@@ -2420,6 +2420,15 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.warlock_imp.name': 'Огненный демон',
   'entities.mobs.warlock_voidwalker.name': 'Демон Пустоты',
   'entities.mobs.ysolei.name': 'Изолея, Воплощение Утонувшей луны',
+  'hudChrome.death.ghostTitle': 'Ваш дух скитается.',
+  'hudChrome.death.corpseHint': 'Бегите духом к своему телу или найдите целителя душ.',
+  'hudChrome.death.resurrectAtCorpse': 'Воскреснуть у тела',
+  'hudChrome.death.resurrectAtHealer': 'Целитель душ (болезнь воскрешения)',
+  'hudChrome.death.spiritHealerAlive': 'Целитель душ оберегает мёртвых. Вы всё ещё среди живых.',
+  'entities.npcs.spirit_healer.name': 'Целитель душ',
+  'entities.npcs.spirit_healer.title': 'Хранитель мёртвых',
+  'entities.npcs.spirit_healer.greeting':
+    'Покойся, дух. Я могу вернуть тебя в тело, но обратный путь оставит тебя ослабленным.',
   'entities.npcs.the_merchant.name': 'Торговец',
   'entities.npcs.the_merchant.title': 'Хранитель мирового рынка',
   'entities.npcs.the_merchant.greeting':

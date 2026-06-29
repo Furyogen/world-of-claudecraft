@@ -154,6 +154,13 @@ export const da_DK: EnTranslations = {
     "spectate": {
       "banner": "Tilskuer til {name}"
     },
+    "death": {
+      "ghostTitle": "Your spirit wanders.",
+      "corpseHint": "Run your spirit back to your body, or find a Spirit Healer.",
+      "resurrectAtCorpse": "Resurrect at Corpse",
+      "resurrectAtHealer": "Spirit Healer (Resurrection Sickness)",
+      "spiritHealerAlive": "The Spirit Healer keeps watch over the dead. You are still among the living."
+    },
     "emotes": {
       "wave": "Vink",
       "laugh": "LOL",
@@ -5726,6 +5733,11 @@ export const da_DK: EnTranslations = {
         "name": "Broder Halven",
         "title": "Relikvarievogter",
         "greeting": "Relikvariet nedenunder har flyttet sig igen."
+      },
+      "spirit_healer": {
+        "name": "Spirit Healer",
+        "title": "Keeper of the Dead",
+        "greeting": "Rest now, spirit. I can return you to your body, but the crossing back leaves you weak."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",

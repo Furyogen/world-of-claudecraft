@@ -154,6 +154,13 @@ export const ru_RU: EnTranslations = {
     "spectate": {
       "banner": "Наблюдение за {name}"
     },
+    "death": {
+      "ghostTitle": "Ваш дух скитается.",
+      "corpseHint": "Бегите духом к своему телу или найдите целителя душ.",
+      "resurrectAtCorpse": "Воскреснуть у тела",
+      "resurrectAtHealer": "Целитель душ (болезнь воскрешения)",
+      "spiritHealerAlive": "Целитель душ оберегает мёртвых. Вы всё ещё среди живых."
+    },
     "emotes": {
       "wave": "Помахать",
       "laugh": "Смех",
@@ -5726,6 +5733,11 @@ export const ru_RU: EnTranslations = {
         "name": "Брат Хальвен",
         "title": "Хранитель Реликвария",
         "greeting": "Реликварий внизу снова сдвинулся."
+      },
+      "spirit_healer": {
+        "name": "Целитель душ",
+        "title": "Хранитель мёртвых",
+        "greeting": "Покойся, дух. Я могу вернуть тебя в тело, но обратный путь оставит тебя ослабленным."
       },
       "tidewatcher_ondrel": {
         "name": "Ондрел Вейн",

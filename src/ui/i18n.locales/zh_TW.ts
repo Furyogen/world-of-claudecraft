@@ -2291,6 +2291,15 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.warlock_imp.name': '火焰惡魔',
   'entities.mobs.warlock_voidwalker.name': '虛空惡魔',
   'entities.mobs.ysolei.name': '伊索蕾，溺月化身',
+  'hudChrome.death.ghostTitle': '你的靈魂在遊蕩。',
+  'hudChrome.death.corpseHint': '讓靈魂跑回你的屍體，或尋找一位靈魂醫者。',
+  'hudChrome.death.resurrectAtCorpse': '在屍體旁復活',
+  'hudChrome.death.resurrectAtHealer': '靈魂醫者（復活虛弱）',
+  'hudChrome.death.spiritHealerAlive': '靈魂醫者只看護逝者。你仍是生者。',
+  'entities.npcs.spirit_healer.name': '靈魂醫者',
+  'entities.npcs.spirit_healer.title': '亡者的守護者',
+  'entities.npcs.spirit_healer.greeting':
+    '安息吧，靈魂。我可以讓你重返軀體，但歸途會讓你變得虛弱。',
   'entities.npcs.the_merchant.name': '商人',
   'entities.npcs.the_merchant.title': '世界市場守護者',
   'entities.npcs.the_merchant.greeting':

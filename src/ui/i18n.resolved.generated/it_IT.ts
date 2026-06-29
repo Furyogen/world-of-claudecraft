@@ -154,6 +154,13 @@ export const it_IT: EnTranslations = {
     "spectate": {
       "banner": "Stai osservando {name}"
     },
+    "death": {
+      "ghostTitle": "Your spirit wanders.",
+      "corpseHint": "Run your spirit back to your body, or find a Spirit Healer.",
+      "resurrectAtCorpse": "Resurrect at Corpse",
+      "resurrectAtHealer": "Spirit Healer (Resurrection Sickness)",
+      "spiritHealerAlive": "The Spirit Healer keeps watch over the dead. You are still among the living."
+    },
     "emotes": {
       "wave": "Saluta",
       "laugh": "Ridi",
@@ -5726,6 +5733,11 @@ export const it_IT: EnTranslations = {
         "name": "Fratello Halven",
         "title": "Custode del Reliquiario",
         "greeting": "Il reliquiario sottostante si è spostato di nuovo."
+      },
+      "spirit_healer": {
+        "name": "Spirit Healer",
+        "title": "Keeper of the Dead",
+        "greeting": "Rest now, spirit. I can return you to your body, but the crossing back leaves you weak."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",

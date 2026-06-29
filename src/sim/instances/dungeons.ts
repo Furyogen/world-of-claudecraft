@@ -19,6 +19,7 @@ import { DUNGEON_X_THRESHOLD, DUNGEONS, dungeonAt, instanceOrigin, MOBS } from '
 import { createGroundObject, createMob } from '../entity';
 import type { InstanceSlot, PlayerMeta } from '../sim';
 import type { SimContext } from '../sim_context';
+import { spawnSpiritHealerAt } from '../spirit';
 import {
   dist2d,
   type Entity,
@@ -244,6 +245,15 @@ function claimInstance(ctx: SimContext, inst: InstanceSlot, key: string): void {
   exit.lootable = true;
   ctx.addEntity(exit);
   inst.exitId = exit.id;
+  // The instance's Spirit Healer (the angel at the dungeon/raid graveyard): a ghost
+  // that releases inside the instance appears at the entry, where this angel stands,
+  // and can resurrect here. Spawned last so the per-mob rng draw order above is
+  // untouched (createNpc draws no rng).
+  inst.spiritHealerId = spawnSpiritHealerAt(
+    ctx,
+    origin.x + dungeon.entry.x + 2,
+    origin.z + dungeon.entry.z,
+  );
 }
 
 function freeInstance(ctx: SimContext, inst: InstanceSlot): void {
@@ -264,10 +274,12 @@ function freeInstance(ctx: SimContext, inst: InstanceSlot): void {
     if (ctx.entities.has(id)) ctx.dropEntity(id);
   }
   if (inst.exitId !== null) ctx.dropEntity(inst.exitId);
+  if (inst.spiritHealerId !== null) ctx.dropEntity(inst.spiritHealerId);
   inst.partyKey = null;
   inst.mobIds = [];
   inst.objectIds = [];
   inst.exitId = null;
+  inst.spiritHealerId = null;
   inst.emptyFor = 0;
 }
 

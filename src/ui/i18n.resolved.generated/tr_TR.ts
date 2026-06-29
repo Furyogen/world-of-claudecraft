@@ -154,6 +154,13 @@ export const tr_TR: EnTranslations = {
     "spectate": {
       "banner": "{name} izleniyor"
     },
+    "death": {
+      "ghostTitle": "Your spirit wanders.",
+      "corpseHint": "Run your spirit back to your body, or find a Spirit Healer.",
+      "resurrectAtCorpse": "Resurrect at Corpse",
+      "resurrectAtHealer": "Spirit Healer (Resurrection Sickness)",
+      "spiritHealerAlive": "The Spirit Healer keeps watch over the dead. You are still among the living."
+    },
     "emotes": {
       "wave": "El Salla",
       "laugh": "LOL",
@@ -5726,6 +5733,11 @@ export const tr_TR: EnTranslations = {
         "name": "Birader Halven",
         "title": "Emanetlik Bekçisi",
         "greeting": "Aşağıdaki kutsal emanetlik yine yer değiştirdi."
+      },
+      "spirit_healer": {
+        "name": "Spirit Healer",
+        "title": "Keeper of the Dead",
+        "greeting": "Rest now, spirit. I can return you to your body, but the crossing back leaves you weak."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",

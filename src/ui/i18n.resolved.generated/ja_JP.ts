@@ -154,6 +154,13 @@ export const ja_JP: EnTranslations = {
     "spectate": {
       "banner": "{name}を観戦中"
     },
+    "death": {
+      "ghostTitle": "あなたの魂はさまよっている。",
+      "corpseHint": "魂を自分の亡骸まで走らせるか、霊魂の癒し手を探そう。",
+      "resurrectAtCorpse": "亡骸で復活",
+      "resurrectAtHealer": "霊魂の癒し手（復活の後遺症）",
+      "spiritHealerAlive": "霊魂の癒し手は死者を見守っている。あなたはまだ生者だ。"
+    },
     "emotes": {
       "wave": "手を振る",
       "laugh": "大笑い",
@@ -5726,6 +5733,11 @@ export const ja_JP: EnTranslations = {
         "name": "ハルヴェン修道士",
         "title": "聖遺物庫の番人",
         "greeting": "下の聖遺物庫がまた動いた。"
+      },
+      "spirit_healer": {
+        "name": "霊魂の癒し手",
+        "title": "死者の番人",
+        "greeting": "安らかに、魂よ。亡骸に戻すことはできるが、戻る道のりで弱ってしまうだろう。"
       },
       "tidewatcher_ondrel": {
         "name": "オンドレル・ヴェイン",

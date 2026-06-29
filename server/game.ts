@@ -546,6 +546,7 @@ function dynamicFields(e: Entity): Record<string, unknown> {
     mhp: e.maxHp,
   };
   if (e.dead) out.dead = 1;
+  if (e.ghost) out.gh = 1; // released spirit (ghost form); renders translucent
   if (e.lootable) out.loot = 1;
   if (e.hostile) out.h = 1;
   if (e.castingAbility) {
@@ -2333,6 +2334,12 @@ export class GameServer {
       case 'release':
         sim.releaseSpirit(pid);
         break;
+      case 'resurrect_corpse':
+        sim.resurrectAtCorpse(pid);
+        break;
+      case 'resurrect_healer':
+        sim.resurrectAtSpiritHealer(pid);
+        break;
       case 'challengeResponse':
         if (typeof msg.n === 'string' && typeof msg.r === 'string' && typeof msg.sig === 'string') {
           if (!verifyChallenge(msg.n, msg.r, msg.sig, session.clientSeed)) break;
@@ -3071,6 +3078,10 @@ export class GameServer {
       'lockouts',
       Object.fromEntries([...meta.raidLockouts].filter(([, until]) => until > Date.now())),
     );
+    // Where the player's corpse lies while their spirit is a ghost (null otherwise).
+    // Delta-guarded: ships on death-release and clears on resurrect. The client
+    // draws the corpse marker and gates the resurrect-at-corpse button on it.
+    maybe('corpse', p.corpsePos);
     maybe('cds', Object.fromEntries([...p.cooldowns.entries()].map(([k, v]) => [k, round2(v)])));
     maybe('stats', p.stats);
     maybe('weapon', p.weapon);

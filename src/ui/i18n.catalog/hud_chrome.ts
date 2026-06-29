@@ -11,6 +11,17 @@ export const hudChromeStrings = {
   spectate: {
     banner: 'Spectating {name}',
   },
+  // WoW-style death loop overlay (release -> ghost run -> resurrect). The release
+  // button and "You have died." title reuse the hud.core.* keys; these are the
+  // ghost-state additions shown once the spirit has been released.
+  death: {
+    ghostTitle: 'Your spirit wanders.',
+    corpseHint: 'Run your spirit back to your body, or find a Spirit Healer.',
+    resurrectAtCorpse: 'Resurrect at Corpse',
+    resurrectAtHealer: 'Spirit Healer (Resurrection Sickness)',
+    spiritHealerAlive:
+      'The Spirit Healer keeps watch over the dead. You are still among the living.',
+  },
   // Overhead emote display names (wheel tooltips/labels, editor items, overhead
   // bubble text). Source ids/order mirror OVERHEAD_EMOTES in world_api.ts.
   emotes: {

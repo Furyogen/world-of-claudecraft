@@ -2387,6 +2387,15 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.warlock_imp.name': '炎の魔物',
   'entities.mobs.warlock_voidwalker.name': '虚無の魔物',
   'entities.mobs.ysolei.name': 'イソレイ、溺月の化身',
+  'hudChrome.death.ghostTitle': 'あなたの魂はさまよっている。',
+  'hudChrome.death.corpseHint': '魂を自分の亡骸まで走らせるか、霊魂の癒し手を探そう。',
+  'hudChrome.death.resurrectAtCorpse': '亡骸で復活',
+  'hudChrome.death.resurrectAtHealer': '霊魂の癒し手（復活の後遺症）',
+  'hudChrome.death.spiritHealerAlive': '霊魂の癒し手は死者を見守っている。あなたはまだ生者だ。',
+  'entities.npcs.spirit_healer.name': '霊魂の癒し手',
+  'entities.npcs.spirit_healer.title': '死者の番人',
+  'entities.npcs.spirit_healer.greeting':
+    '安らかに、魂よ。亡骸に戻すことはできるが、戻る道のりで弱ってしまうだろう。',
   'entities.npcs.the_merchant.name': '商人',
   'entities.npcs.the_merchant.title': '世界市場の守り手',
   'entities.npcs.the_merchant.greeting':

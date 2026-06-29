@@ -2382,6 +2382,15 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.warlock_imp.name': '화염 악마',
   'entities.mobs.warlock_voidwalker.name': '공허 악마',
   'entities.mobs.ysolei.name': '이솔레이, 익사한 달의 화신',
+  'hudChrome.death.ghostTitle': '당신의 영혼이 떠돌고 있습니다.',
+  'hudChrome.death.corpseHint': '영혼을 시신으로 되돌려 보내거나, 영혼 치유사를 찾으십시오.',
+  'hudChrome.death.resurrectAtCorpse': '시신에서 부활',
+  'hudChrome.death.resurrectAtHealer': '영혼 치유사 (부활의 후유증)',
+  'hudChrome.death.spiritHealerAlive': '영혼 치유사는 죽은 자를 지킵니다. 당신은 아직 산 자입니다.',
+  'entities.npcs.spirit_healer.name': '영혼 치유사',
+  'entities.npcs.spirit_healer.title': '죽은 자의 수호자',
+  'entities.npcs.spirit_healer.greeting':
+    '편히 쉬게, 영혼이여. 그대를 육신으로 돌려보낼 수 있으나, 돌아오는 길은 그대를 약하게 만들 것이네.',
   'entities.npcs.the_merchant.name': '상인',
   'entities.npcs.the_merchant.title': '세계 시장 관리자',
   'entities.npcs.the_merchant.greeting':
