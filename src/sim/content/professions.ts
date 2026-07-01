@@ -120,3 +120,86 @@ export function oppositeCraft(craftId: string): CraftDef {
 export function craftById(craftId: string): CraftDef {
   return CRAFT_RING[indexOf(craftId)];
 }
+
+// P3 reconciliation stub (#1135): the crafted tier-4/5 base tools added for
+// this issue (see src/sim/content/items.ts: thorium_mining_pick,
+// arcanite_mining_pick, ashwood_axe, elderwood_axe, goldleaf_sickle,
+// sunpetal_sickle) are meant to be produced via a P3 recipe/crafting action
+// (#1127), NOT bought from a vendor. #1127 (the crafting action itself) has
+// not been implemented in any branch yet, so there is nowhere to register a
+// real, consumed recipe: adding one to a live recipe table would be dead data
+// nobody reads. Instead this is an INERT, documentation-only shape of what
+// each recipe SHOULD look like once #1127 lands. Nothing in the engine reads
+// `TOOL_RECIPE_STUBS` today: it is not merged into any content table by
+// data.ts, and no SimContext callback or effect references it.
+//
+// TODO(#1127): once the crafting action exists, move (not copy) this shape
+// into whatever the real recipe table turns out to be (ingredients + a craft
+// verb the player performs), wire `outputItemId` to the actual item grant,
+// and delete this stub in the same change.
+export interface ToolRecipeStub {
+  /** Item id this recipe would produce once #1127 can consume recipes. */
+  outputItemId: string;
+  /** Which craft on the CRAFT_RING would perform this (see #1125's ring). */
+  craftId: string;
+  /** Placeholder ingredient list: itemId plus quantity consumed per craft. */
+  ingredients: { itemId: string; qty: number }[];
+}
+
+// NOTE: several `ingredients[].itemId` values below (thorium_ore,
+// arcanite_bar, ashwood_log, elderwood_log, goldleaf_herb, sunpetal_herb) are
+// PLACEHOLDER ids: no matching ItemDef exists yet, because the monster
+// material / node-drop items they'd come from are their own future content
+// slice. That is fine ONLY because this table is inert and unread by the
+// engine; do not merge TOOL_RECIPE_STUBS into ITEMS or any live table until
+// those ingredient items are real and #1127 exists to consume the recipe.
+export const TOOL_RECIPE_STUBS: ToolRecipeStub[] = [
+  {
+    outputItemId: 'thorium_mining_pick',
+    craftId: 'engineering',
+    ingredients: [
+      { itemId: 'thorium_ore', qty: 4 },
+      { itemId: 'mithril_mining_pick', qty: 1 },
+    ],
+  },
+  {
+    outputItemId: 'arcanite_mining_pick',
+    craftId: 'engineering',
+    ingredients: [
+      { itemId: 'arcanite_bar', qty: 2 },
+      { itemId: 'thorium_mining_pick', qty: 1 },
+    ],
+  },
+  {
+    outputItemId: 'ashwood_axe',
+    craftId: 'engineering',
+    ingredients: [
+      { itemId: 'ashwood_log', qty: 4 },
+      { itemId: 'ironbark_axe', qty: 1 },
+    ],
+  },
+  {
+    outputItemId: 'elderwood_axe',
+    craftId: 'engineering',
+    ingredients: [
+      { itemId: 'elderwood_log', qty: 2 },
+      { itemId: 'ashwood_axe', qty: 1 },
+    ],
+  },
+  {
+    outputItemId: 'goldleaf_sickle',
+    craftId: 'engineering',
+    ingredients: [
+      { itemId: 'goldleaf_herb', qty: 4 },
+      { itemId: 'silverleaf_sickle', qty: 1 },
+    ],
+  },
+  {
+    outputItemId: 'sunpetal_sickle',
+    craftId: 'engineering',
+    ingredients: [
+      { itemId: 'sunpetal_herb', qty: 2 },
+      { itemId: 'goldleaf_sickle', qty: 1 },
+    ],
+  },
+];
