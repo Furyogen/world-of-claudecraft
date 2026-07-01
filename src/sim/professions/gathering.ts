@@ -9,15 +9,111 @@
 // `updateRested`), so a grant only ever takes effect on the deterministic tick
 // path, never out of band.
 
+import { GATHER_NODES } from '../content/gather_nodes';
 import {
   GATHERING_PROFESSION_IDS,
   GATHERING_PROFESSIONS,
   type GatheringProfessionId,
 } from '../content/professions';
 import type { PlayerMeta } from '../sim';
+import type { SimContext } from '../sim_context';
+import { type GatherNodeDef, type GatherNodeType, INTERACT_RANGE } from '../types';
 import type { PlayerProfessionSkill } from './types';
 
 export type GatheringProficiency = Record<GatheringProfessionId, number>;
+
+// Per-node harvest tuning (#1121). Each node type grants one fixed material item
+// and one point of the matching gathering profession's proficiency; no rng draw,
+// so the outcome is fully deterministic given the same sequence of harvests (the
+// item's RARITY roll is explicitly out of scope, see issue #1122). The items
+// reused below are existing generic junk entries (src/sim/content/items.ts): a
+// placeholder grant that avoids expanding the positional per-locale item-name
+// arrays in src/ui/i18n.catalog/items.ts for this issue; dedicated ore/wood/herb
+// items are future content work.
+export const NODE_HARVEST_TABLE: Record<
+  GatherNodeType,
+  { professionId: GatheringProfessionId; itemId: string; respawnSeconds: number }
+> = {
+  ore: { professionId: 'mining', itemId: 'bone_fragments', respawnSeconds: 120 },
+  wood: { professionId: 'logging', itemId: 'linen_scrap', respawnSeconds: 120 },
+  herb: { professionId: 'herbalism', itemId: 'spider_leg', respawnSeconds: 120 },
+};
+
+export function gatherNodeById(nodeId: string): GatherNodeDef | undefined {
+  return GATHER_NODES.find((n) => n.id === nodeId);
+}
+
+// Flat-ground distance from a player to a node's (x, z) placement. Node
+// placements carry no y (see GatherNodeDef, #1120), so this stays a plain 2D
+// distance rather than reusing types.ts's dist2d (which takes a full Vec3).
+function distToNode(pos: { x: number; z: number }, node: { x: number; z: number }): number {
+  const dx = pos.x - node.x;
+  const dz = pos.z - node.z;
+  return Math.sqrt(dx * dx + dz * dz);
+}
+
+// Per-player, per-node respawn readiness: `meta.nodeHarvestReadyAt[nodeId]` is the
+// sim.time (seconds) at or after which THAT player may harvest THAT node again.
+// Absent means never harvested (always ready). Session-only state (not
+// persisted), same as `lastActiveTick`: one player harvesting a node never
+// blocks, delays, or resets any other player's timer for the same node, so
+// there is no gather rush or node camping.
+export function isNodeHarvestableBy(meta: PlayerMeta, nodeId: string, now: number): boolean {
+  const readyAt = meta.nodeHarvestReadyAt[nodeId];
+  return readyAt === undefined || now >= readyAt;
+}
+
+export interface HarvestResolution {
+  granted: boolean;
+  itemId?: string;
+  professionId?: GatheringProfessionId;
+}
+
+// Resolves one player's harvest attempt against one node: if that player's own
+// timer for this node has elapsed, grants the node type's material (via the
+// caller's item-grant callback) and queues the matching profession's
+// proficiency gain, then resets that player's timer; otherwise denies without
+// side effects. Never touches any other player's state for this or any other
+// node.
+export function resolveHarvest(
+  meta: PlayerMeta,
+  node: GatherNodeDef,
+  now: number,
+): HarvestResolution {
+  if (!isNodeHarvestableBy(meta, node.id, now)) return { granted: false };
+  const entry = NODE_HARVEST_TABLE[node.type];
+  meta.nodeHarvestReadyAt[node.id] = now + entry.respawnSeconds;
+  queueGatheringGrant(meta, entry.professionId, 1);
+  return { granted: true, itemId: entry.itemId, professionId: entry.professionId };
+}
+
+// Command entry point (behind the SimContext seam): resolves one player's
+// harvest attempt against a node they must be standing near. Runs on the
+// deterministic 20 Hz tick path (dispatched from a wire command the same tick
+// it arrives, per the other immediate-interaction commands like `buyItem`),
+// never off-tick. Denies (no side effect) if the node id is unknown, the
+// player is too far away, or that player's own timer for the node has not
+// elapsed; a denial never touches another player's state.
+export function harvestNode(ctx: SimContext, nodeId: string, pid?: number): void {
+  const r = ctx.resolve(pid);
+  if (!r) return;
+  const { meta, e: p } = r;
+  const node = gatherNodeById(nodeId);
+  if (!node) {
+    ctx.error(meta.entityId, 'That resource node does not exist.');
+    return;
+  }
+  if (distToNode(p.pos, node.pos) > INTERACT_RANGE) {
+    ctx.error(meta.entityId, 'Too far away to harvest that.');
+    return;
+  }
+  const result = resolveHarvest(meta, node, ctx.time);
+  if (!result.granted) {
+    ctx.error(meta.entityId, 'This resource node has not respawned for you yet.');
+    return;
+  }
+  ctx.addItem(result.itemId!, 1, meta.entityId);
+}
 
 export interface PendingGatherGrant {
   professionId: GatheringProfessionId;
