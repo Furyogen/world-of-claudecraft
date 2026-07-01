@@ -2,12 +2,23 @@ const { app, BrowserWindow, ipcMain, net, protocol, session, shell } = require('
 const fs = require('node:fs');
 const path = require('node:path');
 const { pathToFileURL } = require('node:url');
-const { appNavigationOrigins, navigationAllowed } = require('./shell_guards.cjs');
+const {
+  appNavigationOrigins,
+  navigationAllowed,
+  deriveOrigin,
+  buildContentSecurityPolicy,
+  extractInlineScriptHashes,
+  withCspHeader,
+} = require('./shell_guards.cjs');
 
 const APP_ORIGIN = 'app://worldofclaudecraft';
 const devServerUrl = process.env.VITE_DEV_SERVER_URL;
 // Origins the main frame may navigate to (app origin, plus the dev server in dev).
 const appOrigins = appNavigationOrigins(APP_ORIGIN, devServerUrl);
+// API origin the renderer talks to (REST + WebSocket); feeds the CSP connect-src.
+const apiOrigin =
+  deriveOrigin(process.env.VITE_DESKTOP_API_ORIGIN || 'https://worldofclaudecraft.com') ||
+  'https://worldofclaudecraft.com';
 const desktopLoginOrigin = (
   process.env.VITE_DESKTOP_LOGIN_ORIGIN ||
   process.env.VITE_DESKTOP_API_ORIGIN ||
@@ -36,12 +47,26 @@ function fileInside(root, target) {
 
 function registerAppProtocol() {
   const distDir = path.join(__dirname, '..', 'dist');
-  protocol.handle('app', (request) => {
+  // Build the CSP once from the shipped index.html: hash its inline bootstrap scripts
+  // (their content is build-dependent) so a strict script-src allows them without
+  // 'unsafe-inline'. In dev the window loads the Vite server and this app:// handler
+  // is never hit, so a missing dist here is harmless.
+  let scriptHashes = [];
+  try {
+    const html = fs.readFileSync(path.join(distDir, 'index.html'), 'utf8');
+    scriptHashes = extractInlineScriptHashes(html);
+  } catch {
+    scriptHashes = [];
+  }
+  const csp = buildContentSecurityPolicy({ apiOrigin, scriptHashes });
+  const notFound = () =>
+    new Response('not found', { status: 404, headers: { 'Content-Security-Policy': csp } });
+  protocol.handle('app', async (request) => {
     const url = new URL(request.url);
     const requestedPath = decodeURIComponent(url.pathname === '/' ? '/index.html' : url.pathname);
     const candidate = path.normalize(path.join(distDir, requestedPath));
     if (!fileInside(distDir, candidate)) {
-      return new Response('not found', { status: 404 });
+      return notFound();
     }
     const hasExtension = path.extname(candidate) !== '';
     const filePath = fs.existsSync(candidate)
@@ -50,9 +75,13 @@ function registerAppProtocol() {
         ? candidate
         : path.join(distDir, 'index.html');
     if (!fs.existsSync(filePath) || !fileInside(distDir, filePath)) {
-      return new Response('not found', { status: 404 });
+      return notFound();
     }
-    return net.fetch(pathToFileURL(filePath).toString());
+    // Every served path (asset or the SPA index.html fallback) gets the CSP header;
+    // net.fetch's own Response has immutable headers, so withCspHeader builds a fresh
+    // one that preserves the body, status, statusText, and Content-Type.
+    const response = await net.fetch(pathToFileURL(filePath).toString());
+    return withCspHeader(response, csp);
   });
 }
 

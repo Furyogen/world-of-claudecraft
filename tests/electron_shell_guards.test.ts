@@ -1,9 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import {
   appNavigationOrigins,
+  buildContentSecurityPolicy,
   deriveOrigin,
+  extractInlineScriptHashes,
   navigationAllowed,
   originAllowed,
+  withCspHeader,
 } from '../electron/shell_guards.cjs';
 
 const APP = 'app://worldofclaudecraft';
@@ -72,5 +75,72 @@ describe('navigationAllowed', () => {
   });
   it('denies a malformed navigation URL', () => {
     expect(navigationAllowed('::: not a url', true, main)).toBe(false);
+  });
+});
+
+describe('extractInlineScriptHashes', () => {
+  it('hashes inline scripts and skips external and empty ones', () => {
+    const html = [
+      '<script src="/assets/main.js"></script>',
+      "<script>console.log('boot');</script>",
+      '<script></script>',
+      '<script type="application/ld+json">{"a":1}</script>',
+    ].join('\n');
+    const hashes = extractInlineScriptHashes(html);
+    // The external-src and empty scripts produce no hash; the two inline bodies do.
+    // The boot script's hash is a known-answer sha256 base64.
+    expect(hashes).toContain('sha256-4U2nQ7ITQ/rEbjI/yjhM48+cOPZaU2gKejSgBqiZtLY=');
+    expect(hashes).toHaveLength(2);
+    expect(hashes.every((h) => h.startsWith('sha256-'))).toBe(true);
+  });
+});
+
+describe('buildContentSecurityPolicy', () => {
+  const csp = buildContentSecurityPolicy({
+    apiOrigin: 'https://worldofclaudecraft.com',
+    scriptHashes: ['sha256-abc123'],
+  });
+  const directive = (name: string) => csp.split('; ').find((d) => d.startsWith(`${name} `));
+
+  it('is strict by default and never uses unsafe-eval or inline script', () => {
+    expect(csp).toContain("default-src 'self'");
+    expect(csp).toContain("object-src 'none'");
+    expect(csp).toContain("base-uri 'none'");
+    expect(csp).toContain("frame-ancestors 'none'");
+    expect(csp).not.toContain("'unsafe-eval'");
+    expect(directive('script-src')).not.toContain("'unsafe-inline'");
+  });
+
+  it('allows wasm and embeds the inline script hashes', () => {
+    expect(directive('script-src')).toContain("'wasm-unsafe-eval'");
+    expect(directive('script-src')).toContain("'sha256-abc123'");
+  });
+
+  it('lists the HTTPS API origin and wss: explicitly in connect-src', () => {
+    expect(directive('connect-src')).toContain('https://worldofclaudecraft.com');
+    expect(directive('connect-src')).toContain('wss:');
+  });
+
+  it('mirrors the web build: Google Fonts, worker blobs, and the Turnstile frame', () => {
+    expect(csp).toContain("style-src 'self' 'unsafe-inline' https://fonts.googleapis.com");
+    expect(csp).toContain("font-src 'self' https://fonts.gstatic.com");
+    expect(csp).toContain("worker-src 'self' blob:");
+    expect(csp).toContain('frame-src https://challenges.cloudflare.com');
+  });
+});
+
+describe('withCspHeader', () => {
+  it('adds the CSP header and preserves status, statusText, and content-type', () => {
+    const upstream = new Response('body', {
+      status: 200,
+      statusText: 'OK',
+      headers: { 'Content-Type': 'application/javascript' },
+    });
+    const csp = "default-src 'self'";
+    const wrapped = withCspHeader(upstream, csp);
+    expect(wrapped.headers.get('Content-Security-Policy')).toBe(csp);
+    expect(wrapped.headers.get('Content-Type')).toBe('application/javascript');
+    expect(wrapped.status).toBe(200);
+    expect(wrapped.statusText).toBe('OK');
   });
 });

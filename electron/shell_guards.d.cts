@@ -15,3 +15,17 @@ export function navigationAllowed(
   subframeOrigins?: Iterable<string>,
 ): boolean;
 export const EMBEDDED_SUBFRAME_ORIGINS: Set<string>;
+export const CSP_ORIGINS: {
+  script: string[];
+  connect: string[];
+  img: string[];
+  turnstile: string;
+  fontsStyle: string;
+  fontsFile: string;
+};
+export function extractInlineScriptHashes(html: string): string[];
+export function buildContentSecurityPolicy(options?: {
+  apiOrigin?: string;
+  scriptHashes?: string[];
+}): string;
+export function withCspHeader(response: Response, csp: string): Response;
