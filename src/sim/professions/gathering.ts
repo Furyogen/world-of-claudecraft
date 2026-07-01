@@ -15,9 +15,10 @@ import {
   GATHERING_PROFESSIONS,
   type GatheringProfessionId,
 } from '../content/professions';
+import type { Rng } from '../rng';
 import type { PlayerMeta } from '../sim';
 import type { SimContext } from '../sim_context';
-import { type GatherNodeDef, type GatherNodeType, INTERACT_RANGE } from '../types';
+import { type GatherNodeDef, type GatherNodeType, INTERACT_RANGE, type ItemDef } from '../types';
 import type { PlayerProfessionSkill } from './types';
 
 export type GatheringProficiency = Record<GatheringProfessionId, number>;
@@ -41,6 +42,55 @@ export const NODE_HARVEST_TABLE: Record<
 
 export function gatherNodeById(nodeId: string): GatherNodeDef | undefined {
   return GATHER_NODES.find((n) => n.id === nodeId);
+}
+
+// Material rarity roll (#1122): the standard item rarity ladder (ItemDef['quality'],
+// src/sim/types.ts), minus 'poor' (a harvested material is never junk-grade). A
+// gathering profession's proficiency shifts a harvest's rarity roll toward the
+// higher tiers; a fresh proficiency-0 harvest always lands common.
+export type MaterialRarity = Exclude<NonNullable<ItemDef['quality']>, 'poor'>;
+
+// Proficiency is clamped to this ceiling before weighting: proficiency gains
+// beyond this point buy no further rarity odds (the ladder is already maxed out).
+export const MATERIAL_RARITY_MAX_PROFICIENCY = 100;
+
+// Weight formula: at clamped proficiency p in [0, MATERIAL_RARITY_MAX_PROFICIENCY],
+// each non-common tier's weight is p * its fixed share below, and common's weight is
+// the remainder (MAX - p). The shares sum to exactly 1, so the total weight is always
+// MATERIAL_RARITY_MAX_PROFICIENCY regardless of p: at p=0 the roll is 100% common; as
+// p rises, weight moves linearly out of common and into the four tiers above it in
+// this fixed proportion, so every non-common tier's weight (and therefore its roll
+// probability) is non-decreasing in proficiency, satisfying the "more proficiency
+// never hurts your odds" acceptance bar. Tuned so legendary stays rare even at max
+// proficiency (2% at p=100) while uncommon becomes the single likeliest non-common
+// outcome quickly.
+const MATERIAL_RARITY_SHARE: Record<Exclude<MaterialRarity, 'common'>, number> = {
+  uncommon: 0.6,
+  rare: 0.3,
+  epic: 0.08,
+  legendary: 0.02,
+};
+
+// Pure function of (proficiency, rng): rolls one material rarity for a harvest.
+// Uses exactly one rng.next() draw, so it composes cleanly with the rest of the
+// sim's one-draw-per-roll rng convention (see loot_roll.ts). Independent of node/
+// harvest wiring: callable standalone, or from resolveHarvest (see below).
+export function rollMaterialRarity(proficiency: number, rng: Rng): MaterialRarity {
+  const p = Math.max(0, Math.min(MATERIAL_RARITY_MAX_PROFICIENCY, proficiency));
+  const weights: [MaterialRarity, number][] = [
+    ['common', MATERIAL_RARITY_MAX_PROFICIENCY - p],
+    ['uncommon', p * MATERIAL_RARITY_SHARE.uncommon],
+    ['rare', p * MATERIAL_RARITY_SHARE.rare],
+    ['epic', p * MATERIAL_RARITY_SHARE.epic],
+    ['legendary', p * MATERIAL_RARITY_SHARE.legendary],
+  ];
+  const total = weights.reduce((sum, [, w]) => sum + w, 0);
+  let roll = rng.next() * total;
+  for (const [tier, w] of weights) {
+    if (roll < w) return tier;
+    roll -= w;
+  }
+  return 'legendary'; // unreachable: weights sum to `total`, so the loop always returns above
 }
 
 // Flat-ground distance from a player to a node's (x, z) placement. Node
@@ -67,24 +117,35 @@ export interface HarvestResolution {
   granted: boolean;
   itemId?: string;
   professionId?: GatheringProfessionId;
+  // The rolled material rarity (#1122), scaled by the player's proficiency in the
+  // node's matching profession at the moment of harvest. Informational for now:
+  // NODE_HARVEST_TABLE still grants one fixed placeholder item id regardless of
+  // rarity (dedicated per-rarity ore/wood/herb items are future content work, same
+  // as the NODE_HARVEST_TABLE comment above), so this does not yet change what
+  // gets granted; it settles the roll contract callers (loot text, future content)
+  // build against.
+  rarity?: MaterialRarity;
 }
 
 // Resolves one player's harvest attempt against one node: if that player's own
 // timer for this node has elapsed, grants the node type's material (via the
-// caller's item-grant callback) and queues the matching profession's
-// proficiency gain, then resets that player's timer; otherwise denies without
-// side effects. Never touches any other player's state for this or any other
-// node.
+// caller's item-grant callback), rolls that material's rarity scaled by the
+// player's current proficiency in the node's profession, and queues the matching
+// profession's proficiency gain, then resets that player's timer; otherwise
+// denies without side effects. Never touches any other player's state for this
+// or any other node.
 export function resolveHarvest(
   meta: PlayerMeta,
   node: GatherNodeDef,
   now: number,
+  rng: Rng,
 ): HarvestResolution {
   if (!isNodeHarvestableBy(meta, node.id, now)) return { granted: false };
   const entry = NODE_HARVEST_TABLE[node.type];
   meta.nodeHarvestReadyAt[node.id] = now + entry.respawnSeconds;
+  const rarity = rollMaterialRarity(meta.gatheringProficiency[entry.professionId], rng);
   queueGatheringGrant(meta, entry.professionId, 1);
-  return { granted: true, itemId: entry.itemId, professionId: entry.professionId };
+  return { granted: true, itemId: entry.itemId, professionId: entry.professionId, rarity };
 }
 
 // Command entry point (behind the SimContext seam): resolves one player's
@@ -107,7 +168,7 @@ export function harvestNode(ctx: SimContext, nodeId: string, pid?: number): void
     ctx.error(meta.entityId, 'Too far away to harvest that.');
     return;
   }
-  const result = resolveHarvest(meta, node, ctx.time);
+  const result = resolveHarvest(meta, node, ctx.time, ctx.rng);
   if (!result.granted) {
     ctx.error(meta.entityId, 'This resource node has not respawned for you yet.');
     return;
