@@ -57,6 +57,7 @@ import {
   type FoliagePerfStats,
   type FoliageView,
 } from './foliage';
+import { buildGatherNodes } from './gather_nodes';
 import {
   GFX,
   type GfxBucketBands,
@@ -1229,6 +1230,10 @@ export class Renderer {
     // numPointLights -> materials never recompile for a light-count change).
     this.fireLights.push(this.impactSite.light);
     this.propsView = props;
+
+    const gatherNodes = buildGatherNodes(this.sim.cfg.seed);
+    setRenderCategory(gatherNodes.group, 'props');
+    this.scene.add(gatherNodes.group);
 
     // selection ring — a classic target reticle: a base ring plus four
     // inward-pointing ticks. The base ring is draped over the terrain each
