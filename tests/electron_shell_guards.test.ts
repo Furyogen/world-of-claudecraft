@@ -4,6 +4,7 @@ import {
   buildContentSecurityPolicy,
   deriveOrigin,
   extractInlineScriptHashes,
+  isTrustedSender,
   navigationAllowed,
   originAllowed,
   withCspHeader,
@@ -142,5 +143,32 @@ describe('withCspHeader', () => {
     expect(wrapped.headers.get('Content-Type')).toBe('application/javascript');
     expect(wrapped.status).toBe(200);
     expect(wrapped.statusText).toBe('OK');
+  });
+});
+
+describe('isTrustedSender', () => {
+  const allowed = new Set([APP, DEV]);
+  it('rejects a null or undefined frame (untrusted by default)', () => {
+    expect(isTrustedSender(null, allowed)).toBe(false);
+    expect(isTrustedSender(undefined, allowed)).toBe(false);
+  });
+  it('accepts the app frame and the dev-server frame', () => {
+    const appFrame = { origin: APP, url: 'app://worldofclaudecraft/index.html' };
+    expect(isTrustedSender(appFrame, allowed)).toBe(true);
+    expect(isTrustedSender({ origin: DEV, url: `${DEV}/` }, allowed)).toBe(true);
+  });
+  it('falls back to frame.url when frame.origin is the opaque "null" string', () => {
+    expect(isTrustedSender({ origin: 'null', url: 'app://worldofclaudecraft/x' }, allowed)).toBe(
+      true,
+    );
+  });
+  it('rejects a foreign sender and a frame with neither a matching origin nor url', () => {
+    expect(
+      isTrustedSender({ origin: 'https://evil.com', url: 'https://evil.com/x' }, allowed),
+    ).toBe(false);
+    expect(isTrustedSender({ origin: 'app://otherhost', url: 'app://otherhost/x' }, allowed)).toBe(
+      false,
+    );
+    expect(isTrustedSender({}, allowed)).toBe(false);
   });
 });

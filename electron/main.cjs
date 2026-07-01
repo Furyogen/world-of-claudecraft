@@ -5,6 +5,7 @@ const { pathToFileURL } = require('node:url');
 const {
   appNavigationOrigins,
   navigationAllowed,
+  isTrustedSender,
   deriveOrigin,
   buildContentSecurityPolicy,
   extractInlineScriptHashes,
@@ -181,11 +182,19 @@ function handleDeepLink(url) {
   deliverLoginCode(code);
 }
 
-ipcMain.handle('desktop-login-open-browser', () => {
+// Trust only IPC from our own app frame (or the dev server in dev). event.senderFrame
+// is read synchronously at the very top of each handler, before any other work; a null
+// or foreign-origin sender is rejected with null.
+const trustedSender = (event) => isTrustedSender(event.senderFrame, appOrigins);
+
+ipcMain.handle('desktop-login-open-browser', (event) => {
+  if (!trustedSender(event)) return null;
   openDesktopLogin();
+  return null;
 });
 
-ipcMain.handle('desktop-login-take-code', () => {
+ipcMain.handle('desktop-login-take-code', (event) => {
+  if (!trustedSender(event)) return null;
   const code = pendingLoginCode;
   pendingLoginCode = null;
   return code;

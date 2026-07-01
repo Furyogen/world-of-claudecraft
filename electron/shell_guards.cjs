@@ -166,11 +166,29 @@ function withCspHeader(response, csp) {
   });
 }
 
+// Validate an IPC sender frame against the trusted origins. event.senderFrame is
+// WebFrameMain | null, so a null/falsy frame is untrusted. Prefer frame.origin
+// (Chromium computes it and knows app:// is a registered standard scheme), falling
+// back to deriving protocol//host from frame.url for any origin-"null" edge. Never
+// throws (unlike the docs' validateSender sample, which host-parses frame.url with no
+// null guard). allowedOrigins are the same main-frame origins used by the nav guard.
+function isTrustedSender(frame, allowedOrigins) {
+  if (!frame) return false;
+  const set = toOriginSet(allowedOrigins);
+  if (typeof frame.origin === 'string' && frame.origin && set.has(frame.origin)) return true;
+  if (typeof frame.url === 'string') {
+    const origin = deriveOrigin(frame.url);
+    if (origin && set.has(origin)) return true;
+  }
+  return false;
+}
+
 module.exports = {
   deriveOrigin,
   originAllowed,
   appNavigationOrigins,
   navigationAllowed,
+  isTrustedSender,
   EMBEDDED_SUBFRAME_ORIGINS,
   CSP_ORIGINS,
   extractInlineScriptHashes,

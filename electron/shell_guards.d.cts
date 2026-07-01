@@ -14,6 +14,10 @@ export function navigationAllowed(
   mainFrameOrigins: Iterable<string>,
   subframeOrigins?: Iterable<string>,
 ): boolean;
+export function isTrustedSender(
+  frame: { origin?: unknown; url?: unknown } | null | undefined,
+  allowedOrigins: Iterable<string>,
+): boolean;
 export const EMBEDDED_SUBFRAME_ORIGINS: Set<string>;
 export const CSP_ORIGINS: {
   script: string[];
