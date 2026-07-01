@@ -1,9 +1,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { MusicDirector, dungeonMusicZoneForDungeon, musicZoneForLocation, shouldResetMusicForDungeonEntry } from '../src/game/music';
+import {
+  dungeonMusicZoneForDungeon,
+  MusicDirector,
+  musicZoneForLocation,
+  shouldResetMusicForDungeonEntry,
+} from '../src/game/music';
 
 class FakeParam {
   value = 0;
-  setTargetAtTime = vi.fn((value: number) => { this.value = value; });
+  setTargetAtTime = vi.fn((value: number) => {
+    this.value = value;
+  });
 }
 
 class FakeNode {
@@ -36,8 +43,11 @@ class FakeAudioContext {
   createGain = vi.fn(() => new FakeGain());
   createDynamicsCompressor = vi.fn(() => ({
     ...new FakeNode(),
-    threshold: new FakeParam(), knee: new FakeParam(), ratio: new FakeParam(),
-    attack: new FakeParam(), release: new FakeParam(),
+    threshold: new FakeParam(),
+    knee: new FakeParam(),
+    ratio: new FakeParam(),
+    attack: new FakeParam(),
+    release: new FakeParam(),
   }));
   createConvolver = vi.fn(() => ({ ...new FakeNode(), buffer: null }));
   createBuffer = vi.fn((_channels: number, length: number) => ({
@@ -64,9 +74,12 @@ describe('MusicDirector — combat / background mix', () => {
     FakeBufferSource.instances = [];
   });
 
-  const layers = () => (director as unknown as {
-    layers: Record<string, { target: number }>;
-  }).layers;
+  const layers = () =>
+    (
+      director as unknown as {
+        layers: Record<string, { target: number }>;
+      }
+    ).layers;
 
   it('plays the zone theme and no combat layer when out of combat', () => {
     director.update('vale', false);
@@ -140,7 +153,9 @@ describe('dungeon music entry reset', () => {
 
   it('resets only when entering a dungeon or changing dungeon instances', () => {
     expect(shouldResetMusicForDungeonEntry(null, 'nythraxis_boss_arena')).toBe(true);
-    expect(shouldResetMusicForDungeonEntry('nythraxis_boss_arena', 'nythraxis_boss_arena')).toBe(false);
+    expect(shouldResetMusicForDungeonEntry('nythraxis_boss_arena', 'nythraxis_boss_arena')).toBe(
+      false,
+    );
     expect(shouldResetMusicForDungeonEntry('nythraxis_boss_arena', 'hollow_crypt')).toBe(true);
     expect(shouldResetMusicForDungeonEntry('nythraxis_boss_arena', null)).toBe(false);
   });
@@ -150,7 +165,9 @@ describe('dungeon music entry reset', () => {
     const layer = { target: 1, anchor: 100, nextIdx: 7, loopCount: 3 };
     const bossElement = { currentTime: 19 };
     (director as unknown as { ctx: { currentTime: number } }).ctx = { currentTime: 42 };
-    (director as unknown as { layers: Record<string, typeof layer> }).layers = { dungeon_hollow_crypt: layer };
+    (director as unknown as { layers: Record<string, typeof layer> }).layers = {
+      dungeon_hollow_crypt: layer,
+    };
     (director as unknown as { bossElement: typeof bossElement }).bossElement = bossElement;
 
     director.resetForDungeonEntry('nythraxis_boss_arena');
@@ -164,8 +181,8 @@ describe('dungeon music entry reset', () => {
 });
 
 describe('world music zone selection', () => {
-  it('uses the original Eastbrook Vale wilderness theme in Thornpeak Heights', () => {
-    expect(musicZoneForLocation('thornpeak_heights', 'peaks', false, false)).toBe('vale_legacy');
+  it('plays the dedicated peaks anthem in the Thornpeak Heights overworld', () => {
+    expect(musicZoneForLocation('thornpeak_heights', 'peaks', false, false)).toBe('peaks');
   });
 
   it('keeps the Thornpeak hub on the Highwatch town theme', () => {
