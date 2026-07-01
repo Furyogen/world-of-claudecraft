@@ -402,9 +402,11 @@ CREATE TABLE IF NOT EXISTS daily_reward_days (
   prize_pool_usd NUMERIC NOT NULL,
   woc_usd_price NUMERIC,
   finalized_at TIMESTAMPTZ,
+  discord_announced_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   PRIMARY KEY (day, realm)
 );
+ALTER TABLE daily_reward_days ADD COLUMN IF NOT EXISTS discord_announced_at TIMESTAMPTZ;
 CREATE TABLE IF NOT EXISTS daily_reward_scores (
   day TEXT NOT NULL,
   realm TEXT NOT NULL DEFAULT '${REALM_SQL_DEFAULT}',

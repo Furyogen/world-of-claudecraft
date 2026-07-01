@@ -43,6 +43,14 @@ export interface DailyRewardInternalPayoutRow extends DailyRewardPayoutRow {
   realm: string;
 }
 
+export interface DailyRewardWinnerAnnouncement {
+  day: string;
+  realm: string;
+  prizePoolUsd: number;
+  finalizedAt: string | null;
+  payouts: DailyRewardInternalPayoutRow[];
+}
+
 export interface DailyRewardDb {
   ensureDay(day: string, prizePoolUsd: number, wocUsdPrice: number | null): Promise<void>;
   seedTasks(day: string, tasks: DailyRewardTaskSeed[]): Promise<void>;
@@ -66,6 +74,8 @@ export interface DailyRewardDb {
   recentPayouts(limit: number): Promise<DailyRewardPayoutRow[]>;
   finalizeDay(day: string, prizePoolUsd: number, splits: readonly number[]): Promise<void>;
   pendingPayouts(limit: number): Promise<DailyRewardInternalPayoutRow[]>;
+  unannouncedWinnerDays(limit: number): Promise<DailyRewardWinnerAnnouncement[]>;
+  markWinnersAnnounced(day: string): Promise<boolean>;
   markPayout(
     day: string,
     rank: number,
@@ -111,6 +121,11 @@ function payoutRow(row: Record<string, unknown>): DailyRewardPayoutRow {
     txSignature: optionalString(row.tx_signature),
     paidAt: optionalString(row.paid_at),
   };
+}
+
+function dateString(value: unknown): string | null {
+  if (value instanceof Date) return value.toISOString();
+  return optionalString(value);
 }
 
 export class PgDailyRewardDb implements DailyRewardDb {
@@ -451,6 +466,56 @@ export class PgDailyRewardDb implements DailyRewardDb {
       [Math.max(1, Math.min(100, limit))],
     );
     return res.rows.map((row) => ({ ...payoutRow(row), realm: String(row.realm) }));
+  }
+
+  async unannouncedWinnerDays(limit: number): Promise<DailyRewardWinnerAnnouncement[]> {
+    const days = await pool.query(
+      `SELECT d.day, d.realm, d.prize_pool_usd, d.finalized_at
+         FROM daily_reward_days d
+        WHERE d.realm = $1
+          AND d.finalized_at IS NOT NULL
+          AND d.discord_announced_at IS NULL
+          AND EXISTS (
+            SELECT 1
+              FROM daily_reward_payouts p
+             WHERE p.day = d.day AND p.realm = d.realm
+          )
+        ORDER BY d.day ASC
+        LIMIT $2`,
+      [REALM, Math.max(1, Math.min(10, limit))],
+    );
+    const out: DailyRewardWinnerAnnouncement[] = [];
+    for (const day of days.rows) {
+      const payouts = await pool.query(
+        `SELECT p.day, p.realm, p.rank, p.account_id, p.username,
+                COALESCE(p.wallet_pubkey, wl.pubkey) AS wallet_pubkey, p.points,
+                p.prize_percent, p.prize_usd, p.status, p.tx_signature, p.paid_at
+           FROM daily_reward_payouts p
+           LEFT JOIN wallet_links wl ON wl.account_id = p.account_id
+          WHERE p.day = $1 AND p.realm = $2
+          ORDER BY p.rank ASC
+          LIMIT 10`,
+        [String(day.day), String(day.realm)],
+      );
+      out.push({
+        day: String(day.day),
+        realm: String(day.realm),
+        prizePoolUsd: Number(day.prize_pool_usd),
+        finalizedAt: dateString(day.finalized_at),
+        payouts: payouts.rows.map((row) => ({ ...payoutRow(row), realm: String(row.realm) })),
+      });
+    }
+    return out;
+  }
+
+  async markWinnersAnnounced(day: string): Promise<boolean> {
+    const res = await pool.query(
+      `UPDATE daily_reward_days
+          SET discord_announced_at = COALESCE(discord_announced_at, now())
+        WHERE day = $1 AND realm = $2 AND finalized_at IS NOT NULL`,
+      [day, REALM],
+    );
+    return (res.rowCount ?? 0) > 0;
   }
 
   async markPayout(

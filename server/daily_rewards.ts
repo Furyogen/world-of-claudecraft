@@ -588,6 +588,23 @@ export class DailyRewardService {
     return { payouts: await this.db.recentPayouts(limit) };
   }
 
+  async discordWinnerAnnouncements(limit = 1): Promise<unknown> {
+    await this.finalizePreviousDay();
+    return { days: await this.db.unannouncedWinnerDays(limit) };
+  }
+
+  async markDiscordWinnersAnnounced(
+    body: unknown,
+  ): Promise<{ ok: true } | { error: string; status: number }> {
+    const record = body && typeof body === 'object' ? (body as Record<string, unknown>) : {};
+    const day = typeof record.day === 'string' ? record.day : '';
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(day)) {
+      return { error: 'invalid reward day', status: 400 };
+    }
+    const ok = await this.db.markWinnersAnnounced(day);
+    return ok ? { ok: true } : { error: 'reward day not found', status: 404 };
+  }
+
   async finalizePreviousDay(now = new Date()): Promise<void> {
     const previous = new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
     const config = await this.ensureActiveDay(previous);

@@ -7,6 +7,7 @@ import type {
   DailyRewardSpinRow,
   DailyRewardTaskRow,
   DailyRewardTaskSeed,
+  DailyRewardWinnerAnnouncement,
 } from '../server/daily_rewards_db';
 
 const walletMock = vi.hoisted(() => ({
@@ -114,6 +115,12 @@ class FakeDailyRewardDb implements DailyRewardDb {
   async finalizeDay(): Promise<void> {}
   async pendingPayouts(): Promise<DailyRewardInternalPayoutRow[]> {
     return [];
+  }
+  async unannouncedWinnerDays(): Promise<DailyRewardWinnerAnnouncement[]> {
+    return [];
+  }
+  async markWinnersAnnounced(): Promise<boolean> {
+    return true;
   }
   async markPayout(): Promise<boolean> {
     return true;
