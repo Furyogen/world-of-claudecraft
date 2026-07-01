@@ -513,6 +513,26 @@
     pointer-events: auto;
   }
   body.mobile-touch #side-buttons {
+    display: block;
+    right: max(8px, env(safe-area-inset-right));
+    top: calc(max(8px, env(safe-area-inset-top)) + 210px);
+    bottom: auto;
+    width: 70px;
+    z-index: 81;
+    pointer-events: none;
+  }
+  body.mobile-touch #side-buttons .micro-btn {
+    display: none;
+  }
+  body.mobile-touch #daily-rewards-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 54px;
+    height: 50px;
+    pointer-events: auto;
+  }
+  body.mobile-touch #daily-rewards-button .daily-rewards-label {
     display: none;
   }
   body.mobile-touch #actionbar {
