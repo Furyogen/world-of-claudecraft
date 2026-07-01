@@ -34,7 +34,7 @@ export const GATHERING_PROFESSIONS: Record<GatheringProfessionId, GatheringProfe
     name: 'Mining',
     icon: 'mining',
     name: 'Mining',
-    icon: '⛏',
+    icon: 'mining',
     description: 'Extracting ore and stone from nodes found in the wild.',
   },
   logging: {
@@ -44,7 +44,7 @@ export const GATHERING_PROFESSIONS: Record<GatheringProfessionId, GatheringProfe
     name: 'Logging',
     icon: 'logging',
     name: 'Logging',
-    icon: '🪓',
+    icon: 'logging',
     description: 'Felling timber from trees found across the zones.',
   },
   herbalism: {
@@ -54,7 +54,7 @@ export const GATHERING_PROFESSIONS: Record<GatheringProfessionId, GatheringProfe
     name: 'Herbalism',
     icon: 'herbalism',
     name: 'Herbalism',
-    icon: '🌿',
+    icon: 'herbalism',
     description: 'Collecting herbs and plants growing in the wild.',
   },
 };
