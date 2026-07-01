@@ -214,6 +214,16 @@ function isDevToolsToggleShortcut(input) {
   return false;
 }
 
+// Classify an app.getGPUFeatureStatus() result: true when WebGL is anything other than
+// hardware-accelerated. A 'software only' or 'disabled' webgl/webgl2 status means Chromium
+// fell back to SwiftShader, which a WebGL game must not silently run on; main.cjs warns on
+// this in its startup GPU diagnostic. An absent/empty status returns false (do not cry wolf
+// before the GPU process has reported). Pure so a unit test can pin the classification.
+function isSoftwareRenderer(status) {
+  const gl = `${status?.webgl ?? ''} ${status?.webgl2 ?? ''}`;
+  return /software|disabled/i.test(gl);
+}
+
 module.exports = {
   deriveOrigin,
   originAllowed,
@@ -221,6 +231,7 @@ module.exports = {
   navigationAllowed,
   isTrustedSender,
   isDevToolsToggleShortcut,
+  isSoftwareRenderer,
   ALLOWED_PERMISSIONS,
   EMBEDDED_SUBFRAME_ORIGINS,
   CSP_ORIGINS,

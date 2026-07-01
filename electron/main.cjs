@@ -7,6 +7,7 @@ const {
   navigationAllowed,
   isTrustedSender,
   isDevToolsToggleShortcut,
+  isSoftwareRenderer,
   deriveOrigin,
   buildContentSecurityPolicy,
   extractInlineScriptHashes,
@@ -278,8 +279,7 @@ function logGpuStatus() {
   try {
     const status = app.getGPUFeatureStatus();
     console.log('[gpu] feature status', status);
-    const gl = `${status?.webgl ?? ''} ${status?.webgl2 ?? ''}`;
-    if (/software|disabled/i.test(gl)) {
+    if (isSoftwareRenderer(status)) {
       console.warn('[gpu] WebGL is NOT hardware-accelerated:', {
         webgl: status?.webgl,
         webgl2: status?.webgl2,

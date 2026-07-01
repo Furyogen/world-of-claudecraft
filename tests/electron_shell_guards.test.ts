@@ -6,6 +6,7 @@ import {
   deriveOrigin,
   extractInlineScriptHashes,
   isDevToolsToggleShortcut,
+  isSoftwareRenderer,
   isTrustedSender,
   navigationAllowed,
   originAllowed,
@@ -254,6 +255,24 @@ describe('isDevToolsToggleShortcut', () => {
     expect(isDevToolsToggleShortcut(undefined)).toBe(false);
     expect(isDevToolsToggleShortcut({})).toBe(false);
     expect(isDevToolsToggleShortcut({ type: 'keyDown' })).toBe(false);
+  });
+});
+
+describe('isSoftwareRenderer', () => {
+  it('reports hardware acceleration (false) when webgl and webgl2 are enabled', () => {
+    expect(isSoftwareRenderer({ webgl: 'enabled', webgl2: 'enabled' })).toBe(false);
+  });
+  it('flags a SwiftShader/software or disabled WebGL status', () => {
+    expect(isSoftwareRenderer({ webgl: 'enabled', webgl2: 'software only' })).toBe(true);
+    expect(isSoftwareRenderer({ webgl: 'disabled_software', webgl2: 'enabled' })).toBe(true);
+    // The pre-initialization 'disabled_off' the diagnostic must not read too early also
+    // classifies as not-hardware if it ever survives to did-finish-load.
+    expect(isSoftwareRenderer({ webgl: 'disabled_off' })).toBe(true);
+  });
+  it('does not cry wolf on an absent, empty, or partial status', () => {
+    expect(isSoftwareRenderer(null)).toBe(false);
+    expect(isSoftwareRenderer(undefined)).toBe(false);
+    expect(isSoftwareRenderer({})).toBe(false);
   });
 });
 

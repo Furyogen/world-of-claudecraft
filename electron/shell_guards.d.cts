@@ -32,6 +32,9 @@ export function isDevToolsToggleShortcut(
     | null
     | undefined,
 ): boolean;
+export function isSoftwareRenderer(
+  status: { webgl?: unknown; webgl2?: unknown } | null | undefined,
+): boolean;
 export const ALLOWED_PERMISSIONS: Set<string>;
 export const EMBEDDED_SUBFRAME_ORIGINS: Set<string>;
 export const CSP_ORIGINS: {
