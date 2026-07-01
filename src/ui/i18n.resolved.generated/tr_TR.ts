@@ -2626,6 +2626,7 @@ export const tr_TR: EnTranslations = {
       "usernameTaken": "Bu kullanıcı adı zaten alınmış.",
       "invalidCredentials": "Geçersiz kullanıcı adı veya parola.",
       "verificationFailed": "Doğrulama başarısız oldu. Lütfen tekrar deneyin.",
+      "desktopCodeInvalid": "Desktop login code is invalid or expired. Please try again.",
       "invalidCharacterName": "Geçersiz karakter adı. 2-16 harf kullanın.",
       "characterNameNotAllowed": "Bu karakter adına izin verilmiyor.",
       "invalidClass": "Geçersiz sınıf.",

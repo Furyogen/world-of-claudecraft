@@ -2626,6 +2626,7 @@ export const da_DK: EnTranslations = {
       "usernameTaken": "Det brugernavn er allerede optaget.",
       "invalidCredentials": "Ugyldigt brugernavn eller adgangskode.",
       "verificationFailed": "Verificeringen mislykkedes. Prøv venligst igen.",
+      "desktopCodeInvalid": "Desktop login code is invalid or expired. Please try again.",
       "invalidCharacterName": "Ugyldigt karakternavn. Brug 2-16 bogstaver.",
       "characterNameNotAllowed": "Det karakternavn er ikke tilladt.",
       "invalidClass": "Ugyldig klasse.",

@@ -2626,6 +2626,7 @@ export const ja_JP: EnTranslations = {
       "usernameTaken": "そのユーザー名は既に使われています。",
       "invalidCredentials": "ユーザー名またはパスワードが正しくありません。",
       "verificationFailed": "確認に失敗しました。もう一度お試しください。",
+      "desktopCodeInvalid": "デスクトップ版のログインコードが無効か期限切れです。もう一度お試しください。",
       "invalidCharacterName": "キャラクター名が無効です。2-16文字の英字を使用してください。",
       "characterNameNotAllowed": "そのキャラクター名は使用できません。",
       "invalidClass": "無効なクラスです。",

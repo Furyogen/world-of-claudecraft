@@ -9,24 +9,52 @@
 // Reproducibility is checked by tests/i18n_resolved_equivalence.test.ts.
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [],
-  "es_ES": [],
-  "fr_FR": [],
-  "fr_CA": [],
+  "es": [
+    "errors.api.desktopCodeInvalid"
+  ],
+  "es_ES": [
+    "errors.api.desktopCodeInvalid"
+  ],
+  "fr_FR": [
+    "errors.api.desktopCodeInvalid"
+  ],
+  "fr_CA": [
+    "errors.api.desktopCodeInvalid"
+  ],
   "en_CA": [],
-  "it_IT": [],
-  "de_DE": [],
+  "it_IT": [
+    "errors.api.desktopCodeInvalid"
+  ],
+  "de_DE": [
+    "errors.api.desktopCodeInvalid"
+  ],
   "zh_CN": [],
   "zh_TW": [],
   "ko_KR": [],
   "ja_JP": [],
-  "pt_BR": [],
+  "pt_BR": [
+    "errors.api.desktopCodeInvalid"
+  ],
   "ru_RU": [],
-  "nl_NL": [],
-  "pl_PL": [],
-  "id_ID": [],
-  "tr_TR": [],
-  "sv_SE": [],
-  "vi_VN": [],
-  "da_DK": []
+  "nl_NL": [
+    "errors.api.desktopCodeInvalid"
+  ],
+  "pl_PL": [
+    "errors.api.desktopCodeInvalid"
+  ],
+  "id_ID": [
+    "errors.api.desktopCodeInvalid"
+  ],
+  "tr_TR": [
+    "errors.api.desktopCodeInvalid"
+  ],
+  "sv_SE": [
+    "errors.api.desktopCodeInvalid"
+  ],
+  "vi_VN": [
+    "errors.api.desktopCodeInvalid"
+  ],
+  "da_DK": [
+    "errors.api.desktopCodeInvalid"
+  ]
 };

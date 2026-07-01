@@ -2626,6 +2626,7 @@ export const sv_SE: EnTranslations = {
       "usernameTaken": "Det användarnamnet är redan upptaget.",
       "invalidCredentials": "Ogiltigt användarnamn eller lösenord.",
       "verificationFailed": "Verifieringen misslyckades. Försök igen.",
+      "desktopCodeInvalid": "Desktop login code is invalid or expired. Please try again.",
       "invalidCharacterName": "Ogiltigt karaktärsnamn. Använd 2-16 bokstäver.",
       "characterNameNotAllowed": "Det karaktärsnamnet är inte tillåtet.",
       "invalidClass": "Ogiltig klass.",

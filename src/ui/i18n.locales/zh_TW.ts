@@ -679,6 +679,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'errors.api.usernameTaken': '此使用者名稱已被使用。',
   'errors.api.invalidCredentials': '使用者名稱或密碼無效。',
   'errors.api.verificationFailed': '驗證失敗，請重試。',
+  'errors.api.desktopCodeInvalid': '桌面版登入代碼無效或已過期，請重試。',
   'errors.api.invalidCharacterName': '角色名稱無效。請使用 2-16 個字母。',
   'errors.api.characterNameNotAllowed': '此角色名稱不可使用。',
   'errors.api.invalidClass': '職業無效。',

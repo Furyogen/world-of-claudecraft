@@ -2626,6 +2626,7 @@ export const en_XA: EnTranslations = {
       "usernameTaken": "[Ţĥáţ úšéŕñáɱé íš áļŕéáðý ţáķéñ.]",
       "invalidCredentials": "[Íñʋáļíð úšéŕñáɱé óŕ þáššŵóŕð.]",
       "verificationFailed": "[Ʋéŕíƒíçáţíóñ ƒáíļéð. Þļéášé ţŕý áĝáíñ.]",
+      "desktopCodeInvalid": "[Ðéšķţóþ ļóĝíñ çóðé íš íñʋáļíð óŕ éẋþíŕéð. Þļéášé ţŕý áĝáíñ.]",
       "invalidCharacterName": "[Íñʋáļíð çĥáŕáçţéŕ ñáɱé. Úšé 2-16 ļéţţéŕš.]",
       "characterNameNotAllowed": "[Ţĥáţ çĥáŕáçţéŕ ñáɱé íš ñóţ áļļóŵéð.]",
       "invalidClass": "[Íñʋáļíð çļášš.]",

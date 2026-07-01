@@ -2626,6 +2626,7 @@ export const vi_VN: EnTranslations = {
       "usernameTaken": "Tên đăng nhập đó đã được sử dụng.",
       "invalidCredentials": "Tên đăng nhập hoặc mật khẩu không đúng.",
       "verificationFailed": "Xác minh thất bại. Vui lòng thử lại.",
+      "desktopCodeInvalid": "Desktop login code is invalid or expired. Please try again.",
       "invalidCharacterName": "Tên nhân vật không hợp lệ. Dùng 2-16 chữ cái.",
       "characterNameNotAllowed": "Tên nhân vật đó không được phép.",
       "invalidClass": "Lớp không hợp lệ.",

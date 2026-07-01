@@ -351,9 +351,18 @@ function userFacingApiError(err: unknown): string {
   // The account row vanished mid-session (404 from /api/account/*); treat as a
   // dropped session rather than rendering raw English in the form.
   if (normalized === 'account not found') return t('errors.api.notAuthenticated');
-  // Cloudflare Turnstile rejection on login/register (server/main.ts passesTurnstile).
+  // Cloudflare Turnstile rejection on login/register (passesTurnstile in
+  // server/turnstile.ts).
   if (normalized === 'verification failed, please try again')
     return t('errors.api.verificationFailed');
+  // Desktop app login handoff (server/desktop_login.ts exchange, plus the
+  // client-side guard in completeDesktopBrowserLogin when the mint response
+  // carries no code).
+  if (
+    normalized === 'invalid or expired desktop login code' ||
+    normalized === 'missing desktop login code'
+  )
+    return t('errors.api.desktopCodeInvalid');
   // WebSocket disconnect reasons surfaced through the fatal overlay (net/online.ts).
   if (normalized === 'connection to the server was lost.') return t('loading.connectionLost');
   if (normalized === 'rejected by server') return t('loading.connectionRejected');
@@ -389,9 +398,13 @@ function turnstileApi(): TurnstileApi | undefined {
 }
 
 // Render the widget once, retrying until the async api.js script is ready. Safe to
-// call repeatedly (idempotent) and a no-op when no site key is configured.
+// call repeatedly (idempotent) and a no-op when no site key is configured. The
+// Electron desktop shell never renders it: Cloudflare rejects the app:// origin
+// (widget error 110200), and the server bypasses Turnstile for desktop origins
+// (passesTurnstile in server/turnstile.ts), so a widget here could only wedge
+// the form.
 function ensureTurnstile(): void {
-  if (!TURNSTILE_SITEKEY || turnstileWidgetId !== undefined) return;
+  if (DESKTOP_APP || !TURNSTILE_SITEKEY || turnstileWidgetId !== undefined) return;
   const ts = turnstileApi();
   const el = document.getElementById('cf-turnstile-container');
   if (!ts || !el) {
@@ -6321,7 +6334,7 @@ function wireStartScreens(): void {
     const password = ($('#login-pass') as unknown as HTMLInputElement).value;
     loginError('');
     const token = turnstileToken();
-    if (!NATIVE_APP && TURNSTILE_SITEKEY && !token) {
+    if (!NATIVE_APP && !DESKTOP_APP && TURNSTILE_SITEKEY && !token) {
       loginError(t('errors.api.verificationFailed'));
       return;
     }

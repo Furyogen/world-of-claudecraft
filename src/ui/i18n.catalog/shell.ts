@@ -58,6 +58,7 @@ export const shellStrings = {
         usernameTaken: 'That username is already taken.',
         invalidCredentials: 'Invalid username or password.',
         verificationFailed: 'Verification failed. Please try again.',
+        desktopCodeInvalid: 'Desktop login code is invalid or expired. Please try again.',
         invalidCharacterName: 'Invalid character name. Use 2-16 letters.',
         characterNameNotAllowed: 'That character name is not allowed.',
         invalidClass: 'Invalid class.',

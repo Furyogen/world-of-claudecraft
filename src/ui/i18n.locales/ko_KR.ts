@@ -711,6 +711,8 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'errors.api.usernameTaken': '이미 사용 중인 사용자 이름입니다.',
   'errors.api.invalidCredentials': '사용자 이름 또는 비밀번호가 올바르지 않습니다.',
   'errors.api.verificationFailed': '확인에 실패했습니다. 다시 시도해 주세요.',
+  'errors.api.desktopCodeInvalid':
+    '데스크톱 로그인 코드가 유효하지 않거나 만료되었습니다. 다시 시도해 주세요.',
   'errors.api.invalidCharacterName': '캐릭터 이름이 올바르지 않습니다. 2-16자의 글자를 사용하세요.',
   'errors.api.characterNameNotAllowed': '이 캐릭터 이름은 사용할 수 없습니다.',
   'errors.api.invalidClass': '유효하지 않은 직업입니다.',

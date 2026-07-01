@@ -2626,6 +2626,7 @@ export const nl_NL: EnTranslations = {
       "usernameTaken": "Die gebruikersnaam is al in gebruik.",
       "invalidCredentials": "Ongeldige gebruikersnaam of wachtwoord.",
       "verificationFailed": "Verificatie mislukt. Probeer het opnieuw.",
+      "desktopCodeInvalid": "Desktop login code is invalid or expired. Please try again.",
       "invalidCharacterName": "Ongeldige personagenaam. Gebruik 2-16 letters.",
       "characterNameNotAllowed": "Die personagenaam is niet toegestaan.",
       "invalidClass": "Ongeldige klasse.",

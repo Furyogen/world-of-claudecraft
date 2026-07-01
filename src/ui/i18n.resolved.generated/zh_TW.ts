@@ -2626,6 +2626,7 @@ export const zh_TW: EnTranslations = {
       "usernameTaken": "此使用者名稱已被使用。",
       "invalidCredentials": "使用者名稱或密碼無效。",
       "verificationFailed": "驗證失敗，請重試。",
+      "desktopCodeInvalid": "桌面版登入代碼無效或已過期，請重試。",
       "invalidCharacterName": "角色名稱無效。請使用 2-16 個字母。",
       "characterNameNotAllowed": "此角色名稱不可使用。",
       "invalidClass": "職業無效。",

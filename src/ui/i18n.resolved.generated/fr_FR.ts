@@ -2626,6 +2626,7 @@ export const fr_FR: EnTranslations = {
       "usernameTaken": "Ce nom d'utilisateur est déjà pris.",
       "invalidCredentials": "Nom d'utilisateur ou mot de passe incorrect.",
       "verificationFailed": "Échec de la vérification. Veuillez réessayer.",
+      "desktopCodeInvalid": "Desktop login code is invalid or expired. Please try again.",
       "invalidCharacterName": "Nom de personnage invalide. Utilisez 2 à 16 lettres.",
       "characterNameNotAllowed": "Ce nom de personnage n'est pas autorisé.",
       "invalidClass": "Classe invalide.",

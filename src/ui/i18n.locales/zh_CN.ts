@@ -678,6 +678,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'errors.api.usernameTaken': '该用户名已被占用。',
   'errors.api.invalidCredentials': '用户名或密码无效。',
   'errors.api.verificationFailed': '验证失败，请重试。',
+  'errors.api.desktopCodeInvalid': '桌面版登录代码无效或已过期，请重试。',
   'errors.api.invalidCharacterName': '角色名称无效。请使用 2-16 个字母。',
   'errors.api.characterNameNotAllowed': '该角色名称不可使用。',
   'errors.api.invalidClass': '职业无效。',

@@ -714,6 +714,8 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'errors.api.usernameTaken': 'そのユーザー名は既に使われています。',
   'errors.api.invalidCredentials': 'ユーザー名またはパスワードが正しくありません。',
   'errors.api.verificationFailed': '確認に失敗しました。もう一度お試しください。',
+  'errors.api.desktopCodeInvalid':
+    'デスクトップ版のログインコードが無効か期限切れです。もう一度お試しください。',
   'errors.api.invalidCharacterName': 'キャラクター名が無効です。2-16文字の英字を使用してください。',
   'errors.api.characterNameNotAllowed': 'そのキャラクター名は使用できません。',
   'errors.api.invalidClass': '無効なクラスです。',

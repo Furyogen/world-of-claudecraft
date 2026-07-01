@@ -2626,6 +2626,7 @@ export const ru_RU: EnTranslations = {
       "usernameTaken": "Это имя пользователя уже занято.",
       "invalidCredentials": "Неверное имя пользователя или пароль.",
       "verificationFailed": "Проверка не пройдена. Повторите попытку.",
+      "desktopCodeInvalid": "Код входа для настольного приложения недействителен или истёк. Повторите попытку.",
       "invalidCharacterName": "Недопустимое имя персонажа. Используйте 2-16 букв.",
       "characterNameNotAllowed": "Это имя персонажа запрещено.",
       "invalidClass": "Недопустимый класс.",

@@ -2626,6 +2626,7 @@ export const id_ID: EnTranslations = {
       "usernameTaken": "Nama pengguna itu sudah dipakai.",
       "invalidCredentials": "Nama pengguna atau kata sandi salah.",
       "verificationFailed": "Verifikasi gagal. Silakan coba lagi.",
+      "desktopCodeInvalid": "Desktop login code is invalid or expired. Please try again.",
       "invalidCharacterName": "Nama karakter tidak valid. Gunakan 2-16 huruf.",
       "characterNameNotAllowed": "Nama karakter itu tidak diperbolehkan.",
       "invalidClass": "Kelas tidak valid.",
