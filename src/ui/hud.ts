@@ -1115,7 +1115,10 @@ export class Hud {
     const dailyRewardsButton = document.getElementById(
       'daily-rewards-button',
     ) as HTMLButtonElement | null;
-    if (dailyRewardsButton) {
+    if (!this.dailyRewardsEnabled()) {
+      dailyRewardsButton?.setAttribute('hidden', '');
+      $('#daily-rewards-window').style.display = 'none';
+    } else if (dailyRewardsButton) {
       this.dailyRewardsButtonEl = dailyRewardsButton;
       dailyRewardsButton.innerHTML =
         `<img class="daily-rewards-icon" src="/ui/daily-rewards/treasure_chest.webp" alt="" draggable="false" decoding="async">` +
@@ -4383,13 +4386,22 @@ export class Hud {
     return coerceFxTier(document.documentElement.dataset.fxLevel);
   }
 
+  private dailyRewardsEnabled(): boolean {
+    return !(
+      document.body.classList.contains('native-app') &&
+      document.body.classList.contains('mobile-touch')
+    );
+  }
+
   private applyDailyRewardsLauncherStatus(status: DailyRewardStatus): void {
+    if (!this.dailyRewardsEnabled()) return;
     const button = this.dailyRewardsButtonEl;
     if (!button) return;
     button.classList.toggle('spin-ready', !status.eligibility.eligible || !status.spin.claimed);
   }
 
   private refreshDailyRewardsLauncher(force = false): void {
+    if (!this.dailyRewardsEnabled()) return;
     const button = this.dailyRewardsButtonEl;
     if (!button) return;
     const now = performance.now();
@@ -9855,6 +9867,7 @@ export class Hud {
   }
 
   toggleDailyRewards(): void {
+    if (!this.dailyRewardsEnabled()) return;
     this.dailyRewardsWindow.toggle();
     this.refreshDailyRewardsLauncher(true);
   }
