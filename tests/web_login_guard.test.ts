@@ -127,9 +127,12 @@ describe('API CORS reflection allow-list (allowedCorsOrigin)', () => {
     expect(allowedCorsOrigin('https://localhost')).toBe('https://localhost');
   });
 
-  it('does not reflect look-alikes, the bare site origin, or a missing Origin', () => {
+  it('does not reflect look-alikes, unlisted origins, or a missing Origin', () => {
     expect(allowedCorsOrigin('app://evil')).toBeNull();
     expect(allowedCorsOrigin('app://worldofclaudecraft.evil')).toBeNull();
+    // Unlisted here because REALM_ORIGINS is empty in the test env; a
+    // deployment that lists the site origin as a realm URL reflects it. The
+    // same-origin page never needs CORS either way.
     expect(allowedCorsOrigin('https://worldofclaudecraft.com')).toBeNull();
     expect(allowedCorsOrigin(undefined)).toBeNull();
     expect(allowedCorsOrigin('')).toBeNull();
