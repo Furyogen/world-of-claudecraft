@@ -2,9 +2,12 @@ const { app, BrowserWindow, ipcMain, net, protocol, session, shell } = require('
 const fs = require('node:fs');
 const path = require('node:path');
 const { pathToFileURL } = require('node:url');
+const { appNavigationOrigins, navigationAllowed } = require('./shell_guards.cjs');
 
 const APP_ORIGIN = 'app://worldofclaudecraft';
 const devServerUrl = process.env.VITE_DEV_SERVER_URL;
+// Origins the main frame may navigate to (app origin, plus the dev server in dev).
+const appOrigins = appNavigationOrigins(APP_ORIGIN, devServerUrl);
 const desktopLoginOrigin = (
   process.env.VITE_DESKTOP_LOGIN_ORIGIN ||
   process.env.VITE_DESKTOP_API_ORIGIN ||
@@ -94,6 +97,22 @@ function createMainWindow() {
     }
     return { action: 'deny' };
   });
+
+  // setWindowOpenHandler governs only new windows, not navigation of an existing
+  // frame, so guard all three navigation events: will-navigate (main frame),
+  // will-frame-navigate (any frame, so subframes are covered), and will-redirect
+  // (server-side redirects). Each receives the merged single-details Event object
+  // (details.url, details.isMainFrame, details.preventDefault()); the positional
+  // (event, url) form is deprecated. An off-origin navigation is blocked.
+  const guardNavigation = (details) => {
+    const isMainFrame = details.isMainFrame !== false;
+    if (!navigationAllowed(details.url, isMainFrame, appOrigins)) {
+      details.preventDefault();
+    }
+  };
+  mainWindow.webContents.on('will-navigate', guardNavigation);
+  mainWindow.webContents.on('will-frame-navigate', guardNavigation);
+  mainWindow.webContents.on('will-redirect', guardNavigation);
 
   if (devServerUrl) {
     mainWindow.loadURL(devServerUrl);
