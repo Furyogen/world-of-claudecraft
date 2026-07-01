@@ -155,8 +155,6 @@ export const ko_KR: EnTranslations = {
       "banner": "{name} 관전 중"
     },
     "death": {
-      "ghostTitle": "당신의 영혼이 떠돌고 있습니다.",
-      "corpseHint": "영혼을 시신으로 되돌려 보내거나, 영혼 치유사를 찾으십시오.",
       "resurrectAtCorpse": "시신에서 부활",
       "resurrectAtHealer": "영혼 치유사 (부활의 후유증)",
       "spiritHealerAlive": "영혼 치유사는 죽은 자를 지킵니다. 당신은 아직 산 자입니다."
@@ -739,6 +737,7 @@ export const ko_KR: EnTranslations = {
         "spi": "정신력을 {value} 감소시킵니다",
         "allStats": "모든 능력치를 {value} 감소시킵니다"
       },
+      "allStatsPctReduce": "모든 능력치를 {pct}% 감소시킵니다",
       "dodge": "회피 확률을 {pct}% 증가시킵니다",
       "dodgeReduce": "회피 확률을 {pct}% 감소시킵니다",
       "armorFlat": "방어도를 {value} 감소시킵니다",

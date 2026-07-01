@@ -821,10 +821,18 @@ export function handleDevChat(
     ctx.completeCurrentQuestsForDev(pid);
     return null;
   }
+  if (/^\/(?:dev\s+(?:kill|die|suicide)|devkill)\s*$/i.test(raw)) {
+    // [dev] Instant self-kill for testing the death/ghost loop: routes through the real
+    // death teardown (handleDeath), so the death overlay, corpse, and The Keeper's Toll
+    // persistence all behave exactly as a combat death.
+    const e = ctx.entities.get(pid);
+    if (e && !e.dead) ctx.handleDeath(e, null);
+    return null;
+  }
   if (/^\/dev(?:\s|$)/i.test(raw)) {
     ctx.error(
       pid,
-      'Dev commands: /dev level N, /dev tp X Z, /dev give itemId [count], /dev quest questId, /dev quests',
+      'Dev commands: /dev level N, /dev tp X Z, /dev give itemId [count], /dev quest questId, /dev quests, /dev kill',
     );
     return null;
   }

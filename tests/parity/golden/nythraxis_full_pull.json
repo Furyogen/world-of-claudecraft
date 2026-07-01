@@ -33,7 +33,7 @@
     {
       "tick": 1,
       "time": 0.05,
-      "nextId": 407,
+      "nextId": 406,
       "state": "3acf9b7b",
       "events": "e3925818",
       "rng": {
@@ -445,7 +445,7 @@
     {
       "tick": 10,
       "time": 0.5,
-      "nextId": 407,
+      "nextId": 406,
       "state": "a510b69a",
       "events": "741638a5",
       "rng": {
@@ -456,7 +456,7 @@
     {
       "tick": 20,
       "time": 1,
-      "nextId": 407,
+      "nextId": 406,
       "state": "a9d4f13d",
       "events": "741638a5",
       "rng": {
@@ -467,7 +467,7 @@
     {
       "tick": 30,
       "time": 1.5,
-      "nextId": 407,
+      "nextId": 406,
       "state": "1416f49f",
       "events": "9eacee0f",
       "rng": {
@@ -478,7 +478,7 @@
     {
       "tick": 40,
       "time": 2,
-      "nextId": 407,
+      "nextId": 406,
       "state": "b36865bd",
       "events": "741638a5",
       "rng": {
@@ -489,8 +489,8 @@
     {
       "tick": 42,
       "time": 2.1,
-      "nextId": 409,
-      "state": "01a37265",
+      "nextId": 408,
+      "state": "fc44d1d9",
       "events": "ee222cc1",
       "rng": {
         "draws": 11,
@@ -886,8 +886,8 @@
             "armor": 798
           },
           "summonedIds": [
-            407,
-            408
+            406,
+            407
           ],
           "swingTimer": 0.55,
           "templateId": "nythraxis_scourge_of_thornpeak",
@@ -914,7 +914,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 1569,
-          "id": 407,
+          "id": 406,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -964,7 +964,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 1569,
-          "id": 408,
+          "id": 407,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -1008,9 +1008,9 @@
     {
       "tick": 43,
       "time": 2.15,
-      "nextId": 410,
-      "state": "27de2a7a",
-      "events": "7535795f",
+      "nextId": 409,
+      "state": "a9b500fd",
+      "events": "a19e7eed",
       "rng": {
         "draws": 15,
         "digest": "6407bd16"
@@ -1473,8 +1473,8 @@
             "armor": 798
           },
           "summonedIds": [
-            407,
-            408
+            406,
+            407
           ],
           "swingTimer": 0.55,
           "templateId": "nythraxis_scourge_of_thornpeak",
@@ -1656,7 +1656,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 1569,
-          "id": 407,
+          "id": 406,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -1717,7 +1717,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 1569,
-          "id": 408,
+          "id": 407,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -1764,7 +1764,7 @@
           "dodgeChance": 0.05,
           "fiveSecondRule": 99,
           "hp": 500,
-          "id": 409,
+          "id": 408,
           "kind": "npc",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -1798,8 +1798,8 @@
     {
       "tick": 50,
       "time": 2.5,
-      "nextId": 410,
-      "state": "77a80106",
+      "nextId": 409,
+      "state": "ab48facf",
       "events": "741638a5",
       "rng": {
         "draws": 37,
@@ -1809,8 +1809,8 @@
     {
       "tick": 60,
       "time": 3,
-      "nextId": 410,
-      "state": "98c33957",
+      "nextId": 409,
+      "state": "4fd1400a",
       "events": "741638a5",
       "rng": {
         "draws": 76,
@@ -1820,8 +1820,8 @@
     {
       "tick": 70,
       "time": 3.5,
-      "nextId": 410,
-      "state": "d96c407e",
+      "nextId": 409,
+      "state": "d1db9ffd",
       "events": "741638a5",
       "rng": {
         "draws": 113,
@@ -1831,8 +1831,8 @@
     {
       "tick": 80,
       "time": 4,
-      "nextId": 410,
-      "state": "33128451",
+      "nextId": 409,
+      "state": "c13e186a",
       "events": "223f004f",
       "rng": {
         "draws": 166,
@@ -1842,9 +1842,9 @@
     {
       "tick": 90,
       "time": 4.5,
-      "nextId": 410,
-      "state": "f252c00a",
-      "events": "e7c5c6c6",
+      "nextId": 409,
+      "state": "c7f8606f",
+      "events": "e2605228",
       "rng": {
         "draws": 228,
         "digest": "4934231a"
@@ -1853,8 +1853,8 @@
     {
       "tick": 100,
       "time": 5,
-      "nextId": 410,
-      "state": "ad619e3f",
+      "nextId": 409,
+      "state": "bbfbfde6",
       "events": "741638a5",
       "rng": {
         "draws": 287,
@@ -1864,8 +1864,8 @@
     {
       "tick": 110,
       "time": 5.5,
-      "nextId": 410,
-      "state": "e080d9cb",
+      "nextId": 409,
+      "state": "fb9efcd6",
       "events": "741638a5",
       "rng": {
         "draws": 341,
@@ -1875,8 +1875,8 @@
     {
       "tick": 120,
       "time": 6,
-      "nextId": 410,
-      "state": "64faa642",
+      "nextId": 409,
+      "state": "687e292b",
       "events": "741638a5",
       "rng": {
         "draws": 391,
@@ -1886,8 +1886,8 @@
     {
       "tick": 130,
       "time": 6.5,
-      "nextId": 410,
-      "state": "875f5a42",
+      "nextId": 409,
+      "state": "fb8209a3",
       "events": "2e6df998",
       "rng": {
         "draws": 452,
@@ -1897,9 +1897,9 @@
     {
       "tick": 140,
       "time": 7,
-      "nextId": 410,
-      "state": "bcf1078d",
-      "events": "09ed204d",
+      "nextId": 409,
+      "state": "7359bf60",
+      "events": "07a152fb",
       "rng": {
         "draws": 517,
         "digest": "0a711af8"
@@ -1908,8 +1908,8 @@
     {
       "tick": 150,
       "time": 7.5,
-      "nextId": 410,
-      "state": "19ceb0cf",
+      "nextId": 409,
+      "state": "1044e622",
       "events": "741638a5",
       "rng": {
         "draws": 558,
@@ -1919,8 +1919,8 @@
     {
       "tick": 160,
       "time": 8,
-      "nextId": 410,
-      "state": "32672f02",
+      "nextId": 409,
+      "state": "86e959db",
       "events": "741638a5",
       "rng": {
         "draws": 613,
@@ -1930,8 +1930,8 @@
     {
       "tick": 170,
       "time": 8.5,
-      "nextId": 410,
-      "state": "0fcec442",
+      "nextId": 409,
+      "state": "0311270b",
       "events": "253512e1",
       "rng": {
         "draws": 684,
@@ -1941,9 +1941,9 @@
     {
       "tick": 180,
       "time": 9,
-      "nextId": 410,
-      "state": "62779c0f",
-      "events": "c901f5da",
+      "nextId": 409,
+      "state": "df25c782",
+      "events": "8a97b2d4",
       "rng": {
         "draws": 781,
         "digest": "e6aece32"
@@ -1952,8 +1952,8 @@
     {
       "tick": 190,
       "time": 9.5,
-      "nextId": 410,
-      "state": "6c01866a",
+      "nextId": 409,
+      "state": "b0e2e5b7",
       "events": "b642e861",
       "rng": {
         "draws": 856,
@@ -1963,8 +1963,8 @@
     {
       "tick": 200,
       "time": 10,
-      "nextId": 410,
-      "state": "66da74af",
+      "nextId": 409,
+      "state": "9d5e83f6",
       "events": "741638a5",
       "rng": {
         "draws": 922,
@@ -1974,8 +1974,8 @@
     {
       "tick": 203,
       "time": 10.15,
-      "nextId": 410,
-      "state": "ba4fd99a",
+      "nextId": 409,
+      "state": "1f287747",
       "events": "741638a5",
       "rng": {
         "draws": 938,
@@ -2420,8 +2420,8 @@
             "armor": 798
           },
           "summonedIds": [
-            407,
-            408
+            406,
+            407
           ],
           "swingTimer": 1.5,
           "templateId": "nythraxis_scourge_of_thornpeak",
@@ -2592,7 +2592,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 1569,
-          "id": 407,
+          "id": 406,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -2643,7 +2643,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 1569,
-          "id": 408,
+          "id": 407,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -2691,7 +2691,7 @@
           "dodgeChance": 0.05,
           "fiveSecondRule": 99,
           "hp": 500,
-          "id": 409,
+          "id": 408,
           "kind": "npc",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -2725,8 +2725,8 @@
     {
       "tick": 204,
       "time": 10.2,
-      "nextId": 410,
-      "state": "4e13c6ed",
+      "nextId": 409,
+      "state": "af05d564",
       "events": "aeec3379",
       "rng": {
         "draws": 942,
@@ -3182,8 +3182,8 @@
             "armor": 798
           },
           "summonedIds": [
-            407,
-            408
+            406,
+            407
           ],
           "swingTimer": 1.45,
           "templateId": "nythraxis_scourge_of_thornpeak",
@@ -3354,7 +3354,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 1569,
-          "id": 407,
+          "id": 406,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -3405,7 +3405,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 1569,
-          "id": 408,
+          "id": 407,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -3453,7 +3453,7 @@
           "dodgeChance": 0.05,
           "fiveSecondRule": 99,
           "hp": 500,
-          "id": 409,
+          "id": 408,
           "kind": "npc",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -3487,8 +3487,8 @@
     {
       "tick": 210,
       "time": 10.5,
-      "nextId": 410,
-      "state": "fd259ca5",
+      "nextId": 409,
+      "state": "83f00828",
       "events": "741638a5",
       "rng": {
         "draws": 959,
@@ -3498,9 +3498,9 @@
     {
       "tick": 220,
       "time": 11,
-      "nextId": 410,
-      "state": "020dc6eb",
-      "events": "e9bad5f0",
+      "nextId": 409,
+      "state": "1161a3f6",
+      "events": "d96d26ae",
       "rng": {
         "draws": 1005,
         "digest": "2f3c2dea"
@@ -3509,8 +3509,8 @@
     {
       "tick": 230,
       "time": 11.5,
-      "nextId": 410,
-      "state": "ec5cb478",
+      "nextId": 409,
+      "state": "236f8dd5",
       "events": "741638a5",
       "rng": {
         "draws": 1055,
@@ -3520,8 +3520,8 @@
     {
       "tick": 240,
       "time": 12,
-      "nextId": 410,
-      "state": "9d71f9cc",
+      "nextId": 409,
+      "state": "a743390d",
       "events": "ae9c5ac8",
       "rng": {
         "draws": 1101,
@@ -3531,8 +3531,8 @@
     {
       "tick": 250,
       "time": 12.5,
-      "nextId": 410,
-      "state": "4e454fd0",
+      "nextId": 409,
+      "state": "c93a32e9",
       "events": "741638a5",
       "rng": {
         "draws": 1139,
@@ -3542,8 +3542,8 @@
     {
       "tick": 260,
       "time": 13,
-      "nextId": 410,
-      "state": "013519d2",
+      "nextId": 409,
+      "state": "e4bf6cdf",
       "events": "741638a5",
       "rng": {
         "draws": 1190,
@@ -3553,9 +3553,9 @@
     {
       "tick": 270,
       "time": 13.5,
-      "nextId": 410,
-      "state": "a35e6294",
-      "events": "50a423e0",
+      "nextId": 409,
+      "state": "a7762b1d",
+      "events": "989dfd7a",
       "rng": {
         "draws": 1230,
         "digest": "3fea8dc1"
@@ -3564,8 +3564,8 @@
     {
       "tick": 280,
       "time": 14,
-      "nextId": 410,
-      "state": "da34aab9",
+      "nextId": 409,
+      "state": "ede27910",
       "events": "741638a5",
       "rng": {
         "draws": 1288,
@@ -3575,8 +3575,8 @@
     {
       "tick": 290,
       "time": 14.5,
-      "nextId": 410,
-      "state": "1a020f28",
+      "nextId": 409,
+      "state": "b18e0fad",
       "events": "17ce51ab",
       "rng": {
         "draws": 1345,
@@ -3586,8 +3586,8 @@
     {
       "tick": 300,
       "time": 15,
-      "nextId": 410,
-      "state": "f643e4d0",
+      "nextId": 409,
+      "state": "d6add159",
       "events": "741638a5",
       "rng": {
         "draws": 1387,
@@ -3597,9 +3597,9 @@
     {
       "tick": 310,
       "time": 15.5,
-      "nextId": 410,
-      "state": "4eb1469b",
-      "events": "975c089b",
+      "nextId": 409,
+      "state": "6bc7f862",
+      "events": "ae83a49d",
       "rng": {
         "draws": 1447,
         "digest": "d5d6f706"
@@ -3608,8 +3608,8 @@
     {
       "tick": 320,
       "time": 16,
-      "nextId": 410,
-      "state": "d5c2ce95",
+      "nextId": 409,
+      "state": "4bd21dd8",
       "events": "741638a5",
       "rng": {
         "draws": 1505,
@@ -3619,8 +3619,8 @@
     {
       "tick": 330,
       "time": 16.5,
-      "nextId": 410,
-      "state": "63a460b6",
+      "nextId": 409,
+      "state": "16ef8e3f",
       "events": "d1c70169",
       "rng": {
         "draws": 1538,
@@ -3630,8 +3630,8 @@
     {
       "tick": 340,
       "time": 17,
-      "nextId": 410,
-      "state": "28f03827",
+      "nextId": 409,
+      "state": "981f5d4a",
       "events": "de49aea9",
       "rng": {
         "draws": 1583,
@@ -3641,8 +3641,8 @@
     {
       "tick": 350,
       "time": 17.5,
-      "nextId": 410,
-      "state": "2635d9aa",
+      "nextId": 409,
+      "state": "aa23d7fb",
       "events": "741638a5",
       "rng": {
         "draws": 1623,
@@ -3652,9 +3652,9 @@
     {
       "tick": 360,
       "time": 18,
-      "nextId": 410,
-      "state": "53c3c50e",
-      "events": "86688569",
+      "nextId": 409,
+      "state": "cedb59df",
+      "events": "704acccb",
       "rng": {
         "draws": 1677,
         "digest": "0d767fc6"
@@ -3663,8 +3663,8 @@
     {
       "tick": 370,
       "time": 18.5,
-      "nextId": 410,
-      "state": "5c0fa31b",
+      "nextId": 409,
+      "state": "c26f4958",
       "events": "b71ca56a",
       "rng": {
         "draws": 1732,
@@ -3674,8 +3674,8 @@
     {
       "tick": 380,
       "time": 19,
-      "nextId": 410,
-      "state": "4850c543",
+      "nextId": 409,
+      "state": "f7e3f398",
       "events": "741638a5",
       "rng": {
         "draws": 1798,
@@ -3685,9 +3685,9 @@
     {
       "tick": 386,
       "time": 19.3,
-      "nextId": 410,
-      "state": "d1777489",
-      "events": "d7c91f30",
+      "nextId": 409,
+      "state": "7e012e4c",
+      "events": "071b8e50",
       "rng": {
         "draws": 1825,
         "digest": "9323f156"
@@ -4120,8 +4120,8 @@
             "armor": 798
           },
           "summonedIds": [
-            407,
-            408
+            406,
+            407
           ],
           "swingTimer": 0.35,
           "templateId": "nythraxis_scourge_of_thornpeak",
@@ -4291,7 +4291,7 @@
           "facing": 2.642246,
           "fiveSecondRule": 99,
           "hostile": true,
-          "id": 407,
+          "id": 406,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -4344,7 +4344,7 @@
           "facing": -2.642246,
           "fiveSecondRule": 99,
           "hostile": true,
-          "id": 408,
+          "id": 407,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -4395,7 +4395,7 @@
           "dodgeChance": 0.05,
           "fiveSecondRule": 99,
           "hp": 500,
-          "id": 409,
+          "id": 408,
           "kind": "npc",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -4429,8 +4429,8 @@
     {
       "tick": 390,
       "time": 19.5,
-      "nextId": 410,
-      "state": "fa5edf3a",
+      "nextId": 409,
+      "state": "87deffff",
       "events": "460785fe",
       "rng": {
         "draws": 1856,
@@ -4440,8 +4440,8 @@
     {
       "tick": 400,
       "time": 20,
-      "nextId": 410,
-      "state": "1788a1e7",
+      "nextId": 409,
+      "state": "873ea216",
       "events": "a2da62e3",
       "rng": {
         "draws": 1908,
@@ -4451,8 +4451,8 @@
     {
       "tick": 410,
       "time": 20.5,
-      "nextId": 410,
-      "state": "6fd782ed",
+      "nextId": 409,
+      "state": "ab2e19cc",
       "events": "a2da62e3",
       "rng": {
         "draws": 1947,
@@ -4462,8 +4462,8 @@
     {
       "tick": 420,
       "time": 21,
-      "nextId": 410,
-      "state": "b13a8738",
+      "nextId": 409,
+      "state": "b3ec96e5",
       "events": "a2da62e3",
       "rng": {
         "draws": 2001,
@@ -4473,8 +4473,8 @@
     {
       "tick": 430,
       "time": 21.5,
-      "nextId": 410,
-      "state": "80d8be78",
+      "nextId": 409,
+      "state": "dbdc7a69",
       "events": "a2da62e3",
       "rng": {
         "draws": 2050,
@@ -4484,8 +4484,8 @@
     {
       "tick": 440,
       "time": 22,
-      "nextId": 410,
-      "state": "9864ea65",
+      "nextId": 409,
+      "state": "c1a9c090",
       "events": "a2da62e3",
       "rng": {
         "draws": 2112,
@@ -4495,8 +4495,8 @@
     {
       "tick": 450,
       "time": 22.5,
-      "nextId": 410,
-      "state": "55a05c93",
+      "nextId": 409,
+      "state": "d4b3763e",
       "events": "a2da62e3",
       "rng": {
         "draws": 2158,
@@ -4506,8 +4506,8 @@
     {
       "tick": 460,
       "time": 23,
-      "nextId": 410,
-      "state": "9014d986",
+      "nextId": 409,
+      "state": "e826deef",
       "events": "a2da62e3",
       "rng": {
         "draws": 2195,
@@ -4517,8 +4517,8 @@
     {
       "tick": 470,
       "time": 23.5,
-      "nextId": 410,
-      "state": "430d2895",
+      "nextId": 409,
+      "state": "67b3fb34",
       "events": "a2da62e3",
       "rng": {
         "draws": 2241,
@@ -4528,8 +4528,8 @@
     {
       "tick": 480,
       "time": 24,
-      "nextId": 410,
-      "state": "5307ff9c",
+      "nextId": 409,
+      "state": "15a1a3f1",
       "events": "a2da62e3",
       "rng": {
         "draws": 2283,
@@ -4539,8 +4539,8 @@
     {
       "tick": 490,
       "time": 24.5,
-      "nextId": 410,
-      "state": "b7f3f78a",
+      "nextId": 409,
+      "state": "71a295a3",
       "events": "0f53fa25",
       "rng": {
         "draws": 2331,
@@ -4550,8 +4550,8 @@
     {
       "tick": 500,
       "time": 25,
-      "nextId": 410,
-      "state": "6d0ef3d2",
+      "nextId": 409,
+      "state": "e4124d33",
       "events": "741638a5",
       "rng": {
         "draws": 2383,
@@ -4561,8 +4561,8 @@
     {
       "tick": 506,
       "time": 25.3,
-      "nextId": 410,
-      "state": "97d28e9d",
+      "nextId": 409,
+      "state": "2df11900",
       "events": "741638a5",
       "rng": {
         "draws": 2418,
@@ -5007,8 +5007,8 @@
             "armor": 798
           },
           "summonedIds": [
-            407,
-            408
+            406,
+            407
           ],
           "swingTimer": 0.35,
           "templateId": "nythraxis_scourge_of_thornpeak",
@@ -5178,7 +5178,7 @@
           "facing": 2.642246,
           "fiveSecondRule": 99,
           "hostile": true,
-          "id": 407,
+          "id": 406,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -5231,7 +5231,7 @@
           "facing": -2.642246,
           "fiveSecondRule": 99,
           "hostile": true,
-          "id": 408,
+          "id": 407,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -5282,7 +5282,7 @@
           "dodgeChance": 0.05,
           "fiveSecondRule": 99,
           "hp": 500,
-          "id": 409,
+          "id": 408,
           "kind": "npc",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -5316,8 +5316,8 @@
     {
       "tick": 510,
       "time": 25.5,
-      "nextId": 410,
-      "state": "69165c88",
+      "nextId": 409,
+      "state": "5e993975",
       "events": "741638a5",
       "rng": {
         "draws": 2433,
@@ -5327,8 +5327,8 @@
     {
       "tick": 520,
       "time": 26,
-      "nextId": 410,
-      "state": "2caf181c",
+      "nextId": 409,
+      "state": "9e07fd01",
       "events": "741638a5",
       "rng": {
         "draws": 2479,
@@ -5338,8 +5338,8 @@
     {
       "tick": 530,
       "time": 26.5,
-      "nextId": 410,
-      "state": "20a5ed4a",
+      "nextId": 409,
+      "state": "69a4a427",
       "events": "741638a5",
       "rng": {
         "draws": 2536,
@@ -5349,8 +5349,8 @@
     {
       "tick": 540,
       "time": 27,
-      "nextId": 410,
-      "state": "3094f5c2",
+      "nextId": 409,
+      "state": "ef783d5f",
       "events": "741638a5",
       "rng": {
         "draws": 2573,
@@ -5360,8 +5360,8 @@
     {
       "tick": 550,
       "time": 27.5,
-      "nextId": 410,
-      "state": "9893b3b4",
+      "nextId": 409,
+      "state": "d403bf15",
       "events": "741638a5",
       "rng": {
         "draws": 2625,
@@ -5371,8 +5371,8 @@
     {
       "tick": 560,
       "time": 28,
-      "nextId": 410,
-      "state": "3ed30298",
+      "nextId": 409,
+      "state": "cb1d88b1",
       "events": "741638a5",
       "rng": {
         "draws": 2658,
@@ -5382,8 +5382,8 @@
     {
       "tick": 570,
       "time": 28.5,
-      "nextId": 410,
-      "state": "f60fe916",
+      "nextId": 409,
+      "state": "a5e47217",
       "events": "741638a5",
       "rng": {
         "draws": 2704,
@@ -5393,8 +5393,8 @@
     {
       "tick": 580,
       "time": 29,
-      "nextId": 410,
-      "state": "55010d80",
+      "nextId": 409,
+      "state": "05d56f81",
       "events": "741638a5",
       "rng": {
         "draws": 2763,
@@ -5404,8 +5404,8 @@
     {
       "tick": 590,
       "time": 29.5,
-      "nextId": 410,
-      "state": "0bb20685",
+      "nextId": 409,
+      "state": "6b19b9ac",
       "events": "384eb1d1",
       "rng": {
         "draws": 2817,
@@ -5415,8 +5415,8 @@
     {
       "tick": 600,
       "time": 30,
-      "nextId": 410,
-      "state": "36d52185",
+      "nextId": 409,
+      "state": "35371ce8",
       "events": "e405d23a",
       "rng": {
         "draws": 2860,
@@ -5426,8 +5426,8 @@
     {
       "tick": 610,
       "time": 30.5,
-      "nextId": 410,
-      "state": "85409941",
+      "nextId": 409,
+      "state": "1cc6b684",
       "events": "741638a5",
       "rng": {
         "draws": 2906,
@@ -5437,8 +5437,8 @@
     {
       "tick": 620,
       "time": 31,
-      "nextId": 410,
-      "state": "f1776b23",
+      "nextId": 409,
+      "state": "6a6469b6",
       "events": "741638a5",
       "rng": {
         "draws": 2957,
@@ -5448,8 +5448,8 @@
     {
       "tick": 627,
       "time": 31.35,
-      "nextId": 410,
-      "state": "fe387fae",
+      "nextId": 409,
+      "state": "edfec78f",
       "events": "46b41032",
       "rng": {
         "draws": 2991,
@@ -5896,8 +5896,8 @@
             "armor": 798
           },
           "summonedIds": [
-            407,
-            408
+            406,
+            407
           ],
           "swingTimer": 1.05,
           "templateId": "nythraxis_scourge_of_thornpeak",
@@ -6067,7 +6067,7 @@
           "facing": 2.642246,
           "fiveSecondRule": 99,
           "hostile": true,
-          "id": 407,
+          "id": 406,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -6120,7 +6120,7 @@
           "facing": -2.642246,
           "fiveSecondRule": 99,
           "hostile": true,
-          "id": 408,
+          "id": 407,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -6171,7 +6171,7 @@
           "dodgeChance": 0.05,
           "fiveSecondRule": 99,
           "hp": 500,
-          "id": 409,
+          "id": 408,
           "kind": "npc",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -6205,8 +6205,8 @@
     {
       "tick": 628,
       "time": 31.4,
-      "nextId": 410,
-      "state": "5925bd15",
+      "nextId": 409,
+      "state": "90b85df6",
       "events": "69cbc25a",
       "rng": {
         "draws": 3002,
@@ -6705,8 +6705,8 @@
             "armor": 798
           },
           "summonedIds": [
-            407,
-            408
+            406,
+            407
           ],
           "swingTimer": 1.05,
           "tappedById": 396,
@@ -6871,7 +6871,7 @@
           "facing": 2.642246,
           "fiveSecondRule": 99,
           "hostile": true,
-          "id": 407,
+          "id": 406,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -6924,7 +6924,7 @@
           "facing": -2.642246,
           "fiveSecondRule": 99,
           "hostile": true,
-          "id": 408,
+          "id": 407,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -6975,7 +6975,7 @@
           "dodgeChance": 0.05,
           "fiveSecondRule": 99,
           "hp": 500,
-          "id": 409,
+          "id": 408,
           "kind": "npc",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -7009,8 +7009,8 @@
     {
       "tick": 630,
       "time": 31.5,
-      "nextId": 410,
-      "state": "7b30a0e8",
+      "nextId": 409,
+      "state": "7e7be023",
       "events": "741638a5",
       "rng": {
         "draws": 3009,
@@ -7020,8 +7020,8 @@
     {
       "tick": 640,
       "time": 32,
-      "nextId": 410,
-      "state": "26b58a0f",
+      "nextId": 409,
+      "state": "9db52214",
       "events": "741638a5",
       "rng": {
         "draws": 3055,
@@ -7031,8 +7031,8 @@
     {
       "tick": 650,
       "time": 32.5,
-      "nextId": 410,
-      "state": "e5f87c0b",
+      "nextId": 409,
+      "state": "d4413d28",
       "events": "741638a5",
       "rng": {
         "draws": 3091,
@@ -7042,8 +7042,8 @@
     {
       "tick": 660,
       "time": 33,
-      "nextId": 410,
-      "state": "9e299e94",
+      "nextId": 409,
+      "state": "4945d957",
       "events": "741638a5",
       "rng": {
         "draws": 3146,
@@ -7053,8 +7053,8 @@
     {
       "tick": 670,
       "time": 33.5,
-      "nextId": 410,
-      "state": "c7316eaa",
+      "nextId": 409,
+      "state": "53e041d9",
       "events": "741638a5",
       "rng": {
         "draws": 3209,
@@ -7064,8 +7064,8 @@
     {
       "tick": 680,
       "time": 34,
-      "nextId": 410,
-      "state": "d92dd871",
+      "nextId": 409,
+      "state": "1dc4d9b2",
       "events": "741638a5",
       "rng": {
         "draws": 3263,
@@ -7075,8 +7075,8 @@
     {
       "tick": 688,
       "time": 34.4,
-      "nextId": 410,
-      "state": "a62f286a",
+      "nextId": 409,
+      "state": "ca8261db",
       "events": "e76c2b5c",
       "rng": {
         "draws": 3299,
@@ -7575,8 +7575,8 @@
             "armor": 798
           },
           "summonedIds": [
-            407,
-            408
+            406,
+            407
           ],
           "swingTimer": 1.05,
           "tappedById": 396,
@@ -7741,7 +7741,7 @@
           "facing": 2.642246,
           "fiveSecondRule": 99,
           "hostile": true,
-          "id": 407,
+          "id": 406,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -7794,7 +7794,7 @@
           "facing": -2.642246,
           "fiveSecondRule": 99,
           "hostile": true,
-          "id": 408,
+          "id": 407,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -7845,7 +7845,7 @@
           "dodgeChance": 0.05,
           "fiveSecondRule": 99,
           "hp": 500,
-          "id": 409,
+          "id": 408,
           "kind": "npc",
           "level": 20,
           "lootFfaTimer": "Infinity",

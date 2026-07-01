@@ -155,11 +155,9 @@ export const id_ID: EnTranslations = {
       "banner": "Menonton {name}"
     },
     "death": {
-      "ghostTitle": "Your spirit wanders.",
-      "corpseHint": "Run your spirit back to your body, or find a Spirit Healer.",
       "resurrectAtCorpse": "Resurrect at Corpse",
-      "resurrectAtHealer": "Spirit Healer (Resurrection Sickness)",
-      "spiritHealerAlive": "The Spirit Healer keeps watch over the dead. You are still among the living."
+      "resurrectAtHealer": "The Pale Keeper (Keeper's Toll)",
+      "spiritHealerAlive": "The Pale Keeper watches over the dead. You are still among the living."
     },
     "emotes": {
       "wave": "Melambai",
@@ -739,6 +737,7 @@ export const id_ID: EnTranslations = {
         "spi": "Reduce el espíritu en {value}",
         "allStats": "Reduce todos los atributos en {value}"
       },
+      "allStatsPctReduce": "Reduces all attributes by {pct}%",
       "dodge": "Aumenta la probabilidad de esquivar un {pct}%",
       "dodgeReduce": "Reduce la probabilidad de esquivar un {pct}%",
       "armorFlat": "Reduce la armadura en {value}",
@@ -5735,8 +5734,8 @@ export const id_ID: EnTranslations = {
         "greeting": "Relikuari di bawah bergeser lagi."
       },
       "spirit_healer": {
-        "name": "Spirit Healer",
-        "title": "Keeper of the Dead",
+        "name": "The Pale Keeper",
+        "title": "Warden of the Dead",
         "greeting": "Rest now, spirit. I can return you to your body, but the crossing back leaves you weak."
       },
       "tidewatcher_ondrel": {

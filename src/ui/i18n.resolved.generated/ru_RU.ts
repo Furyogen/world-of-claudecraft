@@ -155,8 +155,6 @@ export const ru_RU: EnTranslations = {
       "banner": "Наблюдение за {name}"
     },
     "death": {
-      "ghostTitle": "Ваш дух скитается.",
-      "corpseHint": "Бегите духом к своему телу или найдите целителя душ.",
       "resurrectAtCorpse": "Воскреснуть у тела",
       "resurrectAtHealer": "Целитель душ (болезнь воскрешения)",
       "spiritHealerAlive": "Целитель душ оберегает мёртвых. Вы всё ещё среди живых."
@@ -739,6 +737,7 @@ export const ru_RU: EnTranslations = {
         "spi": "Снижает дух на {value}",
         "allStats": "Снижает все характеристики на {value}"
       },
+      "allStatsPctReduce": "Снижает все характеристики на {pct}%",
       "dodge": "Повышает шанс уклонения на {pct}%",
       "dodgeReduce": "Снижает шанс уклонения на {pct}%",
       "armorFlat": "Снижает броню на {value}",

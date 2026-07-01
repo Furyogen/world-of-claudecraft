@@ -15,12 +15,9 @@ export const hudChromeStrings = {
   // button and "You have died." title reuse the hud.core.* keys; these are the
   // ghost-state additions shown once the spirit has been released.
   death: {
-    ghostTitle: 'Your spirit wanders.',
-    corpseHint: 'Run your spirit back to your body, or find a Spirit Healer.',
     resurrectAtCorpse: 'Resurrect at Corpse',
-    resurrectAtHealer: 'Spirit Healer (Resurrection Sickness)',
-    spiritHealerAlive:
-      'The Spirit Healer keeps watch over the dead. You are still among the living.',
+    resurrectAtHealer: "The Pale Keeper (Keeper's Toll)",
+    spiritHealerAlive: 'The Pale Keeper watches over the dead. You are still among the living.',
   },
   // Overhead emote display names (wheel tooltips/labels, editor items, overhead
   // bubble text). Source ids/order mirror OVERHEAD_EMOTES in world_api.ts.
@@ -811,6 +808,7 @@ export const hudChromeStrings = {
       spi: 'Reduces Spirit by {value}',
       allStats: 'Reduces all attributes by {value}',
     },
+    allStatsPctReduce: 'Reduces all attributes by {pct}%',
     dodge: 'Increases dodge chance by {pct}%',
     dodgeReduce: 'Reduces dodge chance by {pct}%',
     armorFlat: 'Reduces armor by {value}',

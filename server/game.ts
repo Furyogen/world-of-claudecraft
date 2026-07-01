@@ -2152,7 +2152,10 @@ export class GameServer {
       if (typeof msg.seq === 'number' && Number.isFinite(msg.seq) && msg.seq > 0) {
         session.lastInputSeq = Math.max(session.lastInputSeq, Math.floor(msg.seq));
       }
-      if (frame.facing !== null && !e.dead) {
+      // A released spirit turns with the camera like the living; only a corpse that
+      // has not yet released (dead and not a ghost) keeps its facing frozen. Without
+      // this the server drops the ghost's mouselook facing and its run feels inverted.
+      if (frame.facing !== null && (!e.dead || e.ghost)) {
         e.facing = frame.facing;
       }
       this.botDetector.observeInput(session.botTrackingContext, frame, receivedAtMs);

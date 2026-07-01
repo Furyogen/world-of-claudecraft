@@ -47,8 +47,8 @@ export const SPIRIT_HEALER_NPC_ID = 'spirit_healer';
 
 export const SPIRIT_HEALER: NpcDef = {
   id: SPIRIT_HEALER_NPC_ID,
-  name: 'Spirit Healer',
-  title: 'Keeper of the Dead',
+  name: 'The Pale Keeper',
+  title: 'Warden of the Dead',
   // Placeholder position: never surface-placed (dynamic), spawned per-graveyard.
   pos: { x: 0, z: 0 },
   facing: Math.PI,

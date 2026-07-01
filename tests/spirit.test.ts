@@ -15,6 +15,7 @@ import {
   CORPSE_REZ_RANGE,
   GHOST_RUN_MULT,
   RES_HEALER_HP_FRACTION,
+  RES_HP_FRACTION,
   RESURRECTION_SICKNESS_ID,
   SPIRIT_HEALER_RANGE,
 } from '../src/sim/spirit';
@@ -131,6 +132,27 @@ describe('spirit: resurrect at corpse', () => {
     expect(p.stats.str).toBe(fullStr);
   });
 
+  it('revives where the ghost is standing, not teleported onto the corpse', () => {
+    const sim = makeSim();
+    sim.setPlayerLevel(10);
+    const p = sim.player as AnyEntity;
+    p.dead = true;
+    sim.releaseSpirit();
+    const corpse = { ...(p.corpsePos as { x: number; y: number; z: number }) };
+    // stand the ghost away from the body but still within rez range
+    const ghostSpot = { x: corpse.x + 20, y: corpse.y, z: corpse.z };
+    p.pos = { ...ghostSpot };
+    p.prevPos = { ...p.pos };
+    sim.rebucket(p);
+    expect(dist2d(p.pos, corpse)).toBeLessThan(CORPSE_REZ_RANGE);
+    expect(dist2d(p.pos, corpse)).toBeGreaterThan(5);
+    sim.resurrectAtCorpse();
+    expect(p.dead).toBe(false);
+    // revived at the ghost's spot, not on the corpse
+    expect(Math.abs(p.pos.x - ghostSpot.x)).toBeLessThan(2);
+    expect(dist2d(p.pos, corpse)).toBeGreaterThan(5);
+  });
+
   it('does nothing when the ghost is too far from its corpse', () => {
     const sim = makeSim();
     sim.setPlayerLevel(10);
@@ -171,7 +193,7 @@ describe('spirit: resurrect at the Spirit Healer', () => {
     expect(p.stats.str).toBeLessThan(fullStr); // stats cut hard by the sickness
   });
 
-  it('always inflicts Resurrection Sickness, even at low level', () => {
+  it('does not inflict Resurrection Sickness below level 10 (classic exemption)', () => {
     const sim = makeSim();
     sim.setPlayerLevel(5);
     const p = sim.player as AnyEntity;
@@ -179,7 +201,7 @@ describe('spirit: resurrect at the Spirit Healer', () => {
     sim.releaseSpirit();
     sim.resurrectAtSpiritHealer();
     expect(p.dead).toBe(false);
-    expect(p.auras.some((a: any) => a.id === RESURRECTION_SICKNESS_ID)).toBe(true);
+    expect(p.auras.some((a: any) => a.id === RESURRECTION_SICKNESS_ID)).toBe(false);
   });
 
   it('does nothing when no Spirit Healer is near the ghost', () => {
@@ -199,8 +221,57 @@ describe('spirit: resurrect at the Spirit Healer', () => {
   });
 });
 
+describe("spirit: The Keeper's Toll persistence", () => {
+  it('survives a further death + release + corpse resurrect (not sheddable by dying)', () => {
+    const sim = makeSim();
+    sim.setPlayerLevel(12);
+    const p = sim.player as AnyEntity;
+    // take the Toll from a healer resurrection
+    p.dead = true;
+    sim.releaseSpirit();
+    sim.resurrectAtSpiritHealer();
+    expect(p.auras.some((a: any) => a.id === RESURRECTION_SICKNESS_ID)).toBe(true);
+    // die again and take the penalty-free corpse run
+    p.dead = true;
+    sim.releaseSpirit();
+    const corpse = { ...(p.corpsePos as { x: number; y: number; z: number }) };
+    p.pos = { x: corpse.x, y: corpse.y, z: corpse.z };
+    p.prevPos = { ...p.pos };
+    sim.rebucket(p);
+    sim.resurrectAtCorpse();
+    // dying did not shed the Toll
+    expect(p.auras.some((a: any) => a.id === RESURRECTION_SICKNESS_ID)).toBe(true);
+  });
+
+  it('survives a logout/login round-trip (cannot be shed by relogging)', () => {
+    const sim = makeSim();
+    sim.setPlayerLevel(12);
+    const p = sim.player as AnyEntity;
+    p.dead = true;
+    sim.releaseSpirit();
+    sim.resurrectAtSpiritHealer();
+    const toll = p.auras.find((a: any) => a.id === RESURRECTION_SICKNESS_ID);
+    expect(toll).toBeDefined();
+    const remaining = toll?.remaining as number;
+    const reducedMaxHp = p.maxHp;
+
+    const state = sim.serializeCharacter(sim.player.id)!;
+    expect(state.resSickness).toBe(remaining);
+
+    // relog: a fresh Sim loads the saved character
+    const sim2 = new Sim({ seed: 99, playerClass: 'warrior', noPlayer: true }) as AnySim;
+    const pid2 = sim2.addPlayer('warrior', 'Toller', { state });
+    const e2 = sim2.entities.get(pid2) as AnyEntity;
+    const toll2 = e2.auras.find((a: any) => a.id === RESURRECTION_SICKNESS_ID);
+    expect(toll2).toBeDefined();
+    expect(toll2?.remaining).toBe(remaining);
+    // maxHp still reduced by the restored Toll (not handed back at full)
+    expect(e2.maxHp).toBe(reducedMaxHp);
+  });
+});
+
 describe('spirit: dungeons', () => {
-  it('a dungeon death rises as a ghost at the instance entry, where an angel hovers', () => {
+  it('a dungeon death rises as a ghost at an OUTDOOR graveyard, not inside the instance', () => {
     const sim = makeSim();
     sim.setPlayerLevel(10);
     const p = sim.player as AnyEntity;
@@ -210,15 +281,44 @@ describe('spirit: dungeons', () => {
     p.pos = { x: p.pos.x, y: p.pos.y, z: p.pos.z + 30 };
     p.prevPos = { ...p.pos };
     sim.rebucket(p);
-    const deathSpot = { x: p.pos.x, y: p.pos.y, z: p.pos.z };
     p.dead = true;
     sim.releaseSpirit();
     expect(p.ghost).toBe(true);
-    // the corpse and the ghost both stay inside the instance, with an angel in reach
+    // the corpse stays inside the instance, but the ghost rises OUTSIDE at an overworld graveyard
     expect((p.corpsePos as { x: number }).x).toBeGreaterThan(DUNGEON_X_THRESHOLD);
-    expect(p.pos.x).toBeGreaterThan(DUNGEON_X_THRESHOLD);
-    expect(dist2d(p.pos, deathSpot)).toBeGreaterThan(0); // moved to the entry graveyard
-    expect(healerInRange(sim, p.pos)).toBe(true);
+    expect(p.pos.x).toBeLessThan(DUNGEON_X_THRESHOLD);
+    // No Spirit Healer stands inside any instance: every angel is at an overworld
+    // graveyard (there are exactly OVERWORLD_GRAVEYARDS of them, none past the threshold).
+    const healers = [...sim.entities.values()].filter(
+      (e: AnyEntity) => e.kind === 'npc' && e.templateId === SPIRIT_HEALER_NPC_ID,
+    );
+    expect(healers.length).toBe(OVERWORLD_GRAVEYARDS.length);
+    expect(healers.every((h: AnyEntity) => h.pos.x < DUNGEON_X_THRESHOLD)).toBe(true);
+  });
+
+  it('a ghost that re-enters the instance resurrects at the entrance, penalty-free', () => {
+    const sim = makeSim();
+    sim.setPlayerLevel(10);
+    const p = sim.player as AnyEntity;
+    sim.enterDungeon('hollow_crypt');
+    const entry = { x: p.pos.x, y: p.pos.y, z: p.pos.z };
+    // die deep inside and release to the outdoor graveyard
+    p.pos = { x: p.pos.x, y: p.pos.y, z: p.pos.z + 30 };
+    p.prevPos = { ...p.pos };
+    sim.rebucket(p);
+    p.dead = true;
+    sim.releaseSpirit();
+    expect(p.ghost).toBe(true);
+    expect(p.pos.x).toBeLessThan(DUNGEON_X_THRESHOLD); // outside as a ghost
+    // run the spirit back and re-enter: resurrects at the entry, no Resurrection Sickness
+    sim.enterDungeon('hollow_crypt');
+    expect(p.dead).toBe(false);
+    expect(p.ghost).toBe(false);
+    expect(p.corpsePos).toBeNull();
+    expect(p.pos.x).toBeGreaterThan(DUNGEON_X_THRESHOLD); // back inside
+    expect(dist2d(p.pos, entry)).toBeLessThan(3); // at the entrance
+    expect(p.hp).toBe(Math.max(1, Math.round(p.maxHp * RES_HP_FRACTION))); // penalty-free half
+    expect(p.auras.some((a: any) => a.id === RESURRECTION_SICKNESS_ID)).toBe(false);
   });
 });
 

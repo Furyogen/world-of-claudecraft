@@ -155,8 +155,6 @@ export const ja_JP: EnTranslations = {
       "banner": "{name}を観戦中"
     },
     "death": {
-      "ghostTitle": "あなたの魂はさまよっている。",
-      "corpseHint": "魂を自分の亡骸まで走らせるか、霊魂の癒し手を探そう。",
       "resurrectAtCorpse": "亡骸で復活",
       "resurrectAtHealer": "霊魂の癒し手（復活の後遺症）",
       "spiritHealerAlive": "霊魂の癒し手は死者を見守っている。あなたはまだ生者だ。"
@@ -739,6 +737,7 @@ export const ja_JP: EnTranslations = {
         "spi": "精神力を{value}低下させる",
         "allStats": "すべての能力値を{value}低下させる"
       },
+      "allStatsPctReduce": "すべての能力値を{pct}%低下させる",
       "dodge": "回避率を{pct}%上昇させる",
       "dodgeReduce": "回避率を{pct}%低下させる",
       "armorFlat": "防御力を{value}低下させる",

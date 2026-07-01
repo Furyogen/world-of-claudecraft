@@ -19,7 +19,6 @@
 
 import {
   dungeonAt,
-  instanceOrigin,
   isDelvePos,
   OVERWORLD_GRAVEYARDS,
   SPIRIT_HEALER,
@@ -27,6 +26,12 @@ import {
 } from './data';
 import { createNpc, recalcPlayerStats } from './entity';
 import { releaseSpiritInDelve } from './entity_roster';
+import {
+  aurasSurvivingDeath,
+  RES_SICKNESS_STAT_MULT,
+  RESURRECTION_SICKNESS_ID,
+  resSicknessDuration,
+} from './resurrection';
 import type { PlayerMeta } from './sim';
 import type { SimContext } from './sim_context';
 import { dist2d, type Entity, type Vec3 } from './types';
@@ -46,11 +51,10 @@ export const RES_HP_FRACTION = 0.5;
 // hp/mana AND inflicts Resurrection Sickness, so the penalty-free corpse run is the
 // reward for running your spirit all the way back.
 export const RES_HEALER_HP_FRACTION = 0.2;
-// Resurrection Sickness: a 10-minute drain to a quarter of all stats, always inflicted
-// by a Spirit Healer resurrection (the corpse run is the penalty-free path).
-export const RESURRECTION_SICKNESS_ID = 'resurrection_sickness';
-export const RES_SICKNESS_DURATION = 600;
-export const RES_SICKNESS_STAT_MULT = -0.75;
+// Resurrection Sickness (display "The Keeper's Toll"), its level-scaled duration, and the
+// "survives death" predicate live in ./resurrection (a leaf module shared by every
+// death/respawn site). Re-export the id so it stays importable from here.
+export { RESURRECTION_SICKNESS_ID };
 
 // --- graveyard selection ----------------------------------------------------
 
@@ -70,24 +74,14 @@ export function nearestOverworldGraveyard(x: number, z: number): { x: number; z:
   return { x: best.x, z: best.z };
 }
 
-// The graveyard a released spirit appears at. Inside a dungeon/raid instance the
-// spirit stays in the instance (it appears at the instance entry, where the
-// per-instance Spirit Healer hovers) so the corpse run happens in the instance;
-// outdoors it is the nearest overworld graveyard.
-function ghostGraveyard(ctx: SimContext, p: Entity): { x: number; z: number } {
+// The graveyard a released spirit appears at. A dungeon/raid death sends the spirit OUT
+// to the overworld graveyard nearest the instance door (never inside the instance): the
+// ghost runs its spirit back to the door and re-enters to resurrect at the entrance, so
+// no Spirit Healer stands inside an instance. Outdoors it is the nearest overworld
+// graveyard to where the body fell.
+function ghostGraveyard(p: Entity): { x: number; z: number } {
   const dungeon = dungeonAt(p.pos.x);
-  if (dungeon) {
-    for (const inst of ctx.instances) {
-      if (inst.dungeonId !== dungeon.id) continue;
-      const o = instanceOrigin(dungeon.index, inst.slot);
-      if (Math.abs(p.pos.x - o.x) < 120 && Math.abs(p.pos.z - o.z) < 250) {
-        return { x: o.x + dungeon.entry.x, z: o.z + dungeon.entry.z };
-      }
-    }
-    // Defensive: a dungeon-band death with no matching instance falls back to the
-    // overworld graveyard nearest the dungeon's door.
-    return nearestOverworldGraveyard(dungeon.doorPos.x, dungeon.doorPos.z);
-  }
+  if (dungeon) return nearestOverworldGraveyard(dungeon.doorPos.x, dungeon.doorPos.z);
   return nearestOverworldGraveyard(p.pos.x, p.pos.z);
 }
 
@@ -109,12 +103,14 @@ export function releasePlayerSpirit(ctx: SimContext, pid?: number): void {
   // Mark where the body lies, then send the spirit to the graveyard.
   p.corpsePos = { x: p.pos.x, y: p.pos.y, z: p.pos.z };
   p.ghost = true; // p.dead stays true
-  const gy = ghostGraveyard(ctx, p);
+  const gy = ghostGraveyard(p);
   p.pos = ctx.groundPos(gy.x, gy.z);
   p.prevPos = { ...p.pos };
   ctx.rebucket(p);
   p.facing = 0;
-  p.auras = [];
+  // The Keeper's Toll (Resurrection Sickness) persists through death and release: it
+  // cannot be shed by dying. Every other aura clears when the spirit is released.
+  p.auras = aurasSurvivingDeath(p.auras);
   p.ccDr.clear();
   recalcPlayerStats(p, meta.cls, meta.equipment, ctx.playerMods(meta));
   // A ghost shows a full (greyed) bar even though it is still `dead`. recalc forces
@@ -137,7 +133,9 @@ export function resurrectAtCorpse(ctx: SimContext, pid?: number): void {
   if (!p.dead || !p.ghost || !p.corpsePos) return;
   // Server-authoritative range gate; the client only offers the button in range.
   if (dist2d(p.pos, p.corpsePos) > CORPSE_REZ_RANGE) return;
-  reviveAt(ctx, meta, p, p.corpsePos, RES_HP_FRACTION, false);
+  // Revive where the ghost is standing (it ran back to within range of the body), not
+  // teleported onto the exact corpse point.
+  reviveAt(ctx, meta, p, p.pos, RES_HP_FRACTION, false);
   ctx.emit({ type: 'respawn', pid: meta.entityId });
 }
 
@@ -151,6 +149,20 @@ export function resurrectAtSpiritHealer(ctx: SimContext, pid?: number): void {
   // The Spirit Healer always inflicts Resurrection Sickness and returns you at only
   // RES_HEALER_HP_FRACTION of your pools (the corpse run is the penalty-free choice).
   reviveAt(ctx, meta, p, p.pos, RES_HEALER_HP_FRACTION, true);
+  ctx.emit({ type: 'respawn', pid: meta.entityId });
+}
+
+// Resurrect a ghost that ran its spirit back and re-entered its instance: penalty-free,
+// at the entry it just crossed. Re-entering IS the corpse run under the instance death
+// model (no Spirit Healer inside an instance), so it carries no Resurrection Sickness.
+// Called from enterDungeon when a ghost walks back through the door.
+export function resurrectOnInstanceReentry(
+  ctx: SimContext,
+  meta: PlayerMeta,
+  p: Entity,
+  pos: Vec3,
+): void {
+  reviveAt(ctx, meta, p, pos, RES_HP_FRACTION, false);
   ctx.emit({ type: 'respawn', pid: meta.entityId });
 }
 
@@ -180,7 +192,9 @@ function reviveAt(
   p.prevPos = { ...p.pos };
   ctx.rebucket(p);
   p.facing = 0;
-  p.auras = [];
+  // Keep The Keeper's Toll across the revive (it persists through death); a healer
+  // resurrection refreshes it to full duration via applyResurrectionSickness below.
+  p.auras = aurasSurvivingDeath(p.auras);
   p.ccDr.clear();
   recalcPlayerStats(p, meta.cls, meta.equipment, ctx.playerMods(meta));
   p.hp = Math.max(1, Math.round(p.maxHp * hpFrac));
@@ -195,13 +209,18 @@ function reviveAt(
   if (sickness) applyResurrectionSickness(ctx, p);
 }
 
-export function applyResurrectionSickness(ctx: SimContext, p: Entity): void {
+// Apply Resurrection Sickness. Fresh application uses the level-scaled duration (nothing
+// below RES_SICKNESS_MIN_LEVEL); a relog restore passes the SAVED remaining so the penalty
+// resumes rather than resets.
+export function applyResurrectionSickness(ctx: SimContext, p: Entity, remaining?: number): void {
+  const dur = remaining ?? resSicknessDuration(p.level);
+  if (dur <= 0) return;
   ctx.applyAura(p, {
     id: RESURRECTION_SICKNESS_ID,
     name: 'Resurrection Sickness',
     kind: 'buff_allstats_pct',
-    remaining: RES_SICKNESS_DURATION,
-    duration: RES_SICKNESS_DURATION,
+    remaining: dur,
+    duration: dur,
     value: RES_SICKNESS_STAT_MULT,
     sourceId: p.id,
     school: 'shadow',

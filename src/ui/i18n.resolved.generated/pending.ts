@@ -13,8 +13,7 @@ export const pending: Record<string, readonly string[]> = {
     "entities.npcs.spirit_healer.greeting",
     "entities.npcs.spirit_healer.name",
     "entities.npcs.spirit_healer.title",
-    "hudChrome.death.corpseHint",
-    "hudChrome.death.ghostTitle",
+    "hudChrome.auraEffect.allStatsPctReduce",
     "hudChrome.death.resurrectAtCorpse",
     "hudChrome.death.resurrectAtHealer",
     "hudChrome.death.spiritHealerAlive"
@@ -23,8 +22,7 @@ export const pending: Record<string, readonly string[]> = {
     "entities.npcs.spirit_healer.greeting",
     "entities.npcs.spirit_healer.name",
     "entities.npcs.spirit_healer.title",
-    "hudChrome.death.corpseHint",
-    "hudChrome.death.ghostTitle",
+    "hudChrome.auraEffect.allStatsPctReduce",
     "hudChrome.death.resurrectAtCorpse",
     "hudChrome.death.resurrectAtHealer",
     "hudChrome.death.spiritHealerAlive"
@@ -33,8 +31,7 @@ export const pending: Record<string, readonly string[]> = {
     "entities.npcs.spirit_healer.greeting",
     "entities.npcs.spirit_healer.name",
     "entities.npcs.spirit_healer.title",
-    "hudChrome.death.corpseHint",
-    "hudChrome.death.ghostTitle",
+    "hudChrome.auraEffect.allStatsPctReduce",
     "hudChrome.death.resurrectAtCorpse",
     "hudChrome.death.resurrectAtHealer",
     "hudChrome.death.spiritHealerAlive"
@@ -43,8 +40,7 @@ export const pending: Record<string, readonly string[]> = {
     "entities.npcs.spirit_healer.greeting",
     "entities.npcs.spirit_healer.name",
     "entities.npcs.spirit_healer.title",
-    "hudChrome.death.corpseHint",
-    "hudChrome.death.ghostTitle",
+    "hudChrome.auraEffect.allStatsPctReduce",
     "hudChrome.death.resurrectAtCorpse",
     "hudChrome.death.resurrectAtHealer",
     "hudChrome.death.spiritHealerAlive"
@@ -54,8 +50,7 @@ export const pending: Record<string, readonly string[]> = {
     "entities.npcs.spirit_healer.greeting",
     "entities.npcs.spirit_healer.name",
     "entities.npcs.spirit_healer.title",
-    "hudChrome.death.corpseHint",
-    "hudChrome.death.ghostTitle",
+    "hudChrome.auraEffect.allStatsPctReduce",
     "hudChrome.death.resurrectAtCorpse",
     "hudChrome.death.resurrectAtHealer",
     "hudChrome.death.spiritHealerAlive"
@@ -64,8 +59,7 @@ export const pending: Record<string, readonly string[]> = {
     "entities.npcs.spirit_healer.greeting",
     "entities.npcs.spirit_healer.name",
     "entities.npcs.spirit_healer.title",
-    "hudChrome.death.corpseHint",
-    "hudChrome.death.ghostTitle",
+    "hudChrome.auraEffect.allStatsPctReduce",
     "hudChrome.death.resurrectAtCorpse",
     "hudChrome.death.resurrectAtHealer",
     "hudChrome.death.spiritHealerAlive"
@@ -78,8 +72,7 @@ export const pending: Record<string, readonly string[]> = {
     "entities.npcs.spirit_healer.greeting",
     "entities.npcs.spirit_healer.name",
     "entities.npcs.spirit_healer.title",
-    "hudChrome.death.corpseHint",
-    "hudChrome.death.ghostTitle",
+    "hudChrome.auraEffect.allStatsPctReduce",
     "hudChrome.death.resurrectAtCorpse",
     "hudChrome.death.resurrectAtHealer",
     "hudChrome.death.spiritHealerAlive"
@@ -89,8 +82,7 @@ export const pending: Record<string, readonly string[]> = {
     "entities.npcs.spirit_healer.greeting",
     "entities.npcs.spirit_healer.name",
     "entities.npcs.spirit_healer.title",
-    "hudChrome.death.corpseHint",
-    "hudChrome.death.ghostTitle",
+    "hudChrome.auraEffect.allStatsPctReduce",
     "hudChrome.death.resurrectAtCorpse",
     "hudChrome.death.resurrectAtHealer",
     "hudChrome.death.spiritHealerAlive"
@@ -99,8 +91,7 @@ export const pending: Record<string, readonly string[]> = {
     "entities.npcs.spirit_healer.greeting",
     "entities.npcs.spirit_healer.name",
     "entities.npcs.spirit_healer.title",
-    "hudChrome.death.corpseHint",
-    "hudChrome.death.ghostTitle",
+    "hudChrome.auraEffect.allStatsPctReduce",
     "hudChrome.death.resurrectAtCorpse",
     "hudChrome.death.resurrectAtHealer",
     "hudChrome.death.spiritHealerAlive"
@@ -109,8 +100,7 @@ export const pending: Record<string, readonly string[]> = {
     "entities.npcs.spirit_healer.greeting",
     "entities.npcs.spirit_healer.name",
     "entities.npcs.spirit_healer.title",
-    "hudChrome.death.corpseHint",
-    "hudChrome.death.ghostTitle",
+    "hudChrome.auraEffect.allStatsPctReduce",
     "hudChrome.death.resurrectAtCorpse",
     "hudChrome.death.resurrectAtHealer",
     "hudChrome.death.spiritHealerAlive"
@@ -119,8 +109,7 @@ export const pending: Record<string, readonly string[]> = {
     "entities.npcs.spirit_healer.greeting",
     "entities.npcs.spirit_healer.name",
     "entities.npcs.spirit_healer.title",
-    "hudChrome.death.corpseHint",
-    "hudChrome.death.ghostTitle",
+    "hudChrome.auraEffect.allStatsPctReduce",
     "hudChrome.death.resurrectAtCorpse",
     "hudChrome.death.resurrectAtHealer",
     "hudChrome.death.spiritHealerAlive"
@@ -129,8 +118,7 @@ export const pending: Record<string, readonly string[]> = {
     "entities.npcs.spirit_healer.greeting",
     "entities.npcs.spirit_healer.name",
     "entities.npcs.spirit_healer.title",
-    "hudChrome.death.corpseHint",
-    "hudChrome.death.ghostTitle",
+    "hudChrome.auraEffect.allStatsPctReduce",
     "hudChrome.death.resurrectAtCorpse",
     "hudChrome.death.resurrectAtHealer",
     "hudChrome.death.spiritHealerAlive"
@@ -139,8 +127,7 @@ export const pending: Record<string, readonly string[]> = {
     "entities.npcs.spirit_healer.greeting",
     "entities.npcs.spirit_healer.name",
     "entities.npcs.spirit_healer.title",
-    "hudChrome.death.corpseHint",
-    "hudChrome.death.ghostTitle",
+    "hudChrome.auraEffect.allStatsPctReduce",
     "hudChrome.death.resurrectAtCorpse",
     "hudChrome.death.resurrectAtHealer",
     "hudChrome.death.spiritHealerAlive"
@@ -149,8 +136,7 @@ export const pending: Record<string, readonly string[]> = {
     "entities.npcs.spirit_healer.greeting",
     "entities.npcs.spirit_healer.name",
     "entities.npcs.spirit_healer.title",
-    "hudChrome.death.corpseHint",
-    "hudChrome.death.ghostTitle",
+    "hudChrome.auraEffect.allStatsPctReduce",
     "hudChrome.death.resurrectAtCorpse",
     "hudChrome.death.resurrectAtHealer",
     "hudChrome.death.spiritHealerAlive"

@@ -22,6 +22,7 @@
 
 import { dungeonAt, zoneAt } from './data';
 import { recalcPlayerStats } from './entity';
+import { aurasSurvivingDeath } from './resurrection';
 import type { SimContext } from './sim_context';
 import type { Entity, SimEvent, Vec3 } from './types';
 import { CAST_COMPLETE_EPS, DT } from './types';
@@ -178,7 +179,9 @@ export function releaseSpiritInDelve(ctx: SimContext, pid: number): void {
   p.prevPos = { ...entry };
   rebucketEntity(ctx, p);
   p.facing = 0;
-  p.auras = [];
+  // The Keeper's Toll persists through a delve death too (see resurrection.ts); every
+  // other aura clears on respawn.
+  p.auras = aurasSurvivingDeath(p.auras);
   p.ccDr.clear();
   recalcPlayerStats(p, r.meta.cls, r.meta.equipment, r.meta.talentMods);
   p.hp = Math.max(1, Math.round(p.maxHp * 0.5));

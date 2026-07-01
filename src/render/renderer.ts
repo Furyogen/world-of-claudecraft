@@ -3855,6 +3855,14 @@ export class Renderer {
         // hidden until its shaders finish linking off-thread (async-compile gate);
         // the object branch below may still re-hide loot
         v.group.visible = !v.compilePending;
+        // The graveyard resurrection angel is present only to a released spirit: hide
+        // it from the living local player. It stays in the sim for the ghost and for
+        // server-side resurrect-range checks, and other ghosts still see it. The
+        // continue also skips its holy shimmer and ghost pass below.
+        if (e.templateId === 'spirit_healer' && !p.ghost) {
+          v.group.visible = false;
+          continue;
+        }
         // mid-distance rigs keep rendering but leave the shadow pass
         const wantShadow = d2 < shadowRangeSq;
         const inProxyBand = d2 < ENTITY_PROXY_SHADOW_RANGE_SQ;
@@ -4812,6 +4820,10 @@ export class Renderer {
         if (o.userData.entityId !== undefined && o.userData.entityId !== this.sim.playerId) {
           const e = this.sim.entities.get(o.userData.entityId as number);
           if (e?.kind === 'object' && !e.lootable) return null;
+          // The graveyard angel is hidden from the living, so it must not be
+          // click-pickable either (the capsule proxy ignores `visible`): skip it
+          // unless the local player is a released spirit.
+          if (e?.templateId === 'spirit_healer' && !this.sim.player?.ghost) break;
           return o.userData.entityId as number;
         }
         o = o.parent;

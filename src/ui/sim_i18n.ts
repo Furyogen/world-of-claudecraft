@@ -164,7 +164,7 @@ const baseEnTable = {
   'aura.offBalance': 'Off-Balance',
   'aura.numbingChill': 'Numbing Chill',
   'aura.demoralized': 'Demoralized',
-  'aura.resurrectionSickness': 'Resurrection Sickness',
+  'aura.resurrectionSickness': "The Keeper's Toll",
 } as const;
 
 const petEnTable = {
@@ -358,7 +358,7 @@ const BASE_DICT: Record<SupportedLanguage, Record<BaseSimMessageKey, string>> = 
     'aura.offBalance': 'Off-Balance',
     'aura.numbingChill': 'Numbing Chill',
     'aura.demoralized': 'Demoralized',
-    'aura.resurrectionSickness': 'Resurrection Sickness',
+    'aura.resurrectionSickness': "The Keeper's Toll",
   },
   es: {
     'log.learnedAbility': 'Has aprendido una nueva habilidad: {name}.',
@@ -1003,7 +1003,7 @@ const BASE_DICT: Record<SupportedLanguage, Record<BaseSimMessageKey, string>> = 
     'aura.offBalance': 'Off-Balance',
     'aura.numbingChill': 'Numbing Chill',
     'aura.demoralized': 'Demoralized',
-    'aura.resurrectionSickness': 'Resurrection Sickness',
+    'aura.resurrectionSickness': "The Keeper's Toll",
     'error.lineOfSight': 'Line of sight.',
     'error.specLevel': 'You may choose a specialization at level {level}.',
     'error.equipLevel': 'You must be level {level} to equip that.',

@@ -155,8 +155,6 @@ export const zh_CN: EnTranslations = {
       "banner": "正在观察 {name}"
     },
     "death": {
-      "ghostTitle": "你的灵魂在游荡。",
-      "corpseHint": "让灵魂跑回你的尸体，或寻找一位灵魂医者。",
       "resurrectAtCorpse": "在尸体旁复活",
       "resurrectAtHealer": "灵魂医者（复活后遗症）",
       "spiritHealerAlive": "灵魂医者只看护逝者。你仍是生者。"
@@ -739,6 +737,7 @@ export const zh_CN: EnTranslations = {
         "spi": "精神降低 {value}",
         "allStats": "所有属性降低 {value}"
       },
+      "allStatsPctReduce": "所有属性降低 {pct}%",
       "dodge": "躲闪几率提高 {pct}%",
       "dodgeReduce": "躲闪几率降低 {pct}%",
       "armorFlat": "护甲降低 {value}",

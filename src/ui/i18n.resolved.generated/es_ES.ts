@@ -155,11 +155,9 @@ export const es_ES: EnTranslations = {
       "banner": "Observando a {name}"
     },
     "death": {
-      "ghostTitle": "Your spirit wanders.",
-      "corpseHint": "Run your spirit back to your body, or find a Spirit Healer.",
       "resurrectAtCorpse": "Resurrect at Corpse",
-      "resurrectAtHealer": "Spirit Healer (Resurrection Sickness)",
-      "spiritHealerAlive": "The Spirit Healer keeps watch over the dead. You are still among the living."
+      "resurrectAtHealer": "The Pale Keeper (Keeper's Toll)",
+      "spiritHealerAlive": "The Pale Keeper watches over the dead. You are still among the living."
     },
     "emotes": {
       "wave": "Saludar",
@@ -739,6 +737,7 @@ export const es_ES: EnTranslations = {
         "spi": "Disminuye el espíritu en {value}",
         "allStats": "Disminuye todos los atributos en {value}"
       },
+      "allStatsPctReduce": "Reduces all attributes by {pct}%",
       "dodge": "Incrementa la probabilidad de esquivar un {pct}%",
       "dodgeReduce": "Disminuye la probabilidad de esquivar un {pct}%",
       "armorFlat": "Disminuye la armadura en {value}",
@@ -5735,8 +5734,8 @@ export const es_ES: EnTranslations = {
         "greeting": "El relicario de abajo ha vuelto a moverse."
       },
       "spirit_healer": {
-        "name": "Spirit Healer",
-        "title": "Keeper of the Dead",
+        "name": "The Pale Keeper",
+        "title": "Warden of the Dead",
         "greeting": "Rest now, spirit. I can return you to your body, but the crossing back leaves you weak."
       },
       "tidewatcher_ondrel": {
