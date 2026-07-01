@@ -135,6 +135,14 @@
       "buildResources": "build",
       "output": "release"
     },
+    "electronFuses": {
+      "runAsNode": false,
+      "enableCookieEncryption": true,
+      "enableNodeOptionsEnvironmentVariable": false,
+      "enableNodeCliInspectArguments": false,
+      "grantFileProtocolExtraPrivileges": false,
+      "onlyLoadAppFromAsar": true
+    },
     "protocols": [
       {
         "name": "World of ClaudeCraft Login",
