@@ -186,6 +186,9 @@ import {
   drainGatheringGrants,
   emptyGatheringProficiency,
   gatheringSkillsView,
+  gatherNodeById,
+  harvestNode as harvestNodeImpl,
+  isNodeHarvestableBy,
   normalizeGatheringProficiency,
 } from './professions/gathering';
 import {
@@ -693,6 +696,12 @@ export interface PlayerMeta {
   // Grants queued by the `/dev gather` cheat, drained once per player per tick
   // (see drainGatheringGrants). Session-only, never persisted.
   pendingGatherGrants: { professionId: GatheringProfessionId; amount: number }[];
+  // Per-player, per-node gather-node respawn readiness (#1121): nodeId ->
+  // sim.time (seconds) at or after which THIS player may harvest that node
+  // again. Absent means never harvested (always ready). Session-only, never
+  // persisted, and never shared across players: see
+  // src/sim/professions/gathering.ts (isNodeHarvestableBy/resolveHarvest).
+  nodeHarvestReadyAt: Record<string, number>;
   known: ResolvedAbility[];
   questLog: Map<string, QuestProgress>;
   questsDone: Set<string>;
@@ -1298,6 +1307,7 @@ export class Sim {
       restedXp: 0,
       gatheringProficiency: emptyGatheringProficiency(),
       pendingGatherGrants: [],
+      nodeHarvestReadyAt: {},
       known: [],
       questLog: new Map(),
       questsDone: new Set(),
@@ -4743,6 +4753,29 @@ export class Sim {
 
   buyBackItem(itemId: string, pid?: number): void {
     items.buyBackItem(this.ctx, itemId, pid);
+  }
+
+  // Gather-node harvest (#1121): a thin delegate onto
+  // src/sim/professions/gathering.ts, resolved on the deterministic tick the
+  // command arrives on, same as buyItem/useItem above.
+  harvestNode(nodeId: string, pid?: number): void {
+    harvestNodeImpl(this.ctx, nodeId, pid);
+  }
+
+  // IWorld read surface (IWorldProfessions): whether the given node is
+  // harvestable right now BY THIS PLAYER specifically (per-player respawn
+  // timer, #1121). Never reflects another player's cooldown for the same node.
+  // Takes an explicit pid (mirrors gatheringProficiencyFor) so both the
+  // local-viewer getter below and tests can check any player's own timer.
+  nodeHarvestableByMeFor(nodeId: string, pid: number): boolean {
+    const meta = this.players.get(pid);
+    if (!meta) return false;
+    if (!gatherNodeById(nodeId)) return false;
+    return isNodeHarvestableBy(meta, nodeId, this.time);
+  }
+
+  nodeHarvestableByMe(nodeId: string): boolean {
+    return this.nodeHarvestableByMeFor(nodeId, this.primaryId);
   }
 
   private maybeAutoEquip(itemId: string, meta: PlayerMeta): void {

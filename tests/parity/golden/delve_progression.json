@@ -15,8 +15,8 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 389,
-      "state": "73f9587b",
+      "nextId": 390,
+      "state": "962d07b8",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -34,12 +34,13 @@
           "counters": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 388,
+          "entityId": 389,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -57,7 +58,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 90,
-          "id": 388,
+          "id": 389,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -100,9 +101,9 @@
     {
       "tick": 5,
       "time": 0.25,
-      "nextId": 410,
-      "state": "33b53dfb",
-      "events": "845f8524",
+      "nextId": 411,
+      "state": "139f27d6",
+      "events": "212ee2d3",
       "rng": {
         "draws": 1,
         "digest": "5eb1ea5d"
@@ -111,8 +112,8 @@
     {
       "tick": 7,
       "time": 0.35,
-      "nextId": 410,
-      "state": "e22494d1",
+      "nextId": 411,
+      "state": "6e6f45bc",
       "events": "741638a5",
       "rng": {
         "draws": 3,
@@ -130,13 +131,14 @@
           "counters": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 388,
+          "entityId": 389,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
           "lifetimeXp": 11200,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -153,7 +155,7 @@
           "dodgeChance": 0.063,
           "fiveSecondRule": 99.35,
           "hp": 50000,
-          "id": 388,
+          "id": 389,
           "kind": "player",
           "level": 7,
           "lootFfaTimer": "Infinity",
@@ -195,9 +197,9 @@
     {
       "tick": 7,
       "time": 0.35,
-      "nextId": 410,
-      "state": "b93feb31",
-      "events": "ba3d4289",
+      "nextId": 411,
+      "state": "f8e64a0c",
+      "events": "62f98853",
       "rng": {
         "draws": 3,
         "digest": "e3485a8b"
@@ -220,7 +222,7 @@
             "date": "2099-06-25"
           },
           "delveMarks": 89,
-          "entityId": 388,
+          "entityId": 389,
           "equipment": {
             "chest": "recruit_tunic",
             "legs": "reliquary_legs",
@@ -228,6 +230,7 @@
           },
           "gatheringProficiency": {},
           "lifetimeXp": 11200,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -244,7 +247,7 @@
           "dodgeChance": 0.063,
           "fiveSecondRule": 99.35,
           "hp": 338,
-          "id": 388,
+          "id": 389,
           "kind": "player",
           "level": 7,
           "lootFfaTimer": "Infinity",
@@ -286,8 +289,8 @@
     {
       "tick": 9,
       "time": 0.45,
-      "nextId": 410,
-      "state": "da7551fb",
+      "nextId": 411,
+      "state": "e169a68e",
       "events": "741638a5",
       "rng": {
         "draws": 3,
@@ -311,7 +314,7 @@
             "date": "2099-06-25"
           },
           "delveMarks": 89,
-          "entityId": 388,
+          "entityId": 389,
           "equipment": {
             "chest": "recruit_tunic",
             "legs": "reliquary_legs",
@@ -319,6 +322,7 @@
           },
           "gatheringProficiency": {},
           "lifetimeXp": 11200,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -335,7 +339,7 @@
           "dodgeChance": 0.063,
           "fiveSecondRule": 99.45,
           "hp": 338,
-          "id": 388,
+          "id": 389,
           "kind": "player",
           "level": 7,
           "lootFfaTimer": "Infinity",
