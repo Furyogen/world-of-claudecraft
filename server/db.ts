@@ -63,16 +63,6 @@ CREATE INDEX IF NOT EXISTS auth_tokens_account ON auth_tokens(account_id);
 -- token in the account portal so a user can revoke a specific one.
 ALTER TABLE auth_tokens ADD COLUMN IF NOT EXISTS scope TEXT NOT NULL DEFAULT 'full';
 ALTER TABLE auth_tokens ADD COLUMN IF NOT EXISTS label TEXT;
-CREATE TABLE IF NOT EXISTS account_identities (
-  account_id INT NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
-  provider TEXT NOT NULL,
-  provider_user_id TEXT NOT NULL,
-  display_name TEXT,
-  linked_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  PRIMARY KEY (provider, provider_user_id),
-  UNIQUE (account_id, provider)
-);
-CREATE INDEX IF NOT EXISTS account_identities_account ON account_identities(account_id);
 CREATE TABLE IF NOT EXISTS characters (
   id SERIAL PRIMARY KEY,
   account_id INT NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
@@ -611,35 +601,6 @@ export async function findAccount(username: string): Promise<AccountRow | null> 
     [username],
   );
   return res.rows[0] ?? null;
-}
-
-export async function accountForIdentity(
-  provider: string,
-  providerUserId: string,
-): Promise<AccountRow | null> {
-  const res = await pool.query(
-    `SELECT a.id, a.username, a.password_hash
-     FROM account_identities i
-     JOIN accounts a ON a.id = i.account_id
-     WHERE i.provider = $1 AND i.provider_user_id = $2`,
-    [provider, providerUserId],
-  );
-  return res.rows[0] ?? null;
-}
-
-export async function linkAccountIdentity(
-  accountId: number,
-  provider: string,
-  providerUserId: string,
-  displayName: string | null = null,
-): Promise<void> {
-  await pool.query(
-    `INSERT INTO account_identities (account_id, provider, provider_user_id, display_name)
-     VALUES ($1, $2, $3, $4)
-     ON CONFLICT (provider, provider_user_id)
-     DO UPDATE SET display_name = EXCLUDED.display_name`,
-    [accountId, provider, providerUserId, cleanMetadataText(displayName, 128)],
-  );
 }
 
 export async function getAccountsCount(): Promise<number> {
