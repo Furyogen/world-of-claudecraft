@@ -86,7 +86,11 @@ import {
   topLifetimeXp,
   touchLogin,
 } from './db';
-import { consumeDesktopLoginCode, createDesktopLoginCode } from './desktop_login';
+import {
+  type DesktopLoginRouteDeps,
+  handleDesktopLoginCreate,
+  handleDesktopLoginExchange,
+} from './desktop_login';
 import {
   handleDiscordCallback,
   handleDiscordLoginLink,
@@ -115,7 +119,7 @@ import {
   createPlayerReport,
   createSuspiciousRegistrationReport,
 } from './moderation_db';
-import { createNativeAttestationChallenge, verifyNativeAttestation } from './native_attestation';
+import { createNativeAttestationChallenge } from './native_attestation';
 import { handleOAuth, seedOAuthClients } from './oauth';
 import { pruneExpiredOAuthGrants } from './oauth_db';
 import { handlePerfReport } from './perf_report';
@@ -139,30 +143,18 @@ import {
   requestIp,
   wocBalanceRateLimited,
 } from './ratelimit';
-import {
-  isPublicCorsPath,
-  publicOriginFromRequest,
-  REALM,
-  REALM_DIRECTORY,
-  REALM_ORIGINS,
-} from './realm';
+import { isPublicCorsPath, publicOriginFromRequest, REALM, REALM_DIRECTORY } from './realm';
 import { resolveReportTarget } from './report_target';
 import { handleSitePresenceHeartbeat } from './site_presence';
 import { cacheControlFor, etagFor, isNotModified } from './static_cache';
-import { verifyTurnstile } from './turnstile';
+import { passesTurnstile } from './turnstile';
 import {
   handleWalletChallenge,
   handleWalletGet,
   handleWalletLink,
   handleWalletUnlink,
 } from './wallet';
-import {
-  DESKTOP_APP_ORIGINS,
-  isNativeAppRequest,
-  isWebClientRequest,
-  NATIVE_APP_ORIGINS,
-  webLoginEnforced,
-} from './web_login_guard';
+import { allowedCorsOrigin, isWebClientRequest, webLoginEnforced } from './web_login_guard';
 import { handleWocBalance, parseWocBalanceQuery } from './woc_balance';
 import { bufferHandshakeMessages } from './ws_buffer';
 
@@ -506,18 +498,19 @@ function requestMetadata(req: http.IncomingMessage): { ip: string; userAgent: st
   };
 }
 
-// Gate account creation / login behind Cloudflare Turnstile. Returns true when
-// the request may proceed: trivially true when no secret is configured, else the
-// client-supplied token must verify. The English error is matched to a t() key
-// by userFacingApiError() in src/main.ts — keep the two strings in sync.
-async function passesTurnstile(
-  req: http.IncomingMessage,
-  body: Record<string, unknown>,
-): Promise<boolean> {
-  if (isNativeAppRequest(req)) return verifyNativeAttestation(req, body.nativeAttestation);
-  if (!TURNSTILE_SECRET) return true;
-  return verifyTurnstile(String(body.turnstileToken ?? ''), TURNSTILE_SECRET, requestIp(req));
-}
+// Host wiring for the desktop-login route handlers (server/desktop_login.ts):
+// the real db/auth implementations here, stubs in tests.
+const desktopLoginRouteDeps: DesktopLoginRouteDeps = {
+  bearerToken,
+  readBody,
+  json,
+  requestMetadata,
+  accountForToken,
+  accountById,
+  moderationStatusForAccount,
+  touchLogin,
+  saveToken,
+};
 
 const MIME: Record<string, string> = {
   '.html': 'text/html',
@@ -610,15 +603,12 @@ function serveStatic(req: http.IncomingMessage, res: http.ServerResponse): void 
 // ---------------------------------------------------------------------------
 
 // Cross-realm CORS: a client served by one realm may call another realm's API
-// after switching realms in the picker. Native Capacitor builds also call the
-// production origin from localhost-style WebView origins. Auth is via bearer
-// token (no cookies), so reflecting these specific origins is safe.
+// after switching realms in the picker. The native Capacitor and Electron
+// desktop shells also call the production origin from non-site origins. The
+// allow-list itself lives in allowedCorsOrigin (server/web_login_guard.ts).
 function maybeCors(req: http.IncomingMessage, res: http.ServerResponse): void {
-  const origin = req.headers.origin;
-  if (
-    typeof origin === 'string' &&
-    (REALM_ORIGINS.has(origin) || NATIVE_APP_ORIGINS.has(origin) || DESKTOP_APP_ORIGINS.has(origin))
-  ) {
+  const origin = allowedCorsOrigin(req.headers.origin);
+  if (origin !== null) {
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Vary', 'Origin');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
@@ -668,9 +658,15 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
     ) {
       return json(res, 403, { error: 'logins are only allowed from the game client' });
     }
+    // The desktop-login handoff shares the same per-IP budget: exchange is
+    // unauthenticated (defense in depth on top of the 160-bit single-use code)
+    // and create bounds how fast one authenticated client can grow the store.
     if (
       req.method === 'POST' &&
-      (url === '/api/register' || url === '/api/login') &&
+      (url === '/api/register' ||
+        url === '/api/login' ||
+        url === '/api/desktop-login/create' ||
+        url === '/api/desktop-login/exchange') &&
       rateLimited(req)
     ) {
       return json(res, 429, { error: 'too many attempts — wait a minute and try again' });
@@ -683,7 +679,7 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
     }
     if (req.method === 'POST' && url === '/api/register') {
       const body = await readBody(req);
-      if (!(await passesTurnstile(req, body)))
+      if (!(await passesTurnstile(req, body, TURNSTILE_SECRET)))
         return json(res, 403, { error: 'verification failed, please try again' });
       if (!validUsernameShape(body.username))
         return json(res, 400, { error: 'username must be 3-24 chars (letters, digits, _)' });
@@ -741,7 +737,7 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
     }
     if (req.method === 'POST' && url === '/api/login') {
       const body = await readBody(req);
-      if (!(await passesTurnstile(req, body)))
+      if (!(await passesTurnstile(req, body, TURNSTILE_SECRET)))
         return json(res, 403, { error: 'verification failed, please try again' });
       const username = typeof body.username === 'string' ? body.username : '';
       // Per-account brute-force throttle (#93). The message is identical to a
@@ -786,26 +782,10 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       return json(res, 200, { token, username: account.username });
     }
     if (req.method === 'POST' && url === '/api/desktop-login/create') {
-      const token = bearerToken(req);
-      if (!token) return json(res, 401, { error: 'not authenticated' });
-      const accountId = await accountForToken(token);
-      if (accountId === null) return json(res, 401, { error: 'not authenticated' });
-      const account = await accountById(accountId);
-      if (account === null) return json(res, 401, { error: 'not authenticated' });
-      const status = await moderationStatusForAccount(account.id);
-      if (status.locked) return json(res, 403, { error: status.message });
-      return json(res, 200, createDesktopLoginCode(req, account));
+      return handleDesktopLoginCreate(req, res, desktopLoginRouteDeps);
     }
     if (req.method === 'POST' && url === '/api/desktop-login/exchange') {
-      const body = await readBody(req);
-      const entry = consumeDesktopLoginCode(req, body.code);
-      if (!entry) return json(res, 401, { error: 'invalid or expired desktop login code' });
-      const status = await moderationStatusForAccount(entry.accountId);
-      if (status.locked) return json(res, 403, { error: status.message });
-      await touchLogin(entry.accountId, requestMetadata(req));
-      const token = newToken();
-      await saveToken(token, entry.accountId);
-      return json(res, 200, { token, username: entry.username });
+      return handleDesktopLoginExchange(req, res, desktopLoginRouteDeps);
     }
     // Read-scoped "my characters" list: lets a companion holding a character:read
     // token (OAuth or a pasted companion token) discover its character ids so it
