@@ -37,6 +37,38 @@ These were locked with the maintainer during the audit:
   owns updates there).
 - Given Steam sign-in is going away, steamworks.js can be removed entirely for v1.
 
+## Implementation status (branch feature/electron-steam-desktop)
+
+Done in this hardening pass (each is its own commit; see the git log):
+
+- Steam sign-in removed (section 6): Discord and email only; the browser plus
+  deep-link desktop-login flow is intact; steamworks.js and its asarUnpack entry
+  are gone.
+- S1, deny-by-default permissions: an allow-list of pointerLock and fullscreen in
+  both permission gates, plus setDevicePermissionHandler denying device access.
+- S2, navigation guard: will-navigate, will-frame-navigate, and will-redirect all
+  block off-origin navigation, with the origin derived as protocol//host (not
+  URL.origin, which is "null" for every app:// host).
+- S3, Content-Security-Policy: served on every app:// response; strict script-src
+  with the inline bootstrap scripts hashed from the built index.html at runtime; no
+  unsafe-eval and no unsafe-inline scripts.
+- S4, IPC sender validation: both desktop-login handlers check event.senderFrame.
+- S5, Electron fuses: the safe set is enabled (RunAsNode off, cookie encryption on,
+  node-options and inspect off, file-protocol-extra-privileges off, only-load-app-
+  from-asar on).
+
+The pure origin, CSP, and trusted-sender logic lives in electron/shell_guards.cjs
+with unit tests (tests/electron_shell_guards.test.ts), since main.cjs runs outside
+tsc and vitest.
+
+Deferred, gated on code signing (B1), not done here:
+
+- EnableEmbeddedAsarIntegrityValidation (to be paired with the enabled
+  OnlyLoadAppFromAsar): it only delivers real tamper protection once the binary is
+  signed and commonly fails to launch unsigned.
+- macOS signing plus notarization (B1), website auto-update (S6), Windows signing
+  (N3), and the remaining nice-to-haves (N1, N2, N4 to N8).
+
 ---
 
 ## 1. Current setup snapshot
