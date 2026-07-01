@@ -5655,6 +5655,24 @@ export const vi_VN: EnTranslations = {
       "silverleaf_sickle": {
         "name": "Liềm Lá Bạc"
       },
+      "thorium_mining_pick": {
+        "name": "Cuốc Khai Khoáng Thorium"
+      },
+      "arcanite_mining_pick": {
+        "name": "Cuốc Khai Khoáng Arcanite"
+      },
+      "ashwood_axe": {
+        "name": "Rìu Gỗ Tần Bì"
+      },
+      "elderwood_axe": {
+        "name": "Rìu Gỗ Cổ Thụ"
+      },
+      "goldleaf_sickle": {
+        "name": "Liềm Lá Vàng"
+      },
+      "sunpetal_sickle": {
+        "name": "Liềm Cánh Hoa Mặt Trời"
+      },
       "bristleback_maul": {
         "name": "Búa Gallowglass"
       },

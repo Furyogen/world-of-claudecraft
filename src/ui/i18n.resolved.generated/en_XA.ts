@@ -5655,6 +5655,24 @@ export const en_XA: EnTranslations = {
       "silverleaf_sickle": {
         "name": "[Šíļʋéŕļéáƒ Šíçķļé]"
       },
+      "thorium_mining_pick": {
+        "name": "[Ţĥóŕíúɱ Ɱíñíñĝ Þíçķ]"
+      },
+      "arcanite_mining_pick": {
+        "name": "[Áŕçáñíţé Ɱíñíñĝ Þíçķ]"
+      },
+      "ashwood_axe": {
+        "name": "[Ášĥŵóóð Áẋé]"
+      },
+      "elderwood_axe": {
+        "name": "[Éļðéŕŵóóð Áẋé]"
+      },
+      "goldleaf_sickle": {
+        "name": "[Ĝóļðļéáƒ Šíçķļé]"
+      },
+      "sunpetal_sickle": {
+        "name": "[Šúñþéţáļ Šíçķļé]"
+      },
       "bristleback_maul": {
         "name": "[Ĝáļļóŵĝļášš Ĥáɱɱéŕ]"
       },

@@ -3135,6 +3135,12 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.items.gathering_sickle.name': '采集镰刀',
   'entities.items.bronze_sickle.name': '青铜镰刀',
   'entities.items.silverleaf_sickle.name': '银叶镰刀',
+  'entities.items.thorium_mining_pick.name': '钍矿采矿镐',
+  'entities.items.arcanite_mining_pick.name': '秘法采矿镐',
+  'entities.items.ashwood_axe.name': '白蜡木斧',
+  'entities.items.elderwood_axe.name': '古木斧',
+  'entities.items.goldleaf_sickle.name': '金叶镰刀',
+  'entities.items.sunpetal_sickle.name': '阳瓣镰刀',
   // v0.10.0 release fill (Fiesta / skin-select / NPC voices / chat channels / Brightwood Glade)
   'hud.core.chatChannels.add': '添加聊天频道',
   'hud.core.chatChannels.addTitle': '添加频道',

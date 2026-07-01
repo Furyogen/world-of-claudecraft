@@ -3919,6 +3919,12 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'entities.items.gathering_sickle.name': 'Hoz de Recolección',
   'entities.items.bronze_sickle.name': 'Hoz de Bronce',
   'entities.items.silverleaf_sickle.name': 'Hoz de Hoja de Plata',
+  'entities.items.thorium_mining_pick.name': 'Pico de Minería de Torio',
+  'entities.items.arcanite_mining_pick.name': 'Pico de Minería de Arcanita',
+  'entities.items.ashwood_axe.name': 'Hacha de Fresno',
+  'entities.items.elderwood_axe.name': 'Hacha de Madera Añeja',
+  'entities.items.goldleaf_sickle.name': 'Hoz de Hoja Dorada',
+  'entities.items.sunpetal_sickle.name': 'Hoz de Pétalo Solar',
   // v0.10.0 release fill (Fiesta / skin-select / NPC voices / chat channels / Brightwood Glade)
   'hud.core.chatChannels.add': 'Añadir canal de chat',
   'hud.core.chatChannels.addTitle': 'Añadir canal',

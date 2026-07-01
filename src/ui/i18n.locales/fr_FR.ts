@@ -3947,6 +3947,12 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.items.gathering_sickle.name': 'Faucille de Récolte',
   'entities.items.bronze_sickle.name': 'Faucille de Bronze',
   'entities.items.silverleaf_sickle.name': "Faucille Feuille d'Argent",
+  'entities.items.thorium_mining_pick.name': 'Pic de Minage au Thorium',
+  'entities.items.arcanite_mining_pick.name': 'Pic de Minage en Arcanite',
+  'entities.items.ashwood_axe.name': 'Hache en Bois de Frêne',
+  'entities.items.elderwood_axe.name': 'Hache en Bois Ancien',
+  'entities.items.goldleaf_sickle.name': "Faucille Feuille d'Or",
+  'entities.items.sunpetal_sickle.name': 'Faucille Pétale de Soleil',
   // v0.10.0 release fill (Fiesta / skin-select / NPC voices / chat channels / Brightwood Glade)
   'hud.core.chatChannels.add': 'Ajouter un canal de discussion',
   'hud.core.chatChannels.addTitle': 'Ajouter un canal',

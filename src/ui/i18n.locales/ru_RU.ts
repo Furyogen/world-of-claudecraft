@@ -3307,6 +3307,12 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.items.gathering_sickle.name': 'Серп для сбора',
   'entities.items.bronze_sickle.name': 'Бронзовый серп',
   'entities.items.silverleaf_sickle.name': 'Серебролистный серп',
+  'entities.items.thorium_mining_pick.name': 'Ториевая кирка',
+  'entities.items.arcanite_mining_pick.name': 'Арканитовая кирка',
+  'entities.items.ashwood_axe.name': 'Ясеневый топор',
+  'entities.items.elderwood_axe.name': 'Топор из древнего дерева',
+  'entities.items.goldleaf_sickle.name': 'Золотолистный серп',
+  'entities.items.sunpetal_sickle.name': 'Солнцелепестковый серп',
   // v0.10.0 release fill (Fiesta / skin-select / NPC voices / chat channels / Brightwood Glade)
   'hud.core.chatChannels.add': 'Добавить канал чата',
   'hud.core.chatChannels.addTitle': 'Добавить канал',

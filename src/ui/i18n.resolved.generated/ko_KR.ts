@@ -5655,6 +5655,24 @@ export const ko_KR: EnTranslations = {
       "silverleaf_sickle": {
         "name": "은엽 낫"
       },
+      "thorium_mining_pick": {
+        "name": "토륨 채광 곡괭이"
+      },
+      "arcanite_mining_pick": {
+        "name": "비전 채광 곡괭이"
+      },
+      "ashwood_axe": {
+        "name": "물푸레나무 도끼"
+      },
+      "elderwood_axe": {
+        "name": "고목 도끼"
+      },
+      "goldleaf_sickle": {
+        "name": "금엽 낫"
+      },
+      "sunpetal_sickle": {
+        "name": "태양꽃잎 낫"
+      },
       "bristleback_maul": {
         "name": "갤로글래스 망치"
       },

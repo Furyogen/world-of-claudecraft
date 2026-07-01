@@ -3935,6 +3935,12 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'entities.items.gathering_sickle.name': 'Erntesichel',
   'entities.items.bronze_sickle.name': 'Bronzesichel',
   'entities.items.silverleaf_sickle.name': 'Silberblatt-Sichel',
+  'entities.items.thorium_mining_pick.name': 'Thorium-Grabpickel',
+  'entities.items.arcanite_mining_pick.name': 'Arkanit-Grabpickel',
+  'entities.items.ashwood_axe.name': 'Eschenholzaxt',
+  'entities.items.elderwood_axe.name': 'Altholzaxt',
+  'entities.items.goldleaf_sickle.name': 'Goldblatt-Sichel',
+  'entities.items.sunpetal_sickle.name': 'Sonnenblütensichel',
   // v0.10.0 release fill (Fiesta / skin-select / NPC voices / chat channels / Brightwood Glade)
   'hud.core.chatChannels.add': 'Chatkanal hinzufügen',
   'hud.core.chatChannels.addTitle': 'Kanal hinzufügen',

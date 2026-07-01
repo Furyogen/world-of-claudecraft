@@ -5655,6 +5655,24 @@ export const pt_BR: EnTranslations = {
       "silverleaf_sickle": {
         "name": "Foice Folha de Prata"
       },
+      "thorium_mining_pick": {
+        "name": "Picareta de Tório"
+      },
+      "arcanite_mining_pick": {
+        "name": "Picareta de Arcanita"
+      },
+      "ashwood_axe": {
+        "name": "Machado de Freixo"
+      },
+      "elderwood_axe": {
+        "name": "Machado de Madeira Antiga"
+      },
+      "goldleaf_sickle": {
+        "name": "Foice Folha Dourada"
+      },
+      "sunpetal_sickle": {
+        "name": "Foice Pétala Solar"
+      },
       "bristleback_maul": {
         "name": "Martelo Gallowglass"
       },

@@ -3910,6 +3910,12 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'entities.items.gathering_sickle.name': 'Falcetto da Raccolta',
   'entities.items.bronze_sickle.name': 'Falcetto di Bronzo',
   'entities.items.silverleaf_sickle.name': 'Falcetto Fogliargento',
+  'entities.items.thorium_mining_pick.name': 'Piccone di Torio',
+  'entities.items.arcanite_mining_pick.name': 'Piccone di Arcanite',
+  'entities.items.ashwood_axe.name': 'Ascia di Frassino',
+  'entities.items.elderwood_axe.name': 'Ascia di Legno Antico',
+  'entities.items.goldleaf_sickle.name': 'Falcetto Fogliadoro',
+  'entities.items.sunpetal_sickle.name': 'Falcetto Petalo di Sole',
   // v0.10.0 release fill (Fiesta / skin-select / NPC voices / chat channels / Brightwood Glade)
   'hud.core.chatChannels.add': 'Aggiungi canale di chat',
   'hud.core.chatChannels.addTitle': 'Aggiungi canale',

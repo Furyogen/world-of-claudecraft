@@ -5655,6 +5655,24 @@ export const zh_CN: EnTranslations = {
       "silverleaf_sickle": {
         "name": "银叶镰刀"
       },
+      "thorium_mining_pick": {
+        "name": "钍矿采矿镐"
+      },
+      "arcanite_mining_pick": {
+        "name": "秘法采矿镐"
+      },
+      "ashwood_axe": {
+        "name": "白蜡木斧"
+      },
+      "elderwood_axe": {
+        "name": "古木斧"
+      },
+      "goldleaf_sickle": {
+        "name": "金叶镰刀"
+      },
+      "sunpetal_sickle": {
+        "name": "阳瓣镰刀"
+      },
       "bristleback_maul": {
         "name": "加洛格拉斯之锤"
       },

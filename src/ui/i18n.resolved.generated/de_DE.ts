@@ -5655,6 +5655,24 @@ export const de_DE: EnTranslations = {
       "silverleaf_sickle": {
         "name": "Silberblatt-Sichel"
       },
+      "thorium_mining_pick": {
+        "name": "Thorium-Grabpickel"
+      },
+      "arcanite_mining_pick": {
+        "name": "Arkanit-Grabpickel"
+      },
+      "ashwood_axe": {
+        "name": "Eschenholzaxt"
+      },
+      "elderwood_axe": {
+        "name": "Altholzaxt"
+      },
+      "goldleaf_sickle": {
+        "name": "Goldblatt-Sichel"
+      },
+      "sunpetal_sickle": {
+        "name": "Sonnenblütensichel"
+      },
       "bristleback_maul": {
         "name": "Gallowglass-Hammer"
       },

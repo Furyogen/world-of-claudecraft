@@ -5655,6 +5655,24 @@ export const fr_CA: EnTranslations = {
       "silverleaf_sickle": {
         "name": "Faucille Feuille d'Argent"
       },
+      "thorium_mining_pick": {
+        "name": "Pic de Minage au Thorium"
+      },
+      "arcanite_mining_pick": {
+        "name": "Pic de Minage en Arcanite"
+      },
+      "ashwood_axe": {
+        "name": "Hache en Bois de Frêne"
+      },
+      "elderwood_axe": {
+        "name": "Hache en Bois Ancien"
+      },
+      "goldleaf_sickle": {
+        "name": "Faucille Feuille d'Or"
+      },
+      "sunpetal_sickle": {
+        "name": "Faucille Pétale de Soleil"
+      },
       "bristleback_maul": {
         "name": "Marteau Gallowglass"
       },
