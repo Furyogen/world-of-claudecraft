@@ -9,6 +9,11 @@
 
 const { createHash } = require('node:crypto');
 
+// The only permissions the game legitimately uses (pointerLock for mouselook,
+// fullscreen for the game view). Everything else is denied by default. Kept here so a
+// unit test can pin the contract against an accidental deletion.
+const ALLOWED_PERMISSIONS = new Set(['pointerLock', 'fullscreen']);
+
 // Derive a comparable origin from a URL string as `${protocol}//${host}`. This is
 // deliberately NOT `new URL(x).origin`: app:// is a non-standard scheme, so Node's
 // URL reports its origin as the literal string "null" and every app:// host
@@ -189,6 +194,7 @@ module.exports = {
   appNavigationOrigins,
   navigationAllowed,
   isTrustedSender,
+  ALLOWED_PERMISSIONS,
   EMBEDDED_SUBFRAME_ORIGINS,
   CSP_ORIGINS,
   extractInlineScriptHashes,

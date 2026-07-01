@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  ALLOWED_PERMISSIONS,
   appNavigationOrigins,
   buildContentSecurityPolicy,
   deriveOrigin,
@@ -93,6 +94,49 @@ describe('extractInlineScriptHashes', () => {
     expect(hashes).toContain('sha256-4U2nQ7ITQ/rEbjI/yjhM48+cOPZaU2gKejSgBqiZtLY=');
     expect(hashes).toHaveLength(2);
     expect(hashes.every((h) => h.startsWith('sha256-'))).toBe(true);
+  });
+
+  it('captures a realistic multi-line bootstrap and skips a src script with attributes', () => {
+    // Mirrors the real index.html shape: an async/defer external script, a multi-line
+    // IIFE bootstrap, and a JSON-LD data block.
+    const html = [
+      '<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>',
+      '<script>',
+      '  (() => {',
+      "    if (location.hostname === 'x') window.__woc = 1;",
+      '  })();',
+      '</script>',
+      '<script type="application/ld+json">{"@context":"https://schema.org"}</script>',
+    ].join('\n');
+    const hashes = extractInlineScriptHashes(html);
+    // The async/defer external script is skipped; the multi-line IIFE and the JSON-LD
+    // data block are both hashed.
+    expect(hashes).toHaveLength(2);
+    expect(hashes.every((h) => /^sha256-[A-Za-z0-9+/]+=*$/.test(h))).toBe(true);
+  });
+});
+
+describe('ALLOWED_PERMISSIONS (deny-by-default allow-list)', () => {
+  it('grants exactly pointerLock and fullscreen', () => {
+    expect(ALLOWED_PERMISSIONS.has('pointerLock')).toBe(true);
+    expect(ALLOWED_PERMISSIONS.has('fullscreen')).toBe(true);
+    expect(ALLOWED_PERMISSIONS.size).toBe(2);
+  });
+  it('denies sensitive permissions by default', () => {
+    const denied = [
+      'camera',
+      'microphone',
+      'geolocation',
+      'notifications',
+      'media',
+      'openExternal',
+      'hid',
+      'usb',
+      'serial',
+    ];
+    for (const permission of denied) {
+      expect(ALLOWED_PERMISSIONS.has(permission)).toBe(false);
+    }
   });
 });
 

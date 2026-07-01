@@ -62,10 +62,6 @@ services:
       APPLE_DEVICECHECK_ENV: ${APPLE_DEVICECHECK_ENV:-production}
       # Runtime: protects the loopback-only deploy countdown endpoint.
       RESTART_COUNTDOWN_SECRET: ${RESTART_COUNTDOWN_SECRET:-}
-      # Runtime: Steam desktop auth verification. STEAM_WEB_API_KEY is server-only.
-      STEAM_APP_ID: ${STEAM_APP_ID:-}
-      STEAM_AUTH_IDENTITY: ${STEAM_AUTH_IDENTITY:-worldofclaudecraft}
-      STEAM_WEB_API_KEY: ${STEAM_WEB_API_KEY:-}
       # Runtime: Discord OAuth + the secret-gated game <-> Discord bot channel.
       DISCORD_CLIENT_ID: ${DISCORD_CLIENT_ID:-}
       DISCORD_CLIENT_SECRET: ${DISCORD_CLIENT_SECRET:-}

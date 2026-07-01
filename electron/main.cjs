@@ -10,6 +10,7 @@ const {
   buildContentSecurityPolicy,
   extractInlineScriptHashes,
   withCspHeader,
+  ALLOWED_PERMISSIONS,
 } = require('./shell_guards.cjs');
 
 const APP_ORIGIN = 'app://worldofclaudecraft';
@@ -94,11 +95,12 @@ function registerAppProtocol() {
 // null in the check handler). Device access (WebHID / Web Serial / WebUSB) is denied
 // outright via a third handler.
 function lockDownPermissions() {
-  const allowed = new Set(['pointerLock', 'fullscreen']);
   const { defaultSession } = session;
-  defaultSession.setPermissionCheckHandler((_webContents, permission) => allowed.has(permission));
+  defaultSession.setPermissionCheckHandler((_webContents, permission) =>
+    ALLOWED_PERMISSIONS.has(permission),
+  );
   defaultSession.setPermissionRequestHandler((_webContents, permission, callback) => {
-    callback(allowed.has(permission));
+    callback(ALLOWED_PERMISSIONS.has(permission));
   });
   defaultSession.setDevicePermissionHandler(() => false);
 }

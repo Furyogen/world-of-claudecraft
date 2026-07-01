@@ -18,6 +18,7 @@ export function isTrustedSender(
   frame: { origin?: unknown; url?: unknown } | null | undefined,
   allowedOrigins: Iterable<string>,
 ): boolean;
+export const ALLOWED_PERMISSIONS: Set<string>;
 export const EMBEDDED_SUBFRAME_ORIGINS: Set<string>;
 export const CSP_ORIGINS: {
   script: string[];

@@ -62,7 +62,6 @@ import {
 import { createNativeAttestationProof } from './net/native_attestation';
 import {
   Api,
-  ApiError,
   type CharacterSummary,
   ClientWorld,
   DESKTOP_APP,
