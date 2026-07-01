@@ -5,6 +5,7 @@ import {
   buildContentSecurityPolicy,
   deriveOrigin,
   extractInlineScriptHashes,
+  isDevToolsToggleShortcut,
   isTrustedSender,
   navigationAllowed,
   originAllowed,
@@ -161,9 +162,11 @@ describe('buildContentSecurityPolicy', () => {
     expect(directive('script-src')).toContain("'sha256-abc123'");
   });
 
-  it('lists the HTTPS API origin and wss: explicitly in connect-src', () => {
+  it('lists the HTTPS API origin, wss:, and blob: explicitly in connect-src', () => {
     expect(directive('connect-src')).toContain('https://worldofclaudecraft.com');
     expect(directive('connect-src')).toContain('wss:');
+    // blob: is required: GLTFLoader fetch()es a model's embedded textures as blob: URLs.
+    expect(directive('connect-src')).toContain('blob:');
   });
 
   it('mirrors the web build: Google Fonts, worker blobs, and the Turnstile frame', () => {
@@ -187,6 +190,70 @@ describe('withCspHeader', () => {
     expect(wrapped.headers.get('Content-Type')).toBe('application/javascript');
     expect(wrapped.status).toBe(200);
     expect(wrapped.statusText).toBe('OK');
+  });
+});
+
+describe('isDevToolsToggleShortcut', () => {
+  it('matches F12 on any platform via key or code', () => {
+    expect(isDevToolsToggleShortcut({ type: 'keyDown', key: 'F12' })).toBe(true);
+    expect(isDevToolsToggleShortcut({ type: 'keyDown', code: 'F12' })).toBe(true);
+  });
+
+  it('matches the Cmd+Option+I chord (macOS) even when Option composes a dead key', () => {
+    // On macOS, Option+I composes input.key into a dead-key accent, so the physical
+    // code (KeyI) is the reliable signal.
+    expect(
+      isDevToolsToggleShortcut({ type: 'keyDown', code: 'KeyI', key: 'ˆ', meta: true, alt: true }),
+    ).toBe(true);
+  });
+
+  it('matches the Ctrl+Shift+I chord (Windows/Linux)', () => {
+    expect(
+      isDevToolsToggleShortcut({
+        type: 'keyDown',
+        code: 'KeyI',
+        key: 'I',
+        control: true,
+        shift: true,
+      }),
+    ).toBe(true);
+  });
+
+  it('rejects a bare I, wrong modifiers, keyUp, and non-toggle keys', () => {
+    expect(isDevToolsToggleShortcut({ type: 'keyDown', code: 'KeyI', key: 'i' })).toBe(false);
+    // Cmd+I alone (no Option) and Ctrl+I alone (no Shift) are not the chord.
+    expect(isDevToolsToggleShortcut({ type: 'keyDown', code: 'KeyI', key: 'i', meta: true })).toBe(
+      false,
+    );
+    expect(
+      isDevToolsToggleShortcut({ type: 'keyDown', code: 'KeyI', key: 'i', control: true }),
+    ).toBe(false);
+    // The chord on keyUp must not fire (would double-toggle).
+    expect(
+      isDevToolsToggleShortcut({
+        type: 'keyUp',
+        code: 'KeyI',
+        key: 'I',
+        control: true,
+        shift: true,
+      }),
+    ).toBe(false);
+    expect(
+      isDevToolsToggleShortcut({
+        type: 'keyDown',
+        code: 'KeyA',
+        key: 'a',
+        control: true,
+        shift: true,
+      }),
+    ).toBe(false);
+  });
+
+  it('never throws on a null, empty, or partial input object', () => {
+    expect(isDevToolsToggleShortcut(null)).toBe(false);
+    expect(isDevToolsToggleShortcut(undefined)).toBe(false);
+    expect(isDevToolsToggleShortcut({})).toBe(false);
+    expect(isDevToolsToggleShortcut({ type: 'keyDown' })).toBe(false);
   });
 });
 

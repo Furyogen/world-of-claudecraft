@@ -136,7 +136,11 @@ function buildContentSecurityPolicy({ apiOrigin, scriptHashes = [] } = {}) {
   ]
     .filter(Boolean)
     .join(' ');
-  const connectSrc = ["connect-src 'self'", apiOrigin, 'wss:', ...CSP_ORIGINS.connect]
+  // connect-src needs blob: because Three.js GLTFLoader loads a model's embedded textures
+  // by turning them into blob: object URLs and then fetch()ing those URLs (a connect-src
+  // request, not img-src). Without blob: here every model renders untextured. img-src and
+  // worker-src already list blob: for the same reason (texture <img> decode, decoder workers).
+  const connectSrc = ["connect-src 'self' blob:", apiOrigin, 'wss:', ...CSP_ORIGINS.connect]
     .filter(Boolean)
     .join(' ');
   const imgSrc = ["img-src 'self' data: blob:", apiOrigin, ...CSP_ORIGINS.img]
@@ -188,12 +192,35 @@ function isTrustedSender(frame, allowedOrigins) {
   return false;
 }
 
+// Decide whether a renderer key event (Electron's before-input-event `input` object)
+// is the DevTools toggle chord. The packaged build runs with setMenu(null) and no
+// DevTools, so there is otherwise no way to open the inspector to check CSP violations,
+// GPU state, or runtime errors in a shipped app; main.cjs binds this to before-input-event
+// to restore a safe, read-only debug affordance. Only a keyDown counts. The accepted
+// chords are F12 (all platforms), Cmd+Option+I (macOS), and Ctrl+Shift+I (Windows/Linux),
+// each matched loosely so either chord works on any platform. The letter is matched on the
+// PHYSICAL key (input.code === 'KeyI') because on macOS holding Option composes input.key
+// into a dead-key accent, which would make an input.key check miss. Never throws on a
+// partial/foreign input object (returns false).
+function isDevToolsToggleShortcut(input) {
+  if (input?.type !== 'keyDown') return false;
+  const code = typeof input.code === 'string' ? input.code : '';
+  const key = typeof input.key === 'string' ? input.key : '';
+  if (code === 'F12' || key === 'F12') return true;
+  const isLetterI = code === 'KeyI' || key.toLowerCase() === 'i';
+  if (!isLetterI) return false;
+  if (input.meta && input.alt) return true;
+  if (input.control && input.shift) return true;
+  return false;
+}
+
 module.exports = {
   deriveOrigin,
   originAllowed,
   appNavigationOrigins,
   navigationAllowed,
   isTrustedSender,
+  isDevToolsToggleShortcut,
   ALLOWED_PERMISSIONS,
   EMBEDDED_SUBFRAME_ORIGINS,
   CSP_ORIGINS,

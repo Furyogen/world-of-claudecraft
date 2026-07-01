@@ -6,6 +6,7 @@ const {
   appNavigationOrigins,
   navigationAllowed,
   isTrustedSender,
+  isDevToolsToggleShortcut,
   deriveOrigin,
   buildContentSecurityPolicy,
   extractInlineScriptHashes,
@@ -119,10 +120,41 @@ function createMainWindow() {
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true,
+      // This wrapper exists to give the browser game the best possible Chromium runtime,
+      // so tune the page for a real-time MMO client (all gameplay-neutral: the server is
+      // authoritative, so none of this changes outcomes or reveals actionable info).
+      //  - backgroundThrottling:false keeps the render loop and the 20 Hz input/network
+      //    timer running when the window is backgrounded. Chromium would otherwise throttle
+      //    setInterval to about once a minute and pause requestAnimationFrame, freezing the
+      //    world mirror and stalling the realm WebSocket traffic, so a brief alt-tab would
+      //    cost a visible hitch on refocus. A game client staying live when backgrounded is
+      //    the expected behavior; the cost is power while minimized, acceptable for a game.
+      //  - spellcheck:false avoids a dictionary download and red squiggles in chat input.
+      //  - webviewTag:false is already the default; state it so no <webview> can be embedded.
+      //  - disableBlinkFeatures:'Autofill' removes a stray autofill dropdown over form fields
+      //    and the repeated "Autofill.enable failed" console spam.
+      backgroundThrottling: false,
+      spellcheck: false,
+      webviewTag: false,
+      disableBlinkFeatures: 'Autofill',
     },
   });
 
   mainWindow.setMenu(null);
+
+  // setMenu(null) drops the default menu (and its DevTools accelerator), and the packaged
+  // build never auto-opens DevTools, so bind a safe, read-only debug affordance directly to
+  // the renderer's key events: F12, Cmd+Option+I (macOS), or Ctrl+Shift+I (Windows/Linux)
+  // toggles the inspector. This is how CSP violations, GPU state, and runtime errors get
+  // inspected in a shipped app. DevTools is read-only against a sandboxed, context-isolated
+  // renderer and confers no gameplay advantage, so it is always available.
+  mainWindow.webContents.on('before-input-event', (event, input) => {
+    if (!isDevToolsToggleShortcut(input)) return;
+    event.preventDefault();
+    const wc = mainWindow.webContents;
+    if (wc.isDevToolsOpened()) wc.closeDevTools();
+    else wc.openDevTools({ mode: 'detach' });
+  });
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     if (url.startsWith('http://') || url.startsWith('https://')) {
       shell.openExternal(url);
@@ -146,11 +178,21 @@ function createMainWindow() {
   mainWindow.webContents.on('will-frame-navigate', guardNavigation);
   mainWindow.webContents.on('will-redirect', guardNavigation);
 
+  // Report GPU status once the page has loaded (and the renderer has created its WebGL
+  // context), by when getGPUFeatureStatus and getGPUInfo have settled to the real values.
+  mainWindow.webContents.once('did-finish-load', logGpuStatus);
+
   if (devServerUrl) {
     mainWindow.loadURL(devServerUrl);
     mainWindow.webContents.openDevTools({ mode: 'detach' });
   } else {
     mainWindow.loadURL(`${APP_ORIGIN}/index.html`);
+    // Opt-in auto-open for a packaged build, so the inspector is up from the first frame
+    // when diagnosing a shipped app (WOC_OPEN_DEVTOOLS=1). The keyboard chord above works
+    // regardless; this just saves a keystroke during a debug launch.
+    if (process.env.WOC_OPEN_DEVTOOLS === '1') {
+      mainWindow.webContents.openDevTools({ mode: 'detach' });
+    }
   }
 
   mainWindow.on('closed', () => {
@@ -222,6 +264,40 @@ if (!singleInstance) {
     event.preventDefault();
     handleDeepLink(url);
   });
+}
+
+// Log Chromium's GPU feature status and the active GL renderer so a shipped build can be
+// checked for hardware-accelerated WebGL (the whole point of the wrapper). In the feature
+// status, 'enabled' means hardware; 'software only' or 'disabled' means Chromium fell back to
+// SwiftShader, which a WebGL game must not silently run on. getGPUInfo('complete') resolves
+// the actual adapter (glRenderer names the real GPU, e.g. "Apple M1", vs "SwiftShader"). This
+// MUST run after the GPU process has reported (call it on the window's did-finish-load, not at
+// whenReady, where getGPUFeatureStatus can still return a pre-initialization 'disabled_off').
+// Dev-channel diagnostics only (console), never user-facing.
+function logGpuStatus() {
+  try {
+    const status = app.getGPUFeatureStatus();
+    console.log('[gpu] feature status', status);
+    const gl = `${status?.webgl ?? ''} ${status?.webgl2 ?? ''}`;
+    if (/software|disabled/i.test(gl)) {
+      console.warn('[gpu] WebGL is NOT hardware-accelerated:', {
+        webgl: status?.webgl,
+        webgl2: status?.webgl2,
+      });
+    }
+  } catch (err) {
+    console.error('[gpu] could not read feature status', err);
+  }
+  app.getGPUInfo('complete').then(
+    (info) => {
+      const aux = info?.auxAttributes ?? {};
+      console.log('[gpu] active renderer', {
+        glRenderer: aux.glRenderer,
+        glVendor: aux.glVendor,
+      });
+    },
+    (err) => console.error('[gpu] could not read gpu info', err),
+  );
 }
 
 app.whenReady().then(() => {
