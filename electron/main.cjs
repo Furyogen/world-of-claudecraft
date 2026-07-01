@@ -11,10 +11,8 @@ const desktopLoginOrigin = (
   'https://worldofclaudecraft.com'
 ).replace(/\/+$/, '');
 const deepLinkProtocol = 'worldofclaudecraft';
-const steamAuthIdentity = process.env.STEAM_AUTH_IDENTITY || 'worldofclaudecraft';
 let mainWindow = null;
 let pendingLoginCode = null;
-let steamClient = null;
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -118,35 +116,6 @@ function openDesktopLogin() {
   shell.openExternal(url.toString());
 }
 
-function steamAppId() {
-  const raw =
-    process.env.STEAM_APP_ID || process.env.VITE_STEAM_APP_ID || (devServerUrl ? '480' : '');
-  const appId = Number(raw);
-  return Number.isInteger(appId) && appId > 0 ? appId : undefined;
-}
-
-function getSteamClient() {
-  if (steamClient) return steamClient;
-  const steamworks = require('steamworks.js');
-  steamClient = steamworks.init(steamAppId());
-  return steamClient;
-}
-
-async function requestSteamAuthTicket() {
-  const client = getSteamClient();
-  const ticket = await client.auth.getAuthTicketForWebApi(steamAuthIdentity);
-  try {
-    const localPlayer = client.localplayer;
-    return {
-      ticket: ticket.getBytes().toString('hex'),
-      steamId: localPlayer.getSteamId().steamId64.toString(),
-      displayName: localPlayer.getName(),
-    };
-  } finally {
-    ticket.cancel();
-  }
-}
-
 function deliverLoginCode(code) {
   pendingLoginCode = code;
   if (!mainWindow) return;
@@ -171,8 +140,6 @@ function handleDeepLink(url) {
 ipcMain.handle('desktop-login-open-browser', () => {
   openDesktopLogin();
 });
-
-ipcMain.handle('steam-auth-ticket', async () => requestSteamAuthTicket());
 
 ipcMain.handle('desktop-login-take-code', () => {
   const code = pendingLoginCode;

@@ -35,11 +35,6 @@ describe('desktop runtime helpers', () => {
       expect(desktopBridge()).toBeNull();
       globalWithBridge.wocDesktop = {
         openBrowserLogin: async () => {},
-        requestSteamAuthTicket: async () => ({
-          ticket: 'a'.repeat(32),
-          steamId: '76561198000000000',
-          displayName: 'Steam Player',
-        }),
         takeLoginCode: async () => null,
         onLoginCode: () => () => {},
       };

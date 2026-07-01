@@ -47,7 +47,6 @@ export function runtimeWebSocketUrl(
 
 export interface DesktopBridge {
   openBrowserLogin(): Promise<void>;
-  requestSteamAuthTicket(): Promise<{ ticket: string; steamId: string; displayName: string }>;
   takeLoginCode(): Promise<string | null>;
   onLoginCode(callback: (code: string) => void): () => void;
 }
@@ -58,7 +57,6 @@ export function desktopBridge(): DesktopBridge | null {
   const bridge = candidate as Partial<DesktopBridge>;
   if (
     typeof bridge.openBrowserLogin !== 'function' ||
-    typeof bridge.requestSteamAuthTicket !== 'function' ||
     typeof bridge.takeLoginCode !== 'function' ||
     typeof bridge.onLoginCode !== 'function'
   )

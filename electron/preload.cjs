@@ -2,7 +2,6 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('wocDesktop', {
   openBrowserLogin: () => ipcRenderer.invoke('desktop-login-open-browser'),
-  requestSteamAuthTicket: () => ipcRenderer.invoke('steam-auth-ticket'),
   takeLoginCode: () => ipcRenderer.invoke('desktop-login-take-code'),
   onLoginCode: (callback) => {
     if (typeof callback !== 'function') return () => {};

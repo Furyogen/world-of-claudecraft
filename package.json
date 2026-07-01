@@ -84,7 +84,6 @@
     "obscenity": "^0.4.6",
     "pg": "^8.21.0",
     "postprocessing": "^6.36.0",
-    "steamworks.js": "^0.4.0",
     "three": "^0.165.0",
     "ws": "^8.21.0"
   },
@@ -131,9 +130,6 @@
       "build/icon.ico",
       "build/icon.icns",
       "package.json"
-    ],
-    "asarUnpack": [
-      "node_modules/steamworks.js/dist/**"
     ],
     "directories": {
       "buildResources": "build",

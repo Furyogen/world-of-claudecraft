@@ -5955,7 +5955,6 @@ function wireStartScreens(): void {
   const btnStartOffline = $('#btn-start-offline') as HTMLButtonElement;
   const offlineNameInput = $('#char-name') as HTMLInputElement;
   const offlineError = $('#offline-error');
-  let pendingSteamAuth: { ticket: string; displayName: string } | null = null;
 
   const goToLoggedInPlay = () => {
     void enterRealmFlow().catch((err) => {
@@ -5988,34 +5987,18 @@ function wireStartScreens(): void {
     await enterRealmFlow();
   };
 
-  const handleDesktopSteamLogin = async (bridge: NonNullable<ReturnType<typeof desktopBridge>>) => {
-    loginError('');
-    let steamAuth: { ticket: string; displayName: string } | null = null;
-    try {
-      steamAuth = await bridge.requestSteamAuthTicket();
-      await api.steamLogin(steamAuth.ticket);
-      pendingSteamAuth = null;
-      await completeOnlineAuth();
-    } catch (err) {
-      if (err instanceof ApiError && err.status === 409 && steamAuth) {
-        pendingSteamAuth = { ticket: steamAuth.ticket, displayName: steamAuth.displayName };
-        show('#login-panel');
-        loginError(userFacingApiError(new Error('not authenticated')));
-        return;
-      }
-      loginError(userFacingApiError(err));
-      show('#login-panel');
-    }
-  };
-
   const handleOnlineSelect = () => {
     if (api.token) {
       goToLoggedInPlay();
       return;
     }
+    // Desktop shell: log in through the external browser (Discord + email). The
+    // /desktop-login page authenticates, then deep-links a one-time code back into
+    // the app (handled by onLoginCode -> completeDesktopAppLogin). The in-app panel
+    // is the fallback when the preload bridge is somehow unavailable.
     const bridge = DESKTOP_APP ? desktopBridge() : null;
     if (bridge) {
-      void handleDesktopSteamLogin(bridge);
+      void bridge.openBrowserLogin();
       return;
     }
     show('#login-panel');
@@ -6341,30 +6324,6 @@ function wireStartScreens(): void {
     const username = ($('#login-user') as unknown as HTMLInputElement).value.trim();
     const password = ($('#login-pass') as unknown as HTMLInputElement).value;
     loginError('');
-    if (pendingSteamAuth) {
-      if (mode !== 'login') {
-        loginError(userFacingApiError(new Error('invalid username or password')));
-        return;
-      }
-      try {
-        await api.linkSteamAccount(
-          username,
-          password,
-          pendingSteamAuth.ticket,
-          pendingSteamAuth.displayName,
-        );
-        pendingSteamAuth = null;
-      } catch (err) {
-        loginError(userFacingApiError(err));
-        return;
-      }
-      try {
-        await completeOnlineAuth();
-      } catch (err) {
-        loginError(userFacingApiError(err));
-      }
-      return;
-    }
     const token = turnstileToken();
     if (!NATIVE_APP && TURNSTILE_SITEKEY && !token) {
       loginError(t('errors.api.verificationFailed'));
@@ -6490,7 +6449,6 @@ function wireStartScreens(): void {
 
   $('#btn-login-back').addEventListener('click', (e) => {
     e.preventDefault();
-    pendingSteamAuth = null;
     // Clear validation state on back
     [userInput, passInput].forEach((input) => {
       input.classList.remove('user-invalid-fallback');

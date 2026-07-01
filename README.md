@@ -85,9 +85,9 @@ Name your character, pick any of the nine classes, and you start in **Eastbrook 
 
 See [Host your own world](#host-your-own-world-one-command) below to stand up the real client/server game with accounts and persistent characters.
 
-### Desktop app for Steam
+### Desktop app
 
-The Electron desktop shell uses the same Vite client. Online play uses Steam auth in the desktop shell: Electron asks Steam for a Web API ticket, and the game server verifies it before issuing a normal World of ClaudeCraft session token.
+The Electron desktop shell wraps the same Vite client. Online sign-in is Discord and email only, and it runs through your default browser: the app opens the `/desktop-login` page, you authenticate there, and the page hands a one-time code back to the app over a `worldofclaudecraft://` deep link, which the app exchanges for a normal World of ClaudeCraft session token.
 
 ```bash
 npm run electron:dev     # Vite + Electron dev shell
@@ -95,13 +95,13 @@ npm run electron:pack    # local unpacked desktop app
 npm run electron:build   # distributable Electron artifacts
 ```
 
-For local Steam-auth testing before the backend routes are deployed, run the API locally with `STEAM_APP_ID`, `STEAM_WEB_API_KEY`, and `STEAM_AUTH_IDENTITY=worldofclaudecraft`, then launch Electron against it:
+Point the shell at a different API with `VITE_DESKTOP_API_ORIGIN`, for example a local server or a staging host:
 
 ```bash
 VITE_DESKTOP_API_ORIGIN=http://127.0.0.1:8787 npm run electron:dev
 ```
 
-Override the production API origin for staging builds with `VITE_DESKTOP_API_ORIGIN=https://dev.worldofclaudecraft.com`. Local dev defaults to Steam AppID `480` when no `STEAM_APP_ID` is set; packaged Steam builds should run with the real Steam app context.
+Override the production API origin for staging builds with `VITE_DESKTOP_API_ORIGIN=https://dev.worldofclaudecraft.com`. Steam is kept as a future distribution channel only (one Electron bundle, uploaded via SteamPipe); there is no Steam sign-in.
 
 ## Host your own world (one command)
 

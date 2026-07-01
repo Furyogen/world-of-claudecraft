@@ -45,7 +45,6 @@ import { characterSheet, type SheetRank } from './character_sheet';
 import {
   accountAndScopeForToken,
   accountById,
-  accountForIdentity,
   accountForToken,
   type CharacterRow,
   characterCountsByRealm,
@@ -65,7 +64,6 @@ import {
   isAdminAccount,
   lifetimeXpRankForCharacter,
   lifetimeXpStanding,
-  linkAccountIdentity,
   listCharacters,
   listCompanionTokens,
   loadAccountCosmetics,
@@ -151,7 +149,6 @@ import {
 import { resolveReportTarget } from './report_target';
 import { handleSitePresenceHeartbeat } from './site_presence';
 import { cacheControlFor, etagFor, isNotModified } from './static_cache';
-import { normalizeSteamTicket, type SteamAuthResult, verifySteamAuthTicket } from './steam_auth';
 import { verifyTurnstile } from './turnstile';
 import {
   handleWalletChallenge,
@@ -783,75 +780,6 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
         }
       }
       clearAuthFailures(username); // correct password: forgive earlier typos
-      await touchLogin(account.id, requestMetadata(req));
-      const token = newToken();
-      await saveToken(token, account.id);
-      return json(res, 200, { token, username: account.username });
-    }
-    if (req.method === 'POST' && url === '/api/steam/login') {
-      const body = await readBody(req);
-      const ticket = normalizeSteamTicket(body.ticket);
-      if (!ticket) return json(res, 400, { error: 'invalid steam ticket' });
-      let steam: SteamAuthResult | null;
-      try {
-        steam = await verifySteamAuthTicket(ticket);
-      } catch (err) {
-        console.error('steam auth unavailable:', err);
-        return json(res, 503, { error: 'steam auth unavailable' });
-      }
-      if (!steam) return json(res, 403, { error: 'steam verification failed' });
-      if (steam.vacBanned || steam.publisherBanned)
-        return json(res, 403, { error: 'steam account is not allowed' });
-      const account = await accountForIdentity('steam', steam.steamId);
-      if (!account) return json(res, 409, { error: 'steam account is not linked' });
-      const status = await moderationStatusForAccount(account.id);
-      if (status.locked) return json(res, 403, { error: status.message });
-      await touchLogin(account.id, requestMetadata(req));
-      const token = newToken();
-      await saveToken(token, account.id);
-      return json(res, 200, { token, username: account.username });
-    }
-    if (req.method === 'POST' && url === '/api/steam/link') {
-      const body = await readBody(req);
-      const ticket = normalizeSteamTicket(body.ticket);
-      if (!ticket) return json(res, 400, { error: 'invalid steam ticket' });
-      let steam: SteamAuthResult | null;
-      try {
-        steam = await verifySteamAuthTicket(ticket);
-      } catch (err) {
-        console.error('steam auth unavailable:', err);
-        return json(res, 503, { error: 'steam auth unavailable' });
-      }
-      if (!steam) return json(res, 403, { error: 'steam verification failed' });
-      if (steam.vacBanned || steam.publisherBanned)
-        return json(res, 403, { error: 'steam account is not allowed' });
-      const existing = await accountForIdentity('steam', steam.steamId);
-      const username = typeof body.username === 'string' ? body.username : '';
-      if (username && authThrottled(username)) {
-        return json(res, 429, {
-          error: 'too many failed attempts — wait a few minutes and try again',
-        });
-      }
-      const account = username ? await findAccount(username) : null;
-      if (!account || !(await verifyPassword(String(body.password ?? ''), account.password_hash))) {
-        if (username) recordAuthFailure(username);
-        return json(res, 401, { error: 'invalid username or password' });
-      }
-      if (existing && existing.id !== account.id)
-        return json(res, 409, { error: 'steam account is already linked' });
-      const status = await moderationStatusForAccount(account.id);
-      if (status.locked) return json(res, 403, { error: status.message });
-      try {
-        await linkAccountIdentity(
-          account.id,
-          'steam',
-          steam.steamId,
-          typeof body.displayName === 'string' ? body.displayName : null,
-        );
-      } catch {
-        return json(res, 409, { error: 'account already has a steam link' });
-      }
-      clearAuthFailures(username);
       await touchLogin(account.id, requestMetadata(req));
       const token = newToken();
       await saveToken(token, account.id);

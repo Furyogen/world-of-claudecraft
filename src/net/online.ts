@@ -306,23 +306,6 @@ export class Api {
     this.username = data.username;
   }
 
-  async steamLogin(ticket: string): Promise<void> {
-    const data = await this.post('/api/steam/login', { ticket });
-    this.token = data.token;
-    this.username = data.username;
-  }
-
-  async linkSteamAccount(
-    username: string,
-    password: string,
-    ticket: string,
-    displayName = '',
-  ): Promise<void> {
-    const data = await this.post('/api/steam/link', { username, password, ticket, displayName });
-    this.token = data.token;
-    this.username = data.username;
-  }
-
   // ── Persistent session (home-page account portal) ──────────────────────────
   // The bearer token + username are cached in localStorage so a reload restores
   // the logged-in nav state. The token is always re-validated server-side via
