@@ -53,25 +53,21 @@ function registerAppProtocol() {
   });
 }
 
+// Deny-by-default: only the two permissions the game legitimately uses are granted
+// (pointerLock for mouselook, fullscreen for the game view); everything else is
+// refused. Both gates are set because they answer different call paths: the check
+// handler is synchronous and returns a boolean, the request handler is asynchronous
+// and answers via callback exactly once. Neither inspects webContents (it can be
+// null in the check handler). Device access (WebHID / Web Serial / WebUSB) is denied
+// outright via a third handler.
 function lockDownPermissions() {
-  const denied = new Set([
-    'camera',
-    'clipboard-read',
-    'display-capture',
-    'geolocation',
-    'media',
-    'mediaKeySystem',
-    'microphone',
-    'midi',
-    'notifications',
-    'openExternal',
-  ]);
-  session.defaultSession.setPermissionCheckHandler(
-    (_webContents, permission) => !denied.has(permission),
-  );
-  session.defaultSession.setPermissionRequestHandler((_webContents, permission, callback) => {
-    callback(!denied.has(permission));
+  const allowed = new Set(['pointerLock', 'fullscreen']);
+  const { defaultSession } = session;
+  defaultSession.setPermissionCheckHandler((_webContents, permission) => allowed.has(permission));
+  defaultSession.setPermissionRequestHandler((_webContents, permission, callback) => {
+    callback(allowed.has(permission));
   });
+  defaultSession.setDevicePermissionHandler(() => false);
 }
 
 function createMainWindow() {
