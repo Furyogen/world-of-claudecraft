@@ -61,6 +61,77 @@ The pure origin, CSP, and trusted-sender logic lives in electron/shell_guards.cj
 with unit tests (tests/electron_shell_guards.test.ts), since main.cjs runs outside
 tsc and vitest.
 
+### Launch, inspect, perform, and in-app login pass (2026-07-01)
+
+A follow-up pass on top of the hardening. The goal for the wrapper is one thing: the
+best possible Chromium runtime for the same browser game, kept gameplay-neutral. Four
+changes, each its own commit.
+
+- Packaged app launch crash, fixed (unblocks every unsigned local/CI test build). The
+  electronFuses flip rewrites the Electron executable, which invalidates the prebuilt
+  ad-hoc signature and the surrounding bundle seal. When a build has no real Developer ID,
+  electron-builder was skipping signing, so the app shipped with a broken signature and the
+  Apple Silicon kernel SIGKILLed it at launch (Code Signature Invalid). Fix: in
+  scripts/electron-build.mjs, when no real certificate is configured (CSC_LINK and CSC_NAME
+  both unset), pass electron-builder `--config.mac.identity=-` so it ad-hoc signs the whole
+  bundle itself. That runs @electron/osx-sign AFTER the fuse flip (electron-builder flips
+  fuses immediately before signing by design), producing a valid ad-hoc signature that
+  launches with no manual `codesign` step. Scoped to macOS and to unsigned builds only, so
+  the deferred production path (B1) is untouched: set CSC_LINK or CSC_NAME and the override
+  is skipped, and the real certificate signs the app.
+  Options considered and rejected: an afterPack/afterSign hook (rejected: afterPack runs
+  BEFORE the fuse flip so its re-sign is clobbered, and afterSign is skipped entirely when
+  no signing occurs); electronFuses.resetAdHocDarwinSignature (works, but re-signs even
+  signed production builds and its `codesign --deep` is the legacy path); skipping the fuse
+  flip for unsigned builds (loses the fused-binary test coverage locally).
+- Packaged-build DevTools affordance (N-new). setMenu(null) plus no DevTools left no way to
+  inspect CSP, GPU, or errors in a shipped app. A before-input-event handler now toggles
+  DevTools on F12, Cmd+Option+I (macOS), or Ctrl+Shift+I (Windows/Linux); WOC_OPEN_DEVTOOLS=1
+  auto-opens it on launch. DevTools is read-only against the sandboxed, context-isolated
+  renderer and confers no gameplay advantage. The chord predicate is pure
+  (isDevToolsToggleShortcut in shell_guards.cjs, matched on the PHYSICAL key code because
+  macOS Option composes input.key into a dead key), unit-tested.
+- Runtime CSP verification found and fixed one real block. Launching the packaged app with
+  Chromium logging showed the ONLY violations were connect-src refusing 226 blob: URLs:
+  Three.js GLTFLoader loads a model's embedded textures by turning them into blob: object
+  URLs and fetch()ing them (a connect-src request, not img-src), so every model rendered
+  untextured. Fix: add blob: to connect-src in buildContentSecurityPolicy (img-src and
+  worker-src already had it). After the fix a relaunch logged zero CSP violations. Everything
+  else the game needs is already allowed: 'wasm-unsafe-eval' for the Three.js WASM decoders,
+  worker-src blob: for decoder workers, 'self' for dynamic imports and app:// assets, wss:
+  for the realm socket, and the HTTPS API origin. The web build ships no CSP at all, so the
+  desktop CSP stays a strict superset of what the web build implicitly allows.
+- N2 and N7, performance and QoL. webPreferences now set backgroundThrottling:false (an MMO
+  client must keep its render loop and its 20 Hz input/network timer alive when backgrounded;
+  Chromium would otherwise throttle timers to about once a minute and pause rAF, stalling the
+  world mirror and the realm WebSocket for a visible hitch on refocus; the server has no
+  app-level idle disconnect, so this is safe and gameplay-neutral), spellcheck:false,
+  webviewTag:false (explicit), and disableBlinkFeatures:'Autofill'. Hardware acceleration is
+  left ON (no disableHardwareAcceleration, no blocklist override); a diagnostic logs
+  app.getGPUFeatureStatus() plus getGPUInfo('complete') glRenderer, fired on the window's
+  did-finish-load (NOT at whenReady, where the GPU process has not reported yet and WebGL can
+  read a spurious 'disabled_off'), so a shipped build can confirm WebGL is hardware-accelerated
+  (verified: webgl 'enabled', not SwiftShader). No GPU command-line switches were shipped:
+  --ignore-gpu-blocklist and forced-GPU switches were considered and left out (risk or power
+  cost without a measured win); the client's own FPS governor is left to own frame pacing.
+- Login stays in the app (fixes a hardening-pass regression). Clicking Play (Online) in the
+  desktop app now shows the in-app #login-panel instead of bouncing to the website;
+  username/password logs in in place via api.login. Only "Continue with Discord" is routed to
+  the external browser (#btn-login-discord calls the preload openBrowserLogin bridge in the
+  desktop build), because its OAuth redirect is off-origin and the navigation guard blocks it
+  in-app; it returns via the worldofclaudecraft://desktop-login?code= deep link (unchanged).
+
+Known dependency, not a wrapper bug (server deploy): the packaged app is served from origin
+app://worldofclaudecraft and calls https://worldofclaudecraft.com, a cross-origin request that
+needs the server to reflect Access-Control-Allow-Origin for that origin. This branch's server
+already allows it (server/web_login_guard.ts DESKTOP_APP_ORIGINS includes app://worldofclaudecraft,
+reflected by maybeCors), but a live probe of production returns no CORS header for that origin,
+so production has not been deployed with this support yet. Until it is, the desktop app cannot
+reach the REST API from production (login, realm list, and the landing-page player counts all
+fail CORS); the realm WebSocket itself is not Origin-gated. Unblock by deploying this branch's
+server to production, or for a local end-to-end smoke test point the build at a local server:
+VITE_DESKTOP_API_ORIGIN=http://localhost:8787 npm run electron:pack (local is http/ws).
+
 Deferred, gated on code signing (B1), not done here:
 
 - EnableEmbeddedAsarIntegrityValidation (to be paired with the enabled
