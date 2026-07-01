@@ -5991,15 +5991,12 @@ function wireStartScreens(): void {
       goToLoggedInPlay();
       return;
     }
-    // Desktop shell: log in through the external browser (Discord + email). The
-    // /desktop-login page authenticates, then deep-links a one-time code back into
-    // the app (handled by onLoginCode -> completeDesktopAppLogin). The in-app panel
-    // is the fallback when the preload bridge is somehow unavailable.
-    const bridge = DESKTOP_APP ? desktopBridge() : null;
-    if (bridge) {
-      void bridge.openBrowserLogin();
-      return;
-    }
+    // Desktop shell and web both show the in-app login panel: username/password logs in
+    // in place (doAuth -> api.login) without ever leaving the app. Only "Continue with
+    // Discord" bounces to the external browser (wired below), because its OAuth redirect
+    // would be blocked by the shell's in-app navigation guard; it returns a one-time code
+    // via the worldofclaudecraft://desktop-login deep link (onLoginCode ->
+    // completeDesktopAppLogin).
     show('#login-panel');
   };
 
@@ -6818,6 +6815,15 @@ function wireStartScreens(): void {
     if (discordOrDivider) discordOrDivider.hidden = false;
     discordLoginBtn.addEventListener('click', (e) => {
       e.preventDefault();
+      // In the desktop shell, Discord OAuth cannot run in-app: the redirect to Discord is
+      // off-origin and the navigation guard blocks it. Route it to the external browser via
+      // the preload bridge; the /desktop-login page finishes OAuth and deep-links a one-time
+      // code back in (onLoginCode -> completeDesktopAppLogin). The web build redirects in place.
+      const bridge = DESKTOP_APP ? desktopBridge() : null;
+      if (bridge) {
+        void bridge.openBrowserLogin();
+        return;
+      }
       startDiscordOAuth('login');
     });
   }
