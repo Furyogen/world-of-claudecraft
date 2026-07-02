@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Hardened-runtime entitlements for the signed macOS desktop app (used for both
+  the app and every nested helper via mac.entitlements / mac.entitlementsInherit).
+  Mirrors electron-builder's own fallback template for Electron apps:
+    - allow-jit: V8 JIT pages; Electron does not launch under the hardened
+      runtime without it.
+    - allow-unsigned-executable-memory: still required by Electron's non-JIT
+      executable allocations (WASM trap handlers, etc.).
+    - disable-library-validation: required for the LOCAL ad-hoc-signed builds
+      (mac.identity "-") where the nested Electron frameworks carry ad-hoc
+      signatures with no team ID; harmless on Developer ID builds (no native
+      modules are shipped, the asar is integrity-checked via the
+      enableEmbeddedAsarIntegrityValidation fuse, and notarization accepts it).
+  Network/JIT-unrelated entitlements (e.g. com.apple.security.network.client)
+  are App Sandbox-only concepts and deliberately absent: this is a hardened
+  runtime, non-sandboxed Developer ID app.
+-->
+<plist version="1.0">
+  <dict>
+    <key>com.apple.security.cs.allow-jit</key>
+    <true/>
+    <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+    <true/>
+    <key>com.apple.security.cs.disable-library-validation</key>
+    <true/>
+  </dict>
+</plist>

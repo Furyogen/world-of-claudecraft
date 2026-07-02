@@ -1,5 +1,6 @@
 import { spawn } from 'node:child_process';
 import { setTimeout as delay } from 'node:timers/promises';
+import { buildElectronVendor } from './electron-vendor.mjs';
 
 const viteUrl = process.env.VITE_DEV_SERVER_URL ?? 'http://127.0.0.1:5173';
 const onlineOrigin = process.env.VITE_DESKTOP_API_ORIGIN ?? 'https://worldofclaudecraft.com';
@@ -47,6 +48,10 @@ async function waitForVite() {
 }
 
 try {
+  // The main process requires the electron/vendor bundles (logging, updater)
+  // even in dev, and they are gitignored generated output, so rebuild them
+  // before launching the shell.
+  buildElectronVendor();
   await waitForVite();
   const electron = spawn(electronCommand, ['.'], {
     env: {

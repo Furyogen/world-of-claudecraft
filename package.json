@@ -21,7 +21,9 @@
     "native:open:android": "npm run native:sync && npx cap open android",
     "electron:dev": "node scripts/electron-dev.mjs",
     "electron:pack": "node scripts/electron-build.mjs pack",
+    "electron:pack:steam": "node scripts/electron-build.mjs pack steam",
     "electron:build": "node scripts/electron-build.mjs build",
+    "electron:build:steam": "node scripts/electron-build.mjs build steam",
     "preview": "vite preview",
     "format": "biome format --write .",
     "format:check": "biome format .",
@@ -80,6 +82,8 @@
     "@wallet-standard/base": "^1.1.1",
     "@wallet-standard/features": "^1.1.1",
     "bs58": "^6.0.0",
+    "electron-log": "^5.4.4",
+    "electron-updater": "^6.8.9",
     "n8ao": "^1.10.1",
     "obscenity": "^0.4.6",
     "pg": "^8.21.0",
@@ -129,7 +133,8 @@
       "build/icon.png",
       "build/icon.ico",
       "build/icon.icns",
-      "package.json"
+      "package.json",
+      "!node_modules/**"
     ],
     "directories": {
       "buildResources": "build",
@@ -141,7 +146,8 @@
       "enableNodeOptionsEnvironmentVariable": false,
       "enableNodeCliInspectArguments": false,
       "grantFileProtocolExtraPrivileges": false,
-      "onlyLoadAppFromAsar": true
+      "onlyLoadAppFromAsar": true,
+      "enableEmbeddedAsarIntegrityValidation": true
     },
     "protocols": [
       {
@@ -154,25 +160,68 @@
     "mac": {
       "category": "public.app-category.games",
       "icon": "build/icon.icns",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist",
       "target": [
-        "dmg",
-        "zip"
+        {
+          "target": "dmg",
+          "arch": [
+            "universal"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "universal"
+          ]
+        }
       ]
     },
     "win": {
       "icon": "build/icon.ico",
       "target": [
-        "nsis",
-        "zip"
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
       ]
     },
     "linux": {
       "category": "Game",
       "icon": "build/icon.png",
       "target": [
-        "AppImage",
-        "deb"
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "deb",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
       ]
+    },
+    "artifactName": "${name}-${version}-${os}-${arch}.${ext}",
+    "publish": {
+      "provider": "generic",
+      "url": "https://updates.worldofclaudecraft.com/desktop"
     }
   },
   "allowScripts": {
