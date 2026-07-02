@@ -47,14 +47,14 @@
     <strong>WoC Music Editor</strong>
     <select id="themeSel"></select>
     <span id="meta"></span>
-    <button id="playBtn" class="primary">Play</button>
+    <button type="button" id="playBtn" class="primary">Play</button>
     <label><input type="checkbox" id="loopChk" checked /> loop</label>
     <label>zoom <input type="number" id="zoomIn" min="8" max="80" step="2" value="26" style="width:64px" /></label>
     <span class="grow"></span>
-    <button id="undoBtn">Undo</button>
-    <button id="revertBtn" class="danger">Revert theme</button>
-    <button id="downloadBtn">Download .ts</button>
-    <button id="saveBtn" class="primary">Save to game</button>
+    <button type="button" id="undoBtn">Undo</button>
+    <button type="button" id="revertBtn" class="danger">Revert theme</button>
+    <button type="button" id="downloadBtn">Download .ts</button>
+    <button type="button" id="saveBtn" class="primary">Save to game</button>
     <span id="status"></span>
   </header>
   <main>
@@ -64,10 +64,10 @@
   <div id="selbar">
     <span id="selInfo">selection: 0 notes</span>
     <select id="selInst"></select>
-    <button id="applyInstBtn">Set instrument</button>
-    <button id="velUpBtn">Vel +15%</button>
-    <button id="velDnBtn">Vel -15%</button>
-    <button id="delBtn" class="danger">Delete</button>
+    <button type="button" id="applyInstBtn">Set instrument</button>
+    <button type="button" id="velUpBtn">Vel +15%</button>
+    <button type="button" id="velDnBtn">Vel -15%</button>
+    <button type="button" id="delBtn" class="danger">Delete</button>
     <span class="hint">click note = select and audition; shift+click = add; drag empty = marquee; drag notes = move (snap 1/4 beat, semitones); <kbd>ctrl+Z</kbd> undo; <kbd>del</kbd> delete; <kbd>esc</kbd> clear</span>
   </div>
   <script type="module">
@@ -234,7 +234,8 @@
 
     // ---- editing ----
     function snapshot() {
-      (undoStack[cur] ??= []).push(clone(themes[cur]));
+      undoStack[cur] = undoStack[cur] ?? [];
+      undoStack[cur].push(clone(themes[cur]));
       if (undoStack[cur].length > 60) undoStack[cur].shift();
       dirty.add(cur);
       reverted.delete(cur);
@@ -339,9 +340,9 @@
         const sw = document.createElement('div'); sw.className = 'sw'; sw.style.background = color(inst);
         const nm = document.createElement('div'); nm.className = 'nm'; nm.textContent = inst;
         const ct = document.createElement('div'); ct.className = 'ct'; ct.textContent = `${counts[inst]} notes`;
-        const mBtn = document.createElement('button'); mBtn.className = 'tog' + (muted.has(inst) ? ' on' : ''); mBtn.textContent = 'M';
+        const mBtn = document.createElement('button'); mBtn.className = `tog${muted.has(inst) ? ' on' : ''}`; mBtn.textContent = 'M';
         mBtn.onclick = () => { muted.has(inst) ? muted.delete(inst) : muted.add(inst); applyMix(); rebuildLanes(); draw(); };
-        const sBtn = document.createElement('button'); sBtn.className = 'tog' + (solo.has(inst) ? ' on' : ''); sBtn.textContent = 'S';
+        const sBtn = document.createElement('button'); sBtn.className = `tog${solo.has(inst) ? ' on' : ''}`; sBtn.textContent = 'S';
         sBtn.onclick = () => { solo.has(inst) ? solo.delete(inst) : solo.add(inst); applyMix(); rebuildLanes(); };
         const selBtn = document.createElement('button'); selBtn.className = 'tog'; selBtn.textContent = 'sel';
         selBtn.onclick = () => { selection = new Set(t.events.map((e, i) => e.inst === inst ? i : -1).filter((i) => i >= 0)); draw(); updateSelBar(); };
@@ -405,7 +406,8 @@
     document.getElementById('velDnBtn').onclick = () => mutateSelection((e) => { e.vel = Math.max(0.005, e.vel / 1.15); });
     document.getElementById('delBtn').onclick = deleteSelection;
     document.getElementById('revertBtn').onclick = () => {
-      (undoStack[cur] ??= []).push(clone(themes[cur]));
+      undoStack[cur] = undoStack[cur] ?? [];
+      undoStack[cur].push(clone(themes[cur]));
       delete overrides[cur];
       dirty.delete(cur);
       reverted.add(cur);
