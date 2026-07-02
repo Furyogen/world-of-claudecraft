@@ -5070,12 +5070,14 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.devBadge.linkedAs': 'Привязан как {login}',
   'hudChrome.devBadge.unlink': 'Отвязать GitHub',
   'desktop.update.downloading': 'Загрузка обновления {version}...',
-  'desktop.update.ready': 'Обновление {version} готово. Оно установится при выходе из игры, либо перезапустите сейчас.',
+  'desktop.update.ready':
+    'Обновление {version} готово. Оно установится при выходе из игры, либо перезапустите сейчас.',
   'desktop.update.restart': 'Перезапустить сейчас',
   'desktop.update.later': 'Позже',
   'desktop.crash.title': 'World of ClaudeCraft',
   'desktop.crash.body': 'Игровой экран перестал отвечать. Перезагрузить его?',
   'desktop.crash.reload': 'Перезагрузить',
   'desktop.crash.quit': 'Выйти',
-  'desktop.crash.fatalBody': 'World of ClaudeCraft столкнулась с непредвиденной ошибкой и будет закрыта.',
+  'desktop.crash.fatalBody':
+    'World of ClaudeCraft столкнулась с непредвиденной ошибкой и будет закрыта.',
 };

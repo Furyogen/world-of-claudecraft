@@ -4960,7 +4960,8 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.devBadge.linkedAs': '{login} として連携済み',
   'hudChrome.devBadge.unlink': 'GitHub の連携を解除',
   'desktop.update.downloading': 'アップデート {version} をダウンロード中...',
-  'desktop.update.ready': 'アップデート {version} の準備ができました。ゲーム終了時に自動でインストールされます。今すぐ再起動もできます。',
+  'desktop.update.ready':
+    'アップデート {version} の準備ができました。ゲーム終了時に自動でインストールされます。今すぐ再起動もできます。',
   'desktop.update.restart': '今すぐ再起動',
   'desktop.update.later': '後で',
   'desktop.crash.title': 'World of ClaudeCraft',

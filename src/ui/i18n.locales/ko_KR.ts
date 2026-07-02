@@ -4969,7 +4969,8 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.devBadge.linkedAs': '{login}(으)로 연결됨',
   'hudChrome.devBadge.unlink': 'GitHub 연결 해제',
   'desktop.update.downloading': '업데이트 {version} 다운로드 중...',
-  'desktop.update.ready': '업데이트 {version} 준비 완료. 게임을 종료하면 자동으로 설치되며, 지금 다시 시작할 수도 있습니다.',
+  'desktop.update.ready':
+    '업데이트 {version} 준비 완료. 게임을 종료하면 자동으로 설치되며, 지금 다시 시작할 수도 있습니다.',
   'desktop.update.restart': '지금 다시 시작',
   'desktop.update.later': '나중에',
   'desktop.crash.title': 'World of ClaudeCraft',

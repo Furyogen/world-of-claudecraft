@@ -20,6 +20,7 @@ import {
   stepAngleToward,
 } from './game/click_move';
 import { getClientSeed } from './game/client_seed';
+import { initDesktopShellIntegration } from './game/desktop_shell_integration';
 import { GamepadManager } from './game/gamepad';
 import { GamepadBindings } from './game/gamepad_bindings';
 import { Input } from './game/input';
@@ -81,7 +82,6 @@ import { installWebGLContextRelease } from './render/context_release';
 import { firstRunGraphicsPreset, GFX, graphicsPresetLabel } from './render/gfx';
 import { Renderer } from './render/renderer';
 import { navigatorSaveData } from './render/sky';
-import { initDesktopShellIntegration } from './game/desktop_shell_integration';
 import { desktopBridge } from './runtime';
 import { pathCrossesFence } from './sim/colliders';
 import { ABILITIES, CLASSES } from './sim/content/classes';

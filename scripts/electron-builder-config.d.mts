@@ -13,10 +13,20 @@ export function azureSignOptionsFromEnv(
   env?: Record<string, string | undefined>,
 ): AzureSignOptions | null;
 
+export interface DesktopBuilderConfig {
+  extraMetadata: { wocDesktop: { distribution: string; crashSubmitUrl?: string } };
+  publish: unknown;
+  directories: { output?: string; [key: string]: unknown };
+  mac: { [key: string]: unknown };
+  win: { azureSignOptions?: AzureSignOptions; [key: string]: unknown };
+  linux: { [key: string]: unknown };
+  [key: string]: unknown;
+}
+
 export function desktopBuilderConfig(input: {
   base: Record<string, unknown>;
   distribution: string;
   mode?: 'pack' | 'build';
   crashSubmitUrl?: string;
   azureSign?: AzureSignOptions | null;
-}): Record<string, any>;
+}): DesktopBuilderConfig;

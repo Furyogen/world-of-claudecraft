@@ -58,6 +58,13 @@ function attachRendererCrashRecovery({
       return;
     }
     log.error('[renderer] gone', details);
+    // A crash racing the window teardown: nothing to recover into (and a
+    // reload/dialog on a destroyed window would throw inside this handler,
+    // which the uncaughtException guard would escalate to a fatal exit).
+    if (window.isDestroyed() || window.webContents.isDestroyed()) {
+      log.warn('[renderer] window already gone; skipping recovery');
+      return;
+    }
     if (reason === 'integrity-failure') {
       const strings = getStrings();
       dialog.showErrorBox(strings.fatalTitle, strings.fatalBody);
