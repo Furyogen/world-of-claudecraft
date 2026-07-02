@@ -1,6 +1,8 @@
 # Desktop release runbook (Electron: website download + Steam)
 
 How to build, sign, publish, and verify the World of ClaudeCraft desktop app.
+The longer companion explainer (what shipped, per-platform update/signing
+mechanics, step-by-step release walkthroughs) is `docs/desktop-ship-notes.md`.
 One codebase produces two distribution channels:
 
 | Channel | Command | Output | Updates |
