@@ -1,4 +1,14 @@
-const { app, BrowserWindow, ipcMain, net, protocol, session, shell } = require('electron');
+const {
+  app,
+  BrowserWindow,
+  crashReporter,
+  dialog,
+  ipcMain,
+  net,
+  protocol,
+  session,
+  shell,
+} = require('electron');
 const fs = require('node:fs');
 const path = require('node:path');
 const { pathToFileURL } = require('node:url');
@@ -14,6 +24,16 @@ const {
   withCspHeader,
   ALLOWED_PERMISSIONS,
 } = require('./shell_guards.cjs');
+const { resolveDesktopConfig } = require('./desktop_config.cjs');
+const {
+  MAX_FORWARDED_ERRORS,
+  normalizeConsoleMessage,
+  rendererErrorLogEntry,
+  shouldLogConsoleLevel,
+} = require('./diagnostics.cjs');
+const { initLogging } = require('./logging.cjs');
+const { DEFAULT_SHELL_STRINGS, sanitizeShellStrings } = require('./shell_strings.cjs');
+const { attachRendererCrashRecovery, installProcessCrashGuards } = require('./crash_guard.cjs');
 
 const APP_ORIGIN = 'app://worldofclaudecraft';
 const devServerUrl = process.env.VITE_DEV_SERVER_URL;
@@ -31,6 +51,54 @@ const desktopLoginOrigin = (
 const deepLinkProtocol = 'worldofclaudecraft';
 let mainWindow = null;
 let pendingLoginCode = null;
+
+// Which distribution this build is (website download vs Steam depot), whether
+// the auto-updater may run, and the optional crash-minidump submit URL. The
+// stamp is read from the PACKAGED package.json (electron-builder extraMetadata
+// wrote wocDesktop there); a bare `electron .` checkout has no stamp and
+// resolves to website-with-updater-off.
+function readPackagedMetadata() {
+  try {
+    return JSON.parse(fs.readFileSync(path.join(app.getAppPath(), 'package.json'), 'utf8'));
+  } catch {
+    return null;
+  }
+}
+const desktopConfig = resolveDesktopConfig({
+  packagedMetadata: readPackagedMetadata(),
+  env: process.env,
+  isPackaged: app.isPackaged,
+});
+
+// Crashpad must start before any window exists so native crashes in EVERY
+// process (main, renderer, GPU, utility) are captured from the first frame.
+// Without a provisioned submit URL the minidumps stay local under
+// app.getPath('crashDumps') for attaching to bug reports; with one (stamped at
+// build time, https-only) they upload compressed and rate-limited. No extra
+// user data rides along: the report carries only process/version metadata.
+crashReporter.start({
+  productName: 'World of ClaudeCraft',
+  companyName: 'World of ClaudeCraft',
+  submitURL: desktopConfig.crashSubmitUrl || undefined,
+  uploadToServer: desktopConfig.crashSubmitUrl !== '',
+  compress: true,
+  rateLimit: true,
+});
+
+// Structured file logging (electron/logging.cjs). Everything the shell used to
+// console.log now lands in a rotating main.log so a shipped build is
+// diagnosable; the renderer's warnings/errors and uncaught exceptions are
+// mirrored into the same file below.
+const { log, filePath: logFilePath } = initLogging({ isPackaged: app.isPackaged });
+
+// Player-visible strings for main-process dialogs (crash recovery): the
+// renderer pushes t()-localized values via 'desktop-set-strings'
+// (src/game/desktop_shell_bridge.ts); until that first push, e.g. a crash
+// before the client booted, the English defaults apply.
+let shellStrings = DEFAULT_SHELL_STRINGS;
+const getShellStrings = () => shellStrings;
+
+installProcessCrashGuards({ app, dialog, log, getStrings: getShellStrings });
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -183,6 +251,30 @@ function createMainWindow() {
   // context), by when getGPUFeatureStatus and getGPUInfo have settled to the real values.
   mainWindow.webContents.once('did-finish-load', logGpuStatus);
 
+  // Crash recovery for the game view: bounded auto-reload, then an i18n
+  // Reload/Quit dialog (electron/crash_guard.cjs).
+  attachRendererCrashRecovery({
+    window: mainWindow,
+    app,
+    dialog,
+    log,
+    getStrings: getShellStrings,
+  });
+
+  // Mirror renderer console warnings/errors into the shell log file so a
+  // shipped build's page-level failures (CSP violations, WebGL loss, network
+  // errors) are diagnosable without DevTools. Info-level output stays out of
+  // the file (electron/diagnostics.cjs shouldLogConsoleLevel).
+  mainWindow.webContents.on('console-message', (details, level, message, line, sourceId) => {
+    const entry = normalizeConsoleMessage(details, level, message, line, sourceId);
+    if (!entry || !shouldLogConsoleLevel(entry.level)) return;
+    log[entry.level === 'error' ? 'error' : 'warn'](
+      '[renderer-console]',
+      entry.message,
+      entry.source,
+    );
+  });
+
   if (devServerUrl) {
     mainWindow.loadURL(devServerUrl);
     mainWindow.webContents.openDevTools({ mode: 'detach' });
@@ -245,6 +337,27 @@ ipcMain.handle('desktop-login-take-code', (event) => {
   return code;
 });
 
+// The renderer's t()-localized shell strings (crash dialog text). Validated
+// and clamped in shell_strings.cjs; unknown keys and junk values are dropped.
+ipcMain.handle('desktop-set-strings', (event, strings) => {
+  if (!trustedSender(event)) return null;
+  shellStrings = sanitizeShellStrings(strings, shellStrings);
+  return null;
+});
+
+// Uncaught renderer errors forwarded by the preload. The preload clamps and
+// caps, but main re-validates and re-caps without trusting it
+// (electron/diagnostics.cjs); a malformed payload is dropped silently.
+let rendererErrorsLogged = 0;
+ipcMain.on('desktop-renderer-error', (event, payload) => {
+  if (!trustedSender(event)) return;
+  if (rendererErrorsLogged >= MAX_FORWARDED_ERRORS) return;
+  const entry = rendererErrorLogEntry(payload);
+  if (!entry) return;
+  rendererErrorsLogged += 1;
+  log.error('[renderer]', entry);
+});
+
 if (process.defaultApp) {
   app.setAsDefaultProtocolClient(deepLinkProtocol, process.execPath, [
     path.resolve(process.argv[1]),
@@ -271,36 +384,53 @@ if (!singleInstance) {
 // checked for hardware-accelerated WebGL (the whole point of the wrapper). In the feature
 // status, 'enabled' means hardware; 'software only' or 'disabled' means Chromium fell back to
 // SwiftShader, which a WebGL game must not silently run on. getGPUInfo('complete') resolves
-// the actual adapter (glRenderer names the real GPU, e.g. "Apple M1", vs "SwiftShader"). This
-// MUST run after the GPU process has reported (call it on the window's did-finish-load, not at
-// whenReady, where getGPUFeatureStatus can still return a pre-initialization 'disabled_off').
-// Dev-channel diagnostics only (console), never user-facing.
+// the actual adapter (glRenderer names the real GPU, e.g. "Apple M1", vs "SwiftShader") and
+// auxAttributes.softwareRendering is Chromium's own verdict. This MUST run after the GPU
+// process has reported (call it on the window's did-finish-load, not at whenReady, where
+// getGPUFeatureStatus can still return a pre-initialization 'disabled_off'). Dev-channel
+// diagnostics only (the log file), never user-facing.
 function logGpuStatus() {
   try {
     const status = app.getGPUFeatureStatus();
-    console.log('[gpu] feature status', status);
+    log.info('[gpu] feature status', status);
     if (isSoftwareRenderer(status)) {
-      console.warn('[gpu] WebGL is NOT hardware-accelerated:', {
+      log.warn('[gpu] WebGL is NOT hardware-accelerated:', {
         webgl: status?.webgl,
         webgl2: status?.webgl2,
       });
     }
   } catch (err) {
-    console.error('[gpu] could not read feature status', err);
+    log.error('[gpu] could not read feature status', err);
   }
   app.getGPUInfo('complete').then(
     (info) => {
       const aux = info?.auxAttributes ?? {};
-      console.log('[gpu] active renderer', {
+      if (aux.softwareRendering) {
+        log.warn('[gpu] GPU process reports softwareRendering: the game is on a CPU rasterizer');
+      }
+      log.info('[gpu] active renderer', {
         glRenderer: aux.glRenderer,
         glVendor: aux.glVendor,
       });
     },
-    (err) => console.error('[gpu] could not read gpu info', err),
+    (err) => log.error('[gpu] could not read gpu info', err),
   );
 }
 
 app.whenReady().then(() => {
+  log.info('[shell] starting', {
+    version: app.getVersion(),
+    electron: process.versions.electron,
+    chrome: process.versions.chrome,
+    platform: process.platform,
+    arch: process.arch,
+    packaged: app.isPackaged,
+    distribution: desktopConfig.distribution,
+    updaterEnabled: desktopConfig.updaterEnabled,
+    crashUpload: desktopConfig.crashSubmitUrl !== '',
+    crashDumpDir: app.getPath('crashDumps'),
+    logFile: logFilePath,
+  });
   registerAppProtocol();
   lockDownPermissions();
   createMainWindow();
