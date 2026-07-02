@@ -5507,6 +5507,18 @@ export const pt_BR: EnTranslations = {
       "acolyte_tessa": {
         "name": "Acólita Tessa"
       },
+      "glimmerfin_eel": {
+        "name": "Enguia de barbatana luzente"
+      },
+      "pearlshell_skitterer": {
+        "name": "Rastejador casca-de-pérola"
+      },
+      "kelpshade_lurker": {
+        "name": "Espreitador sombra-de-alga"
+      },
+      "undertow_maw": {
+        "name": "A Bocarra da Ressaca"
+      },
       "ironvein_foreman": {
         "name": "Capataz Veio de Ferro"
       },
@@ -5726,6 +5738,16 @@ export const pt_BR: EnTranslations = {
         "name": "Irmão Halven",
         "title": "Guardião do Relicário",
         "greeting": "O relicário lá embaixo se moveu de novo."
+      },
+      "keeper_nerissa": {
+        "name": "Guardiã Nerissa",
+        "title": "Sentinela da Coroa de Lúmen",
+        "greeting": "Cuidado com o vidro, criatura da superfície. Ele resiste há uma era — ajude a mantê-lo assim."
+      },
+      "tidewright_ollo": {
+        "name": "Ollo Forja-marés",
+        "title": "Forja-marés do Mercado das Pérolas",
+        "greeting": "Fresquinho dos últimos alambiques secos das profundezas. Moeda primeiro, histórias depois."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
@@ -6650,6 +6672,33 @@ export const pt_BR: EnTranslations = {
           },
           "9": {
             "label": "Santuário do Gravewyrm"
+          },
+          "10": {
+            "label": "O Portão das Marés"
+          }
+        }
+      },
+      "atlantis": {
+        "name": "Atlântida",
+        "welcome": "A cúpula ainda canta, e Atlântida resiste sob a Submaré.",
+        "pois": {
+          "0": {
+            "label": "Atlântida"
+          },
+          "1": {
+            "label": "Praça do Portão das Marés"
+          },
+          "2": {
+            "label": "A Coroa de Lúmen"
+          },
+          "3": {
+            "label": "Mercado das Pérolas"
+          },
+          "4": {
+            "label": "O Arquivo Afogado"
+          },
+          "5": {
+            "label": "Anexo dos Guarda-algas"
           }
         }
       }

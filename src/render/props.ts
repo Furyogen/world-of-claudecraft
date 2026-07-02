@@ -1202,6 +1202,30 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
     );
   }
 
+  // ---- Atlantis dome glass: one translucent shell per PROPS.domes ring ------
+  // Movement is blocked by the collider ring (sim/colliders.ts); this is only
+  // the visual shell. The abyss fog + crushed sky do most of the selling — the
+  // shell catches rim light so the glass reads from inside and outside.
+  for (const dome of PROPS.domes ?? []) {
+    const shell = new THREE.Mesh(
+      new THREE.SphereGeometry(dome.r, 48, 20, 0, Math.PI * 2, 0, Math.PI / 2),
+      new THREE.MeshStandardMaterial({
+        color: 0x7fe8de,
+        transparent: true,
+        opacity: 0.08,
+        roughness: 0.12,
+        metalness: 0,
+        emissive: 0x1d4f4c,
+        emissiveIntensity: 0.4,
+        side: THREE.DoubleSide,
+        depthWrite: false,
+      }),
+    );
+    shell.position.set(dome.x, ground(dome.x, dome.z) - 1.5, dome.z);
+    shell.renderOrder = 2;
+    group.add(shell);
+  }
+
   // ---- delve entrance: Meshy portal-door + animated void + carved name lintel -
   // Town/hub is +z (north) of Reliquary Hill. The portal-door model sits just
   // south of Brother Halven facing +z; it has its own stone backing slab so the

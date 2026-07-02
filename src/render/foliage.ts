@@ -110,13 +110,43 @@ for (const urls of Object.values(MODEL_URLS)) {
 // Desaturated biome tints riding instanceColor. The textured models carry
 // their own hue, so tints are lerped most of the way to white before use
 // (raw tints multiply into the albedo and read as grime).
-const PINE_TINT: Record<BiomeId, number> = { vale: 0x9bb48d, marsh: 0x87966b, peaks: 0x6f8a7a };
-const OAK_TINT: Record<BiomeId, number> = { vale: 0xa7b886, marsh: 0x8d9865, peaks: 0x92a37f };
-const ROCK_TINT: Record<BiomeId, number> = { vale: 0x8d8d85, marsh: 0x565c4e, peaks: 0x878e99 };
-const TRUNK_TINT: Record<BiomeId, number> = { vale: 0xffffff, marsh: 0xd2d8bc, peaks: 0xd9dde4 };
-const GRASS_TINT: Record<BiomeId, number> = { vale: 0xdde4c0, marsh: 0xbfc492, peaks: 0xc2cec8 };
+const PINE_TINT: Record<BiomeId, number> = {
+  vale: 0x9bb48d,
+  marsh: 0x87966b,
+  peaks: 0x6f8a7a,
+  abyss: 0x4a7a6e,
+};
+const OAK_TINT: Record<BiomeId, number> = {
+  vale: 0xa7b886,
+  marsh: 0x8d9865,
+  peaks: 0x92a37f,
+  abyss: 0x527a66,
+};
+const ROCK_TINT: Record<BiomeId, number> = {
+  vale: 0x8d8d85,
+  marsh: 0x565c4e,
+  peaks: 0x878e99,
+  abyss: 0x5e6d7c,
+};
+const TRUNK_TINT: Record<BiomeId, number> = {
+  vale: 0xffffff,
+  marsh: 0xd2d8bc,
+  peaks: 0xd9dde4,
+  abyss: 0xb9cdd1,
+};
+const GRASS_TINT: Record<BiomeId, number> = {
+  vale: 0xdde4c0,
+  marsh: 0xbfc492,
+  peaks: 0xc2cec8,
+  abyss: 0x9fc4b4,
+};
 const SWAMP_CANOPY_TINT = 0x7e8b58;
-const DRESS_TINT: Record<BiomeId, number> = { vale: 0xaebf8e, marsh: 0x8d9865, peaks: 0x93a78f };
+const DRESS_TINT: Record<BiomeId, number> = {
+  vale: 0xaebf8e,
+  marsh: 0x8d9865,
+  peaks: 0x93a78f,
+  abyss: 0x6f9486,
+};
 // how far tints collapse toward white (1 = no tint at all)
 const LEAF_TINT_SOFTEN = 0.6;
 const BARK_TINT_SOFTEN = 0.85;
@@ -1045,7 +1075,12 @@ interface DressingSpot {
 
 const DRESS_STEP_HIGH = 12;
 const DRESS_STEP_LOW = 10;
-const DRESS_DENSITY: Record<BiomeId, number> = { vale: 0.26, marsh: 0.26, peaks: 0.15 };
+const DRESS_DENSITY: Record<BiomeId, number> = {
+  vale: 0.26,
+  marsh: 0.26,
+  peaks: 0.15,
+  abyss: 0.08,
+};
 const DRESS_DENSITY_LOW_SCALE = 1.24;
 const DRESS_LOW_SCALE_BOOST = 1.08;
 const DRESS_TINT_SOFTEN_LOW = 0.56;

@@ -15,6 +15,7 @@ import type {
   MobTemplate,
   NpcDef,
   PlayerClass,
+  PortalPadDef,
   QuestDef,
   QuestState,
   ZoneDef,
@@ -24,6 +25,16 @@ import type {
 export type { FishingEntry } from './content/items';
 export { FISHING_RARE_ID, FISHING_TABLES };
 
+import {
+  ATLANTIS_CAMPS,
+  ATLANTIS_MOBS,
+  ATLANTIS_NPCS,
+  ATLANTIS_OBJECTS,
+  ATLANTIS_PORTAL_PADS,
+  ATLANTIS_PROPS,
+  ATLANTIS_ROADS,
+  ATLANTIS_ZONE,
+} from './content/atlantis';
 import {
   BROTHER_HALVEN,
   COLLAPSED_RELIQUARY_DELVE,
@@ -151,6 +162,7 @@ export const MOBS: Record<string, MobTemplate> = {
   ...TEMPLE_MOBS,
   ...TEMPLE_DUNGEON_MOBS,
   ...DELVE_MOBS,
+  ...ATLANTIS_MOBS,
 };
 
 export const NPCS: Record<string, NpcDef> = {
@@ -159,6 +171,7 @@ export const NPCS: Record<string, NpcDef> = {
   ...ZONE3_NPCS,
   ...TEMPLE_NPCS,
   brother_halven: BROTHER_HALVEN,
+  ...ATLANTIS_NPCS,
 };
 
 export const QUESTS: Record<string, QuestDef> = {
@@ -186,6 +199,8 @@ export const CAMPS: CampDef[] = [
   ...TEMPLE_CAMPS,
   ...ZONE1_CHAPEL_CAMPS,
   { mobId: 'grix_the_tunnelking', center: { x: -95, z: -78 }, radius: 4, count: 1 },
+  // Atlantis (zone 4) appended last, same determinism rule as above.
+  ...ATLANTIS_CAMPS,
 ];
 
 export const GROUND_OBJECTS: GroundObjectDef[] = [
@@ -193,16 +208,26 @@ export const GROUND_OBJECTS: GroundObjectDef[] = [
   ...ZONE2_OBJECTS,
   ...ZONE3_OBJECTS,
   ...TEMPLE_OBJECTS,
+  ...ATLANTIS_OBJECTS,
 ];
 
-export const ROADS: { x: number; z: number }[][] = [...ZONE1_ROADS, ...ZONE2_ROADS, ...ZONE3_ROADS];
+export const ROADS: { x: number; z: number }[][] = [
+  ...ZONE1_ROADS,
+  ...ZONE2_ROADS,
+  ...ZONE3_ROADS,
+  ...ATLANTIS_ROADS,
+];
 
 export const PROPS: ZonePropsDef = mergeProps([
   ZONE1_PROPS,
   ZONE2_PROPS,
   ZONE3_PROPS,
   TEMPLE_PROPS,
+  ATLANTIS_PROPS,
 ]);
+
+// Overworld portal pads (walk-in teleports; see Sim.updatePortalPadTriggers).
+export const PORTAL_PADS: PortalPadDef[] = [...ATLANTIS_PORTAL_PADS];
 
 function mergeProps(sets: ZonePropsDef[]): ZonePropsDef {
   return {
@@ -258,7 +283,7 @@ export const GROUP_XP_BONUS = [1, 1, 1.166, 1.3, 1.43];
 // graveyard, its lakes, and a biome palette the renderer keys off.
 // ---------------------------------------------------------------------------
 
-export const ZONES: ZoneDef[] = [ZONE1_ZONE, ZONE2_ZONE, ZONE3_ZONE];
+export const ZONES: ZoneDef[] = [ZONE1_ZONE, ZONE2_ZONE, ZONE3_ZONE, ATLANTIS_ZONE];
 
 export const WORLD_SIZE = 360; // world width: x spans [-180, 180]
 export const WORLD_MIN_X = -WORLD_SIZE / 2;

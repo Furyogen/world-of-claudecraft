@@ -5507,6 +5507,18 @@ export const da_DK: EnTranslations = {
       "acolyte_tessa": {
         "name": "Akolyt Tessa"
       },
+      "glimmerfin_eel": {
+        "name": "Glimmerfinne-ål"
+      },
+      "pearlshell_skitterer": {
+        "name": "Perleskals-kravler"
+      },
+      "kelpshade_lurker": {
+        "name": "Tangskygge-lurer"
+      },
+      "undertow_maw": {
+        "name": "Understrømmens Gab"
+      },
       "ironvein_foreman": {
         "name": "Jernåre-Formand"
       },
@@ -5726,6 +5738,16 @@ export const da_DK: EnTranslations = {
         "name": "Broder Halven",
         "title": "Relikvarievogter",
         "greeting": "Relikvariet nedenunder har flyttet sig igen."
+      },
+      "keeper_nerissa": {
+        "name": "Vogter Nerissa",
+        "title": "Lumenkronens Vogter",
+        "greeting": "Pas på glasset, overflademenneske. Det har holdt i en evighed — hjælp os med at holde det sådan."
+      },
+      "tidewright_ollo": {
+        "name": "Tidesmed Ollo",
+        "title": "Perlemarkedets Tidesmed",
+        "greeting": "Friskt fra de sidste tørre destillerier i dybet. Mønter først, historier bagefter."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
@@ -6650,6 +6672,33 @@ export const da_DK: EnTranslations = {
           },
           "9": {
             "label": "Gravormens Helligdom"
+          },
+          "10": {
+            "label": "Tidevandsporten"
+          }
+        }
+      },
+      "atlantis": {
+        "name": "Atlantis",
+        "welcome": "Kuplen synger stadig, og Atlantis består under Undertiden.",
+        "pois": {
+          "0": {
+            "label": "Atlantis"
+          },
+          "1": {
+            "label": "Tidevandsportens Plads"
+          },
+          "2": {
+            "label": "Lumenkronen"
+          },
+          "3": {
+            "label": "Perlemarkedet"
+          },
+          "4": {
+            "label": "Det Druknede Arkiv"
+          },
+          "5": {
+            "label": "Tangvogternes Anneks"
           }
         }
       }

@@ -5507,6 +5507,18 @@ export const zh_CN: EnTranslations = {
       "acolyte_tessa": {
         "name": "侍僧泰莎"
       },
+      "glimmerfin_eel": {
+        "name": "闪鳍鳗"
+      },
+      "pearlshell_skitterer": {
+        "name": "珠壳疾行蟹"
+      },
+      "kelpshade_lurker": {
+        "name": "藻影潜伏者"
+      },
+      "undertow_maw": {
+        "name": "底潮巨口"
+      },
       "ironvein_foreman": {
         "name": "铁脉工头"
       },
@@ -5726,6 +5738,16 @@ export const zh_CN: EnTranslations = {
         "name": "哈尔文修士",
         "title": "圣物库守护人",
         "greeting": "下方的圣物库又移位了。"
+      },
+      "keeper_nerissa": {
+        "name": "守护者奈瑞莎",
+        "title": "流明之冠守卫",
+        "greeting": "当心这层玻璃，水面来客。它撑过了一个时代——帮我们让它继续撑下去。"
+      },
+      "tidewright_ollo": {
+        "name": "潮匠奥洛",
+        "title": "珍珠集市潮匠",
+        "greeting": "深渊里最后几座干燥蒸馏器的新货。先付钱，后听故事。"
       },
       "tidewatcher_ondrel": {
         "name": "翁德雷尔·凡恩",
@@ -6650,6 +6672,33 @@ export const zh_CN: EnTranslations = {
           },
           "9": {
             "label": "墓龙圣所"
+          },
+          "10": {
+            "label": "潮汐之门"
+          }
+        }
+      },
+      "atlantis": {
+        "name": "亚特兰蒂斯",
+        "welcome": "穹顶仍在歌唱，亚特兰蒂斯在底潮之下生生不息。",
+        "pois": {
+          "0": {
+            "label": "亚特兰蒂斯"
+          },
+          "1": {
+            "label": "潮门广场"
+          },
+          "2": {
+            "label": "流明之冠"
+          },
+          "3": {
+            "label": "珍珠集市"
+          },
+          "4": {
+            "label": "沉没档案馆"
+          },
+          "5": {
+            "label": "巨藻卫者附楼"
           }
         }
       }

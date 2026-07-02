@@ -5507,6 +5507,18 @@ export const fr_CA: EnTranslations = {
       "acolyte_tessa": {
         "name": "Acolyte Tessa"
       },
+      "glimmerfin_eel": {
+        "name": "Anguille scintillante"
+      },
+      "pearlshell_skitterer": {
+        "name": "Trottineur nacré"
+      },
+      "kelpshade_lurker": {
+        "name": "Rôdeur des varechs"
+      },
+      "undertow_maw": {
+        "name": "La Gueule du Ressac"
+      },
       "ironvein_foreman": {
         "name": "Contremaître Veinefer"
       },
@@ -5726,6 +5738,16 @@ export const fr_CA: EnTranslations = {
         "name": "Frère Halven",
         "title": "Gardien du reliquaire",
         "greeting": "Le reliquaire en bas s'est encore déplacé."
+      },
+      "keeper_nerissa": {
+        "name": "Gardienne Nerissa",
+        "title": "Gardienne de la Couronne de Lumen",
+        "greeting": "Prends garde au verre, surfacien. Il tient depuis un âge — aide-nous à ce qu'il tienne."
+      },
+      "tidewright_ollo": {
+        "name": "Ollo Forge-Marées",
+        "title": "Forge-Marées du Marché aux Perles",
+        "greeting": "Tout frais des derniers alambics secs des profondeurs. La pièce d'abord, les histoires ensuite."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
@@ -6650,6 +6672,33 @@ export const fr_CA: EnTranslations = {
           },
           "9": {
             "label": "Sanctuaire du Gravewyrm"
+          },
+          "10": {
+            "label": "La Porte-des-Marées"
+          }
+        }
+      },
+      "atlantis": {
+        "name": "Atlantide",
+        "welcome": "Le dôme chante encore, et l'Atlantide perdure sous la Sous-Marée.",
+        "pois": {
+          "0": {
+            "label": "Atlantide"
+          },
+          "1": {
+            "label": "Place de la Porte-des-Marées"
+          },
+          "2": {
+            "label": "La Couronne de Lumen"
+          },
+          "3": {
+            "label": "Marché aux Perles"
+          },
+          "4": {
+            "label": "Les Archives Noyées"
+          },
+          "5": {
+            "label": "Annexe des Gardevarechs"
           }
         }
       }

@@ -5507,6 +5507,18 @@ export const es: EnTranslations = {
       "acolyte_tessa": {
         "name": "Acólita Tessa"
       },
+      "glimmerfin_eel": {
+        "name": "Anguila de aleta luminosa"
+      },
+      "pearlshell_skitterer": {
+        "name": "Correteador perlado"
+      },
+      "kelpshade_lurker": {
+        "name": "Acechador sombralga"
+      },
+      "undertow_maw": {
+        "name": "Las Fauces de la Resaca"
+      },
       "ironvein_foreman": {
         "name": "Capataz Vena de Hierro"
       },
@@ -5726,6 +5738,16 @@ export const es: EnTranslations = {
         "name": "Hermano Halven",
         "title": "Guardián del Relicario",
         "greeting": "El relicario de abajo ha vuelto a desplazarse."
+      },
+      "keeper_nerissa": {
+        "name": "Guardiana Nerissa",
+        "title": "Vigilante de la Corona de Lumen",
+        "greeting": "Cuida el cristal, criatura de la superficie. Ha resistido una era: ayúdanos a que siga así."
+      },
+      "tidewright_ollo": {
+        "name": "Forjamareas Ollo",
+        "title": "Forjamareas del Mercado de las Perlas",
+        "greeting": "Recién salido de los últimos alambiques secos de las profundidades. Primero la moneda, después las historias."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
@@ -6650,6 +6672,33 @@ export const es: EnTranslations = {
           },
           "9": {
             "label": "Santuario del Gravewyrm"
+          },
+          "10": {
+            "label": "La Puerta de las Mareas"
+          }
+        }
+      },
+      "atlantis": {
+        "name": "Atlántida",
+        "welcome": "La cúpula aún canta, y la Atlántida perdura bajo la Submarea.",
+        "pois": {
+          "0": {
+            "label": "Atlántida"
+          },
+          "1": {
+            "label": "Plaza de la Puerta de las Mareas"
+          },
+          "2": {
+            "label": "La Corona de Lumen"
+          },
+          "3": {
+            "label": "Mercado de las Perlas"
+          },
+          "4": {
+            "label": "El Archivo Ahogado"
+          },
+          "5": {
+            "label": "Anexo de los Guardialgas"
           }
         }
       }

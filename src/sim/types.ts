@@ -1166,7 +1166,18 @@ export interface DungeonDef {
   leaveText: string;
 }
 
-export type BiomeId = 'vale' | 'marsh' | 'peaks';
+// Overworld portal pads (Atlantis Tidegate, lifts, hidden passages): walking
+// within trigger range teleports the player to `dest` in the same shared
+// world — unlike dungeon doors there is no instancing. Pads are paired; keep
+// every dest out of the partner pad's trigger radius so trips never ping-pong.
+export interface PortalPadDef {
+  id: string;
+  name: string;
+  pos: { x: number; z: number };
+  dest: { x: number; z: number };
+}
+
+export type BiomeId = 'vale' | 'marsh' | 'peaks' | 'abyss';
 
 export interface ZoneDef {
   id: string;
@@ -1215,6 +1226,10 @@ export interface ZonePropsDef {
   // delveId resolves to the delve's localized name at render time (the carved
   // entrance sign), so the marker carries no hardcoded English label.
   delveMarkers?: { x: number; z: number; delveId: string }[];
+  // Glass domes (Atlantis): colliders.ts rings each with wall segments and the
+  // renderer draws the shell. `gaps` are open arcs — bearings in radians,
+  // atan2(dx, dz) from the dome center — where the ring stays passable.
+  domes?: { x: number; z: number; r: number; gaps: { from: number; to: number }[] }[];
 }
 
 export function emptyZoneProps(): ZonePropsDef {

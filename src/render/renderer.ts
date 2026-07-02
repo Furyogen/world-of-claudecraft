@@ -82,6 +82,7 @@ import { buildGroundQuestObject } from './quest_objects';
 import { isOwnedPetHostile } from './reaction';
 import { RenderBudgetGovernor, type RenderBudgetState } from './render_budget';
 import { downscaleDims } from './screenshot';
+import { buildSealife, type SealifeView } from './sealife';
 import { drapeRingLocalY } from './selection_ring';
 import { buildClouds, buildSky, type SkyView } from './sky';
 import { nearestSloppyPickId, type SloppyPickCandidate } from './sloppy_pick';
@@ -645,7 +646,10 @@ function setRenderCategory(obj: THREE.Object3D, category: RenderDiagnosticsCateg
 
 function isPersistentPortalObject(e: Entity): boolean {
   return (
-    e.kind === 'object' && (e.templateId === 'dungeon_door' || e.templateId === 'dungeon_exit')
+    e.kind === 'object' &&
+    (e.templateId === 'dungeon_door' ||
+      e.templateId === 'dungeon_exit' ||
+      e.templateId === 'portal_pad')
   );
 }
 
@@ -800,6 +804,7 @@ export class Renderer {
   private critters: CritterField;
   private motes: MotesView;
   private birds: BirdsView;
+  private sealife: SealifeView;
   private impactSite: ImpactSiteView;
   private fogScratch = new THREE.Color();
   private flames: THREE.Mesh[];
@@ -1163,6 +1168,8 @@ export class Renderer {
     this.scene.add(this.motes.group);
     this.birds = buildBirds(this.sim.cfg.seed);
     this.scene.add(this.birds.group);
+    this.sealife = buildSealife(this.sim.cfg.seed);
+    this.scene.add(this.sealife.group);
     this.impactSite = buildImpactSite(this.sim.cfg.seed);
     this.scene.add(this.impactSite.group);
     this.scene.add(this.impactSite.light);
@@ -3015,8 +3022,12 @@ export class Renderer {
     let portal: THREE.Mesh | undefined;
     if (
       e.kind === 'object' &&
-      (e.templateId === 'dungeon_door' || e.templateId === 'dungeon_exit')
+      (e.templateId === 'dungeon_door' ||
+        e.templateId === 'dungeon_exit' ||
+        e.templateId === 'portal_pad')
     ) {
+      // Overworld portal pads (the Atlantis Tidegate, lifts, hidden passages)
+      // reuse the dungeon arch with the exit-tinted portal oval.
       const entering = e.templateId === 'dungeon_door';
       const built = this.buildDoorBody(entering, e.dungeonId);
       body = built.body;
@@ -3417,6 +3428,9 @@ export class Renderer {
     vale: { color: 0xa6c6e0, near: 130, far: 470 },
     marsh: { color: 0xa3b294, near: 80, far: 330 },
     peaks: { color: 0xbdd3ec, near: 160, far: 560 },
+    // deep water at night: dense teal murk — the dome city stays readable,
+    // the open sea beyond the glass fades fast
+    abyss: { color: 0x0a2530, near: 26, far: 150 },
   };
   private static LOW_FOG = { color: 0xa6c6e0, near: 70, far: 260 };
 
@@ -4312,6 +4326,7 @@ export class Renderer {
     this.critters.update(p.pos.x, p.pos.z, dt);
     this.motes.update(p.pos.x, p.pos.z, dt);
     this.birds.update(p.pos.x, p.pos.z, dt);
+    this.sealife.update(p.pos.x, p.pos.z, dt);
     this.impactSite.update(p.pos.x, p.pos.z, dt);
     worldStart = markWorldPhase('fish', worldStart);
     this.updateAmbience(p.pos.x, this.camera.position.y, dt);

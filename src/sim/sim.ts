@@ -96,6 +96,7 @@ import {
   MOBS,
   NPCS,
   PLAYER_START,
+  PORTAL_PADS,
   QUESTS,
   zoneAt,
 } from './data';
@@ -429,6 +430,7 @@ const DEEPFEN_FISHING_SHORE_MARGIN = 10;
 const THE_CODFATHER_ITEM_ID = 'the_codfather';
 const THE_CODFATHER_QUEST_ID = 'q_the_codfather';
 // DOOR_TRIGGER_RADIUS moved to instances/dungeons.ts (I1: read only by updateDoorTriggers).
+const PORTAL_PAD_TRIGGER_RADIUS = 2.0; // walk-in range of an overworld portal pad
 // NYTHRAXIS_PARTY_INTERACT_RANGE / NYTHRAXIS_VISION_LINE_DELAY moved to
 // encounters/nythraxis.ts (N1) with the crypt-quest helpers that read them.
 const BODY_RADIUS = PLAYER_BODY_RADIUS;
@@ -1018,6 +1020,24 @@ export class Sim {
           emptyFor: 0,
         });
       }
+    }
+
+    // Overworld portal pads (the Atlantis Tidegate, lifts, hidden passages):
+    // plain ground objects whose walk-in trigger teleports within the shared
+    // world (updatePortalPadTriggers) — no instancing. createGroundObject
+    // draws no RNG, so appending them here leaves world-gen draws untouched.
+    for (const pad of PORTAL_PADS) {
+      const obj = createGroundObject(
+        this.nextId++,
+        '',
+        pad.name,
+        this.groundPos(pad.pos.x, pad.pos.z),
+      );
+      obj.templateId = 'portal_pad';
+      obj.objectItemId = null;
+      obj.lootable = false; // walk-in only; never an interact/loot target
+      this.addEntity(obj);
+      this.portalPads.push({ entityId: obj.id, dest: { ...pad.dest } });
     }
 
     for (const delve of DELVE_LIST) {
@@ -2369,6 +2389,7 @@ export class Sim {
       if (!p.dead) {
         this.updatePlayerMovement(p, meta);
         this.updateDoorTriggers(p);
+        this.updatePortalPadTriggers(p);
         this.updateCasting(p, meta);
         this.updatePlayerAutoAttack(p, meta);
         updateRegen(this.ctx, p, meta);
@@ -5196,6 +5217,27 @@ export class Sim {
 
   private updateDoorTriggers(p: Entity): void {
     updateDoorTriggersImpl(this.ctx, p);
+  }
+
+  // Overworld portal pads (Atlantis): entity id ↔ destination, registered at
+  // world init. Same walk-in idiom as dungeon doors, but the teleport stays in
+  // the one shared overworld — no instance claiming, no per-party copies.
+  private portalPads: { entityId: number; dest: { x: number; z: number } }[] = [];
+
+  private updatePortalPadTriggers(p: Entity): void {
+    if (p.kind !== 'player' || p.pos.x > DUNGEON_X_THRESHOLD) return;
+    for (const pad of this.portalPads) {
+      const obj = this.entities.get(pad.entityId);
+      if (!obj) continue;
+      if (dist2d(p.pos, obj.pos) < PORTAL_PAD_TRIGGER_RADIUS) {
+        p.pos = this.groundPos(pad.dest.x, pad.dest.z);
+        p.prevPos = { ...p.pos };
+        this.rebucket(p);
+        p.targetId = null;
+        p.autoAttack = false;
+        return;
+      }
+    }
   }
 
   enterDungeon(dungeonId: string, pid?: number): void {

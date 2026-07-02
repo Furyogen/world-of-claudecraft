@@ -5507,6 +5507,18 @@ export const sv_SE: EnTranslations = {
       "acolyte_tessa": {
         "name": "Akolyten Tessa"
       },
+      "glimmerfin_eel": {
+        "name": "Glimmerfenad ål"
+      },
+      "pearlshell_skitterer": {
+        "name": "Pärlskalskrypare"
+      },
+      "kelpshade_lurker": {
+        "name": "Kelpskuggelurare"
+      },
+      "undertow_maw": {
+        "name": "Underströmmens Gap"
+      },
       "ironvein_foreman": {
         "name": "Järnådersförman"
       },
@@ -5726,6 +5738,16 @@ export const sv_SE: EnTranslations = {
         "name": "Broder Halven",
         "title": "Relikvarievaktare",
         "greeting": "Relikvariet där nere har förskjutits igen."
+      },
+      "keeper_nerissa": {
+        "name": "Väktare Nerissa",
+        "title": "Lumenkronans väktare",
+        "greeting": "Akta glaset, ytbo. Det har hållit i en tidsålder — hjälp oss hålla det så."
+      },
+      "tidewright_ollo": {
+        "name": "Tidvattensmed Ollo",
+        "title": "Pärlmarknadens tidvattensmed",
+        "greeting": "Färskt från djupets sista torra destillerier. Mynt först, historier sen."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
@@ -6650,6 +6672,33 @@ export const sv_SE: EnTranslations = {
           },
           "9": {
             "label": "Gravlindormens helgedom"
+          },
+          "10": {
+            "label": "Tidvattensporten"
+          }
+        }
+      },
+      "atlantis": {
+        "name": "Atlantis",
+        "welcome": "Kupolen sjunger än, och Atlantis består under Undertiden.",
+        "pois": {
+          "0": {
+            "label": "Atlantis"
+          },
+          "1": {
+            "label": "Tidvattensportens torg"
+          },
+          "2": {
+            "label": "Lumenkronan"
+          },
+          "3": {
+            "label": "Pärlmarknaden"
+          },
+          "4": {
+            "label": "Det Dränkta Arkivet"
+          },
+          "5": {
+            "label": "Kelpväktarnas annex"
           }
         }
       }

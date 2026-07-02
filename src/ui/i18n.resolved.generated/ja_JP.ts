@@ -5507,6 +5507,18 @@ export const ja_JP: EnTranslations = {
       "acolyte_tessa": {
         "name": "侍祭テッサ"
       },
+      "glimmerfin_eel": {
+        "name": "輝きヒレウナギ"
+      },
+      "pearlshell_skitterer": {
+        "name": "真珠殻ガニ"
+      },
+      "kelpshade_lurker": {
+        "name": "ケルプ影の潜み手"
+      },
+      "undertow_maw": {
+        "name": "底潮の大顎"
+      },
       "ironvein_foreman": {
         "name": "鉄脈の現場監督"
       },
@@ -5726,6 +5738,16 @@ export const ja_JP: EnTranslations = {
         "name": "ハルヴェン修道士",
         "title": "聖遺物庫の番人",
         "greeting": "下の聖遺物庫がまた動いた。"
+      },
+      "keeper_nerissa": {
+        "name": "番人ネリッサ",
+        "title": "ルーメンの王冠の守り手",
+        "greeting": "ガラスに気をつけな、地上の者よ。一つの時代を耐えてきたんだ――このまま保つのを手伝っておくれ。"
+      },
+      "tidewright_ollo": {
+        "name": "潮鍛冶オロ",
+        "title": "真珠市場の潮鍛冶",
+        "greeting": "深みに残った最後の乾いた蒸留器から採れたてだよ。金が先、話は後だ。"
       },
       "tidewatcher_ondrel": {
         "name": "オンドレル・ヴェイン",
@@ -6650,6 +6672,33 @@ export const ja_JP: EnTranslations = {
           },
           "9": {
             "label": "墓ワームの聖所"
+          },
+          "10": {
+            "label": "潮の門"
+          }
+        }
+      },
+      "atlantis": {
+        "name": "アトランティス",
+        "welcome": "ドームは今も歌い、アトランティスは底潮の下で生き続けている。",
+        "pois": {
+          "0": {
+            "label": "アトランティス"
+          },
+          "1": {
+            "label": "潮門広場"
+          },
+          "2": {
+            "label": "ルーメンの王冠"
+          },
+          "3": {
+            "label": "真珠市場"
+          },
+          "4": {
+            "label": "水没書庫"
+          },
+          "5": {
+            "label": "ケルプ番の別館"
           }
         }
       }

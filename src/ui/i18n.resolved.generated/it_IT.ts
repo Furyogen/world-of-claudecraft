@@ -5507,6 +5507,18 @@ export const it_IT: EnTranslations = {
       "acolyte_tessa": {
         "name": "Accolita Tessa"
       },
+      "glimmerfin_eel": {
+        "name": "Anguilla pinnalucente"
+      },
+      "pearlshell_skitterer": {
+        "name": "Trotterellante guscioperla"
+      },
+      "kelpshade_lurker": {
+        "name": "Appostatore ombralga"
+      },
+      "undertow_maw": {
+        "name": "Le Fauci della Risacca"
+      },
       "ironvein_foreman": {
         "name": "Caposquadra Venaferrata"
       },
@@ -5726,6 +5738,16 @@ export const it_IT: EnTranslations = {
         "name": "Fratello Halven",
         "title": "Custode del Reliquiario",
         "greeting": "Il reliquiario sottostante si è spostato di nuovo."
+      },
+      "keeper_nerissa": {
+        "name": "Custode Nerissa",
+        "title": "Guardiana della Corona di Lumen",
+        "greeting": "Attento al vetro, abitante della superficie. Regge da un'era: aiutaci a farlo reggere ancora."
+      },
+      "tidewright_ollo": {
+        "name": "Ollo Forgiamaree",
+        "title": "Forgiamaree del Mercato delle Perle",
+        "greeting": "Fresco dagli ultimi alambicchi asciutti degli abissi. Prima la moneta, poi le storie."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
@@ -6650,6 +6672,33 @@ export const it_IT: EnTranslations = {
           },
           "9": {
             "label": "Santuario del Gravewyrm"
+          },
+          "10": {
+            "label": "La Porta delle Maree"
+          }
+        }
+      },
+      "atlantis": {
+        "name": "Atlantide",
+        "welcome": "La cupola canta ancora, e Atlantide resiste sotto la Sottomarea.",
+        "pois": {
+          "0": {
+            "label": "Atlantide"
+          },
+          "1": {
+            "label": "Piazza della Porta delle Maree"
+          },
+          "2": {
+            "label": "La Corona di Lumen"
+          },
+          "3": {
+            "label": "Mercato delle Perle"
+          },
+          "4": {
+            "label": "L'Archivio Sommerso"
+          },
+          "5": {
+            "label": "Dipendenza dei Guardialghe"
           }
         }
       }

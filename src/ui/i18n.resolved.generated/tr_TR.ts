@@ -5507,6 +5507,18 @@ export const tr_TR: EnTranslations = {
       "acolyte_tessa": {
         "name": "Çömez Tessa"
       },
+      "glimmerfin_eel": {
+        "name": "Parıltı yüzgeçli yılanbalığı"
+      },
+      "pearlshell_skitterer": {
+        "name": "İnci kabuklu seğirtici"
+      },
+      "kelpshade_lurker": {
+        "name": "Yosun gölgesi pusucusu"
+      },
+      "undertow_maw": {
+        "name": "Dip Akıntısının Ağzı"
+      },
       "ironvein_foreman": {
         "name": "Demirdamar Ustabaşı"
       },
@@ -5726,6 +5738,16 @@ export const tr_TR: EnTranslations = {
         "name": "Birader Halven",
         "title": "Emanetlik Bekçisi",
         "greeting": "Aşağıdaki kutsal emanetlik yine yer değiştirdi."
+      },
+      "keeper_nerissa": {
+        "name": "Muhafız Nerissa",
+        "title": "Lumen Tacının Bekçisi",
+        "greeting": "Cama dikkat et, yüzey insanı. Bir çağdır dayanıyor — öyle kalmasına yardım et."
+      },
+      "tidewright_ollo": {
+        "name": "Gelgit Ustası Ollo",
+        "title": "İnci Pazarının Gelgit Ustası",
+        "greeting": "Derinlerdeki son kuru imbiklerden taze geldi. Önce para, sonra hikâyeler."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
@@ -6650,6 +6672,33 @@ export const tr_TR: EnTranslations = {
           },
           "9": {
             "label": "Mezarejderi Mabedi"
+          },
+          "10": {
+            "label": "Gelgit Kapısı"
+          }
+        }
+      },
+      "atlantis": {
+        "name": "Atlantis",
+        "welcome": "Kubbe hâlâ şarkı söylüyor ve Atlantis, Dip Akıntısının altında ayakta.",
+        "pois": {
+          "0": {
+            "label": "Atlantis"
+          },
+          "1": {
+            "label": "Gelgit Kapısı Meydanı"
+          },
+          "2": {
+            "label": "Lumen Tacı"
+          },
+          "3": {
+            "label": "İnci Pazarı"
+          },
+          "4": {
+            "label": "Batık Arşiv"
+          },
+          "5": {
+            "label": "Yosun Bekçileri Eklentisi"
           }
         }
       }

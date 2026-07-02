@@ -81,6 +81,11 @@ const MOB_IDS = [
   'reliquary_saintless_effigy',
   'deacon_varric',
   'acolyte_tessa',
+  // Atlantis (zone 4) — the Kelpwarden Annex nest
+  'glimmerfin_eel',
+  'pearlshell_skitterer',
+  'kelpshade_lurker',
+  'undertow_maw',
 ] as const;
 
 const NPC_IDS = [
@@ -106,6 +111,8 @@ const NPC_IDS = [
   'auctioneer_voss', // second World Market auctioneer (Highwatch, zone 3)
   'brother_aldric_raid', // dynamically-spawned raid turn-in NPC (Crypt of Nythraxis)
   'brother_halven', // Collapsed Reliquary delve board NPC
+  'keeper_nerissa', // Atlantis, the Lumen Crown
+  'tidewright_ollo', // Atlantis, Pearl Market vendor
 ] as const;
 
 const QUEST_IDS = [
@@ -182,7 +189,7 @@ const QUEST_IDS = [
   'q_mogger',
 ] as const;
 
-const ZONE_IDS = ['eastbrook_vale', 'mirefen_marsh', 'thornpeak_heights'] as const;
+const ZONE_IDS = ['eastbrook_vale', 'mirefen_marsh', 'thornpeak_heights', 'atlantis'] as const;
 const DUNGEON_IDS = [
   'hollow_crypt',
   'sunken_bastion',

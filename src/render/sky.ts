@@ -36,18 +36,24 @@ const HDRI_TUNE: Record<BiomeId, { gain: number; clamp: number }> = {
   vale: { gain: 0.6, clamp: 2.6 },
   marsh: { gain: 0.6, clamp: 2.2 },
   peaks: { gain: 0.48, clamp: 1.7 },
+  // crushed to moonless-deep levels; the dome lights carry the scene
+  abyss: { gain: 0.1, clamp: 0.9 },
 };
 
+// Atlantis reuses the sunless overcast capture — at abyss gain it reads as
+// faint light filtering down through the water column, not as weather.
 const BIOME_HDRI_2K: Record<BiomeId, string> = {
   vale: '/env/vale_day_2k.hdr',
   marsh: '/env/marsh_overcast_2k.hdr',
   peaks: '/env/peaks_dawn_2k.hdr',
+  abyss: '/env/marsh_overcast_2k.hdr',
 };
 
 const BIOME_HDRI_1K: Record<BiomeId, string> = {
   vale: '/env/vale_day_1k.hdr',
   marsh: '/env/marsh_overcast_1k.hdr',
   peaks: '/env/peaks_dawn_1k.hdr',
+  abyss: '/env/marsh_overcast_1k.hdr',
 };
 
 function shouldUseLiteHdri(): boolean {
@@ -61,7 +67,8 @@ function shouldUseLiteHdri(): boolean {
     const nav = navigator as Navigator & { deviceMemory?: number };
     if (nav.deviceMemory !== undefined && nav.deviceMemory <= 4) return true;
     if (nav.maxTouchPoints > 0 && typeof matchMedia !== 'undefined') {
-      if (matchMedia('(pointer: coarse)').matches || matchMedia('(max-width: 900px)').matches) return true;
+      if (matchMedia('(pointer: coarse)').matches || matchMedia('(max-width: 900px)').matches)
+        return true;
     }
   }
   return false;
@@ -69,22 +76,27 @@ function shouldUseLiteHdri(): boolean {
 
 const BIOME_HDRI = shouldUseLiteHdri() ? BIOME_HDRI_1K : BIOME_HDRI_2K;
 
+// Atlantis borrows the peaks backdrop: behind abyssal fog its dark ridgeline
+// silhouettes read as the trench walls around the shelf.
 const BIOME_BACKDROP_8K: Record<BiomeId, string> = {
   vale: '/env/vale_backdrop.webp',
   marsh: '/env/marsh_backdrop.webp',
   peaks: '/env/peaks_backdrop.webp',
+  abyss: '/env/peaks_backdrop.webp',
 };
 
 const BIOME_BACKDROP_4K: Record<BiomeId, string> = {
   vale: '/env/vale_backdrop_4k.webp',
   marsh: '/env/marsh_backdrop_4k.webp',
   peaks: '/env/peaks_backdrop_4k.webp',
+  abyss: '/env/peaks_backdrop_4k.webp',
 };
 
 const BACKDROP_Y_BIAS: Record<BiomeId, number> = {
   vale: 0,
   marsh: 0,
   peaks: 0,
+  abyss: 0,
 };
 
 interface NetworkInformationLike {
@@ -118,10 +130,12 @@ function shouldUseLiteBackdrop(): boolean {
     const nav = navigator as NavigatorWithBackdropHints;
     const connection = nav.connection ?? nav.mozConnection ?? nav.webkitConnection;
     if (connection?.saveData) return true;
-    if (connection?.effectiveType && ['slow-2g', '2g', '3g'].includes(connection.effectiveType)) return true;
+    if (connection?.effectiveType && ['slow-2g', '2g', '3g'].includes(connection.effectiveType))
+      return true;
     if (nav.deviceMemory !== undefined && nav.deviceMemory <= 4) return true;
     if (nav.maxTouchPoints > 0 && typeof matchMedia !== 'undefined') {
-      if (matchMedia('(pointer: coarse)').matches || matchMedia('(max-width: 900px)').matches) return true;
+      if (matchMedia('(pointer: coarse)').matches || matchMedia('(max-width: 900px)').matches)
+        return true;
     }
   }
   return false;
@@ -131,7 +145,12 @@ const BIOME_BACKDROP = shouldUseLiteBackdrop() ? BIOME_BACKDROP_4K : BIOME_BACKD
 
 // Measured brightest-texel u (sun azimuth in equirect space) per HDRI — see
 // tmp/analyze_hdr.mjs. Used to rotate each map so its sun matches SUN_ANCHOR.
-const HDRI_SUN_U: Record<BiomeId, number> = { vale: 0.595, marsh: 0.657, peaks: 0.631 };
+const HDRI_SUN_U: Record<BiomeId, number> = {
+  vale: 0.595,
+  marsh: 0.657,
+  peaks: 0.631,
+  abyss: 0.657,
+};
 
 const hdriStore: Partial<Record<BiomeId, THREE.DataTexture>> = {};
 const backdropStore: Partial<Record<BiomeId, THREE.Texture>> = {};
@@ -142,20 +161,26 @@ const backdropStore: Partial<Record<BiomeId, THREE.Texture>> = {};
 // preload, so this best-effort device gate keeps mobile out of the worst path.
 if (GFX.standardMaterials) {
   for (const biome of Object.keys(BIOME_HDRI) as BiomeId[]) {
-    registerPreload(loadHdr(BIOME_HDRI[biome]).then((tex) => {
-      tex.wrapS = THREE.RepeatWrapping; // azimuth rotation needs u to wrap
-      hdriStore[biome] = tex;
-      return tex;
-    }));
-    registerPreload(loadTexture(BIOME_BACKDROP[biome], { srgb: true }).then((tex) => {
-      tex.wrapS = THREE.RepeatWrapping;
-      tex.wrapT = THREE.ClampToEdgeWrapping;
-      tex.minFilter = THREE.LinearMipmapLinearFilter;
-      tex.magFilter = THREE.LinearFilter;
-      tex.generateMipmaps = true;
-      backdropStore[biome] = tex;
-      return tex;
-    }).catch(() => undefined));
+    registerPreload(
+      loadHdr(BIOME_HDRI[biome]).then((tex) => {
+        tex.wrapS = THREE.RepeatWrapping; // azimuth rotation needs u to wrap
+        hdriStore[biome] = tex;
+        return tex;
+      }),
+    );
+    registerPreload(
+      loadTexture(BIOME_BACKDROP[biome], { srgb: true })
+        .then((tex) => {
+          tex.wrapS = THREE.RepeatWrapping;
+          tex.wrapT = THREE.ClampToEdgeWrapping;
+          tex.minFilter = THREE.LinearMipmapLinearFilter;
+          tex.magFilter = THREE.LinearFilter;
+          tex.generateMipmaps = true;
+          backdropStore[biome] = tex;
+          return tex;
+        })
+        .catch(() => undefined),
+    );
   }
 }
 
@@ -297,7 +322,12 @@ export function buildSky(lowGfx: boolean, sunDir: THREE.Vector3): SkyView {
   if (lowGfx || !hasSkyHdriAssets()) {
     const dome = new THREE.Mesh(
       new THREE.SphereGeometry(DOME_RADIUS, 24, 16),
-      new THREE.MeshBasicMaterial({ map: skyTexture(), side: THREE.BackSide, fog: false, depthWrite: false }),
+      new THREE.MeshBasicMaterial({
+        map: skyTexture(),
+        side: THREE.BackSide,
+        fog: false,
+        depthWrite: false,
+      }),
     );
     dome.renderOrder = -10;
     return {
@@ -396,9 +426,17 @@ export function buildClouds(lowGfx: boolean): CloudLayer {
     ? [cloudTexture()]
     : [cloudTexture(14, 0.5), cloudTexture(8, 0.7), cloudTexture(20, 0.42)];
   const sprites: THREE.Sprite[] = [];
-  const span = (WORLD_MAX_Z - WORLD_MIN_Z) + 240;
+  const span = WORLD_MAX_Z - WORLD_MIN_Z + 240;
 
-  const spawn = (count: number, yMin: number, yMax: number, baseOpacity: number, drift: number, scaleMin: number, scaleMax: number): void => {
+  const spawn = (
+    count: number,
+    yMin: number,
+    yMax: number,
+    baseOpacity: number,
+    drift: number,
+    scaleMin: number,
+    scaleMax: number,
+  ): void => {
     for (let i = 0; i < count; i++) {
       const y = yMin + Math.random() * (yMax - yMin);
       // higher clouds thin out
@@ -413,11 +451,7 @@ export function buildClouds(lowGfx: boolean): CloudLayer {
       const sprite = new THREE.Sprite(mat);
       const sc = scaleMin + Math.random() * (scaleMax - scaleMin);
       sprite.scale.set(sc, sc * 0.45, 1);
-      sprite.position.set(
-        (Math.random() - 0.5) * 600,
-        y,
-        WORLD_MIN_Z - 120 + Math.random() * span,
-      );
+      sprite.position.set((Math.random() - 0.5) * 600, y, WORLD_MIN_Z - 120 + Math.random() * span);
       sprite.userData.drift = drift;
       sprites.push(sprite);
     }

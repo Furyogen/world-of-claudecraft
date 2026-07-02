@@ -5507,6 +5507,18 @@ export const zh_TW: EnTranslations = {
       "acolyte_tessa": {
         "name": "侍僧泰莎"
       },
+      "glimmerfin_eel": {
+        "name": "閃鰭鰻"
+      },
+      "pearlshell_skitterer": {
+        "name": "珠殼疾行蟹"
+      },
+      "kelpshade_lurker": {
+        "name": "藻影潛伏者"
+      },
+      "undertow_maw": {
+        "name": "底潮巨口"
+      },
       "ironvein_foreman": {
         "name": "鐵脈工頭"
       },
@@ -5726,6 +5738,16 @@ export const zh_TW: EnTranslations = {
         "name": "哈爾文修士",
         "title": "聖物庫守護人",
         "greeting": "下方的聖物庫又移位了。"
+      },
+      "keeper_nerissa": {
+        "name": "守護者奈瑞莎",
+        "title": "流明之冠守衛",
+        "greeting": "小心這片玻璃，水面來的客人。它撐過了一個時代——幫我們讓它繼續撐下去。"
+      },
+      "tidewright_ollo": {
+        "name": "潮匠奧洛",
+        "title": "珍珠市集潮匠",
+        "greeting": "深淵裡最後幾座乾燥蒸餾器的新貨。先付錢，再聽故事。"
       },
       "tidewatcher_ondrel": {
         "name": "翁德瑞爾·韋恩",
@@ -6650,6 +6672,33 @@ export const zh_TW: EnTranslations = {
           },
           "9": {
             "label": "墓龍聖所"
+          },
+          "10": {
+            "label": "潮汐之門"
+          }
+        }
+      },
+      "atlantis": {
+        "name": "亞特蘭提斯",
+        "welcome": "穹頂仍在歌唱，亞特蘭提斯於底潮之下長存。",
+        "pois": {
+          "0": {
+            "label": "亞特蘭提斯"
+          },
+          "1": {
+            "label": "潮門廣場"
+          },
+          "2": {
+            "label": "流明之冠"
+          },
+          "3": {
+            "label": "珍珠市集"
+          },
+          "4": {
+            "label": "沉沒檔案館"
+          },
+          "5": {
+            "label": "巨藻守衛附樓"
           }
         }
       }

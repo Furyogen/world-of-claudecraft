@@ -5507,6 +5507,18 @@ export const nl_NL: EnTranslations = {
       "acolyte_tessa": {
         "name": "Acoliet Tessa"
       },
+      "glimmerfin_eel": {
+        "name": "Glinstervin-aal"
+      },
+      "pearlshell_skitterer": {
+        "name": "Parelschaal-scharrelaar"
+      },
+      "kelpshade_lurker": {
+        "name": "Kelpschaduw-loerder"
+      },
+      "undertow_maw": {
+        "name": "De Muil van de Onderstroom"
+      },
       "ironvein_foreman": {
         "name": "IJzerader-Voorman"
       },
@@ -5726,6 +5738,16 @@ export const nl_NL: EnTranslations = {
         "name": "Broeder Halven",
         "title": "Reliekbewaarder",
         "greeting": "Het reliekschrijn beneden is opnieuw verschoven."
+      },
+      "keeper_nerissa": {
+        "name": "Hoedster Nerissa",
+        "title": "Wachter van de Lumenkroon",
+        "greeting": "Pas op het glas, oppervlakteling. Het houdt al een tijdperk stand — help ons dat zo te houden."
+      },
+      "tidewright_ollo": {
+        "name": "Getijsmid Ollo",
+        "title": "Getijsmid van de Parelmarkt",
+        "greeting": "Vers uit de laatste droge stokerijen van de diepte. Eerst munten, dan verhalen."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
@@ -6650,6 +6672,33 @@ export const nl_NL: EnTranslations = {
           },
           "9": {
             "label": "Grafwurm-Heiligdom"
+          },
+          "10": {
+            "label": "De Getijdenpoort"
+          }
+        }
+      },
+      "atlantis": {
+        "name": "Atlantis",
+        "welcome": "De koepel zingt nog steeds, en Atlantis houdt stand onder het Ondertij.",
+        "pois": {
+          "0": {
+            "label": "Atlantis"
+          },
+          "1": {
+            "label": "Getijdenpoortplein"
+          },
+          "2": {
+            "label": "De Lumenkroon"
+          },
+          "3": {
+            "label": "Parelmarkt"
+          },
+          "4": {
+            "label": "Het Verdronken Archief"
+          },
+          "5": {
+            "label": "Kelpwachters-annex"
           }
         }
       }

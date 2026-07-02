@@ -5507,6 +5507,18 @@ export const ko_KR: EnTranslations = {
       "acolyte_tessa": {
         "name": "수련사제 테사"
       },
+      "glimmerfin_eel": {
+        "name": "반짝지느러미 장어"
+      },
+      "pearlshell_skitterer": {
+        "name": "진주껍질 종종게"
+      },
+      "kelpshade_lurker": {
+        "name": "켈프그늘 잠복꾼"
+      },
+      "undertow_maw": {
+        "name": "저층 조류의 아가리"
+      },
       "ironvein_foreman": {
         "name": "철맥 감독관"
       },
@@ -5726,6 +5738,16 @@ export const ko_KR: EnTranslations = {
         "name": "브라더 할벤",
         "title": "성물실 관리인",
         "greeting": "아래의 성물실이 또 움직였소."
+      },
+      "keeper_nerissa": {
+        "name": "수호자 네리사",
+        "title": "루멘 왕관의 파수꾼",
+        "greeting": "유리 조심하게, 물 위 사람. 한 시대를 버텨 온 것이니 — 계속 버티게 도와주게."
+      },
+      "tidewright_ollo": {
+        "name": "조수장인 올로",
+        "title": "진주 시장의 조수장인",
+        "greeting": "깊은 곳에 남은 마지막 마른 증류기에서 갓 꺼낸 것들이라네. 돈이 먼저, 이야기는 그다음."
       },
       "tidewatcher_ondrel": {
         "name": "온드렐 베인",
@@ -6650,6 +6672,33 @@ export const ko_KR: EnTranslations = {
           },
           "9": {
             "label": "무덤고룡 성소"
+          },
+          "10": {
+            "label": "조수의 문"
+          }
+        }
+      },
+      "atlantis": {
+        "name": "아틀란티스",
+        "welcome": "돔은 아직 노래하고, 아틀란티스는 저층 조류 아래에서 버티고 있다.",
+        "pois": {
+          "0": {
+            "label": "아틀란티스"
+          },
+          "1": {
+            "label": "조수문 광장"
+          },
+          "2": {
+            "label": "루멘 왕관"
+          },
+          "3": {
+            "label": "진주 시장"
+          },
+          "4": {
+            "label": "수몰된 기록고"
+          },
+          "5": {
+            "label": "켈프 파수꾼 별관"
           }
         }
       }

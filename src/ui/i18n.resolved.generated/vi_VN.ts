@@ -5507,6 +5507,18 @@ export const vi_VN: EnTranslations = {
       "acolyte_tessa": {
         "name": "Tế Đồ Tessa"
       },
+      "glimmerfin_eel": {
+        "name": "Lươn Vây Lấp Lánh"
+      },
+      "pearlshell_skitterer": {
+        "name": "Bọ Vỏ Ngọc Trai"
+      },
+      "kelpshade_lurker": {
+        "name": "Kẻ Rình Bóng Tảo"
+      },
+      "undertow_maw": {
+        "name": "Hàm Ngoạm Dòng Ngầm"
+      },
       "ironvein_foreman": {
         "name": "Quản Đốc Mạch Sắt"
       },
@@ -5726,6 +5738,16 @@ export const vi_VN: EnTranslations = {
         "name": "Tu Huynh Halven",
         "title": "Người Giữ Thánh Tích",
         "greeting": "Hầm thánh tích bên dưới lại dịch chuyển lần nữa."
+      },
+      "keeper_nerissa": {
+        "name": "Người Gác Nerissa",
+        "title": "Hộ Vệ Vương Miện Lumen",
+        "greeting": "Cẩn thận với lớp kính, người từ mặt nước. Nó đã trụ vững suốt một thời đại — hãy giúp chúng tôi giữ nó như vậy."
+      },
+      "tidewright_ollo": {
+        "name": "Thợ Triều Ollo",
+        "title": "Thợ Triều của Chợ Ngọc Trai",
+        "greeting": "Vừa ra lò từ những lò chưng cất khô cuối cùng dưới đáy sâu. Tiền trước, chuyện kể sau."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
@@ -6650,6 +6672,33 @@ export const vi_VN: EnTranslations = {
           },
           "9": {
             "label": "Thánh Đường Mộ Long"
+          },
+          "10": {
+            "label": "Cổng Thủy Triều"
+          }
+        }
+      },
+      "atlantis": {
+        "name": "Atlantis",
+        "welcome": "Mái vòm vẫn đang ngân nga, và Atlantis vẫn trường tồn dưới Hạ Lưu Triều.",
+        "pois": {
+          "0": {
+            "label": "Atlantis"
+          },
+          "1": {
+            "label": "Quảng trường Cổng Thủy Triều"
+          },
+          "2": {
+            "label": "Vương Miện Lumen"
+          },
+          "3": {
+            "label": "Chợ Ngọc Trai"
+          },
+          "4": {
+            "label": "Văn Khố Chìm Đắm"
+          },
+          "5": {
+            "label": "Khu Phụ của Hộ Vệ Tảo Bẹ"
           }
         }
       }

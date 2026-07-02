@@ -5507,6 +5507,18 @@ export const en_CA: EnTranslations = {
       "acolyte_tessa": {
         "name": "Acolyte Tessa"
       },
+      "glimmerfin_eel": {
+        "name": "Glimmerfin Eel"
+      },
+      "pearlshell_skitterer": {
+        "name": "Pearlshell Skitterer"
+      },
+      "kelpshade_lurker": {
+        "name": "Kelpshade Lurker"
+      },
+      "undertow_maw": {
+        "name": "The Undertow Maw"
+      },
       "ironvein_foreman": {
         "name": "Ironvein Foreman"
       },
@@ -5726,6 +5738,16 @@ export const en_CA: EnTranslations = {
         "name": "Brother Halven",
         "title": "Reliquary Keeper",
         "greeting": "The reliquary below has shifted again."
+      },
+      "keeper_nerissa": {
+        "name": "Keeper Nerissa",
+        "title": "Warden of the Lumen Crown",
+        "greeting": "Mind the glass, surfacer. It has held for an age - help us keep it that way."
+      },
+      "tidewright_ollo": {
+        "name": "Tidewright Ollo",
+        "title": "Pearl Market Tidewright",
+        "greeting": "Fresh from the last dry stills in the deep. Coin first, stories after."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
@@ -6650,6 +6672,33 @@ export const en_CA: EnTranslations = {
           },
           "9": {
             "label": "Gravewyrm Sanctum"
+          },
+          "10": {
+            "label": "The Tidegate"
+          }
+        }
+      },
+      "atlantis": {
+        "name": "Atlantis",
+        "welcome": "The dome still sings, and Atlantis endures beneath the Undertide.",
+        "pois": {
+          "0": {
+            "label": "Atlantis"
+          },
+          "1": {
+            "label": "Tidegate Plaza"
+          },
+          "2": {
+            "label": "The Lumen Crown"
+          },
+          "3": {
+            "label": "Pearl Market"
+          },
+          "4": {
+            "label": "The Drowned Archive"
+          },
+          "5": {
+            "label": "Kelpwarden Annex"
           }
         }
       }

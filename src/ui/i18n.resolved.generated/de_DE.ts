@@ -5507,6 +5507,18 @@ export const de_DE: EnTranslations = {
       "acolyte_tessa": {
         "name": "Akolythin Tessa"
       },
+      "glimmerfin_eel": {
+        "name": "Glimmerflossen-Aal"
+      },
+      "pearlshell_skitterer": {
+        "name": "Perlschalen-Krabbler"
+      },
+      "kelpshade_lurker": {
+        "name": "Tangschatten-Lauerer"
+      },
+      "undertow_maw": {
+        "name": "Der Sogschlund"
+      },
       "ironvein_foreman": {
         "name": "Eisenader-Vorarbeiter"
       },
@@ -5726,6 +5738,16 @@ export const de_DE: EnTranslations = {
         "name": "Bruder Halven",
         "title": "Reliquiarhüter",
         "greeting": "Das Reliquiar unten hat sich erneut verschoben."
+      },
+      "keeper_nerissa": {
+        "name": "Bewahrerin Nerissa",
+        "title": "Wächterin der Lumenkrone",
+        "greeting": "Achte auf das Glas, Oberflächler. Es hält seit einem Zeitalter — hilf uns, dass es so bleibt."
+      },
+      "tidewright_ollo": {
+        "name": "Gezeitenschmied Ollo",
+        "title": "Gezeitenschmied des Perlenmarkts",
+        "greeting": "Frisch aus den letzten trockenen Destillen der Tiefe. Erst die Münzen, dann die Geschichten."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
@@ -6650,6 +6672,33 @@ export const de_DE: EnTranslations = {
           },
           "9": {
             "label": "Gravewyrm-Heiligtum"
+          },
+          "10": {
+            "label": "Das Gezeitentor"
+          }
+        }
+      },
+      "atlantis": {
+        "name": "Atlantis",
+        "welcome": "Die Kuppel singt noch, und Atlantis überdauert unter der Untertide.",
+        "pois": {
+          "0": {
+            "label": "Atlantis"
+          },
+          "1": {
+            "label": "Gezeitentor-Platz"
+          },
+          "2": {
+            "label": "Die Lumenkrone"
+          },
+          "3": {
+            "label": "Perlenmarkt"
+          },
+          "4": {
+            "label": "Das Ertrunkene Archiv"
+          },
+          "5": {
+            "label": "Tangwächter-Anbau"
           }
         }
       }

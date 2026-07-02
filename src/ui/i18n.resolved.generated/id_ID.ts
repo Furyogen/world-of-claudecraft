@@ -5507,6 +5507,18 @@ export const id_ID: EnTranslations = {
       "acolyte_tessa": {
         "name": "Akolit Tessa"
       },
+      "glimmerfin_eel": {
+        "name": "Belut Sirip Kilau"
+      },
+      "pearlshell_skitterer": {
+        "name": "Kepiting Cangkang Mutiara"
+      },
+      "kelpshade_lurker": {
+        "name": "Pengintai Bayang Kelp"
+      },
+      "undertow_maw": {
+        "name": "Mulut Arus Bawah"
+      },
       "ironvein_foreman": {
         "name": "Mandor Ironvein"
       },
@@ -5726,6 +5738,16 @@ export const id_ID: EnTranslations = {
         "name": "Bruder Halven",
         "title": "Penjaga Relikuari",
         "greeting": "Relikuari di bawah bergeser lagi."
+      },
+      "keeper_nerissa": {
+        "name": "Penjaga Nerissa",
+        "title": "Penjaga Mahkota Lumen",
+        "greeting": "Jaga kacanya, pendatang dari permukaan. Sudah bertahan selama satu zaman — bantu kami menjaganya."
+      },
+      "tidewright_ollo": {
+        "name": "Ollo si Pandai Pasang",
+        "title": "Pandai Pasang Pasar Mutiara",
+        "greeting": "Baru dari penyulingan kering terakhir di kedalaman. Uang dulu, cerita kemudian."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
@@ -6650,6 +6672,33 @@ export const id_ID: EnTranslations = {
           },
           "9": {
             "label": "Sanktum Gravewyrm"
+          },
+          "10": {
+            "label": "Gerbang Pasang"
+          }
+        }
+      },
+      "atlantis": {
+        "name": "Atlantis",
+        "welcome": "Kubahnya masih bernyanyi, dan Atlantis bertahan di bawah Arus Bawah.",
+        "pois": {
+          "0": {
+            "label": "Atlantis"
+          },
+          "1": {
+            "label": "Alun-alun Gerbang Pasang"
+          },
+          "2": {
+            "label": "Mahkota Lumen"
+          },
+          "3": {
+            "label": "Pasar Mutiara"
+          },
+          "4": {
+            "label": "Arsip Tenggelam"
+          },
+          "5": {
+            "label": "Aneks Penjaga Kelp"
           }
         }
       }

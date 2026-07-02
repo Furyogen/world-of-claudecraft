@@ -5507,6 +5507,18 @@ export const pl_PL: EnTranslations = {
       "acolyte_tessa": {
         "name": "Akolitka Tessa"
       },
+      "glimmerfin_eel": {
+        "name": "Węgorz lśnistopłetwy"
+      },
+      "pearlshell_skitterer": {
+        "name": "Dreptacz perłoskorupy"
+      },
+      "kelpshade_lurker": {
+        "name": "Czatownik cienistego kelpu"
+      },
+      "undertow_maw": {
+        "name": "Paszcza Prądu Dennego"
+      },
       "ironvein_foreman": {
         "name": "Sztygar z Żelaznej Żyły"
       },
@@ -5726,6 +5738,16 @@ export const pl_PL: EnTranslations = {
         "name": "Brat Halven",
         "title": "Strażnik Relikwiarza",
         "greeting": "Relikwiarz poniżej znów się przesunął."
+      },
+      "keeper_nerissa": {
+        "name": "Strażniczka Nerissa",
+        "title": "Strażniczka Korony Lumenu",
+        "greeting": "Uważaj na szkło, przybyszu z powierzchni. Przetrwało całą epokę — pomóż nam, by tak zostało."
+      },
+      "tidewright_ollo": {
+        "name": "Pływokowal Ollo",
+        "title": "Pływokowal z Targu Perłowego",
+        "greeting": "Prosto z ostatnich suchych destylarni w głębinie. Najpierw moneta, potem opowieści."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
@@ -6650,6 +6672,33 @@ export const pl_PL: EnTranslations = {
           },
           "9": {
             "label": "Sanktuarium Grobowego Żmija"
+          },
+          "10": {
+            "label": "Brama Pływów"
+          }
+        }
+      },
+      "atlantis": {
+        "name": "Atlantyda",
+        "welcome": "Kopuła wciąż śpiewa, a Atlantyda trwa pod Podpływem.",
+        "pois": {
+          "0": {
+            "label": "Atlantyda"
+          },
+          "1": {
+            "label": "Plac Bramy Pływów"
+          },
+          "2": {
+            "label": "Korona Lumenu"
+          },
+          "3": {
+            "label": "Targ Perłowy"
+          },
+          "4": {
+            "label": "Zatopione Archiwum"
+          },
+          "5": {
+            "label": "Aneks Strażników Kelpu"
           }
         }
       }

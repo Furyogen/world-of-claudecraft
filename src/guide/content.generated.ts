@@ -1261,9 +1261,27 @@ export const GUIDE_ZONES: GuideZoneInfo[] = [
       "The Glimmermere",
       "Wyrmcult Tents",
       "Revenant Fields",
-      "Gravewyrm Sanctum"
+      "Gravewyrm Sanctum",
+      "The Tidegate"
     ],
     "welcome": "Captain Thessaly holds the wall at Highwatch — barely."
+  },
+  {
+    "id": "atlantis",
+    "name": "Atlantis",
+    "min": 15,
+    "max": 20,
+    "biome": "abyss",
+    "hub": "Atlantis",
+    "pois": [
+      "Atlantis",
+      "Tidegate Plaza",
+      "The Lumen Crown",
+      "Pearl Market",
+      "The Drowned Archive",
+      "Kelpwarden Annex"
+    ],
+    "welcome": "The dome still sings, and Atlantis endures beneath the Undertide."
   }
 ];
 

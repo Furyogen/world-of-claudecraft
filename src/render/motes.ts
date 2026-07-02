@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { DUNGEON_X_THRESHOLD, WORLD_MAX_X, WORLD_MAX_Z, WORLD_MIN_Z } from '../sim/data';
 import type { BiomeId } from '../sim/types';
-import { terrainHeight, zoneBiomeAt, WATER_LEVEL } from '../sim/world';
+import { terrainHeight, WATER_LEVEL, zoneBiomeAt } from '../sim/world';
 import { GFX } from './gfx';
 
 // ---------------------------------------------------------------------------
@@ -20,7 +20,12 @@ export interface MotesView {
 
 // per-biome speck colour — warm gold pollen, sickly green marsh spores, pale
 // blue snow dust; kept lighter than GRASS_TINT so they read as glints in air
-const MOTE_TINT: Record<BiomeId, number> = { vale: 0xf4e6a0, marsh: 0xb8d28a, peaks: 0xdce8f2 };
+const MOTE_TINT: Record<BiomeId, number> = {
+  vale: 0xf4e6a0,
+  marsh: 0xb8d28a,
+  peaks: 0xdce8f2,
+  abyss: 0x86f0e0,
+};
 
 const RADIUS = 26; // motes live within this ring of the player
 const FLOOR = 0.6; // min height above the sampled ground
@@ -145,7 +150,10 @@ export function buildMotes(seed: number): MotesView {
         const dx = homeX[i] - px;
         const dz = homeZ[i] - pz;
         if (dx * dx + dz * dz > RADIUS * RADIUS) {
-          if (!place(i, px, pz)) { baseY[i] = -1e6; continue; }
+          if (!place(i, px, pz)) {
+            baseY[i] = -1e6;
+            continue;
+          }
         }
         if (baseY[i] < -1e5) continue; // parked
         const ph = phase[i] + t * 0.6;
