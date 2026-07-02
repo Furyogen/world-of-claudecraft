@@ -303,6 +303,13 @@ export const ru_RU: EnTranslations = {
       "heading": "Направление",
       "minimapZoom": "Масштаб миникарты"
     },
+    "nativeUpdate": {
+      "title": "Доступно обновление",
+      "body": "Доступна новая версия World of ClaudeCraft. Обновите сейчас, чтобы получить последние исправления и улучшения.",
+      "bodyWithVersion": "Доступна версия {version} World of ClaudeCraft. Обновите сейчас, чтобы получить последние исправления и улучшения.",
+      "notNow": "Не сейчас",
+      "update": "Обновить"
+    },
     "castBar": {
       "playerAria": "Ваша полоса применения",
       "targetAria": "Полоса применения цели"
@@ -2664,6 +2671,7 @@ export const ru_RU: EnTranslations = {
       "usernameTaken": "Это имя пользователя уже занято.",
       "invalidCredentials": "Неверное имя пользователя или пароль.",
       "verificationFailed": "Проверка не пройдена. Повторите попытку.",
+      "desktopCodeInvalid": "Код входа для настольного приложения недействителен или истёк. Повторите попытку.",
       "invalidCharacterName": "Недопустимое имя персонажа. Используйте 2-16 букв.",
       "characterNameNotAllowed": "Это имя персонажа запрещено.",
       "invalidClass": "Недопустимый класс.",
@@ -2680,6 +2688,21 @@ export const ru_RU: EnTranslations = {
       "takenOver": "Вашего персонажа перехватила другая сессия.",
       "renameBeforeEntering": "Перед входом в мир этому персонажу нужно сменить имя.",
       "renameNotPermitted": "Переименование этого персонажа не разрешено."
+    }
+  },
+  "desktop": {
+    "update": {
+      "downloading": "Загрузка обновления {version}...",
+      "ready": "Обновление {version} готово. Оно установится при выходе из игры, либо перезапустите сейчас.",
+      "restart": "Перезапустить сейчас",
+      "later": "Позже"
+    },
+    "crash": {
+      "title": "World of ClaudeCraft",
+      "body": "Игровой экран перестал отвечать. Перезагрузить его?",
+      "reload": "Перезагрузить",
+      "quit": "Выйти",
+      "fatalBody": "World of ClaudeCraft столкнулась с непредвиденной ошибкой и будет закрыта."
     }
   },
   "realm": {

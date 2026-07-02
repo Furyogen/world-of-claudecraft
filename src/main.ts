@@ -20,6 +20,7 @@ import {
   stepAngleToward,
 } from './game/click_move';
 import { getClientSeed } from './game/client_seed';
+import { initDesktopShellIntegration } from './game/desktop_shell_integration';
 import { GamepadManager } from './game/gamepad';
 import { GamepadBindings } from './game/gamepad_bindings';
 import { Input } from './game/input';
@@ -47,7 +48,7 @@ import { startPerfReporter } from './game/perf_reporter';
 import {
   type GameSettings,
   normalizeClickMoveButton,
-  type SETTING_RANGES,
+  SETTING_RANGES,
   Settings,
 } from './game/settings';
 import { sfx } from './game/sfx';
@@ -64,6 +65,7 @@ import {
   Api,
   type CharacterSummary,
   ClientWorld,
+  DESKTOP_APP,
   isAuthError,
   NATIVE_APP,
   type ReleaseEntry,
@@ -80,6 +82,7 @@ import { installWebGLContextRelease } from './render/context_release';
 import { firstRunGraphicsPreset, GFX, graphicsPresetLabel } from './render/gfx';
 import { Renderer } from './render/renderer';
 import { navigatorSaveData } from './render/sky';
+import { desktopBridge } from './runtime';
 import { pathCrossesFence } from './sim/colliders';
 import { ABILITIES, CLASSES } from './sim/content/classes';
 import { ITEMS } from './sim/data';
@@ -141,6 +144,7 @@ import {
   tPlural,
 } from './ui/i18n';
 import { iconDataUrl } from './ui/icons';
+import { scheduleNativeUpdateCheck } from './ui/native_update_prompt';
 import { createMetricsSampler } from './ui/perf_metrics_sampler';
 import { PerfOverlay } from './ui/perf_overlay';
 import { type PerfOverlayConfig, PerfOverlayConfigStore } from './ui/perf_overlay_config';
@@ -195,10 +199,15 @@ const HOMEPAGE_MUSIC_MUTED_KEY = 'woc_homepage_music_muted';
 const HOMEPAGE_MUSIC_VOLUME = 0.225;
 const GRAPHICS_PRESET_HIGH = 3;
 const GRAPHICS_PRESET_ULTRA = 4;
+const LANDING_GRAPHICS_AUTO = 'auto';
 
 const $ = <T extends HTMLElement = HTMLElement>(sel: string): T => document.querySelector(sel) as T;
 document.body.classList.toggle('native-app', NATIVE_APP);
+document.body.classList.toggle('desktop-app', DESKTOP_APP);
 if (NATIVE_APP) document.body.classList.add('mobile-touch');
+// Electron shell integration: push t()-localized crash-dialog strings to the
+// main process and render the auto-update toast (no-op without the bridge).
+if (DESKTOP_APP) initDesktopShellIntegration();
 // Free every WebGL context (game renderer, character preview, portrait rig) when
 // the page is torn down, so logout/login reload cycles don't exhaust the GPU
 // context pool and break the next renderer with "Error creating WebGL context".
@@ -348,9 +357,18 @@ function userFacingApiError(err: unknown): string {
   // The account row vanished mid-session (404 from /api/account/*); treat as a
   // dropped session rather than rendering raw English in the form.
   if (normalized === 'account not found') return t('errors.api.notAuthenticated');
-  // Cloudflare Turnstile rejection on login/register (server/main.ts passesTurnstile).
+  // Cloudflare Turnstile rejection on login/register (passesTurnstile in
+  // server/turnstile.ts).
   if (normalized === 'verification failed, please try again')
     return t('errors.api.verificationFailed');
+  // Desktop app login handoff (server/desktop_login.ts exchange, plus the
+  // client-side guard in completeDesktopBrowserLogin when the mint response
+  // carries no code).
+  if (
+    normalized === 'invalid or expired desktop login code' ||
+    normalized === 'missing desktop login code'
+  )
+    return t('errors.api.desktopCodeInvalid');
   // WebSocket disconnect reasons surfaced through the fatal overlay (net/online.ts).
   if (normalized === 'connection to the server was lost.') return t('loading.connectionLost');
   if (normalized === 'rejected by server') return t('loading.connectionRejected');
@@ -386,9 +404,13 @@ function turnstileApi(): TurnstileApi | undefined {
 }
 
 // Render the widget once, retrying until the async api.js script is ready. Safe to
-// call repeatedly (idempotent) and a no-op when no site key is configured.
+// call repeatedly (idempotent) and a no-op when no site key is configured. The
+// Electron desktop shell never renders it: Cloudflare rejects the app:// origin
+// (widget error 110200), and the server bypasses Turnstile for desktop origins
+// (passesTurnstile in server/turnstile.ts), so a widget here could only wedge
+// the form.
 function ensureTurnstile(): void {
-  if (!TURNSTILE_SITEKEY || turnstileWidgetId !== undefined) return;
+  if (DESKTOP_APP || !TURNSTILE_SITEKEY || turnstileWidgetId !== undefined) return;
   const ts = turnstileApi();
   const el = document.getElementById('cf-turnstile-container');
   if (!ts || !el) {
@@ -512,6 +534,7 @@ function syncCommunityMenuMode(): void {
 setInterfaceMode(interfaceModeFromSetting(new Settings().get('interfaceMode')));
 syncAppViewport();
 syncBuildInfo();
+scheduleNativeUpdateCheck(__APP_VERSION__);
 preventMobileZoom();
 syncPhoneTouchClass();
 window.matchMedia(PHONE_TOUCH_QUERY).addEventListener?.('change', syncPhoneTouchClass);
@@ -3103,6 +3126,39 @@ const revalidateAccountSession = (): Promise<void> => loadAccountPortal(true);
 // Navigating to the Account view: refresh the portal without touching the chrome.
 const renderAccountPortal = (): Promise<void> => loadAccountPortal(false);
 
+function isDesktopLoginPage(): boolean {
+  return location.pathname === '/desktop-login' || location.pathname === '/desktop-login/';
+}
+
+async function completeDesktopBrowserLogin(): Promise<boolean> {
+  if (!isDesktopLoginPage()) return false;
+  if (!api.token) {
+    show('#login-panel');
+    return true;
+  }
+  try {
+    const { code } = await api.createDesktopLoginCode();
+    if (!code) throw new Error('missing desktop login code');
+    location.href = `worldofclaudecraft://desktop-login?code=${encodeURIComponent(code)}`;
+  } catch (err) {
+    loginError(userFacingApiError(err));
+    show('#login-panel');
+  }
+  return true;
+}
+
+async function completeDesktopAppLogin(code: string): Promise<void> {
+  try {
+    await api.exchangeDesktopLoginCode(code);
+    api.saveSession();
+    enterLoggedInChrome();
+    await enterRealmFlow();
+  } catch (err) {
+    loginError(userFacingApiError(err));
+    show('#login-panel');
+  }
+}
+
 // `focusWallet` differentiates the Wallet card's CTA from "View Characters":
 // both land on the realm/character picker, but Manage Wallet then scrolls to and
 // focuses the wallet control once it renders.
@@ -4597,12 +4653,12 @@ let walletFlowStatus: 'connect' | 'sign' | 'verify' | null = null;
 let walletHiddenNoticeTimeout: number | null = null;
 
 // Feature flag: Wallet Standard support needs no project id. Keep an escape
-// hatch for deploys that want to hide the wallet UI entirely. Native app builds
-// intentionally exclude wallet verification for now.
+// hatch for deploys that want to hide the wallet UI entirely. Native and desktop
+// app builds intentionally exclude wallet verification for now.
 // client_shell.test guards the native exclusion:
 // const WALLET_ENABLED = !NATIVE_APP && String(import.meta.env.VITE_WALLET_DISABLED ?? '').trim() !== '1';
 const WALLET_ENABLED =
-  !NATIVE_APP && String(import.meta.env.VITE_WALLET_DISABLED ?? '').trim() !== '1';
+  !NATIVE_APP && !DESKTOP_APP && String(import.meta.env.VITE_WALLET_DISABLED ?? '').trim() !== '1';
 
 function walletCharacterScreenVisible(): boolean {
   try {
@@ -5947,11 +6003,27 @@ function wireStartScreens(): void {
     show('#mode-select');
   };
 
+  const completeOnlineAuth = async () => {
+    $('#charselect-user').textContent = api.username ?? '';
+    api.saveSession();
+    enterLoggedInChrome();
+    if (await completeDesktopBrowserLogin()) return;
+    void refreshWalletLinkStatus();
+    void refreshGithubLinkStatus();
+    await enterRealmFlow();
+  };
+
   const handleOnlineSelect = () => {
     if (api.token) {
       goToLoggedInPlay();
       return;
     }
+    // Desktop shell and web both show the in-app login panel: username/password logs in
+    // in place (doAuth -> api.login) without ever leaving the app. Only "Continue with
+    // Discord" bounces to the external browser (wired below), because its OAuth redirect
+    // would be blocked by the shell's in-app navigation guard; it returns a one-time code
+    // via the worldofclaudecraft://desktop-login deep link (onLoginCode ->
+    // completeDesktopAppLogin).
     show('#login-panel');
   };
 
@@ -6276,7 +6348,7 @@ function wireStartScreens(): void {
     const password = ($('#login-pass') as unknown as HTMLInputElement).value;
     loginError('');
     const token = turnstileToken();
-    if (!NATIVE_APP && TURNSTILE_SITEKEY && !token) {
+    if (!NATIVE_APP && !DESKTOP_APP && TURNSTILE_SITEKEY && !token) {
       loginError(t('errors.api.verificationFailed'));
       return;
     }
@@ -6321,16 +6393,7 @@ function wireStartScreens(): void {
     // Auth succeeded — a later realm-entry error is NOT a verification failure,
     // so don't reset the widget or let the user re-submit the (now duplicate) auth.
     try {
-      $('#charselect-user').textContent = api.username ?? '';
-      // Persist the session so a reload restores the logged-in "Account" tab,
-      // and reveal that tab now.
-      api.saveSession();
-      enterLoggedInChrome();
-      // bind-on-login: surface the account's linked wallet (and flip a
-      // connected-but-unlinked button into a "Link" call-to-action).
-      void refreshWalletLinkStatus();
-      void refreshGithubLinkStatus();
-      await enterRealmFlow();
+      await completeOnlineAuth();
     } catch (err) {
       loginError(userFacingApiError(err));
     }
@@ -6419,6 +6482,16 @@ function wireStartScreens(): void {
     loginError('');
     show('#mode-select');
   });
+  const bridge = DESKTOP_APP ? desktopBridge() : null;
+  if (bridge) {
+    bridge.onLoginCode((code) => {
+      void bridge.takeLoginCode();
+      void completeDesktopAppLogin(code);
+    });
+    void bridge.takeLoginCode().then((code) => {
+      if (typeof code === 'string' && code) void completeDesktopAppLogin(code);
+    });
+  }
   $('#btn-realm-back').addEventListener('click', () => show('#mode-select'));
   // Change Realm is now an inline dropdown on the character-select screen.
   $('#btn-change-realm').addEventListener('click', (e) => {
@@ -6769,6 +6842,15 @@ function wireStartScreens(): void {
     if (discordOrDivider) discordOrDivider.hidden = false;
     discordLoginBtn.addEventListener('click', (e) => {
       e.preventDefault();
+      // In the desktop shell, Discord OAuth cannot run in-app: the redirect to Discord is
+      // off-origin and the navigation guard blocks it. Route it to the external browser via
+      // the preload bridge; the /desktop-login page finishes OAuth and deep-links a one-time
+      // code back in (onLoginCode -> completeDesktopAppLogin). The web build redirects in place.
+      const bridge = DESKTOP_APP ? desktopBridge() : null;
+      if (bridge) {
+        void bridge.openBrowserLogin();
+        return;
+      }
       startDiscordOAuth('login');
     });
   }
@@ -6934,8 +7016,10 @@ function wireStartScreens(): void {
     void refreshGithubLinkStatus();
     // (Discord status is refreshed by enterLoggedInChrome above.)
     if (discordOnboarding) enterOnlinePlayFlow();
+    if (isDesktopLoginPage()) void completeDesktopBrowserLogin();
   } else {
     enterLoggedOutChrome();
+    if (isDesktopLoginPage()) show('#login-panel');
   }
 
   // Header Logo click listener to return to homepage
@@ -7056,9 +7140,40 @@ function wireStartScreens(): void {
   const contrastToggle = document.getElementById(
     'landing-contrast-toggle',
   ) as HTMLButtonElement | null;
+  const graphicsSelect = document.getElementById(
+    'landing-graphics-select',
+  ) as HTMLSelectElement | null;
+  const normalizedLandingGraphicsChoice = (raw: string | null): string => {
+    if (raw === LANDING_GRAPHICS_AUTO) return raw;
+    const preset = Number(raw);
+    if (
+      Number.isInteger(preset) &&
+      preset >= SETTING_RANGES.graphicsPreset.min &&
+      preset <= SETTING_RANGES.graphicsPreset.max
+    ) {
+      return String(preset);
+    }
+    return LANDING_GRAPHICS_AUTO;
+  };
+  const applyLandingGraphicsChoice = (choice: string): void => {
+    if (choice === LANDING_GRAPHICS_AUTO) {
+      landingSettings.set('graphicsPreset', SETTING_RANGES.graphicsPreset.def);
+      landingSettings.set('graphicsDefaultApplied', false);
+      return;
+    }
+    landingSettings.set('graphicsPreset', Number(choice));
+    landingSettings.set('graphicsDefaultApplied', true);
+  };
+  const syncLandingGraphicsSelect = (): void => {
+    if (!graphicsSelect) return;
+    graphicsSelect.value = landingSettings.get('graphicsDefaultApplied')
+      ? String(landingSettings.get('graphicsPreset'))
+      : LANDING_GRAPHICS_AUTO;
+  };
   const syncContrastToggle = (on: boolean): void => {
     if (contrastToggle) contrastToggle.setAttribute('aria-pressed', String(on));
   };
+  syncLandingGraphicsSelect();
   syncContrastToggle(landingSettings.get('landingHighContrast'));
   applyLandingBackdrop(landingSettings.get('landingHighContrast'));
 
@@ -7087,6 +7202,11 @@ function wireStartScreens(): void {
     landingSettings.set('landingHighContrast', next);
     syncContrastToggle(next);
     applyLandingBackdrop(next);
+  });
+  graphicsSelect?.addEventListener('change', () => {
+    const choice = normalizedLandingGraphicsChoice(graphicsSelect.value);
+    applyLandingGraphicsChoice(choice);
+    syncLandingGraphicsSelect();
   });
 
   // Initialize 3D character preview once assets are ready
