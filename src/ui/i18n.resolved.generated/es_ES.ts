@@ -265,6 +265,13 @@ export const es_ES: EnTranslations = {
       "heading": "Rumbo",
       "minimapZoom": "Zoom del minimapa"
     },
+    "nativeUpdate": {
+      "title": "Update Available",
+      "body": "A new version of World of ClaudeCraft is available. Update now for the latest fixes and improvements.",
+      "bodyWithVersion": "Version {version} of World of ClaudeCraft is available. Update now for the latest fixes and improvements.",
+      "notNow": "Not now",
+      "update": "Update"
+    },
     "castBar": {
       "playerAria": "Tu barra de lanzamiento",
       "targetAria": "Barra de lanzamiento del objetivo"
@@ -274,11 +281,16 @@ export const es_ES: EnTranslations = {
       "tabsLabel": "Tablas de clasificación",
       "tabPlayers": "Jugadores",
       "tabGuilds": "Hermandades",
+      "tabDevs": "Desarrolladores",
       "guildName": "Hermandad",
       "members": "Miembros",
       "topLevel": "Top",
       "guildXp": "XP total",
-      "guildEmpty": "Aún no hay hermandades clasificadas."
+      "guildEmpty": "Aún no hay hermandades clasificadas.",
+      "devName": "Colaborador",
+      "devTierCol": "Insignia",
+      "mergedPrs": "PR fusionadas",
+      "devEmpty": "Aún no hay colaboradores clasificados."
     },
     "raidLockout": {
       "title": "Bloqueos de banda",
@@ -308,7 +320,8 @@ export const es_ES: EnTranslations = {
     "keybinds": {
       "emoteWheel": "Rueda de gestos",
       "targetFriendly": "Objetivo amistoso más cercano",
-      "targetFriendlyNext": "Objetivo amistoso siguiente"
+      "targetFriendlyNext": "Objetivo amistoso siguiente",
+      "discord": "Discord"
     },
     "options": {
       "clickMoveLeft": "Clic izquierdo",
@@ -330,8 +343,10 @@ export const es_ES: EnTranslations = {
       "keybindHelpLockCursorOnRotate": "Mantiene el cursor del ratón dentro de la ventana mientras arrastras para rotar la cámara, para que no llegue al borde de la pantalla ni pase a otro monitor. Desactívalo si prefieres un cursor libre.",
       "showWalletOnCharacterScreen": "Mostrar cartera en la pantalla de personajes",
       "showWalletOnPlayerCard": "Mostrar cartera en la tarjeta de jugador",
+      "showDevBadges": "Mostrar insignias de desarrollador",
       "uiScale": "Escala de la interfaz",
       "highContrastBackground": "Fondo de alto contraste",
+      "startAttackOnAbility": "Ataque automático al usar habilidad",
       "showItemLevel": "Mostrar nivel de objeto",
       "itemLevelLine": "Nivel de objeto {level}",
       "itemScoreLine": "Puntuación {score}",
@@ -428,6 +443,9 @@ export const es_ES: EnTranslations = {
     },
     "statInfo": {
       "fromYour": "De tu {value} de {stat}:",
+      "names": {
+        "spellPower": "Poder con hechizos"
+      },
       "desc": {
         "str": "Aumenta tu poder de ataque, así que tus golpes con el arma impactan con más fuerza.",
         "agi": "Agudiza tus reflejos y tu puntería, mejorando varias de tus estadísticas de combate.",
@@ -436,6 +454,7 @@ export const es_ES: EnTranslations = {
         "spi": "Acelera la rapidez con la que regresa el maná de un lanzador de hechizos al descansar, fuera de combate.",
         "armor": "Amortigua los golpes físicos que recibes. La reducción es mayor contra atacantes de menor nivel y tiene un tope del 75%.",
         "attackPower": "Potencia tus ataques con el arma. Cada 14 de poder de ataque añade 1 de daño por segundo.",
+        "spellPower": "Aumenta el daño de tus hechizos y la potencia de tus sanaciones. Cada punto de Intelecto otorga un poco de Poder con hechizos, además del que provenga del equipo o los beneficios.",
         "dps": "El daño por segundo estimado de tu arma, combinando el daño y la velocidad de tu arma con tu poder de ataque.",
         "critChance": "Tu probabilidad de que un ataque aseste un golpe crítico, infligiendo el doble de daño.",
         "dodge": "Tu probabilidad de evitar por completo un ataque cuerpo a cuerpo entrante, sin recibir daño."
@@ -458,6 +477,15 @@ export const es_ES: EnTranslations = {
         "minorForClass": "De poco beneficio para tu clase.",
         "baseChance": "Incluye un 5% de probabilidad base que comparten todos los aventureros.",
         "dpsApprox": "Es una estimación, no incluye los golpes críticos ni el daño de habilidades."
+      },
+      "sources": {
+        "header": "Compuesto de:",
+        "base": "Base: {value}",
+        "attributes": "De tus atributos: {value}",
+        "fromAttribute": "De {stat}: {value}",
+        "gear": "Equipo equipado: {value}",
+        "buff": "{name}: {value}",
+        "talents": "Talentos y efectos: {value}"
       }
     },
     "talents": {
@@ -481,6 +509,9 @@ export const es_ES: EnTranslations = {
       "ineligible": "No cumples los requisitos de esta misión.",
       "noQuestSelected": "Selecciona una misión en tu diario para compartirla.",
       "linkTitle": "Mayús + clic para enlazar esta misión en el chat."
+    },
+    "itemShare": {
+      "linkHint": "Mayús+clic para enlazar este objeto en el chat."
     },
     "plurals": {
       "guildMembers": {
@@ -506,6 +537,12 @@ export const es_ES: EnTranslations = {
         "few": "Quién: {count} jugadores conectados en {realm}.",
         "many": "Quién: {count} jugadores conectados en {realm}.",
         "other": "Quién: {count} jugadores conectados en {realm}."
+      },
+      "playersMatching": {
+        "one": "Quién: {count} jugador que coincide con \"{query}\" en {realm}.",
+        "few": "Quién: {count} jugadores que coinciden con \"{query}\" en {realm}.",
+        "many": "Quién: {count} jugadores que coinciden con \"{query}\" en {realm}.",
+        "other": "Quién: {count} jugadores que coinciden con \"{query}\" en {realm}."
       }
     },
     "bugReport": {
@@ -624,7 +661,26 @@ export const es_ES: EnTranslations = {
       "methodGroup": "Metodo de botin cambiado a botin de grupo.",
       "assigned": "{looter} asigno {item} a {target}.",
       "unassigned": "{item} no fue asignado y queda libre para todos.",
-      "leaderOnly": "Solo el lider del grupo puede cambiar el metodo de botin."
+      "leaderOnly": "Solo el lider del grupo puede cambiar el metodo de botin.",
+      "rollingFor": "Tirando por {item}.",
+      "looterChanged": "El repartidor ahora es {name}.",
+      "thresholdSet": "Umbral de botín fijado en {threshold}.",
+      "summaryMaster": "Ajustes de botín: botín maestro, repartidor {name}, umbral {threshold}.",
+      "summaryGroup": "Ajustes de botín: botín de grupo."
+    },
+    "party": {
+      "promoteLeader": "Promover a líder"
+    },
+    "lootSettings": {
+      "title": "Ajustes de botín",
+      "close": "Cerrar ajustes de botín",
+      "menuItem": "Ajustes de botín",
+      "method": "Modo de botín",
+      "rollThreshold": "Umbral de tirada",
+      "groupLoot": "Botín de grupo",
+      "valueMaster": "Botín maestro",
+      "leaderOption": "Repartidor: líder (tú)",
+      "masterOption": "Repartidor: {name}"
     },
     "bags": {
       "filterGroupAria": "Filtrar bolsas por categoría",
@@ -732,6 +788,9 @@ export const es_ES: EnTranslations = {
     "nameplate": {
       "mob": "[{level}] {name}",
       "mobElite": "[{level}+] {name}"
+    },
+    "itemTooltip": {
+      "requiresLevel": "Requiere nivel {level}"
     },
     "discord": {
       "title": "Discord",
@@ -875,6 +934,34 @@ export const es_ES: EnTranslations = {
           "hint": "Pide ayuda a la comunidad"
         }
       }
+    },
+    "devBadge": {
+      "title": "Desarrollador",
+      "tiers": {
+        "tinkerer": "Trasteador",
+        "artificer": "Artífice",
+        "runesmith": "Forjarrunas",
+        "architect": "Arquitecto",
+        "worldwright": "Forjamundos"
+      },
+      "flavors": {
+        "tinkerer": "Tu primera pull request llegó al reino.",
+        "artificer": "Cinco pull requests después, y el mundo se pliega a tu código.",
+        "runesmith": "Quince pull requests forjadas en el juego en marcha.",
+        "architect": "Un arquitecto del reino: 30 pull requests fusionadas.",
+        "worldwright": "Un artífice de mundos: 70 pull requests dan forma al juego."
+      },
+      "badgeTitle": "Desarrollador: {tier}",
+      "prsLanded": "{count} pull requests fusionadas",
+      "contributor": "Colaborador de código abierto",
+      "link": {
+        "cta": "Vincular GitHub",
+        "relink": "Revincular GitHub",
+        "benefits": "Vincula tu GitHub para ganar una insignia de desarrollador por las pull requests que hayas fusionado en el repositorio de código abierto.",
+        "error": "No se pudo vincular GitHub. Inténtalo de nuevo."
+      },
+      "linkedAs": "Vinculado como {login}",
+      "unlink": "Desvincular GitHub"
     }
   },
   "guide": {
@@ -2546,6 +2633,7 @@ export const es_ES: EnTranslations = {
       "usernameTaken": "Ese nombre de usuario ya está en uso.",
       "invalidCredentials": "Usuario o contraseña no válidos.",
       "verificationFailed": "La verificación falló. Inténtalo de nuevo.",
+      "desktopCodeInvalid": "Desktop login code is invalid or expired. Please try again.",
       "invalidCharacterName": "Nombre de personaje no válido. Usa 2-16 letras.",
       "characterNameNotAllowed": "Ese nombre de personaje no está permitido.",
       "invalidClass": "Clase no válida.",
@@ -2562,6 +2650,21 @@ export const es_ES: EnTranslations = {
       "takenOver": "Otra sesión tomó el control de tu personaje.",
       "renameBeforeEntering": "Este personaje debe cambiar de nombre antes de entrar en el mundo.",
       "renameNotPermitted": "No se permite cambiar el nombre de este personaje."
+    }
+  },
+  "desktop": {
+    "update": {
+      "downloading": "Downloading update {version}...",
+      "ready": "Update {version} is ready. It installs when you quit, or restart now.",
+      "restart": "Restart now",
+      "later": "Later"
+    },
+    "crash": {
+      "title": "World of ClaudeCraft",
+      "body": "The game view stopped working. Reload it?",
+      "reload": "Reload",
+      "quit": "Quit",
+      "fatalBody": "World of ClaudeCraft hit an unexpected error and needs to close."
     }
   },
   "realm": {
@@ -5631,6 +5734,11 @@ export const es_ES: EnTranslations = {
         "name": "Maestro de saber Caddis",
         "title": "Maestro de saber",
         "greeting": "Cuida la pizarra suelta, {className}. La montaña está inquieta últimamente y quiero saber por qué."
+      },
+      "auctioneer_voss": {
+        "name": "Subastador Voss",
+        "title": "Guardián del Mercado Mundial",
+        "greeting": "El Mercado Mundial también está abierto aquí, {className}. Compra a cualquier aventurero del reino o pon a la venta tus propias mercancías."
       },
       "brother_aldric_raid": {
         "name": "Hermano Aldric",

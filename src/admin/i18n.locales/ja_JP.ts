@@ -7,6 +7,12 @@
 // (tests/i18n_admin_catalog.test.ts).
 
 export const ja_JP: Record<string, string> = {
+  'usage.cache.githubContributors': 'GitHubコントリビューターキャッシュ',
+  'usage.metric.githubContributorsFetch': 'GitHubコントリビューター統計の取得',
+  'usage.metric.githubContributorsFetchFailure': 'GitHubコントリビューター統計の取得失敗',
+  'usage.metric.githubLinkFailure': 'GitHubリンクの失敗',
+  'usage.metric.githubLinkRateLimited': 'GitHubリンクのレート制限リクエスト',
+  'usage.metric.githubLinkRequest': 'GitHubリンクのリクエスト',
   'app.title': 'World of ClaudeCraft - 管理',
   'app.shortTitle': 'WoC管理者',
   'auth.username': 'ユーザー名',

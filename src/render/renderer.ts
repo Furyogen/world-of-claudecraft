@@ -30,6 +30,7 @@ import type { DelveModuleId } from '../sim/delve_layout';
 import type { BiomeId } from '../sim/types';
 import { ALL_CLASSES, type Entity, type SimEvent } from '../sim/types';
 import { groundHeight, WATER_LEVEL, zoneBiomeAt } from '../sim/world';
+import { attachAvatarFallback } from '../ui/avatar_fallback';
 import { tEntity } from '../ui/entity_i18n';
 import type { IWorld } from '../world_api';
 import { isVisuallyDead } from './anim_state';
@@ -488,6 +489,8 @@ export interface EntityView {
   comboSig: string; // cheap-diff for the combo pip row
   tierEl: HTMLImageElement; // $WOC holder-tier flair badge (other players)
   tierValue: number; // last-applied holderTier, to diff cheaply
+  devTierEl: HTMLImageElement; // developer-badge flair badge (other players)
+  devTierValue: number; // last-applied devTier, to diff cheaply
   discordEl: HTMLImageElement; // linked-Discord PFP next to the name (other players)
   discordAvatarSig: string; // last-applied discord avatar URL, to diff cheaply
   sparkle?: THREE.Sprite; // ground objects
@@ -721,6 +724,9 @@ export class Renderer {
   // Smoothed chase-cam occlusion (1 = no pull-in); see updateCamera.
   private camOcclusion: CameraOcclusionState = { pullT: 1, lensT: 1, fov: CAMERA_BASE_FOV };
   showNameplates = true;
+  // settings-backed developer-badge display toggle (nameplate glyph + outline);
+  // initialized from Settings and kept live by main.ts's applySetting dispatcher.
+  showDevBadges = true;
   // settings-menu graphics knobs (applied live)
   private renderScale = 1; // user-requested resolution ceiling on top of the device pixel ratio
   private effectiveRenderScale = 1; // runtime value after adaptive backoff
@@ -970,6 +976,7 @@ export class Renderer {
       world: this.sim,
       getViewport: () => this.viewport,
       showNameplates: () => this.showNameplates,
+      showDevBadges: () => this.showDevBadges,
       isHostilePlayer: (e) => this.isHostilePlayer(e),
     });
 
@@ -3149,12 +3156,21 @@ export class Renderer {
     tierEl.className = 'np-tier';
     tierEl.alt = '';
     tierEl.style.display = 'none';
+    // developer-badge flair, shown inline before the name for other players
+    const devTierEl = document.createElement('img');
+    devTierEl.className = 'np-dev-tier';
+    devTierEl.alt = '';
+    devTierEl.style.display = 'none';
     // linked-Discord PFP, shown inline before the name for other players
     const discordEl = document.createElement('img');
     discordEl.className = 'np-discord';
     discordEl.alt = '';
     discordEl.referrerPolicy = 'no-referrer';
     discordEl.style.display = 'none';
+    // The avatar is the one nameplate image sourced from an external URL (Discord's
+    // CDN); if it fails to load, hide it rather than leave the browser's broken-image
+    // placeholder on the plate. Attached once here; the element is reused per entity.
+    attachAvatarFallback(discordEl);
     const nameEl = document.createElement('div');
     nameEl.className = 'np-name';
     nameEl.textContent = e.kind === 'object' ? objectDisplayName(e) : e.name;
@@ -3182,6 +3198,7 @@ export class Renderer {
       comboRow,
       marker,
       tierEl,
+      devTierEl,
       discordEl,
       nameEl,
       guildEl,
@@ -3237,6 +3254,7 @@ export class Renderer {
       castFill,
       castLabel,
       tierEl,
+      devTierEl,
       discordEl,
       sparkle,
       objectMesh,
@@ -3248,6 +3266,7 @@ export class Renderer {
       nameplateHpWidth: '',
       comboSig: '',
       tierValue: 0,
+      devTierValue: 0,
       discordAvatarSig: '',
       objectCasters,
       viewLights,

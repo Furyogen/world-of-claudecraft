@@ -2,6 +2,78 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const nl_NL: Partial<Record<TranslationKey, string>> = {
+  'entities.npcs.auctioneer_voss.greeting':
+    'De Wereldmarkt is hier ook geopend, {className}. Koop van elke avonturier in het rijk, of stal je eigen waren uit.',
+  'entities.npcs.auctioneer_voss.name': 'Veilingmeester Voss',
+  'entities.npcs.auctioneer_voss.title': 'Hoeder van de Wereldmarkt',
+  'hudChrome.devBadge.badgeTitle': 'Ontwikkelaar: {tier}',
+  'hudChrome.devBadge.contributor': 'Opensource-bijdrager',
+  'hudChrome.devBadge.flavors.architect':
+    'Een architect van het rijk: 30 pull requests samengevoegd.',
+  'hudChrome.devBadge.flavors.artificer':
+    'Vijf pull requests verder, en de wereld buigt naar je code.',
+  'hudChrome.devBadge.flavors.runesmith': 'Vijftien pull requests gesmeed in het draaiende spel.',
+  'hudChrome.devBadge.flavors.tinkerer': 'Je eerste pull request landde in het rijk.',
+  'hudChrome.devBadge.flavors.worldwright':
+    'Een bouwer van werelden: 70 pull requests vormen het spel.',
+  'hudChrome.devBadge.link.benefits':
+    'Koppel je GitHub om een ontwikkelaarsinsigne te verdienen voor de pull requests die je hebt laten samenvoegen in de opensource-repo.',
+  'hudChrome.devBadge.link.cta': 'GitHub koppelen',
+  'hudChrome.devBadge.link.error': 'Kon GitHub niet koppelen. Probeer het opnieuw.',
+  'hudChrome.devBadge.link.relink': 'GitHub opnieuw koppelen',
+  'hudChrome.devBadge.linkedAs': 'Gekoppeld als {login}',
+  'hudChrome.devBadge.prsLanded': '{count} pull requests samengevoegd',
+  'hudChrome.devBadge.tiers.architect': 'Architect',
+  'hudChrome.devBadge.tiers.artificer': 'Vervaardiger',
+  'hudChrome.devBadge.tiers.runesmith': 'Runensmid',
+  'hudChrome.devBadge.tiers.tinkerer': 'Knutselaar',
+  'hudChrome.devBadge.tiers.worldwright': 'Wereldbouwer',
+  'hudChrome.devBadge.title': 'Ontwikkelaar',
+  'hudChrome.devBadge.unlink': 'GitHub ontkoppelen',
+  'hudChrome.itemShare.linkHint': 'Shift-klik om dit voorwerp in de chat te delen.',
+  'hudChrome.itemTooltip.requiresLevel': 'Vereist niveau {level}',
+  'hudChrome.keybinds.discord': 'Discord',
+  'hudChrome.leaderboard.devEmpty': 'Nog geen gerangschikte bijdragers.',
+  'hudChrome.leaderboard.devName': 'Bijdrager',
+  'hudChrome.leaderboard.devTierCol': 'Insigne',
+  'hudChrome.leaderboard.mergedPrs': "Samengevoegde PR's",
+  'hudChrome.leaderboard.tabDevs': 'Ontwikkelaars',
+  'hudChrome.lootSettings.close': 'Buitinstellingen sluiten',
+  'hudChrome.lootSettings.groupLoot': 'Groepsbuit',
+  'hudChrome.lootSettings.leaderOption': 'Buitmeester: Leider (jij)',
+  'hudChrome.lootSettings.masterOption': 'Buitmeester: {name}',
+  'hudChrome.lootSettings.menuItem': 'Buitinstellingen',
+  'hudChrome.lootSettings.method': 'Buitmethode',
+  'hudChrome.lootSettings.rollThreshold': 'Worpdrempel',
+  'hudChrome.lootSettings.title': 'Buitinstellingen',
+  'hudChrome.lootSettings.valueMaster': 'Buitmeester-buit',
+  'hudChrome.masterLoot.looterChanged': 'Buitmeester is nu {name}.',
+  'hudChrome.masterLoot.rollingFor': 'Werpen om {item}.',
+  'hudChrome.masterLoot.summaryGroup': 'Buitinstellingen: Groepsbuit.',
+  'hudChrome.masterLoot.summaryMaster':
+    'Buitinstellingen: Buitmeester-buit, Buitmeester {name}, drempel {threshold}.',
+  'hudChrome.masterLoot.thresholdSet': 'Buitdrempel ingesteld op {threshold}.',
+  'hudChrome.options.showDevBadges': 'Ontwikkelaarsinsignes tonen',
+  'hudChrome.options.startAttackOnAbility': 'Auto-aanval bij gebruik van vaardigheid',
+  'hudChrome.party.promoteLeader': 'Bevorderen tot leider',
+  'hudChrome.plurals.playersMatching.few':
+    'Wie: {count} spelers die overeenkomen met "{query}" op {realm}.',
+  'hudChrome.plurals.playersMatching.many':
+    'Wie: {count} spelers die overeenkomen met "{query}" op {realm}.',
+  'hudChrome.plurals.playersMatching.one':
+    'Wie: {count} speler die overeenkomt met "{query}" op {realm}.',
+  'hudChrome.plurals.playersMatching.other':
+    'Wie: {count} spelers die overeenkomen met "{query}" op {realm}.',
+  'hudChrome.statInfo.desc.spellPower':
+    'Verhoogt de schade van je spreuken en de kracht van je genezingen. Elk punt Intellect verleent een beetje Spreukkracht, bovenop wat je krijgt van uitrusting of buffs.',
+  'hudChrome.statInfo.names.spellPower': 'Spreukkracht',
+  'hudChrome.statInfo.sources.attributes': 'Van je attributen: {value}',
+  'hudChrome.statInfo.sources.base': 'Basis: {value}',
+  'hudChrome.statInfo.sources.buff': '{name}: {value}',
+  'hudChrome.statInfo.sources.fromAttribute': 'Van {stat}: {value}',
+  'hudChrome.statInfo.sources.gear': 'Uitgeruste uitrusting: {value}',
+  'hudChrome.statInfo.sources.header': 'Opgebouwd uit:',
+  'hudChrome.statInfo.sources.talents': 'Talenten en effecten: {value}',
   'a11y.characterActions': 'Personageacties',
   'a11y.discordCommunity': 'Word lid van de World of ClaudeCraft Discord-community',
   'a11y.donateProject': 'Doneer om World of ClaudeCraft te steunen',

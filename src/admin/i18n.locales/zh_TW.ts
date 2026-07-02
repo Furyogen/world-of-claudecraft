@@ -7,6 +7,12 @@
 // (tests/i18n_admin_catalog.test.ts).
 
 export const zh_TW: Record<string, string> = {
+  'usage.cache.githubContributors': 'GitHub 貢獻者快取',
+  'usage.metric.githubContributorsFetch': 'GitHub 貢獻者統計擷取次數',
+  'usage.metric.githubContributorsFetchFailure': 'GitHub 貢獻者統計擷取失敗次數',
+  'usage.metric.githubLinkFailure': 'GitHub 連結失敗次數',
+  'usage.metric.githubLinkRateLimited': 'GitHub 連結遭限流的請求次數',
+  'usage.metric.githubLinkRequest': 'GitHub 連結請求次數',
   'app.title': 'World of ClaudeCraft - 管理後台',
   'app.shortTitle': '沃克管理員',
   'auth.username': '使用者名稱',

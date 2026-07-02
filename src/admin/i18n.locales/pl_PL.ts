@@ -7,6 +7,12 @@
 // (tests/i18n_admin_catalog.test.ts).
 
 export const pl_PL: Record<string, string> = {
+  'usage.cache.githubContributors': 'Pamięć podręczna kontrybutorów GitHub',
+  'usage.metric.githubContributorsFetch': 'Pobrania statystyk kontrybutorów GitHub',
+  'usage.metric.githubContributorsFetchFailure': 'Nieudane pobrania statystyk kontrybutorów GitHub',
+  'usage.metric.githubLinkFailure': 'Nieudane połączenia z GitHub',
+  'usage.metric.githubLinkRateLimited': 'Ograniczone żądania połączenia z GitHub',
+  'usage.metric.githubLinkRequest': 'Żądania połączenia z GitHub',
   'app.title': 'World of ClaudeCraft - Panel administratora',
   'app.shortTitle': 'Administrator WOC',
   'auth.username': 'Nazwa użytkownika',

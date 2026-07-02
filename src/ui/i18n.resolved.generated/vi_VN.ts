@@ -265,6 +265,13 @@ export const vi_VN: EnTranslations = {
       "heading": "Hướng",
       "minimapZoom": "Thu phóng bản đồ nhỏ"
     },
+    "nativeUpdate": {
+      "title": "Update Available",
+      "body": "A new version of World of ClaudeCraft is available. Update now for the latest fixes and improvements.",
+      "bodyWithVersion": "Version {version} of World of ClaudeCraft is available. Update now for the latest fixes and improvements.",
+      "notNow": "Not now",
+      "update": "Update"
+    },
     "castBar": {
       "playerAria": "Thanh Niệm Chú Của Bạn",
       "targetAria": "Thanh Niệm Chú Của Mục Tiêu"
@@ -274,11 +281,16 @@ export const vi_VN: EnTranslations = {
       "tabsLabel": "Bảng điểm cao",
       "tabPlayers": "Người Chơi",
       "tabGuilds": "Bang Hội",
+      "tabDevs": "Nhà phát triển",
       "guildName": "Bang Hội",
       "members": "Thành Viên",
       "topLevel": "Hàng Đầu",
       "guildXp": "Tổng XP",
-      "guildEmpty": "Chưa có bang hội nào được xếp hạng."
+      "guildEmpty": "Chưa có bang hội nào được xếp hạng.",
+      "devName": "Người đóng góp",
+      "devTierCol": "Huy hiệu",
+      "mergedPrs": "PR đã hợp nhất",
+      "devEmpty": "Chưa có người đóng góp nào được xếp hạng."
     },
     "raidLockout": {
       "title": "Khóa Raid",
@@ -308,7 +320,8 @@ export const vi_VN: EnTranslations = {
     "keybinds": {
       "emoteWheel": "Vòng Biểu Cảm",
       "targetFriendly": "Chọn Đồng Minh Gần Nhất",
-      "targetFriendlyNext": "Luân Phiên Mục Tiêu Đồng Minh"
+      "targetFriendlyNext": "Luân Phiên Mục Tiêu Đồng Minh",
+      "discord": "Discord"
     },
     "options": {
       "clickMoveLeft": "Nhấp Trái",
@@ -330,8 +343,10 @@ export const vi_VN: EnTranslations = {
       "keybindHelpLockCursorOnRotate": "Giữ con trỏ chuột bên trong cửa sổ khi bạn kéo để xoay camera, để nó không thể chạm tới mép màn hình hoặc di chuyển sang màn hình khác. Hãy tắt nếu bạn thích con trỏ tự do.",
       "showWalletOnCharacterScreen": "Hiện Ví Tiền Ở Màn Hình Nhân Vật",
       "showWalletOnPlayerCard": "Hiện Ví Tiền Trên Thẻ Người Chơi",
+      "showDevBadges": "Hiện Huy Hiệu Nhà Phát Triển",
       "uiScale": "Tỷ Lệ Giao Diện",
       "highContrastBackground": "Nền Tương Phản Cao",
+      "startAttackOnAbility": "Tự Đánh Khi Dùng Kỹ Năng",
       "showItemLevel": "Hiển Thị Cấp Vật Phẩm",
       "itemLevelLine": "Cấp Vật Phẩm {level}",
       "itemScoreLine": "Điểm {score}",
@@ -428,6 +443,9 @@ export const vi_VN: EnTranslations = {
     },
     "statInfo": {
       "fromYour": "Từ {value} {stat} của bạn:",
+      "names": {
+        "spellPower": "Sức Mạnh Phép Thuật"
+      },
       "desc": {
         "str": "Tăng sức công kích, giúp đòn vũ khí của bạn đánh mạnh hơn.",
         "agi": "Mài giũa phản xạ và độ chính xác của bạn, cải thiện một số chỉ số chiến đấu.",
@@ -436,6 +454,7 @@ export const vi_VN: EnTranslations = {
         "spi": "Tăng tốc độ hồi mana của pháp sư khi nghỉ ngơi, ngoài chiến đấu.",
         "armor": "Giảm nhẹ các đòn tấn công vật lý nhận vào. Mức giảm lớn hơn khi đối đầu kẻ tấn công cấp thấp hơn và bị giới hạn ở 75%.",
         "attackPower": "Tăng sức mạnh cho các đòn tấn công vũ khí. Cứ 14 công kích sẽ thêm 1 sát thương mỗi giây.",
+        "spellPower": "Tăng sát thương của phép thuật và độ mạnh của khả năng trị liệu của bạn. Mỗi điểm Trí Tuệ ban thêm một chút Sức Mạnh Phép Thuật, cộng thêm phần từ trang bị hoặc hiệu ứng tăng cường.",
         "dps": "Sát thương vũ khí ước tính mỗi giây của bạn, kết hợp sát thương và tốc độ vũ khí với sức công kích.",
         "critChance": "Tỉ lệ một đòn tấn công đánh chí mạng, gây sát thương gấp đôi.",
         "dodge": "Tỉ lệ bạn né hoàn toàn một đòn cận chiến, không nhận sát thương."
@@ -458,6 +477,15 @@ export const vi_VN: EnTranslations = {
         "minorForClass": "Ít lợi ích cho lớp nhân vật của bạn.",
         "baseChance": "Bao gồm 5% cơ hội nền tảng chung cho mọi nhà thám hiểm.",
         "dpsApprox": "Đây là con số ước tính, không tính đòn chí mạng và sát thương kỹ năng."
+      },
+      "sources": {
+        "header": "Cấu thành từ:",
+        "base": "Cơ bản: {value}",
+        "attributes": "Từ thuộc tính của bạn: {value}",
+        "fromAttribute": "Từ {stat}: {value}",
+        "gear": "Trang bị đang mặc: {value}",
+        "buff": "{name}: {value}",
+        "talents": "Talent và hiệu ứng: {value}"
       }
     },
     "talents": {
@@ -481,6 +509,9 @@ export const vi_VN: EnTranslations = {
       "ineligible": "Bạn chưa đáp ứng yêu cầu cho nhiệm vụ này.",
       "noQuestSelected": "Chọn một nhiệm vụ trong nhật ký để chia sẻ.",
       "linkTitle": "Shift-click để dẫn nhiệm vụ này vào khung trò chuyện."
+    },
+    "itemShare": {
+      "linkHint": "Shift-click để chia sẻ vật phẩm này trong khung chat."
     },
     "plurals": {
       "guildMembers": {
@@ -506,6 +537,12 @@ export const vi_VN: EnTranslations = {
         "few": "Ai: {count} người chơi đang trực tuyến trên {realm}.",
         "many": "Ai: {count} người chơi đang trực tuyến trên {realm}.",
         "other": "Ai: {count} người chơi đang trực tuyến trên {realm}."
+      },
+      "playersMatching": {
+        "one": "Ai: {count} người chơi khớp \"{query}\" trên {realm}.",
+        "few": "Ai: {count} người chơi khớp \"{query}\" trên {realm}.",
+        "many": "Ai: {count} người chơi khớp \"{query}\" trên {realm}.",
+        "other": "Ai: {count} người chơi khớp \"{query}\" trên {realm}."
       }
     },
     "bugReport": {
@@ -624,7 +661,26 @@ export const vi_VN: EnTranslations = {
       "methodGroup": "Phuong thuc chien loi pham da dat thanh loot nhom.",
       "assigned": "{looter} da gan {item} cho {target}.",
       "unassigned": "{item} chua duoc gan va moi nguoi deu co the nhat.",
-      "leaderOnly": "Chi truong nhom co the doi phuong thuc chien loi pham."
+      "leaderOnly": "Chi truong nhom co the doi phuong thuc chien loi pham.",
+      "rollingFor": "Đang đổ xúc xắc giành {item}.",
+      "looterChanged": "Người Chia Chiến Lợi Phẩm giờ là {name}.",
+      "thresholdSet": "Ngưỡng chiến lợi phẩm được đặt thành {threshold}.",
+      "summaryMaster": "Cài Đặt Chiến Lợi Phẩm: Chia Chủ Trì, Người Chia {name}, ngưỡng {threshold}.",
+      "summaryGroup": "Cài Đặt Chiến Lợi Phẩm: Chiến Lợi Phẩm Nhóm."
+    },
+    "party": {
+      "promoteLeader": "Thăng Làm Đội Trưởng"
+    },
+    "lootSettings": {
+      "title": "Cài Đặt Chiến Lợi Phẩm",
+      "close": "Đóng cài đặt chiến lợi phẩm",
+      "menuItem": "Cài Đặt Chiến Lợi Phẩm",
+      "method": "Cách Chia Chiến Lợi Phẩm",
+      "rollThreshold": "Ngưỡng Đổ Xúc Xắc",
+      "groupLoot": "Chiến Lợi Phẩm Nhóm",
+      "valueMaster": "Chia Chiến Lợi Phẩm Chủ Trì",
+      "leaderOption": "Người Chia Chiến Lợi Phẩm: Đội Trưởng (Bạn)",
+      "masterOption": "Người Chia Chiến Lợi Phẩm: {name}"
     },
     "bags": {
       "filterGroupAria": "Lọc túi đồ theo danh mục",
@@ -732,6 +788,9 @@ export const vi_VN: EnTranslations = {
     "nameplate": {
       "mob": "[{level}] {name}",
       "mobElite": "[{level}+] {name}"
+    },
+    "itemTooltip": {
+      "requiresLevel": "Yêu cầu Cấp {level}"
     },
     "discord": {
       "title": "Discord",
@@ -875,6 +934,34 @@ export const vi_VN: EnTranslations = {
           "hint": "Nhờ cộng đồng giúp đỡ"
         }
       }
+    },
+    "devBadge": {
+      "title": "Nhà phát triển",
+      "tiers": {
+        "tinkerer": "Thợ Mày Mò",
+        "artificer": "Thợ Chế Tác",
+        "runesmith": "Thợ Rèn Rune",
+        "architect": "Kiến Trúc Sư",
+        "worldwright": "Thợ Dựng Thế Giới"
+      },
+      "flavors": {
+        "tinkerer": "Pull request đầu tiên của bạn đã cập bến vương quốc.",
+        "artificer": "Năm pull request, và thế giới uốn mình theo mã của bạn.",
+        "runesmith": "Mười lăm pull request đã rèn vào trò chơi đang vận hành.",
+        "architect": "Một kiến trúc sư của vương quốc: 30 pull request đã được hợp nhất.",
+        "worldwright": "Một thợ dựng thế giới: 70 pull request định hình trò chơi."
+      },
+      "badgeTitle": "Nhà phát triển: {tier}",
+      "prsLanded": "{count} pull request đã hợp nhất",
+      "contributor": "Người đóng góp mã nguồn mở",
+      "link": {
+        "cta": "Liên kết GitHub",
+        "relink": "Liên kết lại GitHub",
+        "benefits": "Liên kết GitHub của bạn để nhận huy hiệu nhà phát triển cho các pull request bạn đã được hợp nhất vào kho mã nguồn mở.",
+        "error": "Không thể liên kết GitHub. Vui lòng thử lại."
+      },
+      "linkedAs": "Đã liên kết với {login}",
+      "unlink": "Hủy liên kết GitHub"
     }
   },
   "guide": {
@@ -2546,6 +2633,7 @@ export const vi_VN: EnTranslations = {
       "usernameTaken": "Tên đăng nhập đó đã được sử dụng.",
       "invalidCredentials": "Tên đăng nhập hoặc mật khẩu không đúng.",
       "verificationFailed": "Xác minh thất bại. Vui lòng thử lại.",
+      "desktopCodeInvalid": "Desktop login code is invalid or expired. Please try again.",
       "invalidCharacterName": "Tên nhân vật không hợp lệ. Dùng 2-16 chữ cái.",
       "characterNameNotAllowed": "Tên nhân vật đó không được phép.",
       "invalidClass": "Lớp không hợp lệ.",
@@ -2562,6 +2650,21 @@ export const vi_VN: EnTranslations = {
       "takenOver": "Nhân vật của bạn đã bị một phiên khác chiếm quyền.",
       "renameBeforeEntering": "Nhân vật này phải được đổi tên trước khi vào thế giới.",
       "renameNotPermitted": "Không được phép đổi tên nhân vật này."
+    }
+  },
+  "desktop": {
+    "update": {
+      "downloading": "Downloading update {version}...",
+      "ready": "Update {version} is ready. It installs when you quit, or restart now.",
+      "restart": "Restart now",
+      "later": "Later"
+    },
+    "crash": {
+      "title": "World of ClaudeCraft",
+      "body": "The game view stopped working. Reload it?",
+      "reload": "Reload",
+      "quit": "Quit",
+      "fatalBody": "World of ClaudeCraft hit an unexpected error and needs to close."
     }
   },
   "realm": {
@@ -5631,6 +5734,11 @@ export const vi_VN: EnTranslations = {
         "name": "Sử Gia Caddis",
         "title": "Sử Gia",
         "greeting": "Coi chừng đá phiến lỏng lẻo, {className}. Ngọn núi gần đây... bất an. Ta định tìm hiểu lý do."
+      },
+      "auctioneer_voss": {
+        "name": "Người Đấu Giá Voss",
+        "title": "Người Giữ World Market",
+        "greeting": "World Market cũng mở cửa ở đây, {className}. Hãy mua từ mọi nhà thám hiểm trong vương quốc, hoặc bày bán hàng hóa của riêng ngươi."
       },
       "brother_aldric_raid": {
         "name": "Tu Huynh Aldric",

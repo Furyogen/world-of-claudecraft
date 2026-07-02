@@ -7,6 +7,12 @@
 // (tests/i18n_admin_catalog.test.ts).
 
 export const de_DE: Record<string, string> = {
+  'usage.cache.githubContributors': 'GitHub-Mitwirkende-Cache',
+  'usage.metric.githubContributorsFetch': 'GitHub-Mitwirkendenstatistik-Abrufe',
+  'usage.metric.githubContributorsFetchFailure': 'GitHub-Mitwirkendenstatistik-Abruffehler',
+  'usage.metric.githubLinkFailure': 'GitHub-Verknüpfungsfehler',
+  'usage.metric.githubLinkRateLimited': 'GitHub-Verknüpfung: gedrosselte Anfragen',
+  'usage.metric.githubLinkRequest': 'GitHub-Verknüpfungsanfragen',
   'app.title': 'World of ClaudeCraft - Admin',
   'app.shortTitle': 'WoC-Administrator',
   'auth.username': 'Benutzername',

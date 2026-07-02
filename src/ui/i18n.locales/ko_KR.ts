@@ -14,8 +14,10 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ko_KR: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.keybinds.discord': 'Discord',
   'hudChrome.spectate.banner': '{name} 관전 중',
   'hudChrome.loot.chestTitle': '상자',
+  'hudChrome.itemTooltip.requiresLevel': '필요 레벨 {level}',
   'hudChrome.spellbook.addToBarAria': '{name}을(를) 행동 단축바에 추가',
   'hudChrome.spellbook.removeFromBarAria': '{name}을(를) 행동 단축바에서 제거',
   'hudChrome.nameplate.mob': '[{level}] {name}',
@@ -45,6 +47,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.questShare.ineligible': '이 퀘스트의 요구 조건을 충족하지 못합니다.',
   'hudChrome.questShare.noQuestSelected': '공유할 퀘스트를 기록에서 선택하세요.',
   'hudChrome.questShare.linkTitle': 'Shift + 클릭하면 이 퀘스트를 채팅에 연결합니다.',
+  'hudChrome.itemShare.linkHint': 'Shift + 클릭하면 이 아이템을 채팅에 연결합니다.',
   'hudChrome.unitFrame.partyGroup': '{n}번 그룹',
   'hudChrome.character.modelPreview': '캐릭터 모델 미리보기',
   'character.sortBy': '정렬',
@@ -74,6 +77,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.masterLoot.enableAria': '분배 담당 사용',
   'hudChrome.masterLoot.looterLabel': '분배 담당자',
   'hudChrome.masterLoot.leaderOption': '파티장',
+  'hudChrome.party.promoteLeader': '파티장으로 지정',
   'hudChrome.masterLoot.thresholdLabel': '품질 기준',
   'hudChrome.masterLoot.thresholdUncommon': '고급 이상',
   'hudChrome.masterLoot.thresholdRare': '희귀 이상',
@@ -88,6 +92,21 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.masterLoot.assigned': '{looter}님이 {item}을(를) {target}에게 분배했습니다.',
   'hudChrome.masterLoot.unassigned': '{item}이(가) 분배되지 않아 모두가 획득할 수 있습니다.',
   'hudChrome.masterLoot.leaderOnly': '파티장만 전리품 방식을 변경할 수 있습니다.',
+  'hudChrome.masterLoot.rollingFor': '{item} 주사위를 굴리는 중입니다.',
+  'hudChrome.masterLoot.looterChanged': '분배 담당자가 {name}(으)로 변경되었습니다.',
+  'hudChrome.masterLoot.thresholdSet': '품질 기준이 {threshold}(으)로 설정되었습니다.',
+  'hudChrome.masterLoot.summaryMaster':
+    '전리품 설정: 분배 담당, 분배 담당자 {name}, 품질 기준 {threshold}.',
+  'hudChrome.masterLoot.summaryGroup': '전리품 설정: 파티 분배.',
+  'hudChrome.lootSettings.title': '전리품 설정',
+  'hudChrome.lootSettings.close': '전리품 설정 닫기',
+  'hudChrome.lootSettings.menuItem': '전리품 설정',
+  'hudChrome.lootSettings.method': '전리품 방식',
+  'hudChrome.lootSettings.rollThreshold': '주사위 기준',
+  'hudChrome.lootSettings.groupLoot': '파티 분배',
+  'hudChrome.lootSettings.valueMaster': '분배 담당',
+  'hudChrome.lootSettings.leaderOption': '분배 담당자: 파티장(나)',
+  'hudChrome.lootSettings.masterOption': '분배 담당자: {name}',
   'hudChrome.theme.preset': 'UI 테마',
   'hudChrome.theme.customColors': '사용자 지정 색상',
   'hudChrome.theme.reset': '초기화',
@@ -112,6 +131,16 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '자동은 기기에 따라 데스크톱 또는 터치 조작을 선택합니다. 데스크톱을 선택하면 키보드와 마우스로 고정되며(키보드가 있는 태블릿 등에 유용), 터치를 선택하면 화면 조작이 됩니다.',
   // Character-sheet stat tooltips (hudChrome.statInfo.*).
   'hudChrome.statInfo.fromYour': '당신의 {value} {stat}에서:',
+  'hudChrome.statInfo.names.spellPower': '주문력',
+  'hudChrome.statInfo.desc.spellPower':
+    '주문의 피해량과 치유량을 증가시킵니다. 지능 1당 장비나 버프로 얻는 양에 더해 약간의 주문력을 부여합니다.',
+  'hudChrome.statInfo.sources.header': '구성:',
+  'hudChrome.statInfo.sources.base': '기본: {value}',
+  'hudChrome.statInfo.sources.attributes': '능력치에서: {value}',
+  'hudChrome.statInfo.sources.fromAttribute': '{stat}에서: {value}',
+  'hudChrome.statInfo.sources.gear': '장비: {value}',
+  'hudChrome.statInfo.sources.buff': '{name}: {value}',
+  'hudChrome.statInfo.sources.talents': '특성 및 효과: {value}',
   'hudChrome.statInfo.desc.str': '전투력을 증가시켜 무기 공격이 더 강하게 적중하도록 합니다.',
   'hudChrome.statInfo.desc.agi':
     '반사 신경과 조준 능력을 예리하게 하여 여러 전투 능력치를 향상시킵니다.',
@@ -236,11 +265,13 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '자동은 브라우저와 기기에 맞춰 무거운 CSS 효과(흐림, 글로우, 배경 모션)를 낮춥니다. 인터페이스가 느리게 느껴지면 수동으로 낮추세요.',
   'hudChrome.options.footstepSounds': '발소리',
   'hudChrome.options.clickFeedback': '클릭 표시',
+  'hudChrome.options.startAttackOnAbility': '스킬 사용 시 자동 공격',
   'hudChrome.options.lockCursorOnRotate': '회전 중 커서 고정',
   'hudChrome.options.keybindHelpLockCursorOnRotate':
     '드래그하여 카메라를 회전하는 동안 마우스 커서를 창 안에 유지하여 화면 가장자리에 닿거나 다른 모니터로 이동하지 않도록 합니다. 자유로운 커서를 원하면 끄세요.',
   'hudChrome.options.showWalletOnCharacterScreen': '캐릭터 화면에 지갑 표시',
   'hudChrome.options.showWalletOnPlayerCard': '플레이어 카드에 지갑 표시',
+  'hudChrome.options.showDevBadges': '개발자 배지 표시',
   'hudChrome.playerCard.showWalletBadge': '지갑 배지 표시',
   'hudChrome.options.uiScale': 'UI 배율',
   'hudChrome.options.highContrastBackground': '고대비 배경',
@@ -680,6 +711,8 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'errors.api.usernameTaken': '이미 사용 중인 사용자 이름입니다.',
   'errors.api.invalidCredentials': '사용자 이름 또는 비밀번호가 올바르지 않습니다.',
   'errors.api.verificationFailed': '확인에 실패했습니다. 다시 시도해 주세요.',
+  'errors.api.desktopCodeInvalid':
+    '데스크톱 로그인 코드가 유효하지 않거나 만료되었습니다. 다시 시도해 주세요.',
   'errors.api.invalidCharacterName': '캐릭터 이름이 올바르지 않습니다. 2-16자의 글자를 사용하세요.',
   'errors.api.characterNameNotAllowed': '이 캐릭터 이름은 사용할 수 없습니다.',
   'errors.api.invalidClass': '유효하지 않은 직업입니다.',
@@ -2429,6 +2462,10 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.loremaster_caddis.title': '현자',
   'entities.npcs.loremaster_caddis.greeting':
     '느슨한 혈암을 조심하십시오, {className}. 산이 요즘 불안정해졌고, 나는 그 이유를 알고 싶습니다.',
+  'entities.npcs.auctioneer_voss.name': '경매인 보스',
+  'entities.npcs.auctioneer_voss.title': '세계 시장 관리자',
+  'entities.npcs.auctioneer_voss.greeting':
+    '세계 시장은 이곳에서도 이용할 수 있습니다, {className}. 왕국의 모험가들에게서 물건을 사거나 자신의 물건을 내놓으십시오.',
   'entities.npcs.tidewatcher_ondrel.name': '온드렐 베인',
   'entities.npcs.tidewatcher_ondrel.title': '조수지기',
   'entities.npcs.tidewatcher_ondrel.greeting':
@@ -3280,6 +3317,11 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.leaderboard.topLevel': '최고',
   'hudChrome.leaderboard.guildXp': '누적 경험치',
   'hudChrome.leaderboard.guildEmpty': '아직 순위에 오른 길드가 없습니다.',
+  'hudChrome.leaderboard.tabDevs': '개발자',
+  'hudChrome.leaderboard.devName': '기여자',
+  'hudChrome.leaderboard.devTierCol': '배지',
+  'hudChrome.leaderboard.mergedPrs': '병합된 PR',
+  'hudChrome.leaderboard.devEmpty': '아직 순위에 오른 기여자가 없습니다.',
   'hudChrome.widgets.worldCoordinates': '세계 좌표',
   'hudChrome.plurals.guildMembers.one': '당신은 {rank}, {count}명 회원',
   'hudChrome.plurals.guildMembers.few': '당신은 {rank}, {count}명 회원',
@@ -3293,6 +3335,14 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.plurals.secondsRemaining.few': '{count}초 남음',
   'hudChrome.plurals.secondsRemaining.many': '{count}초 남음',
   'hudChrome.plurals.secondsRemaining.other': '{count}초 남음',
+  'hudChrome.plurals.playersMatching.one':
+    'Who: {realm}에서 "{query}"와 일치하는 플레이어 {count}명.',
+  'hudChrome.plurals.playersMatching.few':
+    'Who: {realm}에서 "{query}"와 일치하는 플레이어 {count}명.',
+  'hudChrome.plurals.playersMatching.many':
+    'Who: {realm}에서 "{query}"와 일치하는 플레이어 {count}명.',
+  'hudChrome.plurals.playersMatching.other':
+    'Who: {realm}에서 "{query}"와 일치하는 플레이어 {count}명.',
   'hudChrome.plurals.playersOnline.one':
     '검색: {realm} 서버에 {count}명의 플레이어가 접속 중입니다.',
   'hudChrome.plurals.playersOnline.few':
@@ -4893,4 +4943,46 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.relay.wts.label': '판매 희망',
   'hudChrome.discord.relay.wtb.label': '구매 희망',
   'hudChrome.discord.relay.help.label': '도움 요청',
+  // Developer badge (M16 non-Latin fills).
+  'hudChrome.devBadge.title': '개발자',
+  'hudChrome.devBadge.tiers.tinkerer': '수선공',
+  'hudChrome.devBadge.tiers.artificer': '장인',
+  'hudChrome.devBadge.tiers.runesmith': '룬 대장장이',
+  'hudChrome.devBadge.tiers.architect': '설계자',
+  'hudChrome.devBadge.tiers.worldwright': '세계 창조자',
+  'hudChrome.devBadge.flavors.tinkerer': '당신의 첫 풀 리퀘스트가 이 세계에 병합되었습니다.',
+  'hudChrome.devBadge.flavors.artificer':
+    '다섯 번의 풀 리퀘스트 끝에, 세계가 당신의 코드를 따르기 시작합니다.',
+  'hudChrome.devBadge.flavors.runesmith':
+    '열다섯 번의 풀 리퀘스트가 구동 중인 게임에 벼려졌습니다.',
+  'hudChrome.devBadge.flavors.architect': '이 세계의 설계자: 30번의 풀 리퀘스트가 병합되었습니다.',
+  'hudChrome.devBadge.flavors.worldwright':
+    '세계의 창조자: 70번의 풀 리퀘스트가 이 게임을 빚어냅니다.',
+  'hudChrome.devBadge.badgeTitle': '개발자: {tier}',
+  'hudChrome.devBadge.prsLanded': '{count}번의 풀 리퀘스트 병합됨',
+  'hudChrome.devBadge.contributor': '오픈 소스 기여자',
+  'hudChrome.devBadge.link.cta': 'GitHub 연결',
+  'hudChrome.devBadge.link.relink': 'GitHub 다시 연결',
+  'hudChrome.devBadge.link.benefits':
+    'GitHub를 연결하면 오픈 소스 저장소에 병합된 풀 리퀘스트로 개발자 배지를 받을 수 있습니다.',
+  'hudChrome.devBadge.link.error': 'GitHub를 연결할 수 없습니다. 다시 시도해 주세요.',
+  'hudChrome.devBadge.linkedAs': '{login}(으)로 연결됨',
+  'hudChrome.devBadge.unlink': 'GitHub 연결 해제',
+  'hudChrome.nativeUpdate.title': '업데이트 사용 가능',
+  'hudChrome.nativeUpdate.body':
+    'World of ClaudeCraft의 새 버전을 사용할 수 있습니다. 지금 업데이트하여 최신 수정 사항과 개선 사항을 받으세요.',
+  'hudChrome.nativeUpdate.bodyWithVersion':
+    'World of ClaudeCraft 버전 {version}을(를) 사용할 수 있습니다. 지금 업데이트하여 최신 수정 사항과 개선 사항을 받으세요.',
+  'hudChrome.nativeUpdate.notNow': '나중에',
+  'hudChrome.nativeUpdate.update': '업데이트',
+  'desktop.update.downloading': '업데이트 {version} 다운로드 중...',
+  'desktop.update.ready':
+    '업데이트 {version} 준비 완료. 게임을 종료하면 자동으로 설치되며, 지금 다시 시작할 수도 있습니다.',
+  'desktop.update.restart': '지금 다시 시작',
+  'desktop.update.later': '나중에',
+  'desktop.crash.title': 'World of ClaudeCraft',
+  'desktop.crash.body': '게임 화면이 응답하지 않습니다. 다시 불러올까요?',
+  'desktop.crash.reload': '다시 불러오기',
+  'desktop.crash.quit': '종료',
+  'desktop.crash.fatalBody': 'World of ClaudeCraft에 예기치 않은 오류가 발생하여 종료해야 합니다.',
 };

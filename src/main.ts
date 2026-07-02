@@ -2,6 +2,7 @@
 // index.html and play.html both bootstrap through this module, so this one import
 // styles both game entries; admin/guide use their own entries and inline CSS.
 import './styles/index.css';
+import { syncAppViewport as syncAppViewportShared } from './game/app_viewport';
 import { audio } from './game/audio';
 import {
   BROWSER_BODY_CLASSES,
@@ -19,6 +20,7 @@ import {
   stepAngleToward,
 } from './game/click_move';
 import { getClientSeed } from './game/client_seed';
+import { initDesktopShellIntegration } from './game/desktop_shell_integration';
 import { GamepadManager } from './game/gamepad';
 import { GamepadBindings } from './game/gamepad_bindings';
 import { Input } from './game/input';
@@ -46,7 +48,7 @@ import { startPerfReporter } from './game/perf_reporter';
 import {
   type GameSettings,
   normalizeClickMoveButton,
-  type SETTING_RANGES,
+  SETTING_RANGES,
   Settings,
 } from './game/settings';
 import { sfx } from './game/sfx';
@@ -63,6 +65,7 @@ import {
   Api,
   type CharacterSummary,
   ClientWorld,
+  DESKTOP_APP,
   isAuthError,
   NATIVE_APP,
   type ReleaseEntry,
@@ -79,6 +82,7 @@ import { installWebGLContextRelease } from './render/context_release';
 import { firstRunGraphicsPreset, GFX, graphicsPresetLabel } from './render/gfx';
 import { Renderer } from './render/renderer';
 import { navigatorSaveData } from './render/sky';
+import { desktopBridge } from './runtime';
 import { pathCrossesFence } from './sim/colliders';
 import { ABILITIES, CLASSES } from './sim/content/classes';
 import { ITEMS } from './sim/data';
@@ -106,6 +110,7 @@ import { assembleBugReportMeta } from './ui/bug_report';
 import { ChatCommandMenu } from './ui/chat_command_menu';
 import { chatInputSize } from './ui/chat_input_autosize';
 import { CLASS_DETAILS, SIGNATURE_ABILITIES } from './ui/class_details_data';
+import { devTierByIndex, devTierDisplayName } from './ui/dev_tier';
 import {
   type DiscordAccountStatus,
   type DiscordPresenceState,
@@ -139,6 +144,7 @@ import {
   tPlural,
 } from './ui/i18n';
 import { iconDataUrl } from './ui/icons';
+import { scheduleNativeUpdateCheck } from './ui/native_update_prompt';
 import { createMetricsSampler } from './ui/perf_metrics_sampler';
 import { PerfOverlay } from './ui/perf_overlay';
 import { type PerfOverlayConfig, PerfOverlayConfigStore } from './ui/perf_overlay_config';
@@ -193,10 +199,15 @@ const HOMEPAGE_MUSIC_MUTED_KEY = 'woc_homepage_music_muted';
 const HOMEPAGE_MUSIC_VOLUME = 0.225;
 const GRAPHICS_PRESET_HIGH = 3;
 const GRAPHICS_PRESET_ULTRA = 4;
+const LANDING_GRAPHICS_AUTO = 'auto';
 
 const $ = <T extends HTMLElement = HTMLElement>(sel: string): T => document.querySelector(sel) as T;
 document.body.classList.toggle('native-app', NATIVE_APP);
+document.body.classList.toggle('desktop-app', DESKTOP_APP);
 if (NATIVE_APP) document.body.classList.add('mobile-touch');
+// Electron shell integration: push t()-localized crash-dialog strings to the
+// main process and render the auto-update toast (no-op without the bridge).
+if (DESKTOP_APP) initDesktopShellIntegration();
 // Free every WebGL context (game renderer, character preview, portrait rig) when
 // the page is torn down, so logout/login reload cycles don't exhaust the GPU
 // context pool and break the next renderer with "Error creating WebGL context".
@@ -346,9 +357,18 @@ function userFacingApiError(err: unknown): string {
   // The account row vanished mid-session (404 from /api/account/*); treat as a
   // dropped session rather than rendering raw English in the form.
   if (normalized === 'account not found') return t('errors.api.notAuthenticated');
-  // Cloudflare Turnstile rejection on login/register (server/main.ts passesTurnstile).
+  // Cloudflare Turnstile rejection on login/register (passesTurnstile in
+  // server/turnstile.ts).
   if (normalized === 'verification failed, please try again')
     return t('errors.api.verificationFailed');
+  // Desktop app login handoff (server/desktop_login.ts exchange, plus the
+  // client-side guard in completeDesktopBrowserLogin when the mint response
+  // carries no code).
+  if (
+    normalized === 'invalid or expired desktop login code' ||
+    normalized === 'missing desktop login code'
+  )
+    return t('errors.api.desktopCodeInvalid');
   // WebSocket disconnect reasons surfaced through the fatal overlay (net/online.ts).
   if (normalized === 'connection to the server was lost.') return t('loading.connectionLost');
   if (normalized === 'rejected by server') return t('loading.connectionRejected');
@@ -384,9 +404,13 @@ function turnstileApi(): TurnstileApi | undefined {
 }
 
 // Render the widget once, retrying until the async api.js script is ready. Safe to
-// call repeatedly (idempotent) and a no-op when no site key is configured.
+// call repeatedly (idempotent) and a no-op when no site key is configured. The
+// Electron desktop shell never renders it: Cloudflare rejects the app:// origin
+// (widget error 110200), and the server bypasses Turnstile for desktop origins
+// (passesTurnstile in server/turnstile.ts), so a widget here could only wedge
+// the form.
 function ensureTurnstile(): void {
-  if (!TURNSTILE_SITEKEY || turnstileWidgetId !== undefined) return;
+  if (DESKTOP_APP || !TURNSTILE_SITEKEY || turnstileWidgetId !== undefined) return;
   const ts = turnstileApi();
   const el = document.getElementById('cf-turnstile-container');
   if (!ts || !el) {
@@ -463,26 +487,7 @@ function syncBuildInfo(): void {
 }
 
 function syncAppViewport(): void {
-  const useStableGameViewport =
-    document.body.classList.contains('game-active') && useTouchInterface();
-  const width = Math.max(
-    1,
-    Math.round(
-      useStableGameViewport
-        ? window.innerWidth
-        : (window.visualViewport?.width ?? window.innerWidth),
-    ),
-  );
-  const height = Math.max(
-    1,
-    Math.round(
-      useStableGameViewport
-        ? window.innerHeight
-        : (window.visualViewport?.height ?? window.innerHeight),
-    ),
-  );
-  document.documentElement.style.setProperty('--app-vw', `${width}px`);
-  document.documentElement.style.setProperty('--app-vh', `${height}px`);
+  syncAppViewportShared();
 }
 
 function preventMobileZoom(): void {
@@ -529,6 +534,7 @@ function syncCommunityMenuMode(): void {
 setInterfaceMode(interfaceModeFromSetting(new Settings().get('interfaceMode')));
 syncAppViewport();
 syncBuildInfo();
+scheduleNativeUpdateCheck(__APP_VERSION__);
 preventMobileZoom();
 syncPhoneTouchClass();
 window.matchMedia(PHONE_TOUCH_QUERY).addEventListener?.('change', syncPhoneTouchClass);
@@ -941,6 +947,7 @@ async function startGame(
   try {
     renderer = new Renderer(world, canvas, nameplates);
     renderer.setAudioSink(sfx);
+    renderer.showDevBadges = settings.get('showDevBadges');
     // Dev-only: ?targetcone=1 draws the Tab-target front cone on the ground in
     // front of the player, for tuning the targeting angle/radius (tab_target.ts).
     if (import.meta.env.DEV && new URLSearchParams(location.search).get('targetcone') === '1') {
@@ -1015,7 +1022,7 @@ async function startGame(
     chatInput.style.height = '';
     chatInput.style.overflowY = '';
     chatInput.blur();
-    hud.clearPendingQuestLinks();
+    hud.clearPendingChatLinks();
     recoverFromMobileKeyboard();
   };
   function openChat(): void {
@@ -1127,6 +1134,9 @@ async function startGame(
           case 'leaderboard':
             hud.toggleLeaderboard();
             break;
+          case 'discord':
+            toggleDiscordPanel();
+            break;
           case 'chat':
             openChat();
             break;
@@ -1161,6 +1171,7 @@ async function startGame(
     onChat: () => openChat(),
     onMenu: () => hud.toggleOptionsMenu(),
     onSocial: () => hud.toggleSocial(),
+    onDiscord: () => toggleDiscordPanel(true),
     onEmotes: () => hud.toggleEmoteWheel(),
     onArena: () => hud.toggleArena(),
     onQuestLog: () => hud.toggleQuestLog(),
@@ -1242,6 +1253,9 @@ async function startGame(
         break;
       case 'leaderboard':
         hud.toggleLeaderboard();
+        break;
+      case 'discord':
+        toggleDiscordPanel();
         break;
       case 'chat':
         openChat();
@@ -1342,6 +1356,12 @@ async function startGame(
       settings.set('filterProfanity', !!value);
       return;
     }
+    if (key === 'startAttackOnAbilityUse') {
+      // No live subsystem to update: the HUD reads this setting at ability-cast
+      // time (see hud.castSlot). Persist the choice and we are done.
+      settings.set('startAttackOnAbilityUse', !!value);
+      return;
+    }
     if (key === 'attackMove') {
       const v = settings.set('attackMove', !!value);
       if (!v) input.clearClickMove();
@@ -1394,6 +1414,10 @@ async function startGame(
     }
     if (key === 'showWalletOnPlayerCard') {
       settings.set('showWalletOnPlayerCard', !!value);
+      return;
+    }
+    if (key === 'showDevBadges') {
+      renderer.showDevBadges = settings.set('showDevBadges', !!value);
       return;
     }
     if (key === 'invertLookY') {
@@ -3102,6 +3126,39 @@ const revalidateAccountSession = (): Promise<void> => loadAccountPortal(true);
 // Navigating to the Account view: refresh the portal without touching the chrome.
 const renderAccountPortal = (): Promise<void> => loadAccountPortal(false);
 
+function isDesktopLoginPage(): boolean {
+  return location.pathname === '/desktop-login' || location.pathname === '/desktop-login/';
+}
+
+async function completeDesktopBrowserLogin(): Promise<boolean> {
+  if (!isDesktopLoginPage()) return false;
+  if (!api.token) {
+    show('#login-panel');
+    return true;
+  }
+  try {
+    const { code } = await api.createDesktopLoginCode();
+    if (!code) throw new Error('missing desktop login code');
+    location.href = `worldofclaudecraft://desktop-login?code=${encodeURIComponent(code)}`;
+  } catch (err) {
+    loginError(userFacingApiError(err));
+    show('#login-panel');
+  }
+  return true;
+}
+
+async function completeDesktopAppLogin(code: string): Promise<void> {
+  try {
+    await api.exchangeDesktopLoginCode(code);
+    api.saveSession();
+    enterLoggedInChrome();
+    await enterRealmFlow();
+  } catch (err) {
+    loginError(userFacingApiError(err));
+    show('#login-panel');
+  }
+}
+
 // `focusWallet` differentiates the Wallet card's CTA from "View Characters":
 // both land on the realm/character picker, but Manage Wallet then scrolls to and
 // focuses the wallet control once it renders.
@@ -4596,12 +4653,12 @@ let walletFlowStatus: 'connect' | 'sign' | 'verify' | null = null;
 let walletHiddenNoticeTimeout: number | null = null;
 
 // Feature flag: Wallet Standard support needs no project id. Keep an escape
-// hatch for deploys that want to hide the wallet UI entirely. Native app builds
-// intentionally exclude wallet verification for now.
+// hatch for deploys that want to hide the wallet UI entirely. Native and desktop
+// app builds intentionally exclude wallet verification for now.
 // client_shell.test guards the native exclusion:
 // const WALLET_ENABLED = !NATIVE_APP && String(import.meta.env.VITE_WALLET_DISABLED ?? '').trim() !== '1';
 const WALLET_ENABLED =
-  !NATIVE_APP && String(import.meta.env.VITE_WALLET_DISABLED ?? '').trim() !== '1';
+  !NATIVE_APP && !DESKTOP_APP && String(import.meta.env.VITE_WALLET_DISABLED ?? '').trim() !== '1';
 
 function walletCharacterScreenVisible(): boolean {
   try {
@@ -5176,6 +5233,127 @@ window.addEventListener('message', (e: MessageEvent) => {
   else void refreshDiscordStatus(); // link succeeded: refresh the in-game panel
 });
 
+// ── GitHub link (developer badge) on the character-select screen ───────────────
+// Link-only OAuth (the player is already logged in), mirroring the wallet link
+// that sits beside it. The group is hidden until the feature is configured
+// server-side and the player is logged in; the status fetch drives the visibility.
+let githubPopup: Window | null = null;
+
+// Flash an error into the dedicated GitHub status line for 4s, then restore
+// whatever it was showing before (mirrors flashWalletError's temporary-flash +
+// auto-revert, but targets #github-status rather than overwriting the button
+// label, since that line already exists to show the linked @login/tier).
+function flashGithubError(message: string): void {
+  const statusEl = document.getElementById('github-status');
+  if (!statusEl) return;
+  const previousText = statusEl.textContent;
+  const previousHidden = statusEl.hidden;
+  statusEl.textContent = message;
+  statusEl.hidden = false;
+  window.setTimeout(() => {
+    if (statusEl.textContent !== message) return; // a real status refresh already overwrote it
+    statusEl.textContent = previousText;
+    statusEl.hidden = previousHidden;
+  }, 4000);
+}
+
+function startGithubOAuth(): void {
+  if (!api.token) return;
+  const popup = window.open('about:blank', 'woc-github', 'width=600,height=760');
+  githubPopup = popup;
+  if (!popup) {
+    // Popup blocked: there is nothing to navigate, so fail loudly instead of
+    // letting the click silently do nothing.
+    flashGithubError(t('hudChrome.devBadge.link.error'));
+    return;
+  }
+  void api
+    .githubStart()
+    .then(({ url }) => {
+      popup.location.href = url;
+    })
+    .catch((err) => {
+      console.error('[github] could not start oauth', err);
+      popup.close();
+      githubPopup = null;
+      flashGithubError(t('hudChrome.devBadge.link.error'));
+    });
+}
+
+// Popup bounce-page result. Same-origin only; the callback posts { source:
+// 'woc-github', ok, error? } when the link completes (ok or not). A failure
+// (bad/expired state, GitHub error, already linked to another account, server
+// error) flashes the reason instead of silently refreshing as if nothing
+// happened; the user's own "Cancel" on GitHub's consent screen also reports
+// `ok: false`, which is fine here (the row simply stays unlinked, no flash
+// needed for a deliberate cancel) versus a real failure.
+window.addEventListener('message', (e: MessageEvent) => {
+  if (e.origin !== location.origin) return;
+  const d = e.data as { source?: string; ok?: boolean; error?: string | null } | null;
+  if (d?.source !== 'woc-github') return;
+  githubPopup?.close();
+  githubPopup = null;
+  if (d.ok === false && d.error && d.error !== 'cancelled') {
+    flashGithubError(t('hudChrome.devBadge.link.error'));
+  }
+  void refreshGithubLinkStatus();
+});
+
+async function refreshGithubLinkStatus(): Promise<void> {
+  const group = document.getElementById('cs-github-group');
+  if (!group) return;
+  if (!api.token) {
+    group.hidden = true;
+    return;
+  }
+  let status: Record<string, unknown> | null = null;
+  try {
+    status = await api.githubStatus();
+  } catch (err) {
+    console.error('[github] could not load status', err);
+  }
+  if (!status || status.enabled !== true) {
+    group.hidden = true;
+    return;
+  }
+  group.hidden = false;
+  const linked = status.linked === true;
+  const login = typeof status.login === 'string' ? status.login : '';
+  const tier = typeof status.devTier === 'number' ? status.devTier : 0;
+  const label = document.getElementById('github-label');
+  const statusEl = document.getElementById('github-status');
+  const unlinkBtn = document.getElementById('btn-github-unlink');
+  if (label) {
+    label.textContent = linked
+      ? t('hudChrome.devBadge.link.relink')
+      : t('hudChrome.devBadge.link.cta');
+  }
+  if (statusEl) {
+    const tierDef = devTierByIndex(tier);
+    if (linked && login && tierDef) {
+      statusEl.textContent = `@${login} · ${devTierDisplayName(tierDef)}`;
+      statusEl.hidden = false;
+    } else if (linked && login) {
+      statusEl.textContent = t('hudChrome.devBadge.linkedAs', { login });
+      statusEl.hidden = false;
+    } else {
+      statusEl.hidden = true;
+    }
+  }
+  if (unlinkBtn) unlinkBtn.hidden = !linked;
+}
+
+function wireGithubLink(): void {
+  document.getElementById('btn-github')?.addEventListener('click', () => startGithubOAuth());
+  document.getElementById('btn-github-unlink')?.addEventListener('click', () => {
+    void api
+      .unlinkGithub()
+      .then(refreshGithubLinkStatus)
+      .catch((err) => console.error('[github] unlink failed', err));
+  });
+  void refreshGithubLinkStatus();
+}
+
 function coerceDiscordStatus(d: Record<string, unknown>): DiscordAccountStatus {
   return {
     linked: d.linked === true,
@@ -5264,6 +5442,19 @@ function updateDiscordCtaBanner(): void {
   }
 }
 
+// Show/hide the Discord entry in the mobile "More" tray. Mobile has no keyboard,
+// so the U-key panel toggle is unreachable there; this button is the touch path
+// into the same #discord-window (link / unlink / status). It is only meaningful
+// when Discord is available: the client build enables it, the server has it on,
+// and the player is logged in. Driven off the same status-change signal as the
+// panel, so it tracks login/logout and the server's enabled flag.
+function syncDiscordMobileEntry(): void {
+  const btn = document.getElementById('mobile-discord');
+  if (!btn) return;
+  const available = DISCORD_BUILD_ENABLED && discordUiEnabled() && !!api.token;
+  btn.hidden = !available;
+}
+
 function wireDiscordCtaBanner(): void {
   document.getElementById('discord-cta-link')?.addEventListener('click', () => {
     startDiscordOAuth('link');
@@ -5336,17 +5527,12 @@ function toggleDiscordPanel(open?: boolean): void {
 }
 // Keep an open panel in sync as status/presence updates arrive.
 onDiscordStatusChange(() => {
+  syncDiscordMobileEntry();
   if (discordPanelOpen) renderDiscordPanel();
 });
-// Open/close the Discord panel with the U key (ignored while typing).
-window.addEventListener('keydown', (e) => {
-  if (e.code !== 'KeyU' || e.metaKey || e.ctrlKey || e.altKey) return;
-  const tag = (document.activeElement?.tagName ?? '').toLowerCase();
-  if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
-  if (!api.token || !DISCORD_BUILD_ENABLED) return;
-  e.preventDefault();
-  toggleDiscordPanel();
-});
+// The Discord panel toggles via the rebindable `discord` keybind action (default
+// U), dispatched through onUiKey above like every other interface window; the
+// build/token guard lives in toggleDiscordPanel.
 // Light periodic refresh so the panel's online/presence stays current while logged in.
 setInterval(() => {
   if (DISCORD_BUILD_ENABLED && api.token) void refreshDiscordStatus();
@@ -5780,6 +5966,7 @@ function wireStartScreens(): void {
   wireContractAddressCopy();
   wireHomepageMusicToggle();
   wireWallet();
+  wireGithubLink();
 
   // mode select
   const onlineBtn = $('#btn-online');
@@ -5809,11 +5996,27 @@ function wireStartScreens(): void {
     show('#mode-select');
   };
 
+  const completeOnlineAuth = async () => {
+    $('#charselect-user').textContent = api.username ?? '';
+    api.saveSession();
+    enterLoggedInChrome();
+    if (await completeDesktopBrowserLogin()) return;
+    void refreshWalletLinkStatus();
+    void refreshGithubLinkStatus();
+    await enterRealmFlow();
+  };
+
   const handleOnlineSelect = () => {
     if (api.token) {
       goToLoggedInPlay();
       return;
     }
+    // Desktop shell and web both show the in-app login panel: username/password logs in
+    // in place (doAuth -> api.login) without ever leaving the app. Only "Continue with
+    // Discord" bounces to the external browser (wired below), because its OAuth redirect
+    // would be blocked by the shell's in-app navigation guard; it returns a one-time code
+    // via the worldofclaudecraft://desktop-login deep link (onLoginCode ->
+    // completeDesktopAppLogin).
     show('#login-panel');
   };
 
@@ -6138,7 +6341,7 @@ function wireStartScreens(): void {
     const password = ($('#login-pass') as unknown as HTMLInputElement).value;
     loginError('');
     const token = turnstileToken();
-    if (!NATIVE_APP && TURNSTILE_SITEKEY && !token) {
+    if (!NATIVE_APP && !DESKTOP_APP && TURNSTILE_SITEKEY && !token) {
       loginError(t('errors.api.verificationFailed'));
       return;
     }
@@ -6183,15 +6386,7 @@ function wireStartScreens(): void {
     // Auth succeeded — a later realm-entry error is NOT a verification failure,
     // so don't reset the widget or let the user re-submit the (now duplicate) auth.
     try {
-      $('#charselect-user').textContent = api.username ?? '';
-      // Persist the session so a reload restores the logged-in "Account" tab,
-      // and reveal that tab now.
-      api.saveSession();
-      enterLoggedInChrome();
-      // bind-on-login: surface the account's linked wallet (and flip a
-      // connected-but-unlinked button into a "Link" call-to-action).
-      void refreshWalletLinkStatus();
-      await enterRealmFlow();
+      await completeOnlineAuth();
     } catch (err) {
       loginError(userFacingApiError(err));
     }
@@ -6280,6 +6475,16 @@ function wireStartScreens(): void {
     loginError('');
     show('#mode-select');
   });
+  const bridge = DESKTOP_APP ? desktopBridge() : null;
+  if (bridge) {
+    bridge.onLoginCode((code) => {
+      void bridge.takeLoginCode();
+      void completeDesktopAppLogin(code);
+    });
+    void bridge.takeLoginCode().then((code) => {
+      if (typeof code === 'string' && code) void completeDesktopAppLogin(code);
+    });
+  }
   $('#btn-realm-back').addEventListener('click', () => show('#mode-select'));
   // Change Realm is now an inline dropdown on the character-select screen.
   $('#btn-change-realm').addEventListener('click', (e) => {
@@ -6630,6 +6835,15 @@ function wireStartScreens(): void {
     if (discordOrDivider) discordOrDivider.hidden = false;
     discordLoginBtn.addEventListener('click', (e) => {
       e.preventDefault();
+      // In the desktop shell, Discord OAuth cannot run in-app: the redirect to Discord is
+      // off-origin and the navigation guard blocks it. Route it to the external browser via
+      // the preload bridge; the /desktop-login page finishes OAuth and deep-links a one-time
+      // code back in (onLoginCode -> completeDesktopAppLogin). The web build redirects in place.
+      const bridge = DESKTOP_APP ? desktopBridge() : null;
+      if (bridge) {
+        void bridge.openBrowserLogin();
+        return;
+      }
       startDiscordOAuth('login');
     });
   }
@@ -6650,6 +6864,7 @@ function wireStartScreens(): void {
     api.saveSession();
     enterLoggedInChrome();
     void refreshWalletLinkStatus();
+    void refreshGithubLinkStatus();
     goToLoggedInPlay();
   };
   const onDiscordChoiceError = (err: unknown) => {
@@ -6791,10 +7006,13 @@ function wireStartScreens(): void {
     // login), so an auto-reconnected wallet shows verified and is NOT treated as
     // unverified and disconnected (the bug that forced a re-sign on every reload).
     void refreshWalletLinkStatus();
+    void refreshGithubLinkStatus();
     // (Discord status is refreshed by enterLoggedInChrome above.)
     if (discordOnboarding) enterOnlinePlayFlow();
+    if (isDesktopLoginPage()) void completeDesktopBrowserLogin();
   } else {
     enterLoggedOutChrome();
+    if (isDesktopLoginPage()) show('#login-panel');
   }
 
   // Header Logo click listener to return to homepage
@@ -6915,9 +7133,40 @@ function wireStartScreens(): void {
   const contrastToggle = document.getElementById(
     'landing-contrast-toggle',
   ) as HTMLButtonElement | null;
+  const graphicsSelect = document.getElementById(
+    'landing-graphics-select',
+  ) as HTMLSelectElement | null;
+  const normalizedLandingGraphicsChoice = (raw: string | null): string => {
+    if (raw === LANDING_GRAPHICS_AUTO) return raw;
+    const preset = Number(raw);
+    if (
+      Number.isInteger(preset) &&
+      preset >= SETTING_RANGES.graphicsPreset.min &&
+      preset <= SETTING_RANGES.graphicsPreset.max
+    ) {
+      return String(preset);
+    }
+    return LANDING_GRAPHICS_AUTO;
+  };
+  const applyLandingGraphicsChoice = (choice: string): void => {
+    if (choice === LANDING_GRAPHICS_AUTO) {
+      landingSettings.set('graphicsPreset', SETTING_RANGES.graphicsPreset.def);
+      landingSettings.set('graphicsDefaultApplied', false);
+      return;
+    }
+    landingSettings.set('graphicsPreset', Number(choice));
+    landingSettings.set('graphicsDefaultApplied', true);
+  };
+  const syncLandingGraphicsSelect = (): void => {
+    if (!graphicsSelect) return;
+    graphicsSelect.value = landingSettings.get('graphicsDefaultApplied')
+      ? String(landingSettings.get('graphicsPreset'))
+      : LANDING_GRAPHICS_AUTO;
+  };
   const syncContrastToggle = (on: boolean): void => {
     if (contrastToggle) contrastToggle.setAttribute('aria-pressed', String(on));
   };
+  syncLandingGraphicsSelect();
   syncContrastToggle(landingSettings.get('landingHighContrast'));
   applyLandingBackdrop(landingSettings.get('landingHighContrast'));
 
@@ -6946,6 +7195,11 @@ function wireStartScreens(): void {
     landingSettings.set('landingHighContrast', next);
     syncContrastToggle(next);
     applyLandingBackdrop(next);
+  });
+  graphicsSelect?.addEventListener('change', () => {
+    const choice = normalizedLandingGraphicsChoice(graphicsSelect.value);
+    applyLandingGraphicsChoice(choice);
+    syncLandingGraphicsSelect();
   });
 
   // Initialize 3D character preview once assets are ready

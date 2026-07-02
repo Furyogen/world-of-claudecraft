@@ -7,6 +7,13 @@
 // (tests/i18n_admin_catalog.test.ts).
 
 export const tr_TR: Record<string, string> = {
+  'usage.cache.githubContributors': 'GitHub katkıda bulunanlar önbelleği',
+  'usage.metric.githubContributorsFetch': 'GitHub katkıda bulunan istatistiği çekmeleri',
+  'usage.metric.githubContributorsFetchFailure':
+    'GitHub katkıda bulunan istatistiği çekme hataları',
+  'usage.metric.githubLinkFailure': 'GitHub bağlama hataları',
+  'usage.metric.githubLinkRateLimited': 'GitHub bağlama kısıtlanmış istekleri',
+  'usage.metric.githubLinkRequest': 'GitHub bağlama istekleri',
   'app.title': 'World of ClaudeCraft - Yönetici',
   'app.shortTitle': 'WoC Yöneticisi',
   'auth.username': 'Kullanıcı adı',

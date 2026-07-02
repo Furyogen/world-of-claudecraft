@@ -265,6 +265,13 @@ export const de_DE: EnTranslations = {
       "heading": "Blickrichtung",
       "minimapZoom": "Minikarten-Zoom"
     },
+    "nativeUpdate": {
+      "title": "Update Available",
+      "body": "A new version of World of ClaudeCraft is available. Update now for the latest fixes and improvements.",
+      "bodyWithVersion": "Version {version} of World of ClaudeCraft is available. Update now for the latest fixes and improvements.",
+      "notNow": "Not now",
+      "update": "Update"
+    },
     "castBar": {
       "playerAria": "Eure Zauberleiste",
       "targetAria": "Zauberleiste des Ziels"
@@ -274,11 +281,16 @@ export const de_DE: EnTranslations = {
       "tabsLabel": "Bestenlisten",
       "tabPlayers": "Spieler",
       "tabGuilds": "Gilden",
+      "tabDevs": "Entwickler",
       "guildName": "Gilde",
       "members": "Mitglieder",
       "topLevel": "Top",
       "guildXp": "Gesamt-XP",
-      "guildEmpty": "Noch keine platzierten Gilden."
+      "guildEmpty": "Noch keine platzierten Gilden.",
+      "devName": "Mitwirkender",
+      "devTierCol": "Abzeichen",
+      "mergedPrs": "Zusammengeführte PRs",
+      "devEmpty": "Noch keine platzierten Mitwirkenden."
     },
     "raidLockout": {
       "title": "Schlachtzug-Sperren",
@@ -308,7 +320,8 @@ export const de_DE: EnTranslations = {
     "keybinds": {
       "emoteWheel": "Emote-Rad",
       "targetFriendly": "Nächsten Verbündeten anvisieren",
-      "targetFriendlyNext": "Freundliches Ziel wechseln"
+      "targetFriendlyNext": "Freundliches Ziel wechseln",
+      "discord": "Discord"
     },
     "options": {
       "clickMoveLeft": "Linksklick",
@@ -330,8 +343,10 @@ export const de_DE: EnTranslations = {
       "keybindHelpLockCursorOnRotate": "Hält den Mauszeiger im Fenster, während Ihr zum Drehen der Kamera zieht, damit er nicht den Bildschirmrand erreicht oder auf einen anderen Monitor wandert. Schaltet dies aus, wenn Ihr einen freien Cursor bevorzugt.",
       "showWalletOnCharacterScreen": "Wallet auf dem Charakterbildschirm anzeigen",
       "showWalletOnPlayerCard": "Wallet auf der Spielerkarte anzeigen",
+      "showDevBadges": "Entwicklerabzeichen anzeigen",
       "uiScale": "UI-Skalierung",
       "highContrastBackground": "Hintergrund mit hohem Kontrast",
+      "startAttackOnAbility": "Auto-Angriff bei Fähigkeitseinsatz",
       "showItemLevel": "Gegenstandsstufe anzeigen",
       "itemLevelLine": "Gegenstandsstufe {level}",
       "itemScoreLine": "Wertung {score}",
@@ -428,6 +443,9 @@ export const de_DE: EnTranslations = {
     },
     "statInfo": {
       "fromYour": "Von deinen {value} Punkten {stat}:",
+      "names": {
+        "spellPower": "Zaubermacht"
+      },
       "desc": {
         "str": "Erhöht deine Angriffskraft, sodass deine Waffenschläge härter treffen.",
         "agi": "Schärft Reflexe und Zielsicherheit und verbessert mehrere deiner Kampfwerte.",
@@ -436,6 +454,7 @@ export const de_DE: EnTranslations = {
         "spi": "Beschleunigt, wie schnell das Mana eines Zauberwirkers außerhalb des Kampfes beim Ausruhen zurückkehrt.",
         "armor": "Mildert eingehende physische Schläge ab. Die Verringerung fällt gegen Angreifer niedrigerer Stufe stärker aus und ist auf 75% begrenzt.",
         "attackPower": "Verstärkt deine Waffenangriffe. Je 14 Angriffskraft fügen 1 Schaden pro Sekunde hinzu.",
+        "spellPower": "Erhöht den Schaden deiner Zauber und die Stärke deiner Heilungen. Jeder Punkt Intelligenz gewährt etwas Zaubermacht, zusätzlich zu der aus Ausrüstung oder Stärkungszaubern.",
         "dps": "Dein geschätzter Waffenschaden pro Sekunde, der Schaden und Geschwindigkeit deiner Waffe mit deiner Angriffskraft verbindet.",
         "critChance": "Deine Chance, dass ein Angriff kritisch trifft und doppelten Schaden verursacht.",
         "dodge": "Deine Chance, einem eingehenden Nahkampfangriff vollständig auszuweichen und keinen Schaden zu erleiden."
@@ -458,6 +477,15 @@ export const de_DE: EnTranslations = {
         "minorForClass": "Für deine Klasse von geringem Nutzen.",
         "baseChance": "Beinhaltet eine Grundchance von 5%, die allen Abenteurern gemein ist.",
         "dpsApprox": "Ein Schätzwert, kritische Treffer und Fähigkeitsschaden sind ausgenommen."
+      },
+      "sources": {
+        "header": "Zusammengesetzt aus:",
+        "base": "Basis: {value}",
+        "attributes": "Aus deinen Attributen: {value}",
+        "fromAttribute": "Aus {stat}: {value}",
+        "gear": "Angelegte Ausrüstung: {value}",
+        "buff": "{name}: {value}",
+        "talents": "Talente und Effekte: {value}"
       }
     },
     "talents": {
@@ -481,6 +509,9 @@ export const de_DE: EnTranslations = {
       "ineligible": "Ihr erfüllt die Voraussetzungen für diese Quest nicht.",
       "noQuestSelected": "Wählt eine Quest in Eurem Questlog zum Teilen aus.",
       "linkTitle": "Umschalt + Klick, um diese Quest im Chat zu verlinken."
+    },
+    "itemShare": {
+      "linkHint": "Umschalt-Klick, um diesen Gegenstand im Chat zu verlinken."
     },
     "plurals": {
       "guildMembers": {
@@ -506,6 +537,12 @@ export const de_DE: EnTranslations = {
         "few": "Wer: {count} Spieler online auf {realm}.",
         "many": "Wer: {count} Spieler online auf {realm}.",
         "other": "Wer: {count} Spieler online auf {realm}."
+      },
+      "playersMatching": {
+        "one": "Wer: {count} Spieler, die auf \"{query}\" passen, auf {realm}.",
+        "few": "Wer: {count} Spieler, die auf \"{query}\" passen, auf {realm}.",
+        "many": "Wer: {count} Spieler, die auf \"{query}\" passen, auf {realm}.",
+        "other": "Wer: {count} Spieler, die auf \"{query}\" passen, auf {realm}."
       }
     },
     "bugReport": {
@@ -624,7 +661,26 @@ export const de_DE: EnTranslations = {
       "methodGroup": "Beutemethode auf Gruppenbeute gesetzt.",
       "assigned": "{looter} hat {item} an {target} zugewiesen.",
       "unassigned": "{item} wurde nicht zugewiesen und ist fuer alle frei.",
-      "leaderOnly": "Nur der Gruppenleiter kann die Beutemethode aendern."
+      "leaderOnly": "Nur der Gruppenleiter kann die Beutemethode aendern.",
+      "rollingFor": "Es wird um {item} gewürfelt.",
+      "looterChanged": "Plündermeister ist jetzt {name}.",
+      "thresholdSet": "Beuteschwelle auf {threshold} gesetzt.",
+      "summaryMaster": "Beute-Einstellungen: Meisterbeute, Plündermeister {name}, Schwelle {threshold}.",
+      "summaryGroup": "Beute-Einstellungen: Gruppenbeute."
+    },
+    "party": {
+      "promoteLeader": "Zum Anführer befördern"
+    },
+    "lootSettings": {
+      "title": "Beute-Einstellungen",
+      "close": "Beute-Einstellungen schließen",
+      "menuItem": "Beute-Einstellungen",
+      "method": "Beuteverteilung",
+      "rollThreshold": "Würfelschwelle",
+      "groupLoot": "Gruppenbeute",
+      "valueMaster": "Meisterbeute",
+      "leaderOption": "Plündermeister: Anführer (Du)",
+      "masterOption": "Plündermeister: {name}"
     },
     "bags": {
       "filterGroupAria": "Taschen nach Kategorie filtern",
@@ -732,6 +788,9 @@ export const de_DE: EnTranslations = {
     "nameplate": {
       "mob": "[{level}] {name}",
       "mobElite": "[{level}+] {name}"
+    },
+    "itemTooltip": {
+      "requiresLevel": "Benötigt Stufe {level}"
     },
     "discord": {
       "title": "Discord",
@@ -875,6 +934,34 @@ export const de_DE: EnTranslations = {
           "hint": "Bitte die Gemeinschaft um Hilfe"
         }
       }
+    },
+    "devBadge": {
+      "title": "Entwickler",
+      "tiers": {
+        "tinkerer": "Tüftler",
+        "artificer": "Artifex",
+        "runesmith": "Runenschmied",
+        "architect": "Architekt",
+        "worldwright": "Weltenbauer"
+      },
+      "flavors": {
+        "tinkerer": "Dein erster Pull Request ist im Reich gelandet.",
+        "artificer": "Fünf Pull Requests, und die Welt beugt sich deinem Code.",
+        "runesmith": "Fünfzehn Pull Requests, geschmiedet ins laufende Spiel.",
+        "architect": "Ein Architekt des Reiches: 30 zusammengeführte Pull Requests.",
+        "worldwright": "Ein Erschaffer von Welten: 70 Pull Requests formen das Spiel."
+      },
+      "badgeTitle": "Entwickler: {tier}",
+      "prsLanded": "{count} zusammengeführte Pull Requests",
+      "contributor": "Open-Source-Mitwirkender",
+      "link": {
+        "cta": "GitHub verknüpfen",
+        "relink": "GitHub neu verknüpfen",
+        "benefits": "Verknüpfe dein GitHub, um ein Entwicklerabzeichen für die Pull Requests zu erhalten, die in das Open-Source-Repository zusammengeführt wurden.",
+        "error": "GitHub konnte nicht verknüpft werden. Bitte versuche es erneut."
+      },
+      "linkedAs": "Verknüpft als {login}",
+      "unlink": "GitHub trennen"
     }
   },
   "guide": {
@@ -2546,6 +2633,7 @@ export const de_DE: EnTranslations = {
       "usernameTaken": "Dieser Benutzername ist bereits vergeben.",
       "invalidCredentials": "Benutzername oder Passwort ungültig.",
       "verificationFailed": "Verifizierung fehlgeschlagen. Bitte versuche es erneut.",
+      "desktopCodeInvalid": "Desktop login code is invalid or expired. Please try again.",
       "invalidCharacterName": "Ungültiger Charaktername. Verwende 2-16 Buchstaben.",
       "characterNameNotAllowed": "Dieser Charaktername ist nicht erlaubt.",
       "invalidClass": "Ungültige Klasse.",
@@ -2562,6 +2650,21 @@ export const de_DE: EnTranslations = {
       "takenOver": "Dein Charakter wurde von einer anderen Sitzung übernommen.",
       "renameBeforeEntering": "Dieser Charakter muss vor dem Betreten der Welt umbenannt werden.",
       "renameNotPermitted": "Das Umbenennen dieses Charakters ist nicht erlaubt."
+    }
+  },
+  "desktop": {
+    "update": {
+      "downloading": "Downloading update {version}...",
+      "ready": "Update {version} is ready. It installs when you quit, or restart now.",
+      "restart": "Restart now",
+      "later": "Later"
+    },
+    "crash": {
+      "title": "World of ClaudeCraft",
+      "body": "The game view stopped working. Reload it?",
+      "reload": "Reload",
+      "quit": "Quit",
+      "fatalBody": "World of ClaudeCraft hit an unexpected error and needs to close."
     }
   },
   "realm": {
@@ -5631,6 +5734,11 @@ export const de_DE: EnTranslations = {
         "name": "Lehrmeister Caddis",
         "title": "Lehrmeister",
         "greeting": "Achte auf lockeren Schiefer, {className}. Der Berg ist unruhig geworden, und ich will wissen warum."
+      },
+      "auctioneer_voss": {
+        "name": "Auktionator Voss",
+        "title": "Hüter des Weltmarkts",
+        "greeting": "Der Weltmarkt ist auch hier geöffnet, {className}. Kauf bei jedem Abenteurer im Reich ein oder biete deine eigenen Waren feil."
       },
       "brother_aldric_raid": {
         "name": "Bruder Aldric",

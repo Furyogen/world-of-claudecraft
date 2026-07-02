@@ -265,6 +265,13 @@ export const id_ID: EnTranslations = {
       "heading": "Arah",
       "minimapZoom": "Zoom peta mini"
     },
+    "nativeUpdate": {
+      "title": "Update Available",
+      "body": "A new version of World of ClaudeCraft is available. Update now for the latest fixes and improvements.",
+      "bodyWithVersion": "Version {version} of World of ClaudeCraft is available. Update now for the latest fixes and improvements.",
+      "notNow": "Not now",
+      "update": "Update"
+    },
     "castBar": {
       "playerAria": "Bilah Rapal Anda",
       "targetAria": "Bilah Rapal Unit"
@@ -274,11 +281,16 @@ export const id_ID: EnTranslations = {
       "tabsLabel": "Papan skor tertinggi",
       "tabPlayers": "Pemain",
       "tabGuilds": "Guild",
+      "tabDevs": "Pengembang",
       "guildName": "Guild",
       "members": "Anggota",
       "topLevel": "Teratas",
       "guildXp": "Total XP",
-      "guildEmpty": "Belum ada guild berperingkat."
+      "guildEmpty": "Belum ada guild berperingkat.",
+      "devName": "Kontributor",
+      "devTierCol": "Lencana",
+      "mergedPrs": "PR Digabungkan",
+      "devEmpty": "Belum ada kontributor berperingkat."
     },
     "raidLockout": {
       "title": "Penguncian Raid",
@@ -308,7 +320,8 @@ export const id_ID: EnTranslations = {
     "keybinds": {
       "emoteWheel": "Roda Emote",
       "targetFriendly": "Bidik Sekutu Terdekat",
-      "targetFriendlyNext": "Putar Bidikan Sekutu"
+      "targetFriendlyNext": "Putar Bidikan Sekutu",
+      "discord": "Discord"
     },
     "options": {
       "clickMoveLeft": "Klik Kiri",
@@ -330,8 +343,10 @@ export const id_ID: EnTranslations = {
       "keybindHelpLockCursorOnRotate": "Menjaga kursor mouse tetap di dalam jendela saat Anda menyeret untuk memutar kamera, sehingga tidak mencapai tepi layar atau berpindah ke monitor lain. Matikan jika Anda lebih suka kursor bebas.",
       "showWalletOnCharacterScreen": "Tampilkan Dompet di Layar Karakter",
       "showWalletOnPlayerCard": "Tampilkan Dompet di Kartu Pemain",
+      "showDevBadges": "Tampilkan Lencana Pengembang",
       "uiScale": "Skala UI",
       "highContrastBackground": "Latar Kontras Tinggi",
+      "startAttackOnAbility": "Serangan Otomatis Saat Memakai Kemampuan",
       "showItemLevel": "Tampilkan Level Item",
       "itemLevelLine": "Level Item {level}",
       "itemScoreLine": "Skor {score}",
@@ -428,6 +443,9 @@ export const id_ID: EnTranslations = {
     },
     "statInfo": {
       "fromYour": "Dari {value} {stat} Anda:",
+      "names": {
+        "spellPower": "Kekuatan Mantra"
+      },
       "desc": {
         "str": "Meningkatkan daya serang Anda, sehingga serangan senjata Anda menghantam lebih keras.",
         "agi": "Mempertajam refleks dan bidikan Anda, meningkatkan beberapa statistik tempur Anda.",
@@ -436,6 +454,7 @@ export const id_ID: EnTranslations = {
         "spi": "Mempercepat pemulihan mana penyihir saat beristirahat, di luar pertempuran.",
         "armor": "Meredam pukulan fisik yang datang. Pengurangannya lebih besar terhadap penyerang berlevel lebih rendah dan dibatasi hingga 75%.",
         "attackPower": "Memberi tenaga pada serangan senjata Anda. Setiap 14 daya serang menambah 1 kerusakan per detik.",
+        "spellPower": "Meningkatkan kerusakan mantra dan kekuatan penyembuhanmu. Setiap poin Kecerdasan memberi sedikit Kekuatan Mantra, di atas apa pun dari perlengkapan atau buff.",
         "dps": "Perkiraan kerusakan senjata Anda per detik, menggabungkan kerusakan dan kecepatan senjata dengan daya serang Anda.",
         "critChance": "Peluang serangan Anda menghantam secara kritis, memberikan kerusakan ganda.",
         "dodge": "Peluang Anda untuk sepenuhnya menghindari serangan jarak dekat, tanpa menerima kerusakan."
@@ -458,6 +477,15 @@ export const id_ID: EnTranslations = {
         "minorForClass": "Kurang bermanfaat bagi kelas Anda.",
         "baseChance": "Termasuk peluang dasar 5% yang dimiliki semua petualang.",
         "dpsApprox": "Sebuah perkiraan, tidak termasuk serangan kritis dan kerusakan kemampuan."
+      },
+      "sources": {
+        "header": "Terdiri dari:",
+        "base": "Dasar: {value}",
+        "attributes": "Dari atributmu: {value}",
+        "fromAttribute": "Dari {stat}: {value}",
+        "gear": "Perlengkapan terpasang: {value}",
+        "buff": "{name}: {value}",
+        "talents": "Talenta dan efek: {value}"
       }
     },
     "talents": {
@@ -481,6 +509,9 @@ export const id_ID: EnTranslations = {
       "ineligible": "Anda tidak memenuhi persyaratan untuk misi ini.",
       "noQuestSelected": "Pilih misi di catatan Anda untuk dibagikan.",
       "linkTitle": "Shift-klik untuk menautkan misi ini di obrolan."
+    },
+    "itemShare": {
+      "linkHint": "Shift-klik untuk menautkan item ini di obrolan."
     },
     "plurals": {
       "guildMembers": {
@@ -506,6 +537,12 @@ export const id_ID: EnTranslations = {
         "few": "Who: {count} pemain daring di {realm}.",
         "many": "Who: {count} pemain daring di {realm}.",
         "other": "Who: {count} pemain daring di {realm}."
+      },
+      "playersMatching": {
+        "one": "Siapa: {count} pemain yang cocok dengan \"{query}\" di {realm}.",
+        "few": "Siapa: {count} pemain yang cocok dengan \"{query}\" di {realm}.",
+        "many": "Siapa: {count} pemain yang cocok dengan \"{query}\" di {realm}.",
+        "other": "Siapa: {count} pemain yang cocok dengan \"{query}\" di {realm}."
       }
     },
     "bugReport": {
@@ -624,7 +661,26 @@ export const id_ID: EnTranslations = {
       "methodGroup": "Metode loot diatur ke loot grup.",
       "assigned": "{looter} memberikan {item} kepada {target}.",
       "unassigned": "{item} tidak diberikan dan bebas untuk semua.",
-      "leaderOnly": "Hanya pemimpin grup yang dapat mengubah metode loot."
+      "leaderOnly": "Hanya pemimpin grup yang dapat mengubah metode loot.",
+      "rollingFor": "Melempar dadu untuk {item}.",
+      "looterChanged": "Penjarah Utama kini adalah {name}.",
+      "thresholdSet": "Ambang jarahan diatur ke {threshold}.",
+      "summaryMaster": "Pengaturan Jarahan: Jarahan Utama, Penjarah Utama {name}, ambang {threshold}.",
+      "summaryGroup": "Pengaturan Jarahan: Jarahan Kelompok."
+    },
+    "party": {
+      "promoteLeader": "Angkat jadi Pemimpin"
+    },
+    "lootSettings": {
+      "title": "Pengaturan Jarahan",
+      "close": "Tutup pengaturan jarahan",
+      "menuItem": "Pengaturan Jarahan",
+      "method": "Metode Jarahan",
+      "rollThreshold": "Ambang Lempar Dadu",
+      "groupLoot": "Jarahan Kelompok",
+      "valueMaster": "Jarahan Utama",
+      "leaderOption": "Penjarah Utama: Pemimpin (Anda)",
+      "masterOption": "Penjarah Utama: {name}"
     },
     "bags": {
       "filterGroupAria": "Saring tas menurut kategori",
@@ -732,6 +788,9 @@ export const id_ID: EnTranslations = {
     "nameplate": {
       "mob": "[{level}] {name}",
       "mobElite": "[{level}+] {name}"
+    },
+    "itemTooltip": {
+      "requiresLevel": "Membutuhkan Level {level}"
     },
     "discord": {
       "title": "Discord",
@@ -875,6 +934,34 @@ export const id_ID: EnTranslations = {
           "hint": "Minta bantuan dari komunitas"
         }
       }
+    },
+    "devBadge": {
+      "title": "Pengembang",
+      "tiers": {
+        "tinkerer": "Perakit",
+        "artificer": "Perekayasa",
+        "runesmith": "Pandai Rune",
+        "architect": "Arsitek",
+        "worldwright": "Perancang Dunia"
+      },
+      "flavors": {
+        "tinkerer": "Pull request pertamamu telah mendarat di alam ini.",
+        "artificer": "Lima pull request masuk, dan dunia pun tunduk pada kodemu.",
+        "runesmith": "Lima belas pull request ditempa ke dalam permainan yang berjalan.",
+        "architect": "Seorang arsitek alam ini: 30 pull request telah digabungkan.",
+        "worldwright": "Seorang perancang dunia: 70 pull request membentuk permainan ini."
+      },
+      "badgeTitle": "Pengembang: {tier}",
+      "prsLanded": "{count} pull request digabungkan",
+      "contributor": "Kontributor sumber terbuka",
+      "link": {
+        "cta": "Tautkan GitHub",
+        "relink": "Tautkan Ulang GitHub",
+        "benefits": "Tautkan GitHub-mu untuk mendapatkan lencana pengembang atas pull request yang telah digabungkan ke repositori sumber terbuka.",
+        "error": "Tidak dapat menautkan GitHub. Silakan coba lagi."
+      },
+      "linkedAs": "Tertaut sebagai {login}",
+      "unlink": "Putuskan Tautan GitHub"
     }
   },
   "guide": {
@@ -2546,6 +2633,7 @@ export const id_ID: EnTranslations = {
       "usernameTaken": "Nama pengguna itu sudah dipakai.",
       "invalidCredentials": "Nama pengguna atau kata sandi salah.",
       "verificationFailed": "Verifikasi gagal. Silakan coba lagi.",
+      "desktopCodeInvalid": "Desktop login code is invalid or expired. Please try again.",
       "invalidCharacterName": "Nama karakter tidak valid. Gunakan 2-16 huruf.",
       "characterNameNotAllowed": "Nama karakter itu tidak diperbolehkan.",
       "invalidClass": "Kelas tidak valid.",
@@ -2562,6 +2650,21 @@ export const id_ID: EnTranslations = {
       "takenOver": "Karakter Anda telah diambil alih oleh sesi lain.",
       "renameBeforeEntering": "Karakter ini harus diganti namanya sebelum memasuki dunia.",
       "renameNotPermitted": "Mengganti nama karakter ini tidak diperbolehkan."
+    }
+  },
+  "desktop": {
+    "update": {
+      "downloading": "Downloading update {version}...",
+      "ready": "Update {version} is ready. It installs when you quit, or restart now.",
+      "restart": "Restart now",
+      "later": "Later"
+    },
+    "crash": {
+      "title": "World of ClaudeCraft",
+      "body": "The game view stopped working. Reload it?",
+      "reload": "Reload",
+      "quit": "Quit",
+      "fatalBody": "World of ClaudeCraft hit an unexpected error and needs to close."
     }
   },
   "realm": {
@@ -5631,6 +5734,11 @@ export const id_ID: EnTranslations = {
         "name": "Ahli Sejarah Caddis",
         "title": "Ahli Sejarah",
         "greeting": "Hati-hati dengan batu serpih yang longgar, {className}. Gunung ini... gelisah belakangan ini. Aku berniat mencari tahu sebabnya."
+      },
+      "auctioneer_voss": {
+        "name": "Pelelang Voss",
+        "title": "Penjaga World Market",
+        "greeting": "World Market juga buka di sini, {className}. Belilah dari setiap petualang di alam ini, atau gelarlah daganganmu sendiri."
       },
       "brother_aldric_raid": {
         "name": "Bruder Aldric",

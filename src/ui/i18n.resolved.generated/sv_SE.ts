@@ -265,6 +265,13 @@ export const sv_SE: EnTranslations = {
       "heading": "Riktning",
       "minimapZoom": "Minikartans zoom"
     },
+    "nativeUpdate": {
+      "title": "Update Available",
+      "body": "A new version of World of ClaudeCraft is available. Update now for the latest fixes and improvements.",
+      "bodyWithVersion": "Version {version} of World of ClaudeCraft is available. Update now for the latest fixes and improvements.",
+      "notNow": "Not now",
+      "update": "Update"
+    },
     "castBar": {
       "playerAria": "Din besvärjelsemätare",
       "targetAria": "Enhetens besvärjelsemätare"
@@ -274,11 +281,16 @@ export const sv_SE: EnTranslations = {
       "tabsLabel": "Topplistor",
       "tabPlayers": "Spelare",
       "tabGuilds": "Gillen",
+      "tabDevs": "Utvecklare",
       "guildName": "Gille",
       "members": "Medlemmar",
       "topLevel": "Topp",
       "guildXp": "Total XP",
-      "guildEmpty": "Inga rankade gillen ännu."
+      "guildEmpty": "Inga rankade gillen ännu.",
+      "devName": "Bidragsgivare",
+      "devTierCol": "Märke",
+      "mergedPrs": "Sammanslagna PR:er",
+      "devEmpty": "Inga rankade bidragsgivare ännu."
     },
     "raidLockout": {
       "title": "Raidlåsningar",
@@ -308,7 +320,8 @@ export const sv_SE: EnTranslations = {
     "keybinds": {
       "emoteWheel": "Gesthjul",
       "targetFriendly": "Måltavla närmaste vänlig",
-      "targetFriendlyNext": "Växla vänligt mål"
+      "targetFriendlyNext": "Växla vänligt mål",
+      "discord": "Discord"
     },
     "options": {
       "clickMoveLeft": "Vänsterklick",
@@ -330,8 +343,10 @@ export const sv_SE: EnTranslations = {
       "keybindHelpLockCursorOnRotate": "Håller muspekaren inuti fönstret medan du drar för att rotera kameran, så att den inte kan nå skärmkanten eller flytta till en annan skärm. Stäng av om du föredrar en fri pekare.",
       "showWalletOnCharacterScreen": "Visa plånbok på karaktärsskärmen",
       "showWalletOnPlayerCard": "Visa plånbok på spelarkortet",
+      "showDevBadges": "Visa utvecklarmärken",
       "uiScale": "Gränssnittsskala",
       "highContrastBackground": "Bakgrund med hög kontrast",
+      "startAttackOnAbility": "Automatisk attack vid förmågeanvändning",
       "showItemLevel": "Visa föremålsnivå",
       "itemLevelLine": "Föremålsnivå {level}",
       "itemScoreLine": "Poäng {score}",
@@ -428,6 +443,9 @@ export const sv_SE: EnTranslations = {
     },
     "statInfo": {
       "fromYour": "Från dina {value} {stat}:",
+      "names": {
+        "spellPower": "Besvärjelsekraft"
+      },
       "desc": {
         "str": "Ökar din attackstyrka, så att dina vapenslag landar hårdare.",
         "agi": "Skärper dina reflexer och din sikte, vilket förbättrar flera av dina stridsattribut.",
@@ -436,6 +454,7 @@ export const sv_SE: EnTranslations = {
         "spi": "Snabbar på hur fort en besvärjares mana återkommer under vila, utanför strid.",
         "armor": "Mildrar inkommande fysiska slag. Minskningen är större mot anfallare på lägre nivå och har ett tak på 75 %.",
         "attackPower": "Driver dina vapenattacker. Var 14:e attackstyrka ger 1 skada per sekund.",
+        "spellPower": "Ökar skadan från dina besvärjelser och styrkan i dina läkningar. Varje poäng Intellekt ger lite Besvärjelsekraft, utöver det från utrustning eller förstärkningar.",
         "dps": "Din uppskattade vapenskada per sekund, som kombinerar ditt vapens skada och hastighet med din attackstyrka.",
         "critChance": "Din chans att en attack träffar kritiskt och orsakar dubbel skada.",
         "dodge": "Din chans att helt undvika en inkommande närstridsattack utan att ta skada."
@@ -458,6 +477,15 @@ export const sv_SE: EnTranslations = {
         "minorForClass": "Till föga nytta för din klass.",
         "baseChance": "Inkluderar en grundchans på 5 % som delas av alla äventyrare.",
         "dpsApprox": "En uppskattning, den utesluter kritiska träffar och förmågeskada."
+      },
+      "sources": {
+        "header": "Består av:",
+        "base": "Bas: {value}",
+        "attributes": "Från dina attribut: {value}",
+        "fromAttribute": "Från {stat}: {value}",
+        "gear": "Utrustad utrustning: {value}",
+        "buff": "{name}: {value}",
+        "talents": "Talanger och effekter: {value}"
       }
     },
     "talents": {
@@ -481,6 +509,9 @@ export const sv_SE: EnTranslations = {
       "ineligible": "Du uppfyller inte kraven för det här uppdraget.",
       "noQuestSelected": "Välj ett uppdrag i din loggbok att dela.",
       "linkTitle": "Skift-klicka för att länka det här uppdraget i chatten."
+    },
+    "itemShare": {
+      "linkHint": "Skift-klicka för att länka det här föremålet i chatten."
     },
     "plurals": {
       "guildMembers": {
@@ -506,6 +537,12 @@ export const sv_SE: EnTranslations = {
         "few": "Vilka: {count} spelare online på {realm}.",
         "many": "Vilka: {count} spelare online på {realm}.",
         "other": "Vilka: {count} spelare online på {realm}."
+      },
+      "playersMatching": {
+        "one": "Vilka: {count} spelare matchar \"{query}\" på {realm}.",
+        "few": "Vilka: {count} spelare matchar \"{query}\" på {realm}.",
+        "many": "Vilka: {count} spelare matchar \"{query}\" på {realm}.",
+        "other": "Vilka: {count} spelare matchar \"{query}\" på {realm}."
       }
     },
     "bugReport": {
@@ -624,7 +661,26 @@ export const sv_SE: EnTranslations = {
       "methodGroup": "Lootmetod satt till grupploot.",
       "assigned": "{looter} tilldelade {item} till {target}.",
       "unassigned": "{item} tilldelades inte och ar fritt for alla.",
-      "leaderOnly": "Endast gruppledaren kan andra lootmetoden."
+      "leaderOnly": "Endast gruppledaren kan andra lootmetoden.",
+      "rollingFor": "Slår tärning om {item}.",
+      "looterChanged": "Bytesmästare är nu {name}.",
+      "thresholdSet": "Bytest. tröskel satt till {threshold}.",
+      "summaryMaster": "Byteinställningar: Mästarbyte, bytesmästare {name}, tröskel {threshold}.",
+      "summaryGroup": "Byteinställningar: Gruppbyte."
+    },
+    "party": {
+      "promoteLeader": "Befordra till ledare"
+    },
+    "lootSettings": {
+      "title": "Byteinställningar",
+      "close": "Stäng byteinställningar",
+      "menuItem": "Byteinställningar",
+      "method": "Bytesmetod",
+      "rollThreshold": "Tärningströskel",
+      "groupLoot": "Gruppbyte",
+      "valueMaster": "Mästarbyte",
+      "leaderOption": "Bytesmästare: Ledare (Du)",
+      "masterOption": "Bytesmästare: {name}"
     },
     "bags": {
       "filterGroupAria": "Filtrera väskor efter kategori",
@@ -732,6 +788,9 @@ export const sv_SE: EnTranslations = {
     "nameplate": {
       "mob": "[{level}] {name}",
       "mobElite": "[{level}+] {name}"
+    },
+    "itemTooltip": {
+      "requiresLevel": "Kräver nivå {level}"
     },
     "discord": {
       "title": "Discord",
@@ -875,6 +934,34 @@ export const sv_SE: EnTranslations = {
           "hint": "Be gemenskapen om hjälp"
         }
       }
+    },
+    "devBadge": {
+      "title": "Utvecklare",
+      "tiers": {
+        "tinkerer": "Pysslare",
+        "artificer": "Konstsmed",
+        "runesmith": "Runsmed",
+        "architect": "Arkitekt",
+        "worldwright": "Världsbyggare"
+      },
+      "flavors": {
+        "tinkerer": "Din första pull-förfrågan landade i riket.",
+        "artificer": "Fem pull-förfrågningar in, och världen böjer sig efter din kod.",
+        "runesmith": "Femton pull-förfrågningar smidda in i det körande spelet.",
+        "architect": "En arkitekt av riket: 30 sammanslagna pull-förfrågningar.",
+        "worldwright": "En världsbyggare: 70 pull-förfrågningar formar spelet."
+      },
+      "badgeTitle": "Utvecklare: {tier}",
+      "prsLanded": "{count} sammanslagna pull-förfrågningar",
+      "contributor": "Bidragsgivare med öppen källkod",
+      "link": {
+        "cta": "Länka GitHub",
+        "relink": "Länka om GitHub",
+        "benefits": "Länka din GitHub för att förtjäna ett utvecklarmärke för de pull-förfrågningar du har fått sammanslagna i förrådet med öppen källkod.",
+        "error": "Kunde inte länka GitHub. Försök igen."
+      },
+      "linkedAs": "Länkad som {login}",
+      "unlink": "Avlänka GitHub"
     }
   },
   "guide": {
@@ -2546,6 +2633,7 @@ export const sv_SE: EnTranslations = {
       "usernameTaken": "Det användarnamnet är redan upptaget.",
       "invalidCredentials": "Ogiltigt användarnamn eller lösenord.",
       "verificationFailed": "Verifieringen misslyckades. Försök igen.",
+      "desktopCodeInvalid": "Desktop login code is invalid or expired. Please try again.",
       "invalidCharacterName": "Ogiltigt karaktärsnamn. Använd 2-16 bokstäver.",
       "characterNameNotAllowed": "Det karaktärsnamnet är inte tillåtet.",
       "invalidClass": "Ogiltig klass.",
@@ -2562,6 +2650,21 @@ export const sv_SE: EnTranslations = {
       "takenOver": "Din karaktär togs över av en annan session.",
       "renameBeforeEntering": "Denna karaktär måste byta namn innan den går in i världen.",
       "renameNotPermitted": "Det är inte tillåtet att byta namn på denna karaktär."
+    }
+  },
+  "desktop": {
+    "update": {
+      "downloading": "Downloading update {version}...",
+      "ready": "Update {version} is ready. It installs when you quit, or restart now.",
+      "restart": "Restart now",
+      "later": "Later"
+    },
+    "crash": {
+      "title": "World of ClaudeCraft",
+      "body": "The game view stopped working. Reload it?",
+      "reload": "Reload",
+      "quit": "Quit",
+      "fatalBody": "World of ClaudeCraft hit an unexpected error and needs to close."
     }
   },
   "realm": {
@@ -5631,6 +5734,11 @@ export const sv_SE: EnTranslations = {
         "name": "Läromästare Caddis",
         "title": "Läromästare",
         "greeting": "Akta den lösa skiffern, {className}. Berget har varit... rastlöst på sistone. Jag ämnar ta reda på varför."
+      },
+      "auctioneer_voss": {
+        "name": "Auktionsförrättare Voss",
+        "title": "Väktare av världsmarknaden",
+        "greeting": "World of ClaudeCraft-marknaden är öppen även här, {className}. Köp från varje äventyrare i riket, eller lägg ut dina egna varor."
       },
       "brother_aldric_raid": {
         "name": "Broder Aldric",

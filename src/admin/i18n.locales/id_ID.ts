@@ -7,6 +7,13 @@
 // (tests/i18n_admin_catalog.test.ts).
 
 export const id_ID: Record<string, string> = {
+  'usage.cache.githubContributors': 'Cache kontributor GitHub',
+  'usage.metric.githubContributorsFetch': 'Pengambilan statistik kontributor GitHub',
+  'usage.metric.githubContributorsFetchFailure':
+    'Kegagalan pengambilan statistik kontributor GitHub',
+  'usage.metric.githubLinkFailure': 'Kegagalan tautan GitHub',
+  'usage.metric.githubLinkRateLimited': 'Permintaan tautan GitHub yang dibatasi',
+  'usage.metric.githubLinkRequest': 'Permintaan tautan GitHub',
   'app.title': 'World of ClaudeCraft - Admin',
   'app.shortTitle': 'Admin WoC',
   'auth.username': 'Nama pengguna',

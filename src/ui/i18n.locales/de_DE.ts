@@ -14,6 +14,71 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const de_DE: Partial<Record<TranslationKey, string>> = {
+  'entities.npcs.auctioneer_voss.greeting':
+    'Der Weltmarkt ist auch hier geöffnet, {className}. Kauf bei jedem Abenteurer im Reich ein oder biete deine eigenen Waren feil.',
+  'entities.npcs.auctioneer_voss.name': 'Auktionator Voss',
+  'entities.npcs.auctioneer_voss.title': 'Hüter des Weltmarkts',
+  'hudChrome.devBadge.badgeTitle': 'Entwickler: {tier}',
+  'hudChrome.devBadge.contributor': 'Open-Source-Mitwirkender',
+  'hudChrome.devBadge.flavors.architect':
+    'Ein Architekt des Reiches: 30 zusammengeführte Pull Requests.',
+  'hudChrome.devBadge.flavors.artificer':
+    'Fünf Pull Requests, und die Welt beugt sich deinem Code.',
+  'hudChrome.devBadge.flavors.runesmith': 'Fünfzehn Pull Requests, geschmiedet ins laufende Spiel.',
+  'hudChrome.devBadge.flavors.tinkerer': 'Dein erster Pull Request ist im Reich gelandet.',
+  'hudChrome.devBadge.flavors.worldwright':
+    'Ein Erschaffer von Welten: 70 Pull Requests formen das Spiel.',
+  'hudChrome.devBadge.link.benefits':
+    'Verknüpfe dein GitHub, um ein Entwicklerabzeichen für die Pull Requests zu erhalten, die in das Open-Source-Repository zusammengeführt wurden.',
+  'hudChrome.devBadge.link.cta': 'GitHub verknüpfen',
+  'hudChrome.devBadge.link.error':
+    'GitHub konnte nicht verknüpft werden. Bitte versuche es erneut.',
+  'hudChrome.devBadge.link.relink': 'GitHub neu verknüpfen',
+  'hudChrome.devBadge.linkedAs': 'Verknüpft als {login}',
+  'hudChrome.devBadge.prsLanded': '{count} zusammengeführte Pull Requests',
+  'hudChrome.devBadge.tiers.architect': 'Architekt',
+  'hudChrome.devBadge.tiers.artificer': 'Artifex',
+  'hudChrome.devBadge.tiers.runesmith': 'Runenschmied',
+  'hudChrome.devBadge.tiers.tinkerer': 'Tüftler',
+  'hudChrome.devBadge.tiers.worldwright': 'Weltenbauer',
+  'hudChrome.devBadge.title': 'Entwickler',
+  'hudChrome.devBadge.unlink': 'GitHub trennen',
+  'hudChrome.itemShare.linkHint': 'Umschalt-Klick, um diesen Gegenstand im Chat zu verlinken.',
+  'hudChrome.itemTooltip.requiresLevel': 'Benötigt Stufe {level}',
+  'hudChrome.keybinds.discord': 'Discord',
+  'hudChrome.leaderboard.devEmpty': 'Noch keine platzierten Mitwirkenden.',
+  'hudChrome.leaderboard.devName': 'Mitwirkender',
+  'hudChrome.leaderboard.devTierCol': 'Abzeichen',
+  'hudChrome.leaderboard.mergedPrs': 'Zusammengeführte PRs',
+  'hudChrome.leaderboard.tabDevs': 'Entwickler',
+  'hudChrome.lootSettings.close': 'Beute-Einstellungen schließen',
+  'hudChrome.lootSettings.groupLoot': 'Gruppenbeute',
+  'hudChrome.lootSettings.leaderOption': 'Plündermeister: Anführer (Du)',
+  'hudChrome.lootSettings.masterOption': 'Plündermeister: {name}',
+  'hudChrome.lootSettings.menuItem': 'Beute-Einstellungen',
+  'hudChrome.lootSettings.method': 'Beuteverteilung',
+  'hudChrome.lootSettings.rollThreshold': 'Würfelschwelle',
+  'hudChrome.lootSettings.title': 'Beute-Einstellungen',
+  'hudChrome.lootSettings.valueMaster': 'Meisterbeute',
+  'hudChrome.masterLoot.looterChanged': 'Plündermeister ist jetzt {name}.',
+  'hudChrome.masterLoot.rollingFor': 'Es wird um {item} gewürfelt.',
+  'hudChrome.masterLoot.summaryGroup': 'Beute-Einstellungen: Gruppenbeute.',
+  'hudChrome.masterLoot.summaryMaster':
+    'Beute-Einstellungen: Meisterbeute, Plündermeister {name}, Schwelle {threshold}.',
+  'hudChrome.masterLoot.thresholdSet': 'Beuteschwelle auf {threshold} gesetzt.',
+  'hudChrome.options.showDevBadges': 'Entwicklerabzeichen anzeigen',
+  'hudChrome.options.startAttackOnAbility': 'Auto-Angriff bei Fähigkeitseinsatz',
+  'hudChrome.party.promoteLeader': 'Zum Anführer befördern',
+  'hudChrome.statInfo.desc.spellPower':
+    'Erhöht den Schaden deiner Zauber und die Stärke deiner Heilungen. Jeder Punkt Intelligenz gewährt etwas Zaubermacht, zusätzlich zu der aus Ausrüstung oder Stärkungszaubern.',
+  'hudChrome.statInfo.names.spellPower': 'Zaubermacht',
+  'hudChrome.statInfo.sources.attributes': 'Aus deinen Attributen: {value}',
+  'hudChrome.statInfo.sources.base': 'Basis: {value}',
+  'hudChrome.statInfo.sources.buff': '{name}: {value}',
+  'hudChrome.statInfo.sources.fromAttribute': 'Aus {stat}: {value}',
+  'hudChrome.statInfo.sources.gear': 'Angelegte Ausrüstung: {value}',
+  'hudChrome.statInfo.sources.header': 'Zusammengesetzt aus:',
+  'hudChrome.statInfo.sources.talents': 'Talente und Effekte: {value}',
   'hudChrome.loot.chestTitle': 'Truhe',
   'hudChrome.spellbook.addToBarAria': '{name} zur Aktionsleiste hinzufügen',
   'hudChrome.spellbook.removeFromBarAria': '{name} von der Aktionsleiste entfernen',
@@ -3315,6 +3380,14 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.plurals.secondsRemaining.few': 'Noch {count} Sekunden',
   'hudChrome.plurals.secondsRemaining.many': 'Noch {count} Sekunden',
   'hudChrome.plurals.secondsRemaining.other': 'Noch {count} Sekunden',
+  'hudChrome.plurals.playersMatching.one':
+    'Wer: {count} Spieler, die auf "{query}" passen, auf {realm}.',
+  'hudChrome.plurals.playersMatching.few':
+    'Wer: {count} Spieler, die auf "{query}" passen, auf {realm}.',
+  'hudChrome.plurals.playersMatching.many':
+    'Wer: {count} Spieler, die auf "{query}" passen, auf {realm}.',
+  'hudChrome.plurals.playersMatching.other':
+    'Wer: {count} Spieler, die auf "{query}" passen, auf {realm}.',
   'hudChrome.plurals.playersOnline.one': 'Wer: {count} Spieler online auf {realm}.',
   'hudChrome.plurals.playersOnline.few': 'Wer: {count} Spieler online auf {realm}.',
   'hudChrome.plurals.playersOnline.many': 'Wer: {count} Spieler online auf {realm}.',

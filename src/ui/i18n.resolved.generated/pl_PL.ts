@@ -265,6 +265,13 @@ export const pl_PL: EnTranslations = {
       "heading": "Kierunek",
       "minimapZoom": "Przybliżenie minimapy"
     },
+    "nativeUpdate": {
+      "title": "Update Available",
+      "body": "A new version of World of ClaudeCraft is available. Update now for the latest fixes and improvements.",
+      "bodyWithVersion": "Version {version} of World of ClaudeCraft is available. Update now for the latest fixes and improvements.",
+      "notNow": "Not now",
+      "update": "Update"
+    },
     "castBar": {
       "playerAria": "Twój pasek rzucania",
       "targetAria": "Pasek rzucania jednostki"
@@ -274,11 +281,16 @@ export const pl_PL: EnTranslations = {
       "tabsLabel": "Tablice wyników",
       "tabPlayers": "Gracze",
       "tabGuilds": "Gildie",
+      "tabDevs": "Deweloperzy",
       "guildName": "Gildia",
       "members": "Członkowie",
       "topLevel": "Top",
       "guildXp": "Łączne XP",
-      "guildEmpty": "Brak sklasyfikowanych gildii."
+      "guildEmpty": "Brak sklasyfikowanych gildii.",
+      "devName": "Kontrybutor",
+      "devTierCol": "Odznaka",
+      "mergedPrs": "Scalone PR-y",
+      "devEmpty": "Brak sklasyfikowanych kontrybutorów."
     },
     "raidLockout": {
       "title": "Blokady rajdów",
@@ -308,7 +320,8 @@ export const pl_PL: EnTranslations = {
     "keybinds": {
       "emoteWheel": "Koło emotek",
       "targetFriendly": "Obierz najbliższego sojusznika",
-      "targetFriendlyNext": "Przełączaj przyjazny cel"
+      "targetFriendlyNext": "Przełączaj przyjazny cel",
+      "discord": "Discord"
     },
     "options": {
       "clickMoveLeft": "Lewy przycisk",
@@ -330,8 +343,10 @@ export const pl_PL: EnTranslations = {
       "keybindHelpLockCursorOnRotate": "Utrzymuje kursor myszy wewnątrz okna podczas przeciągania w celu obracania kamery, aby nie mógł dotrzeć do krawędzi ekranu ani przejść na inny monitor. Wyłącz, jeśli wolisz swobodny kursor.",
       "showWalletOnCharacterScreen": "Pokaż sakiewkę na ekranie postaci",
       "showWalletOnPlayerCard": "Pokaż sakiewkę na karcie gracza",
+      "showDevBadges": "Pokaż odznaki deweloperów",
       "uiScale": "Skala interfejsu",
       "highContrastBackground": "Tło o wysokim kontraście",
+      "startAttackOnAbility": "Automatyczny atak przy użyciu umiejętności",
       "showItemLevel": "Pokaż poziom przedmiotu",
       "itemLevelLine": "Poziom przedmiotu {level}",
       "itemScoreLine": "Ocena {score}",
@@ -428,6 +443,9 @@ export const pl_PL: EnTranslations = {
     },
     "statInfo": {
       "fromYour": "Z twoich {value} pkt. cechy {stat}:",
+      "names": {
+        "spellPower": "Moc zaklęć"
+      },
       "desc": {
         "str": "Zwiększa twoją moc ataku, więc twoje ciosy bronią są mocniejsze.",
         "agi": "Wyostrza twój refleks i celność, poprawiając kilka twoich statystyk bojowych.",
@@ -436,6 +454,7 @@ export const pl_PL: EnTranslations = {
         "spi": "Przyspiesza tempo regeneracji many rzucającego zaklęcia podczas odpoczynku, poza walką.",
         "armor": "Łagodzi nadchodzące ciosy fizyczne. Redukcja jest większa wobec atakujących o niższym poziomie i jest ograniczona do 75%.",
         "attackPower": "Zasila twoje ataki bronią. Każde 14 punktów mocy ataku dodaje 1 obrażenie na sekundę.",
+        "spellPower": "Zwiększa obrażenia twoich zaklęć i siłę leczenia. Każdy punkt Intelektu zapewnia odrobinę Mocy zaklęć, dodatkowo do tej z ekwipunku lub wzmocnień.",
         "dps": "Twoje szacowane obrażenia bronią na sekundę, łączące obrażenia i szybkość twojej broni z mocą ataku.",
         "critChance": "Twoja szansa na zadanie ataku krytycznego, zadającego podwójne obrażenia.",
         "dodge": "Twoja szansa na całkowite uniknięcie nadchodzącego ataku wręcz, bez otrzymania obrażeń."
@@ -458,6 +477,15 @@ export const pl_PL: EnTranslations = {
         "minorForClass": "Niewielka korzyść dla twojej klasy.",
         "baseChance": "Obejmuje 5% szansy bazowej wspólnej dla wszystkich poszukiwaczy przygód.",
         "dpsApprox": "To szacunek, pomija trafienia krytyczne i obrażenia zdolności."
+      },
+      "sources": {
+        "header": "Składa się z:",
+        "base": "Bazowa: {value}",
+        "attributes": "Z twoich atrybutów: {value}",
+        "fromAttribute": "Z {stat}: {value}",
+        "gear": "Założony ekwipunek: {value}",
+        "buff": "{name}: {value}",
+        "talents": "Talenty i efekty: {value}"
       }
     },
     "talents": {
@@ -481,6 +509,9 @@ export const pl_PL: EnTranslations = {
       "ineligible": "Nie spełniasz wymagań tego zadania.",
       "noQuestSelected": "Wybierz zadanie w dzienniku, aby je udostępnić.",
       "linkTitle": "Kliknij z Shiftem, aby podlinkować to zadanie na czacie."
+    },
+    "itemShare": {
+      "linkHint": "Kliknij z Shift, aby wstawić link do tego przedmiotu na czacie."
     },
     "plurals": {
       "guildMembers": {
@@ -506,6 +537,12 @@ export const pl_PL: EnTranslations = {
         "few": "Kto: {count} graczy online na realmie {realm}.",
         "many": "Kto: {count} graczy online na realmie {realm}.",
         "other": "Kto: {count} graczy online na realmie {realm}."
+      },
+      "playersMatching": {
+        "one": "Kto: {count} gracz pasujący do \"{query}\" na {realm}.",
+        "few": "Kto: {count} graczy pasujących do \"{query}\" na {realm}.",
+        "many": "Kto: {count} graczy pasujących do \"{query}\" na {realm}.",
+        "other": "Kto: {count} gracza pasujących do \"{query}\" na {realm}."
       }
     },
     "bugReport": {
@@ -624,7 +661,26 @@ export const pl_PL: EnTranslations = {
       "methodGroup": "Metoda lupow ustawiona na lup grupowy.",
       "assigned": "{looter} przydzielil {item} graczowi {target}.",
       "unassigned": "{item} nie zostal przydzielony i jest wolny dla wszystkich.",
-      "leaderOnly": "Tylko przywodca grupy moze zmienic metode lupow."
+      "leaderOnly": "Tylko przywodca grupy moze zmienic metode lupow.",
+      "rollingFor": "Losowanie o {item}.",
+      "looterChanged": "Głównym zbieraczem jest teraz {name}.",
+      "thresholdSet": "Próg łupów ustawiony na {threshold}.",
+      "summaryMaster": "Ustawienia łupów: Łup główny, główny zbieracz {name}, próg {threshold}.",
+      "summaryGroup": "Ustawienia łupów: Łup grupowy."
+    },
+    "party": {
+      "promoteLeader": "Mianuj przywódcą"
+    },
+    "lootSettings": {
+      "title": "Ustawienia łupów",
+      "close": "Zamknij ustawienia łupów",
+      "menuItem": "Ustawienia łupów",
+      "method": "Metoda podziału łupów",
+      "rollThreshold": "Próg losowania",
+      "groupLoot": "Łup grupowy",
+      "valueMaster": "Łup główny",
+      "leaderOption": "Główny zbieracz: Przywódca (Ty)",
+      "masterOption": "Główny zbieracz: {name}"
     },
     "bags": {
       "filterGroupAria": "Filtruj torby według kategorii",
@@ -732,6 +788,9 @@ export const pl_PL: EnTranslations = {
     "nameplate": {
       "mob": "[{level}] {name}",
       "mobElite": "[{level}+] {name}"
+    },
+    "itemTooltip": {
+      "requiresLevel": "Wymaga poziomu {level}"
     },
     "discord": {
       "title": "Discord",
@@ -875,6 +934,34 @@ export const pl_PL: EnTranslations = {
           "hint": "Poproś społeczność o pomoc"
         }
       }
+    },
+    "devBadge": {
+      "title": "Deweloper",
+      "tiers": {
+        "tinkerer": "Majsterkowicz",
+        "artificer": "Mechanik",
+        "runesmith": "Runokowal",
+        "architect": "Architekt",
+        "worldwright": "Twórca światów"
+      },
+      "flavors": {
+        "tinkerer": "Twój pierwszy pull request trafił do królestwa.",
+        "artificer": "Pięć pull requestów i świat ugina się pod twoim kodem.",
+        "runesmith": "Piętnaście pull requestów wykutych w działającej grze.",
+        "architect": "Architekt królestwa: 30 scalonych pull requestów.",
+        "worldwright": "Twórca światów: 70 pull requestów kształtuje grę."
+      },
+      "badgeTitle": "Deweloper: {tier}",
+      "prsLanded": "{count} scalonych pull requestów",
+      "contributor": "Kontrybutor open source",
+      "link": {
+        "cta": "Połącz z GitHub",
+        "relink": "Połącz ponownie z GitHub",
+        "benefits": "Połącz swoje konto GitHub, aby zdobyć odznakę dewelopera za pull requesty scalone z repozytorium open source.",
+        "error": "Nie udało się połączyć z GitHub. Spróbuj ponownie."
+      },
+      "linkedAs": "Połączono jako {login}",
+      "unlink": "Odłącz GitHub"
     }
   },
   "guide": {
@@ -2546,6 +2633,7 @@ export const pl_PL: EnTranslations = {
       "usernameTaken": "Ta nazwa użytkownika jest już zajęta.",
       "invalidCredentials": "Nieprawidłowa nazwa użytkownika lub hasło.",
       "verificationFailed": "Weryfikacja nie powiodła się. Spróbuj ponownie.",
+      "desktopCodeInvalid": "Desktop login code is invalid or expired. Please try again.",
       "invalidCharacterName": "Nieprawidłowe imię postaci. Użyj od 2 do 16 liter.",
       "characterNameNotAllowed": "To imię postaci jest niedozwolone.",
       "invalidClass": "Nieprawidłowa klasa.",
@@ -2562,6 +2650,21 @@ export const pl_PL: EnTranslations = {
       "takenOver": "Twoją postać przejęła inna sesja.",
       "renameBeforeEntering": "Tę postać trzeba przemianować przed wejściem do świata.",
       "renameNotPermitted": "Zmiana imienia tej postaci jest niedozwolona."
+    }
+  },
+  "desktop": {
+    "update": {
+      "downloading": "Downloading update {version}...",
+      "ready": "Update {version} is ready. It installs when you quit, or restart now.",
+      "restart": "Restart now",
+      "later": "Later"
+    },
+    "crash": {
+      "title": "World of ClaudeCraft",
+      "body": "The game view stopped working. Reload it?",
+      "reload": "Reload",
+      "quit": "Quit",
+      "fatalBody": "World of ClaudeCraft hit an unexpected error and needs to close."
     }
   },
   "realm": {
@@ -5631,6 +5734,11 @@ export const pl_PL: EnTranslations = {
         "name": "Mistrz Wiedzy Caddis",
         "title": "Mistrz Wiedzy",
         "greeting": "Uważaj na luźny łupek, {className}. Góra była ostatnio... niespokojna. Zamierzam dociec dlaczego."
+      },
+      "auctioneer_voss": {
+        "name": "Aukcjoner Voss",
+        "title": "Strażnik Rynku Świata",
+        "greeting": "Rynek Świata jest otwarty także tutaj, {className}. Kupuj od każdego poszukiwacza przygód w królestwie albo wystaw własne towary."
       },
       "brother_aldric_raid": {
         "name": "Brat Aldric",

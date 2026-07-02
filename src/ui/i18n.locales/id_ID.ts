@@ -2,6 +2,79 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const id_ID: Partial<Record<TranslationKey, string>> = {
+  'entities.npcs.auctioneer_voss.greeting':
+    'World Market juga buka di sini, {className}. Belilah dari setiap petualang di alam ini, atau gelarlah daganganmu sendiri.',
+  'entities.npcs.auctioneer_voss.name': 'Pelelang Voss',
+  'entities.npcs.auctioneer_voss.title': 'Penjaga World Market',
+  'hudChrome.devBadge.badgeTitle': 'Pengembang: {tier}',
+  'hudChrome.devBadge.contributor': 'Kontributor sumber terbuka',
+  'hudChrome.devBadge.flavors.architect':
+    'Seorang arsitek alam ini: 30 pull request telah digabungkan.',
+  'hudChrome.devBadge.flavors.artificer':
+    'Lima pull request masuk, dan dunia pun tunduk pada kodemu.',
+  'hudChrome.devBadge.flavors.runesmith':
+    'Lima belas pull request ditempa ke dalam permainan yang berjalan.',
+  'hudChrome.devBadge.flavors.tinkerer': 'Pull request pertamamu telah mendarat di alam ini.',
+  'hudChrome.devBadge.flavors.worldwright':
+    'Seorang perancang dunia: 70 pull request membentuk permainan ini.',
+  'hudChrome.devBadge.link.benefits':
+    'Tautkan GitHub-mu untuk mendapatkan lencana pengembang atas pull request yang telah digabungkan ke repositori sumber terbuka.',
+  'hudChrome.devBadge.link.cta': 'Tautkan GitHub',
+  'hudChrome.devBadge.link.error': 'Tidak dapat menautkan GitHub. Silakan coba lagi.',
+  'hudChrome.devBadge.link.relink': 'Tautkan Ulang GitHub',
+  'hudChrome.devBadge.linkedAs': 'Tertaut sebagai {login}',
+  'hudChrome.devBadge.prsLanded': '{count} pull request digabungkan',
+  'hudChrome.devBadge.tiers.architect': 'Arsitek',
+  'hudChrome.devBadge.tiers.artificer': 'Perekayasa',
+  'hudChrome.devBadge.tiers.runesmith': 'Pandai Rune',
+  'hudChrome.devBadge.tiers.tinkerer': 'Perakit',
+  'hudChrome.devBadge.tiers.worldwright': 'Perancang Dunia',
+  'hudChrome.devBadge.title': 'Pengembang',
+  'hudChrome.devBadge.unlink': 'Putuskan Tautan GitHub',
+  'hudChrome.itemShare.linkHint': 'Shift-klik untuk menautkan item ini di obrolan.',
+  'hudChrome.itemTooltip.requiresLevel': 'Membutuhkan Level {level}',
+  'hudChrome.keybinds.discord': 'Discord',
+  'hudChrome.leaderboard.devEmpty': 'Belum ada kontributor berperingkat.',
+  'hudChrome.leaderboard.devName': 'Kontributor',
+  'hudChrome.leaderboard.devTierCol': 'Lencana',
+  'hudChrome.leaderboard.mergedPrs': 'PR Digabungkan',
+  'hudChrome.leaderboard.tabDevs': 'Pengembang',
+  'hudChrome.lootSettings.close': 'Tutup pengaturan jarahan',
+  'hudChrome.lootSettings.groupLoot': 'Jarahan Kelompok',
+  'hudChrome.lootSettings.leaderOption': 'Penjarah Utama: Pemimpin (Anda)',
+  'hudChrome.lootSettings.masterOption': 'Penjarah Utama: {name}',
+  'hudChrome.lootSettings.menuItem': 'Pengaturan Jarahan',
+  'hudChrome.lootSettings.method': 'Metode Jarahan',
+  'hudChrome.lootSettings.rollThreshold': 'Ambang Lempar Dadu',
+  'hudChrome.lootSettings.title': 'Pengaturan Jarahan',
+  'hudChrome.lootSettings.valueMaster': 'Jarahan Utama',
+  'hudChrome.masterLoot.looterChanged': 'Penjarah Utama kini adalah {name}.',
+  'hudChrome.masterLoot.rollingFor': 'Melempar dadu untuk {item}.',
+  'hudChrome.masterLoot.summaryGroup': 'Pengaturan Jarahan: Jarahan Kelompok.',
+  'hudChrome.masterLoot.summaryMaster':
+    'Pengaturan Jarahan: Jarahan Utama, Penjarah Utama {name}, ambang {threshold}.',
+  'hudChrome.masterLoot.thresholdSet': 'Ambang jarahan diatur ke {threshold}.',
+  'hudChrome.options.showDevBadges': 'Tampilkan Lencana Pengembang',
+  'hudChrome.options.startAttackOnAbility': 'Serangan Otomatis Saat Memakai Kemampuan',
+  'hudChrome.party.promoteLeader': 'Angkat jadi Pemimpin',
+  'hudChrome.plurals.playersMatching.few':
+    'Siapa: {count} pemain yang cocok dengan "{query}" di {realm}.',
+  'hudChrome.plurals.playersMatching.many':
+    'Siapa: {count} pemain yang cocok dengan "{query}" di {realm}.',
+  'hudChrome.plurals.playersMatching.one':
+    'Siapa: {count} pemain yang cocok dengan "{query}" di {realm}.',
+  'hudChrome.plurals.playersMatching.other':
+    'Siapa: {count} pemain yang cocok dengan "{query}" di {realm}.',
+  'hudChrome.statInfo.desc.spellPower':
+    'Meningkatkan kerusakan mantra dan kekuatan penyembuhanmu. Setiap poin Kecerdasan memberi sedikit Kekuatan Mantra, di atas apa pun dari perlengkapan atau buff.',
+  'hudChrome.statInfo.names.spellPower': 'Kekuatan Mantra',
+  'hudChrome.statInfo.sources.attributes': 'Dari atributmu: {value}',
+  'hudChrome.statInfo.sources.base': 'Dasar: {value}',
+  'hudChrome.statInfo.sources.buff': '{name}: {value}',
+  'hudChrome.statInfo.sources.fromAttribute': 'Dari {stat}: {value}',
+  'hudChrome.statInfo.sources.gear': 'Perlengkapan terpasang: {value}',
+  'hudChrome.statInfo.sources.header': 'Terdiri dari:',
+  'hudChrome.statInfo.sources.talents': 'Talenta dan efek: {value}',
   'a11y.characterActions': 'Aksi karakter',
   'a11y.discordCommunity': 'Gabung komunitas Discord World of ClaudeCraft',
   'a11y.donateProject': 'Berdonasi untuk mendukung World of ClaudeCraft',

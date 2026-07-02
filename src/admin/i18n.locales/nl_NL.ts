@@ -7,6 +7,13 @@
 // (tests/i18n_admin_catalog.test.ts).
 
 export const nl_NL: Record<string, string> = {
+  'usage.cache.githubContributors': 'GitHub-bijdragers-cache',
+  'usage.metric.githubContributorsFetch': 'GitHub-bijdragersstatistieken-ophalingen',
+  'usage.metric.githubContributorsFetchFailure':
+    'Mislukte GitHub-bijdragersstatistieken-ophalingen',
+  'usage.metric.githubLinkFailure': 'Mislukte GitHub-koppelingen',
+  'usage.metric.githubLinkRateLimited': 'Beperkte GitHub-koppelingsverzoeken',
+  'usage.metric.githubLinkRequest': 'GitHub-koppelingsverzoeken',
   'app.title': 'World of ClaudeCraft - Beheer',
   'app.shortTitle': 'WoC-beheerder',
   'auth.username': 'Gebruikersnaam',

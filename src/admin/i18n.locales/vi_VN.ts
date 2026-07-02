@@ -7,6 +7,12 @@
 // (tests/i18n_admin_catalog.test.ts).
 
 export const vi_VN: Record<string, string> = {
+  'usage.cache.githubContributors': 'Bộ nhớ đệm người đóng góp GitHub',
+  'usage.metric.githubContributorsFetch': 'Lượt truy xuất thống kê người đóng góp GitHub',
+  'usage.metric.githubContributorsFetchFailure': 'Lỗi truy xuất thống kê người đóng góp GitHub',
+  'usage.metric.githubLinkFailure': 'Lỗi liên kết GitHub',
+  'usage.metric.githubLinkRateLimited': 'Yêu cầu liên kết GitHub bị giới hạn tần suất',
+  'usage.metric.githubLinkRequest': 'Yêu cầu liên kết GitHub',
   'app.title': 'World of ClaudeCraft - Quản trị',
   'app.shortTitle': 'Quản trị viên WoC',
   'auth.username': 'Tên đăng nhập',

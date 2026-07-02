@@ -14,8 +14,10 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ru_RU: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.keybinds.discord': 'Discord',
   'hudChrome.spectate.banner': 'Наблюдение за {name}',
   'hudChrome.loot.chestTitle': 'Сундук',
+  'hudChrome.itemTooltip.requiresLevel': 'Требуется уровень {level}',
   'hudChrome.spellbook.addToBarAria': 'Добавить {name} на панель действий',
   'hudChrome.spellbook.removeFromBarAria': 'Убрать {name} с панели действий',
   'hudChrome.nameplate.mob': '[{level}] {name}',
@@ -46,6 +48,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.questShare.ineligible': 'Вы не соответствуете требованиям этого задания.',
   'hudChrome.questShare.noQuestSelected': 'Выберите задание в журнале, чтобы поделиться им.',
   'hudChrome.questShare.linkTitle': 'Shift + клик, чтобы вставить ссылку на это задание в чат.',
+  'hudChrome.itemShare.linkHint': 'Shift + клик, чтобы вставить ссылку на этот предмет в чат.',
   'hudChrome.unitFrame.partyGroup': 'Группа {n}',
   'hudChrome.character.modelPreview': 'Предпросмотр модели персонажа',
   'character.sortBy': 'Сортировка',
@@ -75,6 +78,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.masterLoot.enableAria': 'Включить мастера добычи',
   'hudChrome.masterLoot.looterLabel': 'Мастер добычи',
   'hudChrome.masterLoot.leaderOption': 'Лидер группы',
+  'hudChrome.party.promoteLeader': 'Назначить лидером',
   'hudChrome.masterLoot.thresholdLabel': 'Порог качества',
   'hudChrome.masterLoot.thresholdUncommon': 'Необычное и выше',
   'hudChrome.masterLoot.thresholdRare': 'Редкое и выше',
@@ -89,6 +93,21 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.masterLoot.assigned': '{looter} передал предмет {item} игроку {target}.',
   'hudChrome.masterLoot.unassigned': 'Предмет {item} не был назначен и доступен всем.',
   'hudChrome.masterLoot.leaderOnly': 'Только лидер группы может менять способ добычи.',
+  'hudChrome.masterLoot.rollingFor': 'Бросок на {item}.',
+  'hudChrome.masterLoot.looterChanged': 'Теперь мастер добычи: {name}.',
+  'hudChrome.masterLoot.thresholdSet': 'Порог качества установлен: {threshold}.',
+  'hudChrome.masterLoot.summaryMaster':
+    'Настройки добычи: мастер добычи, мастер добычи {name}, порог качества {threshold}.',
+  'hudChrome.masterLoot.summaryGroup': 'Настройки добычи: групповая добыча.',
+  'hudChrome.lootSettings.title': 'Настройки добычи',
+  'hudChrome.lootSettings.close': 'Закрыть настройки добычи',
+  'hudChrome.lootSettings.menuItem': 'Настройки добычи',
+  'hudChrome.lootSettings.method': 'Способ добычи',
+  'hudChrome.lootSettings.rollThreshold': 'Порог броска',
+  'hudChrome.lootSettings.groupLoot': 'Групповая добыча',
+  'hudChrome.lootSettings.valueMaster': 'Мастер добычи',
+  'hudChrome.lootSettings.leaderOption': 'Мастер добычи: лидер группы (вы)',
+  'hudChrome.lootSettings.masterOption': 'Мастер добычи: {name}',
   'hudChrome.theme.preset': 'Тема интерфейса',
   'hudChrome.theme.customColors': 'Настраиваемые цвета',
   'hudChrome.theme.reset': 'Сброс',
@@ -113,6 +132,16 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
     'В режиме «Авто» управление для компьютера или сенсорное выбирается по вашему устройству. Выберите «Компьютер», чтобы включить клавиатуру и мышь (удобно на планшете с клавиатурой), или «Сенсорный» для экранного управления.',
   // Character-sheet stat tooltips (hudChrome.statInfo.*).
   'hudChrome.statInfo.fromYour': 'От вашей характеристики ({value} {stat}):',
+  'hudChrome.statInfo.names.spellPower': 'Сила заклинаний',
+  'hudChrome.statInfo.desc.spellPower':
+    'Увеличивает урон ваших заклинаний и силу исцелений. Каждая единица интеллекта дает немного силы заклинаний, вдобавок к получаемой от снаряжения и усилений.',
+  'hudChrome.statInfo.sources.header': 'Складывается из:',
+  'hudChrome.statInfo.sources.base': 'База: {value}',
+  'hudChrome.statInfo.sources.attributes': 'От характеристик: {value}',
+  'hudChrome.statInfo.sources.fromAttribute': 'От характеристики {stat}: {value}',
+  'hudChrome.statInfo.sources.gear': 'Снаряжение: {value}',
+  'hudChrome.statInfo.sources.buff': '{name}: {value}',
+  'hudChrome.statInfo.sources.talents': 'Таланты и эффекты: {value}',
   'hudChrome.statInfo.desc.str':
     'Увеличивает силу атаки, благодаря чему удары вашим оружием бьют сильнее.',
   'hudChrome.statInfo.desc.agi':
@@ -246,11 +275,13 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
     'Авто снижает тяжёлые CSS-эффекты (размытие, свечение, движение фона) в зависимости от браузера и устройства. Если интерфейс тормозит, понизьте вручную.',
   'hudChrome.options.footstepSounds': 'Звуки шагов',
   'hudChrome.options.clickFeedback': 'Метка клика',
+  'hudChrome.options.startAttackOnAbility': 'Автоатака при использовании способности',
   'hudChrome.options.lockCursorOnRotate': 'Блокировать курсор при вращении',
   'hudChrome.options.keybindHelpLockCursorOnRotate':
     'Удерживает курсор мыши внутри окна, пока вы вращаете камеру перетаскиванием, чтобы он не достигал края экрана и не переходил на другой монитор. Отключите, если предпочитаете свободный курсор.',
   'hudChrome.options.showWalletOnCharacterScreen': 'Показывать кошелек на экране персонажей',
   'hudChrome.options.showWalletOnPlayerCard': 'Показывать кошелек на карточке игрока',
+  'hudChrome.options.showDevBadges': 'Показывать значки разработчика',
   'hudChrome.playerCard.showWalletBadge': 'Показывать значок кошелька',
   'hudChrome.options.uiScale': 'Масштаб интерфейса',
   'hudChrome.options.highContrastBackground': 'Фон высокой контрастности',
@@ -700,6 +731,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'errors.api.usernameTaken': 'Это имя пользователя уже занято.',
   'errors.api.invalidCredentials': 'Неверное имя пользователя или пароль.',
   'errors.api.verificationFailed': 'Проверка не пройдена. Повторите попытку.',
+  'errors.api.desktopCodeInvalid':
+    'Код входа для настольного приложения недействителен или истёк. Повторите попытку.',
   'errors.api.invalidCharacterName': 'Недопустимое имя персонажа. Используйте 2-16 букв.',
   'errors.api.characterNameNotAllowed': 'Это имя персонажа запрещено.',
   'errors.api.invalidClass': 'Недопустимый класс.',
@@ -2465,6 +2498,10 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.loremaster_caddis.title': 'Хранитель знаний',
   'entities.npcs.loremaster_caddis.greeting':
     'Осторожнее с рыхлым сланцем, {className}. Гора стала беспокойной, и я намерен узнать почему.',
+  'entities.npcs.auctioneer_voss.name': 'Аукционист Восс',
+  'entities.npcs.auctioneer_voss.title': 'Хранитель мирового рынка',
+  'entities.npcs.auctioneer_voss.greeting':
+    'Мировой рынок доступен и здесь, {className}. Покупайте у искателей приключений всего королевства или выставляйте свои товары.',
   'entities.npcs.tidewatcher_ondrel.name': 'Ондрел Вейн',
   'entities.npcs.tidewatcher_ondrel.title': 'Страж приливов',
   'entities.npcs.tidewatcher_ondrel.greeting':
@@ -3327,6 +3364,11 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.leaderboard.topLevel': 'Макс',
   'hudChrome.leaderboard.guildXp': 'Всего опыта',
   'hudChrome.leaderboard.guildEmpty': 'Пока нет гильдий в рейтинге.',
+  'hudChrome.leaderboard.tabDevs': 'Разработчики',
+  'hudChrome.leaderboard.devName': 'Участник',
+  'hudChrome.leaderboard.devTierCol': 'Значок',
+  'hudChrome.leaderboard.mergedPrs': 'Слито PR',
+  'hudChrome.leaderboard.devEmpty': 'Пока нет участников в рейтинге.',
   'hudChrome.widgets.worldCoordinates': 'Координаты мира',
   'hudChrome.plurals.guildMembers.one': 'вы {rank}, {count} участник',
   'hudChrome.plurals.guildMembers.few': 'вы {rank}, {count} участника',
@@ -3340,6 +3382,14 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.plurals.secondsRemaining.few': 'Осталось {count} сек.',
   'hudChrome.plurals.secondsRemaining.many': 'Осталось {count} сек.',
   'hudChrome.plurals.secondsRemaining.other': 'Осталось {count} сек.',
+  'hudChrome.plurals.playersMatching.one':
+    'Список игроков: на {realm} по запросу «{query}» найден {count} игрок.',
+  'hudChrome.plurals.playersMatching.few':
+    'Список игроков: на {realm} по запросу «{query}» найдено {count} игрока.',
+  'hudChrome.plurals.playersMatching.many':
+    'Список игроков: на {realm} по запросу «{query}» найдено {count} игроков.',
+  'hudChrome.plurals.playersMatching.other':
+    'Список игроков: на {realm} по запросу «{query}» найдено {count} игроков.',
   'hudChrome.plurals.playersOnline.one': 'Список игроков: на {realm} в сети {count} игрок.',
   'hudChrome.plurals.playersOnline.few': 'Список игроков: на {realm} в сети {count} игрока.',
   'hudChrome.plurals.playersOnline.many': 'Список игроков: на {realm} в сети {count} игроков.',
@@ -4997,4 +5047,44 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.relay.wts.label': 'Продам',
   'hudChrome.discord.relay.wtb.label': 'Куплю',
   'hudChrome.discord.relay.help.label': 'Нужна помощь',
+  // Developer badge (M16 non-Latin fills).
+  'hudChrome.devBadge.title': 'Разработчик',
+  'hudChrome.devBadge.tiers.tinkerer': 'Мастеровой',
+  'hudChrome.devBadge.tiers.artificer': 'Искусник',
+  'hudChrome.devBadge.tiers.runesmith': 'Рунный кузнец',
+  'hudChrome.devBadge.tiers.architect': 'Архитектор',
+  'hudChrome.devBadge.tiers.worldwright': 'Творец мира',
+  'hudChrome.devBadge.flavors.tinkerer': 'Ваш первый пул-реквест слился с этим миром.',
+  'hudChrome.devBadge.flavors.artificer': 'Пять пул-реквестов спустя мир подчиняется вашему коду.',
+  'hudChrome.devBadge.flavors.runesmith': 'Пятнадцать пул-реквестов вкованы в работающую игру.',
+  'hudChrome.devBadge.flavors.architect': 'Архитектор этого мира: слито 30 пул-реквестов.',
+  'hudChrome.devBadge.flavors.worldwright': 'Творец миров: 70 пул-реквестов формируют игру.',
+  'hudChrome.devBadge.badgeTitle': 'Разработчик: {tier}',
+  'hudChrome.devBadge.prsLanded': 'Слито пул-реквестов: {count}',
+  'hudChrome.devBadge.contributor': 'Контрибьютор открытого кода',
+  'hudChrome.devBadge.link.cta': 'Привязать GitHub',
+  'hudChrome.devBadge.link.relink': 'Перепривязать GitHub',
+  'hudChrome.devBadge.link.benefits':
+    'Привяжите GitHub, чтобы получить значок разработчика за пул-реквесты, слитые в открытом репозитории.',
+  'hudChrome.devBadge.link.error': 'Не удалось привязать GitHub. Пожалуйста, попробуйте снова.',
+  'hudChrome.devBadge.linkedAs': 'Привязан как {login}',
+  'hudChrome.devBadge.unlink': 'Отвязать GitHub',
+  'hudChrome.nativeUpdate.title': 'Доступно обновление',
+  'hudChrome.nativeUpdate.body':
+    'Доступна новая версия World of ClaudeCraft. Обновите сейчас, чтобы получить последние исправления и улучшения.',
+  'hudChrome.nativeUpdate.bodyWithVersion':
+    'Доступна версия {version} World of ClaudeCraft. Обновите сейчас, чтобы получить последние исправления и улучшения.',
+  'hudChrome.nativeUpdate.notNow': 'Не сейчас',
+  'hudChrome.nativeUpdate.update': 'Обновить',
+  'desktop.update.downloading': 'Загрузка обновления {version}...',
+  'desktop.update.ready':
+    'Обновление {version} готово. Оно установится при выходе из игры, либо перезапустите сейчас.',
+  'desktop.update.restart': 'Перезапустить сейчас',
+  'desktop.update.later': 'Позже',
+  'desktop.crash.title': 'World of ClaudeCraft',
+  'desktop.crash.body': 'Игровой экран перестал отвечать. Перезагрузить его?',
+  'desktop.crash.reload': 'Перезагрузить',
+  'desktop.crash.quit': 'Выйти',
+  'desktop.crash.fatalBody':
+    'World of ClaudeCraft столкнулась с непредвиденной ошибкой и будет закрыта.',
 };

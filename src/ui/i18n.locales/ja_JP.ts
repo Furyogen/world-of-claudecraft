@@ -14,8 +14,10 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ja_JP: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.keybinds.discord': 'Discord',
   'hudChrome.spectate.banner': '{name}を観戦中',
   'hudChrome.loot.chestTitle': '宝箱',
+  'hudChrome.itemTooltip.requiresLevel': '必要レベル {level}',
   'hudChrome.spellbook.addToBarAria': '{name}をアクションバーに追加',
   'hudChrome.spellbook.removeFromBarAria': '{name}をアクションバーから削除',
   'hudChrome.nameplate.mob': '[{level}] {name}',
@@ -46,6 +48,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.questShare.ineligible': 'このクエストの条件を満たしていません。',
   'hudChrome.questShare.noQuestSelected': '共有するクエストをログから選択してください。',
   'hudChrome.questShare.linkTitle': 'Shift + クリックでこのクエストをチャットにリンクします。',
+  'hudChrome.itemShare.linkHint': 'Shift + クリックでこのアイテムをチャットにリンクします。',
   'hudChrome.unitFrame.partyGroup': 'グループ {n}',
   'hudChrome.character.modelPreview': 'キャラクターモデルプレビュー',
   'character.sortBy': '並べ替え',
@@ -75,6 +78,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.masterLoot.enableAria': 'マスタールートを有効化',
   'hudChrome.masterLoot.looterLabel': '分配担当',
   'hudChrome.masterLoot.leaderOption': 'パーティリーダー',
+  'hudChrome.party.promoteLeader': 'パーティリーダーに指定',
   'hudChrome.masterLoot.thresholdLabel': '品質しきい値',
   'hudChrome.masterLoot.thresholdUncommon': 'アンコモン以上',
   'hudChrome.masterLoot.thresholdRare': 'レア以上',
@@ -88,6 +92,21 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.masterLoot.assigned': '{looter}が{item}を{target}に分配しました。',
   'hudChrome.masterLoot.unassigned': '{item}は分配されず、誰でも入手できます。',
   'hudChrome.masterLoot.leaderOnly': '分配方式を変更できるのはパーティリーダーだけです。',
+  'hudChrome.masterLoot.rollingFor': '{item}にロールしています。',
+  'hudChrome.masterLoot.looterChanged': '分配担当は{name}になりました。',
+  'hudChrome.masterLoot.thresholdSet': '品質しきい値を{threshold}に設定しました。',
+  'hudChrome.masterLoot.summaryMaster':
+    '分配設定：マスタールート、分配担当{name}、品質しきい値{threshold}。',
+  'hudChrome.masterLoot.summaryGroup': '分配設定：グループルート。',
+  'hudChrome.lootSettings.title': '分配設定',
+  'hudChrome.lootSettings.close': '分配設定を閉じる',
+  'hudChrome.lootSettings.menuItem': '分配設定',
+  'hudChrome.lootSettings.method': '分配方式',
+  'hudChrome.lootSettings.rollThreshold': 'ロールしきい値',
+  'hudChrome.lootSettings.groupLoot': 'グループルート',
+  'hudChrome.lootSettings.valueMaster': 'マスタールート',
+  'hudChrome.lootSettings.leaderOption': '分配担当：パーティリーダー（あなた）',
+  'hudChrome.lootSettings.masterOption': '分配担当：{name}',
   'hudChrome.theme.preset': 'UIテーマ',
   'hudChrome.theme.customColors': 'カスタムカラー',
   'hudChrome.theme.reset': 'リセット',
@@ -112,6 +131,16 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     '自動では、デバイスに応じてデスクトップ操作かタッチ操作を選びます。デスクトップを選ぶとキーボードとマウスに固定され（キーボード付きタブレットなどに便利）、タッチを選ぶと画面上の操作になります。',
   // Character-sheet stat tooltips (hudChrome.statInfo.*).
   'hudChrome.statInfo.fromYour': 'あなたの{stat}{value}による効果:',
+  'hudChrome.statInfo.names.spellPower': '呪文威力',
+  'hudChrome.statInfo.desc.spellPower':
+    '呪文のダメージと回復の効果を高めます。知力1ポイントごとに、装備やバフによる分に加えて、わずかな呪文威力を得られます。',
+  'hudChrome.statInfo.sources.header': '内訳:',
+  'hudChrome.statInfo.sources.base': '基本: {value}',
+  'hudChrome.statInfo.sources.attributes': '能力値から: {value}',
+  'hudChrome.statInfo.sources.fromAttribute': '{stat}から: {value}',
+  'hudChrome.statInfo.sources.gear': '装備: {value}',
+  'hudChrome.statInfo.sources.buff': '{name}: {value}',
+  'hudChrome.statInfo.sources.talents': 'タレントと効果: {value}',
   'hudChrome.statInfo.desc.str': '攻撃力を上昇させ、武器による攻撃の威力を高めます。',
   'hudChrome.statInfo.desc.agi': '反射神経と狙いを鋭くし、複数の戦闘ステータスを向上させます。',
   'hudChrome.statInfo.desc.sta': '肉体を強化し、最大体力と休憩中の体力回復速度を高めます。',
@@ -233,11 +262,13 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     '自動はブラウザとデバイスに応じて、負荷の高い CSS エフェクト（ぼかし・グロー・背景アニメーション）を抑えます。動作が重い場合は手動で下げてください。',
   'hudChrome.options.footstepSounds': '足音',
   'hudChrome.options.clickFeedback': 'クリックマーカー',
+  'hudChrome.options.startAttackOnAbility': 'アビリティ使用時に自動攻撃',
   'hudChrome.options.lockCursorOnRotate': '回転中はカーソルを固定',
   'hudChrome.options.keybindHelpLockCursorOnRotate':
     'ドラッグでカメラを回転させている間、マウスカーソルをウィンドウ内に固定し、画面の端や別のモニターに移動しないようにします。自由なカーソルを好む場合はオフにしてください。',
   'hudChrome.options.showWalletOnCharacterScreen': 'キャラクター画面にウォレットを表示',
   'hudChrome.options.showWalletOnPlayerCard': 'プレイヤーカードにウォレットを表示',
+  'hudChrome.options.showDevBadges': '開発者バッジを表示',
   'hudChrome.playerCard.showWalletBadge': 'ウォレットバッジを表示',
   'hudChrome.options.uiScale': 'UIスケール',
   'hudChrome.options.highContrastBackground': '高コントラスト背景',
@@ -683,6 +714,8 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'errors.api.usernameTaken': 'そのユーザー名は既に使われています。',
   'errors.api.invalidCredentials': 'ユーザー名またはパスワードが正しくありません。',
   'errors.api.verificationFailed': '確認に失敗しました。もう一度お試しください。',
+  'errors.api.desktopCodeInvalid':
+    'デスクトップ版のログインコードが無効か期限切れです。もう一度お試しください。',
   'errors.api.invalidCharacterName': 'キャラクター名が無効です。2-16文字の英字を使用してください。',
   'errors.api.characterNameNotAllowed': 'そのキャラクター名は使用できません。',
   'errors.api.invalidClass': '無効なクラスです。',
@@ -2433,6 +2466,10 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.loremaster_caddis.title': '博識者',
   'entities.npcs.loremaster_caddis.greeting':
     '崩れやすい頁岩に気をつけてください、{className}。山は近ごろ落ち着きがなく、その理由を知りたいのです。',
+  'entities.npcs.auctioneer_voss.name': '競売人ヴォス',
+  'entities.npcs.auctioneer_voss.title': '世界市場の守り手',
+  'entities.npcs.auctioneer_voss.greeting':
+    '世界市場はここでも利用できます、{className}。王国中の冒険者から買うことも、自分の品を売ることもできます。',
   'entities.npcs.tidewatcher_ondrel.name': 'オンドレル・ヴェイン',
   'entities.npcs.tidewatcher_ondrel.title': '潮見の番人',
   'entities.npcs.tidewatcher_ondrel.greeting':
@@ -3280,6 +3317,11 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.leaderboard.topLevel': '最高',
   'hudChrome.leaderboard.guildXp': '累計経験値',
   'hudChrome.leaderboard.guildEmpty': 'ランク入りのギルドはまだありません。',
+  'hudChrome.leaderboard.tabDevs': '開発者',
+  'hudChrome.leaderboard.devName': 'コントリビューター',
+  'hudChrome.leaderboard.devTierCol': 'バッジ',
+  'hudChrome.leaderboard.mergedPrs': 'マージ済みPR',
+  'hudChrome.leaderboard.devEmpty': 'ランク入りのコントリビューターはまだいません。',
   'hudChrome.widgets.worldCoordinates': 'ワールド座標',
   'hudChrome.plurals.guildMembers.one': 'あなたは{rank}、{count}人のメンバー',
   'hudChrome.plurals.guildMembers.few': 'あなたは{rank}、{count}人のメンバー',
@@ -3293,6 +3335,14 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.plurals.secondsRemaining.few': '残り {count} 秒',
   'hudChrome.plurals.secondsRemaining.many': '残り {count} 秒',
   'hudChrome.plurals.secondsRemaining.other': '残り {count} 秒',
+  'hudChrome.plurals.playersMatching.one':
+    'Who：{realm}で「{query}」に一致するプレイヤーが{count}人います。',
+  'hudChrome.plurals.playersMatching.few':
+    'Who：{realm}で「{query}」に一致するプレイヤーが{count}人います。',
+  'hudChrome.plurals.playersMatching.many':
+    'Who：{realm}で「{query}」に一致するプレイヤーが{count}人います。',
+  'hudChrome.plurals.playersMatching.other':
+    'Who：{realm}で「{query}」に一致するプレイヤーが{count}人います。',
   'hudChrome.plurals.playersOnline.one': 'Who：{realm}に{count}人のプレイヤーがオンラインです。',
   'hudChrome.plurals.playersOnline.few': 'Who：{realm}に{count}人のプレイヤーがオンラインです。',
   'hudChrome.plurals.playersOnline.many': 'Who：{realm}に{count}人のプレイヤーがオンラインです。',
@@ -4885,4 +4935,45 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.relay.wts.label': '売却希望',
   'hudChrome.discord.relay.wtb.label': '購入希望',
   'hudChrome.discord.relay.help.label': 'ヘルプが必要',
+  // Developer badge (M16 non-Latin fills).
+  'hudChrome.devBadge.title': '開発者',
+  'hudChrome.devBadge.tiers.tinkerer': '修繕屋',
+  'hudChrome.devBadge.tiers.artificer': '工匠',
+  'hudChrome.devBadge.tiers.runesmith': 'ルーン鍛冶',
+  'hudChrome.devBadge.tiers.architect': '設計者',
+  'hudChrome.devBadge.tiers.worldwright': '世界の造り手',
+  'hudChrome.devBadge.flavors.tinkerer': '最初のプルリクエストがこの世界にマージされた。',
+  'hudChrome.devBadge.flavors.artificer':
+    '5 件のプルリクエストを経て、世界はあなたのコードに従い始める。',
+  'hudChrome.devBadge.flavors.runesmith': '15 件のプルリクエストが、稼働中のゲームに鍛え込まれた。',
+  'hudChrome.devBadge.flavors.architect': 'この世界の設計者：30 件のプルリクエストがマージされた。',
+  'hudChrome.devBadge.flavors.worldwright':
+    '世界の造り手：70 件のプルリクエストがこのゲームを形づくる。',
+  'hudChrome.devBadge.badgeTitle': '開発者：{tier}',
+  'hudChrome.devBadge.prsLanded': '{count} 件のプルリクエストがマージ済み',
+  'hudChrome.devBadge.contributor': 'オープンソース貢献者',
+  'hudChrome.devBadge.link.cta': 'GitHub を連携',
+  'hudChrome.devBadge.link.relink': 'GitHub を再連携',
+  'hudChrome.devBadge.link.benefits':
+    'GitHub を連携すると、オープンソースリポジトリにマージされたプルリクエストに応じて開発者バッジを獲得できます。',
+  'hudChrome.devBadge.link.error': 'GitHub を連携できませんでした。もう一度お試しください。',
+  'hudChrome.devBadge.linkedAs': '{login} として連携済み',
+  'hudChrome.devBadge.unlink': 'GitHub の連携を解除',
+  'hudChrome.nativeUpdate.title': 'アップデートがあります',
+  'hudChrome.nativeUpdate.body':
+    'World of ClaudeCraft の新しいバージョンが利用可能です。今すぐアップデートして最新の修正と改善を入手しましょう。',
+  'hudChrome.nativeUpdate.bodyWithVersion':
+    'World of ClaudeCraft のバージョン {version} が利用可能です。今すぐアップデートして最新の修正と改善を入手しましょう。',
+  'hudChrome.nativeUpdate.notNow': '後で',
+  'hudChrome.nativeUpdate.update': '更新',
+  'desktop.update.downloading': 'アップデート {version} をダウンロード中...',
+  'desktop.update.ready':
+    'アップデート {version} の準備ができました。ゲーム終了時に自動でインストールされます。今すぐ再起動もできます。',
+  'desktop.update.restart': '今すぐ再起動',
+  'desktop.update.later': '後で',
+  'desktop.crash.title': 'World of ClaudeCraft',
+  'desktop.crash.body': 'ゲーム画面が停止しました。再読み込みしますか？',
+  'desktop.crash.reload': '再読み込み',
+  'desktop.crash.quit': '終了',
+  'desktop.crash.fatalBody': 'World of ClaudeCraft で予期しないエラーが発生したため、終了します。',
 };

@@ -7,6 +7,12 @@
 // (tests/i18n_admin_catalog.test.ts).
 
 export const ko_KR: Record<string, string> = {
+  'usage.cache.githubContributors': 'GitHub 기여자 캐시',
+  'usage.metric.githubContributorsFetch': 'GitHub 기여자 통계 가져오기',
+  'usage.metric.githubContributorsFetchFailure': 'GitHub 기여자 통계 가져오기 실패',
+  'usage.metric.githubLinkFailure': 'GitHub 연동 실패',
+  'usage.metric.githubLinkRateLimited': 'GitHub 연동 요청 제한',
+  'usage.metric.githubLinkRequest': 'GitHub 연동 요청',
   'app.title': 'World of ClaudeCraft - 관리자',
   'app.shortTitle': 'WoC 관리자',
   'auth.username': '사용자명',
