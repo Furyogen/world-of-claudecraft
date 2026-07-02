@@ -209,6 +209,8 @@ export const da_DK: EnTranslations = {
       "tasks": "Opgaver",
       "taskMultiplier": "x{multiplier} multiplier",
       "pointsGained": "{points} daily rewards points gained.",
+      "showChestButton": "Show Chest",
+      "hideChestButton": "Hide Chest",
       "leaderboard": "Daglig resultattavle",
       "totalPlayer": "{count} player today",
       "totalPlayers": "{count} players today",
@@ -410,7 +412,8 @@ export const da_DK: EnTranslations = {
       "showItemLevel": "Vis genstandsniveau",
       "itemLevelLine": "Genstandsniveau {level}",
       "itemScoreLine": "Score {score}",
-      "showSecondaryActionBar": "Vis sekundær handlingslinje"
+      "showSecondaryActionBar": "Vis sekundær handlingslinje",
+      "showDailyRewardsChest": "Show Daily Rewards Chest"
     },
     "controller": {
       "title": "Controller",

@@ -209,6 +209,8 @@ export const id_ID: EnTranslations = {
       "tasks": "Tugas",
       "taskMultiplier": "x{multiplier} multiplier",
       "pointsGained": "{points} daily rewards points gained.",
+      "showChestButton": "Show Chest",
+      "hideChestButton": "Hide Chest",
       "leaderboard": "Papan Peringkat Harian",
       "totalPlayer": "{count} player today",
       "totalPlayers": "{count} players today",
@@ -410,7 +412,8 @@ export const id_ID: EnTranslations = {
       "showItemLevel": "Tampilkan Level Item",
       "itemLevelLine": "Level Item {level}",
       "itemScoreLine": "Skor {score}",
-      "showSecondaryActionBar": "Tampilkan Bilah Aksi Sekunder"
+      "showSecondaryActionBar": "Tampilkan Bilah Aksi Sekunder",
+      "showDailyRewardsChest": "Show Daily Rewards Chest"
     },
     "controller": {
       "title": "Kontroler",

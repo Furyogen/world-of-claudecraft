@@ -209,6 +209,8 @@ export const sv_SE: EnTranslations = {
       "tasks": "Uppgifter",
       "taskMultiplier": "x{multiplier} multiplier",
       "pointsGained": "{points} daily rewards points gained.",
+      "showChestButton": "Show Chest",
+      "hideChestButton": "Hide Chest",
       "leaderboard": "Daglig topplista",
       "totalPlayer": "{count} player today",
       "totalPlayers": "{count} players today",
@@ -410,7 +412,8 @@ export const sv_SE: EnTranslations = {
       "showItemLevel": "Visa föremålsnivå",
       "itemLevelLine": "Föremålsnivå {level}",
       "itemScoreLine": "Poäng {score}",
-      "showSecondaryActionBar": "Visa sekundärt handlingsfält"
+      "showSecondaryActionBar": "Visa sekundärt handlingsfält",
+      "showDailyRewardsChest": "Show Daily Rewards Chest"
     },
     "controller": {
       "title": "Handkontroll",

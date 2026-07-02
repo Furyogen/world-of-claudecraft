@@ -72,6 +72,8 @@ export const hudChromeStrings = {
     tasks: 'Tasks',
     taskMultiplier: 'x{multiplier} multiplier',
     pointsGained: '{points} daily rewards points gained.',
+    showChestButton: 'Show Chest',
+    hideChestButton: 'Hide Chest',
     leaderboard: 'Daily Leaderboard',
     totalPlayer: '{count} player today',
     totalPlayers: '{count} players today',
@@ -400,6 +402,7 @@ export const hudChromeStrings = {
     // Interface panel toggle that reveals the optional second action bar row (off
     // by default). The abilities bound to its slots stay castable via their keybinds.
     showSecondaryActionBar: 'Show Secondary Action Bar',
+    showDailyRewardsChest: 'Show Daily Rewards Chest',
   },
   // Controller / gamepad options panel (Options > Controller). Player-facing
   // chrome, so every label is a key here; the live numbers run through
