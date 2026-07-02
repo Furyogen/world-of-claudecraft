@@ -1577,23 +1577,6 @@ function pushCombatTimpani(out: NoteEvent[], b0: number, scale = 1): void {
   pushNote(out, b0 + 3.5, 38, 0.5, 0.3 * scale, 'timpani');
 }
 
-/** The original four-bar combat cue, event for event, kept as a selectable
- *  option and the baseline the upgrades are measured against. */
-function composeCombatClassic(): Theme {
-  const ev: NoteEvent[] = [];
-  for (let bar = 0; bar < 4; bar++) {
-    const b0 = bar * 4;
-    pushCombatTimpani(ev, b0);
-    pushCombatCell(ev, b0, 50, 0.26);
-    if (bar % 2 === 1) {
-      pushNote(ev, b0, 50, 1.6, 0.2, 'horn');
-      pushNote(ev, b0 + 0.02, 57, 1.6, 0.16, 'horn');
-    }
-  }
-  ev.sort((a, b) => a.beat - b.beat);
-  return { bpm: 126, bars: 4, events: ev };
-}
-
 /** "Vanguard" (the default): the original cue grown into sixteen bars. The
  *  first four bars ARE the original texture over a new bass shadow; four-bar
  *  terraces then add the octave agitato, war drums, and a rising-fourth war
@@ -1725,136 +1708,6 @@ function composeCombat(): Theme {
   return { bpm: 126, bars: 16, events: ev };
 }
 
-/** "Drums of War": the percussion-forward variant. The war-drum gallop never
- *  stops, a low choir drone breathes underneath, a minor-second horn creep
- *  builds the dread, and the original cell arrives first as a quarter-note
- *  hammer and only then at full speed; the shock lands late and the drop bar
- *  keeps nothing but the drums. */
-function composeCombatWarDrums(): Theme {
-  const ev: NoteEvent[] = [];
-  for (let bar = 0; bar < 16; bar++) {
-    const b0 = bar * 4;
-    const shock = bar === 12 || bar === 13;
-    const base = shock ? 51 : 50;
-    const bass = shock ? 39 : 38;
-    // the gallop
-    pushNote(ev, b0, 38, 0.9, 0.34, 'warDrum');
-    pushNote(ev, b0 + 0.75, 38, 0.6, 0.2, 'warDrum');
-    pushNote(ev, b0 + 2, 38, 0.9, 0.3, 'warDrum');
-    pushNote(ev, b0 + 2.75, 38, 0.6, 0.18, 'warDrum');
-    if (bar % 2 === 0) pushNote(ev, b0, 38, 1, 0.5, 'timpani');
-    pushNote(ev, b0 + 3.5, 38, 0.5, 0.28, 'timpani');
-    pushDrumHits(ev, b0, [1.5, 3.25], 'frameDrum', 0.11, 45);
-    if (bar === 15) {
-      // the drop bar: one strike, then drums alone carry the seam
-      pushVoicing(ev, b0, [38, 45, 50], 1, 0.34, 'brassStab');
-      pushNote(ev, b0, 70, 0.12, 0.2, 'cymSwell');
-      continue;
-    }
-    // the something-big-coming drone (capped before the drums-only drop bar)
-    if (bar % 2 === 0) {
-      const droneDur = bar === 14 ? 4.1 : 8.2;
-      pushNote(ev, b0, bass, droneDur, 0.14, 'choir');
-      pushNote(ev, b0, bass + 7, droneDur, 0.09, 'choir');
-    }
-    // dread creep: a minor second breathing under bars three and four
-    if (bar === 2 || bar === 3) {
-      pushNote(ev, b0, 50, 3.9, 0.07, 'horn');
-      pushNote(ev, b0 + 0.03, 51, 3.9, 0.06, 'horn');
-    }
-    // the hammer, then the full cell once the line breaks
-    if (bar >= 4 && bar < 8) {
-      for (const [i, s] of [0, 3, 0, 5].entries()) {
-        pushNote(ev, b0 + i, base + s, 0.6, 0.3, 'stacc');
-      }
-      pushNote(ev, b0, bass, 0.9, 0.42, 'bass');
-      pushNote(ev, b0 + 2, bass, 0.7, 0.32, 'bass');
-    }
-    if (bar >= 8) {
-      pushCombatCell(ev, b0, base, 0.26);
-      if (bar >= 12) pushCombatCell(ev, b0, base + 12, 0.12);
-      pushNote(ev, b0, bass, 0.6, 0.44, 'bass');
-      pushNote(ev, b0 + 1.5, bass, 0.5, 0.3, 'bass');
-      pushNote(ev, b0 + 3, bass, 0.5, 0.34, 'bass');
-    }
-    // horn fifths and the war calls
-    if (bar === 5 || bar === 7) {
-      pushNote(ev, b0, 50, 1.6, 0.18, 'horn');
-      pushNote(ev, b0 + 0.02, 57, 1.6, 0.14, 'horn');
-    }
-    if (bar === 9) {
-      pushNote(ev, b0, 57, 1, 0.2, 'horn');
-      pushNote(ev, b0 + 1, 62, 3, 0.22, 'horn');
-    }
-    if (bar === 11) {
-      pushNote(ev, b0, 62, 1, 0.2, 'horn');
-      pushNote(ev, b0 + 1, 65, 1, 0.18, 'horn');
-      pushNote(ev, b0 + 2, 62, 2, 0.18, 'horn');
-    }
-    if (shock) pushVoicing(ev, b0, [39, 46], 0.75, bar === 12 ? 0.3 : 0.24, 'brassStab');
-    if (bar === 14) pushVoicing(ev, b0, [38, 45], 0.75, 0.3, 'brassStab');
-  }
-  pushNote(ev, 14, 70, 2, 0.09, 'cymSwell');
-  pushNote(ev, 30, 70, 2, 0.11, 'cymSwell');
-  pushNote(ev, 46, 70, 2, 0.12, 'cymSwell');
-
-  ev.sort((a, b) => a.beat - b.beat);
-  return { bpm: 118, bars: 16, events: ev };
-}
-
-/** "Steel on Steel": the strings-agitato variant. The cell runs as sixteenth
- *  tremolo against its own upper octave, every fourth bar cuts to silence for
- *  one quartal brass hit (blade drawn, blade held), chromatic runs slide the
- *  music between D, F, and E-flat blocks, and the loop ends on the hit-and-
- *  silence itself. */
-function composeCombatSteel(): Theme {
-  const ev: NoteEvent[] = [];
-  for (let bar = 0; bar < 16; bar++) {
-    const b0 = bar * 4;
-    let base = 50;
-    if (bar === 8 || bar === 9) base = 53;
-    if (bar === 10 || bar === 11) base = 51;
-    const gap = bar % 4 === 3;
-    for (let i = 0; i < 16; i++) {
-      const beat = i * 0.25;
-      if ((gap || bar === 9) && beat >= 3) break;
-      if (i % 2 === 0) {
-        pushNote(ev, b0 + beat, base + COMBAT_CELL[(i / 2) % 8], 0.22, 0.24, 'stacc');
-      } else {
-        pushNote(ev, b0 + beat, base + 12, 0.18, 0.1, 'stacc');
-      }
-    }
-    if (gap) pushVoicing(ev, b0 + 3, [base, base + 5, base + 10], 0.9, 0.28, 'brassStab');
-    pushCombatTimpani(ev, b0, 0.9);
-    pushNote(ev, b0 + 1.25, 38, 0.6, 0.18, 'warDrum');
-    pushNote(ev, b0 + (gap ? 3.75 : 3.25), 38, 0.6, 0.16, 'warDrum');
-    pushNote(ev, b0, base - 12, 0.6, 0.42, 'bass');
-    pushNote(ev, b0 + 1.5, base - 12, 0.4, 0.26, 'bass');
-    pushNote(ev, b0 + 2, base - 12, 0.5, 0.32, 'bass');
-    if (bar === 4 || bar === 12) {
-      pushNote(ev, b0, 57, 0.5, 0.2, 'horn');
-      pushNote(ev, b0 + 0.5, 62, 0.5, 0.2, 'horn');
-      pushNote(ev, b0 + 1, 60, 1.5, 0.2, 'horn');
-    }
-    if (bar === 6 || bar === 14) {
-      pushNote(ev, b0, 50, 1.6, 0.18, 'horn');
-      pushNote(ev, b0 + 0.02, 57, 1.6, 0.14, 'horn');
-    }
-  }
-  // chromatic slides into the F and E-flat blocks
-  for (const [i, m] of [50, 51, 52, 53].entries()) {
-    pushNote(ev, 31 + i * 0.25, m, 0.2, 0.18, 'stacc');
-  }
-  for (const [i, m] of [54, 53, 52, 51].entries()) {
-    pushNote(ev, 39 + i * 0.25, m, 0.2, 0.18, 'stacc');
-  }
-  pushNote(ev, 32, 70, 0.12, 0.14, 'cymSwell');
-  pushNote(ev, 40, 70, 0.12, 0.1, 'cymSwell');
-  pushNote(ev, 48, 70, 0.12, 0.14, 'cymSwell');
-
-  ev.sort((a, b) => a.beat - b.beat);
-  return { bpm: 132, bars: 16, events: ev };
-}
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
 // Director
@@ -1903,10 +1756,6 @@ export function buildMusicThemes(withOverrides = true): Record<string, Theme> {
     dungeon_sunken_bastion: composeDungeonSunkenBastion(),
     dungeon_gravewyrm_sanctum: composeDungeonGravewyrmSanctum(),
     combat: composeCombat(),
-    // audition-only alternates for the render tool; never routed in game
-    combat_classic: composeCombatClassic(),
-    combat_wardrums: composeCombatWarDrums(),
-    combat_steel: composeCombatSteel(),
   };
   if (!withOverrides) return composed;
   // themes edited and saved from the music editor take precedence
@@ -1933,9 +1782,6 @@ export const THEME_TRIM: Record<string, number> = {
   dungeon_sunken_bastion: 2.95,
   dungeon_gravewyrm_sanctum: 1.8,
   combat: 1.35,
-  combat_classic: 1.7,
-  combat_wardrums: 1.6,
-  combat_steel: 1.6,
 };
 
 export class MusicSynth {
