@@ -4,9 +4,11 @@
 // derives the per-channel variant from it:
 //
 //  - every channel: stamps `extraMetadata.wocDesktop` into the packaged
-//    package.json (distribution + optional crash submit URL), which is how the
-//    shipped main process (electron/desktop_config.cjs) knows what it is at
-//    runtime, and how the auto-updater stays OFF in Steam builds.
+//    package.json (distribution + the web origins the Vite bundle was baked
+//    with + optional crash submit URL), which is how the shipped main process
+//    (electron/desktop_config.cjs) knows what it is at runtime, how the
+//    auto-updater stays OFF in Steam builds, and why a packaged build never
+//    honors the VITE_DESKTOP_* runtime env pair.
 //  - steam: publish is nulled (no app-update.yml is emitted, electron-updater
 //    has nothing to read even if it were reached), and every OS targets 'dir'
 //    because SteamPipe depots upload the loose installed layout (mac: the
@@ -44,6 +46,8 @@ export function desktopBuilderConfig({
   base,
   distribution,
   mode = 'build',
+  apiOrigin = '',
+  loginOrigin = '',
   crashSubmitUrl = '',
   azureSign = null,
 }) {
@@ -55,6 +59,8 @@ export function desktopBuilderConfig({
     ...(config.extraMetadata ?? {}),
     wocDesktop: {
       distribution,
+      ...(apiOrigin ? { apiOrigin } : {}),
+      ...(loginOrigin ? { loginOrigin } : {}),
       ...(crashSubmitUrl ? { crashSubmitUrl } : {}),
     },
   };

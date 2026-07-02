@@ -5,7 +5,14 @@
 export type Distribution = 'website' | 'steam';
 
 export interface DesktopConfigInput {
-  packagedMetadata?: { wocDesktop?: { distribution?: unknown; crashSubmitUrl?: unknown } } | null;
+  packagedMetadata?: {
+    wocDesktop?: {
+      distribution?: unknown;
+      crashSubmitUrl?: unknown;
+      apiOrigin?: unknown;
+      loginOrigin?: unknown;
+    };
+  } | null;
   env?: Record<string, string | undefined>;
   isPackaged?: boolean;
 }
@@ -14,10 +21,16 @@ export interface DesktopConfig {
   distribution: Distribution;
   updaterEnabled: boolean;
   crashSubmitUrl: string;
+  apiOrigin: string;
+  loginOrigin: string;
 }
 
 export function resolveDistribution(input?: DesktopConfigInput): Distribution;
 export function resolveCrashSubmitUrl(input?: DesktopConfigInput): string;
+export function resolveDesktopOrigins(input?: DesktopConfigInput): {
+  apiOrigin: string;
+  loginOrigin: string;
+};
 export function updaterAllowed(input: {
   distribution: string;
   isPackaged: boolean | undefined;

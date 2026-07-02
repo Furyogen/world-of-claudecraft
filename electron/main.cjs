@@ -46,15 +46,6 @@ const APP_ORIGIN = 'app://worldofclaudecraft';
 const devServerUrl = app.isPackaged ? undefined : process.env.VITE_DEV_SERVER_URL;
 // Origins the main frame may navigate to (app origin, plus the dev server in dev).
 const appOrigins = appNavigationOrigins(APP_ORIGIN, devServerUrl);
-// API origin the renderer talks to (REST + WebSocket); feeds the CSP connect-src.
-const apiOrigin =
-  deriveOrigin(process.env.VITE_DESKTOP_API_ORIGIN || 'https://worldofclaudecraft.com') ||
-  'https://worldofclaudecraft.com';
-const desktopLoginOrigin = (
-  process.env.VITE_DESKTOP_LOGIN_ORIGIN ||
-  process.env.VITE_DESKTOP_API_ORIGIN ||
-  'https://worldofclaudecraft.com'
-).replace(/\/+$/, '');
 const deepLinkProtocol = 'worldofclaudecraft';
 let mainWindow = null;
 let pendingLoginCode = null;
@@ -79,6 +70,15 @@ const desktopConfig = resolveDesktopConfig({
   env: process.env,
   isPackaged: app.isPackaged,
 });
+
+// API origin the renderer talks to (REST + WebSocket; feeds the CSP connect-src)
+// and the origin openDesktopLogin() opens in the player's browser. Resolved by
+// desktop_config.cjs from the build-time wocDesktop stamp (apiOrigin matches
+// what the Vite client bundle was baked with; loginOrigin is main-process-only);
+// the VITE_DESKTOP_* env pair is honored on unpackaged checkouts only,
+// mirroring the WOC_DISTRIBUTION hatch closure.
+const apiOrigin = deriveOrigin(desktopConfig.apiOrigin) || 'https://worldofclaudecraft.com';
+const desktopLoginOrigin = desktopConfig.loginOrigin.replace(/\/+$/, '');
 
 // Crashpad must start before any window exists so native crashes in EVERY
 // process (main, renderer, GPU, utility) are captured from the first frame.
@@ -201,6 +201,11 @@ function createMainWindow() {
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true,
+      // webSecurity:true and allowRunningInsecureContent:false are already the
+      // Chromium defaults; pinned explicitly so the safe baseline survives any
+      // future webPreferences edit (Electron security checklist items 5 and 6).
+      webSecurity: true,
+      allowRunningInsecureContent: false,
       // This wrapper exists to give the browser game the best possible Chromium runtime,
       // so tune the page for a real-time MMO client (all gameplay-neutral: the server is
       // authoritative, so none of this changes outcomes or reveals actionable info).
@@ -495,6 +500,7 @@ app.whenReady().then(() => {
         log,
         getWindow: () => mainWindow,
         isTrusted: trustedSender,
+        isPackaged: app.isPackaged,
       });
     } catch (err) {
       log.error('[updater] init failed', err);

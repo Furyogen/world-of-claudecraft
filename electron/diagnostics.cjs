@@ -38,8 +38,9 @@ function clampText(value, maxLength) {
 }
 
 // Best-effort redaction for log text that might embed a credential (the shell
-// never logs tokens itself; this guards against a renderer error message or a
-// console line quoting one). A cost-raising filter, not a guarantee.
+// never logs tokens itself; this guards against a renderer error message, a
+// console line, or a source URL's query string quoting one). A cost-raising
+// filter, not a guarantee.
 function redactSecrets(text) {
   return text
     .replace(/\bBearer\s+[A-Za-z0-9._~+/=-]{8,}/gi, 'Bearer [redacted]')
@@ -64,7 +65,7 @@ function rendererErrorLogEntry(payload) {
   const entry = { kind };
   entry.message = redactSecrets(clampText(payload.message, MAX_ERROR_TEXT));
   entry.stack = redactSecrets(clampText(payload.stack, MAX_ERROR_TEXT));
-  entry.source = clampText(payload.source, MAX_SOURCE_TEXT);
+  entry.source = redactSecrets(clampText(payload.source, MAX_SOURCE_TEXT));
   if (Number.isFinite(payload.line)) entry.line = Math.trunc(payload.line);
   if (Number.isFinite(payload.col)) entry.col = Math.trunc(payload.col);
   return entry;
@@ -85,7 +86,9 @@ function normalizeConsoleMessage(details, legacyLevel, legacyMessage, legacyLine
     return {
       level,
       message: redactSecrets(clampText(details.message, MAX_ERROR_TEXT)),
-      source: clampText(line !== undefined ? `${sourceId}:${line}` : sourceId, MAX_SOURCE_TEXT),
+      source: redactSecrets(
+        clampText(line !== undefined ? `${sourceId}:${line}` : sourceId, MAX_SOURCE_TEXT),
+      ),
     };
   }
   if (typeof legacyMessage === 'string') {
@@ -99,7 +102,7 @@ function normalizeConsoleMessage(details, legacyLevel, legacyMessage, legacyLine
     return {
       level,
       message: redactSecrets(clampText(legacyMessage, MAX_ERROR_TEXT)),
-      source: clampText(source, MAX_SOURCE_TEXT),
+      source: redactSecrets(clampText(source, MAX_SOURCE_TEXT)),
     };
   }
   return null;

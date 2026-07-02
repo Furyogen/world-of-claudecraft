@@ -29,10 +29,17 @@ const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 const electronBuilderCommand =
   process.platform === 'win32' ? 'electron-builder.cmd' : 'electron-builder';
 const defaultOrigin = 'https://worldofclaudecraft.com';
+// Resolve the web origins ONCE: apiOrigin feeds both the Vite client build and
+// the wocDesktop stamp below (so the packaged main process always agrees with
+// what the bundle was baked with); loginOrigin is stamped for the main process
+// only. A packaged build ignores VITE_DESKTOP_* from runtime env;
+// electron/desktop_config.cjs reads the stamp instead.
+const apiOrigin = process.env.VITE_DESKTOP_API_ORIGIN ?? defaultOrigin;
+const loginOrigin = process.env.VITE_DESKTOP_LOGIN_ORIGIN ?? apiOrigin;
 const env = {
   ...process.env,
   VITE_DESKTOP_APP: '1',
-  VITE_DESKTOP_API_ORIGIN: process.env.VITE_DESKTOP_API_ORIGIN ?? defaultOrigin,
+  VITE_DESKTOP_API_ORIGIN: apiOrigin,
 };
 
 // A macOS build with no real Developer ID configured must still LAUNCH. On Apple Silicon
@@ -84,6 +91,8 @@ const config = desktopBuilderConfig({
   base,
   distribution,
   mode,
+  apiOrigin,
+  loginOrigin,
   crashSubmitUrl: process.env.WOC_CRASH_SUBMIT_URL ?? '',
   azureSign: process.platform === 'win32' ? azureSignOptionsFromEnv(process.env) : null,
 });

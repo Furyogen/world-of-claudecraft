@@ -14,7 +14,14 @@ export function azureSignOptionsFromEnv(
 ): AzureSignOptions | null;
 
 export interface DesktopBuilderConfig {
-  extraMetadata: { wocDesktop: { distribution: 'website' | 'steam'; crashSubmitUrl?: string } };
+  extraMetadata: {
+    wocDesktop: {
+      distribution: 'website' | 'steam';
+      apiOrigin?: string;
+      loginOrigin?: string;
+      crashSubmitUrl?: string;
+    };
+  };
   publish: unknown;
   directories: { output?: string; [key: string]: unknown };
   mac: { [key: string]: unknown };
@@ -27,6 +34,8 @@ export function desktopBuilderConfig(input: {
   base: Record<string, unknown>;
   distribution: string;
   mode?: 'pack' | 'build';
+  apiOrigin?: string;
+  loginOrigin?: string;
   crashSubmitUrl?: string;
   azureSign?: AzureSignOptions | null;
 }): DesktopBuilderConfig;

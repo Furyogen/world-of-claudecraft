@@ -125,7 +125,11 @@ node_modules in the asar, all seven fuses set.
   Ordering matters and is handled for us: the Electron fuses are flipped
   BEFORE signing, so the signature seals the fused binary; the asar hash lives
   in Info.plist (`ElectronAsarIntegrity`) and is likewise sealed, which is what
-  makes the `enableEmbeddedAsarIntegrityValidation` fuse meaningful.
+  makes the `enableEmbeddedAsarIntegrityValidation` fuse meaningful. One fuse
+  is deliberately left at its default: `loadBrowserProcessSpecificV8Snapshot`
+  only switches WHICH snapshot file the browser process loads, and this app
+  ships no custom per-process V8 snapshot, so flipping it would change nothing
+  while adding a startup file dependency.
 - What activates it: `CSC_LINK` (base64 or path of the .p12) +
   `CSC_KEY_PASSWORD`, or `CSC_NAME` (keychain identity), plus notarization
   creds `APPLE_API_KEY` + `APPLE_API_KEY_ID` + `APPLE_API_ISSUER` (App Store
@@ -247,6 +251,10 @@ bump the version, rebuild, upload, and watch the toast + install cycle.
   26.x (27 is an ESM-only alpha); electron-updater on 6.x.
 - **What was NOT verified locally** (needs the CI runners / maintainer):
   actual Windows and Linux builds + launches, a real signed+notarized mac
-  build, a full universal-arch `electron:build`, and an end-to-end update
-  apply (requires a signed build + a live feed). Everything else in this file
-  has packaged-build evidence behind it.
+  build, a full universal-arch `electron:build`, an end-to-end update apply
+  (requires a signed build + a live feed), and the two login paths + the
+  `worldofclaudecraft://desktop-login` deep-link handoff AGAINST PRODUCTION
+  (blocked until this branch's server deploys and production reflects CORS for
+  the `app://` origin; both flows have packaged-build evidence against a local
+  server from the earlier shell passes). Everything else in this file has
+  packaged-build evidence behind it.

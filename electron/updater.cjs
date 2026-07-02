@@ -19,8 +19,20 @@ const { shouldNotifyProgress, updateEventPayload } = require('./update_events.cj
 const FIRST_CHECK_DELAY_MS = 15_000;
 const RECHECK_INTERVAL_MS = 4 * 60 * 60 * 1000;
 
-function loadAutoUpdater() {
-  for (const candidate of ['./vendor/electron_updater.cjs', 'electron-updater']) {
+// A packaged app loads ONLY the in-asar vendor bundle (integrity-validated,
+// static path). The bare-specifier fallback would walk Node's module paths
+// out of the asar into the install directory, which is user-writable on a
+// per-user install; it exists solely for a bare `electron .` checkout, where
+// node_modules is the only place the dependency lives. Pure, so
+// tests/electron_vendor_loading.test.ts can pin the packaged-only order.
+function updaterRequireCandidates(isPackaged) {
+  return isPackaged === true
+    ? ['./vendor/electron_updater.cjs']
+    : ['./vendor/electron_updater.cjs', 'electron-updater'];
+}
+
+function loadAutoUpdater({ isPackaged } = {}) {
+  for (const candidate of updaterRequireCandidates(isPackaged)) {
     try {
       const mod = require(candidate);
       const autoUpdater = mod?.autoUpdater ?? mod?.default?.autoUpdater;
@@ -32,8 +44,8 @@ function loadAutoUpdater() {
   return null;
 }
 
-function initUpdater({ ipcMain, log, getWindow, isTrusted }) {
-  const autoUpdater = loadAutoUpdater();
+function initUpdater({ ipcMain, log, getWindow, isTrusted, isPackaged }) {
+  const autoUpdater = loadAutoUpdater({ isPackaged });
   if (!autoUpdater) {
     log.warn('[updater] electron-updater bundle missing; auto-update disabled this session');
     return null;
@@ -98,4 +110,10 @@ function initUpdater({ ipcMain, log, getWindow, isTrusted }) {
   return autoUpdater;
 }
 
-module.exports = { initUpdater, loadAutoUpdater, FIRST_CHECK_DELAY_MS, RECHECK_INTERVAL_MS };
+module.exports = {
+  initUpdater,
+  loadAutoUpdater,
+  updaterRequireCandidates,
+  FIRST_CHECK_DELAY_MS,
+  RECHECK_INTERVAL_MS,
+};

@@ -80,6 +80,16 @@ describe('rendererErrorLogEntry (untrusted IPC payload validation)', () => {
     expect(entry?.line).toBeUndefined();
     expect(entry?.col).toBeUndefined();
   });
+
+  it('redacts a credential smuggled in the source URL query string', () => {
+    const entry = rendererErrorLogEntry({
+      kind: 'error',
+      message: 'boom',
+      source: 'https://example.com/page?token=deadbeefcafe',
+    });
+    expect(entry?.source).not.toContain('deadbeefcafe');
+    expect(entry?.source).toContain('[redacted]');
+  });
 });
 
 describe('normalizeConsoleMessage (Electron 43 details form + legacy positional form)', () => {
@@ -105,6 +115,17 @@ describe('normalizeConsoleMessage (Electron 43 details form + legacy positional 
   it('returns null when neither form is recognizable', () => {
     expect(normalizeConsoleMessage({}, undefined, undefined)).toBeNull();
     expect(normalizeConsoleMessage(undefined)).toBeNull();
+  });
+
+  it('redacts a credential smuggled in the sourceId, both forms', () => {
+    const modern = normalizeConsoleMessage({
+      level: 'error',
+      message: 'fetch failed',
+      sourceId: 'https://example.com/api?token=deadbeefcafe',
+    });
+    expect(modern?.source).not.toContain('deadbeefcafe');
+    const legacy = normalizeConsoleMessage({}, 3, 'fetch failed', 7, 'page?secret=deadbeefcafe');
+    expect(legacy?.source).not.toContain('deadbeefcafe');
   });
 });
 

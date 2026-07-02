@@ -58,6 +58,30 @@ function resolveCrashSubmitUrl({ packagedMetadata, env, isPackaged } = {}) {
   return '';
 }
 
+// The web origins the shell trusts: the API origin (REST + WebSocket; it feeds
+// the app:// CSP connect-src) and the origin openDesktopLogin() sends the
+// player's browser to for credential entry. Both are stamped at build time by
+// scripts/electron-build.mjs (apiOrigin also feeds the Vite client build, so
+// the packaged main process always agrees with the baked bundle; loginOrigin
+// is main-process-only), because a packaged build honoring VITE_DESKTOP_* from
+// runtime env would let a local env var widen the CSP or redirect the login
+// page: the same escape hatch resolveDistribution and resolveCrashSubmitUrl
+// close. Env applies to unpackaged checkouts only. Values are picked, not
+// sanitized; the caller (electron/main.cjs) still derives/normalizes them
+// before use, so a garbage stamp degrades to the production origin there.
+function resolveDesktopOrigins({ packagedMetadata, env, isPackaged } = {}) {
+  const stamped = packagedMetadata?.wocDesktop ?? {};
+  const pick = (envValue, stampedValue) => {
+    if (isPackaged !== true && typeof envValue === 'string' && envValue !== '') return envValue;
+    if (typeof stampedValue === 'string' && stampedValue !== '') return stampedValue;
+    return '';
+  };
+  const apiOrigin =
+    pick(env?.VITE_DESKTOP_API_ORIGIN, stamped.apiOrigin) || 'https://worldofclaudecraft.com';
+  const loginOrigin = pick(env?.VITE_DESKTOP_LOGIN_ORIGIN, stamped.loginOrigin) || apiOrigin;
+  return { apiOrigin, loginOrigin };
+}
+
 // The one gate the auto-updater honors. Steam builds MUST NOT self-update
 // (SteamPipe owns updates; Valve's guidance is explicit), and an unpackaged
 // checkout has nothing to update, so the updater runs only for a packaged
@@ -75,12 +99,14 @@ function resolveDesktopConfig({ packagedMetadata, env, isPackaged } = {}) {
     distribution,
     updaterEnabled: updaterAllowed({ distribution, isPackaged }),
     crashSubmitUrl: resolveCrashSubmitUrl({ packagedMetadata, env, isPackaged }),
+    ...resolveDesktopOrigins({ packagedMetadata, env, isPackaged }),
   };
 }
 
 module.exports = {
   resolveDistribution,
   resolveCrashSubmitUrl,
+  resolveDesktopOrigins,
   updaterAllowed,
   resolveDesktopConfig,
 };

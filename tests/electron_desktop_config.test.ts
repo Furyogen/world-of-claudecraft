@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   resolveCrashSubmitUrl,
   resolveDesktopConfig,
+  resolveDesktopOrigins,
   resolveDistribution,
   updaterAllowed,
 } from '../electron/desktop_config.cjs';
@@ -129,19 +130,92 @@ describe('resolveCrashSubmitUrl', () => {
   });
 });
 
+describe('resolveDesktopOrigins (the packaged-build VITE_DESKTOP_* hatch closure)', () => {
+  const originStamp = {
+    wocDesktop: {
+      distribution: 'website',
+      apiOrigin: 'https://stamped.example.com',
+      loginOrigin: 'https://login.example.com',
+    },
+  };
+
+  it('a PACKAGED build reads only the stamp: runtime env cannot widen the CSP or move login', () => {
+    expect(
+      resolveDesktopOrigins({
+        packagedMetadata: originStamp,
+        env: {
+          VITE_DESKTOP_API_ORIGIN: 'https://evil.example.com',
+          VITE_DESKTOP_LOGIN_ORIGIN: 'https://evil-login.example.com',
+        },
+        isPackaged: true,
+      }),
+    ).toEqual({
+      apiOrigin: 'https://stamped.example.com',
+      loginOrigin: 'https://login.example.com',
+    });
+  });
+
+  it('an unpackaged checkout honors env first (local-server smoke builds)', () => {
+    expect(
+      resolveDesktopOrigins({
+        packagedMetadata: originStamp,
+        env: { VITE_DESKTOP_API_ORIGIN: 'http://localhost:8787' },
+        isPackaged: false,
+      }),
+    ).toEqual({ apiOrigin: 'http://localhost:8787', loginOrigin: 'https://login.example.com' });
+  });
+
+  it('falls back to the production origin, and login falls back to the api origin', () => {
+    expect(resolveDesktopOrigins({})).toEqual({
+      apiOrigin: 'https://worldofclaudecraft.com',
+      loginOrigin: 'https://worldofclaudecraft.com',
+    });
+    expect(resolveDesktopOrigins()).toEqual({
+      apiOrigin: 'https://worldofclaudecraft.com',
+      loginOrigin: 'https://worldofclaudecraft.com',
+    });
+    expect(
+      resolveDesktopOrigins({
+        packagedMetadata: { wocDesktop: { apiOrigin: 'https://api.example.com' } },
+        isPackaged: true,
+      }),
+    ).toEqual({ apiOrigin: 'https://api.example.com', loginOrigin: 'https://api.example.com' });
+  });
+});
+
+const defaultOrigins = {
+  apiOrigin: 'https://worldofclaudecraft.com',
+  loginOrigin: 'https://worldofclaudecraft.com',
+};
+
 describe('resolveDesktopConfig', () => {
   it('summarizes the packaged website build', () => {
     const config = resolveDesktopConfig({ packagedMetadata: websiteStamp, isPackaged: true });
-    expect(config).toEqual({ distribution: 'website', updaterEnabled: true, crashSubmitUrl: '' });
+    expect(config).toEqual({
+      distribution: 'website',
+      updaterEnabled: true,
+      crashSubmitUrl: '',
+      ...defaultOrigins,
+    });
   });
 
   it('summarizes the packaged Steam build with the updater hard off', () => {
     const config = resolveDesktopConfig({ packagedMetadata: steamStamp, isPackaged: true });
-    expect(config).toEqual({ distribution: 'steam', updaterEnabled: false, crashSubmitUrl: '' });
+    expect(config).toEqual({
+      distribution: 'steam',
+      updaterEnabled: false,
+      crashSubmitUrl: '',
+      ...defaultOrigins,
+    });
   });
 
   it('keeps a bare dev checkout on website with the updater off', () => {
     const config = resolveDesktopConfig({ isPackaged: false });
-    expect(config).toEqual({ distribution: 'website', updaterEnabled: false, crashSubmitUrl: '' });
+    expect(config).toEqual({
+      distribution: 'website',
+      updaterEnabled: false,
+      crashSubmitUrl: '',
+      ...defaultOrigins,
+    });
   });
 });

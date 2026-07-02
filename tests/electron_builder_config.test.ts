@@ -44,6 +44,20 @@ describe('desktopBuilderConfig', () => {
     expect(config.mac.hardenedRuntime).toBe(true);
   });
 
+  it('stamps the resolved web origins so a packaged build never reads them from runtime env', () => {
+    const config = desktopBuilderConfig({
+      base,
+      distribution: 'website',
+      apiOrigin: 'https://api.example.com',
+      loginOrigin: 'https://login.example.com',
+    });
+    expect(config.extraMetadata.wocDesktop.apiOrigin).toBe('https://api.example.com');
+    expect(config.extraMetadata.wocDesktop.loginOrigin).toBe('https://login.example.com');
+    const bare = desktopBuilderConfig({ base, distribution: 'website' });
+    expect('apiOrigin' in bare.extraMetadata.wocDesktop).toBe(false);
+    expect('loginOrigin' in bare.extraMetadata.wocDesktop).toBe(false);
+  });
+
   it('carries the crash submit URL only when one is set', () => {
     const withUrl = desktopBuilderConfig({
       base,

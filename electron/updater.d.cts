@@ -6,11 +6,14 @@
 export const FIRST_CHECK_DELAY_MS: number;
 export const RECHECK_INTERVAL_MS: number;
 
-export function loadAutoUpdater(): unknown;
+export function updaterRequireCandidates(isPackaged?: boolean): string[];
+
+export function loadAutoUpdater(opts?: { isPackaged?: boolean }): unknown;
 
 export function initUpdater(deps: {
   ipcMain: unknown;
   log: unknown;
   getWindow: () => unknown;
   isTrusted: (event: unknown) => boolean;
+  isPackaged?: boolean;
 }): unknown;

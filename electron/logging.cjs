@@ -12,8 +12,19 @@
 // checkout, and finally to a console shim: logging must never be the thing
 // that breaks the game.
 
-function loadElectronLog() {
-  for (const candidate of ['./vendor/electron_log_main.cjs', 'electron-log/main']) {
+// A packaged app loads ONLY the in-asar vendor bundle: the bare-specifier
+// fallback would walk Node's module paths out of the asar into the (per-user
+// installs: user-writable) install directory. It exists solely for a bare
+// `electron .` checkout, where node_modules is the only place the dep lives.
+// Pure, so tests/electron_vendor_loading.test.ts can pin the packaged-only order.
+function logRequireCandidates(isPackaged) {
+  return isPackaged === true
+    ? ['./vendor/electron_log_main.cjs']
+    : ['./vendor/electron_log_main.cjs', 'electron-log/main'];
+}
+
+function loadElectronLog({ isPackaged } = {}) {
+  for (const candidate of logRequireCandidates(isPackaged)) {
     try {
       const mod = require(candidate);
       const log = mod?.default ?? mod;
@@ -47,7 +58,7 @@ function consoleShim() {
 //   Windows %USERPROFILE%\AppData\Roaming\world-of-claudecraft\logs\main.log
 //   Linux   ~/.config/world-of-claudecraft/logs/main.log
 function initLogging({ isPackaged }) {
-  const log = loadElectronLog();
+  const log = loadElectronLog({ isPackaged });
   if (!log) return { log: consoleShim(), filePath: null };
   log.transports.file.level = 'info';
   log.transports.file.maxSize = 5 * 1024 * 1024;
@@ -63,4 +74,4 @@ function initLogging({ isPackaged }) {
   return { log, filePath };
 }
 
-module.exports = { initLogging, loadElectronLog, consoleShim };
+module.exports = { initLogging, loadElectronLog, logRequireCandidates, consoleShim };
