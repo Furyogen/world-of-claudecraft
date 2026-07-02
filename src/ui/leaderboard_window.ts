@@ -56,6 +56,7 @@ export interface LeaderboardWindowDeps {
   closeOthers(): void;
   captureFocus(): HTMLElement | null;
   restoreFocus(target: HTMLElement | null): void;
+  onVisibilityChange?(): void;
   /** The viewer's developer-badge display preference; also hides the Developers tab. */
   showDevBadges(): boolean;
 }
@@ -112,6 +113,7 @@ export class LeaderboardWindow {
     this.devPage = 0;
     this.dailyPage = 0;
     this.deps.root().style.display = 'block';
+    this.deps.onVisibilityChange?.();
     void this.render('open');
   }
 
@@ -124,6 +126,7 @@ export class LeaderboardWindow {
     el.style.display = 'none';
     this.deps.restoreFocus(this.openerFocus);
     this.openerFocus = null;
+    this.deps.onVisibilityChange?.();
   }
 
   // Owns the Promise + await + page controls (the core is async-free). Paints the

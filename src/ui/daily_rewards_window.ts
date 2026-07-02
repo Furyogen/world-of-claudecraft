@@ -24,6 +24,7 @@ export interface DailyRewardsWindowDeps {
   closeOthers(): void;
   captureFocus(): HTMLElement | null;
   restoreFocus(target: HTMLElement | null): void;
+  onVisibilityChange?(): void;
   onStatus?(status: DailyRewardStatus): void;
   onWalletConnect?(): void;
 }
@@ -52,6 +53,7 @@ export class DailyRewardsWindow {
     this.deps.closeOthers();
     const root = this.deps.root();
     root.style.display = 'block';
+    this.deps.onVisibilityChange?.();
     this.ensureShell();
     void this.render('open');
     this.poll = window.setInterval(() => {
@@ -73,6 +75,7 @@ export class DailyRewardsWindow {
     this.closeSpinOverlay();
     this.deps.restoreFocus(this.openerFocus);
     this.openerFocus = null;
+    this.deps.onVisibilityChange?.();
   }
 
   async render(focus: 'open' | null = null): Promise<void> {
