@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -50,9 +50,19 @@ const env = {
 // discovered only from the keychain (no CSC_* env) is also forced to ad-hoc here (matching
 // electron-builder's own mac.identity "-" semantics); to produce a real-signed build locally,
 // set CSC_NAME to that identity. macOS-only: mac signing is a no-op on other hosts.
+// The ad-hoc path also swaps in the adhoc entitlements variant: an ad-hoc
+// signature has no team ID, so hardened runtime + library validation would
+// refuse to load the nested Electron frameworks; the production plist keeps
+// library validation ON (privacy-security-review finding).
 const macSigningConfigured = Boolean(process.env.CSC_LINK) || Boolean(process.env.CSC_NAME);
 const adhocMacSign =
-  process.platform === 'darwin' && !macSigningConfigured ? ['--config.mac.identity=-'] : [];
+  process.platform === 'darwin' && !macSigningConfigured
+    ? [
+        '--config.mac.identity=-',
+        '--config.mac.entitlements=build/entitlements.mac.adhoc.plist',
+        '--config.mac.entitlementsInherit=build/entitlements.mac.adhoc.plist',
+      ]
+    : [];
 
 function run(command, args) {
   const result = spawnSync(command, args, { env, stdio: 'inherit', cwd: root });
@@ -77,7 +87,8 @@ const config = desktopBuilderConfig({
   crashSubmitUrl: process.env.WOC_CRASH_SUBMIT_URL ?? '',
   azureSign: process.platform === 'win32' ? azureSignOptionsFromEnv(process.env) : null,
 });
-const configPath = path.join(mkdtempSync(path.join(tmpdir(), 'woc-eb-')), 'electron-builder.json');
+const configDir = mkdtempSync(path.join(tmpdir(), 'woc-eb-'));
+const configPath = path.join(configDir, 'electron-builder.json');
 writeFileSync(configPath, JSON.stringify(config, null, 2));
 
 // --publish never: artifact upload is a deliberate, documented manual step
@@ -91,3 +102,6 @@ run(electronBuilderCommand, [
   'never',
   ...adhocMacSign,
 ]);
+// The derived config holds no secrets, but do not litter the tmpdir on the
+// success path (run() exits the process on failure, skipping this).
+rmSync(configDir, { recursive: true, force: true });

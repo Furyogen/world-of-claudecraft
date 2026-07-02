@@ -13,13 +13,23 @@
 const MAX_ERROR_TEXT = 4000;
 const MAX_SOURCE_TEXT = 512;
 const MAX_FORWARDED_ERRORS = 30;
+// Renderer console warnings/errors mirrored into the log file are likewise
+// session-capped (higher than errors: warnings are legitimately chattier),
+// so a spammy or hostile page cannot churn the 5 MB rotation and evict
+// useful history (privacy-security-review finding).
+const MAX_MIRRORED_CONSOLE_LINES = 200;
+
+// Replace every C0/C1 control character run with a single space: log lines
+// stay single-line (no \n forgery, no terminal escapes) and native dialog
+// text stays flat. Shared by clampText and shell_strings.cjs.
+function flattenControlChars(text) {
+  // biome-ignore lint/suspicious/noControlCharactersInRegex: matching control chars is the point
+  return text.replace(/[\u0000-\u001f\u007f]+/g, ' ');
+}
 
 function clampText(value, maxLength) {
   if (typeof value !== 'string') return '';
-  // Strip control characters so a hostile payload cannot forge log lines
-  // (\n injection) or emit terminal escapes; keep it single-line.
-  // biome-ignore lint/suspicious/noControlCharactersInRegex: matching control chars is the point
-  const cleaned = value.replace(/[\u0000-\u001f\u007f]+/g, ' ');
+  const cleaned = flattenControlChars(value);
   return cleaned.length > maxLength ? `${cleaned.slice(0, maxLength)}...` : cleaned;
 }
 
@@ -118,6 +128,8 @@ function rendererCrashAction(
 module.exports = {
   MAX_ERROR_TEXT,
   MAX_FORWARDED_ERRORS,
+  MAX_MIRRORED_CONSOLE_LINES,
+  flattenControlChars,
   clampText,
   redactSecrets,
   rendererErrorLogEntry,

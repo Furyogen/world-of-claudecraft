@@ -4,7 +4,9 @@
 
 export const MAX_ERROR_TEXT: number;
 export const MAX_FORWARDED_ERRORS: number;
+export const MAX_MIRRORED_CONSOLE_LINES: number;
 
+export function flattenControlChars(text: string): string;
 export function clampText(value: unknown, maxLength: number): string;
 export function redactSecrets(text: string): string;
 

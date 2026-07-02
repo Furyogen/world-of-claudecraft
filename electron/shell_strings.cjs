@@ -14,6 +14,8 @@
 // dialogs, so it drops unknown keys, non-strings, control characters, and
 // over-long values.
 
+const { flattenControlChars } = require('./diagnostics.cjs');
+
 const DEFAULT_SHELL_STRINGS = {
   crashTitle: 'World of ClaudeCraft',
   crashBody: 'The game view stopped working. Reload it?',
@@ -33,7 +35,9 @@ function sanitizeShellStrings(input, current = DEFAULT_SHELL_STRINGS) {
   for (const key of Object.keys(DEFAULT_SHELL_STRINGS)) {
     const value = input[key];
     if (typeof value !== 'string') continue;
-    const cleaned = value.replace(/[\r\n\t]+/g, ' ').trim();
+    // Full C0/C1 control range, not just \r\n\t: these strings feed native
+    // dialogs, so keep the same trust-boundary stripping the log path uses.
+    const cleaned = flattenControlChars(value).trim();
     if (cleaned === '' || cleaned.length > MAX_SHELL_STRING_LENGTH) continue;
     merged[key] = cleaned;
   }

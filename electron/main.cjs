@@ -27,6 +27,7 @@ const {
 const { resolveDesktopConfig } = require('./desktop_config.cjs');
 const {
   MAX_FORWARDED_ERRORS,
+  MAX_MIRRORED_CONSOLE_LINES,
   normalizeConsoleMessage,
   rendererErrorLogEntry,
   shouldLogConsoleLevel,
@@ -265,10 +266,17 @@ function createMainWindow() {
   // Mirror renderer console warnings/errors into the shell log file so a
   // shipped build's page-level failures (CSP violations, WebGL loss, network
   // errors) are diagnosable without DevTools. Info-level output stays out of
-  // the file (electron/diagnostics.cjs shouldLogConsoleLevel).
+  // the file (electron/diagnostics.cjs shouldLogConsoleLevel), and the mirror
+  // is session-capped like the renderer-error channel so console spam cannot
+  // churn the log rotation.
   mainWindow.webContents.on('console-message', (details, level, message, line, sourceId) => {
+    if (consoleLinesMirrored >= MAX_MIRRORED_CONSOLE_LINES) return;
     const entry = normalizeConsoleMessage(details, level, message, line, sourceId);
     if (!entry || !shouldLogConsoleLevel(entry.level)) return;
+    consoleLinesMirrored += 1;
+    if (consoleLinesMirrored === MAX_MIRRORED_CONSOLE_LINES) {
+      log.warn('[renderer-console] mirror cap reached; further console output stays in DevTools');
+    }
     log[entry.level === 'error' ? 'error' : 'warn'](
       '[renderer-console]',
       entry.message,
@@ -350,6 +358,7 @@ ipcMain.handle('desktop-set-strings', (event, strings) => {
 // caps, but main re-validates and re-caps without trusting it
 // (electron/diagnostics.cjs); a malformed payload is dropped silently.
 let rendererErrorsLogged = 0;
+let consoleLinesMirrored = 0;
 ipcMain.on('desktop-renderer-error', (event, payload) => {
   if (!trustedSender(event)) return;
   if (rendererErrorsLogged >= MAX_FORWARDED_ERRORS) return;

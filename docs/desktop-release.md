@@ -41,9 +41,12 @@ Never commit any of these values; they are env vars in CI or the local shell.
 ## macOS: signing + notarization
 
 Config already in the repo: `hardenedRuntime: true`, entitlements
-(`build/entitlements.mac.plist`: `allow-jit`, `allow-unsigned-executable-memory`,
-`disable-library-validation`), universal dmg + zip targets, and the
-`enableEmbeddedAsarIntegrityValidation` + `onlyLoadAppFromAsar` fuses.
+(`build/entitlements.mac.plist`: `allow-jit` + `allow-unsigned-executable-memory`
+only; library validation stays ON in production), universal dmg + zip targets, and
+the `enableEmbeddedAsarIntegrityValidation` + `onlyLoadAppFromAsar` fuses. Local
+ad-hoc builds automatically swap in `build/entitlements.mac.adhoc.plist` (adds
+`disable-library-validation`, which team-ID-less ad-hoc signatures need to load
+the nested Electron frameworks).
 
 - Signing activates automatically when `CSC_LINK` + `CSC_KEY_PASSWORD` (or `CSC_NAME`
   for a keychain identity) are set. Without them, local builds fall back to AD-HOC
@@ -174,9 +177,12 @@ Rules that keep this working:
   compressed + rate-limited to that endpoint; any multipart minidump receiver works,
   including a Sentry project's `/minidump/` ingest URL, with no SDK added.
 - Privacy: logs stay on the player's machine; the only optional transmission is the
-  minidump upload above (process memory snapshots; treat the endpoint as sensitive
-  and say so in the privacy policy before enabling it). The log redaction strips
-  bearer tokens and obvious credential patterns before writing.
+  minidump upload above. Minidumps are process-memory snapshots and CAN contain
+  whatever was in memory at crash time (including a session token), so before
+  enabling the upload: put the ingest endpoint behind access control, restrict who
+  can read dumps, set a retention window, and disclose the upload in the privacy
+  policy. The log redaction strips bearer tokens and obvious credential patterns
+  before writing.
 
 ## Post-release verification checklist (each OS, each channel)
 

@@ -32,9 +32,11 @@ describe('sanitizeShellStrings (the renderer-to-native-dialog trust boundary)', 
     expect('totallyUnknown' in merged).toBe(false);
   });
 
-  it('flattens control characters so dialog text stays single-line', () => {
+  it('flattens the full control range so dialog text stays single-line', () => {
     const merged = sanitizeShellStrings({ crashBody: 'line one\nline two\ttabbed' });
     expect(merged.crashBody).toBe('line one line two tabbed');
+    const esc = sanitizeShellStrings({ crashQuit: `Qu${String.fromCharCode(27)}[31mit` });
+    expect(esc.crashQuit).toBe('Qu [31mit');
   });
 
   it('never throws on junk input and returns a copy', () => {
