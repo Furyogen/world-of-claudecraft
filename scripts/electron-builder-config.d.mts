@@ -14,7 +14,7 @@ export function azureSignOptionsFromEnv(
 ): AzureSignOptions | null;
 
 export interface DesktopBuilderConfig {
-  extraMetadata: { wocDesktop: { distribution: string; crashSubmitUrl?: string } };
+  extraMetadata: { wocDesktop: { distribution: 'website' | 'steam'; crashSubmitUrl?: string } };
   publish: unknown;
   directories: { output?: string; [key: string]: unknown };
   mac: { [key: string]: unknown };

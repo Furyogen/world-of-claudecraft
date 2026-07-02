@@ -38,7 +38,12 @@ const { attachRendererCrashRecovery, installProcessCrashGuards } = require('./cr
 const { initUpdater } = require('./updater.cjs');
 
 const APP_ORIGIN = 'app://worldofclaudecraft';
-const devServerUrl = process.env.VITE_DEV_SERVER_URL;
+// The Vite dev server URL is a DEV-ONLY seam (electron-dev.mjs sets it): its
+// origin joins the trusted set for BOTH navigation and IPC-sender trust, and it
+// is loaded as the UI, so a packaged build must never honor it from runtime
+// env. Gate it on isPackaged, mirroring the WOC_DISTRIBUTION / WOC_CRASH_SUBMIT_URL
+// hatch closures in electron/desktop_config.cjs.
+const devServerUrl = app.isPackaged ? undefined : process.env.VITE_DEV_SERVER_URL;
 // Origins the main frame may navigate to (app origin, plus the dev server in dev).
 const appOrigins = appNavigationOrigins(APP_ORIGIN, devServerUrl);
 // API origin the renderer talks to (REST + WebSocket); feeds the CSP connect-src.
@@ -53,6 +58,9 @@ const desktopLoginOrigin = (
 const deepLinkProtocol = 'worldofclaudecraft';
 let mainWindow = null;
 let pendingLoginCode = null;
+// Session cap counter for the renderer console mirror (used by the
+// 'console-message' handler in createMainWindow).
+let consoleLinesMirrored = 0;
 
 // Which distribution this build is (website download vs Steam depot), whether
 // the auto-updater may run, and the optional crash-minidump submit URL. The
@@ -216,11 +224,14 @@ function createMainWindow() {
   mainWindow.setMenu(null);
 
   // setMenu(null) drops the default menu (and its DevTools accelerator), and the packaged
-  // build never auto-opens DevTools, so bind a safe, read-only debug affordance directly to
+  // build never auto-opens DevTools, so bind a debug affordance directly to
   // the renderer's key events: F12, Cmd+Option+I (macOS), or Ctrl+Shift+I (Windows/Linux)
   // toggles the inspector. This is how CSP violations, GPU state, and runtime errors get
-  // inspected in a shipped app. DevTools is read-only against a sandboxed, context-isolated
-  // renderer and confers no gameplay advantage, so it is always available.
+  // inspected in a shipped app. DevTools is a local-only affordance requiring physical
+  // keyboard access; its console runs arbitrary JS in the page's own (sandboxed,
+  // context-isolated) main world and can drive the wocDesktop bridge, so it is NOT a
+  // read-only view. It is left available because the server is authoritative (nothing the
+  // console can do confers a gameplay advantage) and it needs local machine access.
   mainWindow.webContents.on('before-input-event', (event, input) => {
     if (!isDevToolsToggleShortcut(input)) return;
     event.preventDefault();
@@ -271,9 +282,19 @@ function createMainWindow() {
   // the file (electron/diagnostics.cjs shouldLogConsoleLevel), and the mirror
   // is session-capped like the renderer-error channel so console spam cannot
   // churn the log rotation.
-  mainWindow.webContents.on('console-message', (details, level, message, line, sourceId) => {
+  //
+  // Single-arg listener: Electron 43 delivers the merged Event form (details.*)
+  // to a one-parameter listener (a multi-parameter listener opts into the
+  // deprecated positional args and logs a deprecation warning; verified against
+  // Electron 43). normalizeConsoleMessage still accepts the legacy positional
+  // form as cross-version insurance. The level is read cheaply BEFORE the
+  // redacting normalize so a page spewing info-level console output cannot cost
+  // per-line regex work in the main process.
+  mainWindow.webContents.on('console-message', (details) => {
     if (consoleLinesMirrored >= MAX_MIRRORED_CONSOLE_LINES) return;
-    const entry = normalizeConsoleMessage(details, level, message, line, sourceId);
+    const rawLevel = typeof details?.level === 'string' ? details.level : 'info';
+    if (!shouldLogConsoleLevel(rawLevel)) return;
+    const entry = normalizeConsoleMessage(details);
     if (!entry || !shouldLogConsoleLevel(entry.level)) return;
     consoleLinesMirrored += 1;
     if (consoleLinesMirrored === MAX_MIRRORED_CONSOLE_LINES) {
@@ -360,7 +381,6 @@ ipcMain.handle('desktop-set-strings', (event, strings) => {
 // caps, but main re-validates and re-caps without trusting it
 // (electron/diagnostics.cjs); a malformed payload is dropped silently.
 let rendererErrorsLogged = 0;
-let consoleLinesMirrored = 0;
 ipcMain.on('desktop-renderer-error', (event, payload) => {
   if (!trustedSender(event)) return;
   if (rendererErrorsLogged >= MAX_FORWARDED_ERRORS) return;
@@ -447,25 +467,43 @@ app.whenReady().then(() => {
   lockDownPermissions();
   createMainWindow();
 
+  // Keep 'desktop-update-install' answerable whenever the real updater did NOT
+  // claim it, so a renderer installUpdate() resolves null instead of rejecting
+  // with "No handler registered". Registered when the updater is off (Steam/dev)
+  // AND when an updater-enabled build could not load its updater bundle. The
+  // try/catch guards the (practically impossible) double-registration race.
+  const registerDisabledUpdateInstall = () => {
+    try {
+      ipcMain.handle('desktop-update-install', (event) => {
+        if (!trustedSender(event)) return null;
+        log.warn('[updater] install requested but auto-update is unavailable on this build');
+        return null;
+      });
+    } catch (err) {
+      log.warn('[updater] disabled-install handler already registered', err?.message ?? err);
+    }
+  };
+
   // Auto-update, website distribution only (desktop_config.cjs gates on
   // packaged + channel; Steam updates via SteamPipe depots, dev has nothing to
   // update). A failed init degrades to a log line: the game must still run.
   if (desktopConfig.updaterEnabled) {
+    let updater = null;
     try {
-      initUpdater({ ipcMain, log, getWindow: () => mainWindow, isTrusted: trustedSender });
+      updater = initUpdater({
+        ipcMain,
+        log,
+        getWindow: () => mainWindow,
+        isTrusted: trustedSender,
+      });
     } catch (err) {
       log.error('[updater] init failed', err);
     }
+    // initUpdater returns null (without registering its handler) when the
+    // updater bundle is missing or broken; keep the channel answerable then.
+    if (!updater) registerDisabledUpdateInstall();
   } else {
-    // Keep the channel answerable on non-updating builds so a renderer
-    // installUpdate() call resolves null instead of rejecting with
-    // "No handler registered" (unreachable today: the restart button only
-    // renders after a 'downloaded' event, which never fires here).
-    ipcMain.handle('desktop-update-install', (event) => {
-      if (!trustedSender(event)) return null;
-      log.warn('[updater] install requested but the updater is disabled on this channel');
-      return null;
-    });
+    registerDisabledUpdateInstall();
   }
 
   const initialDeepLink = process.argv.find((arg) => arg.startsWith(`${deepLinkProtocol}://`));

@@ -4,7 +4,8 @@ Companion to `docs/desktop-release.md` (the terse operational runbook) and
 `ELECTRON-DESKTOP-AUDIT.md` (the decision log). This file is the explainer: what
 the production-readiness change contains, and the per-platform mechanics of
 auto-update, signing, and releasing, with the details an operator or reviewer
-needs. Commit range: `1a82ad62..99453151` on `feature/electron-steam-desktop`.
+needs. Commit range: `1a82ad62..8ba1bf96` on `feature/electron-steam-desktop`
+(the four code commits through `99453151` plus this doc).
 
 ## What shipped (summary)
 
@@ -172,10 +173,13 @@ node_modules in the asar, all seven fuses set.
 3. Upload to the update host directory (keep exact filenames):
    - mac: `world-of-claudecraft-<v>-mac-universal.dmg` (download page),
      `...-mac-universal.zip` + `.zip.blockmap` + `latest-mac.yml` (updater).
-   - win: `...-win-x64.exe`, `...-win-arm64.exe`, their `.exe.blockmap`s,
-     `latest.yml`.
-   - linux: `...-linux-x64.AppImage`, `...-linux-arm64.AppImage`,
-     `latest-linux.yml`, plus the debs for the download page.
+   - win: the combined NSIS installer electron-builder emits by default for
+     x64+arm64 (see `docs/desktop-release.md` for the buildUniversalInstaller
+     detail) plus its `.exe.blockmap` and `latest.yml`.
+   - linux: `...-linux-x86_64.AppImage` (x64) and `...-linux-arm64.AppImage`,
+     the debs (`...-amd64.deb`, `...-arm64.deb`) for the download page, and BOTH
+     per-arch feed files `latest-linux.yml` (x64) and `latest-linux-arm64.yml`
+     (arm64); without the arm64 feed, arm64 AppImage installs cannot self-update.
 4. Optional staged rollout: add `stagingPercentage` to the ymls, raise it as
    confidence grows, remove to finish.
 5. Verify with the post-release checklist in `docs/desktop-release.md`

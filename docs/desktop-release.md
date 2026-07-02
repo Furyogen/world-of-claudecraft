@@ -57,7 +57,7 @@ the nested Electron frameworks).
   on current macOS (15+) an unnotarized quarantined download shows "damaged / can't
   be opened" and only launches via System Settings > Privacy & Security > Open Anyway
   or `xattr -r -d com.apple.quarantine <app>`.
-- Notarization activates automatically when the `APPLE_API_KEY` +` APPLE_API_KEY_ID`
+- Notarization activates automatically when the `APPLE_API_KEY` + `APPLE_API_KEY_ID`
   + `APPLE_API_ISSUER` env vars are present (electron-builder submits via notarytool
   and staples the ticket). `APPLE_ID` + `APPLE_APP_SPECIFIC_PASSWORD` +
   `APPLE_TEAM_ID` also work.
@@ -101,10 +101,19 @@ auto-updatable target; deb users update manually or via a future repo.
 3. Upload from `release/` to the update host directory (keep filenames exactly):
    - macOS: `world-of-claudecraft-<v>-mac-universal.dmg` (download page),
      `...-mac-universal.zip` + `.zip.blockmap` (updater), `latest-mac.yml`.
-   - Windows: `...-win-x64.exe` / `...-win-arm64.exe` (NSIS) + `.exe.blockmap`,
-     `latest.yml` (covers both arches), plus the zips if you publish them.
-   - Linux: `...-linux-x64.AppImage` / `...-linux-arm64.AppImage` (blockmap data is
-     embedded), `latest-linux.yml`, plus the debs for the download page.
+   - Windows: with x64+arm64 and no `nsis` block, electron-builder's
+     `buildUniversalInstaller` default (true) emits ONE combined NSIS installer
+     covering both arches (not per-arch `-win-x64.exe` / `-win-arm64.exe`), plus
+     its `.exe.blockmap` and `latest.yml`. Upload exactly what `release/` holds;
+     verify the emitted installer filename and the `path` in `latest.yml` on the
+     first Windows build. To ship separate per-arch installers instead, set
+     `build.nsis.buildUniversalInstaller: false`.
+   - Linux: `...-linux-x86_64.AppImage` (x64) / `...-linux-arm64.AppImage`
+     (electron-builder names the x64 AppImage `x86_64`; blockmap data is
+     embedded), the debs `...-linux-amd64.deb` (x64) / `...-linux-arm64.deb` for
+     the download page, plus BOTH per-arch feed files `latest-linux.yml` (x64)
+     and `latest-linux-arm64.yml` (arm64). Omitting the arm64 feed means arm64
+     AppImage installs can never self-update.
 4. The running app checks 15 seconds after launch and every 4 hours
    (`electron/updater.cjs`), downloads in the background, toasts the player
    ("restart now" or install-on-quit), and applies deltas via blockmap when the host
@@ -167,7 +176,7 @@ Rules that keep this working:
 - Shell log file (rotating, 5 MB + one archive; paths follow the package NAME,
   verified on a packaged build): macOS
   `~/Library/Logs/world-of-claudecraft/main.log`; Windows
-  `%USERPROFILE%\\AppData\\Roaming\\world-of-claudecraft\\logs\\main.log`; Linux
+  `%USERPROFILE%\AppData\Roaming\world-of-claudecraft\logs\main.log`; Linux
   `~/.config/world-of-claudecraft/logs/main.log`. Contains the startup banner
   (version/channel/updater state), GPU status (including a warning if WebGL fell
   back to software), updater activity, renderer console warnings/errors, uncaught
@@ -202,9 +211,12 @@ Rules that keep this working:
    appears, "Restart now" applies it, and a player who quits instead gets it on next
    launch. Steam channel: confirm the log says the updater is disabled and no
    update network traffic occurs.
-6. Crash surfaces: `kill -SEGV <renderer pid>` (or close via task manager twice)
-   produces the log entries, the bounded auto-reload, then the localized
-   Reload/Quit dialog; a minidump lands in crashDumps.
+6. Crash surfaces: `kill -SEGV <renderer pid>` THREE times within a minute (a
+   task-manager "end task" is classified as a benign `killed` exit and does not
+   trigger recovery). The first two SEGVs each produce a log entry and a bounded
+   auto-reload; the third reaches the localized Reload/Quit dialog (the auto-
+   reload budget is 2 per 60s, electron/diagnostics.cjs). Each SEGV lands a
+   minidump in crashDumps.
 7. `npm test` green at the built commit; `tests/electron_*.test.ts` cover the
    shell's pure logic.
 

@@ -22,6 +22,14 @@ describe('clampText', () => {
     expect(clampText(null, 10)).toBe('');
     expect(clampText(undefined, 10)).toBe('');
   });
+
+  it('strips C1 control characters, not just C0 (the documented contract)', () => {
+    // U+009B is the one-byte control-sequence introducer; U+0085 is NEL. Both
+    // are C1 controls that must not reach a native dialog or a log line.
+    const csi = String.fromCharCode(0x9b);
+    const nel = String.fromCharCode(0x85);
+    expect(clampText(`a${csi}b${nel}c`, 100)).toBe('a b c');
+  });
 });
 
 describe('redactSecrets', () => {

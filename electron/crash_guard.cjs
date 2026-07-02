@@ -27,13 +27,27 @@ function installProcessCrashGuards({ app, dialog, log, getStrings }) {
     app.exit(1);
   });
   process.on('unhandledRejection', (reason) => {
-    log.error(
-      '[main] unhandled rejection',
-      reason instanceof Error ? (reason.stack ?? reason.message) : String(reason),
-    );
+    // A log-only path, so it must not itself throw: a rejection reason whose
+    // stack/toString getter throws (or a hostile Symbol.toPrimitive) would
+    // otherwise surface as an uncaughtException and escalate to a fatal exit.
+    try {
+      log.error(
+        '[main] unhandled rejection',
+        reason instanceof Error ? (reason.stack ?? reason.message) : String(reason),
+      );
+    } catch {
+      // best-effort second attempt with no interpolation of `reason`
+      try {
+        log.error('[main] unhandled rejection (unprintable reason)');
+      } catch {
+        // give up rather than take the app down over a log line
+      }
+    }
   });
   app.on('child-process-gone', (_event, details) => {
-    const benign = details?.reason === 'clean-exit' || details?.reason === 'killed';
+    // Reuse the pure classifier so the benign-vs-crash decision lives in one
+    // place (electron/diagnostics.cjs), not duplicated here.
+    const benign = classifyRendererExit(details?.reason) === 'benign';
     log[benign ? 'info' : 'error']('[child] process gone', details);
   });
 }

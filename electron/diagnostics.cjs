@@ -20,11 +20,15 @@ const MAX_FORWARDED_ERRORS = 30;
 const MAX_MIRRORED_CONSOLE_LINES = 200;
 
 // Replace every C0/C1 control character run with a single space: log lines
-// stay single-line (no \n forgery, no terminal escapes) and native dialog
-// text stays flat. Shared by clampText and shell_strings.cjs.
+// stay single-line (no newline forgery, no terminal escapes) and native
+// dialog text stays flat. The class covers C0 (\u0000-\u001f),
+// DEL (\u007f), and C1 (\u0080-\u009f, which includes
+// \u009b, the one-byte control-sequence introducer), so a crafted string
+// cannot smuggle a terminal escape past the filter. Shared by clampText and
+// shell_strings.cjs.
 function flattenControlChars(text) {
   // biome-ignore lint/suspicious/noControlCharactersInRegex: matching control chars is the point
-  return text.replace(/[\u0000-\u001f\u007f]+/g, ' ');
+  return text.replace(/[\u0000-\u001f\u007f-\u009f]+/g, ' ');
 }
 
 function clampText(value, maxLength) {
@@ -86,7 +90,12 @@ function normalizeConsoleMessage(details, legacyLevel, legacyMessage, legacyLine
   }
   if (typeof legacyMessage === 'string') {
     const level = LEGACY_CONSOLE_LEVELS[legacyLevel] ?? 'info';
-    const source = typeof legacySource === 'string' ? `${legacySource}:${legacyLine}` : '';
+    const source =
+      typeof legacySource === 'string'
+        ? Number.isFinite(legacyLine)
+          ? `${legacySource}:${legacyLine}`
+          : legacySource
+        : '';
     return {
       level,
       message: redactSecrets(clampText(legacyMessage, MAX_ERROR_TEXT)),
