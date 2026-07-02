@@ -464,20 +464,6 @@ export class DailyRewardService {
     return { ...status, awardedPoints: outcome.points, outcomeKey: outcome.key };
   }
 
-  async completeTask(
-    accountId: number,
-    taskId: string,
-  ): Promise<DailyRewardStatus | { error: string; status: number }> {
-    const day = utcRewardDay();
-    const config = await this.ensureActiveDay(day);
-    const eligibility = await dailyRewardEligibility(accountId, config);
-    if (!eligibility.eligible)
-      return { error: 'daily rewards are locked for this wallet', status: 403 };
-    if (!/^[a-z0-9_:-]{1,64}$/.test(taskId)) return { error: 'invalid task', status: 400 };
-    await this.db.completeTask(day, accountId, taskId);
-    return this.status(accountId);
-  }
-
   async recordOnlineMinute(accountId: number, activeAt: Date = new Date()): Promise<void> {
     const day = utcRewardDay(activeAt);
     await this.ensureActiveDay(day);
@@ -660,13 +646,6 @@ export async function handleDailyRewardApi(
   }
   if (req.method === 'POST' && url.pathname === '/api/daily-rewards/spin') {
     const result = await dailyRewardService.spin(accountId);
-    if ('error' in result) return json(res, result.status, { error: result.error });
-    return json(res, 200, result);
-  }
-  if (req.method === 'POST' && url.pathname === '/api/daily-rewards/task') {
-    const body = await readBody(req);
-    const taskId = typeof body.taskId === 'string' ? body.taskId : '';
-    const result = await dailyRewardService.completeTask(accountId, taskId);
     if ('error' in result) return json(res, result.status, { error: result.error });
     return json(res, 200, result);
   }

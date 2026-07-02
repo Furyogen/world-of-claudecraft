@@ -70,7 +70,6 @@ export interface DailyRewardDb {
     idempotencyKey: string,
     meta?: Record<string, unknown>,
   ): Promise<boolean>;
-  completeTask(day: string, accountId: number, taskId: string): Promise<boolean>;
   recentPayouts(limit: number): Promise<DailyRewardPayoutRow[]>;
   finalizeDay(day: string, prizePoolUsd: number, splits: readonly number[]): Promise<void>;
   pendingPayouts(limit: number): Promise<DailyRewardInternalPayoutRow[]>;
@@ -368,24 +367,6 @@ export class PgDailyRewardDb implements DailyRewardDb {
     } finally {
       client.release();
     }
-  }
-
-  async completeTask(day: string, accountId: number, taskId: string): Promise<boolean> {
-    const task = await pool.query(
-      `SELECT points FROM daily_reward_tasks
-        WHERE day = $1 AND realm = $2 AND task_id = $3 AND active = true`,
-      [day, REALM, taskId],
-    );
-    const points = Number(task.rows[0]?.points ?? 0);
-    if (points <= 0) return false;
-    const inserted = await pool.query(
-      `INSERT INTO daily_reward_task_completions (day, realm, account_id, task_id, points)
-       VALUES ($1, $2, $3, $4, $5)
-       ON CONFLICT (day, realm, account_id, task_id) DO NOTHING`,
-      [day, REALM, accountId, taskId, points],
-    );
-    if ((inserted.rowCount ?? 0) === 0) return false;
-    return this.addPoints(day, accountId, 'task', points, `task:${taskId}`, { taskId });
   }
 
   async recentPayouts(limit: number): Promise<DailyRewardPayoutRow[]> {

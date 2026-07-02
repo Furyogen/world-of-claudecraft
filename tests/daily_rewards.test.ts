@@ -106,9 +106,6 @@ class FakeDailyRewardDb implements DailyRewardDb {
     this.score += points;
     return true;
   }
-  async completeTask(): Promise<boolean> {
-    return false;
-  }
   async recentPayouts(): Promise<DailyRewardPayoutRow[]> {
     return [];
   }
