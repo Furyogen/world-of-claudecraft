@@ -14,9 +14,10 @@ These were locked with the maintainer during the audit:
 
 1. Distribution is two channels: the Steam store AND direct downloads from
    worldofclaudecraft.com. One Electron bundle serves both; no separate native Steam build.
-2. Sign-in is Discord plus email only. Steam sign-in is being removed (too many sign-ins,
-   and Discord is the community-growth funnel). The browser plus deep-link `desktop-login`
-   flow stays; it already serves Discord and email.
+2. Sign-in is Discord plus email only, exactly the web flow: email/password logs in
+   inside the app, and Discord goes through the browser plus deep-link `desktop-login`
+   handoff. There is no Steam sign-in (Discord is the community-growth funnel, and one
+   bundle must behave identically on both channels).
 3. Keep the dependency set tiny (repo doctrine). Prefer pure-code fixes and config over new
    packages.
 
@@ -26,24 +27,24 @@ These were locked with the maintainer during the audit:
   (`contextIsolation`, `sandbox`, `nodeIntegration:false`), the custom protocol is modern
   and traversal-guarded, single-instance and deep-link handling is textbook, and the preload
   is minimal and sandbox-compliant.
-- Versions are essentially current. Electron was one major behind; this plan bumps it to the
-  current stable 43. electron-builder and steamworks.js were already at their newest.
-- One ship-blocking gap: there is no macOS code signing or notarization. On current macOS and
-  under Steam policy that blocks both the website DMG and the Steam mac build.
-- A focused set of should-fix hardening items (all pure code, no new deps): deny-by-default
-  permissions, a `will-navigate` guard, a CSP header on the app protocol, IPC sender
-  validation, and Electron fuses plus ASAR integrity.
-- For the website channel only, add `electron-updater`; disable it on the Steam build (Steam
-  owns updates there).
-- Given Steam sign-in is going away, steamworks.js can be removed entirely for v1.
+- Versions are current: Electron 43 (the newest stable; this plan bumped it from 42) and
+  electron-builder on the newest 26.x.
+- Every gap this audit found has since been implemented on the branch (the
+  implementation-status sections below record the details): deny-by-default permissions,
+  the navigation guards, the app:// CSP, IPC sender validation, the fuses plus ASAR
+  integrity, macOS/Windows signing and notarization config, the website auto-updater with
+  the Steam split, and full error/crash capture. What remains is maintainer accounts and
+  infrastructure, listed in `docs/desktop-release.md`.
+- Sign-in is email plus Discord only (the web flow). steamworks.js was removed entirely;
+  Steam is a distribution channel only.
 
 ## Implementation status (branch feature/electron-steam-desktop)
 
 Done in this hardening pass (each is its own commit; see the git log):
 
-- Steam sign-in removed (section 6): Discord and email only; the browser plus
-  deep-link desktop-login flow is intact; steamworks.js and its asarUnpack entry
-  are gone.
+- Steam sign-in code removed (section 6): sign-in is Discord and email only; the
+  browser plus deep-link desktop-login flow is intact; steamworks.js and its
+  asarUnpack entry are gone.
 - S1, deny-by-default permissions: an allow-list of pointerLock and fullscreen in
   both permission gates, plus setDevicePermissionHandler denying device access.
 - S2, navigation guard: will-navigate, will-frame-navigate, and will-redirect all
@@ -203,9 +204,41 @@ update host for https://updates.worldofclaudecraft.com/desktop, the Steam
 partner app + depots, the optional crash-minidump endpoint, and deploying this
 branch's server so production reflects CORS for app://worldofclaudecraft.
 
+### Independent re-verification passes (2026-07-01)
+
+Two fresh audits over the whole ship-prep range (requirement-by-requirement
+auditors with adversarial refutation of every finding, plus privacy, malware,
+QA, and version-currency reviewers) confirmed the state above; every surviving
+finding was applied (commits 8bae7110 and 3d4e49b8):
+
+- First pass (8bae7110): C1 control characters stripped from renderer-supplied
+  log text (not just C0/DEL); the console-message handler moved to the arity-1
+  Electron 43 Event form with a cheap level gate before the redacting
+  normalize; VITE_DEV_SERVER_URL gated on isPackaged; a disabled-install IPC
+  handler registered when an updater-enabled build cannot load its updater
+  bundle; a throw-proofed unhandledRejection path; runbook artifact-name
+  corrections (x86_64 AppImage, amd64 deb, the latest-linux-arm64.yml feed).
+- Second pass (3d4e49b8): the web origins joined the wocDesktop stamp, so a
+  PACKAGED build ignores VITE_DESKTOP_API_ORIGIN / VITE_DESKTOP_LOGIN_ORIGIN
+  from runtime env (they previously could widen the app:// CSP connect-src or
+  move the external login page); proven by launching a packaged build with
+  hostile env vars set. The crash-dialog t() strings re-push once the stored
+  non-English boot locale finishes loading (the initial push races the lazy
+  locale fetch and the boot load fires no woc:languagechange). Packaged builds
+  load the vendored main-process deps ONLY from the in-asar bundle (no
+  bare-specifier fallback through user-writable module paths;
+  tests/electron_vendor_loading.test.ts pins it). Renderer-error and
+  console-mirror source URLs pass redactSecrets like message/stack.
+  webSecurity: true and allowRunningInsecureContent: false pinned explicitly.
+- Cross-checks that came back clean: the vendored bundles match the npm
+  registry tarballs byte-for-byte; the malware gate PASSED; every pinned
+  version was current at the audit date (Electron 43.0.0, electron-builder
+  26.15.6, electron-updater 6.8.9, electron-log 5.4.4); no IWorld / wire / sim
+  divergence; the desktop Turnstile posture unchanged.
+
 ---
 
-## 1. Current setup snapshot
+## 1. Setup snapshot at the research date (historical: the overhaul below has since landed)
 
 - `package.json` `main`: `electron/main.cjs`. Project is `"type":"module"`; the Electron
   entry and preload are deliberately `.cjs`.
@@ -217,9 +250,10 @@ branch's server so production reflects CORS for app://worldofclaudecraft.
   `contextIsolation:true`, `nodeIntegration:false`, `sandbox:true`; `setMenu(null)`;
   `setWindowOpenHandler` denies all and forwards http/https to `shell.openExternal`;
   permission handlers use a deny-list; single-instance lock; `worldofclaudecraft://`
-  deep-link for `desktop-login`; lazy steamworks.js init with `getAuthTicketForWebApi`.
+  deep-link for `desktop-login`; plus the since-removed steamworks.js integration.
 - `electron/preload.cjs` (15 lines): `contextBridge.exposeInMainWorld('wocDesktop', ...)`
-  exposing `openBrowserLogin`, `requestSteamAuthTicket`, `takeLoginCode`, `onLoginCode`.
+  exposing `openBrowserLogin`, `takeLoginCode`, `onLoginCode` (plus one since-removed
+  Steam bridge method).
 - `build` block: appId `com.worldofclaudecraft.desktop`; targets mac dmg+zip, win nsis+zip,
   linux AppImage+deb; `asarUnpack` of `node_modules/steamworks.js/dist/**`; `protocols`
   block for the `worldofclaudecraft` scheme. No signing, notarization, fuses, asarIntegrity,
@@ -288,9 +322,11 @@ Verified strengths, worth preserving through any refactor:
   or hostname is not `desktop-login`, and requires a `code` param (`main.cjs:158-169`).
 - Preload is minimal and sandbox-compliant: requires only `electron`, exposes wrapped
   `ipcRenderer.invoke/on` helpers (never the raw module), type-guards its inputs
-  (`preload.cjs:1-15`). steamworks.js is required in main only, not preload.
-- steamworks.js packaging is correct: `asarUnpack` of the prebuilt `.node` is exactly the
-  required handling for an N-API addon that must not be electron-rebuilt.
+  (`preload.cjs:1-15`). steamworks.js (since removed) was required in main only, never
+  the preload.
+- steamworks.js packaging was correct while it existed (since removed): `asarUnpack` of the
+  prebuilt `.node` is exactly the required handling for an N-API addon that must not be
+  electron-rebuilt. Relevant again only if an overlay/rich-presence slice is ever added.
 - Distribution coverage is broad and the `files` allowlist is tight (dist, electron, icons,
   package.json), avoiding shipping source or dev files.
 
@@ -344,15 +380,14 @@ All pure code and config, no new dependency except electron-updater.
   script-src 'self' 'wasm-unsafe-eval'; object-src 'none'; frame-ancestors 'none'`
   (Three.js/WASM needs `wasm-unsafe-eval`). Source: security checklist item 7/16.
 
-- S4. IPC handlers do not validate the sender frame. `steam-auth-ticket`,
-  `desktop-login-take-code`, and `desktop-login-open-browser` (`main.cjs:171-181`) mint or
-  return sensitive values with no sender check. Add one shared `isTrustedSender(frame)`
-  helper (frame origin is `app://worldofclaudecraft` or the dev URL) and apply it at the top
-  of all three handlers, returning null/void otherwise. Risk is low today given
-  sandbox plus contextIsolation plus no webviewTag, but it is cheap defense-in-depth and the
-  documented pattern. Source: security checklist item 17. Note: the `steam-auth-ticket`
-  handler is removed entirely by the Steam-login cleanup (section 6), so this reduces to the
-  two `desktop-login` handlers.
+- S4. IPC handlers do not validate the sender frame. `desktop-login-take-code` and
+  `desktop-login-open-browser` (`main.cjs:171-181`) mint or return sensitive values with no
+  sender check. Add one shared `isTrustedSender(frame)` helper (frame origin is
+  `app://worldofclaudecraft` or the dev URL) and apply it at the top of every handler,
+  returning null/void otherwise. Risk is low today given sandbox plus contextIsolation plus
+  no webviewTag, but it is cheap defense-in-depth and the documented pattern. Source:
+  security checklist item 17. (A third, since-removed Steam handler was also covered at the
+  time.)
 
 - S5. Electron fuses not flipped and ASAR integrity off. Add electron-builder's built-in
   `electronFuses` config (no new dependency; it drives the transitive `@electron/fuses` and
@@ -397,7 +432,8 @@ All pure code and config, no new dependency except electron-updater.
   on `electron/*.cjs` that restarts Electron on change (the one affordance electron-vite
   would give for free), keeping the dependency set flat.
 - N6. `main.cjs`/`preload.cjs` are untyped and outside `tsc` in an otherwise TS-strict repo.
-  Keep them CJS (steamworks.js is CJS-native and main uses `__dirname`), and add `// @ts-check`
+  Keep them CJS (main uses `__dirname`; at research time the CJS-native steamworks.js was a
+  second reason), and add `// @ts-check`
   plus JSDoc as the zero-build minimum, or compile from TS via the existing esbuild path and
   a small dedicated tsconfig using Electron's `electron/main` and `electron/renderer` subpath
   types. Define one shared type for the `window.wocDesktop` surface consumed by `src/net`.
@@ -424,8 +460,8 @@ These were raised and then dismissed, recorded so they are not re-litigated:
   docs keep it at top level; the repo already matches best practice.
 - electron-builder "behind": not behind. The caret already resolves to the newest 26.x, and
   26.15.3 is npm's `latest` dist-tag.
-- steamworks.js caret risk: none. `package-lock.json` pins exactly 0.4.0 with an integrity
-  hash, so `npm ci` is deterministic.
+- steamworks.js caret risk (while it existed): none. The lockfile pinned exactly 0.4.0 with
+  an integrity hash, so `npm ci` was deterministic. Moot now that the package is removed.
 
 ---
 
@@ -475,55 +511,48 @@ Steam-managed install dir can corrupt it.
 
 ---
 
-## 6. steamworks.js decision and Steam sign-in removal
+## 6. steamworks.js decision (no Steam SDK in v1)
 
-Given Steam sign-in is being removed (Discord plus email only) and Steam is distribution-only:
+Sign-in is email plus Discord only (the web flow) and Steam is distribution-only, so v1
+ships with zero Steamworks SDK. `steamworks.js` and its `asarUnpack` entry are removed
+(this also deleted the app's only native addon, simplifying signing and notarization),
+and the Steam DRM wrapper is skipped (worthless for a free, server-authoritative MMO).
+Distribution, install, and updates all work through SteamPipe depots with nothing
+linked, which Valve explicitly supports. All Steam sign-in code that once existed in
+the shell, preload, and server has been deleted; nothing ships or verifies Steam
+tickets anywhere.
 
-- You do not need the Steamworks SDK to ship on Steam. Ship v1 with zero Steamworks SDK.
-  Remove `steamworks.js` entirely: it deletes the app's only native addon, drops the
-  `asarUnpack` entry, and simplifies signing and notarization. The Steam DRM wrapper is
-  worthless for a free, server-authoritative MMO (nothing to protect locally), so skip it.
-- Optionally later, add only `steamworks.js` `restartAppIfNecessary` plus overlay and rich
-  presence (none of which is login), and guard `init()` so the same bundle no-ops when not
-  launched under Steam. That is additive and does not change distribution.
-- The Steam-auth hardening ideas surfaced during research (single-source the auth identity,
-  add a `restartAppIfNecessary` DRM gate, server-side entitlement and ban checks) are
-  superseded by removing Steam sign-in. Do not implement them.
+Optionally later, add only `steamworks.js` `restartAppIfNecessary` plus overlay and rich
+presence (none of which is login), and guard `init()` so the same bundle no-ops when not
+launched under Steam. That is additive and does not change distribution; gate it behind
+CI that verifies the prebuilt addon loads under the exact Electron version.
 
-### Steam sign-in removal cleanup checklist
-
-When you do the removal, delete:
-
-- `electron/main.cjs`: `getSteamClient()`, `requestSteamAuthTicket()`, `steamAppId()`, the
-  `steamAuthIdentity` constant, and the `ipcMain.handle('steam-auth-ticket', ...)` handler.
-- `electron/preload.cjs`: the `requestSteamAuthTicket` bridge in the `wocDesktop` object.
-- `package.json`: the `steamworks.js` dependency and its `asarUnpack` entry.
-- Server side: the Steam ticket verification path (`server/steam_auth.ts` and its callers),
-  once the client no longer sends tickets. Confirm nothing else depends on it before removing.
-
-Keep untouched (this is what Discord and email use on desktop): `openDesktopLogin()`, the
-`worldofclaudecraft://desktop-login?code=` deep link, `deliverLoginCode()`, `pendingLoginCode`,
-and the `openBrowserLogin`/`takeLoginCode`/`onLoginCode` bridges.
+The desktop login surface (used by BOTH email and Discord) is: `openDesktopLogin()`, the
+`worldofclaudecraft://desktop-login?code=` deep link, `deliverLoginCode()` /
+`pendingLoginCode`, and the `openBrowserLogin` / `takeLoginCode` / `onLoginCode` bridges.
 
 ---
 
-## 7. Recommended implementation sequence
+## 7. Implementation sequence (all code steps landed)
 
-A suggested order to work off. Each step is independently shippable.
+The order the work landed in. Every code step below is DONE on the branch; the
+implementation-status sections above record the details. What remains is maintainer
+accounts and infrastructure (the provisioning table in `docs/desktop-release.md`).
 
-1. Land the Electron 43 bump (section 2). Done in this worktree, pending your commit.
-2. Steam sign-in removal (section 6). Do this first so the later hardening applies to the
-   smaller surface. Removes the only native addon.
-3. Security hardening, no new deps (S1 to S5, plus N1, N2, N4, N5, N6). Pure code and the
-   `electronFuses` config. Sequence fuses/ASAR integrity after signing lands.
-4. macOS signing plus notarization (B1). Needs the Apple Developer account and Developer ID
-   cert. Unblocks both channels on mac.
-5. Website auto-update (S6) and Windows signing (N3). Needs the update feed host and an Azure
-   Artifact Signing setup.
-6. Steam depot pipeline (section 5): per-OS unpacked `dir` builds, SteamPipe upload, per-OS
-   launch options, Linux run-outside-runtime plus `--no-sandbox`.
-7. Optional: crash reporting decision (N8), backgroundThrottling decision (N7), and later a
-   thin steamworks.js overlay/rich-presence slice if wanted.
+1. Electron 43 bump (section 2). Done.
+2. Removal of the Steam sign-in code (section 6). Done: sign-in is email plus Discord
+   only, and the app's only native addon went with it.
+3. Security hardening, no new deps (S1 to S5, plus N1, N2, N4, N5, N6). Done in the
+   hardening pass; fuses and ASAR integrity verified on packaged builds.
+4. macOS signing plus notarization (B1). Config, entitlements, and the ad-hoc fallback
+   are done; the Developer ID certificate and notary API key remain with the maintainer.
+5. Website auto-update (S6) and Windows signing (N3). Done in the ship-prep pass; the
+   update feed host and the Azure Artifact Signing account remain with the maintainer.
+6. Steam depot pipeline (section 5). Done (`npm run electron:build:steam` + the depot
+   runbook); the Steam partner app and depots remain with the maintainer.
+7. Crash reporting (N8) and backgroundThrottling (N7). Done: Crashpad local minidumps
+   with an optional build-stamped https submit URL; throttling off for the game window.
+   A thin steamworks.js overlay/rich-presence slice stays optional and unscheduled.
 
 ---
 
@@ -568,19 +597,15 @@ tooling/structure, process model). Kept for the specifics and citations.
   maintained; the `@ai-zen` fork (0.3.6) is behind. greenworks is effectively dead. It is a
   napi-rs addon with ABI-stable prebuilt binaries that must not be electron-rebuilt.
   registry.npmjs.org/steamworks.js, github.com/ceifa/steamworks.js.
-- `getAuthTicketForWebApi(identity)` is the correct current web-auth API (SDK 1.57);
-  server-side verify via `ISteamUserAuth/AuthenticateUserTicket` on partner.steam-api.com
-  with a publisher key and a matching identity. All of this is moot once Steam sign-in is
-  removed. partner.steamgames.com/doc/api/ISteamUser, /doc/webapi/isteamuserauth.
 - SDK integration is never required to ship on Steam; the DRM wrapper is optional and not an
   anti-piracy solution. partner.steamgames.com/doc/sdk/api, /doc/features/drm.
 
 ### Tooling and structure
 
 - ESM main has been stable since Electron 28. The `.cjs` main and preload in a
-  `"type":"module"` project is intentional and reasonable, not a smell, because main
-  synchronously requires the CJS-native steamworks.js and uses `__dirname`; keep them CJS.
-  electronjs.org/docs/latest/tutorial/esm.
+  `"type":"module"` project is intentional and reasonable, not a smell, because main uses
+  `__dirname` (and at research time also synchronously required the CJS-native
+  steamworks.js); keep them CJS. electronjs.org/docs/latest/tutorial/esm.
 - Sandboxed preload may require only `electron` plus a small built-in allow-list; the repo
   preload is compliant. electronjs.org/docs/latest/tutorial/tutorial-preload.
 - electron-vite (stable v5.0) would give TS, main/preload hot-reload, and dep externalization,
@@ -608,7 +633,7 @@ tooling/structure, process model). Kept for the specifics and citations.
 - electron.build (cli, configuration, notarization, code-signing-win, adding-electron-fuses,
   auto-update)
 - partner.steamgames.com/doc: sdk/uploading, store/application/platforms, sdk/api,
-  features/drm, api/ISteamUser, webapi/isteamuserauth
+  features/drm
 - Apple: support.apple.com/guide/security (Gatekeeper), developer.apple.com/developer-id
 - Microsoft: learn.microsoft.com/azure/trusted-signing/overview
 - ValveSoftware/steam-runtime#579 (Electron libcups in the Steam Linux Runtime)

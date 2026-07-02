@@ -10,17 +10,30 @@ One codebase produces two distribution channels:
 | website | `npm run electron:build` | `release/` installers + update feed files | in-app via electron-updater |
 | steam | `npm run electron:build:steam` | `release-steam/` loose per-OS layouts | SteamPipe depots only (in-app updater OFF) |
 
-The channel is stamped into the packaged `package.json` as `wocDesktop.distribution`
-(electron-builder `extraMetadata`, wired in `scripts/electron-build.mjs` +
-`scripts/electron-builder-config.mjs`); the shell resolves it at runtime in
-`electron/desktop_config.cjs`. The updater runs only for a PACKAGED WEBSITE build;
-there is deliberately no way to force it on in a Steam build. To try either channel
-unpacked, set `WOC_DISTRIBUTION=website|steam` on `npm run electron:dev`.
+Sign-in is email and Discord only, identical to the web flow: email/password logs in
+inside the app, and "Continue with Discord" opens the player's default browser on the
+`/desktop-login` page, which hands a one-time code back to the app over the
+`worldofclaudecraft://desktop-login` deep link. There is no Steam sign-in on any
+channel (Steam is distribution only).
+
+The build stamps `wocDesktop` into the packaged `package.json` (electron-builder
+`extraMetadata`, wired in `scripts/electron-build.mjs` +
+`scripts/electron-builder-config.mjs`): the `distribution` channel, the `apiOrigin`
+the Vite bundle was baked with, the main-process-only `loginOrigin`, and the optional
+`crashSubmitUrl`. The shell resolves the stamp at runtime in
+`electron/desktop_config.cjs`, and a PACKAGED build ignores the `WOC_*` and
+`VITE_DESKTOP_*` runtime env vars entirely (the stamp is final), so a local env var
+cannot steer an installed app to another API, login page, updater state, or crash
+endpoint. The updater runs only for a PACKAGED WEBSITE build; there is deliberately
+no way to force it on in a Steam build. To try either channel unpacked, set
+`WOC_DISTRIBUTION=website|steam` on `npm run electron:dev`.
 
 `npm run electron:pack` / `electron:pack:steam` are the fast local variants
 (`--dir`, host arch only, no installers). Release builds use the full arch matrix in
 `package.json` `build`: macOS universal (dmg + zip), Windows x64 + arm64 (nsis + zip),
-Linux x64 + arm64 (AppImage + deb).
+Linux x64 + arm64 (AppImage + deb). To smoke-test a packaged build against a local
+server: `VITE_DESKTOP_API_ORIGIN=http://localhost:8787 npm run electron:pack` (a
+BUILD-time value: baked into the bundle and stamped into the app).
 
 Build each OS on its own runner (mac artifacts on macOS, Windows artifacts on Windows,
 Linux artifacts on Linux). Cross-building is not part of this runbook.
@@ -39,6 +52,34 @@ Linux artifacts on Linux). Cross-building is not part of this runbook.
 | Optional: a crash-minidump endpoint (e.g. a Sentry project's minidump URL) | crash uploads | build env `WOC_CRASH_SUBMIT_URL` (https only) |
 
 Never commit any of these values; they are env vars in CI or the local shell.
+
+## Deploying the game server (required before any public desktop release)
+
+The desktop app is served from the private origin `app://worldofclaudecraft` and
+calls `https://worldofclaudecraft.com`, so production must run this branch's server
+before a public desktop build ships. The server side is already on the branch and
+needs no desktop-specific configuration: deploy it like any server update
+(`DEPLOY.md`, "Updating the game": ssh to the box, `cd /opt/eastbrook`,
+`sudo git pull`, `sudo docker compose up -d --build`). What the branch's server
+carries for desktop:
+
+- CORS reflection for the desktop origins (`DESKTOP_APP_ORIGINS` in
+  `server/web_login_guard.ts`, reflected by `maybeCors` in `server/main.ts`). Until
+  deployed, every REST call from an installed app fails and its `main.log` fills with
+  CORS errors (the realm WebSocket is not Origin-gated).
+- The `/desktop-login` browser handoff and its one-time-code exchange
+  (`server/desktop_login.ts`), which the Discord sign-in path uses (in-app
+  email/password posts `/api/login` directly and never touches it).
+- The desktop-origin Turnstile admission (`server/turnstile.ts`): the widget cannot
+  run at `app://`, so desktop-Origin requests are admitted without it; a documented,
+  accepted softening of the bot gate for the desktop origins only.
+
+Verify after deploying (should print the origin back):
+
+```bash
+curl -s -D - -o /dev/null -H "Origin: app://worldofclaudecraft" \
+  https://worldofclaudecraft.com/api/project-stats | grep -i access-control-allow-origin
+```
 
 ## macOS: signing + notarization
 

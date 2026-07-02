@@ -4,23 +4,28 @@ Companion to `docs/desktop-release.md` (the terse operational runbook) and
 `ELECTRON-DESKTOP-AUDIT.md` (the decision log). This file is the explainer: what
 the production-readiness change contains, and the per-platform mechanics of
 auto-update, signing, and releasing, with the details an operator or reviewer
-needs. Commit range: `1a82ad62..8ba1bf96` on `feature/electron-steam-desktop`
-(the four code commits through `99453151` plus this doc).
+needs. Commit range: `1a82ad62..3d4e49b8` on `feature/electron-steam-desktop`
+(the ship-prep commits through `99453151`, the docs, and the two independent
+re-verification fix commits `8bae7110` + `3d4e49b8`).
 
 ## What shipped (summary)
 
 - **Two distribution channels from one codebase.** `npm run electron:build`
   (website, self-updating installers) and `npm run electron:build:steam`
-  (SteamPipe depot layouts, updater hard-off). The channel is stamped into the
-  packaged `package.json` (`wocDesktop.distribution`) at build time and resolved
+  (SteamPipe depot layouts, updater hard-off). The build stamps `wocDesktop`
+  into the packaged `package.json` (the `distribution` channel, the web
+  origins the bundle was baked with, the optional crash-submit URL), resolved
   at runtime by `electron/desktop_config.cjs`. Dev env overrides
-  (`WOC_DISTRIBUTION`, `WOC_CRASH_SUBMIT_URL`) apply ONLY to unpackaged
-  checkouts; an installed build's stamp is final.
+  (`WOC_DISTRIBUTION`, `WOC_CRASH_SUBMIT_URL`, `VITE_DESKTOP_API_ORIGIN`,
+  `VITE_DESKTOP_LOGIN_ORIGIN`) apply ONLY to unpackaged checkouts; an
+  installed build's stamp is final.
 - **The app stopped shipping the repo's server/web node_modules.** electron-
   builder's dependency collection was packing pg, three, ws and friends into the
   asar (~1,244 entries). `build.files` now excludes node_modules entirely; the
   two main-process runtime deps (electron-log, electron-updater) are esbuild-
-  bundled into gitignored `electron/vendor/` by `scripts/electron-vendor.mjs`.
+  bundled into gitignored `electron/vendor/` by `scripts/electron-vendor.mjs`,
+  and a packaged build loads ONLY the in-asar vendor bundle (no node_modules
+  fallback; `tests/electron_vendor_loading.test.ts` pins it).
 - **Every error surface is caught and logged.** Rotating 5 MB file log;
   Crashpad minidumps for all processes from before the first window; main-
   process uncaughtException (log + dialog + exit) and unhandledRejection;
@@ -41,7 +46,15 @@ needs. Commit range: `1a82ad62..8ba1bf96` on `feature/electron-steam-desktop`
 - **Review trail**: malware audit PASS; privacy-security review, qa-checklist
   gate, and an adversarial coverage review all clean with every finding
   (blocking, should-fix, and nit) applied, including closing a packaged-build
-  env escape hatch that could have re-enabled the updater on Steam.
+  env escape hatch that could have re-enabled the updater on Steam. A later
+  independent multi-agent re-verification of the whole range confirmed the
+  result and landed the remaining fixes (`8bae7110`, `3d4e49b8`): the web
+  origins joined the stamp (closing the `VITE_DESKTOP_*` runtime-env hatch on
+  packaged builds), crash-dialog strings re-push once the stored locale
+  loads, packaged vendor-only dependency loading, secret redaction on error
+  source URLs, explicit `webSecurity` pins, and hardened control-char /
+  console-message handling; the vendored bundles were verified byte-for-byte
+  against the npm registry tarballs.
 
 Verified on packaged macOS builds via the new log file: correct channel banner
 for both channels, hardware GPU (ANGLE Metal), updater lifecycle, feed-file
@@ -231,6 +244,9 @@ bump the version, rebuild, upload, and watch the toast + install cycle.
   set retention, and disclose in the privacy policy first.
 - **DevTools in a shipped build**: F12, Cmd+Option+I, or Ctrl+Shift+I toggles
   a detached inspector; `WOC_OPEN_DEVTOOLS=1` opens it at launch.
+- **Sign-in**: email and Discord only, exactly the web flow (email/password
+  in-app; Discord via the default browser and the deep link below). There is
+  no Steam sign-in on any channel.
 - **Deep link**: `worldofclaudecraft://desktop-login?code=...` completes the
   browser login handoff (cold start and second-instance both handled).
 - **Inspect a build's channel**: `npx asar extract-file <app>/Contents/
@@ -244,7 +260,13 @@ bump the version, rebuild, upload, and watch the toast + install cycle.
   `https://worldofclaudecraft.com` from origin `app://worldofclaudecraft`;
   production must be running this branch's server (CORS reflection for that
   origin) or every REST call fails. The log file shows the CORS errors
-  plainly until then.
+  plainly until then. Deploying is the standard server update in `DEPLOY.md`
+  (ssh, `cd /opt/eastbrook`, `sudo git pull`,
+  `sudo docker compose up -d --build`); the branch's server
+  carries all desktop support already (CORS in `server/web_login_guard.ts`,
+  the `/desktop-login` handoff in `server/desktop_login.ts`, the
+  desktop-origin Turnstile admission in `server/turnstile.ts`). See the
+  "Deploying the game server" section of `docs/desktop-release.md`.
 - **Electron lifecycle**: pinned to 43.x (current stable; EOL 2027-01-05).
   Before the 44 bump (~Aug 2026): audit renderer `clipboard` usage (removed
   from renderers in 44) and drop 32-bit assumptions. electron-builder stays on

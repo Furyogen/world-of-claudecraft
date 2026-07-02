@@ -87,12 +87,13 @@ See [Host your own world](#host-your-own-world-one-command) below to stand up th
 
 ### Desktop app
 
-The Electron desktop shell wraps the same Vite client. Online sign-in is Discord and email only, and it runs through your default browser: the app opens the `/desktop-login` page, you authenticate there, and the page hands a one-time code back to the app over a `worldofclaudecraft://` deep link, which the app exchanges for a normal World of ClaudeCraft session token.
+The Electron desktop shell wraps the same Vite client. Online sign-in is Discord and email only, exactly the web flow: email/password logs in inside the app, and "Continue with Discord" opens your default browser on the `/desktop-login` page, which hands a one-time code back to the app over a `worldofclaudecraft://` deep link that the app exchanges for a normal World of ClaudeCraft session token.
 
 ```bash
-npm run electron:dev     # Vite + Electron dev shell
-npm run electron:pack    # local unpacked desktop app
-npm run electron:build   # distributable Electron artifacts
+npm run electron:dev          # Vite + Electron dev shell
+npm run electron:pack         # local unpacked desktop app
+npm run electron:build        # website-channel installers (self-updating)
+npm run electron:build:steam  # SteamPipe depot layouts (in-app updater off)
 ```
 
 Point the shell at a different API with `VITE_DESKTOP_API_ORIGIN`, for example a local server or a staging host:
@@ -101,7 +102,7 @@ Point the shell at a different API with `VITE_DESKTOP_API_ORIGIN`, for example a
 VITE_DESKTOP_API_ORIGIN=http://127.0.0.1:8787 npm run electron:dev
 ```
 
-Override the production API origin for staging builds with `VITE_DESKTOP_API_ORIGIN=https://dev.worldofclaudecraft.com`. Steam is kept as a future distribution channel only (one Electron bundle, uploaded via SteamPipe); there is no Steam sign-in.
+Override the production API origin for staging builds with `VITE_DESKTOP_API_ORIGIN=https://dev.worldofclaudecraft.com` (a BUILD-time value: it is baked into the bundle and stamped into the packaged app, and installed builds ignore it as a runtime env var). Steam is a distribution channel only (the same Electron bundle, uploaded via SteamPipe); there is no Steam sign-in. The full release runbook (signing, notarization, publishing an auto-update, SteamPipe depots, the server deploy) is `docs/desktop-release.md`.
 
 ## Host your own world (one command)
 
