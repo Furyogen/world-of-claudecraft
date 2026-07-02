@@ -198,7 +198,11 @@ function parseRuntimeConfigPayload(payload: unknown): DailyRewardRuntimeConfig {
 }
 
 function dailyRewardServiceSecret(): string {
-  return process.env.WOC_DAILY_REWARD_SERVICE_SECRET ?? process.env.RESTART_COUNTDOWN_SECRET ?? '';
+  // Dedicated secret only: never fall back to RESTART_COUNTDOWN_SECRET. That is an
+  // unrelated ops secret, and reusing it would let its holder call the daily-rewards
+  // internal payout endpoints (pending-payouts/mark-payout). internalAuthorized fails
+  // closed when this is unset, so the internal surface stays locked until it is set.
+  return process.env.WOC_DAILY_REWARD_SERVICE_SECRET ?? '';
 }
 
 function dailyRewardServiceUrl(): string {
