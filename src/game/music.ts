@@ -411,8 +411,8 @@ function composeTownFenbridge(): Theme {
     [27, 69, 1],
     [28, 67, 3],
   ];
-  pushPhrase(ev, 0, tuneA, 0.2, 'dulcimer');
-  pushPhrase(ev, 0, tuneA, 0.07, 'flute');
+  pushPhrase(ev, 0, tuneA, 0.28, 'flute');
+  pushPhrase(ev, 0, tuneA, 0.12, 'dulcimer');
   // B tune (flute): rain on the lamplit window, ending on a folk flat seven
   const tuneB: Phrase = [
     [0, 71, 1],
@@ -449,10 +449,10 @@ function composeTownFenbridge(): Theme {
     [28, 71, 1],
     [29, 67, 2.5],
   ];
-  pushPhrase(ev, 32, tuneB, 0.18, 'flute');
+  pushPhrase(ev, 32, tuneB, 0.28, 'flute');
   // reprise with a quiet pipe descant floating over the last phrase
-  pushPhrase(ev, 64, tuneA, 0.18, 'dulcimer');
-  pushPhrase(ev, 64, tuneA, 0.06, 'flute');
+  pushPhrase(ev, 64, tuneA, 0.26, 'flute');
+  pushPhrase(ev, 64, tuneA, 0.11, 'dulcimer');
   const descant: Phrase = [
     [0, 79, 2],
     [2, 81, 2],
@@ -904,7 +904,13 @@ function composeMarsh(): Theme {
     [19, 62, 1],
     [20, 64, 3.5],
   ];
-  pushPhrase(ev, 8, dirge, 0.16, 'flute');
+  pushPhrase(
+    ev,
+    8,
+    dirge.map(([b, m, d]) => [b, m + 12, d] as Phrase[number]),
+    0.26,
+    'flute',
+  );
   pushPhrase(ev, 8, dirge, 0.12, 'harp');
   // B section: the flute lifts into G major light over the water, then sinks
   const lift: Phrase = [
@@ -938,18 +944,16 @@ function composeMarsh(): Theme {
     [28, 76, 2.5],
     [30.5, 71, 1.5],
   ];
-  pushPhrase(ev, 32, lift, 0.19, 'flute');
-  // reprise: the dirge returns with a distant flute shadow an octave above,
-  // aligned note for note with the reed from bar 21 on
-  pushPhrase(ev, 72, dirge, 0.15, 'flute');
-  pushPhrase(ev, 72, dirge, 0.11, 'harp');
+  pushPhrase(ev, 32, lift, 0.26, 'flute');
+  // reprise: the dirge returns, flute above, harp lighting the attacks
   pushPhrase(
     ev,
-    82,
-    dirge.slice(9).map(([b, m, d]) => [b - 10, m + 12, d] as Phrase[number]),
-    0.06,
+    72,
+    dirge.map(([b, m, d]) => [b, m + 12, d] as Phrase[number]),
+    0.24,
     'flute',
   );
+  pushPhrase(ev, 72, dirge, 0.11, 'harp');
   // section seams: a slow harp roll up from the deep
   for (const seam of [31, 63]) {
     for (const [i, m] of [40, 47, 52, 59].entries()) {
@@ -1885,11 +1889,11 @@ export function buildMusicThemes(): Record<string, Theme> {
 // whenever a composition changes materially.
 export const THEME_TRIM: Record<string, number> = {
   town_eastbrook: 1.0,
-  town_fenbridge: 3.15,
+  town_fenbridge: 1.65,
   town_highwatch: 2.15,
   vale: 3.3,
   vale_legacy: 1.35,
-  marsh: 2.15,
+  marsh: 1.6,
   peaks: 2.05,
   dungeon_hollow_crypt: 2.95,
   dungeon_sunken_bastion: 2.95,
