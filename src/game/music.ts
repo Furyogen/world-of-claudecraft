@@ -84,7 +84,8 @@ type Inst =
   | 'piano'
   | 'shaker'
   | 'brassStab'
-  | 'cymSwell';
+  | 'cymSwell'
+  | 'oboe';
 
 interface NoteEvent {
   beat: number; // quarter-note position in the loop
@@ -410,7 +411,7 @@ function composeTownFenbridge(): Theme {
     [27, 69, 1],
     [28, 67, 3],
   ];
-  pushPhrase(ev, 0, tuneA, 0.17, 'reed');
+  pushPhrase(ev, 0, tuneA, 0.17, 'oboe');
   // B tune (flute): rain on the lamplit window, ending on a folk flat seven
   const tuneB: Phrase = [
     [0, 71, 1],
@@ -449,7 +450,7 @@ function composeTownFenbridge(): Theme {
   ];
   pushPhrase(ev, 32, tuneB, 0.18, 'flute');
   // reprise with a quiet pipe descant floating over the last phrase
-  pushPhrase(ev, 64, tuneA, 0.15, 'reed');
+  pushPhrase(ev, 64, tuneA, 0.15, 'oboe');
   const descant: Phrase = [
     [0, 79, 2],
     [2, 81, 2],
@@ -458,7 +459,7 @@ function composeTownFenbridge(): Theme {
     [10, 78, 2],
     [12, 79, 3],
   ];
-  pushPhrase(ev, 80, descant, 0.07, 'pipe');
+  pushPhrase(ev, 80, descant, 0.06, 'flute');
 
   ev.sort((a, b) => a.beat - b.beat);
   return { bpm: 88, bars: 24, events: ev };
@@ -659,7 +660,7 @@ function composeVale(): Theme {
   chords.forEach((c, bar) => {
     const b0 = bar * 4;
     const t = triad(c);
-    if (bar % 2 === 0) pushPedal(ev, b0, c.root < 52 ? c.root + 12 : c.root, 'pad', 0.17);
+    if (bar % 2 === 0) pushPedal(ev, b0, c.root, 'pad', 0.17);
     pushNote(ev, b0, c.root - 24, 1.5, 0.28, 'bass');
     pushNote(ev, b0 + 2, c.root - 19, 1.2, 0.2, 'bass');
     const lilt = [t[0], t[2], t[1] + 12, t[2], t[0] + 12, t[2], t[1] + 12, t[2]];
@@ -847,7 +848,7 @@ function composeMarsh(): Theme {
     const inA2 = bar >= 16;
     // deep water pedal every two bars; the choir of the drowned joins in B
     // and in the final section
-    if (bar % 2 === 0) pushPedal(ev, b0, c.root < 52 ? c.root + 12 : c.root, 'pad', 0.17);
+    if (bar % 2 === 0) pushPedal(ev, b0, c.root < 52 ? c.root + 12 : c.root, 'strings', 0.2);
     if ((inB || inA2) && bar % 2 === 0) {
       pushNote(ev, b0, c.root - 12, 8.2, 0.1, 'choir');
       pushNote(ev, b0, c.root - 5, 8.2, 0.06, 'choir');
@@ -901,7 +902,7 @@ function composeMarsh(): Theme {
     [19, 62, 1],
     [20, 64, 3.5],
   ];
-  pushPhrase(ev, 8, dirge, 0.15, 'reed');
+  pushPhrase(ev, 8, dirge, 0.15, 'oboe');
   // B section: the flute lifts into G major light over the water, then sinks
   const lift: Phrase = [
     [0, 76, 1.5],
@@ -937,7 +938,7 @@ function composeMarsh(): Theme {
   pushPhrase(ev, 32, lift, 0.19, 'flute');
   // reprise: the dirge returns with a distant flute shadow an octave above,
   // aligned note for note with the reed from bar 21 on
-  pushPhrase(ev, 72, dirge, 0.14, 'reed');
+  pushPhrase(ev, 72, dirge, 0.14, 'oboe');
   pushPhrase(
     ev,
     82,
@@ -1884,7 +1885,7 @@ export const THEME_TRIM: Record<string, number> = {
   town_highwatch: 2.15,
   vale: 3.3,
   vale_legacy: 1.35,
-  marsh: 2.5,
+  marsh: 2.75,
   peaks: 2.05,
   dungeon_hollow_crypt: 2.95,
   dungeon_sunken_bastion: 2.95,
@@ -1977,7 +1978,54 @@ export class MusicSynth {
       case 'cymSwell':
         this.cymSwell(when, dur, evt.vel, out);
         break;
+      case 'oboe':
+        this.oboe(when, freq, dur, evt.vel, out);
+        break;
     }
+  }
+
+  // Folk oboe: a detuned sawtooth pair through a reedy formant with delayed
+  // vibrato, plus a triangle carrying the fundamental. The same chorused-saw
+  // richness as the strings voice, shaped into a warm double-reed lead.
+  private oboe(when: number, freq: number, dur: number, vel: number, out: GainNode): void {
+    const ctx = this.ctx;
+    const g = this.adsr(when, dur, vel * 0.17, 0.055, 0.22);
+    const formant = ctx.createBiquadFilter();
+    formant.type = 'bandpass';
+    formant.frequency.value = Math.min(2400, 600 + freq * 2.2);
+    formant.Q.value = 0.9;
+    const lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = 2800;
+    formant.connect(lp).connect(g).connect(out);
+    const vib = ctx.createOscillator();
+    vib.frequency.value = 5.2;
+    const vibGain = ctx.createGain();
+    vibGain.gain.setValueAtTime(0, when);
+    vibGain.gain.linearRampToValueAtTime(freq * 0.004, when + 0.3);
+    vib.connect(vibGain);
+    for (const det of [-5, 4]) {
+      const o = ctx.createOscillator();
+      o.type = 'sawtooth';
+      o.frequency.value = freq;
+      o.detune.value = det;
+      vibGain.connect(o.frequency);
+      o.connect(formant);
+      o.start(when);
+      o.stop(when + dur + 0.4);
+    }
+    // the fundamental body the narrow formant would otherwise thin out
+    const subGain = ctx.createGain();
+    subGain.gain.value = 0.35;
+    const sub = ctx.createOscillator();
+    sub.type = 'triangle';
+    sub.frequency.value = freq;
+    vibGain.connect(sub.frequency);
+    sub.connect(subGain).connect(lp);
+    sub.start(when);
+    sub.stop(when + dur + 0.4);
+    vib.start(when);
+    vib.stop(when + dur + 0.4);
   }
 
   // Suspended-cymbal swell: highpassed noise rising over the note's duration
@@ -2009,45 +2057,62 @@ export class MusicSynth {
   // hammer-noise transient; the damper lifts at note end like a real pedal.
   private piano(when: number, freq: number, dur: number, vel: number, out: GainNode): void {
     const ctx = this.ctx;
-    const naturalDecay = Math.min(4.4, Math.max(1.1, 340 / freq));
+    const naturalDecay = Math.min(5.2, Math.max(1.2, 380 / freq));
     const body = ctx.createBiquadFilter();
     body.type = 'lowpass';
-    body.frequency.value = Math.min(5200, 1200 + freq * 4);
-    body.Q.value = 0.4;
+    body.frequency.value = Math.min(5600, 1400 + freq * 4);
+    body.Q.value = 0.35;
     body.connect(out);
+    // stretched, inharmonic partial stack; the fundamental is a detuned
+    // unison pair so exposed notes shimmer instead of reading as a bare sine
     const partials: ReadonlyArray<readonly [number, number, number, number]> = [
-      [1, 1, 1, 0],
-      [2.001, 0.42, 0.55, 3],
-      [2.998, 0.16, 0.34, -4],
-      [4.006, 0.07, 0.22, 6],
+      [1, 0.62, 1, -3],
+      [1.0005, 0.62, 1, 3],
+      [2.003, 0.5, 0.58, 2],
+      [3.006, 0.2, 0.36, -4],
+      [4.012, 0.09, 0.24, 5],
+      [5.02, 0.05, 0.17, -6],
+      [7.03, 0.025, 0.12, 4],
     ];
     for (const [ratio, amp, decayMul, cents] of partials) {
-      const decay = Math.min(naturalDecay * decayMul, dur + 0.3);
+      const decay = Math.min(naturalDecay * decayMul, dur + 0.35);
       const g = ctx.createGain();
-      g.gain.setValueAtTime(vel * 0.24 * amp, when);
-      g.gain.exponentialRampToValueAtTime(0.0001, when + Math.max(0.12, decay));
+      const peak = vel * 0.24 * amp;
+      g.gain.setValueAtTime(0.0001, when);
+      g.gain.linearRampToValueAtTime(peak, when + 0.004);
+      g.gain.exponentialRampToValueAtTime(0.0001, when + Math.max(0.14, decay));
       const o = ctx.createOscillator();
-      o.type = ratio === 1 ? 'triangle' : 'sine';
+      o.type = ratio < 1.01 ? 'triangle' : 'sine';
       o.frequency.value = freq * ratio;
       o.detune.value = cents;
       o.connect(g).connect(body);
       o.start(when);
-      o.stop(when + Math.max(0.12, decay) + 0.1);
+      o.stop(when + Math.max(0.14, decay) + 0.1);
     }
-    const hammerLen = Math.floor(ctx.sampleRate * 0.018);
+    // two-part hammer: a low felt thump and a soft brightness transient
+    const hammerLen = Math.floor(ctx.sampleRate * 0.016);
     const buf = ctx.createBuffer(1, hammerLen, ctx.sampleRate);
     const data = buf.getChannelData(0);
     for (let i = 0; i < hammerLen; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / hammerLen);
     const hammer = ctx.createBufferSource();
     hammer.buffer = buf;
-    const hp = ctx.createBiquadFilter();
-    hp.type = 'bandpass';
-    hp.frequency.value = Math.min(3800, freq * 5);
-    hp.Q.value = 1.3;
-    const hg = ctx.createGain();
-    hg.gain.value = vel * 0.05;
-    hammer.connect(hp).connect(hg).connect(out);
+    const bright = ctx.createBiquadFilter();
+    bright.type = 'bandpass';
+    bright.frequency.value = Math.min(3200, freq * 4);
+    bright.Q.value = 0.9;
+    const bg = ctx.createGain();
+    bg.gain.value = vel * 0.035;
+    hammer.connect(bright).connect(bg).connect(out);
+    const thump = ctx.createBufferSource();
+    thump.buffer = buf;
+    const tlp = ctx.createBiquadFilter();
+    tlp.type = 'lowpass';
+    tlp.frequency.value = 260;
+    const tg = ctx.createGain();
+    tg.gain.value = vel * 0.05;
+    thump.connect(tlp).connect(tg).connect(out);
     hammer.start(when);
+    thump.start(when);
   }
 
   // Shaker/hat: a short burst of highpassed noise for light rhythmic drive.

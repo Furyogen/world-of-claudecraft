@@ -182,6 +182,28 @@ describe('dungeon music entry reset', () => {
   });
 });
 
+describe('preserved Eastbrook Vale themes', () => {
+  // The Eastbrook town, vale, and legacy vale compositions are frozen: their
+  // note data must never drift while the rest of the soundtrack evolves.
+  // If a change here is truly intended, recompute the checksum deliberately.
+  it('keeps the original note data byte-identical', async () => {
+    const { createHash } = await import('node:crypto');
+    const themes = buildMusicThemes();
+    const expected: Record<string, string> = {
+      town_eastbrook: '0d3e5a4e6a209e42',
+      vale: 'b9e65956ebe4b853',
+      vale_legacy: '9caf3642610580dc',
+    };
+    for (const [name, hash] of Object.entries(expected)) {
+      const actual = createHash('sha256')
+        .update(JSON.stringify(themes[name]))
+        .digest('hex')
+        .slice(0, 16);
+      expect(actual, `theme '${name}' note data changed`).toBe(hash);
+    }
+  });
+});
+
 describe('per-theme loudness trims', () => {
   afterEach(() => {
     vi.unstubAllGlobals();
