@@ -16,25 +16,35 @@
 
 const DISTRIBUTIONS = new Set(['website', 'steam']);
 
-// Resolve the distribution channel. Precedence: WOC_DISTRIBUTION env (local
-// testing) over the packaged wocDesktop.distribution stamp, defaulting to
-// 'website'. Unknown values collapse to the default rather than throwing: a
+// Resolve the distribution channel. The WOC_DISTRIBUTION env override applies
+// ONLY to unpackaged checkouts (`electron .` / electron:dev): a PACKAGED
+// build's channel is its stamp, period. Honoring env on a packaged build
+// would be exactly the escape hatch updaterAllowed promises not to have
+// (WOC_DISTRIBUTION=website on a Steam install would flip the updater back
+// on). Unknown values collapse to the default rather than throwing: a
 // half-stamped build must still launch, and 'website' is the safe channel
 // (its only extra behavior, the updater, is additionally gated on isPackaged).
-function resolveDistribution({ packagedMetadata, env } = {}) {
+function resolveDistribution({ packagedMetadata, env, isPackaged } = {}) {
   const fromEnv = env?.WOC_DISTRIBUTION;
-  if (typeof fromEnv === 'string' && DISTRIBUTIONS.has(fromEnv)) return fromEnv;
+  if (isPackaged !== true && typeof fromEnv === 'string' && DISTRIBUTIONS.has(fromEnv)) {
+    return fromEnv;
+  }
   const stamped = packagedMetadata?.wocDesktop?.distribution;
   if (typeof stamped === 'string' && DISTRIBUTIONS.has(stamped)) return stamped;
   return 'website';
 }
 
-// The crash-minidump submit URL, if the maintainer provisioned one at build time
-// (stamped like the distribution; WOC_CRASH_SUBMIT_URL overrides for testing).
-// Only https: is accepted: minidumps can contain process memory, so they never
-// travel over cleartext. Empty string means "keep dumps local only".
-function resolveCrashSubmitUrl({ packagedMetadata, env } = {}) {
-  const candidates = [env?.WOC_CRASH_SUBMIT_URL, packagedMetadata?.wocDesktop?.crashSubmitUrl];
+// The crash-minidump submit URL, if the maintainer provisioned one at build
+// time (stamped like the distribution). WOC_CRASH_SUBMIT_URL is a DEV-ONLY
+// override, ignored on packaged builds for the same reason as the channel:
+// minidumps carry process memory, so a local env var must not be able to
+// redirect where an installed app uploads them. Only https: is accepted;
+// empty string means "keep dumps local only".
+function resolveCrashSubmitUrl({ packagedMetadata, env, isPackaged } = {}) {
+  const candidates =
+    isPackaged === true
+      ? [packagedMetadata?.wocDesktop?.crashSubmitUrl]
+      : [env?.WOC_CRASH_SUBMIT_URL, packagedMetadata?.wocDesktop?.crashSubmitUrl];
   for (const candidate of candidates) {
     if (typeof candidate !== 'string' || candidate === '') continue;
     let parsed;
@@ -60,11 +70,11 @@ function updaterAllowed({ distribution, isPackaged }) {
 
 // One-call summary used by electron/main.cjs at startup.
 function resolveDesktopConfig({ packagedMetadata, env, isPackaged } = {}) {
-  const distribution = resolveDistribution({ packagedMetadata, env });
+  const distribution = resolveDistribution({ packagedMetadata, env, isPackaged });
   return {
     distribution,
     updaterEnabled: updaterAllowed({ distribution, isPackaged }),
-    crashSubmitUrl: resolveCrashSubmitUrl({ packagedMetadata, env }),
+    crashSubmitUrl: resolveCrashSubmitUrl({ packagedMetadata, env, isPackaged }),
   };
 }
 

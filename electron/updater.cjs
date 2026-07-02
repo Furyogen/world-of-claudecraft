@@ -91,6 +91,8 @@ function initUpdater({ ipcMain, log, getWindow, isTrusted }) {
       .catch((err) => log.warn('[updater] check failed', err?.message ?? String(err)));
   };
   // First check after the game has had its boot bandwidth; then periodically.
+  // Process-lifetime timers by design (the updater lives as long as the app),
+  // so they are deliberately never cleared.
   setTimeout(check, FIRST_CHECK_DELAY_MS);
   setInterval(check, RECHECK_INTERVAL_MS);
   return autoUpdater;

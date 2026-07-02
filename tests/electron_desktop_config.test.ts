@@ -15,13 +15,34 @@ describe('resolveDistribution', () => {
     expect(resolveDistribution({ packagedMetadata: websiteStamp })).toBe('website');
   });
 
-  it('lets WOC_DISTRIBUTION override the stamp for local testing', () => {
+  it('lets WOC_DISTRIBUTION override the stamp on UNPACKAGED checkouts only', () => {
     expect(
-      resolveDistribution({ packagedMetadata: websiteStamp, env: { WOC_DISTRIBUTION: 'steam' } }),
+      resolveDistribution({
+        packagedMetadata: websiteStamp,
+        env: { WOC_DISTRIBUTION: 'steam' },
+        isPackaged: false,
+      }),
     ).toBe('steam');
     expect(
       resolveDistribution({ packagedMetadata: steamStamp, env: { WOC_DISTRIBUTION: 'website' } }),
     ).toBe('website');
+  });
+
+  it('a PACKAGED build ignores the env override: the stamp is final (no updater escape hatch)', () => {
+    expect(
+      resolveDistribution({
+        packagedMetadata: steamStamp,
+        env: { WOC_DISTRIBUTION: 'website' },
+        isPackaged: true,
+      }),
+    ).toBe('steam');
+    const config = resolveDesktopConfig({
+      packagedMetadata: steamStamp,
+      env: { WOC_DISTRIBUTION: 'website' },
+      isPackaged: true,
+    });
+    expect(config.distribution).toBe('steam');
+    expect(config.updaterEnabled).toBe(false);
   });
 
   it('collapses unknown or missing values to website instead of throwing', () => {
@@ -56,7 +77,7 @@ describe('updaterAllowed (the Steam / dev double gate)', () => {
 });
 
 describe('resolveCrashSubmitUrl', () => {
-  it('accepts only https URLs, from env first then the stamp', () => {
+  it('accepts only https URLs, from env first then the stamp (unpackaged)', () => {
     expect(
       resolveCrashSubmitUrl({
         packagedMetadata: { wocDesktop: { crashSubmitUrl: 'https://crash.example.com/minidump' } },
@@ -66,8 +87,25 @@ describe('resolveCrashSubmitUrl', () => {
       resolveCrashSubmitUrl({
         packagedMetadata: { wocDesktop: { crashSubmitUrl: 'https://stamped.example.com' } },
         env: { WOC_CRASH_SUBMIT_URL: 'https://env.example.com' },
+        isPackaged: false,
       }),
     ).toBe('https://env.example.com');
+  });
+
+  it('a PACKAGED build ignores the env URL: minidump uploads cannot be redirected locally', () => {
+    expect(
+      resolveCrashSubmitUrl({
+        packagedMetadata: { wocDesktop: { crashSubmitUrl: 'https://stamped.example.com' } },
+        env: { WOC_CRASH_SUBMIT_URL: 'https://evil.example.com' },
+        isPackaged: true,
+      }),
+    ).toBe('https://stamped.example.com');
+    expect(
+      resolveCrashSubmitUrl({
+        env: { WOC_CRASH_SUBMIT_URL: 'https://evil.example.com' },
+        isPackaged: true,
+      }),
+    ).toBe('');
   });
 
   it('rejects http, malformed, and missing values with the local-only empty string', () => {

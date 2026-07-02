@@ -80,7 +80,9 @@ const desktopConfig = resolveDesktopConfig({
 // user data rides along: the report carries only process/version metadata.
 crashReporter.start({
   productName: 'World of ClaudeCraft',
-  companyName: 'World of ClaudeCraft',
+  // companyName is deprecated in Electron 43; the metadata field survives as
+  // the _companyName global extra.
+  globalExtra: { _companyName: 'World of ClaudeCraft' },
   submitURL: desktopConfig.crashSubmitUrl || undefined,
   uploadToServer: desktopConfig.crashSubmitUrl !== '',
   compress: true,
@@ -454,6 +456,16 @@ app.whenReady().then(() => {
     } catch (err) {
       log.error('[updater] init failed', err);
     }
+  } else {
+    // Keep the channel answerable on non-updating builds so a renderer
+    // installUpdate() call resolves null instead of rejecting with
+    // "No handler registered" (unreachable today: the restart button only
+    // renders after a 'downloaded' event, which never fires here).
+    ipcMain.handle('desktop-update-install', (event) => {
+      if (!trustedSender(event)) return null;
+      log.warn('[updater] install requested but the updater is disabled on this channel');
+      return null;
+    });
   }
 
   const initialDeepLink = process.argv.find((arg) => arg.startsWith(`${deepLinkProtocol}://`));
