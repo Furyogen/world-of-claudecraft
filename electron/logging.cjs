@@ -41,10 +41,11 @@ function consoleShim() {
 
 // Initialize the shell logger. Returns { log, filePath } where filePath is
 // null when only the console shim is available. The file transport rotates at
-// 5 MB (electron-log keeps one .old archive next to it); default locations:
-//   macOS   ~/Library/Logs/World of ClaudeCraft/main.log
-//   Windows %USERPROFILE%\AppData\Roaming\World of ClaudeCraft\logs\main.log
-//   Linux   ~/.config/World of ClaudeCraft/logs/main.log
+// 5 MB (electron-log keeps one .old archive next to it); locations follow
+// app.name, which is the package NAME (verified on a packaged build):
+//   macOS   ~/Library/Logs/world-of-claudecraft/main.log
+//   Windows %USERPROFILE%\AppData\Roaming\world-of-claudecraft\logs\main.log
+//   Linux   ~/.config/world-of-claudecraft/logs/main.log
 function initLogging({ isPackaged }) {
   const log = loadElectronLog();
   if (!log) return { log: consoleShim(), filePath: null };

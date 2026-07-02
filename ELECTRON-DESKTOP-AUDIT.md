@@ -140,6 +140,61 @@ Deferred, gated on code signing (B1), not done here:
 - macOS signing plus notarization (B1), website auto-update (S6), Windows signing
   (N3), and the remaining nice-to-haves (N1, N2, N4 to N8).
 
+### Production-readiness pass (2026-07-01, ship prep)
+
+The pass that closes the deferred list above for public distribution (website
+download + Steam depot). Full operational detail in docs/desktop-release.md; the
+per-area design notes live as comments in the new electron/*.cjs modules. Four
+commits:
+
+- Channel split + packaging hygiene. scripts/electron-build.mjs derives a
+  per-channel electron-builder config (pure, tested scripts/electron-builder-config
+  .mjs) and stamps extraMetadata.wocDesktop into the packaged package.json;
+  electron/desktop_config.cjs (pure, tested) resolves {distribution,
+  updaterEnabled, crashSubmitUrl} at runtime. The bundle stops shipping the repo's
+  production node_modules (pg, three, ws and friends were being collected into the
+  asar; build.files now excludes them) and the two main-process runtime deps
+  (electron-log, electron-updater) are esbuild-bundled into gitignored
+  electron/vendor/ instead. Static release config landed with it: mac universal +
+  win/linux x64+arm64 arch matrix, artifactName, hardenedRuntime + entitlements
+  plist, Azure Artifact Signing injection from WIN_SIGN_* env, --publish never.
+- S6, auto-update (website channel only): electron/updater.cjs + the generic
+  publish feed; whitelisted renderer payloads (electron/update_events.cjs, pure,
+  tested); t()-localized toast with Restart now / Later
+  (src/ui/desktop_update_toast.ts on a pure reducer, desktop.update.* keys with
+  the five non-Latin fills). Steam builds null the publish feed at build time AND
+  gate the updater off at runtime; dev checkouts are off via isPackaged.
+- N8, error/crash capture: rotating file log (electron/logging.cjs, vendor bundle
+  with node_modules and console-shim fallbacks), crashReporter/Crashpad started
+  before any window (local minidumps by default, optional https submit URL stamped
+  at build), uncaughtException/unhandledRejection/child-process-gone handlers,
+  preload forwarding of renderer window errors over a capped validated IPC channel,
+  renderer console warn/error mirroring, and bounded renderer crash recovery
+  (auto-reload then a localized Reload/Quit dialog; integrity-failure is fatal).
+  Decision logic is pure and tested (electron/diagnostics.cjs,
+  electron/shell_strings.cjs); the dialog strings are the renderer's t()
+  translations pushed over IPC, mirroring the sim/server language-agnostic rule.
+- EnableEmbeddedAsarIntegrityValidation: enabled after all. The "fails to launch
+  unsigned" concern did not survive testing: electron-builder 26 embeds the asar
+  hash in Info.plist on every build and the ad-hoc-signed pack launches fine with
+  the fuse on (verified on arm64; the fuse read shows it Enabled and the plist
+  carries ElectronAsarIntegrity).
+
+Verified on a packaged arm64 build via the new log file (the observability this
+pass added): startup banner with the right channel flags for BOTH channels
+(website: updaterEnabled true, feed checked at +15s and failing gracefully without
+a feed file; steam: updaterEnabled false, no updater activity, no app-update.yml
+in the bundle), hardware GPU (ANGLE Metal, Apple M4 Max; webgl enabled, no
+software fallback), renderer console capture (it caught the production CORS gap
+below), and zero node_modules in the asar with the vendor bundles loading.
+
+Still with the maintainer (accounts and infrastructure, not code; see the
+provisioning table in docs/desktop-release.md): the Developer ID certificate +
+notarytool API key, the Azure Artifact Signing account + service principal, the
+update host for https://updates.worldofclaudecraft.com/desktop, the Steam
+partner app + depots, the optional crash-minidump endpoint, and deploying this
+branch's server so production reflects CORS for app://worldofclaudecraft.
+
 ---
 
 ## 1. Current setup snapshot
