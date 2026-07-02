@@ -8,6 +8,8 @@
 // Each theme is a composed multi-track loop scheduled with a lookahead
 // timer; zone changes crossfade.
 
+import { MUSIC_OVERRIDES } from './music_overrides.generated';
+
 export type MusicZone =
   | 'town_eastbrook'
   | 'town_fenbridge'
@@ -87,7 +89,36 @@ type Inst =
   | 'cymSwell'
   | 'oboe';
 
-interface NoteEvent {
+// Every synth voice, for tools (the music editor) that offer instrument
+// choices. Keep in sync with the Inst union above.
+export const INSTRUMENTS: Inst[] = [
+  'strings',
+  'flute',
+  'harp',
+  'horn',
+  'choir',
+  'bell',
+  'timpani',
+  'bass',
+  'stacc',
+  'pad',
+  'lute',
+  'dulcimer',
+  'frameDrum',
+  'warDrum',
+  'reed',
+  'pipe',
+  'squareLead',
+  'woodBlock',
+  'tinyBell',
+  'piano',
+  'shaker',
+  'brassStab',
+  'cymSwell',
+  'oboe',
+];
+
+export interface NoteEvent {
   beat: number; // quarter-note position in the loop
   midi: number;
   dur: number; // beats
@@ -95,7 +126,7 @@ interface NoteEvent {
   inst: Inst;
 }
 
-interface Theme {
+export interface Theme {
   bpm: number;
   bars: number; // 4/4
   events: NoteEvent[];
@@ -1859,8 +1890,8 @@ const COMBAT_TRANSPOSE: Record<MusicZone, number> = {
   dungeon_gravewyrm_sanctum: 9,
 };
 
-export function buildMusicThemes(): Record<string, Theme> {
-  return {
+export function buildMusicThemes(withOverrides = true): Record<string, Theme> {
+  const composed: Record<string, Theme> = {
     town_eastbrook: composeTownEastbrook(),
     town_fenbridge: composeTownFenbridge(),
     town_highwatch: composeTownHighwatch(),
@@ -1877,6 +1908,9 @@ export function buildMusicThemes(): Record<string, Theme> {
     combat_wardrums: composeCombatWarDrums(),
     combat_steel: composeCombatSteel(),
   };
+  if (!withOverrides) return composed;
+  // themes edited and saved from the music editor take precedence
+  return { ...composed, ...MUSIC_OVERRIDES };
 }
 
 // Per-theme loudness trims, applied to each layer's gain so every cue plays
