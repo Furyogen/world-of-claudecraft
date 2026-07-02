@@ -2645,6 +2645,21 @@ export const da_DK: EnTranslations = {
       "renameNotPermitted": "Det er ikke tilladt at omdøbe denne karakter."
     }
   },
+  "desktop": {
+    "update": {
+      "downloading": "Downloading update {version}...",
+      "ready": "Update {version} is ready. It installs when you quit, or restart now.",
+      "restart": "Restart now",
+      "later": "Later"
+    },
+    "crash": {
+      "title": "World of ClaudeCraft",
+      "body": "The game view stopped working. Reload it?",
+      "reload": "Reload",
+      "quit": "Quit",
+      "fatalBody": "World of ClaudeCraft hit an unexpected error and needs to close."
+    }
+  },
   "realm": {
     "noRealms": "Ingen realms tilgængelige.",
     "loading": "Indlæser realms...",

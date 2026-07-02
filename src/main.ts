@@ -81,6 +81,7 @@ import { installWebGLContextRelease } from './render/context_release';
 import { firstRunGraphicsPreset, GFX, graphicsPresetLabel } from './render/gfx';
 import { Renderer } from './render/renderer';
 import { navigatorSaveData } from './render/sky';
+import { initDesktopShellIntegration } from './game/desktop_shell_integration';
 import { desktopBridge } from './runtime';
 import { pathCrossesFence } from './sim/colliders';
 import { ABILITIES, CLASSES } from './sim/content/classes';
@@ -202,6 +203,9 @@ const $ = <T extends HTMLElement = HTMLElement>(sel: string): T => document.quer
 document.body.classList.toggle('native-app', NATIVE_APP);
 document.body.classList.toggle('desktop-app', DESKTOP_APP);
 if (NATIVE_APP) document.body.classList.add('mobile-touch');
+// Electron shell integration: push t()-localized crash-dialog strings to the
+// main process and render the auto-update toast (no-op without the bridge).
+if (DESKTOP_APP) initDesktopShellIntegration();
 // Free every WebGL context (game renderer, character preview, portrait rig) when
 // the page is torn down, so logout/login reload cycles don't exhaust the GPU
 // context pool and break the next renderer with "Error creating WebGL context".

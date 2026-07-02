@@ -2645,6 +2645,21 @@ export const ja_JP: EnTranslations = {
       "renameNotPermitted": "このキャラクターの名前変更は許可されていません。"
     }
   },
+  "desktop": {
+    "update": {
+      "downloading": "アップデート {version} をダウンロード中...",
+      "ready": "アップデート {version} の準備ができました。ゲーム終了時に自動でインストールされます。今すぐ再起動もできます。",
+      "restart": "今すぐ再起動",
+      "later": "後で"
+    },
+    "crash": {
+      "title": "World of ClaudeCraft",
+      "body": "ゲーム画面が停止しました。再読み込みしますか？",
+      "reload": "再読み込み",
+      "quit": "終了",
+      "fatalBody": "World of ClaudeCraft で予期しないエラーが発生したため、終了します。"
+    }
+  },
   "realm": {
     "noRealms": "利用可能なレルムがありません。",
     "loading": "レルムを読み込み中...",

@@ -2645,6 +2645,21 @@ export const ko_KR: EnTranslations = {
       "renameNotPermitted": "이 캐릭터의 이름을 변경할 수 없습니다."
     }
   },
+  "desktop": {
+    "update": {
+      "downloading": "업데이트 {version} 다운로드 중...",
+      "ready": "업데이트 {version} 준비 완료. 게임을 종료하면 자동으로 설치되며, 지금 다시 시작할 수도 있습니다.",
+      "restart": "지금 다시 시작",
+      "later": "나중에"
+    },
+    "crash": {
+      "title": "World of ClaudeCraft",
+      "body": "게임 화면이 응답하지 않습니다. 다시 불러올까요?",
+      "reload": "다시 불러오기",
+      "quit": "종료",
+      "fatalBody": "World of ClaudeCraft에 예기치 않은 오류가 발생하여 종료해야 합니다."
+    }
+  },
   "realm": {
     "noRealms": "사용 가능한 렐름이 없습니다.",
     "loading": "렐름 불러오는 중...",

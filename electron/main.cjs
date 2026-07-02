@@ -34,6 +34,7 @@ const {
 const { initLogging } = require('./logging.cjs');
 const { DEFAULT_SHELL_STRINGS, sanitizeShellStrings } = require('./shell_strings.cjs');
 const { attachRendererCrashRecovery, installProcessCrashGuards } = require('./crash_guard.cjs');
+const { initUpdater } = require('./updater.cjs');
 
 const APP_ORIGIN = 'app://worldofclaudecraft';
 const devServerUrl = process.env.VITE_DEV_SERVER_URL;
@@ -434,6 +435,18 @@ app.whenReady().then(() => {
   registerAppProtocol();
   lockDownPermissions();
   createMainWindow();
+
+  // Auto-update, website distribution only (desktop_config.cjs gates on
+  // packaged + channel; Steam updates via SteamPipe depots, dev has nothing to
+  // update). A failed init degrades to a log line: the game must still run.
+  if (desktopConfig.updaterEnabled) {
+    try {
+      initUpdater({ ipcMain, log, getWindow: () => mainWindow, isTrusted: trustedSender });
+    } catch (err) {
+      log.error('[updater] init failed', err);
+    }
+  }
+
   const initialDeepLink = process.argv.find((arg) => arg.startsWith(`${deepLinkProtocol}://`));
   if (initialDeepLink) handleDeepLink(initialDeepLink);
 

@@ -4713,4 +4713,13 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.devBadge.link.error': '无法关联 GitHub，请重试。',
   'hudChrome.devBadge.linkedAs': '已关联为 {login}',
   'hudChrome.devBadge.unlink': '取消关联 GitHub',
+  'desktop.update.downloading': '正在下载更新 {version}...',
+  'desktop.update.ready': '更新 {version} 已就绪。退出游戏时将自动安装，也可立即重启。',
+  'desktop.update.restart': '立即重启',
+  'desktop.update.later': '稍后',
+  'desktop.crash.title': 'World of ClaudeCraft',
+  'desktop.crash.body': '游戏画面已停止响应。要重新加载吗？',
+  'desktop.crash.reload': '重新加载',
+  'desktop.crash.quit': '退出',
+  'desktop.crash.fatalBody': 'World of ClaudeCraft 遇到意外错误，需要关闭。',
 };

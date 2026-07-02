@@ -2645,6 +2645,21 @@ export const ru_RU: EnTranslations = {
       "renameNotPermitted": "Переименование этого персонажа не разрешено."
     }
   },
+  "desktop": {
+    "update": {
+      "downloading": "Загрузка обновления {version}...",
+      "ready": "Обновление {version} готово. Оно установится при выходе из игры, либо перезапустите сейчас.",
+      "restart": "Перезапустить сейчас",
+      "later": "Позже"
+    },
+    "crash": {
+      "title": "World of ClaudeCraft",
+      "body": "Игровой экран перестал отвечать. Перезагрузить его?",
+      "reload": "Перезагрузить",
+      "quit": "Выйти",
+      "fatalBody": "World of ClaudeCraft столкнулась с непредвиденной ошибкой и будет закрыта."
+    }
+  },
   "realm": {
     "noRealms": "Нет доступных миров.",
     "loading": "Загрузка миров...",

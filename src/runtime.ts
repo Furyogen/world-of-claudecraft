@@ -45,10 +45,25 @@ export function runtimeWebSocketUrl(
   return `${proto}://${host}/ws`;
 }
 
+// One auto-update event forwarded by the shell (electron/update_events.cjs
+// whitelists the payloads; 'progress' carries percent, the others version).
+export interface DesktopUpdateEvent {
+  type: 'available' | 'progress' | 'downloaded';
+  version?: string;
+  percent?: number;
+}
+
 export interface DesktopBridge {
   openBrowserLogin(): Promise<void>;
   takeLoginCode(): Promise<string | null>;
   onLoginCode(callback: (code: string) => void): () => void;
+  // Optional: these shipped after the three login methods, so an older
+  // installed shell may not expose them; feature-check before use. The bridge
+  // detection below deliberately requires only the login trio, or a shell
+  // predating an update feature would lose LOGIN too.
+  setShellStrings?(strings: Record<string, string>): Promise<null>;
+  onUpdateEvent?(callback: (event: DesktopUpdateEvent) => void): () => void;
+  installUpdate?(): Promise<null>;
 }
 
 export function desktopBridge(): DesktopBridge | null {

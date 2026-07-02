@@ -58,4 +58,18 @@ contextBridge.exposeInMainWorld('wocDesktop', {
     if (!strings || typeof strings !== 'object') return Promise.resolve(null);
     return ipcRenderer.invoke('desktop-set-strings', strings);
   },
+  // Auto-update events (website distribution only; the channel is simply
+  // silent on Steam/dev builds). Payloads are the whitelisted shapes built in
+  // electron/update_events.cjs.
+  onUpdateEvent: (callback) => {
+    if (typeof callback !== 'function') return () => {};
+    const listener = (_event, payload) => {
+      if (payload && typeof payload === 'object' && typeof payload.type === 'string') {
+        callback(payload);
+      }
+    };
+    ipcRenderer.on('desktop-update-event', listener);
+    return () => ipcRenderer.removeListener('desktop-update-event', listener);
+  },
+  installUpdate: () => ipcRenderer.invoke('desktop-update-install'),
 });

@@ -4968,4 +4968,13 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.devBadge.link.error': 'GitHub를 연결할 수 없습니다. 다시 시도해 주세요.',
   'hudChrome.devBadge.linkedAs': '{login}(으)로 연결됨',
   'hudChrome.devBadge.unlink': 'GitHub 연결 해제',
+  'desktop.update.downloading': '업데이트 {version} 다운로드 중...',
+  'desktop.update.ready': '업데이트 {version} 준비 완료. 게임을 종료하면 자동으로 설치되며, 지금 다시 시작할 수도 있습니다.',
+  'desktop.update.restart': '지금 다시 시작',
+  'desktop.update.later': '나중에',
+  'desktop.crash.title': 'World of ClaudeCraft',
+  'desktop.crash.body': '게임 화면이 응답하지 않습니다. 다시 불러올까요?',
+  'desktop.crash.reload': '다시 불러오기',
+  'desktop.crash.quit': '종료',
+  'desktop.crash.fatalBody': 'World of ClaudeCraft에 예기치 않은 오류가 발생하여 종료해야 합니다.',
 };

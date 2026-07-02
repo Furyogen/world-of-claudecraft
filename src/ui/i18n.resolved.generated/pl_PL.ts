@@ -2645,6 +2645,21 @@ export const pl_PL: EnTranslations = {
       "renameNotPermitted": "Zmiana imienia tej postaci jest niedozwolona."
     }
   },
+  "desktop": {
+    "update": {
+      "downloading": "Downloading update {version}...",
+      "ready": "Update {version} is ready. It installs when you quit, or restart now.",
+      "restart": "Restart now",
+      "later": "Later"
+    },
+    "crash": {
+      "title": "World of ClaudeCraft",
+      "body": "The game view stopped working. Reload it?",
+      "reload": "Reload",
+      "quit": "Quit",
+      "fatalBody": "World of ClaudeCraft hit an unexpected error and needs to close."
+    }
+  },
   "realm": {
     "noRealms": "Brak dostępnych światów.",
     "loading": "Wczytywanie światów...",

@@ -2645,6 +2645,21 @@ export const zh_TW: EnTranslations = {
       "renameNotPermitted": "不允許為此角色更名。"
     }
   },
+  "desktop": {
+    "update": {
+      "downloading": "正在下載更新 {version}...",
+      "ready": "更新 {version} 已就緒。離開遊戲時將自動安裝，也可立即重新啟動。",
+      "restart": "立即重新啟動",
+      "later": "稍後"
+    },
+    "crash": {
+      "title": "World of ClaudeCraft",
+      "body": "遊戲畫面已停止運作。要重新載入嗎？",
+      "reload": "重新載入",
+      "quit": "離開",
+      "fatalBody": "World of ClaudeCraft 發生未預期的錯誤，必須關閉。"
+    }
+  },
   "realm": {
     "noRealms": "沒有可用伺服器。",
     "loading": "正在載入伺服器...",
