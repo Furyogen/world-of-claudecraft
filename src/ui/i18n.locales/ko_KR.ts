@@ -14,6 +14,44 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ko_KR: Partial<Record<TranslationKey, string>> = {
+  // Daily rewards (M16 non-Latin fill)
+  'hudChrome.dailyRewards.title': '일일 보상',
+  'hudChrome.dailyRewards.close': '일일 보상 닫기',
+  'hudChrome.dailyRewards.loading': '일일 보상 불러오는 중...',
+  'hudChrome.dailyRewards.error': '일일 보상을 불러올 수 없습니다.',
+  'hudChrome.dailyRewards.intro':
+    '인증된 지갑에 충분한 WOC를 보유하여 일일 보상을 잠금 해제하세요. 하루 한 번의 스핀과 교체되는 과제로 포인트를 획득한 뒤, 일일 순위표를 올라 상금 풀의 일부를 차지하세요.',
+  'hudChrome.dailyRewards.prize': '상금 풀',
+  'hudChrome.dailyRewards.reset': '초기화',
+  'hudChrome.dailyRewards.score': '점수',
+  'hudChrome.dailyRewards.walletValue': '지갑 가치 (WOC)',
+  'hudChrome.dailyRewards.unknown': '알 수 없음',
+  'hudChrome.dailyRewards.spinTitle': '일일 스핀',
+  'hudChrome.dailyRewards.spinDialogTitle': '일일 보상 스핀',
+  'hudChrome.dailyRewards.spinClose': '일일 스핀 닫기',
+  'hudChrome.dailyRewards.spinReady': '스핀 한 번을 사용할 수 있습니다.',
+  'hudChrome.dailyRewards.spinClaimed': '획득: +{points} 포인트.',
+  'hudChrome.dailyRewards.spinResult': '+{points} 포인트',
+  'hudChrome.dailyRewards.spinButton': '돌리기',
+  'hudChrome.dailyRewards.tasks': '과제',
+  'hudChrome.dailyRewards.leaderboard': '일일 순위표',
+  'hudChrome.dailyRewards.history': '지난 당첨자',
+  'hudChrome.dailyRewards.noLeaders': '아직 포인트가 없습니다.',
+  'hudChrome.dailyRewards.noHistory': '아직 지급 내역이 없습니다.',
+  'hudChrome.dailyRewards.walletConnectTitle': '지갑 인증',
+  'hudChrome.dailyRewards.walletConnectBody':
+    'WOC를 보유한 Solana 지갑을 인증하여 일일 보상을 잠금 해제하세요.',
+  'hudChrome.dailyRewards.walletConnectButton': '지갑 인증',
+  'hudChrome.dailyRewards.walletHoldTitle': 'WOC 보유',
+  'hudChrome.dailyRewards.walletHoldBody':
+    '일일 보상을 잠금 해제하려면 최소 {amount} USD 상당의 WOC를 보유하세요.',
+  'hudChrome.dailyRewards.walletPriceBody':
+    '현재 WOC 가격을 확인할 수 없습니다. 잠시 후 다시 확인하세요.',
+  'hudChrome.dailyRewards.reason.eligible': '보상이 잠금 해제되었습니다.',
+  'hudChrome.dailyRewards.reason.no_wallet': '$20 USD 상당 이상의 WOC를 보유한 지갑을 연결하세요.',
+  'hudChrome.dailyRewards.reason.under_minimum': '지갑이 최소 $20 USD WOC 기준에 미치지 못합니다.',
+  'hudChrome.dailyRewards.reason.price_unavailable':
+    'WOC 가격을 확인할 수 없어 보상이 일시적으로 잠겨 있습니다.',
   'hudChrome.keybinds.discord': 'Discord',
   'hudChrome.spectate.banner': '{name} 관전 중',
   'hudChrome.loot.chestTitle': '상자',
