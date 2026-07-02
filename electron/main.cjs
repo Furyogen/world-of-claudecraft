@@ -95,7 +95,7 @@ const { log, filePath: logFilePath } = initLogging({ isPackaged: app.isPackaged 
 
 // Player-visible strings for main-process dialogs (crash recovery): the
 // renderer pushes t()-localized values via 'desktop-set-strings'
-// (src/game/desktop_shell_bridge.ts); until that first push, e.g. a crash
+// (src/game/desktop_shell_strings.ts); until that first push, e.g. a crash
 // before the client booted, the English defaults apply.
 let shellStrings = DEFAULT_SHELL_STRINGS;
 const getShellStrings = () => shellStrings;

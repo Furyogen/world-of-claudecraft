@@ -53,6 +53,17 @@ export interface DesktopUpdateEvent {
   percent?: number;
 }
 
+// One main-world uncaught error relayed to the shell's log file
+// (src/game/desktop_error_relay.ts builds it; the shell clamps + validates).
+export interface DesktopRendererErrorReport {
+  kind: 'error' | 'unhandledrejection';
+  message?: string;
+  stack?: string;
+  source?: string;
+  line?: number;
+  col?: number;
+}
+
 export interface DesktopBridge {
   openBrowserLogin(): Promise<void>;
   takeLoginCode(): Promise<string | null>;
@@ -62,6 +73,7 @@ export interface DesktopBridge {
   // detection below deliberately requires only the login trio, or a shell
   // predating an update feature would lose LOGIN too.
   setShellStrings?(strings: Record<string, string>): Promise<null>;
+  reportRendererError?(report: DesktopRendererErrorReport): void;
   onUpdateEvent?(callback: (event: DesktopUpdateEvent) => void): () => void;
   installUpdate?(): Promise<null>;
 }

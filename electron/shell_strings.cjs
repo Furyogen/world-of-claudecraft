@@ -3,7 +3,7 @@
 // Player-visible strings the MAIN process may need when the renderer is dead
 // (the crash dialog) or dying. The main process has no i18n runtime, so the
 // renderer PUSHES its t()-rendered translations over IPC at boot and on locale
-// change ('desktop-set-strings', see src/game/desktop_shell_bridge.ts); the
+// change ('desktop-set-strings', see src/game/desktop_shell_strings.ts); the
 // English values below are only the fallback for the narrow window before the
 // first push (a crash before the client booted far enough to localize
 // anything). This mirrors the repo's sim/server rule: the emitter stays

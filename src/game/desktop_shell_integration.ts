@@ -6,11 +6,14 @@
 
 import { desktopBridge } from '../runtime';
 import { initDesktopUpdateToast } from '../ui/desktop_update_toast';
+import { initDesktopErrorRelay } from './desktop_error_relay';
 import { initDesktopShellStrings } from './desktop_shell_strings';
 
 export function initDesktopShellIntegration(): void {
   const bridge = desktopBridge();
   if (!bridge) return;
+  // Error relay first: its listeners should exist before anything else runs.
+  initDesktopErrorRelay(bridge);
   initDesktopShellStrings(bridge);
   initDesktopUpdateToast(bridge);
 }

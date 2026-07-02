@@ -174,6 +174,14 @@ commits:
   Decision logic is pure and tested (electron/diagnostics.cjs,
   electron/shell_strings.cjs); the dialog strings are the renderer's t()
   translations pushed over IPC, mirroring the sim/server language-agnostic rule.
+  One empirical correction from the QA verify pass: under contextIsolation the
+  preload's window listeners CANNOT see main-world page errors (worlds do not
+  share error/unhandledrejection events; proven with a live Electron 43 probe),
+  so the game client relays them through a new wocDesktop.reportRendererError
+  bridge method (src/game/desktop_error_relay.ts, pure mapper tested); the
+  preload's own listeners remain for isolated-world (preload) errors, and the
+  console-message mirror already catches the 'Uncaught ...' lines as a backstop
+  even without the relay.
 - EnableEmbeddedAsarIntegrityValidation: enabled after all. The "fails to launch
   unsigned" concern did not survive testing: electron-builder 26 embeds the asar
   hash in Info.plist on every build and the ad-hoc-signed pack launches fine with
