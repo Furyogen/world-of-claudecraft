@@ -939,7 +939,7 @@ function composeMarsh(): Theme {
     ev,
     8,
     dirge.map(([b, m, d]) => [b, m + 12, d] as Phrase[number]),
-    0.26,
+    0.21,
     'flute',
   );
   pushPhrase(ev, 8, dirge, 0.12, 'harp');
@@ -981,7 +981,7 @@ function composeMarsh(): Theme {
     ev,
     72,
     dirge.map(([b, m, d]) => [b, m + 12, d] as Phrase[number]),
-    0.24,
+    0.19,
     'flute',
   );
   pushPhrase(ev, 72, dirge, 0.11, 'harp');
@@ -1927,7 +1927,7 @@ export const THEME_TRIM: Record<string, number> = {
   town_highwatch: 2.15,
   vale: 3.3,
   vale_legacy: 1.35,
-  marsh: 1.6,
+  marsh: 1.85,
   peaks: 2.05,
   dungeon_hollow_crypt: 2.95,
   dungeon_sunken_bastion: 2.95,
