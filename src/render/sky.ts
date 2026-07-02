@@ -99,6 +99,12 @@ const BACKDROP_Y_BIAS: Record<BiomeId, number> = {
   abyss: 0,
 };
 
+// Photo-backdrop + anchor-sun brightness per biome. The abyss crushes both:
+// at the bottom of a night sea there is no bright horizon photo and no warm
+// sun glow — the trench walls survive only as near-black silhouettes.
+const BACKDROP_GAIN: Record<BiomeId, number> = { vale: 1, marsh: 1, peaks: 1, abyss: 0.06 };
+const SUN_GLOW_GAIN: Record<BiomeId, number> = { vale: 1, marsh: 1, peaks: 1, abyss: 0 };
+
 interface NetworkInformationLike {
   readonly effectiveType?: string;
   readonly saveData?: boolean;
@@ -232,6 +238,10 @@ const SKY_FRAG = /* glsl */ `
   uniform float uBackdropStrength;
   uniform float uBackdropBiasA;
   uniform float uBackdropBiasB;
+  uniform float uBackGainA;
+  uniform float uBackGainB;
+  uniform float uSunGainA;
+  uniform float uSunGainB;
   varying vec3 vDir;
 
   vec3 sampleSky(sampler2D map, vec3 dir, float uOff, vec2 tune) {
@@ -275,14 +285,15 @@ const SKY_FRAG = /* glsl */ `
   void main() {
     vec3 dir = normalize(vDir);
     vec3 c = mix(sampleSky(uSkyA, dir, uOffA, uTuneA), sampleSky(uSkyB, dir, uOffB, uTuneB), uMix);
-    vec3 backA = sampleBackdrop(uBackdropA, dir, uBackdropBiasA);
-    vec3 backB = sampleBackdrop(uBackdropB, dir, uBackdropBiasB);
+    vec3 backA = sampleBackdrop(uBackdropA, dir, uBackdropBiasA) * uBackGainA;
+    vec3 backB = sampleBackdrop(uBackdropB, dir, uBackdropBiasB) * uBackGainB;
     vec3 backdrop = mix(backA, backB, uMix);
     c = mix(c, backdrop, uBackdropStrength);
+    float sunGain = mix(uSunGainA, uSunGainB, uMix);
     float sunAmt = pow(max(dot(dir, uSunDir), 0.0), 8.0);
-    c += vec3(1.0, 0.85, 0.6) * sunAmt * 0.3;                        // warm glow around the anchor sun
+    c += vec3(1.0, 0.85, 0.6) * sunAmt * 0.3 * sunGain;              // warm glow around the anchor sun
     float sunCore = pow(max(dot(dir, uSunDir), 0.0), 90.0);
-    c += vec3(1.0, 0.92, 0.75) * sunCore * 0.5;                      // tighter bright core
+    c += vec3(1.0, 0.92, 0.75) * sunCore * 0.5 * sunGain;            // tighter bright core
     gl_FragColor = vec4(c, 1.0);
     #include <tonemapping_fragment>
     #include <colorspace_fragment>
@@ -360,6 +371,10 @@ export function buildSky(lowGfx: boolean, sunDir: THREE.Vector3): SkyView {
     uBackdropStrength: { value: backdropsReady ? 1 : 0 },
     uBackdropBiasA: { value: BACKDROP_Y_BIAS[start.from] },
     uBackdropBiasB: { value: BACKDROP_Y_BIAS[start.to] },
+    uBackGainA: { value: BACKDROP_GAIN[start.from] },
+    uBackGainB: { value: BACKDROP_GAIN[start.to] },
+    uSunGainA: { value: SUN_GLOW_GAIN[start.from] },
+    uSunGainB: { value: SUN_GLOW_GAIN[start.to] },
   };
   const material = new THREE.ShaderMaterial({
     uniforms,
@@ -388,6 +403,10 @@ export function buildSky(lowGfx: boolean, sunDir: THREE.Vector3): SkyView {
         uniforms.uBackdropB.value = backdropTex(next.to);
         uniforms.uBackdropBiasA.value = BACKDROP_Y_BIAS[next.from];
         uniforms.uBackdropBiasB.value = BACKDROP_Y_BIAS[next.to];
+        uniforms.uBackGainA.value = BACKDROP_GAIN[next.from];
+        uniforms.uBackGainB.value = BACKDROP_GAIN[next.to];
+        uniforms.uSunGainA.value = SUN_GLOW_GAIN[next.from];
+        uniforms.uSunGainB.value = SUN_GLOW_GAIN[next.to];
         uniforms.uMix.value = next.t;
         cur = next;
         return;

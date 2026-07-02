@@ -96,7 +96,9 @@ export const ATLANTIS_PORTAL_PADS: PortalPadDef[] = [
     id: 'tidegate_thornpeak',
     name: 'The Tidegate',
     pos: { x: 110, z: 800 }, // Stormcrag ridge, zone 3
-    dest: { x: 0, z: 1038 }, // Tidegate Plaza, Lower Ward
+    // A step west of the return gate so the arrival camera never sits inside
+    // the return arch.
+    dest: { x: 6, z: 1042 }, // Tidegate Plaza, Lower Ward
   },
   {
     id: 'tidegate_atlantis',

@@ -3434,6 +3434,16 @@ export class Renderer {
   };
   private static LOW_FOG = { color: 0xa6c6e0, near: 70, far: 260 };
 
+  // Outdoor sun/sky-ambient scale per biome — the abyss keeps only a wash of
+  // moonlight filtered down the water column; brazier light and the rim glow
+  // carry the dome city instead.
+  private static BIOME_LIGHT: Record<BiomeId, { sun: number; hemi: number }> = {
+    vale: { sun: 1, hemi: 1 },
+    marsh: { sun: 1, hemi: 1 },
+    peaks: { sun: 1, hemi: 1 },
+    abyss: { sun: 0.22, hemi: 0.38 },
+  };
+
   private outdoorFogPreset(): { color: number; near: number; far: number } {
     if (this.lowGfx) return Renderer.LOW_FOG;
     return Renderer.BIOME_FOG[zoneBiomeAt(this.sim.player.pos.z)];
@@ -3594,8 +3604,11 @@ export class Renderer {
           desired === 'temple' ||
           desired === 'nythraxis' ||
           desired === 'delve';
-        this.sun.intensity = underground ? DUNGEON_SUN_INTENSITY : SUN_INTENSITY;
-        this.hemi.intensity = underground ? DUNGEON_HEMI_INTENSITY : HEMI_INTENSITY;
+        const outdoorLight = Renderer.BIOME_LIGHT[zoneBiomeAt(this.sim.player.pos.z)];
+        this.sun.intensity = underground ? DUNGEON_SUN_INTENSITY : SUN_INTENSITY * outdoorLight.sun;
+        this.hemi.intensity = underground
+          ? DUNGEON_HEMI_INTENSITY
+          : HEMI_INTENSITY * outdoorLight.hemi;
         this.scene.environmentIntensity = underground
           ? DUNGEON_ENV_INTENSITY
           : this.envOutdoorIntensity;
@@ -3610,6 +3623,9 @@ export class Renderer {
       fog.color.lerp(this.fogScratch.setHex(preset.color), k);
       fog.near += (preset.near - fog.near) * k;
       fog.far += (preset.far - fog.far) * k;
+      const light = Renderer.BIOME_LIGHT[zoneBiomeAt(this.sim.player.pos.z)];
+      this.sun.intensity += (SUN_INTENSITY * light.sun - this.sun.intensity) * k;
+      this.hemi.intensity += (HEMI_INTENSITY * light.hemi - this.hemi.intensity) * k;
     }
   }
 

@@ -99,8 +99,8 @@ describe('portal pads', () => {
     sim.tick();
     const p = sim.entities.get(pid);
     if (!p) throw new Error('player vanished');
-    expect(p.pos.x).toBeCloseTo(0, 0);
-    expect(p.pos.z).toBeCloseTo(1038, 0);
+    expect(p.pos.x).toBeCloseTo(6, 0);
+    expect(p.pos.z).toBeCloseTo(1042, 0);
     expect(zoneAt(p.pos.z).id).toBe('atlantis');
     // step onto the return gate: land at the Highwatch edge in zone 3
     teleport(sim, pid, 0, 1030);
