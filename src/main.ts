@@ -5856,6 +5856,13 @@ function wireWallet(): void {
   updateWalletButton();
 }
 
+window.addEventListener('woc:wallet-verify', () => {
+  if (!WALLET_ENABLED || !api.token) return;
+  startWalletVerifyFlow(false).catch((err) => {
+    console.error('[wallet] daily rewards verification failed', err);
+  });
+});
+
 // ---- Landing-page cinematic backdrop ------------------------------------
 // Decides per-visit whether the start screen shows the looping trailer video or
 // a static, dimmed, high-contrast poster — and crucially NEVER fetches the

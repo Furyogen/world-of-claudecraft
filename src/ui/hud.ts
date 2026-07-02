@@ -91,6 +91,7 @@ import {
   xpUntilNextPrestige,
 } from '../sim/types';
 import {
+  type DailyRewardStatus,
   type DelveRunInfo,
   type IWorld,
   isOverheadEmoteId,
@@ -145,6 +146,7 @@ import {
 } from './combat_sfx';
 import { type CardinalId, compassView } from './compass';
 import { formatMinimapCoords } from './coords';
+import { DailyRewardsWindow } from './daily_rewards_window';
 import { DelveMapPainter } from './delve_map_painter';
 import { devTierBadgeDataUrl, devTierByIndex, devTierDisplayName } from './dev_tier';
 import { markDialogRoot } from './dialog_root';
@@ -958,6 +960,9 @@ export class Hud {
   private lastHudFastAt = 0;
   private lastHudMediumAt = 0;
   private lastHudSlowAt = 0;
+  private dailyRewardsButtonEl: HTMLButtonElement | null = null;
+  private dailyRewardsLauncherSeq = 0;
+  private lastDailyRewardsLauncherRefreshAt = 0;
   // Per-element tier cadence stamps (graphics-tier knobs). Each gates a non-self /
   // canvas redraw to a slower interval on the LOW static preset; on every other tier the
   // interval is 0 (cadenceDue is always true), so these are no-ops and the path is the
@@ -1107,6 +1112,31 @@ export class Hud {
       this.raidLockoutEl.innerHTML = svgIcon('lock');
       this.raidLockoutEl.hidden = false;
       this.attachTooltip(this.raidLockoutEl, () => this.raidLockoutPanelView());
+    }
+    const dailyRewardsButton = document.getElementById(
+      'daily-rewards-button',
+    ) as HTMLButtonElement | null;
+    if (!this.dailyRewardsEnabled()) {
+      dailyRewardsButton?.setAttribute('hidden', '');
+      $('#daily-rewards-window').style.display = 'none';
+    } else if (dailyRewardsButton) {
+      this.dailyRewardsButtonEl = dailyRewardsButton;
+      dailyRewardsButton.innerHTML =
+        `<img class="daily-rewards-icon" src="/ui/daily-rewards/treasure_chest.webp" alt="" draggable="false" decoding="async">` +
+        `<span class="daily-rewards-label" data-i18n="hudChrome.dailyRewards.title">${t('hudChrome.dailyRewards.title')}</span>`;
+      dailyRewardsButton.classList.remove('spin-ready');
+      dailyRewardsButton.addEventListener('pointerdown', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        if (event.button !== 0) return;
+        this.toggleDailyRewards();
+      });
+      dailyRewardsButton.addEventListener('pointerup', (event) => event.stopPropagation());
+      dailyRewardsButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+      });
+      this.refreshDailyRewardsLauncher(true);
     }
     this.clock24 = (() => {
       try {
@@ -1649,6 +1679,9 @@ export class Hud {
         break;
       case 'leaderboard-window':
         this.leaderboardWindow.close();
+        break;
+      case 'daily-rewards-window':
+        this.dailyRewardsWindow.close();
         break;
       case 'emote-editor':
         this.closeEmoteEditor();
@@ -2798,7 +2831,21 @@ export class Hud {
     world: () => this.sim,
     closeOthers: () => this.closeOtherWindows('#leaderboard-window'),
     ...this.windowFocus('#leaderboard-window'),
+    onVisibilityChange: () => this.syncAnyWindowOpenState(),
     showDevBadges: () => this.optionsHooks?.settings.get('showDevBadges') ?? true,
+  });
+  // Daily rewards window painter. It owns the async rewards reads, spin action,
+  // focus opener, and a low-rate refresh while open. All closures are lazy.
+  private readonly dailyRewardsWindow = new DailyRewardsWindow({
+    root: () => $('#daily-rewards-window'),
+    world: () => this.sim,
+    closeOthers: () => this.closeOtherWindows('#daily-rewards-window'),
+    onStatus: (status) => this.applyDailyRewardsLauncherStatus(status),
+    onWalletConnect: () => {
+      window.dispatchEvent(new CustomEvent('woc:wallet-verify'));
+    },
+    ...this.windowFocus('#daily-rewards-window'),
+    onVisibilityChange: () => this.syncAnyWindowOpenState(),
   });
   // Spellbook window painter (spellbook_view.ts core + spellbook_window.ts painter).
   // The window renders ability rows (not item rows), so it composes no presentation
@@ -4342,6 +4389,40 @@ export class Hud {
     return coerceFxTier(document.documentElement.dataset.fxLevel);
   }
 
+  private dailyRewardsEnabled(): boolean {
+    return !(
+      document.body.classList.contains('native-app') &&
+      document.body.classList.contains('mobile-touch')
+    );
+  }
+
+  private applyDailyRewardsLauncherStatus(status: DailyRewardStatus): void {
+    if (!this.dailyRewardsEnabled()) return;
+    const button = this.dailyRewardsButtonEl;
+    if (!button) return;
+    button.classList.toggle('spin-ready', !status.eligibility.eligible || !status.spin.claimed);
+  }
+
+  private refreshDailyRewardsLauncher(force = false): void {
+    if (!this.dailyRewardsEnabled()) return;
+    const button = this.dailyRewardsButtonEl;
+    if (!button) return;
+    const now = performance.now();
+    if (!force && now - this.lastDailyRewardsLauncherRefreshAt < 60_000) return;
+    this.lastDailyRewardsLauncherRefreshAt = now;
+    const seq = ++this.dailyRewardsLauncherSeq;
+    void this.sim
+      .dailyRewards()
+      .then((status) => {
+        if (seq !== this.dailyRewardsLauncherSeq) return;
+        this.applyDailyRewardsLauncherStatus(status);
+      })
+      .catch(() => {
+        if (seq !== this.dailyRewardsLauncherSeq) return;
+        button.classList.remove('spin-ready');
+      });
+  }
+
   update(): void {
     const sim = this.sim;
     const p = sim.player;
@@ -4370,6 +4451,7 @@ export class Hud {
     this.reconcileLootRolls();
     this.updateLootRollTimers(now);
     if (slowHud) this.updateRaidLockoutBadge();
+    if (slowHud) this.refreshDailyRewardsLauncher();
     this.syncActiveHotbarForm();
     this.syncSlotMap(); // picks up newly learned abilities mid-session
 
@@ -9785,6 +9867,12 @@ export class Hud {
   // which consumes the paged leaderboard() and owns the page index + focus.
   toggleLeaderboard(): void {
     this.leaderboardWindow.toggle();
+  }
+
+  toggleDailyRewards(): void {
+    if (!this.dailyRewardsEnabled()) return;
+    this.dailyRewardsWindow.toggle();
+    this.refreshDailyRewardsLauncher(true);
   }
 
   // -------------------------------------------------------------------------

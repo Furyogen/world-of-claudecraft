@@ -14,6 +14,43 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ru_RU: Partial<Record<TranslationKey, string>> = {
+  // Daily rewards (M16 non-Latin fill)
+  'hudChrome.dailyRewards.title': 'Ежедневные награды',
+  'hudChrome.dailyRewards.close': 'Закрыть ежедневные награды',
+  'hudChrome.dailyRewards.loading': 'Загрузка ежедневных наград...',
+  'hudChrome.dailyRewards.error': 'Не удалось загрузить ежедневные награды.',
+  'hudChrome.dailyRewards.intro':
+    'Держите достаточно WOC в подтвержденном кошельке, чтобы открыть ежедневные награды. Зарабатывайте очки за один ежедневный спин и сменяющиеся задания, затем поднимайтесь в ежедневной таблице лидеров ради доли призового фонда.',
+  'hudChrome.dailyRewards.prize': 'Призовой фонд',
+  'hudChrome.dailyRewards.reset': 'Сброс',
+  'hudChrome.dailyRewards.score': 'Счёт',
+  'hudChrome.dailyRewards.walletValue': 'Стоимость кошелька (WOC)',
+  'hudChrome.dailyRewards.unknown': 'Неизвестно',
+  'hudChrome.dailyRewards.spinTitle': 'Ежедневный спин',
+  'hudChrome.dailyRewards.spinDialogTitle': 'Спин ежедневной награды',
+  'hudChrome.dailyRewards.spinClose': 'Закрыть ежедневный спин',
+  'hudChrome.dailyRewards.spinReady': 'Доступен один спин.',
+  'hudChrome.dailyRewards.spinClaimed': 'Получено: +{points} очков.',
+  'hudChrome.dailyRewards.spinResult': '+{points} очков',
+  'hudChrome.dailyRewards.spinButton': 'Крутить',
+  'hudChrome.dailyRewards.tasks': 'Задания',
+  'hudChrome.dailyRewards.leaderboard': 'Ежедневная таблица лидеров',
+  'hudChrome.dailyRewards.history': 'Прошлые победители',
+  'hudChrome.dailyRewards.noLeaders': 'Пока нет очков.',
+  'hudChrome.dailyRewards.noHistory': 'Пока нет выплат.',
+  'hudChrome.dailyRewards.walletConnectTitle': 'Подтвердить кошелек',
+  'hudChrome.dailyRewards.walletConnectBody':
+    'Подтвердите кошелек Solana с WOC, чтобы открыть ежедневные награды.',
+  'hudChrome.dailyRewards.walletConnectButton': 'Подтвердить кошелек',
+  'hudChrome.dailyRewards.walletHoldTitle': 'Держите WOC',
+  'hudChrome.dailyRewards.walletHoldBody':
+    'Держите не менее {amount} USD в WOC, чтобы открыть ежедневные награды.',
+  'hudChrome.dailyRewards.walletPriceBody': 'Цена WOC сейчас недоступна. Загляните чуть позже.',
+  'hudChrome.dailyRewards.reason.eligible': 'Награды открыты.',
+  'hudChrome.dailyRewards.reason.no_wallet': 'Подключите кошелек с не менее чем $20 USD в WOC.',
+  'hudChrome.dailyRewards.reason.under_minimum': 'Кошелек ниже минимума в $20 USD WOC.',
+  'hudChrome.dailyRewards.reason.price_unavailable':
+    'Цена WOC недоступна, награды временно заблокированы.',
   'hudChrome.keybinds.discord': 'Discord',
   'hudChrome.spectate.banner': 'Наблюдение за {name}',
   'hudChrome.loot.chestTitle': 'Сундук',

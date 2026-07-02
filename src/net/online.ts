@@ -45,6 +45,9 @@ import {
   type ArenaInfo,
   type CharacterSearchResult,
   type ClientCommand,
+  type DailyRewardHistory,
+  type DailyRewardSpinResult,
+  type DailyRewardStatus,
   type DelveCompanionInfo,
   type DelveDailyInfo,
   type DelveRunInfo,
@@ -2138,6 +2141,37 @@ export class ClientWorld implements IWorld {
       return empty;
     }
   }
+
+  async dailyRewards(): Promise<DailyRewardStatus> {
+    const res = await fetch(apiUrl('/api/daily-rewards', this.base), {
+      headers: { Authorization: `Bearer ${this.token}` },
+    });
+    if (!res.ok) throw new Error('daily rewards unavailable');
+    return (await res.json()) as DailyRewardStatus;
+  }
+
+  async spinDailyReward(): Promise<DailyRewardSpinResult> {
+    const res = await fetch(apiUrl('/api/daily-rewards/spin', this.base), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.token}`,
+      },
+      body: '{}',
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error ?? 'daily spin unavailable');
+    return data as DailyRewardSpinResult;
+  }
+
+  async dailyRewardHistory(): Promise<DailyRewardHistory> {
+    const res = await fetch(apiUrl('/api/daily-rewards/history', this.base), {
+      headers: { Authorization: `Bearer ${this.token}` },
+    });
+    if (!res.ok) return { payouts: [] };
+    return (await res.json()) as DailyRewardHistory;
+  }
+
   prestige(): void {
     this.cmd({ cmd: 'prestige' });
   }

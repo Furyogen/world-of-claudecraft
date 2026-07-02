@@ -14,6 +14,46 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ja_JP: Partial<Record<TranslationKey, string>> = {
+  // Daily rewards (M16 non-Latin fill)
+  'hudChrome.dailyRewards.title': 'デイリー報酬',
+  'hudChrome.dailyRewards.close': 'デイリー報酬を閉じる',
+  'hudChrome.dailyRewards.loading': 'デイリー報酬を読み込み中...',
+  'hudChrome.dailyRewards.error': 'デイリー報酬を読み込めませんでした。',
+  'hudChrome.dailyRewards.intro':
+    '認証済みウォレットに十分なWOCを保有すると、デイリー報酬が解放されます。1日1回のスピンとローテーションするタスクでポイントを獲得し、デイリーランキングを駆け上がって賞金プールの分け前を狙いましょう。',
+  'hudChrome.dailyRewards.prize': '賞金プール',
+  'hudChrome.dailyRewards.reset': 'リセット',
+  'hudChrome.dailyRewards.score': 'スコア',
+  'hudChrome.dailyRewards.walletValue': 'ウォレット価値 (WOC)',
+  'hudChrome.dailyRewards.unknown': '不明',
+  'hudChrome.dailyRewards.spinTitle': 'デイリースピン',
+  'hudChrome.dailyRewards.spinDialogTitle': 'デイリー報酬スピン',
+  'hudChrome.dailyRewards.spinClose': 'デイリースピンを閉じる',
+  'hudChrome.dailyRewards.spinReady': 'スピンが1回可能です。',
+  'hudChrome.dailyRewards.spinClaimed': '獲得: +{points} ポイント。',
+  'hudChrome.dailyRewards.spinResult': '+{points} ポイント',
+  'hudChrome.dailyRewards.spinButton': 'スピン',
+  'hudChrome.dailyRewards.tasks': 'タスク',
+  'hudChrome.dailyRewards.leaderboard': 'デイリーランキング',
+  'hudChrome.dailyRewards.history': '過去の当選者',
+  'hudChrome.dailyRewards.noLeaders': 'まだポイントがありません。',
+  'hudChrome.dailyRewards.noHistory': 'まだ支払いがありません。',
+  'hudChrome.dailyRewards.walletConnectTitle': 'ウォレットを認証',
+  'hudChrome.dailyRewards.walletConnectBody':
+    'WOCを保有するSolanaウォレットを認証して、デイリー報酬を解放しましょう。',
+  'hudChrome.dailyRewards.walletConnectButton': 'ウォレットを認証',
+  'hudChrome.dailyRewards.walletHoldTitle': 'WOCを保有',
+  'hudChrome.dailyRewards.walletHoldBody':
+    'デイリー報酬を解放するには、少なくとも {amount} USD 相当のWOCを保有してください。',
+  'hudChrome.dailyRewards.walletPriceBody':
+    '現在WOCの価格を取得できません。しばらくしてから再度ご確認ください。',
+  'hudChrome.dailyRewards.reason.eligible': '報酬が解放されました。',
+  'hudChrome.dailyRewards.reason.no_wallet':
+    '$20 USD 相当以上のWOCを保有するウォレットを接続してください。',
+  'hudChrome.dailyRewards.reason.under_minimum':
+    'ウォレットが最低額の $20 USD 相当のWOCを下回っています。',
+  'hudChrome.dailyRewards.reason.price_unavailable':
+    'WOCの価格を取得できないため、報酬は一時的にロックされています。',
   'hudChrome.keybinds.discord': 'Discord',
   'hudChrome.spectate.banner': '{name}を観戦中',
   'hudChrome.loot.chestTitle': '宝箱',
