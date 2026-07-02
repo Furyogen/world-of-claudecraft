@@ -227,6 +227,7 @@ import { makeWriterFacet, type PainterHostPresentation } from './painter_host';
 import { partyFrameSignature, selectPartyFrameMembers } from './party_frames';
 import { PartyFramesPainter } from './party_frames_painter';
 import type { PerfOverlayHooks } from './perf_overlay_settings';
+import { PET_ACTION_ICONS } from './pet_action_icons';
 import {
   CARD_POSES,
   cardCanvasToBlob,
@@ -244,7 +245,6 @@ import {
   publishCard,
 } from './player_card_share';
 import { chatPlayerContextActions } from './player_context_menu';
-import { PET_ACTION_ICONS } from './pet_action_icons';
 import { hydratePortraits, portraitChipHtml } from './portrait_chip';
 import { maskProfanity } from './profanity';
 import { encodeItemLink, encodeQuestLink, parseChatSegments } from './quest_link';
