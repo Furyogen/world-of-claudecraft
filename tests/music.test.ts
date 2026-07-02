@@ -1,9 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
+  buildMusicThemes,
   dungeonMusicZoneForDungeon,
   MusicDirector,
   musicZoneForLocation,
   shouldResetMusicForDungeonEntry,
+  THEME_TRIM,
 } from '../src/game/music';
 
 class FakeParam {
@@ -177,6 +179,38 @@ describe('dungeon music entry reset', () => {
     expect(layer.loopCount).toBe(0);
     expect(layer.anchor).toBe(42);
     expect(bossElement.currentTime).toBe(0);
+  });
+});
+
+describe('per-theme loudness trims', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+  });
+
+  it('has an explicit measured trim for every registered theme', () => {
+    for (const name of Object.keys(buildMusicThemes())) {
+      expect(THEME_TRIM[name], `missing THEME_TRIM entry for '${name}'`).toBeGreaterThan(0);
+      expect(THEME_TRIM[name], `implausible trim for '${name}'`).toBeLessThanOrEqual(4);
+    }
+  });
+
+  it('drives layer gains through the measured trim, not bare 0/1', () => {
+    vi.stubGlobal('AudioContext', FakeAudioContext);
+    vi.stubGlobal('window', { setInterval: vi.fn(() => 1) });
+    const director = new MusicDirector();
+    director.init();
+    const layers = (
+      director as unknown as {
+        layers: Record<string, { gain: { gain: { value: number } }; trim: number }>;
+      }
+    ).layers;
+    director.update('vale', false);
+    expect(layers.vale.gain.gain.value).toBeCloseTo(THEME_TRIM.vale);
+    director.update('vale', true);
+    expect(layers.combat.gain.gain.value).toBeCloseTo(THEME_TRIM.combat);
+    expect(layers.vale.gain.gain.value).toBe(0);
+    clearInterval((director as unknown as { timer: number }).timer);
   });
 });
 

@@ -3,7 +3,7 @@
 // same synth voices and mix chain (master gain, compressor, hall reverb) the
 // in-game MusicDirector builds, so a saved WAV is the true in-game sound.
 // Bundled with esbuild (iife) and injected into a headless browser page.
-import { buildMusicThemes, MusicSynth } from '../src/game/music';
+import { buildMusicThemes, MusicSynth, THEME_TRIM } from '../src/game/music';
 
 interface RenderOpts {
   seconds?: number; // target length; rounded to whole loops of the theme
@@ -67,7 +67,7 @@ async function renderMusicTheme(name: string, opts: RenderOpts = {}): Promise<Re
   reverb.connect(master);
 
   const layerGain = ctx.createGain();
-  layerGain.gain.value = 1;
+  layerGain.gain.value = THEME_TRIM[name] ?? 1;
   layerGain.connect(master);
   layerGain.connect(reverbSend);
 
@@ -81,7 +81,7 @@ async function renderMusicTheme(name: string, opts: RenderOpts = {}): Promise<Re
 
   const buf = await ctx.startRendering();
   const data = buf.getChannelData(0);
-  const gain = opts.gain ?? 6.5; // about +16 dB: audible outside the game, no theme clips
+  const gain = opts.gain ?? 4.5; // about +13 dB: audible outside the game, no trimmed theme clips
   let peak = 0;
   for (let i = 0; i < data.length; i++) {
     const a = Math.abs(data[i]) * gain;

@@ -103,11 +103,12 @@ interface Theme {
 interface Layer {
   theme: Theme;
   gain: GainNode;
-  target: number;
+  target: number; // logical 0..1; the gain node gets target * trim
   anchor: number;
   nextIdx: number;
   loopCount: number;
   transpose: number;
+  trim: number; // measured per-theme loudness trim (THEME_TRIM)
 }
 
 const mtof = (m: number): number => 440 * 2 ** ((m - 69) / 12);
@@ -1869,6 +1870,31 @@ export function buildMusicThemes(): Record<string, Theme> {
   };
 }
 
+// Per-theme loudness trims, applied to each layer's gain so every cue plays
+// at the same perceived level. Values are MEASURED, not guessed: each theme
+// was rendered offline through the exact in-game chain, its gated windowed
+// RMS computed (400ms windows, windows more than 15 dB under the loudest
+// gated out so drop bars and quiet middles do not skew the level), and the
+// trim set to match the Eastbrook town theme, the loudest cue and the game's
+// reference. Recompute with scripts/render_music.mjs plus a gated-RMS pass
+// whenever a composition changes materially.
+export const THEME_TRIM: Record<string, number> = {
+  town_eastbrook: 1.0,
+  town_fenbridge: 3.35,
+  town_highwatch: 2.15,
+  vale: 3.3,
+  vale_legacy: 1.35,
+  marsh: 2.5,
+  peaks: 2.05,
+  dungeon_hollow_crypt: 2.95,
+  dungeon_sunken_bastion: 2.95,
+  dungeon_gravewyrm_sanctum: 1.8,
+  combat: 1.35,
+  combat_classic: 1.7,
+  combat_wardrums: 1.6,
+  combat_steel: 1.6,
+};
+
 export class MusicSynth {
   constructor(private ctx: BaseAudioContext) {}
 
@@ -2754,6 +2780,7 @@ export class MusicDirector {
         nextIdx: -1,
         loopCount: 0,
         transpose: 0,
+        trim: THEME_TRIM[name] ?? 1,
       };
     }
     this.timer = window.setInterval(() => this.tickScheduler(), 110);
@@ -2812,7 +2839,7 @@ export class MusicDirector {
         layer.target = target;
         // fade out faster than fade in so instance music doesn't bleed into the world
         const fade = target > 0 ? FADE_SECONDS / 3 : 0.35;
-        layer.gain.gain.setTargetAtTime(target, now, fade);
+        layer.gain.gain.setTargetAtTime(target * layer.trim, now, fade);
         if (target === 0) layer.nextIdx = -1;
       }
     }
@@ -2824,7 +2851,11 @@ export class MusicDirector {
     const combatTarget = inCombat ? 1 : 0;
     if (combatLayer.target !== combatTarget) {
       combatLayer.target = combatTarget;
-      combatLayer.gain.gain.setTargetAtTime(combatTarget, now, inCombat ? 0.35 : FADE_SECONDS / 3);
+      combatLayer.gain.gain.setTargetAtTime(
+        combatTarget * combatLayer.trim,
+        now,
+        inCombat ? 0.35 : FADE_SECONDS / 3,
+      );
     }
   }
 
