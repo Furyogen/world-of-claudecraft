@@ -4847,4 +4847,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.dailyRewards.remainingMinutes': '{minutes}分',
   'hudChrome.dailyRewards.sol': '{amount} SOL',
   'hudChrome.dailyRewards.usd': '{amount} USD',
+  'auth.emailPlaceholder': "ni@example.com",
+  'auth.recovery.logOut': "退出登录",
 };

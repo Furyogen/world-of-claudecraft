@@ -202,11 +202,11 @@ export const da_DK: EnTranslations = {
       "spinResult": "+{points} point",
       "spinButton": "Drej",
       "tasks": "Opgaver",
-      "taskMultiplier": "x{multiplier} multiplier",
-      "pointsGained": "{points} daily rewards points gained.",
+      "taskMultiplier": "Multiplikator x{multiplier}",
+      "pointsGained": "{points} point til daglige belønninger optjent.",
       "leaderboard": "Daglig resultattavle",
-      "totalPlayer": "{count} player today",
-      "totalPlayers": "{count} players today",
+      "totalPlayer": "{count} spiller i dag",
+      "totalPlayers": "{count} spillere i dag",
       "history": "Tidligere vindere",
       "noLeaders": "Ingen point endnu.",
       "noHistory": "Ingen udbetalinger endnu.",
@@ -390,11 +390,11 @@ export const da_DK: EnTranslations = {
       "showWalletOnCharacterScreen": "Vis pengepung på karakterskærm",
       "showWalletOnPlayerCard": "Vis pengepung på spillerkort",
       "showDevBadges": "Vis udviklermærker",
-      "showOwnNameplate": "Show My Nameplate",
+      "showOwnNameplate": "Vis mit navneskilt",
       "uiScale": "UI-skala",
       "highContrastBackground": "Baggrund med høj kontrast",
       "startAttackOnAbility": "Autoangreb ved brug af evne",
-      "walkByAutoloot": "Walk-by Autoloot",
+      "walkByAutoloot": "Automatisk loot ved forbipassage",
       "groundReticle": "Jordsigte-retikel",
       "showItemLevel": "Vis genstandsniveau",
       "itemLevelLine": "Genstandsniveau {level}",
@@ -828,7 +828,7 @@ export const da_DK: EnTranslations = {
       }
     },
     "worldBoss": {
-      "spawn": "{name} rises over Thornpeak Heights!"
+      "spawn": "{name} rejser sig over Thornpeak Heights!"
     },
     "loot": {
       "chestTitle": "Kiste"
@@ -842,14 +842,14 @@ export const da_DK: EnTranslations = {
       "mobElite": "[{level}+] {name}"
     },
     "mobTooltip": {
-      "levelFamily": "Level {level} {family}",
-      "familyDemon": "Demon",
-      "hostile": "Hostile",
-      "friendly": "Friendly"
+      "levelFamily": "Niveau {level} {family}",
+      "familyDemon": "Dæmon",
+      "hostile": "Fjendtlig",
+      "friendly": "Venlig"
     },
     "targetFrame": {
-      "unlock": "Move target frame",
-      "lock": "Lock target frame"
+      "unlock": "Flyt målramme",
+      "lock": "Lås målramme"
     },
     "itemTooltip": {
       "requiresLevel": "Kræver niveau {level}"
@@ -932,7 +932,7 @@ export const da_DK: EnTranslations = {
       "memberSinceDays": "{days}d på Discord",
       "roleTag": {
         "levyst": "Levy St",
-        "admin": "Admin",
+        "admin": "Administrator",
         "devs": "Udvikler",
         "mods": "Moderator",
         "artists": "Kunstner"
@@ -1973,9 +1973,9 @@ export const da_DK: EnTranslations = {
     "password": "Adgangskode",
     "passwordError": "Indtast venligst din adgangskode.",
     "passwordPlaceholder": "Indtast adgangskode",
-    "email": "Email",
-    "emailPlaceholder": "you@example.com",
-    "emailError": "Please enter a valid email address.",
+    "email": "E-mail",
+    "emailPlaceholder": "dig@example.com",
+    "emailError": "Indtast en gyldig e-mailadresse.",
     "showPassword": "Vis adgangskode",
     "hidePassword": "Skjul adgangskode",
     "logIn": "Log ind",
@@ -2003,12 +2003,12 @@ export const da_DK: EnTranslations = {
     "twoFactorPlaceholder": "6-cifret eller gendannelseskode",
     "twoFactorHint": "Indtast koden fra din autentificeringsapp eller en af dine gendannelseskoder.",
     "recovery": {
-      "title": "Add a recovery email",
-      "body": "Set an email address so you can recover your account. We only use it to confirm you own this account if you ever need to reset your password.",
-      "save": "Save email",
-      "logOut": "Log out",
-      "invalid": "Please enter a valid email address.",
-      "failed": "Could not save your email. Please try again."
+      "title": "Tilføj gendannelses-e-mail",
+      "body": "Stel een hersteladres in voor je account, {playerName}. Dit adres wordt alleen gebruikt om eigendom te bevestigen wanneer je ooit je wachtwoord opnieuw moet instellen.",
+      "save": "Gem e-mail",
+      "logOut": "Log ud",
+      "invalid": "Indtast en gyldig e-mailadresse.",
+      "failed": "Indtast en gyldig e-mailadresse."
     }
   },
   "wallet": {
@@ -2063,7 +2063,7 @@ export const da_DK: EnTranslations = {
     "helpLinkedWithBalance": "Ejerfordele er aktive. Pung-app forbundet i denne browser.",
     "helpLinkedDisconnected": "Ejerfordele er aktive. Forbind appen, når du har brug for at underskrive eller bruge midler.",
     "helpLinkedDisconnectedWithBalance": "Ejerfordele er aktive. Forbind appen, når du har brug for at underskrive eller bruge midler.",
-    "extensionHelp": "To see a wallet here, keep a browser wallet extension such as Solflare Wallet active.",
+    "extensionHelp": "For at se en wallet her skal du holde en browser-walletudvidelse som Solflare Wallet aktiv.",
     "flowConnect": "Vælg en pung. Verificeringen fortsætter automatisk.",
     "flowSign": "Underskriv verificeringsbeskeden i din pung-app. Ingen transaktion eller SOL kræves.",
     "flowVerify": "Verificerer ejerskab af pung...",
@@ -3506,8 +3506,8 @@ export const da_DK: EnTranslations = {
     "tracker": {
       "title": "Quests",
       "complete": "Klar",
-      "showOnMap": "Show {name} on the map",
-      "hideFromMap": "Hide {name} from the map"
+      "showOnMap": "Vis {name} på kortet",
+      "hideFromMap": "Skjul {name} fra kortet"
     },
     "log": {
       "title": "Quest-log",
@@ -5680,10 +5680,10 @@ export const da_DK: EnTranslations = {
         "name": "Akolyt Tessa"
       },
       "thunzharr_waking_peak": {
-        "name": "Thunzharr, the Waking Peak"
+        "name": "Thunzharr, den vågnende tinde"
       },
       "thunzharr_stormling": {
-        "name": "Roused Stormling"
+        "name": "Vækket stormling"
       },
       "ironvein_foreman": {
         "name": "Jernåre-Formand"
@@ -6348,32 +6348,32 @@ export const da_DK: EnTranslations = {
         }
       },
       "q_stalkers_return": {
-        "title": "The Stalkers Return",
-        "text": "Twelve dead, and the ridge crawls thicker than the day you started, {playerName}. Beasts do not throw themselves at a wall out of hunger. Something on the high ridge is pushing them down, and until I know what, the culling does not stop. Fourteen more.",
-        "completion": "Fourteen more, and still my patrols count fresh tracks by morning. My scout came back from the high ridge white as the snowline: prints the size of a shield, she says, and old kills no stalker would leave. Whatever walks up there is no ordinary cat.",
+        "title": "Stalkerne vender tilbage",
+        "text": "Twaalf dood en de kam blijft vol, {playerName}. Iets drijft de beesten naar de muur. Versla er nog veertien.",
+        "completion": "Nog veertien, en elke ochtend zijn er verse sporen. Wat daarboven loopt is geen gewone kat.",
         "objectives": {
           "0": {
-            "label": "Ridge Stalker slain"
+            "label": "Rygstalker dræbt"
           }
         }
       },
       "q_stalker_cloaks": {
-        "title": "Cloaks for the Watch",
-        "text": "Eight pelts lined the officers' cloaks, and now every soldier on the wall wants the same, {playerName}. They are right to want it: winter takes fingers first and apologies never. Ten more pelts from the ridges south of the gate, and the whole watch sleeps warm.",
-        "completion": "Ten good pelts, thick as any I have... no, look at these, {playerName}. Torn, half of them, and by no blade or spear. Claw marks wide as my hand, right through the winter coat. Something on that ridge is savaging its own kind.",
+        "title": "Kapper til vagten",
+        "text": "De wacht heeft warme mantels nodig, {playerName}. Verzamel tien huiden van de stalkers op de kam ten zuiden van de poort.",
+        "completion": "Tien goede huiden, maar veel zijn verscheurd, {playerName}. Iets op de kam valt zijn eigen soort aan.",
         "objectives": {
           "0": {
-            "label": "Ridge Stalker Pelt"
+            "label": "Rygstalker-skind"
           }
         }
       },
       "q_old_cragmaw": {
-        "title": "Old Cragmaw",
-        "text": "The mountain folk put a name to the prints my scout found: Old Cragmaw, a scar-pelted tyrant of a cat that has outlived three generations of its own pack. It is the reason the stalkers flood my road, {playerName}. Its den sits on the western ridge above the road south. Bring a friend, and put the old devil down.",
-        "completion": "Down at last. The mountain folk swore that cat would outlive the wall itself. The stalkers will keep to their high snows now, {playerName}, and my patrols will walk the road without bleeding for it. The whole ridge is quieter for your work.",
+        "title": "Gamle Cragmaw",
+        "text": "Gamle Cragmaw: de sporen leiden naar de westelijke kam boven de zuidweg, {playerName}. Neem hulp mee en versla het oude beest.",
+        "completion": "Gamle Cragmaw is gevallen, {playerName}. De patrouilles kunnen de weg weer gebruiken en de kam is rustiger door je werk.",
         "objectives": {
           "0": {
-            "label": "Old Cragmaw slain"
+            "label": "Gamle Cragmaw dræbt"
           }
         }
       },

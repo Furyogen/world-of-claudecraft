@@ -5109,4 +5109,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.dailyRewards.remainingMinutes': '{minutes}분',
   'hudChrome.dailyRewards.sol': '{amount} SOL',
   'hudChrome.dailyRewards.usd': '{amount} USD',
+  'auth.emailPlaceholder': "dangsin@example.com",
+  'auth.recovery.logOut': "로그아웃",
 };

@@ -202,11 +202,11 @@ export const fr_FR: EnTranslations = {
       "spinResult": "+{points} points",
       "spinButton": "Tourner",
       "tasks": "Tâches",
-      "taskMultiplier": "x{multiplier} multiplier",
-      "pointsGained": "{points} daily rewards points gained.",
+      "taskMultiplier": "Multiplicateur x{multiplier}",
+      "pointsGained": "{points} points de récompenses quotidiennes gagnés.",
       "leaderboard": "Classement quotidien",
-      "totalPlayer": "{count} player today",
-      "totalPlayers": "{count} players today",
+      "totalPlayer": "{count} joueur aujourd’hui",
+      "totalPlayers": "{count} joueurs aujourd’hui",
       "history": "Anciens gagnants",
       "noLeaders": "Aucun point pour l'instant.",
       "noHistory": "Aucun versement pour l'instant.",
@@ -390,11 +390,11 @@ export const fr_FR: EnTranslations = {
       "showWalletOnCharacterScreen": "Afficher le portefeuille sur l’écran des personnages",
       "showWalletOnPlayerCard": "Afficher le portefeuille sur la carte de joueur",
       "showDevBadges": "Afficher les badges de développeur",
-      "showOwnNameplate": "Show My Nameplate",
+      "showOwnNameplate": "Afficher ma plaque de nom",
       "uiScale": "Échelle de l’interface",
       "highContrastBackground": "Arrière-plan à contraste élevé",
       "startAttackOnAbility": "Attaque auto à l'utilisation d'une compétence",
-      "walkByAutoloot": "Walk-by Autoloot",
+      "walkByAutoloot": "Butin auto au passage",
       "groundReticle": "Réticule de ciblage au sol",
       "showItemLevel": "Afficher le niveau d'objet",
       "itemLevelLine": "Niveau d'objet {level}",
@@ -842,14 +842,14 @@ export const fr_FR: EnTranslations = {
       "mobElite": "[{level}+] {name}"
     },
     "mobTooltip": {
-      "levelFamily": "Level {level} {family}",
-      "familyDemon": "Demon",
+      "levelFamily": "Niveau {level} {family}",
+      "familyDemon": "Démon",
       "hostile": "Hostile",
-      "friendly": "Friendly"
+      "friendly": "Amical"
     },
     "targetFrame": {
-      "unlock": "Move target frame",
-      "lock": "Lock target frame"
+      "unlock": "Déplacer le cadre de cible",
+      "lock": "Verrouiller le cadre de cible"
     },
     "itemTooltip": {
       "requiresLevel": "Niveau requis : {level}"
@@ -932,7 +932,7 @@ export const fr_FR: EnTranslations = {
       "memberSinceDays": "{days} j sur le Discord",
       "roleTag": {
         "levyst": "Levy St",
-        "admin": "Admin",
+        "admin": "Administrateur",
         "devs": "Dév",
         "mods": "Modo",
         "artists": "Artiste"
@@ -1973,9 +1973,9 @@ export const fr_FR: EnTranslations = {
     "password": "Mot de passe",
     "passwordError": "Veuillez saisir votre mot de passe.",
     "passwordPlaceholder": "Saisir le mot de passe",
-    "email": "Email",
-    "emailPlaceholder": "you@example.com",
-    "emailError": "Please enter a valid email address.",
+    "email": "E-mail",
+    "emailPlaceholder": "vous@example.com",
+    "emailError": "Saisissez une adresse e-mail valide.",
     "showPassword": "Afficher le mot de passe",
     "hidePassword": "Masquer le mot de passe",
     "logIn": "Se connecter",
@@ -2003,12 +2003,12 @@ export const fr_FR: EnTranslations = {
     "twoFactorPlaceholder": "Code à 6 chiffres ou code de récupération",
     "twoFactorHint": "Saisissez le code de votre application d'authentification, ou l'un de vos codes de récupération.",
     "recovery": {
-      "title": "Add a recovery email",
-      "body": "Set an email address so you can recover your account. We only use it to confirm you own this account if you ever need to reset your password.",
-      "save": "Save email",
-      "logOut": "Log out",
-      "invalid": "Please enter a valid email address.",
-      "failed": "Could not save your email. Please try again."
+      "title": "Ajouter un e-mail de récupération",
+      "body": "Stel een hersteladres in voor je account, {playerName}. Dit adres wordt alleen gebruikt om eigendom te bevestigen wanneer je ooit je wachtwoord opnieuw moet instellen.",
+      "save": "Enregistrer l’e-mail",
+      "logOut": "Se déconnecter",
+      "invalid": "Saisissez une adresse e-mail valide.",
+      "failed": "Saisissez une adresse e-mail e."
     }
   },
   "wallet": {
@@ -2063,7 +2063,7 @@ export const fr_FR: EnTranslations = {
     "helpLinkedWithBalance": "Les avantages de détenteur sont actifs. L'appli de portefeuille est connectée sur ce navigateur.",
     "helpLinkedDisconnected": "Les avantages de détenteur sont actifs. Connectez l'appli lorsque vous devez signer ou dépenser.",
     "helpLinkedDisconnectedWithBalance": "Les avantages de détenteur sont actifs. Connectez l'appli lorsque vous devez signer ou dépenser.",
-    "extensionHelp": "To see a wallet here, keep a browser wallet extension such as Solflare Wallet active.",
+    "extensionHelp": "Pour voir un portefeuille ici, gardez active une extension de portefeuille de navigateur comme Solflare Wallet.",
     "flowConnect": "Choisissez un portefeuille. La vérification continue automatiquement.",
     "flowSign": "Signez le message de vérification dans votre appli de portefeuille. Aucune transaction ni SOL requis.",
     "flowVerify": "Vérification de la propriété du portefeuille...",
@@ -6348,32 +6348,32 @@ export const fr_FR: EnTranslations = {
         }
       },
       "q_stalkers_return": {
-        "title": "The Stalkers Return",
-        "text": "Twelve dead, and the ridge crawls thicker than the day you started, {playerName}. Beasts do not throw themselves at a wall out of hunger. Something on the high ridge is pushing them down, and until I know what, the culling does not stop. Fourteen more.",
-        "completion": "Fourteen more, and still my patrols count fresh tracks by morning. My scout came back from the high ridge white as the snowline: prints the size of a shield, she says, and old kills no stalker would leave. Whatever walks up there is no ordinary cat.",
+        "title": "Le retour des rôdeurs",
+        "text": "Douze morts et la crête reste pleine, {playerName}. Quelque chose pousse les bêtes vers le mur. Abattez-en quatorze de plus.",
+        "completion": "Quatorze de plus, et il y a encore des traces fraîches chaque matin. Ce qui marche là-haut n’est pas un félin ordinaire.",
         "objectives": {
           "0": {
-            "label": "Ridge Stalker slain"
+            "label": "Rôdeur des crêtes abattu"
           }
         }
       },
       "q_stalker_cloaks": {
-        "title": "Cloaks for the Watch",
-        "text": "Eight pelts lined the officers' cloaks, and now every soldier on the wall wants the same, {playerName}. They are right to want it: winter takes fingers first and apologies never. Ten more pelts from the ridges south of the gate, and the whole watch sleeps warm.",
-        "completion": "Ten good pelts, thick as any I have... no, look at these, {playerName}. Torn, half of them, and by no blade or spear. Claw marks wide as my hand, right through the winter coat. Something on that ridge is savaging its own kind.",
+        "title": "Des capes pour la garde",
+        "text": "Les soldats du mur ont besoin de capes chaudes, {playerName}. Rapportez dix peaux de rôdeurs des crêtes au sud de la porte.",
+        "completion": "Dix bonnes peaux, mais beaucoup sont déchirées, {playerName}. Quelque chose sur cette crête attaque les siens.",
         "objectives": {
           "0": {
-            "label": "Ridge Stalker Pelt"
+            "label": "Peau de rôdeur des crêtes"
           }
         }
       },
       "q_old_cragmaw": {
-        "title": "Old Cragmaw",
-        "text": "The mountain folk put a name to the prints my scout found: Old Cragmaw, a scar-pelted tyrant of a cat that has outlived three generations of its own pack. It is the reason the stalkers flood my road, {playerName}. Its den sits on the western ridge above the road south. Bring a friend, and put the old devil down.",
-        "completion": "Down at last. The mountain folk swore that cat would outlive the wall itself. The stalkers will keep to their high snows now, {playerName}, and my patrols will walk the road without bleeding for it. The whole ridge is quieter for your work.",
+        "title": "Vieux Cragmaw",
+        "text": "Les montagnards ont nommé les traces : Vieux Cragmaw. Sa tanière se trouve sur la crête ouest au-dessus de la route du sud, {playerName}. Prenez un allié et abattez la vieille bête.",
+        "completion": "Enfin tombé. Les rôdeurs retourneront aux hautes neiges, {playerName}, et mes patrouilles marcheront sans saigner. La crête est plus calme grâce à vous.",
         "objectives": {
           "0": {
-            "label": "Old Cragmaw slain"
+            "label": "Vieux Cragmaw abattu"
           }
         }
       },

@@ -202,11 +202,11 @@ export const pt_BR: EnTranslations = {
       "spinResult": "+{points} pontos",
       "spinButton": "Girar",
       "tasks": "Tarefas",
-      "taskMultiplier": "x{multiplier} multiplier",
-      "pointsGained": "{points} daily rewards points gained.",
+      "taskMultiplier": "Multiplicador x{multiplier}",
+      "pointsGained": "{points} pontos de recompensas diárias ganhos.",
       "leaderboard": "Classificação Diária",
-      "totalPlayer": "{count} player today",
-      "totalPlayers": "{count} players today",
+      "totalPlayer": "{count} jogador hoje",
+      "totalPlayers": "{count} jogadores hoje",
       "history": "Vencedores anteriores",
       "noLeaders": "Nenhum ponto ainda.",
       "noHistory": "Nenhum pagamento ainda.",
@@ -390,11 +390,11 @@ export const pt_BR: EnTranslations = {
       "showWalletOnCharacterScreen": "Mostrar carteira na tela de personagens",
       "showWalletOnPlayerCard": "Mostrar carteira no cartão de jogador",
       "showDevBadges": "Exibir Insígnias de Desenvolvedor",
-      "showOwnNameplate": "Show My Nameplate",
+      "showOwnNameplate": "Mostrar minha placa de nome",
       "uiScale": "Escala da interface",
       "highContrastBackground": "Fundo de alto contraste",
       "startAttackOnAbility": "Ataque Automático ao Usar Habilidade",
-      "walkByAutoloot": "Walk-by Autoloot",
+      "walkByAutoloot": "Saque automático ao passar",
       "groundReticle": "Retícula de mira no chão",
       "showItemLevel": "Mostrar nível do item",
       "itemLevelLine": "Nível do item {level}",
@@ -842,14 +842,14 @@ export const pt_BR: EnTranslations = {
       "mobElite": "[{level}+] {name}"
     },
     "mobTooltip": {
-      "levelFamily": "Level {level} {family}",
-      "familyDemon": "Demon",
-      "hostile": "Hostile",
-      "friendly": "Friendly"
+      "levelFamily": "Nível {level} {family}",
+      "familyDemon": "Demônio",
+      "hostile": "Hostil",
+      "friendly": "Amigável"
     },
     "targetFrame": {
-      "unlock": "Move target frame",
-      "lock": "Lock target frame"
+      "unlock": "Mover quadro do alvo",
+      "lock": "Bloquear quadro do alvo"
     },
     "itemTooltip": {
       "requiresLevel": "Requer Nível {level}"
@@ -932,7 +932,7 @@ export const pt_BR: EnTranslations = {
       "memberSinceDays": "{days}d no Discord",
       "roleTag": {
         "levyst": "Levy St",
-        "admin": "Admin",
+        "admin": "Administrador",
         "devs": "Dev",
         "mods": "Mod",
         "artists": "Artista"
@@ -1973,9 +1973,9 @@ export const pt_BR: EnTranslations = {
     "password": "Senha",
     "passwordError": "Por favor, insira sua senha.",
     "passwordPlaceholder": "Insira a senha",
-    "email": "Email",
-    "emailPlaceholder": "you@example.com",
-    "emailError": "Please enter a valid email address.",
+    "email": "E-mail",
+    "emailPlaceholder": "voce@example.com",
+    "emailError": "Insira um endereço de e-mail válido.",
     "showPassword": "Mostrar senha",
     "hidePassword": "Ocultar senha",
     "logIn": "Entrar",
@@ -2003,12 +2003,12 @@ export const pt_BR: EnTranslations = {
     "twoFactorPlaceholder": "Código de 6 dígitos ou de recuperação",
     "twoFactorHint": "Digite o código do seu app autenticador ou um dos seus códigos de recuperação.",
     "recovery": {
-      "title": "Add a recovery email",
-      "body": "Set an email address so you can recover your account. We only use it to confirm you own this account if you ever need to reset your password.",
-      "save": "Save email",
-      "logOut": "Log out",
-      "invalid": "Please enter a valid email address.",
-      "failed": "Could not save your email. Please try again."
+      "title": "Adicionar e-mail de recuperação",
+      "body": "Stel een hersteladres in voor je account, {playerName}. Dit adres wordt alleen gebruikt om eigendom te bevestigen wanneer je ooit je wachtwoord opnieuw moet instellen.",
+      "save": "Salvar e-mail",
+      "logOut": "Sair",
+      "invalid": "Insira um endereço de e-mail válido.",
+      "failed": "Insira um endereço de e-mail válido."
     }
   },
   "wallet": {
@@ -2063,7 +2063,7 @@ export const pt_BR: EnTranslations = {
     "helpLinkedWithBalance": "As vantagens de titular estão ativas. O app da carteira está conectado neste navegador.",
     "helpLinkedDisconnected": "As vantagens de titular estão ativas. Conecte o app quando precisar assinar ou gastar.",
     "helpLinkedDisconnectedWithBalance": "As vantagens de titular estão ativas. Conecte o app quando precisar assinar ou gastar.",
-    "extensionHelp": "To see a wallet here, keep a browser wallet extension such as Solflare Wallet active.",
+    "extensionHelp": "Para ver uma carteira aqui, mantenha ativa uma extensão de carteira do navegador, como Solflare Wallet.",
     "flowConnect": "Escolha uma carteira. A verificação continua automaticamente.",
     "flowSign": "Assine a mensagem de verificação no app da carteira. Não exige transação nem SOL.",
     "flowVerify": "Verificando a propriedade da carteira...",
@@ -6348,32 +6348,32 @@ export const pt_BR: EnTranslations = {
         }
       },
       "q_stalkers_return": {
-        "title": "The Stalkers Return",
-        "text": "Twelve dead, and the ridge crawls thicker than the day you started, {playerName}. Beasts do not throw themselves at a wall out of hunger. Something on the high ridge is pushing them down, and until I know what, the culling does not stop. Fourteen more.",
-        "completion": "Fourteen more, and still my patrols count fresh tracks by morning. My scout came back from the high ridge white as the snowline: prints the size of a shield, she says, and old kills no stalker would leave. Whatever walks up there is no ordinary cat.",
+        "title": "O retorno dos espreitadores",
+        "text": "Twaalf dood en de kam blijft vol, {playerName}. Iets drijft de beesten naar de muur. Versla er nog veertien.",
+        "completion": "Nog veertien, en elke ochtend zijn er verse sporen. Wat daarboven loopt is geen gewone kat.",
         "objectives": {
           "0": {
-            "label": "Ridge Stalker slain"
+            "label": "Espreitador da crista abatido"
           }
         }
       },
       "q_stalker_cloaks": {
-        "title": "Cloaks for the Watch",
-        "text": "Eight pelts lined the officers' cloaks, and now every soldier on the wall wants the same, {playerName}. They are right to want it: winter takes fingers first and apologies never. Ten more pelts from the ridges south of the gate, and the whole watch sleeps warm.",
-        "completion": "Ten good pelts, thick as any I have... no, look at these, {playerName}. Torn, half of them, and by no blade or spear. Claw marks wide as my hand, right through the winter coat. Something on that ridge is savaging its own kind.",
+        "title": "Mantos para a guarda",
+        "text": "De wacht heeft warme mantels nodig, {playerName}. Verzamel tien huiden van de stalkers op de kam ten zuiden van de poort.",
+        "completion": "Tien goede huiden, maar veel zijn verscheurd, {playerName}. Iets op de kam valt zijn eigen soort aan.",
         "objectives": {
           "0": {
-            "label": "Ridge Stalker Pelt"
+            "label": "Pele de espreitador da crista"
           }
         }
       },
       "q_old_cragmaw": {
-        "title": "Old Cragmaw",
-        "text": "The mountain folk put a name to the prints my scout found: Old Cragmaw, a scar-pelted tyrant of a cat that has outlived three generations of its own pack. It is the reason the stalkers flood my road, {playerName}. Its den sits on the western ridge above the road south. Bring a friend, and put the old devil down.",
-        "completion": "Down at last. The mountain folk swore that cat would outlive the wall itself. The stalkers will keep to their high snows now, {playerName}, and my patrols will walk the road without bleeding for it. The whole ridge is quieter for your work.",
+        "title": "Velho Cragmaw",
+        "text": "Velho Cragmaw: de sporen leiden naar de westelijke kam boven de zuidweg, {playerName}. Neem hulp mee en versla het oude beest.",
+        "completion": "Velho Cragmaw is gevallen, {playerName}. De patrouilles kunnen de weg weer gebruiken en de kam is rustiger door je werk.",
         "objectives": {
           "0": {
-            "label": "Old Cragmaw slain"
+            "label": "Velho Cragmaw abatido"
           }
         }
       },

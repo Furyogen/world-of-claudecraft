@@ -1974,7 +1974,7 @@ export const ja_JP: EnTranslations = {
     "passwordError": "パスワードを入力してください。",
     "passwordPlaceholder": "パスワードを入力",
     "email": "メールアドレス",
-    "emailPlaceholder": "you@example.com",
+    "emailPlaceholder": "anata@example.com",
     "emailError": "有効なメールアドレスを入力してください。",
     "showPassword": "パスワードを表示",
     "hidePassword": "パスワードを非表示",
@@ -2006,7 +2006,7 @@ export const ja_JP: EnTranslations = {
       "title": "復旧用メールアドレスを追加",
       "body": "メールアドレスを設定すると、アカウントを復旧できるようになります。パスワードのリセットが必要になった際に、このアカウントの所有者であることを確認するためだけに使用します。",
       "save": "メールを保存",
-      "logOut": "Log out",
+      "logOut": "ログアウト",
       "invalid": "有効なメールアドレスを入力してください。",
       "failed": "メールアドレスを保存できませんでした。もう一度お試しください。"
     }

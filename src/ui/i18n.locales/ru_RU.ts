@@ -5208,4 +5208,6 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.dailyRewards.remainingMinutes': '{minutes}м',
   'hudChrome.dailyRewards.sol': '{amount} SOL',
   'hudChrome.dailyRewards.usd': '{amount} USD',
+  'auth.emailPlaceholder': "vy@example.com",
+  'auth.recovery.logOut': "Выйти",
 };
