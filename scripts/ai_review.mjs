@@ -1,16 +1,17 @@
-// Minimal AI pull-request reviewer, driven by the OpenAI Codex CLI authenticated with a
-// ChatGPT account (OAuth), not an API key. Runs `codex exec` non-interactively over the
-// PR diff (read-only sandbox, no network for the agent) and posts the review as a sticky
-// comment on the PR. No new npm deps: the Codex CLI is installed by the workflow, and
-// the GitHub side is plain REST via global fetch.
+// AI pull-request reviewer, driven by the OpenAI Codex CLI authenticated with a ChatGPT
+// account (OAuth), not an API key. Runs `codex exec` non-interactively as a VERIFYING
+// agent: the workflow checks out the PR head with dependencies installed (npm ci +
+// i18n:gen), and the prompt requires it to confirm findings against the real tree by
+// reading files and running the project's own checks (tsc, targeted vitest) before
+// posting the review as a sticky comment on the PR. No new npm deps: the Codex CLI is
+// installed by the workflow, and the GitHub side is plain REST via global fetch.
 //
 // Two ways to trigger it (both wired in .github/workflows/pr-ai.yml):
 //   - automatically on every push to the PR: DIFF_FILE points at a precomputed diff.
 //   - on demand: an OWNER/MEMBER/COLLABORATOR comments `/review` or `/suggest <focus>`
-//     on the PR. The workflow gates on the commenter's author_association; this script
-//     fetches the diff itself via the GitHub API (no DIFF_FILE, no checkout of the PR
-//     head) and posts a fresh reply comment keyed to the triggering comment, separate
-//     from the sticky automatic review.
+//     on the PR. The workflow gates on the commenter's author_association, checks out
+//     the PR head the same way, and posts a fresh reply comment keyed to the triggering
+//     comment, separate from the sticky automatic review.
 //
 // AUTH (ChatGPT OAuth): run `codex login` once locally, which stores OAuth tokens in
 // ~/.codex/auth.json. In CI, put that file's contents in the CODEX_AUTH_JSON repo
@@ -19,10 +20,9 @@
 // fork PR that cannot read repo secrets), it prints a notice and exits 0: it is
 // best-effort and NON-BLOCKING, it never gates a merge.
 //
-// PRIVACY: the diff is sent to OpenAI under the ChatGPT account that logged in. Whether
-// it is used for training follows that account's plan and data settings (check the
-// workspace's data controls); the agent itself runs sandboxed read-only with network
-// disabled, so it cannot exfiltrate beyond the model request itself.
+// PRIVACY: the diff and whatever the agent reads from the checkout are sent to OpenAI
+// under the ChatGPT account that logged in. Whether it is used for training follows that
+// account's plan and data settings (check the workspace's data controls).
 //
 // Env (set by the workflow):
 //   CODEX_AUTH_JSON     contents of a `codex login` auth.json (repo secret); when
@@ -38,7 +38,18 @@
 //   COMMENT_AUTHOR      the triggering comment's author; credited in the reply
 //   CODEX_MODEL         model id override; when absent the Codex CLI default is used
 //   CODEX_BIN           path to the codex binary (default: `codex` on PATH)
-//   MAX_DIFF_CHARS      cap on diff chars sent to the model (default 60000)
+//   CODEX_SANDBOX       codex --sandbox mode (default workspace-write). CI sets
+//                       danger-full-access: the hosted runner is an ephemeral VM, and the
+//                       kernel sandbox (Landlock) is not reliably available there, which
+//                       used to abort every inspection command before it ran.
+//   CODEX_EFFORT        model reasoning effort (default high), passed as
+//                       -c model_reasoning_effort=<value>
+//   BASE_SHA, HEAD_SHA  the PR's base/head commits when the workflow checked out the PR
+//                       head with history: lets the agent read the FULL diff itself via
+//                       git instead of relying only on the inlined (filtered, capped) one
+//   MAX_DIFF_CHARS      cap on inlined diff chars in the prompt (default 150000);
+//                       generated/vendored/binary sections are filtered out first
+//                       (ai_review_diff.mjs) so the cap is spent on hand-written code
 //
 // A local .env is loaded best-effort (same pattern as the other scripts/ utilities), so
 // a local run can keep CODEX_MODEL there. Ambient environment variables (the ones the
@@ -47,6 +58,7 @@ import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { capDiff, filterReviewDiff } from './ai_review_diff.mjs';
 import { upsertStickyComment } from './gh_sticky_comment.mjs';
 
 try {
@@ -57,8 +69,12 @@ try {
 
 const MODEL = process.env.CODEX_MODEL || '';
 const CODEX_BIN = process.env.CODEX_BIN || 'codex';
-const MAX_DIFF_CHARS = Number(process.env.MAX_DIFF_CHARS || 60000);
+const SANDBOX = process.env.CODEX_SANDBOX || 'workspace-write';
+const EFFORT = process.env.CODEX_EFFORT || 'high';
+const MAX_DIFF_CHARS = Number(process.env.MAX_DIFF_CHARS || 150000);
 const GITHUB_API = process.env.GITHUB_API_URL ?? 'https://api.github.com';
+const BASE_SHA = process.env.BASE_SHA || '';
+const HEAD_SHA = process.env.HEAD_SHA || '';
 
 const prNumber = process.env.PR_NUMBER;
 const diffFile = process.env.DIFF_FILE;
@@ -132,36 +148,70 @@ if (!diff.trim()) {
   process.exit(0);
 }
 
-let truncated = false;
-if (diff.length > MAX_DIFF_CHARS) {
-  diff = diff.slice(0, MAX_DIFF_CHARS);
-  truncated = true;
+// Spend the prompt budget on the hand-written change: drop generated/vendored/binary
+// sections first, then cap on a file-section boundary. The agent can always read the
+// full diff itself via git (BASE_SHA/HEAD_SHA below).
+const filtered = filterReviewDiff(diff);
+const dropped = filtered.dropped;
+if (dropped.length) {
+  console.log(
+    `[ai_review] filtered ${dropped.length} generated/binary file section(s) from the inlined diff.`,
+  );
+}
+const capped = capDiff(filtered.diff, MAX_DIFF_CHARS);
+diff = capped.diff;
+const truncated = capped.truncated;
+if (!diff.trim()) {
+  console.log('[ai_review] diff is all generated/binary churn; skipping the AI review.');
+  process.exit(0);
 }
 
-// Unlike the old single-shot HTTP reviewer, Codex runs as an agent with READ-ONLY access
-// to the checkout, so instead of shipping it file lists to stop hallucinated "missing
-// import" findings, we tell it to verify against the working tree itself. One caveat is
-// preserved from the old design: on a comment-triggered run the checkout is the BASE
-// branch (no PR-head checkout, intentionally, see .github/workflows/pr-ai.yml), so a
-// file the PR itself adds exists only inside the diff text.
-const prompt = `You are a precise, skeptical senior code reviewer for World of ClaudeCraft, a TypeScript
-micro-MMO and reinforcement-learning environment built on one deterministic 20 Hz simulation core.
+// Codex runs as a verifying agent over a full checkout of the PR HEAD with dependencies
+// installed (the workflow runs npm ci + i18n:gen first), so the prompt demands evidence:
+// read the tree, run the typecheck, run the tests that cover the change, and only then
+// write the review. The inlined diff below is filtered (no generated/binary churn) and
+// capped; the agent reads the full diff itself via git when it needs more.
+const gitDiffHint =
+  BASE_SHA && HEAD_SHA
+    ? `The checkout is the PR HEAD (${HEAD_SHA.slice(0, 10)}). The full, unfiltered diff is available
+locally: \`git diff --no-color ${BASE_SHA} ${HEAD_SHA}\` (also \`git log ${BASE_SHA}..${HEAD_SHA}\`
+for the commits). The inlined diff below omits generated/binary files and may be capped; consult
+git whenever you need the complete picture.`
+    : `The checkout may be the PR's BASE branch, so a file the diff itself adds may exist only in the
+diff text; that is expected, never a finding.`;
 
-Review the unified diff below. You have READ-ONLY access to a checkout of the repository; before
-flagging that an import, helper, or referenced file is missing or wrong, verify it against the
-working tree (and package.json for dependencies). Use lightweight inspection only: file reads,
-focused searches, and short static checks. Do not install packages, run network commands, run full
-builds, run full test suites, or run long typecheck commands. Note: the checkout may be the PR's
-BASE branch, so a file the diff itself adds may exist only in the diff text; that is expected,
-never a finding. When you cannot verify something, ask a one-line question at LOW severity instead
-of asserting a problem. Do not modify anything; produce a review only.
+const prompt = `You are a thorough, constructive senior code reviewer for World of ClaudeCraft, a TypeScript
+micro-MMO and reinforcement-learning environment built on one deterministic 20 Hz simulation core
+(see CLAUDE.md at the repo root for the architecture and the invariants; read it first).
+
+You have a full checkout of the repository with npm dependencies already installed and generated
+i18n artifacts in place. ${gitDiffHint}
+
+VERIFY BEFORE YOU WRITE. This review must be grounded in what you actually ran and read, not in
+what the diff looks like. Do all of the following that apply, and skip a step only when the diff
+plainly cannot affect it:
+1. Read the changed files IN THE TREE (not just the hunks) so you see each change in context.
+2. Run the typecheck: \`npx tsc --noEmit\`. A new type error introduced by the diff is a finding.
+3. Run the tests that cover the change: the test files the diff touches, plus the suites for the
+   changed area (for example \`npx vitest run tests/<area>.test.ts\`). When the diff touches
+   src/sim/, also run the guard \`npx vitest run tests/architecture.test.ts\`. Prefer several
+   targeted files over the full suite; run broader slices only when the change is genuinely broad.
+4. For a bug fix, check the fix has a test that would fail without it (read the test, do not
+   assume). For new behavior, check the new code paths are exercised by some test.
+5. Confirm imports, helpers, wire fields, and referenced files exist where the code says they do
+   (grep the tree; check package.json for dependencies).
+Budget your time: about 10 minutes of commands. Do not install packages, do not run npm ci, do not
+run browser/E2E scripts (scripts/*.mjs need a live dev server), do not push, and do not modify any
+tracked file; scratch output under /tmp is fine. If a command fails for environmental reasons,
+say so in the verification section rather than guessing.
 
 Invariant scope, apply LITERALLY and do not generalize beyond it: these rules constrain application
 code under src/ ONLY.
 - src/sim/ stays pure: no DOM/Three/render/ui/net imports; all randomness via the Rng helper, never
   Math.random / Date.now / performance.now.
 - The server is authoritative; clients never decide outcomes.
-- Every player-visible string rendered by the app is a t() key.
+- Every player-visible string rendered by the app is a t() key. Contributors add ENGLISH only;
+  never ask for translations, they are release-time maintainer work.
 Code under scripts/, tests/, headless/, and CI YAML under .github/ is Node TOOLING: it is
 English-only, exempt from t(), and may use Math.random / Date.now / child_process freely. NEVER
 raise a t(), Rng, or sim-purity finding against a file outside src/. The "no em dashes, en dashes,
@@ -169,21 +219,34 @@ or emojis" rule applies everywhere.
 
 Severity rubric, use it strictly:
 - high: a real bug, security issue, or src/ invariant violation that WILL break behavior or fail CI
-  AND that you confirmed from the diff plus the working tree.
+  AND that you confirmed against the tree (and, where relevant, by running the check).
 - medium: likely incorrect or risky, but not certain.
 - low: style, naming, maintainability, or a question.
 If you CANNOT verify a finding, it is AT MOST low and MUST be phrased as a one-line question, never
 high or medium.
 
-Output rules: your FINAL message is posted verbatim as the PR review comment, so it must contain
-ONLY the review in GitHub-flavored Markdown, no preamble or meta commentary. Prefer FEW
-high-confidence findings over many; if you are not confident a finding is real, OMIT it. Do not pad
-with generic advice. Only mention missing tests when the diff changes src/ or server logic that the
-repo actually tests. Do NOT add your own title or top-level heading (no "# ..." or "## AI review");
-start directly with the first group. Group findings under Correctness, Invariants, Tests, Nits and
-tag each with its severity. If the change looks fine, say so in one line. Do not restate the diff.
+Be constructive: when the change is solid, open with one or two specific lines on what is good
+(design choice, test coverage, a subtle case handled), never generic praise. Every finding names
+the file and line, explains WHY it matters in one or two sentences, and proposes a concrete fix or
+next step. Prefer FEW verified findings over many speculative ones; if you are not confident a
+finding is real, OMIT it. Do not pad with generic advice, and do not restate the diff.
 
-${truncated ? `Note: the diff was truncated to the first ${MAX_DIFF_CHARS} characters.\n\n` : ''}${
+Output rules: your FINAL message is posted verbatim as the PR review comment, so it must contain
+ONLY the review in GitHub-flavored Markdown, no preamble or meta commentary. Do NOT add your own
+title or top-level heading (no "# ..." or "## AI review"). Structure it as:
+1. A one-or-two-line overall assessment (what the change does and whether it is sound).
+2. "**Verified:**" followed by a short list of the commands you ran and their outcomes (for
+   example: tsc clean; vitest tests/spirit.test.ts 34 passed). If something could not run,
+   say so here honestly.
+3. Findings grouped under Correctness, Invariants, Tests, Nits, each tagged with its severity.
+   Omit an empty group. If there are no findings, say the change looks correct in one line and
+   name the strongest piece of evidence.
+
+${truncated ? `Note: the inlined diff below was capped at ${MAX_DIFF_CHARS} characters; use git for the rest.\n\n` : ''}${
+  dropped.length
+    ? `Note: ${dropped.length} generated/binary file section(s) were omitted from the inlined diff (${dropped.slice(0, 8).join(', ')}${dropped.length > 8 ? ', ...' : ''}); they are derived from the real change and gated elsewhere.\n\n`
+    : ''
+}${
   command?.focus
     ? `The reviewer specifically asked (via a PR comment) to focus on:\n\n${command.focus}\n\nStill mention any other high-confidence finding, but prioritize this.\n\n`
     : ''
@@ -197,11 +260,16 @@ function review() {
   const outFile = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'codex-review-')), 'last.md');
   const args = [
     'exec',
+    // Sandbox mode comes from the environment: workspace-write for a local run (the agent
+    // needs to execute tsc/vitest, which write caches), danger-full-access in CI where the
+    // kernel sandbox is unavailable and the runner VM is the isolation boundary.
     '--sandbox',
-    'read-only',
+    SANDBOX,
     '--skip-git-repo-check',
     '--ignore-user-config',
     '--ignore-rules',
+    '-c',
+    `model_reasoning_effort=${JSON.stringify(EFFORT)}`,
     '--output-last-message',
     outFile,
     ...(MODEL ? ['--model', MODEL] : []),
@@ -209,11 +277,16 @@ function review() {
   ];
   // Progress goes to the workflow log (stderr/stdout inherited); the review itself is
   // read back from --output-last-message so log noise can never leak into the comment.
+  // The budget is generous because the agent runs the project's own checks (tsc, targeted
+  // vitest) before writing; the workflow job timeout is the hard backstop.
   execFileSync(CODEX_BIN, args, {
     input: prompt,
     stdio: ['pipe', 'inherit', 'inherit'],
-    env: { ...process.env, CODEX_HOME: codexHome },
-    timeout: 12 * 60 * 1000,
+    // Scrub the raw secret from the child environment: the agent (and any test process it
+    // spawns, which on a fork PR is that PR's code) only needs the materialized
+    // CODEX_HOME/auth.json, never the CODEX_AUTH_JSON env var itself.
+    env: { ...process.env, CODEX_AUTH_JSON: undefined, CODEX_HOME: codexHome },
+    timeout: 25 * 60 * 1000,
   });
   const content = fs.readFileSync(outFile, 'utf8').trim();
   if (!content) throw new Error('Codex produced no final message');
@@ -240,7 +313,9 @@ const body = [
   heading,
   '',
   reviewText,
-  truncated ? `\n<sub>Diff truncated to the first ${MAX_DIFF_CHARS} characters.</sub>` : '',
+  truncated
+    ? `\n<sub>The inlined diff was capped at ${MAX_DIFF_CHARS} characters; the agent had the full diff via git.</sub>`
+    : '',
   '',
   '<sub>Automated and non-blocking. May be wrong; a human review still decides. Generated by the OpenAI Codex CLI under the maintainer ChatGPT account; data handling follows that account plan and settings.</sub>',
 ].join('\n');

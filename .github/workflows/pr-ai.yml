@@ -8,17 +8,20 @@ name: PR AI assist
 #   screenshots        boots the Vite dev client headless, runs a fixed offline tour
 #                       (character select, desktop HUD, mobile HUD), uploads the PNGs as
 #                       an artifact, and links them in a sticky PR comment.
-#   ai-review           reviews the PR diff with the OpenAI Codex CLI, authenticated via
+#   ai-review           reviews the PR with the OpenAI Codex CLI, authenticated via
 #                       ChatGPT OAuth (the CODEX_AUTH_JSON secret holds a `codex login`
 #                       auth.json), and posts the review as a sticky PR comment. The
-#                       agent runs sandboxed read-only. No-ops without the secret (for
-#                       example on a fork PR), so it never blocks.
+#                       agent gets the PR HEAD checked out with dependencies installed
+#                       and is required to VERIFY before writing: read the tree, run
+#                       npx tsc --noEmit, run the vitest files covering the change.
+#                       No-ops without the secret (for example on a fork PR), so it
+#                       never blocks.
 #   ai-review-comment   on demand: an OWNER/MEMBER/COLLABORATOR comments `/review` or
-#                       `/suggest <focus>` on the PR. Fetches the diff itself via the
-#                       GitHub API (no checkout of the PR head, so this stays safe to run
-#                       with repo secrets even against a fork PR) and posts a fresh reply
-#                       comment, keyed to the triggering comment rather than the sticky
-#                       review above.
+#                       `/suggest <focus>` on the PR. Same verifying setup as ai-review
+#                       (PR-head checkout + deps), posting a fresh reply comment keyed
+#                       to the triggering comment rather than the sticky review above.
+#                       Running a fork PR's code here is a deliberate maintainer opt-in;
+#                       see the security note on the job.
 #
 # Setup (one time): run `codex login` locally and store ~/.codex/auth.json in the
 # CODEX_AUTH_JSON repo secret to enable ai-review. Optionally set a CODEX_MODEL repo
@@ -137,20 +140,35 @@ jobs:
     name: AI review (Codex)
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
-    timeout-minutes: 20
+    timeout-minutes: 35
     steps:
-      - name: Check out repository
+      # The PR HEAD itself (not the merge ref): the agent reviews and runs exactly what
+      # the contributor wrote, and BASE_SHA/HEAD_SHA below match this tree.
+      - name: Check out the PR head
         uses: actions/checkout@v6
         with:
+          ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
           node-version: 22
+          cache: npm
 
       - name: Install the Codex CLI
         run: npm install -g @openai/codex
+
+      # Mount the project for real verification: the agent runs tsc and targeted vitest
+      # against the PR's own tree. --ignore-scripts skips third-party install hooks (the
+      # only dep with one, esbuild, works via its optionalDependencies binary), so no
+      # lifecycle script from a dependency bump ever runs in this job.
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      # The client and several tests import committed-but-derived i18n tables.
+      - name: Generate i18n artifacts
+        run: npm run i18n:gen
 
       - name: Compute PR diff
         env:
@@ -164,10 +182,16 @@ jobs:
         env:
           CODEX_AUTH_JSON: ${{ secrets.CODEX_AUTH_JSON }}
           CODEX_MODEL: ${{ vars.CODEX_MODEL }}
+          # The GitHub-hosted runner VM is the isolation boundary; the kernel sandbox
+          # (Landlock) is not reliably available there and used to abort every
+          # inspection command before it ran.
+          CODEX_SANDBOX: danger-full-access
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           DIFF_FILE: pr.diff
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: node scripts/ai_review.mjs
 
   ai-review-comment:
@@ -177,28 +201,61 @@ jobs:
     # /suggest, from someone with write access to THIS repo. author_association is
     # evaluated against the base repo regardless of whether the PR itself is from a
     # fork, so a fork PR's own author cannot self-trigger this on their own comment.
+    #
+    # SECURITY TRADEOFF, deliberate: this job checks out and exercises the PR's own code
+    # (i18n:gen, and the tests the agent runs) in a job that holds CODEX_AUTH_JSON, so a
+    # maintainer typing /review on a fork PR is explicitly opting in to running that
+    # fork's code. Mitigations: npm ci --ignore-scripts (no third-party install hooks),
+    # the raw secret is scrubbed from the agent's child environment (ai_review.mjs), and
+    # GITHUB_TOKEN carries only contents:read + pull-requests:write. Skim a fork PR's
+    # diff before requesting a review on it.
     if: >
       github.event_name == 'issue_comment' &&
       github.event.issue.pull_request != null &&
       contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association) &&
       (startsWith(github.event.comment.body, '/review') || startsWith(github.event.comment.body, '/suggest'))
-    timeout-minutes: 20
+    timeout-minutes: 35
     steps:
-      - name: Check out repository
+      # The PR head, so the agent verifies the change against the real tree (the same
+      # reason the automatic job does).
+      - name: Check out the PR head
         uses: actions/checkout@v6
+        with:
+          ref: refs/pull/${{ github.event.issue.number }}/head
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
           node-version: 22
+          cache: npm
 
       - name: Install the Codex CLI
         run: npm install -g @openai/codex
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Generate i18n artifacts
+        run: npm run i18n:gen
+
+      # The issue_comment payload has no base/head SHAs; resolve them so the agent can
+      # read the full diff via git.
+      - name: Resolve the PR base and head
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BASE_REF="$(gh pr view "${{ github.event.issue.number }}" --json baseRefName --jq .baseRefName)"
+          git fetch origin "$BASE_REF"
+          echo "BASE_SHA=$(git merge-base "origin/$BASE_REF" HEAD)" >> "$GITHUB_ENV"
+          echo "HEAD_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
 
       - name: Review with Codex
         env:
           CODEX_AUTH_JSON: ${{ secrets.CODEX_AUTH_JSON }}
           CODEX_MODEL: ${{ vars.CODEX_MODEL }}
+          # Same rationale as the automatic job: the runner VM is the isolation boundary.
+          CODEX_SANDBOX: danger-full-access
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.issue.number }}
