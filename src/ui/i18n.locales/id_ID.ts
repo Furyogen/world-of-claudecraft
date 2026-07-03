@@ -5158,6 +5158,8 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'hudChrome.dailyRewards.spinResult': '+{points} poin',
   'hudChrome.dailyRewards.spinTitle': 'Putaran Harian',
   'hudChrome.dailyRewards.tasks': 'Tugas',
+  'hudChrome.dailyRewards.showChestButton': 'Tampilkan Peti',
+  'hudChrome.dailyRewards.hideChestButton': 'Sembunyikan Peti',
   'hudChrome.dailyRewards.title': 'Hadiah Harian',
   'hudChrome.dailyRewards.unknown': 'Tidak diketahui',
   'hudChrome.dailyRewards.usd': '{amount} USD',

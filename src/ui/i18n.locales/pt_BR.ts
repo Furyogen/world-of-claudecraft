@@ -5176,6 +5176,8 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.dailyRewards.spinResult': '+{points} pontos',
   'hudChrome.dailyRewards.spinTitle': 'Giro Diário',
   'hudChrome.dailyRewards.tasks': 'Tarefas',
+  'hudChrome.dailyRewards.showChestButton': 'Mostrar Baú',
+  'hudChrome.dailyRewards.hideChestButton': 'Ocultar Baú',
   'hudChrome.dailyRewards.title': 'Recompensas Diárias',
   'hudChrome.dailyRewards.unknown': 'Desconhecido',
   'hudChrome.dailyRewards.usd': '{amount} USD',

@@ -5157,6 +5157,8 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.dailyRewards.spinResult': '+{points} punten',
   'hudChrome.dailyRewards.spinTitle': 'Dagelijkse draai',
   'hudChrome.dailyRewards.tasks': 'Taken',
+  'hudChrome.dailyRewards.showChestButton': 'Kist tonen',
+  'hudChrome.dailyRewards.hideChestButton': 'Kist verbergen',
   'hudChrome.dailyRewards.title': 'Dagelijkse beloningen',
   'hudChrome.dailyRewards.unknown': 'Onbekend',
   'hudChrome.dailyRewards.usd': '{amount} USD',

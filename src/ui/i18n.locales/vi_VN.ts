@@ -5113,6 +5113,8 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.dailyRewards.spinResult': '+{points} điểm',
   'hudChrome.dailyRewards.spinTitle': 'Vòng Quay Hằng Ngày',
   'hudChrome.dailyRewards.tasks': 'Nhiệm Vụ',
+  'hudChrome.dailyRewards.showChestButton': 'Hiện rương',
+  'hudChrome.dailyRewards.hideChestButton': 'Ẩn rương',
   'hudChrome.dailyRewards.title': 'Phần Thưởng Hằng Ngày',
   'hudChrome.dailyRewards.unknown': 'Không rõ',
   'hudChrome.dailyRewards.usd': '{amount} USD',

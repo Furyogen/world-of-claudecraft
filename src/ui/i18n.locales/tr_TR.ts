@@ -5089,6 +5089,8 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.dailyRewards.spinResult': '+{points} puan',
   'hudChrome.dailyRewards.spinTitle': 'Günlük Çevirme',
   'hudChrome.dailyRewards.tasks': 'Görevler',
+  'hudChrome.dailyRewards.showChestButton': 'Sandığı Göster',
+  'hudChrome.dailyRewards.hideChestButton': 'Sandığı Gizle',
   'hudChrome.dailyRewards.title': 'Günlük Ödüller',
   'hudChrome.dailyRewards.unknown': 'Bilinmiyor',
   'hudChrome.dailyRewards.usd': '{amount} USD',

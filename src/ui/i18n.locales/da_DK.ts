@@ -5084,6 +5084,8 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'hudChrome.dailyRewards.spinResult': '+{points} point',
   'hudChrome.dailyRewards.spinTitle': 'Daglig drejning',
   'hudChrome.dailyRewards.tasks': 'Opgaver',
+  'hudChrome.dailyRewards.showChestButton': 'Vis kiste',
+  'hudChrome.dailyRewards.hideChestButton': 'Skjul kiste',
   'hudChrome.dailyRewards.title': 'Daglige belønninger',
   'hudChrome.dailyRewards.unknown': 'Ukendt',
   'hudChrome.dailyRewards.usd': '{amount} USD',
