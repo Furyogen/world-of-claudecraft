@@ -14,7 +14,6 @@ export interface PickInteractionWorld {
   leaveDungeon(): void;
   pickUpObject(id: number): void;
   startAutoAttack(): void;
-  resurrectAtSpiritHealer(): void;
 }
 
 export interface PickInteractionHud {
@@ -108,12 +107,7 @@ export function handlePickedEntity(
       else hud.showError(t('questUi.errors.tooFar'));
     } else if (e.kind === 'npc') {
       if (d <= INTERACT_RANGE + 2) {
-        if (e.templateId === 'spirit_healer') {
-          // The Spirit Healer resurrects a ghost in place (with Resurrection
-          // Sickness). To the living it offers only watchful flavor.
-          if (world.player.ghost) world.resurrectAtSpiritHealer();
-          else hud.showError(t('hudChrome.death.spiritHealerAlive'));
-        } else if (e.templateId === 'brother_halven') hud.openDelveBoard(id);
+        if (e.templateId === 'brother_halven') hud.openDelveBoard(id);
         else hud.openQuestDialog(id);
       } else hud.showError(t('questUi.errors.tooFar'));
     } else if ((e.kind === 'mob' && !e.dead && e.hostile) || isActivePvpOpponent(world, e)) {

@@ -47,7 +47,6 @@ import {
 import { DUNGEON_WALL_HW, DUNGEON_WALL_X } from '../dungeon_layout';
 import { createGroundObject, createMob, recalcPlayerStats } from '../entity';
 import { restorePetFromDelveStash, stowPetForDelve } from '../pet/pet_commands';
-import { aurasSurvivingDeath } from '../resurrection';
 import { Rng } from '../rng';
 import type { PlayerMeta } from '../sim';
 import type { SimContext } from '../sim_context';
@@ -541,8 +540,7 @@ export function ejectToDelveDoor(ctx: SimContext, pid: number, delve: DelveDef):
   p.prevPos = { ...p.pos };
   ctx.rebucket(p);
   p.facing = 0;
-  // The Keeper's Toll survives a delve eject too (see resurrection.ts); all else clears.
-  p.auras = aurasSurvivingDeath(p.auras);
+  p.auras = [];
   p.ccDr.clear();
   recalcPlayerStats(p, r.meta.cls, r.meta.equipment, r.meta.talentMods);
   p.hp = p.maxHp;

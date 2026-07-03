@@ -283,7 +283,7 @@ describe('coverage: each scenario fires its subsystem', () => {
     expect(evs.some((e) => e.type === 'loot' && /Everyone passed/.test(String(e.text)))).toBe(true);
   });
 
-  it('entity_roster: despawn branches drop, delayed drain runs, ghost release + healer resurrect', () => {
+  it('entity_roster: both despawn branches drop, delayed drain runs, graveyard release at full hp', () => {
     const rec = run('entity_roster');
     const ents = entities(rec);
     const ghostId = rec.notes.ghostId as number;
@@ -294,12 +294,10 @@ describe('coverage: each scenario fires its subsystem', () => {
     // delayed drain: 3 scheduled -> 1 fired, 1 guard-dropped, 1 (future) still pending.
     expect((rec.sim as any).delayedEvents.length).toBe(1);
     expect((rec.allEvents as Ev[]).some((e) => e.type === 'respawn')).toBe(true);
-    // release rose as a ghost, then the Spirit Healer resurrected the player with
-    // Resurrection Sickness (level 10).
+    // outdoor release-spirit: alive again at full hp.
     const p = (rec.sim as any).player;
     expect(p.dead).toBe(false);
-    expect(p.ghost).toBe(false);
-    expect(p.auras.some((a: { id: string }) => a.id === 'resurrection_sickness')).toBe(true);
+    expect(p.hp).toBe(p.maxHp);
   });
 
   it('delve_death: second in-run death fails the delve and ejects the player', () => {
