@@ -31,7 +31,7 @@
       "tick": 2,
       "time": 0.1,
       "nextId": 405,
-      "state": "cffcde99",
+      "state": "cc3620a3",
       "events": "3b2339dc",
       "rng": {
         "draws": 35,
@@ -54,6 +54,7 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -75,6 +76,7 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -793,7 +795,7 @@
       "tick": 4,
       "time": 0.2,
       "nextId": 405,
-      "state": "5a76c1a2",
+      "state": "389eeab0",
       "events": "35839585",
       "rng": {
         "draws": 49,
@@ -819,6 +821,7 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -840,6 +843,7 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1537,7 +1541,7 @@
       "tick": 5,
       "time": 0.25,
       "nextId": 405,
-      "state": "b1bbb8f3",
+      "state": "46836e3f",
       "events": "eda0c419",
       "rng": {
         "draws": 49,
@@ -1548,7 +1552,7 @@
       "tick": 10,
       "time": 0.5,
       "nextId": 405,
-      "state": "0dba7765",
+      "state": "c86ba999",
       "events": "741638a5",
       "rng": {
         "draws": 49,
@@ -1559,7 +1563,7 @@
       "tick": 15,
       "time": 0.75,
       "nextId": 405,
-      "state": "265f7403",
+      "state": "e67e8ccf",
       "events": "741638a5",
       "rng": {
         "draws": 49,
@@ -1570,7 +1574,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 405,
-      "state": "018eac76",
+      "state": "3b71728a",
       "events": "741638a5",
       "rng": {
         "draws": 49,
@@ -1581,7 +1585,7 @@
       "tick": 24,
       "time": 1.2,
       "nextId": 405,
-      "state": "0354dcd6",
+      "state": "70ba90ea",
       "events": "741638a5",
       "rng": {
         "draws": 49,
@@ -1607,6 +1611,7 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1631,6 +1636,7 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1742,7 +1748,7 @@
       "tick": 24,
       "time": 1.2,
       "nextId": 405,
-      "state": "0354dcd6",
+      "state": "70ba90ea",
       "events": "741638a5",
       "rng": {
         "draws": 49,
@@ -1768,6 +1774,7 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1792,6 +1799,7 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}

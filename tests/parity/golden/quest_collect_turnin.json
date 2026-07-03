@@ -16,7 +16,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 390,
-      "state": "812c3f60",
+      "state": "43491f71",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -39,6 +39,7 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -101,7 +102,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 390,
-      "state": "d41f26f8",
+      "state": "9ad03a77",
       "events": "714d6ddf",
       "rng": {
         "draws": 0,
@@ -124,6 +125,7 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "questLog": [
             [
               "q_boars",
@@ -198,7 +200,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 390,
-      "state": "88748d29",
+      "state": "a2335228",
       "events": "f5ba3286",
       "rng": {
         "draws": 0,
@@ -229,6 +231,7 @@
               "itemId": "boar_hide"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "questLog": [
             [
               "q_boars",
@@ -303,7 +306,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 390,
-      "state": "d5e99404",
+      "state": "1d5b9a9b",
       "events": "1858db2d",
       "rng": {
         "draws": 0,
@@ -334,6 +337,7 @@
               "itemId": "boar_hide"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "questLog": [
             [
               "q_boars",
@@ -408,7 +412,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 390,
-      "state": "14373cd2",
+      "state": "53380bc3",
       "events": "3b371ba6",
       "rng": {
         "draws": 0,
@@ -439,6 +443,7 @@
               "itemId": "boar_hide"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "questLog": [
             [
               "q_boars",
@@ -513,7 +518,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 390,
-      "state": "9fbc07fd",
+      "state": "95a7e7bc",
       "events": "5c5c3b4e",
       "rng": {
         "draws": 0,
@@ -542,6 +547,7 @@
           },
           "gatheringProficiency": {},
           "lifetimeXp": 350,
+          "nodeHarvestReadyAt": {},
           "questsDone": [
             "q_boars"
           ],
@@ -608,7 +614,7 @@
       "tick": 2,
       "time": 0.1,
       "nextId": 390,
-      "state": "d7ea417b",
+      "state": "8f196b52",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -637,6 +643,7 @@
           },
           "gatheringProficiency": {},
           "lifetimeXp": 350,
+          "nodeHarvestReadyAt": {},
           "questsDone": [
             "q_boars"
           ],

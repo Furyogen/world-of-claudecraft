@@ -30,7 +30,7 @@
       "tick": 25,
       "time": 1.25,
       "nextId": 393,
-      "state": "6b6ef53d",
+      "state": "e69b6d0b",
       "events": "48044b44",
       "rng": {
         "draws": 0,
@@ -41,7 +41,7 @@
       "tick": 50,
       "time": 2.5,
       "nextId": 393,
-      "state": "c65d1183",
+      "state": "eb3b6921",
       "events": "536fe27e",
       "rng": {
         "draws": 36,
@@ -52,7 +52,7 @@
       "tick": 75,
       "time": 3.75,
       "nextId": 393,
-      "state": "f7b68511",
+      "state": "e265a38f",
       "events": "09b268e6",
       "rng": {
         "draws": 120,
@@ -63,7 +63,7 @@
       "tick": 100,
       "time": 5,
       "nextId": 393,
-      "state": "fd8bae77",
+      "state": "7e82a425",
       "events": "df43dd26",
       "rng": {
         "draws": 230,
@@ -74,7 +74,7 @@
       "tick": 125,
       "time": 6.25,
       "nextId": 393,
-      "state": "c0bb7029",
+      "state": "be3a7367",
       "events": "a3606c28",
       "rng": {
         "draws": 384,
@@ -85,7 +85,7 @@
       "tick": 150,
       "time": 7.5,
       "nextId": 393,
-      "state": "dea0db89",
+      "state": "805ea847",
       "events": "741638a5",
       "rng": {
         "draws": 543,
@@ -96,7 +96,7 @@
       "tick": 163,
       "time": 8.15,
       "nextId": 393,
-      "state": "649ace44",
+      "state": "371a6b8e",
       "events": "8495b1b8",
       "rng": {
         "draws": 608,
@@ -128,6 +128,7 @@
             }
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {
@@ -163,6 +164,7 @@
             }
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {
@@ -203,6 +205,7 @@
             }
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {
@@ -238,6 +241,7 @@
             }
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {

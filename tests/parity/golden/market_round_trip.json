@@ -32,7 +32,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 391,
-      "state": "adae22a0",
+      "state": "64c46b6a",
       "events": "61b5c1e8",
       "rng": {
         "draws": 0,
@@ -61,6 +61,7 @@
               "itemId": "wolf_fang"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -83,6 +84,7 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -194,7 +196,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 391,
-      "state": "3d836252",
+      "state": "aba2125c",
       "events": "e109d8e6",
       "rng": {
         "draws": 0,
@@ -223,6 +225,7 @@
               "itemId": "wolf_fang"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -245,6 +248,7 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -356,7 +360,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 391,
-      "state": "3d836252",
+      "state": "aba2125c",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -385,6 +389,7 @@
               "itemId": "wolf_fang"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -407,6 +412,7 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -518,7 +524,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 391,
-      "state": "3d836252",
+      "state": "aba2125c",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -547,6 +553,7 @@
               "itemId": "wolf_fang"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -569,6 +576,7 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -680,7 +688,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 391,
-      "state": "93bab6f0",
+      "state": "fca57104",
       "events": "30f3b935",
       "rng": {
         "draws": 0,
@@ -709,6 +717,7 @@
               "itemId": "wolf_fang"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -737,6 +746,7 @@
               "itemId": "wolf_fang"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -848,7 +858,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 391,
-      "state": "93bab6f0",
+      "state": "fca57104",
       "events": "0bb1a22d",
       "rng": {
         "draws": 0,
@@ -877,6 +887,7 @@
               "itemId": "wolf_fang"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -905,6 +916,7 @@
               "itemId": "wolf_fang"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1016,7 +1028,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 391,
-      "state": "e4840395",
+      "state": "680cae09",
       "events": "a018ea80",
       "rng": {
         "draws": 0,
@@ -1027,7 +1039,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 391,
-      "state": "e4840395",
+      "state": "680cae09",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -1056,6 +1068,7 @@
               "itemId": "wolf_fang"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1084,6 +1097,7 @@
               "itemId": "wolf_fang"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1195,7 +1209,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 391,
-      "state": "25af4620",
+      "state": "02f22974",
       "events": "542d1497",
       "rng": {
         "draws": 0,
@@ -1225,6 +1239,7 @@
               "itemId": "wolf_fang"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1253,6 +1268,7 @@
               "itemId": "wolf_fang"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1364,7 +1380,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 391,
-      "state": "25af4620",
+      "state": "02f22974",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -1394,6 +1410,7 @@
               "itemId": "wolf_fang"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1422,6 +1439,7 @@
               "itemId": "wolf_fang"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}

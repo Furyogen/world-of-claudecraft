@@ -34,7 +34,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 398,
-      "state": "c940bf0f",
+      "state": "20c344ba",
       "events": "2fb262b7",
       "rng": {
         "draws": 6,
@@ -57,6 +57,7 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -78,6 +79,7 @@
             "mainhand": "training_mace"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -99,6 +101,7 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -120,6 +123,7 @@
             "mainhand": "training_mace"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -141,6 +145,7 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -639,7 +644,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 398,
-      "state": "d135033b",
+      "state": "da9d5866",
       "events": "19aa9b1e",
       "rng": {
         "draws": 6,
@@ -662,6 +667,7 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -683,6 +689,7 @@
             "mainhand": "training_mace"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -706,6 +713,7 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -727,6 +735,7 @@
             "mainhand": "training_mace"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -748,6 +757,7 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1264,7 +1274,7 @@
       "tick": 5,
       "time": 0.25,
       "nextId": 398,
-      "state": "6d0fc7b8",
+      "state": "442e219d",
       "events": "e7cecad5",
       "rng": {
         "draws": 10,
@@ -1275,7 +1285,7 @@
       "tick": 8,
       "time": 0.4,
       "nextId": 398,
-      "state": "d4fa5bec",
+      "state": "6dd6d231",
       "events": "e7cecad5",
       "rng": {
         "draws": 10,
@@ -1298,6 +1308,7 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1319,6 +1330,7 @@
             "mainhand": "training_mace"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1342,6 +1354,7 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1363,6 +1376,7 @@
             "mainhand": "training_mace"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1384,6 +1398,7 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}

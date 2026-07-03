@@ -28,7 +28,7 @@
       "tick": 3,
       "time": 0.15,
       "nextId": 392,
-      "state": "81e6951b",
+      "state": "64faa70d",
       "events": "c0e6c522",
       "rng": {
         "draws": 2,
@@ -57,6 +57,7 @@
               "itemId": "greyjaw_hide_boots"
             }
           ],
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -78,6 +79,7 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
