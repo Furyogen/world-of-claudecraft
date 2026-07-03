@@ -5104,7 +5104,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'auth.email': "E-mail",
   'auth.emailError': "Indtast en gyldig e-mailadresse.",
   'auth.emailPlaceholder': "dig@example.com",
-  'auth.recovery.body': "Stel een hersteladres in voor je account, {playerName}. Dit adres wordt alleen gebruikt om eigendom te bevestigen wanneer je ooit je wachtwoord opnieuw moet instellen.",
+  'auth.recovery.body': "Stel een hersteladres in voor je account. Dit adres wordt alleen gebruikt om eigendom te bevestigen wanneer je ooit je wachtwoord opnieuw moet instellen.",
   'auth.recovery.failed': "Indtast en gyldig e-mailadresse.",
   'auth.recovery.invalid': "Indtast en gyldig e-mailadresse.",
   'auth.recovery.logOut': "Log ud",

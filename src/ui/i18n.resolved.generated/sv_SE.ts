@@ -2004,7 +2004,7 @@ export const sv_SE: EnTranslations = {
     "twoFactorHint": "Ange koden från din autentiseringsapp, eller en av dina återställningskoder.",
     "recovery": {
       "title": "Lägg till återställnings-e-post",
-      "body": "Stel een hersteladres in voor je account, {playerName}. Dit adres wordt alleen gebruikt om eigendom te bevestigen wanneer je ooit je wachtwoord opnieuw moet instellen.",
+      "body": "Stel een hersteladres in voor je account. Dit adres wordt alleen gebruikt om eigendom te bevestigen wanneer je ooit je wachtwoord opnieuw moet instellen.",
       "save": "Spara e-post",
       "logOut": "Logga ut",
       "invalid": "Ange en giltig e-postadress.",

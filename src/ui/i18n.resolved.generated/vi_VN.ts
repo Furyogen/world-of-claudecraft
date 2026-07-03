@@ -2004,7 +2004,7 @@ export const vi_VN: EnTranslations = {
     "twoFactorHint": "Nhập mã từ ứng dụng xác thực của bạn, hoặc một trong các mã khôi phục.",
     "recovery": {
       "title": "Thêm email khôi phục",
-      "body": "Stel een hersteladres in voor je account, {playerName}. Dit adres wordt alleen gebruikt om eigendom te bevestigen wanneer je ooit je wachtwoord opnieuw moet instellen.",
+      "body": "Stel een hersteladres in voor je account. Dit adres wordt alleen gebruikt om eigendom te bevestigen wanneer je ooit je wachtwoord opnieuw moet instellen.",
       "save": "Lưu email",
       "logOut": "Đăng xuất",
       "invalid": "Nhập địa chỉ email hợp lệ.",

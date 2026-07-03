@@ -5205,7 +5205,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'auth.email': "Email",
   'auth.emailError': "Inserisci un indirizzo email valido.",
   'auth.emailPlaceholder': "tuo@example.com",
-  'auth.recovery.body': "Stel een hersteladres in voor je account, {playerName}. Dit adres wordt alleen gebruikt om eigendom te bevestigen wanneer je ooit je wachtwoord opnieuw moet instellen.",
+  'auth.recovery.body': "Stel een hersteladres in voor je account. Dit adres wordt alleen gebruikt om eigendom te bevestigen wanneer je ooit je wachtwoord opnieuw moet instellen.",
   'auth.recovery.failed': "Inserisci un indirizzo email o.",
   'auth.recovery.invalid': "Inserisci un indirizzo email valido.",
   'auth.recovery.logOut': "Esci",

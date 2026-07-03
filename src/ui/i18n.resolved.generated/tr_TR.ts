@@ -2004,7 +2004,7 @@ export const tr_TR: EnTranslations = {
     "twoFactorHint": "Kimlik doğrulama uygulamandaki kodu ya da kurtarma kodlarından birini gir.",
     "recovery": {
       "title": "Kurtarma e-postası ekle",
-      "body": "Stel een hersteladres in voor je account, {playerName}. Dit adres wordt alleen gebruikt om eigendom te bevestigen wanneer je ooit je wachtwoord opnieuw moet instellen.",
+      "body": "Stel een hersteladres in voor je account. Dit adres wordt alleen gebruikt om eigendom te bevestigen wanneer je ooit je wachtwoord opnieuw moet instellen.",
       "save": "E-postayı kaydet",
       "logOut": "Çıkış yap",
       "invalid": "Geçerli bir e-posta adresi gir.",

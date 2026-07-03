@@ -2004,7 +2004,7 @@ export const da_DK: EnTranslations = {
     "twoFactorHint": "Indtast koden fra din autentificeringsapp eller en af dine gendannelseskoder.",
     "recovery": {
       "title": "Tilføj gendannelses-e-mail",
-      "body": "Stel een hersteladres in voor je account, {playerName}. Dit adres wordt alleen gebruikt om eigendom te bevestigen wanneer je ooit je wachtwoord opnieuw moet instellen.",
+      "body": "Stel een hersteladres in voor je account. Dit adres wordt alleen gebruikt om eigendom te bevestigen wanneer je ooit je wachtwoord opnieuw moet instellen.",
       "save": "Gem e-mail",
       "logOut": "Log ud",
       "invalid": "Indtast en gyldig e-mailadresse.",

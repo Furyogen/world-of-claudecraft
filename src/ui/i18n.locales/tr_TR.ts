@@ -5107,7 +5107,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'auth.email': "E-posta",
   'auth.emailError': "Geçerli bir e-posta adresi gir.",
   'auth.emailPlaceholder': "sen@example.com",
-  'auth.recovery.body': "Stel een hersteladres in voor je account, {playerName}. Dit adres wordt alleen gebruikt om eigendom te bevestigen wanneer je ooit je wachtwoord opnieuw moet instellen.",
+  'auth.recovery.body': "Stel een hersteladres in voor je account. Dit adres wordt alleen gebruikt om eigendom te bevestigen wanneer je ooit je wachtwoord opnieuw moet instellen.",
   'auth.recovery.failed': "Geçerli bir e-posta adresi gir.",
   'auth.recovery.invalid': "Geçerli bir e-posta adresi gir.",
   'auth.recovery.logOut': "Çıkış yap",

@@ -5131,7 +5131,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'auth.email': "Email",
   'auth.emailError': "Nhập địa chỉ email hợp lệ.",
   'auth.emailPlaceholder': "ban@example.com",
-  'auth.recovery.body': "Stel een hersteladres in voor je account, {playerName}. Dit adres wordt alleen gebruikt om eigendom te bevestigen wanneer je ooit je wachtwoord opnieuw moet instellen.",
+  'auth.recovery.body': "Stel een hersteladres in voor je account. Dit adres wordt alleen gebruikt om eigendom te bevestigen wanneer je ooit je wachtwoord opnieuw moet instellen.",
   'auth.recovery.failed': "Nhập địa chỉ email hợp lệ.",
   'auth.recovery.invalid': "Nhập địa chỉ email hợp lệ.",
   'auth.recovery.logOut': "Đăng xuất",

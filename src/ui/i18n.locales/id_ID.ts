@@ -5176,7 +5176,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'auth.email': "Email",
   'auth.emailError': "Masukkan alamat email yang valid.",
   'auth.emailPlaceholder': "kamu@example.com",
-  'auth.recovery.body': "Stel een hersteladres in voor je account, {playerName}. Dit adres wordt alleen gebruikt om eigendom te bevestigen wanneer je ooit je wachtwoord opnieuw moet instellen.",
+  'auth.recovery.body': "Stel een hersteladres in voor je account. Dit adres wordt alleen gebruikt om eigendom te bevestigen wanneer je ooit je wachtwoord opnieuw moet instellen.",
   'auth.recovery.failed': "Masukkan alamat email yang .",
   'auth.recovery.invalid': "Masukkan alamat email yang valid.",
   'auth.recovery.logOut': "Keluar",

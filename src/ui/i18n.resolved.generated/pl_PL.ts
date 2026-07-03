@@ -2004,7 +2004,7 @@ export const pl_PL: EnTranslations = {
     "twoFactorHint": "Wprowadź kod z aplikacji uwierzytelniającej lub jeden z kodów odzyskiwania.",
     "recovery": {
       "title": "Dodaj e-mail odzyskiwania",
-      "body": "Stel een hersteladres in voor je account, {playerName}. Dit adres wordt alleen gebruikt om eigendom te bevestigen wanneer je ooit je wachtwoord opnieuw moet instellen.",
+      "body": "Stel een hersteladres in voor je account. Dit adres wordt alleen gebruikt om eigendom te bevestigen wanneer je ooit je wachtwoord opnieuw moet instellen.",
       "save": "Zapisz e-mail",
       "logOut": "Wyloguj",
       "invalid": "Wpisz prawidłowy adres e-mail.",

@@ -2004,7 +2004,7 @@ export const id_ID: EnTranslations = {
     "twoFactorHint": "Masukkan kode dari aplikasi autentikatormu, atau salah satu kode pemulihanmu.",
     "recovery": {
       "title": "Tambahkan email pemulihan",
-      "body": "Stel een hersteladres in voor je account, {playerName}. Dit adres wordt alleen gebruikt om eigendom te bevestigen wanneer je ooit je wachtwoord opnieuw moet instellen.",
+      "body": "Stel een hersteladres in voor je account. Dit adres wordt alleen gebruikt om eigendom te bevestigen wanneer je ooit je wachtwoord opnieuw moet instellen.",
       "save": "Simpan email",
       "logOut": "Keluar",
       "invalid": "Masukkan alamat email yang valid.",
