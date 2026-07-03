@@ -9,24 +9,136 @@
 // Reproducibility is checked by tests/i18n_resolved_equivalence.test.ts.
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [],
-  "es_ES": [],
-  "fr_FR": [],
-  "fr_CA": [],
+  "es": [
+    "entities.npcs.spirit_healer.greeting",
+    "entities.npcs.spirit_healer.name",
+    "entities.npcs.spirit_healer.title",
+    "hudChrome.auraEffect.allStatsPctReduce",
+    "hudChrome.death.resurrectAtCorpse",
+    "hudChrome.death.resurrectAtHealer",
+    "hudChrome.death.spiritHealerAlive"
+  ],
+  "es_ES": [
+    "entities.npcs.spirit_healer.greeting",
+    "entities.npcs.spirit_healer.name",
+    "entities.npcs.spirit_healer.title",
+    "hudChrome.auraEffect.allStatsPctReduce",
+    "hudChrome.death.resurrectAtCorpse",
+    "hudChrome.death.resurrectAtHealer",
+    "hudChrome.death.spiritHealerAlive"
+  ],
+  "fr_FR": [
+    "entities.npcs.spirit_healer.greeting",
+    "entities.npcs.spirit_healer.name",
+    "entities.npcs.spirit_healer.title",
+    "hudChrome.auraEffect.allStatsPctReduce",
+    "hudChrome.death.resurrectAtCorpse",
+    "hudChrome.death.resurrectAtHealer",
+    "hudChrome.death.spiritHealerAlive"
+  ],
+  "fr_CA": [
+    "entities.npcs.spirit_healer.greeting",
+    "entities.npcs.spirit_healer.name",
+    "entities.npcs.spirit_healer.title",
+    "hudChrome.auraEffect.allStatsPctReduce",
+    "hudChrome.death.resurrectAtCorpse",
+    "hudChrome.death.resurrectAtHealer",
+    "hudChrome.death.spiritHealerAlive"
+  ],
   "en_CA": [],
-  "it_IT": [],
-  "de_DE": [],
+  "it_IT": [
+    "entities.npcs.spirit_healer.greeting",
+    "entities.npcs.spirit_healer.name",
+    "entities.npcs.spirit_healer.title",
+    "hudChrome.auraEffect.allStatsPctReduce",
+    "hudChrome.death.resurrectAtCorpse",
+    "hudChrome.death.resurrectAtHealer",
+    "hudChrome.death.spiritHealerAlive"
+  ],
+  "de_DE": [
+    "entities.npcs.spirit_healer.greeting",
+    "entities.npcs.spirit_healer.name",
+    "entities.npcs.spirit_healer.title",
+    "hudChrome.auraEffect.allStatsPctReduce",
+    "hudChrome.death.resurrectAtCorpse",
+    "hudChrome.death.resurrectAtHealer",
+    "hudChrome.death.spiritHealerAlive"
+  ],
   "zh_CN": [],
   "zh_TW": [],
   "ko_KR": [],
   "ja_JP": [],
-  "pt_BR": [],
+  "pt_BR": [
+    "entities.npcs.spirit_healer.greeting",
+    "entities.npcs.spirit_healer.name",
+    "entities.npcs.spirit_healer.title",
+    "hudChrome.auraEffect.allStatsPctReduce",
+    "hudChrome.death.resurrectAtCorpse",
+    "hudChrome.death.resurrectAtHealer",
+    "hudChrome.death.spiritHealerAlive"
+  ],
   "ru_RU": [],
-  "nl_NL": [],
-  "pl_PL": [],
-  "id_ID": [],
-  "tr_TR": [],
-  "sv_SE": [],
-  "vi_VN": [],
-  "da_DK": []
+  "nl_NL": [
+    "entities.npcs.spirit_healer.greeting",
+    "entities.npcs.spirit_healer.name",
+    "entities.npcs.spirit_healer.title",
+    "hudChrome.auraEffect.allStatsPctReduce",
+    "hudChrome.death.resurrectAtCorpse",
+    "hudChrome.death.resurrectAtHealer",
+    "hudChrome.death.spiritHealerAlive"
+  ],
+  "pl_PL": [
+    "entities.npcs.spirit_healer.greeting",
+    "entities.npcs.spirit_healer.name",
+    "entities.npcs.spirit_healer.title",
+    "hudChrome.auraEffect.allStatsPctReduce",
+    "hudChrome.death.resurrectAtCorpse",
+    "hudChrome.death.resurrectAtHealer",
+    "hudChrome.death.spiritHealerAlive"
+  ],
+  "id_ID": [
+    "entities.npcs.spirit_healer.greeting",
+    "entities.npcs.spirit_healer.name",
+    "entities.npcs.spirit_healer.title",
+    "hudChrome.auraEffect.allStatsPctReduce",
+    "hudChrome.death.resurrectAtCorpse",
+    "hudChrome.death.resurrectAtHealer",
+    "hudChrome.death.spiritHealerAlive"
+  ],
+  "tr_TR": [
+    "entities.npcs.spirit_healer.greeting",
+    "entities.npcs.spirit_healer.name",
+    "entities.npcs.spirit_healer.title",
+    "hudChrome.auraEffect.allStatsPctReduce",
+    "hudChrome.death.resurrectAtCorpse",
+    "hudChrome.death.resurrectAtHealer",
+    "hudChrome.death.spiritHealerAlive"
+  ],
+  "sv_SE": [
+    "entities.npcs.spirit_healer.greeting",
+    "entities.npcs.spirit_healer.name",
+    "entities.npcs.spirit_healer.title",
+    "hudChrome.auraEffect.allStatsPctReduce",
+    "hudChrome.death.resurrectAtCorpse",
+    "hudChrome.death.resurrectAtHealer",
+    "hudChrome.death.spiritHealerAlive"
+  ],
+  "vi_VN": [
+    "entities.npcs.spirit_healer.greeting",
+    "entities.npcs.spirit_healer.name",
+    "entities.npcs.spirit_healer.title",
+    "hudChrome.auraEffect.allStatsPctReduce",
+    "hudChrome.death.resurrectAtCorpse",
+    "hudChrome.death.resurrectAtHealer",
+    "hudChrome.death.spiritHealerAlive"
+  ],
+  "da_DK": [
+    "entities.npcs.spirit_healer.greeting",
+    "entities.npcs.spirit_healer.name",
+    "entities.npcs.spirit_healer.title",
+    "hudChrome.auraEffect.allStatsPctReduce",
+    "hudChrome.death.resurrectAtCorpse",
+    "hudChrome.death.resurrectAtHealer",
+    "hudChrome.death.spiritHealerAlive"
+  ]
 };
