@@ -20,6 +20,7 @@ export interface PickInteractionHud {
   openLoot(mobId: number, screenX: number, screenY: number): void;
   openQuestDialog(npcId: number): void;
   openDelveBoard(npcId: number): void;
+  openMailbox(): void;
   showError(text: string): void;
   closeContextMenu(): void;
 }
@@ -43,6 +44,29 @@ export function activePvpOpponentIds(
     }
   }
   return ids;
+}
+
+// Re-pick cadence for the hover cursor while the pointer is stationary. A pointer
+// move always re-picks immediately; this only bounds how fast the world can change
+// WHICH entity sits under an unmoving cursor (a walking mob), so the scene raycast
+// stops costing a full intersect pass on every frame of a still mouse.
+export const HOVER_REPICK_MS = 50;
+
+/** Gate for the per-frame hover raycast: pick when the pointer moved, otherwise at
+ *  most every HOVER_REPICK_MS. Pure state machine (caller supplies the clock), so
+ *  it unit-tests without DOM or timers. */
+export class HoverPickGate {
+  private x = Number.NaN;
+  private y = Number.NaN;
+  private nextAt = 0;
+
+  shouldPick(x: number, y: number, nowMs: number): boolean {
+    if (x === this.x && y === this.y && nowMs < this.nextAt) return false;
+    this.x = x;
+    this.y = y;
+    this.nextAt = nowMs + HOVER_REPICK_MS;
+    return true;
+  }
 }
 
 export function isAttackableEntity(
@@ -101,6 +125,7 @@ export function handlePickedEntity(
       }
       if (e.templateId === 'dungeon_door' && e.dungeonId) world.enterDungeon(e.dungeonId);
       else if (e.templateId === 'dungeon_exit') world.leaveDungeon();
+      else if (e.templateId === 'mailbox') hud.openMailbox();
       else world.pickUpObject(id);
     } else if (e.kind === 'mob' && e.dead && e.lootable) {
       if (d <= INTERACT_RANGE + 1) hud.openLoot(id, screenX, screenY);
@@ -124,6 +149,7 @@ export function handlePickedEntity(
       if (d > INTERACT_RANGE + 1) return;
       if (e.templateId === 'dungeon_door' && e.dungeonId) world.enterDungeon(e.dungeonId);
       else if (e.templateId === 'dungeon_exit') world.leaveDungeon();
+      else if (e.templateId === 'mailbox') hud.openMailbox();
       else world.pickUpObject(id);
     } else if (e.kind === 'mob' && e.dead && e.lootable) {
       const d = dist2d(world.player.pos, e.pos);

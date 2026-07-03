@@ -177,6 +177,52 @@ export const sv_SE: EnTranslations = {
       "title": "Gester",
       "done": "Klar"
     },
+    "dailyRewards": {
+      "title": "Dagliga belöningar",
+      "close": "Stäng dagliga belöningar",
+      "loading": "Laddar dagliga belöningar...",
+      "error": "Kunde inte ladda dagliga belöningar.",
+      "intro": "Håll tillräckligt med WOC i din verifierade plånbok för att låsa upp dagliga belöningar. Tjäna poäng med ett dagligt snurr och roterande uppgifter, och klättra sedan på den dagliga topplistan för en andel av prispotten.",
+      "prize": "Prispott",
+      "reset": "Återställning",
+      "endsIn": "Slutar om {time}",
+      "remainingLessThanMinute": "<1 min",
+      "remainingMinutes": "{minutes} min",
+      "remainingHoursMinutes": "{hours} h {minutes} min",
+      "score": "Poäng",
+      "walletValue": "Plånbokens värde (WOC)",
+      "usd": "{amount} USD",
+      "sol": "{amount} SOL",
+      "unknown": "Okänd",
+      "spinTitle": "Dagligt snurr",
+      "spinDialogTitle": "Dagligt belöningssnurr",
+      "spinClose": "Stäng dagligt snurr",
+      "spinReady": "Ett snurr är redo.",
+      "spinClaimed": "Hämtad: +{points} poäng.",
+      "spinResult": "+{points} poäng",
+      "spinButton": "Snurra",
+      "tasks": "Uppgifter",
+      "taskMultiplier": "x{multiplier} multiplier",
+      "pointsGained": "{points} daily rewards points gained.",
+      "leaderboard": "Daglig topplista",
+      "totalPlayer": "{count} player today",
+      "totalPlayers": "{count} players today",
+      "history": "Tidigare vinnare",
+      "noLeaders": "Inga poäng ännu.",
+      "noHistory": "Inga utbetalningar ännu.",
+      "walletConnectTitle": "Verifiera plånbok",
+      "walletConnectBody": "Verifiera en Solana-plånbok med WOC för att låsa upp dagliga belöningar.",
+      "walletConnectButton": "Verifiera plånbok",
+      "walletHoldTitle": "Håll WOC",
+      "walletHoldBody": "Håll minst {amount} USD i WOC för att låsa upp dagliga belöningar.",
+      "walletPriceBody": "WOC-prissättningen är otillgänglig just nu. Kom tillbaka snart.",
+      "reason": {
+        "eligible": "Belöningar upplåsta.",
+        "no_wallet": "Anslut en plånbok med minst 20 USD i WOC.",
+        "under_minimum": "Plånboken är under WOC-miniminivån på 20 USD.",
+        "price_unavailable": "WOC-priset är otillgängligt, belöningar är tillfälligt låsta."
+      }
+    },
     "theme": {
       "preset": "Gränssnittstema",
       "customColors": "Anpassade färger",
@@ -265,6 +311,13 @@ export const sv_SE: EnTranslations = {
       "heading": "Riktning",
       "minimapZoom": "Minikartans zoom"
     },
+    "nativeUpdate": {
+      "title": "Uppdatering tillgänglig",
+      "body": "En ny version av World of ClaudeCraft är tillgänglig. Uppdatera nu för de senaste korrigeringarna och förbättringarna.",
+      "bodyWithVersion": "Version {version} av World of ClaudeCraft är tillgänglig. Uppdatera nu för de senaste korrigeringarna och förbättringarna.",
+      "notNow": "Inte nu",
+      "update": "Uppdatera"
+    },
     "castBar": {
       "playerAria": "Din besvärjelsemätare",
       "targetAria": "Enhetens besvärjelsemätare"
@@ -337,9 +390,14 @@ export const sv_SE: EnTranslations = {
       "showWalletOnCharacterScreen": "Visa plånbok på karaktärsskärmen",
       "showWalletOnPlayerCard": "Visa plånbok på spelarkortet",
       "showDevBadges": "Visa utvecklarmärken",
+      "showOwnNameplate": "Show My Nameplate",
       "uiScale": "Gränssnittsskala",
+      "playerFrameScale": "Player Frame Scale",
+      "targetFrameScale": "Target Frame Scale",
       "highContrastBackground": "Bakgrund med hög kontrast",
       "startAttackOnAbility": "Automatisk attack vid förmågeanvändning",
+      "walkByAutoloot": "Walk-by Autoloot",
+      "groundReticle": "Markriktmedel",
       "showItemLevel": "Visa föremålsnivå",
       "itemLevelLine": "Föremålsnivå {level}",
       "itemScoreLine": "Poäng {score}",
@@ -771,6 +829,9 @@ export const sv_SE: EnTranslations = {
         "nature": "Natur"
       }
     },
+    "worldBoss": {
+      "spawn": "{name} rises over Thornpeak Heights!"
+    },
     "loot": {
       "chestTitle": "Kista"
     },
@@ -781,6 +842,23 @@ export const sv_SE: EnTranslations = {
     "nameplate": {
       "mob": "[{level}] {name}",
       "mobElite": "[{level}+] {name}"
+    },
+    "mobTooltip": {
+      "levelFamily": "Level {level} {family}",
+      "familyDemon": "Demon",
+      "hostile": "Hostile",
+      "friendly": "Friendly"
+    },
+    "targetFrame": {
+      "unlock": "Move target frame",
+      "lock": "Lock target frame"
+    },
+    "playerFrame": {
+      "unlock": "Move player frame",
+      "lock": "Lock player frame"
+    },
+    "frameReset": {
+      "label": "Reset Frame Positions"
     },
     "itemTooltip": {
       "requiresLevel": "Kräver nivå {level}"
@@ -863,6 +941,7 @@ export const sv_SE: EnTranslations = {
       "memberSinceDays": "{days}d i Discord",
       "roleTag": {
         "levyst": "Levy St",
+        "admin": "Admin",
         "devs": "Utvecklare",
         "mods": "Moderator",
         "artists": "Konstnär"
@@ -955,6 +1034,112 @@ export const sv_SE: EnTranslations = {
       },
       "linkedAs": "Länkad som {login}",
       "unlink": "Avlänka GitHub"
+    },
+    "mailbox": {
+      "title": "Mailbox",
+      "subtitle": "The Ravenpost",
+      "close": "Close mailbox",
+      "tabInbox": "Inbox",
+      "tabInboxWithCount": "Inbox ({count})",
+      "tabSend": "Send",
+      "empty": "Your mailbox is empty.",
+      "truncated": "Showing the newest {shown} of {total} letters.",
+      "attachmentsBadge": "Parcel attached",
+      "unreadBadge": "Unread",
+      "back": "Back",
+      "take": "Take attachments",
+      "delete": "Delete letter",
+      "deleteAria": "Delete the letter {subject}",
+      "openAria": "Read the letter {subject} from {name}",
+      "noSubject": "(no subject)",
+      "toLabel": "To",
+      "toPlaceholder": "Character name",
+      "subjectLabel": "Subject",
+      "bodyLabel": "Message",
+      "coinLabel": "Attach coin",
+      "parcelsLabel": "Parcels",
+      "parcelsHint": "Click an item in your bags to attach it.",
+      "removeParcelAria": "Remove {item} from the letter",
+      "sendButton": "Send letter",
+      "postageNote": "Postage: {amount}. The raven flies for about {seconds}s.",
+      "arrivedBanner": "The raven has landed: mail from {name}.",
+      "arrivedLog": "You have new mail from {name}.",
+      "indicatorAria": "Unread mail: {count}",
+      "indicatorTip": "You have {count} unread letters. Visit a mailbox to read them.",
+      "clickAttach": "Click to attach to your letter.",
+      "cannotMail": "This cannot be mailed.",
+      "result": {
+        "sent": "A raven takes wing with your letter to {name} ({postage} postage).",
+        "collected": "You collect {amount} from the letter.",
+        "tooFar": "You must be at a mailbox to tend your post.",
+        "needRecipient": "Name a recipient for your letter.",
+        "noRecipient": "No one by that name holds a mailbox here.",
+        "tooManyParcels": "A letter carries at most {count} parcels.",
+        "noMailQuestItems": "You cannot mail quest items.",
+        "notEnoughItems": "You do not have that many to send.",
+        "cantAffordPostage": "You cannot afford the postage.",
+        "recipientBoxFull": "Their mailbox is full.",
+        "letterGone": "That letter is no longer in your box.",
+        "takeParcelsFirst": "Take the parcels out before discarding the letter."
+      }
+    },
+    "calendar": {
+      "title": "Event Calendar",
+      "close": "Close calendar",
+      "keybindLabel": "Event Calendar",
+      "prevMonth": "Previous month",
+      "nextMonth": "Next month",
+      "dayAria": "{date}: {count} events",
+      "noEvents": "Nothing planned for this day.",
+      "allDay": "All day",
+      "bookedBy": "Booked by {name}",
+      "deleteAria": "Remove the event {title}",
+      "bookTitle": "Book a guild event",
+      "titlePlaceholder": "Event title",
+      "notePlaceholder": "Note (optional)",
+      "hourLabel": "Hour (UTC)",
+      "hourAllDay": "All day",
+      "addButton": "Book event",
+      "guildOnlyNote": "Join a guild to plan events together.",
+      "result": {
+        "created": "The event is on the guild calendar.",
+        "removed": "The event was taken off the calendar.",
+        "notInGuild": "You are not in a guild.",
+        "notOfficer": "Only officers and the Guild Master may manage guild events.",
+        "badInput": "Give the event a title and a valid day.",
+        "calendarFull": "The guild calendar is full.",
+        "eventGone": "That event is no longer on the calendar."
+      },
+      "events": {
+        "raidCall": {
+          "title": "Raid Call",
+          "note": "Wardens sound the horn: gather a party for the crypts and the raid."
+        },
+        "marketDay": {
+          "title": "Market Day",
+          "note": "The Merchant expects fresh stock. A fine day to browse the World Market."
+        },
+        "fiestaNight": {
+          "title": "Fiesta Night",
+          "note": "The 2v2 Fiesta ring draws its loudest crowds tonight."
+        },
+        "arenaClash": {
+          "title": "Arena Clash",
+          "note": "Duelists flock to the Ashen Coliseum. Queue up and climb the ladder."
+        },
+        "fishingDerby": {
+          "title": "Fishing Derby",
+          "note": "Anglers line the lakes. Bring a pole and swap fishing tales."
+        },
+        "delveDay": {
+          "title": "Delve Day",
+          "note": "Brother Halven marks his charts: a fine day to brave the Collapsed Reliquary."
+        },
+        "moongateCommunion": {
+          "title": "Moongate Communion",
+          "note": "Pilgrims gather at the temple moongate under the mid-month moon."
+        }
+      }
     }
   },
   "guide": {
@@ -1903,6 +2088,9 @@ export const sv_SE: EnTranslations = {
     "password": "Lösenord",
     "passwordError": "Ange ditt lösenord.",
     "passwordPlaceholder": "Ange lösenord",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "emailError": "Please enter a valid email address.",
     "showPassword": "Visa lösenord",
     "hidePassword": "Dölj lösenord",
     "logIn": "Logga in",
@@ -1928,7 +2116,15 @@ export const sv_SE: EnTranslations = {
     "create": "Skapa",
     "twoFactorLabel": "Autentiseringskod",
     "twoFactorPlaceholder": "6-siffrig eller återställningskod",
-    "twoFactorHint": "Ange koden från din autentiseringsapp, eller en av dina återställningskoder."
+    "twoFactorHint": "Ange koden från din autentiseringsapp, eller en av dina återställningskoder.",
+    "recovery": {
+      "title": "Add a recovery email",
+      "body": "Set an email address so you can recover your account. We only use it to confirm you own this account if you ever need to reset your password.",
+      "save": "Save email",
+      "logOut": "Log out",
+      "invalid": "Please enter a valid email address.",
+      "failed": "Could not save your email. Please try again."
+    }
   },
   "wallet": {
     "label": "$WOC-plånbok",
@@ -1982,6 +2178,7 @@ export const sv_SE: EnTranslations = {
     "helpLinkedWithBalance": "Innehavarförmåner är aktiva. Plånboksappen är ansluten i den här webbläsaren.",
     "helpLinkedDisconnected": "Innehavarförmåner är aktiva. Anslut appen när du behöver signera eller spendera.",
     "helpLinkedDisconnectedWithBalance": "Innehavarförmåner är aktiva. Anslut appen när du behöver signera eller spendera.",
+    "extensionHelp": "To see a wallet here, keep a browser wallet extension such as Solflare Wallet active.",
     "flowConnect": "Välj en plånbok. Verifieringen fortsätter automatiskt.",
     "flowSign": "Signera verifieringsmeddelandet i din plånboksapp. Ingen transaktion eller SOL krävs.",
     "flowVerify": "Verifierar plånboksägande...",
@@ -2626,6 +2823,7 @@ export const sv_SE: EnTranslations = {
       "usernameTaken": "Det användarnamnet är redan upptaget.",
       "invalidCredentials": "Ogiltigt användarnamn eller lösenord.",
       "verificationFailed": "Verifieringen misslyckades. Försök igen.",
+      "desktopCodeInvalid": "Inloggningskoden för skrivbordsappen är ogiltig eller har gått ut. Försök igen.",
       "invalidCharacterName": "Ogiltigt karaktärsnamn. Använd 2-16 bokstäver.",
       "characterNameNotAllowed": "Det karaktärsnamnet är inte tillåtet.",
       "invalidClass": "Ogiltig klass.",
@@ -2642,6 +2840,21 @@ export const sv_SE: EnTranslations = {
       "takenOver": "Din karaktär togs över av en annan session.",
       "renameBeforeEntering": "Denna karaktär måste byta namn innan den går in i världen.",
       "renameNotPermitted": "Det är inte tillåtet att byta namn på denna karaktär."
+    }
+  },
+  "desktop": {
+    "update": {
+      "downloading": "Laddar ner uppdatering {version}...",
+      "ready": "Uppdatering {version} är klar. Den installeras när du avslutar, eller starta om nu.",
+      "restart": "Starta om nu",
+      "later": "Senare"
+    },
+    "crash": {
+      "title": "World of ClaudeCraft",
+      "body": "Spelvyn slutade fungera. Ladda om den?",
+      "reload": "Ladda om",
+      "quit": "Avsluta",
+      "fatalBody": "World of ClaudeCraft stötte på ett oväntat fel och måste stängas."
     }
   },
   "realm": {
@@ -3400,13 +3613,16 @@ export const sv_SE: EnTranslations = {
     },
     "cast": {
       "fishing": "Fiske",
-      "demonHeal": "Demonläkning"
+      "demonHeal": "Demonläkning",
+      "thunzharrStormcall": "Stormrop"
     }
   },
   "questUi": {
     "tracker": {
       "title": "Uppdrag",
-      "complete": "Slutfört"
+      "complete": "Slutfört",
+      "showOnMap": "Show {name} on the map",
+      "hideFromMap": "Hide {name} from the map"
     },
     "log": {
       "title": "Uppdragslogg",
@@ -3692,6 +3908,26 @@ export const sv_SE: EnTranslations = {
   },
   "entities": {
     "abilities": {
+      "flamestrike": {
+        "name": "Flamslag",
+        "description": "Kallar ner en eldexplosion på målområdet som ger {damage} Eldskada till fiender som fångas i explosionen."
+      },
+      "rain_of_fire": {
+        "name": "Eldregn",
+        "description": "Låter ett eldregn falla över målområdet och bränner fiender för {damage} Eldskada."
+      },
+      "volley": {
+        "name": "Pilregn",
+        "description": "Låter pilar regna över målområdet och vållar {damage} skada på fiender i det."
+      },
+      "hurricane": {
+        "name": "Orkan",
+        "description": "Släpper lös en orkan över målområdet och slår fiender för {damage} Naturskada."
+      },
+      "earthquake": {
+        "name": "Jordbävning",
+        "description": "Skakar målområdet och slår fiender för {damage} Naturskada."
+      },
       "heroic_strike": {
         "name": "Hjältehugg",
         "description": "Ett kraftfullt anfall som ökar närstridsskadan med {damage}. Aktiveras vid ditt nästa hugg."
@@ -4833,6 +5069,33 @@ export const sv_SE: EnTranslations = {
       "monarch_crown_helm": {
         "name": "Monarkens krona"
       },
+      "copper_mining_pick": {
+        "name": "Kopparhacka"
+      },
+      "iron_mining_pick": {
+        "name": "Järnhacka"
+      },
+      "mithril_mining_pick": {
+        "name": "Mithrilhacka"
+      },
+      "handaxe": {
+        "name": "Handyxa"
+      },
+      "felling_axe": {
+        "name": "Fällyxa"
+      },
+      "ironbark_axe": {
+        "name": "Järnbarksyxa"
+      },
+      "gathering_sickle": {
+        "name": "Skördeskära"
+      },
+      "bronze_sickle": {
+        "name": "Bronsskära"
+      },
+      "silverleaf_sickle": {
+        "name": "Silverbladsskära"
+      },
       "bristleback_maul": {
         "name": "Borstryggens klubba"
       },
@@ -5315,6 +5578,30 @@ export const sv_SE: EnTranslations = {
       },
       "vanguard_chrome_armor_plate": {
         "name": "Förtrupp krom"
+      },
+      "crownforged_gauntlets": {
+        "name": "Kronsmidda handskar"
+      },
+      "nighttalon_grips": {
+        "name": "Nattklogrepp"
+      },
+      "soulflame_gloves": {
+        "name": "Själslågshandskar"
+      },
+      "stormcallers_handguards": {
+        "name": "Stormkallarens handskydd"
+      },
+      "crownforged_girdle": {
+        "name": "Kronsmitt bälte"
+      },
+      "nighttalon_waistband": {
+        "name": "Nattklobälte"
+      },
+      "soulflame_cord": {
+        "name": "Själslågssnöre"
+      },
+      "stormcallers_waistguard": {
+        "name": "Stormkallarens midjeskydd"
       }
     },
     "mobs": {
@@ -5506,6 +5793,12 @@ export const sv_SE: EnTranslations = {
       },
       "acolyte_tessa": {
         "name": "Akolyten Tessa"
+      },
+      "thunzharr_waking_peak": {
+        "name": "Thunzharr, the Waking Peak"
+      },
+      "thunzharr_stormling": {
+        "name": "Roused Stormling"
       },
       "ironvein_foreman": {
         "name": "Järnådersförman"
@@ -6169,6 +6462,36 @@ export const sv_SE: EnTranslations = {
           }
         }
       },
+      "q_stalkers_return": {
+        "title": "The Stalkers Return",
+        "text": "Twelve dead, and the ridge crawls thicker than the day you started, {playerName}. Beasts do not throw themselves at a wall out of hunger. Something on the high ridge is pushing them down, and until I know what, the culling does not stop. Fourteen more.",
+        "completion": "Fourteen more, and still my patrols count fresh tracks by morning. My scout came back from the high ridge white as the snowline: prints the size of a shield, she says, and old kills no stalker would leave. Whatever walks up there is no ordinary cat.",
+        "objectives": {
+          "0": {
+            "label": "Ridge Stalker slain"
+          }
+        }
+      },
+      "q_stalker_cloaks": {
+        "title": "Cloaks for the Watch",
+        "text": "Eight pelts lined the officers' cloaks, and now every soldier on the wall wants the same, {playerName}. They are right to want it: winter takes fingers first and apologies never. Ten more pelts from the ridges south of the gate, and the whole watch sleeps warm.",
+        "completion": "Ten good pelts, thick as any I have... no, look at these, {playerName}. Torn, half of them, and by no blade or spear. Claw marks wide as my hand, right through the winter coat. Something on that ridge is savaging its own kind.",
+        "objectives": {
+          "0": {
+            "label": "Ridge Stalker Pelt"
+          }
+        }
+      },
+      "q_old_cragmaw": {
+        "title": "Old Cragmaw",
+        "text": "The mountain folk put a name to the prints my scout found: Old Cragmaw, a scar-pelted tyrant of a cat that has outlived three generations of its own pack. It is the reason the stalkers flood my road, {playerName}. Its den sits on the western ridge above the road south. Bring a friend, and put the old devil down.",
+        "completion": "Down at last. The mountain folk swore that cat would outlive the wall itself. The stalkers will keep to their high snows now, {playerName}, and my patrols will walk the road without bleeding for it. The whole ridge is quieter for your work.",
+        "objectives": {
+          "0": {
+            "label": "Old Cragmaw slain"
+          }
+        }
+      },
       "q_kobold_tunnels": {
         "title": "Djupstensbekymmer",
         "text": "Kobolderna vid Djupstensgrytorna gräver djupare än någon ljusråtta har ärende att gräva - rakt ner, som om något kallade på dem. Deras tunnlar löper under vår mur, {playerName}. Sätt stopp för saken: döda tolv Djupstensgrävare.",
@@ -6693,6 +7016,28 @@ export const sv_SE: EnTranslations = {
         "leaveText": "Du klättrar tillbaka till broder Halven vid relikvarieruinen."
       }
     },
+    "letters": {
+      "ravenpost_welcome": {
+        "sender": "Korpposten",
+        "subject": "Korparna flyger nu för dig",
+        "body": "Vandrare,\n\nKorpposten har rest sina sittpinnar över hela dalen. Leta efter korppelarna i Eastbrook, Fenbridge och Highwatch: från var och en av dem kan du skicka brev, mynt och varor till andra äventyrare och hämta allt som korparna bär till dig.\n\nBifogat finns en liten gåva till ditt första frimärke.\n\nVingarna upp,\nKorpposten"
+      },
+      "letter_q_wolves": {
+        "sender": "Marskalk Redbrook",
+        "subject": "Fållorna är lugna igen",
+        "body": "Herdarna kan äntligen sova med båda ögonen slutna, och det är din förtjänst. Jag har bett Korpposten föra dig en liten slant ur vaktkassan.\n\nHåll din klinga oljad.\n- Marskalk Redbrook"
+      },
+      "letter_q_greyjaw": {
+        "sender": "Marskalk Redbrook",
+        "subject": "Gamle Gråkäft, äntligen",
+        "body": "Nyheter färdas snabbt i en så liten stad. Herdarna skålade för din hälsa i går kväll, och Wilkes svär att vargen var stor som en kärra. Låt dem brodera ut det: du har förtjänat det.\n\nÄt en måltid på vaktens bekostnad.\n- Marskalk Redbrook"
+      },
+      "letter_q_hollow": {
+        "sender": "Broder Aldric",
+        "subject": "Det du gjorde i mörkret",
+        "body": "Få kommer någonsin att veta vad som låg begravet i den sänkan, och ännu färre skulle tro det. Jag vet, och jag kommer inte att glömma.\n\nMå din väg förbli upplyst.\n- Broder Aldric"
+      }
+    },
     "itemSets": {
       "crownforged": {
         "name": "Kronsmidd stridsutrustning",
@@ -6706,8 +7051,8 @@ export const sv_SE: EnTranslations = {
       },
       "necromancers": {
         "name": "Nekromantikerns skrud",
-        "bonus2": "Minskar kastfördröjning från skada med 50%.",
-        "bonus3": "Skada du tar fördröjer inte dina besvärjelser."
+        "bonus2": "Du kan inte knuffas bakåt (100% motstånd mot tillbakastöt).",
+        "bonus3": "Ökar intellekt med 10 och uthållighet med 10."
       },
       "nighttalon": {
         "name": "Nattklo läderutrustning",
@@ -6716,13 +7061,13 @@ export const sv_SE: EnTranslations = {
       },
       "soulflame": {
         "name": "Själsflammans skrud",
-        "bonus2": "Minskar kastfördröjning från skada med 50%.",
-        "bonus3": "Skada du tar fördröjer inte dina besvärjelser."
+        "bonus2": "Du kan inte knuffas bakåt (100% motstånd mot tillbakastöt).",
+        "bonus3": "Ökar intellekt med 15 och ande med 15."
       },
       "stormcallers": {
         "name": "Stormkallarens skrud",
-        "bonus2": "Minskar kastfördröjning från skada med 50%.",
-        "bonus3": "Skada du tar fördröjer inte dina besvärjelser."
+        "bonus2": "Du kan inte knuffas bakåt (100% motstånd mot tillbakastöt).",
+        "bonus3": "Ökar intellekt med 15 och ande med 15."
       },
       "wyrmshadow": {
         "name": "Wyrmskuggans utrustning",
@@ -6738,6 +7083,7 @@ export const sv_SE: EnTranslations = {
     "dungeonInstanceBusy": "Alla instanser av {name} är upptagna. Försök igen snart.",
     "delveLockedChestInteract": "Tryck på F för att dyrka upp låset",
     "delveRewardChestInteract": "Tryck på F för att hämta bytet",
-    "delveSurfaceExitInteract": "Tryck på F för att klättra"
+    "delveSurfaceExitInteract": "Tryck på F för att klättra",
+    "mailboxName": "Mailbox"
   }
 };

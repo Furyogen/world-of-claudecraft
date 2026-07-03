@@ -229,6 +229,8 @@ describe('options_view: interface dispatch matrix (cluster 5)', () => {
     const controls = buildInterfaceControls(makeSource());
     expect(keysOf(controls)).toEqual([
       'uiScale',
+      'playerFrameScale',
+      'targetFrameScale',
       'hudOpacity',
       'tooltipScale',
       'fctScale',
@@ -241,9 +243,12 @@ describe('options_view: interface dispatch matrix (cluster 5)', () => {
       'showWalletOnCharacterScreen',
       'showWalletOnPlayerCard',
       'showDevBadges',
+      'showOwnNameplate',
       'landingHighContrast',
       'invertLookY',
       'startAttackOnAbilityUse',
+      'walkByAutoloot',
+      'groundReticle',
       'showItemLevel',
       'showSecondaryActionBar',
     ]);

@@ -54,6 +54,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
     'Buitinstellingen: Buitmeester-buit, Buitmeester {name}, drempel {threshold}.',
   'hudChrome.masterLoot.thresholdSet': 'Buitdrempel ingesteld op {threshold}.',
   'hudChrome.options.showDevBadges': 'Ontwikkelaarsinsignes tonen',
+  'hudChrome.options.groundReticle': 'Grondrichtkruis',
   'hudChrome.options.startAttackOnAbility': 'Auto-aanval bij gebruik van vaardigheid',
   'hudChrome.party.promoteLeader': 'Bevorderen tot leider',
   'hudChrome.plurals.playersMatching.few':
@@ -93,6 +94,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'abilityUi.actionBar.slotAria': 'Actiesleuf {slot}: {ability}',
   'abilityUi.cast.demonHeal': 'Demonengenezing',
   'abilityUi.cast.fishing': 'Vissen',
+  'abilityUi.cast.thunzharrStormcall': 'Stormroep',
   'abilityUi.forms.bear': 'Beer',
   'abilityUi.forms.cat': 'Wolf',
   'abilityUi.resources.energy': 'Energie',
@@ -574,6 +576,21 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.fireball.description':
     'Werpt een vurige bal die {damage} Vuurschade toebrengt plus extra schade over tijd.',
   'entities.abilities.fireball.name': 'Vuurbal',
+  'entities.abilities.rain_of_fire.name': 'Vuurregen',
+  'entities.abilities.rain_of_fire.description':
+    'Laat een vuurregen neerdalen op het doelgebied en verbrandt vijanden voor {damage} Vuurschade.',
+  'entities.abilities.volley.name': 'Pijlenregen',
+  'entities.abilities.volley.description':
+    'Laat een pijlenregen neerdalen op het doelgebied en richt {damage} schade aan bij vijanden erin.',
+  'entities.abilities.hurricane.name': 'Orkaan',
+  'entities.abilities.hurricane.description':
+    'Ontketent een orkaan boven het doelgebied en treft vijanden voor {damage} Natuurschade.',
+  'entities.abilities.earthquake.name': 'Aardbeving',
+  'entities.abilities.earthquake.description':
+    'Laat het doelgebied beven, treft vijanden voor {damage} Natuurschade.',
+  'entities.abilities.flamestrike.name': 'Vlammenslag',
+  'entities.abilities.flamestrike.description':
+    'Roept een vuurexplosie op in het doelgebied die vijanden in de explosie {damage} Vuurschade toebrengt.',
   'entities.abilities.flame_shock.description':
     'Schroeit het doelwit met vuur voor 25 schade plus {damage} gedurende 12 sec.',
   'entities.abilities.flame_shock.name': 'Vlamschok',
@@ -1064,6 +1081,15 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.items.moggers_shiv.name': 'Moggers Steekmes',
   'entities.items.moggers_stomper_boots.name': 'Moggers Stamplaarzen',
   'entities.items.monarch_crown_helm.name': 'Monarchenkroon',
+  'entities.items.copper_mining_pick.name': 'Koperen Mijnpik',
+  'entities.items.iron_mining_pick.name': 'IJzeren Mijnpik',
+  'entities.items.mithril_mining_pick.name': 'Mithril Mijnpik',
+  'entities.items.handaxe.name': 'Handbijl',
+  'entities.items.felling_axe.name': 'Velbijl',
+  'entities.items.ironbark_axe.name': 'IJzerschors Bijl',
+  'entities.items.gathering_sickle.name': 'Oogstsikkel',
+  'entities.items.bronze_sickle.name': 'Bronzen Sikkel',
+  'entities.items.silverleaf_sickle.name': 'Zilverbladsikkel',
   'entities.items.moongate_rubbing.name': 'Bezweringsafdruk',
   'entities.items.moonpale_scale.name': 'Maanbleke Schub',
   'entities.items.moonscale_saber.name': 'Maanschub-Sabel',
@@ -1162,6 +1188,14 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.items.steel_orange_armor_plate.name': 'Staaloranje',
   'entities.items.storm_core.name': 'Stormkern',
   'entities.items.stormcallers_crown.name': 'Kroon van de Stormroeper',
+  'entities.items.crownforged_gauntlets.name': 'Kroongesmede Handschoenen',
+  'entities.items.nighttalon_grips.name': 'Nachtklauw-Grepen',
+  'entities.items.soulflame_gloves.name': 'Zielsvlam-Handschoenen',
+  'entities.items.stormcallers_handguards.name': 'Handbeschermers van de Stormroeper',
+  'entities.items.crownforged_girdle.name': 'Kroongesmede Gordel',
+  'entities.items.nighttalon_waistband.name': 'Nachtklauw-Lendenband',
+  'entities.items.soulflame_cord.name': 'Zielsvlam-Koord',
+  'entities.items.stormcallers_waistguard.name': 'Lendenbescherming van de Stormroeper',
   'entities.items.stormcallers_spaulders.name': 'Schouderstukken van de Stormroeper',
   'entities.items.stormshard_leggings.name': 'Stormscherf-Beenbescherming',
   'entities.items.sturdy_belt.name': 'Stevige Reizigersgordel',
@@ -4921,17 +4955,21 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.deathlord.bonus2': 'Verhoogt aanvalskracht met 40.',
   'entities.itemSets.deathlord.bonus3': 'Verhoogt kracht met 15 en uithoudingsvermogen met 15.',
   'entities.itemSets.necromancers.name': 'Gewaden van de necromant',
-  'entities.itemSets.necromancers.bonus2': 'Vermindert terugslag bij spreuken door schade met 50%.',
-  'entities.itemSets.necromancers.bonus3': 'Opgelopen schade vertraagt je spreuken niet.',
+  'entities.itemSets.necromancers.bonus2':
+    'Je kunt niet worden teruggeslagen (100% terugslagweerstand).',
+  'entities.itemSets.necromancers.bonus3':
+    'Verhoogt intellect met 10 en uithoudingsvermogen met 10.',
   'entities.itemSets.nighttalon.name': 'Nachtklauw leren uitrusting',
   'entities.itemSets.nighttalon.bonus2': 'Verhoogt aanvalskracht met 40.',
   'entities.itemSets.nighttalon.bonus3': 'Verhoogt behendigheid met 15 en kritieke kans met 2%.',
   'entities.itemSets.soulflame.name': 'Zielenvlamgewaden',
-  'entities.itemSets.soulflame.bonus2': 'Vermindert terugslag bij spreuken door schade met 50%.',
-  'entities.itemSets.soulflame.bonus3': 'Opgelopen schade vertraagt je spreuken niet.',
+  'entities.itemSets.soulflame.bonus2':
+    'Je kunt niet worden teruggeslagen (100% terugslagweerstand).',
+  'entities.itemSets.soulflame.bonus3': 'Verhoogt intellect met 15 en geest met 15.',
   'entities.itemSets.stormcallers.name': 'Gewaden van de Stormroeper',
-  'entities.itemSets.stormcallers.bonus2': 'Vermindert terugslag bij spreuken door schade met 50%.',
-  'entities.itemSets.stormcallers.bonus3': 'Opgelopen schade vertraagt je spreuken niet.',
+  'entities.itemSets.stormcallers.bonus2':
+    'Je kunt niet worden teruggeslagen (100% terugslagweerstand).',
+  'entities.itemSets.stormcallers.bonus3': 'Verhoogt intellect met 15 en geest met 15.',
   'entities.itemSets.wyrmshadow.name': 'Wurmschaduw-uitrusting',
   'entities.itemSets.wyrmshadow.bonus2': 'Verhoogt aanvalskracht met 40.',
   'entities.itemSets.wyrmshadow.bonus3': 'Verhoogt behendigheid met 15 en kritieke kans met 2%.',
@@ -5069,4 +5107,86 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.relay.help.label': 'Hulp nodig',
   'hudChrome.discord.relay.help.hint': 'Vraag de gemeenschap om hulp',
   'hudChrome.options.showSecondaryActionBar': 'Secundaire actiebalk tonen',
+  'errors.api.desktopCodeInvalid':
+    'Desktop-inlogcode is ongeldig of verlopen. Probeer het opnieuw.',
+  'desktop.crash.body': 'De spelweergave werkt niet meer. Opnieuw laden?',
+  'desktop.crash.fatalBody':
+    'World of ClaudeCraft is op een onverwachte fout gestuit en moet worden afgesloten.',
+  'desktop.crash.quit': 'Afsluiten',
+  'desktop.crash.reload': 'Opnieuw laden',
+  'desktop.crash.title': 'World of ClaudeCraft',
+  'desktop.update.downloading': 'Update {version} wordt gedownload...',
+  'desktop.update.later': 'Later',
+  'desktop.update.ready':
+    'Update {version} is klaar. Deze wordt geïnstalleerd wanneer je afsluit, of herstart nu.',
+  'desktop.update.restart': 'Nu herstarten',
+  'hudChrome.dailyRewards.close': 'Dagelijkse beloningen sluiten',
+  'hudChrome.dailyRewards.endsIn': 'Eindigt over {time}',
+  'hudChrome.dailyRewards.error': 'Kon de dagelijkse beloningen niet laden.',
+  'hudChrome.dailyRewards.history': 'Eerdere winnaars',
+  'hudChrome.dailyRewards.intro':
+    'Houd genoeg WOC in je geverifieerde portemonnee om dagelijkse beloningen te ontgrendelen. Verdien punten met één dagelijkse draai en wisselende taken, en klim daarna op in de dagelijkse ranglijst voor een deel van de prijzenpot.',
+  'hudChrome.dailyRewards.leaderboard': 'Dagelijkse ranglijst',
+  'hudChrome.dailyRewards.loading': 'Dagelijkse beloningen worden geladen...',
+  'hudChrome.dailyRewards.noHistory': 'Nog geen uitbetalingen.',
+  'hudChrome.dailyRewards.noLeaders': 'Nog geen punten.',
+  'hudChrome.dailyRewards.prize': 'Prijzenpot',
+  'hudChrome.dailyRewards.reason.eligible': 'Beloningen ontgrendeld.',
+  'hudChrome.dailyRewards.reason.no_wallet':
+    'Verbind een portemonnee met minstens $20 USD aan WOC.',
+  'hudChrome.dailyRewards.reason.price_unavailable':
+    'WOC-prijs is niet beschikbaar, beloningen zijn tijdelijk vergrendeld.',
+  'hudChrome.dailyRewards.reason.under_minimum':
+    'Portemonnee ligt onder het WOC-minimum van $20 USD.',
+  'hudChrome.dailyRewards.remainingHoursMinutes': '{hours} u {minutes} min',
+  'hudChrome.dailyRewards.remainingLessThanMinute': '<1 min',
+  'hudChrome.dailyRewards.remainingMinutes': '{minutes} min',
+  'hudChrome.dailyRewards.reset': 'Reset',
+  'hudChrome.dailyRewards.score': 'Score',
+  'hudChrome.dailyRewards.sol': '{amount} SOL',
+  'hudChrome.dailyRewards.spinButton': 'Draaien',
+  'hudChrome.dailyRewards.spinClaimed': 'Geclaimd: +{points} punten.',
+  'hudChrome.dailyRewards.spinClose': 'Dagelijkse draai sluiten',
+  'hudChrome.dailyRewards.spinDialogTitle': 'Dagelijkse beloningsdraai',
+  'hudChrome.dailyRewards.spinReady': 'Eén draai staat klaar.',
+  'hudChrome.dailyRewards.spinResult': '+{points} punten',
+  'hudChrome.dailyRewards.spinTitle': 'Dagelijkse draai',
+  'hudChrome.dailyRewards.tasks': 'Taken',
+  'hudChrome.dailyRewards.title': 'Dagelijkse beloningen',
+  'hudChrome.dailyRewards.unknown': 'Onbekend',
+  'hudChrome.dailyRewards.usd': '{amount} USD',
+  'hudChrome.dailyRewards.walletConnectBody':
+    'Verifieer een Solana-portemonnee met WOC om dagelijkse beloningen te ontgrendelen.',
+  'hudChrome.dailyRewards.walletConnectButton': 'Portemonnee verifiëren',
+  'hudChrome.dailyRewards.walletConnectTitle': 'Portemonnee verifiëren',
+  'hudChrome.dailyRewards.walletHoldBody':
+    'Houd minstens {amount} USD aan WOC om dagelijkse beloningen te ontgrendelen.',
+  'hudChrome.dailyRewards.walletHoldTitle': 'WOC aanhouden',
+  'hudChrome.dailyRewards.walletPriceBody':
+    'WOC-prijzen zijn momenteel niet beschikbaar. Kom binnenkort terug.',
+  'hudChrome.dailyRewards.walletValue': 'Portemonneewaarde (WOC)',
+  'hudChrome.nativeUpdate.body':
+    'Er is een nieuwe versie van World of ClaudeCraft beschikbaar. Werk nu bij voor de nieuwste oplossingen en verbeteringen.',
+  'hudChrome.nativeUpdate.bodyWithVersion':
+    'Versie {version} van World of ClaudeCraft is beschikbaar. Werk nu bij voor de nieuwste oplossingen en verbeteringen.',
+  'hudChrome.nativeUpdate.notNow': 'Niet nu',
+  'hudChrome.nativeUpdate.title': 'Update beschikbaar',
+  'hudChrome.nativeUpdate.update': 'Bijwerken',
+  // Ravenpost authored letters
+  'entities.letters.ravenpost_welcome.sender': 'De Ravenpost',
+  'entities.letters.ravenpost_welcome.subject': 'De raven vliegen nu voor jou',
+  'entities.letters.ravenpost_welcome.body':
+    'Reiziger,\n\nde Ravenpost heeft haar roestplaatsen door de hele vallei geopend. Zoek de ravenzuilen in Eastbrook, Fenbridge en Highwatch: vanaf elke zuil kun je brieven, munten en goederen naar andere avonturiers sturen en ophalen wat de raven je brengen.\n\nBijgesloten een kleine attentie voor je eerste postzegel.\n\nVleugels omhoog,\nDe Ravenpost',
+  'entities.letters.letter_q_wolves.sender': 'Maarschalk Redbrook',
+  'entities.letters.letter_q_wolves.subject': 'De kralen zijn weer rustig',
+  'entities.letters.letter_q_wolves.body':
+    'De herders kunnen eindelijk weer met beide ogen dicht slapen, en dat is jouw verdienste. Ik heb de Ravenpost gevraagd je een kleinigheid uit de wachtkas te bezorgen.\n\nHoud je kling geolied.\n- Maarschalk Redbrook',
+  'entities.letters.letter_q_greyjaw.sender': 'Maarschalk Redbrook',
+  'entities.letters.letter_q_greyjaw.subject': 'Oude Grauwkaak, eindelijk',
+  'entities.letters.letter_q_greyjaw.body':
+    'Nieuws reist snel in zo’n klein stadje. De herders dronken gisteravond op je gezondheid, en Wilkes zweert dat de wolf zo groot was als een kar. Laat ze maar aandikken: je hebt het verdiend.\n\nEet een maaltijd op kosten van de wacht.\n- Maarschalk Redbrook',
+  'entities.letters.letter_q_hollow.sender': 'Broeder Aldric',
+  'entities.letters.letter_q_hollow.subject': 'Wat je in het donker hebt gedaan',
+  'entities.letters.letter_q_hollow.body':
+    'Weinigen zullen ooit weten wat er in die kom begraven lag, en nog minder zouden het geloven. Ik weet het, en ik zal het niet vergeten.\n\nMoge je pad verlicht blijven.\n- Broeder Aldric',
 };

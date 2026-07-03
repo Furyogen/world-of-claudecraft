@@ -55,6 +55,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
     'Pengaturan Jarahan: Jarahan Utama, Penjarah Utama {name}, ambang {threshold}.',
   'hudChrome.masterLoot.thresholdSet': 'Ambang jarahan diatur ke {threshold}.',
   'hudChrome.options.showDevBadges': 'Tampilkan Lencana Pengembang',
+  'hudChrome.options.groundReticle': 'Retikel bidik darat',
   'hudChrome.options.startAttackOnAbility': 'Serangan Otomatis Saat Memakai Kemampuan',
   'hudChrome.party.promoteLeader': 'Angkat jadi Pemimpin',
   'hudChrome.plurals.playersMatching.few':
@@ -94,6 +95,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'abilityUi.actionBar.slotAria': 'Slot aksi {slot}: {ability}',
   'abilityUi.cast.demonHeal': 'Penyembuhan Iblis',
   'abilityUi.cast.fishing': 'Memancing',
+  'abilityUi.cast.thunzharrStormcall': 'Panggilan Badai',
   'abilityUi.forms.bear': 'Beruang',
   'abilityUi.forms.cat': 'Serigala',
   'abilityUi.resources.energy': 'Energi',
@@ -584,6 +586,21 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.fireball.description':
     'Melontarkan bola berkobar yang menimbulkan {damage} kerusakan Api ditambah kerusakan tambahan seiring waktu.',
   'entities.abilities.fireball.name': 'Bola Api',
+  'entities.abilities.rain_of_fire.name': 'Hujan Api',
+  'entities.abilities.rain_of_fire.description':
+    'Menurunkan hujan api di area sasaran, membakar musuh sebesar {damage} kerusakan Api.',
+  'entities.abilities.volley.name': 'Hujan Panah',
+  'entities.abilities.volley.description':
+    'Menghujani area sasaran dengan panah, memberi {damage} kerusakan kepada musuh di dalamnya.',
+  'entities.abilities.hurricane.name': 'Badai',
+  'entities.abilities.hurricane.description':
+    'Mendatangkan badai di area sasaran, menghantam musuh sebesar {damage} kerusakan Alam.',
+  'entities.abilities.earthquake.name': 'Gempa Bumi',
+  'entities.abilities.earthquake.description':
+    'Mengguncang area sasaran, menghantam musuh sebesar {damage} kerusakan Alam.',
+  'entities.abilities.flamestrike.name': 'Hantaman Api',
+  'entities.abilities.flamestrike.description':
+    'Memanggil ledakan api di area sasaran, memberikan {damage} kerusakan Api kepada musuh yang terkena ledakan.',
   'entities.abilities.flame_shock.description':
     'Membakar target dengan api sebesar 25 kerusakan ditambah {damage} selama 12 detik.',
   'entities.abilities.flame_shock.name': 'Kejut Nyala Api',
@@ -1074,6 +1091,15 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'entities.items.moggers_shiv.name': 'Belati Mogger',
   'entities.items.moggers_stomper_boots.name': 'Bot Penginjak Mogger',
   'entities.items.monarch_crown_helm.name': 'Mahkota Sang Raja',
+  'entities.items.copper_mining_pick.name': 'Beliung Tambang Tembaga',
+  'entities.items.iron_mining_pick.name': 'Beliung Tambang Besi',
+  'entities.items.mithril_mining_pick.name': 'Beliung Tambang Mithril',
+  'entities.items.handaxe.name': 'Kapak Tangan',
+  'entities.items.felling_axe.name': 'Kapak Tebang',
+  'entities.items.ironbark_axe.name': 'Kapak Kulit Besi',
+  'entities.items.gathering_sickle.name': 'Sabit Panen',
+  'entities.items.bronze_sickle.name': 'Sabit Perunggu',
+  'entities.items.silverleaf_sickle.name': 'Sabit Daun Perak',
   'entities.items.moongate_rubbing.name': 'Gosokan Penangkal',
   'entities.items.moonpale_scale.name': 'Sisik Pucat Bulan',
   'entities.items.moonscale_saber.name': 'Sabel Sisik Bulan',
@@ -1172,6 +1198,14 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'entities.items.steel_orange_armor_plate.name': 'Oranye Baja',
   'entities.items.storm_core.name': 'Inti Badai',
   'entities.items.stormcallers_crown.name': 'Mahkota Pemanggil Badai',
+  'entities.items.crownforged_gauntlets.name': 'Sarung Tangan Tempaan Mahkota',
+  'entities.items.nighttalon_grips.name': 'Cengkeraman Cakar Malam',
+  'entities.items.soulflame_gloves.name': 'Sarung Tangan Api Jiwa',
+  'entities.items.stormcallers_handguards.name': 'Pelindung Tangan Pemanggil Badai',
+  'entities.items.crownforged_girdle.name': 'Sabuk Tempaan Mahkota',
+  'entities.items.nighttalon_waistband.name': 'Ikat Pinggang Cakar Malam',
+  'entities.items.soulflame_cord.name': 'Tali Pinggang Api Jiwa',
+  'entities.items.stormcallers_waistguard.name': 'Pelindung Pinggang Pemanggil Badai',
   'entities.items.stormcallers_spaulders.name': 'Pelindung Bahu Pemanggil Badai',
   'entities.items.stormshard_leggings.name': 'Legging Serpihan Badai',
   'entities.items.sturdy_belt.name': 'Sabuk Pengembara Kokoh',
@@ -4924,21 +4958,19 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.deathlord.bonus2': 'Meningkatkan daya serang sebesar 40.',
   'entities.itemSets.deathlord.bonus3': 'Meningkatkan kekuatan sebesar 15 dan stamina sebesar 15.',
   'entities.itemSets.necromancers.name': 'Jubah ahli nujum',
-  'entities.itemSets.necromancers.bonus2':
-    'Mengurangi dorongan balik sihir akibat kerusakan sebesar 50%.',
-  'entities.itemSets.necromancers.bonus3': 'Kerusakan yang diterima tidak menunda perapalan sihir.',
+  'entities.itemSets.necromancers.bonus2': 'Kamu tidak dapat terpental (ketahanan pentalan 100%).',
+  'entities.itemSets.necromancers.bonus3':
+    'Meningkatkan kecerdasan sebesar 10 dan stamina sebesar 10.',
   'entities.itemSets.nighttalon.name': 'Perlengkapan kulit Cakar Malam',
   'entities.itemSets.nighttalon.bonus2': 'Meningkatkan daya serang sebesar 40.',
   'entities.itemSets.nighttalon.bonus3':
     'Meningkatkan kelincahan sebesar 15 dan peluang kritis sebesar 2%.',
   'entities.itemSets.soulflame.name': 'Jubah Api Jiwa',
-  'entities.itemSets.soulflame.bonus2':
-    'Mengurangi dorongan balik sihir akibat kerusakan sebesar 50%.',
-  'entities.itemSets.soulflame.bonus3': 'Kerusakan yang diterima tidak menunda perapalan sihir.',
+  'entities.itemSets.soulflame.bonus2': 'Kamu tidak dapat terpental (ketahanan pentalan 100%).',
+  'entities.itemSets.soulflame.bonus3': 'Meningkatkan kecerdasan sebesar 15 dan roh sebesar 15.',
   'entities.itemSets.stormcallers.name': 'Jubah Pemanggil Badai',
-  'entities.itemSets.stormcallers.bonus2':
-    'Mengurangi dorongan balik sihir akibat kerusakan sebesar 50%.',
-  'entities.itemSets.stormcallers.bonus3': 'Kerusakan yang diterima tidak menunda perapalan sihir.',
+  'entities.itemSets.stormcallers.bonus2': 'Kamu tidak dapat terpental (ketahanan pentalan 100%).',
+  'entities.itemSets.stormcallers.bonus3': 'Meningkatkan kecerdasan sebesar 15 dan roh sebesar 15.',
   'entities.itemSets.wyrmshadow.name': 'Perlengkapan Bayangan Wyrm',
   'entities.itemSets.wyrmshadow.bonus2': 'Meningkatkan daya serang sebesar 40.',
   'entities.itemSets.wyrmshadow.bonus3':
@@ -5077,4 +5109,85 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.relay.help.label': 'Butuh Bantuan',
   'hudChrome.discord.relay.help.hint': 'Minta bantuan dari komunitas',
   'hudChrome.options.showSecondaryActionBar': 'Tampilkan Bilah Aksi Sekunder',
+  'errors.api.desktopCodeInvalid':
+    'Kode masuk desktop tidak valid atau kedaluwarsa. Silakan coba lagi.',
+  'desktop.crash.body': 'Tampilan gim berhenti bekerja. Muat ulang?',
+  'desktop.crash.fatalBody':
+    'World of ClaudeCraft mengalami kesalahan tak terduga dan perlu ditutup.',
+  'desktop.crash.quit': 'Keluar',
+  'desktop.crash.reload': 'Muat Ulang',
+  'desktop.crash.title': 'World of ClaudeCraft',
+  'desktop.update.downloading': 'Mengunduh pembaruan {version}...',
+  'desktop.update.later': 'Nanti',
+  'desktop.update.ready':
+    'Pembaruan {version} siap. Akan terpasang saat kamu keluar, atau mulai ulang sekarang.',
+  'desktop.update.restart': 'Mulai Ulang Sekarang',
+  'hudChrome.dailyRewards.close': 'Tutup hadiah harian',
+  'hudChrome.dailyRewards.endsIn': 'Berakhir dalam {time}',
+  'hudChrome.dailyRewards.error': 'Tidak dapat memuat hadiah harian.',
+  'hudChrome.dailyRewards.history': 'Pemenang Sebelumnya',
+  'hudChrome.dailyRewards.intro':
+    'Simpan cukup WOC di dompet terverifikasimu untuk membuka hadiah harian. Kumpulkan poin lewat satu putaran harian dan tugas yang bergilir, lalu naiki papan peringkat harian untuk mendapat bagian dari kolam hadiah.',
+  'hudChrome.dailyRewards.leaderboard': 'Papan Peringkat Harian',
+  'hudChrome.dailyRewards.loading': 'Memuat hadiah harian...',
+  'hudChrome.dailyRewards.noHistory': 'Belum ada pembayaran.',
+  'hudChrome.dailyRewards.noLeaders': 'Belum ada poin.',
+  'hudChrome.dailyRewards.prize': 'Kolam Hadiah',
+  'hudChrome.dailyRewards.reason.eligible': 'Hadiah terbuka.',
+  'hudChrome.dailyRewards.reason.no_wallet':
+    'Hubungkan dompet dengan setidaknya $20 USD dalam WOC.',
+  'hudChrome.dailyRewards.reason.price_unavailable':
+    'Harga WOC tidak tersedia, hadiah terkunci sementara.',
+  'hudChrome.dailyRewards.reason.under_minimum': 'Dompet di bawah batas minimum $20 USD WOC.',
+  'hudChrome.dailyRewards.remainingHoursMinutes': '{hours}j {minutes}m',
+  'hudChrome.dailyRewards.remainingLessThanMinute': '<1m',
+  'hudChrome.dailyRewards.remainingMinutes': '{minutes}m',
+  'hudChrome.dailyRewards.reset': 'Atur Ulang',
+  'hudChrome.dailyRewards.score': 'Skor',
+  'hudChrome.dailyRewards.sol': '{amount} SOL',
+  'hudChrome.dailyRewards.spinButton': 'Putar',
+  'hudChrome.dailyRewards.spinClaimed': 'Diklaim: +{points} poin.',
+  'hudChrome.dailyRewards.spinClose': 'Tutup putaran harian',
+  'hudChrome.dailyRewards.spinDialogTitle': 'Putaran Hadiah Harian',
+  'hudChrome.dailyRewards.spinReady': 'Satu putaran siap.',
+  'hudChrome.dailyRewards.spinResult': '+{points} poin',
+  'hudChrome.dailyRewards.spinTitle': 'Putaran Harian',
+  'hudChrome.dailyRewards.tasks': 'Tugas',
+  'hudChrome.dailyRewards.title': 'Hadiah Harian',
+  'hudChrome.dailyRewards.unknown': 'Tidak diketahui',
+  'hudChrome.dailyRewards.usd': '{amount} USD',
+  'hudChrome.dailyRewards.walletConnectBody':
+    'Verifikasi dompet Solana berisi WOC untuk membuka hadiah harian.',
+  'hudChrome.dailyRewards.walletConnectButton': 'Verifikasi Dompet',
+  'hudChrome.dailyRewards.walletConnectTitle': 'Verifikasi Dompet',
+  'hudChrome.dailyRewards.walletHoldBody':
+    'Simpan minimal {amount} USD dalam WOC untuk membuka hadiah harian.',
+  'hudChrome.dailyRewards.walletHoldTitle': 'Simpan WOC',
+  'hudChrome.dailyRewards.walletPriceBody':
+    'Harga WOC tidak tersedia saat ini. Silakan cek kembali sebentar lagi.',
+  'hudChrome.dailyRewards.walletValue': 'Nilai Dompet (WOC)',
+  'hudChrome.nativeUpdate.body':
+    'Versi baru World of ClaudeCraft tersedia. Perbarui sekarang untuk perbaikan dan peningkatan terbaru.',
+  'hudChrome.nativeUpdate.bodyWithVersion':
+    'Versi {version} World of ClaudeCraft tersedia. Perbarui sekarang untuk perbaikan dan peningkatan terbaru.',
+  'hudChrome.nativeUpdate.notNow': 'Jangan sekarang',
+  'hudChrome.nativeUpdate.title': 'Pembaruan Tersedia',
+  'hudChrome.nativeUpdate.update': 'Perbarui',
+  // Ravenpost authored letters
+  'entities.letters.ravenpost_welcome.sender': 'Pos Gagak',
+  'entities.letters.ravenpost_welcome.subject': 'Kini para gagak terbang untukmu',
+  'entities.letters.ravenpost_welcome.body':
+    'Pengelana,\n\nPos Gagak telah membuka tenggeran di seluruh lembah. Carilah pilar gagak di Eastbrook, Fenbridge, dan Highwatch: dari mana pun kau bisa mengirim surat, koin, dan barang kepada petualang lain, serta mengambil apa pun yang dibawa para gagak untukmu.\n\nTerlampir sedikit tanda mata untuk perangko pertamamu.\n\nKepakkan sayap,\nPos Gagak',
+  'entities.letters.letter_q_wolves.sender': 'Marsekal Redbrook',
+  'entities.letters.letter_q_wolves.subject': 'Kandang kembali tenang',
+  'entities.letters.letter_q_wolves.body':
+    'Para gembala akhirnya bisa tidur nyenyak, dan itu berkat dirimu. Kuminta Pos Gagak mengantarkan sedikit imbalan dari kas penjaga.\n\nJaga bilahmu tetap terasah.\n- Marsekal Redbrook',
+  'entities.letters.letter_q_greyjaw.sender': 'Marsekal Redbrook',
+  'entities.letters.letter_q_greyjaw.subject': 'Si Tua Rahang Kelabu, akhirnya',
+  'entities.letters.letter_q_greyjaw.body':
+    'Kabar cepat menyebar di kota sekecil ini. Semalam para gembala bersulang untuk kesehatanmu, dan Wilkes bersumpah serigala itu sebesar gerobak. Biarkan mereka melebih-lebihkan: kau pantas mendapatkannya.\n\nNikmati makan atas nama penjaga.\n- Marsekal Redbrook',
+  'entities.letters.letter_q_hollow.sender': 'Bruder Aldric',
+  'entities.letters.letter_q_hollow.subject': 'Apa yang kaulakukan dalam gelap',
+  'entities.letters.letter_q_hollow.body':
+    'Hanya segelintir yang akan tahu apa yang terkubur di lembah itu, dan lebih sedikit lagi yang akan percaya. Aku tahu, dan aku tidak akan melupakannya.\n\nSemoga jalanmu tetap terang.\n- Bruder Aldric',
 };

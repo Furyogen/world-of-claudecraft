@@ -355,7 +355,7 @@ describe('delta snapshots', () => {
     const snap = lastSnap(fc.sent);
     expect(snap).not.toBeNull();
     // a fresh session has an empty lastSent, so EVERY maybe() delta key rides the
-    // first snapshot (even the null-valued ones like party/trade); widened to all 25
+    // first snapshot (even the null-valued ones like party/trade); widened to all 26
     for (const key of ALL_DELTA_KEYS) {
       expect(snap.self, `self.${key} missing from first snapshot`).toHaveProperty(key);
     }
@@ -418,7 +418,7 @@ describe('delta snapshots', () => {
     const snap = lastSnap(fc.sent);
     // This single-tick test stays on the decay-safe subset: cds and the timer-backed
     // keys (delve/arena timers, delveDaily) can re-emit after a real sim.tick(), so the
-    // widened all-25 omission is proven by the no-op re-broadcast test instead.
+    // widened all-26 omission is proven by the no-op re-broadcast test instead.
     for (const key of DELTA_KEYS) {
       expect(snap.self, `self.${key} resent although unchanged`).not.toHaveProperty(key);
     }
@@ -768,7 +768,7 @@ describe('delta snapshots', () => {
     joinServer(server, fc2, 2, 'Testb');
     broadcast(server);
     const snapNew = lastSnap(fc2.sent);
-    // a fresh session always receives the full self state: all 25 delta keys
+    // a fresh session always receives the full self state: all 26 delta keys
     for (const key of ALL_DELTA_KEYS) {
       expect(snapNew.self, `self.${key} missing for fresh session`).toHaveProperty(key);
     }
@@ -1815,20 +1815,20 @@ describe('lockpick view rebuilds from events on the online client', () => {
 // ---------------------------------------------------------------------------
 // W0a: full self-snapshot delta round-trip gate.
 //
-// `selfWireJson` (server/game.ts) emits 25 heavy "delta" fields through a
+// `selfWireJson` (server/game.ts) emits 26 heavy "delta" fields through a
 // `maybe(key, value)` closure that ships a key only when its serialized form
 // changed since this session last received it; `applySnapshot` (src/net/
 // online.ts) mirrors each with `if (s.X !== undefined)` (or the inline
 // `s.X ?? e.X` form for `stats`/`weapon`). This is the single most fragile codec
-// in the workstream, so we pin: (a) the exact 25-key set against drift, (b) the
+// in the workstream, so we pin: (a) the exact 26-key set against drift, (b) the
 // terse-key -> IWorld-name rename map, (c) that every dirtied value round-trips
-// onto the correct decode target, and (d) that a no-op re-broadcast omits all 25
+// onto the correct decode target, and (d) that a no-op re-broadcast omits all 28
 // while the prior decoded value is preserved.
 // ---------------------------------------------------------------------------
 
-// The pinned set of the 25 `maybe(...)` delta keys, sorted. Cross-checked below
+// The pinned set of the 28 `maybe(...)` delta keys, sorted. Cross-checked below
 // against the live `maybe(...)` calls scraped from server/game.ts source, so a
-// 26th unregistered delta key reddens this gate.
+// 29th unregistered delta key reddens this gate.
 const ALL_DELTA_KEYS = [
   'arena',
   'buyback',
@@ -1845,10 +1845,13 @@ const ALL_DELTA_KEYS = [
   'inv',
   'lockouts',
   'lroll',
+  'mail',
+  'mailU',
   'market',
   'marks',
   'milestones',
   'party',
+  'prof',
   'qdone',
   'qlog',
   'stats',
@@ -1880,12 +1883,15 @@ const TERSE_TO_IWORLD: Record<string, string> = {
   lockouts: 'selfLockouts',
   lroll: 'lootRollPrompts',
   lxp: 'lifetimeXp',
+  mail: 'mailInfo',
+  mailU: 'mailUnread',
   market: 'marketInfo',
   marks: 'markers',
   milestones: 'unlockedMilestones',
   mres: 'maxResource',
   party: 'partyInfo',
   prk: 'prestigeRank',
+  prof: 'professionsState',
   qdone: 'questsDone',
   qlog: 'questLog',
   res: 'resource',
@@ -1946,6 +1952,11 @@ function dirtyEveryDeltaField(): {
   (sim as any).targeting.partyMarkers.set(party.id, new Map([[mp, 3]]));
   const merchant = sim.entities.get(sim.market.merchantIds[0]);
   if (merchant) merchant.pos = { ...p.pos };
+  // `mail`: mailInfoFor is null unless near a mailbox, so relocate one onto the
+  // player. `mailU` is already non-zero: every fresh character got the one-time
+  // Ravenpost welcome letter (delay 0) at join.
+  const mailbox = sim.entities.get(sim.postOffice.mailboxIds[0]);
+  if (mailbox) mailbox.pos = { ...p.pos };
 
   // Direct PlayerMeta fields.
   meta.inventory = [{ itemId: 'baked_bread', count: 3 }];
@@ -1961,6 +1972,7 @@ function dirtyEveryDeltaField(): {
   meta.delveMarks = 7;
   meta.delveClears = { 'collapsed_reliquary:heroic': 1 };
   meta.companionUpgrades = { companion_tessa: 2 };
+  meta.gatheringProficiency = { mining: 6, logging: 0, herbalism: 0 };
   meta.delveDaily = { date: '2099-01-01', firstClearXp: new Set(['x']), markClears: 4 };
   meta.talents = { spec: 'arms', ranks: {}, choices: {} };
   meta.talentMods.spec = 'arms';
@@ -2064,6 +2076,13 @@ describe('full self-state snapshot delta fixture', () => {
     expect(client.companionState?.companionId).toBe('companion_tessa'); // dcompanion -> companionState
     expect(client.delveMarks).toBe(7); // dmarks -> delveMarks
     expect(client.companionUpgrades).toEqual({ companion_tessa: 2 }); // dcomp -> companionUpgrades
+    expect(client.professionsState).toEqual({
+      skills: [
+        { professionId: 'mining', skill: 6, maxSkill: 300 },
+        { professionId: 'logging', skill: 0, maxSkill: 300 },
+        { professionId: 'herbalism', skill: 0, maxSkill: 300 },
+      ],
+    }); // prof -> professionsState
     expect(client.delveClears).toEqual({ 'collapsed_reliquary:heroic': 1 }); // dclears -> delveClears
     expect(client.delveDaily).toMatchObject({ markClears: 4 }); // delveDaily
     // tal -> talents / talentSpec / loadouts / activeLoadout
@@ -2114,9 +2133,9 @@ describe('full self-state snapshot delta fixture', () => {
 });
 
 describe('delta-key contract pins (anti-drift)', () => {
-  it('ALL_DELTA_KEYS contains exactly 25 unique keys in sorted order', () => {
-    expect(ALL_DELTA_KEYS).toHaveLength(25);
-    expect(new Set(ALL_DELTA_KEYS).size).toBe(25);
+  it('ALL_DELTA_KEYS contains exactly 28 unique keys in sorted order', () => {
+    expect(ALL_DELTA_KEYS).toHaveLength(28);
+    expect(new Set(ALL_DELTA_KEYS).size).toBe(28);
     expect([...ALL_DELTA_KEYS]).toEqual([...ALL_DELTA_KEYS].sort());
   });
 
@@ -2128,7 +2147,7 @@ describe('delta-key contract pins (anti-drift)', () => {
     const scraped = new Set<string>();
     for (let m = re.exec(src); m !== null; m = re.exec(src)) scraped.add(m[1]);
     expect(scraped.has('lockouts')).toBe(true); // the multi-line call IS captured
-    expect(scraped.size).toBe(25);
+    expect(scraped.size).toBe(28);
     expect([...scraped].sort()).toEqual([...ALL_DELTA_KEYS].sort());
   });
 
@@ -2367,5 +2386,155 @@ describe('aura magnitude over the wire (buff/debuff tooltip parity)', () => {
     });
     const mirror = client.entities.get(2)!.auras.find((a) => a.kind === 'buff_int')!;
     expect(mirror.value).toBe(0);
+  });
+});
+
+describe('aura decode reuses records across snapshots (allocation fast path)', () => {
+  function wolfWire(sim: Sim, mobId: number): Record<string, unknown> {
+    return JSON.parse(JSON.stringify(wireEntity(sim.entities.get(mobId)!)));
+  }
+
+  function makeMobWithAura(): { sim: Sim; mobId: number } {
+    const sim = new Sim({ seed: 1, playerClass: 'warrior', noPlayer: true });
+    const pid = sim.addPlayer('warrior', 'Poker');
+    const mob = [...sim.entities.values()].find((e) => e.kind === 'mob')!;
+    void pid;
+    mob.auras.push({
+      id: 'corruption',
+      name: 'Corruption',
+      kind: 'dot',
+      remaining: 12,
+      duration: 12,
+      value: 15,
+      tickInterval: 3,
+      sourceId: 0,
+      school: 'shadow',
+    });
+    return { sim, mobId: mob.id };
+  }
+
+  it('keeps the same array and record objects while only fields change', () => {
+    const { sim, mobId } = makeMobWithAura();
+    const client = bareClient(999);
+    (client as any).applySnapshot({ t: 'snap', ents: [wolfWire(sim, mobId)] });
+    const firstArr = client.entities.get(mobId)!.auras;
+    const firstRec = firstArr[0];
+    expect(firstRec.remaining).toBe(12);
+
+    // same aura set, only the remaining ticked down: the mirror must update the
+    // SAME objects in place (no per-snapshot churn) with the new field values
+    sim.entities.get(mobId)!.auras[0].remaining = 7.5;
+    (client as any).applySnapshot({ t: 'snap', ents: [wolfWire(sim, mobId)] });
+    const secondArr = client.entities.get(mobId)!.auras;
+    expect(secondArr).toBe(firstArr);
+    expect(secondArr[0]).toBe(firstRec);
+    expect(firstRec.remaining).toBe(7.5);
+    expect(firstRec.value).toBe(15);
+    expect(firstRec.school).toBe('shadow');
+  });
+
+  it('rebuilds the list when the aura composition changes', () => {
+    const { sim, mobId } = makeMobWithAura();
+    const client = bareClient(999);
+    (client as any).applySnapshot({ t: 'snap', ents: [wolfWire(sim, mobId)] });
+    const firstArr = client.entities.get(mobId)!.auras;
+
+    sim.entities.get(mobId)!.auras.push({
+      id: 'venom_bite',
+      name: 'Venom Bite',
+      kind: 'dot',
+      remaining: 6,
+      duration: 6,
+      value: 4,
+      tickInterval: 2,
+      sourceId: 0,
+      school: 'nature',
+    });
+    (client as any).applySnapshot({ t: 'snap', ents: [wolfWire(sim, mobId)] });
+    const secondArr = client.entities.get(mobId)!.auras;
+    expect(secondArr).not.toBe(firstArr); // composition changed: fresh build
+    expect(secondArr.map((a) => a.id)).toEqual(['corruption', 'venom_bite']);
+    expect(secondArr[1].value).toBe(4);
+
+    // and dropping back to one aura rebuilds again (length mismatch path)
+    sim.entities.get(mobId)!.auras.pop();
+    (client as any).applySnapshot({ t: 'snap', ents: [wolfWire(sim, mobId)] });
+    expect(client.entities.get(mobId)!.auras.map((a) => a.id)).toEqual(['corruption']);
+  });
+});
+
+describe('aura decode fast-path guards (composition edge cases)', () => {
+  function client2(sim: Sim, mobId: number) {
+    const client = bareClient(999);
+    const apply = () =>
+      (client as any).applySnapshot({
+        t: 'snap',
+        ents: [JSON.parse(JSON.stringify(wireEntity(sim.entities.get(mobId)!)))],
+      });
+    return { client, apply };
+  }
+
+  function makeMobWithTwoAuras(): { sim: Sim; mobId: number } {
+    const sim = new Sim({ seed: 1, playerClass: 'warrior', noPlayer: true });
+    sim.addPlayer('warrior', 'Poker');
+    const mob = [...sim.entities.values()].find((e) => e.kind === 'mob')!;
+    mob.auras.push(
+      {
+        id: 'corruption',
+        name: 'Corruption',
+        kind: 'dot',
+        remaining: 12,
+        duration: 12,
+        value: 15,
+        sourceId: 0,
+        school: 'shadow',
+      },
+      {
+        id: 'weakness',
+        name: 'Weakness',
+        kind: 'buff_ap',
+        remaining: 9,
+        duration: 9,
+        value: -5,
+        sourceId: 0,
+        school: 'physical',
+      },
+    );
+    return { sim, mobId: mob.id };
+  }
+
+  it('a same-length REORDER rebuilds instead of smearing fields across records', () => {
+    const { sim, mobId } = makeMobWithTwoAuras();
+    const { client, apply } = client2(sim, mobId);
+    apply();
+    const mob = sim.entities.get(mobId)!;
+    // swap the two auras: same ids, same length, different order
+    mob.auras.reverse();
+    apply();
+    const mirrored = client.entities.get(mobId)!.auras;
+    expect(mirrored.map((a) => a.id)).toEqual(['weakness', 'corruption']);
+    // each record carries ITS aura's fields, not the other slot's
+    expect(mirrored[0].value).toBe(-5);
+    expect(mirrored[1].value).toBe(15);
+    expect(mirrored[1].school).toBe('shadow');
+  });
+
+  it('the in-place path clears optional sub-fields the wire stops sending', () => {
+    const { sim, mobId } = makeMobWithTwoAuras();
+    const mob = sim.entities.get(mobId)!;
+    mob.auras[0].stacks = 3;
+    mob.auras[0].value2 = 8;
+    const { client, apply } = client2(sim, mobId);
+    apply();
+    const rec = client.entities.get(mobId)!.auras[0];
+    expect(rec.stacks).toBe(3);
+    expect(rec.value2).toBe(8);
+    // same aura set (fast path), but the optionals dropped off the wire
+    mob.auras[0].stacks = undefined;
+    mob.auras[0].value2 = undefined;
+    apply();
+    expect(client.entities.get(mobId)!.auras[0]).toBe(rec); // fast path taken
+    expect(rec.stacks).toBeUndefined(); // not a stale 3
+    expect(rec.value2).toBeUndefined(); // not a stale 8
   });
 });

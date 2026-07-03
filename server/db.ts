@@ -1,7 +1,7 @@
 import { Pool } from 'pg';
 import { LEADERBOARD_MAX } from '../src/sim/leaderboard_page';
 import { sanitizeRemovedZone1Content } from '../src/sim/removed_zone1_content';
-import type { CharacterState, MarketSave } from '../src/sim/sim';
+import type { CharacterState, MailSave, MarketSave } from '../src/sim/sim';
 import type { ArenaFormat, PlayerClass } from '../src/sim/types';
 import { seedChatFilterDefaults } from './chat_filter_db';
 import type { ChatLogRow } from './chat_log';
@@ -294,6 +294,17 @@ CREATE TABLE IF NOT EXISTS world_state (
   data JSONB NOT NULL,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+-- Housekeeping: per-realm operator overrides for game content and rates, one
+-- JSONB document per realm (shape: src/sim/game_config.ts GameConfigOverrides,
+-- validated before save AND before apply). Loaded at boot and applied to the
+-- sim content tables before the world is constructed; admin-dashboard edits
+-- land here and take effect on the next restart.
+CREATE TABLE IF NOT EXISTS game_config_overrides (
+  realm TEXT PRIMARY KEY DEFAULT '${REALM_SQL_DEFAULT}',
+  data JSONB NOT NULL DEFAULT '{}'::jsonb,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_by INT REFERENCES accounts(id) ON DELETE SET NULL
+);
 -- Chat moderation: per-account timed mute + running strike count for the
 -- hard-word (slur) enforcement ladder. A mute blocks chat only, never login.
 ALTER TABLE accounts ADD COLUMN IF NOT EXISTS chat_muted_until TIMESTAMPTZ;
@@ -396,6 +407,95 @@ CREATE TABLE IF NOT EXISTS wallet_link_challenges (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS wallet_link_challenges_account ON wallet_link_challenges(account_id);
+CREATE TABLE IF NOT EXISTS daily_reward_days (
+  day TEXT NOT NULL,
+  realm TEXT NOT NULL DEFAULT '${REALM_SQL_DEFAULT}',
+  prize_pool_usd NUMERIC NOT NULL,
+  woc_usd_price NUMERIC,
+  finalized_at TIMESTAMPTZ,
+  discord_announced_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  PRIMARY KEY (day, realm)
+);
+ALTER TABLE daily_reward_days ADD COLUMN IF NOT EXISTS discord_announced_at TIMESTAMPTZ;
+CREATE TABLE IF NOT EXISTS daily_reward_scores (
+  day TEXT NOT NULL,
+  realm TEXT NOT NULL DEFAULT '${REALM_SQL_DEFAULT}',
+  account_id INT NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+  points INT NOT NULL DEFAULT 0,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  PRIMARY KEY (day, realm, account_id)
+);
+CREATE INDEX IF NOT EXISTS daily_reward_scores_rank
+  ON daily_reward_scores(day, realm, points DESC, updated_at ASC);
+CREATE TABLE IF NOT EXISTS daily_reward_events (
+  id BIGSERIAL PRIMARY KEY,
+  day TEXT NOT NULL,
+  realm TEXT NOT NULL DEFAULT '${REALM_SQL_DEFAULT}',
+  account_id INT NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+  kind TEXT NOT NULL,
+  points INT NOT NULL,
+  idempotency_key TEXT NOT NULL,
+  meta JSONB NOT NULL DEFAULT '{}'::jsonb,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  UNIQUE (day, realm, account_id, idempotency_key)
+);
+CREATE TABLE IF NOT EXISTS daily_reward_spins (
+  day TEXT NOT NULL,
+  realm TEXT NOT NULL DEFAULT '${REALM_SQL_DEFAULT}',
+  account_id INT NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+  outcome_key TEXT NOT NULL,
+  points INT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  PRIMARY KEY (day, realm, account_id)
+);
+CREATE TABLE IF NOT EXISTS daily_reward_tasks (
+  day TEXT NOT NULL,
+  realm TEXT NOT NULL DEFAULT '${REALM_SQL_DEFAULT}',
+  task_id TEXT NOT NULL,
+  task_type TEXT NOT NULL DEFAULT 'manual',
+  title TEXT NOT NULL,
+  description TEXT NOT NULL DEFAULT '',
+  points INT NOT NULL,
+  base_points INT NOT NULL DEFAULT 0,
+  sort_order INT NOT NULL DEFAULT 0,
+  active BOOLEAN NOT NULL DEFAULT TRUE,
+  config JSONB NOT NULL DEFAULT '{}'::jsonb,
+  PRIMARY KEY (day, realm, task_id)
+);
+ALTER TABLE daily_reward_tasks ADD COLUMN IF NOT EXISTS task_type TEXT NOT NULL DEFAULT 'manual';
+ALTER TABLE daily_reward_tasks ADD COLUMN IF NOT EXISTS base_points INT NOT NULL DEFAULT 0;
+ALTER TABLE daily_reward_tasks ADD COLUMN IF NOT EXISTS config JSONB NOT NULL DEFAULT '{}'::jsonb;
+UPDATE daily_reward_tasks SET base_points = points WHERE base_points = 0 AND points > 0;
+CREATE TABLE IF NOT EXISTS daily_reward_task_completions (
+  day TEXT NOT NULL,
+  realm TEXT NOT NULL DEFAULT '${REALM_SQL_DEFAULT}',
+  account_id INT NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+  task_id TEXT NOT NULL,
+  points INT NOT NULL,
+  completed_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  PRIMARY KEY (day, realm, account_id, task_id)
+);
+CREATE TABLE IF NOT EXISTS daily_reward_payouts (
+  day TEXT NOT NULL,
+  realm TEXT NOT NULL DEFAULT '${REALM_SQL_DEFAULT}',
+  rank INT NOT NULL,
+  account_id INT NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+  username TEXT NOT NULL,
+  wallet_pubkey TEXT,
+  points INT NOT NULL,
+  prize_percent NUMERIC NOT NULL,
+  prize_usd NUMERIC NOT NULL,
+  status TEXT NOT NULL DEFAULT 'pending',
+  tx_signature TEXT,
+  error TEXT,
+  paid_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  PRIMARY KEY (day, realm, rank)
+);
+CREATE INDEX IF NOT EXISTS daily_reward_payouts_status
+  ON daily_reward_payouts(status, day DESC, realm);
 -- Shareable player cards (docs/prd/woc/player-card.md). One card per character;
 -- the PNG is composited client-side and stored here as bytes so any realm
 -- process (all share this database) can serve /p/<slug> and the OG image. slug
@@ -464,6 +564,9 @@ export interface AccountRow {
   id: number;
   username: string;
   password_hash: string;
+  // Recovery email (nullable): the login path selects it so the handler can tell
+  // the client whether a pre-existing account still needs to set one.
+  email?: string | null;
   // Present on the login path (findAccount): null/undefined when 2FA is off.
   totp_secret?: string | null;
   totp_enabled_at?: string | null;
@@ -596,7 +699,7 @@ export async function createAccount(
 
 export async function findAccount(username: string): Promise<AccountRow | null> {
   const res = await pool.query(
-    `SELECT id, username, password_hash, totp_secret, totp_enabled_at, totp_last_window
+    `SELECT id, username, password_hash, email, totp_secret, totp_enabled_at, totp_last_window
      FROM accounts WHERE username = $1`,
     [username],
   );
@@ -801,6 +904,28 @@ export async function revokeCompanionToken(accountId: number, prefix: string): P
 
 export async function setAccountEmail(accountId: number, email: string | null): Promise<void> {
   await pool.query('UPDATE accounts SET email = $2 WHERE id = $1', [accountId, email]);
+}
+
+// Fill the recovery email ONLY when the account has none yet, never overwriting an
+// address the owner already set (that can only change through the verified change
+// flow). Used by the Discord capture path: a Discord-verified address seeds the
+// recovery email + stamps email_verified_at, but a fresh Discord grant must never
+// clobber an existing one. Idempotent (the WHERE makes a second call a no-op) and
+// race-safe (the guard is in the UPDATE, not a read-then-write). Returns true when
+// a row was actually filled.
+export async function backfillAccountEmailIfEmpty(
+  accountId: number,
+  email: string,
+  verified: boolean,
+): Promise<boolean> {
+  const res = await pool.query(
+    `UPDATE accounts
+       SET email = $2,
+           email_verified_at = CASE WHEN $3 THEN now() ELSE email_verified_at END
+     WHERE id = $1 AND (email IS NULL OR email = '')`,
+    [accountId, email, verified],
+  );
+  return (res.rowCount ?? 0) > 0;
 }
 
 export async function setAccountDeactivated(
@@ -1732,18 +1857,20 @@ export async function saveCharacterState(
   );
 }
 
-// Persist a character row AND this realm's World Market blob in ONE transaction.
-// The two live in different tables (characters / world_state), but a Market
-// listing is an escrow: the item leaves the seller's bags (character state) and
-// becomes a listing (market state) in the same Sim action. Saving them as two
-// independent writes lets an unclean crash persist one half and not the other,
-// vaporising the item or duplicating it across bags and market. The leave path
-// uses this so a logout flush of bags can never tear away from the market.
+// Persist a character row AND this realm's World Market + Ravenpost mail blobs
+// in ONE transaction. They live in different tables (characters / world_state),
+// but a Market listing and a mail attachment are both escrows: the item leaves
+// the character's bags (character state) and becomes a listing / a letter
+// parcel (world state) in the same Sim action. Saving them as independent
+// writes lets an unclean crash persist one half and not the other, vaporising
+// the item or duplicating it across bags and book. The leave path uses this so
+// a logout flush of bags can never tear away from either escrow.
 export async function saveCharacterAndMarketState(
   characterId: number,
   level: number,
   state: CharacterState,
   market: MarketSave,
+  mail: MailSave,
 ): Promise<void> {
   const cleanState = sanitizeRemovedZone1Content(state).state;
   const client = await pool.connect();
@@ -1760,6 +1887,11 @@ export async function saveCharacterAndMarketState(
       // flush must land where the market is read back, or the escrowed listing
       // is written to a key nothing loads and the item is stranded on next boot.
       [marketStateKey(REALM), JSON.stringify(market)],
+    );
+    await client.query(
+      `INSERT INTO world_state (key, data, updated_at) VALUES ($1, $2, now())
+       ON CONFLICT (key) DO UPDATE SET data = EXCLUDED.data, updated_at = now()`,
+      [mailStateKey(REALM), JSON.stringify(mail)],
     );
     await client.query('COMMIT');
   } catch (err) {
@@ -2137,6 +2269,20 @@ export async function loadMarketState(): Promise<MarketSave | null> {
 
 export async function saveMarketState(save: MarketSave): Promise<void> {
   await saveWorldState(marketStateKey(REALM), save);
+}
+
+// The Ravenpost mail book: realm-scoped like the market, one JSONB blob per
+// realm under `mail:<realm>`. Born realm-scoped, so no legacy migration.
+export function mailStateKey(realm: string): string {
+  return `mail:${realm}`;
+}
+
+export async function loadMailState(): Promise<MailSave | null> {
+  return loadWorldState<MailSave>(mailStateKey(REALM));
+}
+
+export async function saveMailState(save: MailSave): Promise<void> {
+  await saveWorldState(mailStateKey(REALM), save);
 }
 
 // ---------------------------------------------------------------------------

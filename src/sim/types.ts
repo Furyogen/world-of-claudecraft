@@ -1,5 +1,6 @@
 // Core shared types for the simulation. The sim layer has zero DOM/rendering deps.
 
+import type { GatheringProfessionId } from './content/professions';
 import type { LockSession, LootTier, PickAction, StepResult, VisibleCell } from './lockpick';
 
 export const TICK_RATE = 20; // sim ticks per second
@@ -177,6 +178,9 @@ export type AuraKind =
   | 'cost_tax'
   | 'heal_absorb'
   | 'critvuln'
+  | 'next_cast_instant'
+  | 'next_cast_free'
+  | 'next_attack_crit'
   | 'buff_spi'
   // 2v2 Fiesta power-up buffs: `buff_scale` value = body-size multiplier (also
   // boosts max-hp when >1); `buff_jump` value = jump-height multiplier.
@@ -207,6 +211,7 @@ export type CrowdControlDrCategory =
   | 'root'
   | 'polymorph'
   | 'fear'
+  | 'lockout'
   | 'openerStun'
   | 'controlledStun'
   | 'randomStun';
@@ -262,7 +267,12 @@ export type ItemUse =
   | { type: 'mechChroma'; chromaId: string }
   // Opens the client-side event skin-select overlay. The server rolls a rank on
   // use (see Sim.openSkinSelect) and the player locks one in via claimEventSkin.
-  | { type: 'skinSelect'; catalog?: SkinCatalog };
+  | { type: 'skinSelect'; catalog?: SkinCatalog }
+  // A base gathering tool (see #1123). `tier` gates which node/material tiers
+  // it can gather: see src/sim/professions/tools.ts (canGatherTier). This item
+  // type never carries a durability field (this repo has no durability
+  // mechanic anywhere), so a base tool can never become unusable.
+  | { type: 'gatherTool'; professionId: GatheringProfessionId; tier: number };
 
 // Rarity ranks for the cosmetic skin-select event, ordered low → high. A rolled
 // rank unlocks its own tier and every tier below it (epic unlocks rare+uncommon).
@@ -325,7 +335,8 @@ interface BaseItemDef {
 // Item-set bonuses (classic "tier set" style). Flat effects fold into
 // recalcPlayerStats: primary stats feed the AP/crit/HP derivations, `ap`/`crit`
 // add at their derivation steps, and `castPushbackReduction` (0..1) scales the
-// damage-driven cast pushback in Sim.pushbackCast. Balance values are authored in
+// damage-driven cast pushback in combat/casting_lifecycle.ts. `knockbackResistance` (0..1)
+// scales on-hit knockback distance. Balance values are authored in
 // content/item_sets.ts, never inline in engine code.
 export interface SetBonusEffect {
   str?: number;
@@ -336,6 +347,7 @@ export interface SetBonusEffect {
   ap?: number; // flat attack power
   crit?: number; // flat crit chance, 0..1
   castPushbackReduction?: number; // 0..1: fraction of damage cast-pushback removed (1 = immune)
+  knockbackResistance?: number; // 0..1: fraction of on-hit knockback distance resisted (1 = immune)
 }
 
 export interface SetBonusTier {
@@ -371,9 +383,45 @@ export interface OtherItemDef extends BaseItemDef {
 
 export type ItemDef = ArmorItemDef | WeaponItemDef | OtherItemDef;
 
+// Per-instance item payload (#1165). Additive and OPTIONAL: most items stay plain
+// {itemId, count} with no instance payload (fungible, market-listable). A slot
+// carrying `instance` is non-fungible (signed, has rolled stats, or is
+// character-bound) and is kept in its own slot entry, never merged with a plain
+// stack of the same itemId. Inert in the World Market for now (blocked at list
+// time, see market.ts marketList); #1146 wires real market handling for
+// instanced items later.
+export interface ItemInstancePayload {
+  /** Player name that signed/crafted this specific copy, if any. */
+  signer?: string;
+  /** Remaining charges for a per-effect-limited item, keyed by effect id. */
+  charges?: Record<string, number>;
+  /** Rolled quality/stat values baked into this specific copy at creation time. */
+  rolled?: { quality?: string; stats?: Record<string, number> };
+  /** Player id (Entity id) this specific copy is bound to. */
+  boundTo?: number;
+}
+
 export interface InvSlot {
   itemId: string;
   count: number;
+  /** Additive, optional per-instance payload (#1165). Absent for ordinary fungible stacks. */
+  instance?: ItemInstancePayload;
+}
+
+// A shallow `{ ...slot }` aliases `instance` (and its mutable `charges`/`rolled.stats`
+// maps) between the live slot and a serialized/loaded copy: decrementing a charge on
+// one would silently mutate the other. Deep-clone at every save/load boundary instead.
+export function cloneInvSlot<T extends InvSlot>(slot: T): T {
+  if (!slot.instance) return { ...slot };
+  const src = slot.instance;
+  const instance: ItemInstancePayload = { ...src };
+  if (src.charges) instance.charges = { ...src.charges };
+  if (src.rolled)
+    instance.rolled = {
+      ...src.rolled,
+      ...(src.rolled.stats && { stats: { ...src.rolled.stats } }),
+    };
+  return { ...slot, instance };
 }
 
 export interface LootSlot extends InvSlot {
@@ -390,7 +438,7 @@ export interface CorpseLoot {
 
 export type CurrencyLootStrategy = 'looter-takes-all' | 'fair-split';
 export type LootRollChoice = 'need' | 'greed' | 'pass';
-export type ItemLootStrategy = 'looter-takes-all' | 'need-greed';
+export type ItemLootStrategy = 'looter-takes-all' | 'need-greed' | 'round-robin';
 
 // An open need-greed roll a player may still answer. Carried both on the
 // transient `lootRoll` SimEvent and (for reliable re-delivery) on the self
@@ -422,7 +470,7 @@ export interface LootStrategies {
 
 export const DEFAULT_PARTY_LOOT_STRATEGIES: LootStrategies = {
   currency: 'fair-split',
-  commonItems: 'looter-takes-all',
+  commonItems: 'round-robin',
   premiumItems: 'need-greed',
   master: { enabled: false, looter: 0, threshold: 'uncommon' },
 };
@@ -471,6 +519,11 @@ export interface MobTemplate {
   color: number; // render hint
   boss?: boolean;
   rare?: boolean;
+  // World boss: a server-wide elite that spawns on a fixed cadence (not from a
+  // CAMP), announces itself when it rises, and drops PERSONAL loot to every player
+  // who damaged it (gated to once per day per boss). The spawn schedule + location
+  // live in src/sim/world_boss.ts; the loot roll runs through rollWorldBossLoot.
+  worldBoss?: boolean;
   // Elite scaling, vanilla-style: ~2.3x health, ~1.5x damage, double XP.
   elite?: boolean;
   // Rare/miniboss controls.
@@ -487,6 +540,28 @@ export interface MobTemplate {
     school?: string;
     fx?: 'nova' | 'projectile';
   };
+  // Boss mechanic: a periodic telegraphed HARDCAST. Unlike the instant aoePulse,
+  // the mob shows a real cast bar (the entity casting fields carry castId) for
+  // `castTime` seconds, then the spell lands as an AoE nova on every living player
+  // within `radius`. The mob keeps meleeing while it casts (the bar is the
+  // telegraph healers react to, not a channel). `yell` is barked at cast start.
+  bigCast?: {
+    castId: string;
+    name: string;
+    castTime: number;
+    every: number;
+    radius: number;
+    min: number;
+    max: number;
+    school?: string;
+    yell?: string;
+  };
+  // Boss bark lines, broadcast as 'yell'-channel chat to every player within
+  // YELL_RANGE (mirroring the Nythraxis encounter yells; sim-emitted English by
+  // the variable-routed-chat precedent, see the S3 note in
+  // tests/localization_fixes.test.ts). engage fires once per pull on the first
+  // player aggro, summon on each add wave, enrage when the enrage turns on.
+  yells?: { engage?: string; summon?: string; enrage?: string };
   // Boss mechanic: spawn adds when hp first drops below each threshold (descending fractions).
   summonAdds?: { mobId: string; count: number; atHpPct: number[] };
   // Boss mechanic: damage multiplier (and optional swing-speed haste) once hp
@@ -995,7 +1070,8 @@ export type AbilityEffect =
       requiresBehind?: boolean;
       weaponMult?: number;
     } // instant special attack (sinister strike, overpower, backstab)
-  | { type: 'directDamage'; min: number; max: number }
+  | { type: 'directDamage'; min: number; max: number; vsRootedMult?: number }
+  | { type: 'interrupt'; lockout: number }
   | { type: 'heal'; min: number; max: number } // friendly target (or self)
   | { type: 'hot'; total: number; duration: number; interval: number } // renew, rejuvenation
   | { type: 'absorb'; amount: number; duration: number } // power word: shield
@@ -1060,10 +1136,22 @@ export interface AbilityDef {
   class: PlayerClass;
   cost: number; // rage/mana/energy (rank 1; ranks may override)
   castTime: number; // 0 = instant
+  // A cast/channel with this flag survives the player's own movement (the
+  // move-input cancel skips it); talents can also grant it per-ability.
+  castWhileMoving?: boolean;
+  // A cast/channel with this flag cannot be stopped by interrupt effects.
+  uninterruptible?: boolean;
   channel?: { duration: number; ticks: number }; // arcane missiles
   cooldown: number; // seconds, 0 = none (GCD only)
   range: number; // yards; 0 = melee range
   minRange?: number;
+  // The attack travels to its target as a projectile, so its damage and effects
+  // resolve when the bolt LANDS (projectile_travel), not at cast completion. Every
+  // non-physical spell is a projectile by convention (keyed off school in
+  // casting_lifecycle); a PHYSICAL ranged shot (hunter Aimed / Concussive Shot) must
+  // set this explicitly, or it would deal its damage instantly while the arrow is
+  // still visibly in flight. Melee physical attacks leave it unset.
+  projectile?: boolean;
   school: 'physical' | 'fire' | 'frost' | 'arcane' | 'shadow' | 'holy' | 'nature';
   // Damage scaling source for the flat directDamage / DoT / AoE riders. Default:
   // non-physical damage scales with Spell Power; physical damage scales with melee
@@ -1073,6 +1161,10 @@ export interface AbilityDef {
   scalesWith?: 'ranged';
   requiresTarget: boolean;
   targetType?: 'enemy' | 'friendly'; // friendly = self or allied player (defaults to enemy)
+  // Ground-targeted ability: instead of an entity target, the cast is aimed at a
+  // world point (the client proposes it, the server clamps it to `range`). Its area
+  // effects (aoeDamage / groundAoE) center on that point. Implies requiresTarget:false.
+  targetMode?: 'position';
   onNextSwing?: boolean; // heroic strike style: no GCD, queues on swing
   offGcd?: boolean;
   awardsCombo?: number; // rogue builders
@@ -1351,6 +1443,7 @@ export interface Entity {
   critChance: number; // 0..1
   dodgeChance: number;
   castPushbackReduction: number; // 0..1: damage cast-pushback removed by item-set bonuses (1 = immune)
+  knockbackResistance: number; // 0..1: on-hit knockback distance resisted by item-set bonuses (1 = immune)
   moveSpeed: number;
   hostile: boolean;
   // combat
@@ -1368,12 +1461,17 @@ export interface Entity {
   castingAbility: string | null;
   castRemaining: number;
   castTotal: number;
+  // Ground-targeted casting: the world point a `targetMode: 'position'` ability is
+  // aimed at, captured (server-clamped to range) when the cast begins and read by
+  // its area effects when it resolves. null for normal entity/self casts.
+  castAim: Vec3 | null;
   channeling: boolean;
   channelTickTimer: number;
   channelTickEvery: number;
   gcdRemaining: number;
   cooldowns: Map<string, number>;
   queuedOnSwing: string | null; // heroic strike
+  queuedOnSwingFree?: boolean; // next_cast_free consumed at queue time
   fiveSecondRule: number; // time since last mana spend
   comboPoints: number;
   comboTargetId: number | null;
@@ -1410,6 +1508,8 @@ export interface Entity {
   petPathCooldown: number; // seconds until this pet may recompute its heel path again
   pulseTimer: number; // boss aoe pulse countdown
   stompTimer: number; // boss War Stomp stun-pulse countdown
+  bigCastTimer: number; // boss telegraphed-hardcast (bigCast) cadence countdown
+  yelledEngage: boolean; // engage bark fired this pull (reset on evade/respawn)
   stoneskinTimer: number; // periodic self-absorb barrier countdown
   terrifyTimer: number; // Banshee's Wail fear-pulse countdown
   detonateTimer: number; // Death Throes fuse on a volatile corpse; Infinity = no pending detonation
@@ -1533,6 +1633,34 @@ export interface NythraxisEncounterState {
 
 export type ErrorReason = 'target_dead';
 
+// Ravenpost mail command outcomes. `sent`/`collected` are successes; the rest
+// are refusals. The client maps each code to its localized line (the sim never
+// emits mail text).
+export type MailResultCode =
+  | 'sent'
+  | 'collected'
+  | 'tooFar'
+  | 'needRecipient'
+  | 'noRecipient'
+  | 'tooManyParcels'
+  | 'noMailQuestItems'
+  | 'notEnoughItems'
+  | 'cantAffordPostage'
+  | 'recipientBoxFull'
+  | 'letterGone'
+  | 'takeParcelsFirst';
+
+// Guild calendar command outcomes (mirrors server/social.ts CalendarResultCode;
+// `created`/`removed` are successes, the rest refusals).
+export type CalendarResultCode =
+  | 'created'
+  | 'removed'
+  | 'notInGuild'
+  | 'notOfficer'
+  | 'badInput'
+  | 'calendarFull'
+  | 'eventGone';
+
 // `pid` (when present) marks a personal event that should only be delivered to
 // that player entity's owner; events without pid are world-visible.
 export type SimEvent = { pid?: number } & (
@@ -1588,6 +1716,20 @@ export type SimEvent = { pid?: number } & (
   // itemId names the single item for buy/sell/buyback; it is omitted for the
   // bulk "sell all junk" sweep, which the client treats as a plain refresh signal.
   | { type: 'vendor'; action: 'buy' | 'sell' | 'buyback'; itemId?: string }
+  // Ravenpost mail. Structured data only, the client builds every visible
+  // string (the lockpick convention). `mailbox` asks the client to open the
+  // mail window (the interact path at a mailbox object); `mailArrived` is the
+  // personal arrival cue (envelope toast + sound); `mailResult` reports a mail
+  // command's outcome (`sent` carries the recipient name + postage in copper,
+  // `collected` the coin taken, `tooManyParcels` the attachment cap). All
+  // always carry pid.
+  | { type: 'mailbox' }
+  | { type: 'mailArrived'; senderName: string; letterId?: string }
+  | { type: 'mailResult'; code: MailResultCode; value?: number; name?: string }
+  // Guild calendar outcome. Emitted only by the server's SocialService (the
+  // sim never books guild events); declared here so the one client event
+  // switch stays exhaustively typed.
+  | { type: 'calendarResult'; code: CalendarResultCode }
   // say/yell are delivered only to players in range and carry the speaker's
   // entity id so the client can hang a chat bubble over their head; whisper
   // goes to the target (and echoes to the sender with `to` set); general is
@@ -1681,6 +1823,19 @@ export type SimEvent = { pid?: number } & (
       targetId: number;
       school: string;
       fx: 'projectile' | 'beam' | 'tick' | 'nova';
+    }
+  // visual-only cue anchored to a WORLD POINT rather than an entity: a
+  // ground-targeted spell's impact (the burst/nova lands where it was aimed, not
+  // on the caster). The renderer drapes it onto the terrain at (x, z).
+  | {
+      type: 'spellfxAt';
+      x: number;
+      z: number;
+      school: string;
+      fx: 'burst' | 'nova';
+      // blast radius in yards; when set the renderer flashes a terrain-draped
+      // AoE ring of this size under the burst so the impact area reads clearly
+      radius?: number;
     }
   // entityId (when set) anchors the log to that entity so the server only
   // delivers it to nearby players; anchorless logs broadcast server-wide
@@ -1831,7 +1986,7 @@ export const MAX_VIRTUAL_LEVEL = 200; // table bound; far beyond any reachable l
 
 // VLEVEL_CUM[v] = total lifetime XP required to *reach* virtual level v.
 // VLEVEL_CUM[1] = 0; index 0 is unused padding.
-const VLEVEL_CUM: number[] = (() => {
+function buildVlevelCum(): number[] {
   const cum: number[] = [0, 0];
   let total = 0;
   // real levels: 1→2 … 19→20 come straight from XP_TABLE
@@ -1847,7 +2002,18 @@ const VLEVEL_CUM: number[] = (() => {
     step *= POSTCAP_GROWTH;
   }
   return cum;
-})();
+}
+
+const VLEVEL_CUM: number[] = buildVlevelCum();
+
+// The cumulative table above is derived from XP_TABLE at module eval. A host
+// that mutates XP_TABLE (the game-config override layer, src/sim/game_config.ts)
+// must call this afterwards so virtual levels keep matching the live curve.
+export function refreshPostcapXpTable(): void {
+  const next = buildVlevelCum();
+  VLEVEL_CUM.length = 0;
+  VLEVEL_CUM.push(...next);
+}
 
 // Total lifetime XP needed to reach a given (virtual or real) level. Used to
 // backfill `lifetimeXp` for characters saved before the counter existed.

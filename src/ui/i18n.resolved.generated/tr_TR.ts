@@ -177,6 +177,52 @@ export const tr_TR: EnTranslations = {
       "title": "İfadeler",
       "done": "Tamam"
     },
+    "dailyRewards": {
+      "title": "Günlük Ödüller",
+      "close": "Günlük ödülleri kapat",
+      "loading": "Günlük ödüller yükleniyor...",
+      "error": "Günlük ödüller yüklenemedi.",
+      "intro": "Günlük ödüllerin kilidini açmak için doğrulanmış cüzdanında yeterince WOC bulundur. Bir günlük çevirme ve dönüşümlü görevlerle puan kazan, ardından ödül havuzundan pay almak için günlük lider tablosunda yüksel.",
+      "prize": "Ödül Havuzu",
+      "reset": "Sıfırla",
+      "endsIn": "Bitmesine {time}",
+      "remainingLessThanMinute": "<1dk",
+      "remainingMinutes": "{minutes}dk",
+      "remainingHoursMinutes": "{hours}sa {minutes}dk",
+      "score": "Skor",
+      "walletValue": "Cüzdan Değeri (WOC)",
+      "usd": "{amount} USD",
+      "sol": "{amount} SOL",
+      "unknown": "Bilinmiyor",
+      "spinTitle": "Günlük Çevirme",
+      "spinDialogTitle": "Günlük Ödül Çevirmesi",
+      "spinClose": "Günlük çevirmeyi kapat",
+      "spinReady": "Bir çevirme hazır.",
+      "spinClaimed": "Alındı: +{points} puan.",
+      "spinResult": "+{points} puan",
+      "spinButton": "Çevir",
+      "tasks": "Görevler",
+      "taskMultiplier": "x{multiplier} multiplier",
+      "pointsGained": "{points} daily rewards points gained.",
+      "leaderboard": "Günlük Lider Tablosu",
+      "totalPlayer": "{count} player today",
+      "totalPlayers": "{count} players today",
+      "history": "Geçmiş Kazananlar",
+      "noLeaders": "Henüz puan yok.",
+      "noHistory": "Henüz ödeme yok.",
+      "walletConnectTitle": "Cüzdanı Doğrula",
+      "walletConnectBody": "Günlük ödüllerin kilidini açmak için WOC bulunan bir Solana cüzdanını doğrula.",
+      "walletConnectButton": "Cüzdanı Doğrula",
+      "walletHoldTitle": "WOC Bulundur",
+      "walletHoldBody": "Günlük ödüllerin kilidini açmak için en az {amount} USD değerinde WOC bulundur.",
+      "walletPriceBody": "WOC fiyatı şu anda alınamıyor. Kısa süre sonra tekrar bak.",
+      "reason": {
+        "eligible": "Ödüllerin kilidi açıldı.",
+        "no_wallet": "En az 20 USD değerinde WOC bulunan bir cüzdan bağla.",
+        "under_minimum": "Cüzdan, 20 USD değerindeki WOC alt sınırının altında.",
+        "price_unavailable": "WOC fiyatı alınamıyor, ödüller geçici olarak kilitli."
+      }
+    },
     "theme": {
       "preset": "Arayüz Teması",
       "customColors": "Özel Renkler",
@@ -265,6 +311,13 @@ export const tr_TR: EnTranslations = {
       "heading": "Yön",
       "minimapZoom": "Mini harita yakınlaştırması"
     },
+    "nativeUpdate": {
+      "title": "Güncelleme Mevcut",
+      "body": "World of ClaudeCraft'ın yeni bir sürümü mevcut. En son düzeltmeler ve iyileştirmeler için şimdi güncelle.",
+      "bodyWithVersion": "World of ClaudeCraft'ın {version} sürümü mevcut. En son düzeltmeler ve iyileştirmeler için şimdi güncelle.",
+      "notNow": "Şimdi Değil",
+      "update": "Güncelle"
+    },
     "castBar": {
       "playerAria": "Senin Büyü Çubuğun",
       "targetAria": "Birim Büyü Çubuğu"
@@ -337,9 +390,14 @@ export const tr_TR: EnTranslations = {
       "showWalletOnCharacterScreen": "Cüzdanı Karakter Ekranında Göster",
       "showWalletOnPlayerCard": "Cüzdanı Oyuncu Kartında Göster",
       "showDevBadges": "Geliştirici Rozetlerini Göster",
+      "showOwnNameplate": "Show My Nameplate",
       "uiScale": "Arayüz Ölçeği",
+      "playerFrameScale": "Player Frame Scale",
+      "targetFrameScale": "Target Frame Scale",
       "highContrastBackground": "Yüksek Kontrastlı Arka Plan",
       "startAttackOnAbility": "Yetenek Kullanımında Otomatik Saldırı",
+      "walkByAutoloot": "Walk-by Autoloot",
+      "groundReticle": "Yer hedefleme halkası",
       "showItemLevel": "Eşya Seviyesini Göster",
       "itemLevelLine": "Eşya Seviyesi {level}",
       "itemScoreLine": "Puan {score}",
@@ -771,6 +829,9 @@ export const tr_TR: EnTranslations = {
         "nature": "Doğa"
       }
     },
+    "worldBoss": {
+      "spawn": "{name} rises over Thornpeak Heights!"
+    },
     "loot": {
       "chestTitle": "Sandık"
     },
@@ -781,6 +842,23 @@ export const tr_TR: EnTranslations = {
     "nameplate": {
       "mob": "[{level}] {name}",
       "mobElite": "[{level}+] {name}"
+    },
+    "mobTooltip": {
+      "levelFamily": "Level {level} {family}",
+      "familyDemon": "Demon",
+      "hostile": "Hostile",
+      "friendly": "Friendly"
+    },
+    "targetFrame": {
+      "unlock": "Move target frame",
+      "lock": "Lock target frame"
+    },
+    "playerFrame": {
+      "unlock": "Move player frame",
+      "lock": "Lock player frame"
+    },
+    "frameReset": {
+      "label": "Reset Frame Positions"
     },
     "itemTooltip": {
       "requiresLevel": "Gereken Seviye {level}"
@@ -863,6 +941,7 @@ export const tr_TR: EnTranslations = {
       "memberSinceDays": "Discord'da {days}g",
       "roleTag": {
         "levyst": "Levy St",
+        "admin": "Admin",
         "devs": "Geliştirici",
         "mods": "Moderatör",
         "artists": "Sanatçı"
@@ -955,6 +1034,112 @@ export const tr_TR: EnTranslations = {
       },
       "linkedAs": "{login} olarak bağlandı",
       "unlink": "GitHub Bağlantısını Kaldır"
+    },
+    "mailbox": {
+      "title": "Mailbox",
+      "subtitle": "The Ravenpost",
+      "close": "Close mailbox",
+      "tabInbox": "Inbox",
+      "tabInboxWithCount": "Inbox ({count})",
+      "tabSend": "Send",
+      "empty": "Your mailbox is empty.",
+      "truncated": "Showing the newest {shown} of {total} letters.",
+      "attachmentsBadge": "Parcel attached",
+      "unreadBadge": "Unread",
+      "back": "Back",
+      "take": "Take attachments",
+      "delete": "Delete letter",
+      "deleteAria": "Delete the letter {subject}",
+      "openAria": "Read the letter {subject} from {name}",
+      "noSubject": "(no subject)",
+      "toLabel": "To",
+      "toPlaceholder": "Character name",
+      "subjectLabel": "Subject",
+      "bodyLabel": "Message",
+      "coinLabel": "Attach coin",
+      "parcelsLabel": "Parcels",
+      "parcelsHint": "Click an item in your bags to attach it.",
+      "removeParcelAria": "Remove {item} from the letter",
+      "sendButton": "Send letter",
+      "postageNote": "Postage: {amount}. The raven flies for about {seconds}s.",
+      "arrivedBanner": "The raven has landed: mail from {name}.",
+      "arrivedLog": "You have new mail from {name}.",
+      "indicatorAria": "Unread mail: {count}",
+      "indicatorTip": "You have {count} unread letters. Visit a mailbox to read them.",
+      "clickAttach": "Click to attach to your letter.",
+      "cannotMail": "This cannot be mailed.",
+      "result": {
+        "sent": "A raven takes wing with your letter to {name} ({postage} postage).",
+        "collected": "You collect {amount} from the letter.",
+        "tooFar": "You must be at a mailbox to tend your post.",
+        "needRecipient": "Name a recipient for your letter.",
+        "noRecipient": "No one by that name holds a mailbox here.",
+        "tooManyParcels": "A letter carries at most {count} parcels.",
+        "noMailQuestItems": "You cannot mail quest items.",
+        "notEnoughItems": "You do not have that many to send.",
+        "cantAffordPostage": "You cannot afford the postage.",
+        "recipientBoxFull": "Their mailbox is full.",
+        "letterGone": "That letter is no longer in your box.",
+        "takeParcelsFirst": "Take the parcels out before discarding the letter."
+      }
+    },
+    "calendar": {
+      "title": "Event Calendar",
+      "close": "Close calendar",
+      "keybindLabel": "Event Calendar",
+      "prevMonth": "Previous month",
+      "nextMonth": "Next month",
+      "dayAria": "{date}: {count} events",
+      "noEvents": "Nothing planned for this day.",
+      "allDay": "All day",
+      "bookedBy": "Booked by {name}",
+      "deleteAria": "Remove the event {title}",
+      "bookTitle": "Book a guild event",
+      "titlePlaceholder": "Event title",
+      "notePlaceholder": "Note (optional)",
+      "hourLabel": "Hour (UTC)",
+      "hourAllDay": "All day",
+      "addButton": "Book event",
+      "guildOnlyNote": "Join a guild to plan events together.",
+      "result": {
+        "created": "The event is on the guild calendar.",
+        "removed": "The event was taken off the calendar.",
+        "notInGuild": "You are not in a guild.",
+        "notOfficer": "Only officers and the Guild Master may manage guild events.",
+        "badInput": "Give the event a title and a valid day.",
+        "calendarFull": "The guild calendar is full.",
+        "eventGone": "That event is no longer on the calendar."
+      },
+      "events": {
+        "raidCall": {
+          "title": "Raid Call",
+          "note": "Wardens sound the horn: gather a party for the crypts and the raid."
+        },
+        "marketDay": {
+          "title": "Market Day",
+          "note": "The Merchant expects fresh stock. A fine day to browse the World Market."
+        },
+        "fiestaNight": {
+          "title": "Fiesta Night",
+          "note": "The 2v2 Fiesta ring draws its loudest crowds tonight."
+        },
+        "arenaClash": {
+          "title": "Arena Clash",
+          "note": "Duelists flock to the Ashen Coliseum. Queue up and climb the ladder."
+        },
+        "fishingDerby": {
+          "title": "Fishing Derby",
+          "note": "Anglers line the lakes. Bring a pole and swap fishing tales."
+        },
+        "delveDay": {
+          "title": "Delve Day",
+          "note": "Brother Halven marks his charts: a fine day to brave the Collapsed Reliquary."
+        },
+        "moongateCommunion": {
+          "title": "Moongate Communion",
+          "note": "Pilgrims gather at the temple moongate under the mid-month moon."
+        }
+      }
     }
   },
   "guide": {
@@ -1903,6 +2088,9 @@ export const tr_TR: EnTranslations = {
     "password": "Parola",
     "passwordError": "Lütfen parolanı gir.",
     "passwordPlaceholder": "Parola gir",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "emailError": "Please enter a valid email address.",
     "showPassword": "Parolayı göster",
     "hidePassword": "Parolayı gizle",
     "logIn": "Giriş Yap",
@@ -1928,7 +2116,15 @@ export const tr_TR: EnTranslations = {
     "create": "Oluştur",
     "twoFactorLabel": "Kimlik doğrulama kodu",
     "twoFactorPlaceholder": "6 haneli ya da kurtarma kodu",
-    "twoFactorHint": "Kimlik doğrulama uygulamandaki kodu ya da kurtarma kodlarından birini gir."
+    "twoFactorHint": "Kimlik doğrulama uygulamandaki kodu ya da kurtarma kodlarından birini gir.",
+    "recovery": {
+      "title": "Add a recovery email",
+      "body": "Set an email address so you can recover your account. We only use it to confirm you own this account if you ever need to reset your password.",
+      "save": "Save email",
+      "logOut": "Log out",
+      "invalid": "Please enter a valid email address.",
+      "failed": "Could not save your email. Please try again."
+    }
   },
   "wallet": {
     "label": "$WOC Cüzdanı",
@@ -1982,6 +2178,7 @@ export const tr_TR: EnTranslations = {
     "helpLinkedWithBalance": "Sahip ayrıcalıkları etkin. Cüzdan uygulaması bu tarayıcıda bağlı.",
     "helpLinkedDisconnected": "Sahip ayrıcalıkları etkin. İmzalamanız veya harcamanız gerektiğinde uygulamayı bağlayın.",
     "helpLinkedDisconnectedWithBalance": "Sahip ayrıcalıkları etkin. İmzalamanız veya harcamanız gerektiğinde uygulamayı bağlayın.",
+    "extensionHelp": "To see a wallet here, keep a browser wallet extension such as Solflare Wallet active.",
     "flowConnect": "Bir cüzdan seçin. Doğrulama otomatik olarak devam eder.",
     "flowSign": "Cüzdan uygulamanızda doğrulama mesajını imzalayın. İşlem veya SOL gerekmez.",
     "flowVerify": "Cüzdan sahipliği doğrulanıyor...",
@@ -2626,6 +2823,7 @@ export const tr_TR: EnTranslations = {
       "usernameTaken": "Bu kullanıcı adı zaten alınmış.",
       "invalidCredentials": "Geçersiz kullanıcı adı veya parola.",
       "verificationFailed": "Doğrulama başarısız oldu. Lütfen tekrar deneyin.",
+      "desktopCodeInvalid": "Masaüstü giriş kodu geçersiz veya süresi dolmuş. Lütfen tekrar deneyin.",
       "invalidCharacterName": "Geçersiz karakter adı. 2-16 harf kullanın.",
       "characterNameNotAllowed": "Bu karakter adına izin verilmiyor.",
       "invalidClass": "Geçersiz sınıf.",
@@ -2642,6 +2840,21 @@ export const tr_TR: EnTranslations = {
       "takenOver": "Karakteriniz başka bir oturum tarafından devralındı.",
       "renameBeforeEntering": "Bu karakter dünyaya girmeden önce yeniden adlandırılmalıdır.",
       "renameNotPermitted": "Bu karakterin yeniden adlandırılmasına izin verilmiyor."
+    }
+  },
+  "desktop": {
+    "update": {
+      "downloading": "{version} güncellemesi indiriliyor...",
+      "ready": "{version} güncellemesi hazır. Çıkış yaptığında kurulur ya da şimdi yeniden başlat.",
+      "restart": "Şimdi Yeniden Başlat",
+      "later": "Daha Sonra"
+    },
+    "crash": {
+      "title": "World of ClaudeCraft",
+      "body": "Oyun görünümü çalışmayı durdurdu. Yeniden yüklensin mi?",
+      "reload": "Yeniden Yükle",
+      "quit": "Çık",
+      "fatalBody": "World of ClaudeCraft beklenmeyen bir hatayla karşılaştı ve kapatılması gerekiyor."
     }
   },
   "realm": {
@@ -3400,13 +3613,16 @@ export const tr_TR: EnTranslations = {
     },
     "cast": {
       "fishing": "Balık Tutma",
-      "demonHeal": "Şeytan İyileştirmesi"
+      "demonHeal": "Şeytan İyileştirmesi",
+      "thunzharrStormcall": "Fırtına Çağrısı"
     }
   },
   "questUi": {
     "tracker": {
       "title": "Görevler",
-      "complete": "Tamamlandı"
+      "complete": "Tamamlandı",
+      "showOnMap": "Show {name} on the map",
+      "hideFromMap": "Hide {name} from the map"
     },
     "log": {
       "title": "Görev Kaydı",
@@ -3692,6 +3908,26 @@ export const tr_TR: EnTranslations = {
   },
   "entities": {
     "abilities": {
+      "flamestrike": {
+        "name": "Alev Vuruşu",
+        "description": "Hedef alanda bir alev patlaması yaratır ve patlamaya yakalanan düşmanlara {damage} Ateş hasarı verir."
+      },
+      "rain_of_fire": {
+        "name": "Ateş Yağmuru",
+        "description": "Hedef alana ateş yağdırır ve düşmanları yakarak {damage} Ateş hasarı verir."
+      },
+      "volley": {
+        "name": "Ok Yağmuru",
+        "description": "Hedef alana ok yağdırır ve içindeki düşmanlara {damage} hasar verir."
+      },
+      "hurricane": {
+        "name": "Kasırga",
+        "description": "Hedef alana bir kasırga indirir ve düşmanlara {damage} Doğa hasarı verir."
+      },
+      "earthquake": {
+        "name": "Deprem",
+        "description": "Hedef alanı sarsar ve düşmanlara {damage} Doğa hasarı verir."
+      },
       "heroic_strike": {
         "name": "Kahramanca Vuruş",
         "description": "Yakın dövüş hasarını {damage} artıran güçlü bir saldırı. Bir sonraki vuruşunda etkinleşir."
@@ -4833,6 +5069,33 @@ export const tr_TR: EnTranslations = {
       "monarch_crown_helm": {
         "name": "Hükümdar'ın Tacı"
       },
+      "copper_mining_pick": {
+        "name": "Bakır Maden Kazması"
+      },
+      "iron_mining_pick": {
+        "name": "Demir Maden Kazması"
+      },
+      "mithril_mining_pick": {
+        "name": "Mithril Maden Kazması"
+      },
+      "handaxe": {
+        "name": "El Baltası"
+      },
+      "felling_axe": {
+        "name": "Kesim Baltası"
+      },
+      "ironbark_axe": {
+        "name": "Demir Kabuklu Balta"
+      },
+      "gathering_sickle": {
+        "name": "Toplama Orağı"
+      },
+      "bronze_sickle": {
+        "name": "Bronz Orak"
+      },
+      "silverleaf_sickle": {
+        "name": "Gümüşyaprak Orağı"
+      },
       "bristleback_maul": {
         "name": "Dikensırt Balyozu"
       },
@@ -5315,6 +5578,30 @@ export const tr_TR: EnTranslations = {
       },
       "vanguard_chrome_armor_plate": {
         "name": "Öncü Birlik Krom"
+      },
+      "crownforged_gauntlets": {
+        "name": "Taçdövme Eldivenleri"
+      },
+      "nighttalon_grips": {
+        "name": "Gecepençe Kavrayıcıları"
+      },
+      "soulflame_gloves": {
+        "name": "Ruhalevi Eldivenleri"
+      },
+      "stormcallers_handguards": {
+        "name": "Fırtınaçağıranın El Koruyucuları"
+      },
+      "crownforged_girdle": {
+        "name": "Taçdövme Kemeri"
+      },
+      "nighttalon_waistband": {
+        "name": "Gecepençe Kuşağı"
+      },
+      "soulflame_cord": {
+        "name": "Ruhalevi Kordonu"
+      },
+      "stormcallers_waistguard": {
+        "name": "Fırtınaçağıranın Bel Koruyucusu"
       }
     },
     "mobs": {
@@ -5506,6 +5793,12 @@ export const tr_TR: EnTranslations = {
       },
       "acolyte_tessa": {
         "name": "Çömez Tessa"
+      },
+      "thunzharr_waking_peak": {
+        "name": "Thunzharr, the Waking Peak"
+      },
+      "thunzharr_stormling": {
+        "name": "Roused Stormling"
       },
       "ironvein_foreman": {
         "name": "Demirdamar Ustabaşı"
@@ -6169,6 +6462,36 @@ export const tr_TR: EnTranslations = {
           }
         }
       },
+      "q_stalkers_return": {
+        "title": "The Stalkers Return",
+        "text": "Twelve dead, and the ridge crawls thicker than the day you started, {playerName}. Beasts do not throw themselves at a wall out of hunger. Something on the high ridge is pushing them down, and until I know what, the culling does not stop. Fourteen more.",
+        "completion": "Fourteen more, and still my patrols count fresh tracks by morning. My scout came back from the high ridge white as the snowline: prints the size of a shield, she says, and old kills no stalker would leave. Whatever walks up there is no ordinary cat.",
+        "objectives": {
+          "0": {
+            "label": "Ridge Stalker slain"
+          }
+        }
+      },
+      "q_stalker_cloaks": {
+        "title": "Cloaks for the Watch",
+        "text": "Eight pelts lined the officers' cloaks, and now every soldier on the wall wants the same, {playerName}. They are right to want it: winter takes fingers first and apologies never. Ten more pelts from the ridges south of the gate, and the whole watch sleeps warm.",
+        "completion": "Ten good pelts, thick as any I have... no, look at these, {playerName}. Torn, half of them, and by no blade or spear. Claw marks wide as my hand, right through the winter coat. Something on that ridge is savaging its own kind.",
+        "objectives": {
+          "0": {
+            "label": "Ridge Stalker Pelt"
+          }
+        }
+      },
+      "q_old_cragmaw": {
+        "title": "Old Cragmaw",
+        "text": "The mountain folk put a name to the prints my scout found: Old Cragmaw, a scar-pelted tyrant of a cat that has outlived three generations of its own pack. It is the reason the stalkers flood my road, {playerName}. Its den sits on the western ridge above the road south. Bring a friend, and put the old devil down.",
+        "completion": "Down at last. The mountain folk swore that cat would outlive the wall itself. The stalkers will keep to their high snows now, {playerName}, and my patrols will walk the road without bleeding for it. The whole ridge is quieter for your work.",
+        "objectives": {
+          "0": {
+            "label": "Old Cragmaw slain"
+          }
+        }
+      },
       "q_kobold_tunnels": {
         "title": "Deeprock Belası",
         "text": "Deeprock İnleri'ndeki koboldlar, hiçbir mum faresinin kazması gerekenden daha derine kazıyor, dümdüz aşağıya, sanki bir şey onları çağırıyormuş gibi. Tünelleri duvarımızın altından geçiyor, {playerName}. Meseleyi çökert: on iki Deeprock Tünelcisi öldür.",
@@ -6693,6 +7016,28 @@ export const tr_TR: EnTranslations = {
         "leaveText": "Emanetlik harabesinde Birader Halven'in yanına tırmanıp geri dönersin."
       }
     },
+    "letters": {
+      "ravenpost_welcome": {
+        "sender": "Kuzgun Postası",
+        "subject": "Kuzgunlar artık senin için uçuyor",
+        "body": "Yolcu,\n\nKuzgun Postası tünek direklerini vadinin dört bir yanına kurdu. Eastbrook, Fenbridge ve Highwatch’taki kuzgun sütunlarını ara: herhangi birinden diğer maceracılara mektup, para ve eşya gönderebilir, kuzgunların sana getirdiklerini alabilirsin.\n\nİlk pulun için küçük bir armağan ekledik.\n\nKanatlar yukarı,\nKuzgun Postası"
+      },
+      "letter_q_wolves": {
+        "sender": "Mareşal Redbrook",
+        "subject": "Ağıllar yeniden sessiz",
+        "body": "Çobanlar nihayet rahat uyuyabiliyor ve bu senin sayende. Kuzgun Postası’ndan nöbet kasasından sana küçük bir şey ulaştırmasını istedim.\n\nKılıcını yağlı tut.\n- Mareşal Redbrook"
+      },
+      "letter_q_greyjaw": {
+        "sender": "Mareşal Redbrook",
+        "subject": "Yaşlı Bozçene, sonunda",
+        "body": "Böyle küçük bir kasabada haber tez yayılır. Çobanlar dün gece sağlığına kadeh kaldırdı, Wilkes ise kurdun bir araba kadar iri olduğuna yemin ediyor. Bırak abartsınlar: bunu hak ettin.\n\nNöbetçilerin hesabına bir yemek ye.\n- Mareşal Redbrook"
+      },
+      "letter_q_hollow": {
+        "sender": "Birader Aldric",
+        "subject": "Karanlıkta yaptıkların",
+        "body": "O çukurda neyin gömülü olduğunu çok az kişi bilecek, inanacak olansa daha da az. Ben biliyorum ve unutmayacağım.\n\nYolun hep aydınlık olsun.\n- Birader Aldric"
+      }
+    },
     "itemSets": {
       "crownforged": {
         "name": "Taçdövme savaş takımı",
@@ -6706,8 +7051,8 @@ export const tr_TR: EnTranslations = {
       },
       "necromancers": {
         "name": "Nekromansır giysileri",
-        "bonus2": "Hasarın neden olduğu büyü geri itmesini %50 azaltır.",
-        "bonus3": "Alınan hasar büyü yapmanı geciktirmez."
+        "bonus2": "Geri itilemezsin (%100 geri itilme direnci).",
+        "bonus3": "Zekayı 10 ve dayanıklılığı 10 artırır."
       },
       "nighttalon": {
         "name": "Gece Pençesi deri takımı",
@@ -6716,13 +7061,13 @@ export const tr_TR: EnTranslations = {
       },
       "soulflame": {
         "name": "Ruh Alevi giysileri",
-        "bonus2": "Hasarın neden olduğu büyü geri itmesini %50 azaltır.",
-        "bonus3": "Alınan hasar büyü yapmanı geciktirmez."
+        "bonus2": "Geri itilemezsin (%100 geri itilme direnci).",
+        "bonus3": "Zekayı 15 ve ruhu 15 artırır."
       },
       "stormcallers": {
         "name": "Fırtına Çağıran giysileri",
-        "bonus2": "Hasarın neden olduğu büyü geri itmesini %50 azaltır.",
-        "bonus3": "Alınan hasar büyü yapmanı geciktirmez."
+        "bonus2": "Geri itilemezsin (%100 geri itilme direnci).",
+        "bonus3": "Zekayı 15 ve ruhu 15 artırır."
       },
       "wyrmshadow": {
         "name": "Wyrm Gölgesi takımı",
@@ -6738,6 +7083,7 @@ export const tr_TR: EnTranslations = {
     "dungeonInstanceBusy": "{name} zindanının tüm kopyaları dolu. Birazdan tekrar deneyin.",
     "delveLockedChestInteract": "Kilidi açmak için F'ye bas",
     "delveRewardChestInteract": "Ganimeti almak için F'ye bas",
-    "delveSurfaceExitInteract": "Tırmanmak için F'ye bas"
+    "delveSurfaceExitInteract": "Tırmanmak için F'ye bas",
+    "mailboxName": "Mailbox"
   }
 };

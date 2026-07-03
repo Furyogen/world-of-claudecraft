@@ -67,6 +67,7 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
     'Beute-Einstellungen: Meisterbeute, Plündermeister {name}, Schwelle {threshold}.',
   'hudChrome.masterLoot.thresholdSet': 'Beuteschwelle auf {threshold} gesetzt.',
   'hudChrome.options.showDevBadges': 'Entwicklerabzeichen anzeigen',
+  'hudChrome.options.groundReticle': 'Bodenziel-Fadenkreuz',
   'hudChrome.options.startAttackOnAbility': 'Auto-Angriff bei Fähigkeitseinsatz',
   'hudChrome.party.promoteLeader': 'Zum Anführer befördern',
   'hudChrome.statInfo.desc.spellPower':
@@ -1398,9 +1399,14 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'abilityUi.forms.bear': 'Bären',
   'abilityUi.forms.cat': 'Wolfs',
   'abilityUi.cast.fishing': 'Angeln',
+  'abilityUi.cast.thunzharrStormcall': 'Sturmruf',
   'abilityUi.cast.demonHeal': 'Dämonenheilung',
   'questUi.tracker.title': 'Quests',
   'questUi.tracker.complete': 'Abgeschlossen',
+
+  'questUi.tracker.showOnMap': '{name} auf der Karte anzeigen',
+
+  'questUi.tracker.hideFromMap': '{name} auf der Karte ausblenden',
   'questUi.log.title': 'Questlog',
   'questUi.log.close': 'Questlog schließen',
   'questUi.log.summary': 'Aktiv: {active} / Abgeschlossen: {completed}',
@@ -1700,6 +1706,21 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.taunt.description':
     'Verspottet das Ziel: Eure Bedrohung steigt auf die seines meistgehassten Gegners und es wird 3 Sek. lang gezwungen, euch anzugreifen.',
   'entities.abilities.fireball.name': 'Feuerball',
+  'entities.abilities.rain_of_fire.name': 'Feuerregen',
+  'entities.abilities.rain_of_fire.description':
+    'Lässt einen Feuerregen auf den Zielbereich niedergehen, der Gegner verbrennt und {damage} Feuerschaden verursacht.',
+  'entities.abilities.volley.name': 'Pfeilhagel',
+  'entities.abilities.volley.description':
+    'Lässt einen Pfeilhagel auf den Zielbereich niedergehen und verursacht {damage} Schaden an den Gegnern darin.',
+  'entities.abilities.hurricane.name': 'Wirbelsturm',
+  'entities.abilities.hurricane.description':
+    'Entfesselt einen Wirbelsturm über dem Zielbereich, der Gegner trifft und {damage} Naturschaden verursacht.',
+  'entities.abilities.earthquake.name': 'Erdbeben',
+  'entities.abilities.earthquake.description':
+    'Lässt den Zielbereich erbeben, trifft Gegner und verursacht {damage} Naturschaden.',
+  'entities.abilities.flamestrike.name': 'Flammenschlag',
+  'entities.abilities.flamestrike.description':
+    'Lässt am Zielort eine Feuerexplosion niedergehen, die allen Gegnern im Wirkungsbereich {damage} Feuerschaden zufügt.',
   'entities.abilities.fireball.description':
     'Schleudert einen feurigen Ball, der {damage} Feuerschaden sowie zusätzlichen Schaden über Zeit verursacht.',
   'entities.abilities.frost_armor.name': 'Frostrüstung',
@@ -3162,6 +3183,15 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'entities.items.brightwood_venison.name': 'Hellholz-Wildbret',
   'entities.items.bramblehide_jerkin.name': 'Dornhaut-Wams',
   'entities.items.monarch_crown_helm.name': 'Krone des Monarchen',
+  'entities.items.copper_mining_pick.name': 'Kupfer-Grabpickel',
+  'entities.items.iron_mining_pick.name': 'Eisen-Grabpickel',
+  'entities.items.mithril_mining_pick.name': 'Mithril-Grabpickel',
+  'entities.items.handaxe.name': 'Handaxt',
+  'entities.items.felling_axe.name': 'Fällaxt',
+  'entities.items.ironbark_axe.name': 'Eisenrinden-Axt',
+  'entities.items.gathering_sickle.name': 'Erntesichel',
+  'entities.items.bronze_sickle.name': 'Bronzesichel',
+  'entities.items.silverleaf_sickle.name': 'Silberblatt-Sichel',
   // v0.10.0 release fill (Fiesta / skin-select / NPC voices / chat channels / Brightwood Glade)
   'hud.core.chatChannels.add': 'Chatkanal hinzufügen',
   'hud.core.chatChannels.addTitle': 'Kanal hinzufügen',
@@ -3415,6 +3445,17 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'entities.items.soulflame_cowl.name': 'Seelenflammenkapuze',
   'entities.items.soulflame_mantle.name': 'Seelenflammenmantel',
   'entities.items.stormcallers_crown.name': 'Krone des Sturmrufers',
+  'entities.items.crownforged_gauntlets.name': 'Kronengeschmiedete Stulpen',
+  'entities.items.nighttalon_grips.name': 'Nachtklauengriffe',
+  'entities.items.soulflame_gloves.name': 'Seelenflammenhandschuhe',
+  'entities.items.stormcallers_handguards.name': 'Handschützer des Sturmrufers',
+  'entities.items.crownforged_girdle.name': 'Kronengeschmiedeter Gürtel',
+  'entities.items.nighttalon_waistband.name': 'Nachtklauengurt',
+  'entities.items.soulflame_cord.name': 'Seelenflammenkordel',
+  'entities.items.stormcallers_waistguard.name': 'Gürtelschutz des Sturmrufers',
+  'entities.mobs.thunzharr_waking_peak.name': 'Thunzharr, der Erwachende Gipfel',
+  'entities.mobs.thunzharr_stormling.name': 'Geweckter Sturmling',
+  'hudChrome.worldBoss.spawn': '{name} erhebt sich über den Thornpeak-Höhen!',
   'entities.items.stormcallers_spaulders.name': 'Schulterplatten des Sturmrufers',
   'hud.chat.context.convertToRaid': 'In Schlachtzug umwandeln',
   'hud.chat.context.convertToParty': 'In Gruppe umwandeln',
@@ -4973,18 +5014,21 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.deathlord.bonus2': 'Erhöht Angriffskraft um 40.',
   'entities.itemSets.deathlord.bonus3': 'Erhöht Stärke um 15 und Ausdauer um 15.',
   'entities.itemSets.necromancers.name': 'Gewänder des Nekromanten',
-  'entities.itemSets.necromancers.bonus2': 'Verringert Zauberrückstoß durch Schaden um 50%.',
-  'entities.itemSets.necromancers.bonus3': 'Erlittener Schaden verzögert das Zauberwirken nicht.',
+  'entities.itemSets.necromancers.bonus2':
+    'Ihr könnt nicht zurückgestoßen werden (100% Rückstoßwiderstand).',
+  'entities.itemSets.necromancers.bonus3': 'Erhöht Intelligenz um 10 und Ausdauer um 10.',
   'entities.itemSets.nighttalon.name': 'Nachtkrallen-Ledertracht',
   'entities.itemSets.nighttalon.bonus2': 'Erhöht Angriffskraft um 40.',
   'entities.itemSets.nighttalon.bonus3':
     'Erhöht Beweglichkeit um 15 und kritische Trefferchance um 2%.',
   'entities.itemSets.soulflame.name': 'Seelenflammengewänder',
-  'entities.itemSets.soulflame.bonus2': 'Verringert Zauberrückstoß durch Schaden um 50%.',
-  'entities.itemSets.soulflame.bonus3': 'Erlittener Schaden verzögert das Zauberwirken nicht.',
+  'entities.itemSets.soulflame.bonus2':
+    'Ihr könnt nicht zurückgestoßen werden (100% Rückstoßwiderstand).',
+  'entities.itemSets.soulflame.bonus3': 'Erhöht Intelligenz um 15 und Willenskraft um 15.',
   'entities.itemSets.stormcallers.name': 'Gewänder des Sturmrufers',
-  'entities.itemSets.stormcallers.bonus2': 'Verringert Zauberrückstoß durch Schaden um 50%.',
-  'entities.itemSets.stormcallers.bonus3': 'Erlittener Schaden verzögert das Zauberwirken nicht.',
+  'entities.itemSets.stormcallers.bonus2':
+    'Ihr könnt nicht zurückgestoßen werden (100% Rückstoßwiderstand).',
+  'entities.itemSets.stormcallers.bonus3': 'Erhöht Intelligenz um 15 und Willenskraft um 15.',
   'entities.itemSets.wyrmshadow.name': 'Wyrmschattentracht',
   'entities.itemSets.wyrmshadow.bonus2': 'Erhöht Angriffskraft um 40.',
   'entities.itemSets.wyrmshadow.bonus3':
@@ -5127,4 +5171,85 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.relay.help.label': 'Hilfe benötigt',
   'hudChrome.discord.relay.help.hint': 'Bitte die Gemeinschaft um Hilfe',
   'hudChrome.options.showSecondaryActionBar': 'Zweite Aktionsleiste anzeigen',
+  'errors.api.desktopCodeInvalid':
+    'Der Desktop-Anmeldecode ist ungültig oder abgelaufen. Bitte versuche es erneut.',
+  'desktop.crash.body': 'Die Spielansicht funktioniert nicht mehr. Neu laden?',
+  'desktop.crash.fatalBody':
+    'World of ClaudeCraft ist auf einen unerwarteten Fehler gestoßen und muss geschlossen werden.',
+  'desktop.crash.quit': 'Beenden',
+  'desktop.crash.reload': 'Neu laden',
+  'desktop.crash.title': 'World of ClaudeCraft',
+  'desktop.update.downloading': 'Update {version} wird heruntergeladen...',
+  'desktop.update.later': 'Später',
+  'desktop.update.ready':
+    'Update {version} ist bereit. Es wird beim Beenden installiert, oder starte jetzt neu.',
+  'desktop.update.restart': 'Jetzt neu starten',
+  'hudChrome.dailyRewards.close': 'Tägliche Belohnungen schließen',
+  'hudChrome.dailyRewards.endsIn': 'Endet in {time}',
+  'hudChrome.dailyRewards.error': 'Tägliche Belohnungen konnten nicht geladen werden.',
+  'hudChrome.dailyRewards.history': 'Bisherige Gewinner',
+  'hudChrome.dailyRewards.intro':
+    'Halte genügend WOC in deiner verifizierten Wallet, um tägliche Belohnungen freizuschalten. Verdiene Punkte mit einem täglichen Dreh und wechselnden Aufgaben und klettere dann in der täglichen Rangliste nach oben, um einen Anteil am Preispool zu erhalten.',
+  'hudChrome.dailyRewards.leaderboard': 'Tägliche Rangliste',
+  'hudChrome.dailyRewards.loading': 'Tägliche Belohnungen werden geladen...',
+  'hudChrome.dailyRewards.noHistory': 'Noch keine Auszahlungen.',
+  'hudChrome.dailyRewards.noLeaders': 'Noch keine Punkte.',
+  'hudChrome.dailyRewards.prize': 'Preispool',
+  'hudChrome.dailyRewards.reason.eligible': 'Belohnungen freigeschaltet.',
+  'hudChrome.dailyRewards.reason.no_wallet': 'Verbinde eine Wallet mit mindestens 20 USD in WOC.',
+  'hudChrome.dailyRewards.reason.price_unavailable':
+    'Der WOC-Preis ist nicht verfügbar, Belohnungen sind vorübergehend gesperrt.',
+  'hudChrome.dailyRewards.reason.under_minimum':
+    'Deine Wallet liegt unter dem Mindestwert von 20 USD in WOC.',
+  'hudChrome.dailyRewards.remainingHoursMinutes': '{hours}Std {minutes}Min',
+  'hudChrome.dailyRewards.remainingLessThanMinute': '<1Min',
+  'hudChrome.dailyRewards.remainingMinutes': '{minutes}Min',
+  'hudChrome.dailyRewards.reset': 'Zurücksetzen',
+  'hudChrome.dailyRewards.score': 'Punktzahl',
+  'hudChrome.dailyRewards.sol': '{amount} SOL',
+  'hudChrome.dailyRewards.spinButton': 'Drehen',
+  'hudChrome.dailyRewards.spinClaimed': 'Erhalten: +{points} Punkte.',
+  'hudChrome.dailyRewards.spinClose': 'Täglichen Dreh schließen',
+  'hudChrome.dailyRewards.spinDialogTitle': 'Täglicher Belohnungsdreh',
+  'hudChrome.dailyRewards.spinReady': 'Ein Dreh ist bereit.',
+  'hudChrome.dailyRewards.spinResult': '+{points} Punkte',
+  'hudChrome.dailyRewards.spinTitle': 'Täglicher Dreh',
+  'hudChrome.dailyRewards.tasks': 'Aufgaben',
+  'hudChrome.dailyRewards.title': 'Tägliche Belohnungen',
+  'hudChrome.dailyRewards.unknown': 'Unbekannt',
+  'hudChrome.dailyRewards.usd': '{amount} USD',
+  'hudChrome.dailyRewards.walletConnectBody':
+    'Verifiziere eine Solana-Wallet mit WOC, um tägliche Belohnungen freizuschalten.',
+  'hudChrome.dailyRewards.walletConnectButton': 'Wallet verifizieren',
+  'hudChrome.dailyRewards.walletConnectTitle': 'Wallet verifizieren',
+  'hudChrome.dailyRewards.walletHoldBody':
+    'Halte mindestens {amount} USD in WOC, um tägliche Belohnungen freizuschalten.',
+  'hudChrome.dailyRewards.walletHoldTitle': 'WOC halten',
+  'hudChrome.dailyRewards.walletPriceBody':
+    'Der WOC-Preis ist derzeit nicht verfügbar. Schau bald wieder vorbei.',
+  'hudChrome.dailyRewards.walletValue': 'Wallet-Wert (WOC)',
+  'hudChrome.nativeUpdate.body':
+    'Eine neue Version von World of ClaudeCraft ist verfügbar. Aktualisiere jetzt für die neuesten Fehlerbehebungen und Verbesserungen.',
+  'hudChrome.nativeUpdate.bodyWithVersion':
+    'Version {version} von World of ClaudeCraft ist verfügbar. Aktualisiere jetzt für die neuesten Fehlerbehebungen und Verbesserungen.',
+  'hudChrome.nativeUpdate.notNow': 'Jetzt nicht',
+  'hudChrome.nativeUpdate.title': 'Update verfügbar',
+  'hudChrome.nativeUpdate.update': 'Aktualisieren',
+  // Ravenpost authored letters
+  'entities.letters.ravenpost_welcome.sender': 'Die Rabenpost',
+  'entities.letters.ravenpost_welcome.subject': 'Die Raben fliegen nun für Euch',
+  'entities.letters.ravenpost_welcome.body':
+    'Reisender,\n\ndie Rabenpost hat ihre Sitzstangen im ganzen Tal eröffnet. Sucht die Rabensäulen in Eastbrook, Fenbridge und Highwatch: Von jeder aus könnt Ihr anderen Abenteurern Briefe, Münzen und Waren schicken und abholen, was die Raben Euch bringen.\n\nAnbei eine kleine Aufmerksamkeit für Eure erste Briefmarke.\n\nSchwingen hoch,\nDie Rabenpost',
+  'entities.letters.letter_q_wolves.sender': 'Marschall Redbrook',
+  'entities.letters.letter_q_wolves.subject': 'In den Pferchen ist wieder Ruhe',
+  'entities.letters.letter_q_wolves.body':
+    'Die Hirten können endlich wieder ruhig schlafen, und das ist Euer Verdienst. Ich habe der Rabenpost aufgetragen, Euch eine Kleinigkeit aus der Wachkasse zu bringen.\n\nHaltet Eure Klinge geölt.\n- Marschall Redbrook',
+  'entities.letters.letter_q_greyjaw.sender': 'Marschall Redbrook',
+  'entities.letters.letter_q_greyjaw.subject': 'Der alte Graukiefer, endlich',
+  'entities.letters.letter_q_greyjaw.body':
+    'Neuigkeiten verbreiten sich schnell in einer so kleinen Stadt. Die Hirten haben gestern Abend auf Eure Gesundheit getrunken, und Wilkes schwört, der Wolf sei so groß wie ein Karren gewesen. Lasst sie ruhig übertreiben: Ihr habt es Euch verdient.\n\nGönnt Euch ein Mahl auf Kosten der Wache.\n- Marschall Redbrook',
+  'entities.letters.letter_q_hollow.sender': 'Bruder Aldric',
+  'entities.letters.letter_q_hollow.subject': 'Was Ihr im Dunkeln vollbracht habt',
+  'entities.letters.letter_q_hollow.body':
+    'Nur wenige werden je erfahren, was in jener Senke begraben lag, und noch weniger würden es glauben. Ich weiß es, und ich werde es nicht vergessen.\n\nMöge Euer Weg erleuchtet bleiben.\n- Bruder Aldric',
 };

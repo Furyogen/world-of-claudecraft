@@ -64,6 +64,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
     'Impostazioni Bottino: Bottino Distribuito, Distributore del Bottino {name}, soglia {threshold}.',
   'hudChrome.masterLoot.thresholdSet': 'Soglia del bottino impostata su {threshold}.',
   'hudChrome.options.showDevBadges': 'Mostra distintivi sviluppatore',
+  'hudChrome.options.groundReticle': 'Reticolo di puntamento a terra',
   'hudChrome.options.startAttackOnAbility': "Attacco automatico all'uso dell'abilita",
   'hudChrome.party.promoteLeader': 'Promuovi a Capo',
   'hudChrome.statInfo.desc.spellPower':
@@ -1392,9 +1393,14 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'abilityUi.forms.bear': 'orso',
   'abilityUi.forms.cat': 'lupo',
   'abilityUi.cast.fishing': 'Pesca',
+  'abilityUi.cast.thunzharrStormcall': 'Richiamo della tempesta',
   'abilityUi.cast.demonHeal': 'Cura demoniaca',
   'questUi.tracker.title': 'Missioni',
   'questUi.tracker.complete': 'Completata',
+
+  'questUi.tracker.showOnMap': 'Mostra {name} sulla mappa',
+
+  'questUi.tracker.hideFromMap': 'Nascondi {name} dalla mappa',
   'questUi.log.title': 'Registro missioni',
   'questUi.log.close': 'Chiudi registro missioni',
   'questUi.log.summary': 'Attive: {active} / Completate: {completed}',
@@ -1690,6 +1696,21 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.taunt.description':
     'Provoca il bersaglio: la tua minaccia sale fino a eguagliare quella del suo nemico più odiato e lo costringe ad attaccarti per 3 s.',
   'entities.abilities.fireball.name': 'Palla di Fuoco',
+  'entities.abilities.rain_of_fire.name': 'Pioggia di Fuoco',
+  'entities.abilities.rain_of_fire.description':
+    'Fa piovere fuoco sulla zona bersaglio, bruciando i nemici per {damage} danni da Fuoco.',
+  'entities.abilities.volley.name': 'Scarica di Frecce',
+  'entities.abilities.volley.description':
+    'Fa piovere frecce sulla zona bersaglio, infliggendo {damage} danni ai nemici colpiti.',
+  'entities.abilities.hurricane.name': 'Uragano',
+  'entities.abilities.hurricane.description':
+    'Scatena un uragano sulla zona bersaglio, colpendo i nemici per {damage} danni della Natura.',
+  'entities.abilities.earthquake.name': 'Terremoto',
+  'entities.abilities.earthquake.description':
+    'Scuote la zona bersaglio, colpendo i nemici per {damage} danni della Natura.',
+  'entities.abilities.flamestrike.name': 'Ondata di Fiamme',
+  'entities.abilities.flamestrike.description':
+    "Evoca un'esplosione di fiamme sulla zona bersaglio, infliggendo {damage} danni da Fuoco ai nemici investiti dalla deflagrazione.",
   'entities.abilities.fireball.description':
     'Scaglia una palla infuocata che infligge {damage} danni da Fuoco più danni aggiuntivi nel tempo.',
   'entities.abilities.frost_armor.name': 'Armatura Gelida',
@@ -3144,6 +3165,15 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'entities.items.brightwood_venison.name': 'Selvaggina di Brightwood',
   'entities.items.bramblehide_jerkin.name': 'Giubbotto di pelle di rovo',
   'entities.items.monarch_crown_helm.name': 'Corona del Monarca',
+  'entities.items.copper_mining_pick.name': 'Piccone di Rame',
+  'entities.items.iron_mining_pick.name': 'Piccone di Ferro',
+  'entities.items.mithril_mining_pick.name': 'Piccone di Mithril',
+  'entities.items.handaxe.name': 'Accetta',
+  'entities.items.felling_axe.name': 'Ascia da Taglio',
+  'entities.items.ironbark_axe.name': 'Ascia di Corteccia Ferrata',
+  'entities.items.gathering_sickle.name': 'Falcetto da Raccolta',
+  'entities.items.bronze_sickle.name': 'Falcetto di Bronzo',
+  'entities.items.silverleaf_sickle.name': 'Falcetto Fogliargento',
   // v0.10.0 release fill (Fiesta / skin-select / NPC voices / chat channels / Brightwood Glade)
   'hud.core.chatChannels.add': 'Aggiungi canale di chat',
   'hud.core.chatChannels.addTitle': 'Aggiungi canale',
@@ -3392,6 +3422,17 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'entities.items.soulflame_cowl.name': 'Cappuccio Fiammanima',
   'entities.items.soulflame_mantle.name': 'Manto Fiammanima',
   'entities.items.stormcallers_crown.name': 'Corona del Chiamatempeste',
+  'entities.items.crownforged_gauntlets.name': 'Manopole Forgiacorona',
+  'entities.items.nighttalon_grips.name': 'Prese Artiglio Notturno',
+  'entities.items.soulflame_gloves.name': 'Guanti Fiammanima',
+  'entities.items.stormcallers_handguards.name': 'Paramani del Chiamatempeste',
+  'entities.items.crownforged_girdle.name': 'Cintura Forgiacorona',
+  'entities.items.nighttalon_waistband.name': 'Fascia Artiglio Notturno',
+  'entities.items.soulflame_cord.name': 'Cordone Fiammanima',
+  'entities.items.stormcallers_waistguard.name': 'Guardacintura del Chiamatempeste',
+  'entities.mobs.thunzharr_waking_peak.name': 'Thunzharr, il Picco Risvegliato',
+  'entities.mobs.thunzharr_stormling.name': 'Elementale di tempesta ridestato',
+  'hudChrome.worldBoss.spawn': '{name} si erge sulle Alture di Thornpeak!',
   'entities.items.stormcallers_spaulders.name': 'Spallacci del Chiamatempeste',
   'hud.chat.context.convertToRaid': 'Converti in incursione',
   'hud.chat.context.convertToParty': 'Converti in gruppo',
@@ -4942,20 +4983,21 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.deathlord.bonus2': "Aumenta la potenza d'attacco di 40.",
   'entities.itemSets.deathlord.bonus3': 'Aumenta la forza di 15 e la vigoria di 15.',
   'entities.itemSets.necromancers.name': 'Vesti del negromante',
-  'entities.itemSets.necromancers.bonus2': 'Riduce del 50% il ritardo al lancio causato dai danni.',
-  'entities.itemSets.necromancers.bonus3':
-    'I danni subiti non ritardano il lancio degli incantesimi.',
+  'entities.itemSets.necromancers.bonus2':
+    'Non puoi essere respinto (100% di resistenza alla respinta).',
+  'entities.itemSets.necromancers.bonus3': "Aumenta l'intelletto di 10 e la tempra di 10.",
   'entities.itemSets.nighttalon.name': 'Tenuta di cuoio Artiglio Notturno',
   'entities.itemSets.nighttalon.bonus2': "Aumenta la potenza d'attacco di 40.",
   'entities.itemSets.nighttalon.bonus3':
     'Aumenta l’agilità di 15 e la probabilità di critico del 2%.',
   'entities.itemSets.soulflame.name': 'Vesti Fiamma dell’Anima',
-  'entities.itemSets.soulflame.bonus2': 'Riduce del 50% il ritardo al lancio causato dai danni.',
-  'entities.itemSets.soulflame.bonus3': 'I danni subiti non ritardano il lancio degli incantesimi.',
+  'entities.itemSets.soulflame.bonus2':
+    'Non puoi essere respinto (100% di resistenza alla respinta).',
+  'entities.itemSets.soulflame.bonus3': "Aumenta l'intelletto di 15 e lo spirito di 15.",
   'entities.itemSets.stormcallers.name': 'Vesti del Chiamatempeste',
-  'entities.itemSets.stormcallers.bonus2': 'Riduce del 50% il ritardo al lancio causato dai danni.',
-  'entities.itemSets.stormcallers.bonus3':
-    'I danni subiti non ritardano il lancio degli incantesimi.',
+  'entities.itemSets.stormcallers.bonus2':
+    'Non puoi essere respinto (100% di resistenza alla respinta).',
+  'entities.itemSets.stormcallers.bonus3': "Aumenta l'intelletto di 15 e lo spirito di 15.",
   'entities.itemSets.wyrmshadow.name': 'Tenuta Ombra del Dragone',
   'entities.itemSets.wyrmshadow.bonus2': "Aumenta la potenza d'attacco di 40.",
   'entities.itemSets.wyrmshadow.bonus3':
@@ -5096,4 +5138,85 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.relay.help.label': 'Serve aiuto',
   'hudChrome.discord.relay.help.hint': 'Chiedi aiuto alla comunita',
   'hudChrome.options.showSecondaryActionBar': 'Mostra la barra delle azioni secondaria',
+  'errors.api.desktopCodeInvalid':
+    'Il codice di accesso desktop non è valido o è scaduto. Riprova.',
+  'desktop.crash.body': 'La vista di gioco ha smesso di funzionare. Ricaricarla?',
+  'desktop.crash.fatalBody':
+    'World of ClaudeCraft ha riscontrato un errore imprevisto e deve chiudersi.',
+  'desktop.crash.quit': 'Esci',
+  'desktop.crash.reload': 'Ricarica',
+  'desktop.crash.title': 'World of ClaudeCraft',
+  'desktop.update.downloading': "Download dell'aggiornamento {version} in corso...",
+  'desktop.update.later': 'Più tardi',
+  'desktop.update.ready':
+    "L'aggiornamento {version} è pronto. Verrà installato alla chiusura, oppure riavvia ora.",
+  'desktop.update.restart': 'Riavvia ora',
+  'hudChrome.dailyRewards.close': 'Chiudi ricompense giornaliere',
+  'hudChrome.dailyRewards.endsIn': 'Termina tra {time}',
+  'hudChrome.dailyRewards.error': 'Impossibile caricare le ricompense giornaliere.',
+  'hudChrome.dailyRewards.history': 'Vincitori precedenti',
+  'hudChrome.dailyRewards.intro':
+    'Detieni abbastanza WOC nel tuo portafoglio verificato per sbloccare le ricompense giornaliere. Guadagna punti con un giro giornaliero e incarichi a rotazione, poi scala la classifica giornaliera per aggiudicarti una parte del montepremi.',
+  'hudChrome.dailyRewards.leaderboard': 'Classifica giornaliera',
+  'hudChrome.dailyRewards.loading': 'Caricamento delle ricompense giornaliere...',
+  'hudChrome.dailyRewards.noHistory': 'Ancora nessun pagamento.',
+  'hudChrome.dailyRewards.noLeaders': 'Ancora nessun punto.',
+  'hudChrome.dailyRewards.prize': 'Montepremi',
+  'hudChrome.dailyRewards.reason.eligible': 'Ricompense sbloccate.',
+  'hudChrome.dailyRewards.reason.no_wallet': 'Collega un portafoglio con almeno 20 USD in WOC.',
+  'hudChrome.dailyRewards.reason.price_unavailable':
+    'Il prezzo di WOC non è disponibile, le ricompense sono temporaneamente bloccate.',
+  'hudChrome.dailyRewards.reason.under_minimum':
+    'Il portafoglio è sotto il minimo di 20 USD in WOC.',
+  'hudChrome.dailyRewards.remainingHoursMinutes': '{hours}h {minutes}m',
+  'hudChrome.dailyRewards.remainingLessThanMinute': '<1m',
+  'hudChrome.dailyRewards.remainingMinutes': '{minutes}m',
+  'hudChrome.dailyRewards.reset': 'Azzeramento',
+  'hudChrome.dailyRewards.score': 'Punteggio',
+  'hudChrome.dailyRewards.sol': '{amount} SOL',
+  'hudChrome.dailyRewards.spinButton': 'Gira',
+  'hudChrome.dailyRewards.spinClaimed': 'Ottenuti: +{points} punti.',
+  'hudChrome.dailyRewards.spinClose': 'Chiudi giro giornaliero',
+  'hudChrome.dailyRewards.spinDialogTitle': 'Giro della ricompensa giornaliera',
+  'hudChrome.dailyRewards.spinReady': 'Un giro è pronto.',
+  'hudChrome.dailyRewards.spinResult': '+{points} punti',
+  'hudChrome.dailyRewards.spinTitle': 'Giro giornaliero',
+  'hudChrome.dailyRewards.tasks': 'Incarichi',
+  'hudChrome.dailyRewards.title': 'Ricompense giornaliere',
+  'hudChrome.dailyRewards.unknown': 'Sconosciuto',
+  'hudChrome.dailyRewards.usd': '{amount} USD',
+  'hudChrome.dailyRewards.walletConnectBody':
+    'Verifica un portafoglio Solana con WOC per sbloccare le ricompense giornaliere.',
+  'hudChrome.dailyRewards.walletConnectButton': 'Verifica portafoglio',
+  'hudChrome.dailyRewards.walletConnectTitle': 'Verifica portafoglio',
+  'hudChrome.dailyRewards.walletHoldBody':
+    'Detieni almeno {amount} USD in WOC per sbloccare le ricompense giornaliere.',
+  'hudChrome.dailyRewards.walletHoldTitle': 'Detieni WOC',
+  'hudChrome.dailyRewards.walletPriceBody':
+    'Il prezzo di WOC non è disponibile al momento. Ricontrolla a breve.',
+  'hudChrome.dailyRewards.walletValue': 'Valore del portafoglio (WOC)',
+  'hudChrome.nativeUpdate.body':
+    'È disponibile una nuova versione di World of ClaudeCraft. Aggiorna ora per le ultime correzioni e migliorie.',
+  'hudChrome.nativeUpdate.bodyWithVersion':
+    'La versione {version} di World of ClaudeCraft è disponibile. Aggiorna ora per le ultime correzioni e migliorie.',
+  'hudChrome.nativeUpdate.notNow': 'Non ora',
+  'hudChrome.nativeUpdate.title': 'Aggiornamento disponibile',
+  'hudChrome.nativeUpdate.update': 'Aggiorna',
+  // Ravenpost authored letters
+  'entities.letters.ravenpost_welcome.sender': 'La Posta dei Corvi',
+  'entities.letters.ravenpost_welcome.subject': 'Ora i corvi volano per te',
+  'entities.letters.ravenpost_welcome.body':
+    'Viandante,\n\nla Posta dei Corvi ha aperto i suoi trespoli in tutta la valle. Cerca i pilastri dei corvi a Eastbrook, Fenbridge e Highwatch: da ognuno di essi potrai inviare lettere, monete e oggetti agli altri avventurieri, e ritirare tutto ciò che i corvi ti portano.\n\nIn allegato un piccolo pensiero per il tuo primo francobollo.\n\nAli in alto,\nLa Posta dei Corvi',
+  'entities.letters.letter_q_wolves.sender': 'Maresciallo Redbrook',
+  'entities.letters.letter_q_wolves.subject': 'Nei recinti è tornata la quiete',
+  'entities.letters.letter_q_wolves.body':
+    'I pastori possono finalmente dormire sonni tranquilli, e il merito è tuo. Ho chiesto alla Posta dei Corvi di portarti un piccolo compenso dal fondo della guardia.\n\nTieni la lama oliata.\n- Maresciallo Redbrook',
+  'entities.letters.letter_q_greyjaw.sender': 'Maresciallo Redbrook',
+  'entities.letters.letter_q_greyjaw.subject': 'Il vecchio Grigiafauci, finalmente',
+  'entities.letters.letter_q_greyjaw.body':
+    'Le notizie corrono in una città così piccola. Ieri sera i pastori hanno brindato alla tua salute, e Wilkes giura che il lupo era grande quanto un carro. Lascia pure che ricamino: te lo sei guadagnato.\n\nConcediti un pasto a spese della guardia.\n- Maresciallo Redbrook',
+  'entities.letters.letter_q_hollow.sender': 'Fratello Aldric',
+  'entities.letters.letter_q_hollow.subject': 'Ciò che hai compiuto nel buio',
+  'entities.letters.letter_q_hollow.body':
+    'Pochi sapranno mai cosa giaceva sepolto in quella conca, e ancora meno ci crederebbero. Io lo so, e non lo dimenticherò.\n\nChe la tua strada resti illuminata.\n- Fratello Aldric',
 };

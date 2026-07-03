@@ -65,6 +65,7 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
     'Configurações de Saque: Saque Mestre, Saqueador Mestre {name}, limite {threshold}.',
   'hudChrome.masterLoot.thresholdSet': 'Limite de saque definido como {threshold}.',
   'hudChrome.options.showDevBadges': 'Exibir Insígnias de Desenvolvedor',
+  'hudChrome.options.groundReticle': 'Retícula de mira no chão',
   'hudChrome.options.startAttackOnAbility': 'Ataque Automático ao Usar Habilidade',
   'hudChrome.party.promoteLeader': 'Promover a Líder',
   'hudChrome.statInfo.desc.spellPower':
@@ -1394,9 +1395,14 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'abilityUi.forms.bear': 'urso',
   'abilityUi.forms.cat': 'lobo',
   'abilityUi.cast.fishing': 'Pesca',
+  'abilityUi.cast.thunzharrStormcall': 'Chamado da Tempestade',
   'abilityUi.cast.demonHeal': 'Cura demoníaca',
   'questUi.tracker.title': 'Missões',
   'questUi.tracker.complete': 'Concluída',
+
+  'questUi.tracker.showOnMap': 'Mostrar {name} no mapa',
+
+  'questUi.tracker.hideFromMap': 'Ocultar {name} do mapa',
   'questUi.log.title': 'Registro de missões',
   'questUi.log.close': 'Fechar registro de missões',
   'questUi.log.summary': 'Ativas: {active} / Concluídas: {completed}',
@@ -1692,6 +1698,21 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.taunt.description':
     'Provoca o alvo: sua ameaça sobe para igualar a do inimigo mais odiado por ele, que é forçado a atacar você por 3 s.',
   'entities.abilities.fireball.name': 'Bola de Fogo',
+  'entities.abilities.rain_of_fire.name': 'Chuva de Fogo',
+  'entities.abilities.rain_of_fire.description':
+    'Faz cair uma chuva de fogo na área-alvo, queimando os inimigos e causando {damage} de dano de Fogo.',
+  'entities.abilities.volley.name': 'Saraivada',
+  'entities.abilities.volley.description':
+    'Dispara uma chuva de flechas na área-alvo, causando {damage} de dano aos inimigos atingidos.',
+  'entities.abilities.hurricane.name': 'Furacão',
+  'entities.abilities.hurricane.description':
+    'Desencadeia um furacão na área-alvo, atingindo os inimigos e causando {damage} de dano de Natureza.',
+  'entities.abilities.earthquake.name': 'Terremoto',
+  'entities.abilities.earthquake.description':
+    'Sacode a área-alvo, atingindo os inimigos e causando {damage} de dano de Natureza.',
+  'entities.abilities.flamestrike.name': 'Golpe Flamejante',
+  'entities.abilities.flamestrike.description':
+    'Invoca uma explosão de chamas no local-alvo, causando {damage} de dano de Fogo aos inimigos atingidos pela explosão.',
   'entities.abilities.fireball.description':
     'Arremessa uma bola flamejante que causa {damage} de dano de Fogo e dano adicional ao longo do tempo.',
   'entities.abilities.frost_armor.name': 'Armadura Gélida',
@@ -3143,6 +3164,15 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'entities.items.brightwood_venison.name': 'Carne de veado de Brightwood',
   'entities.items.bramblehide_jerkin.name': 'Gibão de couro de sarça',
   'entities.items.monarch_crown_helm.name': 'Coroa do Monarca',
+  'entities.items.copper_mining_pick.name': 'Picareta de Cobre',
+  'entities.items.iron_mining_pick.name': 'Picareta de Ferro',
+  'entities.items.mithril_mining_pick.name': 'Picareta de Mithril',
+  'entities.items.handaxe.name': 'Machadinha',
+  'entities.items.felling_axe.name': 'Machado de Corte',
+  'entities.items.ironbark_axe.name': 'Machado de Casca de Ferro',
+  'entities.items.gathering_sickle.name': 'Foice de Coleta',
+  'entities.items.bronze_sickle.name': 'Foice de Bronze',
+  'entities.items.silverleaf_sickle.name': 'Foice Folha de Prata',
   // v0.10.0 release fill (Fiesta / skin-select / NPC voices / chat channels / Brightwood Glade)
   'hud.core.chatChannels.add': 'Adicionar canal de chat',
   'hud.core.chatChannels.addTitle': 'Adicionar canal',
@@ -3392,6 +3422,17 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'entities.items.soulflame_cowl.name': "Capuz Chama d'Alma",
   'entities.items.soulflame_mantle.name': "Manto Chama d'Alma",
   'entities.items.stormcallers_crown.name': 'Coroa do Chamatormenta',
+  'entities.items.crownforged_gauntlets.name': 'Manoplas Forjacoroa',
+  'entities.items.nighttalon_grips.name': 'Pegas Garra Noturna',
+  'entities.items.soulflame_gloves.name': "Luvas Chama d'Alma",
+  'entities.items.stormcallers_handguards.name': 'Protetores de mão do Chamatormenta',
+  'entities.items.crownforged_girdle.name': 'Cinturão Forjacoroa',
+  'entities.items.nighttalon_waistband.name': 'Cinta Garra Noturna',
+  'entities.items.soulflame_cord.name': "Cordão Chama d'Alma",
+  'entities.items.stormcallers_waistguard.name': 'Guarda-cintura do Chamatormentas',
+  'entities.mobs.thunzharr_waking_peak.name': 'Thunzharr, o Pico Desperto',
+  'entities.mobs.thunzharr_stormling.name': 'Elemental de tormenta desperto',
+  'hudChrome.worldBoss.spawn': '{name} ergue-se sobre as Alturas de Thornpeak!',
   'entities.items.stormcallers_spaulders.name': 'Espaldares do Chamatormenta',
   'hud.chat.context.convertToRaid': 'Converter em raide',
   'hud.chat.context.convertToParty': 'Converter em grupo',
@@ -4933,17 +4974,20 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.deathlord.bonus2': 'Aumenta o poder de ataque em 40.',
   'entities.itemSets.deathlord.bonus3': 'Aumenta a força em 15 e o vigor em 15.',
   'entities.itemSets.necromancers.name': 'Vestes do necromante',
-  'entities.itemSets.necromancers.bonus2': 'Reduz em 50% o atraso de conjuração causado por dano.',
-  'entities.itemSets.necromancers.bonus3': 'Dano recebido não atrasa suas conjurações.',
+  'entities.itemSets.necromancers.bonus2':
+    'Você não pode ser repelido (100% de resistência a repulsão).',
+  'entities.itemSets.necromancers.bonus3': 'Aumenta o intelecto em 10 e o vigor em 10.',
   'entities.itemSets.nighttalon.name': 'Traje de couro Garranoite',
   'entities.itemSets.nighttalon.bonus2': 'Aumenta o poder de ataque em 40.',
   'entities.itemSets.nighttalon.bonus3': 'Aumenta a agilidade em 15 e a chance de crítico em 2%.',
   'entities.itemSets.soulflame.name': 'Vestes de Chama da Alma',
-  'entities.itemSets.soulflame.bonus2': 'Reduz em 50% o atraso de conjuração causado por dano.',
-  'entities.itemSets.soulflame.bonus3': 'Dano recebido não atrasa suas conjurações.',
+  'entities.itemSets.soulflame.bonus2':
+    'Você não pode ser repelido (100% de resistência a repulsão).',
+  'entities.itemSets.soulflame.bonus3': 'Aumenta o intelecto em 15 e o espírito em 15.',
   'entities.itemSets.stormcallers.name': 'Vestes do Chamatormentas',
-  'entities.itemSets.stormcallers.bonus2': 'Reduz em 50% o atraso de conjuração causado por dano.',
-  'entities.itemSets.stormcallers.bonus3': 'Dano recebido não atrasa suas conjurações.',
+  'entities.itemSets.stormcallers.bonus2':
+    'Você não pode ser repelido (100% de resistência a repulsão).',
+  'entities.itemSets.stormcallers.bonus3': 'Aumenta o intelecto em 15 e o espírito em 15.',
   'entities.itemSets.wyrmshadow.name': 'Traje Sombraverme',
   'entities.itemSets.wyrmshadow.bonus2': 'Aumenta o poder de ataque em 40.',
   'entities.itemSets.wyrmshadow.bonus3': 'Aumenta a agilidade em 15 e a chance de crítico em 2%.',
@@ -5083,4 +5127,85 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.relay.help.label': 'Preciso de Ajuda',
   'hudChrome.discord.relay.help.hint': 'Peça ajuda à comunidade',
   'hudChrome.options.showSecondaryActionBar': 'Mostrar Barra de Ação Secundária',
+  'errors.api.desktopCodeInvalid':
+    'O código de login do desktop é inválido ou expirou. Tente novamente.',
+  'desktop.crash.body': 'A visualização do jogo parou de funcionar. Recarregar?',
+  'desktop.crash.fatalBody':
+    'O World of ClaudeCraft encontrou um erro inesperado e precisa fechar.',
+  'desktop.crash.quit': 'Sair',
+  'desktop.crash.reload': 'Recarregar',
+  'desktop.crash.title': 'World of ClaudeCraft',
+  'desktop.update.downloading': 'Baixando atualização {version}...',
+  'desktop.update.later': 'Depois',
+  'desktop.update.ready':
+    'A atualização {version} está pronta. Ela será instalada ao sair, ou reinicie agora.',
+  'desktop.update.restart': 'Reiniciar agora',
+  'hudChrome.dailyRewards.close': 'Fechar recompensas diárias',
+  'hudChrome.dailyRewards.endsIn': 'Termina em {time}',
+  'hudChrome.dailyRewards.error': 'Não foi possível carregar as recompensas diárias.',
+  'hudChrome.dailyRewards.history': 'Vencedores anteriores',
+  'hudChrome.dailyRewards.intro':
+    'Mantenha WOC suficiente na sua carteira verificada para desbloquear as recompensas diárias. Ganhe pontos com um giro diário e tarefas rotativas, depois suba na classificação diária para ganhar uma parte da premiação.',
+  'hudChrome.dailyRewards.leaderboard': 'Classificação Diária',
+  'hudChrome.dailyRewards.loading': 'Carregando recompensas diárias...',
+  'hudChrome.dailyRewards.noHistory': 'Nenhum pagamento ainda.',
+  'hudChrome.dailyRewards.noLeaders': 'Nenhum ponto ainda.',
+  'hudChrome.dailyRewards.prize': 'Premiação',
+  'hudChrome.dailyRewards.reason.eligible': 'Recompensas desbloqueadas.',
+  'hudChrome.dailyRewards.reason.no_wallet': 'Conecte uma carteira com pelo menos $20 USD em WOC.',
+  'hudChrome.dailyRewards.reason.price_unavailable':
+    'O preço do WOC está indisponível; as recompensas estão temporariamente bloqueadas.',
+  'hudChrome.dailyRewards.reason.under_minimum':
+    'A carteira está abaixo do mínimo de $20 USD em WOC.',
+  'hudChrome.dailyRewards.remainingHoursMinutes': '{hours}h {minutes}min',
+  'hudChrome.dailyRewards.remainingLessThanMinute': '<1min',
+  'hudChrome.dailyRewards.remainingMinutes': '{minutes}min',
+  'hudChrome.dailyRewards.reset': 'Reinício',
+  'hudChrome.dailyRewards.score': 'Pontuação',
+  'hudChrome.dailyRewards.sol': '{amount} SOL',
+  'hudChrome.dailyRewards.spinButton': 'Girar',
+  'hudChrome.dailyRewards.spinClaimed': 'Resgatado: +{points} pontos.',
+  'hudChrome.dailyRewards.spinClose': 'Fechar giro diário',
+  'hudChrome.dailyRewards.spinDialogTitle': 'Giro de Recompensa Diária',
+  'hudChrome.dailyRewards.spinReady': 'Um giro está disponível.',
+  'hudChrome.dailyRewards.spinResult': '+{points} pontos',
+  'hudChrome.dailyRewards.spinTitle': 'Giro Diário',
+  'hudChrome.dailyRewards.tasks': 'Tarefas',
+  'hudChrome.dailyRewards.title': 'Recompensas Diárias',
+  'hudChrome.dailyRewards.unknown': 'Desconhecido',
+  'hudChrome.dailyRewards.usd': '{amount} USD',
+  'hudChrome.dailyRewards.walletConnectBody':
+    'Verifique uma carteira Solana com WOC para desbloquear as recompensas diárias.',
+  'hudChrome.dailyRewards.walletConnectButton': 'Verificar carteira',
+  'hudChrome.dailyRewards.walletConnectTitle': 'Verificar carteira',
+  'hudChrome.dailyRewards.walletHoldBody':
+    'Mantenha pelo menos {amount} USD em WOC para desbloquear as recompensas diárias.',
+  'hudChrome.dailyRewards.walletHoldTitle': 'Mantenha WOC',
+  'hudChrome.dailyRewards.walletPriceBody':
+    'O preço do WOC está indisponível no momento. Volte em instantes.',
+  'hudChrome.dailyRewards.walletValue': 'Valor da carteira (WOC)',
+  'hudChrome.nativeUpdate.body':
+    'Uma nova versão do World of ClaudeCraft está disponível. Atualize agora para receber as últimas correções e melhorias.',
+  'hudChrome.nativeUpdate.bodyWithVersion':
+    'A versão {version} do World of ClaudeCraft está disponível. Atualize agora para receber as últimas correções e melhorias.',
+  'hudChrome.nativeUpdate.notNow': 'Agora não',
+  'hudChrome.nativeUpdate.title': 'Atualização disponível',
+  'hudChrome.nativeUpdate.update': 'Atualizar',
+  // Ravenpost authored letters
+  'entities.letters.ravenpost_welcome.sender': 'O Correio dos Corvos',
+  'entities.letters.ravenpost_welcome.subject': 'Os corvos agora voam por você',
+  'entities.letters.ravenpost_welcome.body':
+    'Viajante,\n\no Correio dos Corvos abriu seus poleiros ao longo do vale. Procure os pilares dos corvos em Eastbrook, Fenbridge e Highwatch: de qualquer um deles você pode enviar cartas, moedas e itens a outros aventureiros, e recolher o que os corvos trouxerem para você.\n\nSegue anexa uma pequena lembrança para seu primeiro selo.\n\nAsas ao alto,\nO Correio dos Corvos',
+  'entities.letters.letter_q_wolves.sender': 'Marechal Redbrook',
+  'entities.letters.letter_q_wolves.subject': 'Os currais estão calmos de novo',
+  'entities.letters.letter_q_wolves.body':
+    'Os pastores finalmente podem dormir tranquilos, e isso é obra sua. Pedi ao Correio dos Corvos que levasse a você uma lembrança do fundo da guarda.\n\nMantenha a lâmina azeitada.\n- Marechal Redbrook',
+  'entities.letters.letter_q_greyjaw.sender': 'Marechal Redbrook',
+  'entities.letters.letter_q_greyjaw.subject': 'O velho Mandíbula Cinzenta, enfim',
+  'entities.letters.letter_q_greyjaw.body':
+    'As notícias correm depressa numa cidade tão pequena. Ontem à noite os pastores brindaram à sua saúde, e Wilkes jura que o lobo era do tamanho de uma carroça. Deixe que aumentem a história: você mereceu.\n\nFaça uma refeição por conta da guarda.\n- Marechal Redbrook',
+  'entities.letters.letter_q_hollow.sender': 'Irmão Aldric',
+  'entities.letters.letter_q_hollow.subject': 'O que você fez na escuridão',
+  'entities.letters.letter_q_hollow.body':
+    'Poucos saberão o que estava enterrado naquela baixada, e menos ainda acreditariam. Eu sei, e não vou esquecer.\n\nQue seu caminho continue iluminado.\n- Irmão Aldric',
 };

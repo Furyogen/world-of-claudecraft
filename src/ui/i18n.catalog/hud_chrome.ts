@@ -36,6 +36,53 @@ export const hudChromeStrings = {
     title: 'Emotes',
     done: 'Done',
   },
+  dailyRewards: {
+    title: 'Daily Rewards',
+    close: 'Close daily rewards',
+    loading: 'Loading daily rewards...',
+    error: 'Could not load daily rewards.',
+    intro:
+      'Hold enough WOC in your verified wallet to unlock daily rewards. Earn points with one daily spin and rotating tasks, then climb the daily leaderboard for a share of the prize pool.',
+    prize: 'Prize Pool',
+    reset: 'Reset',
+    endsIn: 'Ends in {time}',
+    remainingLessThanMinute: '<1m',
+    remainingMinutes: '{minutes}m',
+    remainingHoursMinutes: '{hours}h {minutes}m',
+    score: 'Score',
+    walletValue: 'Wallet Value (WOC)',
+    usd: '{amount} USD',
+    sol: '{amount} SOL',
+    unknown: 'Unknown',
+    spinTitle: 'Daily Spin',
+    spinDialogTitle: 'Daily Reward Spin',
+    spinClose: 'Close daily spin',
+    spinReady: 'One spin is ready.',
+    spinClaimed: 'Claimed: +{points} points.',
+    spinResult: '+{points} points',
+    spinButton: 'Spin',
+    tasks: 'Tasks',
+    taskMultiplier: 'x{multiplier} multiplier',
+    pointsGained: '{points} daily rewards points gained.',
+    leaderboard: 'Daily Leaderboard',
+    totalPlayer: '{count} player today',
+    totalPlayers: '{count} players today',
+    history: 'Past Winners',
+    noLeaders: 'No points yet.',
+    noHistory: 'No payouts yet.',
+    walletConnectTitle: 'Verify Wallet',
+    walletConnectBody: 'Verify a Solana wallet with WOC to unlock daily rewards.',
+    walletConnectButton: 'Verify Wallet',
+    walletHoldTitle: 'Hold WOC',
+    walletHoldBody: 'Hold at least {amount} USD in WOC to unlock daily rewards.',
+    walletPriceBody: 'WOC pricing is unavailable right now. Check back shortly.',
+    reason: {
+      eligible: 'Rewards unlocked.',
+      no_wallet: 'Connect a wallet with at least $20 USD in WOC.',
+      under_minimum: 'Wallet is below the $20 USD WOC minimum.',
+      price_unavailable: 'WOC price is unavailable, rewards are temporarily locked.',
+    },
+  },
   theme: {
     preset: 'UI Theme',
     customColors: 'Custom Colors',
@@ -189,6 +236,14 @@ export const hudChromeStrings = {
     heading: 'Heading',
     minimapZoom: 'Minimap zoom',
   },
+  nativeUpdate: {
+    title: 'Update Available',
+    body: 'A new version of World of ClaudeCraft is available. Update now for the latest fixes and improvements.',
+    bodyWithVersion:
+      'Version {version} of World of ClaudeCraft is available. Update now for the latest fixes and improvements.',
+    notNow: 'Not now',
+    update: 'Update',
+  },
   // Cast-bar progressbar accessible names (the visible spell name + seconds-left
   // text are the live status; these name which bar is which). One for the player's
   // own cast (#castbar) and one for the target/boss cast (#tf-castbar).
@@ -304,13 +359,23 @@ export const hudChromeStrings = {
     // Interface panel toggle: nameplate glyph/outline, inspect block, player
     // card, and the Developers leaderboard tab (on by default).
     showDevBadges: 'Show Developer Badges',
+    // Interface panel toggle: render your own overhead nameplate the way other
+    // players see it (on by default).
+    showOwnNameplate: 'Show My Nameplate',
     // Interface panel: global HUD zoom slider, and the mirror of the landing
     // page's high-contrast backdrop toggle.
     uiScale: 'UI Scale',
+    // Interface panel sliders: scale just the player / target unit frame
+    // (wordy, M16: the five non-Latin fills land in the same change as each).
+    playerFrameScale: 'Player Frame Scale',
+    targetFrameScale: 'Target Frame Scale',
     highContrastBackground: 'High-Contrast Background',
     // Interface panel toggle: also engage auto-attack when using an offensive
     // ability, so white swings start without a separate Attack press (on by default).
     startAttackOnAbility: 'Auto-Attack on Ability Use',
+    // Interface panel toggle: loot corpses by walking past them (off by default).
+    walkByAutoloot: 'Walk-by Autoloot',
+    groundReticle: 'Ground-Targeting Reticle',
     // Interface panel toggle + the item-tooltip lines it reveals (off by default).
     showItemLevel: 'Show Item Level',
     itemLevelLine: 'Item Level {level}',
@@ -402,7 +467,7 @@ export const hudChromeStrings = {
       crimson: 'Crimson',
       mono: 'Mono',
     },
-    // Value units — the digits are spliced in via formatNumber at the call site.
+    // Value units, the digits are spliced in via formatNumber at the call site.
     units: {
       ms: '{value} ms',
       mb: '{value} MB',
@@ -840,6 +905,12 @@ export const hudChromeStrings = {
       nature: 'Nature',
     },
   },
+  // World-boss spawn announcement. The sim emits this server-wide in English when a
+  // world boss rises; src/ui/sim_i18n.ts re-localizes it through this key, splicing
+  // the localized boss name. English-only domain so an English-only PR compiles.
+  worldBoss: {
+    spawn: '{name} rises over Thornpeak Heights!',
+  },
   // Loot window title shown only when the chest entity is missing (the normal path
   // uses the chest's localized entity name); replaces a former hard-coded 'Chest'.
   loot: {
@@ -859,6 +930,44 @@ export const hudChromeStrings = {
   nameplate: {
     mob: '[{level}] {name}',
     mobElite: '[{level}+] {name}',
+  },
+  // World mouseover tooltip shown when hovering a mob (mob_tooltip_view.ts):
+  // name (colored by the nameplate con-color), then "Level N <type>" ({family}
+  // reuses the existing guide.family.<id>.name bestiary labels), then a
+  // Friendly/Hostile reaction line (green/red, from Entity.hostile). All three
+  // values below are wordy (M16): filled in the five non-Latin locales in this
+  // same change.
+  mobTooltip: {
+    levelFamily: 'Level {level} {family}',
+    // The one MobFamily with no guide.family.* bestiary entry (demons are
+    // warlock-pet / zone encounter mobs, out of scope for the public wiki
+    // bestiary generator), so it needs its own word here.
+    familyDemon: 'Demon',
+    hostile: 'Hostile',
+    friendly: 'Friendly',
+  },
+  // Movable target frame: the small corner toggle that unlocks the frame for
+  // dragging and locks it back in place (target_frame_pos.ts + hud.ts wiring).
+  // The one button swaps its accessible name with its pressed state; both values
+  // are wordy (M16), filled in the five non-Latin locales in this same change.
+  targetFrame: {
+    // aria-label / title while LOCKED (aria-pressed=false): press to move it.
+    unlock: 'Move target frame',
+    // aria-label / title while UNLOCKED (aria-pressed=true): press to fix it.
+    lock: 'Lock target frame',
+  },
+  // Movable player frame: the same MovableFrame corner toggle on #player-frame
+  // (movable_frame.ts). Same shape as targetFrame above; both values are wordy
+  // (M16), filled in the five non-Latin locales in this same change.
+  playerFrame: {
+    unlock: 'Move player frame',
+    lock: 'Lock player frame',
+  },
+  // Interface panel row: snap both movable unit frames back to their stock
+  // spots (the button reuses chatWindow.resetAction). Wordy (M16): the five
+  // non-Latin fills land in this same change.
+  frameReset: {
+    label: 'Reset Frame Positions',
   },
   // Item tooltip: the minimum character level needed to equip a piece (classic
   // "Requires Level N"). Shown red when the viewer is below it. {level} runs
@@ -950,6 +1059,7 @@ export const hudChromeStrings = {
     memberSinceDays: '{days}d in the Discord',
     roleTag: {
       levyst: 'Levy St',
+      admin: 'Admin',
       devs: 'Dev',
       mods: 'Mod',
       artists: 'Artist',
@@ -1038,5 +1148,116 @@ export const hudChromeStrings = {
     },
     linkedAs: 'Linked as {login}',
     unlink: 'Unlink GitHub',
+  },
+  // The Ravenpost mailbox window + envelope indicator. Authored letter
+  // sender/subject/body localize via entities.letters.* (world_entity_i18n),
+  // not here; these are the window chrome and the structured mailResult lines.
+  mailbox: {
+    title: 'Mailbox',
+    subtitle: 'The Ravenpost',
+    close: 'Close mailbox',
+    tabInbox: 'Inbox',
+    tabInboxWithCount: 'Inbox ({count})',
+    tabSend: 'Send',
+    empty: 'Your mailbox is empty.',
+    truncated: 'Showing the newest {shown} of {total} letters.',
+    attachmentsBadge: 'Parcel attached',
+    unreadBadge: 'Unread',
+    back: 'Back',
+    take: 'Take attachments',
+    delete: 'Delete letter',
+    deleteAria: 'Delete the letter {subject}',
+    openAria: 'Read the letter {subject} from {name}',
+    noSubject: '(no subject)',
+    toLabel: 'To',
+    toPlaceholder: 'Character name',
+    subjectLabel: 'Subject',
+    bodyLabel: 'Message',
+    coinLabel: 'Attach coin',
+    parcelsLabel: 'Parcels',
+    parcelsHint: 'Click an item in your bags to attach it.',
+    removeParcelAria: 'Remove {item} from the letter',
+    sendButton: 'Send letter',
+    postageNote: 'Postage: {amount}. The raven flies for about {seconds}s.',
+    arrivedBanner: 'The raven has landed: mail from {name}.',
+    arrivedLog: 'You have new mail from {name}.',
+    indicatorAria: 'Unread mail: {count}',
+    indicatorTip: 'You have {count} unread letters. Visit a mailbox to read them.',
+    clickAttach: 'Click to attach to your letter.',
+    cannotMail: 'This cannot be mailed.',
+    result: {
+      sent: 'A raven takes wing with your letter to {name} ({postage} postage).',
+      collected: 'You collect {amount} from the letter.',
+      tooFar: 'You must be at a mailbox to tend your post.',
+      needRecipient: 'Name a recipient for your letter.',
+      noRecipient: 'No one by that name holds a mailbox here.',
+      tooManyParcels: 'A letter carries at most {count} parcels.',
+      noMailQuestItems: 'You cannot mail quest items.',
+      notEnoughItems: 'You do not have that many to send.',
+      cantAffordPostage: 'You cannot afford the postage.',
+      recipientBoxFull: 'Their mailbox is full.',
+      letterGone: 'That letter is no longer in your box.',
+      takeParcelsFirst: 'Take the parcels out before discarding the letter.',
+    },
+  },
+  // The event calendar window: recurring system events plus the guild lane
+  // (booked by officers and the Guild Master, mirrored via socialInfo).
+  calendar: {
+    title: 'Event Calendar',
+    close: 'Close calendar',
+    keybindLabel: 'Event Calendar',
+    prevMonth: 'Previous month',
+    nextMonth: 'Next month',
+    dayAria: '{date}: {count} events',
+    noEvents: 'Nothing planned for this day.',
+    allDay: 'All day',
+    bookedBy: 'Booked by {name}',
+    deleteAria: 'Remove the event {title}',
+    bookTitle: 'Book a guild event',
+    titlePlaceholder: 'Event title',
+    notePlaceholder: 'Note (optional)',
+    hourLabel: 'Hour (UTC)',
+    hourAllDay: 'All day',
+    addButton: 'Book event',
+    guildOnlyNote: 'Join a guild to plan events together.',
+    result: {
+      created: 'The event is on the guild calendar.',
+      removed: 'The event was taken off the calendar.',
+      notInGuild: 'You are not in a guild.',
+      notOfficer: 'Only officers and the Guild Master may manage guild events.',
+      badInput: 'Give the event a title and a valid day.',
+      calendarFull: 'The guild calendar is full.',
+      eventGone: 'That event is no longer on the calendar.',
+    },
+    events: {
+      raidCall: {
+        title: 'Raid Call',
+        note: 'Wardens sound the horn: gather a party for the crypts and the raid.',
+      },
+      marketDay: {
+        title: 'Market Day',
+        note: 'The Merchant expects fresh stock. A fine day to browse the World Market.',
+      },
+      fiestaNight: {
+        title: 'Fiesta Night',
+        note: 'The 2v2 Fiesta ring draws its loudest crowds tonight.',
+      },
+      arenaClash: {
+        title: 'Arena Clash',
+        note: 'Duelists flock to the Ashen Coliseum. Queue up and climb the ladder.',
+      },
+      fishingDerby: {
+        title: 'Fishing Derby',
+        note: 'Anglers line the lakes. Bring a pole and swap fishing tales.',
+      },
+      delveDay: {
+        title: 'Delve Day',
+        note: 'Brother Halven marks his charts: a fine day to brave the Collapsed Reliquary.',
+      },
+      moongateCommunion: {
+        title: 'Moongate Communion',
+        note: 'Pilgrims gather at the temple moongate under the mid-month moon.',
+      },
+    },
   },
 };

@@ -236,6 +236,9 @@ export interface SimContextCallbacks {
   fiestaTakedown(match: ArenaMatch, killerPid: number, victim: Entity): void;
   fiestaDown(match: ArenaMatch, victim: Entity, killerPid: number | null): void;
   rollLoot(mob: Entity, meta: PlayerMeta, eligible?: PlayerMeta[]): void;
+  // World-boss personal loot: an independent roll of the boss's loot table per
+  // contributor (gated once-per-day per boss). Owned by world_boss.ts.
+  rollWorldBossLoot(mob: Entity, contributors: PlayerMeta[]): void;
 
   // C2/C3/C4b heal, aura, knockback, and crowd-control surface.
   applyHeal(source: Entity, target: Entity, amount: number, ability: string): void;
@@ -280,6 +283,8 @@ export interface SimContextCallbacks {
   // (feedPet consumes the inventory hub; L2 dedupes when it adds the identical decl).
   spendResource(p: Entity, cost: number): void;
   removeItem(itemId: string, count: number, pid?: number): void;
+  // Fungible-only removal (#1165), skips instanced slots; market.ts escrows with this.
+  removeFungibleItem(itemId: string, count: number, pid?: number): void;
 
   // A1/T1 raid markers + party; Q1 quest-credit trio (kill/collect/turn-in credit,
   // foreign-called from handleDeath + the inventory hub + the interaction/crypt
@@ -296,6 +301,9 @@ export interface SimContextCallbacks {
   onInventoryChangedForQuests(meta: PlayerMeta): void;
   checkQuestReady(qp: QuestProgress, meta: PlayerMeta): void;
   countItem(itemId: string, pid?: number): number;
+  // Fungible-only count (excludes per-instance slots, #1165); market.ts uses this
+  // instead of countItem so an instanced copy is never listed as a plain stack member.
+  countFungibleItem(itemId: string, pid?: number): number;
   completeQuestForDev(questId: string, pid?: number): boolean;
   completeCurrentQuestsForDev(pid?: number): number;
 
@@ -522,6 +530,10 @@ export interface SimContextCallbacks {
   // moveSpeedMult/swingIntervalMult are M2 decls above -> all deduped.)
   setPlayerLevel(level: number, pid?: number): void;
   notice(pid: number, text: string, color?: string): void;
+  // Dev-only test-dummy spawner backing "/dev bot <name>" (handleDevChat, gated by
+  // devCommands). Adds a stationary whisperable player near the primary; returns the
+  // new pid, or -1 if the name is blank or already taken. Stays on Sim.
+  spawnDevBot(name: string): number;
 
   // L2 inventory/vendor (src/sim/items.ts): the four helpers the moved useItem
   // dispatches to that STAY on Sim (their owning facets are decided later). W2 owns
@@ -556,6 +568,11 @@ export interface SimContextCallbacks {
   targetEntity(id: number | null, pid?: number): void;
   partyCapacity(party: Party | null): number;
   marketListingBelongsTo(listing: MarketListing, meta: PlayerMeta): boolean;
+
+  // Ravenpost mail (mail/post_office.ts): the quest turn-in core
+  // (quests/quest_commands.ts) queues the giver's authored thank-you letter
+  // through this; the binding points at the PostOffice instance on Sim.
+  queueQuestLetter(questId: string, pid: number): void;
 }
 
 // The seam consumed by extracted modules.
@@ -745,6 +762,7 @@ export function createSimContext(host: SimContextHost): SimContext {
     fiestaTakedown: host.fiestaTakedown,
     fiestaDown: host.fiestaDown,
     rollLoot: host.rollLoot,
+    rollWorldBossLoot: host.rollWorldBossLoot,
     applyHeal: host.applyHeal,
     spellCrit: host.spellCrit,
     applyAura: host.applyAura,
@@ -762,6 +780,7 @@ export function createSimContext(host: SimContextHost): SimContext {
     // already passed through elsewhere - deduped, not re-added).
     spendResource: host.spendResource,
     removeItem: host.removeItem,
+    removeFungibleItem: host.removeFungibleItem,
     clearEntityMarker: host.clearEntityMarker,
     partyOf: host.partyOf,
     removeFromParty: host.removeFromParty,
@@ -770,6 +789,7 @@ export function createSimContext(host: SimContextHost): SimContext {
     onInventoryChangedForQuests: host.onInventoryChangedForQuests,
     checkQuestReady: host.checkQuestReady,
     countItem: host.countItem,
+    countFungibleItem: host.countFungibleItem,
     completeQuestForDev: host.completeQuestForDev,
     completeCurrentQuestsForDev: host.completeCurrentQuestsForDev,
     addEntity: host.addEntity,
@@ -876,6 +896,7 @@ export function createSimContext(host: SimContextHost): SimContext {
     // G2 social plumbing passthroughs (hasPendingSocialInvite already bound above; deduped).
     setPlayerLevel: host.setPlayerLevel,
     notice: host.notice,
+    spawnDevBot: host.spawnDevBot,
     // L2 inventory/vendor (W2): the four still-on-Sim helpers the moved useItem dispatches to.
     startFishing: host.startFishing,
     unlockMechChromaFromItem: host.unlockMechChromaFromItem,
@@ -888,5 +909,7 @@ export function createSimContext(host: SimContextHost): SimContext {
     targetEntity: host.targetEntity,
     partyCapacity: host.partyCapacity,
     marketListingBelongsTo: host.marketListingBelongsTo,
+    // Ravenpost mail: the quest turn-in letter hook (points at the PostOffice on Sim).
+    queueQuestLetter: host.queueQuestLetter,
   };
 }

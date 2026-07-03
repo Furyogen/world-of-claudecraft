@@ -12,7 +12,7 @@ import {
   nonSelfRepaintDue,
   targetFrameNonSelfIntervalMs,
 } from '../game/ui_tier_knobs';
-import { voice } from '../game/voice';
+import { voice, voiceDistanceGain } from '../game/voice';
 import { castBarState, consumeBarState } from '../render/cast_bar';
 import { CharacterPreview } from '../render/characters';
 import { preloadMechAssets } from '../render/characters/assets';
@@ -22,6 +22,7 @@ import {
   playerPortraitDataUrl,
   visualPortraitDataUrl,
 } from '../render/characters/portrait';
+import { isFriendlyPet, mobTooltipConColor } from '../render/reaction';
 import type { Renderer } from '../render/renderer';
 import { type AugmentCategory, augmentCategory } from '../sim/content/augments';
 import {
@@ -63,12 +64,15 @@ import { isItemLevelEligible, itemLevel, itemScore } from '../sim/item_level';
 import { requiredLevelFor } from '../sim/item_level_req';
 import type { Ante, PickAction } from '../sim/lockpick';
 import { PICK_ACTIONS } from '../sim/lockpick';
+import { type QuestObjectiveRef, questObjectivesForMob } from '../sim/quest_targets';
 import type { ResolvedAbility } from '../sim/sim';
 import type {
   AbilityDef,
+  CalendarResultCode,
   EquipSlot,
   InvSlot,
   LootRollChoice,
+  MailResultCode,
   PetMode,
   PlayerClass,
   ResourceType,
@@ -91,6 +95,7 @@ import {
   xpUntilNextPrestige,
 } from '../sim/types';
 import {
+  type DailyRewardStatus,
   type DelveRunInfo,
   type IWorld,
   isOverheadEmoteId,
@@ -109,12 +114,17 @@ import {
   ITEM_ICON_PREFIX,
 } from './action_bar_view';
 import { ArenaWindow } from './arena_window';
-import { abilityStartsAutoAttack, hasAutoAttackTarget } from './attack_on_ability';
+import {
+  abilityStartsAutoAttack,
+  deferAutoAttackUntilCastEnd,
+  hasAutoAttackTarget,
+} from './attack_on_ability';
 import { type AuraEffectInput, auraEffectDescriptor } from './aura_effect';
 import { AurasPainter, type AurasPainterDeps } from './auras_painter';
 import { type AurasDeps, createAurasView } from './auras_view';
 import { attachAvatarFallback } from './avatar_fallback';
 import { BagsWindow } from './bags_window';
+import { CalendarWindow } from './calendar_window';
 import { CastBarPainter } from './cast_bar_painter';
 import { buildPaperdollView, type PaperdollSlot } from './char_view';
 import { CharWindow } from './char_window';
@@ -126,13 +136,19 @@ import { ChatAnnouncer } from './chat_announcer';
 import {
   CHANNEL_LABEL_KEYS,
   CHAT_TAB_CHANNELS,
+  type ChatOpenTab,
   type ChatTabChannel,
   type ChatTabId,
   channelNeedsJoin,
+  chatOpenTabLabelKey,
   composeChatLine,
+  composeWhisperReply,
+  isChatOpenTab,
   isChatTabChannel,
   parseChatTabs,
   serializeChatTabs,
+  WHISPER_TAB,
+  WHISPER_TAB_LABEL_KEY,
 } from './chat_channels';
 import { type ChatClock, clampChatClock, formatChatTimestamp } from './chat_timestamp';
 import { type ChatBoxGeometry, clampChatBox, parseChatBox, serializeChatBox } from './chat_window';
@@ -145,6 +161,7 @@ import {
 } from './combat_sfx';
 import { type CardinalId, compassView } from './compass';
 import { formatMinimapCoords } from './coords';
+import { DailyRewardsWindow } from './daily_rewards_window';
 import { DelveMapPainter } from './delve_map_painter';
 import { devTierBadgeDataUrl, devTierByIndex, devTierDisplayName } from './dev_tier';
 import { markDialogRoot } from './dialog_root';
@@ -163,6 +180,16 @@ import { esc } from './esc';
 import { fctSpawnShape } from './fct_event';
 import { FctPainter } from './fct_painter';
 import { FocusManager, type FocusTrapHandle } from './focus_manager';
+import {
+  type AimPoint,
+  abilityAoeRadius,
+  cancelGroundAim,
+  clampAimToRange,
+  commitGroundAim,
+  createGroundAimState,
+  enterGroundAim,
+  type GroundAimState,
+} from './ground_aim';
 import {
   holderTierBadgeDataUrl,
   holderTierByIndex,
@@ -187,6 +214,7 @@ import {
 import {
   formatMoney as formatLocalizedMoney,
   formatNumber,
+  getLanguage,
   moneyParts,
   type SupportedLanguage,
   type TranslationKey,
@@ -207,9 +235,23 @@ import { lootSettingsView } from './loot_settings_view';
 import { renderLootSettingsWindow } from './loot_settings_window';
 import { lowHealthVignette } from './low_health';
 import { lowResourceView } from './low_resource';
+import { mailIndicatorView } from './mailbox_view';
+import { MailboxWindow } from './mailbox_window';
+import {
+  mapQuestListView,
+  parseUntrackedQuests,
+  serializeUntrackedQuests,
+} from './map_quest_list_view';
 import { type MapRegion, mapCanvasHeight, paintTerrainRows } from './map_terrain';
 import { MapWindowPainter } from './map_window_painter';
-import { MAP_MAX_ZOOM, mapWindowMode } from './map_window_view';
+import {
+  MAP_MAX_ZOOM,
+  type MapNpcMarker,
+  type MapQuestAreaMarker,
+  mapWindowMode,
+  npcMarkerAt,
+  questAreaObjectivesAt,
+} from './map_window_view';
 import { MarketWindow } from './market_window';
 import { Meters } from './meters';
 import { minimapMode } from './minimap_markers';
@@ -222,11 +264,14 @@ import {
   minimapZoomValue,
   nextMinimapZoom,
 } from './minimap_zoom';
+import { type MobTooltipI18n, type MobTooltipModel, mobTooltipHtml } from './mob_tooltip_view';
+import { MovableFrame } from './movable_frame';
 import { OptionsWindow } from './options_window';
 import { makeWriterFacet, type PainterHostPresentation } from './painter_host';
 import { partyFrameSignature, selectPartyFrameMembers } from './party_frames';
 import { PartyFramesPainter } from './party_frames_painter';
 import type { PerfOverlayHooks } from './perf_overlay_settings';
+import { PET_ACTION_ICONS } from './pet_action_icons';
 import {
   CARD_POSES,
   cardCanvasToBlob,
@@ -291,6 +336,7 @@ import {
   wocBalanceVerified,
 } from './wallet_balance';
 import { makeWindowFocus } from './window_focus';
+import { installWindowResize, markResizableWindow } from './window_resize';
 import { formatXp, xpBarView } from './xp_bar';
 import { XpBarPainter } from './xp_bar_painter';
 
@@ -395,9 +441,15 @@ const STAT_VIEW_DEPS: StatTooltipI18n = {
   t: (key, params) => t(key as TranslationKey, params),
   fmt: (value, opts) => formatNumber(value, opts),
 };
+// Same i18n + number-formatting surface, handed to the pure mob-hover tooltip view.
+const MOB_TOOLTIP_VIEW_DEPS: MobTooltipI18n = {
+  t: (key, params) => t(key as TranslationKey, params),
+  fmt: (value, opts) => formatNumber(value, opts),
+};
 const castDisplayName = (id: string): string => {
   if (id === FISHING_CAST_ID) return t('abilityUi.cast.fishing');
   if (id === 'demon_heal') return t('abilityUi.cast.demonHeal');
+  if (id === 'thunzharr_stormcall') return t('abilityUi.cast.thunzharrStormcall');
   const ability = ABILITIES[id];
   return ability ? abilityDisplayName(ability) : id;
 };
@@ -406,6 +458,33 @@ const RESOURCE_LABEL_KEYS: Record<ResourceType, TranslationKey> = {
   mana: 'abilityUi.resources.mana',
   rage: 'abilityUi.resources.rage',
   energy: 'abilityUi.resources.energy',
+};
+// Ravenpost mailResult refusal codes to their toast lines. `sent`/`collected`
+// are successes rendered as chat-log lines in handleEvents, but they map here
+// too so every code resolves without a fallback.
+const MAIL_RESULT_ERROR_KEYS: Record<MailResultCode, TranslationKey> = {
+  sent: 'hudChrome.mailbox.result.sent',
+  collected: 'hudChrome.mailbox.result.collected',
+  tooFar: 'hudChrome.mailbox.result.tooFar',
+  needRecipient: 'hudChrome.mailbox.result.needRecipient',
+  noRecipient: 'hudChrome.mailbox.result.noRecipient',
+  tooManyParcels: 'hudChrome.mailbox.result.tooManyParcels',
+  noMailQuestItems: 'hudChrome.mailbox.result.noMailQuestItems',
+  notEnoughItems: 'hudChrome.mailbox.result.notEnoughItems',
+  cantAffordPostage: 'hudChrome.mailbox.result.cantAffordPostage',
+  recipientBoxFull: 'hudChrome.mailbox.result.recipientBoxFull',
+  letterGone: 'hudChrome.mailbox.result.letterGone',
+  takeParcelsFirst: 'hudChrome.mailbox.result.takeParcelsFirst',
+};
+// Guild calendar outcome lines (created/removed are chat-log successes).
+const CALENDAR_RESULT_KEYS: Record<CalendarResultCode, TranslationKey> = {
+  created: 'hudChrome.calendar.result.created',
+  removed: 'hudChrome.calendar.result.removed',
+  notInGuild: 'hudChrome.calendar.result.notInGuild',
+  notOfficer: 'hudChrome.calendar.result.notOfficer',
+  badInput: 'hudChrome.calendar.result.badInput',
+  calendarFull: 'hudChrome.calendar.result.calendarFull',
+  eventGone: 'hudChrome.calendar.result.eventGone',
 };
 const RAID_MARKER_LABEL_KEYS = [
   'hud.markers.names.star',
@@ -498,6 +577,9 @@ const CHAT_ACTIVE_TAB_KEY = 'woc_chat_active_tab';
 // Persisted chat-window geometry (drag position + resize size). Desktop only —
 // the mobile layout owns its own placement and ignores this.
 const CHAT_GEOMETRY_KEY = 'woc_chat_geometry';
+// Persisted top-left for each movable unit frame (MovableFrame in movable_frame.ts).
+const TARGET_FRAME_POS_KEY = 'woc_target_frame_pos';
+const PLAYER_FRAME_POS_KEY = 'woc_player_frame_pos';
 const CHAT_TEMPLATE_KEYS = {
   party: 'hud.chat.templates.party',
   yell: 'hud.chat.templates.yell',
@@ -643,6 +725,9 @@ export class Hud {
   private loadedSlotMapFromStorage = false;
   private knownAbilityIdsAtLastSlotSync: Set<string> | null = null;
   private activeHotbarForm: HotbarForm = 'normal';
+  private groundAim: GroundAimState = createGroundAimState();
+  private groundAimPoint: AimPoint | null = null;
+  private groundAimClamped = false;
   private dragAction: { action: Exclude<HotbarAction, null>; sourceIndex: number | null } | null =
     null;
   // Set while dragging an equipped piece out of the paperdoll onto the bags window.
@@ -704,10 +789,11 @@ export class Hud {
   // ./focus_manager. Escape is NOT handled here: it stays with the existing unified
   // dispatcher (main.ts game input -> hud.closeAll()), so there is one Escape path.
   private readonly focusManager = new FocusManager();
-  // WoW-style chat tabs. `chatTabs` are the player-added channel tabs (the
-  // built-in `all`/`combat` views are implicit); `activeChatTab` is the one
-  // currently shown, and drives both the log filter and the send channel.
-  private chatTabs: ChatTabChannel[] = [];
+  // WoW-style chat tabs. `chatTabs` are the player-added tabs (send-capable
+  // channels plus the optional filter-only whisper collector; the built-in
+  // `all`/`combat` views are implicit); `activeChatTab` is the one currently
+  // shown, and drives both the log filter and the send channel.
+  private chatTabs: ChatOpenTab[] = [];
   private activeChatTab: ChatTabId = 'all';
   private errorEl = $('#error-msg');
   private bannerEl = $('#banner');
@@ -715,6 +801,13 @@ export class Hud {
   private tooltipEl = $('#tooltip');
   // Distinguishes a touch long-press "peek" (inspect, no action) from a tap.
   private peekGuard = new TouchPeekGuard();
+  // The mob whose world-hover tooltip is currently shown (showMobHoverTooltip),
+  // so main.ts's per-frame updateHoverCursor can call it every frame while the
+  // same mob stays hovered without rebuilding the tooltip HTML each time.
+  // A small composite key (id:level:hostile:playerLevel), not just the mob id, so
+  // the hover tooltip repaints when a mid-hover change moves its model. See
+  // showMobHoverTooltip.
+  private lastMobTooltipId: string | null = null;
   private errorTimer: number | undefined;
   private bannerTimer: number | undefined;
   private pfLevelEl = $('#pf-level');
@@ -803,6 +896,11 @@ export class Hud {
   private compassMarks = new Map<string, HTMLElement>();
   private compassHeadingEl: HTMLElement | null = null;
   private lastCompassHeading = '';
+  // compassView is a pure function of the player facing, so an unchanged facing
+  // skips the whole rose repositioning pass (and this scratch Set avoids a
+  // per-call allocation on the frames that do reposition)
+  private lastCompassFacing = Number.NaN;
+  private compassVisibleScratch = new Set<string>();
   // Minimap zoom: a multiplier on the minimap's base pixels-per-yard. Discrete
   // presets (see minimap_zoom.ts), persisted to localStorage. 1 = shipped look.
   private minimapZoom = MINIMAP_ZOOM_DEFAULT;
@@ -875,6 +973,10 @@ export class Hud {
   private pendingChatLinks = new Map<string, string>(); // display "[Name]" -> [[q:id]]/[[i:id]] token
   private questDialogTrap: FocusTrapHandle | null = null;
   private questDialogOpenedAtMs = 0;
+  // The NPC whose voice line is currently sounding, so update() can fade it by
+  // distance as the player walks away. Outlives the dialog window (which closes at
+  // 8) and is cleared once the clip ends. null when no dialogue voice is playing.
+  private voiceNpcId: number | null = null;
   // swing timer: the period is captured from the reset edge (swingTimer jumping
   // up), so the bar tracks real swing speed including haste / ranged weapons.
   private swingPeriod = 0;
@@ -931,6 +1033,20 @@ export class Hud {
     minZ: number;
     maxZ: number;
   } | null = null;
+  // The quest-objective areas of the last overworld map paint (canvas-pixel
+  // space), kept for the hover tooltip's hit-test. Empty in delve mode.
+  private mapQuestAreas: MapQuestAreaMarker[] = [];
+  // The quest-giver glyphs of the last overworld map paint, for the hover
+  // tooltip's hit-test (quest names + level requirements). Empty in delve mode.
+  private mapNpcMarkers: MapNpcMarker[] = [];
+  // The map's quest side list: quests the player untracked (their blue areas
+  // are hidden), lazily loaded per character; and the render-skip signature so
+  // the 4Hz map cadence rebuilds the list DOM only when it actually changed.
+  private mapUntrackedQuests: Set<string> | null = null;
+  private mapQuestListSig = '';
+  // Whether the map's quest dropdown is unfolded (session-only; reopening the
+  // map keeps the last choice, a fresh session starts folded to a clean map).
+  private mapQuestsOpen = false;
   private windowDrag: {
     el: HTMLElement;
     pointerId: number;
@@ -951,12 +1067,20 @@ export class Hud {
         startH: number;
       }
     | null = null;
+  // Movable unit frames (the shared MovableFrame controller, movable_frame.ts):
+  // the target frame and the player frame each get a corner move/lock button, a
+  // pointer drag, and a persisted top-left. Constructed once in initFrameMovers.
+  private targetFrameMover: MovableFrame | null = null;
+  private playerFrameMover: MovableFrame | null = null;
   private windowObserver: MutationObserver | null = null;
   private windowZ = 50;
   private ignoredChatNames = new Set<string>();
   private lastHudFastAt = 0;
   private lastHudMediumAt = 0;
   private lastHudSlowAt = 0;
+  private dailyRewardsButtonEl: HTMLButtonElement | null = null;
+  private dailyRewardsLauncherSeq = 0;
+  private lastDailyRewardsLauncherRefreshAt = 0;
   // Per-element tier cadence stamps (graphics-tier knobs). Each gates a non-self /
   // canvas redraw to a slower interval on the LOW static preset; on every other tier the
   // interval is 0 (cadenceDue is always true), so these are no-ops and the path is the
@@ -995,6 +1119,9 @@ export class Hud {
   private meters: Meters;
   private tutorial = new TutorialOverlay();
   private lastPetBarSig = '';
+  // Ravenpost envelope indicator (slow-band, value-diffed; see updateMailIndicator).
+  private mailIndicatorEl: HTMLElement | null = null;
+  private lastMailUnread = -1;
   private pendingPetFeed = false;
   private petModeMenuOpen = false;
   // Talents: the local staged allocation the user edits before committing it on save
@@ -1010,6 +1137,7 @@ export class Hud {
     this.meters = new Meters(sim);
     this.initChatTabs();
     this.initChatBoxGeometry();
+    this.initFrameMovers();
     this.initWindowManagement();
     this.emoteWheelSlots = this.loadEmoteWheelSlots();
     this.loadSlotMap();
@@ -1107,6 +1235,31 @@ export class Hud {
       this.raidLockoutEl.hidden = false;
       this.attachTooltip(this.raidLockoutEl, () => this.raidLockoutPanelView());
     }
+    const dailyRewardsButton = document.getElementById(
+      'daily-rewards-button',
+    ) as HTMLButtonElement | null;
+    if (!this.dailyRewardsEnabled()) {
+      dailyRewardsButton?.setAttribute('hidden', '');
+      $('#daily-rewards-window').style.display = 'none';
+    } else if (dailyRewardsButton) {
+      this.dailyRewardsButtonEl = dailyRewardsButton;
+      dailyRewardsButton.innerHTML =
+        `<img class="daily-rewards-icon" src="/ui/daily-rewards/treasure_chest.webp" alt="" draggable="false" decoding="async">` +
+        `<span class="daily-rewards-label" data-i18n="hudChrome.dailyRewards.title">${t('hudChrome.dailyRewards.title')}</span>`;
+      dailyRewardsButton.classList.remove('spin-ready');
+      dailyRewardsButton.addEventListener('pointerdown', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        if (event.button !== 0) return;
+        this.toggleDailyRewards();
+      });
+      dailyRewardsButton.addEventListener('pointerup', (event) => event.stopPropagation());
+      dailyRewardsButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+      });
+      this.refreshDailyRewardsLauncher(true);
+    }
     this.clock24 = (() => {
       try {
         return localStorage.getItem('clock24h') === '1';
@@ -1167,6 +1320,9 @@ export class Hud {
     // delegate on the stable container (the header is rebuilt on each render).
     $('#quest-tracker').addEventListener('click', (e) => {
       if ((e.target as HTMLElement).closest('.qt-header')) this.toggleQuestTrackerCollapsed();
+      // A quest row jumps to that quest's detail in the quest log window.
+      const row = (e.target as HTMLElement).closest<HTMLElement>('.qt-title');
+      if (row?.dataset.quest) this.questlogWindow.openWithQuest(row.dataset.quest);
     });
     // Keyboard activation: handle Enter/Space here and stop the event before it
     // bubbles to the window-level game keybinds (Enter is bound to Open Chat,
@@ -1175,19 +1331,30 @@ export class Hud {
     // overlay, so canUseGameKeys() stays true and those binds fire while it has
     // focus; stopping propagation here keeps the toggle reachable by keyboard.
     $('#quest-tracker').addEventListener('keydown', (e) => {
-      if (!(e.target as HTMLElement).closest('.qt-header')) return;
-      if (e.key === 'Enter' || e.key === ' ' || e.code === 'Space') {
+      const target = e.target as HTMLElement;
+      if (e.key !== 'Enter' && e.key !== ' ' && e.code !== 'Space') return;
+      if (target.closest('.qt-header')) {
         e.preventDefault();
         e.stopPropagation();
         this.toggleQuestTrackerCollapsed();
+        return;
+      }
+      // Keyboard activation for the quest rows (role=button), stopped before
+      // the window-level game keybinds hijack Enter/Space (same as the header).
+      const row = target.closest<HTMLElement>('.qt-title');
+      if (row?.dataset.quest) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.questlogWindow.openWithQuest(row.dataset.quest);
       }
     });
-    // The delve board and lockpick panel are non-modal .window.panel overlays, so
+    // The delve board, lockpick panel, and map window are non-modal overlays, so
     // canUseGameKeys() stays true and the global jump (Space) / chat (Enter) binds
-    // would otherwise hijack those keys on a focused panel button. Stop propagation
-    // (but NOT the default, so the button's native activation still fires) when a
-    // panel button has focus, mirroring the quest-tracker guard above.
-    for (const panelId of ['#delve-board', '#lockpick-panel']) {
+    // would otherwise hijack those keys on a focused panel button (the map's
+    // Quests toggle, per-quest track buttons, zoom, and close included). Stop
+    // propagation (but NOT the default, so the button's native activation still
+    // fires) when a panel button has focus, mirroring the quest-tracker guard above.
+    for (const panelId of ['#delve-board', '#lockpick-panel', '#map-window']) {
       $(panelId).addEventListener('keydown', (e) => {
         if ((e.target as HTMLElement).tagName !== 'BUTTON') return;
         if (e.key === 'Enter' || e.key === ' ' || e.code === 'Space') e.stopPropagation();
@@ -1238,6 +1405,83 @@ export class Hud {
     };
     mapCanvas.addEventListener('pointerup', endDrag);
     mapCanvas.addEventListener('pointercancel', endDrag);
+    // Hovering the map shows context tooltips (mouse only: touch pans the map,
+    // no hover). Priority: a quest-giver glyph ('!'/'?', quest names + level
+    // requirements) sits ON TOP of the blobs, so it wins; otherwise a
+    // quest-objective area shows its objectives with live tracker progress.
+    // Both hit-tests run against the markers of the last paint, scaled from
+    // CSS px to the canvas backing space the model projects into.
+    let mapAreaTipShown = false;
+    const hideMapAreaTip = (): void => {
+      if (!mapAreaTipShown) return;
+      mapAreaTipShown = false;
+      this.hideTooltip();
+    };
+    mapCanvas.addEventListener('pointermove', (ev) => {
+      if (
+        ev.pointerType !== 'mouse' ||
+        this.mapDrag ||
+        (this.mapQuestAreas.length === 0 && this.mapNpcMarkers.length === 0)
+      ) {
+        hideMapAreaTip();
+        return;
+      }
+      const rect = mapCanvas.getBoundingClientRect();
+      const cx = ((ev.clientX - rect.left) * mapCanvas.width) / rect.width;
+      const cy = ((ev.clientY - rect.top) * mapCanvas.height) / rect.height;
+      const glyph = npcMarkerAt(this.mapNpcMarkers, cx, cy);
+      const html = glyph
+        ? this.questGiverTooltipHtml(glyph)
+        : this.questAreaTooltipHtml(questAreaObjectivesAt(this.mapQuestAreas, cx, cy));
+      if (!html) {
+        hideMapAreaTip();
+        return;
+      }
+      // Paint the shared #tooltip beside the cursor (the attachTooltip
+      // mousemove idiom: map visual-space x/y into author space, then clamp
+      // the author-space tooltip box against the viewport).
+      this.tooltipEl.innerHTML = html;
+      this.tooltipEl.style.display = 'block';
+      const z = getUiScale();
+      const tw = this.tooltipEl.offsetWidth;
+      const th = this.tooltipEl.offsetHeight;
+      this.tooltipEl.style.left = `${Math.max(8, Math.min(window.innerWidth / z - tw - 8, ev.clientX / z + 14))}px`;
+      this.tooltipEl.style.top = `${Math.max(8, ev.clientY / z - th - 10)}px`;
+      mapAreaTipShown = true;
+    });
+    mapCanvas.addEventListener('pointerleave', hideMapAreaTip);
+    mapCanvas.addEventListener('pointerdown', hideMapAreaTip);
+    // The map's quest dropdown: the "Quests" button unfolds/folds the list.
+    $('#map-quests-toggle').addEventListener('click', () => {
+      this.mapQuestsOpen = !this.mapQuestsOpen;
+      this.mapQuestListSig = ''; // force the list render to re-apply visibility
+      this.updateMapWindow();
+    });
+    // The map's quest side list: one delegated click listener toggles a
+    // quest's tracking (whether its blue areas + numbered badge paint).
+    $('#map-quests').addEventListener('click', (ev) => {
+      const btn = (ev.target as HTMLElement).closest<HTMLElement>('.mapq-track');
+      const questId = btn?.dataset.quest;
+      if (!questId) return;
+      const untracked = this.untrackedQuestSet();
+      if (untracked.has(questId)) untracked.delete(questId);
+      else untracked.add(questId);
+      try {
+        localStorage.setItem(this.mapUntrackedKey(), serializeUntrackedQuests(untracked));
+      } catch {
+        /* storage unavailable */
+      }
+      // The rebuild below replaces #map-quests's children, destroying a focused
+      // track button; restore focus to the same quest's rebuilt button so keyboard
+      // toggling stays in place and the flipped aria-pressed is announced (the
+      // toggleQuestTrackerCollapsed refocus idiom).
+      const refocus = document.activeElement === btn;
+      this.updateMapWindow();
+      if (refocus)
+        $('#map-quests')
+          .querySelector<HTMLElement>(`.mapq-track[data-quest="${CSS.escape(questId)}"]`)
+          ?.focus();
+    });
     $('#mm-bag').addEventListener('click', () => this.toggleBags());
     // Drop an equipped piece dragged out of the paperdoll onto the bags window.
     const bagsEl = $('#bags');
@@ -1374,6 +1618,9 @@ export class Hud {
         attributes: true,
         attributeFilter: ['class', 'style', 'hidden'],
       });
+      // Piggyback the resize-grip stamp on this one observer (window_resize.ts
+      // deliberately runs no body-wide observer of its own).
+      markResizableWindow(el);
     };
     this.windowObserver = new MutationObserver((mutations) => {
       for (const m of mutations) {
@@ -1438,6 +1685,10 @@ export class Hud {
     };
     document.addEventListener('pointerup', endDrag);
     document.addEventListener('pointercancel', endDrag);
+    installWindowResize({
+      getScale: () => getUiScale(),
+      pinWindow: (el, rect) => this.setWindowPixelPosition(el, rect.left, rect.top, rect),
+    });
     window.addEventListener('resize', () => {
       document.querySelectorAll<HTMLElement>('.window.panel').forEach((el) => {
         if (!this.isWindowVisible(el) || el.dataset.windowMoved !== '1') return;
@@ -1462,6 +1713,13 @@ export class Hud {
     if (el.dataset.windowOpen !== '1') {
       el.dataset.windowOpen = '1';
       this.placeNewWindow(el);
+      // A window moved or resized at an earlier viewport keeps its inline
+      // left/top while hidden; the viewport-resize re-clamp skips hidden
+      // windows, so re-clamp at show time or it can reopen off-screen.
+      if (el.dataset.windowMoved === '1') {
+        const rect = el.getBoundingClientRect();
+        this.setWindowPixelPosition(el, rect.left, rect.top, rect);
+      }
       this.bringWindowToFront(el);
     }
     this.syncAnyWindowOpenState();
@@ -1608,6 +1866,14 @@ export class Hud {
       case 'market-window':
         this.closeMarket();
         break;
+      case 'mailbox-window':
+        // Route through the painter so focus returns to the opener (WCAG 2.2 AA).
+        this.mailboxWindow.close();
+        break;
+      case 'calendar-window':
+        // Route through the painter so focus returns to the opener (WCAG 2.2 AA).
+        this.calendarWindow.close();
+        break;
       case 'arena-window':
         // Route through the painter so focus returns to the opener (WCAG 2.2 AA),
         // consistent with the toggle / X close path.
@@ -1649,6 +1915,9 @@ export class Hud {
       case 'leaderboard-window':
         this.leaderboardWindow.close();
         break;
+      case 'daily-rewards-window':
+        this.dailyRewardsWindow.close();
+        break;
       case 'emote-editor':
         this.closeEmoteEditor();
         break;
@@ -1680,12 +1949,13 @@ export class Hud {
     this.activeChatTab =
       savedActive === 'all' ||
       savedActive === 'combat' ||
-      (isChatTabChannel(savedActive) && this.chatTabs.includes(savedActive))
+      (isChatOpenTab(savedActive) && this.chatTabs.includes(savedActive))
         ? (savedActive as ChatTabId)
         : 'all';
     // re-join any opt-in global channels whose tabs were restored, so messages
-    // typed there are delivered this session too
-    for (const ch of this.chatTabs) if (channelNeedsJoin(ch)) this.sim.chat(`/join ${ch}`);
+    // typed there are delivered this session too (the whisper tab never joins)
+    for (const ch of this.chatTabs)
+      if (isChatTabChannel(ch) && channelNeedsJoin(ch)) this.sim.chat(`/join ${ch}`);
     this.renderChatTabs();
     this.selectChatTab(this.activeChatTab, false);
   }
@@ -1886,6 +2156,69 @@ export class Hud {
     }
   }
 
+  // -------------------------------------------------------------------------
+  // Movable / lockable unit frames (desktop only). The DOM wiring (corner
+  // move/lock button, pointer drag, localStorage persistence) lives in the
+  // shared MovableFrame controller (movable_frame.ts); the pure position math
+  // in target_frame_pos.ts. Two instances: the target frame keeps its stock
+  // look wherever it lands; the player frame DETACHES from the action-bar
+  // stack once moved (pf-detached: position fixed + the compact target-frame
+  // bar width), so it can sit anywhere and read like the target frame.
+  // -------------------------------------------------------------------------
+
+  private initFrameMovers(): void {
+    const isMobileLayout = () => this.isMobileLayout();
+    if (this.targetFrameEl) {
+      this.targetFrameMover = new MovableFrame({
+        frame: this.targetFrameEl,
+        storageKey: TARGET_FRAME_POS_KEY,
+        unlockLabelKey: 'hudChrome.targetFrame.unlock',
+        lockLabelKey: 'hudChrome.targetFrame.lock',
+        draggingBodyClass: 'target-frame-dragging',
+        fallbackSize: { w: 220, h: 92 },
+        isMobileLayout,
+      });
+    }
+    if (this.playerFrameEl) {
+      this.playerFrameMover = new MovableFrame({
+        frame: this.playerFrameEl,
+        storageKey: PLAYER_FRAME_POS_KEY,
+        unlockLabelKey: 'hudChrome.playerFrame.unlock',
+        lockLabelKey: 'hudChrome.playerFrame.lock',
+        draggingBodyClass: 'player-frame-dragging',
+        fallbackSize: { w: 260, h: 84 },
+        isMobileLayout,
+        onPositioned: (active) => this.setPlayerFrameDetached(active),
+      });
+    }
+  }
+
+  // Public: snap both movable unit frames back to their stock CSS spots and
+  // forget the saved drags. Wired to the "Reset Frame Positions" interface option.
+  resetUnitFrames(): void {
+    this.targetFrameMover?.reset();
+    this.playerFrameMover?.reset();
+  }
+
+  // The player frame docks inside #actionbar-stack, whose #bottom-bar ancestor
+  // carries a centering transform, and a transformed ancestor hijacks any
+  // fixed/absolute positioning (it becomes the containing block). Detaching
+  // therefore REPARENTS the frame to #ui, the target frame's own parent, so the
+  // saved left/top resolve in the same HUD coordinates the target frame uses;
+  // re-docking (the mobile layout) puts it back at the head of the stack. The
+  // painters' element refs (pf-hp etc.) are live nodes, so they survive the move.
+  private setPlayerFrameDetached(active: boolean): void {
+    const frame = this.playerFrameEl;
+    frame.classList.toggle('pf-detached', active);
+    if (active) {
+      const uiRoot = $('#ui');
+      if (frame.parentElement !== uiRoot) uiRoot.appendChild(frame);
+    } else {
+      const stack = $('#actionbar-stack');
+      if (frame.parentElement !== stack) stack.insertBefore(frame, stack.firstChild);
+    }
+  }
+
   private renderChatTabs(): void {
     const bar = $('#chatlog-tabs');
     bar.innerHTML = '';
@@ -1905,7 +2238,7 @@ export class Hud {
       makeTab('combat', t('hud.core.combatLogTab')),
     );
     for (const ch of this.chatTabs) {
-      const label = t(CHANNEL_LABEL_KEYS[ch]);
+      const label = t(chatOpenTabLabelKey(ch));
       const btn = makeTab(ch, label);
       btn.title = t('hud.core.chatChannels.close', { channel: label });
       // right-click / long-press a channel tab to close it (the + menu also toggles)
@@ -1958,14 +2291,13 @@ export class Hud {
   // hijacks where typed text goes. `join` auto-joins opt-in global channels;
   // skip it when the caller already sent the /join (e.g. a typed command).
   // `select` focuses the new tab — reserved for a deliberate tab click.
-  private addChatTab(
-    channel: ChatTabChannel,
-    opts: { join?: boolean; select?: boolean } = {},
-  ): void {
+  private addChatTab(channel: ChatOpenTab, opts: { join?: boolean; select?: boolean } = {}): void {
     const { join = true, select = false } = opts;
     if (!this.chatTabs.includes(channel)) {
       this.chatTabs.push(channel);
-      if (join && channelNeedsJoin(channel)) this.sim.chat(`/join ${channel}`);
+      // The whisper tab is filter-only (no channel to /join); only real channels join.
+      if (join && isChatTabChannel(channel) && channelNeedsJoin(channel))
+        this.sim.chat(`/join ${channel}`);
       this.renderChatTabs();
       this.persistChatTabs();
     }
@@ -1985,7 +2317,7 @@ export class Hud {
     else if (this.chatTabs.includes(channel)) this.removeChatTab(channel);
   }
 
-  private removeChatTab(channel: ChatTabChannel): void {
+  private removeChatTab(channel: ChatOpenTab): void {
     const i = this.chatTabs.indexOf(channel);
     if (i < 0) return;
     this.chatTabs.splice(i, 1);
@@ -1995,37 +2327,55 @@ export class Hud {
     this.selectChatTab(this.activeChatTab, true);
   }
 
-  // The "+" menu: a toggle list of every bindable channel. Open channels show a
-  // check and toggle off; the rest add a tab. Reuses the shared #ctx-menu, so
-  // it inherits its outside-click / Escape close behaviour.
+  // The "+" menu: a toggle list of every openable tab. Open tabs show a check and
+  // toggle off; the rest add a tab. Whisper is offered alongside the channels as
+  // a filter-only tab that gathers every whisper in one place. Reuses the shared
+  // #ctx-menu, so it inherits its outside-click / Escape close behaviour.
   private openChatChannelMenu(x: number, y: number): void {
     const el = $('#ctx-menu');
     let html = `<div class="ctx-title">${esc(t('hud.core.chatChannels.addTitle'))}</div>`;
-    for (const ch of CHAT_TAB_CHANNELS) {
-      const open = this.chatTabs.includes(ch);
-      html += `<div class="ctx-item" data-act="${ch}">${esc(t(CHANNEL_LABEL_KEYS[ch]))}${open ? ' ✓' : ''}</div>`;
-    }
+    // A trailing check mark flags already-open tabs, exactly as the channel list
+    // did before this whisper tab was added. Built from its char code so no literal
+    // glyph sits in source, keeping the no-emoji source guard green.
+    const checkMark = ` ${String.fromCharCode(0x2713)}`;
+    const item = (id: ChatOpenTab, labelKey: TranslationKey): string => {
+      const open = this.chatTabs.includes(id);
+      return `<div class="ctx-item" data-act="${id}">${esc(t(labelKey))}${open ? checkMark : ''}</div>`;
+    };
+    for (const ch of CHAT_TAB_CHANNELS) html += item(ch, CHANNEL_LABEL_KEYS[ch]);
+    html += item(WHISPER_TAB, WHISPER_TAB_LABEL_KEY);
     html += `<div class="ctx-item" data-act="close">${esc(t('hud.chat.context.cancel'))}</div>`;
     el.innerHTML = html;
     this.placePopupAt(el, x, y, 170, 320, 0, 8);
     el.style.display = 'block';
     this.bindContextMenuActions((act) => {
-      if (!isChatTabChannel(act)) return;
+      if (!isChatOpenTab(act)) return;
       if (this.chatTabs.includes(act)) this.removeChatTab(act);
-      else this.addChatTab(act);
+      // Focus the whisper tab on open so the effect is visible (channels stay put,
+      // as opening one must not hijack where the player's typed text goes).
+      else this.addChatTab(act, { select: act === WHISPER_TAB });
     });
   }
 
-  // null when the all/combat views are active (no filter, no send prefix);
-  // otherwise the channel the active tab is bound to.
-  private chatFilterChannel(): ChatTabChannel | null {
+  // The tab that FILTERS the log (which messages show): null on all/combat, else
+  // the active tab, including the whisper collector (its messages carry chan
+  // 'whisper', so the same dataset.chan filter gathers them).
+  private chatFilterTab(): ChatOpenTab | null {
     return this.activeChatTab === 'all' || this.activeChatTab === 'combat'
       ? null
       : this.activeChatTab;
   }
 
+  // The SEND channel a plain typed line targets: null on all/combat AND on the
+  // whisper tab (whisper has no generic send channel; the whisper tab replies via
+  // /r instead, handled in composeChatSend).
+  private chatSendChannel(): ChatTabChannel | null {
+    const tab = this.chatFilterTab();
+    return tab !== null && isChatTabChannel(tab) ? tab : null;
+  }
+
   private applyChatFilter(): void {
-    const filter = this.chatFilterChannel();
+    const filter = this.chatFilterTab();
     for (const child of Array.from(this.chatLogEl.children)) {
       const chan = (child as HTMLElement).dataset.chan;
       (child as HTMLElement).classList.toggle('chat-hidden', filter !== null && chan !== filter);
@@ -2034,7 +2384,7 @@ export class Hud {
   }
 
   private hideIfFiltered(div: HTMLElement, chan: string): void {
-    const filter = this.chatFilterChannel();
+    const filter = this.chatFilterTab();
     if (filter !== null && chan !== filter) div.classList.add('chat-hidden');
   }
 
@@ -2043,12 +2393,14 @@ export class Hud {
     if (input) input.placeholder = this.activeChatPlaceholder();
   }
 
-  // The line actually sent for what the player typed, honoring the active
-  // channel tab. main.ts calls this on Enter so a channel tab works without
-  // retyping the slash command; an explicit "/..." the player typed still wins.
+  // The line actually sent for what the player typed, honoring the active tab.
+  // main.ts calls this on Enter so a channel tab works without retyping the slash
+  // command; an explicit "/..." the player typed still wins. On the whisper tab,
+  // plain text replies to the last whisperer (/r) instead of binding a channel.
   composeChatSend(typed: string): string {
     const withLinks = this.applyPendingChatLinks(typed);
-    const ch = this.chatFilterChannel();
+    if (this.activeChatTab === WHISPER_TAB) return composeWhisperReply(withLinks);
+    const ch = this.chatSendChannel();
     return ch ? composeChatLine(ch, withLinks) : withLinks.trim();
   }
 
@@ -2109,9 +2461,11 @@ export class Hud {
     return true;
   }
 
-  // Placeholder for the chat input reflecting the active channel tab.
+  // Placeholder for the chat input reflecting the active tab.
   activeChatPlaceholder(): string {
-    const ch = this.chatFilterChannel();
+    if (this.activeChatTab === WHISPER_TAB)
+      return t('hud.core.chatChannels.sendingTo', { channel: t(WHISPER_TAB_LABEL_KEY) });
+    const ch = this.chatSendChannel();
     return ch
       ? t('hud.core.chatChannels.sendingTo', { channel: t(CHANNEL_LABEL_KEYS[ch]) })
       : t('hud.core.chatPlaceholder');
@@ -2487,6 +2841,11 @@ export class Hud {
       repaintPortrait: () => this.drawTargetPortrait(),
     },
   );
+  // Deferred "Auto-Attack on Ability Use" for TIMED casts: set by castSlot when
+  // the QoL would engage but the ability has a cast time, consumed by the
+  // castStop event (engage on success, drop on interrupt), so starting a Smite
+  // never aggros the target before its damage lands.
+  private pendingAutoAttackOnCastEnd = false;
   // The party frames are N further instances of the unit_frame family, one per
   // member, behind a keyed node pool that replaces the old per-rebuild innerHTML wipe
   // + click/contextmenu re-attach. The pool owns #party-frames; updatePartyFrames
@@ -2646,10 +3005,12 @@ export class Hud {
     vendorOpen: () => this.vendorOpen,
     tradeOpen: () => this.tradeOpen,
     isMarketSell: () => this.marketWindow.isSellTab,
+    isMailAttach: () => this.mailboxWindow.isSendTab,
     pendingPetFeed: () => this.pendingPetFeed,
     closeVendor: () => this.closeVendor(),
     addItemToTrade: (itemId) => this.addItemToTrade(itemId),
     stageMarketSell: (itemId) => this.marketWindow.stageSell(itemId),
+    stageMailParcel: (itemId) => this.mailboxWindow.stageParcel(itemId),
     insertItemChatLink: (itemId) => this.insertItemChatLink(itemId),
     showError: (text) => this.showError(text),
     setPendingPetFeed: (active) => {
@@ -2686,6 +3047,37 @@ export class Hud {
         this.renderBags();
       }
     },
+  });
+  // Ravenpost mailbox window painter (mailbox_view.ts core + mailbox_window.ts
+  // painter). It owns the mailbox view-state (tab, opened letter, staged
+  // parcels); the bags window rides alongside the Send tab and stages parcels
+  // through the same cross-window closures the market Sell tab uses.
+  private readonly mailboxWindow = new MailboxWindow({
+    ...this.presentationBag,
+    root: () => $('#mailbox-window'),
+    world: () => this.sim,
+    closeOthers: () => this.closeOtherWindows('#mailbox-window'),
+    hideTooltip: () => this.hideTooltip(),
+    ...this.windowFocus('#mailbox-window'),
+    showError: (text) => this.showError(text),
+    syncBags: (open) => {
+      if (open) {
+        this.renderBags();
+        $('#bags').style.display = 'flex';
+      } else if ($('#bags').style.display !== 'none') {
+        this.renderBags();
+      }
+    },
+  });
+  // Event calendar window painter (calendar_view.ts month-grid core +
+  // calendar_window.ts painter). System events expand from data rules; guild
+  // events read the socialInfo mirror and book/remove through IWorld.
+  private readonly calendarWindow = new CalendarWindow({
+    root: () => $('#calendar-window'),
+    world: () => this.sim,
+    closeOthers: () => this.closeOtherWindows('#calendar-window'),
+    ...this.windowFocus('#calendar-window'),
+    showError: (text) => this.showError(text),
   });
   // Ashen Coliseum window painter (arena_window_view.ts offline/live model +
   // arena_window.ts painter). It owns the selected bracket, the all-time-ladder
@@ -2777,6 +3169,7 @@ export class Hud {
     // The gold log tint stays Hud-side so the painter carries no color literal.
     log: (message) => this.log(message, '#ffd100'),
     resetChatWindow: () => this.resetChatWindow(),
+    resetUnitFrames: () => this.resetUnitFrames(),
     getChatTimestamps: () => this.chatTimestamps,
     setChatTimestamps: (on) => {
       this.chatTimestamps = on;
@@ -2797,7 +3190,21 @@ export class Hud {
     world: () => this.sim,
     closeOthers: () => this.closeOtherWindows('#leaderboard-window'),
     ...this.windowFocus('#leaderboard-window'),
+    onVisibilityChange: () => this.syncAnyWindowOpenState(),
     showDevBadges: () => this.optionsHooks?.settings.get('showDevBadges') ?? true,
+  });
+  // Daily rewards window painter. It owns the async rewards reads, spin action,
+  // focus opener, and a low-rate refresh while open. All closures are lazy.
+  private readonly dailyRewardsWindow = new DailyRewardsWindow({
+    root: () => $('#daily-rewards-window'),
+    world: () => this.sim,
+    closeOthers: () => this.closeOtherWindows('#daily-rewards-window'),
+    onStatus: (status) => this.applyDailyRewardsLauncherStatus(status),
+    onWalletConnect: () => {
+      window.dispatchEvent(new CustomEvent('woc:wallet-verify'));
+    },
+    ...this.windowFocus('#daily-rewards-window'),
+    onVisibilityChange: () => this.syncAnyWindowOpenState(),
   });
   // Spellbook window painter (spellbook_view.ts core + spellbook_window.ts painter).
   // The window renders ability rows (not item rows), so it composes no presentation
@@ -2926,6 +3333,11 @@ export class Hud {
 
   attachTooltip(el: HTMLElement, html: () => string): void {
     let touchTimer: number | undefined;
+    // tooltip box size, measured once in showAt (right after the content is set)
+    // and reused by every mousemove: the content cannot change between showAt
+    // calls, so re-reading offsetWidth/Height per mousemove only forced a reflow
+    let ttW = 0;
+    let ttH = 0;
     const mobile = () => document.body.classList.contains('mobile-touch');
     const clearTouchTimer = () => {
       if (touchTimer !== undefined) window.clearTimeout(touchTimer);
@@ -2936,16 +3348,10 @@ export class Hud {
       // Touch-only path: showing the tooltip means the held control is being
       // inspected, so the release click should peek, not fire its action.
       this.peekGuard.tooltipShown(trigger);
-      this.tooltipEl.innerHTML = html();
-      this.tooltipEl.style.display = 'block';
-      // offsetWidth/Height are author-space (zoom-immune) layout sizes, but x/y
-      // arrive in visual (zoomed) space, so map x/y into author space (÷ scale)
-      // before clamping against the author-space tooltip box + viewport.
-      const z = getUiScale();
-      const tw = this.tooltipEl.offsetWidth,
-        th = this.tooltipEl.offsetHeight;
-      this.tooltipEl.style.left = `${Math.max(8, Math.min(window.innerWidth / z - tw - 8, x / z + 14))}px`;
-      this.tooltipEl.style.top = `${Math.max(8, y / z - th - 10)}px`;
+      const size = this.paintTooltipAt(html(), x, y);
+      // cache the measured box for the mousemove clamp below (no forced reflow)
+      ttW = size.w;
+      ttH = size.h;
     };
     const showNearElement = () => {
       const rect = el.getBoundingClientRect();
@@ -2959,8 +3365,9 @@ export class Hud {
     el.addEventListener('mousemove', (e) => {
       if (mobile()) return;
       const z = getUiScale();
-      const tw = this.tooltipEl.offsetWidth,
-        th = this.tooltipEl.offsetHeight;
+      // reuse the box size measured in showAt: same content, no forced reflow
+      const tw = ttW,
+        th = ttH;
       this.tooltipEl.style.left = `${Math.min(window.innerWidth / z - tw - 8, e.clientX / z + 14)}px`;
       this.tooltipEl.style.top = `${Math.max(8, e.clientY / z - th - 10)}px`;
     });
@@ -2989,6 +3396,104 @@ export class Hud {
 
   hideTooltip(): void {
     this.tooltipEl.style.display = 'none';
+    this.tooltipEl.classList.remove('mob-tooltip');
+  }
+
+  // Paints the shared #tooltip box at a screen point, used by attachTooltip's
+  // element-hover showAt (item/ability/stat tooltips). Drops the mob-tooltip
+  // size modifier so a leftover world-hover tooltip never leaks its bigger
+  // sizing onto one of these. Returns the measured author-space box size so the
+  // caller can cache it (attachTooltip's mousemove clamp reuses it instead of
+  // re-reading offsetWidth/Height, which would force a reflow per mousemove).
+  private paintTooltipAt(html: string, x: number, y: number): { w: number; h: number } {
+    this.tooltipEl.classList.remove('mob-tooltip');
+    this.tooltipEl.innerHTML = html;
+    this.tooltipEl.style.display = 'block';
+    // offsetWidth/Height are author-space (zoom-immune) layout sizes, but x/y
+    // arrive in visual (zoomed) space, so map x/y into author space (÷ scale)
+    // before clamping against the author-space tooltip box + viewport.
+    const z = getUiScale();
+    const tw = this.tooltipEl.offsetWidth,
+      th = this.tooltipEl.offsetHeight;
+    this.tooltipEl.style.left = `${Math.max(8, Math.min(window.innerWidth / z - tw - 8, x / z + 14))}px`;
+    this.tooltipEl.style.top = `${Math.max(8, y / z - th - 10)}px`;
+    return { w: tw, h: th };
+  }
+
+  // Anchors the mob-hover tooltip to a fixed screen slot instead of the cursor:
+  // just right of the player frame's health/resource bars, bottom-aligned with
+  // them. Unlike paintTooltipAt (cursor-relative), this reads the player frame's
+  // live rect so it tracks that frame's real position/size (desktop or mobile)
+  // instead of a hand-picked pixel offset.
+  private paintTooltipNearPlayerFrame(html: string): void {
+    this.tooltipEl.classList.add('mob-tooltip');
+    this.tooltipEl.innerHTML = html;
+    this.tooltipEl.style.display = 'block';
+    const z = getUiScale();
+    const tw = this.tooltipEl.offsetWidth,
+      th = this.tooltipEl.offsetHeight;
+    const pf = this.playerFrameEl.getBoundingClientRect();
+    const gap = 14;
+    const left = Math.max(8, Math.min(window.innerWidth / z - tw - 8, pf.right / z + gap));
+    const top = Math.max(8, Math.min(window.innerHeight / z - th - 8, pf.bottom / z - th));
+    this.tooltipEl.style.left = `${left}px`;
+    this.tooltipEl.style.top = `${top}px`;
+  }
+
+  // Shows the WoW-style mouseover tooltip (name / level / creature type) for a
+  // mob hovered in the 3D world. Called every frame main.ts's updateHoverCursor
+  // finds a hovered mob; gated on a small key (not just the id) so re-hovering the
+  // same mob each frame does not rebuild the HTML, yet a mid-hover change that
+  // moves the rendered model (the mob aggros so hostile flips, the mob or the
+  // viewer dings a level so the con-color shifts) still repaints. Colored by the
+  // tooltip's own classic con spread (mobTooltipConColor), deliberately independent
+  // of the overhead nameplate bands (mobNameColor). Shown at a fixed spot (right of
+  // the health bars, see paintTooltipNearPlayerFrame) rather than following the cursor.
+  showMobHoverTooltip(entity: Entity, pvpOpponents: ReadonlySet<number>): void {
+    // Questie-style quest lines: the objectives this mob advances, with live
+    // counts. They ride the rebuild key so a kill mid-hover repaints 3/8 -> 4/8.
+    const mobQuests = questObjectivesForMob(this.sim.questLog, entity.templateId);
+    const questKey = mobQuests
+      .map((q) => `${q.questId}#${q.objectiveIndex}:${q.current}/${q.total}`)
+      .join(',');
+    const key = `${entity.id}:${entity.level}:${entity.hostile ? 1 : 0}:${this.sim.player.level}:${questKey}`;
+    if (key === this.lastMobTooltipId) return;
+    this.lastMobTooltipId = key;
+    const template = MOBS[entity.templateId];
+    if (!template) {
+      this.hideTooltip();
+      return;
+    }
+    const diff = entity.level - this.sim.player.level;
+    const friendlyPet = isFriendlyPet(entity, this.sim.entities, (p) => pvpOpponents.has(p.id));
+    const familyLabel =
+      template.family === 'demon'
+        ? t('hudChrome.mobTooltip.familyDemon')
+        : t(`guide.family.${template.family}.name` as TranslationKey);
+    const model: MobTooltipModel = {
+      name: mobDisplayName(entity.templateId),
+      level: entity.level,
+      familyLabel,
+      color: mobTooltipConColor(diff, entity.dead, friendlyPet),
+      hostile: entity.hostile,
+      quests: mobQuests.map((q) => ({
+        title: questTitle(q.questId),
+        progress: this.questProgressText(
+          questObjectiveLabel(q.questId, q.objectiveIndex),
+          q.current,
+          q.total,
+        ),
+      })),
+    };
+    this.paintTooltipNearPlayerFrame(mobTooltipHtml(model, MOB_TOOLTIP_VIEW_DEPS));
+  }
+
+  // Clears the world-hover mob tooltip; a no-op if none is showing, so main.ts
+  // can call it unconditionally every frame nothing (or a non-mob) is hovered.
+  clearMobHoverTooltip(): void {
+    if (this.lastMobTooltipId === null) return;
+    this.lastMobTooltipId = null;
+    this.hideTooltip();
   }
 
   private itemTooltip(item: ItemDef, compare = true): string {
@@ -3222,6 +3727,11 @@ export class Hud {
     // The keyed-pool party rows reuse their DOM, so a rebuild never re-runs t() on
     // their badge tooltips / leave label; re-localize them in place on a switch.
     this.partyFramesPainter.relocalize();
+    // The unit-frame move/lock buttons' labels are set once at construction + on
+    // toggle, so re-localize them in place on a language switch (same reason as
+    // the party rows above).
+    this.targetFrameMover?.relocalize();
+    this.playerFrameMover?.relocalize();
     if (this.questlogWindow.isOpen) this.questlogWindow.render();
     if ($('#bags').style.display !== 'none') this.renderBags();
     if (this.openVendorNpcId !== null && $('#vendor-window').style.display === 'block')
@@ -3586,8 +4096,111 @@ export class Hud {
     );
   }
 
+  // Where a ground-targeted ability should land: the current target's position if
+  // one is selected (the usual "cast on that pack" intent), else the caster's own
+  // spot for an open-ground cast. The sim clamps this to the ability's range.
+  private groundTargetAim(): { x: number; z: number } {
+    const me = this.sim.player;
+    const tid = me.targetId;
+    const t = tid !== null ? this.sim.entities.get(tid) : null;
+    if (t && !t.dead && t.id !== me.id) return { x: t.pos.x, z: t.pos.z };
+    return { x: me.pos.x, z: me.pos.z };
+  }
+
+  private groundReticleEnabled(): boolean {
+    if (document.body.classList.contains('mobile-touch')) return false;
+    return this.optionsHooks?.settings.get('groundReticle') ?? true;
+  }
+
+  isGroundAimActive(): boolean {
+    return this.groundAim.activeAbilityId !== null;
+  }
+
+  cancelGroundAim(): boolean {
+    if (!this.isGroundAimActive()) return false;
+    this.groundAim = cancelGroundAim(this.groundAim);
+    this.groundAimPoint = null;
+    this.groundAimClamped = false;
+    this.renderer.setGroundAimReticle(null);
+    return true;
+  }
+
+  private beginGroundAim(abilityId: string, slot: number): void {
+    this.groundAim = enterGroundAim(this.groundAim, abilityId, slot);
+    this.groundAimPoint = null;
+  }
+
+  private activeGroundAimAbility(): ResolvedAbility | null {
+    const id = this.groundAim.activeAbilityId;
+    if (!id) return null;
+    return this.sim.known.find((k) => k.def.id === id) ?? null;
+  }
+
+  updateGroundAimPoint(rawPoint: AimPoint | null): void {
+    if (!this.isGroundAimActive() || !rawPoint) {
+      this.groundAimPoint = null;
+      this.groundAimClamped = false;
+      return;
+    }
+    const res = this.activeGroundAimAbility();
+    if (!res) {
+      this.cancelGroundAim();
+      return;
+    }
+    const aim = clampAimToRange(this.sim.player, rawPoint, res.def.range);
+    this.groundAimPoint = aim.point;
+    this.groundAimClamped = aim.clamped;
+  }
+
+  groundAimReticle(): {
+    point: AimPoint;
+    radius: number;
+    school: string;
+    clamped: boolean;
+  } | null {
+    if (!this.isGroundAimActive()) return null;
+    const point = this.groundAimPoint;
+    if (!point) return null;
+    const res = this.activeGroundAimAbility();
+    if (!res) return null;
+    return {
+      point,
+      radius: abilityAoeRadius(res),
+      school: res.def.school,
+      clamped: this.groundAimClamped,
+    };
+  }
+
+  commitGroundAimAt(rawPoint: AimPoint | null = this.groundAimPoint): boolean {
+    if (!this.isGroundAimActive()) return false;
+    const res = this.activeGroundAimAbility();
+    const abilityId = this.groundAim.activeAbilityId;
+    if (!res || !abilityId) {
+      this.cancelGroundAim();
+      return true;
+    }
+    const point = rawPoint
+      ? clampAimToRange(this.sim.player, rawPoint, res.def.range).point
+      : this.groundTargetAim();
+    const committed = commitGroundAim(this.groundAim);
+    this.groundAim = committed.state;
+    this.groundAimPoint = null;
+    this.groundAimClamped = false;
+    this.renderer.setGroundAimReticle(null);
+    this.sim.castAbilityAt(abilityId, point);
+    return true;
+  }
+
   // Shared entry point for hotbar clicks and the 1..0-= keybinds.
   castSlot(barSlot: number): void {
+    if (this.isGroundAimActive()) {
+      if (this.groundAim.activeSlot === barSlot) {
+        this.commitGroundAimAt();
+        this.flashActionSlot(barSlot);
+        return;
+      }
+      this.cancelGroundAim();
+    }
     if (barSlot === 0) {
       if (this.sim.player.autoAttack) this.sim.stopAutoAttack();
       else this.sim.startAutoAttack();
@@ -3600,24 +4213,41 @@ export class Hud {
       // so the client-side slot remap never desyncs slot semantics
       const resolved = this.abilityForSlot(barSlot);
       if (resolved) {
-        this.sim.castAbility(action.id);
-        // Optional QoL: also engage auto-attack when the ability is an offensive
-        // attack, so white swings start without a separate Attack press. Gated on
-        // the player setting; abilityStartsAutoAttack skips heals/buffs and any
-        // damage-breakable CC (gouge/sap/sheep) the swing would shatter. We MUST also
-        // gate on hasAutoAttackTarget: many damaging abilities are requiresTarget:false
-        // AOEs (Arcane Explosion, Frost Nova, Thunder Clap, ...) cast with no hostile
-        // target, where startAutoAttack does NOT no-op but errors "Invalid attack
-        // target." (sim/combat/auto_attack.ts). The explicit Attack button keeps that
-        // error feedback; this convenience path must not trip it.
-        const tid = this.sim.player.targetId;
-        const target = tid !== null ? (this.sim.entities.get(tid) ?? null) : null;
-        if (
-          this.optionsHooks?.settings.get('startAttackOnAbilityUse') &&
-          abilityStartsAutoAttack(resolved.effects) &&
-          hasAutoAttackTarget(target)
-        ) {
-          this.sim.startAutoAttack();
+        if (resolved.def.targetMode === 'position') {
+          if (this.groundReticleEnabled()) {
+            this.beginGroundAim(action.id, barSlot);
+          } else {
+            this.sim.castAbilityAt(action.id, this.groundTargetAim());
+          }
+        } else {
+          this.sim.castAbility(action.id);
+          // Optional QoL: also engage auto-attack when the ability is an offensive
+          // attack, so white swings start without a separate Attack press. Gated on
+          // the player setting; abilityStartsAutoAttack skips heals/buffs and any
+          // damage-breakable CC (gouge/sap/sheep) the swing would shatter. We MUST also
+          // gate on hasAutoAttackTarget: many damaging abilities are requiresTarget:false
+          // AOEs (Arcane Explosion, Frost Nova, Thunder Clap, ...) cast with no hostile
+          // target, where startAutoAttack does NOT no-op but errors "Invalid attack
+          // target." (sim/combat/auto_attack.ts). The explicit Attack button keeps that
+          // error feedback; this convenience path must not trip it.
+          const tid = this.sim.player.targetId;
+          const target = tid !== null ? (this.sim.entities.get(tid) ?? null) : null;
+          if (
+            this.optionsHooks?.settings.get('startAttackOnAbilityUse') &&
+            abilityStartsAutoAttack(resolved.effects) &&
+            hasAutoAttackTarget(target)
+          ) {
+            // A TIMED cast must not engage yet: startAutoAttack aggros the target
+            // immediately, so engaging at cast start pulled the mob before any
+            // damage existed (the aggro-before-damage bug). Defer to the
+            // successful castStop (handled in the events switch); instants keep
+            // engaging at once since their damage lands this same tick.
+            if (deferAutoAttackUntilCastEnd(resolved.castTime)) {
+              this.pendingAutoAttackOnCastEnd = true;
+            } else {
+              this.sim.startAutoAttack();
+            }
+          }
         }
         this.flashActionSlot(barSlot);
       }
@@ -4201,14 +4831,14 @@ export class Hud {
     };
     addButton(
       commands,
-      'attack',
+      PET_ACTION_ICONS.attack,
       t('hud.pet.attack'),
       petTooltip(t('hud.pet.petAttackTitle'), t('hud.pet.petAttackDesc')),
       () => this.sim.petAttack(),
     );
     addButton(
       commands,
-      'growl',
+      PET_ACTION_ICONS.taunt,
       t('hud.pet.taunt'),
       petTooltip(t('hud.pet.petTauntTitle'), t('hud.pet.petTauntDesc')),
       () => this.sim.petTaunt(),
@@ -4228,7 +4858,7 @@ export class Hud {
     if (ownerClass === 'warlock') {
       addButton(
         commands,
-        'drain_life',
+        PET_ACTION_ICONS.healDemon,
         t('hud.pet.healDemon'),
         petTooltip(t('hud.pet.healDemon'), t('hud.pet.healDemonDesc')),
         () => {
@@ -4238,7 +4868,7 @@ export class Hud {
     } else {
       addButton(
         commands,
-        'rejuvenation',
+        PET_ACTION_ICONS.feed,
         t('hud.pet.healPet'),
         petTooltip(t('hud.pet.healPet'), t('hud.pet.healPetDesc')),
         () => {
@@ -4280,9 +4910,9 @@ export class Hud {
       },
     ];
     const modeIcons: Record<PetMode, string> = {
-      passive: 'prowl',
-      defensive: 'defensive_stance',
-      aggressive: 'rapid_fire',
+      passive: PET_ACTION_ICONS.passive,
+      defensive: PET_ACTION_ICONS.defensive,
+      aggressive: PET_ACTION_ICONS.aggressive,
     };
     addButton(
       stances,
@@ -4341,6 +4971,40 @@ export class Hud {
     return coerceFxTier(document.documentElement.dataset.fxLevel);
   }
 
+  private dailyRewardsEnabled(): boolean {
+    return !(
+      document.body.classList.contains('native-app') &&
+      document.body.classList.contains('mobile-touch')
+    );
+  }
+
+  private applyDailyRewardsLauncherStatus(status: DailyRewardStatus): void {
+    if (!this.dailyRewardsEnabled()) return;
+    const button = this.dailyRewardsButtonEl;
+    if (!button) return;
+    button.classList.toggle('spin-ready', !status.eligibility.eligible || !status.spin.claimed);
+  }
+
+  private refreshDailyRewardsLauncher(force = false): void {
+    if (!this.dailyRewardsEnabled()) return;
+    const button = this.dailyRewardsButtonEl;
+    if (!button) return;
+    const now = performance.now();
+    if (!force && now - this.lastDailyRewardsLauncherRefreshAt < 60_000) return;
+    this.lastDailyRewardsLauncherRefreshAt = now;
+    const seq = ++this.dailyRewardsLauncherSeq;
+    void this.sim
+      .dailyRewards()
+      .then((status) => {
+        if (seq !== this.dailyRewardsLauncherSeq) return;
+        this.applyDailyRewardsLauncherStatus(status);
+      })
+      .catch(() => {
+        if (seq !== this.dailyRewardsLauncherSeq) return;
+        button.classList.remove('spin-ready');
+      });
+  }
+
   update(): void {
     const sim = this.sim;
     const p = sim.player;
@@ -4363,12 +5027,25 @@ export class Hud {
     // chat burst on the fast tier once chat goes quiet.
     if (fastHud) this.chatAnnouncer.flush(now);
 
+    // Fade a talking NPC's voice line by distance as the player walks away, so a
+    // dialogue trails off naturally instead of holding full volume. Per-frame for a
+    // smooth ramp; independent of the dialog window (which closes at 8), so the
+    // voice keeps fading until the clip ends or the player is out of earshot.
+    if (this.voiceNpcId !== null) {
+      if (!voice.isPlaying()) {
+        this.voiceNpcId = null;
+      } else {
+        const vnpc = sim.entities.get(this.voiceNpcId);
+        voice.setDistanceGain(vnpc ? voiceDistanceGain(dist2d(p.pos, vnpc.pos)) : 0);
+      }
+    }
     this.meters.update();
     this.lockpickWindow.repaintIfChanged();
     this.tutorial.update(sim, this.renderer, this.keybinds);
     this.reconcileLootRolls();
     this.updateLootRollTimers(now);
     if (slowHud) this.updateRaidLockoutBadge();
+    if (slowHud) this.refreshDailyRewardsLauncher();
     this.syncActiveHotbarForm();
     this.syncSlotMap(); // picks up newly learned abilities mid-session
 
@@ -4532,9 +5209,11 @@ export class Hud {
           }
         }
         const points = p.comboTargetId === target.id ? p.comboPoints : 0;
-        [...this.comboRowEl.children].forEach((pip, i) => {
-          this.toggleClass(pip as HTMLElement, 'on', i < points);
-        });
+        // indexed walk over the live collection: no per-frame array copy
+        const pips = this.comboRowEl.children;
+        for (let i = 0; i < pips.length; i++) {
+          this.toggleClass(pips[i] as HTMLElement, 'on', i < points);
+        }
       } else {
         this.setDisplay(this.comboRowEl, 'none');
       }
@@ -4731,6 +5410,13 @@ export class Hud {
         const npc = sim.entities.get(this.openVendorNpcId);
         if (!npc || dist2d(p.pos, npc.pos) > 8) this.closeVendor();
       }
+      // Close the quest/gossip dialog once the player walks out of talking range
+      // (or the NPC is gone), the same way the vendor window auto-closes above. You
+      // open within INTERACT_RANGE (5), so the wider 8 threshold never fires on open.
+      if (this.openGossipNpcId !== null) {
+        const npc = sim.entities.get(this.openGossipNpcId);
+        if (!npc || dist2d(p.pos, npc.pos) > 8) this.closeQuestDialog();
+      }
     }
 
     // when a bout begins, get the queue panel out of the way for the fight. Route through
@@ -4759,6 +5445,29 @@ export class Hud {
     if (slowHud && this.marketWindow.isOpen) {
       if (!this.nearbyMarketNpc()) this.marketWindow.close();
       else this.marketWindow.refreshIfChanged();
+    }
+    // The mailbox closes itself when the mail mirror goes null (walked away).
+    if (slowHud && this.mailboxWindow.isOpen) this.mailboxWindow.refreshIfChanged();
+    if (slowHud && this.calendarWindow.isOpen) this.calendarWindow.refreshIfChanged();
+    if (slowHud) this.updateMailIndicator();
+  }
+
+  // The envelope indicator by the minimap: visible while unread letters wait.
+  // Slow-band, value-diffed writes only (mailUnread changes rarely).
+  private updateMailIndicator(): void {
+    const el = this.mailIndicatorEl ?? ($('#mail-indicator') as HTMLElement | null);
+    if (!el) return;
+    this.mailIndicatorEl = el;
+    const view = mailIndicatorView(this.sim.mailUnread);
+    if (view.count === this.lastMailUnread) return;
+    this.lastMailUnread = view.count;
+    const count = formatNumber(view.count, { maximumFractionDigits: 0 });
+    el.hidden = !view.visible;
+    if (view.visible) {
+      const badge = el.querySelector<HTMLElement>('.mail-indicator-count');
+      if (badge) badge.textContent = count;
+      el.setAttribute('aria-label', t('hudChrome.mailbox.indicatorAria', { count }));
+      el.title = t('hudChrome.mailbox.indicatorTip', { count });
     }
   }
 
@@ -4839,6 +5548,8 @@ export class Hud {
       const quest = QUESTS[qp.questId];
       quests.push({
         id: qp.questId,
+        // acceptance-order number, the same one the map badges + side list show
+        number: quests.length + 1,
         title: questTitle(qp.questId),
         complete: qp.state === 'ready',
         objectives: quest.objectives.map((obj, i) => ({
@@ -4890,7 +5601,7 @@ export class Hud {
       `<span class="qt-h-label">${esc(t('questUi.tracker.title'))}</span>${count}</button>`;
     let rows = '';
     for (const q of view.quests) {
-      rows += `<div class="qt-title">${esc(q.title)}${q.complete ? ` <span class="quest-complete">(${esc(t('questUi.tracker.complete'))})</span>` : ''}</div>`;
+      rows += `<div class="qt-title" role="button" tabindex="0" data-quest="${esc(q.id)}"><span class="qt-num">${esc(this.questNumber(q.number))}</span>${esc(q.title)}${q.complete ? ` <span class="quest-complete">(${esc(t('questUi.tracker.complete'))})</span>` : ''}</div>`;
       for (const o of q.objectives) {
         rows += `<div class="qt-obj${o.done ? ' done' : ''}">- ${esc(this.questProgressText(o.label, o.current, o.total))}</div>`;
       }
@@ -5529,8 +6240,12 @@ export class Hud {
 
   private updateCompass(): void {
     if (this.compassMarks.size === 0) return;
-    const view = compassView(this.sim.player.facing);
-    const visible = new Set<string>();
+    const facing = this.sim.player.facing;
+    if (facing === this.lastCompassFacing) return; // pure function of facing: nothing can have changed
+    this.lastCompassFacing = facing;
+    const view = compassView(facing);
+    const visible = this.compassVisibleScratch;
+    visible.clear();
     for (const m of view.marks) {
       const el = this.compassMarks.get(m.label);
       if (!el) continue;
@@ -5725,6 +6440,9 @@ export class Hud {
     if (mapWindowMode(this.sim) === 'delve') {
       // The delve painter owns the full world-map schematic render (the area
       // title is drawn on-canvas, since the world map has no DOM zone label).
+      this.mapQuestAreas = [];
+      this.mapNpcMarkers = [];
+      this.hideMapQuestList();
       this.delvePainter.paintWorldMapDelve(ctx, this.sim, S);
       const run = this.sim.delveRun;
       const area = run ? delveDisplayName(run.delveId) : '';
@@ -5745,10 +6463,140 @@ export class Hud {
       canvasSize: S,
       zoom: this.mapZoom,
       center: this.mapCenter,
+      untrackedQuestIds: this.untrackedQuestSet(),
     });
     this.mapView = result.view;
+    this.mapQuestAreas = result.questAreas;
+    this.mapNpcMarkers = result.npcs;
     if (!this.mapDrag) canvas.style.cursor = result.cursor;
+    this.renderMapQuestList();
     this.setText(summaryEl, t('hud.core.mapSummary', { zone: zoneDisplayName(zone.id) }));
+  }
+
+  // ---- the map's numbered quest side list (track/untrack the blue areas) ----
+
+  private mapUntrackedKey(): string {
+    return `woc_map_untracked_${this.sim.cfg.playerClass}_${this.sim.player.name}`;
+  }
+
+  private untrackedQuestSet(): Set<string> {
+    if (!this.mapUntrackedQuests) {
+      let raw: string | null = null;
+      try {
+        raw = localStorage.getItem(this.mapUntrackedKey());
+      } catch {
+        /* storage unavailable */
+      }
+      this.mapUntrackedQuests = parseUntrackedQuests(raw);
+    }
+    return this.mapUntrackedQuests;
+  }
+
+  private hideMapQuestList(): void {
+    if (this.mapQuestListSig === '') return;
+    this.mapQuestListSig = '';
+    const el = $('#map-quests');
+    el.classList.remove('on');
+    el.replaceChildren();
+    ($('#map-quests-toggle') as unknown as HTMLButtonElement).hidden = true;
+  }
+
+  // Rebuild the dropdown only when its content actually changed (the map
+  // repaints on the 4Hz cadence; the signature keeps the DOM quiet between
+  // real changes and covers a language switch via the current language salt).
+  // The "Quests" toggle button shows whenever the log has quests; the list
+  // itself only while the dropdown is unfolded.
+  private renderMapQuestList(): void {
+    const entries = mapQuestListView(this.sim.questLog, this.untrackedQuestSet());
+    if (entries.length === 0) {
+      this.hideMapQuestList();
+      return;
+    }
+    const sig = `${getLanguage()}|${this.mapQuestsOpen ? 1 : 0}|${entries
+      .map((e) => `${e.questId}:${e.number}:${e.ready ? 1 : 0}:${e.tracked ? 1 : 0}`)
+      .join('|')}`;
+    if (sig === this.mapQuestListSig) return;
+    this.mapQuestListSig = sig;
+    const toggle = $('#map-quests-toggle') as unknown as HTMLButtonElement;
+    toggle.hidden = false;
+    toggle.setAttribute('aria-expanded', this.mapQuestsOpen ? 'true' : 'false');
+    // U+25BE down / U+25B8 right triangle, the tracker header's chevron pair
+    toggle.textContent = `${this.mapQuestsOpen ? '▾' : '▸'} ${t('questUi.tracker.title')}`;
+    const listEl = $('#map-quests');
+    if (!this.mapQuestsOpen) {
+      listEl.classList.remove('on');
+      listEl.replaceChildren();
+      return;
+    }
+    const check = String.fromCharCode(0x2713); // escaped so no literal glyph in source
+    let html = `<div class="mapq-head">${esc(t('questUi.tracker.title'))}</div>`;
+    for (const e of entries) {
+      const title = questTitle(e.questId);
+      const label = t(e.tracked ? 'questUi.tracker.hideFromMap' : 'questUi.tracker.showOnMap', {
+        name: title,
+      });
+      html +=
+        `<div class="mapq-row${e.tracked ? '' : ' untracked'}">` +
+        `<span class="mapq-num">${esc(this.questNumber(e.number))}</span>` +
+        `<span class="mapq-title">${esc(title)}</span>` +
+        (e.ready
+          ? `<span class="mapq-complete">${esc(t('questUi.tracker.complete'))}</span>`
+          : '') +
+        `<button type="button" class="mapq-track" data-quest="${esc(e.questId)}" aria-pressed="${e.tracked}" title="${esc(label)}" aria-label="${esc(label)}">${e.tracked ? check : ''}</button>` +
+        `</div>`;
+    }
+    listEl.innerHTML = html;
+    listEl.classList.add('on');
+  }
+
+  // Tooltip body for a hovered quest-giver glyph on the world map: each quest
+  // behind the '!'/'?' shows its title (with the ready-to-turn-in tag on '?'
+  // quests) plus its level requirement when the quest declares one, all through
+  // existing questUi keys (no new i18n surface).
+  private questGiverTooltipHtml(marker: MapNpcMarker): string {
+    let html = '';
+    for (const ref of marker.quests) {
+      const quest = QUESTS[ref.questId];
+      if (!quest) continue;
+      const readyTag = ref.ready
+        ? ` <span class="quest-complete">(${esc(t('questUi.log.readyStatus'))})</span>`
+        : '';
+      html += `<div class="tt-title">${esc(questTitle(ref.questId))}${readyTag}</div>`;
+      if (quest.minLevel) {
+        html += `<div class="tt-quest-req">${esc(
+          t('questUi.detail.requiresLevel', { level: this.questNumber(quest.minLevel) }),
+        )}</div>`;
+      }
+    }
+    return html;
+  }
+
+  // Tooltip body for hovered quest-objective areas on the world map: per quest,
+  // its title plus each hovered objective's tracker-style "label current/total"
+  // line, all through the existing questUi keys + formatters (no new i18n
+  // surface). Empty string when nothing under the cursor resolves.
+  private questAreaTooltipHtml(refs: readonly QuestObjectiveRef[]): string {
+    const byQuest = new Map<string, number[]>();
+    for (const ref of refs) {
+      const list = byQuest.get(ref.questId);
+      if (list) list.push(ref.objectiveIndex);
+      else byQuest.set(ref.questId, [ref.objectiveIndex]);
+    }
+    let html = '';
+    for (const [questId, objectiveIndexes] of byQuest) {
+      const quest = QUESTS[questId];
+      const qp = this.sim.questLog.get(questId);
+      if (!quest || !qp) continue;
+      let lines = '';
+      for (const i of objectiveIndexes) {
+        const obj = quest.objectives[i];
+        if (!obj) continue;
+        const current = Math.min(qp.counts[i] ?? 0, obj.count);
+        lines += `<div>${esc(this.questProgressText(questObjectiveLabel(questId, i), current, obj.count))}</div>`;
+      }
+      if (lines) html += `<div class="tt-title">${esc(questTitle(questId))}</div>${lines}`;
+    }
+    return html;
   }
 
   // -------------------------------------------------------------------------
@@ -6175,6 +7023,51 @@ export class Hud {
         case 'skinEvent':
           this.openSkinEvent(ev.rank, ev.catalog === 'mech' ? { mech: true } : undefined);
           break;
+        case 'mailbox':
+          // Keyboard/sim interact at a mailbox object: open the mail window.
+          this.openMailbox();
+          break;
+        case 'mailArrived': {
+          // Player names splice verbatim; authored letters carry their
+          // letterId, so the sender localizes through the entity dictionary
+          // exactly like the mailbox window does.
+          const sender = ev.letterId
+            ? tEntity({ kind: 'letter', id: ev.letterId, field: 'sender' })
+            : ev.senderName;
+          audio.whisper();
+          this.showBanner(t('hudChrome.mailbox.arrivedBanner', { name: sender }));
+          this.log(t('hudChrome.mailbox.arrivedLog', { name: sender }), '#c8f7c5');
+          this.lastMailUnread = -1; // force the envelope indicator to repaint
+          break;
+        }
+        case 'mailResult': {
+          const values = {
+            name: ev.name ?? '',
+            count: formatNumber(ev.value ?? 0, { maximumFractionDigits: 0 }),
+            amount: formatLocalizedMoney(ev.value ?? 0),
+            postage: formatLocalizedMoney(ev.value ?? 0),
+          };
+          if (ev.code === 'sent') {
+            audio.coin();
+            this.log(t('hudChrome.mailbox.result.sent', values), '#c8f7c5');
+          } else if (ev.code === 'collected') {
+            this.log(t('hudChrome.mailbox.result.collected', values), '#c8f7c5');
+          } else {
+            this.showError(t(MAIL_RESULT_ERROR_KEYS[ev.code], values));
+          }
+          this.mailboxWindow.onMailResult(ev.code);
+          this.lastMailUnread = -1;
+          break;
+        }
+        case 'calendarResult': {
+          if (ev.code === 'created' || ev.code === 'removed') {
+            this.log(t(CALENDAR_RESULT_KEYS[ev.code]), '#c8f7c5');
+          } else {
+            this.showError(t(CALENDAR_RESULT_KEYS[ev.code]));
+          }
+          this.calendarWindow.onCalendarResult(ev.code);
+          break;
+        }
         case 'error':
           this.showError(this.localizeErrorText(ev.text));
           break;
@@ -6344,7 +7237,12 @@ export class Hud {
               performance.now(),
             );
             this.lastVoicedYell = voiced.state;
-            if (voiced.play) voice.play(voiced.state.key, { gain: voicedYellGain(ev.from) });
+            if (voiced.play) {
+              voice.play(voiced.state.key, { gain: voicedYellGain(ev.from) });
+              // A distinct overheard yell, not a dialogue: do not let the per-frame
+              // distance fade attenuate it by a talked-to NPC's position.
+              this.voiceNpcId = null;
+            }
           }
           break;
         }
@@ -6690,6 +7588,19 @@ export class Hud {
         case 'castStart':
           break; // cast-loop SFX is spatial now (see playEventSfx)
         case 'castStop':
+          // Deferred "Auto-Attack on Ability Use" (timed casts): engage only when
+          // the player's own cast COMPLETES, so the aggro happens as the damage
+          // lands, never at cast start (the aggro-before-damage bug). An
+          // interrupted/canceled cast just drops the pending engage; the target
+          // is re-validated since the cast itself may have killed or cleared it.
+          if (ev.entityId === sim.playerId && this.pendingAutoAttackOnCastEnd) {
+            this.pendingAutoAttackOnCastEnd = false;
+            if (ev.success) {
+              const castTid = sim.player.targetId;
+              const castTarget = castTid !== null ? (sim.entities.get(castTid) ?? null) : null;
+              if (hasAutoAttackTarget(castTarget)) this.sim.startAutoAttack();
+            }
+          }
           break;
         case 'aura': {
           const tgt = sim.entities.get(ev.targetId);
@@ -7129,6 +8040,11 @@ export class Hud {
         count: formatNumber(Number(match[2]), { maximumFractionDigits: 0 }),
       });
     }
+    match = /^(\d+) daily rewards points gained\.$/.exec(text);
+    if (match)
+      return t('hudChrome.dailyRewards.pointsGained', {
+        points: formatNumber(Number(match[1]), { maximumFractionDigits: 0 }),
+      });
     // Server-sent friends/guild/who/world messages arrive as 'log' events; fall
     // back to the shared server-message localizer (same as localizeErrorText /
     // localizeLootText) so they are not displayed in raw English.
@@ -7648,6 +8564,7 @@ export class Hud {
     // navigating back from a quest detail or after accept/turn-in, where a
     // re-greeting would be noise.
     voice.play(`greeting__${npc.templateId}`);
+    this.voiceNpcId = npc.id;
     this.renderGossip(npc);
   }
 
@@ -7750,6 +8667,7 @@ export class Hud {
       this.sim.player.name,
     );
     voice.play(state === 'ready' ? `quest__${questId}__complete` : `quest__${questId}__offer`);
+    this.voiceNpcId = npc.id;
     markDialogRoot(el, { labelledBy: 'quest-dialog-title' });
     let html = `<div class="panel-title"><span id="quest-dialog-title">${esc(questTitle(questId))}${this.questSuggestedPlayersHtml(quest.suggestedPlayers)}</span><button type="button" class="x-btn" data-close aria-label="${esc(t('questUi.dialog.close'))}">${svgIcon('close')}</button></div>`;
     if (state === 'available' && quest.minLevel) {
@@ -8335,6 +9253,30 @@ export class Hud {
 
   get marketWindowOpen(): boolean {
     return this.marketWindow.isOpen;
+  }
+
+  openMailbox(): void {
+    this.mailboxWindow.open();
+  }
+
+  closeMailbox(): void {
+    this.mailboxWindow.close();
+  }
+
+  get mailboxWindowOpen(): boolean {
+    return this.mailboxWindow.isOpen;
+  }
+
+  toggleCalendar(): void {
+    this.calendarWindow.toggle();
+  }
+
+  closeCalendar(): void {
+    this.calendarWindow.close();
+  }
+
+  get calendarWindowOpen(): boolean {
+    return this.calendarWindow.isOpen;
   }
 
   private nearbyMarketNpc(): Entity | null {
@@ -9786,6 +10728,12 @@ export class Hud {
     this.leaderboardWindow.toggle();
   }
 
+  toggleDailyRewards(): void {
+    if (!this.dailyRewardsEnabled()) return;
+    this.dailyRewardsWindow.toggle();
+    this.refreshDailyRewardsLauncher(true);
+  }
+
   // -------------------------------------------------------------------------
   // Spellbook
   // -------------------------------------------------------------------------
@@ -9953,6 +10901,8 @@ export class Hud {
     let html = `<div class="ctx-title ctx-title-player">${entCls ? portraitChipHtml({ cls: entCls, skin: ent?.skin ?? 0, name, variant: 'sm' }) : ''}<span class="ctx-title-name">${esc(name)}</span></div>`;
     if (entCls)
       html += `<div class="ctx-item" data-act="inspect">${esc(t('character.viewProfile'))}</div>`;
+    if (pid !== this.sim.playerId)
+      html += `<div class="ctx-item" data-act="whisper">${esc(t('hud.chat.context.whisper'))}</div>`;
     if (!isMember)
       html += `<div class="ctx-item" data-act="invite">${esc(t('hud.chat.context.invite'))}</div>`;
     html += `<div class="ctx-item" data-act="trade">${esc(t('hud.chat.context.trade'))}</div>`;
@@ -9987,6 +10937,7 @@ export class Hud {
     el.style.display = 'block';
     this.bindContextMenuActions((act) => {
       if (act === 'inspect') this.openInspect(pid);
+      else if (act === 'whisper') this.startWhisper(name);
       else if (act === 'invite') this.sim.partyInvite(pid);
       else if (act === 'trade') this.sim.tradeRequest(pid);
       else if (act === 'duel') this.sim.duelRequest(pid);
@@ -10033,6 +10984,8 @@ export class Hud {
       switch (key) {
         case 'levyst':
           return t('hudChrome.discord.roleTag.levyst');
+        case 'admin':
+          return t('hudChrome.discord.roleTag.admin');
         case 'devs':
           return t('hudChrome.discord.roleTag.devs');
         case 'mods':
@@ -10110,6 +11063,8 @@ export class Hud {
       switch (key) {
         case 'levyst':
           return t('hudChrome.discord.roleTag.levyst');
+        case 'admin':
+          return t('hudChrome.discord.roleTag.admin');
         case 'devs':
           return t('hudChrome.discord.roleTag.devs');
         case 'mods':

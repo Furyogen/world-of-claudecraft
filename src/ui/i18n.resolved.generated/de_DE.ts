@@ -177,6 +177,52 @@ export const de_DE: EnTranslations = {
       "title": "Emotes",
       "done": "Fertig"
     },
+    "dailyRewards": {
+      "title": "Tägliche Belohnungen",
+      "close": "Tägliche Belohnungen schließen",
+      "loading": "Tägliche Belohnungen werden geladen...",
+      "error": "Tägliche Belohnungen konnten nicht geladen werden.",
+      "intro": "Halte genügend WOC in deiner verifizierten Wallet, um tägliche Belohnungen freizuschalten. Verdiene Punkte mit einem täglichen Dreh und wechselnden Aufgaben und klettere dann in der täglichen Rangliste nach oben, um einen Anteil am Preispool zu erhalten.",
+      "prize": "Preispool",
+      "reset": "Zurücksetzen",
+      "endsIn": "Endet in {time}",
+      "remainingLessThanMinute": "<1Min",
+      "remainingMinutes": "{minutes}Min",
+      "remainingHoursMinutes": "{hours}Std {minutes}Min",
+      "score": "Punktzahl",
+      "walletValue": "Wallet-Wert (WOC)",
+      "usd": "{amount} USD",
+      "sol": "{amount} SOL",
+      "unknown": "Unbekannt",
+      "spinTitle": "Täglicher Dreh",
+      "spinDialogTitle": "Täglicher Belohnungsdreh",
+      "spinClose": "Täglichen Dreh schließen",
+      "spinReady": "Ein Dreh ist bereit.",
+      "spinClaimed": "Erhalten: +{points} Punkte.",
+      "spinResult": "+{points} Punkte",
+      "spinButton": "Drehen",
+      "tasks": "Aufgaben",
+      "taskMultiplier": "x{multiplier} multiplier",
+      "pointsGained": "{points} daily rewards points gained.",
+      "leaderboard": "Tägliche Rangliste",
+      "totalPlayer": "{count} player today",
+      "totalPlayers": "{count} players today",
+      "history": "Bisherige Gewinner",
+      "noLeaders": "Noch keine Punkte.",
+      "noHistory": "Noch keine Auszahlungen.",
+      "walletConnectTitle": "Wallet verifizieren",
+      "walletConnectBody": "Verifiziere eine Solana-Wallet mit WOC, um tägliche Belohnungen freizuschalten.",
+      "walletConnectButton": "Wallet verifizieren",
+      "walletHoldTitle": "WOC halten",
+      "walletHoldBody": "Halte mindestens {amount} USD in WOC, um tägliche Belohnungen freizuschalten.",
+      "walletPriceBody": "Der WOC-Preis ist derzeit nicht verfügbar. Schau bald wieder vorbei.",
+      "reason": {
+        "eligible": "Belohnungen freigeschaltet.",
+        "no_wallet": "Verbinde eine Wallet mit mindestens 20 USD in WOC.",
+        "under_minimum": "Deine Wallet liegt unter dem Mindestwert von 20 USD in WOC.",
+        "price_unavailable": "Der WOC-Preis ist nicht verfügbar, Belohnungen sind vorübergehend gesperrt."
+      }
+    },
     "theme": {
       "preset": "Oberflächendesign",
       "customColors": "Eigene Farben",
@@ -265,6 +311,13 @@ export const de_DE: EnTranslations = {
       "heading": "Blickrichtung",
       "minimapZoom": "Minikarten-Zoom"
     },
+    "nativeUpdate": {
+      "title": "Update verfügbar",
+      "body": "Eine neue Version von World of ClaudeCraft ist verfügbar. Aktualisiere jetzt für die neuesten Fehlerbehebungen und Verbesserungen.",
+      "bodyWithVersion": "Version {version} von World of ClaudeCraft ist verfügbar. Aktualisiere jetzt für die neuesten Fehlerbehebungen und Verbesserungen.",
+      "notNow": "Jetzt nicht",
+      "update": "Aktualisieren"
+    },
     "castBar": {
       "playerAria": "Eure Zauberleiste",
       "targetAria": "Zauberleiste des Ziels"
@@ -337,9 +390,14 @@ export const de_DE: EnTranslations = {
       "showWalletOnCharacterScreen": "Wallet auf dem Charakterbildschirm anzeigen",
       "showWalletOnPlayerCard": "Wallet auf der Spielerkarte anzeigen",
       "showDevBadges": "Entwicklerabzeichen anzeigen",
+      "showOwnNameplate": "Show My Nameplate",
       "uiScale": "UI-Skalierung",
+      "playerFrameScale": "Player Frame Scale",
+      "targetFrameScale": "Target Frame Scale",
       "highContrastBackground": "Hintergrund mit hohem Kontrast",
       "startAttackOnAbility": "Auto-Angriff bei Fähigkeitseinsatz",
+      "walkByAutoloot": "Walk-by Autoloot",
+      "groundReticle": "Bodenziel-Fadenkreuz",
       "showItemLevel": "Gegenstandsstufe anzeigen",
       "itemLevelLine": "Gegenstandsstufe {level}",
       "itemScoreLine": "Wertung {score}",
@@ -771,6 +829,9 @@ export const de_DE: EnTranslations = {
         "nature": "Natur"
       }
     },
+    "worldBoss": {
+      "spawn": "{name} erhebt sich über den Thornpeak-Höhen!"
+    },
     "loot": {
       "chestTitle": "Truhe"
     },
@@ -781,6 +842,23 @@ export const de_DE: EnTranslations = {
     "nameplate": {
       "mob": "[{level}] {name}",
       "mobElite": "[{level}+] {name}"
+    },
+    "mobTooltip": {
+      "levelFamily": "Level {level} {family}",
+      "familyDemon": "Demon",
+      "hostile": "Hostile",
+      "friendly": "Friendly"
+    },
+    "targetFrame": {
+      "unlock": "Move target frame",
+      "lock": "Lock target frame"
+    },
+    "playerFrame": {
+      "unlock": "Move player frame",
+      "lock": "Lock player frame"
+    },
+    "frameReset": {
+      "label": "Reset Frame Positions"
     },
     "itemTooltip": {
       "requiresLevel": "Benötigt Stufe {level}"
@@ -863,6 +941,7 @@ export const de_DE: EnTranslations = {
       "memberSinceDays": "{days}T im Discord",
       "roleTag": {
         "levyst": "Levy St",
+        "admin": "Admin",
         "devs": "Entwickler",
         "mods": "Mod",
         "artists": "Künstler"
@@ -955,6 +1034,112 @@ export const de_DE: EnTranslations = {
       },
       "linkedAs": "Verknüpft als {login}",
       "unlink": "GitHub trennen"
+    },
+    "mailbox": {
+      "title": "Mailbox",
+      "subtitle": "The Ravenpost",
+      "close": "Close mailbox",
+      "tabInbox": "Inbox",
+      "tabInboxWithCount": "Inbox ({count})",
+      "tabSend": "Send",
+      "empty": "Your mailbox is empty.",
+      "truncated": "Showing the newest {shown} of {total} letters.",
+      "attachmentsBadge": "Parcel attached",
+      "unreadBadge": "Unread",
+      "back": "Back",
+      "take": "Take attachments",
+      "delete": "Delete letter",
+      "deleteAria": "Delete the letter {subject}",
+      "openAria": "Read the letter {subject} from {name}",
+      "noSubject": "(no subject)",
+      "toLabel": "To",
+      "toPlaceholder": "Character name",
+      "subjectLabel": "Subject",
+      "bodyLabel": "Message",
+      "coinLabel": "Attach coin",
+      "parcelsLabel": "Parcels",
+      "parcelsHint": "Click an item in your bags to attach it.",
+      "removeParcelAria": "Remove {item} from the letter",
+      "sendButton": "Send letter",
+      "postageNote": "Postage: {amount}. The raven flies for about {seconds}s.",
+      "arrivedBanner": "The raven has landed: mail from {name}.",
+      "arrivedLog": "You have new mail from {name}.",
+      "indicatorAria": "Unread mail: {count}",
+      "indicatorTip": "You have {count} unread letters. Visit a mailbox to read them.",
+      "clickAttach": "Click to attach to your letter.",
+      "cannotMail": "This cannot be mailed.",
+      "result": {
+        "sent": "A raven takes wing with your letter to {name} ({postage} postage).",
+        "collected": "You collect {amount} from the letter.",
+        "tooFar": "You must be at a mailbox to tend your post.",
+        "needRecipient": "Name a recipient for your letter.",
+        "noRecipient": "No one by that name holds a mailbox here.",
+        "tooManyParcels": "A letter carries at most {count} parcels.",
+        "noMailQuestItems": "You cannot mail quest items.",
+        "notEnoughItems": "You do not have that many to send.",
+        "cantAffordPostage": "You cannot afford the postage.",
+        "recipientBoxFull": "Their mailbox is full.",
+        "letterGone": "That letter is no longer in your box.",
+        "takeParcelsFirst": "Take the parcels out before discarding the letter."
+      }
+    },
+    "calendar": {
+      "title": "Event Calendar",
+      "close": "Close calendar",
+      "keybindLabel": "Event Calendar",
+      "prevMonth": "Previous month",
+      "nextMonth": "Next month",
+      "dayAria": "{date}: {count} events",
+      "noEvents": "Nothing planned for this day.",
+      "allDay": "All day",
+      "bookedBy": "Booked by {name}",
+      "deleteAria": "Remove the event {title}",
+      "bookTitle": "Book a guild event",
+      "titlePlaceholder": "Event title",
+      "notePlaceholder": "Note (optional)",
+      "hourLabel": "Hour (UTC)",
+      "hourAllDay": "All day",
+      "addButton": "Book event",
+      "guildOnlyNote": "Join a guild to plan events together.",
+      "result": {
+        "created": "The event is on the guild calendar.",
+        "removed": "The event was taken off the calendar.",
+        "notInGuild": "You are not in a guild.",
+        "notOfficer": "Only officers and the Guild Master may manage guild events.",
+        "badInput": "Give the event a title and a valid day.",
+        "calendarFull": "The guild calendar is full.",
+        "eventGone": "That event is no longer on the calendar."
+      },
+      "events": {
+        "raidCall": {
+          "title": "Raid Call",
+          "note": "Wardens sound the horn: gather a party for the crypts and the raid."
+        },
+        "marketDay": {
+          "title": "Market Day",
+          "note": "The Merchant expects fresh stock. A fine day to browse the World Market."
+        },
+        "fiestaNight": {
+          "title": "Fiesta Night",
+          "note": "The 2v2 Fiesta ring draws its loudest crowds tonight."
+        },
+        "arenaClash": {
+          "title": "Arena Clash",
+          "note": "Duelists flock to the Ashen Coliseum. Queue up and climb the ladder."
+        },
+        "fishingDerby": {
+          "title": "Fishing Derby",
+          "note": "Anglers line the lakes. Bring a pole and swap fishing tales."
+        },
+        "delveDay": {
+          "title": "Delve Day",
+          "note": "Brother Halven marks his charts: a fine day to brave the Collapsed Reliquary."
+        },
+        "moongateCommunion": {
+          "title": "Moongate Communion",
+          "note": "Pilgrims gather at the temple moongate under the mid-month moon."
+        }
+      }
     }
   },
   "guide": {
@@ -1903,6 +2088,9 @@ export const de_DE: EnTranslations = {
     "password": "Passwort",
     "passwordError": "Bitte gib dein Passwort ein.",
     "passwordPlaceholder": "Passwort eingeben",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "emailError": "Please enter a valid email address.",
     "showPassword": "Passwort anzeigen",
     "hidePassword": "Passwort ausblenden",
     "logIn": "Einloggen",
@@ -1928,7 +2116,15 @@ export const de_DE: EnTranslations = {
     "create": "Erstellen",
     "twoFactorLabel": "Authentifizierungscode",
     "twoFactorPlaceholder": "6-stelliger Code oder Wiederherstellungscode",
-    "twoFactorHint": "Gib den Code aus deiner Authentifizierungs-App ein oder einen deiner Wiederherstellungscodes."
+    "twoFactorHint": "Gib den Code aus deiner Authentifizierungs-App ein oder einen deiner Wiederherstellungscodes.",
+    "recovery": {
+      "title": "Add a recovery email",
+      "body": "Set an email address so you can recover your account. We only use it to confirm you own this account if you ever need to reset your password.",
+      "save": "Save email",
+      "logOut": "Log out",
+      "invalid": "Please enter a valid email address.",
+      "failed": "Could not save your email. Please try again."
+    }
   },
   "wallet": {
     "label": "$WOC-Wallet",
@@ -1982,6 +2178,7 @@ export const de_DE: EnTranslations = {
     "helpLinkedWithBalance": "Inhaberboni sind aktiv. Die Wallet-App ist in diesem Browser verbunden.",
     "helpLinkedDisconnected": "Inhaberboni sind aktiv. Verbindet die App, wenn Ihr unterschreiben oder ausgeben müsst.",
     "helpLinkedDisconnectedWithBalance": "Inhaberboni sind aktiv. Verbindet die App, wenn Ihr unterschreiben oder ausgeben müsst.",
+    "extensionHelp": "To see a wallet here, keep a browser wallet extension such as Solflare Wallet active.",
     "flowConnect": "Wählt ein Wallet. Die Verifizierung läuft automatisch weiter.",
     "flowSign": "Unterschreibt die Verifizierungsnachricht in Eurer Wallet-App. Keine Transaktion und kein SOL erforderlich.",
     "flowVerify": "Wallet-Besitz wird verifiziert...",
@@ -2626,6 +2823,7 @@ export const de_DE: EnTranslations = {
       "usernameTaken": "Dieser Benutzername ist bereits vergeben.",
       "invalidCredentials": "Benutzername oder Passwort ungültig.",
       "verificationFailed": "Verifizierung fehlgeschlagen. Bitte versuche es erneut.",
+      "desktopCodeInvalid": "Der Desktop-Anmeldecode ist ungültig oder abgelaufen. Bitte versuche es erneut.",
       "invalidCharacterName": "Ungültiger Charaktername. Verwende 2-16 Buchstaben.",
       "characterNameNotAllowed": "Dieser Charaktername ist nicht erlaubt.",
       "invalidClass": "Ungültige Klasse.",
@@ -2642,6 +2840,21 @@ export const de_DE: EnTranslations = {
       "takenOver": "Dein Charakter wurde von einer anderen Sitzung übernommen.",
       "renameBeforeEntering": "Dieser Charakter muss vor dem Betreten der Welt umbenannt werden.",
       "renameNotPermitted": "Das Umbenennen dieses Charakters ist nicht erlaubt."
+    }
+  },
+  "desktop": {
+    "update": {
+      "downloading": "Update {version} wird heruntergeladen...",
+      "ready": "Update {version} ist bereit. Es wird beim Beenden installiert, oder starte jetzt neu.",
+      "restart": "Jetzt neu starten",
+      "later": "Später"
+    },
+    "crash": {
+      "title": "World of ClaudeCraft",
+      "body": "Die Spielansicht funktioniert nicht mehr. Neu laden?",
+      "reload": "Neu laden",
+      "quit": "Beenden",
+      "fatalBody": "World of ClaudeCraft ist auf einen unerwarteten Fehler gestoßen und muss geschlossen werden."
     }
   },
   "realm": {
@@ -3400,13 +3613,16 @@ export const de_DE: EnTranslations = {
     },
     "cast": {
       "fishing": "Angeln",
-      "demonHeal": "Dämonenheilung"
+      "demonHeal": "Dämonenheilung",
+      "thunzharrStormcall": "Sturmruf"
     }
   },
   "questUi": {
     "tracker": {
       "title": "Quests",
-      "complete": "Abgeschlossen"
+      "complete": "Abgeschlossen",
+      "showOnMap": "{name} auf der Karte anzeigen",
+      "hideFromMap": "{name} auf der Karte ausblenden"
     },
     "log": {
       "title": "Questlog",
@@ -3692,6 +3908,26 @@ export const de_DE: EnTranslations = {
   },
   "entities": {
     "abilities": {
+      "flamestrike": {
+        "name": "Flammenschlag",
+        "description": "Lässt am Zielort eine Feuerexplosion niedergehen, die allen Gegnern im Wirkungsbereich {damage} Feuerschaden zufügt."
+      },
+      "rain_of_fire": {
+        "name": "Feuerregen",
+        "description": "Lässt einen Feuerregen auf den Zielbereich niedergehen, der Gegner verbrennt und {damage} Feuerschaden verursacht."
+      },
+      "volley": {
+        "name": "Pfeilhagel",
+        "description": "Lässt einen Pfeilhagel auf den Zielbereich niedergehen und verursacht {damage} Schaden an den Gegnern darin."
+      },
+      "hurricane": {
+        "name": "Wirbelsturm",
+        "description": "Entfesselt einen Wirbelsturm über dem Zielbereich, der Gegner trifft und {damage} Naturschaden verursacht."
+      },
+      "earthquake": {
+        "name": "Erdbeben",
+        "description": "Lässt den Zielbereich erbeben, trifft Gegner und verursacht {damage} Naturschaden."
+      },
       "heroic_strike": {
         "name": "Heldenhafter Stoß",
         "description": "Ein mächtiger Angriff, der den Nahkampfschaden um {damage} erhöht. Wird bei eurem nächsten Schwung ausgelöst."
@@ -4833,6 +5069,33 @@ export const de_DE: EnTranslations = {
       "monarch_crown_helm": {
         "name": "Krone des Monarchen"
       },
+      "copper_mining_pick": {
+        "name": "Kupfer-Grabpickel"
+      },
+      "iron_mining_pick": {
+        "name": "Eisen-Grabpickel"
+      },
+      "mithril_mining_pick": {
+        "name": "Mithril-Grabpickel"
+      },
+      "handaxe": {
+        "name": "Handaxt"
+      },
+      "felling_axe": {
+        "name": "Fällaxt"
+      },
+      "ironbark_axe": {
+        "name": "Eisenrinden-Axt"
+      },
+      "gathering_sickle": {
+        "name": "Erntesichel"
+      },
+      "bronze_sickle": {
+        "name": "Bronzesichel"
+      },
+      "silverleaf_sickle": {
+        "name": "Silberblatt-Sichel"
+      },
       "bristleback_maul": {
         "name": "Bristleback-Schlägel"
       },
@@ -5315,6 +5578,30 @@ export const de_DE: EnTranslations = {
       },
       "vanguard_chrome_armor_plate": {
         "name": "Vorhut-Chrom"
+      },
+      "crownforged_gauntlets": {
+        "name": "Kronengeschmiedete Stulpen"
+      },
+      "nighttalon_grips": {
+        "name": "Nachtklauengriffe"
+      },
+      "soulflame_gloves": {
+        "name": "Seelenflammenhandschuhe"
+      },
+      "stormcallers_handguards": {
+        "name": "Handschützer des Sturmrufers"
+      },
+      "crownforged_girdle": {
+        "name": "Kronengeschmiedeter Gürtel"
+      },
+      "nighttalon_waistband": {
+        "name": "Nachtklauengurt"
+      },
+      "soulflame_cord": {
+        "name": "Seelenflammenkordel"
+      },
+      "stormcallers_waistguard": {
+        "name": "Gürtelschutz des Sturmrufers"
       }
     },
     "mobs": {
@@ -5506,6 +5793,12 @@ export const de_DE: EnTranslations = {
       },
       "acolyte_tessa": {
         "name": "Akolythin Tessa"
+      },
+      "thunzharr_waking_peak": {
+        "name": "Thunzharr, der Erwachende Gipfel"
+      },
+      "thunzharr_stormling": {
+        "name": "Geweckter Sturmling"
       },
       "ironvein_foreman": {
         "name": "Eisenader-Vorarbeiter"
@@ -6169,6 +6462,36 @@ export const de_DE: EnTranslations = {
           }
         }
       },
+      "q_stalkers_return": {
+        "title": "The Stalkers Return",
+        "text": "Twelve dead, and the ridge crawls thicker than the day you started, {playerName}. Beasts do not throw themselves at a wall out of hunger. Something on the high ridge is pushing them down, and until I know what, the culling does not stop. Fourteen more.",
+        "completion": "Fourteen more, and still my patrols count fresh tracks by morning. My scout came back from the high ridge white as the snowline: prints the size of a shield, she says, and old kills no stalker would leave. Whatever walks up there is no ordinary cat.",
+        "objectives": {
+          "0": {
+            "label": "Ridge Stalker slain"
+          }
+        }
+      },
+      "q_stalker_cloaks": {
+        "title": "Cloaks for the Watch",
+        "text": "Eight pelts lined the officers' cloaks, and now every soldier on the wall wants the same, {playerName}. They are right to want it: winter takes fingers first and apologies never. Ten more pelts from the ridges south of the gate, and the whole watch sleeps warm.",
+        "completion": "Ten good pelts, thick as any I have... no, look at these, {playerName}. Torn, half of them, and by no blade or spear. Claw marks wide as my hand, right through the winter coat. Something on that ridge is savaging its own kind.",
+        "objectives": {
+          "0": {
+            "label": "Ridge Stalker Pelt"
+          }
+        }
+      },
+      "q_old_cragmaw": {
+        "title": "Old Cragmaw",
+        "text": "The mountain folk put a name to the prints my scout found: Old Cragmaw, a scar-pelted tyrant of a cat that has outlived three generations of its own pack. It is the reason the stalkers flood my road, {playerName}. Its den sits on the western ridge above the road south. Bring a friend, and put the old devil down.",
+        "completion": "Down at last. The mountain folk swore that cat would outlive the wall itself. The stalkers will keep to their high snows now, {playerName}, and my patrols will walk the road without bleeding for it. The whole ridge is quieter for your work.",
+        "objectives": {
+          "0": {
+            "label": "Old Cragmaw slain"
+          }
+        }
+      },
       "q_kobold_tunnels": {
         "title": "Ärger in Deeprock",
         "text": "Die Kobolde von Deeprock graben gerade nach unten, als rufe etwas unter der Mauer. Ihre Tunnel laufen unter unserer Mauer, {playerName}. Töte 12 Tunnelgräber.",
@@ -6693,6 +7016,28 @@ export const de_DE: EnTranslations = {
         "leaveText": "Du kletterst zurück zu Bruder Halven bei der Reliquiarruine."
       }
     },
+    "letters": {
+      "ravenpost_welcome": {
+        "sender": "Die Rabenpost",
+        "subject": "Die Raben fliegen nun für Euch",
+        "body": "Reisender,\n\ndie Rabenpost hat ihre Sitzstangen im ganzen Tal eröffnet. Sucht die Rabensäulen in Eastbrook, Fenbridge und Highwatch: Von jeder aus könnt Ihr anderen Abenteurern Briefe, Münzen und Waren schicken und abholen, was die Raben Euch bringen.\n\nAnbei eine kleine Aufmerksamkeit für Eure erste Briefmarke.\n\nSchwingen hoch,\nDie Rabenpost"
+      },
+      "letter_q_wolves": {
+        "sender": "Marschall Redbrook",
+        "subject": "In den Pferchen ist wieder Ruhe",
+        "body": "Die Hirten können endlich wieder ruhig schlafen, und das ist Euer Verdienst. Ich habe der Rabenpost aufgetragen, Euch eine Kleinigkeit aus der Wachkasse zu bringen.\n\nHaltet Eure Klinge geölt.\n- Marschall Redbrook"
+      },
+      "letter_q_greyjaw": {
+        "sender": "Marschall Redbrook",
+        "subject": "Der alte Graukiefer, endlich",
+        "body": "Neuigkeiten verbreiten sich schnell in einer so kleinen Stadt. Die Hirten haben gestern Abend auf Eure Gesundheit getrunken, und Wilkes schwört, der Wolf sei so groß wie ein Karren gewesen. Lasst sie ruhig übertreiben: Ihr habt es Euch verdient.\n\nGönnt Euch ein Mahl auf Kosten der Wache.\n- Marschall Redbrook"
+      },
+      "letter_q_hollow": {
+        "sender": "Bruder Aldric",
+        "subject": "Was Ihr im Dunkeln vollbracht habt",
+        "body": "Nur wenige werden je erfahren, was in jener Senke begraben lag, und noch weniger würden es glauben. Ich weiß es, und ich werde es nicht vergessen.\n\nMöge Euer Weg erleuchtet bleiben.\n- Bruder Aldric"
+      }
+    },
     "itemSets": {
       "crownforged": {
         "name": "Kronengeschmiedete Kriegstracht",
@@ -6706,8 +7051,8 @@ export const de_DE: EnTranslations = {
       },
       "necromancers": {
         "name": "Gewänder des Nekromanten",
-        "bonus2": "Verringert Zauberrückstoß durch Schaden um 50%.",
-        "bonus3": "Erlittener Schaden verzögert das Zauberwirken nicht."
+        "bonus2": "Ihr könnt nicht zurückgestoßen werden (100% Rückstoßwiderstand).",
+        "bonus3": "Erhöht Intelligenz um 10 und Ausdauer um 10."
       },
       "nighttalon": {
         "name": "Nachtkrallen-Ledertracht",
@@ -6716,13 +7061,13 @@ export const de_DE: EnTranslations = {
       },
       "soulflame": {
         "name": "Seelenflammengewänder",
-        "bonus2": "Verringert Zauberrückstoß durch Schaden um 50%.",
-        "bonus3": "Erlittener Schaden verzögert das Zauberwirken nicht."
+        "bonus2": "Ihr könnt nicht zurückgestoßen werden (100% Rückstoßwiderstand).",
+        "bonus3": "Erhöht Intelligenz um 15 und Willenskraft um 15."
       },
       "stormcallers": {
         "name": "Gewänder des Sturmrufers",
-        "bonus2": "Verringert Zauberrückstoß durch Schaden um 50%.",
-        "bonus3": "Erlittener Schaden verzögert das Zauberwirken nicht."
+        "bonus2": "Ihr könnt nicht zurückgestoßen werden (100% Rückstoßwiderstand).",
+        "bonus3": "Erhöht Intelligenz um 15 und Willenskraft um 15."
       },
       "wyrmshadow": {
         "name": "Wyrmschattentracht",
@@ -6738,6 +7083,7 @@ export const de_DE: EnTranslations = {
     "dungeonInstanceBusy": "Alle Instanzen von {name} sind belegt. Versuch es bald erneut.",
     "delveLockedChestInteract": "Drücke F, um das Schloss zu knacken",
     "delveRewardChestInteract": "Drücke F, um Beute zu beanspruchen",
-    "delveSurfaceExitInteract": "Drücke F, um hinaufzuklettern"
+    "delveSurfaceExitInteract": "Drücke F, um hinaufzuklettern",
+    "mailboxName": "Mailbox"
   }
 };

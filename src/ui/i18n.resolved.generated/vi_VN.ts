@@ -177,6 +177,52 @@ export const vi_VN: EnTranslations = {
       "title": "Biểu Cảm",
       "done": "Xong"
     },
+    "dailyRewards": {
+      "title": "Phần Thưởng Hằng Ngày",
+      "close": "Đóng phần thưởng hằng ngày",
+      "loading": "Đang tải phần thưởng hằng ngày...",
+      "error": "Không thể tải phần thưởng hằng ngày.",
+      "intro": "Giữ đủ WOC trong ví đã xác minh của bạn để mở khóa phần thưởng hằng ngày. Kiếm điểm bằng một lượt quay mỗi ngày và các nhiệm vụ luân phiên, rồi leo lên bảng xếp hạng hằng ngày để nhận phần chia từ quỹ giải thưởng.",
+      "prize": "Quỹ Giải Thưởng",
+      "reset": "Đặt Lại",
+      "endsIn": "Kết thúc sau {time}",
+      "remainingLessThanMinute": "<1p",
+      "remainingMinutes": "{minutes}p",
+      "remainingHoursMinutes": "{hours}h {minutes}p",
+      "score": "Điểm",
+      "walletValue": "Giá Trị Ví (WOC)",
+      "usd": "{amount} USD",
+      "sol": "{amount} SOL",
+      "unknown": "Không rõ",
+      "spinTitle": "Vòng Quay Hằng Ngày",
+      "spinDialogTitle": "Vòng Quay Phần Thưởng Hằng Ngày",
+      "spinClose": "Đóng lượt quay hằng ngày",
+      "spinReady": "Một lượt quay đã sẵn sàng.",
+      "spinClaimed": "Đã nhận: +{points} điểm.",
+      "spinResult": "+{points} điểm",
+      "spinButton": "Quay",
+      "tasks": "Nhiệm Vụ",
+      "taskMultiplier": "x{multiplier} multiplier",
+      "pointsGained": "{points} daily rewards points gained.",
+      "leaderboard": "Bảng Xếp Hạng Hằng Ngày",
+      "totalPlayer": "{count} player today",
+      "totalPlayers": "{count} players today",
+      "history": "Người Thắng Trước Đây",
+      "noLeaders": "Chưa có điểm nào.",
+      "noHistory": "Chưa có khoản chi trả nào.",
+      "walletConnectTitle": "Xác Minh Ví",
+      "walletConnectBody": "Xác minh một ví Solana có WOC để mở khóa phần thưởng hằng ngày.",
+      "walletConnectButton": "Xác Minh Ví",
+      "walletHoldTitle": "Giữ WOC",
+      "walletHoldBody": "Giữ ít nhất {amount} USD WOC để mở khóa phần thưởng hằng ngày.",
+      "walletPriceBody": "Hiện chưa có giá WOC. Vui lòng quay lại sau ít phút.",
+      "reason": {
+        "eligible": "Đã mở khóa phần thưởng.",
+        "no_wallet": "Kết nối một ví có ít nhất 20 USD WOC.",
+        "under_minimum": "Ví thấp hơn mức tối thiểu 20 USD WOC.",
+        "price_unavailable": "Giá WOC hiện không có sẵn, phần thưởng tạm thời bị khóa."
+      }
+    },
     "theme": {
       "preset": "Giao Diện UI",
       "customColors": "Màu Tùy Chỉnh",
@@ -265,6 +311,13 @@ export const vi_VN: EnTranslations = {
       "heading": "Hướng",
       "minimapZoom": "Thu phóng bản đồ nhỏ"
     },
+    "nativeUpdate": {
+      "title": "Có Bản Cập Nhật",
+      "body": "Đã có phiên bản mới của World of ClaudeCraft. Cập nhật ngay để nhận các bản sửa lỗi và cải tiến mới nhất.",
+      "bodyWithVersion": "Đã có phiên bản {version} của World of ClaudeCraft. Cập nhật ngay để nhận các bản sửa lỗi và cải tiến mới nhất.",
+      "notNow": "Không phải bây giờ",
+      "update": "Cập Nhật"
+    },
     "castBar": {
       "playerAria": "Thanh Niệm Chú Của Bạn",
       "targetAria": "Thanh Niệm Chú Của Mục Tiêu"
@@ -337,9 +390,14 @@ export const vi_VN: EnTranslations = {
       "showWalletOnCharacterScreen": "Hiện Ví Tiền Ở Màn Hình Nhân Vật",
       "showWalletOnPlayerCard": "Hiện Ví Tiền Trên Thẻ Người Chơi",
       "showDevBadges": "Hiện Huy Hiệu Nhà Phát Triển",
+      "showOwnNameplate": "Show My Nameplate",
       "uiScale": "Tỷ Lệ Giao Diện",
+      "playerFrameScale": "Player Frame Scale",
+      "targetFrameScale": "Target Frame Scale",
       "highContrastBackground": "Nền Tương Phản Cao",
       "startAttackOnAbility": "Tự Đánh Khi Dùng Kỹ Năng",
+      "walkByAutoloot": "Walk-by Autoloot",
+      "groundReticle": "Vòng ngắm mục tiêu mặt đất",
       "showItemLevel": "Hiển Thị Cấp Vật Phẩm",
       "itemLevelLine": "Cấp Vật Phẩm {level}",
       "itemScoreLine": "Điểm {score}",
@@ -771,6 +829,9 @@ export const vi_VN: EnTranslations = {
         "nature": "Tự nhiên"
       }
     },
+    "worldBoss": {
+      "spawn": "{name} rises over Thornpeak Heights!"
+    },
     "loot": {
       "chestTitle": "Rương"
     },
@@ -781,6 +842,23 @@ export const vi_VN: EnTranslations = {
     "nameplate": {
       "mob": "[{level}] {name}",
       "mobElite": "[{level}+] {name}"
+    },
+    "mobTooltip": {
+      "levelFamily": "Level {level} {family}",
+      "familyDemon": "Demon",
+      "hostile": "Hostile",
+      "friendly": "Friendly"
+    },
+    "targetFrame": {
+      "unlock": "Move target frame",
+      "lock": "Lock target frame"
+    },
+    "playerFrame": {
+      "unlock": "Move player frame",
+      "lock": "Lock player frame"
+    },
+    "frameReset": {
+      "label": "Reset Frame Positions"
     },
     "itemTooltip": {
       "requiresLevel": "Yêu cầu Cấp {level}"
@@ -863,6 +941,7 @@ export const vi_VN: EnTranslations = {
       "memberSinceDays": "{days} ngày trong Discord",
       "roleTag": {
         "levyst": "Levy St",
+        "admin": "Admin",
         "devs": "Lập Trình Viên",
         "mods": "Điều Hành Viên",
         "artists": "Họa Sĩ"
@@ -955,6 +1034,112 @@ export const vi_VN: EnTranslations = {
       },
       "linkedAs": "Đã liên kết với {login}",
       "unlink": "Hủy liên kết GitHub"
+    },
+    "mailbox": {
+      "title": "Mailbox",
+      "subtitle": "The Ravenpost",
+      "close": "Close mailbox",
+      "tabInbox": "Inbox",
+      "tabInboxWithCount": "Inbox ({count})",
+      "tabSend": "Send",
+      "empty": "Your mailbox is empty.",
+      "truncated": "Showing the newest {shown} of {total} letters.",
+      "attachmentsBadge": "Parcel attached",
+      "unreadBadge": "Unread",
+      "back": "Back",
+      "take": "Take attachments",
+      "delete": "Delete letter",
+      "deleteAria": "Delete the letter {subject}",
+      "openAria": "Read the letter {subject} from {name}",
+      "noSubject": "(no subject)",
+      "toLabel": "To",
+      "toPlaceholder": "Character name",
+      "subjectLabel": "Subject",
+      "bodyLabel": "Message",
+      "coinLabel": "Attach coin",
+      "parcelsLabel": "Parcels",
+      "parcelsHint": "Click an item in your bags to attach it.",
+      "removeParcelAria": "Remove {item} from the letter",
+      "sendButton": "Send letter",
+      "postageNote": "Postage: {amount}. The raven flies for about {seconds}s.",
+      "arrivedBanner": "The raven has landed: mail from {name}.",
+      "arrivedLog": "You have new mail from {name}.",
+      "indicatorAria": "Unread mail: {count}",
+      "indicatorTip": "You have {count} unread letters. Visit a mailbox to read them.",
+      "clickAttach": "Click to attach to your letter.",
+      "cannotMail": "This cannot be mailed.",
+      "result": {
+        "sent": "A raven takes wing with your letter to {name} ({postage} postage).",
+        "collected": "You collect {amount} from the letter.",
+        "tooFar": "You must be at a mailbox to tend your post.",
+        "needRecipient": "Name a recipient for your letter.",
+        "noRecipient": "No one by that name holds a mailbox here.",
+        "tooManyParcels": "A letter carries at most {count} parcels.",
+        "noMailQuestItems": "You cannot mail quest items.",
+        "notEnoughItems": "You do not have that many to send.",
+        "cantAffordPostage": "You cannot afford the postage.",
+        "recipientBoxFull": "Their mailbox is full.",
+        "letterGone": "That letter is no longer in your box.",
+        "takeParcelsFirst": "Take the parcels out before discarding the letter."
+      }
+    },
+    "calendar": {
+      "title": "Event Calendar",
+      "close": "Close calendar",
+      "keybindLabel": "Event Calendar",
+      "prevMonth": "Previous month",
+      "nextMonth": "Next month",
+      "dayAria": "{date}: {count} events",
+      "noEvents": "Nothing planned for this day.",
+      "allDay": "All day",
+      "bookedBy": "Booked by {name}",
+      "deleteAria": "Remove the event {title}",
+      "bookTitle": "Book a guild event",
+      "titlePlaceholder": "Event title",
+      "notePlaceholder": "Note (optional)",
+      "hourLabel": "Hour (UTC)",
+      "hourAllDay": "All day",
+      "addButton": "Book event",
+      "guildOnlyNote": "Join a guild to plan events together.",
+      "result": {
+        "created": "The event is on the guild calendar.",
+        "removed": "The event was taken off the calendar.",
+        "notInGuild": "You are not in a guild.",
+        "notOfficer": "Only officers and the Guild Master may manage guild events.",
+        "badInput": "Give the event a title and a valid day.",
+        "calendarFull": "The guild calendar is full.",
+        "eventGone": "That event is no longer on the calendar."
+      },
+      "events": {
+        "raidCall": {
+          "title": "Raid Call",
+          "note": "Wardens sound the horn: gather a party for the crypts and the raid."
+        },
+        "marketDay": {
+          "title": "Market Day",
+          "note": "The Merchant expects fresh stock. A fine day to browse the World Market."
+        },
+        "fiestaNight": {
+          "title": "Fiesta Night",
+          "note": "The 2v2 Fiesta ring draws its loudest crowds tonight."
+        },
+        "arenaClash": {
+          "title": "Arena Clash",
+          "note": "Duelists flock to the Ashen Coliseum. Queue up and climb the ladder."
+        },
+        "fishingDerby": {
+          "title": "Fishing Derby",
+          "note": "Anglers line the lakes. Bring a pole and swap fishing tales."
+        },
+        "delveDay": {
+          "title": "Delve Day",
+          "note": "Brother Halven marks his charts: a fine day to brave the Collapsed Reliquary."
+        },
+        "moongateCommunion": {
+          "title": "Moongate Communion",
+          "note": "Pilgrims gather at the temple moongate under the mid-month moon."
+        }
+      }
     }
   },
   "guide": {
@@ -1903,6 +2088,9 @@ export const vi_VN: EnTranslations = {
     "password": "Mật Khẩu",
     "passwordError": "Vui lòng nhập mật khẩu của bạn.",
     "passwordPlaceholder": "Nhập mật khẩu",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "emailError": "Please enter a valid email address.",
     "showPassword": "Hiện mật khẩu",
     "hidePassword": "Ẩn mật khẩu",
     "logIn": "Đăng Nhập",
@@ -1928,7 +2116,15 @@ export const vi_VN: EnTranslations = {
     "create": "Tạo",
     "twoFactorLabel": "Mã xác thực",
     "twoFactorPlaceholder": "Mã 6 chữ số hoặc mã khôi phục",
-    "twoFactorHint": "Nhập mã từ ứng dụng xác thực của bạn, hoặc một trong các mã khôi phục."
+    "twoFactorHint": "Nhập mã từ ứng dụng xác thực của bạn, hoặc một trong các mã khôi phục.",
+    "recovery": {
+      "title": "Add a recovery email",
+      "body": "Set an email address so you can recover your account. We only use it to confirm you own this account if you ever need to reset your password.",
+      "save": "Save email",
+      "logOut": "Log out",
+      "invalid": "Please enter a valid email address.",
+      "failed": "Could not save your email. Please try again."
+    }
   },
   "wallet": {
     "label": "Ví $WOC",
@@ -1982,6 +2178,7 @@ export const vi_VN: EnTranslations = {
     "helpLinkedWithBalance": "Đặc quyền chủ sở hữu đang hoạt động. Ứng dụng ví đã kết nối trên trình duyệt này.",
     "helpLinkedDisconnected": "Đặc quyền chủ sở hữu đang hoạt động. Kết nối ứng dụng khi bạn cần ký hoặc chi tiêu.",
     "helpLinkedDisconnectedWithBalance": "Đặc quyền chủ sở hữu đang hoạt động. Kết nối ứng dụng khi bạn cần ký hoặc chi tiêu.",
+    "extensionHelp": "To see a wallet here, keep a browser wallet extension such as Solflare Wallet active.",
     "flowConnect": "Chọn một ví. Quá trình xác minh sẽ tiếp tục tự động.",
     "flowSign": "Ký vào thông điệp xác minh trong ứng dụng ví của bạn. Không cần giao dịch hay SOL.",
     "flowVerify": "Đang xác minh quyền sở hữu ví...",
@@ -2626,6 +2823,7 @@ export const vi_VN: EnTranslations = {
       "usernameTaken": "Tên đăng nhập đó đã được sử dụng.",
       "invalidCredentials": "Tên đăng nhập hoặc mật khẩu không đúng.",
       "verificationFailed": "Xác minh thất bại. Vui lòng thử lại.",
+      "desktopCodeInvalid": "Mã đăng nhập máy tính không hợp lệ hoặc đã hết hạn. Vui lòng thử lại.",
       "invalidCharacterName": "Tên nhân vật không hợp lệ. Dùng 2-16 chữ cái.",
       "characterNameNotAllowed": "Tên nhân vật đó không được phép.",
       "invalidClass": "Lớp không hợp lệ.",
@@ -2642,6 +2840,21 @@ export const vi_VN: EnTranslations = {
       "takenOver": "Nhân vật của bạn đã bị một phiên khác chiếm quyền.",
       "renameBeforeEntering": "Nhân vật này phải được đổi tên trước khi vào thế giới.",
       "renameNotPermitted": "Không được phép đổi tên nhân vật này."
+    }
+  },
+  "desktop": {
+    "update": {
+      "downloading": "Đang tải bản cập nhật {version}...",
+      "ready": "Bản cập nhật {version} đã sẵn sàng. Sẽ tự cài khi bạn thoát, hoặc khởi động lại ngay.",
+      "restart": "Khởi động lại ngay",
+      "later": "Để sau"
+    },
+    "crash": {
+      "title": "World of ClaudeCraft",
+      "body": "Khung trò chơi đã ngừng hoạt động. Tải lại chứ?",
+      "reload": "Tải lại",
+      "quit": "Thoát",
+      "fatalBody": "World of ClaudeCraft gặp lỗi không mong muốn và cần đóng lại."
     }
   },
   "realm": {
@@ -3400,13 +3613,16 @@ export const vi_VN: EnTranslations = {
     },
     "cast": {
       "fishing": "Câu Cá",
-      "demonHeal": "Quỷ Trị Liệu"
+      "demonHeal": "Quỷ Trị Liệu",
+      "thunzharrStormcall": "Tiếng Gọi Bão"
     }
   },
   "questUi": {
     "tracker": {
       "title": "Nhiệm Vụ",
-      "complete": "Hoàn Thành"
+      "complete": "Hoàn Thành",
+      "showOnMap": "Show {name} on the map",
+      "hideFromMap": "Hide {name} from the map"
     },
     "log": {
       "title": "Nhật Ký Nhiệm Vụ",
@@ -3692,6 +3908,26 @@ export const vi_VN: EnTranslations = {
   },
   "entities": {
     "abilities": {
+      "flamestrike": {
+        "name": "Cú Đánh Lửa",
+        "description": "Gọi một vụ nổ lửa xuống khu vực mục tiêu, gây {damage} sát thương Lửa cho kẻ địch trong vụ nổ."
+      },
+      "rain_of_fire": {
+        "name": "Mưa Lửa",
+        "description": "Trút một cơn mưa lửa xuống khu vực mục tiêu, thiêu đốt kẻ địch gây {damage} sát thương Lửa."
+      },
+      "volley": {
+        "name": "Loạt Tên",
+        "description": "Trút mưa tên xuống khu vực mục tiêu, gây {damage} sát thương cho kẻ địch bên trong."
+      },
+      "hurricane": {
+        "name": "Cuồng Phong",
+        "description": "Triệu hồi cuồng phong xuống khu vực mục tiêu, quật ngã kẻ địch gây {damage} sát thương Thiên Nhiên."
+      },
+      "earthquake": {
+        "name": "Động Đất",
+        "description": "Làm rung chuyển khu vực mục tiêu, quật ngã kẻ địch gây {damage} sát thương Thiên Nhiên."
+      },
       "heroic_strike": {
         "name": "Đòn Anh Hùng",
         "description": "Một đòn đánh mạnh tăng sát thương cận chiến thêm {damage}. Kích hoạt ở đòn đánh tiếp theo của bạn."
@@ -4833,6 +5069,33 @@ export const vi_VN: EnTranslations = {
       "monarch_crown_helm": {
         "name": "Vương Miện Quân Vương"
       },
+      "copper_mining_pick": {
+        "name": "Cuốc Khai Khoáng Đồng"
+      },
+      "iron_mining_pick": {
+        "name": "Cuốc Khai Khoáng Sắt"
+      },
+      "mithril_mining_pick": {
+        "name": "Cuốc Khai Khoáng Mithril"
+      },
+      "handaxe": {
+        "name": "Rìu Tay"
+      },
+      "felling_axe": {
+        "name": "Rìu Đốn Gỗ"
+      },
+      "ironbark_axe": {
+        "name": "Rìu Vỏ Sắt"
+      },
+      "gathering_sickle": {
+        "name": "Liềm Thu Hoạch"
+      },
+      "bronze_sickle": {
+        "name": "Liềm Đồng"
+      },
+      "silverleaf_sickle": {
+        "name": "Liềm Lá Bạc"
+      },
       "bristleback_maul": {
         "name": "Vồ Lưng Gai"
       },
@@ -5315,6 +5578,30 @@ export const vi_VN: EnTranslations = {
       },
       "vanguard_chrome_armor_plate": {
         "name": "Crôm Tiên Phong"
+      },
+      "crownforged_gauntlets": {
+        "name": "Găng Tay Rèn Vương Miện"
+      },
+      "nighttalon_grips": {
+        "name": "Bao Tay Dạ Trảo"
+      },
+      "soulflame_gloves": {
+        "name": "Găng Tay Hồn Hỏa"
+      },
+      "stormcallers_handguards": {
+        "name": "Hộ Thủ của Triệu Bão Sư"
+      },
+      "crownforged_girdle": {
+        "name": "Đai Lưng Rèn Vương Miện"
+      },
+      "nighttalon_waistband": {
+        "name": "Đai Lưng Dạ Trảo"
+      },
+      "soulflame_cord": {
+        "name": "Dây Lưng Hồn Hỏa"
+      },
+      "stormcallers_waistguard": {
+        "name": "Hộ Yêu của Triệu Bão Sư"
       }
     },
     "mobs": {
@@ -5506,6 +5793,12 @@ export const vi_VN: EnTranslations = {
       },
       "acolyte_tessa": {
         "name": "Tế Đồ Tessa"
+      },
+      "thunzharr_waking_peak": {
+        "name": "Thunzharr, the Waking Peak"
+      },
+      "thunzharr_stormling": {
+        "name": "Roused Stormling"
       },
       "ironvein_foreman": {
         "name": "Quản Đốc Mạch Sắt"
@@ -6169,6 +6462,36 @@ export const vi_VN: EnTranslations = {
           }
         }
       },
+      "q_stalkers_return": {
+        "title": "The Stalkers Return",
+        "text": "Twelve dead, and the ridge crawls thicker than the day you started, {playerName}. Beasts do not throw themselves at a wall out of hunger. Something on the high ridge is pushing them down, and until I know what, the culling does not stop. Fourteen more.",
+        "completion": "Fourteen more, and still my patrols count fresh tracks by morning. My scout came back from the high ridge white as the snowline: prints the size of a shield, she says, and old kills no stalker would leave. Whatever walks up there is no ordinary cat.",
+        "objectives": {
+          "0": {
+            "label": "Ridge Stalker slain"
+          }
+        }
+      },
+      "q_stalker_cloaks": {
+        "title": "Cloaks for the Watch",
+        "text": "Eight pelts lined the officers' cloaks, and now every soldier on the wall wants the same, {playerName}. They are right to want it: winter takes fingers first and apologies never. Ten more pelts from the ridges south of the gate, and the whole watch sleeps warm.",
+        "completion": "Ten good pelts, thick as any I have... no, look at these, {playerName}. Torn, half of them, and by no blade or spear. Claw marks wide as my hand, right through the winter coat. Something on that ridge is savaging its own kind.",
+        "objectives": {
+          "0": {
+            "label": "Ridge Stalker Pelt"
+          }
+        }
+      },
+      "q_old_cragmaw": {
+        "title": "Old Cragmaw",
+        "text": "The mountain folk put a name to the prints my scout found: Old Cragmaw, a scar-pelted tyrant of a cat that has outlived three generations of its own pack. It is the reason the stalkers flood my road, {playerName}. Its den sits on the western ridge above the road south. Bring a friend, and put the old devil down.",
+        "completion": "Down at last. The mountain folk swore that cat would outlive the wall itself. The stalkers will keep to their high snows now, {playerName}, and my patrols will walk the road without bleeding for it. The whole ridge is quieter for your work.",
+        "objectives": {
+          "0": {
+            "label": "Old Cragmaw slain"
+          }
+        }
+      },
       "q_kobold_tunnels": {
         "title": "Rắc Rối Deeprock",
         "text": "Lũ kobold ở Hang Deeprock đang đào sâu hơn bất kỳ con chuột mang nến nào nên đào - thẳng xuống dưới, như thể có thứ gì đó đang gọi chúng. Những đường hầm của chúng chạy bên dưới bức tường của chúng ta, {playerName}. Hãy chấm dứt chuyện này: giết mười hai Kẻ Đào Hầm Deeprock.",
@@ -6693,6 +7016,28 @@ export const vi_VN: EnTranslations = {
         "leaveText": "Bạn trèo trở lại chỗ Tu Huynh Halven tại tàn tích thánh tích."
       }
     },
+    "letters": {
+      "ravenpost_welcome": {
+        "sender": "Bưu Quạ",
+        "subject": "Giờ đây bầy quạ bay vì bạn",
+        "body": "Lữ khách,\n\nBưu Quạ đã dựng những trụ đậu khắp thung lũng. Hãy tìm các trụ quạ ở Eastbrook, Fenbridge và Highwatch: từ bất kỳ trụ nào, bạn có thể gửi thư, tiền và vật phẩm cho những nhà phiêu lưu khác, và nhận mọi thứ bầy quạ mang đến cho bạn.\n\nKèm theo là một món quà nhỏ cho con tem đầu tiên của bạn.\n\nTung cánh,\nBưu Quạ"
+      },
+      "letter_q_wolves": {
+        "sender": "Cảnh Trưởng Redbrook",
+        "subject": "Chuồng trại lại yên ắng",
+        "body": "Những người chăn cừu rốt cuộc đã có thể ngủ yên, và đó là công của bạn. Tôi đã nhờ Bưu Quạ mang đến bạn chút quà từ quỹ tuần tra.\n\nGiữ lưỡi kiếm luôn sắc bén.\n- Cảnh Trưởng Redbrook"
+      },
+      "letter_q_greyjaw": {
+        "sender": "Cảnh Trưởng Redbrook",
+        "subject": "Lão Hàm Xám, cuối cùng",
+        "body": "Tin tức lan nhanh trong một thị trấn nhỏ thế này. Đêm qua những người chăn cừu đã nâng cốc chúc sức khỏe bạn, còn Wilkes thề rằng con sói to bằng cả cỗ xe. Cứ để họ thêu dệt: bạn xứng đáng.\n\nHãy dùng một bữa do đội tuần tra khoản đãi.\n- Cảnh Trưởng Redbrook"
+      },
+      "letter_q_hollow": {
+        "sender": "Tu Huynh Aldric",
+        "subject": "Điều bạn đã làm trong bóng tối",
+        "body": "Hiếm ai sẽ biết thứ gì từng bị chôn dưới lòng chảo ấy, và càng hiếm ai tin. Tôi biết, và tôi sẽ không quên.\n\nMong con đường của bạn luôn sáng tỏ.\n- Tu Huynh Aldric"
+      }
+    },
     "itemSets": {
       "crownforged": {
         "name": "Bộ chiến Crownforged",
@@ -6706,8 +7051,8 @@ export const vi_VN: EnTranslations = {
       },
       "necromancers": {
         "name": "Áo choàng pháp sư gọi hồn",
-        "bonus2": "Giảm 50% độ lùi khi niệm phép do sát thương.",
-        "bonus3": "Sát thương nhận vào không làm chậm niệm phép."
+        "bonus2": "Bạn không thể bị đẩy lùi (kháng đẩy lùi 100%).",
+        "bonus3": "Tăng trí tuệ thêm 10 và thể lực thêm 10."
       },
       "nighttalon": {
         "name": "Bộ da Móng Đêm",
@@ -6716,13 +7061,13 @@ export const vi_VN: EnTranslations = {
       },
       "soulflame": {
         "name": "Áo choàng Lửa Linh Hồn",
-        "bonus2": "Giảm 50% độ lùi khi niệm phép do sát thương.",
-        "bonus3": "Sát thương nhận vào không làm chậm niệm phép."
+        "bonus2": "Bạn không thể bị đẩy lùi (kháng đẩy lùi 100%).",
+        "bonus3": "Tăng trí tuệ thêm 15 và tinh thần thêm 15."
       },
       "stormcallers": {
         "name": "Áo choàng Gọi Bão",
-        "bonus2": "Giảm 50% độ lùi khi niệm phép do sát thương.",
-        "bonus3": "Sát thương nhận vào không làm chậm niệm phép."
+        "bonus2": "Bạn không thể bị đẩy lùi (kháng đẩy lùi 100%).",
+        "bonus3": "Tăng trí tuệ thêm 15 và tinh thần thêm 15."
       },
       "wyrmshadow": {
         "name": "Bộ Bóng Wyrm",
@@ -6738,6 +7083,7 @@ export const vi_VN: EnTranslations = {
     "dungeonInstanceBusy": "Tất cả các phiên bản của {name} đang bận. Hãy thử lại sau.",
     "delveLockedChestInteract": "Nhấn F để cạy khóa",
     "delveRewardChestInteract": "Nhấn F để nhận chiến lợi phẩm",
-    "delveSurfaceExitInteract": "Nhấn F để leo lên"
+    "delveSurfaceExitInteract": "Nhấn F để leo lên",
+    "mailboxName": "Mailbox"
   }
 };

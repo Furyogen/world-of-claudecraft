@@ -211,6 +211,9 @@
              accessible #map-window as the alternative, per the zone-label decision. -->
         <canvas id="minimap" width="162" height="162" aria-hidden="true"></canvas>
         <button id="raid-lockout" type="button" hidden data-i18n-title="hudChrome.raidLockout.title" data-i18n-aria="hudChrome.raidLockout.title" title="Raid Lockouts" aria-label="Raid Lockouts"></button>
+        <!-- Ravenpost envelope: visible while unread letters wait (role=status so
+             arrivals are announced; reading them still requires a mailbox). -->
+        <div id="mail-indicator" role="status" hidden data-icon="mail"><span class="mail-indicator-count">0</span></div>
       </div>
       <div id="minimap-clock" data-i18n-title="hudChrome.widgets.clockTitle" title="Local time — click to toggle 12/24-hour">--:--</div>
       <div id="minimap-coords" data-i18n-title="hudChrome.widgets.worldCoordinates" data-i18n-aria="hudChrome.widgets.coordinates" title="Your current world coordinates" aria-label="Coordinates">0, 0</div>
@@ -326,16 +329,22 @@
       </div>
       <canvas id="map-canvas" width="560" height="560" role="img" data-i18n-aria="hud.core.mapCanvasLabel" aria-label="Map"></canvas>
       <span id="map-summary" class="visually-hidden" role="status" aria-live="polite"></span>
+      <button type="button" id="map-quests-toggle" data-i18n-title="questUi.tracker.title" data-i18n-aria="questUi.tracker.title" title="Quests" aria-label="Quests" aria-expanded="false" aria-controls="map-quests" hidden></button>
+      <div id="map-quests" class="panel" role="group" data-i18n-aria="questUi.tracker.title" aria-label="Quests"></div>
     </div>
     <div id="arena-window" class="window panel"></div>
     <div id="leaderboard-window" class="window panel"></div>
+    <div id="daily-rewards-window" class="window panel"></div>
     <div id="market-window" class="window panel"></div>
+    <div id="mailbox-window" class="window panel"></div>
+    <div id="calendar-window" class="window panel"></div>
     <div id="arena-status"></div>
     <div id="options-menu" class="window panel"></div>
     <div id="emote-editor" class="window panel"></div>
     <div id="social-window" class="window panel"></div>
     <div id="report-window" class="window panel"></div>
     <div id="side-buttons">
+      <button id="daily-rewards-button" type="button" data-i18n-title="hudChrome.dailyRewards.title" data-i18n-aria="hudChrome.dailyRewards.title" title="Daily Rewards" aria-label="Daily Rewards"></button>
       <button class="micro-btn" id="mm-char" data-i18n-title="hud.keybinds.actions.char" data-i18n-aria="hud.keybinds.actions.char" title="Character" aria-label="Character" data-icon="character"><span class="keybind">c</span></button>
       <button class="micro-btn" id="mm-spell" data-i18n-title="abilityUi.spellbook.title" data-i18n-aria="abilityUi.spellbook.title" title="Spellbook" aria-label="Spellbook" data-icon="spellbook"><span class="keybind">p</span></button>
       <button class="micro-btn" id="mm-talents" data-i18n-title="game.talents.title" data-i18n-aria="game.talents.title" title="Talents" aria-label="Talents" data-icon="talents"><span class="keybind">n</span></button>
@@ -364,6 +373,25 @@
 
   <textarea id="chat-input" rows="1" maxlength="255" data-i18n-placeholder="hud.core.chatPlaceholder" placeholder="Say something... (/w name, /r, /p, /gu, /o, /general, /join world|lfg, /afk, /dnd)" autocomplete="off" autocapitalize="sentences" autocorrect="off" spellcheck="false" data-1p-ignore data-lpignore="true" data-bwignore data-form-type="other"></textarea>
   </template>
+
+  <!-- Mandatory recovery-email capture: shown on sign-in when the account has no
+       email on file yet. Not dismissable except by logging out; setting an address
+       is required to continue into the realm. -->
+  <div id="recovery-email-modal" class="modal-backdrop" hidden>
+    <div class="confirm-modal panel auth-panel-premium" role="dialog" aria-modal="true" aria-labelledby="recovery-email-title">
+      <h2 id="recovery-email-title" data-i18n="auth.recovery.title">Add a recovery email</h2>
+      <p data-i18n="auth.recovery.body">Set an email address so you can recover your account. We only use it to confirm you own this account if you ever need to reset your password.</p>
+      <div class="auth-field">
+        <label for="recovery-email-input" class="auth-label" data-i18n="auth.email">Email</label>
+        <input id="recovery-email-input" type="email" maxlength="254" autocomplete="email" data-i18n-placeholder="auth.emailPlaceholder" placeholder="you@example.com" />
+      </div>
+      <div id="recovery-email-error" class="auth-error" aria-live="polite"></div>
+      <div class="confirm-actions">
+        <button type="button" class="btn btn-secondary" id="btn-recovery-email-logout" data-i18n="auth.recovery.logOut">Log out</button>
+        <button type="button" class="btn btn-primary" id="btn-recovery-email-submit" data-i18n="auth.recovery.save">Save email</button>
+      </div>
+    </div>
+  </div>
 
   <main id="start-screen">
     <!-- Keep the backdrop here at the top level so it spans the entire screen behind content -->
@@ -534,6 +562,23 @@
                 </svg>
               </button>
             </div>
+          </div>
+
+          <!-- Email is captured at signup as the account recovery address. Shown in
+               register mode only; setAuthMode toggles its visibility + required. -->
+          <div class="auth-field" id="login-email-field" hidden>
+            <label for="login-email" class="auth-label" data-i18n="auth.email">Email</label>
+            <div id="login-email-error" class="auth-field-error" aria-live="polite" data-i18n="auth.emailError">Please enter a valid email address.</div>
+            <input
+              id="login-email"
+              name="email"
+              type="email"
+              maxlength="254"
+              data-i18n-placeholder="auth.emailPlaceholder"
+              placeholder="you@example.com"
+              autocomplete="email"
+              aria-describedby="login-email-error"
+            />
           </div>
 
           <!-- Cloudflare Turnstile widget mounts here when configured (src/main.ts). -->

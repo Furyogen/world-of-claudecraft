@@ -177,6 +177,52 @@ export const ko_KR: EnTranslations = {
       "title": "감정 표현",
       "done": "완료"
     },
+    "dailyRewards": {
+      "title": "일일 보상",
+      "close": "일일 보상 닫기",
+      "loading": "일일 보상 불러오는 중...",
+      "error": "일일 보상을 불러올 수 없습니다.",
+      "intro": "인증된 지갑에 충분한 WOC를 보유하여 일일 보상을 잠금 해제하세요. 하루 한 번의 스핀과 교체되는 과제로 포인트를 획득한 뒤, 일일 순위표를 올라 상금 풀의 일부를 차지하세요.",
+      "prize": "상금 풀",
+      "reset": "초기화",
+      "endsIn": "{time} 후 종료",
+      "remainingLessThanMinute": "1분 미만",
+      "remainingMinutes": "{minutes}분",
+      "remainingHoursMinutes": "{hours}시간 {minutes}분",
+      "score": "점수",
+      "walletValue": "지갑 가치 (WOC)",
+      "usd": "{amount} USD",
+      "sol": "{amount} SOL",
+      "unknown": "알 수 없음",
+      "spinTitle": "일일 스핀",
+      "spinDialogTitle": "일일 보상 스핀",
+      "spinClose": "일일 스핀 닫기",
+      "spinReady": "스핀 한 번을 사용할 수 있습니다.",
+      "spinClaimed": "획득: +{points} 포인트.",
+      "spinResult": "+{points} 포인트",
+      "spinButton": "돌리기",
+      "tasks": "과제",
+      "taskMultiplier": "{multiplier}배 배율",
+      "pointsGained": "{points} 일일 보상 포인트를 획득했습니다.",
+      "leaderboard": "일일 순위표",
+      "totalPlayer": "오늘 플레이어 {count}명",
+      "totalPlayers": "오늘 플레이어 {count}명",
+      "history": "지난 당첨자",
+      "noLeaders": "아직 포인트가 없습니다.",
+      "noHistory": "아직 지급 내역이 없습니다.",
+      "walletConnectTitle": "지갑 인증",
+      "walletConnectBody": "WOC를 보유한 Solana 지갑을 인증하여 일일 보상을 잠금 해제하세요.",
+      "walletConnectButton": "지갑 인증",
+      "walletHoldTitle": "WOC 보유",
+      "walletHoldBody": "일일 보상을 잠금 해제하려면 최소 {amount} USD 상당의 WOC를 보유하세요.",
+      "walletPriceBody": "현재 WOC 가격을 확인할 수 없습니다. 잠시 후 다시 확인하세요.",
+      "reason": {
+        "eligible": "보상이 잠금 해제되었습니다.",
+        "no_wallet": "$20 USD 상당 이상의 WOC를 보유한 지갑을 연결하세요.",
+        "under_minimum": "지갑이 최소 $20 USD WOC 기준에 미치지 못합니다.",
+        "price_unavailable": "WOC 가격을 확인할 수 없어 보상이 일시적으로 잠겨 있습니다."
+      }
+    },
     "theme": {
       "preset": "UI 테마",
       "customColors": "사용자 지정 색상",
@@ -265,6 +311,13 @@ export const ko_KR: EnTranslations = {
       "heading": "방향",
       "minimapZoom": "미니맵 확대/축소"
     },
+    "nativeUpdate": {
+      "title": "업데이트 사용 가능",
+      "body": "World of ClaudeCraft의 새 버전을 사용할 수 있습니다. 지금 업데이트하여 최신 수정 사항과 개선 사항을 받으세요.",
+      "bodyWithVersion": "World of ClaudeCraft 버전 {version}을(를) 사용할 수 있습니다. 지금 업데이트하여 최신 수정 사항과 개선 사항을 받으세요.",
+      "notNow": "나중에",
+      "update": "업데이트"
+    },
     "castBar": {
       "playerAria": "내 시전 막대",
       "targetAria": "대상 시전 막대"
@@ -337,9 +390,14 @@ export const ko_KR: EnTranslations = {
       "showWalletOnCharacterScreen": "캐릭터 화면에 지갑 표시",
       "showWalletOnPlayerCard": "플레이어 카드에 지갑 표시",
       "showDevBadges": "개발자 배지 표시",
+      "showOwnNameplate": "내 이름표 표시",
       "uiScale": "UI 배율",
+      "playerFrameScale": "플레이어 프레임 크기",
+      "targetFrameScale": "대상 프레임 크기",
       "highContrastBackground": "고대비 배경",
       "startAttackOnAbility": "스킬 사용 시 자동 공격",
+      "walkByAutoloot": "지나가며 자동 획득",
+      "groundReticle": "지면 조준 표시기",
       "showItemLevel": "아이템 레벨 표시",
       "itemLevelLine": "아이템 레벨 {level}",
       "itemScoreLine": "점수 {score}",
@@ -771,6 +829,9 @@ export const ko_KR: EnTranslations = {
         "nature": "자연"
       }
     },
+    "worldBoss": {
+      "spawn": "{name}이(가) 쏜피크 고지에 솟아올랐습니다!"
+    },
     "loot": {
       "chestTitle": "상자"
     },
@@ -781,6 +842,23 @@ export const ko_KR: EnTranslations = {
     "nameplate": {
       "mob": "[{level}] {name}",
       "mobElite": "[{level}+] {name}"
+    },
+    "mobTooltip": {
+      "levelFamily": "{level}레벨 {family}",
+      "familyDemon": "악마",
+      "hostile": "적대",
+      "friendly": "아군"
+    },
+    "targetFrame": {
+      "unlock": "대상 프레임 이동",
+      "lock": "대상 프레임 고정"
+    },
+    "playerFrame": {
+      "unlock": "플레이어 프레임 이동",
+      "lock": "플레이어 프레임 고정"
+    },
+    "frameReset": {
+      "label": "프레임 위치 초기화"
     },
     "itemTooltip": {
       "requiresLevel": "필요 레벨 {level}"
@@ -863,6 +941,7 @@ export const ko_KR: EnTranslations = {
       "memberSinceDays": "Discord 가입 {days}일",
       "roleTag": {
         "levyst": "Levy St",
+        "admin": "관리자",
         "devs": "개발자",
         "mods": "운영자",
         "artists": "아티스트"
@@ -955,6 +1034,112 @@ export const ko_KR: EnTranslations = {
       },
       "linkedAs": "{login}(으)로 연결됨",
       "unlink": "GitHub 연결 해제"
+    },
+    "mailbox": {
+      "title": "우편함",
+      "subtitle": "레이븐포스트",
+      "close": "우편함 닫기",
+      "tabInbox": "받은 편지함",
+      "tabInboxWithCount": "받은 편지함 ({count})",
+      "tabSend": "Send",
+      "empty": "우편함이 비어 있습니다.",
+      "truncated": "전체 {total}통 중 최신 {shown}통을 표시합니다.",
+      "attachmentsBadge": "소포 첨부됨",
+      "unreadBadge": "읽지 않음",
+      "back": "Back",
+      "take": "첨부물 받기",
+      "delete": "편지 삭제",
+      "deleteAria": "편지 {subject} 삭제",
+      "openAria": "{name}이(가) 보낸 편지 {subject} 읽기",
+      "noSubject": "(제목 없음)",
+      "toLabel": "To",
+      "toPlaceholder": "캐릭터 이름",
+      "subjectLabel": "제목",
+      "bodyLabel": "내용",
+      "coinLabel": "동전 첨부",
+      "parcelsLabel": "소포",
+      "parcelsHint": "가방의 아이템을 클릭하면 첨부됩니다.",
+      "removeParcelAria": "편지에서 {item} 제거",
+      "sendButton": "편지 보내기",
+      "postageNote": "우편 요금: {amount}. 까마귀가 약 {seconds}초 동안 날아갑니다.",
+      "arrivedBanner": "까마귀가 도착했습니다: {name}의 우편.",
+      "arrivedLog": "{name}에게서 새 우편이 도착했습니다.",
+      "indicatorAria": "읽지 않은 우편: {count}",
+      "indicatorTip": "읽지 않은 편지가 {count}통 있습니다. 우편함에서 확인하세요.",
+      "clickAttach": "클릭하면 편지에 첨부됩니다.",
+      "cannotMail": "이 아이템은 우편으로 보낼 수 없습니다.",
+      "result": {
+        "sent": "까마귀가 {name}에게 보낼 편지를 물고 날아올랐습니다 (우편 요금 {postage}).",
+        "collected": "편지에서 {amount}을(를) 받았습니다.",
+        "tooFar": "우편을 처리하려면 우편함 옆에 있어야 합니다.",
+        "needRecipient": "편지의 수신인을 지정하세요.",
+        "noRecipient": "그 이름을 가진 우편함 주인이 없습니다.",
+        "tooManyParcels": "편지 하나에는 소포를 최대 {count}개까지 담을 수 있습니다.",
+        "noMailQuestItems": "퀘스트 아이템은 우편으로 보낼 수 없습니다.",
+        "notEnoughItems": "보낼 수 있는 수량이 부족합니다.",
+        "cantAffordPostage": "우편 요금을 낼 수 없습니다.",
+        "recipientBoxFull": "상대의 우편함이 가득 찼습니다.",
+        "letterGone": "그 편지는 더 이상 우편함에 없습니다.",
+        "takeParcelsFirst": "편지를 버리기 전에 소포를 먼저 꺼내세요."
+      }
+    },
+    "calendar": {
+      "title": "이벤트 달력",
+      "close": "달력 닫기",
+      "keybindLabel": "이벤트 달력",
+      "prevMonth": "이전 달",
+      "nextMonth": "다음 달",
+      "dayAria": "{date}: 이벤트 {count}건",
+      "noEvents": "이 날에는 일정이 없습니다.",
+      "allDay": "종일",
+      "bookedBy": "{name} 등록",
+      "deleteAria": "이벤트 {title} 삭제",
+      "bookTitle": "길드 이벤트 등록",
+      "titlePlaceholder": "이벤트 이름",
+      "notePlaceholder": "메모 (선택)",
+      "hourLabel": "시각 (UTC)",
+      "hourAllDay": "종일",
+      "addButton": "이벤트 등록",
+      "guildOnlyNote": "길드에 가입하면 함께 이벤트를 계획할 수 있습니다.",
+      "result": {
+        "created": "이벤트가 길드 달력에 등록되었습니다.",
+        "removed": "이벤트가 달력에서 삭제되었습니다.",
+        "notInGuild": "길드에 소속되어 있지 않습니다.",
+        "notOfficer": "길드 이벤트는 임원과 길드 마스터만 관리할 수 있습니다.",
+        "badInput": "이벤트 이름과 올바른 날짜를 입력하세요.",
+        "calendarFull": "길드 달력이 가득 찼습니다.",
+        "eventGone": "그 이벤트는 더 이상 달력에 없습니다."
+      },
+      "events": {
+        "raidCall": {
+          "title": "공격대 소집",
+          "note": "수비대가 뿔피리를 붑니다. 파티를 모아 지하 묘지와 공격대로."
+        },
+        "marketDay": {
+          "title": "장날",
+          "note": "상인이 새 물건을 기다립니다. 월드 마켓을 둘러보기 좋은 날."
+        },
+        "fiestaNight": {
+          "title": "피에스타의 밤",
+          "note": "오늘 밤 2대2 피에스타 링이 가장 붐빕니다."
+        },
+        "arenaClash": {
+          "title": "투기장 격돌",
+          "note": "결투사들이 잿빛 투기장으로 몰려듭니다. 대기열에 올라 순위를 노리세요."
+        },
+        "fishingDerby": {
+          "title": "낚시 대회",
+          "note": "낚시꾼들이 호숫가에 늘어섭니다. 낚싯대를 들고 이야기꽃을 피우세요."
+        },
+        "delveDay": {
+          "title": "탐굴의 날",
+          "note": "할벤 수사가 지도에 표시를 남겼습니다. 무너진 성물고에 도전하기 좋은 날."
+        },
+        "moongateCommunion": {
+          "title": "달문 집회",
+          "note": "보름의 달 아래 순례자들이 사원의 달문에 모입니다."
+        }
+      }
     }
   },
   "guide": {
@@ -1903,6 +2088,9 @@ export const ko_KR: EnTranslations = {
     "password": "비밀번호",
     "passwordError": "비밀번호를 입력해 주세요.",
     "passwordPlaceholder": "비밀번호 입력",
+    "email": "이메일",
+    "emailPlaceholder": "you@example.com",
+    "emailError": "유효한 이메일 주소를 입력하세요.",
     "showPassword": "비밀번호 표시",
     "hidePassword": "비밀번호 숨기기",
     "logIn": "로그인",
@@ -1928,7 +2116,15 @@ export const ko_KR: EnTranslations = {
     "create": "생성",
     "twoFactorLabel": "인증 코드",
     "twoFactorPlaceholder": "6자리 또는 복구 코드",
-    "twoFactorHint": "인증 앱에 표시된 코드 또는 복구 코드 중 하나를 입력하세요."
+    "twoFactorHint": "인증 앱에 표시된 코드 또는 복구 코드 중 하나를 입력하세요.",
+    "recovery": {
+      "title": "복구 이메일 추가",
+      "body": "계정을 복구할 수 있도록 이메일 주소를 설정하세요. 비밀번호를 재설정해야 할 경우 이 계정의 소유자임을 확인하는 용도로만 사용됩니다.",
+      "save": "이메일 저장",
+      "logOut": "Log out",
+      "invalid": "유효한 이메일 주소를 입력하세요.",
+      "failed": "이메일을 저장하지 못했습니다. 다시 시도해 주세요."
+    }
   },
   "wallet": {
     "label": "$WOC 지갑",
@@ -1982,6 +2178,7 @@ export const ko_KR: EnTranslations = {
     "helpLinkedWithBalance": "보유자 혜택이 활성화되었습니다. 이 브라우저에 지갑 앱이 연결되어 있습니다.",
     "helpLinkedDisconnected": "보유자 혜택이 활성화되었습니다. 서명이나 지출이 필요할 때 앱을 연결하세요.",
     "helpLinkedDisconnectedWithBalance": "보유자 혜택이 활성화되었습니다. 서명이나 지출이 필요할 때 앱을 연결하세요.",
+    "extensionHelp": "여기에 지갑이 표시되려면 Solflare Wallet 같은 브라우저 지갑 확장 프로그램이 활성화되어 있어야 합니다.",
     "flowConnect": "지갑을 선택하세요. 인증은 자동으로 계속됩니다.",
     "flowSign": "지갑 앱에서 인증 메시지에 서명하세요. 트랜잭션이나 SOL은 필요 없습니다.",
     "flowVerify": "지갑 소유권 인증 중...",
@@ -2626,6 +2823,7 @@ export const ko_KR: EnTranslations = {
       "usernameTaken": "이미 사용 중인 사용자 이름입니다.",
       "invalidCredentials": "사용자 이름 또는 비밀번호가 올바르지 않습니다.",
       "verificationFailed": "확인에 실패했습니다. 다시 시도해 주세요.",
+      "desktopCodeInvalid": "데스크톱 로그인 코드가 유효하지 않거나 만료되었습니다. 다시 시도해 주세요.",
       "invalidCharacterName": "캐릭터 이름이 올바르지 않습니다. 2-16자의 글자를 사용하세요.",
       "characterNameNotAllowed": "이 캐릭터 이름은 사용할 수 없습니다.",
       "invalidClass": "유효하지 않은 직업입니다.",
@@ -2642,6 +2840,21 @@ export const ko_KR: EnTranslations = {
       "takenOver": "다른 세션이 캐릭터를 넘겨받았습니다.",
       "renameBeforeEntering": "이 캐릭터는 세계에 들어가기 전에 이름을 변경해야 합니다.",
       "renameNotPermitted": "이 캐릭터의 이름을 변경할 수 없습니다."
+    }
+  },
+  "desktop": {
+    "update": {
+      "downloading": "업데이트 {version} 다운로드 중...",
+      "ready": "업데이트 {version} 준비 완료. 게임을 종료하면 자동으로 설치되며, 지금 다시 시작할 수도 있습니다.",
+      "restart": "지금 다시 시작",
+      "later": "나중에"
+    },
+    "crash": {
+      "title": "World of ClaudeCraft",
+      "body": "게임 화면이 응답하지 않습니다. 다시 불러올까요?",
+      "reload": "다시 불러오기",
+      "quit": "종료",
+      "fatalBody": "World of ClaudeCraft에 예기치 않은 오류가 발생하여 종료해야 합니다."
     }
   },
   "realm": {
@@ -3400,13 +3613,16 @@ export const ko_KR: EnTranslations = {
     },
     "cast": {
       "fishing": "낚시",
-      "demonHeal": "악마 치유"
+      "demonHeal": "악마 치유",
+      "thunzharrStormcall": "폭풍의 부름"
     }
   },
   "questUi": {
     "tracker": {
       "title": "퀘스트",
-      "complete": "완료"
+      "complete": "완료",
+      "showOnMap": "{name} 지도에 표시",
+      "hideFromMap": "{name} 지도에서 숨기기"
     },
     "log": {
       "title": "퀘스트 기록",
@@ -3692,6 +3908,26 @@ export const ko_KR: EnTranslations = {
   },
   "entities": {
     "abilities": {
+      "flamestrike": {
+        "name": "화염 폭발",
+        "description": "지정한 지역에 화염 폭발을 일으켜 폭발 범위 안의 적에게 {damage}의 화염 피해를 입힙니다."
+      },
+      "rain_of_fire": {
+        "name": "불의 비",
+        "description": "지정한 지역에 불의 비를 내려 적을 불태우고 {damage}의 화염 피해를 입힙니다."
+      },
+      "volley": {
+        "name": "일제 사격",
+        "description": "지정한 지역에 화살을 쏟아부어 그 안의 적에게 {damage}의 피해를 입힙니다."
+      },
+      "hurricane": {
+        "name": "폭풍우",
+        "description": "지정한 지역에 폭풍우를 일으켜 적을 강타하고 {damage}의 자연 피해를 입힙니다."
+      },
+      "earthquake": {
+        "name": "지진",
+        "description": "지정한 지역을 뒤흔들어 적을 강타하고 {damage}의 자연 피해를 입힙니다."
+      },
       "heroic_strike": {
         "name": "영웅의 일격",
         "description": "강력한 공격으로 근접 피해가 {damage}만큼 증가합니다. 다음 무기 공격 시 발동됩니다."
@@ -4833,6 +5069,33 @@ export const ko_KR: EnTranslations = {
       "monarch_crown_helm": {
         "name": "군주의 왕관"
       },
+      "copper_mining_pick": {
+        "name": "구리 채광 곡괭이"
+      },
+      "iron_mining_pick": {
+        "name": "철 채광 곡괭이"
+      },
+      "mithril_mining_pick": {
+        "name": "미스릴 채광 곡괭이"
+      },
+      "handaxe": {
+        "name": "손도끼"
+      },
+      "felling_axe": {
+        "name": "벌목 도끼"
+      },
+      "ironbark_axe": {
+        "name": "철피 도끼"
+      },
+      "gathering_sickle": {
+        "name": "채집 낫"
+      },
+      "bronze_sickle": {
+        "name": "청동 낫"
+      },
+      "silverleaf_sickle": {
+        "name": "은엽 낫"
+      },
       "bristleback_maul": {
         "name": "뻣센등뼈 철퇴"
       },
@@ -5315,6 +5578,30 @@ export const ko_KR: EnTranslations = {
       },
       "vanguard_chrome_armor_plate": {
         "name": "선봉대 크롬"
+      },
+      "crownforged_gauntlets": {
+        "name": "왕관벼림 건틀릿"
+      },
+      "nighttalon_grips": {
+        "name": "밤발톱 손아귀"
+      },
+      "soulflame_gloves": {
+        "name": "영혼불꽃 장갑"
+      },
+      "stormcallers_handguards": {
+        "name": "폭풍소환사의 손보호구"
+      },
+      "crownforged_girdle": {
+        "name": "왕관벼림 허리띠"
+      },
+      "nighttalon_waistband": {
+        "name": "밤발톱 허리싸개"
+      },
+      "soulflame_cord": {
+        "name": "영혼불꽃 허리끈"
+      },
+      "stormcallers_waistguard": {
+        "name": "폭풍소환사의 허리보호구"
       }
     },
     "mobs": {
@@ -5506,6 +5793,12 @@ export const ko_KR: EnTranslations = {
       },
       "acolyte_tessa": {
         "name": "수련사제 테사"
+      },
+      "thunzharr_waking_peak": {
+        "name": "천자르, 깨어나는 봉우리"
+      },
+      "thunzharr_stormling": {
+        "name": "깨어난 폭풍 정령"
       },
       "ironvein_foreman": {
         "name": "철맥 감독관"
@@ -6169,6 +6462,36 @@ export const ko_KR: EnTranslations = {
           }
         }
       },
+      "q_stalkers_return": {
+        "title": "추적자들의 귀환",
+        "text": "열두 마리를 잡았는데도 산등성이는 처음보다 더 들끓습니다, {playerName}. 짐승이 굶주림만으로 성벽에 몸을 던질 리 없습니다. 높은 산마루의 무언가가 그들을 몰아내리고 있습니다. 정체를 알기 전까지 사냥은 계속됩니다. 열네 마리 더.",
+        "completion": "열네 마리를 더 잡았는데도 순찰대는 아침마다 새 발자국을 셉니다. 높은 산마루에서 돌아온 정찰병은 설선처럼 하얗게 질려 있었습니다. 방패만 한 발자국에, 추적자라면 절대 남기지 않을 사냥 흔적이 있었다고 합니다. 저 위를 걷는 것은 평범한 고양이가 아닙니다.",
+        "objectives": {
+          "0": {
+            "label": "산등성이 추적자 처치"
+          }
+        }
+      },
+      "q_stalker_cloaks": {
+        "title": "경비대의 망토",
+        "text": "가죽 여덟 장으로 장교들 망토를 덧댔더니, 이제 성벽의 병사 모두가 같은 것을 원합니다, {playerName}. 당연한 바람입니다. 겨울은 손가락부터 앗아 가고 사과는 듣지 않으니까요. 성문 남쪽 산등성이에서 열 장만 더 구해 오면 경비대 전원이 따뜻하게 잘 수 있습니다.",
+        "completion": "좋은 가죽 열 장, 더없이 두툼한... 아니, 이걸 보십시오, {playerName}. 절반이 찢겨 있는데 칼이나 창의 흔적이 아닙니다. 내 손바닥만 한 발톱 자국이 겨울 털가죽을 꿰뚫었습니다. 그 산등성이의 무언가가 제 동족을 물어뜯고 있습니다.",
+        "objectives": {
+          "0": {
+            "label": "산등성이 추적자 가죽"
+          }
+        }
+      },
+      "q_old_cragmaw": {
+        "title": "늙은 크래그모",
+        "text": "산사람들은 정찰병이 찾은 발자국의 주인을 알고 있었습니다. 늙은 크래그모, 제 무리의 세 세대를 먼저 보낸 흉터투성이 폭군 고양이입니다. 추적자들이 내 길로 쏟아지는 것도 그놈 때문입니다, {playerName}. 굴은 남쪽 길 위 서편 산등성이에 있습니다. 동료를 데리고 가서 그 늙은 악마를 처치하십시오.",
+        "completion": "마침내 쓰러졌군요. 산사람들은 그 고양이가 성벽보다 오래 살 거라 장담했었습니다. 이제 추적자들은 높은 설원에 머물 겁니다, {playerName}. 내 순찰대도 피 흘리지 않고 길을 걷겠지요. 당신 덕분에 산등성이 전체가 조용해졌습니다.",
+        "objectives": {
+          "0": {
+            "label": "늙은 크래그모 처치"
+          }
+        }
+      },
       "q_kobold_tunnels": {
         "title": "깊은바위 문제",
         "text": "딥록 코볼트들이 성벽 아래에서 부르는 것처럼 곧장 아래로 파고 있습니다. {playerName}이여, 굴꾼 12마리를 처치하십시오.",
@@ -6693,6 +7016,28 @@ export const ko_KR: EnTranslations = {
         "leaveText": "성물실 폐허의 브라더 할벤에게로 다시 올라갑니다."
       }
     },
+    "letters": {
+      "ravenpost_welcome": {
+        "sender": "레이븐포스트",
+        "subject": "이제 까마귀가 당신을 위해 날아갑니다",
+        "body": "여행자님,\n\n레이븐포스트가 골짜기 곳곳에 홰를 열었습니다. 이스트브룩, 펜브리지, 하이워치에서 까마귀 석주를 찾아보세요. 어느 곳에서든 다른 모험가에게 편지와 동전과 물건을 보낼 수 있고, 까마귀가 물어온 것들을 받을 수 있습니다.\n\n첫 우표값으로 쓸 작은 성의를 동봉합니다.\n\n날개를 활짝,\n레이븐포스트"
+      },
+      "letter_q_wolves": {
+        "sender": "레드브룩 원수",
+        "subject": "우리가 다시 조용해졌소",
+        "body": "목동들이 모처럼 두 다리 뻗고 잘 수 있게 된 것은 그대 덕분이오. 경비 기금에서 작은 성의를 레이븐포스트 편에 보냈소.\n\n칼날을 잘 벼려 두시오.\n- 레드브룩 원수"
+      },
+      "letter_q_greyjaw": {
+        "sender": "레드브룩 원수",
+        "subject": "늙은 회색이빨, 마침내",
+        "body": "이런 작은 마을에서는 소문이 빠르게 도는 법이오. 목동들은 어젯밤 그대의 건강을 위해 잔을 들었고, 윌크스는 그 늑대가 수레만 했다고 우기고 있소. 부풀리게 내버려 두시오. 그대가 얻어낸 명성이니.\n\n경비대를 대신해 식사 한 끼 하시오.\n- 레드브룩 원수"
+      },
+      "letter_q_hollow": {
+        "sender": "알드릭 수사",
+        "subject": "그대가 어둠 속에서 해낸 일",
+        "body": "그 구렁에 무엇이 묻혀 있었는지 아는 이는 거의 없고, 믿을 이는 더 적을 것입니다. 저는 알고 있고, 잊지 않겠습니다.\n\n그대의 길에 늘 빛이 함께하기를.\n- 알드릭 수사"
+      }
+    },
     "itemSets": {
       "crownforged": {
         "name": "왕관벼림 전투장비",
@@ -6706,8 +7051,8 @@ export const ko_KR: EnTranslations = {
       },
       "necromancers": {
         "name": "강령술사의 의복",
-        "bonus2": "피해로 인한 시전 밀림이 50% 감소합니다.",
-        "bonus3": "시전 중 피해를 받아도 밀려나지 않습니다."
+        "bonus2": "넉백되지 않습니다 (넉백 저항 100%).",
+        "bonus3": "지능이 10, 체력이 10만큼 증가합니다."
       },
       "nighttalon": {
         "name": "밤발톱 가죽장비",
@@ -6716,13 +7061,13 @@ export const ko_KR: EnTranslations = {
       },
       "soulflame": {
         "name": "영혼불꽃 의복",
-        "bonus2": "피해로 인한 시전 밀림이 50% 감소합니다.",
-        "bonus3": "시전 중 피해를 받아도 밀려나지 않습니다."
+        "bonus2": "넉백되지 않습니다 (넉백 저항 100%).",
+        "bonus3": "지능이 15, 정신력이 15만큼 증가합니다."
       },
       "stormcallers": {
         "name": "폭풍소환사의 의복",
-        "bonus2": "피해로 인한 시전 밀림이 50% 감소합니다.",
-        "bonus3": "시전 중 피해를 받아도 밀려나지 않습니다."
+        "bonus2": "넉백되지 않습니다 (넉백 저항 100%).",
+        "bonus3": "지능이 15, 정신력이 15만큼 증가합니다."
       },
       "wyrmshadow": {
         "name": "고룡그림자 의복",
@@ -6738,6 +7083,7 @@ export const ko_KR: EnTranslations = {
     "dungeonInstanceBusy": "{name}의 모든 인스턴스가 사용 중입니다. 잠시 후 다시 시도하십시오.",
     "delveLockedChestInteract": "F를 눌러 자물쇠 따기",
     "delveRewardChestInteract": "F를 눌러 전리품 받기",
-    "delveSurfaceExitInteract": "F를 눌러 지상으로 오르기"
+    "delveSurfaceExitInteract": "F를 눌러 지상으로 오르기",
+    "mailboxName": "우편함"
   }
 };
