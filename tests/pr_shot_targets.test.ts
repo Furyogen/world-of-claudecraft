@@ -4,7 +4,7 @@
 // it directly.
 import { describe, expect, it } from 'vitest';
 // @ts-expect-error - plain Node ESM script, no types
-import { classifyDiff, resolveTargets } from '../scripts/pr_shot_targets.mjs';
+import { classifyDiff, diffChangedPaths, resolveTargets } from '../scripts/pr_shot_targets.mjs';
 
 describe('classifyDiff', () => {
   it('treats a backend/data-only diff as non-visual (captures nothing)', () => {
@@ -61,5 +61,38 @@ describe('classifyDiff', () => {
       (t: { key: string }) => t.key,
     );
     expect(keys).toEqual(['inventory', 'world-map']);
+  });
+});
+
+describe('diffChangedPaths', () => {
+  function section(header: string, minus: string, plus: string) {
+    return `diff --git ${header}\n--- ${minus}\n+++ ${plus}\n@@ -1 +1 @@\n-x\n+y\n`;
+  }
+
+  it('collects modified, added, and deleted paths (both diff sides, no /dev/null)', () => {
+    const diff =
+      section('a/src/ui/hud.ts b/src/ui/hud.ts', 'a/src/ui/hud.ts', 'b/src/ui/hud.ts') +
+      section('a/src/render/new.ts b/src/render/new.ts', '/dev/null', 'b/src/render/new.ts') +
+      section(
+        'a/src/styles/hud.mobile.css b/src/styles/hud.mobile.css',
+        'a/src/styles/hud.mobile.css',
+        '/dev/null',
+      );
+    expect(diffChangedPaths(diff).sort()).toEqual([
+      'src/render/new.ts',
+      'src/styles/hud.mobile.css',
+      'src/ui/hud.ts',
+    ]);
+  });
+
+  it('a DELETED visual file still classifies as a visual change', () => {
+    const diff = section(
+      'a/src/styles/hud.mobile.css b/src/styles/hud.mobile.css',
+      'a/src/styles/hud.mobile.css',
+      '/dev/null',
+    );
+    const plan = classifyDiff(diffChangedPaths(diff));
+    expect(plan.isVisual).toBe(true);
+    expect(plan.generic).toEqual(['hud-desktop', 'hud-mobile']);
   });
 });

@@ -22,7 +22,7 @@
 import fs from 'node:fs';
 import puppeteer from 'puppeteer-core';
 import { enterOfflineGame } from './enter_offline_game.mjs';
-import { classifyDiff } from './pr_shot_targets.mjs';
+import { classifyDiff, diffChangedPaths } from './pr_shot_targets.mjs';
 
 const URL = process.env.GAME_URL ?? 'http://localhost:5173';
 const OUT = process.env.SHOTS_DIR ?? 'pr-shots';
@@ -34,9 +34,8 @@ let plan = { specific: [], generic: [], isVisual: false };
 if (DIFF_FILE) {
   try {
     const diff = fs.readFileSync(DIFF_FILE, 'utf8');
-    const files = [...diff.matchAll(/^\+\+\+ b\/(.+)$/gm)]
-      .map((m) => m[1])
-      .filter((p) => p !== '/dev/null');
+    // Both diff sides, so a DELETED visual file (whose "+++" side is /dev/null) still counts.
+    const files = diffChangedPaths(diff);
     plan = classifyDiff(files);
     const shooting = plan.specific.length
       ? plan.specific.map((t) => t.key).join(', ')

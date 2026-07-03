@@ -81,6 +81,15 @@ export function resolveTargets(changedFiles) {
   return TARGETS.filter((t) => changedFiles.some((f) => t.when.some((w) => f.includes(w))));
 }
 
+// Every path a unified diff touches. Reads BOTH sides of each file header: an addition has
+// only a real "+++ b/" path, a deletion only a real "--- a/" path (its "+++" side is
+// /dev/null, which must still count as a visual change when a renderer/CSS file is removed).
+export function diffChangedPaths(diff) {
+  const paths = new Set();
+  for (const m of diff.matchAll(/^(?:---|\+\+\+) [ab]\/(.+)$/gm)) paths.add(m[1]);
+  return [...paths];
+}
+
 // Path prefixes/names that make a change "visual": the renderer, the HUD/UI, the extracted
 // CSS, local input/camera/mobile controls, and the two HTML shells. A change here can alter
 // what the client looks like even when it does not map to a specific window target above.

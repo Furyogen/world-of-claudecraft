@@ -19,7 +19,14 @@ import { upsertStickyComment } from './gh_sticky_comment.mjs';
 const MARKER = '<!-- pr-ai-screenshots -->';
 const OUT = process.env.SHOTS_DIR ?? 'pr-shots';
 const prNumber = process.env.PR_NUMBER;
-const runId = process.env.GITHUB_RUN_ID;
+// Key hosted image paths by run id AND attempt: GITHUB_RUN_ID is stable across re-runs,
+// and a Contents-API PUT to an existing path without its sha fails with 422, which would
+// silently drop every image on a re-run. The attempt suffix keeps each upload path fresh.
+// (Both are default Actions env vars; no workflow wiring needed.)
+const runAttempt = process.env.GITHUB_RUN_ATTEMPT;
+const runId = process.env.GITHUB_RUN_ID
+  ? `${process.env.GITHUB_RUN_ID}${runAttempt ? `-${runAttempt}` : ''}`
+  : undefined;
 
 let manifest = { mode: 'no-visual', captured: [], errors: [] };
 try {
