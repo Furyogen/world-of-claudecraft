@@ -2259,7 +2259,7 @@ async function startGame(
 
     // freeze movement while the game menu is up so WASD doesn't walk the
     // character behind it (other windows stay non-modal, as before)
-    input.suspendMovement = !gameInputReady || hud.isModalOpen();
+    input.setSuspendMovement(!gameInputReady || hud.isModalOpen());
     perf.trace('input.updateTouchLook', () => input.updateTouchLook(frameDt), {
       frameDtMs: frameDt * 1000,
     });
@@ -2472,7 +2472,7 @@ async function startGame(
       input.clearControllerMoveInput();
     },
   };
-  input.suspendMovement = true;
+  input.setSuspendMovement(true);
   await nextPaint();
   try {
     await renderer.prewarmInitialScene();
