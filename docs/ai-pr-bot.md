@@ -25,8 +25,9 @@ them is a required check.
    Inline embedding needs a URL GitHub can fetch (artifacts are not embeddable and markdown
    does not render `data:` URIs), so `scripts/gh_image_host.mjs` uploads each PNG to a
    bot-owned orphan branch (`bot-pr-screenshots`) via the REST API and references its raw
-   URL. This needs the job's `contents: write` permission; on a fork PR the token is
-   read-only, so it degrades to a note instead of broken image links.
+   URL. This needs the job's `contents: write` permission. If hosting fails while
+   commenting still works, the comment degrades to a note instead of broken image links;
+   on a fork PR the read-only token can do neither, so the comment is skipped entirely.
 2. **AI review** (`ai-review` job). Reviews the PR with the OpenAI Codex CLI,
    authenticated with a ChatGPT account via OAuth (no API key), and posts the review as a
    sticky PR comment: a short overall assessment, a "Verified" list of the commands it
@@ -113,8 +114,9 @@ The screenshots job sends nothing to a third party; it only renders your own cli
 Pull requests from forks get a read-only `GITHUB_TOKEN` and cannot read repo secrets on
 the `pull_request` trigger. Both comment steps and the automatic AI review degrade to a
 no-op there (the scripts detect the missing write access / auth and skip), so the workflow
-never errors on a fork PR. Screenshots are still captured, but with a read-only token they
-cannot be hosted for inline embedding, so the comment shows a short note instead.
+never errors on a fork PR. Screenshots are still captured, but a read-only token can
+neither host the images nor post a comment at all, so on a fork PR the screenshot comment
+is skipped entirely (the frames exist only in the job log's capture output).
 
 The on-demand `/review` and `/suggest` comment trigger is different: `issue_comment`
 always runs with full repo secrets, regardless of whether the PR is from a fork, and it
