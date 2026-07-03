@@ -202,11 +202,11 @@ export const nl_NL: EnTranslations = {
       "spinResult": "+{points} punten",
       "spinButton": "Draaien",
       "tasks": "Taken",
-      "taskMultiplier": "x{multiplier} multiplier",
-      "pointsGained": "{points} daily rewards points gained.",
+      "taskMultiplier": "vermenigvuldiger x{multiplier}",
+      "pointsGained": "{points} dagelijkse beloningspunten behaald.",
       "leaderboard": "Dagelijkse ranglijst",
-      "totalPlayer": "{count} player today",
-      "totalPlayers": "{count} players today",
+      "totalPlayer": "{count} speler vandaag",
+      "totalPlayers": "{count} spelers vandaag",
       "history": "Eerdere winnaars",
       "noLeaders": "Nog geen punten.",
       "noHistory": "Nog geen uitbetalingen.",
@@ -390,11 +390,11 @@ export const nl_NL: EnTranslations = {
       "showWalletOnCharacterScreen": "Portemonnee tonen op personagescherm",
       "showWalletOnPlayerCard": "Portemonnee tonen op spelerskaart",
       "showDevBadges": "Ontwikkelaarsinsignes tonen",
-      "showOwnNameplate": "Show My Nameplate",
+      "showOwnNameplate": "Mijn naamplaat tonen",
       "uiScale": "UI-schaal",
       "highContrastBackground": "Hoog-contrastachtergrond",
       "startAttackOnAbility": "Auto-aanval bij gebruik van vaardigheid",
-      "walkByAutoloot": "Walk-by Autoloot",
+      "walkByAutoloot": "Automatisch plunderen bij voorbijlopen",
       "groundReticle": "Grondrichtkruis",
       "showItemLevel": "Itemniveau tonen",
       "itemLevelLine": "Itemniveau {level}",
@@ -828,7 +828,7 @@ export const nl_NL: EnTranslations = {
       }
     },
     "worldBoss": {
-      "spawn": "{name} rises over Thornpeak Heights!"
+      "spawn": "{name} rijst op boven Thornpeak Heights!"
     },
     "loot": {
       "chestTitle": "Kist"
@@ -844,12 +844,12 @@ export const nl_NL: EnTranslations = {
     "mobTooltip": {
       "levelFamily": "Level {level} {family}",
       "familyDemon": "Demon",
-      "hostile": "Hostile",
-      "friendly": "Friendly"
+      "hostile": "Vijandig",
+      "friendly": "Vriendelijk"
     },
     "targetFrame": {
-      "unlock": "Move target frame",
-      "lock": "Lock target frame"
+      "unlock": "Doelframe verplaatsen",
+      "lock": "Doelframe vergrendelen"
     },
     "itemTooltip": {
       "requiresLevel": "Vereist niveau {level}"
@@ -932,7 +932,7 @@ export const nl_NL: EnTranslations = {
       "memberSinceDays": "{days}d in de Discord",
       "roleTag": {
         "levyst": "Levy St",
-        "admin": "Admin",
+        "admin": "Beheerder",
         "devs": "Dev",
         "mods": "Mod",
         "artists": "Artiest"
@@ -1973,9 +1973,9 @@ export const nl_NL: EnTranslations = {
     "password": "Wachtwoord",
     "passwordError": "Voer je wachtwoord in.",
     "passwordPlaceholder": "Wachtwoord invoeren",
-    "email": "Email",
-    "emailPlaceholder": "you@example.com",
-    "emailError": "Please enter a valid email address.",
+    "email": "E-mail",
+    "emailPlaceholder": "jij@example.com",
+    "emailError": "Voer een geldig e-mailadres in.",
     "showPassword": "Wachtwoord tonen",
     "hidePassword": "Wachtwoord verbergen",
     "logIn": "Inloggen",
@@ -2003,12 +2003,12 @@ export const nl_NL: EnTranslations = {
     "twoFactorPlaceholder": "6-cijferige of herstelcode",
     "twoFactorHint": "Voer de code uit je authenticator-app in, of een van je herstelcodes.",
     "recovery": {
-      "title": "Add a recovery email",
-      "body": "Set an email address so you can recover your account. We only use it to confirm you own this account if you ever need to reset your password.",
-      "save": "Save email",
-      "logOut": "Log out",
-      "invalid": "Please enter a valid email address.",
-      "failed": "Could not save your email. Please try again."
+      "title": "Herstel-e-mail toevoegen",
+      "body": "Stel een e-mailadres in zodat je je account kunt herstellen. We gebruiken het alleen om te bevestigen dat dit account van jou is als je ooit je wachtwoord moet resetten.",
+      "save": "E-mail opslaan",
+      "logOut": "Uitloggen",
+      "invalid": "Voer een geldig e-mailadres in.",
+      "failed": "Je e-mail kon niet worden opgeslagen. Probeer het opnieuw."
     }
   },
   "wallet": {
@@ -2063,7 +2063,7 @@ export const nl_NL: EnTranslations = {
     "helpLinkedWithBalance": "Houdervoordelen zijn actief. Portemonnee-app verbonden in deze browser.",
     "helpLinkedDisconnected": "Houdervoordelen zijn actief. Verbind de app wanneer je moet ondertekenen of uitgeven.",
     "helpLinkedDisconnectedWithBalance": "Houdervoordelen zijn actief. Verbind de app wanneer je moet ondertekenen of uitgeven.",
-    "extensionHelp": "To see a wallet here, keep a browser wallet extension such as Solflare Wallet active.",
+    "extensionHelp": "Om hier een wallet te zien, houd je een browser-walletuitbreiding zoals Solflare Wallet actief.",
     "flowConnect": "Kies een portemonnee. De verificatie gaat automatisch verder.",
     "flowSign": "Onderteken het verificatiebericht in je portemonnee-app. Geen transactie of SOL vereist.",
     "flowVerify": "Eigendom van portemonnee verifiëren...",
@@ -3506,8 +3506,8 @@ export const nl_NL: EnTranslations = {
     "tracker": {
       "title": "Quests",
       "complete": "Voltooid",
-      "showOnMap": "Show {name} on the map",
-      "hideFromMap": "Hide {name} from the map"
+      "showOnMap": "{name} op de kaart tonen",
+      "hideFromMap": "{name} van de kaart verbergen"
     },
     "log": {
       "title": "Questlogboek",
@@ -5653,10 +5653,10 @@ export const nl_NL: EnTranslations = {
         "name": "Acoliet Tessa"
       },
       "thunzharr_waking_peak": {
-        "name": "Thunzharr, the Waking Peak"
+        "name": "Thunzharr, de wakende piek"
       },
       "thunzharr_stormling": {
-        "name": "Roused Stormling"
+        "name": "Gewekte stormling"
       },
       "ironvein_foreman": {
         "name": "IJzerader-Voorman"
@@ -6321,32 +6321,32 @@ export const nl_NL: EnTranslations = {
         }
       },
       "q_stalkers_return": {
-        "title": "The Stalkers Return",
-        "text": "Twelve dead, and the ridge crawls thicker than the day you started, {playerName}. Beasts do not throw themselves at a wall out of hunger. Something on the high ridge is pushing them down, and until I know what, the culling does not stop. Fourteen more.",
-        "completion": "Fourteen more, and still my patrols count fresh tracks by morning. My scout came back from the high ridge white as the snowline: prints the size of a shield, she says, and old kills no stalker would leave. Whatever walks up there is no ordinary cat.",
+        "title": "De stalkers keren terug",
+        "text": "Twaalf dood, en de rug krioelt dichter dan op de dag dat je begon, {playerName}. Beesten werpen zich niet uit honger tegen een muur. Iets op de hoge rug drijft ze omlaag, en tot ik weet wat, stopt het ruimen niet. Nog veertien.",
+        "completion": "Nog veertien, en toch tellen mijn patrouilles elke ochtend verse sporen. Mijn verkenner kwam terug van de hoge rug, wit als de sneeuwgrens: afdrukken zo groot als een schild, zegt ze, en oude prooien die geen stalker zou laten liggen. Wat daarboven loopt is geen gewone kat.",
         "objectives": {
           "0": {
-            "label": "Ridge Stalker slain"
+            "label": "Rugstalker gedood"
           }
         }
       },
       "q_stalker_cloaks": {
-        "title": "Cloaks for the Watch",
-        "text": "Eight pelts lined the officers' cloaks, and now every soldier on the wall wants the same, {playerName}. They are right to want it: winter takes fingers first and apologies never. Ten more pelts from the ridges south of the gate, and the whole watch sleeps warm.",
-        "completion": "Ten good pelts, thick as any I have... no, look at these, {playerName}. Torn, half of them, and by no blade or spear. Claw marks wide as my hand, right through the winter coat. Something on that ridge is savaging its own kind.",
+        "title": "Mantels voor de wacht",
+        "text": "Acht vachten voerden de mantels van de officieren, en nu wil elke soldaat op de muur hetzelfde, {playerName}. Ze hebben gelijk: de winter neemt eerst vingers, en excuses geven geen warmte. Nog tien vachten van de ruggen ten zuiden van de poort, en de hele wacht slaapt warm.",
+        "completion": "Tien goede vachten, dik als alles wat ik heb... nee, kijk hiernaar, {playerName}. Gescheurd, de helft ervan, en niet door zwaard of speer. Klauwsporen zo breed als mijn hand, dwars door de wintervacht. Iets op die rug verscheurt zijn eigen soort.",
         "objectives": {
           "0": {
-            "label": "Ridge Stalker Pelt"
+            "label": "Rugstalker-vacht"
           }
         }
       },
       "q_old_cragmaw": {
-        "title": "Old Cragmaw",
-        "text": "The mountain folk put a name to the prints my scout found: Old Cragmaw, a scar-pelted tyrant of a cat that has outlived three generations of its own pack. It is the reason the stalkers flood my road, {playerName}. Its den sits on the western ridge above the road south. Bring a friend, and put the old devil down.",
-        "completion": "Down at last. The mountain folk swore that cat would outlive the wall itself. The stalkers will keep to their high snows now, {playerName}, and my patrols will walk the road without bleeding for it. The whole ridge is quieter for your work.",
+        "title": "Oude Cragmaw",
+        "text": "Het bergvolk gaf een naam aan de sporen die mijn verkenner vond: Oude Cragmaw, een littekenvellige kattenheerser die drie generaties van zijn eigen roedel heeft overleefd. Hij is de reden dat de stalkers mijn weg overspoelen, {playerName}. Zijn hol ligt op de westelijke rug boven de zuidelijke weg. Neem een vriend mee en vel die oude duivel.",
+        "completion": "Eindelijk neer. Het bergvolk zwoer dat die kat de muur zelf zou overleven. De stalkers blijven nu bij hun hoge sneeuw, {playerName}, en mijn patrouilles kunnen de weg lopen zonder ervoor te bloeden. De hele rug is rustiger door jouw werk.",
         "objectives": {
           "0": {
-            "label": "Old Cragmaw slain"
+            "label": "Oude Cragmaw gedood"
           }
         }
       },

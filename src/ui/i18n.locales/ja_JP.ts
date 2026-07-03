@@ -5093,4 +5093,6 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.dailyRewards.remainingMinutes': '{minutes}分',
   'hudChrome.dailyRewards.sol': '{amount} SOL',
   'hudChrome.dailyRewards.usd': '{amount} USD',
+  'auth.emailPlaceholder': "あなた@example.com",
+  'auth.recovery.logOut': "ログアウト",
 };

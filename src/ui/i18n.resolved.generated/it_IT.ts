@@ -202,11 +202,11 @@ export const it_IT: EnTranslations = {
       "spinResult": "+{points} punti",
       "spinButton": "Gira",
       "tasks": "Incarichi",
-      "taskMultiplier": "x{multiplier} multiplier",
-      "pointsGained": "{points} daily rewards points gained.",
+      "taskMultiplier": "moltiplicatore x{multiplier}",
+      "pointsGained": "{points} punti ricompense giornaliere ottenuti.",
       "leaderboard": "Classifica giornaliera",
-      "totalPlayer": "{count} player today",
-      "totalPlayers": "{count} players today",
+      "totalPlayer": "{count} giocatore oggi",
+      "totalPlayers": "{count} giocatori oggi",
       "history": "Vincitori precedenti",
       "noLeaders": "Ancora nessun punto.",
       "noHistory": "Ancora nessun pagamento.",
@@ -390,11 +390,11 @@ export const it_IT: EnTranslations = {
       "showWalletOnCharacterScreen": "Mostra portafoglio nella schermata personaggi",
       "showWalletOnPlayerCard": "Mostra portafoglio nella scheda giocatore",
       "showDevBadges": "Mostra distintivi sviluppatore",
-      "showOwnNameplate": "Show My Nameplate",
+      "showOwnNameplate": "Mostra la mia targhetta",
       "uiScale": "Scala dell'interfaccia",
       "highContrastBackground": "Sfondo a contrasto elevato",
       "startAttackOnAbility": "Attacco automatico all'uso dell'abilita",
-      "walkByAutoloot": "Walk-by Autoloot",
+      "walkByAutoloot": "Bottino automatico al passaggio",
       "groundReticle": "Reticolo di puntamento a terra",
       "showItemLevel": "Mostra livello oggetto",
       "itemLevelLine": "Livello oggetto {level}",
@@ -842,14 +842,14 @@ export const it_IT: EnTranslations = {
       "mobElite": "[{level}+] {name}"
     },
     "mobTooltip": {
-      "levelFamily": "Level {level} {family}",
-      "familyDemon": "Demon",
-      "hostile": "Hostile",
-      "friendly": "Friendly"
+      "levelFamily": "Livello {level} {family}",
+      "familyDemon": "Demone",
+      "hostile": "Ostile",
+      "friendly": "Amichevole"
     },
     "targetFrame": {
-      "unlock": "Move target frame",
-      "lock": "Lock target frame"
+      "unlock": "Sposta riquadro bersaglio",
+      "lock": "Blocca riquadro bersaglio"
     },
     "itemTooltip": {
       "requiresLevel": "Richiede livello {level}"
@@ -932,7 +932,7 @@ export const it_IT: EnTranslations = {
       "memberSinceDays": "{days}g nel Discord",
       "roleTag": {
         "levyst": "Levy St",
-        "admin": "Admin",
+        "admin": "Amministratore",
         "devs": "Dev",
         "mods": "Mod",
         "artists": "Artista"
@@ -1974,8 +1974,8 @@ export const it_IT: EnTranslations = {
     "passwordError": "Inserisci la tua password.",
     "passwordPlaceholder": "Inserisci la password",
     "email": "Email",
-    "emailPlaceholder": "you@example.com",
-    "emailError": "Please enter a valid email address.",
+    "emailPlaceholder": "tu@example.com",
+    "emailError": "Inserisci un indirizzo email valido.",
     "showPassword": "Mostra password",
     "hidePassword": "Nascondi password",
     "logIn": "Accedi",
@@ -2003,12 +2003,12 @@ export const it_IT: EnTranslations = {
     "twoFactorPlaceholder": "Codice a 6 cifre o codice di recupero",
     "twoFactorHint": "Inserisci il codice della tua app di autenticazione, oppure uno dei tuoi codici di recupero.",
     "recovery": {
-      "title": "Add a recovery email",
-      "body": "Set an email address so you can recover your account. We only use it to confirm you own this account if you ever need to reset your password.",
-      "save": "Save email",
-      "logOut": "Log out",
-      "invalid": "Please enter a valid email address.",
-      "failed": "Could not save your email. Please try again."
+      "title": "Aggiungi email di recupero",
+      "body": "Imposta un indirizzo email per poter recuperare il tuo account. Lo usiamo solo per confermare che l’account è tuo se dovrai reimpostare la password.",
+      "save": "Salva email",
+      "logOut": "Esci",
+      "invalid": "Inserisci un indirizzo email valido.",
+      "failed": "Impossibile salvare la tua email. Riprova."
     }
   },
   "wallet": {
@@ -2063,7 +2063,7 @@ export const it_IT: EnTranslations = {
     "helpLinkedWithBalance": "I vantaggi da titolare sono attivi. L'app del portafoglio è connessa su questo browser.",
     "helpLinkedDisconnected": "I vantaggi da titolare sono attivi. Connetti l'app quando devi firmare o spendere.",
     "helpLinkedDisconnectedWithBalance": "I vantaggi da titolare sono attivi. Connetti l'app quando devi firmare o spendere.",
-    "extensionHelp": "To see a wallet here, keep a browser wallet extension such as Solflare Wallet active.",
+    "extensionHelp": "Per vedere un wallet qui, tieni attiva un’estensione wallet del browser come Solflare Wallet.",
     "flowConnect": "Scegli un portafoglio. La verifica continua automaticamente.",
     "flowSign": "Firma il messaggio di verifica nell'app del portafoglio. Non servono transazioni né SOL.",
     "flowVerify": "Verifica della proprietà del portafoglio...",
@@ -6321,32 +6321,32 @@ export const it_IT: EnTranslations = {
         }
       },
       "q_stalkers_return": {
-        "title": "The Stalkers Return",
-        "text": "Twelve dead, and the ridge crawls thicker than the day you started, {playerName}. Beasts do not throw themselves at a wall out of hunger. Something on the high ridge is pushing them down, and until I know what, the culling does not stop. Fourteen more.",
-        "completion": "Fourteen more, and still my patrols count fresh tracks by morning. My scout came back from the high ridge white as the snowline: prints the size of a shield, she says, and old kills no stalker would leave. Whatever walks up there is no ordinary cat.",
+        "title": "Il ritorno degli stalker",
+        "text": "Dodici morti, e la cresta brulica più fitta del giorno in cui hai cominciato, {playerName}. Le bestie non si gettano contro un muro per fame. Qualcosa sulla cresta alta le spinge giù, e finché non saprò cosa, l’abbattimento non si ferma. Altri quattordici.",
+        "completion": "Altri quattordici, e le mie pattuglie contano ancora tracce fresche al mattino. La mia esploratrice è tornata dalla cresta alta bianca come la linea della neve: impronte grandi come uno scudo, dice, e vecchie uccisioni che nessuno stalker lascerebbe. Qualunque cosa cammini lassù non è un gatto comune.",
         "objectives": {
           "0": {
-            "label": "Ridge Stalker slain"
+            "label": "Stalker della cresta ucciso"
           }
         }
       },
       "q_stalker_cloaks": {
-        "title": "Cloaks for the Watch",
-        "text": "Eight pelts lined the officers' cloaks, and now every soldier on the wall wants the same, {playerName}. They are right to want it: winter takes fingers first and apologies never. Ten more pelts from the ridges south of the gate, and the whole watch sleeps warm.",
-        "completion": "Ten good pelts, thick as any I have... no, look at these, {playerName}. Torn, half of them, and by no blade or spear. Claw marks wide as my hand, right through the winter coat. Something on that ridge is savaging its own kind.",
+        "title": "Mantelli per la guardia",
+        "text": "Otto pelli foderavano i mantelli degli ufficiali, e ora ogni soldato sul muro vuole lo stesso, {playerName}. Hanno ragione: l’inverno prende prima le dita, e le scuse non scaldano. Dieci altre pelli dalle creste a sud del cancello, e tutta la guardia dormirà al caldo.",
+        "completion": "Dieci buone pelli, spesse come qualunque cosa io abbia... no, guarda queste, {playerName}. Strappate, metà di loro, e non da lama o lancia. Segni di artigli larghi come la mia mano, attraverso il manto invernale. Qualcosa su quella cresta sta sbranando i suoi simili.",
         "objectives": {
           "0": {
-            "label": "Ridge Stalker Pelt"
+            "label": "Pelle di stalker della cresta"
           }
         }
       },
       "q_old_cragmaw": {
-        "title": "Old Cragmaw",
-        "text": "The mountain folk put a name to the prints my scout found: Old Cragmaw, a scar-pelted tyrant of a cat that has outlived three generations of its own pack. It is the reason the stalkers flood my road, {playerName}. Its den sits on the western ridge above the road south. Bring a friend, and put the old devil down.",
-        "completion": "Down at last. The mountain folk swore that cat would outlive the wall itself. The stalkers will keep to their high snows now, {playerName}, and my patrols will walk the road without bleeding for it. The whole ridge is quieter for your work.",
+        "title": "Vecchio Cragmaw",
+        "text": "La gente di montagna ha dato un nome alle impronte trovate dalla mia esploratrice: Vecchio Cragmaw, un tiranno felino dal pelo sfregiato che ha superato tre generazioni del suo stesso branco. È per lui che gli stalker invadono la mia strada, {playerName}. La sua tana si trova sulla cresta occidentale sopra la strada a sud. Porta un amico e abbatti quel vecchio diavolo.",
+        "completion": "Finalmente a terra. La gente di montagna giurava che quel gatto sarebbe sopravvissuto al muro stesso. Gli stalker resteranno tra le loro nevi alte ora, {playerName}, e le mie pattuglie cammineranno sulla strada senza sanguinare per questo. Tutta la cresta è più quieta grazie al tuo lavoro.",
         "objectives": {
           "0": {
-            "label": "Old Cragmaw slain"
+            "label": "Vecchio Cragmaw ucciso"
           }
         }
       },

@@ -202,11 +202,11 @@ export const sv_SE: EnTranslations = {
       "spinResult": "+{points} poäng",
       "spinButton": "Snurra",
       "tasks": "Uppgifter",
-      "taskMultiplier": "x{multiplier} multiplier",
-      "pointsGained": "{points} daily rewards points gained.",
+      "taskMultiplier": "multiplikator x{multiplier}",
+      "pointsGained": "{points} dagliga belöningspoäng tjänade.",
       "leaderboard": "Daglig topplista",
-      "totalPlayer": "{count} player today",
-      "totalPlayers": "{count} players today",
+      "totalPlayer": "{count} spelare i dag",
+      "totalPlayers": "{count} spelare i dag",
       "history": "Tidigare vinnare",
       "noLeaders": "Inga poäng ännu.",
       "noHistory": "Inga utbetalningar ännu.",
@@ -390,11 +390,11 @@ export const sv_SE: EnTranslations = {
       "showWalletOnCharacterScreen": "Visa plånbok på karaktärsskärmen",
       "showWalletOnPlayerCard": "Visa plånbok på spelarkortet",
       "showDevBadges": "Visa utvecklarmärken",
-      "showOwnNameplate": "Show My Nameplate",
+      "showOwnNameplate": "Visa min namnplåt",
       "uiScale": "Gränssnittsskala",
       "highContrastBackground": "Bakgrund med hög kontrast",
       "startAttackOnAbility": "Automatisk attack vid förmågeanvändning",
-      "walkByAutoloot": "Walk-by Autoloot",
+      "walkByAutoloot": "Automatisk plundring när du går förbi",
       "groundReticle": "Markriktmedel",
       "showItemLevel": "Visa föremålsnivå",
       "itemLevelLine": "Föremålsnivå {level}",
@@ -828,7 +828,7 @@ export const sv_SE: EnTranslations = {
       }
     },
     "worldBoss": {
-      "spawn": "{name} rises over Thornpeak Heights!"
+      "spawn": "{name} reser sig över Thornpeak Heights!"
     },
     "loot": {
       "chestTitle": "Kista"
@@ -842,14 +842,14 @@ export const sv_SE: EnTranslations = {
       "mobElite": "[{level}+] {name}"
     },
     "mobTooltip": {
-      "levelFamily": "Level {level} {family}",
+      "levelFamily": "Nivå {level} {family}",
       "familyDemon": "Demon",
-      "hostile": "Hostile",
-      "friendly": "Friendly"
+      "hostile": "Fientlig",
+      "friendly": "Vänlig"
     },
     "targetFrame": {
-      "unlock": "Move target frame",
-      "lock": "Lock target frame"
+      "unlock": "Flytta målram",
+      "lock": "Lås målram"
     },
     "itemTooltip": {
       "requiresLevel": "Kräver nivå {level}"
@@ -932,7 +932,7 @@ export const sv_SE: EnTranslations = {
       "memberSinceDays": "{days}d i Discord",
       "roleTag": {
         "levyst": "Levy St",
-        "admin": "Admin",
+        "admin": "Administratör",
         "devs": "Utvecklare",
         "mods": "Moderator",
         "artists": "Konstnär"
@@ -1973,9 +1973,9 @@ export const sv_SE: EnTranslations = {
     "password": "Lösenord",
     "passwordError": "Ange ditt lösenord.",
     "passwordPlaceholder": "Ange lösenord",
-    "email": "Email",
-    "emailPlaceholder": "you@example.com",
-    "emailError": "Please enter a valid email address.",
+    "email": "E-post",
+    "emailPlaceholder": "du@example.com",
+    "emailError": "Ange en giltig e-postadress.",
     "showPassword": "Visa lösenord",
     "hidePassword": "Dölj lösenord",
     "logIn": "Logga in",
@@ -2003,12 +2003,12 @@ export const sv_SE: EnTranslations = {
     "twoFactorPlaceholder": "6-siffrig eller återställningskod",
     "twoFactorHint": "Ange koden från din autentiseringsapp, eller en av dina återställningskoder.",
     "recovery": {
-      "title": "Add a recovery email",
-      "body": "Set an email address so you can recover your account. We only use it to confirm you own this account if you ever need to reset your password.",
-      "save": "Save email",
-      "logOut": "Log out",
-      "invalid": "Please enter a valid email address.",
-      "failed": "Could not save your email. Please try again."
+      "title": "Lägg till återställnings-e-post",
+      "body": "Ange en e-postadress så att du kan återställa ditt konto. Vi använder den bara för att bekräfta att kontot är ditt om du behöver återställa lösenordet.",
+      "save": "Spara e-post",
+      "logOut": "Logga ut",
+      "invalid": "Ange en giltig e-postadress.",
+      "failed": "Kunde inte spara din e-post. Försök igen."
     }
   },
   "wallet": {
@@ -2063,7 +2063,7 @@ export const sv_SE: EnTranslations = {
     "helpLinkedWithBalance": "Innehavarförmåner är aktiva. Plånboksappen är ansluten i den här webbläsaren.",
     "helpLinkedDisconnected": "Innehavarförmåner är aktiva. Anslut appen när du behöver signera eller spendera.",
     "helpLinkedDisconnectedWithBalance": "Innehavarförmåner är aktiva. Anslut appen när du behöver signera eller spendera.",
-    "extensionHelp": "To see a wallet here, keep a browser wallet extension such as Solflare Wallet active.",
+    "extensionHelp": "För att se en plånbok här, håll ett webbläsartillägg för plånbok som Solflare Wallet aktivt.",
     "flowConnect": "Välj en plånbok. Verifieringen fortsätter automatiskt.",
     "flowSign": "Signera verifieringsmeddelandet i din plånboksapp. Ingen transaktion eller SOL krävs.",
     "flowVerify": "Verifierar plånboksägande...",
@@ -3506,8 +3506,8 @@ export const sv_SE: EnTranslations = {
     "tracker": {
       "title": "Uppdrag",
       "complete": "Slutfört",
-      "showOnMap": "Show {name} on the map",
-      "hideFromMap": "Hide {name} from the map"
+      "showOnMap": "Visa {name} på kartan",
+      "hideFromMap": "Dölj {name} från kartan"
     },
     "log": {
       "title": "Uppdragslogg",
@@ -5653,10 +5653,10 @@ export const sv_SE: EnTranslations = {
         "name": "Akolyten Tessa"
       },
       "thunzharr_waking_peak": {
-        "name": "Thunzharr, the Waking Peak"
+        "name": "Thunzharr, den vaknande toppen"
       },
       "thunzharr_stormling": {
-        "name": "Roused Stormling"
+        "name": "Väckt stormling"
       },
       "ironvein_foreman": {
         "name": "Järnådersförman"
@@ -6321,32 +6321,32 @@ export const sv_SE: EnTranslations = {
         }
       },
       "q_stalkers_return": {
-        "title": "The Stalkers Return",
-        "text": "Twelve dead, and the ridge crawls thicker than the day you started, {playerName}. Beasts do not throw themselves at a wall out of hunger. Something on the high ridge is pushing them down, and until I know what, the culling does not stop. Fourteen more.",
-        "completion": "Fourteen more, and still my patrols count fresh tracks by morning. My scout came back from the high ridge white as the snowline: prints the size of a shield, she says, and old kills no stalker would leave. Whatever walks up there is no ordinary cat.",
+        "title": "Stalkers återvänder",
+        "text": "Tolv döda, och ryggen kryllar tätare än dagen du började, {playerName}. Bestar kastar sig inte mot en mur av hunger. Något på den höga ryggen driver dem nedåt, och tills jag vet vad, upphör inte gallringen. Fjorton till.",
+        "completion": "Fjorton till, och ändå räknar mina patruller färska spår varje morgon. Min spejare kom tillbaka från den höga ryggen vit som snögränsen: avtryck stora som en sköld, säger hon, och gamla byten ingen stalker skulle lämna. Vad som än går där uppe är ingen vanlig katt.",
         "objectives": {
           "0": {
-            "label": "Ridge Stalker slain"
+            "label": "Ryggstalker dräpt"
           }
         }
       },
       "q_stalker_cloaks": {
-        "title": "Cloaks for the Watch",
-        "text": "Eight pelts lined the officers' cloaks, and now every soldier on the wall wants the same, {playerName}. They are right to want it: winter takes fingers first and apologies never. Ten more pelts from the ridges south of the gate, and the whole watch sleeps warm.",
-        "completion": "Ten good pelts, thick as any I have... no, look at these, {playerName}. Torn, half of them, and by no blade or spear. Claw marks wide as my hand, right through the winter coat. Something on that ridge is savaging its own kind.",
+        "title": "Mantlar åt vakten",
+        "text": "Åtta pälsar fodrade officerarnas mantlar, och nu vill varje soldat på muren ha samma sak, {playerName}. De har rätt: vintern tar fingrar först, och ursäkter värmer inte. Tio pälsar till från ryggarna söder om porten, så sover hela vakten varmt.",
+        "completion": "Tio goda pälsar, tjocka som alla jag har... nej, se på dem, {playerName}. Sönderrivna, hälften av dem, och inte av klinga eller spjut. Klomärken breda som min hand, rakt genom vinterpälsen. Något på den ryggen sliter sönder sina egna.",
         "objectives": {
           "0": {
-            "label": "Ridge Stalker Pelt"
+            "label": "Ryggstalker-päls"
           }
         }
       },
       "q_old_cragmaw": {
-        "title": "Old Cragmaw",
-        "text": "The mountain folk put a name to the prints my scout found: Old Cragmaw, a scar-pelted tyrant of a cat that has outlived three generations of its own pack. It is the reason the stalkers flood my road, {playerName}. Its den sits on the western ridge above the road south. Bring a friend, and put the old devil down.",
-        "completion": "Down at last. The mountain folk swore that cat would outlive the wall itself. The stalkers will keep to their high snows now, {playerName}, and my patrols will walk the road without bleeding for it. The whole ridge is quieter for your work.",
+        "title": "Gamle Cragmaw",
+        "text": "Bergsfolket gav ett namn åt spåren min spejare hittade: Gamle Cragmaw, en ärrpälsad katt-tyrann som överlevt tre generationer av sin egen flock. Han är orsaken till att stalkers svämmar över min väg, {playerName}. Hans lya ligger på den västra ryggen ovanför vägen söderut. Ta med en vän och fäll den gamle djävulen.",
+        "completion": "Nere till sist. Bergsfolket svor att katten skulle överleva själva muren. Stalkers håller sig till sina höga snöfält nu, {playerName}, och mina patruller kan gå vägen utan att blöda för det. Hela ryggen är tystare tack vare ditt arbete.",
         "objectives": {
           "0": {
-            "label": "Old Cragmaw slain"
+            "label": "Gamle Cragmaw dräpt"
           }
         }
       },

@@ -1974,7 +1974,7 @@ export const ko_KR: EnTranslations = {
     "passwordError": "비밀번호를 입력해 주세요.",
     "passwordPlaceholder": "비밀번호 입력",
     "email": "이메일",
-    "emailPlaceholder": "you@example.com",
+    "emailPlaceholder": "나@example.com",
     "emailError": "유효한 이메일 주소를 입력하세요.",
     "showPassword": "비밀번호 표시",
     "hidePassword": "비밀번호 숨기기",
@@ -2006,7 +2006,7 @@ export const ko_KR: EnTranslations = {
       "title": "복구 이메일 추가",
       "body": "계정을 복구할 수 있도록 이메일 주소를 설정하세요. 비밀번호를 재설정해야 할 경우 이 계정의 소유자임을 확인하는 용도로만 사용됩니다.",
       "save": "이메일 저장",
-      "logOut": "Log out",
+      "logOut": "로그아웃",
       "invalid": "유효한 이메일 주소를 입력하세요.",
       "failed": "이메일을 저장하지 못했습니다. 다시 시도해 주세요."
     }

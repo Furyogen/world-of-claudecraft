@@ -202,11 +202,11 @@ export const es: EnTranslations = {
       "spinResult": "+{points} puntos",
       "spinButton": "Girar",
       "tasks": "Tareas",
-      "taskMultiplier": "x{multiplier} multiplier",
-      "pointsGained": "{points} daily rewards points gained.",
+      "taskMultiplier": "multiplicador x{multiplier}",
+      "pointsGained": "{points} puntos de recompensas diarias obtenidos.",
       "leaderboard": "Clasificación diaria",
-      "totalPlayer": "{count} player today",
-      "totalPlayers": "{count} players today",
+      "totalPlayer": "{count} jugador hoy",
+      "totalPlayers": "{count} jugadores hoy",
       "history": "Ganadores anteriores",
       "noLeaders": "Aún no hay puntos.",
       "noHistory": "Aún no hay pagos.",
@@ -390,11 +390,11 @@ export const es: EnTranslations = {
       "showWalletOnCharacterScreen": "Mostrar cartera en la pantalla de personajes",
       "showWalletOnPlayerCard": "Mostrar cartera en la tarjeta de jugador",
       "showDevBadges": "Mostrar insignias de desarrollador",
-      "showOwnNameplate": "Show My Nameplate",
+      "showOwnNameplate": "Mostrar mi placa de nombre",
       "uiScale": "Escala de la interfaz",
       "highContrastBackground": "Fondo de alto contraste",
       "startAttackOnAbility": "Ataque automático al usar habilidad",
-      "walkByAutoloot": "Walk-by Autoloot",
+      "walkByAutoloot": "Autosaqueo al pasar",
       "groundReticle": "Retícula de objetivo terrestre",
       "showItemLevel": "Mostrar nivel de objeto",
       "itemLevelLine": "Nivel de objeto {level}",
@@ -848,8 +848,8 @@ export const es: EnTranslations = {
       "friendly": "Amistoso"
     },
     "targetFrame": {
-      "unlock": "Move target frame",
-      "lock": "Lock target frame"
+      "unlock": "Mover marco de objetivo",
+      "lock": "Bloquear marco de objetivo"
     },
     "itemTooltip": {
       "requiresLevel": "Requiere nivel {level}"
@@ -932,7 +932,7 @@ export const es: EnTranslations = {
       "memberSinceDays": "{days}d en el Discord",
       "roleTag": {
         "levyst": "Levy St",
-        "admin": "Admin",
+        "admin": "Administrador",
         "devs": "Dev",
         "mods": "Mod",
         "artists": "Artista"
@@ -1973,9 +1973,9 @@ export const es: EnTranslations = {
     "password": "Contraseña",
     "passwordError": "Por favor, introduce tu contraseña.",
     "passwordPlaceholder": "Introduce tu contraseña",
-    "email": "Email",
-    "emailPlaceholder": "you@example.com",
-    "emailError": "Please enter a valid email address.",
+    "email": "Correo electrónico",
+    "emailPlaceholder": "tu@example.com",
+    "emailError": "Introduce una dirección de correo válida.",
     "showPassword": "Mostrar contraseña",
     "hidePassword": "Ocultar contraseña",
     "logIn": "Iniciar Sesión",
@@ -2003,12 +2003,12 @@ export const es: EnTranslations = {
     "twoFactorPlaceholder": "Código de 6 dígitos o de recuperación",
     "twoFactorHint": "Introduce el código de tu app de autenticación, o uno de tus códigos de recuperación.",
     "recovery": {
-      "title": "Add a recovery email",
-      "body": "Set an email address so you can recover your account. We only use it to confirm you own this account if you ever need to reset your password.",
-      "save": "Save email",
-      "logOut": "Log out",
-      "invalid": "Please enter a valid email address.",
-      "failed": "Could not save your email. Please try again."
+      "title": "Añadir correo de recuperación",
+      "body": "Configura una dirección de correo para poder recuperar tu cuenta. Solo la usamos para confirmar que la cuenta es tuya si alguna vez necesitas restablecer la contraseña.",
+      "save": "Guardar correo",
+      "logOut": "Cerrar sesión",
+      "invalid": "Introduce una dirección de correo válida.",
+      "failed": "No se pudo guardar tu correo. Inténtalo de nuevo."
     }
   },
   "wallet": {
@@ -2063,7 +2063,7 @@ export const es: EnTranslations = {
     "helpLinkedWithBalance": "Las ventajas de titular están activas. La app de cartera está conectada en este navegador.",
     "helpLinkedDisconnected": "Las ventajas de titular están activas. Conecta la app cuando necesites firmar o gastar.",
     "helpLinkedDisconnectedWithBalance": "Las ventajas de titular están activas. Conecta la app cuando necesites firmar o gastar.",
-    "extensionHelp": "To see a wallet here, keep a browser wallet extension such as Solflare Wallet active.",
+    "extensionHelp": "Para ver una billetera aquí, mantén activa una extensión de billetera del navegador como Solflare Wallet.",
     "flowConnect": "Elige una cartera. La verificación continúa automáticamente.",
     "flowSign": "Firma el mensaje de verificación en tu app de cartera. No requiere transacción ni SOL.",
     "flowVerify": "Verificando la propiedad de la cartera...",
@@ -6321,32 +6321,32 @@ export const es: EnTranslations = {
         }
       },
       "q_stalkers_return": {
-        "title": "The Stalkers Return",
-        "text": "Twelve dead, and the ridge crawls thicker than the day you started, {playerName}. Beasts do not throw themselves at a wall out of hunger. Something on the high ridge is pushing them down, and until I know what, the culling does not stop. Fourteen more.",
-        "completion": "Fourteen more, and still my patrols count fresh tracks by morning. My scout came back from the high ridge white as the snowline: prints the size of a shield, she says, and old kills no stalker would leave. Whatever walks up there is no ordinary cat.",
+        "title": "Vuelven los acechadores",
+        "text": "Doce muertos, y la cresta se arrastra más llena que el día en que empezaste, {playerName}. Las bestias no se lanzan contra una muralla por hambre. Algo en la cresta alta las empuja hacia abajo, y hasta que sepa qué es, la caza no se detiene. Catorce más.",
+        "completion": "Catorce más, y aun así mis patrullas cuentan huellas frescas por la mañana. Mi exploradora volvió de la cresta alta blanca como la línea de nieve: huellas del tamaño de un escudo, dice, y muertes viejas que ningún acechador dejaría. Lo que camina ahí arriba no es un gato común.",
         "objectives": {
           "0": {
-            "label": "Ridge Stalker slain"
+            "label": "Acechador de la cresta abatido"
           }
         }
       },
       "q_stalker_cloaks": {
-        "title": "Cloaks for the Watch",
-        "text": "Eight pelts lined the officers' cloaks, and now every soldier on the wall wants the same, {playerName}. They are right to want it: winter takes fingers first and apologies never. Ten more pelts from the ridges south of the gate, and the whole watch sleeps warm.",
-        "completion": "Ten good pelts, thick as any I have... no, look at these, {playerName}. Torn, half of them, and by no blade or spear. Claw marks wide as my hand, right through the winter coat. Something on that ridge is savaging its own kind.",
+        "title": "Capas para la guardia",
+        "text": "Ocho pieles forraron las capas de los oficiales, y ahora cada soldado de la muralla quiere lo mismo, {playerName}. Tienen razón: el invierno se lleva primero los dedos, y las disculpas no abrigan. Diez pieles más de las crestas al sur de la puerta, y la guardia entera dormirá caliente.",
+        "completion": "Diez buenas pieles, gruesas como cualquiera que tenga... no, mira esto, {playerName}. Rotas, la mitad, y no por hoja ni lanza. Marcas de garra anchas como mi mano, atravesando el pelaje de invierno. Algo en esa cresta está despedazando a los suyos.",
         "objectives": {
           "0": {
-            "label": "Ridge Stalker Pelt"
+            "label": "Piel de acechador de la cresta"
           }
         }
       },
       "q_old_cragmaw": {
-        "title": "Old Cragmaw",
-        "text": "The mountain folk put a name to the prints my scout found: Old Cragmaw, a scar-pelted tyrant of a cat that has outlived three generations of its own pack. It is the reason the stalkers flood my road, {playerName}. Its den sits on the western ridge above the road south. Bring a friend, and put the old devil down.",
-        "completion": "Down at last. The mountain folk swore that cat would outlive the wall itself. The stalkers will keep to their high snows now, {playerName}, and my patrols will walk the road without bleeding for it. The whole ridge is quieter for your work.",
+        "title": "Viejo Cragmaw",
+        "text": "La gente de la montaña puso nombre a las huellas que encontró mi exploradora: Viejo Cragmaw, un tirano felino de pelaje marcado que ha sobrevivido a tres generaciones de su propia manada. Por él los acechadores inundan mi camino, {playerName}. Su guarida está en la cresta occidental sobre la ruta al sur. Trae a un amigo y acaba con el viejo diablo.",
+        "completion": "Por fin cayó. La gente de la montaña juraba que ese gato viviría más que la muralla. Los acechadores se quedarán en sus nieves altas ahora, {playerName}, y mis patrullas recorrerán el camino sin sangrar por ello. Toda la cresta está más tranquila gracias a tu labor.",
         "objectives": {
           "0": {
-            "label": "Old Cragmaw slain"
+            "label": "Viejo Cragmaw abatido"
           }
         }
       },

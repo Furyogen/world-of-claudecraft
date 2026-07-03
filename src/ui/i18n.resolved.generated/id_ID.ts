@@ -202,11 +202,11 @@ export const id_ID: EnTranslations = {
       "spinResult": "+{points} poin",
       "spinButton": "Putar",
       "tasks": "Tugas",
-      "taskMultiplier": "x{multiplier} multiplier",
-      "pointsGained": "{points} daily rewards points gained.",
+      "taskMultiplier": "pengali x{multiplier}",
+      "pointsGained": "{points} poin hadiah harian diperoleh.",
       "leaderboard": "Papan Peringkat Harian",
-      "totalPlayer": "{count} player today",
-      "totalPlayers": "{count} players today",
+      "totalPlayer": "{count} pemain hari ini",
+      "totalPlayers": "{count} pemain hari ini",
       "history": "Pemenang Sebelumnya",
       "noLeaders": "Belum ada poin.",
       "noHistory": "Belum ada pembayaran.",
@@ -390,11 +390,11 @@ export const id_ID: EnTranslations = {
       "showWalletOnCharacterScreen": "Tampilkan Dompet di Layar Karakter",
       "showWalletOnPlayerCard": "Tampilkan Dompet di Kartu Pemain",
       "showDevBadges": "Tampilkan Lencana Pengembang",
-      "showOwnNameplate": "Show My Nameplate",
+      "showOwnNameplate": "Tampilkan pelat namaku",
       "uiScale": "Skala UI",
       "highContrastBackground": "Latar Kontras Tinggi",
       "startAttackOnAbility": "Serangan Otomatis Saat Memakai Kemampuan",
-      "walkByAutoloot": "Walk-by Autoloot",
+      "walkByAutoloot": "Loot otomatis saat lewat",
       "groundReticle": "Retikel bidik darat",
       "showItemLevel": "Tampilkan Level Item",
       "itemLevelLine": "Level Item {level}",
@@ -828,7 +828,7 @@ export const id_ID: EnTranslations = {
       }
     },
     "worldBoss": {
-      "spawn": "{name} rises over Thornpeak Heights!"
+      "spawn": "{name} bangkit di atas Dataran Tinggi Thornpeak!"
     },
     "loot": {
       "chestTitle": "Peti"
@@ -843,13 +843,13 @@ export const id_ID: EnTranslations = {
     },
     "mobTooltip": {
       "levelFamily": "Level {level} {family}",
-      "familyDemon": "Demon",
-      "hostile": "Hostile",
-      "friendly": "Friendly"
+      "familyDemon": "Iblis",
+      "hostile": "Bermusuhan",
+      "friendly": "Bersahabat"
     },
     "targetFrame": {
-      "unlock": "Move target frame",
-      "lock": "Lock target frame"
+      "unlock": "Pindahkan bingkai target",
+      "lock": "Kunci bingkai target"
     },
     "itemTooltip": {
       "requiresLevel": "Membutuhkan Level {level}"
@@ -1974,8 +1974,8 @@ export const id_ID: EnTranslations = {
     "passwordError": "Silakan masukkan kata sandimu.",
     "passwordPlaceholder": "Masukkan kata sandi",
     "email": "Email",
-    "emailPlaceholder": "you@example.com",
-    "emailError": "Please enter a valid email address.",
+    "emailPlaceholder": "kamu@example.com",
+    "emailError": "Masukkan alamat email yang valid.",
     "showPassword": "Tampilkan kata sandi",
     "hidePassword": "Sembunyikan kata sandi",
     "logIn": "Masuk",
@@ -2003,12 +2003,12 @@ export const id_ID: EnTranslations = {
     "twoFactorPlaceholder": "Kode 6 digit atau pemulihan",
     "twoFactorHint": "Masukkan kode dari aplikasi autentikatormu, atau salah satu kode pemulihanmu.",
     "recovery": {
-      "title": "Add a recovery email",
-      "body": "Set an email address so you can recover your account. We only use it to confirm you own this account if you ever need to reset your password.",
-      "save": "Save email",
-      "logOut": "Log out",
-      "invalid": "Please enter a valid email address.",
-      "failed": "Could not save your email. Please try again."
+      "title": "Tambahkan email pemulihan",
+      "body": "Tetapkan alamat email agar kamu dapat memulihkan akun. Kami hanya menggunakannya untuk memastikan akun ini milikmu jika suatu saat kamu perlu mengatur ulang kata sandi.",
+      "save": "Simpan email",
+      "logOut": "Keluar",
+      "invalid": "Masukkan alamat email yang valid.",
+      "failed": "Tidak dapat menyimpan emailmu. Coba lagi."
     }
   },
   "wallet": {
@@ -2063,7 +2063,7 @@ export const id_ID: EnTranslations = {
     "helpLinkedWithBalance": "Manfaat pemegang aktif. Aplikasi dompet terhubung di peramban ini.",
     "helpLinkedDisconnected": "Manfaat pemegang aktif. Hubungkan aplikasi saat Anda perlu menandatangani atau membelanjakan.",
     "helpLinkedDisconnectedWithBalance": "Manfaat pemegang aktif. Hubungkan aplikasi saat Anda perlu menandatangani atau membelanjakan.",
-    "extensionHelp": "To see a wallet here, keep a browser wallet extension such as Solflare Wallet active.",
+    "extensionHelp": "Untuk melihat dompet di sini, biarkan ekstensi dompet browser seperti Solflare Wallet tetap aktif.",
     "flowConnect": "Pilih sebuah dompet. Verifikasi berlanjut secara otomatis.",
     "flowSign": "Tanda tangani pesan verifikasi di aplikasi dompet Anda. Tidak perlu transaksi atau SOL.",
     "flowVerify": "Memverifikasi kepemilikan dompet...",
@@ -3506,8 +3506,8 @@ export const id_ID: EnTranslations = {
     "tracker": {
       "title": "Misi",
       "complete": "Selesai",
-      "showOnMap": "Show {name} on the map",
-      "hideFromMap": "Hide {name} from the map"
+      "showOnMap": "Tampilkan {name} di peta",
+      "hideFromMap": "Sembunyikan {name} dari peta"
     },
     "log": {
       "title": "Catatan Misi",
@@ -5653,10 +5653,10 @@ export const id_ID: EnTranslations = {
         "name": "Akolit Tessa"
       },
       "thunzharr_waking_peak": {
-        "name": "Thunzharr, the Waking Peak"
+        "name": "Thunzharr, Puncak yang Terjaga"
       },
       "thunzharr_stormling": {
-        "name": "Roused Stormling"
+        "name": "Anak badai terbangun"
       },
       "ironvein_foreman": {
         "name": "Mandor Ironvein"
@@ -6321,32 +6321,32 @@ export const id_ID: EnTranslations = {
         }
       },
       "q_stalkers_return": {
-        "title": "The Stalkers Return",
-        "text": "Twelve dead, and the ridge crawls thicker than the day you started, {playerName}. Beasts do not throw themselves at a wall out of hunger. Something on the high ridge is pushing them down, and until I know what, the culling does not stop. Fourteen more.",
-        "completion": "Fourteen more, and still my patrols count fresh tracks by morning. My scout came back from the high ridge white as the snowline: prints the size of a shield, she says, and old kills no stalker would leave. Whatever walks up there is no ordinary cat.",
+        "title": "Para Stalker Kembali",
+        "text": "Dua belas mati, dan punggung bukit makin penuh dibanding hari kau mulai, {playerName}. Binatang tidak melemparkan diri ke tembok karena lapar. Sesuatu di punggung bukit tinggi mendorong mereka turun, dan sampai aku tahu apa itu, pemusnahan tak berhenti. Empat belas lagi.",
+        "completion": "Empat belas lagi, dan patroliku masih menghitung jejak baru setiap pagi. Pengintaiku kembali dari punggung bukit tinggi seputih garis salju: jejak sebesar perisai, katanya, dan bangkai lama yang takkan ditinggalkan stalker mana pun. Apa pun yang berjalan di atas sana bukan kucing biasa.",
         "objectives": {
           "0": {
-            "label": "Ridge Stalker slain"
+            "label": "Stalker punggung bukit dibunuh"
           }
         }
       },
       "q_stalker_cloaks": {
-        "title": "Cloaks for the Watch",
-        "text": "Eight pelts lined the officers' cloaks, and now every soldier on the wall wants the same, {playerName}. They are right to want it: winter takes fingers first and apologies never. Ten more pelts from the ridges south of the gate, and the whole watch sleeps warm.",
-        "completion": "Ten good pelts, thick as any I have... no, look at these, {playerName}. Torn, half of them, and by no blade or spear. Claw marks wide as my hand, right through the winter coat. Something on that ridge is savaging its own kind.",
+        "title": "Jubah untuk Penjaga",
+        "text": "Delapan kulit melapisi jubah para perwira, dan kini setiap prajurit di tembok menginginkan hal yang sama, {playerName}. Mereka benar: musim dingin mengambil jari lebih dulu, dan maaf tidak memberi hangat. Sepuluh kulit lagi dari punggung bukit selatan gerbang, dan seluruh penjaga tidur hangat.",
+        "completion": "Sepuluh kulit bagus, setebal yang pernah kumiliki... tidak, lihat ini, {playerName}. Sobek, separuhnya, dan bukan oleh pedang atau tombak. Bekas cakar selebar tanganku, menembus bulu musim dingin. Sesuatu di punggung bukit itu mencabik jenisnya sendiri.",
         "objectives": {
           "0": {
-            "label": "Ridge Stalker Pelt"
+            "label": "Kulit stalker punggung bukit"
           }
         }
       },
       "q_old_cragmaw": {
-        "title": "Old Cragmaw",
-        "text": "The mountain folk put a name to the prints my scout found: Old Cragmaw, a scar-pelted tyrant of a cat that has outlived three generations of its own pack. It is the reason the stalkers flood my road, {playerName}. Its den sits on the western ridge above the road south. Bring a friend, and put the old devil down.",
-        "completion": "Down at last. The mountain folk swore that cat would outlive the wall itself. The stalkers will keep to their high snows now, {playerName}, and my patrols will walk the road without bleeding for it. The whole ridge is quieter for your work.",
+        "title": "Cragmaw Tua",
+        "text": "Orang gunung memberi nama pada jejak yang ditemukan pengintaiku: Cragmaw Tua, tiran kucing berbulu penuh bekas luka yang telah hidup melampaui tiga generasi kawanannya sendiri. Dialah alasan stalker membanjiri jalanku, {playerName}. Sarangnya ada di punggung bukit barat di atas jalan selatan. Bawa teman, dan tumbangkan iblis tua itu.",
+        "completion": "Akhirnya tumbang. Orang gunung bersumpah kucing itu akan hidup lebih lama dari tembok itu sendiri. Para stalker akan tetap di salju tinggi mereka sekarang, {playerName}, dan patroliku akan menyusuri jalan tanpa berdarah karenanya. Seluruh punggung bukit lebih tenang berkat kerjamu.",
         "objectives": {
           "0": {
-            "label": "Old Cragmaw slain"
+            "label": "Cragmaw Tua dibunuh"
           }
         }
       },

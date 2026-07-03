@@ -202,11 +202,11 @@ export const tr_TR: EnTranslations = {
       "spinResult": "+{points} puan",
       "spinButton": "Çevir",
       "tasks": "Görevler",
-      "taskMultiplier": "x{multiplier} multiplier",
-      "pointsGained": "{points} daily rewards points gained.",
+      "taskMultiplier": "x{multiplier} çarpan",
+      "pointsGained": "{points} günlük ödül puanı kazanıldı.",
       "leaderboard": "Günlük Lider Tablosu",
-      "totalPlayer": "{count} player today",
-      "totalPlayers": "{count} players today",
+      "totalPlayer": "Bugün {count} oyuncu",
+      "totalPlayers": "Bugün {count} oyuncu",
       "history": "Geçmiş Kazananlar",
       "noLeaders": "Henüz puan yok.",
       "noHistory": "Henüz ödeme yok.",
@@ -390,11 +390,11 @@ export const tr_TR: EnTranslations = {
       "showWalletOnCharacterScreen": "Cüzdanı Karakter Ekranında Göster",
       "showWalletOnPlayerCard": "Cüzdanı Oyuncu Kartında Göster",
       "showDevBadges": "Geliştirici Rozetlerini Göster",
-      "showOwnNameplate": "Show My Nameplate",
+      "showOwnNameplate": "Kendi ad levhamı göster",
       "uiScale": "Arayüz Ölçeği",
       "highContrastBackground": "Yüksek Kontrastlı Arka Plan",
       "startAttackOnAbility": "Yetenek Kullanımında Otomatik Saldırı",
-      "walkByAutoloot": "Walk-by Autoloot",
+      "walkByAutoloot": "Yanından geçerken otomatik ganimet",
       "groundReticle": "Yer hedefleme halkası",
       "showItemLevel": "Eşya Seviyesini Göster",
       "itemLevelLine": "Eşya Seviyesi {level}",
@@ -828,7 +828,7 @@ export const tr_TR: EnTranslations = {
       }
     },
     "worldBoss": {
-      "spawn": "{name} rises over Thornpeak Heights!"
+      "spawn": "{name} Thornpeak Heights üzerinde yükseliyor!"
     },
     "loot": {
       "chestTitle": "Sandık"
@@ -842,14 +842,14 @@ export const tr_TR: EnTranslations = {
       "mobElite": "[{level}+] {name}"
     },
     "mobTooltip": {
-      "levelFamily": "Level {level} {family}",
-      "familyDemon": "Demon",
-      "hostile": "Hostile",
-      "friendly": "Friendly"
+      "levelFamily": "Seviye {level} {family}",
+      "familyDemon": "İblis",
+      "hostile": "Düşman",
+      "friendly": "Dost"
     },
     "targetFrame": {
-      "unlock": "Move target frame",
-      "lock": "Lock target frame"
+      "unlock": "Hedef çerçevesini taşı",
+      "lock": "Hedef çerçevesini kilitle"
     },
     "itemTooltip": {
       "requiresLevel": "Gereken Seviye {level}"
@@ -932,7 +932,7 @@ export const tr_TR: EnTranslations = {
       "memberSinceDays": "Discord'da {days}g",
       "roleTag": {
         "levyst": "Levy St",
-        "admin": "Admin",
+        "admin": "Yönetici",
         "devs": "Geliştirici",
         "mods": "Moderatör",
         "artists": "Sanatçı"
@@ -1973,9 +1973,9 @@ export const tr_TR: EnTranslations = {
     "password": "Parola",
     "passwordError": "Lütfen parolanı gir.",
     "passwordPlaceholder": "Parola gir",
-    "email": "Email",
-    "emailPlaceholder": "you@example.com",
-    "emailError": "Please enter a valid email address.",
+    "email": "E-posta",
+    "emailPlaceholder": "sen@example.com",
+    "emailError": "Geçerli bir e-posta adresi gir.",
     "showPassword": "Parolayı göster",
     "hidePassword": "Parolayı gizle",
     "logIn": "Giriş Yap",
@@ -2003,12 +2003,12 @@ export const tr_TR: EnTranslations = {
     "twoFactorPlaceholder": "6 haneli ya da kurtarma kodu",
     "twoFactorHint": "Kimlik doğrulama uygulamandaki kodu ya da kurtarma kodlarından birini gir.",
     "recovery": {
-      "title": "Add a recovery email",
-      "body": "Set an email address so you can recover your account. We only use it to confirm you own this account if you ever need to reset your password.",
-      "save": "Save email",
-      "logOut": "Log out",
-      "invalid": "Please enter a valid email address.",
-      "failed": "Could not save your email. Please try again."
+      "title": "Kurtarma e-postası ekle",
+      "body": "Hesabını kurtarabilmen için bir e-posta adresi ayarla. Parolanı sıfırlaman gerekirse yalnızca bu hesabın sana ait olduğunu doğrulamak için kullanırız.",
+      "save": "E-postayı kaydet",
+      "logOut": "Çıkış yap",
+      "invalid": "Geçerli bir e-posta adresi gir.",
+      "failed": "E-postan kaydedilemedi. Lütfen tekrar dene."
     }
   },
   "wallet": {
@@ -2063,7 +2063,7 @@ export const tr_TR: EnTranslations = {
     "helpLinkedWithBalance": "Sahip ayrıcalıkları etkin. Cüzdan uygulaması bu tarayıcıda bağlı.",
     "helpLinkedDisconnected": "Sahip ayrıcalıkları etkin. İmzalamanız veya harcamanız gerektiğinde uygulamayı bağlayın.",
     "helpLinkedDisconnectedWithBalance": "Sahip ayrıcalıkları etkin. İmzalamanız veya harcamanız gerektiğinde uygulamayı bağlayın.",
-    "extensionHelp": "To see a wallet here, keep a browser wallet extension such as Solflare Wallet active.",
+    "extensionHelp": "Burada bir cüzdan görmek için Solflare Wallet gibi bir tarayıcı cüzdan eklentisini etkin tut.",
     "flowConnect": "Bir cüzdan seçin. Doğrulama otomatik olarak devam eder.",
     "flowSign": "Cüzdan uygulamanızda doğrulama mesajını imzalayın. İşlem veya SOL gerekmez.",
     "flowVerify": "Cüzdan sahipliği doğrulanıyor...",
@@ -3506,8 +3506,8 @@ export const tr_TR: EnTranslations = {
     "tracker": {
       "title": "Görevler",
       "complete": "Tamamlandı",
-      "showOnMap": "Show {name} on the map",
-      "hideFromMap": "Hide {name} from the map"
+      "showOnMap": "{name} haritada göster",
+      "hideFromMap": "{name} haritadan gizle"
     },
     "log": {
       "title": "Görev Kaydı",
@@ -5653,10 +5653,10 @@ export const tr_TR: EnTranslations = {
         "name": "Çömez Tessa"
       },
       "thunzharr_waking_peak": {
-        "name": "Thunzharr, the Waking Peak"
+        "name": "Thunzharr, Uyanan Zirve"
       },
       "thunzharr_stormling": {
-        "name": "Roused Stormling"
+        "name": "Uyandırılmış fırtınacık"
       },
       "ironvein_foreman": {
         "name": "Demirdamar Ustabaşı"
@@ -6321,32 +6321,32 @@ export const tr_TR: EnTranslations = {
         }
       },
       "q_stalkers_return": {
-        "title": "The Stalkers Return",
-        "text": "Twelve dead, and the ridge crawls thicker than the day you started, {playerName}. Beasts do not throw themselves at a wall out of hunger. Something on the high ridge is pushing them down, and until I know what, the culling does not stop. Fourteen more.",
-        "completion": "Fourteen more, and still my patrols count fresh tracks by morning. My scout came back from the high ridge white as the snowline: prints the size of a shield, she says, and old kills no stalker would leave. Whatever walks up there is no ordinary cat.",
+        "title": "Stalkerlar geri döndü",
+        "text": "On iki ölü, ama sırt başladığın günden daha kalabalık, {playerName}. Hayvanlar açlıktan kendini duvara atmaz. Yüksek sırtta bir şey onları aşağı itiyor, ne olduğunu öğrenene kadar itlaf durmaz. On dört tane daha.",
+        "completion": "On dört tane daha, yine de devriyelerim sabahları taze iz sayıyor. İzcim yüksek sırttan kar çizgisi kadar bembeyaz döndü: kalkan büyüklüğünde izler gördüğünü söylüyor, hiçbir stalkerın bırakmayacağı eski leşler de var. Orada yürüyen her neyse sıradan bir kedi değil.",
         "objectives": {
           "0": {
-            "label": "Ridge Stalker slain"
+            "label": "Sırt stalkerı öldürüldü"
           }
         }
       },
       "q_stalker_cloaks": {
-        "title": "Cloaks for the Watch",
-        "text": "Eight pelts lined the officers' cloaks, and now every soldier on the wall wants the same, {playerName}. They are right to want it: winter takes fingers first and apologies never. Ten more pelts from the ridges south of the gate, and the whole watch sleeps warm.",
-        "completion": "Ten good pelts, thick as any I have... no, look at these, {playerName}. Torn, half of them, and by no blade or spear. Claw marks wide as my hand, right through the winter coat. Something on that ridge is savaging its own kind.",
+        "title": "Nöbet için pelerinler",
+        "text": "Sekiz post subayların pelerinlerini astarladı, şimdi duvardaki her asker aynısını istiyor, {playerName}. Haklılar: kış önce parmakları alır, özürler ısıtmaz. Kapının güneyindeki sırtlardan on post daha getir, bütün nöbet sıcak uyusun.",
+        "completion": "On iyi post, elimdekiler kadar kalın... hayır, şunlara bak, {playerName}. Yarısı yırtılmış, ne kılıç ne mızrakla. Elim kadar geniş pençe izleri, kış postunun içinden geçmiş. O sırtta bir şey kendi türünü parçalıyor.",
         "objectives": {
           "0": {
-            "label": "Ridge Stalker Pelt"
+            "label": "Sırt stalkerı postu"
           }
         }
       },
       "q_old_cragmaw": {
-        "title": "Old Cragmaw",
-        "text": "The mountain folk put a name to the prints my scout found: Old Cragmaw, a scar-pelted tyrant of a cat that has outlived three generations of its own pack. It is the reason the stalkers flood my road, {playerName}. Its den sits on the western ridge above the road south. Bring a friend, and put the old devil down.",
-        "completion": "Down at last. The mountain folk swore that cat would outlive the wall itself. The stalkers will keep to their high snows now, {playerName}, and my patrols will walk the road without bleeding for it. The whole ridge is quieter for your work.",
+        "title": "Yaşlı Cragmaw",
+        "text": "Dağ halkı izcimin bulduğu izlere bir ad verdi: Yaşlı Cragmaw, kendi sürüsünün üç kuşağından uzun yaşamış, yara izli postlu bir kedi zorbası. Stalkerların yolumu basmasının sebebi o, {playerName}. İni, güneye giden yolun üstündeki batı sırtında. Bir dost getir ve o yaşlı şeytanı indir.",
+        "completion": "Sonunda düştü. Dağ halkı o kedinin duvarın kendisinden uzun yaşayacağına yemin ederdi. Stalkerlar artık yüksek karlarında kalacak, {playerName}, devriyelerim de bunun için kan dökmeden yolu yürüyecek. Bütün sırt emeğinle daha sessiz.",
         "objectives": {
           "0": {
-            "label": "Old Cragmaw slain"
+            "label": "Yaşlı Cragmaw öldürüldü"
           }
         }
       },

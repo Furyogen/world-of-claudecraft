@@ -202,11 +202,11 @@ export const vi_VN: EnTranslations = {
       "spinResult": "+{points} điểm",
       "spinButton": "Quay",
       "tasks": "Nhiệm Vụ",
-      "taskMultiplier": "x{multiplier} multiplier",
-      "pointsGained": "{points} daily rewards points gained.",
+      "taskMultiplier": "hệ số x{multiplier}",
+      "pointsGained": "Đã nhận {points} điểm thưởng hằng ngày.",
       "leaderboard": "Bảng Xếp Hạng Hằng Ngày",
-      "totalPlayer": "{count} player today",
-      "totalPlayers": "{count} players today",
+      "totalPlayer": "{count} người chơi hôm nay",
+      "totalPlayers": "{count} người chơi hôm nay",
       "history": "Người Thắng Trước Đây",
       "noLeaders": "Chưa có điểm nào.",
       "noHistory": "Chưa có khoản chi trả nào.",
@@ -390,11 +390,11 @@ export const vi_VN: EnTranslations = {
       "showWalletOnCharacterScreen": "Hiện Ví Tiền Ở Màn Hình Nhân Vật",
       "showWalletOnPlayerCard": "Hiện Ví Tiền Trên Thẻ Người Chơi",
       "showDevBadges": "Hiện Huy Hiệu Nhà Phát Triển",
-      "showOwnNameplate": "Show My Nameplate",
+      "showOwnNameplate": "Hiện bảng tên của tôi",
       "uiScale": "Tỷ Lệ Giao Diện",
       "highContrastBackground": "Nền Tương Phản Cao",
       "startAttackOnAbility": "Tự Đánh Khi Dùng Kỹ Năng",
-      "walkByAutoloot": "Walk-by Autoloot",
+      "walkByAutoloot": "Tự nhặt khi đi ngang",
       "groundReticle": "Vòng ngắm mục tiêu mặt đất",
       "showItemLevel": "Hiển Thị Cấp Vật Phẩm",
       "itemLevelLine": "Cấp Vật Phẩm {level}",
@@ -828,7 +828,7 @@ export const vi_VN: EnTranslations = {
       }
     },
     "worldBoss": {
-      "spawn": "{name} rises over Thornpeak Heights!"
+      "spawn": "{name} trỗi dậy trên Thornpeak Heights!"
     },
     "loot": {
       "chestTitle": "Rương"
@@ -842,14 +842,14 @@ export const vi_VN: EnTranslations = {
       "mobElite": "[{level}+] {name}"
     },
     "mobTooltip": {
-      "levelFamily": "Level {level} {family}",
-      "familyDemon": "Demon",
-      "hostile": "Hostile",
-      "friendly": "Friendly"
+      "levelFamily": "Cấp {level} {family}",
+      "familyDemon": "Quỷ",
+      "hostile": "Thù địch",
+      "friendly": "Thân thiện"
     },
     "targetFrame": {
-      "unlock": "Move target frame",
-      "lock": "Lock target frame"
+      "unlock": "Di chuyển khung mục tiêu",
+      "lock": "Khóa khung mục tiêu"
     },
     "itemTooltip": {
       "requiresLevel": "Yêu cầu Cấp {level}"
@@ -932,7 +932,7 @@ export const vi_VN: EnTranslations = {
       "memberSinceDays": "{days} ngày trong Discord",
       "roleTag": {
         "levyst": "Levy St",
-        "admin": "Admin",
+        "admin": "Quản trị viên",
         "devs": "Lập Trình Viên",
         "mods": "Điều Hành Viên",
         "artists": "Họa Sĩ"
@@ -1974,8 +1974,8 @@ export const vi_VN: EnTranslations = {
     "passwordError": "Vui lòng nhập mật khẩu của bạn.",
     "passwordPlaceholder": "Nhập mật khẩu",
     "email": "Email",
-    "emailPlaceholder": "you@example.com",
-    "emailError": "Please enter a valid email address.",
+    "emailPlaceholder": "ban@example.com",
+    "emailError": "Vui lòng nhập địa chỉ email hợp lệ.",
     "showPassword": "Hiện mật khẩu",
     "hidePassword": "Ẩn mật khẩu",
     "logIn": "Đăng Nhập",
@@ -2003,12 +2003,12 @@ export const vi_VN: EnTranslations = {
     "twoFactorPlaceholder": "Mã 6 chữ số hoặc mã khôi phục",
     "twoFactorHint": "Nhập mã từ ứng dụng xác thực của bạn, hoặc một trong các mã khôi phục.",
     "recovery": {
-      "title": "Add a recovery email",
-      "body": "Set an email address so you can recover your account. We only use it to confirm you own this account if you ever need to reset your password.",
-      "save": "Save email",
-      "logOut": "Log out",
-      "invalid": "Please enter a valid email address.",
-      "failed": "Could not save your email. Please try again."
+      "title": "Thêm email khôi phục",
+      "body": "Đặt địa chỉ email để bạn có thể khôi phục tài khoản. Chúng tôi chỉ dùng nó để xác nhận tài khoản này là của bạn nếu bạn cần đặt lại mật khẩu.",
+      "save": "Lưu email",
+      "logOut": "Đăng xuất",
+      "invalid": "Vui lòng nhập địa chỉ email hợp lệ.",
+      "failed": "Không thể lưu email của bạn. Vui lòng thử lại."
     }
   },
   "wallet": {
@@ -2063,7 +2063,7 @@ export const vi_VN: EnTranslations = {
     "helpLinkedWithBalance": "Đặc quyền chủ sở hữu đang hoạt động. Ứng dụng ví đã kết nối trên trình duyệt này.",
     "helpLinkedDisconnected": "Đặc quyền chủ sở hữu đang hoạt động. Kết nối ứng dụng khi bạn cần ký hoặc chi tiêu.",
     "helpLinkedDisconnectedWithBalance": "Đặc quyền chủ sở hữu đang hoạt động. Kết nối ứng dụng khi bạn cần ký hoặc chi tiêu.",
-    "extensionHelp": "To see a wallet here, keep a browser wallet extension such as Solflare Wallet active.",
+    "extensionHelp": "Để thấy ví ở đây, hãy giữ tiện ích ví trình duyệt như Solflare Wallet luôn hoạt động.",
     "flowConnect": "Chọn một ví. Quá trình xác minh sẽ tiếp tục tự động.",
     "flowSign": "Ký vào thông điệp xác minh trong ứng dụng ví của bạn. Không cần giao dịch hay SOL.",
     "flowVerify": "Đang xác minh quyền sở hữu ví...",
@@ -3506,8 +3506,8 @@ export const vi_VN: EnTranslations = {
     "tracker": {
       "title": "Nhiệm Vụ",
       "complete": "Hoàn Thành",
-      "showOnMap": "Show {name} on the map",
-      "hideFromMap": "Hide {name} from the map"
+      "showOnMap": "Hiện {name} trên bản đồ",
+      "hideFromMap": "Ẩn {name} khỏi bản đồ"
     },
     "log": {
       "title": "Nhật Ký Nhiệm Vụ",
@@ -5653,10 +5653,10 @@ export const vi_VN: EnTranslations = {
         "name": "Tế Đồ Tessa"
       },
       "thunzharr_waking_peak": {
-        "name": "Thunzharr, the Waking Peak"
+        "name": "Thunzharr, Đỉnh Thức Tỉnh"
       },
       "thunzharr_stormling": {
-        "name": "Roused Stormling"
+        "name": "Tiểu linh bão bị đánh thức"
       },
       "ironvein_foreman": {
         "name": "Quản Đốc Mạch Sắt"
@@ -6321,32 +6321,32 @@ export const vi_VN: EnTranslations = {
         }
       },
       "q_stalkers_return": {
-        "title": "The Stalkers Return",
-        "text": "Twelve dead, and the ridge crawls thicker than the day you started, {playerName}. Beasts do not throw themselves at a wall out of hunger. Something on the high ridge is pushing them down, and until I know what, the culling does not stop. Fourteen more.",
-        "completion": "Fourteen more, and still my patrols count fresh tracks by morning. My scout came back from the high ridge white as the snowline: prints the size of a shield, she says, and old kills no stalker would leave. Whatever walks up there is no ordinary cat.",
+        "title": "Bọn stalker trở lại",
+        "text": "Mười hai con chết, mà sống núi còn lúc nhúc hơn ngày bạn bắt đầu, {playerName}. Thú vật không lao vào tường chỉ vì đói. Có thứ gì đó trên sống núi cao đang đẩy chúng xuống, và cho tới khi tôi biết đó là gì, cuộc tiêu diệt chưa dừng. Thêm mười bốn con.",
+        "completion": "Thêm mười bốn con, vậy mà các đội tuần tra của tôi vẫn đếm được dấu mới mỗi sáng. Trinh sát của tôi trở về từ sống núi cao, mặt trắng như vạch tuyết: cô ấy nói có dấu chân lớn bằng cái khiên, và những xác cũ không stalker nào bỏ lại. Thứ đi trên đó không phải một con mèo thường.",
         "objectives": {
           "0": {
-            "label": "Ridge Stalker slain"
+            "label": "Stalker sống núi bị hạ"
           }
         }
       },
       "q_stalker_cloaks": {
-        "title": "Cloaks for the Watch",
-        "text": "Eight pelts lined the officers' cloaks, and now every soldier on the wall wants the same, {playerName}. They are right to want it: winter takes fingers first and apologies never. Ten more pelts from the ridges south of the gate, and the whole watch sleeps warm.",
-        "completion": "Ten good pelts, thick as any I have... no, look at these, {playerName}. Torn, half of them, and by no blade or spear. Claw marks wide as my hand, right through the winter coat. Something on that ridge is savaging its own kind.",
+        "title": "Áo choàng cho đội gác",
+        "text": "Tám tấm da đã lót áo choàng của sĩ quan, và giờ mọi lính trên tường đều muốn như vậy, {playerName}. Họ đúng: mùa đông lấy ngón tay trước, lời xin lỗi không làm ấm được. Mười tấm da nữa từ các sống núi phía nam cổng, và cả đội gác sẽ ngủ ấm.",
+        "completion": "Mười tấm da tốt, dày như bất kỳ tấm nào tôi có... không, nhìn chúng đi, {playerName}. Một nửa bị xé rách, không phải bởi lưỡi kiếm hay giáo. Vết vuốt rộng bằng bàn tay tôi, xuyên qua lớp lông mùa đông. Có thứ gì đó trên sống núi ấy đang xé nát đồng loại của nó.",
         "objectives": {
           "0": {
-            "label": "Ridge Stalker Pelt"
+            "label": "Da stalker sống núi"
           }
         }
       },
       "q_old_cragmaw": {
-        "title": "Old Cragmaw",
-        "text": "The mountain folk put a name to the prints my scout found: Old Cragmaw, a scar-pelted tyrant of a cat that has outlived three generations of its own pack. It is the reason the stalkers flood my road, {playerName}. Its den sits on the western ridge above the road south. Bring a friend, and put the old devil down.",
-        "completion": "Down at last. The mountain folk swore that cat would outlive the wall itself. The stalkers will keep to their high snows now, {playerName}, and my patrols will walk the road without bleeding for it. The whole ridge is quieter for your work.",
+        "title": "Cragmaw Già",
+        "text": "Người miền núi đã đặt tên cho những dấu chân trinh sát của tôi tìm thấy: Cragmaw Già, một con mèo bạo chúa với bộ lông đầy sẹo, sống lâu hơn ba thế hệ trong chính bầy của nó. Nó là lý do bọn stalker tràn xuống con đường của tôi, {playerName}. Hang của nó nằm trên sống núi phía tây, phía trên đường nam. Hãy đưa một người bạn theo và hạ con quỷ già đó.",
+        "completion": "Cuối cùng cũng gục. Người miền núi từng thề con mèo ấy sẽ sống lâu hơn cả bức tường. Giờ bọn stalker sẽ ở lại vùng tuyết cao của chúng, {playerName}, và các đội tuần tra của tôi sẽ đi con đường này mà không phải đổ máu. Cả sống núi yên hơn nhờ việc của bạn.",
         "objectives": {
           "0": {
-            "label": "Old Cragmaw slain"
+            "label": "Cragmaw Già bị hạ"
           }
         }
       },

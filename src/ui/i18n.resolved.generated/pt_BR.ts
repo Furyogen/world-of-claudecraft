@@ -202,11 +202,11 @@ export const pt_BR: EnTranslations = {
       "spinResult": "+{points} pontos",
       "spinButton": "Girar",
       "tasks": "Tarefas",
-      "taskMultiplier": "x{multiplier} multiplier",
-      "pointsGained": "{points} daily rewards points gained.",
+      "taskMultiplier": "multiplicador x{multiplier}",
+      "pointsGained": "{points} pontos de recompensas diárias obtidos.",
       "leaderboard": "Classificação Diária",
-      "totalPlayer": "{count} player today",
-      "totalPlayers": "{count} players today",
+      "totalPlayer": "{count} jogador hoje",
+      "totalPlayers": "{count} jogadores hoje",
       "history": "Vencedores anteriores",
       "noLeaders": "Nenhum ponto ainda.",
       "noHistory": "Nenhum pagamento ainda.",
@@ -390,11 +390,11 @@ export const pt_BR: EnTranslations = {
       "showWalletOnCharacterScreen": "Mostrar carteira na tela de personagens",
       "showWalletOnPlayerCard": "Mostrar carteira no cartão de jogador",
       "showDevBadges": "Exibir Insígnias de Desenvolvedor",
-      "showOwnNameplate": "Show My Nameplate",
+      "showOwnNameplate": "Mostrar minha placa de nome",
       "uiScale": "Escala da interface",
       "highContrastBackground": "Fundo de alto contraste",
       "startAttackOnAbility": "Ataque Automático ao Usar Habilidade",
-      "walkByAutoloot": "Walk-by Autoloot",
+      "walkByAutoloot": "Saque automático ao passar",
       "groundReticle": "Retícula de mira no chão",
       "showItemLevel": "Mostrar nível do item",
       "itemLevelLine": "Nível do item {level}",
@@ -842,14 +842,14 @@ export const pt_BR: EnTranslations = {
       "mobElite": "[{level}+] {name}"
     },
     "mobTooltip": {
-      "levelFamily": "Level {level} {family}",
-      "familyDemon": "Demon",
-      "hostile": "Hostile",
-      "friendly": "Friendly"
+      "levelFamily": "Nível {level} {family}",
+      "familyDemon": "Demônio",
+      "hostile": "Hostil",
+      "friendly": "Amigável"
     },
     "targetFrame": {
-      "unlock": "Move target frame",
-      "lock": "Lock target frame"
+      "unlock": "Mover quadro do alvo",
+      "lock": "Bloquear quadro do alvo"
     },
     "itemTooltip": {
       "requiresLevel": "Requer Nível {level}"
@@ -932,7 +932,7 @@ export const pt_BR: EnTranslations = {
       "memberSinceDays": "{days}d no Discord",
       "roleTag": {
         "levyst": "Levy St",
-        "admin": "Admin",
+        "admin": "Administrador",
         "devs": "Dev",
         "mods": "Mod",
         "artists": "Artista"
@@ -1974,8 +1974,8 @@ export const pt_BR: EnTranslations = {
     "passwordError": "Por favor, insira sua senha.",
     "passwordPlaceholder": "Insira a senha",
     "email": "Email",
-    "emailPlaceholder": "you@example.com",
-    "emailError": "Please enter a valid email address.",
+    "emailPlaceholder": "voce@example.com",
+    "emailError": "Insira um endereço de email válido.",
     "showPassword": "Mostrar senha",
     "hidePassword": "Ocultar senha",
     "logIn": "Entrar",
@@ -2003,12 +2003,12 @@ export const pt_BR: EnTranslations = {
     "twoFactorPlaceholder": "Código de 6 dígitos ou de recuperação",
     "twoFactorHint": "Digite o código do seu app autenticador ou um dos seus códigos de recuperação.",
     "recovery": {
-      "title": "Add a recovery email",
-      "body": "Set an email address so you can recover your account. We only use it to confirm you own this account if you ever need to reset your password.",
-      "save": "Save email",
-      "logOut": "Log out",
-      "invalid": "Please enter a valid email address.",
-      "failed": "Could not save your email. Please try again."
+      "title": "Adicionar email de recuperação",
+      "body": "Defina um endereço de email para recuperar sua conta. Só o usamos para confirmar que esta conta é sua se você precisar redefinir sua senha.",
+      "save": "Salvar email",
+      "logOut": "Sair",
+      "invalid": "Insira um endereço de email válido.",
+      "failed": "Não foi possível salvar seu email. Tente novamente."
     }
   },
   "wallet": {
@@ -2063,7 +2063,7 @@ export const pt_BR: EnTranslations = {
     "helpLinkedWithBalance": "As vantagens de titular estão ativas. O app da carteira está conectado neste navegador.",
     "helpLinkedDisconnected": "As vantagens de titular estão ativas. Conecte o app quando precisar assinar ou gastar.",
     "helpLinkedDisconnectedWithBalance": "As vantagens de titular estão ativas. Conecte o app quando precisar assinar ou gastar.",
-    "extensionHelp": "To see a wallet here, keep a browser wallet extension such as Solflare Wallet active.",
+    "extensionHelp": "Para ver uma carteira aqui, mantenha ativa uma extensão de carteira do navegador como Solflare Wallet.",
     "flowConnect": "Escolha uma carteira. A verificação continua automaticamente.",
     "flowSign": "Assine a mensagem de verificação no app da carteira. Não exige transação nem SOL.",
     "flowVerify": "Verificando a propriedade da carteira...",
@@ -6321,32 +6321,32 @@ export const pt_BR: EnTranslations = {
         }
       },
       "q_stalkers_return": {
-        "title": "The Stalkers Return",
-        "text": "Twelve dead, and the ridge crawls thicker than the day you started, {playerName}. Beasts do not throw themselves at a wall out of hunger. Something on the high ridge is pushing them down, and until I know what, the culling does not stop. Fourteen more.",
-        "completion": "Fourteen more, and still my patrols count fresh tracks by morning. My scout came back from the high ridge white as the snowline: prints the size of a shield, she says, and old kills no stalker would leave. Whatever walks up there is no ordinary cat.",
+        "title": "Os stalkers retornam",
+        "text": "Doze mortos, e a crista rasteja mais cheia do que no dia em que você começou, {playerName}. Feras não se lançam contra uma muralha por fome. Algo na crista alta as empurra para baixo, e até eu saber o que é, o abate não para. Mais catorze.",
+        "completion": "Mais catorze, e minhas patrulhas ainda contam rastros frescos pela manhã. Minha batedora voltou da crista alta branca como a linha de neve: pegadas do tamanho de um escudo, diz ela, e mortes antigas que nenhum stalker deixaria. O que quer que caminhe lá em cima não é um gato comum.",
         "objectives": {
           "0": {
-            "label": "Ridge Stalker slain"
+            "label": "Stalker da crista abatido"
           }
         }
       },
       "q_stalker_cloaks": {
-        "title": "Cloaks for the Watch",
-        "text": "Eight pelts lined the officers' cloaks, and now every soldier on the wall wants the same, {playerName}. They are right to want it: winter takes fingers first and apologies never. Ten more pelts from the ridges south of the gate, and the whole watch sleeps warm.",
-        "completion": "Ten good pelts, thick as any I have... no, look at these, {playerName}. Torn, half of them, and by no blade or spear. Claw marks wide as my hand, right through the winter coat. Something on that ridge is savaging its own kind.",
+        "title": "Capas para a guarda",
+        "text": "Oito peles forraram as capas dos oficiais, e agora cada soldado na muralha quer o mesmo, {playerName}. Eles têm razão: o inverno leva os dedos primeiro, e desculpas não aquecem. Mais dez peles das cristas ao sul do portão, e a guarda inteira dormirá aquecida.",
+        "completion": "Dez boas peles, grossas como qualquer uma que eu tenha... não, olhe isto, {playerName}. Rasgadas, metade delas, e não por lâmina ou lança. Marcas de garras largas como minha mão, atravessando o pelo de inverno. Algo naquela crista está dilacerando os próprios iguais.",
         "objectives": {
           "0": {
-            "label": "Ridge Stalker Pelt"
+            "label": "Pele de stalker da crista"
           }
         }
       },
       "q_old_cragmaw": {
-        "title": "Old Cragmaw",
-        "text": "The mountain folk put a name to the prints my scout found: Old Cragmaw, a scar-pelted tyrant of a cat that has outlived three generations of its own pack. It is the reason the stalkers flood my road, {playerName}. Its den sits on the western ridge above the road south. Bring a friend, and put the old devil down.",
-        "completion": "Down at last. The mountain folk swore that cat would outlive the wall itself. The stalkers will keep to their high snows now, {playerName}, and my patrols will walk the road without bleeding for it. The whole ridge is quieter for your work.",
+        "title": "Velho Cragmaw",
+        "text": "O povo da montanha deu nome às pegadas que minha batedora encontrou: Velho Cragmaw, um tirano felino de pelo marcado por cicatrizes que sobreviveu a três gerações da própria alcateia. É por causa dele que os stalkers inundam minha estrada, {playerName}. Sua toca fica na crista oeste acima da estrada sul. Traga um amigo e derrube o velho demônio.",
+        "completion": "Por fim caiu. O povo da montanha jurava que aquele gato viveria mais que a própria muralha. Os stalkers ficarão nas neves altas agora, {playerName}, e minhas patrulhas andarão pela estrada sem sangrar por isso. Toda a crista está mais quieta pelo seu trabalho.",
         "objectives": {
           "0": {
-            "label": "Old Cragmaw slain"
+            "label": "Velho Cragmaw abatido"
           }
         }
       },

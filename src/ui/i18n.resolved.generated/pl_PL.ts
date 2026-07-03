@@ -202,11 +202,11 @@ export const pl_PL: EnTranslations = {
       "spinResult": "+{points} pkt",
       "spinButton": "Zakręć",
       "tasks": "Zadania",
-      "taskMultiplier": "x{multiplier} multiplier",
-      "pointsGained": "{points} daily rewards points gained.",
+      "taskMultiplier": "mnożnik x{multiplier}",
+      "pointsGained": "Zdobyto {points} punktów dziennych nagród.",
       "leaderboard": "Codzienna tabela wyników",
-      "totalPlayer": "{count} player today",
-      "totalPlayers": "{count} players today",
+      "totalPlayer": "{count} gracz dzisiaj",
+      "totalPlayers": "{count} graczy dzisiaj",
       "history": "Poprzedni zwycięzcy",
       "noLeaders": "Jeszcze brak punktów.",
       "noHistory": "Jeszcze brak wypłat.",
@@ -390,11 +390,11 @@ export const pl_PL: EnTranslations = {
       "showWalletOnCharacterScreen": "Pokaż sakiewkę na ekranie postaci",
       "showWalletOnPlayerCard": "Pokaż sakiewkę na karcie gracza",
       "showDevBadges": "Pokaż odznaki deweloperów",
-      "showOwnNameplate": "Show My Nameplate",
+      "showOwnNameplate": "Pokaż moją tabliczkę imienia",
       "uiScale": "Skala interfejsu",
       "highContrastBackground": "Tło o wysokim kontraście",
       "startAttackOnAbility": "Automatyczny atak przy użyciu umiejętności",
-      "walkByAutoloot": "Walk-by Autoloot",
+      "walkByAutoloot": "Automatyczne łupy przy przejściu",
       "groundReticle": "Celownik naziemny",
       "showItemLevel": "Pokaż poziom przedmiotu",
       "itemLevelLine": "Poziom przedmiotu {level}",
@@ -828,7 +828,7 @@ export const pl_PL: EnTranslations = {
       }
     },
     "worldBoss": {
-      "spawn": "{name} rises over Thornpeak Heights!"
+      "spawn": "{name} wznosi się nad Thornpeak Heights!"
     },
     "loot": {
       "chestTitle": "Skrzynia"
@@ -842,14 +842,14 @@ export const pl_PL: EnTranslations = {
       "mobElite": "[{level}+] {name}"
     },
     "mobTooltip": {
-      "levelFamily": "Level {level} {family}",
+      "levelFamily": "Poziom {level} {family}",
       "familyDemon": "Demon",
-      "hostile": "Hostile",
-      "friendly": "Friendly"
+      "hostile": "Wrogi",
+      "friendly": "Przyjazny"
     },
     "targetFrame": {
-      "unlock": "Move target frame",
-      "lock": "Lock target frame"
+      "unlock": "Przenieś ramkę celu",
+      "lock": "Zablokuj ramkę celu"
     },
     "itemTooltip": {
       "requiresLevel": "Wymaga poziomu {level}"
@@ -932,7 +932,7 @@ export const pl_PL: EnTranslations = {
       "memberSinceDays": "{days}d na Discordzie",
       "roleTag": {
         "levyst": "Levy St",
-        "admin": "Admin",
+        "admin": "Administrator",
         "devs": "Dev",
         "mods": "Mod",
         "artists": "Grafik"
@@ -1973,9 +1973,9 @@ export const pl_PL: EnTranslations = {
     "password": "Hasło",
     "passwordError": "Wprowadź swoje hasło.",
     "passwordPlaceholder": "Wprowadź hasło",
-    "email": "Email",
-    "emailPlaceholder": "you@example.com",
-    "emailError": "Please enter a valid email address.",
+    "email": "E-mail",
+    "emailPlaceholder": "ty@example.com",
+    "emailError": "Wpisz prawidłowy adres e-mail.",
     "showPassword": "Pokaż hasło",
     "hidePassword": "Ukryj hasło",
     "logIn": "Zaloguj się",
@@ -2003,12 +2003,12 @@ export const pl_PL: EnTranslations = {
     "twoFactorPlaceholder": "6-cyfrowy kod lub kod odzyskiwania",
     "twoFactorHint": "Wprowadź kod z aplikacji uwierzytelniającej lub jeden z kodów odzyskiwania.",
     "recovery": {
-      "title": "Add a recovery email",
-      "body": "Set an email address so you can recover your account. We only use it to confirm you own this account if you ever need to reset your password.",
-      "save": "Save email",
-      "logOut": "Log out",
-      "invalid": "Please enter a valid email address.",
-      "failed": "Could not save your email. Please try again."
+      "title": "Dodaj e-mail odzyskiwania",
+      "body": "Ustaw adres e-mail, aby móc odzyskać konto. Użyjemy go tylko do potwierdzenia, że konto należy do ciebie, jeśli kiedyś trzeba będzie zresetować hasło.",
+      "save": "Zapisz e-mail",
+      "logOut": "Wyloguj",
+      "invalid": "Wpisz prawidłowy adres e-mail.",
+      "failed": "Nie udało się zapisać e-maila. Spróbuj ponownie."
     }
   },
   "wallet": {
@@ -2063,7 +2063,7 @@ export const pl_PL: EnTranslations = {
     "helpLinkedWithBalance": "Przywileje posiadacza są aktywne. Aplikacja portfela połączona w tej przeglądarce.",
     "helpLinkedDisconnected": "Przywileje posiadacza są aktywne. Połącz aplikację, gdy musisz podpisać lub wydać środki.",
     "helpLinkedDisconnectedWithBalance": "Przywileje posiadacza są aktywne. Połącz aplikację, gdy musisz podpisać lub wydać środki.",
-    "extensionHelp": "To see a wallet here, keep a browser wallet extension such as Solflare Wallet active.",
+    "extensionHelp": "Aby zobaczyć tu portfel, utrzymuj aktywne rozszerzenie portfela w przeglądarce, takie jak Solflare Wallet.",
     "flowConnect": "Wybierz portfel. Weryfikacja przebiega automatycznie.",
     "flowSign": "Podpisz wiadomość weryfikacyjną w aplikacji portfela. Transakcja ani SOL nie są wymagane.",
     "flowVerify": "Weryfikowanie własności portfela...",
@@ -3506,8 +3506,8 @@ export const pl_PL: EnTranslations = {
     "tracker": {
       "title": "Zadania",
       "complete": "Gotowe",
-      "showOnMap": "Show {name} on the map",
-      "hideFromMap": "Hide {name} from the map"
+      "showOnMap": "Pokaż {name} na mapie",
+      "hideFromMap": "Ukryj {name} na mapie"
     },
     "log": {
       "title": "Dziennik zadań",
@@ -5653,10 +5653,10 @@ export const pl_PL: EnTranslations = {
         "name": "Akolitka Tessa"
       },
       "thunzharr_waking_peak": {
-        "name": "Thunzharr, the Waking Peak"
+        "name": "Thunzharr, Budzący się Szczyt"
       },
       "thunzharr_stormling": {
-        "name": "Roused Stormling"
+        "name": "Przebudzony burznik"
       },
       "ironvein_foreman": {
         "name": "Sztygar z Żelaznej Żyły"
@@ -6321,32 +6321,32 @@ export const pl_PL: EnTranslations = {
         }
       },
       "q_stalkers_return": {
-        "title": "The Stalkers Return",
-        "text": "Twelve dead, and the ridge crawls thicker than the day you started, {playerName}. Beasts do not throw themselves at a wall out of hunger. Something on the high ridge is pushing them down, and until I know what, the culling does not stop. Fourteen more.",
-        "completion": "Fourteen more, and still my patrols count fresh tracks by morning. My scout came back from the high ridge white as the snowline: prints the size of a shield, she says, and old kills no stalker would leave. Whatever walks up there is no ordinary cat.",
+        "title": "Stalkerzy wracają",
+        "text": "Dwunastu martwych, a grań roi się gęściej niż w dniu, gdy zacząłeś, {playerName}. Bestie nie rzucają się na mur z głodu. Coś na wysokiej grani spycha je w dół, a dopóki nie wiem co, odstrzał się nie kończy. Jeszcze czternaście.",
+        "completion": "Jeszcze czternaście, a moje patrole wciąż liczą świeże ślady o poranku. Moja zwiadowczyni wróciła z wysokiej grani biała jak linia śniegu: odciski wielkości tarczy, mówi, i stare ofiary, których żaden stalker by nie zostawił. Cokolwiek tam chodzi, nie jest zwykłym kotem.",
         "objectives": {
           "0": {
-            "label": "Ridge Stalker slain"
+            "label": "Stalker z grani zabity"
           }
         }
       },
       "q_stalker_cloaks": {
-        "title": "Cloaks for the Watch",
-        "text": "Eight pelts lined the officers' cloaks, and now every soldier on the wall wants the same, {playerName}. They are right to want it: winter takes fingers first and apologies never. Ten more pelts from the ridges south of the gate, and the whole watch sleeps warm.",
-        "completion": "Ten good pelts, thick as any I have... no, look at these, {playerName}. Torn, half of them, and by no blade or spear. Claw marks wide as my hand, right through the winter coat. Something on that ridge is savaging its own kind.",
+        "title": "Płaszcze dla straży",
+        "text": "Osiem skór podszyło płaszcze oficerów, a teraz każdy żołnierz na murze chce tego samego, {playerName}. Mają rację: zima najpierw zabiera palce, a przeprosiny nie grzeją. Dziesięć kolejnych skór z grani na południe od bramy, a cała straż będzie spać w cieple.",
+        "completion": "Dziesięć dobrych skór, grubych jak każde, które mam... nie, spójrz na nie, {playerName}. Podarte, połowa z nich, i nie ostrzem ani włócznią. Ślady pazurów szerokie jak moja dłoń, przez zimową sierść. Coś na tej grani rozszarpuje własny gatunek.",
         "objectives": {
           "0": {
-            "label": "Ridge Stalker Pelt"
+            "label": "Skóra stalkera z grani"
           }
         }
       },
       "q_old_cragmaw": {
-        "title": "Old Cragmaw",
-        "text": "The mountain folk put a name to the prints my scout found: Old Cragmaw, a scar-pelted tyrant of a cat that has outlived three generations of its own pack. It is the reason the stalkers flood my road, {playerName}. Its den sits on the western ridge above the road south. Bring a friend, and put the old devil down.",
-        "completion": "Down at last. The mountain folk swore that cat would outlive the wall itself. The stalkers will keep to their high snows now, {playerName}, and my patrols will walk the road without bleeding for it. The whole ridge is quieter for your work.",
+        "title": "Stary Cragmaw",
+        "text": "Ludzie z gór nadali nazwę śladom znalezionym przez moją zwiadowczynię: Stary Cragmaw, bliznowłosy koci tyran, który przeżył trzy pokolenia własnej watahy. To przez niego stalkerzy zalewają moją drogę, {playerName}. Jego legowisko leży na zachodniej grani nad drogą na południe. Weź przyjaciela i powal starego diabła.",
+        "completion": "Wreszcie padł. Ludzie z gór przysięgali, że ten kot przeżyje sam mur. Stalkerzy zostaną teraz w swoich wysokich śniegach, {playerName}, a moje patrole przejdą drogą bez krwawienia za to. Cała grań jest spokojniejsza dzięki twojej pracy.",
         "objectives": {
           "0": {
-            "label": "Old Cragmaw slain"
+            "label": "Stary Cragmaw zabity"
           }
         }
       },
