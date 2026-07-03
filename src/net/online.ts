@@ -770,6 +770,7 @@ function blankEntity(id: number): Entity {
     castingAbility: null,
     castRemaining: 0,
     castTotal: 0,
+    castTargetId: null,
     castAim: null,
     channeling: false,
     channelTickTimer: 0,

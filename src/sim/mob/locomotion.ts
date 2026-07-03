@@ -385,6 +385,7 @@ export function updateMob(ctx: SimContext, mob: Entity): void {
             mob.castingAbility = null;
             mob.castTotal = 0;
             mob.castRemaining = 0;
+            mob.castTargetId = null;
             const school = (bigCast.school ?? 'nature') as Aura['school'];
             ctx.emit({ type: 'spellfx', sourceId: mob.id, targetId: mob.id, school, fx: 'nova' });
             ctx.emit({
@@ -408,6 +409,7 @@ export function updateMob(ctx: SimContext, mob: Entity): void {
             mob.castingAbility = bigCast.castId;
             mob.castTotal = bigCast.castTime;
             mob.castRemaining = bigCast.castTime;
+            mob.castTargetId = null;
             mob.channeling = false;
             if (bigCast.yell) emitMobYell(ctx, mob, bigCast.yell);
           }
@@ -585,6 +587,7 @@ export function resetEvadingMob(ctx: SimContext, mob: Entity): void {
     mob.castingAbility = null;
     mob.castTotal = 0;
     mob.castRemaining = 0;
+    mob.castTargetId = null;
   }
   mob.yelledEngage = false;
   mob.wanderTimer = ctx.rng.range(2, 8);

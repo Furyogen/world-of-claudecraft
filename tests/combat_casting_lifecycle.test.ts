@@ -15,6 +15,7 @@ import {
 } from '../src/sim/combat/casting_lifecycle';
 import { MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
+import { advancePendingProjectiles } from '../src/sim/projectile_travel';
 import { Sim } from '../src/sim/sim';
 import type { Entity, PlayerClass } from '../src/sim/types';
 import { CAST_PUSHBACK_SEC, CHANNEL_PUSHBACK_FRACTION } from '../src/sim/types';
@@ -33,7 +34,7 @@ function makeSim(cls: PlayerClass, level: number): { sim: AnySim; p: AnyEntity; 
 
 // An idle hostile target in range + faced, so an offensive cast passes its guards.
 function spawnTarget(sim: AnySim, p: AnyEntity, level = 1, dz = 6): AnyEntity {
-  const mob = createMob(sim.nextId++, MOBS['forest_wolf'], level, {
+  const mob = createMob(sim.nextId++, MOBS.forest_wolf, level, {
     x: p.pos.x,
     y: p.pos.y,
     z: p.pos.z + dz,
@@ -69,6 +70,29 @@ describe('casting_lifecycle: timed cast start -> progress -> finish', () => {
     expect(p.castingAbility).toBeNull(); // FINISHED via updateCasting
     expect(ticks).toBeGreaterThan(1); // actually progressed over multiple ticks
     expect(p.hp).toBeGreaterThan(hp0); // applyAbility ran the heal effect
+  });
+
+  it('resolves a completed hostile cast against the target selected at cast start', () => {
+    const { sim, p, meta } = makeSim('mage', 12);
+    const firstTarget = spawnTarget(sim, p, 12, 6);
+    const firstHp0 = firstTarget.hp;
+    castAbility(sim.ctx, 'fireball', p.id);
+    expect(p.castingAbility).toBe('fireball');
+    expect(p.castTargetId).toBe(firstTarget.id);
+
+    const secondTarget = spawnTarget(sim, p, 12, 8);
+    const secondHp0 = secondTarget.hp;
+    expect(p.targetId).toBe(secondTarget.id);
+    sim.rng.chance = () => true;
+    drainCast(sim, p, meta);
+
+    expect(p.castingAbility).toBeNull();
+    expect(p.castTargetId).toBeNull();
+    expect(sim.ctx.pendingProjectiles[0]?.targetId).toBe(firstTarget.id);
+    for (let i = 0; i < 200 && sim.ctx.pendingProjectiles.length > 0; i++)
+      advancePendingProjectiles(sim.ctx);
+    expect(firstTarget.hp).toBeLessThan(firstHp0);
+    expect(secondTarget.hp).toBe(secondHp0);
   });
 });
 

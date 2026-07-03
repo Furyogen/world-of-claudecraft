@@ -1450,6 +1450,9 @@ export interface Entity {
   castingAbility: string | null;
   castRemaining: number;
   castTotal: number;
+  // Entity-targeted casting: the target captured when a cast begins. Timed casts
+  // resolve against this id so retargeting mid-cast cannot redirect the spell.
+  castTargetId: number | null;
   // Ground-targeted casting: the world point a `targetMode: 'position'` ability is
   // aimed at, captured (server-clamped to range) when the cast begins and read by
   // its area effects when it resolves. null for normal entity/self casts.

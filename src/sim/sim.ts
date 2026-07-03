@@ -4678,6 +4678,7 @@ export class Sim {
     p.castingAbility = FISHING_CAST_ID;
     p.castTotal = FISHING_CAST_TIME;
     p.castRemaining = FISHING_CAST_TIME;
+    p.castTargetId = null;
     p.channeling = false;
     this.emit({
       type: 'castStart',
