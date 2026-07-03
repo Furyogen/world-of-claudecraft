@@ -207,6 +207,7 @@ export function resetNythraxisEncounter(ctx: SimContext, boss: Entity): void {
   }
   boss.nythraxis = undefined;
   boss.castingAbility = null;
+  boss.castTargetId = null;
   boss.castRemaining = 0;
   boss.castTotal = 0;
   boss.channeling = false;
@@ -581,6 +582,7 @@ export function startNythraxisTransition(
   st.soulRendMarks = [];
   st.deathlessCastRemaining = 0;
   boss.castingAbility = null;
+  boss.castTargetId = null;
   boss.castRemaining = 0;
   boss.castTotal = 0;
   const transitionLines = [
@@ -788,6 +790,7 @@ export function startNythraxisDeathlessRage(
     complete: false,
   }));
   boss.castingAbility = 'nythraxis_deathless_rage';
+  boss.castTargetId = null;
   boss.castTotal = NYTHRAXIS_DEATHLESS_CAST;
   boss.castRemaining = NYTHRAXIS_DEATHLESS_CAST;
   boss.channeling = false;
@@ -808,12 +811,14 @@ export function updateNythraxisDeathlessRage(
 ): void {
   st.deathlessCastRemaining = Math.max(0, st.deathlessCastRemaining - DT);
   boss.castingAbility = 'nythraxis_deathless_rage';
+  boss.castTargetId = null;
   boss.castTotal = NYTHRAXIS_DEATHLESS_CAST;
   boss.castRemaining = st.deathlessCastRemaining;
   updateNythraxisWardChannels(ctx, boss, st);
   if (nythraxisWardstoneInterruptReady(st)) {
     st.deathlessCastRemaining = 0;
     boss.castingAbility = null;
+    boss.castTargetId = null;
     boss.castRemaining = 0;
     boss.castTotal = 0;
     st.deathlessStunRemaining = NYTHRAXIS_DEATHLESS_STUN;
@@ -838,6 +843,7 @@ export function updateNythraxisDeathlessRage(
   }
   if (st.deathlessCastRemaining > 0) return;
   boss.castingAbility = null;
+  boss.castTargetId = null;
   boss.castRemaining = 0;
   boss.castTotal = 0;
   nythraxisSay(ctx, boss, 'nythraxis', 'You cannot stop what was promised..', true);
@@ -888,6 +894,7 @@ export function updateNythraxisWardChannels(
     }
     channel.remaining = Math.max(0, channel.remaining - DT);
     p.castingAbility = 'nythraxis_ward_channel';
+    p.castTargetId = null;
     p.channeling = true;
     p.castTotal = NYTHRAXIS_DEATHLESS_CHANNEL;
     p.castRemaining = channel.remaining;
@@ -915,6 +922,7 @@ export function updateNythraxisWardChannels(
 export function clearNythraxisWardChannelCast(p: Entity): void {
   if (p.castingAbility !== 'nythraxis_ward_channel') return;
   p.castingAbility = null;
+  p.castTargetId = null;
   p.channeling = false;
   p.castRemaining = 0;
   p.castTotal = 0;
@@ -960,6 +968,7 @@ export function tryStartNythraxisWardChannel(
   channel.playerId = player.id;
   channel.remaining = NYTHRAXIS_DEATHLESS_CHANNEL;
   player.castingAbility = 'nythraxis_ward_channel';
+  player.castTargetId = null;
   player.channeling = true;
   player.castTotal = NYTHRAXIS_DEATHLESS_CHANNEL;
   player.castRemaining = NYTHRAXIS_DEATHLESS_CHANNEL;

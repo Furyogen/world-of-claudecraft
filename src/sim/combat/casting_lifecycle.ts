@@ -131,6 +131,7 @@ export function updateCasting(ctx: SimContext, p: Entity, meta: PlayerMeta): voi
       p.channeling = false;
       // completed ground-targeted channels drop their aim like every other
       // resolve path: castAim is always cleared on resolve
+      p.castTargetId = null;
       p.castAim = null;
       ctx.emit({ type: 'castStop', entityId: p.id, success: true });
     }
@@ -143,6 +144,7 @@ export function updateCasting(ctx: SimContext, p: Entity, meta: PlayerMeta): voi
     p.castRemaining = 0;
     ctx.emit({ type: 'castStop', entityId: p.id, success: true });
     if (castId === FISHING_CAST_ID) {
+      p.castTargetId = null;
       ctx.completeFishing(p, meta);
       return;
     }
@@ -150,6 +152,7 @@ export function updateCasting(ctx: SimContext, p: Entity, meta: PlayerMeta): voi
     if (res) applyAbility(ctx, p, meta, res);
     // the aim point is consumed by the resolved area effects; drop it so a later
     // non-aimed cast can't inherit a stale target point.
+    p.castTargetId = null;
     p.castAim = null;
   }
 }
@@ -158,6 +161,7 @@ export function cancelCast(ctx: SimContext, p: Entity): void {
   p.castingAbility = null;
   p.castRemaining = 0;
   p.channeling = false;
+  p.castTargetId = null;
   p.castAim = null;
   ctx.emit({ type: 'castStop', entityId: p.id, success: false });
 }
@@ -398,10 +402,12 @@ export function castAbility(
   // Stash the (clamped) aim so the resolved area effects read it, both for an
   // instant cast (resolved just below) and a cast-time spell (resolved on
   // completion in updateCasting). Cleared there / on cancel.
+  p.castTargetId = null;
   p.castAim = aimPoint;
 
   // Heroic-strike style: queue on next swing, pay cost on the swing itself.
   if (ability.onNextSwing) {
+    p.castTargetId = null;
     const toggledOff = p.queuedOnSwing === ability.id;
     p.queuedOnSwing = toggledOff ? null : ability.id;
     if (!toggledOff && canCastFree && consumeNextCastFree(ctx, p)) {
@@ -434,6 +440,7 @@ export function castAbility(
     spendResource(p, res.cost);
     armAbilityCooldown(p, ability.id, res.cooldown);
     p.castingAbility = ability.id;
+    p.castTargetId = null;
     p.castTotal = ability.channel.duration;
     p.castRemaining = ability.channel.duration;
     p.channeling = true;
@@ -453,6 +460,8 @@ export function castAbility(
     // Curse of Tongues stretches the resolved (already haste-adjusted) cast time.
     const stretchedCastTime = castTime * tonguesMult(p);
     p.castingAbility = ability.id;
+    p.castTargetId =
+      target && ability.requiresTarget && ability.targetType !== 'friendly' ? target.id : null;
     p.castTotal = stretchedCastTime;
     p.castRemaining = stretchedCastTime;
     p.gcdRemaining = Math.max(p.gcdRemaining, gcd);
@@ -461,8 +470,10 @@ export function castAbility(
   }
 
   if (!ability.offGcd) p.gcdRemaining = Math.max(p.gcdRemaining, gcd);
+  p.castTargetId = null;
   applyAbility(ctx, p, meta, res);
   // instant ground-targeted cast: its effects have consumed the aim point.
+  p.castTargetId = null;
   p.castAim = null;
 }
 
@@ -646,7 +657,8 @@ function applyAbility(ctx: SimContext, p: Entity, meta: PlayerMeta, res: Resolve
       return;
     }
   } else if (ability.requiresTarget) {
-    target = p.targetId !== null ? (ctx.entities.get(p.targetId) ?? null) : null;
+    const targetId = p.castTargetId ?? p.targetId;
+    target = targetId !== null ? (ctx.entities.get(targetId) ?? null) : null;
     if (!target || target.dead || !ctx.isHostileTo(p, target)) {
       ctx.error(p.id, 'You have no target.');
       return;

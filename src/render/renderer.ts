@@ -2081,6 +2081,7 @@ export class Renderer {
       skin,
       dead: false,
       castingAbility: null,
+      castTargetId: null,
       overheadEmoteId: null,
       overheadEmoteUntil: 0,
       objectItemId: null,

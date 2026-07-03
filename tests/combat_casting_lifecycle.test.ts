@@ -70,6 +70,29 @@ describe('casting_lifecycle: timed cast start -> progress -> finish', () => {
     expect(ticks).toBeGreaterThan(1); // actually progressed over multiple ticks
     expect(p.hp).toBeGreaterThan(hp0); // applyAbility ran the heal effect
   });
+
+  it('locks a hostile cast target at start so retargeting before completion cannot redirect it', () => {
+    const { sim, p, meta } = makeSim('mage', 12);
+    p.resource = p.maxResource = 500;
+    const first = spawnTarget(sim, p, 12, 12);
+    const second = spawnTarget(sim, p, 12, 14);
+    sim.targetEntity(first.id, p.id);
+    const firstHp0 = first.hp;
+    const secondHp0 = second.hp;
+
+    castAbility(sim.ctx, 'fireball', p.id);
+    expect(p.castingAbility).toBe('fireball');
+    expect(p.castTargetId).toBe(first.id);
+
+    sim.targetEntity(second.id, p.id);
+    expect(p.targetId).toBe(second.id);
+    drainCast(sim, p, meta);
+    expect(p.castTargetId).toBeNull();
+
+    for (let i = 0; i < 80 && first.hp === firstHp0 && second.hp === secondHp0; i++) sim.tick();
+    expect(first.hp).toBeLessThan(firstHp0);
+    expect(second.hp).toBe(secondHp0);
+  });
 });
 
 describe('casting_lifecycle: channel start -> tick -> finish', () => {

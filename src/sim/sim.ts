@@ -4651,6 +4651,7 @@ export class Sim {
     }
     if (p.sitting) this.standUp(p);
     p.castingAbility = FISHING_CAST_ID;
+    p.castTargetId = null;
     p.castTotal = FISHING_CAST_TIME;
     p.castRemaining = FISHING_CAST_TIME;
     p.channeling = false;

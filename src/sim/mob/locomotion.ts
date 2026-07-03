@@ -383,6 +383,7 @@ export function updateMob(ctx: SimContext, mob: Entity): void {
           mob.castRemaining = Math.max(0, mob.castRemaining - DT);
           if (mob.castRemaining <= 0) {
             mob.castingAbility = null;
+            mob.castTargetId = null;
             mob.castTotal = 0;
             mob.castRemaining = 0;
             const school = (bigCast.school ?? 'nature') as Aura['school'];
@@ -406,6 +407,7 @@ export function updateMob(ctx: SimContext, mob: Entity): void {
           if (mob.bigCastTimer <= 0) {
             mob.bigCastTimer = bigCast.every + bigCast.castTime;
             mob.castingAbility = bigCast.castId;
+            mob.castTargetId = null;
             mob.castTotal = bigCast.castTime;
             mob.castRemaining = bigCast.castTime;
             mob.channeling = false;
@@ -583,6 +585,7 @@ export function resetEvadingMob(ctx: SimContext, mob: Entity): void {
   mob.bigCastTimer = bigCastDef?.every ?? 0;
   if (bigCastDef && mob.castingAbility === bigCastDef.castId) {
     mob.castingAbility = null;
+    mob.castTargetId = null;
     mob.castTotal = 0;
     mob.castRemaining = 0;
   }

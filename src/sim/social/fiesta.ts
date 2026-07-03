@@ -287,6 +287,7 @@ export function fiestaDownEntity(ctx: SimContext, e: Entity, killer: Entity | nu
   e.auras = [];
   e.ccDr.clear();
   e.castingAbility = null;
+  e.castTargetId = null;
   e.castRemaining = 0;
   e.channeling = false;
   e.autoAttack = false;

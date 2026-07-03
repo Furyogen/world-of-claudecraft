@@ -84,6 +84,7 @@ export function respawnMob(ctx: SimContext, mob: Entity): void {
   mob.bigCastTimer = bigCastDef?.every ?? 0;
   if (bigCastDef && mob.castingAbility === bigCastDef.castId) {
     mob.castingAbility = null;
+    mob.castTargetId = null;
     mob.castTotal = 0;
     mob.castRemaining = 0;
   }

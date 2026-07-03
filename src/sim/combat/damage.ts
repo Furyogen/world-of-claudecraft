@@ -478,6 +478,7 @@ export function handleDeath(ctx: SimContext, e: Entity, killer: Entity | null): 
   e.auras = [];
   e.ccDr.clear();
   e.castingAbility = null;
+  e.castTargetId = null;
   ctx.emit({ type: 'death', entityId: e.id, killerId: killer?.id ?? -1 });
 
   // a dead mob keeps no raid marker — respawnMob reuses the same entity id,

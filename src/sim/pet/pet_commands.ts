@@ -651,6 +651,7 @@ export function healPet(ctx: SimContext, pid?: number): void {
   }
   ctx.spendResource(r.e, DEMON_HEAL_MANA_COST);
   r.e.castingAbility = DEMON_HEAL_CAST_ID;
+  r.e.castTargetId = null;
   r.e.castTotal = DEMON_HEAL_DURATION;
   r.e.castRemaining = DEMON_HEAL_DURATION;
   r.e.channeling = true;
