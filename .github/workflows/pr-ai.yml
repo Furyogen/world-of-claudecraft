@@ -5,9 +5,10 @@ name: PR AI assist
 # review, it does not gate merge. Lives in its own workflow so it never interferes with
 # the CI gate in ci.yml.
 #
-#   screenshots        boots the Vite dev client headless, runs a fixed offline tour
-#                       (character select, desktop HUD, mobile HUD), uploads the PNGs as
-#                       an artifact, and links them in a sticky PR comment.
+#   screenshots        boots the Vite dev client headless and, ONLY when the diff has a
+#                       visual change, renders the sections it touches (a mapped window, or
+#                       the in-world HUD for a generic visual change), then embeds the PNGs
+#                       inline in a sticky PR comment. A non-visual diff captures nothing.
 #   ai-review           reviews the PR diff with the OpenAI Codex CLI, authenticated via
 #                       ChatGPT OAuth (the CODEX_AUTH_JSON secret holds a `codex login`
 #                       auth.json), and posts the review as a sticky PR comment. The
@@ -48,6 +49,12 @@ jobs:
   screenshots:
     name: Screenshots of changes
     runs-on: ubuntu-latest
+    # contents:write so the embedded screenshots can be uploaded to the bot-owned asset
+    # branch; pull-requests:write to post the comment. A fork PR still gets a read-only
+    # token, so both degrade to a no-op (the scripts handle it) and never block.
+    permissions:
+      contents: write
+      pull-requests: write
     # issue_comment fires this workflow on every comment on any issue or PR; without this
     # guard the full checkout + npm ci + Vite boot + puppeteer run would fire on every
     # comment too, even though nothing in this job reads the comment.
@@ -92,9 +99,9 @@ jobs:
             sleep 2
           done
 
-      # Change-aware capture: map the diff to the screens it implies (inventory, world
-      # map, ...). Only on pull_request; otherwise pr_screenshots falls back to the fixed
-      # tour. pr.diff is gitignored.
+      # Change-aware capture: map the diff to the sections it touches (inventory, world map,
+      # or the in-world HUD for a generic visual change) and shoot only those. A diff with no
+      # visual change captures nothing. pr.diff is gitignored.
       - name: Compute PR diff (for change-aware capture)
         if: github.event_name == 'pull_request'
         env:
@@ -113,23 +120,13 @@ jobs:
         if: always()
         run: kill "$(cat .devpid)" 2>/dev/null || true
 
-      - name: Upload screenshots
-        id: upload
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: pr-screenshots
-          path: pr-shots/
-          if-no-files-found: warn
-
-      - name: Comment with screenshot link
+      # Host the PNGs on the bot asset branch and embed them inline in a sticky comment.
+      - name: Embed screenshots in a comment
         if: always() && github.event_name == 'pull_request'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-          ARTIFACT_URL: ${{ steps.upload.outputs.artifact-url }}
-          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           SHOTS_DIR: pr-shots
         run: node scripts/pr_comment_shots.mjs
 
