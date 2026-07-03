@@ -34,7 +34,13 @@ export class GameAudio {
     }
   }
 
-  private noise(duration: number, filterFreq: number, gain: number, decay = 0.9, filterType: BiquadFilterType = 'lowpass'): void {
+  private noise(
+    duration: number,
+    filterFreq: number,
+    gain: number,
+    decay = 0.9,
+    filterType: BiquadFilterType = 'lowpass',
+  ): void {
     if (!this.ctx || !this.master || !this.noiseBuf) return;
     const t = this.ctx.currentTime;
     const src = this.ctx.createBufferSource();
@@ -50,7 +56,14 @@ export class GameAudio {
     src.start(t, Math.random() * 0.5, duration);
   }
 
-  private tone(freq: number, duration: number, gain: number, type: OscillatorType = 'sine', delay = 0, slideTo?: number): void {
+  private tone(
+    freq: number,
+    duration: number,
+    gain: number,
+    type: OscillatorType = 'sine',
+    delay = 0,
+    slideTo?: number,
+  ): void {
     if (!this.ctx || !this.master) return;
     const t = this.ctx.currentTime + delay;
     const osc = this.ctx.createOscillator();
@@ -103,17 +116,36 @@ export class GameAudio {
 
   levelUp(): void {
     const notes = [392, 523, 659, 784, 1046];
-    notes.forEach((f, i) => this.tone(f, 0.5, 0.18, 'triangle', i * 0.09));
+    notes.forEach((f, i) => {
+      this.tone(f, 0.5, 0.18, 'triangle', i * 0.09);
+    });
     this.noise(0.8, 5000, 0.06, 0.95, 'highpass');
   }
 
+  // Accepting a quest: a parchment unfurl under the rising two-tone, so it
+  // reads as "taking the scroll" rather than a bare UI blip.
   questAccept(): void {
+    this.noise(0.18, 1500, 0.12, 0.75, 'bandpass');
     this.tone(660, 0.18, 0.14, 'triangle');
     this.tone(880, 0.25, 0.14, 'triangle', 0.1);
   }
 
+  // Completing / turning in: the fanfare doubled an octave down with a soft
+  // sawtooth, a heraldic-horn undertone beneath the bright arpeggio.
   questDone(): void {
-    [523, 659, 784].forEach((f, i) => this.tone(f, 0.35, 0.16, 'triangle', i * 0.12));
+    [523, 659, 784].forEach((f, i) => {
+      this.tone(f, 0.35, 0.16, 'triangle', i * 0.12);
+      this.tone(f / 2, 0.42, 0.05, 'sawtooth', i * 0.12);
+    });
+  }
+
+  // Abandoning a quest: a page flip into the falling two-tone, ending on a
+  // low "book shut" thump; the inverse of the rising accept.
+  questAbandon(): void {
+    this.noise(0.14, 1100, 0.1, 0.75, 'bandpass');
+    this.tone(440, 0.2, 0.13, 'triangle');
+    this.tone(311, 0.32, 0.13, 'triangle', 0.12);
+    this.tone(98, 0.3, 0.12, 'sine', 0.26, 60);
   }
 
   coin(): void {
@@ -136,11 +168,15 @@ export class GameAudio {
   }
 
   drink(): void {
-    [0, 0.25, 0.5].forEach((d) => this.tone(420 + Math.random() * 80, 0.12, 0.08, 'sine', d, 280));
+    [0, 0.25, 0.5].forEach((d) => {
+      this.tone(420 + Math.random() * 80, 0.12, 0.08, 'sine', d, 280);
+    });
   }
 
   eat(): void {
-    [0, 0.3].forEach((d) => this.noise(0.1, 800, 0.1, 0.8, 'bandpass'));
+    [0, 0.3].forEach(() => {
+      this.noise(0.1, 800, 0.1, 0.8, 'bandpass');
+    });
   }
 
   click(): void {
@@ -200,7 +236,10 @@ export class GameAudio {
     const base = [523, 587, 659, 784][Math.min(3, tier)];
     this.tone(base, 0.16, 0.2, 'square');
     this.tone(base * 1.5, 0.22, 0.16, 'triangle', 0.05);
-    if (tier >= 2) { this.tone(base * 2, 0.3, 0.14, 'triangle', 0.1); this.noise(0.35, 5200, 0.1, 0.7, 'highpass'); }
+    if (tier >= 2) {
+      this.tone(base * 2, 0.3, 0.14, 'triangle', 0.1);
+      this.noise(0.35, 5200, 0.1, 0.7, 'highpass');
+    }
   }
 
   // Your team scored a point — quick, satisfying blip (higher when it's yours).
@@ -211,7 +250,9 @@ export class GameAudio {
 
   // A new augment wave drops: triumphant rising fanfare — the party escalates.
   fiestaWave(): void {
-    [523, 659, 784, 1046].forEach((f, i) => this.tone(f, 0.4, 0.18, 'triangle', i * 0.08));
+    [523, 659, 784, 1046].forEach((f, i) => {
+      this.tone(f, 0.4, 0.18, 'triangle', i * 0.08);
+    });
     this.noise(0.6, 5000, 0.08, 0.9, 'highpass');
   }
 

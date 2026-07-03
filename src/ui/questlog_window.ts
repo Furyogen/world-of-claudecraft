@@ -16,6 +16,7 @@
 // stylesheet; the per-quality reward color comes from the shared QUALITY_COLOR
 // map, the fallback is a CSS token, so there is no literal hex/px in TS).
 
+import { audio } from '../game/audio';
 import { ITEMS, NPCS } from '../sim/data';
 import type { IWorld } from '../world_api';
 import { markDialogRoot } from './dialog_root';
@@ -200,6 +201,9 @@ export class QuestLogWindow {
         t('questUi.log.abandonConfirm'),
         t('questUi.log.abandonCancel'),
         () => {
+          // Confirmed abandon: the falling "closing the book" cue, distinct
+          // from the rising accept and the questDone fanfare.
+          audio.questAbandon();
           this.deps.world().abandonQuest(questId);
           this.selected = null;
           this.render();
