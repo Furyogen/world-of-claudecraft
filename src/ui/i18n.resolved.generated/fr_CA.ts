@@ -1973,7 +1973,7 @@ export const fr_CA: EnTranslations = {
     "password": "Mot de passe",
     "passwordError": "Veuillez saisir votre mot de passe.",
     "passwordPlaceholder": "Saisir le mot de passe",
-    "email": "E-mail",
+    "email": "Courriel",
     "emailPlaceholder": "vous@example.com",
     "emailError": "Veuillez saisir une adresse e-mail valide.",
     "showPassword": "Afficher le mot de passe",

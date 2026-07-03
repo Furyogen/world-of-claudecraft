@@ -1973,7 +1973,7 @@ export const es_ES: EnTranslations = {
     "password": "Contraseña",
     "passwordError": "Por favor, introduce tu contraseña.",
     "passwordPlaceholder": "Introduce tu contraseña",
-    "email": "Correo electrónico",
+    "email": "Dirección de correo",
     "emailPlaceholder": "tu@example.com",
     "emailError": "Introduce una dirección de correo válida.",
     "showPassword": "Mostrar contraseña",
