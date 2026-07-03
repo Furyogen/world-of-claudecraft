@@ -1274,9 +1274,8 @@ function l1LootDistribution(): Scenario {
 // them through BOTH despawn branches (despawnTimer + the idle-despawn timer on a
 // DAMAGE_IDLE_DESPAWN mob) so the prologue collect-then-drop loop fires; schedules
 // three delayed events (due+fires, due+guard-fails-and-drops, future+stays-pending)
-// so emitDueDelayedEvents exercises every branch; then kills the player, releases the
-// spirit (rises as a ghost at the nearest graveyard), and resurrects at the Spirit
-// Healer (in place, with Resurrection Sickness at level 10).
+// so emitDueDelayedEvents exercises every branch; then kills the player and releases
+// the spirit to the zone graveyard (full hp, auras + ccDr cleared, out of combat).
 function entityRoster(): Scenario {
   return {
     name: 'entity_roster',
@@ -1284,7 +1283,7 @@ function entityRoster(): Scenario {
       'addEntity roster + spatial grids',
       'despawn prologue: despawnTimer + DAMAGE_IDLE_DESPAWN idle-despawn (collect-then-drop)',
       'emitDueDelayedEvents drain (fires / guard-drops / stays-pending)',
-      'releaseSpirit ghost release + Spirit Healer resurrect (Resurrection Sickness)',
+      'releaseSpirit outdoor graveyard respawn (full hp, ~10966)',
     ],
     sampleEvery: 2,
     build: () => new Sim({ seed: 1012, playerClass: 'warrior', autoEquip: true }),
@@ -1323,14 +1322,11 @@ function entityRoster(): Scenario {
       delayed.push({ at: sim.time + 100, event: { type: 'respawn', pid: p.id } });
       rec.tick(5); // both mobs despawn (0.1s) and the due delayed events resolve
       rec.snapshot('post-churn');
-      // (4) outdoor release-spirit -> rise as a ghost at the nearest graveyard, then
-      // resurrect at the Spirit Healer (in place, with Resurrection Sickness at lvl 10).
+      // (4) outdoor release-spirit -> zone graveyard at FULL hp.
       p.hp = 1;
       p.dead = true;
       sim.releaseSpirit();
-      rec.snapshot('ghost-release');
-      sim.resurrectAtSpiritHealer();
-      rec.snapshot('healer-resurrect');
+      rec.snapshot('graveyard-release');
       rec.tick(2);
     },
   };
