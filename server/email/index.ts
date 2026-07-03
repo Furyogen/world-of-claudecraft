@@ -8,6 +8,7 @@ import { type AccountMailTarget, recordEmailLog } from '../db';
 import { logger } from '../http/logger';
 import { selectSender } from './sender';
 import { EmailService } from './service';
+import { hashEmailToken, makeEmailToken } from './tokens';
 
 export type { EmailCategory, EmailEvent } from './events';
 export type { EmailSender, OutboundEmail } from './sender';
@@ -52,6 +53,13 @@ export function emailChangeVerifyUrl(token: string, env?: NodeJS.ProcessEnv): st
   return `${emailBaseUrl(env)}/api/account/email/verify?token=${encodeURIComponent(token)}`;
 }
 
+// Unlike the email-verify link (which hits a JSON API route), the reset link
+// lands on the client page so the logged-out user can type a new password; the
+// client reads the ?reset= token at load.
+export function passwordResetUrl(token: string, env?: NodeJS.ProcessEnv): string {
+  return `${emailBaseUrl(env)}/?reset=${encodeURIComponent(token)}`;
+}
+
 type Target = Pick<AccountMailTarget, 'id' | 'username' | 'email' | 'locale' | 'marketing_opt_in'>;
 
 function fire(p: Promise<unknown>): void {
@@ -78,6 +86,18 @@ export function emailPasswordChanged(t: Target): void {
       locale: t.locale,
       accountId: t.id,
       data: { username: t.username },
+    }),
+  );
+}
+
+export function emailPasswordReset(t: Target, resetUrl: string): void {
+  fire(
+    getEmailService().send({
+      event: 'password_reset',
+      to: t.email,
+      locale: t.locale,
+      accountId: t.id,
+      data: { username: t.username, resetUrl },
     }),
   );
 }

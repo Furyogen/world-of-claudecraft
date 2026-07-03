@@ -32,6 +32,23 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mailbox.toLabel': '받는 사람',
   'itemUi.kind.bag': '가방',
   'itemUi.tooltip.bagSlots': '{slots}칸 가방',
+  'hudChrome.auth.forgotPrompt': '비밀번호를 잊으셨나요?',
+  'hudChrome.auth.forgotTitle': '비밀번호 재설정',
+  'hudChrome.auth.forgotHint': '사용자 이름을 입력하면 등록된 이메일로 재설정 링크를 보내드립니다.',
+  'hudChrome.auth.forgotUsername': '사용자 이름',
+  'hudChrome.auth.forgotSubmit': '재설정 링크 보내기',
+  'hudChrome.auth.forgotSent':
+    '해당 사용자 이름의 계정에 등록된 이메일이 있으면 재설정 링크를 보냈습니다. 받은 편지함을 확인하세요.',
+  'hudChrome.auth.forgotBack': '로그인으로 돌아가기',
+  'hudChrome.auth.resetTitle': '새 비밀번호 설정',
+  'hudChrome.auth.resetNewPassword': '새 비밀번호',
+  'hudChrome.auth.resetConfirm': '새 비밀번호 확인',
+  'hudChrome.auth.resetSubmit': '비밀번호 업데이트',
+  'hudChrome.auth.resetDone': '비밀번호가 업데이트되었습니다. 이제 로그인할 수 있습니다.',
+  'hudChrome.auth.resetMismatch': '비밀번호가 일치하지 않습니다.',
+  'hudChrome.auth.resetErrInvalid':
+    '이 재설정 링크가 유효하지 않거나 만료되었습니다. 새 링크를 요청하세요.',
+  // Guild roster last-seen (M16 non-Latin fill)
   'hudChrome.social.lastSeen': '마지막 접속: {when}',
   'hudChrome.social.lastSeenNever': '없음',
   'hudChrome.dailyRewards.title': '일일 보상',

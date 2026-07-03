@@ -1272,6 +1272,28 @@ export const hudChromeStrings = {
   worldBoss: {
     spawn: '{name} rises over Thornpeak Heights!',
   },
+  // Password-reset ("forgot password") flow: the login-panel entry link, the
+  // request-a-link panel, and the set-a-new-password panel (index.html +
+  // main.ts). English-only lives here; the reset-link error is re-localized in
+  // main.ts userFacingApiError. The generic "sent" copy never reveals whether an
+  // account exists.
+  auth: {
+    forgotPrompt: 'Forgot password?',
+    forgotTitle: 'Reset your password',
+    forgotHint: 'Enter your username and we will email a reset link to the address on file.',
+    forgotUsername: 'Username',
+    forgotSubmit: 'Send reset link',
+    forgotSent:
+      'If an account with that username has an email on file, we have sent a reset link. Check your inbox.',
+    forgotBack: 'Back to log in',
+    resetTitle: 'Choose a new password',
+    resetNewPassword: 'New password',
+    resetConfirm: 'Confirm new password',
+    resetSubmit: 'Update password',
+    resetDone: 'Your password has been updated. You can now log in.',
+    resetMismatch: 'The passwords do not match.',
+    resetErrInvalid: 'This reset link is invalid or has expired. Request a new one.',
+  },
   // Loot window title shown only when the chest entity is missing (the normal path
   // uses the chest's localized entity name); replaces a former hard-coded 'Chest'.
   loot: {

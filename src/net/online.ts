@@ -427,6 +427,18 @@ export class Api {
     await this.post('/api/account/password', { current, next });
   }
 
+  // Request a password-reset email (for a locked-out user). Always resolves: the
+  // server returns 200 whether or not the username exists, so the UI cannot be
+  // used to enumerate accounts.
+  async requestPasswordReset(username: string): Promise<void> {
+    await this.post('/api/account/password/forgot', { username });
+  }
+
+  // Complete a password reset with the emailed token and a new password.
+  async resetPassword(token: string, next: string): Promise<void> {
+    await this.post('/api/account/password/reset', { token, next });
+  }
+
   async logout(): Promise<void> {
     await this.post('/api/account/logout', {});
   }
