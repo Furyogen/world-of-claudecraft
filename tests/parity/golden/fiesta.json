@@ -30,7 +30,7 @@
       "tick": 25,
       "time": 1.25,
       "nextId": 393,
-      "state": "8270a66f",
+      "state": "e69b6d0b",
       "events": "48044b44",
       "rng": {
         "draws": 0,
@@ -41,7 +41,7 @@
       "tick": 50,
       "time": 2.5,
       "nextId": 393,
-      "state": "58a296e5",
+      "state": "eb3b6921",
       "events": "536fe27e",
       "rng": {
         "draws": 36,
@@ -52,7 +52,7 @@
       "tick": 75,
       "time": 3.75,
       "nextId": 393,
-      "state": "f5c4e463",
+      "state": "e265a38f",
       "events": "09b268e6",
       "rng": {
         "draws": 120,
@@ -63,7 +63,7 @@
       "tick": 100,
       "time": 5,
       "nextId": 393,
-      "state": "dde3adc9",
+      "state": "7e82a425",
       "events": "df43dd26",
       "rng": {
         "draws": 230,
@@ -74,7 +74,7 @@
       "tick": 125,
       "time": 6.25,
       "nextId": 393,
-      "state": "2a4e6d3b",
+      "state": "be3a7367",
       "events": "a3606c28",
       "rng": {
         "draws": 384,
@@ -85,7 +85,7 @@
       "tick": 150,
       "time": 7.5,
       "nextId": 393,
-      "state": "e5e4dd9b",
+      "state": "805ea847",
       "events": "741638a5",
       "rng": {
         "draws": 543,
@@ -96,7 +96,7 @@
       "tick": 163,
       "time": 8.15,
       "nextId": 393,
-      "state": "01859a6a",
+      "state": "371a6b8e",
       "events": "8495b1b8",
       "rng": {
         "draws": 608,
@@ -139,7 +139,8 @@
               "war_toughness": 3
             },
             "spec": "arms"
-          }
+          },
+          "worldBossDaily": {}
         },
         {
           "activeLoadout": -1,
@@ -174,7 +175,8 @@
               "mag_wand_specialization": 2
             },
             "spec": "arcane"
-          }
+          },
+          "worldBossDaily": {}
         },
         {
           "activeLoadout": -1,
@@ -214,7 +216,8 @@
               "rog_malice": 3
             },
             "spec": "assassination"
-          }
+          },
+          "worldBossDaily": {}
         },
         {
           "activeLoadout": -1,
@@ -249,7 +252,8 @@
               "hun_lethal_shots": 3
             },
             "spec": "beast_mastery"
-          }
+          },
+          "worldBossDaily": {}
         }
       ],
       "entities": [

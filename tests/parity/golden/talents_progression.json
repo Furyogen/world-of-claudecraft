@@ -17,7 +17,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 390,
-      "state": "962d07b8",
+      "state": "64589a80",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -45,7 +45,8 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "worldBossDaily": {}
         }
       ],
       "entities": [
@@ -103,7 +104,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 390,
-      "state": "34fac19c",
+      "state": "5627852c",
       "events": "799cce3e",
       "rng": {
         "draws": 0,
@@ -136,7 +137,8 @@
               "war_cruelty": 2
             },
             "spec": "arms"
-          }
+          },
+          "worldBossDaily": {}
         }
       ],
       "entities": [
@@ -194,7 +196,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 390,
-      "state": "01ad8387",
+      "state": "b65357af",
       "events": "a8848b3e",
       "rng": {
         "draws": 0,
@@ -224,7 +226,8 @@
             "choices": {},
             "ranks": {},
             "spec": "arms"
-          }
+          },
+          "worldBossDaily": {}
         }
       ],
       "entities": [
@@ -282,7 +285,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 390,
-      "state": "e441f006",
+      "state": "ac948262",
       "events": "f3824701",
       "rng": {
         "draws": 0,
@@ -330,7 +333,8 @@
               "war_cruelty": 3
             },
             "spec": "arms"
-          }
+          },
+          "worldBossDaily": {}
         }
       ],
       "entities": [
@@ -388,7 +392,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 390,
-      "state": "28e8393d",
+      "state": "e45d95e1",
       "events": "68e599fc",
       "rng": {
         "draws": 0,
@@ -436,7 +440,8 @@
               "arms_imp_overpower": 2
             },
             "spec": "arms"
-          }
+          },
+          "worldBossDaily": {}
         }
       ],
       "entities": [
@@ -494,7 +499,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 390,
-      "state": "0c148e69",
+      "state": "a90c9ac5",
       "events": "799cce3e",
       "rng": {
         "draws": 0,
@@ -540,7 +545,8 @@
             "choices": {},
             "ranks": {},
             "spec": "fury"
-          }
+          },
+          "worldBossDaily": {}
         }
       ],
       "entities": [
@@ -598,7 +604,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 390,
-      "state": "0c148e69",
+      "state": "a90c9ac5",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -644,7 +650,8 @@
             "choices": {},
             "ranks": {},
             "spec": "fury"
-          }
+          },
+          "worldBossDaily": {}
         }
       ],
       "entities": [

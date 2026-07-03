@@ -31,7 +31,7 @@
       "tick": 2,
       "time": 0.1,
       "nextId": 405,
-      "state": "fc7d5acb",
+      "state": "cc3620a3",
       "events": "3b2339dc",
       "rng": {
         "draws": 35,
@@ -58,7 +58,8 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "worldBossDaily": {}
         },
         {
           "activeLoadout": -1,
@@ -79,7 +80,8 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "worldBossDaily": {}
         }
       ],
       "entities": [
@@ -793,8 +795,8 @@
       "tick": 4,
       "time": 0.2,
       "nextId": 405,
-      "state": "0d16c831",
-      "events": "1ebf3fdc",
+      "state": "389eeab0",
+      "events": "35839585",
       "rng": {
         "draws": 49,
         "digest": "1d1c5dad"
@@ -808,7 +810,7 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
-            "damageTaken": 110624,
+            "damageTaken": 163124,
             "deaths": 1
           },
           "delveClears": {},
@@ -823,7 +825,8 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "worldBossDaily": {}
         },
         {
           "activeLoadout": -1,
@@ -844,7 +847,8 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "worldBossDaily": {}
         }
       ],
       "entities": [
@@ -903,7 +907,7 @@
           "critChance": 0.056,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.056,
-          "fallStartY": 42.122741,
+          "fallStartY": 57.122741,
           "fiveSecondRule": 99.2,
           "hp": 50000,
           "id": 390,
@@ -1537,8 +1541,8 @@
       "tick": 5,
       "time": 0.25,
       "nextId": 405,
-      "state": "cd618b41",
-      "events": "73ee09ee",
+      "state": "46836e3f",
+      "events": "eda0c419",
       "rng": {
         "draws": 49,
         "digest": "1d1c5dad"
@@ -1548,7 +1552,7 @@
       "tick": 10,
       "time": 0.5,
       "nextId": 405,
-      "state": "7aa522fb",
+      "state": "c86ba999",
       "events": "741638a5",
       "rng": {
         "draws": 49,
@@ -1559,7 +1563,7 @@
       "tick": 15,
       "time": 0.75,
       "nextId": 405,
-      "state": "c41cb9d1",
+      "state": "e67e8ccf",
       "events": "741638a5",
       "rng": {
         "draws": 49,
@@ -1570,7 +1574,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 405,
-      "state": "89a693ec",
+      "state": "3b71728a",
       "events": "741638a5",
       "rng": {
         "draws": 49,
@@ -1581,7 +1585,7 @@
       "tick": 24,
       "time": 1.2,
       "nextId": 405,
-      "state": "58c9c7cc",
+      "state": "70ba90ea",
       "events": "741638a5",
       "rng": {
         "draws": 49,
@@ -1596,7 +1600,7 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
-            "damageTaken": 110624,
+            "damageTaken": 163124,
             "deaths": 1
           },
           "delveClears": {},
@@ -1611,7 +1615,8 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "worldBossDaily": {}
         },
         {
           "activeLoadout": -1,
@@ -1620,7 +1625,7 @@
           "cls": "mage",
           "companionUpgrades": {},
           "counters": {
-            "damageTaken": 110624,
+            "damageTaken": 163124,
             "deaths": 1
           },
           "delveClears": {},
@@ -1635,7 +1640,8 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "worldBossDaily": {}
         }
       ],
       "entities": [
@@ -1742,7 +1748,7 @@
       "tick": 24,
       "time": 1.2,
       "nextId": 405,
-      "state": "58c9c7cc",
+      "state": "70ba90ea",
       "events": "741638a5",
       "rng": {
         "draws": 49,
@@ -1757,7 +1763,7 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
-            "damageTaken": 110624,
+            "damageTaken": 163124,
             "deaths": 1
           },
           "delveClears": {},
@@ -1772,7 +1778,8 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "worldBossDaily": {}
         },
         {
           "activeLoadout": -1,
@@ -1781,7 +1788,7 @@
           "cls": "mage",
           "companionUpgrades": {},
           "counters": {
-            "damageTaken": 110624,
+            "damageTaken": 163124,
             "deaths": 1
           },
           "delveClears": {},
@@ -1796,7 +1803,8 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "worldBossDaily": {}
         }
       ],
       "entities": [

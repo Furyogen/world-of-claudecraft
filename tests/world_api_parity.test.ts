@@ -338,7 +338,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
   it('pins total / data / method counts', () => {
     expect(IWORLD_MEMBERS.length).toBe(153);
     expect(DATA_MEMBERS.length).toBe(37);
-    expect(METHOD_MEMBERS.length).toBe(114);
+    expect(METHOD_MEMBERS.length).toBe(116);
   });
 
   it('has no duplicate member names', () => {

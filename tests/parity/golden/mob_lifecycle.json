@@ -31,7 +31,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 394,
-      "state": "22c64089",
+      "state": "9ec1ec71",
       "events": "c4f6a5ca",
       "rng": {
         "draws": 4,
@@ -64,6 +64,7 @@
             "choices": {},
             "ranks": {}
           },
+          "worldBossDaily": {},
           "xp": 84
         }
       ],
@@ -347,7 +348,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 395,
-      "state": "deb402ec",
+      "state": "5a53c578",
       "events": "29d51e67",
       "rng": {
         "draws": 7,
@@ -380,6 +381,7 @@
             "choices": {},
             "ranks": {}
           },
+          "worldBossDaily": {},
           "xp": 198
         }
       ],
@@ -721,7 +723,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 395,
-      "state": "ea820d37",
+      "state": "020722e7",
       "events": "82e45265",
       "rng": {
         "draws": 8,
@@ -755,6 +757,7 @@
             "choices": {},
             "ranks": {}
           },
+          "worldBossDaily": {},
           "xp": 198
         }
       ],
@@ -1097,7 +1100,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 397,
-      "state": "e7682f22",
+      "state": "5562da35",
       "events": "a2b8439c",
       "rng": {
         "draws": 13,
@@ -1131,6 +1134,7 @@
             "choices": {},
             "ranks": {}
           },
+          "worldBossDaily": {},
           "xp": 282
         }
       ],
@@ -1473,7 +1477,7 @@
           "critChance": 0.05,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.05,
-          "fallStartY": 39.410541,
+          "fallStartY": 54.410541,
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 84,
@@ -1488,14 +1492,14 @@
           "petMode": "defensive",
           "pos": {
             "x": 300,
-            "y": 39.410541,
+            "y": 54.410541,
             "z": 300
           },
           "potionCooldownUntil": -1,
           "respawnTimer": -0.05,
           "spawnPos": {
             "x": 300,
-            "y": 39.410541,
+            "y": 54.410541,
             "z": 300
           },
           "stats": {
@@ -1515,7 +1519,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 398,
-      "state": "759127f3",
+      "state": "a86dc0f8",
       "events": "d877e3e8",
       "rng": {
         "draws": 17,
@@ -1549,6 +1553,7 @@
             "choices": {},
             "ranks": {}
           },
+          "worldBossDaily": {},
           "xp": 366
         }
       ],
@@ -1891,7 +1896,7 @@
           "critChance": 0.05,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.05,
-          "fallStartY": 39.410541,
+          "fallStartY": 54.410541,
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 84,
@@ -1906,14 +1911,14 @@
           "petMode": "defensive",
           "pos": {
             "x": 300,
-            "y": 39.410541,
+            "y": 54.410541,
             "z": 300
           },
           "potionCooldownUntil": -1,
           "respawnTimer": -0.05,
           "spawnPos": {
             "x": 300,
-            "y": 39.410541,
+            "y": 54.410541,
             "z": 300
           },
           "stats": {
@@ -1934,7 +1939,7 @@
           "dead": true,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.05,
-          "fallStartY": 41.399945,
+          "fallStartY": 56.399945,
           "fiveSecondRule": 99,
           "hostile": true,
           "id": 397,
@@ -1942,7 +1947,7 @@
           "kind": "mob",
           "leashAnchor": {
             "x": 700,
-            "y": 41.399945,
+            "y": 56.399945,
             "z": 300
           },
           "level": 5,
@@ -1960,14 +1965,14 @@
           "petMode": "defensive",
           "pos": {
             "x": 700,
-            "y": 41.399945,
+            "y": 56.399945,
             "z": 300
           },
           "potionCooldownUntil": -1,
           "respawnTimer": -0.05,
           "spawnPos": {
             "x": 700,
-            "y": 41.399945,
+            "y": 56.399945,
             "z": 300
           },
           "stats": {
@@ -1987,7 +1992,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 398,
-      "state": "759127f3",
+      "state": "a86dc0f8",
       "events": "741638a5",
       "rng": {
         "draws": 17,
@@ -2021,6 +2026,7 @@
             "choices": {},
             "ranks": {}
           },
+          "worldBossDaily": {},
           "xp": 366
         }
       ],
@@ -2363,7 +2369,7 @@
           "critChance": 0.05,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.05,
-          "fallStartY": 39.410541,
+          "fallStartY": 54.410541,
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 84,
@@ -2378,14 +2384,14 @@
           "petMode": "defensive",
           "pos": {
             "x": 300,
-            "y": 39.410541,
+            "y": 54.410541,
             "z": 300
           },
           "potionCooldownUntil": -1,
           "respawnTimer": -0.05,
           "spawnPos": {
             "x": 300,
-            "y": 39.410541,
+            "y": 54.410541,
             "z": 300
           },
           "stats": {
@@ -2406,7 +2412,7 @@
           "dead": true,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.05,
-          "fallStartY": 41.399945,
+          "fallStartY": 56.399945,
           "fiveSecondRule": 99,
           "hostile": true,
           "id": 397,
@@ -2414,7 +2420,7 @@
           "kind": "mob",
           "leashAnchor": {
             "x": 700,
-            "y": 41.399945,
+            "y": 56.399945,
             "z": 300
           },
           "level": 5,
@@ -2432,14 +2438,14 @@
           "petMode": "defensive",
           "pos": {
             "x": 700,
-            "y": 41.399945,
+            "y": 56.399945,
             "z": 300
           },
           "potionCooldownUntil": -1,
           "respawnTimer": -0.05,
           "spawnPos": {
             "x": 700,
-            "y": 41.399945,
+            "y": 56.399945,
             "z": 300
           },
           "stats": {

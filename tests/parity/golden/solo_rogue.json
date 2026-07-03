@@ -15,7 +15,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 390,
-      "state": "e440f72d",
+      "state": "3dfeb4d1",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -43,7 +43,8 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "worldBossDaily": {}
         }
       ],
       "entities": [
@@ -103,7 +104,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 391,
-      "state": "9972fbba",
+      "state": "8868ea2e",
       "events": "046941dc",
       "rng": {
         "draws": 9,
@@ -114,7 +115,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 391,
-      "state": "d2376771",
+      "state": "e7e162cd",
       "events": "731af17e",
       "rng": {
         "draws": 15,
@@ -125,7 +126,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 391,
-      "state": "c4674bc6",
+      "state": "a4caf822",
       "events": "f2487ec0",
       "rng": {
         "draws": 90,
@@ -136,7 +137,7 @@
       "tick": 72,
       "time": 3.6,
       "nextId": 391,
-      "state": "ec8f67ea",
+      "state": "f19aefde",
       "events": "741638a5",
       "rng": {
         "draws": 143,
@@ -168,7 +169,8 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "worldBossDaily": {}
         }
       ],
       "entities": [
