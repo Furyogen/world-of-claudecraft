@@ -7,17 +7,26 @@ them is a required check.
 ## What it does
 
 1. **Screenshots of changes** (`screenshots` job). Boots the Vite dev client headless on
-   a runner (software GL via SwiftShader, no GPU needed) and captures PNGs of the relevant
-   screens. The frames are uploaded as the `pr-screenshots` artifact and linked from a
-   sticky PR comment. Two modes (`scripts/pr_screenshots.mjs`):
-   - **Change-aware** (when a diff is available): it maps the changed paths to the screens
-     they imply and shoots exactly those, cropped to the relevant region. A change under
-     `src/ui/bags*` captures the inventory window; a change under `src/sim/content/zones*`
-     (or the map/terrain renderer) teleports to a landmark and captures the world map. The
-     target registry (which paths imply which screen, and how to bring it up + clip it)
-     lives in `scripts/pr_shot_targets.mjs`; add coverage with one entry there.
-   - **Fixed tour** (no diff or no matched target): a consistent baseline, character
-     select, desktop HUD, mobile HUD. Keep all recipes offline and quick.
+   a runner (software GL via SwiftShader, no GPU needed) and, only when the diff has a
+   visual change, captures PNGs of the sections it touches, then **embeds them inline** in a
+   sticky PR comment (no artifact to download). The capture plan comes from the diff alone
+   (`scripts/pr_screenshots.mjs` + the classifier in `scripts/pr_shot_targets.mjs`):
+   - **Specific windows**: a change under `src/ui/bags*` captures the inventory window; a
+     change under `src/sim/content/zones*` (or the map/terrain renderer) teleports to a
+     landmark and captures the world map, each cropped to that window. The target registry
+     (which paths imply which screen, and how to bring it up + clip it) lives in
+     `scripts/pr_shot_targets.mjs`; add coverage with one entry there.
+   - **Generic HUD**: a visual change that maps to no specific window (renderer, HUD chrome,
+     CSS) captures the in-world desktop HUD, plus the mobile HUD when the change touches the
+     mobile/responsive surface (`hud.mobile`, `play.html`, touch controls).
+   - **Nothing**: a backend/data/i18n-only diff is not visual, so it captures no frames and
+     posts no screenshots. There is no fixed tour of unrelated screens.
+
+   Inline embedding needs a URL GitHub can fetch (artifacts are not embeddable and markdown
+   does not render `data:` URIs), so `scripts/gh_image_host.mjs` uploads each PNG to a
+   bot-owned orphan branch (`bot-pr-screenshots`) via the REST API and references its raw
+   URL. This needs the job's `contents: write` permission; on a fork PR the token is
+   read-only, so it degrades to a note instead of broken image links.
 2. **AI review** (`ai-review` job). Reviews the PR with the OpenAI Codex CLI,
    authenticated with a ChatGPT account via OAuth (no API key), and posts the review as a
    sticky PR comment: a short overall assessment, a "Verified" list of the commands it
@@ -104,7 +113,8 @@ The screenshots job sends nothing to a third party; it only renders your own cli
 Pull requests from forks get a read-only `GITHUB_TOKEN` and cannot read repo secrets on
 the `pull_request` trigger. Both comment steps and the automatic AI review degrade to a
 no-op there (the scripts detect the missing write access / auth and skip), so the workflow
-never errors on a fork PR. Screenshots are still captured and uploaded as an artifact.
+never errors on a fork PR. Screenshots are still captured, but with a read-only token they
+cannot be hosted for inline embedding, so the comment shows a short note instead.
 
 The on-demand `/review` and `/suggest` comment trigger is different: `issue_comment`
 always runs with full repo secrets, regardless of whether the PR is from a fork, and it
@@ -113,13 +123,15 @@ is gated on the commenter's `author_association` with this repo, not the PR's or
 and is a deliberate maintainer opt-in with documented mitigations (see "Requesting a
 review on demand" above).
 
-## Running the screenshot tour locally
+## Running the screenshot capture locally
 
 ```sh
 npm run dev                       # serves the client on :5173
-BROWSER_PATH=/path/to/chrome \
-  node scripts/pr_screenshots.mjs # writes PNGs into pr-shots/
+git diff --no-color origin/main > pr.diff   # the change to classify
+BROWSER_PATH=/path/to/chrome DIFF_FILE=pr.diff \
+  node scripts/pr_screenshots.mjs # writes PNGs into pr-shots/ (none if not visual)
 ```
 
-`BROWSER_PATH` is only needed if no Chrome/Edge/Chromium is on a standard path
-(see `scripts/browser_path.mjs`).
+The capture is diff-driven: with no `DIFF_FILE` (or a diff that changes nothing visual)
+it captures nothing. `BROWSER_PATH` is only needed if no Chrome/Edge/Chromium is on a
+standard path (see `scripts/browser_path.mjs`), and only when there is something to shoot.
