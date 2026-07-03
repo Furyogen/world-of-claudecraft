@@ -14,6 +14,14 @@ vi.mock('pg', () => ({
   }),
 }));
 
+// Spy ONLY on the post-reset "your password changed" security notice; every other
+// mail helper account.ts imports stays real (importOriginal), so nothing else changes.
+const emailMock = vi.hoisted(() => ({ passwordChanged: vi.fn() }));
+vi.mock('../server/email', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('../server/email')>()),
+  emailPasswordChanged: emailMock.passwordChanged,
+}));
+
 import { handleAccountPasswordForgot, handleAccountPasswordReset } from '../server/account';
 
 function makeReq(body: unknown, ip = '203.0.113.20'): any {
@@ -69,6 +77,7 @@ beforeEach(() => {
   };
   resetClaim = { account_id: 1 };
   writes = [];
+  emailMock.passwordChanged.mockClear();
   dbMock.query.mockReset();
   dbMock.query.mockImplementation((sql: string, params: any[]) => routeQuery(sql, params));
 });
@@ -147,5 +156,27 @@ describe('handleAccountPasswordReset', () => {
       res,
     );
     expect(parse(res).status).toBe(400);
+  });
+
+  it('rejects a too-long new password (400) before any password write', async () => {
+    const res = makeRes();
+    await handleAccountPasswordReset(
+      makeReq({ token: 'd'.repeat(64), next: 'a'.repeat(1000) }, '203.0.113.29'),
+      res,
+    );
+    expect(parse(res).status).toBe(400);
+    // The length gate runs before hashing/consume, so no account row is touched.
+    expect(writes.some((w) => w.sql.includes('UPDATE accounts SET password_hash'))).toBe(false);
+    expect(emailMock.passwordChanged).not.toHaveBeenCalled();
+  });
+
+  it('fires the "your password changed" security notice after a successful reset', async () => {
+    const res = makeRes();
+    await handleAccountPasswordReset(
+      makeReq({ token: 'a'.repeat(64), next: 'brandnew1' }, '203.0.113.30'),
+      res,
+    );
+    expect(parse(res).status).toBe(200);
+    expect(emailMock.passwordChanged).toHaveBeenCalledTimes(1);
   });
 });
