@@ -20,7 +20,7 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 389,
+      "nextId": 392,
       "state": "5bc471b0",
       "events": "741638a5",
       "rng": {
@@ -34,9 +34,9 @@
     {
       "tick": 5,
       "time": 0.25,
-      "nextId": 399,
-      "state": "1708ab77",
-      "events": "4a6c7105",
+      "nextId": 402,
+      "state": "cf332af0",
+      "events": "9530ab98",
       "rng": {
         "draws": 20,
         "digest": "55f37111"
@@ -45,8 +45,8 @@
     {
       "tick": 10,
       "time": 0.5,
-      "nextId": 399,
-      "state": "903caf55",
+      "nextId": 402,
+      "state": "5cece34e",
       "events": "741638a5",
       "rng": {
         "draws": 20,
@@ -56,9 +56,9 @@
     {
       "tick": 15,
       "time": 0.75,
-      "nextId": 399,
-      "state": "168ead3e",
-      "events": "9bbd02df",
+      "nextId": 402,
+      "state": "43b3df4a",
+      "events": "ae05cf08",
       "rng": {
         "draws": 23,
         "digest": "b39278ba"
@@ -67,9 +67,9 @@
     {
       "tick": 20,
       "time": 1,
-      "nextId": 399,
-      "state": "f536804c",
-      "events": "f9d3fc28",
+      "nextId": 402,
+      "state": "49518fc1",
+      "events": "edaa65be",
       "rng": {
         "draws": 26,
         "digest": "708cc4a7"
@@ -78,9 +78,9 @@
     {
       "tick": 25,
       "time": 1.25,
-      "nextId": 399,
-      "state": "c6ed61ff",
-      "events": "41ae2539",
+      "nextId": 402,
+      "state": "0277a362",
+      "events": "96602a48",
       "rng": {
         "draws": 26,
         "digest": "708cc4a7"
@@ -89,8 +89,8 @@
     {
       "tick": 30,
       "time": 1.5,
-      "nextId": 399,
-      "state": "0f77370e",
+      "nextId": 402,
+      "state": "e5428e5b",
       "events": "741638a5",
       "rng": {
         "draws": 26,
@@ -100,9 +100,9 @@
     {
       "tick": 35,
       "time": 1.75,
-      "nextId": 399,
-      "state": "0e7d43de",
-      "events": "41ae2539",
+      "nextId": 402,
+      "state": "34c026df",
+      "events": "96602a48",
       "rng": {
         "draws": 26,
         "digest": "708cc4a7"
@@ -111,9 +111,9 @@
     {
       "tick": 40,
       "time": 2,
-      "nextId": 399,
-      "state": "12905d28",
-      "events": "72ccd44f",
+      "nextId": 402,
+      "state": "889e5489",
+      "events": "97f34a41",
       "rng": {
         "draws": 27,
         "digest": "b7df48f2"
@@ -122,9 +122,9 @@
     {
       "tick": 45,
       "time": 2.25,
-      "nextId": 399,
-      "state": "5b4c6a37",
-      "events": "4fc51e8d",
+      "nextId": 402,
+      "state": "50662d88",
+      "events": "77b3b93d",
       "rng": {
         "draws": 68,
         "digest": "4e54af34"
@@ -133,9 +133,9 @@
     {
       "tick": 50,
       "time": 2.5,
-      "nextId": 399,
-      "state": "049b2885",
-      "events": "842619cc",
+      "nextId": 402,
+      "state": "846d8ed8",
+      "events": "4727b74c",
       "rng": {
         "draws": 93,
         "digest": "e53395e6"
@@ -144,9 +144,9 @@
     {
       "tick": 55,
       "time": 2.75,
-      "nextId": 399,
-      "state": "723d8079",
-      "events": "41ae2539",
+      "nextId": 402,
+      "state": "e3b914d0",
+      "events": "96602a48",
       "rng": {
         "draws": 105,
         "digest": "bee63e22"
@@ -155,9 +155,9 @@
     {
       "tick": 60,
       "time": 3,
-      "nextId": 399,
-      "state": "016d9e76",
-      "events": "5e1fd76f",
+      "nextId": 402,
+      "state": "50d8473b",
+      "events": "9b2ccf75",
       "rng": {
         "draws": 129,
         "digest": "ae076555"
@@ -166,9 +166,9 @@
     {
       "tick": 65,
       "time": 3.25,
-      "nextId": 399,
-      "state": "a743133e",
-      "events": "41ae2539",
+      "nextId": 402,
+      "state": "5a50ee97",
+      "events": "96602a48",
       "rng": {
         "draws": 151,
         "digest": "208fe418"
@@ -177,8 +177,8 @@
     {
       "tick": 70,
       "time": 3.5,
-      "nextId": 399,
-      "state": "2dea46ac",
+      "nextId": 402,
+      "state": "50a31825",
       "events": "741638a5",
       "rng": {
         "draws": 173,
@@ -188,9 +188,9 @@
     {
       "tick": 75,
       "time": 3.75,
-      "nextId": 399,
-      "state": "f29ec1aa",
-      "events": "bdbe797e",
+      "nextId": 402,
+      "state": "083f7e67",
+      "events": "ed0691f5",
       "rng": {
         "draws": 198,
         "digest": "c4eec8b8"
@@ -199,8 +199,8 @@
     {
       "tick": 80,
       "time": 4,
-      "nextId": 399,
-      "state": "569f14fb",
+      "nextId": 402,
+      "state": "2918ab7e",
       "events": "741638a5",
       "rng": {
         "draws": 216,
@@ -210,9 +210,9 @@
     {
       "tick": 85,
       "time": 4.25,
-      "nextId": 399,
-      "state": "3e20e695",
-      "events": "010e6dcb",
+      "nextId": 402,
+      "state": "886bdfe4",
+      "events": "9efb9790",
       "rng": {
         "draws": 256,
         "digest": "caa0beb3"
@@ -221,9 +221,9 @@
     {
       "tick": 90,
       "time": 4.5,
-      "nextId": 399,
-      "state": "0edcdbc0",
-      "events": "9345f7d4",
+      "nextId": 402,
+      "state": "d89465d9",
+      "events": "2f211a9b",
       "rng": {
         "draws": 285,
         "digest": "eb174aa4"
@@ -232,9 +232,9 @@
     {
       "tick": 95,
       "time": 4.75,
-      "nextId": 399,
-      "state": "50df99b8",
-      "events": "78c777a2",
+      "nextId": 402,
+      "state": "b04eaa05",
+      "events": "bca5d867",
       "rng": {
         "draws": 315,
         "digest": "ccf6ee96"
@@ -243,8 +243,8 @@
     {
       "tick": 100,
       "time": 5,
-      "nextId": 399,
-      "state": "3e54f518",
+      "nextId": 402,
+      "state": "dd74318d",
       "events": "741638a5",
       "rng": {
         "draws": 341,
@@ -254,9 +254,9 @@
     {
       "tick": 105,
       "time": 5.25,
-      "nextId": 399,
-      "state": "d559b326",
-      "events": "41ae2539",
+      "nextId": 402,
+      "state": "ad55ee23",
+      "events": "96602a48",
       "rng": {
         "draws": 374,
         "digest": "1ef810ee"
@@ -265,9 +265,9 @@
     {
       "tick": 110,
       "time": 5.5,
-      "nextId": 399,
-      "state": "e84bff9d",
-      "events": "2e963b99",
+      "nextId": 402,
+      "state": "453e01bc",
+      "events": "a79a6c0d",
       "rng": {
         "draws": 399,
         "digest": "d3aca4ad"
@@ -276,9 +276,9 @@
     {
       "tick": 115,
       "time": 5.75,
-      "nextId": 399,
-      "state": "30293427",
-      "events": "41ae2539",
+      "nextId": 402,
+      "state": "95e9d0a2",
+      "events": "96602a48",
       "rng": {
         "draws": 419,
         "digest": "193892c1"
@@ -287,9 +287,9 @@
     {
       "tick": 120,
       "time": 6,
-      "nextId": 399,
-      "state": "0d50a9f4",
-      "events": "c13a5186",
+      "nextId": 402,
+      "state": "d7f9ea65",
+      "events": "64e45200",
       "rng": {
         "draws": 478,
         "digest": "852cf2d5"
@@ -298,8 +298,8 @@
     {
       "tick": 120,
       "time": 6,
-      "nextId": 399,
-      "state": "0d50a9f4",
+      "nextId": 402,
+      "state": "d7f9ea65",
       "events": "741638a5",
       "rng": {
         "draws": 478,
@@ -319,13 +319,14 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 389,
+          "entityId": 392,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
@@ -345,13 +346,14 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 390,
+          "entityId": 393,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
           },
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
@@ -371,13 +373,14 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 391,
+          "entityId": 394,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
@@ -396,13 +399,14 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 392,
+          "entityId": 395,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
@@ -421,13 +425,14 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 393,
+          "entityId": 396,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
@@ -442,13 +447,14 @@
           "attackPower": 102,
           "autoAttack": true,
           "combatTimer": 2,
+          "comboUntil": -1,
           "critChance": 0.067,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.067,
           "fallStartY": -1.553351,
           "fiveSecondRule": 105,
           "hp": 79983,
-          "id": 389,
+          "id": 392,
           "inCombat": true,
           "kind": "player",
           "level": 15,
@@ -483,7 +489,7 @@
             "str": 51
           },
           "swingTimer": 0.05,
-          "targetId": 394,
+          "targetId": 397,
           "templateId": "warrior",
           "weapon": {
             "max": 5,
@@ -496,13 +502,14 @@
           "attackPower": 98,
           "autoAttack": true,
           "combatTimer": 0.6,
+          "comboUntil": -1,
           "critChance": 0.0835,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0835,
           "fallStartY": -3.203049,
           "fiveSecondRule": 105,
           "hp": 79986,
-          "id": 390,
+          "id": 393,
           "inCombat": true,
           "kind": "player",
           "level": 15,
@@ -536,7 +543,7 @@
             "str": 31
           },
           "swingTimer": 1.25,
-          "targetId": 395,
+          "targetId": 398,
           "templateId": "rogue",
           "weapon": {
             "dagger": true,
@@ -550,6 +557,7 @@
           "attackPower": 95,
           "autoAttack": true,
           "combatTimer": 1.6,
+          "comboUntil": -1,
           "cooldowns": [
             [
               "raptor_strike",
@@ -562,7 +570,7 @@
           "fallStartY": -3.063027,
           "fiveSecondRule": 6,
           "hp": 79973,
-          "id": 391,
+          "id": 394,
           "inCombat": true,
           "kind": "player",
           "level": 15,
@@ -596,7 +604,7 @@
             "str": 28
           },
           "swingTimer": 0.65,
-          "targetId": 396,
+          "targetId": 399,
           "templateId": "hunter",
           "weapon": {
             "max": 5,
@@ -609,13 +617,14 @@
           "attackPower": 95,
           "autoAttack": true,
           "combatTimer": 0.7,
+          "comboUntil": -1,
           "critChance": 0.0835,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0835,
           "fallStartY": 0.802791,
           "fiveSecondRule": 105,
           "hp": 80000,
-          "id": 392,
+          "id": 395,
           "inCombat": true,
           "kind": "player",
           "level": 15,
@@ -650,7 +659,7 @@
             "str": 28
           },
           "swingTimer": 0.95,
-          "targetId": 397,
+          "targetId": 400,
           "templateId": "hunter",
           "weapon": {
             "max": 5,
@@ -663,13 +672,14 @@
           "attackPower": 10,
           "autoAttack": true,
           "combatTimer": 0.1,
+          "comboUntil": -1,
           "critChance": 0.056,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.056,
           "fallStartY": 4.788119,
           "fiveSecondRule": 105,
           "hp": 80000,
-          "id": 393,
+          "id": 396,
           "inCombat": true,
           "kind": "player",
           "level": 15,
@@ -703,7 +713,7 @@
             "str": 10
           },
           "swingTimer": 1.25,
-          "targetId": 398,
+          "targetId": 401,
           "templateId": "mage",
           "weapon": {
             "max": 6,
@@ -712,9 +722,10 @@
           }
         },
         {
-          "aggroTargetId": 389,
+          "aggroTargetId": 392,
           "aiState": "attack",
           "combatTimer": 2,
+          "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.05,
@@ -723,7 +734,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 499851,
-          "id": 394,
+          "id": 397,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -753,11 +764,11 @@
             "armor": 28
           },
           "swingTimer": 0.65,
-          "tappedById": 389,
+          "tappedById": 392,
           "templateId": "wild_boar",
           "threat": [
             [
-              389,
+              392,
               328
             ]
           ],
@@ -768,9 +779,10 @@
           }
         },
         {
-          "aggroTargetId": 390,
+          "aggroTargetId": 393,
           "aiState": "attack",
           "combatTimer": 0.6,
+          "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.05,
@@ -779,7 +791,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 499941,
-          "id": 395,
+          "id": 398,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -809,11 +821,11 @@
             "armor": 50
           },
           "swingTimer": 0.05,
-          "tappedById": 390,
+          "tappedById": 393,
           "templateId": "forest_wolf",
           "threat": [
             [
-              390,
+              393,
               61
             ]
           ],
@@ -824,9 +836,10 @@
           }
         },
         {
-          "aggroTargetId": 391,
+          "aggroTargetId": 394,
           "aiState": "attack",
           "combatTimer": 1.6,
+          "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.05,
@@ -835,7 +848,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 499946,
-          "id": 396,
+          "id": 399,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -862,11 +875,11 @@
             "armor": 50
           },
           "swingTimer": 0.05,
-          "tappedById": 391,
+          "tappedById": 394,
           "templateId": "forest_wolf",
           "threat": [
             [
-              391,
+              394,
               56
             ]
           ],
@@ -877,9 +890,10 @@
           }
         },
         {
-          "aggroTargetId": 392,
+          "aggroTargetId": 395,
           "aiState": "chase",
           "combatTimer": 0.7,
+          "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.05,
@@ -888,7 +902,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 499914,
-          "id": 397,
+          "id": 400,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -917,11 +931,11 @@
           "stats": {
             "armor": 70
           },
-          "tappedById": 392,
+          "tappedById": 395,
           "templateId": "forest_wolf",
           "threat": [
             [
-              392,
+              395,
               87
             ]
           ],
@@ -938,9 +952,10 @@
           }
         },
         {
-          "aggroTargetId": 393,
+          "aggroTargetId": 396,
           "aiState": "chase",
           "combatTimer": 0.1,
+          "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.05,
@@ -949,7 +964,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 499979,
-          "id": 398,
+          "id": 401,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -978,11 +993,11 @@
           "stats": {
             "armor": 70
           },
-          "tappedById": 393,
+          "tappedById": 396,
           "templateId": "forest_wolf",
           "threat": [
             [
-              393,
+              396,
               22
             ]
           ],
@@ -1003,9 +1018,9 @@
     {
       "tick": 125,
       "time": 6.25,
-      "nextId": 399,
-      "state": "b72913b0",
-      "events": "e0a8606c",
+      "nextId": 402,
+      "state": "c6cba5db",
+      "events": "de622054",
       "rng": {
         "draws": 516,
         "digest": "e781610a"
@@ -1014,8 +1029,8 @@
     {
       "tick": 126,
       "time": 6.3,
-      "nextId": 399,
-      "state": "1cf117de",
+      "nextId": 402,
+      "state": "50af43d7",
       "events": "741638a5",
       "rng": {
         "draws": 524,
@@ -1035,13 +1050,14 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 389,
+          "entityId": 392,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
@@ -1061,13 +1077,14 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 390,
+          "entityId": 393,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
           },
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
@@ -1087,13 +1104,14 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 391,
+          "entityId": 394,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
@@ -1112,13 +1130,14 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 392,
+          "entityId": 395,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
@@ -1137,13 +1156,14 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 393,
+          "entityId": 396,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
@@ -1158,13 +1178,14 @@
           "attackPower": 102,
           "autoAttack": true,
           "combatTimer": 0.3,
+          "comboUntil": -1,
           "critChance": 0.067,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.067,
           "fallStartY": -1.553351,
           "fiveSecondRule": 105.3,
           "hp": 79981,
-          "id": 389,
+          "id": 392,
           "inCombat": true,
           "kind": "player",
           "level": 15,
@@ -1198,7 +1219,7 @@
             "str": 51
           },
           "swingTimer": 1.75,
-          "targetId": 394,
+          "targetId": 397,
           "templateId": "warrior",
           "weapon": {
             "max": 5,
@@ -1210,13 +1231,14 @@
           "aiState": "idle",
           "attackPower": 98,
           "combatTimer": 0.9,
+          "comboUntil": -1,
           "critChance": 0.0835,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0835,
           "fallStartY": -3.203049,
           "fiveSecondRule": 105.3,
           "hp": 79986,
-          "id": 390,
+          "id": 393,
           "inCombat": true,
           "kind": "player",
           "level": 15,
@@ -1250,7 +1272,7 @@
             "str": 31
           },
           "swingTimer": 0.95,
-          "targetId": 395,
+          "targetId": 398,
           "templateId": "rogue",
           "weapon": {
             "dagger": true,
@@ -1264,13 +1286,14 @@
           "attackPower": 95,
           "autoAttack": true,
           "combatTimer": 0.25,
+          "comboUntil": -1,
           "critChance": 0.0835,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0835,
           "fallStartY": -3.063027,
           "fiveSecondRule": 6.3,
           "hp": 79966,
-          "id": 391,
+          "id": 394,
           "inCombat": true,
           "kind": "player",
           "level": 15,
@@ -1304,7 +1327,7 @@
             "str": 28
           },
           "swingTimer": 0.35,
-          "targetId": 396,
+          "targetId": 399,
           "templateId": "hunter",
           "weapon": {
             "max": 5,
@@ -1317,13 +1340,14 @@
           "attackPower": 95,
           "autoAttack": true,
           "combatTimer": 1,
+          "comboUntil": -1,
           "critChance": 0.0835,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0835,
           "fallStartY": 0.802791,
           "fiveSecondRule": 105.3,
           "hp": 80000,
-          "id": 392,
+          "id": 395,
           "inCombat": true,
           "kind": "player",
           "level": 15,
@@ -1358,7 +1382,7 @@
             "str": 28
           },
           "swingTimer": 0.65,
-          "targetId": 397,
+          "targetId": 400,
           "templateId": "hunter",
           "weapon": {
             "max": 5,
@@ -1371,13 +1395,14 @@
           "attackPower": 10,
           "autoAttack": true,
           "combatTimer": 0.4,
+          "comboUntil": -1,
           "critChance": 0.056,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.056,
           "fallStartY": 4.788119,
           "fiveSecondRule": 105.3,
           "hp": 80000,
-          "id": 393,
+          "id": 396,
           "inCombat": true,
           "kind": "player",
           "level": 15,
@@ -1411,7 +1436,7 @@
             "str": 10
           },
           "swingTimer": 0.95,
-          "targetId": 398,
+          "targetId": 401,
           "templateId": "mage",
           "weapon": {
             "max": 6,
@@ -1420,9 +1445,10 @@
           }
         },
         {
-          "aggroTargetId": 389,
+          "aggroTargetId": 392,
           "aiState": "attack",
           "combatTimer": 0.3,
+          "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.05,
@@ -1431,7 +1457,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 499800,
-          "id": 394,
+          "id": 397,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -1461,11 +1487,11 @@
             "armor": 28
           },
           "swingTimer": 0.35,
-          "tappedById": 389,
+          "tappedById": 392,
           "templateId": "wild_boar",
           "threat": [
             [
-              389,
+              392,
               438
             ]
           ],
@@ -1476,9 +1502,10 @@
           }
         },
         {
-          "aggroTargetId": 390,
+          "aggroTargetId": 393,
           "aiState": "attack",
           "combatTimer": 0.9,
+          "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.05,
@@ -1487,7 +1514,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 499941,
-          "id": 395,
+          "id": 398,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -1517,11 +1544,11 @@
             "armor": 50
           },
           "swingTimer": 1.75,
-          "tappedById": 390,
+          "tappedById": 393,
           "templateId": "forest_wolf",
           "threat": [
             [
-              390,
+              393,
               61
             ]
           ],
@@ -1532,9 +1559,10 @@
           }
         },
         {
-          "aggroTargetId": 391,
+          "aggroTargetId": 394,
           "aiState": "attack",
           "combatTimer": 0.25,
+          "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.05,
@@ -1543,7 +1571,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 499946,
-          "id": 396,
+          "id": 399,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -1570,11 +1598,11 @@
             "armor": 50
           },
           "swingTimer": 1.75,
-          "tappedById": 391,
+          "tappedById": 394,
           "templateId": "forest_wolf",
           "threat": [
             [
-              391,
+              394,
               56
             ]
           ],
@@ -1585,9 +1613,10 @@
           }
         },
         {
-          "aggroTargetId": 392,
+          "aggroTargetId": 395,
           "aiState": "chase",
           "combatTimer": 1,
+          "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.05,
@@ -1596,7 +1625,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 499914,
-          "id": 397,
+          "id": 400,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -1625,11 +1654,11 @@
           "stats": {
             "armor": 70
           },
-          "tappedById": 392,
+          "tappedById": 395,
           "templateId": "forest_wolf",
           "threat": [
             [
-              392,
+              395,
               87
             ]
           ],
@@ -1646,9 +1675,10 @@
           }
         },
         {
-          "aggroTargetId": 393,
+          "aggroTargetId": 396,
           "aiState": "chase",
           "combatTimer": 0.4,
+          "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.05,
@@ -1657,7 +1687,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 499979,
-          "id": 398,
+          "id": 401,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -1686,11 +1716,11 @@
           "stats": {
             "armor": 70
           },
-          "tappedById": 393,
+          "tappedById": 396,
           "templateId": "forest_wolf",
           "threat": [
             [
-              393,
+              396,
               22
             ]
           ],
@@ -1711,8 +1741,8 @@
     {
       "tick": 126,
       "time": 6.3,
-      "nextId": 399,
-      "state": "1cf117de",
+      "nextId": 402,
+      "state": "50af43d7",
       "events": "741638a5",
       "rng": {
         "draws": 524,
@@ -1732,13 +1762,14 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 389,
+          "entityId": 392,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
@@ -1758,13 +1789,14 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 390,
+          "entityId": 393,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
           },
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
@@ -1784,13 +1816,14 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 391,
+          "entityId": 394,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
@@ -1809,13 +1842,14 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 392,
+          "entityId": 395,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
@@ -1834,13 +1868,14 @@
           },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 393,
+          "entityId": 396,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
           "lifetimeXp": 78400,
+          "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
@@ -1855,13 +1890,14 @@
           "attackPower": 102,
           "autoAttack": true,
           "combatTimer": 0.3,
+          "comboUntil": -1,
           "critChance": 0.067,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.067,
           "fallStartY": -1.553351,
           "fiveSecondRule": 105.3,
           "hp": 79981,
-          "id": 389,
+          "id": 392,
           "inCombat": true,
           "kind": "player",
           "level": 15,
@@ -1895,7 +1931,7 @@
             "str": 51
           },
           "swingTimer": 1.75,
-          "targetId": 394,
+          "targetId": 397,
           "templateId": "warrior",
           "weapon": {
             "max": 5,
@@ -1907,13 +1943,14 @@
           "aiState": "idle",
           "attackPower": 98,
           "combatTimer": 0.9,
+          "comboUntil": -1,
           "critChance": 0.0835,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0835,
           "fallStartY": -3.203049,
           "fiveSecondRule": 105.3,
           "hp": 79986,
-          "id": 390,
+          "id": 393,
           "inCombat": true,
           "kind": "player",
           "level": 15,
@@ -1947,7 +1984,7 @@
             "str": 31
           },
           "swingTimer": 0.95,
-          "targetId": 395,
+          "targetId": 398,
           "templateId": "rogue",
           "weapon": {
             "dagger": true,
@@ -1961,13 +1998,14 @@
           "attackPower": 95,
           "autoAttack": true,
           "combatTimer": 0.25,
+          "comboUntil": -1,
           "critChance": 0.0835,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0835,
           "fallStartY": -3.063027,
           "fiveSecondRule": 6.3,
           "hp": 79966,
-          "id": 391,
+          "id": 394,
           "inCombat": true,
           "kind": "player",
           "level": 15,
@@ -2001,7 +2039,7 @@
             "str": 28
           },
           "swingTimer": 0.35,
-          "targetId": 396,
+          "targetId": 399,
           "templateId": "hunter",
           "weapon": {
             "max": 5,
@@ -2014,13 +2052,14 @@
           "attackPower": 95,
           "autoAttack": true,
           "combatTimer": 1,
+          "comboUntil": -1,
           "critChance": 0.0835,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0835,
           "fallStartY": 0.802791,
           "fiveSecondRule": 105.3,
           "hp": 80000,
-          "id": 392,
+          "id": 395,
           "inCombat": true,
           "kind": "player",
           "level": 15,
@@ -2055,7 +2094,7 @@
             "str": 28
           },
           "swingTimer": 0.65,
-          "targetId": 397,
+          "targetId": 400,
           "templateId": "hunter",
           "weapon": {
             "max": 5,
@@ -2068,13 +2107,14 @@
           "attackPower": 10,
           "autoAttack": true,
           "combatTimer": 0.4,
+          "comboUntil": -1,
           "critChance": 0.056,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.056,
           "fallStartY": 4.788119,
           "fiveSecondRule": 105.3,
           "hp": 80000,
-          "id": 393,
+          "id": 396,
           "inCombat": true,
           "kind": "player",
           "level": 15,
@@ -2108,7 +2148,7 @@
             "str": 10
           },
           "swingTimer": 0.95,
-          "targetId": 398,
+          "targetId": 401,
           "templateId": "mage",
           "weapon": {
             "max": 6,
@@ -2117,9 +2157,10 @@
           }
         },
         {
-          "aggroTargetId": 389,
+          "aggroTargetId": 392,
           "aiState": "attack",
           "combatTimer": 0.3,
+          "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.05,
@@ -2128,7 +2169,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 499800,
-          "id": 394,
+          "id": 397,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -2158,11 +2199,11 @@
             "armor": 28
           },
           "swingTimer": 0.35,
-          "tappedById": 389,
+          "tappedById": 392,
           "templateId": "wild_boar",
           "threat": [
             [
-              389,
+              392,
               438
             ]
           ],
@@ -2173,9 +2214,10 @@
           }
         },
         {
-          "aggroTargetId": 390,
+          "aggroTargetId": 393,
           "aiState": "attack",
           "combatTimer": 0.9,
+          "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.05,
@@ -2184,7 +2226,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 499941,
-          "id": 395,
+          "id": 398,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -2214,11 +2256,11 @@
             "armor": 50
           },
           "swingTimer": 1.75,
-          "tappedById": 390,
+          "tappedById": 393,
           "templateId": "forest_wolf",
           "threat": [
             [
-              390,
+              393,
               61
             ]
           ],
@@ -2229,9 +2271,10 @@
           }
         },
         {
-          "aggroTargetId": 391,
+          "aggroTargetId": 394,
           "aiState": "attack",
           "combatTimer": 0.25,
+          "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.05,
@@ -2240,7 +2283,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 499946,
-          "id": 396,
+          "id": 399,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -2267,11 +2310,11 @@
             "armor": 50
           },
           "swingTimer": 1.75,
-          "tappedById": 391,
+          "tappedById": 394,
           "templateId": "forest_wolf",
           "threat": [
             [
-              391,
+              394,
               56
             ]
           ],
@@ -2282,9 +2325,10 @@
           }
         },
         {
-          "aggroTargetId": 392,
+          "aggroTargetId": 395,
           "aiState": "chase",
           "combatTimer": 1,
+          "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.05,
@@ -2293,7 +2337,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 499914,
-          "id": 397,
+          "id": 400,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -2322,11 +2366,11 @@
           "stats": {
             "armor": 70
           },
-          "tappedById": 392,
+          "tappedById": 395,
           "templateId": "forest_wolf",
           "threat": [
             [
-              392,
+              395,
               87
             ]
           ],
@@ -2343,9 +2387,10 @@
           }
         },
         {
-          "aggroTargetId": 393,
+          "aggroTargetId": 396,
           "aiState": "chase",
           "combatTimer": 0.4,
+          "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.05,
@@ -2354,7 +2399,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 499979,
-          "id": 398,
+          "id": 401,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -2383,11 +2428,11 @@
           "stats": {
             "armor": 70
           },
-          "tappedById": 393,
+          "tappedById": 396,
           "templateId": "forest_wolf",
           "threat": [
             [
-              393,
+              396,
               22
             ]
           ],
