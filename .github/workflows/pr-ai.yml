@@ -205,10 +205,13 @@ jobs:
     # SECURITY TRADEOFF, deliberate: this job checks out and exercises the PR's own code
     # (i18n:gen, and the tests the agent runs) in a job that holds CODEX_AUTH_JSON, so a
     # maintainer typing /review on a fork PR is explicitly opting in to running that
-    # fork's code. Mitigations: npm ci --ignore-scripts (no third-party install hooks),
-    # the raw secret is scrubbed from the agent's child environment (ai_review.mjs), and
-    # GITHUB_TOKEN carries only contents:read + pull-requests:write. Skim a fork PR's
-    # diff before requesting a review on it.
+    # fork's code. Mitigations: the REVIEWER SCRIPTS run from a trusted default-branch
+    # checkout while the PR head sits in a separate pr/ tree (so a fork cannot swap
+    # ai_review.mjs itself and read the secret), npm ci --ignore-scripts (no third-party
+    # install hooks), the raw secret is scrubbed from the agent's child environment
+    # (ai_review.mjs), and GITHUB_TOKEN carries only contents:read + pull-requests:write.
+    # Residual risk: code the agent chooses to execute (the PR's tests) runs inside the
+    # job; skim a fork PR's diff before requesting a review on it.
     if: >
       github.event_name == 'issue_comment' &&
       github.event.issue.pull_request != null &&
@@ -216,32 +219,42 @@ jobs:
       (startsWith(github.event.comment.body, '/review') || startsWith(github.event.comment.body, '/suggest'))
     timeout-minutes: 35
     steps:
-      # The PR head, so the agent verifies the change against the real tree (the same
-      # reason the automatic job does).
+      # Trusted copy of the reviewer tooling: the default branch of the base repo. The
+      # secret-holding step below runs scripts from HERE, never from the PR's tree.
+      - name: Check out trusted reviewer code
+        uses: actions/checkout@v6
+
+      # The PR head, in its own subdirectory: the tree the agent verifies (and whose
+      # tests it may run), kept apart from the code that handles the secret.
       - name: Check out the PR head
         uses: actions/checkout@v6
         with:
           ref: refs/pull/${{ github.event.issue.number }}/head
           fetch-depth: 0
+          path: pr
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: npm
+          cache-dependency-path: pr/package-lock.json
 
       - name: Install the Codex CLI
         run: npm install -g @openai/codex
 
-      - name: Install dependencies
+      - name: Install PR dependencies
+        working-directory: pr
         run: npm ci --ignore-scripts
 
       - name: Generate i18n artifacts
+        working-directory: pr
         run: npm run i18n:gen
 
       # The issue_comment payload has no base/head SHAs; resolve them so the agent can
       # read the full diff via git.
       - name: Resolve the PR base and head
+        working-directory: pr
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -256,6 +269,8 @@ jobs:
           CODEX_MODEL: ${{ vars.CODEX_MODEL }}
           # Same rationale as the automatic job: the runner VM is the isolation boundary.
           CODEX_SANDBOX: danger-full-access
+          # The agent works inside the PR tree; the script itself is the trusted copy.
+          REVIEW_CWD: ${{ github.workspace }}/pr
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.issue.number }}

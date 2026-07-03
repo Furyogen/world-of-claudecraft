@@ -81,12 +81,14 @@ time contributor cannot self-trigger it on their own fork PR by commenting on it
 Know what you are opting into on a FORK PR: unlike the old diff-only reviewer, this job
 checks out the fork's code and exercises it (the i18n generation step, and whatever tests
 the agent runs), in a job that holds the `CODEX_AUTH_JSON` secret. The mitigations are
-real but not absolute: `npm ci --ignore-scripts` keeps third-party install hooks from
-running, the raw secret is scrubbed from the agent's child environment (only the
-materialized `CODEX_HOME/auth.json` exists, in a throwaway temp dir), and the
-`GITHUB_TOKEN` carries only `contents: read` plus `pull-requests: write`. Skim a fork
-PR's diff for anything that reads credentials or phones home before typing `/review` on
-it; for same-repo PRs there is no new exposure.
+real but not absolute: the reviewer scripts themselves run from a TRUSTED default-branch
+checkout while the PR head sits in a separate `pr/` tree (so a fork cannot replace
+`ai_review.mjs` and read the secret from inside the secret-holding step),
+`npm ci --ignore-scripts` keeps third-party install hooks from running, the raw secret is
+scrubbed from the agent's child environment (only the materialized `CODEX_HOME/auth.json`
+exists, in a throwaway temp dir), and the `GITHUB_TOKEN` carries only `contents: read`
+plus `pull-requests: write`. Skim a fork PR's diff for anything that reads credentials or
+phones home before typing `/review` on it; for same-repo PRs there is no new exposure.
 
 ## Privacy: read before enabling on private code
 

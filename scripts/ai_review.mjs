@@ -47,6 +47,11 @@
 //   BASE_SHA, HEAD_SHA  the PR's base/head commits when the workflow checked out the PR
 //                       head with history: lets the agent read the FULL diff itself via
 //                       git instead of relying only on the inlined (filtered, capped) one
+//   REVIEW_CWD          working directory for the Codex agent (default: this script's
+//                       cwd). The comment-command job sets it to a separate PR-head
+//                       checkout so this script always runs from TRUSTED base-repo code
+//                       while the agent inspects the (possibly fork) PR tree; a fork can
+//                       then never swap this script out to read the raw secret.
 //   MAX_DIFF_CHARS      cap on inlined diff chars in the prompt (default 150000);
 //                       generated/vendored/binary sections are filtered out first
 //                       (ai_review_diff.mjs) so the cap is spent on hand-written code
@@ -75,6 +80,7 @@ const MAX_DIFF_CHARS = Number(process.env.MAX_DIFF_CHARS || 150000);
 const GITHUB_API = process.env.GITHUB_API_URL ?? 'https://api.github.com';
 const BASE_SHA = process.env.BASE_SHA || '';
 const HEAD_SHA = process.env.HEAD_SHA || '';
+const REVIEW_CWD = process.env.REVIEW_CWD || process.cwd();
 
 const prNumber = process.env.PR_NUMBER;
 const diffFile = process.env.DIFF_FILE;
@@ -282,6 +288,9 @@ function review() {
   execFileSync(CODEX_BIN, args, {
     input: prompt,
     stdio: ['pipe', 'inherit', 'inherit'],
+    // The agent's workspace: REVIEW_CWD when the workflow separates the (trusted) script
+    // checkout from the (untrusted) PR tree; otherwise wherever this script runs.
+    cwd: REVIEW_CWD,
     // Scrub the raw secret from the child environment: the agent (and any test process it
     // spawns, which on a fork PR is that PR's code) only needs the materialized
     // CODEX_HOME/auth.json, never the CODEX_AUTH_JSON env var itself.
