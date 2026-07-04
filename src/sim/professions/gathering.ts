@@ -77,7 +77,11 @@ const MATERIAL_RARITY_SHARE: Record<Exclude<MaterialRarity, 'common'>, number> =
 // sim's one-draw-per-roll rng convention (see loot_roll.ts). Independent of node/
 // harvest wiring: callable standalone, or from resolveHarvest (see below).
 export function rollMaterialRarity(proficiency: number, rng: Rng): MaterialRarity {
-  const p = Math.max(0, Math.min(MATERIAL_RARITY_MAX_PROFICIENCY, proficiency));
+  // NaN pins to 0 rather than surviving the clamp: every `NaN < w` comparison
+  // below is false, so an unclamped NaN would fall through to legendary.
+  const p = Number.isNaN(proficiency)
+    ? 0
+    : Math.max(0, Math.min(MATERIAL_RARITY_MAX_PROFICIENCY, proficiency));
   const weights: [MaterialRarity, number][] = [
     ['common', MATERIAL_RARITY_MAX_PROFICIENCY - p],
     ['uncommon', p * MATERIAL_RARITY_SHARE.uncommon],

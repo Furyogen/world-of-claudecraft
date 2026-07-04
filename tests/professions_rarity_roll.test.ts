@@ -48,9 +48,14 @@ describe('material rarity roll (#1122)', () => {
     expect(counts.uncommon + counts.rare + counts.epic + counts.legendary).toBe(0);
   });
 
-  it('at proficiency 0, a negative or NaN proficiency clamps the same as 0', () => {
-    const counts = tally(-50, 500, 42);
-    expect(counts.common).toBe(500);
+  it('a negative or NaN proficiency clamps the same as 0 (every roll is common)', () => {
+    const negative = tally(-50, 500, 42);
+    expect(negative.common).toBe(500);
+    // NaN survives Math.max/Math.min, so the clamp pins it to 0 explicitly; an
+    // unclamped NaN would fail every weight comparison and land legendary.
+    const nan = tally(Number.NaN, 500, 42);
+    expect(nan.common).toBe(500);
+    expect(nan).toEqual(negative);
   });
 
   it('at high proficiency, non-trivial chances of uncommon, rare, epic, and legendary appear', () => {
