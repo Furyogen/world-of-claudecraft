@@ -86,6 +86,9 @@ export interface VisualDef {
    *  flip the standalone weapon files carry). Node name as authored in the GLB;
    *  applied as a local-space rotation (radians) after the bind transform. */
   weaponFix?: { node: string; rotX?: number; rotY?: number; rotZ?: number }[];
+  /** Glowing ring parented behind the head bone (the priest's Light halo).
+   *  Value is the glow color; geometry/placement live in visual.ts. */
+  halo?: number;
 }
 
 /** The slice of a VisualDef that decides how held weapons attach (which bones, and
@@ -318,14 +321,18 @@ export const SKINS: Record<string, (string | null)[]> = {
     `${SKINS_DIR}/rogue/alt_b.png`,
     `${SKINS_DIR}/rogue/alt_c.png`,
   ],
+  // Priest and mage share the mage.glb rig but each gets its OWN default look
+  // (index 0 is a real recolored atlas, not the embedded texture): white-and-
+  // gold linen for the priest, night-indigo with muted gold trim and glowing
+  // eyes for the mage. The alt skins stay the shared mage set.
   player_priest: [
-    null,
+    `${SKINS_DIR}/priest/base.png`,
     `${SKINS_DIR}/mage/alt_a.png`,
     `${SKINS_DIR}/mage/alt_b.png`,
     `${SKINS_DIR}/mage/alt_c.png`,
   ],
   player_mage: [
-    null,
+    `${SKINS_DIR}/mage/night.png`,
     `${SKINS_DIR}/mage/alt_a.png`,
     `${SKINS_DIR}/mage/alt_b.png`,
     `${SKINS_DIR}/mage/alt_c.png`,
@@ -356,6 +363,9 @@ export const SKINS: Record<string, (string | null)[]> = {
 // Emissive (glow) maps keyed exactly like SKINS, applied to .emissiveMap when a
 // skin index has one. Only the Combat Mech epics glow; null entries mean no glow.
 export const SKIN_EMISSIVE: Record<string, (string | null)[]> = {
+  // The mage's default night look glows at the eye tile only (the hood-shadow
+  // fantasy: faint light-blue eyes under a dark cowl).
+  player_mage: [`${SKINS_DIR}/mage/night_emis.png`, null, null, null],
   player_mech: MECH_CHROMAS.map(mechEmissiveUrl),
 };
 
@@ -434,8 +444,9 @@ export const VISUALS: Record<string, VisualDef> = {
     show: [],
     attach: [{ url: `${WEAPONS}/staff.glb`, bone: 'handslot.r' }],
     weaponSlots: [0],
-    tint: 0xf0e9d6,
-    tintStrength: 0.5,
+    // the white-linen look lives in the default atlas (SKINS index 0); no tint,
+    // it would also warm the face
+    halo: 0xffd766,
   },
   player_shaman: {
     url: `${PLAYERS}/barbarian.glb`,

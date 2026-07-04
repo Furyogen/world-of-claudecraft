@@ -22,6 +22,7 @@ import {
   skinTexture,
   tintedFarMaterials,
 } from './assets';
+import { buildHalo } from './halo';
 import type { EmoteClipSpec, VisualDef, WeaponLayoutOverride } from './manifest';
 
 export type { AnimState, BaseState } from './anim_state';
@@ -139,6 +140,14 @@ export class CharacterVisual {
       skinTexture(key, skinIndex),
       skinEmissiveTexture(key, skinIndex),
     );
+    // Class halo (the priest's Light): a glowing ring behind the head bone.
+    // Added AFTER applyMaterials (its additive material must not be re-mapped)
+    // and BEFORE the originalMaterials snapshot, so ghost/stealth material
+    // swaps restore it like any other mesh.
+    if (this.def.halo !== undefined) {
+      const head = this.model.getObjectByName('head');
+      head?.add(buildHalo(this.def.halo));
+    }
     this.model.traverse((o) => {
       const mesh = o as THREE.Mesh;
       if (mesh.isMesh) this.originalMaterials.set(mesh, mesh.material);
