@@ -1448,6 +1448,13 @@ export class Sim {
       delveDaily: { date: '', firstClearXp: new Set(), markClears: 0 },
       worldBossDaily: emptyWorldBossDaily(),
     };
+    // A fresh character sets out provisioned (class-defined starter rations);
+    // a saved character loads its own bags from savedState below.
+    if (!savedState) {
+      for (const it of classDef.startItems) {
+        meta.inventory.push({ itemId: it.itemId, count: it.count });
+      }
+    }
     this.players.set(player.id, meta);
     player.skinCatalog = meta.skinCatalog;
     player.skin = meta.skin; // mirror onto the entity so the renderer + wire can read it

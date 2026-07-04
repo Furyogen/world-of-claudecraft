@@ -16,7 +16,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "aaa995ef",
+      "state": "47bc31d2",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -47,8 +47,13 @@
             "mainhand": "rusty_dagger"
           },
           "gatheringProficiency": {},
+          "inventory": [
+            {
+              "count": 5,
+              "itemId": "baked_bread"
+            }
+          ],
           "mailWelcomed": true,
-          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -114,7 +119,7 @@
       "tick": 10,
       "time": 0.5,
       "nextId": 412,
-      "state": "ab6c1d42",
+      "state": "b1d429ad",
       "events": "32297f59",
       "rng": {
         "draws": 3,
@@ -125,7 +130,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 412,
-      "state": "aedbeb22",
+      "state": "2a5f754d",
       "events": "b93c7dc5",
       "rng": {
         "draws": 3,
@@ -136,7 +141,7 @@
       "tick": 30,
       "time": 1.5,
       "nextId": 412,
-      "state": "1354ee84",
+      "state": "be9ebbc3",
       "events": "741638a5",
       "rng": {
         "draws": 3,
@@ -147,7 +152,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 412,
-      "state": "221675d2",
+      "state": "23083a7d",
       "events": "741638a5",
       "rng": {
         "draws": 3,
@@ -158,7 +163,7 @@
       "tick": 50,
       "time": 2.5,
       "nextId": 412,
-      "state": "cf226af8",
+      "state": "2653356f",
       "events": "741638a5",
       "rng": {
         "draws": 3,
@@ -169,7 +174,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 412,
-      "state": "f7c03cfe",
+      "state": "f1922df1",
       "events": "741638a5",
       "rng": {
         "draws": 3,
@@ -180,7 +185,7 @@
       "tick": 69,
       "time": 3.45,
       "nextId": 413,
-      "state": "a5971884",
+      "state": "8b2019c3",
       "events": "3b915263",
       "rng": {
         "draws": 3,
@@ -215,9 +220,14 @@
             "mainhand": "rusty_dagger"
           },
           "gatheringProficiency": {},
+          "inventory": [
+            {
+              "count": 5,
+              "itemId": "baked_bread"
+            }
+          ],
           "lifetimeXp": 11398,
           "mailWelcomed": true,
-          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -321,7 +331,7 @@
       "tick": 70,
       "time": 3.5,
       "nextId": 413,
-      "state": "7b3cea14",
+      "state": "009e9993",
       "events": "741638a5",
       "rng": {
         "draws": 3,
@@ -332,7 +342,7 @@
       "tick": 71,
       "time": 3.55,
       "nextId": 413,
-      "state": "fb7759b8",
+      "state": "1880cb2f",
       "events": "741638a5",
       "rng": {
         "draws": 3,
@@ -367,9 +377,14 @@
             "mainhand": "rusty_dagger"
           },
           "gatheringProficiency": {},
+          "inventory": [
+            {
+              "count": 5,
+              "itemId": "baked_bread"
+            }
+          ],
           "lifetimeXp": 11398,
           "mailWelcomed": true,
-          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}

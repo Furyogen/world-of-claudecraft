@@ -15,7 +15,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "aaa995ef",
+      "state": "47bc31d2",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -46,8 +46,13 @@
             "mainhand": "rusty_dagger"
           },
           "gatheringProficiency": {},
+          "inventory": [
+            {
+              "count": 5,
+              "itemId": "baked_bread"
+            }
+          ],
           "mailWelcomed": true,
-          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -113,7 +118,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 402,
-      "state": "501cb8f9",
+      "state": "0e429448",
       "events": "aba0e338",
       "rng": {
         "draws": 9,
@@ -124,7 +129,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 402,
-      "state": "466ed175",
+      "state": "2d8413ac",
       "events": "60422bb3",
       "rng": {
         "draws": 15,
@@ -135,7 +140,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 402,
-      "state": "c94c0dcf",
+      "state": "cbba567a",
       "events": "811b3577",
       "rng": {
         "draws": 90,
@@ -146,7 +151,7 @@
       "tick": 72,
       "time": 3.6,
       "nextId": 402,
-      "state": "a3fc2f6b",
+      "state": "717d263e",
       "events": "741638a5",
       "rng": {
         "draws": 143,
@@ -180,9 +185,14 @@
             "mainhand": "rusty_dagger"
           },
           "gatheringProficiency": {},
+          "inventory": [
+            {
+              "count": 5,
+              "itemId": "baked_bread"
+            }
+          ],
           "lifetimeXp": 27600,
           "mailWelcomed": true,
-          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}

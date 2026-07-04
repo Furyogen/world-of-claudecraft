@@ -29,7 +29,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 402,
-      "state": "cd17fcba",
+      "state": "da9352bd",
       "events": "085aa36a",
       "rng": {
         "draws": 0,
@@ -40,7 +40,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 402,
-      "state": "e179cb46",
+      "state": "7ef22ea9",
       "events": "00c5747e",
       "rng": {
         "draws": 0,
@@ -51,7 +51,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 402,
-      "state": "624ba20e",
+      "state": "50004bf1",
       "events": "b2d6a10c",
       "rng": {
         "draws": 71,
@@ -62,7 +62,7 @@
       "tick": 61,
       "time": 3.05,
       "nextId": 402,
-      "state": "61234de4",
+      "state": "8b9f9d43",
       "events": "e8722199",
       "rng": {
         "draws": 78,
@@ -93,8 +93,13 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "inventory": [
+            {
+              "count": 5,
+              "itemId": "baked_bread"
+            }
+          ],
           "mailWelcomed": true,
-          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -124,8 +129,17 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "inventory": [
+            {
+              "count": 5,
+              "itemId": "baked_bread"
+            },
+            {
+              "count": 5,
+              "itemId": "spring_water"
+            }
+          ],
           "mailWelcomed": true,
-          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -238,7 +252,7 @@
       "tick": 61,
       "time": 3.05,
       "nextId": 402,
-      "state": "39291e94",
+      "state": "83f2e2d3",
       "events": "8d231b78",
       "rng": {
         "draws": 78,
@@ -269,8 +283,13 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "inventory": [
+            {
+              "count": 5,
+              "itemId": "baked_bread"
+            }
+          ],
           "mailWelcomed": true,
-          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -300,8 +319,17 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "inventory": [
+            {
+              "count": 5,
+              "itemId": "baked_bread"
+            },
+            {
+              "count": 5,
+              "itemId": "spring_water"
+            }
+          ],
           "mailWelcomed": true,
-          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -414,7 +442,7 @@
       "tick": 80,
       "time": 4,
       "nextId": 402,
-      "state": "c2fc0e80",
+      "state": "2e99f2cf",
       "events": "741638a5",
       "rng": {
         "draws": 150,
@@ -425,7 +453,7 @@
       "tick": 100,
       "time": 5,
       "nextId": 402,
-      "state": "a4c09608",
+      "state": "87670837",
       "events": "741638a5",
       "rng": {
         "draws": 262,
@@ -436,7 +464,7 @@
       "tick": 101,
       "time": 5.05,
       "nextId": 402,
-      "state": "20da4dc2",
+      "state": "3a7bf585",
       "events": "741638a5",
       "rng": {
         "draws": 263,
@@ -467,8 +495,13 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "inventory": [
+            {
+              "count": 5,
+              "itemId": "baked_bread"
+            }
+          ],
           "mailWelcomed": true,
-          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -498,8 +531,17 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "inventory": [
+            {
+              "count": 5,
+              "itemId": "baked_bread"
+            },
+            {
+              "count": 5,
+              "itemId": "spring_water"
+            }
+          ],
           "mailWelcomed": true,
-          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
