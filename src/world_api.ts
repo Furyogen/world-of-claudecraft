@@ -47,6 +47,7 @@
 //                                          union of the 22 facets.
 // ---------------------------------------------------------------------------
 
+import type { IWorldBattleground } from './world_api/battleground';
 import type { IWorldChat } from './world_api/chat';
 import type { IWorldCombat } from './world_api/combat';
 import type { IWorldCosmetics } from './world_api/cosmetics';
@@ -81,6 +82,18 @@ export type { ArenaCombatant, ArenaFormat, ArenaStanding, OverheadEmoteId } from
 
 // --- facet aux-type + value re-exports (each travels with its facet file) ---
 export { isOverheadEmoteId, OVERHEAD_EMOTES } from './world_api/chat';
+export type {
+  BgAllyPosition,
+  BgInfo,
+  BgKnellView,
+  BgLadderEntry,
+  BgLiveMatch,
+  BgMatchInfo,
+  BgScoreboardPlayer,
+  BgStanding,
+  BgStructureView,
+  BgTeamId,
+} from './world_api/battleground';
 export type { AccountCosmetics } from './world_api/cosmetics';
 export type {
   DailyRewardEligibilityView,
@@ -150,6 +163,7 @@ export interface IWorld
     IWorldTrade,
     IWorldChat,
     IWorldDuelArena,
+    IWorldBattleground,
     IWorldSocialGraph,
     IWorldMarket,
     IWorldMail,
@@ -303,6 +317,11 @@ export const COMMAND_NAMES = [
   'autoloot',
   'resurrect_corpse',
   'resurrect_healer',
+  'bg_queue',
+  'bg_leave',
+  'bg_spectate',
+  'bg_spectate_next',
+  'bg_spectate_leave',
 ] as const;
 
 // The union both the send path (`online.ts`) and the dispatch switch
@@ -360,6 +379,7 @@ export type WorldFacet =
   | 'IWorldTrade'
   | 'IWorldChat'
   | 'IWorldDuelArena'
+  | 'IWorldBattleground'
   | 'IWorldSocialGraph'
   | 'IWorldMarket'
   | 'IWorldMail'
@@ -503,4 +523,11 @@ export const COMMAND_FACETS = {
   lockpick_abort: 'IWorldDelves',
   collect_delve_chest_loot: 'IWorldDelves',
   delve_rite_choose: 'IWorldDelves',
+  // IWorldBattleground: the 5v5 Gravemarch queue + player spectate. bgInfo is a
+  // snapshot read (no send); bgPracticeStart is offline-only (no wire command).
+  bg_queue: 'IWorldBattleground',
+  bg_leave: 'IWorldBattleground',
+  bg_spectate: 'IWorldBattleground',
+  bg_spectate_next: 'IWorldBattleground',
+  bg_spectate_leave: 'IWorldBattleground',
 } as const satisfies Partial<Record<ClientCommand, WorldFacet>>;
