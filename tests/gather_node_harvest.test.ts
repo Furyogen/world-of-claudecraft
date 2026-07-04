@@ -234,4 +234,56 @@ describe('gather node harvest (#1121)', () => {
     sim.tick();
     expect(sim.nodeHarvestableByMeFor(NODE_ID, pid)).toBe(true);
   });
+
+  it('spends exactly one rng draw on a granted harvest and none on any denial path', () => {
+    const sim = makeWorld();
+    const pid = sim.addPlayer('warrior', 'DrawCount');
+    const fullBagsPid = sim.addPlayer('warrior', 'DrawCountFull');
+    teleportOntoNode(sim, pid, NODE_ID);
+    teleportOntoNode(sim, fullBagsPid, NODE_ID);
+    const node = mustNode(NODE_ID);
+    const entry = NODE_HARVEST_TABLE[node.type];
+
+    // Stuff the second player's bags up front so the bags-full branch below
+    // stays reachable while their own per-player node timer is still fresh
+    // (the readiness check sits before the capacity check).
+    const fullMeta = mustMeta(sim, fullBagsPid);
+    fullMeta.inventory.length = 0;
+    for (let i = 0; i < bagCapacity(fullMeta.bags); i++) {
+      fullMeta.inventory.push({
+        itemId: 'bone_fragments',
+        count: 1,
+        instance: { boundTo: fullBagsPid },
+      });
+    }
+    expect(sim.canAddItem(entry.itemId, 1, fullBagsPid)).toBe(false);
+
+    // The rarity roll (#1122) pulls from the SHARED sim rng, so a draw on a
+    // denial would advance the whole sim's stream and desync every downstream
+    // roll. harvestNode dispatches synchronously and nothing ticks inside
+    // this bracket, so every counted draw belongs to the harvest path.
+    let draws = 0;
+    (sim as unknown as { rng: { setObserver(fn: () => void): void } }).rng.setObserver(() => {
+      draws++;
+    });
+
+    sim.harvestNode(NODE_ID, pid); // granted: exactly the one rarity draw
+    expect(draws).toBe(1);
+
+    draws = 0;
+    sim.harvestNode(NODE_ID, pid); // denied: not respawned for this player yet
+    expect(draws).toBe(0);
+    sim.harvestNode('no_such_node_id', pid); // denied: unknown node
+    expect(draws).toBe(0);
+    sim.harvestNode(NODE_ID, fullBagsPid); // denied: bags full
+    expect(draws).toBe(0);
+    const p = mustEntity(sim, pid);
+    p.pos.x = node.pos.x + 100;
+    p.prevPos = { ...p.pos };
+    sim.harvestNode(NODE_ID, pid); // denied: too far away
+    expect(draws).toBe(0);
+    p.dead = true;
+    sim.harvestNode(NODE_ID, pid); // denied: dead, the first guard in the chain
+    expect(draws).toBe(0);
+  });
 });
