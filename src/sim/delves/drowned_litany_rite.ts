@@ -17,7 +17,7 @@ import {
   type RiteShrineKind,
 } from '../types';
 import { RITE_INTENSITY } from './rite_tuning';
-import { grantDelveRewards, openDelveSurfaceExit } from './runs';
+import { collectDelveChestLoot, grantDelveRewards, openDelveSurfaceExit } from './runs';
 
 const RITE_PLAYBACK_STEP = 0.6; // seconds between sequence lights
 const RITE_REPEAT_GAP = 1.2; // longer dark beat between repeat playbacks
@@ -290,7 +290,12 @@ export function interactDrownedLitanyRite(
 
   if (state.kind === 'drowned_reliquary') {
     if (state.looted && state.partyLoot?.[pid]?.length) {
-      return false; // let collectDelveChestLoot handle
+      // The rite completes at a shrine 8yd out, beyond both the loot window's
+      // auto-close radius and the collect gate, so the take-all can never fire
+      // from there. Interacting with the reliquary is the recovery path: collect
+      // this player's own slice directly (it re-checks kind and proximity).
+      collectDelveChestLoot(ctx, objectId, pid);
+      return true;
     }
     if (state.open) {
       ctx.emit({ type: 'log', text: 'The reliquary is empty.', color: '#aaa', pid });
