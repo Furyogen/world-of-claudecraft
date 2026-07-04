@@ -7213,6 +7213,14 @@ export class Hud {
     // share a bornAt, and the pooled painter's step() evicts each once now - bornAt >= ttl.
     const now = performance.now();
     for (const ev of events) {
+      // A pid on an event means personal delivery (the server's routeEvents).
+      // Online the server only ever sends this player's own, but the OFFLINE
+      // drain hands over the whole sim batch, and practice bots (fiesta,
+      // battleground) are real players whose errors, queue lines, and banners
+      // would surface on this HUD. Drop other players' personal events so the
+      // offline experience matches the online one.
+      const evPid = (ev as { pid?: number }).pid;
+      if (evPid !== undefined && evPid !== sim.playerId) continue;
       // visual effects (swings, projectiles, glows) — for everyone nearby,
       // not just events involving this player
       this.renderer.handleEvent(ev);
