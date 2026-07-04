@@ -28,7 +28,7 @@
       "tick": 3,
       "time": 0.15,
       "nextId": 403,
-      "state": "85c24ac0",
+      "state": "be0b4402",
       "events": "e50fb0d8",
       "rng": {
         "draws": 2,
@@ -65,6 +65,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -94,6 +95,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}

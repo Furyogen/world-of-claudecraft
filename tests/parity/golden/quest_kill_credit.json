@@ -16,7 +16,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "d35a4a11",
+      "state": "1d0c5980",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -48,6 +48,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -111,7 +112,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "2904828e",
+      "state": "078e1195",
       "events": "00bafcff",
       "rng": {
         "draws": 0,
@@ -144,6 +145,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 27600,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "questLog": [
             [
               "q_wolves",
@@ -219,7 +221,7 @@
       "tick": 8,
       "time": 0.4,
       "nextId": 409,
-      "state": "f58bba20",
+      "state": "f875cb09",
       "events": "7d1a20e0",
       "rng": {
         "draws": 40,
@@ -256,6 +258,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 27600,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "questLog": [
             [
               "q_wolves",
@@ -332,7 +335,7 @@
       "tick": 8,
       "time": 0.4,
       "nextId": 409,
-      "state": "f2231791",
+      "state": "69f3f846",
       "events": "272aafab",
       "rng": {
         "draws": 40,
@@ -372,6 +375,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 27850,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "questsDone": [
             "q_wolves"
           ],
@@ -440,7 +444,7 @@
       "tick": 10,
       "time": 0.5,
       "nextId": 409,
-      "state": "18931e09",
+      "state": "91b8613e",
       "events": "741638a5",
       "rng": {
         "draws": 40,
@@ -480,6 +484,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 27850,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "questsDone": [
             "q_wolves"
           ],
