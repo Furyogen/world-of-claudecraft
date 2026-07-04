@@ -34,6 +34,9 @@ function baseEntity(id: number, pos: Vec3): Entity {
     attackPower: 0,
     rangedPower: 0,
     spellPower: 0,
+    meleeHaste: 0,
+    rangedHaste: 0,
+    spellHaste: 0,
     critChance: 0.05,
     dodgeChance: 0.05,
     castPushbackReduction: 0,
@@ -110,6 +113,7 @@ function baseEntity(id: number, pos: Vec3): Entity {
     respawnTimer: 0,
     corpseTimer: 0,
     lootFfaTimer: Infinity, // no FFA countdown until rollLoot starts it at death
+    harvestClaimedBy: null,
     lootable: false,
     loot: null,
     xpValue: 0,
@@ -327,6 +331,12 @@ export function recalcPlayerStats(
   // Spell Power: Intellect converted via SPELL_POWER_PER_INT plus flat Spell Power
   // from gear/buffs. Floored at 0 so an Intellect-draining debuff can't go negative.
   e.spellPower = Math.max(0, Math.round(s.int * SPELL_POWER_PER_INT + bonusSp));
+  // Haste from item-set bonuses (the only haste-gear source). ONE aggregated
+  // stat drives all three channels: faster melee and ranged auto-attack swings
+  // AND shorter spell casts/channels.
+  e.meleeHaste = setEff.haste;
+  e.rangedHaste = setEff.haste;
+  e.spellHaste = setEff.haste;
   // Crit: ~1% per 20 agi at low level
   e.critChance = 0.05 + s.agi * 0.0005 + (mods?.stats.crit ?? 0) + setEff.crit;
   e.castPushbackReduction = setEff.castPushbackReduction;

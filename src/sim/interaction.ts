@@ -23,7 +23,7 @@
 // `src/sim`-pure: no DOM/Three/render-ui-game-net imports, no Math.random/Date.now
 // (enforced by tests/architecture.test.ts).
 
-import { ITEMS, MOBS, QUESTS } from './data';
+import { ITEMS, MOBS, QUESTS, SPIRIT_HEALER_NPC_ID } from './data';
 import {
   activateNythraxisRelic,
   interactObjectForQuests,
@@ -37,6 +37,7 @@ import {
   lootSlotVisibleTo,
   pruneCorpseLoot,
 } from './loot/loot_roll';
+import { harvestItemFor, isHarvestableCorpse, resolveCorpseHarvest } from './professions/gathering';
 import type { SimContext } from './sim_context';
 import { dist2d, type Entity, INTERACT_RANGE, OBJECT_RESPAWN } from './types';
 import { markWorldBossLooted } from './world_boss';
@@ -79,6 +80,13 @@ export function lootCorpse(
   const r = ctx.resolve(pid);
   if (!r) return;
   const { meta, e: p } = r;
+  // Dead players (released ghosts included) cannot loot; the same rejection the
+  // item family uses (src/sim/items.ts). The walk-by autoLootForParty path never
+  // reaches this: it silently drops a dead trigger before delegating here.
+  if (p.dead) {
+    ctx.error(meta.entityId, "You can't do that while dead.");
+    return;
+  }
   const mob = ctx.entities.get(mobId);
   if (!mob?.lootable || !mob.loot) return;
   // owner-lock lapses LOOT_FFA_DELAY after the corpse became lootable: then anyone may loot.
@@ -168,10 +176,47 @@ export function autoLootForParty(ctx: SimContext, mobId: number, triggerPid: num
   lootCorpse(ctx, mobId, meta.entityId, false, true);
 }
 
+/**
+ * Profession harvest: single-use, first-come salvage of a dead mob's corpse
+ * (skinning/salvage components), independent of the loot table above. Whoever's
+ * command reaches here first while the corpse is unclaimed wins; every later
+ * attempt against the same corpse (same tick or later) is denied. See
+ * professions/gathering.ts for the race-freedom argument.
+ */
+export function harvestCorpse(ctx: SimContext, mobId: number, pid?: number): void {
+  const r = ctx.resolve(pid);
+  if (!r) return;
+  const { meta, e: p } = r;
+  const mob = ctx.entities.get(mobId);
+  if (!mob || mob.kind !== 'mob' || !mob.dead) return;
+  const componentTags = MOBS[mob.templateId]?.componentTags;
+  if (!isHarvestableCorpse(componentTags)) {
+    ctx.error(meta.entityId, 'That corpse has nothing to harvest.');
+    return;
+  }
+  if (dist2d(p.pos, mob.pos) > INTERACT_RANGE) {
+    ctx.error(meta.entityId, 'Too far away.');
+    return;
+  }
+  const claim = resolveCorpseHarvest(mob.harvestClaimedBy, meta.entityId);
+  if (!claim.success) {
+    ctx.error(meta.entityId, 'This corpse has already been harvested.');
+    return;
+  }
+  mob.harvestClaimedBy = claim.claimedBy;
+  const itemId = harvestItemFor(componentTags);
+  if (itemId) ctx.addItem(itemId, 1, meta.entityId);
+}
+
 export function pickUpObject(ctx: SimContext, objId: number, pid?: number): void {
   const r = ctx.resolve(pid);
   if (!r) return;
   const { meta, e: p } = r;
+  // Dead players (released ghosts included) cannot pick up world objects.
+  if (p.dead) {
+    ctx.error(meta.entityId, "You can't do that while dead.");
+    return;
+  }
   const obj = ctx.entities.get(objId);
   if (obj?.kind !== 'object' || !obj.lootable || !obj.objectItemId) return;
   if (dist2d(p.pos, obj.pos) > INTERACT_RANGE) {
@@ -217,6 +262,30 @@ export function interact(ctx: SimContext, pid?: number): void {
   const r = ctx.resolve(pid);
   if (!r) return;
   const p = r.e;
+  if (p.dead) {
+    // A dead player or released spirit cannot interact with the world: no
+    // looting, object pickup, mailbox, or quest talk. The one exception is the
+    // Spirit Healer (talking to the angel is how a ghost reaches the healer
+    // resurrection), so route a nearby angel through the normal quest-NPC talk
+    // and refuse everything else. A ghost still re-enters its instance via the
+    // proximity door trigger (updateDoorTriggers), which never comes through here.
+    let bestHealer: Entity | null = null;
+    let bestHealerD2 = INTERACT_RANGE * INTERACT_RANGE;
+    ctx.grid.forEachInRadius(p.pos.x, p.pos.z, INTERACT_RANGE, (e, d2) => {
+      if (e.kind === 'npc' && e.templateId === SPIRIT_HEALER_NPC_ID && d2 < bestHealerD2) {
+        bestHealer = e;
+        bestHealerD2 = d2;
+      }
+    });
+    // re-read through a wider type: TS cannot see the closure assignment above
+    const healer = bestHealer as Entity | null;
+    if (healer) {
+      ctx.talkToNpc(healer.id, p.id);
+      return;
+    }
+    ctx.error(r.meta.entityId, "You can't do that while dead.");
+    return;
+  }
   if (p.targetId !== null) {
     const target = ctx.entities.get(p.targetId);
     if (target && dist2d(p.pos, target.pos) <= INTERACT_RANGE + 2) {
