@@ -24,13 +24,14 @@ import type { PlayerProfessionSkill } from './types';
 export type GatheringProficiency = Record<GatheringProfessionId, number>;
 
 // Per-node harvest tuning (#1121). Each node type grants one fixed material item
-// and one point of the matching gathering profession's proficiency; no rng draw,
-// so the outcome is fully deterministic given the same sequence of harvests (the
-// item's RARITY roll is explicitly out of scope, see issue #1122). The items
-// reused below are existing generic junk entries (src/sim/content/items.ts): a
-// placeholder grant that avoids expanding the positional per-locale item-name
-// arrays in src/ui/i18n.catalog/items.ts for this issue; dedicated ore/wood/herb
-// items are future content work.
+// and one point of the matching gathering profession's proficiency. The one rng
+// draw per granted harvest is the material RARITY roll (#1122, rollMaterialRarity
+// below, wired in resolveHarvest); the roll is informational for now, since this
+// table still grants the same fixed item id regardless of the rolled tier. The
+// items reused below are existing generic junk entries (src/sim/content/items.ts):
+// a placeholder grant that avoids expanding the positional per-locale item-name
+// arrays in src/ui/i18n.catalog/items.ts for this issue; dedicated per-rarity
+// ore/wood/herb items are future content work.
 export const NODE_HARVEST_TABLE: Record<
   GatherNodeType,
   { professionId: GatheringProfessionId; itemId: string; respawnSeconds: number }
@@ -132,8 +133,8 @@ export interface HarvestResolution {
 // caller's item-grant callback), rolls that material's rarity scaled by the
 // player's current proficiency in the node's profession, and queues the matching
 // profession's proficiency gain, then resets that player's timer; otherwise
-// denies without side effects. Never touches any other player's state for this
-// or any other node.
+// denies without side effects (a denial never draws rng). Never touches any
+// other player's state for this or any other node.
 export function resolveHarvest(
   meta: PlayerMeta,
   node: GatherNodeDef,
@@ -152,24 +153,45 @@ export function resolveHarvest(
 // harvest attempt against a node they must be standing near. Runs on the
 // deterministic 20 Hz tick path (dispatched from a wire command the same tick
 // it arrives, per the other immediate-interaction commands like `buyItem`),
-// never off-tick. Denies (no side effect) if the node id is unknown, the
-// player is too far away, or that player's own timer for the node has not
-// elapsed; a denial never touches another player's state.
+// never off-tick. Denies (no side effect) if the requesting player is dead
+// (matching the vendor family's dead gate, items.ts buyItem/useItem), the
+// node id is unknown, the player is too far away, their own timer for the
+// node has not elapsed, or their bags are full (matching the pickupObject
+// capacity pre-check, interaction.ts); a denial never touches another
+// player's state and never consumes that player's respawn timer.
 export function harvestNode(ctx: SimContext, nodeId: string, pid?: number): void {
   const r = ctx.resolve(pid);
   if (!r) return;
   const { meta, e: p } = r;
+  if (p.dead) {
+    ctx.error(meta.entityId, "You can't do that while dead.");
+    return;
+  }
   const node = gatherNodeById(nodeId);
   if (!node) {
     ctx.error(meta.entityId, 'That resource node does not exist.');
     return;
   }
   if (distToNode(p.pos, node.pos) > INTERACT_RANGE) {
-    ctx.error(meta.entityId, 'Too far away to harvest that.');
+    ctx.error(meta.entityId, 'Too far away.');
     return;
   }
+  if (!isNodeHarvestableBy(meta, node.id, ctx.time)) {
+    ctx.error(meta.entityId, 'This resource node has not respawned for you yet.');
+    return;
+  }
+  const entry = NODE_HARVEST_TABLE[node.type];
+  if (!ctx.canAddItem(entry.itemId, 1, meta.entityId)) {
+    ctx.error(meta.entityId, 'Your bags are full.');
+    return;
+  }
+  // The rng draw (the rarity roll) happens only past every guard above, so a
+  // denied attempt never advances the shared sim rng stream.
   const result = resolveHarvest(meta, node, ctx.time, ctx.rng);
   if (!result.granted) {
+    // Unreachable in practice (the readiness check above already gates this),
+    // but kept as a defensive fallback so a future resolveHarvest change
+    // cannot silently grant with no player-visible denial.
     ctx.error(meta.entityId, 'This resource node has not respawned for you yet.');
     return;
   }
