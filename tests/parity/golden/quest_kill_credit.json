@@ -9,14 +9,14 @@
     "acceptQuest -> finalizeQuestAccept -> onInventoryChangedForQuests",
     "turnInQuest (xp + copper reward)"
   ],
-  "draws": 32,
-  "drawDigest": "4d504aff",
+  "draws": 40,
+  "drawDigest": "0e96c13c",
   "frames": [
     {
       "tick": 0,
       "time": 0,
-      "nextId": 393,
-      "state": "e6a44c6e",
+      "nextId": 401,
+      "state": "d35a4a11",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -29,12 +29,19 @@
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 392,
+          "entityId": 400,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -53,13 +60,14 @@
           "aiState": "idle",
           "attackPower": 46,
           "combatTimer": 99,
+          "comboUntil": -1,
           "critChance": 0.06,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.06,
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 90,
-          "id": 392,
+          "id": 400,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -102,9 +110,9 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 393,
-      "state": "ebed2945",
-      "events": "5f459d47",
+      "nextId": 401,
+      "state": "2904828e",
+      "events": "00bafcff",
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -116,12 +124,19 @@
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 392,
+          "entityId": 400,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -153,13 +168,14 @@
           "aiState": "idle",
           "attackPower": 82,
           "combatTimer": 99,
+          "comboUntil": -1,
           "critChance": 0.0645,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0645,
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 50000,
-          "id": 392,
+          "id": 400,
           "kind": "player",
           "level": 10,
           "lootFfaTimer": "Infinity",
@@ -202,12 +218,12 @@
     {
       "tick": 8,
       "time": 0.4,
-      "nextId": 401,
-      "state": "7f1818af",
-      "events": "2fad2100",
+      "nextId": 409,
+      "state": "f58bba20",
+      "events": "7d1a20e0",
       "rng": {
-        "draws": 32,
-        "digest": "4d504aff"
+        "draws": 40,
+        "digest": "0e96c13c"
       },
       "label": "quest-ready",
       "players": [
@@ -216,6 +232,12 @@
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
@@ -223,9 +245,10 @@
             "kills": 8,
             "questProgress": 8
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 392,
+          "entityId": 400,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -257,13 +280,14 @@
           "aiState": "idle",
           "attackPower": 82,
           "combatTimer": 0.05,
+          "comboUntil": -1,
           "critChance": 0.0645,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0645,
           "fallStartY": 1.5,
           "fiveSecondRule": 99.4,
           "hp": 50000,
-          "id": 392,
+          "id": 400,
           "inCombat": true,
           "kind": "player",
           "level": 10,
@@ -307,12 +331,12 @@
     {
       "tick": 8,
       "time": 0.4,
-      "nextId": 401,
-      "state": "6bac4fe4",
-      "events": "f846efa3",
+      "nextId": 409,
+      "state": "f2231791",
+      "events": "272aafab",
       "rng": {
-        "draws": 32,
-        "digest": "4d504aff"
+        "draws": 40,
+        "digest": "0e96c13c"
       },
       "label": "quest-turned-in",
       "players": [
@@ -321,6 +345,12 @@
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "warrior",
           "companionUpgrades": {},
           "copper": 75,
@@ -331,9 +361,10 @@
             "questsCompleted": 1,
             "xpGained": 250
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 392,
+          "entityId": 400,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -357,13 +388,14 @@
           "aiState": "idle",
           "attackPower": 82,
           "combatTimer": 0.05,
+          "comboUntil": -1,
           "critChance": 0.0645,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0645,
           "fallStartY": 1.5,
           "fiveSecondRule": 99.4,
           "hp": 50000,
-          "id": 392,
+          "id": 400,
           "inCombat": true,
           "kind": "player",
           "level": 10,
@@ -407,12 +439,12 @@
     {
       "tick": 10,
       "time": 0.5,
-      "nextId": 401,
-      "state": "4a4851f8",
+      "nextId": 409,
+      "state": "18931e09",
       "events": "741638a5",
       "rng": {
-        "draws": 32,
-        "digest": "4d504aff"
+        "draws": 40,
+        "digest": "0e96c13c"
       },
       "label": "final",
       "players": [
@@ -421,6 +453,12 @@
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "warrior",
           "companionUpgrades": {},
           "copper": 75,
@@ -431,9 +469,10 @@
             "questsCompleted": 1,
             "xpGained": 250
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 392,
+          "entityId": 400,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -457,13 +496,14 @@
           "aiState": "idle",
           "attackPower": 82,
           "combatTimer": 0.15,
+          "comboUntil": -1,
           "critChance": 0.0645,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0645,
           "fallStartY": 1.5,
           "fiveSecondRule": 99.5,
           "hp": 50000,
-          "id": 392,
+          "id": 400,
           "inCombat": true,
           "kind": "player",
           "level": 10,

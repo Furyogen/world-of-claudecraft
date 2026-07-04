@@ -207,7 +207,10 @@
   }
 
   /* ---------- lockpicking minigame ("Tumbler's Path") ---------- */
-  #lockpick-panel {
+  /* #delve-rite-panel (the Drowned Reliquary Rite difficulty popup) reuses the
+     lp-ante-* selector family by design (rite_window.ts mirrors the ante picker). */
+  #lockpick-panel,
+  #delve-rite-panel {
     width: 420px;
     max-width: 92vw;
     --window-pad: 14px;
@@ -216,18 +219,29 @@
     transform: translate(-50%, -50%);
     position: fixed;
   }
-  #lockpick-panel .lp-blurb {
+  #lockpick-panel .lp-blurb,
+  #delve-rite-panel .lp-blurb {
     font-size: 12px;
     color: #e8e0c8;
     line-height: 1.4;
     margin: 8px 0 12px;
   }
-  #lockpick-panel .lp-ante-row {
+  #delve-rite-panel .rite-guide {
+    margin: 0 0 12px;
+    padding-left: 18px;
+    list-style: decimal;
+  }
+  #delve-rite-panel .rite-guide li {
+    margin: 2px 0;
+  }
+  #lockpick-panel .lp-ante-row,
+  #delve-rite-panel .lp-ante-row {
     display: flex;
     flex-direction: column;
     gap: 8px;
   }
-  #lockpick-panel .lp-ante-btn {
+  #lockpick-panel .lp-ante-btn,
+  #delve-rite-panel .lp-ante-btn {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -241,20 +255,25 @@
     gap: 12px;
   }
   #lockpick-panel .lp-ante-btn:hover,
-  #lockpick-panel .lp-ante-btn:focus-visible {
+  #lockpick-panel .lp-ante-btn:focus-visible,
+  #delve-rite-panel .lp-ante-btn:hover,
+  #delve-rite-panel .lp-ante-btn:focus-visible {
     border-color: var(--gold);
     background: #2a2010;
   }
-  #lockpick-panel .lp-ante-tier {
+  #lockpick-panel .lp-ante-tier,
+  #delve-rite-panel .lp-ante-tier {
     font-family: var(--title-font);
     font-size: 15px;
   }
-  #lockpick-panel .lp-ante-badges {
+  #lockpick-panel .lp-ante-badges,
+  #delve-rite-panel .lp-ante-badges {
     display: flex;
     gap: 6px;
     align-items: center;
   }
-  #lockpick-panel .lp-ante-pages {
+  #lockpick-panel .lp-ante-pages,
+  #delve-rite-panel .lp-ante-pages {
     font-size: 11px;
     color: #1a1410;
     background: var(--gold);
@@ -263,7 +282,8 @@
     font-weight: 700;
     white-space: nowrap;
   }
-  #lockpick-panel .lp-ante-tries {
+  #lockpick-panel .lp-ante-tries,
+  #delve-rite-panel .lp-ante-tries {
     font-size: 11px;
     color: #c9b27a;
     border: 1px solid #5a4a28;
@@ -271,10 +291,24 @@
     padding: 2px 8px;
     white-space: nowrap;
   }
-  #lockpick-panel .lp-ante-timer {
+  #lockpick-panel .lp-ante-timer,
+  #delve-rite-panel .lp-ante-timer {
     font-size: 11px;
     color: #ff9e5a;
     white-space: nowrap;
+  }
+  /* The rite buttons carry two long trailing labels (playback count + reward),
+     so unlike the lockpick ante row they must wrap instead of overflowing the
+     420px panel (and the 92vw mobile panel). Placed AFTER the shared lp-ante
+     rules so these same-specificity overrides win the cascade. */
+  #delve-rite-panel .lp-ante-btn {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    row-gap: 4px;
+  }
+  #delve-rite-panel .lp-ante-timer {
+    white-space: normal;
+    text-align: left;
   }
   /* §7.6 Bountiful Coffer, purple/epic accent overriding the gold ante selector. */
   #lockpick-panel .lp-blurb-coffer {
@@ -827,6 +861,10 @@
   .q-epic {
     border-color: #a335ee !important;
     box-shadow: 0 0 6px #a335ee66;
+  }
+  .q-legendary {
+    border-color: #ff8000 !important;
+    box-shadow: 0 0 6px #ff800066;
   }
 
   /* ---------- character window ---------- */
@@ -1383,6 +1421,12 @@
     font-size: 12px;
     line-height: 1.4;
   }
+  .dr-disclaimer {
+    margin: -4px 0 10px;
+    color: var(--color-text-muted);
+    font-size: 11px;
+    line-height: 1.35;
+  }
   .dr-summary strong {
     color: #ffe27a;
     font-size: 13px;
@@ -1774,9 +1818,17 @@
     color: #ffe27a;
     text-align: right;
   }
+  .dr-chest-toggle {
+    margin-top: 8px;
+  }
   .dr-ranks {
     display: grid;
     gap: 4px;
+  }
+  .dr-leaderboard-ranks {
+    max-height: 222px;
+    overflow-y: auto;
+    padding-right: 2px;
   }
   .dr-rank span {
     color: var(--color-text-muted);
@@ -2817,37 +2869,131 @@
     background: radial-gradient(circle at 35% 30%, #c9a3ff, #6b3fa0);
     box-shadow: 0 0 4px rgba(150, 90, 230, 0.5);
   }
+  /* WoW-style slot grid: square cells, the item icon fills the cell, quality
+     drives the cell border (the .q-* classes below), the stack count sits as a
+     badge in the bottom-right corner, and free capacity paints as empty sockets. */
   .bag-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(42px, 1fr));
+    gap: 4px;
+    padding: 2px;
+    align-content: start;
   }
   .bag-item {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    width: 100%;
-    font-size: 12px;
-    padding: 3px 4px;
-    /* SC 2.5.8 (target size, minimum): the 12px font + 3px padding lands ~20px tall on
-       desktop, under the 24px floor. The mobile touch override (body.mobile-touch
-       .bag-item { min-height: 40px } in hud.mobile.css) is more specific and still wins,
-       so the stronger 40x40 mobile floor is not weakened. */
-    min-height: 24px;
-    border: 0;
-    border-radius: 3px;
+    position: relative;
+    aspect-ratio: 1;
+    /* SC 2.5.8: the 42px column floor keeps every cell >= 40x40 on touch too. */
+    min-width: 0;
+    min-height: 40px;
+    padding: 0;
+    border: 1px solid #4a3d26;
+    border-radius: 5px;
     cursor: var(--cursor-point);
-    background: transparent;
+    background: linear-gradient(160deg, #17130c, #0c0a07);
+    box-shadow: inset 0 1px 4px #000c;
     color: inherit;
     font-family: var(--ui-font);
-    text-align: left;
   }
   .bag-item:hover {
-    background: #ffffff12;
+    filter: brightness(1.25);
+  }
+  .bag-item .item-icon {
+    /* a replaced element keeps its intrinsic size under width:auto even when
+       inset-pinned, so size it explicitly to fill the slot */
+    position: absolute;
+    inset: 2px;
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
+    border: 0;
+    border-radius: 4px;
+  }
+  /* the cell owns the quality border; a soft outer glow from the same quality
+     color (set by the painter from the shared QUALITY_COLOR map) lifts rare+ */
+  .bag-item[class*=" q-"] {
+    box-shadow:
+      inset 0 1px 4px #000c,
+      0 0 5px color-mix(in srgb, var(--bag-slot-quality, transparent) 45%, transparent);
+  }
+  /* classic look: poor/common cells keep the neutral socket border (a colored
+     border on every white item reads as noise); uncommon+ pop by contrast */
+  .bag-item.q-poor,
+  .bag-item.q-common {
+    border-color: #4a3d26 !important;
+    box-shadow: inset 0 1px 4px #000c;
   }
   .bag-item .bi-count {
+    position: absolute;
+    right: 2px;
+    bottom: 1px;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-shadow:
+      0 1px 2px #000,
+      0 0 3px #000;
+    pointer-events: none;
+  }
+  .bag-item.empty {
+    cursor: default;
+    background: #0b0906;
+    border-color: #2f281a;
+    box-shadow: inset 0 2px 6px #000d;
+  }
+  /* The bag bar: backpack + the 4 equip sockets + the used/total counter. */
+  .bag-bar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin: 4px 0 2px;
+  }
+  .bag-socket {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    flex: none;
+    padding: 0;
+    border: 1px solid #4a3d26;
+    border-radius: 5px;
+    background: linear-gradient(160deg, #17130c, #0c0a07);
+    box-shadow: inset 0 1px 4px #000c;
+    cursor: var(--cursor-point);
+  }
+  .bag-socket .item-icon {
+    position: absolute;
+    inset: 2px;
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
+    border: 0;
+    border-radius: 4px;
+  }
+  .bag-socket.backpack {
+    cursor: default;
+  }
+  .bag-socket.empty {
+    cursor: default;
+    border-style: dashed;
+    border-color: #3a3020;
+    background: #0b0906;
+  }
+  .bag-socket:hover:not(.empty):not(.backpack) {
+    filter: brightness(1.25);
+  }
+  .bag-socket:focus-visible,
+  .bag-item:focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 1px;
+  }
+  .bag-capacity {
     margin-left: auto;
-    color: #ccc;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gold-dim, #8a6f3a);
+    white-space: nowrap;
+    padding-right: 2px;
+  }
+  .bag-capacity.over {
+    color: var(--color-text-error);
   }
   .bag-empty {
     font-size: 12px;

@@ -163,6 +163,14 @@ export const BOOL_SETTINGS = {
   // casting. Touch keeps the instant target-feet fallback because there is no
   // persistent cursor to preview.
   groundReticle: { def: true },
+  // off by default: anchor the player's own BUFF row to the movable player
+  // frame instead of the classic top-right corner. hud.ts reparents the buff
+  // bar into #player-frame (above it while docked over the action bars, below
+  // it once the frame is moved), so it follows the frame's spot and scale; the
+  // debuff row stays put in the DOM and slides up beside the minimap (the
+  // vacated top spot) so incoming debuffs keep one glanceable classic corner.
+  // Desktop only; the mobile layout keeps its own aura placement.
+  aurasOnPlayerFrame: { def: false },
 
   // --- Interface & Comfort pack (booleans). ---
   // off by default: drop every HUD cross-fade / panel animation, for players
@@ -233,6 +241,9 @@ export const BOOL_SETTINGS = {
   // applied in main.ts. Purely a display preference; the slots stay reachable via
   // their keybinds either way, so the row being hidden never disables those abilities.
   showSecondaryActionBar: { def: false },
+  // on by default: keep the Daily Rewards chest launcher visible on the HUD. Hiding
+  // it only removes the shortcut; rewards, eligibility, and the panel remain available.
+  showDailyRewardsChest: { def: true },
   // internal, never shown in the options UI: set true once main.ts has persisted a
   // device-appropriate graphicsPreset on a player's first run (a CONCLUSIVE detection).
   // It gates firstRunGraphicsPreset so a recognized device is classified at most once and

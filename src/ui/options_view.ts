@@ -372,8 +372,10 @@ export function buildInterfaceControls(s: OptionsSettingsSource): OptionsControl
     boolToggle(s, 'startAttackOnAbilityUse', 'hudChrome.options.startAttackOnAbility'),
     boolToggle(s, 'walkByAutoloot', 'hudChrome.options.walkByAutoloot'),
     boolToggle(s, 'groundReticle', 'hudChrome.options.groundReticle'),
+    boolToggle(s, 'aurasOnPlayerFrame', 'hudChrome.options.aurasOnPlayerFrame'),
     boolToggle(s, 'showItemLevel', 'hudChrome.options.showItemLevel'),
     boolToggle(s, 'showSecondaryActionBar', 'hudChrome.options.showSecondaryActionBar'),
+    boolToggle(s, 'showDailyRewardsChest', 'hudChrome.options.showDailyRewardsChest'),
   ];
 }
 

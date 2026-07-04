@@ -550,9 +550,6 @@
     height: 50px;
     pointer-events: auto;
   }
-  body.mobile-touch #daily-rewards-button .daily-rewards-label {
-    display: none;
-  }
   body.native-app.mobile-touch #daily-rewards-button,
   body.native-app.mobile-touch #daily-rewards-window {
     display: none !important;
@@ -729,6 +726,11 @@
   body.mobile-touch #chatlog-tabs {
     transform: scale(0.92);
     transform-origin: left bottom;
+    /* The chat-box move gesture is desktop-only (onChatBoxMoveStart bails on mobile),
+       so allow a horizontal touch-pan here to reach tabs that overflow the strip
+       (its scrollbar is hidden for the classic look). */
+    touch-action: pan-x;
+    -webkit-overflow-scrolling: touch;
   }
   body.mobile-touch #chat-input {
     left: max(10px, env(safe-area-inset-left));
@@ -848,10 +850,12 @@
     transform: scale(0.72);
     transform-origin: right top;
   }
-  body.mobile-touch #quest-tracker {
+  body.mobile-touch #right-tracker-stack {
     right: max(10px, env(safe-area-inset-right));
     top: max(150px, env(safe-area-inset-top));
     width: 190px;
+  }
+  body.mobile-touch #quest-tracker {
     font-size: 11px;
   }
   body.mobile-touch #meters-window {
@@ -2051,7 +2055,7 @@
     #community-hud {
       top: auto;
     }
-    #quest-tracker {
+    #right-tracker-stack {
       top: 260px;
       right: 12px;
       width: 190px;

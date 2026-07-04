@@ -52,7 +52,7 @@ function stubEntity(partial: Partial<Entity> & Pick<Entity, 'id' | 'kind'>): Ent
     queuedOnSwing: null,
     fiveSecondRule: 0,
     comboPoints: 0,
-    comboTargetId: null,
+    comboUntil: -1,
     overpowerUntil: 0,
     chargeTargetId: null,
     chargeTimeLeft: 0,

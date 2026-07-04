@@ -14,7 +14,7 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 392,
+      "nextId": 400,
       "state": "5bc471b0",
       "events": "741638a5",
       "rng": {
@@ -28,9 +28,9 @@
     {
       "tick": 25,
       "time": 1.25,
-      "nextId": 396,
-      "state": "a7573c21",
-      "events": "a13e97cd",
+      "nextId": 404,
+      "state": "cfb9c2b5",
+      "events": "ad17345d",
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -39,9 +39,9 @@
     {
       "tick": 50,
       "time": 2.5,
-      "nextId": 396,
-      "state": "e950b40b",
-      "events": "806089f9",
+      "nextId": 404,
+      "state": "75471447",
+      "events": "6e60008d",
       "rng": {
         "draws": 54,
         "digest": "addf5faa"
@@ -50,9 +50,9 @@
     {
       "tick": 75,
       "time": 3.75,
-      "nextId": 396,
-      "state": "4e587d39",
-      "events": "fb6d18c1",
+      "nextId": 404,
+      "state": "7700362d",
+      "events": "9b3dbf7d",
       "rng": {
         "draws": 152,
         "digest": "8e2944b7"
@@ -61,9 +61,9 @@
     {
       "tick": 100,
       "time": 5,
-      "nextId": 396,
-      "state": "3657a82d",
-      "events": "f4715bd9",
+      "nextId": 404,
+      "state": "51234e39",
+      "events": "e324e10d",
       "rng": {
         "draws": 276,
         "digest": "73e9d0e2"
@@ -72,9 +72,9 @@
     {
       "tick": 101,
       "time": 5.05,
-      "nextId": 396,
-      "state": "b7358fd9",
-      "events": "7c0bf805",
+      "nextId": 404,
+      "state": "a4e3165d",
+      "events": "daaa2835",
       "rng": {
         "draws": 280,
         "digest": "a2a55785"
@@ -85,12 +85,19 @@
           "activeLoadout": -1,
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 392,
+          "entityId": 400,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -107,12 +114,19 @@
           "activeLoadout": -1,
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "mage",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 393,
+          "entityId": 401,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -129,12 +143,19 @@
           "activeLoadout": -1,
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "rogue",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 394,
+          "entityId": 402,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -151,12 +172,19 @@
           "activeLoadout": -1,
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "priest",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 395,
+          "entityId": 403,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -175,12 +203,13 @@
           "aiState": "idle",
           "attackPower": 46,
           "combatTimer": 99,
+          "comboUntil": -1,
           "critChance": 0.06,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.06,
           "fiveSecondRule": 104.05,
           "hp": 90,
-          "id": 392,
+          "id": 400,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -221,12 +250,13 @@
           "aiState": "idle",
           "attackPower": 10,
           "combatTimer": 99,
+          "comboUntil": -1,
           "critChance": 0.056,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.056,
           "fiveSecondRule": 104.05,
           "hp": 54,
-          "id": 393,
+          "id": 401,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -268,13 +298,14 @@
           "aiState": "idle",
           "attackPower": 42,
           "combatTimer": 99,
+          "comboUntil": -1,
           "critChance": 0.0625,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0625,
           "facing": 3.141593,
           "fiveSecondRule": 104.05,
           "hp": 62,
-          "id": 394,
+          "id": 402,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -317,13 +348,14 @@
           "aiState": "idle",
           "attackPower": 10,
           "combatTimer": 99,
+          "comboUntil": -1,
           "critChance": 0.0555,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0555,
           "facing": 3.141593,
           "fiveSecondRule": 104.05,
           "hp": 51,
-          "id": 395,
+          "id": 403,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -366,9 +398,9 @@
     {
       "tick": 102,
       "time": 5.1,
-      "nextId": 396,
-      "state": "1d810821",
-      "events": "64044c68",
+      "nextId": 404,
+      "state": "c1fb385d",
+      "events": "cfe12802",
       "rng": {
         "draws": 281,
         "digest": "9090c1ff"
@@ -379,12 +411,19 @@
           "activeLoadout": -1,
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 392,
+          "entityId": 400,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -401,12 +440,19 @@
           "activeLoadout": -1,
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "mage",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 393,
+          "entityId": 401,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -423,14 +469,21 @@
           "activeLoadout": -1,
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "rogue",
           "companionUpgrades": {},
           "counters": {
             "deaths": 1
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 394,
+          "entityId": 402,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -447,12 +500,19 @@
           "activeLoadout": -1,
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "priest",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 395,
+          "entityId": 403,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -471,12 +531,13 @@
           "aiState": "idle",
           "attackPower": 46,
           "combatTimer": 99.05,
+          "comboUntil": -1,
           "critChance": 0.06,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.06,
           "fiveSecondRule": 104.1,
           "hp": 90,
-          "id": 392,
+          "id": 400,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -517,12 +578,13 @@
           "aiState": "idle",
           "attackPower": 10,
           "combatTimer": 99.05,
+          "comboUntil": -1,
           "critChance": 0.056,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.056,
           "fiveSecondRule": 104.1,
           "hp": 54,
-          "id": 393,
+          "id": 401,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -564,13 +626,14 @@
           "aiState": "idle",
           "attackPower": 42,
           "combatTimer": 99.05,
+          "comboUntil": -1,
           "critChance": 0.0625,
           "dead": true,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0625,
           "facing": 3.141593,
           "fiveSecondRule": 104.1,
-          "id": 394,
+          "id": 402,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -613,13 +676,14 @@
           "aiState": "idle",
           "attackPower": 10,
           "combatTimer": 99.05,
+          "comboUntil": -1,
           "critChance": 0.0555,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0555,
           "facing": 3.141593,
           "fiveSecondRule": 104.1,
           "hp": 51,
-          "id": 395,
+          "id": 403,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -662,9 +726,9 @@
     {
       "tick": 103,
       "time": 5.15,
-      "nextId": 396,
-      "state": "17f9d659",
-      "events": "a9bcbf5b",
+      "nextId": 404,
+      "state": "08cb1061",
+      "events": "62948351",
       "rng": {
         "draws": 284,
         "digest": "22941d42"
@@ -676,12 +740,19 @@
           "arena2v2Rating": 1516,
           "arena2v2Wins": 1,
           "arenaRating": 1500,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 392,
+          "entityId": 400,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -699,12 +770,19 @@
           "arena2v2Rating": 1516,
           "arena2v2Wins": 1,
           "arenaRating": 1500,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "mage",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 393,
+          "entityId": 401,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -722,14 +800,21 @@
           "arena2v2Losses": 1,
           "arena2v2Rating": 1484,
           "arenaRating": 1500,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "rogue",
           "companionUpgrades": {},
           "counters": {
             "deaths": 1
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 394,
+          "entityId": 402,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -747,14 +832,21 @@
           "arena2v2Losses": 1,
           "arena2v2Rating": 1484,
           "arenaRating": 1500,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "priest",
           "companionUpgrades": {},
           "counters": {
             "deaths": 1
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 395,
+          "entityId": 403,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -773,12 +865,13 @@
           "aiState": "idle",
           "attackPower": 46,
           "combatTimer": 99.05,
+          "comboUntil": -1,
           "critChance": 0.06,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.06,
           "fiveSecondRule": 104.15,
           "hp": 90,
-          "id": 392,
+          "id": 400,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -819,12 +912,13 @@
           "aiState": "idle",
           "attackPower": 10,
           "combatTimer": 99.05,
+          "comboUntil": -1,
           "critChance": 0.056,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.056,
           "fiveSecondRule": 104.15,
           "hp": 54,
-          "id": 393,
+          "id": 401,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -866,13 +960,14 @@
           "aiState": "idle",
           "attackPower": 42,
           "combatTimer": 99.1,
+          "comboUntil": -1,
           "critChance": 0.0625,
           "dead": true,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0625,
           "facing": 3.141593,
           "fiveSecondRule": 104.15,
-          "id": 394,
+          "id": 402,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -915,13 +1010,14 @@
           "aiState": "idle",
           "attackPower": 10,
           "combatTimer": 99.1,
+          "comboUntil": -1,
           "critChance": 0.0555,
           "dead": true,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0555,
           "facing": 3.141593,
           "fiveSecondRule": 104.15,
-          "id": 395,
+          "id": 403,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -964,8 +1060,8 @@
     {
       "tick": 125,
       "time": 6.25,
-      "nextId": 396,
-      "state": "cfbe4b2f",
+      "nextId": 404,
+      "state": "9027f687",
       "events": "741638a5",
       "rng": {
         "draws": 411,
@@ -975,8 +1071,8 @@
     {
       "tick": 150,
       "time": 7.5,
-      "nextId": 396,
-      "state": "d5b62afd",
+      "nextId": 404,
+      "state": "69833755",
       "events": "741638a5",
       "rng": {
         "draws": 548,
@@ -986,8 +1082,8 @@
     {
       "tick": 175,
       "time": 8.75,
-      "nextId": 396,
-      "state": "e897f2b7",
+      "nextId": 404,
+      "state": "81aabcbf",
       "events": "741638a5",
       "rng": {
         "draws": 712,
@@ -997,8 +1093,8 @@
     {
       "tick": 200,
       "time": 10,
-      "nextId": 396,
-      "state": "0b98f965",
+      "nextId": 404,
+      "state": "cf010d4d",
       "events": "741638a5",
       "rng": {
         "draws": 902,
@@ -1008,9 +1104,9 @@
     {
       "tick": 225,
       "time": 11.25,
-      "nextId": 396,
-      "state": "bb94091b",
-      "events": "1d5eb89d",
+      "nextId": 404,
+      "state": "7b11c57f",
+      "events": "01be3279",
       "rng": {
         "draws": 1011,
         "digest": "e9b4d4be"
@@ -1019,8 +1115,8 @@
     {
       "tick": 243,
       "time": 12.15,
-      "nextId": 396,
-      "state": "39823d1b",
+      "nextId": 404,
+      "state": "a94dd437",
       "events": "741638a5",
       "rng": {
         "draws": 1088,
@@ -1033,12 +1129,19 @@
           "arena2v2Rating": 1516,
           "arena2v2Wins": 1,
           "arenaRating": 1500,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 392,
+          "entityId": 400,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -1056,12 +1159,19 @@
           "arena2v2Rating": 1516,
           "arena2v2Wins": 1,
           "arenaRating": 1500,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "mage",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 393,
+          "entityId": 401,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -1079,14 +1189,21 @@
           "arena2v2Losses": 1,
           "arena2v2Rating": 1484,
           "arenaRating": 1500,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "rogue",
           "companionUpgrades": {},
           "counters": {
             "deaths": 1
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 394,
+          "entityId": 402,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -1104,14 +1221,21 @@
           "arena2v2Losses": 1,
           "arena2v2Rating": 1484,
           "arenaRating": 1500,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "priest",
           "companionUpgrades": {},
           "counters": {
             "deaths": 1
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 395,
+          "entityId": 403,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -1130,13 +1254,14 @@
           "aiState": "idle",
           "attackPower": 46,
           "combatTimer": 101,
+          "comboUntil": -1,
           "critChance": 0.06,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.06,
           "fallStartY": 3.238738,
           "fiveSecondRule": 111.15,
           "hp": 90,
-          "id": 392,
+          "id": 400,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1177,13 +1302,14 @@
           "aiState": "idle",
           "attackPower": 10,
           "combatTimer": 101,
+          "comboUntil": -1,
           "critChance": 0.056,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.056,
           "fallStartY": 3.09695,
           "fiveSecondRule": 111.15,
           "hp": 54,
-          "id": 393,
+          "id": 401,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1226,13 +1352,14 @@
           "aiState": "idle",
           "attackPower": 42,
           "combatTimer": 101,
+          "comboUntil": -1,
           "critChance": 0.0625,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0625,
           "fallStartY": 2.656939,
           "fiveSecondRule": 111.15,
           "hp": 62,
-          "id": 394,
+          "id": 402,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1276,13 +1403,14 @@
           "aiState": "idle",
           "attackPower": 10,
           "combatTimer": 101,
+          "comboUntil": -1,
           "critChance": 0.0555,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0555,
           "fallStartY": 1.893785,
           "fiveSecondRule": 111.15,
           "hp": 51,
-          "id": 395,
+          "id": 403,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1326,8 +1454,8 @@
     {
       "tick": 243,
       "time": 12.15,
-      "nextId": 396,
-      "state": "39823d1b",
+      "nextId": 404,
+      "state": "a94dd437",
       "events": "741638a5",
       "rng": {
         "draws": 1088,
@@ -1340,12 +1468,19 @@
           "arena2v2Rating": 1516,
           "arena2v2Wins": 1,
           "arenaRating": 1500,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 392,
+          "entityId": 400,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -1363,12 +1498,19 @@
           "arena2v2Rating": 1516,
           "arena2v2Wins": 1,
           "arenaRating": 1500,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "mage",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 393,
+          "entityId": 401,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -1386,14 +1528,21 @@
           "arena2v2Losses": 1,
           "arena2v2Rating": 1484,
           "arenaRating": 1500,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "rogue",
           "companionUpgrades": {},
           "counters": {
             "deaths": 1
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 394,
+          "entityId": 402,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -1411,14 +1560,21 @@
           "arena2v2Losses": 1,
           "arena2v2Rating": 1484,
           "arenaRating": 1500,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "priest",
           "companionUpgrades": {},
           "counters": {
             "deaths": 1
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 395,
+          "entityId": 403,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -1437,13 +1593,14 @@
           "aiState": "idle",
           "attackPower": 46,
           "combatTimer": 101,
+          "comboUntil": -1,
           "critChance": 0.06,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.06,
           "fallStartY": 3.238738,
           "fiveSecondRule": 111.15,
           "hp": 90,
-          "id": 392,
+          "id": 400,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1484,13 +1641,14 @@
           "aiState": "idle",
           "attackPower": 10,
           "combatTimer": 101,
+          "comboUntil": -1,
           "critChance": 0.056,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.056,
           "fallStartY": 3.09695,
           "fiveSecondRule": 111.15,
           "hp": 54,
-          "id": 393,
+          "id": 401,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1533,13 +1691,14 @@
           "aiState": "idle",
           "attackPower": 42,
           "combatTimer": 101,
+          "comboUntil": -1,
           "critChance": 0.0625,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0625,
           "fallStartY": 2.656939,
           "fiveSecondRule": 111.15,
           "hp": 62,
-          "id": 394,
+          "id": 402,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -1583,13 +1742,14 @@
           "aiState": "idle",
           "attackPower": 10,
           "combatTimer": 101,
+          "comboUntil": -1,
           "critChance": 0.0555,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0555,
           "fallStartY": 1.893785,
           "fiveSecondRule": 111.15,
           "hp": 51,
-          "id": 395,
+          "id": 403,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",

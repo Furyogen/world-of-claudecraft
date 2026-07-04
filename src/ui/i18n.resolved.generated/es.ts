@@ -154,6 +154,11 @@ export const es: EnTranslations = {
     "spectate": {
       "banner": "Observando a {name}"
     },
+    "death": {
+      "resurrectAtCorpse": "Resurrect at Corpse",
+      "resurrectAtHealer": "The Pale Keeper (Keeper's Toll)",
+      "spiritHealerAlive": "The Pale Keeper watches over the dead. You are still among the living."
+    },
     "emotes": {
       "wave": "Saludar",
       "laugh": "Reír",
@@ -183,6 +188,7 @@ export const es: EnTranslations = {
       "loading": "Cargando recompensas diarias...",
       "error": "No se pudieron cargar las recompensas diarias.",
       "intro": "Mantén suficiente WOC en tu cartera verificada para desbloquear las recompensas diarias. Gana puntos con un giro diario y tareas rotativas, y escala la clasificación diaria para llevarte una parte del fondo de premios.",
+      "disclaimer": "WOC price can move quickly. We recommend holding more than the $20 USD minimum so normal price swings do not lock you out. This is not financial advice.",
       "prize": "Fondo de premios",
       "reset": "Reinicio",
       "endsIn": "Termina en {time}",
@@ -204,6 +210,8 @@ export const es: EnTranslations = {
       "tasks": "Tareas",
       "taskMultiplier": "x{multiplier} multiplier",
       "pointsGained": "{points} daily rewards points gained.",
+      "showChestButton": "Mostrar cofre",
+      "hideChestButton": "Ocultar cofre",
       "leaderboard": "Clasificación diaria",
       "totalPlayer": "{count} player today",
       "totalPlayers": "{count} players today",
@@ -280,7 +288,10 @@ export const es: EnTranslations = {
       "targetAnnounce": "Objetivo: {name}",
       "partyLabel": "Tu grupo",
       "partyGroup": "Grupo {n}",
-      "durationUnitSeconds": "s"
+      "durationUnitSeconds": "s",
+      "durationUnitMinutes": "m",
+      "durationUnitHours": "h",
+      "durationUnitDays": "d"
     },
     "character": {
       "modelPreview": "Vista previa del modelo del personaje"
@@ -394,6 +405,7 @@ export const es: EnTranslations = {
       "uiScale": "Escala de la interfaz",
       "playerFrameScale": "Escala del marco del jugador",
       "targetFrameScale": "Escala del marco del objetivo",
+      "aurasOnPlayerFrame": "Beneficios en el marco del jugador",
       "highContrastBackground": "Fondo de alto contraste",
       "startAttackOnAbility": "Ataque automático al usar habilidad",
       "walkByAutoloot": "Walk-by Autoloot",
@@ -401,7 +413,8 @@ export const es: EnTranslations = {
       "showItemLevel": "Mostrar nivel de objeto",
       "itemLevelLine": "Nivel de objeto {level}",
       "itemScoreLine": "Puntuación {score}",
-      "showSecondaryActionBar": "Mostrar barra de acción secundaria"
+      "showSecondaryActionBar": "Mostrar barra de acción secundaria",
+      "showDailyRewardsChest": "Show Daily Rewards Chest"
     },
     "controller": {
       "title": "Mando",
@@ -720,7 +733,8 @@ export const es: EnTranslations = {
       "summaryGroup": "Ajustes de botín: botín de grupo."
     },
     "party": {
-      "promoteLeader": "Promover a líder"
+      "promoteLeader": "Promover a líder",
+      "inviteUsage": "Invite whom? Usage: /invite <name>."
     },
     "lootSettings": {
       "title": "Ajustes de botín",
@@ -747,7 +761,13 @@ export const es: EnTranslations = {
       "sortName": "Nombre",
       "searchPlaceholder": "Buscar objetos",
       "searchAria": "Buscar objetos de la bolsa por nombre",
-      "noMatch": "Ningún objeto coincide con tus filtros."
+      "noMatch": "Ningún objeto coincide con tus filtros.",
+      "capacity": "{used}/{total}",
+      "capacityAria": "Bag slots used: {used} of {total}",
+      "backpack": "Backpack",
+      "bagSocketAria": "{name}: {slots}",
+      "socketEmpty": "Empty bag slot",
+      "unequipHint": "Click to remove this bag"
     },
     "raidConvert": {
       "toPartyDone": "Tu banda ha vuelto a convertirse en grupo.",
@@ -790,6 +810,7 @@ export const es: EnTranslations = {
         "spi": "Reduce el espíritu en {value}",
         "allStats": "Reduce todos los atributos en {value}"
       },
+      "allStatsPctReduce": "Reduces all attributes by {pct}%",
       "dodge": "Aumenta la probabilidad de esquivar un {pct}%",
       "dodgeReduce": "Reduce la probabilidad de esquivar un {pct}%",
       "armorFlat": "Reduce la armadura en {value}",
@@ -1140,6 +1161,10 @@ export const es: EnTranslations = {
           "note": "Pilgrims gather at the temple moongate under the mid-month moon."
         }
       }
+    },
+    "social": {
+      "lastSeen": "Last seen: {when}",
+      "lastSeenNever": "never"
     }
   },
   "guide": {
@@ -1538,13 +1563,13 @@ export const es: EnTranslations = {
       "thorns": "Protege a un aliado para que los atacantes cuerpo a cuerpo se hieran al golpearlo."
     },
     "petHook": {
-      "imp": "Un demonio de descargas de fuego a distancia que merma a los enemigos desde un lugar seguro.",
-      "voidwalker": "Un demonio robusto que provoca y absorbe golpes para que puedas lanzar en paz.",
-      "succubus": "Un demonio cuerpo a cuerpo veloz que golpea fuerte pero cede bajo presión.",
-      "felhunter": "Un hostigador de las sombras que acosa a los lanzadores enemigos.",
-      "felguard": "Un combatiente cuerpo a cuerpo resistente, el todoterreno una vez que puedes invocarlo.",
-      "infernal": "Un coloso descomunal con un cuerpo a cuerpo demoledor, invocado por puro poder.",
-      "doomguard": "Un lanzador de élite que descarga sombra pesada desde la distancia."
+      "emberkin": "Un demonio de descargas de fuego a distancia que merma a los enemigos desde un lugar seguro.",
+      "gloomshade": "Un demonio robusto que provoca y absorbe golpes para que puedas lanzar en paz.",
+      "duskborn": "Un demonio cuerpo a cuerpo veloz que golpea fuerte pero cede bajo presión.",
+      "spellhound": "Un hostigador de las sombras que acosa a los lanzadores enemigos.",
+      "warfiend": "Un combatiente cuerpo a cuerpo resistente, el todoterreno una vez que puedes invocarlo.",
+      "pyre_colossus": "Un coloso descomunal con un cuerpo a cuerpo demoledor, invocado por puro poder.",
+      "wraithborn": "Un lanzador de élite que descarga sombra pesada desde la distancia."
     },
     "bestiary": {
       "heading": "Bestiario",
@@ -1570,11 +1595,11 @@ export const es: EnTranslations = {
         "name": "Arañas",
         "desc": "Tejedoras de telarañas y acechadoras venenosas que anidan en lugares oscuros y enmarañados. Los Cazadores pueden domarlas, igual que a las bestias."
       },
-      "murloc": {
+      "mudfin": {
         "name": "Múrlocs",
         "desc": "Habitantes anfibios de la ciénaga que pululan por los bajíos en bandadas ruidosas y territoriales."
       },
-      "kobold": {
+      "burrower": {
         "name": "Kobolds",
         "desc": "Excavadores con velas en la cabeza que infestan minas y madrigueras, defendiendo con ferocidad su mineral."
       },
@@ -1966,6 +1991,430 @@ export const es: EnTranslations = {
       "title": "No hemos podido encontrar esa página",
       "body": "La página que buscabas no existe o puede que se haya movido.",
       "home": "Volver al resumen"
+    }
+  },
+  "editor": {
+    "appTitle": "Map Editor",
+    "docTitle": "Map Editor - World of ClaudeCraft",
+    "untitledMap": "Untitled Map",
+    "playtestPlayerName": "Mapmaker",
+    "topbar": {
+      "label": "Editor actions",
+      "mapNameLabel": "Map name",
+      "dirty": "Unsaved changes",
+      "dirtyDot": "This map has unsaved changes",
+      "clean": "All changes saved",
+      "savedLocal": "Saved in this browser",
+      "savedServer": "Saved to server (v{version})",
+      "saving": "Saving...",
+      "neverSaved": "Not saved yet",
+      "new": "New",
+      "newTitle": "Start a new map from the built-in world",
+      "open": "Open",
+      "openTitle": "Open a saved map (browser or server)",
+      "save": "Save",
+      "saveTitle": "Save to this browser, and to the server when signed in (Ctrl+S)",
+      "saveAs": "Save As",
+      "saveAsTitle": "Save a copy under a new name",
+      "fork": "Fork",
+      "forkTitle": "Create your own server-side copy of this map",
+      "forkDisabledTitle": "Open a server map first to fork it",
+      "import": "Import",
+      "importTitle": "Import a map from a JSON file",
+      "export": "Export",
+      "exportTitle": "Download this map as a JSON file",
+      "uploadAsset": "Upload Asset",
+      "uploadAssetTitle": "Upload a GLB model (up to 8 MiB) to place in your maps",
+      "uploadAssetDisabledTitle": "Sign in from the game to upload assets",
+      "playtest": "Playtest",
+      "playtestTitle": "Boot the game on this map (offline, current edits included)",
+      "viewLabel": "View mode",
+      "view3d": "3D",
+      "view3dTitle": "Edit in the rendered world",
+      "view2d": "2D",
+      "view2dTitle": "Edit on the symbolic overhead map",
+      "undoCount": "Undo: {count}",
+      "undoCountTitle": "{count} undoable steps (Ctrl+Z to undo, Ctrl+Y to redo)",
+      "autosave": "Autosave",
+      "autosaveTitle": "Automatically save the map while there are unsaved changes. Turns itself off if a save fails.",
+      "undo": "Undo",
+      "undoTitle": "Undo the last change (Ctrl+Z)",
+      "redo": "Redo",
+      "redoTitle": "Redo the last undone change (Ctrl+Y)",
+      "offline": "Offline",
+      "offlineTitle": "Not signed in: maps save to this browser only. Sign in from the game to save online.",
+      "signIn": "Sign in",
+      "signInTitle": "Open the game login screen in a new tab",
+      "help": "Help",
+      "helpTitle": "Editor guide: tools, shortcuts, and the tutorial"
+    },
+    "tool": {
+      "listLabel": "Editor tools",
+      "keyHint": "{name} ({key})",
+      "select": "Select",
+      "raise": "Raise",
+      "lower": "Lower",
+      "smooth": "Smooth",
+      "flatten": "Flatten",
+      "paint": "Paint Biome",
+      "water": "Water",
+      "place": "Place Asset",
+      "blocker": "Blocker Wall",
+      "camp": "Camp",
+      "spawn": "Spawn Point",
+      "region": "Region",
+      "erase": "Erase"
+    },
+    "inspector": {
+      "label": "Tool options"
+    },
+    "brush": {
+      "title": "Brush",
+      "size": "Brush size",
+      "strength": "Strength",
+      "sizeHint": "Keys: [ and ] resize the brush; Shift+[ and Shift+] change strength.",
+      "editCount": "Terrain edits: {count} / {max}"
+    },
+    "biome": {
+      "title": "Biome",
+      "paletteLabel": "Biome to paint",
+      "vale": "Vale",
+      "marsh": "Marsh",
+      "peaks": "Peaks",
+      "beach": "Beach",
+      "desert": "Desert",
+      "volcano": "Volcano",
+      "cave": "Cave",
+      "erase": "Erase paint",
+      "hint": "Painted cells override the zone biome for terrain shape and color.",
+      "clear": "Clear all biome paint",
+      "clearConfirm": "Remove every painted biome cell from this map?"
+    },
+    "flatten": {
+      "hint": "Flatten levels the ground to the height under the cursor when the drag starts.",
+      "hardEdge": "Hard edge"
+    },
+    "water": {
+      "title": "Water Level",
+      "level": "Water level",
+      "hint": "Sets the map-wide water surface height, from {min} to {max} yards.",
+      "reset": "Reset to the built-in level"
+    },
+    "place": {
+      "title": "Place Asset",
+      "scale": "Scale",
+      "collide": "Blocks movement",
+      "collideHint": "A blocking asset gets a collision footprint players cannot walk through.",
+      "randomRotation": "Random rotation",
+      "chosen": "Placing: {name}",
+      "none": "Pick an asset from the browser below, then click the ground to place it."
+    },
+    "blockerTool": {
+      "title": "Blocker Wall",
+      "hint": "Drag along the ground to draw an invisible wall players cannot walk or jump through. Release to place it; a wall shorter than half a yard is discarded.",
+      "count": "Blocker walls: {count} / {max}"
+    },
+    "camp": {
+      "title": "Mob Camp",
+      "mob": "Mob",
+      "count": "Count",
+      "radius": "Radius",
+      "delete": "Delete camp",
+      "hint": "Click open ground to add a camp, or click an existing camp to edit it.",
+      "playtestNote": "Mobs spawn only in playtest, never in the editor view.",
+      "selected": "Camp: {mob}",
+      "none": "No camp selected."
+    },
+    "spawn": {
+      "title": "Spawn Point",
+      "hint": "Click the ground to set where playtest drops the player.",
+      "position": "Spawn: {x}, {z}",
+      "unset": "Using the built-in start position.",
+      "clear": "Clear spawn point"
+    },
+    "region": {
+      "title": "Region",
+      "hint": "Drag a box to select placements and terrain edits. Copy, then click to paste.",
+      "hint3d": "Region boxes draw in the 2D view; copy and paste work in both views.",
+      "copy": "Copy region",
+      "pasteBeside": "Paste beside",
+      "copied": "Copied {assets} assets and {edits} terrain edits.",
+      "pasted": "Pasted {count} items.",
+      "needBox": "Draw a region box first.",
+      "needClipboard": "Copy a region first."
+    },
+    "eraseTool": {
+      "title": "Erase",
+      "hint": "Click a placed asset to remove it, or click sculpted ground to remove the newest stamp under the cursor.",
+      "blockerHint": "Clicking near a blocker wall removes that wall instead."
+    },
+    "selection": {
+      "title": "Selection",
+      "none": "Nothing selected. Use Select and click a placed asset.",
+      "asset": "Asset: {name}",
+      "x": "X",
+      "z": "Z",
+      "rotation": "Rotation",
+      "scale": "Scale",
+      "collide": "Blocks movement",
+      "radius": "Collision radius",
+      "radiusAuto": "Auto",
+      "radiusAutoTitle": "Reset the collision radius to follow the asset scale",
+      "radiusHint": "Auto derives the collision radius from the asset scale; drag the slider to override it.",
+      "footprints": "Show collision footprints",
+      "duplicate": "Duplicate",
+      "delete": "Delete",
+      "deleteHint": "Delete removes the selection; Ctrl+Z restores it.",
+      "moveHint": "Move: drag the asset along the ground in the 3D view, or nudge it with the arrow keys (0.5 yd, Shift for 2 yd).",
+      "wheelHint": "Shift+scroll rotates the asset, Alt+scroll scales it, Ctrl+D duplicates it."
+    },
+    "marker": {
+      "title": "Marker",
+      "reset": "Reset position",
+      "moved": "{count} markers moved from the built-in layout."
+    },
+    "layers": {
+      "title": "Layers",
+      "hub": "Hubs",
+      "graveyard": "Graveyards",
+      "lake": "Lakes",
+      "poi": "Points of interest",
+      "camp": "Camps",
+      "npc": "NPCs",
+      "object": "Objects",
+      "blocker": "Blocker walls"
+    },
+    "frame": {
+      "title": "Frame",
+      "all": "All"
+    },
+    "procgen": {
+      "title": "Procedural",
+      "count": "Count",
+      "scatter": "Scatter category assets",
+      "hills": "Generate rolling hills",
+      "scattered": "Scattered {count} assets from {category}.",
+      "hillsAdded": "Added {count} hills.",
+      "noAssets": "No assets in that category."
+    },
+    "assets": {
+      "title": "Asset Browser",
+      "label": "Asset browser",
+      "search": "Search assets",
+      "searchPlaceholder": "Search assets...",
+      "empty": "No matching assets.",
+      "uploadedTab": "Uploaded",
+      "uploadedEmpty": "No uploaded assets yet. Use Upload Asset to add a GLB model (up to 8 MiB).",
+      "uploadedSignIn": "Sign in from the game to upload and place your own GLB models.",
+      "uploadedLoadFailed": "Could not load your uploaded assets.",
+      "deleteAsset": "Delete uploaded asset",
+      "deleteAssetConfirm": "Delete the uploaded asset \"{name}\"? Maps that use it lose the model.",
+      "pick": "Place {name}",
+      "categoryTab": "{category} ({count})",
+      "category": {
+        "biome": "Biome",
+        "chars": "Characters",
+        "creatures": "Creatures",
+        "dungeon": "Dungeon",
+        "foliage": "Foliage",
+        "props": "Props",
+        "quest": "Quest",
+        "resources": "Resources",
+        "tools": "Tools",
+        "weapons": "Weapons"
+      }
+    },
+    "upload": {
+      "notGlb": "Pick a .glb file.",
+      "tooLarge": "That file is over the 8 MiB limit.",
+      "uploading": "Uploading asset...",
+      "uploaded": "Asset uploaded: {name}",
+      "uploadedExisting": "That model was already on the server; reusing it.",
+      "deleted": "Uploaded asset deleted."
+    },
+    "openDrawer": {
+      "title": "Open Map",
+      "close": "Close",
+      "tabLocal": "This Browser",
+      "tabMine": "My Server Maps",
+      "tabPublic": "Public Maps",
+      "colName": "Name",
+      "colUpdated": "Updated",
+      "colStatus": "Status",
+      "statusPublic": "Public",
+      "statusPrivate": "Private",
+      "open": "Open",
+      "fork": "Fork",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "delete": "Delete",
+      "draft": "Autosaved draft",
+      "emptyLocal": "No maps saved in this browser yet. Save one and it appears here.",
+      "emptyMine": "No maps on the server yet. Save while signed in to create one.",
+      "emptyPublic": "No public maps yet.",
+      "loading": "Loading maps...",
+      "loadFailed": "Could not load maps from the server.",
+      "signInHint": "Sign in from the game to browse, save, and fork server maps.",
+      "deleteLocalConfirm": "Delete the local map \"{name}\"?",
+      "deleteServerConfirm": "Delete the server map \"{name}\"? This cannot be undone.",
+      "prev": "Previous page",
+      "next": "Next page",
+      "page": "Page {page}"
+    },
+    "status": {
+      "savedLocal": "Saved \"{name}\" to this browser.",
+      "savedServer": "Saved \"{name}\" to the server (v{version}).",
+      "savedLocalOnly": "Saved \"{name}\" to this browser. Sign in to save online.",
+      "saveFailedLocal": "Local save failed (storage blocked).",
+      "opened": "Opened \"{name}\".",
+      "imported": "Imported \"{name}\".",
+      "importFailed": "Import cancelled, or the file is not a valid map.",
+      "exported": "Downloaded \"{name}\".",
+      "newMap": "New map started from the built-in world.",
+      "forked": "Forked to \"{name}\". You are editing your own copy now.",
+      "published": "Map published. Anyone can now find and fork it.",
+      "unpublished": "Map unpublished.",
+      "deleted": "Map deleted.",
+      "assetPlacedFirst": "Pick an asset in the browser first.",
+      "loading3d": "Loading the world...",
+      "playtestLaunch": "Launching playtest...",
+      "playtestFailed": "Could not start the playtest (storage blocked).",
+      "draftSaved": "Draft autosaved.",
+      "draftRestored": "Restored the autosaved draft.",
+      "autosaveFailed": "Autosave failed (browser storage is full or blocked). Export the map to keep a backup.",
+      "terrainCapReached": "Terrain edit limit reached ({max}). Extra sculpt stamps were not added.",
+      "placementCapReached": "Placement limit reached ({max}). Extra assets were not added.",
+      "blockerCapReached": "Blocker wall limit reached ({max}). The new wall was not added.",
+      "autosaveOff": "Autosave turned off: {reason} Save manually, then turn it back on."
+    },
+    "confirm": {
+      "ok": "OK",
+      "cancel": "Cancel",
+      "discardTitle": "Discard changes?",
+      "discardBody": "You have unsaved changes on \"{name}\". Discard them?",
+      "discard": "Discard",
+      "conflictTitle": "Save conflict",
+      "conflictBody": "This map changed on the server since you opened it (now v{version}). Save your version as a new copy?",
+      "conflictSaveCopy": "Save As Copy"
+    },
+    "prompt": {
+      "saveAsTitle": "Save As",
+      "nameLabel": "New map name"
+    },
+    "serverError": {
+      "invalid_map_name": "That map name is not allowed. Use letters, numbers, spaces, apostrophes, or hyphens.",
+      "map_name_not_allowed": "That map name is not allowed.",
+      "invalid_map_doc": "The server rejected the map document.",
+      "invalid_version": "The save request was malformed. Reload and try again.",
+      "map_limit_reached": "You have reached the server map limit. Delete a map to save more.",
+      "map_not_found": "That map no longer exists on the server.",
+      "version_conflict": "The map changed on the server since you opened it.",
+      "slug_unavailable": "The server could not make a link for that name. Try a different name.",
+      "map_too_large": "The map document is too large to save on the server.",
+      "invalid_glb": "That file is not a valid GLB model.",
+      "asset_blocked": "That asset has been blocked by moderation.",
+      "asset_limit_reached": "You have reached the uploaded asset limit. Delete one to upload more.",
+      "asset_storage_limit_reached": "You are out of asset storage space. Delete an asset first.",
+      "asset_too_large": "That model is over the upload size limit.",
+      "asset_not_found": "That asset no longer exists on the server.",
+      "rate_limited": "Slow down a little and try again.",
+      "unauthorized": "Your session has expired. Sign in from the game again.",
+      "network": "Could not reach the server. Check your connection and try again.",
+      "timeout": "The server took too long to respond. Try again.",
+      "unknown": "Something went wrong talking to the server."
+    },
+    "hints": {
+      "nav3d": "Drag to orbit, scroll to zoom. While dragging, WASD flies and Q/E changes height.",
+      "nav2d": "Drag to pan, scroll to zoom."
+    },
+    "help": {
+      "title": "Editor Help",
+      "toolsTitle": "Tools",
+      "shortcutsTitle": "Keyboard shortcuts",
+      "mouseTitle": "Mouse and navigation",
+      "flowTitle": "Saving and playtesting",
+      "beginTutorial": "Begin tutorial",
+      "close": "Close",
+      "tool": {
+        "select": "Pick placed assets to move, rotate, and scale them; click a 2D marker to edit it.",
+        "raise": "Raise the terrain under the brush.",
+        "lower": "Lower the terrain under the brush.",
+        "smooth": "Smooth bumps toward the local average height.",
+        "flatten": "Level the ground to the height where the drag starts.",
+        "paint": "Paint biome ground cover over the zone default.",
+        "water": "Set the map-wide water level.",
+        "place": "Place catalog or uploaded assets on the ground.",
+        "blocker": "Drag invisible walls that block movement in playtest.",
+        "camp": "Add and edit mob camps that spawn in playtest.",
+        "spawn": "Set where playtest drops the player.",
+        "region": "Box-select terrain and assets to copy and paste.",
+        "erase": "Remove placed assets or sculpt stamps under the cursor."
+      },
+      "key": {
+        "tools": "Every tool has a single-letter shortcut, shown on its button in the tool rail.",
+        "brush": "[ and ] resize the brush; Shift+[ and Shift+] change its strength.",
+        "undo": "Ctrl+Z undoes the last change; Ctrl+Y or Ctrl+Shift+Z redoes it.",
+        "save": "Ctrl+S saves the map.",
+        "duplicate": "Ctrl+D duplicates the selected asset.",
+        "nudge": "Arrow keys nudge the selected asset by 0.5 yards; hold Shift for 2 yards.",
+        "wheel": "Shift+scroll rotates the selected asset; Alt+scroll scales it.",
+        "delete": "Delete removes the selected asset or camp.",
+        "escape": "Esc clears the selection first, then returns to the Select tool."
+      },
+      "mouse": {
+        "orbit3d": "3D view: drag to orbit and scroll to zoom; middle-drag or Shift+drag pans.",
+        "fly3d": "While holding a drag in 3D, WASD flies the camera and Q/E changes height.",
+        "move": "With Select active, drag a placed asset to move it across the ground.",
+        "pan2d": "2D view: drag to pan and scroll to zoom."
+      },
+      "flow": {
+        "save": "Save keeps the map in this browser, and on the server when you are signed in.",
+        "draft": "While you have unsaved changes, a draft is autosaved every 30 seconds; Open restores it.",
+        "playtest": "Playtest boots the real game on this map, including your unsaved edits."
+      }
+    },
+    "tutorial": {
+      "title": "Editor tutorial",
+      "back": "Back",
+      "next": "Next",
+      "finish": "Finish",
+      "skip": "Skip tour",
+      "counter": "Step {current} of {total}",
+      "steps": {
+        "toolbar": {
+          "title": "The tool rail",
+          "body": "Every editing tool lives here: sculpting brushes, biome paint, water, asset placement, camps, and more. Each one has a single-key shortcut, shown in its corner."
+        },
+        "stage": {
+          "title": "The world",
+          "body": "This is your map, rendered with the real game engine. Drag to orbit, scroll to zoom, and middle-drag or Shift+drag to pan. Click the ground with a tool to edit."
+        },
+        "inspector": {
+          "title": "Tool options",
+          "body": "The options for the active tool appear here: brush size, the biome palette, asset scale, camp settings, and the properties of whatever you select."
+        },
+        "viewToggle": {
+          "title": "3D and 2D",
+          "body": "Switch between the rendered 3D world and the symbolic overhead 2D map. The 2D view is best for moving zone markers and framing large areas."
+        },
+        "save": {
+          "title": "Save your work",
+          "body": "Save stores the map in this browser, and on the server when you are signed in. Export downloads a JSON backup, and Open brings back saved maps and drafts."
+        },
+        "playtest": {
+          "title": "Playtest",
+          "body": "Boot the real game on your map at any time, with your current edits included. Close the playtest tab to come back and keep editing."
+        },
+        "help": {
+          "title": "Help is here",
+          "body": "That is the whole loop. Open Help any time for the full tool list and every shortcut, or to run this tour again."
+        }
+      }
+    },
+    "a11y": {
+      "stage": "Map viewport",
+      "toasts": "Editor notifications",
+      "dialog": "Editor dialog"
     }
   },
   "skinEvent": {
@@ -2364,6 +2813,7 @@ export const es: EnTranslations = {
       "unknownTier": "Nivel de expedición desconocido.",
       "levelRequired": "Debes ser nivel {level} para entrar a {name}.",
       "levelRequiredTier": "Debes ser nivel {level} para entrar a {name} en {tier}.",
+      "partyTooLarge": "{name} is meant for solo or duo delves. Parties of {max} or more may not enter.",
       "instancesBusy": "Todas las instancias de {name} están ocupadas. Inténtalo de nuevo pronto.",
       "runFailed": "La incursión de {name} ha fracasado.",
       "complete": "{name} completado.",
@@ -2373,6 +2823,14 @@ export const es: EnTranslations = {
       "doorAlreadyOpen": "La puerta ya está abierta.",
       "companionRankUp": "{name} alcanza el rango {rank}.",
       "bossChest": "El jefe cae. Un cofre de relicario protegido se alza sobre el estrado: fuerza su cerradura para reclamar tu botín.",
+      "drownedLitanyReliquaryRise": "Sister Nhalia falls silent. The Drowned Reliquary rises from the blackwater. Approach it to begin the rite.",
+      "riteSequenceReady": "The shrines fall dark. Repeat the sequence.",
+      "riteSequencePlaying": "The shrines replay the rite. Wait.",
+      "riteCorrect": "A soft chime answers your touch.",
+      "riteWrong": "A harsh bell crack. Black water splashes at your feet.",
+      "riteReliquaryOpen": "The Drowned Reliquary opens.",
+      "riteReliquaryLocked": "Complete the shrine rite to open the reliquary.",
+      "riteReliquaryEmpty": "The reliquary is empty.",
       "surfaceStairs": "Se abre una escalera hacia la superficie. Pulsa F en las escaleras para salir.",
       "moduleEnter": "{name}: {objective}",
       "objectiveClearRoom": "Despeja la sala.",
@@ -2380,6 +2838,13 @@ export const es: EnTranslations = {
       "tombstoneHint": "Un pasaje de lápida se abre al norte cuando la sala queda despejada.",
       "tombstoneOpen": "Un pasaje de lápida sellado se abre con un chirrido al norte. Camina hacia él para continuar.",
       "tombstoneInto": "Atraviesas la lápida hacia {name}.",
+      "bellRopeShock": "The bell rope snaps taut. Drowned Cantors reel from the shock.",
+      "eggSacBurst": "The egg-sac bursts. Spiderlings skitter free across the baptistry rim.",
+      "baptistryEggs": "The baptistry falls quiet. Spider egg-sacs cling wetly to the rim.",
+      "baptistrySpidersSealed": "You should try to destroy the spider sacs.",
+      "puzzleSealed": "You need to open the seal by applying pressure somewhere in the room.",
+      "ropesSealed": "You should try pulling the bell ropes.",
+      "baptistryWave": "Something stirs in the black baptistry water.",
       "chestEmpty": "El cofre está vacío.",
       "notInDelve": "No estás en una expedición.",
       "cannotInteract": "No puedes interactuar con eso.",
@@ -2398,9 +2863,12 @@ export const es: EnTranslations = {
       "passageSealed": "El pasaje está sellado.",
       "moveCloserPassage": "Acércate al pasaje.",
       "moveCloserChest": "Acércate al cofre.",
+      "moveCloserReliquary": "Move closer to the reliquary.",
       "nothingToTake": "Ya no queda nada que llevarse.",
       "wayOutNotOpen": "La salida aún no está abierta.",
-      "moveCloserStairs": "Acércate a las escaleras."
+      "moveCloserStairs": "Acércate a las escaleras.",
+      "nhaliaCantorShield": "Cantors, hold the note!",
+      "nhaliaBlackwaterMark": "{name} marks {player} with Blackwater!"
     },
     "lockpick": {
       "lockYields": "¡La cerradura cede! Botín {tier}.",
@@ -2463,6 +2931,26 @@ export const es: EnTranslations = {
       "abandoned": "Sacas las ganzúas con cuidado. La cerradura aguarda."
     }
   },
+  "delveRiteUi": {
+    "title": "The Drowned Reliquary Rite",
+    "blurb": "The shrines will light in order. Repeat the sequence by activating each shrine in turn. A wrong touch fails the attempt and replays the sequence, a flawless attempt earns the richest spoils, and running out of tries opens the reliquary on its meanest. Choose how the rite tests you.",
+    "easy": "Easy",
+    "medium": "Medium",
+    "hard": "Hard",
+    "guideWatch": "After you choose, the four shrines light up one at a time. Memorize the order.",
+    "guideRepeat": "When the shrines fall dark, walk to each shrine and press F (Interact) in that same order.",
+    "guideStakes": "A wrong shrine splashes you with blackwater and costs a try. Complete the sequence to open the reliquary.",
+    "showsTimes": "Sequence shown {count} times",
+    "showsOnce": "Sequence shown once",
+    "symbols": "{count} symbols",
+    "tries": "{count} tries",
+    "reward": {
+      "easy": "Modest spoils",
+      "medium": "Rich spoils",
+      "hard": "Premium spoils"
+    },
+    "closeAria": "Close"
+  },
   "delveUi": {
     "board": {
       "title": "Tablón de Expediciones",
@@ -2472,6 +2960,7 @@ export const es: EnTranslations = {
       "openDelveAria": "Abrir el Tablón de Expediciones desde {name}",
       "marks": "Marcas de Expedición: {count}",
       "minLevel": "Requiere nivel {level}",
+      "partyTooLarge": "Solo or duo only ({max} players max)",
       "tier": {
         "normal": "Normal",
         "heroic": "Heroico"
@@ -2479,6 +2968,7 @@ export const es: EnTranslations = {
       "companion": {
         "pick": "Elige un compañero",
         "tessa": "Acólita Tessa",
+        "edda": "Edda Reedhand",
         "rank": "Rango {rank}",
         "boon": "Cura al grupo entre combates. El rango 3 revive a un aliado caído una vez por incursión.",
         "upgrade": "Mejorar al rango {rank} ({marks} Marcas)",
@@ -2504,7 +2994,11 @@ export const es: EnTranslations = {
       "complete": "Completado",
       "marks": "Marcas de Expedición: {count}",
       "exitHintOpen": "Entra al pasaje de lápida (norte)",
-      "exitHintLocked": "Despeja a los enemigos para abrir el pasaje al norte"
+      "exitHintLocked": "Despeja a los enemigos para abrir el pasaje al norte",
+      "riteChoose": "Approach the Drowned Reliquary and press F to begin the rite",
+      "ritePlayback": "Watch the shrines: memorize the order they light up",
+      "riteInput": "Press F at each shrine in the order they lit ({current}/{total})",
+      "riteOpen": "The reliquary is open: press F on it to claim your spoils"
     },
     "objective": {
       "kill_boss": "Da muerte a {boss}",
@@ -2525,27 +3019,54 @@ export const es: EnTranslations = {
     "npc": {
       "halven": {
         "greeting": "El relicario de abajo ha vuelto a desplazarse. Oímos cánticos a través del suelo después de medianoche, y la Acólita Tessa jura que los registros funerarios cambian su propia tinta. Si tienes valor suficiente, {playerName}, toma una vela y baja. No confíes en cada voz que oigas allá abajo. Algunas conocían tu nombre antes de que nacieras."
+      },
+      "halvenMarsh": {
+        "greeting": "The trail led north to the marsh, {playerName}. Another reliquary sings under the black water, and the drowned dead answer the bells. Acolyte Edda knows these reeds better than I do, stay close to her lantern. Choose your tier, and I will hold the rope until you return."
       }
     },
     "intro": {
       "normal": "La escalera es fría y oscura. Piedras de santos rotas cubren el descenso, y una suave nota de campana flota en el aire húmedo. La Acólita Tessa susurra: «El relicario no debería estar abierto hasta tan abajo. Quédate cerca, {playerName}.»",
-      "heroic": "Las puertas se cierran con un quejido a tu espalda. Los nombres raspan la piedra como uñas. La vela de Tessa arde azul. «Ya no están llamando a los muertos, {playerName}. Están respondiéndole a algo.»"
+      "heroic": "Las puertas se cierran con un quejido a tu espalda. Los nombres raspan la piedra como uñas. La vela de Tessa arde azul. «Ya no están llamando a los muertos, {playerName}. Están respondiéndole a algo.»",
+      "litanyNormal": "Reed-choked stairs drop beneath Fenbridge. Edda Reedhand lifts her lantern. \"The marsh remembers every name they drowned, {playerName}. Stay in the light.\"",
+      "litanyHeroic": "Blackwater laps the causeway stones. Edda's flame gutters green. \"They are singing again below, {playerName}. Do not answer the choir.\""
     },
     "module": {
       "reliquary_sunken_ossuary": "El agua se filtra por los estantes funerarios, arrastrando ceniza vieja en regueros de plata y negro.",
       "reliquary_bell_niche": "Decenas de campanillas cuelgan en silencio, cada una atada con paño funerario.",
       "reliquary_saintless_hall": "Estatuas con los rostros cincelados con cuidadoso odio.",
-      "reliquary_finale": "La campana enterrada tañe una vez bajo tus botas."
+      "reliquary_finale": "La campana enterrada tañe una vez bajo tus botas.",
+      "litany_sluice": "Moss-choked sluice gates drip blackwater into the old choir crypt.",
+      "litany_ledger": "Ledger islands rise from flooded channels, ink bleeding into the marsh.",
+      "litany_ring": "A reliquary ring loops around a sealed central font of black water.",
+      "litany_baptistry": "A sinkhole baptistry yawns beneath cracked saint-stones and egg-sacs.",
+      "litany_choir_loft": "Fanning choir lofts echo with rope-hung bells that never quite stop.",
+      "litany_causeway": "A Y-split causeway forks over waist-deep fen water.",
+      "litany_apse": "The drowned apse opens onto Sister Nhalia's altar island."
     },
     "moduleName": {
       "reliquary_sunken_ossuary": "El Osario Hundido",
       "reliquary_bell_niche": "La Hornacina de la Campana",
       "reliquary_saintless_hall": "La Sala sin Santos",
-      "reliquary_finale": "La Cámara de la Campana Enterrada"
+      "reliquary_finale": "La Cámara de la Campana Enterrada",
+      "litany_sluice": "The Crescent Sluice",
+      "litany_ledger": "The Island Ledger",
+      "litany_ring": "The Ring Reliquary",
+      "litany_baptistry": "The Sinkhole Baptistry",
+      "litany_choir_loft": "The Reedsong Gallery",
+      "litany_causeway": "The Y-Split Causeway",
+      "litany_apse": "The Drowned Apse"
+    },
+    "object": {
+      "sluice_valve": "Sluice Valve",
+      "grave_tablet": "Grave Tablet",
+      "corpse_candle": "Corpse-Candle",
+      "bell_rope": "Bell Rope"
     },
     "companion": {
       "barkLine": "{name}: {line}",
       "tessa": {
+        "run_start": "I have my candle and my ledger, {playerName}. Lead on.",
+        "ally_revive": "Up now. Tonight's ledger does not carry your name.",
         "combat_start": "Mantén el equilibrio, {playerName}. Los muertos están inquietos aquí.",
         "low_hp": "Respira. Aún me quedan plegarias para ti.",
         "trap_spotted": "Quieto, algo en el suelo recuerda las pisadas.",
@@ -2557,6 +3078,20 @@ export const es: EnTranslations = {
           "3": "Acólita del Relicario",
           "4": "Testigo de la Llamada de Tumba",
           "5": "Guardiana de la capilla"
+        }
+      },
+      "edda": {
+        "run_start": "Keep to the plank-line, {playerName}. The silt takes the proud-footed.",
+        "ally_revive": "Up, now. The marsh does not get you today.",
+        "combat_start": "Mind the blackwater, {playerName}. The marsh listens.",
+        "low_hp": "Steady. My lantern is not out yet.",
+        "trap_spotted": "Wait. The reeds are wrong here.",
+        "boss_pull": "That canticle knows your name, {playerName}. Do not sing back.",
+        "completion": "The fen can swallow its secrets for one more night.",
+        "rank": {
+          "1": "Lantern-Bearer",
+          "2": "Reed-Watcher",
+          "3": "Fenbridge Acolyte"
         }
       }
     },
@@ -2600,7 +3135,10 @@ export const es: EnTranslations = {
       "flooded_paths": "Senderos Inundados",
       "grave_tax": "Tributo de Tumba",
       "unstable_roof": "Techo Inestable",
-      "cult_remnants": "Restos del Culto"
+      "cult_remnants": "Restos del Culto",
+      "high_water": "High Water",
+      "lively_choir": "Lively Choir",
+      "belligerent_dead": "Belligerent Dead"
     },
     "blessing": {
       "chapel_candle": "Vela de capilla: una incursión más segura, una Marca menos al completarla."
@@ -3725,7 +4263,8 @@ export const es: EnTranslations = {
       "drink": "Bebida",
       "tool": "Herramienta",
       "potion": "Poción",
-      "elixir": "Elixir"
+      "elixir": "Elixir",
+      "bag": "Bag"
     },
     "stats": {
       "armor": "Armadura",
@@ -3767,7 +4306,8 @@ export const es: EnTranslations = {
       "useManaPotion": "Uso: restaura al instante {amount} de maná. Se puede usar en combate. Reutilización de 1 min.",
       "clickUseInstant": "Haz clic para usar al instante en combate",
       "clickUse": "Haz clic para usar",
-      "clickBuyback": "Haz clic para recomprar"
+      "clickBuyback": "Haz clic para recomprar",
+      "bagSlots": "{slots} Slot Bag"
     },
     "bags": {
       "title": "Bolsas",
@@ -5069,6 +5609,21 @@ export const es: EnTranslations = {
       "monarch_crown_helm": {
         "name": "Corona del Monarca"
       },
+      "linen_pouch": {
+        "name": "Bolsa de lino"
+      },
+      "travelers_knapsack": {
+        "name": "Mochila de viajero"
+      },
+      "wolfhide_satchel": {
+        "name": "Zurrón de piel de lobo"
+      },
+      "gravewoven_bag": {
+        "name": "Bolsa sepulcral"
+      },
+      "mistcallers_duffel": {
+        "name": "Petate del Llamaniebla"
+      },
       "copper_mining_pick": {
         "name": "Pico de Minería de Cobre"
       },
@@ -5459,6 +6014,69 @@ export const es: EnTranslations = {
       "varric_shadow_cowl": {
         "name": "Capucha sombría de Varric"
       },
+      "siltguard_helm": {
+        "name": "Siltguard Helm"
+      },
+      "bulwark_rusted_pauldrons": {
+        "name": "Bulwark-Rusted Pauldrons"
+      },
+      "nhalias_bell_maul": {
+        "name": "Nhalia's Bell-Maul"
+      },
+      "reedstalker_jerkin": {
+        "name": "Reedstalker Jerkin"
+      },
+      "mirejaw_fang_knife": {
+        "name": "Mirejaw Fang-Knife"
+      },
+      "widow_silk_hood": {
+        "name": "Widow-Silk Hood"
+      },
+      "cantors_drowned_sash": {
+        "name": "Cantor's Drowned Sash"
+      },
+      "corpse_candle_focus": {
+        "name": "Corpse-Candle Focus"
+      },
+      "nhalias_litany_rod": {
+        "name": "Nhalia's Litany Rod"
+      },
+      "blackwater_vanguard_chest": {
+        "name": "Blackwater Vanguard Chestguard"
+      },
+      "siltstep_leggings": {
+        "name": "Siltstep Leggings"
+      },
+      "sunken_reliquary_hood": {
+        "name": "Sunken Reliquary Hood"
+      },
+      "litany_legs": {
+        "name": "Silt-Walker Greaves"
+      },
+      "litany_shoulder": {
+        "name": "Blackwater Drift Mantle"
+      },
+      "litany_gloves_rog": {
+        "name": "Reed-Bound Handwraps"
+      },
+      "litany_plate_chest": {
+        "name": "Sump-Warden Cuirass"
+      },
+      "litany_leather_chest": {
+        "name": "Silt-Deep Vestment"
+      },
+      "litany_cloth_chest": {
+        "name": "Choir-Drowned Raiment"
+      },
+      "litany_helm": {
+        "name": "Reliquant's Drowned Cowl"
+      },
+      "sister_nhalia_choir_plate": {
+        "name": "Sister Nhalia's Choir-Forged Plate"
+      },
+      "drowned_choir_fang": {
+        "name": "Drowned Choir-Fang"
+      },
       "the_codfather": {
         "name": "El Bacaladrino"
       },
@@ -5794,6 +6412,39 @@ export const es: EnTranslations = {
       "acolyte_tessa": {
         "name": "Acólita Tessa"
       },
+      "drowned_cantor": {
+        "name": "Drowned Cantor"
+      },
+      "reedbound_acolyte": {
+        "name": "Reedbound Acolyte"
+      },
+      "deepfen_spearjaw": {
+        "name": "Deepfen Spearjaw"
+      },
+      "mirefen_widowling": {
+        "name": "Mirefen Widowling"
+      },
+      "spider_egg_sac": {
+        "name": "Spider Egg-Sac"
+      },
+      "grave_silt_bulwark": {
+        "name": "Grave-Silt Bulwark"
+      },
+      "sump_troll_devourer": {
+        "name": "Sump Troll Devourer"
+      },
+      "choir_thrall": {
+        "name": "Bog Thrall"
+      },
+      "sister_nhalia_drowned_canticle": {
+        "name": "Sister Nhalia, the Drowned Canticle"
+      },
+      "edda_reedhand": {
+        "name": "Edda Reedhand"
+      },
+      "tolling_bell": {
+        "name": "Tolling Bell"
+      },
       "thunzharr_waking_peak": {
         "name": "Thunzharr, el Pico Despierto"
       },
@@ -5830,13 +6481,13 @@ export const es: EnTranslations = {
       "varkas_boneguard": {
         "name": "Guardahuesos de Varkas"
       },
-      "imp": {
+      "emberkin": {
         "name": "Diablillo"
       },
-      "voidwalker": {
+      "gloomshade": {
         "name": "Caminante del Vacío"
       },
-      "succubus": {
+      "duskborn": {
         "name": "Súcubo"
       },
       "grix_the_tunnelking": {
@@ -5860,16 +6511,16 @@ export const es: EnTranslations = {
       "wraithbinder_maldrec": {
         "name": "Maldrec el Ataespectros"
       },
-      "felhunter": {
+      "spellhound": {
         "name": "Cazador vil"
       },
-      "felguard": {
+      "warfiend": {
         "name": "Guardia vil"
       },
-      "infernal": {
+      "pyre_colossus": {
         "name": "Infernal"
       },
-      "doomguard": {
+      "wraithborn": {
         "name": "Guardián del Terror"
       },
       "choirmother_selthe": {
@@ -6019,6 +6670,16 @@ export const es: EnTranslations = {
         "name": "Hermano Halven",
         "title": "Guardián del Relicario",
         "greeting": "El relicario de abajo ha vuelto a desplazarse."
+      },
+      "brother_halven_marsh": {
+        "name": "Brother Halven",
+        "title": "Reliquary Keeper",
+        "greeting": "The trail led north. Another reliquary, another rite. Choose your tier, and I'll hold the rope until you return."
+      },
+      "spirit_healer": {
+        "name": "The Pale Keeper",
+        "title": "Warden of the Dead",
+        "greeting": "Rest now, spirit. I can return you to your body, but the crossing back leaves you weak."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
@@ -7014,6 +7675,11 @@ export const es: EnTranslations = {
         "name": "El Relicario Hundido",
         "enterText": "Desciendes al relicario hundido.",
         "leaveText": "Subes de vuelta hasta el Hermano Halven, en la ruina del relicario."
+      },
+      "drowned_litany": {
+        "name": "The Drowned Litany",
+        "enterText": "You descend into the drowned shrine at the marsh's edge.",
+        "leaveText": "You climb back to Brother Halven at the marsh's edge."
       }
     },
     "letters": {
@@ -7084,6 +7750,11 @@ export const es: EnTranslations = {
     "delveLockedChestInteract": "Pulsa F para forzar la cerradura",
     "delveRewardChestInteract": "Pulsa F para reclamar el botín",
     "delveSurfaceExitInteract": "Pulsa F para trepar",
+    "delveReliquaryInteract": "Drowned Reliquary: Press F to begin the rite",
+    "delveRiteShrineBellInteract": "Bell Shrine: Press F to ring it",
+    "delveRiteShrineCandleInteract": "Candle Shrine: Press F to touch it",
+    "delveRiteShrineReedInteract": "Reed Shrine: Press F to touch it",
+    "delveRiteShrineSkullInteract": "Skull Shrine: Press F to touch it",
     "mailboxName": "Mailbox"
   }
 };
