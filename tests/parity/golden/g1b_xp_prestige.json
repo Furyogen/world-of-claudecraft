@@ -17,7 +17,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "d35a4a11",
+      "state": "1d0c5980",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -49,6 +49,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -112,7 +113,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 401,
-      "state": "8f58da6d",
+      "state": "7310e878",
       "events": "b93c7dc5",
       "rng": {
         "draws": 0,
@@ -123,7 +124,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 401,
-      "state": "286d3dad",
+      "state": "87000238",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -134,7 +135,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 401,
-      "state": "6550d2f3",
+      "state": "104b3234",
       "events": "741638a5",
       "rng": {
         "draws": 75,
@@ -145,7 +146,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 401,
-      "state": "6550d2f3",
+      "state": "104b3234",
       "events": "741638a5",
       "rng": {
         "draws": 75,
@@ -177,6 +178,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "restedXp": 0.125,
           "talents": {
             "choices": {},
@@ -241,7 +243,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 401,
-      "state": "6566ebd4",
+      "state": "b3ccab4d",
       "events": "1cded724",
       "rng": {
         "draws": 75,
@@ -276,6 +278,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 160,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "restedXp": 920,
           "talents": {
             "choices": {},
@@ -341,7 +344,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 401,
-      "state": "320498c9",
+      "state": "1e913ef8",
       "events": "c434cdff",
       "rng": {
         "draws": 75,
@@ -377,6 +380,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 610,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "restedXp": 920,
           "talents": {
             "choices": {},
@@ -442,7 +446,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 401,
-      "state": "1420b165",
+      "state": "7dabf634",
       "events": "5079bfdf",
       "rng": {
         "draws": 75,
@@ -478,6 +482,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 190400,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "restedXp": 920,
           "talents": {
             "choices": {},
@@ -543,7 +548,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 401,
-      "state": "ba2cc3da",
+      "state": "94d708af",
       "events": "dee49cdf",
       "rng": {
         "draws": 75,
@@ -579,6 +584,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 190400,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "prestigeRank": 1,
           "restedXp": 920,
           "talents": {
@@ -644,7 +650,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 401,
-      "state": "ba2cc3da",
+      "state": "94d708af",
       "events": "741638a5",
       "rng": {
         "draws": 75,
@@ -680,6 +686,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 190400,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "prestigeRank": 1,
           "restedXp": 920,
           "talents": {
@@ -745,7 +752,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 401,
-      "state": "ba2cc3da",
+      "state": "94d708af",
       "events": "741638a5",
       "rng": {
         "draws": 75,
@@ -781,6 +788,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 190400,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "prestigeRank": 1,
           "restedXp": 920,
           "talents": {

@@ -6453,15 +6453,6 @@ export class Sim {
     return this.companionUpgradesFor(this.primaryId);
   }
 
-  // Read-only gathering-profession proficiency surface for IWorld. Stubbed
-  // directly on IWorld pending issue #1164 (a broader professions facet); see
-  // that issue for the eventual reconciliation.
-  gatheringProficiencyFor(pid: number): Record<string, number> {
-    return { ...(this.players.get(pid)?.gatheringProficiency ?? emptyGatheringProficiency()) };
-  }
-
-  get gatheringProficiency(): Record<string, number> {
-    return this.gatheringProficiencyFor(this.primaryId);
   get craftSkills(): Record<string, number> {
     return this.craftSkillsFor(this.primaryId);
   }

@@ -16,7 +16,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "e9f653f8",
+      "state": "f0d771e9",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -47,6 +47,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -110,7 +111,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "7cbf99fc",
+      "state": "8495582b",
       "events": "27c7a42a",
       "rng": {
         "draws": 0,
@@ -141,6 +142,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "questLog": [
             [
               "q_boars",
@@ -216,7 +218,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "7779a07d",
+      "state": "1c3d82ec",
       "events": "01e3a6cf",
       "rng": {
         "draws": 0,
@@ -255,6 +257,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "questLog": [
             [
               "q_boars",
@@ -330,7 +333,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "01dfd4e4",
+      "state": "7cec0b3b",
       "events": "f2ada81f",
       "rng": {
         "draws": 0,
@@ -369,6 +372,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "questLog": [
             [
               "q_boars",
@@ -444,7 +448,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "c7e560d4",
+      "state": "1f6a4a95",
       "events": "c3882f07",
       "rng": {
         "draws": 0,
@@ -483,6 +487,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "questLog": [
             [
               "q_boars",
@@ -558,7 +563,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "1289c23d",
+      "state": "4afad9fc",
       "events": "1dce54bf",
       "rng": {
         "draws": 0,
@@ -595,6 +600,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 350,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "questsDone": [
             "q_boars"
           ],
@@ -662,7 +668,7 @@
       "tick": 2,
       "time": 0.1,
       "nextId": 401,
-      "state": "77b11143",
+      "state": "ed7051fa",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -699,6 +705,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 350,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "questsDone": [
             "q_boars"
           ],

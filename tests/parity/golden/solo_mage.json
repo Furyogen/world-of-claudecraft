@@ -15,7 +15,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "e48662ed",
+      "state": "d676a38c",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -47,6 +47,7 @@
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -111,7 +112,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 402,
-      "state": "96811767",
+      "state": "fecb2a56",
       "events": "9bba49b4",
       "rng": {
         "draws": 3,
@@ -122,7 +123,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 402,
-      "state": "91459d50",
+      "state": "208ff3a1",
       "events": "fbffbbed",
       "rng": {
         "draws": 3,
@@ -133,7 +134,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 402,
-      "state": "f1ed2b00",
+      "state": "762fb651",
       "events": "e7371025",
       "rng": {
         "draws": 73,
@@ -144,7 +145,7 @@
       "tick": 80,
       "time": 4,
       "nextId": 402,
-      "state": "a1e6fc94",
+      "state": "3abc9465",
       "events": "e7371025",
       "rng": {
         "draws": 162,
@@ -155,7 +156,7 @@
       "tick": 100,
       "time": 5,
       "nextId": 402,
-      "state": "de0ad5a4",
+      "state": "43849975",
       "events": "91956d6d",
       "rng": {
         "draws": 254,
@@ -166,7 +167,7 @@
       "tick": 120,
       "time": 6,
       "nextId": 402,
-      "state": "257230f9",
+      "state": "53fe50a8",
       "events": "e7371025",
       "rng": {
         "draws": 367,
@@ -177,7 +178,7 @@
       "tick": 128,
       "time": 6.4,
       "nextId": 402,
-      "state": "2a6b55a9",
+      "state": "29371298",
       "events": "741638a5",
       "rng": {
         "draws": 411,
@@ -210,6 +211,7 @@
           "gatheringProficiency": {},
           "lifetimeXp": 27600,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
