@@ -1536,6 +1536,13 @@ export interface Entity {
   threat: Map<number, number>;
   forcedTargetId: number | null; // taunt/growl: attack this target while the timer runs
   forcedTargetTimer: number; // seconds left on the forced-attack window
+  // Gravemarch battleground entities (minions/structures/the Knell Warden):
+  // the owning match id and company. Set only by social/battleground.ts at
+  // spawn; the wild-mob AI, hostility, and damage arms key off these so no
+  // other system ever touches a battleground mob. bgTeam stays undefined for
+  // the neutral Knell Warden. Never persisted or wired.
+  bgMatchId?: number;
+  bgTeam?: BgTeam;
   ownerId: number | null; // controlled pets: owning player's entity id (null = wild)
   petMode: PetMode; // hunter pet behavior stance
   petTauntTimer: number; // controlled pet Growl cooldown
@@ -1862,7 +1869,13 @@ export type SimEvent = { pid?: number } & (
   // (personal, delivered to each fighter/spectator via the anchor session).
   | { type: 'bgQueued'; position: number }
   | { type: 'bgUnqueued' }
-  | { type: 'bgFound'; team: BgTeam; allies: ArenaCombatant[]; enemies: ArenaCombatant[]; rated: boolean }
+  | {
+      type: 'bgFound';
+      team: BgTeam;
+      allies: ArenaCombatant[];
+      enemies: ArenaCombatant[];
+      rated: boolean;
+    }
   | { type: 'bgCountdown'; seconds: number }
   | { type: 'bgStart' }
   // A champion takedown; tallies ride along so the HUD strip updates instantly.

@@ -102,13 +102,52 @@ function mirrorStructure(s: BgStructureDef): BgStructureDef {
 
 const STRUCTURES_A: BgStructureDef[] = [
   { id: 'a_warstone', team: 'A', kind: 'warstone', lane: null, tier: null, x: 0, z: -102, r: 2.5 },
-  { id: 'a_west_outer', team: 'A', kind: 'bulwark', lane: 'west', tier: 'outer', x: -49, z: -38, r: 1.8 },
-  { id: 'a_west_inner', team: 'A', kind: 'bulwark', lane: 'west', tier: 'inner', x: -47, z: -72, r: 1.8 },
-  { id: 'a_east_outer', team: 'A', kind: 'bulwark', lane: 'east', tier: 'outer', x: 49, z: -38, r: 1.8 },
-  { id: 'a_east_inner', team: 'A', kind: 'bulwark', lane: 'east', tier: 'inner', x: 47, z: -72, r: 1.8 },
+  {
+    id: 'a_west_outer',
+    team: 'A',
+    kind: 'bulwark',
+    lane: 'west',
+    tier: 'outer',
+    x: -49,
+    z: -38,
+    r: 1.8,
+  },
+  {
+    id: 'a_west_inner',
+    team: 'A',
+    kind: 'bulwark',
+    lane: 'west',
+    tier: 'inner',
+    x: -47,
+    z: -72,
+    r: 1.8,
+  },
+  {
+    id: 'a_east_outer',
+    team: 'A',
+    kind: 'bulwark',
+    lane: 'east',
+    tier: 'outer',
+    x: 49,
+    z: -38,
+    r: 1.8,
+  },
+  {
+    id: 'a_east_inner',
+    team: 'A',
+    kind: 'bulwark',
+    lane: 'east',
+    tier: 'inner',
+    x: 47,
+    z: -72,
+    r: 1.8,
+  },
 ];
 
-export const BG_STRUCTURES: BgStructureDef[] = [...STRUCTURES_A, ...STRUCTURES_A.map(mirrorStructure)];
+export const BG_STRUCTURES: BgStructureDef[] = [
+  ...STRUCTURES_A,
+  ...STRUCTURES_A.map(mirrorStructure),
+];
 
 export function bgStructure(id: string): BgStructureDef | null {
   return BG_STRUCTURES.find((s) => s.id === id) ?? null;
@@ -236,8 +275,9 @@ export const BG_CHAPEL_STUBS: BgChapelStub[] = (() => {
       z: Math.cos(ang) * BG_CHAPEL_R,
       hw: 4.2,
       hd: 0.9,
-      // wall face is tangent to the ring
-      rot: Math.atan2(Math.sin(ang), Math.cos(ang)) + Math.PI / 2,
+      // Long axis (hw) tangent to the ring: rotation.y of `ang` maps local +x
+      // to (cos ang, -sin ang), the tangent at position (sin ang, cos ang).
+      rot: ang,
     });
   }
   return out;
