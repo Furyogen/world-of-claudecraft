@@ -390,6 +390,7 @@ export const zh_CN: EnTranslations = {
       "highContrastBackground": "高对比度背景",
       "startAttackOnAbility": "使用技能时自动攻击",
       "groundReticle": "地面瞄准指示圈",
+      "mouseoverCast": "鼠标悬停施法（队伍框体）",
       "showItemLevel": "显示物品等级",
       "itemLevelLine": "物品等级 {level}",
       "itemScoreLine": "评分 {score}",

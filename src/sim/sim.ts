@@ -3074,6 +3074,15 @@ export class Sim {
     castAbilityImpl(this.ctx, abilityId, undefined, aim);
   }
 
+  // Mouseover cast (Clique-style): cast a friendly ability on an explicit
+  // target without touching the player's persistent selection. The IWorld
+  // surface behind the party-frame hover cast; the server routes the online
+  // {cmd:'cast', target} form here with its session pid.
+  castAbilityOn(abilityId: string, targetId: number, pid?: number): void {
+    // no ground aim: the override is an entity target, the two are exclusive
+    castAbilityImpl(this.ctx, abilityId, pid, undefined, targetId);
+  }
+
   // Voluntarily cancel one of a player's own helpful auras (the HUD right-click-a-buff
   // action). Authoritative: the pure predicate refuses debuffs, so a player can never
   // strip a silence/hex/root off themselves. Mirrors clearAurasFromSource's fade-event

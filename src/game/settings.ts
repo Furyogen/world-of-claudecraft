@@ -149,6 +149,11 @@ export const BOOL_SETTINGS = {
   // casting. Touch keeps the instant target-feet fallback because there is no
   // persistent cursor to preview.
   groundReticle: { def: true },
+  // on by default: Clique-style mouseover casting. Pressing an action-bar key
+  // for a friendly (heal/buff) ability while the cursor is over a party frame
+  // casts it on the hovered member without touching the current target (read
+  // live by Hud.castSlot). Off restores the classic target-else-self routing.
+  mouseoverCast: { def: true },
 
   // --- Interface & Comfort pack (booleans). ---
   // off by default: drop every HUD cross-fade / panel animation, for players

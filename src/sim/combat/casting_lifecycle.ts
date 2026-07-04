@@ -156,6 +156,7 @@ export function updateCasting(ctx: SimContext, p: Entity, meta: PlayerMeta): voi
 
 export function cancelCast(ctx: SimContext, p: Entity): void {
   p.castingAbility = null;
+  p.castTargetId = null;
   p.castRemaining = 0;
   p.channeling = false;
   p.castAim = null;
@@ -189,11 +190,26 @@ export function castAbilityBySlot(
   if (known) castAbility(ctx, known.def.id, pid, aim);
 }
 
+// Mouseover-cast (Clique-style) friendly-target resolution: an explicit
+// override id (from castAbility's castTargetId param at start, or the
+// entity's stored castTargetId at a timed cast's finish) wins while valid;
+// a stale/invalid override falls back to the classic current-friendly-target-
+// else-self rule, byte-identical to the pre-override behavior when null.
+function resolveFriendlyTarget(ctx: SimContext, p: Entity, overrideId: number | null): Entity {
+  if (overrideId !== null) {
+    const o = ctx.entities.get(overrideId);
+    if (o && !o.dead && ctx.isFriendlyTo(p, o)) return o;
+  }
+  const cur = p.targetId !== null ? (ctx.entities.get(p.targetId) ?? null) : null;
+  return cur && !cur.dead && ctx.isFriendlyTo(p, cur) ? cur : p;
+}
+
 export function castAbility(
   ctx: SimContext,
   abilityId: string,
   pid?: number,
   aim?: { x: number; z: number },
+  castTargetId: number | null = null,
 ): void {
   const r = ctx.resolve(pid);
   if (!r) return;
@@ -277,9 +293,9 @@ export function castAbility(
 
   let target: Entity | null = null;
   if (ability.requiresTarget && ability.targetType === 'friendly') {
-    // heals/buffs: current friendly target, else yourself
-    const cur = p.targetId !== null ? (ctx.entities.get(p.targetId) ?? null) : null;
-    target = cur && !cur.dead && ctx.isFriendlyTo(p, cur) ? cur : p;
+    // heals/buffs: the mouseover override when given, else the current
+    // friendly target, else yourself
+    target = resolveFriendlyTarget(ctx, p, castTargetId);
     const d = dist2d(p.pos, target.pos);
     if (d > Math.max(ability.range, 5)) {
       ctx.error(p.id, 'Out of range.');
@@ -434,6 +450,7 @@ export function castAbility(
     spendResource(p, res.cost);
     armAbilityCooldown(p, ability.id, res.cooldown);
     p.castingAbility = ability.id;
+    p.castTargetId = null; // channels are hostile-path; never carry an override
     p.castTotal = ability.channel.duration;
     p.castRemaining = ability.channel.duration;
     p.channeling = true;
@@ -453,6 +470,9 @@ export function castAbility(
     // Curse of Tongues stretches the resolved (already haste-adjusted) cast time.
     const stretchedCastTime = castTime * tonguesMult(p);
     p.castingAbility = ability.id;
+    // A timed cast re-resolves its friendly target at FINISH, so the mouseover
+    // override must ride on the entity until applyAbility consumes it.
+    p.castTargetId = castTargetId;
     p.castTotal = stretchedCastTime;
     p.castRemaining = stretchedCastTime;
     p.gcdRemaining = Math.max(p.gcdRemaining, gcd);
@@ -461,7 +481,7 @@ export function castAbility(
   }
 
   if (!ability.offGcd) p.gcdRemaining = Math.max(p.gcdRemaining, gcd);
-  applyAbility(ctx, p, meta, res);
+  applyAbility(ctx, p, meta, res, castTargetId);
   // instant ground-targeted cast: its effects have consumed the aim point.
   p.castAim = null;
 }
@@ -595,7 +615,18 @@ function applyChannelTick(ctx: SimContext, p: Entity, res: ResolvedAbility): voi
   });
 }
 
-function applyAbility(ctx: SimContext, p: Entity, meta: PlayerMeta, res: ResolvedAbility): void {
+function applyAbility(
+  ctx: SimContext,
+  p: Entity,
+  meta: PlayerMeta,
+  res: ResolvedAbility,
+  castTargetId: number | null = null,
+): void {
+  // Consume the mouseover override: an instant cast passes it directly; a
+  // timed cast stored it on the entity at start (updateCasting's finish call
+  // passes nothing). Cleared here so it can never leak into a later cast.
+  const castTarget = castTargetId ?? p.castTargetId;
+  p.castTargetId = null;
   const ability = res.def;
   const togglingOff = isToggleBuff(ability) && p.auras.some((a) => a.id === ability.id);
   // The free charge is consumed exactly where a cost is actually billed; the
@@ -635,8 +666,7 @@ function applyAbility(ctx: SimContext, p: Entity, meta: PlayerMeta, res: Resolve
 
   let target: Entity | null = null;
   if (ability.requiresTarget && ability.targetType === 'friendly') {
-    const cur = p.targetId !== null ? (ctx.entities.get(p.targetId) ?? null) : null;
-    target = cur && !cur.dead && ctx.isFriendlyTo(p, cur) ? cur : p;
+    target = resolveFriendlyTarget(ctx, p, castTarget);
     if (dist2d(p.pos, target.pos) > Math.max(ability.range, 5) + 2) {
       ctx.error(p.id, 'Out of range.');
       return;

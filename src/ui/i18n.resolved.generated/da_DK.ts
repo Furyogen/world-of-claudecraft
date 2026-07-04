@@ -390,6 +390,7 @@ export const da_DK: EnTranslations = {
       "highContrastBackground": "Baggrund med høj kontrast",
       "startAttackOnAbility": "Autoangreb ved brug af evne",
       "groundReticle": "Jordsigte-retikel",
+      "mouseoverCast": "Mouseover Cast on Party Frames",
       "showItemLevel": "Vis genstandsniveau",
       "itemLevelLine": "Genstandsniveau {level}",
       "itemScoreLine": "Score {score}",

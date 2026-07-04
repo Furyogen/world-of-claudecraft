@@ -390,6 +390,7 @@ export const tr_TR: EnTranslations = {
       "highContrastBackground": "Yüksek Kontrastlı Arka Plan",
       "startAttackOnAbility": "Yetenek Kullanımında Otomatik Saldırı",
       "groundReticle": "Yer hedefleme halkası",
+      "mouseoverCast": "Mouseover Cast on Party Frames",
       "showItemLevel": "Eşya Seviyesini Göster",
       "itemLevelLine": "Eşya Seviyesi {level}",
       "itemScoreLine": "Puan {score}",

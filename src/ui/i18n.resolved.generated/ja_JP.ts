@@ -390,6 +390,7 @@ export const ja_JP: EnTranslations = {
       "highContrastBackground": "高コントラスト背景",
       "startAttackOnAbility": "アビリティ使用時に自動攻撃",
       "groundReticle": "地面ターゲットのレティクル",
+      "mouseoverCast": "マウスオーバー詠唱（パーティ枠）",
       "showItemLevel": "アイテムレベルを表示",
       "itemLevelLine": "アイテムレベル {level}",
       "itemScoreLine": "スコア {score}",

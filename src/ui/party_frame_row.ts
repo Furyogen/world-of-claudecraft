@@ -49,10 +49,12 @@ export interface PartyRowSlot {
 }
 
 /** Row interaction callbacks the Hud supplies (target on click / Enter / Space, the
- *  context menu on right-click or the Menu key). */
+ *  context menu on right-click or the Menu key, and the hover tracking behind
+ *  Clique-style mouseover casts: pid on enter, null on leave). */
 export interface PartyRowDeps {
   onTarget: (pid: number) => void;
   onContextMenu: (pid: number, name: string, x: number, y: number) => void;
+  onHover: (pid: number | null) => void;
 }
 
 /** A pooled row: its container element, the live slot, the per-row family painter the
@@ -100,6 +102,10 @@ export function partyRowHandlers(slot: PartyRowSlot, deps: PartyRowDeps) {
         deps.onTarget(slot.member.pid);
       }
     },
+    // Mouseover-cast hover tracking: reads the LIVE slot like the others, so a
+    // recycled row under the cursor reports its current member.
+    mouseenter: (): void => deps.onHover(slot.member.pid),
+    mouseleave: (): void => deps.onHover(null),
   };
 }
 
@@ -208,6 +214,8 @@ export function createPartyRow(
   row.addEventListener('click', handlers.click);
   row.addEventListener('contextmenu', handlers.contextmenu);
   row.addEventListener('keydown', handlers.keydown);
+  row.addEventListener('mouseenter', handlers.mouseenter);
+  row.addEventListener('mouseleave', handlers.mouseleave);
 
   const painter = new UnitFramePainter(
     writers,

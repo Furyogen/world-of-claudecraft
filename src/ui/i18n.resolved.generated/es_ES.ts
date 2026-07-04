@@ -390,6 +390,7 @@ export const es_ES: EnTranslations = {
       "highContrastBackground": "Fondo de alto contraste",
       "startAttackOnAbility": "Ataque automático al usar habilidad",
       "groundReticle": "Retícula de objetivo terrestre",
+      "mouseoverCast": "Lanzar hechizos al apuntar el grupo",
       "showItemLevel": "Mostrar nivel de objeto",
       "itemLevelLine": "Nivel de objeto {level}",
       "itemScoreLine": "Puntuación {score}",

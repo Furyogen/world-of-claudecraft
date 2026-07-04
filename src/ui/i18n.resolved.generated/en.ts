@@ -390,6 +390,7 @@ export const en: EnTranslations = {
       "highContrastBackground": "High-Contrast Background",
       "startAttackOnAbility": "Auto-Attack on Ability Use",
       "groundReticle": "Ground-Targeting Reticle",
+      "mouseoverCast": "Mouseover Cast on Party Frames",
       "showItemLevel": "Show Item Level",
       "itemLevelLine": "Item Level {level}",
       "itemScoreLine": "Score {score}",

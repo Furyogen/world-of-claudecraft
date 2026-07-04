@@ -67,6 +67,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.showDevBadges': 'Afficher les badges de développeur',
   'hudChrome.options.groundReticle': 'Réticule de ciblage au sol',
   'hudChrome.options.startAttackOnAbility': "Attaque auto à l'utilisation d'une compétence",
+  'hudChrome.options.mouseoverCast': 'Sort au survol des cadres de groupe',
   'hudChrome.party.promoteLeader': 'Promouvoir chef',
   'hudChrome.statInfo.desc.spellPower':
     "Augmente les dégâts de vos sorts et la puissance de vos soins. Chaque point d'Intelligence confère un peu de Puissance des sorts, en plus de celle de l'équipement ou des améliorations.",

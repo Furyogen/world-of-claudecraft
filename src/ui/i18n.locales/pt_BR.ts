@@ -67,6 +67,7 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.showDevBadges': 'Exibir Insígnias de Desenvolvedor',
   'hudChrome.options.groundReticle': 'Retícula de mira no chão',
   'hudChrome.options.startAttackOnAbility': 'Ataque Automático ao Usar Habilidade',
+  'hudChrome.options.mouseoverCast': 'Lançar feitiços ao apontar o grupo',
   'hudChrome.party.promoteLeader': 'Promover a Líder',
   'hudChrome.statInfo.desc.spellPower':
     'Aumenta o dano das suas magias e a força das suas curas. Cada ponto de Intelecto concede um pouco de Poder Mágico, além do que vem de equipamentos ou benefícios.',

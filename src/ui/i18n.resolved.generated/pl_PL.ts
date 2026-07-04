@@ -390,6 +390,7 @@ export const pl_PL: EnTranslations = {
       "highContrastBackground": "Tło o wysokim kontraście",
       "startAttackOnAbility": "Automatyczny atak przy użyciu umiejętności",
       "groundReticle": "Celownik naziemny",
+      "mouseoverCast": "Mouseover Cast on Party Frames",
       "showItemLevel": "Pokaż poziom przedmiotu",
       "itemLevelLine": "Poziom przedmiotu {level}",
       "itemScoreLine": "Ocena {score}",

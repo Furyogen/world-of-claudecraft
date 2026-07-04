@@ -69,6 +69,7 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.showDevBadges': 'Entwicklerabzeichen anzeigen',
   'hudChrome.options.groundReticle': 'Bodenziel-Fadenkreuz',
   'hudChrome.options.startAttackOnAbility': 'Auto-Angriff bei Fähigkeitseinsatz',
+  'hudChrome.options.mouseoverCast': 'Mouseover-Zauber auf Gruppenfenster',
   'hudChrome.party.promoteLeader': 'Zum Anführer befördern',
   'hudChrome.statInfo.desc.spellPower':
     'Erhöht den Schaden deiner Zauber und die Stärke deiner Heilungen. Jeder Punkt Intelligenz gewährt etwas Zaubermacht, zusätzlich zu der aus Ausrüstung oder Stärkungszaubern.',

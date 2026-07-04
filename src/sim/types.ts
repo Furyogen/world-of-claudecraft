@@ -1369,6 +1369,11 @@ export interface Entity {
   stealthed: boolean;
   ccDr: Map<CrowdControlDrCategory, CrowdControlDrState>;
   castingAbility: string | null;
+  // Mouseover-cast override (Clique-style): the friendly entity id an
+  // in-progress cast should land on instead of targetId. Set when a cast
+  // starts via castAbilityOn, consumed at finish, cleared on cancel. Runtime
+  // combat state only: never serialized, never on the wire.
+  castTargetId: number | null;
   castRemaining: number;
   castTotal: number;
   // Ground-targeted casting: the world point a `targetMode: 'position'` ability is

@@ -390,6 +390,7 @@ export const nl_NL: EnTranslations = {
       "highContrastBackground": "Hoog-contrastachtergrond",
       "startAttackOnAbility": "Auto-aanval bij gebruik van vaardigheid",
       "groundReticle": "Grondrichtkruis",
+      "mouseoverCast": "Mouseover Cast on Party Frames",
       "showItemLevel": "Itemniveau tonen",
       "itemLevelLine": "Itemniveau {level}",
       "itemScoreLine": "Score {score}",

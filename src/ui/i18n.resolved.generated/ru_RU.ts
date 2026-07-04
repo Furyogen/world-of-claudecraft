@@ -390,6 +390,7 @@ export const ru_RU: EnTranslations = {
       "highContrastBackground": "Фон высокой контрастности",
       "startAttackOnAbility": "Автоатака при использовании способности",
       "groundReticle": "Прицел наземного наведения",
+      "mouseoverCast": "Каст по наведению на рамки группы",
       "showItemLevel": "Показывать уровень предмета",
       "itemLevelLine": "Уровень предмета {level}",
       "itemScoreLine": "Оценка {score}",

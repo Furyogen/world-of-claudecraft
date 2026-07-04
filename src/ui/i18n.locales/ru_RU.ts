@@ -314,6 +314,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.footstepSounds': 'Звуки шагов',
   'hudChrome.options.clickFeedback': 'Метка клика',
   'hudChrome.options.startAttackOnAbility': 'Автоатака при использовании способности',
+  'hudChrome.options.mouseoverCast': 'Каст по наведению на рамки группы',
   'hudChrome.options.lockCursorOnRotate': 'Блокировать курсор при вращении',
   'hudChrome.options.keybindHelpLockCursorOnRotate':
     'Удерживает курсор мыши внутри окна, пока вы вращаете камеру перетаскиванием, чтобы он не достигал края экрана и не переходил на другой монитор. Отключите, если предпочитаете свободный курсор.',

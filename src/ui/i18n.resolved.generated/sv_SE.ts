@@ -390,6 +390,7 @@ export const sv_SE: EnTranslations = {
       "highContrastBackground": "Bakgrund med hög kontrast",
       "startAttackOnAbility": "Automatisk attack vid förmågeanvändning",
       "groundReticle": "Markriktmedel",
+      "mouseoverCast": "Mouseover Cast on Party Frames",
       "showItemLevel": "Visa föremålsnivå",
       "itemLevelLine": "Föremålsnivå {level}",
       "itemScoreLine": "Poäng {score}",

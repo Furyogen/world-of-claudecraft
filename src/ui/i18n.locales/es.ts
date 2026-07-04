@@ -67,6 +67,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.showDevBadges': 'Mostrar insignias de desarrollador',
   'hudChrome.options.groundReticle': 'Retícula de objetivo terrestre',
   'hudChrome.options.startAttackOnAbility': 'Ataque automático al usar habilidad',
+  'hudChrome.options.mouseoverCast': 'Lanzar hechizos al apuntar el grupo',
   'hudChrome.party.promoteLeader': 'Promover a líder',
   'hudChrome.statInfo.desc.spellPower':
     'Aumenta el daño de tus hechizos y la potencia de tus sanaciones. Cada punto de Intelecto otorga un poco de Poder con hechizos, además del que provenga del equipo o los beneficios.',

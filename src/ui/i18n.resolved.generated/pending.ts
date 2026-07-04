@@ -22,11 +22,25 @@ export const pending: Record<string, readonly string[]> = {
   "ja_JP": [],
   "pt_BR": [],
   "ru_RU": [],
-  "nl_NL": [],
-  "pl_PL": [],
-  "id_ID": [],
-  "tr_TR": [],
-  "sv_SE": [],
-  "vi_VN": [],
-  "da_DK": []
+  "nl_NL": [
+    "hudChrome.options.mouseoverCast"
+  ],
+  "pl_PL": [
+    "hudChrome.options.mouseoverCast"
+  ],
+  "id_ID": [
+    "hudChrome.options.mouseoverCast"
+  ],
+  "tr_TR": [
+    "hudChrome.options.mouseoverCast"
+  ],
+  "sv_SE": [
+    "hudChrome.options.mouseoverCast"
+  ],
+  "vi_VN": [
+    "hudChrome.options.mouseoverCast"
+  ],
+  "da_DK": [
+    "hudChrome.options.mouseoverCast"
+  ]
 };

@@ -66,6 +66,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.showDevBadges': 'Mostra distintivi sviluppatore',
   'hudChrome.options.groundReticle': 'Reticolo di puntamento a terra',
   'hudChrome.options.startAttackOnAbility': "Attacco automatico all'uso dell'abilita",
+  'hudChrome.options.mouseoverCast': 'Lancio al passaggio sui riquadri del gruppo',
   'hudChrome.party.promoteLeader': 'Promuovi a Capo',
   'hudChrome.statInfo.desc.spellPower':
     "Aumenta il danno dei tuoi incantesimi e la potenza delle tue cure. Ogni punto di Intelletto conferisce un po' di Potere Magico, in aggiunta a quello dell'equipaggiamento o dei potenziamenti.",

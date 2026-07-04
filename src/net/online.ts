@@ -742,6 +742,7 @@ function blankEntity(id: number): Entity {
     stealthed: false,
     ccDr: new Map(),
     castingAbility: null,
+    castTargetId: null, // server-side combat state; never on the wire
     castRemaining: 0,
     castTotal: 0,
     castAim: null,
@@ -1659,6 +1660,13 @@ export class ClientWorld implements IWorld {
   castAbilityAt(abilityId: string, aim: { x: number; z: number }): void {
     // Ground-targeted: no entity target involved, so no dead-target guard.
     this.cmd({ cmd: 'castAt', ability: abilityId, x: aim.x, z: aim.z });
+  }
+  // Mouseover cast: the friendly-target override rides the existing 'cast'
+  // token as an extra field; the server routes it to sim.castAbilityOn. No
+  // dead-target pre-reject here: friendly casts never take that path, and a
+  // stale override falls back to current-target-else-self server-side.
+  castAbilityOn(abilityId: string, targetId: number): void {
+    this.cmd({ cmd: 'cast', ability: abilityId, target: targetId });
   }
   cancelAura(auraId: string): void {
     // Authoritative on the server; the dropped aura disappears on the next self

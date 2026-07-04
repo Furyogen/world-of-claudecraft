@@ -78,6 +78,7 @@ describe('partyRowHandlers: the closures read the LIVE slot, never a captured me
     const handlers = partyRowHandlers(slot, {
       onTarget: (pid) => targets.push(pid),
       onContextMenu: (pid, name) => menus.push([pid, name]),
+      onHover: () => {},
     });
 
     handlers.click();
@@ -99,6 +100,7 @@ describe('partyRowHandlers: the closures read the LIVE slot, never a captured me
     const handlers = partyRowHandlers(slot, {
       onTarget: (pid) => targets.push(pid),
       onContextMenu: (pid, _name, x, y) => menus.push([pid, x, y]),
+      onHover: () => {},
     });
     for (const key of ['Enter', ' ']) {
       handlers.keydown({ key, preventDefault() {} } as unknown as KeyboardEvent);
@@ -243,7 +245,7 @@ describe('createPartyRow: decorative badges + relocalize hook (a11y + live langu
     createPartyRow(
       fakeDoc,
       recordingFacet().writers,
-      { onTarget() {}, onContextMenu() {} },
+      { onTarget() {}, onContextMenu() {}, onHover() {} },
       member({ pid: 1 }),
     );
 
@@ -306,6 +308,7 @@ describe('PartyFramesPainter: keyed pool over the elided writers', () => {
         classCss: () => 'var(--cls)',
         onTarget: (pid) => targeted.push(pid),
         onContextMenu: () => {},
+        onHover: () => {},
         onLeave: () => {
           leftParty++;
         },

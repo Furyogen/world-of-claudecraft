@@ -390,6 +390,7 @@ export const id_ID: EnTranslations = {
       "highContrastBackground": "Latar Kontras Tinggi",
       "startAttackOnAbility": "Serangan Otomatis Saat Memakai Kemampuan",
       "groundReticle": "Retikel bidik darat",
+      "mouseoverCast": "Mouseover Cast on Party Frames",
       "showItemLevel": "Tampilkan Level Item",
       "itemLevelLine": "Level Item {level}",
       "itemScoreLine": "Skor {score}",
