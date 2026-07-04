@@ -2542,9 +2542,19 @@
     }
     /* The online panels' card layout is a grid, and grid-placement on an
        absolutely-positioned child would anchor it to its grid AREA rather
-       than the full-screen panel: flatten to a block. */
-    body:not(.mobile-touch) :is(#charselect-panel, #charcreate-panel).cs-wow {
+       than the full-screen panel: flatten. The create panel stays a block
+       (everything in it docks against the panel). The roster panel is a
+       column flexbox instead: the account bar sits IN FLOW at the top and
+       the stage (.cs-body) takes the rest, so when the wallet / developer
+       cards wrap the bar onto extra lines the docked columns shift down
+       with it. (The bar used to be absolute over hardcoded 150px column
+       offsets, which let a wrapped bar cover the top of the roster.) */
+    body:not(.mobile-touch) #charcreate-panel.cs-wow {
       display: block;
+    }
+    body:not(.mobile-touch) #charselect-panel.cs-wow {
+      display: flex;
+      flex-direction: column;
     }
     #offline-select.cs-wow .charselect-layout,
     #offline-select.cs-wow .charselect-col-left,
@@ -2562,8 +2572,18 @@
         .skin-picker,
         .cs-form-actions
       ),
-    body:not(.mobile-touch) #charselect-panel.cs-wow :is(.cs-body, .cs-detail-col) {
+    body:not(.mobile-touch) #charselect-panel.cs-wow .cs-detail-col {
       display: contents;
+    }
+    /* The roster's stage region below the account bar: the 3D preview and
+       the two docked columns anchor to THIS box rather than the viewport,
+       so none of them can slide under the bar whatever height it wraps to.
+       Overrides the card layout's display: contents. */
+    body:not(.mobile-touch) #charselect-panel.cs-wow .cs-body {
+      display: block;
+      position: relative;
+      flex: 1 1 auto;
+      min-height: 0;
     }
     #offline-select.cs-wow .auth-title,
     body:not(.mobile-touch) #charcreate-panel.cs-wow .auth-title {
@@ -2805,16 +2825,15 @@
       border-top: 58px solid transparent;
     }
 
-    /* The roster: the account chrome (realm / sort / wallet) stays a top bar,
-       the character list docks right (WoW style) with its actions at its
-       foot, and the selected character's summary docks left. display:flex is
-       restated because the card layout below unwraps .cs-head / .cs-head-row
-       with display:contents. */
+    /* The roster: the account chrome (realm / sort / wallet) is an in-flow
+       top bar (first flex row of the panel column; it grows when its cards
+       wrap and pushes the stage down), the character list docks right (WoW
+       style) with its actions at its foot, and the selected character's
+       summary docks left. display:flex is restated because the card layout
+       below unwraps .cs-head / .cs-head-row with display:contents. The
+       z-index keeps the bar's dropdown menus over the stage columns. */
     body:not(.mobile-touch) #charselect-panel.cs-wow .cs-head {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
+      flex: 0 0 auto;
       z-index: 3;
       display: flex;
       flex-direction: row;
@@ -2872,11 +2891,12 @@
       max-width: 300px;
       font-size: 10px;
     }
-    /* Between 900px and 1400px the two cards plus the realm/sort controls
-       would wrap the account bar to a second line and collide with the
-       docked columns below: drop the captions (every action keeps its
-       title/aria text) so the bar stays one line. */
-    @media (max-width: 1399px) {
+    /* Below 1800px the two cards (verified wallet + linked developer) plus
+       the realm/sort controls no longer fit the account bar on one line
+       with their helper captions, so the bar wraps tall and eats stage
+       height: drop the captions (every action keeps its title/aria text)
+       so the wrapped cards stay short. */
+    @media (max-width: 1799px) {
       body:not(.mobile-touch) #charselect-panel.cs-wow .cs-wallet-help {
         display: none;
       }
@@ -2884,7 +2904,7 @@
     body:not(.mobile-touch) #charselect-panel.cs-wow .cs-list-col {
       position: absolute;
       right: 26px;
-      top: 150px;
+      top: 18px;
       bottom: 96px;
       width: 340px;
       /* The card layout gives the column height:100%; the dock stretches via
@@ -2911,7 +2931,7 @@
     body:not(.mobile-touch) #charselect-panel.cs-wow .class-details-panel {
       position: absolute;
       left: 26px;
-      top: 150px;
+      top: 18px;
       bottom: 96px;
       width: 340px;
       overflow-y: auto;
