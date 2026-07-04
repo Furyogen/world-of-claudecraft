@@ -1,9 +1,16 @@
 import { describe, expect, it } from 'vitest';
+import { bagCapacity } from '../src/sim/bags';
 import { GATHER_NODES } from '../src/sim/data';
 import { NODE_HARVEST_TABLE } from '../src/sim/professions/gathering';
 import { Sim } from '../src/sim/sim';
 import type { Entity } from '../src/sim/types';
 import { terrainHeight } from '../src/sim/world';
+
+function mustMeta(sim: Sim, pid: number) {
+  const meta = sim.players.get(pid);
+  if (!meta) throw new Error(`missing player meta ${pid}`);
+  return meta;
+}
 
 function makeWorld() {
   return new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
@@ -90,8 +97,10 @@ describe('gather node harvest (#1121)', () => {
     sim.harvestNode(NODE_ID, pidB);
     sim.tick();
     expect(sim.countItem(entry.itemId, pidB)).toBe(1);
-    // B is now on cooldown for B; A's cooldown is unaffected by B harvesting.
+    // B is now on cooldown for B; A's cooldown is unaffected by B harvesting:
+    // it stays on the same denial it already had before B ever harvested.
     expect(sim.nodeHarvestableByMeFor(NODE_ID, pidB)).toBe(false);
+    expect(sim.nodeHarvestableByMeFor(NODE_ID, pidA)).toBe(false);
   });
 
   it('denies a second harvest by the SAME player before their own timer elapses, allows it after', () => {
@@ -124,6 +133,11 @@ describe('gather node harvest (#1121)', () => {
   });
 
   it('determinism: the same seed and same sequence of harvests yields the same result', () => {
+    // A richer observable than "granted or not": the exact sim-time at which
+    // the node becomes harvestable again (drives from ctx.time + a fixed
+    // respawnSeconds, no rng, so it must land on the exact same tick every
+    // run) plus the settled gathering-profession skill value, so a
+    // regression that shifts either the timer or the grant amount is caught.
     const run = () => {
       const sim = makeWorld();
       const pid = sim.addPlayer('warrior', 'Det');
@@ -132,7 +146,23 @@ describe('gather node harvest (#1121)', () => {
       sim.tick();
       const node = mustNode(NODE_ID);
       const entry = NODE_HARVEST_TABLE[node.type];
-      return sim.countItem(entry.itemId, pid);
+      // Advance to just short of the respawn window and record readiness,
+      // then past it, so both edges of the timer are part of the observable.
+      sim.time += entry.respawnSeconds - 1;
+      sim.tick();
+      const notYetReady = sim.nodeHarvestableByMeFor(NODE_ID, pid);
+      sim.time += 2;
+      sim.tick();
+      const nowReady = sim.nodeHarvestableByMeFor(NODE_ID, pid);
+      const skill = sim
+        .professionsStateFor(pid)
+        .skills.find((s) => s.professionId === entry.professionId)?.skill;
+      return {
+        count: sim.countItem(entry.itemId, pid),
+        notYetReady,
+        nowReady,
+        skill,
+      };
     };
     expect(run()).toEqual(run());
   });
@@ -143,5 +173,65 @@ describe('gather node harvest (#1121)', () => {
     expect(() => sim.harvestNode('not_a_real_node', pid)).not.toThrow();
     sim.tick();
     expect(sim.nodeHarvestableByMeFor('not_a_real_node', pid)).toBe(false);
+  });
+
+  it('a harvest grants the matching gathering profession one point of skill', () => {
+    const sim = makeWorld();
+    const pid = sim.addPlayer('warrior', 'Skiller');
+    teleportOntoNode(sim, pid, NODE_ID);
+    const node = mustNode(NODE_ID);
+    const entry = NODE_HARVEST_TABLE[node.type];
+
+    const before = sim
+      .professionsStateFor(pid)
+      .skills.find((s) => s.professionId === entry.professionId)?.skill;
+    sim.harvestNode(NODE_ID, pid);
+    // The grant is queued this tick and drained on the next tick's per-player
+    // pass (same cadence as every other pendingGatherGrant drain), so tick
+    // once to let it land before asserting.
+    sim.tick();
+    const after = sim
+      .professionsStateFor(pid)
+      .skills.find((s) => s.professionId === entry.professionId)?.skill;
+    expect(after).toBe((before ?? 0) + 1);
+  });
+
+  it('denies harvest for a dead player without granting the item or the timer', () => {
+    const sim = makeWorld();
+    const pid = sim.addPlayer('warrior', 'Ghost');
+    teleportOntoNode(sim, pid, NODE_ID);
+    const p = mustEntity(sim, pid);
+    p.dead = true;
+
+    const node = mustNode(NODE_ID);
+    const entry = NODE_HARVEST_TABLE[node.type];
+    const before = sim.countItem(entry.itemId, pid);
+    sim.harvestNode(NODE_ID, pid);
+    sim.tick();
+    expect(sim.countItem(entry.itemId, pid)).toBe(before);
+    expect(sim.nodeHarvestableByMeFor(NODE_ID, pid)).toBe(true);
+  });
+
+  it('denies harvest when the bag is full, without consuming the respawn timer', () => {
+    const sim = makeWorld();
+    const pid = sim.addPlayer('warrior', 'FullBags');
+    teleportOntoNode(sim, pid, NODE_ID);
+    const node = mustNode(NODE_ID);
+    const entry = NODE_HARVEST_TABLE[node.type];
+
+    // Fill every bag slot with non-stacking instanced junk so canAddItem
+    // denies regardless of the harvested item's own stack state (an
+    // instanced slot, unlike a plain stack, never merges further adds).
+    const meta = mustMeta(sim, pid);
+    const capacity = bagCapacity(meta.bags);
+    meta.inventory.length = 0;
+    for (let i = 0; i < capacity; i++) {
+      meta.inventory.push({ itemId: 'bone_fragments', count: 1, instance: { boundTo: pid } });
+    }
+    expect(sim.canAddItem(entry.itemId, 1, pid)).toBe(false);
+
+    sim.harvestNode(NODE_ID, pid);
+    sim.tick();
+    expect(sim.nodeHarvestableByMeFor(NODE_ID, pid)).toBe(true);
   });
 });

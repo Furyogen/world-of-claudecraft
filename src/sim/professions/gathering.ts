@@ -91,24 +91,43 @@ export function resolveHarvest(
 // harvest attempt against a node they must be standing near. Runs on the
 // deterministic 20 Hz tick path (dispatched from a wire command the same tick
 // it arrives, per the other immediate-interaction commands like `buyItem`),
-// never off-tick. Denies (no side effect) if the node id is unknown, the
-// player is too far away, or that player's own timer for the node has not
-// elapsed; a denial never touches another player's state.
+// never off-tick. Denies (no side effect) if the requesting player is dead
+// (matching the vendor family's dead gate, items.ts buyItem/useItem), the
+// node id is unknown, the player is too far away, their own timer for the
+// node has not elapsed, or their bags are full (matching the pickupObject
+// capacity pre-check, interaction.ts); a denial never touches another
+// player's state and never consumes that player's respawn timer.
 export function harvestNode(ctx: SimContext, nodeId: string, pid?: number): void {
   const r = ctx.resolve(pid);
   if (!r) return;
   const { meta, e: p } = r;
+  if (p.dead) {
+    ctx.error(meta.entityId, "You can't do that while dead.");
+    return;
+  }
   const node = gatherNodeById(nodeId);
   if (!node) {
     ctx.error(meta.entityId, 'That resource node does not exist.');
     return;
   }
   if (distToNode(p.pos, node.pos) > INTERACT_RANGE) {
-    ctx.error(meta.entityId, 'Too far away to harvest that.');
+    ctx.error(meta.entityId, 'Too far away.');
+    return;
+  }
+  if (!isNodeHarvestableBy(meta, node.id, ctx.time)) {
+    ctx.error(meta.entityId, 'This resource node has not respawned for you yet.');
+    return;
+  }
+  const entry = NODE_HARVEST_TABLE[node.type];
+  if (!ctx.canAddItem(entry.itemId, 1, meta.entityId)) {
+    ctx.error(meta.entityId, 'Your bags are full.');
     return;
   }
   const result = resolveHarvest(meta, node, ctx.time);
   if (!result.granted) {
+    // Unreachable in practice (the readiness check above already gates this),
+    // but kept as a defensive fallback so a future resolveHarvest change
+    // cannot silently grant with no player-visible denial.
     ctx.error(meta.entityId, 'This resource node has not respawned for you yet.');
     return;
   }
