@@ -64,8 +64,8 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { capDiff, filterReviewDiff } from './ai_review_diff.mjs';
-import { redactSecrets } from './redact_secrets.mjs';
 import { upsertStickyComment } from './gh_sticky_comment.mjs';
+import { redactSecrets } from './redact_secrets.mjs';
 
 try {
   process.loadEnvFile();
@@ -372,9 +372,7 @@ const { text: scrubbedBody, redactedCount } = redactSecrets(
   [process.env.GITHUB_TOKEN, process.env.CODEX_AUTH_JSON].filter(Boolean),
 );
 if (redactedCount > 0) {
-  console.log(
-    `[ai_review] redacted ${redactedCount} secret-like match(es) from the comment body.`,
-  );
+  console.log(`[ai_review] redacted ${redactedCount} secret-like match(es) from the comment body.`);
 }
 const body =
   redactedCount > 0
