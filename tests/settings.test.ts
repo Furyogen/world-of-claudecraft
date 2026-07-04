@@ -70,6 +70,8 @@ describe('Settings', () => {
     // both unit frames ship at their stock size; the scale sliders are opt-in tuning.
     expect(s.get('playerFrameScale')).toBe(1);
     expect(s.get('targetFrameScale')).toBe(1);
+    // the classic top-right aura corner stays the default; frame-anchoring is opt-in.
+    expect(s.get('aurasOnPlayerFrame')).toBe(false);
     expect(s.get('joystickDeadzone')).toBe(SETTING_RANGES.joystickDeadzone.def);
     // Interface Mode defaults to Auto (0): detect desktop vs touch from the device.
     expect(s.get('interfaceMode')).toBe(SETTING_RANGES.interfaceMode.def);
@@ -238,6 +240,7 @@ describe('Interface & Comfort settings pack', () => {
     expect(s.get('showWalletOnCharacterScreen')).toBe(true);
     expect(s.get('showWalletOnPlayerCard')).toBe(true);
     expect(s.get('showDevBadges')).toBe(true);
+    expect(s.get('showDailyRewardsChest')).toBe(true);
     expect(s.get('invertLookY')).toBe(false);
   });
 

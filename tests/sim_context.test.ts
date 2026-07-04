@@ -65,6 +65,7 @@ const CALLBACK_KEYS = [
   // elsewhere - deduped, not re-added).
   'spendResource',
   'removeItem',
+  'canAddItem',
   'clearEntityMarker',
   'partyOf',
   'removeFromParty',
@@ -307,6 +308,7 @@ function makeFakeHost() {
     // elsewhere in this host - deduped).
     spendResource: vi.fn(),
     removeItem: vi.fn(),
+    canAddItem: vi.fn(() => true),
     removeFungibleItem: vi.fn(),
     clearEntityMarker: vi.fn(),
     partyOf: vi.fn(() => null),
@@ -408,6 +410,7 @@ function makeFakeHost() {
     isHostileTo: vi.fn(() => false),
     lineOfSightBlocked: vi.fn(() => false),
     stopFollow: vi.fn(),
+    partyInvite: vi.fn(),
     tameError: vi.fn(() => null),
     standUp: vi.fn(),
     breakGhostWolf: vi.fn(),

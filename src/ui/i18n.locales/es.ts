@@ -96,6 +96,9 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.skipLinks.chat': 'Saltar al chat',
   'hudChrome.skipLinks.mainHud': 'Saltar a la interfaz principal',
   'hudChrome.unitFrame.durationUnitSeconds': 's',
+  'hudChrome.unitFrame.durationUnitMinutes': 'm',
+  'hudChrome.unitFrame.durationUnitHours': 'h',
+  'hudChrome.unitFrame.durationUnitDays': 'd',
   'hudChrome.unitFrame.partyGroup': 'Grupo {n}',
   'hudChrome.unitFrame.partyLabel': 'Tu grupo',
   'hudChrome.unitFrame.playerLabel': 'Tu personaje',
@@ -308,6 +311,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.uiScale': 'Escala de la interfaz',
   'hudChrome.options.playerFrameScale': 'Escala del marco del jugador',
   'hudChrome.options.targetFrameScale': 'Escala del marco del objetivo',
+  'hudChrome.options.aurasOnPlayerFrame': 'Beneficios en el marco del jugador',
   'hudChrome.playerFrame.unlock': 'Mover marco del jugador',
   'hudChrome.playerFrame.lock': 'Fijar marco del jugador',
   'hudChrome.frameReset.label': 'Restablecer posición de los marcos',
@@ -2192,6 +2196,11 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'entities.items.weathered_ledger_page.name': 'Página de libro mayor ajada',
   'entities.items.morthen_grimoire.name': 'Grimorio de Morthen',
   'entities.items.wolf_fang.name': 'Colmillo de lobo quebrado',
+  'entities.items.linen_pouch.name': 'Bolsa de lino',
+  'entities.items.travelers_knapsack.name': 'Mochila de viajero',
+  'entities.items.wolfhide_satchel.name': 'Zurrón de piel de lobo',
+  'entities.items.gravewoven_bag.name': 'Bolsa sepulcral',
+  'entities.items.mistcallers_duffel.name': 'Petate del Llamaniebla',
   'entities.items.bandit_bandana.name': 'Pañuelo rojo',
   'entities.items.tough_jerky.name': 'Cecina dura',
   'entities.items.mudfin_scale.name': 'Escama viscosa de múrloc',
@@ -2442,14 +2451,14 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.nhalia_mourner.name': 'Doliente de Nhalia',
   'entities.mobs.sister_nhalia.name': 'Hermana Nhalia',
   'entities.mobs.varkas_boneguard.name': 'Guardahuesos de Varkas',
-  'entities.mobs.imp.name': 'Diablillo',
-  'entities.mobs.voidwalker.name': 'Caminante del Vacío',
-  'entities.mobs.succubus.name': 'Súcubo',
+  'entities.mobs.emberkin.name': 'Diablillo',
+  'entities.mobs.gloomshade.name': 'Caminante del Vacío',
+  'entities.mobs.duskborn.name': 'Súcubo',
   'entities.mobs.grix_the_tunnelking.name': 'Grix el Rey Túnel',
-  'entities.mobs.felhunter.name': 'Cazador vil',
-  'entities.mobs.felguard.name': 'Guardia vil',
-  'entities.mobs.infernal.name': 'Infernal',
-  'entities.mobs.doomguard.name': 'Guardián del Terror',
+  'entities.mobs.spellhound.name': 'Cazador vil',
+  'entities.mobs.warfiend.name': 'Guardia vil',
+  'entities.mobs.pyre_colossus.name': 'Infernal',
+  'entities.mobs.wraithborn.name': 'Guardián del Terror',
   'entities.mobs.choirmother_selthe.name': 'Selthe, madre del coro',
   'entities.mobs.drowned_templeguard.name': 'Guardián ahogado del templo',
   'entities.mobs.drowned_votary.name': 'Devoto ahogado',
@@ -3732,12 +3741,12 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'guide.family.humanoid.desc':
     'Bandidos, sectarios y otros que tomaron el oficio equivocado. Luchan con tácticas, no solo con los dientes.',
   'guide.family.humanoid.name': 'Humanoides',
-  'guide.family.kobold.desc':
+  'guide.family.burrower.desc':
     'Excavadores con velas en la cabeza que infestan minas y madrigueras, defendiendo con ferocidad su mineral.',
-  'guide.family.kobold.name': 'Kobolds',
-  'guide.family.murloc.desc':
+  'guide.family.burrower.name': 'Kobolds',
+  'guide.family.mudfin.desc':
     'Habitantes anfibios de la ciénaga que pululan por los bajíos en bandadas ruidosas y territoriales.',
-  'guide.family.murloc.name': 'Múrlocs',
+  'guide.family.mudfin.name': 'Múrlocs',
   'guide.family.ogre.desc':
     'Enormes, torpes de mente y peligrosos. Acampan en los pasos elevados y golpean como un alud.',
   'guide.family.ogre.name': 'Ogros',
@@ -4172,17 +4181,17 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'guide.nav.arena': 'Arena y JcJ',
   'guide.nav.talents': 'Talentos',
   'guide.nav.wishIKnew': 'Lo que me habría gustado saber',
-  'guide.petHook.doomguard': 'Un lanzador de élite que descarga sombra pesada desde la distancia.',
-  'guide.petHook.felguard':
+  'guide.petHook.wraithborn': 'Un lanzador de élite que descarga sombra pesada desde la distancia.',
+  'guide.petHook.warfiend':
     'Un combatiente cuerpo a cuerpo resistente, el todoterreno una vez que puedes invocarlo.',
-  'guide.petHook.felhunter': 'Un hostigador de las sombras que acosa a los lanzadores enemigos.',
-  'guide.petHook.imp':
+  'guide.petHook.spellhound': 'Un hostigador de las sombras que acosa a los lanzadores enemigos.',
+  'guide.petHook.emberkin':
     'Un demonio de descargas de fuego a distancia que merma a los enemigos desde un lugar seguro.',
-  'guide.petHook.infernal':
+  'guide.petHook.pyre_colossus':
     'Un coloso descomunal con un cuerpo a cuerpo demoledor, invocado por puro poder.',
-  'guide.petHook.succubus':
+  'guide.petHook.duskborn':
     'Un demonio cuerpo a cuerpo veloz que golpea fuerte pero cede bajo presión.',
-  'guide.petHook.voidwalker':
+  'guide.petHook.gloomshade':
     'Un demonio robusto que provoca y absorbe golpes para que puedas lanzar en paz.',
   'guide.related': 'Relacionado',
   'guide.search.label': 'Buscar',
@@ -5202,6 +5211,8 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.dailyRewards.spinResult': '+{points} puntos',
   'hudChrome.dailyRewards.spinTitle': 'Giro diario',
   'hudChrome.dailyRewards.tasks': 'Tareas',
+  'hudChrome.dailyRewards.showChestButton': 'Mostrar cofre',
+  'hudChrome.dailyRewards.hideChestButton': 'Ocultar cofre',
   'hudChrome.dailyRewards.title': 'Recompensas diarias',
   'hudChrome.dailyRewards.unknown': 'Desconocido',
   'hudChrome.dailyRewards.usd': '{amount} USD',

@@ -15,6 +15,11 @@ export const INTERACT_RANGE = 5;
 // Nythraxis encounter's yells + crypt-relic respawn), so they live here, not in sim.ts.
 export const YELL_RANGE = 100;
 export const OBJECT_RESPAWN = 30;
+// How many of a party member's auras ride the party wire (PartyMemberInfo.auras,
+// the mini icon strip under each party frame row). A cap, not a filter: the first
+// N in aura order, buffs and debuffs alike. Neutral const shared by Sim.partyInfo,
+// the server's partyWire, and the world_api shape, so it lives here.
+export const PARTY_MEMBER_AURA_CAP = 8;
 // Pet tuning shared between the pet-AI slice (src/sim/pet/pet_ai.ts) and code that
 // stays on Sim, so it lives in this neutral module (the slice-only PET_* consts live
 // in pet_ai.ts). PET_GROWL_INTERVAL is read by the moved updatePet auto-taunt arm AND
@@ -32,10 +37,10 @@ export const DUNGEON_LEASH_DISTANCE = 70;
 export const NYTHRAXIS_ADD_ID = 'nythraxis_skeleton_warrior';
 export const GCD = 1.5; // seconds
 // Shared cooldown across ALL combat potions (classic-era potion sickness): one
-// potion locks every other potion for this long (#103). 2 minutes, vanilla value.
+// potion locks every other potion for this long (#103). 2 minutes, the classic-era value.
 export const POTION_COOLDOWN = 120; // seconds
-export const CAST_PUSHBACK_SEC = 0.5; // vanilla: each hit delays a cast by 0.5s
-export const CHANNEL_PUSHBACK_FRACTION = 0.25; // vanilla: each hit shaves 25% off a channel
+export const CAST_PUSHBACK_SEC = 0.5; // classic-era: each hit delays a cast by 0.5s
+export const CHANNEL_PUSHBACK_FRACTION = 0.25; // classic-era: each hit shaves 25% off a channel
 // Tolerance for "this per-tick timer is effectively complete" comparisons (casting,
 // channels, ground-AoE pulses). Shared across sim modules (sim.ts + entity_roster.ts).
 export const CAST_COMPLETE_EPS = 1e-9;
@@ -157,6 +162,10 @@ export type AuraKind =
   | 'imbue'
   | 'buff_sta'
   | 'buff_allstats'
+  // Percentage drain on the whole stat block (value is a signed fraction, e.g.
+  // -0.75 = stats reduced to 25%). Resurrection Sickness uses it; see
+  // src/sim/spirit.ts and recalcPlayerStats.
+  | 'buff_allstats_pct'
   | 'thorns'
   | 'form_bear'
   | 'form_cat'
@@ -289,7 +298,8 @@ type ItemKind =
   | 'drink'
   | 'tool'
   | 'potion'
-  | 'elixir';
+  | 'elixir'
+  | 'bag';
 
 interface BaseItemDef {
   id: string;
@@ -323,6 +333,12 @@ interface BaseItemDef {
   // `duration` the buff length in seconds. Folds through the normal aura/stat path.
   elixir?: { aura: string; kind: AuraKind; value: number; duration: number };
   quality?: 'poor' | 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary'; // gray/white/green/blue/purple/orange name colors
+  // bags (kind:'bag'): extra inventory slots granted while equipped in one of
+  // the 4 bag sockets (see src/sim/bags.ts; the 16-slot backpack is implicit).
+  bagSlots?: number;
+  // Max copies per inventory slot. When omitted the default is derived from
+  // `kind` (weapon/armor/bag/tool: 1, everything else: 20); see stackSizeOf.
+  stackSize?: number;
   requiredClass?: PlayerClass[];
   // Minimum character level needed to equip this piece. When omitted, the level
   // is DERIVED from `quality` (see src/sim/item_level_req.ts); set this only to
@@ -488,9 +504,9 @@ export interface LootEntry {
 export type MobFamily =
   | 'beast'
   | 'humanoid'
-  | 'murloc'
+  | 'mudfin'
   | 'spider'
-  | 'kobold'
+  | 'burrower'
   | 'undead'
   | 'troll'
   | 'ogre'
@@ -524,8 +540,11 @@ export interface MobTemplate {
   // who damaged it (gated to once per day per boss). The spawn schedule + location
   // live in src/sim/world_boss.ts; the loot roll runs through rollWorldBossLoot.
   worldBoss?: boolean;
-  // Elite scaling, vanilla-style: ~2.3x health, ~1.5x damage, double XP.
+  // Elite scaling, classic-style: ~2.3x health, ~1.5x damage, double XP.
   elite?: boolean;
+  // Kill-XP multiplier (default 1). 0 marks a puzzle-object mob (e.g. the 1 HP
+  // spider egg-sac) that must not pay full kill XP for a single hit.
+  xpMult?: number;
   // Rare/miniboss controls.
   canSwim?: boolean;
   ccImmune?: boolean;
@@ -673,7 +692,7 @@ export interface MobTemplate {
     school?: Aura['school'];
   };
   // Melee mechanic: each landed swing also splashes onto other players near the
-  // primary target for `mult` of the (pre-armor) hit. Classic-WoW Cleave.
+  // primary target for `mult` of the (pre-armor) hit. A classic-style cleave arc.
   cleave?: { radius: number; mult: number; name?: string };
   // On-hit debuff: a chance per landed melee swing to inflict a stacking-refresh
   // damage-over-time poison on the struck target (spiders, serpents, scorpions).
@@ -952,7 +971,7 @@ export interface MobTemplate {
     name: string;
     school?: Aura['school'];
   };
-  // Pet mechanic: this creature is a ranged caster (warlock Imp) — instead of
+  // Pet mechanic: this creature is a ranged caster (warlock Emberkin) — instead of
   // closing to melee, it stays at `range` and hurls bolts of `school` damage.
   // updatePet reads this; the bolt damage comes from the mob's weapon range.
   petRanged?: { range: number; school: Aura['school'] };
@@ -1119,7 +1138,7 @@ export type AbilityEffect =
   | { type: 'tamePet' } // hunter tame beast: the targeted mob becomes the caster's pet
   | { type: 'dismissPet' } // release the caster's pet back to the wild
   | { type: 'summonPet'; templateId: string } // warlock demon summon: creates/replaces a controlled pet
-  | { type: 'summonDemon'; mobId: string }; // warlock: summon a demon pet (imp/voidwalker)
+  | { type: 'summonDemon'; mobId: string }; // warlock: summon a demon pet (emberkin/gloomshade)
 
 export interface AbilityRank {
   rank: number;
@@ -1269,7 +1288,7 @@ export interface DungeonDef {
   leaveText: string;
 }
 
-export type BiomeId = 'vale' | 'marsh' | 'peaks';
+export type BiomeId = 'vale' | 'marsh' | 'peaks' | 'beach' | 'desert' | 'volcano' | 'cave';
 
 export interface ZoneDef {
   id: string;
@@ -1461,6 +1480,12 @@ export interface Entity {
   castingAbility: string | null;
   castRemaining: number;
   castTotal: number;
+  // Entity-targeted casting: the target captured at cast start for entity-targeted
+  // casts (hostile and friendly) and channels. Timed casts and channel ticks resolve
+  // against this id, so retargeting mid-cast/mid-channel cannot redirect the spell,
+  // and clearing your target no longer cancels a channel. The channel still cancels
+  // if the locked target dies or turns non-hostile.
+  castTargetId: number | null;
   // Ground-targeted casting: the world point a `targetMode: 'position'` ability is
   // aimed at, captured (server-clamped to range) when the cast begins and read by
   // its area effects when it resolves. null for normal entity/self casts.
@@ -1473,8 +1498,8 @@ export interface Entity {
   queuedOnSwing: string | null; // heroic strike
   queuedOnSwingFree?: boolean; // next_cast_free consumed at queue time
   fiveSecondRule: number; // time since last mana spend
-  comboPoints: number;
-  comboTargetId: number | null;
+  comboPoints: number; // retail-style: character-bound, not anchored to a target
+  comboUntil: number; // sim-time until which unspent combo points persist
   overpowerUntil: number; // sim-time until which overpower is usable
   potionCooldownUntil: number; // sim-time until a combat potion can be used again (#103)
   // Same shared potion cooldown as REMAINING seconds, materialized per tick (like
@@ -1534,6 +1559,10 @@ export interface Entity {
   /** GM character: invulnerable (dealDamage no-ops). Server-set from the
    *  characters.is_gm column; never user-settable. */
   gm?: boolean;
+  /** True for a mob spawned BY a delve affix (e.g. Restless Graves' Raised
+   *  Bonewalker). Affix re-trigger checks exclude these so an affix-spawned mob's
+   *  own death can never re-trigger the same affix (would otherwise chain forever). */
+  affixSpawned?: boolean;
   respawnTimer: number;
   corpseTimer: number;
   lootFfaTimer: number; // seconds of owner-lock left before tap loot opens to all (FFA); Infinity until rollLoot starts it
@@ -1551,6 +1580,15 @@ export interface Entity {
   dungeonId: string | null; // set on dungeon door/exit portals
   // misc
   dead: boolean;
+  // Ghost/spirit state for the WoW-style death -> corpse-run -> resurrect loop.
+  // `ghost` is true once the player has released their spirit: `dead` stays true
+  // (a ghost still cannot fight or be attacked) but the spirit CAN move, runs at a
+  // boosted speed, and is rendered translucent. `corpsePos` marks where the body
+  // fell so the client can draw a corpse marker and the server can gate
+  // resurrect-at-corpse on range. Both inert (false / null) for the living and for
+  // every non-player entity. Owned by src/sim/spirit.ts.
+  ghost: boolean;
+  corpsePos: Vec3 | null;
   scale: number;
   color: number;
   skinCatalog: SkinCatalog; // player appearance catalog: class texture set or cosmetic body.
@@ -1844,7 +1882,7 @@ export type SimEvent = { pid?: number } & (
   | { type: 'delveComplete'; delveId: string; tierId: string }
   | { type: 'delveFailed'; delveId: string; tierId: string }
   | { type: 'delveLoreUnlock'; loreId: string }
-  | { type: 'companionBark'; barkId: string; pid?: number }
+  | { type: 'companionBark'; barkId: string; companionId: string; pid?: number }
   // Lockpicking minigame ("Tumbler's Path"). All personal (pid-scoped). The sim
   // emits structured data only, the client builds every visible string. Cells
   // are always limited to the fog window (anti-cheat: the full lock is never
@@ -1887,6 +1925,20 @@ export type SimEvent = { pid?: number } & (
     }
   | { type: 'lockpickBonus'; tier: LootTier; marks: number; copper: number }
   | { type: 'delveChestLoot'; chestId: number; items: { itemId: string; count: number }[] }
+  // Carries the shrine as `entityId` so the server's eventAnchor interest-scopes
+  // the pulse to players near the apse instead of broadcasting it realm-wide
+  // (the HUD closes the rite popup on the first pulse).
+  | { type: 'delveRitePulse'; entityId: number; shrineKind: RiteShrineKind }
+  | {
+      type: 'delveRiteFeedback';
+      shrineId: number;
+      shrineKind: RiteShrineKind;
+      correct: boolean;
+    }
+  // Personal cue (carries `pid`) to open the rite difficulty popup when a player
+  // interacts with the risen reliquary before choosing. Text-free: the client
+  // renders its own localized copy, so no sim/server i18n matcher rule is needed.
+  | { type: 'delveRiteChoosePrompt'; reliquaryId: number }
   // personal cue (carries `pid`) to open the cosmetic skin-select overlay with
   // the server-rolled rank. Text-free on purpose — the client renders its own
   // localized copy, so no sim/server i18n matcher rule is needed.
@@ -1903,6 +1955,91 @@ export interface MoveInput {
   jump: boolean;
 }
 
+// A bounded height edit (the sculpt brush stamp), applied inside terrainHeight()
+// exactly like MIREFEN_IMPACT_CRATER. Pure data, no RNG: the sim and renderer both
+// sample it so collision and the ground mesh stay in agreement. Stamps apply in
+// array order: `add` (default) adds `delta`, weighted by the falloff; `level`
+// pulls the height toward the ABSOLUTE height `delta`, weighted by the falloff
+// (the flatten/plateau brush; full weight means h becomes exactly `delta`).
+export interface HeightStamp {
+  x: number;
+  z: number;
+  radius: number;
+  delta: number; // add: +raise / -lower at the centre; level: target height
+  falloff: 'smooth' | 'flat';
+  mode?: 'add' | 'level'; // absent = 'add' (v1 documents)
+}
+
+// A freely placed GLB model the editor drops onto the world. Rendered by the
+// placed-asset instancer (never a Sim entity); when `collideRadius` is set (> 0)
+// the sim additionally derives a static circle collider from this record, so
+// what-you-see-is-what-you-collide-with holds for editor placements too.
+// Carried on WorldContent so both sides read the SAME record.
+export interface PlacedAsset {
+  path: string; // public GLB url, e.g. "/models/props/well.glb"
+  x: number;
+  z: number;
+  rotY: number; // radians
+  scale: number;
+  // Circle collider radius in yards (already scaled), or absent/0 for walk-through.
+  collideRadius?: number;
+}
+
+// An invisible blocker wall (editor-authored, custom maps only): a world-space
+// XZ segment the sim turns into a fence-width OBB collider at playtest. Pure
+// collision data; there is NO render mesh for it in the shipped game, so map
+// makers can wall off areas without visible geometry.
+export interface BlockerDef {
+  x1: number;
+  z1: number;
+  x2: number;
+  z2: number;
+}
+
+// A coarse 2D biome paint grid (editor). Each cell holds a biome id (0=vale,
+// 1=marsh, 2=peaks) or 255 for unpainted. Where painted, it overrides both the
+// terrain SHAPE (sim, in shapeAt) and the ground COLOR (render). Absent for the
+// built-in world, so terrain stays byte-identical.
+export interface BiomePaint {
+  cell: number; // cell size in yards
+  cols: number;
+  rows: number;
+  originX: number; // world x of the grid's (col 0) edge
+  originZ: number; // world z of the grid's (row 0) edge
+  ids: number[]; // length cols*rows; 0/1/2 = biome, 255 = unpainted
+}
+
+// A swappable world definition: the spatial + content data the terrain function
+// and the Sim spawn loop derive a playable world from. The built-in 3-zone world
+// is one of these (data.ts BUILTIN_WORLD); the map editor produces custom ones for
+// offline play-testing. Injected via SimConfig.world plus the data.ts active-content
+// registry (both, because terrain reaches the data by module global and the Sim
+// reaches it by config). CAMPS order is a determinism contract: append, never
+// reorder, since the Sim draws the shared Rng in array order.
+export interface WorldContent {
+  zones: ZoneDef[];
+  camps: CampDef[];
+  npcs: Record<string, NpcDef>;
+  groundObjects: GroundObjectDef[];
+  roads: { x: number; z: number }[][];
+  props: ZonePropsDef;
+  playerStart: { x: number; z: number };
+  // Heightfield edits applied inside terrainHeight(). Absent/empty for the
+  // built-in world, so its heightfield stays byte-identical.
+  terrainEdits?: HeightStamp[];
+  // Freely placed GLB models (editor). Rendered by the placed-asset instancer;
+  // records with collideRadius also feed the sim's static colliders.
+  placements?: PlacedAsset[];
+  // Invisible blocker walls (editor). Collision-only OBBs in the sim's static
+  // colliders; never rendered. Absent for the built-in world.
+  blockers?: BlockerDef[];
+  // 2D biome paint overriding terrain shape (sim) and color (render).
+  biomePaint?: BiomePaint;
+  // Water surface height for this map; absent = the built-in WATER_LEVEL (-4.5).
+  // Read through waterLevel() in src/sim/world.ts, never directly.
+  waterLevel?: number;
+}
+
 export interface SimConfig {
   seed: number;
   playerClass: PlayerClass;
@@ -1916,6 +2053,11 @@ export interface SimConfig {
   // authoritative server uses its realm-local 3 AM daily reset; offline/headless omit
   // this and fall back to a flat 24h day. Keeps the time zone out of the sim core.
   raidResetMs?: (nowMs: number) => number;
+  // Offline play-test: a custom world to run instead of the built-in one. The Sim
+  // ctor reads spawns from here; render/terrain read it via the data.ts registry,
+  // so callers that set this MUST also call setActiveWorldContent() with content
+  // whose terrain-relevant fields are identical (see the sim.ts ctor invariant).
+  world?: WorldContent;
 }
 
 export function emptyMoveInput(): MoveInput {
@@ -1950,7 +2092,7 @@ export function normAngle(a: number): number {
 // Classic progression formulas
 // ---------------------------------------------------------------------------
 
-// XP required to go from level L to L+1 (real vanilla values, levels 1..20)
+// XP required to go from level L to L+1 (classic-era curve values, levels 1..20)
 export const XP_TABLE = [
   400, 900, 1400, 2100, 2800, 3600, 4500, 5400, 6500, 7600, 8800, 10100, 11400, 12900, 14400, 16000,
   17700, 19400, 21300, 23200,
@@ -1964,6 +2106,11 @@ export const PARTY_XP_RANGE = 80; // yards: members this close share kill xp/cre
 // boss death) and the still-on-Sim encounter logic; N1 may re-home it when it owns
 // the encounter. Kept here as the neutral shared seam in the meantime.
 export const NYTHRAXIS_BOSS_ID = 'nythraxis_scourge_of_thornpeak';
+// The Drowned Litany finale boss. Used by the drowned_litany_boss driver.
+export const SISTER_NHALIA_BOSS_ID = 'sister_nhalia_drowned_canticle';
+// The Tolling Bells projectile mob (Drowned Litany finale): moved exclusively by
+// the boss driver. Shared with mob/locomotion.ts so the AI dispatcher skips it.
+export const TOLLING_BELL_TEMPLATE_ID = 'tolling_bell';
 
 export function xpForLevel(level: number): number {
   return XP_TABLE[Math.min(level - 1, XP_TABLE.length - 1)];
@@ -1986,7 +2133,7 @@ export const MAX_VIRTUAL_LEVEL = 200; // table bound; far beyond any reachable l
 
 // VLEVEL_CUM[v] = total lifetime XP required to *reach* virtual level v.
 // VLEVEL_CUM[1] = 0; index 0 is unused padding.
-function buildVlevelCum(): number[] {
+const VLEVEL_CUM: number[] = (() => {
   const cum: number[] = [0, 0];
   let total = 0;
   // real levels: 1→2 … 19→20 come straight from XP_TABLE
@@ -2002,18 +2149,7 @@ function buildVlevelCum(): number[] {
     step *= POSTCAP_GROWTH;
   }
   return cum;
-}
-
-const VLEVEL_CUM: number[] = buildVlevelCum();
-
-// The cumulative table above is derived from XP_TABLE at module eval. A host
-// that mutates XP_TABLE (the game-config override layer, src/sim/game_config.ts)
-// must call this afterwards so virtual levels keep matching the live curve.
-export function refreshPostcapXpTable(): void {
-  const next = buildVlevelCum();
-  VLEVEL_CUM.length = 0;
-  VLEVEL_CUM.push(...next);
-}
+})();
 
 // Total lifetime XP needed to reach a given (virtual or real) level. Used to
 // backfill `lifetimeXp` for characters saved before the counter existed.
@@ -2093,7 +2229,7 @@ export function xpUntilNextPrestige(lifetimeXp: number, prestigeRank: number): n
 }
 
 // Zero-difference band: how many levels below you a mob stops giving XP.
-// Vanilla: ZD = 5 for player level 1-7, 6 for 8-9, 7 for 10-11, ...
+// Classic-era rule: ZD = 5 for player level 1-7, 6 for 8-9, 7 for 10-11, ...
 export function zeroDiff(playerLevel: number): number {
   if (playerLevel <= 7) return 5;
   if (playerLevel <= 9) return 6;
@@ -2101,7 +2237,7 @@ export function zeroDiff(playerLevel: number): number {
   return 8;
 }
 
-// Real vanilla mob XP: base = 45 + 5 * mobLevel, scaled by level difference.
+// Classic-era mob XP: base = 45 + 5 * mobLevel, scaled by level difference.
 export function mobXpValue(mobLevel: number, playerLevel: number): number {
   const base = 45 + 5 * mobLevel;
   const diff = mobLevel - playerLevel;
@@ -2113,7 +2249,7 @@ export function mobXpValue(mobLevel: number, playerLevel: number): number {
   return Math.round(base * (1 - -diff / zd));
 }
 
-// Rage conversion constant (vanilla): c = 0.0091 L^2 + 3.23 L + 4.27
+// Rage conversion constant (classic-era): c = 0.0091 L^2 + 3.23 L + 4.27
 export function rageConversion(level: number): number {
   return 0.0091 * level * level + 3.23 * level + 4.27;
 }
@@ -2181,7 +2317,7 @@ export function armorReduction(armor: number, attackerLevel: number): number {
 }
 
 // ---------------------------------------------------------------------------
-// Spell Power: caster damage scaling (vanilla-style cast-time / DoT-duration
+// Spell Power: caster damage scaling (classic-style cast-time / DoT-duration
 // coefficient model). Casters convert Intellect into Spell Power; Spell Power
 // then adds to each spell's damage via a per-spell coefficient. Hunter "attack
 // spells" (Arcane Shot, Serpent Sting, Aimed Shot) instead scale off Ranged
@@ -2192,15 +2328,15 @@ export function armorReduction(armor: number, attackerLevel: number): number {
 // (see tests/spell_power.test.ts) so a fully-leveled caster gets a meaningful but
 // not dominant damage lift, scaling further as caster gear adds Int + Spell Power.
 export const SPELL_POWER_PER_INT = 0.5;
-// Direct nuke coefficient = clamp(castTime, MIN, MAX) / DIVISOR (vanilla 3.5). The
+// Direct nuke coefficient = clamp(castTime, MIN, MAX) / DIVISOR (classic-era 3.5). The
 // max equals the divisor so the direct coefficient caps at 1.0 (a 3.5s+ cast gets
 // full Spell Power; a 6s Pyroblast does not exceed it).
 export const SPELL_COEFF_DIVISOR = 3.5;
 export const SPELL_COEFF_MIN_CAST = 1.5; // instant / sub-1.5s casts use this floor
 export const SPELL_COEFF_MAX_CAST = 3.5; // longer casts cap at a 1.0 coefficient
-// Total DoT coefficient = duration / DURATION (vanilla 15), spread across ticks.
+// Total DoT coefficient = duration / DURATION (classic-era 15), spread across ticks.
 export const SPELL_DOT_COEFF_DURATION = 15;
-// AoE spells take a reduced coefficient (vanilla AoE penalty).
+// AoE spells take a reduced coefficient (the classic-era AoE penalty).
 export const SPELL_AOE_COEFF_MULT = 0.333;
 // Hunter ranged "attack spells" scale off Ranged Attack Power using the same
 // cast/duration shape, scaled down by this factor (RAP is far larger than SP).
@@ -2272,6 +2408,22 @@ export interface DelveInteractableSlot {
   variants: string[];
 }
 
+// A static environmental hazard circle (instance-local coords), e.g. the Drowned
+// Litany's Blackwater pools. Standing players take damage on a fixed interval; it
+// is NOT a collider (mobs/companions walk through, pathing ignores it), it only
+// shapes where players choose to stand.
+export interface DelveHazardZone {
+  x: number;
+  z: number;
+  r: number;
+  // An authored ellipse (e.g. the apse moat, wider along x than z to fit
+  // between its flanking islands): rx/rz win over r for both the damage
+  // check and every visual (map, render). Omit for a plain circle of radius r.
+  rx?: number;
+  rz?: number;
+  tier?: 'shallow' | 'deep';
+}
+
 export interface DelveModuleDef {
   id: string;
   interior: 'crypt' | 'cave' | 'mine';
@@ -2280,6 +2432,8 @@ export interface DelveModuleDef {
   spawnSets: DelveSpawnSet[];
   interactableSlots: DelveInteractableSlot[];
   sideRoom?: { chance: number; moduleId: string };
+  // Static Blackwater (or similar) hazard zones for this module, instance-local.
+  hazards?: DelveHazardZone[];
 }
 
 export interface DelveDef {
@@ -2289,6 +2443,8 @@ export interface DelveDef {
   index: number;
   minLevel: number;
   suggestedPlayers: number;
+  // Hard cap: a party larger than this may not enter (delves are solo/duo content).
+  maxPlayers: number;
   doorPos: { x: number; z: number };
   modules: string[];
   moduleCount: [number, number];
@@ -2337,7 +2493,14 @@ export interface DelveRun {
   raiseDeadChannel: DelveRaiseDeadChannel | null;
   restlessPending: DelveRestlessPending[];
   badAirTimer: number;
+  /** Accumulates DT for the static Blackwater hazard pulse (damage every interval
+   * a player stands in a module hazard zone). Reset on run start / module change. */
+  blackwaterTimer: number;
   companionBarks: string[];
+  /** Rank 3 boon: set once the once-per-run ally revive has been spent. Lives on
+   * the run (like companionBarks), not on the companion state, so leaving and
+   * re-entering mid-run cannot recharge it. */
+  companionReviveUsed: boolean;
   /** True when the current module exit portal is active (trash cleared + plate if any). */
   exitPortalOpen: boolean;
   /** §7.6, this run rolled Bountiful (ultra-rare): the reward chest is a purple
@@ -2350,6 +2513,22 @@ export interface DelveRun {
   surfaceExitId: number | null;
   /** Active lockpicking attempt on the finale chest (single interactor, v1), or null. In-memory only. */
   lockpick: LockSession | null;
+  /** Sister Nhalia boss mechanics (The Drowned Litany finale only). */
+  nhaliaBoss?: DrownedLitanyBossState;
+  /** Drowned Reliquary Rite shrine puzzle (The Drowned Litany finale only). */
+  drownedLitanyRite?: DrownedLitanyRiteState;
+  /** Sinkhole Baptistry wave progression (egg-sacs gated until wave 3). */
+  litanyBaptistry?: DrownedLitanyBaptistryState;
+}
+
+export interface DrownedLitanyBaptistryState {
+  /** Index of the active wave in BAPTISTRY_WAVES (0..2). */
+  wave: number;
+  eggsEnabled: boolean;
+  /** Mob ids of the spawned spider_egg_sac adds (set once, at spawn time). */
+  eggSacIds: number[];
+  /** Subset of eggSacIds whose death burst has already fired, so a kill is processed once. */
+  burstIds: number[];
 }
 
 export interface DelveDailyState {
@@ -2389,6 +2568,10 @@ export interface DelveObjectState {
   pendingLoot?: { itemId: string; count: number }[];
   /** Entity id of the player who picked the lock; only they may collect the loot. */
   lootOwnerId?: number;
+  // Drowned Reliquary loot (kind === 'drowned_reliquary'): each party member rolls
+  // and collects their own items independently, so there is no single owner to
+  // front-run. Keyed by pid; emptied per member as they collect.
+  partyLoot?: Record<number, { itemId: string; count: number }[]>;
 }
 
 export interface DelveRaiseDeadChannel {
@@ -2397,6 +2580,88 @@ export interface DelveRaiseDeadChannel {
   mobId: string;
   count: number;
   remaining: number;
+}
+
+/** A boss-spawned Blackwater Mark puddle (world coords, instance-local). */
+export interface DrownedLitanyBlackwaterMark {
+  x: number;
+  z: number;
+  remaining: number;
+  tickTimer: number;
+}
+
+/** A single Tolling Bell projectile entity in flight (entity id + expiry timer). */
+export interface TollingBellEntity {
+  /** Entity id of the mob entity representing this bell. */
+  entityId: number;
+  /** Seconds until the bell expires (travels out of bounds). */
+  remaining: number;
+  /** Velocity direction: unit vector (dx, dz). */
+  vx: number;
+  vz: number;
+}
+
+/** Per-run Sister Nhalia encounter state (DelveRun.nhaliaBoss). */
+export interface DrownedLitanyBossState {
+  markTimer: number;
+  marks: DrownedLitanyBlackwaterMark[];
+  firedCantorPhases: number;
+  /** Entity ids from the active Cantor phase; shield drops when all are dead. */
+  cantorShieldAdds: number[];
+  finalBellFired: boolean;
+  /** Countdown until the next Tolling Bells volley (seconds). */
+  bellVolleyTimer: number;
+  /** Currently in-flight bell projectile entities. */
+  bells: TollingBellEntity[];
+}
+
+export type RiteShrineKind =
+  | 'rite_shrine_bell'
+  | 'rite_shrine_candle'
+  | 'rite_shrine_reed'
+  | 'rite_shrine_skull';
+
+export const RITE_SHRINE_KINDS: RiteShrineKind[] = [
+  'rite_shrine_bell',
+  'rite_shrine_candle',
+  'rite_shrine_reed',
+  'rite_shrine_skull',
+];
+
+/** Player-chosen rite difficulty: more playbacks + shorter for Easy, fewer + longer
+ * for Hard. Loot ceiling rises with difficulty (Easy=low, Medium=medium, Hard=premium). */
+export type RiteIntensity = 'easy' | 'medium' | 'hard';
+
+export const RITE_INTENSITIES: RiteIntensity[] = ['easy', 'medium', 'hard'];
+
+/** Per-run Drowned Reliquary Rite puzzle state (DelveRun.drownedLitanyRite). */
+export interface DrownedLitanyRiteState {
+  /** True after the reliquary rises until the player picks a difficulty; the
+   * sequence is empty and playback has not started while this is set. */
+  awaitingChoice: boolean;
+  /** The chosen difficulty, or null while awaitingChoice. */
+  intensity: RiteIntensity | null;
+  sequence: RiteShrineKind[];
+  currentIndex: number;
+  mistakes: number;
+  /** How many wrong touches are tolerated before the reliquary opens on low loot.
+   * Equals tries - 1: a wrong touch fails the current try and (if tries remain)
+   * replays the sequence from the top. */
+  mistakesAllowed: number;
+  /** Full attempts the player gets at repeating the sequence (Easy 3, Medium 2,
+   * Hard 1). Each wrong touch consumes a try. */
+  tries: number;
+  /** How many times the full sequence is shown before input is accepted. */
+  playbacks: number;
+  /** Which playback pass (0-based) is currently showing. */
+  playbackLoop: number;
+  puzzleActive: boolean;
+  sequencePlaying: boolean;
+  playbackIndex: number;
+  playbackTimer: number;
+  shrineEntityIds: Record<RiteShrineKind, number>;
+  reliquaryId: number;
+  opened: boolean;
 }
 
 export interface DelveRestlessPending {
