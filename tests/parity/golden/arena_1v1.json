@@ -29,7 +29,7 @@
       "tick": 25,
       "time": 1.25,
       "nextId": 402,
-      "state": "accd2817",
+      "state": "0d887ac6",
       "events": "f97d10ae",
       "rng": {
         "draws": 0,
@@ -40,7 +40,7 @@
       "tick": 50,
       "time": 2.5,
       "nextId": 402,
-      "state": "42247093",
+      "state": "60907db2",
       "events": "485835de",
       "rng": {
         "draws": 34,
@@ -51,7 +51,7 @@
       "tick": 75,
       "time": 3.75,
       "nextId": 402,
-      "state": "9186588b",
+      "state": "5bb071ea",
       "events": "154b31fe",
       "rng": {
         "draws": 134,
@@ -62,7 +62,7 @@
       "tick": 100,
       "time": 5,
       "nextId": 402,
-      "state": "89c49397",
+      "state": "9c9f8a46",
       "events": "cedd0946",
       "rng": {
         "draws": 254,
@@ -73,7 +73,7 @@
       "tick": 125,
       "time": 6.25,
       "nextId": 402,
-      "state": "a3ca1d40",
+      "state": "5c9b7e19",
       "events": "9b404428",
       "rng": {
         "draws": 384,
@@ -84,7 +84,7 @@
       "tick": 142,
       "time": 7.1,
       "nextId": 402,
-      "state": "d63b8368",
+      "state": "b97434c1",
       "events": "741638a5",
       "rng": {
         "draws": 482,
@@ -115,6 +115,12 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "inventory": [
+            {
+              "count": 5,
+              "itemId": "baked_bread"
+            }
+          ],
           "mailWelcomed": true,
           "talents": {
             "choices": {},
@@ -147,6 +153,16 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "inventory": [
+            {
+              "count": 5,
+              "itemId": "baked_bread"
+            },
+            {
+              "count": 5,
+              "itemId": "spring_water"
+            }
+          ],
           "mailWelcomed": true,
           "talents": {
             "choices": {},

@@ -16,7 +16,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "d35a4a11",
+      "state": "0c2196d3",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -47,6 +47,12 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "inventory": [
+            {
+              "count": 5,
+              "itemId": "baked_bread"
+            }
+          ],
           "mailWelcomed": true,
           "talents": {
             "choices": {},
@@ -111,7 +117,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "2904828e",
+      "state": "cb4a0c2e",
       "events": "00bafcff",
       "rng": {
         "draws": 0,
@@ -142,6 +148,12 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "inventory": [
+            {
+              "count": 5,
+              "itemId": "baked_bread"
+            }
+          ],
           "lifetimeXp": 27600,
           "mailWelcomed": true,
           "questLog": [
@@ -219,8 +231,8 @@
       "tick": 8,
       "time": 0.4,
       "nextId": 409,
-      "state": "f58bba20",
-      "events": "7d1a20e0",
+      "state": "ad4d38a9",
+      "events": "d894ee18",
       "rng": {
         "draws": 40,
         "digest": "0e96c13c"
@@ -241,7 +253,7 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
-            "damageDealt": 8336,
+            "damageDealt": 8432,
             "kills": 8,
             "questProgress": 8
           },
@@ -254,6 +266,12 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "inventory": [
+            {
+              "count": 5,
+              "itemId": "baked_bread"
+            }
+          ],
           "lifetimeXp": 27600,
           "mailWelcomed": true,
           "questLog": [
@@ -332,7 +350,7 @@
       "tick": 8,
       "time": 0.4,
       "nextId": 409,
-      "state": "f2231791",
+      "state": "454a07ca",
       "events": "272aafab",
       "rng": {
         "draws": 40,
@@ -355,7 +373,7 @@
           "companionUpgrades": {},
           "copper": 75,
           "counters": {
-            "damageDealt": 8336,
+            "damageDealt": 8432,
             "kills": 8,
             "questProgress": 8,
             "questsCompleted": 1,
@@ -370,6 +388,12 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "inventory": [
+            {
+              "count": 5,
+              "itemId": "baked_bread"
+            }
+          ],
           "lifetimeXp": 27850,
           "mailWelcomed": true,
           "questsDone": [
@@ -440,7 +464,7 @@
       "tick": 10,
       "time": 0.5,
       "nextId": 409,
-      "state": "18931e09",
+      "state": "b4f67d02",
       "events": "741638a5",
       "rng": {
         "draws": 40,
@@ -463,7 +487,7 @@
           "companionUpgrades": {},
           "copper": 75,
           "counters": {
-            "damageDealt": 8336,
+            "damageDealt": 8432,
             "kills": 8,
             "questProgress": 8,
             "questsCompleted": 1,
@@ -478,6 +502,12 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "inventory": [
+            {
+              "count": 5,
+              "itemId": "baked_bread"
+            }
+          ],
           "lifetimeXp": 27850,
           "mailWelcomed": true,
           "questsDone": [
