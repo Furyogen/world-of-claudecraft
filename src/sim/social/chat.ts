@@ -239,7 +239,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
   }
 
   // "/inspect name" — self-only readout of another online player's level,
-  // class, and health. The first cross-player readout; mirrors WoW's Inspect.
+  // class, and health. The first cross-player readout; a classic-style Inspect.
   const im = /^\/(?:inspect|ins|examine)(?:\s+([\s\S]+))?$/i.exec(raw);
   if (im) {
     const targetName = (im[1] ?? '').trim();
@@ -274,6 +274,46 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
       return null;
     }
     ctx.error(r.meta.entityId, inspectReadout(target, te));
+    return null;
+  }
+
+  // "/invite name" — invite a player to your party by name, regardless of
+  // distance (party invites have no proximity check, unlike trade/duel). Name
+  // resolution mirrors /inspect (exact, then unambiguous case-insensitive); all
+  // party validation is delegated to partyInvite. (No "/inv" alias — that is
+  // /inventory.)
+  const invm = /^\/invite(?:\s+([\s\S]+))?$/i.exec(raw);
+  if (invm) {
+    const targetName = (invm[1] ?? '').trim();
+    if (!targetName) {
+      ctx.error(r.meta.entityId, 'Invite whom? Usage: /invite <name>.');
+      return null;
+    }
+    let target: PlayerMeta | null = null;
+    const ciMatches: PlayerMeta[] = [];
+    const wanted = targetName.toLowerCase();
+    for (const meta of ctx.players.values()) {
+      if (meta.name === targetName) {
+        target = meta;
+        break;
+      }
+      if (meta.name.toLowerCase() === wanted) ciMatches.push(meta);
+    }
+    if (!target) {
+      if (ciMatches.length === 1) target = ciMatches[0];
+      else if (ciMatches.length > 1) {
+        ctx.error(
+          r.meta.entityId,
+          `Several players match '${targetName}'. Use exact capitalization.`,
+        );
+        return null;
+      }
+    }
+    if (!target) {
+      ctx.error(r.meta.entityId, `There is no player named '${targetName}' online.`);
+      return null;
+    }
+    ctx.partyInvite(target.entityId, r.meta.entityId);
     return null;
   }
 
@@ -592,7 +632,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
         return { channel: 'whisper', message: msg };
       }
     }
-    // classic-WoW "/r": the recipient's reply target is whoever last
+    // classic-style "/r": the recipient's reply target is whoever last
     // whispered them, so record it on the target (not the sender).
     target.lastWhisperFrom = r.meta.name;
     // The recipient's copy of the whisper. A dev bot ("/dev bot") has no owning
@@ -883,10 +923,18 @@ export function handleDevChat(
     else ctx.emit({ type: 'log', text: okText, pid });
     return null;
   }
+  if (/^\/(?:dev\s+(?:kill|die|suicide)|devkill)\s*$/i.test(raw)) {
+    // [dev] Instant self-kill for testing the death/ghost loop: routes through the real
+    // death teardown (handleDeath), so the death overlay, corpse, and The Keeper's Toll
+    // persistence all behave exactly as a combat death.
+    const e = ctx.entities.get(pid);
+    if (e && !e.dead) ctx.handleDeath(e, null);
+    return null;
+  }
   if (/^\/dev(?:\s|$)/i.test(raw)) {
     ctx.error(
       pid,
-      'Dev commands: /dev level N, /dev tp X Z, /dev give itemId [count], /dev gold N, /dev quest questId, /dev quests, /dev gather professionId [amount], /dev bot name',
+      'Dev commands: /dev level N, /dev tp X Z, /dev give itemId [count], /dev gold N, /dev quest questId, /dev quests, /dev gather professionId [amount], /dev bot name, /dev kill',
     );
     return null;
   }
@@ -988,7 +1036,7 @@ export function helpLines(): string[] {
   return [
     'Chat channels: /s say, /y yell, /general, /p party, /world, /lfg.',
     'Whisper a player with /w <name> <message>, reply with /r.',
-    'Other commands: /join <world|lfg>, /roll, /inspect <name>, /follow <name>, /unfollow, /assist <name>, /afk, /dnd, /who.',
+    'Other commands: /join <world|lfg>, /roll, /invite <name>, /inspect <name>, /follow <name>, /unfollow, /assist <name>, /afk, /dnd, /who.',
     'Character readouts: /played, /xp, /gold, /stats, /bags, /gear, /abilities, /buffs, /cooldowns, /quest, /completed.',
     'World readouts: /where, /zones, /nearby, /pois, /graveyard, /dungeons, /arena, /session, /listings, /buyback.',
     'Combat readouts: /target, /targetbuffs, /range, /attack, /casting, /combat, /threat, /consider, /combo, /overpower.',

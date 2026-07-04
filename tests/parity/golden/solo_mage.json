@@ -14,8 +14,8 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 393,
-      "state": "cbe10791",
+      "nextId": 401,
+      "state": "e48662ed",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -28,19 +28,25 @@
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "mage",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 392,
+          "entityId": 400,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
-          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -60,7 +66,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 54,
-          "id": 392,
+          "id": 400,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -104,9 +110,9 @@
     {
       "tick": 20,
       "time": 1,
-      "nextId": 394,
-      "state": "f30dd3b1",
-      "events": "c97b03d0",
+      "nextId": 402,
+      "state": "96811767",
+      "events": "9bba49b4",
       "rng": {
         "draws": 3,
         "digest": "73521d70"
@@ -115,9 +121,9 @@
     {
       "tick": 40,
       "time": 2,
-      "nextId": 394,
-      "state": "7b555f2e",
-      "events": "940d13d1",
+      "nextId": 402,
+      "state": "91459d50",
+      "events": "fbffbbed",
       "rng": {
         "draws": 3,
         "digest": "73521d70"
@@ -126,9 +132,9 @@
     {
       "tick": 60,
       "time": 3,
-      "nextId": 394,
-      "state": "3bc94742",
-      "events": "be3c0c43",
+      "nextId": 402,
+      "state": "f1ed2b00",
+      "events": "e7371025",
       "rng": {
         "draws": 73,
         "digest": "7ef074c8"
@@ -137,9 +143,9 @@
     {
       "tick": 80,
       "time": 4,
-      "nextId": 394,
-      "state": "ab96d41e",
-      "events": "be3c0c43",
+      "nextId": 402,
+      "state": "a1e6fc94",
+      "events": "e7371025",
       "rng": {
         "draws": 162,
         "digest": "a72d4df2"
@@ -148,9 +154,9 @@
     {
       "tick": 100,
       "time": 5,
-      "nextId": 394,
-      "state": "eacd8752",
-      "events": "d17a9a9d",
+      "nextId": 402,
+      "state": "de0ad5a4",
+      "events": "91956d6d",
       "rng": {
         "draws": 254,
         "digest": "8a8c6a7c"
@@ -159,9 +165,9 @@
     {
       "tick": 120,
       "time": 6,
-      "nextId": 394,
-      "state": "98aa4a6b",
-      "events": "be3c0c43",
+      "nextId": 402,
+      "state": "257230f9",
+      "events": "e7371025",
       "rng": {
         "draws": 367,
         "digest": "6d00992d"
@@ -170,8 +176,8 @@
     {
       "tick": 128,
       "time": 6.4,
-      "nextId": 394,
-      "state": "9fc0685b",
+      "nextId": 402,
+      "state": "2a6b55a9",
       "events": "741638a5",
       "rng": {
         "draws": 411,
@@ -184,12 +190,19 @@
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "mage",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 392,
+          "entityId": 400,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -197,7 +210,6 @@
           "gatheringProficiency": {},
           "lifetimeXp": 27600,
           "mailWelcomed": true,
-          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -219,7 +231,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 105.4,
           "hp": 50000,
-          "id": 392,
+          "id": 400,
           "kind": "player",
           "level": 10,
           "lootFfaTimer": "Infinity",
@@ -251,7 +263,7 @@
             "sta": 23,
             "str": 10
           },
-          "targetId": 393,
+          "targetId": 401,
           "templateId": "mage",
           "weapon": {
             "max": 6,
@@ -271,7 +283,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 9000,
-          "id": 393,
+          "id": 401,
           "kind": "mob",
           "level": 5,
           "lootFfaTimer": "Infinity",

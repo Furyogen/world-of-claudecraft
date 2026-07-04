@@ -25,7 +25,7 @@
 import { DELVES, GROUP_XP_BONUS, MOBS } from '../data';
 import { recalcPlayerStats } from '../entity';
 import { DAMAGE_IDLE_DESPAWN_MOB_IDS, DAMAGE_IDLE_DESPAWN_SECONDS } from '../entity_roster';
-import { tunedXpAmount } from '../game_config';
+import { aurasSurvivingDeath } from '../resurrection';
 import type { PlayerMeta } from '../sim';
 import type { SimContext } from '../sim_context';
 import { addThreat, clearThreat } from '../threat';
@@ -52,7 +52,7 @@ const CORPSE_DURATION = 60;
 // Self attack-speed buff a wounded frenzyOnHit mob gains; sole user maybeFrenzyOnHit.
 const BLOOD_FRENZY_AURA_ID = 'blood_frenzy';
 
-// A handful of casts ignore vanilla spell pushback (e.g. ghost_wolf). Sole user is
+// A handful of casts ignore classic-era spell pushback (e.g. ghost_wolf). Sole user is
 // the dealDamage pushback branch, so the predicate lives here with it.
 function ignoresDamagePushback(abilityId: string): boolean {
   return abilityId === 'ghost_wolf';
@@ -353,7 +353,7 @@ export function dealDamage(
       target.drinking = null;
     }
     if (target.sitting) target.sitting = false;
-    // vanilla spell pushback: a landed hit delays the cast rather than
+    // classic-era spell pushback: a landed hit delays the cast rather than
     // cancelling it (misses and fully absorbed hits don't push back)
     if (
       target.castingAbility &&
@@ -476,9 +476,13 @@ export function handleDeath(ctx: SimContext, e: Entity, killer: Entity | null): 
   e.dead = true;
   e.hp = 0;
   ctx.clearNonPlayerStatAuras(e);
-  e.auras = [];
+  // The Keeper's Toll (Resurrection Sickness) is the one debuff that survives death: it
+  // must not be sheddable by dying and releasing the spirit. Only a player ever carries
+  // it, so mobs still clear fully.
+  e.auras = aurasSurvivingDeath(e.auras);
   e.ccDr.clear();
   e.castingAbility = null;
+  e.castTargetId = null;
   ctx.emit({ type: 'death', entityId: e.id, killerId: killer?.id ?? -1 });
 
   // a dead mob keeps no raid marker — respawnMob reuses the same entity id,
@@ -538,7 +542,13 @@ export function handleDeath(ctx: SimContext, e: Entity, killer: Entity | null): 
       run.objective.complete = true;
       ctx.onDelveBossDefeated(run);
     }
-    if (run?.affixes.includes('restless_graves') && template && !template.boss && !template.elite) {
+    if (
+      run?.affixes.includes('restless_graves') &&
+      template &&
+      !template.boss &&
+      !template.elite &&
+      !e.affixSpawned
+    ) {
       run.restlessPending.push({
         at: ctx.time + 3,
         x: e.pos.x,
@@ -583,7 +593,10 @@ export function handleDeath(ctx: SimContext, e: Entity, killer: Entity | null): 
     const meta = creditId !== null ? ctx.players.get(creditId) : null;
     const creditEntity = creditId !== null ? ctx.entities.get(creditId) : null;
     if (meta && creditEntity) {
-      const eliteMult = MOBS[e.templateId]?.elite ? 2 : 1;
+      const tmpl = MOBS[e.templateId];
+      // xpMult 0 marks a puzzle-object mob (the 1 HP spider egg-sac): killable
+      // in one hit by design, so it must not pay full kill XP.
+      const eliteMult = (tmpl?.elite ? 2 : 1) * (tmpl?.xpMult ?? 1);
       // party play: kill credit, xp split and quest progress shared with
       // members nearby (classic group rules + group bonus). A member downed
       // during the fight still counts while their corpse is in range: classic
@@ -636,12 +649,7 @@ export function grantXp(
 ): void {
   const p = ctx.entities.get(meta.entityId);
   if (!p || amount <= 0) return;
-  // Operator XP rate (game_config override layer). Identity at the default 1,
-  // so unconfigured hosts keep the exact vanilla awards. Applied before the
-  // rested draw-down so the rested bonus scales with the same knob.
-  amount = tunedXpAmount(amount);
-  if (amount <= 0) return;
-  // Rested XP bonus: classic vanilla only doubles KILL xp (not quests), and
+  // Rested XP bonus: the classic-era rule only doubles KILL xp (not quests), and
   // never past the cap (no level bar to advance). The bonus equals the rested
   // amount drawn down, so the effective award is up to 2x while the pool lasts.
   let restedBonus = 0;

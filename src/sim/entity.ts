@@ -51,6 +51,7 @@ function baseEntity(id: number, pos: Vec3): Entity {
     castingAbility: null,
     castRemaining: 0,
     castTotal: 0,
+    castTargetId: null,
     castAim: null,
     channeling: false,
     channelTickTimer: 0,
@@ -117,6 +118,8 @@ function baseEntity(id: number, pos: Vec3): Entity {
     objectItemId: null,
     dungeonId: null,
     dead: false,
+    ghost: false,
+    corpsePos: null,
     scale: 1,
     color: 0xffffff,
     skinCatalog: 'class',
@@ -141,7 +144,7 @@ export function createPlayer(id: number, cls: PlayerClass, pos: Vec3, name: stri
 
 export type PlayerEquipment = Partial<Record<EquipSlot, string>>;
 
-// Vanilla rules: first 20 stamina gives 1 hp each, the rest 10 hp each.
+// Classic-era rules: first 20 stamina gives 1 hp each, the rest 10 hp each.
 // First 20 intellect gives 1 mana each, the rest 15 mana each.
 function hpFromStamina(sta: number): number {
   // Floor at 0 so a Stamina-draining debuff (negative buff_sta) can never push
@@ -231,7 +234,18 @@ export function recalcPlayerStats(
       s.int += a.value;
       s.spi += a.value;
     } else if (a.kind === 'buff_spellpower') bonusSp += a.value;
-    else if (a.kind === 'buff_dodge') bonusDodge += a.value;
+    else if (a.kind === 'buff_allstats_pct') {
+      // Percentage drain on the whole stat block (Resurrection Sickness: value
+      // -0.75 leaves stats at 25%). Applied to the base + gear total gathered so
+      // far; the only aura that ever carries this kind is player-only, so it never
+      // stacks with another pct drain in practice.
+      const m = 1 + a.value;
+      s.str = Math.round(s.str * m);
+      s.agi = Math.round(s.agi * m);
+      s.sta = Math.round(s.sta * m);
+      s.int = Math.round(s.int * m);
+      s.spi = Math.round(s.spi * m);
+    } else if (a.kind === 'buff_dodge') bonusDodge += a.value;
     else if (a.kind === 'buff_scale') scaleMul *= a.value;
     else if (a.kind === 'form_bear') bearForm = true;
     else if (a.kind === 'form_cat') catForm = true;
@@ -294,7 +308,7 @@ export function recalcPlayerStats(
   // owning PlayerMeta.equipment never aliases into the entity. Synced in the
   // identity wire (terse `eq`) for the inspect-another-player window.
   e.equippedItems = { ...equipment };
-  // Melee AP by class (vanilla-ish): warriors/paladins/shamans/druids 2/str,
+  // Melee AP by class (classic-era-ish): warriors/paladins/shamans/druids 2/str,
   // rogues str+agi, hunters str+agi, pure casters str.
   const apFromStats =
     cls === 'warrior' || cls === 'paladin' || cls === 'shaman' || cls === 'druid'
@@ -305,7 +319,7 @@ export function recalcPlayerStats(
   // Floor at 0 so a heavy debuff_ap stack can never bake a negative attack power
   // (mirrors effectiveAttackPower's mob floor and the agi/spi floors above).
   e.attackPower = Math.max(0, Math.round((apFromStats + bonusAp) * (1 + (mods?.stats.apPct ?? 0))));
-  // Hunters: ranged AP = 2/agi (vanilla)
+  // Hunters: ranged AP = 2/agi (classic-era value)
   e.rangedPower =
     cls === 'hunter'
       ? Math.max(0, Math.round((s.agi * 2 + bonusAp) * (1 + (mods?.stats.apPct ?? 0))))
@@ -333,7 +347,7 @@ export function recalcPlayerStats(
 
   // Druid forms swap the resource bar, classic-style: bear runs on rage
   // (starts empty, fills from combat), cat on energy (starts full — friendlier
-  // than vanilla's 0). Mana is parked in savedMana and restored on shift-out.
+  // than the classic-era 0). Mana is parked in savedMana and restored on shift-out.
   const formResource: 'rage' | 'energy' | null = bearForm ? 'rage' : catForm ? 'energy' : null;
   if (formResource) {
     if (e.resourceType === 'mana') e.savedMana = e.resource;
@@ -393,7 +407,7 @@ export function createMob(id: number, template: MobTemplate, level: number, pos:
   e.name = template.name;
   e.level = level;
   e.hostile = true;
-  // Elite scaling, vanilla-style: ~2.3x health, ~1.5x damage.
+  // Elite scaling, classic-style: ~2.3x health, ~1.5x damage.
   const hpMult = template.elite ? 2.3 : 1;
   const dmgMult = template.elite ? 1.5 : 1;
   e.maxHp = Math.round((template.hpBase + template.hpPerLevel * (level - 1)) * hpMult);

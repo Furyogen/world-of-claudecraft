@@ -8,10 +8,12 @@ import type { ChatLogRow } from './chat_log';
 import { DISCORD_SCHEMA } from './discord_db';
 import { GITHUB_SCHEMA } from './github_db';
 import { isUniqueViolation } from './http_util';
+import { MAPS_SCHEMA } from './maps_db';
 import { OAUTH_SCHEMA } from './oauth_db';
 import { REALM } from './realm';
 import { chooseArchiveName } from './reclaim_name';
 import { SOCIAL_SCHEMA } from './social_db';
+import { USER_ASSETS_SCHEMA } from './user_assets_db';
 
 try {
   process.loadEnvFile?.();
@@ -76,6 +78,10 @@ CREATE TABLE IF NOT EXISTS characters (
 );
 CREATE INDEX IF NOT EXISTS characters_account ON characters(account_id);
 ALTER TABLE characters ADD COLUMN IF NOT EXISTS realm TEXT NOT NULL DEFAULT '${REALM_SQL_DEFAULT}';
+-- Last time this character entered the world (stamped on join). Drives the
+-- "last seen" readout on offline guild-roster rows. Nullable: a character that
+-- has never entered the world since this column was added reads NULL.
+ALTER TABLE characters ADD COLUMN IF NOT EXISTS last_login TIMESTAMPTZ;
 -- Max-Level XP Overflow leaderboard: indexed lifetime-XP sort key. The first
 -- index serves the realm-scoped in-game panel; the second serves the global
 -- (cross-realm) home-page board.
@@ -293,17 +299,6 @@ CREATE TABLE IF NOT EXISTS world_state (
   key TEXT PRIMARY KEY,
   data JSONB NOT NULL,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
-);
--- Housekeeping: per-realm operator overrides for game content and rates, one
--- JSONB document per realm (shape: src/sim/game_config.ts GameConfigOverrides,
--- validated before save AND before apply). Loaded at boot and applied to the
--- sim content tables before the world is constructed; admin-dashboard edits
--- land here and take effect on the next restart.
-CREATE TABLE IF NOT EXISTS game_config_overrides (
-  realm TEXT PRIMARY KEY DEFAULT '${REALM_SQL_DEFAULT}',
-  data JSONB NOT NULL DEFAULT '{}'::jsonb,
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  updated_by INT REFERENCES accounts(id) ON DELETE SET NULL
 );
 -- Chat moderation: per-account timed mute + running strike count for the
 -- hard-word (slur) enforcement ladder. A mute blocks chat only, never login.
@@ -548,6 +543,11 @@ export async function ensureSchema(): Promise<void> {
     // FK-references accounts(id), so it runs after SCHEMA. Applied unconditionally
     // (idempotent), like the Discord tables.
     await client.query(GITHUB_SCHEMA);
+    // Map editor tables: saved/forked custom maps and uploaded GLB assets.
+    // Both FK-reference accounts(id), so they run after SCHEMA. Applied
+    // unconditionally (idempotent), like the other schema modules.
+    await client.query(MAPS_SCHEMA);
+    await client.query(USER_ASSETS_SCHEMA);
     // Seed the chat-filter word lists + config on first boot only (idempotent).
     // Runs under the same advisory lock so concurrent realm boots don't race.
     await seedChatFilterDefaults(client);
@@ -806,6 +806,12 @@ export async function characterCountForAccount(accountId: number): Promise<numbe
     [accountId],
   );
   return res.rows[0]?.count ?? 0;
+}
+
+// Stamp a character's last world-entry time. Called best-effort on join; drives
+// the "last seen" readout on guild-roster rows.
+export async function touchCharacterLogin(characterId: number): Promise<void> {
+  await pool.query('UPDATE characters SET last_login = now() WHERE id = $1', [characterId]);
 }
 
 export async function updatePasswordHash(accountId: number, passwordHash: string): Promise<void> {

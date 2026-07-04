@@ -284,10 +284,13 @@ export function fiestaRespawnTime(deaths: number, elapsed: number): number {
 export function fiestaDownEntity(ctx: SimContext, e: Entity, killer: Entity | null): void {
   e.dead = true;
   e.hp = 0;
+  // Fiesta is a clean-slate minigame with its own timed revive: it intentionally strips
+  // ALL auras (including The Keeper's Toll), unlike the overworld/delve death paths.
   e.auras = [];
   e.ccDr.clear();
   e.castingAbility = null;
   e.castRemaining = 0;
+  e.castTargetId = null;
   e.channeling = false;
   e.autoAttack = false;
   e.queuedOnSwing = null;

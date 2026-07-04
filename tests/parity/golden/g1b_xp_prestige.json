@@ -16,8 +16,8 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 393,
-      "state": "31ae4d51",
+      "nextId": 401,
+      "state": "d35a4a11",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -30,19 +30,25 @@
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 392,
+          "entityId": 400,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
-          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -62,7 +68,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 90,
-          "id": 392,
+          "id": 400,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -105,9 +111,9 @@
     {
       "tick": 20,
       "time": 1,
-      "nextId": 393,
-      "state": "ed914491",
-      "events": "1bd10bbf",
+      "nextId": 401,
+      "state": "8f58da6d",
+      "events": "b93c7dc5",
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -116,8 +122,8 @@
     {
       "tick": 40,
       "time": 2,
-      "nextId": 393,
-      "state": "462ffcf1",
+      "nextId": 401,
+      "state": "286d3dad",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -127,8 +133,8 @@
     {
       "tick": 60,
       "time": 3,
-      "nextId": 393,
-      "state": "ad1ea2b7",
+      "nextId": 401,
+      "state": "6550d2f3",
       "events": "741638a5",
       "rng": {
         "draws": 75,
@@ -138,8 +144,8 @@
     {
       "tick": 60,
       "time": 3,
-      "nextId": 393,
-      "state": "ad1ea2b7",
+      "nextId": 401,
+      "state": "6550d2f3",
       "events": "741638a5",
       "rng": {
         "draws": 75,
@@ -152,19 +158,25 @@
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 392,
+          "entityId": 400,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
           "mailWelcomed": true,
-          "nodeHarvestReadyAt": {},
           "restedXp": 0.125,
           "talents": {
             "choices": {},
@@ -185,7 +197,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 102,
           "hp": 90,
-          "id": 392,
+          "id": 400,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -228,9 +240,9 @@
     {
       "tick": 60,
       "time": 3,
-      "nextId": 393,
-      "state": "0112e7d8",
-      "events": "cfb621aa",
+      "nextId": 401,
+      "state": "6566ebd4",
+      "events": "1cded724",
       "rng": {
         "draws": 75,
         "digest": "cc652885"
@@ -242,14 +254,21 @@
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
             "xpGained": 160
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 392,
+          "entityId": 400,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -257,7 +276,6 @@
           "gatheringProficiency": {},
           "lifetimeXp": 160,
           "mailWelcomed": true,
-          "nodeHarvestReadyAt": {},
           "restedXp": 920,
           "talents": {
             "choices": {},
@@ -279,7 +297,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 102,
           "hp": 90,
-          "id": 392,
+          "id": 400,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -322,9 +340,9 @@
     {
       "tick": 60,
       "time": 3,
-      "nextId": 393,
-      "state": "da20543d",
-      "events": "d6afcb77",
+      "nextId": 401,
+      "state": "320498c9",
+      "events": "c434cdff",
       "rng": {
         "draws": 75,
         "digest": "cc652885"
@@ -336,15 +354,22 @@
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
             "levelUps": 1,
             "xpGained": 610
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 392,
+          "entityId": 400,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -352,7 +377,6 @@
           "gatheringProficiency": {},
           "lifetimeXp": 610,
           "mailWelcomed": true,
-          "nodeHarvestReadyAt": {},
           "restedXp": 920,
           "talents": {
             "choices": {},
@@ -374,7 +398,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 102,
           "hp": 128,
-          "id": 392,
+          "id": 400,
           "kind": "player",
           "level": 2,
           "lootFfaTimer": "Infinity",
@@ -417,9 +441,9 @@
     {
       "tick": 60,
       "time": 3,
-      "nextId": 393,
-      "state": "d19738cd",
-      "events": "4c331eaf",
+      "nextId": 401,
+      "state": "1420b165",
+      "events": "5079bfdf",
       "rng": {
         "draws": 75,
         "digest": "cc652885"
@@ -431,15 +455,22 @@
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
             "levelUps": 1,
             "xpGained": 23810
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 392,
+          "entityId": 400,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -447,7 +478,6 @@
           "gatheringProficiency": {},
           "lifetimeXp": 190400,
           "mailWelcomed": true,
-          "nodeHarvestReadyAt": {},
           "restedXp": 920,
           "talents": {
             "choices": {},
@@ -469,7 +499,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 102,
           "hp": 812,
-          "id": 392,
+          "id": 400,
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -512,9 +542,9 @@
     {
       "tick": 60,
       "time": 3,
-      "nextId": 393,
-      "state": "710cdc02",
-      "events": "c9fb53c1",
+      "nextId": 401,
+      "state": "ba2cc3da",
+      "events": "dee49cdf",
       "rng": {
         "draws": 75,
         "digest": "cc652885"
@@ -526,15 +556,22 @@
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
             "levelUps": 1,
             "xpGained": 23810
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 392,
+          "entityId": 400,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -542,7 +579,6 @@
           "gatheringProficiency": {},
           "lifetimeXp": 190400,
           "mailWelcomed": true,
-          "nodeHarvestReadyAt": {},
           "prestigeRank": 1,
           "restedXp": 920,
           "talents": {
@@ -564,7 +600,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 102,
           "hp": 812,
-          "id": 392,
+          "id": 400,
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -607,8 +643,8 @@
     {
       "tick": 60,
       "time": 3,
-      "nextId": 393,
-      "state": "710cdc02",
+      "nextId": 401,
+      "state": "ba2cc3da",
       "events": "741638a5",
       "rng": {
         "draws": 75,
@@ -621,15 +657,22 @@
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
             "levelUps": 1,
             "xpGained": 23810
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 392,
+          "entityId": 400,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -637,7 +680,6 @@
           "gatheringProficiency": {},
           "lifetimeXp": 190400,
           "mailWelcomed": true,
-          "nodeHarvestReadyAt": {},
           "prestigeRank": 1,
           "restedXp": 920,
           "talents": {
@@ -659,7 +701,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 102,
           "hp": 812,
-          "id": 392,
+          "id": 400,
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -702,8 +744,8 @@
     {
       "tick": 60,
       "time": 3,
-      "nextId": 393,
-      "state": "710cdc02",
+      "nextId": 401,
+      "state": "ba2cc3da",
       "events": "741638a5",
       "rng": {
         "draws": 75,
@@ -716,15 +758,22 @@
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
             "levelUps": 1,
             "xpGained": 23810
           },
+          "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 392,
+          "entityId": 400,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -732,7 +781,6 @@
           "gatheringProficiency": {},
           "lifetimeXp": 190400,
           "mailWelcomed": true,
-          "nodeHarvestReadyAt": {},
           "prestigeRank": 1,
           "restedXp": 920,
           "talents": {
@@ -754,7 +802,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 102,
           "hp": 812,
-          "id": 392,
+          "id": 400,
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
