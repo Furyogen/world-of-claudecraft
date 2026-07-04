@@ -2767,19 +2767,42 @@
       text-align: center;
     }
 
-    /* While a full-screen cs-wow panel is up, the landing chrome (sticky nav,
-       footer, SEO hero copy) would bleed through the translucent stage: park
-       it. The online arms keep the touch gate, matching their layout arms. */
+    /* While a full-screen cs-wow panel is up, the landing chrome that has no
+       business on a character screen (footer, SEO hero copy) would bleed
+       through the translucent stage: park it. The ONLINE panels deliberately
+       KEEP the site menu bar (pinned below); only the offline quick-play
+       panel still parks the whole chrome. The online arms keep the touch
+       gate, matching their layout arms. */
     body[data-start-panel="offline-select"] :is(
         .homepage-header,
         .homepage-footer,
         .official-site-copy
       ),
     body:not(.mobile-touch)[data-start-panel="charselect-panel"]
-      :is(.homepage-header, .homepage-footer, .official-site-copy),
+      :is(.homepage-footer, .official-site-copy),
     body:not(.mobile-touch)[data-start-panel="charcreate-panel"]
-      :is(.homepage-header, .homepage-footer, .official-site-copy) {
+      :is(.homepage-footer, .official-site-copy) {
       visibility: hidden;
+    }
+
+    /* The online character screens keep the site menu bar: pin it over the
+       full-screen stage (the panel is fixed at z-index 60) so Play / Wiki /
+       News / Account stay reachable, and reserve its height on the panel
+       with a transparent top border. Absolutely-positioned children anchor
+       to the padding box (inside the border), so the border shifts the
+       cs-head bar, the docked columns, and the corner actions down
+       uniformly without touching any of their offsets. */
+    body:not(.mobile-touch)[data-start-panel="charselect-panel"] .homepage-header,
+    body:not(.mobile-touch)[data-start-panel="charcreate-panel"] .homepage-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 70;
+    }
+    body:not(.mobile-touch) :is(#charselect-panel, #charcreate-panel).cs-wow {
+      /* Matches the one-line desktop header height (logo row + its padding). */
+      border-top: 58px solid transparent;
     }
 
     /* The roster: the account chrome (realm / sort / wallet) stays a top bar,
@@ -2816,9 +2839,47 @@
       justify-content: flex-end;
       margin: 0;
     }
+    /* $WOC Wallet and Developer become two matching stacked cards on the
+       account bar: the service name reads as the card's own header, the
+       action row sits under it, and the helper caption anchors the foot,
+       instead of a label floating beside a button row with its caption
+       dangling underneath. Overrides the base .cs-wallet row layout (label
+       beside actions, separator border-top), which the card/mobile layouts
+       keep. */
+    body:not(.mobile-touch) #charselect-panel.cs-wow :is(.cs-wallet-group, .cs-github-group) {
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      gap: 7px;
+      margin: 0;
+      padding: 9px 12px 8px;
+      border: 1px solid var(--color-border-default);
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.03);
+    }
+    body:not(.mobile-touch) #charselect-panel.cs-wow .cs-wallet-label {
+      font-size: 11px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+    body:not(.mobile-touch) #charselect-panel.cs-wow .cs-wallet-main {
+      align-items: flex-start;
+    }
+    body:not(.mobile-touch) #charselect-panel.cs-wow .cs-wallet-actions {
+      justify-content: flex-start;
+    }
     body:not(.mobile-touch) #charselect-panel.cs-wow .cs-wallet-help {
       max-width: 300px;
       font-size: 10px;
+    }
+    /* Between 900px and 1400px the two cards plus the realm/sort controls
+       would wrap the account bar to a second line and collide with the
+       docked columns below: drop the captions (every action keeps its
+       title/aria text) so the bar stays one line. */
+    @media (max-width: 1399px) {
+      body:not(.mobile-touch) #charselect-panel.cs-wow .cs-wallet-help {
+        display: none;
+      }
     }
     body:not(.mobile-touch) #charselect-panel.cs-wow .cs-list-col {
       position: absolute;

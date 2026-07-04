@@ -15,7 +15,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "d676a38c",
+      "state": "f769da1c",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -46,8 +46,17 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "inventory": [
+            {
+              "count": 5,
+              "itemId": "baked_bread"
+            },
+            {
+              "count": 5,
+              "itemId": "spring_water"
+            }
+          ],
           "mailWelcomed": true,
-          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -112,7 +121,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 402,
-      "state": "fecb2a56",
+      "state": "909de248",
       "events": "9bba49b4",
       "rng": {
         "draws": 3,
@@ -123,7 +132,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 402,
-      "state": "208ff3a1",
+      "state": "157f1409",
       "events": "fbffbbed",
       "rng": {
         "draws": 3,
@@ -134,7 +143,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 402,
-      "state": "762fb651",
+      "state": "e1d09e99",
       "events": "e7371025",
       "rng": {
         "draws": 73,
@@ -145,7 +154,7 @@
       "tick": 80,
       "time": 4,
       "nextId": 402,
-      "state": "3abc9465",
+      "state": "ec0df675",
       "events": "e7371025",
       "rng": {
         "draws": 162,
@@ -156,7 +165,7 @@
       "tick": 100,
       "time": 5,
       "nextId": 402,
-      "state": "43849975",
+      "state": "3fa564e5",
       "events": "91956d6d",
       "rng": {
         "draws": 254,
@@ -167,7 +176,7 @@
       "tick": 120,
       "time": 6,
       "nextId": 402,
-      "state": "53fe50a8",
+      "state": "8413eeea",
       "events": "e7371025",
       "rng": {
         "draws": 367,
@@ -178,7 +187,7 @@
       "tick": 128,
       "time": 6.4,
       "nextId": 402,
-      "state": "29371298",
+      "state": "a10b84ba",
       "events": "741638a5",
       "rng": {
         "draws": 411,
@@ -209,9 +218,18 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "inventory": [
+            {
+              "count": 5,
+              "itemId": "baked_bread"
+            },
+            {
+              "count": 5,
+              "itemId": "spring_water"
+            }
+          ],
           "lifetimeXp": 27600,
           "mailWelcomed": true,
-          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}

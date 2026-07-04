@@ -438,25 +438,31 @@ export function castAbility(
   if (ability.channel) {
     spendResource(p, res.cost);
     armAbilityCooldown(p, ability.id, res.cooldown);
+    // Spell haste (item-set bonus) shortens the whole channel and so each tick.
+    const channelDuration = ability.channel.duration / (1 + p.spellHaste);
     p.castingAbility = ability.id;
-    p.castTotal = ability.channel.duration;
-    p.castRemaining = ability.channel.duration;
+    p.castTotal = channelDuration;
+    p.castRemaining = channelDuration;
     p.channeling = true;
-    p.channelTickEvery = ability.channel.duration / ability.channel.ticks;
+    p.channelTickEvery = channelDuration / ability.channel.ticks;
     p.channelTickTimer = p.channelTickEvery;
     p.gcdRemaining = Math.max(p.gcdRemaining, gcd);
     ctx.emit({
       type: 'castStart',
       entityId: p.id,
       ability: ability.id,
-      time: ability.channel.duration,
+      time: channelDuration,
     });
     return;
   }
 
   if (castTime > 0 && !togglingOff) {
-    // Curse of Tongues stretches the resolved (already haste-adjusted) cast time.
-    const stretchedCastTime = castTime * tonguesMult(p);
+    // Spell haste (item-set bonus) shortens the cast; Curse of Tongues stretches it.
+    // Physical-school casts (Slam) ride spellHaste too: set-bonus haste is ONE stat,
+    // so meleeHaste always equals spellHaste and the classic melee-haste scaling
+    // falls out identically. If the haste channels ever split, give physical casts
+    // p.meleeHaste here (and mirror `mh` over the wire for the tooltip).
+    const stretchedCastTime = (castTime * tonguesMult(p)) / (1 + p.spellHaste);
     p.castingAbility = ability.id;
     p.castTotal = stretchedCastTime;
     p.castRemaining = stretchedCastTime;

@@ -3384,6 +3384,8 @@ export class Hud {
     },
     showChestButton: () => this.showDailyRewardsChestButton(),
     setShowChestButton: (show) => this.setDailyRewardsChestButtonPreference(show),
+    confirmDialog: (title, body, okText, cancelText, onOk) =>
+      this.confirmDialog(title, body, okText, cancelText, onOk),
     ...this.windowFocus('#daily-rewards-window'),
     onVisibilityChange: () => this.syncAnyWindowOpenState(),
   });
@@ -3399,7 +3401,8 @@ export class Hud {
     ...this.windowFocus('#spellbook'),
     hideTooltip: () => this.hideTooltip(),
     attachTooltip: (el, html) => this.attachTooltip(el, html),
-    abilitySummary: (known) => describeAbilitySummary(known, this.sim.player.resourceType),
+    abilitySummary: (known) =>
+      describeAbilitySummary(known, this.sim.player.resourceType, this.sim.player.spellHaste),
     abilityTooltip: (known) => this.abilityTooltip(known),
     barAbilityIds: () =>
       this.hotbarActions.flatMap((a) => (a && a.type === 'ability' ? [a.id] : [])),
@@ -3960,7 +3963,7 @@ export class Hud {
     const rangeLine = abilityRangeLine(a);
     if (rangeLine) costLine.push(rangeLine);
     if (costLine.length) html += `<div class="tt-stat">${costLine.map(esc).join(' &nbsp; ')}</div>`;
-    const castLine = [abilityCastLine(res)];
+    const castLine = [abilityCastLine(res, this.sim.player.spellHaste)];
     // Use the RESOLVED cooldown (res.cooldown), not res.def.cooldown, so talents that
     // reduce cooldown (Improved Mortal Strike, Barrage, Improved Fire Blast, ...) show
     // their effect in the tooltip.
@@ -12160,7 +12163,11 @@ export class Hud {
   }
 }
 
-function describeAbilitySummary(known: ResolvedAbility, resourceType: ResourceType | null): string {
+function describeAbilitySummary(
+  known: ResolvedAbility,
+  resourceType: ResourceType | null,
+  spellHaste = 0,
+): string {
   const parts: string[] = [];
   if (known.cost > 0) {
     parts.push(
@@ -12170,7 +12177,7 @@ function describeAbilitySummary(known: ResolvedAbility, resourceType: ResourceTy
       }),
     );
   }
-  parts.push(abilityCastLine(known));
+  parts.push(abilityCastLine(known, spellHaste));
   // Resolved cooldown (after talent cooldown modifiers), not the base def cooldown.
   if (known.cooldown > 0) {
     parts.push(
@@ -12351,14 +12358,18 @@ function abilityRangeLine(def: AbilityDef): string | null {
   return t('abilityUi.tooltip.range', { range: formatAbilityNumber(def.range) });
 }
 
-function abilityCastLine(known: ResolvedAbility): string {
+// `spellHaste` (the live character's set-bonus spell haste, a fraction) shortens
+// the shown cast / channel time exactly as the sim does, so a hasted caster's
+// tooltips reflect the real, faster cast.
+function abilityCastLine(known: ResolvedAbility, spellHaste = 0): string {
+  const h = 1 + Math.max(0, spellHaste);
   if (known.def.channel) {
     return t('abilityUi.tooltip.channeledSeconds', {
-      seconds: formatAbilityNumber(known.def.channel.duration),
+      seconds: formatAbilityNumber(known.def.channel.duration / h),
     });
   }
   if (known.castTime > 0) {
-    return t('abilityUi.tooltip.castSeconds', { seconds: formatAbilityNumber(known.castTime) });
+    return t('abilityUi.tooltip.castSeconds', { seconds: formatAbilityNumber(known.castTime / h) });
   }
   return t('abilityUi.tooltip.instant');
 }

@@ -192,6 +192,7 @@ export const COMMAND_NAMES = [
   'stopattack',
   'interact',
   'loot',
+  'harvestCorpse',
   'lootRoll',
   'pickup',
   'accept',

@@ -28,7 +28,7 @@
       "tick": 3,
       "time": 0.15,
       "nextId": 403,
-      "state": "be0b4402",
+      "state": "858fb6c7",
       "events": "e50fb0d8",
       "rng": {
         "draws": 2,
@@ -60,12 +60,15 @@
           "gatheringProficiency": {},
           "inventory": [
             {
+              "count": 5,
+              "itemId": "baked_bread"
+            },
+            {
               "count": 1,
               "itemId": "greyjaw_hide_boots"
             }
           ],
           "mailWelcomed": true,
-          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -94,8 +97,17 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "inventory": [
+            {
+              "count": 5,
+              "itemId": "baked_bread"
+            },
+            {
+              "count": 5,
+              "itemId": "spring_water"
+            }
+          ],
           "mailWelcomed": true,
-          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -215,13 +227,13 @@
           "fallStartY": 1.031633,
           "fiveSecondRule": 99,
           "hostile": true,
-          "hp": 42,
+          "hp": 54,
           "id": 402,
           "kind": "mob",
           "level": 2,
           "lootFfaTimer": "Infinity",
           "lootable": true,
-          "maxHp": 42,
+          "maxHp": 54,
           "moveSpeed": 8,
           "onGround": true,
           "overpowerUntil": -1,
