@@ -7,9 +7,10 @@
 //
 // Bot state (`bgBotPids`) stays a Sim field (the E1 "state stays on Sim"
 // pattern). Driven from Sim.updateBattlegrounds each tick, never from
-// main.ts. DETERMINISM: the drivers use NO randomness at all (tick-staggered
-// heuristics only), so backfilled online matches and offline practice draw
-// nothing from the shared stream.
+// main.ts. DETERMINISM: the driver decision logic itself draws NO randomness
+// (tick-staggered heuristics only). The abilities the bots cast resolve
+// through the normal combat pipeline and roll on the shared stream like any
+// cast, deterministically; with no bots active this module touches nothing.
 
 import { bgLaneWaypoints, bgSpawns } from '../battleground_layout';
 import { battlegroundOrigin, CLASSES, DUNGEON_X_THRESHOLD } from '../data';

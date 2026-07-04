@@ -5550,6 +5550,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.bg.err.cannotSpectate': '你现在无法观战。',
   'hudChrome.bg.err.matchEnded': '那场战斗已经结束。',
   'hudChrome.bg.err.noDuel': '你不能在墓行之原决斗。',
+  'hudChrome.bg.err.partyTooLarge': '墓行之原的战团最多五人。',
   'guide.nav.battlegrounds': '战场',
   'guide.bgPage.heading': '墓行之原',
   'guide.bgPage.intro':

@@ -1250,7 +1250,8 @@ export const ko_KR: EnTranslations = {
         "deserter": "탈영병의 조종이 울리는 동안에는 대기할 수 없습니다.",
         "cannotSpectate": "지금은 관전할 수 없습니다.",
         "matchEnded": "그 전투는 이미 끝났습니다.",
-        "noDuel": "그레이브마치에서는 결투할 수 없습니다."
+        "noDuel": "그레이브마치에서는 결투할 수 없습니다.",
+        "partyTooLarge": "그레이브마치 부대는 최대 5명까지입니다."
       }
     }
   },

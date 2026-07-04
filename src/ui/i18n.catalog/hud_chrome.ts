@@ -1392,7 +1392,7 @@ export const hudChromeStrings = {
       draw: 'The field falls silent. A draw.',
       rating: 'Rating {rating} ({delta}).',
     },
-    // Sim-emitted queue/spectate errors (exact English the sim emits verbatim;
+    // Sim-emitted queue/spectate/duel errors (exact English the sim emits verbatim;
     // sim_i18n.ts matcher rules re-localize them through these keys).
     err: {
       level10: 'You must be at least level 10 to join the Gravemarch.',
@@ -1400,6 +1400,7 @@ export const hudChromeStrings = {
       cannotSpectate: 'You cannot spectate right now.',
       matchEnded: 'That battle has already ended.',
       noDuel: 'You cannot duel on the Gravemarch.',
+      partyTooLarge: 'A Gravemarch company takes five at most.',
     },
   },
 };

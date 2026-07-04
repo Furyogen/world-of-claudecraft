@@ -4578,6 +4578,10 @@ const RULES: Rule[] = [
     re: /^You cannot duel on the Gravemarch\.$/,
     build: () => t('hudChrome.bg.err.noDuel'),
   },
+  {
+    re: /^A Gravemarch company takes five at most\.$/,
+    build: () => t('hudChrome.bg.err.partyTooLarge'),
+  },
   // Delve / lockpicking sim text. Re-localized through t() against the sim.delve.* /
   // sim.lockpick.* keys (src/ui/i18n.catalog/index.ts). The module-enter banner is two
   // rules anchored on the fixed objective lines ("X: Clear the room." / "X: Defeat the

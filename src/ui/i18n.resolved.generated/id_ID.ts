@@ -1250,7 +1250,8 @@ export const id_ID: EnTranslations = {
         "deserter": "You cannot queue while the Deserter's Knell tolls.",
         "cannotSpectate": "You cannot spectate right now.",
         "matchEnded": "That battle has already ended.",
-        "noDuel": "You cannot duel on the Gravemarch."
+        "noDuel": "You cannot duel on the Gravemarch.",
+        "partyTooLarge": "A Gravemarch company takes five at most."
       }
     }
   },

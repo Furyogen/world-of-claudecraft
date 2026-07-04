@@ -5,6 +5,7 @@
 import { describe, expect, it } from 'vitest';
 import type { BgStructureDef, BgTeam } from '../src/sim/battleground_layout';
 import { BG_STRUCTURES } from '../src/sim/battleground_layout';
+import { BATTLEGROUND_X_MIN, DELVE_BAND_X_MAX, DELVE_LIST, delveOrigin } from '../src/sim/data';
 import {
   BG_RESPAWN_MAX,
   type BgQueueUnit,
@@ -192,5 +193,19 @@ describe('battleground module: layout sanity for the drive code', () => {
     expect(BG_STRUCTURES.filter((s) => s.kind === 'bulwark').length).toBe(8);
     expect(BG_STRUCTURES.filter((s) => s.kind === 'warstone').length).toBe(2);
     expect(BG_STRUCTURES.filter((s) => s.team === 'A').length).toBe(5);
+  });
+});
+
+describe('battleground: instance-band ordering stays safe', () => {
+  it('every delve band fits under DELVE_BAND_X_MAX and clear of the battleground band', () => {
+    // isDelvePos was capped east when the battleground band was added; a
+    // future delve whose index pushes its walls to the cap would silently
+    // stop classifying as a delve. Pin the invariant so adding delve number
+    // eight forces a reviewed decision about the band map.
+    for (const d of DELVE_LIST) {
+      const center = delveOrigin(d.index, 0).x;
+      expect(center + 60).toBeLessThan(DELVE_BAND_X_MAX);
+    }
+    expect(DELVE_BAND_X_MAX).toBeLessThanOrEqual(BATTLEGROUND_X_MIN);
   });
 });

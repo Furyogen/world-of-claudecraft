@@ -1250,7 +1250,8 @@ export const ja_JP: EnTranslations = {
         "deserter": "脱走者の弔鐘が鳴っている間はキューに入れません。",
         "cannotSpectate": "今は観戦できません。",
         "matchEnded": "その戦いはすでに終わっています。",
-        "noDuel": "グレイヴマーチでは決闘できません。"
+        "noDuel": "グレイヴマーチでは決闘できません。",
+        "partyTooLarge": "グレイヴマーチの部隊は最大 5 人までです。"
       }
     }
   },

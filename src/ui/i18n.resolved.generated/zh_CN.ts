@@ -1250,7 +1250,8 @@ export const zh_CN: EnTranslations = {
         "deserter": "逃兵丧钟敲响时你无法排队。",
         "cannotSpectate": "你现在无法观战。",
         "matchEnded": "那场战斗已经结束。",
-        "noDuel": "你不能在墓行之原决斗。"
+        "noDuel": "你不能在墓行之原决斗。",
+        "partyTooLarge": "墓行之原的战团最多五人。"
       }
     }
   },

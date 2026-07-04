@@ -279,22 +279,9 @@ export function dealDamage(
     if (sourcePlayer && amount > 0 && ctx.isBgCrossTeam(bgMatch, sourcePlayer.id, target.id)) {
       ctx.bgNotePlayerDamage(bgMatch, target, sourcePlayer);
     }
-    if (!bgMatch.down.has(target.id) && target.hp - amount <= 0) {
-      amount = Math.max(0, target.hp);
-      target.hp = 0;
-      ctx.emit({
-        type: 'damage',
-        sourceId: source?.id ?? -1,
-        targetId: target.id,
-        amount,
-        crit,
-        school,
-        ability,
-        kind,
-      });
-      ctx.bgPlayerDown(bgMatch, target, source);
-      return;
-    }
+    // The bench divert happens at the death ladder below (the fiesta shape):
+    // the killing blow runs the FULL damage pipeline (event emit, aura breaks,
+    // stealth break, combat entry) and only the death handling diverts.
   }
 
   target.hp = Math.max(0, target.hp - amount);
@@ -416,6 +403,12 @@ export function dealDamage(
     const fmatch = target.kind === 'player' ? ctx.arenaMatches.get(target.id) : undefined;
     if (fmatch?.fiesta && fmatch.state === 'active' && !ctx.arenaIsDown(fmatch, target.id)) {
       ctx.fiestaDown(fmatch, target, null);
+    } else if (bgMatch && bgMatch.state === 'active') {
+      // Gravemarch fighters bench on a respawn timer, never truly die. An
+      // already-benched fighter bottoming out again (a friendly DoT tail)
+      // must ALSO never reach handleDeath; bgPlayerDown self-guards on the
+      // down set, so the swallow here is deliberate either way.
+      ctx.bgPlayerDown(bgMatch, target, source);
     } else if (target.kind === 'mob' && target.bgMatchId !== undefined) {
       // Battleground entities die through the module: no xp, no loot, no wild
       // respawn — the match tracks its own corpses, waves, and win checks.

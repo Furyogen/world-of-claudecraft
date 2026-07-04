@@ -79,3 +79,18 @@ describe('battleground_window: offline skip-rebuild sentinel (collision-proof)',
     expect(code).toContain('this.lastSig = BG_OFFLINE_SIG');
   });
 });
+
+describe('battleground indicator + match hud painters: no magic values', () => {
+  // The QA coverage gap: the window painter above was source-guarded but the
+  // sibling DOM painters were not. Same contract: colors live in the
+  // stylesheet behind tokens, never as TS literals.
+  for (const file of ['battleground_indicator.ts', 'battleground_hud.ts']) {
+    it(`${file} carries no literal hex or rgb color in TS`, () => {
+      const src = readFileSync(new URL(`../src/ui/${file}`, import.meta.url), 'utf8');
+      const hex = src.match(/#[0-9a-fA-F]{3,8}\b/g) ?? [];
+      const rgb = src.match(/rgba?\(/g) ?? [];
+      expect(hex, `hex colors in ${file}: ${hex.join(', ')}`).toEqual([]);
+      expect(rgb, `rgb colors in ${file}`).toEqual([]);
+    });
+  }
+});

@@ -5860,6 +5860,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.bg.err.cannotSpectate': '지금은 관전할 수 없습니다.',
   'hudChrome.bg.err.matchEnded': '그 전투는 이미 끝났습니다.',
   'hudChrome.bg.err.noDuel': '그레이브마치에서는 결투할 수 없습니다.',
+  'hudChrome.bg.err.partyTooLarge': '그레이브마치 부대는 최대 5명까지입니다.',
   'guide.nav.battlegrounds': '전장',
   'guide.bgPage.heading': '그레이브마치',
   'guide.bgPage.intro':

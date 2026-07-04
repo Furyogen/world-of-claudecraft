@@ -5865,6 +5865,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.bg.err.cannotSpectate': '今は観戦できません。',
   'hudChrome.bg.err.matchEnded': 'その戦いはすでに終わっています。',
   'hudChrome.bg.err.noDuel': 'グレイヴマーチでは決闘できません。',
+  'hudChrome.bg.err.partyTooLarge': 'グレイヴマーチの部隊は最大 5 人までです。',
   'guide.nav.battlegrounds': 'バトルグラウンド',
   'guide.bgPage.heading': 'グレイヴマーチ',
   'guide.bgPage.intro':

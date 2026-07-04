@@ -10,12 +10,15 @@
 // Sim keeps thin same-named delegates for every foreign caller (the IWorld
 // facet, server helpers, combat/damage.ts arms via ctx, removePlayer, tests).
 //
-// DETERMINISM CONTRACT: every piece of battleground randomness (minion damage
-// rolls, bulwark bolts, warden swings) draws from the PER-MATCH sub-stream
-// `match.rng`, seeded with exactly ONE shared-stream draw at match start (the
-// fiesta.ts per-match-stream precedent). updateBattlegrounds performs ZERO
-// shared-rng draws and ZERO state changes on ticks with no queue entries and
-// no live matches, so the parity goldens never fork.
+// DETERMINISM CONTRACT: every MODULE-DRIVEN battleground roll (minion damage,
+// bulwark bolts, warden swings) draws from the PER-MATCH sub-stream
+// `match.rng`, seeded off the sim clock + match id with ZERO shared-stream
+// draws (the fiesta.ts per-match-stream mechanism). Player/pet/bot abilities
+// that hit battleground entities resolve through the normal combat pipeline
+// and draw from the shared stream like all combat, which is correct.
+// updateBattlegrounds performs ZERO shared-rng draws and ZERO state changes
+// on ticks with no queue entries and no live matches, so the parity goldens
+// never fork and idle worlds are byte-identical with the feature unused.
 //
 // `src/sim`-pure: no DOM/Three/render/ui/game/net imports, no Math.random /
 // Date.now (enforced by tests/architecture.test.ts). Player-facing error
@@ -368,9 +371,8 @@ export function bgQueueJoin(ctx: SimContext, pid?: number): void {
       return;
     }
     if (party.members.length > BG_TEAM_SIZE) {
-      // The arena party-shape literal, reused verbatim so the existing
-      // sim_i18n premade rule matches (the Gravemarch takes 2..5).
-      ctx.error(id, 'Gravemarch premade requires a party of exactly two.');
+      // A raid group can exceed five; the Gravemarch takes 2..5.
+      ctx.error(id, 'A Gravemarch company takes five at most.');
       return;
     }
     for (const mPid of party.members) {
@@ -569,9 +571,10 @@ export function startBgMatch(
     returns,
     ratingA: bgTeamRating(ctx, teamA),
     ratingB: bgTeamRating(ctx, teamB),
-    // The ONE shared-stream draw of the whole match: it seeds the private
-    // sub-stream every in-match roll uses (see the determinism contract).
-    rng: new Rng(Math.floor(ctx.rng.next() * 4294967296) >>> 0),
+    // Per-match deterministic stream, seeded off the sim clock + match id
+    // (the exact fiesta.ts mechanism): ZERO shared-stream draws, so a match
+    // start never perturbs the shared rng other systems consume.
+    rng: new Rng((ctx.tickCount * 2654435761 + ctx.nextBgMatchId * 40503) >>> 0),
     killsA: 0,
     killsB: 0,
     kills: new Map(),

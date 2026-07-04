@@ -5985,6 +5985,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.bg.err.cannotSpectate': 'Сейчас вы не можете наблюдать.',
   'hudChrome.bg.err.matchEnded': 'Та битва уже закончилась.',
   'hudChrome.bg.err.noDuel': 'Нельзя вызывать на дуэль на Могильном марше.',
+  'hudChrome.bg.err.partyTooLarge': 'Отряд Могильного марша принимает не больше пяти бойцов.',
   'guide.nav.battlegrounds': 'Поля боя',
   'guide.bgPage.heading': 'Могильный марш',
   'guide.bgPage.intro':
