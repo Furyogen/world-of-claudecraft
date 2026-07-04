@@ -672,6 +672,9 @@ function mobVoiceFamily(templateId: string): string | null {
 
 /** Sustained cast-loop clip for an ability's school, or null (physical/unknown). */
 function castKeyForAbility(ability: string): string | null {
+  // Per-ability custom cast loop overrides (a player-provided clip that fits the
+  // spell better than its school default). Loops for the whole cast, any rank.
+  if (ability === 'lightning_bolt') return 'cast_lightning_bolt';
   const school = ABILITIES[ability]?.school;
   return school && SFX_CAST_SCHOOLS.has(school) ? `cast_${school}` : null;
 }
