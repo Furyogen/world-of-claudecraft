@@ -748,6 +748,40 @@ describe('Input emote wheel hold', () => {
 
     expect(cb.onEmoteWheel).toHaveBeenLastCalledWith(false);
   });
+
+  it('stays open when its own modal state suspends movement', () => {
+    // Regression (v0.20.0): the open emote wheel counts toward hud.isModalOpen(),
+    // which main.ts feeds into setSuspendMovement every frame. The stale-input
+    // clear then closed the wheel one frame after the bound key opened it, so
+    // the X hotkey wheel flashed and vanished. Held wheel keys are never stale:
+    // onKeyUp is not modal-gated and releaseCapture covers focus loss.
+    const { cb, input, windowListeners } = makeInput();
+
+    windowListeners.get('keydown')!({ code: 'KeyX', repeat: false, preventDefault: vi.fn() });
+    expect(cb.onEmoteWheel).toHaveBeenCalledWith(true);
+
+    input.setSuspendMovement(true); // mirrors the frame loop reacting to the open wheel
+    expect(cb.onEmoteWheel).not.toHaveBeenCalledWith(false); // wheel stays open
+
+    windowListeners.get('keyup')!({ code: 'KeyX', preventDefault: vi.fn() });
+    expect(cb.onEmoteWheel).toHaveBeenCalledWith(false); // release still closes it
+  });
+
+  it('resumes held movement after the wheel closes instead of going stale', () => {
+    // Classic flow: run with W held, flick X to emote, keep running. The
+    // wheel-caused suspension must not clear the still-held movement keys.
+    const { input, windowListeners } = makeInput();
+
+    windowListeners.get('keydown')!({ code: 'KeyW', repeat: false });
+    windowListeners.get('keydown')!({ code: 'KeyX', repeat: false, preventDefault: vi.fn() });
+    input.setSuspendMovement(true); // the open wheel is the modal that suspends
+    expect(input.readMoveInput().forward).toBe(false); // movement frozen while the wheel is up
+
+    windowListeners.get('keyup')!({ code: 'KeyX', preventDefault: vi.fn() });
+    input.setSuspendMovement(false); // wheel closed, modal gone
+
+    expect(input.readMoveInput().forward).toBe(true); // W never went stale
+  });
 });
 
 describe('Input modifier combos', () => {
