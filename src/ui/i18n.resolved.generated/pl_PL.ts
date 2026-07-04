@@ -556,7 +556,7 @@ export const pl_PL: EnTranslations = {
       "defaultBuildName": "Zestaw {n}"
     },
     "tips": {
-      "joinChannels": "Wskazówka: wpisz /join world lub /join lfg, aby rozmawiać z graczami z całego realmu."
+      "joinChannels": "Wskazówka: wpisz /join world lub /join lfg, aby rozmawiać z graczami z całego świata."
     },
     "itemSet": {
       "header": "{name} ({have}/{total})",
@@ -824,20 +824,20 @@ export const pl_PL: EnTranslations = {
       "stun": "Betäubt: handlungsunfähig",
       "root": "Festgewurzelt: bewegungsunfähig",
       "incapacitate": "Handlungsunfähig: kann nicht handeln",
-      "polymorph": "Verwandelt: handlungsunfähig",
+      "polymorph": "Przemieniony: niezdolny do działania",
       "hex": "Verringert verursachten Schaden und Heilung um {pct}%",
       "blind": "Geblendet: handlungsunfähig",
       "silence": "Zum Schweigen gebracht: kann keine Zauber wirken",
       "disarm": "Entwaffnet: kann keine Waffenangriffe nutzen",
       "lockout": "Zauberschule gesperrt",
       "imbue": "Waffe mit Bonuseffekten erfüllt",
-      "imbueRange": "Waffe erfüllt: {min} bis {max} Bonusschaden bei Richturteil",
+      "imbueRange": "Broń nasycona: od {min} do {max} dodatkowych obrażeń przy Verdict",
       "stealth": "Verborgen; Bewegungstempo um {pct}% verringert",
-      "formBear": "Bärengestalt: Gesundheit und Rüstung erhöht",
+      "formBear": "Postać Bruina: zwiększone zdrowie i pancerz",
       "formCat": "Katzengestalt: Nahkampfschaden und Energie",
-      "formTravel": "Reisegestalt: Bewegungstempo um {pct}% erhöht",
-      "defensiveStance": "Verteidigungshaltung: weniger erlittener Schaden, mehr Bedrohung",
-      "righteousFury": "Rechtschaffener Zorn: stark erhöhte Bedrohung durch Heiligschaden",
+      "formTravel": "Postać Fleet: prędkość ruchu zwiększona o {pct}%",
+      "defensiveStance": "Czujna postawa: mniej otrzymywanych obrażeń, większe zagrożenie",
+      "righteousFury": "Płonąca przysięga: znacznie zwiększone zagrożenie od obrażeń od Świętości",
       "scale": "Größe um {pct}% erhöht",
       "jump": "Sprunghöhe um {pct}% erhöht",
       "school": {
@@ -1275,7 +1275,7 @@ export const pl_PL: EnTranslations = {
         "valeName": "Dolina Wschodniego Strumienia",
         "valeBlurb": "Zielone wzgórza i stare lasy, gdzie zaczyna się każda przygoda.",
         "marshName": "Trzęsawisko Mokrzawia",
-        "marshBlurb": "Zatopione bagna i nadgryzione przez przypływy ruiny, dom murloków i gorszych stworzeń.",
+        "marshBlurb": "Zatopione bagna i nadgryzione przez przypływy ruiny, dom Mudfinów i gorszych stworzeń.",
         "peaksName": "Wyżyny Ciernistego Szczytu",
         "peaksBlurb": "Smagane wiatrem granie wspinające się ku najzimniejszym niebezpieczeństwom królestwa."
       },
@@ -1297,12 +1297,12 @@ export const pl_PL: EnTranslations = {
         "q2": "Czy potrzebuję portfela krypto?",
         "a2": "Nie. W grę można grać w pełni bez niego. Opcjonalny token społecznościowy odblokowuje jedynie kosmetyczne ozdoby i nigdy nie wpływa na moc.",
         "q3": "Czy mogę grać offline?",
-        "a3": "Tak. Jest natychmiastowy tryb dla jednego gracza w przeglądarce, a także wspólne królestwo online.",
+        "a3": "Tak. Jest natychmiastowy tryb dla jednego gracza w przeglądarce, a także wspólny świat online.",
         "q4": "Ile zajmuje osiągnięcie maksymalnego poziomu?",
         "a4": "Limit to poziom {cap}, osiągany w trzech strefach pełnych zadań, lochów i eksploracji."
       },
       "community": {
-        "heading": "Dołącz do królestwa",
+        "heading": "Dołącz do świata",
         "body": "Wskocz teraz albo wpadnij się przywitać. Świat jest lepszy w towarzystwie.",
         "play": "Zagraj teraz",
         "discord": "Dołącz na Discordzie",
@@ -1336,7 +1336,7 @@ export const pl_PL: EnTranslations = {
       "groupingTitle": "Wspólna gra",
       "groupingBody": "Zaproś innych do drużyny, by dzielić zaliczenie zadań i mierzyć się z lochami. Większość świata da się przejść samotnie, więc dołączanie do grupy to wybór, nie obowiązek.",
       "onlineTitle": "Online czy offline",
-      "onlineBody": "Graj we wspólnym królestwie online z wszystkimi innymi albo rozpocznij natychmiastowy świat offline w przeglądarce, by poznać zasady.",
+      "onlineBody": "Graj we wspólnym świecie online z wszystkimi innymi albo rozpocznij natychmiastowy świat offline w przeglądarce, by poznać zasady.",
       "reassure": "Talenty odblokowują się na poziomie 10 i można je zresetować w każdej chwili, więc twoje wczesne wybory nigdy nie są ostateczne. Eksperymentuj śmiało.",
       "controlsLink": "Zobacz pełne odniesienie sterowania"
     },
@@ -1372,7 +1372,7 @@ export const pl_PL: EnTranslations = {
       "growBody": "Każdy poziom czyni cię wytrzymalszym i odblokowuje nowe zdolności, aż po pułap poziomu {cap}. Wykonywanie zadań to najszybsza droga w górę; lochy i eksploracja ją dopełniają.",
       "effectsTitle": "Wzmocnienia, osłabienia i kontrola tłumu",
       "effectsBody": "Wiele zdolności nakłada utrzymujący się efekt. Korzystne (wzmocnienia) zwiększają twoje cechy, osłaniają cię lub leczą po trochu; szkodliwe (osłabienia) wysysają twoje zdrowie obrażeniami w czasie albo cię osłabiają. Obserwuj małe ikony przy pasku akcji, by zobaczyć, co na tobie działa i jak długo.",
-      "ccBody": "Kontrola tłumu to szczególny rodzaj osłabienia, które ogranicza możliwości celu: ogłuszenia, unieruchomienia i spowolnienia, uciszenia powstrzymujące rzucanie zaklęć, rozbrojenia, efekty strachu oraz polimorfia, która na chwilę czyni wroga nieszkodliwym. Niektóre z nich, jak unieruchomienia, strach i polimorfia, tracą moc, gdy nakłada się je zbyt szybko ponownie, więc nie da się ich łączyć w nieskończoność.",
+      "ccBody": "Kontrola tłumu to szczególny rodzaj osłabienia, które ogranicza możliwości celu: ogłuszenia, unieruchomienia i spowolnienia, uciszenia powstrzymujące rzucanie zaklęć, rozbrojenia, efekty strachu oraz przemiany, które na chwilę czynią wroga nieszkodliwym. Niektóre z nich, jak unieruchomienia, strach i przemiany, tracą moc, gdy nakłada się je zbyt szybko ponownie, więc nie da się ich łączyć w nieskończoność.",
       "deathTitle": "Gdy padniesz",
       "deathBody": "Gdy twoje zdrowie spadnie do zera, padasz. Uwolnij ducha, by odrodzić się na najbliższym cmentarzu z pełnym zdrowiem, a potem wróć do miejsca, w którym byłeś, więc śmierć kosztuje cię trochę czasu, a nie postępu. Między walkami usiądź, by zjeść i napić się, byś następną zaczął w pełni sił."
     },
@@ -1513,12 +1513,12 @@ export const pl_PL: EnTranslations = {
       "charge": "Szarżujesz na odległego wroga, otwierając walkę krótkim ogłuszeniem.",
       "rend": "Otwiera krwawienie, które z czasem wyczerpuje cel.",
       "thunder_clap": "Uderza we wszystko wokół ciebie i spowalnia ataki wrogów.",
-      "seal_of_righteousness": "Nasyca twoje ciosy świętymi obrażeniami, które potem zużywasz Osądem.",
+      "seal_of_righteousness": "Nasyca twoje ciosy świętymi obrażeniami, które potem zużywasz Verdictem.",
       "holy_light": "Stabilne, pokaźne leczenie do uzupełnienia zdrowia sojusznika lub własnego.",
       "devotion_aura": "Trwałe wzmocnienie, które zwiększa pancerz, by ciosy mniej bolały.",
       "judgement": "Zużywa twoją aktywną pieczęć, by uderzyć wroga z bliskiego dystansu.",
       "blessing_of_might": "Zwiększa siłę ataku przyjaznego celu; warto rzucić je przed rozpoczęciem walki.",
-      "divine_protection": "Szybka święta tarcza pochłaniająca obrażenia, gdy robi się gorąco.",
+      "divine_protection": "Szybka ochronna osłona pochłaniająca obrażenia, gdy robi się gorąco.",
       "raptor_strike": "Mocny cios wręcz na wypadek, gdy coś zbliży się do ciebie.",
       "aspect_of_the_hawk": "Aspekt, który utrzymujesz, by wyostrzyć siłę ataku dystansowego.",
       "serpent_sting": "Wstrzykuje jad, który z czasem zadaje obrażenia od natury.",
@@ -1550,7 +1550,7 @@ export const pl_PL: EnTranslations = {
       "conjure_water": "Przywołuje napoje przywracające manę, byś mógł uzupełnić ją między walkami.",
       "conjure_food": "Przywołuje jedzenie, które przywraca zdrowie, gdy usiądziesz, by się posilić.",
       "shadow_bolt": "Pocisk cienia rzucany w cel, twój podstawowy atak.",
-      "summon_imp": "Przywołuje chochlika, który ciska ognistymi pociskami we wrogów z dystansu.",
+      "summon_imp": "Przywołuje Emberkina, który ciska ognistymi pociskami we wrogów z dystansu.",
       "demon_skin": "Trwałe wzmocnienie, które utwardza skórę i zwiększa pancerz.",
       "immolate": "Podpala cel, zadając początkowy cios i pozostawiając utrzymujące się płomienie.",
       "corruption": "Skaża cel cieniem, który zadaje obrażenia, gdy zajmujesz się czymś innym.",
@@ -1582,7 +1582,7 @@ export const pl_PL: EnTranslations = {
         "old_greyjaw": "Pokryty bliznami stary wilk, którego nie utrzymały żadne wnyki, obwiniany o trzy psy gończe i rękę chłopca stajennego. Poluje samotnie w głębi lasu i staje się tym dzikszy, im dłużej trwa walka.",
         "grubjaw": "Trol z trzęsawisk tak chciwy, że inne trole nie kopią obok niego; podobno pożarł dwa ostatnie juczne muły pewnego kupca, razem z uprzężą.",
         "shardlord_kazzix": "Żywiołak burzy obleczony w barki, kroczący po dalekich turniach nad Stormcrag z sercowym odłamkiem wartym zmierzenia się z błyskawicami.",
-        "mirejaw_frenzy": "Bagienny murlok, który w środku walki wpada w szaleńczy szał, najgłośniejszy w głośnej, terytorialnej watasze.",
+        "mirejaw_frenzy": "Bagienny Mudfin, który w środku walki wpada w szaleńczy szał, najgłośniejszy w głośnej, terytorialnej watasze.",
         "gravecaller_cultist": "Odziani w szaty słudzy kultu śmierci, których dzieło plugawi groby od Doliny po szczyty. Gdzie się gromadzą, zmarli nie zaznają spoczynku."
       }
     },
@@ -1596,12 +1596,12 @@ export const pl_PL: EnTranslations = {
         "desc": "Tkacze sieci i jadowite czyhające stworzenia, które gnieżdżą się w ciemnych, splątanych miejscach. Łowcy mogą je oswajać, tak samo jak bestie."
       },
       "mudfin": {
-        "name": "Murloki",
+        "name": "Mudfiny",
         "desc": "Ziemnowodni mieszkańcy bagien, którzy zalewają płycizny w hałaśliwych, terytorialnych watahach."
       },
       "burrower": {
-        "name": "Kobold",
-        "desc": "Świecogłowi kopacze, którzy zarażają kopalnie i nory, zaciekle strzegąc swojej rudy."
+        "name": "Drążyciele",
+        "desc": "Oblepieni błotem kopacze, którzy zarażają kopalnie i nory, zaciekle strzegąc swojej rudy."
       },
       "humanoid": {
         "name": "Humanoidy",
@@ -1637,7 +1637,7 @@ export const pl_PL: EnTranslations = {
       "places": "Godne uwagi miejsca",
       "residents": "Kogo spotkasz",
       "valeBlurb": "Zielona startowa dolina, gdzie nowi bohaterowie zaprawiają się w boju na wilkach i bandytach wokół miasta Eastbrook.",
-      "marshBlurb": "Zatopiona kraina mgieł i ruin. Murloki roją się na płyciznach, a coś starszego porusza się pod wodą, obserwowane z mostowego miasteczka Fenbridge.",
+      "marshBlurb": "Zatopiona kraina mgieł i ruin. Mudfiny roją się na płyciznach, a coś starszego porusza się pod wodą, obserwowane z mostowego miasteczka Fenbridge.",
       "peaksBlurb": "Smagane wiatrem granie i stare wyrobiska wspinające się ku najzimniejszym, najwyżej położonym niebezpieczeństwom królestwa, bronione przez posterunek Highwatch.",
       "valeGreeting": "Trzymaj ostrze blisko. Dolina nie jest już tym, czym była.",
       "valeGreeter": "Marszałek Redbrook, Eastbrook",
@@ -1645,9 +1645,9 @@ export const pl_PL: EnTranslations = {
       "marshGreeter": "Strażniczka Fenwick, Fenbridge",
       "peaksGreeting": "Od dwustu lat ten mur trzyma. Nie pęknie na mojej warcie, ale jęczy.",
       "peaksGreeter": "Kapitan Thessaly, Highwatch",
-      "valePlaceNotes": "Eastbrook to twoja pierwsza baza wypadowa. Wolf Run i Boar Meadow to łagodne tereny łowieckie; Mirror Lake to spokojna woda do łowienia; the Webwood i the Copper Dig kryją pająki i chciwych na rudę kopaczy; Bandit Camp i the Fallen Chapel oferują trudniejszą robotę; Reliquary Hill schodzi w the Collapsed Reliquary, pierwszą głębię królestwa; a Brightwood Glade to spokojny, nasłoneczniony zagajnik na północy.",
-      "marshPlaceNotes": "Fenbridge strzeże jedynej suchej drogi. Trzciny Czyhacza i Płycizny Głębotopieli aż się roją od bagiennych bestii i murloków; Gąszcz Wdowy jest gęsto osnuty pajęczyną; Zatopiona Kaplica i Kopce Trolli kryją starsze niebezpieczeństwa; Obozowisko Grobowych Przyzywaczy to okopany kult, a Zatopiony Bastion to instancjowane serce trzęsawiska.",
-      "peaksPlaceNotes": "Highwatch trzyma mur. Grań Skradacza i Głębogłazowe Nory należą do górskich kotów i kobaltów; Pogórze Ogrów i Obóz Wojenny Drogmara do najemnych brutali; Stormcrag trzaska żywiołami, a poniżej jarzy się Glimmermere; Namioty Kultu Żmija i Pola Powracających otaczają wyżynne pozycje kultu, a na ich szczycie wznosi się Sanktuarium Grobowego Żmija.",
+      "valePlaceNotes": "Eastbrook to twoja pierwsza baza wypadowa. Wolf Run i Boar Meadow to łagodne tereny łowieckie; Mirror Lake to spokojna woda do łowienia; Sableweb i Copper Dig kryją pająki i chciwych na rudę kopaczy; Bandit Camp i Fallen Chapel oferują trudniejszą robotę; Reliquary Hill schodzi w Collapsed Reliquary, pierwszą głębię królestwa; a Brightwood Glade to spokojny, nasłoneczniony zagajnik na północy.",
+      "marshPlaceNotes": "Fenbridge strzeże jedynej suchej drogi. Trzciny Czyhacza i Płycizny Głębotopieli aż się roją od bagiennych bestii i Mudfinów; Gąszcz Wdowy jest gęsto osnuty pajęczyną; Zatopiona Kaplica i Kopce Trolli kryją starsze niebezpieczeństwa; Obozowisko Gravecallera to okopany kult, a Zatopiony Bastion to instancjowane serce trzęsawiska.",
+      "peaksPlaceNotes": "Highwatch trzyma mur. Grań Skradacza i Głębogłazowe Nory należą do górskich kotów i drążycieli; Pogórze Ogrów i Obóz Wojenny Drogmara do najemnych brutali; Stormcrag trzaska żywiołami, a poniżej jarzy się Glimmermere; Namioty Kultu Żmija i Pola Powracających otaczają wyżynne pozycje kultu, a na ich szczycie wznosi się Sanktuarium Grobowego Żmija.",
       "gladeTitle": "Cichy zakątek: Brightwood Glade",
       "gladeBody": "Nie każda historia w Vale dotyczy umarłych. Na północy nasłoneczniony zagajnik zwany Brightwood Glade trzyma się własnego, łagodniejszego rytmu: same ciche ścieżki i cętkowane światło pod konarami. To miękki kontrapunkt dla szlaku, którym podążasz, i warto go zobaczyć, gdy droga daje ci chwilę na wędrówkę."
     },
@@ -1682,7 +1682,7 @@ export const pl_PL: EnTranslations = {
       "sagaValeTitle": "Dolina: imię na pieczęci",
       "sagaValeBody": "W Dolinie Wschodniego Strumienia zmarli nie zaznają spoczynku, a stojący za tym znak należy do sekty od dawna uważanej za wygasłą. Wytrop go do Grobowego Przyzywacza działającego w krypcie kaplicy, a jego własne papiery skierują cię ku trzęsawisku na północy.",
       "sagaMarshTitle": "Trzęsawisko: dziesięcina dusz",
-      "sagaMarshBody": "Na Mokrzawiu utonięcia nie są przypadkiem. Ktoś napełnia trzęsawisko niczym skarbonkę dziesięciny, wskrzeszając posłusznych nieumarłych z każdego wędrowca, którego pochłonie woda. Podążaj za rozkazami w górę łańcucha, aż do Mglistego Przyzywacza w zatopionym bastionie, którego ostatnie słowa wymieniają coś jeszcze starszego, poruszającego się pod szczytami.",
+      "sagaMarshBody": "Na Mokrzawiu utonięcia nie są przypadkiem. Ktoś napełnia trzęsawisko niczym skarbonkę dziesięciny, wskrzeszając posłusznych nieumarłych z każdego wędrowca, którego pochłonie woda. Podążaj za rozkazami w górę łańcucha, aż do Fogbindera w zatopionym bastionie, którego ostatnie słowa wymieniają coś jeszcze starszego, poruszającego się pod szczytami.",
       "sagaPeaksTitle": "Szczyty: po co była dziesięcina",
       "sagaPeaksBody": "Na Thornpeak cały plan staje się jasny. Każda dusza skradziona od czasów Vale była dziesięciną wlewaną w ponurą pracę kultu w sercu góry. Trop, który zaczął się na kościelnym dziedzińcu, kończy się tutaj, w zejściu dla pięciu graczy, by stawić czoła ręce stojącej za tym wszystkim. Pozwolimy ci samemu odkryć, kto czeka na dole.",
       "sideTitle": "Nici poza główną drogą",
@@ -2485,7 +2485,7 @@ export const pl_PL: EnTranslations = {
   },
   "highscores": {
     "title": "Tabela najlepszych wyników",
-    "desc": "Śledź największych mistrzów królestwa i porównuj swoje postępy."
+    "desc": "Śledź największych mistrzów świata i porównuj swoje postępy."
   },
   "wiki": {
     "title": "Wiki i poradnik gry",
@@ -2511,8 +2511,8 @@ export const pl_PL: EnTranslations = {
   },
   "mode": {
     "onlineTitle": "Graj online",
-    "onlineDesc": "Zaloguj się do królestwa. Twoje postacie żyją na serwerze, a świat dzielisz ze wszystkimi innymi, którzy są online.",
-    "onlineAria": "Graj online: zaloguj się do trwałego współdzielonego królestwa",
+    "onlineDesc": "Zaloguj się do świata. Twoje postacie żyją na serwerze, a świat dzielisz ze wszystkimi innymi, którzy są online.",
+    "onlineAria": "Graj online: zaloguj się do trwałego współdzielonego świata",
     "offlineTitle": "Graj offline",
     "offlineDesc": "Natychmiastowy świat jednoosobowy w twojej przeglądarce. Nic nie jest zapisywane: idealny na szybką potyczkę lub testy.",
     "offlineAria": "Graj offline: rozpocznij natychmiastową lokalną sesję jednoosobową",
@@ -3221,7 +3221,7 @@ export const pl_PL: EnTranslations = {
         "desc": "Twoje fizyczne uderzenia ranią o 15% mocniej."
       },
       "aug_spellfire": {
-        "name": "Czaroogień",
+        "name": "Ponury ogień",
         "desc": "Twoje zaklęcia zadają o 15% więcej obrażeń."
       },
       "aug_toughness": {
@@ -3265,7 +3265,7 @@ export const pl_PL: EnTranslations = {
         "desc": "+18% obrażeń wszelkiego rodzaju i +12% szybkości ruchu."
       },
       "aug_lightwell": {
-        "name": "Studnia Światła",
+        "name": "Grobowe światło",
         "desc": "+30% leczenia i +15% maksymalnego zdrowia. Bądź ostoją drużyny."
       },
       "aug_bounty_hunter": {
@@ -3338,7 +3338,7 @@ export const pl_PL: EnTranslations = {
     "world": "Wczytywanie świata...",
     "worldProgress": "Wczytywanie świata... {done}/{total}",
     "enteringWorld": "Wchodzenie do świata...",
-    "connectingRealm": "Łączenie z królestwem...",
+    "connectingRealm": "Łączenie ze światem...",
     "assetsFailed": "Wczytywanie zasobów nie powiodło się: spróbuj odświeżyć. {error}",
     "rendererFailed": "Nie udało się uruchomić renderera: spróbuj odświeżyć. {error}",
     "enterTimeout": "Nie udało się wejść do świata. Upłynął limit czasu połączenia. Czy serwer gry jest uruchomiony?",
@@ -3498,12 +3498,12 @@ export const pl_PL: EnTranslations = {
     },
     "lore": {
       "warrior": "Wojownicy to zaprawieni w boju wojownicy walki wręcz, którzy gromadzą Furię, zadając lub otrzymując obrażenia. Pochłaniają potężne ciosy lub miażdżą wrogów potężnym orężem.",
-      "paladin": "Paladyni to święci krzyżowcy, którzy wspierają sojuszników błogosławieństwami, leczą rany Świętym Światłem i chronią słabych, odziani w ciężki pancerz.",
+      "paladin": "Paladyni to święci krzyżowcy, którzy wspierają sojuszników błogosławieństwami, leczą rany Kojącym Światłem i chronią słabych, odziani w ciężki pancerz.",
       "hunter": "Łowcy to specjaliści walki dystansowej, którzy walczą u boku oswojonej bestii, zasypując wrogów celnymi i szybkimi strzałami, spowalniając ich żądłami oraz ogłuszającym ostrzałem i zmieniając aspekty stosownie do chwili.",
       "rogue": "Łotrzykowie to skradający się zabójcy, którzy wydają Energię i Punkty Kombosów na ciosy w plecy i wykończenia z cienia.",
-      "priest": "Kapłani przyzywają Święte Światło, by leczyć i osłaniać sojuszników, a magia Cienia pozwala im wysysać życie z wrogów.",
+      "priest": "Kapłani przyzywają Kojące Światło, by leczyć i osłaniać sojuszników, a magia Cienia pozwala im wysysać życie z wrogów.",
       "shaman": "Szamani rozkazują żywiołom, napełniając oręż mocą, rażąc wrogów błyskawicami i przywracając siły sojusznikom.",
-      "mage": "Magowie naginają moc Ognia, Mrozu i Arkanów, by niszczyć wrogów, przyzywać wodę i zamrażać zagrożenia w miejscu.",
+      "mage": "Magowie naginają Ogień, Mróz i arkaniczną moc, by niszczyć wrogów, przyzywać wodę i zamrażać zagrożenia w miejscu.",
       "warlock": "Czarnoksiężnicy przyzywają demony, rzucają klątwy i magię obrażeń w czasie oraz wysysają życie z wrogów, by przetrwać.",
       "druid": "Druidzi czerpią z natury, lecząc rany, pętając wrogów i przemieniając się w postacie zwierząt dla obrony lub zadawania obrażeń."
     },
@@ -3852,9 +3852,9 @@ export const pl_PL: EnTranslations = {
       "requiresCombo": "Ta umiejętność wymaga punktów kombinacji.",
       "requiresForm": "Musisz być w postaci: {form}.",
       "cantInForm": "Nie możesz tego zrobić w postaci: {form}.",
-      "bear": "Niedźwiedź",
+      "bear": "Bruin",
       "cat": "Wilk",
-      "travel": "Podróż",
+      "travel": "Fleet",
       "shapeshifted": "Nie możesz tego zrobić w przemienionej postaci.",
       "stealthed": "Musisz się skradać.",
       "inCombat": "Nie możesz tego zrobić podczas walki.",
@@ -4469,83 +4469,83 @@ export const pl_PL: EnTranslations = {
         "description": "Wstrząsa wybranym obszarem, smagając wrogów i zadając {damage} obrażeń od sił natury."
       },
       "heroic_strike": {
-        "name": "Heroiczne uderzenie",
+        "name": "Cios łupieżcy",
         "description": "Potężny atak, który zwiększa obrażenia w zwarciu o {damage}. Aktywuje się przy następnym uderzeniu."
       },
       "battle_shout": {
-        "name": "Okrzyk bojowy",
+        "name": "Żelazny ryk",
         "description": "Zwiększa twoją moc ataku o 20 na 2 min."
       },
       "commanding_shout": {
-        "name": "Rozkazujący okrzyk",
+        "name": "Krzepiący okrzyk",
         "description": "Zwiększa twoją kondycję o 6 na 2 min."
       },
       "demoralizing_shout": {
-        "name": "Demoralizujący okrzyk",
+        "name": "Złowieszcze wycie",
         "description": "Wydaje przerażający okrzyk, zmniejszając moc ataku wszystkich pobliskich wrogów o 30 na 30 sek."
       },
       "charge": {
-        "name": "Szarża",
+        "name": "Natarcie",
         "description": "Szarżuj na wroga, generując 9 wściekłości i ogłuszając go na 1 sek. Zasięg 8-25 jardów."
       },
       "rend": {
-        "name": "Rozdarcie",
+        "name": "Głęboka rana",
         "description": "Rani cel, powodując krwawienie zadające {damage} obrażeń w ciągu 9 sek."
       },
       "thunder_clap": {
-        "name": "Uderzenie gromu",
+        "name": "Trzęsący cios",
         "description": "Razi pobliskich wrogów za {damage} obrażeń i spowalnia ich ataki o 10% na 10 sek."
       },
       "hamstring": {
-        "name": "Podcięcie ścięgien",
+        "name": "Kulawiące cięcie",
         "description": "Okalecza wroga, zadając 5 obrażeń i spowalniając jego ruch o 50% na 15 sek."
       },
       "bloodrage": {
-        "name": "Krwawa furia",
+        "name": "Krwawa danina",
         "description": "Generuje 10 wściekłości kosztem zdrowia."
       },
       "overpower": {
-        "name": "Przewaga",
+        "name": "Krwawa ręka",
         "description": "Natychmiastowy atak za obrażenia broni +5. Użyteczne tylko po uniku celu. Nie można uniknąć."
       },
       "execute": {
-        "name": "Egzekucja",
+        "name": "Przedwczesny grób",
         "description": "Próba dobicia rannego przeciwnika, zadająca {damage} obrażeń. Użyteczne tylko na wrogach poniżej 20% zdrowia."
       },
       "slam": {
-        "name": "Walnięcie",
+        "name": "Brutalny zamach",
         "description": "Wali przeciwnika, zadając obrażenia broni plus {damage}."
       },
       "cleave": {
-        "name": "Rozpłatanie",
+        "name": "Kosiący łuk",
         "description": "Zamaszyste uderzenie, które trafia wszystkich wrogów przed tobą, zadając {damage} obrażeń."
       },
       "defensive_stance": {
-        "name": "Postawa defensywna",
+        "name": "Czujna postawa",
         "description": "Defensywna postawa bojowa: generujesz o 30% więcej zagrożenia, lecz zadajesz i otrzymujesz o 10% mniej obrażeń. Rzuć ponownie, aby opuścić postawę."
       },
       "sunder_armor": {
-        "name": "Strzaskanie pancerza",
+        "name": "Rozdarcie pancerza",
         "description": "Strzaskuje pancerz celu, zmniejszając go o {damage} za każde nałożenie. Kumuluje się do 5 razy. Generuje wysokie zagrożenie."
       },
       "taunt": {
-        "name": "Prowokacja",
+        "name": "Podjudzenie",
         "description": "Prowokuje cel: twoje zagrożenie wzrasta do poziomu jego najbardziej znienawidzonego wroga, a cel jest zmuszony atakować cię przez 3 sek."
       },
       "fireball": {
-        "name": "Kula ognia",
+        "name": "Żarowy pocisk",
         "description": "Ciska ognistą kulą, która zadaje {damage} obrażeń od ognia oraz dodatkowe obrażenia w czasie."
       },
       "frost_armor": {
-        "name": "Mroźny pancerz",
+        "name": "Płaszcz szronu",
         "description": "Otacza cię szronem, zwiększając pancerz o 30 na 30 min."
       },
       "arcane_intellect": {
-        "name": "Arkaniczny intelekt",
+        "name": "Wgląd eteru",
         "description": "Zwiększa intelekt o 2 na 30 min."
       },
       "frostbolt": {
-        "name": "Mroźny pocisk",
+        "name": "Szronowa lanca",
         "description": "Wystrzeliwuje pocisk mrozu, zadając {damage} obrażeń od mrozu i spowalniając ruch o 40%."
       },
       "conjure_water": {
@@ -4553,91 +4553,91 @@ export const pl_PL: EnTranslations = {
         "description": "Przywołuje 2 butelki wody, które po wypiciu przywracają manę. Wyższe rangi przywołują czystszą wodę."
       },
       "conjure_food": {
-        "name": "Przywołanie jedzenia",
+        "name": "Przywołanie chleba",
         "description": "Przywołuje 2 porcje chleba, które po zjedzeniu przywracają zdrowie. Wyższe rangi przywołują pożywniejsze jadło."
       },
       "fire_blast": {
-        "name": "Ognisty wybuch",
+        "name": "Deszcz żaru",
         "description": "Razi wroga, zadając {damage} obrażeń od ognia. Natychmiastowe."
       },
       "arcane_missiles": {
-        "name": "Arkaniczne pociski",
-        "description": "Wystrzeliwuje arkaniczne pociski we wroga, zadając {damage} obrażeń arkanicznych co sekundę przez 3 sek."
+        "name": "Eteryczne strzały",
+        "description": "Wystrzeliwuje eteryczne strzały we wroga, zadając {damage} obrażeń arkanicznych co sekundę przez 3 sek."
       },
       "polymorph": {
-        "name": "Polimorfia",
-        "description": "Przemienia wroga w owcę na nawet 15 sek. Owca błąka się i szybko się leczy. Każde obrażenie przerywa efekt. Tylko bestie i humanoidy."
+        "name": "Zauroczenie",
+        "description": "Przemienia wroga w ropuchę na nawet 15 sek. Ropucha błąka się i szybko się leczy. Każde obrażenie przerywa efekt. Tylko bestie i humanoidy."
       },
       "frost_nova": {
-        "name": "Mroźna nowa",
+        "name": "Lodowe okowy",
         "description": "Zamraża wszystkich pobliskich wrogów w miejscu na nawet 8 sek, zadając {damage} obrażeń od mrozu."
       },
       "arcane_explosion": {
-        "name": "Arkaniczna eksplozja",
+        "name": "Wybuch eteru",
         "description": "Wybuch arkanicznej energii uderza wszystkich pobliskich wrogów, zadając {damage} obrażeń arkanicznych."
       },
       "scorch": {
-        "name": "Osmalenie",
+        "name": "Poparzenie",
         "description": "Osmala wroga, zadając {damage} obrażeń od Ognia. Szybkie do rzucenia."
       },
       "pyroblast": {
-        "name": "Pirowybuch",
+        "name": "Ognista lanca",
         "description": "Ciska ogromnym ognistym głazem, który zadaje {damage} obrażeń od ognia oraz dodatkowe obrażenia w czasie."
       },
       "ice_barrier": {
-        "name": "Lodowa bariera",
+        "name": "Lodowa zasłona",
         "description": "Osłania cię lodem, pochłaniając 130 obrażeń przez 60 sek."
       },
       "sinister_strike": {
-        "name": "Złowrogie uderzenie",
+        "name": "Nikczemne cięcie",
         "description": "Natychmiastowe uderzenie zadające obrażenia broni plus {damage}. Przyznaje 1 punkt kombinacji."
       },
       "eviscerate": {
-        "name": "Patroszenie",
+        "name": "Wieczny sen",
         "description": "Ruch kończący, który zadaje obrażenia za każdy punkt kombinacji."
       },
       "backstab": {
-        "name": "Cios w plecy",
+        "name": "Tchórzliwe pchnięcie",
         "description": "Pchnij cel w plecy, zadając 150% obrażeń broni plus {damage}. Musisz znajdować się za celem. Wymaga sztyletu. Przyznaje 1 punkt kombinacji."
       },
       "gouge": {
-        "name": "Dźgnięcie w oczy",
+        "name": "Cios w oko",
         "description": "Uderza w cel, obezwładniając go na 4 sek. Każde obrażenie przerywa efekt. Przyznaje 1 punkt kombinacji."
       },
       "evasion": {
-        "name": "Uniki",
+        "name": "Upiorny krok",
         "description": "Zwiększa twoją szansę na unik o 50% na 15 sek."
       },
       "slice_and_dice": {
-        "name": "Cięcie i szatkowanie",
+        "name": "Mordercze tempo",
         "description": "Cios kończący zwiększający szybkość ataków wręcz o 30%. Trwa dłużej za każdy punkt kombinacji."
       },
       "sprint": {
-        "name": "Sprint",
+        "name": "Rącze pięty",
         "description": "Zwiększa twoją szybkość poruszania się o 70% na 15 sek."
       },
       "kidney_shot": {
-        "name": "Cios w nerki",
+        "name": "Cios poniżej pasa",
         "description": "Ruch kończący, który ogłusza cel. Trwa o 1 sek dłużej za każdy punkt kombinacji."
       },
       "ambush": {
-        "name": "Zasadzka",
+        "name": "Cios czyhacza",
         "description": "Atakuj cel z zasadzki, zadając 250% obrażeń broni plus {damage}. Wymaga skradania się i pozycji za celem. Wymaga sztyletu. Przyznaje 1 punkt kombinacji."
       },
       "stealth": {
-        "name": "Skradanie się",
-        "description": "Ukrywa cię w cieniu: wrogowie ledwie cię dostrzegają, ale poruszasz się o 50% wolniej. Atak lub otrzymanie obrażeń przerywa Skradanie się. Rzuć ponownie, aby się ujawnić."
+        "name": "Duskveil",
+        "description": "Ukrywa cię w cieniu: wrogowie ledwie cię dostrzegają, ale poruszasz się o 50% wolniej. Atak lub otrzymanie obrażeń przerywa Duskveil. Rzuć ponownie, aby się ujawnić."
       },
       "adrenaline_rush": {
-        "name": "Przypływ adrenaliny",
+        "name": "Przyspieszona krew",
         "description": "Twoja krew wrze, natychmiast przywracając 60 energii."
       },
       "garrote": {
-        "name": "Garota",
+        "name": "Drut na gardło",
         "description": "Dusi wroga garotą, zadając obrażenia natychmiast oraz powodując krwawienie za {damage} w ciągu 18 sek. Wymaga skradania. Przyznaje 1 punkt kombinacji."
       },
       "cheap_shot": {
-        "name": "Podły cios",
+        "name": "Cios w brzuch",
         "description": "Uderz cel, ogłuszając go na 4 sek. Wymaga skradania się. Przyznaje 2 punkty kombinacji."
       },
       "sap": {
@@ -4645,79 +4645,79 @@ export const pl_PL: EnTranslations = {
         "description": "Obezwładnia cel na 8 sek. Wymaga skradania się i pozostawania poza walką. Jakiekolwiek obrażenia przerywają efekt."
       },
       "crippling_poison": {
-        "name": "Obezwładniająca trucizna",
-        "description": "Uderza cel obezwładniającą trucizną, zadając {damage} obrażeń natury i spowalniając jego prędkość ruchu o 50% na 12 sek."
+        "name": "Ołowiany jad",
+        "description": "Uderza cel ołowianym jadem, zadając {damage} obrażeń natury i spowalniając jego prędkość ruchu o 50% na 12 sek."
       },
       "expose_armor": {
-        "name": "Odsłonięcie pancerza",
+        "name": "Wyłom w pancerzu",
         "description": "Ruch kończący, który odsłania cel, zmniejszając jego pancerz. Więcej wydanych punktów kombinacji pogłębia cięcie."
       },
       "rupture": {
-        "name": "Rozerwanie",
+        "name": "Wykrwawienie",
         "description": "Cios kończący, który rani cel, powodując krwawienie zadające {damage} w ciągu 16 sek."
       },
       "vanish": {
-        "name": "Zniknięcie",
-        "description": "Znikasz z pola widzenia, wchodząc w Skradanie się nawet w walce. Ukryty poruszasz się o 50% wolniej. Trwa do 10 sek."
+        "name": "Dymny krok",
+        "description": "Znikasz z pola widzenia, wchodząc w Duskveil nawet w walce. Ukryty poruszasz się o 50% wolniej. Trwa do 10 sek."
       },
       "instant_poison": {
-        "name": "Natychmiastowa trucizna",
+        "name": "Ukąszenie żmii",
         "description": "Pokrywa twój oręż na 30 min, sprawiając, że każde uderzenie wręcz zadaje 8 dodatkowych obrażeń od natury."
       },
       "deadly_poison": {
-        "name": "Śmiertelna trucizna",
+        "name": "Jątrzący jad",
         "description": "Pokrywa twój oręż na 30 min, sprawiając, że każde uderzenie wręcz zadaje 14 dodatkowych obrażeń od natury."
       },
       "blind": {
-        "name": "Oślepienie",
+        "name": "Rzut piaskiem",
         "description": "Oślepia cel, sprawiając, że błądzi zdezorientowany przez 8 sek. Jakiekolwiek obrażenia przerywają efekt."
       },
       "seal_of_righteousness": {
-        "name": "Pieczęć prawości",
-        "description": "Napełnia cię mocą Świętości na 30 sek., sprawiając, że każde twoje uderzenie wręcz zadaje 4 dodatkowe obrażenia od Świętości. Uwolnij ją Osądem."
+        "name": "Piętno przysięgi",
+        "description": "Napełnia cię mocą Świętości na 30 sek., sprawiając, że każde twoje uderzenie wręcz zadaje 4 dodatkowe obrażenia od Świętości. Uwolnij ją Verdictem."
       },
       "holy_light": {
-        "name": "Święte światło",
+        "name": "Kojące Światło",
         "description": "Leczy sprzymierzony cel o {damage}."
       },
       "devotion_aura": {
-        "name": "Aura oddania",
+        "name": "Aura niezłomności",
         "description": "Zwiększa twój pancerz o 40 na 30 min."
       },
       "judgement": {
-        "name": "Osąd",
-        "description": "Uwalnia twoją aktywną pieczęć na wrogu, zużywając ją, by zadać obrażenia jej osądu."
+        "name": "Verdict",
+        "description": "Uwalnia twoją aktywną pieczęć na wrogu, zużywając ją, by zadać zmagazynowane obrażenia od Świętości."
       },
       "blessing_of_might": {
-        "name": "Błogosławieństwo mocy",
+        "name": "Przysięga żelaza",
         "description": "Nakłada błogosławieństwo na przyjazny cel, zwiększając moc ataku o 15 na 5 min."
       },
       "divine_protection": {
-        "name": "Boska ochrona",
-        "description": "Święta tarcza pochłania 50 obrażeń przez 10 sek."
+        "name": "Osłona wiary",
+        "description": "Ochronna osłona pochłania 50 obrażeń przez 10 sek."
       },
       "hammer_of_justice": {
-        "name": "Młot sprawiedliwości",
+        "name": "Druzgocący młot",
         "description": "Ogłusza cel na 3 sek."
       },
       "lay_on_hands": {
-        "name": "Nałożenie rąk",
+        "name": "Ostatnie namaszczenie",
         "description": "Potężny przypływ uzdrowienia: przywraca 250 zdrowia. 10 min czasu odnowienia."
       },
       "flash_of_light": {
-        "name": "Błysk światła",
-        "description": "Szybki, oszczędny błysk światłości, który leczy sprzymierzony cel o {damage}."
+        "name": "Świetliste ukojenie",
+        "description": "Szybki, oszczędny rozbłysk światła, który leczy sprzymierzony cel o {damage}."
       },
       "exorcism": {
-        "name": "Egzorcyzm",
+        "name": "Rytuał wygnania",
         "description": "Wygania niegodziwca świętym gniewem, zadając {damage} obrażeń od światłości."
       },
       "consecration": {
-        "name": "Poświęcenie",
+        "name": "Święta ziemia",
         "description": "Poświęca ziemię pod tobą, parząc pobliskich wrogów, zadając {damage} obrażeń świętych."
       },
       "righteous_fury": {
-        "name": "Sprawiedliwa furia",
+        "name": "Płonąca przysięga",
         "description": "Zwiększa zagrożenie generowane przez twoje obrażenia od Świętości o 60% na 30 min. Filar paladyna-obrońcy."
       },
       "retribution_aura": {
@@ -4725,55 +4725,55 @@ export const pl_PL: EnTranslations = {
         "description": "Otacza cię świętą energią na 30 min, zadając 5 obrażeń od Świętości każdemu wrogowi, który zaatakuje cię wręcz."
       },
       "tame_beast": {
-        "name": "Oswojenie bestii",
+        "name": "Dzika więź",
         "description": "Rozpoczyna oswajanie bestii, by stała się twoim towarzyszem. Musi być na twoim poziomie lub niższym i nie może być elitą. Twoje zwierzę podąża za tobą, atakuje twoich wrogów i utrzymuje własne zagrożenie. Możesz mieć jedno zwierzę naraz."
       },
       "dismiss_pet": {
-        "name": "Odprawienie zwierzęcia",
+        "name": "Uwolnij towarzysza",
         "description": "Odsyła twoje zwierzę z powrotem na łono dziczy."
       },
       "raptor_strike": {
-        "name": "Uderzenie raptora",
+        "name": "Patroszące uderzenie",
         "description": "Potężny atak w zwarciu, który zwiększa obrażenia o 5. Aktywuje się przy następnym uderzeniu."
       },
       "aspect_of_the_hawk": {
-        "name": "Aspekt jastrzębia",
-        "description": "Przyjmij aspekt jastrzębia, zwiększając moc ataku o 20 na 30 min."
+        "name": "Postać błotniaka",
+        "description": "Przyjmij postać błotniaka, zwiększając moc ataku o 20 na 30 min."
       },
       "serpent_sting": {
-        "name": "Wężowe żądło",
+        "name": "Jadowity kolec",
         "description": "Żądli cel, zadając {damage} obrażeń od Natury w ciągu 15 sek."
       },
       "arcane_shot": {
-        "name": "Arkaniczny strzał",
+        "name": "Plugawy strzał",
         "description": "Natychmiastowy strzał, który zadaje {damage} obrażeń arkanicznych."
       },
       "concussive_shot": {
-        "name": "Ogłuszający strzał",
+        "name": "Wstrząsający strzał",
         "description": "Oszałamia cel, spowalniając ruch o 50% na 4 sek."
       },
       "mongoose_bite": {
-        "name": "Ugryzienie mangusty",
+        "name": "Odwetowy kieł",
         "description": "Kontratak po uniku celu, zadający obrażenia broni plus 12. Nie można uniknąć."
       },
       "wing_clip": {
-        "name": "Podcięcie skrzydeł",
+        "name": "Pętające cięcie",
         "description": "Zadaje ranę, która spowalnia wroga o 40% na 10 sek."
       },
       "aspect_of_the_monkey": {
-        "name": "Aspekt małpy",
-        "description": "Przyjmij aspekt małpy, zwiększając szansę na unik o 8% na 30 min."
+        "name": "Postać kuny",
+        "description": "Przyjmij postać kuny, zwiększając szansę na unik o 8% na 30 min."
       },
       "aspect_of_the_cheetah": {
-        "name": "Aspekt geparda",
-        "description": "Przyjmij aspekt geparda, zwiększając prędkość ruchu o 30% na 30 min."
+        "name": "Postać rumaka",
+        "description": "Przyjmij postać rumaka, zwiększając prędkość ruchu o 30% na 30 min."
       },
       "aimed_shot": {
-        "name": "Strzał celowany",
-        "description": "Starannie wymierzony strzał, który zadaje {damage} obrażeń."
+        "name": "Długie naciągnięcie",
+        "description": "Starannie naciągnięty strzał, który zadaje {damage} obrażeń."
       },
       "rapid_fire": {
-        "name": "Szybki ostrzał",
+        "name": "Gorączkowy ostrzał",
         "description": "Zwiększa twoją prędkość ataku o 40% na 15 sek."
       },
       "smite": {
@@ -4781,164 +4781,164 @@ export const pl_PL: EnTranslations = {
         "description": "Karze wroga, zadając {damage} obrażeń od Świętości."
       },
       "lesser_heal": {
-        "name": "Słabsze leczenie",
+        "name": "Szeptana modlitwa",
         "description": "Leczy sprzymierzony cel o {damage}."
       },
       "power_word_fortitude": {
-        "name": "Słowo mocy: Hart",
+        "name": "Litania hartu",
         "description": "Zwiększa wytrzymałość celu o 3 na 30 min."
       },
       "shadow_word_pain": {
-        "name": "Mroczne słowo: Ból",
+        "name": "Pieśń rozkładu",
         "description": "Słowo mroku zadaje {damage} obrażeń od Cienia w ciągu 18 sek."
       },
       "power_word_shield": {
-        "name": "Słowo mocy: Tarcza",
+        "name": "Psalm ochrony",
         "description": "Osłania cel, pochłaniając 48 obrażeń przez 30 sek."
       },
       "renew": {
-        "name": "Odnowa",
+        "name": "Trwająca łaska",
         "description": "Leczy cel o {damage} w ciągu 15 sek."
       },
       "mind_blast": {
-        "name": "Atak umysłu",
+        "name": "Roztrzaskanie umysłu",
         "description": "Razi umysł celu, zadając {damage} obrażeń od cienia."
       },
       "heal": {
-        "name": "Leczenie",
+        "name": "Uroczysta modlitwa",
         "description": "Powolna, lecz potężna modlitwa, która leczy sprzymierzony cel o {damage}."
       },
       "mind_flay": {
-        "name": "Smaganie umysłu",
+        "name": "Litania niedoli",
         "description": "Naciera na umysł celu energią cienia, zadając {damage} obrażeń co sekundę przez 3 sek."
       },
       "flash_heal": {
-        "name": "Błyskawiczne leczenie",
+        "name": "Pilna modlitwa",
         "description": "Szybka modlitwa, która leczy sprzymierzony cel o {damage}."
       },
       "lightning_bolt": {
-        "name": "Błyskawica",
+        "name": "Łukowy pocisk",
         "description": "Ciska piorunem, zadając {damage} obrażeń od natury."
       },
       "rockbiter_weapon": {
-        "name": "Oręż kąsacza skał",
+        "name": "Oręż kamiennych okowów",
         "description": "Nasyca twoją broń furią kamienia: każde uderzenie zadaje 5 dodatkowych obrażeń przez 5 min."
       },
       "healing_wave": {
-        "name": "Fala uzdrowienia",
+        "name": "Kojące wody",
         "description": "Leczy sprzymierzony cel o {damage}."
       },
       "earth_shock": {
-        "name": "Wstrząs ziemi",
+        "name": "Ziemny wstrząs",
         "description": "Natychmiast razi cel wstrząsową siłą, zadając {damage} obrażeń od natury."
       },
       "lightning_shield": {
-        "name": "Tarcza błyskawic",
+        "name": "Osłona gromu",
         "description": "Otacza cię trzaskająca błyskawica: napastnicy w zwarciu otrzymują 13 obrażeń od natury."
       },
       "flame_shock": {
-        "name": "Płomienny wstrząs",
+        "name": "Żarowy wstrząs",
         "description": "Spala cel ogniem, zadając 25 obrażeń oraz {damage} w ciągu 12 sek."
       },
       "flametongue_weapon": {
-        "name": "Oręż ognistego języka",
+        "name": "Oręż żarowego piętna",
         "description": "Przepaja twój oręż żywiołem ognia: każde uderzenie zadaje 8 dodatkowych obrażeń od ognia przez 5 min."
       },
       "frost_shock": {
-        "name": "Mroźny wstrząs",
+        "name": "Szronowy wstrząs",
         "description": "Natychmiast razi cel mrozem, zadając {damage} obrażeń od mrozu i spowalniając jego ruch o 50% na 8 sek."
       },
       "frostbrand_weapon": {
-        "name": "Oręż mroźnego piętna",
+        "name": "Oręż szronowych okowów",
         "description": "Przepaja twój oręż kąsającym mrozem: każde uderzenie zadaje 8 dodatkowych obrażeń przez 5 min."
       },
       "ghost_wolf": {
-        "name": "Wilczy duch",
-        "description": "Przemienia cię w wilczego ducha, zwiększając prędkość ruchu o 40% na 10 min."
+        "name": "Shadewolf",
+        "description": "Przemienia cię w Shadewolfa, zwiększając prędkość ruchu o 40% na 10 min."
       },
       "stormstrike": {
-        "name": "Burzowe uderzenie",
+        "name": "Uderzenie przodków",
         "description": "Kieruje burzę przez twoją broń, natychmiast uderzając za obrażenia broni plus {damage}."
       },
       "shadow_bolt": {
-        "name": "Mroczny pocisk",
+        "name": "Pocisk mroku",
         "description": "Wysyła mroczny pocisk w stronę wroga, zadając {damage} obrażeń od Cienia."
       },
       "demon_skin": {
-        "name": "Demoniczna skóra",
+        "name": "Skóra plugawca",
         "description": "Demoniczna skóra zwiększa twój pancerz o 30 na 30 min."
       },
       "immolate": {
-        "name": "Spopielenie",
+        "name": "Płonący pakt",
         "description": "Pali wroga, zadając 11 obrażeń od ognia oraz dodatkowe {damage} w ciągu 15 sek."
       },
       "corruption": {
-        "name": "Skażenie",
+        "name": "Czarna zgnilizna",
         "description": "Skaża cel, zadając {damage} obrażeń cienia przez 18 sek."
       },
       "life_tap": {
-        "name": "Pobór życia",
+        "name": "Trudny targ",
         "description": "Zamienia 30 zdrowia na 30 many."
       },
       "curse_of_agony": {
-        "name": "Klątwa agonii",
+        "name": "Urok udręki",
         "description": "Przeklina cel agonią: {damage} obrażeń od cienia w ciągu 24 sek."
       },
       "drain_life": {
-        "name": "Wyssanie życia",
+        "name": "Pochłonięcie",
         "description": "Wysysa życie celu, przekazując ci {damage} zdrowia co sekundę przez 5 sek."
       },
       "fear": {
-        "name": "Strach",
+        "name": "Trwoga",
         "description": "Wzbudza w przeciwniku przerażenie, zmuszając go do kulenia się przez nawet 8 sek. Każde obrażenie przerywa efekt."
       },
       "searing_pain": {
-        "name": "Piekący ból",
+        "name": "Przypalenie",
         "description": "Przypieka wroga dręczącym ogniem, zadając {damage} obrażeń od Ognia. Szybkie do rzucenia."
       },
       "shadowburn": {
-        "name": "Spalenie cieniem",
-        "description": "Natychmiast razi cel Mrocznym Płomieniem, zadając {damage} obrażeń od Cienia."
+        "name": "Ogień zmierzchu",
+        "description": "Natychmiast razi cel palącym cieniem, zadając {damage} obrażeń od Cienia."
       },
       "wrath": {
-        "name": "Gniew",
+        "name": "Dziki pocisk",
         "description": "Ciska pocisk energii natury, zadając {damage} obrażeń od Natury."
       },
       "healing_touch": {
-        "name": "Uzdrawiający dotyk",
+        "name": "Dzikie ukojenie",
         "description": "Leczy sprzymierzony cel o {damage}."
       },
       "mark_of_the_wild": {
-        "name": "Znak dziczy",
-        "description": "Nakłada znak dziczy na sprzymierzony cel, zwiększając pancerz o 25 na 30 min."
+        "name": "Dzika osłona",
+        "description": "Nakłada Dziką osłonę na sprzymierzony cel, zwiększając pancerz o 25 na 30 min."
       },
       "moonfire": {
-        "name": "Księżycowy ogień",
+        "name": "Księżycowa nawałnica",
         "description": "Spala wroga księżycowym ogniem, zadając {damage} obrażeń arkanicznych oraz obrażenia w czasie."
       },
       "rejuvenation": {
-        "name": "Odmłodzenie",
+        "name": "Dziki rozkwit",
         "description": "Leczy cel o {damage} w ciągu 12 sek."
       },
       "thorns": {
-        "name": "Ciernie",
+        "name": "Cierniowa straż",
         "description": "Z celu wyrastają ciernie: atakujący wręcz otrzymują 3 obrażeń od Natury."
       },
       "entangling_roots": {
-        "name": "Pętające korzenie",
+        "name": "Chwytające korzenie",
         "description": "Unieruchamia cel w miejscu nawet na 12 sek."
       },
       "bear_form": {
-        "name": "Postać niedźwiedzia",
+        "name": "Postać Bruina",
         "description": "Zmień postać w niedźwiedzia: pancerz +65%, moc ataku +15, twoje ataki budują wściekłość i generują 30% więcej zagrożenia. Rzuć ponownie, aby wrócić do postaci rzucającego."
       },
       "maul": {
-        "name": "Zmiażdżenie",
-        "description": "Miażdżący atak, który zwiększa obrażenia w zwarciu o {damage} i powoduje wysokie zagrożenie. Aktywuje się przy następnym uderzeniu. Tylko w postaci niedźwiedzia."
+        "name": "Kruszenie kości",
+        "description": "Miażdżący atak, który zwiększa obrażenia w zwarciu o {damage} i powoduje wysokie zagrożenie. Aktywuje się przy następnym uderzeniu. Tylko w postaci Bruina."
       },
       "growl": {
-        "name": "Warknięcie",
-        "description": "Warczy na cel: twoje zagrożenie wzrasta do poziomu jego najbardziej znienawidzonego wroga, a cel zostaje zmuszony do atakowania cię przez 3 sek. Tylko w postaci niedźwiedzia."
+        "name": "Groźba",
+        "description": "Warczy na cel: twoje zagrożenie wzrasta do poziomu jego najbardziej znienawidzonego wroga, a cel zostaje zmuszony do atakowania cię przez 3 sek. Tylko w postaci Bruina."
       },
       "cat_form": {
         "name": "Postać wilka",
@@ -4949,43 +4949,43 @@ export const pl_PL: EnTranslations = {
         "description": "Rozdrap wroga, zadając obrażenia broni plus {damage}. Przyznaje 1 punkt kombinacji. Tylko w postaci wilka."
       },
       "ferocious_bite": {
-        "name": "Zaciekłe ugryzienie",
+        "name": "Krwawe ukąszenie",
         "description": "Ruch kończący, który zadaje obrażenia za każdy punkt kombinacji. Tylko w postaci wilka."
       },
       "swipe": {
-        "name": "Zamach",
-        "description": "Zamach uderzający pobliskich wrogów za {damage} obrażeń. Wzbudza dodatkowe zagrożenie. Tylko w Postaci niedźwiedzia."
+        "name": "Zamaszyste pazury",
+        "description": "Zamach uderzający pobliskich wrogów za {damage} obrażeń. Wzbudza dodatkowe zagrożenie. Tylko w postaci Bruina."
       },
       "regrowth": {
-        "name": "Odrost",
+        "name": "Drugi rozkwit",
         "description": "Leczy sprzymierzony cel o {damage} oraz dodatkową ilość w ciągu 21 sek."
       },
       "barkskin": {
-        "name": "Kora",
+        "name": "Dębowa skóra",
         "description": "Twoja skóra twardnieje niczym kora, zwiększając pancerz o 150 na 15 sek."
       },
       "starfire": {
-        "name": "Gwiezdny ogień",
+        "name": "Spadające niebo",
         "description": "Sprowadza pocisk gwiezdnego ognia, zadając {damage} obrażeń od Arkanów."
       },
       "travel_form": {
-        "name": "Postać podróżna",
-        "description": "Natychmiast przemienia cię w szybką postać podróżną, zwiększając szybkość poruszania się o 40%. Po przemianie nie możesz używać innych zdolności, ale możesz się przemieniać w walce i poza nią, co czyni ją idealną do ucieczki."
+        "name": "Postać Fleet",
+        "description": "Natychmiast przemienia cię w szybką, rączą postać, zwiększając szybkość poruszania się o 40%. Po przemianie nie możesz używać innych zdolności, ale możesz się przemieniać w walce i poza nią, co czyni ją idealną do ucieczki."
       },
       "enrage": {
-        "name": "Rozjuszenie",
-        "description": "Natychmiast generuje 20 wściekłości. Tylko w postaci niedźwiedzia."
+        "name": "Podsycenie",
+        "description": "Natychmiast generuje 20 wściekłości. Tylko w postaci Bruina."
       },
       "bash": {
-        "name": "Roztrzaskanie",
-        "description": "Ogłusza cel na 2 sek. Tylko w postaci niedźwiedzia."
+        "name": "Wstrząśnienie",
+        "description": "Ogłusza cel na 2 sek. Tylko w postaci Bruina."
       },
       "faerie_fire": {
-        "name": "Wróżkowy ogień",
+        "name": "Wiedźmie światło",
         "description": "Zmniejsza pancerz celu o 35 na 40 sek."
       },
       "hibernate": {
-        "name": "Hibernacja",
+        "name": "Uśpienie",
         "description": "Zmusza cel do głębokiego snu na nawet 8 sek. Każde obrażenie go obudzi."
       },
       "dash": {
@@ -4993,15 +4993,15 @@ export const pl_PL: EnTranslations = {
         "description": "Rusza naprzód susem, zwiększając prędkość ruchu o 50% na 15 sek. Tylko w postaci wilka."
       },
       "pounce": {
-        "name": "Skok",
+        "name": "Skradający cios",
         "description": "Otwarcie ze skradania, które ogłusza cel na 2 sek. Przyznaje 1 punkt kombinacji. Tylko w postaci wilka."
       },
       "insect_swarm": {
-        "name": "Rój owadów",
+        "name": "Żądlący rój",
         "description": "Wroga oblepia rój owadów, zadając {damage} obrażeń od natury w ciągu 12 sek."
       },
       "tigers_fury": {
-        "name": "Furia tygrysa",
+        "name": "Wilcza krew",
         "description": "Zwiększa moc ataku o 40 na 6 sek. Tylko w Postaci wilka."
       },
       "rip": {
@@ -5009,15 +5009,15 @@ export const pl_PL: EnTranslations = {
         "description": "Cios kończący zadający obrażenia od Krwawienia w ciągu 12 sek. Zużywa punkty kombinacji. Tylko w Postaci wilka."
       },
       "mortal_strike": {
-        "name": "Śmiertelne uderzenie",
+        "name": "Okaleczające uderzenie",
         "description": "Bezlitosne uderzenie zadające obrażenia broni plus {damage}. (Sygnatura Oręża)"
       },
       "bloodthirst": {
-        "name": "Żądza krwi",
+        "name": "Upust krwi",
         "description": "Natychmiast atakuj w krwawym szale, zadając {damage}. (Sygnatura furii)"
       },
       "shield_slam": {
-        "name": "Uderzenie tarczą",
+        "name": "Trzask tarczy",
         "description": "Uderza cel tarczą, zadając {damage} i wzbudzając ogromne zagrożenie. (Znak rozpoznawczy Ochrony)"
       },
       "whirlwind": {
@@ -5025,51 +5025,51 @@ export const pl_PL: EnTranslations = {
         "description": "Wirujesz w śmiercionośnym łuku, uderzając wszystkich pobliskich wrogów za {damage}. (Talent Furii)"
       },
       "berserker_rage": {
-        "name": "Furia berserkera",
-        "description": "Wpadnij w furię berserkera, generując 20 wściekłości. (Talent wojownika)"
+        "name": "Kipiąca furia",
+        "description": "Wpadnij w kipiącą furię, generując 20 wściekłości. (Talent wojownika)"
       },
       "summon_imp": {
-        "name": "Przywołanie chochlika",
-        "description": "Przywołuje chochlika pod komendę Czarnoksiężnika. Chochlik ciska Ognistymi pociskami w twoich wrogów z oddali. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
+        "name": "Przywołanie Emberkina",
+        "description": "Przywołuje Emberkina pod komendę Czarnoksiężnika. Emberkin ciska popielnymi pociskami w twoich wrogów z oddali. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
       },
       "summon_voidwalker": {
-        "name": "Przywołanie wędrowca pustki",
-        "description": "Przywołuje wędrowca pustki pod komendę Czarnoksiężnika. Wędrowiec pustki to wytrzymały demon, który prowokuje twoich wrogów i pochłania razy. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
+        "name": "Przywołanie Gloomshade'a",
+        "description": "Przywołuje Gloomshade'a pod komendę Czarnoksiężnika. Gloomshade to wytrzymały demon, który prowokuje twoich wrogów i pochłania razy. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
       },
       "summon_succubus": {
-        "name": "Przywołanie sukkuba",
-        "description": "Przywołuje sukkuba pod komendę Czarnoksiężnika. Sukkub to kruchy demon, który uderza szybko i mocno bije wręcz. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
+        "name": "Przywołanie Duskborna",
+        "description": "Przywołuje Duskborna pod komendę Czarnoksiężnika. Duskborn to kruchy demon, który uderza szybko i mocno bije wręcz. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
       },
       "summon_felhunter": {
-        "name": "Przywołanie plugawego łowcy",
-        "description": "Przywołuje plugawego łowcę pod komendę Czarnoksiężnika. Plugawy łowca nęka wrogów z dystansu Mrocznym Ukąszeniem i znakomicie poluje na rzucających zaklęcia. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
+        "name": "Przywołanie Spellhounda",
+        "description": "Przywołuje Spellhounda pod komendę Czarnoksiężnika. Spellhound nęka wrogów z dystansu Mrocznym Ukąszeniem i znakomicie poluje na rzucających zaklęcia. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
       },
       "summon_felguard": {
-        "name": "Przywołanie plugawego strażnika",
-        "description": "Przywołuje plugawego strażnika pod komendę Czarnoksiężnika. Plugawy strażnik to wytrzymały demon walczący wręcz, który wkracza w bitwę i dzielnie się broni. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
+        "name": "Przywołanie Warfienda",
+        "description": "Przywołuje Warfienda pod komendę Czarnoksiężnika. Warfiend to wytrzymały demon walczący wręcz, który wkracza w bitwę i dzielnie się broni. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
       },
       "summon_infernal": {
-        "name": "Przywołanie piekielnika",
-        "description": "Wiąże piekielnika z twoją wolą - potężnego kolosa o miażdżącym ataku wręcz oraz najgłębszym zdrowiu i pancerzu spośród wszystkich demonów. Długi czas odnowienia ogranicza jego surową moc. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
+        "name": "Przywołanie Pyre Colossus",
+        "description": "Wiąże Pyre Colossus z twoją wolą, potężnego kolosa o miażdżącym ataku wręcz oraz najgłębszym zdrowiu i pancerzu spośród wszystkich demonów. Długi czas odnowienia ogranicza jego surową moc. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
       },
       "summon_doomguard": {
-        "name": "Przywołanie strażnika zagłady",
-        "description": "Wiąże strażnika zagłady z twoją wolą - elitarnego demona, który zsyła z oddali potężne obrażenia od Cienia. Długi czas odnowienia ogranicza jego niszczycielską moc. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
+        "name": "Przywołanie Wraithborna",
+        "description": "Wiąże Wraithborna z twoją wolą, elitarnego demona, który zsyła z oddali potężne obrażenia od Cienia. Długi czas odnowienia ogranicza jego niszczycielską moc. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
       },
       "bear_charge": {
-        "name": "Szarża niedźwiedzia",
-        "description": "Szarżuj na wroga, generując 9 wściekłości i ogłuszając go na 1 sek. Zasięg 8-25 jardów. Tylko w postaci niedźwiedzia."
+        "name": "Szarża Bruina",
+        "description": "Szarżuj na wroga, generując 9 wściekłości i ogłuszając go na 1 sek. Zasięg 8-25 jardów. Tylko w postaci Bruina."
       },
       "demoralizing_roar": {
-        "name": "Demoralizujący ryk",
-        "description": "Demoralizuje pobliskich wrogów, zmniejszając ich moc ataku o 20 na 20 sek. Tylko w postaci niedźwiedzia."
+        "name": "Tchórzliwy ryk",
+        "description": "Demoralizuje pobliskich wrogów, zmniejszając ich moc ataku o 20 na 20 sek. Tylko w postaci Bruina."
       },
       "prowl": {
-        "name": "Czajenie",
+        "name": "Podchody",
         "description": "Wchodzi w skradanie w postaci wilka, poruszając się o 50% wolniej. Nie można użyć w walce."
       },
       "rake": {
-        "name": "Rozoranie",
+        "name": "Zdzieranie",
         "description": "Otwarcie ze skradania, które rozdziera wroga za obrażenia broni plus {damage} i powoduje krwawienie w ciągu 9 sek. Przyznaje 1 punkt kombinacji. Tylko w postaci wilka."
       },
       "revive_pet": {
@@ -5079,10 +5079,10 @@ export const pl_PL: EnTranslations = {
     },
     "items": {
       "worn_sword": {
-        "name": "Zużyty krótki miecz"
+        "name": "Wyszczerbiony krótki miecz"
       },
       "gnarled_staff": {
-        "name": "Sękaty kostur"
+        "name": "Kostur z bagiennego dębu"
       },
       "rusty_dagger": {
         "name": "Zardzewiały sztylet"
@@ -5094,10 +5094,10 @@ export const pl_PL: EnTranslations = {
         "name": "Zardzewiały toporek"
       },
       "recruit_tunic": {
-        "name": "Tunika rekruta"
+        "name": "Tunika poborowego"
       },
       "apprentice_robe": {
-        "name": "Szata adepta"
+        "name": "Wytarta szata"
       },
       "footpad_jerkin": {
         "name": "Kaftan rzezimieszka"
@@ -5130,22 +5130,22 @@ export const pl_PL: EnTranslations = {
         "name": "Nogawice z futra Szaroszczękiego"
       },
       "baked_bread": {
-        "name": "Świeżo upieczony chleb"
+        "name": "Wiejski bochenek"
       },
       "spring_water": {
-        "name": "Orzeźwiająca woda źródlana"
+        "name": "Zimna woda ze studni"
       },
       "roasted_boar": {
-        "name": "Pieczone mięso dzika"
+        "name": "Udziec dzika z rożna"
       },
       "conjured_water": {
-        "name": "Przywołana woda źródlana"
+        "name": "Przywołana woda deszczowa"
       },
       "conjured_water2": {
-        "name": "Przywołana woda mineralna"
+        "name": "Przywołana woda studzienna"
       },
       "conjured_water3": {
-        "name": "Przywołana woda gazowana"
+        "name": "Przywołana czysta woda"
       },
       "eastbrook_arming_sword": {
         "name": "Miecz zbrojny ze Wschodniego Strumienia"
@@ -5205,7 +5205,7 @@ export const pl_PL: EnTranslations = {
         "name": "Upiorna esencja"
       },
       "webwood_silk": {
-        "name": "Pajęczy gruczoł jedwabny"
+        "name": "Gruczoł jedwabny Sableweb"
       },
       "supply_crate": {
         "name": "Skradziona skrzynia z zaopatrzeniem"
@@ -5226,13 +5226,13 @@ export const pl_PL: EnTranslations = {
         "name": "Czerwona bandana"
       },
       "tough_jerky": {
-        "name": "Twarde suszone mięso"
+        "name": "Solone suszone mięso"
       },
       "mudfin_scale": {
-        "name": "Oślizgła łuska murloka"
+        "name": "Oślizgła łuska Mudfina"
       },
       "tallow_candle": {
-        "name": "Łojowa świeca"
+        "name": "Tłusta bryła łoju"
       },
       "spider_leg": {
         "name": "Drgająca noga pająka"
@@ -5298,7 +5298,7 @@ export const pl_PL: EnTranslations = {
         "name": "Buty bagiennego piechura"
       },
       "mistcallers_edge": {
-        "name": "Ostrze mgłozwańcy"
+        "name": "Ostrze Fogbindera"
       },
       "vaels_mist_staff": {
         "name": "Mglisty kostur Vaela"
@@ -5442,7 +5442,7 @@ export const pl_PL: EnTranslations = {
         "name": "Kostur Velkhara"
       },
       "shadowmeld_tunic": {
-        "name": "Tunika zlania z cieniem"
+        "name": "Tunika nocnej zasłony"
       },
       "gravewyrm_scale_hauberk": {
         "name": "Łuskowy kaftan Grobowego Żmija"
@@ -5511,13 +5511,13 @@ export const pl_PL: EnTranslations = {
         "name": "Pęknięta łuska żmija"
       },
       "conjured_bread": {
-        "name": "Przywołany chleb"
+        "name": "Przywołany placek owsiany"
       },
       "conjured_bread2": {
-        "name": "Przywołany razowiec"
+        "name": "Przywołany czarny bochenek"
       },
       "conjured_bread3": {
-        "name": "Przywołana słodka bułka"
+        "name": "Przywołane ciasto miodowe"
       },
       "roadwardens_helm": {
         "name": "Hełm strażnika dróg"
@@ -5622,7 +5622,7 @@ export const pl_PL: EnTranslations = {
         "name": "Grobowo tkana torba"
       },
       "mistcallers_duffel": {
-        "name": "Worek Przyzywacza Mgły"
+        "name": "Worek Fogbindera"
       },
       "copper_mining_pick": {
         "name": "Miedziany Kilof Górniczy"
@@ -5652,7 +5652,7 @@ export const pl_PL: EnTranslations = {
         "name": "Sierp Srebrnolistny"
       },
       "bristleback_maul": {
-        "name": "Tłuk szczeciniastych"
+        "name": "Młot Gallowglass"
       },
       "broodmother_silk_robe": {
         "name": "Jedwabna szata matki legu"
@@ -5661,16 +5661,16 @@ export const pl_PL: EnTranslations = {
         "name": "Nagolenniki z kości krypty"
       },
       "cryptstalker_jerkin": {
-        "name": "Kaftan podkradacza krypt"
+        "name": "Kaftan Gravestalker"
       },
       "deathlord_legguards": {
-        "name": "Nagolenniki władcy śmierci"
+        "name": "Nagolenniki Barrowlorda"
       },
       "deathlord_sabatons": {
-        "name": "Buty płytowe władcy śmierci"
+        "name": "Buty płytowe Barrowlorda"
       },
       "deathlord_warplate": {
-        "name": "Płyta bojowa władcy śmierci"
+        "name": "Płyta bojowa Barrowlorda"
       },
       "drogmar_warboots": {
         "name": "Buty bojowe Drogmara"
@@ -5748,13 +5748,13 @@ export const pl_PL: EnTranslations = {
         "name": "Tupiące buty Moggera"
       },
       "necromancers_legwraps": {
-        "name": "Owijki nogawic nekromanty"
+        "name": "Owijki nóg Mournweave"
       },
       "necromancers_soulsteps": {
-        "name": "Duszokroki nekromanty"
+        "name": "Duszokroki Mournweave"
       },
       "necromancers_starshroud": {
-        "name": "Gwiezdny całun nekromanty"
+        "name": "Gwiezdny całun Mournweave"
       },
       "nhalias_dirgeblade": {
         "name": "Ostrze żałobnej pieśni Nhalii"
@@ -5790,13 +5790,13 @@ export const pl_PL: EnTranslations = {
         "name": "Duszokroki kultu żmija"
       },
       "wyrmshadow_harness": {
-        "name": "Uprząż cienia żmija"
+        "name": "Uprząż Nightfang"
       },
       "wyrmshadow_legguards": {
-        "name": "Nogawice cienia żmija"
+        "name": "Nogawice Nightfang"
       },
       "wyrmshadow_treads": {
-        "name": "Trzewiki cienia żmija"
+        "name": "Trzewiki Nightfang"
       },
       "glimmerfin_koi": {
         "name": "Lśniącopłetwy karp koi"
@@ -5814,7 +5814,7 @@ export const pl_PL: EnTranslations = {
         "name": "Surowy okoń rzeczny"
       },
       "raw_stonescale_carp": {
-        "name": "Surowy karp kamiennołuski"
+        "name": "Surowy karp Slatefin"
       },
       "soggy_boot": {
         "name": "Przemoczony but"
@@ -5925,13 +5925,13 @@ export const pl_PL: EnTranslations = {
         "name": "Szabla z księżycowej łuski"
       },
       "moonshroud_breastplate": {
-        "name": "Napierśnik księżycowego całunu"
+        "name": "Napierśnik Moonwrack"
       },
       "moonshroud_robe": {
-        "name": "Szata księżycowego całunu"
+        "name": "Szata Moonwrack"
       },
       "moonshroud_tunic": {
-        "name": "Tunika księżycowego całunu"
+        "name": "Tunika Moonwrack"
       },
       "pale_pearl": {
         "name": "Blada perła"
@@ -5967,7 +5967,7 @@ export const pl_PL: EnTranslations = {
         "name": "Naramienniki z kości krypty"
       },
       "deathlords_dread_visage": {
-        "name": "Maska grozy władcy śmierci"
+        "name": "Maska grozy Barrowlorda"
       },
       "gravewyrm_gauntlets": {
         "name": "Rękawice Grobowego Żmija"
@@ -5982,10 +5982,10 @@ export const pl_PL: EnTranslations = {
         "name": "Rękawice mglistej zasłony"
       },
       "necromancers_soulspire_mantle": {
-        "name": "Płaszcz iglicy dusz nekromanty"
+        "name": "Płaszcz iglicy dusz Mournweave"
       },
       "wyrmshadow_talongrips": {
-        "name": "Szponiaste chwyty cienia żmija"
+        "name": "Szponiaste chwyty Nightfang"
       },
       "reliquary_plate_chest": {
         "name": "Kolczuga strażnika relikwiarza"
@@ -6120,31 +6120,31 @@ export const pl_PL: EnTranslations = {
         "name": "Twardziel Nieśmiertelnej Korony"
       },
       "kingsbane_last_oath": {
-        "name": "Królobójca, Ostatnia Przysięga Ciernistego Szczytu"
+        "name": "Thronebane, Ostatnia Przysięga Ciernistego Szczytu"
       },
       "crownforged_dreadhelm": {
-        "name": "Koronokuty hełm grozy"
+        "name": "Hełm grozy Bonewrought"
       },
       "crownforged_warspaulders": {
-        "name": "Koronokute naramienniki bojowe"
+        "name": "Naramienniki bojowe Bonewrought"
       },
       "nighttalon_crown": {
-        "name": "Korona nocnego szpona"
+        "name": "Korona Direfang"
       },
       "nighttalon_shoulderguards": {
-        "name": "Naramienniki nocnego szpona"
+        "name": "Naramienniki Direfang"
       },
       "soulflame_cowl": {
-        "name": "Kaptur duszopłomienia"
+        "name": "Kaptur Wraithfire"
       },
       "soulflame_mantle": {
-        "name": "Płaszcz duszopłomienia"
+        "name": "Płaszcz Wraithfire"
       },
       "stormcallers_crown": {
-        "name": "Korona przywoływacza burz"
+        "name": "Korona Galecall"
       },
       "stormcallers_spaulders": {
-        "name": "Naramienniki przywoływacza burz"
+        "name": "Naramienniki Galecall"
       },
       "unknown_alien_weaponry": {
         "name": "Nieznana obca broń"
@@ -6233,13 +6233,13 @@ export const pl_PL: EnTranslations = {
         "name": "Dziki Odyniec"
       },
       "webwood_spider": {
-        "name": "Czyhający z Pajęczego Boru"
+        "name": "Czyhacz Sableweb"
       },
       "mudfin_murloc": {
         "name": "Błotnopłetwy Skradacz"
       },
       "tunnel_rat": {
-        "name": "Tunelowy Szczur Kopacz"
+        "name": "Kopacz z Deeprock"
       },
       "vale_bandit": {
         "name": "Bandyta z Doliny"
@@ -6254,7 +6254,7 @@ export const pl_PL: EnTranslations = {
         "name": "Bagienny Czający"
       },
       "deepfen_murloc": {
-        "name": "Głębotopielny Kąsacz"
+        "name": "Kąsacz z Deepfen"
       },
       "mire_widow": {
         "name": "Wdowa z Mokrzawia"
@@ -6287,7 +6287,7 @@ export const pl_PL: EnTranslations = {
         "name": "Grzbietowy Tropiciel"
       },
       "deeprock_kobold": {
-        "name": "Głęboskalny Drążyciel"
+        "name": "Drążyciel z Deeprock"
       },
       "thornpeak_ogre": {
         "name": "Ogr z Ciernistego Szczytu"
@@ -6341,13 +6341,13 @@ export const pl_PL: EnTranslations = {
         "name": "Komandor Rycerzy Olen"
       },
       "vael_the_mistcaller": {
-        "name": "Vael Mgłowołacz"
+        "name": "Vael Fogbinder"
       },
       "sanctum_boneguard": {
         "name": "Kościostrażnik Sanktuarium"
       },
       "sanctum_drakonid": {
-        "name": "Drakonid Sanktuarium"
+        "name": "Strażnik łusek z Sanktuarium"
       },
       "raised_bonewalker": {
         "name": "Wskrzeszony Kościochód"
@@ -6482,13 +6482,13 @@ export const pl_PL: EnTranslations = {
         "name": "Kościostrażnik Varkasa"
       },
       "emberkin": {
-        "name": "Chochlik"
+        "name": "Emberkin"
       },
       "gloomshade": {
-        "name": "Wędrowiec Pustki"
+        "name": "Gloomshade"
       },
       "duskborn": {
-        "name": "Sukkub"
+        "name": "Duskborn"
       },
       "grix_the_tunnelking": {
         "name": "Grix Tunelowy Król"
@@ -6512,16 +6512,16 @@ export const pl_PL: EnTranslations = {
         "name": "Widmowiąż Maldrec"
       },
       "spellhound": {
-        "name": "Plugawy Łowca"
+        "name": "Spellhound"
       },
       "warfiend": {
-        "name": "Plugawy Strażnik"
+        "name": "Warfiend"
       },
       "pyre_colossus": {
-        "name": "Piekielnik"
+        "name": "Pyre Colossus"
       },
       "wraithborn": {
-        "name": "Strażnik Zagłady"
+        "name": "Wraithborn"
       },
       "choirmother_selthe": {
         "name": "Chórmatka Selthe"
@@ -6594,12 +6594,12 @@ export const pl_PL: EnTranslations = {
       "fisherman_brandt": {
         "name": "Rybak Brandt",
         "title": "Stary Wilk Morski",
-        "greeting": "Grlmurlgrl- wybacz, za długo słuchałem tych rybich ludzi."
+        "greeting": "Blrb-glub- wybacz, za długo słuchałem tych rybich ludzi."
       },
       "foreman_odell": {
         "name": "Sztygar Odell",
         "title": "Sztygar Kopalni",
-        "greeting": "Cały wykop roi się od tego świecogłowego robactwa!"
+        "greeting": "Cały wykop roi się od tego oblepionego błotem robactwa!"
       },
       "warden_fenwick": {
         "name": "Strażnik Fenwick",
@@ -6709,7 +6709,7 @@ export const pl_PL: EnTranslations = {
         }
       },
       "q_boars": {
-        "title": "Szczeciniaste skóry",
+        "title": "Szczeciniaste skóry dzików",
         "text": "Ze skóry dzika robi się najlepsze torby podróżne, a łąki na zachód od miasta aż roją się od tych bestii. Przynieś mi 5 szczeciniastych skór dzika, a wynagrodzę ci poświęcony czas.",
         "completion": "Ach, świetne szczeciniaste skóry! Dostanę za nie dobrą cenę.",
         "objectives": {
@@ -6719,21 +6719,21 @@ export const pl_PL: EnTranslations = {
         }
       },
       "q_spiders": {
-        "title": "Plaga Sieciolasu",
-        "text": "Czaiciele we wschodnich lasach przędą jedwab, którego potrzebuję do okładów - a do tego rozmnożyły się stanowczo zbyt licznie. Przetrzeb 6 Czaicieli z Sieciolasu i wytnij 4 gruczoły jedwabne z ich brzuchów.",
+        "title": "Plaga Sableweb",
+        "text": "Czyhacze we wschodnich lasach przędą jedwab, którego potrzebuję do okładów - a do tego rozmnożyły się stanowczo zbyt licznie. Przetrzeb 6 Czyhaczy Sableweb i wytnij 4 gruczoły jedwabne z ich brzuchów.",
         "completion": "Brr, wciąż drgają. Doskonale. Masz, zasłużyłeś na to.",
         "objectives": {
           "0": {
-            "label": "Czaiciel z Sieciolasu pokonany"
+            "label": "Czyhacz Sableweb pokonany"
           },
           "1": {
-            "label": "Gruczoł jedwabny z Sieciolasu"
+            "label": "Gruczoł jedwabny Sableweb"
           }
         }
       },
       "q_murlocs": {
         "title": "Kłopoty nad jeziorem",
-        "text": "Dwadzieścia lat łowię w Jeziorze Lustrzanym i nigdy nie straciłem sieci, póki te bulgoczące rybo-ludy nie wypełzły z płycizn. Odeprzyj Błotnopłetwych - ubij ich 8. I miej się na baczności: gdzie jest jeden murlok, tam jest ich pięć.",
+        "text": "Dwadzieścia lat łowię w Jeziorze Lustrzanym i nigdy nie straciłem sieci, póki te bulgoczące rybo-ludy nie wypełzły z płycizn. Odeprzyj Mudfiny - ubij ich 8. I miej się na baczności: gdzie jest jeden Mudfin, tam jest ich pięć.",
         "completion": "Ha! To ich nauczy, by pilnowały własnych bajor.",
         "objectives": {
           "0": {
@@ -6743,11 +6743,11 @@ export const pl_PL: EnTranslations = {
       },
       "q_mine": {
         "title": "Szczury w kopalni",
-        "text": "Trafiliśmy na świetną żyłę miedzi, a potem to koboldzie robactwo wysypało się ze zbocza. Moja ekipa nie postawi stopy w wykopie, dopóki nie zostanie oczyszczony. Połóż 10 kopaczy Tunelowych Szczurów.",
+        "text": "Trafiliśmy na świetną żyłę miedzi, a potem to drążące robactwo wysypało się ze zbocza. Moja ekipa nie postawi stopy w wykopie, dopóki nie zostanie oczyszczony. Połóż 10 kopaczy z Deeprock.",
         "completion": "Ha! Wracać do pracy, chłopcy! Masz moje podziękowania i moje złoto.",
         "objectives": {
           "0": {
-            "label": "Zabity kopacz Tunelowych Szczurów"
+            "label": "Zabity kopacz z Deeprock"
           }
         }
       },
@@ -6803,7 +6803,7 @@ export const pl_PL: EnTranslations = {
       },
       "q_rite": {
         "title": "Obrzęd wiążący",
-        "text": "Krypta pod kaplicą musi zostać odpieczętowana, jeśli mamy powstrzymać Grobozwańcę - lecz tylko obrzęd wiążący pozwoli żywym przejść. Potrzebuję 4 bryłek Poświęconego łoju - koboldzcy kopacze gromadzą świece skrzyniami - oraz 6 Upiornych esencji od niespokojnych zmarłych.",
+        "text": "Krypta pod kaplicą musi zostać odpieczętowana, jeśli mamy powstrzymać Gravecallera - lecz tylko obrzęd wiążący pozwoli żywym przejść. Potrzebuję 4 bryłek Poświęconego łoju - drążyciele z kopalni gromadzą łój skrzyniami - oraz 6 Upiornych esencji od niespokojnych zmarłych.",
         "completion": "Stało się. Droga w dół stoi otworem... i niech Światło wybaczy mi, że ją otworzyłem. Zbierz swych najsilniejszych towarzyszy, nim zejdziesz, {playerName}. Nikt nie powinien mierzyć się z Wydrążoną w pojedynkę.",
         "objectives": {
           "0": {
@@ -6837,7 +6837,7 @@ export const pl_PL: EnTranslations = {
       "q_gravecallers_trail": {
         "title": "Trop Grobowołacza",
         "text": "Morthen nie żyje, a jednak dręczy mnie pytanie: sekta, która ukrywała się przez stulecie, nie trwoni się na jedną wiejską kaplicę. Trzymał grymuar, swoje obrzędy, swoją korespondencję. Jeśli cokolwiek z niego przetrwało, leży w zakrystii zrujnowanej kaplicy nad kryptą. Przeszukaj ruinę i przynieś mi wszystko, co zostało z jego pism, {playerName}.",
-        "completion": "Morthen pisał do 'Mglarza' w północnym trzęsawisku. Sekta nie jest martwa, {playerName}, była jedynie cierpliwa.",
+        "completion": "Morthen pisał do 'Fogbindera' w północnym trzęsawisku. Sekta nie jest martwa, {playerName}, była jedynie cierpliwa.",
         "objectives": {
           "0": {
             "label": "Grymuar Morthena"
@@ -6866,7 +6866,7 @@ export const pl_PL: EnTranslations = {
       },
       "q_fenbridge_muster": {
         "title": "Zaciąg w Fenbridge",
-        "text": "Pisma Morthena wymieniały mistrza w północnym bagnie, 'Mglarza'. Teraz strażnik Fenwick zadął w róg zaciągowy w Fenbridge, a ja nie wierzę w przypadki, {playerName}. Ruszaj groblą na północ, zerwij rozkaz zaciągu ze słupa bramy i przedstaw go strażnikowi.",
+        "text": "Pisma Morthena wymieniały mistrza w północnym bagnie, 'Fogbindera'. Teraz strażnik Fenwick zadął w róg zaciągowy w Fenbridge, a ja nie wierzę w przypadki, {playerName}. Ruszaj groblą na północ, zerwij rozkaz zaciągu ze słupa bramy i przedstaw go strażnikowi.",
         "completion": "Pieczęć Aldrica, tak? Zatem się nadasz. Trzęsawisko połyka moje patrole w całości, a ja potrzebuję każdego ostrza, które utrzyma się na wodzie.",
         "objectives": {
           "0": {
@@ -6906,7 +6906,7 @@ export const pl_PL: EnTranslations = {
       },
       "q_deepfen": {
         "title": "Deepfen się budzi",
-        "text": "Murloki z Deepfen przez dwadzieścia lat trzymały się swoich płycizn. Teraz roją się na wschodnim brzegu niczym muchy na padlinie, a moi strażnicy mówią, że wyciągają coś z dna jeziora. Cokolwiek je poruszyło, chcę, by to ustało. Przetrzeb 12 kąsaczy.",
+        "text": "Mudfiny z Deepfen przez dwadzieścia lat trzymały się swoich płycizn. Teraz roją się na wschodnim brzegu niczym muchy na padlinie, a moi strażnicy mówią, że wyciągają coś z dna jeziora. Cokolwiek je poruszyło, chcę, by to ustało. Przetrzeb 12 kąsaczy.",
         "completion": "To na jakiś czas zepchnie ich z powrotem w błoto. Ale coś kazało im kopać i zamierzam się dowiedzieć, co.",
         "objectives": {
           "0": {
@@ -6936,7 +6936,7 @@ export const pl_PL: EnTranslations = {
       },
       "q_deepfen_purge": {
         "title": "Powrót na płycizny",
-        "text": "Aldric twierdzi, że te bożki to wytwór kultu, co znaczy, że murloki garść po garści wydobywają z bagna jego dawne zło. Nie pozwolę, by przybiło to do mojej grobli. Wróć na płycizny i raz na zawsze przerwij to pogłębianie: jeszcze 14 kąsaczy.",
+        "text": "Aldric twierdzi, że te bożki to wytwór kultu, co znaczy, że Mudfiny garść po garści wydobywają z bagna jego dawne zło. Nie pozwolę, by przybiło to do mojej grobli. Wróć na płycizny i raz na zawsze przerwij to pogłębianie: jeszcze 14 kąsaczy.",
         "completion": "Bezwzględnie i dokładnie. Jeśli to bagno kiedykolwiek wyschnie, czeka tu na ciebie praca strażnika.",
         "objectives": {
           "0": {
@@ -7043,7 +7043,7 @@ export const pl_PL: EnTranslations = {
       "q_summoners": {
         "title": "Powstrzymać przywoływanie",
         "text": "Raporty Maren wymieniają przywoływaczy wśród kultystów - głosy, które wzywają utopionych z wody jak ogary na gwizd. Ich szyfry wyłożą łańcuch dowodzenia. Ucisz 8 przywoływaczy i przynieś mi 4 z ich szyfrów.",
-        "completion": "Każdy szyfr jest kontrasygnowany \"Diakon Voss\" - i adresowany dalej do \"Mglarza\" w Bastionie. Mistrz Morthena, {playerName}. Znaleźliśmy go.",
+        "completion": "Każdy szyfr jest kontrasygnowany \"Diakon Voss\" - i adresowany dalej do \"Fogbindera\" w Bastionie. Mistrz Morthena, {playerName}. Znaleźliśmy go.",
         "objectives": {
           "0": {
             "label": "Przywoływacz Grobozwańców pokonany"
@@ -7065,7 +7065,7 @@ export const pl_PL: EnTranslations = {
       },
       "q_bastion_door": {
         "title": "Zatopiony Bastion",
-        "text": "Zatopiony Bastion, warownia rycerza, która sto lat temu utonęła w trzęsawisku, to miejsce, na które wskazują listy Vossa i gdzie ów Mglarz śpiewa swoje topielcze hymny. Kult zabezpieczył jego drzwi nagrobkami. Przynieś mi jeden z kamieni zaklęcia, {playerName}, a rozplotę pieczęć.",
+        "text": "Zatopiony Bastion, warownia rycerza, która sto lat temu utonęła w trzęsawisku, to miejsce, na które wskazują listy Vossa i gdzie ów Fogbinder śpiewa swoje topielcze hymny. Kult zabezpieczył jego drzwi nagrobkami. Przynieś mi jeden z kamieni zaklęcia, {playerName}, a rozplotę pieczęć.",
         "completion": "Zaklęcie pęka jak zbutwiały sznur. Drzwi stoją otworem... a mrok pod nimi nasłuchuje.",
         "objectives": {
           "0": {
@@ -7075,7 +7075,7 @@ export const pl_PL: EnTranslations = {
       },
       "q_olen": {
         "title": "Hańba Rycerza-Komandora",
-        "text": "Rycerz-Komandor Olen bronił Bastionu, gdy ten tonął - utonął na posterunku, zamiast go porzucić. Każdy strażnik z dumą uczy się jego imienia. Teraz Mglarz podniósł go jako marionetkę, by strzegła tych samych wrót, których broniąc zginął. Ta hańba się kończy, {playerName}. Weź czterech towarzyszy w dół i obdarz Olena spoczynkiem, na jaki zasłużył.",
+        "text": "Rycerz-Komandor Olen bronił Bastionu, gdy ten tonął - utonął na posterunku, zamiast go porzucić. Każdy strażnik z dumą uczy się jego imienia. Teraz Fogbinder podniósł go jako marionetkę, by strzegła tych samych wrót, których broniąc zginął. Ta hańba się kończy, {playerName}. Weź czterech towarzyszy w dół i obdarz Olena spoczynkiem, na jaki zasłużył.",
         "completion": "Zatem jego warta wreszcie dobiegła końca. Sam dopilnuję, by jego imię wyryto na bramie. Dziękuję ci, {playerName}.",
         "objectives": {
           "0": {
@@ -7084,12 +7084,12 @@ export const pl_PL: EnTranslations = {
         }
       },
       "q_mistcaller": {
-        "title": "Mglarz",
-        "text": "Na samym dnie Bastionu czeka Vael Mglarz - mistrz Morthena, mistrz Vossa, głos, który utopił setkę wędrowców, by wystawić sobie armię. Jest daleko poza siłami jednego bohatera: weź czterech towarzyszy, nie mniej. Skończ z nim, {playerName}, a zmarli z trzęsawiska wreszcie spoczną w spokoju.",
+        "title": "Fogbinder",
+        "text": "Na samym dnie Bastionu czeka Vael Fogbinder - mistrz Morthena, mistrz Vossa, głos, który utopił setkę wędrowców, by wystawić sobie armię. Jest daleko poza siłami jednego bohatera: weź czterech towarzyszy, nie mniej. Skończ z nim, {playerName}, a zmarli z trzęsawiska wreszcie spoczną w spokoju.",
         "completion": "Vael nie żyje, a mgła unosi się po raz pierwszy od lat. Lecz Maren usłyszała jego ostatnie słowa i mrożą mi one krew w żyłach: \"Żmij budzi się pod szczytami\". Sekta służy czemuś starszemu, niż kiedykolwiek przypuszczaliśmy, {playerName}. Odpocznij, póki możesz - góry są następne.",
         "objectives": {
           "0": {
-            "label": "Vael Mglarz pokonany"
+            "label": "Vael Fogbinder pokonany"
           }
         }
       },
@@ -7155,8 +7155,8 @@ export const pl_PL: EnTranslations = {
       },
       "q_kobold_tunnels": {
         "title": "Kłopoty w Deeprock",
-        "text": "Kobolty w Norach Deeprock kopią głębiej, niż jakikolwiek świecowy szczur ma prawo kopać, prosto w dół, jakby coś je wzywało. Ich tunele biegną pod naszym murem, {playerName}. Zakończ sprawę: zabij dwunastu drążycieli z Deeprock.",
-        "completion": "Prosto w dół, każdy szyb, kobolty nie kopią tak z własnej woli. Muszę zajrzeć do moich ksiąg.",
+        "text": "Drążyciele w Norach Deeprock kopią głębiej, niż jakikolwiek szczur z jam ma prawo kopać, prosto w dół, jakby coś je wzywało. Ich tunele biegną pod naszym murem, {playerName}. Zakończ sprawę: zabij dwunastu Drążycieli z Deeprock.",
+        "completion": "Prosto w dół, każdy szyb, drążyciele nie kopią tak z własnej woli. Muszę zajrzeć do moich ksiąg.",
         "objectives": {
           "0": {
             "label": "Zabity drążyciel z Deeprock"
@@ -7165,7 +7165,7 @@ export const pl_PL: EnTranslations = {
       },
       "q_glowing_wax": {
         "title": "Dziwny wosk",
-        "text": "Caddis pokazał mi świecę zabraną jednemu z tych kopaczy, wosk świeci, {playerName}, i jest ciepły jak bicie serca. On chce go więcej do badań, a ja chcę go skreślić z mojej listy zapotrzebowań. Przynieś sześć grudek świecącego wosku.",
+        "text": "Caddis pokazał mi bryłę wosku zabraną jednemu z tych drążycieli, wosk świeci, {playerName}, i jest ciepły jak bicie serca. On chce go więcej do badań, a ja chcę go skreślić z mojej listy zapotrzebowań. Przynieś sześć grudek świecącego wosku.",
         "completion": "Wciąż ciepły. Mistrz Wiedzy mówi, że ta poświata nie pasuje do żadnego znanego mu płomienia. Ja mówię, że to górskie kłopoty, i mówię to łagodnie.",
         "objectives": {
           "0": {
@@ -7552,7 +7552,7 @@ export const pl_PL: EnTranslations = {
             "label": "Jezioro Lustrzane"
           },
           "4": {
-            "label": "Pajęczy Las"
+            "label": "Sableweb"
           },
           "5": {
             "label": "Miedziane Wykopalisko"
@@ -7710,12 +7710,12 @@ export const pl_PL: EnTranslations = {
         "bonus3": "Zwiększa szybkość ataku i rzucania zaklęć o 15%."
       },
       "crownforged": {
-        "name": "Koronokuty rynsztunek bojowy",
+        "name": "Regalia Bonewrought",
         "bonus2": "Zwiększa siłę ataku o 40.",
         "bonus3": "Zwiększa siłę o 15, wytrzymałość o 15 oraz szybkość ataku i rzucania zaklęć o 15%."
       },
       "deathlord": {
-        "name": "Rynsztunek bojowy Władcy Śmierci",
+        "name": "Rynsztunek bojowy Barrowlorda",
         "bonus2": "Zwiększa siłę ataku o 40.",
         "bonus3": "Zwiększa siłę o 15 i wytrzymałość o 15."
       },
@@ -7724,22 +7724,22 @@ export const pl_PL: EnTranslations = {
         "bonus3": "Zwiększa szybkość ataku i rzucania zaklęć o 15%."
       },
       "necromancers": {
-        "name": "Szaty nekromanty",
+        "name": "Szaty Mournweave",
         "bonus2": "Nie można cię odrzucić (100% odporności na odrzucenie).",
         "bonus3": "Zwiększa intelekt o 10 i wytrzymałość o 10."
       },
       "nighttalon": {
-        "name": "Skórzany rynsztunek Nocnego Szpona",
+        "name": "Skóra Direfang",
         "bonus2": "Zwiększa siłę ataku o 40.",
         "bonus3": "Zwiększa zręczność o 15, szansę na trafienie krytyczne o 2% oraz szybkość ataku i rzucania zaklęć o 15%."
       },
       "soulflame": {
-        "name": "Szaty Płomienia Duszy",
+        "name": "Regalia Wraithfire",
         "bonus2": "Nie można cię odrzucić (100% odporności na odrzucenie).",
         "bonus3": "Zwiększa intelekt o 15, ducha o 15 oraz szybkość ataku i rzucania zaklęć o 15%."
       },
       "stormcallers": {
-        "name": "Szaty Przyzywacza Burz",
+        "name": "Szaty Galecall",
         "bonus2": "Nie można cię odrzucić (100% odporności na odrzucenie).",
         "bonus3": "Zwiększa intelekt o 15, ducha o 15 oraz szybkość ataku i rzucania zaklęć o 15%."
       },
@@ -7748,7 +7748,7 @@ export const pl_PL: EnTranslations = {
         "bonus3": "Zwiększa szybkość ataku i rzucania zaklęć o 15%."
       },
       "wyrmshadow": {
-        "name": "Rynsztunek Cienia Żmija",
+        "name": "Szaty Nightfang",
         "bonus2": "Zwiększa siłę ataku o 40.",
         "bonus3": "Zwiększa zręczność o 15 i szansę na trafienie krytyczne o 2%."
       }

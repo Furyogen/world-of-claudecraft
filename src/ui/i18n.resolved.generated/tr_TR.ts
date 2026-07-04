@@ -43,7 +43,7 @@ export const tr_TR: EnTranslations = {
       "subtitle": "Ömür Boyu XP",
       "rank": "Sıra",
       "name": "Ad",
-      "realmCol": "Diyar",
+      "realmCol": "Dünya",
       "level": "Sv",
       "vlevel": "S.Sv",
       "lifetimeXp": "Ömür Boyu XP",
@@ -52,7 +52,7 @@ export const tr_TR: EnTranslations = {
       "loading": "Sıralamalar yükleniyor…",
       "unranked": "Sırasız",
       "you": "Sen",
-      "globalSubtitle": "Tüm diyarların en iyi şampiyonları",
+      "globalSubtitle": "Tüm dünyaların en iyi şampiyonları",
       "retry": "Lider tablosu yüklenemedi. Tekrar deneyin."
     },
     "milestone": {
@@ -556,7 +556,7 @@ export const tr_TR: EnTranslations = {
       "defaultBuildName": "Yapı {n}"
     },
     "tips": {
-      "joinChannels": "İpucu: Sunucu genelindeki oyuncularla sohbet etmek için /join world ya da /join lfg yaz."
+      "joinChannels": "İpucu: Dünya genelindeki oyuncularla sohbet etmek için /join world ya da /join lfg yaz."
     },
     "itemSet": {
       "header": "{name} ({have}/{total})",
@@ -611,7 +611,7 @@ export const tr_TR: EnTranslations = {
     },
     "bugReport": {
       "menuButton": "Hata Bildir",
-      "realm": "Diyar",
+      "realm": "Dünya",
       "character": "Karakter",
       "position": "Konum",
       "unknown": "Bilinmeyen",
@@ -824,20 +824,20 @@ export const tr_TR: EnTranslations = {
       "stun": "Aturdido: no puede actuar",
       "root": "Enraizado: no puede moverse",
       "incapacitate": "Incapacitado: no puede actuar",
-      "polymorph": "Polimorfado: no puede actuar",
+      "polymorph": "Dönüştürüldü: hareket edemez",
       "hex": "Reduce el daño y la sanación realizados un {pct}%",
       "blind": "Cegado: no puede actuar",
       "silence": "Silenciado: no puede lanzar hechizos",
       "disarm": "Desarmado: no puede usar ataques con arma",
       "lockout": "Escuela de hechizos bloqueada",
       "imbue": "Arma imbuida con efectos adicionales",
-      "imbueRange": "Arma imbuida: {min} a {max} de daño adicional al juzgar",
+      "imbueRange": "Silah güçlendirildi: Hukum ile {min} ila {max} bonus hasar",
       "stealth": "Oculto; velocidad de movimiento reducida un {pct}%",
-      "formBear": "Forma de oso: salud y armadura aumentadas",
+      "formBear": "Bruin Formu: can ve zırh artışı",
       "formCat": "Forma felina: daño cuerpo a cuerpo y energía",
-      "formTravel": "Forma de viaje: velocidad de movimiento aumentada un {pct}%",
-      "defensiveStance": "Actitud defensiva: daño recibido reducido, más amenaza",
-      "righteousFury": "Furia recta: amenaza de daño Sagrado muy aumentada",
+      "formTravel": "Fleet Formu: hareket hızı %{pct} artar",
+      "defensiveStance": "Korumali Durus: alınan hasar azalır, daha fazla tehdit",
+      "righteousFury": "Yanan Yemin: Kutsal hasardan gelen tehdit büyük ölçüde artar",
       "scale": "Tamaño aumentado un {pct}%",
       "jump": "Altura de salto aumentada un {pct}%",
       "school": {
@@ -1275,7 +1275,7 @@ export const tr_TR: EnTranslations = {
         "valeName": "Doğudere Vadisi",
         "valeBlurb": "Her maceranın başladığı yeşil tepeler ve eski ormanlar.",
         "marshName": "Mirefen Bataklığı",
-        "marshBlurb": "Batık bataklıklar ve dalgaların aşındırdığı harabeler; murlocların ve daha beterlerinin yurdu.",
+        "marshBlurb": "Batık bataklıklar ve dalgaların aşındırdığı harabeler; Mudfinlerin ve daha beterlerinin yurdu.",
         "peaksName": "Dikenzirve Tepeleri",
         "peaksBlurb": "Rüzgârın kavurduğu, diyarın en soğuk tehlikelerine doğru yükselen sırtlar."
       },
@@ -1297,12 +1297,12 @@ export const tr_TR: EnTranslations = {
         "q2": "Kripto cüzdanına ihtiyacım var mı?",
         "a2": "Hayır. Oyun, cüzdan olmadan da tümüyle oynanabilir. İsteğe bağlı topluluk jetonu yalnızca görsel süsler açar ve gücü asla etkilemez.",
         "q3": "Çevrim dışı oynayabilir miyim?",
-        "a3": "Evet. Tarayıcında anında başlayan bir tek oyunculu mod, ayrıca paylaşılan çevrim içi diyar var.",
+        "a3": "Evet. Tarayıcında anında başlayan bir tek oyunculu mod, ayrıca paylaşılan çevrim içi dünya var.",
         "q4": "Azami seviyeye ulaşmak ne kadar sürer?",
         "a4": "Sınır, üç bölge boyunca görevler, zindanlar ve keşifle ulaşılan {cap}. seviyedir."
       },
       "community": {
-        "heading": "Diyara katıl",
+        "heading": "Dünyaya katıl",
         "body": "Hemen katıl ya da bir merhaba demeye gel. Dünya, arkadaşlarla daha güzel.",
         "play": "Şimdi Oyna",
         "discord": "Discord'a katıl",
@@ -1336,7 +1336,7 @@ export const tr_TR: EnTranslations = {
       "groupingTitle": "Birlikte oynamak",
       "groupingBody": "Görev hakkını paylaşmak ve zindanlara girişmek için başkalarını gruba davet et. Dünyanın çoğu tek başına aşılabilir, yani gruplaşmak bir zorunluluk değil, bir tercihtir.",
       "onlineTitle": "Çevrim içi ya da çevrim dışı",
-      "onlineBody": "Herkesle birlikte paylaşılan çevrim içi diyarda oyna ya da ipuçlarını öğrenmek için tarayıcında anında bir çevrim dışı dünya başlat.",
+      "onlineBody": "Herkesle birlikte paylaşılan çevrim içi dünyada oyna ya da ipuçlarını öğrenmek için tarayıcında anında bir çevrim dışı dünya başlat.",
       "reassure": "Yetenekler 10. seviyede açılır ve istediğin zaman sıfırlanabilir, bu yüzden erken seçimlerin asla kalıcı değildir. Gönlünce dene.",
       "controlsLink": "Tam denetim başvurusunu gör"
     },
@@ -1513,12 +1513,12 @@ export const tr_TR: EnTranslations = {
       "charge": "Uzaktaki bir düşmana atılarak kısa bir sersemletmeyle dövüşü başlatır.",
       "rend": "Hedefi zamanla yıpratan bir kanama açar.",
       "thunder_clap": "Çevrendeki her şeye vurur ve saldırılarını yavaşlatır.",
-      "seal_of_righteousness": "Savruşlarını Kutsal hasarla güçlendirir, sonra onu Yargı ile harca.",
+      "seal_of_righteousness": "Savuruşlarını Kutsal hasarla güçlendirir, sonra onu Verdict ile harca.",
       "holy_light": "Bir dostu ya da kendini tam doldurmak için istikrarlı, hatırı sayılır bir iyileştirme.",
       "devotion_aura": "Zırhı yükselten kalıcı bir öz güçlendirmesi, böylece darbeler daha hafif gelir.",
       "judgement": "Aktif Mührünü harcayarak kısa menzilden bir düşmana vurur.",
       "blessing_of_might": "Dost bir hedefin saldırı gücünü yükseltir, akından önce kullanmak iyidir.",
-      "divine_protection": "İşler kızıştığında hasarı emmek için hızlı bir kutsal kalkan.",
+      "divine_protection": "İşler kızıştığında hasarı emmek için hızlı bir koruyucu siper.",
       "raptor_strike": "Bir şey aradaki mesafeyi kapattığında kullanılacak sert bir yakın dövüş savruşu.",
       "aspect_of_the_hawk": "Menzilli saldırı gücünü keskinleştirmek için sürekli açık tuttuğun bir suret.",
       "serpent_sting": "Zamanla doğa hasarı kanatan bir zehir bulaştırır.",
@@ -1550,7 +1550,7 @@ export const tr_TR: EnTranslations = {
       "conjure_water": "Mana yenileyen içecekler çağırır, böylece akınlar arasında dolum yapabilirsin.",
       "conjure_food": "Oturup yediğinde can yenileyen yiyecek çağırır.",
       "shadow_bolt": "Bir hedefe okuduğun bir gölge oku; başvuru bombasın.",
-      "summon_imp": "Düşmanlara menzilden ateş okları fırlatan bir iblisçik çağırır.",
+      "summon_imp": "Düşmanlara menzilden ateş okları fırlatan bir Emberkin çağırır.",
       "demon_skin": "Derini sertleştirip zırh ekleyen kalıcı bir öz güçlendirmesi.",
       "immolate": "Bir hedefi tutuşturur; açılış darbesi ve sonra süren bir yanış verir.",
       "corruption": "Bir hedefi gölgeyle çürütür ve sen başka işler yaparken hasar verir.",
@@ -1582,7 +1582,7 @@ export const tr_TR: EnTranslations = {
         "old_greyjaw": "Hiçbir tuzağın tutamadığı, üç tazıyla bir ahır oğlanının kolundan sorumlu tutulan yaralı yaşlı bir kurt. Derin ormanlarda yalnız avlanır ve bir dövüş uzadıkça vahşileşir.",
         "grubjaw": "Diğer trollerin yanında kazmak istemeyeceği kadar açgözlü bir bataklık trolü; bir tüccarın son iki katır eşeğini, koşum takımı dahil yediği söylenir.",
         "shardlord_kazzix": "Omuz kazanmış bir fırtına elementali; Stormcrag üzerindeki uzak kayalıklarda, yıldırımı göze almaya değer bir kalp parçasıyla dolaşır.",
-        "mirejaw_frenzy": "Dövüşün ortasında kendini çırpınan bir cinnete sürükleyen bir bataklık murloku; gürültülü, bölgesel bir sürünün en gürültülü üyesi.",
+        "mirejaw_frenzy": "Dövüşün ortasında kendini çırpınan bir cinnete sürükleyen bir bataklık Mudfini; gürültülü, bölgesel bir sürünün en gürültülü üyesi.",
         "gravecaller_cultist": "Vadiden zirvelere kadar mezarları kirleten ölüm tarikatının cüppeli hizmetkarları. Toplandıkları yerde, ölüler huzur bulmaz."
       }
     },
@@ -1596,12 +1596,12 @@ export const tr_TR: EnTranslations = {
         "desc": "Karanlık, çapraşık yerlerde yuvalanan ağ örücüler ve zehirli pusucular. Avcılar onları, tıpkı yabani hayvanlar gibi evcilleştirebilir."
       },
       "mudfin": {
-        "name": "Murloclar",
+        "name": "Mudfinler",
         "desc": "Sığ suları gürültülü, bölgeci sürüler hâlinde saran amfibik bataklık sakinleri."
       },
       "burrower": {
-        "name": "Koboldlar",
-        "desc": "Madenleri ve oyukları istila eden, cevherlerini hırsla koruyan mum başlı kazıcılar."
+        "name": "Oyucular",
+        "desc": "Madenleri ve oyukları istila eden, cevherlerini hırsla koruyan toprağa bulanmış kazıcılar."
       },
       "humanoid": {
         "name": "İnsansılar",
@@ -1637,7 +1637,7 @@ export const tr_TR: EnTranslations = {
       "places": "Görülmeye değer yerler",
       "residents": "Karşılaşacağınız kişiler",
       "valeBlurb": "Yeni kahramanların Eastbrook kasabası çevresinde kurtlar ve haydutlarla dişlerini biledikleri yemyeşil başlangıç vadisi.",
-      "marshBlurb": "Sis ve harabelerle dolu, suya gömülmüş bir ülke. Murloclar sığlıkları sarar ve suyun altında daha eski bir şey kıpırdanır, köprü-kasabası Fenbridge'den izlenir.",
+      "marshBlurb": "Sis ve harabelerle dolu, suya gömülmüş bir ülke. Mudfinler sığlıkları sarar ve suyun altında daha eski bir şey kıpırdanır, köprü-kasabası Fenbridge'den izlenir.",
       "peaksBlurb": "Rüzgarın aşındırdığı sırtlar ve eski maden ocakları, diyarın en soğuk, en yüksek tehlikelerine doğru tırmanır; ileri karakol Highwatch tarafından tutulur.",
       "valeGreeting": "Kılıcını yakın tut. Vadi eski Vadi değil.",
       "valeGreeter": "Mareşal Redbrook, Eastbrook",
@@ -1645,9 +1645,9 @@ export const tr_TR: EnTranslations = {
       "marshGreeter": "Muhafız Fenwick, Fenbridge",
       "peaksGreeting": "İki yüz yıldır bu sur dayandı. Benim nöbetimde yıkılmayacak, ama inliyor.",
       "peaksGreeter": "Yüzbaşı Thessaly, Highwatch",
-      "valePlaceNotes": "Eastbrook ilk ana üssünüzdür. Wolf Run ve Boar Meadow yumuşak av sahalarıdır; Mirror Lake balık tutulacak sakin sulardır; Webwood ve Copper Dig örümcekleri ve cevhere aç kazıcıları saklar; bir Bandit Camp ve Fallen Chapel daha çetin işler barındırır; Reliquary Hill, diyarın ilk delvesi olan Collapsed Reliquary'ye iner; ve Brightwood Glade kuzeydeki sakin, güneşli bir korudur.",
-      "marshPlaceNotes": "Fenbridge tek kuru yolu korur. Sinsi Sazlıklar ve Derinbataklık Sığlıkları bataklık canavarları ve murloclarla kaynar; Dul Çalılığı sımsıkı ağlarla örülüdür; Boğulmuş Şapel ve Trol Höyükleri daha eski tehlikeleri barındırır; Mezarçağıran Kampı tarikatın siper kazdığı yerdir ve Batık Kale bataklığın örneklenmiş kalbidir.",
-      "peaksPlaceNotes": "Highwatch suru tutar. Sinsi Sırt ve Derinkaya Oyukları sırt kedileri ve kobolderindir; Dev Etekleri ve Drogmar Savaş Kampı kiralık zorbalarındır; Fırtınakaya elementallerle çıtırdar ve altında Pırıltıgöl ışıldar; Solucanküt Çadırları ve Hortlak Tarlaları tarikatın yüksek mevzisini kuşatır, zirvesinde Mezarejderi Mabedi yer alır.",
+      "valePlaceNotes": "Eastbrook ilk ana üssünüzdür. Wolf Run ve Boar Meadow yumuşak av sahalarıdır; Mirror Lake balık tutulacak sakin sulardır; Sableweb ve Copper Dig örümcekleri ve cevhere aç kazıcıları saklar; bir Bandit Camp ve Fallen Chapel daha çetin işler barındırır; Reliquary Hill, diyarın ilk delvesi olan Collapsed Reliquary'ye iner; ve Brightwood Glade kuzeydeki sakin, güneşli bir korudur.",
+      "marshPlaceNotes": "Fenbridge tek kuru yolu korur. Sinsi Sazliklar ve Deepfen Sigliklari bataklik canavarlari ve Mudfinlerle kaynar; Dul Cadirligi simsiki aglarla oruludur; Bogulmus Sapel ve Trol Hoyukleri daha eski tehlikeleri barindirir; Gravecaller Kampi tarikatin siper kazdigi yerdir ve Batik Kale bataklarin orneklenmis kalbidir.",
+      "peaksPlaceNotes": "Highwatch suru tutar. Sinsi Sirt ve Deeprock Oyuklari sirt kedileri ve oyucularindir; Dev Etekleri ve Drogmar Savas Kampi kiralik zorbalarindir; Firtinakaya elementallerle citirdar ve altinda Piriltigol isildar; Solucankut Cadirlari ve Hortlak Tarlalari tarikatin yuksek mevzisini kusatir, zirvesinde Mezarejderi Mabedi yer alir.",
       "gladeTitle": "Sakin bir köşe: Parlakorman Açıklığı",
       "gladeBody": "Vale'deki her hikaye ölülerle ilgili değildir. Kuzeyde, Brightwood Glade adlı güneşli bir koru, dalların altındaki sessiz patikaları ve benek benek ışığıyla kendi daha yumuşak ritmini korur. Takip ettiğiniz izin yumuşak bir karşı sesidir ve yol başıboş dolaşmanıza imkan verdiğinde görmeye değer."
     },
@@ -1682,7 +1682,7 @@ export const tr_TR: EnTranslations = {
       "sagaValeTitle": "Vadi: bir mühürdeki isim",
       "sagaValeBody": "Doğudere'de ölüler huzur bulmuyor ve bunun ardındaki damga, çoktan yok olduğu sanılan bir mezhebe ait. İzi şapel mahzeninde çalışan bir Mezar Çağırıcı'ya kadar sür, onun kendi evrakları seni kuzeydeki bataklığa yönlendirir.",
       "sagaMarshTitle": "Bataklık: ruhlardan bir öşür",
-      "sagaMarshBody": "Mirefen'de boğulmalar tesadüf değil. Biri bataklığı bir öşür kutusu gibi dolduruyor, suyun aldığı her yolcudan itaatkâr ölüler diriltiyor. Emirleri zincirde yukarı, boğulmuş kaledeki bir Sis Çağırıcı'ya kadar takip et; onun son sözleri zirvelerin altında kıpırdanan, daha da kadim bir şeyin adını verir.",
+      "sagaMarshBody": "Mirefen'de boğulmalar tesadüf değil. Biri bataklığı bir öşür kutusu gibi dolduruyor, suyun aldığı her yolcudan itaatkâr ölüler diriltiyor. Emirleri zincirde yukarı, boğulmuş kaledeki bir Fogbinder'a kadar takip et; onun son sözleri zirvelerin altında kıpırdanan, daha da kadim bir şeyin adını verir.",
       "sagaPeaksTitle": "Zirveler: öşür ne içindi",
       "sagaPeaksBody": "Thornpeak'te bütün düzen açığa çıkar. Vale'den beri çalınan her ruh, dağın kalbindeki kültün kasvetli işine dökülen bir öşürdü. Bir şapel avlusunda başlayan iz burada, tüm bunların ardındaki eli karşılamak için beş oyunculu bir inişte son bulur. En dipte kimin beklediğini öğrenmeyi sana bırakacağız.",
       "sideTitle": "Ana yoldan ayrılan iplikler",
@@ -2464,10 +2464,10 @@ export const tr_TR: EnTranslations = {
     "donate": "Bağış Yap"
   },
   "stats": {
-    "title": "Diyar Durumu",
+    "title": "Dünya Durumu",
     "accountsCreated": "Oyuncular",
     "playersOnline": "Çevrimiçi Oyuncular",
-    "realmName": "Diyar Adı"
+    "realmName": "Dünya Adı"
   },
   "footer": {
     "copyright": "2026 World of ClaudeCraft",
@@ -2485,7 +2485,7 @@ export const tr_TR: EnTranslations = {
   },
   "highscores": {
     "title": "Yüksek Skorlar Liderlik Tablosu",
-    "desc": "Diyarın en büyük şampiyonlarını takip et ve ilerlemeni kıyasla."
+    "desc": "Dünyanın en büyük şampiyonlarını takip et ve ilerlemeni kıyasla."
   },
   "wiki": {
     "title": "Oyun Wiki ve Rehberi",
@@ -2507,12 +2507,12 @@ export const tr_TR: EnTranslations = {
   },
   "comingSoon": {
     "placeholder": "Yakında...",
-    "featureComingSoon": "Bu özellik yakında diyara geliyor."
+    "featureComingSoon": "Bu özellik yakında dünyaya geliyor."
   },
   "mode": {
     "onlineTitle": "Çevrimiçi Oyna",
-    "onlineDesc": "Diyara giriş yap. Karakterlerin sunucuda yaşar ve dünyayı çevrimiçi olan herkesle paylaşırsın.",
-    "onlineAria": "Çevrimiçi Oyna: kalıcı paylaşımlı diyara giriş yap",
+    "onlineDesc": "Dünyaya giriş yap. Karakterlerin sunucuda yaşar ve dünyayı çevrimiçi olan herkesle paylaşırsın.",
+    "onlineAria": "Çevrimiçi Oyna: kalıcı paylaşımlı dünyaya giriş yap",
     "offlineTitle": "Çevrimdışı Oyna",
     "offlineDesc": "Tarayıcınızda anında tek oyunculu dünya. Hiçbir şey kaydedilmez: hızlı bir kapışma veya test için ideal.",
     "offlineAria": "Çevrimdışı Oyna: anında yerel tek oyunculu oturum başlat",
@@ -2522,15 +2522,15 @@ export const tr_TR: EnTranslations = {
     "serverOffline": "Çevrimdışı",
     "play": "Oyna",
     "playAria": "World of ClaudeCraft oyna",
-    "serverLabel": "Diyarını seç",
-    "serverAria": "Diyar seç: Çevrimiçi veya Çevrimdışı",
+    "serverLabel": "Dünyanı seç",
+    "serverAria": "Dünya seç: Çevrimiçi veya Çevrimdışı",
     "serverOfflineSub": "Anında yerel dünya",
     "caLabel": "$WOC Sözleşme Adresi",
     "caCopyAria": "Sözleşme adresini kopyala",
     "caNote": "WOC topluluk jetonumuzdur. Oynamak için gerekli değildir. WOC'un faydasını ve döngüsünü tartışmak için Discord'a katılın."
   },
   "auth": {
-    "enterRealm": "Diyara Gir",
+    "enterRealm": "Dünyaya Gir",
     "username": "Kullanıcı adı",
     "usernameError": "Lütfen kullanıcı adını gir.",
     "usernamePlaceholder": "Kullanıcı adı gir",
@@ -2545,16 +2545,16 @@ export const tr_TR: EnTranslations = {
     "logIn": "Giriş Yap",
     "createAccount": "Hesap Oluştur",
     "back": "Geri",
-    "realmList": "Diyar Listesi",
-    "loadingRealms": "Diyarlar yükleniyor...",
-    "changeRealm": "Diyarı Değiştir",
-    "realm": "Diyar",
+    "realmList": "Dünya Listesi",
+    "loadingRealms": "Dünyalar yükleniyor...",
+    "changeRealm": "Dünyayı Değiştir",
+    "realm": "Dünya",
     "newCharacter": "Yeni Karakter",
     "appearance": "Görünüm",
     "class": "Sınıf",
     "name": "Ad",
     "chromaOption": "Renk {n}",
-    "noAccountPrompt": "Diyara yeni mi geldin?",
+    "noAccountPrompt": "Dünyaya yeni mi geldin?",
     "haveAccountPrompt": "Zaten bir hesabın var mı?",
     "characters": "Karakterler:",
     "createCharacter": "Karakter Oluştur",
@@ -2726,7 +2726,7 @@ export const tr_TR: EnTranslations = {
     "renderFailedStatus": "Kart oluşturma başarısız oldu.",
     "levelClass": "Seviye {level} - {className}",
     "topPercent": "İLK %{percent}",
-    "realmSubtitle": "{realm} Diyarı",
+    "realmSubtitle": "{realm} Dünyası",
     "defaultRealm": "World of ClaudeCraft",
     "brandWordmark": "WORLD OF CLAUDECRAFT",
     "recruited": "{count} davet edildi",
@@ -2735,7 +2735,7 @@ export const tr_TR: EnTranslations = {
     "footerCta": "Efsaneni yarat: {siteUrl}",
     "arenaStat": "Arena",
     "shareTierBit": ", {tier}-derece $WOC sahibi",
-    "shareText": "World of ClaudeCraft'ta efsanemi yaratıyorum: Seviye {level} {className}{tierBit}. Diyarıma katıl:",
+    "shareText": "World of ClaudeCraft'ta efsanemi yaratıyorum: Seviye {level} {className}{tierBit}. Dünyama katıl:",
     "nativeShareTitle": "World of ClaudeCraft",
     "fileNameFallback": "oyuncu",
     "actionShareX": "X'te Paylaş",
@@ -3221,7 +3221,7 @@ export const tr_TR: EnTranslations = {
         "desc": "Fiziksel vuruşların %15 daha sert isabet eder."
       },
       "aug_spellfire": {
-        "name": "Büyü Ateşi",
+        "name": "Kara Ateş",
         "desc": "Büyülerin %15 daha fazla hasar verir."
       },
       "aug_toughness": {
@@ -3265,7 +3265,7 @@ export const tr_TR: EnTranslations = {
         "desc": "Her türden +%18 hasar ve +%12 hareket hızı."
       },
       "aug_lightwell": {
-        "name": "Işık Kuyusu",
+        "name": "Mezar Işığı",
         "desc": "+%30 iyileştirme ve +%15 azami can. Takımına dayanak ol."
       },
       "aug_bounty_hunter": {
@@ -3316,13 +3316,13 @@ export const tr_TR: EnTranslations = {
   },
   "seo": {
     "title": "World of ClaudeCraft: Klasik Tarzı Web MMO'su",
-    "description": "Doğrudan tarayıcında oynanabilen klasik tarzı bir mikro MMO olan World of ClaudeCraft'ta destansı bir maceraya atıl. Kalıcı bir ortak diyara katıl, sınıfları geliştir ve düşmanları alt et!",
+    "description": "Doğrudan tarayıcında oynanabilen klasik tarzı bir mikro MMO olan World of ClaudeCraft'ta destansı bir maceraya atıl. Kalıcı bir ortak dünyaya katıl, sınıfları geliştir ve düşmanları alt et!",
     "genre": "MMORPG",
     "playMode": "Çok Oyunculu",
     "applicationCategory": "Oyun",
     "operatingSystem": "Web tarayıcısı",
     "officialLabel": "Resmi World of ClaudeCraft web sitesi",
-    "officialBody": "worldofclaudecraft.com, Claudemoon diyarının resmi ücretsiz tarayıcı MMO'sudur. Kalıcı bir karakterle çevrimiçi oyna, çevrimdışı tek başına keşfet, wiki'yi oku ve bu siteden doğrulanmış topluluk bağlantılarını takip et."
+    "officialBody": "worldofclaudecraft.com, Claudemoon dünyasının resmi ücretsiz tarayıcı MMO'sudur. Kalıcı bir karakterle çevrimiçi oyna, çevrimdışı tek başına keşfet, wiki'yi oku ve bu siteden doğrulanmış topluluk bağlantılarını takip et."
   },
   "a11y": {
     "goHome": "Ana sayfaya git",
@@ -3338,7 +3338,7 @@ export const tr_TR: EnTranslations = {
     "world": "Dünya yükleniyor...",
     "worldProgress": "Dünya yükleniyor... {done}/{total}",
     "enteringWorld": "Dünyaya giriliyor...",
-    "connectingRealm": "Diyara bağlanılıyor...",
+    "connectingRealm": "Dünyaya bağlanılıyor...",
     "assetsFailed": "Varlık yüklemesi başarısız oldu: yeniden yüklemeyi deneyin. {error}",
     "rendererFailed": "Görüntüleyici başlatılamadı: yeniden yüklemeyi deneyin. {error}",
     "enterTimeout": "Dünyaya girilemedi. Bağlantı zaman aşımına uğradı. Oyun sunucusu çalışıyor mu?",
@@ -3396,25 +3396,25 @@ export const tr_TR: EnTranslations = {
     }
   },
   "realm": {
-    "noRealms": "Mevcut diyar yok.",
-    "loading": "Diyarlar yükleniyor...",
+    "noRealms": "Mevcut dünya yok.",
+    "loading": "Dünyalar yükleniyor...",
     "recommended": "Önerilen",
     "checkingStatus": "Durum denetleniyor...",
     "onlineNow": "şu anda {count} çevrimiçi",
-    "down": "Diyar çevrimdışı",
+    "down": "Dünya çevrimdışı",
     "offline": "Çevrimdışı",
     "full": "Dolu",
     "high": "Yüksek",
     "medium": "Orta",
     "low": "Düşük",
     "popTipLow": "Düşük nüfus: şu anda 15'ten az oyuncu çevrimiçi. Bolca yer var; taze bir başlangıç için harika.",
-    "popTipMedium": "Orta nüfus: şu anda 15 ila 39 oyuncu çevrimiçi. Sağlıklı, etkin bir diyar.",
+    "popTipMedium": "Orta nüfus: şu anda 15 ila 39 oyuncu çevrimiçi. Sağlıklı, etkin bir dünya.",
     "popTipHigh": "Yüksek nüfus: şu anda 40 ila 79 oyuncu çevrimiçi. Yoğun, çevrede çok sayıda oyuncu var.",
     "popTipFull": "Dolu nüfus: şu anda 80 veya daha fazla oyuncu çevrimiçi. Çok yoğun; giriş kuyruğunda bekleyebilirsin.",
-    "popTipOffline": "Çevrimdışı: bu diyara şu anda ulaşılamıyor ve katılınamıyor.",
+    "popTipOffline": "Çevrimdışı: bu dünyaya şu anda ulaşılamıyor ve katılınamıyor.",
     "characterCountOne": "{count} karakter",
     "characterCountOther": "{count} karakter",
-    "selectedRealm": "Diyar: {name}",
+    "selectedRealm": "Dünya: {name}",
     "statsOffline": "Çevrimdışı",
     "statsRealmOffline": "{realm} (Çevrimdışı)"
   },
@@ -3498,12 +3498,12 @@ export const tr_TR: EnTranslations = {
     },
     "lore": {
       "warrior": "Savaşçılar, hasar verdikçe ya da aldıkça Öfke biriktiren çelik gibi yakın dövüş savaşçılarıdır. Ağır darbeleri soğurur ya da düşmanları güçlü silahlarla ezerler.",
-      "paladin": "Paladinler, müttefiklerini kutsamalarla destekleyen, yaraları Kutsal Işık'la iyileştiren ve ağır zırhları içinde güçsüzü koruyan kutsal şövalyelerdir.",
+      "paladin": "Paladinler, müttefiklerini kutsamalarla destekleyen, yaraları Onaran Işık'la iyileştiren ve ağır zırhları içinde güçsüzü koruyan kutsal şövalyelerdir.",
       "hunter": "Avcılar, evcilleştirdikleri bir canavarın yanında savaşan menzilli uzmanlardır; düşmanları nişanlı ve seri atış yağmuruna tutar, sokmalar ve sersemletici atışlarla yavaşlatır ve ana uygun suretlere bürünürler.",
       "rogue": "Hırsızlar, gölgelerden sırttan bıçaklamalar ve bitirici hamleler için Enerji ile Kombo Puanı harcayan gizli suikastçılardır.",
-      "priest": "Rahipler müttefikleri iyileştirmek ve korumak için Kutsal Işık'a başvurur; Gölge büyüsü ise düşmanlarının canını emmelerine olanak tanır.",
+      "priest": "Rahipler müttefikleri iyileştirmek ve korumak için Onaran Işık'a başvurur; Gölge büyüsü ise düşmanlarının canını emmelerine olanak tanır.",
       "shaman": "Şamanlar elementlere komuta eder; silahlara güç katar, düşmanları yıldırımla sarsar ve müttefikleri iyileştirir.",
-      "mage": "Büyücüler Ateş, Buz ve Gizem gücünü bükerek düşmanları yok eder, su çağırır ve tehditleri olduğu yerde dondurur.",
+      "mage": "Büyücüler Ateş, Buz ve gizem gücünü bükerek düşmanları yok eder, su çağırır ve tehditleri olduğu yerde dondurur.",
       "warlock": "Karabüyücüler şeytanlar çağırır, lanetler ve süregelen hasar büyüleri uygular ve dayanmak için düşmanlardan can emer.",
       "druid": "Druidler doğayı yönlendirir; yaraları iyileştirir, düşmanları kıskaca alır ve savunma ya da hasar için hayvan formlarına bürünür."
     },
@@ -3529,10 +3529,10 @@ export const tr_TR: EnTranslations = {
     "otherInstallDetail": "En iyi tam ekran mobil deneyim için bu sayfayı yükleyin veya Ana ekranınıza ekleyin."
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - Diyar Kullanılamıyor",
+    "title": "World of ClaudeCraft - Dünya Kullanılamıyor",
     "logoAlt": "World of ClaudeCraft",
-    "eyebrow": "Diyar bakımı",
-    "heading": "Diyar geçici olarak kullanılamıyor.",
+    "eyebrow": "Dünya bakımı",
+    "heading": "Dünya geçici olarak kullanılamıyor.",
     "body": "Oyun hizmetini yeniden başlatıyoruz ve Claudemoon'un kısa süre içinde geri döneceğini umuyoruz. Bu sayfa otomatik olarak denetlemeye devam edecek.",
     "status": "Birazdan döneriz"
   },
@@ -3852,9 +3852,9 @@ export const tr_TR: EnTranslations = {
       "requiresCombo": "O yetenek kombo puanı gerektirir.",
       "requiresForm": "{form} Formunda olmalısın.",
       "cantInForm": "{form} Formunda bunu yapamazsın.",
-      "bear": "Ayı",
+      "bear": "Bruin",
       "cat": "Kurt",
-      "travel": "Yolculuk",
+      "travel": "Fleet",
       "shapeshifted": "Şekil değiştirmişken bunu yapamazsın.",
       "stealthed": "Gizlenmiş olmalısın.",
       "inCombat": "Bunu savaşta yapamazsın.",
@@ -4469,175 +4469,175 @@ export const tr_TR: EnTranslations = {
         "description": "Hedef alanı sarsar ve düşmanlara {damage} Doğa hasarı verir."
       },
       "heroic_strike": {
-        "name": "Kahramanca Vuruş",
+        "name": "Yağmacı Darbesi",
         "description": "Yakın dövüş hasarını {damage} artıran güçlü bir saldırı. Bir sonraki vuruşunda etkinleşir."
       },
       "battle_shout": {
-        "name": "Savaş Narası",
+        "name": "Demir Nara",
         "description": "Saldırı gücünü 2 dakika boyunca 20 artırır."
       },
       "commanding_shout": {
-        "name": "Komuta Narası",
+        "name": "Güçlendiren Nara",
         "description": "Dayanıklılığını 2 dakika boyunca 6 artırır."
       },
       "demoralizing_shout": {
-        "name": "Moral Bozucu Nara",
+        "name": "Vahim Uluma",
         "description": "Korkunç bir nara atarak yakındaki tüm düşmanların saldırı gücünü 30 saniye boyunca 30 azaltır."
       },
       "charge": {
-        "name": "Hücum",
+        "name": "Atılım",
         "description": "Bir düşmana hücum ederek 9 öfke üretir ve onu 1 saniye sersemletir. 8-25 yarda menzil."
       },
       "rend": {
-        "name": "Yırtma",
+        "name": "Derin Yarık",
         "description": "Hedefi yaralar, 9 saniye boyunca {damage} kanama hasarı vermesine yol açar."
       },
       "thunder_clap": {
-        "name": "Gök Gürültüsü",
+        "name": "Sarsan Darbe",
         "description": "Yakındaki düşmanları {damage} hasar için patlatır ve saldırılarını 10 saniye boyunca %10 yavaşlatır."
       },
       "hamstring": {
-        "name": "Diz Ardı Kesme",
+        "name": "Topallatan Kesik",
         "description": "Düşmanı 5 hasarla sakatlayarak hareketini 15 saniye boyunca %50 yavaşlatır."
       },
       "bloodrage": {
-        "name": "Kan Öfkesi",
+        "name": "Kan Bedeli",
         "description": "Can pahasına 10 öfke üretir."
       },
       "overpower": {
-        "name": "Alt Etme",
+        "name": "Kızıl El",
         "description": "Silah hasarı +5 veren anında saldırı. Yalnızca hedef sıyırma yaptıktan sonra kullanılabilir. Sıyrılamaz."
       },
       "execute": {
-        "name": "İnfaz",
+        "name": "Erken Mezar",
         "description": "Yaralı bir düşmanı bitirmeye çalışır ve {damage} hasar verir. Yalnızca canı %20'nin altındaki düşmanlarda kullanılabilir."
       },
       "slam": {
-        "name": "Çarpma",
+        "name": "Kaba Savuruş",
         "description": "Rakibe silah hasarı artı {damage} için çarpar."
       },
       "cleave": {
-        "name": "Yarma",
+        "name": "Biçen Yay",
         "description": "Önündeki tüm düşmanlara {damage} hasar veren süpüren bir darbe."
       },
       "defensive_stance": {
-        "name": "Savunma Duruşu",
+        "name": "Korumali Durus",
         "description": "Savunma amaçlı bir dövüş duruşu: %30 daha fazla tehdit üretirsin ama %10 daha az hasar verir ve alırsın. Duruştan çıkmak için tekrar kullan."
       },
       "sunder_armor": {
-        "name": "Zırh Parçalama",
+        "name": "Zırh Kesme",
         "description": "Hedefin zırhını parçalar, her uygulamada {damage} azaltır. 5 kata kadar üst üste binebilir. Yüksek miktarda tehdit üretir."
       },
       "taunt": {
-        "name": "Kışkırtma",
+        "name": "Tahrik",
         "description": "Hedefi kışkırtır: tehdidin onun en nefret ettiği düşmana eşit hale gelir ve 3 saniye boyunca sana saldırmaya zorlanır."
       },
       "fireball": {
-        "name": "Ateş Topu",
+        "name": "Köz Oku",
         "description": "Ateşli bir top fırlatarak {damage} Ateş hasarı ve ek olarak zamana yayılı hasar verir."
       },
       "frost_armor": {
-        "name": "Buz Zırhı",
+        "name": "Kırağı Pelerini",
         "description": "Seni buzla sarar ve zırhını 30 dakika boyunca 30 artırır."
       },
       "arcane_intellect": {
-        "name": "Gizemli Zeka",
+        "name": "Aether Sezgisi",
         "description": "Zekayı 30 dakika boyunca 2 artırır."
       },
       "frostbolt": {
-        "name": "Buz Oku",
+        "name": "Ayaz Mızrağı",
         "description": "Bir ayaz oku fırlatarak {damage} Ayaz hasarı verir ve hareketi %40 yavaşlatır."
       },
       "conjure_water": {
-        "name": "Su Çağırma",
+        "name": "Su Bağlama",
         "description": "İçildiğinde mana geri kazandıran 2 şişe su çağırır. Daha yüksek rütbeler daha saf su çağırır."
       },
       "conjure_food": {
-        "name": "Yiyecek Çağırma",
+        "name": "Ekmek Bağlama",
         "description": "Yendiğinde can geri kazandıran 2 porsiyon ekmek çağırır. Daha yüksek rütbeler daha doyurucu yiyecekler çağırır."
       },
       "fire_blast": {
-        "name": "Ateş Patlaması",
+        "name": "Köz Yağmuru",
         "description": "Düşmanı {damage} Ateş hasarıyla patlatır. Anında."
       },
       "arcane_missiles": {
-        "name": "Gizemli Füzeler",
-        "description": "Düşmana Gizemli Füzeler fırlatır, 3 saniye boyunca her saniye {damage} Gizemli hasar verir."
+        "name": "Aether Okları",
+        "description": "Düşmana Aether Okları fırlatır, 3 saniye boyunca her saniye {damage} Gizemli hasar verir."
       },
       "polymorph": {
-        "name": "Dönüştürme",
-        "description": "Düşmanı 15 saniyeye kadar bir koyuna dönüştürür. Koyun başıboş dolaşır ve hızla iyileşir. Herhangi bir hasar etkiyi bozar. Yalnızca canavarlar ve insansılar."
+        "name": "Büyüleme",
+        "description": "Düşmanı 15 saniyeye kadar bir kurbağaya dönüştürür. Kurbağa başıboş dolaşır ve hızla iyileşir. Herhangi bir hasar etkiyi bozar. Yalnızca canavarlar ve insansılar."
       },
       "frost_nova": {
-        "name": "Buz Novası",
+        "name": "Buz Bağı",
         "description": "Yakındaki tüm düşmanları 8 saniyeye kadar yerinde dondurur ve {damage} Ayaz hasarı verir."
       },
       "arcane_explosion": {
-        "name": "Gizemli Patlama",
+        "name": "Aether Patlaması",
         "description": "Bir Gizemli enerji patlaması yakındaki tüm düşmanlara {damage} Gizemli hasar verir."
       },
       "scorch": {
-        "name": "Kavurma",
+        "name": "Haşlama",
         "description": "Düşmanı {damage} Ateş hasarıyla kavurur. Hızlı büyülenir."
       },
       "pyroblast": {
-        "name": "Alev Bombası",
+        "name": "Alev Mızrağı",
         "description": "Devasa ateşli bir kaya fırlatarak {damage} Ateş hasarı ve ek olarak zamana yayılı hasar verir."
       },
       "ice_barrier": {
-        "name": "Buz Bariyeri",
+        "name": "Buz Örtüsü",
         "description": "Seni buzla kalkanlar ve 60 saniye boyunca 130 hasarı emer."
       },
       "sinister_strike": {
-        "name": "Uğursuz Darbe",
+        "name": "Kötücül Kesik",
         "description": "Silah hasarı artı {damage} için anlık bir vuruş. 1 kombo puanı kazandırır."
       },
       "eviscerate": {
-        "name": "Deşme",
+        "name": "Toprak Uykusu",
         "description": "Her kombo puanı başına hasar veren bitirici hamle."
       },
       "backstab": {
-        "name": "Sırttan Bıçaklama",
+        "name": "Korkakça Saplama",
         "description": "Hedefe %150 silah hasarı artı {damage} ile sırttan bıçakla. Hedefin arkasında olmalısın. Bir hançer gerektirir. 1 kombo puanı kazandırır."
       },
       "gouge": {
-        "name": "Oyma",
+        "name": "Göz Dürtme",
         "description": "Hedefe vurarak onu 4 saniye boyunca etkisiz bırakır. Herhangi bir hasar etkiyi bozar. 1 kombo puanı kazandırır."
       },
       "evasion": {
-        "name": "Kaçınma",
+        "name": "Hayalet Ayak",
         "description": "Sıyırma şansını 15 saniye boyunca %50 artırır."
       },
       "slice_and_dice": {
-        "name": "Doğra Biç",
+        "name": "Gaddar Tempo",
         "description": "Yakın dövüş saldırı hızını %30 artıran bitirici hamle. Kombo puanı başına daha uzun sürer."
       },
       "sprint": {
-        "name": "Sürat Koşusu",
+        "name": "Çevik Topuklar",
         "description": "Hareket hızını 15 saniye boyunca %70 artırır."
       },
       "kidney_shot": {
-        "name": "Böbrek Darbesi",
+        "name": "Aşağılık Darbe",
         "description": "Hedefi sersemleten bitirici hamle. Her kombo puanı başına 1 saniye daha uzun sürer."
       },
       "ambush": {
-        "name": "Pusu",
+        "name": "Pusucunun Darbesi",
         "description": "Hedefe %250 silah hasarı artı {damage} ile pusu kur. Gizlenmiş ve hedefin arkasında olmalısın. Bir hançer gerektirir. 1 kombo puanı kazandırır."
       },
       "stealth": {
-        "name": "Gizlenme",
-        "description": "Seni gölgelerde gizler: düşmanlar seni güçlükle fark eder, ancak %30 daha yavaş hareket edersin. Saldırmak ya da hasar almak Gizlenmeyi bozar. Çıkmak için tekrar kullan."
+        "name": "Duskveil",
+        "description": "Seni gölgelerde gizler: düşmanlar seni güçlükle fark eder, ancak %50 daha yavaş hareket edersin. Saldırmak ya da hasar almak Duskveil'i bozar. Çıkmak için tekrar kullan."
       },
       "adrenaline_rush": {
-        "name": "Adrenalin Patlaması",
+        "name": "Hızlanan Kan",
         "description": "Kanın kaynar, anında 60 enerji geri kazandırır."
       },
       "garrote": {
-        "name": "Boğma",
+        "name": "Boğaz Teli",
         "description": "Düşmanı boğarak hem anında hasar verir hem de 18 saniye boyunca {damage} kanama yaratır. Gizlenmiş olmalısın. 1 kombo puanı kazandırır."
       },
       "cheap_shot": {
-        "name": "Sinsi Vuruş",
+        "name": "Mide Yumruğu",
         "description": "Hedefe vurarak onu 4 saniye sersemletir. Gizlenmiş olmalısın. 2 kombo puanı kazandırır."
       },
       "sap": {
@@ -4645,135 +4645,135 @@ export const tr_TR: EnTranslations = {
         "description": "Hedefi 8 saniye boyunca etkisiz hale getirir. Gizlenmiş ve dövüş dışı olman gerekir. Herhangi bir hasar etkiyi bozar."
       },
       "crippling_poison": {
-        "name": "Felç Edici Zehir",
-        "description": "Hedefe felç edici bir zehirle vurur, {damage} Doğa hasarı verir ve hareket hızını 12 saniye boyunca %50 yavaşlatır."
+        "name": "Kurşuni Zehir",
+        "description": "Hedefe kurşun gibi ağır bir zehirle vurur, {damage} Doğa hasarı verir ve hareket hızını 12 saniye boyunca %50 yavaşlatır."
       },
       "expose_armor": {
-        "name": "Zırh Açığı",
+        "name": "Zırh Gediği",
         "description": "Hedefi açığa düşüren ve zırhını azaltan bitirici hamle. Harcanan daha fazla kombo puanı daha derin bir kesik oluşturur."
       },
       "rupture": {
-        "name": "Kanatma",
+        "name": "Kan Kaybı",
         "description": "Hedefi yaralayan bitirici hamle; 16 saniye boyunca {damage} kanama hasarı vermesine yol açar."
       },
       "vanish": {
-        "name": "Gözden Kaybolma",
-        "description": "Gözden kaybolursun, dövüşte bile Gizlenmeye geçersin. Gizliyken %30 daha yavaş hareket edersin. 10 saniyeye kadar sürer."
+        "name": "Duman Adımı",
+        "description": "Gözden kaybolursun, dövüşte bile Duskveil'e geçersin. Gizliyken %50 daha yavaş hareket edersin. 10 saniyeye kadar sürer."
       },
       "instant_poison": {
-        "name": "Ani Zehir",
+        "name": "Engerek Isırığı",
         "description": "Silahını 30 dakika boyunca kaplar; her yakın dövüş vuruşun 8 ek Doğa hasarı verir."
       },
       "deadly_poison": {
-        "name": "Ölümcül Zehir",
+        "name": "İrinli Zehir",
         "description": "Silahını 30 dakika boyunca kaplar; her yakın dövüş vuruşun 14 ek Doğa hasarı verir."
       },
       "blind": {
-        "name": "Kör Etme",
+        "name": "Toprak Fırlatma",
         "description": "Hedefi kör eder, 8 saniye boyunca şaşkın şaşkın dolaşmasına neden olur. Herhangi bir hasar etkiyi bozar."
       },
       "seal_of_righteousness": {
-        "name": "Doğruluk Mührü",
-        "description": "Seni 30 saniye boyunca Kutsal güçle doldurur; her yakın dövüş vuruşunun 4 ek Kutsal hasar vermesini sağlar. Yargı ile açığa çıkar."
+        "name": "Yemin Damgası",
+        "description": "Seni 30 saniye boyunca Kutsal güçle doldurur; her yakın dövüş vuruşunun 4 ek Kutsal hasar vermesini sağlar. Verdict ile açığa çıkar."
       },
       "holy_light": {
-        "name": "Kutsal Işık",
+        "name": "Onaran Işık",
         "description": "Dost bir hedefi {damage} iyileştirir."
       },
       "devotion_aura": {
-        "name": "Bağlılık Aurası",
+        "name": "Sarsılmaz Aura",
         "description": "Zırhını 30 dakika boyunca 40 artırır."
       },
       "judgement": {
-        "name": "Yargı",
-        "description": "Aktif Mührünü düşmanın üzerine salar ve onu tüketerek yargı hasarını verir."
+        "name": "Hukum",
+        "description": "Aktif Mührünü düşmanın üzerine salar ve onu tüketerek depoladığı Kutsal hasarı verir."
       },
       "blessing_of_might": {
-        "name": "Güç Kutsaması",
+        "name": "Demir Yemini",
         "description": "Dost bir hedefe bir Kutsama yerleştirir, saldırı gücünü 5 dakika boyunca 15 artırır."
       },
       "divine_protection": {
-        "name": "Kutsal Koruma",
-        "description": "Kutsal bir kalkan 10 saniye boyunca 50 hasarı emer."
+        "name": "İnanç Siperi",
+        "description": "Koruyucu bir siper 10 saniye boyunca 50 hasarı emer."
       },
       "hammer_of_justice": {
-        "name": "Adalet Çekici",
+        "name": "Parçalayan Tokmak",
         "description": "Hedefi 3 saniye boyunca sersemletir."
       },
       "lay_on_hands": {
-        "name": "Şifa Dokunuşu",
+        "name": "Son Ayin",
         "description": "Devasa bir iyileştirme dalgası: 250 can geri kazandırır. 10 dakika bekleme süresi."
       },
       "flash_of_light": {
-        "name": "Işık Parıltısı",
-        "description": "Dost bir hedefi {damage} iyileştiren hızlı ve verimli bir Işık parıltısı."
+        "name": "Işık Şifası",
+        "description": "Dost bir hedefi {damage} iyileştiren hızlı ve verimli bir Işık patlaması."
       },
       "exorcism": {
-        "name": "Şeytan Kovma",
+        "name": "Kovma Ayini",
         "description": "Günahkârı Kutsal gazapla kovar ve {damage} Kutsal hasar verir."
       },
       "consecration": {
-        "name": "Kutsama",
+        "name": "Kutsal Toprak",
         "description": "Altındaki zemini kutsar, yakındaki düşmanları {damage} Kutsal hasarla dağlar."
       },
       "righteous_fury": {
-        "name": "Kutsal Gazap",
+        "name": "Yanan Yemin",
         "description": "Kutsal hasarının ürettiği tehdidi 30 dakika boyunca %60 artırır. Tank paladinin temel taşı."
       },
       "retribution_aura": {
-        "name": "İntikam Aurası",
+        "name": "Karşılık Aurası",
         "description": "Seni 30 dakika boyunca kutsal enerjiyle sarar; yakın dövüşte sana vuran her düşmana 5 Kutsal hasar verir."
       },
       "tame_beast": {
-        "name": "Canavar Evcilleştirme",
+        "name": "Yaban Bağı",
         "description": "Bir canavarı yoldaşın olması için evcilleştirmeye başlar. Senin seviyende ya da daha düşük olmalı ve seçkin olmamalı. Evcilin seni takip eder, düşmanlarına saldırır ve kendi tehdidini tutar. Bir seferde yalnızca bir evcilin olabilir."
       },
       "dismiss_pet": {
-        "name": "Evcili Gönderme",
+        "name": "Yoldaşı Serbest Bırakma",
         "description": "Evcilini tekrar vahşi doğaya salar."
       },
       "raptor_strike": {
-        "name": "Yırtıcı Darbe",
+        "name": "Deşen Darbe",
         "description": "Hasarı 5 artıran güçlü bir yakın dövüş saldırısı. Bir sonraki vuruşunda etkinleşir."
       },
       "aspect_of_the_hawk": {
-        "name": "Şahin Sureti",
-        "description": "Şahin suretine bürünerek saldırı gücünü 30 dakika boyunca 20 artırırsın."
+        "name": "Delice Sureti",
+        "description": "Delice suretine bürünerek saldırı gücünü 30 dakika boyunca 20 artırırsın."
       },
       "serpent_sting": {
-        "name": "Yılan Sokması",
+        "name": "Zehir Dikeni",
         "description": "Hedefi sokar ve 15 saniye boyunca {damage} Doğa hasarı verir."
       },
       "arcane_shot": {
-        "name": "Gizemli Atış",
+        "name": "Uğursuz Atış",
         "description": "{damage} Gizemli hasar veren anlık bir atış."
       },
       "concussive_shot": {
-        "name": "Sersemletici Atış",
+        "name": "Sarsıcı Atış",
         "description": "Hedefi sersemletir, hareketini 4 saniye boyunca %50 yavaşlatır."
       },
       "mongoose_bite": {
-        "name": "Firavunfaresi Isırığı",
+        "name": "Karşı Diş",
         "description": "Hedef sıyırma yaptıktan sonra silah hasarı artı 12 ile karşı saldırı. Sıyrılamaz."
       },
       "wing_clip": {
-        "name": "Kanat Kırpma",
+        "name": "Prangalayan Kesik",
         "description": "Düşmanı 10 saniye boyunca %40 yavaşlatan bir yara açar."
       },
       "aspect_of_the_monkey": {
-        "name": "Maymun Sureti",
-        "description": "Maymun suretine bürünerek kaçınma şansını 30 dakika boyunca %8 artırırsın."
+        "name": "Sansar Sureti",
+        "description": "Sansar suretine bürünerek kaçınma şansını 30 dakika boyunca %8 artırırsın."
       },
       "aspect_of_the_cheetah": {
-        "name": "Çita Sureti",
-        "description": "Çita suretine bürünerek hareket hızını 30 dakika boyunca %30 artırırsın."
+        "name": "Küheylan Sureti",
+        "description": "Küheylan suretine bürünerek hareket hızını 30 dakika boyunca %30 artırırsın."
       },
       "aimed_shot": {
-        "name": "Nişanlı Atış",
-        "description": "{damage} hasar veren, dikkatle nişanlanmış bir atış."
+        "name": "Uzun Çekiş",
+        "description": "{damage} hasar veren, dikkatle çekilmiş bir atış."
       },
       "rapid_fire": {
-        "name": "Seri Atış",
+        "name": "Hummalı Çekiş",
         "description": "Saldırı hızını 15 saniye boyunca %40 artırır."
       },
       "smite": {
@@ -4781,164 +4781,164 @@ export const tr_TR: EnTranslations = {
         "description": "Düşmanı {damage} Kutsal hasarla cezalandırır."
       },
       "lesser_heal": {
-        "name": "Küçük İyileştirme",
+        "name": "Fısıldanan Dua",
         "description": "Dost bir hedefi {damage} iyileştirir."
       },
       "power_word_fortitude": {
-        "name": "Güç Sözü: Dayanıklılık",
+        "name": "Azim Yakarışı",
         "description": "Hedefin Dayanıklılığını 30 dakika boyunca 3 artırır."
       },
       "shadow_word_pain": {
-        "name": "Gölge Sözü: Acı",
+        "name": "Çürüme Ağıdı",
         "description": "Bir karanlık sözü 18 saniye boyunca {damage} Gölge hasarı verir."
       },
       "power_word_shield": {
-        "name": "Güç Sözü: Kalkan",
+        "name": "Koruma Mezmuru",
         "description": "Hedefi kalkanlar ve 30 saniye boyunca 48 hasarı emer."
       },
       "renew": {
-        "name": "Tazeleme",
+        "name": "Kalıcı Lütuf",
         "description": "Hedefi 15 saniye boyunca {damage} iyileştirir."
       },
       "mind_blast": {
-        "name": "Zihin Patlaması",
+        "name": "Zihin Kırılması",
         "description": "Hedefin zihnini {damage} Gölge hasarıyla patlatır."
       },
       "heal": {
-        "name": "İyileştirme",
+        "name": "Vakur Dua",
         "description": "Dost bir hedefi {damage} iyileştiren yavaş ama güçlü bir dua."
       },
       "mind_flay": {
-        "name": "Zihin Dağlama",
+        "name": "Keder Yakarışı",
         "description": "Hedefin zihnini Gölge enerjisiyle sarsar ve 3 saniye boyunca her saniye {damage} hasar verir."
       },
       "flash_heal": {
-        "name": "Hızlı İyileştirme",
+        "name": "Acil Dua",
         "description": "Dost bir hedefi {damage} iyileştiren hızlı bir dua."
       },
       "lightning_bolt": {
-        "name": "Yıldırım Oku",
+        "name": "Ark Oku",
         "description": "Bir yıldırım oku fırlatarak {damage} Doğa hasarı verir."
       },
       "rockbiter_weapon": {
-        "name": "Taşkıran Silah",
+        "name": "Stonebound Silahı",
         "description": "Silahına taşın gazabını işler: her vuruş 5 dakika boyunca 5 ek hasar verir."
       },
       "healing_wave": {
-        "name": "İyileştirici Dalga",
+        "name": "Onaran Sular",
         "description": "Dost bir hedefi {damage} iyileştirir."
       },
       "earth_shock": {
-        "name": "Toprak Şoku",
+        "name": "Toprak Sarsıntısı",
         "description": "Hedefi sersemletici bir kuvvetle anında şoklar ve {damage} Doğa hasarı verir."
       },
       "lightning_shield": {
-        "name": "Yıldırım Kalkanı",
+        "name": "Gök Gürültüsü Siperi",
         "description": "Seni çatırdayan yıldırımla sarar: yakın dövüş saldırganları 13 Doğa hasarı alır."
       },
       "flame_shock": {
-        "name": "Alev Şoku",
+        "name": "Köz Sarsıntısı",
         "description": "Hedefi ateşle dağlar: 25 hasar artı 12 saniye boyunca {damage}."
       },
       "flametongue_weapon": {
-        "name": "Alevdili Silah",
+        "name": "Pyrebrand Silahı",
         "description": "Silahını element ateşiyle güçlendirir: her vuruş 5 dakika boyunca 8 ek Ateş hasarı verir."
       },
       "frost_shock": {
-        "name": "Buz Şoku",
+        "name": "Ayaz Sarsıntısı",
         "description": "Hedefi ayazla anında şoklar, {damage} Ayaz hasarı verir ve hareketini 8 saniye boyunca %50 yavaşlatır."
       },
       "frostbrand_weapon": {
-        "name": "Buzdamga Silahı",
+        "name": "Rimebound Silahı",
         "description": "Silahını kavrayan ayazla güçlendirir: her vuruş 5 dakika boyunca 8 ek hasar verir."
       },
       "ghost_wolf": {
-        "name": "Hayalet Kurt",
-        "description": "Seni bir Hayalet Kurda dönüştürür ve hareket hızını 10 dakika boyunca %40 artırır."
+        "name": "Shadewolf",
+        "description": "Seni bir Shadewolf'a dönüştürür ve hareket hızını 10 dakika boyunca %40 artırır."
       },
       "stormstrike": {
-        "name": "Fırtına Darbesi",
+        "name": "Atalar Darbesi",
         "description": "Fırtınayı silahından geçirir ve silah hasarı artı {damage} için anında vurur."
       },
       "shadow_bolt": {
-        "name": "Gölge Oku",
+        "name": "Kasvet Oku",
         "description": "Düşmana {damage} Gölge hasarı için gölgeli bir ok gönderir."
       },
       "demon_skin": {
-        "name": "Şeytan Derisi",
+        "name": "İblis Derisi",
         "description": "Şeytani deri zırhını 30 dakika boyunca 30 artırır."
       },
       "immolate": {
-        "name": "Yakma",
+        "name": "Yanan Ahit",
         "description": "Düşmanı 11 Ateş hasarıyla ve ek olarak 15 saniye boyunca {damage} ile yakar."
       },
       "corruption": {
-        "name": "Yozlaştırma",
+        "name": "Kara Çürüme",
         "description": "Hedefi yozlaştırır, 18 saniye boyunca {damage} Gölge hasarı verir."
       },
       "life_tap": {
-        "name": "Can Aktarımı",
+        "name": "Ağır Pazarlık",
         "description": "30 canı 30 manaya dönüştürür."
       },
       "curse_of_agony": {
-        "name": "Izdırap Laneti",
+        "name": "Izdırap Büyüsü",
         "description": "Hedefi ızdırapla lanetler: 24 saniye boyunca {damage} Gölge hasarı."
       },
       "drain_life": {
-        "name": "Can Emme",
+        "name": "Tüketme",
         "description": "Hedefin canını emer; 5 saniye boyunca her saniye sana {damage} can aktarır."
       },
       "fear": {
-        "name": "Korku",
+        "name": "Dehşet",
         "description": "Düşmanın yüreğine korku salar ve onu 8 saniyeye kadar sinmiş bırakır. Herhangi bir hasar etkiyi bozar."
       },
       "searing_pain": {
-        "name": "Kavurucu Acı",
+        "name": "Dağlama",
         "description": "Düşmanı ıstırap veren ateşle {damage} Ateş hasarı için dağlar. Hızlı büyülenir."
       },
       "shadowburn": {
-        "name": "Gölge Yakımı",
-        "description": "Hedefi anında Gölge Alevi ile vurarak {damage} Gölge hasarı verir."
+        "name": "Alaca Ateşi",
+        "description": "Hedefi anında dağlayan gölge ile vurarak {damage} Gölge hasarı verir."
       },
       "wrath": {
-        "name": "Gazap",
+        "name": "Yaban Oku",
         "description": "{damage} Doğa hasarı için bir doğa enerjisi oku fırlatır."
       },
       "healing_touch": {
-        "name": "İyileştirici Dokunuş",
+        "name": "Yaban Şifası",
         "description": "Dost bir hedefi {damage} iyileştirir."
       },
       "mark_of_the_wild": {
-        "name": "Vahşi Doğa Nişanı",
-        "description": "Dost bir hedefe Vahşi Doğa Nişanı'nı yerleştirir ve zırhını 30 dakika boyunca 25 artırır."
+        "name": "Wildward",
+        "description": "Dost bir hedefe Wildward'ı yerleştirir ve zırhını 30 dakika boyunca 25 artırır."
       },
       "moonfire": {
-        "name": "Ay Ateşi",
+        "name": "Ay Fırtınası",
         "description": "Düşmanı ay ateşiyle {damage} Gizemli hasar ve zamana yayılı hasar ile yakar."
       },
       "rejuvenation": {
-        "name": "Yenilenme",
+        "name": "Yaban Çiçeği",
         "description": "Hedefi 12 saniye boyunca {damage} iyileştirir."
       },
       "thorns": {
-        "name": "Dikenler",
+        "name": "Diken Muhafızı",
         "description": "Hedeften dikenler filizlenir: yakın dövüş saldırganları 3 Doğa hasarı alır."
       },
       "entangling_roots": {
-        "name": "Saran Kökler",
+        "name": "Kavrayan Kökler",
         "description": "Hedefi 12 saniyeye kadar yerine sabitler."
       },
       "bear_form": {
-        "name": "Ayı Formu",
+        "name": "Bruin Formu",
         "description": "Bir ayıya dönüş: zırh +%65, saldırı gücü +15, saldırıların öfke biriktirir ve %30 daha fazla tehdit üretir. Büyücü formuna dönmek için tekrar kullan."
       },
       "maul": {
-        "name": "Hırpalama",
-        "description": "Yakın dövüş hasarını {damage} artıran ve yüksek miktarda tehdit yaratan hırpalayıcı bir saldırı. Bir sonraki vuruşunda etkinleşir. Yalnızca Ayı Formu."
+        "name": "Kemik Kıran",
+        "description": "Yakın dövüş hasarını {damage} artıran ve yüksek miktarda tehdit yaratan hırpalayıcı bir saldırı. Bir sonraki vuruşunda etkinleşir. Yalnızca Bruin Formu."
       },
       "growl": {
-        "name": "Hırlama",
-        "description": "Hedefe hırlar: tehdidin onun en nefret ettiği düşmanla eşitlenir ve 3 saniye boyunca sana saldırmaya zorlanır. Yalnızca Ayı Formu."
+        "name": "Gözdağı",
+        "description": "Hedefe hırlar: tehdidin onun en nefret ettiği düşmanla eşitlenir ve 3 saniye boyunca sana saldırmaya zorlanır. Yalnızca Bruin Formu."
       },
       "cat_form": {
         "name": "Kurt Formu",
@@ -4949,43 +4949,43 @@ export const tr_TR: EnTranslations = {
         "description": "Düşmanı silah hasarı artı {damage} ile pençele. 1 kombo puanı kazandırır. Yalnızca Kurt Formu."
       },
       "ferocious_bite": {
-        "name": "Vahşi Isırık",
+        "name": "Kanlı Isırık",
         "description": "Her kombo puanı başına hasar veren bitirici hamle. Yalnızca Kurt Formu."
       },
       "swipe": {
-        "name": "Savurma",
-        "description": "Yakındaki düşmanları {damage} hasar için savurur. Ekstra tehdit üretir. Yalnızca Ayı Formu."
+        "name": "Süpüren Pençeler",
+        "description": "Yakındaki düşmanları {damage} hasar için savurur. Ekstra tehdit üretir. Yalnızca Bruin Formu."
       },
       "regrowth": {
-        "name": "Yeniden Büyüme",
+        "name": "İkinci Çiçeklenme",
         "description": "Dost bir hedefi {damage} ve 21 saniye boyunca ek bir miktar iyileştirir."
       },
       "barkskin": {
-        "name": "Kabuk Derisi",
+        "name": "Meşe Derisi",
         "description": "Derin ağaç kabuğu gibi sertleşir, zırhı 15 saniye boyunca 150 artırır."
       },
       "starfire": {
-        "name": "Yıldız Ateşi",
+        "name": "Gök Düşüşü",
         "description": "Yıldız ateşinden bir ok indirir ve {damage} Gizemli hasar verir."
       },
       "travel_form": {
-        "name": "Yolculuk Formu",
-        "description": "Anında hızlı bir yolculuk formuna bürünerek hareket hızını %40 artırır. Bürünmüşken diğer yetenekleri kullanamazsın, ancak dövüşte ya da dövüş dışında bürünebilirsin; kaçmak için idealdir."
+        "name": "Fleet Formu",
+        "description": "Anında hızlı bir Fleet Formu'na bürünerek hareket hızını %40 artırır. Bürünmüşken diğer yetenekleri kullanamazsın, ancak dövüşte ya da dövüş dışında bürünebilirsin; kaçmak için idealdir."
       },
       "enrage": {
-        "name": "Öfkelenme",
-        "description": "Anında 20 öfke üretir. Yalnızca Ayı Formu."
+        "name": "Körükleme",
+        "description": "Anında 20 öfke üretir. Yalnızca Bruin Formu."
       },
       "bash": {
-        "name": "Darbe",
-        "description": "Hedefi 2 saniye sersemletir. Yalnızca Ayı Formu."
+        "name": "Sarsma",
+        "description": "Hedefi 2 saniye sersemletir. Yalnızca Bruin Formu."
       },
       "faerie_fire": {
-        "name": "Peri Ateşi",
+        "name": "Cadı Işığı",
         "description": "Hedefin zırhını 40 saniye boyunca 35 azaltır."
       },
       "hibernate": {
-        "name": "Kış Uykusu",
+        "name": "Derin Uyku",
         "description": "Hedefi 8 saniyeye kadar derin bir uykuya zorlar. Herhangi bir hasar onu uyandırır."
       },
       "dash": {
@@ -4993,15 +4993,15 @@ export const tr_TR: EnTranslations = {
         "description": "İleri atılarak hareket hızını 15 saniye boyunca %50 artırır. Yalnızca Kurt Formu."
       },
       "pounce": {
-        "name": "Sıçrayış",
+        "name": "Sinsi Darbe",
         "description": "Hedefi 2 saniye boyunca sersemleten gizlilik açılışı. 1 kombo puanı kazandırır. Yalnızca Kurt Formu."
       },
       "insect_swarm": {
-        "name": "Böcek Sürüsü",
+        "name": "Sokan Sürü",
         "description": "Düşman böceklerce sarılır ve 12 saniye boyunca {damage} Doğa hasarı alır."
       },
       "tigers_fury": {
-        "name": "Kaplan Öfkesi",
+        "name": "Kurt Kanı",
         "description": "Saldırı gücünü 6 saniye boyunca 40 artırır. Yalnızca Kurt Formu."
       },
       "rip": {
@@ -5009,67 +5009,67 @@ export const tr_TR: EnTranslations = {
         "description": "12 saniye boyunca kanama hasarı veren bitirici hamle. Kombo puanlarını tüketir. Yalnızca Kurt Formu."
       },
       "mortal_strike": {
-        "name": "Ölümcül Darbe",
+        "name": "Sakatlayan Darbe",
         "description": "Silah hasarı artı {damage} veren acımasız bir darbe. (Silahşor imzası)"
       },
       "bloodthirst": {
-        "name": "Kana Susamışlık",
+        "name": "Kan Akıtma",
         "description": "Bir kan çılgınlığıyla anında {damage} hasar veren bir saldırı yap. (Hiddet imzası)"
       },
       "shield_slam": {
-        "name": "Kalkan Vuruşu",
+        "name": "Kalkan Kırma",
         "description": "Hedefe kalkanınla {damage} hasar ve devasa tehdit için vurursun. (Koruma imzası)"
       },
       "whirlwind": {
-        "name": "Kasırga",
+        "name": "Bıçaklı Girdap",
         "description": "Ölümcül bir yayda dönerek yakındaki tüm düşmanları {damage} için vurursun. (Cinnet yeteneği)"
       },
       "berserker_rage": {
-        "name": "Cinnet Öfkesi",
-        "description": "Bir cinnet öfkesine girerek 20 öfke üretir. (Savaşçı yeteneği)"
+        "name": "Kaynayan Gazap",
+        "description": "Kaynayan bir gazaba kapılarak 20 öfke üretir. (Savaşçı yeteneği)"
       },
       "summon_imp": {
-        "name": "İblisçik Çağırma",
-        "description": "Karabüyücünün komutası altında bir İblisçik çağırır. İblisçik, düşmanlarına uzaktan Alev Okları fırlatır. Yeni bir iblis çağırmak mevcut olanı gönderir. Bir seferde yalnızca bir iblisin olabilir."
+        "name": "Emberkin Çağırma",
+        "description": "Karabüyücünün komutası altında bir Emberkin çağırır. Emberkin, düşmanlarına uzaktan Kül Okları fırlatır. Yeni bir iblis çağırmak mevcut olanı gönderir. Bir seferde yalnızca bir iblisin olabilir."
       },
       "summon_voidwalker": {
-        "name": "Boşlukgezer Çağırma",
-        "description": "Karabüyücünün komutası altında bir Boşlukgezer çağırır. Boşlukgezer, düşmanlarını kışkırtan ve cezayı üstüne çeken sağlam bir iblistir. Yeni bir iblis çağırmak mevcut olanı gönderir. Bir seferde yalnızca bir iblisin olabilir."
+        "name": "Gloomshade Çağırma",
+        "description": "Karabüyücünün komutası altında bir Gloomshade çağırır. Gloomshade, düşmanlarını kışkırtan ve cezayı üstüne çeken sağlam bir iblistir. Yeni bir iblis çağırmak mevcut olanı gönderir. Bir seferde yalnızca bir iblisin olabilir."
       },
       "summon_succubus": {
-        "name": "Sukubus Çağırma",
-        "description": "Karabüyücünün komutası altında bir Sukubus çağırır. Sukubus, yakın dövüşte hızla vuran ve sert darbeler indiren kırılgan bir iblistir. Yeni bir iblis çağırmak mevcut olanı gönderir. Bir seferde yalnızca bir iblisin olabilir."
+        "name": "Duskborn Çağırma",
+        "description": "Karabüyücünün komutası altında bir Duskborn çağırır. Duskborn, yakın dövüşte hızla vuran ve sert darbeler indiren kırılgan bir iblistir. Yeni bir iblis çağırmak mevcut olanı gönderir. Bir seferde yalnızca bir iblisin olabilir."
       },
       "summon_felhunter": {
-        "name": "İfrit Avcısı Çağırma",
-        "description": "Karabüyücünün komutası altında bir İfrit Avcısı çağırır. İfrit Avcısı, düşmanları Gölge Isırığı ile uzaktan taciz eder ve büyücü avlamada ustadır. Yeni bir iblis çağırmak mevcut olanı gönderir. Bir seferde yalnızca bir iblisin olabilir."
+        "name": "Spellhound Çağırma",
+        "description": "Karabüyücünün komutası altında bir Spellhound çağırır. Spellhound, düşmanları Kasvet Isırığı ile uzaktan taciz eder ve büyücü avlamada ustadır. Yeni bir iblis çağırmak mevcut olanı gönderir. Bir seferde yalnızca bir iblisin olabilir."
       },
       "summon_felguard": {
-        "name": "İfrit Muhafızı Çağırma",
-        "description": "Karabüyücünün komutası altında bir İfrit Muhafızı çağırır. İfrit Muhafızı, savaşa dalan ve kendi başının çaresine bakan dayanıklı bir yakın dövüş iblisidir. Yeni bir iblis çağırmak mevcut olanı gönderir. Bir seferde yalnızca bir iblisin olabilir."
+        "name": "Warfiend Çağırma",
+        "description": "Karabüyücünün komutası altında bir Warfiend çağırır. Warfiend, savaşa dalan ve kendi başının çaresine bakan dayanıklı bir yakın dövüş iblisidir. Yeni bir iblis çağırmak mevcut olanı gönderir. Bir seferde yalnızca bir iblisin olabilir."
       },
       "summon_infernal": {
-        "name": "Cehennem Zebanisi Çağırma",
-        "description": "Bir Cehennem Zebanisini iradene bağlar — ezici yakın dövüşe ve herhangi bir iblisin en derin canına ve zırhına sahip hantal bir devasa güç. Uzun bir bekleme süresi ham gücünü dizginler. Yeni bir iblis çağırmak mevcut olanı gönderir. Bir seferde yalnızca bir iblisin olabilir."
+        "name": "Pyre Colossus Çağırma",
+        "description": "Bir Pyre Colossus'u iradene bağlar: ezici yakın dövüşe ve herhangi bir iblisin en derin canına ve zırhına sahip hantal bir devasa güç. Uzun bir bekleme süresi ham gücünü dizginler. Yeni bir iblis çağırmak mevcut olanı gönderir. Bir seferde yalnızca bir iblisin olabilir."
       },
       "summon_doomguard": {
-        "name": "Kıyamet Muhafızı Çağırma",
-        "description": "Bir Kıyamet Muhafızını iradene bağlar — uzaktan ağır Gölge hasarı yağdıran seçkin bir iblis. Uzun bir bekleme süresi yıkıcı gücünü dizginler. Yeni bir iblis çağırmak mevcut olanı gönderir. Bir seferde yalnızca bir iblisin olabilir."
+        "name": "Wraithborn Çağırma",
+        "description": "Bir Wraithborn'u iradene bağlar: uzaktan ağır Gölge hasarı yağdıran seçkin bir iblis. Uzun bir bekleme süresi yıkıcı gücünü dizginler. Yeni bir iblis çağırmak mevcut olanı gönderir. Bir seferde yalnızca bir iblisin olabilir."
       },
       "bear_charge": {
-        "name": "Ayı Hücumu",
-        "description": "Bir düşmana hücum ederek 9 öfke üretir ve onu 1 saniye sersemletir. 8-25 yarda menzil. Yalnızca Ayı Formu."
+        "name": "Bruin Hücumu",
+        "description": "Bir düşmana hücum ederek 9 öfke üretir ve onu 1 saniye sersemletir. 8-25 yarda menzil. Yalnızca Bruin Formu."
       },
       "demoralizing_roar": {
-        "name": "Moral Bozucu Kükreme",
-        "description": "Yakındaki düşmanların moralini bozarak saldırı güçlerini 20 saniye boyunca 20 azaltır. Yalnızca Ayı Formu."
+        "name": "Sindiren Kükreme",
+        "description": "Yakındaki düşmanların moralini bozarak saldırı güçlerini 20 saniye boyunca 20 azaltır. Yalnızca Bruin Formu."
       },
       "prowl": {
-        "name": "Sinsi Yürüyüş",
+        "name": "Sinsi Sokulma",
         "description": "Kurt Formundayken gizliliğe geçer ve 50% daha yavaş hareket edersin. Dövüş sırasında kullanılamaz."
       },
       "rake": {
-        "name": "Tırmalama",
+        "name": "Deri Yüzme",
         "description": "Düşmanı silah hasarı artı {damage} ile tırmalayan ve 9 saniye boyunca kanama hasarı yaratan gizlilik açılışı. 1 kombo puanı kazandırır. Yalnızca Kurt Formu."
       },
       "revive_pet": {
@@ -5079,10 +5079,10 @@ export const tr_TR: EnTranslations = {
     },
     "items": {
       "worn_sword": {
-        "name": "Yıpranmış Kısa Kılıç"
+        "name": "Çentikli Kısa Kılıç"
       },
       "gnarled_staff": {
-        "name": "Çarpık Asa"
+        "name": "Bataklık Meşesi Asası"
       },
       "rusty_dagger": {
         "name": "Paslı Hançer"
@@ -5094,13 +5094,13 @@ export const tr_TR: EnTranslations = {
         "name": "Paslı Balta"
       },
       "recruit_tunic": {
-        "name": "Acemi Erin Tuniği"
+        "name": "Devşirme Tuniği"
       },
       "apprentice_robe": {
-        "name": "Çırağın Cübbesi"
+        "name": "Eski Püskü Cübbe"
       },
       "footpad_jerkin": {
-        "name": "Yol Kesici Yeleği"
+        "name": "Yankesici Yeleği"
       },
       "redbrook_blade": {
         "name": "Redbrook Milis Kılıcı"
@@ -5130,22 +5130,22 @@ export const tr_TR: EnTranslations = {
         "name": "Greyjaw'un Post Tozluğu"
       },
       "baked_bread": {
-        "name": "Taze Pişmiş Ekmek"
+        "name": "Köy Somunu"
       },
       "spring_water": {
-        "name": "Ferahlatıcı Kaynak Suyu"
+        "name": "Soğuk Kuyu Suyu"
       },
       "roasted_boar": {
-        "name": "Kızarmış Yabandomuzu Eti"
+        "name": "Şişte Yabandomuzu Budu"
       },
       "conjured_water": {
-        "name": "Çağrılmış Pınar Suyu"
+        "name": "Çağrılmış Yağmur Suyu"
       },
       "conjured_water2": {
-        "name": "Çağrılmış Maden Suyu"
+        "name": "Çağrılmış Kuyu Suyu"
       },
       "conjured_water3": {
-        "name": "Çağrılmış Soda"
+        "name": "Çağrılmış Duru Su"
       },
       "eastbrook_arming_sword": {
         "name": "Doğudere Cenk Kılıcı"
@@ -5205,7 +5205,7 @@ export const tr_TR: EnTranslations = {
         "name": "Hayalet Özü"
       },
       "webwood_silk": {
-        "name": "Ağorman İpek Bezi"
+        "name": "Sableweb İpek Bezi"
       },
       "supply_crate": {
         "name": "Çalınmış Erzak Sandığı"
@@ -5226,13 +5226,13 @@ export const tr_TR: EnTranslations = {
         "name": "Kırmızı Bandana"
       },
       "tough_jerky": {
-        "name": "Sert Kurutulmuş Et"
+        "name": "Tuzlu Kurutulmuş Et"
       },
       "mudfin_scale": {
-        "name": "Yapışkan Murloc Pulu"
+        "name": "Yapışkan Mudfin Pulu"
       },
       "tallow_candle": {
-        "name": "Donyağı Mumu"
+        "name": "Yağlı Donyağı Topağı"
       },
       "spider_leg": {
         "name": "Seğiren Örümcek Bacağı"
@@ -5298,7 +5298,7 @@ export const tr_TR: EnTranslations = {
         "name": "Bataklıkadım Çizmeleri"
       },
       "mistcallers_edge": {
-        "name": "Sisçağıran'ın Keskini"
+        "name": "Fogbinder'ın Keskini"
       },
       "vaels_mist_staff": {
         "name": "Vael'in Sis Asası"
@@ -5442,7 +5442,7 @@ export const tr_TR: EnTranslations = {
         "name": "Velkhar Asası"
       },
       "shadowmeld_tunic": {
-        "name": "Gölgekarışım Tuniği"
+        "name": "Gece Örtüsü Tuniği"
       },
       "gravewyrm_scale_hauberk": {
         "name": "Mezarejderi Pul Zırhı"
@@ -5511,13 +5511,13 @@ export const tr_TR: EnTranslations = {
         "name": "Çatlak Ejder Pulu"
       },
       "conjured_bread": {
-        "name": "Çağrılmış Ekmek"
+        "name": "Çağrılmış Yulaf Çöreği"
       },
       "conjured_bread2": {
-        "name": "Çağrılmış Çavdar Ekmeği"
+        "name": "Çağrılmış Kara Somun"
       },
       "conjured_bread3": {
-        "name": "Çağrılmış Tatlı Çörek"
+        "name": "Çağrılmış Ballı Çörek"
       },
       "roadwardens_helm": {
         "name": "Yol Muhafızının Miğferi"
@@ -5622,7 +5622,7 @@ export const tr_TR: EnTranslations = {
         "name": "Mezar Dokuması Çanta"
       },
       "mistcallers_duffel": {
-        "name": "Sis Çağıranın Denizci Çantası"
+        "name": "Fogbinder'ın Denizci Çantası"
       },
       "copper_mining_pick": {
         "name": "Bakır Maden Kazması"
@@ -5652,7 +5652,7 @@ export const tr_TR: EnTranslations = {
         "name": "Gümüşyaprak Orağı"
       },
       "bristleback_maul": {
-        "name": "Dikensırt Balyozu"
+        "name": "Gallowglass Balyozu"
       },
       "broodmother_silk_robe": {
         "name": "Yumurtlayan Ananın İpek Cübbesi"
@@ -5661,16 +5661,16 @@ export const tr_TR: EnTranslations = {
         "name": "Mezarkemiği Dizlikleri"
       },
       "cryptstalker_jerkin": {
-        "name": "Mezar Sinsisi Yeleği"
+        "name": "Gravestalker Yeleği"
       },
       "deathlord_legguards": {
-        "name": "Ölüm Lordu Bacaklığı"
+        "name": "Barrowlord Bacaklığı"
       },
       "deathlord_sabatons": {
-        "name": "Ölüm Lordu Demir Çizmeleri"
+        "name": "Barrowlord Demir Çizmeleri"
       },
       "deathlord_warplate": {
-        "name": "Ölüm Lordu Savaş Zırhı"
+        "name": "Barrowlord Savaş Zırhı"
       },
       "drogmar_warboots": {
         "name": "Drogmar'ın Savaş Çizmeleri"
@@ -5748,13 +5748,13 @@ export const tr_TR: EnTranslations = {
         "name": "Mogger'ın Ezici Çizmeleri"
       },
       "necromancers_legwraps": {
-        "name": "Ölüçağıranın Bacak Sargıları"
+        "name": "Mournweave Bacak Sargıları"
       },
       "necromancers_soulsteps": {
-        "name": "Ölüçağıranın Ruhadımları"
+        "name": "Mournweave Ruhadımları"
       },
       "necromancers_starshroud": {
-        "name": "Ölüçağıranın Yıldızörtüsü"
+        "name": "Mournweave Yıldızörtüsü"
       },
       "nhalias_dirgeblade": {
         "name": "Nhalia'nın Ağıt Kılıcı"
@@ -5790,13 +5790,13 @@ export const tr_TR: EnTranslations = {
         "name": "Ejdertarikatı Ruhadımları"
       },
       "wyrmshadow_harness": {
-        "name": "Ejdergölgesi Koşumu"
+        "name": "Nightfang Koşumu"
       },
       "wyrmshadow_legguards": {
-        "name": "Ejdergölgesi Bacaklıkları"
+        "name": "Nightfang Bacaklıkları"
       },
       "wyrmshadow_treads": {
-        "name": "Ejdergölgesi Postalları"
+        "name": "Nightfang Postalları"
       },
       "glimmerfin_koi": {
         "name": "Pırıltıyüzgeç Koi"
@@ -5814,7 +5814,7 @@ export const tr_TR: EnTranslations = {
         "name": "Çiğ Nehir Levreği"
       },
       "raw_stonescale_carp": {
-        "name": "Çiğ Taşpul Sazanı"
+        "name": "Çiğ Slatefin Sazanı"
       },
       "soggy_boot": {
         "name": "Islak Çizme"
@@ -5925,13 +5925,13 @@ export const tr_TR: EnTranslations = {
         "name": "Aypulu Pala"
       },
       "moonshroud_breastplate": {
-        "name": "Ay Örtüsü Göğüslüğü"
+        "name": "Moonwrack Göğüslüğü"
       },
       "moonshroud_robe": {
-        "name": "Ay Örtüsü Cübbesi"
+        "name": "Moonwrack Cübbesi"
       },
       "moonshroud_tunic": {
-        "name": "Ayörtüsü Tuniği"
+        "name": "Moonwrack Tuniği"
       },
       "pale_pearl": {
         "name": "Soluk İnci"
@@ -5967,7 +5967,7 @@ export const tr_TR: EnTranslations = {
         "name": "Mezarkemiği Omuzlukları"
       },
       "deathlords_dread_visage": {
-        "name": "Ölüm Lordu'nun Dehşet Suratlığı"
+        "name": "Barrowlord'un Dehşet Suratlığı"
       },
       "gravewyrm_gauntlets": {
         "name": "Mezarejderi Eldivenleri"
@@ -5982,10 +5982,10 @@ export const tr_TR: EnTranslations = {
         "name": "Sis Tülü Eldivenleri"
       },
       "necromancers_soulspire_mantle": {
-        "name": "Ölüçağıranın Ruhkule Pelerini"
+        "name": "Mournweave Ruhkule Pelerini"
       },
       "wyrmshadow_talongrips": {
-        "name": "Ejdergölgesi Pençe Kavramaları"
+        "name": "Nightfang Pençe Kavramaları"
       },
       "reliquary_plate_chest": {
         "name": "Emanetlik Muhafızı Zırhı"
@@ -6120,31 +6120,31 @@ export const tr_TR: EnTranslations = {
         "name": "Ölümsüz Taç'ın Öz Odunu"
       },
       "kingsbane_last_oath": {
-        "name": "Kralkıran, Dikenzirve'nin Son Yemini"
+        "name": "Thronebane, Dikenzirve'nin Son Yemini"
       },
       "crownforged_dreadhelm": {
-        "name": "Taçdövme Dehşet Miğferi"
+        "name": "Bonewrought Dehşet Miğferi"
       },
       "crownforged_warspaulders": {
-        "name": "Taçdövme Savaş Omuzlukları"
+        "name": "Bonewrought Savaş Omuzlukları"
       },
       "nighttalon_crown": {
-        "name": "Gecepençe Tacı"
+        "name": "Direfang Tacı"
       },
       "nighttalon_shoulderguards": {
-        "name": "Gecepençe Omuzlukları"
+        "name": "Direfang Omuzlukları"
       },
       "soulflame_cowl": {
-        "name": "Ruhalevi Başlığı"
+        "name": "Wraithfire Başlığı"
       },
       "soulflame_mantle": {
-        "name": "Ruhalevi Pelerini"
+        "name": "Wraithfire Pelerini"
       },
       "stormcallers_crown": {
-        "name": "Fırtınaçağıranın Tacı"
+        "name": "Galecall Tacı"
       },
       "stormcallers_spaulders": {
-        "name": "Fırtınaçağıranın Omuzlukları"
+        "name": "Galecall Omuzlukları"
       },
       "unknown_alien_weaponry": {
         "name": "Bilinmeyen Uzaylı Silahı"
@@ -6233,13 +6233,13 @@ export const tr_TR: EnTranslations = {
         "name": "Yaban Domuzu"
       },
       "webwood_spider": {
-        "name": "Ağorman Sinsisi"
+        "name": "Sableweb Pusucusu"
       },
       "mudfin_murloc": {
         "name": "Çamuryüzgeç Sinsisi"
       },
       "tunnel_rat": {
-        "name": "Tünel Faresi Kazıcısı"
+        "name": "Deeprock Kazıcısı"
       },
       "vale_bandit": {
         "name": "Vadi Haydudu"
@@ -6254,7 +6254,7 @@ export const tr_TR: EnTranslations = {
         "name": "Bataklık Sinsisi"
       },
       "deepfen_murloc": {
-        "name": "Derinbatak Kapanı"
+        "name": "Deepfen Isirgani"
       },
       "mire_widow": {
         "name": "Mirefen Dulu"
@@ -6287,7 +6287,7 @@ export const tr_TR: EnTranslations = {
         "name": "Sırt Sinsisi"
       },
       "deeprock_kobold": {
-        "name": "Derinkaya Tünelcisi"
+        "name": "Deeprock Tunelcisi"
       },
       "thornpeak_ogre": {
         "name": "Dikenzirve Ogresi"
@@ -6341,13 +6341,13 @@ export const tr_TR: EnTranslations = {
         "name": "Şövalye-Komutan Olen"
       },
       "vael_the_mistcaller": {
-        "name": "Sisçağıran Vael"
+        "name": "Fogbinder Vael"
       },
       "sanctum_boneguard": {
         "name": "Mabet Kemik Muhafızı"
       },
       "sanctum_drakonid": {
-        "name": "Mabet Drakonidi"
+        "name": "Mabet Pul Muhafizi"
       },
       "raised_bonewalker": {
         "name": "Diriltilmiş Kemikyürüyen"
@@ -6482,13 +6482,13 @@ export const tr_TR: EnTranslations = {
         "name": "Varkas Kemik Muhafızı"
       },
       "emberkin": {
-        "name": "İblisçik"
+        "name": "Emberkin"
       },
       "gloomshade": {
-        "name": "Boşlukgezer"
+        "name": "Gloomshade"
       },
       "duskborn": {
-        "name": "Sukubus"
+        "name": "Duskborn"
       },
       "grix_the_tunnelking": {
         "name": "Tünelkral Grix"
@@ -6512,16 +6512,16 @@ export const tr_TR: EnTranslations = {
         "name": "Hayaletbağlayan Maldrec"
       },
       "spellhound": {
-        "name": "İfrit Avcısı"
+        "name": "Spellhound"
       },
       "warfiend": {
-        "name": "İfrit Muhafızı"
+        "name": "Warfiend"
       },
       "pyre_colossus": {
-        "name": "Cehennem Zebanisi"
+        "name": "Pyre Colossus"
       },
       "wraithborn": {
-        "name": "Kıyamet Muhafızı"
+        "name": "Wraithborn"
       },
       "choirmother_selthe": {
         "name": "Koroana Selthe"
@@ -6594,12 +6594,12 @@ export const tr_TR: EnTranslations = {
       "fisherman_brandt": {
         "name": "Balıkçı Brandt",
         "title": "Eski Denizci",
-        "greeting": "Grlmurlgrl- pardon, şu balık adamları çok uzun dinledim."
+        "greeting": "Blrb-glub- pardon, şu balık adamlarını çok uzun süredir dinliyorum."
       },
       "foreman_odell": {
         "name": "Ustabaşı Odell",
         "title": "Maden Ustabaşısı",
-        "greeting": "Bütün kazı şu mum kafalı haşaratla kaynıyor!"
+        "greeting": "Bütün kazı şu toprağa bulanmış haşaratla kaynıyor!"
       },
       "warden_fenwick": {
         "name": "Muhafız Fenwick",
@@ -6709,7 +6709,7 @@ export const tr_TR: EnTranslations = {
         }
       },
       "q_boars": {
-        "title": "Kıllı Sırt Postları",
+        "title": "Kıllı Yabandomuzu Postları",
         "text": "Yaban domuzu postundan en iyi seyahat çantaları yapılır ve kasabanın batısındaki çayırlar bu hayvanlarla kaynıyor. Bana 5 Kıllı Yaban Domuzu Postu getir, emeğinin karşılığını vereyim.",
         "completion": "Ah, güzel kıllı postlar! Bunlar iyi para eder.",
         "objectives": {
@@ -6719,21 +6719,21 @@ export const tr_TR: EnTranslations = {
         }
       },
       "q_spiders": {
-        "title": "Ağorman Tehdidi",
-        "text": "Doğudaki ormandaki pusucular, lapalarım için ihtiyaç duyduğum bir ipek örüyor; üstelik aşırı çoğaldılar. 6 Ağorman Pusucusunu telef et ve karınlarından 4 ipek bezi kes.",
+        "title": "Sableweb Tehdidi",
+        "text": "Doğudaki ormandaki pusucular, lapalarım için ihtiyaç duyduğum bir ipek örüyor; üstelik aşırı çoğaldılar. 6 Sableweb Pusucusunu telef et ve karınlarından 4 ipek bezi kes.",
         "completion": "Öff, hâlâ seğiriyor. Mükemmel. Al, bunu hak ettin.",
         "objectives": {
           "0": {
-            "label": "Ağorman Pusucusu öldürüldü"
+            "label": "Sableweb Pusucusu öldürüldü"
           },
           "1": {
-            "label": "Ağorman İpek Bezi"
+            "label": "Sableweb İpek Bezi"
           }
         }
       },
       "q_murlocs": {
         "title": "Göldeki Bela",
-        "text": "Yirmi yıldır Ayna Gölü'nde balık tutarım ve o gurultulu balık-adamlar sığlıklardan sürünüp çıkana dek hiç ağ kaybetmedim. Çamuryüzgeçleri geri püskürt; 8 tanesini öldür. Ve kendine dikkat et: bir murloc'un olduğu yerde beş tane vardır.",
+        "text": "Yirmi yıldır Ayna Gölü'nde balık tutarım ve o gurultulu balık-adamlar sığlıklardan sürünüp çıkana dek hiç ağ kaybetmedim. Mudfinleri geri püskürt; 8 tanesini öldür. Ve kendine dikkat et: bir Mudfin'in olduğu yerde beş tane vardır.",
         "completion": "Ha! Bu, kendi çamur çukurlarına bakmayı öğretir onlara.",
         "objectives": {
           "0": {
@@ -6743,11 +6743,11 @@ export const tr_TR: EnTranslations = {
       },
       "q_mine": {
         "title": "Madendeki Fareler",
-        "text": "Güzel bir bakır damarı bulduk, sonra o kobold haşaratı tepenin yamacından kaynayarak çıktı. Ekibim temizlenene kadar kazıya ayak basmaz. 10 Tünel Sıçanı Kazıcısı yere ser.",
+        "text": "Güzel bir bakır damarı bulduk, sonra o oyucu haşaratı tepenin yamacından kaynayarak çıktı. Ekibim temizlenene kadar kazıya ayak basmaz. 10 Deeprock Kazıcısı yere ser.",
         "completion": "Ha! İşe geri dönün, çocuklar! Teşekkürlerimi al, altınımı da.",
         "objectives": {
           "0": {
-            "label": "Tünel Sıçanı Kazıcısı öldürüldü"
+            "label": "Deeprock Kazıcısı öldürüldü"
           }
         }
       },
@@ -6803,7 +6803,7 @@ export const tr_TR: EnTranslations = {
       },
       "q_rite": {
         "title": "Bağlama Ayini",
-        "text": "Mezarçağıran'ı durduracaksak şapelin altındaki mahzenin mührü açılmalı; ama yaşayanların geçmesine yalnızca bir bağlama ayini izin verir. 4 parça Kutsanmış Donyağı'na ihtiyacım var; kobold kazıcıları mumları sandık sandık biriktiriyor; bir de huzursuz ölülerden 6 Hayaletimsi Öz.",
+        "text": "Gravecaller'ı durduracaksak şapelin altındaki mahzenin mührü açılmalı; ama yaşayanların geçmesine yalnızca bir bağlama ayini izin verir. 4 parça Kutsanmış Donyağı'na ihtiyacım var; madenin oyucuları donyağını sandık sandık biriktiriyor; bir de huzursuz ölülerden 6 Hayaletimsi Öz.",
         "completion": "Tamamlandı. Aşağıya giden yol açık duruyor... ve onu açtığım için Işık beni affetsin. İnmeden önce en güçlü yoldaşlarını topla, {playerName}. Kimse Oyuk'la yalnız yüzleşmemeli.",
         "objectives": {
           "0": {
@@ -6837,7 +6837,7 @@ export const tr_TR: EnTranslations = {
       "q_gravecallers_trail": {
         "title": "Mezarçağıranın İzi",
         "text": "Morthen öldü, yine de bir soru içimi kemiriyor: bir asır boyunca saklanan bir tarikat, kendini tek bir köy şapelinde harcamaz. Bir büyü kitabı tutuyordu, ayinleri, yazışmaları. Ondan bir şey kaldıysa, mahzenin üstündeki yıkık şapelin kutsal odasında yatıyordur. Harabeyi ara ve yazılarından geriye ne kaldıysa bana getir, {playerName}.",
-        "completion": "Morthen, kuzey bataklığındaki bir 'Sis Çağırıcısı'na yazmış. Tarikat ölü değil, {playerName}, yalnızca sabırlı davranmış.",
+        "completion": "Morthen, kuzey bataklığındaki bir 'Fogbinder'a yazmış. Tarikat ölü değil, {playerName}, yalnızca sabırlı davranmış.",
         "objectives": {
           "0": {
             "label": "Morthen'in Büyü Kitabı"
@@ -6866,7 +6866,7 @@ export const tr_TR: EnTranslations = {
       },
       "q_fenbridge_muster": {
         "title": "Fenbridge'de Toplanma",
-        "text": "Morthen'in yazıları kuzey bataklığında bir efendiden söz ediyordu, bir 'Sis Çağırıcısı.' Şimdi Muhafız Fenwick, Fenbridge'de toplanma borusunu çaldı ve ben tesadüflere inanmam, {playerName}. Geçitten kuzeye git, kapı direğinden toplanma emrini al ve Muhafız'a sun.",
+        "text": "Morthen'in yazıları kuzey bataklığında bir efendiden söz ediyordu, bir 'Fogbinder.' Şimdi Muhafız Fenwick, Fenbridge'de toplanma borusunu çaldı ve ben tesadüflere inanmam, {playerName}. Geçitten kuzeye git, kapı direğinden toplanma emrini al ve Muhafız'a sun.",
         "completion": "Aldric'in mührü, öyle mi? O zaman işimi görürsün. Bataklık devriyelerimi olduğu gibi yutuyor ve yüzebilen her kılıca ihtiyacım var.",
         "objectives": {
           "0": {
@@ -6906,7 +6906,7 @@ export const tr_TR: EnTranslations = {
       },
       "q_deepfen": {
         "title": "Deepfen Kıpırdanıyor",
-        "text": "Deepfen murlocları yirmi yıl boyunca sığlıklarında kaldı. Şimdi doğu kıyısını bir leşin üstündeki sinekler gibi sarıyorlar, ve muhafızlarım göl yatağından bir şeyler çıkardıklarını söylüyor. Onları her ne kışkırttıysa, durdurulmasını istiyorum. Isırganlardan 12 tanesini telef et.",
+        "text": "Deepfen Mudfinleri yirmi yıl boyunca sığlıklarında kaldı. Şimdi doğu kıyısını bir leşin üstündeki sinekler gibi sarıyorlar ve muhafızlarım göl yatağından bir şeyler çıkardıklarını söylüyor. Onları her ne kışkırttıysa, durdurulmasını istiyorum. Isırganlardan 12 tanesini telef et.",
         "completion": "Bu, onları bir süreliğine çamura geri iter. Ama bir şey onları kazmaya itti ve neyin olduğunu öğrenmeye niyetliyim.",
         "objectives": {
           "0": {
@@ -6936,7 +6936,7 @@ export const tr_TR: EnTranslations = {
       },
       "q_deepfen_purge": {
         "title": "Sığlıklara Dönüş",
-        "text": "Aldric o putların tarikat işi olduğunu söylüyor, bu da murlocların bataklığın eski şeytanını kucak kucak yukarı taşıdığı anlamına geliyor. Bunun benim geçidime vurmasına izin vermem. Sığlıklara geri dön ve o tarama işini tamamen bitir: 14 ısırgan daha.",
+        "text": "Aldric o putların tarikat işi olduğunu söylüyor, bu da Mudfinlerin bataklığın eski şeytanını kucak kucak yukarı taşıdığı anlamına geliyor. Bunun benim geçidime vurmasına izin vermem. Sığlıklara geri dön ve o tarama işini tamamen bitir: 14 ısırgan daha.",
         "completion": "Acımasız ve titiz. Bu bataklık bir gün kurursa, seni bekleyen bir muhafızlık işi var.",
         "objectives": {
           "0": {
@@ -7043,7 +7043,7 @@ export const tr_TR: EnTranslations = {
       "q_summoners": {
         "title": "Davetin Durdurulması",
         "text": "Maren'in raporları tarikat üyeleri arasında davetçilerden söz ediyor; boğulmuşları, düdükle çağrılan tazılar gibi sudan çağıran sesler. Şifreleri komuta zincirini açık eder. 8 davetçiyi sustur ve şifrelerinden 4 tanesini bana getir.",
-        "completion": "Her şifre 'Diyakoz Voss' tarafından karşı imzalanmış; ve Kale'deki bir 'Sisçağıran'a yönlendirilmiş. Morthen'in efendisi, {playerName}. Onu bulduk.",
+        "completion": "Her şifre 'Diyakoz Voss' tarafından karşı imzalanmış; ve Kale'deki bir 'Fogbinder'a yönlendirilmiş. Morthen'in efendisi, {playerName}. Onu bulduk.",
         "objectives": {
           "0": {
             "label": "Mezarçağıran Davetçisi öldürüldü"
@@ -7065,7 +7065,7 @@ export const tr_TR: EnTranslations = {
       },
       "q_bastion_door": {
         "title": "Batık Kale",
-        "text": "Batık Kale, bir asır önce bataklıkta boğulmuş bir şövalye yurdu, Voss'un mektuplarının işaret ettiği yer ve şu Sis Çağırıcısı'nın boğulma ilahilerini söylediği yer. Tarikat kapısını mezar taşlarıyla tılsımlamış. Bana tılsım taşlarından birini getir, {playerName}, ben de mührü çözeyim.",
+        "text": "Batık Kale, bir asır önce bataklıkta boğulmuş bir şövalye yurdu, Voss'un mektuplarının işaret ettiği yer ve şu Fogbinder'ın boğulma ilahilerini söylediği yer. Tarikat kapısını mezar taşlarıyla tılsımlamış. Bana tılsım taşlarından birini getir, {playerName}, ben de mührü çözeyim.",
         "completion": "Tılsım çürük bir ip gibi ayrılıyor. Kapı açık duruyor... ve altındaki karanlık dinliyor.",
         "objectives": {
           "0": {
@@ -7075,7 +7075,7 @@ export const tr_TR: EnTranslations = {
       },
       "q_olen": {
         "title": "Şövalye-Komutanın Utancı",
-        "text": "Şövalye-Komutan Olen, Kale battığında onu savunuyordu; görevini terk etmektense yerinde boğuldu. Her muhafız onun adını gururla öğrenir. Şimdi Sisçağıran onu, savunurken öldüğü kapıyı korusun diye bir kukla olarak diriltti. Bu utanç sona erecek, {playerName}. Yanına dört yoldaş alıp aşağı in ve Olen'e hak ettiği huzuru bağışla.",
+        "text": "Şövalye-Komutan Olen, Kale battığında onu savunuyordu; görevini terk etmektense yerinde boğuldu. Her muhafız onun adını gururla öğrenir. Şimdi Fogbinder onu, savunurken öldüğü kapıyı korusun diye bir kukla olarak diriltti. Bu utanç sona erecek, {playerName}. Yanına dört yoldaş alıp aşağı in ve Olen'e hak ettiği huzuru bağışla.",
         "completion": "Demek nöbeti sonunda sona erdi. Adının kapıya kazınmasını bizzat sağlayacağım. Teşekkürler, {playerName}.",
         "objectives": {
           "0": {
@@ -7084,12 +7084,12 @@ export const tr_TR: EnTranslations = {
         }
       },
       "q_mistcaller": {
-        "title": "Sisçağıran",
-        "text": "Kalenin dibinde Sisçağıran Vael bekliyor; Morthen'in efendisi, Voss'un efendisi, kendine bir ordu kurmak için yüzlerce yolcuyu boğan ses. Tek bir kahramanın çok ötesinde: yanına dört yoldaş al, daha az değil. Onun işini bitir, {playerName}, böylece bataklığın ölüleri sonunda huzura erebilir.",
+        "title": "Fogbinder",
+        "text": "Kalenin dibinde Fogbinder Vael bekliyor; Morthen'in efendisi, Voss'un efendisi, kendine bir ordu kurmak için yüzlerce yolcuyu boğan ses. Tek bir kahramanın çok ötesinde: yanına dört yoldaş al, daha az değil. Onun işini bitir, {playerName}, böylece bataklığın ölüleri sonunda huzura erebilir.",
         "completion": "Vael öldü ve sis yıllardır ilk kez dağılıyor. Ama Maren onun son sözlerini duydu ve bunlar kanımı donduruyor: 'Ejder, zirvelerin altında kıpırdanıyor.' Tarikat, tahmin ettiğimizden çok daha eski bir şeye hizmet ediyor, {playerName}. Fırsatın varken dinlen; sıra dağlarda.",
         "objectives": {
           "0": {
-            "label": "Sisçağıran Vael öldürüldü"
+            "label": "Fogbinder Vael öldürüldü"
           }
         }
       },
@@ -7155,8 +7155,8 @@ export const tr_TR: EnTranslations = {
       },
       "q_kobold_tunnels": {
         "title": "Deeprock Belası",
-        "text": "Deeprock İnleri'ndeki koboldlar, hiçbir mum faresinin kazması gerekenden daha derine kazıyor, dümdüz aşağıya, sanki bir şey onları çağırıyormuş gibi. Tünelleri duvarımızın altından geçiyor, {playerName}. Meseleyi çökert: on iki Deeprock Tünelcisi öldür.",
-        "completion": "Dümdüz aşağıya, her bir kuyusu, koboldlar kendi başlarına böyle kazmaz. Kitaplarıma danışmalıyım.",
+        "text": "Deeprock İnleri'ndeki tünelciler, hiçbir çukur faresinin kazması gerekenden daha derine kazıyor, dümdüz aşağıya, sanki bir şey onları çağırıyormuş gibi. Tünelleri duvarımızın altından geçiyor, {playerName}. Meseleyi çökert: on iki Deeprock Tünelcisi öldür.",
+        "completion": "Dümdüz aşağıya, her bir kuyusu, oyucular kendi başlarına böyle kazmaz. Kitaplarıma danışmalıyım.",
         "objectives": {
           "0": {
             "label": "Deeprock Tünelcisi öldürüldü"
@@ -7165,7 +7165,7 @@ export const tr_TR: EnTranslations = {
       },
       "q_glowing_wax": {
         "title": "Tuhaf Balmumu",
-        "text": "Caddis bana o tünelcilerden birinden alınmış bir mum gösterdi, balmumu parıldıyor, {playerName}, ve bir kalp atışı kadar sıcak. O, incelemek için daha fazlasını istiyor, ben de bunu istek listemden çıkarmak istiyorum. Parıldayan balmumundan altı parça geri getir.",
+        "text": "Caddis bana o tünelcilerden birinden alınmış bir parça balmumu gösterdi, parıldıyor, {playerName}, ve bir kalp atışı kadar sıcak. O, incelemek için daha fazlasını istiyor, ben de bunu istek listemden çıkarmak istiyorum. Parıldayan balmumundan altı parça geri getir.",
         "completion": "Hâlâ sıcak. Bilge, parıltının bildiği hiçbir aleve uymadığını söylüyor. Ben de bunun dağ belası olduğunu söylüyorum, hem de nazikçe.",
         "objectives": {
           "0": {
@@ -7552,7 +7552,7 @@ export const tr_TR: EnTranslations = {
             "label": "Ayna Gölü"
           },
           "4": {
-            "label": "Ağ Ormanı"
+            "label": "Sableweb"
           },
           "5": {
             "label": "Bakır Kazısı"
@@ -7710,12 +7710,12 @@ export const tr_TR: EnTranslations = {
         "bonus3": "Saldırı ve büyü hızını %15 artırır."
       },
       "crownforged": {
-        "name": "Taçdövme savaş takımı",
+        "name": "Bonewrought Kıyafetleri",
         "bonus2": "Saldırı gücünü 40 artırır.",
         "bonus3": "Gücü 15, dayanıklılığı 15, saldırı ve büyü hızını %15 artırır."
       },
       "deathlord": {
-        "name": "Ölüm Lordu savaş takımı",
+        "name": "Barrowlord Savaş Takımı",
         "bonus2": "Saldırı gücünü 40 artırır.",
         "bonus3": "Gücü 15 ve dayanıklılığı 15 artırır."
       },
@@ -7724,22 +7724,22 @@ export const tr_TR: EnTranslations = {
         "bonus3": "Saldırı ve büyü hızını %15 artırır."
       },
       "necromancers": {
-        "name": "Nekromansır giysileri",
+        "name": "Mournweave Giysileri",
         "bonus2": "Geri itilemezsin (%100 geri itilme direnci).",
         "bonus3": "Zekayı 10 ve dayanıklılığı 10 artırır."
       },
       "nighttalon": {
-        "name": "Gece Pençesi deri takımı",
+        "name": "Direfang Postu",
         "bonus2": "Saldırı gücünü 40 artırır.",
         "bonus3": "Çevikliği 15, kritik şansını %2, saldırı ve büyü hızını %15 artırır."
       },
       "soulflame": {
-        "name": "Ruh Alevi giysileri",
+        "name": "Wraithfire Kıyafetleri",
         "bonus2": "Geri itilemezsin (%100 geri itilme direnci).",
         "bonus3": "Zekayı 15, ruhu 15, saldırı ve büyü hızını %15 artırır."
       },
       "stormcallers": {
-        "name": "Fırtına Çağıran giysileri",
+        "name": "Galecall Cübbeleri",
         "bonus2": "Geri itilemezsin (%100 geri itilme direnci).",
         "bonus3": "Zekayı 15, ruhu 15, saldırı ve büyü hızını %15 artırır."
       },
@@ -7748,7 +7748,7 @@ export const tr_TR: EnTranslations = {
         "bonus3": "Saldırı ve büyü hızını %15 artırır."
       },
       "wyrmshadow": {
-        "name": "Wyrm Gölgesi takımı",
+        "name": "Nightfang Cübbeleri",
         "bonus2": "Saldırı gücünü 40 artırır.",
         "bonus3": "Çevikliği 15 ve kritik şansını %2 artırır."
       }

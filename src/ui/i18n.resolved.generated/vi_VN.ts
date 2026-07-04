@@ -43,7 +43,7 @@ export const vi_VN: EnTranslations = {
       "subtitle": "XP Trọn Đời",
       "rank": "Hạng",
       "name": "Tên",
-      "realmCol": "Máy Chủ",
+      "realmCol": "Thế Giới",
       "level": "Cấp",
       "vlevel": "Cấp Ảo",
       "lifetimeXp": "XP Trọn Đời",
@@ -52,7 +52,7 @@ export const vi_VN: EnTranslations = {
       "loading": "Đang tải bảng xếp hạng…",
       "unranked": "Chưa Xếp Hạng",
       "you": "Bạn",
-      "globalSubtitle": "Những nhà vô địch hàng đầu trên mọi máy chủ",
+      "globalSubtitle": "Những nhà vô địch hàng đầu trên mọi thế giới",
       "retry": "Không thể tải bảng xếp hạng. Hãy thử lại."
     },
     "milestone": {
@@ -556,7 +556,7 @@ export const vi_VN: EnTranslations = {
       "defaultBuildName": "Cấu Hình {n}"
     },
     "tips": {
-      "joinChannels": "Mẹo: gõ /join world hoặc /join lfg để trò chuyện với người chơi khắp realm."
+      "joinChannels": "Mẹo: gõ /join world hoặc /join lfg để trò chuyện với người chơi khắp thế giới."
     },
     "itemSet": {
       "header": "{name} ({have}/{total})",
@@ -611,7 +611,7 @@ export const vi_VN: EnTranslations = {
     },
     "bugReport": {
       "menuButton": "Báo Cáo Lỗi",
-      "realm": "Máy Chủ",
+      "realm": "Thế Giới",
       "character": "Nhân vật",
       "position": "Vị Trí",
       "unknown": "Không Rõ",
@@ -824,20 +824,20 @@ export const vi_VN: EnTranslations = {
       "stun": "Aturdido: no puede actuar",
       "root": "Enraizado: no puede moverse",
       "incapacitate": "Incapacitado: no puede actuar",
-      "polymorph": "Polimorfado: no puede actuar",
+      "polymorph": "Bị biến hình: không thể hành động.",
       "hex": "Reduce el daño y la sanación realizados un {pct}%",
       "blind": "Cegado: no puede actuar",
       "silence": "Silenciado: no puede lanzar hechizos",
       "disarm": "Desarmado: no puede usar ataques con arma",
       "lockout": "Escuela de hechizos bloqueada",
       "imbue": "Arma imbuida con efectos adicionales",
-      "imbueRange": "Arma imbuida: {min} a {max} de daño adicional al juzgar",
+      "imbueRange": "Vũ khí được phù chú: {min} đến {max} sát thương thêm khi dùng Verdict.",
       "stealth": "Oculto; velocidad de movimiento reducida un {pct}%",
-      "formBear": "Forma de oso: salud y armadura aumentadas",
+      "formBear": "Bruin Form: tăng máu và giáp.",
       "formCat": "Forma felina: daño cuerpo a cuerpo y energía",
-      "formTravel": "Forma de viaje: velocidad de movimiento aumentada un {pct}%",
-      "defensiveStance": "Actitud defensiva: daño recibido reducido, más amenaza",
-      "righteousFury": "Furia recta: amenaza de daño Sagrado muy aumentada",
+      "formTravel": "Fleet Form: tốc độ di chuyển tăng {pct}%.",
+      "defensiveStance": "Thế Thủ: giảm sát thương phải chịu, tăng đe dọa.",
+      "righteousFury": "Lời Thề Rực Cháy: tăng mạnh đe dọa từ sát thương Thánh.",
       "scale": "Tamaño aumentado un {pct}%",
       "jump": "Altura de salto aumentada un {pct}%",
       "school": {
@@ -1275,7 +1275,7 @@ export const vi_VN: EnTranslations = {
         "valeName": "Thung Lũng Đông Khê",
         "valeBlurb": "Những ngọn đồi xanh và những cánh rừng già nơi mọi cuộc phiêu lưu bắt đầu.",
         "marshName": "Đầm Lầy Bùn Sâu",
-        "marshBlurb": "Những đầm lầy chìm sâu và phế tích bị thủy triều mài mòn, nơi trú ngụ của murloc và những thứ tệ hơn.",
+        "marshBlurb": "Những đầm lầy chìm sâu và phế tích bị thủy triều mài mòn, nơi trú ngụ của mudfin và những thứ tệ hơn.",
         "peaksName": "Cao Nguyên Đỉnh Gai",
         "peaksBlurb": "Những rặng núi bị gió bào mòn vươn lên về phía những hiểm nguy lạnh giá nhất của vương quốc."
       },
@@ -1297,12 +1297,12 @@ export const vi_VN: EnTranslations = {
         "q2": "Tôi có cần ví crypto không?",
         "a2": "Không. Trò chơi hoàn toàn chơi được mà không cần ví. Token cộng đồng tùy chọn chỉ mở khóa trang trí làm đẹp và không bao giờ ảnh hưởng đến sức mạnh.",
         "q3": "Tôi có thể chơi ngoại tuyến không?",
-        "a3": "Có. Có chế độ chơi đơn tức thì ngay trong trình duyệt của bạn, cộng thêm vương quốc trực tuyến chung.",
+        "a3": "Có. Có chế độ chơi đơn tức thì ngay trong trình duyệt của bạn, cộng thêm thế giới trực tuyến chung.",
         "q4": "Mất bao lâu để đạt cấp tối đa?",
         "a4": "Cấp tối đa là cấp {cap}, đạt được qua ba vùng đất với nhiệm vụ, hầm ngục và khám phá."
       },
       "community": {
-        "heading": "Gia nhập vương quốc",
+        "heading": "Gia nhập thế giới",
         "body": "Nhảy vào ngay, hoặc ghé qua chào một tiếng. Thế giới sẽ vui hơn khi có bạn đồng hành.",
         "play": "Chơi Ngay",
         "discord": "Tham gia Discord",
@@ -1336,7 +1336,7 @@ export const vi_VN: EnTranslations = {
       "groupingTitle": "Cùng nhau chơi",
       "groupingBody": "Mời người khác vào tổ đội để chia sẻ công trạng nhiệm vụ và chinh phục các hầm ngục. Phần lớn thế giới có thể chơi đơn, nên lập đội là một lựa chọn, không phải một việc bắt buộc.",
       "onlineTitle": "Trực tuyến hay ngoại tuyến",
-      "onlineBody": "Chơi vương quốc trực tuyến chung với mọi người khác, hoặc khởi tạo một thế giới ngoại tuyến tức thì trong trình duyệt để học cách chơi.",
+      "onlineBody": "Chơi thế giới trực tuyến chung với mọi người khác, hoặc khởi tạo một thế giới ngoại tuyến tức thì trong trình duyệt để học cách chơi.",
       "reassure": "Tài năng mở khóa ở cấp 10 và có thể thiết lập lại bất cứ lúc nào, nên những lựa chọn ban đầu của bạn không bao giờ là vĩnh viễn. Cứ thoải mái thử nghiệm.",
       "controlsLink": "Xem bảng tra điều khiển đầy đủ"
     },
@@ -1513,12 +1513,12 @@ export const vi_VN: EnTranslations = {
       "charge": "Lao tới kẻ địch ở xa để mở màn trận đấu bằng một cú choáng ngắn.",
       "rend": "Mở một vết chảy máu bào mòn mục tiêu dần theo thời gian.",
       "thunder_clap": "Đánh trúng mọi thứ quanh bạn và làm chậm đòn tấn công của chúng.",
-      "seal_of_righteousness": "Phù chú đòn vung của bạn với sát thương Thánh, rồi giải phóng bằng Phán Xét.",
+      "seal_of_righteousness": "Phù chú đòn vung của bạn với sát thương Thánh, rồi giải phóng bằng Verdict.",
       "holy_light": "Một đòn trị liệu vững chãi, đáng kể để hồi đầy cho đồng đội hoặc bản thân.",
       "devotion_aura": "Một buff bản thân lâu dài giúp tăng giáp để đòn đánh giảm uy lực.",
       "judgement": "Tiêu Ấn Chú đang kích hoạt để giáng đòn lên kẻ địch từ cự ly gần.",
       "blessing_of_might": "Tăng sức tấn công cho mục tiêu thân thiện, nên niệm trước khi vào trận.",
-      "divine_protection": "Một tấm khiên thần thánh nhanh gọn để hứng sát thương khi tình thế ngặt nghèo.",
+      "divine_protection": "Một tấm bùa hộ mệnh nhanh gọn để hứng sát thương khi tình thế ngặt nghèo.",
       "raptor_strike": "Một cú vung cận chiến mạnh tay cho khi có kẻ áp sát bạn.",
       "aspect_of_the_hawk": "Một trạng thái bạn duy trì để gia tăng sức tấn công tầm xa.",
       "serpent_sting": "Tiêm vào một liều nọc độc gây sát thương tự nhiên theo thời gian.",
@@ -1550,7 +1550,7 @@ export const vi_VN: EnTranslations = {
       "conjure_water": "Tạo ra đồ uống hồi mana, để bạn nạp lại giữa các đợt kéo quái.",
       "conjure_food": "Tạo ra thức ăn hồi máu khi bạn ngồi xuống dùng bữa.",
       "shadow_bolt": "Một tia bóng tối bạn niệm vào mục tiêu, đòn chủ lực quen thuộc của bạn.",
-      "summon_imp": "Triệu một tiểu quỷ phóng những tia lửa vào kẻ địch từ xa.",
+      "summon_imp": "Triệu một Emberkin phóng những tia lửa vào kẻ địch từ xa.",
       "demon_skin": "Một buff bản thân lâu dài giúp da bạn cứng cáp hơn và tăng giáp.",
       "immolate": "Thiêu cháy mục tiêu cho một đòn mở màn và một vệt cháy âm ỉ kéo dài.",
       "corruption": "Làm mục rữa mục tiêu bằng bóng tối, gây sát thương theo thời gian trong khi bạn làm việc khác.",
@@ -1582,7 +1582,7 @@ export const vi_VN: EnTranslations = {
         "old_greyjaw": "Một con sói già đầy sẹo chưa cái bẫy nào giữ nổi, bị đổ tội cho ba con chó săn và cánh tay một cậu giữ ngựa. Hắn săn mồi một mình giữa rừng sâu, và càng trở nên hung tợn khi trận đấu kéo dài.",
         "grubjaw": "Một troll đầm lầy tham lam đến mức những troll khác không chịu đào bới bên cạnh hắn, đồn rằng đã nuốt chửng hai con la thồ cuối cùng của một thương nhân, cả bộ yên cương lẫn tất cả.",
         "shardlord_kazzix": "Một tinh linh bão tố được ban cho thân hình, lang thang trên những vách đá xa xôi phía trên Stormcrag với một mảnh tâm thạch đáng để liều mình giữa sấm sét.",
-        "mirejaw_frenzy": "Một murloc đầm lầy tự kích mình vào cơn cuồng quẫy đảo giữa trận, thứ ồn ào nhất trong một bầy ồn ào, hung hãn lãnh thổ.",
+        "mirejaw_frenzy": "Một mudfin đầm lầy tự kích mình vào cơn cuồng quẫy đảo giữa trận, thứ ồn ào nhất trong một bầy ồn ào, hung hãn lãnh thổ.",
         "gravecaller_cultist": "Những kẻ phục dịch khoác áo choàng của giáo phái tử thần, kẻ mà công việc làm ô uế những nấm mồ từ Thung Lũng đến những đỉnh núi. Nơi chúng tụ họp, người chết không được yên nghỉ."
       }
     },
@@ -1596,12 +1596,12 @@ export const vi_VN: EnTranslations = {
         "desc": "Những kẻ giăng tơ và rình rập độc địa làm tổ ở những nơi tối tăm, rậm rạp. Thợ Săn có thể thuần hóa chúng, giống như dã thú."
       },
       "mudfin": {
-        "name": "Murloc",
+        "name": "Mudfin",
         "desc": "Cư dân đầm lầy lưỡng cư tràn ngập vùng nước nông trong những bầy ồn ào, giành lãnh thổ."
       },
       "burrower": {
-        "name": "Kobold",
-        "desc": "Những kẻ đào hang đầu mang nến tràn ngập các hầm mỏ và hang ổ, hung hãn bảo vệ quặng của chúng."
+        "name": "Lũ Đào Hang",
+        "desc": "Những kẻ đào hang bám đầy bùn đất tràn ngập các hầm mỏ và hang ổ, hung hãn bảo vệ quặng của chúng."
       },
       "humanoid": {
         "name": "Nhân Hình",
@@ -1637,7 +1637,7 @@ export const vi_VN: EnTranslations = {
       "places": "Những địa điểm đáng chú ý",
       "residents": "Những người bạn sẽ gặp",
       "valeBlurb": "Thung lũng khởi đầu xanh tươi, nơi những anh hùng mới rèn luyện bản lĩnh với lũ sói và đám cướp quanh thị trấn Eastbrook.",
-      "marshBlurb": "Một xứ sở chìm trong sương mù và phế tích. Bầy murloc tràn ngập vùng nước nông và một thứ gì đó cổ xưa hơn đang cựa quậy dưới mặt nước, được canh chừng từ thị trấn cầu Fenbridge.",
+      "marshBlurb": "Một xứ sở chìm trong sương mù và phế tích. Bầy mudfin tràn ngập vùng nước nông và một thứ gì đó cổ xưa hơn đang cựa quậy dưới mặt nước, được canh chừng từ thị trấn cầu Fenbridge.",
       "peaksBlurb": "Những rặng núi bị gió bào mòn và các hầm mỏ cũ vươn tới những hiểm họa lạnh giá, cao nhất của vương quốc, được trấn giữ bởi tiền đồn Highwatch.",
       "valeGreeting": "Hãy giữ lưỡi kiếm bên mình. Thung Lũng không còn như xưa nữa.",
       "valeGreeter": "Cảnh Sát Trưởng Redbrook, Eastbrook",
@@ -1645,9 +1645,9 @@ export const vi_VN: EnTranslations = {
       "marshGreeter": "Hộ Vệ Fenwick, Fenbridge",
       "peaksGreeting": "Hai trăm năm bức tường này đã đứng vững. Nó sẽ không sụp đổ dưới phiên gác của ta, nhưng nó đang rền rĩ.",
       "peaksGreeter": "Đại Úy Thessaly, Highwatch",
-      "valePlaceNotes": "Eastbrook là căn cứ nhà đầu tiên của bạn. Wolf Run và Boar Meadow là vùng săn bắn hiền hòa; Mirror Lake là vùng nước tĩnh lặng để câu cá; Webwood và Copper Dig giấu lũ nhện và đám đào mỏ tham quặng; một Bandit Camp và Fallen Chapel chứa những công việc gai góc hơn; Reliquary Hill dẫn xuống Collapsed Reliquary, delve đầu tiên của vương quốc; và Brightwood Glade là một khu rừng thưa ngập nắng, tĩnh lặng ở phía bắc.",
-      "marshPlaceNotes": "Fenbridge canh giữ con đường khô ráo duy nhất. Prowler Reeds và Deepfen Shallows đầy thú đầm lầy và murloc; Widow Thicket giăng kín mạng nhện dày đặc; Drowned Chapel và Troll Mounds chứa những hiểm họa cổ xưa hơn; Gravecaller Encampment là nơi giáo phái đào hầm ẩn náu, và Pháo Đài Chìm là trái tim hầm ngục của đầm lầy.",
-      "peaksPlaceNotes": "Highwatch giữ vững bức tường. Stalker Ridge và Deeprock Burrows thuộc về mèo núi và kobold; Ogre Foothills và Drogmar's War-Camp thuộc về lũ côn đồ đánh thuê; Stormcrag lách tách tiếng các nguyên tố và Glimmermere phát sáng bên dưới nó; Wyrmcult Tents và Revenant Fields bao quanh vùng đất cao của giáo phái, với Thánh Đường Mộ Long ở đỉnh của nó.",
+      "valePlaceNotes": "Eastbrook là căn cứ nhà đầu tiên của bạn. Wolf Run và Boar Meadow là vùng săn bắn hiền hòa; Mirror Lake là vùng nước tĩnh lặng để câu cá; Sableweb và Copper Dig giấu lũ nhện và đám đào mỏ tham quặng; một Bandit Camp và Fallen Chapel chứa những công việc gai góc hơn; Reliquary Hill dẫn xuống Collapsed Reliquary, delve đầu tiên của thế giới; và Brightwood Glade là một khu rừng thưa ngập nắng, tĩnh lặng ở phía bắc.",
+      "marshPlaceNotes": "Fenbridge canh giữ con đường khô ráo duy nhất. Prowler Reeds và Deepfen Shallows đầy thú đầm lầy và mudfin; Widow Thicket giăng kín mạng nhện dày đặc; Drowned Chapel và Troll Mounds chứa những hiểm họa cổ xưa hơn; Gravecaller Encampment là nơi giáo phái đào hầm ẩn náu, và Pháo Đài Chìm là trái tim hầm ngục của đầm lầy.",
+      "peaksPlaceNotes": "Highwatch giữ vững bức tường. Stalker Ridge và Deeprock Burrows thuộc về mèo núi và lũ đào hang; Ogre Foothills và Drogmar's War-Camp thuộc về lũ côn đồ đánh thuê; Stormcrag lách tách tiếng các nguyên tố và Glimmermere phát sáng bên dưới nó; Wyrmcult Tents và Revenant Fields bao quanh vùng đất cao của giáo phái, với Thánh Đường Mộ Long ở đỉnh của nó.",
       "gladeTitle": "Một góc tĩnh lặng: Brightwood Glade",
       "gladeBody": "Không phải mọi câu chuyện ở Vale đều về người chết. Ở phía bắc, một khu rừng thưa ngập nắng tên là Brightwood Glade giữ nhịp điệu dịu dàng của riêng nó, toàn những lối đi tĩnh lặng và ánh sáng lốm đốm dưới tán cành. Nó là một nốt nhạc đối lập êm dịu với con đường bạn đang theo, và đáng để ghé thăm khi cung đường cho bạn chỗ để lang thang."
     },
@@ -1682,7 +1682,7 @@ export const vi_VN: EnTranslations = {
       "sagaValeTitle": "Thung Lũng: một cái tên trên ấn triện",
       "sagaValeBody": "Tại Eastbrook người chết không chịu yên nghỉ, và dấu ấn đằng sau nó thuộc về một giáo phái từ lâu tưởng đã biến mất. Lần theo nó đến một Kẻ Gọi Mộ đang hoạt động trong hầm mộ nguyện đường, và chính giấy tờ của hắn chỉ bạn về phía đầm lầy ở phương bắc.",
       "sagaMarshTitle": "Đầm lầy: một khoản thuế linh hồn",
-      "sagaMarshBody": "Tại Đầm Lầy Bùn Sâu những cái chết đuối không phải tai nạn. Có kẻ đang lấp đầy đầm lầy như một hòm thuế, dựng dậy những xác chết phục tùng từ mọi lữ khách bị dòng nước cuốn đi. Lần theo mệnh lệnh ngược lên chuỗi chỉ huy đến một Kẻ Gọi Sương trong pháo đài chìm, mà lời trăng trối nêu tên một thứ còn cổ xưa hơn, đang cựa mình bên dưới những đỉnh núi.",
+      "sagaMarshBody": "Tại Đầm Lầy Bùn Sâu những cái chết đuối không phải tai nạn. Có kẻ đang lấp đầy đầm lầy như một hòm thuế, dựng dậy những xác chết phục tùng từ mọi lữ khách bị dòng nước cuốn đi. Lần theo mệnh lệnh ngược lên chuỗi chỉ huy đến một Fogbinder trong pháo đài chìm, mà lời trăng trối nêu tên một thứ còn cổ xưa hơn, đang cựa mình bên dưới những đỉnh núi.",
       "sagaPeaksTitle": "Đỉnh núi: khoản thuế ấy để làm gì",
       "sagaPeaksBody": "Trên Thornpeak toàn bộ âm mưu trở nên rõ ràng. Mọi linh hồn bị đánh cắp kể từ Vale đều là một khoản cống nạp đổ về công việc tăm tối của giáo phái nơi trái tim ngọn núi. Con đường khởi đầu từ một sân nguyện đường kết thúc tại đây, trong một cuộc xuống sâu năm người để đối mặt với bàn tay đứng sau tất cả. Chúng tôi sẽ để bạn tự khám phá ai đang chờ ở tận cùng.",
       "sideTitle": "Những sợi chỉ rẽ khỏi đường chính",
@@ -2464,10 +2464,10 @@ export const vi_VN: EnTranslations = {
     "donate": "Ủng Hộ"
   },
   "stats": {
-    "title": "Trạng Thái Realm",
+    "title": "Trạng Thái Thế Giới",
     "accountsCreated": "Người Chơi",
     "playersOnline": "Người Chơi Trực Tuyến",
-    "realmName": "Tên Realm"
+    "realmName": "Tên Thế Giới"
   },
   "footer": {
     "copyright": "2026 World of ClaudeCraft",
@@ -2485,7 +2485,7 @@ export const vi_VN: EnTranslations = {
   },
   "highscores": {
     "title": "Bảng Xếp Hạng Điểm Cao",
-    "desc": "Theo dõi những nhà vô địch vĩ đại nhất của vương quốc và so sánh tiến độ của bạn."
+    "desc": "Theo dõi những nhà vô địch vĩ đại nhất của thế giới và so sánh tiến độ của bạn."
   },
   "wiki": {
     "title": "Wiki & Hướng Dẫn Trò Chơi",
@@ -2507,12 +2507,12 @@ export const vi_VN: EnTranslations = {
   },
   "comingSoon": {
     "placeholder": "Sắp Ra Mắt...",
-    "featureComingSoon": "Tính năng này sắp ra mắt trong realm."
+    "featureComingSoon": "Tính năng này sắp ra mắt trong thế giới."
   },
   "mode": {
     "onlineTitle": "Chơi Trực Tuyến",
-    "onlineDesc": "Đăng nhập vào máy chủ. Các nhân vật của bạn sống trên máy chủ và bạn chia sẻ thế giới với tất cả những người khác đang trực tuyến.",
-    "onlineAria": "Chơi Trực Tuyến: đăng nhập vào máy chủ chung lưu trữ lâu dài",
+    "onlineDesc": "Đăng nhập vào thế giới. Các nhân vật của bạn sống trên máy chủ và bạn chia sẻ thế giới với tất cả những người khác đang trực tuyến.",
+    "onlineAria": "Chơi Trực Tuyến: đăng nhập vào thế giới chung lưu trữ lâu dài",
     "offlineTitle": "Chơi Ngoại Tuyến",
     "offlineDesc": "Thế giới chơi đơn tức thì ngay trong trình duyệt. Không lưu lại gì: hoàn hảo cho một trận đánh nhanh hoặc để thử nghiệm.",
     "offlineAria": "Chơi Ngoại Tuyến: bắt đầu phiên chơi đơn cục bộ tức thì",
@@ -2522,15 +2522,15 @@ export const vi_VN: EnTranslations = {
     "serverOffline": "Ngoại Tuyến",
     "play": "Chơi",
     "playAria": "Chơi World of ClaudeCraft",
-    "serverLabel": "Chọn realm của bạn",
-    "serverAria": "Chọn realm: Trực Tuyến hoặc Ngoại Tuyến",
+    "serverLabel": "Chọn thế giới của bạn",
+    "serverAria": "Chọn thế giới: Trực Tuyến hoặc Ngoại Tuyến",
     "serverOfflineSub": "Thế giới cục bộ tức thì",
     "caLabel": "Địa Chỉ Hợp Đồng $WOC",
     "caCopyAria": "Sao chép địa chỉ hợp đồng",
     "caNote": "WOC là token cộng đồng của chúng tôi. Không cần nó để chơi. Hãy tham gia Discord để thảo luận về tiện ích và vòng xoáy tăng trưởng của WOC."
   },
   "auth": {
-    "enterRealm": "Vào Máy Chủ",
+    "enterRealm": "Vào Thế Giới",
     "username": "Tên Đăng Nhập",
     "usernameError": "Vui lòng nhập tên đăng nhập của bạn.",
     "usernamePlaceholder": "Nhập tên đăng nhập",
@@ -2545,16 +2545,16 @@ export const vi_VN: EnTranslations = {
     "logIn": "Đăng Nhập",
     "createAccount": "Tạo Tài Khoản",
     "back": "Quay lại",
-    "realmList": "Danh Sách Máy Chủ",
-    "loadingRealms": "Đang tải máy chủ...",
-    "changeRealm": "Đổi Máy Chủ",
-    "realm": "Máy Chủ",
+    "realmList": "Danh Sách Thế Giới",
+    "loadingRealms": "Đang tải thế giới...",
+    "changeRealm": "Đổi Thế Giới",
+    "realm": "Thế Giới",
     "newCharacter": "Nhân Vật Mới",
     "appearance": "Ngoại hình",
     "class": "Lớp Nhân Vật",
     "name": "Tên",
     "chromaOption": "Sắc Màu {n}",
-    "noAccountPrompt": "Mới đến với máy chủ?",
+    "noAccountPrompt": "Mới đến với thế giới?",
     "haveAccountPrompt": "Đã có tài khoản?",
     "characters": "Nhân vật:",
     "createCharacter": "Tạo Nhân Vật",
@@ -2726,7 +2726,7 @@ export const vi_VN: EnTranslations = {
     "renderFailedStatus": "Kết xuất thẻ thất bại.",
     "levelClass": "Cấp {level} - {className}",
     "topPercent": "TOP {percent}%",
-    "realmSubtitle": "Máy Chủ {realm}",
+    "realmSubtitle": "Thế Giới {realm}",
     "defaultRealm": "World of ClaudeCraft",
     "brandWordmark": "WORLD OF CLAUDECRAFT",
     "recruited": "{count} người được chiêu mộ",
@@ -2735,7 +2735,7 @@ export const vi_VN: EnTranslations = {
     "footerCta": "Rèn nên huyền thoại của bạn: {siteUrl}",
     "arenaStat": "Đấu Trường",
     "shareTierBit": ", người nắm giữ $WOC hạng {tier}",
-    "shareText": "Tôi đang rèn nên huyền thoại của mình trong World of ClaudeCraft: {className} cấp {level}{tierBit}. Hãy tham gia máy chủ của tôi:",
+    "shareText": "Tôi đang rèn nên huyền thoại của mình trong World of ClaudeCraft: {className} cấp {level}{tierBit}. Hãy tham gia thế giới của tôi:",
     "nativeShareTitle": "World of ClaudeCraft",
     "fileNameFallback": "nguoichoi",
     "actionShareX": "Chia Sẻ Lên X",
@@ -3221,7 +3221,7 @@ export const vi_VN: EnTranslations = {
         "desc": "Đòn đánh vật lý của ngươi mạnh hơn 15%."
       },
       "aug_spellfire": {
-        "name": "Hỏa Phép",
+        "name": "Hỏa Nghiệt",
         "desc": "Phép của ngươi gây thêm 15% sát thương."
       },
       "aug_toughness": {
@@ -3265,7 +3265,7 @@ export const vi_VN: EnTranslations = {
         "desc": "+18% mọi loại sát thương và +12% tốc chạy."
       },
       "aug_lightwell": {
-        "name": "Giếng Thánh Quang",
+        "name": "Ánh Sáng Mộ Phần",
         "desc": "+30% trị liệu và +15% máu tối đa. Làm trụ cột cho cả đội."
       },
       "aug_bounty_hunter": {
@@ -3316,13 +3316,13 @@ export const vi_VN: EnTranslations = {
   },
   "seo": {
     "title": "World of ClaudeCraft: MMO Web Phong Cách Cổ Điển",
-    "description": "Bắt đầu cuộc phiêu lưu hoành tráng trong World of ClaudeCraft, một micro-MMO phong cách cổ điển chơi trực tiếp trên trình duyệt của bạn. Tham gia một máy chủ chung bền vững, lên cấp các lớp nhân vật và đánh bại kẻ thù!",
+    "description": "Bắt đầu cuộc phiêu lưu hoành tráng trong World of ClaudeCraft, một micro-MMO phong cách cổ điển chơi trực tiếp trên trình duyệt của bạn. Tham gia một thế giới chung bền vững, lên cấp các lớp nhân vật và đánh bại kẻ thù!",
     "genre": "MMORPG",
     "playMode": "Nhiều người chơi",
     "applicationCategory": "Trò chơi",
     "operatingSystem": "Trình duyệt web",
     "officialLabel": "Trang web World of ClaudeCraft chính thức",
-    "officialBody": "worldofclaudecraft.com là trang MMO trên trình duyệt miễn phí chính thức cho máy chủ Claudemoon. Chơi trực tuyến với một nhân vật bền vững, khám phá đơn lẻ ngoại tuyến, đọc wiki và theo dõi các liên kết cộng đồng đã được xác minh từ trang này."
+    "officialBody": "worldofclaudecraft.com là trang MMO trên trình duyệt miễn phí chính thức cho thế giới Claudemoon. Chơi trực tuyến với một nhân vật bền vững, khám phá đơn lẻ ngoại tuyến, đọc wiki và theo dõi các liên kết cộng đồng đã được xác minh từ trang này."
   },
   "a11y": {
     "goHome": "Về trang chủ",
@@ -3338,7 +3338,7 @@ export const vi_VN: EnTranslations = {
     "world": "Đang tải thế giới...",
     "worldProgress": "Đang tải thế giới... {done}/{total}",
     "enteringWorld": "Đang vào thế giới...",
-    "connectingRealm": "Đang kết nối tới máy chủ...",
+    "connectingRealm": "Đang kết nối tới thế giới...",
     "assetsFailed": "Tải tài nguyên thất bại: thử tải lại. {error}",
     "rendererFailed": "Không thể khởi động bộ kết xuất: thử tải lại. {error}",
     "enterTimeout": "Không thể vào thế giới. Kết nối đã quá thời gian. Máy chủ trò chơi có đang chạy không?",
@@ -3396,25 +3396,25 @@ export const vi_VN: EnTranslations = {
     }
   },
   "realm": {
-    "noRealms": "Không có realm nào khả dụng.",
-    "loading": "Đang tải các realm...",
+    "noRealms": "Không có thế giới nào khả dụng.",
+    "loading": "Đang tải các thế giới...",
     "recommended": "Được Đề Xuất",
     "checkingStatus": "Đang kiểm tra trạng thái...",
     "onlineNow": "{count} đang trực tuyến",
-    "down": "Realm đang ngừng hoạt động",
+    "down": "Thế giới đang ngừng hoạt động",
     "offline": "Ngoại Tuyến",
     "full": "Đầy",
     "high": "Cao",
     "medium": "Trung Bình",
     "low": "Thấp",
     "popTipLow": "Dân số thấp: ít hơn 15 người chơi đang trực tuyến ngay lúc này. Còn nhiều chỗ trống; tuyệt vời để khởi đầu mới.",
-    "popTipMedium": "Dân số trung bình: 15 đến 39 người chơi đang trực tuyến ngay lúc này. Một realm năng động và lành mạnh.",
+    "popTipMedium": "Dân số trung bình: 15 đến 39 người chơi đang trực tuyến ngay lúc này. Một thế giới năng động và lành mạnh.",
     "popTipHigh": "Dân số cao: 40 đến 79 người chơi đang trực tuyến ngay lúc này. Đông đúc, có nhiều người chơi xung quanh.",
     "popTipFull": "Dân số đầy: 80 người chơi trở lên đang trực tuyến ngay lúc này. Rất đông; bạn có thể phải chờ trong hàng đợi đăng nhập.",
-    "popTipOffline": "Ngoại tuyến: realm này hiện không thể truy cập và không thể tham gia.",
+    "popTipOffline": "Ngoại tuyến: thế giới này hiện không thể truy cập và không thể tham gia.",
     "characterCountOne": "{count} nhân vật",
     "characterCountOther": "{count} nhân vật",
-    "selectedRealm": "Realm: {name}",
+    "selectedRealm": "Thế Giới: {name}",
     "statsOffline": "Ngoại Tuyến",
     "statsRealmOffline": "{realm} (Ngoại Tuyến)"
   },
@@ -3498,12 +3498,12 @@ export const vi_VN: EnTranslations = {
     },
     "lore": {
       "warrior": "Chiến Binh là những đấu sĩ cận chiến dày dạn trận mạc, tích lũy Nộ Khí khi gây ra hoặc nhận sát thương. Họ hứng chịu những đòn nặng nề hoặc nghiền nát kẻ thù bằng vũ khí uy lực.",
-      "paladin": "Thánh Kỵ Sĩ là những thập tự quân thần thánh, hỗ trợ đồng minh bằng các phúc lành, chữa lành vết thương bằng Thánh Quang, và bảo vệ kẻ yếu trong bộ giáp nặng.",
+      "paladin": "Thánh Kỵ Sĩ là những thập tự quân thần thánh, hỗ trợ đồng minh bằng các phúc lành, chữa lành vết thương bằng Thánh Quang Chữa Lành, và bảo vệ kẻ yếu trong bộ giáp nặng.",
       "hunter": "Thợ Săn là những chuyên gia tầm xa chiến đấu bên cạnh một mãnh thú đã thuần hóa, dội vào kẻ thù những phát bắn nhắm chuẩn và liên hồi, làm chậm chúng bằng các đòn chích nọc và hỏa lực chấn động, và chuyển đổi Linh Khí để thích ứng với từng khoảnh khắc.",
       "rogue": "Đạo Tặc là những sát thủ ẩn mình, tiêu hao Năng Lượng và Điểm Liên Hoàn cho những đòn đâm lén và đòn kết liễu từ trong bóng tối.",
-      "priest": "Tu Sĩ kêu gọi Thánh Quang để chữa lành và che chắn cho đồng minh, trong khi ma thuật Bóng Tối cho phép họ hút sinh lực của kẻ thù.",
+      "priest": "Tu Sĩ kêu gọi Thánh Quang Chữa Lành để chữa lành và che chắn cho đồng minh, trong khi ma thuật Bóng Tối cho phép họ hút sinh lực của kẻ thù.",
       "shaman": "Shaman điều khiển các nguyên tố, ban sức mạnh cho vũ khí, gây choáng kẻ thù bằng sấm sét, và hồi phục cho đồng minh.",
-      "mage": "Pháp Sư điều khiển sức mạnh Hỏa, Băng và Bí Thuật để tiêu diệt kẻ thù, tạo ra nước, và đóng băng các mối đe dọa tại chỗ.",
+      "mage": "Pháp Sư điều khiển sức mạnh Hỏa, Băng và uy lực bí thuật để tiêu diệt kẻ thù, triệu hồi nước, và đóng băng các mối đe dọa tại chỗ.",
       "warlock": "Thuật Sĩ Hắc Ám triệu hồi quỷ dữ, gieo lời nguyền và ma thuật sát thương theo thời gian, và hút sinh lực từ kẻ thù để trường tồn.",
       "druid": "Druid khơi dẫn sức mạnh thiên nhiên, chữa lành vết thương, trói buộc kẻ thù, và biến hình thành các dạng thú để phòng thủ hoặc gây sát thương."
     },
@@ -3529,10 +3529,10 @@ export const vi_VN: EnTranslations = {
     "otherInstallDetail": "Hãy cài đặt hoặc thêm trang này vào Màn hình chính để có trải nghiệm toàn màn hình tốt nhất trên di động."
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - Realm Không Khả Dụng",
+    "title": "World of ClaudeCraft - Thế Giới Không Khả Dụng",
     "logoAlt": "World of ClaudeCraft",
-    "eyebrow": "Bảo trì realm",
-    "heading": "Realm tạm thời không khả dụng.",
+    "eyebrow": "Bảo trì thế giới",
+    "heading": "Thế giới tạm thời không khả dụng.",
     "body": "Chúng tôi đang khởi động lại dịch vụ trò chơi và dự kiến Claudemoon sẽ trở lại trong giây lát. Trang này sẽ tự động tiếp tục kiểm tra.",
     "status": "Sớm trở lại"
   },
@@ -3852,9 +3852,9 @@ export const vi_VN: EnTranslations = {
       "requiresCombo": "Kỹ năng đó cần điểm liên hoàn.",
       "requiresForm": "Bạn phải ở Hình {form}.",
       "cantInForm": "Bạn không thể làm điều đó khi đang ở Hình {form}.",
-      "bear": "Gấu",
+      "bear": "Bruin",
       "cat": "Sói",
-      "travel": "Lữ Hành",
+      "travel": "Fleet",
       "shapeshifted": "Bạn không thể làm điều đó khi đang biến hình.",
       "stealthed": "Bạn phải đang ẩn thân.",
       "inCombat": "Bạn không thể làm điều đó khi đang chiến đấu.",
@@ -4469,55 +4469,55 @@ export const vi_VN: EnTranslations = {
         "description": "Làm rung chuyển khu vực mục tiêu, quật ngã kẻ địch gây {damage} sát thương Thiên Nhiên."
       },
       "heroic_strike": {
-        "name": "Đòn Anh Hùng",
+        "name": "Đòn Cướp Phá",
         "description": "Một đòn đánh mạnh tăng sát thương cận chiến thêm {damage}. Kích hoạt ở đòn đánh tiếp theo của bạn."
       },
       "battle_shout": {
-        "name": "Hô Chiến",
+        "name": "Tiếng Gầm Thép",
         "description": "Tăng sức mạnh tấn công của ngươi thêm 20 trong 2 phút."
       },
       "commanding_shout": {
-        "name": "Hô Chỉ Huy",
+        "name": "Tiếng Hô Trợ Uy",
         "description": "Tăng Thể Lực của ngươi thêm 6 trong 2 phút."
       },
       "demoralizing_shout": {
-        "name": "Hô Áp Chế",
+        "name": "Tiếng Hú Hung Hiểm",
         "description": "Bật ra tiếng hô đáng sợ, giảm sức tấn công của tất cả kẻ địch xung quanh đi 30 trong 30 giây."
       },
       "charge": {
-        "name": "Xung Phong",
+        "name": "Xông Tới",
         "description": "Lao vào kẻ địch, tạo 9 nộ khí và làm choáng nó trong 1 giây. Tầm 8-25 thước."
       },
       "rend": {
-        "name": "Xé Toạc",
+        "name": "Vết Rạch Sâu",
         "description": "Gây vết thương cho mục tiêu, khiến chúng chảy máu nhận {damage} sát thương trong 9 giây."
       },
       "thunder_clap": {
-        "name": "Sấm Vỗ",
+        "name": "Đòn Chấn Rung",
         "description": "Giáng đòn lên các kẻ địch lân cận gây {damage} sát thương và làm chậm 10% đòn tấn công của chúng trong 10 giây."
       },
       "hamstring": {
-        "name": "Cắt Gân",
+        "name": "Nhát Cắt Què Chân",
         "description": "Làm bị thương kẻ địch 5 sát thương, làm chậm di chuyển của nó 50% trong 15 giây."
       },
       "bloodrage": {
-        "name": "Cuồng Huyết",
+        "name": "Giá Máu",
         "description": "Tạo 10 nộ khí bằng cái giá sinh lực."
       },
       "overpower": {
-        "name": "Áp Đảo",
+        "name": "Bàn Tay Đẫm Máu",
         "description": "Đòn tấn công tức thời gây sát thương vũ khí +5. Chỉ dùng được sau khi mục tiêu né đòn. Không thể bị né."
       },
       "execute": {
-        "name": "Hành Quyết",
+        "name": "Nấm Mồ Sớm",
         "description": "Cố gắng kết liễu kẻ thù đang trọng thương, gây {damage} sát thương. Chỉ dùng được trên kẻ địch còn dưới 20% máu."
       },
       "slam": {
-        "name": "Giáng Đòn",
+        "name": "Cú Vung Thô Bạo",
         "description": "Giáng đòn vào đối thủ gây sát thương vũ khí cộng thêm {damage}."
       },
       "cleave": {
-        "name": "Chém Quét",
+        "name": "Vòng Chém Gặt",
         "description": "Một đòn chém quét trúng mọi kẻ địch phía trước ngươi gây {damage} sát thương."
       },
       "defensive_stance": {
@@ -4525,119 +4525,119 @@ export const vi_VN: EnTranslations = {
         "description": "Thế đứng phòng thủ: bạn tạo ra nhiều hơn 30% mối đe dọa nhưng gây và nhận ít hơn 10% sát thương. Thi triển lại để rời khỏi thế đứng."
       },
       "sunder_armor": {
-        "name": "Nghiền Giáp",
+        "name": "Xẻ Giáp",
         "description": "Nghiền nát giáp của mục tiêu, giảm giáp đi {damage} mỗi lần áp dụng. Cộng dồn tối đa 5 lần. Tạo lượng đe dọa cao."
       },
       "taunt": {
-        "name": "Khiêu Khích",
+        "name": "Chọc Tức",
         "description": "Khiêu khích mục tiêu: đe dọa của bạn tăng lên ngang bằng kẻ địch mà nó căm ghét nhất và nó buộc phải tấn công bạn trong 3 giây."
       },
       "fireball": {
-        "name": "Cầu Lửa",
+        "name": "Tia Tàn Lửa",
         "description": "Ném ra một quả cầu lửa rực cháy gây {damage} sát thương Hỏa cùng sát thương cộng dồn theo thời gian."
       },
       "frost_armor": {
-        "name": "Giáp Băng",
+        "name": "Áo Choàng Sương Giá",
         "description": "Bao bọc bạn trong băng giá, tăng giáp thêm 30 trong 30 phút."
       },
       "arcane_intellect": {
-        "name": "Trí Tuệ Bí Thuật",
+        "name": "Tuệ Giác Ê-te",
         "description": "Tăng 2 Trí Tuệ trong 30 phút."
       },
       "frostbolt": {
-        "name": "Tiễn Băng",
+        "name": "Thương Băng Giá",
         "description": "Phóng ra một mũi tiễn băng, gây {damage} sát thương Băng và làm chậm di chuyển 40%."
       },
       "conjure_water": {
-        "name": "Tạo Nước Uống",
+        "name": "Kết Nước",
         "description": "Tạo ra 2 chai nước, hồi pháp lực khi uống. Cấp cao hơn tạo ra nước tinh khiết hơn."
       },
       "conjure_food": {
-        "name": "Tạo Thức Ăn",
+        "name": "Kết Bánh Mì",
         "description": "Tạo ra 2 phần bánh mì, hồi sinh lực khi ăn. Cấp cao hơn tạo ra món ăn no đủ hơn."
       },
       "fire_blast": {
-        "name": "Bộc Hỏa",
+        "name": "Mưa Tàn Lửa",
         "description": "Nổ tung kẻ địch, gây {damage} sát thương Hỏa. Tức thời."
       },
       "arcane_missiles": {
-        "name": "Phi Đạn Bí Thuật",
-        "description": "Phóng các Phi Đạn Bí Thuật vào kẻ địch, gây {damage} sát thương Bí Thuật mỗi giây trong 3 giây."
+        "name": "Phi Tiêu Ê-te",
+        "description": "Phóng các Phi Tiêu Ê-te vào kẻ địch, gây {damage} sát thương Bí Thuật mỗi giây trong 3 giây."
       },
       "polymorph": {
-        "name": "Biến Hình",
-        "description": "Biến kẻ địch thành một con cừu trong tối đa 15 giây. Con cừu đi lang thang và hồi máu rất nhanh. Mọi sát thương sẽ phá vỡ hiệu ứng. Chỉ với quái thú và nhân hình."
+        "name": "Mê Hoặc",
+        "description": "Biến kẻ địch thành một con cóc trong tối đa 15 giây. Con cóc đi lang thang và hồi máu rất nhanh. Mọi sát thương sẽ phá vỡ hiệu ứng. Chỉ với quái thú và nhân hình."
       },
       "frost_nova": {
-        "name": "Vụ Nổ Băng",
+        "name": "Trói Băng",
         "description": "Đóng băng tất cả kẻ địch xung quanh tại chỗ trong tối đa 8 giây, gây {damage} sát thương Băng."
       },
       "arcane_explosion": {
-        "name": "Nổ Bí Thuật",
+        "name": "Nổ Ê-te",
         "description": "Một luồng năng lượng Bí Thuật bùng nổ giáng vào mọi kẻ địch lân cận gây {damage} sát thương Bí Thuật."
       },
       "scorch": {
-        "name": "Cháy Sém",
+        "name": "Bỏng Rát",
         "description": "Thiêu cháy kẻ địch nhận {damage} sát thương Lửa. Niệm nhanh."
       },
       "pyroblast": {
-        "name": "Liệt Hỏa",
+        "name": "Thương Liệt Hỏa",
         "description": "Ném ra một tảng lửa khổng lồ gây {damage} sát thương Hỏa cùng sát thương cộng dồn theo thời gian."
       },
       "ice_barrier": {
-        "name": "Rào Băng",
+        "name": "Màn Băng",
         "description": "Che chắn bạn trong băng, hấp thụ 130 sát thương trong 60 giây."
       },
       "sinister_strike": {
-        "name": "Đòn Hiểm Ác",
+        "name": "Nhát Chém Gian Tà",
         "description": "Một đòn đánh tức thì gây sát thương vũ khí cộng thêm {damage}. Tích 1 điểm liên hoàn."
       },
       "eviscerate": {
-        "name": "Mổ Bụng",
+        "name": "Giấc Ngủ Vùi Đất",
         "description": "Đòn kết liễu gây sát thương theo mỗi điểm liên hoàn."
       },
       "backstab": {
-        "name": "Đâm Lén",
+        "name": "Đòn Đâm Hèn Hạ",
         "description": "Đâm lén mục tiêu gây 150% sát thương vũ khí cộng thêm {damage}. Phải ở phía sau mục tiêu. Yêu cầu một thanh dao găm. Thưởng 1 điểm liên hoàn."
       },
       "gouge": {
-        "name": "Khoét Mắt",
+        "name": "Thọc Mắt",
         "description": "Đâm vào mục tiêu, khiến nó bất lực trong 4 giây. Mọi sát thương sẽ phá vỡ hiệu ứng. Tặng 1 điểm liên hoàn."
       },
       "evasion": {
-        "name": "Né Tránh",
+        "name": "Bước Chân Ma",
         "description": "Tăng tỷ lệ né đòn của bạn thêm 50% trong 15 giây."
       },
       "slice_and_dice": {
-        "name": "Chém Băm",
+        "name": "Nhịp Cắt Cổ",
         "description": "Đòn kết liễu tăng 30% tốc độ đánh cận chiến. Kéo dài hơn theo mỗi điểm liên hoàn."
       },
       "sprint": {
-        "name": "Nước Rút",
+        "name": "Gót Chân Nhanh",
         "description": "Tăng 70% tốc độ di chuyển của bạn trong 15 giây."
       },
       "kidney_shot": {
-        "name": "Đánh Thận",
+        "name": "Đòn Chơi Xấu",
         "description": "Đòn kết liễu làm choáng mục tiêu. Kéo dài thêm 1 giây cho mỗi điểm liên hoàn."
       },
       "ambush": {
-        "name": "Mai Phục",
+        "name": "Đòn Kẻ Rình Rập",
         "description": "Mai phục mục tiêu gây 250% sát thương vũ khí cộng thêm {damage}. Phải đang ẩn thân và ở phía sau mục tiêu. Yêu cầu một thanh dao găm. Thưởng 1 điểm liên hoàn."
       },
       "stealth": {
-        "name": "Ẩn Thân",
-        "description": "Che giấu bạn trong bóng tối: kẻ địch khó nhận ra bạn, nhưng bạn di chuyển chậm hơn 50%. Tấn công hoặc nhận sát thương sẽ phá vỡ Ẩn Thân. Niệm lại để bước ra."
+        "name": "Duskveil",
+        "description": "Che giấu bạn trong bóng tối: kẻ địch khó nhận ra bạn, nhưng bạn di chuyển chậm hơn 50%. Tấn công hoặc nhận sát thương sẽ phá vỡ Duskveil. Niệm lại để bước ra."
       },
       "adrenaline_rush": {
-        "name": "Bộc Phát Adrenaline",
+        "name": "Huyết Tăng Tốc",
         "description": "Máu ngươi sôi sục, lập tức hồi lại 60 năng lượng."
       },
       "garrote": {
-        "name": "Siết Cổ",
+        "name": "Dây Siết Cổ",
         "description": "Siết cổ kẻ địch, gây sát thương ngay lập tức và khiến nó chảy máu {damage} trong 18 giây. Phải đang ẩn thân. Tặng 1 điểm liên hoàn."
       },
       "cheap_shot": {
-        "name": "Đòn Bẩn",
+        "name": "Thụi Bụng",
         "description": "Đánh mục tiêu, làm choáng nó trong 4 giây. Phải đang ẩn thân. Thưởng 2 điểm liên hoàn."
       },
       "sap": {
@@ -4645,135 +4645,135 @@ export const vi_VN: EnTranslations = {
         "description": "Vô hiệu hóa mục tiêu trong 8 giây. Phải đang Ẩn Thân và ngoài chiến đấu. Bất kỳ sát thương nào cũng phá vỡ hiệu ứng."
       },
       "crippling_poison": {
-        "name": "Độc Làm Què",
-        "description": "Tẩm vào mục tiêu một loại độc làm què, gây {damage} sát thương Tự Nhiên và giảm 50% tốc độ di chuyển của nó trong 12 giây."
+        "name": "Nọc Độc Chì",
+        "description": "Tẩm vào mục tiêu một loại nọc độc nặng như chì, gây {damage} sát thương Tự Nhiên và giảm 50% tốc độ di chuyển của nó trong 12 giây."
       },
       "expose_armor": {
-        "name": "Phá Giáp",
+        "name": "Xuyên Phá Giáp",
         "description": "Đòn kết liễu phơi bày mục tiêu, giảm giáp của chúng. Càng nhiều điểm liên hoàn được dùng thì vết cắt càng sâu."
       },
       "rupture": {
-        "name": "Rách Nát",
+        "name": "Rỉ Máu Chí Tử",
         "description": "Đòn kết liễu gây vết thương cho mục tiêu, khiến nó chảy máu nhận {damage} trong 16 giây."
       },
       "vanish": {
-        "name": "Tàng Hình",
-        "description": "Biến mất khỏi tầm nhìn, đi vào Ẩn Thân ngay cả trong chiến đấu. Bạn di chuyển chậm hơn 50% khi ẩn nấp. Kéo dài tối đa 10 giây."
+        "name": "Bước Khói",
+        "description": "Biến mất khỏi tầm nhìn, đi vào Duskveil ngay cả trong chiến đấu. Bạn di chuyển chậm hơn 50% khi ẩn nấp. Kéo dài tối đa 10 giây."
       },
       "instant_poison": {
-        "name": "Độc Tức Thời",
+        "name": "Vết Cắn Rắn Độc",
         "description": "Bôi lên vũ khí trong 30 phút, khiến mỗi đòn cận chiến gây thêm 8 sát thương Tự Nhiên."
       },
       "deadly_poison": {
-        "name": "Độc Chí Mạng",
+        "name": "Nọc Độc Ung Mủ",
         "description": "Bôi lên vũ khí trong 30 phút, khiến mỗi đòn cận chiến gây thêm 14 sát thương Tự Nhiên."
       },
       "blind": {
-        "name": "Làm Mù",
+        "name": "Hất Cát",
         "description": "Làm mù mục tiêu, khiến nó lảo đảo mất phương hướng trong 8 giây. Bất kỳ sát thương nào cũng phá vỡ hiệu ứng."
       },
       "seal_of_righteousness": {
-        "name": "Ấn Chính Nghĩa",
-        "description": "Tràn đầy sức mạnh Thánh trong 30 giây, khiến mỗi cú vung cận chiến của bạn gây thêm 4 sát thương Thánh. Giải phóng bằng Phán Xét."
+        "name": "Ấn Khắc Lời Thề",
+        "description": "Tràn đầy sức mạnh Thánh trong 30 giây, khiến mỗi cú vung cận chiến của bạn gây thêm 4 sát thương Thánh. Giải phóng bằng Verdict."
       },
       "holy_light": {
-        "name": "Thánh Quang",
+        "name": "Thánh Quang Chữa Lành",
         "description": "Trị liệu cho đồng minh {damage} máu."
       },
       "devotion_aura": {
-        "name": "Hào Quang Tận Tụy",
+        "name": "Hào Quang Kiên Định",
         "description": "Tăng giáp của bạn thêm 40 trong 30 phút."
       },
       "judgement": {
-        "name": "Phán Xét",
-        "description": "Giải phóng Ấn đang kích hoạt của bạn lên kẻ địch, tiêu hao nó để gây sát thương phán xét tương ứng."
+        "name": "Verdict",
+        "description": "Giải phóng Ấn đang kích hoạt của bạn lên kẻ địch, tiêu hao nó để gây lượng sát thương Thánh tích trữ trong đó."
       },
       "blessing_of_might": {
-        "name": "Phúc Lành Sức Mạnh",
+        "name": "Lời Thề Sắt Thép",
         "description": "Ban một Phúc Lành lên mục tiêu thân thiện, tăng sức mạnh tấn công thêm 15 trong 5 phút."
       },
       "divine_protection": {
-        "name": "Thần Thánh Bảo Hộ",
-        "description": "Một tấm khiên thần thánh hấp thụ 50 sát thương trong 10 giây."
+        "name": "Bùa Hộ Đức Tin",
+        "description": "Một tấm bùa hộ mệnh hấp thụ 50 sát thương trong 10 giây."
       },
       "hammer_of_justice": {
-        "name": "Búa Công Lý",
+        "name": "Búa Phán Nứt Vỡ",
         "description": "Làm choáng mục tiêu trong 3 giây."
       },
       "lay_on_hands": {
-        "name": "Đặt Tay Cứu Rỗi",
+        "name": "Nghi Thức Cuối Cùng",
         "description": "Một luồng trị liệu khổng lồ: hồi phục 250 máu. Hồi chiêu 10 phút."
       },
       "flash_of_light": {
-        "name": "Lóe Sáng Thánh Quang",
-        "description": "Một tia Thánh Quang nhanh và hiệu quả trị liệu cho đồng minh {damage} máu."
+        "name": "Ánh Quang Hàn Gắn",
+        "description": "Một luồng Thánh Quang nhanh và hiệu quả trị liệu cho đồng minh {damage} máu."
       },
       "exorcism": {
-        "name": "Trừ Tà",
+        "name": "Nghi Lễ Trục Xuất",
         "description": "Trục xuất kẻ xấu xa bằng cơn thịnh nộ Thần Thánh, gây {damage} sát thương Thần Thánh."
       },
       "consecration": {
-        "name": "Thánh Hóa",
+        "name": "Thánh Địa",
         "description": "Thánh hóa mặt đất bên dưới ngươi, thiêu đốt kẻ địch lân cận gây {damage} sát thương Thần Thánh."
       },
       "righteous_fury": {
-        "name": "Phẫn Nộ Chính Nghĩa",
+        "name": "Lời Thề Rực Cháy",
         "description": "Tăng 60% mối đe dọa tạo ra từ sát thương Thánh của bạn trong 30 phút. Nền tảng của thánh kỵ sĩ giữ aggro."
       },
       "retribution_aura": {
-        "name": "Hào Quang Báo Phục",
+        "name": "Hào Quang Báo Đền",
         "description": "Bao bọc bạn trong năng lượng thánh thiện trong 30 phút, gây 5 sát thương Thánh cho bất kỳ kẻ địch nào đánh cận chiến bạn."
       },
       "tame_beast": {
-        "name": "Thuần Thú",
+        "name": "Kết Giao Hoang Dã",
         "description": "Bắt đầu thuần hóa một mãnh thú làm bạn đồng hành. Nó phải bằng hoặc thấp hơn cấp của bạn và không phải tinh nhuệ. Thú cưng đi theo bạn, tấn công kẻ địch và tự giữ đe dọa. Bạn chỉ có thể có một thú cưng cùng lúc."
       },
       "dismiss_pet": {
-        "name": "Giải Tán Thú",
+        "name": "Thả Bạn Đồng Hành",
         "description": "Thả thú cưng của bạn về lại nơi hoang dã."
       },
       "raptor_strike": {
-        "name": "Đòn Mãnh Cầm",
+        "name": "Đòn Moi Ruột",
         "description": "Một đòn cận chiến mạnh tăng sát thương thêm 5. Kích hoạt ở đòn đánh tiếp theo của bạn."
       },
       "aspect_of_the_hawk": {
-        "name": "Linh Khí Ưng",
-        "description": "Khoác lên linh khí ưng, tăng 20 sức mạnh tấn công trong 30 phút."
+        "name": "Lốt Diều Hâu",
+        "description": "Khoác lên lốt diều hâu, tăng 20 sức mạnh tấn công trong 30 phút."
       },
       "serpent_sting": {
-        "name": "Nọc Rắn",
+        "name": "Ngạnh Nọc Độc",
         "description": "Chích nọc mục tiêu, gây {damage} sát thương Tự Nhiên trong 15 giây."
       },
       "arcane_shot": {
-        "name": "Bắn Bí Thuật",
+        "name": "Bắn Tà Ác",
         "description": "Một phát bắn tức thời gây {damage} sát thương Bí Thuật."
       },
       "concussive_shot": {
-        "name": "Bắn Chấn Động",
+        "name": "Bắn Rúng Động",
         "description": "Làm choáng váng mục tiêu, giảm 50% tốc độ di chuyển trong 4 giây."
       },
       "mongoose_bite": {
-        "name": "Cắn Chồn",
+        "name": "Phản Nanh",
         "description": "Phản công sau khi mục tiêu né đòn, gây sát thương vũ khí cộng thêm 12. Không thể bị né."
       },
       "wing_clip": {
-        "name": "Cắt Cánh",
+        "name": "Nhát Chém Xiềng Xích",
         "description": "Gây một vết thương làm chậm kẻ địch 40% trong 10 giây."
       },
       "aspect_of_the_monkey": {
-        "name": "Linh Khí Khỉ",
-        "description": "Khoác lên linh khí khỉ, tăng tỷ lệ né đòn thêm 8% trong 30 phút."
+        "name": "Lốt Chồn",
+        "description": "Khoác lên lốt chồn, tăng tỷ lệ né đòn thêm 8% trong 30 phút."
       },
       "aspect_of_the_cheetah": {
-        "name": "Linh Khí Báo Săn",
-        "description": "Khoác lên linh khí báo săn, tăng tốc độ di chuyển thêm 30% trong 30 phút."
+        "name": "Lốt Tuấn Mã",
+        "description": "Khoác lên lốt tuấn mã, tăng tốc độ di chuyển thêm 30% trong 30 phút."
       },
       "aimed_shot": {
-        "name": "Nhắm Bắn",
-        "description": "Một phát bắn nhắm kỹ gây {damage} sát thương."
+        "name": "Kéo Cung Dài",
+        "description": "Một phát bắn được giương cung cẩn thận gây {damage} sát thương."
       },
       "rapid_fire": {
-        "name": "Bắn Liên Hoàn",
+        "name": "Giương Cung Cuồng Loạn",
         "description": "Tăng tốc độ tấn công của bạn thêm 40% trong 15 giây."
       },
       "smite": {
@@ -4781,71 +4781,71 @@ export const vi_VN: EnTranslations = {
         "description": "Trừng phạt kẻ địch gây {damage} sát thương Thánh."
       },
       "lesser_heal": {
-        "name": "Trị Liệu Sơ Cấp",
+        "name": "Lời Nguyện Thì Thầm",
         "description": "Trị liệu cho đồng minh {damage} máu."
       },
       "power_word_fortitude": {
-        "name": "Thánh Ngữ: Kiên Cường",
+        "name": "Kinh Cầu Kiên Định",
         "description": "Tăng Thể Lực của mục tiêu thêm 3 trong 30 phút."
       },
       "shadow_word_pain": {
-        "name": "Ám Ngữ: Thống Khổ",
+        "name": "Ai Ca Mục Rữa",
         "description": "Một lời ám tối gây {damage} sát thương Bóng Tối trong 18 giây."
       },
       "power_word_shield": {
-        "name": "Thánh Ngữ: Khiên Chắn",
+        "name": "Thánh Thi Hộ Mệnh",
         "description": "Che chắn mục tiêu, hấp thụ 48 sát thương trong 30 giây."
       },
       "renew": {
-        "name": "Hồi Sinh",
+        "name": "Ân Điển Vương Vấn",
         "description": "Trị liệu cho mục tiêu {damage} trong 15 giây."
       },
       "mind_blast": {
-        "name": "Nổ Tâm Trí",
+        "name": "Nứt Vỡ Tâm Trí",
         "description": "Nổ tung tâm trí của mục tiêu gây {damage} sát thương Bóng Tối."
       },
       "heal": {
-        "name": "Trị Liệu",
+        "name": "Lời Nguyện Trang Nghiêm",
         "description": "Một lời cầu nguyện chậm nhưng mạnh mẽ trị liệu cho đồng minh {damage} máu."
       },
       "mind_flay": {
-        "name": "Cào Xé Tâm Trí",
+        "name": "Kinh Cầu Thống Khổ",
         "description": "Công kích tâm trí mục tiêu bằng năng lượng Bóng Tối, gây {damage} sát thương mỗi giây trong 3 giây."
       },
       "flash_heal": {
-        "name": "Trị Liệu Nhanh",
+        "name": "Lời Nguyện Khẩn Cấp",
         "description": "Một lời cầu nguyện nhanh trị liệu cho đồng minh {damage} máu."
       },
       "lightning_bolt": {
-        "name": "Tia Sét",
+        "name": "Tia Hồ Quang",
         "description": "Phóng ra một tia sét gây {damage} sát thương Tự Nhiên."
       },
       "rockbiter_weapon": {
-        "name": "Vũ Khí Nghiền Đá",
+        "name": "Vũ Khí Khắc Đá",
         "description": "Phù phép vũ khí với cơn cuồng nộ của đá: mỗi cú vung gây thêm 5 sát thương trong 5 phút."
       },
       "healing_wave": {
-        "name": "Sóng Trị Liệu",
+        "name": "Dòng Nước Hàn Gắn",
         "description": "Trị liệu cho đồng minh {damage} máu."
       },
       "earth_shock": {
-        "name": "Chấn Địa",
+        "name": "Địa Giật",
         "description": "Lập tức giáng chấn động vào mục tiêu, gây {damage} sát thương Tự Nhiên."
       },
       "lightning_shield": {
-        "name": "Khiên Sét",
+        "name": "Bùa Hộ Sấm Sét",
         "description": "Bao quanh bạn bằng sét lốp bốp: kẻ tấn công cận chiến nhận 13 sát thương Tự Nhiên."
       },
       "flame_shock": {
-        "name": "Chấn Hỏa",
+        "name": "Giật Tàn Lửa",
         "description": "Thiêu đốt mục tiêu bằng lửa gây 25 sát thương cộng thêm {damage} trong 12 giây."
       },
       "flametongue_weapon": {
-        "name": "Vũ Khí Lưỡi Lửa",
+        "name": "Vũ Khí Khắc Hỏa",
         "description": "Phù phép vũ khí của bạn bằng lửa nguyên tố: mỗi đòn đánh gây thêm 8 sát thương Hỏa trong 5 phút."
       },
       "frost_shock": {
-        "name": "Chấn Băng",
+        "name": "Giật Băng Giá",
         "description": "Lập tức giáng băng giá vào mục tiêu gây {damage} sát thương Băng và làm chậm di chuyển của nó 50% trong 8 giây."
       },
       "frostbrand_weapon": {
@@ -4853,92 +4853,92 @@ export const vi_VN: EnTranslations = {
         "description": "Phù phép vũ khí của bạn bằng băng giá buốt lạnh: mỗi đòn đánh gây thêm 8 sát thương trong 5 phút."
       },
       "ghost_wolf": {
-        "name": "Sói Ma",
-        "description": "Biến bạn thành Sói Ma, tăng tốc độ di chuyển 40% trong 10 phút."
+        "name": "Shadewolf",
+        "description": "Biến bạn thành Shadewolf, tăng tốc độ di chuyển 40% trong 10 phút."
       },
       "stormstrike": {
-        "name": "Đòn Bão Tố",
+        "name": "Đòn Tổ Tiên",
         "description": "Dẫn dắt cơn bão qua vũ khí của bạn, tức thì đánh gây sát thương vũ khí cộng thêm {damage}."
       },
       "shadow_bolt": {
-        "name": "Tia Bóng Tối",
+        "name": "Tia U Ám",
         "description": "Phóng một tia bóng tối vào kẻ địch gây {damage} sát thương Bóng Tối."
       },
       "demon_skin": {
-        "name": "Da Quỷ",
+        "name": "Da Ác Quỷ",
         "description": "Lớp da quỷ tăng giáp của bạn thêm 30 trong 30 phút."
       },
       "immolate": {
-        "name": "Thiêu Đốt",
+        "name": "Khế Ước Rực Cháy",
         "description": "Thiêu đốt kẻ địch 11 sát thương Hỏa cùng thêm {damage} trong 15 giây."
       },
       "corruption": {
-        "name": "Hủ Hóa",
+        "name": "Hắc Hủ",
         "description": "Hủ hóa mục tiêu, gây {damage} sát thương Bóng Tối trong 18 giây."
       },
       "life_tap": {
-        "name": "Trích Sinh Lực",
+        "name": "Mặc Cả Nghiệt Ngã",
         "description": "Chuyển hóa 30 máu thành 30 mana."
       },
       "curse_of_agony": {
-        "name": "Lời Nguyền Thống Khổ",
+        "name": "Tà Chú Thống Khổ",
         "description": "Nguyền rủa mục tiêu bằng thống khổ: gây {damage} sát thương Bóng Tối trong 24 giây."
       },
       "drain_life": {
-        "name": "Hút Sinh Lực",
+        "name": "Nuốt Chửng",
         "description": "Hút sinh lực của mục tiêu, chuyển {damage} máu sang cho bạn mỗi giây trong 5 giây."
       },
       "fear": {
-        "name": "Gieo Sợ Hãi",
+        "name": "Giày Vò",
         "description": "Gieo nỗi kinh hoàng vào kẻ địch, khiến nó co rúm sợ hãi trong tối đa 8 giây. Mọi sát thương sẽ phá vỡ hiệu ứng."
       },
       "searing_pain": {
-        "name": "Đau Rát Bỏng",
+        "name": "Nung Đốt",
         "description": "Thiêu đốt kẻ địch bằng ngọn lửa đau đớn nhận {damage} sát thương Lửa. Niệm nhanh."
       },
       "shadowburn": {
-        "name": "Thiêu Bóng Tối",
-        "description": "Tức thì thiêu đốt mục tiêu bằng Ngọn Lửa Bóng Tối gây {damage} sát thương Bóng Tối."
+        "name": "Lửa Chạng Vạng",
+        "description": "Tức thì thiêu đốt mục tiêu bằng bóng tối nung cháy gây {damage} sát thương Bóng Tối."
       },
       "wrath": {
-        "name": "Thịnh Nộ",
+        "name": "Tia Hoang Dã",
         "description": "Phóng một tia năng lượng tự nhiên gây {damage} sát thương Tự Nhiên."
       },
       "healing_touch": {
-        "name": "Bàn Tay Trị Liệu",
+        "name": "Hàn Gắn Hoang Dã",
         "description": "Trị liệu cho đồng minh {damage} máu."
       },
       "mark_of_the_wild": {
-        "name": "Dấu Ấn Hoang Dã",
-        "description": "Đặt Dấu Ấn Hoang Dã lên một đồng minh, tăng giáp thêm 25 trong 30 phút."
+        "name": "Wildward",
+        "description": "Đặt Wildward lên một đồng minh, tăng giáp thêm 25 trong 30 phút."
       },
       "moonfire": {
-        "name": "Nguyệt Hỏa",
+        "name": "Bão Tố Nguyệt",
         "description": "Thiêu đốt kẻ địch bằng nguyệt hỏa gây {damage} sát thương Bí Thuật cùng sát thương theo thời gian."
       },
       "rejuvenation": {
-        "name": "Hồi Phục",
+        "name": "Hoa Nở Hoang Dã",
         "description": "Trị liệu cho mục tiêu {damage} máu trong 12 giây."
       },
       "thorns": {
-        "name": "Gai Nhọn",
+        "name": "Bụi Gai Hộ Thân",
         "description": "Gai nhọn mọc ra từ mục tiêu: kẻ tấn công cận chiến nhận 3 sát thương Tự Nhiên."
       },
       "entangling_roots": {
-        "name": "Rễ Trói",
+        "name": "Rễ Siết Chặt",
         "description": "Trói chân mục tiêu tại chỗ trong tối đa 12 giây."
       },
       "bear_form": {
-        "name": "Hình Gấu",
+        "name": "Bruin Form",
         "description": "Biến hình thành gấu: giáp +65%, sức mạnh tấn công +15, các đòn đánh của ngươi tích nộ khí và tạo thêm 30% đe dọa. Niệm lại để trở về hình pháp sư."
       },
       "maul": {
-        "name": "Vồ Mạnh",
-        "description": "Một đòn vồ tăng sát thương cận chiến thêm {damage} và gây ra lượng đe dọa lớn. Kích hoạt ở đòn đánh tiếp theo của bạn. Chỉ dùng được ở Hình Gấu."
+        "name": "Nghiền Xương",
+        "description": "Một đòn vồ tăng sát thương cận chiến thêm {damage} và gây ra lượng đe dọa lớn. Kích hoạt ở đòn đánh tiếp theo của bạn. Chỉ dùng được ở Bruin Form."
       },
       "growl": {
-        "name": "Gầm Gừ",
-        "description": "Gầm gừ với mục tiêu: mối đe dọa của bạn tăng lên ngang bằng kẻ địch mà nó căm ghét nhất và nó bị buộc phải tấn công bạn trong 3 giây. Chỉ dùng được ở Hình Gấu."
+        "name": "Hăm Dọa",
+        "description": "Gầm gừ với mục tiêu: mối đe dọa của bạn tăng lên ngang bằng kẻ địch mà nó căm ghét nhất và nó bị buộc phải tấn công bạn trong 3 giây. Chỉ dùng được ở Bruin Form."
       },
       "cat_form": {
         "name": "Hình Sói",
@@ -4949,43 +4949,43 @@ export const vi_VN: EnTranslations = {
         "description": "Cào kẻ địch gây sát thương vũ khí cộng thêm {damage}. Thưởng 1 điểm liên hoàn. Chỉ khi ở Hình Sói."
       },
       "ferocious_bite": {
-        "name": "Cắn Cuồng Bạo",
+        "name": "Cắn Xé Máu",
         "description": "Đòn kết liễu gây sát thương theo mỗi điểm liên hoàn. Chỉ dùng được ở Hình Sói."
       },
       "swipe": {
-        "name": "Quật Quét",
-        "description": "Quật quét các kẻ địch lân cận gây {damage} sát thương. Tạo thêm đe dọa. Chỉ dùng được ở Hình Gấu."
+        "name": "Vuốt Quét Ngang",
+        "description": "Quật quét các kẻ địch lân cận gây {damage} sát thương. Tạo thêm đe dọa. Chỉ dùng được ở Bruin Form."
       },
       "regrowth": {
-        "name": "Tái Sinh Trưởng",
+        "name": "Nở Hoa Lần Hai",
         "description": "Trị liệu cho đồng minh {damage} máu cùng một lượng bổ sung trong 21 giây."
       },
       "barkskin": {
-        "name": "Da Vỏ Cây",
+        "name": "Da Sồi",
         "description": "Da ngươi rắn lại như vỏ cây, tăng 150 giáp trong 15 giây."
       },
       "starfire": {
-        "name": "Tinh Hỏa",
+        "name": "Thiên Giáng",
         "description": "Gọi xuống một tia lửa tinh tú, gây {damage} sát thương Bí Thuật."
       },
       "travel_form": {
-        "name": "Hình Lữ Hành",
-        "description": "Tức thì biến thành hình lữ hành nhanh nhẹn, tăng 40% tốc độ di chuyển. Bạn không thể dùng các kỹ năng khác khi đã biến hình, nhưng có thể biến hình trong hoặc ngoài chiến đấu, lý tưởng để chạy trốn."
+        "name": "Fleet Form",
+        "description": "Tức thì biến thành Fleet Form nhanh nhẹn, tăng 40% tốc độ di chuyển. Bạn không thể dùng các kỹ năng khác khi đã biến hình, nhưng có thể biến hình trong hoặc ngoài chiến đấu, lý tưởng để chạy trốn."
       },
       "enrage": {
-        "name": "Phẫn Nộ",
-        "description": "Lập tức tạo ra 20 nộ khí. Chỉ dùng được ở Hình Gấu."
+        "name": "Khơi Bùng",
+        "description": "Lập tức tạo ra 20 nộ khí. Chỉ dùng được ở Bruin Form."
       },
       "bash": {
-        "name": "Đập Choáng",
-        "description": "Làm choáng mục tiêu trong 2 giây. Chỉ khi ở Hình Gấu."
+        "name": "Chấn Choáng",
+        "description": "Làm choáng mục tiêu trong 2 giây. Chỉ dùng được ở Bruin Form."
       },
       "faerie_fire": {
-        "name": "Lửa Tiên",
+        "name": "Ánh Ma Trơi",
         "description": "Giảm giáp của mục tiêu đi 35 trong 40 giây."
       },
       "hibernate": {
-        "name": "Ngủ Đông",
+        "name": "Giấc Ngủ Sâu",
         "description": "Buộc mục tiêu chìm vào giấc ngủ sâu trong tối đa 8 giây. Mọi sát thương sẽ đánh thức nó."
       },
       "dash": {
@@ -4993,15 +4993,15 @@ export const vi_VN: EnTranslations = {
         "description": "Lao về phía trước, tăng tốc độ di chuyển 50% trong 15 giây. Chỉ dùng được ở Hình Sói."
       },
       "pounce": {
-        "name": "Vồ Mồi",
+        "name": "Đòn Lẻn Vồ",
         "description": "Một đòn mở màn từ trạng thái ẩn thân làm choáng mục tiêu trong 2 giây. Tặng 1 điểm liên hoàn. Chỉ dùng được ở Hình Sói."
       },
       "insect_swarm": {
-        "name": "Bầy Côn Trùng",
+        "name": "Bầy Đốt Chích",
         "description": "Kẻ địch bị bầy côn trùng bủa vây, nhận {damage} sát thương Tự Nhiên trong 12 giây."
       },
       "tigers_fury": {
-        "name": "Phẫn Nộ Mãnh Hổ",
+        "name": "Huyết Sói",
         "description": "Tăng 40 sức mạnh tấn công trong 6 giây. Chỉ dùng được ở Hình Sói."
       },
       "rip": {
@@ -5009,67 +5009,67 @@ export const vi_VN: EnTranslations = {
         "description": "Đòn kết liễu gây sát thương Chảy Máu trong 12 giây. Tiêu hao điểm liên hoàn. Chỉ dùng được ở Hình Sói."
       },
       "mortal_strike": {
-        "name": "Đòn Trí Mạng",
+        "name": "Đòn Tàn Phế",
         "description": "Một đòn đánh hung hãn gây sát thương vũ khí cộng thêm {damage}. (Đặc trưng nhánh Vũ Khí)"
       },
       "bloodthirst": {
-        "name": "Khát Máu",
+        "name": "Trích Huyết",
         "description": "Tấn công tức thời trong cơn cuồng huyết gây {damage}. (Tuyệt chiêu Cuồng Nộ)"
       },
       "shield_slam": {
-        "name": "Giáng Khiên",
+        "name": "Giáng Nứt Khiên",
         "description": "Giáng khiên vào mục tiêu gây {damage} và lượng đe dọa khổng lồ. (Đặc trưng Hộ Vệ)"
       },
       "whirlwind": {
-        "name": "Lốc Xoáy",
+        "name": "Vòng Xoáy Lưỡi Kiếm",
         "description": "Xoay theo một vòng cung chết chóc, đánh tất cả kẻ địch lân cận gây {damage}. (Tài năng Cuồng Nộ)"
       },
       "berserker_rage": {
-        "name": "Cuồng Nộ Berserker",
-        "description": "Bước vào cơn cuồng nộ berserker, tạo 20 nộ khí. (Tài năng Chiến Binh)"
+        "name": "Thịnh Nộ Sục Sôi",
+        "description": "Bước vào cơn thịnh nộ sục sôi, tạo 20 nộ khí. (Tài năng Chiến Binh)"
       },
       "summon_imp": {
-        "name": "Triệu Hồi Tiểu Quỷ",
-        "description": "Triệu hồi một Tiểu Quỷ dưới quyền chỉ huy của Thuật Sĩ Hắc Ám. Tiểu Quỷ ném Tiễn Lửa vào kẻ địch của bạn từ xa. Triệu hồi một con quỷ mới sẽ giải tán con hiện tại. Bạn chỉ có thể có một con quỷ cùng lúc."
+        "name": "Triệu Hồi Emberkin",
+        "description": "Triệu hồi một Emberkin dưới quyền chỉ huy của Thuật Sĩ Hắc Ám. Emberkin ném Tiễn Tro vào kẻ địch của bạn từ xa. Triệu hồi một con quỷ mới sẽ giải tán con hiện tại. Bạn chỉ có thể có một con quỷ cùng lúc."
       },
       "summon_voidwalker": {
-        "name": "Triệu Hồi Quỷ Hư Không",
-        "description": "Triệu hồi một Quỷ Hư Không dưới quyền chỉ huy của Thuật Sĩ Hắc Ám. Quỷ Hư Không là con quỷ vững chãi khiêu khích kẻ địch của bạn và hứng chịu đòn tấn công. Triệu hồi một con quỷ mới sẽ giải tán con hiện tại. Bạn chỉ có thể có một con quỷ cùng lúc."
+        "name": "Triệu Hồi Gloomshade",
+        "description": "Triệu hồi một Gloomshade dưới quyền chỉ huy của Thuật Sĩ Hắc Ám. Gloomshade là con quỷ vững chãi khiêu khích kẻ địch của bạn và hứng chịu đòn tấn công. Triệu hồi một con quỷ mới sẽ giải tán con hiện tại. Bạn chỉ có thể có một con quỷ cùng lúc."
       },
       "summon_succubus": {
-        "name": "Triệu Hồi Mỹ Quỷ",
-        "description": "Triệu hồi một Mỹ Quỷ dưới quyền chỉ huy của Thuật Sĩ Hắc Ám. Mỹ Quỷ là con quỷ mong manh nhưng đánh nhanh và gây sát thương cận chiến mạnh. Triệu hồi một con quỷ mới sẽ giải tán con hiện tại. Bạn chỉ có thể có một con quỷ cùng lúc."
+        "name": "Triệu Hồi Duskborn",
+        "description": "Triệu hồi một Duskborn dưới quyền chỉ huy của Thuật Sĩ Hắc Ám. Duskborn là con quỷ mong manh nhưng đánh nhanh và gây sát thương cận chiến mạnh. Triệu hồi một con quỷ mới sẽ giải tán con hiện tại. Bạn chỉ có thể có một con quỷ cùng lúc."
       },
       "summon_felhunter": {
-        "name": "Triệu Hồi Thợ Săn Quỷ",
-        "description": "Triệu hồi một Thợ Săn Quỷ dưới quyền chỉ huy của Thuật Sĩ Hắc Ám. Thợ Săn Quỷ quấy rối kẻ địch từ xa bằng Cắn Bóng Tối và xuất sắc trong việc săn lùng các pháp sư niệm chú. Triệu hồi một con quỷ mới sẽ giải tán con hiện tại. Bạn chỉ có thể có một con quỷ cùng lúc."
+        "name": "Triệu Hồi Spellhound",
+        "description": "Triệu hồi một Spellhound dưới quyền chỉ huy của Thuật Sĩ Hắc Ám. Spellhound quấy rối kẻ địch từ xa bằng Cắn U Ám và xuất sắc trong việc săn lùng các pháp sư niệm chú. Triệu hồi một con quỷ mới sẽ giải tán con hiện tại. Bạn chỉ có thể có một con quỷ cùng lúc."
       },
       "summon_felguard": {
-        "name": "Triệu Hồi Vệ Binh Quỷ",
-        "description": "Triệu hồi một Vệ Binh Quỷ dưới quyền chỉ huy của Thuật Sĩ Hắc Ám. Vệ Binh Quỷ là con quỷ cận chiến bền bỉ lao vào trận chiến và tự đứng vững. Triệu hồi một con quỷ mới sẽ giải tán con hiện tại. Bạn chỉ có thể có một con quỷ cùng lúc."
+        "name": "Triệu Hồi Warfiend",
+        "description": "Triệu hồi một Warfiend dưới quyền chỉ huy của Thuật Sĩ Hắc Ám. Warfiend là con quỷ cận chiến bền bỉ lao vào trận chiến và tự đứng vững. Triệu hồi một con quỷ mới sẽ giải tán con hiện tại. Bạn chỉ có thể có một con quỷ cùng lúc."
       },
       "summon_infernal": {
-        "name": "Triệu Hồi Quỷ Hỏa Ngục",
-        "description": "Ràng buộc một Quỷ Hỏa Ngục theo ý chí của bạn, một cỗ máy hủy diệt đồ sộ với đòn cận chiến nghiền nát cùng lượng máu và giáp sâu nhất trong các loại quỷ. Thời gian hồi chiêu dài kìm hãm sức mạnh thô của nó. Triệu hồi một con quỷ mới sẽ giải tán con hiện tại. Bạn chỉ có thể có một con quỷ cùng lúc."
+        "name": "Triệu Hồi Pyre Colossus",
+        "description": "Ràng buộc một Pyre Colossus theo ý chí của bạn, một cỗ máy hủy diệt đồ sộ với đòn cận chiến nghiền nát cùng lượng máu và giáp sâu nhất trong các loại quỷ. Thời gian hồi chiêu dài kìm hãm sức mạnh thô của nó. Triệu hồi một con quỷ mới sẽ giải tán con hiện tại. Bạn chỉ có thể có một con quỷ cùng lúc."
       },
       "summon_doomguard": {
-        "name": "Triệu Hồi Vệ Binh Diệt Vong",
-        "description": "Ràng buộc một Vệ Binh Diệt Vong theo ý chí của bạn, một con quỷ tinh nhuệ trút sát thương Bóng Tối nặng nề từ xa. Thời gian hồi chiêu dài kìm hãm sức mạnh tàn phá của nó. Triệu hồi một con quỷ mới sẽ giải tán con hiện tại. Bạn chỉ có thể có một con quỷ cùng lúc."
+        "name": "Triệu Hồi Wraithborn",
+        "description": "Ràng buộc một Wraithborn theo ý chí của bạn, một con quỷ tinh nhuệ trút sát thương Bóng Tối nặng nề từ xa. Thời gian hồi chiêu dài kìm hãm sức mạnh tàn phá của nó. Triệu hồi một con quỷ mới sẽ giải tán con hiện tại. Bạn chỉ có thể có một con quỷ cùng lúc."
       },
       "bear_charge": {
-        "name": "Gấu Lao",
-        "description": "Lao vào kẻ địch, tạo 9 nộ khí và làm choáng nó trong 1 giây. Tầm 8-25 thước. Chỉ khi ở Hình Gấu."
+        "name": "Cú Lao Bruin",
+        "description": "Lao vào kẻ địch, tạo 9 nộ khí và làm choáng nó trong 1 giây. Tầm 8-25 thước. Chỉ dùng được ở Bruin Form."
       },
       "demoralizing_roar": {
-        "name": "Gầm Áp Chế",
-        "description": "Áp chế kẻ địch xung quanh, giảm sức tấn công của chúng đi 20 trong 20 giây. Chỉ dùng được ở Hình Gấu."
+        "name": "Tiếng Gầm Khiếp Đảm",
+        "description": "Áp chế kẻ địch xung quanh, giảm sức tấn công của chúng đi 20 trong 20 giây. Chỉ dùng được ở Bruin Form."
       },
       "prowl": {
-        "name": "Rình Mồi",
+        "name": "Rình Rập",
         "description": "Vào trạng thái ẩn thân khi ở Hình Sói, di chuyển chậm hơn 50%. Không thể dùng trong chiến đấu."
       },
       "rake": {
-        "name": "Cào Xé",
+        "name": "Lóc Xé",
         "description": "Một đòn mở màn từ trạng thái ẩn thân cào xé kẻ địch gây sát thương vũ khí cộng thêm {damage} và gây sát thương chảy máu trong 9 giây. Tặng 1 điểm liên hoàn. Chỉ dùng được ở Hình Sói."
       },
       "revive_pet": {
@@ -5079,10 +5079,10 @@ export const vi_VN: EnTranslations = {
     },
     "items": {
       "worn_sword": {
-        "name": "Đoản Kiếm Mòn Cũ"
+        "name": "Đoản Kiếm Rỗ Sét"
       },
       "gnarled_staff": {
-        "name": "Trượng Gỗ Xù Xì"
+        "name": "Trượng Gỗ Sồi Đầm Lầy"
       },
       "rusty_dagger": {
         "name": "Dao Găm Gỉ Sét"
@@ -5094,13 +5094,13 @@ export const vi_VN: EnTranslations = {
         "name": "Rìu Nhỏ Gỉ Sét"
       },
       "recruit_tunic": {
-        "name": "Áo Da của Tân Binh"
+        "name": "Áo Chẽn Của Dân Binh"
       },
       "apprentice_robe": {
-        "name": "Áo Choàng Học Việc"
+        "name": "Áo Choàng Sờn Rách"
       },
       "footpad_jerkin": {
-        "name": "Áo Da Của Kẻ Cướp Đường"
+        "name": "Áo Da Của Kẻ Móc Túi"
       },
       "redbrook_blade": {
         "name": "Đao Dân Quân Redbrook"
@@ -5130,22 +5130,22 @@ export const vi_VN: EnTranslations = {
         "name": "Quần Da Lông Greyjaw"
       },
       "baked_bread": {
-        "name": "Bánh Mì Mới Nướng"
+        "name": "Ổ Bánh Mì Quê"
       },
       "spring_water": {
-        "name": "Nước Suối Tươi Mát"
+        "name": "Nước Giếng Lạnh"
       },
       "roasted_boar": {
-        "name": "Thịt Lợn Rừng Quay"
+        "name": "Đùi Lợn Rừng Xiên Nướng"
       },
       "conjured_water": {
-        "name": "Nước Suối Triệu Hồi"
+        "name": "Nước Mưa Triệu Hồi"
       },
       "conjured_water2": {
-        "name": "Nước Khoáng Triệu Hồi"
+        "name": "Nước Giếng Triệu Hồi"
       },
       "conjured_water3": {
-        "name": "Nước Có Ga Triệu Hồi"
+        "name": "Nước Trong Triệu Hồi"
       },
       "eastbrook_arming_sword": {
         "name": "Kiếm Chiến Đông Khê"
@@ -5205,7 +5205,7 @@ export const vi_VN: EnTranslations = {
         "name": "Tinh Chất Ma Quái"
       },
       "webwood_silk": {
-        "name": "Tuyến Tơ Võng Lâm"
+        "name": "Tuyến Tơ Sableweb"
       },
       "supply_crate": {
         "name": "Thùng Tiếp Tế Bị Trộm"
@@ -5226,13 +5226,13 @@ export const vi_VN: EnTranslations = {
         "name": "Khăn Bịt Đỏ"
       },
       "tough_jerky": {
-        "name": "Thịt Khô Dai"
+        "name": "Thịt Khô Muối"
       },
       "mudfin_scale": {
-        "name": "Vảy Murloc Nhầy Nhụa"
+        "name": "Vảy Mudfin Nhầy Nhụa"
       },
       "tallow_candle": {
-        "name": "Nến Mỡ"
+        "name": "Cục Mỡ Nhờn"
       },
       "spider_leg": {
         "name": "Chân Nhện Co Giật"
@@ -5298,7 +5298,7 @@ export const vi_VN: EnTranslations = {
         "name": "Giày Bước Đầm"
       },
       "mistcallers_edge": {
-        "name": "Lưỡi Đao Của Kẻ Gọi Sương"
+        "name": "Lưỡi Đao Của Fogbinder"
       },
       "vaels_mist_staff": {
         "name": "Trượng Sương của Vael"
@@ -5442,7 +5442,7 @@ export const vi_VN: EnTranslations = {
         "name": "Trượng của Velkhar"
       },
       "shadowmeld_tunic": {
-        "name": "Áo Da Hòa Bóng"
+        "name": "Áo Chẽn Màn Đêm"
       },
       "gravewyrm_scale_hauberk": {
         "name": "Áo Giáp Vảy Mộ Long"
@@ -5511,13 +5511,13 @@ export const vi_VN: EnTranslations = {
         "name": "Vảy Wyrm Rạn Nứt"
       },
       "conjured_bread": {
-        "name": "Bánh Mì Triệu Hồi"
+        "name": "Bánh Yến Mạch Triệu Hồi"
       },
       "conjured_bread2": {
-        "name": "Bánh Mì Đen Triệu Hồi"
+        "name": "Ổ Bánh Đen Triệu Hồi"
       },
       "conjured_bread3": {
-        "name": "Bánh Cuộn Ngọt Triệu Hồi"
+        "name": "Bánh Mật Ong Triệu Hồi"
       },
       "roadwardens_helm": {
         "name": "Mũ Giáp của Lộ Vệ"
@@ -5622,7 +5622,7 @@ export const vi_VN: EnTranslations = {
         "name": "Túi dệt mộ"
       },
       "mistcallers_duffel": {
-        "name": "Túi vải của Kẻ Gọi Sương"
+        "name": "Túi vải của Fogbinder"
       },
       "copper_mining_pick": {
         "name": "Cuốc Khai Khoáng Đồng"
@@ -5652,7 +5652,7 @@ export const vi_VN: EnTranslations = {
         "name": "Liềm Lá Bạc"
       },
       "bristleback_maul": {
-        "name": "Vồ Lưng Gai"
+        "name": "Búa Gallowglass"
       },
       "broodmother_silk_robe": {
         "name": "Áo Choàng Lụa Nhền Nhện Mẹ"
@@ -5664,13 +5664,13 @@ export const vi_VN: EnTranslations = {
         "name": "Áo Da Kẻ Rình Mộ"
       },
       "deathlord_legguards": {
-        "name": "Giáp Chân Tử Vương"
+        "name": "Giáp Chân Barrowlord"
       },
       "deathlord_sabatons": {
-        "name": "Giày Sắt Tử Vương"
+        "name": "Giày Sắt Barrowlord"
       },
       "deathlord_warplate": {
-        "name": "Giáp Chiến Tử Vương"
+        "name": "Giáp Chiến Barrowlord"
       },
       "drogmar_warboots": {
         "name": "Giày Chiến Của Drogmar"
@@ -5748,13 +5748,13 @@ export const vi_VN: EnTranslations = {
         "name": "Giày Giẫm Đạp Của Mogger"
       },
       "necromancers_legwraps": {
-        "name": "Quấn Chân của Tử Linh Sư"
+        "name": "Quấn Chân Mournweave"
       },
       "necromancers_soulsteps": {
-        "name": "Bước Hồn của Tử Linh Sư"
+        "name": "Bước Hồn Mournweave"
       },
       "necromancers_starshroud": {
-        "name": "Tinh Sa của Tử Linh Sư"
+        "name": "Tinh Sa Mournweave"
       },
       "nhalias_dirgeblade": {
         "name": "Ai Kiếm của Nhalia"
@@ -5790,13 +5790,13 @@ export const vi_VN: EnTranslations = {
         "name": "Bước Hồn Long Giáo"
       },
       "wyrmshadow_harness": {
-        "name": "Đai Giáp Long Ảnh"
+        "name": "Đai Giáp Nightfang"
       },
       "wyrmshadow_legguards": {
-        "name": "Giáp Chân Long Ảnh"
+        "name": "Giáp Chân Nightfang"
       },
       "wyrmshadow_treads": {
-        "name": "Giày Long Ảnh"
+        "name": "Giày Nightfang"
       },
       "glimmerfin_koi": {
         "name": "Cá Koi Vây Lấp Lánh"
@@ -5814,7 +5814,7 @@ export const vi_VN: EnTranslations = {
         "name": "Cá Rô Sông Sống"
       },
       "raw_stonescale_carp": {
-        "name": "Cá Chép Vảy Đá Sống"
+        "name": "Cá Chép Vây Đá Phiến Sống"
       },
       "soggy_boot": {
         "name": "Giày Ướt Sũng"
@@ -5925,13 +5925,13 @@ export const vi_VN: EnTranslations = {
         "name": "Mã Tấu Vảy Trăng"
       },
       "moonshroud_breastplate": {
-        "name": "Giáp Ngực Màn Trăng"
+        "name": "Giáp Ngực Moonwrack"
       },
       "moonshroud_robe": {
-        "name": "Áo Choàng Màn Trăng"
+        "name": "Áo Choàng Moonwrack"
       },
       "moonshroud_tunic": {
-        "name": "Áo Choàng Nguyệt Sa"
+        "name": "Áo Chẽn Moonwrack"
       },
       "pale_pearl": {
         "name": "Ngọc Trai Nhợt Nhạt"
@@ -5967,7 +5967,7 @@ export const vi_VN: EnTranslations = {
         "name": "Giáp Vai Xương Mộ"
       },
       "deathlords_dread_visage": {
-        "name": "Mặt Nạ Kinh Hoàng Của Tử Vương"
+        "name": "Mặt Nạ Kinh Hoàng Của Barrowlord"
       },
       "gravewyrm_gauntlets": {
         "name": "Găng Tay Mộ Long"
@@ -5982,10 +5982,10 @@ export const vi_VN: EnTranslations = {
         "name": "Găng Tay Màn Sương"
       },
       "necromancers_soulspire_mantle": {
-        "name": "Áo Choàng Hồn Tháp của Tử Linh Sư"
+        "name": "Áo Choàng Hồn Tháp Mournweave"
       },
       "wyrmshadow_talongrips": {
-        "name": "Bao Tay Trảo Long Ảnh"
+        "name": "Bao Tay Trảo Nightfang"
       },
       "reliquary_plate_chest": {
         "name": "Áo Giáp Vệ Binh Thánh Tích"
@@ -6120,31 +6120,31 @@ export const vi_VN: EnTranslations = {
         "name": "Lõi Gỗ Của Vương Miện Bất Tử"
       },
       "kingsbane_last_oath": {
-        "name": "Kingsbane, Lời Thề Cuối Cùng Của Đỉnh Gai"
+        "name": "Thronebane, Lời Thề Cuối Cùng Của Đỉnh Gai"
       },
       "crownforged_dreadhelm": {
-        "name": "Mũ Kinh Hoàng Rèn Vương Miện"
+        "name": "Mũ Kinh Hoàng Bonewrought"
       },
       "crownforged_warspaulders": {
-        "name": "Giáp Vai Chiến Rèn Vương Miện"
+        "name": "Giáp Vai Chiến Bonewrought"
       },
       "nighttalon_crown": {
-        "name": "Vương Miện Dạ Trảo"
+        "name": "Vương Miện Direfang"
       },
       "nighttalon_shoulderguards": {
-        "name": "Giáp Vai Dạ Trảo"
+        "name": "Giáp Vai Direfang"
       },
       "soulflame_cowl": {
-        "name": "Mũ Trùm Hồn Hỏa"
+        "name": "Mũ Trùm Wraithfire"
       },
       "soulflame_mantle": {
-        "name": "Áo Choàng Hồn Hỏa"
+        "name": "Áo Choàng Wraithfire"
       },
       "stormcallers_crown": {
-        "name": "Vương Miện của Triệu Bão Sư"
+        "name": "Vương Miện Galecall"
       },
       "stormcallers_spaulders": {
-        "name": "Giáp Vai của Triệu Bão Sư"
+        "name": "Giáp Vai Galecall"
       },
       "unknown_alien_weaponry": {
         "name": "Vũ Khí Ngoài Hành Tinh Bí Ẩn"
@@ -6233,13 +6233,13 @@ export const vi_VN: EnTranslations = {
         "name": "Lợn Rừng"
       },
       "webwood_spider": {
-        "name": "Kẻ Rình Rừng Tơ"
+        "name": "Kẻ Rình Sableweb"
       },
       "mudfin_murloc": {
         "name": "Kẻ Lẩn Vây Bùn"
       },
       "tunnel_rat": {
-        "name": "Chuột Đào Hầm"
+        "name": "Thợ Đào Deeprock"
       },
       "vale_bandit": {
         "name": "Cướp Thung Lũng"
@@ -6254,7 +6254,7 @@ export const vi_VN: EnTranslations = {
         "name": "Kẻ Rình Đầm Lầy"
       },
       "deepfen_murloc": {
-        "name": "Quái Đớp Đầm Sâu"
+        "name": "Quái Đớp Deepfen"
       },
       "mire_widow": {
         "name": "Góa Phụ Đầm Bùn"
@@ -6287,7 +6287,7 @@ export const vi_VN: EnTranslations = {
         "name": "Kẻ Rình Sườn Núi"
       },
       "deeprock_kobold": {
-        "name": "Kẻ Đào Hầm Thạch Sâu"
+        "name": "Kẻ Đào Hầm Deeprock"
       },
       "thornpeak_ogre": {
         "name": "Quỷ Khổng Lồ Đỉnh Gai"
@@ -6341,13 +6341,13 @@ export const vi_VN: EnTranslations = {
         "name": "Hiệp Sĩ Chỉ Huy Olen"
       },
       "vael_the_mistcaller": {
-        "name": "Vael Kẻ Gọi Sương"
+        "name": "Vael Fogbinder"
       },
       "sanctum_boneguard": {
         "name": "Vệ Xương Thánh Đường"
       },
       "sanctum_drakonid": {
-        "name": "Nhân Long Thánh Đường"
+        "name": "Vệ Vảy Thánh Đường"
       },
       "raised_bonewalker": {
         "name": "Xác Xương Hồi Sinh"
@@ -6482,13 +6482,13 @@ export const vi_VN: EnTranslations = {
         "name": "Vệ Xương Varkas"
       },
       "emberkin": {
-        "name": "Tiểu Quỷ"
+        "name": "Emberkin"
       },
       "gloomshade": {
-        "name": "Quỷ Hư Không"
+        "name": "Gloomshade"
       },
       "duskborn": {
-        "name": "Mỹ Quỷ"
+        "name": "Duskborn"
       },
       "grix_the_tunnelking": {
         "name": "Grix Vua Đường Hầm"
@@ -6512,16 +6512,16 @@ export const vi_VN: EnTranslations = {
         "name": "Kẻ Buộc Oan Hồn Maldrec"
       },
       "spellhound": {
-        "name": "Thợ Săn Quỷ"
+        "name": "Spellhound"
       },
       "warfiend": {
-        "name": "Vệ Binh Quỷ"
+        "name": "Warfiend"
       },
       "pyre_colossus": {
-        "name": "Quỷ Hỏa Ngục"
+        "name": "Pyre Colossus"
       },
       "wraithborn": {
-        "name": "Vệ Binh Diệt Vong"
+        "name": "Wraithborn"
       },
       "choirmother_selthe": {
         "name": "Mẫu Ca Selthe"
@@ -6594,12 +6594,12 @@ export const vi_VN: EnTranslations = {
       "fisherman_brandt": {
         "name": "Ngư Dân Brandt",
         "title": "Lão Thủy Thủ",
-        "greeting": "Grlmurlgrl- xin lỗi, ta nghe đám người cá đó lâu quá rồi."
+        "greeting": "Blrb-glub- xin lỗi, ta nghe đám người cá đó lâu quá rồi."
       },
       "foreman_odell": {
         "name": "Quản Đốc Odell",
         "title": "Quản Đốc Hầm Mỏ",
-        "greeting": "Cả khu khai quật bò lúc nhúc lũ sâu bọ đầu nến đó!"
+        "greeting": "Cả khu khai quật bò lúc nhúc lũ sâu bọ bám đầy bùn đất đó!"
       },
       "warden_fenwick": {
         "name": "Vệ Quan Fenwick",
@@ -6709,7 +6709,7 @@ export const vi_VN: EnTranslations = {
         }
       },
       "q_boars": {
-        "title": "Da Lưng Lông Cứng",
+        "title": "Da Lợn Rừng Lông Cứng",
         "text": "Da lợn lòi làm ra những chiếc túi du hành tốt nhất, và những đồng cỏ phía tây thị trấn nhung nhúc lũ thú đó. Hãy mang cho ta 5 tấm Da Lợn Lòi Lông Cứng và ta sẽ không để ngươi phí công.",
         "completion": "À, những tấm da lông cứng tuyệt hảo! Chúng sẽ bán được giá hời.",
         "objectives": {
@@ -6719,21 +6719,21 @@ export const vi_VN: EnTranslations = {
         }
       },
       "q_spiders": {
-        "title": "Hiểm Họa Rừng Mạng",
-        "text": "Bọn rình rập trong khu rừng phía đông nhả ra một loại tơ ta cần cho thuốc đắp - mà chúng cũng đã sinh sôi quá đông. Hãy tỉa bớt 6 con Kẻ Rình Rừng Mạng và cắt 4 tuyến tơ từ bụng chúng.",
+        "title": "Hiểm Họa Sableweb",
+        "text": "Bọn rình rập trong khu rừng phía đông nhả ra một loại tơ ta cần cho thuốc đắp, mà chúng cũng đã sinh sôi quá đông. Hãy tỉa bớt 6 con Kẻ Rình Sableweb và cắt 4 tuyến tơ từ bụng chúng.",
         "completion": "Ặc, vẫn còn giật giật. Hoàn hảo. Đây, ngươi đã xứng đáng với thứ này.",
         "objectives": {
           "0": {
-            "label": "Đã hạ Kẻ Rình Rừng Mạng"
+            "label": "Đã hạ Kẻ Rình Sableweb"
           },
           "1": {
-            "label": "Tuyến Tơ Rừng Mạng"
+            "label": "Tuyến Tơ Sableweb"
           }
         }
       },
       "q_murlocs": {
         "title": "Rắc Rối Bên Hồ",
-        "text": "Hai mươi năm ta câu cá ở Hồ Gương, chưa từng mất một tấm lưới cho đến khi lũ người-cá ằng ặc kia bò lên từ vùng nước nông. Hãy đẩy lùi bọn Mudfin - tiêu diệt 8 con. Và coi chừng đấy: nơi nào có một con murloc, nơi đó có năm con.",
+        "text": "Hai mươi năm ta câu cá ở Hồ Gương, chưa từng mất một tấm lưới cho đến khi lũ người cá ằng ặc kia bò lên từ vùng nước nông. Hãy đẩy lùi bọn Mudfin, tiêu diệt 8 con. Và coi chừng đấy: nơi nào có một con mudfin, nơi đó có năm con.",
         "completion": "Hà! Thế là chúng sẽ biết mà lo cho mấy vũng bùn của mình thôi.",
         "objectives": {
           "0": {
@@ -6743,11 +6743,11 @@ export const vi_VN: EnTranslations = {
       },
       "q_mine": {
         "title": "Chuột Trong Hầm Mỏ",
-        "text": "Chúng tôi vừa trúng một mạch đồng tốt thì lũ kobold sâu bọ đó ùa ra từ sườn đồi. Đám thợ của tôi sẽ không đặt chân vào hầm đào cho đến khi nó được dọn sạch. Hãy hạ 10 con Chuột Hầm Đào Bới.",
+        "text": "Chúng tôi vừa trúng một mạch đồng tốt thì lũ sâu bọ đào hang đó ùa ra từ sườn đồi. Đám thợ của tôi sẽ không đặt chân vào hầm đào cho đến khi nó được dọn sạch. Hãy hạ 10 con Kẻ Đào Hầm Deeprock.",
         "completion": "Ha! Trở lại làm việc nào, các chàng trai! Ngươi có lời cảm tạ của ta - và cả vàng của ta nữa.",
         "objectives": {
           "0": {
-            "label": "Đã hạ Chuột Hầm Đào Bới"
+            "label": "Đã hạ Kẻ Đào Hầm Deeprock"
           }
         }
       },
@@ -6803,7 +6803,7 @@ export const vi_VN: EnTranslations = {
       },
       "q_rite": {
         "title": "Nghi Lễ Trói Buộc",
-        "text": "Phải phá phong ấn hầm mộ bên dưới nhà nguyện nếu chúng ta muốn ngăn chặn Kẻ Gọi Mộ - nhưng chỉ một nghi lễ trói buộc mới cho phép người sống đi qua. Ta cần 4 cục Mỡ Thánh - lũ kobold đào hầm tích trữ nến cả thùng - và 6 Tinh Chất Ma Quái từ những kẻ chết không yên nghỉ.",
+        "text": "Phải phá phong ấn hầm mộ bên dưới nhà nguyện nếu chúng ta muốn ngăn chặn Gravecaller, nhưng chỉ một nghi lễ trói buộc mới cho phép người sống đi qua. Ta cần 4 cục Mỡ Thánh, lũ đào hang trong mỏ tích trữ mỡ cả thùng, và 6 Tinh Chất Ma Quái từ những kẻ chết không yên nghỉ.",
         "completion": "Đã xong. Con đường bên dưới đã rộng mở... và cầu Thánh Quang tha thứ cho ta vì đã mở nó ra. Hãy tập hợp những đồng đội mạnh nhất của ngươi trước khi xuống dưới, {playerName}. Không ai nên đối mặt với Hầm Mộ Rỗng một mình.",
         "objectives": {
           "0": {
@@ -6837,7 +6837,7 @@ export const vi_VN: EnTranslations = {
       "q_gravecallers_trail": {
         "title": "Dấu Vết Kẻ Triệu Mộ",
         "text": "Morthen đã chết, nhưng một câu hỏi cứ gặm nhấm ta: một giáo phái ẩn mình suốt một thế kỷ không dốc hết sức vào một nhà nguyện làng quê. Hắn giữ một cuốn ma thư - những nghi lễ, những thư từ của hắn. Nếu còn sót lại thứ gì, nó nằm trong phòng thánh của nhà nguyện đổ nát phía trên hầm mộ. Hãy lục soát tàn tích và mang cho ta bất cứ thứ gì còn lại từ những ghi chép của hắn, {playerName}.",
-        "completion": "Morthen đã viết thư cho một kẻ 'Triệu Sương' ở đầm lầy phía bắc. Giáo phái chưa chết, {playerName} - nó chỉ đơn thuần là đã kiên nhẫn.",
+        "completion": "Morthen đã viết thư cho một kẻ 'Fogbinder' ở đầm lầy phía bắc. Giáo phái chưa chết, {playerName}, nó chỉ đơn thuần là đã kiên nhẫn.",
         "objectives": {
           "0": {
             "label": "Ma Thư của Morthen"
@@ -6866,7 +6866,7 @@ export const vi_VN: EnTranslations = {
       },
       "q_fenbridge_muster": {
         "title": "Tập Hợp ở Fenbridge",
-        "text": "Những ghi chép của Morthen có nhắc đến một bậc thầy ở đầm lầy phía bắc - một kẻ 'Triệu Sương.' Giờ Vệ Quan Fenwick đã thổi tù và tập hợp ở Fenbridge, và ta không tin vào trùng hợp, {playerName}. Hãy đi theo con đường đắp về phía bắc, lấy lệnh tập hợp từ cột cổng, và trình nó cho Vệ Quan.",
+        "text": "Những ghi chép của Morthen có nhắc đến một bậc thầy ở đầm lầy phía bắc, một kẻ 'Fogbinder.' Giờ Vệ Quan Fenwick đã thổi tù và tập hợp ở Fenbridge, và ta không tin vào trùng hợp, {playerName}. Hãy đi theo con đường đắp về phía bắc, lấy lệnh tập hợp từ cột cổng, và trình nó cho Vệ Quan.",
         "completion": "Ấn của Aldric phải không? Vậy thì ngươi được đấy. Đầm lầy đã nuốt chửng cả những đội tuần tra của ta, và ta cần mọi lưỡi kiếm còn nổi.",
         "objectives": {
           "0": {
@@ -6906,17 +6906,17 @@ export const vi_VN: EnTranslations = {
       },
       "q_deepfen": {
         "title": "Deepfen Dậy Sóng",
-        "text": "Lũ murloc Deepfen đã quanh quẩn ở vùng nước nông của chúng suốt hai mươi năm. Giờ chúng tràn lên bờ đông như ruồi bu xác chết - và các vệ binh của ta nói chúng đang lôi những thứ gì đó lên từ đáy hồ. Dù thứ gì khuấy động chúng, ta muốn nó chấm dứt. Hãy tiêu diệt 12 con murloc đớp.",
+        "text": "Lũ mudfin Deepfen đã quanh quẩn ở vùng nước nông của chúng suốt hai mươi năm. Giờ chúng tràn lên bờ đông như ruồi bu xác chết, và các vệ binh của ta nói chúng đang lôi những thứ gì đó lên từ đáy hồ. Dù thứ gì khuấy động chúng, ta muốn nó chấm dứt. Hãy tiêu diệt 12 con quái đớp.",
         "completion": "Thế cũng đủ đẩy chúng trở lại bùn lầy một thời gian. Nhưng thứ gì đó đã khiến chúng đào bới, và ta quyết tìm cho ra đó là gì.",
         "objectives": {
           "0": {
-            "label": "Đã hạ Murloc Đớp Deepfen"
+            "label": "Đã hạ Quái Đớp Deepfen"
           }
         }
       },
       "q_idols": {
         "title": "Thần Tượng Của Đáy Sâu",
-        "text": "Các vệ binh của Fenwick nói lũ người cá nạo vét thần tượng từ đáy hồ và ôm chặt chúng như thánh tích. Nếu những thần tượng đó là thứ ta lo sợ, ta phải tận mắt nhìn chúng. Hãy lấy 5 cái từ lũ murloc đớp Deepfen - chúng sẽ không dễ dàng buông ra đâu.",
+        "text": "Các vệ binh của Fenwick nói lũ người cá nạo vét thần tượng từ đáy hồ và ôm chặt chúng như thánh tích. Nếu những thần tượng đó là thứ ta lo sợ, ta phải tận mắt nhìn chúng. Hãy lấy 5 cái từ lũ quái đớp Deepfen, chúng sẽ không dễ dàng buông ra đâu.",
         "completion": "Thủ công của bọn Triệu Mộ - cổ hơn Morthen, cổ hơn cả ta. Giáo phái không khởi đầu ở Eastbrook, {playerName}. Nó bắt đầu tại đây, và hồ nước đã giữ kín những bí mật của nó.",
         "objectives": {
           "0": {
@@ -6936,11 +6936,11 @@ export const vi_VN: EnTranslations = {
       },
       "q_deepfen_purge": {
         "title": "Trở Lại Vùng Nước Nông",
-        "text": "Aldric nói những thần tượng đó là do giáo phái tạo ra - nghĩa là lũ murloc đang lôi tà khí cổ xưa của đầm lầy lên từng ôm một. Ta sẽ không để nó trôi dạt lên con đường đắp của ta. Hãy trở lại vùng nước nông và chấm dứt việc nạo vét đó vĩnh viễn: thêm 14 con murloc đớp.",
+        "text": "Aldric nói những thần tượng đó là do giáo phái tạo ra, nghĩa là lũ mudfin đang lôi tà khí cổ xưa của đầm lầy lên từng ôm một. Ta sẽ không để nó trôi dạt lên con đường đắp của ta. Hãy trở lại vùng nước nông và chấm dứt việc nạo vét đó vĩnh viễn: thêm 14 con quái đớp.",
         "completion": "Tàn nhẫn và triệt để. Nếu đầm lầy này có ngày khô cạn, sẽ có công việc của vệ binh đang chờ ngươi.",
         "objectives": {
           "0": {
-            "label": "Đã hạ Murloc Đớp Deepfen"
+            "label": "Đã hạ Quái Đớp Deepfen"
           }
         }
       },
@@ -7043,7 +7043,7 @@ export const vi_VN: EnTranslations = {
       "q_summoners": {
         "title": "Chặn Đứng Cuộc Triệu Hồi",
         "text": "Những bản báo cáo của Maren nhắc đến các kẻ triệu hồi trong hàng ngũ tín đồ - những giọng nói gọi kẻ chết chìm trồi lên khỏi mặt nước như gọi chó săn bằng tiếng còi. Những mật thư của chúng sẽ vạch rõ chuỗi mệnh lệnh. Hãy bịt miệng 8 kẻ triệu hồi và mang về cho ta 4 mật thư của chúng.",
-        "completion": "Mỗi mật thư đều có chữ ký xác nhận 'Phó Tế Voss' - và đề gửi tiếp tới một 'Kẻ Gọi Sương' trong Pháo Đài. Chủ nhân của Morthen, {playerName}. Chúng ta đã tìm ra hắn.",
+        "completion": "Mỗi mật thư đều có chữ ký xác nhận 'Phó Tế Voss', và đề gửi tiếp tới một 'Fogbinder' trong Pháo Đài. Chủ nhân của Morthen, {playerName}. Chúng ta đã tìm ra hắn.",
         "objectives": {
           "0": {
             "label": "Đã hạ Pháp Sư Triệu Hồi Gọi Mộ"
@@ -7065,7 +7065,7 @@ export const vi_VN: EnTranslations = {
       },
       "q_bastion_door": {
         "title": "Pháo Đài Chìm",
-        "text": "Pháo Đài Chìm, thành lũy của một hiệp sĩ đã chìm xuống đầm lầy một thế kỷ trước, là nơi những lá thư của Voss chỉ đến, và là nơi gã Triệu Sương này hát những bài thánh ca chết chìm. Giáo phái đã yểm bùa cửa của nó bằng những phiến đá mộ. Hãy mang cho ta một trong những viên đá bùa đó, {playerName}, và ta sẽ tháo gỡ phong ấn.",
+        "text": "Pháo Đài Chìm, thành lũy của một hiệp sĩ đã chìm xuống đầm lầy một thế kỷ trước, là nơi những lá thư của Voss chỉ đến, và là nơi gã Fogbinder này hát những bài thánh ca chết chìm. Giáo phái đã yểm bùa cửa của nó bằng những phiến đá mộ. Hãy mang cho ta một trong những viên đá bùa đó, {playerName}, và ta sẽ tháo gỡ phong ấn.",
         "completion": "Lá bùa đứt ra như sợi dây thừng mục. Cánh cửa mở toang... và bóng tối bên dưới đang lắng nghe.",
         "objectives": {
           "0": {
@@ -7075,7 +7075,7 @@ export const vi_VN: EnTranslations = {
       },
       "q_olen": {
         "title": "Nỗi Nhục Của Hiệp Sĩ Chỉ Huy",
-        "text": "Hiệp Sĩ Chỉ Huy Olen đã trấn giữ Pháo Đài khi nó chìm xuống - chết đuối ngay vị trí của mình thay vì bỏ trốn. Mọi vệ binh đều học tên ngài với niềm tự hào. Giờ Kẻ Gọi Sương đã hồi sinh ngài thành một con rối để canh giữ chính cánh cửa mà ngài đã chết để bảo vệ. Nỗi nhục ấy phải chấm dứt, {playerName}. Hãy dẫn bốn đồng đội xuống dưới và ban cho Olen sự yên nghỉ mà ngài xứng đáng.",
+        "text": "Hiệp Sĩ Chỉ Huy Olen đã trấn giữ Pháo Đài khi nó chìm xuống, chết đuối ngay vị trí của mình thay vì bỏ trốn. Mọi vệ binh đều học tên ngài với niềm tự hào. Giờ Fogbinder đã hồi sinh ngài thành một con rối để canh giữ chính cánh cửa mà ngài đã chết để bảo vệ. Nỗi nhục ấy phải chấm dứt, {playerName}. Hãy dẫn bốn đồng đội xuống dưới và ban cho Olen sự yên nghỉ mà ngài xứng đáng.",
         "completion": "Vậy là cuối cùng phiên gác của ngài cũng đã kết thúc. Chính ta sẽ khắc tên ngài lên cổng thành. Cảm ơn ngươi, {playerName}.",
         "objectives": {
           "0": {
@@ -7084,12 +7084,12 @@ export const vi_VN: EnTranslations = {
         }
       },
       "q_mistcaller": {
-        "title": "Kẻ Gọi Sương",
-        "text": "Dưới đáy Pháo Đài, Vael Kẻ Gọi Sương đang chờ - chủ nhân của Morthen, chủ nhân của Voss, giọng nói đã nhấn chìm hàng trăm lữ khách để dựng nên một đạo quân cho riêng mình. Hắn vượt xa sức của bất kỳ một anh hùng đơn lẻ nào: hãy mang theo bốn đồng đội, không ít hơn. Hãy kết liễu hắn, {playerName}, và những kẻ chết nơi đầm lầy mới có thể yên nghỉ.",
+        "title": "Fogbinder",
+        "text": "Dưới đáy Pháo Đài, Vael Fogbinder đang chờ, chủ nhân của Morthen, chủ nhân của Voss, giọng nói đã nhấn chìm hàng trăm lữ khách để dựng nên một đạo quân cho riêng mình. Hắn vượt xa sức của bất kỳ một anh hùng đơn lẻ nào: hãy mang theo bốn đồng đội, không ít hơn. Hãy kết liễu hắn, {playerName}, và những kẻ chết nơi đầm lầy mới có thể yên nghỉ.",
         "completion": "Vael đã chết, và lần đầu tiên sau nhiều năm sương mù mới tan đi. Nhưng Maren đã nghe những lời cuối của hắn, và chúng khiến máu ta đông lại: 'Mộ Long đang cựa mình dưới những đỉnh núi.' Giáo phái này phụng sự thứ gì đó cổ xưa hơn ta từng đoán, {playerName}. Hãy nghỉ ngơi khi còn có thể - dãy núi sẽ là nơi tiếp theo.",
         "objectives": {
           "0": {
-            "label": "Đã hạ Vael Kẻ Gọi Sương"
+            "label": "Đã hạ Vael Fogbinder"
           }
         }
       },
@@ -7155,8 +7155,8 @@ export const vi_VN: EnTranslations = {
       },
       "q_kobold_tunnels": {
         "title": "Rắc Rối Deeprock",
-        "text": "Lũ kobold ở Hang Deeprock đang đào sâu hơn bất kỳ con chuột mang nến nào nên đào - thẳng xuống dưới, như thể có thứ gì đó đang gọi chúng. Những đường hầm của chúng chạy bên dưới bức tường của chúng ta, {playerName}. Hãy chấm dứt chuyện này: giết mười hai Kẻ Đào Hầm Deeprock.",
-        "completion": "Thẳng xuống dưới, từng đường hầm một - lũ kobold không tự đào như thế đâu. Ta phải tra cứu sách vở của mình.",
+        "text": "Lũ đào hầm ở Hang Deeprock đang đào sâu hơn bất kỳ con chuột hầm nào nên đào, thẳng xuống dưới, như thể có thứ gì đó đang gọi chúng. Những đường hầm của chúng chạy bên dưới bức tường của chúng ta, {playerName}. Hãy chấm dứt chuyện này: giết mười hai Kẻ Đào Hầm Deeprock.",
+        "completion": "Thẳng xuống dưới, từng đường hầm một, lũ đào hang không tự đào như thế đâu. Ta phải tra cứu sách vở của mình.",
         "objectives": {
           "0": {
             "label": "Đã hạ Kẻ Đào Hầm Deeprock"
@@ -7165,7 +7165,7 @@ export const vi_VN: EnTranslations = {
       },
       "q_glowing_wax": {
         "title": "Sáp Kỳ Lạ",
-        "text": "Caddis cho ta xem một cây nến lấy từ một trong những kẻ đào hầm đó - sáp phát sáng, {playerName}, và nó ấm như nhịp tim. Ông ấy muốn thêm để nghiên cứu, còn ta muốn nó khỏi danh sách trưng dụng của ta. Hãy mang về sáu cục sáp phát sáng.",
+        "text": "Caddis cho ta xem một cục sáp lấy từ một trong những kẻ đào hầm đó, nó phát sáng, {playerName}, và ấm như nhịp tim. Ông ấy muốn thêm để nghiên cứu, còn ta muốn nó khỏi danh sách trưng dụng của ta. Hãy mang về sáu cục sáp phát sáng.",
         "completion": "Vẫn còn ấm. Bậc Học Giả nói ánh sáng này chẳng khớp với ngọn lửa nào ông ấy biết. Ta thì nói đó là rắc rối của ngọn núi, và ta nói thế một cách nhẹ nhàng.",
         "objectives": {
           "0": {
@@ -7552,7 +7552,7 @@ export const vi_VN: EnTranslations = {
             "label": "Hồ Gương"
           },
           "4": {
-            "label": "Rừng Tơ Nhện"
+            "label": "Sableweb"
           },
           "5": {
             "label": "Mỏ Đồng"
@@ -7710,12 +7710,12 @@ export const vi_VN: EnTranslations = {
         "bonus3": "Tăng tốc độ tấn công cùng thi triển thêm 15%."
       },
       "crownforged": {
-        "name": "Bộ chiến Crownforged",
+        "name": "Bộ Lễ Phục Bonewrought",
         "bonus2": "Tăng sức mạnh tấn công thêm 40.",
         "bonus3": "Tăng sức mạnh thêm 15, thể lực thêm 15 và tốc độ tấn công cùng thi triển thêm 15%."
       },
       "deathlord": {
-        "name": "Bộ chiến Deathlord",
+        "name": "Bộ Chiến Barrowlord",
         "bonus2": "Tăng sức mạnh tấn công thêm 40.",
         "bonus3": "Tăng sức mạnh thêm 15 và thể lực thêm 15."
       },
@@ -7724,22 +7724,22 @@ export const vi_VN: EnTranslations = {
         "bonus3": "Tăng tốc độ tấn công cùng thi triển thêm 15%."
       },
       "necromancers": {
-        "name": "Áo choàng pháp sư gọi hồn",
+        "name": "Y Phục Mournweave",
         "bonus2": "Bạn không thể bị đẩy lùi (kháng đẩy lùi 100%).",
         "bonus3": "Tăng trí tuệ thêm 10 và thể lực thêm 10."
       },
       "nighttalon": {
-        "name": "Bộ da Móng Đêm",
+        "name": "Bộ Da Direfang",
         "bonus2": "Tăng sức mạnh tấn công thêm 40.",
         "bonus3": "Tăng nhanh nhẹn thêm 15, tỉ lệ chí mạng thêm 2% và tốc độ tấn công cùng thi triển thêm 15%."
       },
       "soulflame": {
-        "name": "Áo choàng Lửa Linh Hồn",
+        "name": "Lễ Phục Wraithfire",
         "bonus2": "Bạn không thể bị đẩy lùi (kháng đẩy lùi 100%).",
         "bonus3": "Tăng trí tuệ thêm 15, tinh thần thêm 15 và tốc độ tấn công cùng thi triển thêm 15%."
       },
       "stormcallers": {
-        "name": "Áo choàng Gọi Bão",
+        "name": "Áo Lễ Galecall",
         "bonus2": "Bạn không thể bị đẩy lùi (kháng đẩy lùi 100%).",
         "bonus3": "Tăng trí tuệ thêm 15, tinh thần thêm 15 và tốc độ tấn công cùng thi triển thêm 15%."
       },
@@ -7748,7 +7748,7 @@ export const vi_VN: EnTranslations = {
         "bonus3": "Tăng tốc độ tấn công cùng thi triển thêm 15%."
       },
       "wyrmshadow": {
-        "name": "Bộ Bóng Wyrm",
+        "name": "Áo Lễ Nightfang",
         "bonus2": "Tăng sức mạnh tấn công thêm 40.",
         "bonus3": "Tăng nhanh nhẹn thêm 15 và tỉ lệ chí mạng thêm 2%."
       }

@@ -426,7 +426,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   mistcallers_duffel: {
     id: 'mistcallers_duffel',
-    name: "Mistcaller's Duffel",
+    name: "Fogbinder's Duffel",
     kind: 'bag',
     quality: 'epic',
     bagSlots: 14,

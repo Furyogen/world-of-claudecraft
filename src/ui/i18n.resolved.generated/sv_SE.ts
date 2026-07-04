@@ -43,7 +43,7 @@ export const sv_SE: EnTranslations = {
       "subtitle": "Livstids-XP",
       "rank": "Rang",
       "name": "Namn",
-      "realmCol": "Rike",
+      "realmCol": "Värld",
       "level": "Nivå",
       "vlevel": "V.nivå",
       "lifetimeXp": "Livstids-XP",
@@ -52,7 +52,7 @@ export const sv_SE: EnTranslations = {
       "loading": "Laddar rankningar…",
       "unranked": "Orankad",
       "you": "Du",
-      "globalSubtitle": "Främsta mästarna över alla riken",
+      "globalSubtitle": "Främsta mästarna över alla världar",
       "retry": "Kunde inte ladda topplistan. Försök igen."
     },
     "milestone": {
@@ -824,20 +824,20 @@ export const sv_SE: EnTranslations = {
       "stun": "Betäubt: handlungsunfähig",
       "root": "Festgewurzelt: bewegungsunfähig",
       "incapacitate": "Handlungsunfähig: kann nicht handeln",
-      "polymorph": "Verwandelt: handlungsunfähig",
+      "polymorph": "Förvandlad: kan inte agera",
       "hex": "Verringert verursachten Schaden und Heilung um {pct}%",
       "blind": "Geblendet: handlungsunfähig",
       "silence": "Zum Schweigen gebracht: kann keine Zauber wirken",
       "disarm": "Entwaffnet: kann keine Waffenangriffe nutzen",
       "lockout": "Zauberschule gesperrt",
       "imbue": "Waffe mit Bonuseffekten erfüllt",
-      "imbueRange": "Waffe erfüllt: {min} bis {max} Bonusschaden bei Richturteil",
+      "imbueRange": "Vapen besjälat: {min} till {max} bonusskada vid Utslag",
       "stealth": "Verborgen; Bewegungstempo um {pct}% verringert",
-      "formBear": "Bärengestalt: Gesundheit und Rüstung erhöht",
+      "formBear": "Bruinform: ökad hälsa och rustning",
       "formCat": "Katzengestalt: Nahkampfschaden und Energie",
-      "formTravel": "Reisegestalt: Bewegungstempo um {pct}% erhöht",
-      "defensiveStance": "Verteidigungshaltung: weniger erlittener Schaden, mehr Bedrohung",
-      "righteousFury": "Rechtschaffener Zorn: stark erhöhte Bedrohung durch Heiligschaden",
+      "formTravel": "Fleetform: förflyttningshastighet ökad med {pct}%",
+      "defensiveStance": "Gardställning: minskad mottagen skada, mer hot",
+      "righteousFury": "Brinnande ed: kraftigt ökat hot från helig skada",
       "scale": "Größe um {pct}% erhöht",
       "jump": "Sprunghöhe um {pct}% erhöht",
       "school": {
@@ -1275,7 +1275,7 @@ export const sv_SE: EnTranslations = {
         "valeName": "Östbäcksdalen",
         "valeBlurb": "Gröna kullar och gamla skogar där varje äventyr börjar.",
         "marshName": "Dykärrsträsket",
-        "marshBlurb": "Sjunkna kärr och tidsslitna ruiner, hem åt murlocer och värre.",
+        "marshBlurb": "Sjunkna kärr och tidsslitna ruiner, hem åt Mudfiner och värre.",
         "peaksName": "Törntoppshöjderna",
         "peaksBlurb": "Vindpiskade åsar som klättrar mot världens kallaste faror."
       },
@@ -1372,7 +1372,7 @@ export const sv_SE: EnTranslations = {
       "growBody": "Varje nivå gör dig tåligare och låser upp nya förmågor, hela vägen till taket på nivå {cap}. Att lösa uppdrag är det snabbaste sättet uppåt; fängelsehålor och utforskning rundar av det.",
       "effectsTitle": "Förstärkningar, försvagningar och masskontroll",
       "effectsBody": "Många förmågor lägger på en effekt som dröjer kvar. Hjälpsamma (förstärkningar) höjer dina egenskaper, skyddar dig eller läker dig lite i taget; skadliga (försvagningar) tömmer din hälsa med skada över tid eller försvagar dig. Håll koll på de små ikonerna nära din handlingsrad för att se vad som ligger på dig och hur länge det varar.",
-      "ccBody": "Masskontroll är ett särskilt slags försvagning som begränsar vad ett mål kan göra: bedövningar, rötter och nedsaktningar, tystnader som stoppar besvärjelser, avväpningar, skräckeffekter, och förvandling som gör en fiende ofarlig för ett ögonblick. Vissa av dessa, som rötter, skräck och förvandling, tappar sitt grepp när de läggs på igen för snabbt, så de kan inte kedjas i all evighet.",
+      "ccBody": "Masskontroll är ett särskilt slags försvagning som begränsar vad ett mål kan göra: bedövningar, rötter och nedsaktningar, tystnader som stoppar besvärjelser, avväpningar, skräckeffekter, och förvandlingar som gör en fiende ofarlig för ett ögonblick. Vissa av dessa, som rötter, skräck och förvandlingar, tappar sitt grepp när de läggs på igen för snabbt, så de kan inte kedjas i all evighet.",
       "deathTitle": "När du faller",
       "deathBody": "Om din hälsa når noll blir du nedlagd. Släpp din ande för att återupplivas vid närmaste kyrkogård med full hälsa, och ta dig sedan tillbaka, så en död kostar dig lite tid, inte ditt framsteg. Mellan strider, sätt dig ner och ät och drick så att du börjar nästa vid full styrka."
     },
@@ -1513,12 +1513,12 @@ export const sv_SE: EnTranslations = {
       "charge": "Stormar mot en avlägsen fiende för att öppna striden med en kort bedövning.",
       "rend": "Öppnar en blödning som sliter ner målet över tid.",
       "thunder_clap": "Slår allt runt omkring dig och saktar ner deras attacker.",
-      "seal_of_righteousness": "Besjälar dina sving med helig skada, förbruka den sedan med Dom.",
+      "seal_of_righteousness": "Besjälar dina sving med helig skada, förbruka den sedan med Verdict.",
       "holy_light": "En stadig, rejäl läkning för att toppa upp en allierad eller dig själv.",
       "devotion_aura": "En varaktig självförstärkning som höjer rustningen så slag landar mjukare.",
       "judgement": "Förbrukar ditt aktiva sigill för att slå en fiende från kort avstånd.",
       "blessing_of_might": "Höjer ett vänligt måls attackstyrka, bra att kasta före en anstormning.",
-      "divine_protection": "En snabb helig sköld för att suga upp skada när det blir tufft.",
+      "divine_protection": "Ett snabbt skyddande värn för att suga upp skada när det blir tufft.",
       "raptor_strike": "Ett hårt närstridssving för när något sluter avståndet till dig.",
       "aspect_of_the_hawk": "En skepnad du håller uppe för att skärpa din avståndsattackstyrka.",
       "serpent_sting": "Landar ett gift som blöder naturskada över tid.",
@@ -1550,7 +1550,7 @@ export const sv_SE: EnTranslations = {
       "conjure_water": "Frammanar drycker som återställer mana, så du kan fylla på mellan anstormningarna.",
       "conjure_food": "Frammanar mat som återställer hälsa när du sätter dig ner och äter.",
       "shadow_bolt": "En skuggpil du kastar mot ett mål, din förstavalskanon.",
-      "summon_imp": "Kallar fram en imp som slungar eldpilar mot fiender från avstånd.",
+      "summon_imp": "Kallar fram en Emberkin som slungar eldpilar mot fiender från avstånd.",
       "demon_skin": "En varaktig självförstärkning som härdar din hud och ger rustning.",
       "immolate": "Sätter ett mål i brand för ett inledande slag och en brand som dröjer kvar.",
       "corruption": "Förmultnar ett mål med skugga som tickar medan du gör andra saker.",
@@ -1582,7 +1582,7 @@ export const sv_SE: EnTranslations = {
         "old_greyjaw": "En ärrad gammal varg som ingen fälla har hållit, anklagad för tre jakthundar och en stalldrängs arm. Han jagar de djupa skogarna ensam, och blir vildare ju längre en strid drar ut.",
         "grubjaw": "Ett kärrtroll så girigt att de andra trollen inte vill gräva bredvid honom, sägs ha ätit en handelsmans två sista packmulor, seldon och allt.",
         "shardlord_kazzix": "En stormelementar med axlar, som vandrar de bortre klipporna ovanför Stormcrag med en hjärtskärva värd att trotsa blixten för.",
-        "mirejaw_frenzy": "En träskmurloc som piskar upp sig själv i ett tröskande raseri mitt i striden, det högljuddaste i en högljudd, revirhävdande flock.",
+        "mirejaw_frenzy": "En träsk-Mudfin som piskar upp sig själv i ett tröskande raseri mitt i striden, det högljuddaste i en högljudd, revirhävdande flock.",
         "gravecaller_cultist": "Kåpklädda tjänare till dödskulten vars verk besudlar gravarna från dalen till topparna. Där de samlas vilar inte de döda."
       }
     },
@@ -1596,12 +1596,12 @@ export const sv_SE: EnTranslations = {
         "desc": "Nätspinnare och giftiga lurande varelser som bygger bo på mörka, snåriga platser. Jägare kan tämja dem, precis som bestar."
       },
       "mudfin": {
-        "name": "Murlocer",
+        "name": "Mudfiner",
         "desc": "Amfibiska träskbor som svärmar i grunden i högljudda, revirhävdande flockar."
       },
       "burrower": {
-        "name": "Koboldar",
-        "desc": "Ljushuvade grävare som plågar gruvor och hålor och hetsigt vaktar sin malm."
+        "name": "Grävare",
+        "desc": "Lerinkrustade grävare som plågar gruvor och hålor och hetsigt vaktar sin malm."
       },
       "humanoid": {
         "name": "Humanoider",
@@ -1637,7 +1637,7 @@ export const sv_SE: EnTranslations = {
       "places": "Anmärkningsvärda platser",
       "residents": "Vem du kommer att möta",
       "valeBlurb": "Den gröna startdalen, där nya hjältar prövar sina krafter på vargar och banditer kring staden Eastbrook.",
-      "marshBlurb": "Ett dränkt land av dimma och ruiner. Murlocer svärmar i grundvattnet och något äldre rör sig under ytan, bevakat från bro-staden Fenbridge.",
+      "marshBlurb": "Ett dränkt land av dimma och ruiner. Mudfiner svärmar i grundvattnet och något äldre rör sig under ytan, bevakat från bro-staden Fenbridge.",
       "peaksBlurb": "Vindpiskade åsar och gamla gruvverk som klättrar mot rikets kallaste, högsta faror, hållna av utposten Highwatch.",
       "valeGreeting": "Håll ditt svärd nära. Dalen är inte vad den var.",
       "valeGreeter": "Marskalk Redbrook, Eastbrook",
@@ -1645,9 +1645,9 @@ export const sv_SE: EnTranslations = {
       "marshGreeter": "Väktare Fenwick, Fenbridge",
       "peaksGreeting": "Tvåhundra år har denna mur hållit. Den ska inte brista på min vakt, men den stönar.",
       "peaksGreeter": "Kapten Thessaly, Highwatch",
-      "valePlaceNotes": "Eastbrook är din första hembas. Wolf Run och Boar Meadow är milda jaktmarker; Mirror Lake är stilla vatten att fiska i; Webwood och Copper Dig döljer spindlar och malmgiriga grävare; ett Bandit Camp och Fallen Chapel rymmer hårdare arbete; Reliquary Hill leder ner i Collapsed Reliquary, rikets första delve; och Brightwood Glade är en lugn, solbelyst lund i norr.",
-      "marshPlaceNotes": "Fenbridge vaktar den enda torra vägen. Prowler Reeds och Deepfen Shallows kryllar av träskbestar och murlocer; Widow Thicket är tjockt spunnet med väv; Drowned Chapel och Troll Mounds rymmer äldre faror; Gravecaller Encampment är kulten nedgrävd, och Den sjunkna bastionen är myrens instansierade hjärta.",
-      "peaksPlaceNotes": "Highwatch håller muren. Stalker Ridge och Deeprock Burrows tillhör åskatter och kobolder; Ogre Foothills och Drogmar's War-Camp åt brutaler till salu; Stormcrag sprakar av elementarer och Glimmermere lyser nedanför den; Wyrmcult Tents och Revenant Fields omger kultens höglänta mark, med Gravlindormens helgedom på dess topp.",
+      "valePlaceNotes": "Eastbrook är din första hembas. Wolf Run och Boar Meadow är milda jaktmarker; Mirror Lake är stilla vatten att fiska i; Sableweb och Copper Dig döljer spindlar och malmgiriga grävare; ett Bandit Camp och Fallen Chapel rymmer hårdare arbete; Reliquary Hill leder ner i Collapsed Reliquary, rikets första delve; och Brightwood Glade är en lugn, solbelyst lund i norr.",
+      "marshPlaceNotes": "Fenbridge vaktar den enda torra vägen. Prowler Reeds och Deepfen Shallows kryllar av träskbestar och Mudfiner; Widow Thicket är tjockt spunnet med väv; Drowned Chapel och Troll Mounds rymmer äldre faror; Gravecaller Encampment är kulten nedgrävd, och Den sjunkna bastionen är myrens instansierade hjärta.",
+      "peaksPlaceNotes": "Highwatch håller muren. Stalker Ridge och Deeprock Burrows tillhör åskatter och grävare; Ogre Foothills och Drogmar's War-Camp åt brutaler till salu; Stormcrag sprakar av elementarer och Glimmermere lyser nedanför den; Wyrmcult Tents och Revenant Fields omger kultens höglänta mark, med Gravlindormens helgedom på dess topp.",
       "gladeTitle": "En stilla vrå: Brightwood Glade",
       "gladeBody": "Inte varje berättelse i the Vale handlar om de döda. I norr håller en solbelyst lund kallad Brightwood Glade sin egen mildare rytm, med tysta stigar och fläckvist ljus under grenverket. Det är en mjuk motpol till spåret du följer, och värt att se när vägen ger dig utrymme att vandra."
     },
@@ -1682,7 +1682,7 @@ export const sv_SE: EnTranslations = {
       "sagaValeTitle": "Dalen: ett namn på ett sigill",
       "sagaValeBody": "I Östbäck vill de döda inte vila, och märket bakom det tillhör en sekt man länge trott vara borta. Spåra det till en Gravkallare som verkar i kapellkryptan, och hans egna papper pekar dig mot kärret i norr.",
       "sagaMarshTitle": "Träsket: ett tionde av själar",
-      "sagaMarshBody": "I Dykärret är drunkningarna ingen olycka. Någon fyller kärret som en tiondebössa och reser lydiga döda ur varje resenär vattnet tar. Följ orderna uppåt i ledet till en Dimkallare i den dränkta bastionen, vars sista ord namnger något ännu äldre som rör sig under topparna.",
+      "sagaMarshBody": "I Dykärret är drunkningarna ingen olycka. Någon fyller kärret som en tiondebössa och reser lydiga döda ur varje resenär vattnet tar. Följ orderna uppåt i ledet till en Fogbinder i den dränkta bastionen, vars sista ord namnger något ännu äldre som rör sig under topparna.",
       "sagaPeaksTitle": "Topparna: vad tiondet var till för",
       "sagaPeaksBody": "På Thornpeak blir hela planen tydlig. Varje själ som stulits sedan the Vale var ett tionde hällt mot kultens dystra verk i bergets hjärta. Spåret som började på en kapellgård slutar här, i en nedstigning för fem spelare för att möta handen bakom allt. Vi låter dig själv upptäcka vem som väntar längst ner.",
       "sideTitle": "Trådar vid sidan av huvudvägen",
@@ -2464,10 +2464,10 @@ export const sv_SE: EnTranslations = {
     "donate": "Donera"
   },
   "stats": {
-    "title": "Rikesstatus",
+    "title": "Världsstatus",
     "accountsCreated": "Spelare",
     "playersOnline": "Spelare online",
-    "realmName": "Rikets namn"
+    "realmName": "Världens namn"
   },
   "footer": {
     "copyright": "2026 World of ClaudeCraft",
@@ -2485,7 +2485,7 @@ export const sv_SE: EnTranslations = {
   },
   "highscores": {
     "title": "Topplista över höga poäng",
-    "desc": "Följ rikets största hjältar och jämför dina framsteg."
+    "desc": "Följ världens största hjältar och jämför dina framsteg."
   },
   "wiki": {
     "title": "Spelwiki och guide",
@@ -2507,12 +2507,12 @@ export const sv_SE: EnTranslations = {
   },
   "comingSoon": {
     "placeholder": "Kommer snart...",
-    "featureComingSoon": "Den här funktionen kommer snart till riket."
+    "featureComingSoon": "Den här funktionen kommer snart till världen."
   },
   "mode": {
     "onlineTitle": "Spela online",
-    "onlineDesc": "Logga in på riket. Dina karaktärer lever på servern och du delar världen med alla andra som är inloggade.",
-    "onlineAria": "Spela online: logga in på det beständiga delade riket",
+    "onlineDesc": "Logga in på världen. Dina karaktärer lever på servern och du delar världen med alla andra som är inloggade.",
+    "onlineAria": "Spela online: logga in på den beständiga delade världen",
     "offlineTitle": "Spela offline",
     "offlineDesc": "Omedelbar enspelarvärld i din webbläsare. Inget sparas: perfekt för en snabb drabbning eller testning.",
     "offlineAria": "Spela offline: starta en omedelbar lokal enspelarsession",
@@ -2522,15 +2522,15 @@ export const sv_SE: EnTranslations = {
     "serverOffline": "Offline",
     "play": "Spela",
     "playAria": "Spela World of ClaudeCraft",
-    "serverLabel": "Välj ditt rike",
-    "serverAria": "Välj rike: Online eller Offline",
+    "serverLabel": "Välj din värld",
+    "serverAria": "Välj värld: Online eller Offline",
     "serverOfflineSub": "Direkt lokal värld",
     "caLabel": "$WOC Kontraktsadress",
     "caCopyAria": "Kopiera kontraktsadress",
     "caNote": "WOC är vår community-token. Den behövs inte för att spela. Gå med i Discord för att diskutera WOC:s nytta och svänghjul."
   },
   "auth": {
-    "enterRealm": "Träd in i riket",
+    "enterRealm": "Träd in i världen",
     "username": "Användarnamn",
     "usernameError": "Ange ditt användarnamn.",
     "usernamePlaceholder": "Ange användarnamn",
@@ -2545,16 +2545,16 @@ export const sv_SE: EnTranslations = {
     "logIn": "Logga in",
     "createAccount": "Skapa konto",
     "back": "Tillbaka",
-    "realmList": "Rikeslista",
-    "loadingRealms": "Laddar riken...",
-    "changeRealm": "Byt rike",
-    "realm": "Rike",
+    "realmList": "Världslista",
+    "loadingRealms": "Laddar världar...",
+    "changeRealm": "Byt värld",
+    "realm": "Värld",
     "newCharacter": "Ny karaktär",
     "appearance": "Utseende",
     "class": "Klass",
     "name": "Namn",
     "chromaOption": "Nyans {n}",
-    "noAccountPrompt": "Ny i riket?",
+    "noAccountPrompt": "Ny i världen?",
     "haveAccountPrompt": "Har du redan ett konto?",
     "characters": "Karaktärer:",
     "createCharacter": "Skapa karaktär",
@@ -3221,7 +3221,7 @@ export const sv_SE: EnTranslations = {
         "desc": "Dina fysiska slag träffar 15% hårdare."
       },
       "aug_spellfire": {
-        "name": "Trolldomseld",
+        "name": "Dystereld",
         "desc": "Dina besvärjelser gör 15% mer skada."
       },
       "aug_toughness": {
@@ -3265,7 +3265,7 @@ export const sv_SE: EnTranslations = {
         "desc": "+18% skada av alla slag och +12% förflyttningshastighet."
       },
       "aug_lightwell": {
-        "name": "Ljusbrunn",
+        "name": "Gravljus",
         "desc": "+30% läkning och +15% maximalt liv. Var lagets ankare."
       },
       "aug_bounty_hunter": {
@@ -3338,7 +3338,7 @@ export const sv_SE: EnTranslations = {
     "world": "Läser in världen...",
     "worldProgress": "Läser in världen... {done}/{total}",
     "enteringWorld": "Går in i världen...",
-    "connectingRealm": "Ansluter till riket...",
+    "connectingRealm": "Ansluter till världen...",
     "assetsFailed": "Inläsning av tillgångar misslyckades: försök läsa om sidan. {error}",
     "rendererFailed": "Kunde inte starta renderaren: försök läsa om sidan. {error}",
     "enterTimeout": "Kunde inte gå in i världen. Anslutningen tog för lång tid. Körs spelservern?",
@@ -3396,25 +3396,25 @@ export const sv_SE: EnTranslations = {
     }
   },
   "realm": {
-    "noRealms": "Inga riken tillgängliga.",
-    "loading": "Laddar riken...",
+    "noRealms": "Inga världar tillgängliga.",
+    "loading": "Laddar världar...",
     "recommended": "Rekommenderas",
     "checkingStatus": "Kontrollerar status...",
     "onlineNow": "{count} online nu",
-    "down": "Riket är nere",
+    "down": "Världen är nere",
     "offline": "Offline",
     "full": "Fullt",
     "high": "Hög",
     "medium": "Medel",
     "low": "Låg",
     "popTipLow": "Låg befolkning: färre än 15 spelare online just nu. Gott om plats; perfekt för en nystart.",
-    "popTipMedium": "Medelhög befolkning: 15 till 39 spelare online just nu. Ett friskt och aktivt rike.",
+    "popTipMedium": "Medelhög befolkning: 15 till 39 spelare online just nu. En frisk och aktiv värld.",
     "popTipHigh": "Hög befolkning: 40 till 79 spelare online just nu. Livligt, med många spelare runtomkring.",
     "popTipFull": "Full befolkning: 80 eller fler spelare online just nu. Mycket livligt; du kan få vänta i en inloggningskö.",
-    "popTipOffline": "Offline: det här riket går inte att nå just nu och kan inte anslutas till.",
+    "popTipOffline": "Offline: den här världen går inte att nå just nu och kan inte anslutas till.",
     "characterCountOne": "{count} karaktär",
     "characterCountOther": "{count} karaktärer",
-    "selectedRealm": "Rike: {name}",
+    "selectedRealm": "Värld: {name}",
     "statsOffline": "Offline",
     "statsRealmOffline": "{realm} (Offline)"
   },
@@ -3498,13 +3498,13 @@ export const sv_SE: EnTranslations = {
     },
     "lore": {
       "warrior": "Krigare är stridshärdade närstridskämpar som bygger upp Raseri när de utdelar eller tar skada. De absorberar tunga slag eller krossar fiender med kraftfulla vapen.",
-      "paladin": "Paladiner är heliga korsriddare som stödjer allierade med välsignelser, läker sår med Heligt ljus och skyddar de svaga i tung rustning.",
+      "paladin": "Paladiner är heliga korsriddare som stödjer allierade med välsignelser, läker sår med Lagande ljus och skyddar de svaga i tung rustning.",
       "hunter": "Jägare är distansspecialister som slåss vid sidan av ett tämjt vilddjur, pepprar fiender med riktade skott och snabbeld, saktar ner dem med stick och krossande eld, och skiftar skepnader efter stundens behov.",
       "rogue": "Skurkar är smygande lönnmördare som spenderar Energi och Kombopoäng på ryggdolkar och dödsstötar från skuggorna.",
-      "priest": "Präster åkallar Heligt ljus för att läka och skydda allierade, medan Skuggmagi låter dem dränera livet ur sina fiender.",
+      "priest": "Präster åkallar Lagande ljus för att läka och skydda allierade, medan Skuggmagi låter dem dränera livet ur sina fiender.",
       "shaman": "Schamaner befaller elementen, fyller vapen med kraft, chockar fiender med blixtar och återställer allierade.",
-      "mage": "Magiker böjer Eld-, Frost- och Arkankraft för att förgöra fiender, frammana vatten och frysa hot på plats.",
-      "warlock": "Häxmästare frammanar demoner, lägger förbannelser och skada-över-tid-magi, och dränerar liv från fiender för att överleva.",
+      "mage": "Magiker böjer Eld, Frost och arkankraft för att förgöra fiender, frammana vatten och frysa hot på plats.",
+      "warlock": "Häxmästare frammanar demoner, lägger förbannelser och skada-över-tid-magi, och suger liv från fiender för att överleva.",
       "druid": "Druider kanaliserar naturen, läker sår, snärjer fiender och skiftar till djurformer för försvar eller skada."
     },
     "aria": "Klassdetaljer för {className}: roll {role}. Startvärden: Styrka {str}, Smidighet {agi}, Uthållighet {sta}, Intellekt {int}, Ande {spi}.",
@@ -3529,10 +3529,10 @@ export const sv_SE: EnTranslations = {
     "otherInstallDetail": "Installera eller lägg till den här sidan på din Hemskärm för bästa mobila helskärmsupplevelse."
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - Riket otillgängligt",
+    "title": "World of ClaudeCraft - Världen otillgänglig",
     "logoAlt": "World of ClaudeCraft",
-    "eyebrow": "Rikesunderhåll",
-    "heading": "Riket är tillfälligt otillgängligt.",
+    "eyebrow": "Världsunderhåll",
+    "heading": "Världen är tillfälligt otillgänglig.",
     "body": "Vi startar om speltjänsten och förväntar oss att Claudemoon är tillbaka inom kort. Den här sidan fortsätter att kontrollera automatiskt.",
     "status": "Tillbaka snart"
   },
@@ -3852,9 +3852,9 @@ export const sv_SE: EnTranslations = {
       "requiresCombo": "Den förmågan kräver kombopoäng.",
       "requiresForm": "Du måste vara i {form}-form.",
       "cantInForm": "Du kan inte göra det i {form}-form.",
-      "bear": "Björn",
+      "bear": "Bruin",
       "cat": "Varg",
-      "travel": "Färd",
+      "travel": "Fleet",
       "shapeshifted": "Du kan inte göra det medan du är förvandlad.",
       "stealthed": "Du måste smyga.",
       "inCombat": "Du kan inte göra det medan du är i strid.",
@@ -4469,175 +4469,175 @@ export const sv_SE: EnTranslations = {
         "description": "Skakar målområdet och slår fiender för {damage} Naturskada."
       },
       "heroic_strike": {
-        "name": "Hjältehugg",
+        "name": "Plundrarhugg",
         "description": "Ett kraftfullt anfall som ökar närstridsskadan med {damage}. Aktiveras vid ditt nästa hugg."
       },
       "battle_shout": {
-        "name": "Stridsrop",
+        "name": "Järnvrål",
         "description": "Ökar din attackkraft med 20 i 2 min."
       },
       "commanding_shout": {
-        "name": "Befallande rop",
+        "name": "Stärkande rop",
         "description": "Ökar din uthållighet med 6 i 2 min."
       },
       "demoralizing_shout": {
-        "name": "Demoraliserande rop",
+        "name": "Fasans tjut",
         "description": "Utstöter ett skräckinjagande rop som sänker anfallskraften hos alla närliggande fiender med 30 i 30 sek."
       },
       "charge": {
-        "name": "Storma",
+        "name": "Anstormning",
         "description": "Stormar en fiende, genererar 9 raseri och bedövar den i 1 sek. 8-25 m räckvidd."
       },
       "rend": {
-        "name": "Slita",
+        "name": "Djup skåra",
         "description": "Sårar målet och får det att blöda för {damage} skada under 9 sek."
       },
       "thunder_clap": {
-        "name": "Åskknall",
+        "name": "Skälvande slag",
         "description": "Spränger närliggande fiender för {damage} skada och saktar ner deras attacker med 10 % i 10 sek."
       },
       "hamstring": {
-        "name": "Hälsenehugg",
+        "name": "Haltande hugg",
         "description": "Stympar fienden för 5 skada och saktar dess förflyttning med 50 % i 15 sek."
       },
       "bloodrage": {
-        "name": "Blodsraseri",
+        "name": "Blodstull",
         "description": "Genererar 10 raseri på bekostnad av hälsa."
       },
       "overpower": {
-        "name": "Övermanna",
+        "name": "Rödhand",
         "description": "Omedelbart anfall för vapenskada +5. Endast användbart efter att målet väjt undan. Kan inte väjas undan."
       },
       "execute": {
-        "name": "Avrätta",
+        "name": "Tidig grav",
         "description": "Försöker göra slut på en sårad fiende och vållar {damage} skada. Endast användbar på fiender under 20 % hälsa."
       },
       "slam": {
-        "name": "Smäll",
+        "name": "Brutalt sving",
         "description": "Smäller till motståndaren för vapenskada plus {damage}."
       },
       "cleave": {
-        "name": "Klyv",
+        "name": "Skördebåge",
         "description": "Ett svepande hugg som träffar alla fiender framför dig för {damage} skada."
       },
       "defensive_stance": {
-        "name": "Försvarsställning",
+        "name": "Gardställning",
         "description": "En defensiv stridsställning: du genererar 30 % mer hot men vållar och tar 10 % mindre skada. Kasta igen för att lämna ställningen."
       },
       "sunder_armor": {
-        "name": "Krossa rustning",
+        "name": "Rustningsklipp",
         "description": "Krossar målets rustning och minskar den med {damage} per applicering. Staplas upp till 5 gånger. Genererar en stor mängd hot."
       },
       "taunt": {
-        "name": "Håna",
+        "name": "Egga",
         "description": "Hånar målet: ditt hot stiger till nivå med dess mest hatade fiende och det tvingas anfalla dig i 3 sek."
       },
       "fireball": {
-        "name": "Eldklot",
+        "name": "Glödbult",
         "description": "Slungar ett brinnande klot som vållar {damage} eldskada plus ytterligare skada över tid."
       },
       "frost_armor": {
-        "name": "Frostrustning",
+        "name": "Rimfrostmantel",
         "description": "Omsluter dig i frost och ökar rustningen med 30 i 30 min."
       },
       "arcane_intellect": {
-        "name": "Arkant intellekt",
+        "name": "Eterinsikt",
         "description": "Ökar intellekt med 2 i 30 min."
       },
       "frostbolt": {
-        "name": "Frostpil",
+        "name": "Rimlans",
         "description": "Avfyrar en frostpil som vållar {damage} frostskada och saktar förflyttningen med 40 %."
       },
       "conjure_water": {
-        "name": "Frammana vatten",
+        "name": "Vattenbindning",
         "description": "Frammanar 2 flaskor vatten som återställer mana när de dricks. Högre rang frammanar renare vatten."
       },
       "conjure_food": {
-        "name": "Frammana mat",
+        "name": "Brödbindning",
         "description": "Frammanar 2 portioner bröd som återställer hälsa när de äts. Högre rang frammanar matnyttigare kost."
       },
       "fire_blast": {
-        "name": "Eldsalva",
+        "name": "Glödfall",
         "description": "Spränger fienden för {damage} eldskada. Omedelbar."
       },
       "arcane_missiles": {
-        "name": "Arkana missiler",
-        "description": "Skickar arkana missiler mot fienden och vållar {damage} arkanskada varje sekund i 3 sek."
+        "name": "Eterpilar",
+        "description": "Skickar Eterpilar mot fienden och vållar {damage} arkanskada varje sekund i 3 sek."
       },
       "polymorph": {
-        "name": "Förvandling",
-        "description": "Förvandlar fienden till ett får i upp till 15 sek. Fåret vandrar omkring och läks snabbt. All skada bryter effekten. Endast bestar och humanoider."
+        "name": "Förhäxa",
+        "description": "Förvandlar fienden till en padda i upp till 15 sek. Paddan vandrar omkring och läks snabbt. All skada bryter effekten. Endast bestar och humanoider."
       },
       "frost_nova": {
-        "name": "Frostnova",
+        "name": "Isbindning",
         "description": "Fryser fast alla närliggande fiender på platsen i upp till 8 sek och vållar {damage} frostskada."
       },
       "arcane_explosion": {
-        "name": "Arkanexplosion",
+        "name": "Etersalva",
         "description": "Ett utbrott av arkanenergi träffar alla närliggande fiender för {damage} arkanskada."
       },
       "scorch": {
-        "name": "Sveda",
+        "name": "Skålla",
         "description": "Svedjer fienden för {damage} eldskada. Snabb att kasta."
       },
       "pyroblast": {
-        "name": "Pyrosalva",
+        "name": "Pyrolans",
         "description": "Slungar ett väldigt brinnande stenblock som vållar {damage} eldskada plus ytterligare skada över tid."
       },
       "ice_barrier": {
-        "name": "Isbarriär",
+        "name": "Frostslöja",
         "description": "Skyddar dig i is och absorberar 130 skada i 60 sek."
       },
       "sinister_strike": {
-        "name": "Lömskt hugg",
+        "name": "Ondsint hugg",
         "description": "Ett omedelbart hugg för vapenskada plus {damage}. Ger 1 kombopoäng."
       },
       "eviscerate": {
-        "name": "Sönderslita",
+        "name": "Sista vilan",
         "description": "Avslutande manöver som vållar skada per kombopoäng."
       },
       "backstab": {
-        "name": "Ryggdolk",
+        "name": "Feg stöt",
         "description": "Ryggdolka målet för 150 % vapenskada plus {damage}. Måste vara bakom målet. Kräver en dolk. Ger 1 kombopoäng."
       },
       "gouge": {
-        "name": "Karva",
+        "name": "Ögonstöt",
         "description": "Slår till målet och gör det stridsodugligt i 4 sek. All skada bryter effekten. Ger 1 kombopoäng."
       },
       "evasion": {
-        "name": "Undvikande",
+        "name": "Spökfot",
         "description": "Ökar din chans att väja undan med 50 % i 15 sek."
       },
       "slice_and_dice": {
-        "name": "Hugg och skär",
+        "name": "Skoningslöst tempo",
         "description": "Avslutande manöver som ökar attackhastigheten i närstrid med 30 %. Varar längre per kombopoäng."
       },
       "sprint": {
-        "name": "Spurt",
+        "name": "Snabba hälar",
         "description": "Ökar din förflyttningshastighet med 70 % i 15 sek."
       },
       "kidney_shot": {
-        "name": "Njurstöt",
+        "name": "Lågt slag",
         "description": "Avslutande manöver som bedövar målet. Varar 1 sek längre per kombopoäng."
       },
       "ambush": {
-        "name": "Bakhåll",
+        "name": "Smygarens hugg",
         "description": "Lägg bakhåll för målet för 250 % vapenskada plus {damage}. Måste vara smygande och bakom målet. Kräver en dolk. Ger 1 kombopoäng."
       },
       "stealth": {
-        "name": "Smyg",
-        "description": "Döljer dig i skuggorna: fiender lägger knappt märke till dig, men du rör dig 50 % långsammare. Att anfalla eller ta skada bryter Smyg. Kasta igen för att kliva fram."
+        "name": "Duskveil",
+        "description": "Döljer dig i skuggorna: fiender lägger knappt märke till dig, men du rör dig 50 % långsammare. Att anfalla eller ta skada bryter Duskveil. Kasta igen för att kliva fram."
       },
       "adrenaline_rush": {
-        "name": "Adrenalinrus",
+        "name": "Kvickat blod",
         "description": "Ditt blod hettar upp och återställer omedelbart 60 energi."
       },
       "garrote": {
-        "name": "Strypsnara",
+        "name": "Strupvajer",
         "description": "Stryper fienden, vållar skada nu och får den att blöda för {damage} över 18 sek. Måste vara i smyg. Ger 1 kombopoäng."
       },
       "cheap_shot": {
-        "name": "Fult slag",
+        "name": "Magslag",
         "description": "Slå målet och bedöva det i 4 sek. Måste vara smygande. Ger 2 kombopoäng."
       },
       "sap": {
@@ -4645,79 +4645,79 @@ export const sv_SE: EnTranslations = {
         "description": "Slår målet medvetslöst i 8 sek. Du måste vara smygande och utanför strid. All skada bryter effekten."
       },
       "crippling_poison": {
-        "name": "Lamslående gift",
-        "description": "Träffar målet med ett lamslående gift som vållar {damage} naturskada och saktar dess förflyttningshastighet med 50 % i 12 sek."
+        "name": "Blytungt gift",
+        "description": "Träffar målet med ett blytungt gift som vållar {damage} naturskada och saktar dess förflyttningshastighet med 50 % i 12 sek."
       },
       "expose_armor": {
-        "name": "Blotta rustning",
+        "name": "Rustningsbräsch",
         "description": "Avslutande manöver som blottar målet och sänker dess rustning. Fler förbrukade kombopoäng ger ett djupare snitt."
       },
       "rupture": {
-        "name": "Bristning",
+        "name": "Förblöda",
         "description": "Avslutande manöver som sårar målet och får det att blöda för {damage} under 16 sek."
       },
       "vanish": {
-        "name": "Försvinn",
-        "description": "Försvinn ur sikte och gå in i Smyg även i strid. Du rör dig 50 % långsammare medan du är dold. Varar i upp till 10 sek."
+        "name": "Rökssteg",
+        "description": "Försvinn ur sikte och gå in i Duskveil även i strid. Du rör dig 50 % långsammare medan du är dold. Varar i upp till 10 sek."
       },
       "instant_poison": {
-        "name": "Snabbverkande gift",
+        "name": "Huggormens bett",
         "description": "Bestryker ditt vapen i 30 min så att vart och ett av dina närstridshugg vållar 8 extra naturskada."
       },
       "deadly_poison": {
-        "name": "Dödligt gift",
+        "name": "Varande gift",
         "description": "Bestryker ditt vapen i 30 min så att vart och ett av dina närstridshugg vållar 14 extra naturskada."
       },
       "blind": {
-        "name": "Förblinda",
+        "name": "Gruskast",
         "description": "Förblindar målet och får det att vandra desorienterat i 8 sek. All skada bryter effekten."
       },
       "seal_of_righteousness": {
-        "name": "Rättfärdighetens sigill",
-        "description": "Fyller dig med helig kraft i 30 sek, vilket får vart och ett av dina närstridsslag att göra 4 extra helig skada. Släpp loss den med Dom."
+        "name": "Edsbrand",
+        "description": "Fyller dig med helig kraft i 30 sek, vilket får vart och ett av dina närstridsslag att göra 4 extra helig skada. Släpp loss den med Verdict."
       },
       "holy_light": {
-        "name": "Heligt ljus",
+        "name": "Lagande ljus",
         "description": "Läker ett vänligt mål för {damage}."
       },
       "devotion_aura": {
-        "name": "Hängivenhetsaura",
+        "name": "Ståndaktig aura",
         "description": "Ökar din rustning med 40 i 30 min."
       },
       "judgement": {
-        "name": "Dom",
-        "description": "Släpper lös ditt aktiva sigill mot fienden och förbrukar det för att vålla dess domsskada."
+        "name": "Utslag",
+        "description": "Släpper lös ditt aktiva sigill mot fienden och förbrukar det för att vålla dess lagrade heliga skada."
       },
       "blessing_of_might": {
-        "name": "Styrkans välsignelse",
+        "name": "Järnets ed",
         "description": "Lägger en välsignelse på ett vänligt mål och ökar attackkraften med 15 i 5 min."
       },
       "divine_protection": {
-        "name": "Gudomligt skydd",
-        "description": "En helig sköld absorberar 50 skada i 10 sek."
+        "name": "Trons värn",
+        "description": "En skyddande värn absorberar 50 skada i 10 sek."
       },
       "hammer_of_justice": {
-        "name": "Rättvisans hammare",
+        "name": "Klyvande domarklubba",
         "description": "Bedövar målet i 3 sek."
       },
       "lay_on_hands": {
-        "name": "Handpåläggning",
+        "name": "Sista smörjelsen",
         "description": "En massiv våg av läkning: återställer 250 hälsa. 10 min nedkylning."
       },
       "flash_of_light": {
-        "name": "Ljusglimt",
-        "description": "En snabb, effektiv glimt av ljus som läker ett vänligt mål för {damage}."
+        "name": "Ljuslagning",
+        "description": "En snabb, effektiv ljusskur som läker ett vänligt mål för {damage}."
       },
       "exorcism": {
-        "name": "Exorcism",
+        "name": "Utdrivningens rit",
         "description": "Förvisar de ondskefulla med helig vrede och vållar {damage} helig skada."
       },
       "consecration": {
-        "name": "Invigning",
+        "name": "Helig mark",
         "description": "Inviger marken under dig och svedjar närliggande fiender för {damage} helig skada."
       },
       "righteous_fury": {
-        "name": "Rättfärdig vrede",
+        "name": "Brinnande ed",
         "description": "Ökar hotet som din heliga skada genererar med 60 % i 30 min. Hörnstenen för paladinen som tankar."
       },
       "retribution_aura": {
@@ -4725,55 +4725,55 @@ export const sv_SE: EnTranslations = {
         "description": "Omger dig med helig energi i 30 min och tillfogar 5 helig skada till varje fiende som slår dig i närstrid."
       },
       "tame_beast": {
-        "name": "Tämja best",
+        "name": "Vildband",
         "description": "Börjar tämja en best till din följeslagare. Den måste vara på din nivå eller lägre och inte en elit. Ditt djur följer dig, anfaller dina fiender och håller eget hot. Du kan ha ett djur åt gången."
       },
       "dismiss_pet": {
-        "name": "Avfärda djur",
+        "name": "Släpp följeslagare",
         "description": "Släpper tillbaka ditt djur ut i vildmarken."
       },
       "raptor_strike": {
-        "name": "Raptorhugg",
+        "name": "Uppsprättande hugg",
         "description": "Ett kraftfullt närstridsanfall som ökar skadan med 5. Aktiveras vid ditt nästa hugg."
       },
       "aspect_of_the_hawk": {
-        "name": "Hökens skepnad",
-        "description": "Anta hökens skepnad och öka attackkraften med 20 i 30 min."
+        "name": "Kärrhökens skepnad",
+        "description": "Anta kärrhökens skepnad och öka attackkraften med 20 i 30 min."
       },
       "serpent_sting": {
-        "name": "Ormstick",
+        "name": "Gifthulling",
         "description": "Sticker målet och tillfogar {damage} naturskada under 15 sek."
       },
       "arcane_shot": {
-        "name": "Arkant skott",
+        "name": "Ondskeskott",
         "description": "Ett omedelbart skott som vållar {damage} arkanskada."
       },
       "concussive_shot": {
-        "name": "Bedövande skott",
+        "name": "Skakande skott",
         "description": "Omtöcknar målet och saktar förflyttningen med 50 % i 4 sek."
       },
       "mongoose_bite": {
-        "name": "Mungobett",
+        "name": "Mothugg",
         "description": "Motanfall efter att målet väjt undan för vapenskada plus 12. Kan inte väjas undan."
       },
       "wing_clip": {
-        "name": "Vingklippning",
+        "name": "Fjättrande hugg",
         "description": "Tillfogar ett sår som saktar ner fienden med 40 % i 10 sek."
       },
       "aspect_of_the_monkey": {
-        "name": "Apans skepnad",
-        "description": "Anta apans skepnad och öka din chans att väja med 8 % i 30 min."
+        "name": "Mårdens skepnad",
+        "description": "Anta mårdens skepnad och öka din chans att väja med 8 % i 30 min."
       },
       "aspect_of_the_cheetah": {
-        "name": "Gepardens skepnad",
-        "description": "Anta gepardens skepnad och öka förflyttningshastigheten med 30 % i 30 min."
+        "name": "Springarens skepnad",
+        "description": "Anta springarens skepnad och öka förflyttningshastigheten med 30 % i 30 min."
       },
       "aimed_shot": {
-        "name": "Riktat skott",
-        "description": "Ett omsorgsfullt riktat skott som vållar {damage} skada."
+        "name": "Långt drag",
+        "description": "Ett omsorgsfullt draget skott som vållar {damage} skada."
       },
       "rapid_fire": {
-        "name": "Snabbeld",
+        "name": "Febrigt drag",
         "description": "Ökar din anfallshastighet med 40 % i 15 sek."
       },
       "smite": {
@@ -4781,164 +4781,164 @@ export const sv_SE: EnTranslations = {
         "description": "Tuktar fienden för {damage} helig skada."
       },
       "lesser_heal": {
-        "name": "Mindre läkning",
+        "name": "Viskad bön",
         "description": "Läker ett vänligt mål för {damage}."
       },
       "power_word_fortitude": {
-        "name": "Maktord: Härdighet",
+        "name": "Beslutsamhetens litania",
         "description": "Ökar målets uthållighet med 3 i 30 min."
       },
       "shadow_word_pain": {
-        "name": "Skuggord: Smärta",
+        "name": "Förruttnelsens klagosång",
         "description": "Ett mörkrets ord tillfogar {damage} skuggskada under 18 sek."
       },
       "power_word_shield": {
-        "name": "Maktord: Sköld",
+        "name": "Värnpsalm",
         "description": "Skyddar målet och absorberar 48 skada i 30 sek."
       },
       "renew": {
-        "name": "Förnya",
+        "name": "Dröjande nåd",
         "description": "Läker målet för {damage} under 15 sek."
       },
       "mind_blast": {
-        "name": "Sinnesstöt",
+        "name": "Sinnessplittring",
         "description": "Spränger målets sinne för {damage} skuggskada."
       },
       "heal": {
-        "name": "Läka",
+        "name": "Högtidlig bön",
         "description": "En långsam men kraftfull bön som läker ett vänligt mål för {damage}."
       },
       "mind_flay": {
-        "name": "Sinnesgissel",
+        "name": "Sorgens litania",
         "description": "Angriper målets sinne med skuggenergi och vållar {damage} skada varje sekund i 3 sek."
       },
       "flash_heal": {
-        "name": "Snabbläkning",
+        "name": "Brådskande bön",
         "description": "En snabb bön som läker ett vänligt mål för {damage}."
       },
       "lightning_bolt": {
-        "name": "Blixt",
+        "name": "Bågblixt",
         "description": "Slungar en blixt för {damage} naturskada."
       },
       "rockbiter_weapon": {
-        "name": "Stenbitarvapen",
+        "name": "Stenbundet vapen",
         "description": "Genomsyrar ditt vapen med stenens raseri: varje slag gör 5 extra skada under 5 min."
       },
       "healing_wave": {
-        "name": "Läkande våg",
+        "name": "Lagande vatten",
         "description": "Läker ett vänligt mål för {damage}."
       },
       "earth_shock": {
-        "name": "Jordchock",
+        "name": "Jordstöt",
         "description": "Chockar omedelbart målet med dånande kraft för {damage} naturskada."
       },
       "lightning_shield": {
-        "name": "Blixtsköld",
+        "name": "Åskvärn",
         "description": "Omger dig med knastrande blixtar: närstridsanfallare tar 13 naturskada."
       },
       "flame_shock": {
-        "name": "Flamchock",
+        "name": "Glödstöt",
         "description": "Sveder målet med eld för 25 skada plus {damage} över 12 sek."
       },
       "flametongue_weapon": {
-        "name": "Flamtungevapen",
+        "name": "Pyrobrandsvapen",
         "description": "Förlänar ditt vapen elementarisk eld: varje hugg vållar 8 extra eldskada i 5 min."
       },
       "frost_shock": {
-        "name": "Frostchock",
+        "name": "Rimstöt",
         "description": "Chockar omedelbart målet med frost för {damage} frostskada och saktar dess förflyttning med 50 % i 8 sek."
       },
       "frostbrand_weapon": {
-        "name": "Frostbrandsvapen",
+        "name": "Rimbundet vapen",
         "description": "Förlänar ditt vapen bitande frost: varje hugg vållar 8 extra skada i 5 min."
       },
       "ghost_wolf": {
-        "name": "Spökvarg",
-        "description": "Förvandlar dig till en spökvarg och ökar förflyttningshastigheten med 40 % i 10 min."
+        "name": "Shadewolf",
+        "description": "Förvandlar dig till en Shadewolf och ökar förflyttningshastigheten med 40 % i 10 min."
       },
       "stormstrike": {
-        "name": "Stormhugg",
+        "name": "Anfäders hugg",
         "description": "Kanaliserar stormen genom ditt vapen och hugger omedelbart för vapenskada plus {damage}."
       },
       "shadow_bolt": {
-        "name": "Skuggpil",
+        "name": "Dysterbult",
         "description": "Skickar en skuggpil mot fienden för {damage} skuggskada."
       },
       "demon_skin": {
-        "name": "Demonhud",
+        "name": "Djävulshud",
         "description": "Demonisk hud ökar din rustning med 30 i 30 min."
       },
       "immolate": {
-        "name": "Förbränna",
+        "name": "Brinnande pakt",
         "description": "Bränner fienden för 11 eldskada och ytterligare {damage} över 15 sek."
       },
       "corruption": {
-        "name": "Fördärv",
+        "name": "Svartröta",
         "description": "Fördärvar målet och vållar {damage} skuggskada under 18 sek."
       },
       "life_tap": {
-        "name": "Livstappning",
+        "name": "Hårt köpslag",
         "description": "Omvandlar 30 hälsa till 30 mana."
       },
       "curse_of_agony": {
-        "name": "Plågans förbannelse",
+        "name": "Våndans häxkonst",
         "description": "Förbannar målet med plåga: {damage} skuggskada över 24 sek."
       },
       "drain_life": {
-        "name": "Dränera liv",
+        "name": "Förtär",
         "description": "Dränerar målets liv och överför {damage} hälsa till dig varje sekund i 5 sek."
       },
       "fear": {
-        "name": "Skräck",
+        "name": "Plåga",
         "description": "Slår skräck i fienden och får den att huka sig i upp till 8 sek. All skada bryter effekten."
       },
       "searing_pain": {
-        "name": "Brännande smärta",
+        "name": "Sveda",
         "description": "Bränner fienden med plågsam eld för {damage} eldskada. Snabb att kasta."
       },
       "shadowburn": {
-        "name": "Skuggbränna",
-        "description": "Spränger omedelbart målet med skuggflamma för {damage} skuggskada."
+        "name": "Skymningseld",
+        "description": "Spränger omedelbart målet med brännande skugga för {damage} skuggskada."
       },
       "wrath": {
-        "name": "Vrede",
+        "name": "Vildbult",
         "description": "Slungar en pil av naturenergi för {damage} naturskada."
       },
       "healing_touch": {
-        "name": "Läkande beröring",
+        "name": "Vildläkning",
         "description": "Läker ett vänligt mål för {damage}."
       },
       "mark_of_the_wild": {
-        "name": "Vildmarkens tecken",
-        "description": "Placerar Vildmarkens tecken på ett vänligt mål och ökar rustningen med 25 i 30 min."
+        "name": "Wildward",
+        "description": "Placerar Wildward på ett vänligt mål och ökar rustningen med 25 i 30 min."
       },
       "moonfire": {
-        "name": "Måneld",
+        "name": "Månstorm",
         "description": "Bränner fienden med måneld för {damage} arkanskada plus skada över tid."
       },
       "rejuvenation": {
-        "name": "Föryngring",
+        "name": "Vildblomning",
         "description": "Läker målet för {damage} över 12 sek."
       },
       "thorns": {
-        "name": "Törnen",
+        "name": "Törnvärn",
         "description": "Törnen skjuter ut ur målet: närstridsanfallare tar 3 naturskada."
       },
       "entangling_roots": {
-        "name": "Snärjande rötter",
+        "name": "Gripande rötter",
         "description": "Rotfäster målet på platsen i upp till 12 sek."
       },
       "bear_form": {
-        "name": "Björnform",
+        "name": "Bruinform",
         "description": "Skiftar gestalt till en björn: rustning +65 %, attackkraft +15, dina attacker bygger raseri och genererar 30 % mer hot. Kasta igen för att återgå till besvärjarform."
       },
       "maul": {
-        "name": "Mörbulta",
-        "description": "Ett mörbultande anfall som ökar närstridsskadan med {damage} och vållar en stor mängd hot. Aktiveras vid ditt nästa hugg. Endast i björnform."
+        "name": "Benkross",
+        "description": "Ett mörbultande anfall som ökar närstridsskadan med {damage} och vållar en stor mängd hot. Aktiveras vid ditt nästa hugg. Endast i Bruinform."
       },
       "growl": {
-        "name": "Morra",
-        "description": "Morrar åt målet: ditt hot stiger till nivån hos dess mest hatade fiende och den tvingas anfalla dig i 3 sek. Endast i björnform."
+        "name": "Hota",
+        "description": "Morrar åt målet: ditt hot stiger till nivån hos dess mest hatade fiende och den tvingas anfalla dig i 3 sek. Endast i Bruinform."
       },
       "cat_form": {
         "name": "Vargform",
@@ -4949,43 +4949,43 @@ export const sv_SE: EnTranslations = {
         "description": "Klö fienden för vapenskada plus {damage}. Ger 1 kombopoäng. Endast i vargform."
       },
       "ferocious_bite": {
-        "name": "Vilt bett",
+        "name": "Blodsbett",
         "description": "Avslutande manöver som vållar skada per kombopoäng. Endast i vargform."
       },
       "swipe": {
-        "name": "Svep",
-        "description": "Svep mot närliggande fiender för {damage} skada. Orsakar extra hot. Endast björnform."
+        "name": "Svepande klor",
+        "description": "Svep mot närliggande fiender för {damage} skada. Orsakar extra hot. Endast i Bruinform."
       },
       "regrowth": {
-        "name": "Återväxt",
+        "name": "Andra blomningen",
         "description": "Läker ett vänligt mål för {damage} och en ytterligare mängd över 21 sek."
       },
       "barkskin": {
-        "name": "Barkhud",
+        "name": "Ekhud",
         "description": "Din hud hårdnar som bark och ökar rustning med 150 i 15 sek."
       },
       "starfire": {
-        "name": "Stjärneld",
+        "name": "Himlafall",
         "description": "Kallar ner en pil av stjärneld och tillfogar {damage} arkan skada."
       },
       "travel_form": {
-        "name": "Färdform",
-        "description": "Skiftar omedelbart till en snabb färdform och ökar förflyttningshastigheten med 40 %. Du kan inte använda andra förmågor i skepnaden, men kan skifta in eller ut i strid, idealiskt för flykt."
+        "name": "Fleetform",
+        "description": "Skiftar omedelbart till en snabb Fleetform och ökar förflyttningshastigheten med 40 %. Du kan inte använda andra förmågor i skepnaden, men kan skifta in eller ut i strid, idealiskt för flykt."
       },
       "enrage": {
-        "name": "Ursinne",
-        "description": "Genererar omedelbart 20 raseri. Endast i björnform."
+        "name": "Elda på",
+        "description": "Genererar omedelbart 20 raseri. Endast i Bruinform."
       },
       "bash": {
-        "name": "Klubbslag",
-        "description": "Bedövar målet i 2 sek. Endast i björnform."
+        "name": "Omtumla",
+        "description": "Bedövar målet i 2 sek. Endast i Bruinform."
       },
       "faerie_fire": {
-        "name": "Féeld",
+        "name": "Häxljus",
         "description": "Sänker målets rustning med 35 i 40 sek."
       },
       "hibernate": {
-        "name": "Försätt i dvala",
+        "name": "Slummer",
         "description": "Tvingar målet i en djup sömn i upp till 8 sek. All skada väcker det."
       },
       "dash": {
@@ -4993,15 +4993,15 @@ export const sv_SE: EnTranslations = {
         "description": "Spurta framåt och öka förflyttningshastigheten med 50 % i 15 sek. Endast i vargform."
       },
       "pounce": {
-        "name": "Kasta sig över",
+        "name": "Smyghugg",
         "description": "En smygöppnare som bedövar målet i 2 sek. Ger 1 kombopoäng. Endast i vargform."
       },
       "insect_swarm": {
-        "name": "Insektssvärm",
+        "name": "Stickande svärm",
         "description": "Fienden svärmas av insekter och tar {damage} naturskada över 12 sek."
       },
       "tigers_fury": {
-        "name": "Tigerns raseri",
+        "name": "Vargblod",
         "description": "Ökar attackstyrkan med 40 i 6 sek. Endast vargform."
       },
       "rip": {
@@ -5009,67 +5009,67 @@ export const sv_SE: EnTranslations = {
         "description": "Avslutande manöver som tillfogar blödningsskada under 12 sek. Förbrukar kombopoäng. Endast vargform."
       },
       "mortal_strike": {
-        "name": "Dödligt hugg",
+        "name": "Stympande hugg",
         "description": "Ett illvilligt hugg som vållar vapenskada plus {damage}. (Vapensignatur)"
       },
       "bloodthirst": {
-        "name": "Blodtörst",
+        "name": "Åderlåtning",
         "description": "Attackera omedelbart i ett blodsraseri för {damage}. (Fury-signatur)"
       },
       "shield_slam": {
-        "name": "Sköldslag",
+        "name": "Sköldkross",
         "description": "Slå målet med din sköld för {damage} och enormt hot. (Skyddssignatur)"
       },
       "whirlwind": {
-        "name": "Virvelvind",
+        "name": "Klingvirvel",
         "description": "Snurra i en dödlig båge och hugg alla närliggande fiender för {damage}. (Raserital)"
       },
       "berserker_rage": {
-        "name": "Bärsärkaraseri",
-        "description": "Gå in i ett bärsärkaraseri och generera 20 raseri. (Krigartalang)"
+        "name": "Sjudande raseri",
+        "description": "Gå in i ett sjudande raseri och generera 20 raseri. (Krigartalang)"
       },
       "summon_imp": {
-        "name": "Frammana imp",
-        "description": "Frammanar en imp under häxmästarens befäl. Impen slungar eldpilar mot dina fiender från avstånd. Att frammana en ny demon avfärdar din nuvarande. Du kan ha en demon åt gången."
+        "name": "Frammana Emberkin",
+        "description": "Frammanar en Emberkin under häxmästarens befäl. Emberkin slungar askpilar mot dina fiender från avstånd. Att frammana en ny demon avfärdar din nuvarande. Du kan ha en demon åt gången."
       },
       "summon_voidwalker": {
-        "name": "Frammana tomhetsvandrare",
-        "description": "Frammanar en tomhetsvandrare under häxmästarens befäl. Tomhetsvandraren är en robust demon som hånar dina fiender och suger upp stryk. Att frammana en ny demon avfärdar din nuvarande. Du kan ha en demon åt gången."
+        "name": "Frammana Gloomshade",
+        "description": "Frammanar en Gloomshade under häxmästarens befäl. Gloomshade är en robust demon som hånar dina fiender och suger upp stryk. Att frammana en ny demon avfärdar din nuvarande. Du kan ha en demon åt gången."
       },
       "summon_succubus": {
-        "name": "Frammana succubus",
-        "description": "Frammanar en succubus under häxmästarens befäl. Succubusen är en bräcklig demon som hugger snabbt och slår hårt i närstrid. Att frammana en ny demon avfärdar din nuvarande. Du kan ha en demon åt gången."
+        "name": "Frammana Duskborn",
+        "description": "Frammanar en Duskborn under häxmästarens befäl. Duskborn är en bräcklig demon som hugger snabbt och slår hårt i närstrid. Att frammana en ny demon avfärdar din nuvarande. Du kan ha en demon åt gången."
       },
       "summon_felhunter": {
-        "name": "Frammana feljägare",
-        "description": "Frammanar en feljägare under häxmästarens befäl. Feljägaren ansätter fiender från avstånd med skuggbett och utmärker sig på att jaga magiker. Att frammana en ny demon avfärdar din nuvarande. Du kan ha en demon åt gången."
+        "name": "Frammana Spellhound",
+        "description": "Frammanar en Spellhound under häxmästarens befäl. Spellhound ansätter fiender från avstånd med Dysterbett och utmärker sig på att jaga magiker. Att frammana en ny demon avfärdar din nuvarande. Du kan ha en demon åt gången."
       },
       "summon_felguard": {
-        "name": "Frammana felvakt",
-        "description": "Frammanar en felvakt under häxmästarens befäl. Felvakten är en tålig närstridsdemon som vadar in i striden och står på egna ben. Att frammana en ny demon avfärdar din nuvarande. Du kan ha en demon åt gången."
+        "name": "Frammana Warfiend",
+        "description": "Frammanar en Warfiend under häxmästarens befäl. Warfiend är en tålig närstridsdemon som vadar in i striden och står på egna ben. Att frammana en ny demon avfärdar din nuvarande. Du kan ha en demon åt gången."
       },
       "summon_infernal": {
-        "name": "Frammana inferno",
-        "description": "Binder ett inferno till din vilja, en väldig pansarvräng med krossande närstrid och de djupaste hälso- och rustningsvärdena av alla demoner. En lång nedkylning hindrar dess råa kraft. Att frammana en ny demon avfärdar din nuvarande. Du kan ha en demon åt gången."
+        "name": "Frammana Pyre Colossus",
+        "description": "Binder en Pyre Colossus till din vilja, en väldig pansarvräng med krossande närstrid och de djupaste hälso- och rustningsvärdena av alla demoner. En lång nedkylning hindrar dess råa kraft. Att frammana en ny demon avfärdar din nuvarande. Du kan ha en demon åt gången."
       },
       "summon_doomguard": {
-        "name": "Frammana domsväktare",
-        "description": "Binder en domsväktare till din vilja, en elitdemon som öser tung skuggskada från avstånd. En lång nedkylning hindrar dess förödande kraft. Att frammana en ny demon avfärdar din nuvarande. Du kan ha en demon åt gången."
+        "name": "Frammana Wraithborn",
+        "description": "Binder en Wraithborn till din vilja, en elitdemon som öser tung skuggskada från avstånd. En lång nedkylning hindrar dess förödande kraft. Att frammana en ny demon avfärdar din nuvarande. Du kan ha en demon åt gången."
       },
       "bear_charge": {
-        "name": "Björnrusning",
-        "description": "Storma en fiende, generera 9 raseri och bedöva den i 1 sek. 8-25 m räckvidd. Endast i björnform."
+        "name": "Bruinrusning",
+        "description": "Storma en fiende, generera 9 raseri och bedöva den i 1 sek. 8-25 m räckvidd. Endast i Bruinform."
       },
       "demoralizing_roar": {
-        "name": "Demoraliserande vrål",
-        "description": "Demoraliserar närliggande fiender och sänker deras anfallskraft med 20 i 20 sek. Endast i björnform."
+        "name": "Fegt vrål",
+        "description": "Demoraliserar närliggande fiender och sänker deras anfallskraft med 20 i 20 sek. Endast i Bruinform."
       },
       "prowl": {
-        "name": "Smyga",
+        "name": "Smygjaga",
         "description": "Gå i smyg medan du är i vargform och rör dig 50 % långsammare. Kan inte användas i strid."
       },
       "rake": {
-        "name": "Krafsa",
+        "name": "Flå",
         "description": "En smygöppnare som krafsar fienden för vapenskada plus {damage} och vållar blödningsskada över 9 sek. Ger 1 kombopoäng. Endast i vargform."
       },
       "revive_pet": {
@@ -5079,10 +5079,10 @@ export const sv_SE: EnTranslations = {
     },
     "items": {
       "worn_sword": {
-        "name": "Slitet kortsvärd"
+        "name": "Frätt kortsvärd"
       },
       "gnarled_staff": {
-        "name": "Knotig stav"
+        "name": "Kärrekstav"
       },
       "rusty_dagger": {
         "name": "Rostig dolk"
@@ -5094,13 +5094,13 @@ export const sv_SE: EnTranslations = {
         "name": "Rostig handyxa"
       },
       "recruit_tunic": {
-        "name": "Rekrytens tunika"
+        "name": "Uppbådsmannens tunika"
       },
       "apprentice_robe": {
-        "name": "Lärlingens dräkt"
+        "name": "Trådsliten dräkt"
       },
       "footpad_jerkin": {
-        "name": "Stråtrövarväst"
+        "name": "Ficktjuvsväst"
       },
       "redbrook_blade": {
         "name": "Redbrook-milisens klinga"
@@ -5130,22 +5130,22 @@ export const sv_SE: EnTranslations = {
         "name": "Gråkäftens pälsbyxor"
       },
       "baked_bread": {
-        "name": "Nybakat bröd"
+        "name": "Bondlimpa"
       },
       "spring_water": {
-        "name": "Uppfriskande källvatten"
+        "name": "Kallt brunnsvatten"
       },
       "roasted_boar": {
-        "name": "Stekt vildsvinskött"
+        "name": "Spettstekt vildsvinslägg"
       },
       "conjured_water": {
-        "name": "Frammanat källvatten"
+        "name": "Frammanat regnvatten"
       },
       "conjured_water2": {
-        "name": "Frammanat mineralvatten"
+        "name": "Frammanat brunnsvatten"
       },
       "conjured_water3": {
-        "name": "Frammanat kolsyrat vatten"
+        "name": "Frammanat klarvatten"
       },
       "eastbrook_arming_sword": {
         "name": "Östbäcks väpnarsvärd"
@@ -5205,7 +5205,7 @@ export const sv_SE: EnTranslations = {
         "name": "Spöklik essens"
       },
       "webwood_silk": {
-        "name": "Vävskogens silkeskörtel"
+        "name": "Sablewebs silkeskörtel"
       },
       "supply_crate": {
         "name": "Stulen förrådslåda"
@@ -5226,13 +5226,13 @@ export const sv_SE: EnTranslations = {
         "name": "Röd bandana"
       },
       "tough_jerky": {
-        "name": "Segt torkat kött"
+        "name": "Saltat torkat kött"
       },
       "mudfin_scale": {
-        "name": "Slemmigt murlocfjäll"
+        "name": "Slemmigt Mudfin-fjäll"
       },
       "tallow_candle": {
-        "name": "Talgljus"
+        "name": "Flottig talgklump"
       },
       "spider_leg": {
         "name": "Ryckande spindelben"
@@ -5298,7 +5298,7 @@ export const sv_SE: EnTranslations = {
         "name": "Träskklivarstövlar"
       },
       "mistcallers_edge": {
-        "name": "Dimkallarens egg"
+        "name": "Fogbinderns egg"
       },
       "vaels_mist_staff": {
         "name": "Vaels dimstav"
@@ -5442,7 +5442,7 @@ export const sv_SE: EnTranslations = {
         "name": "Velkhars stav"
       },
       "shadowmeld_tunic": {
-        "name": "Skuggsmälttunika"
+        "name": "Nattslöjetunika"
       },
       "gravewyrm_scale_hauberk": {
         "name": "Gravlindormsfjällbrynja"
@@ -5511,13 +5511,13 @@ export const sv_SE: EnTranslations = {
         "name": "Sprucket lindormsfjäll"
       },
       "conjured_bread": {
-        "name": "Frammanat bröd"
+        "name": "Frammanad havrekaka"
       },
       "conjured_bread2": {
-        "name": "Frammanat rågbröd"
+        "name": "Frammanad svartlimpa"
       },
       "conjured_bread3": {
-        "name": "Frammanad sötbulle"
+        "name": "Frammanad honungskaka"
       },
       "roadwardens_helm": {
         "name": "Vägväktarens hjälm"
@@ -5622,7 +5622,7 @@ export const sv_SE: EnTranslations = {
         "name": "Gravvävd väska"
       },
       "mistcallers_duffel": {
-        "name": "Dimkallarens sjösäck"
+        "name": "Fogbinderns sjösäck"
       },
       "copper_mining_pick": {
         "name": "Kopparhacka"
@@ -5652,7 +5652,7 @@ export const sv_SE: EnTranslations = {
         "name": "Silverbladsskära"
       },
       "bristleback_maul": {
-        "name": "Borstryggens klubba"
+        "name": "Gallowglass-hammare"
       },
       "broodmother_silk_robe": {
         "name": "Yngelmoderns sidendräkt"
@@ -5661,16 +5661,16 @@ export const sv_SE: EnTranslations = {
         "name": "Kryptbensbenskenor"
       },
       "cryptstalker_jerkin": {
-        "name": "Kryptsmygarväst"
+        "name": "Gravsmygarväst"
       },
       "deathlord_legguards": {
-        "name": "Dödsherrens benskydd"
+        "name": "Barrowlords benskydd"
       },
       "deathlord_sabatons": {
-        "name": "Dödsherrens sabatoner"
+        "name": "Barrowlords sabatoner"
       },
       "deathlord_warplate": {
-        "name": "Dödsherrens krigsplåt"
+        "name": "Barrowlords krigsplåt"
       },
       "drogmar_warboots": {
         "name": "Drogmars krigsstövlar"
@@ -5748,13 +5748,13 @@ export const sv_SE: EnTranslations = {
         "name": "Moggers stampstövlar"
       },
       "necromancers_legwraps": {
-        "name": "Nekromantikerns benlindor"
+        "name": "Mournweave-benlindor"
       },
       "necromancers_soulsteps": {
-        "name": "Nekromantikerns själssteg"
+        "name": "Mournweave själssteg"
       },
       "necromancers_starshroud": {
-        "name": "Nekromantikerns stjärnslöja"
+        "name": "Mournweave stjärnslöja"
       },
       "nhalias_dirgeblade": {
         "name": "Nhalias sorgeklinga"
@@ -5790,13 +5790,13 @@ export const sv_SE: EnTranslations = {
         "name": "Lindormskultens själssteg"
       },
       "wyrmshadow_harness": {
-        "name": "Lindormsskuggans sele"
+        "name": "Nightfang-sele"
       },
       "wyrmshadow_legguards": {
-        "name": "Lindormsskuggans benskydd"
+        "name": "Nightfang-benskydd"
       },
       "wyrmshadow_treads": {
-        "name": "Lindormsskuggans stövlar"
+        "name": "Nightfang-stövlar"
       },
       "glimmerfin_koi": {
         "name": "Skimmerfenad koi"
@@ -5814,7 +5814,7 @@ export const sv_SE: EnTranslations = {
         "name": "Rå flodabborre"
       },
       "raw_stonescale_carp": {
-        "name": "Rå stenfjällskarp"
+        "name": "Rå skifferfenskarp"
       },
       "soggy_boot": {
         "name": "Genomblöt stövel"
@@ -5925,13 +5925,13 @@ export const sv_SE: EnTranslations = {
         "name": "Månfjällsabel"
       },
       "moonshroud_breastplate": {
-        "name": "Månhöljes bröstharnesk"
+        "name": "Moonwrack-bröstharnesk"
       },
       "moonshroud_robe": {
-        "name": "Månhöljesrock"
+        "name": "Moonwrack-rock"
       },
       "moonshroud_tunic": {
-        "name": "Månslöjetunika"
+        "name": "Moonwrack-tunika"
       },
       "pale_pearl": {
         "name": "Blek pärla"
@@ -5967,7 +5967,7 @@ export const sv_SE: EnTranslations = {
         "name": "Kryptbensskuldror"
       },
       "deathlords_dread_visage": {
-        "name": "Dödsherrens skräckanlete"
+        "name": "Barrowlords skräckanlete"
       },
       "gravewyrm_gauntlets": {
         "name": "Gravlindormens pansarhandskar"
@@ -5982,10 +5982,10 @@ export const sv_SE: EnTranslations = {
         "name": "Dimslöjehandskar"
       },
       "necromancers_soulspire_mantle": {
-        "name": "Nekromantikerns själsspiramantel"
+        "name": "Mournweave själsspiramantel"
       },
       "wyrmshadow_talongrips": {
-        "name": "Lindormsskuggans klogrepp"
+        "name": "Nightfang-klogrepp"
       },
       "reliquary_plate_chest": {
         "name": "Relikvarievaktens ringbrynja"
@@ -6120,31 +6120,31 @@ export const sv_SE: EnTranslations = {
         "name": "Kärnved från den odödliga kronan"
       },
       "kingsbane_last_oath": {
-        "name": "Kungabane, Törntoppens sista ed"
+        "name": "Tronbane, Törntoppens sista ed"
       },
       "crownforged_dreadhelm": {
-        "name": "Kronsmidd skräckhjälm"
+        "name": "Bonewrought skräckhjälm"
       },
       "crownforged_warspaulders": {
-        "name": "Kronsmidda krigsskuldror"
+        "name": "Bonewrought krigsskuldror"
       },
       "nighttalon_crown": {
-        "name": "Nattklokrona"
+        "name": "Direfang-krona"
       },
       "nighttalon_shoulderguards": {
-        "name": "Nattkloaxelskydd"
+        "name": "Direfang-axelskydd"
       },
       "soulflame_cowl": {
-        "name": "Själslågshuva"
+        "name": "Wraithfire-huva"
       },
       "soulflame_mantle": {
-        "name": "Själslågsmantel"
+        "name": "Wraithfire-mantel"
       },
       "stormcallers_crown": {
-        "name": "Stormkallarens krona"
+        "name": "Galecall-krona"
       },
       "stormcallers_spaulders": {
-        "name": "Stormkallarens axelskydd"
+        "name": "Galecall-axelskydd"
       },
       "unknown_alien_weaponry": {
         "name": "Okänd främmande vapenutrustning"
@@ -6233,13 +6233,13 @@ export const sv_SE: EnTranslations = {
         "name": "Vildsvin"
       },
       "webwood_spider": {
-        "name": "Vävskogslurkare"
+        "name": "Sableweb-lurkare"
       },
       "mudfin_murloc": {
         "name": "Dyfenesmygare"
       },
       "tunnel_rat": {
-        "name": "Tunnelråttgrävare"
+        "name": "Djupbergsgrävare"
       },
       "vale_bandit": {
         "name": "Dalbandit"
@@ -6341,13 +6341,13 @@ export const sv_SE: EnTranslations = {
         "name": "Riddarkommendör Olen"
       },
       "vael_the_mistcaller": {
-        "name": "Vael Dimkallaren"
+        "name": "Vael Fogbindern"
       },
       "sanctum_boneguard": {
         "name": "Helgedomsbenvakt"
       },
       "sanctum_drakonid": {
-        "name": "Helgedomsdrakonid"
+        "name": "Helgedomens fjällväktare"
       },
       "raised_bonewalker": {
         "name": "Uppstånden benvandrare"
@@ -6482,13 +6482,13 @@ export const sv_SE: EnTranslations = {
         "name": "Varkas benvakt"
       },
       "emberkin": {
-        "name": "Imp"
+        "name": "Emberkin"
       },
       "gloomshade": {
-        "name": "Tomhetsvandrare"
+        "name": "Gloomshade"
       },
       "duskborn": {
-        "name": "Succubus"
+        "name": "Duskborn"
       },
       "grix_the_tunnelking": {
         "name": "Grix Tunnelkungen"
@@ -6512,16 +6512,16 @@ export const sv_SE: EnTranslations = {
         "name": "Vålnadsbindare Maldrec"
       },
       "spellhound": {
-        "name": "Feljägare"
+        "name": "Spellhound"
       },
       "warfiend": {
-        "name": "Felvakt"
+        "name": "Warfiend"
       },
       "pyre_colossus": {
-        "name": "Inferno"
+        "name": "Pyre Colossus"
       },
       "wraithborn": {
-        "name": "Domsväktare"
+        "name": "Wraithborn"
       },
       "choirmother_selthe": {
         "name": "Körmoder Selthe"
@@ -6594,12 +6594,12 @@ export const sv_SE: EnTranslations = {
       "fisherman_brandt": {
         "name": "Fiskare Brandt",
         "title": "Gammal sjöbjörn",
-        "greeting": "Grlmurlgrl- ursäkta, har lyssnat på de där fiskmännen för länge."
+        "greeting": "Blrb-glub- ursäkta, har lyssnat på de där fiskmännen för länge."
       },
       "foreman_odell": {
         "name": "Förman Odell",
         "title": "Gruvförman",
-        "greeting": "Hela utgrävningen kryllar av de där ljushuvade skadedjuren!"
+        "greeting": "Hela utgrävningen kryllar av de där lerinkrustade skadedjuren!"
       },
       "warden_fenwick": {
         "name": "Väktaren Fenwick",
@@ -6709,7 +6709,7 @@ export const sv_SE: EnTranslations = {
         }
       },
       "q_boars": {
-        "title": "Borstryggens skinn",
+        "title": "Borstiga vildsvinsskinn",
         "text": "Vildsvinsskinn ger de bästa färdväskorna, och ängarna väster om staden kryllar av bestarna. Hämta mig 5 Borstiga vildsvinsskinn så ska jag göra det värt din tid.",
         "completion": "Ah, fina borstiga skinn! Dessa kommer att inbringa ett bra pris.",
         "objectives": {
@@ -6719,21 +6719,21 @@ export const sv_SE: EnTranslations = {
         }
       },
       "q_spiders": {
-        "title": "Vävskogens plåga",
-        "text": "Lurkarna i de östra skogarna spinner ett silke jag behöver till mina omslag - och de har dessutom blivit alldeles för talrika. Gallra 6 vävskogslurkare och skär ut 4 silkeskörtlar ur deras bukar.",
+        "title": "Sablewebs plåga",
+        "text": "Lurkarna i de östra skogarna spinner ett silke jag behöver till mina omslag - och de har dessutom blivit alldeles för talrika. Gallra 6 Sableweb-lurkare och skär ut 4 silkeskörtlar ur deras bukar.",
         "completion": "Usch, rycker fortfarande. Perfekt. Här, du har förtjänat detta.",
         "objectives": {
           "0": {
-            "label": "Vävskogslurkare dräpt"
+            "label": "Sableweb-lurkare dräpt"
           },
           "1": {
-            "label": "Vävskogens silkeskörtel"
+            "label": "Sablewebs silkeskörtel"
           }
         }
       },
       "q_murlocs": {
         "title": "Bekymmer vid sjön",
-        "text": "I tjugo år har jag fiskat i Spegelsjön, och aldrig förlorat ett nät förrän de där bubblande fiskmännen kröp upp ur grundvattnet. Driv tillbaka Lerfenarna - dräp 8 av dem. Och se dig för: där det finns en murloc, finns det fem.",
+        "text": "I tjugo år har jag fiskat i Spegelsjön, och aldrig förlorat ett nät förrän de där bubblande fiskmännen kröp upp ur grundvattnet. Driv tillbaka Mudfinerna - dräp 8 av dem. Och se dig för: där det finns en Mudfin, finns det fem.",
         "completion": "Hah! Det ska lära dem att sköta sina egna lerhål.",
         "objectives": {
           "0": {
@@ -6743,11 +6743,11 @@ export const sv_SE: EnTranslations = {
       },
       "q_mine": {
         "title": "Råttor i gruvan",
-        "text": "Vi stötte på en fin kopparåder och sedan kom de där koboldskadedjuren forsande ut ur bergssidan. Min besättning sätter inte sin fot i schaktet förrän det är rensat. Lägg 10 Tunnelråttsgrävare döda.",
+        "text": "Vi stötte på en fin kopparåder och sedan kom de där grävande skadedjuren forsande ut ur bergssidan. Min besättning sätter inte sin fot i schaktet förrän det är rensat. Lägg 10 Djupbergsgrävare döda.",
         "completion": "Ha! Tillbaka till arbetet, gossar! Du har min tacksamhet - och mina mynt.",
         "objectives": {
           "0": {
-            "label": "Tunnelråttsgrävare dräpt"
+            "label": "Djupbergsgrävare dräpt"
           }
         }
       },
@@ -6803,7 +6803,7 @@ export const sv_SE: EnTranslations = {
       },
       "q_rite": {
         "title": "Den bindande riten",
-        "text": "Kryptan under kapellet måste öppnas om vi ska stoppa Gravkallaren - men endast en bindande rit låter de levande passera. Jag behöver 4 klumpar välsignad talg - koboldgrävarna hamstrar ljus lådvis - och 6 spöklika essenser från de rastlösa döda.",
+        "text": "Kryptan under kapellet måste öppnas om vi ska stoppa Gravecallern - men endast en bindande rit låter de levande passera. Jag behöver 4 klumpar välsignad talg - gruvans grävare hamstrar talg lådvis - och 6 spöklika essenser från de rastlösa döda.",
         "completion": "Det är gjort. Vägen nedåt står öppen... och må Ljuset förlåta mig för att jag öppnade den. Samla dina starkaste följeslagare innan du stiger ner, {playerName}. Ingen bör möta den Ihåliga ensam.",
         "objectives": {
           "0": {
@@ -6837,7 +6837,7 @@ export const sv_SE: EnTranslations = {
       "q_gravecallers_trail": {
         "title": "Gravkallarens spår",
         "text": "Morthen är död, men en fråga gnager i mig: en sekt som gömt sig i ett sekel slösar inte bort sig själv på ett enda bykapell. Han höll en grimoar - sina riter, sin korrespondens. Om något av den överlever, ligger den i sakristian i det ödelagda kapellet ovanför kryptan. Genomsök ruinen och hämta mig vad som än återstår av hans skrifter, {playerName}.",
-        "completion": "Morthen skrev till en 'Dimkallare' i det norra kärret. Sekten är inte död, {playerName} - den har bara varit tålmodig.",
+        "completion": "Morthen skrev till en 'Fogbinder' i det norra kärret. Sekten är inte död, {playerName} - den har bara varit tålmodig.",
         "objectives": {
           "0": {
             "label": "Morthens grimoar"
@@ -6866,7 +6866,7 @@ export const sv_SE: EnTranslations = {
       },
       "q_fenbridge_muster": {
         "title": "Uppbåd vid Fenbridge",
-        "text": "Morthens skrifter namngav en mästare i det norra kärret - en 'Dimkallare.' Nu har Väktaren Fenwick blåst i uppbådshornet vid Fenbridge, och jag tror inte på sammanträffanden, {playerName}. Ta vägbanken norrut, dra uppbådsordern från portstolpen, och överlämna den till Väktaren.",
+        "text": "Morthens skrifter namngav en mästare i det norra kärret - en 'Fogbinder.' Nu har Väktaren Fenwick blåst i uppbådshornet vid Fenbridge, och jag tror inte på sammanträffanden, {playerName}. Ta vägbanken norrut, dra uppbådsordern från portstolpen, och överlämna den till Väktaren.",
         "completion": "Aldrics sigill, är det? Då duger du. Kärret har slukat mina patruller hela, och jag behöver varje blad som flyter.",
         "objectives": {
           "0": {
@@ -6906,17 +6906,17 @@ export const sv_SE: EnTranslations = {
       },
       "q_deepfen": {
         "title": "Djupkärret rör sig",
-        "text": "Djupkärrets murlocer höll sig till sina grundvatten i tjugo år. Nu svärmar de över östra stranden som flugor på ett kadaver - och mina väktare säger att de drar upp saker från sjöbotten. Vad det än är som har stört dem, så vill jag att det stoppas. Gallra ut 12 av bitarna.",
+        "text": "Djupkärrets Mudfiner höll sig till sina grundvatten i tjugo år. Nu svärmar de över östra stranden som flugor på ett kadaver - och mina väktare säger att de drar upp saker från sjöbotten. Vad det än är som har stört dem, så vill jag att det stoppas. Gallra ut 12 av huggarna.",
         "completion": "Det kommer att tränga tillbaka dem i gyttjan ett tag. Men något fick dem att gräva, och jag tänker ta reda på vad.",
         "objectives": {
           "0": {
-            "label": "Djupkärrsbitare dräpt"
+            "label": "Djupkärrshuggare dräpt"
           }
         }
       },
       "q_idols": {
         "title": "Djupets avgudar",
-        "text": "Fenwicks väktare säger att fiskmännen muddrar upp avgudar från sjöbotten och klamrar sig fast vid dem som heliga reliker. Om de avgudarna är vad jag fruktar, måste jag se dem med egna ögon. Ta 5 från Djupkärrsbitarna - de kommer inte att skiljas från dem med lätthet.",
+        "text": "Fenwicks väktare säger att fiskmännen muddrar upp avgudar från sjöbotten och klamrar sig fast vid dem som heliga reliker. Om de avgudarna är vad jag fruktar, måste jag se dem med egna ögon. Ta 5 från Djupkärrshuggarna - de kommer inte att skiljas från dem med lätthet.",
         "completion": "Gravkallararbete - äldre än Morthen, äldre än mig. Sekten började inte i Östbäck, {playerName}. Den började här, och sjön har bevarat sina hemligheter.",
         "objectives": {
           "0": {
@@ -6936,11 +6936,11 @@ export const sv_SE: EnTranslations = {
       },
       "q_deepfen_purge": {
         "title": "Tillbaka till grundvattnen",
-        "text": "Aldric säger att de där avgudarna är kultmakade - vilket betyder att murlocerna hissar upp kärrets gamla ondska en famn i taget. Jag tänker inte ha det sköljande upp på min vägbank. Gå tillbaka till grundvattnen och bryt muddringen för gott: 14 bitare till.",
+        "text": "Aldric säger att de där avgudarna är kultmakade - vilket betyder att Mudfiner hissar upp kärrets gamla ondska en famn i taget. Jag tänker inte ha det sköljande upp på min vägbank. Gå tillbaka till grundvattnen och bryt muddringen för gott: 14 huggare till.",
         "completion": "Skoningslös och grundlig. Om detta träsk någonsin torkar ut väntar väktararbete på dig.",
         "objectives": {
           "0": {
-            "label": "Djupkärrsbitare dräpt"
+            "label": "Djupkärrshuggare dräpt"
           }
         }
       },
@@ -7043,7 +7043,7 @@ export const sv_SE: EnTranslations = {
       "q_summoners": {
         "title": "Att stoppa manandet",
         "text": "Marens rapporter namnger manare bland sektmedlemmarna - röster som kallar upp de dränkta ur vattnet som hundar till en vissling. Deras chiffer kommer att stava ut befälsordningen. Tysta 8 manare och hämta 4 av deras chiffer åt mig.",
-        "completion": "Varje chiffer är kontrasignerat 'Diakon Voss' - och vidareadresserat till en 'Dimkallare' i bastionen. Morthens mästare, {playerName}. Vi har funnit honom.",
+        "completion": "Varje chiffer är kontrasignerat 'Diakon Voss' - och vidareadresserat till en 'Fogbinder' i bastionen. Morthens mästare, {playerName}. Vi har funnit honom.",
         "objectives": {
           "0": {
             "label": "Gravkallarmanare dräpt"
@@ -7065,7 +7065,7 @@ export const sv_SE: EnTranslations = {
       },
       "q_bastion_door": {
         "title": "Den sjunkna bastionen",
-        "text": "Den sjunkna bastionen - en riddarborg som drunknade i kärret för ett sekel sedan - är dit Voss brev pekar, och där denna Dimkallare sjunger sina drunkningshymner. Kulten har skyddat dörren med gravstenar. Hämta mig en av skyddsstenarna, {playerName}, så ska jag lösa upp förseglingen.",
+        "text": "Den sjunkna bastionen - en riddarborg som drunknade i kärret för ett sekel sedan - är dit Voss brev pekar, och där denne Fogbinder sjunger sina drunkningshymner. Kulten har skyddat dörren med gravstenar. Hämta mig en av skyddsstenarna, {playerName}, så ska jag lösa upp förseglingen.",
         "completion": "Skyddsväven brister som ruttet rep. Dörren står öppen... och mörkret där nere lyssnar.",
         "objectives": {
           "0": {
@@ -7075,7 +7075,7 @@ export const sv_SE: EnTranslations = {
       },
       "q_olen": {
         "title": "Riddarkommendörens skam",
-        "text": "Riddarkommendör Olen höll bastionen när den sjönk - dränktes vid sin post hellre än att överge den. Varje väktare lär sig hans namn med stolthet. Nu har Dimkallaren rest honom som en marionett för att vakta just den dörr han dog för att försvara. Den skammen tar slut, {playerName}. Ta med fyra följeslagare ner och skänk Olen den ro han förtjänade.",
+        "text": "Riddarkommendör Olen höll bastionen när den sjönk - dränktes vid sin post hellre än att överge den. Varje väktare lär sig hans namn med stolthet. Nu har Fogbindern rest honom som en marionett för att vakta just den dörr han dog för att försvara. Den skammen tar slut, {playerName}. Ta med fyra följeslagare ner och skänk Olen den ro han förtjänade.",
         "completion": "Då är hans vakt äntligen över. Jag ska se till att hans namn ristas in i porten själv. Tack, {playerName}.",
         "objectives": {
           "0": {
@@ -7084,12 +7084,12 @@ export const sv_SE: EnTranslations = {
         }
       },
       "q_mistcaller": {
-        "title": "Dimkallaren",
-        "text": "På botten av bastionen väntar Vael Dimkallaren - Morthens mästare, Voss mästare, rösten som har dränkt hundra resenärer för att resa sig en armé. Han är långt bortom en ensam hjälte: ta med fyra följeslagare, inte färre. Gör slut på honom, {playerName}, så kan kärrets döda äntligen ligga stilla.",
+        "title": "Fogbindern",
+        "text": "På botten av bastionen väntar Vael Fogbindern - Morthens mästare, Voss mästare, rösten som har dränkt hundra resenärer för att resa sig en armé. Han är långt bortom en ensam hjälte: ta med fyra följeslagare, inte färre. Gör slut på honom, {playerName}, så kan kärrets döda äntligen ligga stilla.",
         "completion": "Vael är död, och dimman lättar för första gången på flera år. Men Maren hörde hans sista ord, och de får mitt blod att frysa: 'Lindormen rör sig under topparna.' Sekten tjänar något äldre än vi någonsin anat, {playerName}. Vila medan du kan - bergen står på tur.",
         "objectives": {
           "0": {
-            "label": "Vael Dimkallaren dräpt"
+            "label": "Vael Fogbindern dräpt"
           }
         }
       },
@@ -7155,17 +7155,17 @@ export const sv_SE: EnTranslations = {
       },
       "q_kobold_tunnels": {
         "title": "Djupstensbekymmer",
-        "text": "Kobolderna vid Djupstensgrytorna gräver djupare än någon ljusråtta har ärende att gräva - rakt ner, som om något kallade på dem. Deras tunnlar löper under vår mur, {playerName}. Sätt stopp för saken: döda tolv Djupstensgrävare.",
-        "completion": "Rakt ner, varje schakt av det - kobolder gräver inte så på egen hand. Jag måste rådfråga mina böcker.",
+        "text": "Grävarna vid Djupbergsgrytorna gräver djupare än någon gropråtta har ärende att gräva - rakt ner, som om något kallade på dem. Deras tunnlar löper under vår mur, {playerName}. Sätt stopp för saken: döda tolv Djupbergsgrävare.",
+        "completion": "Rakt ner, varje schakt av det - grävarna gräver inte så på egen hand. Jag måste rådfråga mina böcker.",
         "objectives": {
           "0": {
-            "label": "Djupstensgrävare dräpt"
+            "label": "Djupbergsgrävare dräpt"
           }
         }
       },
       "q_glowing_wax": {
         "title": "Sällsamt vax",
-        "text": "Caddis visade mig ett ljus taget från en av de där tunnelgrävarna - vaxet glöder, {playerName}, och det är varmt som ett hjärtslag. Han vill ha mer för studier, och jag vill ha det av min rekvisitionslista. Hämta tillbaka sex klumpar av det glödande vaxet.",
+        "text": "Caddis visade mig en vaxklump tagen från en av de där tunnelgrävarna - den glöder, {playerName}, och den är varm som ett hjärtslag. Han vill ha mer för studier, och jag vill ha det av min rekvisitionslista. Hämta tillbaka sex klumpar av det glödande vaxet.",
         "completion": "Fortfarande varmt. Lärdomsmästaren säger att glöden inte matchar någon låga han känner till. Jag säger att det är bergsbekymmer, och jag säger det vänligt.",
         "objectives": {
           "0": {
@@ -7552,7 +7552,7 @@ export const sv_SE: EnTranslations = {
             "label": "Spegelsjön"
           },
           "4": {
-            "label": "Vävskogen"
+            "label": "Sableweb"
           },
           "5": {
             "label": "Kopparbrottet"
@@ -7710,12 +7710,12 @@ export const sv_SE: EnTranslations = {
         "bonus3": "Ökar attack- och magihastighet med 15%."
       },
       "crownforged": {
-        "name": "Kronsmidd stridsutrustning",
+        "name": "Bonewrought-regalier",
         "bonus2": "Ökar attackkraft med 40.",
         "bonus3": "Ökar styrka med 15, uthållighet med 15 samt attack- och magihastighet med 15%."
       },
       "deathlord": {
-        "name": "Dödsherrens stridsutrustning",
+        "name": "Barrowlords stridsutrustning",
         "bonus2": "Ökar attackkraft med 40.",
         "bonus3": "Ökar styrka med 15 och uthållighet med 15."
       },
@@ -7724,22 +7724,22 @@ export const sv_SE: EnTranslations = {
         "bonus3": "Ökar attack- och magihastighet med 15%."
       },
       "necromancers": {
-        "name": "Nekromantikerns skrud",
+        "name": "Mournweave-skrud",
         "bonus2": "Du kan inte knuffas bakåt (100% motstånd mot tillbakastöt).",
         "bonus3": "Ökar intellekt med 10 och uthållighet med 10."
       },
       "nighttalon": {
-        "name": "Nattklo läderutrustning",
+        "name": "Direfang-päls",
         "bonus2": "Ökar attackkraft med 40.",
         "bonus3": "Ökar smidighet med 15, kritisk chans med 2% samt attack- och magihastighet med 15%."
       },
       "soulflame": {
-        "name": "Själsflammans skrud",
+        "name": "Wraithfire-regalier",
         "bonus2": "Du kan inte knuffas bakåt (100% motstånd mot tillbakastöt).",
         "bonus3": "Ökar intellekt med 15, ande med 15 samt attack- och magihastighet med 15%."
       },
       "stormcallers": {
-        "name": "Stormkallarens skrud",
+        "name": "Galecall-skrud",
         "bonus2": "Du kan inte knuffas bakåt (100% motstånd mot tillbakastöt).",
         "bonus3": "Ökar intellekt med 15, ande med 15 samt attack- och magihastighet med 15%."
       },
@@ -7748,7 +7748,7 @@ export const sv_SE: EnTranslations = {
         "bonus3": "Ökar attack- och magihastighet med 15%."
       },
       "wyrmshadow": {
-        "name": "Wyrmskuggans utrustning",
+        "name": "Nightfang-skrud",
         "bonus2": "Ökar attackkraft med 40.",
         "bonus3": "Ökar smidighet med 15 och kritisk chans med 2%."
       }

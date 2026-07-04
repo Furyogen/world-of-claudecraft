@@ -5622,7 +5622,7 @@ export const en_XA: EnTranslations = {
         "name": "[Ĝŕáʋéŵóʋéñ Ɓáĝ]"
       },
       "mistcallers_duffel": {
-        "name": "[Ɱíšţçáļļéŕ'š Ðúƒƒéļ]"
+        "name": "[Ƒóĝƀíñðéŕ'š Ðúƒƒéļ]"
       },
       "copper_mining_pick": {
         "name": "[Çóþþéŕ Ɱíñíñĝ Þíçķ]"

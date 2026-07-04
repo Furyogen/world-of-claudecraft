@@ -3498,7 +3498,7 @@ export const en_CA: EnTranslations = {
     },
     "lore": {
       "warrior": "Warriors are battle-hardened melee fighters who build Rage as they deal or take damage. They absorb heavy hits or crush foes with powerful weapons.",
-      "paladin": "Paladins are holy crusaders who support allies with blessings, heal wounds with Holy Light, and protect the weak in heavy armour.",
+      "paladin": "Paladins are holy crusaders who support allies with blessings, heal wounds with Mending Light, and protect the weak in heavy armour.",
       "hunter": "Hunters are ranged specialists who fight beside a tamed beast, peppering enemies with aimed and rapid shots, slowing them with stings and concussive fire, and shifting aspects to suit the moment.",
       "rogue": "Rogues are stealthy assassins who spend Energy and Combo Points on backstabs and finishing moves from the shadows.",
       "priest": "Priests call on Mending Light to heal and shield allies, while Shadow magic lets them drain the life of their enemies.",
@@ -5622,7 +5622,7 @@ export const en_CA: EnTranslations = {
         "name": "Gravewoven Bag"
       },
       "mistcallers_duffel": {
-        "name": "Mistcaller's Duffel"
+        "name": "Fogbinder's Duffel"
       },
       "copper_mining_pick": {
         "name": "Copper Mining Pick"

@@ -5622,7 +5622,7 @@ export const en: EnTranslations = {
         "name": "Gravewoven Bag"
       },
       "mistcallers_duffel": {
-        "name": "Mistcaller's Duffel"
+        "name": "Fogbinder's Duffel"
       },
       "copper_mining_pick": {
         "name": "Copper Mining Pick"
