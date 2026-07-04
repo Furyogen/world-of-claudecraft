@@ -200,8 +200,9 @@ describe('combat/damage handleDeath', () => {
     handleDeath(sim.ctx, victim, owner);
 
     expect(pet.dead).toBe(false);
-    expect(pet.aiState).toBe('attack');
-    expect(pet.aggroTargetId).toBe(victim.id);
+    expect(pet.aiState).toBe('idle');
+    expect(pet.aggroTargetId).toBeNull();
+    expect(pet.inCombat).toBe(false);
     const hpBefore = pet.hp;
     dealDamage(sim.ctx, victim, pet, 5, false, 'physical', 'Test Strike', 'hit');
     expect(pet.hp).toBe(hpBefore - 5);
