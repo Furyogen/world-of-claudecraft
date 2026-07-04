@@ -3064,7 +3064,7 @@ export class GameServer {
         break;
       case 'bg_spectate':
         if (typeof msg.matchId === 'number' && Number.isFinite(msg.matchId))
-          this.enterMatchSpectate(session, msg.matchId);
+          this.enterMatchSpectate(session, msg.matchId | 0);
         break;
       case 'bg_spectate_next':
         this.matchSpectateNext(session);
@@ -3622,6 +3622,18 @@ export class GameServer {
       opUntil: p.overpowerUntil > this.sim.time ? 1 : 0,
       ack: session.spectating ? 0 : anchorSession.lastInputSeq,
     });
+    // Match spectators must not see the anchored fighter's private economy or
+    // progression scalars. These ride the always-serialized base object, so the
+    // SPECTATOR_PRIVATE_SELF_KEYS maybe() skip set cannot catch them; strip
+    // them here (moderator spectate keeps the full record).
+    if (session.spectating?.mode === 'match') {
+      const s = self as Record<string, unknown>;
+      delete s.copper;
+      delete s.xp;
+      delete s.lxp;
+      delete s.rxp;
+      delete s.prk;
+    }
     const json = JSON.stringify(self);
     // heavy, rarely-changing fields ride along only when their serialized
     // form differs from what this session last received; the client treats

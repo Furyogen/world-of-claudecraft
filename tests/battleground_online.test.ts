@@ -276,6 +276,13 @@ describe('battleground: online integration (GameServer)', () => {
       'market',
       'trade',
       'prof',
+      // private economy/progression scalars stripped from the BASE self object
+      // (they bypass the maybe() skip set)
+      'copper',
+      'xp',
+      'lxp',
+      'rxp',
+      'prk',
     ]) {
       expect(key in snap.self, `spectator self must omit ${key}`).toBe(false);
     }
@@ -297,6 +304,8 @@ describe('battleground: online integration (GameServer)', () => {
     expect('inv' in fighterSnap.self).toBe(true);
     expect('tal' in fighterSnap.self).toBe(true);
     expect('equip' in fighterSnap.self).toBe(true);
+    expect('copper' in fighterSnap.self).toBe(true);
+    expect('xp' in fighterSnap.self).toBe(true);
 
     // the spectator command gate: bg_queue stays blocked while spectating
     cmd(server, watcher, { cmd: 'bg_queue' });
