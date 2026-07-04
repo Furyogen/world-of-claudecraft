@@ -411,7 +411,7 @@ export function dealDamage(
       ctx.bgPlayerDown(bgMatch, target, source);
     } else if (target.kind === 'mob' && target.bgMatchId !== undefined) {
       // Battleground entities die through the module: no xp, no loot, no wild
-      // respawn — the match tracks its own corpses, waves, and win checks.
+      // respawn; the match tracks its own corpses, waves, and win checks.
       ctx.bgMobKilled(target, source);
     } else {
       handleDeath(ctx, target, source);
