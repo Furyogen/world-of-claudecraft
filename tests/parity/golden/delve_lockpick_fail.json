@@ -16,7 +16,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "47bc31d2",
+      "state": "1984eb7b",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -54,6 +54,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -119,7 +120,7 @@
       "tick": 10,
       "time": 0.5,
       "nextId": 412,
-      "state": "b1d429ad",
+      "state": "e7e32a66",
       "events": "32297f59",
       "rng": {
         "draws": 3,
@@ -130,7 +131,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 412,
-      "state": "2a5f754d",
+      "state": "7e835e46",
       "events": "b93c7dc5",
       "rng": {
         "draws": 3,
@@ -141,7 +142,7 @@
       "tick": 30,
       "time": 1.5,
       "nextId": 412,
-      "state": "be9ebbc3",
+      "state": "2990a864",
       "events": "741638a5",
       "rng": {
         "draws": 3,
@@ -152,7 +153,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 412,
-      "state": "23083a7d",
+      "state": "37bbbbf6",
       "events": "741638a5",
       "rng": {
         "draws": 3,
@@ -163,7 +164,7 @@
       "tick": 50,
       "time": 2.5,
       "nextId": 412,
-      "state": "2653356f",
+      "state": "71547080",
       "events": "741638a5",
       "rng": {
         "draws": 3,
@@ -174,7 +175,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 412,
-      "state": "f1922df1",
+      "state": "94334eba",
       "events": "741638a5",
       "rng": {
         "draws": 3,
@@ -185,7 +186,7 @@
       "tick": 69,
       "time": 3.45,
       "nextId": 413,
-      "state": "8b2019c3",
+      "state": "a1234664",
       "events": "3b915263",
       "rng": {
         "draws": 3,
@@ -228,6 +229,7 @@
           ],
           "lifetimeXp": 11398,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -331,7 +333,7 @@
       "tick": 70,
       "time": 3.5,
       "nextId": 413,
-      "state": "009e9993",
+      "state": "408e8674",
       "events": "741638a5",
       "rng": {
         "draws": 3,
@@ -342,7 +344,7 @@
       "tick": 71,
       "time": 3.55,
       "nextId": 413,
-      "state": "1880cb2f",
+      "state": "c53c3d40",
       "events": "741638a5",
       "rng": {
         "draws": 3,
@@ -385,6 +387,7 @@
           ],
           "lifetimeXp": 11398,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}

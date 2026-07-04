@@ -16,7 +16,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "0c2196d3",
+      "state": "97047752",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -54,6 +54,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -117,7 +118,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "cb4a0c2e",
+      "state": "37ed4f75",
       "events": "00bafcff",
       "rng": {
         "draws": 0,
@@ -156,6 +157,7 @@
           ],
           "lifetimeXp": 27600,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "questLog": [
             [
               "q_wolves",
@@ -231,7 +233,7 @@
       "tick": 8,
       "time": 0.4,
       "nextId": 409,
-      "state": "ad4d38a9",
+      "state": "da370d00",
       "events": "d894ee18",
       "rng": {
         "draws": 40,
@@ -274,6 +276,7 @@
           ],
           "lifetimeXp": 27600,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "questLog": [
             [
               "q_wolves",
@@ -350,7 +353,7 @@
       "tick": 8,
       "time": 0.4,
       "nextId": 409,
-      "state": "454a07ca",
+      "state": "50bf432d",
       "events": "272aafab",
       "rng": {
         "draws": 40,
@@ -396,6 +399,7 @@
           ],
           "lifetimeXp": 27850,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "questsDone": [
             "q_wolves"
           ],
@@ -464,7 +468,7 @@
       "tick": 10,
       "time": 0.5,
       "nextId": 409,
-      "state": "b4f67d02",
+      "state": "4e48bea5",
       "events": "741638a5",
       "rng": {
         "draws": 40,
@@ -510,6 +514,7 @@
           ],
           "lifetimeXp": 27850,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "questsDone": [
             "q_wolves"
           ],
