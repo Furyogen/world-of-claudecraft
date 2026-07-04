@@ -50,6 +50,10 @@ import type { Vfx } from './vfx';
 // deterministic per-prop hash seed (never Math.random; render convention)
 const SEED = 0x67726176; // 'grav'
 
+// warstone stone-body emissive while alive (setStructureAlive restores it);
+// kept modest so the monolith reads soul-lit, not an orange slab up close
+const WARSTONE_EMISSIVE = 0.2;
+
 // ---------------------------------------------------------------------------
 // Team look. Ember (A) burns warm red-orange, Pale (B) burns cold blue: the
 // same per-variant flame/emissive/light pattern the dungeon interiors use.
@@ -360,6 +364,12 @@ const WARSTONE_FRAG = /* glsl */ `
     float pulse = 0.72 + 0.28 * sin(uTime * 1.7);
     vec3 col = mix(uDim, uBright, bands * 0.55 + fres * 0.75) * pulse * uHdr;
     float alpha = clamp(fres * 0.85 + bands * 0.28, 0.0, 1.0) * (0.25 + 0.75 * uAlive);
+    // temper the glow point-blank: full strength reads as an orange slab at
+    // the dais, so brightness ramps back in with camera distance and the
+    // across-the-field landmark read (>30u) keeps the old intensity
+    float nearTemper = mix(0.28, 1.0, smoothstep(9.0, 30.0, length(cameraPosition - vWPos)));
+    col *= nearTemper;
+    alpha *= mix(0.75, 1.0, nearTemper);
     col *= (0.2 + 0.8 * uAlive);
     gl_FragColor = vec4(col, alpha * 0.9);
     #include <tonemapping_fragment>
@@ -456,12 +466,15 @@ function tintGlsl(tint: Exclude<Tint, 'none'>): string {
       }
     `;
   }
+  // team targets sit deliberately desaturated and dark (dried banner cloth,
+  // not fresh paint) so the hex roofs read in-palette point-blank while the
+  // red/blue split still carries across the fogged field
   const green =
     tint === 'ember'
-      ? 'vec3(0.55, 0.14, 0.10)'
+      ? 'vec3(0.42, 0.13, 0.10)'
       : tint === 'pale'
-        ? 'vec3(0.14, 0.26, 0.55)'
-        : 'vec3(0.30, 0.30, 0.24)';
+        ? 'vec3(0.12, 0.20, 0.42)'
+        : 'vec3(0.27, 0.27, 0.22)';
   return /* glsl */ `
       {
         float gDom = diffuseColor.g - max(diffuseColor.r, diffuseColor.b);
@@ -470,7 +483,7 @@ function tintGlsl(tint: Exclude<Tint, 'none'>): string {
         float cDom = min(diffuseColor.g, diffuseColor.b) - diffuseColor.r;
         float cyanMask = smoothstep(0.05, 0.16, cDom) * (1.0 - greenMask);
         diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.20, 0.19, 0.20) * (0.5 + diffuseColor.b), cyanMask);
-        diffuseColor.rgb *= vec3(0.80, 0.76, 0.72);
+        diffuseColor.rgb *= vec3(0.76, 0.72, 0.68);
       }
   `;
 }
@@ -994,7 +1007,7 @@ export class BattlegroundView {
     const stoneMat = surfaceMat({
       color: 0x2c2a30,
       emissive: look.glowBright,
-      emissiveIntensity: 0.42,
+      emissiveIntensity: WARSTONE_EMISSIVE,
       roughness: 0.85,
       flatShading: true,
     }).clone() as THREE.MeshStandardMaterial | THREE.MeshLambertMaterial;
@@ -1008,7 +1021,7 @@ export class BattlegroundView {
     const shellMat = new THREE.ShaderMaterial({
       uniforms: {
         uTime: sharedUniforms.uTime,
-        uHdr: { value: GFX.composer ? 3.0 : 1.3 },
+        uHdr: { value: GFX.composer ? 2.4 : 1.15 },
         uAlive: { value: 1 },
         uBright: { value: new THREE.Color(look.glowBright) },
         uDim: { value: new THREE.Color(look.glowDim) },
@@ -1611,7 +1624,7 @@ export class BattlegroundView {
       if (!alive) vis.light.intensity = 0;
     }
     if (vis.warstoneShell) vis.warstoneShell.uniforms.uAlive.value = alive ? 1 : 0;
-    if (vis.warstoneMat) vis.warstoneMat.emissiveIntensity = alive ? 0.42 : 0.05;
+    if (vis.warstoneMat) vis.warstoneMat.emissiveIntensity = alive ? WARSTONE_EMISSIVE : 0.05;
     if (vis.embers) vis.embers.visible = alive;
     if (!alive && live) {
       // collapse burst at the structure's world position

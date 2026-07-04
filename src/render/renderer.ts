@@ -90,7 +90,7 @@ import { isOwnedPetHostile } from './reaction';
 import { RenderBudgetGovernor, type RenderBudgetState } from './render_budget';
 import { downscaleDims } from './screenshot';
 import { drapeRingLocalY } from './selection_ring';
-import { buildClouds, buildSky, type SkyView } from './sky';
+import { buildClouds, buildSky, PLACE_SKY, type SkyView } from './sky';
 import { nearestSloppyPickId, type SloppyPickCandidate } from './sloppy_pick';
 import { freezeStaticMatrices } from './static_matrix';
 import { shouldRenderStealthGhost } from './stealth';
@@ -886,6 +886,10 @@ export class Renderer {
   private envRTs = new Map<BiomeId, THREE.WebGLRenderTarget>();
   private envBiome: BiomeId = 'vale';
   private envOutdoorIntensity = ENV_INTENSITY;
+  // prefiltered night HDRI for the battleground's dusk sky override, plus
+  // whether the scene env currently holds it (see updateEnvBiome)
+  private envRTDusk: THREE.WebGLRenderTarget | null = null;
+  private envDusk = false;
   private time = 0;
   private frameIdx = 0;
   // Visible non-self character rigs last frame, feeding the crowd-adaptive LOD.
@@ -1067,6 +1071,10 @@ export class Renderer {
         const eq = this.skyView.envTexture(b);
         if (eq) this.envRTs.set(b, pmrem.fromEquirectangular(eq));
       }
+      // the battleground's dusk override (night HDRI): materials must not
+      // read daylight-lit under the dark sky, so IBL swaps with the dome
+      const eqDusk = this.skyView.placeEnvTexture('bg_dusk');
+      if (eqDusk) this.envRTDusk = pmrem.fromEquirectangular(eqDusk);
       if (this.envRTs.size > 0) {
         this.envOutdoorIntensity = ENV_INTENSITY * IBL_RAW_SCALE;
         this.scene.environment = this.envRTs.get('vale')?.texture ?? null;
@@ -3795,6 +3803,10 @@ export class Renderer {
     const fog = this.scene.fog as THREE.Fog;
     if (desired !== this.fogState) {
       this.fogState = desired;
+      // the Gravemarch pins a dusk sky regardless of the biome band the
+      // camera z sits in (sky.ts eases the cross-fade; the low tier tints
+      // its gradient dome instead)
+      this.skyView.setPlaceOverride(desired === 'battleground' ? 'bg_dusk' : null);
       if (desired === 'dungeon') {
         fog.color.setHex(0x05060a);
         fog.near = 18;
@@ -3819,8 +3831,10 @@ export class Renderer {
       } else if (desired === 'battleground') {
         // the Gravemarch is OPEN AIR at dusk: ash-grey warm murk that keeps
         // the sun/sky/IBL rig (see the underground check below), tuned so the
-        // far base still silhouettes through the haze on the 240yd field
-        fog.color.setHex(0x9b8a78);
+        // far base still silhouettes through the haze on the 240yd field.
+        // Darker than the old pale-day value so distant geometry fogs into
+        // the dusk sky override instead of a bright white band.
+        fog.color.setHex(0x81725f);
         if (this.lowGfx) {
           fog.near = 60;
           fog.far = 240;
@@ -3864,7 +3878,9 @@ export class Renderer {
             : HEMI_INTENSITY;
         this.scene.environmentIntensity = underground
           ? DUNGEON_ENV_INTENSITY
-          : this.envOutdoorIntensity;
+          : dusk && this.envRTDusk
+            ? PLACE_SKY.bg_dusk.envIntensity
+            : this.envOutdoorIntensity;
         sharedUniforms.uRimBoost.value = underground ? DUNGEON_RIM_BOOST : 1;
       }
       return;
@@ -3883,7 +3899,28 @@ export class Renderer {
   // camera crosses zone bands (the dome cross-fades the same textures); a
   // brief intensity dip masks the hard texture swap, then eases back like fog.
   private updateEnvBiome(dt: number): void {
-    if (this.lowGfx || this.envRTs.size < 2) return;
+    if (this.lowGfx) return;
+    // the battleground pins the dusk IBL for as long as its fog state holds
+    if (this.fogState === 'battleground' && this.envRTDusk) {
+      if (!this.envDusk) {
+        this.envDusk = true;
+        this.scene.environment = this.envRTDusk.texture;
+        this.scene.environmentRotation.y = this.skyView.placeEnvRotationY('bg_dusk');
+      }
+      const kd = 1 - Math.exp(-dt * 1.5);
+      this.scene.environmentIntensity +=
+        (PLACE_SKY.bg_dusk.envIntensity - this.scene.environmentIntensity) * kd;
+      return;
+    }
+    if (this.envDusk) {
+      // leaving: restore the biome env here, because the swap branch below
+      // only fires on a biome CHANGE and returning to the same band is not one
+      this.envDusk = false;
+      this.scene.environment = this.envRTs.get(this.envBiome)?.texture ?? null;
+      this.scene.environmentRotation.y = this.skyView.envRotationY(this.envBiome);
+      this.scene.environmentIntensity = this.envOutdoorIntensity * 0.4;
+    }
+    if (this.envRTs.size < 2) return;
     const blend = this.skyView.biomeAt(this.camera.position.z);
     const dominant = blend.t < 0.5 ? blend.from : blend.to;
     if (dominant !== this.envBiome && this.envRTs.has(dominant)) {
