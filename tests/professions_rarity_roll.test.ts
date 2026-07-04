@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'vitest';
+import { GATHER_NODES } from '../src/sim/content/gather_nodes';
 import {
   MATERIAL_RARITY_MAX_PROFICIENCY,
   type MaterialRarity,
+  resolveHarvest,
   rollMaterialRarity,
 } from '../src/sim/professions/gathering';
 import { Rng } from '../src/sim/rng';
+import type { PlayerMeta } from '../src/sim/sim';
 
 const TIERS: MaterialRarity[] = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
 
@@ -42,6 +45,40 @@ describe('material rarity roll (#1122)', () => {
     expect(draws).toBe(1);
   });
 
+  it('a denied harvest never draws rng (the roll happens only on a grant)', () => {
+    // The roll pulls from the SHARED sim rng, so a draw on a denial would
+    // advance the whole sim's rng stream and desync everything downstream.
+    // Pin the ordering: readiness is checked before any draw.
+    const node = GATHER_NODES[0];
+    // Only the fields resolveHarvest touches; the full PlayerMeta shape is not
+    // needed for this leaf-level pin (same convention as AnySim/AnyEntity).
+    const meta = {
+      gatheringProficiency: { mining: 50, logging: 50, herbalism: 50 },
+      nodeHarvestReadyAt: { [node.id]: 1000 },
+      pendingGatherGrants: [],
+    } as unknown as PlayerMeta;
+    let draws = 0;
+    const rng = new Rng(1);
+    rng.setObserver(() => {
+      draws++;
+    });
+    const denied = resolveHarvest(meta, node, 500, rng);
+    expect(denied.granted).toBe(false);
+    expect(denied.rarity).toBeUndefined();
+    expect(draws).toBe(0);
+    // The same rng then serves the granted path with exactly one draw.
+    const granted = resolveHarvest(meta, node, 1000, rng);
+    expect(granted.granted).toBe(true);
+    expect(draws).toBe(1);
+  });
+
+  it('the proficiency ceiling is pinned to 100', () => {
+    // Load-bearing tuning constant: the proficiency at which rarity odds cap
+    // and the scale of the common weight. Every other test consumes it as an
+    // argument, which any value would satisfy, so pin the literal here.
+    expect(MATERIAL_RARITY_MAX_PROFICIENCY).toBe(100);
+  });
+
   it('at proficiency 0, every roll is common', () => {
     const counts = tally(0, 2000, 42);
     expect(counts.common).toBe(2000);
@@ -63,6 +100,15 @@ describe('material rarity roll (#1122)', () => {
     // Exact fixed-seed pin, matching the documented weight shares at p=100
     // (common 0, uncommon 60, rare 30, epic 8, legendary 2 out of 100).
     expect(counts).toEqual({ common: 0, uncommon: 11958, rare: 6026, epic: 1617, legendary: 399 });
+  });
+
+  it('at mid proficiency, the fixed-seed tally matches the documented weight shift', () => {
+    const counts = tally(50, 20000, 123);
+    // Exact fixed-seed pin at p=50 (common 50, uncommon 30, rare 15, epic 4,
+    // legendary 1 out of 100). Unlike the p=max pin above, this distribution
+    // shifts if MATERIAL_RARITY_MAX_PROFICIENCY or any share changes, so it
+    // pins the mid-ladder shape the monotonic sweep only bounds loosely.
+    expect(counts).toEqual({ common: 9952, uncommon: 6009, rare: 3050, epic: 761, legendary: 228 });
   });
 
   it('proficiency above the max clamps to the max (identical distribution)', () => {
