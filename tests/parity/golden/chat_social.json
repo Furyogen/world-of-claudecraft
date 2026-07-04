@@ -30,7 +30,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 403,
-      "state": "4eb25b0b",
+      "state": "a3909512",
       "events": "0e7377d1",
       "rng": {
         "draws": 0,
@@ -67,6 +67,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -106,6 +107,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -141,6 +143,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -304,7 +307,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 403,
-      "state": "4eb25b0b",
+      "state": "a3909512",
       "events": "9c4125b9",
       "rng": {
         "draws": 0,
@@ -341,6 +344,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -380,6 +384,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -415,6 +420,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -578,7 +584,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 403,
-      "state": "4eb25b0b",
+      "state": "a3909512",
       "events": "18b43f9f",
       "rng": {
         "draws": 0,
@@ -615,6 +621,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -654,6 +661,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -689,6 +697,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -852,7 +861,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 403,
-      "state": "4eb25b0b",
+      "state": "a3909512",
       "events": "8732bde5",
       "rng": {
         "draws": 0,
@@ -889,6 +898,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -928,6 +938,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -963,6 +974,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1126,7 +1138,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 403,
-      "state": "4eb25b0b",
+      "state": "a3909512",
       "events": "4c39e831",
       "rng": {
         "draws": 0,
@@ -1163,6 +1175,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1202,6 +1215,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1237,6 +1251,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1400,7 +1415,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 403,
-      "state": "4eb25b0b",
+      "state": "a3909512",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -1437,6 +1452,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1476,6 +1492,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1511,6 +1528,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}

@@ -29,7 +29,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 402,
-      "state": "d31b4bf4",
+      "state": "84ac7cf4",
       "events": "5247b342",
       "rng": {
         "draws": 0,
@@ -66,6 +66,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -105,6 +106,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -218,7 +220,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 402,
-      "state": "d31b4bf4",
+      "state": "84ac7cf4",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -255,6 +257,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -294,6 +297,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -407,7 +411,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 402,
-      "state": "d31b4bf4",
+      "state": "84ac7cf4",
       "events": "0e7377d1",
       "rng": {
         "draws": 0,
@@ -444,6 +448,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -483,6 +488,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -596,7 +602,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 402,
-      "state": "a1fa534a",
+      "state": "19cabe4a",
       "events": "e9ef6efe",
       "rng": {
         "draws": 0,
@@ -633,6 +639,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -672,6 +679,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "questLog": [
             [
               "q_wolves",
@@ -797,7 +805,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 402,
-      "state": "d31b4bf4",
+      "state": "84ac7cf4",
       "events": "5eaa4afa",
       "rng": {
         "draws": 0,
@@ -834,6 +842,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -873,6 +882,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -986,7 +996,7 @@
       "tick": 2,
       "time": 0.1,
       "nextId": 402,
-      "state": "244f1008",
+      "state": "f883a5c8",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -1023,6 +1033,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -1062,6 +1073,7 @@
             }
           ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
