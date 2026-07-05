@@ -2507,7 +2507,9 @@ export const tr_TR: EnTranslations = {
   },
   "download": {
     "title": "Masaüstü Başlatıcısını İndir",
-    "desc": "Optimize edilmiş performans ve tam ekran oyun için bağımsız başlatıcıyı edinin."
+    "desc": "Optimize edilmiş performans ve tam ekran oyun için bağımsız başlatıcıyı edinin.",
+    "macCta": "Download for macOS",
+    "windowsPending": "Windows build pending."
   },
   "comingSoon": {
     "placeholder": "Yakında...",

@@ -2507,7 +2507,9 @@ export const nl_NL: EnTranslations = {
   },
   "download": {
     "title": "Desktop-launcher downloaden",
-    "desc": "Download de losse launcher voor optimale prestaties en schermvullend spelen."
+    "desc": "Download de losse launcher voor optimale prestaties en schermvullend spelen.",
+    "macCta": "Download for macOS",
+    "windowsPending": "Windows build pending."
   },
   "comingSoon": {
     "placeholder": "Binnenkort beschikbaar...",

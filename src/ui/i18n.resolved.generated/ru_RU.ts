@@ -2507,7 +2507,9 @@ export const ru_RU: EnTranslations = {
   },
   "download": {
     "title": "Скачать загрузчик для ПК",
-    "desc": "Загрузите отдельный клиент для оптимальной производительности и игры на весь экран."
+    "desc": "Загрузите отдельный клиент для оптимальной производительности и игры на весь экран.",
+    "macCta": "Download for macOS",
+    "windowsPending": "Windows build pending."
   },
   "comingSoon": {
     "placeholder": "Скоро...",
