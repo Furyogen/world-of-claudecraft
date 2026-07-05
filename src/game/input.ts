@@ -357,17 +357,22 @@ export class Input {
   setSuspendMovement(on: boolean): void {
     if (this.suspendMovement === on) return;
     this.suspendMovement = on;
-    if (on) {
-      const hadEmoteWheel = this.emoteWheelHeldCodes.size > 0;
-      const hadHeldInput = this.keys.size > 0 || hadEmoteWheel || this.keyJumpUntil > 0;
-      this.keys.clear();
-      this.keyJumpUntil = 0;
-      if (hadEmoteWheel) {
-        this.emoteWheelHeldCodes.clear();
-        this.cb.onEmoteWheel(false);
-      }
-      if (hadHeldInput) this.noteIntent('move');
-    }
+    if (!on) return;
+    // The held-open emote wheel itself counts as a modal (hud.isModalOpen()),
+    // so when its keys are down this suspension almost always IS the wheel. The
+    // stale-input clear below must not run then: it would close the wheel one
+    // frame after the bound key opened it, and drop still-held movement keys
+    // mid-emote. Nothing held is actually stale in that state, because onKeyUp
+    // is never modal-gated and releaseCapture handles focus loss. (Rare corner:
+    // the hud can close the wheel while the key is still physically down, e.g.
+    // Escape or clicking a slice mid-hold; a menu suspension inside that window
+    // also skips the clear, which just restores the pre-clear behavior of held
+    // movement resuming when the menu closes.)
+    if (this.emoteWheelHeldCodes.size > 0) return;
+    const hadHeldInput = this.keys.size > 0 || this.keyJumpUntil > 0;
+    this.keys.clear();
+    this.keyJumpUntil = 0;
+    if (hadHeldInput) this.noteIntent('move');
   }
 
   captureNextKey(cb: (code: string | null) => void): void {

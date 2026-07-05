@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { NODE_COLOR } from '../src/render/gather_nodes_lookup';
+import { NODE_COLOR, NODE_GEOMETRY_KEYS } from '../src/render/gather_nodes_lookup';
 import { GATHER_NODE_TYPES, GATHER_NODES, ZONES } from '../src/sim/data';
 
 describe('gather node content', () => {
@@ -33,9 +33,9 @@ describe('gather node content', () => {
 
   it('render lookup table covers every node type used in content', () => {
     const usedTypes = new Set(GATHER_NODES.map((n) => n.type));
-    const coveredTypes = new Set(Object.keys(NODE_COLOR));
     for (const type of usedTypes) {
-      expect(coveredTypes.has(type)).toBe(true);
+      expect(NODE_GEOMETRY_KEYS).toContain(type);
+      expect(NODE_COLOR[type]).toBeDefined();
     }
   });
 });

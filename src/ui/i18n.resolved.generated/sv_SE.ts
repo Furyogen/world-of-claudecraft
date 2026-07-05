@@ -2508,8 +2508,8 @@ export const sv_SE: EnTranslations = {
   "download": {
     "title": "Ladda ner skrivbordsstartaren",
     "desc": "Hämta den fristående startaren för optimerad prestanda och spel i helskärm.",
-    "macCta": "Download for macOS",
-    "windowsPending": "Windows build pending."
+    "macCta": "Ladda ner för macOS",
+    "windowsPending": "Windows-bygge väntar."
   },
   "comingSoon": {
     "placeholder": "Kommer snart...",

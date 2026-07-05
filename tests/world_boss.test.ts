@@ -78,6 +78,25 @@ describe('world boss scheduler', () => {
     expect((announce as any).entityId).toBeUndefined();
   });
 
+  it('worldBossAtBoot spawns the boss on the first tick (the live server), default waits the interval', () => {
+    // The live server opts in: Thunzharr is up as soon as the realm boots.
+    const atBoot = new Sim({
+      seed: 7,
+      playerClass: 'warrior',
+      autoEquip: true,
+      noPlayer: true,
+      worldBossAtBoot: true,
+    });
+    atBoot.tick();
+    expect(findBoss(atBoot)).toBeDefined();
+    // After the boot spawn, the next rise is still one interval out.
+    expect((atBoot as any).worldBossNextAt[0]).toBeCloseTo(WORLD_BOSS_INTERVAL_SECONDS, 0);
+    // Default (offline worlds, parity traces): nothing spawns at boot.
+    const plain = makeSim();
+    plain.tick();
+    expect(findBoss(plain)).toBeUndefined();
+  });
+
   it('does not spawn a second boss while one is alive', () => {
     const sim = makeSim();
     spawnBossNow(sim);

@@ -2508,8 +2508,8 @@ export const vi_VN: EnTranslations = {
   "download": {
     "title": "Tải Trình Khởi Chạy Trên Máy Tính",
     "desc": "Tải trình khởi chạy độc lập để có hiệu năng tối ưu và chơi toàn màn hình.",
-    "macCta": "Download for macOS",
-    "windowsPending": "Windows build pending."
+    "macCta": "Tải xuống cho macOS",
+    "windowsPending": "Bản dựng Windows đang chờ."
   },
   "comingSoon": {
     "placeholder": "Sắp Ra Mắt...",

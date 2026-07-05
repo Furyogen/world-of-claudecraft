@@ -13,15 +13,11 @@ export interface PlayerProfessionsView {
 // `professionsState`/`professionsStateFor`) and `ClientWorld` (src/net/
 // online.ts, mirrored from the `prof` wire delta) both implement this; see
 // src/sim/professions/CLAUDE.md for the settled wire/persistence key names.
-// `professionsState` is real for the gathering professions (#1119); crafting/
-// secondary professions still contribute nothing until #1120/#1125/#1126/#1140
-// land. `nodeHarvestableByMe` (#1121) is the first node-level member: whether
-// the given gather node (see src/sim/content/gather_nodes.ts, #1120) is
-// harvestable right now BY THE LOCAL VIEWER specifically. It is per-VIEWER,
-// never global: two players asking about the same node id can get different
-// answers, because each player's respawn timer for a node is independent (see
-// src/sim/professions/gathering.ts). `harvestNode` (#1121) is the matching
-// command that resolves one harvest attempt.
+// `nodeHarvestableByMe` (#1121) is per-VIEWER, never global: whether the
+// given gather node (see src/sim/content/gather_nodes.ts, #1120) is
+// harvestable right now BY THE LOCAL VIEWER specifically. Two players asking
+// about the same node id can get different answers, because each player's
+// respawn timer for a node is independent (see src/sim/professions/gathering.ts).
 export interface IWorldProfessions {
   professionsState: PlayerProfessionsView;
   nodeHarvestableByMe(nodeId: string): boolean;

@@ -2082,6 +2082,11 @@ export interface SimConfig {
   noPlayer?: boolean; // multiplayer server: start with an empty world and addPlayer() later
   devCommands?: boolean; // local dev: /dev level|tp|give chat cheats
   lockoutNowMs?: () => number; // host wall-clock for persisted raid lockouts
+  // Live server: schedule the first world-boss rise at boot instead of one
+  // interval out, so a freshly (re)started realm has Thunzharr up immediately.
+  // Offline worlds and parity traces keep the default (first rise after one
+  // interval), so this never fires inside a short deterministic scenario.
+  worldBossAtBoot?: boolean;
   // Host-computed next raid-reset instant for a given lockout "now" (epoch ms). The
   // authoritative server uses its realm-local 3 AM daily reset; offline/headless omit
   // this and fall back to a flat 24h day. Keeps the time zone out of the sim core.

@@ -296,7 +296,9 @@ describe('rare spawn rules', () => {
       });
       if (id === 'mirejaw_the_ravenous' || id === 'sister_nhalia')
         expect(MOBS[id].respawnMult).toBe(648);
-      else expect(MOBS[id].respawnMult).toBe(864);
+      // Ironvein Foreman + Marrowlord Varkas rise hourly (144 * 25s base) so
+      // their epic T1 boots/legs are farmable on a predictable cadence.
+      else expect(MOBS[id].respawnMult).toBe(144);
     }
     expect(MOBS.mogger).toMatchObject({
       rare: true,

@@ -2508,8 +2508,8 @@ export const da_DK: EnTranslations = {
   "download": {
     "title": "Download Desktop-launcher",
     "desc": "Hent den selvstændige launcher for optimeret ydeevne og fuldskærmsspil.",
-    "macCta": "Download for macOS",
-    "windowsPending": "Windows build pending."
+    "macCta": "Download til macOS",
+    "windowsPending": "Windows-build afventer."
   },
   "comingSoon": {
     "placeholder": "Kommer snart...",

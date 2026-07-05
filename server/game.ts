@@ -797,6 +797,9 @@ export class GameServer {
       playerClass: 'warrior',
       noPlayer: true,
       devCommands: process.env.ALLOW_DEV_COMMANDS === '1',
+      // Thunzharr is up as soon as the realm boots; subsequent rises keep the
+      // normal interval cadence (see src/sim/world_boss.ts).
+      worldBossAtBoot: true,
       lockoutNowMs: () => Date.now(),
       // Raid lockouts end at the next 3 AM (the classic daily reset) in this realm's civil
       // time zone, so the whole realm shares one predictable reset (via REALM_RESET_TZ).

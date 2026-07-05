@@ -2901,6 +2901,45 @@ describe('The Drowned Litany (Phase 7 Drowned Reliquary Rite)', () => {
     expect(state.partyLoot![sim.playerId]!.length).toBe(0);
   });
 
+  it('F-interact at the reliquary collects loot stranded by the distance-gated window', () => {
+    const sim = makeSim('warrior');
+    const run = enterLitanyApse(sim);
+    killNhalia(sim);
+    // Hard flawless guarantees a premium (non-empty) roll, so this isn't seed-flaky.
+    chooseRite(sim, 'hard');
+    waitForRitePlayback(sim, run);
+    // replaySequence completes the rite standing at the FINAL SHRINE, 8yd from the
+    // reliquary: outside both the HUD loot window's 7yd auto-close radius and the
+    // collect gate (DELVE_PLATE_RADIUS + 2). The real player is stuck exactly here.
+    replaySequence(sim, run);
+    const chestId = run.rewardChestId!;
+    const state = run.objectState[chestId];
+    expect(state.partyLoot![sim.playerId]!.length).toBeGreaterThan(0);
+    // The loot window's take-all fires from the shrine and is rejected as too far.
+    sim.drainEvents();
+    sim.collectDelveChestLoot(chestId);
+    const farRefusals = sim.drainEvents().filter((e) => e.type === 'error');
+    expect(farRefusals.some((e) => /move closer/i.test(e.text ?? ''))).toBe(true);
+    expect(state.partyLoot![sim.playerId]!.length).toBeGreaterThan(0); // not granted
+    // Recovery: walk onto the reliquary and press F. Pre-fix this fell through to
+    // "Nothing happens." and the items were stranded in partyLoot forever.
+    const chest = sim.entities.get(chestId)!;
+    sim.player.pos = { ...chest.pos };
+    sim.player.prevPos = { ...chest.pos };
+    sim.delveInteract(chestId);
+    const events = sim.drainEvents();
+    expect(events.some((e) => e.type === 'error' && /nothing happens/i.test(e.text ?? ''))).toBe(
+      false,
+    );
+    expect(events.some((e) => e.type === 'loot' && /you receive/i.test(e.text ?? ''))).toBe(true);
+    expect(state.partyLoot![sim.playerId]!.length).toBe(0);
+    // A second interact reads as an emptied reliquary, not a dead object.
+    sim.delveInteract(chestId);
+    expect(
+      sim.drainEvents().some((e) => e.type === 'log' && /reliquary is empty/i.test(e.text ?? '')),
+    ).toBe(true);
+  });
+
   it('Easy caps loot at low even with a flawless replay', () => {
     const sim = makeSim('warrior');
     const run = enterLitanyApse(sim);

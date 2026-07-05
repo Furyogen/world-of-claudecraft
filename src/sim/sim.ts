@@ -1062,6 +1062,7 @@ export class Sim {
       autoEquip: cfg.autoEquip ?? false,
       playerName: cfg.playerName ?? 'Adventurer',
       devCommands: this.devCommands,
+      worldBossAtBoot: cfg.worldBossAtBoot ?? false,
       lockoutNowMs: cfg.lockoutNowMs ?? (() => Math.floor(this.time * 1000)),
       raidResetMs: cfg.raidResetMs ?? ((nowMs: number) => nowMs + DEFAULT_RAID_LOCKOUT_MS),
       // Carried through so the renderer (which reaches the Sim as IWorld) can read
@@ -1069,6 +1070,11 @@ export class Sim {
       world: cfg.world,
     };
     this.rng = new Rng(cfg.seed);
+    // Live server opt-in (worldBossAtBoot): the first world-boss rise is due
+    // immediately instead of one interval out, so a freshly (re)started realm
+    // has its boss up. Draws no rng here; the spawn itself fires on the first
+    // tick through the normal updateWorldBosses path.
+    if (cfg.worldBossAtBoot) this.worldBossNextAt = WORLD_BOSSES.map(() => 0);
     // S0b seam: the shared SimContext every extracted slice routes through. Built
     // once here (the rng now exists); a live view + bound callbacks, it draws no rng
     // and mutates nothing, so it cannot perturb the construction draws below.
@@ -6526,6 +6532,17 @@ export class Sim {
 
   get craftSkills(): Record<string, number> {
     return this.craftSkillsFor(this.primaryId);
+  }
+
+  // Read-only gathering-profession proficiency surface for IWorld. Stubbed
+  // directly on IWorld pending issue #1164 (a broader professions facet); see
+  // that issue for the eventual reconciliation.
+  gatheringProficiencyFor(pid: number): Record<string, number> {
+    return { ...(this.players.get(pid)?.gatheringProficiency ?? emptyGatheringProficiency()) };
+  }
+
+  get gatheringProficiency(): Record<string, number> {
+    return this.gatheringProficiencyFor(this.primaryId);
   }
 
   delveShopOffers(delveId: string): DelveShopOffer[] {

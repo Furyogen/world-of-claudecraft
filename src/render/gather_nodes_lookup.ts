@@ -4,6 +4,8 @@ import type { GatherNodeType } from '../sim/data';
 // can assert coverage against sim/content/gather_nodes.ts without importing
 // three.js. Keep this in sync with NODE_GEOMETRY in gather_nodes.ts: every
 // key here must have a matching geometry factory there.
+export const NODE_GEOMETRY_KEYS: readonly GatherNodeType[] = ['ore', 'wood', 'herb'];
+
 export const NODE_COLOR: Record<GatherNodeType, number> = {
   ore: 0x8a8f98,
   wood: 0x5b3a21,

@@ -605,7 +605,7 @@ export const DUNGEON_DEFS: Record<string, DungeonDef> = {
     id: 'gravewyrm_sanctum',
     name: 'Gravewyrm Sanctum',
     index: 2,
-    doorPos: { x: 0, z: 880 }, // sealed gate at the head of the Sanctum Approach
+    doorPos: { x: 0, z: 858 }, // sealed gate in the graveyard, off the Sanctum Approach slope
     entry: { x: 0, z: 4 },
     exitOffset: { x: 0, z: -6 },
     spawns: SANCTUM_SPAWN_LIST,
