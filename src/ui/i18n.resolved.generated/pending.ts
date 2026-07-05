@@ -9,81 +9,24 @@
 // Reproducibility is checked by tests/i18n_resolved_equivalence.test.ts.
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [
-    "download.macCta",
-    "download.windowsPending"
-  ],
-  "es_ES": [
-    "download.macCta",
-    "download.windowsPending"
-  ],
-  "fr_FR": [
-    "download.macCta",
-    "download.windowsPending"
-  ],
-  "fr_CA": [
-    "download.macCta",
-    "download.windowsPending"
-  ],
+  "es": [],
+  "es_ES": [],
+  "fr_FR": [],
+  "fr_CA": [],
   "en_CA": [],
-  "it_IT": [
-    "download.macCta",
-    "download.windowsPending"
-  ],
-  "de_DE": [
-    "download.macCta",
-    "download.windowsPending"
-  ],
-  "zh_CN": [
-    "download.macCta",
-    "download.windowsPending"
-  ],
-  "zh_TW": [
-    "download.macCta",
-    "download.windowsPending"
-  ],
-  "ko_KR": [
-    "download.macCta",
-    "download.windowsPending"
-  ],
-  "ja_JP": [
-    "download.macCta",
-    "download.windowsPending"
-  ],
-  "pt_BR": [
-    "download.macCta",
-    "download.windowsPending"
-  ],
-  "ru_RU": [
-    "download.macCta",
-    "download.windowsPending"
-  ],
-  "nl_NL": [
-    "download.macCta",
-    "download.windowsPending"
-  ],
-  "pl_PL": [
-    "download.macCta",
-    "download.windowsPending"
-  ],
-  "id_ID": [
-    "download.macCta",
-    "download.windowsPending"
-  ],
-  "tr_TR": [
-    "download.macCta",
-    "download.windowsPending"
-  ],
-  "sv_SE": [
-    "download.macCta",
-    "download.windowsPending"
-  ],
-  "vi_VN": [
-    "download.macCta",
-    "download.windowsPending"
-  ],
-  "da_DK": [
-    "download.macCta",
-    "download.windowsPending"
-  ]
+  "it_IT": [],
+  "de_DE": [],
+  "zh_CN": [],
+  "zh_TW": [],
+  "ko_KR": [],
+  "ja_JP": [],
+  "pt_BR": [],
+  "ru_RU": [],
+  "nl_NL": [],
+  "pl_PL": [],
+  "id_ID": [],
+  "tr_TR": [],
+  "sv_SE": [],
+  "vi_VN": [],
+  "da_DK": []
 };

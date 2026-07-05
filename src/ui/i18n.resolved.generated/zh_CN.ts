@@ -2508,8 +2508,8 @@ export const zh_CN: EnTranslations = {
   "download": {
     "title": "下载电脑版启动器",
     "desc": "获取独立启动器，以获得更优化的性能和全屏游戏体验。",
-    "macCta": "Download for macOS",
-    "windowsPending": "Windows build pending."
+    "macCta": "下载 macOS 版",
+    "windowsPending": "Windows 版本即将推出。"
   },
   "comingSoon": {
     "placeholder": "敬请期待...",

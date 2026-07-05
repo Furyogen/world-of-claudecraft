@@ -2508,8 +2508,8 @@ export const id_ID: EnTranslations = {
   "download": {
     "title": "Unduh Peluncur Desktop",
     "desc": "Dapatkan peluncur mandiri untuk performa optimal dan permainan layar penuh.",
-    "macCta": "Download for macOS",
-    "windowsPending": "Windows build pending."
+    "macCta": "Unduh untuk macOS",
+    "windowsPending": "Build Windows tertunda."
   },
   "comingSoon": {
     "placeholder": "Segera Hadir...",
