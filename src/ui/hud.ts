@@ -60,7 +60,6 @@ import {
   zoneAt,
 } from '../sim/data';
 import { specialRoleColor } from '../sim/discord_roles';
-import { worldBossIdFromLockout } from '../sim/world_boss';
 import { armorTypeForItem, canEquipItem, weaponArchetypeForItem } from '../sim/equipment_rules';
 import { isItemLevelEligible, itemLevel, itemScore } from '../sim/item_level';
 import { requiredLevelFor } from '../sim/item_level_req';
@@ -97,6 +96,7 @@ import {
   virtualLevel,
   xpUntilNextPrestige,
 } from '../sim/types';
+import { worldBossIdFromLockout } from '../sim/world_boss';
 import {
   type DailyRewardStatus,
   type DelveRunInfo,

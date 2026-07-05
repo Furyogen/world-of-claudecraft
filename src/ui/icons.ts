@@ -2180,7 +2180,6 @@ interface IconRecipe {
 // corner-badge / backdrop placement shorthand
 const TL = { x: -13, y: -13, s: 0.45 } as const;
 const TR = { x: 13, y: -13, s: 0.45 } as const;
-const BL = { x: -13, y: 13, s: 0.45 } as const;
 const BR = { x: 13, y: 13, s: 0.45 } as const;
 const BIG = { s: 1.15, alpha: 0.35 } as const;
 
@@ -2918,11 +2917,17 @@ function itemFallback(id: string): IconRecipe | null {
 
 const SPECK_COUNT = 40;
 
+function getCanvas2d(canvas: HTMLCanvasElement): CanvasRenderingContext2D {
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('2D canvas context is unavailable');
+  return ctx;
+}
+
 function compose(recipe: IconRecipe, seedKey: string, size: number): HTMLCanvasElement {
   const canvas = document.createElement('canvas');
   canvas.width = size;
   canvas.height = size;
-  const ctx = canvas.getContext('2d')!;
+  const ctx = getCanvas2d(canvas);
   ctx.scale(size / 100, size / 100);
 
   ctx.save();
@@ -3765,7 +3770,7 @@ export function raidMarkerDataUrl(idx: number): string {
   const canvas = document.createElement('canvas');
   canvas.width = RAID_MARKER_PX;
   canvas.height = RAID_MARKER_PX;
-  const ctx = canvas.getContext('2d')!;
+  const ctx = getCanvas2d(canvas);
   ctx.scale(RAID_MARKER_PX / 100, RAID_MARKER_PX / 100);
   ctx.translate(50, 50);
   drawRaidMarker(ctx, idx);
