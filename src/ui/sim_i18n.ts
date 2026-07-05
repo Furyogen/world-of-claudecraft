@@ -165,6 +165,8 @@ const baseEnTable = {
   'presence.dndDefault': 'Do Not Disturb',
   'log.channelJoined': 'Joined the {channel} channel. Type /{channel} <message> to talk.',
   'log.channelLeft': 'Left the {channel} channel.',
+  'log.dungeonDifficultyHeroic': 'Dungeon difficulty set to Heroic.',
+  'log.dungeonDifficultyNormal': 'Dungeon difficulty set to Normal.',
   'error.channelUsage': 'Usage: /{action} <channel>. Channels: {list}.',
   'error.generalAlwaysOn': 'The General channel is always on - just use /general.',
   'error.noSuchChannel': "There is no channel named '{name}'. Channels: {list}.",

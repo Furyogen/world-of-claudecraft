@@ -310,6 +310,7 @@ export const COMMAND_NAMES = [
   'autoloot',
   'resurrect_corpse',
   'resurrect_healer',
+  'set_dungeon_difficulty',
 ] as const;
 
 // The union both the send path (`online.ts`) and the dispatch switch
@@ -494,6 +495,7 @@ export const COMMAND_FACETS = {
   // (untagged; on the DISPATCH_ONLY_COMMANDS allowlist), NOT IWorldDungeons.
   enter_dungeon: 'IWorldDungeons',
   leave_dungeon: 'IWorldDungeons',
+  set_dungeon_difficulty: 'IWorldDungeons',
   // IWorldDelves: delve enter/leave + interact + companion upgrade + Marks-vendor buy
   // + lockpick lifecycle + chest collect. Note the wire-name skew: delveBuyShopItem
   // sends `delve_buy`, so the tag is keyed on the WIRE string `delve_buy`. The reads

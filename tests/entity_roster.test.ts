@@ -183,6 +183,8 @@ function makeCtx() {
     instanceOriginOf: vi.fn(() => ({ x: 0, z: 0 })),
     enterDungeon: vi.fn(),
     leaveDungeon: vi.fn(),
+    dungeonDifficulty: vi.fn(() => 'normal' as const),
+    setDungeonDifficulty: vi.fn(),
     addEntity: vi.fn(),
     dropEntity: vi.fn(),
     rebucket: vi.fn(),

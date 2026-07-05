@@ -89,6 +89,12 @@ export function isPetClass(cls: PlayerClass): boolean {
 // ring) — see docs/design and the Fiesta region of sim.ts.
 export type ArenaFormat = '1v1' | '2v2' | 'fiesta';
 
+export type DungeonDifficulty = 'normal' | 'heroic';
+
+export function isDungeonDifficulty(value: unknown): value is DungeonDifficulty {
+  return value === 'normal' || value === 'heroic';
+}
+
 export interface ArenaStanding {
   rating: number;
   wins: number;

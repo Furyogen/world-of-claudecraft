@@ -27,6 +27,11 @@ import {
   NYTHRAXIS_BOSS_ID,
   type Vec3,
 } from '../types';
+import {
+  claimDifficultyForDungeon,
+  mobLevelForDungeonDifficulty,
+  mobTemplateForDungeonDifficulty,
+} from './difficulty';
 
 const DOOR_TRIGGER_RADIUS = 2.0; // walking this close to a dungeon door teleports you
 const RAID_ALLOWED_DUNGEON_IDS = new Set(['nythraxis_crypt', 'nythraxis_boss_arena']);
@@ -108,14 +113,17 @@ export function enterDungeon(ctx: SimContext, dungeonId: string, pid?: number): 
     }
   }
   const key = instanceKeyFor(ctx, r.meta.entityId);
-  let inst = ctx.instances.find((i) => i.dungeonId === dungeonId && i.partyKey === key);
+  const difficulty = claimDifficultyForDungeon(dungeonId, ctx.dungeonDifficulty(r.meta.entityId));
+  let inst = ctx.instances.find(
+    (i) => i.dungeonId === dungeonId && i.partyKey === key && i.difficulty === difficulty,
+  );
   if (!inst) {
     inst = ctx.instances.find((i) => i.dungeonId === dungeonId && i.partyKey === null);
     if (!inst) {
       ctx.error(r.meta.entityId, `All instances of ${dungeon.name} are busy. Try again soon.`);
       return;
     }
-    claimInstance(ctx, inst, key);
+    claimInstance(ctx, inst, key, difficulty);
   }
   if (!party || party.members.length < dungeon.suggestedPlayers) {
     ctx.emit({
@@ -206,17 +214,25 @@ export function leaveCrypt(ctx: SimContext, pid?: number): void {
   leaveDungeon(ctx, pid);
 }
 
-function claimInstance(ctx: SimContext, inst: InstanceSlot, key: string): void {
+function claimInstance(
+  ctx: SimContext,
+  inst: InstanceSlot,
+  key: string,
+  difficulty: InstanceSlot['difficulty'],
+): void {
   const dungeon = DUNGEONS[inst.dungeonId];
   inst.partyKey = key;
+  inst.difficulty = difficulty;
   inst.emptyFor = 0;
   const origin = instanceOriginOf(inst);
   for (const spawn of dungeon.spawns) {
     const template = MOBS[spawn.mobId];
-    const level = ctx.rng.int(template.minLevel, template.maxLevel);
+    const rolledLevel = ctx.rng.int(template.minLevel, template.maxLevel);
+    const spawnTemplate = mobTemplateForDungeonDifficulty(template, inst.dungeonId, difficulty);
+    const level = mobLevelForDungeonDifficulty(template, inst.dungeonId, difficulty, rolledLevel);
     const mob = createMob(
       ctx.nextId++,
-      template,
+      spawnTemplate,
       level,
       ctx.groundPos(origin.x + spawn.x, origin.z + spawn.z),
     );
@@ -273,6 +289,7 @@ function freeInstance(ctx: SimContext, inst: InstanceSlot): void {
   }
   if (inst.exitId !== null) ctx.dropEntity(inst.exitId);
   inst.partyKey = null;
+  inst.difficulty = 'normal';
   inst.mobIds = [];
   inst.objectIds = [];
   inst.exitId = null;

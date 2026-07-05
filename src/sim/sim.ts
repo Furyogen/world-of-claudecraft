@@ -254,6 +254,10 @@ export type { MailSave } from './mail/post_office';
 export type { MarketSave } from './market';
 
 import {
+  mobLevelForDungeonDifficulty,
+  mobTemplateForDungeonDifficulty,
+} from './instances/difficulty';
+import {
   enterCrypt as enterCryptImpl,
   enterDungeon as enterDungeonImpl,
   instanceInfoAt as instanceInfoAtImpl,
@@ -326,6 +330,7 @@ import {
   type DelveRun,
   DT,
   DUNGEON_LEASH_DISTANCE,
+  type DungeonDifficulty,
   dist2d,
   type Entity,
   type EquipSlot,
@@ -337,6 +342,7 @@ import {
   type InvSlot,
   type ItemInstancePayload,
   isConsuming,
+  isDungeonDifficulty,
   isPetClass,
   isQuestTurnInNpc,
   LEASH_DISTANCE,
@@ -551,6 +557,7 @@ export interface Party {
   raidGroups: Map<number, 1 | 2>; // pid -> raid subgroup
   lootStrategies: LootStrategies;
   lootTurn: number; // round-robin common-item cursor; advances once per awarded item
+  dungeonDifficulty?: DungeonDifficulty;
 }
 
 export interface TradeSession {
@@ -642,6 +649,7 @@ export interface FiestaPowerup {
 
 export interface InstanceSlot {
   dungeonId: string;
+  difficulty: DungeonDifficulty;
   slot: number;
   partyKey: string | null; // party id or 'solo:<pid>'
   mobIds: number[];
@@ -799,6 +807,9 @@ export interface PlayerMeta {
   fiestaRestore: { level: number; xp: number; talents: TalentAllocation } | null;
   loadouts: SavedLoadout[];
   activeLoadout: number; // index into loadouts, or -1 for none
+  // Session-only dungeon preference. Omitted when normal so deterministic
+  // parity samples and character persistence do not churn on a default.
+  dungeonDifficulty?: DungeonDifficulty;
   raidLockouts: Map<string, number>; // dungeon id -> epoch ms expiry
   // Transient presence status. Set by /afk and /dnd, cleared when the player
   // chats again. Session-only — never persisted, so it resets on login.
@@ -1205,6 +1216,7 @@ export class Sim {
         for (let i = 0; i < INSTANCE_SLOT_COUNT; i++) {
           this.instances.push({
             dungeonId: dungeon.id,
+            difficulty: 'normal',
             slot: i,
             partyKey: null,
             mobIds: [],
@@ -1230,6 +1242,7 @@ export class Sim {
       for (let i = 0; i < INSTANCE_SLOT_COUNT; i++) {
         this.instances.push({
           dungeonId: dungeon.id,
+          difficulty: 'normal',
           slot: i,
           partyKey: null,
           mobIds: [],
@@ -2474,6 +2487,8 @@ export class Sim {
       instanceOriginOf: sim.instanceOriginOf.bind(sim),
       enterDungeon: sim.enterDungeon.bind(sim),
       leaveDungeon: sim.leaveDungeon.bind(sim),
+      dungeonDifficulty: sim.dungeonDifficulty.bind(sim),
+      setDungeonDifficulty: sim.setDungeonDifficulty.bind(sim),
       addEntity: sim.addEntity.bind(sim),
       dropEntity: sim.dropEntity.bind(sim),
       rebucket: sim.rebucket.bind(sim),
@@ -4821,8 +4836,20 @@ export class Sim {
         boss.pos.x + Math.sin(ang) * spawnRadius,
         boss.pos.z + Math.cos(ang) * spawnRadius,
       );
-      const level = this.rng.int(template.minLevel, template.maxLevel);
-      const add = createMob(this.nextId++, template, level, pos);
+      const rolledLevel = this.rng.int(template.minLevel, template.maxLevel);
+      const difficulty = inst?.difficulty ?? 'normal';
+      const addTemplate = mobTemplateForDungeonDifficulty(
+        template,
+        inst?.dungeonId ?? '',
+        difficulty,
+      );
+      const level = mobLevelForDungeonDifficulty(
+        template,
+        inst?.dungeonId ?? '',
+        difficulty,
+        rolledLevel,
+      );
+      const add = createMob(this.nextId++, addTemplate, level, pos);
       // Leash to the boss's ORIGINAL spawn (not his current, possibly-kited position):
       // pulled too far from it, the add's chase-case leash check evades it home.
       add.spawnPos = { ...boss.spawnPos };
@@ -6113,6 +6140,49 @@ export class Sim {
 
   leaveDungeon(pid?: number): void {
     leaveDungeonImpl(this.ctx, pid);
+  }
+
+  dungeonDifficulty(pid?: number): DungeonDifficulty {
+    const r = this.resolve(pid);
+    if (!r) return 'normal';
+    return this.dungeonDifficultyForPid(r.meta.entityId);
+  }
+
+  setDungeonDifficulty(difficulty: DungeonDifficulty, pid?: number): void {
+    if (!isDungeonDifficulty(difficulty)) return;
+    const r = this.resolve(pid);
+    if (!r) return;
+    const party = this.partyOf(r.meta.entityId);
+    if (party && party.leader !== r.meta.entityId) {
+      this.error(r.meta.entityId, 'You are not the party leader.');
+      return;
+    }
+    const applyMetaDifficulty = (meta: PlayerMeta): void => {
+      if (difficulty === 'normal') delete meta.dungeonDifficulty;
+      else meta.dungeonDifficulty = difficulty;
+    };
+    if (party) {
+      if (difficulty === 'normal') delete party.dungeonDifficulty;
+      else party.dungeonDifficulty = difficulty;
+      for (const mPid of party.members) {
+        const meta = this.players.get(mPid);
+        if (meta) applyMetaDifficulty(meta);
+      }
+    } else {
+      applyMetaDifficulty(r.meta);
+    }
+    this.error(
+      r.meta.entityId,
+      difficulty === 'heroic'
+        ? 'Dungeon difficulty set to Heroic.'
+        : 'Dungeon difficulty set to Normal.',
+    );
+  }
+
+  private dungeonDifficultyForPid(pid: number): DungeonDifficulty {
+    return (
+      this.partyOf(pid)?.dungeonDifficulty ?? this.players.get(pid)?.dungeonDifficulty ?? 'normal'
+    );
   }
 
   // Legacy single-dungeon entry points (tests + scripts use these).

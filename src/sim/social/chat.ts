@@ -520,6 +520,14 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
     ctx.error(r.meta.entityId, graveyardReadout(r.e));
     return null;
   }
+  const dungeonDifficulty = /^\/(?:dungeons|dungeon|instances)\s+(normal|heroic)$/i.exec(raw);
+  if (dungeonDifficulty) {
+    ctx.setDungeonDifficulty(
+      dungeonDifficulty[1].toLowerCase() as 'normal' | 'heroic',
+      r.meta.entityId,
+    );
+    return null;
+  }
   if (/^\/(?:dungeons|dungeon|instances)(?:\s|$)/i.test(raw)) {
     ctx.error(r.meta.entityId, readouts.dungeonsReadout());
     return null;

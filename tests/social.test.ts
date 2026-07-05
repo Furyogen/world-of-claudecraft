@@ -1226,3 +1226,34 @@ describe('the new dungeons', () => {
     expect(korgath.enraged).toBe(true);
   });
 });
+
+describe('dungeon difficulty slash command', () => {
+  it('lets a leader switch normal and heroic without using dev commands', () => {
+    const sim = makeWorld();
+    const leader = sim.addPlayer('warrior', 'Lead');
+    const member = sim.addPlayer('mage', 'Mage');
+    sim.partyInvite(member, leader);
+    sim.partyAccept(member);
+
+    sim.drainEvents();
+    sim.chat('/dungeon heroic', member);
+    expect(sim.dungeonDifficulty(leader)).toBe('normal');
+    expect(
+      (sim.drainEvents() as any[]).some(
+        (e) => e.type === 'error' && e.pid === member && e.text === 'You are not the party leader.',
+      ),
+    ).toBe(true);
+
+    sim.chat('/dungeon heroic', leader);
+    expect(sim.dungeonDifficulty(member)).toBe('heroic');
+    expect(
+      (sim.drainEvents() as any[]).some(
+        (e) =>
+          e.type === 'error' && e.pid === leader && e.text === 'Dungeon difficulty set to Heroic.',
+      ),
+    ).toBe(true);
+
+    sim.chat('/dungeon normal', leader);
+    expect(sim.dungeonDifficulty(member)).toBe('normal');
+  });
+});

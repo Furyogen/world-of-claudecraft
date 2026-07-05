@@ -39,6 +39,7 @@ import type {
   Aura,
   CrowdControlDrCategory,
   DelveRun,
+  DungeonDifficulty,
   Entity,
   ErrorReason,
   ItemInstancePayload,
@@ -181,6 +182,8 @@ export interface SimContextCallbacks {
   instanceOriginOf(inst: InstanceSlot): { x: number; z: number };
   enterDungeon(dungeonId: string, pid?: number): void;
   leaveDungeon(pid?: number): void;
+  dungeonDifficulty(pid?: number): DungeonDifficulty;
+  setDungeonDifficulty(difficulty: DungeonDifficulty, pid?: number): void;
 
   // C1 damage/death hub + the casting/leash/arena/duel/fiesta/loot teardown it
   // drives mid-tick. `dealDamage` is the post-mitigation entry (crit/dodge/miss and
@@ -748,6 +751,8 @@ export function createSimContext(host: SimContextHost): SimContext {
     instanceOriginOf: host.instanceOriginOf,
     enterDungeon: host.enterDungeon,
     leaveDungeon: host.leaveDungeon,
+    dungeonDifficulty: host.dungeonDifficulty,
+    setDungeonDifficulty: host.setDungeonDifficulty,
     dealDamage: host.dealDamage,
     handleDeath: host.handleDeath,
     cancelCast: host.cancelCast,

@@ -41,6 +41,20 @@ function claimedHollow(sim: AnySim): any {
   );
 }
 
+function claimedDungeon(sim: AnySim, dungeonId: string, difficulty = 'normal'): any {
+  return (sim.instances as any[]).find(
+    (i) => i.dungeonId === dungeonId && i.difficulty === difficulty && i.partyKey !== null,
+  );
+}
+
+function mobInInstance(sim: AnySim, inst: any, templateId: string): AnyEntity {
+  const mob = inst.mobIds
+    .map((id: number) => sim.entities.get(id))
+    .find((e: AnyEntity | undefined) => e?.templateId === templateId);
+  if (!mob) throw new Error(`missing ${templateId} in ${inst.dungeonId}`);
+  return mob as AnyEntity;
+}
+
 describe('dungeons: door-trigger entry/exit', () => {
   it('walking onto a dungeon door teleports the player into a freshly claimed instance', () => {
     const sim = makeSim();
@@ -97,6 +111,106 @@ describe('dungeons: door-trigger entry/exit', () => {
     updateDoorTriggers(sim.ctx, p);
 
     expect(sim.instanceSlotAt(p.pos)).toBeNull(); // back outside the instance
+  });
+});
+
+describe('dungeons: heroic difficulty', () => {
+  it('claims heroic Hollow Crypt as a fixed heroic instance with level-20 transformed mobs', () => {
+    const heroic = makeSim(123);
+    const heroicPid = heroic.addPlayer('warrior', 'Hero');
+    heroic.setDungeonDifficulty('heroic', heroicPid);
+
+    enterDungeon(heroic.ctx, 'hollow_crypt', heroicPid);
+
+    const heroicInst = claimedDungeon(heroic, 'hollow_crypt', 'heroic');
+    expect(heroicInst).toBeTruthy();
+    expect(heroicInst.difficulty).toBe('heroic');
+    const heroicMorthen = mobInInstance(heroic, heroicInst, 'morthen');
+    expect(heroicMorthen.level).toBe(20);
+
+    const normal = makeSim(123);
+    const normalPid = normal.addPlayer('warrior', 'Normal');
+    enterDungeon(normal.ctx, 'hollow_crypt', normalPid);
+    const normalInst = claimedDungeon(normal, 'hollow_crypt', 'normal');
+    const normalMorthen = mobInInstance(normal, normalInst, 'morthen');
+    expect(normalMorthen.level).toBe(10);
+    expect(heroicMorthen.maxHp).toBeGreaterThan(normalMorthen.maxHp);
+    expect(heroicMorthen.weapon.min).toBeGreaterThan(normalMorthen.weapon.min);
+  });
+
+  it('supports heroic mode across the four five-player dungeons only', () => {
+    const finalBosses = [
+      ['hollow_crypt', 'morthen'],
+      ['sunken_bastion', 'vael_the_mistcaller'],
+      ['drowned_temple', 'ysolei'],
+      ['gravewyrm_sanctum', 'korzul_the_gravewyrm'],
+    ] as const;
+
+    for (const [dungeonId, bossId] of finalBosses) {
+      const sim = makeSim(321);
+      const pid = sim.addPlayer('warrior', `Hero-${dungeonId}`);
+      sim.setDungeonDifficulty('heroic', pid);
+
+      enterDungeon(sim.ctx, dungeonId, pid);
+
+      const inst = claimedDungeon(sim, dungeonId, 'heroic');
+      expect(inst, `${dungeonId} did not claim a heroic instance`).toBeTruthy();
+      expect(mobInInstance(sim, inst, bossId).level).toBe(20);
+    }
+  });
+
+  it('does not apply heroic selection to Nythraxis quest or raid instance ids', () => {
+    const sim = makeSim();
+    const pid = sim.addPlayer('warrior', 'Attuned');
+    sim.setDungeonDifficulty('heroic', pid);
+
+    enterDungeon(sim.ctx, 'nythraxis_crypt', pid);
+
+    expect(claimedDungeon(sim, 'nythraxis_crypt', 'heroic')).toBeUndefined();
+    expect(claimedDungeon(sim, 'nythraxis_crypt', 'normal')).toBeTruthy();
+  });
+
+  it('keeps normal and heroic claims separate so an existing instance never mutates', () => {
+    const sim = makeSim(456);
+    const pid = sim.addPlayer('warrior', 'Switcher');
+
+    enterDungeon(sim.ctx, 'hollow_crypt', pid);
+    const normalInst = claimedDungeon(sim, 'hollow_crypt', 'normal');
+    const normalMorthen = mobInInstance(sim, normalInst, 'morthen');
+    expect(normalMorthen.level).toBe(10);
+
+    sim.setDungeonDifficulty('heroic', pid);
+    enterDungeon(sim.ctx, 'hollow_crypt', pid);
+
+    const heroicInst = claimedDungeon(sim, 'hollow_crypt', 'heroic');
+    expect(heroicInst).toBeTruthy();
+    expect(heroicInst.slot).not.toBe(normalInst.slot);
+    expect(mobInInstance(sim, normalInst, 'morthen').level).toBe(10);
+    expect(mobInInstance(sim, heroicInst, 'morthen').level).toBe(20);
+  });
+
+  it('allows only the party leader to change the party dungeon difficulty', () => {
+    const sim = makeSim();
+    const leader = sim.addPlayer('warrior', 'Leader');
+    const member = sim.addPlayer('mage', 'Member');
+    sim.partyInvite(member, leader);
+    sim.partyAccept(member);
+    sim.drainEvents();
+
+    sim.setDungeonDifficulty('heroic', member);
+
+    expect(sim.dungeonDifficulty(leader)).toBe('normal');
+    expect(sim.dungeonDifficulty(member)).toBe('normal');
+    expect(
+      (sim.drainEvents() as any[]).some(
+        (e) => e.type === 'error' && e.pid === member && e.text === 'You are not the party leader.',
+      ),
+    ).toBe(true);
+
+    sim.setDungeonDifficulty('heroic', leader);
+
+    expect(sim.dungeonDifficulty(leader)).toBe('heroic');
+    expect(sim.dungeonDifficulty(member)).toBe('heroic');
   });
 });
 

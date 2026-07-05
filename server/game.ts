@@ -27,6 +27,7 @@ import {
   EQUIP_SLOTS,
   type EquipSlot,
   emptyMoveInput,
+  isDungeonDifficulty,
   MAX_LEVEL,
   PARTY_MEMBER_AURA_CAP,
   RUN_SPEED,
@@ -183,6 +184,7 @@ type ClientMessage = Record<string, unknown> & {
   count?: number;
   copper?: number;
   delveId?: string;
+  difficulty?: unknown;
   dungeon?: string;
   emote?: unknown;
   enabled?: boolean;
@@ -3281,6 +3283,10 @@ export class GameServer {
         if (exit) sim.leaveDungeon(pid);
         break;
       }
+      case 'set_dungeon_difficulty': {
+        if (isDungeonDifficulty(msg.difficulty)) sim.setDungeonDifficulty(msg.difficulty, pid);
+        break;
+      }
       case 'enter_delve': {
         if (typeof msg.delveId !== 'string' || typeof msg.tierId !== 'string') break;
         const e = sim.entities.get(pid);
@@ -3581,6 +3587,7 @@ export class GameServer {
       drk: p.drinking ? { remaining: round2(p.drinking.remaining) } : null,
       opUntil: p.overpowerUntil > this.sim.time ? 1 : 0,
       ack: session.spectating ? 0 : anchorSession.lastInputSeq,
+      ddiff: this.sim.dungeonDifficulty(anchorSession.pid),
     });
     const json = JSON.stringify(self);
     // heavy, rarely-changing fields ride along only when their serialized
