@@ -22,6 +22,13 @@ const OVERLAP_THRESHOLD_Y_PX = 18;
 // Vertical gap applied between stacked members of a cluster.
 const STACK_OFFSET_PX = 20;
 
+function overlaps(a: NameplateAnchor, b: NameplateAnchor): boolean {
+  return (
+    Math.abs(a.sx - b.sx) <= OVERLAP_THRESHOLD_X_PX &&
+    Math.abs(a.sy - b.sy) <= OVERLAP_THRESHOLD_Y_PX
+  );
+}
+
 export function declutterNameplates(anchors: NameplateAnchor[]): NameplateAnchor[] {
   const out = anchors.map((a) => ({ ...a }));
   const byId = new Map(out.map((a) => [a.id, a]));
@@ -33,16 +40,31 @@ export function declutterNameplates(anchors: NameplateAnchor[]): NameplateAnchor
 
   for (const anchor of ordered) {
     if (visited.has(anchor.id)) continue;
-    const cluster = ordered.filter(
-      (other) =>
-        !visited.has(other.id) &&
-        Math.abs(other.sx - anchor.sx) <= OVERLAP_THRESHOLD_X_PX &&
-        Math.abs(other.sy - anchor.sy) <= OVERLAP_THRESHOLD_Y_PX,
-    );
+
+    // Connected component over the overlap graph (BFS), not just anchors
+    // directly overlapping `anchor`: a chain A-B-C where A overlaps B and B
+    // overlaps C, but A does not overlap C, must still stack all three or
+    // B/C would be left overlapping.
+    const cluster: NameplateAnchor[] = [];
+    const queue = [anchor];
+    const inQueue = new Set([anchor.id]);
+    while (queue.length > 0) {
+      const current = queue.shift()!;
+      cluster.push(current);
+      for (const other of ordered) {
+        if (inQueue.has(other.id) || visited.has(other.id)) continue;
+        if (overlaps(current, other)) {
+          inQueue.add(other.id);
+          queue.push(other);
+        }
+      }
+    }
+
     if (cluster.length < 2) {
       visited.add(anchor.id);
       continue;
     }
+    cluster.sort((a, b) => a.id - b.id);
     const baseSy = cluster.reduce((sum, a) => sum + a.sy, 0) / cluster.length;
     cluster.forEach((member, i) => {
       const target = byId.get(member.id);

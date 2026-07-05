@@ -53,6 +53,26 @@ describe('nameplate declutter', () => {
     expect(ys[2] - ys[0]).toBeLessThan(200);
   });
 
+  it('stacks a transitive chain where the endpoints do not directly overlap', () => {
+    // A overlaps B (70px apart) and B overlaps C (70px apart), but A and C
+    // are 140px apart, beyond OVERLAP_THRESHOLD_X_PX (80px), so a naive
+    // "only cluster with the anchor itself" pass would stack A/B and leave
+    // C untouched, which still collides with B's new position.
+    const anchors: NameplateAnchor[] = [
+      { id: 1, sx: 0, sy: 100 },
+      { id: 2, sx: 70, sy: 100 },
+      { id: 3, sx: 140, sy: 100 },
+    ];
+    const out = declutterNameplates(anchors);
+    const byId = new Map(out.map((n) => [n.id, n]));
+    const a = byId.get(1)!;
+    const b = byId.get(2)!;
+    const c = byId.get(3)!;
+    expect(Math.abs(a.sy - b.sy)).toBeGreaterThanOrEqual(18);
+    expect(Math.abs(b.sy - c.sy)).toBeGreaterThanOrEqual(18);
+    expect(Math.abs(a.sy - c.sy)).toBeGreaterThanOrEqual(18);
+  });
+
   it('orders a cluster stably by id regardless of input order', () => {
     const anchors: NameplateAnchor[] = [
       { id: 9, sx: 400, sy: 400 },
