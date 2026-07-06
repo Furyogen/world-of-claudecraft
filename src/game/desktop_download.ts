@@ -14,12 +14,10 @@ export const DESKTOP_VERSION = '0.21.0';
 const DESKTOP_HOST = 'https://updates.worldofclaudecraft.com/desktop';
 
 // electron-builder website-channel artifact names (docs/desktop-release.md):
-// mac ships one universal dmg; the x64 Linux AppImage is named x86_64 (that is
-// electron-builder's arch token for AppImage, not "x64"). Windows is not
-// published yet, so it has no entry here.
+// mac ships one universal dmg. Linux and Windows are not published yet, so they
+// have no entries here.
 const ARTIFACT: Partial<Record<DesktopPlatform, string>> = {
   mac: `world-of-claudecraft-${DESKTOP_VERSION}-mac-universal.dmg`,
-  linux: `world-of-claudecraft-${DESKTOP_VERSION}-linux-x86_64.AppImage`,
 };
 
 // Full download URL for a platform, or null when no artifact is published for it.
@@ -52,17 +50,25 @@ export function initDesktopDownload(doc: Document = document): void {
   for (const link of links) {
     const platform = link.dataset.platform as DesktopPlatform | undefined;
     const url = platform ? desktopDownloadUrl(platform) : null;
-    if (url) link.href = url;
+    link.classList.toggle('is-unavailable', !url);
+    link.setAttribute('aria-disabled', url ? 'false' : 'true');
+    if (url) {
+      link.href = url;
+    } else {
+      link.removeAttribute('href');
+    }
   }
   const detected = detectDesktopPlatform(navigator.userAgent);
   const actions = section.querySelector('.desktop-download-actions');
   for (const link of links) {
-    const isSelf = link.dataset.platform === detected;
+    const platform = link.dataset.platform as DesktopPlatform | undefined;
+    const isSelf = !!platform && !!desktopDownloadUrl(platform) && platform === detected;
     link.classList.toggle('is-detected', isSelf);
     if (isSelf && actions && link !== actions.firstElementChild) actions.prepend(link);
   }
   const hints = section.querySelectorAll<HTMLElement>('[data-platform-hint]');
   for (const hint of hints) {
-    hint.hidden = hint.dataset.platformHint !== detected;
+    const platform = hint.dataset.platformHint as DesktopPlatform | undefined;
+    hint.hidden = platform !== detected || !desktopDownloadUrl(platform);
   }
 }
