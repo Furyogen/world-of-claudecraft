@@ -28,7 +28,7 @@
       "tick": 3,
       "time": 0.15,
       "nextId": 460,
-      "state": "edb531a1",
+      "state": "8d526e9b",
       "events": "3ff42290",
       "rng": {
         "draws": 2,
@@ -38,6 +38,7 @@
       "players": [
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -78,6 +79,7 @@
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [

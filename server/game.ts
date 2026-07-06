@@ -2465,6 +2465,13 @@ export class GameServer {
     const msg = rawMsg as ClientMessage;
     const sim = this.sim;
     const pid = session.pid;
+    // Deliberate logout: the client wants a clean leave, not a linkdead grace.
+    // Calling leave() immediately sets session.left = true, so the subsequent
+    // WebSocket close event (from the page reload) is a no-op in socketClosed().
+    if (msg.t === 'logout') {
+      void this.leave(session, 'logout');
+      return;
+    }
     if (msg.t === 'input') {
       if (session.spectating) return;
       const meta = sim.meta(pid);
@@ -3651,6 +3658,10 @@ export class GameServer {
     // mirrors the raw per-craft proficiency map for the `gatheringProficiency`
     // IWorld data member (#1119), independent of the `professionsState` view.
     maybe('prof', this.sim.professionsStateFor(anchorSession.pid));
+    // Raw gathering-profession proficiency map (IWorld `gatheringProficiency`,
+    // #1119), a second small read alongside `prof` for the ORIGINAL flat-map
+    // shape used by the `/dev gather` chat cheat and existing consumers. Wire
+    // key `gprof`; see TERSE_TO_IWORLD/ALL_DELTA_KEYS in tests/snapshots.test.ts.
     maybe('gprof', this.sim.gatheringProficiencyFor(anchorSession.pid));
     // stats + weapon stay per-tick: recalcPlayerStats re-derives them on every
     // stat-affecting aura gain/loss (Bear/Cat Form, shouts, debuffs, elixir

@@ -34,7 +34,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 466,
-      "state": "2c6db194",
+      "state": "c4c15531",
       "events": "580a7d26",
       "rng": {
         "draws": 6,
@@ -44,6 +44,7 @@
       "players": [
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -84,6 +85,7 @@
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -124,6 +126,7 @@
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -164,6 +167,7 @@
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -204,6 +208,7 @@
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -744,7 +749,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 466,
-      "state": "3b5555e5",
+      "state": "dec5f126",
       "events": "8ca46c85",
       "rng": {
         "draws": 6,
@@ -754,6 +759,7 @@
       "players": [
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -794,6 +800,7 @@
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -834,6 +841,7 @@
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -876,6 +884,7 @@
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -916,6 +925,7 @@
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -1474,7 +1484,7 @@
       "tick": 5,
       "time": 0.25,
       "nextId": 466,
-      "state": "abe88b8a",
+      "state": "83056d6f",
       "events": "ba30a541",
       "rng": {
         "draws": 10,
@@ -1485,7 +1495,7 @@
       "tick": 8,
       "time": 0.4,
       "nextId": 466,
-      "state": "726456d4",
+      "state": "85a95755",
       "events": "ba30a541",
       "rng": {
         "draws": 10,
@@ -1495,6 +1505,7 @@
       "players": [
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -1535,6 +1546,7 @@
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -1575,6 +1587,7 @@
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -1617,6 +1630,7 @@
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -1657,6 +1671,7 @@
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [

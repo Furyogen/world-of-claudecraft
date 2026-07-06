@@ -221,6 +221,8 @@ const QUEST_IDS = [
   'q_nythraxis_bound_guardian',
   'q_nythraxis_scourges_end',
   'q_mogger',
+  'q_archetype_acceptance',
+  'q_prof_make_amends',
   // The Mirror World (zone 4) — the Deepdream chain
   'q_deepdream_recipe',
   'q_face_your_echo',

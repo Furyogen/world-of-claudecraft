@@ -32,7 +32,7 @@ import {
 import type { DelveModuleId } from '../sim/delve_layout';
 import type { BiomeId } from '../sim/types';
 import { ALL_CLASSES, type Entity, type SimEvent } from '../sim/types';
-import { groundHeight, waterLevel, zoneBiomeAt } from '../sim/world';
+import { groundHeight, waterLevelAt, zoneBiomeAt } from '../sim/world';
 import { attachAvatarFallback } from '../ui/avatar_fallback';
 import { tEntity } from '../ui/entity_i18n';
 import type { IWorld } from '../world_api';
@@ -50,6 +50,7 @@ import { trackWebGLContext } from './context_release';
 import { buildCritters, type CritterField } from './critters';
 import { buildDelveModule } from './delve_interiors';
 import { buildDelveInteractable } from './delve_props';
+import { buildDoorBody, buildMirrorBody } from './door_portal';
 import { DungeonInteriors, ensureDungeonAssets } from './dungeon';
 import { objectDisplayName } from './entity_labels';
 import { releaseSelfFacing, stepSelfFacing } from './facing_smooth';
@@ -93,6 +94,7 @@ import { RenderBudgetGovernor, type RenderBudgetState } from './render_budget';
 import { downscaleDims } from './screenshot';
 import { buildSealife, type SealifeView } from './sealife';
 import { drapeRingLocalY } from './selection_ring';
+import { isSharedGeometry, isSharedMaterial } from './shared_resource';
 import { buildClouds, buildSky, type SkyView } from './sky';
 import { nearestSloppyPickId, type SloppyPickCandidate } from './sloppy_pick';
 import { freezeStaticMatrices } from './static_matrix';
@@ -192,19 +194,6 @@ const SELECTION_RING_SPIN = 0.6; // rad/s — slow classic target-reticle rotati
 const CLICK_MARKER_POOL = 4; // concurrent click-feedback markers before reuse
 const GROUND_AIM_RETICLE_PULSE_HZ = 2;
 const SPARKLE_BOOST = 1.5;
-const PORTAL_BOOST = 2;
-// Door-arch tints by context. The emissive is a slight self-light on the stone:
-// Lambert alone goes near-black on every sun-away face, which read as a dead
-// monolith from behind/beside (worst under dim mist light). `portal` tints the
-// additive oval. Violet marks dungeon entrances, blue instance exits; `pad` is
-// the pale silver shimmer of the Mirror World's standing mirrors
-// (buildMirrorBody rides it on the glass).
-const DOOR_TINTS = {
-  enter: { portal: 0x9a5df0, emissive: 0x2a1a4e },
-  exit: { portal: 0x6ab8ff, emissive: 0x16304a },
-  pad: { portal: 0xb9c2dd, emissive: 0x2a2a45 },
-} as const;
-type DoorTint = keyof typeof DOOR_TINTS;
 // Third-person camera collision (see updateCamera). Prop colliders marked
 // camGhost are hidden by props.ts/foliage.ts instead; this path is for
 // non-hideable blockers such as large rocks and interior walls.
@@ -692,24 +681,6 @@ function isPersistentPortalObject(e: Entity): boolean {
       e.templateId === 'dungeon_exit' ||
       e.templateId === 'portal_pad')
   );
-}
-
-function markSharedGeometry<T extends THREE.BufferGeometry>(geometry: T): T {
-  geometry.userData.sharedRendererResource = true;
-  return geometry;
-}
-
-function markSharedMaterial<T extends THREE.Material>(material: T): T {
-  material.userData.sharedRendererResource = true;
-  return material;
-}
-
-function isSharedGeometry(geometry: THREE.BufferGeometry): boolean {
-  return geometry.userData.sharedRendererResource === true;
-}
-
-function isSharedMaterial(material: THREE.Material): boolean {
-  return material.userData.sharedRendererResource === true;
 }
 
 function sleep(ms: number): Promise<void> {
@@ -1888,7 +1859,7 @@ export class Renderer {
   // Surface under (x,z) for footstep timbre. Sampled only at a footfall (cheap).
   private surfaceAt(x: number, z: number, y: number): Surface {
     if (x > DUNGEON_X_THRESHOLD) return 'stone'; // dungeon interiors are stone halls
-    const wl = waterLevel();
+    const wl = waterLevelAt(x, z);
     if (groundHeight(x, z, this.sim.cfg.seed) < wl && y <= wl + 0.3) return 'water';
     const biome = zoneBiomeAt(z);
     if (biome === 'vale') return 'grass';
@@ -3407,240 +3378,18 @@ export class Renderer {
   // -------------------------------------------------------------------------
 
   // Shared object-view resources: views must not own materials/textures, or
-  // interest churn leaks them (removeView only disposes per-view geometry).
-  private doorStoneMats = new Map<DoorTint, THREE.Material>();
-  private doorArchGeo: THREE.BufferGeometry | null = null;
-  private doorKeystoneGeo: THREE.BufferGeometry | null = null;
-  private doorPlinthGeo: THREE.BufferGeometry | null = null;
-  private doorPortalGeo: THREE.BufferGeometry | null = null;
-  private doorNythraxisClickGeo: THREE.BufferGeometry | null = null;
-  private doorNythraxisClickMat: THREE.MeshBasicMaterial | null = null;
-  private doorPortalMats = new Map<DoorTint, THREE.MeshBasicMaterial>();
-  private doorPortalBackMats = new Map<DoorTint, THREE.MeshBasicMaterial>();
+  // interest churn leaks them (removeView only disposes per-view geometry). The
+  // dungeon door/portal resources moved to door_portal.ts (same shared tagging);
+  // the Mirror World standing-mirror body (buildMirrorBody) rides that module's
+  // shared portal geometry + pad-tinted shimmer too.
   private sparkleMat: THREE.SpriteMaterial | null = null;
-
-  private doorStoneMaterial(tint: DoorTint): THREE.Material {
-    let mat = this.doorStoneMats.get(tint);
-    if (!mat) {
-      mat = markSharedMaterial(
-        new THREE.MeshLambertMaterial({
-          color: 0x6a6a72,
-          emissive: DOOR_TINTS[tint].emissive,
-        }),
-      );
-      this.doorStoneMats.set(tint, mat);
-    }
-    return mat;
-  }
-
-  private doorArchGeometry(): THREE.BufferGeometry {
-    if (!this.doorArchGeo) {
-      const outer = new THREE.Shape();
-      outer.moveTo(-2.1, 0);
-      outer.lineTo(-2.1, 3.1);
-      outer.quadraticCurveTo(-2.1, 4.85, 0, 5.05);
-      outer.quadraticCurveTo(2.1, 4.85, 2.1, 3.1);
-      outer.lineTo(2.1, 0);
-      outer.closePath();
-      const inner = new THREE.Path();
-      inner.moveTo(-1.3, -0.5);
-      inner.lineTo(-1.3, 2.9);
-      inner.quadraticCurveTo(-1.3, 4.05, 0, 4.22);
-      inner.quadraticCurveTo(1.3, 4.05, 1.3, 2.9);
-      inner.lineTo(1.3, -0.5);
-      inner.closePath();
-      outer.holes.push(inner);
-      const archGeo = new THREE.ExtrudeGeometry(outer, {
-        depth: 0.7,
-        bevelEnabled: true,
-        bevelThickness: 0.07,
-        bevelSize: 0.07,
-        bevelSegments: 1,
-      });
-      archGeo.translate(0, 0, -0.35);
-      this.doorArchGeo = markSharedGeometry(archGeo);
-    }
-    return this.doorArchGeo;
-  }
-
-  private doorKeystoneGeometry(): THREE.BufferGeometry {
-    this.doorKeystoneGeo ??= markSharedGeometry(new THREE.BoxGeometry(0.7, 1.0, 0.95));
-    return this.doorKeystoneGeo;
-  }
-
-  private doorPlinthGeometry(): THREE.BufferGeometry {
-    this.doorPlinthGeo ??= markSharedGeometry(new THREE.BoxGeometry(1.15, 0.7, 1.15));
-    return this.doorPlinthGeo;
-  }
-
-  private doorPortalGeometry(): THREE.BufferGeometry {
-    this.doorPortalGeo ??= markSharedGeometry(new THREE.CircleGeometry(1.55, 24));
-    return this.doorPortalGeo;
-  }
-
-  private doorNythraxisClickGeometry(): THREE.BufferGeometry {
-    this.doorNythraxisClickGeo ??= markSharedGeometry(new THREE.BoxGeometry(4.6, 4.2, 2.4));
-    return this.doorNythraxisClickGeo;
-  }
-
-  private doorNythraxisClickMaterial(): THREE.MeshBasicMaterial {
-    this.doorNythraxisClickMat ??= markSharedMaterial(
-      new THREE.MeshBasicMaterial({
-        color: 0x000000,
-        transparent: true,
-        opacity: 0.001,
-        depthWrite: false,
-      }),
-    );
-    return this.doorNythraxisClickMat;
-  }
-
-  // Front oval: FrontSide so the rear oval below can take over from behind
-  // without the two ever adding together through the arch opening.
-  private doorPortalMaterial(tint: DoorTint): THREE.MeshBasicMaterial {
-    let mat = this.doorPortalMats.get(tint);
-    if (!mat) {
-      mat = markSharedMaterial(
-        new THREE.MeshBasicMaterial({
-          color: DOOR_TINTS[tint].portal,
-          transparent: true,
-          opacity: 0.55,
-          blending: THREE.AdditiveBlending,
-          depthWrite: false,
-        }),
-      );
-      if (!this.lowGfx) mat.color.multiplyScalar(PORTAL_BOOST);
-      this.doorPortalMats.set(tint, mat);
-    }
-    return mat;
-  }
-
-  // Rear oval: BackSide, so it only shows from behind the arch. Static opacity
-  // (the per-frame pulse in sync() drives the front material only) sitting at
-  // the middle of the front oval's 0.30–0.60 swing.
-  private doorPortalBackMaterial(tint: DoorTint): THREE.MeshBasicMaterial {
-    let mat = this.doorPortalBackMats.get(tint);
-    if (!mat) {
-      mat = markSharedMaterial(
-        new THREE.MeshBasicMaterial({
-          color: DOOR_TINTS[tint].portal,
-          transparent: true,
-          opacity: 0.5,
-          side: THREE.BackSide,
-          blending: THREE.AdditiveBlending,
-          depthWrite: false,
-        }),
-      );
-      if (!this.lowGfx) mat.color.multiplyScalar(PORTAL_BOOST);
-      this.doorPortalBackMats.set(tint, mat);
-    }
-    return mat;
-  }
-
-  private buildDoorBody(
-    tint: DoorTint,
-    dungeonId?: string | null,
-  ): { body: THREE.Group; portal?: THREE.Mesh } {
-    const body = new THREE.Group();
-    if (tint === 'enter' && dungeonId === 'nythraxis_crypt') {
-      const clickBox = new THREE.Mesh(
-        this.doorNythraxisClickGeometry(),
-        this.doorNythraxisClickMaterial(),
-      );
-      clickBox.position.y = 2.1;
-      body.add(clickBox);
-      return { body };
-    }
-
-    const stone = this.doorStoneMaterial(tint);
-    const arch = new THREE.Mesh(this.doorArchGeometry(), stone);
-    arch.castShadow = true;
-    body.add(arch);
-    const keystone = new THREE.Mesh(this.doorKeystoneGeometry(), stone);
-    keystone.position.set(0, 4.75, 0);
-    keystone.castShadow = true;
-    body.add(keystone);
-    for (const sx of [-1.7, 1.7]) {
-      const plinth = new THREE.Mesh(this.doorPlinthGeometry(), stone);
-      plinth.position.set(sx, 0.35, 0);
-      plinth.castShadow = true;
-      body.add(plinth);
-    }
-    const portal = new THREE.Mesh(this.doorPortalGeometry(), this.doorPortalMaterial(tint));
-    portal.position.y = 2.15;
-    portal.scale.set(1, 1.35, 1);
-    body.add(portal);
-    // The front oval sits recessed in the frame, so past ~90° the stone hides
-    // it. Float a rear oval just clear of the arch's back bevel (z ≈ -0.42) so
-    // the portal reads from behind too; as a child of `portal` it inherits the
-    // sync() spin for free.
-    const back = new THREE.Mesh(this.doorPortalGeometry(), this.doorPortalBackMaterial(tint));
-    back.position.z = -0.55;
-    portal.add(back);
-    return { body, portal };
-  }
-
-  // A standing mirror — every Mirror World portal pad renders as one: a dark
-  // ornate frame on a plinth around a polished metal oval, with the pad-tinted
-  // door shimmer riding the 'portal' slot so the existing portal animation
-  // path breathes it for free. High metalness + the scene env map make the
-  // glass read as a true reflection of its surroundings (bright sky on the
-  // Thornpeak ridge, pale gloaming inside the dome).
-  private mirrorFrameMat: THREE.Material | null = null;
-  private mirrorGlassMat: THREE.Material | null = null;
-
-  private buildMirrorBody(): { body: THREE.Group; portal?: THREE.Mesh } {
-    this.mirrorFrameMat ??= markSharedMaterial(
-      new THREE.MeshStandardMaterial({
-        color: 0x2e2a3e,
-        roughness: 0.55,
-        metalness: 0.35,
-        emissive: 0x14122a,
-        emissiveIntensity: 0.6,
-      }),
-    );
-    this.mirrorGlassMat ??= markSharedMaterial(
-      new THREE.MeshStandardMaterial({
-        color: 0xcfd6e6,
-        roughness: 0.05,
-        metalness: 1,
-        envMapIntensity: 2.5,
-        emissive: 0x0c0c18,
-        emissiveIntensity: 0.3,
-      }),
-    );
-    const body = new THREE.Group();
-    const plinth = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.5, 1.4), this.mirrorFrameMat);
-    plinth.position.y = 0.25;
-    plinth.castShadow = true;
-    body.add(plinth);
-    const frame = new THREE.Mesh(new THREE.TorusGeometry(1.35, 0.16, 10, 40), this.mirrorFrameMat);
-    frame.position.y = 2.5;
-    frame.scale.set(1, 1.45, 1);
-    frame.castShadow = true;
-    body.add(frame);
-    const glass = new THREE.Mesh(new THREE.CircleGeometry(1.3, 40), this.mirrorGlassMat);
-    glass.position.y = 2.5;
-    glass.scale.set(1, 1.45, 1);
-    body.add(glass);
-    const backing = new THREE.Mesh(new THREE.CircleGeometry(1.3, 40), this.mirrorFrameMat);
-    backing.position.set(0, 2.5, -0.03);
-    backing.scale.set(1, 1.45, 1);
-    backing.rotation.y = Math.PI;
-    body.add(backing);
-    const portal = new THREE.Mesh(this.doorPortalGeometry(), this.doorPortalMaterial('pad'));
-    portal.position.set(0, 2.5, 0.06);
-    portal.scale.set(0.62, 0.9, 1);
-    body.add(portal);
-    return { body, portal };
-  }
 
   private buildDoorPrewarmGroup(): THREE.Group {
     const group = new THREE.Group();
-    const entrance = this.buildDoorBody('enter').body;
+    const entrance = buildDoorBody(true, null, this.lowGfx).body;
     entrance.position.x = -3;
     group.add(entrance);
-    const exit = this.buildDoorBody('exit').body;
+    const exit = buildDoorBody(false, null, this.lowGfx).body;
     exit.position.x = 3;
     group.add(exit);
     const p = this.sim.player;
@@ -3666,10 +3415,8 @@ export class Renderer {
       e.kind === 'object' &&
       (e.templateId === 'dungeon_door' || e.templateId === 'dungeon_exit')
     ) {
-      // Dungeon doors keep the stone arch: entrances violet, exits blue (see
-      // DOOR_TINTS).
-      const tint: DoorTint = e.templateId === 'dungeon_door' ? 'enter' : 'exit';
-      const built = this.buildDoorBody(tint, e.dungeonId);
+      const entering = e.templateId === 'dungeon_door';
+      const built = buildDoorBody(entering, e.dungeonId, this.lowGfx);
       body = built.body;
       portal = built.portal;
       height = 4.6;
@@ -3684,7 +3431,7 @@ export class Renderer {
     } else if (e.kind === 'object' && e.templateId === 'portal_pad') {
       // Every Mirror World portal — the Mirrorgates, the Lumen Lift, the
       // clouded grotto mirrors — is a standing mirror.
-      const built = this.buildMirrorBody();
+      const built = buildMirrorBody(this.lowGfx);
       body = built.body;
       portal = built.portal;
       height = 4.4;
@@ -4286,7 +4033,7 @@ export class Renderer {
             ? 'nythraxis'
             : inside
               ? 'dungeon'
-              : camY < waterLevel() - 0.05
+              : camY < waterLevelAt(px, pz) - 0.05
                 ? 'underwater'
                 : 'outdoor';
     const fog = this.scene.fog as THREE.Fog;
@@ -4798,13 +4545,15 @@ export class Renderer {
       }
 
       // swimming pose: prone at the surface (derived here — the sim is unaware).
-      // The cheap feet-depth test gates the expensive terrain-noise sample: an
-      // entity whose feet are above the swim line can't be swimming, so the vast
-      // majority (everyone on land) skip groundHeight() entirely each frame.
+      // waterLevelAt is -Infinity outside a declared lake, so the cheap feet-depth
+      // test also gates entities standing in a dry sunken feature: they can't be
+      // swimming there, and the vast majority (everyone on land) skip
+      // groundHeight() entirely each frame.
+      const wl = waterLevelAt(e.pos.x, e.pos.z);
       const swimming =
         !e.dead &&
-        e.pos.y <= waterLevel() - 0.5 &&
-        groundHeight(e.pos.x, e.pos.z, this.sim.cfg.seed) < waterLevel() - 0.8;
+        e.pos.y <= wl - 0.5 &&
+        groundHeight(e.pos.x, e.pos.z, this.sim.cfg.seed) < wl - 0.8;
 
       // lazy form visuals, swapped by visibility like the old sheep/bear rigs
       if (polyed && !v.sheepVisual) {
@@ -5599,10 +5348,36 @@ export class Renderer {
   /**
    * Re-seat the water surface at the ACTIVE waterLevel() and recompute the
    * shoreline depth attribute from the current terrain (after a water-level
-   * edit or a shoreline sculpt). Editor-only.
+   * edit or a shoreline sculpt). A cheap in-place update: it does NOT change
+   * which lakes exist or where they are, only their shared level/shore depth.
+   * Editor-only.
    */
   rebuildWater(): void {
     this.waterView.setLevel();
+  }
+
+  /**
+   * Full water rebuild: dispose every existing lake mesh and rebuild from the
+   * CURRENT `waterBodies()` (declared lake list). Needed after the editor adds,
+   * removes, or moves a lake marker: `rebuildWater()` only reseats existing
+   * meshes in place, so a moved marker would otherwise leave the water mesh,
+   * shader `uCenter`/`uRadius`, and shore-depth attribute at the OLD footprint
+   * while the terrain basin itself has already moved. Editor-only.
+   */
+  rebuildWaterBodies(): void {
+    for (const mesh of this.waterView.meshes) {
+      this.scene.remove(mesh);
+      mesh.geometry.dispose();
+      const mat = mesh.material as THREE.Material | THREE.Material[];
+      if (Array.isArray(mat)) for (const m of mat) m.dispose();
+      else mat.dispose();
+    }
+    this.waterView = buildWater(this.sim.cfg.seed);
+    for (const mesh of this.waterView.meshes) {
+      setRenderCategory(mesh, 'water');
+      this.scene.add(mesh);
+      freezeStaticMatrices(mesh);
+    }
   }
 
   /**
@@ -5735,7 +5510,7 @@ export class Renderer {
               : null;
       // Only at the water's edge / in it — sampled at the player, so a loose
       // threshold made the loop bleed across the low marsh from far off.
-      const nearWater = !inDungeon && groundHeight(px, pz, seed) < waterLevel() + 0.4;
+      const nearWater = !inDungeon && groundHeight(px, pz, seed) < waterLevelAt(px, pz) + 0.4;
       sink.ambience(biome, inDungeon, precip, nearWater);
     }
   }

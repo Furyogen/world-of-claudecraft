@@ -21,7 +21,9 @@ import {
   resolveClickMoveAction,
   stepAngleToward,
 } from './game/click_move';
+import { clientEnvBits, installPageStateTracking, pageStateBits } from './game/client_env';
 import { getClientSeed } from './game/client_seed';
+import { initDesktopDownload } from './game/desktop_download';
 import { initDesktopShellIntegration } from './game/desktop_shell_integration';
 import { takeEditorPlaytestRequest } from './game/editor_playtest';
 import { GamepadManager } from './game/gamepad';
@@ -45,7 +47,6 @@ import {
   setInterfaceMode,
   useTouchInterface,
 } from './game/mobile_controls';
-import { applyMobileHudLayout } from './game/mobile_hud_layout_applier';
 import { mouselookReleaseFacing } from './game/mouselook_release';
 import { music } from './game/music';
 import { createPerfMonitor } from './game/perf';
@@ -421,7 +422,6 @@ function syncBuildInfo(): void {
 
 function syncAppViewport(): void {
   syncAppViewportShared();
-  applyMobileHudLayout();
 }
 
 function preventMobileZoom(): void {
@@ -1107,14 +1107,10 @@ async function startGame(
     gameInputReady,
   }));
 
-  // The ring's attack toggle acquires the nearest attackable enemy when tapped
-  // with no live hostile target (the HUD falls back to plain castSlot(0) until
-  // this is wired); the Target button cycles targets via the Tab path below.
-  hud.onMobileAttackNearest = () => attackNearest();
-
   const mobileControls = new MobileControls(input, {
-    onCycleTarget: () => world.tabTarget(),
+    onAttackNearest: () => attackNearest(),
     onJump: () => input.triggerTouchJump(),
+    onTarget: () => world.tabTarget(),
     onInteract: () => interactKey(),
     onAutorun: () => input.toggleAutorun(),
     onChat: () => openChat(),
@@ -1147,9 +1143,15 @@ async function startGame(
   // movement/camera/jump are applied to Input directly by the manager.
   const inputMeter = new InputActivityMeter();
   installInputActivityTracking(inputMeter, window, () => performance.now());
+  installPageStateTracking(window, document);
   const APM_BEAT_MS = 10_000;
   window.setInterval(() => {
-    world.reportTelemetry('apm', { count: inputMeter.drainCount(), periodMs: APM_BEAT_MS });
+    world.reportTelemetry('apm', {
+      count: inputMeter.drainCount(),
+      periodMs: APM_BEAT_MS,
+      env: clientEnvBits(),
+      vis: pageStateBits(),
+    });
   }, APM_BEAT_MS);
   const gamepadBindings = new GamepadBindings();
   const canUseGameKeysNow = () => !hud.isModalOpen() && chatInput.style.display !== 'block';
@@ -1308,12 +1310,6 @@ async function startGame(
     if (key === 'leftHandedTouch') {
       const v = settings.set('leftHandedTouch', !!value);
       document.body.classList.toggle('mobile-left-handed', v);
-      return;
-    }
-    if (key === 'mobileCameraJoystick') {
-      const v = settings.set('mobileCameraJoystick', !!value);
-      document.body.classList.toggle('mobile-camera-joystick-on', v);
-      mobileControls.setCameraJoystickEnabled(v);
       return;
     }
     if (key === 'touchInvertLook') {
@@ -1549,7 +1545,12 @@ async function startGame(
   // the options menu drives logout + key-capture + settings, all of which need
   // refs that only exist now (input/renderer) or are page-level (reload)
   hud.attachOptions({
-    logout: () => location.reload(),
+    logout: () => {
+      // Signal the server to leave immediately, skipping the linkdead grace, so
+      // the character is not held in-world after a deliberate logout.
+      online?.sendLogout();
+      location.reload();
+    },
     captureKey: (cb) => input.captureNextKey(cb),
     settings,
     onSettingChange: (key, value) => applySetting(key, value),
@@ -7242,6 +7243,7 @@ function wireStartScreens(): void {
     void loadNews();
   });
   setupNavBtn(navBtnDownload, '#download-view');
+  initDesktopDownload();
   setupNavBtn(navBtnLogin, '#hero-view', () => {
     show('#login-panel');
   });

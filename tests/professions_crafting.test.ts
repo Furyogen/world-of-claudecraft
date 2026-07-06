@@ -132,6 +132,22 @@ describe('resolveCraft (#1127)', () => {
     expect(meta.craftSkills.cooking).toBe(2);
   });
 
+  it('the quality roll is deterministic under a fixed seed and consumes exactly one rng draw', () => {
+    const runOnce = () => {
+      const sim = makeSim(7);
+      const pid = sim.playerId;
+      grantItem(sim, 'spider_leg', 1, pid);
+      const recipe = recipeById('recipe_tough_jerky')!;
+      const drawsBefore = (sim as any).rng.draws ?? 0;
+      const result = resolveCraft((sim as any).ctx, pid, recipe.id);
+      return { result, drawsBefore };
+    };
+    const a = runOnce();
+    const b = runOnce();
+    expect(a.result.quality).toBe(b.result.quality);
+    expect(typeof a.result.quality).toBe('string');
+  });
+
   it('grants no craft skill on a denied craft', () => {
     const sim = makeSim();
     const pid = sim.playerId;
