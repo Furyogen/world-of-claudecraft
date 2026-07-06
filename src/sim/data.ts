@@ -44,6 +44,7 @@ import {
   SPIRIT_HEALER_NPC_ID,
 } from './content/graveyards';
 import { GROUND_PICKUP_LINES } from './content/ground_pickup_lines';
+import { HC_HERALD, HC_HERALD_NPC_ID } from './content/hodrics';
 import { COMMON_RECIPES as COMMON_RECIPES_CONTENT } from './content/recipes';
 import {
   TEMPLE_CAMPS,
@@ -180,6 +181,9 @@ export const NPCS: Record<string, NpcDef> = {
   // loop skips it). Kept in NPCS so the online client and world_entity_i18n can
   // resolve its name; spirit.ts spawns a copy at every graveyard.
   [SPIRIT_HEALER_NPC_ID]: SPIRIT_HEALER,
+  // The Gauntlet Herald (dynamic: true): spawned guarded at world init with a
+  // reserved out-of-band id (social/hodrics.ts spawnHcHerald), zero rng.
+  [HC_HERALD_NPC_ID]: HC_HERALD,
 };
 
 // Graveyards + the Spirit Healer: re-exported so the Sim and spirit.ts import the

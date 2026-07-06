@@ -1240,6 +1240,9 @@ export class Sim {
     // Per-instance dungeon/raid healers spawn on claim (instances/dungeons.ts).
     // createNpc draws no rng, so world-gen determinism is preserved.
     spawnOverworldSpiritHealers(this.ctx);
+    // The Gauntlet Herald: guarded, reserved-id, zero rng (goldens never see
+    // him). See social/hodrics.ts spawnHcHerald and HC_HERALD_ID.
+    hodricsMod.spawnHcHerald(this.ctx);
 
     for (const delve of DELVE_LIST) {
       for (let i = 0; i < DELVE_SLOT_COUNT; i++) {

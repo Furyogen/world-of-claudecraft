@@ -154,6 +154,61 @@ export const zh_TW: EnTranslations = {
     "spectate": {
       "banner": "正在觀察 {name}"
     },
+    "hc": {
+      "title": "霍德里克城堡",
+      "close": "關閉試煉之門視窗",
+      "zoneName": "霍德里克城堡",
+      "offlineNote": "試煉之門尚未同步,請稍候。",
+      "howto": "衝過城堡試煉:躲開鏈錘,穿過轉木,算準巨斧,踏上吊橋,躲開滾石。第一個衝線者奪得王冠。摔落只會耽誤時間。",
+      "joinQueue": "加入試煉",
+      "leaveQueue": "離開隊列",
+      "queuedAt": "排隊中,位置 {position}。湊滿十人即開賽。",
+      "inMatchNote": "比賽進行中,全力衝刺!",
+      "practice": "與試煉騎士練習",
+      "practiceNote": "挑戰霍德里克領主的騎士團:九名對手,無需等待。",
+      "record": "奪冠 {wins} / 參賽 {races}",
+      "bestTime": "最佳成績 {seconds}秒",
+      "bestNone": "尚無完賽紀錄",
+      "rank": "排名 {rank} / {total}",
+      "finishPlace": "完賽第 {place} 名",
+      "timeLeft": "{seconds}s",
+      "overWon": "王冠歸你所有!",
+      "overPlaced": "比賽結束:第 {place} 名",
+      "section": {
+        "start_yard": "起點廣場",
+        "flail_bridge": "鏈錘橋",
+        "log_court": "轉木廣場",
+        "axe_walk": "巨斧迴廊",
+        "drawspan": "升降吊橋",
+        "boulder_alley": "滾石巷",
+        "red_ascent": "赤紅坡道",
+        "finish_keep": "終點主堡"
+      },
+      "banner": {
+        "found": "試煉召喚而來!",
+        "go": "出發!",
+        "finish": "完賽第 {place} 名!",
+        "crown": "你奪得了霍德里克的王冠!"
+      },
+      "log": {
+        "queued": "你加入試煉隊列(位置 {position})。",
+        "unqueued": "你離開了試煉隊列。",
+        "fall": "深淵吞沒了你,返回檢查點。",
+        "checkpoint": "已通過檢查點 {index}。",
+        "placed": "你以第 {place} 名完成試煉。"
+      },
+      "flavor": {
+        "queueJoin": "你加入試煉隊列。霍德里克領主為你上油鏈錘,以示敬意。",
+        "gatesOpen": "霍德里克城堡的大門緩緩開啟,衝向王冠吧!",
+        "go": "出發!試煉之門已開!"
+      },
+      "err": {
+        "legsOnly": "試煉中只能靠雙腿:禁止使用技能。",
+        "inMatch": "你已經在參加試煉了。",
+        "dead": "死亡狀態下無法加入試煉隊列。",
+        "arenaConflict": "請先離開競技場再參加試煉。"
+      }
+    },
     "death": {
       "resurrectAtCorpse": "在屍體旁復活",
       "resurrectAtHealer": "靈魂醫者（復活虛弱）",
@@ -1333,6 +1388,7 @@ export const zh_TW: EnTranslations = {
       "combat": "戰鬥",
       "talents": "天賦",
       "arena": "競技場與PvP",
+      "hodricsCastle": "霍德里克城堡",
       "glossary": "詞彙表",
       "wishIKnew": "我希望早點知道的事",
       "faq": "常見問題",
@@ -1927,6 +1983,20 @@ export const zh_TW: EnTranslations = {
       "powerupsBody": "戰鬥進行到一半，發光的能量球也會落入競技場，誰先搶到就歸誰。它們刻意設計得誇張過火，且只持續短短一陣子：速度惡魔讓你瞬間飆出令人目眩的步伐，巨像讓你脹大成笨重的巨人，月靴帶來低重力的彈跳躍動，狂戰士則是一股突如其來的暴怒之潮。",
       "ladderHeading": "在天梯上攀升",
       "ladderBody": "排名對戰會長期記錄你的名次。查看排行榜便能看到自己的位置，以及誰穩坐王國之巔。"
+    },
+    "hodricsCastlePage": {
+      "heading": "霍德里克城堡",
+      "intro": "霍德里克領主向任何挑戰者敞開城堡通道。衝過他舊日防線的試煉,奪得王冠,不論你是誰,不論你的等級如何。",
+      "heraldHeading": "傳令官",
+      "heraldBody": "前往伊斯特布魯克邊緣找傳令官奧斯里克,加入試煉隊列。湊滿十名挑戰者(真實玩家與霍德里克宮廷的騎士皆可)即開賽,所以比賽總是很快開始。",
+      "courseHeading": "試煉賽道",
+      "courseBody": "賽道從起點廣場出發,穿過鏈錘橋、轉木廣場、巨斧迴廊、升降吊橋、滾石巷,最後沿赤紅坡道衝向終點主堡。每個機關都按自己固定的節奏擺動、旋轉或滾動,絕非隨機,細心觀察總能找到安全的時機。",
+      "fairnessHeading": "只靠雙腿",
+      "fairnessBody": "這裡沒人施法:整場比賽禁止使用技能,每位選手速度相同。試煉勝負只看膽識與時機,與裝備或等級無關。",
+      "fallsHeading": "摔落只耽誤時間,不會喪命",
+      "fallsBody": "被機關擊中或跌入深淵,只會送你回到上一個檢查點。沒人會死在這條通道上:摔落唯一的代價就是追趕失去的那幾秒。",
+      "standingsHeading": "王冠",
+      "standingsBody": "第一個衝過終點線的人奪得那場比賽的霍德里克王冠。你的參賽次數、勝場與最佳成績會隨著每次參賽不斷累積。"
     },
     "wishPage": {
       "heading": "我希望早點知道的事",
@@ -6842,6 +6912,11 @@ export const zh_TW: EnTranslations = {
         "name": "靈魂醫者",
         "title": "亡者的守護者",
         "greeting": "安息吧，靈魂。我可以讓你重返軀體，但歸途會讓你變得虛弱。"
+      },
+      "hodrics_herald": {
+        "name": "傳令官奧斯里克",
+        "title": "霍德里克試煉傳令官",
+        "greeting": "霍德里克領主向所有來客敞開通道!參加試煉,躲開鏈錘,奪得王冠!"
       },
       "tidewatcher_ondrel": {
         "name": "翁德瑞爾·韋恩",

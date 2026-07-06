@@ -15,6 +15,7 @@ import { economy } from './economy';
 import { faq } from './faq';
 import { gear } from './gear';
 import { glossary } from './glossary';
+import { hodricsCastle } from './hodrics_castle';
 import { home } from './home';
 import { howToPlay } from './how_to_play';
 import { models } from './models';
@@ -44,6 +45,7 @@ const PAGES: Record<string, GuidePage> = {
   dungeons,
   delves,
   arena,
+  'hodrics-castle': hodricsCastle,
   combat,
   stats,
   progression,

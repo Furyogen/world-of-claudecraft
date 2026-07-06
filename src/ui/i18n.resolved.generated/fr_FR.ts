@@ -154,6 +154,61 @@ export const fr_FR: EnTranslations = {
     "spectate": {
       "banner": "Vous observez {name}"
     },
+    "hc": {
+      "title": "Hodric's Castle",
+      "close": "Close the Gauntlet window",
+      "zoneName": "Hodric's Castle",
+      "offlineNote": "The Gauntlet desk has not synced yet. One moment.",
+      "howto": "Race the castle gauntlet: dodge the flails, weave the logs, time the axes, ride the Drawspan, outrun the boulders. First over the line takes the crown. Falls only cost time.",
+      "joinQueue": "Join the Gauntlet",
+      "leaveQueue": "Leave the queue",
+      "queuedAt": "In the queue at position {position}. The field fills to ten.",
+      "inMatchNote": "You are racing. Eyes forward!",
+      "practice": "Practice vs the Court",
+      "practiceNote": "Race Lord Hodric's own court: nine challengers, no waiting.",
+      "record": "Crowns {wins} / Races {races}",
+      "bestTime": "Best run {seconds}s",
+      "bestNone": "No finish on the books yet",
+      "rank": "Position {rank} / {total}",
+      "finishPlace": "Finished #{place}",
+      "timeLeft": "{seconds}s",
+      "overWon": "The crown is yours!",
+      "overPlaced": "Race over: #{place}",
+      "section": {
+        "start_yard": "Start Yard",
+        "flail_bridge": "The Flail Bridge",
+        "log_court": "The Log Court",
+        "axe_walk": "The Axe Walk",
+        "drawspan": "The Drawspan",
+        "boulder_alley": "Boulder Alley",
+        "red_ascent": "The Red Ascent",
+        "finish_keep": "The Finish Keep"
+      },
+      "banner": {
+        "found": "The Gauntlet calls!",
+        "go": "GO!",
+        "finish": "Finished #{place}!",
+        "crown": "You take Hodric's crown!"
+      },
+      "log": {
+        "queued": "You join the Gauntlet queue (position {position}).",
+        "unqueued": "You leave the Gauntlet queue.",
+        "fall": "The chasm takes you. Back to the checkpoint.",
+        "checkpoint": "Checkpoint {index} banked.",
+        "placed": "You finish the Gauntlet in place {place}."
+      },
+      "flavor": {
+        "queueJoin": "You join the Gauntlet queue. Lord Hodric oils the flails in your honor.",
+        "gatesOpen": "The gates of Hodric's Castle grind open. Race to the crown!",
+        "go": "GO! The Gauntlet is open!"
+      },
+      "err": {
+        "legsOnly": "Legs only in the Gauntlet: abilities are barred.",
+        "inMatch": "You are already racing the Gauntlet.",
+        "dead": "You cannot queue for the Gauntlet while dead.",
+        "arenaConflict": "Leave the Coliseum before racing the Gauntlet."
+      }
+    },
     "death": {
       "resurrectAtCorpse": "Ressusciter près du cadavre",
       "resurrectAtHealer": "Le Veilleur pâle (Glas du Veilleur)",
@@ -1333,6 +1388,7 @@ export const fr_FR: EnTranslations = {
       "combat": "Combat",
       "talents": "Talents",
       "arena": "Arène et JcJ",
+      "hodricsCastle": "Hodric's Castle",
       "glossary": "Glossaire",
       "wishIKnew": "Ce que j'aurais aimé savoir",
       "faq": "FAQ",
@@ -1927,6 +1983,20 @@ export const fr_FR: EnTranslations = {
       "powerupsBody": "Des orbes lumineux tombent aussi dans l'arène en pleine bataille, libres pour celui qui les atteint en premier. Ils sont volontairement démesurés et ne durent qu'un court instant : Démon de vitesse pour un éclair de cadence aveuglante, Colosse pour enfler en géant pataud, Bottes lunaires pour un bond rebondissant en gravité réduite, et Berserker pour un soudain accès de furie.",
       "ladderHeading": "Gravir l'échelle",
       "ladderBody": "Le jeu classé suit votre classement dans le temps. Consultez le classement pour voir où vous en êtes et qui tient le haut du royaume."
+    },
+    "hodricsCastlePage": {
+      "heading": "Hodric's Castle",
+      "intro": "Lord Hodric opens his castle causeway to any challenger. Race the gauntlet of his old defenses and take the crown, whoever you are, whatever your level.",
+      "heraldHeading": "The Herald",
+      "heraldBody": "Find Herald Osric at the edge of Eastbrook to join the Gauntlet queue. A race starts once ten racers are seated, real players and challengers from Hodric's own court alike, so a race always starts before long.",
+      "courseHeading": "The gauntlet",
+      "courseBody": "The course runs from the Start Yard across the Flail Bridge, through the Log Court, along the Axe Walk, over the Drawspan, up Boulder Alley, and up the Red Ascent to the Finish Keep. Every obstacle swings, spins, or rolls on its own clockwork rhythm, never at random, so a careful eye can always find the safe window.",
+      "fairnessHeading": "Legs only",
+      "fairnessBody": "Nobody casts a spell here: abilities are barred for the whole race, and every racer runs at the same pace. The Gauntlet is decided by nerve and timing, never by gear or level.",
+      "fallsHeading": "Falls cost time, not blood",
+      "fallsBody": "A knock from an obstacle or a tumble into the chasm only sends you back to your last checkpoint. Nobody dies on the causeway: the only real cost of a fall is the seconds it takes to catch back up.",
+      "standingsHeading": "The crown",
+      "standingsBody": "First across the finish line takes Hodric's Crown for that race. Your race count, wins, and best time are yours to build on every time you queue."
     },
     "wishPage": {
       "heading": "Ce que j'aurais aimé savoir",
@@ -6842,6 +6912,11 @@ export const fr_FR: EnTranslations = {
         "name": "Le Veilleur pâle",
         "title": "Gardien des morts",
         "greeting": "Repose-toi maintenant, esprit. Je peux te rendre à ton corps, mais la traversée du retour te laisse affaibli."
+      },
+      "hodrics_herald": {
+        "name": "Herald Osric",
+        "title": "Hodric's Gauntlet Herald",
+        "greeting": "Lord Hodric opens his causeway to all comers! Race the Gauntlet, dodge the flails, take the crown!"
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",

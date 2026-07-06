@@ -154,6 +154,61 @@ export const ko_KR: EnTranslations = {
     "spectate": {
       "banner": "{name} 관전 중"
     },
+    "hc": {
+      "title": "호드릭 성",
+      "close": "건틀릿 창 닫기",
+      "zoneName": "호드릭 성",
+      "offlineNote": "건틀릿 접수처가 아직 동기화되지 않았습니다. 잠시만 기다려 주세요.",
+      "howto": "성의 시련을 돌파하라: 도리깨를 피하고, 통나무를 헤치고, 도끼 타이밍을 맞추고, 도개교를 건너고, 바위를 피하라. 결승선을 가장 먼저 통과한 자가 왕관을 차지한다. 추락해도 시간만 잃을 뿐이다.",
+      "joinQueue": "건틀릿 참가",
+      "leaveQueue": "대기열 나가기",
+      "queuedAt": "대기 순번 {position}. 열 명이 모이면 경주가 시작됩니다.",
+      "inMatchNote": "경주 중입니다. 앞만 보고 달리세요!",
+      "practice": "궁정 기사단과 연습",
+      "practiceNote": "호드릭 경의 궁정 기사단과 겨루기: 도전자 아홉 명, 대기 없음.",
+      "record": "우승 {wins} / 참가 {races}",
+      "bestTime": "최고 기록 {seconds}초",
+      "bestNone": "아직 완주 기록이 없습니다",
+      "rank": "순위 {rank} / {total}",
+      "finishPlace": "{place}위로 완주",
+      "timeLeft": "{seconds}s",
+      "overWon": "왕관은 당신의 것이다!",
+      "overPlaced": "경주 종료: {place}위",
+      "section": {
+        "start_yard": "출발 광장",
+        "flail_bridge": "도리깨 다리",
+        "log_court": "통나무 광장",
+        "axe_walk": "도끼 회랑",
+        "drawspan": "도개교",
+        "boulder_alley": "바위 골목",
+        "red_ascent": "붉은 경사로",
+        "finish_keep": "결승 성채"
+      },
+      "banner": {
+        "found": "건틀릿이 부른다!",
+        "go": "출발!",
+        "finish": "{place}위로 완주!",
+        "crown": "호드릭의 왕관을 차지했다!"
+      },
+      "log": {
+        "queued": "건틀릿 대기열에 참가했습니다 (순번 {position}).",
+        "unqueued": "건틀릿 대기열에서 나갔습니다.",
+        "fall": "심연이 당신을 삼켰습니다. 체크포인트로 돌아갑니다.",
+        "checkpoint": "체크포인트 {index} 통과.",
+        "placed": "건틀릿을 {place}위로 완주했습니다."
+      },
+      "flavor": {
+        "queueJoin": "건틀릿 대기열에 참가했습니다. 호드릭 경이 당신을 위해 도리깨에 기름을 칩니다.",
+        "gatesOpen": "호드릭 성의 문이 삐걱이며 열린다. 왕관을 향해 달려라!",
+        "go": "출발! 건틀릿이 열렸다!"
+      },
+      "err": {
+        "legsOnly": "건틀릿에서는 다리만 쓸 수 있습니다: 스킬 사용이 금지됩니다.",
+        "inMatch": "이미 건틀릿에 참가 중입니다.",
+        "dead": "사망 상태에서는 건틀릿에 참가할 수 없습니다.",
+        "arenaConflict": "건틀릿에 참가하려면 먼저 콜로세움을 나가세요."
+      }
+    },
     "death": {
       "resurrectAtCorpse": "시신에서 부활",
       "resurrectAtHealer": "영혼 치유사 (부활의 후유증)",
@@ -1333,6 +1388,7 @@ export const ko_KR: EnTranslations = {
       "combat": "전투",
       "talents": "특성",
       "arena": "투기장과 PvP",
+      "hodricsCastle": "호드릭 성",
       "glossary": "용어집",
       "wishIKnew": "미리 알았으면 좋았을 것들",
       "faq": "자주 묻는 질문",
@@ -1927,6 +1983,20 @@ export const ko_KR: EnTranslations = {
       "powerupsBody": "빛나는 구슬이 전투 도중 투기장 안으로 떨어지기도 하며, 먼저 닿는 사람이 임자입니다. 일부러 과장되게 만들어졌고 효과는 잠깐뿐입니다. 눈이 멀 듯한 속도를 주는 스피드 데몬, 굼뜬 거인으로 부풀어 오르는 콜로서스, 저중력으로 통통 튀어 오르게 하는 문 부츠, 그리고 분노가 한순간에 폭발하는 버서커가 있습니다.",
       "ladderHeading": "순위 올리기",
       "ladderBody": "등급전은 시간이 지나며 당신의 순위를 기록합니다. 순위표를 확인해 자신의 위치와 서버 정상에 오른 이가 누구인지 살펴보세요."
+    },
+    "hodricsCastlePage": {
+      "heading": "호드릭 성",
+      "intro": "호드릭 경은 어떤 도전자에게든 성의 통로를 열어준다. 그의 옛 방어선으로 이루어진 시련을 돌파하여 왕관을 차지하라. 당신이 누구이든, 레벨이 무엇이든 상관없다.",
+      "heraldHeading": "전령",
+      "heraldBody": "이스트브룩 외곽에서 전령 오스릭을 찾아 건틀릿 대기열에 참가하세요. 열 명의 도전자(실제 플레이어와 호드릭 경의 궁정 기사단 모두)가 모이면 경주가 시작되므로, 경주는 언제나 금방 시작됩니다.",
+      "courseHeading": "건틀릿 코스",
+      "courseBody": "코스는 출발 광장에서 시작해 도리깨 다리, 통나무 광장, 도끼 회랑, 도개교, 바위 골목을 지나 붉은 경사로를 따라 결승 성채까지 이어집니다. 모든 장치는 무작위가 아니라 각자 정해진 리듬으로 흔들리고, 돌고, 구르므로 주의 깊게 보면 언제나 안전한 순간을 찾을 수 있습니다.",
+      "fairnessHeading": "오직 다리로만",
+      "fairnessBody": "여기서는 아무도 주문을 쓰지 않습니다: 경주 내내 스킬 사용이 금지되며, 모든 참가자는 같은 속도로 달립니다. 건틀릿의 승부는 오직 배짱과 타이밍으로 결정되며, 장비나 레벨과는 무관합니다.",
+      "fallsHeading": "추락은 시간만 잃을 뿐",
+      "fallsBody": "장치에 맞거나 심연으로 떨어져도 마지막 체크포인트로 돌아갈 뿐입니다. 이 통로에서 죽는 사람은 없습니다: 추락의 진짜 대가는 잃어버린 몇 초를 따라잡는 시간뿐입니다.",
+      "standingsHeading": "왕관",
+      "standingsBody": "결승선을 가장 먼저 통과한 사람이 그 경주의 호드릭 왕관을 차지합니다. 참가 횟수, 승수, 최고 기록은 참가할 때마다 계속 쌓여갑니다."
     },
     "wishPage": {
       "heading": "미리 알았으면 좋았을 것들",
@@ -6842,6 +6912,11 @@ export const ko_KR: EnTranslations = {
         "name": "영혼 치유사",
         "title": "죽은 자의 수호자",
         "greeting": "편히 쉬게, 영혼이여. 그대를 육신으로 돌려보낼 수 있으나, 돌아오는 길은 그대를 약하게 만들 것이네."
+      },
+      "hodrics_herald": {
+        "name": "전령 오스릭",
+        "title": "호드릭 건틀릿 전령",
+        "greeting": "호드릭 경이 모든 도전자에게 길을 연다! 건틀릿에 도전하여 도리깨를 피하고 왕관을 차지하라!"
       },
       "tidewatcher_ondrel": {
         "name": "온드렐 베인",

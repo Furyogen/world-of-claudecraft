@@ -124,6 +124,7 @@ const NPC_IDS = [
   'brother_halven', // Collapsed Reliquary delve board NPC
   'brother_halven_marsh', // Drowned Litany delve board NPC (same character, marsh camp)
   'spirit_healer', // the graveyard angel (spawned at every graveyard + dungeon entry)
+  'hodrics_herald', // Herald Osric, the Gauntlet race desk (Eastbrook edge)
 ] as const;
 
 const QUEST_IDS = [

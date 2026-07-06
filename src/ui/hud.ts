@@ -197,6 +197,8 @@ import {
   enterGroundAim,
   type GroundAimState,
 } from './ground_aim';
+import { HodricsHud } from './hodrics_hud';
+import { HodricsWindow } from './hodrics_window';
 import {
   holderTierBadgeDataUrl,
   holderTierByIndex,
@@ -1979,6 +1981,10 @@ export class Hud {
         // consistent with the toggle / X close path.
         this.arenaWindow.close();
         break;
+      case 'hodrics-window':
+        // Route through the painter so focus returns to the opener (WCAG 2.2 AA).
+        this.hodricsWindow.close();
+        break;
       case 'vendor-window':
         this.closeVendor();
         break;
@@ -3307,6 +3313,21 @@ export class Hud {
     closeOthers: () => this.closeOtherWindows('#arena-window'),
     ...this.windowFocus('#arena-window'),
   });
+  // Hodric's Castle Gauntlet window painter (hodrics_window_view.ts model +
+  // hodrics_window.ts painter). Opened by the Herald's hodricsWindow event;
+  // driven from the mediumHud band while open.
+  private readonly hodricsWindow = new HodricsWindow({
+    root: () => $('#hodrics-window'),
+    world: () => this.sim,
+    closeOthers: () => this.closeOtherWindows('#hodrics-window'),
+    ...this.windowFocus('#hodrics-window'),
+  });
+  // In-race Gauntlet HUD strip (hodrics_hud_view.ts model + hodrics_hud.ts
+  // painter). Snapshot-driven from hcInfo on the mediumHud band; actionable
+  // race information, so it is never tier-shed.
+  private readonly hodricsHud = new HodricsHud({
+    root: () => $('#hodrics-hud'),
+  });
   // Character window painter (char_view.ts paperdoll core + char_window.ts painter).
   // It composes the presentation bag (icon/tooltip) for the equip slots and routes
   // the HUD-built stat / talent / progression fragments plus the unequip + drag
@@ -3971,6 +3992,8 @@ export class Hud {
     // JSON of ids/numbers), so a language switch alone never moves it; relocalize() forces
     // one rebuild with fresh t() (self-gated on isOpen).
     this.arenaWindow.relocalize();
+    this.hodricsWindow.relocalize();
+    this.hodricsHud.relocalize();
     const dialog = $('#quest-dialog');
     if (dialog.style.display !== 'block' || this.openGossipNpcId === null) return;
     const npc = this.sim.entities.get(this.openGossipNpcId);
@@ -5862,6 +5885,9 @@ export class Hud {
       this.updateFiestaHud();
       if ($('#map-window').style.display === 'block') this.updateMapWindow();
       if ($('#arena-window').style.display === 'block') this.arenaWindow.render();
+      if ($('#hodrics-window').style.display === 'block') this.hodricsWindow.render();
+      // The race strip/board: sig-gated, so an idle frame writes nothing.
+      this.hodricsHud.render(sim.hcInfo);
       if (this.openLootMobId !== null) {
         const mob = sim.entities.get(this.openLootMobId);
         if (!mob?.lootable || dist2d(p.pos, mob.pos) > 7) this.closeLoot();
@@ -7327,6 +7353,13 @@ export class Hud {
       this.playEventSfx(ev); // positional sound for nearby combat/creatures
       this.meters.onEvent(ev);
       if (this.isNythraxisEvent(ev)) this.lastNythraxisCombatEventAt = performance.now();
+      // Personal events are addressed by pid. Offline, the drain carries every
+      // player's events (Gauntlet practice bots are real players), so another
+      // player's queue lines and banners must never surface on this HUD. The
+      // gate sits after the world-visual fan-out above: pid-less events
+      // (damage, spellfx, auras) are world events and pass through untouched.
+      const evPid = (ev as { pid?: number }).pid;
+      if (evPid !== undefined && evPid !== sim.playerId) continue;
       switch (ev.type) {
         case 'damage': {
           const src = sim.entities.get(ev.sourceId);
@@ -8013,6 +8046,73 @@ export class Hud {
           }
           break;
         }
+        // --- Hodric's Castle Gauntlet: the window opener, queue lines, and the
+        // race's one-shot juice. The live strip/board is snapshot-driven from
+        // hcInfo (hodricsHud on the mediumHud band), so it self-heals; these
+        // cases carry only moments.
+        case 'hodricsWindow':
+          if (!this.hodricsWindow.isOpen) this.hodricsWindow.toggle();
+          break;
+        case 'hcQueued':
+          this.log(
+            t('hudChrome.hc.log.queued', {
+              position: formatNumber(ev.position, { maximumFractionDigits: 0 }),
+            }),
+            '#c9a2ff',
+          );
+          break;
+        case 'hcUnqueued':
+          this.log(t('hudChrome.hc.log.unqueued'), '#c9a2ff');
+          break;
+        case 'hcFound':
+          this.showBanner(t('hudChrome.hc.banner.found'));
+          audio.duelChallenge();
+          break;
+        case 'hcCountdown':
+          audio.duelCountdownTick();
+          break;
+        case 'hcStart':
+          this.showBanner(t('hudChrome.hc.banner.go'));
+          audio.duelStart();
+          break;
+        case 'hcKnocked':
+          this.renderer.addShake(0.5);
+          audio.fiestaWord(1);
+          break;
+        case 'hcFall':
+          this.log(t('hudChrome.hc.log.fall'), '#ff9a6a');
+          break;
+        case 'hcCheckpoint':
+          this.log(
+            t('hudChrome.hc.log.checkpoint', {
+              index: formatNumber(ev.index, { maximumFractionDigits: 0 }),
+            }),
+            '#c9a2ff',
+          );
+          break;
+        case 'hcFinish':
+          this.showBanner(
+            t('hudChrome.hc.banner.finish', {
+              place: formatNumber(ev.place, { maximumFractionDigits: 0 }),
+            }),
+          );
+          audio.duelEnd();
+          break;
+        case 'hcEnd': {
+          if (ev.won) {
+            this.showBanner(t('hudChrome.hc.banner.crown'));
+            this.combatLog(t('hudChrome.hc.banner.crown'), '#ffd75e');
+            audio.fiestaWave();
+          } else {
+            this.combatLog(
+              t('hudChrome.hc.log.placed', {
+                place: formatNumber(ev.place, { maximumFractionDigits: 0 }),
+              }),
+              '#c9a2ff',
+            );
+          }
+          break;
+        }
         case 'fiestaWord': {
           const { text, tier, color } = this.fiestaWordParts(ev.flavor, ev.n);
           this.fiestaWordPop(text, color, tier);
@@ -8427,6 +8527,10 @@ export class Hud {
       'You cannot queue while dueling.': 'hud.errors.arenaQueueDueling',
       'Finish your trade before queueing.': 'hud.errors.arenaQueueTrading',
       'You cannot queue from inside an instance.': 'hud.errors.arenaQueueInstance',
+      'Legs only in the Gauntlet: abilities are barred.': 'hudChrome.hc.err.legsOnly',
+      'You are already racing the Gauntlet.': 'hudChrome.hc.err.inMatch',
+      'You cannot queue for the Gauntlet while dead.': 'hudChrome.hc.err.dead',
+      'Leave the Coliseum before racing the Gauntlet.': 'hudChrome.hc.err.arenaConflict',
       'A trade is already in progress.': 'hud.errors.tradeInProgress',
       'Target is too far away to trade.': 'hud.errors.tradeTooFar',
       'The trade request has expired.': 'hud.errors.tradeExpired',
@@ -8546,6 +8650,11 @@ export class Hud {
       'Trade cancelled.': 'hud.logs.tradeCancelled',
       'Loot method set to Group Loot.': 'hudChrome.masterLoot.methodGroup',
       'Loot Settings: Group Loot.': 'hudChrome.masterLoot.summaryGroup',
+      'You join the Gauntlet queue. Lord Hodric oils the flails in your honor.':
+        'hudChrome.hc.flavor.queueJoin',
+      "The gates of Hodric's Castle grind open. Race to the crown!":
+        'hudChrome.hc.flavor.gatesOpen',
+      'GO! The Gauntlet is open!': 'hudChrome.hc.flavor.go',
     };
     const key = exact[text];
     if (key) return t(key);
@@ -8854,6 +8963,10 @@ export class Hud {
 
   setFiestaPracticeHook(fn: (() => void) | null): void {
     this.arenaWindow.setPracticeHook(fn);
+  }
+
+  setHcPracticeHook(fn: (() => void) | null): void {
+    this.hodricsWindow.setPracticeHook(fn);
   }
 
   private inFiesta(): boolean {

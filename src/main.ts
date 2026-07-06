@@ -903,6 +903,8 @@ async function startGame(
 
   // Offline only: expose the dev "2v2 Fiesta vs Bots" practice toggle to the HUD.
   if (offlineSim) hud.setFiestaPracticeHook(() => offlineSim.startFiestaPractice());
+  // Offline only: the Gauntlet practice race vs Lord Hodric's court.
+  if (offlineSim) hud.setHcPracticeHook(() => void offlineSim.hcPracticeStart());
 
   const chatInput = $('#chat-input') as unknown as HTMLTextAreaElement;
   const clickMoveMarker = $('#click-move-marker') as HTMLDivElement;
