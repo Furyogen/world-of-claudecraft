@@ -159,7 +159,7 @@ export const pl_PL: EnTranslations = {
       "close": "Close the Gauntlet window",
       "zoneName": "Hodric's Castle",
       "offlineNote": "The Gauntlet desk has not synced yet. One moment.",
-      "howto": "Race the castle gauntlet: dodge the flails, weave the logs, time the axes, ride the Drawspan, outrun the boulders. First over the line takes the crown. Falls only cost time.",
+      "howto": "Three rounds, ten racers, one crown. Lord Hodric rebuilds his gauntlet every round: survive the cut each time (six advance, then three) and win the final. Falls only cost time.",
       "joinQueue": "Join the Gauntlet",
       "leaveQueue": "Leave the queue",
       "queuedAt": "In the queue at position {position}. The field fills to ten.",
@@ -174,19 +174,31 @@ export const pl_PL: EnTranslations = {
       "timeLeft": "{seconds}s",
       "overWon": "The crown is yours!",
       "overPlaced": "Race over: #{place}",
+      "round": "Round {round}/{rounds}",
+      "advance": "{count} advance",
+      "spectating": "Spectating from the gallery",
+      "intermissionRebuild": "Lord Hodric rebuilds his gauntlet!",
+      "intermissionQualified": "You are through. Next round soon.",
+      "intermissionEliminated": "Eliminated! Enjoy the gallery view.",
       "section": {
         "start_yard": "Start Yard",
-        "flail_bridge": "The Flail Bridge",
-        "log_court": "The Log Court",
+        "hammer_bridge": "The Hammer Bridge",
+        "rotor_court": "The Rotor Court",
         "axe_walk": "The Axe Walk",
         "drawspan": "The Drawspan",
-        "boulder_alley": "Boulder Alley",
+        "boulder_climb": "The Boulder Climb",
+        "piston_ledge": "The Piston Ledge",
+        "spinner_court": "The Spinner Court",
+        "landing": "The Landing",
         "red_ascent": "The Red Ascent",
         "finish_keep": "The Finish Keep"
       },
       "banner": {
         "found": "The Gauntlet calls!",
         "go": "GO!",
+        "round": "Round {round}!",
+        "qualified": "QUALIFIED!",
+        "eliminated": "ELIMINATED",
         "finish": "Finished #{place}!",
         "crown": "You take Hodric's crown!"
       },
@@ -195,12 +207,15 @@ export const pl_PL: EnTranslations = {
         "unqueued": "You leave the Gauntlet queue.",
         "fall": "The chasm takes you. Back to the checkpoint.",
         "checkpoint": "Checkpoint {index} banked.",
+        "qualified": "You qualify for the next round.",
+        "eliminated": "Eliminated in round {round}. The gallery has snacks.",
         "placed": "You finish the Gauntlet in place {place}."
       },
       "flavor": {
         "queueJoin": "You join the Gauntlet queue. Lord Hodric oils the flails in your honor.",
         "gatesOpen": "The gates of Hodric's Castle grind open. Race to the crown!",
-        "go": "GO! The Gauntlet is open!"
+        "go": "GO! The Gauntlet is open!",
+        "rebuild": "Lord Hodric rebuilds his gauntlet. New course, same crown!"
       },
       "err": {
         "legsOnly": "Legs only in the Gauntlet: abilities are barred.",
@@ -1989,14 +2004,14 @@ export const pl_PL: EnTranslations = {
       "intro": "Lord Hodric opens his castle causeway to any challenger. Race the gauntlet of his old defenses and take the crown, whoever you are, whatever your level.",
       "heraldHeading": "The Herald",
       "heraldBody": "Find Herald Osric at the edge of Eastbrook to join the Gauntlet queue. A race starts once ten racers are seated, real players and challengers from Hodric's own court alike, so a race always starts before long.",
-      "courseHeading": "The gauntlet",
-      "courseBody": "The course runs from the Start Yard across the Flail Bridge, through the Log Court, along the Axe Walk, over the Drawspan, up Boulder Alley, and up the Red Ascent to the Finish Keep. Every obstacle swings, spins, or rolls on its own clockwork rhythm, never at random, so a careful eye can always find the safe window.",
+      "courseHeading": "Three rounds, one crown",
+      "courseBody": "The Gauntlet is an elimination show: ten racers start round one, six survive the cut, three reach the final, and one takes the crown. Lord Hodric rebuilds his course between every round, so no two runs are the same: hammer bridges, spinning log courts, axe walks, sliding drawspans, boulder climbs, piston ledges, and rotating platforms, in whatever order pleases his lordship that day. Every obstacle swings, spins, or rolls on its own clockwork rhythm, never at random, so a careful eye can always find the safe window.",
       "fairnessHeading": "Legs only",
       "fairnessBody": "Nobody casts a spell here: abilities are barred for the whole race, and every racer runs at the same pace. The Gauntlet is decided by nerve and timing, never by gear or level.",
       "fallsHeading": "Falls cost time, not blood",
-      "fallsBody": "A knock from an obstacle or a tumble into the chasm only sends you back to your last checkpoint. Nobody dies on the causeway: the only real cost of a fall is the seconds it takes to catch back up.",
+      "fallsBody": "A knock from an obstacle or a tumble into the chasm only sends you back to your last checkpoint. Nobody dies on the causeway: the only real cost of a fall is the seconds it takes to catch back up. Racers cut at the end of a round are flung to the gallery balcony in style, where they watch the rest of the show with snacks.",
       "standingsHeading": "The crown",
-      "standingsBody": "First across the finish line takes Hodric's Crown for that race. Your race count, wins, and best time are yours to build on every time you queue."
+      "standingsBody": "First across the final round's finish line takes Hodric's Crown for that show. Your race count, wins, and best final time are yours to build on every time you queue."
     },
     "wishPage": {
       "heading": "Rzeczy, które chciałbym wiedzieć wcześniej",
