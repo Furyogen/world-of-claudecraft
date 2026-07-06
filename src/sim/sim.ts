@@ -109,9 +109,9 @@ import {
   isDreamPos,
   MOBS,
   NPCS,
-  PLAYER_START,
   PAD_LOCKED_ALL,
   PAD_QUEST_LOCKS,
+  PLAYER_START,
   PORTAL_PADS,
   QUESTS,
   REWARD_ARCHETYPE,
@@ -6702,7 +6702,13 @@ export class Sim {
     mob.inCombat = true;
     this.awakenedGargoyles.set(mob.id, { npcTemplateId, home, respawnAt: null });
     // the waking moment: stone bursts outward as the wyrm takes its first step
-    this.emit({ type: 'spellfx', fx: 'nova', sourceId: mob.id, targetId: mob.id, school: 'shadow' });
+    this.emit({
+      type: 'spellfx',
+      fx: 'nova',
+      sourceId: mob.id,
+      targetId: mob.id,
+      school: 'shadow',
+    });
     this.emit({
       type: 'log',
       text: 'Stone splits along old seams — the sentinel steps off its plinth.',

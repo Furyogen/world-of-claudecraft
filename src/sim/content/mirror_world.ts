@@ -491,7 +491,10 @@ export const MIRROR_WORLD_MOBS: Record<string, MobTemplate> = {
     aoePulse: { min: 14, max: 20, radius: 10, every: 9, name: 'Gloaming' },
     // the Crown's last true spark, swallowed when it fell in the mere — this is
     // why it glows from the inside (quest: q_relight_the_lumen_crown)
-    loot: [{ copper: 2200, chance: 1 }, { itemId: 'drowned_lumen', chance: 1 }],
+    loot: [
+      { copper: 2200, chance: 1 },
+      { itemId: 'drowned_lumen', chance: 1 },
+    ],
     scale: 1.45,
     color: 0x241f38,
   },
@@ -780,7 +783,8 @@ export const MIRROR_WORLD_QUESTS: Record<string, QuestDef> = {
     turnInNpcId: 'gargoyle_sentinel_south',
     requiresBow: true,
     text: 'The shimmer resolves into words behind your eyes: the reapers crowd my glass, $N. Thin them, and the way to Highwatch is yours.',
-    completionText: 'The stone hums once, satisfied. Behind it, the mirror clears like a held breath let go.',
+    completionText:
+      'The stone hums once, satisfied. Behind it, the mirror clears like a held breath let go.',
     objectives: [{ type: 'kill', targetMobId: 'hooded_reaper', count: 6, label: 'Reaper culled' }],
     xpReward: 700,
     copperReward: 900,
@@ -793,7 +797,8 @@ export const MIRROR_WORLD_QUESTS: Record<string, QuestDef> = {
     turnInNpcId: 'gargoyle_sentinel_west',
     requiresBow: true,
     text: 'The shimmer resolves into words behind your eyes: bring me four white sheets off the poor dead, $N. The road to Eastbrook opens for those who pay in cloth.',
-    completionText: 'The sheets sink into the stone and are gone. The mirror behind it wakes with light.',
+    completionText:
+      'The sheets sink into the stone and are gone. The mirror behind it wakes with light.',
     objectives: [{ type: 'collect', itemId: 'white_sheet', count: 4, label: 'White Sheet' }],
     xpReward: 700,
     copperReward: 900,
@@ -806,8 +811,11 @@ export const MIRROR_WORLD_QUESTS: Record<string, QuestDef> = {
     turnInNpcId: 'gargoyle_sentinel_north',
     requiresBow: true,
     text: 'The shimmer resolves into words behind your eyes: the spirit herds burn too bright for the glass, $N. Cull five, and Fenbridge is a step away.',
-    completionText: 'The stone drinks the light you spilled. The mirror behind it opens like an eye.',
-    objectives: [{ type: 'kill', targetMobId: 'spirit_unicorn', count: 5, label: 'Spirit Unicorn culled' }],
+    completionText:
+      'The stone drinks the light you spilled. The mirror behind it opens like an eye.',
+    objectives: [
+      { type: 'kill', targetMobId: 'spirit_unicorn', count: 5, label: 'Spirit Unicorn culled' },
+    ],
     xpReward: 700,
     copperReward: 900,
     itemRewards: {},
@@ -865,9 +873,14 @@ export const MIRROR_WORLD_QUESTS: Record<string, QuestDef> = {
     turnInNpcId: 'keeper_nerissa',
     text: "You feel the cold of me and think I am a story. I am a post, $N. The Lumen Crown I kept is no gold circlet — it is the light in every mirror here, the seam that holds the living and the dead in separate reflections so neither drowns the other. That light is failing, and you can see it in the Mirrorbound Sentries: once they were the Crown's own radiance walking guard, now they are glass full of stolen light, crowding the north ruins because the seam no longer tells them where to stand. Break eight. Each shard you scatter is a little light returned — and a little proof you can be trusted with the rest.",
     completionText:
-      "The shards drift back toward the well like snow falling upward, and for one breath the whole vale is a shade brighter. It will not last. But you mend seams instead of cutting them, $N — that is rarer here than you would think. You broke the OTHER crown too, did you not — the iron one, beneath Thornpeak. Then for the first time in three hundred years, this light might come back. Stay. The vale has been waiting for hands that close wounds.",
+      'The shards drift back toward the well like snow falling upward, and for one breath the whole vale is a shade brighter. It will not last. But you mend seams instead of cutting them, $N — that is rarer here than you would think. You broke the OTHER crown too, did you not — the iron one, beneath Thornpeak. Then for the first time in three hundred years, this light might come back. Stay. The vale has been waiting for hands that close wounds.',
     objectives: [
-      { type: 'kill', targetMobId: 'mirrorbound_sentry', count: 8, label: 'Mirrorbound Sentry shattered' },
+      {
+        type: 'kill',
+        targetMobId: 'mirrorbound_sentry',
+        count: 8,
+        label: 'Mirrorbound Sentry shattered',
+      },
     ],
     xpReward: 800,
     copperReward: 900,
@@ -881,7 +894,7 @@ export const MIRROR_WORLD_QUESTS: Record<string, QuestDef> = {
     requiresQuest: 'q_the_failing_radiance',
     text: "The Poverty Ghosts on the south shore owned nothing in life, $N — nothing but the sheet they were buried in, because the parish could spare no coffin. Now the Crown's light is too thin to loose their grip, so they wander clutching the one thing that was ever theirs. Do not think this cruelty; it is love with nowhere to put itself. Bring me five of their sheets. I will lay each in the well and speak the name that was too poor to be carved. That is the whole of the rite: to be poor, and dead, and still called by name.",
     completionText:
-      "Five sheets, five names. I say them into the well and the water takes them the way a mother lifts a coat off a sleeping child. The ghosts on the shore are fewer tonight, $N — not slain, released. This is what the Crown did when it was whole: it held the dead close enough to let them go. We do it by hand now, you and I, five names at a time. It is slower. It is not nothing.",
+      'Five sheets, five names. I say them into the well and the water takes them the way a mother lifts a coat off a sleeping child. The ghosts on the shore are fewer tonight, $N — not slain, released. This is what the Crown did when it was whole: it held the dead close enough to let them go. We do it by hand now, you and I, five names at a time. It is slower. It is not nothing.',
     objectives: [{ type: 'collect', itemId: 'white_sheet', count: 5, label: 'White Sheet' }],
     xpReward: 900,
     copperReward: 1100,
@@ -895,7 +908,7 @@ export const MIRROR_WORLD_QUESTS: Record<string, QuestDef> = {
     requiresQuest: 'q_what_the_poor_keep',
     text: "The three that pace the Black Canyon are called Dread Sentinels by those who flee them. I called them by name once — they were my order, $N, the last men to hold the Sable Mirror's causeway in life, and they never stood down, not even when their hearts did. No blade frees them now; the black glass rides them too deep to fall. But that glass has crept from the wardens into the reapers that swarm the causeway, and over the long years the reapers have torn the wardens' sigils loose. Bring me three, cut from the reapers at the canyon, so I may say the three names aloud one final time.",
     completionText:
-      "Corwin. Aldous. Brenna. There — said, and the saying is lighter than the holding ever was. They can stop soon; I will see to it. But mind what draws near, $N: the sigils torn loose mean the glass on that causeway is thinning, and the wound at its end has been waiting exactly this long. I must relight the Crown and shore the Sable before something on the far side notices the door is going bare. There is one last thing I need — and it is under the black water.",
+      'Corwin. Aldous. Brenna. There — said, and the saying is lighter than the holding ever was. They can stop soon; I will see to it. But mind what draws near, $N: the sigils torn loose mean the glass on that causeway is thinning, and the wound at its end has been waiting exactly this long. I must relight the Crown and shore the Sable before something on the far side notices the door is going bare. There is one last thing I need — and it is under the black water.',
     objectives: [{ type: 'collect', itemId: 'warden_sigil', count: 3, label: 'Warden Sigil' }],
     xpReward: 1100,
     copperReward: 1400,
@@ -909,9 +922,14 @@ export const MIRROR_WORLD_QUESTS: Record<string, QuestDef> = {
     requiresQuest: 'q_face_your_echo',
     text: "You beat your Echo and thought it a trial of self, $N. It was not. I brew the Deepdream from sheet and horn and hood — but the thing your dream set a mirror against, the thing that walked in wearing your face, that I do not brew. It leaks in, from the black glass in the canyon. The reapers crowding the canyon mouth are thick with the same leak; cull eight of them and mark which way their shadows crawl. Then I will show Nerissa's own eyes where her wound truly weeps.",
     completionText:
-      "Northeast. Always northeast, always toward the Sable — did you mark it? Your Echo was not YOU, wanderer. It was a splinter of whatever lives behind that gate, dressed in the nearest reflection it could steal: yours. The dream is only the thinnest place the leak has found; the canyon is the widest. Tell Nerissa. She has earned the truth of it, and so have you.",
+      'Northeast. Always northeast, always toward the Sable — did you mark it? Your Echo was not YOU, wanderer. It was a splinter of whatever lives behind that gate, dressed in the nearest reflection it could steal: yours. The dream is only the thinnest place the leak has found; the canyon is the widest. Tell Nerissa. She has earned the truth of it, and so have you.',
     objectives: [
-      { type: 'kill', targetMobId: 'hooded_reaper', count: 8, label: 'Reaper culled at the canyon mouth' },
+      {
+        type: 'kill',
+        targetMobId: 'hooded_reaper',
+        count: 8,
+        label: 'Reaper culled at the canyon mouth',
+      },
     ],
     xpReward: 1200,
     copperReward: 1800,
@@ -925,7 +943,7 @@ export const MIRROR_WORLD_QUESTS: Record<string, QuestDef> = {
     requiresQuest: 'q_the_wardens_names',
     text: "The wardens are named and the causeway thins, so I must do now what I have put off since I died: light the Lumen Crown one last time and press the Sable shut from this side. The Crown's last true spark was swallowed by the Gloaming Maw when it fell in the mere — that is why the thing glows from the inside. Cut the light back out of it, $N. The black glass will send its gloomhulks to stop the rite; put four of them down. Bring me a drowned spark while I still remember how to hold one. A keeper's last duty is to become someone who no longer needs to keep.",
     completionText:
-      "It burns. After all this dark it still knows my hand. Look — the glass is TRUE again: no heartbeat behind the water, no soul lost between a world and its reflection. And the weight is off me at last. I am not vanishing, $N; I am being RELIEVED. This is not the breaking of the Sable — only the holding of it; I have not the strength to break what waits there, and I would not dare. But held one more age, it is held. When some braver company than us finally walks INTO that gate, they will find the far side ready. Tell them in Highwatch that their keeper stood the vigil to the end, and then was let go. The glass will remember you. See that you give it something worth reflecting.",
+      'It burns. After all this dark it still knows my hand. Look — the glass is TRUE again: no heartbeat behind the water, no soul lost between a world and its reflection. And the weight is off me at last. I am not vanishing, $N; I am being RELIEVED. This is not the breaking of the Sable — only the holding of it; I have not the strength to break what waits there, and I would not dare. But held one more age, it is held. When some braver company than us finally walks INTO that gate, they will find the far side ready. Tell them in Highwatch that their keeper stood the vigil to the end, and then was let go. The glass will remember you. See that you give it something worth reflecting.',
     objectives: [
       { type: 'kill', targetMobId: 'gloaming_maw', count: 1, label: 'The Gloaming Maw slain' },
       { type: 'collect', itemId: 'drowned_lumen', count: 1, label: 'Drowned Lumen' },

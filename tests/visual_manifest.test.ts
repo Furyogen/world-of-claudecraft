@@ -49,7 +49,12 @@ async function glbNodeNames(path: string): Promise<Set<string>> {
     .registerExtensions(ALL_EXTENSIONS)
     .registerDependencies({ 'meshopt.decoder': MeshoptDecoder });
   const doc = await io.read(path);
-  return new Set(doc.getRoot().listNodes().map((node) => node.getName()));
+  return new Set(
+    doc
+      .getRoot()
+      .listNodes()
+      .map((node) => node.getName()),
+  );
 }
 
 describe('character visual manifest', () => {

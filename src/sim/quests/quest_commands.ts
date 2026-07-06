@@ -258,7 +258,12 @@ export function turnInQuestCore(
   for (const [padId, lockQuest] of Object.entries(PAD_QUEST_LOCKS)) {
     if (lockQuest !== questId) continue;
     for (const e of ctx.entities.values()) {
-      if (e.templateId === 'portal_pad' && PORTAL_PADS.some((p) => p.id === padId && Math.hypot(e.pos.x - p.pos.x, e.pos.z - p.pos.z) < 2)) {
+      if (
+        e.templateId === 'portal_pad' &&
+        PORTAL_PADS.some(
+          (p) => p.id === padId && Math.hypot(e.pos.x - p.pos.x, e.pos.z - p.pos.z) < 2,
+        )
+      ) {
         ctx.emit({ type: 'spellfx', fx: 'nova', sourceId: e.id, targetId: e.id, school: 'arcane' });
         break;
       }

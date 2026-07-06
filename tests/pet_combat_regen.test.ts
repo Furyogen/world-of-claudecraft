@@ -89,7 +89,10 @@ describe('pet-held combat does not block owner health regen', () => {
 
     // Let the pet acquire the target and land its first blow before snapshotting:
     // acquisition cadence is seed-dependent timing noise, not what this test pins.
-    for (let i = 0; i < 200 && pet.combatTimer >= 5; i++) { place(); sim.tick(); }
+    for (let i = 0; i < 200 && pet.combatTimer >= 5; i++) {
+      place();
+      sim.tick();
+    }
     expect(pet.combatTimer).toBeLessThan(5); // fight established
     const hpStart = p.hp;
 

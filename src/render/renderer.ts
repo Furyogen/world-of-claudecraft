@@ -1487,7 +1487,10 @@ export class Renderer {
       const theta = rng() * Math.PI * 2;
       const onBelt = new THREE.Vector3()
         .addScaledVector(perp, Math.cos(theta))
-        .addScaledVector(new THREE.Vector3().crossVectors(this.asteroidAxis, perp), Math.sin(theta));
+        .addScaledVector(
+          new THREE.Vector3().crossVectors(this.asteroidAxis, perp),
+          Math.sin(theta),
+        );
       onBelt.addScaledVector(this.asteroidAxis, (rng() - 0.5) * 0.35); // off-plane scatter
       // a third of the rocks cluster toward Cael's azimuth
       if (i % 3 === 0) onBelt.lerp(caelAz, 0.35 + rng() * 0.25);
@@ -4370,7 +4373,9 @@ export class Renderer {
         k,
       );
       this.hemi.groundColor.lerp(
-        this.sunColorScratch.setHex(mirror ? Renderer.MIRROR_HEMI_GROUND : Renderer.WARM_HEMI_GROUND),
+        this.sunColorScratch.setHex(
+          mirror ? Renderer.MIRROR_HEMI_GROUND : Renderer.WARM_HEMI_GROUND,
+        ),
         k,
       );
     }
@@ -5467,8 +5472,7 @@ export class Renderer {
   private updateGodRays(): void {
     if (this.godRays.length === 0) return;
     // Warm sun shafts have no place under the Mirror World's cold moon.
-    const outdoor =
-      this.fogState === 'outdoor' && zoneBiomeAt(this.sim.player.pos.z) !== 'mirror';
+    const outdoor = this.fogState === 'outdoor' && zoneBiomeAt(this.sim.player.pos.z) !== 'mirror';
     // azimuth-only alignment — the chase cam always pitches down while the
     // sun sits high, so a full 3D dot product would never light the shafts
     this.camera.getWorldDirection(this.tmpV);

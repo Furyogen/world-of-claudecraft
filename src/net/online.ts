@@ -1831,7 +1831,13 @@ export class ClientWorld implements IWorld {
   // -----------------------------------------------------------------------
 
   questState(questId: string): QuestState {
-    const state = computeQuestState(questId, this.questLog, this.questsDone, this.player.level, this.bowedGargoyles);
+    const state = computeQuestState(
+      questId,
+      this.questLog,
+      this.questsDone,
+      this.player.level,
+      this.bowedGargoyles,
+    );
     const pending = this.pendingQuestCommands?.get(questId);
     if (
       (pending === 'accept' && state === 'available') ||

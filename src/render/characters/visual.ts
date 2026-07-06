@@ -383,8 +383,7 @@ export class CharacterVisual {
     for (const b of spec.bones) {
       // GLTFLoader sanitizes node names (strips [].:/), so try both spellings.
       const node =
-        this.model.getObjectByName(b.n) ??
-        this.model.getObjectByName(b.n.replace(/[[\].:/]/g, ''));
+        this.model.getObjectByName(b.n) ?? this.model.getObjectByName(b.n.replace(/[[\].:/]/g, ''));
       if (node) bones.push({ bone: node, w: b.w, phase: b.phase ?? 0 });
     }
     if (bones.length === 0) return; // nothing resolved — leave the swing a no-op

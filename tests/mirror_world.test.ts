@@ -267,7 +267,10 @@ describe('the belt beasts', () => {
       );
       expect(spawned.length, `${id} did not spawn`).toBeGreaterThan(0);
       for (const mob of spawned) {
-        const q = Math.hypot((mob.pos.x - L.vale.x) / L.vale.rx, (mob.pos.z - L.vale.z) / L.vale.rz);
+        const q = Math.hypot(
+          (mob.pos.x - L.vale.x) / L.vale.rx,
+          (mob.pos.z - L.vale.z) / L.vale.rz,
+        );
         expect(q, `${id} left the vale`).toBeLessThan(0.97);
         const d = Math.hypot(mob.pos.x - anchor.x, mob.pos.z - anchor.z);
         expect(d, `${id} strayed from its district`).toBeLessThan(anchor.range);
@@ -334,8 +337,10 @@ describe("the Keeper's Vigil (Nerissa's arc wiring)", () => {
       expect(qd.requiresQuest).toBe(i === 0 ? undefined : chain[i - 1]);
       // Every objective resolves to a real mob or a real item.
       for (const obj of qd.objectives) {
-        if (obj.type === 'kill') expect(MOBS[obj.targetMobId!], `${obj.targetMobId} missing`).toBeDefined();
-        if (obj.type === 'collect') expect(ITEMS[obj.itemId!], `${obj.itemId} missing`).toBeDefined();
+        if (obj.type === 'kill')
+          expect(MOBS[obj.targetMobId!], `${obj.targetMobId} missing`).toBeDefined();
+        if (obj.type === 'collect')
+          expect(ITEMS[obj.itemId!], `${obj.itemId} missing`).toBeDefined();
       }
     }
   });
@@ -369,7 +374,8 @@ describe("the Keeper's Vigil (Nerissa's arc wiring)", () => {
     // It is a pure kill objective over a real canyon-mouth mob (NPCs grant no
     // kill credit — this must target a mob, not a warden statue).
     expect(glass.objectives.every((o) => o.type === 'kill')).toBe(true);
-    for (const obj of glass.objectives) expect(MOBS[obj.targetMobId!], `${obj.targetMobId} missing`).toBeDefined();
+    for (const obj of glass.objectives)
+      expect(MOBS[obj.targetMobId!], `${obj.targetMobId} missing`).toBeDefined();
   });
 });
 
@@ -621,7 +627,10 @@ describe('the mirror guardians (gargoyles)', () => {
     // hidden until the courtesy
     expect(sim.questState('q_gargoyle_south', pid)).toBe('unavailable');
     sim.bowToGargoyle(pid);
-    expect(sim.bowedGargoyles.has('gargoyle_sentinel_south') || (sim as any).players.get(pid).bowedGargoyles.has('gargoyle_sentinel_south')).toBe(true);
+    expect(
+      sim.bowedGargoyles.has('gargoyle_sentinel_south') ||
+        (sim as any).players.get(pid).bowedGargoyles.has('gargoyle_sentinel_south'),
+    ).toBe(true);
     expect(sim.questState('q_gargoyle_south', pid)).toBe('available');
     // the courtesy is a real bow — the emote fires in the same beat
     expect(sim.entities.get(pid)?.overheadEmoteId).toBe('bow');
@@ -636,7 +645,9 @@ describe('the mirror guardians (gargoyles)', () => {
     sim.turnInQuest('q_gargoyle_south', pid);
     const evs = (sim as any).drainEvents() as { type: string; padId?: string }[];
     expect(meta.questsDone.has('q_gargoyle_south')).toBe(true);
-    expect(evs.some((e) => e.type === 'mirrorUnlocked' && e.padId === 'mirrorgate_return')).toBe(true);
+    expect(evs.some((e) => e.type === 'mirrorUnlocked' && e.padId === 'mirrorgate_return')).toBe(
+      true,
+    );
     // and the mirror now carries
     teleport(sim, pid, -18, 1054);
     sim.tick();
@@ -791,7 +802,8 @@ describe('echo combat behavior', () => {
     const buffed = echo.auras.some((a) => a.kind === 'buff_ap');
     // and the dreamer carries evidence of real abilities: a bleed/dot or debuff
     const p = sim.entities.get(pid);
-    const marked = (p?.auras.length ?? 0) > 0 || (p?.dead ?? false) || (p?.hp ?? 1) < (p?.maxHp ?? 1);
+    const marked =
+      (p?.auras.length ?? 0) > 0 || (p?.dead ?? false) || (p?.hp ?? 1) < (p?.maxHp ?? 1);
     expect(buffed, 'echo never raised its shout').toBe(true);
     expect(marked).toBe(true);
   });

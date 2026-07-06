@@ -147,7 +147,8 @@ const baseEnTable = {
   'log.brewLadled': 'Morwen ladles a fresh Deepdream Draught into your pack.',
   'log.gargoyleBows': 'The gargoyle inclines its head, stone grinding on stone.',
   'log.gargoyleWakes': 'Stone splits along old seams — the sentinel steps off its plinth.',
-  'log.gargoyleRestones': 'Its fury spent, the gargoyle climbs back onto its plinth and stills into stone.',
+  'log.gargoyleRestones':
+    'Its fury spent, the gargoyle climbs back onto its plinth and stills into stone.',
   'error.mirrorSealed': 'The mirror is dark. Its keeper expects a courtesy first.',
   'error.blackMirrorSealed': 'The Sable Mirror does not know you. Yet.',
   'log.mirrorUnsealed': 'The toll is paid. Behind the statue, the mirror clears.',
@@ -393,7 +394,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'log.brewLadled': 'Morwen ladles a fresh Deepdream Draught into your pack.',
     'log.gargoyleBows': 'The gargoyle inclines its head, stone grinding on stone.',
     'log.gargoyleWakes': 'Stone splits along old seams — the sentinel steps off its plinth.',
-    'log.gargoyleRestones': 'Its fury spent, the gargoyle climbs back onto its plinth and stills into stone.',
+    'log.gargoyleRestones':
+      'Its fury spent, the gargoyle climbs back onto its plinth and stills into stone.',
     'error.mirrorSealed': 'The mirror is dark. Its keeper expects a courtesy first.',
     'error.blackMirrorSealed': 'The Sable Mirror does not know you. Yet.',
     'log.mirrorUnsealed': 'The toll is paid. Behind the statue, the mirror clears.',
@@ -707,8 +709,10 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'log.dreamWake': 'Despiertas donde el sueño te tomó.',
     'log.brewLadled': 'Morwen sirve un Bebedizo del Sueño Profundo recién hecho en tu zurrón.',
     'log.gargoyleBows': 'La gárgola inclina la cabeza, piedra rechinando contra piedra.',
-    'log.gargoyleWakes': 'La piedra se agrieta por sus viejas junturas: el centinela baja de su pedestal.',
-    'log.gargoyleRestones': 'Agotada su furia, la gárgola vuelve a subir a su pedestal y se aquieta en piedra.',
+    'log.gargoyleWakes':
+      'La piedra se agrieta por sus viejas junturas: el centinela baja de su pedestal.',
+    'log.gargoyleRestones':
+      'Agotada su furia, la gárgola vuelve a subir a su pedestal y se aquieta en piedra.',
     'error.mirrorSealed': 'El espejo está oscuro. Su guardián espera antes una cortesía.',
     'error.blackMirrorSealed': 'El Espejo Sable no te conoce. Todavía.',
     'log.mirrorUnsealed': 'El peaje está pagado. Tras la estatua, el espejo se aclara.',
@@ -942,8 +946,10 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'log.dreamWake': 'Despiertas donde el sueño te tomó.',
     'log.brewLadled': 'Morwen sirve un Bebedizo del Sueño Profundo recién hecho en tu zurrón.',
     'log.gargoyleBows': 'La gárgola inclina la cabeza, piedra rechinando contra piedra.',
-    'log.gargoyleWakes': 'La piedra se agrieta por sus viejas junturas: el centinela baja de su pedestal.',
-    'log.gargoyleRestones': 'Agotada su furia, la gárgola vuelve a subir a su pedestal y se aquieta en piedra.',
+    'log.gargoyleWakes':
+      'La piedra se agrieta por sus viejas junturas: el centinela baja de su pedestal.',
+    'log.gargoyleRestones':
+      'Agotada su furia, la gárgola vuelve a subir a su pedestal y se aquieta en piedra.',
     'error.mirrorSealed': 'El espejo está oscuro. Su guardián espera antes una cortesía.',
     'error.blackMirrorSealed': 'El Espejo Sable no te conoce. Todavía.',
     'log.mirrorUnsealed': 'El peaje está pagado. Tras la estatua, el espejo se aclara.',
@@ -1179,11 +1185,13 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'log.dreamWake': 'Tu te réveilles là où le sommeil t’a pris.',
     'log.brewLadled': 'Morwen verse un Philtre de Rêve profond tout frais dans ton sac.',
     'log.gargoyleBows': 'La gargouille incline la tête, pierre grinçant sur pierre.',
-    'log.gargoyleWakes': 'La pierre se fend le long des vieux joints — la sentinelle descend de son socle.',
-    'log.gargoyleRestones': 'Sa fureur épuisée, la gargouille remonte sur son socle et se fige en pierre.',
-    'error.mirrorSealed': 'Le miroir est éteint. Son gardien attend d\'abord une courtoisie.',
+    'log.gargoyleWakes':
+      'La pierre se fend le long des vieux joints — la sentinelle descend de son socle.',
+    'log.gargoyleRestones':
+      'Sa fureur épuisée, la gargouille remonte sur son socle et se fige en pierre.',
+    'error.mirrorSealed': "Le miroir est éteint. Son gardien attend d'abord une courtoisie.",
     'error.blackMirrorSealed': 'Le Miroir de sable ne te connaît pas. Pas encore.',
-    'log.mirrorUnsealed': 'Le tribut est payé. Derrière la statue, le miroir s\'éclaircit.',
+    'log.mirrorUnsealed': "Le tribut est payé. Derrière la statue, le miroir s'éclaircit.",
     'error.noGargoyleNear': 'Aucune gargouille à portée.',
     'log.shardStr': 'L’Éclat de Miroir s’enfonce en toi. Ta force grandit — pour toujours.',
     'log.shardAgi': 'L’Éclat de Miroir s’enfonce en toi. Tes réflexes s’aiguisent — pour toujours.',
@@ -1416,11 +1424,13 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'log.dreamWake': 'Tu te réveilles là où le sommeil t’a pris.',
     'log.brewLadled': 'Morwen verse un Philtre de Rêve profond tout frais dans ton sac.',
     'log.gargoyleBows': 'La gargouille incline la tête, pierre grinçant sur pierre.',
-    'log.gargoyleWakes': 'La pierre se fend le long des vieux joints — la sentinelle descend de son socle.',
-    'log.gargoyleRestones': 'Sa fureur épuisée, la gargouille remonte sur son socle et se fige en pierre.',
-    'error.mirrorSealed': 'Le miroir est éteint. Son gardien attend d\'abord une courtoisie.',
+    'log.gargoyleWakes':
+      'La pierre se fend le long des vieux joints — la sentinelle descend de son socle.',
+    'log.gargoyleRestones':
+      'Sa fureur épuisée, la gargouille remonte sur son socle et se fige en pierre.',
+    'error.mirrorSealed': "Le miroir est éteint. Son gardien attend d'abord une courtoisie.",
     'error.blackMirrorSealed': 'Le Miroir de sable ne te connaît pas. Pas encore.',
-    'log.mirrorUnsealed': 'Le tribut est payé. Derrière la statue, le miroir s\'éclaircit.',
+    'log.mirrorUnsealed': "Le tribut est payé. Derrière la statue, le miroir s'éclaircit.",
     'error.noGargoyleNear': 'Aucune gargouille à portée.',
     'log.shardStr': 'L’Éclat de Miroir s’enfonce en toi. Ta force grandit — pour toujours.',
     'log.shardAgi': 'L’Éclat de Miroir s’enfonce en toi. Tes réflexes s’aiguisent — pour toujours.',
@@ -1599,7 +1609,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'log.brewLadled': 'Morwen ladles a fresh Deepdream Draught into your pack.',
     'log.gargoyleBows': 'The gargoyle inclines its head, stone grinding on stone.',
     'log.gargoyleWakes': 'Stone splits along old seams — the sentinel steps off its plinth.',
-    'log.gargoyleRestones': 'Its fury spent, the gargoyle climbs back onto its plinth and stills into stone.',
+    'log.gargoyleRestones':
+      'Its fury spent, the gargoyle climbs back onto its plinth and stills into stone.',
     'error.mirrorSealed': 'The mirror is dark. Its keeper expects a courtesy first.',
     'error.blackMirrorSealed': 'The Sable Mirror does not know you. Yet.',
     'log.mirrorUnsealed': 'The toll is paid. Behind the statue, the mirror clears.',
@@ -1831,15 +1842,19 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'log.dreamWake': 'Ti svegli dove il sonno ti ha preso.',
     'log.brewLadled': 'Morwen versa un Intruglio del Sonno Profondo appena fatto nel tuo zaino.',
     'log.gargoyleBows': 'La gargolla china il capo, pietra che stride su pietra.',
-    'log.gargoyleWakes': 'La pietra si spacca lungo le vecchie giunture — la sentinella scende dal piedistallo.',
+    'log.gargoyleWakes':
+      'La pietra si spacca lungo le vecchie giunture — la sentinella scende dal piedistallo.',
     'log.gargoyleRestones': 'Esaurita la furia, la gargolla risale sul piedistallo e torna pietra.',
     'error.mirrorSealed': 'Lo specchio è spento. Il suo guardiano esige prima una cortesia.',
     'error.blackMirrorSealed': 'Lo Specchio Cupo non ti conosce. Non ancora.',
     'log.mirrorUnsealed': 'Il pedaggio è pagato. Dietro la statua, lo specchio si rischiara.',
-    'error.noGargoyleNear': 'Non c\'è nessuna gargolla a portata.',
-    'log.shardStr': 'La Scheggia di Specchio ti si conficca dentro. La tua forza cresce — per sempre.',
-    'log.shardAgi': 'La Scheggia di Specchio ti si conficca dentro. I tuoi riflessi si affinano — per sempre.',
-    'log.shardInt': 'La Scheggia di Specchio ti si conficca dentro. La tua mente si fa più profonda — per sempre.',
+    'error.noGargoyleNear': "Non c'è nessuna gargolla a portata.",
+    'log.shardStr':
+      'La Scheggia di Specchio ti si conficca dentro. La tua forza cresce — per sempre.',
+    'log.shardAgi':
+      'La Scheggia di Specchio ti si conficca dentro. I tuoi riflessi si affinano — per sempre.',
+    'log.shardInt':
+      'La Scheggia di Specchio ti si conficca dentro. La tua mente si fa più profonda — per sempre.',
     'error.dreamCrowded': 'Il sogno è affollato stanotte. Riprova presto.',
     'error.brewNotAttuned': 'Morwen non ha ancora nulla da prepararti.',
     'error.brewTooFar': 'Morwen non è abbastanza vicina per distillare.',
@@ -2066,13 +2081,15 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'log.brewLadled': 'Morwen schöpft dir einen frischen Tieftraum-Trank in dein Gepäck.',
     'log.gargoyleBows': 'Der Gargoyle neigt das Haupt, Stein knirscht auf Stein.',
     'log.gargoyleWakes': 'Der Stein birst entlang alter Fugen — die Wache steigt von ihrem Sockel.',
-    'log.gargoyleRestones': 'Mit verrauchter Wut klettert der Gargoyle zurück auf den Sockel und erstarrt zu Stein.',
+    'log.gargoyleRestones':
+      'Mit verrauchter Wut klettert der Gargoyle zurück auf den Sockel und erstarrt zu Stein.',
     'error.mirrorSealed': 'Der Spiegel ist dunkel. Sein Wächter erwartet zuerst eine Geste.',
     'error.blackMirrorSealed': 'Der Düsterspiegel kennt dich nicht. Noch nicht.',
     'log.mirrorUnsealed': 'Der Zoll ist entrichtet. Hinter der Statue klart der Spiegel auf.',
     'error.noGargoyleNear': 'Kein Gargoyle in Reichweite.',
     'log.shardStr': 'Der Spiegelsplitter sinkt in dich ein. Deine Stärke wächst — für immer.',
-    'log.shardAgi': 'Der Spiegelsplitter sinkt in dich ein. Deine Reflexe schärfen sich — für immer.',
+    'log.shardAgi':
+      'Der Spiegelsplitter sinkt in dich ein. Deine Reflexe schärfen sich — für immer.',
     'log.shardInt': 'Der Spiegelsplitter sinkt in dich ein. Dein Geist vertieft sich — für immer.',
     'error.dreamCrowded': 'Der Traum ist heute Nacht überfüllt. Versuch es bald wieder.',
     'error.brewNotAttuned': 'Morwen hat noch nichts für dich zu brauen.',
@@ -3211,8 +3228,10 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'log.dreamWake': 'Você acorda onde o sono te pegou.',
     'log.brewLadled': 'Morwen despeja uma Beberagem do Sono Profundo fresquinha na sua mochila.',
     'log.gargoyleBows': 'A gárgula inclina a cabeça, pedra rangendo contra pedra.',
-    'log.gargoyleWakes': 'A pedra racha ao longo das juntas antigas — a sentinela desce do pedestal.',
-    'log.gargoyleRestones': 'Com a fúria esgotada, a gárgula sobe de volta ao pedestal e aquieta-se em pedra.',
+    'log.gargoyleWakes':
+      'A pedra racha ao longo das juntas antigas — a sentinela desce do pedestal.',
+    'log.gargoyleRestones':
+      'Com a fúria esgotada, a gárgula sobe de volta ao pedestal e aquieta-se em pedra.',
     'error.mirrorSealed': 'O espelho está escuro. Seu guardião espera antes uma cortesia.',
     'error.blackMirrorSealed': 'O Espelho Sombrio não conhece você. Ainda.',
     'log.mirrorUnsealed': 'O pedágio foi pago. Atrás da estátua, o espelho clareia.',
@@ -3448,7 +3467,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'log.brewLadled': 'Морвен наливает свежий Отвар глубокого сна тебе в суму.',
     'log.gargoyleBows': 'Горгулья склоняет голову — камень скрежещет о камень.',
     'log.gargoyleWakes': 'Камень трескается по старым швам — страж сходит с постамента.',
-    'log.gargoyleRestones': 'Истратив ярость, горгулья взбирается обратно на постамент и застывает камнем.',
+    'log.gargoyleRestones':
+      'Истратив ярость, горгулья взбирается обратно на постамент и застывает камнем.',
     'error.mirrorSealed': 'Зеркало темно. Его страж сперва ждёт учтивости.',
     'error.blackMirrorSealed': 'Тёмное Зеркало тебя не знает. Пока.',
     'log.mirrorUnsealed': 'Плата внесена. За статуей зеркало проясняется.',

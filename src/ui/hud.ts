@@ -9241,7 +9241,10 @@ export class Hud {
     if (npc.templateId.startsWith('gargoyle_sentinel')) {
       html += `<button type="button" class="qd-list-item" data-gargoyle-bow="1" aria-label="${esc(t('questUi.dialog.gargoyleBowAria', { name: npcName }))}"><span class="gold">${svgIcon('interact')}</span> ${esc(t('questUi.dialog.gargoyleBow'))}</button>`;
     }
-    if (npc.templateId.startsWith('gargoyle_sentinel') || npc.templateId.startsWith('dread_sentinel')) {
+    if (
+      npc.templateId.startsWith('gargoyle_sentinel') ||
+      npc.templateId.startsWith('dread_sentinel')
+    ) {
       html += `<button type="button" class="qd-list-item" data-gargoyle-wake="1" aria-label="${esc(t('questUi.dialog.gargoyleAttackAria', { name: npcName }))}"><span class="gold">${svgIcon('skull')}</span> ${esc(t('questUi.dialog.gargoyleAttack'))}</button>`;
     }
     el.innerHTML = html;

@@ -45,7 +45,6 @@ import {
   SPIRIT_HEALER_NPC_ID,
 } from './content/graveyards';
 import { GROUND_PICKUP_LINES } from './content/ground_pickup_lines';
-import { COMMON_RECIPES as COMMON_RECIPES_CONTENT } from './content/recipes';
 import {
   MIRROR_WORLD_CAMPS,
   MIRROR_WORLD_ITEMS,
@@ -59,6 +58,7 @@ import {
   MIRROR_WORLD_ROADS,
   MIRROR_WORLD_ZONE,
 } from './content/mirror_world';
+import { COMMON_RECIPES as COMMON_RECIPES_CONTENT } from './content/recipes';
 import {
   TEMPLE_CAMPS,
   TEMPLE_DUNGEON_DEFS,

@@ -186,7 +186,8 @@ export const BASE_NEW = {
     'log.brewLadled': 'Morwen øser en frisk Dybdrøm-eliksir i din taske.',
     'log.gargoyleBows': 'Gargoilen bøjer hovedet, sten der skurrer mod sten.',
     'log.gargoyleWakes': 'Stenen flækker langs gamle fuger — vagten træder ned fra sin sokkel.',
-    'log.gargoyleRestones': 'Med raseriet brugt op kravler gargoilen tilbage på soklen og stivner til sten.',
+    'log.gargoyleRestones':
+      'Med raseriet brugt op kravler gargoilen tilbage på soklen og stivner til sten.',
     'error.mirrorSealed': 'Spejlet er mørkt. Dets vogter forventer først en høflighed.',
     'error.blackMirrorSealed': 'Skyggespejlet kender dig ikke. Endnu.',
     'log.mirrorUnsealed': 'Tolden er betalt. Bag statuen klarer spejlet op.',
@@ -414,13 +415,16 @@ export const BASE_NEW = {
     'log.slumberTakes': 'Kantuk mencengkerammu — mimpi menarikmu ke bawah.',
     'log.echoRises': 'Di dalam kabut, sesuatu yang memakai wajahmu berdiri.',
     'log.echoScatters': 'Gema menyebarkanmu seperti napas di kaca.',
-    'log.echoShardDrop': 'Gema pecah berkeping — sebuah Pecahan Cermin tertinggal di tempatnya berdiri.',
+    'log.echoShardDrop':
+      'Gema pecah berkeping — sebuah Pecahan Cermin tertinggal di tempatnya berdiri.',
     'log.echoNoShard': 'Gema pecah berkeping. Kali ini ia tak meninggalkan apa pun.',
     'log.dreamWake': 'Kau terbangun di tempat tidur menjemputmu.',
     'log.brewLadled': 'Morwen menuangkan Ramuan Mimpi Dalam yang baru ke dalam ranselmu.',
     'log.gargoyleBows': 'Gargoyle itu menundukkan kepala, batu bergesek dengan batu.',
-    'log.gargoyleWakes': 'Batu retak di sepanjang sambungan lama — sang penjaga turun dari alasnya.',
-    'log.gargoyleRestones': 'Amarahnya habis, gargoyle itu memanjat kembali ke alasnya dan membeku jadi batu.',
+    'log.gargoyleWakes':
+      'Batu retak di sepanjang sambungan lama — sang penjaga turun dari alasnya.',
+    'log.gargoyleRestones':
+      'Amarahnya habis, gargoyle itu memanjat kembali ke alasnya dan membeku jadi batu.',
     'error.mirrorSealed': 'Cermin itu gelap. Penjaganya menunggu penghormatan lebih dulu.',
     'error.blackMirrorSealed': 'Cermin Kelam belum mengenalmu.',
     'log.mirrorUnsealed': 'Upeti telah dibayar. Di belakang patung, cermin itu menjernih.',
@@ -651,7 +655,8 @@ export const BASE_NEW = {
     'log.brewLadled': 'Morwen schept een verse Diepdroom-drank in je ransel.',
     'log.gargoyleBows': 'De gargouille buigt het hoofd, steen knarst op steen.',
     'log.gargoyleWakes': 'De steen splijt langs oude naden — de wachter stapt van zijn sokkel.',
-    'log.gargoyleRestones': 'Zijn woede uitgeraasd klimt de gargouille terug op zijn sokkel en verstilt tot steen.',
+    'log.gargoyleRestones':
+      'Zijn woede uitgeraasd klimt de gargouille terug op zijn sokkel en verstilt tot steen.',
     'error.mirrorSealed': 'De spiegel is donker. Zijn wachter verwacht eerst een hoffelijkheid.',
     'error.blackMirrorSealed': 'De Duisterspiegel kent je niet. Nog niet.',
     'log.mirrorUnsealed': 'De tol is betaald. Achter het beeld klaart de spiegel op.',
@@ -882,7 +887,8 @@ export const BASE_NEW = {
     'log.brewLadled': 'Morwen nalewa świeży Napar Głębokiego Snu do twojej sakwy.',
     'log.gargoyleBows': 'Gargulec pochyla głowę, kamień zgrzyta o kamień.',
     'log.gargoyleWakes': 'Kamień pęka wzdłuż starych spoin — strażnik schodzi z cokołu.',
-    'log.gargoyleRestones': 'Wyczerpawszy furię, gargulec wspina się z powrotem na cokół i nieruchomieje w kamień.',
+    'log.gargoyleRestones':
+      'Wyczerpawszy furię, gargulec wspina się z powrotem na cokół i nieruchomieje w kamień.',
     'error.mirrorSealed': 'Zwierciadło jest ciemne. Jego strażnik oczekuje najpierw ukłonu.',
     'error.blackMirrorSealed': 'Mroczne Zwierciadło jeszcze cię nie zna.',
     'log.mirrorUnsealed': 'Myto zapłacone. Za posągiem zwierciadło się przejaśnia.',
@@ -1113,7 +1119,8 @@ export const BASE_NEW = {
     'log.brewLadled': 'Morwen öser en färsk Djupdröm-brygd i din packning.',
     'log.gargoyleBows': 'Gargoylen böjer huvudet, sten som gnisslar mot sten.',
     'log.gargoyleWakes': 'Stenen spricker längs gamla fogar — vakten kliver ner från sin sockel.',
-    'log.gargoyleRestones': 'Med raseriet förbrukat klättrar gargoylen tillbaka upp på sockeln och stelnar till sten.',
+    'log.gargoyleRestones':
+      'Med raseriet förbrukat klättrar gargoylen tillbaka upp på sockeln och stelnar till sten.',
     'error.mirrorSealed': 'Spegeln är mörk. Dess väktare väntar sig först en artighet.',
     'error.blackMirrorSealed': 'Skuggspegeln känner dig inte. Ännu.',
     'log.mirrorUnsealed': 'Tullen är betald. Bakom statyn klarnar spegeln.',
