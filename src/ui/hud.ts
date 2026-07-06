@@ -48,6 +48,7 @@ import {
   dungeonAt,
   ITEMS,
   isDelvePos,
+  isHodricsPos,
   MOBS,
   NPCS,
   QUESTS,
@@ -5843,14 +5844,19 @@ export class Hud {
       const instanceId = inDelveBand
         ? (delveAt(p.pos.x)?.id ?? 'collapsed_reliquary')
         : (dungeon?.id ?? null);
+      // Hodric's Castle is open-air (the zone banner/subzone suppression above
+      // is still correct: it is an instance), so it takes the ordinary
+      // outdoor zone theme instead of the dungeon murk.
+      const inHodrics = isHodricsPos(p.pos.x);
+      const musicInDungeon = (inDungeon && !inHodrics) || inNythraxisArena;
       const zone = musicZoneForLocation(
         currentZone.id,
         currentZone.biome,
         inHub,
-        inDungeon || inNythraxisArena,
+        musicInDungeon,
         instanceId,
       );
-      const musicDungeonId = inDungeon || inNythraxisArena ? instanceId : null;
+      const musicDungeonId = musicInDungeon ? instanceId : null;
       if (shouldResetMusicForDungeonEntry(this.lastMusicDungeonId, musicDungeonId)) {
         music.resetForDungeonEntry(musicDungeonId);
       }

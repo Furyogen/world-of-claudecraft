@@ -16,10 +16,13 @@ import {
   delveOrigin,
   delveSlotAt,
   dungeonAt,
+  HODRICS_SLOT_COUNT,
+  hodricsOrigin,
   INSTANCE_SLOT_COUNT,
   instanceOrigin,
   isArenaPos,
   isDelvePos,
+  isHodricsPos,
   MOBS,
   NPCS,
   WORLD_MAX_Z,
@@ -27,6 +30,7 @@ import {
   ZONES,
 } from '../sim/data';
 import type { DelveModuleId } from '../sim/delve_layout';
+import { HC_HALF_Z } from '../sim/hodrics_layout';
 import type { BiomeId } from '../sim/types';
 import { ALL_CLASSES, type Entity, type SimEvent } from '../sim/types';
 import { groundHeight, waterLevel, zoneBiomeAt } from '../sim/world';
@@ -68,6 +72,7 @@ import {
   sharedUniforms,
   urlForcedTier,
 } from './gfx';
+import { buildHodricsCastle, type HodricsCastleView } from './hodrics_castle';
 import { buildImpactSite, type ImpactSiteView } from './impact_site';
 import { ensureDelveInteriorKit } from './interior_kit';
 import { type LocoTrack, newLocoTrack, updateLocomotion } from './locomotion';
@@ -3598,6 +3603,13 @@ export class Renderer {
   // Delve module interiors build asynchronously; track in-flight keys so a
   // per-frame ensureDelveInteriorsNear does not re-schedule a build mid-load.
   private pendingInteriors = new Set<string>();
+  // Hodric's Castle: built once per race slot on approach, kept for the
+  // session (the builtInteriors precedent — no teardown), and driven every
+  // frame with the renderer's interpolated clock (this.time). A slot only
+  // ever enters `hodricsCastles` once its async build resolves; `pending`
+  // tracks in-flight builds so the approach gate does not re-schedule one.
+  private hodricsCastles = new Map<number, HodricsCastleView>();
+  private pendingHodricsSlots = new Set<number>();
   private fogState: 'outdoor' | 'dungeon' | 'temple' | 'nythraxis' | 'delve' | 'underwater' =
     'outdoor';
 
@@ -3710,6 +3722,26 @@ export class Renderer {
           this.buildInterior('arena', o.x, o.z);
         }
       }
+    } else if (inside && isHodricsPos(px)) {
+      // build the Hodric's Castle race slot the player was matched into (or
+      // is approaching in practice); the course footprint is ~280yd long, so
+      // gate on a window wide enough to cover it end to end.
+      for (let i = 0; i < HODRICS_SLOT_COUNT; i++) {
+        if (this.hodricsCastles.has(i) || this.pendingHodricsSlots.has(i)) continue;
+        const o = hodricsOrigin(i);
+        if (Math.abs(px - o.x) < 60 && Math.abs(pz - o.z) < HC_HALF_Z + 40) {
+          this.pendingHodricsSlots.add(i);
+          void buildHodricsCastle(this.scene, o.x, o.z)
+            .then((view) => {
+              this.hodricsCastles.set(i, view);
+              this.pendingHodricsSlots.delete(i);
+            })
+            .catch((err) => {
+              this.pendingHodricsSlots.delete(i);
+              console.error("Failed to build Hodric's Castle:", err);
+            });
+        }
+      }
     } else if (inside) {
       void ensureDungeonAssets().catch(() => undefined);
       // build the interior copy the player is standing in
@@ -3731,17 +3763,22 @@ export class Renderer {
     const interior = inside && !inDelve && !isArenaPos(px) ? dungeonAt(px)?.interior : null;
     const inTemple = interior === 'temple';
     const inNythraxis = interior === 'nythraxis';
+    // Hodric's Castle is the one instance band that reads as open-air day,
+    // never as an underground dungeon: the chasm below its terraces is a
+    // long fall, not water, so it is excluded from the 'underwater' check too.
     const desired = inDelve
       ? 'delve'
       : inTemple
         ? 'temple'
         : inNythraxis
           ? 'nythraxis'
-          : inside
-            ? 'dungeon'
-            : camY < waterLevel() - 0.05
-              ? 'underwater'
-              : 'outdoor';
+          : isHodricsPos(px)
+            ? 'outdoor'
+            : inside
+              ? 'dungeon'
+              : camY < waterLevel() - 0.05
+                ? 'underwater'
+                : 'outdoor';
     const fog = this.scene.fog as THREE.Fog;
     if (desired !== this.fogState) {
       this.fogState = desired;
@@ -4600,6 +4637,11 @@ export class Renderer {
       this.cameraLookAt.y,
       this.cameraLookAt.z,
     );
+    // Hodric's Castle obstacles: analytic pose at the render-interpolated
+    // clock. this.time already tracks sim.time + alpha*DT (both advance from
+    // the same tick origin), so this matches the sim's collision poses phase
+    // for phase — the whole "what you see is what you collide with" contract.
+    for (const castle of this.hodricsCastles.values()) castle.update(this.time);
     worldStart = markWorldPhase('props', worldStart);
     this.foliage.update(
       p.pos.x,
@@ -5104,7 +5146,9 @@ export class Renderer {
         fz = pz - cpz;
       const fl = Math.hypot(fx, fy, fz) || 1;
       sink.setListener(cpx, cpy, cpz, fx / fl, fy / fl, fz / fl);
-      const inDungeon = px > DUNGEON_X_THRESHOLD;
+      // Hodric's Castle is open-air (wind/birds), never the dungeon drone; its
+      // chasm floor is a long fall, not water, so it never reads as a shoreline.
+      const inDungeon = px > DUNGEON_X_THRESHOLD && !isHodricsPos(px);
       const biome = zoneBiomeAt(pz);
       const precip =
         !this.weatherOn || inDungeon
@@ -5116,7 +5160,8 @@ export class Renderer {
               : null;
       // Only at the water's edge / in it — sampled at the player, so a loose
       // threshold made the loop bleed across the low marsh from far off.
-      const nearWater = !inDungeon && groundHeight(px, pz, seed) < waterLevel() + 0.4;
+      const nearWater =
+        !inDungeon && !isHodricsPos(px) && groundHeight(px, pz, seed) < waterLevel() + 0.4;
       sink.ambience(biome, inDungeon, precip, nearWater);
     }
   }
