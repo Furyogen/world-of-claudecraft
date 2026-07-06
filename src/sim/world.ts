@@ -5,7 +5,7 @@ import {
   isHodricsPos,
   WORLD_MAX_X,
 } from './data';
-import { hodricsGroundWorld } from './hodrics_layout';
+import { hodricsGroundWorld } from './hodrics_course';
 import { fbm2, hash2 } from './rng';
 import type { BiomeId, HeightStamp, WorldContent } from './types';
 
