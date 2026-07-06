@@ -984,6 +984,7 @@ export const id_ID: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "Admin",
+        "coredevs": "Core Dev",
         "devs": "Pengembang",
         "mods": "Moderator",
         "artists": "Seniman"
