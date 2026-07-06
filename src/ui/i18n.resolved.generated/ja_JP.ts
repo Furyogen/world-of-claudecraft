@@ -235,6 +235,30 @@ export const ja_JP: EnTranslations = {
         "price_unavailable": "WOCの価格を取得できないため、報酬は一時的にロックされています。"
       }
     },
+    "claudium": {
+      "title": "クラウジウム",
+      "close": "クラウジウムを閉じる",
+      "balanceLabel": "残高",
+      "balanceUnit": "{amount} クラウジウム",
+      "unavailable": "クラウジウムストアは現在利用できません。残高や購入には影響ありません。しばらくしてから再度お試しください。",
+      "disclosure": "クラウジウムは一方向のソフト通貨です。お金で購入し、コスメティックに使用します。換金、送金、払い戻しはできません。",
+      "buyTitle": "クラウジウムを購入",
+      "railLabel": "支払い方法",
+      "railStripe": "カード",
+      "railWoc": "WOC",
+      "railWocUnavailable": "WOCの価格は現在利用できません。",
+      "amountLabel": "金額",
+      "skuRow": "{usd} で {claudium} クラウジウム",
+      "buyButton": "購入",
+      "buyUnavailable": "購入は現在利用できません。",
+      "storeTitle": "コスメティックストア",
+      "storeEmpty": "現在利用できるコスメティックはありません。",
+      "storeCost": "{amount} クラウジウム",
+      "spendButton": "交換",
+      "kindCosmetic": "コスメティック",
+      "kindSkin": "スキン",
+      "kindItem": "アイテム"
+    },
     "theme": {
       "preset": "UIテーマ",
       "customColors": "カスタムカラー",

@@ -235,6 +235,30 @@ export const zh_CN: EnTranslations = {
         "price_unavailable": "WOC 价格不可用，奖励暂时锁定。"
       }
     },
+    "claudium": {
+      "title": "克劳迪姆",
+      "close": "关闭克劳迪姆",
+      "balanceLabel": "余额",
+      "balanceUnit": "{amount} 克劳迪姆",
+      "unavailable": "克劳迪姆商店当前不可用。您的余额和购买不受影响，请稍后再试。",
+      "disclosure": "克劳迪姆是一种单向软通货：用钱购买，用于外观装饰。不可赎回、转让或兑现。",
+      "buyTitle": "购买克劳迪姆",
+      "railLabel": "支付方式",
+      "railStripe": "银行卡",
+      "railWoc": "WOC",
+      "railWocUnavailable": "WOC 价格当前不可用。",
+      "amountLabel": "金额",
+      "skuRow": "{usd} 兑换 {claudium} 克劳迪姆",
+      "buyButton": "购买",
+      "buyUnavailable": "购买当前不可用。",
+      "storeTitle": "外观商店",
+      "storeEmpty": "当前没有可用的外观装饰。",
+      "storeCost": "{amount} 克劳迪姆",
+      "spendButton": "兑换",
+      "kindCosmetic": "外观",
+      "kindSkin": "皮肤",
+      "kindItem": "物品"
+    },
     "theme": {
       "preset": "界面主题",
       "customColors": "自定义颜色",

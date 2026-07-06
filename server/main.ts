@@ -49,6 +49,7 @@ import { configureAuthRuntime } from './auth_routes';
 import { BUG_DESCRIPTION_MAX, BugReportRateLimitError, createBugReport } from './bug_report_db';
 import { characterSheet, type SheetRank } from './character_sheet';
 import { configureCharactersRuntime } from './characters';
+import { handleClaudiumApi } from './claudium';
 import { handleDailyRewardApi, handleDailyRewardInternalApi } from './daily_rewards';
 import {
   accountAndScopeForToken,
@@ -1675,6 +1676,11 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       const accountId = await bearerActiveAccount(req, res);
       if (accountId === null) return;
       return handleDailyRewardApi(req, res, accountId);
+    }
+    if (url.startsWith('/api/claudium')) {
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      return handleClaudiumApi(req, res, accountId);
     }
     // Shareable player card: publish (PNG body) + referral stats for the card.
     if (req.method === 'POST' && url === '/api/card') {

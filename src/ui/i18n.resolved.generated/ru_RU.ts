@@ -235,6 +235,30 @@ export const ru_RU: EnTranslations = {
         "price_unavailable": "Цена WOC недоступна, награды временно заблокированы."
       }
     },
+    "claudium": {
+      "title": "Клаудиум",
+      "close": "Закрыть Клаудиум",
+      "balanceLabel": "Баланс",
+      "balanceUnit": "{amount} Клаудиума",
+      "unavailable": "Магазин Клаудиума сейчас недоступен. Ваш баланс и покупки не затронуты. Пожалуйста, зайдите позже.",
+      "disclosure": "Клаудиум - это односторонняя внутренняя валюта: покупайте её за деньги и тратьте на косметику. Её нельзя обменять, передать или обналичить.",
+      "buyTitle": "Купить Клаудиум",
+      "railLabel": "Способ оплаты",
+      "railStripe": "Карта",
+      "railWoc": "WOC",
+      "railWocUnavailable": "Цена WOC сейчас недоступна.",
+      "amountLabel": "Сумма",
+      "skuRow": "{usd} за {claudium} Клаудиума",
+      "buyButton": "Купить",
+      "buyUnavailable": "Покупка сейчас недоступна.",
+      "storeTitle": "Магазин косметики",
+      "storeEmpty": "Сейчас нет доступной косметики.",
+      "storeCost": "{amount} Клаудиума",
+      "spendButton": "Обменять",
+      "kindCosmetic": "Косметика",
+      "kindSkin": "Облик",
+      "kindItem": "Предмет"
+    },
     "theme": {
       "preset": "Тема интерфейса",
       "customColors": "Настраиваемые цвета",

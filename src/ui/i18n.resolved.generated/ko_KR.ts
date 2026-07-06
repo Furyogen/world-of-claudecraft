@@ -235,6 +235,30 @@ export const ko_KR: EnTranslations = {
         "price_unavailable": "WOC 가격을 확인할 수 없어 보상이 일시적으로 잠겨 있습니다."
       }
     },
+    "claudium": {
+      "title": "클라우디움",
+      "close": "클라우디움 닫기",
+      "balanceLabel": "잔액",
+      "balanceUnit": "{amount} 클라우디움",
+      "unavailable": "클라우디움 상점을 현재 이용할 수 없습니다. 잔액과 구매 내역에는 영향이 없습니다. 잠시 후 다시 시도해 주세요.",
+      "disclosure": "클라우디움은 일방향 소프트 화폐입니다. 돈으로 구매하여 치장 아이템에 사용합니다. 환급, 전송, 현금화는 불가능합니다.",
+      "buyTitle": "클라우디움 구매",
+      "railLabel": "결제 수단",
+      "railStripe": "카드",
+      "railWoc": "WOC",
+      "railWocUnavailable": "WOC 가격을 현재 이용할 수 없습니다.",
+      "amountLabel": "금액",
+      "skuRow": "{usd}로 {claudium} 클라우디움",
+      "buyButton": "구매",
+      "buyUnavailable": "구매를 현재 이용할 수 없습니다.",
+      "storeTitle": "치장 상점",
+      "storeEmpty": "현재 이용 가능한 치장 아이템이 없습니다.",
+      "storeCost": "{amount} 클라우디움",
+      "spendButton": "교환",
+      "kindCosmetic": "치장",
+      "kindSkin": "스킨",
+      "kindItem": "아이템"
+    },
     "theme": {
       "preset": "UI 테마",
       "customColors": "사용자 지정 색상",

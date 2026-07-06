@@ -235,6 +235,30 @@ export const fr_FR: EnTranslations = {
         "price_unavailable": "Le cours du WOC est indisponible, les récompenses sont temporairement verrouillées."
       }
     },
+    "claudium": {
+      "title": "Claudium",
+      "close": "Close Claudium",
+      "balanceLabel": "Balance",
+      "balanceUnit": "{amount} Claudium",
+      "unavailable": "The Claudium store is unavailable right now. Your balance and purchases are unaffected; please check back shortly.",
+      "disclosure": "Claudium is a one-way soft currency: buy it with money and spend it on cosmetics. It cannot be redeemed, transferred, or cashed out.",
+      "buyTitle": "Buy Claudium",
+      "railLabel": "Payment method",
+      "railStripe": "Card",
+      "railWoc": "WOC",
+      "railWocUnavailable": "WOC pricing is unavailable right now.",
+      "amountLabel": "Amount",
+      "skuRow": "{usd} for {claudium} Claudium",
+      "buyButton": "Buy",
+      "buyUnavailable": "Purchasing is unavailable right now.",
+      "storeTitle": "Cosmetic Store",
+      "storeEmpty": "No cosmetics are available right now.",
+      "storeCost": "{amount} Claudium",
+      "spendButton": "Redeem",
+      "kindCosmetic": "Cosmetic",
+      "kindSkin": "Skin",
+      "kindItem": "Item"
+    },
     "theme": {
       "preset": "Thème de l'interface",
       "customColors": "Couleurs personnalisées",
