@@ -3454,7 +3454,11 @@ export class Sim {
         p.onGround = true;
         p.jumping = false;
         const drop = p.fallStartY - ground;
-        if (drop > FALL_SAFE_DISTANCE) {
+        // Hodric's Castle is a bouncy gameshow, not a cliff: the course has no
+        // damage sources at all (falls respawn at a checkpoint), so a hard
+        // landing after a hammer yeet never stings. Everywhere else, fall
+        // damage applies as normal.
+        if (drop > FALL_SAFE_DISTANCE && !isHodricsPos(p.pos.x)) {
           const dmg = Math.round(p.maxHp * (drop - FALL_SAFE_DISTANCE) * 0.07);
           if (dmg > 0) this.dealDamage(null, p, dmg, false, 'physical', 'Falling', 'hit', true);
         }

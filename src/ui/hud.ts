@@ -1,6 +1,7 @@
 import { audio } from '../game/audio';
 import type { GamepadKind } from '../game/gamepad_map';
 import type { Keybinds } from '../game/keybinds';
+import { loadHapticsEnabled, triggerHaptic } from '../game/mobile_controls';
 import { music, musicZoneForLocation, shouldResetMusicForDungeonEntry } from '../game/music';
 import type { GameSettings, Settings } from '../game/settings';
 import { sfx } from '../game/sfx';
@@ -8080,17 +8081,22 @@ export class Hud {
           break;
         case 'hcCountdown':
           audio.duelCountdownTick();
+          triggerHaptic(8, loadHapticsEnabled());
           break;
         case 'hcStart':
           this.showBanner(t('hudChrome.hc.banner.go'));
           audio.duelStart();
+          triggerHaptic([15, 40, 25], loadHapticsEnabled());
           break;
         case 'hcKnocked':
           this.renderer.addShake(0.5);
           audio.fiestaWord(1);
+          triggerHaptic([18, 30, 45], loadHapticsEnabled());
           break;
         case 'hcFall':
           this.log(t('hudChrome.hc.log.fall'), '#ff9a6a');
+          this.renderer.addShake(0.22);
+          triggerHaptic(35, loadHapticsEnabled());
           break;
         case 'hcCheckpoint':
           this.log(
@@ -8099,6 +8105,7 @@ export class Hud {
             }),
             '#c9a2ff',
           );
+          triggerHaptic(12, loadHapticsEnabled());
           break;
         case 'hcFinish':
           this.showBanner(
@@ -8107,12 +8114,18 @@ export class Hud {
             }),
           );
           audio.duelEnd();
+          this.renderer.addShake(0.3);
+          // The gold ascension pillar doubles as the finish-line firework.
+          this.renderer.fiestaAugmentBurst(this.sim.playerId);
+          triggerHaptic([20, 40, 20, 40, 70], loadHapticsEnabled());
           break;
         case 'hcEnd': {
           if (ev.won) {
             this.showBanner(t('hudChrome.hc.banner.crown'));
             this.combatLog(t('hudChrome.hc.banner.crown'), '#ffd75e');
             audio.fiestaWave();
+            this.renderer.fiestaKillBurst(this.sim.playerId, 'holy');
+            triggerHaptic([30, 50, 30, 50, 90], loadHapticsEnabled());
           } else {
             this.combatLog(
               t('hudChrome.hc.log.placed', {
