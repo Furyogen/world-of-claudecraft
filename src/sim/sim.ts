@@ -104,6 +104,7 @@ import {
   ITEMS,
   isArenaPos,
   isDelvePos,
+  isHodricsPos,
   MOBS,
   QUESTS,
   SPIRIT_HEALER_NPC_ID,
@@ -3050,6 +3051,9 @@ export class Sim {
   }
 
   isSwimming(e: Entity): boolean {
+    // The Hodric's Castle chasm dives below the world water line, but the race
+    // crag holds no water: fallers drop to the kill plane, they never swim.
+    if (isHodricsPos(e.pos.x)) return false;
     return (
       groundHeight(e.pos.x, e.pos.z, this.cfg.seed) < waterLevel() - SWIM_DEPTH &&
       e.pos.y <= swimSurfaceY() + 0.15
@@ -3311,9 +3315,11 @@ export class Sim {
       }
     }
 
-    // Vertical: jumping, gravity, swimming, fall damage
+    // Vertical: jumping, gravity, swimming, fall damage. The Hodric's Castle
+    // chasm is dry: falls there run to the kill plane (checkpoint respawn),
+    // they never splash into phantom water.
     const ground = groundHeight(p.pos.x, p.pos.z, this.cfg.seed);
-    const deepWater = ground < waterLevel() - SWIM_DEPTH;
+    const deepWater = !isHodricsPos(p.pos.x) && ground < waterLevel() - SWIM_DEPTH;
     if (deepWater && p.pos.y <= swimSurfaceY() + 0.05) {
       // treading water at the surface
       p.pos.y = swimSurfaceY();
