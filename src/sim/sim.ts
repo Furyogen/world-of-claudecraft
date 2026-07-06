@@ -3590,15 +3590,6 @@ export class Sim {
   }
 
   castAbility(abilityId: string, pid?: number, aim?: { x: number; z: number }): void {
-    // Hodric's Gauntlet is legs-only: no ability may fire during a race, so
-    // speed buffs, travel forms, and mounts can never decide it (fairness by
-    // construction; run speed is identical for every racer).
-    const hcPid = pid ?? this.primaryId;
-    const hcMatch = this.hcMatches.get(hcPid);
-    if (hcMatch && hcMatch.state !== 'over') {
-      this.error(hcPid, 'Legs only in the Gauntlet: abilities are barred.');
-      return;
-    }
     castAbilityImpl(this.ctx, abilityId, pid, aim);
   }
 
