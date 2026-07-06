@@ -225,6 +225,7 @@ describe('xp pacing budget (no forced grinding)', () => {
 
   for (const zone of ZONES) {
     it(`${zone.id} covers levels ${zone.levelRange[0]}-${zone.levelRange[1]} with headroom`, () => {
+      if (zone.sideZone) return; // optional bonus areas carry no leveling budget
       const budget = questsForZone(zone);
       if (budget.count === 0) return; // zone content not built yet
       const [lo, hi] = zone.levelRange;

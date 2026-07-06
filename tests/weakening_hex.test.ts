@@ -94,7 +94,9 @@ describe('mob hex ("Weakening Hex")', () => {
   it('reduces the healing a hexed source does', () => {
     const sim = makeSim('priest');
     const p = sim.player;
-    (sim as any).spellCrit = () => 0; // remove crit RNG so the ratio is exact
+    // Remove crit RNG so the ratio is exact. Stub via ctx: the SimContext bound
+    // spellCrit at construction, so replacing sim.spellCrit would never be seen.
+    (sim as any).ctx.spellCrit = () => 0;
     p.maxHp = 100000; p.hp = 1; // huge deficit so nothing is capped by overheal
     (sim as any).applyHeal(p, p, 1000, 'Test Heal');
     const plain = p.hp - 1;

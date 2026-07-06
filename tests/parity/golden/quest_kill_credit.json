@@ -10,13 +10,13 @@
     "turnInQuest (xp + copper reward)"
   ],
   "draws": 40,
-  "drawDigest": "0e96c13c",
+  "drawDigest": "db5bbcf5",
   "frames": [
     {
       "tick": 0,
       "time": 0,
-      "nextId": 401,
-      "state": "74bced36",
+      "nextId": 458,
+      "state": "800d5044",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -41,7 +41,7 @@
           "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 400,
+          "entityId": 457,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -55,6 +55,7 @@
           ],
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "permanentStats": {},
           "talents": {
             "choices": {},
             "ranks": {}
@@ -73,7 +74,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 90,
-          "id": 400,
+          "id": 457,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -82,6 +83,7 @@
           "moveSpeed": 7,
           "onGround": true,
           "overpowerUntil": -1,
+          "permanentStats": {},
           "petMode": "defensive",
           "pos": {
             "x": 2,
@@ -116,9 +118,9 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 401,
-      "state": "19959b59",
-      "events": "00bafcff",
+      "nextId": 458,
+      "state": "39ff249f",
+      "events": "e85f59e3",
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -142,7 +144,7 @@
           "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 400,
+          "entityId": 457,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -157,6 +159,7 @@
           "lifetimeXp": 27600,
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "permanentStats": {},
           "questLog": [
             [
               "q_wolves",
@@ -187,7 +190,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 50000,
-          "id": 400,
+          "id": 457,
           "kind": "player",
           "level": 10,
           "lootFfaTimer": "Infinity",
@@ -196,6 +199,7 @@
           "moveSpeed": 7,
           "onGround": true,
           "overpowerUntil": -1,
+          "permanentStats": {},
           "petMode": "defensive",
           "pos": {
             "x": 4,
@@ -230,12 +234,12 @@
     {
       "tick": 8,
       "time": 0.4,
-      "nextId": 409,
-      "state": "a031b238",
-      "events": "d894ee18",
+      "nextId": 466,
+      "state": "2ca351aa",
+      "events": "093c3cdc",
       "rng": {
         "draws": 40,
-        "digest": "0e96c13c"
+        "digest": "db5bbcf5"
       },
       "label": "quest-ready",
       "players": [
@@ -260,7 +264,7 @@
           "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 400,
+          "entityId": 457,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -275,6 +279,7 @@
           "lifetimeXp": 27600,
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "permanentStats": {},
           "questLog": [
             [
               "q_wolves",
@@ -305,7 +310,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99.4,
           "hp": 50000,
-          "id": 400,
+          "id": 457,
           "inCombat": true,
           "kind": "player",
           "level": 10,
@@ -315,6 +320,7 @@
           "moveSpeed": 7,
           "onGround": true,
           "overpowerUntil": -1,
+          "permanentStats": {},
           "petMode": "defensive",
           "pos": {
             "x": 4,
@@ -349,12 +355,12 @@
     {
       "tick": 8,
       "time": 0.4,
-      "nextId": 409,
-      "state": "4448f63d",
-      "events": "272aafab",
+      "nextId": 466,
+      "state": "be09a829",
+      "events": "55b09e6f",
       "rng": {
         "draws": 40,
-        "digest": "0e96c13c"
+        "digest": "db5bbcf5"
       },
       "label": "quest-turned-in",
       "players": [
@@ -382,7 +388,7 @@
           "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 400,
+          "entityId": 457,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -397,6 +403,7 @@
           "lifetimeXp": 27850,
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "permanentStats": {},
           "questsDone": [
             "q_wolves"
           ],
@@ -419,7 +426,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99.4,
           "hp": 50000,
-          "id": 400,
+          "id": 457,
           "inCombat": true,
           "kind": "player",
           "level": 10,
@@ -429,6 +436,7 @@
           "moveSpeed": 7,
           "onGround": true,
           "overpowerUntil": -1,
+          "permanentStats": {},
           "petMode": "defensive",
           "pos": {
             "x": 4,
@@ -463,12 +471,12 @@
     {
       "tick": 10,
       "time": 0.5,
-      "nextId": 409,
-      "state": "e2c8f9f5",
+      "nextId": 466,
+      "state": "a3a467c1",
       "events": "741638a5",
       "rng": {
         "draws": 40,
-        "digest": "0e96c13c"
+        "digest": "db5bbcf5"
       },
       "label": "final",
       "players": [
@@ -496,7 +504,7 @@
           "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 400,
+          "entityId": 457,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -511,6 +519,7 @@
           "lifetimeXp": 27850,
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "permanentStats": {},
           "questsDone": [
             "q_wolves"
           ],
@@ -533,7 +542,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99.5,
           "hp": 50000,
-          "id": 400,
+          "id": 457,
           "inCombat": true,
           "kind": "player",
           "level": 10,
@@ -543,6 +552,7 @@
           "moveSpeed": 7,
           "onGround": true,
           "overpowerUntil": -1,
+          "permanentStats": {},
           "petMode": "defensive",
           "pos": {
             "x": 4,
