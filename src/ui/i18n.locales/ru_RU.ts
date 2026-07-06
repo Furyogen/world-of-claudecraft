@@ -6481,4 +6481,27 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.sport_second_wind.name': 'Второе дыхание',
   'entities.abilities.sport_second_wind.description':
     'Обретите ноги: скорость передвижения повышена на 50% на 4 сек.',
+  'hudChrome.claudium.title': 'Клаудиум',
+  'hudChrome.claudium.close': 'Закрыть Клаудиум',
+  'hudChrome.claudium.balanceLabel': 'Баланс',
+  'hudChrome.claudium.balanceUnit': '{amount} Клаудиума',
+  'hudChrome.claudium.unavailable':
+    'Магазин Клаудиума сейчас недоступен. Ваш баланс и покупки не затронуты. Пожалуйста, зайдите позже.',
+  'hudChrome.claudium.disclosure':
+    'Клаудиум - это односторонняя внутренняя валюта: покупайте её за деньги и тратьте на косметику. Её нельзя обменять, передать или обналичить.',
+  'hudChrome.claudium.buyTitle': 'Купить Клаудиум',
+  'hudChrome.claudium.railLabel': 'Способ оплаты',
+  'hudChrome.claudium.railStripe': 'Карта',
+  'hudChrome.claudium.railWocUnavailable': 'Цена WOC сейчас недоступна.',
+  'hudChrome.claudium.amountLabel': 'Сумма',
+  'hudChrome.claudium.skuRow': '{usd} за {claudium} Клаудиума',
+  'hudChrome.claudium.buyButton': 'Купить',
+  'hudChrome.claudium.buyUnavailable': 'Покупка сейчас недоступна.',
+  'hudChrome.claudium.storeTitle': 'Магазин косметики',
+  'hudChrome.claudium.storeEmpty': 'Сейчас нет доступной косметики.',
+  'hudChrome.claudium.storeCost': '{amount} Клаудиума',
+  'hudChrome.claudium.spendButton': 'Обменять',
+  'hudChrome.claudium.kindCosmetic': 'Косметика',
+  'hudChrome.claudium.kindSkin': 'Облик',
+  'hudChrome.claudium.kindItem': 'Предмет',
 };
