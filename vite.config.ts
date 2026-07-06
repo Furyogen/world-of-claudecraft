@@ -349,6 +349,11 @@ export default defineConfig({
     },
   },
   test: {
+    // Sim tick-loop tests (fiesta/social/threat) run 1200-1600 full-world ticks and sit
+    // right against vitest's stock 5000ms per-test default; under parallel CPU contention
+    // on CI they intermittently trip it. Give them headroom (the ci.yml worker cap is the
+    // primary mitigation; this removes the reliance on the borderline default).
+    testTimeout: 15_000,
     // server/db.ts (and every module importing it) requires DATABASE_URL at module
     // load. Locally db.ts fills it from .env; a CI checkout has no .env, so default
     // a dummy here to keep the suite runnable in plain Node. Unit tests never open

@@ -142,7 +142,11 @@ jobs:
         run: npm run security:gate
 
       - name: Run tests (PR tier)
-        run: npm test
+        # Cap fork parallelism to half the cores, mirroring scripts/gate.mjs's local
+        # worker cap. A bare `npm test` lets vitest spawn one fork per core; on shared
+        # CI runners that starves CPU-bound sim tick-loop tests (fiesta/social/threat),
+        # which then intermittently trip the per-test timeout. See vite.config.ts.
+        run: npm test -- --maxWorkers=50%
 
       - name: Typecheck
         run: npx tsc --noEmit
@@ -197,7 +201,8 @@ jobs:
         run: npm run security:gate
 
       - name: Run tests (release tier - 14-locale + empty-pending)
-        run: npm test
+        # Cap fork parallelism to half the cores (see the PR-tier step / scripts/gate.mjs).
+        run: npm test -- --maxWorkers=50%
 
       - name: Typecheck
         run: npx tsc --noEmit
