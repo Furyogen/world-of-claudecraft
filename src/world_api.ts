@@ -39,6 +39,7 @@
 //   professions.ts      IWorldProfessions    skill/craft/recipe/node read surface (#1164; node
 //                                            harvest read + action landed in #1121; recipe
 //                                            content + basic crafting action landed in #1127)
+//   hodrics.ts          IWorldHodrics        Hodric's Castle Gauntlet race queue + live view
 //
 // THREE GATES pin this seam (run before any facet edit; the literal counts are
 // pinned THERE and re-stale here, so this prose stays count-free):
@@ -59,6 +60,7 @@ import type { IWorldDelves } from './world_api/delves';
 import type { IWorldDuelArena } from './world_api/duel_arena';
 import type { IWorldDungeons } from './world_api/dungeons';
 import type { IWorldEntityRoster } from './world_api/entity_roster';
+import type { IWorldHodrics } from './world_api/hodrics';
 import type { IWorldInteraction } from './world_api/interaction';
 import type { IWorldInventory } from './world_api/inventory';
 import type { IWorldLoot } from './world_api/loot';
@@ -114,6 +116,12 @@ export type {
   FiestaScoreboardPlayer,
 } from './world_api/duel_arena';
 export type { RaidLockout } from './world_api/dungeons';
+export type {
+  HcInfo,
+  HcMatchInfo,
+  HcRacerView,
+  HcStandingView,
+} from './world_api/hodrics';
 export type { MailInfo, MailKindView, MailMessageView } from './world_api/mail';
 export type { MarketInfo, MarketListingView } from './world_api/market';
 export type { PartyInfo, PartyMemberAura, PartyMemberInfo } from './world_api/party';
@@ -161,7 +169,8 @@ export interface IWorld
     IWorldDelves,
     IWorldDailyRewards,
     IWorldTelemetry,
-    IWorldProfessions {}
+    IWorldProfessions,
+    IWorldHodrics {}
 
 // ---------------------------------------------------------------------------
 // Command schema (W0b): the shared wire-token vocabulary.
@@ -310,6 +319,8 @@ export const COMMAND_NAMES = [
   'autoloot',
   'resurrect_corpse',
   'resurrect_healer',
+  'hc_queue',
+  'hc_leave',
 ] as const;
 
 // The union both the send path (`online.ts`) and the dispatch switch
@@ -373,7 +384,8 @@ export type WorldFacet =
   | 'IWorldDungeons'
   | 'IWorldDelves'
   | 'IWorldDailyRewards'
-  | 'IWorldTelemetry';
+  | 'IWorldTelemetry'
+  | 'IWorldHodrics';
 
 export const COMMAND_FACETS = {
   // IWorldCombat: ability casts, auto-attack, spirit release.
@@ -456,6 +468,10 @@ export const COMMAND_FACETS = {
   arena_queue: 'IWorldDuelArena',
   arena_leave: 'IWorldDuelArena',
   arena_augment: 'IWorldDuelArena',
+  // IWorldHodrics: the Gauntlet race queue. hcInfo is a snapshot read (no send,
+  // untagged); hcPracticeStart is offline-only (never a wire command).
+  hc_queue: 'IWorldHodrics',
+  hc_leave: 'IWorldHodrics',
   // IWorldSocialGraph: friends/blocks/guild commands (online only; resolved
   // server-side by character name, handled by the #4 SocialService). socialInfo
   // arrives via the social/socialpos frames (no command); searchCharacters is a REST
