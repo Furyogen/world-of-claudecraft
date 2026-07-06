@@ -1739,6 +1739,13 @@ export class Sim {
       const racer = hcMatch.racers.get(pid);
       if (racer) racer.left = true;
       this.hcMatches.delete(pid);
+      // If that emptied the match (a full all-human lobby whose racers all
+      // disconnect), fold it now: with no pid still mapping to it the match
+      // is unreachable from updateHodrics, so its slot + pinned course would
+      // leak forever (only HODRICS_SLOT_COUNT slots exist). returnFromHcMatch
+      // frees the slot, resets the registry, and teleports any survivors home.
+      const anyLive = [...hcMatch.racers.values()].some((r) => !r.left && this.entities.has(r.pid));
+      if (!anyLive) hodricsMod.returnFromHcMatch(this.ctx, hcMatch);
     }
     this.party.partyInvites.delete(pid);
     this.tradeInvites.delete(pid);
@@ -3348,11 +3355,15 @@ export class Sim {
       // angle cannot cheat the limit)
       if (p.onGround && !swimming) {
         // Gate from where the mover actually STANDS, not the static field
-        // under them: identical everywhere a grounded mover rests on terrain
-        // (pos.y == ground), but a racer riding a Hodric's Castle platform
-        // stands at deck height over the chasm, and stepping onto the equal
-        // height landing must not read as climbing a 40 yd wall.
-        const h0 = Math.max(groundHeight(p.pos.x, p.pos.z, this.cfg.seed), p.pos.y);
+        // under them: a racer riding a Hodric's Castle platform stands at
+        // deck height over the chasm, and stepping onto the equal height
+        // landing must not read as climbing a 40 yd wall. Scoped to the
+        // Hodric's band (like the isSwimming/deepWater/fall-damage siblings)
+        // so it never touches the universal climb gate: everywhere else a
+        // grounded mover has pos.y == ground, making the Math.max a no-op.
+        const h0 = isHodricsPos(p.pos.x)
+          ? Math.max(groundHeight(p.pos.x, p.pos.z, this.cfg.seed), p.pos.y)
+          : groundHeight(p.pos.x, p.pos.z, this.cfg.seed);
         const h1 = groundHeight(nx, nz, this.cfg.seed);
         const run = Math.hypot(nx - p.pos.x, nz - p.pos.z);
         if (
