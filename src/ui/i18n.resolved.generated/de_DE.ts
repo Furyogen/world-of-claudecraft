@@ -3483,6 +3483,7 @@ export const de_DE: EnTranslations = {
     "rendererFailed": "Renderer konnte nicht gestartet werden: bitte neu laden. {error}",
     "enterTimeout": "Die Welt konnte nicht betreten werden. Die Verbindung ist abgelaufen. Läuft der Spielserver?",
     "connectionLost": "Die Verbindung zum Server wurde unterbrochen.",
+    "reconnecting": "Connection lost. Reconnecting...",
     "connectionRejected": "Der Server hat die Verbindung geschlossen."
   },
   "errors": {

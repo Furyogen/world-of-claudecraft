@@ -89,6 +89,7 @@ export const IWORLD_MEMBERS = [
   { name: 'unlockedMilestones', kind: 'data' },
   { name: 'restedXp', kind: 'data' },
   { name: 'craftSkills', kind: 'data' },
+  { name: 'gatheringProficiency', kind: 'data' },
   { name: 'known', kind: 'data' },
   { name: 'questLog', kind: 'data' },
   { name: 'questsDone', kind: 'data' },
@@ -357,8 +358,8 @@ beforeAll(() => {
 
 describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => {
   it('pins total / data / method counts', () => {
-    expect(IWORLD_MEMBERS.length).toBe(177);
-    expect(DATA_MEMBERS.length).toBe(45);
+    expect(IWORLD_MEMBERS.length).toBe(178);
+    expect(DATA_MEMBERS.length).toBe(46);
     expect(METHOD_MEMBERS.length).toBe(132);
   });
 
@@ -369,7 +370,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
 
   // Sorted-name `toEqual` snapshots: a dropped, renamed, or kind-flipped member reddens
   // these deliberately, forcing a reviewed edit. NOT length-only.
-  it('the full sorted member set is exactly the pinned 177', () => {
+  it('the full sorted member set is exactly the pinned 178', () => {
     expect(IWORLD_MEMBERS.map((m) => m.name).sort()).toEqual([
       'abandonPet',
       'abandonQuest',
@@ -436,6 +437,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'friendAdd',
       'friendRemove',
       'friendlyTabTarget',
+      'gatheringProficiency',
       'guildAccept',
       'guildCreate',
       'guildDecline',
@@ -551,7 +553,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
     ]);
   });
 
-  it('the sorted data-kind set is exactly the pinned 45', () => {
+  it('the sorted data-kind set is exactly the pinned 46', () => {
     expect(DATA_MEMBERS.map((m) => m.name).sort()).toEqual([
       'accountCosmetics',
       'activeLoadout',
@@ -570,6 +572,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'duelInfo',
       'entities',
       'equipment',
+      'gatheringProficiency',
       'inventory',
       'known',
       'lastCraftResult',
@@ -780,7 +783,7 @@ describe('membership, not equality: world extras do not fail the gate', () => {
 //       a MISSING name (if the array omits a key, Exclude<> is a non-never union and tsc
 //       fails) -- (1)+(2) together make each array EXACTLY its facet key-set;
 //   (3) the 22 arrays are pairwise DISJOINT (a member filed in two facets reddens);
-//   (4) their union, sorted, equals the pinned 177-name IWORLD_MEMBERS set (a member
+//   (4) their union, sorted, equals the pinned 178-name IWORLD_MEMBERS set (a member
 //       dropped from the split reddens).
 // This is the rigorous form, NOT the tautological `keyof IWorld === keyof (A & B & ...)`
 // (IWorld extends them, so that self-equality proves nothing): it asserts against the
@@ -898,6 +901,7 @@ const FACET_PROGRESSION_XP = [
   'unlockedMilestones',
   'restedXp',
   'craftSkills',
+  'gatheringProficiency',
   'leaderboard',
   'guildLeaderboard',
   'devLeaderboard',
@@ -1125,10 +1129,10 @@ describe('W1: aggregate IWorld member set equals the disjoint union of the 22 fa
     expect(overlaps, `members filed in more than one facet:\n${overlaps.join('\n')}`).toEqual([]);
   });
 
-  it('the union of the 22 facets equals the pinned 177-member IWORLD_MEMBERS set', () => {
+  it('the union of the 22 facets equals the pinned 178-member IWORLD_MEMBERS set', () => {
     const union = Object.values(FACET_MEMBER_ARRAYS).flatMap((arr) => [...arr]);
-    expect(union.length, 'union size before dedup (catches a duplicated member)').toBe(177);
-    expect(new Set(union).size, 'union size after dedup (catches a duplicated member)').toBe(177);
+    expect(union.length, 'union size before dedup (catches a duplicated member)').toBe(178);
+    expect(new Set(union).size, 'union size after dedup (catches a duplicated member)').toBe(178);
     const sortedUnion = [...union].sort();
     const pinned = IWORLD_MEMBERS.map((m) => m.name).sort();
     expect(sortedUnion).toEqual(pinned);

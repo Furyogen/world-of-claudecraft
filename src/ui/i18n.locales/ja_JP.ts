@@ -814,6 +814,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'loading.enterTimeout':
     '世界に入れませんでした。接続がタイムアウトしました。ゲームサーバーは動作していますか？',
   'loading.connectionLost': 'サーバーとの接続が切断されました。',
+  'loading.reconnecting': 'サーバーとの接続が切断されました。再接続しています...',
   'loading.connectionRejected': 'サーバーが接続を閉じました。',
   'errors.nothingInteract': '操作できるものがありません。',
   'errors.noEnemyNearby': '近くに敵がいません。',

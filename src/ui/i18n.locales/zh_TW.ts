@@ -774,6 +774,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'loading.rendererFailed': '無法啟動渲染器：請嘗試重新整理。{error}',
   'loading.enterTimeout': '無法進入世界。連線已逾時。遊戲伺服器是否正在執行？',
   'loading.connectionLost': '與伺服器的連線已中斷。',
+  'loading.reconnecting': '連線已中斷。正在重新連線...',
   'loading.connectionRejected': '伺服器已關閉連線。',
   'errors.nothingInteract': '附近沒有可互動目標。',
   'errors.noEnemyNearby': '附近沒有敵人。',

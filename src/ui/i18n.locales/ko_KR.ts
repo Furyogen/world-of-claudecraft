@@ -810,6 +810,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'loading.enterTimeout':
     '세계에 입장할 수 없습니다. 연결 시간이 초과되었습니다. 게임 서버가 실행 중인가요?',
   'loading.connectionLost': '서버와의 연결이 끊어졌습니다.',
+  'loading.reconnecting': '연결이 끊어졌습니다. 다시 연결하는 중...',
   'loading.connectionRejected': '서버가 연결을 종료했습니다.',
   'errors.nothingInteract': '상호작용할 대상이 없습니다.',
   'errors.noEnemyNearby': '근처에 적이 없습니다.',

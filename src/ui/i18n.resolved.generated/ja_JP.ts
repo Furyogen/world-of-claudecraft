@@ -3483,6 +3483,7 @@ export const ja_JP: EnTranslations = {
     "rendererFailed": "レンダラーを開始できません。再読み込みしてください。{error}",
     "enterTimeout": "世界に入れませんでした。接続がタイムアウトしました。ゲームサーバーは動作していますか？",
     "connectionLost": "サーバーとの接続が切断されました。",
+    "reconnecting": "サーバーとの接続が切断されました。再接続しています...",
     "connectionRejected": "サーバーが接続を閉じました。"
   },
   "errors": {

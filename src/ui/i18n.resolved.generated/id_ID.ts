@@ -3483,6 +3483,7 @@ export const id_ID: EnTranslations = {
     "rendererFailed": "Tidak bisa memulai perender: coba muat ulang. {error}",
     "enterTimeout": "Tidak bisa masuk dunia. Koneksi kehabisan waktu. Apakah server gim berjalan?",
     "connectionLost": "Koneksi ke server terputus.",
+    "reconnecting": "Connection lost. Reconnecting...",
     "connectionRejected": "Server menutup koneksi."
   },
   "errors": {

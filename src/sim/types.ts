@@ -1991,6 +1991,7 @@ export type SimEvent = { pid?: number } & (
   // delivers it to nearby players; anchorless logs broadcast server-wide
   | { type: 'log'; text: string; color?: string; entityId?: number }
   | { type: 'delveEntered'; delveId: string; tierId: string }
+  | { type: 'delveObjectiveComplete'; delveId: string; tierId: string }
   | { type: 'delveComplete'; delveId: string; tierId: string }
   | { type: 'delveFailed'; delveId: string; tierId: string }
   | { type: 'delveLoreUnlock'; loreId: string }
@@ -2036,7 +2037,15 @@ export type SimEvent = { pid?: number } & (
       lootTier?: LootTier;
     }
   | { type: 'lockpickBonus'; tier: LootTier; marks: number; copper: number }
-  | { type: 'delveChestLoot'; chestId: number; items: { itemId: string; count: number }[] }
+  | {
+      type: 'delveChestLoot';
+      chestId: number;
+      delveId: string;
+      tierId: string;
+      lootTier: LootTier;
+      bountiful: boolean;
+      items: { itemId: string; count: number }[];
+    }
   // Carries the shrine as `entityId` so the server's eventAnchor interest-scopes
   // the pulse to players near the apse instead of broadcasting it realm-wide
   // (the HUD closes the rite popup on the first pulse).

@@ -3483,6 +3483,7 @@ export const zh_CN: EnTranslations = {
     "rendererFailed": "无法启动渲染器：请尝试刷新。{error}",
     "enterTimeout": "无法进入世界。连接已超时。游戏服务器是否正在运行？",
     "connectionLost": "与服务器的连接已断开。",
+    "reconnecting": "连接已断开。正在重新连接...",
     "connectionRejected": "服务器关闭了连接。"
   },
   "errors": {

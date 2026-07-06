@@ -773,6 +773,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'loading.rendererFailed': '无法启动渲染器：请尝试刷新。{error}',
   'loading.enterTimeout': '无法进入世界。连接已超时。游戏服务器是否正在运行？',
   'loading.connectionLost': '与服务器的连接已断开。',
+  'loading.reconnecting': '连接已断开。正在重新连接...',
   'loading.connectionRejected': '服务器关闭了连接。',
   'errors.nothingInteract': '附近没有可互动目标。',
   'errors.noEnemyNearby': '附近没有敌人。',

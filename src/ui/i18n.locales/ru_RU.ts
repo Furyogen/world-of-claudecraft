@@ -829,6 +829,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'loading.enterTimeout':
     'Не удалось войти в мир. Время подключения истекло. Запущен ли игровой сервер?',
   'loading.connectionLost': 'Соединение с сервером потеряно.',
+  'loading.reconnecting': 'Соединение потеряно. Повторное подключение...',
   'loading.connectionRejected': 'Сервер закрыл соединение.',
   'errors.nothingInteract': 'Нет объекта для взаимодействия.',
   'errors.noEnemyNearby': 'Рядом нет врагов.',

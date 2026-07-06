@@ -3483,6 +3483,7 @@ export const vi_VN: EnTranslations = {
     "rendererFailed": "Không thể khởi động bộ kết xuất: thử tải lại. {error}",
     "enterTimeout": "Không thể vào thế giới. Kết nối đã quá thời gian. Máy chủ trò chơi có đang chạy không?",
     "connectionLost": "Đã mất kết nối tới máy chủ.",
+    "reconnecting": "Connection lost. Reconnecting...",
     "connectionRejected": "Máy chủ đã đóng kết nối."
   },
   "errors": {

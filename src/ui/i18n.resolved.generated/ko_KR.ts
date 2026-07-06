@@ -3483,6 +3483,7 @@ export const ko_KR: EnTranslations = {
     "rendererFailed": "렌더러를 시작할 수 없습니다. 새로고침해 보세요. {error}",
     "enterTimeout": "세계에 입장할 수 없습니다. 연결 시간이 초과되었습니다. 게임 서버가 실행 중인가요?",
     "connectionLost": "서버와의 연결이 끊어졌습니다.",
+    "reconnecting": "연결이 끊어졌습니다. 다시 연결하는 중...",
     "connectionRejected": "서버가 연결을 종료했습니다."
   },
   "errors": {

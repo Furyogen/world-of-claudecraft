@@ -3483,6 +3483,7 @@ export const es_ES: EnTranslations = {
     "rendererFailed": "No se pudo iniciar el renderizador: prueba a recargar. {error}",
     "enterTimeout": "No se pudo entrar en el mundo. La conexión agotó el tiempo de espera. ¿Está funcionando el servidor del juego?",
     "connectionLost": "Se perdió la conexión con el servidor.",
+    "reconnecting": "Connection lost. Reconnecting...",
     "connectionRejected": "El servidor cerró la conexión."
   },
   "errors": {

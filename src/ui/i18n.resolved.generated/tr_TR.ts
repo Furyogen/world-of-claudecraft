@@ -3483,6 +3483,7 @@ export const tr_TR: EnTranslations = {
     "rendererFailed": "Görüntüleyici başlatılamadı: yeniden yüklemeyi deneyin. {error}",
     "enterTimeout": "Dünyaya girilemedi. Bağlantı zaman aşımına uğradı. Oyun sunucusu çalışıyor mu?",
     "connectionLost": "Sunucuyla bağlantı koptu.",
+    "reconnecting": "Connection lost. Reconnecting...",
     "connectionRejected": "Sunucu bağlantıyı kapattı."
   },
   "errors": {
