@@ -285,7 +285,7 @@ export const MIRROR_WORLD_ITEMS: Record<string, ItemDef> = {
     slot: 'mainhand',
     quality: 'rare',
     weapon: { min: 17, max: 29, speed: 2.4 },
-    stats: { str: 4, sta: 3 },
+    stats: { str: 8, sta: 5 },
     sellValue: 420,
   },
   ghostly_shroudmantle: {
@@ -325,7 +325,7 @@ export const MIRROR_WORLD_ITEMS: Record<string, ItemDef> = {
     armorType: 'cloth',
     slot: 'feet',
     quality: 'uncommon',
-    stats: { armor: 24, spi: 4, int: 3 },
+    stats: { armor: 24, spi: 3, int: 2 },
     sellValue: 230,
   },
   ghostly_glasscord: {
@@ -335,7 +335,7 @@ export const MIRROR_WORLD_ITEMS: Record<string, ItemDef> = {
     armorType: 'leather',
     slot: 'waist',
     quality: 'uncommon',
-    stats: { armor: 34, agi: 4, sta: 3 },
+    stats: { armor: 34, agi: 4, sta: 2 },
     sellValue: 230,
   },
   // Drinking it starts the slumber sequence → the shadow-realm Echo duel
