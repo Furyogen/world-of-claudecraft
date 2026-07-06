@@ -2362,15 +2362,20 @@ describe('The Drowned Litany (Phase 7 heroic affixes)', () => {
       enterLitany(sim, 'normal');
       const run = enterModule(sim, 'litany_baptistry');
       run.affixes = affixes;
-      run.blackwaterTimer = 0;
       const h = DELVE_MODULES.litany_baptistry.hazards![0];
       const zBase = delveModuleZOffset(run.modules, 0);
       const p = sim.player;
       p.pos.x = run.origin.x + h.x;
       p.pos.z = run.origin.z + zBase + h.z;
       p.prevPos = { ...p.pos };
+      // Fire exactly one Blackwater pulse and measure only that pulse. The old
+      // fixed 20-tick window (one pulse interval) was fragile to the delve run's
+      // timer PHASE: content additions shift it, letting a second unbuffed pulse
+      // land in the window and dilute the high_water multiplier. Priming the
+      // timer isolates a single pulse so the +35% is measured cleanly.
+      run.blackwaterTimer = 1e6;
       const hp0 = p.hp;
-      for (let i = 0; i < 20; i++) sim.tick();
+      sim.tick();
       return hp0 - p.hp;
     };
     const base = pulse([]);
