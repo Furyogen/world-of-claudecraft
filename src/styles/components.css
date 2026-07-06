@@ -1874,6 +1874,173 @@
     background: #f5c84322;
   }
 
+  /* ---------- claudium ---------- */
+  #claudium-window {
+    width: min(440px, 92vw);
+  }
+  .cl-body {
+    margin-top: 8px;
+    max-height: 62vh;
+    overflow-y: auto;
+  }
+  .cl-balance {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 10px;
+    border: 1px solid #463a1c;
+    background: #ffffff08;
+    border-radius: 4px;
+  }
+  .cl-balance-label {
+    color: var(--color-text-muted);
+    font-size: 12px;
+  }
+  .cl-balance-value {
+    color: #ffe27a;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .cl-notice {
+    margin: 10px 0 0;
+    padding: 8px 10px;
+    border: 1px solid #8a6427;
+    border-radius: 4px;
+    background: #160f08;
+    color: #ffb07a;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+  .cl-disclosure {
+    margin: 12px 0 2px;
+    color: var(--color-text-muted);
+    font-size: 11px;
+    line-height: 1.35;
+  }
+  .cl-section {
+    margin-top: 12px;
+  }
+  .cl-section h3 {
+    margin: 0 0 6px;
+    color: var(--gold);
+    font-family: var(--title-font);
+    font-size: 12px;
+  }
+  .cl-rails {
+    display: flex;
+    gap: 8px;
+  }
+  .cl-rail {
+    flex: 1;
+    min-height: 40px;
+    padding: 8px;
+    border: 1px solid #463a1c;
+    border-radius: 4px;
+    background: #ffffff08;
+    color: #f0e4c8;
+    font-size: 13px;
+    cursor: var(--cursor-pointer);
+  }
+  .cl-rail[aria-pressed="true"] {
+    border-color: #b8902a;
+    background: #f5c84322;
+    color: #ffe27a;
+  }
+  .cl-rail:disabled {
+    opacity: 0.45;
+    cursor: var(--cursor-arrow);
+  }
+  .cl-rail:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+  .cl-rail-note {
+    margin: 6px 0 0;
+    color: #ffb07a;
+    font-size: 11px;
+  }
+  .cl-amount-label {
+    margin: 10px 0 4px;
+    color: var(--color-text-muted);
+    font-size: 11px;
+  }
+  .cl-sku-list,
+  .cl-item-list {
+    display: grid;
+    gap: 6px;
+  }
+  .cl-sku {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 8px 10px;
+    border: 1px solid #463a1c;
+    border-radius: 4px;
+    background: #ffffff08;
+    color: #f0e4c8;
+    font-size: 13px;
+    text-align: left;
+    cursor: var(--cursor-pointer);
+  }
+  .cl-sku:focus-visible,
+  .cl-item-buy:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+  .cl-sku-claudium {
+    color: #ffe27a;
+    font-size: 12px;
+  }
+  .cl-sku-buy {
+    justify-self: end;
+    color: var(--gold);
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .cl-item {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border: 1px solid #463a1c;
+    border-radius: 4px;
+    background: #ffffff08;
+  }
+  .cl-item-name {
+    color: #f0e4c8;
+    font-size: 13px;
+  }
+  .cl-item-kind {
+    color: var(--color-text-muted);
+    font-size: 11px;
+  }
+  .cl-item-cost {
+    color: #ffe27a;
+    font-size: 12px;
+  }
+  .cl-item-buy {
+    grid-column: 1 / -1;
+    justify-self: end;
+    min-height: 40px;
+    min-width: 80px;
+    padding: 6px 12px;
+    border: 1px solid #8a6427;
+    border-radius: 4px;
+    background: #f5c84322;
+    color: #ffe27a;
+    font-size: 12px;
+    cursor: var(--cursor-pointer);
+  }
+  .cl-empty {
+    margin: 4px 0;
+    color: var(--color-text-muted);
+    font-size: 12px;
+  }
+
   /* ---------- talents ---------- */
   /* talents & specializations panel */
   #talents-window {

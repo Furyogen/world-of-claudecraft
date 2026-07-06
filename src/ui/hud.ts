@@ -155,6 +155,8 @@ import {
 } from './chat_channels';
 import { type ChatClock, clampChatClock, formatChatTimestamp } from './chat_timestamp';
 import { type ChatBoxGeometry, clampChatBox, parseChatBox, serializeChatBox } from './chat_window';
+import type { ClaudiumRail, ClaudiumSnapshot } from './claudium_window';
+import { ClaudiumWindow } from './claudium_window';
 import { formatClockTime } from './clock';
 import { CombatAnnouncer } from './combat_announcer';
 import {
@@ -403,6 +405,18 @@ export interface GamepadBindingsHooks {
 export interface ReportHooks {
   submit(targetPid: number, reason: string, details: string): Promise<void>;
   submitByName?(targetName: string, reason: string, details: string): Promise<void>;
+}
+
+/**
+ * Online-only glue that backs the Claudium store window. main.ts wires this from
+ * the client economy SDK (which hits the game server's /api/claudium/* routes).
+ * snapshot() reads the current service state; buy()/spend() begin the client-signed
+ * purchase / cosmetic-redeem flows. All values originate in the economy service.
+ */
+export interface ClaudiumHooks {
+  snapshot(): Promise<ClaudiumSnapshot>;
+  buy(rail: ClaudiumRail, sku: string): void;
+  spend(itemId: string, kind: 'cosmetic' | 'skin' | 'item'): void;
 }
 
 export interface BugReportPayload {
@@ -3426,6 +3440,27 @@ export class Hud {
     confirmDialog: (title, body, okText, cancelText, onOk) =>
       this.confirmDialog(title, body, okText, cancelText, onOk),
     ...this.windowFocus('#daily-rewards-window'),
+    onVisibilityChange: () => this.syncAnyWindowOpenState(),
+  });
+  // Claudium (server-authoritative soft currency) window. main.ts injects the
+  // economy hooks when online via attachClaudium; until then (and offline) the
+  // hooks are null and the window renders its clean disabled/empty state. The
+  // window computes NOTHING; every number rides in through these hooks.
+  private claudiumHooks: ClaudiumHooks | null = null;
+  private readonly claudiumWindow = new ClaudiumWindow({
+    root: () => $('#claudium-window'),
+    closeOthers: () => this.closeOtherWindows('#claudium-window'),
+    snapshot: () =>
+      this.claudiumHooks?.snapshot() ??
+      Promise.resolve({
+        balance: null,
+        skus: [],
+        price: { usdPerClaudium: null, wocBaseUnitsPerClaudium: null },
+        storeItems: [],
+      }),
+    buy: (rail, sku) => this.claudiumHooks?.buy(rail, sku),
+    spend: (itemId, kind) => this.claudiumHooks?.spend(itemId, kind),
+    ...this.windowFocus('#claudium-window'),
     onVisibilityChange: () => this.syncAnyWindowOpenState(),
   });
   // Spellbook window painter (spellbook_view.ts core + spellbook_window.ts painter).
@@ -11374,6 +11409,19 @@ export class Hud {
     if (!this.dailyRewardsEnabled()) return;
     this.dailyRewardsWindow.toggle();
     this.refreshDailyRewardsLauncher(true);
+  }
+
+  /** Inject the online economy hooks that back the Claudium window (main.ts, online only). */
+  attachClaudium(hooks: ClaudiumHooks): void {
+    this.claudiumHooks = hooks;
+  }
+
+  /**
+   * Open or close the Claudium store. Always renders: with no hooks (offline or the
+   * service off) the window shows its clean disabled state, never a boot crash.
+   */
+  toggleClaudium(): void {
+    this.claudiumWindow.toggle();
   }
 
   // -------------------------------------------------------------------------

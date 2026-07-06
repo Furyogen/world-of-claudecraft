@@ -73,6 +73,7 @@ import {
   sortCharacters,
 } from './net/char_sort';
 import { charselectPrimaryAction } from './net/charselect_action';
+import { EconomyClient, newIdempotencyKey, startClaudiumPurchase } from './net/economy_sdk';
 import { createNativeAttestationProof } from './net/native_attestation';
 import {
   Api,
@@ -1628,6 +1629,39 @@ async function startGame(
           screenshot: payload.screenshot,
           meta: payload.meta,
         }),
+    });
+    // Claudium store, online only. The client SDK hits the game server's
+    // same-origin /api/claudium/* routes, which proxy to the economy service and
+    // fail closed; the SDK itself returns typed unavailable states, never throws.
+    // The game therefore boots and plays with the service OFF: snapshot() resolves
+    // to the disabled state and the window renders its empty notice.
+    const economy = new EconomyClient({ token: () => api.token, base: api.base });
+    hud.attachClaudium({
+      snapshot: async () => {
+        const [balance, skus, price, storeItems] = await Promise.all([
+          economy.balance(),
+          economy.skus(),
+          // The peg display uses the stripe rail's USD-per-Claudium; the woc oracle
+          // (base units per Claudium, null => oracle down) gates the woc rail only.
+          economy.price('woc'),
+          economy.store(),
+        ]);
+        return {
+          balance: balance.balance,
+          skus,
+          price: {
+            usdPerClaudium: price.usdPerClaudium,
+            wocBaseUnitsPerClaudium: price.wocBaseUnitsPerClaudium,
+          },
+          storeItems,
+        };
+      },
+      buy: (rail, sku) => {
+        void startClaudiumPurchase(economy, rail, sku);
+      },
+      spend: (itemId, kind) => {
+        void economy.spend({ itemId, kind, idempotencyKey: newIdempotencyKey() });
+      },
     });
   }
   function interactKey(): void {
