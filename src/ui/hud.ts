@@ -1,7 +1,12 @@
 import { audio } from '../game/audio';
 import type { GamepadKind } from '../game/gamepad_map';
 import type { Keybinds } from '../game/keybinds';
-import { music, musicZoneForLocation, shouldResetMusicForDungeonEntry } from '../game/music';
+import {
+  mapMusicZoneAt,
+  music,
+  musicZoneForLocation,
+  shouldResetMusicForDungeonEntry,
+} from '../game/music';
 import type { GameSettings, Settings } from '../game/settings';
 import { sfx } from '../game/sfx';
 import type { UiEffectsTier } from '../game/ui_effects_profile';
@@ -46,6 +51,7 @@ import {
   DUNGEON_X_THRESHOLD,
   delveAt,
   dungeonAt,
+  getActiveWorldContent,
   ITEMS,
   isDelvePos,
   MOBS,
@@ -1604,9 +1610,13 @@ export class Hud {
     const startZoneName = zoneDisplayName(startZone.id);
     this.lastZoneId = startZone.id;
     this.prewarmMapBg(startZone.id); // render the spawn-zone map bg during idle, not on first open
-    this.showBanner(startZoneName);
-    this.log(t('hud.core.welcomeZone', { zone: startZoneName }), '#ffd100');
-    this.logZoneWelcome(startZone);
+    // Unnamed zones (blank authoring maps before the maker adds locations)
+    // skip the banner/welcome entirely.
+    if (startZoneName) {
+      this.showBanner(startZoneName);
+      this.log(t('hud.core.welcomeZone', { zone: startZoneName }), '#ffd100');
+      this.logZoneWelcome(startZone);
+    }
     this.log(t('hudChrome.tips.joinChannels'), '#7fd4ff');
   }
 
@@ -5563,7 +5573,9 @@ export class Hud {
       // A ~5yd dead-band past the boundary stops a player straddling the border
       // from re-triggering the banner/log (and the map canvas regen) every step.
       if (!inDungeon && currentZone.id !== this.lastZoneId) {
-        const lastZone = ZONES.find((z) => z.id === this.lastZoneId);
+        // Active-world zones, so custom-map playtests dead-band against THEIR
+        // bands (the static table would re-trigger the banner every step).
+        const lastZone = getActiveWorldContent().zones.find((z) => z.id === this.lastZoneId);
         const pastDeadBand =
           !lastZone ||
           p.pos.z < lastZone.zMin - ZONE_BANNER_DEADBAND ||
@@ -5571,9 +5583,13 @@ export class Hud {
         if (pastDeadBand) {
           if (this.lastZoneId !== '') {
             const currentZoneName = zoneDisplayName(currentZone.id);
-            this.showBanner(currentZoneName);
-            this.log(t('hud.core.enteringZone', { zone: currentZoneName }), '#ffd100');
-            this.logZoneWelcome(currentZone);
+            // Unnamed custom zones show no banner/welcome (blank maps stay
+            // quiet until the maker authors locations).
+            if (currentZoneName) {
+              this.showBanner(currentZoneName);
+              this.log(t('hud.core.enteringZone', { zone: currentZoneName }), '#ffd100');
+              this.logZoneWelcome(currentZone);
+            }
           }
           this.lastZoneId = currentZone.id;
           this.prewarmMapBg(currentZone.id); // get the new zone's map bg ready before the player opens it
@@ -5582,9 +5598,28 @@ export class Hud {
 
       // subzone text: a smaller banner when you step into a named landmark
       // (classic "subzone" display). POIs are the same labels the minimap pins.
-      const subzone = inDungeon
-        ? null
-        : nearestSubzone(p.pos.x, p.pos.z, currentZone.pois, this.lastSubzone);
+      // Editor-authored location rects (custom maps) take precedence: standing
+      // inside one shows ITS name as the current location.
+      let subzone: string | null = null;
+      if (!inDungeon) {
+        const locations = getActiveWorldContent().locations;
+        if (locations) {
+          for (const loc of locations) {
+            if (
+              p.pos.x >= loc.minX &&
+              p.pos.x <= loc.maxX &&
+              p.pos.z >= loc.minZ &&
+              p.pos.z <= loc.maxZ
+            ) {
+              subzone = loc.name;
+              break;
+            }
+          }
+        }
+        if (subzone === null) {
+          subzone = nearestSubzone(p.pos.x, p.pos.z, currentZone.pois, this.lastSubzone);
+        }
+      }
       if (subzone !== this.lastSubzone) {
         this.lastSubzone = subzone;
         if (subzone) {
@@ -5634,7 +5669,10 @@ export class Hud {
         music.resetForDungeonEntry(musicDungeonId);
       }
       this.lastMusicDungeonId = musicDungeonId;
-      music.update(zone, musicCombat);
+      // Map-authored music (custom maps): the area under the player, else the
+      // map-wide pick; dungeons keep their own themes.
+      const authoredZone = inDungeon || inNythraxisArena ? null : mapMusicZoneAt(p.pos.x, p.pos.z);
+      music.update(authoredZone ?? zone, musicCombat);
       music.setBossCombat(bossEngaged);
 
       // classic combat indicator: crossed swords + red ring on the player portrait.
@@ -8006,7 +8044,8 @@ export class Hud {
 
   private logZoneWelcome(zone: ZoneDef): void {
     if (zone.welcomeQuestId && this.sim.questState(zone.welcomeQuestId) !== 'available') return;
-    this.log(zoneWelcome(zone.id), '#ffd100');
+    const text = zoneWelcome(zone.id);
+    if (text) this.log(text, '#ffd100');
   }
 
   private chatLogFrom(

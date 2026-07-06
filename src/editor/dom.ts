@@ -30,6 +30,45 @@ export function button(
   return b;
 }
 
+// Inline 24x24 stroke icon (Feather-style), the editor's shared glyph convention.
+// `path` is SVG path data; the icon inherits the button's text color via
+// currentColor. Matches the tool-palette icons in toolbar.ts.
+export function iconSvg(path: string): SVGSVGElement {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('width', '20');
+  svg.setAttribute('height', '20');
+  svg.setAttribute('fill', 'none');
+  svg.setAttribute('stroke', 'currentColor');
+  svg.setAttribute('stroke-width', '1.7');
+  svg.setAttribute('stroke-linecap', 'round');
+  svg.setAttribute('stroke-linejoin', 'round');
+  svg.setAttribute('aria-hidden', 'true');
+  const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  p.setAttribute('d', path);
+  svg.appendChild(p);
+  return svg;
+}
+
+// Like button(), but the visible label is an inline SVG icon instead of text.
+export function iconButton(
+  path: string,
+  onClick: () => void,
+  cls?: string,
+  title?: string,
+): HTMLButtonElement {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.appendChild(iconSvg(path));
+  if (cls) b.className = cls;
+  if (title) {
+    b.title = title;
+    b.setAttribute('aria-label', title);
+  }
+  b.addEventListener('click', onClick);
+  return b;
+}
+
 export interface SliderOptions {
   min: number;
   max: number;
