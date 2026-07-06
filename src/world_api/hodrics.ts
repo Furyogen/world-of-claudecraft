@@ -20,21 +20,27 @@ export interface HcRacerView {
   cls: PlayerClass;
   bot: boolean;
   you: boolean;
-  progress: number; // 0..1 along the course
-  finished: boolean;
-  place: number | null; // 1..N once assigned
+  progress: number; // 0..1 along THIS round's course
+  finished: boolean; // crossed this round's line (qualified, or crowned)
+  place: number | null; // FINAL match placement 1..N once assigned
+  eliminated: boolean; // cut in an earlier round; watching from the gallery
   left: boolean;
 }
 
 export interface HcMatchInfo {
-  state: 'countdown' | 'active' | 'over';
+  state: 'countdown' | 'active' | 'intermission' | 'over';
+  round: number; // 1..rounds
+  rounds: number; // the show length (3)
+  qualify: number; // how many advance out of THIS round
+  courseSeed: number; // this round's generated-course seed (render rebuilds on change)
   countdown: number; // whole seconds left on the plates ('countdown' only)
-  clock: number; // elapsed race seconds
-  timeLeft: number; // seconds until the course cap scores stragglers
+  clock: number; // elapsed race seconds this round
+  timeLeft: number; // seconds until this round's cap ranks the unfinished
   section: string; // course section id under the local racer (HUD label key)
-  checkpoint: number; // last banked checkpoint index
+  checkpoint: number; // last banked checkpoint index this round
   finished: boolean;
   place: number | null;
+  eliminated: boolean; // you, watching from the gallery
   falls: number;
   racers: HcRacerView[]; // placement-then-progress order
 }

@@ -269,7 +269,7 @@ import {
 // (online.ts) stays byte-identical.
 export { computeQuestState } from './quests/quest_commands';
 
-import { HC_CHECKPOINTS, hcProgressFrac, hcSectionAt } from './hodrics_layout';
+import { hcProgressFrac, hcSectionAt } from './hodrics_course';
 import { completeCurrentQuestsForDev, completeQuestForDev } from './quests/dev_quest_commands';
 import * as arenaMod from './social/arena';
 import * as duelMod from './social/duel';
@@ -5715,39 +5715,52 @@ export class Sim {
     let matchInfo: import('../world_api').HcMatchInfo | null = null;
     if (match) {
       const origin = hodricsOrigin(match.slot);
+      const course = match.course;
       const me = match.racers.get(pid) ?? null;
       const e = this.entities.get(pid);
-      const myZ = e ? e.pos.z - origin.z : HC_CHECKPOINTS[0].z;
+      const myZ = e ? e.pos.z - origin.z : course.checkpoints[0].z;
       const racers = [...match.racers.values()]
         .map((r) => {
           const re = this.entities.get(r.pid);
-          const liveZ = re && !r.left ? Math.max(r.furthestZ, re.pos.z - origin.z) : r.furthestZ;
+          const eliminated = r.eliminatedRound > 0;
+          const liveZ =
+            re && !r.left && !eliminated ? Math.max(r.furthestZ, re.pos.z - origin.z) : r.furthestZ;
           return {
             name: r.name,
             cls: r.cls,
             bot: r.bot,
             you: r.pid === pid,
-            progress: r.finished ? 1 : hcProgressFrac(liveZ),
+            progress: r.finished ? 1 : hcProgressFrac(course, liveZ),
             finished: r.finished,
             place: r.place > 0 ? r.place : null,
+            eliminated,
             left: r.left,
           };
         })
         .sort((a, b) => {
+          // Board order: the live round first (finishers, then by progress),
+          // the gallery below it (best final placement first).
+          if (a.eliminated !== b.eliminated) return a.eliminated ? 1 : -1;
+          if (a.eliminated && b.eliminated) return (a.place ?? 99) - (b.place ?? 99);
+          if (a.finished !== b.finished) return a.finished ? -1 : 1;
           if (a.place !== null && b.place !== null) return a.place - b.place;
-          if (a.place !== null) return -1;
-          if (b.place !== null) return 1;
           return b.progress - a.progress;
         });
+      const roundTime = hodricsMod.HC_ROUND_TIME[match.round - 1] ?? 120;
       matchInfo = {
         state: match.state,
+        round: match.round,
+        rounds: hodricsMod.HC_ROUNDS,
+        qualify: hodricsMod.hcQualifyTarget(match),
+        courseSeed: match.courseSeed,
         countdown: match.state === 'countdown' ? Math.max(0, Math.ceil(match.timer)) : 0,
         clock: match.clock,
-        timeLeft: Math.max(0, hodricsMod.HC_MAX_DURATION - match.clock),
-        section: hcSectionAt(myZ),
+        timeLeft: Math.max(0, roundTime - match.clock),
+        section: hcSectionAt(course, myZ).id,
         checkpoint: me?.checkpoint ?? 0,
         finished: me?.finished ?? false,
         place: me && me.place > 0 ? me.place : null,
+        eliminated: me ? me.eliminatedRound > 0 : false,
         falls: me?.falls ?? 0,
         racers,
       };
