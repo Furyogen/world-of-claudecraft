@@ -311,7 +311,15 @@ export const sv_SE: EnTranslations = {
       "nameplates": "Namn",
       "haptics": "Haptik",
       "hapticsOff": "Haptik av",
-      "toggleHaptics": "Växla haptik"
+      "toggleHaptics": "Växla haptik",
+      "hotbarPage": "Förmågor",
+      "hotbarPageAria": "Visa nästa uppsättning förmågor",
+      "actionRing": "Combat actions",
+      "actionPageToggle": "Switch action page",
+      "actionPageIndicator": "{page}",
+      "targetCycle": "Swap target",
+      "targetCycleShort": "Target",
+      "spellbookPageLabel": "Page {page}"
     },
     "tutorial": {
       "moveBodyTouch": "Använd rörelsespaken för att gå och dra på skärmen för att se dig omkring. Ta några steg för att börja.",
@@ -418,7 +426,9 @@ export const sv_SE: EnTranslations = {
       "itemLevelLine": "Föremålsnivå {level}",
       "itemScoreLine": "Poäng {score}",
       "showSecondaryActionBar": "Visa sekundärt handlingsfält",
-      "showDailyRewardsChest": "Visa kistan för dagliga belöningar"
+      "showDailyRewardsChest": "Visa kistan för dagliga belöningar",
+      "mobileCameraJoystick": "Camera joystick",
+      "mobileLeftHanded": "Left-handed layout"
     },
     "controller": {
       "title": "Handkontroll",
@@ -736,6 +746,23 @@ export const sv_SE: EnTranslations = {
       "summaryMaster": "Byteinställningar: Mästarbyte, bytesmästare {name}, tröskel {threshold}.",
       "summaryGroup": "Byteinställningar: Gruppbyte."
     },
+    "corpseHarvest": {
+      "title": "Skörda",
+      "harvestButton": "Skörda",
+      "concentrateHint": "Ju färre delar du väljer, desto högre kvalitetsnivå får var och en.",
+      "alreadyHarvested": "Det här kadavret har redan skördats.",
+      "componentAria": "Skörda {component}",
+      "components": {
+        "hide": "Hud",
+        "fang": "Huggtand",
+        "silk": "Silke",
+        "venomSac": "Giftsäck",
+        "gills": "Gälar",
+        "claw": "Klo",
+        "horn": "Horn",
+        "tusk": "Bete"
+      }
+    },
     "party": {
       "promoteLeader": "Befordra till ledare",
       "inviteUsage": "Bjud in vem? Användning: /invite <namn>."
@@ -1032,6 +1059,18 @@ export const sv_SE: EnTranslations = {
         }
       }
     },
+    "crafting": {
+      "title": "Crafting",
+      "close": "Close crafting",
+      "craft": "Craft",
+      "reagentsNeeded": "Requires:",
+      "reagentLine": "{name} x{have}/{required}",
+      "empty": "No recipes known yet.",
+      "resultAria": "Craft {name}",
+      "craftedToast": "Crafted: {name}",
+      "insufficientMaterials": "You do not have the materials for that.",
+      "unknownRecipe": "That recipe does not exist."
+    },
     "devBadge": {
       "title": "Utvecklare",
       "tiers": {
@@ -1177,6 +1216,95 @@ export const sv_SE: EnTranslations = {
       "herbalism": "Örtkunskap"
     }
   },
+  "apiError": {
+    "validation": {
+      "failed": "Vissa fält är ogiltiga. Kontrollera formuläret och försök igen."
+    },
+    "json": {
+      "malformed": "Begäran kunde inte läsas. Försök igen."
+    },
+    "body": {
+      "too_large": "Begäran är för stor. Försök igen med mindre data.",
+      "unsupported_media_type": "Formatet på begäran stöds inte."
+    },
+    "db": {
+      "conflict": "Ändringen stod i konflikt med en annan uppdatering. Försök igen."
+    },
+    "rate_limit": {
+      "exceeded": "För många förfrågningar. Försök igen om {seconds}."
+    },
+    "internal": {
+      "error": "Något gick fel hos oss. Försök igen."
+    },
+    "auth": {
+      "token_missing": "Du måste vara inloggad för att göra det.",
+      "token_invalid": "Din session har gått ut. Logga in igen.",
+      "forbidden": "Du har inte behörighet att göra det.",
+      "invalid_credentials": "Ogiltigt användarnamn eller lösenord.",
+      "required": "Inte autentiserad.",
+      "web_login_only": "Inloggningar är endast tillåtna från spelklienten.",
+      "too_many_attempts": "För många försök. Vänta en minut och försök igen.",
+      "too_many_failed_attempts": "För många misslyckade försök. Vänta några minuter och försök igen.",
+      "current_password_incorrect": "Ditt nuvarande lösenord är felaktigt.",
+      "password_incorrect": "Ditt lösenord är felaktigt.",
+      "verification_failed": "Verifieringen misslyckades. Försök igen."
+    },
+    "account": {
+      "username_invalid": "Användarnamnet måste vara 3-24 tecken och använda bokstäver, siffror eller understreck.",
+      "username_not_allowed": "Det användarnamnet är inte tillåtet.",
+      "username_taken": "Det användarnamnet är redan upptaget.",
+      "username_mismatch": "Det användarnamnet matchar inte ditt konto.",
+      "password_too_short": "Lösenordet måste vara minst 6 tecken.",
+      "password_too_long": "Det nya lösenordet får vara högst 128 tecken.",
+      "characters_online": "Logga ut alla dina karaktärer innan du inaktiverar kontot.",
+      "deactivated": "Detta konto har inaktiverats. Kontakta en administratör för att återställa det.",
+      "not_found": "Kontot hittades inte."
+    },
+    "character": {
+      "name_invalid": "Ogiltigt karaktärsnamn. Använd 2-16 bokstäver.",
+      "name_not_allowed": "Det karaktärsnamnet är inte tillåtet.",
+      "invalid_class": "Ogiltig klass.",
+      "limit_reached": "Karaktärsgränsen är nådd.",
+      "name_taken": "Det namnet är upptaget.",
+      "not_found": "Karaktären hittades inte.",
+      "online": "Karaktären är för närvarande online.",
+      "rename_not_permitted": "Det är inte tillåtet att byta namn på denna karaktär.",
+      "delete_confirm": "Skriv karaktärens namn för att bekräfta raderingen.",
+      "already_in_world": "Karaktären är redan i världen.",
+      "taken_over": "Din karaktär togs över av en annan session.",
+      "rename_required": "Denna karaktär måste byta namn innan den går in i världen."
+    },
+    "moderation": {
+      "suspended_until": "Detta konto är avstängt till {date}.",
+      "suspended": "Detta konto är avstängt.",
+      "banned": "Detta konto har bannlysts.",
+      "force_rename": "En moderator kräver att en av dina karaktärer byter namn."
+    },
+    "email": {
+      "invalid": "Ange en giltig e-postadress.",
+      "unchanged": "Det är redan din e-postadress."
+    },
+    "two_factor": {
+      "code_invalid": "Den koden är inte giltig, försök igen.",
+      "setup_required": "Starta konfigurationen av tvåfaktorsautentisering först.",
+      "already_enabled": "Tvåfaktorsautentisering är redan aktiverad.",
+      "not_enabled": "Tvåfaktorsautentisering är inte aktiverad."
+    },
+    "origin": {
+      "cross_site": "Begäran blockerades av säkerhetsskäl."
+    },
+    "discord": {
+      "not_configured": "Discord-integrationen är inte tillgänglig just nu.",
+      "expired": "Den Discord-inloggningen har gått ut. Logga in med Discord igen.",
+      "already_linked": "Det Discord-kontot är redan kopplat till ett annat konto.",
+      "password_required": "Ange ett lösenord innan du kopplar bort ditt Discord-konto.",
+      "unknown_swag": "Den belöningen är inte tillgänglig.",
+      "link_required": "Koppla ditt Discord-konto först.",
+      "swag_claimed": "Du har redan hämtat den här belöningen.",
+      "swag_tier": "Nå en högre rang för att hämta den här.",
+      "swag_points": "Inte tillräckligt med poäng."
+    }
+  },
   "guide": {
     "brand": "World of ClaudeCraft",
     "brandShort": "ClaudeCraft",
@@ -1202,6 +1330,7 @@ export const sv_SE: EnTranslations = {
       "delves": "Delver",
       "reference": "Referens",
       "controls": "Kontroller",
+      "settings": "Settings & Performance",
       "combat": "Strid",
       "talents": "Talanger",
       "arena": "Arena och PvP",
@@ -1369,6 +1498,66 @@ export const sv_SE: EnTranslations = {
       "mobileBody": "Pekkontroller visas automatiskt på telefoner och surfplattor: en rörelsespak till vänster, dra var som helst till höger för att titta, och knappar på skärmen för dina förmågor och menyer.",
       "controllerHeading": "På handkontroll",
       "controllerBody": "Handkontroller fungerar också, och stöd för handkontroll är på som standard. Vänsterspaken förflyttar dig, högerspaken styr kameran, och ansikts- och axelknapparna täcker dina förmågor, hopp och interaktion. Öppna valfritt fönster för att ta fram en pekare på skärmen för menyer. Du kan binda om knapparna och justera spakens dödzon, kamerahastighet, vibration och inverterat sikte i handkontrollsinställningarna under alternativ."
+    },
+    "settingsPage": {
+      "heading": "Settings & Performance",
+      "intro": "Make the game look its best or run its fastest. Three ready-made loadouts, plus what every graphics option really does.",
+      "wherePath": "Everything on this page lives in the game: press Esc and look in Graphics, Interface, and Performance Overlay.",
+      "fairnessTitle": "Fair by design",
+      "fairnessBody": "No option here trades beauty for power. Lower settings shed cosmetic polish only, never information you fight with: your debuffs, cast bars, party health, and damage numbers are identical from Low to Ultra. Playing on a modest machine is never a handicap.",
+      "loadoutsHeading": "Three ready-made loadouts",
+      "loadoutsIntro": "Start from the loadout that sounds like your machine, then adjust one option at a time until it feels right.",
+      "recommended": "Recommended",
+      "whyLabel": "Why it works:",
+      "tagReload": "after reload",
+      "fpsTitle": "Best FPS",
+      "fpsTagline": "For older laptops, integrated graphics, and battery play.",
+      "fpsWhy": "Graphics Quality is the master switch, and Render Quality is the strongest slider: at 70% the world draws roughly half the pixels while the interface stays perfectly sharp.",
+      "balancedTitle": "Balanced",
+      "balancedTagline": "The sweet spot for most machines, and our default advice.",
+      "balancedWhy": "Medium brings real shadows and full materials; High adds ambient occlusion and bloom. Below Ultra a built-in safety net absorbs sudden dips in busy fights, so Balanced stays smooth without babysitting.",
+      "visualsTitle": "Best Visuals",
+      "visualsTagline": "Screenshot mode for powerful desktop machines.",
+      "visualsWhy": "Ultra renders at the highest resolution your display offers with the richest lighting. It also switches the safety net off, and it is desktop-only: phones and the app top out at High.",
+      "value50to70": "50 to 70%",
+      "value90to100": "90 to 100%",
+      "value100": "100%",
+      "valueHighOrMedium": "High on a gaming PC, Medium on a laptop",
+      "valueOnOptional": "On (optional)",
+      "howHeading": "How the options behave",
+      "factDetectTitle": "The game tunes itself first",
+      "factDetectBody": "On your first launch the game reads your device and picks a sensible tier, from Low on a modest phone to Ultra on a strong desktop. Any choice you make yourself always wins.",
+      "factReloadTitle": "Two kinds of options",
+      "factReloadBody": "Graphics Quality and the Advanced pickers take effect after a reload, and the panel offers a Reload Now button when needed. Every other option applies the moment you change it.",
+      "factGovernorTitle": "A built-in safety net",
+      "factGovernorBody": "On every tier below Ultra, the game quietly thins grass, effects, and lighting for a moment when a big fight spikes, then restores them. Choosing Ultra tells it you would rather keep every detail.",
+      "advancedHeading": "The Advanced preset: mix your own",
+      "advancedBody": "Advanced starts from the High tier and unlocks four extra pickers, so you can spend your frames where you actually notice them: Terrain Detail, Foliage Density, Effects & Lighting, and Shadow Quality. Like Graphics Quality, they apply after a reload.",
+      "advancedMixes": "Two favorite mixes: keep Shadow Quality on High and set Effects & Lighting to Low for a crisp, glow-free look that runs light, or do the reverse to keep the bloom and soften the shadows.",
+      "tableHeading": "Every option, explained",
+      "colSetting": "Setting",
+      "colDoes": "What it does",
+      "colImpact": "FPS impact",
+      "impactNone": "None",
+      "impactLight": "Light",
+      "impactModerate": "Moderate",
+      "impactHeavy": "Heavy",
+      "rowGraphicsQuality": "The master switch. Each step changes resolution, shadows, materials, foliage, and lighting effects together. The biggest single difference you can make.",
+      "rowRenderQuality": "Draws the 3D world at a lower internal resolution and scales it up; the interface stays sharp. The strongest instant slider on weaker machines and high-resolution screens.",
+      "rowFieldOfView": "How much of the world fits on screen, from a zoomed 55 to a sweeping 100 degrees. A comfort choice; wider views draw slightly more.",
+      "rowBrightness": "Scene exposure, darker or brighter. Pure preference.",
+      "rowWeather": "Ambient rain and snow. Atmosphere only, and switching it off saves a little during storms.",
+      "rowBrowserEffects": "How fancy the interface itself is allowed to be: glass blur, glow, animated menus. Auto matches your browser; the 3D world is untouched either way.",
+      "rowTerrainDetail": "Rich, blended ground textures versus a simpler, faster terrain look.",
+      "rowFoliageDensity": "How far and how thick the grass grows around your character.",
+      "rowEffectsQuality": "Bloom, ambient occlusion, and how many torches and spells cast real light. The single biggest saving among the Advanced pickers.",
+      "rowShadowQuality": "Shadow crispness. Low keeps shadows but softens their edges.",
+      "rowFrostedPanels": "A frosted-glass blur behind windows. Pretty, and exactly the kind of effect a weaker browser feels; leave it off for the classic crisp look.",
+      "rowReduceMotion": "Removes interface animations so windows appear instantly. An accessibility option first, with a small performance bonus.",
+      "rowPerfOverlay": "An on-screen readout of FPS, frame time, and more. Turn it on while you tune this page, then hide it again.",
+      "tableFoot": "Looking for a draw-distance slider or an FPS cap? There is nothing to hunt for: view distance is part of each quality tier, and frame pacing follows your display.",
+      "mobileTitle": "On phones and tablets",
+      "mobileBody": "Mobile manages more for you: the game picks the tier, holds resolution a touch lower to protect battery and heat, and keeps the highest tiers desktop-only. The loadouts above still apply; phones simply top out at High."
     },
     "combat": {
       "intro": "Strid följer välbekanta klassiska MMO-regler. Du behöver aldrig studera något av det för att spela bra, detta är bara formen för hur strider fungerar.",
@@ -2515,6 +2704,8 @@ export const sv_SE: EnTranslations = {
     "title": "Ladda ner skrivbordsstartaren",
     "desc": "Hämta den fristående startaren för optimerad prestanda och spel i helskärm.",
     "macCta": "Ladda ner för macOS",
+    "linuxCta": "Download for Linux",
+    "linuxHint": "AppImage: make it executable, then run it. No install needed.",
     "windowsPending": "Windows-bygge väntar."
   },
   "comingSoon": {
@@ -3355,6 +3546,7 @@ export const sv_SE: EnTranslations = {
     "rendererFailed": "Kunde inte starta renderaren: försök läsa om sidan. {error}",
     "enterTimeout": "Kunde inte gå in i världen. Anslutningen tog för lång tid. Körs spelservern?",
     "connectionLost": "Anslutningen till servern bröts.",
+    "reconnecting": "Connection lost. Reconnecting...",
     "connectionRejected": "Servern stängde anslutningen."
   },
   "errors": {
@@ -3387,9 +3579,12 @@ export const sv_SE: EnTranslations = {
       "webLoginOnly": "Inloggningar är endast tillåtna från spelklienten.",
       "accountSuspended": "Detta konto är avstängt till {date}.",
       "alreadyInWorld": "Karaktären är redan i världen.",
+      "accountSessionLimit": "För många karaktärer på detta konto är redan i världen.",
       "takenOver": "Din karaktär togs över av en annan session.",
       "renameBeforeEntering": "Denna karaktär måste byta namn innan den går in i världen.",
-      "renameNotPermitted": "Det är inte tillåtet att byta namn på denna karaktär."
+      "renameNotPermitted": "Det är inte tillåtet att byta namn på denna karaktär.",
+      "unsupportedMediaType": "Formatet på begäran stöds inte.",
+      "crossSiteOrigin": "Begäran blockerades av säkerhetsskäl."
     }
   },
   "desktop": {

@@ -1,4 +1,5 @@
 import { formatDuration } from './duration';
+import { logger } from './http/logger';
 import { parseModerationChatCommand } from './moderation_commands';
 
 export interface ModerationSession {
@@ -138,7 +139,7 @@ export class ModerationService<TSession extends ModerationSession> {
         this.host.kick(target);
         this.host.systemNotice(actor, `Kicked ${target.name}.`);
       })
-      .catch((err) => console.error('failed to audit in-game kick:', err));
+      .catch((err) => logger.error({ err }, 'failed to audit in-game kick'));
   }
 
   private killTarget(actor: TSession, name: string | null, reason: string): void {
@@ -155,7 +156,7 @@ export class ModerationService<TSession extends ModerationSession> {
         this.host.killEntity(target.pid);
         this.host.systemNotice(actor, `Killed ${target.name}.`);
       })
-      .catch((err) => console.error('failed to audit in-game kill:', err));
+      .catch((err) => logger.error({ err }, 'failed to audit in-game kill'));
   }
 
   private mute(actor: TSession, name: string | null, minutes: number | null, reason: string): void {
@@ -172,7 +173,7 @@ export class ModerationService<TSession extends ModerationSession> {
         this.host.muteLive(target.accountId, expiresAt, reason);
         this.host.systemNotice(actor, `Muted ${target.name} for ${formatDuration(minutes * 60)}.`);
       })
-      .catch((err) => console.error('failed to mute in-game:', err));
+      .catch((err) => logger.error({ err }, 'failed to mute in-game'));
   }
 
   private ban(actor: TSession, name: string | null, reason: string): void {
@@ -184,7 +185,7 @@ export class ModerationService<TSession extends ModerationSession> {
         this.host.disconnect(target.accountId, BAN_MESSAGE);
         this.host.systemNotice(actor, `Banned ${target.name}.`);
       })
-      .catch((err) => console.error('failed to ban in-game:', err));
+      .catch((err) => logger.error({ err }, 'failed to ban in-game'));
   }
 
   private suspend(
@@ -209,7 +210,7 @@ export class ModerationService<TSession extends ModerationSession> {
           `Suspended ${target.name} for ${formatDuration(minutes * 60)}.`,
         );
       })
-      .catch((err) => console.error('failed to suspend in-game:', err));
+      .catch((err) => logger.error({ err }, 'failed to suspend in-game'));
   }
 
   private forceRename(actor: TSession, name: string | null, reason: string): void {
@@ -225,7 +226,7 @@ export class ModerationService<TSession extends ModerationSession> {
         this.host.disconnect(target.accountId, RENAME_MESSAGE);
         this.host.systemNotice(actor, `Required ${target.name} to rename.`);
       })
-      .catch((err) => console.error('failed to force-rename in-game:', err));
+      .catch((err) => logger.error({ err }, 'failed to force-rename in-game'));
   }
 
   private spectate(actor: TSession, name: string | null): void {

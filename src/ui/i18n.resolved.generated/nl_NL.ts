@@ -311,7 +311,15 @@ export const nl_NL: EnTranslations = {
       "nameplates": "Namen",
       "haptics": "Haptiek",
       "hapticsOff": "Haptiek uit",
-      "toggleHaptics": "Haptiek aan/uit"
+      "toggleHaptics": "Haptiek aan/uit",
+      "hotbarPage": "Vaardigheden",
+      "hotbarPageAria": "Toon de volgende set vaardigheden",
+      "actionRing": "Combat actions",
+      "actionPageToggle": "Switch action page",
+      "actionPageIndicator": "{page}",
+      "targetCycle": "Swap target",
+      "targetCycleShort": "Target",
+      "spellbookPageLabel": "Page {page}"
     },
     "tutorial": {
       "moveBodyTouch": "Gebruik de bewegingsstick om te bewegen en sleep over het scherm om rond te kijken. Zet een paar stappen om te beginnen.",
@@ -418,7 +426,9 @@ export const nl_NL: EnTranslations = {
       "itemLevelLine": "Itemniveau {level}",
       "itemScoreLine": "Score {score}",
       "showSecondaryActionBar": "Secundaire actiebalk tonen",
-      "showDailyRewardsChest": "Kist met dagelijkse beloningen tonen"
+      "showDailyRewardsChest": "Kist met dagelijkse beloningen tonen",
+      "mobileCameraJoystick": "Camera joystick",
+      "mobileLeftHanded": "Left-handed layout"
     },
     "controller": {
       "title": "Controller",
@@ -736,6 +746,23 @@ export const nl_NL: EnTranslations = {
       "summaryMaster": "Buitinstellingen: Buitmeester-buit, Buitmeester {name}, drempel {threshold}.",
       "summaryGroup": "Buitinstellingen: Groepsbuit."
     },
+    "corpseHarvest": {
+      "title": "Oogsten",
+      "harvestButton": "Oogsten",
+      "concentrateHint": "Hoe minder delen je kiest, hoe hoger de kwaliteit van elk deel.",
+      "alreadyHarvested": "Dit kadaver is al geoogst.",
+      "componentAria": "Oogst {component}",
+      "components": {
+        "hide": "Huid",
+        "fang": "Tand",
+        "silk": "Zijde",
+        "venomSac": "Gifzak",
+        "gills": "Kieuwen",
+        "claw": "Klauw",
+        "horn": "Hoorn",
+        "tusk": "Slagtand"
+      }
+    },
     "party": {
       "promoteLeader": "Bevorderen tot leider",
       "inviteUsage": "Wie wil je uitnodigen? Gebruik: /invite <naam>."
@@ -1032,6 +1059,18 @@ export const nl_NL: EnTranslations = {
         }
       }
     },
+    "crafting": {
+      "title": "Crafting",
+      "close": "Close crafting",
+      "craft": "Craft",
+      "reagentsNeeded": "Requires:",
+      "reagentLine": "{name} x{have}/{required}",
+      "empty": "No recipes known yet.",
+      "resultAria": "Craft {name}",
+      "craftedToast": "Crafted: {name}",
+      "insufficientMaterials": "You do not have the materials for that.",
+      "unknownRecipe": "That recipe does not exist."
+    },
     "devBadge": {
       "title": "Ontwikkelaar",
       "tiers": {
@@ -1177,6 +1216,95 @@ export const nl_NL: EnTranslations = {
       "herbalism": "Kruidenkunde"
     }
   },
+  "apiError": {
+    "validation": {
+      "failed": "Sommige velden zijn ongeldig. Controleer het formulier en probeer het opnieuw."
+    },
+    "json": {
+      "malformed": "Dat verzoek kon niet worden gelezen. Probeer het opnieuw."
+    },
+    "body": {
+      "too_large": "Dat verzoek is te groot. Probeer het opnieuw met minder gegevens.",
+      "unsupported_media_type": "Niet-ondersteund verzoekformaat."
+    },
+    "db": {
+      "conflict": "Die wijziging conflicteerde met een andere update. Probeer het opnieuw."
+    },
+    "rate_limit": {
+      "exceeded": "Te veel verzoeken. Probeer het opnieuw over {seconds}."
+    },
+    "internal": {
+      "error": "Er is iets misgegaan aan onze kant. Probeer het opnieuw."
+    },
+    "auth": {
+      "token_missing": "Je moet ingelogd zijn om dat te doen.",
+      "token_invalid": "Je sessie is verlopen. Log opnieuw in.",
+      "forbidden": "Je hebt geen toestemming om dat te doen.",
+      "invalid_credentials": "Ongeldige gebruikersnaam of wachtwoord.",
+      "required": "Niet geauthenticeerd.",
+      "web_login_only": "Inloggen is alleen toegestaan vanuit de spelclient.",
+      "too_many_attempts": "Te veel pogingen. Wacht een minuut en probeer het opnieuw.",
+      "too_many_failed_attempts": "Te veel mislukte pogingen. Wacht een paar minuten en probeer het opnieuw.",
+      "current_password_incorrect": "Je huidige wachtwoord is onjuist.",
+      "password_incorrect": "Je wachtwoord is onjuist.",
+      "verification_failed": "Verificatie mislukt. Probeer het opnieuw."
+    },
+    "account": {
+      "username_invalid": "Gebruikersnaam moet 3-24 tekens lang zijn en letters, cijfers of een liggend streepje bevatten.",
+      "username_not_allowed": "Die gebruikersnaam is niet toegestaan.",
+      "username_taken": "Die gebruikersnaam is al in gebruik.",
+      "username_mismatch": "Die gebruikersnaam komt niet overeen met je account.",
+      "password_too_short": "Wachtwoord moet minstens 6 tekens lang zijn.",
+      "password_too_long": "Nieuw wachtwoord mag maximaal 128 tekens lang zijn.",
+      "characters_online": "Log al je personages uit voordat je het account deactiveert.",
+      "deactivated": "Dit account is gedeactiveerd. Neem contact op met een beheerder om het te herstellen.",
+      "not_found": "Account niet gevonden."
+    },
+    "character": {
+      "name_invalid": "Ongeldige personagenaam. Gebruik 2-16 letters.",
+      "name_not_allowed": "Die personagenaam is niet toegestaan.",
+      "invalid_class": "Ongeldige klasse.",
+      "limit_reached": "Maximumaantal personages bereikt.",
+      "name_taken": "Die naam is al in gebruik.",
+      "not_found": "Personage niet gevonden.",
+      "online": "Personage is momenteel online.",
+      "rename_not_permitted": "Dit personage hernoemen is niet toegestaan.",
+      "delete_confirm": "Typ de personagenaam om de verwijdering te bevestigen.",
+      "already_in_world": "Personage is al in de wereld.",
+      "taken_over": "Je personage is overgenomen door een andere sessie.",
+      "rename_required": "Dit personage moet hernoemd worden voordat het de wereld kan betreden."
+    },
+    "moderation": {
+      "suspended_until": "Dit account is geschorst tot {date}.",
+      "suspended": "Dit account is geschorst.",
+      "banned": "Dit account is verbannen.",
+      "force_rename": "Een moderator vereist dat een van je personages wordt hernoemd."
+    },
+    "email": {
+      "invalid": "Voer een geldig e-mailadres in.",
+      "unchanged": "Dat is al je e-mailadres."
+    },
+    "two_factor": {
+      "code_invalid": "Die code is niet geldig, probeer het opnieuw.",
+      "setup_required": "Stel eerst tweefactorauthenticatie in.",
+      "already_enabled": "Tweefactorauthenticatie is al ingeschakeld.",
+      "not_enabled": "Tweefactorauthenticatie is niet ingeschakeld."
+    },
+    "origin": {
+      "cross_site": "Verzoek geblokkeerd om veiligheidsredenen."
+    },
+    "discord": {
+      "not_configured": "Discord-integratie is momenteel niet beschikbaar.",
+      "expired": "Die Discord-aanmelding is verlopen. Meld je opnieuw aan met Discord.",
+      "already_linked": "Dat Discord-account is al gekoppeld aan een ander account.",
+      "password_required": "Stel een wachtwoord in voordat je je Discord-account ontkoppelt.",
+      "unknown_swag": "Die beloning is niet beschikbaar.",
+      "link_required": "Koppel eerst je Discord-account.",
+      "swag_claimed": "Je hebt deze beloning al geclaimd.",
+      "swag_tier": "Bereik een hogere rang om dit te claimen.",
+      "swag_points": "Niet genoeg punten."
+    }
+  },
   "guide": {
     "brand": "World of ClaudeCraft",
     "brandShort": "ClaudeCraft",
@@ -1202,6 +1330,7 @@ export const nl_NL: EnTranslations = {
       "delves": "Delves",
       "reference": "Naslag",
       "controls": "Besturing",
+      "settings": "Settings & Performance",
       "combat": "Gevecht",
       "talents": "Talenten",
       "arena": "Arena & PvP",
@@ -1369,6 +1498,66 @@ export const nl_NL: EnTranslations = {
       "mobileBody": "Aanraakbediening verschijnt automatisch op telefoons en tablets: een bewegingsstick aan de linkerkant, sleep ergens aan de rechterkant om rond te kijken, en knoppen op het scherm voor je vaardigheden en menu's.",
       "controllerHeading": "Op een controller",
       "controllerBody": "Gamepads werken ook, en controllerondersteuning staat standaard aan. De linkerstick beweegt, de rechterstick richt de camera, en de gezichts- en schouderknoppen dekken je vaardigheden, springen en interageren. Open een venster om een aanwijzer op het scherm op te roepen voor menu's. Je kunt de knoppen opnieuw toewijzen en de stickdeadzone, camerasnelheid, trilling en omgekeerd kijken aanpassen bij de controllerinstellingen in de opties."
+    },
+    "settingsPage": {
+      "heading": "Settings & Performance",
+      "intro": "Make the game look its best or run its fastest. Three ready-made loadouts, plus what every graphics option really does.",
+      "wherePath": "Everything on this page lives in the game: press Esc and look in Graphics, Interface, and Performance Overlay.",
+      "fairnessTitle": "Fair by design",
+      "fairnessBody": "No option here trades beauty for power. Lower settings shed cosmetic polish only, never information you fight with: your debuffs, cast bars, party health, and damage numbers are identical from Low to Ultra. Playing on a modest machine is never a handicap.",
+      "loadoutsHeading": "Three ready-made loadouts",
+      "loadoutsIntro": "Start from the loadout that sounds like your machine, then adjust one option at a time until it feels right.",
+      "recommended": "Recommended",
+      "whyLabel": "Why it works:",
+      "tagReload": "after reload",
+      "fpsTitle": "Best FPS",
+      "fpsTagline": "For older laptops, integrated graphics, and battery play.",
+      "fpsWhy": "Graphics Quality is the master switch, and Render Quality is the strongest slider: at 70% the world draws roughly half the pixels while the interface stays perfectly sharp.",
+      "balancedTitle": "Balanced",
+      "balancedTagline": "The sweet spot for most machines, and our default advice.",
+      "balancedWhy": "Medium brings real shadows and full materials; High adds ambient occlusion and bloom. Below Ultra a built-in safety net absorbs sudden dips in busy fights, so Balanced stays smooth without babysitting.",
+      "visualsTitle": "Best Visuals",
+      "visualsTagline": "Screenshot mode for powerful desktop machines.",
+      "visualsWhy": "Ultra renders at the highest resolution your display offers with the richest lighting. It also switches the safety net off, and it is desktop-only: phones and the app top out at High.",
+      "value50to70": "50 to 70%",
+      "value90to100": "90 to 100%",
+      "value100": "100%",
+      "valueHighOrMedium": "High on a gaming PC, Medium on a laptop",
+      "valueOnOptional": "On (optional)",
+      "howHeading": "How the options behave",
+      "factDetectTitle": "The game tunes itself first",
+      "factDetectBody": "On your first launch the game reads your device and picks a sensible tier, from Low on a modest phone to Ultra on a strong desktop. Any choice you make yourself always wins.",
+      "factReloadTitle": "Two kinds of options",
+      "factReloadBody": "Graphics Quality and the Advanced pickers take effect after a reload, and the panel offers a Reload Now button when needed. Every other option applies the moment you change it.",
+      "factGovernorTitle": "A built-in safety net",
+      "factGovernorBody": "On every tier below Ultra, the game quietly thins grass, effects, and lighting for a moment when a big fight spikes, then restores them. Choosing Ultra tells it you would rather keep every detail.",
+      "advancedHeading": "The Advanced preset: mix your own",
+      "advancedBody": "Advanced starts from the High tier and unlocks four extra pickers, so you can spend your frames where you actually notice them: Terrain Detail, Foliage Density, Effects & Lighting, and Shadow Quality. Like Graphics Quality, they apply after a reload.",
+      "advancedMixes": "Two favorite mixes: keep Shadow Quality on High and set Effects & Lighting to Low for a crisp, glow-free look that runs light, or do the reverse to keep the bloom and soften the shadows.",
+      "tableHeading": "Every option, explained",
+      "colSetting": "Setting",
+      "colDoes": "What it does",
+      "colImpact": "FPS impact",
+      "impactNone": "None",
+      "impactLight": "Light",
+      "impactModerate": "Moderate",
+      "impactHeavy": "Heavy",
+      "rowGraphicsQuality": "The master switch. Each step changes resolution, shadows, materials, foliage, and lighting effects together. The biggest single difference you can make.",
+      "rowRenderQuality": "Draws the 3D world at a lower internal resolution and scales it up; the interface stays sharp. The strongest instant slider on weaker machines and high-resolution screens.",
+      "rowFieldOfView": "How much of the world fits on screen, from a zoomed 55 to a sweeping 100 degrees. A comfort choice; wider views draw slightly more.",
+      "rowBrightness": "Scene exposure, darker or brighter. Pure preference.",
+      "rowWeather": "Ambient rain and snow. Atmosphere only, and switching it off saves a little during storms.",
+      "rowBrowserEffects": "How fancy the interface itself is allowed to be: glass blur, glow, animated menus. Auto matches your browser; the 3D world is untouched either way.",
+      "rowTerrainDetail": "Rich, blended ground textures versus a simpler, faster terrain look.",
+      "rowFoliageDensity": "How far and how thick the grass grows around your character.",
+      "rowEffectsQuality": "Bloom, ambient occlusion, and how many torches and spells cast real light. The single biggest saving among the Advanced pickers.",
+      "rowShadowQuality": "Shadow crispness. Low keeps shadows but softens their edges.",
+      "rowFrostedPanels": "A frosted-glass blur behind windows. Pretty, and exactly the kind of effect a weaker browser feels; leave it off for the classic crisp look.",
+      "rowReduceMotion": "Removes interface animations so windows appear instantly. An accessibility option first, with a small performance bonus.",
+      "rowPerfOverlay": "An on-screen readout of FPS, frame time, and more. Turn it on while you tune this page, then hide it again.",
+      "tableFoot": "Looking for a draw-distance slider or an FPS cap? There is nothing to hunt for: view distance is part of each quality tier, and frame pacing follows your display.",
+      "mobileTitle": "On phones and tablets",
+      "mobileBody": "Mobile manages more for you: the game picks the tier, holds resolution a touch lower to protect battery and heat, and keeps the highest tiers desktop-only. The loadouts above still apply; phones simply top out at High."
     },
     "combat": {
       "intro": "Gevechten volgen vertrouwde klassieke MMO-regels. Je hoeft er niets van te bestuderen om goed te spelen, dit is gewoon de vorm van hoe gevechten werken.",
@@ -2515,6 +2704,8 @@ export const nl_NL: EnTranslations = {
     "title": "Desktop-launcher downloaden",
     "desc": "Download de losse launcher voor optimale prestaties en schermvullend spelen.",
     "macCta": "Download voor macOS",
+    "linuxCta": "Download for Linux",
+    "linuxHint": "AppImage: make it executable, then run it. No install needed.",
     "windowsPending": "Windows-build volgt later."
   },
   "comingSoon": {
@@ -3355,6 +3546,7 @@ export const nl_NL: EnTranslations = {
     "rendererFailed": "Kon de renderer niet starten: probeer opnieuw te laden. {error}",
     "enterTimeout": "Kon de wereld niet betreden. De verbinding is verlopen. Draait de gameserver?",
     "connectionLost": "De verbinding met de server is verbroken.",
+    "reconnecting": "Connection lost. Reconnecting...",
     "connectionRejected": "De server heeft de verbinding gesloten."
   },
   "errors": {
@@ -3387,9 +3579,12 @@ export const nl_NL: EnTranslations = {
       "webLoginOnly": "Inloggen is alleen toegestaan vanuit de spelclient.",
       "accountSuspended": "Dit account is geschorst tot {date}.",
       "alreadyInWorld": "Personage is al in de wereld.",
+      "accountSessionLimit": "Te veel personages op dit account zijn al in de wereld.",
       "takenOver": "Je personage is overgenomen door een andere sessie.",
       "renameBeforeEntering": "Dit personage moet hernoemd worden voordat het de wereld kan betreden.",
-      "renameNotPermitted": "Dit personage hernoemen is niet toegestaan."
+      "renameNotPermitted": "Dit personage hernoemen is niet toegestaan.",
+      "unsupportedMediaType": "Niet-ondersteund verzoekformaat.",
+      "crossSiteOrigin": "Verzoek geblokkeerd om veiligheidsredenen."
     }
   },
   "desktop": {

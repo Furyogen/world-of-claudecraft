@@ -1,17 +1,20 @@
 // World bosses: server-wide elites that rise on a fixed cadence, announce
 // themselves, and reward every player who damaged them with PERSONAL loot, gated
-// to once per day per boss.
+// by a real raid lockout per boss (consumed by LOOTING, reset on the shared
+// raid-reset boundary).
 //
 // This module owns the world-boss DATA (the spawn registry) and the pure pieces of
-// the system: the per-player daily-loot gate, the contributor set derived from a
+// the system: the per-player loot-lockout gate (a `meta.raidLockouts` entry, one
+// source of truth with the raid-lockout UI), the contributor set derived from a
 // boss's hate table, and the personal-loot roller. The SCHEDULER state and the
 // spawn primitive live on `Sim` (it needs createMob/addEntity/groundPos), which
 // drives this module each tick; the loot roller is reached through the SimContext
 // seam (ctx.rollWorldBossLoot), exactly like ctx.rollLoot.
 //
 // Determinism (this is sim-core): no Math.random/Date.now, randomness is ctx.rng
-// only, and the daily boundary is the host-injected ctx.utcDay string (empty in
-// headless/replay, so the gate never rolls over and same-seed runs reproduce). The
+// only, and the lockout boundary is the host lockout clock plus raid-reset instant
+// (ctx.lockoutNowMs() / ctx.raidResetMs(), the same pair the dungeon raid lockouts
+// use; the host wall clock on the server, the sim clock offline). The
 // personal-loot roller draws rng in a FIXED order (contributors sorted by entityId,
 // loot entries in array order) so the parity gate's rng draw-order log stays stable.
 

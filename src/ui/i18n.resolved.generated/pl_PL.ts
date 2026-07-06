@@ -311,7 +311,15 @@ export const pl_PL: EnTranslations = {
       "nameplates": "Nazwy",
       "haptics": "Wibracje",
       "hapticsOff": "Wibracje wył.",
-      "toggleHaptics": "Przełącz wibracje"
+      "toggleHaptics": "Przełącz wibracje",
+      "hotbarPage": "Umiejętności",
+      "hotbarPageAria": "Pokaż następny zestaw umiejętności",
+      "actionRing": "Combat actions",
+      "actionPageToggle": "Switch action page",
+      "actionPageIndicator": "{page}",
+      "targetCycle": "Swap target",
+      "targetCycleShort": "Target",
+      "spellbookPageLabel": "Page {page}"
     },
     "tutorial": {
       "moveBodyTouch": "Użyj gałki ruchu, aby się poruszać, i przeciągaj ekran, aby się rozglądać. Zrób kilka kroków, by zacząć.",
@@ -418,7 +426,9 @@ export const pl_PL: EnTranslations = {
       "itemLevelLine": "Poziom przedmiotu {level}",
       "itemScoreLine": "Ocena {score}",
       "showSecondaryActionBar": "Pokaż dodatkowy pasek akcji",
-      "showDailyRewardsChest": "Pokaż skrzynię codziennych nagród"
+      "showDailyRewardsChest": "Pokaż skrzynię codziennych nagród",
+      "mobileCameraJoystick": "Camera joystick",
+      "mobileLeftHanded": "Left-handed layout"
     },
     "controller": {
       "title": "Kontroler",
@@ -736,6 +746,23 @@ export const pl_PL: EnTranslations = {
       "summaryMaster": "Ustawienia łupów: Łup główny, główny zbieracz {name}, próg {threshold}.",
       "summaryGroup": "Ustawienia łupów: Łup grupowy."
     },
+    "corpseHarvest": {
+      "title": "Zbieranie",
+      "harvestButton": "Zbierz",
+      "concentrateHint": "Im mniej części wybierzesz, tym wyższa jakość każdej z nich.",
+      "alreadyHarvested": "Z tego truchła już wszystko zebrano.",
+      "componentAria": "Zbierz: {component}",
+      "components": {
+        "hide": "Skóra",
+        "fang": "Kieł",
+        "silk": "Jedwab",
+        "venomSac": "Worek jadowy",
+        "gills": "Skrzela",
+        "claw": "Pazur",
+        "horn": "Róg",
+        "tusk": "Cios"
+      }
+    },
     "party": {
       "promoteLeader": "Mianuj przywódcą",
       "inviteUsage": "Kogo zaprosić? Użycie: /invite <imię>."
@@ -1032,6 +1059,18 @@ export const pl_PL: EnTranslations = {
         }
       }
     },
+    "crafting": {
+      "title": "Crafting",
+      "close": "Close crafting",
+      "craft": "Craft",
+      "reagentsNeeded": "Requires:",
+      "reagentLine": "{name} x{have}/{required}",
+      "empty": "No recipes known yet.",
+      "resultAria": "Craft {name}",
+      "craftedToast": "Crafted: {name}",
+      "insufficientMaterials": "You do not have the materials for that.",
+      "unknownRecipe": "That recipe does not exist."
+    },
     "devBadge": {
       "title": "Deweloper",
       "tiers": {
@@ -1177,6 +1216,95 @@ export const pl_PL: EnTranslations = {
       "herbalism": "Zielarstwo"
     }
   },
+  "apiError": {
+    "validation": {
+      "failed": "Niektóre pola są nieprawidłowe. Sprawdź formularz i spróbuj ponownie."
+    },
+    "json": {
+      "malformed": "Nie udało się odczytać żądania. Spróbuj ponownie."
+    },
+    "body": {
+      "too_large": "To żądanie jest zbyt duże. Spróbuj ponownie z mniejszą ilością danych.",
+      "unsupported_media_type": "Nieobsługiwany format żądania."
+    },
+    "db": {
+      "conflict": "Ta zmiana koliduje z inną aktualizacją. Spróbuj ponownie."
+    },
+    "rate_limit": {
+      "exceeded": "Zbyt wiele żądań. Spróbuj ponownie za {seconds}."
+    },
+    "internal": {
+      "error": "Coś poszło nie tak po naszej stronie. Spróbuj ponownie."
+    },
+    "auth": {
+      "token_missing": "Musisz być zalogowany, aby to zrobić.",
+      "token_invalid": "Twoja sesja wygasła. Zaloguj się ponownie.",
+      "forbidden": "Nie masz uprawnień, aby to zrobić.",
+      "invalid_credentials": "Nieprawidłowa nazwa użytkownika lub hasło.",
+      "required": "Brak uwierzytelnienia.",
+      "web_login_only": "Logowanie jest dozwolone tylko z klienta gry.",
+      "too_many_attempts": "Zbyt wiele prób. Odczekaj minutę i spróbuj ponownie.",
+      "too_many_failed_attempts": "Zbyt wiele nieudanych prób. Odczekaj kilka minut i spróbuj ponownie.",
+      "current_password_incorrect": "Twoje obecne hasło jest nieprawidłowe.",
+      "password_incorrect": "Twoje hasło jest nieprawidłowe.",
+      "verification_failed": "Weryfikacja nie powiodła się. Spróbuj ponownie."
+    },
+    "account": {
+      "username_invalid": "Nazwa użytkownika musi mieć od 3 do 24 znaków i zawierać litery, cyfry lub podkreślenie.",
+      "username_not_allowed": "Ta nazwa użytkownika jest niedozwolona.",
+      "username_taken": "Ta nazwa użytkownika jest już zajęta.",
+      "username_mismatch": "Ta nazwa użytkownika nie pasuje do Twojego konta.",
+      "password_too_short": "Hasło musi mieć co najmniej 6 znaków.",
+      "password_too_long": "Nowe hasło może mieć maksymalnie 128 znaków.",
+      "characters_online": "Wyloguj wszystkie swoje postacie przed dezaktywacją.",
+      "deactivated": "To konto zostało dezaktywowane. Skontaktuj się z administratorem, aby je przywrócić.",
+      "not_found": "Nie znaleziono konta."
+    },
+    "character": {
+      "name_invalid": "Nieprawidłowe imię postaci. Użyj od 2 do 16 liter.",
+      "name_not_allowed": "To imię postaci jest niedozwolone.",
+      "invalid_class": "Nieprawidłowa klasa.",
+      "limit_reached": "Osiągnięto limit postaci.",
+      "name_taken": "To imię jest już zajęte.",
+      "not_found": "Nie znaleziono postaci.",
+      "online": "Postać jest obecnie online.",
+      "rename_not_permitted": "Zmiana imienia tej postaci jest niedozwolona.",
+      "delete_confirm": "Wpisz imię postaci, aby potwierdzić usunięcie.",
+      "already_in_world": "Postać jest już w świecie.",
+      "taken_over": "Twoją postać przejęła inna sesja.",
+      "rename_required": "Tę postać trzeba przemianować przed wejściem do świata."
+    },
+    "moderation": {
+      "suspended_until": "To konto jest zawieszone do {date}.",
+      "suspended": "To konto jest zawieszone.",
+      "banned": "To konto zostało zbanowane.",
+      "force_rename": "Moderator wymaga zmiany imienia jednej z Twoich postaci."
+    },
+    "email": {
+      "invalid": "Podaj prawidłowy adres e-mail.",
+      "unchanged": "To jest już Twój adres e-mail."
+    },
+    "two_factor": {
+      "code_invalid": "Ten kod jest nieprawidłowy, spróbuj ponownie.",
+      "setup_required": "Najpierw rozpocznij konfigurację uwierzytelniania dwuskładnikowego.",
+      "already_enabled": "Uwierzytelnianie dwuskładnikowe jest już włączone.",
+      "not_enabled": "Uwierzytelnianie dwuskładnikowe nie jest włączone."
+    },
+    "origin": {
+      "cross_site": "Żądanie zablokowane ze względów bezpieczeństwa."
+    },
+    "discord": {
+      "not_configured": "Integracja z Discord jest obecnie niedostępna.",
+      "expired": "Logowanie przez Discord wygasło. Zaloguj się ponownie przez Discord.",
+      "already_linked": "To konto Discord jest już połączone z innym kontem.",
+      "password_required": "Ustaw hasło przed odłączeniem swojego konta Discord.",
+      "unknown_swag": "Ta nagroda jest niedostępna.",
+      "link_required": "Najpierw połącz swoje konto Discord.",
+      "swag_claimed": "Już odebrałeś tę nagrodę.",
+      "swag_tier": "Osiągnij wyższą rangę, aby to odebrać.",
+      "swag_points": "Za mało punktów."
+    }
+  },
   "guide": {
     "brand": "World of ClaudeCraft",
     "brandShort": "ClaudeCraft",
@@ -1202,6 +1330,7 @@ export const pl_PL: EnTranslations = {
       "delves": "Wyprawy",
       "reference": "Odniesienie",
       "controls": "Sterowanie",
+      "settings": "Settings & Performance",
       "combat": "Walka",
       "talents": "Talenty",
       "arena": "Arena i PvP",
@@ -1369,6 +1498,66 @@ export const pl_PL: EnTranslations = {
       "mobileBody": "Sterowanie dotykowe pojawia się automatycznie na telefonach i tabletach: gałka ruchu po lewej, przeciągnij gdziekolwiek po prawej, aby się rozglądać, oraz przyciski ekranowe dla twoich umiejętności i menu.",
       "controllerHeading": "Na kontrolerze",
       "controllerBody": "Pady również działają, a obsługa kontrolera jest domyślnie włączona. Lewa gałka odpowiada za ruch, prawa steruje kamerą, a przyciski akcji i bumpery obsługują twoje umiejętności, skakanie i interakcję. Otwórz dowolne okno, aby przywołać ekranowy wskaźnik do menu. W ustawieniach kontrolera w opcjach możesz zmienić przypisania przycisków oraz dostosować martwą strefę gałek, szybkość kamery, wibracje i odwrócone patrzenie."
+    },
+    "settingsPage": {
+      "heading": "Settings & Performance",
+      "intro": "Make the game look its best or run its fastest. Three ready-made loadouts, plus what every graphics option really does.",
+      "wherePath": "Everything on this page lives in the game: press Esc and look in Graphics, Interface, and Performance Overlay.",
+      "fairnessTitle": "Fair by design",
+      "fairnessBody": "No option here trades beauty for power. Lower settings shed cosmetic polish only, never information you fight with: your debuffs, cast bars, party health, and damage numbers are identical from Low to Ultra. Playing on a modest machine is never a handicap.",
+      "loadoutsHeading": "Three ready-made loadouts",
+      "loadoutsIntro": "Start from the loadout that sounds like your machine, then adjust one option at a time until it feels right.",
+      "recommended": "Recommended",
+      "whyLabel": "Why it works:",
+      "tagReload": "after reload",
+      "fpsTitle": "Best FPS",
+      "fpsTagline": "For older laptops, integrated graphics, and battery play.",
+      "fpsWhy": "Graphics Quality is the master switch, and Render Quality is the strongest slider: at 70% the world draws roughly half the pixels while the interface stays perfectly sharp.",
+      "balancedTitle": "Balanced",
+      "balancedTagline": "The sweet spot for most machines, and our default advice.",
+      "balancedWhy": "Medium brings real shadows and full materials; High adds ambient occlusion and bloom. Below Ultra a built-in safety net absorbs sudden dips in busy fights, so Balanced stays smooth without babysitting.",
+      "visualsTitle": "Best Visuals",
+      "visualsTagline": "Screenshot mode for powerful desktop machines.",
+      "visualsWhy": "Ultra renders at the highest resolution your display offers with the richest lighting. It also switches the safety net off, and it is desktop-only: phones and the app top out at High.",
+      "value50to70": "50 to 70%",
+      "value90to100": "90 to 100%",
+      "value100": "100%",
+      "valueHighOrMedium": "High on a gaming PC, Medium on a laptop",
+      "valueOnOptional": "On (optional)",
+      "howHeading": "How the options behave",
+      "factDetectTitle": "The game tunes itself first",
+      "factDetectBody": "On your first launch the game reads your device and picks a sensible tier, from Low on a modest phone to Ultra on a strong desktop. Any choice you make yourself always wins.",
+      "factReloadTitle": "Two kinds of options",
+      "factReloadBody": "Graphics Quality and the Advanced pickers take effect after a reload, and the panel offers a Reload Now button when needed. Every other option applies the moment you change it.",
+      "factGovernorTitle": "A built-in safety net",
+      "factGovernorBody": "On every tier below Ultra, the game quietly thins grass, effects, and lighting for a moment when a big fight spikes, then restores them. Choosing Ultra tells it you would rather keep every detail.",
+      "advancedHeading": "The Advanced preset: mix your own",
+      "advancedBody": "Advanced starts from the High tier and unlocks four extra pickers, so you can spend your frames where you actually notice them: Terrain Detail, Foliage Density, Effects & Lighting, and Shadow Quality. Like Graphics Quality, they apply after a reload.",
+      "advancedMixes": "Two favorite mixes: keep Shadow Quality on High and set Effects & Lighting to Low for a crisp, glow-free look that runs light, or do the reverse to keep the bloom and soften the shadows.",
+      "tableHeading": "Every option, explained",
+      "colSetting": "Setting",
+      "colDoes": "What it does",
+      "colImpact": "FPS impact",
+      "impactNone": "None",
+      "impactLight": "Light",
+      "impactModerate": "Moderate",
+      "impactHeavy": "Heavy",
+      "rowGraphicsQuality": "The master switch. Each step changes resolution, shadows, materials, foliage, and lighting effects together. The biggest single difference you can make.",
+      "rowRenderQuality": "Draws the 3D world at a lower internal resolution and scales it up; the interface stays sharp. The strongest instant slider on weaker machines and high-resolution screens.",
+      "rowFieldOfView": "How much of the world fits on screen, from a zoomed 55 to a sweeping 100 degrees. A comfort choice; wider views draw slightly more.",
+      "rowBrightness": "Scene exposure, darker or brighter. Pure preference.",
+      "rowWeather": "Ambient rain and snow. Atmosphere only, and switching it off saves a little during storms.",
+      "rowBrowserEffects": "How fancy the interface itself is allowed to be: glass blur, glow, animated menus. Auto matches your browser; the 3D world is untouched either way.",
+      "rowTerrainDetail": "Rich, blended ground textures versus a simpler, faster terrain look.",
+      "rowFoliageDensity": "How far and how thick the grass grows around your character.",
+      "rowEffectsQuality": "Bloom, ambient occlusion, and how many torches and spells cast real light. The single biggest saving among the Advanced pickers.",
+      "rowShadowQuality": "Shadow crispness. Low keeps shadows but softens their edges.",
+      "rowFrostedPanels": "A frosted-glass blur behind windows. Pretty, and exactly the kind of effect a weaker browser feels; leave it off for the classic crisp look.",
+      "rowReduceMotion": "Removes interface animations so windows appear instantly. An accessibility option first, with a small performance bonus.",
+      "rowPerfOverlay": "An on-screen readout of FPS, frame time, and more. Turn it on while you tune this page, then hide it again.",
+      "tableFoot": "Looking for a draw-distance slider or an FPS cap? There is nothing to hunt for: view distance is part of each quality tier, and frame pacing follows your display.",
+      "mobileTitle": "On phones and tablets",
+      "mobileBody": "Mobile manages more for you: the game picks the tier, holds resolution a touch lower to protect battery and heat, and keeps the highest tiers desktop-only. The loadouts above still apply; phones simply top out at High."
     },
     "combat": {
       "intro": "Walka rządzi się znajomymi zasadami klasycznych MMO. Nigdy nie musisz tego zgłębiać, by dobrze grać, to tylko zarys tego, jak działają starcia.",
@@ -2515,6 +2704,8 @@ export const pl_PL: EnTranslations = {
     "title": "Pobierz launcher na komputer",
     "desc": "Pobierz samodzielny launcher dla zoptymalizowanej wydajności i gry na pełnym ekranie.",
     "macCta": "Pobierz dla macOS",
+    "linuxCta": "Download for Linux",
+    "linuxHint": "AppImage: make it executable, then run it. No install needed.",
     "windowsPending": "Build Windows w przygotowaniu."
   },
   "comingSoon": {
@@ -3355,6 +3546,7 @@ export const pl_PL: EnTranslations = {
     "rendererFailed": "Nie udało się uruchomić renderera: spróbuj odświeżyć. {error}",
     "enterTimeout": "Nie udało się wejść do świata. Upłynął limit czasu połączenia. Czy serwer gry jest uruchomiony?",
     "connectionLost": "Połączenie z serwerem zostało utracone.",
+    "reconnecting": "Connection lost. Reconnecting...",
     "connectionRejected": "Serwer zamknął połączenie."
   },
   "errors": {
@@ -3387,9 +3579,12 @@ export const pl_PL: EnTranslations = {
       "webLoginOnly": "Logowanie jest dozwolone tylko z klienta gry.",
       "accountSuspended": "To konto jest zawieszone do {date}.",
       "alreadyInWorld": "Postać jest już w świecie.",
+      "accountSessionLimit": "Zbyt wiele postaci na tym koncie jest już w świecie.",
       "takenOver": "Twoją postać przejęła inna sesja.",
       "renameBeforeEntering": "Tę postać trzeba przemianować przed wejściem do świata.",
-      "renameNotPermitted": "Zmiana imienia tej postaci jest niedozwolona."
+      "renameNotPermitted": "Zmiana imienia tej postaci jest niedozwolona.",
+      "unsupportedMediaType": "Nieobsługiwany format żądania.",
+      "crossSiteOrigin": "Żądanie zablokowane ze względów bezpieczeństwa."
     }
   },
   "desktop": {

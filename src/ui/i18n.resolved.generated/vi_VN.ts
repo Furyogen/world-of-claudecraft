@@ -311,7 +311,15 @@ export const vi_VN: EnTranslations = {
       "nameplates": "Tên",
       "haptics": "Phản Hồi Rung",
       "hapticsOff": "Tắt Phản Hồi Rung",
-      "toggleHaptics": "Bật/tắt phản hồi rung"
+      "toggleHaptics": "Bật/tắt phản hồi rung",
+      "hotbarPage": "Kỹ Năng",
+      "hotbarPageAria": "Hiện bộ kỹ năng tiếp theo",
+      "actionRing": "Combat actions",
+      "actionPageToggle": "Switch action page",
+      "actionPageIndicator": "{page}",
+      "targetCycle": "Swap target",
+      "targetCycleShort": "Target",
+      "spellbookPageLabel": "Page {page}"
     },
     "tutorial": {
       "moveBodyTouch": "Dùng cần di chuyển để đi và kéo màn hình để nhìn quanh. Bước vài bước để bắt đầu.",
@@ -418,7 +426,9 @@ export const vi_VN: EnTranslations = {
       "itemLevelLine": "Cấp Vật Phẩm {level}",
       "itemScoreLine": "Điểm {score}",
       "showSecondaryActionBar": "Hiện Thanh Hành Động Phụ",
-      "showDailyRewardsChest": "Hiện Rương Phần Thưởng Hằng Ngày"
+      "showDailyRewardsChest": "Hiện Rương Phần Thưởng Hằng Ngày",
+      "mobileCameraJoystick": "Camera joystick",
+      "mobileLeftHanded": "Left-handed layout"
     },
     "controller": {
       "title": "Tay Cầm",
@@ -736,6 +746,23 @@ export const vi_VN: EnTranslations = {
       "summaryMaster": "Cài Đặt Chiến Lợi Phẩm: Chia Chủ Trì, Người Chia {name}, ngưỡng {threshold}.",
       "summaryGroup": "Cài Đặt Chiến Lợi Phẩm: Chiến Lợi Phẩm Nhóm."
     },
+    "corpseHarvest": {
+      "title": "Thu Hoạch",
+      "harvestButton": "Thu Hoạch",
+      "concentrateHint": "Chọn càng ít bộ phận, mỗi bộ phận thu được sẽ có bậc chất lượng càng cao.",
+      "alreadyHarvested": "Xác này đã bị thu hoạch rồi.",
+      "componentAria": "Thu hoạch {component}",
+      "components": {
+        "hide": "Da",
+        "fang": "Nanh",
+        "silk": "Tơ",
+        "venomSac": "Túi Độc",
+        "gills": "Mang",
+        "claw": "Móng Vuốt",
+        "horn": "Sừng",
+        "tusk": "Ngà"
+      }
+    },
     "party": {
       "promoteLeader": "Thăng Làm Đội Trưởng",
       "inviteUsage": "Mời ai? Cách dùng: /invite <name>."
@@ -1032,6 +1059,18 @@ export const vi_VN: EnTranslations = {
         }
       }
     },
+    "crafting": {
+      "title": "Crafting",
+      "close": "Close crafting",
+      "craft": "Craft",
+      "reagentsNeeded": "Requires:",
+      "reagentLine": "{name} x{have}/{required}",
+      "empty": "No recipes known yet.",
+      "resultAria": "Craft {name}",
+      "craftedToast": "Crafted: {name}",
+      "insufficientMaterials": "You do not have the materials for that.",
+      "unknownRecipe": "That recipe does not exist."
+    },
     "devBadge": {
       "title": "Nhà phát triển",
       "tiers": {
@@ -1177,6 +1216,95 @@ export const vi_VN: EnTranslations = {
       "herbalism": "Thảo dược học"
     }
   },
+  "apiError": {
+    "validation": {
+      "failed": "Một số trường không hợp lệ. Hãy kiểm tra biểu mẫu và thử lại."
+    },
+    "json": {
+      "malformed": "Không thể đọc được yêu cầu đó. Vui lòng thử lại."
+    },
+    "body": {
+      "too_large": "Yêu cầu đó quá lớn. Hãy thử lại với ít dữ liệu hơn.",
+      "unsupported_media_type": "Định dạng yêu cầu không được hỗ trợ."
+    },
+    "db": {
+      "conflict": "Thay đổi đó xung đột với một cập nhật khác. Vui lòng thử lại."
+    },
+    "rate_limit": {
+      "exceeded": "Quá nhiều yêu cầu. Hãy thử lại sau {seconds}."
+    },
+    "internal": {
+      "error": "Đã có lỗi xảy ra ở phía chúng tôi. Vui lòng thử lại."
+    },
+    "auth": {
+      "token_missing": "Bạn cần đăng nhập để thực hiện thao tác đó.",
+      "token_invalid": "Phiên của bạn đã hết hạn. Vui lòng đăng nhập lại.",
+      "forbidden": "Bạn không có quyền thực hiện thao tác đó.",
+      "invalid_credentials": "Tên đăng nhập hoặc mật khẩu không đúng.",
+      "required": "Chưa xác thực.",
+      "web_login_only": "Chỉ được phép đăng nhập từ trình khách trò chơi.",
+      "too_many_attempts": "Quá nhiều lần thử. Hãy đợi một phút rồi thử lại.",
+      "too_many_failed_attempts": "Quá nhiều lần thử thất bại. Hãy đợi vài phút rồi thử lại.",
+      "current_password_incorrect": "Mật khẩu hiện tại của bạn không đúng.",
+      "password_incorrect": "Mật khẩu của bạn không đúng.",
+      "verification_failed": "Xác minh thất bại. Vui lòng thử lại."
+    },
+    "account": {
+      "username_invalid": "Tên đăng nhập phải có 3-24 ký tự và chỉ dùng chữ cái, chữ số hoặc dấu gạch dưới.",
+      "username_not_allowed": "Tên đăng nhập đó không được phép.",
+      "username_taken": "Tên đăng nhập đó đã được sử dụng.",
+      "username_mismatch": "Tên đăng nhập đó không khớp với tài khoản của bạn.",
+      "password_too_short": "Mật khẩu phải có ít nhất 6 ký tự.",
+      "password_too_long": "Mật khẩu mới phải có tối đa 128 ký tự.",
+      "characters_online": "Hãy đăng xuất tất cả nhân vật của bạn trước khi vô hiệu hóa tài khoản.",
+      "deactivated": "Tài khoản này đã bị vô hiệu hóa. Hãy liên hệ quản trị viên để khôi phục.",
+      "not_found": "Không tìm thấy tài khoản."
+    },
+    "character": {
+      "name_invalid": "Tên nhân vật không hợp lệ. Dùng 2-16 chữ cái.",
+      "name_not_allowed": "Tên nhân vật đó không được phép.",
+      "invalid_class": "Lớp không hợp lệ.",
+      "limit_reached": "Đã đạt giới hạn số nhân vật.",
+      "name_taken": "Tên đó đã được sử dụng.",
+      "not_found": "Không tìm thấy nhân vật.",
+      "online": "Nhân vật hiện đang trực tuyến.",
+      "rename_not_permitted": "Không được phép đổi tên nhân vật này.",
+      "delete_confirm": "Nhập tên nhân vật để xác nhận xóa.",
+      "already_in_world": "Nhân vật đã ở trong thế giới.",
+      "taken_over": "Nhân vật của bạn đã bị một phiên khác chiếm quyền.",
+      "rename_required": "Nhân vật này phải được đổi tên trước khi vào thế giới."
+    },
+    "moderation": {
+      "suspended_until": "Tài khoản này bị đình chỉ đến {date}.",
+      "suspended": "Tài khoản này bị đình chỉ.",
+      "banned": "Tài khoản này đã bị cấm.",
+      "force_rename": "Người kiểm duyệt yêu cầu đổi tên một nhân vật của bạn."
+    },
+    "email": {
+      "invalid": "Hãy nhập một địa chỉ email hợp lệ.",
+      "unchanged": "Đó đã là địa chỉ email của bạn."
+    },
+    "two_factor": {
+      "code_invalid": "Mã đó không hợp lệ, hãy thử lại.",
+      "setup_required": "Hãy bắt đầu thiết lập xác thực hai yếu tố trước.",
+      "already_enabled": "Xác thực hai yếu tố đã được bật.",
+      "not_enabled": "Xác thực hai yếu tố chưa được bật."
+    },
+    "origin": {
+      "cross_site": "Yêu cầu đã bị chặn vì lý do bảo mật."
+    },
+    "discord": {
+      "not_configured": "Tích hợp Discord hiện không khả dụng.",
+      "expired": "Lượt đăng nhập Discord đó đã hết hạn. Vui lòng đăng nhập lại bằng Discord.",
+      "already_linked": "Tài khoản Discord đó đã được liên kết với một tài khoản khác.",
+      "password_required": "Hãy đặt mật khẩu trước khi hủy liên kết tài khoản Discord của bạn.",
+      "unknown_swag": "Phần thưởng đó không khả dụng.",
+      "link_required": "Hãy liên kết tài khoản Discord của bạn trước.",
+      "swag_claimed": "Bạn đã nhận phần thưởng này rồi.",
+      "swag_tier": "Hãy đạt cấp bậc cao hơn để nhận phần thưởng này.",
+      "swag_points": "Không đủ điểm."
+    }
+  },
   "guide": {
     "brand": "World of ClaudeCraft",
     "brandShort": "ClaudeCraft",
@@ -1202,6 +1330,7 @@ export const vi_VN: EnTranslations = {
       "delves": "Hang Sâu",
       "reference": "Tra Cứu",
       "controls": "Điều Khiển",
+      "settings": "Settings & Performance",
       "combat": "Chiến Đấu",
       "talents": "Tài Năng",
       "arena": "Đấu Trường & PvP",
@@ -1369,6 +1498,66 @@ export const vi_VN: EnTranslations = {
       "mobileBody": "Điều khiển cảm ứng tự động xuất hiện trên điện thoại và máy tính bảng: cần di chuyển ở bên trái, kéo bất cứ đâu ở bên phải để nhìn quanh, và các nút trên màn hình cho kỹ năng và menu của bạn.",
       "controllerHeading": "Trên tay cầm",
       "controllerBody": "Tay cầm cũng dùng được, và hỗ trợ tay cầm được bật sẵn theo mặc định. Cần trái để di chuyển, cần phải để chỉnh máy quay, còn các nút mặt và nút vai lo phần kỹ năng, nhảy và tương tác của bạn. Mở bất kỳ cửa sổ nào để hiện một con trỏ trên màn hình cho các menu. Bạn có thể đổi lại các nút và chỉnh vùng chết của cần, tốc độ máy quay, rung và đảo chiều nhìn trong phần cài đặt tay cầm ở mục tùy chọn."
+    },
+    "settingsPage": {
+      "heading": "Settings & Performance",
+      "intro": "Make the game look its best or run its fastest. Three ready-made loadouts, plus what every graphics option really does.",
+      "wherePath": "Everything on this page lives in the game: press Esc and look in Graphics, Interface, and Performance Overlay.",
+      "fairnessTitle": "Fair by design",
+      "fairnessBody": "No option here trades beauty for power. Lower settings shed cosmetic polish only, never information you fight with: your debuffs, cast bars, party health, and damage numbers are identical from Low to Ultra. Playing on a modest machine is never a handicap.",
+      "loadoutsHeading": "Three ready-made loadouts",
+      "loadoutsIntro": "Start from the loadout that sounds like your machine, then adjust one option at a time until it feels right.",
+      "recommended": "Recommended",
+      "whyLabel": "Why it works:",
+      "tagReload": "after reload",
+      "fpsTitle": "Best FPS",
+      "fpsTagline": "For older laptops, integrated graphics, and battery play.",
+      "fpsWhy": "Graphics Quality is the master switch, and Render Quality is the strongest slider: at 70% the world draws roughly half the pixels while the interface stays perfectly sharp.",
+      "balancedTitle": "Balanced",
+      "balancedTagline": "The sweet spot for most machines, and our default advice.",
+      "balancedWhy": "Medium brings real shadows and full materials; High adds ambient occlusion and bloom. Below Ultra a built-in safety net absorbs sudden dips in busy fights, so Balanced stays smooth without babysitting.",
+      "visualsTitle": "Best Visuals",
+      "visualsTagline": "Screenshot mode for powerful desktop machines.",
+      "visualsWhy": "Ultra renders at the highest resolution your display offers with the richest lighting. It also switches the safety net off, and it is desktop-only: phones and the app top out at High.",
+      "value50to70": "50 to 70%",
+      "value90to100": "90 to 100%",
+      "value100": "100%",
+      "valueHighOrMedium": "High on a gaming PC, Medium on a laptop",
+      "valueOnOptional": "On (optional)",
+      "howHeading": "How the options behave",
+      "factDetectTitle": "The game tunes itself first",
+      "factDetectBody": "On your first launch the game reads your device and picks a sensible tier, from Low on a modest phone to Ultra on a strong desktop. Any choice you make yourself always wins.",
+      "factReloadTitle": "Two kinds of options",
+      "factReloadBody": "Graphics Quality and the Advanced pickers take effect after a reload, and the panel offers a Reload Now button when needed. Every other option applies the moment you change it.",
+      "factGovernorTitle": "A built-in safety net",
+      "factGovernorBody": "On every tier below Ultra, the game quietly thins grass, effects, and lighting for a moment when a big fight spikes, then restores them. Choosing Ultra tells it you would rather keep every detail.",
+      "advancedHeading": "The Advanced preset: mix your own",
+      "advancedBody": "Advanced starts from the High tier and unlocks four extra pickers, so you can spend your frames where you actually notice them: Terrain Detail, Foliage Density, Effects & Lighting, and Shadow Quality. Like Graphics Quality, they apply after a reload.",
+      "advancedMixes": "Two favorite mixes: keep Shadow Quality on High and set Effects & Lighting to Low for a crisp, glow-free look that runs light, or do the reverse to keep the bloom and soften the shadows.",
+      "tableHeading": "Every option, explained",
+      "colSetting": "Setting",
+      "colDoes": "What it does",
+      "colImpact": "FPS impact",
+      "impactNone": "None",
+      "impactLight": "Light",
+      "impactModerate": "Moderate",
+      "impactHeavy": "Heavy",
+      "rowGraphicsQuality": "The master switch. Each step changes resolution, shadows, materials, foliage, and lighting effects together. The biggest single difference you can make.",
+      "rowRenderQuality": "Draws the 3D world at a lower internal resolution and scales it up; the interface stays sharp. The strongest instant slider on weaker machines and high-resolution screens.",
+      "rowFieldOfView": "How much of the world fits on screen, from a zoomed 55 to a sweeping 100 degrees. A comfort choice; wider views draw slightly more.",
+      "rowBrightness": "Scene exposure, darker or brighter. Pure preference.",
+      "rowWeather": "Ambient rain and snow. Atmosphere only, and switching it off saves a little during storms.",
+      "rowBrowserEffects": "How fancy the interface itself is allowed to be: glass blur, glow, animated menus. Auto matches your browser; the 3D world is untouched either way.",
+      "rowTerrainDetail": "Rich, blended ground textures versus a simpler, faster terrain look.",
+      "rowFoliageDensity": "How far and how thick the grass grows around your character.",
+      "rowEffectsQuality": "Bloom, ambient occlusion, and how many torches and spells cast real light. The single biggest saving among the Advanced pickers.",
+      "rowShadowQuality": "Shadow crispness. Low keeps shadows but softens their edges.",
+      "rowFrostedPanels": "A frosted-glass blur behind windows. Pretty, and exactly the kind of effect a weaker browser feels; leave it off for the classic crisp look.",
+      "rowReduceMotion": "Removes interface animations so windows appear instantly. An accessibility option first, with a small performance bonus.",
+      "rowPerfOverlay": "An on-screen readout of FPS, frame time, and more. Turn it on while you tune this page, then hide it again.",
+      "tableFoot": "Looking for a draw-distance slider or an FPS cap? There is nothing to hunt for: view distance is part of each quality tier, and frame pacing follows your display.",
+      "mobileTitle": "On phones and tablets",
+      "mobileBody": "Mobile manages more for you: the game picks the tier, holds resolution a touch lower to protect battery and heat, and keeps the highest tiers desktop-only. The loadouts above still apply; phones simply top out at High."
     },
     "combat": {
       "intro": "Chiến đấu tuân theo những quy tắc MMO cổ điển quen thuộc. Bạn không bao giờ cần nghiên cứu bất kỳ điều gì để chơi tốt, đây chỉ là hình dáng cách các trận đấu vận hành.",
@@ -2515,6 +2704,8 @@ export const vi_VN: EnTranslations = {
     "title": "Tải Trình Khởi Chạy Trên Máy Tính",
     "desc": "Tải trình khởi chạy độc lập để có hiệu năng tối ưu và chơi toàn màn hình.",
     "macCta": "Tải xuống cho macOS",
+    "linuxCta": "Download for Linux",
+    "linuxHint": "AppImage: make it executable, then run it. No install needed.",
     "windowsPending": "Bản dựng Windows đang chờ."
   },
   "comingSoon": {
@@ -3355,6 +3546,7 @@ export const vi_VN: EnTranslations = {
     "rendererFailed": "Không thể khởi động bộ kết xuất: thử tải lại. {error}",
     "enterTimeout": "Không thể vào thế giới. Kết nối đã quá thời gian. Máy chủ trò chơi có đang chạy không?",
     "connectionLost": "Đã mất kết nối tới máy chủ.",
+    "reconnecting": "Connection lost. Reconnecting...",
     "connectionRejected": "Máy chủ đã đóng kết nối."
   },
   "errors": {
@@ -3387,9 +3579,12 @@ export const vi_VN: EnTranslations = {
       "webLoginOnly": "Chỉ được phép đăng nhập từ trình khách trò chơi.",
       "accountSuspended": "Tài khoản này bị đình chỉ đến {date}.",
       "alreadyInWorld": "Nhân vật đã ở trong thế giới.",
+      "accountSessionLimit": "Quá nhiều nhân vật trên tài khoản này đã ở trong thế giới.",
       "takenOver": "Nhân vật của bạn đã bị một phiên khác chiếm quyền.",
       "renameBeforeEntering": "Nhân vật này phải được đổi tên trước khi vào thế giới.",
-      "renameNotPermitted": "Không được phép đổi tên nhân vật này."
+      "renameNotPermitted": "Không được phép đổi tên nhân vật này.",
+      "unsupportedMediaType": "Định dạng yêu cầu không được hỗ trợ.",
+      "crossSiteOrigin": "Yêu cầu đã bị chặn vì lý do bảo mật."
     }
   },
   "desktop": {

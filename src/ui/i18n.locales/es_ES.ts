@@ -289,4 +289,7 @@ export const es_ES: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraEffect.school.shadow': 'Sombra',
   'hudChrome.auraEffect.school.holy': 'Sagrada',
   'hudChrome.auraEffect.school.nature': 'Natural',
+  // Corpse-harvest window + mobile hotbar page toggle.
+  'hudChrome.corpseHarvest.title': 'Recolección',
+  'hudChrome.corpseHarvest.components.gills': 'Branquias',
 };

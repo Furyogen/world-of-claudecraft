@@ -539,7 +539,8 @@ export interface MobTemplate {
   color: number; // render hint
   // Profession harvesting: the skinning/salvage component types this mob's corpse
   // can yield (e.g. 'hide', 'horn', 'venomSac', 'gills', 'fang', 'claw', 'feather').
-  // Data-as-code only for now; consumed by later profession-harvest issues.
+  // Consumed by the corpse-harvest command (src/sim/interaction.ts harvestCorpse)
+  // via the tag-to-item map in src/sim/content/professions.ts (#1141).
   componentTags?: string[];
   boss?: boolean;
   rare?: boolean;
@@ -1624,6 +1625,9 @@ export interface Entity {
   // Profession harvest: single-use, first-come claim on this corpse's componentTags
   // yield. null = unharvested; once set to a player's entity id, every later attempt
   // (same tick or later) is denied. The opposite of a world gathering node (per-player).
+  // SERVER-PRIVATE today: no snapshot delta mirrors it, so the online ClientWorld
+  // always reads null (src/net/online.ts blankEntity). Mirror it over the wire
+  // before any UI/render consumer reads it through IWorld.
   harvestClaimedBy: number | null;
   despawnTimer?: number;
   damageIdleDespawnTimer?: number;
@@ -1941,6 +1945,7 @@ export type SimEvent = { pid?: number } & (
   // delivers it to nearby players; anchorless logs broadcast server-wide
   | { type: 'log'; text: string; color?: string; entityId?: number }
   | { type: 'delveEntered'; delveId: string; tierId: string }
+  | { type: 'delveObjectiveComplete'; delveId: string; tierId: string }
   | { type: 'delveComplete'; delveId: string; tierId: string }
   | { type: 'delveFailed'; delveId: string; tierId: string }
   | { type: 'delveLoreUnlock'; loreId: string }
@@ -1986,7 +1991,15 @@ export type SimEvent = { pid?: number } & (
       lootTier?: LootTier;
     }
   | { type: 'lockpickBonus'; tier: LootTier; marks: number; copper: number }
-  | { type: 'delveChestLoot'; chestId: number; items: { itemId: string; count: number }[] }
+  | {
+      type: 'delveChestLoot';
+      chestId: number;
+      delveId: string;
+      tierId: string;
+      lootTier: LootTier;
+      bountiful: boolean;
+      items: { itemId: string; count: number }[];
+    }
   // Carries the shrine as `entityId` so the server's eventAnchor interest-scopes
   // the pulse to players near the apse instead of broadcasting it realm-wide
   // (the HUD closes the rite popup on the first pulse).
@@ -2005,6 +2018,19 @@ export type SimEvent = { pid?: number } & (
   // the server-rolled rank. Text-free on purpose — the client renders its own
   // localized copy, so no sim/server i18n matcher rule is needed.
   | { type: 'skinEvent'; rank: SkinRank; catalog?: SkinCatalog }
+  // Common-tier crafting outcome (#1127): mirrors CraftResult so the online
+  // client can reflect the local result of a craftItem command without
+  // deciding it itself. Text-free on purpose (see skinEvent above): the
+  // client renders its own localized copy off the structured fields.
+  | {
+      type: 'craftResult';
+      ok: boolean;
+      recipeId: string;
+      itemId?: string;
+      count?: number;
+      quality?: ItemDef['quality'];
+      reason?: 'unknown_recipe' | 'insufficient_materials';
+    }
 );
 
 export interface MoveInput {
