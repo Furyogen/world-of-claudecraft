@@ -19,6 +19,7 @@ export interface DiscordVoiceMember {
 /** The linked account's reward + link state (server-authoritative). */
 export interface DiscordAccountStatus {
   linked: boolean;
+  promptHidden: boolean;
   username: string | null;
   /** Discord profile-picture URL (CDN), or null for a default avatar. */
   avatar: string | null;
@@ -55,6 +56,7 @@ export interface DiscordPresenceState {
 
 const UNLINKED: DiscordAccountStatus = {
   linked: false,
+  promptHidden: false,
   username: null,
   avatar: null,
   guildMember: false,

@@ -100,6 +100,7 @@ import {
   handleDiscordCallback,
   handleDiscordLoginLink,
   handleDiscordLoginNew,
+  handleDiscordPromptDismiss,
   handleDiscordStart,
   handleDiscordStatus,
   handleDiscordUnlink,
@@ -187,6 +188,14 @@ import {
 import { allowedCorsOrigin, isWebClientRequest, webLoginEnforced } from './web_login_guard';
 import { handleWocBalance, parseWocBalanceQuery } from './woc_balance';
 import { bufferHandshakeMessages } from './ws_buffer';
+import {
+  handleXCallback,
+  handleXPromptDismiss,
+  handleXStart,
+  handleXStatus,
+  handleXUnlink,
+} from './x';
+import { pruneXOAuthStates, pruneXPendingLogins } from './x_db';
 
 const PORT = Number(process.env.PORT ?? 8787);
 const STATIC_DIR = path.join(__dirname, '..', 'dist');
@@ -1447,6 +1456,12 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       if (discordRateLimited(req, accountId)) return json(res, 429, { error: 'rate limited' });
       return handleDiscordStatus(req, res, accountId);
     }
+    if (req.method === 'POST' && url === '/api/discord/prompt/dismiss') {
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      if (discordRateLimited(req, accountId)) return json(res, 429, { error: 'rate limited' });
+      return handleDiscordPromptDismiss(req, res, accountId);
+    }
     if (req.method === 'DELETE' && url === '/api/discord') {
       const accountId = await bearerActiveAccount(req, res);
       if (accountId === null) return;
@@ -1480,6 +1495,38 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       if (accountId === null) return;
       if (githubRateLimited(req, accountId)) return json(res, 429, { error: 'rate limited' });
       return handleGitHubUnlink(req, res, accountId);
+    }
+    // X integration: link-only OAuth, link status, prompt dismissal, unlink.
+    // X stores only public identity, no X access or refresh token.
+    if (req.method === 'POST' && url === '/api/auth/x/start') {
+      const mode = new URL(req.url ?? '/', 'http://localhost').searchParams.get('mode');
+      if (mode !== 'link') {
+        return json(res, 400, { error: 'X can only be linked from a logged-in account' });
+      }
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      return handleXStart(req, res, { mode, accountId });
+    }
+    if (req.method === 'GET' && url === '/api/auth/x/callback') {
+      return handleXCallback(req, res);
+    }
+    if (req.method === 'GET' && url === '/api/x') {
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      if (discordRateLimited(req, accountId)) return json(res, 429, { error: 'rate limited' });
+      return handleXStatus(req, res, accountId);
+    }
+    if (req.method === 'POST' && url === '/api/x/prompt/dismiss') {
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      if (discordRateLimited(req, accountId)) return json(res, 429, { error: 'rate limited' });
+      return handleXPromptDismiss(req, res, accountId);
+    }
+    if (req.method === 'DELETE' && url === '/api/x') {
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      if (discordRateLimited(req, accountId)) return json(res, 429, { error: 'rate limited' });
+      return handleXUnlink(req, res, accountId);
     }
     // $WOC balance proxy — keeps the Solana RPC endpoint (and any key in it)
     // server-side so it never ships in the client bundle. Public (on-chain
@@ -1792,6 +1839,12 @@ async function main(): Promise<void> {
       );
       void pruneGitHubOAuthStates(pool).catch((err) =>
         console.error('github oauth state prune failed:', err),
+      );
+      void pruneXOAuthStates(pool).catch((err) =>
+        console.error('x oauth state prune failed:', err),
+      );
+      void pruneXPendingLogins(pool).catch((err) =>
+        console.error('x pending login prune failed:', err),
       );
     },
     24 * 3600 * 1000,

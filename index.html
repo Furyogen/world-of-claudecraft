@@ -303,6 +303,18 @@
       </details>
     </nav>
 
+    <section id="x-link-prompt" class="x-link-prompt" hidden aria-live="polite">
+      <div id="x-link-prompt-logo" class="x-link-prompt-logo" aria-hidden="true">
+        <img src="/ui/x-logo.svg" alt="" draggable="false" />
+      </div>
+      <button type="button" id="x-link-prompt-close" class="x-link-prompt-close" data-i18n-aria="hudChrome.x.prompt.dismiss" aria-label="Dismiss" data-icon="close"></button>
+      <div class="x-link-prompt-copy">
+        <strong id="x-link-prompt-title" data-i18n="hudChrome.x.prompt.title">Link X in game</strong>
+        <span id="x-link-prompt-body" data-i18n="hudChrome.x.prompt.body">Yuumi can tag your X profile on stream posts. More rewards are coming.</span>
+      </div>
+      <button type="button" id="x-link-prompt-link" class="x-link-prompt-action" data-i18n="hudChrome.x.account.link">Link X</button>
+    </section>
+
     <div id="right-tracker-stack">
       <div id="quest-tracker"></div>
       <div id="delve-tracker"></div>
@@ -658,7 +670,7 @@
             <svg viewBox="0 0 127.14 96.36" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M107.7 8.07A105.15 105.15 0 0 0 81.47 0a72.06 72.06 0 0 0-3.36 6.83 97.68 97.68 0 0 0-29.11 0A72.37 72.37 0 0 0 45.64 0a105.89 105.89 0 0 0-26.25 8.09C2.79 32.65-1.71 56.6.54 80.21a105.73 105.73 0 0 0 32.17 16.15 77.7 77.7 0 0 0 6.89-11.11 68.42 68.42 0 0 1-10.85-5.18c.91-.66 1.8-1.34 2.66-2a75.57 75.57 0 0 0 64.32 0c.87.71 1.76 1.39 2.66 2a68.68 68.68 0 0 1-10.87 5.19 77 77 0 0 0 6.89 11.1 105.25 105.25 0 0 0 32.19-16.14c2.64-27.38-4.51-51.11-18.9-72.15zM42.45 65.69C36.18 65.69 31 60 31 53s5-12.74 11.43-12.74S54 46 53.89 53s-5.05 12.69-11.44 12.69zm42.24 0C78.41 65.69 73.25 60 73.25 53s5-12.74 11.44-12.74S96.23 46 96.12 53s-5.04 12.69-11.43 12.69z"/></svg>
             <span data-i18n="hudChrome.discord.loginCta">Continue with Discord</span>
           </button>
-          <div id="auth-or-divider" class="auth-or" hidden><span data-i18n="hudChrome.discord.orEmail">or use email</span></div>
+          <div id="auth-or-divider" class="auth-or"><span data-i18n="hudChrome.discord.orEmail">or use email</span></div>
 
           <div class="auth-field">
             <label for="login-user" class="auth-label" data-i18n="auth.username">Username</label>
@@ -1136,6 +1148,31 @@
               <button type="button" class="btn btn-secondary" id="account-manage-wallet" data-i18n="hudChrome.account.manageWallet">Manage Wallet</button>
             </section>
 
+            <section class="account-card" id="account-x-card" hidden>
+              <h3 class="account-card-title" data-i18n="hudChrome.x.account.title">X Account</h3>
+              <p class="account-summary" data-i18n="hudChrome.x.account.summary">Link X so other players and companion apps can recognize your public profile.</p>
+              <div id="account-x-linked" hidden>
+                <p class="account-meta"><span data-i18n="hudChrome.x.account.linkedAs">Linked as</span> <a id="account-x-profile" class="auth-link" href="https://x.com" target="_blank" rel="noopener noreferrer"></a></p>
+                <button type="button" class="btn btn-secondary" id="account-x-unlink" data-i18n="hudChrome.x.account.unlink">Unlink X</button>
+              </div>
+              <div id="account-x-unlinked" hidden>
+                <button type="button" class="btn btn-primary" id="account-x-link" data-i18n="hudChrome.x.account.link">Link X</button>
+              </div>
+              <div id="account-x-keep" class="account-form" hidden>
+                <p class="account-hint" data-i18n="hudChrome.x.keep.body">Set a password so you can still log in with your username after unlinking X.</p>
+                <div class="auth-field">
+                  <label for="account-x-keep-pass" class="auth-label" data-i18n="auth.password">Password</label>
+                  <input id="account-x-keep-pass" type="password" maxlength="128" autocomplete="new-password" data-i18n-placeholder="auth.passwordPlaceholder" placeholder="Enter password" />
+                </div>
+                <div class="auth-field">
+                  <label for="account-x-keep-confirm" class="auth-label" data-i18n="hudChrome.discord.keep.confirmLabel">Confirm password</label>
+                  <input id="account-x-keep-confirm" type="password" maxlength="128" autocomplete="new-password" />
+                </div>
+                <button type="button" class="btn btn-danger" id="account-x-keep-submit" data-i18n="hudChrome.x.keep.submit">Set password and unlink</button>
+              </div>
+              <div id="account-x-msg" class="auth-field-msg" aria-live="polite"></div>
+            </section>
+
             <!-- Characters -->
             <section class="account-card">
               <h3 class="account-card-title" data-i18n="hudChrome.account.sectionCharacters">Characters</h3>
@@ -1276,7 +1313,7 @@
         </div>
         <div id="mobile-extra-grid">
           <button type="button" class="mobile-btn" id="mobile-social" data-i18n-title="hud.keybinds.actions.social" data-i18n-aria="hud.keybinds.actions.social" title="Friends &amp; Guild" aria-label="Friends &amp; Guild" data-icon="social"><span class="mobile-label" data-i18n="hud.core.mobileSocial">Social</span></button>
-          <button type="button" class="mobile-btn" id="mobile-discord" hidden data-i18n-title="hudChrome.discord.title" data-i18n-aria="hudChrome.discord.title" title="Discord" aria-label="Discord" data-icon="discord"><span class="mobile-label" data-i18n="hudChrome.discord.title">Discord</span></button>
+          <button type="button" class="mobile-btn" id="mobile-discord" hidden data-i18n-title="hudChrome.community.title" data-i18n-aria="hudChrome.community.title" title="Community" aria-label="Community" data-icon="discord"><span class="mobile-label" data-i18n="hudChrome.community.title">Community</span></button>
           <button type="button" class="mobile-btn" id="mobile-emote" data-i18n-title="hudChrome.emoteWheel.label" data-i18n-aria="hudChrome.emoteWheel.label" title="Emotes" aria-label="Emotes" data-icon="emote"><span class="mobile-label" data-i18n="hudChrome.emoteWheel.label">Emotes</span></button>
           <button type="button" class="mobile-btn" id="mobile-arena" data-i18n-title="hud.keybinds.actions.arena" data-i18n-aria="hud.keybinds.actions.arena" title="Arena (Ashen Coliseum)" aria-label="Arena (Ashen Coliseum)" data-icon="arena"><span class="mobile-label" data-i18n="hud.core.mobileArena">Arena</span></button>
           <button type="button" class="mobile-btn" id="mobile-menu" data-i18n-title="hud.options.gameMenu" data-i18n-aria="hud.options.gameMenu" title="Game Menu" aria-label="Game Menu" data-icon="menu"><span class="mobile-label" data-i18n="hud.core.mobileMenu">Menu</span></button>

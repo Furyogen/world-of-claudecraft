@@ -73,6 +73,9 @@ CREATE INDEX IF NOT EXISTS discord_pending_logins_expires ON discord_pending_log
 -- Additive + idempotent so existing deployments upgrade on boot.
 ALTER TABLE discord_pending_logins ADD COLUMN IF NOT EXISTS discord_email TEXT;
 ALTER TABLE discord_pending_logins ADD COLUMN IF NOT EXISTS discord_email_verified BOOLEAN NOT NULL DEFAULT FALSE;
+-- Account-level UI preference for the in-game link prompt. Stored on accounts
+-- so dismissal follows the player across browsers and devices.
+ALTER TABLE accounts ADD COLUMN IF NOT EXISTS discord_link_prompt_hidden BOOLEAN NOT NULL DEFAULT FALSE;
 -- Authored, account-wide reward balance. points = spendable, lifetime_points =
 -- monotonic total that drives the status tier (status never drops on a spend).
 CREATE TABLE IF NOT EXISTS reward_points (
@@ -129,6 +132,27 @@ export async function discordForAccount(
     [accountId],
   );
   return res.rows[0] ?? null;
+}
+
+export async function discordPromptHiddenForAccount(
+  pool: Pool,
+  accountId: number,
+): Promise<boolean> {
+  const res = await pool.query('SELECT discord_link_prompt_hidden FROM accounts WHERE id = $1', [
+    accountId,
+  ]);
+  return res.rows[0]?.discord_link_prompt_hidden === true;
+}
+
+export async function setDiscordPromptHidden(
+  pool: Pool,
+  accountId: number,
+  hidden: boolean,
+): Promise<void> {
+  await pool.query('UPDATE accounts SET discord_link_prompt_hidden = $2 WHERE id = $1', [
+    accountId,
+    hidden,
+  ]);
 }
 
 export async function accountForDiscord(pool: Pool, discordUserId: string): Promise<number | null> {

@@ -1,4 +1,5 @@
 import type * as http from 'node:http';
+import './env';
 import { DEFAULT_RAID_RESET_TIME_ZONE, isSupportedTimeZone } from './raid_reset';
 
 // The realm (world/shard) this server process serves. In the process-per-realm

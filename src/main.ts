@@ -130,6 +130,7 @@ import { assembleBugReportMeta } from './ui/bug_report';
 import { ChatCommandMenu } from './ui/chat_command_menu';
 import { chatInputSize } from './ui/chat_input_autosize';
 import { CLASS_DETAILS, SIGNATURE_ABILITIES } from './ui/class_details_data';
+import { renderCommunityWidget } from './ui/community_widget';
 import { devTierByIndex, devTierDisplayName } from './ui/dev_tier';
 import {
   type DiscordAccountStatus,
@@ -145,7 +146,6 @@ import {
   setDiscordStatus,
   setDiscordUiEnabled,
 } from './ui/discord_status';
-import { renderDiscordWidget } from './ui/discord_widget';
 import { classDisplayName, tEntity } from './ui/entity_i18n';
 import { FocusManager, type FocusTrapHandle } from './ui/focus_manager';
 import { Hud } from './ui/hud';
@@ -195,6 +195,13 @@ import {
   setWocBalance,
   shouldDisconnectUnverifiedWallet,
 } from './ui/wallet_balance';
+import {
+  onXStatusChange,
+  resetXStatus,
+  setXStatus,
+  type XAccountStatus,
+  xStatus,
+} from './ui/x_status';
 import { formatXp } from './ui/xp_bar';
 import type { IWorld, LeaderboardEntry } from './world_api';
 
@@ -2075,6 +2082,7 @@ async function startGame(
   // perf overlay's Jitter row.
   let onlineJitterMs = 0;
   let gameInputReady = false;
+  accountLinkPromptGameInputReady = false;
 
   // Camera follow state: keyboard turning advances facing in 20Hz sim steps,
   // so the camera tracks the player's render-interpolated facing per frame
@@ -2644,6 +2652,8 @@ async function startGame(
       if (intro) intro.startedAt = performance.now();
       window.setTimeout(() => {
         gameInputReady = true;
+        accountLinkPromptGameInputReady = true;
+        updateAccountLinkPrompt();
         perf.reset();
         startPerfReporter({
           perf,
@@ -3230,12 +3240,16 @@ function enterLoggedInChrome(): void {
   // Becoming logged-in (fresh login OR restored session): pull Discord status so
   // the unlinked CTA banner can appear immediately, not only after opening the panel.
   void refreshDiscordStatus();
+  void refreshXStatus();
 }
 
 function enterLoggedOutChrome(): void {
-  // Leaving the logged-in state hides the Discord CTA + panel.
+  // Leaving the logged-in state hides Community account prompts + panel.
   setDiscordUiEnabled(false);
+  resetXStatus();
+  accountLinkPromptGameInputReady = false;
   document.getElementById('discord-cta-banner')?.setAttribute('hidden', '');
+  document.getElementById('x-link-prompt')?.setAttribute('hidden', '');
   const dw = document.getElementById('discord-window');
   if (dw) dw.hidden = true;
   loggedInNavItems.forEach((sel) => {
@@ -3259,7 +3273,8 @@ function logoutAccount(): void {
 }
 
 function setAccountFieldMsg(sel: string, text: string, ok: boolean): void {
-  const el = $(sel);
+  const el = document.querySelector<HTMLElement>(sel);
+  if (!el) return;
   el.textContent = text;
   el.classList.toggle('is-error', !ok && text !== '');
   el.classList.toggle('is-ok', ok && text !== '');
@@ -3361,6 +3376,7 @@ async function loadAccountPortal(setChrome: boolean): Promise<void> {
       false,
       acct.twoFactorEnabled,
     );
+    void refreshXStatus();
   } catch (err) {
     if (isAuthError(err)) {
       handleAccountSessionExpired();
@@ -3378,6 +3394,7 @@ async function loadAccountPortal(setChrome: boolean): Promise<void> {
       }),
       true,
     );
+    void refreshXStatus();
   }
 }
 
@@ -3511,6 +3528,43 @@ function setupAccountPortal(): void {
   document
     .getElementById('account-manage-wallet')
     ?.addEventListener('click', () => accountGoToCharacters(true));
+  document.getElementById('account-x-link')?.addEventListener('click', () => startXOAuth());
+  document.getElementById('account-x-unlink')?.addEventListener('click', () => {
+    const keep = document.getElementById('account-x-keep');
+    if (!accountXPasswordSet) {
+      if (keep) keep.hidden = false;
+      (document.getElementById('account-x-keep-pass') as HTMLInputElement | null)?.focus();
+      return;
+    }
+    void api
+      .unlinkX()
+      .then(() => {
+        setAccountFieldMsg('#account-x-msg', t('hudChrome.x.account.unlinked'), true);
+        return refreshXStatus();
+      })
+      .catch((err) => setAccountFieldMsg('#account-x-msg', userFacingApiError(err), false));
+  });
+  document.getElementById('account-x-keep-submit')?.addEventListener('click', () => {
+    const pass =
+      (document.getElementById('account-x-keep-pass') as HTMLInputElement | null)?.value ?? '';
+    const confirm =
+      (document.getElementById('account-x-keep-confirm') as HTMLInputElement | null)?.value ?? '';
+    if (pass.length < DISCORD_KEEP_PASSWORD_MIN) {
+      setAccountFieldMsg('#account-x-msg', t('hudChrome.discord.keep.tooShort'), false);
+      return;
+    }
+    if (pass !== confirm) {
+      setAccountFieldMsg('#account-x-msg', t('hudChrome.discord.keep.mismatch'), false);
+      return;
+    }
+    void api
+      .unlinkX(pass)
+      .then(() => {
+        setAccountFieldMsg('#account-x-msg', t('hudChrome.x.account.unlinked'), true);
+        return refreshXStatus();
+      })
+      .catch((err) => setAccountFieldMsg('#account-x-msg', userFacingApiError(err), false));
+  });
   ($('#account-go-characters') as HTMLElement).addEventListener('click', () =>
     accountGoToCharacters(false),
   );
@@ -5442,6 +5496,7 @@ let discordPopup: Window | null = null;
 function flashDiscordError(): void {
   const el = document.getElementById('login-error');
   if (el) el.textContent = t('hudChrome.discord.link.error');
+  showAccountLinkPromptError('discord', t('hudChrome.discord.link.error'));
 }
 
 function startDiscordOAuth(mode: 'login' | 'link'): void {
@@ -5622,6 +5677,7 @@ function wireGithubLink(): void {
 function coerceDiscordStatus(d: Record<string, unknown>): DiscordAccountStatus {
   return {
     linked: d.linked === true,
+    promptHidden: d.promptHidden === true,
     username: typeof d.username === 'string' ? d.username : null,
     avatar: typeof d.avatar === 'string' ? d.avatar : null,
     guildMember: d.guildMember === true,
@@ -5673,50 +5729,26 @@ async function refreshDiscordStatus(): Promise<void> {
   } catch (err) {
     console.error('[discord] could not load status', err);
   }
-  updateDiscordCtaBanner();
+  updateAccountLinkPrompt();
 }
 
 const DISCORD_CTA_DISMISS_KEY = 'woc_discord_cta_dismissed';
 
-// Show the "link your Discord" CTA banner to a logged-in player who has not linked
-// yet (and has not dismissed it this session), with live online/total counts.
+// Legacy top banner stays hidden; the in-game account prompt owns Discord linking.
 function updateDiscordCtaBanner(): void {
   const banner = document.getElementById('discord-cta-banner');
-  if (!banner) return;
-  let dismissed = false;
-  try {
-    dismissed = sessionStorage.getItem(DISCORD_CTA_DISMISS_KEY) === '1';
-  } catch {
-    /* storage disabled */
-  }
-  const status = discordStatus();
-  const show =
-    DISCORD_BUILD_ENABLED && discordUiEnabled() && !!api.token && !status.linked && !dismissed;
-  banner.hidden = !show;
-  if (!show) return;
-  const stats = document.getElementById('discord-cta-stats');
-  if (stats) {
-    const p = discordPresence();
-    stats.textContent =
-      p.memberTotal > 0
-        ? t('hudChrome.discord.cta.stats', {
-            online: formatNumber(p.onlineCount),
-            total: formatNumber(p.memberTotal),
-          })
-        : t('hudChrome.discord.cta.statsLoading');
-  }
+  if (banner) banner.hidden = true;
 }
 
-// Show/hide the Discord entry in the mobile "More" tray. Mobile has no keyboard,
-// so the U-key panel toggle is unreachable there; this button is the touch path
-// into the same #discord-window (link / unlink / status). It is only meaningful
-// when Discord is available: the client build enables it, the server has it on,
-// and the player is logged in. Driven off the same status-change signal as the
-// panel, so it tracks login/logout and the server's enabled flag.
+// Show/hide the Community entry in the mobile "More" tray. Mobile has no
+// keyboard, so the U-key panel toggle is unreachable there; this button is the
+// touch path into the same panel.
 function syncDiscordMobileEntry(): void {
   const btn = document.getElementById('mobile-discord');
   if (!btn) return;
-  const available = DISCORD_BUILD_ENABLED && discordUiEnabled() && !!api.token;
+  const available =
+    !!api.token &&
+    ((DISCORD_BUILD_ENABLED && discordUiEnabled()) || (X_BUILD_ENABLED && xStatus().enabled));
   btn.hidden = !available;
 }
 
@@ -5735,25 +5767,23 @@ function wireDiscordCtaBanner(): void {
   });
 }
 
-// In-game Discord panel (#discord-window): link status, status tiers, presence.
+// In-game Community panel (#discord-window): Discord and X link status.
 let discordPanelOpen = false;
-function renderDiscordPanel(): void {
+function renderCommunityPanel(): void {
   const el = document.getElementById('discord-window');
   if (!el) return;
-  renderDiscordWidget(
+  renderCommunityWidget(
     el,
     {
-      enabled: discordUiEnabled(),
-      status: discordStatus(),
-      presence: discordPresence(),
-      inviteUrl: discordInviteUrl(),
-      characterName: null,
+      discordEnabled: discordUiEnabled(),
+      discordStatus: discordStatus(),
+      discordPresence: discordPresence(),
+      discordInviteUrl: discordInviteUrl(),
+      xStatus: xStatus(),
     },
     {
-      attachTooltip: () => {},
-      hideTooltip: () => {},
-      onLink: () => startDiscordOAuth('link'),
-      onUnlink: () => {
+      onDiscordLink: () => startDiscordOAuth('link'),
+      onDiscordUnlink: () => {
         // A Discord-provisioned account (no real password) must set one first, or
         // unlinking would strand it. Collect it via the keep-account modal.
         if (!discordStatus().passwordSet) {
@@ -5773,7 +5803,23 @@ function renderDiscordPanel(): void {
             console.error('[discord] unlink failed', err);
           });
       },
-      onOpenUrl: (url) => {
+      onDiscordOpen: (url) => {
+        if (url) window.open(url, '_blank', 'noopener,noreferrer');
+      },
+      onXLink: () => startXOAuth(),
+      onXUnlink: () => {
+        void api
+          .unlinkX()
+          .then(() => refreshXStatus())
+          .catch((err) => {
+            if ((err as { status?: number })?.status === 400) {
+              setAccountFieldMsg('#account-x-msg', t('hudChrome.x.keep.body'), false);
+              return;
+            }
+            console.error('[x] unlink failed', err);
+          });
+      },
+      onXOpen: (url) => {
         if (url) window.open(url, '_blank', 'noopener,noreferrer');
       },
       onClose: () => toggleDiscordPanel(false),
@@ -5782,25 +5828,33 @@ function renderDiscordPanel(): void {
 }
 function toggleDiscordPanel(open?: boolean): void {
   const el = document.getElementById('discord-window');
-  if (!el || !DISCORD_BUILD_ENABLED || !api.token) return;
+  if (!el || !api.token) return;
   discordPanelOpen = open ?? !discordPanelOpen;
   el.hidden = !discordPanelOpen;
   if (discordPanelOpen) {
-    void refreshDiscordStatus().then(renderDiscordPanel);
-    renderDiscordPanel();
+    void Promise.all([refreshDiscordStatus(), refreshXStatus()]).then(renderCommunityPanel);
+    renderCommunityPanel();
   }
 }
 // Keep an open panel in sync as status/presence updates arrive.
 onDiscordStatusChange(() => {
+  updateAccountLinkPrompt();
   syncDiscordMobileEntry();
-  if (discordPanelOpen) renderDiscordPanel();
+  if (discordPanelOpen) renderCommunityPanel();
 });
-// The Discord panel toggles via the rebindable `discord` keybind action (default
+onXStatusChange(() => {
+  paintAccountXStatus();
+  updateAccountLinkPrompt();
+  syncDiscordMobileEntry();
+  if (discordPanelOpen) renderCommunityPanel();
+});
+// The Community panel toggles via the rebindable `discord` keybind action (default
 // U), dispatched through onUiKey above like every other interface window; the
 // build/token guard lives in toggleDiscordPanel.
 // Light periodic refresh so the panel's online/presence stays current while logged in.
 setInterval(() => {
   if (DISCORD_BUILD_ENABLED && api.token) void refreshDiscordStatus();
+  if (X_BUILD_ENABLED && api.token) void refreshXStatus();
 }, 45_000);
 
 // ── Keep-account-before-unlink modal (#discord-keep-modal) ───────────────────
@@ -5853,7 +5907,7 @@ function wireDiscordKeepModal(): void {
         closeDiscordKeepModal();
         return refreshDiscordStatus();
       })
-      .then(() => renderDiscordPanel())
+      .then(() => renderCommunityPanel())
       .catch((err) => {
         if (errEl) errEl.textContent = userFacingApiError(err);
       });
@@ -6018,6 +6072,214 @@ function clearDiscordChoice(): void {
   } catch {
     /* storage disabled */
   }
+}
+
+// X account linking + account-portal / in-game prompt status.
+const X_BUILD_ENABLED = !NATIVE_APP && String(import.meta.env.VITE_X_DISABLED ?? '').trim() !== '1';
+let xPopup: Window | null = null;
+let accountXPasswordSet = true;
+let accountLinkPromptGameInputReady = false;
+type AccountLinkProvider = 'x' | 'discord';
+let activeAccountLinkPrompt: AccountLinkProvider | null = null;
+
+const X_PROMPT_LOGO =
+  '<svg viewBox="0 0 300 300.251" aria-hidden="true"><path fill="currentColor" d="M178.57 127.15 290.27 0h-26.46l-97.03 110.38L89.34 0H0l117.13 166.93L0 300.25h26.46l102.4-116.59 81.8 116.59h89.34M36.01 19.54H76.66l187.13 262.13h-40.66"/></svg>';
+const DISCORD_PROMPT_LOGO =
+  '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.32 4.37A19.8 19.8 0 0 0 15.36 2.8a13.66 13.66 0 0 0-.64 1.32 18.47 18.47 0 0 0-5.45 0 13.02 13.02 0 0 0-.65-1.32 19.73 19.73 0 0 0-4.96 1.58C.53 9.03-.32 13.56.1 18.02a19.9 19.9 0 0 0 6.08 3.08c.49-.67.93-1.38 1.3-2.13-.72-.27-1.41-.6-2.06-.98.17-.13.34-.26.5-.4a14.16 14.16 0 0 0 12.16 0c.16.14.33.27.5.4-.65.39-1.34.72-2.07.99.38.74.81 1.45 1.31 2.12a19.86 19.86 0 0 0 6.08-3.08c.5-5.17-.85-9.66-3.58-13.65ZM8.02 15.28c-1.18 0-2.15-1.08-2.15-2.41 0-1.33.95-2.42 2.15-2.42 1.2 0 2.17 1.1 2.15 2.42 0 1.33-.95 2.41-2.15 2.41Zm7.96 0c-1.18 0-2.15-1.08-2.15-2.41 0-1.33.95-2.42 2.15-2.42 1.2 0 2.17 1.1 2.15 2.42 0 1.33-.95 2.41-2.15 2.41Z"/></svg>';
+
+function flashXLinkError(): void {
+  setAccountFieldMsg('#account-x-msg', t('hudChrome.x.link.error'), false);
+  showAccountLinkPromptError('x', t('hudChrome.x.link.error'));
+}
+
+function startXOAuth(): void {
+  if (!api.token) return;
+  const popup = window.open('about:blank', 'woc-x', 'width=520,height=720');
+  xPopup = popup;
+  void api
+    .xStart()
+    .then(({ url }) => {
+      if (popup) popup.location.href = url;
+      else flashXLinkError();
+    })
+    .catch((err) => {
+      console.error('[x] could not start oauth', err);
+      popup?.close();
+      flashXLinkError();
+    });
+}
+
+window.addEventListener('message', (e: MessageEvent) => {
+  if (e.origin !== location.origin) return;
+  const d = e.data as { source?: string; ok?: boolean; mode?: string } | null;
+  if (d?.source !== 'woc-x') return;
+  xPopup?.close();
+  xPopup = null;
+  if (!d.ok) {
+    flashXLinkError();
+    return;
+  }
+  void refreshXStatus();
+});
+
+function coerceXStatus(d: Record<string, unknown>): XAccountStatus {
+  return {
+    enabled: d.enabled === true,
+    linked: d.linked === true,
+    promptHidden: d.promptHidden === true,
+    passwordSet: d.passwordSet !== false,
+    username: typeof d.username === 'string' ? d.username : null,
+    displayName: typeof d.displayName === 'string' ? d.displayName : null,
+    avatar: typeof d.avatar === 'string' ? d.avatar : null,
+    verified: d.verified === true,
+    verifiedType: typeof d.verifiedType === 'string' ? d.verifiedType : null,
+    profileUrl: typeof d.profileUrl === 'string' ? d.profileUrl : null,
+  };
+}
+
+function paintAccountXStatus(): void {
+  const card = document.getElementById('account-x-card');
+  if (!card || !X_BUILD_ENABLED || !api.token) {
+    if (card) card.hidden = true;
+    return;
+  }
+  const d = xStatus();
+  card.hidden = !d.enabled;
+  if (!d.enabled) return;
+  const linked = d.linked;
+  accountXPasswordSet = d.passwordSet;
+  const linkedEl = document.getElementById('account-x-linked');
+  const unlinkedEl = document.getElementById('account-x-unlinked');
+  const keepEl = document.getElementById('account-x-keep');
+  if (linkedEl) linkedEl.hidden = !linked;
+  if (unlinkedEl) unlinkedEl.hidden = linked;
+  if (keepEl) keepEl.hidden = true;
+  const profile = document.getElementById('account-x-profile') as HTMLAnchorElement | null;
+  if (profile) {
+    const username = d.username ?? '';
+    const displayName = d.displayName || username;
+    profile.textContent = username
+      ? `@${username}${d.verified ? ` ${t('hudChrome.x.verified')}` : ''}`
+      : displayName;
+    profile.href = d.profileUrl ?? 'https://x.com';
+  }
+  setAccountFieldMsg('#account-x-msg', '', true);
+}
+
+function updateAccountLinkPrompt(): void {
+  const prompt = document.getElementById('x-link-prompt');
+  if (!prompt) return;
+  const x = xStatus();
+  const discord = discordStatus();
+  const showX =
+    X_BUILD_ENABLED &&
+    !!api.token &&
+    x.enabled &&
+    !x.linked &&
+    !x.promptHidden &&
+    accountLinkPromptGameInputReady;
+  const showDiscord =
+    DISCORD_BUILD_ENABLED &&
+    discordUiEnabled() &&
+    !!api.token &&
+    !discord.linked &&
+    !discord.promptHidden &&
+    accountLinkPromptGameInputReady;
+  const rows: AccountLinkProvider[] = [];
+  if (showX) rows.push('x');
+  if (showDiscord) rows.push('discord');
+  activeAccountLinkPrompt = rows[0] ?? null;
+  prompt.hidden = rows.length === 0;
+  if (rows.length === 0) return;
+  prompt.dataset.provider = rows.join(' ');
+  prompt.innerHTML =
+    `<div class="x-link-prompt-head">` +
+    `<strong>${escapeHtml(t('hudChrome.community.integrations'))}</strong>` +
+    `<button type="button" id="x-link-prompt-close" class="x-link-prompt-close" aria-label="${escapeHtml(t('hudChrome.x.prompt.dismiss'))}" data-icon="close"></button>` +
+    `</div>` +
+    `<div class="x-link-prompt-list">` +
+    rows.map((provider) => accountLinkPromptRow(provider)).join('') +
+    `</div>`;
+  hydrateIcons(prompt);
+}
+
+function accountLinkPromptRow(provider: AccountLinkProvider): string {
+  const isDiscord = provider === 'discord';
+  const title = isDiscord ? t('hudChrome.discord.prompt.title') : t('hudChrome.x.prompt.title');
+  const body = isDiscord ? t('hudChrome.discord.prompt.body') : t('hudChrome.x.prompt.body');
+  const action = isDiscord ? t('hudChrome.discord.prompt.action') : t('hudChrome.x.account.link');
+  const logo = isDiscord ? DISCORD_PROMPT_LOGO : X_PROMPT_LOGO;
+  return (
+    `<div class="x-link-prompt-row" data-provider-row="${provider}">` +
+    `<span class="x-link-prompt-row-icon ${isDiscord ? 'discord' : 'x'}" aria-hidden="true">${logo}</span>` +
+    `<span class="x-link-prompt-row-copy">` +
+    `<strong>${escapeHtml(title)}</strong>` +
+    `<span>${escapeHtml(body)}</span>` +
+    `</span>` +
+    `<button type="button" class="x-link-prompt-row-action" data-account-link-provider="${provider}">${escapeHtml(action)}</button>` +
+    `</div>`
+  );
+}
+
+function showAccountLinkPromptError(provider: AccountLinkProvider, message: string): void {
+  const row = document.querySelector(
+    `[data-provider-row="${provider}"] .x-link-prompt-row-copy span`,
+  );
+  if (row) row.textContent = message;
+}
+
+async function refreshXStatus(): Promise<void> {
+  if (!X_BUILD_ENABLED || !api.token) {
+    resetXStatus();
+    return;
+  }
+  try {
+    const d = await api.xStatus();
+    setXStatus(coerceXStatus(d));
+  } catch (err) {
+    console.error('[x] could not load status', err);
+  }
+}
+
+function wireAccountLinkPrompt(): void {
+  document.addEventListener('click', (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    const linkButton = target.closest<HTMLElement>('[data-account-link-provider]');
+    if (linkButton) {
+      event.preventDefault();
+      const provider = linkButton.dataset.accountLinkProvider as AccountLinkProvider | undefined;
+      activeAccountLinkPrompt = provider ?? null;
+      if (provider === 'discord') {
+        startDiscordOAuth('link');
+        return;
+      }
+      if (provider === 'x') startXOAuth();
+      return;
+    }
+    if (!target.closest('#x-link-prompt-close')) return;
+    event.preventDefault();
+    const providers = Array.from(
+      document.querySelectorAll<HTMLElement>('[data-provider-row]'),
+      (row) => row.dataset.providerRow,
+    ).filter(
+      (provider): provider is AccountLinkProvider => provider === 'x' || provider === 'discord',
+    );
+    const prompt = document.getElementById('x-link-prompt');
+    if (prompt) prompt.hidden = true;
+    if (providers.includes('discord')) {
+      void api
+        .dismissDiscordPrompt()
+        .then(refreshDiscordStatus)
+        .catch((err) => console.error('[discord] could not dismiss prompt', err));
+    }
+    if (providers.includes('x')) {
+      void api
+        .dismissXPrompt()
+        .then(refreshXStatus)
+        .catch((err) => console.error('[x] could not dismiss prompt', err));
+    }
+  });
 }
 
 async function refreshWalletLinkStatus(): Promise<void> {
@@ -7253,6 +7515,7 @@ function wireStartScreens(): void {
   wireDiscordCtaBanner();
   wireDiscordKeepModal();
   wireRecoveryEmailModal();
+  wireAccountLinkPrompt();
 
   // First-time Discord login chooser: create a new account, or link an existing one.
   let pendingDiscordChoice: DiscordLoginChoice | null = null;
@@ -7383,7 +7646,7 @@ function wireStartScreens(): void {
   };
   if (DISCORD_BUILD_ENABLED) wireDiscordChoice();
 
-  // A just-completed Discord login should land straight in online play, not home.
+  // A just-completed external-provider login should land straight in online play, not home.
   let discordOnboarding = false;
   try {
     discordOnboarding = localStorage.getItem(DISCORD_ONBOARD_KEY) === '1';
@@ -7612,13 +7875,15 @@ function wireStartScreens(): void {
 
   // Initialize 3D character preview once assets are ready
   assetsReady().then(() => {
-    const activePanelId = ['#charselect-panel', '#offline-select'].find(
+    const activePanelId = ['#charselect-panel', '#charcreate-panel', '#offline-select'].find(
       (id) => !$(id).hasAttribute('hidden'),
     );
     const containerId =
       activePanelId === '#offline-select'
         ? '#offline-preview-container'
-        : '#online-preview-container';
+        : activePanelId === '#charcreate-panel'
+          ? '#charcreate-preview-container'
+          : '#online-preview-container';
     const container = $(containerId);
     const canvas = $('#char-preview-canvas') as HTMLCanvasElement | null;
     if (container && canvas) {
@@ -7626,10 +7891,15 @@ function wireStartScreens(): void {
       const selSelector =
         activePanelId === '#offline-select'
           ? '#offline-select .mini-class.sel'
-          : '#charcreate-panel .mini-class.sel';
+          : activePanelId === '#charcreate-panel'
+            ? '#charcreate-panel .mini-class.sel'
+            : '#char-list .char-row.sel';
       const selEl = document.querySelector(selSelector) as HTMLElement | null;
       const cls = selEl ? (selEl.dataset.class as PlayerClass) : 'warrior';
       characterPreview.setClass(cls);
+      if (activePanelId === '#charcreate-panel') refreshOnlineSkins(cls);
+      else if (activePanelId === '#offline-select') refreshOfflineSkins(cls);
+      syncPreviewAfterPanelLayout();
     }
     decorateClassChips();
   });

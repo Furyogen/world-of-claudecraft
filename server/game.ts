@@ -101,6 +101,7 @@ import { PgSocialDb } from './social_db';
 import { TickProfiler } from './tick_profiler';
 import { holderInfoForPubkey } from './woc_balance';
 import { isBackpressureExceeded } from './ws_backpressure';
+import { xFlairForAccount } from './x_db';
 
 const WORLD_SEED = 20061;
 const ALDRIC_METEOR_QUEST_ID = 'q_aldrics_fallen_star';
@@ -567,6 +568,11 @@ function identityFields(e: Entity): Record<string, unknown> {
   if (e.devTier) out.dvt = e.devTier; // developer-badge tier (cosmetic)
   if (e.devMergedPrs) out.dvc = e.devMergedPrs; // merged-PR count, for inspect/card
   if (e.githubLogin) out.dgl = e.githubLogin; // GitHub login (inspect readout + profile link)
+  if (e.xUsername) out.xun = e.xUsername; // linked X handle
+  if (e.xDisplayName) out.xdn = e.xDisplayName; // linked X display name
+  if (e.xAvatar) out.xav = e.xAvatar; // linked X profile image
+  if (e.xVerified) out.xv = true; // linked X verified badge
+  if (e.xVerifiedType) out.xvt = e.xVerifiedType; // X verified type
   if (e.guild) out.gd = e.guild;
   if (e.dungeonId) out.dgn = e.dungeonId;
   if (e.objectItemId) out.obj = e.objectItemId;
@@ -1193,6 +1199,31 @@ export class GameServer {
     }
   }
 
+  private async refreshXFlair(session: ClientSession): Promise<void> {
+    const flair = await xFlairForAccount(pool, session.accountId);
+    if (this.clients.get(session.pid) !== session) return;
+    const e = this.sim.entities.get(session.pid);
+    if (!e) return;
+    const username = flair?.username ?? undefined;
+    const displayName = flair?.displayName ?? undefined;
+    const avatar = flair?.avatarUrl ?? undefined;
+    const verified = flair?.verified === true ? true : undefined;
+    const verifiedType = flair?.verifiedType ?? undefined;
+    if (
+      e.xUsername !== username ||
+      e.xDisplayName !== displayName ||
+      e.xAvatar !== avatar ||
+      e.xVerified !== verified ||
+      e.xVerifiedType !== verifiedType
+    ) {
+      e.xUsername = username;
+      e.xDisplayName = displayName;
+      e.xAvatar = avatar;
+      e.xVerified = verified;
+      e.xVerifiedType = verifiedType;
+    }
+  }
+
   // Intercept a leading "!" community command in chat (lfg/wts/...): broadcast it
   // in-world and hand it to the bot for Discord cross-post. Returns true when it
   // consumed the line (so it is not sent as normal chat).
@@ -1299,6 +1330,9 @@ export class GameServer {
             ),
             this.refreshDevBadge(session).catch((err) =>
               console.error('dev badge refresh failed:', err),
+            ),
+            this.refreshXFlair(session).catch((err) =>
+              console.error('x flair refresh failed:', err),
             ),
           ]),
         ),
@@ -1635,6 +1669,7 @@ export class GameServer {
     void this.refreshDevBadge(session).catch((err) =>
       console.error('dev badge refresh failed:', err),
     );
+    void this.refreshXFlair(session).catch((err) => console.error('x flair refresh failed:', err));
     return session;
   }
 

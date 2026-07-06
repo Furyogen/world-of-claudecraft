@@ -4,6 +4,7 @@ import { buildDiscordWidgetView } from '../src/ui/discord_widget_view';
 
 const UNLINKED: DiscordAccountStatus = {
   linked: false,
+  promptHidden: false,
   username: null,
   avatar: null,
   guildMember: false,

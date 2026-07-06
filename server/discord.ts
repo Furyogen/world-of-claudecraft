@@ -36,6 +36,7 @@ import {
   createDiscordOAuthState,
   createDiscordPendingLogin,
   discordForAccount,
+  discordPromptHiddenForAccount,
   grantRewardPoints,
   linkDiscordToAccount,
   listSwagClaims,
@@ -43,6 +44,7 @@ import {
   peekDiscordPendingLogin,
   setDiscordGuildMember,
   setDiscordLinkEmail,
+  setDiscordPromptHidden,
   unlinkDiscord,
 } from './discord_db';
 import {
@@ -685,11 +687,12 @@ export async function handleDiscordStatus(
 }
 
 export async function discordStatusPayload(accountId: number): Promise<Record<string, unknown>> {
-  const [link, reward, claimedSwagIds, acct] = await Promise.all([
+  const [link, reward, claimedSwagIds, acct, promptHidden] = await Promise.all([
     discordForAccount(pool, accountId),
     loadRewardState(pool, accountId),
     listSwagClaims(pool, accountId),
     accountById(accountId),
+    discordPromptHiddenForAccount(pool, accountId),
   ]);
   const presence = discordPresenceCache();
   const cfg = discordConfig();
@@ -700,6 +703,7 @@ export async function discordStatusPayload(accountId: number): Promise<Record<st
     // Discord. Null when no guild is configured.
     widgetUrl: cfg?.guildId ? `https://discord.com/widget?id=${cfg.guildId}&theme=dark` : null,
     linked: link !== null,
+    promptHidden,
     // Whether the account has a real (owner-chosen) password. The client reads this
     // to decide whether unlinking must first set one (a Discord-only account with no
     // usable password would otherwise be stranded). Defaults true if the account row
@@ -723,6 +727,15 @@ export async function discordStatusPayload(accountId: number): Promise<Record<st
       voice: presence.voice,
     },
   };
+}
+
+export async function handleDiscordPromptDismiss(
+  _req: http.IncomingMessage,
+  res: http.ServerResponse,
+  accountId: number,
+): Promise<void> {
+  await setDiscordPromptHidden(pool, accountId, true);
+  return json(res, 200, { promptHidden: true });
 }
 
 // ── DELETE /api/discord (unlink) ───────────────────────────────────────────────

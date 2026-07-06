@@ -611,6 +611,10 @@ export class Api {
     return this.get('/api/discord');
   }
 
+  async dismissDiscordPrompt(): Promise<void> {
+    await this.post('/api/discord/prompt/dismiss', {});
+  }
+
   // Unlink Discord. A Discord-provisioned account (no real password yet) must send a
   // `password` so it stays reachable after unlinking; the server 400s with
   // 'password_required' otherwise. A normal account passes nothing.
@@ -633,6 +637,23 @@ export class Api {
   // Unlink GitHub from the current account.
   async unlinkGithub(): Promise<void> {
     await this.delete('/api/github', {});
+  }
+
+  // X account linking + status. X is link-only; it never starts a login session.
+  async xStart(): Promise<{ url: string }> {
+    return this.post('/api/auth/x/start?mode=link', {});
+  }
+
+  async xStatus(): Promise<Record<string, unknown>> {
+    return this.get('/api/x');
+  }
+
+  async unlinkX(password?: string): Promise<void> {
+    await this.delete('/api/x', password ? { password } : {});
+  }
+
+  async dismissXPrompt(): Promise<void> {
+    await this.post('/api/x/prompt/dismiss', {});
   }
 
   // ── Shareable player card + referrals ──────────────────────────────────────
@@ -1333,6 +1354,11 @@ export class ClientWorld implements IWorld {
         e.devTier = w.dvt ?? 0; // developer-badge tier (cosmetic, server-set)
         e.devMergedPrs = typeof w.dvc === 'number' ? w.dvc : undefined; // merged-PR count
         e.githubLogin = typeof w.dgl === 'string' ? w.dgl : undefined; // GitHub login
+        e.xUsername = typeof w.xun === 'string' ? w.xun : undefined; // linked X handle
+        e.xDisplayName = typeof w.xdn === 'string' ? w.xdn : undefined; // linked X display name
+        e.xAvatar = typeof w.xav === 'string' ? w.xav : undefined; // linked X profile image
+        e.xVerified = w.xv === true ? true : undefined; // linked X verified badge
+        e.xVerifiedType = typeof w.xvt === 'string' ? w.xvt : undefined; // X verified type
         e.scale = w.sc ?? 1;
         e.color = w.c ?? 0xffffff;
         e.dungeonId = w.dgn ?? null;

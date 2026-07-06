@@ -915,6 +915,11 @@ export const tr_TR: EnTranslations = {
         "button": "Tek tıkla bağla",
         "dismiss": "Kapat"
       },
+      "prompt": {
+        "title": "Link Discord in game",
+        "body": "Earn points from time played and community activity. Higher ranks unlock rewards.",
+        "action": "Link Discord"
+      },
       "link": {
         "cta": "Discord'u bağla",
         "relink": "Discord'u yeniden bağla",
@@ -953,6 +958,7 @@ export const tr_TR: EnTranslations = {
       "unlinkConfirm": "Discord hesabının bu oyun hesabıyla bağlantısı kaldırılsın mı?",
       "statusLabel": "Statü",
       "rank": "Rütbe",
+      "rankLine": "Rank: {rank}",
       "points": "Puan",
       "lifetime": "Tüm zamanlar",
       "toNext": "Sonraki rütbeye {points}",
@@ -1031,6 +1037,11 @@ export const tr_TR: EnTranslations = {
           "hint": "Topluluktan yardım iste"
         }
       }
+    },
+    "community": {
+      "title": "Community",
+      "close": "Close Community",
+      "integrations": "Integrations"
     },
     "devBadge": {
       "title": "Geliştirici",
@@ -1175,6 +1186,37 @@ export const tr_TR: EnTranslations = {
       "mining": "Madencilik",
       "logging": "Ağaç kesme",
       "herbalism": "Bitkicilik"
+    },
+    "x": {
+      "title": "X",
+      "verified": "verified",
+      "disabled": "X linking is not available right now.",
+      "visit": "Visit X profile",
+      "link": {
+        "benefits": "Link X so Yuumi and companion tools can recognize your public profile.",
+        "yuumi": "Yuumi can tag your X profile on stream posts.",
+        "rewards": "More linked-profile rewards are coming.",
+        "linkedBenefit": "Yuumi and companion tools can recognize this public X profile.",
+        "error": "Could not link X. Please try again."
+      },
+      "account": {
+        "title": "X Account",
+        "summary": "Link X so other players and companion apps can recognize your public profile.",
+        "linkedAs": "Linked as",
+        "link": "Link X",
+        "unlink": "Unlink X",
+        "linked": "X linked.",
+        "unlinked": "X unlinked."
+      },
+      "keep": {
+        "body": "Set a password so you can still log in with your username after unlinking X.",
+        "submit": "Set password and unlink"
+      },
+      "prompt": {
+        "title": "Link X in game",
+        "body": "Yuumi can tag your X profile on stream posts. More rewards are coming.",
+        "dismiss": "Dismiss X link prompt"
+      }
     }
   },
   "guide": {

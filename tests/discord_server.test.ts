@@ -21,6 +21,7 @@ import {
   handleDiscordCallback,
   handleDiscordLoginLink,
   handleDiscordLoginNew,
+  handleDiscordPromptDismiss,
   handleDiscordStart,
   handleDiscordStatus,
   handleDiscordUnlink,
@@ -69,6 +70,7 @@ let pendingRows: any[] = []; // discord_pending_logins peek/consume
 let accountByIdRows: any[] = []; // accountById (password_set / username)
 let findAccountRows: any[] = []; // findAccount (login/link password path)
 let accountInsertRow: any[] = [{ id: 5, username: 'Maxp', password_hash: 'h' }]; // createAccount
+let discordPromptHiddenRows: any[] = [];
 
 function defaultRouter(sql: string) {
   const s = String(sql).replace(/\s+/g, ' ').trim();
@@ -90,6 +92,10 @@ function defaultRouter(sql: string) {
     return { rows: accountInsertRow, rowCount: accountInsertRow.length };
   if (s.includes('FROM accounts WHERE username'))
     return { rows: findAccountRows, rowCount: findAccountRows.length };
+  if (s.includes('SELECT discord_link_prompt_hidden FROM accounts WHERE id'))
+    return { rows: discordPromptHiddenRows, rowCount: discordPromptHiddenRows.length };
+  if (s.includes('UPDATE accounts SET discord_link_prompt_hidden'))
+    return { rows: [], rowCount: 1 };
   if (s.includes('password_set, email') && s.includes('FROM accounts WHERE id'))
     return { rows: accountByIdRows, rowCount: accountByIdRows.length };
   if (s.includes('banned_at, suspended_until')) return { rows: [], rowCount: 0 }; // not locked
@@ -118,6 +124,7 @@ beforeEach(() => {
   accountByIdRows = [];
   findAccountRows = [];
   accountInsertRow = [{ id: 5, username: 'Maxp', password_hash: 'h' }];
+  discordPromptHiddenRows = [];
   resetDiscordRateLimits();
   resetAuthFailures();
   dbMock.query.mockReset();
@@ -213,7 +220,15 @@ describe('GET /api/discord (status)', () => {
     expect(data.linked).toBe(false);
     expect(data.points).toBe(0);
     expect(data.statusTier).toBe(0);
+    expect(data.promptHidden).toBe(false);
     expect(data.inviteUrl).toContain('discord.gg');
+  });
+
+  it('surfaces the persisted prompt hidden flag', async () => {
+    discordPromptHiddenRows = [{ discord_link_prompt_hidden: true }];
+    const res = makeRes();
+    await handleDiscordStatus(makeReq(), res, 1);
+    expect(parse(res).data.promptHidden).toBe(true);
   });
 
   it('reports linked status, points and derived tier', async () => {
@@ -253,6 +268,19 @@ describe('GET /api/discord (status)', () => {
     const res = makeRes();
     await handleDiscordStatus(makeReq(), res, 1);
     expect(parse(res).data.passwordSet).toBe(true);
+  });
+});
+
+describe('POST /api/discord/prompt/dismiss', () => {
+  it('persists the account-level hidden flag', async () => {
+    const res = makeRes();
+    await handleDiscordPromptDismiss(makeReq(), res, 1);
+    expect(parse(res)).toEqual({ status: 200, data: { promptHidden: true } });
+    expect(
+      dbMock.query.mock.calls.some((c) =>
+        String(c[0]).includes('UPDATE accounts SET discord_link_prompt_hidden'),
+      ),
+    ).toBe(true);
   });
 });
 

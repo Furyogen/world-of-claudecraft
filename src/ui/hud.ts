@@ -726,6 +726,11 @@ function yellVoiceKey(text: string): string {
     .slice(0, 60)}`;
 }
 
+function xProfileUrl(username: string | undefined): string | null {
+  if (!username || !/^[A-Za-z0-9_]{1,15}$/.test(username)) return null;
+  return `https://x.com/${encodeURIComponent(username)}`;
+}
+
 export class Hud {
   // Ability slots across both rows: 1..11 on the primary bar, 12..22 on the
   // secondary bar (slot 0 is the fixed Attack toggle on the primary bar). The
@@ -11326,17 +11331,18 @@ export class Hud {
     });
   }
 
-  // Fill the target frame's social/badge line: a linked player's nickname (with
-  // PFP), their staff-role tag, Discord rank, and developer badge. Hidden for mobs
-  // and players with no linked flair at all.
+  // Fill the target frame's social/badge line: linked Discord/X identity,
+  // staff-role tag, Discord rank, and developer badge. Hidden for mobs and
+  // players with no linked flair at all.
   private updateTargetDiscordLine(target: Entity): void {
     const el = this.targetDiscordEl;
     const tier = target.discordTier ?? 0;
     const showDevBadges = this.optionsHooks?.settings.get('showDevBadges') ?? true;
     const devIdx = showDevBadges ? (target.devTier ?? 0) : 0;
+    const hasX = !!target.xUsername;
     if (
       target.kind !== 'player' ||
-      (!tier && !target.discordName && !target.discordRole && !devIdx)
+      (!tier && !target.discordName && !target.discordRole && !devIdx && !hasX)
     ) {
       if (this.targetDiscordSig !== '') {
         this.targetDiscordSig = '';
@@ -11345,10 +11351,10 @@ export class Hud {
       }
       return;
     }
-    // This runs every frame the target frame updates; only rebuild when the Discord
+    // This runs every frame the target frame updates; only rebuild when the social
     // content actually changes (else a fresh <img> per frame would re-fetch the
     // avatar and, on a failing CDN load, flicker between the broken glyph and hidden).
-    const sig = `${tier}|${target.discordName ?? ''}|${target.discordRole ?? ''}|${target.discordAvatar ?? ''}|${devIdx}`;
+    const sig = `${tier}|${target.discordName ?? ''}|${target.discordRole ?? ''}|${target.discordAvatar ?? ''}|${devIdx}|${target.xUsername ?? ''}|${target.xDisplayName ?? ''}|${target.xAvatar ?? ''}|${target.xVerified ? 1 : 0}|${target.xVerifiedType ?? ''}`;
     if (sig === this.targetDiscordSig) return;
     this.targetDiscordSig = sig;
     const roleTagLabel = (key: string | undefined): string => {
@@ -11374,6 +11380,29 @@ export class Hud {
     if (target.discordName || target.discordAvatar) {
       parts.push(`<span class="uf-dc-name">${nameInner}</span>`);
     }
+    if (target.xUsername) {
+      const xHandle = `@${target.xUsername}`;
+      const xDisplay = target.xDisplayName || xHandle;
+      const href = xProfileUrl(target.xUsername);
+      const xInner = target.xAvatar
+        ? `<img src="${esc(target.xAvatar)}" referrerpolicy="no-referrer" alt="" draggable="false">${esc(xDisplay)}`
+        : esc(xDisplay);
+      const linkedXInner = href
+        ? `<a class="uf-x-link" href="${esc(href)}" target="_blank" rel="noopener noreferrer">${xInner}</a>`
+        : xInner;
+      parts.push(`<span class="uf-dc-name uf-x-name">${linkedXInner}</span>`);
+      const verified = target.xVerified
+        ? target.xVerifiedType
+          ? ` ${target.xVerifiedType}`
+          : ` ${t('hudChrome.x.verified')}`
+        : '';
+      const xTag = `${esc(xHandle)}${esc(verified)}`;
+      parts.push(
+        href
+          ? `<a class="uf-dc-chip x uf-x-link" href="${esc(href)}" target="_blank" rel="noopener noreferrer">${xTag}</a>`
+          : `<span class="uf-dc-chip x">${xTag}</span>`,
+      );
+    }
     const roleLabel = roleTagLabel(target.discordRole);
     if (roleLabel) {
       parts.push(
@@ -11390,8 +11419,9 @@ export class Hud {
     el.innerHTML = parts.join('');
     // Hide the external Discord avatar if its CDN image fails to load, so the line
     // never shows the browser's broken-image placeholder (the nickname stays).
-    const dcAvatar = el.querySelector<HTMLImageElement>('.uf-dc-name img');
-    if (dcAvatar) attachAvatarFallback(dcAvatar);
+    for (const avatar of el.querySelectorAll<HTMLImageElement>('.uf-dc-name img')) {
+      attachAvatarFallback(avatar);
+    }
     el.classList.add('show');
   }
 
@@ -11484,6 +11514,22 @@ export class Hud {
         devLoginHtml +
         `</div></div>`
       : '';
+    const xVerifiedLabel = e.xVerified
+      ? e.xVerifiedType
+        ? ` / ${esc(e.xVerifiedType)}`
+        : ` / ${esc(t('hudChrome.x.verified'))}`
+      : '';
+    const xHref = xProfileUrl(e.xUsername);
+    const xHtml = e.xUsername
+      ? `${xHref ? `<a class="inspect-holder inspect-holder-link" href="${esc(xHref)}" target="_blank" rel="noopener noreferrer">` : `<div class="inspect-holder">`}` +
+        (e.xAvatar
+          ? `<img class="inspect-holder-badge inspect-discord-pfp" src="${esc(e.xAvatar)}" referrerpolicy="no-referrer" alt="" draggable="false">`
+          : `<div class="inspect-holder-badge inspect-discord-pfp" aria-hidden="true">X</div>`) +
+        `<div class="inspect-holder-text">` +
+        `<div class="inspect-holder-name">${esc(e.xDisplayName || `@${e.xUsername}`)}</div>` +
+        `<div class="inspect-holder-sub">${esc(t('hudChrome.x.title'))} / @${esc(e.xUsername)}${xVerifiedLabel}</div>` +
+        `</div>${xHref ? `</a>` : `</div>`}`
+      : '';
     el.innerHTML =
       `<div class="panel-title"><span>${esc(t('character.profile'))}</span>` +
       `<button type="button" class="x-btn" data-close aria-label="${esc(t('character.closeProfile'))}">${svgIcon('close')}</button></div>` +
@@ -11494,6 +11540,7 @@ export class Hud {
       holderHtml +
       discordHtml +
       devHtml +
+      xHtml +
       `</div>` +
       // Worn gear, mirrored from the entity's render-only `equippedItems` (the
       // `eq` identity field). Item names/icons/tooltips resolve fully client-side

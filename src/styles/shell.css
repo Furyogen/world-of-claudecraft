@@ -3159,6 +3159,31 @@
       2px 2px 4px rgba(0, 0, 0, 0.8);
   }
 
+  /* Shared divider under the first-class Continue with Discord button. */
+  .auth-or {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 14px;
+    color: var(--color-text-muted, #9a8f70);
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .auth-or[hidden] {
+    display: none;
+  }
+  .auth-or::before,
+  .auth-or::after {
+    content: "";
+    flex: 1 1 auto;
+    height: 1px;
+    background: #463a1c;
+  }
+  #discord-choice-panel .auth-or {
+    margin: 10px 0;
+  }
+
   .auth-field {
     display: flex;
     flex-direction: column;
@@ -3568,20 +3593,18 @@
     height: 100%;
     object-fit: cover;
     object-position: center 42%;
-    /* held dark + slightly desaturated so the gold UI and white type stay dominant;
-       JS fades opacity in once the first frame is actually playing. */
-    opacity: 0;
+    /* Show the poster by default so a blocked/stalled trailer or partial startup
+       never leaves the landing page on a black backdrop. JS only adds drift once
+       the first video frame is actually playing. */
+    opacity: 0.85;
     filter: saturate(1.08) contrast(1.02) brightness(1);
     transform: scale(1.04); /* hide cover-fit edge crawl + give a faint Ken-Burns drift */
     transition: opacity 1.1s ease;
     will-change: opacity;
     pointer-events: none;
   }
-  /* The poster (the <video>'s poster frame) is held hidden by .bg-trailer's
-     opacity:0 above; it is revealed ONLY when JS adds trailer-ready (the video
-     started, or a play/decode failure fallback) or backdrop-static (the static
-     poster path). That is what keeps the still key-art from flashing before the
-     trailer plays. */
+  /* The poster (the <video>'s poster frame) is visible from first paint. If the
+     trailer can play, JS swaps in the mp4 and adds trailer-playing for drift. */
   /* The backdrop only shows on the Play page; switchMainView toggles this when
      navigating to High Scores / Wiki / News / Download. */
   #start-screen-backdrop.trailer-off .bg-trailer {
@@ -5349,6 +5372,15 @@
   .inspect-holder-sub {
     font-size: 11px;
     color: var(--color-text-muted);
+  }
+  .inspect-holder-link {
+    color: inherit;
+    text-decoration: none;
+    cursor: var(--cursor-point);
+  }
+  .inspect-holder-link:hover {
+    border-color: #8a8a8a;
+    background: rgba(20, 20, 28, 0.72);
   }
   /* Worn-gear paperdoll in the inspect/profile window (read-only). Reuses the
      character-window .equip-col / .equip-slot styling, but the two columns flex

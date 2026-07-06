@@ -5,11 +5,13 @@ import {
   consumeDiscordOAuthState,
   consumeDiscordPendingLogin,
   createDiscordPendingLogin,
+  discordPromptHiddenForAccount,
   grantRewardPoints,
   linkDiscordToAccount,
   loadRewardState,
   peekDiscordPendingLogin,
   setDiscordLinkEmail,
+  setDiscordPromptHidden,
 } from '../server/discord_db';
 
 // discord_db functions take the pg `pool` as an argument, so a fake pool (no
@@ -240,6 +242,22 @@ describe('loadRewardState', () => {
   it('defaults to zeros when no row exists', async () => {
     const { pool } = makePool(() => NONE);
     expect(await loadRewardState(pool, 1)).toEqual({ points: 0, lifetimePoints: 0 });
+  });
+});
+
+describe('discord prompt flag', () => {
+  it('reads and writes the account-level hidden flag', async () => {
+    const { pool, calls } = makePool((s) => {
+      if (s.includes('SELECT discord_link_prompt_hidden')) {
+        return { rows: [{ discord_link_prompt_hidden: true }], rowCount: 1 };
+      }
+      return NONE;
+    });
+    await expect(discordPromptHiddenForAccount(pool, 1)).resolves.toBe(true);
+    await setDiscordPromptHidden(pool, 1, true);
+    expect(
+      calls.some((c) => c.sql.includes('UPDATE accounts SET discord_link_prompt_hidden')),
+    ).toBe(true);
   });
 });
 

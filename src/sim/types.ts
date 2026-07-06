@@ -1681,6 +1681,14 @@ export interface Entity {
   devTier?: number;
   devMergedPrs?: number;
   githubLogin?: string;
+  // Linked X identity (cosmetic, server-set from the account's X link; the sim
+  // never reads any of it). Public profile handle/name/avatar ride identity
+  // fields for nameplates, inspect cards, and companion tooling.
+  xUsername?: string;
+  xDisplayName?: string;
+  xAvatar?: string;
+  xVerified?: boolean;
+  xVerifiedType?: string;
 }
 
 export interface NythraxisWardChannel {

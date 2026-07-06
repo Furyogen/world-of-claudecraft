@@ -915,6 +915,11 @@ export const ja_JP: EnTranslations = {
         "button": "ワンクリックで連携",
         "dismiss": "非表示にする"
       },
+      "prompt": {
+        "title": "Link Discord in game",
+        "body": "Earn points from time played and community activity. Higher ranks unlock rewards.",
+        "action": "Link Discord"
+      },
       "link": {
         "cta": "Discordを連携",
         "relink": "Discordを再連携",
@@ -953,6 +958,7 @@ export const ja_JP: EnTranslations = {
       "unlinkConfirm": "このゲームアカウントからDiscordアカウントの連携を解除しますか？",
       "statusLabel": "ステータス",
       "rank": "ランク",
+      "rankLine": "Rank: {rank}",
       "points": "ポイント",
       "lifetime": "累計",
       "toNext": "次のランクまで{points}",
@@ -1031,6 +1037,11 @@ export const ja_JP: EnTranslations = {
           "hint": "コミュニティに助けを求める"
         }
       }
+    },
+    "community": {
+      "title": "Community",
+      "close": "Close Community",
+      "integrations": "Integrations"
     },
     "devBadge": {
       "title": "開発者",
@@ -1175,6 +1186,37 @@ export const ja_JP: EnTranslations = {
       "mining": "採掘",
       "logging": "伐採",
       "herbalism": "薬草学"
+    },
+    "x": {
+      "title": "X",
+      "verified": "verified",
+      "disabled": "X linking is not available right now.",
+      "visit": "Visit X profile",
+      "link": {
+        "benefits": "Link X so Yuumi and companion tools can recognize your public profile.",
+        "yuumi": "Yuumi can tag your X profile on stream posts.",
+        "rewards": "More linked-profile rewards are coming.",
+        "linkedBenefit": "Yuumi and companion tools can recognize this public X profile.",
+        "error": "Could not link X. Please try again."
+      },
+      "account": {
+        "title": "X Account",
+        "summary": "Link X so other players and companion apps can recognize your public profile.",
+        "linkedAs": "Linked as",
+        "link": "Link X",
+        "unlink": "Unlink X",
+        "linked": "X linked.",
+        "unlinked": "X unlinked."
+      },
+      "keep": {
+        "body": "Set a password so you can still log in with your username after unlinking X.",
+        "submit": "Set password and unlink"
+      },
+      "prompt": {
+        "title": "Link X in game",
+        "body": "Yuumi can tag your X profile on stream posts. More rewards are coming.",
+        "dismiss": "Dismiss X link prompt"
+      }
     }
   },
   "guide": {
