@@ -6,6 +6,7 @@
 import { describe, expect, it } from 'vitest';
 import { HEROIC_DUNGEON_TUNING, HEROIC_MARK_ITEM_ID } from '../src/sim/content/dungeon_difficulty';
 import { DUNGEONS, ITEMS, instanceOrigin, MOBS } from '../src/sim/data';
+import { spawnNythraxisAdds } from '../src/sim/encounters/nythraxis';
 import {
   enterDungeon,
   instanceKeyFor,
@@ -15,7 +16,12 @@ import {
   updateInstances,
 } from '../src/sim/instances/dungeons';
 import { Sim } from '../src/sim/sim';
-import type { Entity, MobTemplate } from '../src/sim/types';
+import {
+  type Entity,
+  type MobTemplate,
+  NYTHRAXIS_ADD_ID,
+  NYTHRAXIS_BOSS_ID,
+} from '../src/sim/types';
 
 type AnySim = Sim & Record<string, any>;
 type AnyEntity = Entity & Record<string, any>;
@@ -203,7 +209,7 @@ describe('dungeons: heroic difficulty', () => {
     }
   });
 
-  it('does not apply heroic selection to Nythraxis quest or raid instance ids', () => {
+  it('never applies heroic selection to the Nythraxis attunement dungeon', () => {
     const sim = makeSim();
     const pid = sim.addPlayer('warrior', 'Attuned');
     sim.setDungeonDifficulty('heroic', pid);
@@ -500,6 +506,95 @@ describe('dungeons: heroic marks', () => {
         (s) => s.itemId === HEROIC_MARK_ITEM_ID,
       ),
     ).toBe(false);
+  });
+});
+
+describe('dungeons: heroic Nythraxis raid arena', () => {
+  // Compact attuned-raid harness (the full version lives in
+  // tests/nythraxis_encounter.test.ts): five raiders, tank attuned, leader
+  // selects the difficulty, tank enters and claims the arena.
+  function raidSetup(difficulty: 'normal' | 'heroic') {
+    const sim = makeSim(77);
+    const tank = sim.addPlayer('warrior', 'Tank');
+    sim.players.get(tank)!.questsDone.add('q_nythraxis_bound_guardian');
+    const raiders: number[] = [tank];
+    for (let i = 0; i < 4; i++) {
+      const pid = sim.addPlayer('mage', `Dps${i}`);
+      sim.partyInvite(pid, tank);
+      sim.partyAccept(pid);
+      raiders.push(pid);
+    }
+    sim.convertPartyToRaid(tank);
+    if (difficulty === 'heroic') sim.setDungeonDifficulty('heroic', tank);
+    sim.enterDungeon('nythraxis_boss_arena', tank);
+    const inst = claimedDungeon(sim, 'nythraxis_boss_arena', difficulty);
+    return { sim, tank, raiders, inst };
+  }
+
+  it('a heroic raid claim spawns the transformed boss and scaled add waves', () => {
+    const { sim, inst } = raidSetup('heroic');
+    expect(inst).toBeTruthy();
+    expect(inst.difficulty).toBe('heroic');
+
+    const boss = mobInInstance(sim, inst, NYTHRAXIS_BOSS_ID);
+    const pins = expectedHeroicStats(MOBS[NYTHRAXIS_BOSS_ID], 'nythraxis_boss_arena');
+    expect(boss.level).toBe(20);
+    expect(boss.maxHp).toBe(pins.maxHp);
+    expect(boss.weapon.min).toBe(pins.weaponMin);
+    expect(boss.weapon.max).toBe(pins.weaponMax);
+    expect(boss.mechanicDamageMult).toBe(
+      HEROIC_DUNGEON_TUNING.nythraxis_boss_arena.damageMultiplier,
+    );
+
+    // The encounter's scripted add waves inherit the instance difficulty.
+    spawnNythraxisAdds(sim.ctx, boss);
+    const adds = (boss.summonedIds as number[])
+      .map((id) => sim.entities.get(id) as AnyEntity)
+      .filter(Boolean);
+    expect(adds.length).toBeGreaterThan(0);
+    const addPins = expectedHeroicStats(MOBS[NYTHRAXIS_ADD_ID], 'nythraxis_boss_arena');
+    for (const add of adds) {
+      expect(add.templateId).toBe(NYTHRAXIS_ADD_ID);
+      expect(add.maxHp).toBe(addPins.maxHp);
+      expect(add.mechanicDamageMult).toBe(
+        HEROIC_DUNGEON_TUNING.nythraxis_boss_arena.damageMultiplier,
+      );
+    }
+  });
+
+  it('a normal raid claim is untransformed; a heroic kill pays marks to every raider', () => {
+    const normal = raidSetup('normal');
+    const nBoss = mobInInstance(normal.sim, normal.inst, NYTHRAXIS_BOSS_ID);
+    expect(nBoss.maxHp).toBe(51239); // the untransformed raid boss
+    expect(nBoss.mechanicDamageMult).toBeUndefined();
+    spawnNythraxisAdds(normal.sim.ctx, nBoss);
+    const nAdd = normal.sim.entities.get((nBoss.summonedIds as number[])[0]) as AnyEntity;
+    expect(nAdd.mechanicDamageMult).toBeUndefined();
+
+    const { sim, raiders, inst } = raidSetup('heroic');
+    const boss = mobInInstance(sim, inst, NYTHRAXIS_BOSS_ID);
+    raiders.forEach((pid, i) => {
+      teleport(sim, sim.entities.get(pid) as AnyEntity, boss.pos.x + (i - 2), boss.pos.z - 4);
+    });
+
+    (sim as any).dealDamage(
+      sim.entities.get(raiders[0]),
+      boss,
+      boss.hp + 100,
+      false,
+      'physical',
+      null,
+      'hit',
+    );
+
+    expect(boss.dead).toBe(true);
+    const marks = ((boss.loot?.items ?? []) as any[]).filter(
+      (s) => s.itemId === HEROIC_MARK_ITEM_ID,
+    );
+    expect(marks).toHaveLength(raiders.length);
+    expect(marks.flatMap((s) => s.personalFor).sort((a, b) => a - b)).toEqual(
+      [...raiders].sort((a, b) => a - b),
+    );
   });
 });
 

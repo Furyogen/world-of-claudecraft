@@ -70,4 +70,23 @@ export const HEROIC_DUNGEON_TUNING: Record<string, HeroicDungeonTuning> = {
     armorMultiplier: 1.2,
     finalBossId: 'korzul_the_gravewyrm',
   },
+  // The 10-player raid arena. Normal Nythraxis already swings ~3.7x harder
+  // than Korzul, so the raid's heroic multiplier is small in RELATIVE terms
+  // while landing the hardest absolute hits in the game: the boss chews a
+  // geared tank for ~38% of max hp per 2.6s swing (a raid brings two or
+  // three healers), add waves hit cloth for ~40%, and the percentage
+  // mechanics (Soul Rend splits, the 82% Deathless Rage wardstone check)
+  // stay difficulty-neutral by design. The attunement dungeon
+  // nythraxis_crypt is story content and deliberately has NO heroic record.
+  // The daily raid lockout is keyed by dungeon id, so it is SHARED across
+  // difficulties: one Nythraxis kill per day, normal or heroic.
+  nythraxis_boss_arena: {
+    id: 'nythraxis_boss_arena',
+    difficulty: 'heroic',
+    level: 20,
+    healthMultiplier: 1.6,
+    damageMultiplier: 1.6,
+    armorMultiplier: 1.2,
+    finalBossId: 'nythraxis_scourge_of_thornpeak',
+  },
 };

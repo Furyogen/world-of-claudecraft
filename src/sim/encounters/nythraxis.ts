@@ -28,6 +28,7 @@
 import { isStunned } from '../combat/cc';
 import { ITEMS, MOBS, NPCS, QUESTS } from '../data';
 import { createMob, createNpc } from '../entity';
+import { applyHeroicMobTuning, mobTemplateForDungeonDifficulty } from '../instances/difficulty';
 import type { PlayerMeta } from '../sim';
 import type { SimContext } from '../sim_context';
 import { clearThreat, threatEntries } from '../threat';
@@ -547,10 +548,20 @@ export function spawnNythraxisAdds(ctx: SimContext, boss: Entity): void {
     ctx.groundPos(boss.spawnPos.x + 12, back),
   ];
   const inst = ctx.instances.find((i) => i.partyKey !== null && i.mobIds.includes(boss.id));
+  // Add waves inherit the claimed instance's difficulty exactly like
+  // claimInstance spawns (the heroic transform is a no-op for normal; no rng
+  // is drawn here, so the parity full-pull golden is unaffected).
+  const difficulty = inst?.difficulty ?? 'normal';
+  const spawnTemplate = mobTemplateForDungeonDifficulty(
+    template,
+    inst?.dungeonId ?? '',
+    difficulty,
+  );
   const victimId = boss.aggroTargetId ?? threatEntries(boss, 1)[0]?.[0] ?? null;
   const victim = victimId !== null ? ctx.entities.get(victimId) : null;
   for (const pos of spawnPoints) {
-    const add = createMob(ctx.nextId++, template, template.maxLevel, pos);
+    const add = createMob(ctx.nextId++, spawnTemplate, spawnTemplate.maxLevel, pos);
+    applyHeroicMobTuning(add, inst?.dungeonId ?? '', difficulty);
     add.spawnPos = { ...boss.spawnPos };
     add.tappedById = boss.tappedById;
     ctx.addEntity(add);

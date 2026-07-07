@@ -37,11 +37,12 @@ const SYNTHETIC: MobTemplate = {
 };
 
 describe('heroic tuning data contract', () => {
-  it('covers exactly the four five-player dungeons with their final bosses', () => {
+  it('covers the four five-player dungeons plus the raid arena, with their final bosses', () => {
     expect([...HEROIC_DUNGEON_IDS].sort()).toEqual([
       'drowned_temple',
       'gravewyrm_sanctum',
       'hollow_crypt',
+      'nythraxis_boss_arena',
       'sunken_bastion',
     ]);
     expect(
@@ -51,6 +52,7 @@ describe('heroic tuning data contract', () => {
       sunken_bastion: 'vael_the_mistcaller',
       drowned_temple: 'ysolei',
       gravewyrm_sanctum: 'korzul_the_gravewyrm',
+      nythraxis_boss_arena: 'nythraxis_scourge_of_thornpeak',
     });
     for (const tuning of Object.values(HEROIC_DUNGEON_TUNING)) {
       expect(tuning.level).toBe(20);
@@ -77,17 +79,21 @@ describe('heroic tuning data contract', () => {
       sunken_bastion: [2.0, 3.8, 1.3],
       drowned_temple: [2.6, 4.2, 1.25],
       gravewyrm_sanctum: [2.0, 4.6, 1.2],
+      // The raid multiplier is smaller in RELATIVE terms because normal
+      // Nythraxis already lands the game's hardest hits (see the tuning
+      // table's comment); percentage mechanics stay difficulty-neutral.
+      nythraxis_boss_arena: [1.6, 1.6, 1.2],
     });
   });
 });
 
 describe('claimDifficultyForDungeon', () => {
-  it('grants heroic only to the four supported dungeons', () => {
+  it('grants heroic to the supported dungeons and the raid arena only', () => {
     expect(claimDifficultyForDungeon('hollow_crypt', 'heroic')).toBe('heroic');
     expect(claimDifficultyForDungeon('gravewyrm_sanctum', 'heroic')).toBe('heroic');
-    // Nythraxis quest and raid ids stay normal even when heroic is selected.
+    expect(claimDifficultyForDungeon('nythraxis_boss_arena', 'heroic')).toBe('heroic');
+    // The attunement dungeon is story content: normal even when heroic is selected.
     expect(claimDifficultyForDungeon('nythraxis_crypt', 'heroic')).toBe('normal');
-    expect(claimDifficultyForDungeon('nythraxis_boss_arena', 'heroic')).toBe('normal');
     expect(claimDifficultyForDungeon('no_such_dungeon', 'heroic')).toBe('normal');
     expect(claimDifficultyForDungeon('hollow_crypt', 'normal')).toBe('normal');
   });
