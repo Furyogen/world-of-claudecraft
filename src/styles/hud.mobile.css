@@ -2097,7 +2097,6 @@
     min-height: 44px;
   }
   /* Trial input controls: keep every tap target >= 44px on touch. */
-  body.mobile-touch .gh-pull-btn,
   body.mobile-touch .gh-court-btn {
     min-height: 48px;
   }
