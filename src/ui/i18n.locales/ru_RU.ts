@@ -6121,7 +6121,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.crafting.reagentLine': '{name}: {have}/{required}',
   // The Gauntlet event (v0.22.0).
   'hudChrome.gauntlet.title': 'Гаунтлет',
-  'hudChrome.gauntlet.pitch': 'Переживи каждое испытание. Последний, кто устоит, забирает весь приз.',
+  'hudChrome.gauntlet.pitch':
+    'Переживи каждое испытание. Последний, кто устоит, забирает весь приз.',
   'hudChrome.gauntlet.join': 'Вступить в Гаунтлет',
   'hudChrome.gauntlet.withdraw': 'Выйти',
   'hudChrome.gauntlet.lobbyJoined': 'В лобби: {count}',

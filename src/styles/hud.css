@@ -4352,8 +4352,8 @@
   #gauntlet-overlay[hidden] {
     display: none;
   }
-  #gauntlet-overlay[data-state='eliminated'],
-  #gauntlet-overlay[data-state='podium'] {
+  #gauntlet-overlay[data-state="eliminated"],
+  #gauntlet-overlay[data-state="podium"] {
     background: radial-gradient(ellipse at center, #00000066 0%, #000000cc 100%);
   }
   #gauntlet-overlay .go-eliminated,
@@ -4361,16 +4361,16 @@
   #gauntlet-overlay .go-podium {
     display: none;
   }
-  #gauntlet-overlay[data-state='eliminated'] .go-eliminated {
+  #gauntlet-overlay[data-state="eliminated"] .go-eliminated {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
   }
-  #gauntlet-overlay[data-state='spectating'] .go-spectate {
+  #gauntlet-overlay[data-state="spectating"] .go-spectate {
     display: flex;
   }
-  #gauntlet-overlay[data-state='podium'] .go-podium {
+  #gauntlet-overlay[data-state="podium"] .go-podium {
     display: flex;
   }
   .go-title {

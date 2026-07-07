@@ -116,7 +116,9 @@ export class GameAudio {
 
   levelUp(): void {
     const notes = [392, 523, 659, 784, 1046];
-    notes.forEach((f, i) => this.tone(f, 0.5, 0.18, 'triangle', i * 0.09));
+    notes.forEach((f, i) => {
+      this.tone(f, 0.5, 0.18, 'triangle', i * 0.09);
+    });
     this.noise(0.8, 5000, 0.06, 0.95, 'highpass');
   }
 
@@ -126,7 +128,9 @@ export class GameAudio {
   }
 
   questDone(): void {
-    [523, 659, 784].forEach((f, i) => this.tone(f, 0.35, 0.16, 'triangle', i * 0.12));
+    [523, 659, 784].forEach((f, i) => {
+      this.tone(f, 0.35, 0.16, 'triangle', i * 0.12);
+    });
   }
 
   coin(): void {
@@ -149,11 +153,15 @@ export class GameAudio {
   }
 
   drink(): void {
-    [0, 0.25, 0.5].forEach((d) => this.tone(420 + Math.random() * 80, 0.12, 0.08, 'sine', d, 280));
+    [0, 0.25, 0.5].forEach((d) => {
+      this.tone(420 + Math.random() * 80, 0.12, 0.08, 'sine', d, 280);
+    });
   }
 
   eat(): void {
-    [0, 0.3].forEach((d) => this.noise(0.1, 800, 0.1, 0.8, 'bandpass'));
+    [0, 0.3].forEach(() => {
+      this.noise(0.1, 800, 0.1, 0.8, 'bandpass');
+    });
   }
 
   click(): void {
@@ -227,7 +235,9 @@ export class GameAudio {
 
   // A new augment wave drops: triumphant rising fanfare — the party escalates.
   fiestaWave(): void {
-    [523, 659, 784, 1046].forEach((f, i) => this.tone(f, 0.4, 0.18, 'triangle', i * 0.08));
+    [523, 659, 784, 1046].forEach((f, i) => {
+      this.tone(f, 0.4, 0.18, 'triangle', i * 0.08);
+    });
     this.noise(0.6, 5000, 0.08, 0.9, 'highpass');
   }
 
@@ -312,7 +322,9 @@ export class GameAudio {
 
   // A short triumphant rising fanfare for the podium win.
   gauntletFanfare(): void {
-    [523, 659, 784, 1046].forEach((f, i) => this.tone(f, 0.4, 0.18, 'triangle', i * 0.12));
+    [523, 659, 784, 1046].forEach((f, i) => {
+      this.tone(f, 0.4, 0.18, 'triangle', i * 0.12);
+    });
     this.noise(0.5, 5000, 0.06, 0.9, 'highpass');
   }
 }
