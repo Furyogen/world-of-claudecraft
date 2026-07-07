@@ -18,16 +18,20 @@ import { Sim } from '../src/sim/sim';
 import { MELEE_RANGE } from '../src/sim/types';
 
 describe('mob combat profiles', () => {
-  it('keeps ordinary mobs on the legacy scale-based melee range profile', () => {
+  it('gives ordinary mobs a pursuing scale-based melee profile (hit-and-run)', () => {
     const profile = combatProfileForMob('forest_wolf', 1.5);
 
     expect(profile).toEqual({
       ...DEFAULT_MOB_COMBAT_PROFILE,
       meleeRange: scaledDefaultMobMeleeRange(1.5),
+      desiredRange: scaledDefaultMobMeleeRange(1.5) * 0.8,
     });
     expect(profile.meleeRange).toBe(MELEE_RANGE + 1.5);
     expect(profile.canLeash).toBe(true);
-    expect(profile.swingWhilePursuing).toBe(false);
+    expect(profile.swingWhilePursuing).toBe(true);
+    expect(profile.immediateSwingOnEnterRange).toBe(true);
+    expect(DEFAULT_MOB_COMBAT_PROFILE.swingWhilePursuing).toBe(true);
+    expect(DEFAULT_MOB_COMBAT_PROFILE.immediateSwingOnEnterRange).toBe(true);
   });
 
   it('gives Nythraxis a non-leashing pursuing melee profile', () => {

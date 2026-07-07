@@ -1,11 +1,14 @@
 // Mob locomotion (M2), extracted from the Sim monolith.
 //
-// This module owns the mob-AI locomotion core: the ~460-line updateMob dispatcher
-// (its corpse-tick prologue, the vision/owner/Nythraxis-add early returns, the
-// stun/polymorph/fear guard, and the idle/chase/attack/flee/evade switch) plus its
-// movement satellites resetEvadingMob, recoverFromFlee, and blockedTowardSpawn. The
-// boss-mechanic, pet, Nythraxis, and corpse-lifecycle branches the dispatcher
-// interleaves stay on Sim and are reached through the SimContext seam.
+// This module owns the mob-AI locomotion core: the updateMob dispatcher (its
+// corpse-tick prologue, the vision/owner/Nythraxis-add early returns, the
+// stun/polymorph/fear guard, and the idle/chase/attack/flee/evade switch), the
+// melee-gated boss attack mechanics (runMobAttackMechanics) and engaged-tick
+// pulses, plus the movement satellites resetEvadingMob, recoverFromFlee, and
+// blockedTowardSpawn. The engaged chase/attack states route through the general
+// combat-profile runner in the sibling mob/combat_profile.ts; the pet, Nythraxis
+// encounter, and corpse-lifecycle branches the dispatcher interleaves stay on Sim
+// and are reached through the SimContext seam.
 //
 // PRIME DIRECTIVE: this is a MOVE, not a rewrite. Every function below is the former
 // `Sim` method verbatim, with `this.X` rewritten to `ctx.X` (the SimContext seam),
@@ -249,18 +252,11 @@ export function updateMob(ctx: SimContext, mob: Entity): void {
       }
       break;
     }
-    case 'chase': {
-      const result = updateMobCombatProfile(ctx, mob, 'chase', () => {
-        // Anti-kite snare fires while chasing a fleeing target (the kite case).
-        pulseAntiKiteSnare(ctx, mob);
-        pulseLoudYell(ctx, mob);
-      });
-      if (result === 'runAttackMechanics') runMobAttackMechanics(ctx, mob);
-      break;
-    }
+    case 'chase':
     case 'attack': {
-      const result = updateMobCombatProfile(ctx, mob, 'attack', () => {
-        // Anti-kite snare also fires in melee (slows ranged players around the boss).
+      const result = updateMobCombatProfile(ctx, mob, () => {
+        // The anti-kite snare and loud battle cries fire once per engaged tick,
+        // from either engaged state (mid-chase is the kite case they exist for).
         pulseAntiKiteSnare(ctx, mob);
         pulseLoudYell(ctx, mob);
       });
