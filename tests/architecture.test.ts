@@ -172,6 +172,7 @@ const UI_PURE_CORES = [
   'src/ui/desktop_update_view.ts',
   'src/ui/corpse_harvest_view.ts',
   'src/ui/gauntlet_hud_view.ts',
+  'src/ui/gauntlet_trace_core.ts',
   'src/ui/hodrics_window_view.ts',
   'src/ui/hodrics_hud_view.ts',
   'src/game/ui_effects_profile.ts',

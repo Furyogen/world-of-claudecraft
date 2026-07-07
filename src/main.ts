@@ -1765,6 +1765,7 @@ async function startGame(
   // stroke via the per-frame suspendMovement driver (isWorldPointerStroking),
   // which also releases it automatically if the trial ends mid-stroke.
   const worldAim = new WorldAim();
+  hud.attachWorldAim(worldAim);
   input.worldPointerHook = (phase, x, y) => {
     const surf = worldAim.surface();
     if (!surf) return false;
