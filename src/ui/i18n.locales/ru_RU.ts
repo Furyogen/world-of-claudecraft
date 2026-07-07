@@ -6241,7 +6241,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gauntlet.hint.sentinel': 'Беги на зелёный. Замри на красный.',
   'hudChrome.gauntlet.hint.sigils':
     'Зажмите кнопку мыши и обводите линию, выгравированную на плите.',
-  'hudChrome.gauntlet.hint.pull': 'Кликайте, касайтесь или жмите пробел в такт барабану.',
+  'hudChrome.gauntlet.hint.pull': 'Кликайте по кругу, когда он сожмётся до внутреннего кольца.',
   'hudChrome.gauntlet.hint.echoWatch': 'Смотрите, в каком порядке вспыхивают камни.',
   'hudChrome.gauntlet.hint.echoAnswer': 'Кликайте по камням в том же порядке.',
   'hudChrome.gauntlet.hint.span': 'Перейдите по стеклу. В каждой паре одна панель хрупкая.',

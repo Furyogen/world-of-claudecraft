@@ -192,6 +192,8 @@ import { esc } from './esc';
 import { fctSpawnShape } from './fct_event';
 import { FctPainter } from './fct_painter';
 import { FocusManager, type FocusTrapHandle } from './focus_manager';
+import { GauntletCirclesPainter } from './gauntlet_circles_painter';
+import { gauntletCircleModel } from './gauntlet_circles_view';
 import { GauntletClock } from './gauntlet_clock';
 import { GauntletHudPainter } from './gauntlet_hud_painter';
 import { gauntletHudModel } from './gauntlet_hud_view';
@@ -3170,6 +3172,25 @@ export class Hud {
     court: $('#gauntlet-court'),
     courtRole: $('#gauntlet-court-role'),
   });
+  // The Great Pull's shrinking-circle input overlay: one pooled circle driven
+  // per frame from the viewer's wire schedule (pure size math in
+  // gauntlet_circles_view). The painter rolls the cosmetic screen point per
+  // spawn; the ring's pointerdown sends the authoritative pull by id.
+  private readonly gauntletCirclesPainter = new GauntletCirclesPainter(
+    this.writerFacet,
+    {
+      circle: $('#gauntlet-circle'),
+      ring: $('#gauntlet-circles .gc-ring'),
+    },
+    {
+      onCircleClick: (id) => {
+        this.sim.gauntletPullCircle(id);
+        triggerHaptic(10, loadHapticsEnabled());
+      },
+      viewport: () => ({ w: window.innerWidth, h: window.innerHeight }),
+      random: Math.random,
+    },
+  );
   // The in-world sigils stage: while trial 2 is live for a live contestant,
   // updateGauntletHud registers the venue's lectern slab as the world-aim
   // surface (main.ts routes claimed pointer strokes back through onPoint),
@@ -8982,6 +9003,8 @@ export class Hud {
     const run = this.sim.gauntletRun;
     const time = this.gauntletTimeNow();
     this.gauntletHudPainter.paint(gauntletHudModel({ run, time }));
+    // The Great Pull's screen-space circle rides the same wire view + clock.
+    this.gauntletCirclesPainter.paint(gauntletCircleModel({ run, time }));
     // Trials are legs-only (the sim rejects every cast; see casting_lifecycle):
     // the ability rows hide so the bar cannot even suggest pressing one. The
     // frame stack (player frame, xp bar) stays.
@@ -9017,13 +9040,9 @@ export class Hud {
   // ends. Key-diffed so the renderer sees one set per transition.
   private updateGauntletFocus(): void {
     const live = this.gauntletContestantRun();
-    const key = live?.sigils
-      ? ('sigils' as const)
-      : live?.pull
-        ? ('pull' as const)
-        : live?.echo
-          ? ('echo' as const)
-          : null;
+    // The pull holds no pose: it is standard third person, locked in place by
+    // the station pin, with the circle overlay as its input.
+    const key = live?.sigils ? ('sigils' as const) : live?.echo ? ('echo' as const) : null;
     if (key === this.gauntletFocusKey) return;
     this.gauntletFocusKey = key;
     if (!key || !live) {

@@ -198,7 +198,7 @@ export const zh_CN: EnTranslations = {
       "hint": {
         "sentinel": "绿灯快跑,红灯定住。",
         "sigils": "按住鼠标,沿石板上蚀刻的线条描画。",
-        "pull": "随每声鼓点点击、轻触或按空格键。",
+        "pull": "在圆圈缩到内环大小的瞬间点击它。",
         "echoWatch": "看好石头亮起的顺序。",
         "echoAnswer": "按同样的顺序点击石头。",
         "span": "横渡玻璃桥。每对板中藏着一块脆板。",

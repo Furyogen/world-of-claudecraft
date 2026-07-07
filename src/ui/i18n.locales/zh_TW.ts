@@ -5791,7 +5791,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gauntlet.echoRound': '第 {n} / {total} 輪',
   'hudChrome.gauntlet.hint.sentinel': '綠燈快跑,紅燈定住。',
   'hudChrome.gauntlet.hint.sigils': '按住滑鼠,沿石板上蝕刻的線條描畫。',
-  'hudChrome.gauntlet.hint.pull': '隨每聲鼓點點擊、輕觸或按空白鍵。',
+  'hudChrome.gauntlet.hint.pull': '在圓圈縮到內環大小的瞬間點擊它。',
   'hudChrome.gauntlet.hint.echoWatch': '看好石頭亮起的順序。',
   'hudChrome.gauntlet.hint.echoAnswer': '按同樣的順序點擊石頭。',
   'hudChrome.gauntlet.hint.span': '橫渡玻璃橋。每對板中藏著一塊脆板。',

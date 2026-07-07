@@ -6121,7 +6121,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gauntlet.echoRound': 'ラウンド {n} / {total}',
   'hudChrome.gauntlet.hint.sentinel': '青は走れ。赤は止まれ。',
   'hudChrome.gauntlet.hint.sigils': 'マウスを押したまま、石板に刻まれた線をなぞろう。',
-  'hudChrome.gauntlet.hint.pull': '太鼓の音に合わせてクリック、タップ、またはスペースキー。',
+  'hudChrome.gauntlet.hint.pull': '円が内側のリングの大きさまで縮んだ瞬間にクリック。',
   'hudChrome.gauntlet.hint.echoWatch': '石が光る順番をよく見よう。',
   'hudChrome.gauntlet.hint.echoAnswer': '同じ順番で石をクリックしよう。',
   'hudChrome.gauntlet.hint.span': 'ガラスの橋を渡ろう。各組の片方は脆い板だ。',

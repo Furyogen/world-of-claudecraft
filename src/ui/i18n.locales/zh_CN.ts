@@ -5790,7 +5790,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gauntlet.echoRound': '第 {n} / {total} 轮',
   'hudChrome.gauntlet.hint.sentinel': '绿灯快跑,红灯定住。',
   'hudChrome.gauntlet.hint.sigils': '按住鼠标,沿石板上蚀刻的线条描画。',
-  'hudChrome.gauntlet.hint.pull': '随每声鼓点点击、轻触或按空格键。',
+  'hudChrome.gauntlet.hint.pull': '在圆圈缩到内环大小的瞬间点击它。',
   'hudChrome.gauntlet.hint.echoWatch': '看好石头亮起的顺序。',
   'hudChrome.gauntlet.hint.echoAnswer': '按同样的顺序点击石头。',
   'hudChrome.gauntlet.hint.span': '横渡玻璃桥。每对板中藏着一块脆板。',

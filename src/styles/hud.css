@@ -4283,6 +4283,63 @@
     box-shadow: 0 0 10px #ff5a4a99;
   }
 
+  /* ---------- gauntlet circles overlay ---------- */
+  /* The Great Pull's input: one pooled circle, positioned per spawn via
+     --gc-x/--gc-y and shrunk per frame via --gc-size (the painter drives the
+     custom properties; sizes come from the wire, rendered px 1:1). The layer
+     never eats clicks; the shrinking ring is the one pointer target (the tap
+     target IS the circle, well over 44px until late in the shrink). */
+  #gauntlet-circles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 6;
+  }
+  #gauntlet-circle {
+    position: absolute;
+    left: var(--gc-x, 50%);
+    top: var(--gc-y, 50%);
+    display: none;
+    width: 0;
+    height: 0;
+  }
+  #gauntlet-circle .gc-ring {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: var(--gc-size, 200px);
+    height: var(--gc-size, 200px);
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 3px solid #ffe48a;
+    background: rgba(8, 8, 12, 0.16);
+    box-shadow:
+      0 0 12px #000c,
+      inset 0 0 10px #0009;
+    pointer-events: auto;
+    cursor: pointer;
+  }
+  /* Inside the near-target band the ring turns go-green (the same family as
+     the sentinel's green light): this is the "click now" cue. */
+  #gauntlet-circle .gc-ring.near {
+    border-color: #3fd268;
+    box-shadow:
+      0 0 14px #35d06a99,
+      inset 0 0 10px #35d06a55;
+  }
+  /* The fixed target-size indicator ring inside every circle. */
+  #gauntlet-circle .gc-target {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: var(--gc-target-size, 75px);
+    height: var(--gc-target-size, 75px);
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 2px dashed #ffffffaa;
+    pointer-events: none;
+  }
+
   /* ---------- gauntlet recruiter window ---------- */
   #gauntlet-recruit {
     width: 320px;

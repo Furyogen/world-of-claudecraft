@@ -6110,7 +6110,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gauntlet.echoRound': '라운드 {n} / {total}',
   'hudChrome.gauntlet.hint.sentinel': '초록불에는 달리고, 빨간불에는 멈추세요.',
   'hudChrome.gauntlet.hint.sigils': '마우스를 누른 채 석판에 새겨진 선을 따라 그리세요.',
-  'hudChrome.gauntlet.hint.pull': '북소리에 맞춰 클릭, 탭 또는 스페이스 키를 누르세요.',
+  'hudChrome.gauntlet.hint.pull': '원이 안쪽 고리 크기로 줄어드는 순간 클릭하세요.',
   'hudChrome.gauntlet.hint.echoWatch': '돌이 빛나는 순서를 잘 보세요.',
   'hudChrome.gauntlet.hint.echoAnswer': '같은 순서로 돌을 클릭하세요.',
   'hudChrome.gauntlet.hint.span':
