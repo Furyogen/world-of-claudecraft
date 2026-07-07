@@ -7047,6 +7047,51 @@ export const en_XA: EnTranslations = {
         "title": "[Çóñţéšţáñţ]",
         "greeting": "[Éýéš ƒóŕŵáŕð. Ţĥé Ŵáŕðéñ íš ŵáţçĥíñĝ.]"
       },
+      "gauntlet_contestant_warrior": {
+        "name": "[Ĝáúñţļéţ Çóñţéšţáñţ]",
+        "title": "[Çóñţéšţáñţ]",
+        "greeting": "[Éýéš ƒóŕŵáŕð. Ţĥé Ŵáŕðéñ íš ŵáţçĥíñĝ.]"
+      },
+      "gauntlet_contestant_paladin": {
+        "name": "[Ĝáúñţļéţ Çóñţéšţáñţ]",
+        "title": "[Çóñţéšţáñţ]",
+        "greeting": "[Éýéš ƒóŕŵáŕð. Ţĥé Ŵáŕðéñ íš ŵáţçĥíñĝ.]"
+      },
+      "gauntlet_contestant_hunter": {
+        "name": "[Ĝáúñţļéţ Çóñţéšţáñţ]",
+        "title": "[Çóñţéšţáñţ]",
+        "greeting": "[Éýéš ƒóŕŵáŕð. Ţĥé Ŵáŕðéñ íš ŵáţçĥíñĝ.]"
+      },
+      "gauntlet_contestant_rogue": {
+        "name": "[Ĝáúñţļéţ Çóñţéšţáñţ]",
+        "title": "[Çóñţéšţáñţ]",
+        "greeting": "[Éýéš ƒóŕŵáŕð. Ţĥé Ŵáŕðéñ íš ŵáţçĥíñĝ.]"
+      },
+      "gauntlet_contestant_priest": {
+        "name": "[Ĝáúñţļéţ Çóñţéšţáñţ]",
+        "title": "[Çóñţéšţáñţ]",
+        "greeting": "[Éýéš ƒóŕŵáŕð. Ţĥé Ŵáŕðéñ íš ŵáţçĥíñĝ.]"
+      },
+      "gauntlet_contestant_mage": {
+        "name": "[Ĝáúñţļéţ Çóñţéšţáñţ]",
+        "title": "[Çóñţéšţáñţ]",
+        "greeting": "[Éýéš ƒóŕŵáŕð. Ţĥé Ŵáŕðéñ íš ŵáţçĥíñĝ.]"
+      },
+      "gauntlet_contestant_warlock": {
+        "name": "[Ĝáúñţļéţ Çóñţéšţáñţ]",
+        "title": "[Çóñţéšţáñţ]",
+        "greeting": "[Éýéš ƒóŕŵáŕð. Ţĥé Ŵáŕðéñ íš ŵáţçĥíñĝ.]"
+      },
+      "gauntlet_contestant_shaman": {
+        "name": "[Ĝáúñţļéţ Çóñţéšţáñţ]",
+        "title": "[Çóñţéšţáñţ]",
+        "greeting": "[Éýéš ƒóŕŵáŕð. Ţĥé Ŵáŕðéñ íš ŵáţçĥíñĝ.]"
+      },
+      "gauntlet_contestant_druid": {
+        "name": "[Ĝáúñţļéţ Çóñţéšţáñţ]",
+        "title": "[Çóñţéšţáñţ]",
+        "greeting": "[Éýéš ƒóŕŵáŕð. Ţĥé Ŵáŕðéñ íš ŵáţçĥíñĝ.]"
+      },
       "hodrics_herald": {
         "name": "[Ĥéŕáļð Óšŕíç]",
         "title": "[Ĥóðŕíç'š Ĝáúñţļéţ Ĥéŕáļð]",

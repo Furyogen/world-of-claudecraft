@@ -7047,6 +7047,51 @@ export const ja_JP: EnTranslations = {
         "title": "参加者",
         "greeting": "前を向け。番人が見ている。"
       },
+      "gauntlet_contestant_warrior": {
+        "name": "ガントレット参加者",
+        "title": "参加者",
+        "greeting": "前を向け。番人が見ている。"
+      },
+      "gauntlet_contestant_paladin": {
+        "name": "ガントレット参加者",
+        "title": "参加者",
+        "greeting": "前を向け。番人が見ている。"
+      },
+      "gauntlet_contestant_hunter": {
+        "name": "ガントレット参加者",
+        "title": "参加者",
+        "greeting": "前を向け。番人が見ている。"
+      },
+      "gauntlet_contestant_rogue": {
+        "name": "ガントレット参加者",
+        "title": "参加者",
+        "greeting": "前を向け。番人が見ている。"
+      },
+      "gauntlet_contestant_priest": {
+        "name": "ガントレット参加者",
+        "title": "参加者",
+        "greeting": "前を向け。番人が見ている。"
+      },
+      "gauntlet_contestant_mage": {
+        "name": "ガントレット参加者",
+        "title": "参加者",
+        "greeting": "前を向け。番人が見ている。"
+      },
+      "gauntlet_contestant_warlock": {
+        "name": "ガントレット参加者",
+        "title": "参加者",
+        "greeting": "前を向け。番人が見ている。"
+      },
+      "gauntlet_contestant_shaman": {
+        "name": "ガントレット参加者",
+        "title": "参加者",
+        "greeting": "前を向け。番人が見ている。"
+      },
+      "gauntlet_contestant_druid": {
+        "name": "ガントレット参加者",
+        "title": "参加者",
+        "greeting": "前を向け。番人が見ている。"
+      },
       "hodrics_herald": {
         "name": "伝令オズリック",
         "title": "ホドリックのガントレット伝令",

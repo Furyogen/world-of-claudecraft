@@ -2025,6 +2025,8 @@ function dirtyEveryDeltaField(): {
         name: 'Alld',
         vitality: 100,
         skill: 0,
+        cls: 'warrior' as const,
+        skin: 0,
         eliminatedAtTrial: null,
         script: {
           speed: 0,

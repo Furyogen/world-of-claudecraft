@@ -7047,6 +7047,51 @@ export const ko_KR: EnTranslations = {
         "title": "참가자",
         "greeting": "앞을 보라. 감시자가 지켜보고 있다."
       },
+      "gauntlet_contestant_warrior": {
+        "name": "시련의 관문 참가자",
+        "title": "참가자",
+        "greeting": "앞을 보라. 감시자가 지켜보고 있다."
+      },
+      "gauntlet_contestant_paladin": {
+        "name": "시련의 관문 참가자",
+        "title": "참가자",
+        "greeting": "앞을 보라. 감시자가 지켜보고 있다."
+      },
+      "gauntlet_contestant_hunter": {
+        "name": "시련의 관문 참가자",
+        "title": "참가자",
+        "greeting": "앞을 보라. 감시자가 지켜보고 있다."
+      },
+      "gauntlet_contestant_rogue": {
+        "name": "시련의 관문 참가자",
+        "title": "참가자",
+        "greeting": "앞을 보라. 감시자가 지켜보고 있다."
+      },
+      "gauntlet_contestant_priest": {
+        "name": "시련의 관문 참가자",
+        "title": "참가자",
+        "greeting": "앞을 보라. 감시자가 지켜보고 있다."
+      },
+      "gauntlet_contestant_mage": {
+        "name": "시련의 관문 참가자",
+        "title": "참가자",
+        "greeting": "앞을 보라. 감시자가 지켜보고 있다."
+      },
+      "gauntlet_contestant_warlock": {
+        "name": "시련의 관문 참가자",
+        "title": "참가자",
+        "greeting": "앞을 보라. 감시자가 지켜보고 있다."
+      },
+      "gauntlet_contestant_shaman": {
+        "name": "시련의 관문 참가자",
+        "title": "참가자",
+        "greeting": "앞을 보라. 감시자가 지켜보고 있다."
+      },
+      "gauntlet_contestant_druid": {
+        "name": "시련의 관문 참가자",
+        "title": "참가자",
+        "greeting": "앞을 보라. 감시자가 지켜보고 있다."
+      },
       "hodrics_herald": {
         "name": "전령 오스릭",
         "title": "호드릭 건틀릿 전령",

@@ -7047,6 +7047,51 @@ export const zh_CN: EnTranslations = {
         "title": "参赛者",
         "greeting": "目视前方。守望者正盯着你。"
       },
+      "gauntlet_contestant_warrior": {
+        "name": "试炼参赛者",
+        "title": "参赛者",
+        "greeting": "目视前方。守望者正盯着你。"
+      },
+      "gauntlet_contestant_paladin": {
+        "name": "试炼参赛者",
+        "title": "参赛者",
+        "greeting": "目视前方。守望者正盯着你。"
+      },
+      "gauntlet_contestant_hunter": {
+        "name": "试炼参赛者",
+        "title": "参赛者",
+        "greeting": "目视前方。守望者正盯着你。"
+      },
+      "gauntlet_contestant_rogue": {
+        "name": "试炼参赛者",
+        "title": "参赛者",
+        "greeting": "目视前方。守望者正盯着你。"
+      },
+      "gauntlet_contestant_priest": {
+        "name": "试炼参赛者",
+        "title": "参赛者",
+        "greeting": "目视前方。守望者正盯着你。"
+      },
+      "gauntlet_contestant_mage": {
+        "name": "试炼参赛者",
+        "title": "参赛者",
+        "greeting": "目视前方。守望者正盯着你。"
+      },
+      "gauntlet_contestant_warlock": {
+        "name": "试炼参赛者",
+        "title": "参赛者",
+        "greeting": "目视前方。守望者正盯着你。"
+      },
+      "gauntlet_contestant_shaman": {
+        "name": "试炼参赛者",
+        "title": "参赛者",
+        "greeting": "目视前方。守望者正盯着你。"
+      },
+      "gauntlet_contestant_druid": {
+        "name": "试炼参赛者",
+        "title": "参赛者",
+        "greeting": "目视前方。守望者正盯着你。"
+      },
       "hodrics_herald": {
         "name": "传令官奥斯里克",
         "title": "霍德里克试炼传令官",

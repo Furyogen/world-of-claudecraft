@@ -7047,6 +7047,51 @@ export const ru_RU: EnTranslations = {
         "title": "Участник",
         "greeting": "Смотри вперёд. Страж наблюдает."
       },
+      "gauntlet_contestant_warrior": {
+        "name": "Участник Гаунтлета",
+        "title": "Участник",
+        "greeting": "Смотри вперёд. Страж наблюдает."
+      },
+      "gauntlet_contestant_paladin": {
+        "name": "Участник Гаунтлета",
+        "title": "Участник",
+        "greeting": "Смотри вперёд. Страж наблюдает."
+      },
+      "gauntlet_contestant_hunter": {
+        "name": "Участник Гаунтлета",
+        "title": "Участник",
+        "greeting": "Смотри вперёд. Страж наблюдает."
+      },
+      "gauntlet_contestant_rogue": {
+        "name": "Участник Гаунтлета",
+        "title": "Участник",
+        "greeting": "Смотри вперёд. Страж наблюдает."
+      },
+      "gauntlet_contestant_priest": {
+        "name": "Участник Гаунтлета",
+        "title": "Участник",
+        "greeting": "Смотри вперёд. Страж наблюдает."
+      },
+      "gauntlet_contestant_mage": {
+        "name": "Участник Гаунтлета",
+        "title": "Участник",
+        "greeting": "Смотри вперёд. Страж наблюдает."
+      },
+      "gauntlet_contestant_warlock": {
+        "name": "Участник Гаунтлета",
+        "title": "Участник",
+        "greeting": "Смотри вперёд. Страж наблюдает."
+      },
+      "gauntlet_contestant_shaman": {
+        "name": "Участник Гаунтлета",
+        "title": "Участник",
+        "greeting": "Смотри вперёд. Страж наблюдает."
+      },
+      "gauntlet_contestant_druid": {
+        "name": "Участник Гаунтлета",
+        "title": "Участник",
+        "greeting": "Смотри вперёд. Страж наблюдает."
+      },
       "hodrics_herald": {
         "name": "Герольд Осрик",
         "title": "Герольд Гонтлета Ходрика",

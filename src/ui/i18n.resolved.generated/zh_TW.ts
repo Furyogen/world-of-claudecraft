@@ -7047,6 +7047,51 @@ export const zh_TW: EnTranslations = {
         "title": "參賽者",
         "greeting": "目視前方。守望者正盯著你。"
       },
+      "gauntlet_contestant_warrior": {
+        "name": "試煉參賽者",
+        "title": "參賽者",
+        "greeting": "目視前方。守望者正盯著你。"
+      },
+      "gauntlet_contestant_paladin": {
+        "name": "試煉參賽者",
+        "title": "參賽者",
+        "greeting": "目視前方。守望者正盯著你。"
+      },
+      "gauntlet_contestant_hunter": {
+        "name": "試煉參賽者",
+        "title": "參賽者",
+        "greeting": "目視前方。守望者正盯著你。"
+      },
+      "gauntlet_contestant_rogue": {
+        "name": "試煉參賽者",
+        "title": "參賽者",
+        "greeting": "目視前方。守望者正盯著你。"
+      },
+      "gauntlet_contestant_priest": {
+        "name": "試煉參賽者",
+        "title": "參賽者",
+        "greeting": "目視前方。守望者正盯著你。"
+      },
+      "gauntlet_contestant_mage": {
+        "name": "試煉參賽者",
+        "title": "參賽者",
+        "greeting": "目視前方。守望者正盯著你。"
+      },
+      "gauntlet_contestant_warlock": {
+        "name": "試煉參賽者",
+        "title": "參賽者",
+        "greeting": "目視前方。守望者正盯著你。"
+      },
+      "gauntlet_contestant_shaman": {
+        "name": "試煉參賽者",
+        "title": "參賽者",
+        "greeting": "目視前方。守望者正盯著你。"
+      },
+      "gauntlet_contestant_druid": {
+        "name": "試煉參賽者",
+        "title": "參賽者",
+        "greeting": "目視前方。守望者正盯著你。"
+      },
       "hodrics_herald": {
         "name": "傳令官奧斯里克",
         "title": "霍德里克試煉傳令官",
