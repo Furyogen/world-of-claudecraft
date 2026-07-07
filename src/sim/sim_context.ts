@@ -41,6 +41,7 @@ import type {
   DelveRun,
   Entity,
   ErrorReason,
+  ItemInstancePayload,
   PlayerClass,
   QuestProgress,
   SimConfig,
@@ -395,16 +396,12 @@ export interface SimContextCallbacks {
   ): void;
   fleeMoveSpeed(e: Entity): number;
   // --- mob-AI helpers the dispatcher consults ---
-  usesProfiledMobCombat(mob: Entity): boolean;
-  updateProfiledMobCombat(mob: Entity): void;
-  tryMobMeleeSwingInRange(mob: Entity, target: Entity): boolean;
   maybeFlee(mob: Entity, target: Entity): boolean;
   aggroMob(mob: Entity, target: Entity, social: boolean): void;
   isStunned(e: Entity): boolean;
   isRooted(e: Entity): boolean;
   moveSpeedMult(e: Entity): number;
   swingIntervalMult(e: Entity): number;
-  mobEffectiveMeleeRange(mob: Entity): number;
   mobCanSwim(template: { family?: string; canSwim?: boolean } | undefined): boolean;
   resolveMovePoint(nx: number, nz: number, r: number, e: Entity): { x: number; z: number };
   // --- pet / delve-companion / boss-mechanic branches (owners: P1 / delve / M3-N1) ---
@@ -450,6 +447,11 @@ export interface SimContextCallbacks {
   // AI (spawnDelveCompanion/despawnDelveCompanion/maybeCompanionBark).
   partyMembersForKey(key: string): number[];
   addItem(itemId: string, count: number, pid?: number): void;
+  // #1145 signed materials: grants a single non-fungible item copy carrying an
+  // instance payload (signer/charges/rolled/boundTo, #1165), never merged into a
+  // plain fungible stack. Used by corpse harvest to stamp a rare+ monster
+  // material with the harvester's name.
+  addItemInstance(itemId: string, instance: ItemInstancePayload, pid?: number): void;
   // L2 World Market escrow (marketList) also consumes removeItem; it is declared once
   // above (P1b inventory-hub helper, points-at Sim) - deduped, not re-added here.
   spawnBossAdds(boss: Entity, mobId: string, count: number): void;
@@ -833,16 +835,12 @@ export function createSimContext(host: SimContextHost): SimContext {
     mobSwing: host.mobSwing,
     updateRangedPetAttack: host.updateRangedPetAttack,
     fleeMoveSpeed: host.fleeMoveSpeed,
-    usesProfiledMobCombat: host.usesProfiledMobCombat,
-    updateProfiledMobCombat: host.updateProfiledMobCombat,
-    tryMobMeleeSwingInRange: host.tryMobMeleeSwingInRange,
     maybeFlee: host.maybeFlee,
     aggroMob: host.aggroMob,
     isStunned: host.isStunned,
     isRooted: host.isRooted,
     moveSpeedMult: host.moveSpeedMult,
     swingIntervalMult: host.swingIntervalMult,
-    mobEffectiveMeleeRange: host.mobEffectiveMeleeRange,
     mobCanSwim: host.mobCanSwim,
     resolveMovePoint: host.resolveMovePoint,
     updatePet: host.updatePet,
@@ -866,6 +864,7 @@ export function createSimContext(host: SimContextHost): SimContext {
     // onDelveBossDefeated/delveDetectMult are bound above (C1/M2/C3); deduped here.
     partyMembersForKey: host.partyMembersForKey,
     addItem: host.addItem,
+    addItemInstance: host.addItemInstance,
     // removeItem passed through above (P1b inventory-hub helper) - deduped, not re-added.
     spawnBossAdds: host.spawnBossAdds,
     tradeFor: host.tradeFor,

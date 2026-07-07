@@ -311,7 +311,15 @@ export const tr_TR: EnTranslations = {
       "nameplates": "İsimler",
       "haptics": "Dokunsal Geri Bildirim",
       "hapticsOff": "Dokunsal Kapalı",
-      "toggleHaptics": "Dokunsal geri bildirimi aç/kapat"
+      "toggleHaptics": "Dokunsal geri bildirimi aç/kapat",
+      "hotbarPage": "Yetenekler",
+      "hotbarPageAria": "Sonraki yetenek grubunu göster",
+      "actionRing": "Savaş eylemleri",
+      "actionPageToggle": "İşlem sayfasını değiştir",
+      "actionPageIndicator": "Sayfa {page}",
+      "targetCycle": "Hedefi değiştir",
+      "targetCycleShort": "Hedef",
+      "spellbookPageLabel": "Sayfa {page}"
     },
     "tutorial": {
       "moveBodyTouch": "Hareket etmek için hareket çubuğunu kullan ve etrafa bakmak için ekranı sürükle. Başlamak için birkaç adım at.",
@@ -418,7 +426,9 @@ export const tr_TR: EnTranslations = {
       "itemLevelLine": "Eşya Seviyesi {level}",
       "itemScoreLine": "Puan {score}",
       "showSecondaryActionBar": "İkincil Eylem Çubuğunu Göster",
-      "showDailyRewardsChest": "Günlük Ödül Sandığını Göster"
+      "showDailyRewardsChest": "Günlük Ödül Sandığını Göster",
+      "mobileCameraJoystick": "Kamera joystick'i",
+      "mobileLeftHanded": "Solak düzen"
     },
     "controller": {
       "title": "Oyun Kolu",
@@ -984,6 +994,7 @@ export const tr_TR: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "Yönetici",
+        "coredevs": "Core Dev",
         "devs": "Geliştirici",
         "mods": "Moderatör",
         "artists": "Sanatçı"
@@ -1048,18 +1059,6 @@ export const tr_TR: EnTranslations = {
           "hint": "Topluluktan yardım iste"
         }
       }
-    },
-    "crafting": {
-      "title": "işçiliği",
-      "close": "İşçiliği kapat",
-      "craft": "Zanaat",
-      "reagentsNeeded": "Gereklilikler:",
-      "reagentLine": "{name}: {have}/{required}",
-      "empty": "Henüz bilinen bir tarif yok.",
-      "resultAria": "{name} zanaatı",
-      "craftedToast": "Hazırlanma Tarihi: {name}",
-      "insufficientMaterials": "Bunun için malzemeleriniz yok.",
-      "unknownRecipe": "O tarif mevcut değil."
     },
     "devBadge": {
       "title": "Geliştirici",
@@ -1204,6 +1203,19 @@ export const tr_TR: EnTranslations = {
       "mining": "Madencilik",
       "logging": "Ağaç kesme",
       "herbalism": "Bitkicilik"
+    },
+    "crafting": {
+      "title": "işçiliği",
+      "close": "İşçiliği kapat",
+      "craft": "Zanaat",
+      "reagentsNeeded": "Gereklilikler:",
+      "reagentLine": "{name}: {have}/{required}",
+      "empty": "Henüz bilinen bir tarif yok.",
+      "resultAria": "{name} zanaatı",
+      "craftedToast": "Hazırlanma Tarihi: {name}",
+      "insufficientMaterials": "Bunun için malzemeleriniz yok.",
+      "unknownRecipe": "O tarif mevcut değil.",
+      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
     }
   },
   "apiError": {

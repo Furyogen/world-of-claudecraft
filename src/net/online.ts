@@ -20,13 +20,7 @@ import {
   type TalentAllocation,
   talentPointsAtLevel,
 } from '../sim/content/talents';
-import {
-  abilitiesKnownAt,
-  CLASSES,
-  COMMON_RECIPES,
-  NPCS,
-  resolveDelveShopOffers,
-} from '../sim/data';
+import { ALL_RECIPES, abilitiesKnownAt, CLASSES, NPCS, resolveDelveShopOffers } from '../sim/data';
 import { deadTargetSelectable } from '../sim/dead_target';
 import { LEADERBOARD_PAGE_SIZE } from '../sim/leaderboard_page';
 import type { Ante, PickAction } from '../sim/lockpick';
@@ -980,6 +974,9 @@ export class ClientWorld implements IWorld {
   // all-zero default until the wheel/mass-conservation follow-up wires a self-snap
   // field the way `dmarks`/`dcomp` do for delveMarks/companionUpgrades above.
   craftSkills: Record<string, number> = emptyCraftSkills();
+  // Gathering profession proficiency (Mining/Logging/Herbalism). NOT mirrored over
+  // the wire (see professionsState below, the real read surface); this stub keeps
+  // ClientWorld structurally satisfying IWorldProgressionXp.gatheringProficiency.
   gatheringProficiency: Record<string, number> = {};
   // Per-delve clears (key `${delveId}:${tierId}`), mirrored from the self-wire so
   // delveShopOffers can resolve the shop lock badge client-side.
@@ -1000,10 +997,13 @@ export class ClientWorld implements IWorld {
   nodeHarvestableByMe(_nodeId: string): boolean {
     return true;
   }
-  // Static content read (#1127): the common-tier recipe list ships with the
-  // client bundle like every other content table, so this needs no wire
-  // round-trip. See src/world_api/professions.ts.
-  recipeList: readonly RecipeDef[] = COMMON_RECIPES;
+  // Static content read (#1127, extended #1132): the full recipe list (common
+  // tier plus combo recipes) ships with the client bundle like every other
+  // content table, so this needs no wire round-trip. See src/world_api/professions.ts.
+  recipeList: readonly RecipeDef[] = ALL_RECIPES;
+  // Craft-result surface (#1127), mirrored from the server's `craftResult`
+  // event (applyEvent below). Null until this session's first craft attempt.
+  lastCraftResult: CraftResultView | null = null;
   // Active-archetype identity (#1129, superseded scope). Same not-yet-wired-on-the-
   // wire status as craftSkills/gatheringProficiency above: this change lands the
   // sim-side state machine + persistence only, so online play sees the all-unset
@@ -1017,9 +1017,6 @@ export class ClientWorld implements IWorld {
   acceptArchetypeQuest(_craftId: string): void {}
   advanceAmendsProgress(): void {}
   switchArchetype(_craftId: string): void {}
-  // Craft-result surface (#1127), mirrored from the server's `craftResult`
-  // event (applyEvent below). Null until this session's first craft attempt.
-  lastCraftResult: CraftResultView | null = null;
   // --- IWorldParty: raid-target marker mirror, from the self-wire `marks` (markerFor
   // reads it, no send). ---
   markers: Record<number, number> = {}; // entityId -> markerId, mirrored from the self-wire
@@ -1133,12 +1130,27 @@ export class ClientWorld implements IWorld {
     this.reconnectTimer = window.setTimeout(() => this.openSocket(), delayMs);
   }
 
-  close(): void {
+  private endSession(): void {
     this.sessionEnded = true;
     clearInterval(this.sendTimer);
     if (this.reconnectTimer !== undefined) clearTimeout(this.reconnectTimer);
+  }
+
+  close(): void {
+    this.endSession();
     this.ws.onclose = null;
     this.ws.close();
+  }
+
+  // Signal a deliberate logout to the server so it skips linkdead grace and
+  // calls leave() immediately. Must be called before a page reload so the
+  // character is properly removed from the world instead of being held
+  // in-world for the 5-minute linkdead window.
+  sendLogout(): void {
+    this.endSession();
+    if (this.ws.readyState === WebSocket.OPEN) {
+      this.ws.send(JSON.stringify({ t: 'logout' }));
+    }
   }
 
   get player(): Entity {
@@ -1342,9 +1354,7 @@ export class ClientWorld implements IWorld {
       }
       // any other server rejection (kick, moderation, takeover, failed auth)
       // ends the session for good: no auto-reconnect
-      this.sessionEnded = true;
-      clearInterval(this.sendTimer);
-      if (this.reconnectTimer !== undefined) clearTimeout(this.reconnectTimer);
+      this.endSession();
       this.onDisconnect?.(msg.error ?? 'rejected by server');
       return;
     }

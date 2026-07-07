@@ -9,24 +9,90 @@
 // Reproducibility is checked by tests/i18n_resolved_equivalence.test.ts.
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [],
-  "es_ES": [],
-  "fr_FR": [],
-  "fr_CA": [],
+  "es": [
+    "hudChrome.crafting.comboRequirementUnmet",
+    "hudChrome.discord.roleTag.coredevs"
+  ],
+  "es_ES": [
+    "hudChrome.crafting.comboRequirementUnmet",
+    "hudChrome.discord.roleTag.coredevs"
+  ],
+  "fr_FR": [
+    "hudChrome.crafting.comboRequirementUnmet",
+    "hudChrome.discord.roleTag.coredevs"
+  ],
+  "fr_CA": [
+    "hudChrome.crafting.comboRequirementUnmet",
+    "hudChrome.discord.roleTag.coredevs"
+  ],
   "en_CA": [],
-  "it_IT": [],
-  "de_DE": [],
-  "zh_CN": [],
-  "zh_TW": [],
-  "ko_KR": [],
-  "ja_JP": [],
-  "pt_BR": [],
-  "ru_RU": [],
-  "nl_NL": [],
-  "pl_PL": [],
-  "id_ID": [],
-  "tr_TR": [],
-  "sv_SE": [],
-  "vi_VN": [],
-  "da_DK": []
+  "it_IT": [
+    "hudChrome.crafting.comboRequirementUnmet",
+    "hudChrome.discord.roleTag.coredevs"
+  ],
+  "de_DE": [
+    "hudChrome.crafting.comboRequirementUnmet",
+    "hudChrome.discord.roleTag.coredevs"
+  ],
+  "zh_CN": [
+    "hudChrome.discord.roleTag.coredevs"
+  ],
+  "zh_TW": [
+    "hudChrome.discord.roleTag.coredevs"
+  ],
+  "ko_KR": [
+    "hudChrome.discord.roleTag.coredevs"
+  ],
+  "ja_JP": [
+    "hudChrome.discord.roleTag.coredevs"
+  ],
+  "pt_BR": [
+    "hudChrome.crafting.comboRequirementUnmet",
+    "hudChrome.discord.roleTag.coredevs"
+  ],
+  "ru_RU": [
+    "hudChrome.discord.roleTag.coredevs"
+  ],
+  "cs_CZ": [
+    "hudChrome.crafting.comboRequirementUnmet",
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.mobile.actionPageIndicator",
+    "hudChrome.mobile.actionPageToggle",
+    "hudChrome.mobile.actionRing",
+    "hudChrome.mobile.hotbarPage",
+    "hudChrome.mobile.hotbarPageAria",
+    "hudChrome.mobile.spellbookPageLabel",
+    "hudChrome.mobile.targetCycle",
+    "hudChrome.mobile.targetCycleShort",
+    "hudChrome.options.mobileCameraJoystick",
+    "hudChrome.options.mobileLeftHanded"
+  ],
+  "nl_NL": [
+    "hudChrome.crafting.comboRequirementUnmet",
+    "hudChrome.discord.roleTag.coredevs"
+  ],
+  "pl_PL": [
+    "hudChrome.crafting.comboRequirementUnmet",
+    "hudChrome.discord.roleTag.coredevs"
+  ],
+  "id_ID": [
+    "hudChrome.crafting.comboRequirementUnmet",
+    "hudChrome.discord.roleTag.coredevs"
+  ],
+  "tr_TR": [
+    "hudChrome.crafting.comboRequirementUnmet",
+    "hudChrome.discord.roleTag.coredevs"
+  ],
+  "sv_SE": [
+    "hudChrome.crafting.comboRequirementUnmet",
+    "hudChrome.discord.roleTag.coredevs"
+  ],
+  "vi_VN": [
+    "hudChrome.crafting.comboRequirementUnmet",
+    "hudChrome.discord.roleTag.coredevs"
+  ],
+  "da_DK": [
+    "hudChrome.crafting.comboRequirementUnmet",
+    "hudChrome.discord.roleTag.coredevs"
+  ]
 };
