@@ -3145,6 +3145,10 @@ export const ja_JP: EnTranslations = {
     },
     "closeAria": "閉じる"
   },
+  "heroicShop": {
+    "balance": "英雄の証: {count}",
+    "buyAria": "英雄の証{marks}個で{item}を購入"
+  },
   "delveUi": {
     "board": {
       "title": "デルヴボード",
@@ -4437,12 +4441,14 @@ export const ja_JP: EnTranslations = {
     "slots": {
       "mainhand": "メインハンド",
       "helmet": "頭",
+      "neck": "首",
       "shoulder": "肩",
       "chest": "胸",
       "waist": "腰",
       "legs": "脚",
       "gloves": "手",
-      "feet": "足"
+      "feet": "足",
+      "ring": "指"
     },
     "quality": {
       "poor": "粗悪",
@@ -6335,6 +6341,30 @@ export const ja_JP: EnTranslations = {
       "heroic_mark": {
         "name": "英雄の証"
       },
+      "ring_of_the_nine": {
+        "name": "九人の指輪"
+      },
+      "nielas_band": {
+        "name": "ニエラの指輪"
+      },
+      "sutils_fortune": {
+        "name": "スティルの幸運"
+      },
+      "arthurs_round_band": {
+        "name": "アーサーの丸き指輪"
+      },
+      "signet_of_zyzz": {
+        "name": "ジズの印章指輪"
+      },
+      "yumis_best_pendant": {
+        "name": "ユミの一番のペンダント"
+      },
+      "zense_meridian": {
+        "name": "ゼンセの子午線"
+      },
+      "pendant_of_endless_profit": {
+        "name": "無限の利益のペンダント"
+      },
       "deathless_heartwood": {
         "name": "不死王冠の心材"
       },
@@ -6869,6 +6899,11 @@ export const ja_JP: EnTranslations = {
         "name": "防具師ホード",
         "title": "熟練防具師",
         "greeting": "炉は熱く、砥石は回っています。切れるものなら売ります。"
+      },
+      "heroic_quartermaster": {
+        "name": "補給係ヴェックス",
+        "title": "英雄補給係",
+        "greeting": "英雄の深部の証があれば、ハイウォッチ一の指輪とペンダントが手に入る。あなたの証を見せてくれ。"
       },
       "loremaster_caddis": {
         "name": "博識者キャディス",

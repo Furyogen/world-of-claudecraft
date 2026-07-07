@@ -3145,6 +3145,10 @@ export const fr_CA: EnTranslations = {
     },
     "closeAria": "Fermer"
   },
+  "heroicShop": {
+    "balance": "Heroic Marks: {count}",
+    "buyAria": "Buy {item} for {marks} Heroic Marks"
+  },
   "delveUi": {
     "board": {
       "title": "Tableau des excavations",
@@ -4437,12 +4441,14 @@ export const fr_CA: EnTranslations = {
     "slots": {
       "mainhand": "Main droite",
       "helmet": "Tête",
+      "neck": "Neck",
       "shoulder": "Épaules",
       "chest": "Torse",
       "waist": "Taille",
       "legs": "Jambes",
       "gloves": "Mains",
-      "feet": "Pieds"
+      "feet": "Pieds",
+      "ring": "Finger"
     },
     "quality": {
       "poor": "Médiocre",
@@ -6335,6 +6341,30 @@ export const fr_CA: EnTranslations = {
       "heroic_mark": {
         "name": "Heroic Mark"
       },
+      "ring_of_the_nine": {
+        "name": "Ring of the Nine"
+      },
+      "nielas_band": {
+        "name": "Niela's Band"
+      },
+      "sutils_fortune": {
+        "name": "Sutil's Fortune"
+      },
+      "arthurs_round_band": {
+        "name": "Arthur's Round Band"
+      },
+      "signet_of_zyzz": {
+        "name": "Signet of Zyzz"
+      },
+      "yumis_best_pendant": {
+        "name": "Yumi's Best Pendant"
+      },
+      "zense_meridian": {
+        "name": "Zense Meridian"
+      },
+      "pendant_of_endless_profit": {
+        "name": "Pendant of Endless Profit"
+      },
       "deathless_heartwood": {
         "name": "Bois-coeur de la Couronne immortelle"
       },
@@ -6869,6 +6899,11 @@ export const fr_CA: EnTranslations = {
         "name": "Armurier Hode",
         "title": "Maître armurier",
         "greeting": "La forge est chaude et la meule tourne. Si ça coupe, je le vends."
+      },
+      "heroic_quartermaster": {
+        "name": "Quartermaster Vex",
+        "title": "Heroic Quartermaster",
+        "greeting": "Proof of the heroic depths buys the finest rings and pendants in Highwatch. Show me your marks."
       },
       "loremaster_caddis": {
         "name": "Maître du savoir Caddis",

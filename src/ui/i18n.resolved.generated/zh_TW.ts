@@ -3145,6 +3145,10 @@ export const zh_TW: EnTranslations = {
     },
     "closeAria": "關閉"
   },
+  "heroicShop": {
+    "balance": "英雄徽記: {count}",
+    "buyAria": "用{marks}枚英雄徽記購買{item}"
+  },
   "delveUi": {
     "board": {
       "title": "秘探看板",
@@ -4437,12 +4441,14 @@ export const zh_TW: EnTranslations = {
     "slots": {
       "mainhand": "主手",
       "helmet": "頭部",
+      "neck": "頸部",
       "shoulder": "肩部",
       "chest": "胸部",
       "waist": "腰部",
       "legs": "腿部",
       "gloves": "手部",
-      "feet": "腳部"
+      "feet": "腳部",
+      "ring": "手指"
     },
     "quality": {
       "poor": "粗糙",
@@ -6335,6 +6341,30 @@ export const zh_TW: EnTranslations = {
       "heroic_mark": {
         "name": "英雄徽記"
       },
+      "ring_of_the_nine": {
+        "name": "九人之戒"
+      },
+      "nielas_band": {
+        "name": "妮拉之環"
+      },
+      "sutils_fortune": {
+        "name": "蘇蒂爾的財運"
+      },
+      "arthurs_round_band": {
+        "name": "亞瑟的圓環"
+      },
+      "signet_of_zyzz": {
+        "name": "茲茲的印戒"
+      },
+      "yumis_best_pendant": {
+        "name": "由美的至愛吊墜"
+      },
+      "zense_meridian": {
+        "name": "澤恩斯子午墜"
+      },
+      "pendant_of_endless_profit": {
+        "name": "無盡利潤吊墜"
+      },
       "deathless_heartwood": {
         "name": "不朽王冠之心木"
       },
@@ -6869,6 +6899,11 @@ export const zh_TW: EnTranslations = {
         "name": "霍德護甲匠",
         "title": "護甲大師",
         "greeting": "爐火正旺，砂輪正轉。能砍的東西，我都賣。"
+      },
+      "heroic_quartermaster": {
+        "name": "軍需官維克斯",
+        "title": "英雄軍需官",
+        "greeting": "英雄深淵的憑證能換來高崖望最上等的戒指和吊墜。把你的徽記拿給我看。"
       },
       "loremaster_caddis": {
         "name": "凱迪斯博學者",

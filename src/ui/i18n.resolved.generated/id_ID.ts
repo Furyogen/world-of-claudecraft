@@ -3145,6 +3145,10 @@ export const id_ID: EnTranslations = {
     },
     "closeAria": "Tutup"
   },
+  "heroicShop": {
+    "balance": "Heroic Marks: {count}",
+    "buyAria": "Buy {item} for {marks} Heroic Marks"
+  },
   "delveUi": {
     "board": {
       "title": "Papan Delve",
@@ -4437,12 +4441,14 @@ export const id_ID: EnTranslations = {
     "slots": {
       "mainhand": "Tangan Utama",
       "helmet": "Helm",
+      "neck": "Neck",
       "shoulder": "Bahu",
       "chest": "Dada",
       "waist": "Pinggang",
       "legs": "Tungkai",
       "gloves": "Sarung Tangan",
-      "feet": "Kaki"
+      "feet": "Kaki",
+      "ring": "Finger"
     },
     "quality": {
       "poor": "Buruk",
@@ -6335,6 +6341,30 @@ export const id_ID: EnTranslations = {
       "heroic_mark": {
         "name": "Heroic Mark"
       },
+      "ring_of_the_nine": {
+        "name": "Ring of the Nine"
+      },
+      "nielas_band": {
+        "name": "Niela's Band"
+      },
+      "sutils_fortune": {
+        "name": "Sutil's Fortune"
+      },
+      "arthurs_round_band": {
+        "name": "Arthur's Round Band"
+      },
+      "signet_of_zyzz": {
+        "name": "Signet of Zyzz"
+      },
+      "yumis_best_pendant": {
+        "name": "Yumi's Best Pendant"
+      },
+      "zense_meridian": {
+        "name": "Zense Meridian"
+      },
+      "pendant_of_endless_profit": {
+        "name": "Pendant of Endless Profit"
+      },
       "deathless_heartwood": {
         "name": "Inti Kayu Mahkota Baka"
       },
@@ -6869,6 +6899,11 @@ export const id_ID: EnTranslations = {
         "name": "Penempa Zirah Hode",
         "title": "Ahli Penempa Zirah",
         "greeting": "Tungku menyala dan batu asah berputar. Kalau bisa menebas, aku menjualnya."
+      },
+      "heroic_quartermaster": {
+        "name": "Quartermaster Vex",
+        "title": "Heroic Quartermaster",
+        "greeting": "Proof of the heroic depths buys the finest rings and pendants in Highwatch. Show me your marks."
       },
       "loremaster_caddis": {
         "name": "Ahli Sejarah Caddis",

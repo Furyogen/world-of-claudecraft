@@ -2614,7 +2614,8 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '화덕은 뜨겁고 숫돌은 돌고 있습니다. 베는 물건이라면 팝니다.',
   'entities.npcs.heroic_quartermaster.name': '병참장교 벡스',
   'entities.npcs.heroic_quartermaster.title': '영웅 병참장교',
-  'entities.npcs.heroic_quartermaster.greeting': '영웅 던전의 증표는 하이워치 최고의 반지와 펜던트로 바꿀 수 있소. 징표를 보여 주시오.',
+  'entities.npcs.heroic_quartermaster.greeting':
+    '영웅 던전의 증표는 하이워치 최고의 반지와 펜던트로 바꿀 수 있소. 징표를 보여 주시오.',
   'entities.npcs.loremaster_caddis.name': '현자 캐디스',
   'entities.npcs.loremaster_caddis.title': '현자',
   'entities.npcs.loremaster_caddis.greeting':

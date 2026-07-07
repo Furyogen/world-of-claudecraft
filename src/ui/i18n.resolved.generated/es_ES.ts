@@ -3145,6 +3145,10 @@ export const es_ES: EnTranslations = {
     },
     "closeAria": "Cerrar"
   },
+  "heroicShop": {
+    "balance": "Heroic Marks: {count}",
+    "buyAria": "Buy {item} for {marks} Heroic Marks"
+  },
   "delveUi": {
     "board": {
       "title": "Tablón de Profundidades",
@@ -4437,12 +4441,14 @@ export const es_ES: EnTranslations = {
     "slots": {
       "mainhand": "Mano principal",
       "helmet": "Cabeza",
+      "neck": "Neck",
       "shoulder": "Hombros",
       "chest": "Pecho",
       "waist": "Cintura",
       "legs": "Piernas",
       "gloves": "Manos",
-      "feet": "Pies"
+      "feet": "Pies",
+      "ring": "Finger"
     },
     "quality": {
       "poor": "Pobre",
@@ -6335,6 +6341,30 @@ export const es_ES: EnTranslations = {
       "heroic_mark": {
         "name": "Heroic Mark"
       },
+      "ring_of_the_nine": {
+        "name": "Ring of the Nine"
+      },
+      "nielas_band": {
+        "name": "Niela's Band"
+      },
+      "sutils_fortune": {
+        "name": "Sutil's Fortune"
+      },
+      "arthurs_round_band": {
+        "name": "Arthur's Round Band"
+      },
+      "signet_of_zyzz": {
+        "name": "Signet of Zyzz"
+      },
+      "yumis_best_pendant": {
+        "name": "Yumi's Best Pendant"
+      },
+      "zense_meridian": {
+        "name": "Zense Meridian"
+      },
+      "pendant_of_endless_profit": {
+        "name": "Pendant of Endless Profit"
+      },
       "deathless_heartwood": {
         "name": "Duramen de la Corona Inmortal"
       },
@@ -6869,6 +6899,11 @@ export const es_ES: EnTranslations = {
         "name": "Armero Hode",
         "title": "Maestro armero",
         "greeting": "La forja está caliente y la piedra gira. Si corta, lo vendo."
+      },
+      "heroic_quartermaster": {
+        "name": "Quartermaster Vex",
+        "title": "Heroic Quartermaster",
+        "greeting": "Proof of the heroic depths buys the finest rings and pendants in Highwatch. Show me your marks."
       },
       "loremaster_caddis": {
         "name": "Maestro de saber Caddis",

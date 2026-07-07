@@ -3145,6 +3145,10 @@ export const vi_VN: EnTranslations = {
     },
     "closeAria": "Đóng"
   },
+  "heroicShop": {
+    "balance": "Heroic Marks: {count}",
+    "buyAria": "Buy {item} for {marks} Heroic Marks"
+  },
   "delveUi": {
     "board": {
       "title": "Bảng Hang Sâu",
@@ -4437,12 +4441,14 @@ export const vi_VN: EnTranslations = {
     "slots": {
       "mainhand": "Tay Chính",
       "helmet": "Mũ Giáp",
+      "neck": "Neck",
       "shoulder": "Giáp Vai",
       "chest": "Áo Giáp",
       "waist": "Thắt Lưng",
       "legs": "Quần Giáp",
       "gloves": "Găng Tay",
-      "feet": "Giày"
+      "feet": "Giày",
+      "ring": "Finger"
     },
     "quality": {
       "poor": "Kém",
@@ -6335,6 +6341,30 @@ export const vi_VN: EnTranslations = {
       "heroic_mark": {
         "name": "Heroic Mark"
       },
+      "ring_of_the_nine": {
+        "name": "Ring of the Nine"
+      },
+      "nielas_band": {
+        "name": "Niela's Band"
+      },
+      "sutils_fortune": {
+        "name": "Sutil's Fortune"
+      },
+      "arthurs_round_band": {
+        "name": "Arthur's Round Band"
+      },
+      "signet_of_zyzz": {
+        "name": "Signet of Zyzz"
+      },
+      "yumis_best_pendant": {
+        "name": "Yumi's Best Pendant"
+      },
+      "zense_meridian": {
+        "name": "Zense Meridian"
+      },
+      "pendant_of_endless_profit": {
+        "name": "Pendant of Endless Profit"
+      },
       "deathless_heartwood": {
         "name": "Lõi Gỗ Của Vương Miện Bất Tử"
       },
@@ -6869,6 +6899,11 @@ export const vi_VN: EnTranslations = {
         "name": "Thợ Giáp Hode",
         "title": "Thợ Giáp Bậc Thầy",
         "greeting": "Lò rèn đang nóng và đá mài đang quay. Cái gì chém được, ta bán."
+      },
+      "heroic_quartermaster": {
+        "name": "Quartermaster Vex",
+        "title": "Heroic Quartermaster",
+        "greeting": "Proof of the heroic depths buys the finest rings and pendants in Highwatch. Show me your marks."
       },
       "loremaster_caddis": {
         "name": "Sử Gia Caddis",

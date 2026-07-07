@@ -3145,6 +3145,10 @@ export const en_XA: EnTranslations = {
     },
     "closeAria": "[Çļóšé]"
   },
+  "heroicShop": {
+    "balance": "[Ĥéŕóíç Ɱáŕķš: {count}]",
+    "buyAria": "[Ɓúý {item} ƒóŕ {marks} Ĥéŕóíç Ɱáŕķš]"
+  },
   "delveUi": {
     "board": {
       "title": "[Ðéļʋé Ɓóáŕð]",
@@ -4437,12 +4441,14 @@ export const en_XA: EnTranslations = {
     "slots": {
       "mainhand": "[Ɱáíñ Ĥáñð]",
       "helmet": "[Ĥéļɱéţ]",
+      "neck": "[Ñéçķ]",
       "shoulder": "[Šĥóúļðéŕ]",
       "chest": "[Çĥéšţ]",
       "waist": "[Ŵáíšţ]",
       "legs": "[Ļéĝš]",
       "gloves": "[Ĝļóʋéš]",
-      "feet": "[Ƒééţ]"
+      "feet": "[Ƒééţ]",
+      "ring": "[Ƒíñĝéŕ]"
     },
     "quality": {
       "poor": "[Þóóŕ]",
@@ -6335,6 +6341,30 @@ export const en_XA: EnTranslations = {
       "heroic_mark": {
         "name": "[Ĥéŕóíç Ɱáŕķ]"
       },
+      "ring_of_the_nine": {
+        "name": "[Ŕíñĝ óƒ ţĥé Ñíñé]"
+      },
+      "nielas_band": {
+        "name": "[Ñíéļá'š Ɓáñð]"
+      },
+      "sutils_fortune": {
+        "name": "[Šúţíļ'š Ƒóŕţúñé]"
+      },
+      "arthurs_round_band": {
+        "name": "[Áŕţĥúŕ'š Ŕóúñð Ɓáñð]"
+      },
+      "signet_of_zyzz": {
+        "name": "[Šíĝñéţ óƒ Žýžž]"
+      },
+      "yumis_best_pendant": {
+        "name": "[Ýúɱí'š Ɓéšţ Þéñðáñţ]"
+      },
+      "zense_meridian": {
+        "name": "[Žéñšé Ɱéŕíðíáñ]"
+      },
+      "pendant_of_endless_profit": {
+        "name": "[Þéñðáñţ óƒ Éñðļéšš Þŕóƒíţ]"
+      },
       "deathless_heartwood": {
         "name": "[Ĥéáŕţŵóóð óƒ ţĥé Ðéáţĥļéšš Çŕóŵñ]"
       },
@@ -6869,6 +6899,11 @@ export const en_XA: EnTranslations = {
         "name": "[Áŕɱóŕéŕ Ĥóðé]",
         "title": "[Ɱášţéŕ Áŕɱóŕéŕ]",
         "greeting": "[Ƒóŕĝé íš ĥóţ áñð ţĥé ĝŕíñðšţóñé íš ţúŕñíñĝ. Íƒ íţ çúţš, Í šéļļ íţ.]"
+      },
+      "heroic_quartermaster": {
+        "name": "[Ɋúáŕţéŕɱášţéŕ Ʋéẋ]",
+        "title": "[Ĥéŕóíç Ɋúáŕţéŕɱášţéŕ]",
+        "greeting": "[Þŕóóƒ óƒ ţĥé ĥéŕóíç ðéþţĥš ƀúýš ţĥé ƒíñéšţ ŕíñĝš áñð þéñðáñţš íñ Ĥíĝĥŵáţçĥ. Šĥóŵ ɱé ýóúŕ ɱáŕķš.]"
       },
       "loremaster_caddis": {
         "name": "[Ļóŕéɱášţéŕ Çáððíš]",

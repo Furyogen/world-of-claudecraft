@@ -3145,6 +3145,10 @@ export const ru_RU: EnTranslations = {
     },
     "closeAria": "Закрыть"
   },
+  "heroicShop": {
+    "balance": "Героические знаки: {count}",
+    "buyAria": "Купить {item} за {marks} героических знаков"
+  },
   "delveUi": {
     "board": {
       "title": "Доска Вылазок",
@@ -4437,12 +4441,14 @@ export const ru_RU: EnTranslations = {
     "slots": {
       "mainhand": "Правая рука",
       "helmet": "Голова",
+      "neck": "Шея",
       "shoulder": "Плечи",
       "chest": "Грудь",
       "waist": "Пояс",
       "legs": "Ноги",
       "gloves": "Кисти рук",
-      "feet": "Ступни"
+      "feet": "Ступни",
+      "ring": "Палец"
     },
     "quality": {
       "poor": "Низкое",
@@ -6335,6 +6341,30 @@ export const ru_RU: EnTranslations = {
       "heroic_mark": {
         "name": "Героический знак"
       },
+      "ring_of_the_nine": {
+        "name": "Кольцо девяти"
+      },
+      "nielas_band": {
+        "name": "Обруч Ниэлы"
+      },
+      "sutils_fortune": {
+        "name": "Удача Сутила"
+      },
+      "arthurs_round_band": {
+        "name": "Круглое кольцо Артура"
+      },
+      "signet_of_zyzz": {
+        "name": "Печатка Зизза"
+      },
+      "yumis_best_pendant": {
+        "name": "Лучший кулон Юми"
+      },
+      "zense_meridian": {
+        "name": "Меридиан Зенсе"
+      },
+      "pendant_of_endless_profit": {
+        "name": "Кулон бесконечной прибыли"
+      },
       "deathless_heartwood": {
         "name": "Сердцевина бессмертной короны"
       },
@@ -6869,6 +6899,11 @@ export const ru_RU: EnTranslations = {
         "name": "Бронник Ходе",
         "title": "Мастер-бронник",
         "greeting": "Горн горяч, точило крутится. Если режет, я это продаю."
+      },
+      "heroic_quartermaster": {
+        "name": "Интендант Векс",
+        "title": "Героический интендант",
+        "greeting": "Знаки героических глубин покупают лучшие кольца и кулоны Хайвотча. Покажи мне свои знаки."
       },
       "loremaster_caddis": {
         "name": "Хранитель знаний Каддис",

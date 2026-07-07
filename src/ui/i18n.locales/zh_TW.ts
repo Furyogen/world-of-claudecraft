@@ -2507,7 +2507,8 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.armorer_hode.greeting': '爐火正旺，砂輪正轉。能砍的東西，我都賣。',
   'entities.npcs.heroic_quartermaster.name': '軍需官維克斯',
   'entities.npcs.heroic_quartermaster.title': '英雄軍需官',
-  'entities.npcs.heroic_quartermaster.greeting': '英雄深淵的憑證能換來高崖望最上等的戒指和吊墜。把你的徽記拿給我看。',
+  'entities.npcs.heroic_quartermaster.greeting':
+    '英雄深淵的憑證能換來高崖望最上等的戒指和吊墜。把你的徽記拿給我看。',
   'entities.npcs.loremaster_caddis.name': '凱迪斯博學者',
   'entities.npcs.loremaster_caddis.title': '博學者',
   'entities.npcs.loremaster_caddis.greeting':

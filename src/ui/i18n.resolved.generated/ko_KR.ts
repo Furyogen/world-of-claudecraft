@@ -3145,6 +3145,10 @@ export const ko_KR: EnTranslations = {
     },
     "closeAria": "닫기"
   },
+  "heroicShop": {
+    "balance": "영웅의 징표: {count}",
+    "buyAria": "영웅의 징표 {marks}개로 {item} 구매"
+  },
   "delveUi": {
     "board": {
       "title": "탐굴 게시판",
@@ -4437,12 +4441,14 @@ export const ko_KR: EnTranslations = {
     "slots": {
       "mainhand": "주장비",
       "helmet": "머리",
+      "neck": "목",
       "shoulder": "어깨",
       "chest": "가슴",
       "waist": "허리",
       "legs": "다리",
       "gloves": "손",
-      "feet": "발"
+      "feet": "발",
+      "ring": "손가락"
     },
     "quality": {
       "poor": "하급",
@@ -6335,6 +6341,30 @@ export const ko_KR: EnTranslations = {
       "heroic_mark": {
         "name": "영웅의 징표"
       },
+      "ring_of_the_nine": {
+        "name": "아홉의 반지"
+      },
+      "nielas_band": {
+        "name": "니엘라의 고리"
+      },
+      "sutils_fortune": {
+        "name": "수틸의 행운"
+      },
+      "arthurs_round_band": {
+        "name": "아서의 둥근 반지"
+      },
+      "signet_of_zyzz": {
+        "name": "지즈의 인장"
+      },
+      "yumis_best_pendant": {
+        "name": "유미의 소중한 펜던트"
+      },
+      "zense_meridian": {
+        "name": "젠세의 자오선"
+      },
+      "pendant_of_endless_profit": {
+        "name": "끝없는 이득의 펜던트"
+      },
       "deathless_heartwood": {
         "name": "죽지 않는 왕관의 심재"
       },
@@ -6869,6 +6899,11 @@ export const ko_KR: EnTranslations = {
         "name": "방어구 제작자 호드",
         "title": "장인 방어구 제작자",
         "greeting": "화덕은 뜨겁고 숫돌은 돌고 있습니다. 베는 물건이라면 팝니다."
+      },
+      "heroic_quartermaster": {
+        "name": "병참장교 벡스",
+        "title": "영웅 병참장교",
+        "greeting": "영웅 던전의 증표는 하이워치 최고의 반지와 펜던트로 바꿀 수 있소. 징표를 보여 주시오."
       },
       "loremaster_caddis": {
         "name": "현자 캐디스",

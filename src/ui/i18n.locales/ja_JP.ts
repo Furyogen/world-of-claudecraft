@@ -2621,7 +2621,8 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.armorer_hode.greeting': '炉は熱く、砥石は回っています。切れるものなら売ります。',
   'entities.npcs.heroic_quartermaster.name': '補給係ヴェックス',
   'entities.npcs.heroic_quartermaster.title': '英雄補給係',
-  'entities.npcs.heroic_quartermaster.greeting': '英雄の深部の証があれば、ハイウォッチ一の指輪とペンダントが手に入る。あなたの証を見せてくれ。',
+  'entities.npcs.heroic_quartermaster.greeting':
+    '英雄の深部の証があれば、ハイウォッチ一の指輪とペンダントが手に入る。あなたの証を見せてくれ。',
   'entities.npcs.loremaster_caddis.name': '博識者キャディス',
   'entities.npcs.loremaster_caddis.title': '博識者',
   'entities.npcs.loremaster_caddis.greeting':

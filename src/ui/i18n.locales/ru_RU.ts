@@ -2652,7 +2652,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.armorer_hode.greeting': 'Горн горяч, точило крутится. Если режет, я это продаю.',
   'entities.npcs.heroic_quartermaster.name': 'Интендант Векс',
   'entities.npcs.heroic_quartermaster.title': 'Героический интендант',
-  'entities.npcs.heroic_quartermaster.greeting': 'Знаки героических глубин покупают лучшие кольца и кулоны Хайвотча. Покажи мне свои знаки.',
+  'entities.npcs.heroic_quartermaster.greeting':
+    'Знаки героических глубин покупают лучшие кольца и кулоны Хайвотча. Покажи мне свои знаки.',
   'entities.npcs.loremaster_caddis.name': 'Хранитель знаний Каддис',
   'entities.npcs.loremaster_caddis.title': 'Хранитель знаний',
   'entities.npcs.loremaster_caddis.greeting':

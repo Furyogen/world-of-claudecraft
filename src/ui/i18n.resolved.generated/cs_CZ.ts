@@ -3145,6 +3145,10 @@ export const cs_CZ: EnTranslations = {
     },
     "closeAria": "Zavřít"
   },
+  "heroicShop": {
+    "balance": "Heroic Marks: {count}",
+    "buyAria": "Buy {item} for {marks} Heroic Marks"
+  },
   "delveUi": {
     "board": {
       "title": "Tabule výprav",
@@ -4437,12 +4441,14 @@ export const cs_CZ: EnTranslations = {
     "slots": {
       "mainhand": "Hlavní ruka",
       "helmet": "Helma",
+      "neck": "Neck",
       "shoulder": "Ramena",
       "chest": "Hruď",
       "waist": "Pas",
       "legs": "Nohy",
       "gloves": "Rukavice",
-      "feet": "Chodidla"
+      "feet": "Chodidla",
+      "ring": "Finger"
     },
     "quality": {
       "poor": "Chatrné",
@@ -6335,6 +6341,30 @@ export const cs_CZ: EnTranslations = {
       "heroic_mark": {
         "name": "Heroic Mark"
       },
+      "ring_of_the_nine": {
+        "name": "Ring of the Nine"
+      },
+      "nielas_band": {
+        "name": "Niela's Band"
+      },
+      "sutils_fortune": {
+        "name": "Sutil's Fortune"
+      },
+      "arthurs_round_band": {
+        "name": "Arthur's Round Band"
+      },
+      "signet_of_zyzz": {
+        "name": "Signet of Zyzz"
+      },
+      "yumis_best_pendant": {
+        "name": "Yumi's Best Pendant"
+      },
+      "zense_meridian": {
+        "name": "Zense Meridian"
+      },
+      "pendant_of_endless_profit": {
+        "name": "Pendant of Endless Profit"
+      },
       "deathless_heartwood": {
         "name": "Jádrové dřevo nesmrtelné koruny"
       },
@@ -6869,6 +6899,11 @@ export const cs_CZ: EnTranslations = {
         "name": "Zbrojíř Hode",
         "title": "Mistr zbrojíř",
         "greeting": "Výheň je rozpálená a brusný kámen se točí. Pokud to řeže, prodávám to."
+      },
+      "heroic_quartermaster": {
+        "name": "Quartermaster Vex",
+        "title": "Heroic Quartermaster",
+        "greeting": "Proof of the heroic depths buys the finest rings and pendants in Highwatch. Show me your marks."
       },
       "loremaster_caddis": {
         "name": "Kronikář Caddis",

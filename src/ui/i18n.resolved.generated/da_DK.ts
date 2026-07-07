@@ -3145,6 +3145,10 @@ export const da_DK: EnTranslations = {
     },
     "closeAria": "Luk"
   },
+  "heroicShop": {
+    "balance": "Heroic Marks: {count}",
+    "buyAria": "Buy {item} for {marks} Heroic Marks"
+  },
   "delveUi": {
     "board": {
       "title": "Delve-Tavle",
@@ -4437,12 +4441,14 @@ export const da_DK: EnTranslations = {
     "slots": {
       "mainhand": "Hovedhånd",
       "helmet": "Hjelm",
+      "neck": "Neck",
       "shoulder": "Skulder",
       "chest": "Bryst",
       "waist": "Talje",
       "legs": "Ben",
       "gloves": "Handsker",
-      "feet": "Fødder"
+      "feet": "Fødder",
+      "ring": "Finger"
     },
     "quality": {
       "poor": "Ringe",
@@ -6335,6 +6341,30 @@ export const da_DK: EnTranslations = {
       "heroic_mark": {
         "name": "Heroic Mark"
       },
+      "ring_of_the_nine": {
+        "name": "Ring of the Nine"
+      },
+      "nielas_band": {
+        "name": "Niela's Band"
+      },
+      "sutils_fortune": {
+        "name": "Sutil's Fortune"
+      },
+      "arthurs_round_band": {
+        "name": "Arthur's Round Band"
+      },
+      "signet_of_zyzz": {
+        "name": "Signet of Zyzz"
+      },
+      "yumis_best_pendant": {
+        "name": "Yumi's Best Pendant"
+      },
+      "zense_meridian": {
+        "name": "Zense Meridian"
+      },
+      "pendant_of_endless_profit": {
+        "name": "Pendant of Endless Profit"
+      },
       "deathless_heartwood": {
         "name": "Kerneved fra Den Udødelige Krone"
       },
@@ -6869,6 +6899,11 @@ export const da_DK: EnTranslations = {
         "name": "Rustningssmed Hode",
         "title": "Mesterrustningssmed",
         "greeting": "Essen er varm og slibestenen drejer. Hvis det skærer, sælger jeg det."
+      },
+      "heroic_quartermaster": {
+        "name": "Quartermaster Vex",
+        "title": "Heroic Quartermaster",
+        "greeting": "Proof of the heroic depths buys the finest rings and pendants in Highwatch. Show me your marks."
       },
       "loremaster_caddis": {
         "name": "Lærdomsmester Caddis",
