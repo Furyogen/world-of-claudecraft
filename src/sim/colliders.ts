@@ -10,6 +10,7 @@ import {
   instanceOrigin,
   isArenaPos,
   isDelvePos,
+  isHodricsPos,
 } from './data';
 import { type DelveModuleId, delveModuleColliders } from './delve_layout';
 import { isLitanyModuleId, litanyModuleLosColliders } from './delve_litany_layout';
@@ -21,6 +22,7 @@ import {
   SANCTUM_LAYOUT,
   TEMPLE_LAYOUT,
 } from './dungeon_layout';
+import { hodricsCollidersAt } from './hodrics_course';
 import type { WorldContent } from './types';
 import { generateDecorations, groundHeight } from './world';
 
@@ -432,6 +434,13 @@ export function resolvePosition(
     const local = resolveAgainst(ARENA_COLLIDERS, x - o.x, z - o.z, r, ignoreFences);
     return { x: local.x + o.x, z: local.z + o.z };
   }
+  if (isHodricsPos(x)) {
+    // Lord Hodric rebuilds his course every round: walls come from the
+    // slot's ACTIVE generated course, not a static layout.
+    const hc = hodricsCollidersAt(z);
+    const local = resolveAgainst(hc.colliders, x - hc.ox, z - hc.oz, r, ignoreFences);
+    return { x: local.x + hc.ox, z: local.z + hc.oz };
+  }
   if (x > DUNGEON_X_THRESHOLD) {
     const { ox, oz, interior } = instanceLocal(x, z);
     const colliders = INTERIOR_COLLIDERS[interior] ?? CRYPT_COLLIDERS;
@@ -694,6 +703,20 @@ export function cameraOcclusion(
       true,
     );
   }
+  if (isHodricsPos(ax)) {
+    const hc = hodricsCollidersAt(az);
+    return sweepColliders(
+      hc.colliders,
+      ax - hc.ox,
+      ay,
+      az - hc.oz,
+      bx - hc.ox,
+      by,
+      bz - hc.oz,
+      pad,
+      true,
+    );
+  }
   if (ax > DUNGEON_X_THRESHOLD) {
     const { ox, oz, interior } = instanceLocal(ax, az);
     const colliders = INTERIOR_COLLIDERS[interior] ?? CRYPT_COLLIDERS;
@@ -749,6 +772,10 @@ function sightBlockedAt(seed: number, x: number, z: number, r: number, sightY: n
   if (isArenaPos(x)) {
     const o = arenaOriginAt(z);
     return overlapsAny(ARENA_COLLIDERS, x - o.x, z - o.z, false);
+  }
+  if (isHodricsPos(x)) {
+    const hc = hodricsCollidersAt(z);
+    return overlapsAny(hc.colliders, x - hc.ox, z - hc.oz, false);
   }
   if (x > DUNGEON_X_THRESHOLD) {
     const { ox, oz, interior } = instanceLocal(x, z);

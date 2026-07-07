@@ -100,6 +100,7 @@ import { navigatorSaveData } from './render/sky';
 import { desktopBridge } from './runtime';
 import { pathCrossesFence } from './sim/colliders';
 import { ABILITIES, CLASSES } from './sim/content/classes';
+import { HC_HERALD_NPC_ID } from './sim/content/hodrics';
 import { ITEMS, setActiveWorldContent } from './sim/data';
 import { canEquipItem } from './sim/equipment_rules';
 import { findPlayerPath, resolvePlayerDestination } from './sim/pathfind';
@@ -903,6 +904,8 @@ async function startGame(
 
   // Offline only: expose the dev "2v2 Fiesta vs Bots" practice toggle to the HUD.
   if (offlineSim) hud.setFiestaPracticeHook(() => offlineSim.startFiestaPractice());
+  // Offline only: the Gauntlet practice race vs Lord Hodric's court.
+  if (offlineSim) hud.setHcPracticeHook(() => void offlineSim.hcPracticeStart());
 
   const chatInput = $('#chat-input') as unknown as HTMLTextAreaElement;
   const clickMoveMarker = $('#click-move-marker') as HTMLDivElement;
@@ -1691,6 +1694,8 @@ async function startGame(
       if (npc?.kind === 'npc' && npc.templateId === 'brother_halven') hud.openDelveBoard(bestNpc);
       else if (npc?.kind === 'npc' && npc.templateId === 'gauntlet_recruiter')
         hud.openGauntletRecruit();
+      else if (npc?.kind === 'npc' && npc.templateId === HC_HERALD_NPC_ID)
+        hud.toggleHodricsWindow();
       else hud.openQuestDialog(bestNpc);
       return;
     }

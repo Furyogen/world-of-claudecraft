@@ -186,6 +186,76 @@ export const zh_TW: EnTranslations = {
       "placeSecond": "2nd",
       "placeThird": "3rd"
     },
+    "hc": {
+      "title": "霍德里克城堡",
+      "close": "關閉試煉之門視窗",
+      "zoneName": "霍德里克城堡",
+      "offlineNote": "試煉之門尚未同步,請稍候。",
+      "howto": "三個回合,十名選手,一頂王冠。霍德里克大人每回合都會重建他的闖關賽道:每次挺過淘汰(六人晉級,再三人),贏下決賽。跌落只損失時間。",
+      "joinQueue": "加入試煉",
+      "leaveQueue": "離開隊列",
+      "queuedAt": "排隊中,位置 {position}。湊滿十人即開賽。",
+      "inMatchNote": "比賽進行中,全力衝刺!",
+      "practice": "與試煉騎士練習",
+      "practiceNote": "挑戰霍德里克領主的騎士團:九名對手,無需等待。",
+      "record": "奪冠 {wins} / 參賽 {races}",
+      "bestTime": "最佳成績 {seconds}秒",
+      "bestNone": "尚無完賽紀錄",
+      "rank": "排名 {rank} / {total}",
+      "finishPlace": "完賽第 {place} 名",
+      "timeLeft": "{seconds}s",
+      "overWon": "王冠歸你所有!",
+      "overPlaced": "比賽結束:第 {place} 名",
+      "round": "回合 {round}/{rounds}",
+      "advance": "{count}人晉級",
+      "spectating": "正在看台觀戰",
+      "intermissionRebuild": "霍德里克大人正在重建賽道!",
+      "intermissionQualified": "晉級成功,下一回合即將開始。",
+      "intermissionEliminated": "被淘汰了!請欣賞看台風景。",
+      "section": {
+        "start_yard": "起點廣場",
+        "hammer_bridge": "鐵鎚橋",
+        "rotor_court": "旋木庭院",
+        "axe_walk": "巨斧迴廊",
+        "drawspan": "升降吊橋",
+        "boulder_climb": "滾石坡",
+        "piston_ledge": "活塞窄道",
+        "spinner_court": "轉盤廣場",
+        "landing": "平臺",
+        "red_ascent": "赤紅坡道",
+        "finish_keep": "終點主堡"
+      },
+      "banner": {
+        "found": "試煉召喚而來!",
+        "go": "出發!",
+        "round": "第{round}回合!",
+        "qualified": "晉級!",
+        "eliminated": "淘汰",
+        "finish": "完賽第 {place} 名!",
+        "crown": "你奪得了霍德里克的王冠!"
+      },
+      "log": {
+        "queued": "你加入試煉隊列(位置 {position})。",
+        "unqueued": "你離開了試煉隊列。",
+        "fall": "深淵吞沒了你,返回檢查點。",
+        "checkpoint": "已通過檢查點 {index}。",
+        "qualified": "你晉級下一回合。",
+        "eliminated": "在第{round}回合被淘汰。看台上有小吃。",
+        "placed": "你以第 {place} 名完成試煉。"
+      },
+      "flavor": {
+        "queueJoin": "你加入試煉隊列。霍德里克領主為你上油鏈錘,以示敬意。",
+        "gatesOpen": "霍德里克城堡的大門緩緩開啟,衝向王冠吧!",
+        "go": "出發!試煉之門已開!",
+        "rebuild": "霍德里克大人重建了賽道。新賽道,同一頂王冠!"
+      },
+      "err": {
+        "legsOnly": "試煉中只能靠雙腿:禁止使用技能。",
+        "inMatch": "你已經在參加試煉了。",
+        "dead": "死亡狀態下無法加入試煉隊列。",
+        "arenaConflict": "請先離開競技場再參加試煉。"
+      }
+    },
     "death": {
       "resurrectAtCorpse": "在屍體旁復活",
       "resurrectAtHealer": "靈魂醫者（復活虛弱）",
@@ -1356,6 +1426,7 @@ export const zh_TW: EnTranslations = {
       "combat": "戰鬥",
       "talents": "天賦",
       "arena": "競技場與PvP",
+      "hodricsCastle": "霍德里克城堡",
       "glossary": "詞彙表",
       "wishIKnew": "我希望早點知道的事",
       "faq": "常見問題",
@@ -2010,6 +2081,20 @@ export const zh_TW: EnTranslations = {
       "powerupsBody": "戰鬥進行到一半，發光的能量球也會落入競技場，誰先搶到就歸誰。它們刻意設計得誇張過火，且只持續短短一陣子：速度惡魔讓你瞬間飆出令人目眩的步伐，巨像讓你脹大成笨重的巨人，月靴帶來低重力的彈跳躍動，狂戰士則是一股突如其來的暴怒之潮。",
       "ladderHeading": "在天梯上攀升",
       "ladderBody": "排名對戰會長期記錄你的名次。查看排行榜便能看到自己的位置，以及誰穩坐王國之巔。"
+    },
+    "hodricsCastlePage": {
+      "heading": "霍德里克城堡",
+      "intro": "霍德里克領主向任何挑戰者敞開城堡通道。衝過他舊日防線的試煉,奪得王冠,不論你是誰,不論你的等級如何。",
+      "heraldHeading": "傳令官",
+      "heraldBody": "前往伊斯特布魯克邊緣找傳令官奧斯里克,加入試煉隊列。湊滿十名挑戰者(真實玩家與霍德里克宮廷的騎士皆可)即開賽,所以比賽總是很快開始。",
+      "courseHeading": "三個回合,一頂王冠",
+      "courseBody": "闖關賽是一場淘汰秀:十名選手開跑,六人挺過首輪,三人進入決賽,一人加冕。霍德里克大人每回合都會重建賽道,所以沒有兩場相同的比賽:鐵鎚橋、旋木庭院、斧刃迴廊、滑動吊橋、滾石坡、活塞窄道、旋轉平臺,順序全憑大人當天的興致。每個機關都按自己固定的發條節奏擺動、旋轉、滾動,絕無隨機,細心的眼睛總能找到安全的空檔。",
+      "fairnessHeading": "只靠雙腿",
+      "fairnessBody": "這裡沒人施法:整場比賽禁止使用技能,每位選手速度相同。試煉勝負只看膽識與時機,與裝備或等級無關。",
+      "fallsHeading": "摔落只耽誤時間,不會喪命",
+      "fallsBody": "被機關擊中或跌入深淵,只會把你送回上一個檢查點。堤道上沒有人會死:跌落的唯一代價是追趕的那幾秒。回合結束被淘汰的選手會被氣派地拋上看台包廂,在那裡就著小吃看完剩下的比賽。",
+      "standingsHeading": "王冠",
+      "standingsBody": "決賽回合率先衝線者贏得本場霍德里克王冠。你的出場數、奪冠數和決賽最佳成績,每次排隊都在累積。"
     },
     "wishPage": {
       "heading": "我希望早點知道的事",
@@ -6942,6 +7027,11 @@ export const zh_TW: EnTranslations = {
         "name": "試煉參賽者",
         "title": "參賽者",
         "greeting": "目視前方。守望者正盯著你。"
+      },
+      "hodrics_herald": {
+        "name": "傳令官奧斯里克",
+        "title": "霍德里克試煉傳令官",
+        "greeting": "霍德里克領主向所有來客敞開通道!參加試煉,躲開鏈錘,奪得王冠!"
       },
       "tidewatcher_ondrel": {
         "name": "翁德瑞爾·韋恩",

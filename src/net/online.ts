@@ -28,6 +28,7 @@ import {
   resolveDelveShopOffers,
 } from '../sim/data';
 import { deadTargetSelectable } from '../sim/dead_target';
+import { hcCourseFor, hodricsSlotAt, setActiveHodricsCourse } from '../sim/hodrics_course';
 import { LEADERBOARD_PAGE_SIZE } from '../sim/leaderboard_page';
 import type { Ante, PickAction } from '../sim/lockpick';
 import type { MarketQuery } from '../sim/market_query';
@@ -955,6 +956,12 @@ export class ClientWorld implements IWorld {
   // arenaInfo.match.fiesta and its dynamics flow over the events queue. ---
   duelInfo: DuelInfo | null = null;
   arenaInfo: ArenaInfo | null = null;
+  // --- IWorldHodrics: the Gauntlet race view, mirrored from the snapshot self
+  // (`s.hc`, delta-omitted, throttled server-side). ---
+  hcInfo: import('../world_api').HcInfo | null = null;
+  // Last course seed written to the active-course registry (see the `s.hc`
+  // apply): -1 = none, so the write fires once per round, not every snapshot.
+  private lastHcCourseSeed = -1;
   // --- IWorldSocialGraph: persistent friends/blocks/guild, set ONLY by the
   // `social`/`socialpos` frames (there is no `s.social` snapshot field). ---
   socialInfo: SocialInfo | null = null;
@@ -1780,6 +1787,23 @@ export class ClientWorld implements IWorld {
       if (s.trade !== undefined) this.tradeInfo = s.trade;
       if (s.duel !== undefined) this.duelInfo = s.duel;
       if (s.arena !== undefined) this.arenaInfo = s.arena;
+      if (s.hc !== undefined) {
+        this.hcInfo = s.hc;
+        // Online, ClientWorld is the world seam: keep the active-course
+        // registry (which the renderer's camera/ground/collider sampling
+        // reads for the band) in step with the round on the wire, since no
+        // local Sim match runs here to write it. Offline the Sim's match
+        // module owns this write; the renderer only ever reads. Both go
+        // through the memoized hcCourseFor, so collision matches visuals.
+        const hcm = s.hc?.match ?? null;
+        if (hcm && hcm.courseSeed !== this.lastHcCourseSeed) {
+          this.lastHcCourseSeed = hcm.courseSeed;
+          const slot = hodricsSlotAt(this.player.pos.z);
+          setActiveHodricsCourse(slot, hcCourseFor(hcm.courseSeed, Math.max(0, hcm.round - 1)));
+        } else if (!hcm) {
+          this.lastHcCourseSeed = -1;
+        }
+      }
       if (s.market !== undefined) this.marketInfo = s.market;
       if (s.mail !== undefined) this.mailInfo = s.mail;
       if (s.mailU !== undefined) this.mailUnread = s.mailU ?? 0;
@@ -2208,6 +2232,17 @@ export class ClientWorld implements IWorld {
   }
   arenaAugmentPick(augmentId: string): void {
     this.cmd({ cmd: 'arena_augment', augment: augmentId });
+  }
+  // --- IWorldHodrics: the Gauntlet race queue. Practice is an offline harness;
+  // online it is a no-op (the server fields full races with backfill bots). ---
+  hcQueueJoin(): void {
+    this.cmd({ cmd: 'hc_queue' });
+  }
+  hcQueueLeave(): void {
+    this.cmd({ cmd: 'hc_leave' });
+  }
+  hcPracticeStart(): boolean {
+    return false;
   }
   // --- IWorldSocialGraph: persistent social command sends (resolved server-side by
   // character name) + the REST character typeahead. socialInfo arrives via the

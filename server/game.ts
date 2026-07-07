@@ -167,6 +167,10 @@ const STALE_INPUT_SECONDS = 0.75;
 const TICK_EMA_ALPHA = 0.05;
 const ARENA_WIRE_HZ = 0.1;
 const ARENA_WIRE_INTERVAL_TICKS = Math.max(1, Math.round(1 / (DT * ARENA_WIRE_HZ)));
+// The Gauntlet race view carries live progress bars and the countdown, so it
+// reconciles at 2 Hz (the battleground cadence), still delta-guarded by maybe().
+const HC_WIRE_HZ = 2;
+const HC_WIRE_INTERVAL_TICKS = Math.max(1, Math.round(1 / (DT * HC_WIRE_HZ)));
 
 type ClientMessage = Record<string, unknown> & {
   ability?: string;
@@ -398,6 +402,8 @@ export interface ClientSession {
   lastSent: Record<string, string>;
   // arena readout is reconciled at UI cadence instead of snapshot cadence
   lastArenaWireTick: number;
+  // Gauntlet race readout, reconciled at its own 2 Hz cadence
+  lastHcWireTick: number;
   // set when a command or sim event that can change a heavy self field (bags,
   // gear, quests, talents, stats, ...) lands for this session, so the next
   // snapshot re-diffs those fields. Otherwise they're skipped (see
@@ -930,6 +936,7 @@ export class GameServer {
 
     moderator.lastSent = {};
     moderator.lastArenaWireTick = -ARENA_WIRE_INTERVAL_TICKS;
+    moderator.lastHcWireTick = -HC_WIRE_INTERVAL_TICKS;
     moderator.sentEnts.clear();
     this.send(moderator, { t: 'spectate', name: target.name });
     this.sendSystemNotice(moderator, `Now spectating ${target.name}.`);
@@ -953,6 +960,7 @@ export class GameServer {
     moderator.spectating = null;
     moderator.lastSent = {};
     moderator.lastArenaWireTick = -ARENA_WIRE_INTERVAL_TICKS;
+    moderator.lastHcWireTick = -HC_WIRE_INTERVAL_TICKS;
     moderator.sentEnts.clear();
     this.send(moderator, { t: 'spectate', name: null });
     if (announce) this.sendSystemNotice(moderator, 'Stopped spectating.');
@@ -1653,6 +1661,7 @@ export class GameServer {
       lastInputAt: this.sim.time,
       lastSent: {},
       lastArenaWireTick: -ARENA_WIRE_INTERVAL_TICKS,
+      lastHcWireTick: -HC_WIRE_INTERVAL_TICKS,
       selfHeavyDirty: true,
       lastWireRev: -1,
       sentEnts: new Map(),
@@ -1768,6 +1777,7 @@ export class GameServer {
     session.selfHeavyDirty = true;
     session.lastWireRev = -1;
     session.lastArenaWireTick = -ARENA_WIRE_INTERVAL_TICKS;
+    session.lastHcWireTick = -HC_WIRE_INTERVAL_TICKS;
     this.send(session, {
       t: 'hello',
       pid: session.pid,
@@ -3030,6 +3040,13 @@ export class GameServer {
           sim.arenaAugmentPick(msg.augment, pid);
         break;
       }
+      // Hodric's Castle Gauntlet race queue
+      case 'hc_queue':
+        sim.hcQueueJoin(pid);
+        break;
+      case 'hc_leave':
+        sim.hcQueueLeave(pid);
+        break;
 
       // post-cap cosmetic prestige (Max-Level XP Overflow)
       case 'prestige':
@@ -3635,6 +3652,10 @@ export class GameServer {
     if (this.sim.tickCount - session.lastArenaWireTick >= ARENA_WIRE_INTERVAL_TICKS) {
       session.lastArenaWireTick = this.sim.tickCount;
       maybe('arena', this.sim.arenaInfoFor(anchorSession.pid));
+    }
+    if (this.sim.tickCount - session.lastHcWireTick >= HC_WIRE_INTERVAL_TICKS) {
+      session.lastHcWireTick = this.sim.tickCount;
+      maybe('hc', this.sim.hcInfoFor(anchorSession.pid));
     }
     // market info is null unless the player is standing at the Merchant, so it
     // only rides the wire for players actually browsing the World Market

@@ -19,9 +19,11 @@ export const GAUNTLET_NPCS: Record<string, NpcDef> = {
     id: GAUNTLET_RECRUITER_NPC_ID,
     name: 'Maro Half-Mask',
     title: 'Herald of the Gauntlet',
-    // east edge of the town square, facing the well
-    pos: { x: 14, z: 4 },
-    facing: -Math.PI / 2,
+    // The castle recruitment corner: the grassy rise on the edge of Eastbrook,
+    // beside Herald Osric (content/hodrics.ts HC_HERALD_POS at -24,-6), so the
+    // castle desk is the one place players sign up for either gauntlet.
+    pos: { x: -21, z: -9 },
+    facing: Math.PI * 0.75,
     color: 0x9b59b6,
     questIds: [],
     dynamic: true,

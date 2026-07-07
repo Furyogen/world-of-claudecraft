@@ -45,6 +45,7 @@ import {
   SPIRIT_HEALER_NPC_ID,
 } from './content/graveyards';
 import { GROUND_PICKUP_LINES } from './content/ground_pickup_lines';
+import { HC_HERALD, HC_HERALD_NPC_ID } from './content/hodrics';
 import { COMMON_RECIPES as COMMON_RECIPES_CONTENT } from './content/recipes';
 import {
   TEMPLE_CAMPS,
@@ -184,6 +185,9 @@ export const NPCS: Record<string, NpcDef> = {
   // The Gauntlet event NPCs (all dynamic: the recruiter spawns only while the
   // event window is open; the watcher/contestants spawn per run in the band).
   ...GAUNTLET_NPCS,
+  // The Gauntlet Herald (dynamic: true): spawned guarded at world init with a
+  // reserved out-of-band id (social/hodrics.ts spawnHcHerald), zero rng.
+  [HC_HERALD_NPC_ID]: HC_HERALD,
 };
 
 // Graveyards + the Spirit Healer: re-exported so the Sim and spirit.ts import the
@@ -467,10 +471,16 @@ export function delveOrigin(delveIndex: number, slot: number): { x: number; z: n
   return { x: DELVE_X_MIN + delveIndex * 600, z: DELVE_Z0 + slot * DELVE_SLOT_SPACING };
 }
 
+// East edge of the delve band, equal to GAUNTLET_BAND_X_MIN (the next band
+// east; declared below, so the literal repeats here). Delve rooms sit at
+// DELVE_X_MIN + index*600, so the cap leaves room for indices 0..6 (4800 +
+// 6*600 = 8400, room walls well short of the edge); a delve at index 7+ would
+// cross into The Gauntlet band and must move the cap first (pinned by
+// tests/hodrics_course.test.ts's band-footprint checks).
+export const DELVE_BAND_X_MAX = 8800;
+
 export function isDelvePos(x: number): boolean {
-  // Bounded above by the gauntlet band: delve indices 0..6 fit below x=9000
-  // (4800 + 6*600 = 8400, room walls well short of GAUNTLET_BAND_X_MIN).
-  return x >= DELVE_BAND_X_MIN && x < GAUNTLET_BAND_X_MIN;
+  return x >= DELVE_BAND_X_MIN && x < DELVE_BAND_X_MAX;
 }
 
 export function delveAt(x: number): DelveDef | null {
@@ -491,6 +501,9 @@ export function delveAt(x: number): DelveDef | null {
 
 export const GAUNTLET_X = 9000; // gauntlet instances share this x; slots stack along z
 export const GAUNTLET_BAND_X_MIN = 8800; // x at/after this = the gauntlet band
+// East edge: the 9600..10200 range beyond is reserved for the battleground
+// band (on its feature branch), and Hodric's Castle sits at 10800+.
+export const GAUNTLET_BAND_X_MAX = 9600;
 export const GAUNTLET_SLOT_COUNT = 8; // concurrent runs the world can host
 const GAUNTLET_Z0 = -1250;
 // Covers the sentinel field (~90 long) + staging/spectator dressing with wide margin.
@@ -501,7 +514,7 @@ export function gauntletOrigin(slot: number): { x: number; z: number } {
 }
 
 export function isGauntletPos(x: number): boolean {
-  return x >= GAUNTLET_BAND_X_MIN;
+  return x >= GAUNTLET_BAND_X_MIN && x < GAUNTLET_BAND_X_MAX;
 }
 
 export const DELVES: Record<string, DelveDef> = {
@@ -509,6 +522,30 @@ export const DELVES: Record<string, DelveDef> = {
   [DROWNED_LITANY_DELVE.id]: DROWNED_LITANY_DELVE,
 };
 export const DELVE_LIST: DelveDef[] = Object.values(DELVES).sort((a, b) => a.index - b.index);
+
+// ---------------------------------------------------------------------------
+// Hodric's Castle, the obstacle-race gauntlet. Its race instances live in
+// their own far-off x-band past the delve cap (and clear of x 9600..10200,
+// reserved for the battleground band on its feature branch). Unlike the other
+// instance bands the ground here is NOT flat: world.groundHeight routes the
+// band to the course terraces in sim/hodrics_layout.ts.
+// ---------------------------------------------------------------------------
+
+export const HODRICS_X = 11100; // race instances share this x; slots stack along z
+export const HODRICS_X_MIN = 10800;
+export const HODRICS_X_MAX = 11400;
+export const HODRICS_SLOT_COUNT = 2; // concurrent races the world can host
+const HODRICS_Z0 = -1250;
+const HODRICS_SLOT_SPACING = 800; // clears the course footprint (~280yd) + interest radius
+
+export function hodricsOrigin(slot: number): { x: number; z: number } {
+  return { x: HODRICS_X, z: HODRICS_Z0 + slot * HODRICS_SLOT_SPACING };
+}
+
+export function isHodricsPos(x: number): boolean {
+  return x >= HODRICS_X_MIN && x < HODRICS_X_MAX;
+}
+
 export const DELVE_MODULES: Record<string, DelveModuleDef> = {
   ...COLLAPSED_RELIQUARY_MODULES,
   ...DROWNED_LITANY_MODULES,

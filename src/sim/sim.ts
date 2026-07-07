@@ -100,10 +100,12 @@ import {
   FISHING_RARE_ID,
   FISHING_TABLES,
   getActiveWorldContent,
+  hodricsOrigin,
   INSTANCE_SLOT_COUNT,
   ITEMS,
   isArenaPos,
   isDelvePos,
+  isHodricsPos,
   MOBS,
   QUESTS,
   SPIRIT_HEALER_NPC_ID,
@@ -279,9 +281,13 @@ import {
 // (online.ts) stays byte-identical.
 export { computeQuestState } from './quests/quest_commands';
 
+import { hcProgressFrac, hcSectionAt } from './hodrics_course';
 import { completeCurrentQuestsForDev, completeQuestForDev } from './quests/dev_quest_commands';
 import * as arenaMod from './social/arena';
 import * as duelMod from './social/duel';
+import type { HcMatch, HcQueueUnit } from './social/hodrics';
+import * as hodricsMod from './social/hodrics';
+import * as hcBotsMod from './social/hodrics_bots';
 
 // A2: eloDelta (with ARENA_K_FACTOR) moved to social/arena.ts. Re-exported so the
 // public path `import { Sim, eloDelta } from './sim'` (tests/arena.test.ts) holds.
@@ -783,6 +789,13 @@ export interface PlayerMeta {
   arena2v2Rating: number;
   arena2v2Wins: number;
   arena2v2Losses: number;
+  // Hodric's Castle Gauntlet standings. OPTIONAL (absent until the first race
+  // touches them) so pre-feature saves and parity samples stay byte-identical.
+  hcRaces?: number;
+  hcWins?: number;
+  hcBest?: number; // fastest personal finish, seconds
+  // Gauntlet practice/backfill bot marker. Runtime-only, never serialized.
+  isHcBot?: boolean;
   // Talents & Specializations. `talents` is the active allocation; `talentMods`
   // is its precomputed flat struct — resolved only on allocation/respec/loadout
   // change (recomputeTalents), never walked on the combat or stat hot path.
@@ -901,6 +914,13 @@ export interface CharacterState {
   arena2v2Rating?: number;
   arena2v2Wins?: number;
   arena2v2Losses?: number;
+  // Hodric's Castle Gauntlet standings (JSONB; all optional so pre-Gauntlet
+  // saves load cleanly). `hcReturnPos` is where a mid-race save goes home to:
+  // the race band position itself is never persisted.
+  hcRaces?: number;
+  hcWins?: number;
+  hcBest?: number;
+  hcReturnPos?: { x: number; z: number; facing: number } | null;
   // Talents & Specializations (JSONB; no schema migration). All optional so
   // characters saved before talents existed load cleanly (default: no points spent).
   talents?: TalentAllocation;
@@ -1060,6 +1080,14 @@ export class Sim {
   arenaMatches = new Map<number, ArenaMatch>(); // pid -> shared match (both pids)
   private arenaBusySlots = new Set<number>();
   private nextArenaMatchId = 1;
+  // Hodric's Castle Gauntlet: the race queue, live races keyed by every racer
+  // pid, busy course slots, and the practice/backfill bot rosters.
+  hcQueue: HcQueueUnit[] = [];
+  hcMatches = new Map<number, HcMatch>(); // pid -> shared race (all racers)
+  private hcBusySlots = new Set<number>();
+  private nextHcMatchId = 1;
+  hcPracticeBotPids: number[] = [];
+  hcFillBotPids: number[] = [];
   // per-player chat token bucket (anti-spam); refilled lazily by sim time
   private chatTokens = new Map<number, { tokens: number; at: number }>();
   // per-player set of opt-in global channels (world, lfg) joined via /join
@@ -1264,6 +1292,9 @@ export class Sim {
     // Per-instance dungeon/raid healers spawn on claim (instances/dungeons.ts).
     // createNpc draws no rng, so world-gen determinism is preserved.
     spawnOverworldSpiritHealers(this.ctx);
+    // The Gauntlet Herald: guarded, reserved-id, zero rng (goldens never see
+    // him). See social/hodrics.ts spawnHcHerald and HC_HERALD_ID.
+    hodricsMod.spawnHcHerald(this.ctx);
 
     for (const delve of DELVE_LIST) {
       for (let i = 0; i < DELVE_SLOT_COUNT; i++) {
@@ -1438,6 +1469,12 @@ export class Sim {
     if (savedPos && isDelvePos(savedPos.x)) {
       const delve = delveAt(savedPos.x) ?? DELVE_LIST[0];
       savedPos = { x: delve.doorPos.x, z: delve.doorPos.z - 4 };
+    } else if (savedPos && isHodricsPos(savedPos.x)) {
+      // Saved mid-race at Hodric's Castle: rejoin where they queued from (the
+      // race instance is long gone); no return recorded falls back to the
+      // world start below.
+      const ret = savedState?.hcReturnPos;
+      savedPos = ret ? { x: ret.x, z: ret.z } : null;
     } else if (savedPos && savedPos.x > DUNGEON_X_THRESHOLD) {
       const dungeon = dungeonAt(savedPos.x) ?? DUNGEON_LIST[0];
       savedPos = { x: dungeon.doorPos.x, z: dungeon.doorPos.z - 4 };
@@ -1527,6 +1564,11 @@ export class Sim {
         meta.inventory.push({ itemId: it.itemId, count: it.count });
       }
     }
+    // Gauntlet standings: optional, only present once a race has touched them,
+    // so pre-feature saves and parity samples stay byte-identical.
+    if (savedState?.hcRaces !== undefined) meta.hcRaces = savedState.hcRaces;
+    if (savedState?.hcWins !== undefined) meta.hcWins = savedState.hcWins;
+    if (savedState?.hcBest !== undefined) meta.hcBest = savedState.hcBest;
     this.players.set(player.id, meta);
     player.skinCatalog = meta.skinCatalog;
     player.skin = meta.skin; // mirror onto the entity so the renderer + wire can read it
@@ -1761,6 +1803,22 @@ export class Sim {
       const team = this.arenaTeamOf(match, pid);
       this.endArenaMatch(match, team === 'A' ? 'B' : team === 'B' ? 'A' : null, 'forfeit');
     }
+    // Gauntlet: leaving the queue is free; a mid-race leaver becomes a DNF
+    // (the match module's desertion sweep scores them by progress).
+    hodricsMod.hcQueueLeave(this.ctx, pid);
+    const hcMatch = this.hcMatches.get(pid);
+    if (hcMatch) {
+      const racer = hcMatch.racers.get(pid);
+      if (racer) racer.left = true;
+      this.hcMatches.delete(pid);
+      // If that emptied the match (a full all-human lobby whose racers all
+      // disconnect), fold it now: with no pid still mapping to it the match
+      // is unreachable from updateHodrics, so its slot + pinned course would
+      // leak forever (only HODRICS_SLOT_COUNT slots exist). returnFromHcMatch
+      // frees the slot, resets the registry, and teleports any survivors home.
+      const anyLive = [...hcMatch.racers.values()].some((r) => !r.left && this.entities.has(r.pid));
+      if (!anyLive) hodricsMod.returnFromHcMatch(this.ctx, hcMatch);
+    }
     this.party.partyInvites.delete(pid);
     this.tradeInvites.delete(pid);
     this.duelInvites.delete(pid);
@@ -1858,6 +1916,14 @@ export class Sim {
       arena2v2Rating: meta.arena2v2Rating,
       arena2v2Wins: meta.arena2v2Wins,
       arena2v2Losses: meta.arena2v2Losses,
+      // Gauntlet standings ride only once touched (undefined keys are dropped
+      // by JSON, so pre-Gauntlet saves stay byte-identical). A mid-race save
+      // also records where to go home to; the load ladder never resumes a
+      // character inside the race band.
+      hcRaces: meta.hcRaces,
+      hcWins: meta.hcWins,
+      hcBest: meta.hcBest,
+      hcReturnPos: this.hcMatches.get(pid)?.returns.get(pid) ?? undefined,
       talents: cloneAllocation(restore ? restore.talents : meta.talents),
       loadouts: meta.loadouts.map((l) => ({
         name: l.name,
@@ -2364,6 +2430,26 @@ export class Sim {
       },
       set nextArenaMatchId(v) {
         sim.nextArenaMatchId = v;
+      },
+      // Hodric's Castle Gauntlet state, same live-view shape as the arena's:
+      // the queue is reassigned by prune filters, the rest mutate in place.
+      get hcQueue() {
+        return sim.hcQueue;
+      },
+      set hcQueue(v) {
+        sim.hcQueue = v;
+      },
+      get hcMatches() {
+        return sim.hcMatches;
+      },
+      get hcBusySlots() {
+        return sim.hcBusySlots;
+      },
+      get nextHcMatchId() {
+        return sim.nextHcMatchId;
+      },
+      set nextHcMatchId(v) {
+        sim.nextHcMatchId = v;
       },
       get delveRuns() {
         return sim.delveRuns;
@@ -2964,6 +3050,7 @@ export class Sim {
 
     this.updateDuels();
     this.updateArena();
+    this.updateHodrics();
     this.updateTradesAndInvites();
     this.updateLootRolls();
     this.updateInstances();
@@ -3147,6 +3234,9 @@ export class Sim {
   }
 
   isSwimming(e: Entity): boolean {
+    // The Hodric's Castle chasm dives below the world water line, but the race
+    // crag holds no water: fallers drop to the kill plane, they never swim.
+    if (isHodricsPos(e.pos.x)) return false;
     return (
       groundHeight(e.pos.x, e.pos.z, this.cfg.seed) < waterLevelAt(e.pos.x, e.pos.z) - SWIM_DEPTH &&
       e.pos.y <= swimSurfaceY(e.pos.x, e.pos.z) + 0.15
@@ -3361,7 +3451,16 @@ export class Sim {
       // lands on ground whose true gradient is unwalkable (so approaching at an
       // angle cannot cheat the limit)
       if (p.onGround && !swimming) {
-        const h0 = groundHeight(p.pos.x, p.pos.z, this.cfg.seed);
+        // Gate from where the mover actually STANDS, not the static field
+        // under them: a racer riding a Hodric's Castle platform stands at
+        // deck height over the chasm, and stepping onto the equal height
+        // landing must not read as climbing a 40 yd wall. Scoped to the
+        // Hodric's band (like the isSwimming/deepWater/fall-damage siblings)
+        // so it never touches the universal climb gate: everywhere else a
+        // grounded mover has pos.y == ground, making the Math.max a no-op.
+        const h0 = isHodricsPos(p.pos.x)
+          ? Math.max(groundHeight(p.pos.x, p.pos.z, this.cfg.seed), p.pos.y)
+          : groundHeight(p.pos.x, p.pos.z, this.cfg.seed);
         const h1 = groundHeight(nx, nz, this.cfg.seed);
         const run = Math.hypot(nx - p.pos.x, nz - p.pos.z);
         if (
@@ -3408,9 +3507,12 @@ export class Sim {
       }
     }
 
-    // Vertical: jumping, gravity, swimming, fall damage
+    // Vertical: jumping, gravity, swimming, fall damage. The Hodric's Castle
+    // chasm is dry: falls there run to the kill plane (checkpoint respawn),
+    // they never splash into phantom water.
     const ground = groundHeight(p.pos.x, p.pos.z, this.cfg.seed);
-    const deepWater = ground < waterLevelAt(p.pos.x, p.pos.z) - SWIM_DEPTH;
+    const deepWater =
+      !isHodricsPos(p.pos.x) && ground < waterLevelAt(p.pos.x, p.pos.z) - SWIM_DEPTH;
     if (deepWater && p.pos.y <= swimSurfaceY(p.pos.x, p.pos.z) + 0.05) {
       // treading water at the surface
       p.pos.y = swimSurfaceY(p.pos.x, p.pos.z);
@@ -3461,7 +3563,11 @@ export class Sim {
         p.onGround = true;
         p.jumping = false;
         const drop = p.fallStartY - ground;
-        if (drop > FALL_SAFE_DISTANCE) {
+        // Hodric's Castle is a bouncy gameshow, not a cliff: the course has no
+        // damage sources at all (falls respawn at a checkpoint), so a hard
+        // landing after a hammer yeet never stings. Everywhere else, fall
+        // damage applies as normal.
+        if (drop > FALL_SAFE_DISTANCE && !isHodricsPos(p.pos.x)) {
           const dmg = Math.round(p.maxHp * (drop - FALL_SAFE_DISTANCE) * 0.07);
           if (dmg > 0) this.dealDamage(null, p, dmg, false, 'physical', 'Falling', 'hit', true);
         }
@@ -5698,6 +5804,104 @@ export class Sim {
 
   private updateArena(): void {
     arenaMod.updateArena(this.ctx);
+  }
+
+  // Hodric's Castle Gauntlet, directly after the arena in the end-of-tick
+  // system block (never reorder: parity pins the phase order). The match
+  // module runs FIRST (matchmake + race physics, which re-pins platform
+  // riders the base movement marked as ledge walk-offs), THEN the bots steer:
+  // a bot must decide on the post-physics truth of this tick (the state that
+  // gets snapshotted), or a rider looks permanently airborne to its own
+  // brain. Idle cost is one length check and ZERO rng draws.
+  private updateHodrics(): void {
+    hodricsMod.updateHodrics(this.ctx);
+    hcBotsMod.updateHcBots(this);
+  }
+
+  hcQueueJoin(pid?: number): void {
+    hodricsMod.hcQueueJoin(this.ctx, pid);
+  }
+
+  hcQueueLeave(pid?: number): void {
+    hodricsMod.hcQueueLeave(this.ctx, pid);
+  }
+
+  hcPracticeStart(): boolean {
+    return hcBotsMod.startHcPractice(this);
+  }
+
+  hcMatchFor(pid: number): HcMatch | null {
+    return hodricsMod.hcMatchFor(this.ctx, pid);
+  }
+
+  hcInfoFor(pid: number): import('../world_api').HcInfo | null {
+    const meta = this.players.get(pid);
+    if (!meta) return null;
+    const match = this.hcMatches.get(pid) ?? null;
+    const queuedAt = hodricsMod.hcQueuePosition(this.ctx, pid);
+    const standing = hodricsMod.hcStanding(meta);
+    let matchInfo: import('../world_api').HcMatchInfo | null = null;
+    if (match) {
+      const origin = hodricsOrigin(match.slot);
+      const course = match.course;
+      const me = match.racers.get(pid) ?? null;
+      const e = this.entities.get(pid);
+      const myZ = e ? e.pos.z - origin.z : course.checkpoints[0].z;
+      const racers = [...match.racers.values()]
+        .map((r) => {
+          const re = this.entities.get(r.pid);
+          const eliminated = r.eliminatedRound > 0;
+          const liveZ =
+            re && !r.left && !eliminated ? Math.max(r.furthestZ, re.pos.z - origin.z) : r.furthestZ;
+          return {
+            name: r.name,
+            cls: r.cls,
+            bot: r.bot,
+            you: r.pid === pid,
+            progress: r.finished ? 1 : hcProgressFrac(course, liveZ),
+            finished: r.finished,
+            place: r.place > 0 ? r.place : null,
+            eliminated,
+            left: r.left,
+          };
+        })
+        .sort((a, b) => {
+          // Board order: the live round first (finishers, then by progress),
+          // the gallery below it (best final placement first).
+          if (a.eliminated !== b.eliminated) return a.eliminated ? 1 : -1;
+          if (a.eliminated && b.eliminated) return (a.place ?? 99) - (b.place ?? 99);
+          if (a.finished !== b.finished) return a.finished ? -1 : 1;
+          if (a.place !== null && b.place !== null) return a.place - b.place;
+          return b.progress - a.progress;
+        });
+      const roundTime = hodricsMod.HC_ROUND_TIME[match.round - 1] ?? 120;
+      matchInfo = {
+        state: match.state,
+        round: match.round,
+        rounds: hodricsMod.HC_ROUNDS,
+        qualify: hodricsMod.hcQualifyTarget(match),
+        courseSeed: match.courseSeed,
+        countdown: match.state === 'countdown' ? Math.max(0, Math.ceil(match.timer)) : 0,
+        clock: match.clock,
+        timeLeft: Math.max(0, roundTime - match.clock),
+        section: hcSectionAt(course, myZ).id,
+        checkpoint: me?.checkpoint ?? 0,
+        finished: me?.finished ?? false,
+        place: me && me.place > 0 ? me.place : null,
+        eliminated: me ? me.eliminatedRound > 0 : false,
+        falls: me?.falls ?? 0,
+        racers,
+      };
+    }
+    return {
+      queued: queuedAt > 0 ? { position: queuedAt } : null,
+      standing: standing.races > 0 ? standing : null,
+      match: matchInfo,
+    };
+  }
+
+  get hcInfo(): import('../world_api').HcInfo | null {
+    return this.primaryId === -1 ? null : this.hcInfoFor(this.primaryId);
   }
 
   // A3: createFiestaState (FiestaState factory + per-match sub-Rng seed) moved to

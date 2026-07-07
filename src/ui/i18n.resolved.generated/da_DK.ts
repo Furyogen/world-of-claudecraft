@@ -186,6 +186,76 @@ export const da_DK: EnTranslations = {
       "placeSecond": "2nd",
       "placeThird": "3rd"
     },
+    "hc": {
+      "title": "Hodric's Castle",
+      "close": "Close the Gauntlet window",
+      "zoneName": "Hodric's Castle",
+      "offlineNote": "The Gauntlet desk has not synced yet. One moment.",
+      "howto": "Three rounds, ten racers, one crown. Lord Hodric rebuilds his gauntlet every round: survive the cut each time (six advance, then three) and win the final. Falls only cost time.",
+      "joinQueue": "Join the Gauntlet",
+      "leaveQueue": "Leave the queue",
+      "queuedAt": "In the queue at position {position}. The field fills to ten.",
+      "inMatchNote": "You are racing. Eyes forward!",
+      "practice": "Practice vs the Court",
+      "practiceNote": "Race Lord Hodric's own court: nine challengers, no waiting.",
+      "record": "Crowns {wins} / Races {races}",
+      "bestTime": "Best run {seconds}s",
+      "bestNone": "No finish on the books yet",
+      "rank": "Position {rank} / {total}",
+      "finishPlace": "Finished #{place}",
+      "timeLeft": "{seconds}s",
+      "overWon": "The crown is yours!",
+      "overPlaced": "Race over: #{place}",
+      "round": "Round {round}/{rounds}",
+      "advance": "{count} advance",
+      "spectating": "Spectating from the gallery",
+      "intermissionRebuild": "Lord Hodric rebuilds his gauntlet!",
+      "intermissionQualified": "You are through. Next round soon.",
+      "intermissionEliminated": "Eliminated! Enjoy the gallery view.",
+      "section": {
+        "start_yard": "Start Yard",
+        "hammer_bridge": "The Hammer Bridge",
+        "rotor_court": "The Rotor Court",
+        "axe_walk": "The Axe Walk",
+        "drawspan": "The Drawspan",
+        "boulder_climb": "The Boulder Climb",
+        "piston_ledge": "The Piston Ledge",
+        "spinner_court": "The Spinner Court",
+        "landing": "The Landing",
+        "red_ascent": "The Red Ascent",
+        "finish_keep": "The Finish Keep"
+      },
+      "banner": {
+        "found": "The Gauntlet calls!",
+        "go": "GO!",
+        "round": "Round {round}!",
+        "qualified": "QUALIFIED!",
+        "eliminated": "ELIMINATED",
+        "finish": "Finished #{place}!",
+        "crown": "You take Hodric's crown!"
+      },
+      "log": {
+        "queued": "You join the Gauntlet queue (position {position}).",
+        "unqueued": "You leave the Gauntlet queue.",
+        "fall": "The chasm takes you. Back to the checkpoint.",
+        "checkpoint": "Checkpoint {index} banked.",
+        "qualified": "You qualify for the next round.",
+        "eliminated": "Eliminated in round {round}. The gallery has snacks.",
+        "placed": "You finish the Gauntlet in place {place}."
+      },
+      "flavor": {
+        "queueJoin": "You join the Gauntlet queue. Lord Hodric oils the flails in your honor.",
+        "gatesOpen": "The gates of Hodric's Castle grind open. Race to the crown!",
+        "go": "GO! The Gauntlet is open!",
+        "rebuild": "Lord Hodric rebuilds his gauntlet. New course, same crown!"
+      },
+      "err": {
+        "legsOnly": "Legs only in the Gauntlet: abilities are barred.",
+        "inMatch": "You are already racing the Gauntlet.",
+        "dead": "You cannot queue for the Gauntlet while dead.",
+        "arenaConflict": "Leave the Coliseum before racing the Gauntlet."
+      }
+    },
     "death": {
       "resurrectAtCorpse": "Genopstå ved liget",
       "resurrectAtHealer": "Den Blege Vogter (Vogterens Klokke)",
@@ -1356,6 +1426,7 @@ export const da_DK: EnTranslations = {
       "combat": "Kamp",
       "talents": "Talenter",
       "arena": "Arena & PvP",
+      "hodricsCastle": "Hodric's Castle",
       "glossary": "Ordliste",
       "wishIKnew": "Ting jeg ville ønske jeg vidste",
       "faq": "FAQ",
@@ -2010,6 +2081,20 @@ export const da_DK: EnTranslations = {
       "powerupsBody": "Glødende kugler falder også ned i arenaen midt i kampen, gratis for den der når dem først. De er bevidst overdrevne og varer kun et kort øjeblik: Speed Demon for et glimt af blændende fart, Colossus for at svulme op til en kluntet kæmpe, Moon Boots for et hoppende, lavtyngdekrafts-hop, og Berserker for et pludseligt udbrud af raseri.",
       "ladderHeading": "At klatre op ad rangstigen",
       "ladderBody": "Rangeret spil følger din placering over tid. Tjek ranglisten for at se hvor du ligger og hvem der holder toppen af riget."
+    },
+    "hodricsCastlePage": {
+      "heading": "Hodric's Castle",
+      "intro": "Lord Hodric opens his castle causeway to any challenger. Race the gauntlet of his old defenses and take the crown, whoever you are, whatever your level.",
+      "heraldHeading": "The Herald",
+      "heraldBody": "Find Herald Osric at the edge of Eastbrook to join the Gauntlet queue. A race starts once ten racers are seated, real players and challengers from Hodric's own court alike, so a race always starts before long.",
+      "courseHeading": "Three rounds, one crown",
+      "courseBody": "The Gauntlet is an elimination show: ten racers start round one, six survive the cut, three reach the final, and one takes the crown. Lord Hodric rebuilds his course between every round, so no two runs are the same: hammer bridges, spinning log courts, axe walks, sliding drawspans, boulder climbs, piston ledges, and rotating platforms, in whatever order pleases his lordship that day. Every obstacle swings, spins, or rolls on its own clockwork rhythm, never at random, so a careful eye can always find the safe window.",
+      "fairnessHeading": "Legs only",
+      "fairnessBody": "Nobody casts a spell here: abilities are barred for the whole race, and every racer runs at the same pace. The Gauntlet is decided by nerve and timing, never by gear or level.",
+      "fallsHeading": "Falls cost time, not blood",
+      "fallsBody": "A knock from an obstacle or a tumble into the chasm only sends you back to your last checkpoint. Nobody dies on the causeway: the only real cost of a fall is the seconds it takes to catch back up. Racers cut at the end of a round are flung to the gallery balcony in style, where they watch the rest of the show with snacks.",
+      "standingsHeading": "The crown",
+      "standingsBody": "First across the final round's finish line takes Hodric's Crown for that show. Your race count, wins, and best final time are yours to build on every time you queue."
     },
     "wishPage": {
       "heading": "Ting jeg ville ønske jeg vidste",
@@ -6942,6 +7027,11 @@ export const da_DK: EnTranslations = {
         "name": "Gauntlet Contestant",
         "title": "Contestant",
         "greeting": "Eyes forward. The Warden is watching."
+      },
+      "hodrics_herald": {
+        "name": "Herald Osric",
+        "title": "Hodric's Gauntlet Herald",
+        "greeting": "Lord Hodric opens his causeway to all comers! Race the Gauntlet, dodge the flails, take the crown!"
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
