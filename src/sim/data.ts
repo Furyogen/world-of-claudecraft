@@ -37,6 +37,7 @@ import {
 } from './content/delves';
 import { DUNGEON_DEFS, DUNGEON_MOBS } from './content/dungeons';
 import { GATHER_NODES as GATHER_NODES_CONTENT } from './content/gather_nodes';
+import { GAUNTLET_NPCS } from './content/gauntlet';
 import {
   type GraveyardDef,
   OVERWORLD_GRAVEYARDS,
@@ -180,6 +181,9 @@ export const NPCS: Record<string, NpcDef> = {
   // loop skips it). Kept in NPCS so the online client and world_entity_i18n can
   // resolve its name; spirit.ts spawns a copy at every graveyard.
   [SPIRIT_HEALER_NPC_ID]: SPIRIT_HEALER,
+  // The Gauntlet event NPCs (all dynamic: the recruiter spawns only while the
+  // event window is open; the watcher/contestants spawn per run in the band).
+  ...GAUNTLET_NPCS,
 };
 
 // Graveyards + the Spirit Healer: re-exported so the Sim and spirit.ts import the
@@ -464,13 +468,40 @@ export function delveOrigin(delveIndex: number, slot: number): { x: number; z: n
 }
 
 export function isDelvePos(x: number): boolean {
-  return x >= DELVE_BAND_X_MIN;
+  // Bounded above by the gauntlet band: delve indices 0..6 fit below x=9000
+  // (4800 + 6*600 = 8400, room walls well short of GAUNTLET_BAND_X_MIN).
+  return x >= DELVE_BAND_X_MIN && x < GAUNTLET_BAND_X_MIN;
 }
 
 export function delveAt(x: number): DelveDef | null {
   if (!isDelvePos(x)) return null;
   const index = Math.round((x - DELVE_X_MIN) / 600);
   return DELVE_LIST.find((d) => d.index === index) ?? null;
+}
+
+// ---------------------------------------------------------------------------
+// The Gauntlet, the survival-event band past the delves. Like the other
+// far-off bands: x beyond DUNGEON_X_THRESHOLD means flat ground
+// (world.groundHeight), and the band has NO static colliders (an open field;
+// colliders.ts never classifies it as a delve/arena interior because
+// isDelvePos/isArenaPos are both bounded away from it). Slots stack along z.
+// Delve indices 0..6 stay below (4800 + 6*600 = 8400), so the 8800 band edge
+// leaves the delve band five more delves of headroom.
+// ---------------------------------------------------------------------------
+
+export const GAUNTLET_X = 9000; // gauntlet instances share this x; slots stack along z
+export const GAUNTLET_BAND_X_MIN = 8800; // x at/after this = the gauntlet band
+export const GAUNTLET_SLOT_COUNT = 8; // concurrent runs the world can host
+const GAUNTLET_Z0 = -1250;
+// Covers the sentinel field (~90 long) + staging/spectator dressing with wide margin.
+const GAUNTLET_SLOT_SPACING = 400;
+
+export function gauntletOrigin(slot: number): { x: number; z: number } {
+  return { x: GAUNTLET_X, z: GAUNTLET_Z0 + slot * GAUNTLET_SLOT_SPACING };
+}
+
+export function isGauntletPos(x: number): boolean {
+  return x >= GAUNTLET_BAND_X_MIN;
 }
 
 export const DELVES: Record<string, DelveDef> = {
