@@ -44,8 +44,8 @@ them is a required check.
    `scripts/gh_sticky_comment.mjs`. No new npm dependencies in the repo: the workflow
    installs `@openai/codex` globally on the runner, and the GitHub side is Node's
    built-in `fetch` against the REST API.
-3. **AI review on demand** (`ai-review-comment` job). An OWNER, MEMBER, or COLLABORATOR
-   of this repo can comment `/review` or `/suggest <focus>` on a PR (for example
+3. **AI review on demand** (`ai-review-comment` job). Anyone can comment `/review` or
+   `/suggest <focus>` on a PR (for example
    `/suggest check the null handling around the new cache`) to re-run the same reviewer
    whenever they want, optionally pointed at a specific concern. It runs the same
    `scripts/ai_review.mjs` with the same PR-head checkout and verification setup, and
@@ -84,21 +84,24 @@ opt-in and authenticates with a ChatGPT account through OAuth, not an API key:
 Comment `/review` on a PR to re-run the reviewer over the current state of the PR, or
 `/suggest <focus>` to ask it to prioritize something specific (the rest of the comment
 after the command is passed to the model as the thing to focus on; it still mentions
-other high-confidence findings). Only comments from an OWNER, MEMBER, or COLLABORATOR of
-this repo trigger it, checked against this repo regardless of whose PR it is, so a first-
-time contributor cannot self-trigger it on their own fork PR by commenting on it.
+other high-confidence findings). There is no author_association gate: any commenter can
+trigger it, including a first-time contributor on their own fork PR. This is a deliberate
+choice so every contributor can self-serve a review without waiting on a maintainer.
 
-Know what you are opting into on a FORK PR: unlike the old diff-only reviewer, this job
-checks out the fork's code and exercises it (the i18n generation step, and whatever tests
-the agent runs), in a job that holds the `CODEX_AUTH_JSON` secret. The mitigations are
+Know what that opens up on a FORK PR: unlike the old diff-only reviewer, this job checks
+out the fork's code and exercises it (the i18n generation step, and whatever tests the
+agent runs), in a job that holds the `CODEX_AUTH_JSON` secret. Because the trigger is
+ungated, anyone who can open a PR can cause that code to run here. The mitigations are
 real but not absolute: the reviewer scripts themselves run from a TRUSTED default-branch
 checkout while the PR head sits in a separate `pr/` tree (so a fork cannot replace
 `ai_review.mjs` and read the secret from inside the secret-holding step),
 `npm ci --ignore-scripts` keeps third-party install hooks from running, the raw secret is
 scrubbed from the agent's child environment (only the materialized `CODEX_HOME/auth.json`
 exists, in a throwaway temp dir), and the `GITHUB_TOKEN` carries only `contents: read`
-plus `pull-requests: write`. Skim a fork PR's diff for anything that reads credentials or
-phones home before typing `/review` on it; for same-repo PRs there is no new exposure.
+plus `pull-requests: write`. Residual risk is that the code the agent chooses to run (the
+PR's tests) executes inside the secret-holding job. If the `CODEX_AUTH_JSON` token is ever
+suspected leaked, refresh it (see the setup note) and consider restoring the
+author_association gate on the `ai-review-comment` job.
 
 ## Privacy: read before enabling on private code
 
@@ -121,9 +124,9 @@ is skipped entirely (the frames exist only in the job log's capture output).
 The on-demand `/review` and `/suggest` comment trigger is different: `issue_comment`
 always runs with full repo secrets, regardless of whether the PR is from a fork, and it
 checks out and exercises the PR's own code so the agent can verify it. That combination
-is gated on the commenter's `author_association` with this repo, not the PR's origin,
-and is a deliberate maintainer opt-in with documented mitigations (see "Requesting a
-review on demand" above).
+is intentionally ungated: any commenter can trigger it on any PR, including a fork PR's
+own author. The documented mitigations (see "Requesting a review on demand" above) are
+what contain the residual risk of running fork code under the secret.
 
 ## Running the screenshot capture locally
 

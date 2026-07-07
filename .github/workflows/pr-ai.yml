@@ -17,12 +17,13 @@ name: PR AI assist
 #                       npx tsc --noEmit, run the vitest files covering the change.
 #                       No-ops without the secret (for example on a fork PR), so it
 #                       never blocks.
-#   ai-review-comment   on demand: an OWNER/MEMBER/COLLABORATOR comments `/review` or
-#                       `/suggest <focus>` on the PR. Same verifying setup as ai-review
-#                       (PR-head checkout + deps), posting a fresh reply comment keyed
-#                       to the triggering comment rather than the sticky review above.
-#                       Running a fork PR's code here is a deliberate maintainer opt-in;
-#                       see the security note on the job.
+#   ai-review-comment   on demand: ANYONE comments `/review` or `/suggest <focus>` on
+#                       the PR. Same verifying setup as ai-review (PR-head checkout +
+#                       deps), posting a fresh reply comment keyed to the triggering
+#                       comment rather than the sticky review above. Open to any
+#                       commenter by deliberate choice, including a fork PR's own author;
+#                       this runs that PR's code in a secret-holding job, so read the
+#                       security note on the job before relying on it.
 #
 # Setup (one time): run `codex login` locally and store ~/.codex/auth.json in the
 # CODEX_AUTH_JSON repo secret to enable ai-review. Optionally set a CODEX_MODEL repo
@@ -38,8 +39,9 @@ on:
 # Needed to post the sticky review/screenshot comments and read the PR diff via the API.
 # Fork PRs get a read-only token on the pull_request trigger, so the comment steps
 # degrade to a no-op there (handled in the scripts). issue_comment always runs with the
-# base repo's token and secrets regardless of whose PR it is, which is why
-# ai-review-comment additionally gates on the commenter's author_association.
+# base repo's token and secrets regardless of whose PR it is; ai-review-comment is
+# intentionally open to any commenter, so the security note on that job is the only thing
+# standing between a fork PR's code and the secret it runs under.
 permissions:
   contents: read
   pull-requests: write
@@ -194,25 +196,25 @@ jobs:
   ai-review-comment:
     name: AI review (comment command)
     runs-on: ubuntu-latest
-    # Only a PR conversation comment (not a plain issue), starting with /review or
-    # /suggest, from someone with write access to THIS repo. author_association is
-    # evaluated against the base repo regardless of whether the PR itself is from a
-    # fork, so a fork PR's own author cannot self-trigger this on their own comment.
+    # Any PR conversation comment (not a plain issue) starting with /review or /suggest,
+    # from ANY commenter. There is no author_association gate: a fork PR's own author,
+    # or any drive-by GitHub account, can trigger this on their own comment. This is a
+    # deliberate choice to let every contributor self-serve a review.
     #
-    # SECURITY TRADEOFF, deliberate: this job checks out and exercises the PR's own code
-    # (i18n:gen, and the tests the agent runs) in a job that holds CODEX_AUTH_JSON, so a
-    # maintainer typing /review on a fork PR is explicitly opting in to running that
-    # fork's code. Mitigations: the REVIEWER SCRIPTS run from a trusted default-branch
-    # checkout while the PR head sits in a separate pr/ tree (so a fork cannot swap
-    # ai_review.mjs itself and read the secret), npm ci --ignore-scripts (no third-party
-    # install hooks), the raw secret is scrubbed from the agent's child environment
-    # (ai_review.mjs), and GITHUB_TOKEN carries only contents:read + pull-requests:write.
-    # Residual risk: code the agent chooses to execute (the PR's tests) runs inside the
-    # job; skim a fork PR's diff before requesting a review on it.
+    # SECURITY TRADEOFF, deliberate and now UNGATED: this job checks out and exercises
+    # the PR's own code (i18n:gen, and the tests the agent runs) in a job that holds
+    # CODEX_AUTH_JSON, so anyone who can open a PR can cause that PR's code to run here.
+    # Mitigations: the REVIEWER SCRIPTS run from a trusted default-branch checkout while
+    # the PR head sits in a separate pr/ tree (so a fork cannot swap ai_review.mjs itself
+    # and read the secret), npm ci --ignore-scripts (no third-party install hooks), the
+    # raw secret is scrubbed from the agent's child environment (ai_review.mjs), and
+    # GITHUB_TOKEN carries only contents:read + pull-requests:write. Residual risk, larger
+    # now that anyone can trigger: code the agent chooses to execute (the PR's tests) runs
+    # inside the job. If the CODEX_AUTH_JSON token is ever suspected leaked, refresh it
+    # (docs/ai-pr-bot.md) and consider restoring an author_association gate here.
     if: >
       github.event_name == 'issue_comment' &&
       github.event.issue.pull_request != null &&
-      contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association) &&
       (startsWith(github.event.comment.body, '/review') || startsWith(github.event.comment.body, '/suggest'))
     timeout-minutes: 35
     steps:
