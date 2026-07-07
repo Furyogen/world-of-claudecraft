@@ -16,7 +16,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "71c5bba0",
+      "state": "6de8b295",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -48,6 +48,7 @@
             "mainhand": "rusty_dagger"
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
@@ -120,7 +121,7 @@
       "tick": 10,
       "time": 0.5,
       "nextId": 414,
-      "state": "988ccd2c",
+      "state": "2b3fb2cd",
       "events": "a8af5cb6",
       "rng": {
         "draws": 4,
@@ -131,7 +132,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 414,
-      "state": "0bf68c97",
+      "state": "cefb89a4",
       "events": "b93c7dc5",
       "rng": {
         "draws": 4,
@@ -142,7 +143,7 @@
       "tick": 30,
       "time": 1.5,
       "nextId": 414,
-      "state": "16a23e34",
+      "state": "5dc5ef65",
       "events": "0b43bbc3",
       "rng": {
         "draws": 5,
@@ -153,7 +154,7 @@
       "tick": 38,
       "time": 1.9,
       "nextId": 416,
-      "state": "e8900fb3",
+      "state": "c9b3a0c4",
       "events": "6c6bd0f2",
       "rng": {
         "draws": 8,
@@ -201,6 +202,7 @@
             "mainhand": "rusty_dagger"
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
@@ -413,7 +415,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 416,
-      "state": "3e4d2b6e",
+      "state": "57d0de4b",
       "events": "741638a5",
       "rng": {
         "draws": 8,
@@ -424,7 +426,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 416,
-      "state": "3e4d2b6e",
+      "state": "57d0de4b",
       "events": "741638a5",
       "rng": {
         "draws": 8,
@@ -472,6 +474,7 @@
             "mainhand": "rusty_dagger"
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,

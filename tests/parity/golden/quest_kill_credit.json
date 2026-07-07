@@ -16,7 +16,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "7dfedf0b",
+      "state": "652b2840",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -48,6 +48,7 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
@@ -118,7 +119,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "c0c2372a",
+      "state": "0f056cfb",
       "events": "00bafcff",
       "rng": {
         "draws": 0,
@@ -150,6 +151,7 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
@@ -233,7 +235,7 @@
       "tick": 8,
       "time": 0.4,
       "nextId": 409,
-      "state": "0bdbd8b9",
+      "state": "1e766dd6",
       "events": "d894ee18",
       "rng": {
         "draws": 40,
@@ -269,6 +271,7 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
@@ -353,7 +356,7 @@
       "tick": 8,
       "time": 0.4,
       "nextId": 409,
-      "state": "26db3dc0",
+      "state": "b449d143",
       "events": "272aafab",
       "rng": {
         "draws": 40,
@@ -392,6 +395,7 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
@@ -468,7 +472,7 @@
       "tick": 10,
       "time": 0.5,
       "nextId": 409,
-      "state": "bd08b448",
+      "state": "35d7c07b",
       "events": "741638a5",
       "rng": {
         "draws": 40,
@@ -507,6 +511,7 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,

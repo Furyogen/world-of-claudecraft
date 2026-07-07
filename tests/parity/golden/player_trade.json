@@ -30,7 +30,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 402,
-      "state": "1d9bfdbd",
+      "state": "7d76460b",
       "events": "6cbb98f1",
       "rng": {
         "draws": 0,
@@ -62,6 +62,7 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
@@ -103,6 +104,7 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 7,
@@ -226,7 +228,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 402,
-      "state": "da337dde",
+      "state": "c0153642",
       "events": "27a26705",
       "rng": {
         "draws": 0,
@@ -258,6 +260,7 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 6,
@@ -299,6 +302,7 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 6,
@@ -426,7 +430,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 402,
-      "state": "da337dde",
+      "state": "c0153642",
       "events": "c00485a7",
       "rng": {
         "draws": 0,
@@ -458,6 +462,7 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 6,
@@ -499,6 +504,7 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 6,
@@ -626,7 +632,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 402,
-      "state": "da337dde",
+      "state": "c0153642",
       "events": "a4365a6e",
       "rng": {
         "draws": 0,
@@ -658,6 +664,7 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 6,
@@ -699,6 +706,7 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 6,
@@ -826,7 +834,7 @@
       "tick": 1,
       "time": 0.05,
       "nextId": 402,
-      "state": "f9598fcf",
+      "state": "5eab3a97",
       "events": "eb0174f4",
       "rng": {
         "draws": 0,
@@ -858,6 +866,7 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 6,
@@ -899,6 +908,7 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 6,
@@ -1026,7 +1036,7 @@
       "tick": 1,
       "time": 0.05,
       "nextId": 402,
-      "state": "f9598fcf",
+      "state": "5eab3a97",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -1058,6 +1068,7 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 6,
@@ -1099,6 +1110,7 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 6,

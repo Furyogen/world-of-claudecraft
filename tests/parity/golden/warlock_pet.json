@@ -16,7 +16,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "35a51728",
+      "state": "257410f3",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -48,6 +48,7 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
@@ -123,7 +124,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 401,
-      "state": "ac691038",
+      "state": "5236fac7",
       "events": "3acb3014",
       "rng": {
         "draws": 0,
@@ -134,7 +135,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 401,
-      "state": "dea81de2",
+      "state": "3109e285",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -145,7 +146,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 401,
-      "state": "7c8ccfb1",
+      "state": "b05a043c",
       "events": "741638a5",
       "rng": {
         "draws": 100,
@@ -156,7 +157,7 @@
       "tick": 80,
       "time": 4,
       "nextId": 401,
-      "state": "d5cf61d0",
+      "state": "5b99f28f",
       "events": "741638a5",
       "rng": {
         "draws": 186,
@@ -167,7 +168,7 @@
       "tick": 100,
       "time": 5,
       "nextId": 402,
-      "state": "eea5d140",
+      "state": "901bf9df",
       "events": "2796152c",
       "rng": {
         "draws": 271,
@@ -178,7 +179,7 @@
       "tick": 120,
       "time": 6,
       "nextId": 403,
-      "state": "770b0db4",
+      "state": "88510553",
       "events": "26a41d9d",
       "rng": {
         "draws": 366,
@@ -189,7 +190,7 @@
       "tick": 140,
       "time": 7,
       "nextId": 403,
-      "state": "b71ff925",
+      "state": "63e66a20",
       "events": "9caad040",
       "rng": {
         "draws": 495,
@@ -200,7 +201,7 @@
       "tick": 160,
       "time": 8,
       "nextId": 403,
-      "state": "e0ae3553",
+      "state": "afa801b2",
       "events": "05346f1a",
       "rng": {
         "draws": 636,
@@ -211,7 +212,7 @@
       "tick": 180,
       "time": 9,
       "nextId": 403,
-      "state": "f453afa0",
+      "state": "5c2c06ff",
       "events": "cfc18f2e",
       "rng": {
         "draws": 774,
@@ -222,7 +223,7 @@
       "tick": 200,
       "time": 10,
       "nextId": 403,
-      "state": "0f0bb4f7",
+      "state": "d6440a76",
       "events": "ced2e436",
       "rng": {
         "draws": 943,
@@ -233,7 +234,7 @@
       "tick": 220,
       "time": 11,
       "nextId": 403,
-      "state": "7ee4e9e6",
+      "state": "4a2e8459",
       "events": "cfc18f2e",
       "rng": {
         "draws": 1021,
@@ -244,7 +245,7 @@
       "tick": 220,
       "time": 11,
       "nextId": 403,
-      "state": "7535d2ec",
+      "state": "f016c8fb",
       "events": "741638a5",
       "rng": {
         "draws": 1021,
@@ -278,6 +279,7 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
@@ -468,7 +470,7 @@
       "tick": 224,
       "time": 11.2,
       "nextId": 403,
-      "state": "79a5122f",
+      "state": "7f38f65e",
       "events": "852d6621",
       "rng": {
         "draws": 1050,
@@ -502,6 +504,7 @@
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,

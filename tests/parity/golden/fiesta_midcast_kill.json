@@ -31,7 +31,7 @@
       "tick": 25,
       "time": 1.25,
       "nextId": 404,
-      "state": "4a02d92b",
+      "state": "b70905df",
       "events": "a1a98eff",
       "rng": {
         "draws": 0,
@@ -42,7 +42,7 @@
       "tick": 50,
       "time": 2.5,
       "nextId": 404,
-      "state": "51ba5395",
+      "state": "2a9d3cd9",
       "events": "6e60008d",
       "rng": {
         "draws": 28,
@@ -53,7 +53,7 @@
       "tick": 75,
       "time": 3.75,
       "nextId": 404,
-      "state": "ffd93aab",
+      "state": "e13f2f5f",
       "events": "9b3dbf7d",
       "rng": {
         "draws": 138,
@@ -64,7 +64,7 @@
       "tick": 100,
       "time": 5,
       "nextId": 404,
-      "state": "1c09254d",
+      "state": "bfa309b1",
       "events": "e324e10d",
       "rng": {
         "draws": 294,
@@ -75,7 +75,7 @@
       "tick": 101,
       "time": 5.05,
       "nextId": 404,
-      "state": "b962e30c",
+      "state": "975330d4",
       "events": "eac8ab97",
       "rng": {
         "draws": 300,
@@ -115,6 +115,7 @@
             }
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
@@ -165,6 +166,7 @@
             }
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
@@ -221,6 +223,7 @@
             }
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
@@ -271,6 +274,7 @@
             }
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
@@ -502,7 +506,7 @@
       "tick": 101,
       "time": 5.05,
       "nextId": 404,
-      "state": "1fc7d586",
+      "state": "2f475576",
       "events": "abc18e50",
       "rng": {
         "draws": 300,
@@ -542,6 +546,7 @@
             }
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
@@ -592,6 +597,7 @@
             }
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
@@ -648,6 +654,7 @@
             }
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
@@ -698,6 +705,7 @@
             }
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
@@ -927,7 +935,7 @@
       "tick": 101,
       "time": 5.05,
       "nextId": 404,
-      "state": "f6d5463c",
+      "state": "bd8e0d84",
       "events": "d24eb35d",
       "rng": {
         "draws": 300,
@@ -968,6 +976,7 @@
             }
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
@@ -1018,6 +1027,7 @@
             }
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
@@ -1075,6 +1085,7 @@
             }
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
@@ -1125,6 +1136,7 @@
             }
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
@@ -1354,7 +1366,7 @@
       "tick": 125,
       "time": 6.25,
       "nextId": 404,
-      "state": "6adf901a",
+      "state": "de81b7ea",
       "events": "741638a5",
       "rng": {
         "draws": 429,
@@ -1365,7 +1377,7 @@
       "tick": 142,
       "time": 7.1,
       "nextId": 404,
-      "state": "0bba6d52",
+      "state": "39db9ba2",
       "events": "741638a5",
       "rng": {
         "draws": 524,
@@ -1406,6 +1418,7 @@
             }
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
@@ -1456,6 +1469,7 @@
             }
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
@@ -1513,6 +1527,7 @@
             }
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
@@ -1563,6 +1578,7 @@
             }
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,

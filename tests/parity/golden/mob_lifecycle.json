@@ -31,7 +31,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 405,
-      "state": "02657fa4",
+      "state": "d6b22033",
       "events": "afc1696f",
       "rng": {
         "draws": 5,
@@ -66,6 +66,7 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
@@ -367,7 +368,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 406,
-      "state": "146f04ee",
+      "state": "8b9763f1",
       "events": "6ff1c8ee",
       "rng": {
         "draws": 8,
@@ -402,6 +403,7 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
@@ -756,7 +758,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 406,
-      "state": "2ab28bf8",
+      "state": "a96421ff",
       "events": "e7eb4dcc",
       "rng": {
         "draws": 9,
@@ -792,6 +794,7 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
@@ -1147,7 +1150,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 408,
-      "state": "424411fb",
+      "state": "5962b7ba",
       "events": "70ed87d1",
       "rng": {
         "draws": 15,
@@ -1183,6 +1186,7 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
@@ -1581,7 +1585,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 409,
-      "state": "a122810a",
+      "state": "1eea0781",
       "events": "d9e22721",
       "rng": {
         "draws": 20,
@@ -1617,6 +1621,7 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
@@ -2076,7 +2081,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 409,
-      "state": "a122810a",
+      "state": "1eea0781",
       "events": "741638a5",
       "rng": {
         "draws": 20,
@@ -2112,6 +2117,7 @@
             "mainhand": "worn_sword"
           },
           "gatheringProficiency": {},
+          "gauntletStats": {},
           "inventory": [
             {
               "count": 5,
