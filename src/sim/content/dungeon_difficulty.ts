@@ -17,27 +17,29 @@ export interface HeroicDungeonTuning {
   finalBossId: string;
 }
 
-// Tuning model follows classic-era (TBC) heroics, calibrated against MEASURED
-// database pairs (normal vs heroic raw melee damage): Watchkeeper Gargolmar
-// 3.00x, Nazan 3.28x, Omor 3.42x, and, critically, the cap-level Shattered
-// Halls' Kargath Bladefist ALSO 3.50x, so the damage jump was flat across
-// leveling and endgame dungeons. Health followed the cap-band level jump
-// (roughly 3x for leveling dungeons, a smaller ~1.5-2x for already-cap
-// normals). One deliberate deviation: TBC tanks mitigated 60-70% of raw
-// swings while a level-20 tank here mitigates ~15%, so the multipliers below
-// target TBC's EFFECTIVE severity (boss on tank ~20-30% of tank HP per
-// swing, trash on cloth ~40-60%) rather than the raw 3.5x, which lands the
-// overall raw ratios at ~2.7-3.2x. Recompute the bands with the level-20 pin
-// included: e.g. Hollow Crypt L10 mobs already gain ~1.6x health and ~1.8x
-// damage from the level bump alone. Mechanic damage/heals scale with these
-// too (mechanicDamageMult/mechanicHealMult in ../instances/difficulty.ts).
+// Tuning model follows classic-era (TBC) heroics: measured database pairs put
+// the heroic raw-damage jump at ~3.0-3.5x flat across leveling and endgame
+// dungeons (Gargolmar 3.00x, Nazan 3.28x, Omor 3.42x, cap-level Kargath
+// Bladefist 3.50x), with health following the cap-band level jump. The
+// damage multipliers below are calibrated against a GEARED level-20 roster
+// (endgame blues: tank ~1150 hp at 33% armor DR, cloth ~640 hp at 18%),
+// reproducing the TBC-heroic EXPERIENCE: a final boss chews a tank for
+// ~18-28% of max hp per swing (healers must actively pump), trash melee
+// takes ~30-55% of a clothie per hit, and boss melee on cloth is close to a
+// two-shot. That lands the raw heroic-vs-normal ratios above TBC's 3.5x
+// because this game's mitigation and hp pools are proportionally larger at
+// the cap; the EFFECTIVE severity is the calibration target. Recompute the
+// bands with the level-20 pin included (Hollow Crypt L10 mobs already gain
+// ~1.6x health and ~1.8x damage from the level bump alone). Mechanic damage
+// and support heals scale with the same multipliers
+// (mechanicDamageMult/mechanicHealMult in ../instances/difficulty.ts).
 export const HEROIC_DUNGEON_TUNING: Record<string, HeroicDungeonTuning> = {
   hollow_crypt: {
     id: 'hollow_crypt',
     difficulty: 'heroic',
     level: 20,
     healthMultiplier: 1.9,
-    damageMultiplier: 1.8,
+    damageMultiplier: 3.4,
     armorMultiplier: 1.3,
     finalBossId: 'morthen',
   },
@@ -46,7 +48,7 @@ export const HEROIC_DUNGEON_TUNING: Record<string, HeroicDungeonTuning> = {
     difficulty: 'heroic',
     level: 20,
     healthMultiplier: 2.0,
-    damageMultiplier: 2.2,
+    damageMultiplier: 3.8,
     armorMultiplier: 1.3,
     finalBossId: 'vael_the_mistcaller',
   },
@@ -55,7 +57,7 @@ export const HEROIC_DUNGEON_TUNING: Record<string, HeroicDungeonTuning> = {
     difficulty: 'heroic',
     level: 20,
     healthMultiplier: 2.6,
-    damageMultiplier: 2.8,
+    damageMultiplier: 4.2,
     armorMultiplier: 1.25,
     finalBossId: 'ysolei',
   },
@@ -64,7 +66,7 @@ export const HEROIC_DUNGEON_TUNING: Record<string, HeroicDungeonTuning> = {
     difficulty: 'heroic',
     level: 20,
     healthMultiplier: 2.0,
-    damageMultiplier: 2.7,
+    damageMultiplier: 4.6,
     armorMultiplier: 1.2,
     finalBossId: 'korzul_the_gravewyrm',
   },

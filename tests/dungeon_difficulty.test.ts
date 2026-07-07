@@ -73,10 +73,10 @@ describe('heroic tuning data contract', () => {
         ]),
       ),
     ).toEqual({
-      hollow_crypt: [1.9, 1.8, 1.3],
-      sunken_bastion: [2.0, 2.2, 1.3],
-      drowned_temple: [2.6, 2.8, 1.25],
-      gravewyrm_sanctum: [2.0, 2.7, 1.2],
+      hollow_crypt: [1.9, 3.4, 1.3],
+      sunken_bastion: [2.0, 3.8, 1.3],
+      drowned_temple: [2.6, 4.2, 1.25],
+      gravewyrm_sanctum: [2.0, 4.6, 1.2],
     });
   });
 });
@@ -102,14 +102,14 @@ describe('mobTemplateForDungeonDifficulty', () => {
   it('produces an exact heroic transform without mutating the base template', () => {
     const before = JSON.stringify(SYNTHETIC);
     const heroic = mobTemplateForDungeonDifficulty(SYNTHETIC, 'hollow_crypt', 'heroic');
-    // hollow_crypt tuning: health x1.9, damage x1.8, armor x1.3, level 20.
+    // hollow_crypt tuning: health x1.9, damage x3.4, armor x1.3, level 20.
     expect(heroic).not.toBe(SYNTHETIC);
     expect(heroic.minLevel).toBe(20);
     expect(heroic.maxLevel).toBe(20);
     expect(heroic.hpBase).toBeCloseTo(190, 10);
     expect(heroic.hpPerLevel).toBeCloseTo(19, 10);
-    expect(heroic.dmgBase).toBeCloseTo(36, 10);
-    expect(heroic.dmgPerLevel).toBeCloseTo(3.6, 10);
+    expect(heroic.dmgBase).toBeCloseTo(68, 10);
+    expect(heroic.dmgPerLevel).toBeCloseTo(6.8, 10);
     expect(heroic.armorPerLevel).toBeCloseTo(5.2, 10);
     // Untouched fields carry over; the base template is never mutated.
     expect(heroic.attackSpeed).toBe(SYNTHETIC.attackSpeed);
