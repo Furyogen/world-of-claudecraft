@@ -246,7 +246,9 @@ describe('dungeons: heroic difficulty', () => {
     const heroicInst = claimedDungeon(sim, 'hollow_crypt', 'heroic');
     expect(heroicInst).toBeTruthy();
     expect(mobInInstance(sim, heroicInst, 'morthen').level).toBe(20);
-  });
+    // 6000+ ticks of empty-instance countdown: comfortably under a second alone,
+    // but borderline at the 5s default under full-suite core contention.
+  }, 20000);
 
   it('a party formed after the leader chose heroic inherits the selection', () => {
     const sim = makeSim();
