@@ -127,8 +127,11 @@ describe('minimapMode (delve vs overworld discriminator)', () => {
       player: { pos: { x: number } };
       delveRun: unknown;
     };
-    w.player.pos.x = 100000; // a delve-band x
-    w.delveRun = { delveId: 'd', modules: ['m'], moduleIndex: 0, origin: { x: 100000, z: 0 } };
+    // A real delve-band x: the band is bounded above by the gauntlet band
+    // (isDelvePos = DELVE_BAND_X_MIN <= x < GAUNTLET_BAND_X_MIN), so an
+    // arbitrary huge x no longer classifies as a delve.
+    w.player.pos.x = 5000;
+    w.delveRun = { delveId: 'd', modules: ['m'], moduleIndex: 0, origin: { x: 5000, z: 0 } };
     expect(minimapMode(w as unknown as IWorld)).toBe('delve');
   });
 });
