@@ -193,7 +193,7 @@ const BIPED14: ClipMap = {
   death: 'Death',
 };
 
-// Quaternius ghost rig — it never walks, it drifts.
+// Quaternius ghost rig - it never walks, it drifts.
 const GHOST: ClipMap = {
   idle: 'Flying_Idle',
   walk: 'Fast_Flying',
@@ -213,7 +213,7 @@ const ENEMY7: ClipMap = {
   death: 'Death',
 };
 
-// Quaternius crab rig (crabenemy.glb) — no Run clip; Walk covers both.
+// Quaternius crab rig (crabenemy.glb) - no Run clip; Walk covers both.
 const CRAB: ClipMap = {
   idle: 'Idle',
   walk: 'Walk',
@@ -249,7 +249,7 @@ const SPIRIT_CLIPS: ClipMap = {
 
 // Shared clip set for the Mirror World's bespoke grounded combat bipeds (reaper,
 // and the brutes/sentries as they land): a Tripo humanoid rig with the game's
-// core loop. No dedicated run cycle — Walk covers both (server drives speed).
+// core loop. No dedicated run cycle - Walk covers both (server drives speed).
 const MIRROR_COMBAT_CLIPS: ClipMap = {
   idle: 'Idle',
   walk: 'Walk',
@@ -260,8 +260,8 @@ const MIRROR_COMBAT_CLIPS: ClipMap = {
 };
 
 // Walk-only quadruped set (spirit unicorn and kin). Tripo's quadruped auto-rig
-// only ships a single Walk cycle — no idle/gallop/attack/death for four-legged
-// models — so every ClipMap slot points at Walk. With --strip-root the creature
+// only ships a single Walk cycle - no idle/gallop/attack/death for four-legged
+// models - so every ClipMap slot points at Walk. With --strip-root the creature
 // walk-cycles in place, which reads as a restless drift on a spirit; not ideal for
 // a distinct attack/death pose, but keeps a bespoke body over the placeholder.
 const WALK_ONLY_QUAD_CLIPS: ClipMap = {
@@ -274,7 +274,7 @@ const WALK_ONLY_QUAD_CLIPS: ClipMap = {
 
 // Stationary bespoke-NPC set: one signature clip baked as 'Idle' (Nerissa's
 // standing warden idle; Morwen's perpetual cast/stir over her kettle). Town NPCs
-// never walk or fight, so every slot points at Idle — the render never asks for a
+// never walk or fight, so every slot points at Idle - the render never asks for a
 // clip the GLB doesn't ship.
 const NPC_IDLE_CLIPS: ClipMap = {
   idle: 'Idle',
@@ -700,7 +700,7 @@ export const VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.45,
   },
-  // Mirror World belt spirits — each moving off the placeholder rig onto its own
+  // Mirror World belt spirits - each moving off the placeholder rig onto its own
   // bespoke Tripo body as they land. Poverty ghost + mistshade are done (own
   // floating GLBs, SPIRIT_CLIPS); the unicorn/reaper/etc. still ride placeholders
   // below until their models ship.
@@ -757,7 +757,7 @@ export const VISUALS: Record<string, VisualDef> = {
     tintStrength: 0.15,
   },
   // Spirit Unicorn: bespoke translucent unicorn (was a pale-tinted stag). Walk-only
-  // (Tripo quadruped limitation) — the baked pale-blue ghost texture carries the look.
+  // (Tripo quadruped limitation) - the baked pale-blue ghost texture carries the look.
   mob_unicorn: {
     url: `${CREATURES}/spirit_unicorn.glb`,
     height: 2.6,
@@ -772,7 +772,7 @@ export const VISUALS: Record<string, VisualDef> = {
     tintStrength: 0.15,
   },
   // Voidfang Stalker: bespoke gaunt spectral hound (was the shared fox). Walk-only
-  // (Tripo quadruped limitation) — the baked grey-blue ghost texture carries the
+  // (Tripo quadruped limitation) - the baked grey-blue ghost texture carries the
   // wraith-predator read; with the in-place walk it drift-prowls the causeway.
   mob_voidfang: {
     url: `${CREATURES}/voidfang_stalker.glb`,
@@ -788,7 +788,7 @@ export const VISUALS: Record<string, VisualDef> = {
     tintStrength: 0.12,
   },
   // Gloaming Maw: bespoke all-jaws void predator (new key; previously fell back to
-  // the demon family). Walk-only quadruped — the baked black-violet void texture and
+  // the demon family). Walk-only quadruped - the baked black-violet void texture and
   // huge fanged maw carry the horror; only a whisper of cool tint so it seats in the
   // moonlit Mirror-World palette without dulling the violet.
   mob_maw: {
@@ -797,7 +797,7 @@ export const VISUALS: Record<string, VisualDef> = {
     orient: { x: -Math.PI / 2 },
     yaw: Math.PI / 2,
     clips: WALK_ONLY_QUAD_CLIPS,
-    // walk-only rig: the jaw chomp is a procedural bone overlay (visual.ts) — the
+    // walk-only rig: the jaw chomp is a procedural bone overlay (visual.ts) - the
     // 4-segment tripoHead chain gapes open then snaps shut on the strike.
     proceduralAttack: 'chomp',
     tint: 0x9aa0b0,
@@ -1178,7 +1178,7 @@ export const VISUALS: Record<string, VisualDef> = {
     tintStrength: 0.55,
   },
   // The statue form: the same bespoke gargoyle, frozen on its idle's first frame.
-  // `frozen` parks the mixer there — statues do not sway. It rouses into the
+  // `frozen` parks the mixer there - statues do not sway. It rouses into the
   // awakened boss (mob_gargoyle) on Sim.wakeGargoyle, playing the Wake flourish.
   npc_gargoyle: {
     url: `${CREATURES}/gargoyle.glb`,
@@ -1249,7 +1249,7 @@ const MOB_KEYS: Record<string, string> = {
   tolling_bell: 'mob_tolling_bell',
   reedbound_acolyte: 'mob_reedbound_acolyte',
   edda_reedhand: 'npc_edda_reedhand',
-  // Mirror World belt spirits — species-specific rigs; the mistshade takes a
+  // Mirror World belt spirits - species-specific rigs; the mistshade takes a
   // heavier-tinted variant of the murloc/frog rig so it reads as a shadow.
   poverty_ghost: 'mob_ghost',
   gloomhulk: 'mob_gloomhulk',
@@ -1320,7 +1320,7 @@ const NPC_KEYS: Record<string, string> = {
   gargoyle_sentinel_south: 'npc_gargoyle',
   gargoyle_sentinel_west: 'npc_gargoyle',
   gargoyle_sentinel_north: 'npc_gargoyle',
-  // The Black Mirror causeway wardens are gargoyle statues too — without these
+  // The Black Mirror causeway wardens are gargoyle statues too - without these
   // they fell through to npc_villager and rendered as townsfolk.
   dread_sentinel_a: 'npc_gargoyle',
   dread_sentinel_b: 'npc_gargoyle',
@@ -1354,11 +1354,6 @@ export function visualKeyFor(e: Entity): string {
     return VISUALS[`player_${e.templateId}`] ? `player_${e.templateId}` : 'player_warrior';
   }
   if (e.kind === 'mob') {
-    // The Deepdream Echo wears the dreamer's own class silhouette (its dark
-    // entity tint reads it as a shadow of you). mirrorClass is set at spawn.
-    if (e.mirrorClass) {
-      return VISUALS[`player_${e.mirrorClass}`] ? `player_${e.mirrorClass}` : 'player_warrior';
-    }
     const override = MOB_KEYS[e.templateId];
     if (override) return override;
     const family = MOBS[e.templateId]?.family;

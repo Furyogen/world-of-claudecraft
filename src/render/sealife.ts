@@ -1,12 +1,13 @@
 import * as THREE from 'three';
 import { MIRROR_LAYOUT } from '../sim/content/mirror_world';
 import { zoneBiomeAt } from '../sim/world';
+import { mulberry32 } from './rng';
 
-// Ambient spirits for the Mirror World — RENDER-ONLY decoration, no sim/IWorld
+// Ambient spirits for the Mirror World - RENDER-ONLY decoration, no sim/IWorld
 // state. Glowing orbs drift through the darkness outside the dome glass:
 // unhurried wisps circling the city at different heights, each pulsing softly
 // as it goes. Same contract as birds/motes/critters: a fixed pool,
-// deterministic placement (mulberry32 off the world seed — the render
+// deterministic placement (mulberry32 off the world seed - the render
 // convention forbids Math.random), hidden outside the mirror biome.
 
 const SPIRIT_COUNT = 14;
@@ -15,17 +16,6 @@ const VISIBLE_RANGE = 320; // hide the whole group when the player is far away
 export interface SealifeView {
   group: THREE.Group;
   update(px: number, pz: number, dt: number): void;
-}
-
-function mulberry32(seed: number): () => number {
-  let a = seed >>> 0;
-  return () => {
-    a |= 0;
-    a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
 }
 
 interface Spirit {

@@ -1838,6 +1838,10 @@ export const da_DK: EnTranslations = {
       "valePlaceNotes": "Eastbrook er din første hjemmebase. Wolf Run og Boar Meadow er milde jagtmarker; Spejlsøen er stille vand at fiske i; Sableweb og Copper Dig skjuler edderkopper og malmgriske gravere; en Bandit Camp og Fallen Chapel rummer barskere arbejde; Reliquary Hill falder ned i Collapsed Reliquary, rigets første delve; og Brightwood Glade er en rolig, solbeskinnet lund i nord.",
       "marshPlaceNotes": "Fenbridge bevogter den eneste tørre vej. Prowler Reeds og Deepfen Shallows myldrer med mosebæster og mudfiner; Widow Thicket er spundet tæt med spind; Drowned Chapel og Troll Mounds rummer ældre farer; Gravecaller Encampment er kulten gravet ind, og Den Sunkne Bastion er mosens instans-hjerte.",
       "peaksPlaceNotes": "Highwatch holder muren. Stalker Ridge og Deeprock Burrows tilhører ryg-katte og gravere; Ogre Foothills og Drogmar's War-Camp tilhører lejede bøller; Stormcrag knitrer med elementaler, og Glimmermere gløder nedenfor; Wyrmcult Tents og Revenant Fields omkranser kultens høje grund, med Gravormens Helligdom på dens top.",
+      "mirrorBlurb": "Et månelyst, tågesvøbt land af sort glas hinsides Highwatchs spejle, hvor Glasdalen vogter rigets slutspilsånder, og Vogterske Nerissa holder Lumen-lavningen.",
+      "mirrorGreeting": "Glasset beholder hvert ansigt, det har druknet. Gå varsomt her, og se ikke for længe ind i dit eget.",
+      "mirrorGreeter": "Vogterske Nerissa, Lumen-lavningen",
+      "mirrorPlaceNotes": "Lumen-lavningen er spejlbyens hjerte, med Spejlhoffet og dets gargilstatuer lige ovenfor og Udkigstrappen, der falder væk nedenunder; Spejlsøen er stille sort vand, omkranset af Måneengen og Sorgstenene; Dysterklipperne og Mørkeskoven rummer dalens tungeste ånder; Heksens Lavning huser Morwen Tågeheksen, Stjernekiggerens Afsats sit lange kolde udsyn, og Den Sorte Kløft snor sig østpå til Sable-spejlet.",
       "gladeTitle": "Et stille hjørne: Brightwood Glade",
       "gladeBody": "Ikke hver historie i the Vale handler om de døde. Mod nord holder en solbeskinnet lund kaldet Brightwood Glade sin egen blidere rytme, med lutter stille stier og spættet lys under grenene. Den er en blød modvægt til det spor, du følger, og værd at se, når vejen giver dig plads til at vandre."
     },
@@ -6987,7 +6991,7 @@ export const da_DK: EnTranslations = {
       "mistwitch_morwen": {
         "name": "Morwen Tågeheksen",
         "title": "Lavningens drømmebrygger",
-        "greeting": "Tågen holder de fleste af jer vågne. Jeg kan brygge dig den anden slags søvn — den slags, der svarer igen."
+        "greeting": "Tågen holder de fleste af jer vågne. Jeg kan brygge dig den anden slags søvn - den slags, der svarer igen."
       },
       "gargoyle_sentinel_south": {
         "name": "Gargoilvagt",
@@ -7831,7 +7835,7 @@ export const da_DK: EnTranslations = {
       "q_deepdream_recipe": {
         "title": "En opskrift på dyb søvn",
         "text": "Brygget kræver tre stemmer, {playerName}: to hvide lagner fra fattigdomsspøgelserne, der intet andet ejer, to horn fra åndeenhjørningerne, der græsser i mørket, og to hætter skåret af høstmændene, der vogter bæltet. Bring dem, så brygger jeg dig en søvn med tænder.",
-        "completion": "Lagen, horn, hætte — de fattige, de strålende, de tålmodige. Kedlen kan lide dig. Drik det et blødt sted, vandringsmand: du vil møde den, du har båret på.",
+        "completion": "Lagen, horn, hætte - de fattige, de strålende, de tålmodige. Kedlen kan lide dig. Drik det et blødt sted, vandringsmand: du vil møde den, du har båret på.",
         "objectives": {
           "0": {
             "label": "Hvidt Lagen"
@@ -7846,8 +7850,8 @@ export const da_DK: EnTranslations = {
       },
       "q_face_your_echo": {
         "title": "Mød dit Ekko",
-        "text": "Drik brygget, og drømmen stiller et spejl foran dig — dit Ekko, hvert ar og hvert af dine tricks på den anden side. Besejr det, du er, {playerName}, og bring mig dit ansigt bagefter.",
-        "completion": "Du kom tilbage, og det gjorde spejlet ikke. Hvad det efterlod i din hånd, er dit — drømmen betaler kun den pris én gang.",
+        "text": "Drik brygget, og drømmen stiller et spejl foran dig - dit Ekko, hvert ar og hvert af dine tricks på den anden side. Besejr det, du er, {playerName}, og bring mig dit ansigt bagefter.",
+        "completion": "Du kom tilbage, og det gjorde spejlet ikke. Hvad det efterlod i din hånd, er dit - drømmen betaler kun den pris én gang.",
         "objectives": {
           "0": {
             "label": "Dit Ekko besejret"
@@ -7917,7 +7921,7 @@ export const da_DK: EnTranslations = {
       "q_what_the_glass_wants": {
         "title": "Hvad glasset vil",
         "text": "Du besejrede din Ekko og troede, det var en prøve på dig selv, {playerName}. Det var det ikke. Jeg brygger Dybdrømmen af lagen, horn og hætte, men det, din drøm rejste et spejl imod, tingen der kom ind i dit ansigt, det brygger jeg ikke. Det siver ind fra kløftens sorte glas. Høstmændene, der trænges ved kløftmundingen, er tætte af samme lækage; fæld otte og se, hvorhen deres skygger kryber. Så viser jeg Nerissas egne øjne, hvor hendes sår i sandhed bløder.",
-        "completion": "Mod nordøst. Altid mod nordøst, altid mod Sablen — så du det? Din Ekko var ikke DIG, vandrer. Den var et skår af hvad end der bor bag den port, klædt i det nærmeste spejlbillede, den kunne stjæle: dit. Drømmen er blot det tyndeste sted, lækagen har fundet; kløften det bredeste. Sig det til Nerissa. Hun har fortjent sandheden om det, og det har du med.",
+        "completion": "Mod nordøst. Altid mod nordøst, altid mod Sablen - så du det? Din Ekko var ikke DIG, vandrer. Den var et skår af hvad end der bor bag den port, klædt i det nærmeste spejlbillede, den kunne stjæle: dit. Drømmen er blot det tyndeste sted, lækagen har fundet; kløften det bredeste. Sig det til Nerissa. Hun har fortjent sandheden om det, og det har du med.",
         "objectives": {
           "0": {
             "label": "Høstmand fældet ved kløftmundingen"
@@ -7926,7 +7930,7 @@ export const da_DK: EnTranslations = {
       },
       "q_relight_the_lumen_crown": {
         "title": "Genantænd Lumenkronen",
-        "text": "Vogterne har navn, og dæmningen tyndes, så nu må jeg gøre det, jeg har udskudt, siden jeg døde: tænde Lumenkronen en sidste gang og presse Sablen lukket fra denne side. Kronens sidste sande gnist blev slugt af Tusmørkegabet, da det faldt i dammen — derfor gløder tingen indefra. Skær lyset ud af det igen, {playerName}. Det sorte glas sender sine dysterkolosser for at standse riten; fæld fire. Bring mig en druknet gnist, mens jeg endnu husker, hvordan man holder en. En vogters sidste pligt er at blive en, der ikke længere behøver at vogte.",
+        "text": "Vogterne har navn, og dæmningen tyndes, så nu må jeg gøre det, jeg har udskudt, siden jeg døde: tænde Lumenkronen en sidste gang og presse Sablen lukket fra denne side. Kronens sidste sande gnist blev slugt af Tusmørkegabet, da det faldt i dammen - derfor gløder tingen indefra. Skær lyset ud af det igen, {playerName}. Det sorte glas sender sine dysterkolosser for at standse riten; fæld fire. Bring mig en druknet gnist, mens jeg endnu husker, hvordan man holder en. En vogters sidste pligt er at blive en, der ikke længere behøver at vogte.",
         "completion": "Den brænder. Efter alt dette mørke kender den endnu min hånd. Se: glasset er SANDT igen; ingen hjerteslag bag vandet, ingen sjæl fortabt mellem en verden og dens spejlbillede. Og vægten har endelig forladt mig. Jeg svinder ikke, {playerName}; jeg bliver AFLØST. Dette er ikke at bryde Sablen, kun at holde den; jeg har ikke kraften til at bryde det, der venter dér, og jeg ville ikke vove det. Men holdt en tidsalder til, er den holdt. Når et modigere følge end vi til sidst går IND gennem den port, skal de finde den anden side rede. Sig i Highwatch, at deres vogter holdt vagten til det sidste og så blev afløst. Glasset vil huske dig. Sørg for at give det noget værd at spejle.",
         "objectives": {
           "0": {

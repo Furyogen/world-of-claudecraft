@@ -682,11 +682,11 @@ export const guideStrings = {
   worldPage: {
     heading: 'The world',
     intro:
-      'World of ClaudeCraft is one continuous land you cross on foot, three zones laid south to north. There is no fast travel, so the journey is part of the adventure.',
+      'World of ClaudeCraft is one continuous land you cross on foot: three zones laid south to north, and a fourth held behind the mirrors for those who reach the peaks. There is no fast travel, so the journey is part of the adventure.',
     hub: 'Home base',
     mapHeading: 'The road north',
     mapSub:
-      'Three zones, south to north, each a step higher in level. Follow the quest trail and the land carries you from the valley to the peaks.',
+      'Three zones, south to north, each a step higher in level, with a fourth reflected beyond the town mirrors. Follow the quest trail and the land carries you from the valley to the peaks.',
     places: 'Notable places',
     residents: 'Who you will meet',
     valeBlurb:
@@ -714,6 +714,13 @@ export const guideStrings = {
       "Fenbridge guards the only dry road. The Prowler Reeds and Deepfen Shallows teem with marsh beasts and mudfins; the Widow Thicket is spun thick with web; the Drowned Chapel and the Troll Mounds keep older dangers; the Gravecaller Encampment is the cult dug in, and the Sunken Bastion is the marsh's instanced heart.",
     peaksPlaceNotes:
       "Highwatch holds the wall. Stalker Ridge and the Deeprock Burrows belong to ridge cats and burrowers; the Ogre Foothills and Drogmar's War-Camp to brutes for hire; Stormcrag crackles with elementals and the Glimmermere glows below it; the Wyrmcult Tents and Revenant Fields ring the cult's high ground, with Gravewyrm Sanctum at its peak.",
+    mirrorBlurb:
+      "A moonlit, mist-wreathed country of black glass beyond the Highwatch mirrors, where the Vale of Glass keeps the realm's endgame spirits and Keeper Nerissa holds the Lumen Hollow.",
+    mirrorGreeting:
+      'The glass keeps every face it has drowned. Walk softly here, and do not look too long into your own.',
+    mirrorGreeter: 'Keeper Nerissa, the Lumen Hollow',
+    mirrorPlaceNotes:
+      "The Lumen Hollow is the mirror town's heart, the Mirror Court and its gargoyle statues just above and the Overlook stair falling away below; the Mirrormere is black water still, ringed by the Moonmeadow and the Sorrowstones; the Gloomcrags and the Darkwood hold the vale's heaviest spirits; Witch's Hollow keeps Mistwitch Morwen, Stargazer's Ledge its long cold view, and the Black Canyon winds east to the Sable Mirror.",
 
     // Brightwood Glade vignette, distilled spoiler-safe.
     gladeTitle: 'A quiet corner: Brightwood Glade',

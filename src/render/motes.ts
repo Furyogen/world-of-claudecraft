@@ -3,6 +3,7 @@ import { DUNGEON_X_THRESHOLD, WORLD_MAX_X, WORLD_MAX_Z, WORLD_MIN_Z } from '../s
 import type { BiomeId } from '../sim/types';
 import { terrainHeight, waterLevelAt, zoneBiomeAt } from '../sim/world';
 import { GFX } from './gfx';
+import { mulberry32 } from './rng';
 
 // ---------------------------------------------------------------------------
 // Ambient motes — a render-only field of drifting airborne specks (pollen in
@@ -35,17 +36,7 @@ const RADIUS = 26; // motes live within this ring of the player
 const FLOOR = 0.6; // min height above the sampled ground
 const CEIL = 3.4; // max height above the sampled ground
 
-// deterministic per-render RNG (render convention: never Math.random)
-function mulberry32(seed: number): () => number {
-  let a = seed >>> 0;
-  return () => {
-    a |= 0;
-    a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
+// deterministic per-render RNG (shared ./rng; convention: never Math.random)
 
 // soft round glow sprite, built once on a canvas (no image assets)
 function moteSprite(): THREE.Texture {

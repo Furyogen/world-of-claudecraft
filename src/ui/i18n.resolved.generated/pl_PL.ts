@@ -1838,6 +1838,10 @@ export const pl_PL: EnTranslations = {
       "valePlaceNotes": "Eastbrook to twoja pierwsza baza wypadowa. Wolf Run i Boar Meadow to łagodne tereny łowieckie; Mirror Lake to spokojna woda do łowienia; Sableweb i Copper Dig kryją pająki i chciwych na rudę kopaczy; Bandit Camp i Fallen Chapel oferują trudniejszą robotę; Reliquary Hill schodzi w Collapsed Reliquary, pierwszą głębię królestwa; a Brightwood Glade to spokojny, nasłoneczniony zagajnik na północy.",
       "marshPlaceNotes": "Fenbridge strzeże jedynej suchej drogi. Trzciny Czyhacza i Płycizny Głębotopieli aż się roją od bagiennych bestii i Mudfinów; Gąszcz Wdowy jest gęsto osnuty pajęczyną; Zatopiona Kaplica i Kopce Trolli kryją starsze niebezpieczeństwa; Obozowisko Gravecallera to okopany kult, a Zatopiony Bastion to instancjowane serce trzęsawiska.",
       "peaksPlaceNotes": "Highwatch trzyma mur. Grań Skradacza i Głębogłazowe Nory należą do górskich kotów i drążycieli; Pogórze Ogrów i Obóz Wojenny Drogmara do najemnych brutali; Stormcrag trzaska żywiołami, a poniżej jarzy się Glimmermere; Namioty Kultu Żmija i Pola Powracających otaczają wyżynne pozycje kultu, a na ich szczycie wznosi się Sanktuarium Grobowego Żmija.",
+      "mirrorBlurb": "Skąpana w księżycu, spowita mgłą kraina czarnego szkła za zwierciadłami Highwatch, gdzie Dolina Szkła strzeże duchów schyłku gry tego królestwa, a Strażniczka Nerissa dzierży Kotlinę Lumen.",
+      "mirrorGreeting": "Szkło zachowuje każdą twarz, którą utopiło. Stąpaj tu cicho i nie wpatruj się zbyt długo we własną.",
+      "mirrorGreeter": "Strażniczka Nerissa, Kotlina Lumen",
+      "mirrorPlaceNotes": "Kotlina Lumen to serce zwierciadlanego miasta, ze Zwierciadlanym Dworem i jego gargulcami tuż powyżej oraz schodami Punktu Widokowego opadającymi w dół; Zwierciadlane Rozlewisko to nieruchoma czarna woda, otoczona Księżycową Łąką i Kamieniami Żałości; Ponure Turnie i Mroczny Bór kryją najcięższe duchy doliny; Kotlina Wiedźmy przygarnia Morwen, Wiedźmę Mgieł, Półka Gwiazdarza swój długi zimny widok, a Czarny Kanion wije się na wschód ku Zwierciadłu Sable.",
       "gladeTitle": "Cichy zakątek: Brightwood Glade",
       "gladeBody": "Nie każda historia w Vale dotyczy umarłych. Na północy nasłoneczniony zagajnik zwany Brightwood Glade trzyma się własnego, łagodniejszego rytmu: same ciche ścieżki i cętkowane światło pod konarami. To miękki kontrapunkt dla szlaku, którym podążasz, i warto go zobaczyć, gdy droga daje ci chwilę na wędrówkę."
     },
@@ -6987,7 +6991,7 @@ export const pl_PL: EnTranslations = {
       "mistwitch_morwen": {
         "name": "Morwen, Wiedźma Mgieł",
         "title": "Warzycielka snów z Kotliny",
-        "greeting": "Mgła nie daje większości z was zasnąć. Ja uwarzę ci ten drugi sen — taki, który odpowiada."
+        "greeting": "Mgła nie daje większości z was zasnąć. Ja uwarzę ci ten drugi sen - taki, który odpowiada."
       },
       "gargoyle_sentinel_south": {
         "name": "Gargulec Strażniczy",
@@ -7831,7 +7835,7 @@ export const pl_PL: EnTranslations = {
       "q_deepdream_recipe": {
         "title": "Przepis na głęboki sen",
         "text": "Wywar potrzebuje trzech głosów, {playerName}: dwóch białych prześcieradeł od duchów ubóstwa, które nie mają nic innego, dwóch rogów duchowych jednorożców pasących się w mroku i dwóch kapturów ściętych żniwiarzom pilnującym pasa. Przynieś je, a uwarzę ci sen z zębami.",
-        "completion": "Prześcieradło, róg, kaptur — biedni, promienni, cierpliwi. Kocioł cię polubił. Wypij go w miękkim miejscu, wędrowcze: spotkasz tego, kogo nosisz w sobie.",
+        "completion": "Prześcieradło, róg, kaptur - biedni, promienni, cierpliwi. Kocioł cię polubił. Wypij go w miękkim miejscu, wędrowcze: spotkasz tego, kogo nosisz w sobie.",
         "objectives": {
           "0": {
             "label": "Białe Prześcieradło"
@@ -7846,8 +7850,8 @@ export const pl_PL: EnTranslations = {
       },
       "q_face_your_echo": {
         "title": "Stań twarzą w twarz ze swoim Echem",
-        "text": "Wypij napar, a sen postawi przed tobą zwierciadło — twoje Echo, każdą twoją bliznę i każdą sztuczkę po drugiej stronie. Pokonaj to, czym jesteś, {playerName}, i przynieś mi swoją minę po wszystkim.",
-        "completion": "Wróciłeś ty, a zwierciadło nie. Co zostawiło ci w dłoni, jest twoje — sen płaci tę cenę tylko raz.",
+        "text": "Wypij napar, a sen postawi przed tobą zwierciadło - twoje Echo, każdą twoją bliznę i każdą sztuczkę po drugiej stronie. Pokonaj to, czym jesteś, {playerName}, i przynieś mi swoją minę po wszystkim.",
+        "completion": "Wróciłeś ty, a zwierciadło nie. Co zostawiło ci w dłoni, jest twoje - sen płaci tę cenę tylko raz.",
         "objectives": {
           "0": {
             "label": "Twoje Echo pokonane"
@@ -7917,7 +7921,7 @@ export const pl_PL: EnTranslations = {
       "q_what_the_glass_wants": {
         "title": "Czego pragnie szkło",
         "text": "Pokonałeś swe Echo i wziąłeś to za próbę samego siebie, {playerName}. Nie było nią. Warzę Głęboki Sen z prześcieradła, rogu i kaptura, lecz to, przeciw czemu twój sen wystawił zwierciadło, rzecz, co weszła w twej twarzy, tego nie warzę ja. Przesącza się z czarnego szkła kanionu. Żniwiarze tłoczący się u wylotu kanionu są gęści od tego samego przecieku; powal ośmiu i patrz, dokąd pełzną ich cienie. Wtedy pokażę własnym oczom Nerissy, gdzie jej rana naprawdę krwawi.",
-        "completion": "Na północny wschód. Zawsze na północny wschód, zawsze ku Sobolowemu — widziałeś? Twe Echo nie było TOBĄ, wędrowcze. Było odłamkiem tego, co żyje za owymi wrotami, odzianym w najbliższe odbicie, jakie mogło ukraść: twoje. Sen to tylko najcieńsze miejsce, jakie znalazł przeciek; kanion — najszersze. Powiedz to Nerissie. Zasłużyła na prawdę o tym, a i ty też.",
+        "completion": "Na północny wschód. Zawsze na północny wschód, zawsze ku Sobolowemu - widziałeś? Twe Echo nie było TOBĄ, wędrowcze. Było odłamkiem tego, co żyje za owymi wrotami, odzianym w najbliższe odbicie, jakie mogło ukraść: twoje. Sen to tylko najcieńsze miejsce, jakie znalazł przeciek; kanion - najszersze. Powiedz to Nerissie. Zasłużyła na prawdę o tym, a i ty też.",
         "objectives": {
           "0": {
             "label": "Żniwiarz powalony u wylotu kanionu"
@@ -7926,8 +7930,8 @@ export const pl_PL: EnTranslations = {
       },
       "q_relight_the_lumen_crown": {
         "title": "Rozpalić Koronę Lumenu",
-        "text": "Strażnicy mają imiona, a grobla cieńczeje, muszę więc uczynić teraz to, co odkładałam od śmierci: rozpalić Koronę Lumenu ostatni raz i przycisnąć Sobolowe od tej strony. Ostatnią prawdziwą iskrę Korony połknęła Zmierzchowa Paszcza, gdy padła w staw — dlatego to coś jarzy się od środka. Wytnij z niej światło z powrotem, {playerName}. Czarne szkło pośle swe mroczne kolosy, by przerwać obrzęd; powal czterech. Przynieś mi utopioną iskrę, póki jeszcze pamiętam, jak taką trzymać. Ostatnią powinnością strażnika jest stać się kimś, kto już strzec nie musi.",
-        "completion": "Płonie. Po całym tym mroku wciąż zna mą dłoń. Patrz: szkło znów jest PRAWDZIWE; żadnego bicia za wodą, żadnej duszy zgubionej między światem a jego odbiciem. I ciężar wreszcie ze mnie zszedł. Nie znikam, {playerName}; zostaję ZLUZOWANA. To nie skruszenie Sobolowego, jeno trzymanie; nie mam siły skruszyć tego, co tam czeka, i nie śmiałabym. Lecz trzymane o wiek dłużej — jest trzymane. Gdy dzielniejsza od nas kompania wreszcie wejdzie DO owych wrót, zastanie drugą stronę gotową. Powiedz w Highwatch, że ich strażniczka trwała na warcie do końca, a potem została zluzowana. Szkło cię zapamięta. Zadbaj, byś dał mu coś godnego odbicia.",
+        "text": "Strażnicy mają imiona, a grobla cieńczeje, muszę więc uczynić teraz to, co odkładałam od śmierci: rozpalić Koronę Lumenu ostatni raz i przycisnąć Sobolowe od tej strony. Ostatnią prawdziwą iskrę Korony połknęła Zmierzchowa Paszcza, gdy padła w staw - dlatego to coś jarzy się od środka. Wytnij z niej światło z powrotem, {playerName}. Czarne szkło pośle swe mroczne kolosy, by przerwać obrzęd; powal czterech. Przynieś mi utopioną iskrę, póki jeszcze pamiętam, jak taką trzymać. Ostatnią powinnością strażnika jest stać się kimś, kto już strzec nie musi.",
+        "completion": "Płonie. Po całym tym mroku wciąż zna mą dłoń. Patrz: szkło znów jest PRAWDZIWE; żadnego bicia za wodą, żadnej duszy zgubionej między światem a jego odbiciem. I ciężar wreszcie ze mnie zszedł. Nie znikam, {playerName}; zostaję ZLUZOWANA. To nie skruszenie Sobolowego, jeno trzymanie; nie mam siły skruszyć tego, co tam czeka, i nie śmiałabym. Lecz trzymane o wiek dłużej - jest trzymane. Gdy dzielniejsza od nas kompania wreszcie wejdzie DO owych wrót, zastanie drugą stronę gotową. Powiedz w Highwatch, że ich strażniczka trwała na warcie do końca, a potem została zluzowana. Szkło cię zapamięta. Zadbaj, byś dał mu coś godnego odbicia.",
         "objectives": {
           "0": {
             "label": "Zmierzchowa Paszcza pokonana"

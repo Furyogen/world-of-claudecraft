@@ -268,7 +268,6 @@ export function turnInQuestCore(
         break;
       }
     }
-    ctx.emit({ type: 'mirrorUnlocked', padId, pid: meta.entityId });
     ctx.emit({
       type: 'log',
       text: 'The toll is paid. Behind the statue, the mirror clears.',

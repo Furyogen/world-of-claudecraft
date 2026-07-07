@@ -3840,11 +3840,11 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_what_the_glass_wants.text':
     'Du hast deinen Echo besiegt und es für eine Prüfung deiner selbst gehalten, {playerName}. Das war es nicht. Ich braue den Tieftraum aus Laken, Horn und Kapuze - doch das, wogegen dein Traum einen Spiegel stellte, das Ding, das in deinem Gesicht hereinkam, das braue ich nicht. Es sickert herein, aus dem schwarzen Glas der Schlucht. Die Schnitter, die den Schluchtmund überfüllen, sind dick von demselben Leck; erschlag acht und sieh, wohin ihre Schatten kriechen. Dann zeige ich Nerissas eigenen Augen, wo ihre Wunde wahrhaft blutet.',
   'entities.quests.q_what_the_glass_wants.completion':
-    'Nach Nordosten. Immer nach Nordosten, immer zum Sable — hast du es gesehen? Dein Echo warst nicht DU, Wanderer. Es war ein Splitter dessen, was hinter jenem Tor haust, gekleidet in das nächste Spiegelbild, das es stehlen konnte: deins. Der Traum ist nur die dünnste Stelle, die das Leck gefunden hat; die Schlucht die breiteste. Sag es Nerissa. Sie hat sich die Wahrheit darüber verdient, und du auch.',
+    'Nach Nordosten. Immer nach Nordosten, immer zum Sable - hast du es gesehen? Dein Echo warst nicht DU, Wanderer. Es war ein Splitter dessen, was hinter jenem Tor haust, gekleidet in das nächste Spiegelbild, das es stehlen konnte: deins. Der Traum ist nur die dünnste Stelle, die das Leck gefunden hat; die Schlucht die breiteste. Sag es Nerissa. Sie hat sich die Wahrheit darüber verdient, und du auch.',
   'entities.quests.q_what_the_glass_wants.objectives.0.label': 'Schnitter am Schluchtmund erlegt',
   'entities.quests.q_relight_the_lumen_crown.title': 'Die Lumenkrone neu entzünden',
   'entities.quests.q_relight_the_lumen_crown.text':
-    'Die Wächter haben Namen und der Damm wird dünner, so muss ich nun tun, was ich seit meinem Tod aufschob: die Lumenkrone ein letztes Mal entzünden und das Sable von dieser Seite zudrücken. Den letzten wahren Funken der Krone verschluckte der Dämmerschlund, als er in den Weiher fiel — darum glüht das Ding von innen. Schneid ihm das Licht wieder heraus, {playerName}. Das schwarze Glas wird seine Düsterkolosse senden, den Ritus zu hemmen; erschlag vier. Bring mir einen ertrunkenen Funken, solang ich noch weiß, wie man einen hält. Die letzte Pflicht eines Hüters ist, jemand zu werden, der nicht mehr hüten muss.',
+    'Die Wächter haben Namen und der Damm wird dünner, so muss ich nun tun, was ich seit meinem Tod aufschob: die Lumenkrone ein letztes Mal entzünden und das Sable von dieser Seite zudrücken. Den letzten wahren Funken der Krone verschluckte der Dämmerschlund, als er in den Weiher fiel - darum glüht das Ding von innen. Schneid ihm das Licht wieder heraus, {playerName}. Das schwarze Glas wird seine Düsterkolosse senden, den Ritus zu hemmen; erschlag vier. Bring mir einen ertrunkenen Funken, solang ich noch weiß, wie man einen hält. Die letzte Pflicht eines Hüters ist, jemand zu werden, der nicht mehr hüten muss.',
   'entities.quests.q_relight_the_lumen_crown.completion':
     'Sie brennt. Nach all der Finsternis kennt sie noch meine Hand. Sieh: das Glas ist wieder WAHR; kein Herzschlag hinter dem Wasser, keine Seele verloren zwischen einer Welt und ihrem Spiegelbild. Und die Last ist endlich von mir. Ich vergehe nicht, {playerName}; ich werde ABGELÖST. Dies ist kein Brechen des Sable, nur ein Halten; ich habe nicht die Kraft, zu brechen, was dort wartet, und würde es nicht wagen. Doch ein Zeitalter länger gehalten, ist es gehalten. Wenn eine tapferere Schar als wir endlich in jenes Tor hineingeht, wird sie die andere Seite bereit finden. Sag es in Highwatch, dass ihre Hüterin die Wache bis zuletzt hielt und dann abgelöst wurde. Das Glas wird sich deiner erinnern. Sieh zu, dass du ihm etwas gibst, das des Spiegelns wert ist.',
   'entities.quests.q_relight_the_lumen_crown.objectives.0.label': 'Der Dämmerschlund erschlagen',
@@ -3869,20 +3869,20 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.mistwitch_morwen.name': 'Morwen die Nebelhexe',
   'entities.npcs.mistwitch_morwen.title': 'Traumbrauerin der Mulde',
   'entities.npcs.mistwitch_morwen.greeting':
-    'Der Nebel hält die meisten von euch wach. Ich braue dir die andere Art von Schlaf — die Art, die zurückspricht.',
+    'Der Nebel hält die meisten von euch wach. Ich braue dir die andere Art von Schlaf - die Art, die zurückspricht.',
   'entities.quests.q_deepdream_recipe.title': 'Ein Rezept für tiefen Schlaf',
   'entities.quests.q_deepdream_recipe.text':
     'Der Trank verlangt drei Stimmen, {playerName}: zwei weiße Laken von den Armutsgeistern, die sonst nichts besitzen, zwei Hörner der Geist-Einhörner, die im Düster grasen, und zwei Kapuzen, den Schnittern abgeschnitten, die den Gürtel bewachen. Bring sie mir, und ich braue dir einen Schlaf mit Zähnen.',
   'entities.quests.q_deepdream_recipe.completion':
-    'Laken, Horn, Kapuze — die Armen, die Strahlenden, die Geduldigen. Der Kessel mag dich. Trink ihn an einem weichen Ort, Wanderer: du wirst treffen, wen du mit dir trägst.',
+    'Laken, Horn, Kapuze - die Armen, die Strahlenden, die Geduldigen. Der Kessel mag dich. Trink ihn an einem weichen Ort, Wanderer: du wirst treffen, wen du mit dir trägst.',
   'entities.quests.q_deepdream_recipe.objectives.0.label': 'Weißes Laken',
   'entities.quests.q_deepdream_recipe.objectives.1.label': 'Geisterhorn',
   'entities.quests.q_deepdream_recipe.objectives.2.label': 'Schwarze Kapuze',
   'entities.quests.q_face_your_echo.title': 'Stell dich deinem Echo',
   'entities.quests.q_face_your_echo.text':
-    'Trink den Trank, und der Traum stellt dir einen Spiegel hin — dein Echo, jede Narbe und jeder deiner Tricks auf der anderen Seite. Besiege, was du bist, {playerName}, und bring mir den Blick auf deinem Gesicht zurück.',
+    'Trink den Trank, und der Traum stellt dir einen Spiegel hin - dein Echo, jede Narbe und jeder deiner Tricks auf der anderen Seite. Besiege, was du bist, {playerName}, und bring mir den Blick auf deinem Gesicht zurück.',
   'entities.quests.q_face_your_echo.completion':
-    'Du bist zurückgekehrt, und der Spiegel nicht. Was er dir in der Hand gelassen hat, gehört dir — der Traum zahlt diesen Preis nur einmal.',
+    'Du bist zurückgekehrt, und der Spiegel nicht. Was er dir in der Hand gelassen hat, gehört dir - der Traum zahlt diesen Preis nur einmal.',
   'entities.quests.q_face_your_echo.objectives.0.label': 'Dein Echo besiegt',
   'entities.items.white_sheet.name': 'Weißes Laken',
   'entities.items.spirit_horn.name': 'Geisterhorn',
@@ -5513,6 +5513,13 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
     'Halt am Tor. Jenseits dieses Schilfs erledigt das Moor das Töten für uns.',
   'guide.worldPage.marshPlaceNotes':
     'Fenbridge bewacht die einzige trockene Straße. Das Pirscherschilf und die Deepfen-Niederung wimmeln von Moorbestien und Mudfins; das Witwendickicht ist dicht mit Netzen versponnen; die Ertrunkene Kapelle und die Trollhügel beherbergen ältere Gefahren; das Gravecaller-Lager ist der eingegrabene Kult, und die versunkene Bastion ist das instanzierte Herz des Moores.',
+  'guide.worldPage.mirrorBlurb':
+    'Ein mondbeschienenes, nebelumwobenes Land aus schwarzem Glas jenseits der Spiegel von Highwatch, wo das Glastal die Endspiel-Geister des Reiches hütet und Bewahrerin Nerissa über die Lumen-Senke wacht.',
+  'guide.worldPage.mirrorGreeting':
+    'Das Glas behält jedes Gesicht, das es ertränkt hat. Geh hier leise, und blicke nicht zu lange in dein eigenes.',
+  'guide.worldPage.mirrorGreeter': 'Bewahrerin Nerissa, die Lumen-Senke',
+  'guide.worldPage.mirrorPlaceNotes':
+    'Die Lumen-Senke ist das Herz der Spiegelstadt, der Spiegelhof mit seinen Wasserspeier-Statuen gleich darüber und die Aussichtstreppe fällt darunter ab; der Spiegelweiher ist stilles schwarzes Wasser, umringt von der Mondwiese und den Kummersteinen; die Düsterklippen und der Dunkelwald bergen die schwersten Geister des Tals; die Hexensenke birgt die Nebelhexe Morwen, der Sterngucker-Sims seinen langen kalten Ausblick, und die Schwarze Schlucht windet sich nach Osten zum Sablespiegel.',
   'guide.worldPage.peaksGreeter': 'Hauptmann Thessaly, Highwatch',
   'guide.worldPage.peaksGreeting':
     'Zweihundert Jahre hat diese Mauer gehalten. Unter meiner Wache wird sie nicht brechen, doch sie ächzt.',

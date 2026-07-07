@@ -1838,6 +1838,10 @@ export const tr_TR: EnTranslations = {
       "valePlaceNotes": "Eastbrook ilk ana üssünüzdür. Wolf Run ve Boar Meadow yumuşak av sahalarıdır; Mirror Lake balık tutulacak sakin sulardır; Sableweb ve Copper Dig örümcekleri ve cevhere aç kazıcıları saklar; bir Bandit Camp ve Fallen Chapel daha çetin işler barındırır; Reliquary Hill, diyarın ilk delvesi olan Collapsed Reliquary'ye iner; ve Brightwood Glade kuzeydeki sakin, güneşli bir korudur.",
       "marshPlaceNotes": "Fenbridge tek kuru yolu korur. Sinsi Sazliklar ve Deepfen Sigliklari bataklik canavarlari ve Mudfinlerle kaynar; Dul Cadirligi simsiki aglarla oruludur; Bogulmus Sapel ve Trol Hoyukleri daha eski tehlikeleri barindirir; Gravecaller Kampi tarikatin siper kazdigi yerdir ve Batik Kale bataklarin orneklenmis kalbidir.",
       "peaksPlaceNotes": "Highwatch suru tutar. Sinsi Sirt ve Deeprock Oyuklari sirt kedileri ve oyucularindir; Dev Etekleri ve Drogmar Savas Kampi kiralik zorbalarindir; Firtinakaya elementallerle citirdar ve altinda Piriltigol isildar; Solucankut Cadirlari ve Hortlak Tarlalari tarikatin yuksek mevzisini kusatir, zirvesinde Mezarejderi Mabedi yer alir.",
+      "mirrorBlurb": "Highwatch aynalarinin otesinde, ay isigina bogulmus, sise sarmalanmis bir kara cam ulkesi; Cam Vadisi diyarin oyun sonu ruhlarini barindirir ve Bekci Nerissa Lumen Coken Yerini elinde tutar.",
+      "mirrorGreeting": "Cam, boguldugu her yuzu saklar. Burada usulca yuru ve kendi yuzune fazla uzun bakma.",
+      "mirrorGreeter": "Bekci Nerissa, Lumen Coken Yeri",
+      "mirrorPlaceNotes": "Lumen Coken Yeri ayna kentinin kalbidir; hemen ustunde Ayna Divani ve gargoyle heykelleri, altinda ise asagi dusen Gozetleme merdiveni. Ayna Golu dingin kara sudur, Ay Cayiri ve Keder Taslariyla cevrilidir; Kasvet Kayaliklari ve Kara Orman vadinin en agir ruhlarini barindirir; Cadi Coken Yeri Sis Cadisi Morwen’i barindirir, Yildizbakan Cikintisi uzun ve soguk manzarasini, Kara Kanyon ise doguya kivrilarak Sable Aynasina uzanir.",
       "gladeTitle": "Sakin bir köşe: Parlakorman Açıklığı",
       "gladeBody": "Vale'deki her hikaye ölülerle ilgili değildir. Kuzeyde, Brightwood Glade adlı güneşli bir koru, dalların altındaki sessiz patikaları ve benek benek ışığıyla kendi daha yumuşak ritmini korur. Takip ettiğiniz izin yumuşak bir karşı sesidir ve yol başıboş dolaşmanıza imkan verdiğinde görmeye değer."
     },
@@ -6987,7 +6991,7 @@ export const tr_TR: EnTranslations = {
       "mistwitch_morwen": {
         "name": "Sis Cadısı Morwen",
         "title": "Çukurun Düş Demleyicisi",
-        "greeting": "Sis çoğunuzu uyutmaz. Ben sana öteki uykuyu demlerim — cevap veren türden."
+        "greeting": "Sis çoğunuzu uyutmaz. Ben sana öteki uykuyu demlerim - cevap veren türden."
       },
       "gargoyle_sentinel_south": {
         "name": "Gargoyl Nöbetçisi",
@@ -7831,7 +7835,7 @@ export const tr_TR: EnTranslations = {
       "q_deepdream_recipe": {
         "title": "Derin Uyku Tarifi",
         "text": "İksir üç ses ister, {playerName}: başka hiçbir şeyi olmayan yoksulluk hayaletlerinden iki beyaz çarşaf, alacakaranlıkta otlayan ruh tekboynuzlarından iki boynuz ve kuşağı gözetleyen orakçılardan kesilmiş iki kukuleta. Getir, sana dişli bir uyku kaynatayım.",
-        "completion": "Çarşaf, boynuz, kukuleta — yoksullar, ışıyanlar, sabırlılar. Kazan senden hoşlandı. Yumuşak bir yerde iç, gezgin: hep taşıdığın kişiyle karşılaşacaksın.",
+        "completion": "Çarşaf, boynuz, kukuleta - yoksullar, ışıyanlar, sabırlılar. Kazan senden hoşlandı. Yumuşak bir yerde iç, gezgin: hep taşıdığın kişiyle karşılaşacaksın.",
         "objectives": {
           "0": {
             "label": "Beyaz Çarşaf"
@@ -7846,8 +7850,8 @@ export const tr_TR: EnTranslations = {
       },
       "q_face_your_echo": {
         "title": "Yankınla Yüzleş",
-        "text": "İksiri iç, düş önüne bir ayna dikecek — Yankın; her yara izin, her numaran öbür tarafta. Ne isen onu yen, {playerName}, ve o anki yüzünü bana geri getir.",
-        "completion": "Sen döndün, ayna dönmedi. Elinde bıraktığı şey senindir — düş o bedeli yalnız bir kez öder.",
+        "text": "İksiri iç, düş önüne bir ayna dikecek - Yankın; her yara izin, her numaran öbür tarafta. Ne isen onu yen, {playerName}, ve o anki yüzünü bana geri getir.",
+        "completion": "Sen döndün, ayna dönmedi. Elinde bıraktığı şey senindir - düş o bedeli yalnız bir kez öder.",
         "objectives": {
           "0": {
             "label": "Yankın yenildi"
@@ -7917,7 +7921,7 @@ export const tr_TR: EnTranslations = {
       "q_what_the_glass_wants": {
         "title": "Camın İstediği",
         "text": "Yankı'nı yendin ve bunu bir öz sınavı sandın, {playerName}. Değildi. Ben Derin Düş'ü örtüden, boynuzdan ve başlıktan damıtırım, ama düşünün karşısına ayna diktiği şey, senin yüzünle içeri giren o şey, onu ben damıtmam. O, kanyonun kara camından sızar. Kanyon ağzını dolduran orakçılar aynı sızıntıyla kalınlaşmış; sekizini devir ve gölgelerinin nereye süründüğüne bak. O zaman Nerissa'nın kendi gözlerine, yarasının gerçekte nerede kanadığını göstereceğim.",
-        "completion": "Kuzeydoğuya. Hep kuzeydoğuya, hep Samur'a doğru — gördün mü? Yankın SEN değildin, gezgin. O kapının ardında her ne yaşıyorsa, ondan bir kıymıktı; çalabildiği en yakın yansımayı giymişti: seninkini. Rüya, sızıntının bulduğu en ince yerdir yalnızca; kanyon ise en geniş. Nerissa'ya söyle. Bunun gerçeğini hak etti, sen de.",
+        "completion": "Kuzeydoğuya. Hep kuzeydoğuya, hep Samur'a doğru - gördün mü? Yankın SEN değildin, gezgin. O kapının ardında her ne yaşıyorsa, ondan bir kıymıktı; çalabildiği en yakın yansımayı giymişti: seninkini. Rüya, sızıntının bulduğu en ince yerdir yalnızca; kanyon ise en geniş. Nerissa'ya söyle. Bunun gerçeğini hak etti, sen de.",
         "objectives": {
           "0": {
             "label": "Kanyon ağzında Orakçı devrildi"
@@ -7926,7 +7930,7 @@ export const tr_TR: EnTranslations = {
       },
       "q_relight_the_lumen_crown": {
         "title": "Lümen Tacı'nı Yeniden Yak",
-        "text": "Muhafızların adları söylendi ve geçit inceliyor, o yüzden şimdi öldüğümden beri ertelediğimi yapmalıyım: Lümen Tacı'nı son bir kez yakıp Samur'u bu taraftan kapalı tutmalıyım. Tacın son gerçek kıvılcımını, gölete düştüğünde Alacakaranlık Ağzı yuttu — o yüzden o şey içten içe parlar. Işığı ondan geri kes, {playerName}. Kara cam, ayini durdurmak için kasvet devlerini yollayacak; dördünü devir. Ben hâlâ birini nasıl tutacağımı hatırlarken bana boğulmuş bir kıvılcım getir. Bir bekçinin son görevi, artık beklemeye ihtiyacı olmayan biri hâline gelmektir.",
+        "text": "Muhafızların adları söylendi ve geçit inceliyor, o yüzden şimdi öldüğümden beri ertelediğimi yapmalıyım: Lümen Tacı'nı son bir kez yakıp Samur'u bu taraftan kapalı tutmalıyım. Tacın son gerçek kıvılcımını, gölete düştüğünde Alacakaranlık Ağzı yuttu - o yüzden o şey içten içe parlar. Işığı ondan geri kes, {playerName}. Kara cam, ayini durdurmak için kasvet devlerini yollayacak; dördünü devir. Ben hâlâ birini nasıl tutacağımı hatırlarken bana boğulmuş bir kıvılcım getir. Bir bekçinin son görevi, artık beklemeye ihtiyacı olmayan biri hâline gelmektir.",
         "completion": "Yanıyor. Onca karanlığın ardından hâlâ elimi tanıyor. Bak: cam yeniden GERÇEK; suyun ardında bir kalp atışı yok, bir dünya ile yansıması arasında yitmiş bir ruh yok. Ve yük nihayet üstümden kalktı. Yok olmuyorum, {playerName}; NÖBETİM devralınıyor. Bu, Samur'u kırmak değil, yalnızca tutmaktır; orada bekleyeni kıracak gücüm yok, ve buna cüret de etmezdim. Ama bir çağ daha tutuldu mu, tutulmuştur. Bizden daha yürekli bir bölük o kapıdan sonunda İÇERİ girdiğinde, öte tarafı hazır bulacaklar. Highwatch'ta söyle: bekçileri nöbeti sonuna dek tuttu, sonra da devraldılar. Cam seni anacak. Ona yansıtmaya değer bir şey vermeye bak.",
         "objectives": {
           "0": {

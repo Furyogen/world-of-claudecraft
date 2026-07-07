@@ -40,7 +40,7 @@ const SOUL_REND_OPACITY = 0.58;
 const SOUL_REND_TINT = new THREE.Color(0x4f0505);
 
 // ---------------------------------------------------------------------------
-// Procedural attack overlay — for the Mirror World's walk-only Tripo quadrupeds
+// Procedural attack overlay - for the Mirror World's walk-only Tripo quadrupeds
 // (gloaming maw / voidfang / spirit unicorn) whose GLB ships ONLY a 'Walk' clip
 // and so has no baked swing. On a sim swing (playAttack) a short
 // load->strike->recover clock curls the rig's Tripo head/spine bone chain on top
@@ -118,7 +118,7 @@ const PROC_ATTACKS: Record<ProcAttackKind, ProcAttackSpec> = {
     // sends the mouth down+forward). Chain rotations COMPOUND, so keep the summed
     // weight small (~1.55 -> ~40deg at the jaw tip): a clean down-bite, not the
     // contorted gullet-curl an aggressive tip-bias produced. No spine bone (its
-    // counter-rotation was what bent the neck weirdly) — the lunge carries the drive.
+    // counter-rotation was what bent the neck weirdly) - the lunge carries the drive.
     axis: 'z',
     sign: -1,
     peakDeg: 26,
@@ -386,7 +386,7 @@ export class CharacterVisual {
         this.model.getObjectByName(b.n) ?? this.model.getObjectByName(b.n.replace(/[[\].:/]/g, ''));
       if (node) bones.push({ bone: node, w: b.w, phase: b.phase ?? 0 });
     }
-    if (bones.length === 0) return; // nothing resolved — leave the swing a no-op
+    if (bones.length === 0) return; // nothing resolved - leave the swing a no-op
     this.procAttack = {
       spec,
       axis: new THREE.Vector3(
@@ -405,7 +405,7 @@ export class CharacterVisual {
   /** `animate=false` skips mixer integration (distance throttling); state
    *  edges still latch so the pose catches up when the entity nears. */
   update(dt: number, s: AnimState, animate: boolean): void {
-    // Statue mode: hold the first idle frame forever — stone does not sway.
+    // Statue mode: hold the first idle frame forever - stone does not sway.
     if (this.def.frozen) {
       if (!this.frozePose) {
         this.frozePose = true;
@@ -491,7 +491,7 @@ export class CharacterVisual {
     const pa = this.procAttack;
     if (!pa || this.attackClock < 0) return;
     if (this.deadLock) {
-      // died mid-swing — drop the overlay so the chomp never rides the death pose
+      // died mid-swing - drop the overlay so the chomp never rides the death pose
       this.attackClock = -1;
       this.poseWrap.position.z = 0;
       return;
@@ -522,7 +522,7 @@ export class CharacterVisual {
   playAttack(): void {
     if (this.deadLock) return;
     // walk-only rigs animate the swing procedurally (a bone overlay), (re)starting
-    // the clock and leaving the locomotion loop live — no one-shot clip.
+    // the clock and leaving the locomotion loop live - no one-shot clip.
     if (this.procAttack) {
       this.attackClock = 0;
       return;

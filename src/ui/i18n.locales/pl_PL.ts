@@ -2741,13 +2741,13 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_what_the_glass_wants.text':
     'Pokonałeś swe Echo i wziąłeś to za próbę samego siebie, {playerName}. Nie było nią. Warzę Głęboki Sen z prześcieradła, rogu i kaptura, lecz to, przeciw czemu twój sen wystawił zwierciadło, rzecz, co weszła w twej twarzy, tego nie warzę ja. Przesącza się z czarnego szkła kanionu. Żniwiarze tłoczący się u wylotu kanionu są gęści od tego samego przecieku; powal ośmiu i patrz, dokąd pełzną ich cienie. Wtedy pokażę własnym oczom Nerissy, gdzie jej rana naprawdę krwawi.',
   'entities.quests.q_what_the_glass_wants.completion':
-    'Na północny wschód. Zawsze na północny wschód, zawsze ku Sobolowemu — widziałeś? Twe Echo nie było TOBĄ, wędrowcze. Było odłamkiem tego, co żyje za owymi wrotami, odzianym w najbliższe odbicie, jakie mogło ukraść: twoje. Sen to tylko najcieńsze miejsce, jakie znalazł przeciek; kanion — najszersze. Powiedz to Nerissie. Zasłużyła na prawdę o tym, a i ty też.',
+    'Na północny wschód. Zawsze na północny wschód, zawsze ku Sobolowemu - widziałeś? Twe Echo nie było TOBĄ, wędrowcze. Było odłamkiem tego, co żyje za owymi wrotami, odzianym w najbliższe odbicie, jakie mogło ukraść: twoje. Sen to tylko najcieńsze miejsce, jakie znalazł przeciek; kanion - najszersze. Powiedz to Nerissie. Zasłużyła na prawdę o tym, a i ty też.',
   'entities.quests.q_what_the_glass_wants.objectives.0.label': 'Żniwiarz powalony u wylotu kanionu',
   'entities.quests.q_relight_the_lumen_crown.title': 'Rozpalić Koronę Lumenu',
   'entities.quests.q_relight_the_lumen_crown.text':
-    'Strażnicy mają imiona, a grobla cieńczeje, muszę więc uczynić teraz to, co odkładałam od śmierci: rozpalić Koronę Lumenu ostatni raz i przycisnąć Sobolowe od tej strony. Ostatnią prawdziwą iskrę Korony połknęła Zmierzchowa Paszcza, gdy padła w staw — dlatego to coś jarzy się od środka. Wytnij z niej światło z powrotem, {playerName}. Czarne szkło pośle swe mroczne kolosy, by przerwać obrzęd; powal czterech. Przynieś mi utopioną iskrę, póki jeszcze pamiętam, jak taką trzymać. Ostatnią powinnością strażnika jest stać się kimś, kto już strzec nie musi.',
+    'Strażnicy mają imiona, a grobla cieńczeje, muszę więc uczynić teraz to, co odkładałam od śmierci: rozpalić Koronę Lumenu ostatni raz i przycisnąć Sobolowe od tej strony. Ostatnią prawdziwą iskrę Korony połknęła Zmierzchowa Paszcza, gdy padła w staw - dlatego to coś jarzy się od środka. Wytnij z niej światło z powrotem, {playerName}. Czarne szkło pośle swe mroczne kolosy, by przerwać obrzęd; powal czterech. Przynieś mi utopioną iskrę, póki jeszcze pamiętam, jak taką trzymać. Ostatnią powinnością strażnika jest stać się kimś, kto już strzec nie musi.',
   'entities.quests.q_relight_the_lumen_crown.completion':
-    'Płonie. Po całym tym mroku wciąż zna mą dłoń. Patrz: szkło znów jest PRAWDZIWE; żadnego bicia za wodą, żadnej duszy zgubionej między światem a jego odbiciem. I ciężar wreszcie ze mnie zszedł. Nie znikam, {playerName}; zostaję ZLUZOWANA. To nie skruszenie Sobolowego, jeno trzymanie; nie mam siły skruszyć tego, co tam czeka, i nie śmiałabym. Lecz trzymane o wiek dłużej — jest trzymane. Gdy dzielniejsza od nas kompania wreszcie wejdzie DO owych wrót, zastanie drugą stronę gotową. Powiedz w Highwatch, że ich strażniczka trwała na warcie do końca, a potem została zluzowana. Szkło cię zapamięta. Zadbaj, byś dał mu coś godnego odbicia.',
+    'Płonie. Po całym tym mroku wciąż zna mą dłoń. Patrz: szkło znów jest PRAWDZIWE; żadnego bicia za wodą, żadnej duszy zgubionej między światem a jego odbiciem. I ciężar wreszcie ze mnie zszedł. Nie znikam, {playerName}; zostaję ZLUZOWANA. To nie skruszenie Sobolowego, jeno trzymanie; nie mam siły skruszyć tego, co tam czeka, i nie śmiałabym. Lecz trzymane o wiek dłużej - jest trzymane. Gdy dzielniejsza od nas kompania wreszcie wejdzie DO owych wrót, zastanie drugą stronę gotową. Powiedz w Highwatch, że ich strażniczka trwała na warcie do końca, a potem została zluzowana. Szkło cię zapamięta. Zadbaj, byś dał mu coś godnego odbicia.',
   'entities.quests.q_relight_the_lumen_crown.objectives.0.label': 'Zmierzchowa Paszcza pokonana',
   'entities.quests.q_relight_the_lumen_crown.objectives.1.label': 'Utopiony lumen',
   'entities.quests.q_relight_the_lumen_crown.objectives.2.label': 'Mroczny kolos strzaskany',
@@ -2770,20 +2770,20 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.mistwitch_morwen.name': 'Morwen, Wiedźma Mgieł',
   'entities.npcs.mistwitch_morwen.title': 'Warzycielka snów z Kotliny',
   'entities.npcs.mistwitch_morwen.greeting':
-    'Mgła nie daje większości z was zasnąć. Ja uwarzę ci ten drugi sen — taki, który odpowiada.',
+    'Mgła nie daje większości z was zasnąć. Ja uwarzę ci ten drugi sen - taki, który odpowiada.',
   'entities.quests.q_deepdream_recipe.title': 'Przepis na głęboki sen',
   'entities.quests.q_deepdream_recipe.text':
     'Wywar potrzebuje trzech głosów, {playerName}: dwóch białych prześcieradeł od duchów ubóstwa, które nie mają nic innego, dwóch rogów duchowych jednorożców pasących się w mroku i dwóch kapturów ściętych żniwiarzom pilnującym pasa. Przynieś je, a uwarzę ci sen z zębami.',
   'entities.quests.q_deepdream_recipe.completion':
-    'Prześcieradło, róg, kaptur — biedni, promienni, cierpliwi. Kocioł cię polubił. Wypij go w miękkim miejscu, wędrowcze: spotkasz tego, kogo nosisz w sobie.',
+    'Prześcieradło, róg, kaptur - biedni, promienni, cierpliwi. Kocioł cię polubił. Wypij go w miękkim miejscu, wędrowcze: spotkasz tego, kogo nosisz w sobie.',
   'entities.quests.q_deepdream_recipe.objectives.0.label': 'Białe Prześcieradło',
   'entities.quests.q_deepdream_recipe.objectives.1.label': 'Duchowy Róg',
   'entities.quests.q_deepdream_recipe.objectives.2.label': 'Czarny Kaptur',
   'entities.quests.q_face_your_echo.title': 'Stań twarzą w twarz ze swoim Echem',
   'entities.quests.q_face_your_echo.text':
-    'Wypij napar, a sen postawi przed tobą zwierciadło — twoje Echo, każdą twoją bliznę i każdą sztuczkę po drugiej stronie. Pokonaj to, czym jesteś, {playerName}, i przynieś mi swoją minę po wszystkim.',
+    'Wypij napar, a sen postawi przed tobą zwierciadło - twoje Echo, każdą twoją bliznę i każdą sztuczkę po drugiej stronie. Pokonaj to, czym jesteś, {playerName}, i przynieś mi swoją minę po wszystkim.',
   'entities.quests.q_face_your_echo.completion':
-    'Wróciłeś ty, a zwierciadło nie. Co zostawiło ci w dłoni, jest twoje — sen płaci tę cenę tylko raz.',
+    'Wróciłeś ty, a zwierciadło nie. Co zostawiło ci w dłoni, jest twoje - sen płaci tę cenę tylko raz.',
   'entities.quests.q_face_your_echo.objectives.0.label': 'Twoje Echo pokonane',
   'entities.items.white_sheet.name': 'Białe Prześcieradło',
   'entities.items.spirit_horn.name': 'Duchowy Róg',
@@ -4061,6 +4061,13 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
     'Zatrzymaj się przy bramie. Za tymi trzcinami trzęsawisko zabija za nas.',
   'guide.worldPage.marshPlaceNotes':
     'Fenbridge strzeże jedynej suchej drogi. Trzciny Czyhacza i Płycizny Głębotopieli aż się roją od bagiennych bestii i Mudfinów; Gąszcz Wdowy jest gęsto osnuty pajęczyną; Zatopiona Kaplica i Kopce Trolli kryją starsze niebezpieczeństwa; Obozowisko Gravecallera to okopany kult, a Zatopiony Bastion to instancjowane serce trzęsawiska.',
+  'guide.worldPage.mirrorBlurb':
+    'Skąpana w księżycu, spowita mgłą kraina czarnego szkła za zwierciadłami Highwatch, gdzie Dolina Szkła strzeże duchów schyłku gry tego królestwa, a Strażniczka Nerissa dzierży Kotlinę Lumen.',
+  'guide.worldPage.mirrorGreeting':
+    'Szkło zachowuje każdą twarz, którą utopiło. Stąpaj tu cicho i nie wpatruj się zbyt długo we własną.',
+  'guide.worldPage.mirrorGreeter': 'Strażniczka Nerissa, Kotlina Lumen',
+  'guide.worldPage.mirrorPlaceNotes':
+    'Kotlina Lumen to serce zwierciadlanego miasta, ze Zwierciadlanym Dworem i jego gargulcami tuż powyżej oraz schodami Punktu Widokowego opadającymi w dół; Zwierciadlane Rozlewisko to nieruchoma czarna woda, otoczona Księżycową Łąką i Kamieniami Żałości; Ponure Turnie i Mroczny Bór kryją najcięższe duchy doliny; Kotlina Wiedźmy przygarnia Morwen, Wiedźmę Mgieł, Półka Gwiazdarza swój długi zimny widok, a Czarny Kanion wije się na wschód ku Zwierciadłu Sable.',
   'guide.worldPage.peaksBlurb':
     'Smagane wiatrem granie i stare wyrobiska wspinające się ku najzimniejszym, najwyżej położonym niebezpieczeństwom królestwa, bronione przez posterunek Highwatch.',
   'guide.worldPage.peaksGreeter': 'Kapitan Thessaly, Highwatch',

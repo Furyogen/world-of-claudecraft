@@ -7,7 +7,7 @@ import {
   arenaOrigin,
   CLASSES,
   DELVE_MODULE_Z_START,
-  DREAM_X,
+  DREAM_SLOT_COUNT,
   DUNGEON_FLOOR_Y,
   DUNGEON_LIST,
   DUNGEON_X_THRESHOLD,
@@ -17,6 +17,7 @@ import {
   delveModuleZOffset,
   delveOrigin,
   delveSlotAt,
+  dreamOrigin,
   dungeonAt,
   INSTANCE_SLOT_COUNT,
   instanceOrigin,
@@ -91,6 +92,7 @@ import { buildPropMaterialPrewarmGroup, buildProps } from './props';
 import { buildGroundQuestObject } from './quest_objects';
 import { isOwnedPetHostile } from './reaction';
 import { RenderBudgetGovernor, type RenderBudgetState } from './render_budget';
+import { mulberry32 } from './rng';
 import { downscaleDims } from './screenshot';
 import { buildSealife, type SealifeView } from './sealife';
 import { drapeRingLocalY } from './selection_ring';
@@ -687,19 +689,9 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => window.setTimeout(resolve, Math.max(0, ms)));
 }
 
-// Deterministic PRNG for Mirror World sky placement — the render convention
-// forbids Math.random (see sealife.ts). Seeded off a fixed constant so the
-// asteroid field is identical every session.
-function mulberry32(seed: number): () => number {
-  let a = seed >>> 0;
-  return () => {
-    a |= 0;
-    a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
+// Mirror World sky placement uses the shared deterministic PRNG (./rng); the
+// render convention forbids Math.random (see sealife.ts). Seeded off a fixed
+// constant so the asteroid field is identical every session.
 
 // Paint one Mirror World asteroid: an irregular basalt-violet glass chip with a
 // single cold-silver moonlit rim (sun-facing) and an occasional warm fleck.
@@ -838,7 +830,7 @@ function makeMoonTextures(a: MoonArt): { core: THREE.CanvasTexture; halo: THREE.
   x.restore();
   if (a.ring) {
     // a thin foreshortened ellipse, brighter at the ansae (tips), drawn over
-    // the disc — reads as a ringed world at sprite scale
+    // the disc - reads as a ringed world at sprite scale
     x.save();
     x.translate(cx, cy);
     x.rotate(-0.34);
@@ -1341,7 +1333,7 @@ export class Renderer {
     }
 
     // The Sundered Orrery: three moons hang over the Mirror World, each a
-    // different world caught in a different phase — the alien gut-punch that
+    // different world caught in a different phase - the alien gut-punch that
     // proves this is not our sky. Each is an additive core disc (phase-shaded on
     // a canvas, with maria / bands+ring / crescent+earthshine detail) plus a
     // soft bloom halo, both hidden until the mirror cross-fade reveals them.
@@ -1358,7 +1350,7 @@ export class Renderer {
     const D2R = Math.PI / 180;
     const moonDefs: { dir: THREE.Vector3; coreScale: number; haloScale: number; art: MoonArt }[] = [
       {
-        // SABLE — the Broken Sister: the dominant moon. Azimuth locked to the
+        // SABLE - the Broken Sister: the dominant moon. Azimuth locked to the
         // sun so the vale's glints track it, but eased down to 46deg elevation
         // (from SUN_DIR's 54deg) so it sits inside the player's max look-up frame.
         dir: moonDir(0, 46 * D2R),
@@ -1375,7 +1367,7 @@ export class Renderer {
         },
       },
       {
-        // CAEL — the Ringed Wanderer: warm banded gas-giant, low + wide.
+        // CAEL - the Ringed Wanderer: warm banded gas-giant, low + wide.
         dir: moonDir(150 * D2R, 27 * D2R),
         coreScale: 34,
         haloScale: 82,
@@ -1390,7 +1382,7 @@ export class Renderer {
         },
       },
       {
-        // VIRE — the Ice Spark: tiny cold crescent, high, with earthshine ghost.
+        // VIRE - the Ice Spark: tiny cold crescent, high, with earthshine ghost.
         dir: moonDir(-102 * D2R, 45 * D2R),
         coreScale: 19,
         haloScale: 46,
@@ -1439,7 +1431,7 @@ export class Renderer {
       });
     }
 
-    // Near asteroids — the shattered-glass belt we are passing through, feeding
+    // Near asteroids - the shattered-glass belt we are passing through, feeding
     // the painted arc that recedes to the horizon. Deterministic placement
     // biased to lie along the belt plane, with a loose cluster toward Cael so
     // the ringed moon visibly sheds the belt. Nearer than the moons (radius
@@ -3429,8 +3421,8 @@ export class Renderer {
       height = built.height;
       objectMesh = body!;
     } else if (e.kind === 'object' && e.templateId === 'portal_pad') {
-      // Every Mirror World portal — the Mirrorgates, the Lumen Lift, the
-      // clouded grotto mirrors — is a standing mirror.
+      // Every Mirror World portal - the Mirrorgates, the Lumen Lift, the
+      // clouded grotto mirrors - is a standing mirror.
       const built = buildMirrorBody(this.lowGfx);
       body = built.body;
       portal = built.portal;
@@ -3806,7 +3798,7 @@ export class Renderer {
   private isHostilePlayer(target: Entity): boolean {
     if (target.kind !== 'player' || target.dead || target.id === this.sim.playerId) return false;
     // hostile-flagged player-kind entities (the Deepdream Echo) read hostile on
-    // every host — the flag rides the snapshot identity, so no match state needed
+    // every host - the flag rides the snapshot identity, so no match state needed
     if (target.hostile) return true;
     if (this.sim.duelInfo?.state === 'active' && this.sim.duelInfo.otherPid === target.id)
       return true;
@@ -3860,7 +3852,7 @@ export class Renderer {
     volcano: { color: 0x8a7468, near: 50, far: 220 },
     cave: { color: 0x76807c, near: 45, far: 190 },
     // the Mirror World: a luminous silver-violet murk. Open enough that the
-    // vale reveals its scale on arrival — distant rim, shore, and ledge resolve
+    // vale reveals its scale on arrival - distant rim, shore, and ledge resolve
     // as ghost-silhouettes in the mist rather than vanishing at arm's length,
     // yet the far edges still fade to mystery so the country keeps its secrets.
     mirror: { color: 0x201d38, near: 30, far: 165 },
@@ -3875,7 +3867,7 @@ export class Renderer {
   private sunColorScratch = new THREE.Color();
   private static LOW_FOG = { color: 0xa6c6e0, near: 70, far: 260 };
 
-  // Outdoor sun/sky-ambient scale per biome — the Mirror World keeps only a
+  // Outdoor sun/sky-ambient scale per biome - the Mirror World keeps only a
   // wash of pale gloaming; brazier light and the rim glow carry the country.
   private static BIOME_LIGHT: Record<BiomeId, { sun: number; hemi: number }> = {
     vale: { sun: 1, hemi: 1 },
@@ -3939,29 +3931,38 @@ export class Renderer {
     this.buildAllDelveModules(delveId, run.slot, run.origin, run.modules as DelveModuleId[]);
   }
 
-  // The shadow realm has no built architecture — its surreal read comes from
+  // The shadow realm has no built architecture - its surreal read comes from
   // the mist (updateAmbience 'dream' fog/light). We lay one faint reflective
   // disc under each dream slot so the duelists cast a hint of a footing in the
   // void rather than floating over pure black. Built once per session, lazily.
+  //
+  // The dream slots stack along z (dreamOrigin(slot), 200u apart) and dream fog
+  // far is short, so only the local slot's disc is ever visible - but offline
+  // solo play always duels at slot 0 (z far from 0), so a single disc pinned at
+  // z=0 sat under no one. One shared geometry/material, one cheap mesh per slot,
+  // each seated at its own dreamOrigin, guarantees footing at whatever slot the
+  // player's dream is scheduled into.
   private dreamGroundBuilt = false;
 
   private ensureDreamRealmNear(_px: number, _pz: number): void {
     if (this.dreamGroundBuilt) return;
     this.dreamGroundBuilt = true;
-    const disc = new THREE.Mesh(
-      new THREE.CircleGeometry(60, 48),
-      new THREE.MeshStandardMaterial({
-        color: 0x14122e,
-        roughness: 0.15,
-        metalness: 0.6,
-        transparent: true,
-        opacity: 0.55,
-      }),
-    );
-    disc.rotation.x = -Math.PI / 2;
-    disc.position.set(DREAM_X, DUNGEON_FLOOR_Y + 0.02, 0);
-    disc.renderOrder = -1;
-    this.scene.add(disc);
+    const geo = new THREE.CircleGeometry(60, 48);
+    const mat = new THREE.MeshStandardMaterial({
+      color: 0x14122e,
+      roughness: 0.15,
+      metalness: 0.6,
+      transparent: true,
+      opacity: 0.55,
+    });
+    for (let slot = 0; slot < DREAM_SLOT_COUNT; slot++) {
+      const origin = dreamOrigin(slot);
+      const disc = new THREE.Mesh(geo, mat);
+      disc.rotation.x = -Math.PI / 2;
+      disc.position.set(origin.x, DUNGEON_FLOOR_Y + 0.02, origin.z);
+      disc.renderOrder = -1;
+      this.scene.add(disc);
+    }
   }
 
   private ensureDelveInteriorsNear(px: number, pz: number): void {
@@ -4875,7 +4876,7 @@ export class Renderer {
 
     // clouds drift (the high cirrus layer crawls slower); on the lit tiers
     // they tint warm sunward / cool anti-sun to anchor the key light's azimuth.
-    // The Mirror World sky is a starless black void — daylight clouds would
+    // The Mirror World sky is a starless black void - daylight clouds would
     // drag the outside world in, so they hide while the camera is in the band.
     const cloudsHidden = zoneBiomeAt(this.sim.player.pos.z) === 'mirror';
     for (const cl of this.clouds) {
@@ -5187,8 +5188,8 @@ export class Renderer {
   }
 
   // light shafts fade in as the camera turns toward the sun, outdoor only
-  // Position the Mirror World orrery — three moons at fixed sky directions plus
-  // the near asteroid field drifting along the belt — and fade it in/out with
+  // Position the Mirror World orrery - three moons at fixed sky directions plus
+  // the near asteroid field drifting along the belt - and fade it in/out with
   // the alien-sky cross-fade. Moons are camera-locked; rocks slowly orbit the
   // belt axis and tumble, giving parallax against the fixed painted sky.
   private updateMoons(mirrorFactor: number): void {

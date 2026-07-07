@@ -2,9 +2,10 @@ import * as THREE from 'three';
 import { DUNGEON_X_THRESHOLD, WORLD_MAX_X, WORLD_MAX_Z, WORLD_MIN_Z } from '../sim/data';
 import { terrainHeight, WATER_LEVEL, zoneBiomeAt } from '../sim/world';
 import { GFX } from './gfx';
+import { mulberry32 } from './rng';
 
 // ---------------------------------------------------------------------------
-// Mirror World ground mist — a render-only field of thick, soft white mist
+// Mirror World ground mist - a render-only field of thick, soft white mist
 // banks that hug the vale floor and drift on a steady wind, giving the Vale of
 // Glass its haunted-marsh ambience without the old draw-distance fog that
 // crushed the view. Pure presentation: reads the world's terrain height + biome
@@ -22,19 +23,9 @@ const RADIUS = 62; // mist fills this ring around the player
 // steady wind across the vale (xz direction); banks drift along it and the
 // per-bank churn/billow rides the same clock so the whole field reads as wind
 const WIND = new THREE.Vector2(0.86, 0.32).normalize();
-const WIND_SPEED = 3.1; // units/sec — a visible, unhurried drift
+const WIND_SPEED = 3.1; // units/sec - a visible, unhurried drift
 
-// deterministic per-render RNG (render convention: never Math.random)
-function mulberry32(seed: number): () => number {
-  let a = seed >>> 0;
-  return () => {
-    a |= 0;
-    a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
+// deterministic per-render RNG (shared ./rng; convention: never Math.random)
 
 // a soft, uneven mist puff: several overlapping feathered blobs so the edge
 // reads wispy rather than a clean disc (no image assets)
@@ -67,7 +58,7 @@ interface Bank {
   hy: number; // height above the sampled ground
   sx: number; // base sprite scale (wide banks)
   sy: number;
-  op: number; // base opacity — low; layered banks build the veil
+  op: number; // base opacity - low; layered banks build the veil
   phase: number;
   rot: number; // slow per-bank churn rate
 }

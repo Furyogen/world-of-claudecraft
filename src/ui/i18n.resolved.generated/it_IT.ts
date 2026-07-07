@@ -1838,6 +1838,10 @@ export const it_IT: EnTranslations = {
       "valePlaceNotes": "Eastbrook è la tua prima base. Il Sentiero dei Lupi e il Prato dei Cinghiali sono terreni di caccia tranquilli; il Lago a Specchio è acqua quieta dove pescare; il Sableweb e lo Scavo di Rame nascondono ragni e scavatori avidi di minerale; un Campo di Banditi e la Cappella Caduta custodiscono lavori più duri; il Colle del Reliquiario scende nel Reliquiario Crollato, il primo delve del reame; e Brightwood Glade è una serena radura assolata a nord.",
       "marshPlaceNotes": "Fenbridge custodisce l'unica strada asciutta. Le Canne del Predatore e le Secche di Deepfen brulicano di bestie di palude e mudfin; il Roveto della Vedova è fittamente intessuto di ragnatele; la Cappella Annegata e i Tumuli dei Troll custodiscono pericoli più antichi; l'Accampamento del Gravecaller è il culto trincerato, e il Bastione Sommerso è il cuore istanziato della palude.",
       "peaksPlaceNotes": "Highwatch tiene il muro. La Cresta del Cacciatore e le Tane di Deeprock appartengono ai felini di cresta e agli scavatori; le Pendici degli Ogre e l'Accampamento di Guerra di Drogmar ai bruti a pagamento; Stormcrag crepita di elementali e il Glimmermere risplende sotto di esso; le Tende del Culto del Wyrm e i Campi dei Revenant cingono l'altura del culto, con il Santuario del Gravewyrm alla sua sommità.",
+      "mirrorBlurb": "Un paese di vetro nero, illuminato dalla luna e avvolto nella nebbia, oltre gli specchi di Highwatch, dove la Valle di Vetro custodisce gli spiriti di fine gioco del reame e la Custode Nerissa veglia sull'Anfratto di Lumen.",
+      "mirrorGreeting": "Il vetro conserva ogni volto che ha annegato. Cammina piano qui, e non fissare troppo a lungo il tuo.",
+      "mirrorGreeter": "Custode Nerissa, l'Anfratto di Lumen",
+      "mirrorPlaceNotes": "L'Anfratto di Lumen è il cuore della città-specchio, con la Corte dello Specchio e le sue gargolle poco più su e la scalinata del Belvedere che precipita più in basso; il Lago Specchio è acqua nera e immobile, cinta dal Prato della Luna e dalle Pietre del Dolore; i Dirupi Tetri e il Bosco Oscuro racchiudono gli spiriti più gravi della valle; l'Anfratto della Strega ospita Morwen la Strega delle Brume, la Cengia dell'Astronomo la sua lunga e fredda veduta, e il Canyon Nero serpeggia verso est fino allo Specchio Sable.",
       "gladeTitle": "Un angolo quieto: la Radura di Brightwood",
       "gladeBody": "Non ogni storia della Valle parla dei morti. A nord, una radura assolata chiamata Brightwood Glade mantiene un ritmo più gentile tutto suo, fatto di sentieri silenziosi e luce screziata sotto i rami. È un contrappunto lieve alla pista che stai seguendo e vale la pena vederla quando la strada ti lascia spazio per vagare."
     },
@@ -6987,7 +6991,7 @@ export const it_IT: EnTranslations = {
       "mistwitch_morwen": {
         "name": "Morwen la Strega delle Brume",
         "title": "Distillatrice di sogni della Conca",
-        "greeting": "La bruma tiene svegli i tuoi. Io posso prepararti l’altro sonno — quello che risponde."
+        "greeting": "La bruma tiene svegli i tuoi. Io posso prepararti l’altro sonno - quello che risponde."
       },
       "gargoyle_sentinel_south": {
         "name": "Sentinella Gargolla",
@@ -7831,7 +7835,7 @@ export const it_IT: EnTranslations = {
       "q_deepdream_recipe": {
         "title": "Una ricetta per il sonno profondo",
         "text": "La pozione vuole tre voci, {playerName}: due lenzuola bianche dei fantasmi della povertà che non possiedono altro, due corni degli unicorni spirituali che pascolano nella penombra, e due cappucci tagliati ai mietitori che sorvegliano la cintura. Portameli e ti distillerò un sonno coi denti.",
-        "completion": "Lenzuolo, corno, cappuccio — i poveri, i radiosi, i pazienti. Al calderone piaci. Bevila in un posto morbido, viandante: incontrerai chi porti con te.",
+        "completion": "Lenzuolo, corno, cappuccio - i poveri, i radiosi, i pazienti. Al calderone piaci. Bevila in un posto morbido, viandante: incontrerai chi porti con te.",
         "objectives": {
           "0": {
             "label": "Lenzuolo Bianco"
@@ -7846,8 +7850,8 @@ export const it_IT: EnTranslations = {
       },
       "q_face_your_echo": {
         "title": "Affronta il tuo Eco",
-        "text": "Bevi l’intruglio e il sogno ti porrà uno specchio davanti — il tuo Eco, ogni tua cicatrice e ogni tuo trucco dall’altra parte. Sconfiggi ciò che sei, {playerName}, e riportami la faccia che farai.",
-        "completion": "Sei tornato tu, e lo specchio no. Ciò che ti ha lasciato in mano è tuo — il sogno paga quel prezzo una sola volta.",
+        "text": "Bevi l’intruglio e il sogno ti porrà uno specchio davanti - il tuo Eco, ogni tua cicatrice e ogni tuo trucco dall’altra parte. Sconfiggi ciò che sei, {playerName}, e riportami la faccia che farai.",
+        "completion": "Sei tornato tu, e lo specchio no. Ciò che ti ha lasciato in mano è tuo - il sogno paga quel prezzo una sola volta.",
         "objectives": {
           "0": {
             "label": "Il tuo Eco sconfitto"
@@ -7917,7 +7921,7 @@ export const it_IT: EnTranslations = {
       "q_what_the_glass_wants": {
         "title": "Ciò che il Vetro Vuole",
         "text": "Hai vinto il tuo Eco e l'hai creduto una prova di te, {playerName}. Non lo era. Io distillo il Sogno Profondo da lenzuolo, corno e cappuccio, ma ciò contro cui il tuo sogno alzò uno specchio, la cosa entrata indossando il tuo volto, quella non la distillo io. Filtra dentro, dal vetro nero del canyon. I mietitori che affollano l'imbocco del canyon sono densi della stessa infiltrazione; abbattine otto e osserva verso dove strisciano le loro ombre. Allora mostrerò agli occhi stessi di Nerissa dove la sua ferita davvero sanguina.",
-        "completion": "A nordest. Sempre a nordest, sempre verso il Sable — l'hai visto? Il tuo Eco non eri TU, viandante. Era una scheggia di ciò che vive dietro quella porta, vestita col riflesso più vicino che poté rubare: il tuo. Il sogno è solo il punto più sottile che l'infiltrazione abbia trovato; il canyon il più largo. Dillo a Nerissa. Se n'è meritata la verità, e anche tu.",
+        "completion": "A nordest. Sempre a nordest, sempre verso il Sable - l'hai visto? Il tuo Eco non eri TU, viandante. Era una scheggia di ciò che vive dietro quella porta, vestita col riflesso più vicino che poté rubare: il tuo. Il sogno è solo il punto più sottile che l'infiltrazione abbia trovato; il canyon il più largo. Dillo a Nerissa. Se n'è meritata la verità, e anche tu.",
         "objectives": {
           "0": {
             "label": "Mietitore abbattuto all'imbocco del canyon"
@@ -7926,7 +7930,7 @@ export const it_IT: EnTranslations = {
       },
       "q_relight_the_lumen_crown": {
         "title": "Riaccendere la Corona di Lumen",
-        "text": "I guardiani hanno un nome e la strada s'assottiglia, dunque devo fare ora ciò che ho rimandato da quando morii: accendere la Corona di Lumen un'ultima volta e premere chiuso il Sable da questo lato. L'ultima vera scintilla della Corona la inghiottì le Fauci del Crepuscolo quando cadde nel laghetto — per questo la cosa brilla di dentro. Ritagliale di nuovo la luce, {playerName}. Il vetro nero manderà i suoi colossi tenebrosi a fermare il rito; abbattine quattro. Portami una scintilla annegata finché ricordo ancora come tenerne una. L'ultimo dovere d'un custode è divenire qualcuno che non ha più bisogno di custodire.",
+        "text": "I guardiani hanno un nome e la strada s'assottiglia, dunque devo fare ora ciò che ho rimandato da quando morii: accendere la Corona di Lumen un'ultima volta e premere chiuso il Sable da questo lato. L'ultima vera scintilla della Corona la inghiottì le Fauci del Crepuscolo quando cadde nel laghetto - per questo la cosa brilla di dentro. Ritagliale di nuovo la luce, {playerName}. Il vetro nero manderà i suoi colossi tenebrosi a fermare il rito; abbattine quattro. Portami una scintilla annegata finché ricordo ancora come tenerne una. L'ultimo dovere d'un custode è divenire qualcuno che non ha più bisogno di custodire.",
         "completion": "Brucia. Dopo tutto questo buio, conosce ancora la mia mano. Guarda: il vetro è di nuovo VERO; nessun battito dietro l'acqua, nessun'anima perduta tra un mondo e il suo riflesso. E il peso mi ha lasciata, alfine. Non svanisco, {playerName}; mi si dà il CAMBIO. Questo non è spezzare il Sable, solo tenerlo; non ho la forza di spezzare ciò che attende là, né oserei. Ma tenuto un'era di più, è tenuto. Quando una compagnia più ardita di noi varcherà infine DENTRO quella porta, troverà l'altro lato pronto. Di' a Highwatch che la loro custode tenne la veglia fino alla fine, e poi fu data il cambio. Il vetro ti ricorderà. Bada di dargli qualcosa che valga la pena di riflettere.",
         "objectives": {
           "0": {

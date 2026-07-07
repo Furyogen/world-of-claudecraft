@@ -1,23 +1,23 @@
-// Zone 4 — the Mirror World (levels 15-20). A surreal, mist-drowned mountain
+// Zone 4 - the Mirror World (levels 15-20). A surreal, mist-drowned mountain
 // vale north of Thornpeak: the Vale of Glass. Sheer ridges seal it on every
-// side — no road leads here, and the only ways in or out are the standing
-// MIRRORS (portal pads — see PORTAL_PADS below and Sim.updatePortalPadTriggers;
+// side - no road leads here, and the only ways in or out are the standing
+// MIRRORS (portal pads - see PORTAL_PADS below and Sim.updatePortalPadTriggers;
 // the renderer draws every pad as a mirror).
 //
 // The flow: the Thornpeak mirror lands on the OVERLOOK, a shelf high on the
 // south wall with the whole vale below. One stone stair descends to the TOWN
 // RISE (inn, market, the keeper and the trader) and the MIRROR COURT at its
 // edge, where the three town mirrors stand in stone niches, each watched by
-// its gargoyle statue (the tolls). East lies the MIRRORMERE — one real lake,
+// its gargoyle statue (the tolls). East lies the MIRRORMERE - one real lake,
 // fishable shores, deep enough to swim. A loop road circles the vale; camps
 // sit off it at readable distances, harder the further you walk clockwise:
 // ghosts on the south shore, unicorns in the east moonmeadow, reapers on the
 // graveyard knoll, sentries in the north ruin field, gloomhulks in the NW
-// crags, mistshades in the western darkwood — and the Gloaming Maw prowls the
+// crags, mistshades in the western darkwood - and the Gloaming Maw prowls the
 // lake's north inlet. The witch waits in a hollow at the end of a winding NW
 // spur; the Lumen Lift pairs the town with Stargazer's Ledge high on the
 // south wall; a clouded mirror hides the grotto pocket in the SE cliffs; and
-// the BLACK CANYON cuts the NE rim — a walkable stone floor between sheer
+// the BLACK CANYON cuts the NE rim - a walkable stone floor between sheer
 // walls, past three dread sentinels, to the sealed Sable Mirror gate.
 //
 // Layout numbers here are load-bearing: src/sim/world.ts shapes the terrain
@@ -36,7 +36,7 @@ import type {
 } from '../types';
 
 // ---------------------------------------------------------------------------
-// Shared layout constants — the single source for terrain + colliders + spawns
+// Shared layout constants - the single source for terrain + colliders + spawns
 // ---------------------------------------------------------------------------
 
 export const MIRROR_LAYOUT = {
@@ -48,19 +48,19 @@ export const MIRROR_LAYOUT = {
   sealRidge: { z: 900, height: 48, sigma: 10 },
   /** THE VALE OF GLASS: everything walkable sits inside this mountain bowl.
    * The rim is a natural wall (slope ~1.7, unclimbable); beyond it there is
-   * only highland lost in the night fog. No dome, no moat — mountains. */
+   * only highland lost in the night fog. No dome, no moat - mountains. */
   vale: { x: 0, z: 1085, rx: 150, rz: 138, rimHeight: 48 },
   valeFloor: 3,
   /** arrival overlook: a shelf high on the south wall. The Thornpeak mirror
-   * lands here; one stone stair descends to the town — the vista frames the
+   * lands here; one stone stair descends to the town - the vista frames the
    * whole vale on arrival. */
   overlook: { x: 0, z: 962, r: 15, h: 22 },
   stairs: { x: 0, zTop: 970, zBottom: 1004, halfWidth: 6, hTop: 22, hBottom: 8 },
-  /** the town rise and the Mirror Court crescent at its north edge — all
+  /** the town rise and the Mirror Court crescent at its north edge - all
    * three town mirrors stand together in stone niches, statues beside them */
   townRise: { x: -8, z: 1022, r: 30, h: 8 },
   court: { x: -8, z: 1055, r: 15, h: 9 },
-  /** the Mirrormere — ONE real lake: fishable shoreline, swimmable middle */
+  /** the Mirrormere - ONE real lake: fishable shoreline, swimmable middle */
   lake: { x: 62, z: 1088, r: 27, floor: -6.5 },
   /** graveyard knoll (NE) and the witch's hollow (NW) */
   knoll: { x: 96, z: 1148, r: 18, h: 10 },
@@ -71,7 +71,7 @@ export const MIRROR_LAYOUT = {
   grotto: { x: 146, z: 928, r: 9, h: 4 },
   /** the black canyon: a walkable stone floor between sheer walls, winding
    * through the NE rim to the Sable Mirror gate. The dread sentinels wait
-   * along it. Walk-in from the loop road — no mirror needed. */
+   * along it. Walk-in from the loop road - no mirror needed. */
   canyon: {
     halfWidth: 5,
     points: [
@@ -92,7 +92,7 @@ export const MIRROR_WORLD_ZONE: ZoneDef = {
   zMin: MIRROR_LAYOUT.zMin,
   zMax: MIRROR_LAYOUT.zMax,
   levelRange: [15, 20],
-  lakes: [{ x: 62, z: 1088, radius: 27 }], // the Mirrormere — the fishing water
+  lakes: [{ x: 62, z: 1088, radius: 27 }], // the Mirrormere - the fishing water
   hub: { x: -8, z: 1022, radius: 30, name: 'the Lumen Hollow' },
   graveyard: { x: -30, z: 1004 },
   pois: [
@@ -111,7 +111,7 @@ export const MIRROR_WORLD_ZONE: ZoneDef = {
   welcome: 'The glass remembers you. Mind which side of it you walk.',
 };
 
-// Paths — the intended routes: plaza → stairs → market → crown, and the belt
+// Paths - the intended routes: plaza → stairs → market → crown, and the belt
 // ring that threads every district through its berm gate. Roads render as
 // worn track in the terrain splat and keep decorations off the walkway.
 export const MIRROR_WORLD_ROADS: { x: number; z: number }[][] = [
@@ -160,7 +160,7 @@ export const MIRROR_WORLD_ROADS: { x: number; z: number }[][] = [
 ];
 
 // ---------------------------------------------------------------------------
-// Portal pads — every one a standing MIRROR (the renderer draws templateId
+// Portal pads - every one a standing MIRROR (the renderer draws templateId
 // 'portal_pad' as a framed mirror). Walk-in proximity teleports (see
 // Sim.updatePortalPadTriggers). Pads come in pairs; every `dest` lands more
 // than the trigger radius away from the reverse pad so a round trip never
@@ -171,8 +171,8 @@ export const MIRROR_WORLD_PORTAL_PADS: PortalPadDef[] = [
   {
     id: 'mirrorgate_thornpeak',
     name: 'The Mirrorgate',
-    pos: { x: 110, z: 800 }, // Stormcrag ridge, zone 3 — a mirror on a mountainside
-    dest: { x: 0, z: 958 }, // the Overlook — the whole vale below you
+    pos: { x: 110, z: 800 }, // Stormcrag ridge, zone 3 - a mirror on a mountainside
+    dest: { x: 0, z: 958 }, // the Overlook - the whole vale below you
   },
   // The Mirror Court: the three town mirrors stand together in stone niches,
   // each watched by its statue. Sealed until that statue's toll is paid.
@@ -233,7 +233,7 @@ export const MIRROR_WORLD_PORTAL_PADS: PortalPadDef[] = [
 export const PAD_LOCKED_ALL: ReadonlySet<string> = new Set(['black_mirror_gate']);
 
 // ---------------------------------------------------------------------------
-// Items — the witch's recipe parts (drop from the belt's beasts), her draught,
+// Items - the witch's recipe parts (drop from the belt's beasts), her draught,
 // and the once-ever Mirror Shard the Echo yields.
 // ---------------------------------------------------------------------------
 
@@ -259,7 +259,7 @@ export const MIRROR_WORLD_ITEMS: Record<string, ItemDef> = {
     quality: 'common',
     sellValue: 0,
   },
-  // The Keeper's Vigil — Nerissa's Lumen Crown arc. Two quest tokens: a warden's
+  // The Keeper's Vigil - Nerissa's Lumen Crown arc. Two quest tokens: a warden's
   // sigil the black glass tore loose onto the causeway reapers, and the Crown's
   // last spark the Gloaming Maw swallowed in the mere.
   warden_sigil: {
@@ -276,7 +276,7 @@ export const MIRROR_WORLD_ITEMS: Record<string, ItemDef> = {
     quality: 'common',
     sellValue: 0,
   },
-  // Ghost-gear: the Echo's spoils — pale twins of honest equipment. Uncommon
+  // Ghost-gear: the Echo's spoils - pale twins of honest equipment. Uncommon
   // by default, two scarce rares, nothing higher (no legendaries by design).
   ghostly_mirrorblade: {
     id: 'ghostly_mirrorblade',
@@ -348,7 +348,7 @@ export const MIRROR_WORLD_ITEMS: Record<string, ItemDef> = {
     use: { type: 'slumber' },
     sellValue: 0,
   },
-  // Consumed for a permanent primary-stat increase (once ever — it only drops
+  // Consumed for a permanent primary-stat increase (once ever - it only drops
   // from the first Echo you defeat).
   mirror_shard: {
     id: 'mirror_shard',
@@ -361,7 +361,7 @@ export const MIRROR_WORLD_ITEMS: Record<string, ItemDef> = {
 };
 
 // ---------------------------------------------------------------------------
-// Mobs — the belt's mirror-fauna (levels 15-18). The city terraces stay safe;
+// Mobs - the belt's mirror-fauna (levels 15-18). The city terraces stay safe;
 // these haunt the district wilds and drop the witch's recipe parts.
 // ---------------------------------------------------------------------------
 
@@ -439,8 +439,9 @@ export const MIRROR_WORLD_MOBS: Record<string, MobTemplate> = {
       { copper: 85, chance: 1 },
       { itemId: 'black_hood', chance: 0.75 },
       // the black glass has spread from the wardens to the reapers that swarm the
-      // causeway; they carry the sigils torn loose (quest: q_the_wardens_names)
-      { itemId: 'warden_sigil', chance: 0.5 },
+      // causeway; they carry the sigils torn loose. Quest-gated like the zone3
+      // tokens so they stop dropping once q_the_wardens_names is done/unaccepted.
+      { itemId: 'warden_sigil', chance: 0.5, questId: 'q_the_wardens_names' },
     ],
     scale: 1.05,
     color: 0x1a1622,
@@ -489,11 +490,12 @@ export const MIRROR_WORLD_MOBS: Record<string, MobTemplate> = {
     moveSpeed: 8.5,
     aggroRadius: 14,
     aoePulse: { min: 14, max: 20, radius: 10, every: 9, name: 'Gloaming' },
-    // the Crown's last true spark, swallowed when it fell in the mere — this is
+    // the Crown's last true spark, swallowed when it fell in the mere - this is
     // why it glows from the inside (quest: q_relight_the_lumen_crown)
     loot: [
       { copper: 2200, chance: 1 },
-      { itemId: 'drowned_lumen', chance: 1 },
+      // quest-gated (see above) so it drops only while on the quest, not forever
+      { itemId: 'drowned_lumen', chance: 1, questId: 'q_relight_the_lumen_crown' },
     ],
     scale: 1.45,
     color: 0x241f38,
@@ -501,7 +503,7 @@ export const MIRROR_WORLD_MOBS: Record<string, MobTemplate> = {
   // The shadow-realm duelist. This template is only a registry anchor (name,
   // family, kill-quest credit): every real stat is overwritten at spawn with a
   // clone of the dreaming player's own numbers (Sim dream machinery). It never
-  // spawns from a camp and drops nothing — the Mirror Shard grant is code-side
+  // spawns from a camp and drops nothing - the Mirror Shard grant is code-side
   // and once-ever.
   player_echo: {
     id: 'player_echo',
@@ -594,7 +596,7 @@ export const MIRROR_WORLD_MOBS: Record<string, MobTemplate> = {
     color: 0x241f38,
   },
   // The mirror-guardians. Sentinels stand as NPCs beside the three town
-  // mirrors; challenging one (gossip "Attack") swaps the statue for this — a
+  // mirrors; challenging one (gossip "Attack") swaps the statue for this - a
   // skull-level horror with the full boss toolkit. Waking it is voluntary.
   gargoyle_awakened: {
     id: 'gargoyle_awakened',
@@ -629,7 +631,7 @@ export const MIRROR_WORLD_MOBS: Record<string, MobTemplate> = {
 
 // Camps sit on wading rims and dry banks, never in swim-deep water: the engine
 // never SPAWNS a mob below wading depth (findSafePos floors swimmers at
-// WATER_LEVEL - 0.5 — see tests/fixes.test.ts "mobs spawn out of deep water").
+// WATER_LEVEL - 0.5 - see tests/fixes.test.ts "mobs spawn out of deep water").
 // The beasts still swim: they wander and chase into the mere freely.
 export const MIRROR_WORLD_CAMPS: CampDef[] = [
   // clockwise from town, harder the further you walk; every camp sits off the
@@ -681,8 +683,8 @@ export const MIRROR_WORLD_NPCS: Record<string, NpcDef> = {
       "Dead men's coats, bottled sighs, honest prices - the veil provides. Everything on my table was set down by someone who owns nothing now; the trick is telling what the dead are DONE with from what they still clutch. Get it wrong and they come to the stall at midnight. Ask the Keeper about the light in the well, if you want the sad version. I only sell the coats.",
   },
   // One colossal statue beside each town mirror. Gossip offers "Bow down" (a
-  // courtesy that stirs it — the statue shimmers and its toll-quest opens) or
-  // "Attack" (swaps the statue for the level-99 gargoyle_awakened — see
+  // courtesy that stirs it - the statue shimmers and its toll-quest opens) or
+  // "Attack" (swaps the statue for the level-99 gargoyle_awakened - see
   // Sim.wakeGargoyle). Its mirror stays sealed until its quest is done.
   gargoyle_sentinel_south: {
     id: 'gargoyle_sentinel_south',
@@ -719,7 +721,7 @@ export const MIRROR_WORLD_NPCS: Record<string, NpcDef> = {
     greeting: 'Weathered stone, crouched and waiting. It does not move. It is listening.',
   },
   // The dread sentinels of the Black Mirror causeway. No courtesy moves them
-  // and no toll opens their gate — they only warn, and they only wake to kill.
+  // and no toll opens their gate - they only warn, and they only wake to kill.
   dread_sentinel_a: {
     id: 'dread_sentinel_a',
     name: 'Dread Sentinel',
@@ -761,12 +763,12 @@ export const MIRROR_WORLD_NPCS: Record<string, NpcDef> = {
     color: 0x7a5f9e,
     questIds: ['q_deepdream_recipe', 'q_face_your_echo', 'q_what_the_glass_wants'],
     greeting:
-      'The mist keeps most of you awake. I can brew you the other kind of sleep — the kind that answers back.',
+      'The mist keeps most of you awake. I can brew you the other kind of sleep - the kind that answers back.',
   },
 };
 
 // ---------------------------------------------------------------------------
-// Quests — the witch's chain. The first brew is the quest reward; after that,
+// Quests - the witch's chain. The first brew is the quest reward; after that,
 // bring her the same parts again and she brews on demand (Sim.brewDraught,
 // gated on q_deepdream_recipe being done). The Mirror Shard only ever drops
 // from your FIRST defeated Echo.
@@ -827,7 +829,7 @@ export const MIRROR_WORLD_QUESTS: Record<string, QuestDef> = {
     turnInNpcId: 'mistwitch_morwen',
     text: 'The draught wants three voices, $N: two white sheets off the poverty ghosts who own nothing else, two horns of the spirit unicorns that graze the gloom, and two hoods cut from the reapers who watch the belt. Bring them and I will brew you a sleep with teeth.',
     completionText:
-      'Sheet, horn, hood — the poor, the radiant, the patient. The kettle likes you. Drink it somewhere soft, wanderer: you will meet whoever you have been carrying.',
+      'Sheet, horn, hood - the poor, the radiant, the patient. The kettle likes you. Drink it somewhere soft, wanderer: you will meet whoever you have been carrying.',
     objectives: [
       { type: 'collect', itemId: 'white_sheet', count: 2, label: 'White Sheet' },
       { type: 'collect', itemId: 'spirit_horn', count: 2, label: 'Spirit Horn' },
@@ -847,9 +849,9 @@ export const MIRROR_WORLD_QUESTS: Record<string, QuestDef> = {
     giverNpcId: 'mistwitch_morwen',
     turnInNpcId: 'mistwitch_morwen',
     requiresQuest: 'q_deepdream_recipe',
-    text: 'Drink the draught and the dream will set a mirror before you — your Echo, every scar and every trick of yours on the other side of it. Beat what you are, $N, and bring me back the look on your face.',
+    text: 'Drink the draught and the dream will set a mirror before you - your Echo, every scar and every trick of yours on the other side of it. Beat what you are, $N, and bring me back the look on your face.',
     completionText:
-      'You came back, and the mirror did not. Whatever it left in your hand is yours — the dream only pays that price once.',
+      'You came back, and the mirror did not. Whatever it left in your hand is yours - the dream only pays that price once.',
     objectives: [
       { type: 'kill', targetMobId: 'player_echo', count: 1, label: 'Your Echo defeated' },
     ],
@@ -858,22 +860,22 @@ export const MIRROR_WORLD_QUESTS: Record<string, QuestDef> = {
     itemRewards: {},
   },
 
-  // ---- The Keeper's Vigil — Nerissa and the Lumen Crown ------------------
+  // ---- The Keeper's Vigil - Nerissa and the Lumen Crown ------------------
   // Why the vale is a mirror/dream world: the Lumen Crown is the light in every
   // mirror that keeps the seam between the living world and its reflection whole.
   // King Nythraxis's iron/deathless crown (broken by the player in Thornpeak,
   // zone 3) was its opposite; its rising dimmed the Lumen light and softened the
   // vale into a dream, and Nerissa died at her post unable to leave. Now the iron
   // crown is broken, the Crown can be relit one last time so she can rest. The
-  // Sable Mirror is the wound it tore — the arc SHORES it, leaves it sealed.
+  // Sable Mirror is the wound it tore - the arc SHORES it, leaves it sealed.
   q_the_failing_radiance: {
     id: 'q_the_failing_radiance',
     name: 'The Failing Radiance',
     giverNpcId: 'keeper_nerissa',
     turnInNpcId: 'keeper_nerissa',
-    text: "You feel the cold of me and think I am a story. I am a post, $N. The Lumen Crown I kept is no gold circlet — it is the light in every mirror here, the seam that holds the living and the dead in separate reflections so neither drowns the other. That light is failing, and you can see it in the Mirrorbound Sentries: once they were the Crown's own radiance walking guard, now they are glass full of stolen light, crowding the north ruins because the seam no longer tells them where to stand. Break eight. Each shard you scatter is a little light returned — and a little proof you can be trusted with the rest.",
+    text: "You feel the cold of me and think I am a story. I am a post, $N. The Lumen Crown I kept is no gold circlet - it is the light in every mirror here, the seam that holds the living and the dead in separate reflections so neither drowns the other. That light is failing, and you can see it in the Mirrorbound Sentries: once they were the Crown's own radiance walking guard, now they are glass full of stolen light, crowding the north ruins because the seam no longer tells them where to stand. Break eight. Each shard you scatter is a little light returned - and a little proof you can be trusted with the rest.",
     completionText:
-      'The shards drift back toward the well like snow falling upward, and for one breath the whole vale is a shade brighter. It will not last. But you mend seams instead of cutting them, $N — that is rarer here than you would think. You broke the OTHER crown too, did you not — the iron one, beneath Thornpeak. Then for the first time in three hundred years, this light might come back. Stay. The vale has been waiting for hands that close wounds.',
+      'The shards drift back toward the well like snow falling upward, and for one breath the whole vale is a shade brighter. It will not last. But you mend seams instead of cutting them, $N - that is rarer here than you would think. You broke the OTHER crown too, did you not - the iron one, beneath Thornpeak. Then for the first time in three hundred years, this light might come back. Stay. The vale has been waiting for hands that close wounds.',
     objectives: [
       {
         type: 'kill',
@@ -892,9 +894,9 @@ export const MIRROR_WORLD_QUESTS: Record<string, QuestDef> = {
     giverNpcId: 'keeper_nerissa',
     turnInNpcId: 'keeper_nerissa',
     requiresQuest: 'q_the_failing_radiance',
-    text: "The Poverty Ghosts on the south shore owned nothing in life, $N — nothing but the sheet they were buried in, because the parish could spare no coffin. Now the Crown's light is too thin to loose their grip, so they wander clutching the one thing that was ever theirs. Do not think this cruelty; it is love with nowhere to put itself. Bring me five of their sheets. I will lay each in the well and speak the name that was too poor to be carved. That is the whole of the rite: to be poor, and dead, and still called by name.",
+    text: "The Poverty Ghosts on the south shore owned nothing in life, $N - nothing but the sheet they were buried in, because the parish could spare no coffin. Now the Crown's light is too thin to loose their grip, so they wander clutching the one thing that was ever theirs. Do not think this cruelty; it is love with nowhere to put itself. Bring me five of their sheets. I will lay each in the well and speak the name that was too poor to be carved. That is the whole of the rite: to be poor, and dead, and still called by name.",
     completionText:
-      'Five sheets, five names. I say them into the well and the water takes them the way a mother lifts a coat off a sleeping child. The ghosts on the shore are fewer tonight, $N — not slain, released. This is what the Crown did when it was whole: it held the dead close enough to let them go. We do it by hand now, you and I, five names at a time. It is slower. It is not nothing.',
+      'Five sheets, five names. I say them into the well and the water takes them the way a mother lifts a coat off a sleeping child. The ghosts on the shore are fewer tonight, $N - not slain, released. This is what the Crown did when it was whole: it held the dead close enough to let them go. We do it by hand now, you and I, five names at a time. It is slower. It is not nothing.',
     objectives: [{ type: 'collect', itemId: 'white_sheet', count: 5, label: 'White Sheet' }],
     xpReward: 900,
     copperReward: 1100,
@@ -906,9 +908,9 @@ export const MIRROR_WORLD_QUESTS: Record<string, QuestDef> = {
     giverNpcId: 'keeper_nerissa',
     turnInNpcId: 'keeper_nerissa',
     requiresQuest: 'q_what_the_poor_keep',
-    text: "The three that pace the Black Canyon are called Dread Sentinels by those who flee them. I called them by name once — they were my order, $N, the last men to hold the Sable Mirror's causeway in life, and they never stood down, not even when their hearts did. No blade frees them now; the black glass rides them too deep to fall. But that glass has crept from the wardens into the reapers that swarm the causeway, and over the long years the reapers have torn the wardens' sigils loose. Bring me three, cut from the reapers at the canyon, so I may say the three names aloud one final time.",
+    text: "The three that pace the Black Canyon are called Dread Sentinels by those who flee them. I called them by name once - they were my order, $N, the last men to hold the Sable Mirror's causeway in life, and they never stood down, not even when their hearts did. No blade frees them now; the black glass rides them too deep to fall. But that glass has crept from the wardens into the reapers that swarm the causeway, and over the long years the reapers have torn the wardens' sigils loose. Bring me three, cut from the reapers at the canyon, so I may say the three names aloud one final time.",
     completionText:
-      'Corwin. Aldous. Brenna. There — said, and the saying is lighter than the holding ever was. They can stop soon; I will see to it. But mind what draws near, $N: the sigils torn loose mean the glass on that causeway is thinning, and the wound at its end has been waiting exactly this long. I must relight the Crown and shore the Sable before something on the far side notices the door is going bare. There is one last thing I need — and it is under the black water.',
+      'Corwin. Aldous. Brenna. There - said, and the saying is lighter than the holding ever was. They can stop soon; I will see to it. But mind what draws near, $N: the sigils torn loose mean the glass on that causeway is thinning, and the wound at its end has been waiting exactly this long. I must relight the Crown and shore the Sable before something on the far side notices the door is going bare. There is one last thing I need - and it is under the black water.',
     objectives: [{ type: 'collect', itemId: 'warden_sigil', count: 3, label: 'Warden Sigil' }],
     xpReward: 1100,
     copperReward: 1400,
@@ -920,9 +922,9 @@ export const MIRROR_WORLD_QUESTS: Record<string, QuestDef> = {
     giverNpcId: 'mistwitch_morwen',
     turnInNpcId: 'mistwitch_morwen',
     requiresQuest: 'q_face_your_echo',
-    text: "You beat your Echo and thought it a trial of self, $N. It was not. I brew the Deepdream from sheet and horn and hood — but the thing your dream set a mirror against, the thing that walked in wearing your face, that I do not brew. It leaks in, from the black glass in the canyon. The reapers crowding the canyon mouth are thick with the same leak; cull eight of them and mark which way their shadows crawl. Then I will show Nerissa's own eyes where her wound truly weeps.",
+    text: "You beat your Echo and thought it a trial of self, $N. It was not. I brew the Deepdream from sheet and horn and hood - but the thing your dream set a mirror against, the thing that walked in wearing your face, that I do not brew. It leaks in, from the black glass in the canyon. The reapers crowding the canyon mouth are thick with the same leak; cull eight of them and mark which way their shadows crawl. Then I will show Nerissa's own eyes where her wound truly weeps.",
     completionText:
-      'Northeast. Always northeast, always toward the Sable — did you mark it? Your Echo was not YOU, wanderer. It was a splinter of whatever lives behind that gate, dressed in the nearest reflection it could steal: yours. The dream is only the thinnest place the leak has found; the canyon is the widest. Tell Nerissa. She has earned the truth of it, and so have you.',
+      'Northeast. Always northeast, always toward the Sable - did you mark it? Your Echo was not YOU, wanderer. It was a splinter of whatever lives behind that gate, dressed in the nearest reflection it could steal: yours. The dream is only the thinnest place the leak has found; the canyon is the widest. Tell Nerissa. She has earned the truth of it, and so have you.',
     objectives: [
       {
         type: 'kill',
@@ -941,9 +943,9 @@ export const MIRROR_WORLD_QUESTS: Record<string, QuestDef> = {
     giverNpcId: 'keeper_nerissa',
     turnInNpcId: 'keeper_nerissa',
     requiresQuest: 'q_the_wardens_names',
-    text: "The wardens are named and the causeway thins, so I must do now what I have put off since I died: light the Lumen Crown one last time and press the Sable shut from this side. The Crown's last true spark was swallowed by the Gloaming Maw when it fell in the mere — that is why the thing glows from the inside. Cut the light back out of it, $N. The black glass will send its gloomhulks to stop the rite; put four of them down. Bring me a drowned spark while I still remember how to hold one. A keeper's last duty is to become someone who no longer needs to keep.",
+    text: "The wardens are named and the causeway thins, so I must do now what I have put off since I died: light the Lumen Crown one last time and press the Sable shut from this side. The Crown's last true spark was swallowed by the Gloaming Maw when it fell in the mere - that is why the thing glows from the inside. Cut the light back out of it, $N. The black glass will send its gloomhulks to stop the rite; put four of them down. Bring me a drowned spark while I still remember how to hold one. A keeper's last duty is to become someone who no longer needs to keep.",
     completionText:
-      'It burns. After all this dark it still knows my hand. Look — the glass is TRUE again: no heartbeat behind the water, no soul lost between a world and its reflection. And the weight is off me at last. I am not vanishing, $N; I am being RELIEVED. This is not the breaking of the Sable — only the holding of it; I have not the strength to break what waits there, and I would not dare. But held one more age, it is held. When some braver company than us finally walks INTO that gate, they will find the far side ready. Tell them in Highwatch that their keeper stood the vigil to the end, and then was let go. The glass will remember you. See that you give it something worth reflecting.',
+      'It burns. After all this dark it still knows my hand. Look - the glass is TRUE again: no heartbeat behind the water, no soul lost between a world and its reflection. And the weight is off me at last. I am not vanishing, $N; I am being RELIEVED. This is not the breaking of the Sable - only the holding of it; I have not the strength to break what waits there, and I would not dare. But held one more age, it is held. When some braver company than us finally walks INTO that gate, they will find the far side ready. Tell them in Highwatch that their keeper stood the vigil to the end, and then was let go. The glass will remember you. See that you give it something worth reflecting.',
     objectives: [
       { type: 'kill', targetMobId: 'gloaming_maw', count: 1, label: 'The Gloaming Maw slain' },
       { type: 'collect', itemId: 'drowned_lumen', count: 1, label: 'Drowned Lumen' },
@@ -952,7 +954,9 @@ export const MIRROR_WORLD_QUESTS: Record<string, QuestDef> = {
     xpReward: 1500,
     copperReward: 2200,
     itemRewards: {
-      warrior: 'ghostly_wraithjerkin',
+      // the str mail gloves suit a warrior; the leather agi chest (wraithjerkin)
+      // is a rogue/hunter piece and stays an Echo-drop-only item.
+      warrior: 'ghostly_palegrips',
       rogue: 'ghostly_glasscord',
       mage: 'ghostly_hushboots',
     },
@@ -974,9 +978,9 @@ export const MIRROR_WORLD_QUEST_ORDER: string[] = [
   'q_gargoyle_north',
 ];
 
-// Town mirrors stay dark until their statue's toll is paid. The walk-in
-// trigger (Sim.updatePortalPadTriggers) refuses locked pads; the client draws
-// a locked pad as dead glass and lights it on the mirrorUnlocked event.
+// Town mirrors stay sealed until their statue's toll is paid. The walk-in
+// trigger (Sim.updatePortalPadTriggers) refuses locked pads; paying the toll
+// plays the nova burst and the "the mirror clears" log as the unlock feedback.
 export const PAD_QUEST_LOCKS: Record<string, string> = {
   mirrorgate_return: 'q_gargoyle_south',
   mirrorgate_eastbrook: 'q_gargoyle_west',
@@ -989,13 +993,13 @@ export const MIRROR_WORLD_OBJECTS: GroundObjectDef[] = [];
 // ---------------------------------------------------------------------------
 // Props. Positions respect the layout: crown r < 20 (around 0,1080), market
 // terrace r 20-45, the belt r 47-147 split into districts. The single `domes`
-// entry is the glass: colliders.ts turns it into a sealed wall ring (no gaps —
+// entry is the glass: colliders.ts turns it into a sealed wall ring (no gaps -
 // the grotto island outside is mirror-only).
 // ---------------------------------------------------------------------------
 
 export const MIRROR_WORLD_PROPS: ZonePropsDef = {
   buildings: [
-    // the Lumen Hollow — the town on the rise
+    // the Lumen Hollow - the town on the rise
     { kind: 'inn', x: -18, z: 1012, w: 10, d: 8, rot: 0.35 },
     { kind: 'house', x: -2, z: 1010, w: 7, d: 6, rot: -0.5 },
     { kind: 'house', x: -20, z: 1030, w: 7, d: 6, rot: 1.1 },
@@ -1032,5 +1036,5 @@ export const MIRROR_WORLD_PROPS: ZonePropsDef = {
     { x: 96, z: 1146 }, // the Sorrowstones
     { x: 102, z: 1152 },
   ],
-  domes: [], // the dome is gone — the vale's mountain rim does the sealing
+  domes: [], // the dome is gone - the vale's mountain rim does the sealing
 };

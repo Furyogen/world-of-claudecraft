@@ -3860,7 +3860,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_deepdream_recipe.text':
     'El bebedizo pide tres voces, {playerName}: dos sábanas blancas de los fantasmas de la pobreza que no poseen otra cosa, dos cuernos de los unicornios espirituales que pastan en la penumbra, y dos capuchas cortadas a los segadores que vigilan el cinturón. Tráemelos y te herviré un sueño con dientes.',
   'entities.quests.q_deepdream_recipe.completion':
-    'Sábana, cuerno, capucha — los pobres, los radiantes, los pacientes. Al caldero le caes bien. Bébelo en un lugar blando, caminante: conocerás a quien llevas dentro.',
+    'Sábana, cuerno, capucha - los pobres, los radiantes, los pacientes. Al caldero le caes bien. Bébelo en un lugar blando, caminante: conocerás a quien llevas dentro.',
   'entities.quests.q_deepdream_recipe.objectives.0.label': 'Sábana Blanca',
   'entities.quests.q_deepdream_recipe.objectives.1.label': 'Cuerno Espiritual',
   'entities.quests.q_deepdream_recipe.objectives.2.label': 'Capucha Negra',
@@ -5477,6 +5477,13 @@ export const es: Partial<Record<TranslationKey, string>> = {
     'Detente en la puerta. Pasados esos juncos, la ciénaga mata por nosotros.',
   'guide.worldPage.marshPlaceNotes':
     'Fenbridge custodia el único camino seco. Los Juncos del Acechador y los Bajíos de Deepfen rebosan de bestias de la ciénaga y mudfins; la Espesura de la Viuda está tupida de telarañas; la Capilla Ahogada y los Túmulos de los Troles guardan peligros más antiguos; el Campamento de Gravecaller es el culto atrincherado, y el Bastión Sumergido es el corazón instanciado de la ciénaga.',
+  'guide.worldPage.mirrorBlurb':
+    'Un país de cristal negro, bañado por la luna y envuelto en niebla, más allá de los espejos de Highwatch, donde el Valle de Cristal guarda los espíritus de fin de juego del reino y la Guardiana Nerissa custodia la Hondonada de Lumen.',
+  'guide.worldPage.mirrorGreeting':
+    'El cristal conserva cada rostro que ha ahogado. Camina con cuidado por aquí y no mires demasiado tiempo el tuyo.',
+  'guide.worldPage.mirrorGreeter': 'Guardiana Nerissa, la Hondonada de Lumen',
+  'guide.worldPage.mirrorPlaceNotes':
+    'La Hondonada de Lumen es el corazón de la ciudad espejo, con la Corte del Espejo y sus gárgolas justo encima y la escalinata del Mirador cayendo por debajo; el Lago Espejo es agua negra e inmóvil, ceñida por el Prado de la Luna y las Piedras del Pesar; los Riscos Lóbregos y el Bosque Oscuro albergan los espíritus más pesados del valle; la Hondonada de la Bruja acoge a Morwen la Bruja de la Bruma, la Cornisa del Astrónomo su larga y fría vista, y el Cañón Negro serpentea hacia el este hasta el Espejo Sable.',
   'guide.worldPage.peaksGreeter': 'Capitana Thessaly, Highwatch',
   'guide.worldPage.peaksGreeting':
     'Doscientos años ha resistido este muro. No caerá durante mi guardia, pero cruje.',

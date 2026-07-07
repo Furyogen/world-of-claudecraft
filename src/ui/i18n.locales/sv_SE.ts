@@ -2736,12 +2736,12 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_what_the_glass_wants.text':
     'Du besegrade din Eko och trodde det en prövning av dig själv, {playerName}. Det var det inte. Jag brygger Djupdrömmen av lakan, horn och huva, men det din dröm reste en spegel mot, tinget som kom in i ditt ansikte, det brygger jag inte. Det sipprar in, ur ravinens svarta glas. Skördarna som trängs vid ravinens mynning är tjocka av samma läcka; fäll åtta och se vart deras skuggor kryper. Då ska jag visa Nerissas egna ögon var hennes sår sannerligen blöder.',
   'entities.quests.q_what_the_glass_wants.completion':
-    'Åt nordost. Alltid åt nordost, alltid mot Sobeln — såg du det? Din Eko var inte DU, vandrare. Den var en skärva av vad som än bor bakom den porten, klädd i den närmaste spegling den kunde stjäla: din. Drömmen är bara den tunnaste plats läckan funnit; ravinen den bredaste. Säg det till Nerissa. Hon har förtjänat sanningen om det, och det har du med.',
+    'Åt nordost. Alltid åt nordost, alltid mot Sobeln - såg du det? Din Eko var inte DU, vandrare. Den var en skärva av vad som än bor bakom den porten, klädd i den närmaste spegling den kunde stjäla: din. Drömmen är bara den tunnaste plats läckan funnit; ravinen den bredaste. Säg det till Nerissa. Hon har förtjänat sanningen om det, och det har du med.',
   'entities.quests.q_what_the_glass_wants.objectives.0.label':
     'Skördare fälld vid ravinens mynning',
   'entities.quests.q_relight_the_lumen_crown.title': 'Tänd Lumenkronan på nytt',
   'entities.quests.q_relight_the_lumen_crown.text':
-    'Väktarna har namn och vägbanken tunnas, så nu måste jag göra det jag skjutit upp sedan jag dog: tända Lumenkronan en sista gång och pressa Sobeln sluten från denna sida. Kronans sista sanna gnista slukades av Skymningsgapet när det föll i dammen — därför glöder tinget inifrån. Skär ljuset ut ur det igen, {playerName}. Det svarta glaset sänder sina dysterkolosser att hejda riten; fäll fyra. Hämta mig en dränkt gnista medan jag ännu minns hur man håller en. En väktares sista plikt är att bli någon som inte längre behöver vakta.',
+    'Väktarna har namn och vägbanken tunnas, så nu måste jag göra det jag skjutit upp sedan jag dog: tända Lumenkronan en sista gång och pressa Sobeln sluten från denna sida. Kronans sista sanna gnista slukades av Skymningsgapet när det föll i dammen - därför glöder tinget inifrån. Skär ljuset ut ur det igen, {playerName}. Det svarta glaset sänder sina dysterkolosser att hejda riten; fäll fyra. Hämta mig en dränkt gnista medan jag ännu minns hur man håller en. En väktares sista plikt är att bli någon som inte längre behöver vakta.',
   'entities.quests.q_relight_the_lumen_crown.completion':
     'Den brinner. Efter allt detta mörker känner den ännu min hand. Se: glaset är SANT igen; ingen hjärtslag bakom vattnet, ingen själ förlorad mellan en värld och dess spegling. Och tyngden har äntligen lämnat mig. Jag förbleknar inte, {playerName}; jag blir AVLÖST. Detta är inte att bryta Sobeln, blott att hålla den; jag har ej kraften att bryta det som väntar där, och jag skulle inte våga. Men hållen en tidsålder till, är den hållen. När ett tapprare följe än vi till sist går IN genom den porten, ska de finna andra sidan redo. Säg i Highwatch att deras väktare höll vakan till slutet, och sedan blev avlöst. Glaset ska minnas dig. Se till att ge det något värt att spegla.',
   'entities.quests.q_relight_the_lumen_crown.objectives.0.label': 'Skymningsgapet fällt',
@@ -2763,20 +2763,20 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.mistwitch_morwen.name': 'Morwen Dimhäxan',
   'entities.npcs.mistwitch_morwen.title': 'Sänkans drömbryggerska',
   'entities.npcs.mistwitch_morwen.greeting':
-    'Dimman håller de flesta av er vakna. Jag kan brygga dig den andra sortens sömn — den som svarar.',
+    'Dimman håller de flesta av er vakna. Jag kan brygga dig den andra sortens sömn - den som svarar.',
   'entities.quests.q_deepdream_recipe.title': 'Ett recept på djup sömn',
   'entities.quests.q_deepdream_recipe.text':
     'Brygden kräver tre röster, {playerName}: två vita lakan från fattigdomsspökena som inget annat äger, två horn från andeenhörningarna som betar i dunklet, och två huvor skurna från skördemännen som vaktar bältet. Ta hit dem så brygger jag dig en sömn med tänder.',
   'entities.quests.q_deepdream_recipe.completion':
-    'Lakan, horn, huva — de fattiga, de strålande, de tålmodiga. Kitteln gillar dig. Drick den någonstans mjukt, vandrare: du kommer att möta den du burit på.',
+    'Lakan, horn, huva - de fattiga, de strålande, de tålmodiga. Kitteln gillar dig. Drick den någonstans mjukt, vandrare: du kommer att möta den du burit på.',
   'entities.quests.q_deepdream_recipe.objectives.0.label': 'Vitt Lakan',
   'entities.quests.q_deepdream_recipe.objectives.1.label': 'Andehorn',
   'entities.quests.q_deepdream_recipe.objectives.2.label': 'Svart Huva',
   'entities.quests.q_face_your_echo.title': 'Möt ditt Eko',
   'entities.quests.q_face_your_echo.text':
-    'Drick brygden så ställer drömmen en spegel framför dig — ditt Eko, varje ärr och varje knep du har på andra sidan. Besegra det du är, {playerName}, och kom tillbaka med minen du gör.',
+    'Drick brygden så ställer drömmen en spegel framför dig - ditt Eko, varje ärr och varje knep du har på andra sidan. Besegra det du är, {playerName}, och kom tillbaka med minen du gör.',
   'entities.quests.q_face_your_echo.completion':
-    'Du kom tillbaka, och det gjorde inte spegeln. Vad den lämnade i din hand är ditt — drömmen betalar det priset bara en gång.',
+    'Du kom tillbaka, och det gjorde inte spegeln. Vad den lämnade i din hand är ditt - drömmen betalar det priset bara en gång.',
   'entities.quests.q_face_your_echo.objectives.0.label': 'Ditt Eko besegrat',
   'entities.items.white_sheet.name': 'Vitt Lakan',
   'entities.items.spirit_horn.name': 'Andehorn',
@@ -4047,6 +4047,13 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
     'Stanna vid porten. Bortom de vassen sköter myren dödandet åt oss.',
   'guide.worldPage.marshPlaceNotes':
     'Fenbridge vaktar den enda torra vägen. Prowler Reeds och Deepfen Shallows kryllar av träskbestar och Mudfiner; Widow Thicket är tjockt spunnet med väv; Drowned Chapel och Troll Mounds rymmer äldre faror; Gravecaller Encampment är kulten nedgrävd, och Den sjunkna bastionen är myrens instansierade hjärta.',
+  'guide.worldPage.mirrorBlurb':
+    'Ett månbelyst, dimhöljt land av svart glas bortom Highwatchs speglar, där Glasdalen vaktar rikets slutspelsandar och Väktarinnan Nerissa håller Lumen-sänkan.',
+  'guide.worldPage.mirrorGreeting':
+    'Glaset behåller varje ansikte det har dränkt. Gå varsamt här, och blicka inte för länge in i ditt eget.',
+  'guide.worldPage.mirrorGreeter': 'Väktarinnan Nerissa, Lumen-sänkan',
+  'guide.worldPage.mirrorPlaceNotes':
+    'Lumen-sänkan är spegelstadens hjärta, med Spegelhovet och dess gargoljstatyer strax ovanför och Utsiktstrappan som stupar nedanför; Spegelsjön är stilla svart vatten, omgärdad av Månängen och Sorgestenarna; Dysterklipporna och Mörkskogen rymmer dalens tyngsta andar; Häxans Sänka hyser Morwen Dimhäxan, Stjärnskådarens Avsats sin långa kalla utsikt, och Den Svarta Ravinen slingrar sig österut till Sable-spegeln.',
   'guide.worldPage.peaksBlurb':
     'Vindpiskade åsar och gamla gruvverk som klättrar mot rikets kallaste, högsta faror, hållna av utposten Highwatch.',
   'guide.worldPage.peaksGreeter': 'Kapten Thessaly, Highwatch',

@@ -5529,6 +5529,13 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
     'Eastbrook je tvoje první domovská základna. Vlčí stezka a Kančí louka jsou mírná loviště; Zrcadlové jezero je klidná voda pro rybaření; Černopavučina a Měděná štola skrývají pavouky a rudychtivé kopáče; Tábor banditů a Padlá kaple drží drsnější práci; Vrch relikviáře klesá do Zhrouceného relikviáře, první výpravy světa; a Mýtina Brightwoodu je tichý, sluncem zalitý háj na severu.',
   'guide.worldPage.marshPlaceNotes':
     'Fenbridge hlídá jedinou suchou cestu. Rákosiny slídilů a Mělčiny Deepfenu se hemží močálovými šelmami a bahenními ploutvemi; Vdoví houština je hustě opředená pavučinami; Utopená kaple a Trollí mohyly drží starší nebezpečí; Tábor Hrobovolajících je zakopaný kult a Potopená bašta je instancované srdce močálu.',
+  'guide.worldPage.mirrorBlurb':
+    'Měsícem ozářená, mlhou zahalená země černého skla za zrcadly Highwatche, kde Skleněné údolí střeží koncové duchy říše a Strážkyně Nerissa drží Lumenovou úžlabinu.',
+  'guide.worldPage.mirrorGreeting':
+    'Sklo si podrží každou tvář, kterou utopilo. Kráčej tu tiše a nehleď příliš dlouho do té své.',
+  'guide.worldPage.mirrorGreeter': 'Strážkyně Nerissa, Lumenova úžlabina',
+  'guide.worldPage.mirrorPlaceNotes':
+    'Lumenova úžlabina je srdcem zrcadlového města, se Zrcadlovým dvorem a jeho chrliči hned nad ním a schodištěm Vyhlídky padajícím dolů; Zrcadlová tůň je nehybná černá voda obkroužená Měsíční loukou a Kameny žalu; Ponuré srázy a Temný hvozd chovají nejtěžší duchy údolí; Čarodějčina úžlabina hostí Mlžnou čarodějku Morwen, Hvězdářův výstupek svůj dlouhý studený rozhled a Černý kaňon se vine na východ k Sablovému zrcadlu.',
   'guide.worldPage.peaksPlaceNotes':
     'Highwatch drží zeď. Hřeben slídilů a Hlubokamenné nory patří hřebenovým kočkám a norníkům; Zlobří podhůří a Drogmarův válečný tábor surovcům za žold; Bouřný skalní štít praská elementály a Třpytivé pleso září pod ním; Stany kultu draka a Pole revenantů obkružují vyvýšeninu kultu, se Svatyní Hrobodraka na vrcholu.',
   'guide.worldPage.gladeTitle': 'Tichý kout: Mýtina Brightwoodu',

@@ -37,7 +37,7 @@ describe('parity gate', () => {
   for (const scenario of SCENARIOS) {
     describe(scenario.name, () => {
       // Records the scenario TWICE, so the heaviest (nythraxis_full_pull) can
-      // brush past the default 5s on slower dev machines — same widened-budget
+      // brush past the default 5s on slower dev machines - same widened-budget
       // treatment as the i18n scanner-determinism test.
       it('records deterministically (same scenario -> identical trace)', { timeout: 20000 }, () => {
         const a = plain(recordTrace(scenario));

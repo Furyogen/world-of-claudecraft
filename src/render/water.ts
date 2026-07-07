@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { MIRROR_LAYOUT } from '../sim/content/mirror_world';
 import { waterBodies, waterLevel } from '../sim/world';
 import { loadTexture } from './assets/loader';
 import { registerPreload } from './assets/preload';
@@ -51,6 +52,17 @@ const DEEP_COLOR = new THREE.Color(0x0d3a52);
 const SHALLOW_COLOR = new THREE.Color(0x2d8077);
 const SKY_TINT = new THREE.Color(0x7fb2e0); // matches the sky horizon band
 const SUN_COLOR = new THREE.Color(0xfff0d4);
+
+// Mirror World gloom band: water crossing into the mirror zone (z >= its zMin)
+// goes dark silver-indigo and loses the sun. Derived from MIRROR_LAYOUT.zMin so
+// it tracks the zone seam instead of a magic literal (the band eases in over a
+// few units, starting just before the seam and settling just inside it). Baked
+// into the fragment shader below as GLSL float literals - constant per build,
+// so no uniform is needed.
+const GLOOM_BAND_START = MIRROR_LAYOUT.zMin - 3;
+const GLOOM_BAND_END = MIRROR_LAYOUT.zMin + 17;
+// GLSL needs a decimal point on float literals (e.g. 900 -> "900.0").
+const glsl = (n: number): string => (Number.isInteger(n) ? `${n}.0` : `${n}`);
 
 export interface WaterView {
   meshes: THREE.Mesh[];
@@ -121,7 +133,7 @@ const WATER_FRAG = /* glsl */ `
     float depth = clamp(vShoreDepth / 6.0, 0.0, 1.0);
     vec3 col = mix(uShallow, uDeep, depth);
     // Mirror World band: pools go dark silver-indigo and lose the sun
-    float gloom = smoothstep(897.0, 917.0, vWPos.z);
+    float gloom = smoothstep(${glsl(GLOOM_BAND_START)}, ${glsl(GLOOM_BAND_END)}, vWPos.z);
     col = mix(col, mix(vec3(0.10, 0.105, 0.17), vec3(0.045, 0.05, 0.10), depth), gloom);
     // dappled shimmer — fades with distance so it never reads as speckle
     float shimmer = max(n1.x * 0.7 + n2.y * 0.55, 0.0) * exp(-camDist * 0.022);

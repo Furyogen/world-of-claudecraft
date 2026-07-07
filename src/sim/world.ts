@@ -95,7 +95,7 @@ const BIOME_SHAPE: Record<BiomeId, { hill: number; base: number; hubHeight: numb
 // (identity check), so the hot terrain path stays cheap. For the built-in world
 // these match the old module-level constants exactly.
 //
-// Each inter-zone ridge is opened by a road pass — except the Mirror World
+// Each inter-zone ridge is opened by a road pass - except the Mirror World
 // trench seal (the band before a `mirror` zone), which has no pass and is too
 // steep to climb: the Mirrorgate portal pads are the only way across (see
 // content/mirror_world.ts).
@@ -135,7 +135,7 @@ const RIDGE_HEIGHT = 40;
 const RIDGE_SIGMA = 10; // gaussian width of the wall
 // The sealed Mirror World trench wall: no pass, taller and narrower so its face
 // stays steeper than PLAYER_MAX_CLIMB_SLOPE (1.5) even at the crest jitter's low
-// swing — the Mirrorgate pads are the only crossing.
+// swing - the Mirrorgate pads are the only crossing.
 const SEAL_RIDGE_HEIGHT = MIRROR_LAYOUT.sealRidge.height;
 const SEAL_RIDGE_SIGMA = MIRROR_LAYOUT.sealRidge.sigma;
 const PASS_HALF_WIDTH = 10; // flat opening around the road
@@ -445,10 +445,10 @@ function baseHeight(x: number, z: number, seed: number): number {
 }
 
 // ---------------------------------------------------------------------------
-// The Mirror World (zone 4) — the domed-country profile. A pure function of
+// The Mirror World (zone 4) - the domed-country profile. A pure function of
 // (x, z): the whole landmass lives INSIDE the glass (only the black plain
 // beyond it). City terraces stack over the belt, which six radial berms split
-// into districts — each berm spans the full belt and is pierced by one gate,
+// into districts - each berm spans the full belt and is pierced by one gate,
 // so the paths through the gates are the only routes (the berm faces and the
 // terrace lips are steeper than the climb limit everywhere else). Pools carve
 // the in-dome mirror-water; the grotto island hides outside on the plain.
@@ -486,7 +486,7 @@ function mirrorSurface(x: number, z: number, seed: number): number {
   const rimJitter = 1 + (fbm2(x * 0.02 + 7, z * 0.02 + 7, seed + 31, 2) - 0.5) * 0.2;
   h += smoothstep(0.86, 1.02, q) * L.vale.rimHeight * rimJitter;
 
-  // ---- the Mirrormere: one real lake — wading shore into a swimmable bowl
+  // ---- the Mirrormere: one real lake - wading shore into a swimmable bowl
   {
     const d = Math.hypot(x - L.lake.x, z - L.lake.z);
     if (d < L.lake.r + 10) {
@@ -602,7 +602,7 @@ export function terrainHeight(x: number, z: number, seed: number): number {
   const mountainDetail = 1 - smoothstep(OUTSIDE_FADE_START, OUTSIDE_FADE_END, beyond);
 
   // Mountain ridge walls between zones, pierced by the road pass. The sealed
-  // Mirror World trench wall is taller, narrower, and has no pass — the
+  // Mirror World trench wall is taller, narrower, and has no pass - the
   // Mirrorgate pads are the only crossing.
   let mountainAdd = 0;
   for (const ridge of w.ridges) {

@@ -3857,12 +3857,12 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_what_the_glass_wants.text':
     "Tu as vaincu ton Écho et cru à une épreuve de toi-même, {playerName}. Il n'en était rien. Je distille le Songe profond de drap, de corne et de capuche, mais ce contre quoi ton rêve dressa un miroir, la chose entrée en portant ton visage, cela je ne le distille pas. Cela s'infiltre, du verre noir du canyon. Les faucheurs qui grouillent à l'entrée du canyon sont épais de la même infiltration ; abats-en huit et regarde de quel côté rampent leurs ombres. Alors je montrerai aux yeux mêmes de Nerissa où sa plaie saigne vraiment.",
   'entities.quests.q_what_the_glass_wants.completion':
-    "Au nord-est. Toujours au nord-est, toujours vers le Sable — l'as-tu vu ? Ton Écho, ce n'était pas TOI, voyageur. C'était un éclat de ce qui vit derrière cette porte, vêtu du reflet le plus proche qu'il pût dérober : le tien. Le rêve n'est que l'endroit le plus mince que l'infiltration ait trouvé ; le canyon est le plus large. Dis-le à Nerissa. Elle en a mérité la vérité, et toi aussi.",
+    "Au nord-est. Toujours au nord-est, toujours vers le Sable - l'as-tu vu ? Ton Écho, ce n'était pas TOI, voyageur. C'était un éclat de ce qui vit derrière cette porte, vêtu du reflet le plus proche qu'il pût dérober : le tien. Le rêve n'est que l'endroit le plus mince que l'infiltration ait trouvé ; le canyon est le plus large. Dis-le à Nerissa. Elle en a mérité la vérité, et toi aussi.",
   'entities.quests.q_what_the_glass_wants.objectives.0.label':
     "Faucheur abattu à l'entrée du canyon",
   'entities.quests.q_relight_the_lumen_crown.title': 'Rallumer la Couronne de Lumen',
   'entities.quests.q_relight_the_lumen_crown.text':
-    "Les gardiens ont un nom et la chaussée s'amincit, aussi dois-je faire à présent ce que j'ai différé depuis ma mort : allumer la Couronne de Lumen une dernière fois et presser le Sable clos de ce côté. La dernière vraie étincelle de la Couronne fut avalée par la Gueule crépusculaire quand elle tomba dans la mare — voilà pourquoi la chose luit du dedans. Retaille-lui la lumière, {playerName}. Le verre noir enverra ses colosses lugubres arrêter le rite ; abats-en quatre. Rapporte-moi une étincelle noyée tant que je me rappelle encore comment en tenir une. Le dernier devoir d'un gardien est de devenir quelqu'un qui n'a plus besoin de garder.",
+    "Les gardiens ont un nom et la chaussée s'amincit, aussi dois-je faire à présent ce que j'ai différé depuis ma mort : allumer la Couronne de Lumen une dernière fois et presser le Sable clos de ce côté. La dernière vraie étincelle de la Couronne fut avalée par la Gueule crépusculaire quand elle tomba dans la mare - voilà pourquoi la chose luit du dedans. Retaille-lui la lumière, {playerName}. Le verre noir enverra ses colosses lugubres arrêter le rite ; abats-en quatre. Rapporte-moi une étincelle noyée tant que je me rappelle encore comment en tenir une. Le dernier devoir d'un gardien est de devenir quelqu'un qui n'a plus besoin de garder.",
   'entities.quests.q_relight_the_lumen_crown.completion':
     "Elle brûle. Après toutes ces ténèbres, elle connaît encore ma main. Regarde : le verre est VRAI de nouveau ; nul battement derrière l'eau, nulle âme perdue entre un monde et son reflet. Et le poids m'a enfin quittée. Je ne m'évanouis pas, {playerName} ; on me RELÈVE. Ce n'est pas briser le Sable, seulement le tenir ; je n'ai pas la force de briser ce qui attend là, et je n'oserais pas. Mais tenu un âge de plus, il est tenu. Quand une compagnie plus brave que nous franchira enfin cette porte, elle trouvera l'autre côté prêt. Dis à Highwatch que leur gardienne a monté la garde jusqu'au bout, puis a été relevée. Le verre se souviendra de toi. Veille à lui donner quelque chose qui vaille d'être reflété.",
   'entities.quests.q_relight_the_lumen_crown.objectives.0.label': 'La Gueule crépusculaire abattue',
@@ -3887,20 +3887,20 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.mistwitch_morwen.name': 'Morwen la Sorcière des Brumes',
   'entities.npcs.mistwitch_morwen.title': 'Brasseuse de rêves du Creux',
   'entities.npcs.mistwitch_morwen.greeting':
-    'La brume garde les tiens éveillés. Je peux te brasser l’autre sommeil — celui qui répond.',
+    'La brume garde les tiens éveillés. Je peux te brasser l’autre sommeil - celui qui répond.',
   'entities.quests.q_deepdream_recipe.title': 'Une recette de sommeil profond',
   'entities.quests.q_deepdream_recipe.text':
     "Le philtre réclame trois voix, {playerName} : deux draps blancs pris aux fantômes de misère qui ne possèdent rien d'autre, deux cornes des licornes spectrales qui paissent dans la pénombre, et deux capuches taillées aux faucheurs qui veillent sur la ceinture. Apporte-les et je te brasserai un sommeil qui a des dents.",
   'entities.quests.q_deepdream_recipe.completion':
-    "Drap, corne, capuche — les pauvres, les radieux, les patients. Le chaudron t'aime bien. Bois-le dans un endroit doux, voyageur : tu rencontreras qui tu portes en toi.",
+    "Drap, corne, capuche - les pauvres, les radieux, les patients. Le chaudron t'aime bien. Bois-le dans un endroit doux, voyageur : tu rencontreras qui tu portes en toi.",
   'entities.quests.q_deepdream_recipe.objectives.0.label': 'Drap blanc',
   'entities.quests.q_deepdream_recipe.objectives.1.label': 'Corne spectrale',
   'entities.quests.q_deepdream_recipe.objectives.2.label': 'Capuche noire',
   'entities.quests.q_face_your_echo.title': 'Affronte ton Écho',
   'entities.quests.q_face_your_echo.text':
-    'Bois le philtre et le rêve dressera un miroir devant toi — ton Écho, chaque cicatrice et chaque tour à toi de l’autre côté. Bats ce que tu es, {playerName}, et rapporte-moi la tête que tu feras.',
+    'Bois le philtre et le rêve dressera un miroir devant toi - ton Écho, chaque cicatrice et chaque tour à toi de l’autre côté. Bats ce que tu es, {playerName}, et rapporte-moi la tête que tu feras.',
   'entities.quests.q_face_your_echo.completion':
-    'Tu es revenu, et le miroir non. Ce qu’il t’a laissé dans la main est à toi — le rêve ne paie ce prix qu’une fois.',
+    'Tu es revenu, et le miroir non. Ce qu’il t’a laissé dans la main est à toi - le rêve ne paie ce prix qu’une fois.',
   'entities.quests.q_face_your_echo.objectives.0.label': 'Ton Écho vaincu',
   'entities.items.white_sheet.name': 'Drap blanc',
   'entities.items.spirit_horn.name': 'Corne spectrale',
@@ -5533,6 +5533,13 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     'Restez à la porte. Au-delà de ces roseaux, la fagne tue à notre place.',
   'guide.worldPage.marshPlaceNotes':
     "Fenbridge garde la seule route sèche. Les Roseaux du Rôdeur et les Hauts-fonds de Deepfen grouillent de bêtes des marais et de Mudfins ; le Fourré de la Veuve est tissé d'une épaisse toile ; la Chapelle noyée et les Tertres des trolls gardent des dangers plus anciens ; le Campement de Gravecaller est le culte retranché, et le Bastion englouti est le cœur en instance du marais.",
+  'guide.worldPage.mirrorBlurb':
+    "Un pays de verre noir, baigné de lune et voilé de brume, au-delà des miroirs de Highwatch, où le Val de Verre garde les esprits de fin de jeu du royaume et où la Gardienne Nerissa veille sur le Creux de Lumen.",
+  'guide.worldPage.mirrorGreeting':
+    "Le verre garde chaque visage qu'il a noyé. Marche doucement ici, et ne contemple pas trop longtemps le tien.",
+  'guide.worldPage.mirrorGreeter': 'Gardienne Nerissa, le Creux de Lumen',
+  'guide.worldPage.mirrorPlaceNotes':
+    "Le Creux de Lumen est le cœur de la ville-miroir, la Cour du Miroir et ses statues de gargouilles juste au-dessus et l'escalier du Belvédère qui plonge en contrebas ; le Lac-Miroir est une eau noire et immobile, ceinte de la Prairie de Lune et des Pierres du Chagrin ; les Escarpements Lugubres et le Bois Sombre abritent les esprits les plus lourds du val ; le Creux de la Sorcière garde Morwen la Sorcière des Brumes, la Corniche de l'Astronome sa longue vue glacée, et le Canyon Noir serpente vers l'est jusqu'au Miroir de Sable.",
   'guide.worldPage.peaksGreeter': 'Capitaine Thessaly, Highwatch',
   'guide.worldPage.peaksGreeting':
     'Deux cents ans que ce mur tient. Il ne cédera pas sous ma garde, mais il gémit.',

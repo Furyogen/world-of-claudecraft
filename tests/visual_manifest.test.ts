@@ -98,7 +98,7 @@ describe('character visual manifest', () => {
 
   // The Mirror World's Tripo quadrupeds ship only a 'Walk' clip, so their swing is
   // a procedural bone overlay (visual.ts) instead of a baked Attack clip. Lock in
-  // the wiring: the tag, the walk-only clip set, and — the load-bearing bit — that
+  // the wiring: the tag, the walk-only clip set, and - the load-bearing bit - that
   // the head/spine bone chain the overlay curls actually exists in each GLB.
   describe('procedural attack (walk-only quadrupeds)', () => {
     const QUADS = [

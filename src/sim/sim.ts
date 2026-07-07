@@ -1294,7 +1294,7 @@ export class Sim {
 
     // Overworld portal pads (the Mirror World's standing mirrors):
     // plain ground objects whose walk-in trigger teleports within the shared
-    // world (updatePortalPadTriggers) — no instancing. createGroundObject
+    // world (updatePortalPadTriggers) - no instancing. createGroundObject
     // draws no RNG, so appending them here leaves world-gen draws untouched.
     for (const pad of PORTAL_PADS) {
       const obj = createGroundObject(
@@ -1486,7 +1486,7 @@ export class Sim {
     } else if (savedPos && isDreamPos(savedPos.x)) {
       // A crash mid-dream persisted a shadow-realm position: wake at the
       // Witch's Hollow instead (normal saves persist the waking-world return
-      // spot — see serializeCharacter).
+      // spot - see serializeCharacter).
       savedPos = { x: -110, z: 1162 };
     } else if (savedPos && savedPos.x > DUNGEON_X_THRESHOLD) {
       const dungeon = dungeonAt(savedPos.x) ?? DUNGEON_LIST[0];
@@ -6222,7 +6222,7 @@ export class Sim {
 
   // Overworld portal pads (mirrors): entity id ↔ destination, registered at
   // world init. Same walk-in idiom as dungeon doors, but the teleport stays in
-  // the one shared overworld — no instance claiming, no per-party copies.
+  // the one shared overworld - no instance claiming, no per-party copies.
   private portalPads: { entityId: number; padId: string; dest: { x: number; z: number } }[] = [];
 
   private updatePortalPadTriggers(p: Entity): void {
@@ -6274,7 +6274,7 @@ export class Sim {
   }
 
   // ---------------------------------------------------------------------------
-  // The Deepdream — drink Morwen's draught, fall asleep, duel your Echo in the
+  // The Deepdream - drink Morwen's draught, fall asleep, duel your Echo in the
   // shadow realm, wake where you slept. Solo slots far past every other
   // off-world band (DREAM_X in data.ts). Mirrors the arena's save-return /
   // clean-slate / aftermath flow, but for one player against a stat-clone mob.
@@ -6325,7 +6325,7 @@ export class Sim {
     this.emit({ type: 'slumber', pid: meta.entityId });
     this.emit({
       type: 'log',
-      text: 'Sleep takes hold — the dream pulls you under.',
+      text: 'Sleep takes hold - the dream pulls you under.',
       color: '#b9f',
       pid: meta.entityId,
     });
@@ -6359,7 +6359,7 @@ export class Sim {
           run.won = true;
           run.timer = DREAM_AFTERMATH_WIN;
           // The Echo is a player-kind bot, so the mob-kill quest path never
-          // fires — grant the "Face Your Echo" credit by its quest key here.
+          // fires - grant the "Face Your Echo" credit by its quest key here.
           if (meta)
             onMobKilledForQuests(
               this.ctx,
@@ -6374,7 +6374,27 @@ export class Sim {
           // corpse is a player entity and never lootable).
           if (meta?.questsDone.has('q_face_your_echo')) {
             let copper = 0;
+            const rolledGroups = new Set<string>();
             for (const entry of MOBS.player_echo.loot) {
+              // Exclusive group (the ghostgear set): one rng draw partitioned
+              // across the group's chances, mirroring rollLoot in
+              // loot/loot_roll.ts, so at most one piece drops per win rather
+              // than each ghost entry rolling independently.
+              if (entry.rollGroup) {
+                if (rolledGroups.has(entry.rollGroup)) continue;
+                rolledGroups.add(entry.rollGroup);
+                const group = MOBS.player_echo.loot.filter((l) => l.rollGroup === entry.rollGroup);
+                const roll = this.rng.next();
+                let cumulative = 0;
+                for (const g of group) {
+                  cumulative += g.chance;
+                  if (roll < cumulative) {
+                    if (g.itemId) this.addItem(g.itemId, 1, pid);
+                    break;
+                  }
+                }
+                continue;
+              }
               if (!this.rng.chance(entry.chance)) continue;
               if (entry.copper)
                 copper += this.rng.int(
@@ -6399,7 +6419,7 @@ export class Sim {
             this.addItem('mirror_shard', 1, pid);
             this.emit({
               type: 'log',
-              text: 'The Echo shatters — a Mirror Shard is left where it stood.',
+              text: 'The Echo shatters - a Mirror Shard is left where it stood.',
               color: '#f6f',
               pid,
             });
@@ -6431,10 +6451,12 @@ export class Sim {
       }
     }
     if (slot === -1) {
-      // every dream slot is occupied: hand the draught back and stay awake
+      // every dream slot is occupied: hand the draught back, lift the sleep
+      // fade the draught raised (else the player is stuck behind it), stay awake
       this.dreamRuns.delete(pid);
       p.sitting = false;
       this.addItem('deepdream_draught', 1, pid);
+      this.emit({ type: 'slumberEnd', pid });
       this.error(pid, 'The dream is crowded tonight. Try again soon.');
       return;
     }
@@ -6442,12 +6464,12 @@ export class Sim {
     run.slot = slot;
     run.state = 'active';
     const origin = dreamOrigin(slot);
-    this.resetForArena(p); // a clean slate — the duel is decided by play
+    this.resetForArena(p); // a clean slate - the duel is decided by play
     p.pos = this.groundPos(origin.x, origin.z);
     p.prevPos = { ...p.pos };
     p.facing = 0;
     this.rebucket(p);
-    // The Echo: a full bot-player clone — same class, level, gear, talents,
+    // The Echo: a full bot-player clone - same class, level, gear, talents,
     // skin, and Mirror-Shard gains, so every derived stat, the whole ability
     // kit, and the silhouette mirror exactly. It is driven each tick by
     // driveEcho through the real castAbility path (the fiesta-bot pattern).
@@ -6464,12 +6486,16 @@ export class Sim {
     this.setPlayerLevel(p.level, echoPid);
     echoMeta.equipment = { ...meta.equipment };
     echoMeta.permanentStats = { ...meta.permanentStats };
-    // mirror talents the silent login-restore way — applyTalents would toast
+    // mirror talents the silent login-restore way - applyTalents would toast
     // 'Talents updated.' into the dreamer's offline chat
     echoMeta.talents = cloneAllocation(meta.talents);
     echoMeta.talentMods = computeTalentModifiers(cls, echoMeta.talents);
     this.refreshKnownAbilities(echoMeta, false);
     this.setPlayerSkin(echoPid, meta.skin, meta.skinCatalog);
+    // recalcPlayerStats (inside resetForArena) reads the ENTITY's permanentStats
+    // field, which addPlayer left at zeros; mirror the dreamer's Mirror-Shard
+    // gains onto the echo entity so the clone's derived stats match exactly.
+    echo.permanentStats = { ...echoMeta.permanentStats };
     this.resetForArena(echo); // recalc with the mirrored kit; full hp/resource
     echo.pos = this.groundPos(origin.x, origin.z + 12);
     echo.prevPos = { ...echo.pos };
@@ -6526,7 +6552,7 @@ export class Sim {
     echoMeta.moveInput = emptyMoveInput();
     echo.facing = angleTo(echo.pos, dreamer.pos);
     // Opening ritual: raise every self/party buff in the kit before engaging
-    // (Battle Shout, fortitude-style wards — friendly casts self-target here).
+    // (Battle Shout, fortitude-style wards - friendly casts self-target here).
     if (run.echoBuffs === undefined) {
       run.echoBuffs = echoMeta.known
         .filter((k) =>
@@ -6543,17 +6569,17 @@ export class Sim {
     if (dist2d(echo.pos, dreamer.pos) > engage) echoMeta.moveInput.forward = true;
     echo.targetId = dreamer.id;
     if (!echo.autoAttack) this.startAutoAttack(run.echoId);
-    // One deliberate action per cadence beat — hammering castAbility every
+    // One deliberate action per cadence beat - hammering castAbility every
     // tick fights the swing cycle and reads as a mob that only ever melees.
     if (this.tickCount % 12 !== run.echoId % 12) return;
     if (run.echoBuffs.length > 0) {
       const next = run.echoBuffs[0];
       this.castAbility(next, run.echoId);
       if (echo.castingAbility || echo.gcdRemaining > 0) {
-        run.echoBuffs.shift(); // it fired — the next buff takes a later beat
+        run.echoBuffs.shift(); // it fired - the next buff takes a later beat
         run.echoBuffTries = 0;
       } else {
-        // not yet affordable (a rage-starved shout builds toward it) — retry,
+        // not yet affordable (a rage-starved shout builds toward it) - retry,
         // but let go eventually so an already-active stance can't stall us
         run.echoBuffTries = (run.echoBuffTries ?? 0) + 1;
         if (run.echoBuffTries > 25) {
@@ -6569,8 +6595,8 @@ export class Sim {
 
   // The Echo's rotation: mend itself when pressed (friendly heals self-target
   // when the current target is hostile), keep its summon standing, then a
-  // varied pick across EVERY castable spell in the mirrored kit — dots,
-  // debuffs, strikes — so the duel reads like fighting a player, not a mob.
+  // varied pick across EVERY castable spell in the mirrored kit - dots,
+  // debuffs, strikes - so the duel reads like fighting a player, not a mob.
   private pickEchoAbility(meta: PlayerMeta, echo: Entity, echoPid: number): string | null {
     if (echo.hp < echo.maxHp * 0.55) {
       for (const k of meta.known) {
@@ -6648,7 +6674,7 @@ export class Sim {
 
   // Morwen re-brews on demand once the recipe quest is done (the quest itself
   // rewards the first draught): same parts, no quest-state involved, so the
-  // chain is repeatable forever — only the shard is once-ever.
+  // chain is repeatable forever - only the shard is once-ever.
   brewDraught(pid?: number): void {
     const r = this.resolve(pid);
     if (!r || r.e.dead) return;
@@ -6695,11 +6721,11 @@ export class Sim {
 
   // -------------------------------------------------------------------------
   // Mirror-guardian gargoyles. Three sentinels stand as NPCs beside the town
-  // mirrors. Gossip offers a bow (answered with the statue's head-nod — the
+  // mirrors. Gossip offers a bow (answered with the statue's head-nod - the
   // npcBow event) or a challenge, which swaps the statue for the level-99
   // gargoyle_awakened boss. The stone returns 60s after the boss dies, or
   // immediately if it fully resets (leash), so the mirror is never left
-  // unguarded — or camped by an unkillable wanderer.
+  // unguarded - or camped by an unkillable wanderer.
   // -------------------------------------------------------------------------
 
   private nearestGargoyleSentinel(p: Entity): Entity | null {
@@ -6728,7 +6754,7 @@ export class Sim {
       this.error(r.meta.entityId, 'There is no gargoyle within reach.');
       return;
     }
-    // The courtesy is a real bow — play the emote — and it stirs the statue:
+    // The courtesy is a real bow - play the emote - and it stirs the statue:
     // its toll-quest opens in the same beat. The "shimmers with energy" line
     // is client dialog copy (questUi).
     this.playEmote('bow', r.meta.entityId);
@@ -6772,7 +6798,7 @@ export class Sim {
     });
     this.emit({
       type: 'log',
-      text: 'Stone splits along old seams — the sentinel steps off its plinth.',
+      text: 'Stone splits along old seams - the sentinel steps off its plinth.',
       color: '#f66',
       pid: r.meta.entityId,
     });
@@ -6839,10 +6865,10 @@ export class Sim {
     recalcPlayerStats(p, meta.cls, meta.equipment, this.playerMods(meta));
     const text =
       stat === 'str'
-        ? 'The Mirror Shard sinks in. Your strength grows — permanently.'
+        ? 'The Mirror Shard sinks in. Your strength grows - permanently.'
         : stat === 'agi'
-          ? 'The Mirror Shard sinks in. Your reflexes sharpen — permanently.'
-          : 'The Mirror Shard sinks in. Your mind deepens — permanently.';
+          ? 'The Mirror Shard sinks in. Your reflexes sharpen - permanently.'
+          : 'The Mirror Shard sinks in. Your mind deepens - permanently.';
     this.emit({ type: 'log', text, color: '#f6f', pid: meta.entityId });
   }
 

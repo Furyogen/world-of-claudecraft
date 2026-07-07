@@ -280,6 +280,9 @@ export type ItemUse =
   // The Deepdream Draught: falling-asleep sequence → the shadow-realm Echo
   // duel (Sim.startSlumber).
   | { type: 'slumber' }
+  // The dream was denied (all slots busy) after the fade began: lift the sleep
+  // wash so the player is not left behind a stuck overlay.
+  | { type: 'slumberEnd' }
   // The Mirror Shard: consumed for a permanent primary-stat increase
   // (Sim.consumeMirrorShard).
   | { type: 'mirrorShard' }
@@ -1341,7 +1344,7 @@ export interface DungeonDef {
 
 // Overworld portal pads (the Mirror World's standing mirrors): walking
 // within trigger range teleports the player to `dest` in the same shared
-// world — unlike dungeon doors there is no instancing. Pads are paired; keep
+// world - unlike dungeon doors there is no instancing. Pads are paired; keep
 // every dest out of the partner pad's trigger radius so trips never ping-pong.
 export interface PortalPadDef {
   id: string;
@@ -1412,8 +1415,8 @@ export interface ZonePropsDef {
   // entrance sign), so the marker carries no hardcoded English label.
   delveMarkers?: { x: number; z: number; delveId: string }[];
   // Glass domes (the Mirror World): colliders.ts rings each with wall segments and the
-  // renderer draws the shell. `gaps` are open arcs — bearings in radians,
-  // atan2(dx, dz) from the dome center — where the ring stays passable.
+  // renderer draws the shell. `gaps` are open arcs - bearings in radians,
+  // atan2(dx, dz) from the dome center - where the ring stays passable.
   domes?: { x: number; z: number; r: number; gaps: { from: number; to: number }[] }[];
 }
 
@@ -1549,7 +1552,7 @@ export interface Entity {
   dodgeChance: number;
   // Permanent Mirror-Shard stat grants, mirrored from PlayerMeta.permanentStats
   // at login/consume so recalcPlayerStats can fold them without a meta handle.
-  // Sim-side only — never serialized onto the wire.
+  // Sim-side only - never serialized onto the wire.
   permanentStats?: { str: number; agi: number; sta: number; int: number; spi: number };
   castPushbackReduction: number; // 0..1: damage cast-pushback removed by item-set bonuses (1 = immune)
   knockbackResistance: number; // 0..1: on-hit knockback distance resisted by item-set bonuses (1 = immune)
@@ -1694,10 +1697,6 @@ export interface Entity {
   corpsePos: Vec3 | null;
   scale: number;
   color: number;
-  // The Deepdream Echo: the class whose model this mob wears (a shadow of the
-  // dreamer). Render-only; set at spawn, synced as the terse identity field
-  // `mc`. Undefined on every normal entity.
-  mirrorClass?: PlayerClass;
   skinCatalog: SkinCatalog; // player appearance catalog: class texture set or cosmetic body.
   skin: number; // player appearance: index into SKINS[visualKey]; 0 = default. synced in identity fields.
   // Equipped mainhand item id (players only; null otherwise). Render-only: the
@@ -1861,9 +1860,9 @@ export type SimEvent = { pid?: number } & (
   // The Deepdream Draught took hold: the client plays the falling-asleep
   // fade/VFX while the sim holds the sleeper for the teleport.
   | { type: 'slumber' }
-  // A gargoyle toll was paid: the statue's town mirror unseals. The client
-  // re-lights the pad view and plays the unlock burst.
-  | { type: 'mirrorUnlocked'; padId: string; pid?: number }
+  // The dream was denied (all slots busy) after the fade began: lift the sleep
+  // wash so the player is not left behind a stuck overlay.
+  | { type: 'slumberEnd' }
   // itemId names the single item for buy/sell/buyback; it is omitted for the
   // bulk "sell all junk" sweep, which the client treats as a plain refresh signal.
   | { type: 'vendor'; action: 'buy' | 'sell' | 'buyback'; itemId?: string }

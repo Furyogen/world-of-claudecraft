@@ -2788,12 +2788,12 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_what_the_glass_wants.text':
     'Kau mengalahkan Gemamu dan mengiranya ujian atas dirimu, {playerName}. Bukan. Aku menyuling Mimpi Dalam dari kain, tanduk, dan tudung, tapi hal yang di hadapannya mimpimu memasang cermin, sosok yang masuk mengenakan wajahmu, itu bukan aku yang menyuling. Ia merembes, dari kaca hitam di ngarai. Para pemanen yang memenuhi mulut ngarai kental oleh rembesan yang sama; tumbangkan delapan dan amati ke mana bayang mereka merayap. Lalu akan kutunjukkan pada mata Nerissa sendiri di mana lukanya benar-benar berdarah.',
   'entities.quests.q_what_the_glass_wants.completion':
-    'Ke timur laut. Selalu ke timur laut, selalu menuju Sable — kaulihat? Gemamu bukanlah DIRIMU, pengembara. Ia serpihan dari apa pun yang bersemayam di balik pintu itu, mengenakan pantulan terdekat yang bisa ia curi: milikmu. Mimpi hanyalah titik tertipis yang ditemukan rembesan itu; ngarai yang terlebar. Katakan pada Nerissa. Ia telah pantas atas kebenarannya, dan begitu pula kau.',
+    'Ke timur laut. Selalu ke timur laut, selalu menuju Sable - kaulihat? Gemamu bukanlah DIRIMU, pengembara. Ia serpihan dari apa pun yang bersemayam di balik pintu itu, mengenakan pantulan terdekat yang bisa ia curi: milikmu. Mimpi hanyalah titik tertipis yang ditemukan rembesan itu; ngarai yang terlebar. Katakan pada Nerissa. Ia telah pantas atas kebenarannya, dan begitu pula kau.',
   'entities.quests.q_what_the_glass_wants.objectives.0.label':
     'Pemanen ditumbangkan di mulut ngarai',
   'entities.quests.q_relight_the_lumen_crown.title': 'Nyalakan Kembali Mahkota Lumen',
   'entities.quests.q_relight_the_lumen_crown.text':
-    'Para penjaga sudah bernama dan tanggul menipis, maka kini harus kulakukan apa yang kutunda sejak aku mati: menyalakan Mahkota Lumen sekali terakhir dan menekan Sable menutup dari sisi ini. Percik sejati terakhir Mahkota ditelan Sang Rahang Senja saat ia jatuh ke telaga — itulah sebab benda itu bercahaya dari dalam. Potong keluar lagi cahayanya, {playerName}. Kaca hitam akan mengirim raksasa-raksasa suramnya untuk menghentikan ritus; tumbangkan empat. Bawakan aku percik yang tenggelam selagi aku masih ingat cara memegangnya. Tugas terakhir seorang penjaga adalah menjadi seseorang yang tak lagi perlu menjaga.',
+    'Para penjaga sudah bernama dan tanggul menipis, maka kini harus kulakukan apa yang kutunda sejak aku mati: menyalakan Mahkota Lumen sekali terakhir dan menekan Sable menutup dari sisi ini. Percik sejati terakhir Mahkota ditelan Sang Rahang Senja saat ia jatuh ke telaga - itulah sebab benda itu bercahaya dari dalam. Potong keluar lagi cahayanya, {playerName}. Kaca hitam akan mengirim raksasa-raksasa suramnya untuk menghentikan ritus; tumbangkan empat. Bawakan aku percik yang tenggelam selagi aku masih ingat cara memegangnya. Tugas terakhir seorang penjaga adalah menjadi seseorang yang tak lagi perlu menjaga.',
   'entities.quests.q_relight_the_lumen_crown.completion':
     'Ia menyala. Setelah segala gelap ini, ia masih mengenali tanganku. Lihat: kaca itu SEJATI lagi; tak ada detak di balik air, tak ada jiwa yang tersesat antara dunia dan pantulannya. Dan beban itu akhirnya lepas dariku. Aku tak lenyap, {playerName}; aku DIGANTIKAN. Ini bukan mematahkan Sable, hanya menahannya; aku tak berdaya mematahkan apa yang menanti di sana, dan takkan berani. Tapi tertahan satu zaman lagi, ia tertahan. Ketika suatu rombongan yang lebih berani dari kita akhirnya masuk KE DALAM pintu itu, mereka akan mendapati sisi seberang telah siap. Katakan di Highwatch bahwa penjaga mereka berjaga sampai akhir, lalu digantikan. Kaca akan mengingatmu. Pastikan kauberi ia sesuatu yang layak dipantulkan.',
   'entities.quests.q_relight_the_lumen_crown.objectives.0.label': 'Sang Rahang Senja ditumbangkan',
@@ -2818,20 +2818,20 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.mistwitch_morwen.name': 'Morwen si Penyihir Kabut',
   'entities.npcs.mistwitch_morwen.title': 'Peramu Mimpi dari Lembah',
   'entities.npcs.mistwitch_morwen.greeting':
-    'Kabut membuat kebanyakan kalian terjaga. Aku bisa meramu tidur yang satunya — yang menjawab balik.',
+    'Kabut membuat kebanyakan kalian terjaga. Aku bisa meramu tidur yang satunya - yang menjawab balik.',
   'entities.quests.q_deepdream_recipe.title': 'Resep Tidur Nyenyak',
   'entities.quests.q_deepdream_recipe.text':
     'Ramuan ini butuh tiga suara, {playerName}: dua kain putih dari hantu kemiskinan yang tak punya apa-apa lagi, dua tanduk unicorn roh yang merumput dalam kelam, dan dua tudung yang dipotong dari para penuai penjaga sabuk. Bawakan, dan kuseduhkan tidur yang bertaring.',
   'entities.quests.q_deepdream_recipe.completion':
-    'Kain, tanduk, tudung — si miskin, si bercahaya, si sabar. Kualinya menyukaimu. Minumlah di tempat yang empuk, pengembara: kau akan bertemu siapa yang selama ini kaubawa.',
+    'Kain, tanduk, tudung - si miskin, si bercahaya, si sabar. Kualinya menyukaimu. Minumlah di tempat yang empuk, pengembara: kau akan bertemu siapa yang selama ini kaubawa.',
   'entities.quests.q_deepdream_recipe.objectives.0.label': 'Kain Putih',
   'entities.quests.q_deepdream_recipe.objectives.1.label': 'Tanduk Roh',
   'entities.quests.q_deepdream_recipe.objectives.2.label': 'Tudung Hitam',
   'entities.quests.q_face_your_echo.title': 'Hadapi Gemamu',
   'entities.quests.q_face_your_echo.text':
-    'Minum ramuannya dan mimpi akan menegakkan cermin di hadapanmu — Gemamu, tiap bekas luka dan tiap tipuanmu di sisi seberang. Kalahkan dirimu sendiri, {playerName}, dan bawakan aku wajahmu setelahnya.',
+    'Minum ramuannya dan mimpi akan menegakkan cermin di hadapanmu - Gemamu, tiap bekas luka dan tiap tipuanmu di sisi seberang. Kalahkan dirimu sendiri, {playerName}, dan bawakan aku wajahmu setelahnya.',
   'entities.quests.q_face_your_echo.completion':
-    'Kau kembali, dan cerminnya tidak. Apa yang ia tinggalkan di tanganmu adalah milikmu — mimpi hanya membayar harga itu sekali.',
+    'Kau kembali, dan cerminnya tidak. Apa yang ia tinggalkan di tanganmu adalah milikmu - mimpi hanya membayar harga itu sekali.',
   'entities.quests.q_face_your_echo.objectives.0.label': 'Gemamu dikalahkan',
   'entities.items.white_sheet.name': 'Kain Putih',
   'entities.items.spirit_horn.name': 'Tanduk Roh',
@@ -4116,6 +4116,13 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
     'Berhenti di gerbang. Lewat alang-alang itu, rawa yang akan membunuh untuk kami.',
   'guide.worldPage.marshPlaceNotes':
     'Fenbridge menjaga satu-satunya jalan kering. Prowler Reeds dan Deepfen Shallows dipenuhi binatang rawa dan Mudfin; Widow Thicket dipintal tebal oleh jaring; Drowned Chapel dan Troll Mounds menyimpan bahaya yang lebih tua; Gravecaller Encampment adalah sarang kultus yang menggali masuk, dan Benteng Karam adalah jantung berinstans rawa ini.',
+  'guide.worldPage.mirrorBlurb':
+    'Sebuah negeri kaca hitam yang disinari bulan dan diselubungi kabut di balik cermin-cermin Highwatch, tempat Lembah Kaca menyimpan roh-roh akhir permainan sang kerajaan dan Penjaga Nerissa menguasai Cekungan Lumen.',
+  'guide.worldPage.mirrorGreeting':
+    'Kaca menyimpan setiap wajah yang telah ditenggelamkannya. Melangkahlah dengan lembut di sini, dan jangan terlalu lama menatap wajahmu sendiri.',
+  'guide.worldPage.mirrorGreeter': 'Penjaga Nerissa, Cekungan Lumen',
+  'guide.worldPage.mirrorPlaceNotes':
+    'Cekungan Lumen adalah jantung kota cermin, dengan Balai Cermin serta patung-patung gargoylnya tepat di atas dan tangga Sudut Pandang yang menurun di bawah; Danau Cermin adalah air hitam yang tenang, dikelilingi Padang Bulan dan Batu-Batu Duka; Tebing Suram dan Rimba Kelam menampung roh-roh terberat lembah ini; Cekungan Penyihir menaungi Morwen si Penyihir Kabut, Tepian Pengamat Bintang menyimpan pemandangannya yang panjang dan dingin, dan Ngarai Hitam berkelok ke timur menuju Cermin Sable.',
   'guide.worldPage.peaksBlurb':
     'Punggung bukit yang terkikis angin dan bekas tambang tua yang menanjak ke bahaya tertinggi dan terdingin di alam ini, dijaga oleh pos Highwatch.',
   'guide.worldPage.peaksGreeter': 'Captain Thessaly, Highwatch',

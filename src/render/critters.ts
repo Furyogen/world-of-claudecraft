@@ -10,6 +10,7 @@ import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js
 import { DUNGEON_X_THRESHOLD, WORLD_MAX_X, WORLD_MAX_Z, WORLD_MIN_Z } from '../sim/data';
 import { terrainHeight, terrainSteepnessAt, waterLevelAt } from '../sim/world';
 import { GFX } from './gfx';
+import { mulberry32 } from './rng';
 
 export interface CritterField {
   group: THREE.Group;
@@ -40,18 +41,8 @@ export function causewayPopScale(pz: number): number {
   return CAUSEWAY_FLOOR + (1 - CAUSEWAY_FLOOR) * eased;
 }
 
-// A tiny seeded RNG so placement/wander variety stays off Math.random (matching
-// the render layer's deterministic-generation convention).
-function mulberry32(seed: number): () => number {
-  let a = seed >>> 0;
-  return () => {
-    a |= 0;
-    a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
+// Placement/wander variety uses the shared seeded RNG (./rng) so it stays off
+// Math.random, matching the render layer's deterministic-generation convention.
 
 type Species = 'rabbit' | 'squirrel' | 'bird';
 

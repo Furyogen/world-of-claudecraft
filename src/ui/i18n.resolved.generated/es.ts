@@ -1838,6 +1838,10 @@ export const es: EnTranslations = {
       "valePlaceNotes": "Eastbrook es tu primera base de operaciones. Wolf Run y el Prado de los Jabalíes son terreno de caza apacible; el Lago Espejo es agua tranquila para pescar; el Sableweb y la Excavación de Cobre ocultan arañas y excavadores ávidos de mineral; un Campamento de Bandidos y la Capilla Caída albergan trabajos más recios; la colina del Relicario desciende hasta el Relicario Derrumbado, la primera expedición del reino; y la arboleda de Brightwood es una apacible arboleda soleada en el norte.",
       "marshPlaceNotes": "Fenbridge custodia el único camino seco. Los Juncos del Acechador y los Bajíos de Deepfen rebosan de bestias de la ciénaga y mudfins; la Espesura de la Viuda está tupida de telarañas; la Capilla Ahogada y los Túmulos de los Troles guardan peligros más antiguos; el Campamento de Gravecaller es el culto atrincherado, y el Bastión Sumergido es el corazón instanciado de la ciénaga.",
       "peaksPlaceNotes": "Highwatch defiende el muro. La Cresta del Acechador y las Galerías de Deeprock pertenecen a felinos de las crestas y madrigueros; las Estribaciones de los Ogros y el Campamento de Guerra de Drogmar, a brutos a sueldo; Stormcrag crepita de elementales y el Glimmermere reluce a sus pies; las Tiendas del Culto del Vermis y los Campos de los Resucitados rodean el bastión elevado del culto, con el Santuario del Gravewyrm en su cima.",
+      "mirrorBlurb": "Un país de cristal negro, bañado por la luna y envuelto en niebla, más allá de los espejos de Highwatch, donde el Valle de Cristal guarda los espíritus de fin de juego del reino y la Guardiana Nerissa custodia la Hondonada de Lumen.",
+      "mirrorGreeting": "El cristal conserva cada rostro que ha ahogado. Camina con cuidado por aquí y no mires demasiado tiempo el tuyo.",
+      "mirrorGreeter": "Guardiana Nerissa, la Hondonada de Lumen",
+      "mirrorPlaceNotes": "La Hondonada de Lumen es el corazón de la ciudad espejo, con la Corte del Espejo y sus gárgolas justo encima y la escalinata del Mirador cayendo por debajo; el Lago Espejo es agua negra e inmóvil, ceñida por el Prado de la Luna y las Piedras del Pesar; los Riscos Lóbregos y el Bosque Oscuro albergan los espíritus más pesados del valle; la Hondonada de la Bruja acoge a Morwen la Bruja de la Bruma, la Cornisa del Astrónomo su larga y fría vista, y el Cañón Negro serpentea hacia el este hasta el Espejo Sable.",
       "gladeTitle": "Un rincón tranquilo: la arboleda de Brightwood",
       "gladeBody": "No todas las historias del Valle tratan de los muertos. Al norte, una arboleda soleada llamada arboleda de Brightwood conserva su propio ritmo más amable, solo senderos silenciosos y luz moteada bajo las ramas. Es un contrapunto suave al rastro que sigues y merece verse cuando el camino te deje espacio para vagar."
     },
@@ -7831,7 +7835,7 @@ export const es: EnTranslations = {
       "q_deepdream_recipe": {
         "title": "Una receta para el sueño profundo",
         "text": "El bebedizo pide tres voces, {playerName}: dos sábanas blancas de los fantasmas de la pobreza que no poseen otra cosa, dos cuernos de los unicornios espirituales que pastan en la penumbra, y dos capuchas cortadas a los segadores que vigilan el cinturón. Tráemelos y te herviré un sueño con dientes.",
-        "completion": "Sábana, cuerno, capucha — los pobres, los radiantes, los pacientes. Al caldero le caes bien. Bébelo en un lugar blando, caminante: conocerás a quien llevas dentro.",
+        "completion": "Sábana, cuerno, capucha - los pobres, los radiantes, los pacientes. Al caldero le caes bien. Bébelo en un lugar blando, caminante: conocerás a quien llevas dentro.",
         "objectives": {
           "0": {
             "label": "Sábana Blanca"

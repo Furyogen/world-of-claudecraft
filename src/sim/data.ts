@@ -500,10 +500,10 @@ export function isDelvePos(x: number): boolean {
 }
 
 // ---------------------------------------------------------------------------
-// The shadow realm — the Deepdream Draught's solo Echo duel. Its slots sit in
+// The shadow realm - the Deepdream Draught's solo Echo duel. Its slots sit in
 // their own far-off band past every other one (delve rooms grow east from
 // DELVE_X_MIN by index*600; DREAM_X_MIN caps them so the bands can never
-// collide — indexes 0..2 fit with headroom). Flat ground + void rendering.
+// collide - indexes 0..2 fit with headroom). Flat ground + void rendering.
 // ---------------------------------------------------------------------------
 
 export const DREAM_X_MIN = 7000; // x at/after this = the shadow realm

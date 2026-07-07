@@ -196,7 +196,7 @@ function mirrorGlassMaterial(): THREE.Material {
   return mirrorGlassMat;
 }
 
-// A standing mirror — every Mirror World portal pad renders as one: a dark
+// A standing mirror - every Mirror World portal pad renders as one: a dark
 // ornate frame on a plinth around a polished metal oval, with the pad-tinted
 // door shimmer riding the returned `portal` mesh so the renderer's existing
 // portal animation path (spin + opacity pulse) breathes it for free. High

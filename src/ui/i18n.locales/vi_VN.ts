@@ -2768,11 +2768,11 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_what_the_glass_wants.text':
     'Ngươi đã thắng Tiếng Vọng của mình và ngỡ đó là thử thách chính mình, {playerName}. Không phải vậy. Ta chưng cất Mộng Sâu từ vải, sừng và mũ trùm, nhưng cái mà giấc mơ ngươi dựng gương đối mặt, cái bước vào mang gương mặt ngươi, cái đó ta không chưng. Nó rỉ vào, từ tấm kính đen nơi hẻm. Lũ tử thần chen chúc nơi cửa hẻm đặc quánh cùng thứ rỉ ấy; hạ tám tên và nhìn xem bóng chúng bò về hướng nào. Bấy giờ ta sẽ chỉ cho chính đôi mắt Nerissa nơi vết thương của bà thật sự đang rỉ máu.',
   'entities.quests.q_what_the_glass_wants.completion':
-    'Về phía đông bắc. Luôn về đông bắc, luôn hướng về Sable — ngươi thấy chứ? Tiếng Vọng của ngươi chẳng phải là NGƯƠI, lữ khách. Nó là một mảnh vỡ của bất cứ thứ gì trú ngụ sau cánh cửa ấy, khoác lấy hình phản chiếu gần nhất mà nó trộm được: của ngươi. Giấc mơ chỉ là chỗ mỏng nhất mà kẽ rỉ tìm ra; cái hẻm là chỗ rộng nhất. Hãy nói với Nerissa. Bà đã xứng đáng biết sự thật ấy, và ngươi cũng vậy.',
+    'Về phía đông bắc. Luôn về đông bắc, luôn hướng về Sable - ngươi thấy chứ? Tiếng Vọng của ngươi chẳng phải là NGƯƠI, lữ khách. Nó là một mảnh vỡ của bất cứ thứ gì trú ngụ sau cánh cửa ấy, khoác lấy hình phản chiếu gần nhất mà nó trộm được: của ngươi. Giấc mơ chỉ là chỗ mỏng nhất mà kẽ rỉ tìm ra; cái hẻm là chỗ rộng nhất. Hãy nói với Nerissa. Bà đã xứng đáng biết sự thật ấy, và ngươi cũng vậy.',
   'entities.quests.q_what_the_glass_wants.objectives.0.label': 'Tử Thần bị hạ nơi cửa hẻm',
   'entities.quests.q_relight_the_lumen_crown.title': 'Thắp Lại Vương Miện Lumen',
   'entities.quests.q_relight_the_lumen_crown.text':
-    'Những người gác đã có tên và con đê đang mỏng đi, nên giờ ta phải làm điều ta trì hoãn từ khi chết: thắp Vương Miện Lumen một lần cuối và ép Sable đóng lại từ phía này. Tia sáng thật cuối cùng của Vương Miện đã bị Hàm Nhá Nhem nuốt khi nó ngã xuống đầm — nên cái vật ấy mới rực sáng từ bên trong. Hãy cắt ánh sáng ấy ra khỏi nó, {playerName}. Tấm kính đen sẽ phái những Khối U Ám của nó đến chặn nghi lễ; hạ bốn tên. Đem cho ta một tia sáng chìm khi ta còn nhớ cách nâng giữ một tia. Phận sự cuối cùng của người gác là trở thành kẻ không còn cần phải gác nữa.',
+    'Những người gác đã có tên và con đê đang mỏng đi, nên giờ ta phải làm điều ta trì hoãn từ khi chết: thắp Vương Miện Lumen một lần cuối và ép Sable đóng lại từ phía này. Tia sáng thật cuối cùng của Vương Miện đã bị Hàm Nhá Nhem nuốt khi nó ngã xuống đầm - nên cái vật ấy mới rực sáng từ bên trong. Hãy cắt ánh sáng ấy ra khỏi nó, {playerName}. Tấm kính đen sẽ phái những Khối U Ám của nó đến chặn nghi lễ; hạ bốn tên. Đem cho ta một tia sáng chìm khi ta còn nhớ cách nâng giữ một tia. Phận sự cuối cùng của người gác là trở thành kẻ không còn cần phải gác nữa.',
   'entities.quests.q_relight_the_lumen_crown.completion':
     'Nó cháy. Sau ngần ấy bóng tối, nó vẫn nhận ra bàn tay ta. Nhìn xem: tấm kính lại CHÂN THẬT rồi; không còn nhịp đập sau làn nước, không còn linh hồn nào lạc giữa một thế giới và hình phản chiếu của nó. Và gánh nặng cuối cùng đã rời khỏi ta. Ta không tan biến, {playerName}; ta được THAY GÁC. Đây không phải là phá vỡ Sable, chỉ là gắng giữ nó; ta không đủ sức phá thứ đang chờ nơi ấy, và cũng chẳng dám. Nhưng giữ thêm được một thời đại nữa, thì là đã giữ. Khi một đoàn người can trường hơn ta rốt cuộc bước VÀO cánh cửa đó, họ sẽ thấy phía bên kia đã sẵn sàng. Hãy nói ở Highwatch rằng người gác của họ đã đứng canh đến cùng, rồi được thay phiên. Tấm kính sẽ nhớ ngươi. Hãy liệu mà cho nó một điều gì đó đáng để phản chiếu.',
   'entities.quests.q_relight_the_lumen_crown.objectives.0.label': 'Hàm Nhá Nhem bị hạ',
@@ -2797,20 +2797,20 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.mistwitch_morwen.name': 'Morwen Phù Thủy Sương Mù',
   'entities.npcs.mistwitch_morwen.title': 'Người Ủ Mộng của Thung Lũng',
   'entities.npcs.mistwitch_morwen.greeting':
-    'Sương mù khiến phần lớn các ngươi không ngủ được. Ta có thể ủ cho ngươi giấc ngủ còn lại — loại biết trả lời.',
+    'Sương mù khiến phần lớn các ngươi không ngủ được. Ta có thể ủ cho ngươi giấc ngủ còn lại - loại biết trả lời.',
   'entities.quests.q_deepdream_recipe.title': 'Công Thức Giấc Ngủ Sâu',
   'entities.quests.q_deepdream_recipe.text':
     'Thuốc cần ba giọng nói, {playerName}: hai tấm vải trắng từ những hồn ma bần cùng chẳng còn gì khác, hai chiếc sừng của kỳ lân linh hồn gặm cỏ trong màn tối, và hai chiếc mũ trùm cắt từ các tử thần canh vành đai. Mang về đây, ta sẽ nấu cho ngươi một giấc ngủ có răng.',
   'entities.quests.q_deepdream_recipe.completion':
-    'Vải, sừng, mũ trùm — kẻ nghèo, kẻ rạng rỡ, kẻ nhẫn nại. Cái vạc ưng ngươi đấy. Hãy uống ở nơi êm ái, lữ khách: ngươi sẽ gặp kẻ mình vẫn mang theo bấy lâu.',
+    'Vải, sừng, mũ trùm - kẻ nghèo, kẻ rạng rỡ, kẻ nhẫn nại. Cái vạc ưng ngươi đấy. Hãy uống ở nơi êm ái, lữ khách: ngươi sẽ gặp kẻ mình vẫn mang theo bấy lâu.',
   'entities.quests.q_deepdream_recipe.objectives.0.label': 'Vải Trắng',
   'entities.quests.q_deepdream_recipe.objectives.1.label': 'Sừng Linh Hồn',
   'entities.quests.q_deepdream_recipe.objectives.2.label': 'Mũ Trùm Đen',
   'entities.quests.q_face_your_echo.title': 'Đối Mặt Tiếng Vọng Của Ngươi',
   'entities.quests.q_face_your_echo.text':
-    'Uống dược, và giấc mơ sẽ dựng một tấm gương trước mặt ngươi — Tiếng Vọng của ngươi, từng vết sẹo và từng ngón nghề của ngươi ở phía bên kia. Hãy đánh bại chính mình, {playerName}, rồi mang gương mặt lúc ấy về cho ta.',
+    'Uống dược, và giấc mơ sẽ dựng một tấm gương trước mặt ngươi - Tiếng Vọng của ngươi, từng vết sẹo và từng ngón nghề của ngươi ở phía bên kia. Hãy đánh bại chính mình, {playerName}, rồi mang gương mặt lúc ấy về cho ta.',
   'entities.quests.q_face_your_echo.completion':
-    'Ngươi trở về, còn tấm gương thì không. Thứ nó để lại trong tay ngươi là của ngươi — giấc mơ chỉ trả cái giá đó một lần.',
+    'Ngươi trở về, còn tấm gương thì không. Thứ nó để lại trong tay ngươi là của ngươi - giấc mơ chỉ trả cái giá đó một lần.',
   'entities.quests.q_face_your_echo.objectives.0.label': 'Tiếng Vọng của ngươi bị đánh bại',
   'entities.items.white_sheet.name': 'Vải Trắng',
   'entities.items.spirit_horn.name': 'Sừng Linh Hồn',
@@ -4088,6 +4088,13 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
     'Dừng lại ở cổng. Vượt qua đám sậy kia, đầm lầy sẽ giết thay cho chúng ta.',
   'guide.worldPage.marshPlaceNotes':
     'Fenbridge canh giữ con đường khô ráo duy nhất. Prowler Reeds và Deepfen Shallows đầy thú đầm lầy và mudfin; Widow Thicket giăng kín mạng nhện dày đặc; Drowned Chapel và Troll Mounds chứa những hiểm họa cổ xưa hơn; Gravecaller Encampment là nơi giáo phái đào hầm ẩn náu, và Pháo Đài Chìm là trái tim hầm ngục của đầm lầy.',
+  'guide.worldPage.mirrorBlurb':
+    'Một xứ sở thủy tinh đen, tắm trong ánh trăng và phủ sương mù, nằm bên kia những tấm gương của Highwatch, nơi Thung Lũng Thủy Tinh gìn giữ các linh hồn cuối trò chơi của vương quốc và Người Giữ Nerissa cai quản Lũng Lumen.',
+  'guide.worldPage.mirrorGreeting':
+    'Tấm gương giữ lại mọi gương mặt mà nó đã nhấn chìm. Hãy bước khẽ nơi đây, và đừng nhìn quá lâu vào chính mình.',
+  'guide.worldPage.mirrorGreeter': 'Người Giữ Nerissa, Lũng Lumen',
+  'guide.worldPage.mirrorPlaceNotes':
+    'Lũng Lumen là trái tim của thị trấn gương, với Triều Đình Gương cùng những pho tượng gargoyle ngay phía trên và bậc thang Đài Ngắm đổ xuống bên dưới; Hồ Gương là làn nước đen tĩnh lặng, vây quanh bởi Đồng Trăng và Đá Sầu; Vách Đá U Ám và Rừng Tối ôm giữ những linh hồn nặng nề nhất của thung lũng; Lũng Phù Thủy che chở Morwen Phù Thủy Sương Mù, Gờ Đá Người Ngắm Sao giữ tầm nhìn dài và lạnh lẽo, còn Hẻm Núi Đen uốn lượn về đông tới Gương Sable.',
   'guide.worldPage.peaksBlurb':
     'Những rặng núi bị gió bào mòn và các hầm mỏ cũ vươn tới những hiểm họa lạnh giá, cao nhất của vương quốc, được trấn giữ bởi tiền đồn Highwatch.',
   'guide.worldPage.peaksGreeter': 'Đại Úy Thessaly, Highwatch',

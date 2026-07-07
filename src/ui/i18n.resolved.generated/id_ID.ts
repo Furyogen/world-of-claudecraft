@@ -1838,6 +1838,10 @@ export const id_ID: EnTranslations = {
       "valePlaceNotes": "Eastbrook adalah markas pertamamu. Wolf Run dan Boar Meadow adalah lahan berburu yang lembut; Mirror Lake adalah air tenang untuk memancing; Sableweb dan Copper Dig menyembunyikan laba-laba dan penggali yang rakus bijih; sebuah Bandit Camp dan Fallen Chapel menyimpan pekerjaan yang lebih kasar; Reliquary Hill menurun ke Collapsed Reliquary, delve pertama realm; dan Brightwood Glade adalah hutan kecil tenang yang dibasuh sinar matahari di utara.",
       "marshPlaceNotes": "Fenbridge menjaga satu-satunya jalan kering. Prowler Reeds dan Deepfen Shallows dipenuhi binatang rawa dan Mudfin; Widow Thicket dipintal tebal oleh jaring; Drowned Chapel dan Troll Mounds menyimpan bahaya yang lebih tua; Gravecaller Encampment adalah sarang kultus yang menggali masuk, dan Benteng Karam adalah jantung berinstans rawa ini.",
       "peaksPlaceNotes": "Highwatch menjaga tembok. Stalker Ridge dan Deeprock Burrows milik kucing punggung bukit dan penggali liang; Ogre Foothills dan Drogmar's War-Camp milik para bedebah bayaran; Stormcrag berderak oleh elemental dan Glimmermere bersinar di bawahnya; Wyrmcult Tents dan Revenant Fields mengelilingi dataran tinggi kultus, dengan Sanktum Gravewyrm di puncaknya.",
+      "mirrorBlurb": "Sebuah negeri kaca hitam yang disinari bulan dan diselubungi kabut di balik cermin-cermin Highwatch, tempat Lembah Kaca menyimpan roh-roh akhir permainan sang kerajaan dan Penjaga Nerissa menguasai Cekungan Lumen.",
+      "mirrorGreeting": "Kaca menyimpan setiap wajah yang telah ditenggelamkannya. Melangkahlah dengan lembut di sini, dan jangan terlalu lama menatap wajahmu sendiri.",
+      "mirrorGreeter": "Penjaga Nerissa, Cekungan Lumen",
+      "mirrorPlaceNotes": "Cekungan Lumen adalah jantung kota cermin, dengan Balai Cermin serta patung-patung gargoylnya tepat di atas dan tangga Sudut Pandang yang menurun di bawah; Danau Cermin adalah air hitam yang tenang, dikelilingi Padang Bulan dan Batu-Batu Duka; Tebing Suram dan Rimba Kelam menampung roh-roh terberat lembah ini; Cekungan Penyihir menaungi Morwen si Penyihir Kabut, Tepian Pengamat Bintang menyimpan pemandangannya yang panjang dan dingin, dan Ngarai Hitam berkelok ke timur menuju Cermin Sable.",
       "gladeTitle": "Sebuah sudut yang tenang: Brightwood Glade",
       "gladeBody": "Tidak setiap kisah di Lembah ini tentang yang mati. Di utara, sebuah hutan kecil yang dibasuh sinar matahari bernama Brightwood Glade menjaga iramanya sendiri yang lebih lembut, serba jalan setapak yang tenang dan cahaya berbintik di bawah dahan. Ia adalah penyeimbang lembut bagi jejak yang sedang kamu ikuti, dan layak dikunjungi saat jalan memberimu ruang untuk mengembara."
     },
@@ -6987,7 +6991,7 @@ export const id_ID: EnTranslations = {
       "mistwitch_morwen": {
         "name": "Morwen si Penyihir Kabut",
         "title": "Peramu Mimpi dari Lembah",
-        "greeting": "Kabut membuat kebanyakan kalian terjaga. Aku bisa meramu tidur yang satunya — yang menjawab balik."
+        "greeting": "Kabut membuat kebanyakan kalian terjaga. Aku bisa meramu tidur yang satunya - yang menjawab balik."
       },
       "gargoyle_sentinel_south": {
         "name": "Penjaga Gargoyle",
@@ -7831,7 +7835,7 @@ export const id_ID: EnTranslations = {
       "q_deepdream_recipe": {
         "title": "Resep Tidur Nyenyak",
         "text": "Ramuan ini butuh tiga suara, {playerName}: dua kain putih dari hantu kemiskinan yang tak punya apa-apa lagi, dua tanduk unicorn roh yang merumput dalam kelam, dan dua tudung yang dipotong dari para penuai penjaga sabuk. Bawakan, dan kuseduhkan tidur yang bertaring.",
-        "completion": "Kain, tanduk, tudung — si miskin, si bercahaya, si sabar. Kualinya menyukaimu. Minumlah di tempat yang empuk, pengembara: kau akan bertemu siapa yang selama ini kaubawa.",
+        "completion": "Kain, tanduk, tudung - si miskin, si bercahaya, si sabar. Kualinya menyukaimu. Minumlah di tempat yang empuk, pengembara: kau akan bertemu siapa yang selama ini kaubawa.",
         "objectives": {
           "0": {
             "label": "Kain Putih"
@@ -7846,8 +7850,8 @@ export const id_ID: EnTranslations = {
       },
       "q_face_your_echo": {
         "title": "Hadapi Gemamu",
-        "text": "Minum ramuannya dan mimpi akan menegakkan cermin di hadapanmu — Gemamu, tiap bekas luka dan tiap tipuanmu di sisi seberang. Kalahkan dirimu sendiri, {playerName}, dan bawakan aku wajahmu setelahnya.",
-        "completion": "Kau kembali, dan cerminnya tidak. Apa yang ia tinggalkan di tanganmu adalah milikmu — mimpi hanya membayar harga itu sekali.",
+        "text": "Minum ramuannya dan mimpi akan menegakkan cermin di hadapanmu - Gemamu, tiap bekas luka dan tiap tipuanmu di sisi seberang. Kalahkan dirimu sendiri, {playerName}, dan bawakan aku wajahmu setelahnya.",
+        "completion": "Kau kembali, dan cerminnya tidak. Apa yang ia tinggalkan di tanganmu adalah milikmu - mimpi hanya membayar harga itu sekali.",
         "objectives": {
           "0": {
             "label": "Gemamu dikalahkan"
@@ -7917,7 +7921,7 @@ export const id_ID: EnTranslations = {
       "q_what_the_glass_wants": {
         "title": "Yang Diinginkan Kaca",
         "text": "Kau mengalahkan Gemamu dan mengiranya ujian atas dirimu, {playerName}. Bukan. Aku menyuling Mimpi Dalam dari kain, tanduk, dan tudung, tapi hal yang di hadapannya mimpimu memasang cermin, sosok yang masuk mengenakan wajahmu, itu bukan aku yang menyuling. Ia merembes, dari kaca hitam di ngarai. Para pemanen yang memenuhi mulut ngarai kental oleh rembesan yang sama; tumbangkan delapan dan amati ke mana bayang mereka merayap. Lalu akan kutunjukkan pada mata Nerissa sendiri di mana lukanya benar-benar berdarah.",
-        "completion": "Ke timur laut. Selalu ke timur laut, selalu menuju Sable — kaulihat? Gemamu bukanlah DIRIMU, pengembara. Ia serpihan dari apa pun yang bersemayam di balik pintu itu, mengenakan pantulan terdekat yang bisa ia curi: milikmu. Mimpi hanyalah titik tertipis yang ditemukan rembesan itu; ngarai yang terlebar. Katakan pada Nerissa. Ia telah pantas atas kebenarannya, dan begitu pula kau.",
+        "completion": "Ke timur laut. Selalu ke timur laut, selalu menuju Sable - kaulihat? Gemamu bukanlah DIRIMU, pengembara. Ia serpihan dari apa pun yang bersemayam di balik pintu itu, mengenakan pantulan terdekat yang bisa ia curi: milikmu. Mimpi hanyalah titik tertipis yang ditemukan rembesan itu; ngarai yang terlebar. Katakan pada Nerissa. Ia telah pantas atas kebenarannya, dan begitu pula kau.",
         "objectives": {
           "0": {
             "label": "Pemanen ditumbangkan di mulut ngarai"
@@ -7926,7 +7930,7 @@ export const id_ID: EnTranslations = {
       },
       "q_relight_the_lumen_crown": {
         "title": "Nyalakan Kembali Mahkota Lumen",
-        "text": "Para penjaga sudah bernama dan tanggul menipis, maka kini harus kulakukan apa yang kutunda sejak aku mati: menyalakan Mahkota Lumen sekali terakhir dan menekan Sable menutup dari sisi ini. Percik sejati terakhir Mahkota ditelan Sang Rahang Senja saat ia jatuh ke telaga — itulah sebab benda itu bercahaya dari dalam. Potong keluar lagi cahayanya, {playerName}. Kaca hitam akan mengirim raksasa-raksasa suramnya untuk menghentikan ritus; tumbangkan empat. Bawakan aku percik yang tenggelam selagi aku masih ingat cara memegangnya. Tugas terakhir seorang penjaga adalah menjadi seseorang yang tak lagi perlu menjaga.",
+        "text": "Para penjaga sudah bernama dan tanggul menipis, maka kini harus kulakukan apa yang kutunda sejak aku mati: menyalakan Mahkota Lumen sekali terakhir dan menekan Sable menutup dari sisi ini. Percik sejati terakhir Mahkota ditelan Sang Rahang Senja saat ia jatuh ke telaga - itulah sebab benda itu bercahaya dari dalam. Potong keluar lagi cahayanya, {playerName}. Kaca hitam akan mengirim raksasa-raksasa suramnya untuk menghentikan ritus; tumbangkan empat. Bawakan aku percik yang tenggelam selagi aku masih ingat cara memegangnya. Tugas terakhir seorang penjaga adalah menjadi seseorang yang tak lagi perlu menjaga.",
         "completion": "Ia menyala. Setelah segala gelap ini, ia masih mengenali tanganku. Lihat: kaca itu SEJATI lagi; tak ada detak di balik air, tak ada jiwa yang tersesat antara dunia dan pantulannya. Dan beban itu akhirnya lepas dariku. Aku tak lenyap, {playerName}; aku DIGANTIKAN. Ini bukan mematahkan Sable, hanya menahannya; aku tak berdaya mematahkan apa yang menanti di sana, dan takkan berani. Tapi tertahan satu zaman lagi, ia tertahan. Ketika suatu rombongan yang lebih berani dari kita akhirnya masuk KE DALAM pintu itu, mereka akan mendapati sisi seberang telah siap. Katakan di Highwatch bahwa penjaga mereka berjaga sampai akhir, lalu digantikan. Kaca akan mengingatmu. Pastikan kauberi ia sesuatu yang layak dipantulkan.",
         "objectives": {
           "0": {

@@ -1838,6 +1838,10 @@ export const nl_NL: EnTranslations = {
       "valePlaceNotes": "Eastbrook is je eerste thuisbasis. Wolf Run en Boar Meadow zijn rustig jachtgebied; Mirror Lake is stil water om te vissen; het Sableweb en de Copper Dig verbergen spinnen en ertsbeluste delvers; een Bandit Camp en de Fallen Chapel bieden ruwer werk; Reliquary Hill leidt naar de Collapsed Reliquary, de eerste delve van het rijk; en Brightwood Glade is een kalm, zonovergoten bosje in het noorden.",
       "marshPlaceNotes": "Fenbridge bewaakt de enige droge weg. Het Prowler Reeds en de Deepfen Shallows wemelen van moerasbeesten en mudfins; het Widow Thicket zit dik onder het web; de Drowned Chapel en de Troll Mounds bergen oudere gevaren; het Gravecaller Encampment is de ingegraven sekte, en het Verzonken Bastion is het instantiehart van het moeras.",
       "peaksPlaceNotes": "Highwatch houdt de muur. Stalker Ridge en de Dieprots-Holen behoren tot bergkatten en gravers; de Ogre Foothills en Drogmar's War-Camp tot ingehuurde bruten; Stormcrag knettert van de elementalen en de Glimmermere gloeit eronder; de Wyrmcult Tents en Revenant Fields omsluiten het hoge terrein van de sekte, met het Grafwurm-Heiligdom op de top.",
+      "mirrorBlurb": "Een maanverlicht, in mist gehuld land van zwart glas voorbij de spiegels van Highwatch, waar de Glasvallei de eindspel-geesten van het rijk bewaart en Bewaarster Nerissa de Lumen-laagte behoedt.",
+      "mirrorGreeting": "Het glas bewaart elk gezicht dat het verdronken heeft. Loop hier zachtjes en kijk niet te lang in je eigen gezicht.",
+      "mirrorGreeter": "Bewaarster Nerissa, de Lumen-laagte",
+      "mirrorPlaceNotes": "De Lumen-laagte is het hart van de spiegelstad, met het Spiegelhof en zijn gargouille-beelden er net boven en de Uitkijktrap die eronder wegvalt; het Spiegelmeer is stil zwart water, omringd door de Maanweide en de Treursteen; de Sombere Kliffen en het Duisterwoud bergen de zwaarste geesten van de vallei; de Heksenlaagte herbergt Morwen de Mistheks, de Sterrenkijkersrichel haar lange koude uitzicht, en de Zwarte Kloof kronkelt oostwaarts naar de Sable-spiegel.",
       "gladeTitle": "Een rustig hoekje: Brightwood Glade",
       "gladeBody": "Niet elk verhaal in the Vale gaat over de doden. In het noorden houdt een zonovergoten bosje genaamd Brightwood Glade zijn eigen, zachtere ritme aan, met enkel stille paden en gevlekt licht onder het loof. Het is een zacht tegenwicht voor het spoor dat je volgt, en de moeite waard als de weg je ruimte geeft om te dwalen."
     },
@@ -6987,7 +6991,7 @@ export const nl_NL: EnTranslations = {
       "mistwitch_morwen": {
         "name": "Morwen de Mistheks",
         "title": "Droombrouwster van de Kom",
-        "greeting": "De mist houdt de meesten van jullie wakker. Ik kan je de andere slaap brouwen — de soort die terugpraat."
+        "greeting": "De mist houdt de meesten van jullie wakker. Ik kan je de andere slaap brouwen - de soort die terugpraat."
       },
       "gargoyle_sentinel_south": {
         "name": "Gargouillewachter",
@@ -7831,7 +7835,7 @@ export const nl_NL: EnTranslations = {
       "q_deepdream_recipe": {
         "title": "Een recept voor diepe slaap",
         "text": "Het brouwsel vraagt drie stemmen, {playerName}: twee witte lakens van de armoedegeesten die verder niets bezitten, twee hoorns van de geesteneenhoorns die in het duister grazen, en twee kappen gesneden van de maaiers die de gordel bewaken. Breng ze en ik brouw je een slaap met tanden.",
-        "completion": "Laken, hoorn, kap — de armen, de stralenden, de geduldigen. De ketel mag je. Drink het ergens zachts, zwerver: je zult ontmoeten wie je al die tijd meedroeg.",
+        "completion": "Laken, hoorn, kap - de armen, de stralenden, de geduldigen. De ketel mag je. Drink het ergens zachts, zwerver: je zult ontmoeten wie je al die tijd meedroeg.",
         "objectives": {
           "0": {
             "label": "Wit Laken"
@@ -7846,8 +7850,8 @@ export const nl_NL: EnTranslations = {
       },
       "q_face_your_echo": {
         "title": "Zie je Echo onder ogen",
-        "text": "Drink de drank en de droom zet een spiegel voor je neer — jouw Echo, elk litteken en elke truc van jou aan de andere kant. Versla wat je bent, {playerName}, en breng me je gezicht daarna.",
-        "completion": "Jij kwam terug, en de spiegel niet. Wat hij in je hand achterliet is van jou — de droom betaalt die prijs maar één keer.",
+        "text": "Drink de drank en de droom zet een spiegel voor je neer - jouw Echo, elk litteken en elke truc van jou aan de andere kant. Versla wat je bent, {playerName}, en breng me je gezicht daarna.",
+        "completion": "Jij kwam terug, en de spiegel niet. Wat hij in je hand achterliet is van jou - de droom betaalt die prijs maar één keer.",
         "objectives": {
           "0": {
             "label": "Je Echo verslagen"
@@ -7917,7 +7921,7 @@ export const nl_NL: EnTranslations = {
       "q_what_the_glass_wants": {
         "title": "Wat het Glas Wil",
         "text": "Je versloeg je Echo en hield het voor een beproeving van jezelf, {playerName}. Dat was het niet. Ik brouw de Diepdroom uit laken, hoorn en kap, maar datgene waartegen je droom een spiegel zette, het ding dat binnenkwam met jouw gezicht, dat brouw ik niet. Het sijpelt binnen, uit het zwarte glas van de canyon. De maaiers die de canyonmond verdringen zijn dik van datzelfde lek; vel er acht en zie waarheen hun schaduwen kruipen. Dan toon ik Nerissa's eigen ogen waar haar wond werkelijk bloedt.",
-        "completion": "Naar het noordoosten. Altijd naar het noordoosten, altijd richting het Sabel — zag je het? Je Echo was niet JIJ, reiziger. Het was een scherf van wat er ook achter die poort huist, gekleed in het dichtstbijzijnde spiegelbeeld dat het kon stelen: het jouwe. De droom is slechts de dunste plek die het lek gevonden heeft; de canyon de breedste. Zeg het Nerissa. Zij heeft de waarheid ervan verdiend, en jij ook.",
+        "completion": "Naar het noordoosten. Altijd naar het noordoosten, altijd richting het Sabel - zag je het? Je Echo was niet JIJ, reiziger. Het was een scherf van wat er ook achter die poort huist, gekleed in het dichtstbijzijnde spiegelbeeld dat het kon stelen: het jouwe. De droom is slechts de dunste plek die het lek gevonden heeft; de canyon de breedste. Zeg het Nerissa. Zij heeft de waarheid ervan verdiend, en jij ook.",
         "objectives": {
           "0": {
             "label": "Maaier geveld bij de canyonmond"
@@ -7926,7 +7930,7 @@ export const nl_NL: EnTranslations = {
       },
       "q_relight_the_lumen_crown": {
         "title": "De Lumenkroon Herontsteken",
-        "text": "De wachters hebben een naam en de dam wordt dunner, dus moet ik nu doen wat ik sinds mijn dood heb uitgesteld: de Lumenkroon een laatste maal ontsteken en het Sabel van deze zijde dichtdrukken. De laatste ware vonk van de Kroon werd door de Schemermuil verzwolgen toen die in de poel viel — daarom gloeit het ding van binnen. Snijd het licht er weer uit, {playerName}. Het zwarte glas zal zijn somberkolossen sturen om het ritueel te stuiten; vel er vier. Breng me een verdronken vonk zolang ik nog weet hoe je er een vasthoudt. De laatste plicht van een hoeder is iemand te worden die niet meer hoeven hoeft.",
+        "text": "De wachters hebben een naam en de dam wordt dunner, dus moet ik nu doen wat ik sinds mijn dood heb uitgesteld: de Lumenkroon een laatste maal ontsteken en het Sabel van deze zijde dichtdrukken. De laatste ware vonk van de Kroon werd door de Schemermuil verzwolgen toen die in de poel viel - daarom gloeit het ding van binnen. Snijd het licht er weer uit, {playerName}. Het zwarte glas zal zijn somberkolossen sturen om het ritueel te stuiten; vel er vier. Breng me een verdronken vonk zolang ik nog weet hoe je er een vasthoudt. De laatste plicht van een hoeder is iemand te worden die niet meer hoeven hoeft.",
         "completion": "Ze brandt. Na al dit duister kent ze nog mijn hand. Kijk: het glas is weer WAAR; geen hartslag achter het water, geen ziel verloren tussen een wereld en haar spiegelbeeld. En het gewicht is eindelijk van me af. Ik verga niet, {playerName}; ik word AFGELOST. Dit is geen breken van het Sabel, slechts een houden; ik heb niet de kracht te breken wat daar wacht, en zou het niet wagen. Maar een tijdperk langer gehouden, is het gehouden. Wanneer een dapperder gezelschap dan wij eindelijk die poort BINNENgaat, zullen ze de overzijde gereed vinden. Zeg in Highwatch dat hun hoedster de wacht tot het einde hield, en toen werd afgelost. Het glas zal je heugen. Zorg dat je het iets geeft dat het spiegelen waard is.",
         "objectives": {
           "0": {

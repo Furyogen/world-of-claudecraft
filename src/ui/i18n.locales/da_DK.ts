@@ -2725,11 +2725,11 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_what_the_glass_wants.text':
     'Du besejrede din Ekko og troede, det var en prøve på dig selv, {playerName}. Det var det ikke. Jeg brygger Dybdrømmen af lagen, horn og hætte, men det, din drøm rejste et spejl imod, tingen der kom ind i dit ansigt, det brygger jeg ikke. Det siver ind fra kløftens sorte glas. Høstmændene, der trænges ved kløftmundingen, er tætte af samme lækage; fæld otte og se, hvorhen deres skygger kryber. Så viser jeg Nerissas egne øjne, hvor hendes sår i sandhed bløder.',
   'entities.quests.q_what_the_glass_wants.completion':
-    'Mod nordøst. Altid mod nordøst, altid mod Sablen — så du det? Din Ekko var ikke DIG, vandrer. Den var et skår af hvad end der bor bag den port, klædt i det nærmeste spejlbillede, den kunne stjæle: dit. Drømmen er blot det tyndeste sted, lækagen har fundet; kløften det bredeste. Sig det til Nerissa. Hun har fortjent sandheden om det, og det har du med.',
+    'Mod nordøst. Altid mod nordøst, altid mod Sablen - så du det? Din Ekko var ikke DIG, vandrer. Den var et skår af hvad end der bor bag den port, klædt i det nærmeste spejlbillede, den kunne stjæle: dit. Drømmen er blot det tyndeste sted, lækagen har fundet; kløften det bredeste. Sig det til Nerissa. Hun har fortjent sandheden om det, og det har du med.',
   'entities.quests.q_what_the_glass_wants.objectives.0.label': 'Høstmand fældet ved kløftmundingen',
   'entities.quests.q_relight_the_lumen_crown.title': 'Genantænd Lumenkronen',
   'entities.quests.q_relight_the_lumen_crown.text':
-    'Vogterne har navn, og dæmningen tyndes, så nu må jeg gøre det, jeg har udskudt, siden jeg døde: tænde Lumenkronen en sidste gang og presse Sablen lukket fra denne side. Kronens sidste sande gnist blev slugt af Tusmørkegabet, da det faldt i dammen — derfor gløder tingen indefra. Skær lyset ud af det igen, {playerName}. Det sorte glas sender sine dysterkolosser for at standse riten; fæld fire. Bring mig en druknet gnist, mens jeg endnu husker, hvordan man holder en. En vogters sidste pligt er at blive en, der ikke længere behøver at vogte.',
+    'Vogterne har navn, og dæmningen tyndes, så nu må jeg gøre det, jeg har udskudt, siden jeg døde: tænde Lumenkronen en sidste gang og presse Sablen lukket fra denne side. Kronens sidste sande gnist blev slugt af Tusmørkegabet, da det faldt i dammen - derfor gløder tingen indefra. Skær lyset ud af det igen, {playerName}. Det sorte glas sender sine dysterkolosser for at standse riten; fæld fire. Bring mig en druknet gnist, mens jeg endnu husker, hvordan man holder en. En vogters sidste pligt er at blive en, der ikke længere behøver at vogte.',
   'entities.quests.q_relight_the_lumen_crown.completion':
     'Den brænder. Efter alt dette mørke kender den endnu min hånd. Se: glasset er SANDT igen; ingen hjerteslag bag vandet, ingen sjæl fortabt mellem en verden og dens spejlbillede. Og vægten har endelig forladt mig. Jeg svinder ikke, {playerName}; jeg bliver AFLØST. Dette er ikke at bryde Sablen, kun at holde den; jeg har ikke kraften til at bryde det, der venter dér, og jeg ville ikke vove det. Men holdt en tidsalder til, er den holdt. Når et modigere følge end vi til sidst går IND gennem den port, skal de finde den anden side rede. Sig i Highwatch, at deres vogter holdt vagten til det sidste og så blev afløst. Glasset vil huske dig. Sørg for at give det noget værd at spejle.',
   'entities.quests.q_relight_the_lumen_crown.objectives.0.label': 'Tusmørkegabet fældet',
@@ -2751,20 +2751,20 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.mistwitch_morwen.name': 'Morwen Tågeheksen',
   'entities.npcs.mistwitch_morwen.title': 'Lavningens drømmebrygger',
   'entities.npcs.mistwitch_morwen.greeting':
-    'Tågen holder de fleste af jer vågne. Jeg kan brygge dig den anden slags søvn — den slags, der svarer igen.',
+    'Tågen holder de fleste af jer vågne. Jeg kan brygge dig den anden slags søvn - den slags, der svarer igen.',
   'entities.quests.q_deepdream_recipe.title': 'En opskrift på dyb søvn',
   'entities.quests.q_deepdream_recipe.text':
     'Brygget kræver tre stemmer, {playerName}: to hvide lagner fra fattigdomsspøgelserne, der intet andet ejer, to horn fra åndeenhjørningerne, der græsser i mørket, og to hætter skåret af høstmændene, der vogter bæltet. Bring dem, så brygger jeg dig en søvn med tænder.',
   'entities.quests.q_deepdream_recipe.completion':
-    'Lagen, horn, hætte — de fattige, de strålende, de tålmodige. Kedlen kan lide dig. Drik det et blødt sted, vandringsmand: du vil møde den, du har båret på.',
+    'Lagen, horn, hætte - de fattige, de strålende, de tålmodige. Kedlen kan lide dig. Drik det et blødt sted, vandringsmand: du vil møde den, du har båret på.',
   'entities.quests.q_deepdream_recipe.objectives.0.label': 'Hvidt Lagen',
   'entities.quests.q_deepdream_recipe.objectives.1.label': 'Åndehorn',
   'entities.quests.q_deepdream_recipe.objectives.2.label': 'Sort Hætte',
   'entities.quests.q_face_your_echo.title': 'Mød dit Ekko',
   'entities.quests.q_face_your_echo.text':
-    'Drik brygget, og drømmen stiller et spejl foran dig — dit Ekko, hvert ar og hvert af dine tricks på den anden side. Besejr det, du er, {playerName}, og bring mig dit ansigt bagefter.',
+    'Drik brygget, og drømmen stiller et spejl foran dig - dit Ekko, hvert ar og hvert af dine tricks på den anden side. Besejr det, du er, {playerName}, og bring mig dit ansigt bagefter.',
   'entities.quests.q_face_your_echo.completion':
-    'Du kom tilbage, og det gjorde spejlet ikke. Hvad det efterlod i din hånd, er dit — drømmen betaler kun den pris én gang.',
+    'Du kom tilbage, og det gjorde spejlet ikke. Hvad det efterlod i din hånd, er dit - drømmen betaler kun den pris én gang.',
   'entities.quests.q_face_your_echo.objectives.0.label': 'Dit Ekko besejret',
   'entities.items.white_sheet.name': 'Hvidt Lagen',
   'entities.items.spirit_horn.name': 'Åndehorn',
@@ -4031,6 +4031,13 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'guide.worldPage.marshGreeting': 'Hold ved porten. Bag de siv klarer mosen drabet for os.',
   'guide.worldPage.marshPlaceNotes':
     'Fenbridge bevogter den eneste tørre vej. Prowler Reeds og Deepfen Shallows myldrer med mosebæster og mudfiner; Widow Thicket er spundet tæt med spind; Drowned Chapel og Troll Mounds rummer ældre farer; Gravecaller Encampment er kulten gravet ind, og Den Sunkne Bastion er mosens instans-hjerte.',
+  'guide.worldPage.mirrorBlurb':
+    'Et månelyst, tågesvøbt land af sort glas hinsides Highwatchs spejle, hvor Glasdalen vogter rigets slutspilsånder, og Vogterske Nerissa holder Lumen-lavningen.',
+  'guide.worldPage.mirrorGreeting':
+    'Glasset beholder hvert ansigt, det har druknet. Gå varsomt her, og se ikke for længe ind i dit eget.',
+  'guide.worldPage.mirrorGreeter': 'Vogterske Nerissa, Lumen-lavningen',
+  'guide.worldPage.mirrorPlaceNotes':
+    'Lumen-lavningen er spejlbyens hjerte, med Spejlhoffet og dets gargilstatuer lige ovenfor og Udkigstrappen, der falder væk nedenunder; Spejlsøen er stille sort vand, omkranset af Måneengen og Sorgstenene; Dysterklipperne og Mørkeskoven rummer dalens tungeste ånder; Heksens Lavning huser Morwen Tågeheksen, Stjernekiggerens Afsats sit lange kolde udsyn, og Den Sorte Kløft snor sig østpå til Sable-spejlet.',
   'guide.worldPage.peaksBlurb':
     'Vindskurede rygge og gamle minegange, der klatrer mod rigets koldeste og højeste farer, holdt af forposten Highwatch.',
   'guide.worldPage.peaksGreeter': 'Kaptajn Thessaly, Highwatch',

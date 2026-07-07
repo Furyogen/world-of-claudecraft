@@ -1282,7 +1282,7 @@ export const GUIDE_ZONES: GuideZoneInfo[] = [
       "Wyrmcult Tents",
       "Revenant Fields",
       "Gravewyrm Sanctum",
-      "The Tidegate"
+      "The Mirrorgate"
     ],
     "welcome": "Captain Thessaly holds the wall at Highwatch — barely."
   },
@@ -1467,6 +1467,26 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "model": "mob_wolf",
         "tint": "#8c8270",
         "still": "/guide-stills/mob_wolf__8c8270.webp"
+      },
+      {
+        "name": "Palefang Stalker",
+        "min": 15,
+        "max": 15,
+        "rare": false,
+        "templateId": "voidfang_stalker",
+        "model": "mob_voidfang",
+        "tint": "#9aa0b0",
+        "still": "/guide-stills/mob_voidfang__9aa0b0.webp"
+      },
+      {
+        "name": "Spirit Unicorn",
+        "min": 15,
+        "max": 16,
+        "rare": false,
+        "templateId": "spirit_unicorn",
+        "model": "mob_unicorn",
+        "tint": "#d8e8ff",
+        "still": "/guide-stills/mob_unicorn__d8e8ff.webp"
       }
     ]
   },
@@ -1657,6 +1677,16 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "model": "mob_ogre",
         "tint": "#9e7b53",
         "still": "/guide-stills/mob_ogre__9e7b53.webp"
+      },
+      {
+        "name": "Gloomhulk",
+        "min": 16,
+        "max": 17,
+        "rare": false,
+        "templateId": "gloomhulk",
+        "model": "mob_gloomhulk",
+        "tint": "#3a3648",
+        "still": "/guide-stills/mob_gloomhulk__3a3648.webp"
       }
     ]
   },
@@ -1692,6 +1722,46 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "model": "skel_minion",
         "tint": "#6c8f8a",
         "still": "/guide-stills/skel_minion__6c8f8a.webp"
+      },
+      {
+        "name": "Mirrorbound Sentry",
+        "min": 15,
+        "max": 16,
+        "rare": false,
+        "templateId": "mirrorbound_sentry",
+        "model": "mob_sentry",
+        "tint": "#9aa0b0",
+        "still": "/guide-stills/mob_sentry__9aa0b0.webp"
+      },
+      {
+        "name": "Poverty Ghost",
+        "min": 15,
+        "max": 15,
+        "rare": false,
+        "templateId": "poverty_ghost",
+        "model": "mob_ghost",
+        "tint": "#e8e8f2",
+        "still": "/guide-stills/mob_ghost__e8e8f2.webp"
+      },
+      {
+        "name": "Reaper",
+        "min": 15,
+        "max": 16,
+        "rare": false,
+        "templateId": "hooded_reaper",
+        "model": "mob_reaper",
+        "tint": "#1a1622",
+        "still": "/guide-stills/mob_reaper__1a1622.webp"
+      },
+      {
+        "name": "Mistshade Lurker",
+        "min": 16,
+        "max": 17,
+        "rare": false,
+        "templateId": "mistshade_lurker",
+        "model": "mob_mistshade",
+        "tint": "#3c4452",
+        "still": "/guide-stills/mob_mistshade__3c4452.webp"
       },
       {
         "name": "Boneclad Revenant",
@@ -2038,5 +2108,51 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     "height": 2.4,
     "hover": 0.25,
     "tintStrength": 0.2
+  },
+  "mob_ghost": {
+    "url": "models/creatures/poverty_ghost.glb",
+    "idle": "Idle",
+    "height": 3.3,
+    "hover": 0.25,
+    "tintStrength": 0.2
+  },
+  "mob_unicorn": {
+    "url": "models/creatures/spirit_unicorn.glb",
+    "idle": "Walk",
+    "height": 2.6,
+    "yaw": 1.5707963267948966,
+    "tintStrength": 0.15
+  },
+  "mob_reaper": {
+    "url": "models/creatures/hooded_reaper.glb",
+    "idle": "Idle",
+    "height": 2.85,
+    "tintStrength": 0.2
+  },
+  "mob_mistshade": {
+    "url": "models/creatures/mistshade_lurker.glb",
+    "idle": "Idle",
+    "height": 3.3,
+    "hover": 0.25,
+    "tintStrength": 0.2
+  },
+  "mob_gloomhulk": {
+    "url": "models/creatures/gloomhulk.glb",
+    "idle": "Idle",
+    "height": 2.9,
+    "tintStrength": 0.2
+  },
+  "mob_sentry": {
+    "url": "models/creatures/mirrorbound_sentry.glb",
+    "idle": "Idle",
+    "height": 2.75,
+    "tintStrength": 0.15
+  },
+  "mob_voidfang": {
+    "url": "models/creatures/voidfang_stalker.glb",
+    "idle": "Walk",
+    "height": 1.7,
+    "yaw": 1.5707963267948966,
+    "tintStrength": 0.12
   }
 };

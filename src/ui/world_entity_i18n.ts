@@ -97,7 +97,7 @@ const MOB_IDS = [
   // Thornpeak Heights world boss + its summoned adds
   'thunzharr_waking_peak',
   'thunzharr_stormling',
-  // The Mirror World (zone 4) — the belt beasts + the shadow-realm Echo
+  // The Mirror World (zone 4) - the belt beasts + the shadow-realm Echo
   'spirit_unicorn',
   'hooded_reaper',
   'mistshade_lurker',
@@ -137,7 +137,7 @@ const NPC_IDS = [
   'spirit_healer', // the graveyard angel (spawned at every graveyard + dungeon entry)
   'keeper_nerissa', // Mirror World, the Lumen Crown
   'veilwright_ollo', // Mirror World, the Veiled Market vendor
-  'mistwitch_morwen', // Mirror World, the Witch's Hollow — Deepdream chain
+  'mistwitch_morwen', // Mirror World, the Witch's Hollow - Deepdream chain
   'gargoyle_sentinel_south', // the three mirror-guardians (bow or wake)
   'gargoyle_sentinel_west',
   'gargoyle_sentinel_north',
@@ -223,13 +223,13 @@ const QUEST_IDS = [
   'q_mogger',
   'q_archetype_acceptance',
   'q_prof_make_amends',
-  // The Mirror World (zone 4) — the Deepdream chain
+  // The Mirror World (zone 4) - the Deepdream chain
   'q_deepdream_recipe',
   'q_face_your_echo',
   'q_gargoyle_south',
   'q_gargoyle_west',
   'q_gargoyle_north',
-  // The Keeper's Vigil — Nerissa's Lumen Crown arc
+  // The Keeper's Vigil - Nerissa's Lumen Crown arc
   'q_the_failing_radiance',
   'q_what_the_poor_keep',
   'q_the_wardens_names',

@@ -3151,22 +3151,22 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.dread_sentinel_c.name': '戦慄の番人',
   'entities.npcs.dread_sentinel_c.title': '仄暗い鏡の見守り手',
   'entities.npcs.dread_sentinel_c.greeting':
-    '引き返せ。黒硝子は生者のためのものではない——我らのためでも、ついぞなかった。',
+    '引き返せ。黒硝子は生者のためのものではない--我らのためでも、ついぞなかった。',
   'entities.quests.q_gargoyle_south.title': '見守り手の通行料',
   'entities.quests.q_gargoyle_south.text':
-    '揺らめきがお前の目の奥で言葉になる——死神どもがわが硝子に群がっている、{playerName}。間引け、さればHighwatchへの道はお前のものだ。',
+    '揺らめきがお前の目の奥で言葉になる--死神どもがわが硝子に群がっている、{playerName}。間引け、さればHighwatchへの道はお前のものだ。',
   'entities.quests.q_gargoyle_south.completion':
     '石が一度、満ち足りて鳴る。その後ろで、鏡が、ようやく放たれた抑えた息のように澄んでいく。',
   'entities.quests.q_gargoyle_south.objectives.0.label': '死神を討伐',
   'entities.quests.q_gargoyle_west.title': '敷布の通行料',
   'entities.quests.q_gargoyle_west.text':
-    '揺らめきがお前の目の奥で言葉になる——哀れな死者から白い敷布を四枚持ってこい、{playerName}。布で払う者にEastbrookへの道が開かれる。',
+    '揺らめきがお前の目の奥で言葉になる--哀れな死者から白い敷布を四枚持ってこい、{playerName}。布で払う者にEastbrookへの道が開かれる。',
   'entities.quests.q_gargoyle_west.completion':
     '敷布が石に沈み、消える。その後ろの鏡が光とともに目覚める。',
   'entities.quests.q_gargoyle_west.objectives.0.label': '白い敷布',
   'entities.quests.q_gargoyle_north.title': '刈られた輝き',
   'entities.quests.q_gargoyle_north.text':
-    '揺らめきがお前の目の奥で言葉になる——精霊の群れは硝子には眩しすぎる、{playerName}。五体を間引け、さればFenbridgeは一歩の先だ。',
+    '揺らめきがお前の目の奥で言葉になる--精霊の群れは硝子には眩しすぎる、{playerName}。五体を間引け、さればFenbridgeは一歩の先だ。',
   'entities.quests.q_gargoyle_north.completion':
     '石がお前のこぼした光を飲む。その後ろの鏡が眼のように開く。',
   'entities.quests.q_gargoyle_north.objectives.0.label': '精霊ユニコーンを討伐',
@@ -3203,11 +3203,11 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_what_the_glass_wants.text':
     'あなたは己のエコーを打ち破り、それを自らの試練だと思った、{playerName}。そうではない。わたしは経帷子と角と頭巾から深き夢を醸すが、あなたの夢が鏡を突きつけた相手、あなたの顔をまとって入り込んだあれは、わたしが醸したものではない。あれは峡谷の黒硝子から滲み込むのだ。峡谷の口にひしめく死神たちは、同じ滲みで濃くなっている。八体を討ち、その影がどちらへ這うかを見よ。さらばわたしは、ネリッサ自身の目に、彼女の傷がまことにどこで血を流しているかを示そう。',
   'entities.quests.q_what_the_glass_wants.completion':
-    '北東へ。つねに北東へ、つねに黒貂の鏡の方へ——見たか? あなたのエコーはあなたではなかった、旅の者よ。あれはあの扉の奥に棲む何かの欠片、盗みうるかぎり最も近い映し身、すなわちあなたの姿をまとっていた。夢とは、その滲みが見つけた最も薄い場所にすぎぬ。峡谷こそが最も広い。ネリッサに伝えよ。彼女はその真実を受け取るに値する、そしてあなたもだ。',
+    '北東へ。つねに北東へ、つねに黒貂の鏡の方へ--見たか? あなたのエコーはあなたではなかった、旅の者よ。あれはあの扉の奥に棲む何かの欠片、盗みうるかぎり最も近い映し身、すなわちあなたの姿をまとっていた。夢とは、その滲みが見つけた最も薄い場所にすぎぬ。峡谷こそが最も広い。ネリッサに伝えよ。彼女はその真実を受け取るに値する、そしてあなたもだ。',
   'entities.quests.q_what_the_glass_wants.objectives.0.label': '峡谷の口で死神を討つ',
   'entities.quests.q_relight_the_lumen_crown.title': 'ルーメンの冠を再び灯せ',
   'entities.quests.q_relight_the_lumen_crown.text':
-    '守番たちには名が戻り、堤道は薄れゆく。ゆえに今こそ、死んで以来先延ばしにしてきたことをせねば——ルーメンの冠を最後にもう一度灯し、黒貂の鏡をこちら側から押し閉じるのだ。冠の最後のまことの火花は、黄昏の顎が淵に落ちたとき呑み込まれた——だからあれは内から光る。その光をふたたび切り出せ、{playerName}。黒硝子は儀式を止めんと陰鬱の巨躯どもを送ってくる。四体を倒せ。わたしがまだ火花の持ち方を憶えているうちに、沈んだ火花を持ってきておくれ。守り手の最後の務めは、もはや守る必要のない者になることだ。',
+    '守番たちには名が戻り、堤道は薄れゆく。ゆえに今こそ、死んで以来先延ばしにしてきたことをせねば--ルーメンの冠を最後にもう一度灯し、黒貂の鏡をこちら側から押し閉じるのだ。冠の最後のまことの火花は、黄昏の顎が淵に落ちたとき呑み込まれた--だからあれは内から光る。その光をふたたび切り出せ、{playerName}。黒硝子は儀式を止めんと陰鬱の巨躯どもを送ってくる。四体を倒せ。わたしがまだ火花の持ち方を憶えているうちに、沈んだ火花を持ってきておくれ。守り手の最後の務めは、もはや守る必要のない者になることだ。',
   'entities.quests.q_relight_the_lumen_crown.completion':
     '燃えている。これほどの闇のあとでも、まだわたしの手を知っている。見よ――硝子はふたたびまことになった。水の奥に鼓動はなく、世界とその映しのあいだに失われた魂もない。そして重荷が、ついにわたしから降りた。消えるのではない、{playerName}――わたしは交代させてもらうのだ。これは黒貂の鏡を破ることではなく、ただ支えること。あそこで待つものを破る力はわたしにはなく、あえてするつもりもない。だがもう一時代支えられたなら、支えられたのだ。いつか我らより勇なる一団が、ついにあの扉の内へ踏み入るとき、向こう側は整っていよう。ハイウォッチで伝えてくれ――彼らの守り手は最後まで見張りに立ち、そして解き放たれたと。硝子はあなたを憶えている。映すに値するものを、それに与えることだ。',
   'entities.quests.q_relight_the_lumen_crown.objectives.0.label': '黄昏の顎を討つ',
@@ -3216,7 +3216,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.veilwright_ollo.name': '帳織りオロ',
   'entities.npcs.veilwright_ollo.title': '帳の市の商人',
   'entities.npcs.veilwright_ollo.greeting':
-    '死者の外套、瓶詰めのため息、正直な値——帳は与えてくれる。この台の品はみな、今や何も持たぬ者が置いていったもの。肝要なのは、死者が済ませたものと、なお握りしめているものを見分けることだ。取り違えれば、真夜中に露店へやって来る。悲しい話が聞きたければ、井戸の光のことを守番に問え。おれはただ外套を売るだけさ。',
+    '死者の外套、瓶詰めのため息、正直な値--帳は与えてくれる。この台の品はみな、今や何も持たぬ者が置いていったもの。肝要なのは、死者が済ませたものと、なお握りしめているものを見分けることだ。取り違えれば、真夜中に露店へやって来る。悲しい話が聞きたければ、井戸の光のことを守番に問え。おれはただ外套を売るだけさ。',
   'entities.npcs.gargoyle_sentinel_south.name': 'ガーゴイルの番人',
   'entities.npcs.gargoyle_sentinel_south.title': '鏡の守護者',
   'entities.npcs.gargoyle_sentinel_south.greeting': '石の眼が軋みながらこちらを向く。聞いている。',
@@ -3234,7 +3234,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_deepdream_recipe.text':
     '妙薬には三つの声がいる、{playerName}。それしか持たぬ貧しき亡霊から白い敷布を二枚、薄闇に草を食む精霊ユニコーンの角を二本、環帯を見張る死神から刈り取った頭巾を二つ。持ってくれば、牙のある眠りを醸してやろう。',
   'entities.quests.q_deepdream_recipe.completion':
-    '敷布、角、頭巾——貧しき者、輝く者、耐える者。釜はお前を気に入ったようだ。柔らかい場所で飲むといい、放浪者よ。ずっと背負ってきた者に会えるだろう。',
+    '敷布、角、頭巾--貧しき者、輝く者、耐える者。釜はお前を気に入ったようだ。柔らかい場所で飲むといい、放浪者よ。ずっと背負ってきた者に会えるだろう。',
   'entities.quests.q_deepdream_recipe.objectives.0.label': '白い敷布',
   'entities.quests.q_deepdream_recipe.objectives.1.label': '精霊の角',
   'entities.quests.q_deepdream_recipe.objectives.2.label': '黒い頭巾',
@@ -4921,6 +4921,13 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     '門で止まれ。あの葦の向こうでは、沼が我々の代わりに殺しをやってくれる。',
   'guide.worldPage.marshPlaceNotes':
     'フェンブリッジは唯一の乾いた道を守っています。プラウラー葦原とディープフェン浅瀬は沼地の獣とマッドフィンでひしめき、ウィドウの茂みは蜘蛛の糸が厚く張られ、水没の礼拝堂とトロルの塚にはより古き危険が潜み、グレイブコーラーの野営地にはカルトが立てこもり、沈んだ砦は沼地のインスタンス化された中心地です。',
+  'guide.worldPage.mirrorBlurb':
+    'ハイウォッチの鏡の向こうに広がるのは、月光に照らされ霧に包まれた黒硝子の国。ガラスの谷がレルム終盤の亡霊たちを抱え、守り手ネリッサがルーメンの窪地を治めています。',
+  'guide.worldPage.mirrorGreeting':
+    '硝子は、そこに溺れさせたすべての顔を留めている。ここでは静かに歩き、自らの映し身をあまり長く覗き込むな。',
+  'guide.worldPage.mirrorGreeter': '守り手ネリッサ、ルーメンの窪地',
+  'guide.worldPage.mirrorPlaceNotes':
+    'ルーメンの窪地は鏡の町の中心。すぐ上に鏡の宮廷とガーゴイル像が並び、下へはオーバールックの階段が落ちていきます。鏡の淵は静かな黒い水をたたえ、月草原と嘆きの石に囲まれ、グルームクラグと暗き森が谷でもっとも重い亡霊たちを抱えます。魔女の窪地には霧の魔女モルウェンが住み、スターゲイザーの棚は長く冷たい眺めを持ち、黒い峡谷は東へ蛇行して黒貂の鏡へと通じています。',
   'guide.worldPage.peaksGreeter': '隊長テサリー、ハイウォッチ',
   'guide.worldPage.peaksGreeting':
     'この壁は二百年立ち続けてきた。私が守る限り崩れはしないが、軋んでいる。',

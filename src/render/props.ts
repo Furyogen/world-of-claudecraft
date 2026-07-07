@@ -664,7 +664,7 @@ function buildDelveEmbers(
 // --- Mirror World gothic wash ------------------------------------------------
 // The Vale of Glass (biome 'mirror') reuses Eastbrook's village GLBs, so there we
 // clone each structure material and drain its colour toward a cold spectral slate
-// with a faint inner glow — otherwise a sunny cottage sits jarringly in the dense
+// with a faint inner glow - otherwise a sunny cottage sits jarringly in the dense
 // 0x100e1c murk. Clone-first guarantees zero cross-zone leak into the shared
 // prop-asset cache; the emissive keeps the silhouette legible in fog far=40.
 const MIRROR_STRUCT_TINT = new THREE.Color(0x3a4258);
@@ -883,7 +883,7 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
     g.position.set(w.x, ground(w.x, w.z) - 0.1, w.z);
     g.rotation.y = propRand(w.x, w.z, 1) * Math.PI;
     if (zoneBiomeAt(w.z) === 'mirror') {
-      // the Lumen Well — heart of the town: cold stone + a glowing cyan wellspring
+      // the Lumen Well - heart of the town: cold stone + a glowing cyan wellspring
       // disc at the mouth (emissive blooms on high-gfx) so it reads as a beacon.
       mirrorizeGroup(g, 0x0a2440, 0.45);
       const spring = new THREE.Mesh(
@@ -1292,7 +1292,7 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
 
   // ---- Mirror World dome glass: one translucent shell per PROPS.domes ring --
   // Movement is blocked by the collider ring (sim/colliders.ts); this is only
-  // the visual shell. The mist + crushed sky do most of the selling — the
+  // the visual shell. The mist + crushed sky do most of the selling - the
   // shell catches rim light so the glass reads from inside and outside.
   for (const dome of PROPS.domes ?? []) {
     const shell = new THREE.Mesh(

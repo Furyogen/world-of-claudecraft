@@ -270,7 +270,10 @@ describe('fiesta: offline practice vs bots', () => {
     for (const pid of botPids) expect(sim.entities.has(pid)).toBe(false);
   });
 
-  it('practice runs are deterministic (same score timeline on replay)', () => {
+  // Builds the Sim twice and replays ~600 bot-AI ticks per run; it sits right
+  // against vitest's 5s default under parallel CI contention (mirrors the widened
+  // parity.test.ts budget). Give it headroom so it is not a false red.
+  it('practice runs are deterministic (same score timeline on replay)', { timeout: 20000 }, () => {
     const run = () => {
       const sim = new Sim({ seed: 11, playerClass: 'mage' });
       sim.startFiestaPractice();

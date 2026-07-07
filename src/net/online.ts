@@ -1495,7 +1495,6 @@ export class ClientWorld implements IWorld {
         e.githubLogin = typeof w.dgl === 'string' ? w.dgl : undefined; // GitHub login
         e.scale = w.sc ?? 1;
         e.color = w.c ?? 0xffffff;
-        e.mirrorClass = typeof w.mc === 'string' ? (w.mc as PlayerClass) : undefined; // Deepdream Echo
         e.dungeonId = w.dgn ?? null;
         e.objectItemId = w.obj ?? null;
         e.guild = w.gd ?? '';

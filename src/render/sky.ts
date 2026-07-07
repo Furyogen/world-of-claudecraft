@@ -41,7 +41,7 @@ const HDRI_TUNE: Record<BiomeId, { gain: number; clamp: number }> = {
   desert: { gain: 0.55, clamp: 2.2 },
   volcano: { gain: 0.5, clamp: 2.0 },
   cave: { gain: 0.55, clamp: 2.0 },
-  // zero gain: the night capture carries a warm glow the void must not show —
+  // zero gain: the night capture carries a warm glow the void must not show -
   // the Mirror World sky is pure black; mist and dome lights carry the scene
   mirror: { gain: 0, clamp: 0.1 },
 };
@@ -126,7 +126,7 @@ const BACKDROP_Y_BIAS: Record<BiomeId, number> = {
 };
 
 // Photo-backdrop + anchor-sun brightness per biome. The Mirror World crushes
-// both: outside its glass there is only darkness — no bright horizon photo
+// both: outside its glass there is only darkness - no bright horizon photo
 // and no sun glow; far shapes survive only as near-black silhouettes.
 const BACKDROP_GAIN: Record<BiomeId, number> = {
   vale: 1,
@@ -383,7 +383,7 @@ const SKY_FRAG = /* glsl */ `
     float wash = fbm(p * 0.5 + 11.0);
     col += mix(AMETH, TEAL, smoothstep(0.35, 0.75, wash)) * 0.045 * smoothstep(0.25, 0.8, wash);
 
-    // (c) galactic band — the one reused mask (band glow + nebula veins + swell)
+    // (c) galactic band - the one reused mask (band glow + nebula veins + swell)
     vec3 nBand = normalize(vec3(0.35, 0.82, 0.45));
     float bd = abs(dot(dir, nBand));
     float band = 1.0 - smoothstep(0.0, 0.32, bd);
@@ -391,7 +391,7 @@ const SKY_FRAG = /* glsl */ `
     band *= 1.0 - 0.5 * smoothstep(0.06, 0.0, abs(bd - 0.02));     // great-rift lane
     col += mix(SILVER, AMETH, 0.6) * band * 0.20;
 
-    // (d) nebula — two fbm layers; a domain-mirrored echo breathes past the body,
+    // (d) nebula - two fbm layers; a domain-mirrored echo breathes past the body,
     // warm knots ignite only along the river
     float fA = fbm(p * 1.4 + vec2(uTime * 0.006, 0.0));
     float dens = smoothstep(0.40, 0.78, fA);
@@ -401,7 +401,7 @@ const SKY_FRAG = /* glsl */ `
     vec3 nebula = (colA + ROSE * veins * 0.7) * (0.45 + 0.55 * band);
     col += min(nebula, vec3(0.42)) * 0.9;
 
-    // (e) stars — three quantized hashed layers. radius is a small fraction of a
+    // (e) stars - three quantized hashed layers. radius is a small fraction of a
     // cell so each star is a crisp point, not a cell-filling blob.
     vec2 cell;
     // L1: faint dense depth field (no twinkle), rare warm/cobalt tint
@@ -422,12 +422,12 @@ const SKY_FRAG = /* glsl */ `
               + smoothstep(0.28, 0.0, abs(d2.y)) * smoothstep(0.04, 0.0, abs(d2.x))) * 0.5;
     }
     col += SILVER * present2 * star2 * (0.4 + 0.5 * bright) * tw;
-    // L3: band stars — unresolved density swells inside the river so the
+    // L3: band stars - unresolved density swells inside the river so the
     // galactic band reads as made of stars, not just painted glow
     float s3 = starCell(cellUV, vec2(560.0, 280.0), 0.72, 0.12, cell) * band;
     col += mix(SILVER, COBALT, 0.3) * s3 * (0.32 + 0.5 * hash12(cell + 8.4));
 
-    // (f) asteroid belt arc — its own great circle, a fine hashed stipple of
+    // (f) asteroid belt arc - its own great circle, a fine hashed stipple of
     // rock points (not full cells), lit toward the sun
     vec3 nBelt = normalize(vec3(-0.5, 0.6, 0.3));
     float belt = smoothstep(0.055, 0.0, abs(dot(dir, nBelt))) * step(0.0, dir.y);
@@ -435,7 +435,7 @@ const SKY_FRAG = /* glsl */ `
     float lit = 0.55 + 0.45 * max(dot(dir, uSunDir), 0.0);
     col += mix(SILVER, AMBER, 0.4) * belt * stip * 0.65 * lit;
 
-    // (g) meteor — one deterministic shooting star per ~4.5s epoch
+    // (g) meteor - one deterministic shooting star per ~4.5s epoch
     float epoch = floor(uTime / 4.5);
     float life = fract(uTime / 4.5);
     if (life < 0.2) {
@@ -450,11 +450,11 @@ const SKY_FRAG = /* glsl */ `
       col += SILVER * (trail * 0.6 + headGlow) * step(0.0, dir.y);
     }
 
-    // (h) the galactic heart — a warm luminous core sitting LOW on the horizon
+    // (h) the galactic heart - a warm luminous core sitting LOW on the horizon
     // (the dream-world "sun" of the reference), placed on SUN_DIR's azimuth so it
     // blazes back off the Mirrormere. A blazing gold centre, a gold bloom, and a
     // broad rose aura that warms the surrounding galaxy toward it and cools away
-    // — the reference's warm-heart / cool-edges spread.
+    // - the reference's warm-heart / cool-edges spread.
     vec3 coreDir = normalize(vec3(uSunDir.x, 0.22, uSunDir.z));
     float cd = max(dot(dir, coreDir), 0.0);
     const vec3 CORE_HOT  = vec3(1.0, 0.96, 0.82); // gold-white heart
@@ -586,7 +586,7 @@ export function buildSky(lowGfx: boolean, sunDir: THREE.Vector3): SkyView {
     uSunGainB: { value: SUN_GLOW_GAIN[start.to] },
     // Alien-sky cross-fade weight, driven each frame from the mirror biome blend.
     uMirror: { value: mirrorWeight(start) },
-    // Shared seconds clock (ticked by the renderer) — twinkle / drift / meteors.
+    // Shared seconds clock (ticked by the renderer) - twinkle / drift / meteors.
     uTime: sharedUniforms.uTime,
   };
   const material = new THREE.ShaderMaterial({

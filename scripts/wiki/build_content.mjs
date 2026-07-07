@@ -29,6 +29,7 @@ const entrySource = `
   export { ZONE2_MOBS } from './src/sim/content/zone2.ts';
   export { ZONE3_MOBS } from './src/sim/content/zone3.ts';
   export { TEMPLE_MOBS } from './src/sim/content/temple.ts';
+  export { MIRROR_WORLD_MOBS } from './src/sim/content/mirror_world.ts';
   export { DELVE_COMPANIONS, DELVE_AFFIXES } from './src/sim/content/delves/index.ts';
   export { VISUALS, visualKeyFor } from './src/render/characters/manifest.ts';
 `;
@@ -61,6 +62,7 @@ const {
   ZONE2_MOBS,
   ZONE3_MOBS,
   TEMPLE_MOBS,
+  MIRROR_WORLD_MOBS,
   DELVE_LIST,
   NPCS,
   DELVE_COMPANIONS,
@@ -235,6 +237,7 @@ for (const [id, m] of Object.entries({
   ...ZONE2_MOBS,
   ...ZONE3_MOBS,
   ...TEMPLE_MOBS,
+  ...MIRROR_WORLD_MOBS,
 })) {
   if (m.elite || m.boss) continue;
   if (id.startsWith('warlock_')) continue; // summoned pets, not wild creatures

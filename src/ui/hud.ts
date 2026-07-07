@@ -5570,7 +5570,10 @@ export class Hud {
     const inDungeon = p.pos.x > DUNGEON_X_THRESHOLD;
     // The slumber fade covers the fall-asleep teleport; lift it as soon as the
     // dreamer is standing in the dream band (waking is handled by 'respawn').
-    if (isDreamPos(p.pos.x)) this.dreamOverlayEl?.classList.remove('active');
+    // guard the write: only touch classList when the fade is actually up, so this
+    // per-frame path stays write-elided like the rest of the frame update.
+    if (isDreamPos(p.pos.x) && this.dreamOverlayEl?.classList.contains('active'))
+      this.dreamOverlayEl.classList.remove('active');
     const currentZone = zoneAt(p.pos.z);
     if (mediumHud) {
       // zone transitions: banner + welcome hint when crossing into a new band.
@@ -7992,6 +7995,11 @@ export class Hud {
           this.dreamOverlayEl?.classList.add('active');
           audio.death(); // a soft, low tone reads as drifting under
           break;
+        case 'slumberEnd':
+          // The dream was denied (every slot busy): lift the sleep wash the
+          // draught raised so the player is not stranded behind a stuck overlay.
+          this.dreamOverlayEl?.classList.remove('active');
+          break;
         case 'castStart':
           break; // cast-loop SFX is spatial now (see playEventSfx)
         case 'castStop':
@@ -9039,7 +9047,7 @@ export class Hud {
       html += `<button type="button" class="qd-list-item" data-delve-board="1" aria-label="${esc(t('delveUi.board.openDelveAria', { name: npcName }))}"><span class="gold">${svgIcon('skull')}</span> ${esc(openLabel)}</button>`;
     }
     // Morwen brews a fresh Deepdream Draught on demand once her recipe quest is
-    // done — repeatable forever (the server re-validates parts + proximity).
+    // done - repeatable forever (the server re-validates parts + proximity).
     const canBrew =
       npc.templateId === 'mistwitch_morwen' && this.sim.questsDone.has('q_deepdream_recipe');
     if (canBrew) {
@@ -9091,7 +9099,10 @@ export class Hud {
       // The statue shimmers: swap the greeting copy in place, then re-render
       // so the newly-opened toll quest row appears under it.
       window.setTimeout(() => {
-        this.renderGossip(npc, t('questUi.dialog.gargoyleShimmer'));
+        // still-open guard: if the player closed the dialog (or opened another
+        // NPC) inside the 120ms window, do not reopen it and steal focus.
+        if (this.openGossipNpcId === npc.id && $('#quest-dialog').style.display === 'block')
+          this.renderGossip(npc, t('questUi.dialog.gargoyleShimmer'));
       }, 120);
     });
     el.querySelector('[data-gargoyle-wake]')?.addEventListener('click', () => {

@@ -584,7 +584,6 @@ function identityFields(e: Entity): Record<string, unknown> {
   if (e.objectItemId) out.obj = e.objectItemId;
   if (e.scale !== 1) out.sc = e.scale;
   if (e.color !== 0xffffff) out.c = e.color;
-  if (e.mirrorClass) out.mc = e.mirrorClass; // Deepdream Echo → wear this class model
   return out;
 }
 
@@ -2633,7 +2632,7 @@ export class GameServer {
         }
         break;
       case 'brew_draught':
-        // Morwen's repeatable Deepdream brew — fully validated in the sim
+        // Morwen's repeatable Deepdream brew - fully validated in the sim
         // (recipe quest done, witch proximity, 2/2/2 parts in bags).
         sim.brewDraught(pid);
         break;

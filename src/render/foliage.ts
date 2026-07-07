@@ -990,7 +990,7 @@ function buildTrees(
   for (const bucket of buckets.values()) {
     const { items } = bucket;
     // The Mirror World's trees are bare "ghost trees" (dead-glass wood, no
-    // canopy) — the leafy oak/pine look never fit the ghostly vale. Route BOTH
+    // canopy) - the leafy oak/pine look never fit the ghostly vale. Route BOTH
     // tree kinds there to the bare dead-tree model, and drop the ones on the
     // steep rim where the coarse terrain mesh chord sags and they'd float.
     const isMirrorTree = (d: Decoration): boolean =>

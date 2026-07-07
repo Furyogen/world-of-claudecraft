@@ -3817,12 +3817,12 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_what_the_glass_wants.text':
     "Hai vinto il tuo Eco e l'hai creduto una prova di te, {playerName}. Non lo era. Io distillo il Sogno Profondo da lenzuolo, corno e cappuccio, ma ciò contro cui il tuo sogno alzò uno specchio, la cosa entrata indossando il tuo volto, quella non la distillo io. Filtra dentro, dal vetro nero del canyon. I mietitori che affollano l'imbocco del canyon sono densi della stessa infiltrazione; abbattine otto e osserva verso dove strisciano le loro ombre. Allora mostrerò agli occhi stessi di Nerissa dove la sua ferita davvero sanguina.",
   'entities.quests.q_what_the_glass_wants.completion':
-    "A nordest. Sempre a nordest, sempre verso il Sable — l'hai visto? Il tuo Eco non eri TU, viandante. Era una scheggia di ciò che vive dietro quella porta, vestita col riflesso più vicino che poté rubare: il tuo. Il sogno è solo il punto più sottile che l'infiltrazione abbia trovato; il canyon il più largo. Dillo a Nerissa. Se n'è meritata la verità, e anche tu.",
+    "A nordest. Sempre a nordest, sempre verso il Sable - l'hai visto? Il tuo Eco non eri TU, viandante. Era una scheggia di ciò che vive dietro quella porta, vestita col riflesso più vicino che poté rubare: il tuo. Il sogno è solo il punto più sottile che l'infiltrazione abbia trovato; il canyon il più largo. Dillo a Nerissa. Se n'è meritata la verità, e anche tu.",
   'entities.quests.q_what_the_glass_wants.objectives.0.label':
     "Mietitore abbattuto all'imbocco del canyon",
   'entities.quests.q_relight_the_lumen_crown.title': 'Riaccendere la Corona di Lumen',
   'entities.quests.q_relight_the_lumen_crown.text':
-    "I guardiani hanno un nome e la strada s'assottiglia, dunque devo fare ora ciò che ho rimandato da quando morii: accendere la Corona di Lumen un'ultima volta e premere chiuso il Sable da questo lato. L'ultima vera scintilla della Corona la inghiottì le Fauci del Crepuscolo quando cadde nel laghetto — per questo la cosa brilla di dentro. Ritagliale di nuovo la luce, {playerName}. Il vetro nero manderà i suoi colossi tenebrosi a fermare il rito; abbattine quattro. Portami una scintilla annegata finché ricordo ancora come tenerne una. L'ultimo dovere d'un custode è divenire qualcuno che non ha più bisogno di custodire.",
+    "I guardiani hanno un nome e la strada s'assottiglia, dunque devo fare ora ciò che ho rimandato da quando morii: accendere la Corona di Lumen un'ultima volta e premere chiuso il Sable da questo lato. L'ultima vera scintilla della Corona la inghiottì le Fauci del Crepuscolo quando cadde nel laghetto - per questo la cosa brilla di dentro. Ritagliale di nuovo la luce, {playerName}. Il vetro nero manderà i suoi colossi tenebrosi a fermare il rito; abbattine quattro. Portami una scintilla annegata finché ricordo ancora come tenerne una. L'ultimo dovere d'un custode è divenire qualcuno che non ha più bisogno di custodire.",
   'entities.quests.q_relight_the_lumen_crown.completion':
     "Brucia. Dopo tutto questo buio, conosce ancora la mia mano. Guarda: il vetro è di nuovo VERO; nessun battito dietro l'acqua, nessun'anima perduta tra un mondo e il suo riflesso. E il peso mi ha lasciata, alfine. Non svanisco, {playerName}; mi si dà il CAMBIO. Questo non è spezzare il Sable, solo tenerlo; non ho la forza di spezzare ciò che attende là, né oserei. Ma tenuto un'era di più, è tenuto. Quando una compagnia più ardita di noi varcherà infine DENTRO quella porta, troverà l'altro lato pronto. Di' a Highwatch che la loro custode tenne la veglia fino alla fine, e poi fu data il cambio. Il vetro ti ricorderà. Bada di dargli qualcosa che valga la pena di riflettere.",
   'entities.quests.q_relight_the_lumen_crown.objectives.0.label':
@@ -3848,20 +3848,20 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.mistwitch_morwen.name': 'Morwen la Strega delle Brume',
   'entities.npcs.mistwitch_morwen.title': 'Distillatrice di sogni della Conca',
   'entities.npcs.mistwitch_morwen.greeting':
-    'La bruma tiene svegli i tuoi. Io posso prepararti l’altro sonno — quello che risponde.',
+    'La bruma tiene svegli i tuoi. Io posso prepararti l’altro sonno - quello che risponde.',
   'entities.quests.q_deepdream_recipe.title': 'Una ricetta per il sonno profondo',
   'entities.quests.q_deepdream_recipe.text':
     'La pozione vuole tre voci, {playerName}: due lenzuola bianche dei fantasmi della povertà che non possiedono altro, due corni degli unicorni spirituali che pascolano nella penombra, e due cappucci tagliati ai mietitori che sorvegliano la cintura. Portameli e ti distillerò un sonno coi denti.',
   'entities.quests.q_deepdream_recipe.completion':
-    'Lenzuolo, corno, cappuccio — i poveri, i radiosi, i pazienti. Al calderone piaci. Bevila in un posto morbido, viandante: incontrerai chi porti con te.',
+    'Lenzuolo, corno, cappuccio - i poveri, i radiosi, i pazienti. Al calderone piaci. Bevila in un posto morbido, viandante: incontrerai chi porti con te.',
   'entities.quests.q_deepdream_recipe.objectives.0.label': 'Lenzuolo Bianco',
   'entities.quests.q_deepdream_recipe.objectives.1.label': 'Corno Spirituale',
   'entities.quests.q_deepdream_recipe.objectives.2.label': 'Cappuccio Nero',
   'entities.quests.q_face_your_echo.title': 'Affronta il tuo Eco',
   'entities.quests.q_face_your_echo.text':
-    'Bevi l’intruglio e il sogno ti porrà uno specchio davanti — il tuo Eco, ogni tua cicatrice e ogni tuo trucco dall’altra parte. Sconfiggi ciò che sei, {playerName}, e riportami la faccia che farai.',
+    'Bevi l’intruglio e il sogno ti porrà uno specchio davanti - il tuo Eco, ogni tua cicatrice e ogni tuo trucco dall’altra parte. Sconfiggi ciò che sei, {playerName}, e riportami la faccia che farai.',
   'entities.quests.q_face_your_echo.completion':
-    'Sei tornato tu, e lo specchio no. Ciò che ti ha lasciato in mano è tuo — il sogno paga quel prezzo una sola volta.',
+    'Sei tornato tu, e lo specchio no. Ciò che ti ha lasciato in mano è tuo - il sogno paga quel prezzo una sola volta.',
   'entities.quests.q_face_your_echo.objectives.0.label': 'Il tuo Eco sconfitto',
   'entities.items.white_sheet.name': 'Lenzuolo Bianco',
   'entities.items.spirit_horn.name': 'Corno Spirituale',
@@ -5483,6 +5483,13 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
     "Fermati al cancello. Oltre quelle canne, l'acquitrino uccide al posto nostro.",
   'guide.worldPage.marshPlaceNotes':
     "Fenbridge custodisce l'unica strada asciutta. Le Canne del Predatore e le Secche di Deepfen brulicano di bestie di palude e mudfin; il Roveto della Vedova è fittamente intessuto di ragnatele; la Cappella Annegata e i Tumuli dei Troll custodiscono pericoli più antichi; l'Accampamento del Gravecaller è il culto trincerato, e il Bastione Sommerso è il cuore istanziato della palude.",
+  'guide.worldPage.mirrorBlurb':
+    "Un paese di vetro nero, illuminato dalla luna e avvolto nella nebbia, oltre gli specchi di Highwatch, dove la Valle di Vetro custodisce gli spiriti di fine gioco del reame e la Custode Nerissa veglia sull'Anfratto di Lumen.",
+  'guide.worldPage.mirrorGreeting':
+    'Il vetro conserva ogni volto che ha annegato. Cammina piano qui, e non fissare troppo a lungo il tuo.',
+  'guide.worldPage.mirrorGreeter': "Custode Nerissa, l'Anfratto di Lumen",
+  'guide.worldPage.mirrorPlaceNotes':
+    "L'Anfratto di Lumen è il cuore della città-specchio, con la Corte dello Specchio e le sue gargolle poco più su e la scalinata del Belvedere che precipita più in basso; il Lago Specchio è acqua nera e immobile, cinta dal Prato della Luna e dalle Pietre del Dolore; i Dirupi Tetri e il Bosco Oscuro racchiudono gli spiriti più gravi della valle; l'Anfratto della Strega ospita Morwen la Strega delle Brume, la Cengia dell'Astronomo la sua lunga e fredda veduta, e il Canyon Nero serpeggia verso est fino allo Specchio Sable.",
   'guide.worldPage.peaksGreeter': 'Capitano Thessaly, Highwatch',
   'guide.worldPage.peaksGreeting':
     'Duecento anni ha retto questo muro. Non cederà sotto la mia guardia, ma geme.',

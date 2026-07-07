@@ -66,11 +66,13 @@ export function musicZoneForLocation(
   const biomeMusic: MusicZone =
     biome === 'vale' || biome === 'marsh' || biome === 'peaks'
       ? biome
-      : biome === 'beach'
-        ? 'vale'
-        : biome === 'cave'
-          ? 'marsh'
-          : 'peaks';
+      : biome === 'mirror'
+        ? 'mirror'
+        : biome === 'beach'
+          ? 'vale'
+          : biome === 'cave'
+            ? 'marsh'
+            : 'peaks';
   if (inDungeon) return dungeonId ? dungeonMusicZoneForDungeon(dungeonId) : 'dungeon_hollow_crypt';
   if (inHub) return TOWN_MUSIC[zoneId] ?? biomeMusic;
   return ZONE_MUSIC[zoneId] ?? biomeMusic;
@@ -696,7 +698,7 @@ function composeTownHighwatch(): Theme {
 function composeTownMirror(): Theme {
   const ev: NoteEvent[] = [];
   // A minor nocturne under glass: slow harp lattices, low choir glow, and tiny
-  // bell glints like drifting lume-motes — a town asleep inside the mist.
+  // bell glints like drifting lume-motes - a town asleep inside the mist.
   const Am = { root: 57, minor: true },
     F = { root: 53 },
     C = { root: 60 },
@@ -1071,7 +1073,7 @@ function composeMarsh(): Theme {
 function composeMirror(): Theme {
   const ev: NoteEvent[] = [];
   // E aeolian mist drift: long choir swells over slow bass pulses, a sparse
-  // harp, and a low reed line — the gloom beyond the lamplight.
+  // harp, and a low reed line - the gloom beyond the lamplight.
   const Em = { root: 52, minor: true },
     C = { root: 60 },
     Am = { root: 57, minor: true };

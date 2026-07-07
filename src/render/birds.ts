@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { DUNGEON_X_THRESHOLD } from '../sim/data';
 import { GFX } from './gfx';
+import { mulberry32 } from './rng';
 
 // Ambient high-altitude BIRD FLOCK — a render-only flourish, no sim state.
 // A small V-formation of dark silhouettes drifts across the sky high above the
@@ -14,19 +15,8 @@ export interface BirdsView {
   update(px: number, pz: number, dt: number): void;
 }
 
-// Local seeded PRNG — render convention is never to touch Math.random so the
-// flock is reproducible per world seed (mirrors foliage's hashing discipline).
-function mulberry32(seed: number): () => number {
-  let a = seed >>> 0;
-  return () => {
-    a |= 0;
-    a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
+// Seeded PRNG (shared ./rng): render convention is never to touch Math.random
+// so the flock is reproducible per world seed (mirrors foliage's discipline).
 const SPAWN_RADIUS = 120; // where a recycled flock re-enters around the player
 const DESPAWN_RADIUS = 165; // once the flock drifts past this it is recycled
 const ALT_MIN = 54;

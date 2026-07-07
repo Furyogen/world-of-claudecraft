@@ -3196,11 +3196,11 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_what_the_glass_wants.text':
     '그대는 자신의 메아리를 이기고 그것을 스스로에 대한 시험이라 여겼지, {playerName}. 아니었다. 나는 수의와 뿔과 두건으로 깊은 꿈을 빚지만, 그대의 꿈이 거울을 들이댄 대상, 그대의 얼굴을 쓰고 들어온 그것은 내가 빚은 게 아니다. 그것은 협곡의 검은 유리에서 스며든다. 협곡 어귀에 몰린 사신들은 같은 새어듦으로 짙어져 있다; 여덟을 쓰러뜨리고 그 그림자가 어느 쪽으로 기어가는지 보라. 그러면 나는 네리사 자신의 눈에, 그녀의 상처가 참으로 어디서 피 흘리는지를 보여 주리라.',
   'entities.quests.q_what_the_glass_wants.completion':
-    '북동쪽으로. 언제나 북동쪽으로, 언제나 검은담비 거울 쪽으로 — 보았는가? 그대의 메아리는 그대가 아니었다, 나그네여. 그것은 저 문 너머에 사는 그 무엇의 파편이요, 훔칠 수 있는 가장 가까운 반영, 곧 그대의 모습을 걸친 것이었다. 꿈은 그 새어듦이 찾아낸 가장 얇은 자리일 뿐이요; 협곡이 가장 넓은 자리다. 네리사에게 전하라. 그녀는 그 진실을 누릴 자격이 있고, 그대 또한 그러하다.',
+    '북동쪽으로. 언제나 북동쪽으로, 언제나 검은담비 거울 쪽으로 - 보았는가? 그대의 메아리는 그대가 아니었다, 나그네여. 그것은 저 문 너머에 사는 그 무엇의 파편이요, 훔칠 수 있는 가장 가까운 반영, 곧 그대의 모습을 걸친 것이었다. 꿈은 그 새어듦이 찾아낸 가장 얇은 자리일 뿐이요; 협곡이 가장 넓은 자리다. 네리사에게 전하라. 그녀는 그 진실을 누릴 자격이 있고, 그대 또한 그러하다.',
   'entities.quests.q_what_the_glass_wants.objectives.0.label': '협곡 어귀에서 사신 처치',
   'entities.quests.q_relight_the_lumen_crown.title': '루멘 왕관에 다시 불을 밝혀라',
   'entities.quests.q_relight_the_lumen_crown.text':
-    '파수꾼들의 이름이 불렸고 둑길은 얇아지니, 이제 나는 죽은 이래 미뤄 온 일을 해야 한다: 루멘 왕관에 마지막으로 불을 밝히고, 이쪽에서 검은담비 거울을 눌러 닫는 일. 왕관의 마지막 참된 불꽃은 어스름 아가리가 못에 빠질 때 삼켰다 — 그래서 그것이 안에서부터 빛나는 것이다. 그 빛을 도로 도려내라, {playerName}. 검은 유리는 의식을 막으려 음울한 거구들을 보낼 것이다; 넷을 쓰러뜨려라. 내가 아직 불꽃 쥐는 법을 기억할 동안, 가라앉은 불꽃 하나를 가져오라. 지킴이의 마지막 소임은, 더는 지킬 필요가 없는 이가 되는 것이다.',
+    '파수꾼들의 이름이 불렸고 둑길은 얇아지니, 이제 나는 죽은 이래 미뤄 온 일을 해야 한다: 루멘 왕관에 마지막으로 불을 밝히고, 이쪽에서 검은담비 거울을 눌러 닫는 일. 왕관의 마지막 참된 불꽃은 어스름 아가리가 못에 빠질 때 삼켰다 - 그래서 그것이 안에서부터 빛나는 것이다. 그 빛을 도로 도려내라, {playerName}. 검은 유리는 의식을 막으려 음울한 거구들을 보낼 것이다; 넷을 쓰러뜨려라. 내가 아직 불꽃 쥐는 법을 기억할 동안, 가라앉은 불꽃 하나를 가져오라. 지킴이의 마지막 소임은, 더는 지킬 필요가 없는 이가 되는 것이다.',
   'entities.quests.q_relight_the_lumen_crown.completion':
     '타오른다. 이 모든 어둠 뒤에도, 아직 내 손을 알아본다. 보라: 유리가 다시 참되다; 물 너머에 고동이 없고, 한 세계와 그 반영 사이에 잃어버린 혼도 없다. 그리고 짐이 마침내 내게서 내려졌다. 나는 스러지는 게 아니다, {playerName}; 나는 교대되는 것이다. 이는 검은담비 거울을 깨뜨림이 아니라, 다만 붙듦이다; 저기서 기다리는 것을 깨뜨릴 힘이 내겐 없고, 감히 그러지도 않으리. 허나 한 시대를 더 붙들었다면, 붙든 것이다. 언젠가 우리보다 용맹한 무리가 마침내 저 문 안으로 들어설 때, 그들은 저편이 준비되어 있음을 보리라. 하이워치에 전하라 - 그들의 지킴이가 끝까지 밤을 지켰고, 그러고서 놓여났다고. 유리는 그대를 기억하리라. 비출 만한 무언가를 그것에 주도록 하라.',
   'entities.quests.q_relight_the_lumen_crown.objectives.0.label': '어스름 아가리 처치',
@@ -3222,20 +3222,20 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.mistwitch_morwen.name': '안개마녀 모르웬',
   'entities.npcs.mistwitch_morwen.title': '골짜기의 꿈 양조사',
   'entities.npcs.mistwitch_morwen.greeting':
-    '안개는 너희 대부분을 잠들지 못하게 하지. 나는 다른 종류의 잠을 빚어 줄 수 있어 — 대답하는 잠 말이야.',
+    '안개는 너희 대부분을 잠들지 못하게 하지. 나는 다른 종류의 잠을 빚어 줄 수 있어 - 대답하는 잠 말이야.',
   'entities.quests.q_deepdream_recipe.title': '깊은 잠의 조리법',
   'entities.quests.q_deepdream_recipe.text':
     '물약에는 세 가지 목소리가 필요하다, {playerName}. 가진 것이라고는 그것뿐인 가난의 유령에게서 흰 천 두 장, 어스름을 뜯는 영혼 유니콘의 뿔 두 개, 그리고 순환로를 지키는 수확자에게서 잘라낸 두건 두 개. 가져오면 이빨 달린 잠을 끓여 주지.',
   'entities.quests.q_deepdream_recipe.completion':
-    '천, 뿔, 두건 — 가난한 자, 빛나는 자, 참을성 있는 자. 솥이 널 마음에 들어 하는군. 푹신한 곳에서 마시게, 방랑자여. 줄곧 짊어지고 다니던 이를 만나게 될 테니.',
+    '천, 뿔, 두건 - 가난한 자, 빛나는 자, 참을성 있는 자. 솥이 널 마음에 들어 하는군. 푹신한 곳에서 마시게, 방랑자여. 줄곧 짊어지고 다니던 이를 만나게 될 테니.',
   'entities.quests.q_deepdream_recipe.objectives.0.label': '흰 천',
   'entities.quests.q_deepdream_recipe.objectives.1.label': '영혼의 뿔',
   'entities.quests.q_deepdream_recipe.objectives.2.label': '검은 두건',
   'entities.quests.q_face_your_echo.title': '너의 메아리와 마주하라',
   'entities.quests.q_face_your_echo.text':
-    '물약을 마시면 꿈이 네 앞에 거울을 세울 것이다 — 너의 메아리, 네 모든 흉터와 모든 수법이 그 건너편에 있다. 네가 무엇인지 이겨 내라, {playerName}, 그리고 그때의 표정을 내게 가져오라.',
+    '물약을 마시면 꿈이 네 앞에 거울을 세울 것이다 - 너의 메아리, 네 모든 흉터와 모든 수법이 그 건너편에 있다. 네가 무엇인지 이겨 내라, {playerName}, 그리고 그때의 표정을 내게 가져오라.',
   'entities.quests.q_face_your_echo.completion':
-    '너는 돌아왔고, 거울은 돌아오지 못했군. 그것이 네 손에 남긴 것은 네 것이다 — 꿈은 그 값을 단 한 번만 치른다.',
+    '너는 돌아왔고, 거울은 돌아오지 못했군. 그것이 네 손에 남긴 것은 네 것이다 - 꿈은 그 값을 단 한 번만 치른다.',
   'entities.quests.q_face_your_echo.objectives.0.label': '너의 메아리 처치',
   'entities.items.white_sheet.name': '흰 천',
   'entities.items.spirit_horn.name': '영혼의 뿔',
@@ -4927,6 +4927,13 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '문에서 멈추시오. 저 갈대밭 너머에서는, 습지가 우리 대신 죽이는 일을 하니까.',
   'guide.worldPage.marshPlaceNotes':
     '펜브리지는 유일하게 마른 길을 지킵니다. 배회자 갈대밭과 깊은습지 얕은 물에는 습지 짐승과 진흙지느러미가 들끓고, 과부 덤불은 거미줄로 빽빽이 얽혀 있습니다. 익사한 예배당과 트롤 봉분은 한층 오래된 위험을 품고, 무덤부름 야영지는 교단이 자리를 틀고 박힌 곳이며, 가라앉은 요새는 습지의 인스턴스 심장부입니다.',
+  'guide.worldPage.mirrorBlurb':
+    '하이워치의 거울들 너머에는 달빛이 비치고 안개가 서린 검은 유리의 땅이 펼쳐집니다. 유리의 골짜기가 월드 종반의 망령들을 품고, 지킴이 네리사가 루멘 골짜기를 다스립니다.',
+  'guide.worldPage.mirrorGreeting':
+    '유리는 자신이 빠뜨린 모든 얼굴을 간직한다. 이곳에서는 조심스레 걷고, 그대 자신의 모습을 너무 오래 들여다보지 마라.',
+  'guide.worldPage.mirrorGreeter': '지킴이 네리사, 루멘 골짜기',
+  'guide.worldPage.mirrorPlaceNotes':
+    '루멘 골짜기는 거울 마을의 심장부로, 바로 위에는 거울 궁정과 가고일 석상이, 아래로는 조망대 계단이 떨어져 내립니다. 거울못은 고요한 검은 물로, 달빛 초원과 슬픔의 돌들에 에워싸여 있습니다. 음울한 벼랑과 어둠숲은 골짜기에서 가장 무거운 망령들을 품고, 마녀의 골짜기에는 안개마녀 모르웬이 머물며, 별지기의 바위턱은 길고 차가운 조망을 지니고, 검은 협곡은 동쪽으로 굽이쳐 검은담비 거울로 이어집니다.',
   'guide.worldPage.peaksGreeter': '대장 테살리, 하이워치',
   'guide.worldPage.peaksGreeting':
     '이 성벽이 이백 년을 버텨 왔소. 내가 지키는 한 무너지지 않겠지만, 신음하고 있긴 하지.',

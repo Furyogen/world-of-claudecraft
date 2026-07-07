@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import type { BiomeId } from '../sim/types';
+import { mulberry32 } from './rng';
 
 // Ambient precipitation. One pooled THREE.Points cloud rides inside a box that
 // follows the camera (the same "ride along" trick the sky dome uses), so a
@@ -42,19 +43,9 @@ const STYLES: Record<Precip, PrecipStyle> = {
   rain: { color: 0x9fc4e0, size: 0.6, fall: 52, fallVar: 14, sway: 0.5, target: 0.7, texture: 'streak' },
 };
 
-// Tiny deterministic RNG (mulberry32) so particle seeding never reaches for
-// Math.random — keeps this in step with the "procedural-everything is seeded"
-// ethos of the renderer even though it's not on the sim determinism path.
-function mulberry32(seed: number): () => number {
-  let a = seed >>> 0;
-  return () => {
-    a |= 0;
-    a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
+// Particle seeding uses the shared deterministic RNG (./rng) so it never
+// reaches for Math.random - keeps this in step with the "procedural-everything
+// is seeded" ethos of the renderer even though it's not on the sim path.
 
 // A soft round flake — radial alpha falloff, painted white so the material's
 // `color` tints it.

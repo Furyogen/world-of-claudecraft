@@ -1838,6 +1838,10 @@ export const pt_BR: EnTranslations = {
       "valePlaceNotes": "Eastbrook é sua primeira base de operações. A Trilha do Lobo e a Campina do Javali são terreno de caça ameno; o Lago Espelho é água tranquila para pescar; a Sableweb e a Escavação de Cobre escondem aranhas e escavadores gananciosos por minério; um Acampamento de Bandidos e a Capela Caída guardam trabalhos mais duros; a Colina do Relicário desce até o Relicário Desmoronado, o primeiro delve do mundo; e a Clareira de Brightwood é um bosque calmo e ensolarado ao norte.",
       "marshPlaceNotes": "Fenbridge guarda a única estrada seca. Os Juncos do Espreitador e os Baixios de Deepfen fervilham de feras do pântano e Mudfins; o Matagal da Viúva é tecido de teias; a Capela Afogada e os Montículos dos Trolls guardam perigos mais antigos; o Acampamento de Gravecaller é o culto entrincheirado, e o Bastião Submerso é o coração instanciado do pântano.",
       "peaksPlaceNotes": "Highwatch defende a muralha. A Cumeeira do Espreitador e as Tocas de Deeprock pertencem a felinos da serra e escavadores; os Sopés dos Ogros e o Acampamento de Guerra de Drogmar a brutamontes de aluguel; Stormcrag crepita de elementais e o Glimmermere reluz abaixo dele; as Tendas do Culto do Verme e os Campos dos Revenantes cercam o terreno alto do culto, com o Santuário do Gravewyrm no seu topo.",
+      "mirrorBlurb": "Um país de vidro negro, banhado pela lua e envolto em névoa, além dos espelhos de Highwatch, onde o Vale de Vidro guarda os espíritos de fim de jogo do reino e a Guardiã Nerissa zela pela Enseada de Lumen.",
+      "mirrorGreeting": "O vidro conserva cada rosto que afogou. Ande com cuidado por aqui e não contemple por muito tempo o seu.",
+      "mirrorGreeter": "Guardiã Nerissa, a Enseada de Lumen",
+      "mirrorPlaceNotes": "A Enseada de Lumen é o coração da cidade-espelho, com a Corte do Espelho e suas gárgulas logo acima e a escadaria do Mirante despencando abaixo; o Lago Espelho é água negra e imóvel, cercada pelo Prado da Lua e pelas Pedras da Mágoa; os Penhascos Sombrios e a Mata Escura abrigam os espíritos mais pesados do vale; a Enseada da Bruxa acolhe Morwen a Bruxa das Brumas, o Parapeito do Astrônomo sua longa e fria vista, e o Cânion Negro serpenteia para leste até o Espelho Sable.",
       "gladeTitle": "Um canto tranquilo: Clareira de Brightwood",
       "gladeBody": "Nem toda história no Vale fala dos mortos. Ao norte, uma clareira ensolarada chamada Brightwood Glade mantém seu próprio ritmo mais gentil, só trilhas silenciosas e luz salpicada sob os galhos. É um contraponto suave à trilha que você segue, e vale ser vista quando a estrada lhe der espaço para vaguear."
     },
@@ -6987,7 +6991,7 @@ export const pt_BR: EnTranslations = {
       "mistwitch_morwen": {
         "name": "Morwen, a Bruxa das Brumas",
         "title": "Destiladora de sonhos da Grota",
-        "greeting": "A bruma mantém os seus acordados. Eu preparo o outro sono — aquele que responde."
+        "greeting": "A bruma mantém os seus acordados. Eu preparo o outro sono - aquele que responde."
       },
       "gargoyle_sentinel_south": {
         "name": "Sentinela Gárgula",
@@ -7831,7 +7835,7 @@ export const pt_BR: EnTranslations = {
       "q_deepdream_recipe": {
         "title": "Uma receita para o sono profundo",
         "text": "A beberagem pede três vozes, {playerName}: dois lençóis brancos dos fantasmas da pobreza que não possuem mais nada, dois chifres dos unicórnios espirituais que pastam na penumbra, e dois capuzes cortados dos ceifadores que vigiam o cinturão. Traga-os e eu fervo para você um sono com dentes.",
-        "completion": "Lençol, chifre, capuz — os pobres, os radiantes, os pacientes. O caldeirão gosta de você. Beba num lugar macio, andarilho: você vai encontrar quem carrega consigo.",
+        "completion": "Lençol, chifre, capuz - os pobres, os radiantes, os pacientes. O caldeirão gosta de você. Beba num lugar macio, andarilho: você vai encontrar quem carrega consigo.",
         "objectives": {
           "0": {
             "label": "Lençol Branco"
@@ -7846,8 +7850,8 @@ export const pt_BR: EnTranslations = {
       },
       "q_face_your_echo": {
         "title": "Encare o seu Eco",
-        "text": "Beba a beberagem e o sonho porá um espelho à sua frente — o seu Eco, cada cicatriz e cada truque seu do outro lado. Vença o que você é, {playerName}, e traga de volta a cara que fizer.",
-        "completion": "Você voltou, e o espelho não. O que ele deixou na sua mão é seu — o sonho só paga esse preço uma vez.",
+        "text": "Beba a beberagem e o sonho porá um espelho à sua frente - o seu Eco, cada cicatriz e cada truque seu do outro lado. Vença o que você é, {playerName}, e traga de volta a cara que fizer.",
+        "completion": "Você voltou, e o espelho não. O que ele deixou na sua mão é seu - o sonho só paga esse preço uma vez.",
         "objectives": {
           "0": {
             "label": "Seu Eco derrotado"
@@ -7917,7 +7921,7 @@ export const pt_BR: EnTranslations = {
       "q_what_the_glass_wants": {
         "title": "O que o Vidro Quer",
         "text": "Venceste o teu Eco e o julgaste uma prova de ti mesmo, {playerName}. Não era. Eu destilo o Sonho Profundo de lençol, chifre e capuz, mas aquilo contra o que o teu sonho ergueu um espelho, a coisa que entrou vestindo o teu rosto, isso eu não destilo. Infiltra-se, do vidro negro do desfiladeiro. Os ceifadores que atulham a boca do desfiladeiro estão densos da mesma infiltração; abate oito e repara para onde rastejam as suas sombras. Então mostrarei aos próprios olhos de Nerissa onde a sua ferida de fato sangra.",
-        "completion": "A nordeste. Sempre a nordeste, sempre em direção ao Sable — viste? O teu Eco não eras TU, viajante. Era uma lasca do que quer que viva atrás daquela porta, vestida com o reflexo mais próximo que pôde roubar: o teu. O sonho é apenas o ponto mais fino que a infiltração encontrou; o desfiladeiro, o mais largo. Diz a Nerissa. Ela mereceu a verdade disto, e tu também.",
+        "completion": "A nordeste. Sempre a nordeste, sempre em direção ao Sable - viste? O teu Eco não eras TU, viajante. Era uma lasca do que quer que viva atrás daquela porta, vestida com o reflexo mais próximo que pôde roubar: o teu. O sonho é apenas o ponto mais fino que a infiltração encontrou; o desfiladeiro, o mais largo. Diz a Nerissa. Ela mereceu a verdade disto, e tu também.",
         "objectives": {
           "0": {
             "label": "Ceifador abatido na boca do desfiladeiro"
@@ -7926,7 +7930,7 @@ export const pt_BR: EnTranslations = {
       },
       "q_relight_the_lumen_crown": {
         "title": "Reacender a Coroa de Lúmen",
-        "text": "Os guardiões têm nome e a calçada adelgaça, por isso devo fazer agora o que adiei desde que morri: acender a Coroa de Lúmen uma última vez e premir o Sable fechado deste lado. A última centelha verdadeira da Coroa foi engolida pelas Fauces do Crepúsculo quando caiu no açude — por isso a coisa brilha por dentro. Recorta-lhe de novo a luz, {playerName}. O vidro negro enviará os seus brutos lúgubres para deter o rito; abate quatro. Traz-me uma centelha afogada enquanto ainda me lembro de como segurar uma. O último dever de um guardião é tornar-se alguém que já não precisa de guardar.",
+        "text": "Os guardiões têm nome e a calçada adelgaça, por isso devo fazer agora o que adiei desde que morri: acender a Coroa de Lúmen uma última vez e premir o Sable fechado deste lado. A última centelha verdadeira da Coroa foi engolida pelas Fauces do Crepúsculo quando caiu no açude - por isso a coisa brilha por dentro. Recorta-lhe de novo a luz, {playerName}. O vidro negro enviará os seus brutos lúgubres para deter o rito; abate quatro. Traz-me uma centelha afogada enquanto ainda me lembro de como segurar uma. O último dever de um guardião é tornar-se alguém que já não precisa de guardar.",
         "completion": "Arde. Depois de toda esta treva, ainda conhece a minha mão. Olha: o vidro está VERDADEIRO de novo; sem pulsação atrás da água, sem alma perdida entre um mundo e o seu reflexo. E o peso enfim me deixou. Não me desvaneço, {playerName}; sou RENDIDA. Isto não é quebrar o Sable, só sustentá-lo; não tenho força para quebrar o que aguarda ali, e não ousaria. Mas sustentado por mais uma era, está sustentado. Quando uma companhia mais brava que nós enfim cruzar PARA DENTRO daquela porta, achará o outro lado pronto. Diz em Highwatch que a sua guardiã montou a vigília até o fim, e então foi rendida. O vidro se lembrará de ti. Trata de lhe dar algo digno de refletir.",
         "objectives": {
           "0": {

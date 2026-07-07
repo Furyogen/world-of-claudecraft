@@ -1838,6 +1838,10 @@ export const cs_CZ: EnTranslations = {
       "valePlaceNotes": "Eastbrook je tvoje první domovská základna. Vlčí stezka a Kančí louka jsou mírná loviště; Zrcadlové jezero je klidná voda pro rybaření; Černopavučina a Měděná štola skrývají pavouky a rudychtivé kopáče; Tábor banditů a Padlá kaple drží drsnější práci; Vrch relikviáře klesá do Zhrouceného relikviáře, první výpravy světa; a Mýtina Brightwoodu je tichý, sluncem zalitý háj na severu.",
       "marshPlaceNotes": "Fenbridge hlídá jedinou suchou cestu. Rákosiny slídilů a Mělčiny Deepfenu se hemží močálovými šelmami a bahenními ploutvemi; Vdoví houština je hustě opředená pavučinami; Utopená kaple a Trollí mohyly drží starší nebezpečí; Tábor Hrobovolajících je zakopaný kult a Potopená bašta je instancované srdce močálu.",
       "peaksPlaceNotes": "Highwatch drží zeď. Hřeben slídilů a Hlubokamenné nory patří hřebenovým kočkám a norníkům; Zlobří podhůří a Drogmarův válečný tábor surovcům za žold; Bouřný skalní štít praská elementály a Třpytivé pleso září pod ním; Stany kultu draka a Pole revenantů obkružují vyvýšeninu kultu, se Svatyní Hrobodraka na vrcholu.",
+      "mirrorBlurb": "Měsícem ozářená, mlhou zahalená země černého skla za zrcadly Highwatche, kde Skleněné údolí střeží koncové duchy říše a Strážkyně Nerissa drží Lumenovou úžlabinu.",
+      "mirrorGreeting": "Sklo si podrží každou tvář, kterou utopilo. Kráčej tu tiše a nehleď příliš dlouho do té své.",
+      "mirrorGreeter": "Strážkyně Nerissa, Lumenova úžlabina",
+      "mirrorPlaceNotes": "Lumenova úžlabina je srdcem zrcadlového města, se Zrcadlovým dvorem a jeho chrliči hned nad ním a schodištěm Vyhlídky padajícím dolů; Zrcadlová tůň je nehybná černá voda obkroužená Měsíční loukou a Kameny žalu; Ponuré srázy a Temný hvozd chovají nejtěžší duchy údolí; Čarodějčina úžlabina hostí Mlžnou čarodějku Morwen, Hvězdářův výstupek svůj dlouhý studený rozhled a Černý kaňon se vine na východ k Sablovému zrcadlu.",
       "gladeTitle": "Tichý kout: Mýtina Brightwoodu",
       "gladeBody": "Ne každý příběh v údolí je o mrtvých. Na severu si sluncem zalitý háj zvaný Mýtina Brightwoodu drží vlastní jemnější rytmus, samé tiché stezky a skvrnité světlo pod větvemi. Je to měkký protipól cesty, po které jdeš, a stojí za vidění, když ti cesta dá prostor se toulat."
     },
@@ -8106,7 +8110,7 @@ export const cs_CZ: EnTranslations = {
             "label": "Svatyně Hrobodraka"
           },
           "10": {
-            "label": "The Tidegate"
+            "label": "The Mirrorgate"
           }
         }
       },

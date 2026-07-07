@@ -3648,6 +3648,16 @@
   #dream-overlay.active {
     opacity: 1;
   }
+  /* Motion calming on all three axes (OS reduced-motion, the in-game Reduce Motion
+     setting, and the low effect tier), mirroring the low-health vignette below: drop
+     the slow ease and the blur so the wash simply cross-fades. */
+  @media (prefers-reduced-motion: reduce) {
+    #dream-overlay {
+      transition: opacity 0.4s linear;
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+  }
   body.reduce-motion #dream-overlay,
   :root[data-fx-level="low"] #dream-overlay {
     transition: opacity 0.4s linear;

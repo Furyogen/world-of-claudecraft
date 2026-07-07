@@ -2775,11 +2775,11 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_what_the_glass_wants.text':
     "Je versloeg je Echo en hield het voor een beproeving van jezelf, {playerName}. Dat was het niet. Ik brouw de Diepdroom uit laken, hoorn en kap, maar datgene waartegen je droom een spiegel zette, het ding dat binnenkwam met jouw gezicht, dat brouw ik niet. Het sijpelt binnen, uit het zwarte glas van de canyon. De maaiers die de canyonmond verdringen zijn dik van datzelfde lek; vel er acht en zie waarheen hun schaduwen kruipen. Dan toon ik Nerissa's eigen ogen waar haar wond werkelijk bloedt.",
   'entities.quests.q_what_the_glass_wants.completion':
-    'Naar het noordoosten. Altijd naar het noordoosten, altijd richting het Sabel — zag je het? Je Echo was niet JIJ, reiziger. Het was een scherf van wat er ook achter die poort huist, gekleed in het dichtstbijzijnde spiegelbeeld dat het kon stelen: het jouwe. De droom is slechts de dunste plek die het lek gevonden heeft; de canyon de breedste. Zeg het Nerissa. Zij heeft de waarheid ervan verdiend, en jij ook.',
+    'Naar het noordoosten. Altijd naar het noordoosten, altijd richting het Sabel - zag je het? Je Echo was niet JIJ, reiziger. Het was een scherf van wat er ook achter die poort huist, gekleed in het dichtstbijzijnde spiegelbeeld dat het kon stelen: het jouwe. De droom is slechts de dunste plek die het lek gevonden heeft; de canyon de breedste. Zeg het Nerissa. Zij heeft de waarheid ervan verdiend, en jij ook.',
   'entities.quests.q_what_the_glass_wants.objectives.0.label': 'Maaier geveld bij de canyonmond',
   'entities.quests.q_relight_the_lumen_crown.title': 'De Lumenkroon Herontsteken',
   'entities.quests.q_relight_the_lumen_crown.text':
-    'De wachters hebben een naam en de dam wordt dunner, dus moet ik nu doen wat ik sinds mijn dood heb uitgesteld: de Lumenkroon een laatste maal ontsteken en het Sabel van deze zijde dichtdrukken. De laatste ware vonk van de Kroon werd door de Schemermuil verzwolgen toen die in de poel viel — daarom gloeit het ding van binnen. Snijd het licht er weer uit, {playerName}. Het zwarte glas zal zijn somberkolossen sturen om het ritueel te stuiten; vel er vier. Breng me een verdronken vonk zolang ik nog weet hoe je er een vasthoudt. De laatste plicht van een hoeder is iemand te worden die niet meer hoeven hoeft.',
+    'De wachters hebben een naam en de dam wordt dunner, dus moet ik nu doen wat ik sinds mijn dood heb uitgesteld: de Lumenkroon een laatste maal ontsteken en het Sabel van deze zijde dichtdrukken. De laatste ware vonk van de Kroon werd door de Schemermuil verzwolgen toen die in de poel viel - daarom gloeit het ding van binnen. Snijd het licht er weer uit, {playerName}. Het zwarte glas zal zijn somberkolossen sturen om het ritueel te stuiten; vel er vier. Breng me een verdronken vonk zolang ik nog weet hoe je er een vasthoudt. De laatste plicht van een hoeder is iemand te worden die niet meer hoeven hoeft.',
   'entities.quests.q_relight_the_lumen_crown.completion':
     'Ze brandt. Na al dit duister kent ze nog mijn hand. Kijk: het glas is weer WAAR; geen hartslag achter het water, geen ziel verloren tussen een wereld en haar spiegelbeeld. En het gewicht is eindelijk van me af. Ik verga niet, {playerName}; ik word AFGELOST. Dit is geen breken van het Sabel, slechts een houden; ik heb niet de kracht te breken wat daar wacht, en zou het niet wagen. Maar een tijdperk langer gehouden, is het gehouden. Wanneer een dapperder gezelschap dan wij eindelijk die poort BINNENgaat, zullen ze de overzijde gereed vinden. Zeg in Highwatch dat hun hoedster de wacht tot het einde hield, en toen werd afgelost. Het glas zal je heugen. Zorg dat je het iets geeft dat het spiegelen waard is.',
   'entities.quests.q_relight_the_lumen_crown.objectives.0.label': 'De Schemermuil geveld',
@@ -2804,20 +2804,20 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.mistwitch_morwen.name': 'Morwen de Mistheks',
   'entities.npcs.mistwitch_morwen.title': 'Droombrouwster van de Kom',
   'entities.npcs.mistwitch_morwen.greeting':
-    'De mist houdt de meesten van jullie wakker. Ik kan je de andere slaap brouwen — de soort die terugpraat.',
+    'De mist houdt de meesten van jullie wakker. Ik kan je de andere slaap brouwen - de soort die terugpraat.',
   'entities.quests.q_deepdream_recipe.title': 'Een recept voor diepe slaap',
   'entities.quests.q_deepdream_recipe.text':
     'Het brouwsel vraagt drie stemmen, {playerName}: twee witte lakens van de armoedegeesten die verder niets bezitten, twee hoorns van de geesteneenhoorns die in het duister grazen, en twee kappen gesneden van de maaiers die de gordel bewaken. Breng ze en ik brouw je een slaap met tanden.',
   'entities.quests.q_deepdream_recipe.completion':
-    'Laken, hoorn, kap — de armen, de stralenden, de geduldigen. De ketel mag je. Drink het ergens zachts, zwerver: je zult ontmoeten wie je al die tijd meedroeg.',
+    'Laken, hoorn, kap - de armen, de stralenden, de geduldigen. De ketel mag je. Drink het ergens zachts, zwerver: je zult ontmoeten wie je al die tijd meedroeg.',
   'entities.quests.q_deepdream_recipe.objectives.0.label': 'Wit Laken',
   'entities.quests.q_deepdream_recipe.objectives.1.label': 'Geestenhoorn',
   'entities.quests.q_deepdream_recipe.objectives.2.label': 'Zwarte Kap',
   'entities.quests.q_face_your_echo.title': 'Zie je Echo onder ogen',
   'entities.quests.q_face_your_echo.text':
-    'Drink de drank en de droom zet een spiegel voor je neer — jouw Echo, elk litteken en elke truc van jou aan de andere kant. Versla wat je bent, {playerName}, en breng me je gezicht daarna.',
+    'Drink de drank en de droom zet een spiegel voor je neer - jouw Echo, elk litteken en elke truc van jou aan de andere kant. Versla wat je bent, {playerName}, en breng me je gezicht daarna.',
   'entities.quests.q_face_your_echo.completion':
-    'Jij kwam terug, en de spiegel niet. Wat hij in je hand achterliet is van jou — de droom betaalt die prijs maar één keer.',
+    'Jij kwam terug, en de spiegel niet. Wat hij in je hand achterliet is van jou - de droom betaalt die prijs maar één keer.',
   'entities.quests.q_face_your_echo.objectives.0.label': 'Je Echo verslagen',
   'entities.items.white_sheet.name': 'Wit Laken',
   'entities.items.spirit_horn.name': 'Geestenhoorn',
@@ -4101,6 +4101,13 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
     'Houd halt bij de poort. Voorbij dat riet doet het veen het doden voor ons.',
   'guide.worldPage.marshPlaceNotes':
     'Fenbridge bewaakt de enige droge weg. Het Prowler Reeds en de Deepfen Shallows wemelen van moerasbeesten en mudfins; het Widow Thicket zit dik onder het web; de Drowned Chapel en de Troll Mounds bergen oudere gevaren; het Gravecaller Encampment is de ingegraven sekte, en het Verzonken Bastion is het instantiehart van het moeras.',
+  'guide.worldPage.mirrorBlurb':
+    'Een maanverlicht, in mist gehuld land van zwart glas voorbij de spiegels van Highwatch, waar de Glasvallei de eindspel-geesten van het rijk bewaart en Bewaarster Nerissa de Lumen-laagte behoedt.',
+  'guide.worldPage.mirrorGreeting':
+    'Het glas bewaart elk gezicht dat het verdronken heeft. Loop hier zachtjes en kijk niet te lang in je eigen gezicht.',
+  'guide.worldPage.mirrorGreeter': 'Bewaarster Nerissa, de Lumen-laagte',
+  'guide.worldPage.mirrorPlaceNotes':
+    'De Lumen-laagte is het hart van de spiegelstad, met het Spiegelhof en zijn gargouille-beelden er net boven en de Uitkijktrap die eronder wegvalt; het Spiegelmeer is stil zwart water, omringd door de Maanweide en de Treursteen; de Sombere Kliffen en het Duisterwoud bergen de zwaarste geesten van de vallei; de Heksenlaagte herbergt Morwen de Mistheks, de Sterrenkijkersrichel haar lange koude uitzicht, en de Zwarte Kloof kronkelt oostwaarts naar de Sable-spiegel.',
   'guide.worldPage.peaksBlurb':
     'Door wind geschuurde bergkammen en oude mijnwerken klimmen op naar de koudste, hoogste gevaren van het rijk, in handen van de buitenpost Highwatch.',
   'guide.worldPage.peaksGreeter': 'Captain Thessaly, Highwatch',

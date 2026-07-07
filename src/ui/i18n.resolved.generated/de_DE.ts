@@ -1838,6 +1838,10 @@ export const de_DE: EnTranslations = {
       "valePlaceNotes": "Eastbrook ist deine erste Heimatbasis. Der Wolfslauf und die Eberwiese sind sanftes Jagdgebiet; der Spiegelsee ist stilles Wasser zum Angeln; das Sableweb und die Kupfergrube verbergen Spinnen und erzgierige Schaufler; ein Banditenlager und die Gefallene Kapelle bergen rauere Arbeit; der Reliquienhügel führt hinab in das Eingestürzte Reliquiar, die erste Tiefe des Reichs; und Brightwood Glade ist ein ruhiger, sonnenheller Hain im Norden.",
       "marshPlaceNotes": "Fenbridge bewacht die einzige trockene Straße. Das Pirscherschilf und die Deepfen-Niederung wimmeln von Moorbestien und Mudfins; das Witwendickicht ist dicht mit Netzen versponnen; die Ertrunkene Kapelle und die Trollhügel beherbergen ältere Gefahren; das Gravecaller-Lager ist der eingegrabene Kult, und die versunkene Bastion ist das instanzierte Herz des Moores.",
       "peaksPlaceNotes": "Highwatch hält die Mauer. Der Pirscherkamm und die Deeprock-Baue gehören Bergkatzen und Wühlern; die Ogervorberge und Drogmars Kriegslager den Schlägern für Sold; Stormcrag knistert vor Elementaren, und der Glimmermere leuchtet darunter; die Wyrmkultzelte und die Wiedergängerfelder umringen das Hochland des Kults, mit dem Gravewyrm-Heiligtum auf seinem Gipfel.",
+      "mirrorBlurb": "Ein mondbeschienenes, nebelumwobenes Land aus schwarzem Glas jenseits der Spiegel von Highwatch, wo das Glastal die Endspiel-Geister des Reiches hütet und Bewahrerin Nerissa über die Lumen-Senke wacht.",
+      "mirrorGreeting": "Das Glas behält jedes Gesicht, das es ertränkt hat. Geh hier leise, und blicke nicht zu lange in dein eigenes.",
+      "mirrorGreeter": "Bewahrerin Nerissa, die Lumen-Senke",
+      "mirrorPlaceNotes": "Die Lumen-Senke ist das Herz der Spiegelstadt, der Spiegelhof mit seinen Wasserspeier-Statuen gleich darüber und die Aussichtstreppe fällt darunter ab; der Spiegelweiher ist stilles schwarzes Wasser, umringt von der Mondwiese und den Kummersteinen; die Düsterklippen und der Dunkelwald bergen die schwersten Geister des Tals; die Hexensenke birgt die Nebelhexe Morwen, der Sterngucker-Sims seinen langen kalten Ausblick, und die Schwarze Schlucht windet sich nach Osten zum Sablespiegel.",
       "gladeTitle": "Eine stille Ecke: Brightwood Glade",
       "gladeBody": "Nicht jede Geschichte im Tal handelt von den Toten. Im Norden bewahrt ein sonnenheller Hain namens Brightwood Glade seinen eigenen, sanfteren Rhythmus, ganz aus stillen Pfaden und geflecktem Licht unter den Zweigen. Er ist ein sanfter Gegenklang zu der Spur, der du folgst, und einen Blick wert, wenn die Straße dir Raum zum Umherstreifen lässt."
     },
@@ -6987,7 +6991,7 @@ export const de_DE: EnTranslations = {
       "mistwitch_morwen": {
         "name": "Morwen die Nebelhexe",
         "title": "Traumbrauerin der Mulde",
-        "greeting": "Der Nebel hält die meisten von euch wach. Ich braue dir die andere Art von Schlaf — die Art, die zurückspricht."
+        "greeting": "Der Nebel hält die meisten von euch wach. Ich braue dir die andere Art von Schlaf - die Art, die zurückspricht."
       },
       "gargoyle_sentinel_south": {
         "name": "Gargoyle-Wache",
@@ -7831,7 +7835,7 @@ export const de_DE: EnTranslations = {
       "q_deepdream_recipe": {
         "title": "Ein Rezept für tiefen Schlaf",
         "text": "Der Trank verlangt drei Stimmen, {playerName}: zwei weiße Laken von den Armutsgeistern, die sonst nichts besitzen, zwei Hörner der Geist-Einhörner, die im Düster grasen, und zwei Kapuzen, den Schnittern abgeschnitten, die den Gürtel bewachen. Bring sie mir, und ich braue dir einen Schlaf mit Zähnen.",
-        "completion": "Laken, Horn, Kapuze — die Armen, die Strahlenden, die Geduldigen. Der Kessel mag dich. Trink ihn an einem weichen Ort, Wanderer: du wirst treffen, wen du mit dir trägst.",
+        "completion": "Laken, Horn, Kapuze - die Armen, die Strahlenden, die Geduldigen. Der Kessel mag dich. Trink ihn an einem weichen Ort, Wanderer: du wirst treffen, wen du mit dir trägst.",
         "objectives": {
           "0": {
             "label": "Weißes Laken"
@@ -7846,8 +7850,8 @@ export const de_DE: EnTranslations = {
       },
       "q_face_your_echo": {
         "title": "Stell dich deinem Echo",
-        "text": "Trink den Trank, und der Traum stellt dir einen Spiegel hin — dein Echo, jede Narbe und jeder deiner Tricks auf der anderen Seite. Besiege, was du bist, {playerName}, und bring mir den Blick auf deinem Gesicht zurück.",
-        "completion": "Du bist zurückgekehrt, und der Spiegel nicht. Was er dir in der Hand gelassen hat, gehört dir — der Traum zahlt diesen Preis nur einmal.",
+        "text": "Trink den Trank, und der Traum stellt dir einen Spiegel hin - dein Echo, jede Narbe und jeder deiner Tricks auf der anderen Seite. Besiege, was du bist, {playerName}, und bring mir den Blick auf deinem Gesicht zurück.",
+        "completion": "Du bist zurückgekehrt, und der Spiegel nicht. Was er dir in der Hand gelassen hat, gehört dir - der Traum zahlt diesen Preis nur einmal.",
         "objectives": {
           "0": {
             "label": "Dein Echo besiegt"
@@ -7917,7 +7921,7 @@ export const de_DE: EnTranslations = {
       "q_what_the_glass_wants": {
         "title": "Was das Glas will",
         "text": "Du hast deinen Echo besiegt und es für eine Prüfung deiner selbst gehalten, {playerName}. Das war es nicht. Ich braue den Tieftraum aus Laken, Horn und Kapuze - doch das, wogegen dein Traum einen Spiegel stellte, das Ding, das in deinem Gesicht hereinkam, das braue ich nicht. Es sickert herein, aus dem schwarzen Glas der Schlucht. Die Schnitter, die den Schluchtmund überfüllen, sind dick von demselben Leck; erschlag acht und sieh, wohin ihre Schatten kriechen. Dann zeige ich Nerissas eigenen Augen, wo ihre Wunde wahrhaft blutet.",
-        "completion": "Nach Nordosten. Immer nach Nordosten, immer zum Sable — hast du es gesehen? Dein Echo warst nicht DU, Wanderer. Es war ein Splitter dessen, was hinter jenem Tor haust, gekleidet in das nächste Spiegelbild, das es stehlen konnte: deins. Der Traum ist nur die dünnste Stelle, die das Leck gefunden hat; die Schlucht die breiteste. Sag es Nerissa. Sie hat sich die Wahrheit darüber verdient, und du auch.",
+        "completion": "Nach Nordosten. Immer nach Nordosten, immer zum Sable - hast du es gesehen? Dein Echo warst nicht DU, Wanderer. Es war ein Splitter dessen, was hinter jenem Tor haust, gekleidet in das nächste Spiegelbild, das es stehlen konnte: deins. Der Traum ist nur die dünnste Stelle, die das Leck gefunden hat; die Schlucht die breiteste. Sag es Nerissa. Sie hat sich die Wahrheit darüber verdient, und du auch.",
         "objectives": {
           "0": {
             "label": "Schnitter am Schluchtmund erlegt"
@@ -7926,7 +7930,7 @@ export const de_DE: EnTranslations = {
       },
       "q_relight_the_lumen_crown": {
         "title": "Die Lumenkrone neu entzünden",
-        "text": "Die Wächter haben Namen und der Damm wird dünner, so muss ich nun tun, was ich seit meinem Tod aufschob: die Lumenkrone ein letztes Mal entzünden und das Sable von dieser Seite zudrücken. Den letzten wahren Funken der Krone verschluckte der Dämmerschlund, als er in den Weiher fiel — darum glüht das Ding von innen. Schneid ihm das Licht wieder heraus, {playerName}. Das schwarze Glas wird seine Düsterkolosse senden, den Ritus zu hemmen; erschlag vier. Bring mir einen ertrunkenen Funken, solang ich noch weiß, wie man einen hält. Die letzte Pflicht eines Hüters ist, jemand zu werden, der nicht mehr hüten muss.",
+        "text": "Die Wächter haben Namen und der Damm wird dünner, so muss ich nun tun, was ich seit meinem Tod aufschob: die Lumenkrone ein letztes Mal entzünden und das Sable von dieser Seite zudrücken. Den letzten wahren Funken der Krone verschluckte der Dämmerschlund, als er in den Weiher fiel - darum glüht das Ding von innen. Schneid ihm das Licht wieder heraus, {playerName}. Das schwarze Glas wird seine Düsterkolosse senden, den Ritus zu hemmen; erschlag vier. Bring mir einen ertrunkenen Funken, solang ich noch weiß, wie man einen hält. Die letzte Pflicht eines Hüters ist, jemand zu werden, der nicht mehr hüten muss.",
         "completion": "Sie brennt. Nach all der Finsternis kennt sie noch meine Hand. Sieh: das Glas ist wieder WAHR; kein Herzschlag hinter dem Wasser, keine Seele verloren zwischen einer Welt und ihrem Spiegelbild. Und die Last ist endlich von mir. Ich vergehe nicht, {playerName}; ich werde ABGELÖST. Dies ist kein Brechen des Sable, nur ein Halten; ich habe nicht die Kraft, zu brechen, was dort wartet, und würde es nicht wagen. Doch ein Zeitalter länger gehalten, ist es gehalten. Wenn eine tapferere Schar als wir endlich in jenes Tor hineingeht, wird sie die andere Seite bereit finden. Sag es in Highwatch, dass ihre Hüterin die Wache bis zuletzt hielt und dann abgelöst wurde. Das Glas wird sich deiner erinnern. Sieh zu, dass du ihm etwas gibst, das des Spiegelns wert ist.",
         "objectives": {
           "0": {

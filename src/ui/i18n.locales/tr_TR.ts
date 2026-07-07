@@ -2746,11 +2746,11 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_what_the_glass_wants.text':
     "Yankı'nı yendin ve bunu bir öz sınavı sandın, {playerName}. Değildi. Ben Derin Düş'ü örtüden, boynuzdan ve başlıktan damıtırım, ama düşünün karşısına ayna diktiği şey, senin yüzünle içeri giren o şey, onu ben damıtmam. O, kanyonun kara camından sızar. Kanyon ağzını dolduran orakçılar aynı sızıntıyla kalınlaşmış; sekizini devir ve gölgelerinin nereye süründüğüne bak. O zaman Nerissa'nın kendi gözlerine, yarasının gerçekte nerede kanadığını göstereceğim.",
   'entities.quests.q_what_the_glass_wants.completion':
-    "Kuzeydoğuya. Hep kuzeydoğuya, hep Samur'a doğru — gördün mü? Yankın SEN değildin, gezgin. O kapının ardında her ne yaşıyorsa, ondan bir kıymıktı; çalabildiği en yakın yansımayı giymişti: seninkini. Rüya, sızıntının bulduğu en ince yerdir yalnızca; kanyon ise en geniş. Nerissa'ya söyle. Bunun gerçeğini hak etti, sen de.",
+    "Kuzeydoğuya. Hep kuzeydoğuya, hep Samur'a doğru - gördün mü? Yankın SEN değildin, gezgin. O kapının ardında her ne yaşıyorsa, ondan bir kıymıktı; çalabildiği en yakın yansımayı giymişti: seninkini. Rüya, sızıntının bulduğu en ince yerdir yalnızca; kanyon ise en geniş. Nerissa'ya söyle. Bunun gerçeğini hak etti, sen de.",
   'entities.quests.q_what_the_glass_wants.objectives.0.label': 'Kanyon ağzında Orakçı devrildi',
   'entities.quests.q_relight_the_lumen_crown.title': "Lümen Tacı'nı Yeniden Yak",
   'entities.quests.q_relight_the_lumen_crown.text':
-    "Muhafızların adları söylendi ve geçit inceliyor, o yüzden şimdi öldüğümden beri ertelediğimi yapmalıyım: Lümen Tacı'nı son bir kez yakıp Samur'u bu taraftan kapalı tutmalıyım. Tacın son gerçek kıvılcımını, gölete düştüğünde Alacakaranlık Ağzı yuttu — o yüzden o şey içten içe parlar. Işığı ondan geri kes, {playerName}. Kara cam, ayini durdurmak için kasvet devlerini yollayacak; dördünü devir. Ben hâlâ birini nasıl tutacağımı hatırlarken bana boğulmuş bir kıvılcım getir. Bir bekçinin son görevi, artık beklemeye ihtiyacı olmayan biri hâline gelmektir.",
+    "Muhafızların adları söylendi ve geçit inceliyor, o yüzden şimdi öldüğümden beri ertelediğimi yapmalıyım: Lümen Tacı'nı son bir kez yakıp Samur'u bu taraftan kapalı tutmalıyım. Tacın son gerçek kıvılcımını, gölete düştüğünde Alacakaranlık Ağzı yuttu - o yüzden o şey içten içe parlar. Işığı ondan geri kes, {playerName}. Kara cam, ayini durdurmak için kasvet devlerini yollayacak; dördünü devir. Ben hâlâ birini nasıl tutacağımı hatırlarken bana boğulmuş bir kıvılcım getir. Bir bekçinin son görevi, artık beklemeye ihtiyacı olmayan biri hâline gelmektir.",
   'entities.quests.q_relight_the_lumen_crown.completion':
     "Yanıyor. Onca karanlığın ardından hâlâ elimi tanıyor. Bak: cam yeniden GERÇEK; suyun ardında bir kalp atışı yok, bir dünya ile yansıması arasında yitmiş bir ruh yok. Ve yük nihayet üstümden kalktı. Yok olmuyorum, {playerName}; NÖBETİM devralınıyor. Bu, Samur'u kırmak değil, yalnızca tutmaktır; orada bekleyeni kıracak gücüm yok, ve buna cüret de etmezdim. Ama bir çağ daha tutuldu mu, tutulmuştur. Bizden daha yürekli bir bölük o kapıdan sonunda İÇERİ girdiğinde, öte tarafı hazır bulacaklar. Highwatch'ta söyle: bekçileri nöbeti sonuna dek tuttu, sonra da devraldılar. Cam seni anacak. Ona yansıtmaya değer bir şey vermeye bak.",
   'entities.quests.q_relight_the_lumen_crown.objectives.0.label': 'Alacakaranlık Ağzı öldürüldü',
@@ -2772,20 +2772,20 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.mistwitch_morwen.name': 'Sis Cadısı Morwen',
   'entities.npcs.mistwitch_morwen.title': 'Çukurun Düş Demleyicisi',
   'entities.npcs.mistwitch_morwen.greeting':
-    'Sis çoğunuzu uyutmaz. Ben sana öteki uykuyu demlerim — cevap veren türden.',
+    'Sis çoğunuzu uyutmaz. Ben sana öteki uykuyu demlerim - cevap veren türden.',
   'entities.quests.q_deepdream_recipe.title': 'Derin Uyku Tarifi',
   'entities.quests.q_deepdream_recipe.text':
     'İksir üç ses ister, {playerName}: başka hiçbir şeyi olmayan yoksulluk hayaletlerinden iki beyaz çarşaf, alacakaranlıkta otlayan ruh tekboynuzlarından iki boynuz ve kuşağı gözetleyen orakçılardan kesilmiş iki kukuleta. Getir, sana dişli bir uyku kaynatayım.',
   'entities.quests.q_deepdream_recipe.completion':
-    'Çarşaf, boynuz, kukuleta — yoksullar, ışıyanlar, sabırlılar. Kazan senden hoşlandı. Yumuşak bir yerde iç, gezgin: hep taşıdığın kişiyle karşılaşacaksın.',
+    'Çarşaf, boynuz, kukuleta - yoksullar, ışıyanlar, sabırlılar. Kazan senden hoşlandı. Yumuşak bir yerde iç, gezgin: hep taşıdığın kişiyle karşılaşacaksın.',
   'entities.quests.q_deepdream_recipe.objectives.0.label': 'Beyaz Çarşaf',
   'entities.quests.q_deepdream_recipe.objectives.1.label': 'Ruh Boynuzu',
   'entities.quests.q_deepdream_recipe.objectives.2.label': 'Kara Kukuleta',
   'entities.quests.q_face_your_echo.title': 'Yankınla Yüzleş',
   'entities.quests.q_face_your_echo.text':
-    'İksiri iç, düş önüne bir ayna dikecek — Yankın; her yara izin, her numaran öbür tarafta. Ne isen onu yen, {playerName}, ve o anki yüzünü bana geri getir.',
+    'İksiri iç, düş önüne bir ayna dikecek - Yankın; her yara izin, her numaran öbür tarafta. Ne isen onu yen, {playerName}, ve o anki yüzünü bana geri getir.',
   'entities.quests.q_face_your_echo.completion':
-    'Sen döndün, ayna dönmedi. Elinde bıraktığı şey senindir — düş o bedeli yalnız bir kez öder.',
+    'Sen döndün, ayna dönmedi. Elinde bıraktığı şey senindir - düş o bedeli yalnız bir kez öder.',
   'entities.quests.q_face_your_echo.objectives.0.label': 'Yankın yenildi',
   'entities.items.white_sheet.name': 'Beyaz Çarşaf',
   'entities.items.spirit_horn.name': 'Ruh Boynuzu',
@@ -4047,6 +4047,13 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
     'Kapıda durun. Şu sazların ötesinde, öldürme işini bizim yerimize bataklık görür.',
   'guide.worldPage.marshPlaceNotes':
     'Fenbridge tek kuru yolu korur. Sinsi Sazliklar ve Deepfen Sigliklari bataklik canavarlari ve Mudfinlerle kaynar; Dul Cadirligi simsiki aglarla oruludur; Bogulmus Sapel ve Trol Hoyukleri daha eski tehlikeleri barindirir; Gravecaller Kampi tarikatin siper kazdigi yerdir ve Batik Kale bataklarin orneklenmis kalbidir.',
+  'guide.worldPage.mirrorBlurb':
+    'Highwatch aynalarinin otesinde, ay isigina bogulmus, sise sarmalanmis bir kara cam ulkesi; Cam Vadisi diyarin oyun sonu ruhlarini barindirir ve Bekci Nerissa Lumen Coken Yerini elinde tutar.',
+  'guide.worldPage.mirrorGreeting':
+    'Cam, boguldugu her yuzu saklar. Burada usulca yuru ve kendi yuzune fazla uzun bakma.',
+  'guide.worldPage.mirrorGreeter': 'Bekci Nerissa, Lumen Coken Yeri',
+  'guide.worldPage.mirrorPlaceNotes':
+    'Lumen Coken Yeri ayna kentinin kalbidir; hemen ustunde Ayna Divani ve gargoyle heykelleri, altinda ise asagi dusen Gozetleme merdiveni. Ayna Golu dingin kara sudur, Ay Cayiri ve Keder Taslariyla cevrilidir; Kasvet Kayaliklari ve Kara Orman vadinin en agir ruhlarini barindirir; Cadi Coken Yeri Sis Cadisi Morwen’i barindirir, Yildizbakan Cikintisi uzun ve soguk manzarasini, Kara Kanyon ise doguya kivrilarak Sable Aynasina uzanir.',
   'guide.worldPage.peaksBlurb':
     'Rüzgarın aşındırdığı sırtlar ve eski maden ocakları, diyarın en soğuk, en yüksek tehlikelerine doğru tırmanır; ileri karakol Highwatch tarafından tutulur.',
   'guide.worldPage.peaksGreeter': 'Yüzbaşı Thessaly, Highwatch',

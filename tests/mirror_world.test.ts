@@ -67,7 +67,7 @@ describe('the trench seal', () => {
 
   it('cannot be jump-hopped: spamming jump into the seal never crosses it', () => {
     // The seam terrain is steeper than the climb limit (test above), but a
-    // player used to ratchet across it by spamming space — the slope-wall check
+    // player used to ratchet across it by spamming space - the slope-wall check
     // ran only while grounded, so each jump carried horizontal velocity uphill.
     const sim = new Sim({ seed: SEED, playerClass: 'warrior', autoEquip: true });
     const p = sim.player;
@@ -293,7 +293,7 @@ describe("the witch's chain (content wiring)", () => {
     expect(echoQuest.requiresQuest).toBe('q_deepdream_recipe');
     expect(echoQuest.objectives[0].targetMobId).toBe('player_echo');
     expect(MOBS.player_echo).toBeDefined();
-    // A real drop table now — but rolled by the dream win branch only AFTER
+    // A real drop table now - but rolled by the dream win branch only AFTER
     // q_face_your_echo is done (the first win pays the Mirror Shard instead).
     expect(MOBS.player_echo.loot.length).toBeGreaterThan(0);
     for (const entry of MOBS.player_echo.loot)
@@ -333,7 +333,7 @@ describe("the Keeper's Vigil (Nerissa's arc wiring)", () => {
       // Vigil quests are handed out and turned in at the same keeper.
       expect(qd.giverNpcId).toBe('keeper_nerissa');
       expect(qd.turnInNpcId).toBe('keeper_nerissa');
-      // Each step gates on the previous one — a linear vigil.
+      // Each step gates on the previous one - a linear vigil.
       expect(qd.requiresQuest).toBe(i === 0 ? undefined : chain[i - 1]);
       // Every objective resolves to a real mob or a real item.
       for (const obj of qd.objectives) {
@@ -372,7 +372,7 @@ describe("the Keeper's Vigil (Nerissa's arc wiring)", () => {
     expect(glass.turnInNpcId).toBe('mistwitch_morwen');
     expect(glass.requiresQuest).toBe('q_face_your_echo');
     // It is a pure kill objective over a real canyon-mouth mob (NPCs grant no
-    // kill credit — this must target a mob, not a warden statue).
+    // kill credit - this must target a mob, not a warden statue).
     expect(glass.objectives.every((o) => o.type === 'kill')).toBe(true);
     for (const obj of glass.objectives)
       expect(MOBS[obj.targetMobId!], `${obj.targetMobId} missing`).toBeDefined();
@@ -437,6 +437,25 @@ describe('the Deepdream chain', () => {
     giveParts(sim, pid);
     sim.brewDraught(pid);
     expect(sim.countItem('deepdream_draught', pid)).toBe(2); // repeatable forever
+  });
+
+  it('will not brew with the recipe learned but no ingredients (no free draughts)', () => {
+    const { sim, pid } = primedSim();
+    (sim as any).players.get(pid).questsDone.add('q_deepdream_recipe');
+    // attuned and standing at Morwen, but empty-handed: the parts guard holds
+    sim.brewDraught(pid);
+    expect(sim.countItem('deepdream_draught', pid)).toBe(0);
+  });
+
+  it('will not brew away from Morwen even with the recipe and the parts', () => {
+    const { sim, pid } = primedSim();
+    (sim as any).players.get(pid).questsDone.add('q_deepdream_recipe');
+    giveParts(sim, pid);
+    teleport(sim, pid, -8, 1022); // the Lumen Hollow town, far from the witch's hollow
+    sim.tick();
+    sim.brewDraught(pid);
+    expect(sim.countItem('deepdream_draught', pid)).toBe(0);
+    expect(sim.countItem('white_sheet', pid)).toBe(2); // parts untouched
   });
 
   it('clones the dreamer into the Echo, drops the shard once, and wakes home', () => {
@@ -568,6 +587,33 @@ describe('the Deepdream chain', () => {
     expect(state?.permanentStats?.str).toBe(3);
   });
 
+  it('restores the Mirror-Shard bonus across a relog, and tolerates old rows without it', () => {
+    const { sim, pid } = primedSim();
+    const p = sim.entities.get(pid);
+    if (!p) throw new Error('player vanished');
+    sim.addItem('mirror_shard', 1, pid);
+    sim.useItem('mirror_shard', pid);
+    const boostedStr = p.stats.str; // warrior: +3 str folded into derived stats
+    const state = sim.serializeCharacter(pid)!;
+
+    // relog: a fresh sim loads the saved character - the bonus must survive, not
+    // just in permanentStats but folded back into the entity's derived stats.
+    const sim2 = makeSim();
+    const pid2 = sim2.addPlayer('warrior', 'Relog', { state });
+    const meta2 = (sim2 as any).players.get(pid2);
+    expect(meta2.permanentStats.str).toBe(3);
+    expect(sim2.entities.get(pid2)?.stats.str).toBe(boostedStr);
+
+    // an old save row from before the field existed loads without throwing, at zero
+    const legacy = { ...state };
+    delete (legacy as any).permanentStats;
+    let pid3 = -1;
+    expect(() => {
+      pid3 = sim2.addPlayer('warrior', 'Legacy', { state: legacy });
+    }).not.toThrow();
+    expect((sim2 as any).players.get(pid3).permanentStats.str).toBe(0);
+  });
+
   it('persists the waking-world spot, never the shadow realm', () => {
     const { sim, pid } = primedSim();
     const meta = (sim as any).players.get(pid);
@@ -632,10 +678,10 @@ describe('the mirror guardians (gargoyles)', () => {
         (sim as any).players.get(pid).bowedGargoyles.has('gargoyle_sentinel_south'),
     ).toBe(true);
     expect(sim.questState('q_gargoyle_south', pid)).toBe('available');
-    // the courtesy is a real bow — the emote fires in the same beat
+    // the courtesy is a real bow - the emote fires in the same beat
     expect(sim.entities.get(pid)?.overheadEmoteId).toBe('bow');
     expect(sentinels(sim)).toHaveLength(3);
-    // run the toll: kill credit, turn-in, and the mirror unseals with an event
+    // run the toll: kill credit, turn-in, and the mirror unseals
     sim.acceptQuest('q_gargoyle_south', pid);
     const meta = (sim as any).players.get(pid);
     const qp = meta.questLog.get('q_gargoyle_south');
@@ -643,9 +689,11 @@ describe('the mirror guardians (gargoyles)', () => {
     qp.state = 'ready';
     (sim as any).drainEvents();
     sim.turnInQuest('q_gargoyle_south', pid);
-    const evs = (sim as any).drainEvents() as { type: string; padId?: string }[];
+    const evs = (sim as any).drainEvents() as { type: string; text?: string }[];
     expect(meta.questsDone.has('q_gargoyle_south')).toBe(true);
-    expect(evs.some((e) => e.type === 'mirrorUnlocked' && e.padId === 'mirrorgate_return')).toBe(
+    // the unseal signal is the "the mirror clears" log line (the mirrorUnlocked
+    // event was dropped as dead plumbing - no host ever consumed it).
+    expect(evs.some((e) => e.type === 'log' && (e.text ?? '').includes('the mirror clears'))).toBe(
       true,
     );
     // and the mirror now carries
@@ -795,7 +843,7 @@ describe('echo combat behavior', () => {
     const echoPid = (sim as any).dreamRuns.get(pid)?.echoId as number;
     const echo = sim.entities.get(echoPid);
     if (!echo) throw new Error('no echo');
-    // give the mirror room to open its ritual and rotation — a rage mirror
+    // give the mirror room to open its ritual and rotation - a rage mirror
     // must swing its way up to the shout's cost first (~15s)
     for (let i = 0; i < 20 * 25 && !sim.entities.get(pid)?.dead; i++) sim.tick();
     // the opening ritual raised at least one self-buff (Battle Shout et al.)

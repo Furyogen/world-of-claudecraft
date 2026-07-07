@@ -35,7 +35,7 @@ export const ZONE3_ZONE: ZoneDef = {
     { x: 55, z: 820, label: 'Wyrmcult Tents' },
     { x: -40, z: 830, label: 'Revenant Fields' },
     { x: 0, z: 880, label: 'Gravewyrm Sanctum' },
-    { x: 110, z: 800, label: 'The Tidegate' },
+    { x: 110, z: 800, label: 'The Mirrorgate' },
   ],
   welcome: 'Captain Thessaly holds the wall at Highwatch — barely.',
 };
