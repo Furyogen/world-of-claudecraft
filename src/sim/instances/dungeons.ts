@@ -15,6 +15,7 @@
 // and the seam exposes instanceKeyFor/instanceOriginOf/enterDungeon/leaveDungeon for
 // the N1/quest/delve code that reaches them through `ctx`.
 
+import { HEROIC_DUNGEON_TUNING, HEROIC_MARK_ITEM_ID } from '../content/dungeon_difficulty';
 import { DUNGEON_X_THRESHOLD, DUNGEONS, dungeonAt, instanceOrigin, MOBS } from '../data';
 import { createGroundObject, createMob } from '../entity';
 import type { InstanceSlot, PlayerMeta } from '../sim';
@@ -28,6 +29,7 @@ import {
   type Vec3,
 } from '../types';
 import {
+  applyHeroicMobTuning,
   claimDifficultyForDungeon,
   mobLevelForDungeonDifficulty,
   mobTemplateForDungeonDifficulty,
@@ -114,9 +116,12 @@ export function enterDungeon(ctx: SimContext, dungeonId: string, pid?: number): 
   }
   const key = instanceKeyFor(ctx, r.meta.entityId);
   const difficulty = claimDifficultyForDungeon(dungeonId, ctx.dungeonDifficulty(r.meta.entityId));
-  let inst = ctx.instances.find(
-    (i) => i.dungeonId === dungeonId && i.partyKey === key && i.difficulty === difficulty,
-  );
+  // An existing claim for this group ALWAYS wins, whatever the current selection:
+  // the claimed difficulty is fixed for the instance's life, so a mid-run
+  // selection flip (or a ghost corpse-running back after one) rejoins the
+  // group's live instance instead of stranding the player in a fresh parallel
+  // claim. The selected difficulty applies only when claiming a new instance.
+  let inst = ctx.instances.find((i) => i.dungeonId === dungeonId && i.partyKey === key);
   if (!inst) {
     inst = ctx.instances.find((i) => i.dungeonId === dungeonId && i.partyKey === null);
     if (!inst) {
@@ -229,13 +234,14 @@ function claimInstance(
     const template = MOBS[spawn.mobId];
     const rolledLevel = ctx.rng.int(template.minLevel, template.maxLevel);
     const spawnTemplate = mobTemplateForDungeonDifficulty(template, inst.dungeonId, difficulty);
-    const level = mobLevelForDungeonDifficulty(template, inst.dungeonId, difficulty, rolledLevel);
+    const level = mobLevelForDungeonDifficulty(inst.dungeonId, difficulty, rolledLevel);
     const mob = createMob(
       ctx.nextId++,
       spawnTemplate,
       level,
       ctx.groundPos(origin.x + spawn.x, origin.z + spawn.z),
     );
+    applyHeroicMobTuning(mob, inst.dungeonId, difficulty);
     mob.facing = Math.PI; // face the entrance
     mob.prevFacing = mob.facing;
     ctx.addEntity(mob);
@@ -294,6 +300,26 @@ function freeInstance(ctx: SimContext, inst: InstanceSlot): void {
   inst.objectIds = [];
   inst.exitId = null;
   inst.emptyFor = 0;
+}
+
+// Heroic participation reward: the final boss of a heroic instance drops one
+// personal Heroic Mark per eligible participant. `recipients` is the same
+// downed-members-included snapshot handleDeath uses for XP and loot rights,
+// so everyone who took part in the kill can pick up exactly one mark; each
+// slot is personalFor a single player, so nobody can take another's. Draws no
+// rng, so the corpse loot draw order is untouched.
+export function awardHeroicMarks(ctx: SimContext, mob: Entity, recipients: PlayerMeta[]): void {
+  if (recipients.length === 0) return;
+  const inst = ctx.instances.find((i) => i.partyKey !== null && i.mobIds.includes(mob.id));
+  if (!inst || inst.difficulty !== 'heroic') return;
+  const tuning = HEROIC_DUNGEON_TUNING[inst.dungeonId];
+  if (!tuning || mob.templateId !== tuning.finalBossId) return;
+  const loot = mob.loot ?? { copper: 0, items: [] };
+  for (const meta of recipients) {
+    loot.items.push({ itemId: HEROIC_MARK_ITEM_ID, count: 1, personalFor: [meta.entityId] });
+  }
+  mob.loot = loot;
+  mob.lootable = true;
 }
 
 export function updateInstances(ctx: SimContext): void {

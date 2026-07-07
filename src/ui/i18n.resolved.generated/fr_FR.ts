@@ -6332,6 +6332,9 @@ export const fr_FR: EnTranslations = {
       "event_skin_token": {
         "name": "Cache cosmétique mystérieuse"
       },
+      "heroic_mark": {
+        "name": "Heroic Mark"
+      },
       "deathless_heartwood": {
         "name": "Bois-coeur de la Couronne immortelle"
       },

@@ -10,22 +10,28 @@
 
 export const pending: Record<string, readonly string[]> = {
   "es": [
+    "entities.items.heroic_mark.name",
     "hudChrome.discord.roleTag.coredevs"
   ],
   "es_ES": [
+    "entities.items.heroic_mark.name",
     "hudChrome.discord.roleTag.coredevs"
   ],
   "fr_FR": [
+    "entities.items.heroic_mark.name",
     "hudChrome.discord.roleTag.coredevs"
   ],
   "fr_CA": [
+    "entities.items.heroic_mark.name",
     "hudChrome.discord.roleTag.coredevs"
   ],
   "en_CA": [],
   "it_IT": [
+    "entities.items.heroic_mark.name",
     "hudChrome.discord.roleTag.coredevs"
   ],
   "de_DE": [
+    "entities.items.heroic_mark.name",
     "hudChrome.discord.roleTag.coredevs"
   ],
   "zh_CN": [
@@ -41,33 +47,42 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.roleTag.coredevs"
   ],
   "pt_BR": [
+    "entities.items.heroic_mark.name",
     "hudChrome.discord.roleTag.coredevs"
   ],
   "ru_RU": [
     "hudChrome.discord.roleTag.coredevs"
   ],
   "cs_CZ": [
+    "entities.items.heroic_mark.name",
     "hudChrome.discord.roleTag.coredevs"
   ],
   "nl_NL": [
+    "entities.items.heroic_mark.name",
     "hudChrome.discord.roleTag.coredevs"
   ],
   "pl_PL": [
+    "entities.items.heroic_mark.name",
     "hudChrome.discord.roleTag.coredevs"
   ],
   "id_ID": [
+    "entities.items.heroic_mark.name",
     "hudChrome.discord.roleTag.coredevs"
   ],
   "tr_TR": [
+    "entities.items.heroic_mark.name",
     "hudChrome.discord.roleTag.coredevs"
   ],
   "sv_SE": [
+    "entities.items.heroic_mark.name",
     "hudChrome.discord.roleTag.coredevs"
   ],
   "vi_VN": [
+    "entities.items.heroic_mark.name",
     "hudChrome.discord.roleTag.coredevs"
   ],
   "da_DK": [
+    "entities.items.heroic_mark.name",
     "hudChrome.discord.roleTag.coredevs"
   ]
 };

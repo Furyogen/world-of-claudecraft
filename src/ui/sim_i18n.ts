@@ -167,6 +167,8 @@ const baseEnTable = {
   'log.channelLeft': 'Left the {channel} channel.',
   'log.dungeonDifficultyHeroic': 'Dungeon difficulty set to Heroic.',
   'log.dungeonDifficultyNormal': 'Dungeon difficulty set to Normal.',
+  'log.dungeonDifficultyIsHeroic': 'Dungeon difficulty: Heroic. Use /dungeon normal to change it.',
+  'log.dungeonDifficultyIsNormal': 'Dungeon difficulty: Normal. Use /dungeon heroic to change it.',
   'error.channelUsage': 'Usage: /{action} <channel>. Channels: {list}.',
   'error.generalAlwaysOn': 'The General channel is always on - just use /general.',
   'error.noSuchChannel': "There is no channel named '{name}'. Channels: {list}.",

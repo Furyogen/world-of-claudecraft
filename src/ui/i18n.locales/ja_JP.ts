@@ -3167,6 +3167,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.items.crypt_ritual_circle.name': '儀式の円',
   'entities.items.kings_signet.name': '王の印章指輪',
   'entities.items.event_skin_token.name': '謎めいた装いの宝箱',
+  'entities.items.heroic_mark.name': '英雄の証',
   'entities.mobs.fallen_captain_aldren.name': '堕ちた隊長オルドレン',
   'entities.mobs.corrupted_priest_malric.name': '腐敗した司祭マルリック',
   'entities.mobs.deathstalker_voss.name': 'デスストーカー・ヴォス',

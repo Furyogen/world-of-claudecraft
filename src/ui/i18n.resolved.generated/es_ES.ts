@@ -6332,6 +6332,9 @@ export const es_ES: EnTranslations = {
       "event_skin_token": {
         "name": "Alijo cosmético misterioso"
       },
+      "heroic_mark": {
+        "name": "Heroic Mark"
+      },
       "deathless_heartwood": {
         "name": "Duramen de la Corona Inmortal"
       },

@@ -6332,6 +6332,9 @@ export const id_ID: EnTranslations = {
       "event_skin_token": {
         "name": "Peti Kosmetik Misterius"
       },
+      "heroic_mark": {
+        "name": "Heroic Mark"
+      },
       "deathless_heartwood": {
         "name": "Inti Kayu Mahkota Baka"
       },

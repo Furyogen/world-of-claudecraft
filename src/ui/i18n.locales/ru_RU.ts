@@ -3197,6 +3197,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.items.crypt_ritual_circle.name': 'Ритуальный круг',
   'entities.items.kings_signet.name': 'Перстень короля',
   'entities.items.event_skin_token.name': 'Загадочный косметический тайник',
+  'entities.items.heroic_mark.name': 'Героический знак',
   'entities.mobs.fallen_captain_aldren.name': 'Павший капитан Алдрен',
   'entities.mobs.corrupted_priest_malric.name': 'Оскверненный жрец Малрик',
   'entities.mobs.deathstalker_voss.name': 'Смертолаз Восс',

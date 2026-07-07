@@ -609,6 +609,16 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     use: { type: 'skinSelect', catalog: 'class' },
     sellValue: 0,
   },
+  // Heroic-dungeon participation token: the final boss of a heroic instance
+  // drops one personal mark per eligible participant (awardHeroicMarks in
+  // src/sim/instances/dungeons.ts). Not vendorable; a spend sink ships later.
+  heroic_mark: {
+    id: 'heroic_mark',
+    name: 'Heroic Mark',
+    kind: 'tool',
+    quality: 'rare',
+    sellValue: 0,
+  },
   raw_mirror_trout: {
     id: 'raw_mirror_trout',
     name: 'Raw Mirror Trout',

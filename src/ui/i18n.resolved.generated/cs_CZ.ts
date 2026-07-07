@@ -6332,6 +6332,9 @@ export const cs_CZ: EnTranslations = {
       "event_skin_token": {
         "name": "Tajemná kosmetická skrýš"
       },
+      "heroic_mark": {
+        "name": "Heroic Mark"
+      },
       "deathless_heartwood": {
         "name": "Jádrové dřevo nesmrtelné koruny"
       },

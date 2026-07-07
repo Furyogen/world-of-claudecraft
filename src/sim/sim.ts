@@ -254,10 +254,12 @@ export type { MailSave } from './mail/post_office';
 export type { MarketSave } from './market';
 
 import {
+  applyHeroicMobTuning,
   mobLevelForDungeonDifficulty,
   mobTemplateForDungeonDifficulty,
 } from './instances/difficulty';
 import {
+  awardHeroicMarks as awardHeroicMarksImpl,
   enterCrypt as enterCryptImpl,
   enterDungeon as enterDungeonImpl,
   instanceInfoAt as instanceInfoAtImpl,
@@ -2489,6 +2491,7 @@ export class Sim {
       leaveDungeon: sim.leaveDungeon.bind(sim),
       dungeonDifficulty: sim.dungeonDifficulty.bind(sim),
       setDungeonDifficulty: sim.setDungeonDifficulty.bind(sim),
+      awardHeroicMarks: sim.awardHeroicMarks.bind(sim),
       addEntity: sim.addEntity.bind(sim),
       dropEntity: sim.dropEntity.bind(sim),
       rebucket: sim.rebucket.bind(sim),
@@ -4642,7 +4645,10 @@ export class Sim {
             entityId: mob.id,
           });
           for (const ally of wounded) {
-            const amount = Math.round(this.rng.range(tmpl.mendAlly.healMin, tmpl.mendAlly.healMax));
+            const amount = Math.round(
+              this.rng.range(tmpl.mendAlly.healMin, tmpl.mendAlly.healMax) *
+                (mob.mechanicHealMult ?? 1),
+            );
             this.applyHeal(mob, ally, amount, tmpl.mendAlly.name);
           }
         }
@@ -4679,7 +4685,7 @@ export class Sim {
               kind: 'absorb',
               remaining: tmpl.wardAllies.duration,
               duration: tmpl.wardAllies.duration,
-              value: tmpl.wardAllies.amount,
+              value: Math.round(tmpl.wardAllies.amount * (mob.mechanicHealMult ?? 1)),
               sourceId: mob.id,
               school,
             });
@@ -4843,13 +4849,9 @@ export class Sim {
         inst?.dungeonId ?? '',
         difficulty,
       );
-      const level = mobLevelForDungeonDifficulty(
-        template,
-        inst?.dungeonId ?? '',
-        difficulty,
-        rolledLevel,
-      );
+      const level = mobLevelForDungeonDifficulty(inst?.dungeonId ?? '', difficulty, rolledLevel);
       const add = createMob(this.nextId++, addTemplate, level, pos);
+      applyHeroicMobTuning(add, inst?.dungeonId ?? '', difficulty);
       // Leash to the boss's ORIGINAL spawn (not his current, possibly-kited position):
       // pulled too far from it, the add's chase-case leash check evades it home.
       add.spawnPos = { ...boss.spawnPos };
@@ -6157,19 +6159,14 @@ export class Sim {
       this.error(r.meta.entityId, 'You are not the party leader.');
       return;
     }
-    const applyMetaDifficulty = (meta: PlayerMeta): void => {
-      if (difficulty === 'normal') delete meta.dungeonDifficulty;
-      else meta.dungeonDifficulty = difficulty;
-    };
+    // Only the SETTER's own preference is stamped: members mirror the party via
+    // dungeonDifficultyForPid while grouped and keep their own prior preference
+    // after leaving, so a stale stamp can never leak into another group.
+    if (difficulty === 'normal') delete r.meta.dungeonDifficulty;
+    else r.meta.dungeonDifficulty = difficulty;
     if (party) {
       if (difficulty === 'normal') delete party.dungeonDifficulty;
       else party.dungeonDifficulty = difficulty;
-      for (const mPid of party.members) {
-        const meta = this.players.get(mPid);
-        if (meta) applyMetaDifficulty(meta);
-      }
-    } else {
-      applyMetaDifficulty(r.meta);
     }
     this.error(
       r.meta.entityId,
@@ -6179,10 +6176,19 @@ export class Sim {
     );
   }
 
+  // Owned by instances/dungeons (heroic final-boss participation marks); the
+  // C1 death hub reaches it through the seam, this delegate keeps the facade.
+  awardHeroicMarks(mob: Entity, recipients: PlayerMeta[]): void {
+    awardHeroicMarksImpl(this.ctx, mob, recipients);
+  }
+
   private dungeonDifficultyForPid(pid: number): DungeonDifficulty {
-    return (
-      this.partyOf(pid)?.dungeonDifficulty ?? this.players.get(pid)?.dungeonDifficulty ?? 'normal'
-    );
+    // In a party the PARTY state is the only authority (leader-set): falling
+    // through to a member's personal stamp would let a stale solo preference
+    // bypass the leader-only rule at the dungeon door.
+    const party = this.partyOf(pid);
+    if (party) return party.dungeonDifficulty ?? 'normal';
+    return this.players.get(pid)?.dungeonDifficulty ?? 'normal';
   }
 
   // Legacy single-dungeon entry points (tests + scripts use these).

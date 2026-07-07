@@ -6332,6 +6332,9 @@ export const en_XA: EnTranslations = {
       "event_skin_token": {
         "name": "[Ɱýšţéŕíóúš Çóšɱéţíç Çáçĥé]"
       },
+      "heroic_mark": {
+        "name": "[Ĥéŕóíç Ɱáŕķ]"
+      },
       "deathless_heartwood": {
         "name": "[Ĥéáŕţŵóóð óƒ ţĥé Ðéáţĥļéšš Çŕóŵñ]"
       },

@@ -1020,6 +1020,7 @@ export const en = {
       crypt_ritual_circle: { name: 'Ritual Circle' },
       kings_signet: { name: "King's Signet" },
       event_skin_token: { name: 'Mysterious Cosmetic Cache' },
+      heroic_mark: { name: 'Heroic Mark' },
       deathless_heartwood: { name: 'Heartwood of the Deathless Crown' },
       kingsbane_last_oath: { name: 'Thronebane, Last Oath of Thornpeak' },
       crownforged_dreadhelm: { name: 'Bonewrought Dreadhelm' },

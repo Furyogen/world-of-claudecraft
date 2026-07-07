@@ -4,7 +4,8 @@
 // the party-shared instance, the claim -> free empty-reset, and the raid-lockout gate.
 
 import { describe, expect, it } from 'vitest';
-import { DUNGEONS, instanceOrigin } from '../src/sim/data';
+import { HEROIC_DUNGEON_TUNING, HEROIC_MARK_ITEM_ID } from '../src/sim/content/dungeon_difficulty';
+import { DUNGEONS, ITEMS, instanceOrigin, MOBS } from '../src/sim/data';
 import {
   enterDungeon,
   instanceKeyFor,
@@ -14,7 +15,7 @@ import {
   updateInstances,
 } from '../src/sim/instances/dungeons';
 import { Sim } from '../src/sim/sim';
-import type { Entity } from '../src/sim/types';
+import type { Entity, MobTemplate } from '../src/sim/types';
 
 type AnySim = Sim & Record<string, any>;
 type AnyEntity = Entity & Record<string, any>;
@@ -53,6 +54,31 @@ function mobInInstance(sim: AnySim, inst: any, templateId: string): AnyEntity {
     .find((e: AnyEntity | undefined) => e?.templateId === templateId);
   if (!mob) throw new Error(`missing ${templateId} in ${inst.dungeonId}`);
   return mob as AnyEntity;
+}
+
+// Recompute the heroic spawn stats from the RAW base template and the tuning
+// record, independently of mobTemplateForDungeonDifficulty, mirroring createMob's
+// formulas. Dropping any multiplier from the transform reddens these pins even
+// though forcing level 20 alone would already raise the per-level stats.
+function expectedHeroicStats(template: MobTemplate, dungeonId: string) {
+  const tuning = HEROIC_DUNGEON_TUNING[dungeonId];
+  const levelUps = tuning.level - 1;
+  const hpMult = template.elite ? 2.3 : 1;
+  const dmgMult = template.elite ? 1.5 : 1;
+  const dmg =
+    (template.dmgBase * tuning.damageMultiplier +
+      template.dmgPerLevel * tuning.damageMultiplier * levelUps) *
+    dmgMult;
+  return {
+    maxHp: Math.round(
+      (template.hpBase * tuning.healthMultiplier +
+        template.hpPerLevel * tuning.healthMultiplier * levelUps) *
+        hpMult,
+    ),
+    weaponMin: Math.round(dmg * 0.8),
+    weaponMax: Math.round(dmg * 1.25),
+    armor: Math.round(template.armorPerLevel * tuning.armorMultiplier * levelUps),
+  };
 }
 
 describe('dungeons: door-trigger entry/exit', () => {
@@ -128,6 +154,22 @@ describe('dungeons: heroic difficulty', () => {
     const heroicMorthen = mobInInstance(heroic, heroicInst, 'morthen');
     expect(heroicMorthen.level).toBe(20);
 
+    // The health/damage/armor multipliers must survive independently of the
+    // level-20 bump: pin the exact recomputed values, not just a > compare.
+    const pins = expectedHeroicStats(MOBS.morthen, 'hollow_crypt');
+    expect(heroicMorthen.maxHp).toBe(pins.maxHp);
+    expect(heroicMorthen.weapon.min).toBe(pins.weaponMin);
+    expect(heroicMorthen.weapon.max).toBe(pins.weaponMax);
+    expect(heroicMorthen.stats.armor).toBe(pins.armor);
+    // Fire-time mechanic scaling rides these per-entity fields (the mechanic
+    // numbers are read from the base MOBS table, not the transformed template).
+    expect(heroicMorthen.mechanicDamageMult).toBe(
+      HEROIC_DUNGEON_TUNING.hollow_crypt.damageMultiplier,
+    );
+    expect(heroicMorthen.mechanicHealMult).toBe(
+      HEROIC_DUNGEON_TUNING.hollow_crypt.healthMultiplier,
+    );
+
     const normal = makeSim(123);
     const normalPid = normal.addPlayer('warrior', 'Normal');
     enterDungeon(normal.ctx, 'hollow_crypt', normalPid);
@@ -136,6 +178,8 @@ describe('dungeons: heroic difficulty', () => {
     expect(normalMorthen.level).toBe(10);
     expect(heroicMorthen.maxHp).toBeGreaterThan(normalMorthen.maxHp);
     expect(heroicMorthen.weapon.min).toBeGreaterThan(normalMorthen.weapon.min);
+    expect(normalMorthen.mechanicDamageMult).toBeUndefined();
+    expect(normalMorthen.mechanicHealMult).toBeUndefined();
   });
 
   it('supports heroic mode across the four five-player dungeons only', () => {
@@ -170,23 +214,132 @@ describe('dungeons: heroic difficulty', () => {
     expect(claimedDungeon(sim, 'nythraxis_crypt', 'normal')).toBeTruthy();
   });
 
-  it('keeps normal and heroic claims separate so an existing instance never mutates', () => {
+  it('a live claim wins over a flipped selection; the new difficulty applies after the reset', () => {
     const sim = makeSim(456);
     const pid = sim.addPlayer('warrior', 'Switcher');
 
     enterDungeon(sim.ctx, 'hollow_crypt', pid);
     const normalInst = claimedDungeon(sim, 'hollow_crypt', 'normal');
-    const normalMorthen = mobInInstance(sim, normalInst, 'morthen');
-    expect(normalMorthen.level).toBe(10);
+    expect(mobInInstance(sim, normalInst, 'morthen').level).toBe(10);
 
+    // Flipping the selection mid-claim and re-entering rejoins the existing
+    // normal instance (never mutating it, never claiming a parallel one): the
+    // claimed difficulty is fixed for the instance's life. This is also the
+    // ghost corpse-run path, so a dead member can never be stranded in a fresh
+    // parallel instance by a mid-run flip.
     sim.setDungeonDifficulty('heroic', pid);
     enterDungeon(sim.ctx, 'hollow_crypt', pid);
+    expect(claimedDungeon(sim, 'hollow_crypt', 'heroic')).toBeUndefined();
+    expect(normalInst.partyKey).not.toBeNull();
+    expect(normalInst.difficulty).toBe('normal');
+    expect(mobInInstance(sim, normalInst, 'morthen').level).toBe(10);
 
+    // Leave and wait out the empty-instance reset; the freed slot clears back
+    // to normal and the pending heroic selection applies to the fresh claim.
+    leaveDungeon(sim.ctx, pid);
+    teleport(sim, sim.entities.get(pid) as AnyEntity, 0, 0);
+    for (let i = 0; i < 20 * 301 && normalInst.partyKey !== null; i++) sim.tick();
+    expect(normalInst.partyKey).toBeNull();
+    expect(normalInst.difficulty).toBe('normal');
+
+    enterDungeon(sim.ctx, 'hollow_crypt', pid);
     const heroicInst = claimedDungeon(sim, 'hollow_crypt', 'heroic');
     expect(heroicInst).toBeTruthy();
-    expect(heroicInst.slot).not.toBe(normalInst.slot);
-    expect(mobInInstance(sim, normalInst, 'morthen').level).toBe(10);
     expect(mobInInstance(sim, heroicInst, 'morthen').level).toBe(20);
+  });
+
+  it('a party formed after the leader chose heroic inherits the selection', () => {
+    const sim = makeSim();
+    const leader = sim.addPlayer('warrior', 'Lead');
+    const member = sim.addPlayer('mage', 'Late');
+    sim.setDungeonDifficulty('heroic', leader);
+
+    sim.partyInvite(member, leader);
+    sim.partyAccept(member);
+
+    expect(sim.dungeonDifficulty(leader)).toBe('heroic');
+    expect(sim.dungeonDifficulty(member)).toBe('heroic');
+  });
+
+  it("a member's stale personal heroic preference never overrides an unset party", () => {
+    const sim = makeSim();
+    const member = sim.addPlayer('warrior', 'Stale');
+    const leader = sim.addPlayer('mage', 'Fresh');
+    sim.setDungeonDifficulty('heroic', member); // stamped while solo
+    expect(sim.dungeonDifficulty(member)).toBe('heroic');
+
+    sim.partyInvite(member, leader);
+    sim.partyAccept(member);
+
+    // Inside a party the party state is the only authority: the stale solo
+    // stamp must not let a non-leader claim heroic at the door.
+    expect(sim.dungeonDifficulty(member)).toBe('normal');
+    enterDungeon(sim.ctx, 'hollow_crypt', member);
+    expect(claimedDungeon(sim, 'hollow_crypt', 'heroic')).toBeUndefined();
+    expect(claimedDungeon(sim, 'hollow_crypt', 'normal')).toBeTruthy();
+
+    // Back solo the personal preference still applies.
+    sim.partyLeave(member);
+    expect(sim.dungeonDifficulty(member)).toBe('heroic');
+  });
+
+  it('boss adds summoned in a heroic instance spawn as level-20 transforms', () => {
+    const sim = makeSim(31);
+    const pid = sim.addPlayer('warrior', 'Adds');
+    sim.setDungeonDifficulty('heroic', pid);
+    enterDungeon(sim.ctx, 'sunken_bastion', pid);
+    const inst = claimedDungeon(sim, 'sunken_bastion', 'heroic');
+    const vael = mobInInstance(sim, inst, 'vael_the_mistcaller');
+
+    vael.inCombat = true;
+    vael.hp = Math.floor(vael.maxHp * 0.5);
+    sim.tick();
+
+    const adds = (vael.summonedIds as number[])
+      .map((id) => sim.entities.get(id) as AnyEntity)
+      .filter(Boolean);
+    expect(adds.length).toBeGreaterThan(0);
+    const pins = expectedHeroicStats(MOBS.drowned_thrall, 'sunken_bastion');
+    for (const add of adds) {
+      expect(add.templateId).toBe('drowned_thrall');
+      expect(add.level).toBe(20);
+      expect(add.maxHp).toBe(pins.maxHp);
+      expect(add.mechanicDamageMult).toBe(HEROIC_DUNGEON_TUNING.sunken_bastion.damageMultiplier);
+    }
+  });
+
+  it('mechanicDamageMult scales aoePulse damage at the fire site', () => {
+    // Two identical runs where the ONLY difference is a manually doubled
+    // mechanicDamageMult on the same boss: the pulse rng draw is identical, so
+    // the landed damage must double (within one point of rounding). This pins
+    // the fire-site multiply that heroic spawns rely on.
+    const run = (mult?: number): number => {
+      const sim = makeSim(444);
+      const pid = sim.addPlayer('warrior', 'Pulse');
+      enterDungeon(sim.ctx, 'hollow_crypt', pid);
+      const inst = claimedDungeon(sim, 'hollow_crypt', 'normal');
+      const morthen = mobInInstance(sim, inst, 'morthen');
+      if (mult !== undefined) morthen.mechanicDamageMult = mult;
+      const p = sim.entities.get(pid) as AnyEntity;
+      p.maxHp = 1_000_000;
+      p.hp = 1_000_000;
+      teleport(sim, p, morthen.pos.x + 1, morthen.pos.z);
+      (sim as any).dealDamage(p, morthen, 1, false, 'physical', null, 'hit');
+      morthen.pulseTimer = 0.1;
+      for (let i = 0; i < 20 * 15; i++) {
+        for (const ev of sim.tick() as any[]) {
+          if (ev.type === 'damage' && ev.ability === 'Shadow Pulse' && ev.targetId === pid) {
+            return ev.amount as number;
+          }
+        }
+      }
+      throw new Error('Shadow Pulse never fired');
+    };
+
+    const base = run();
+    const doubled = run(2);
+    expect(base).toBeGreaterThanOrEqual(12); // morthen aoePulse min
+    expect(Math.abs(doubled - base * 2)).toBeLessThanOrEqual(1);
   });
 
   it('allows only the party leader to change the party dungeon difficulty', () => {
@@ -211,6 +364,120 @@ describe('dungeons: heroic difficulty', () => {
 
     expect(sim.dungeonDifficulty(leader)).toBe('heroic');
     expect(sim.dungeonDifficulty(member)).toBe('heroic');
+  });
+});
+
+describe('dungeons: heroic marks', () => {
+  it('registers the heroic_mark item the award path references', () => {
+    expect(ITEMS[HEROIC_MARK_ITEM_ID]).toBeTruthy();
+    expect(ITEMS[HEROIC_MARK_ITEM_ID].quality).toBe('rare');
+    expect(ITEMS[HEROIC_MARK_ITEM_ID].sellValue).toBe(0);
+    // Every tuned final boss must be a real mob record (ids are string-matched
+    // at runtime with no compile check).
+    for (const tuning of Object.values(HEROIC_DUNGEON_TUNING)) {
+      expect(MOBS[tuning.finalBossId], `${tuning.id} finalBossId`).toBeTruthy();
+    }
+  });
+
+  it('a heroic final boss drops one personal Heroic Mark per participant', () => {
+    const sim = makeSim(9);
+    const leader = sim.addPlayer('warrior', 'Lead');
+    const member = sim.addPlayer('mage', 'Mate');
+    sim.partyInvite(member, leader);
+    sim.partyAccept(member);
+    sim.setDungeonDifficulty('heroic', leader);
+    enterDungeon(sim.ctx, 'hollow_crypt', leader);
+    enterDungeon(sim.ctx, 'hollow_crypt', member);
+    const inst = claimedDungeon(sim, 'hollow_crypt', 'heroic');
+    const morthen = mobInInstance(sim, inst, 'morthen');
+    const le = sim.entities.get(leader) as AnyEntity;
+    const me = sim.entities.get(member) as AnyEntity;
+    teleport(sim, le, morthen.pos.x + 1, morthen.pos.z);
+    teleport(sim, me, morthen.pos.x - 1, morthen.pos.z);
+
+    (sim as any).dealDamage(le, morthen, morthen.hp + 10, false, 'physical', null, 'hit');
+
+    expect(morthen.dead).toBe(true);
+    const marks = ((morthen.loot?.items ?? []) as any[]).filter(
+      (s) => s.itemId === HEROIC_MARK_ITEM_ID,
+    );
+    expect(marks).toHaveLength(2);
+    expect(marks.every((s) => s.count === 1)).toBe(true);
+    // One personal slot per participant: each mark is lootable by exactly one
+    // player, and together they cover both party members.
+    expect(marks.map((s) => s.personalFor)).toEqual(expect.arrayContaining([[leader], [member]]));
+    expect(morthen.lootable).toBe(true);
+  });
+
+  it('a solo heroic participant gets exactly one mark', () => {
+    const sim = makeSim(12);
+    const pid = sim.addPlayer('warrior', 'Solo');
+    sim.setDungeonDifficulty('heroic', pid);
+    enterDungeon(sim.ctx, 'hollow_crypt', pid);
+    const inst = claimedDungeon(sim, 'hollow_crypt', 'heroic');
+    const morthen = mobInInstance(sim, inst, 'morthen');
+
+    (sim as any).dealDamage(
+      sim.entities.get(pid),
+      morthen,
+      morthen.hp + 10,
+      false,
+      'physical',
+      null,
+      'hit',
+    );
+
+    const marks = ((morthen.loot?.items ?? []) as any[]).filter(
+      (s) => s.itemId === HEROIC_MARK_ITEM_ID,
+    );
+    expect(marks).toHaveLength(1);
+    expect(marks[0].personalFor).toEqual([pid]);
+  });
+
+  it('drops no marks from a normal final boss or heroic trash', () => {
+    const normal = makeSim(10);
+    const nPid = normal.addPlayer('warrior', 'Norm');
+    enterDungeon(normal.ctx, 'hollow_crypt', nPid);
+    const nInst = claimedDungeon(normal, 'hollow_crypt', 'normal');
+    const nMorthen = mobInInstance(normal, nInst, 'morthen');
+    (normal as any).dealDamage(
+      normal.entities.get(nPid),
+      nMorthen,
+      nMorthen.hp + 10,
+      false,
+      'physical',
+      null,
+      'hit',
+    );
+    expect(nMorthen.dead).toBe(true);
+    expect(
+      ((nMorthen.loot?.items ?? []) as any[]).some((s) => s.itemId === HEROIC_MARK_ITEM_ID),
+    ).toBe(false);
+
+    const heroic = makeSim(11);
+    const hPid = heroic.addPlayer('warrior', 'Hero');
+    heroic.setDungeonDifficulty('heroic', hPid);
+    enterDungeon(heroic.ctx, 'hollow_crypt', hPid);
+    const hInst = claimedDungeon(heroic, 'hollow_crypt', 'heroic');
+    const trash = (hInst.mobIds as number[])
+      .map((id) => heroic.entities.get(id) as AnyEntity)
+      .find((e) => e && e.templateId !== 'morthen');
+    expect(trash).toBeTruthy();
+    (heroic as any).dealDamage(
+      heroic.entities.get(hPid),
+      trash,
+      (trash as AnyEntity).hp + 10,
+      false,
+      'physical',
+      null,
+      'hit',
+    );
+    expect((trash as AnyEntity).dead).toBe(true);
+    expect(
+      (((trash as AnyEntity).loot?.items ?? []) as any[]).some(
+        (s) => s.itemId === HEROIC_MARK_ITEM_ID,
+      ),
+    ).toBe(false);
   });
 });
 

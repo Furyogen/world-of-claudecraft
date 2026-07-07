@@ -6332,6 +6332,9 @@ export const ja_JP: EnTranslations = {
       "event_skin_token": {
         "name": "謎めいた装いの宝箱"
       },
+      "heroic_mark": {
+        "name": "英雄の証"
+      },
       "deathless_heartwood": {
         "name": "不死王冠の心材"
       },

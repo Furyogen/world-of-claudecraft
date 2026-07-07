@@ -6332,6 +6332,9 @@ export const ko_KR: EnTranslations = {
       "event_skin_token": {
         "name": "신비한 외형 상자"
       },
+      "heroic_mark": {
+        "name": "영웅의 징표"
+      },
       "deathless_heartwood": {
         "name": "죽지 않는 왕관의 심재"
       },

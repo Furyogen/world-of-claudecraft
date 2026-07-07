@@ -635,6 +635,9 @@ export function handleDeath(ctx: SimContext, e: Entity, killer: Entity | null): 
       // World bosses use PERSONAL loot for every contributor (rolled below from the
       // hate-table snapshot), not the tapper/party shared-corpse roll.
       if (!template?.worldBoss) ctx.rollLoot(e, meta, eligible);
+      // A heroic final boss additionally carries one personal Heroic Mark per
+      // eligible participant (no-op outside a heroic instance; draws no rng).
+      ctx.awardHeroicMarks(e, eligible);
     }
     // Personal loot is independent of tap/party kill credit: it goes to everyone who
     // damaged the boss, so it rolls outside the credited-player block above.

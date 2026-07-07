@@ -2627,6 +2627,8 @@ const ITEM_RECIPES: Record<string, IconRecipe> = {
     ],
     ['glow', 'sparkle'],
   ),
+  // Heroic-dungeon participation token (final-boss personal drop).
+  heroic_mark: r('holy', 'holyGold', ['sigil_rune'], ['glow']),
   // misc UI icons (not real items)
   coin_gold: r('treasure', 'gold', ['coin'], ['sparkle']),
   slot_empty: r('junk', 'silverWhite', []),

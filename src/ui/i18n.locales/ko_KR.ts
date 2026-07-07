@@ -3162,6 +3162,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.items.crypt_ritual_circle.name': '의식 원',
   'entities.items.kings_signet.name': '왕의 인장 반지',
   'entities.items.event_skin_token.name': '신비한 외형 상자',
+  'entities.items.heroic_mark.name': '영웅의 징표',
   'entities.mobs.fallen_captain_aldren.name': '타락한 대장 알드렌',
   'entities.mobs.corrupted_priest_malric.name': '타락한 사제 말릭',
   'entities.mobs.deathstalker_voss.name': '죽음추적자 보스',

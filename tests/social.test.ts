@@ -1256,4 +1256,36 @@ describe('dungeon difficulty slash command', () => {
     sim.chat('/dungeon normal', leader);
     expect(sim.dungeonDifficulty(member)).toBe('normal');
   });
+
+  it('routes the /instances and /dungeons aliases, case-insensitively', () => {
+    const sim = makeWorld();
+    const p = sim.addPlayer('warrior', 'Solo');
+
+    sim.chat('/instances heroic', p);
+    expect(sim.dungeonDifficulty(p)).toBe('heroic');
+    sim.chat('/dungeons normal', p);
+    expect(sim.dungeonDifficulty(p)).toBe('normal');
+    sim.chat('/DUNGEON HEROIC', p);
+    expect(sim.dungeonDifficulty(p)).toBe('heroic');
+  });
+
+  it('the /dungeon readout reports the current selection and how to change it', () => {
+    const sim = makeWorld();
+    const p = sim.addPlayer('warrior', 'Solo');
+
+    sim.drainEvents();
+    sim.chat('/dungeon', p);
+    let texts = (sim.drainEvents() as any[])
+      .filter((e) => e.type === 'error' && e.pid === p)
+      .map((e) => e.text);
+    expect(texts).toContain('Dungeon difficulty: Normal. Use /dungeon heroic to change it.');
+
+    sim.chat('/dungeon heroic', p);
+    sim.drainEvents();
+    sim.chat('/dungeon', p);
+    texts = (sim.drainEvents() as any[])
+      .filter((e) => e.type === 'error' && e.pid === p)
+      .map((e) => e.text);
+    expect(texts).toContain('Dungeon difficulty: Heroic. Use /dungeon normal to change it.');
+  });
 });

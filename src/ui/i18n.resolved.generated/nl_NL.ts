@@ -6332,6 +6332,9 @@ export const nl_NL: EnTranslations = {
       "event_skin_token": {
         "name": "Mysterieuze Cosmetische Buidel"
       },
+      "heroic_mark": {
+        "name": "Heroic Mark"
+      },
       "deathless_heartwood": {
         "name": "Kernhout van de Dodeloze Kroon"
       },

@@ -6332,6 +6332,9 @@ export const zh_TW: EnTranslations = {
       "event_skin_token": {
         "name": "神秘外觀寶箱"
       },
+      "heroic_mark": {
+        "name": "英雄徽記"
+      },
       "deathless_heartwood": {
         "name": "不朽王冠之心木"
       },

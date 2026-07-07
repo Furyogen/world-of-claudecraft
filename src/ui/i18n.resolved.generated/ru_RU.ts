@@ -6332,6 +6332,9 @@ export const ru_RU: EnTranslations = {
       "event_skin_token": {
         "name": "Загадочный косметический тайник"
       },
+      "heroic_mark": {
+        "name": "Героический знак"
+      },
       "deathless_heartwood": {
         "name": "Сердцевина бессмертной короны"
       },

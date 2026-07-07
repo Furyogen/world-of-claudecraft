@@ -6332,6 +6332,9 @@ export const tr_TR: EnTranslations = {
       "event_skin_token": {
         "name": "Gizemli Kozmetik Sandığı"
       },
+      "heroic_mark": {
+        "name": "Heroic Mark"
+      },
       "deathless_heartwood": {
         "name": "Ölümsüz Taç'ın Öz Odunu"
       },

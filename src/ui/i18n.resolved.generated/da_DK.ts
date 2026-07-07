@@ -6332,6 +6332,9 @@ export const da_DK: EnTranslations = {
       "event_skin_token": {
         "name": "Mystisk Kosmetisk Skrin"
       },
+      "heroic_mark": {
+        "name": "Heroic Mark"
+      },
       "deathless_heartwood": {
         "name": "Kerneved fra Den Udødelige Krone"
       },

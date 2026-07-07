@@ -530,6 +530,12 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
   }
   if (/^\/(?:dungeons|dungeon|instances)(?:\s|$)/i.test(raw)) {
     ctx.error(r.meta.entityId, readouts.dungeonsReadout());
+    ctx.error(
+      r.meta.entityId,
+      ctx.dungeonDifficulty(r.meta.entityId) === 'heroic'
+        ? 'Dungeon difficulty: Heroic. Use /dungeon normal to change it.'
+        : 'Dungeon difficulty: Normal. Use /dungeon heroic to change it.',
+    );
     return null;
   }
   if (/^\/(?:consider|con|difficulty)(?:\s|$)/i.test(raw)) {
