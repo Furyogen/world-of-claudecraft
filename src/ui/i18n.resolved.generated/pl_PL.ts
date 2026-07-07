@@ -3536,8 +3536,7 @@ export const pl_PL: EnTranslations = {
     "rendererFailed": "Nie udało się uruchomić renderera: spróbuj odświeżyć. {error}",
     "enterTimeout": "Nie udało się wejść do świata. Upłynął limit czasu połączenia. Czy serwer gry jest uruchomiony?",
     "connectionLost": "Połączenie z serwerem zostało utracone.",
-    "connectionRejected": "Serwer zamknął połączenie.",
-    "reconnecting": "Połączenie utracone. Ponowne łączenie..."
+    "connectionRejected": "Serwer zamknął połączenie."
   },
   "errors": {
     "nothingInteract": "Brak obiektu do interakcji.",

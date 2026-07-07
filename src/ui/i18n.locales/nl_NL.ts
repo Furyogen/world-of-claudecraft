@@ -6037,7 +6037,6 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'download.linuxCta': 'Downloaden voor Linux',
   'download.linuxHint':
     'AppImage: maak het uitvoerbaar en voer het vervolgens uit. Geen installatie nodig.',
-  'loading.reconnecting': 'Verbinding verbroken. Opnieuw verbinding maken...',
   'guide.nav.settings': 'Instellingen en prestaties',
   'guide.settingsPage.advancedBody':
     'Geavanceerd begint vanaf het niveau High en ontgrendelt vier extra keuzemogelijkheden, zodat u uw frames kunt besteden waar u ze daadwerkelijk opmerkt: terreindetail, bladdichtheid, effecten en belichting en schaduwkwaliteit. Net als Grafische kwaliteit zijn ze van toepassing na een herlaadbeurt.',

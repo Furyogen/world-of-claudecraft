@@ -3536,8 +3536,7 @@ export const it_IT: EnTranslations = {
     "rendererFailed": "Impossibile avviare il renderer: ricarica la pagina. {error}",
     "enterTimeout": "Impossibile entrare nel mondo. La connessione è scaduta. Il server di gioco è in esecuzione?",
     "connectionLost": "Connessione al server persa.",
-    "connectionRejected": "Il server ha chiuso la connessione.",
-    "reconnecting": "Connessione persa. Riconnessione..."
+    "connectionRejected": "Il server ha chiuso la connessione."
   },
   "errors": {
     "nothingInteract": "Non c'è nulla con cui interagire.",

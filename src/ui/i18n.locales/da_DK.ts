@@ -5942,7 +5942,6 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'download.linuxCta': 'Download til Linux',
   'download.linuxHint':
     'AppImage: gør det eksekverbart, og kør det derefter. Ingen installation nødvendig.',
-  'loading.reconnecting': 'Forbindelse mistet. Genopretter forbindelse...',
   'guide.nav.settings': 'Indstillinger og ydeevne',
   'guide.settingsPage.advancedBody':
     'Avanceret starter fra High-niveauet og låser op for fire ekstra vælgere, så du kan bruge dine rammer, hvor du rent faktisk bemærker dem: Terrændetaljer, Løvtæthed, Effekter og belysning og Skyggekvalitet. Ligesom grafikkvalitet gælder de efter en genindlæsning.',

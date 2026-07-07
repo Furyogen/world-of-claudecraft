@@ -6131,7 +6131,6 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'download.linuxCta': 'Télécharger pour Linux',
   'download.linuxHint':
     'AppImage$1 rendez-le exécutable, puis exécutez-le. Aucune installation nécessaire.',
-  'loading.reconnecting': 'Connexion perdue. Reconnexion...',
   'guide.nav.settings': 'Paramètres et performances',
   'guide.settingsPage.advancedBody':
     'Advanced commence à partir du niveau High et débloque quatre sélecteurs supplémentaires, afin que vous puissiez passer vos images là où vous les remarquez réellement$1 détails du terrain, densité du feuillage, effets et éclairage et qualité des ombres. Comme la qualité graphique, ils s’appliquent après un rechargement.',

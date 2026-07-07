@@ -6072,7 +6072,6 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'download.linuxCta': 'Scarica per Linux',
   'download.linuxHint':
     'AppImage: rendilo eseguibile, quindi eseguilo. Nessuna installazione necessaria.',
-  'loading.reconnecting': 'Connessione persa. Riconnessione...',
   'guide.nav.settings': 'Impostazioni e prestazioni',
   'guide.settingsPage.advancedBody':
     'Avanzato inizia dal livello High e sblocca quattro selettori extra, così puoi spendere i tuoi fotogrammi dove li noti effettivamente: dettaglio del terreno, densità del fogliame, effetti e illuminazione e qualità delle ombre. Come la qualità grafica, si applicano dopo una ricarica.',

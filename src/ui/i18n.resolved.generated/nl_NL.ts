@@ -3536,8 +3536,7 @@ export const nl_NL: EnTranslations = {
     "rendererFailed": "Kon de renderer niet starten: probeer opnieuw te laden. {error}",
     "enterTimeout": "Kon de wereld niet betreden. De verbinding is verlopen. Draait de gameserver?",
     "connectionLost": "De verbinding met de server is verbroken.",
-    "connectionRejected": "De server heeft de verbinding gesloten.",
-    "reconnecting": "Verbinding verbroken. Opnieuw verbinding maken..."
+    "connectionRejected": "De server heeft de verbinding gesloten."
   },
   "errors": {
     "nothingInteract": "Niets om mee te interacteren.",

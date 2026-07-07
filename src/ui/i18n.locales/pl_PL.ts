@@ -5988,7 +5988,6 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'download.linuxCta': 'Pobierz dla Linuksa',
   'download.linuxHint':
     'AppImage: uczyń go wykonywalnym, a następnie uruchom. Nie wymaga instalacji.',
-  'loading.reconnecting': 'Połączenie utracone. Ponowne łączenie...',
   'guide.nav.settings': 'Ustawienia i wydajność',
   'guide.settingsPage.advancedBody':
     'Zaawansowany zaczyna się od poziomu High i odblokowuje cztery dodatkowe selektory, dzięki czemu możesz spędzać klatki tam, gdzie je faktycznie zauważasz: szczegóły terenu, gęstość listowia, efekty i oświetlenie oraz jakość cieni. Podobnie jak jakość grafiki, obowiązują one po przeładowaniu.',
