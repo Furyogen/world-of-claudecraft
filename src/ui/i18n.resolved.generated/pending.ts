@@ -59,6 +59,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.copied",
     "hudChrome.claudium.copyAddress",
     "hudChrome.claudium.disclosure",
+    "hudChrome.claudium.discountBonus",
+    "hudChrome.claudium.discountLabel",
+    "hudChrome.claudium.discountSummary",
     "hudChrome.claudium.enterCode",
     "hudChrome.claudium.expiresIn",
     "hudChrome.claudium.insufficientBalance",
@@ -104,7 +107,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.title",
     "hudChrome.claudium.topUpButton",
     "hudChrome.claudium.unavailable",
-    "hudChrome.claudium.usdAmount"
+    "hudChrome.claudium.usdAmount",
+    "hudChrome.claudium.wocIncentive",
+    "hudChrome.claudium.wocPromoNote"
   ],
   "es_ES": [
     "guide.nav.professions",
@@ -156,6 +161,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.copied",
     "hudChrome.claudium.copyAddress",
     "hudChrome.claudium.disclosure",
+    "hudChrome.claudium.discountBonus",
+    "hudChrome.claudium.discountLabel",
+    "hudChrome.claudium.discountSummary",
     "hudChrome.claudium.enterCode",
     "hudChrome.claudium.expiresIn",
     "hudChrome.claudium.insufficientBalance",
@@ -201,7 +209,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.title",
     "hudChrome.claudium.topUpButton",
     "hudChrome.claudium.unavailable",
-    "hudChrome.claudium.usdAmount"
+    "hudChrome.claudium.usdAmount",
+    "hudChrome.claudium.wocIncentive",
+    "hudChrome.claudium.wocPromoNote"
   ],
   "fr_FR": [
     "guide.nav.professions",
@@ -253,6 +263,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.copied",
     "hudChrome.claudium.copyAddress",
     "hudChrome.claudium.disclosure",
+    "hudChrome.claudium.discountBonus",
+    "hudChrome.claudium.discountLabel",
+    "hudChrome.claudium.discountSummary",
     "hudChrome.claudium.enterCode",
     "hudChrome.claudium.expiresIn",
     "hudChrome.claudium.insufficientBalance",
@@ -298,7 +311,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.title",
     "hudChrome.claudium.topUpButton",
     "hudChrome.claudium.unavailable",
-    "hudChrome.claudium.usdAmount"
+    "hudChrome.claudium.usdAmount",
+    "hudChrome.claudium.wocIncentive",
+    "hudChrome.claudium.wocPromoNote"
   ],
   "fr_CA": [
     "guide.nav.professions",
@@ -350,6 +365,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.copied",
     "hudChrome.claudium.copyAddress",
     "hudChrome.claudium.disclosure",
+    "hudChrome.claudium.discountBonus",
+    "hudChrome.claudium.discountLabel",
+    "hudChrome.claudium.discountSummary",
     "hudChrome.claudium.enterCode",
     "hudChrome.claudium.expiresIn",
     "hudChrome.claudium.insufficientBalance",
@@ -395,7 +413,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.title",
     "hudChrome.claudium.topUpButton",
     "hudChrome.claudium.unavailable",
-    "hudChrome.claudium.usdAmount"
+    "hudChrome.claudium.usdAmount",
+    "hudChrome.claudium.wocIncentive",
+    "hudChrome.claudium.wocPromoNote"
   ],
   "en_CA": [],
   "it_IT": [
@@ -448,6 +468,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.copied",
     "hudChrome.claudium.copyAddress",
     "hudChrome.claudium.disclosure",
+    "hudChrome.claudium.discountBonus",
+    "hudChrome.claudium.discountLabel",
+    "hudChrome.claudium.discountSummary",
     "hudChrome.claudium.enterCode",
     "hudChrome.claudium.expiresIn",
     "hudChrome.claudium.insufficientBalance",
@@ -493,7 +516,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.title",
     "hudChrome.claudium.topUpButton",
     "hudChrome.claudium.unavailable",
-    "hudChrome.claudium.usdAmount"
+    "hudChrome.claudium.usdAmount",
+    "hudChrome.claudium.wocIncentive",
+    "hudChrome.claudium.wocPromoNote"
   ],
   "de_DE": [
     "guide.nav.professions",
@@ -545,6 +570,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.copied",
     "hudChrome.claudium.copyAddress",
     "hudChrome.claudium.disclosure",
+    "hudChrome.claudium.discountBonus",
+    "hudChrome.claudium.discountLabel",
+    "hudChrome.claudium.discountSummary",
     "hudChrome.claudium.enterCode",
     "hudChrome.claudium.expiresIn",
     "hudChrome.claudium.insufficientBalance",
@@ -590,39 +618,61 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.title",
     "hudChrome.claudium.topUpButton",
     "hudChrome.claudium.unavailable",
-    "hudChrome.claudium.usdAmount"
+    "hudChrome.claudium.usdAmount",
+    "hudChrome.claudium.wocIncentive",
+    "hudChrome.claudium.wocPromoNote"
   ],
   "zh_CN": [
     "hudChrome.claudium.codePlaceholder",
+    "hudChrome.claudium.discountBonus",
+    "hudChrome.claudium.discountLabel",
+    "hudChrome.claudium.discountSummary",
     "hudChrome.claudium.railSol",
     "hudChrome.claudium.railUsdc",
     "hudChrome.claudium.railWoc",
     "hudChrome.claudium.topUpButton",
-    "hudChrome.claudium.usdAmount"
+    "hudChrome.claudium.usdAmount",
+    "hudChrome.claudium.wocIncentive",
+    "hudChrome.claudium.wocPromoNote"
   ],
   "zh_TW": [
     "hudChrome.claudium.codePlaceholder",
+    "hudChrome.claudium.discountBonus",
+    "hudChrome.claudium.discountLabel",
+    "hudChrome.claudium.discountSummary",
     "hudChrome.claudium.railSol",
     "hudChrome.claudium.railUsdc",
     "hudChrome.claudium.railWoc",
     "hudChrome.claudium.topUpButton",
-    "hudChrome.claudium.usdAmount"
+    "hudChrome.claudium.usdAmount",
+    "hudChrome.claudium.wocIncentive",
+    "hudChrome.claudium.wocPromoNote"
   ],
   "ko_KR": [
     "hudChrome.claudium.codePlaceholder",
+    "hudChrome.claudium.discountBonus",
+    "hudChrome.claudium.discountLabel",
+    "hudChrome.claudium.discountSummary",
     "hudChrome.claudium.railSol",
     "hudChrome.claudium.railUsdc",
     "hudChrome.claudium.railWoc",
     "hudChrome.claudium.topUpButton",
-    "hudChrome.claudium.usdAmount"
+    "hudChrome.claudium.usdAmount",
+    "hudChrome.claudium.wocIncentive",
+    "hudChrome.claudium.wocPromoNote"
   ],
   "ja_JP": [
     "hudChrome.claudium.codePlaceholder",
+    "hudChrome.claudium.discountBonus",
+    "hudChrome.claudium.discountLabel",
+    "hudChrome.claudium.discountSummary",
     "hudChrome.claudium.railSol",
     "hudChrome.claudium.railUsdc",
     "hudChrome.claudium.railWoc",
     "hudChrome.claudium.topUpButton",
-    "hudChrome.claudium.usdAmount"
+    "hudChrome.claudium.usdAmount",
+    "hudChrome.claudium.wocIncentive",
+    "hudChrome.claudium.wocPromoNote"
   ],
   "pt_BR": [
     "guide.nav.professions",
@@ -674,6 +724,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.copied",
     "hudChrome.claudium.copyAddress",
     "hudChrome.claudium.disclosure",
+    "hudChrome.claudium.discountBonus",
+    "hudChrome.claudium.discountLabel",
+    "hudChrome.claudium.discountSummary",
     "hudChrome.claudium.enterCode",
     "hudChrome.claudium.expiresIn",
     "hudChrome.claudium.insufficientBalance",
@@ -719,15 +772,22 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.title",
     "hudChrome.claudium.topUpButton",
     "hudChrome.claudium.unavailable",
-    "hudChrome.claudium.usdAmount"
+    "hudChrome.claudium.usdAmount",
+    "hudChrome.claudium.wocIncentive",
+    "hudChrome.claudium.wocPromoNote"
   ],
   "ru_RU": [
     "hudChrome.claudium.codePlaceholder",
+    "hudChrome.claudium.discountBonus",
+    "hudChrome.claudium.discountLabel",
+    "hudChrome.claudium.discountSummary",
     "hudChrome.claudium.railSol",
     "hudChrome.claudium.railUsdc",
     "hudChrome.claudium.railWoc",
     "hudChrome.claudium.topUpButton",
-    "hudChrome.claudium.usdAmount"
+    "hudChrome.claudium.usdAmount",
+    "hudChrome.claudium.wocIncentive",
+    "hudChrome.claudium.wocPromoNote"
   ],
   "cs_CZ": [
     "guide.nav.professions",
@@ -779,6 +839,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.copied",
     "hudChrome.claudium.copyAddress",
     "hudChrome.claudium.disclosure",
+    "hudChrome.claudium.discountBonus",
+    "hudChrome.claudium.discountLabel",
+    "hudChrome.claudium.discountSummary",
     "hudChrome.claudium.enterCode",
     "hudChrome.claudium.expiresIn",
     "hudChrome.claudium.insufficientBalance",
@@ -824,7 +887,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.title",
     "hudChrome.claudium.topUpButton",
     "hudChrome.claudium.unavailable",
-    "hudChrome.claudium.usdAmount"
+    "hudChrome.claudium.usdAmount",
+    "hudChrome.claudium.wocIncentive",
+    "hudChrome.claudium.wocPromoNote"
   ],
   "nl_NL": [
     "guide.nav.professions",
@@ -876,6 +941,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.copied",
     "hudChrome.claudium.copyAddress",
     "hudChrome.claudium.disclosure",
+    "hudChrome.claudium.discountBonus",
+    "hudChrome.claudium.discountLabel",
+    "hudChrome.claudium.discountSummary",
     "hudChrome.claudium.enterCode",
     "hudChrome.claudium.expiresIn",
     "hudChrome.claudium.insufficientBalance",
@@ -921,7 +989,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.title",
     "hudChrome.claudium.topUpButton",
     "hudChrome.claudium.unavailable",
-    "hudChrome.claudium.usdAmount"
+    "hudChrome.claudium.usdAmount",
+    "hudChrome.claudium.wocIncentive",
+    "hudChrome.claudium.wocPromoNote"
   ],
   "pl_PL": [
     "guide.nav.professions",
@@ -973,6 +1043,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.copied",
     "hudChrome.claudium.copyAddress",
     "hudChrome.claudium.disclosure",
+    "hudChrome.claudium.discountBonus",
+    "hudChrome.claudium.discountLabel",
+    "hudChrome.claudium.discountSummary",
     "hudChrome.claudium.enterCode",
     "hudChrome.claudium.expiresIn",
     "hudChrome.claudium.insufficientBalance",
@@ -1018,7 +1091,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.title",
     "hudChrome.claudium.topUpButton",
     "hudChrome.claudium.unavailable",
-    "hudChrome.claudium.usdAmount"
+    "hudChrome.claudium.usdAmount",
+    "hudChrome.claudium.wocIncentive",
+    "hudChrome.claudium.wocPromoNote"
   ],
   "id_ID": [
     "guide.nav.professions",
@@ -1070,6 +1145,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.copied",
     "hudChrome.claudium.copyAddress",
     "hudChrome.claudium.disclosure",
+    "hudChrome.claudium.discountBonus",
+    "hudChrome.claudium.discountLabel",
+    "hudChrome.claudium.discountSummary",
     "hudChrome.claudium.enterCode",
     "hudChrome.claudium.expiresIn",
     "hudChrome.claudium.insufficientBalance",
@@ -1115,7 +1193,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.title",
     "hudChrome.claudium.topUpButton",
     "hudChrome.claudium.unavailable",
-    "hudChrome.claudium.usdAmount"
+    "hudChrome.claudium.usdAmount",
+    "hudChrome.claudium.wocIncentive",
+    "hudChrome.claudium.wocPromoNote"
   ],
   "tr_TR": [
     "guide.nav.professions",
@@ -1167,6 +1247,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.copied",
     "hudChrome.claudium.copyAddress",
     "hudChrome.claudium.disclosure",
+    "hudChrome.claudium.discountBonus",
+    "hudChrome.claudium.discountLabel",
+    "hudChrome.claudium.discountSummary",
     "hudChrome.claudium.enterCode",
     "hudChrome.claudium.expiresIn",
     "hudChrome.claudium.insufficientBalance",
@@ -1212,7 +1295,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.title",
     "hudChrome.claudium.topUpButton",
     "hudChrome.claudium.unavailable",
-    "hudChrome.claudium.usdAmount"
+    "hudChrome.claudium.usdAmount",
+    "hudChrome.claudium.wocIncentive",
+    "hudChrome.claudium.wocPromoNote"
   ],
   "sv_SE": [
     "guide.nav.professions",
@@ -1264,6 +1349,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.copied",
     "hudChrome.claudium.copyAddress",
     "hudChrome.claudium.disclosure",
+    "hudChrome.claudium.discountBonus",
+    "hudChrome.claudium.discountLabel",
+    "hudChrome.claudium.discountSummary",
     "hudChrome.claudium.enterCode",
     "hudChrome.claudium.expiresIn",
     "hudChrome.claudium.insufficientBalance",
@@ -1309,7 +1397,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.title",
     "hudChrome.claudium.topUpButton",
     "hudChrome.claudium.unavailable",
-    "hudChrome.claudium.usdAmount"
+    "hudChrome.claudium.usdAmount",
+    "hudChrome.claudium.wocIncentive",
+    "hudChrome.claudium.wocPromoNote"
   ],
   "vi_VN": [
     "guide.nav.professions",
@@ -1361,6 +1451,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.copied",
     "hudChrome.claudium.copyAddress",
     "hudChrome.claudium.disclosure",
+    "hudChrome.claudium.discountBonus",
+    "hudChrome.claudium.discountLabel",
+    "hudChrome.claudium.discountSummary",
     "hudChrome.claudium.enterCode",
     "hudChrome.claudium.expiresIn",
     "hudChrome.claudium.insufficientBalance",
@@ -1406,7 +1499,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.title",
     "hudChrome.claudium.topUpButton",
     "hudChrome.claudium.unavailable",
-    "hudChrome.claudium.usdAmount"
+    "hudChrome.claudium.usdAmount",
+    "hudChrome.claudium.wocIncentive",
+    "hudChrome.claudium.wocPromoNote"
   ],
   "da_DK": [
     "guide.nav.professions",
@@ -1458,6 +1553,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.copied",
     "hudChrome.claudium.copyAddress",
     "hudChrome.claudium.disclosure",
+    "hudChrome.claudium.discountBonus",
+    "hudChrome.claudium.discountLabel",
+    "hudChrome.claudium.discountSummary",
     "hudChrome.claudium.enterCode",
     "hudChrome.claudium.expiresIn",
     "hudChrome.claudium.insufficientBalance",
@@ -1503,6 +1601,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.title",
     "hudChrome.claudium.topUpButton",
     "hudChrome.claudium.unavailable",
-    "hudChrome.claudium.usdAmount"
+    "hudChrome.claudium.usdAmount",
+    "hudChrome.claudium.wocIncentive",
+    "hudChrome.claudium.wocPromoNote"
   ]
 };
