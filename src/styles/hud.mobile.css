@@ -2086,7 +2086,8 @@
     width: 100%;
   }
   body.mobile-touch .go-spectate {
-    bottom: 140px;
+    /* the mobile bottom bar floats at 64px + safe-area and rises ~150px */
+    bottom: 210px;
     max-width: 92vw;
     flex-wrap: wrap;
     justify-content: center;
