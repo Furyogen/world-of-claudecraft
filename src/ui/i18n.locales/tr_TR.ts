@@ -5953,7 +5953,6 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'download.linuxCta': 'Linux için indirin',
   'download.linuxHint':
     'AppImage: yürütülebilir hale getirin ve ardından çalıştırın. Kurulum gerekmez.',
-  'loading.reconnecting': 'Bağlantı kesildi. Yeniden bağlanılıyor...',
   'guide.nav.settings': 'Ayarlar ve Performans',
   'guide.settingsPage.advancedBody':
     'Gelişmiş, High seviyesinden başlar ve dört ekstra seçicinin kilidini açar, böylece karelerinizi gerçekten fark ettiğiniz yerde geçirebilirsiniz: Arazi Detayı, Yeşillik Yoğunluğu, Efektler ve Aydınlatma ve Gölge Kalitesi. Grafik Kalitesi gibi, yeniden yükleme sonrasında uygulanırlar.',

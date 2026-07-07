@@ -6047,7 +6047,6 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   // Release v0.22.0 locale fill.
   'download.linuxCta': 'Baixar para Linux',
   'download.linuxHint': 'AppImage: torne-o executável e execute-o. Não é necessária instalação.',
-  'loading.reconnecting': 'Conexão perdida. Reconectando...',
   'guide.nav.settings': 'Configurações e desempenho',
   'guide.settingsPage.advancedBody':
     'Avançado começa no nível High e desbloqueia quatro seletores extras, para que você possa passar seus quadros onde realmente os percebe: detalhes do terreno, densidade da folhagem, efeitos e iluminação e qualidade da sombra. Assim como a qualidade gráfica, eles se aplicam após uma recarga.',

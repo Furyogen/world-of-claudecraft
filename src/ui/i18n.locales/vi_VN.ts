@@ -5979,7 +5979,6 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   // Release v0.22.0 locale fill.
   'download.linuxCta': 'Tải xuống cho Linux',
   'download.linuxHint': 'AppImage: làm cho nó có thể thực thi được rồi chạy nó. Không cần cài đặt.',
-  'loading.reconnecting': 'Mất kết nối. Đang kết nối lại...',
   'guide.nav.settings': 'Cài đặt & Hiệu suất',
   'guide.settingsPage.advancedBody':
     'Nâng cao bắt đầu từ cấp High và mở khóa bốn bộ chọn bổ sung, do đó bạn có thể sử dụng khung hình của mình ở nơi bạn thực sự chú ý đến chúng: Chi tiết địa hình, Mật độ tán lá, Hiệu ứng & Ánh sáng và Chất lượng bóng. Giống như Chất lượng đồ họa, chúng được áp dụng sau khi tải lại.',
