@@ -328,7 +328,7 @@ export const COMMAND_NAMES = [
   'hc_queue',
   'hc_leave',
   'gauntlet_trace',
-  'gauntlet_pull',
+  'gauntlet_pull_circle',
   'gauntlet_echo',
   'gauntlet_court',
 ] as const;
@@ -538,11 +538,11 @@ export const COMMAND_FACETS = {
   collect_delve_chest_loot: 'IWorldDelves',
   delve_rite_choose: 'IWorldDelves',
   // IWorldGauntlet: The Gauntlet survival event (join the lobby / leave the
-  // run, plus the per-trial inputs: trace, beat pull, echo tap, court shove).
+  // run, plus the per-trial inputs: trace, circle pull, echo tap, court shove).
   gauntlet_join: 'IWorldGauntlet',
   gauntlet_leave: 'IWorldGauntlet',
   gauntlet_trace: 'IWorldGauntlet',
-  gauntlet_pull: 'IWorldGauntlet',
+  gauntlet_pull_circle: 'IWorldGauntlet',
   gauntlet_echo: 'IWorldGauntlet',
   gauntlet_court: 'IWorldGauntlet',
 } as const satisfies Partial<Record<ClientCommand, WorldFacet>>;
