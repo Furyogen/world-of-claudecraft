@@ -5791,6 +5791,13 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gauntlet.wagerStake': '赌注',
   'hudChrome.gauntlet.stakeDown': '降低赌注',
   'hudChrome.gauntlet.stakeUp': '提高赌注',
+  'hudChrome.gauntlet.hint.sentinel': '绿灯快跑,红灯定住。',
+  'hudChrome.gauntlet.hint.sigils': '按住鼠标,沿石板上蚀刻的线条描画。',
+  'hudChrome.gauntlet.hint.pull': '随每声鼓点点击、轻触或按空格键。',
+  'hudChrome.gauntlet.hint.wagerHold': '点击一枚石子,藏起相应数量的弹珠。',
+  'hudChrome.gauntlet.hint.wagerGuess': '点击石头:一点为单,两点为双。',
+  'hudChrome.gauntlet.hint.span': '横渡玻璃桥。每对板中藏着一块脆板。',
+  'hudChrome.gauntlet.hint.court': '光环闪起时点击对手,将其推出场外。',
   'entities.npcs.gauntlet_recruiter.title': '试炼回廊传令官',
   'entities.npcs.gauntlet_recruiter.greeting':
     '和其他人一起踏上沙场吧,{className}。熬过每一场试炼,领奖台就是你的。',

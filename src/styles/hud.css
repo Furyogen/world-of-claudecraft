@@ -4242,6 +4242,19 @@
     gap: 8px;
     flex-wrap: wrap;
   }
+  /* The one-line teaching hint under the meta row: how the live trial is
+     played (the painter shows it only while the viewer can act). */
+  #gauntlet-hint {
+    display: none;
+    font: italic 600 11px / 15px var(--body-font);
+    color: var(--color-text-light);
+    background: rgba(8, 8, 12, 0.72);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 2px 10px;
+    text-align: center;
+    text-shadow: 1px 1px 2px #000;
+  }
   .gh-chip {
     font: 700 11px / 16px var(--body-font);
     color: var(--color-text-light);

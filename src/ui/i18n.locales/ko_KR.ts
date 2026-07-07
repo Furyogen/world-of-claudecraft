@@ -6111,6 +6111,13 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gauntlet.wagerStake': '판돈',
   'hudChrome.gauntlet.stakeDown': '판돈 낮추기',
   'hudChrome.gauntlet.stakeUp': '판돈 올리기',
+  'hudChrome.gauntlet.hint.sentinel': '초록불에는 달리고, 빨간불에는 멈추세요.',
+  'hudChrome.gauntlet.hint.sigils': '마우스를 누른 채 석판에 새겨진 선을 따라 그리세요.',
+  'hudChrome.gauntlet.hint.pull': '북소리에 맞춰 클릭, 탭 또는 스페이스 키를 누르세요.',
+  'hudChrome.gauntlet.hint.wagerHold': '조약돌을 클릭해 그 수만큼 구슬을 숨기세요.',
+  'hudChrome.gauntlet.hint.wagerGuess': '돌을 클릭하세요. 점 하나는 홀, 점 둘은 짝입니다.',
+  'hudChrome.gauntlet.hint.span': '유리 다리를 건너세요. 각 쌍마다 부서지는 판이 하나 숨어 있습니다.',
+  'hudChrome.gauntlet.hint.court': '링이 번쩍일 때 상대를 클릭해 밖으로 밀어내세요.',
   'entities.npcs.gauntlet_recruiter.title': '시련의 관문 전령',
   'entities.npcs.gauntlet_recruiter.greeting':
     '다른 이들과 함께 모래 위에 서라, {className}. 모든 시련을 견뎌내면 시상대는 그대의 것이다.',

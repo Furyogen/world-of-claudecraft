@@ -196,7 +196,16 @@ export const ko_KR: EnTranslations = {
       "wagerRound": "라운드: {seconds}초",
       "wagerStake": "판돈",
       "stakeDown": "판돈 낮추기",
-      "stakeUp": "판돈 올리기"
+      "stakeUp": "판돈 올리기",
+      "hint": {
+        "sentinel": "초록불에는 달리고, 빨간불에는 멈추세요.",
+        "sigils": "마우스를 누른 채 석판에 새겨진 선을 따라 그리세요.",
+        "pull": "북소리에 맞춰 클릭, 탭 또는 스페이스 키를 누르세요.",
+        "wagerHold": "조약돌을 클릭해 그 수만큼 구슬을 숨기세요.",
+        "wagerGuess": "돌을 클릭하세요. 점 하나는 홀, 점 둘은 짝입니다.",
+        "span": "유리 다리를 건너세요. 각 쌍마다 부서지는 판이 하나 숨어 있습니다.",
+        "court": "링이 번쩍일 때 상대를 클릭해 밖으로 밀어내세요."
+      }
     },
     "hc": {
       "title": "호드릭 성",

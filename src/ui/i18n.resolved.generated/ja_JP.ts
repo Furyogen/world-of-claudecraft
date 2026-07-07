@@ -196,7 +196,16 @@ export const ja_JP: EnTranslations = {
       "wagerRound": "ラウンド:{seconds}秒",
       "wagerStake": "賭け金",
       "stakeDown": "賭け金を下げる",
-      "stakeUp": "賭け金を上げる"
+      "stakeUp": "賭け金を上げる",
+      "hint": {
+        "sentinel": "青は走れ。赤は止まれ。",
+        "sigils": "マウスを押したまま、石板に刻まれた線をなぞろう。",
+        "pull": "太鼓の音に合わせてクリック、タップ、またはスペースキー。",
+        "wagerHold": "小石をクリックして、その数だけビー玉を隠そう。",
+        "wagerGuess": "石をクリック:点一つは奇数、点二つは偶数。",
+        "span": "ガラスの橋を渡ろう。各組の片方は脆い板だ。",
+        "court": "リングが光ったら相手をクリックして場外へ突き飛ばそう。"
+      }
     },
     "hc": {
       "title": "ホドリック城",

@@ -6241,6 +6241,13 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gauntlet.wagerStake': 'Ставка',
   'hudChrome.gauntlet.stakeDown': 'Понизить ставку',
   'hudChrome.gauntlet.stakeUp': 'Повысить ставку',
+  'hudChrome.gauntlet.hint.sentinel': 'Беги на зелёный. Замри на красный.',
+  'hudChrome.gauntlet.hint.sigils': 'Зажмите кнопку мыши и обводите линию, выгравированную на плите.',
+  'hudChrome.gauntlet.hint.pull': 'Кликайте, касайтесь или жмите пробел в такт барабану.',
+  'hudChrome.gauntlet.hint.wagerHold': 'Кликните по камешку, чтобы спрятать столько шариков.',
+  'hudChrome.gauntlet.hint.wagerGuess': 'Кликните по камню: одна точка значит нечет, две точки значат чет.',
+  'hudChrome.gauntlet.hint.span': 'Перейдите по стеклу. В каждой паре одна панель хрупкая.',
+  'hudChrome.gauntlet.hint.court': 'Когда кольцо вспыхнет, кликните по сопернику, чтобы вытолкнуть его.',
   'entities.npcs.gauntlet_recruiter.title': 'Глашатай Гаунтлета',
   'entities.npcs.gauntlet_recruiter.greeting':
     'Ступай на песок вместе с остальными, {className}. Переживи каждое испытание, и пьедестал твой.',

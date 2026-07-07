@@ -196,7 +196,16 @@ export const zh_TW: EnTranslations = {
       "wagerRound": "本輪:{seconds}秒",
       "wagerStake": "賭注",
       "stakeDown": "降低賭注",
-      "stakeUp": "提高賭注"
+      "stakeUp": "提高賭注",
+      "hint": {
+        "sentinel": "綠燈快跑,紅燈定住。",
+        "sigils": "按住滑鼠,沿石板上蝕刻的線條描畫。",
+        "pull": "隨每聲鼓點點擊、輕觸或按空白鍵。",
+        "wagerHold": "點擊一枚石子,藏起相應數量的彈珠。",
+        "wagerGuess": "點擊石頭:一點為單,兩點為雙。",
+        "span": "橫渡玻璃橋。每對板中藏著一塊脆板。",
+        "court": "光環閃起時點擊對手,將其推出場外。"
+      }
     },
     "hc": {
       "title": "霍德里克城堡",

@@ -6122,6 +6122,13 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gauntlet.wagerStake': '賭け金',
   'hudChrome.gauntlet.stakeDown': '賭け金を下げる',
   'hudChrome.gauntlet.stakeUp': '賭け金を上げる',
+  'hudChrome.gauntlet.hint.sentinel': '青は走れ。赤は止まれ。',
+  'hudChrome.gauntlet.hint.sigils': 'マウスを押したまま、石板に刻まれた線をなぞろう。',
+  'hudChrome.gauntlet.hint.pull': '太鼓の音に合わせてクリック、タップ、またはスペースキー。',
+  'hudChrome.gauntlet.hint.wagerHold': '小石をクリックして、その数だけビー玉を隠そう。',
+  'hudChrome.gauntlet.hint.wagerGuess': '石をクリック:点一つは奇数、点二つは偶数。',
+  'hudChrome.gauntlet.hint.span': 'ガラスの橋を渡ろう。各組の片方は脆い板だ。',
+  'hudChrome.gauntlet.hint.court': 'リングが光ったら相手をクリックして場外へ突き飛ばそう。',
   'entities.npcs.gauntlet_recruiter.title': 'ガントレットの伝令',
   'entities.npcs.gauntlet_recruiter.greeting':
     '他の者たちと共に砂上に立て、{className}。すべての試練を生き延びれば、表彰台は君のものだ。',
