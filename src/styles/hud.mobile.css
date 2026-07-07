@@ -2096,9 +2096,4 @@
   body.mobile-touch #gauntlet-recruit .gr-action {
     min-height: 44px;
   }
-  /* Trial input controls: keep every tap target >= 44px on touch. */
-  body.mobile-touch .gh-wager-btn {
-    min-width: 44px;
-    min-height: 44px;
-  }
 }
