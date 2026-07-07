@@ -365,6 +365,28 @@ describe('dungeons: heroic difficulty', () => {
     expect(sim.dungeonDifficulty(leader)).toBe('heroic');
     expect(sim.dungeonDifficulty(member)).toBe('heroic');
   });
+
+  it('a leader-set party difficulty never stamps other members personally', () => {
+    const sim = makeSim();
+    const leader = sim.addPlayer('warrior', 'Boss');
+    const member = sim.addPlayer('mage', 'Along');
+    sim.partyInvite(member, leader);
+    sim.partyAccept(member);
+
+    sim.setDungeonDifficulty('heroic', leader);
+    expect(sim.dungeonDifficulty(member)).toBe('heroic'); // mirrors the party while grouped
+
+    // The member never chose heroic personally: leaving reverts them, and a
+    // party they later lead does not inherit the old group's setting.
+    sim.partyLeave(member);
+    expect(sim.dungeonDifficulty(member)).toBe('normal');
+    const third = sim.addPlayer('rogue', 'Newmate');
+    sim.partyInvite(third, member);
+    sim.partyAccept(third);
+    expect(sim.dungeonDifficulty(third)).toBe('normal');
+    // The setter keeps their own preference.
+    expect(sim.dungeonDifficulty(leader)).toBe('heroic');
+  });
 });
 
 describe('dungeons: heroic marks', () => {
