@@ -6116,7 +6116,8 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gauntlet.hint.pull': '북소리에 맞춰 클릭, 탭 또는 스페이스 키를 누르세요.',
   'hudChrome.gauntlet.hint.wagerHold': '조약돌을 클릭해 그 수만큼 구슬을 숨기세요.',
   'hudChrome.gauntlet.hint.wagerGuess': '돌을 클릭하세요. 점 하나는 홀, 점 둘은 짝입니다.',
-  'hudChrome.gauntlet.hint.span': '유리 다리를 건너세요. 각 쌍마다 부서지는 판이 하나 숨어 있습니다.',
+  'hudChrome.gauntlet.hint.span':
+    '유리 다리를 건너세요. 각 쌍마다 부서지는 판이 하나 숨어 있습니다.',
   'hudChrome.gauntlet.hint.court': '링이 번쩍일 때 상대를 클릭해 밖으로 밀어내세요.',
   'entities.npcs.gauntlet_recruiter.title': '시련의 관문 전령',
   'entities.npcs.gauntlet_recruiter.greeting':
