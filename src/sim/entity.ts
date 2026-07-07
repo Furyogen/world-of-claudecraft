@@ -2,7 +2,12 @@ import type { TalentModifiers } from './content/talents';
 import { aggregateSetBonuses, CLASSES, ITEMS, MOBS, type NpcDef } from './data';
 import { meetsLevelRequirement } from './item_level_req';
 import type { Entity, EquipSlot, MobTemplate, PlayerClass, Stats, Vec3 } from './types';
-import { EQUIP_SLOTS, SPELL_POWER_PER_INT } from './types';
+import {
+  critFractionFromRating,
+  EQUIP_SLOTS,
+  hasteFractionFromRating,
+  SPELL_POWER_PER_INT,
+} from './types';
 
 function baseEntity(id: number, pos: Vec3): Entity {
   return {
@@ -37,7 +42,11 @@ function baseEntity(id: number, pos: Vec3): Entity {
     meleeHaste: 0,
     rangedHaste: 0,
     spellHaste: 0,
+    setProcs: [],
+    procReadyAt: undefined as unknown as Record<string, number>,
     critChance: 0.05,
+    critRating: 0,
+    hasteRating: 0,
     dodgeChance: 0.05,
     castPushbackReduction: 0,
     knockbackResistance: 0,
@@ -187,6 +196,8 @@ export function recalcPlayerStats(
   };
   const setCounts = new Map<string, number>();
   let bonusSp = 0; // flat Spell Power from gear affixes + buff_spellpower auras
+  let bonusCritRating = 0;
+  let bonusHasteRating = 0;
   for (const slot of EQUIP_SLOTS) {
     const itemId = equipment[slot];
     if (!itemId) continue;
@@ -200,6 +211,8 @@ export function recalcPlayerStats(
     if (!meetsLevelRequirement(lvl, item)) continue;
     if (item.set) setCounts.set(item.set, (setCounts.get(item.set) ?? 0) + 1);
     bonusSp += item.spellPower ?? 0;
+    bonusCritRating += item.critRating ?? 0;
+    bonusHasteRating += item.hasteRating ?? 0;
     if (!item.stats) continue;
     s.str += item.stats.str ?? 0;
     s.agi += item.stats.agi ?? 0;
@@ -217,6 +230,7 @@ export function recalcPlayerStats(
   s.sta += setEff.sta;
   s.int += setEff.int;
   s.spi += setEff.spi;
+  bonusSp += setEff.sp; // caster set 2-piece spell power (mirrors setEff.ap for melee)
   // Buff auras
   let bonusAp = setEff.ap;
   let bonusDodge = 0;
@@ -305,8 +319,10 @@ export function recalcPlayerStats(
       ? mainhand.weapon
       : { min: 1, max: 2, speed: 2 };
   e.weapon = weapon;
-  // Render-only: the equipped mainhand item id drives the held weapon model on
-  // the client (mapped via ITEM_WEAPON_VARIANTS). Gated on the item actually being
+  // The equipped mainhand item id: drives the held weapon model on the client
+  // (mapped via ITEM_WEAPON_VARIANTS) AND legendary weapon procs in combat
+  // (combat/equip_procs.ts, which re-applies the level gate above so an inert
+  // over-level weapon's procs are inert too). Gated on the item actually being
   // a weapon, mirroring the e.weapon derivation above (so a non-weapon mainhand,
   // were one ever stored, never resolves to a held model).
   e.mainhandItemId =
@@ -334,14 +350,23 @@ export function recalcPlayerStats(
   // Spell Power: Intellect converted via SPELL_POWER_PER_INT plus flat Spell Power
   // from gear/buffs. Floored at 0 so an Intellect-draining debuff can't go negative.
   e.spellPower = Math.max(0, Math.round(s.int * SPELL_POWER_PER_INT + bonusSp));
-  // Haste from item-set bonuses (the only haste-gear source). ONE aggregated
-  // stat drives all three channels: faster melee and ranged auto-attack swings
+  e.critRating = bonusCritRating + setEff.critRating;
+  e.hasteRating = bonusHasteRating + setEff.hasteRating;
+  const hasteFrac = setEff.haste + hasteFractionFromRating(e.hasteRating);
+  // Haste drives all three channels: faster melee and ranged auto-attack swings
   // AND shorter spell casts/channels.
-  e.meleeHaste = setEff.haste;
-  e.rangedHaste = setEff.haste;
-  e.spellHaste = setEff.haste;
+  e.meleeHaste = hasteFrac;
+  e.rangedHaste = hasteFrac;
+  e.spellHaste = hasteFrac;
+  e.setProcs = setEff.procs;
+  if (e.setProcs.length > 0 && !e.procReadyAt) e.procReadyAt = {};
   // Crit: ~1% per 20 agi at low level
-  e.critChance = 0.05 + s.agi * 0.0005 + (mods?.stats.crit ?? 0) + setEff.crit;
+  e.critChance =
+    0.05 +
+    s.agi * 0.0005 +
+    (mods?.stats.crit ?? 0) +
+    setEff.crit +
+    critFractionFromRating(e.critRating);
   e.castPushbackReduction = setEff.castPushbackReduction;
   e.knockbackResistance = setEff.knockbackResistance;
   // Floored at 0: an off-balance debuff (negative buff_dodge) can drive dodge to nothing.

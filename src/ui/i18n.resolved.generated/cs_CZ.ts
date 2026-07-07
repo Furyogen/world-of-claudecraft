@@ -311,7 +311,15 @@ export const cs_CZ: EnTranslations = {
       "nameplates": "Jména",
       "haptics": "Haptika",
       "hapticsOff": "Haptika vypnuta",
-      "toggleHaptics": "Přepnout haptiku"
+      "toggleHaptics": "Přepnout haptiku",
+      "hotbarPage": "Skills",
+      "hotbarPageAria": "Show next set of skills",
+      "actionRing": "Combat actions",
+      "actionPageToggle": "Switch action page",
+      "actionPageIndicator": "{page}",
+      "targetCycle": "Swap target",
+      "targetCycleShort": "Target",
+      "spellbookPageLabel": "Page {page}"
     },
     "tutorial": {
       "moveBodyTouch": "Pohybuj se páčkou pohybu a tažením po obrazovce se rozhlížej. Udělej pár kroků a začni.",
@@ -389,6 +397,7 @@ export const cs_CZ: EnTranslations = {
     "options": {
       "clickMoveLeft": "Levé kliknutí",
       "clickMoveRight": "Pravé kliknutí",
+      "version": "v{version} ({build})",
       "browserEffects": "Efekty prohlížeče",
       "browserEffectsAuto": "Automaticky",
       "browserEffectsFull": "Plné",
@@ -420,7 +429,9 @@ export const cs_CZ: EnTranslations = {
       "itemLevelLine": "Úroveň předmětu {level}",
       "itemScoreLine": "Skóre {score}",
       "showSecondaryActionBar": "Zobrazit sekundární akční lištu",
-      "showDailyRewardsChest": "Zobrazit truhlu denních odměn"
+      "showDailyRewardsChest": "Zobrazit truhlu denních odměn",
+      "mobileCameraJoystick": "Camera joystick",
+      "mobileLeftHanded": "Left-handed layout"
     },
     "controller": {
       "title": "Ovladač",
@@ -514,7 +525,9 @@ export const cs_CZ: EnTranslations = {
     "statInfo": {
       "fromYour": "Z tvojí hodnoty {value} {stat}:",
       "names": {
-        "spellPower": "Síla kouzel"
+        "spellPower": "Síla kouzel",
+        "critRating": "Crit Rating",
+        "hasteRating": "Haste Rating"
       },
       "desc": {
         "str": "Zvyšuje tvoji sílu útoku, takže údery zbraní dopadají tvrději.",
@@ -527,7 +540,9 @@ export const cs_CZ: EnTranslations = {
         "spellPower": "Zvyšuje poškození tvých kouzel a sílu tvého léčení. Každý bod Intelektu dává trochu síly kouzel navíc k vybavení a buffům.",
         "dps": "Odhadované poškození zbraně za sekundu, které kombinuje poškození a rychlost zbraně s tvojí silou útoku.",
         "critChance": "Tvoje šance, že útok zasáhne kriticky a způsobí dvojnásobné poškození.",
-        "dodge": "Tvoje šance úplně se vyhnout příchozímu útoku na blízko a neutrpět poškození."
+        "dodge": "Tvoje šance úplně se vyhnout příchozímu útoku na blízko a neutrpět poškození.",
+        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
+        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
       },
       "effects": {
         "attackPower": "+{value} síla útoku",
@@ -567,6 +582,15 @@ export const cs_CZ: EnTranslations = {
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
+    },
+    "itemProc": {
+      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
+      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
+      "onHeal": "Chance on your heals ({chance}%): {effect}",
+      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
+      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
+      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
+      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
     },
     "questShare": {
       "notShareable": "Tento úkol nelze sdílet.",
@@ -775,6 +799,8 @@ export const cs_CZ: EnTranslations = {
       "setNormal": "Set Dungeon Difficulty: Normal"
     },
     "bags": {
+      "cannotDestroy": "This item cannot be destroyed.",
+      "rightClickDestroy": "Right-click to destroy",
       "filterGroupAria": "Filtrovat batohy podle kategorie",
       "filterAll": "Vše",
       "filterWeapon": "Zbraně",
@@ -1056,18 +1082,6 @@ export const cs_CZ: EnTranslations = {
         }
       }
     },
-    "crafting": {
-      "title": "Výroba",
-      "close": "Zavřít výrobu",
-      "craft": "Vyrobit",
-      "reagentsNeeded": "Vyžaduje:",
-      "reagentLine": "{name} x{have}/{required}",
-      "empty": "Zatím nejsou známy žádné recepty.",
-      "resultAria": "Vyrobit {name}",
-      "craftedToast": "Vyrobeno: {name}",
-      "insufficientMaterials": "Na to nemáš materiály.",
-      "unknownRecipe": "Tento recept neexistuje."
-    },
     "devBadge": {
       "title": "Vývojář",
       "tiers": {
@@ -1211,6 +1225,19 @@ export const cs_CZ: EnTranslations = {
       "mining": "Těžba",
       "logging": "Dřevorubectví",
       "herbalism": "Bylinkářství"
+    },
+    "crafting": {
+      "title": "Výroba",
+      "close": "Zavřít výrobu",
+      "craft": "Vyrobit",
+      "reagentsNeeded": "Vyžaduje:",
+      "reagentLine": "{name} x{have}/{required}",
+      "empty": "Zatím nejsou známy žádné recepty.",
+      "resultAria": "Vyrobit {name}",
+      "craftedToast": "Vyrobeno: {name}",
+      "insufficientMaterials": "Na to nemáš materiály.",
+      "unknownRecipe": "Tento recept neexistuje.",
+      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
     }
   },
   "apiError": {
@@ -8091,12 +8118,14 @@ export const cs_CZ: EnTranslations = {
       "crownforged": {
         "name": "Regálie z kosti",
         "bonus2": "Zvyšuje sílu útoku o 40.",
-        "bonus3": "Zvyšuje sílu o 15, výdrž o 15 a rychlost útoku i sesílání o 15 %."
+        "bonus3": "Zvyšuje sílu o 15, výdrž o 15 a rychlost útoku i sesílání o 15 %.",
+        "bonus4": "Your weapon critical strikes splinter the target with Bonesplinter, bleeding it for 8 damage every 2 sec for 12 sec. Stacks up to 3 times."
       },
       "deathlord": {
         "name": "Bojová výbava mohylového pána",
         "bonus2": "Zvyšuje sílu útoku o 40.",
-        "bonus3": "Zvyšuje sílu o 15 a výdrž o 15."
+        "bonus3": "Zvyšuje sílu o 15 a výdrž o 15.",
+        "bonus4": "Your weapon critical strikes have a 50% chance to grant Gravemight, increasing attack power by 60 for 10 sec."
       },
       "greyjaw_stalker": {
         "name": "Výbava stopaře Šedočelista",
@@ -8105,22 +8134,26 @@ export const cs_CZ: EnTranslations = {
       "necromancers": {
         "name": "Oděv smutkotkaní",
         "bonus2": "Nelze tě odhodit (100% odolnost proti odhození).",
-        "bonus3": "Zvyšuje intelekt o 10 a výdrž o 10."
+        "bonus3": "Zvyšuje intelekt o 10 a výdrž o 10.",
+        "bonus4": "Your spells have a 10% chance to grant Clearcasting, making your next spell free."
       },
       "nighttalon": {
         "name": "Kožešina děsivého tesáku",
         "bonus2": "Zvyšuje sílu útoku o 40.",
-        "bonus3": "Zvyšuje obratnost o 15, šanci na kritický zásah o 2 % a rychlost útoku i sesílání o 15 %."
+        "bonus3": "Zvyšuje obratnost o 15, šanci na kritický zásah o 2 % a rychlost útoku i sesílání o 15 %.",
+        "bonus4": "Your weapon critical strikes tear a Ragged Gash, bleeding the target for 6 damage every 2 sec for 12 sec. Stacks up to 3 times."
       },
       "soulflame": {
         "name": "Regálie přízračného ohně",
         "bonus2": "Nelze tě odhodit (100% odolnost proti odhození).",
-        "bonus3": "Zvyšuje intelekt o 15, ducha o 15 a rychlost útoku i sesílání o 15 %."
+        "bonus3": "Zvyšuje intelekt o 15, ducha o 15 a rychlost útoku i sesílání o 15 %.",
+        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
       },
       "stormcallers": {
         "name": "Roucha volání vichru",
         "bonus2": "Nelze tě odhodit (100% odolnost proti odhození).",
-        "bonus3": "Zvyšuje intelekt o 15, ducha o 15 a rychlost útoku i sesílání o 15 %."
+        "bonus3": "Zvyšuje intelekt o 15, ducha o 15 a rychlost útoku i sesílání o 15 %.",
+        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
       },
       "vale_arcanist": {
         "name": "Regálie arkánisty z údolí",
@@ -8129,7 +8162,8 @@ export const cs_CZ: EnTranslations = {
       "wyrmshadow": {
         "name": "Roucha nočního tesáku",
         "bonus2": "Zvyšuje sílu útoku o 40.",
-        "bonus3": "Zvyšuje obratnost o 15 a šanci na kritický zásah o 2 %."
+        "bonus3": "Zvyšuje obratnost o 15 a šanci na kritický zásah o 2 %.",
+        "bonus4": "Your weapon critical strikes have a 50% chance to grant Fangrush, increasing attack speed by 25% for 8 sec."
       }
     }
   },

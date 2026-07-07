@@ -233,6 +233,12 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   // Character-sheet stat tooltips (hudChrome.statInfo.*).
   'hudChrome.statInfo.fromYour': 'От вашей характеристики ({value} {stat}):',
   'hudChrome.statInfo.names.spellPower': 'Сила заклинаний',
+  'hudChrome.statInfo.names.critRating': 'Рейтинг крит. удара',
+  'hudChrome.statInfo.names.hasteRating': 'Рейтинг ускорения',
+  'hudChrome.statInfo.desc.critRating':
+    'Рейтинг критического удара от снаряжения и бонусов комплекта повышает шанс критического удара. Примерно 10 рейтинга дают 1% крит. удара.',
+  'hudChrome.statInfo.desc.hasteRating':
+    'Рейтинг ускорения от снаряжения и бонусов комплекта ускоряет ваши атаки и заклинания. Примерно 10 рейтинга дают 1% ускорения.',
   'hudChrome.statInfo.desc.spellPower':
     'Увеличивает урон ваших заклинаний и силу исцелений. Каждая единица интеллекта дает немного силы заклинаний, вдобавок к получаемой от снаряжения и усилений.',
   'hudChrome.statInfo.sources.header': 'Складывается из:',
@@ -390,6 +396,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.showItemLevel': 'Показывать уровень предмета',
   'hudChrome.options.showSecondaryActionBar': 'Показывать вторичную панель действий',
   'hudChrome.options.showDailyRewardsChest': 'Показывать сундук ежедневных наград',
+  'hudChrome.options.mobileCameraJoystick': 'Джойстик камеры',
+  'hudChrome.options.mobileLeftHanded': 'Раскладка для левшей',
   'hudChrome.options.itemLevelLine': 'Уровень предмета {level}',
   'hudChrome.options.itemScoreLine': 'Оценка {score}',
   'hudChrome.landing.highContrast': 'Высокая контрастность',
@@ -3596,12 +3604,18 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.meters.perSecond': '{value}/с',
   'hudChrome.meters.perSecondRow': '{total} ({rate})',
   'hudChrome.meters.seconds': '{s} сек.',
+  'hudChrome.mobile.actionPageToggle': 'Переключить страницу действий',
+  'hudChrome.mobile.actionRing': 'Боевые действия',
   'hudChrome.mobile.autorun': 'Автобег',
   'hudChrome.mobile.haptics': 'Вибрация',
   'hudChrome.mobile.hapticsOff': 'Вибрация выкл.',
+  'hudChrome.mobile.hotbarPage': 'Навыки',
+  'hudChrome.mobile.hotbarPageAria': 'Показать следующий набор навыков',
   'hudChrome.mobile.jump': 'Прыжок',
   'hudChrome.mobile.leaderboard': 'Рейтинг',
   'hudChrome.mobile.nameplates': 'Имена',
+  'hudChrome.mobile.targetCycle': 'Сменить цель',
+  'hudChrome.mobile.targetCycleShort': 'Цель',
   'hudChrome.mobile.toggleHaptics': 'Вкл/выкл вибрацию',
   'hudChrome.rest.resting': 'Отдых',
   'hudChrome.swing.ready': 'Замах',
@@ -3816,6 +3830,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.questTracker.collapseHint': 'Свернуть трекер заданий',
   'hudChrome.questTracker.expandHint': 'Развернуть трекер заданий',
   // Modular bag filtering controls (hudChrome.bags.*).
+  'hudChrome.bags.cannotDestroy': 'Этот предмет нельзя уничтожить.',
+  'hudChrome.bags.rightClickDestroy': 'Правый клик, чтобы уничтожить',
   'hudChrome.bags.filterGroupAria': 'Фильтровать сумки по категории',
   'hudChrome.bags.filterAll': 'Все',
   'hudChrome.bags.filterWeapon': 'Оружие',
@@ -5269,9 +5285,13 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.crownforged.bonus2': 'Сила атаки повышается на 40.',
   'entities.itemSets.crownforged.bonus3':
     'Сила повышается на 15, выносливость на 15, а скорость атаки и произнесения заклинаний на 15%.',
+  'entities.itemSets.crownforged.bonus4':
+    'Критические удары оружием оставляют в цели «Костяной осколок»: 8 ед. урона от кровотечения каждые 2 сек. в течение 12 сек. Суммируется до 3 раз.',
   'entities.itemSets.deathlord.name': 'Боевой доспех Владыки Кургана',
   'entities.itemSets.deathlord.bonus2': 'Сила атаки повышается на 40.',
   'entities.itemSets.deathlord.bonus3': 'Сила повышается на 15, выносливость на 15.',
+  'entities.itemSets.deathlord.bonus4':
+    'Критические удары оружием с вероятностью 50% даруют «Могильную мощь», увеличивая силу атаки на 60 на 10 сек.',
   'entities.itemSets.greyjaw_stalker.name': 'Снаряжение ловчего Серой Челюсти',
   'entities.itemSets.greyjaw_stalker.bonus3':
     'Скорость атаки и произнесения заклинаний повышается на 15%.',
@@ -5279,20 +5299,28 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.necromancers.bonus2':
     'Вас невозможно отбросить (100% сопротивление отбрасыванию).',
   'entities.itemSets.necromancers.bonus3': 'Интеллект повышается на 10, выносливость на 10.',
+  'entities.itemSets.necromancers.bonus4':
+    'Ваши заклинания с вероятностью 10% даруют «Ясность», делая следующее заклинание бесплатным.',
   'entities.itemSets.nighttalon.name': 'Кожаный доспех Лютого Клыка',
   'entities.itemSets.nighttalon.bonus2': 'Сила атаки повышается на 40.',
   'entities.itemSets.nighttalon.bonus3':
     'Ловкость повышается на 15, вероятность критического удара на 2%, а скорость атаки и произнесения заклинаний на 15%.',
+  'entities.itemSets.nighttalon.bonus4':
+    'Критические удары оружием наносят «Рваную рану»: цель теряет 6 ед. здоровья от кровотечения каждые 2 сек. в течение 12 сек. Суммируется до 3 раз.',
   'entities.itemSets.soulflame.name': 'Одеяние Призрачного пламени',
   'entities.itemSets.soulflame.bonus2':
     'Вас невозможно отбросить (100% сопротивление отбрасыванию).',
   'entities.itemSets.soulflame.bonus3':
     'Интеллект повышается на 15, дух на 15, а скорость атаки и произнесения заклинаний на 15%.',
+  'entities.itemSets.soulflame.bonus4':
+    'Ваши заклинания с вероятностью 10% даруют «Пламя души», увеличивая силу заклинаний на 40 на 10 сек.',
   'entities.itemSets.stormcallers.name': 'Одеяние Зова Бури',
   'entities.itemSets.stormcallers.bonus2':
     'Вас невозможно отбросить (100% сопротивление отбрасыванию).',
   'entities.itemSets.stormcallers.bonus3':
     'Интеллект повышается на 15, дух на 15, а скорость атаки и произнесения заклинаний на 15%.',
+  'entities.itemSets.stormcallers.bonus4':
+    'Ваши заклинания с вероятностью 10% даруют «Пламя души», увеличивая силу заклинаний на 40 на 10 сек.',
   'entities.itemSets.vale_arcanist.name': 'Регалии арканиста Долины',
   'entities.itemSets.vale_arcanist.bonus3':
     'Скорость атаки и произнесения заклинаний повышается на 15%.',
@@ -5300,7 +5328,19 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.wyrmshadow.bonus2': 'Сила атаки повышается на 40.',
   'entities.itemSets.wyrmshadow.bonus3':
     'Ловкость повышается на 15, вероятность критического удара на 2%.',
+  'entities.itemSets.wyrmshadow.bonus4':
+    'Критические удары оружием с вероятностью 50% даруют «Клыкастый порыв», увеличивая скорость атаки на 25% на 8 сек.',
   'hudChrome.itemSet.header': '{name} ({have}/{total})',
+  'hudChrome.itemProc.onMeleeHit': 'Шанс при попадании ({chance}%): {effect}',
+  'hudChrome.itemProc.onSpellDamage': 'Шанс от уронных заклинаний ({chance}%): {effect}',
+  'hudChrome.itemProc.onHeal': 'Шанс при исцелении ({chance}%): {effect}',
+  'hudChrome.itemProc.chainArc':
+    'поражает цель эффектом «{name}» ({school}, {damage}) и перескакивает на {jumps} ближайших врагов с затухающим уроном',
+  'hudChrome.itemProc.attackSlow': 'и снижает скорость атаки цели на {pct}% на {duration} сек',
+  'hudChrome.itemProc.dot':
+    'вызывает «{name}», периодический урон ({school}), нанося {total} за {duration} сек',
+  'hudChrome.itemProc.hot':
+    'распускает «{name}», периодическое исцеление, восполняя {total} за {duration} сек',
   'hudChrome.itemSet.bonusLine': '({pieces}) {bonus}',
   'hudChrome.abilityScaling.bonus': '(+{value})',
   // Discord integration (two-way login, rewards, relay, in-game flair).
@@ -5986,15 +6026,6 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.dailyRewards.remainingMinutes': '{minutes}м',
   'hudChrome.dailyRewards.sol': '{amount} SOL',
   'hudChrome.dailyRewards.usd': '{amount} USD',
-  'hudChrome.crafting.title': 'Крафт',
-  'hudChrome.crafting.close': 'Закрыть крафт',
-  'hudChrome.crafting.craft': 'Создать',
-  'hudChrome.crafting.reagentsNeeded': 'Требуется:',
-  'hudChrome.crafting.empty': 'Известных рецептов пока нет.',
-  'hudChrome.crafting.resultAria': 'Создать {name}',
-  'hudChrome.crafting.craftedToast': 'Создано: {name}',
-  'hudChrome.crafting.insufficientMaterials': 'У вас недостаточно материалов.',
-  'hudChrome.crafting.unknownRecipe': 'Такого рецепта не существует.',
   // apiError.* server error-code catalog (M16 non-Latin fill, Phase 22)
   'apiError.validation.failed':
     'Некоторые поля заполнены неверно. Проверьте форму и попробуйте снова.',
@@ -6173,4 +6204,17 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gathering.herbalism': 'Травничество',
   // Release v0.22.0 locale fill.
   'hudChrome.crafting.reagentLine': '{name}: {have}/{required}',
+  'hudChrome.crafting.title': 'Крафт',
+  'hudChrome.crafting.close': 'Закрыть крафт',
+  'hudChrome.crafting.craft': 'Создать',
+  'hudChrome.crafting.reagentsNeeded': 'Требуется:',
+  'hudChrome.crafting.empty': 'Известных рецептов пока нет.',
+  'hudChrome.crafting.resultAria': 'Создать {name}',
+  'hudChrome.crafting.craftedToast': 'Создано: {name}',
+  'hudChrome.crafting.insufficientMaterials': 'У вас недостаточно материалов.',
+  'hudChrome.crafting.unknownRecipe': 'Такого рецепта не существует.',
+  'hudChrome.crafting.comboRequirementUnmet':
+    'У вас нет обоих требуемых ремесел нужного уровня для этого рецепта.',
+  'hudChrome.mobile.actionPageIndicator': 'Стр. {page}',
+  'hudChrome.mobile.spellbookPageLabel': 'Страница {page}',
 };

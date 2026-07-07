@@ -221,16 +221,12 @@ function makeCtx() {
     mobSwing: vi.fn(),
     updateRangedPetAttack: vi.fn(),
     fleeMoveSpeed: vi.fn(() => 0),
-    usesProfiledMobCombat: vi.fn(() => false),
-    updateProfiledMobCombat: vi.fn(),
-    tryMobMeleeSwingInRange: vi.fn(() => false),
     maybeFlee: vi.fn(() => false),
     aggroMob: vi.fn(),
     isStunned: vi.fn(() => false),
     isRooted: vi.fn(() => false),
     moveSpeedMult: vi.fn(() => 1),
     swingIntervalMult: vi.fn(() => 1),
-    mobEffectiveMeleeRange: vi.fn(() => 0),
     mobCanSwim: vi.fn(() => false),
     resolveMovePoint: vi.fn(() => ({ x: 0, z: 0 })),
     updatePet: vi.fn(),
@@ -309,6 +305,7 @@ function makeCtx() {
     marketListingBelongsTo: vi.fn(() => false),
     // Ravenpost mail: the quest turn-in letter hook.
     queueQuestLetter: vi.fn(),
+    applySetProcs: vi.fn(),
   };
   const ctx = createSimContext(host);
   return {

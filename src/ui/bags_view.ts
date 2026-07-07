@@ -18,6 +18,8 @@ export interface BagItemInfo {
   noMarketList?: boolean;
   /** Truthy when the item has a generic "use" effect (e.g. fishing). */
   use?: unknown;
+  /** Protected from destruction (the sim's discardItem also no-ops these). */
+  noDiscard?: boolean;
 }
 
 /** The open-window modes that change what a bag click does. At most one is the
@@ -92,6 +94,36 @@ export function bagItemAction(item: BagItemInfo, mode: BagMode): BagAction {
  *  already owns the split-stack sell prompt; that affordance is left untouched. */
 export function bagShiftLinks(mode: BagMode): boolean {
   return !mode.vendorOpen;
+}
+
+/** Whether the #bags window is currently shown, from its inline display value.
+ *  Shown = any non-hidden value (#bags is only ever assigned 'flex' today), NOT
+ *  hidden ('none') and NOT the cold-load empty ''. The '' case is the bug (issue
+ *  #1538): the .window stylesheet rule hides the window, so a fresh page load
+ *  leaves the inline display '' (never 'none'). It must read as NOT shown so the
+ *  first toggle OPENS instead of taking the close branch (and playing the close
+ *  sound) against an already-hidden window. Guards on the hidden values rather
+ *  than pinning to a specific shown value (mirroring close() and the closeAll
+ *  precedent), so it stays correct if the shown value ever changes. */
+export function bagsWindowShown(display: string): boolean {
+  return display !== 'none' && display !== '';
+}
+
+/** What a right-click (destroy affordance) on a bag item does. 'discard' opens the
+ *  destroy prompt, 'discardBlocked' rejects a protected item with feedback, 'none'
+ *  means the destroy affordance is inert. */
+export type BagDestroyAction = 'discard' | 'discardBlocked' | 'none';
+
+/** Decide the right-click destroy affordance for a bag item. Inert in the
+ *  transactional modes (trade / mail / market / vendor / pet-feed), whose own
+ *  click/contextmenu owns the slot; a noDiscard item is protected with feedback,
+ *  every other item can be destroyed (mirrors the sim's discardItem rule, which
+ *  accepts any non-noDiscard item). Left-click use/equip is unaffected. */
+export function bagDestroyAction(item: BagItemInfo, mode: BagMode): BagDestroyAction {
+  if (mode.tradeOpen || mode.mailAttach || mode.marketSell || mode.vendorOpen || mode.petFeed)
+    return 'none';
+  if (item.noDiscard) return 'discardBlocked';
+  return 'discard';
 }
 
 /** The tooltip hint sub-line for a bag item, matching the original tooltip's

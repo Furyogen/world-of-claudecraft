@@ -311,7 +311,15 @@ export const nl_NL: EnTranslations = {
       "nameplates": "Namen",
       "haptics": "Haptiek",
       "hapticsOff": "Haptiek uit",
-      "toggleHaptics": "Haptiek aan/uit"
+      "toggleHaptics": "Haptiek aan/uit",
+      "hotbarPage": "Vaardigheden",
+      "hotbarPageAria": "Toon de volgende set vaardigheden",
+      "actionRing": "Gevechtsacties",
+      "actionPageToggle": "Actiepagina wisselen",
+      "actionPageIndicator": "Pag. {page}",
+      "targetCycle": "Wissel van doel",
+      "targetCycleShort": "Doel",
+      "spellbookPageLabel": "Pagina {page}"
     },
     "tutorial": {
       "moveBodyTouch": "Gebruik de bewegingsstick om te bewegen en sleep over het scherm om rond te kijken. Zet een paar stappen om te beginnen.",
@@ -389,6 +397,7 @@ export const nl_NL: EnTranslations = {
     "options": {
       "clickMoveLeft": "Linkermuisklik",
       "clickMoveRight": "Rechtermuisklik",
+      "version": "v{version} ({build})",
       "browserEffects": "Browsereffecten",
       "browserEffectsAuto": "Automatisch",
       "browserEffectsFull": "Volledig",
@@ -420,7 +429,9 @@ export const nl_NL: EnTranslations = {
       "itemLevelLine": "Itemniveau {level}",
       "itemScoreLine": "Score {score}",
       "showSecondaryActionBar": "Secundaire actiebalk tonen",
-      "showDailyRewardsChest": "Kist met dagelijkse beloningen tonen"
+      "showDailyRewardsChest": "Kist met dagelijkse beloningen tonen",
+      "mobileCameraJoystick": "Camerajoystick",
+      "mobileLeftHanded": "Linkshandige indeling"
     },
     "controller": {
       "title": "Controller",
@@ -514,7 +525,9 @@ export const nl_NL: EnTranslations = {
     "statInfo": {
       "fromYour": "Van je {value} {stat}:",
       "names": {
-        "spellPower": "Spreukkracht"
+        "spellPower": "Spreukkracht",
+        "critRating": "Crit Rating",
+        "hasteRating": "Haste Rating"
       },
       "desc": {
         "str": "Verhoogt je aanvalskracht, zodat je wapenslagen harder aankomen.",
@@ -527,7 +540,9 @@ export const nl_NL: EnTranslations = {
         "spellPower": "Verhoogt de schade van je spreuken en de kracht van je genezingen. Elk punt Intellect verleent een beetje Spreukkracht, bovenop wat je krijgt van uitrusting of buffs.",
         "dps": "Je geschatte wapenschade per seconde, een combinatie van de schade en snelheid van je wapen met je aanvalskracht.",
         "critChance": "Je kans dat een aanval kritiek raakt en dubbele schade aanricht.",
-        "dodge": "Je kans om een inkomende slagaanval volledig te ontwijken, zonder schade op te lopen."
+        "dodge": "Je kans om een inkomende slagaanval volledig te ontwijken, zonder schade op te lopen.",
+        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
+        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
       },
       "effects": {
         "attackPower": "+{value} Aanvalskracht",
@@ -567,6 +582,15 @@ export const nl_NL: EnTranslations = {
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
+    },
+    "itemProc": {
+      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
+      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
+      "onHeal": "Chance on your heals ({chance}%): {effect}",
+      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
+      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
+      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
+      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
     },
     "questShare": {
       "notShareable": "Deze queeste kan niet gedeeld worden.",
@@ -775,6 +799,8 @@ export const nl_NL: EnTranslations = {
       "setNormal": "Set Dungeon Difficulty: Normal"
     },
     "bags": {
+      "cannotDestroy": "This item cannot be destroyed.",
+      "rightClickDestroy": "Right-click to destroy",
       "filterGroupAria": "Tassen filteren op categorie",
       "filterAll": "Alle",
       "filterWeapon": "Wapens",
@@ -1056,18 +1082,6 @@ export const nl_NL: EnTranslations = {
         }
       }
     },
-    "crafting": {
-      "title": "Knutselen",
-      "close": "Sluit het maken",
-      "craft": "Ambacht",
-      "reagentsNeeded": "Vereist:",
-      "reagentLine": "{name}: {have}/{required}",
-      "empty": "Nog geen recepten bekend.",
-      "resultAria": "Ambacht {name}",
-      "craftedToast": "Gemaakt: {name}",
-      "insufficientMaterials": "Daar heb je de materialen niet voor.",
-      "unknownRecipe": "Dat recept bestaat niet."
-    },
     "devBadge": {
       "title": "Ontwikkelaar",
       "tiers": {
@@ -1211,6 +1225,19 @@ export const nl_NL: EnTranslations = {
       "mining": "Mijnbouw",
       "logging": "Houtkap",
       "herbalism": "Kruidenkunde"
+    },
+    "crafting": {
+      "title": "Knutselen",
+      "close": "Sluit het maken",
+      "craft": "Ambacht",
+      "reagentsNeeded": "Vereist:",
+      "reagentLine": "{name}: {have}/{required}",
+      "empty": "Nog geen recepten bekend.",
+      "resultAria": "Ambacht {name}",
+      "craftedToast": "Gemaakt: {name}",
+      "insufficientMaterials": "Daar heb je de materialen niet voor.",
+      "unknownRecipe": "Dat recept bestaat niet.",
+      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
     }
   },
   "apiError": {
@@ -8091,12 +8118,14 @@ export const nl_NL: EnTranslations = {
       "crownforged": {
         "name": "Bonewrought-Regalia",
         "bonus2": "Verhoogt aanvalskracht met 40.",
-        "bonus3": "Verhoogt kracht met 15, uithoudingsvermogen met 15 en aanvals- en spreuksnelheid met 15%."
+        "bonus3": "Verhoogt kracht met 15, uithoudingsvermogen met 15 en aanvals- en spreuksnelheid met 15%.",
+        "bonus4": "Your weapon critical strikes splinter the target with Bonesplinter, bleeding it for 8 damage every 2 sec for 12 sec. Stacks up to 3 times."
       },
       "deathlord": {
         "name": "Barrowlord-Strijduitrusting",
         "bonus2": "Verhoogt aanvalskracht met 40.",
-        "bonus3": "Verhoogt kracht met 15 en uithoudingsvermogen met 15."
+        "bonus3": "Verhoogt kracht met 15 en uithoudingsvermogen met 15.",
+        "bonus4": "Your weapon critical strikes have a 50% chance to grant Gravemight, increasing attack power by 60 for 10 sec."
       },
       "greyjaw_stalker": {
         "name": "Uitrusting van de Grijskaak-sluiper",
@@ -8105,22 +8134,26 @@ export const nl_NL: EnTranslations = {
       "necromancers": {
         "name": "Mournweave-Gewaden",
         "bonus2": "Je kunt niet worden teruggeslagen (100% terugslagweerstand).",
-        "bonus3": "Verhoogt intellect met 10 en uithoudingsvermogen met 10."
+        "bonus3": "Verhoogt intellect met 10 en uithoudingsvermogen met 10.",
+        "bonus4": "Your spells have a 10% chance to grant Clearcasting, making your next spell free."
       },
       "nighttalon": {
         "name": "Direfang-Pels",
         "bonus2": "Verhoogt aanvalskracht met 40.",
-        "bonus3": "Verhoogt behendigheid met 15, kritieke kans met 2% en aanvals- en spreuksnelheid met 15%."
+        "bonus3": "Verhoogt behendigheid met 15, kritieke kans met 2% en aanvals- en spreuksnelheid met 15%.",
+        "bonus4": "Your weapon critical strikes tear a Ragged Gash, bleeding the target for 6 damage every 2 sec for 12 sec. Stacks up to 3 times."
       },
       "soulflame": {
         "name": "Wraithfire-Regalia",
         "bonus2": "Je kunt niet worden teruggeslagen (100% terugslagweerstand).",
-        "bonus3": "Verhoogt intellect met 15, geest met 15 en aanvals- en spreuksnelheid met 15%."
+        "bonus3": "Verhoogt intellect met 15, geest met 15 en aanvals- en spreuksnelheid met 15%.",
+        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
       },
       "stormcallers": {
         "name": "Galecall-Gewaden",
         "bonus2": "Je kunt niet worden teruggeslagen (100% terugslagweerstand).",
-        "bonus3": "Verhoogt intellect met 15, geest met 15 en aanvals- en spreuksnelheid met 15%."
+        "bonus3": "Verhoogt intellect met 15, geest met 15 en aanvals- en spreuksnelheid met 15%.",
+        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
       },
       "vale_arcanist": {
         "name": "Gewaden van de Dal-arcanist",
@@ -8129,7 +8162,8 @@ export const nl_NL: EnTranslations = {
       "wyrmshadow": {
         "name": "Nightfang-Gewaden",
         "bonus2": "Verhoogt aanvalskracht met 40.",
-        "bonus3": "Verhoogt behendigheid met 15 en kritieke kans met 2%."
+        "bonus3": "Verhoogt behendigheid met 15 en kritieke kans met 2%.",
+        "bonus4": "Your weapon critical strikes have a 50% chance to grant Fangrush, increasing attack speed by 25% for 8 sec."
       }
     }
   },

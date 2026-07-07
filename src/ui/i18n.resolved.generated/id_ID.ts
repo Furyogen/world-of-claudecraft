@@ -311,7 +311,15 @@ export const id_ID: EnTranslations = {
       "nameplates": "Nama",
       "haptics": "Haptik",
       "hapticsOff": "Haptik Nonaktif",
-      "toggleHaptics": "Alihkan haptik"
+      "toggleHaptics": "Alihkan haptik",
+      "hotbarPage": "Kemampuan",
+      "hotbarPageAria": "Tampilkan rangkaian kemampuan berikutnya",
+      "actionRing": "Aksi tempur",
+      "actionPageToggle": "Ganti halaman tindakan",
+      "actionPageIndicator": "Hal. {page}",
+      "targetCycle": "Tukar sasaran",
+      "targetCycleShort": "Target",
+      "spellbookPageLabel": "Halaman {page}"
     },
     "tutorial": {
       "moveBodyTouch": "Gunakan tuas gerak untuk berpindah dan seret layar untuk melihat sekeliling. Ambil beberapa langkah untuk memulai.",
@@ -389,6 +397,7 @@ export const id_ID: EnTranslations = {
     "options": {
       "clickMoveLeft": "Klik Kiri",
       "clickMoveRight": "Klik Kanan",
+      "version": "v{version} ({build})",
       "browserEffects": "Efek Peramban",
       "browserEffectsAuto": "Otomatis",
       "browserEffectsFull": "Penuh",
@@ -420,7 +429,9 @@ export const id_ID: EnTranslations = {
       "itemLevelLine": "Level Item {level}",
       "itemScoreLine": "Skor {score}",
       "showSecondaryActionBar": "Tampilkan Bilah Aksi Sekunder",
-      "showDailyRewardsChest": "Tampilkan Peti Hadiah Harian"
+      "showDailyRewardsChest": "Tampilkan Peti Hadiah Harian",
+      "mobileCameraJoystick": "Joystick kamera",
+      "mobileLeftHanded": "Tata letak kidal"
     },
     "controller": {
       "title": "Kontroler",
@@ -514,7 +525,9 @@ export const id_ID: EnTranslations = {
     "statInfo": {
       "fromYour": "Dari {value} {stat} Anda:",
       "names": {
-        "spellPower": "Kekuatan Mantra"
+        "spellPower": "Kekuatan Mantra",
+        "critRating": "Crit Rating",
+        "hasteRating": "Haste Rating"
       },
       "desc": {
         "str": "Meningkatkan daya serang Anda, sehingga serangan senjata Anda menghantam lebih keras.",
@@ -527,7 +540,9 @@ export const id_ID: EnTranslations = {
         "spellPower": "Meningkatkan kerusakan mantra dan kekuatan penyembuhanmu. Setiap poin Kecerdasan memberi sedikit Kekuatan Mantra, di atas apa pun dari perlengkapan atau buff.",
         "dps": "Perkiraan kerusakan senjata Anda per detik, menggabungkan kerusakan dan kecepatan senjata dengan daya serang Anda.",
         "critChance": "Peluang serangan Anda menghantam secara kritis, memberikan kerusakan ganda.",
-        "dodge": "Peluang Anda untuk sepenuhnya menghindari serangan jarak dekat, tanpa menerima kerusakan."
+        "dodge": "Peluang Anda untuk sepenuhnya menghindari serangan jarak dekat, tanpa menerima kerusakan.",
+        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
+        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
       },
       "effects": {
         "attackPower": "+{value} Daya Serang",
@@ -567,6 +582,15 @@ export const id_ID: EnTranslations = {
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
+    },
+    "itemProc": {
+      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
+      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
+      "onHeal": "Chance on your heals ({chance}%): {effect}",
+      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
+      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
+      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
+      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
     },
     "questShare": {
       "notShareable": "Misi ini tidak dapat dibagikan.",
@@ -775,6 +799,8 @@ export const id_ID: EnTranslations = {
       "setNormal": "Set Dungeon Difficulty: Normal"
     },
     "bags": {
+      "cannotDestroy": "This item cannot be destroyed.",
+      "rightClickDestroy": "Right-click to destroy",
       "filterGroupAria": "Saring tas menurut kategori",
       "filterAll": "Semua",
       "filterWeapon": "Senjata",
@@ -1056,18 +1082,6 @@ export const id_ID: EnTranslations = {
         }
       }
     },
-    "crafting": {
-      "title": "kerajinan",
-      "close": "Tutup kerajinan",
-      "craft": "Keahlian",
-      "reagentsNeeded": "Memerlukan:",
-      "reagentLine": "{name}: {have}/{required}",
-      "empty": "Belum ada resep yang diketahui.",
-      "resultAria": "Kerajinan {name}",
-      "craftedToast": "Dibuat: {name}",
-      "insufficientMaterials": "Anda tidak memiliki bahan untuk itu.",
-      "unknownRecipe": "Resep itu tidak ada."
-    },
     "devBadge": {
       "title": "Pengembang",
       "tiers": {
@@ -1211,6 +1225,19 @@ export const id_ID: EnTranslations = {
       "mining": "Penambangan",
       "logging": "Penebangan",
       "herbalism": "Herbalisme"
+    },
+    "crafting": {
+      "title": "kerajinan",
+      "close": "Tutup kerajinan",
+      "craft": "Keahlian",
+      "reagentsNeeded": "Memerlukan:",
+      "reagentLine": "{name}: {have}/{required}",
+      "empty": "Belum ada resep yang diketahui.",
+      "resultAria": "Kerajinan {name}",
+      "craftedToast": "Dibuat: {name}",
+      "insufficientMaterials": "Anda tidak memiliki bahan untuk itu.",
+      "unknownRecipe": "Resep itu tidak ada.",
+      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
     }
   },
   "apiError": {
@@ -8091,12 +8118,14 @@ export const id_ID: EnTranslations = {
       "crownforged": {
         "name": "Regalia Bonewrought",
         "bonus2": "Meningkatkan daya serang sebesar 40.",
-        "bonus3": "Meningkatkan kekuatan sebesar 15, stamina sebesar 15, serta kecepatan serangan dan rapal sebesar 15%."
+        "bonus3": "Meningkatkan kekuatan sebesar 15, stamina sebesar 15, serta kecepatan serangan dan rapal sebesar 15%.",
+        "bonus4": "Your weapon critical strikes splinter the target with Bonesplinter, bleeding it for 8 damage every 2 sec for 12 sec. Stacks up to 3 times."
       },
       "deathlord": {
         "name": "Perlengkapan Tempur Barrowlord",
         "bonus2": "Meningkatkan daya serang sebesar 40.",
-        "bonus3": "Meningkatkan kekuatan sebesar 15 dan stamina sebesar 15."
+        "bonus3": "Meningkatkan kekuatan sebesar 15 dan stamina sebesar 15.",
+        "bonus4": "Your weapon critical strikes have a 50% chance to grant Gravemight, increasing attack power by 60 for 10 sec."
       },
       "greyjaw_stalker": {
         "name": "Perlengkapan Penguntit Greyjaw",
@@ -8105,22 +8134,26 @@ export const id_ID: EnTranslations = {
       "necromancers": {
         "name": "Jubah Mournweave",
         "bonus2": "Kamu tidak dapat terpental (ketahanan pentalan 100%).",
-        "bonus3": "Meningkatkan kecerdasan sebesar 10 dan stamina sebesar 10."
+        "bonus3": "Meningkatkan kecerdasan sebesar 10 dan stamina sebesar 10.",
+        "bonus4": "Your spells have a 10% chance to grant Clearcasting, making your next spell free."
       },
       "nighttalon": {
         "name": "Perlengkapan Kulit Direfang",
         "bonus2": "Meningkatkan daya serang sebesar 40.",
-        "bonus3": "Meningkatkan kelincahan sebesar 15, peluang kritis sebesar 2%, serta kecepatan serangan dan rapal sebesar 15%."
+        "bonus3": "Meningkatkan kelincahan sebesar 15, peluang kritis sebesar 2%, serta kecepatan serangan dan rapal sebesar 15%.",
+        "bonus4": "Your weapon critical strikes tear a Ragged Gash, bleeding the target for 6 damage every 2 sec for 12 sec. Stacks up to 3 times."
       },
       "soulflame": {
         "name": "Regalia Wraithfire",
         "bonus2": "Kamu tidak dapat terpental (ketahanan pentalan 100%).",
-        "bonus3": "Meningkatkan kecerdasan sebesar 15, roh sebesar 15, serta kecepatan serangan dan rapal sebesar 15%."
+        "bonus3": "Meningkatkan kecerdasan sebesar 15, roh sebesar 15, serta kecepatan serangan dan rapal sebesar 15%.",
+        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
       },
       "stormcallers": {
         "name": "Jubah Galecall",
         "bonus2": "Kamu tidak dapat terpental (ketahanan pentalan 100%).",
-        "bonus3": "Meningkatkan kecerdasan sebesar 15, roh sebesar 15, serta kecepatan serangan dan rapal sebesar 15%."
+        "bonus3": "Meningkatkan kecerdasan sebesar 15, roh sebesar 15, serta kecepatan serangan dan rapal sebesar 15%.",
+        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
       },
       "vale_arcanist": {
         "name": "Perlengkapan Arkanis Lembah",
@@ -8129,7 +8162,8 @@ export const id_ID: EnTranslations = {
       "wyrmshadow": {
         "name": "Jubah Nightfang",
         "bonus2": "Meningkatkan daya serang sebesar 40.",
-        "bonus3": "Meningkatkan kelincahan sebesar 15 dan peluang kritis sebesar 2%."
+        "bonus3": "Meningkatkan kelincahan sebesar 15 dan peluang kritis sebesar 2%.",
+        "bonus4": "Your weapon critical strikes have a 50% chance to grant Fangrush, increasing attack speed by 25% for 8 sec."
       }
     }
   },

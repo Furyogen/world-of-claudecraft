@@ -311,7 +311,15 @@ export const sv_SE: EnTranslations = {
       "nameplates": "Namn",
       "haptics": "Haptik",
       "hapticsOff": "Haptik av",
-      "toggleHaptics": "Växla haptik"
+      "toggleHaptics": "Växla haptik",
+      "hotbarPage": "Förmågor",
+      "hotbarPageAria": "Visa nästa uppsättning förmågor",
+      "actionRing": "Stridsaktioner",
+      "actionPageToggle": "Byt åtgärdssida",
+      "actionPageIndicator": "Sida {page}",
+      "targetCycle": "Byt mål",
+      "targetCycleShort": "Mål",
+      "spellbookPageLabel": "Sida {page}"
     },
     "tutorial": {
       "moveBodyTouch": "Använd rörelsespaken för att gå och dra på skärmen för att se dig omkring. Ta några steg för att börja.",
@@ -389,6 +397,7 @@ export const sv_SE: EnTranslations = {
     "options": {
       "clickMoveLeft": "Vänsterklick",
       "clickMoveRight": "Högerklick",
+      "version": "v{version} ({build})",
       "browserEffects": "Webbläsareffekter",
       "browserEffectsAuto": "Auto",
       "browserEffectsFull": "Fullständig",
@@ -420,7 +429,9 @@ export const sv_SE: EnTranslations = {
       "itemLevelLine": "Föremålsnivå {level}",
       "itemScoreLine": "Poäng {score}",
       "showSecondaryActionBar": "Visa sekundärt handlingsfält",
-      "showDailyRewardsChest": "Visa kistan för dagliga belöningar"
+      "showDailyRewardsChest": "Visa kistan för dagliga belöningar",
+      "mobileCameraJoystick": "Kamera joystick",
+      "mobileLeftHanded": "Vänsterhänt layout"
     },
     "controller": {
       "title": "Handkontroll",
@@ -514,7 +525,9 @@ export const sv_SE: EnTranslations = {
     "statInfo": {
       "fromYour": "Från dina {value} {stat}:",
       "names": {
-        "spellPower": "Besvärjelsekraft"
+        "spellPower": "Besvärjelsekraft",
+        "critRating": "Crit Rating",
+        "hasteRating": "Haste Rating"
       },
       "desc": {
         "str": "Ökar din attackstyrka, så att dina vapenslag landar hårdare.",
@@ -527,7 +540,9 @@ export const sv_SE: EnTranslations = {
         "spellPower": "Ökar skadan från dina besvärjelser och styrkan i dina läkningar. Varje poäng Intellekt ger lite Besvärjelsekraft, utöver det från utrustning eller förstärkningar.",
         "dps": "Din uppskattade vapenskada per sekund, som kombinerar ditt vapens skada och hastighet med din attackstyrka.",
         "critChance": "Din chans att en attack träffar kritiskt och orsakar dubbel skada.",
-        "dodge": "Din chans att helt undvika en inkommande närstridsattack utan att ta skada."
+        "dodge": "Din chans att helt undvika en inkommande närstridsattack utan att ta skada.",
+        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
+        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
       },
       "effects": {
         "attackPower": "+{value} Attackstyrka",
@@ -567,6 +582,15 @@ export const sv_SE: EnTranslations = {
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
+    },
+    "itemProc": {
+      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
+      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
+      "onHeal": "Chance on your heals ({chance}%): {effect}",
+      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
+      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
+      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
+      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
     },
     "questShare": {
       "notShareable": "Det här uppdraget kan inte delas.",
@@ -775,6 +799,8 @@ export const sv_SE: EnTranslations = {
       "setNormal": "Set Dungeon Difficulty: Normal"
     },
     "bags": {
+      "cannotDestroy": "This item cannot be destroyed.",
+      "rightClickDestroy": "Right-click to destroy",
       "filterGroupAria": "Filtrera väskor efter kategori",
       "filterAll": "Alla",
       "filterWeapon": "Vapen",
@@ -1056,18 +1082,6 @@ export const sv_SE: EnTranslations = {
         }
       }
     },
-    "crafting": {
-      "title": "Hantverk",
-      "close": "Nära hantverk",
-      "craft": "Hantverk",
-      "reagentsNeeded": "Kräver:",
-      "reagentLine": "{name}: {have}/{required}",
-      "empty": "Inga recept kända än.",
-      "resultAria": "Hantverk {name}",
-      "craftedToast": "Tillverkad: {name}",
-      "insufficientMaterials": "Du har inte materialet för det.",
-      "unknownRecipe": "Det receptet finns inte."
-    },
     "devBadge": {
       "title": "Utvecklare",
       "tiers": {
@@ -1211,6 +1225,19 @@ export const sv_SE: EnTranslations = {
       "mining": "Gruvdrift",
       "logging": "Skogsavverkning",
       "herbalism": "Örtkunskap"
+    },
+    "crafting": {
+      "title": "Hantverk",
+      "close": "Nära hantverk",
+      "craft": "Hantverk",
+      "reagentsNeeded": "Kräver:",
+      "reagentLine": "{name}: {have}/{required}",
+      "empty": "Inga recept kända än.",
+      "resultAria": "Hantverk {name}",
+      "craftedToast": "Tillverkad: {name}",
+      "insufficientMaterials": "Du har inte materialet för det.",
+      "unknownRecipe": "Det receptet finns inte.",
+      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
     }
   },
   "apiError": {
@@ -8091,12 +8118,14 @@ export const sv_SE: EnTranslations = {
       "crownforged": {
         "name": "Bonewrought-regalier",
         "bonus2": "Ökar attackkraft med 40.",
-        "bonus3": "Ökar styrka med 15, uthållighet med 15 samt attack- och magihastighet med 15%."
+        "bonus3": "Ökar styrka med 15, uthållighet med 15 samt attack- och magihastighet med 15%.",
+        "bonus4": "Your weapon critical strikes splinter the target with Bonesplinter, bleeding it for 8 damage every 2 sec for 12 sec. Stacks up to 3 times."
       },
       "deathlord": {
         "name": "Barrowlords stridsutrustning",
         "bonus2": "Ökar attackkraft med 40.",
-        "bonus3": "Ökar styrka med 15 och uthållighet med 15."
+        "bonus3": "Ökar styrka med 15 och uthållighet med 15.",
+        "bonus4": "Your weapon critical strikes have a 50% chance to grant Gravemight, increasing attack power by 60 for 10 sec."
       },
       "greyjaw_stalker": {
         "name": "Gråkäftssmygarens utrustning",
@@ -8105,22 +8134,26 @@ export const sv_SE: EnTranslations = {
       "necromancers": {
         "name": "Mournweave-skrud",
         "bonus2": "Du kan inte knuffas bakåt (100% motstånd mot tillbakastöt).",
-        "bonus3": "Ökar intellekt med 10 och uthållighet med 10."
+        "bonus3": "Ökar intellekt med 10 och uthållighet med 10.",
+        "bonus4": "Your spells have a 10% chance to grant Clearcasting, making your next spell free."
       },
       "nighttalon": {
         "name": "Direfang-päls",
         "bonus2": "Ökar attackkraft med 40.",
-        "bonus3": "Ökar smidighet med 15, kritisk chans med 2% samt attack- och magihastighet med 15%."
+        "bonus3": "Ökar smidighet med 15, kritisk chans med 2% samt attack- och magihastighet med 15%.",
+        "bonus4": "Your weapon critical strikes tear a Ragged Gash, bleeding the target for 6 damage every 2 sec for 12 sec. Stacks up to 3 times."
       },
       "soulflame": {
         "name": "Wraithfire-regalier",
         "bonus2": "Du kan inte knuffas bakåt (100% motstånd mot tillbakastöt).",
-        "bonus3": "Ökar intellekt med 15, ande med 15 samt attack- och magihastighet med 15%."
+        "bonus3": "Ökar intellekt med 15, ande med 15 samt attack- och magihastighet med 15%.",
+        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
       },
       "stormcallers": {
         "name": "Galecall-skrud",
         "bonus2": "Du kan inte knuffas bakåt (100% motstånd mot tillbakastöt).",
-        "bonus3": "Ökar intellekt med 15, ande med 15 samt attack- och magihastighet med 15%."
+        "bonus3": "Ökar intellekt med 15, ande med 15 samt attack- och magihastighet med 15%.",
+        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
       },
       "vale_arcanist": {
         "name": "Dalarkanistens skrud",
@@ -8129,7 +8162,8 @@ export const sv_SE: EnTranslations = {
       "wyrmshadow": {
         "name": "Nightfang-skrud",
         "bonus2": "Ökar attackkraft med 40.",
-        "bonus3": "Ökar smidighet med 15 och kritisk chans med 2%."
+        "bonus3": "Ökar smidighet med 15 och kritisk chans med 2%.",
+        "bonus4": "Your weapon critical strikes have a 50% chance to grant Fangrush, increasing attack speed by 25% for 8 sec."
       }
     }
   },

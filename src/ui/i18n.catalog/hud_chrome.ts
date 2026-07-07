@@ -229,6 +229,40 @@ export const hudChromeStrings = {
     haptics: 'Haptics',
     hapticsOff: 'Haptics Off',
     toggleHaptics: 'Toggle haptics',
+    // The v0.22.0 base's touch-hotbar paging button ("Skills", #mobile-hotbar-page):
+    // superseded by the paged action ring below, whose page toggle owns ability
+    // paging on touch. The keys stay (already filled in all 20 locales) per the
+    // hud.core.mobileTarget precedent for retired-but-translated chrome keys.
+    hotbarPage: 'Skills',
+    hotbarPageAria: 'Show next set of skills',
+    // Paged mobile action ring (Phase 1 of the mobile combat HUD rework): the
+    // ring container's accessible name, the page-cycle toggle's accessible name,
+    // and the page indicator text painted on the toggle. The per-button
+    // aria labels reuse abilityUi.actionBar.slotAria/emptySlotAria/attackName via
+    // the shared action_bar_view core, so no per-slot key lives here.
+    actionRing: 'Combat actions',
+    actionPageToggle: 'Switch action page',
+    // The bare page number ("1"/"2", painted big and gold over the swap-arrows
+    // glyph) rather than "Page 1 of 2": the toggle button already carries the
+    // full "Switch action page" accessible name via actionPageToggle above, so
+    // the indicator span only needs to be legible at a glance, not restate the
+    // count in words. "{page}" is token-only, so it is exempt from the M16
+    // non-Latin-fill requirement.
+    actionPageIndicator: '{page}',
+    // Target swap (#mobile-target-cycle, replacing the old Target Closest
+    // button): a crosshair-icon secondary button that cycles the hostile
+    // target via the Tab-target path (acquire-nearest now lives on the ring's
+    // attack toggle itself), kept visually distinct from the ring's primary
+    // attack toggle. targetCycle is the accessible name/title;
+    // targetCycleShort is the tiny on-button caption (space is tight at the
+    // button's 44-60px width, so it stays one word).
+    targetCycle: 'Swap target',
+    targetCycleShort: 'Target',
+    // Phase 4: a small touch-only label on each bar-assigned spellbook row,
+    // naming which mobile action-ring page (Phase 1) the ability's bar slot
+    // falls on. "Page {page}" is not wordy (one word plus a token), so it is
+    // exempt from the M16 non-Latin-fill requirement.
+    spellbookPageLabel: 'Page {page}',
   },
   // New-adventurer tutorial copy for the touch interface. The default tutorial
   // bodies (hud.tutorial.*Body) reference keyboard/mouse ("W/A/S/D", "press F"),
@@ -352,6 +386,9 @@ export const hudChromeStrings = {
   options: {
     clickMoveLeft: 'Left Click',
     clickMoveRight: 'Right Click',
+    // Running client version + build id, shown as small secondary text at the foot
+    // of the settings menu so players can confirm their build without closing it.
+    version: 'v{version} ({build})',
     // Adaptive browser-effects tier control (Graphics panel). Auto detects the
     // browser engine/version + device; the rest pin the CSS-effects tier.
     browserEffects: 'Browser Effects',
@@ -415,6 +452,14 @@ export const hudChromeStrings = {
     // by default). The abilities bound to its slots stay castable via their keybinds.
     showSecondaryActionBar: 'Show Secondary Action Bar',
     showDailyRewardsChest: 'Show Daily Rewards Chest',
+    // Touch-only Graphics panel toggles (mobile combat HUD rework, phase 2).
+    // Camera joystick: hidden and off by default, swipe-look on open gameplay
+    // space is the primary camera path; this opts into the dedicated stick.
+    mobileCameraJoystick: 'Camera joystick',
+    // Mirrors the touch layout (movement joystick right, camera joystick left)
+    // for left-thumb-dominant players; the same setting as the Key Bindings
+    // panel's leftHandedTouch row, surfaced again here alongside the joystick.
+    mobileLeftHanded: 'Left-handed layout',
   },
   // Controller / gamepad options panel (Options > Controller). Player-facing
   // chrome, so every label is a key here; the live numbers run through
@@ -536,6 +581,8 @@ export const hudChromeStrings = {
     // item-stats catalog.
     names: {
       spellPower: 'Spell Power',
+      critRating: 'Crit Rating',
+      hasteRating: 'Haste Rating',
     },
     desc: {
       str: 'Increases your attack power, so your weapon strikes land harder.',
@@ -551,6 +598,10 @@ export const hudChromeStrings = {
       dps: "Your estimated weapon damage per second, combining your weapon's damage and speed with your attack power.",
       critChance: 'Your chance for an attack to strike critically, dealing double damage.',
       dodge: 'Your chance to completely avoid an incoming melee attack, taking no damage.',
+      critRating:
+        'Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.',
+      hasteRating:
+        'Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste.',
     },
     // One line per derived effect a stat contributes. {value} is a live number.
     effects: {
@@ -602,6 +653,19 @@ export const hudChromeStrings = {
   itemSet: {
     header: '{name} ({have}/{total})',
     bonusLine: '({pieces}) {bonus}',
+  },
+  // Legendary weapon "chance on action" procs, rendered in the item tooltip from
+  // the ItemDef.weaponProcs data (see src/ui/weapon_proc_view.ts). One trigger
+  // line wraps the joined effect fragments below it.
+  itemProc: {
+    onMeleeHit: 'Chance on hit ({chance}%): {effect}',
+    onSpellDamage: 'Chance on your damaging spells ({chance}%): {effect}',
+    onHeal: 'Chance on your heals ({chance}%): {effect}',
+    chainArc:
+      'blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage',
+    attackSlow: 'and slows the target attack speed by {pct}% for {duration} sec',
+    dot: 'festers {name}, a {school} damage-over-time dealing {total} over {duration} sec',
+    hot: 'blooms {name}, a heal-over-time restoring {total} over {duration} sec',
   },
   // Quest-link sharing: the chat-link affordance and its sim-emitted notices
   // (re-localized through the hud-local localizeErrorText/localizeSystemText arms).
@@ -861,6 +925,12 @@ export const hudChromeStrings = {
   // Modular bag filtering controls: the category chips, sort dropdown, and live
   // search above the bag grid, plus the "no items match" empty state.
   bags: {
+    // Right-click destroy affordance: rejected when the item is flagged noDiscard
+    // (soulbound quest keys, etc.), which the sim's discardItem also refuses.
+    cannotDestroy: 'This item cannot be destroyed.',
+    // Tooltip sub-line advertising the right-click destroy affordance, shown only
+    // for a destroyable item so junk is removable without hunting for a menu.
+    rightClickDestroy: 'Right-click to destroy',
     filterGroupAria: 'Filter bags by category',
     filterAll: 'All',
     filterWeapon: 'Weapons',
@@ -1185,20 +1255,6 @@ export const hudChromeStrings = {
       help: { label: 'Need Help', hint: 'Ask the community for help' },
     },
   },
-  // Crafting window (#1127): the minimal common-tier crafting action, one row
-  // per known recipe, a Craft button enabled only when every reagent is held.
-  crafting: {
-    title: 'Crafting',
-    close: 'Close crafting',
-    craft: 'Craft',
-    reagentsNeeded: 'Requires:',
-    reagentLine: '{name} x{have}/{required}',
-    empty: 'No recipes known yet.',
-    resultAria: 'Craft {name}',
-    craftedToast: 'Crafted: {name}',
-    insufficientMaterials: 'You do not have the materials for that.',
-    unknownRecipe: 'That recipe does not exist.',
-  },
   // Developer badge: a cosmetic honor for contributors by landed-commit count
   // (the ladder lives in src/sim/dev_tier.ts; the data is sourced from a verified
   // GitHub-OAuth link plus the repo's contributor stats). Shown on the player
@@ -1363,5 +1419,21 @@ export const hudChromeStrings = {
     mining: 'Mining',
     logging: 'Logging',
     herbalism: 'Herbalism',
+  },
+  // Crafting window (#1127): the minimal common-tier crafting action, one row
+  // per known recipe, a Craft button enabled only when every reagent is held.
+  crafting: {
+    title: 'Crafting',
+    close: 'Close crafting',
+    craft: 'Craft',
+    reagentsNeeded: 'Requires:',
+    reagentLine: '{name} x{have}/{required}',
+    empty: 'No recipes known yet.',
+    resultAria: 'Craft {name}',
+    craftedToast: 'Crafted: {name}',
+    insufficientMaterials: 'You do not have the materials for that.',
+    unknownRecipe: 'That recipe does not exist.',
+    comboRequirementUnmet:
+      'You do not have both required crafts at the required tier for that recipe.',
   },
 };

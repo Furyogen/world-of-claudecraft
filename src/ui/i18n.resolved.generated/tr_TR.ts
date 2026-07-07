@@ -311,7 +311,15 @@ export const tr_TR: EnTranslations = {
       "nameplates": "İsimler",
       "haptics": "Dokunsal Geri Bildirim",
       "hapticsOff": "Dokunsal Kapalı",
-      "toggleHaptics": "Dokunsal geri bildirimi aç/kapat"
+      "toggleHaptics": "Dokunsal geri bildirimi aç/kapat",
+      "hotbarPage": "Yetenekler",
+      "hotbarPageAria": "Sonraki yetenek grubunu göster",
+      "actionRing": "Savaş eylemleri",
+      "actionPageToggle": "İşlem sayfasını değiştir",
+      "actionPageIndicator": "Sayfa {page}",
+      "targetCycle": "Hedefi değiştir",
+      "targetCycleShort": "Hedef",
+      "spellbookPageLabel": "Sayfa {page}"
     },
     "tutorial": {
       "moveBodyTouch": "Hareket etmek için hareket çubuğunu kullan ve etrafa bakmak için ekranı sürükle. Başlamak için birkaç adım at.",
@@ -389,6 +397,7 @@ export const tr_TR: EnTranslations = {
     "options": {
       "clickMoveLeft": "Sol Tık",
       "clickMoveRight": "Sağ Tık",
+      "version": "v{version} ({build})",
       "browserEffects": "Tarayıcı Efektleri",
       "browserEffectsAuto": "Otomatik",
       "browserEffectsFull": "Tam",
@@ -420,7 +429,9 @@ export const tr_TR: EnTranslations = {
       "itemLevelLine": "Eşya Seviyesi {level}",
       "itemScoreLine": "Puan {score}",
       "showSecondaryActionBar": "İkincil Eylem Çubuğunu Göster",
-      "showDailyRewardsChest": "Günlük Ödül Sandığını Göster"
+      "showDailyRewardsChest": "Günlük Ödül Sandığını Göster",
+      "mobileCameraJoystick": "Kamera joystick'i",
+      "mobileLeftHanded": "Solak düzen"
     },
     "controller": {
       "title": "Oyun Kolu",
@@ -514,7 +525,9 @@ export const tr_TR: EnTranslations = {
     "statInfo": {
       "fromYour": "{value} {stat} değerinden:",
       "names": {
-        "spellPower": "Büyü Gücü"
+        "spellPower": "Büyü Gücü",
+        "critRating": "Crit Rating",
+        "hasteRating": "Haste Rating"
       },
       "desc": {
         "str": "Saldırı gücünü artırır, böylece silah darbelerin daha sert iner.",
@@ -527,7 +540,9 @@ export const tr_TR: EnTranslations = {
         "spellPower": "Büyülerinin hasarını ve iyileştirmelerinin gücünü artırır. Her Zeka puanı, teçhizat veya güçlendirmelerden gelenlere ek olarak biraz Büyü Gücü sağlar.",
         "dps": "Silahının hasarını ve hızını saldırı gücünle birleştiren, saniye başına tahmini silah hasarın.",
         "critChance": "Bir saldırının kritik vurma ve çift hasar verme şansın.",
-        "dodge": "Gelen bir yakın dövüş saldırısından hiç hasar almadan tamamen kaçınma şansın."
+        "dodge": "Gelen bir yakın dövüş saldırısından hiç hasar almadan tamamen kaçınma şansın.",
+        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
+        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
       },
       "effects": {
         "attackPower": "+{value} Saldırı Gücü",
@@ -567,6 +582,15 @@ export const tr_TR: EnTranslations = {
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
+    },
+    "itemProc": {
+      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
+      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
+      "onHeal": "Chance on your heals ({chance}%): {effect}",
+      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
+      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
+      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
+      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
     },
     "questShare": {
       "notShareable": "Bu görev paylaşılamaz.",
@@ -775,6 +799,8 @@ export const tr_TR: EnTranslations = {
       "setNormal": "Set Dungeon Difficulty: Normal"
     },
     "bags": {
+      "cannotDestroy": "This item cannot be destroyed.",
+      "rightClickDestroy": "Right-click to destroy",
       "filterGroupAria": "Çantaları kategoriye göre filtrele",
       "filterAll": "Tümü",
       "filterWeapon": "Silahlar",
@@ -1056,18 +1082,6 @@ export const tr_TR: EnTranslations = {
         }
       }
     },
-    "crafting": {
-      "title": "işçiliği",
-      "close": "İşçiliği kapat",
-      "craft": "Zanaat",
-      "reagentsNeeded": "Gereklilikler:",
-      "reagentLine": "{name}: {have}/{required}",
-      "empty": "Henüz bilinen bir tarif yok.",
-      "resultAria": "{name} zanaatı",
-      "craftedToast": "Hazırlanma Tarihi: {name}",
-      "insufficientMaterials": "Bunun için malzemeleriniz yok.",
-      "unknownRecipe": "O tarif mevcut değil."
-    },
     "devBadge": {
       "title": "Geliştirici",
       "tiers": {
@@ -1211,6 +1225,19 @@ export const tr_TR: EnTranslations = {
       "mining": "Madencilik",
       "logging": "Ağaç kesme",
       "herbalism": "Bitkicilik"
+    },
+    "crafting": {
+      "title": "işçiliği",
+      "close": "İşçiliği kapat",
+      "craft": "Zanaat",
+      "reagentsNeeded": "Gereklilikler:",
+      "reagentLine": "{name}: {have}/{required}",
+      "empty": "Henüz bilinen bir tarif yok.",
+      "resultAria": "{name} zanaatı",
+      "craftedToast": "Hazırlanma Tarihi: {name}",
+      "insufficientMaterials": "Bunun için malzemeleriniz yok.",
+      "unknownRecipe": "O tarif mevcut değil.",
+      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
     }
   },
   "apiError": {
@@ -8091,12 +8118,14 @@ export const tr_TR: EnTranslations = {
       "crownforged": {
         "name": "Bonewrought Kıyafetleri",
         "bonus2": "Saldırı gücünü 40 artırır.",
-        "bonus3": "Gücü 15, dayanıklılığı 15, saldırı ve büyü hızını %15 artırır."
+        "bonus3": "Gücü 15, dayanıklılığı 15, saldırı ve büyü hızını %15 artırır.",
+        "bonus4": "Your weapon critical strikes splinter the target with Bonesplinter, bleeding it for 8 damage every 2 sec for 12 sec. Stacks up to 3 times."
       },
       "deathlord": {
         "name": "Barrowlord Savaş Takımı",
         "bonus2": "Saldırı gücünü 40 artırır.",
-        "bonus3": "Gücü 15 ve dayanıklılığı 15 artırır."
+        "bonus3": "Gücü 15 ve dayanıklılığı 15 artırır.",
+        "bonus4": "Your weapon critical strikes have a 50% chance to grant Gravemight, increasing attack power by 60 for 10 sec."
       },
       "greyjaw_stalker": {
         "name": "Greyjaw İzsürücü takımı",
@@ -8105,22 +8134,26 @@ export const tr_TR: EnTranslations = {
       "necromancers": {
         "name": "Mournweave Giysileri",
         "bonus2": "Geri itilemezsin (%100 geri itilme direnci).",
-        "bonus3": "Zekayı 10 ve dayanıklılığı 10 artırır."
+        "bonus3": "Zekayı 10 ve dayanıklılığı 10 artırır.",
+        "bonus4": "Your spells have a 10% chance to grant Clearcasting, making your next spell free."
       },
       "nighttalon": {
         "name": "Direfang Postu",
         "bonus2": "Saldırı gücünü 40 artırır.",
-        "bonus3": "Çevikliği 15, kritik şansını %2, saldırı ve büyü hızını %15 artırır."
+        "bonus3": "Çevikliği 15, kritik şansını %2, saldırı ve büyü hızını %15 artırır.",
+        "bonus4": "Your weapon critical strikes tear a Ragged Gash, bleeding the target for 6 damage every 2 sec for 12 sec. Stacks up to 3 times."
       },
       "soulflame": {
         "name": "Wraithfire Kıyafetleri",
         "bonus2": "Geri itilemezsin (%100 geri itilme direnci).",
-        "bonus3": "Zekayı 15, ruhu 15, saldırı ve büyü hızını %15 artırır."
+        "bonus3": "Zekayı 15, ruhu 15, saldırı ve büyü hızını %15 artırır.",
+        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
       },
       "stormcallers": {
         "name": "Galecall Cübbeleri",
         "bonus2": "Geri itilemezsin (%100 geri itilme direnci).",
-        "bonus3": "Zekayı 15, ruhu 15, saldırı ve büyü hızını %15 artırır."
+        "bonus3": "Zekayı 15, ruhu 15, saldırı ve büyü hızını %15 artırır.",
+        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
       },
       "vale_arcanist": {
         "name": "Vadi Arkanisti giysileri",
@@ -8129,7 +8162,8 @@ export const tr_TR: EnTranslations = {
       "wyrmshadow": {
         "name": "Nightfang Cübbeleri",
         "bonus2": "Saldırı gücünü 40 artırır.",
-        "bonus3": "Çevikliği 15 ve kritik şansını %2 artırır."
+        "bonus3": "Çevikliği 15 ve kritik şansını %2 artırır.",
+        "bonus4": "Your weapon critical strikes have a 50% chance to grant Fangrush, increasing attack speed by 25% for 8 sec."
       }
     }
   },

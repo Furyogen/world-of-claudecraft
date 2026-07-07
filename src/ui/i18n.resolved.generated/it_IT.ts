@@ -311,7 +311,15 @@ export const it_IT: EnTranslations = {
       "nameplates": "Nomi",
       "haptics": "Vibrazione",
       "hapticsOff": "Vibrazione disattivata",
-      "toggleHaptics": "Attiva/disattiva vibrazione"
+      "toggleHaptics": "Attiva/disattiva vibrazione",
+      "hotbarPage": "Abilità",
+      "hotbarPageAria": "Mostra la serie successiva di abilità",
+      "actionRing": "Azioni di combattimento",
+      "actionPageToggle": "Cambia pagina di azione",
+      "actionPageIndicator": "Pag. {page}",
+      "targetCycle": "Scambia bersaglio",
+      "targetCycleShort": "Bersaglio",
+      "spellbookPageLabel": "Pagina {page}"
     },
     "tutorial": {
       "moveBodyTouch": "Usa il joystick di movimento per muoverti e trascina lo schermo per guardarti intorno. Fai qualche passo per iniziare.",
@@ -389,6 +397,7 @@ export const it_IT: EnTranslations = {
     "options": {
       "clickMoveLeft": "Clic sinistro",
       "clickMoveRight": "Clic destro",
+      "version": "v{version} ({build})",
       "browserEffects": "Effetti del browser",
       "browserEffectsAuto": "Auto",
       "browserEffectsFull": "Completi",
@@ -420,7 +429,9 @@ export const it_IT: EnTranslations = {
       "itemLevelLine": "Livello oggetto {level}",
       "itemScoreLine": "Punteggio {score}",
       "showSecondaryActionBar": "Mostra la barra delle azioni secondaria",
-      "showDailyRewardsChest": "Mostra forziere delle ricompense giornaliere"
+      "showDailyRewardsChest": "Mostra forziere delle ricompense giornaliere",
+      "mobileCameraJoystick": "Joystick della fotocamera",
+      "mobileLeftHanded": "Disposizione per mancini"
     },
     "controller": {
       "title": "Controller",
@@ -514,7 +525,9 @@ export const it_IT: EnTranslations = {
     "statInfo": {
       "fromYour": "Dai tuoi {value} punti {stat}:",
       "names": {
-        "spellPower": "Potere Magico"
+        "spellPower": "Potere Magico",
+        "critRating": "Crit Rating",
+        "hasteRating": "Haste Rating"
       },
       "desc": {
         "str": "Aumenta la tua potenza d'attacco, così i colpi della tua arma sono più potenti.",
@@ -527,7 +540,9 @@ export const it_IT: EnTranslations = {
         "spellPower": "Aumenta il danno dei tuoi incantesimi e la potenza delle tue cure. Ogni punto di Intelletto conferisce un po' di Potere Magico, in aggiunta a quello dell'equipaggiamento o dei potenziamenti.",
         "dps": "I danni al secondo stimati della tua arma, combinando i danni e la velocità della tua arma con la tua potenza d'attacco.",
         "critChance": "La tua probabilità che un attacco colpisca in modo critico, infliggendo danni doppi.",
-        "dodge": "La tua probabilità di evitare completamente un attacco in mischia in arrivo, senza subire danni."
+        "dodge": "La tua probabilità di evitare completamente un attacco in mischia in arrivo, senza subire danni.",
+        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
+        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
       },
       "effects": {
         "attackPower": "+{value} Potenza d'attacco",
@@ -567,6 +582,15 @@ export const it_IT: EnTranslations = {
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
+    },
+    "itemProc": {
+      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
+      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
+      "onHeal": "Chance on your heals ({chance}%): {effect}",
+      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
+      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
+      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
+      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
     },
     "questShare": {
       "notShareable": "Questa missione non può essere condivisa.",
@@ -775,6 +799,8 @@ export const it_IT: EnTranslations = {
       "setNormal": "Set Dungeon Difficulty: Normal"
     },
     "bags": {
+      "cannotDestroy": "This item cannot be destroyed.",
+      "rightClickDestroy": "Right-click to destroy",
       "filterGroupAria": "Filtra le borse per categoria",
       "filterAll": "Tutti",
       "filterWeapon": "Armi",
@@ -1056,18 +1082,6 @@ export const it_IT: EnTranslations = {
         }
       }
     },
-    "crafting": {
-      "title": "Creazione",
-      "close": "Chiudi la lavorazione",
-      "craft": "Mestiere",
-      "reagentsNeeded": "Richiede:",
-      "reagentLine": "{name}: {have}/{required}",
-      "empty": "Nessuna ricetta ancora conosciuta.",
-      "resultAria": "Crea {name}",
-      "craftedToast": "Realizzato: {name}",
-      "insufficientMaterials": "Non hai i materiali per quello.",
-      "unknownRecipe": "Quella ricetta non esiste."
-    },
     "devBadge": {
       "title": "Sviluppatore",
       "tiers": {
@@ -1211,6 +1225,19 @@ export const it_IT: EnTranslations = {
       "mining": "Estrazione mineraria",
       "logging": "Taglio del legname",
       "herbalism": "Erbalismo"
+    },
+    "crafting": {
+      "title": "Creazione",
+      "close": "Chiudi la lavorazione",
+      "craft": "Mestiere",
+      "reagentsNeeded": "Richiede:",
+      "reagentLine": "{name}: {have}/{required}",
+      "empty": "Nessuna ricetta ancora conosciuta.",
+      "resultAria": "Crea {name}",
+      "craftedToast": "Realizzato: {name}",
+      "insufficientMaterials": "Non hai i materiali per quello.",
+      "unknownRecipe": "Quella ricetta non esiste.",
+      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
     }
   },
   "apiError": {
@@ -8091,12 +8118,14 @@ export const it_IT: EnTranslations = {
       "crownforged": {
         "name": "Tenuta da battaglia Bonewrought",
         "bonus2": "Aumenta la potenza d'attacco di 40.",
-        "bonus3": "Aumenta la forza di 15, la vigoria di 15 e la velocità d'attacco e di lancio del 15%."
+        "bonus3": "Aumenta la forza di 15, la vigoria di 15 e la velocità d'attacco e di lancio del 15%.",
+        "bonus4": "Your weapon critical strikes splinter the target with Bonesplinter, bleeding it for 8 damage every 2 sec for 12 sec. Stacks up to 3 times."
       },
       "deathlord": {
         "name": "Tenuta da battaglia di Barrowlord",
         "bonus2": "Aumenta la potenza d'attacco di 40.",
-        "bonus3": "Aumenta la forza di 15 e la vigoria di 15."
+        "bonus3": "Aumenta la forza di 15 e la vigoria di 15.",
+        "bonus4": "Your weapon critical strikes have a 50% chance to grant Gravemight, increasing attack power by 60 for 10 sec."
       },
       "greyjaw_stalker": {
         "name": "Equipaggiamento del Braccatore di Greyjaw",
@@ -8105,22 +8134,26 @@ export const it_IT: EnTranslations = {
       "necromancers": {
         "name": "Vesti Mournweave",
         "bonus2": "Non puoi essere respinto (100% di resistenza alla respinta).",
-        "bonus3": "Aumenta l'intelletto di 10 e la tempra di 10."
+        "bonus3": "Aumenta l'intelletto di 10 e la tempra di 10.",
+        "bonus4": "Your spells have a 10% chance to grant Clearcasting, making your next spell free."
       },
       "nighttalon": {
         "name": "Tenuta di cuoio Direfang",
         "bonus2": "Aumenta la potenza d'attacco di 40.",
-        "bonus3": "Aumenta l'agilità di 15, la probabilità di critico del 2% e la velocità d'attacco e di lancio del 15%."
+        "bonus3": "Aumenta l'agilità di 15, la probabilità di critico del 2% e la velocità d'attacco e di lancio del 15%.",
+        "bonus4": "Your weapon critical strikes tear a Ragged Gash, bleeding the target for 6 damage every 2 sec for 12 sec. Stacks up to 3 times."
       },
       "soulflame": {
         "name": "Paramenti Wraithfire",
         "bonus2": "Non puoi essere respinto (100% di resistenza alla respinta).",
-        "bonus3": "Aumenta l'intelletto di 15, lo spirito di 15 e la velocità d'attacco e di lancio del 15%."
+        "bonus3": "Aumenta l'intelletto di 15, lo spirito di 15 e la velocità d'attacco e di lancio del 15%.",
+        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
       },
       "stormcallers": {
         "name": "Vesti Galecall",
         "bonus2": "Non puoi essere respinto (100% di resistenza alla respinta).",
-        "bonus3": "Aumenta l'intelletto di 15, lo spirito di 15 e la velocità d'attacco e di lancio del 15%."
+        "bonus3": "Aumenta l'intelletto di 15, lo spirito di 15 e la velocità d'attacco e di lancio del 15%.",
+        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
       },
       "vale_arcanist": {
         "name": "Tenuta dell'Arcanista della Valle",
@@ -8129,7 +8162,8 @@ export const it_IT: EnTranslations = {
       "wyrmshadow": {
         "name": "Vesti Nightfang",
         "bonus2": "Aumenta la potenza d'attacco di 40.",
-        "bonus3": "Aumenta l’agilità di 15 e la probabilità di critico del 2%."
+        "bonus3": "Aumenta l’agilità di 15 e la probabilità di critico del 2%.",
+        "bonus4": "Your weapon critical strikes have a 50% chance to grant Fangrush, increasing attack speed by 25% for 8 sec."
       }
     }
   },

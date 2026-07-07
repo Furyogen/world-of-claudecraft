@@ -311,7 +311,15 @@ export const zh_TW: EnTranslations = {
       "nameplates": "名條",
       "haptics": "觸覺回饋",
       "hapticsOff": "觸覺回饋已關閉",
-      "toggleHaptics": "切換觸覺回饋"
+      "toggleHaptics": "切換觸覺回饋",
+      "hotbarPage": "技能",
+      "hotbarPageAria": "顯示下一組技能",
+      "actionRing": "戰鬥動作",
+      "actionPageToggle": "切換動作頁",
+      "actionPageIndicator": "第{page}頁",
+      "targetCycle": "切換目標",
+      "targetCycleShort": "目標",
+      "spellbookPageLabel": "頁{page}"
     },
     "tutorial": {
       "moveBodyTouch": "使用搖桿移動，拖曳螢幕環顧四周。先走幾步開始吧。",
@@ -389,6 +397,7 @@ export const zh_TW: EnTranslations = {
     "options": {
       "clickMoveLeft": "左鍵",
       "clickMoveRight": "右鍵",
+      "version": "v{version} ({build})",
       "browserEffects": "瀏覽器特效",
       "browserEffectsAuto": "自動",
       "browserEffectsFull": "完整",
@@ -420,7 +429,9 @@ export const zh_TW: EnTranslations = {
       "itemLevelLine": "物品等級 {level}",
       "itemScoreLine": "評分 {score}",
       "showSecondaryActionBar": "顯示副動作列",
-      "showDailyRewardsChest": "顯示每日獎勵寶箱"
+      "showDailyRewardsChest": "顯示每日獎勵寶箱",
+      "mobileCameraJoystick": "攝影機搖桿",
+      "mobileLeftHanded": "左手配置"
     },
     "controller": {
       "title": "手把",
@@ -514,7 +525,9 @@ export const zh_TW: EnTranslations = {
     "statInfo": {
       "fromYour": "來自你的 {value} 點{stat}：",
       "names": {
-        "spellPower": "法術強度"
+        "spellPower": "法術強度",
+        "critRating": "暴擊等級",
+        "hasteRating": "急速等級"
       },
       "desc": {
         "str": "提升你的攻擊強度，使你的武器攻擊更具威力。",
@@ -527,7 +540,9 @@ export const zh_TW: EnTranslations = {
         "spellPower": "提高你法術造成的傷害與治療的強度。每點智力都會提供少量法術強度，此外還有來自裝備與增益的加成。",
         "dps": "你的預估武器每秒傷害，由武器的傷害與速度結合你的攻擊強度計算而來。",
         "critChance": "你的攻擊造成暴擊並施加雙倍傷害的機率。",
-        "dodge": "你完全閃躲受到的近戰攻擊、不受任何傷害的機率。"
+        "dodge": "你完全閃躲受到的近戰攻擊、不受任何傷害的機率。",
+        "critRating": "來自裝備和套裝加成的暴擊等級，提升你的暴擊機率。約每10點等級提供1%暴擊。",
+        "hasteRating": "來自裝備和套裝加成的急速等級，加快你的攻擊和施法速度。約每10點等級提供1%急速。"
       },
       "effects": {
         "attackPower": "+{value} 攻擊強度",
@@ -567,6 +582,15 @@ export const zh_TW: EnTranslations = {
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
+    },
+    "itemProc": {
+      "onMeleeHit": "命中時機率（{chance}%）：{effect}",
+      "onSpellDamage": "造成傷害的法術機率（{chance}%）：{effect}",
+      "onHeal": "治療時機率（{chance}%）：{effect}",
+      "chainArc": "以{school}{name}（{damage}）轟擊目標，並跳躍至{jumps}個附近敵人，造成遞減傷害",
+      "attackSlow": "並使目標攻擊速度降低{pct}%，持續{duration}秒",
+      "dot": "引發{name}，一種{school}持續傷害效果，在{duration}秒內造成{total}點傷害",
+      "hot": "綻放{name}，一種持續治療效果，在{duration}秒內恢復{total}點生命"
     },
     "questShare": {
       "notShareable": "該任務無法分享。",
@@ -775,6 +799,8 @@ export const zh_TW: EnTranslations = {
       "setNormal": "設定地城難度：普通"
     },
     "bags": {
+      "cannotDestroy": "此物品無法銷毀。",
+      "rightClickDestroy": "右鍵單擊以銷毀",
       "filterGroupAria": "依類別篩選背包",
       "filterAll": "全部",
       "filterWeapon": "武器",
@@ -1056,18 +1082,6 @@ export const zh_TW: EnTranslations = {
         }
       }
     },
-    "crafting": {
-      "title": "製作",
-      "close": "關閉製作",
-      "craft": "製作",
-      "reagentsNeeded": "需要:",
-      "reagentLine": "{name}: {have}/{required}",
-      "empty": "尚無已知配方。",
-      "resultAria": "製作{name}",
-      "craftedToast": "已製作:{name}",
-      "insufficientMaterials": "你沒有足夠的材料。",
-      "unknownRecipe": "該配方不存在。"
-    },
     "devBadge": {
       "title": "開發者",
       "tiers": {
@@ -1211,6 +1225,19 @@ export const zh_TW: EnTranslations = {
       "mining": "採礦",
       "logging": "伐木",
       "herbalism": "藥草學"
+    },
+    "crafting": {
+      "title": "製作",
+      "close": "關閉製作",
+      "craft": "製作",
+      "reagentsNeeded": "需要:",
+      "reagentLine": "{name}: {have}/{required}",
+      "empty": "尚無已知配方。",
+      "resultAria": "製作{name}",
+      "craftedToast": "已製作:{name}",
+      "insufficientMaterials": "你沒有足夠的材料。",
+      "unknownRecipe": "該配方不存在。",
+      "comboRequirementUnmet": "你尚未達到該配方所需組合的兩項製造技能等級。"
     }
   },
   "apiError": {
@@ -8091,12 +8118,14 @@ export const zh_TW: EnTranslations = {
       "crownforged": {
         "name": "骨鑄戰裝",
         "bonus2": "攻擊強度提高 40 點。",
-        "bonus3": "力量提高 15 點，耐力提高 15 點，攻擊速度和施法速度提高 15%。"
+        "bonus3": "力量提高 15 點，耐力提高 15 點，攻擊速度和施法速度提高 15%。",
+        "bonus4": "你的武器致命一擊會使目標產生「骨刺」，每 2 秒流血 8 點傷害，持續 12 秒。最多疊加 3 層。"
       },
       "deathlord": {
         "name": "塚陵領主戰鬥護甲",
         "bonus2": "攻擊強度提高 40 點。",
-        "bonus3": "力量提高 15 點，耐力提高 15 點。"
+        "bonus3": "力量提高 15 點，耐力提高 15 點。",
+        "bonus4": "你的武器致命一擊有 50% 的機率觸發「墓塚之力」，使攻擊強度提高 60 點，持續 10 秒。"
       },
       "greyjaw_stalker": {
         "name": "灰顎追獵者裝備",
@@ -8105,22 +8134,26 @@ export const zh_TW: EnTranslations = {
       "necromancers": {
         "name": "哀織法衣",
         "bonus2": "你不會被擊退（擊退抗性 100%）。",
-        "bonus3": "智力提高 10 點，耐力提高 10 點。"
+        "bonus3": "智力提高 10 點，耐力提高 10 點。",
+        "bonus4": "你的法術有 10% 的機率觸發「清晰施法」，使你的下一個法術免費施放。"
       },
       "nighttalon": {
         "name": "厲牙皮甲",
         "bonus2": "攻擊強度提高 40 點。",
-        "bonus3": "敏捷提高 15 點，致命一擊機率提高 2%，攻擊速度和施法速度提高 15%。"
+        "bonus3": "敏捷提高 15 點，致命一擊機率提高 2%，攻擊速度和施法速度提高 15%。",
+        "bonus4": "你的武器致命一擊會撕開「撕裂傷口」，使目標每 2 秒流血 6 點傷害，持續 12 秒。最多疊加 3 層。"
       },
       "soulflame": {
         "name": "怨焰法衣",
         "bonus2": "你不會被擊退（擊退抗性 100%）。",
-        "bonus3": "智力提高 15 點，精神提高 15 點，攻擊速度和施法速度提高 15%。"
+        "bonus3": "智力提高 15 點，精神提高 15 點，攻擊速度和施法速度提高 15%。",
+        "bonus4": "你的法術有 10% 的機率觸發「灼魂之焰」，使法術強度提高 40 點，持續 10 秒。"
       },
       "stormcallers": {
         "name": "喚風法衣",
         "bonus2": "你不會被擊退（擊退抗性 100%）。",
-        "bonus3": "智力提高 15 點，精神提高 15 點，攻擊速度和施法速度提高 15%。"
+        "bonus3": "智力提高 15 點，精神提高 15 點，攻擊速度和施法速度提高 15%。",
+        "bonus4": "你的法術有 10% 的機率觸發「灼魂之焰」，使法術強度提高 40 點，持續 10 秒。"
       },
       "vale_arcanist": {
         "name": "谷地秘法師法衣",
@@ -8129,7 +8162,8 @@ export const zh_TW: EnTranslations = {
       "wyrmshadow": {
         "name": "夜牙法衣",
         "bonus2": "攻擊強度提高 40 點。",
-        "bonus3": "敏捷提高 15 點，致命一擊機率提高 2%。"
+        "bonus3": "敏捷提高 15 點，致命一擊機率提高 2%。",
+        "bonus4": "你的武器致命一擊有 50% 的機率觸發「獠牙疾襲」，使攻擊速度提高 25%，持續 8 秒。"
       }
     }
   },

@@ -308,7 +308,7 @@ function withDomStubs<T>(fn: () => T): T {
 }
 
 // A real ClientWorld whose FIELD INITIALIZERS have run (a raw
-// `Object.create(ClientWorld.prototype)` bareClient would be missing all 36 data
+// `Object.create(ClientWorld.prototype)` bareClient would be missing all data
 // props). Pass a non-empty `base` so the ctor builds a `ws://localhost/ws` URL instead
 // of touching `location`; `.close()` clears the stubbed input timer.
 function makeClientWorld(): ClientWorld {
@@ -368,7 +368,6 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
     expect(DATA_MEMBERS.length).toBe(49);
     expect(METHOD_MEMBERS.length).toBe(135);
   });
-
   it('has no duplicate member names', () => {
     const names = IWORLD_MEMBERS.map((m) => m.name);
     expect(new Set(names).size).toBe(names.length);

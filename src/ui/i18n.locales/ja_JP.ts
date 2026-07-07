@@ -234,6 +234,12 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   // Character-sheet stat tooltips (hudChrome.statInfo.*).
   'hudChrome.statInfo.fromYour': 'あなたの{stat}{value}による効果:',
   'hudChrome.statInfo.names.spellPower': '呪文威力',
+  'hudChrome.statInfo.names.critRating': 'クリティカルレーティング',
+  'hudChrome.statInfo.names.hasteRating': 'ヘイストレーティング',
+  'hudChrome.statInfo.desc.critRating':
+    '装備とセットボーナスによるクリティカルレーティング。クリティカル率が上昇します。約10レーティングで1%クリティカル。',
+  'hudChrome.statInfo.desc.hasteRating':
+    '装備とセットボーナスによるヘイストレーティング。攻撃と詠唱の速度が上昇します。約10レーティングで1%ヘイスト。',
   'hudChrome.statInfo.desc.spellPower':
     '呪文のダメージと回復の効果を高めます。知力1ポイントごとに、装備やバフによる分に加えて、わずかな呪文威力を得られます。',
   'hudChrome.statInfo.sources.header': '内訳:',
@@ -379,6 +385,8 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.showItemLevel': 'アイテムレベルを表示',
   'hudChrome.options.showSecondaryActionBar': 'セカンダリアクションバーを表示',
   'hudChrome.options.showDailyRewardsChest': 'デイリー報酬の宝箱を表示',
+  'hudChrome.options.mobileCameraJoystick': 'カメラスティック',
+  'hudChrome.options.mobileLeftHanded': '左利き用レイアウト',
   'hudChrome.options.itemLevelLine': 'アイテムレベル {level}',
   'hudChrome.options.itemScoreLine': 'スコア {score}',
   'hudChrome.landing.highContrast': '高コントラスト',
@@ -3551,12 +3559,18 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.meters.perSecond': '{value}/秒',
   'hudChrome.meters.perSecondRow': '{total}（{rate}）',
   'hudChrome.meters.seconds': '{s}秒',
+  'hudChrome.mobile.actionPageToggle': '行動ページ切替',
+  'hudChrome.mobile.actionRing': '戦闘アクション',
   'hudChrome.mobile.autorun': 'オートラン',
   'hudChrome.mobile.haptics': '振動',
   'hudChrome.mobile.hapticsOff': '振動オフ',
+  'hudChrome.mobile.hotbarPage': 'スキル',
+  'hudChrome.mobile.hotbarPageAria': '次のスキルセットを表示',
   'hudChrome.mobile.jump': 'ジャンプ',
   'hudChrome.mobile.leaderboard': 'ランキング',
   'hudChrome.mobile.nameplates': 'ネームプレート',
+  'hudChrome.mobile.targetCycle': 'ターゲット切替',
+  'hudChrome.mobile.targetCycleShort': '標的',
   'hudChrome.mobile.toggleHaptics': '振動を切り替え',
   'hudChrome.rest.resting': '休息中',
   'hudChrome.swing.ready': '攻撃',
@@ -3767,6 +3781,8 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.questTracker.collapseHint': 'クエストトラッカーを折りたたむ',
   'hudChrome.questTracker.expandHint': 'クエストトラッカーを展開する',
   // Modular bag filtering controls (hudChrome.bags.*).
+  'hudChrome.bags.cannotDestroy': 'このアイテムは破壊できません。',
+  'hudChrome.bags.rightClickDestroy': '右クリックで破壊',
   'hudChrome.bags.filterGroupAria': 'バッグをカテゴリーで絞り込む',
   'hudChrome.bags.filterAll': 'すべて',
   'hudChrome.bags.filterWeapon': '武器',
@@ -5165,32 +5181,55 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.crownforged.bonus2': '攻撃力が40上昇します。',
   'entities.itemSets.crownforged.bonus3':
     '筋力が15、スタミナが15上昇し、攻撃速度と詠唱速度が15%上昇します。',
+  'entities.itemSets.crownforged.bonus4':
+    '武器のクリティカルヒットで対象に「ボーンスプリンター」を刻み、2秒ごとに8ダメージの出血を12秒間与えます。最大3回まで累積します。',
   'entities.itemSets.deathlord.name': 'バロウロードの戦装束',
   'entities.itemSets.deathlord.bonus2': '攻撃力が40上昇します。',
   'entities.itemSets.deathlord.bonus3': '筋力が15、スタミナが15上昇します。',
+  'entities.itemSets.deathlord.bonus4':
+    '武器のクリティカルヒット時に50%の確率で「グレイブマイト」が発動し、攻撃力が10秒間60上昇します。',
   'entities.itemSets.greyjaw_stalker.name': 'グレイジョーの追跡者の装備',
   'entities.itemSets.greyjaw_stalker.bonus3': '攻撃速度と詠唱速度が15%上昇します。',
   'entities.itemSets.necromancers.name': 'モーンウィーヴの法衣',
   'entities.itemSets.necromancers.bonus2': 'ノックバックされなくなります（ノックバック耐性100%）。',
   'entities.itemSets.necromancers.bonus3': '知力が10、スタミナが10上昇します。',
+  'entities.itemSets.necromancers.bonus4':
+    '呪文に10%の確率で「クリアキャスティング」が発動し、次の呪文が無償になります。',
   'entities.itemSets.nighttalon.name': 'ダイアファングの革装束',
   'entities.itemSets.nighttalon.bonus2': '攻撃力が40上昇します。',
   'entities.itemSets.nighttalon.bonus3':
     '敏捷性が15、クリティカル率が2%上昇し、攻撃速度と詠唱速度が15%上昇します。',
+  'entities.itemSets.nighttalon.bonus4':
+    '武器のクリティカルヒットで「裂けた傷」を与え、対象に2秒ごとに6ダメージの出血を12秒間与えます。最大3回まで累積します。',
   'entities.itemSets.soulflame.name': 'レイスファイアの法衣',
   'entities.itemSets.soulflame.bonus2': 'ノックバックされなくなります（ノックバック耐性100%）。',
   'entities.itemSets.soulflame.bonus3':
     '知力が15、精神力が15上昇し、攻撃速度と詠唱速度が15%上昇します。',
+  'entities.itemSets.soulflame.bonus4':
+    '呪文に10%の確率で「ソウルブレイズ」が発動し、呪文の威力が10秒間40上昇します。',
   'entities.itemSets.stormcallers.name': 'ゲイルコールの法衣',
   'entities.itemSets.stormcallers.bonus2': 'ノックバックされなくなります（ノックバック耐性100%）。',
   'entities.itemSets.stormcallers.bonus3':
     '知力が15、精神力が15上昇し、攻撃速度と詠唱速度が15%上昇します。',
+  'entities.itemSets.stormcallers.bonus4':
+    '呪文に10%の確率で「ソウルブレイズ」が発動し、呪文の威力が10秒間40上昇します。',
   'entities.itemSets.vale_arcanist.name': '谷の秘術師の装束',
   'entities.itemSets.vale_arcanist.bonus3': '攻撃速度と詠唱速度が15%上昇します。',
   'entities.itemSets.wyrmshadow.name': 'ナイトファングの装束',
   'entities.itemSets.wyrmshadow.bonus2': '攻撃力が40上昇します。',
   'entities.itemSets.wyrmshadow.bonus3': '敏捷性が15、クリティカル率が2%上昇します。',
+  'entities.itemSets.wyrmshadow.bonus4':
+    '武器のクリティカルヒット時に50%の確率で「ファングラッシュ」が発動し、攻撃速度が8秒間25%上昇します。',
   'hudChrome.itemSet.header': '{name} ({have}/{total})',
+  'hudChrome.itemProc.onMeleeHit': '命中時に確率（{chance}%）：{effect}',
+  'hudChrome.itemProc.onSpellDamage': 'ダメージ呪文で確率（{chance}%）：{effect}',
+  'hudChrome.itemProc.onHeal': '回復時に確率（{chance}%）：{effect}',
+  'hudChrome.itemProc.chainArc':
+    '{school}の{name}（{damage}）で対象を撃ち、近くの敵{jumps}体に減衰しながら連鎖する',
+  'hudChrome.itemProc.attackSlow': '対象の攻撃速度を{pct}%低下させる（{duration}秒）',
+  'hudChrome.itemProc.dot':
+    '{name}を植え付け、{school}の継続ダメージで{duration}秒かけて{total}を与える',
+  'hudChrome.itemProc.hot': '{name}を咲かせ、継続回復で{duration}秒かけて{total}を回復する',
   'hudChrome.itemSet.bonusLine': '({pieces}) {bonus}',
   'hudChrome.abilityScaling.bonus': '(+{value})',
   // Discord integration (two-way login, rewards, relay, in-game flair).
@@ -5869,15 +5908,6 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.dailyRewards.remainingMinutes': '{minutes}分',
   'hudChrome.dailyRewards.sol': '{amount} SOL',
   'hudChrome.dailyRewards.usd': '{amount} USD',
-  'hudChrome.crafting.title': '製作',
-  'hudChrome.crafting.close': '製作を閉じる',
-  'hudChrome.crafting.craft': '製作',
-  'hudChrome.crafting.reagentsNeeded': '必要素材:',
-  'hudChrome.crafting.empty': '既知のレシピはありません。',
-  'hudChrome.crafting.resultAria': '{name}を製作',
-  'hudChrome.crafting.craftedToast': '製作しました:{name}',
-  'hudChrome.crafting.insufficientMaterials': '材料が不足しています。',
-  'hudChrome.crafting.unknownRecipe': 'そのレシピは存在しません。',
   // apiError.* server error-code catalog (M16 non-Latin fill, Phase 22)
   'apiError.validation.failed': '一部の項目が無効です。入力内容を確認してもう一度お試しください。',
   'apiError.json.malformed': 'リクエストを読み取れませんでした。もう一度お試しください。',
@@ -6057,4 +6087,17 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gathering.herbalism': '薬草学',
   // Release v0.22.0 locale fill.
   'hudChrome.crafting.reagentLine': '{name}: {have}/{required}',
+  'hudChrome.crafting.title': '製作',
+  'hudChrome.crafting.close': '製作を閉じる',
+  'hudChrome.crafting.craft': '製作',
+  'hudChrome.crafting.reagentsNeeded': '必要素材:',
+  'hudChrome.crafting.empty': '既知のレシピはありません。',
+  'hudChrome.crafting.resultAria': '{name}を製作',
+  'hudChrome.crafting.craftedToast': '製作しました:{name}',
+  'hudChrome.crafting.insufficientMaterials': '材料が不足しています。',
+  'hudChrome.crafting.unknownRecipe': 'そのレシピは存在しません。',
+  'hudChrome.crafting.comboRequirementUnmet':
+    'その組み合わせレシピに必要な両方の生産スキルの熟練度に達していません。',
+  'hudChrome.mobile.actionPageIndicator': '{page}ページ',
+  'hudChrome.mobile.spellbookPageLabel': 'ページ{page}',
 };

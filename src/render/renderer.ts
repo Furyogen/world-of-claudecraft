@@ -17,6 +17,7 @@ import {
   delveSlotAt,
   dungeonAt,
   INSTANCE_SLOT_COUNT,
+  ITEM_SETS,
   instanceOrigin,
   isArenaPos,
   isDelvePos,
@@ -186,6 +187,29 @@ const LIGHT_BUDGET_RANGE_SQ = 55 * 55;
 // HDR boosts so the bloom pass picks these out (composer tiers only)
 const SELECTION_RING_BOOST = 1.5;
 const SELECTION_RING_SPIN = 0.6; // rad/s — slow classic target-reticle rotation
+
+// Themed swirl colors for the 4-piece set-proc auras, by proc id; resolved to
+// the buff display NAME below (the aura SimEvent carries only the name) via
+// ITEM_SETS, so a re-coined proc name keeps its effect wired. The bleeds land
+// on the TARGET (a mob), so the aura case below must not gate these on the
+// player kind.
+const SET_PROC_FX_BY_ID: Record<string, number> = {
+  set_clearcasting: 0x8ed2ff, // icy arcane blue: a free cast
+  set_gravemight: 0xffb04d, // burnished gold: attack power
+  set_fangrush: 0xbfff5a, // feral green-yellow: attack speed
+  set_bonesplinter: 0xc22a2a, // blood red: the plate bleed landing
+  set_ragged_gash: 0xc22a2a, // blood red: the leather bleed landing
+  set_soulblaze: 0xff6a9e, // ember pink: spell power
+};
+const SET_PROC_FX_BY_NAME = new Map<string, number>();
+for (const set of Object.values(ITEM_SETS)) {
+  for (const tier of set.bonuses) {
+    const proc = tier.effect.proc;
+    if (proc && SET_PROC_FX_BY_ID[proc.id] !== undefined) {
+      SET_PROC_FX_BY_NAME.set(proc.name, SET_PROC_FX_BY_ID[proc.id]);
+    }
+  }
+}
 const CLICK_MARKER_POOL = 4; // concurrent click-feedback markers before reuse
 const GROUND_AIM_RETICLE_PULSE_HZ = 2;
 const SPARKLE_BOOST = 1.5;
@@ -2855,7 +2879,15 @@ export class Renderer {
         break;
       case 'aura': {
         const tgt = this.sim.entities.get(ev.targetId);
-        if (ev.gained && tgt?.kind === 'player') this.vfx.buffSwirl(ev.targetId);
+        // Set-proc auras announce themselves with a themed swirl: on the wearer
+        // for the self buffs, on the struck mob for the bleeds (so this arm is
+        // NOT player-gated). Everything else keeps the generic player swirl.
+        const procColor = SET_PROC_FX_BY_NAME.get(ev.name);
+        if (ev.gained && procColor !== undefined && tgt) {
+          this.vfx.buffSwirl(ev.targetId, procColor);
+        } else if (ev.gained && tgt?.kind === 'player') {
+          this.vfx.buffSwirl(ev.targetId);
+        }
         break;
       }
       case 'levelup':
@@ -5121,9 +5153,16 @@ export class Renderer {
       if (id === this.sim.playerId || !v.visual || !v.group.visible) continue;
       const e = this.sim.entities.get(id);
       if (!e || (e.dead && !e.lootable)) continue;
-      // body midpoint anchor (also the in-front-of-camera cull)
+      // A lying corpse (dead + lootable) has no upright body: collapse its sloppy
+      // column to a ground-level point so a near-eye click above/behind the flat
+      // body no longer snaps to it (issue 1486). Like the flattened pick proxy, this
+      // sheds the upright column; the exact drop is approximate (a ground-level
+      // anchor inside the 26px assist radius is all this path needs), not a parity
+      // match of the proxy's min(standHeight, radius*2) height.
+      const dead = !!e.dead;
+      // body midpoint anchor (also the in-front-of-camera cull); ground-hug if dead
       this.tmpV.copy(v.group.position);
-      this.tmpV.y += v.height * e.scale * 0.5;
+      this.tmpV.y += v.height * e.scale * (dead ? 0.15 : 0.5);
       this.tmpV.project(this.camera);
       if (this.tmpV.z > 1) continue;
       const midX = (this.tmpV.x * 0.5 + 0.5) * this.viewport.width;
@@ -5133,16 +5172,19 @@ export class Renderer {
       // front of the camera: a point behind the near plane projects to bogus
       // screen coords that could steal an unrelated click (close / first-person
       // camera puts the head behind the near plane). Same guard the real
-      // nameplate path uses before trusting its projection.
-      this.tmpV2.copy(v.group.position);
-      this.tmpV2.y += v.height * e.scale + 1.0;
+      // nameplate path uses before trusting its projection. A dead corpse has no
+      // overhead column at all, so keep top == mid (the ground point).
       let topX = midX;
       let topY = midY;
-      if (isProjectedNameplateAnchorVisible(this.camera, this.tmpV2, this.tmpV3)) {
-        this.tmpV2.project(this.camera);
-        if (this.tmpV2.z <= 1) {
-          topX = (this.tmpV2.x * 0.5 + 0.5) * this.viewport.width;
-          topY = (-this.tmpV2.y * 0.5 + 0.5) * this.viewport.height;
+      if (!dead) {
+        this.tmpV2.copy(v.group.position);
+        this.tmpV2.y += v.height * e.scale + 1.0;
+        if (isProjectedNameplateAnchorVisible(this.camera, this.tmpV2, this.tmpV3)) {
+          this.tmpV2.project(this.camera);
+          if (this.tmpV2.z <= 1) {
+            topX = (this.tmpV2.x * 0.5 + 0.5) * this.viewport.width;
+            topY = (-this.tmpV2.y * 0.5 + 0.5) * this.viewport.height;
+          }
         }
       }
       candidates.push({ id, midX, midY, topX, topY });

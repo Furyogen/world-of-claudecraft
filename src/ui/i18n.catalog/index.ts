@@ -45,7 +45,10 @@ export { questStrings } from './quests';
 // Re-export the catalog public surface (every name the old i18n.en.ts exported).
 export { shellStrings } from './shell';
 
-type ItemSetEntityText = Record<string, { name: string; bonus2?: string; bonus3?: string }>;
+type ItemSetEntityText = Record<
+  string,
+  { name: string; bonus2?: string; bonus3?: string; bonus4?: string }
+>;
 
 const itemSetEntityText: ItemSetEntityText = Object.fromEntries(
   Object.values(ITEM_SETS)
@@ -55,9 +58,15 @@ const itemSetEntityText: ItemSetEntityText = Object.fromEntries(
       // 3-piece tier, so emitting a bonus2 row would bake in an id-fallback string.
       const bonus2 = set.bonuses.find((bonus) => bonus.pieces === 2)?.text;
       const bonus3 = set.bonuses.find((bonus) => bonus.pieces === 3)?.text;
+      const bonus4 = set.bonuses.find((bonus) => bonus.pieces === 4)?.text;
       return [
         set.id,
-        { name: set.name, ...(bonus2 ? { bonus2 } : {}), ...(bonus3 ? { bonus3 } : {}) },
+        {
+          name: set.name,
+          ...(bonus2 ? { bonus2 } : {}),
+          ...(bonus3 ? { bonus3 } : {}),
+          ...(bonus4 ? { bonus4 } : {}),
+        },
       ];
     }),
 );
@@ -1096,14 +1105,14 @@ export const en = {
       vanguard_azure_armor_plate: { name: 'Vanguard Azure' },
       vanguard_chrome_armor_plate: { name: 'Vanguard Chrome' },
       // Thunzharr, the Waking Peak (world boss): epic Tier-2 set gloves and belts
-      crownforged_gauntlets: { name: 'Crownforged Gauntlets' },
-      nighttalon_grips: { name: 'Nighttalon Grips' },
-      soulflame_gloves: { name: 'Soulflame Gloves' },
-      stormcallers_handguards: { name: "Stormcaller's Handguards" },
-      crownforged_girdle: { name: 'Crownforged Girdle' },
-      nighttalon_waistband: { name: 'Nighttalon Waistband' },
-      soulflame_cord: { name: 'Soulflame Cord' },
-      stormcallers_waistguard: { name: "Stormcaller's Waistguard" },
+      crownforged_gauntlets: { name: 'Bonewrought Gauntlets' },
+      nighttalon_grips: { name: 'Direfang Grips' },
+      soulflame_gloves: { name: 'Wraithfire Gloves' },
+      stormcallers_handguards: { name: 'Galecall Handguards' },
+      crownforged_girdle: { name: 'Bonewrought Girdle' },
+      nighttalon_waistband: { name: 'Direfang Waistband' },
+      soulflame_cord: { name: 'Wraithfire Cord' },
+      stormcallers_waistguard: { name: 'Galecall Waistguard' },
     },
     itemSets: itemSetEntityText,
     mobs: { ...worldNames.en.entities.mobs, ...mergeEntities.en.mobs, ...mergeExtra.en.mobs },

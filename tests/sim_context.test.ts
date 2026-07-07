@@ -112,16 +112,12 @@ const CALLBACK_KEYS = [
   'mobSwing',
   'updateRangedPetAttack',
   'fleeMoveSpeed',
-  'usesProfiledMobCombat',
-  'updateProfiledMobCombat',
-  'tryMobMeleeSwingInRange',
   'maybeFlee',
   'aggroMob',
   'isStunned',
   'isRooted',
   'moveSpeedMult',
   'swingIntervalMult',
-  'mobEffectiveMeleeRange',
   'mobCanSwim',
   'resolveMovePoint',
   'updatePet',
@@ -211,6 +207,8 @@ const CALLBACK_KEYS = [
   'marketListingBelongsTo',
   // Ravenpost mail: the quest turn-in letter hook.
   'queueQuestLetter',
+  // Set proc firing.
+  'applySetProcs',
 ] as const;
 
 // A fully-spied fake host. `clock` is mutable so a test can prove the context reads
@@ -365,16 +363,12 @@ function makeFakeHost() {
     mobSwing: vi.fn(),
     updateRangedPetAttack: vi.fn(),
     fleeMoveSpeed: vi.fn(() => 0),
-    usesProfiledMobCombat: vi.fn(() => false),
-    updateProfiledMobCombat: vi.fn(),
-    tryMobMeleeSwingInRange: vi.fn(() => false),
     maybeFlee: vi.fn(() => false),
     aggroMob: vi.fn(),
     isStunned: vi.fn(() => false),
     isRooted: vi.fn(() => false),
     moveSpeedMult: vi.fn(() => 1),
     swingIntervalMult: vi.fn(() => 1),
-    mobEffectiveMeleeRange: vi.fn(() => 0),
     mobCanSwim: vi.fn(() => false),
     resolveMovePoint: vi.fn(() => ({ x: 0, z: 0 })),
     updatePet: vi.fn(),
@@ -453,6 +447,7 @@ function makeFakeHost() {
     marketListingBelongsTo: vi.fn(() => false),
     // Ravenpost mail: the quest turn-in letter hook.
     queueQuestLetter: vi.fn(),
+    applySetProcs: vi.fn(),
   };
   return { host, rng, entities, clock };
 }

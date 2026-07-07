@@ -20,13 +20,7 @@ import {
   type TalentAllocation,
   talentPointsAtLevel,
 } from '../sim/content/talents';
-import {
-  abilitiesKnownAt,
-  CLASSES,
-  COMMON_RECIPES,
-  NPCS,
-  resolveDelveShopOffers,
-} from '../sim/data';
+import { ALL_RECIPES, abilitiesKnownAt, CLASSES, NPCS, resolveDelveShopOffers } from '../sim/data';
 import { deadTargetSelectable } from '../sim/dead_target';
 import { LEADERBOARD_PAGE_SIZE } from '../sim/leaderboard_page';
 import type { Ante, PickAction } from '../sim/lockpick';
@@ -807,7 +801,11 @@ function blankEntity(id: number): Entity {
     meleeHaste: 0,
     rangedHaste: 0,
     spellHaste: 0,
+    setProcs: [],
+    procReadyAt: undefined as unknown as Record<string, number>,
     critChance: 0.05,
+    critRating: 0,
+    hasteRating: 0,
     dodgeChance: 0.05,
     moveSpeed: 7,
     hostile: false,
@@ -982,6 +980,9 @@ export class ClientWorld implements IWorld {
   // all-zero default until the wheel/mass-conservation follow-up wires a self-snap
   // field the way `dmarks`/`dcomp` do for delveMarks/companionUpgrades above.
   craftSkills: Record<string, number> = emptyCraftSkills();
+  // Gathering profession proficiency (Mining/Logging/Herbalism). NOT mirrored over
+  // the wire (see professionsState below, the real read surface); this stub keeps
+  // ClientWorld structurally satisfying IWorldProgressionXp.gatheringProficiency.
   gatheringProficiency: Record<string, number> = {};
   // Per-delve clears (key `${delveId}:${tierId}`), mirrored from the self-wire so
   // delveShopOffers can resolve the shop lock badge client-side.
@@ -1002,10 +1003,10 @@ export class ClientWorld implements IWorld {
   nodeHarvestableByMe(_nodeId: string): boolean {
     return true;
   }
-  // Static content read (#1127): the common-tier recipe list ships with the
-  // client bundle like every other content table, so this needs no wire
-  // round-trip. See src/world_api/professions.ts.
-  recipeList: readonly RecipeDef[] = COMMON_RECIPES;
+  // Static content read (#1127, extended #1132): the full recipe list (common
+  // tier plus combo recipes) ships with the client bundle like every other
+  // content table, so this needs no wire round-trip. See src/world_api/professions.ts.
+  recipeList: readonly RecipeDef[] = ALL_RECIPES;
   // Craft-result surface (#1127), mirrored from the server's `craftResult`
   // event (applyEvent below). Null until this session's first craft attempt.
   lastCraftResult: CraftResultView | null = null;
@@ -1630,6 +1631,9 @@ export class ClientWorld implements IWorld {
           // sends it only when defined (server/game.ts), so an ordinary aura or an old server
           // decodes to undefined and the badge falls back to the stacks path, exactly as before.
           rec.charges = a.charges;
+          // The caster's entity id, for the target strip's own-aura prominence
+          // (auras_view ownFirst). An old server omits it; 0 matches no player id.
+          rec.sourceId = a.src ?? 0;
         }
       } else {
         e.auras = wireAuras.map((a: any) => ({
@@ -1642,7 +1646,7 @@ export class ClientWorld implements IWorld {
           value2: a.value2,
           value3: a.value3,
           tickInterval: a.tickInterval,
-          sourceId: 0,
+          sourceId: a.src ?? 0,
           school: a.school ?? 'physical',
           stacks: a.stacks,
           charges: a.charges,
@@ -1715,6 +1719,11 @@ export class ClientWorld implements IWorld {
       e.spellHaste = s.sh ?? 0;
       e.critChance = s.crit ?? 0.05;
       e.dodgeChance = s.dodge ?? 0.05;
+      // Crit/haste RATING are informational paper-doll stats (combat values ride
+      // crit/sh above); sent always like the other self stats so the online
+      // character sheet shows them instead of the blankEntity 0. Server-recomputed.
+      e.critRating = s.crat ?? 0;
+      e.hasteRating = s.hrat ?? 0;
       e.weapon = s.weapon ?? e.weapon;
       e.eating = s.eat
         ? { itemId: '', kind: 'food', hpPer2s: 0, manaPer2s: 0, remaining: s.eat.remaining }
