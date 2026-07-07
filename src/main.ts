@@ -2631,8 +2631,11 @@ async function startOffline(
     playerName: name,
     devCommands: import.meta.env.DEV,
     // The Gauntlet is always joinable offline (the server gates its own window
-    // via GAUNTLET_EVENT / the ops toggle; headless keeps the default closed).
+    // via GAUNTLET_EVENT / the ops toggle; headless keeps the default closed),
+    // and the lobby starts instantly: no other player can join a single-player
+    // world, so the run backfills with contestants on the spot.
     gauntletAlwaysOpen: true,
+    gauntletInstantLobby: true,
     world,
   });
   sim.setPlayerSkin(sim.playerId, skin);
