@@ -41,7 +41,18 @@ const RAID_REQUIRED_DUNGEON_IDS = new Set(['nythraxis_boss_arena']);
 
 export function instanceKeyFor(ctx: SimContext, pid: number): string {
   const party = ctx.partyOf(pid);
-  return party ? `party:${party.id}` : `solo:${pid}`;
+  if (party) return `party:${party.id}`;
+  // Key a solo instance to the DURABLE character id, not the transient entity
+  // id. A logout/relog or a character-select Take-Over mints a NEW entity id,
+  // which under an entity-id key spawned a fresh instance with the boss alive
+  // again, bypassing the empty-instance reset timer (the Gravewyrm Sanctum
+  // zero-downtime farm, issue 1600). Re-deriving the same key across relog makes
+  // re-entry rejoin the cleared instance instead. Keep the `solo:` prefix (the
+  // delve auto-companion gates on startsWith('solo:')) and mark the
+  // character-keyed form so it can never collide with the entity-id fallback,
+  // which offline / headless / tests (no character id) still use.
+  const cid = ctx.players.get(pid)?.characterId;
+  return cid != null ? `solo:char:${cid}` : `solo:${pid}`;
 }
 
 export function instanceOriginOf(inst: InstanceSlot): { x: number; z: number } {

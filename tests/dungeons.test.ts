@@ -980,6 +980,48 @@ describe('dungeons: pure helpers', () => {
     expect(instanceKeyFor(sim.ctx, b)).toBe(`party:${party.id}`);
   });
 
+  it('keys a solo instance to the durable character id when present (issue 1600)', () => {
+    const sim = makeSim();
+    // Online players carry a durable character id; the solo key is derived from
+    // it, not the transient entity id, so a relog (new entity id) rejoins the
+    // same instance. The `solo:` prefix is preserved (the delve auto-companion
+    // checks startsWith('solo:')) and the `char:` marker keeps it from ever
+    // colliding with the entity-id fallback used offline / in tests.
+    const withCid = sim.addPlayer('warrior', 'Durable', { characterId: 77 });
+    expect(instanceKeyFor(sim.ctx, withCid)).toBe('solo:char:77');
+    // No character id (offline / headless / most tests): fall back to entity id.
+    const noCid = sim.addPlayer('mage', 'Legacy');
+    expect(instanceKeyFor(sim.ctx, noCid)).toBe(`solo:${noCid}`);
+  });
+
+  it('a relog rejoins the cleared solo instance instead of respawning the boss (issue 1600)', () => {
+    const sim = makeSim();
+    const cid = 4242;
+    const pid1 = sim.addPlayer('rogue', 'Exploiter', { characterId: cid });
+    enterDungeon(sim.ctx, 'gravewyrm_sanctum', pid1);
+    const inst1 = claimedDungeon(sim, 'gravewyrm_sanctum');
+    expect(inst1, 'gravewyrm_sanctum did not claim a solo instance').toBeTruthy();
+    const slot1 = inst1.slot;
+    const bossId1 = mobInInstance(sim, inst1, 'korzul_the_gravewyrm').id;
+
+    // Simulate the Take-Over relog exploit: drop the player (the instance
+    // lingers, its 300s empty reset not yet elapsed) and re-add the SAME
+    // character, which assigns a NEW entity id.
+    sim.removePlayer(pid1);
+    const pid2 = sim.addPlayer('rogue', 'Exploiter', { characterId: cid });
+    expect(pid2).not.toBe(pid1);
+    enterDungeon(sim.ctx, 'gravewyrm_sanctum', pid2);
+
+    // The relog must rejoin the cleared instance, not mint a fresh one with the
+    // boss respawned: exactly ONE claimed instance, same slot, same boss entity.
+    const claimed = (sim.instances as any[]).filter(
+      (i) => i.dungeonId === 'gravewyrm_sanctum' && i.partyKey !== null,
+    );
+    expect(claimed.length).toBe(1);
+    expect(claimed[0].slot).toBe(slot1);
+    expect(mobInInstance(sim, claimed[0], 'korzul_the_gravewyrm').id).toBe(bossId1);
+  });
+
   it('instanceOriginOf matches the data instanceOrigin for the slot', () => {
     const sim = makeSim();
     const pid = sim.addPlayer('warrior', 'Solo');
