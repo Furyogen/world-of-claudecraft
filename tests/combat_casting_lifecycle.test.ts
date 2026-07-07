@@ -284,6 +284,57 @@ describe('casting_lifecycle: determinism', () => {
   });
 });
 
+describe('casting_lifecycle: death mid-channel fully clears the channel state', () => {
+  it('handleDeath on a channeling caster clears channeling, not just castingAbility', () => {
+    const { sim, p } = makeSim('warlock', 12);
+    const mob = spawnTarget(sim, p);
+    castAbility(sim.ctx, 'drain_life', p.id);
+    expect(p.channeling).toBe(true);
+    expect(p.castRemaining).toBeGreaterThan(0);
+    handleDeath(sim.ctx, p, mob); // the CASTER dies mid-channel
+    expect(p.castingAbility).toBeNull();
+    expect(p.castTargetId).toBeNull();
+    expect(p.channeling).toBe(false); // stale true turned the next timed cast into a channel
+    expect(p.castRemaining).toBe(0);
+    expect(p.castAim).toBeNull();
+  });
+
+  it('a timed cast after a mid-channel death resolves ONCE at completion, not per channel tick', () => {
+    // The live repro (the Pyrelance "hundreds of fireballs" raid bug): a mage dies
+    // while channeling, gets back up, and casts a timed nuke. The stale
+    // channeling flag sent updateCasting down the channel branch, re-firing the
+    // nuke's effects on every leftover channel-tick boundary DURING the cast.
+    const { sim, p, meta } = makeSim('mage', 20);
+    const mob = spawnTarget(sim, p, 20, 6);
+    castAbility(sim.ctx, 'arcane_missiles', p.id);
+    expect(p.channeling).toBe(true);
+    handleDeath(sim.ctx, p, mob); // dies mid-channel
+    p.dead = false; // revived on the spot (test-suite revive idiom)
+    p.hp = p.maxHp;
+    p.resource = p.maxResource;
+    p.gcdRemaining = 0;
+    sim.drainEvents();
+
+    castAbility(sim.ctx, 'pyroblast', p.id);
+    expect(p.castingAbility).toBe('pyroblast');
+    let n = 0;
+    while (p.castingAbility && n++ < 1000) {
+      updateCasting(sim.ctx, p, meta);
+      // No bolt may launch while the cast is still in progress: a mid-cast
+      // projectile means the channel branch fired the nuke early.
+      if (p.castingAbility) expect(sim.ctx.pendingProjectiles).toHaveLength(0);
+    }
+    expect(p.castingAbility).toBeNull();
+    expect(sim.ctx.pendingProjectiles).toHaveLength(1); // exactly one bolt, at completion
+    for (let i = 0; i < 200 && sim.ctx.pendingProjectiles.length > 0; i++)
+      advancePendingProjectiles(sim.ctx);
+    const resolutions = sim
+      .drainEvents()
+      .filter((e: any) => e.type === 'damage' && e.ability === 'Pyrelance');
+    expect(resolutions).toHaveLength(1); // one cast = one resolution (hit or resist)
+  });
+});
+
 describe('casting_lifecycle: physical ranged shots resolve on projectile impact (Long Draw)', () => {
   it('deals no damage at cast completion; damage lands when the arrow arrives', () => {
     const { sim, p, meta } = makeSim('hunter', 20);

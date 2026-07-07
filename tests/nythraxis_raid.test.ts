@@ -2278,6 +2278,62 @@ describe('Nythraxis raid encounter', () => {
     expect(tank.hp).toBeLessThan(tank.maxHp);
   });
 
+  it('fully clears the ward-channel cast state when the channeler dies mid-channel', () => {
+    // Regression: handleDeath nulled castingAbility but left `channeling` armed,
+    // and clearNythraxisWardChannelCast no-ops once castingAbility is null, so a
+    // player killed mid-ward-channel kept channeling=true through resurrection.
+    // Their next timed cast (Pyrelance) then ran the channel branch and re-fired
+    // its damage every leftover channel tick: the "hundreds of fireballs" bug.
+    const sim = makeWorld();
+    const tankPid = sim.addPlayer('warrior', 'Tank');
+    const origin = enterRaid(sim, tankPid);
+    const tank = sim.entities.get(tankPid)!;
+    tank.maxHp = 1e7;
+    tank.hp = tank.maxHp;
+    const boss = mob(sim, 'nythraxis_scourge_of_thornpeak');
+    engage(boss, tank);
+    boss.nythraxis = {
+      phase: 2,
+      introSpoken: true,
+      transitionStarted: true,
+      transitionTimer: 0,
+      transitionCues: [],
+      transitionReleased: true,
+      gravebreakerTimer: 99,
+      raiseFallenTimer: 99,
+      soulRendTimer: 99,
+      soulRendMarks: [],
+      soulRendLockout: 0,
+      deathlessTimer: 0,
+      deathlessCastRemaining: 0,
+      deathlessStunRemaining: 0,
+      wardChannels: [],
+      finalStand: false,
+      deathSpoken: false,
+    };
+    sim.tick();
+
+    const ward = objects(sim, 'bastion_ward_stone', origin)[0];
+    const pid = sim.addPlayer('mage', 'DoomedMage');
+    teleport(sim, pid, ward.pos.x, ward.pos.z);
+    sim.targetEntity(ward.id, pid);
+    sim.interact(pid);
+    sim.tick();
+    const mage = sim.entities.get(pid)!;
+    expect(mage.castingAbility).toBe('nythraxis_ward_channel');
+    expect(mage.channeling).toBe(true);
+
+    (sim as any).dealDamage(boss, mage, mage.maxHp * 10, false, 'shadow', null, 'hit', true);
+    expect(mage.dead).toBe(true);
+    expect(mage.castingAbility).toBeNull();
+    expect(mage.channeling).toBe(false); // death must clear the WHOLE cast state
+    expect(mage.castRemaining).toBe(0);
+
+    sim.tick();
+    const channel = boss.nythraxis!.wardChannels.find((c) => c.objectId === ward.id)!;
+    expect(channel.playerId).toBeNull(); // the slot frees for another raider
+  });
+
   it('starts wardstone channels through the object click pickup path', () => {
     const sim = makeWorld();
     const tankPid = sim.addPlayer('warrior', 'Tank');
