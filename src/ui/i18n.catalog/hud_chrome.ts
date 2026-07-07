@@ -14,7 +14,8 @@ export const hudChromeStrings = {
   // The Gauntlet survival event: the recruiter dialog, the live HUD cluster, the
   // green-light/red-light banners + logs, and the knockout / podium overlay.
   // {placeholder} tokens: {count}/{total}/{n} are formatNumber counts, {seconds} a
-  // whole-second countdown, {amount} a formatMoney value, {name} a contestant name.
+  // whole-second countdown, {name} a contestant name; {amount} is a formatMoney
+  // value in prizeAria but a plain formatNumber vitality amount in vitalityLost.
   gauntlet: {
     title: 'The Gauntlet',
     pitch: 'Outlast every trial. The last one standing takes the purse.',

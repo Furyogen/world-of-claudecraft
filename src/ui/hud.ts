@@ -8106,6 +8106,7 @@ export class Hud {
           break;
         }
         case 'gauntletPhase': {
+          this.gauntletClock.calibrate(ev.remainingS, performance.now());
           const line = this.gauntletPhaseBanner(ev.phase);
           if (line) this.showSubzone(line);
           break;
