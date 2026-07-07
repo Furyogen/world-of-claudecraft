@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { coerceFxTier, nameplateIntervalSec } from '../game/ui_tier_knobs';
 import { cameraOcclusion } from '../sim/colliders';
+import { GAUNTLET_LAYOUT } from '../sim/content/gauntlet';
 import {
   ABILITIES,
   ARENA_SLOT_COUNT,
@@ -2931,6 +2932,27 @@ export class Renderer {
         this.vfx.poof({ x: ev.x, y: gy + 0.5, z: ev.z });
         break;
       }
+      case 'gauntletPodium': {
+        // The run resolved: a firework volley over the podium steps (the
+        // ceremony anchor lives in the layout data; the run view carries the
+        // instance origin). Winners get a little camera kick on top.
+        const run = this.sim.gauntletRun;
+        if (!run) break;
+        const px = run.originX;
+        const pz = run.originZ + GAUNTLET_LAYOUT.podiumZ - 4;
+        const gy = groundHeight(px, pz, this.sim.cfg.seed);
+        const schools = ['holy', 'arcane', 'fire', 'holy', 'arcane'];
+        for (let i = 0; i < schools.length; i++) {
+          this.vfx.burst(
+            new THREE.Vector3(px - 6 + i * 3, gy + 7 + (i % 2) * 3, pz - 2 + (i % 3)),
+            schools[i],
+            26,
+            1.6,
+          );
+        }
+        if (ev.won) this.addShake(0.5);
+        break;
+      }
     }
   }
 
@@ -3628,8 +3650,14 @@ export class Renderer {
   // light-reactive signal pieces.
   private gauntletVenues = new Map<number, GauntletVenueView>();
   private pendingGauntletSlots = new Set<number>();
-  private fogState: 'outdoor' | 'dungeon' | 'temple' | 'nythraxis' | 'delve' | 'underwater' =
-    'outdoor';
+  private fogState:
+    | 'outdoor'
+    | 'dungeon'
+    | 'temple'
+    | 'nythraxis'
+    | 'delve'
+    | 'gauntlet'
+    | 'underwater' = 'outdoor';
 
   private buildInterior(interior: string, ox: number, oz: number): void {
     this.dungeons ??= new DungeonInteriors(this.scene, this.lowGfx, this.flames, this.fireLights);
@@ -3831,14 +3859,19 @@ export class Renderer {
         ? 'temple'
         : inNythraxis
           ? 'nythraxis'
-          : // the gauntlet band and the castle course are open daylight, never a dark interior
-            isHodricsPos(px)
-            ? 'outdoor'
-            : inside && !inGauntlet
-              ? 'dungeon'
-              : camY < waterLevelAt(px, pz) - 0.05
-                ? 'underwater'
-                : 'outdoor';
+          : // the Gauntlet venue gets its own perpetual-dusk haze (the venue's
+            // backdrop dome supplies the horizon; the HDRI sky hides with the
+            // other non-outdoor states)
+            inGauntlet
+            ? 'gauntlet'
+            : // the castle course is open daylight, never a dark interior
+              isHodricsPos(px)
+              ? 'outdoor'
+              : inside
+                ? 'dungeon'
+                : camY < waterLevelAt(px, pz) - 0.05
+                  ? 'underwater'
+                  : 'outdoor';
     const fog = this.scene.fog as THREE.Fog;
     if (desired !== this.fogState) {
       this.fogState = desired;
@@ -3863,6 +3896,13 @@ export class Renderer {
         fog.color.setHex(0x0e0705);
         fog.near = 14;
         fog.far = 74;
+      } else if (desired === 'gauntlet') {
+        // A warm dust haze over the venue: far enough that the Stone Warden
+        // (~100yd from the start line) stays readable, close enough that the
+        // empty band beyond the backdrop dome never shows.
+        fog.color.setHex(0xd3b48c);
+        fog.near = 60;
+        fog.far = 290;
       } else if (desired === 'underwater') {
         fog.color.setHex(0x17506e);
         fog.near = 2;

@@ -105,6 +105,7 @@ import {
   ITEMS,
   isArenaPos,
   isDelvePos,
+  isGauntletPos,
   isHodricsPos,
   MOBS,
   QUESTS,
@@ -1476,6 +1477,12 @@ export class Sim {
       // world start below.
       const ret = savedState?.hcReturnPos;
       savedPos = ret ? { x: ret.x, z: ret.z } : null;
+    } else if (savedPos && isGauntletPos(savedPos.x)) {
+      // Saved mid-run in the Gauntlet band: their run is long gone, and
+      // without this branch the generic dungeon fallback below would eject
+      // them to an unrelated dungeon door. Rejoin at the world start (the
+      // recruiter stands in town when the event is open).
+      savedPos = null;
     } else if (savedPos && savedPos.x > DUNGEON_X_THRESHOLD) {
       const dungeon = dungeonAt(savedPos.x) ?? DUNGEON_LIST[0];
       savedPos = { x: dungeon.doorPos.x, z: dungeon.doorPos.z - 4 };

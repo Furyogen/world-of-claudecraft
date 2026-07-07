@@ -2026,7 +2026,16 @@ function dirtyEveryDeltaField(): {
         vitality: 100,
         skill: 0,
         eliminatedAtTrial: null,
-        script: { speed: 0, fumbleOnFlip: null },
+        script: {
+          speed: 0,
+          fumbleOnFlip: null,
+          planKey: -1,
+          goAt: 0,
+          stopAt: 0,
+          mult: 1,
+          pauseAt: 0,
+          pauseUntil: 0,
+        },
       },
     ],
     playerStates: new Map([
@@ -2034,6 +2043,7 @@ function dirtyEveryDeltaField(): {
         lp,
         {
           savedPos: { ...p.pos },
+          savedHp: p.hp,
           spectating: false,
           momentumX: 0,
           momentumZ: 0,
