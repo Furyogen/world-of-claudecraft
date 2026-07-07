@@ -105,6 +105,7 @@ export const hudChromeStrings = {
   // computes nothing. One-way: buy with money, spend on cosmetics, never cashes out.
   claudium: {
     title: 'Claudium',
+    open: 'Open Claudium',
     close: 'Close Claudium',
     balanceLabel: 'Balance',
     balanceUnit: '{amount} Claudium',
@@ -128,6 +129,11 @@ export const hudChromeStrings = {
     kindCosmetic: 'Cosmetic',
     kindSkin: 'Skin',
     kindItem: 'Item',
+    checkoutTitle: 'Complete purchase',
+    checkoutClose: 'Close checkout',
+    checkoutLoading: 'Loading checkout...',
+    checkoutFailed: 'Checkout could not be loaded. Please try again.',
+    checkoutUnavailable: 'That Claudium purchase is not available right now.',
   },
   theme: {
     preset: 'UI Theme',
