@@ -311,7 +311,15 @@ export const fr_CA: EnTranslations = {
       "nameplates": "Noms",
       "haptics": "Vibrations",
       "hapticsOff": "Vibrations désactivées",
-      "toggleHaptics": "Activer/désactiver les vibrations"
+      "toggleHaptics": "Activer/désactiver les vibrations",
+      "hotbarPage": "Techniques",
+      "hotbarPageAria": "Afficher la prochaine série de techniques",
+      "actionRing": "Actions de combat",
+      "actionPageToggle": "Changer de page d'action",
+      "actionPageIndicator": "Page {page}",
+      "targetCycle": "Échanger la cible",
+      "targetCycleShort": "Cible",
+      "spellbookPageLabel": "Page {page}"
     },
     "tutorial": {
       "moveBodyTouch": "Utilise le joystick de déplacement pour te déplacer et fais glisser l'écran pour regarder autour de toi. Fais quelques pas pour commencer.",
@@ -418,7 +426,9 @@ export const fr_CA: EnTranslations = {
       "itemLevelLine": "Niveau d'objet {level}",
       "itemScoreLine": "Score {score}",
       "showSecondaryActionBar": "Afficher la barre d'action secondaire",
-      "showDailyRewardsChest": "Afficher le coffre des récompenses quotidiennes"
+      "showDailyRewardsChest": "Afficher le coffre des récompenses quotidiennes",
+      "mobileCameraJoystick": "Manette de caméra",
+      "mobileLeftHanded": "Disposition pour gaucher"
     },
     "controller": {
       "title": "Manette",
@@ -1050,18 +1060,6 @@ export const fr_CA: EnTranslations = {
         }
       }
     },
-    "crafting": {
-      "title": "Artisanat",
-      "close": "Fermer la fabrication",
-      "craft": "Artisanat",
-      "reagentsNeeded": "Nécessite$1",
-      "reagentLine": "{name}: {have}/{required}",
-      "empty": "Aucune recette connue pour l'instant.",
-      "resultAria": "Artisanat {name}",
-      "craftedToast": "Fabriqué$1 {name}",
-      "insufficientMaterials": "Vous n'avez pas le matériel pour cela.",
-      "unknownRecipe": "Cette recette n'existe pas."
-    },
     "devBadge": {
       "title": "Développeur",
       "tiers": {
@@ -1205,6 +1203,19 @@ export const fr_CA: EnTranslations = {
       "mining": "Minage",
       "logging": "Bûcheronnage",
       "herbalism": "Herboristerie"
+    },
+    "crafting": {
+      "title": "Artisanat",
+      "close": "Fermer la fabrication",
+      "craft": "Artisanat",
+      "reagentsNeeded": "Nécessite$1",
+      "reagentLine": "{name}: {have}/{required}",
+      "empty": "Aucune recette connue pour l'instant.",
+      "resultAria": "Artisanat {name}",
+      "craftedToast": "Fabriqué$1 {name}",
+      "insufficientMaterials": "Vous n'avez pas le matériel pour cela.",
+      "unknownRecipe": "Cette recette n'existe pas.",
+      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
     }
   },
   "apiError": {

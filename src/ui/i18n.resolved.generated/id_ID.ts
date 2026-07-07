@@ -311,7 +311,15 @@ export const id_ID: EnTranslations = {
       "nameplates": "Nama",
       "haptics": "Haptik",
       "hapticsOff": "Haptik Nonaktif",
-      "toggleHaptics": "Alihkan haptik"
+      "toggleHaptics": "Alihkan haptik",
+      "hotbarPage": "Kemampuan",
+      "hotbarPageAria": "Tampilkan rangkaian kemampuan berikutnya",
+      "actionRing": "Aksi tempur",
+      "actionPageToggle": "Ganti halaman tindakan",
+      "actionPageIndicator": "Hal. {page}",
+      "targetCycle": "Tukar sasaran",
+      "targetCycleShort": "Target",
+      "spellbookPageLabel": "Halaman {page}"
     },
     "tutorial": {
       "moveBodyTouch": "Gunakan tuas gerak untuk berpindah dan seret layar untuk melihat sekeliling. Ambil beberapa langkah untuk memulai.",
@@ -418,7 +426,9 @@ export const id_ID: EnTranslations = {
       "itemLevelLine": "Level Item {level}",
       "itemScoreLine": "Skor {score}",
       "showSecondaryActionBar": "Tampilkan Bilah Aksi Sekunder",
-      "showDailyRewardsChest": "Tampilkan Peti Hadiah Harian"
+      "showDailyRewardsChest": "Tampilkan Peti Hadiah Harian",
+      "mobileCameraJoystick": "Joystick kamera",
+      "mobileLeftHanded": "Tata letak kidal"
     },
     "controller": {
       "title": "Kontroler",
@@ -1050,18 +1060,6 @@ export const id_ID: EnTranslations = {
         }
       }
     },
-    "crafting": {
-      "title": "kerajinan",
-      "close": "Tutup kerajinan",
-      "craft": "Keahlian",
-      "reagentsNeeded": "Memerlukan:",
-      "reagentLine": "{name}: {have}/{required}",
-      "empty": "Belum ada resep yang diketahui.",
-      "resultAria": "Kerajinan {name}",
-      "craftedToast": "Dibuat: {name}",
-      "insufficientMaterials": "Anda tidak memiliki bahan untuk itu.",
-      "unknownRecipe": "Resep itu tidak ada."
-    },
     "devBadge": {
       "title": "Pengembang",
       "tiers": {
@@ -1205,6 +1203,19 @@ export const id_ID: EnTranslations = {
       "mining": "Penambangan",
       "logging": "Penebangan",
       "herbalism": "Herbalisme"
+    },
+    "crafting": {
+      "title": "kerajinan",
+      "close": "Tutup kerajinan",
+      "craft": "Keahlian",
+      "reagentsNeeded": "Memerlukan:",
+      "reagentLine": "{name}: {have}/{required}",
+      "empty": "Belum ada resep yang diketahui.",
+      "resultAria": "Kerajinan {name}",
+      "craftedToast": "Dibuat: {name}",
+      "insufficientMaterials": "Anda tidak memiliki bahan untuk itu.",
+      "unknownRecipe": "Resep itu tidak ada.",
+      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
     }
   },
   "apiError": {

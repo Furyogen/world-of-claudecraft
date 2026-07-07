@@ -10,22 +10,28 @@
 
 export const pending: Record<string, readonly string[]> = {
   "es": [
+    "hudChrome.crafting.comboRequirementUnmet",
     "hudChrome.discord.roleTag.coredevs"
   ],
   "es_ES": [
+    "hudChrome.crafting.comboRequirementUnmet",
     "hudChrome.discord.roleTag.coredevs"
   ],
   "fr_FR": [
+    "hudChrome.crafting.comboRequirementUnmet",
     "hudChrome.discord.roleTag.coredevs"
   ],
   "fr_CA": [
+    "hudChrome.crafting.comboRequirementUnmet",
     "hudChrome.discord.roleTag.coredevs"
   ],
   "en_CA": [],
   "it_IT": [
+    "hudChrome.crafting.comboRequirementUnmet",
     "hudChrome.discord.roleTag.coredevs"
   ],
   "de_DE": [
+    "hudChrome.crafting.comboRequirementUnmet",
     "hudChrome.discord.roleTag.coredevs"
   ],
   "zh_CN": [
@@ -41,33 +47,52 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.roleTag.coredevs"
   ],
   "pt_BR": [
+    "hudChrome.crafting.comboRequirementUnmet",
     "hudChrome.discord.roleTag.coredevs"
   ],
   "ru_RU": [
     "hudChrome.discord.roleTag.coredevs"
   ],
   "cs_CZ": [
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.crafting.comboRequirementUnmet",
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.mobile.actionPageIndicator",
+    "hudChrome.mobile.actionPageToggle",
+    "hudChrome.mobile.actionRing",
+    "hudChrome.mobile.hotbarPage",
+    "hudChrome.mobile.hotbarPageAria",
+    "hudChrome.mobile.spellbookPageLabel",
+    "hudChrome.mobile.targetCycle",
+    "hudChrome.mobile.targetCycleShort",
+    "hudChrome.options.mobileCameraJoystick",
+    "hudChrome.options.mobileLeftHanded"
   ],
   "nl_NL": [
+    "hudChrome.crafting.comboRequirementUnmet",
     "hudChrome.discord.roleTag.coredevs"
   ],
   "pl_PL": [
+    "hudChrome.crafting.comboRequirementUnmet",
     "hudChrome.discord.roleTag.coredevs"
   ],
   "id_ID": [
+    "hudChrome.crafting.comboRequirementUnmet",
     "hudChrome.discord.roleTag.coredevs"
   ],
   "tr_TR": [
+    "hudChrome.crafting.comboRequirementUnmet",
     "hudChrome.discord.roleTag.coredevs"
   ],
   "sv_SE": [
+    "hudChrome.crafting.comboRequirementUnmet",
     "hudChrome.discord.roleTag.coredevs"
   ],
   "vi_VN": [
+    "hudChrome.crafting.comboRequirementUnmet",
     "hudChrome.discord.roleTag.coredevs"
   ],
   "da_DK": [
+    "hudChrome.crafting.comboRequirementUnmet",
     "hudChrome.discord.roleTag.coredevs"
   ]
 };

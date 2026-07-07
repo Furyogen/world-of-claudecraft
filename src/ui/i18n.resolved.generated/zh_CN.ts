@@ -311,7 +311,15 @@ export const zh_CN: EnTranslations = {
       "nameplates": "姓名板",
       "haptics": "震动反馈",
       "hapticsOff": "震动反馈：关",
-      "toggleHaptics": "切换震动反馈"
+      "toggleHaptics": "切换震动反馈",
+      "hotbarPage": "技能",
+      "hotbarPageAria": "显示下一组技能",
+      "actionRing": "战斗动作",
+      "actionPageToggle": "切换动作页",
+      "actionPageIndicator": "第{page}页",
+      "targetCycle": "切换目标",
+      "targetCycleShort": "目标",
+      "spellbookPageLabel": "页{page}"
     },
     "tutorial": {
       "moveBodyTouch": "使用摇杆移动，拖动屏幕环顾四周。先走几步开始吧。",
@@ -418,7 +426,9 @@ export const zh_CN: EnTranslations = {
       "itemLevelLine": "物品等级 {level}",
       "itemScoreLine": "评分 {score}",
       "showSecondaryActionBar": "显示副动作条",
-      "showDailyRewardsChest": "显示每日奖励宝箱"
+      "showDailyRewardsChest": "显示每日奖励宝箱",
+      "mobileCameraJoystick": "摄像机摇杆",
+      "mobileLeftHanded": "左手布局"
     },
     "controller": {
       "title": "手柄",
@@ -1050,18 +1060,6 @@ export const zh_CN: EnTranslations = {
         }
       }
     },
-    "crafting": {
-      "title": "制作",
-      "close": "关闭制作",
-      "craft": "制作",
-      "reagentsNeeded": "需要:",
-      "reagentLine": "{name}: {have}/{required}",
-      "empty": "尚无已知配方。",
-      "resultAria": "制作{name}",
-      "craftedToast": "已制作:{name}",
-      "insufficientMaterials": "你没有足够的材料。",
-      "unknownRecipe": "该配方不存在。"
-    },
     "devBadge": {
       "title": "开发者",
       "tiers": {
@@ -1205,6 +1203,19 @@ export const zh_CN: EnTranslations = {
       "mining": "采矿",
       "logging": "伐木",
       "herbalism": "草药学"
+    },
+    "crafting": {
+      "title": "制作",
+      "close": "关闭制作",
+      "craft": "制作",
+      "reagentsNeeded": "需要:",
+      "reagentLine": "{name}: {have}/{required}",
+      "empty": "尚无已知配方。",
+      "resultAria": "制作{name}",
+      "craftedToast": "已制作:{name}",
+      "insufficientMaterials": "你没有足够的材料。",
+      "unknownRecipe": "该配方不存在。",
+      "comboRequirementUnmet": "你没有达到该配方所需组合的两项制造技能等级。"
     }
   },
   "apiError": {

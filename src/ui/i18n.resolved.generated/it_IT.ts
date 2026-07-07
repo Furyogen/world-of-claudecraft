@@ -311,7 +311,15 @@ export const it_IT: EnTranslations = {
       "nameplates": "Nomi",
       "haptics": "Vibrazione",
       "hapticsOff": "Vibrazione disattivata",
-      "toggleHaptics": "Attiva/disattiva vibrazione"
+      "toggleHaptics": "Attiva/disattiva vibrazione",
+      "hotbarPage": "Abilità",
+      "hotbarPageAria": "Mostra la serie successiva di abilità",
+      "actionRing": "Azioni di combattimento",
+      "actionPageToggle": "Cambia pagina di azione",
+      "actionPageIndicator": "Pag. {page}",
+      "targetCycle": "Scambia bersaglio",
+      "targetCycleShort": "Bersaglio",
+      "spellbookPageLabel": "Pagina {page}"
     },
     "tutorial": {
       "moveBodyTouch": "Usa il joystick di movimento per muoverti e trascina lo schermo per guardarti intorno. Fai qualche passo per iniziare.",
@@ -418,7 +426,9 @@ export const it_IT: EnTranslations = {
       "itemLevelLine": "Livello oggetto {level}",
       "itemScoreLine": "Punteggio {score}",
       "showSecondaryActionBar": "Mostra la barra delle azioni secondaria",
-      "showDailyRewardsChest": "Mostra forziere delle ricompense giornaliere"
+      "showDailyRewardsChest": "Mostra forziere delle ricompense giornaliere",
+      "mobileCameraJoystick": "Joystick della fotocamera",
+      "mobileLeftHanded": "Disposizione per mancini"
     },
     "controller": {
       "title": "Controller",
@@ -1050,18 +1060,6 @@ export const it_IT: EnTranslations = {
         }
       }
     },
-    "crafting": {
-      "title": "Creazione",
-      "close": "Chiudi la lavorazione",
-      "craft": "Mestiere",
-      "reagentsNeeded": "Richiede:",
-      "reagentLine": "{name}: {have}/{required}",
-      "empty": "Nessuna ricetta ancora conosciuta.",
-      "resultAria": "Crea {name}",
-      "craftedToast": "Realizzato: {name}",
-      "insufficientMaterials": "Non hai i materiali per quello.",
-      "unknownRecipe": "Quella ricetta non esiste."
-    },
     "devBadge": {
       "title": "Sviluppatore",
       "tiers": {
@@ -1205,6 +1203,19 @@ export const it_IT: EnTranslations = {
       "mining": "Estrazione mineraria",
       "logging": "Taglio del legname",
       "herbalism": "Erbalismo"
+    },
+    "crafting": {
+      "title": "Creazione",
+      "close": "Chiudi la lavorazione",
+      "craft": "Mestiere",
+      "reagentsNeeded": "Richiede:",
+      "reagentLine": "{name}: {have}/{required}",
+      "empty": "Nessuna ricetta ancora conosciuta.",
+      "resultAria": "Crea {name}",
+      "craftedToast": "Realizzato: {name}",
+      "insufficientMaterials": "Non hai i materiali per quello.",
+      "unknownRecipe": "Quella ricetta non esiste.",
+      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
     }
   },
   "apiError": {

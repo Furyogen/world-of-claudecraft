@@ -311,7 +311,15 @@ export const pl_PL: EnTranslations = {
       "nameplates": "Nazwy",
       "haptics": "Wibracje",
       "hapticsOff": "Wibracje wył.",
-      "toggleHaptics": "Przełącz wibracje"
+      "toggleHaptics": "Przełącz wibracje",
+      "hotbarPage": "Umiejętności",
+      "hotbarPageAria": "Pokaż następny zestaw umiejętności",
+      "actionRing": "Działania bojowe",
+      "actionPageToggle": "Zmień stronę akcji",
+      "actionPageIndicator": "Str. {page}",
+      "targetCycle": "Zmień cel",
+      "targetCycleShort": "Cel",
+      "spellbookPageLabel": "Strona {page}"
     },
     "tutorial": {
       "moveBodyTouch": "Użyj gałki ruchu, aby się poruszać, i przeciągaj ekran, aby się rozglądać. Zrób kilka kroków, by zacząć.",
@@ -418,7 +426,9 @@ export const pl_PL: EnTranslations = {
       "itemLevelLine": "Poziom przedmiotu {level}",
       "itemScoreLine": "Ocena {score}",
       "showSecondaryActionBar": "Pokaż dodatkowy pasek akcji",
-      "showDailyRewardsChest": "Pokaż skrzynię codziennych nagród"
+      "showDailyRewardsChest": "Pokaż skrzynię codziennych nagród",
+      "mobileCameraJoystick": "Joystick aparatu",
+      "mobileLeftHanded": "Układ leworęczny"
     },
     "controller": {
       "title": "Kontroler",
@@ -1050,18 +1060,6 @@ export const pl_PL: EnTranslations = {
         }
       }
     },
-    "crafting": {
-      "title": "Rzemiosło",
-      "close": "Zamknij rzemiosło",
-      "craft": "Rzemiosło",
-      "reagentsNeeded": "Wymaga:",
-      "reagentLine": "{name}: {have}/{required}",
-      "empty": "Nie są jeszcze znane żadne przepisy.",
-      "resultAria": "Craft {name}",
-      "craftedToast": "Wykonane: {name}",
-      "insufficientMaterials": "Nie masz na to materiałów.",
-      "unknownRecipe": "Ten przepis nie istnieje."
-    },
     "devBadge": {
       "title": "Deweloper",
       "tiers": {
@@ -1205,6 +1203,19 @@ export const pl_PL: EnTranslations = {
       "mining": "Górnictwo",
       "logging": "Wyrąb",
       "herbalism": "Zielarstwo"
+    },
+    "crafting": {
+      "title": "Rzemiosło",
+      "close": "Zamknij rzemiosło",
+      "craft": "Rzemiosło",
+      "reagentsNeeded": "Wymaga:",
+      "reagentLine": "{name}: {have}/{required}",
+      "empty": "Nie są jeszcze znane żadne przepisy.",
+      "resultAria": "Craft {name}",
+      "craftedToast": "Wykonane: {name}",
+      "insufficientMaterials": "Nie masz na to materiałów.",
+      "unknownRecipe": "Ten przepis nie istnieje.",
+      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
     }
   },
   "apiError": {

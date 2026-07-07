@@ -311,7 +311,15 @@ export const ko_KR: EnTranslations = {
       "nameplates": "이름표",
       "haptics": "진동",
       "hapticsOff": "진동 꺼짐",
-      "toggleHaptics": "진동 전환"
+      "toggleHaptics": "진동 전환",
+      "hotbarPage": "스킬",
+      "hotbarPageAria": "다음 스킬 세트 표시",
+      "actionRing": "전투 행동",
+      "actionPageToggle": "행동 페이지 전환",
+      "actionPageIndicator": "{page}페이지",
+      "targetCycle": "대상 전환",
+      "targetCycleShort": "대상",
+      "spellbookPageLabel": "페이지 {page}"
     },
     "tutorial": {
       "moveBodyTouch": "이동 스틱으로 이동하고 화면을 끌어 주위를 둘러보세요. 몇 걸음 움직여 시작하세요.",
@@ -418,7 +426,9 @@ export const ko_KR: EnTranslations = {
       "itemLevelLine": "아이템 레벨 {level}",
       "itemScoreLine": "점수 {score}",
       "showSecondaryActionBar": "보조 액션 바 표시",
-      "showDailyRewardsChest": "일일 보상 보물상자 표시"
+      "showDailyRewardsChest": "일일 보상 보물상자 표시",
+      "mobileCameraJoystick": "카메라 조이스틱",
+      "mobileLeftHanded": "왼손잡이 레이아웃"
     },
     "controller": {
       "title": "컨트롤러",
@@ -1050,18 +1060,6 @@ export const ko_KR: EnTranslations = {
         }
       }
     },
-    "crafting": {
-      "title": "제작",
-      "close": "제작 닫기",
-      "craft": "제작",
-      "reagentsNeeded": "필요 재료:",
-      "reagentLine": "{name}: {have}/{required}",
-      "empty": "알려진 제작법이 없습니다.",
-      "resultAria": "{name} 제작",
-      "craftedToast": "제작 완료:{name}",
-      "insufficientMaterials": "재료가 부족합니다.",
-      "unknownRecipe": "해당 제작법이 존재하지 않습니다."
-    },
     "devBadge": {
       "title": "개발자",
       "tiers": {
@@ -1205,6 +1203,19 @@ export const ko_KR: EnTranslations = {
       "mining": "채광",
       "logging": "벌목",
       "herbalism": "약초학"
+    },
+    "crafting": {
+      "title": "제작",
+      "close": "제작 닫기",
+      "craft": "제작",
+      "reagentsNeeded": "필요 재료:",
+      "reagentLine": "{name}: {have}/{required}",
+      "empty": "알려진 제작법이 없습니다.",
+      "resultAria": "{name} 제작",
+      "craftedToast": "제작 완료:{name}",
+      "insufficientMaterials": "재료가 부족합니다.",
+      "unknownRecipe": "해당 제작법이 존재하지 않습니다.",
+      "comboRequirementUnmet": "이 조합 제작법에 필요한 두 제작 기술의 숙련도에 도달하지 못했습니다."
     }
   },
   "apiError": {

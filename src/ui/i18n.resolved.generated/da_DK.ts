@@ -311,7 +311,15 @@ export const da_DK: EnTranslations = {
       "nameplates": "Navne",
       "haptics": "Haptik",
       "hapticsOff": "Haptik fra",
-      "toggleHaptics": "Slå haptik til/fra"
+      "toggleHaptics": "Slå haptik til/fra",
+      "hotbarPage": "Evner",
+      "hotbarPageAria": "Vis næste sæt evner",
+      "actionRing": "Kamphandlinger",
+      "actionPageToggle": "Skift handlingsside",
+      "actionPageIndicator": "Side {page}",
+      "targetCycle": "Byt mål",
+      "targetCycleShort": "Mål",
+      "spellbookPageLabel": "Side {page}"
     },
     "tutorial": {
       "moveBodyTouch": "Brug bevægelsesstikken til at bevæge dig og træk på skærmen for at se dig omkring. Tag et par skridt for at begynde.",
@@ -418,7 +426,9 @@ export const da_DK: EnTranslations = {
       "itemLevelLine": "Genstandsniveau {level}",
       "itemScoreLine": "Score {score}",
       "showSecondaryActionBar": "Vis sekundær handlingslinje",
-      "showDailyRewardsChest": "Vis kisten med daglige belønninger"
+      "showDailyRewardsChest": "Vis kisten med daglige belønninger",
+      "mobileCameraJoystick": "Kamera joystick",
+      "mobileLeftHanded": "Venstrehånds layout"
     },
     "controller": {
       "title": "Controller",
@@ -1050,18 +1060,6 @@ export const da_DK: EnTranslations = {
         }
       }
     },
-    "crafting": {
-      "title": "Håndværk",
-      "close": "Tæt håndværk",
-      "craft": "Håndværk",
-      "reagentsNeeded": "Kræver:",
-      "reagentLine": "{name}: {have}/{required}",
-      "empty": "Ingen opskrifter kendt endnu.",
-      "resultAria": "Håndværk {name}",
-      "craftedToast": "Udformet: {name}",
-      "insufficientMaterials": "Det har du ikke materialerne til.",
-      "unknownRecipe": "Den opskrift findes ikke."
-    },
     "devBadge": {
       "title": "Udvikler",
       "tiers": {
@@ -1205,6 +1203,19 @@ export const da_DK: EnTranslations = {
       "mining": "Minedrift",
       "logging": "Skovhugst",
       "herbalism": "Urtekundskab"
+    },
+    "crafting": {
+      "title": "Håndværk",
+      "close": "Tæt håndværk",
+      "craft": "Håndværk",
+      "reagentsNeeded": "Kræver:",
+      "reagentLine": "{name}: {have}/{required}",
+      "empty": "Ingen opskrifter kendt endnu.",
+      "resultAria": "Håndværk {name}",
+      "craftedToast": "Udformet: {name}",
+      "insufficientMaterials": "Det har du ikke materialerne til.",
+      "unknownRecipe": "Den opskrift findes ikke.",
+      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
     }
   },
   "apiError": {

@@ -311,7 +311,15 @@ export const vi_VN: EnTranslations = {
       "nameplates": "Tên",
       "haptics": "Phản Hồi Rung",
       "hapticsOff": "Tắt Phản Hồi Rung",
-      "toggleHaptics": "Bật/tắt phản hồi rung"
+      "toggleHaptics": "Bật/tắt phản hồi rung",
+      "hotbarPage": "Kỹ Năng",
+      "hotbarPageAria": "Hiện bộ kỹ năng tiếp theo",
+      "actionRing": "Hành động chiến đấu",
+      "actionPageToggle": "Chuyển trang hành động",
+      "actionPageIndicator": "Trang {page}",
+      "targetCycle": "Hoán đổi mục tiêu",
+      "targetCycleShort": "Mục tiêu",
+      "spellbookPageLabel": "Trang {page}"
     },
     "tutorial": {
       "moveBodyTouch": "Dùng cần di chuyển để đi và kéo màn hình để nhìn quanh. Bước vài bước để bắt đầu.",
@@ -418,7 +426,9 @@ export const vi_VN: EnTranslations = {
       "itemLevelLine": "Cấp Vật Phẩm {level}",
       "itemScoreLine": "Điểm {score}",
       "showSecondaryActionBar": "Hiện Thanh Hành Động Phụ",
-      "showDailyRewardsChest": "Hiện Rương Phần Thưởng Hằng Ngày"
+      "showDailyRewardsChest": "Hiện Rương Phần Thưởng Hằng Ngày",
+      "mobileCameraJoystick": "Cần điều khiển máy ảnh",
+      "mobileLeftHanded": "Bố cục thuận tay trái"
     },
     "controller": {
       "title": "Tay Cầm",
@@ -1050,18 +1060,6 @@ export const vi_VN: EnTranslations = {
         }
       }
     },
-    "crafting": {
-      "title": "Chế tạo",
-      "close": "Đóng chế tạo",
-      "craft": "thủ công",
-      "reagentsNeeded": "Yêu cầu:",
-      "reagentLine": "{name}: {have}/{required}",
-      "empty": "Chưa có công thức nấu ăn nào được biết đến.",
-      "resultAria": "Thủ công {name}",
-      "craftedToast": "Đã chế tác: {name}",
-      "insufficientMaterials": "Bạn không có tài liệu cho việc đó.",
-      "unknownRecipe": "Công thức đó không tồn tại."
-    },
     "devBadge": {
       "title": "Nhà phát triển",
       "tiers": {
@@ -1205,6 +1203,19 @@ export const vi_VN: EnTranslations = {
       "mining": "Khai mỏ",
       "logging": "Đốn gỗ",
       "herbalism": "Thảo dược học"
+    },
+    "crafting": {
+      "title": "Chế tạo",
+      "close": "Đóng chế tạo",
+      "craft": "thủ công",
+      "reagentsNeeded": "Yêu cầu:",
+      "reagentLine": "{name}: {have}/{required}",
+      "empty": "Chưa có công thức nấu ăn nào được biết đến.",
+      "resultAria": "Thủ công {name}",
+      "craftedToast": "Đã chế tác: {name}",
+      "insufficientMaterials": "Bạn không có tài liệu cho việc đó.",
+      "unknownRecipe": "Công thức đó không tồn tại.",
+      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
     }
   },
   "apiError": {

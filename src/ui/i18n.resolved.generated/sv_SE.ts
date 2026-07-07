@@ -311,7 +311,15 @@ export const sv_SE: EnTranslations = {
       "nameplates": "Namn",
       "haptics": "Haptik",
       "hapticsOff": "Haptik av",
-      "toggleHaptics": "Växla haptik"
+      "toggleHaptics": "Växla haptik",
+      "hotbarPage": "Förmågor",
+      "hotbarPageAria": "Visa nästa uppsättning förmågor",
+      "actionRing": "Stridsaktioner",
+      "actionPageToggle": "Byt åtgärdssida",
+      "actionPageIndicator": "Sida {page}",
+      "targetCycle": "Byt mål",
+      "targetCycleShort": "Mål",
+      "spellbookPageLabel": "Sida {page}"
     },
     "tutorial": {
       "moveBodyTouch": "Använd rörelsespaken för att gå och dra på skärmen för att se dig omkring. Ta några steg för att börja.",
@@ -418,7 +426,9 @@ export const sv_SE: EnTranslations = {
       "itemLevelLine": "Föremålsnivå {level}",
       "itemScoreLine": "Poäng {score}",
       "showSecondaryActionBar": "Visa sekundärt handlingsfält",
-      "showDailyRewardsChest": "Visa kistan för dagliga belöningar"
+      "showDailyRewardsChest": "Visa kistan för dagliga belöningar",
+      "mobileCameraJoystick": "Kamera joystick",
+      "mobileLeftHanded": "Vänsterhänt layout"
     },
     "controller": {
       "title": "Handkontroll",
@@ -1050,18 +1060,6 @@ export const sv_SE: EnTranslations = {
         }
       }
     },
-    "crafting": {
-      "title": "Hantverk",
-      "close": "Nära hantverk",
-      "craft": "Hantverk",
-      "reagentsNeeded": "Kräver:",
-      "reagentLine": "{name}: {have}/{required}",
-      "empty": "Inga recept kända än.",
-      "resultAria": "Hantverk {name}",
-      "craftedToast": "Tillverkad: {name}",
-      "insufficientMaterials": "Du har inte materialet för det.",
-      "unknownRecipe": "Det receptet finns inte."
-    },
     "devBadge": {
       "title": "Utvecklare",
       "tiers": {
@@ -1205,6 +1203,19 @@ export const sv_SE: EnTranslations = {
       "mining": "Gruvdrift",
       "logging": "Skogsavverkning",
       "herbalism": "Örtkunskap"
+    },
+    "crafting": {
+      "title": "Hantverk",
+      "close": "Nära hantverk",
+      "craft": "Hantverk",
+      "reagentsNeeded": "Kräver:",
+      "reagentLine": "{name}: {have}/{required}",
+      "empty": "Inga recept kända än.",
+      "resultAria": "Hantverk {name}",
+      "craftedToast": "Tillverkad: {name}",
+      "insufficientMaterials": "Du har inte materialet för det.",
+      "unknownRecipe": "Det receptet finns inte.",
+      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
     }
   },
   "apiError": {
