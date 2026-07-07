@@ -237,6 +237,7 @@ export const ru_RU: EnTranslations = {
     },
     "claudium": {
       "title": "Клаудиум",
+      "open": "Open Claudium",
       "close": "Закрыть Клаудиум",
       "balanceLabel": "Баланс",
       "balanceUnit": "{amount} Клаудиума",
@@ -257,7 +258,12 @@ export const ru_RU: EnTranslations = {
       "spendButton": "Обменять",
       "kindCosmetic": "Косметика",
       "kindSkin": "Облик",
-      "kindItem": "Предмет"
+      "kindItem": "Предмет",
+      "checkoutTitle": "Complete purchase",
+      "checkoutClose": "Close checkout",
+      "checkoutLoading": "Loading checkout...",
+      "checkoutFailed": "Checkout could not be loaded. Please try again.",
+      "checkoutUnavailable": "That Claudium purchase is not available right now."
     },
     "theme": {
       "preset": "Тема интерфейса",

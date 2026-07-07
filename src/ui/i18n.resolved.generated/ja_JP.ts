@@ -237,6 +237,7 @@ export const ja_JP: EnTranslations = {
     },
     "claudium": {
       "title": "クラウジウム",
+      "open": "Open Claudium",
       "close": "クラウジウムを閉じる",
       "balanceLabel": "残高",
       "balanceUnit": "{amount} クラウジウム",
@@ -257,7 +258,12 @@ export const ja_JP: EnTranslations = {
       "spendButton": "交換",
       "kindCosmetic": "コスメティック",
       "kindSkin": "スキン",
-      "kindItem": "アイテム"
+      "kindItem": "アイテム",
+      "checkoutTitle": "Complete purchase",
+      "checkoutClose": "Close checkout",
+      "checkoutLoading": "Loading checkout...",
+      "checkoutFailed": "Checkout could not be loaded. Please try again.",
+      "checkoutUnavailable": "That Claudium purchase is not available right now."
     },
     "theme": {
       "preset": "UIテーマ",

@@ -99,6 +99,9 @@ export interface BagsWindowDeps extends PainterHostPresentation {
   world(): IWorld;
   /** Localized $WOC on-chain balance markup for the money footer. */
   wocBalanceHtml(): string;
+  /** Localized launcher for the Claudium store, empty when the feature is not available. */
+  claudiumLauncherHtml(): string;
+  openClaudium(): void;
   hideTooltip(): void;
   cancelPetFeed(): void;
   // Non-modal focus capture/return (WCAG 2.4.3). Bags rides alongside vendor / trade /
@@ -201,8 +204,11 @@ export class BagsWindow {
     grid.scrollTop = prevScrollTop;
     const moneyRow = document.createElement('div');
     moneyRow.className = 'money';
-    moneyRow.innerHTML = `${this.deps.wocBalanceHtml()}${this.deps.moneyHtml(world.copper)}`;
+    moneyRow.innerHTML = `${this.deps.wocBalanceHtml()}${this.deps.claudiumLauncherHtml()}${this.deps.moneyHtml(world.copper)}`;
     el.appendChild(moneyRow);
+    moneyRow.querySelector('[data-claudium-launcher]')?.addEventListener('click', () => {
+      this.deps.openClaudium();
+    });
     el.querySelector('[data-close]')?.addEventListener('click', () => {
       if (this.deps.vendorOpen() && document.body.classList.contains('mobile-touch')) {
         this.deps.closeVendor();

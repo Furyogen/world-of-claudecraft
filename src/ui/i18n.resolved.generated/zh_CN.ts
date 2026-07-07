@@ -237,6 +237,7 @@ export const zh_CN: EnTranslations = {
     },
     "claudium": {
       "title": "克劳迪姆",
+      "open": "Open Claudium",
       "close": "关闭克劳迪姆",
       "balanceLabel": "余额",
       "balanceUnit": "{amount} 克劳迪姆",
@@ -257,7 +258,12 @@ export const zh_CN: EnTranslations = {
       "spendButton": "兑换",
       "kindCosmetic": "外观",
       "kindSkin": "皮肤",
-      "kindItem": "物品"
+      "kindItem": "物品",
+      "checkoutTitle": "Complete purchase",
+      "checkoutClose": "Close checkout",
+      "checkoutLoading": "Loading checkout...",
+      "checkoutFailed": "Checkout could not be loaded. Please try again.",
+      "checkoutUnavailable": "That Claudium purchase is not available right now."
     },
     "theme": {
       "preset": "界面主题",

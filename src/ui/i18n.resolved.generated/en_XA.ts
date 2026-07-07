@@ -237,6 +237,7 @@ export const en_XA: EnTranslations = {
     },
     "claudium": {
       "title": "[Çļáúðíúɱ]",
+      "open": "[Óþéñ Çļáúðíúɱ]",
       "close": "[Çļóšé Çļáúðíúɱ]",
       "balanceLabel": "[Ɓáļáñçé]",
       "balanceUnit": "[{amount} Çļáúðíúɱ]",
@@ -257,7 +258,12 @@ export const en_XA: EnTranslations = {
       "spendButton": "[Ŕéðééɱ]",
       "kindCosmetic": "[Çóšɱéţíç]",
       "kindSkin": "[Šķíñ]",
-      "kindItem": "[Íţéɱ]"
+      "kindItem": "[Íţéɱ]",
+      "checkoutTitle": "[Çóɱþļéţé þúŕçĥášé]",
+      "checkoutClose": "[Çļóšé çĥéçķóúţ]",
+      "checkoutLoading": "[Ļóáðíñĝ çĥéçķóúţ...]",
+      "checkoutFailed": "[Çĥéçķóúţ çóúļð ñóţ ƀé ļóáðéð. Þļéášé ţŕý áĝáíñ.]",
+      "checkoutUnavailable": "[Ţĥáţ Çļáúðíúɱ þúŕçĥášé íš ñóţ áʋáíļáƀļé ŕíĝĥţ ñóŵ.]"
     },
     "theme": {
       "preset": "[ÚÍ Ţĥéɱé]",

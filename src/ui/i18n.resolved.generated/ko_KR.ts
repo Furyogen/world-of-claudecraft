@@ -237,6 +237,7 @@ export const ko_KR: EnTranslations = {
     },
     "claudium": {
       "title": "클라우디움",
+      "open": "Open Claudium",
       "close": "클라우디움 닫기",
       "balanceLabel": "잔액",
       "balanceUnit": "{amount} 클라우디움",
@@ -257,7 +258,12 @@ export const ko_KR: EnTranslations = {
       "spendButton": "교환",
       "kindCosmetic": "치장",
       "kindSkin": "스킨",
-      "kindItem": "아이템"
+      "kindItem": "아이템",
+      "checkoutTitle": "Complete purchase",
+      "checkoutClose": "Close checkout",
+      "checkoutLoading": "Loading checkout...",
+      "checkoutFailed": "Checkout could not be loaded. Please try again.",
+      "checkoutUnavailable": "That Claudium purchase is not available right now."
     },
     "theme": {
       "preset": "UI 테마",

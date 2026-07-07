@@ -3226,6 +3226,8 @@ export class Hud {
     root: () => $('#bags'),
     world: () => this.sim,
     wocBalanceHtml: () => this.wocBalanceHtml(),
+    claudiumLauncherHtml: () => this.claudiumLauncherHtml(),
+    openClaudium: () => this.toggleClaudium(),
     hideTooltip: () => this.hideTooltip(),
     cancelPetFeed: () => this.cancelPetFeed(),
     // Non-trapping focus capture/return (bags is a non-modal companion of vendor /
@@ -3574,6 +3576,13 @@ export class Hud {
       ? t('wallet.balanceAria', { balance })
       : t('wallet.balancePreviewAria', { balance });
     return `<span class="woc-balance ${verified ? 'is-verified' : 'is-preview'}" title="${esc(title)}" aria-label="${esc(aria)}"><span class="woc-coin" aria-hidden="true"></span>${esc(balance)}</span>`;
+  }
+
+  private claudiumLauncherHtml(): string {
+    if (!this.claudiumHooks) return '';
+    const label = t('hudChrome.claudium.title');
+    const aria = t('hudChrome.claudium.open');
+    return `<button type="button" class="claudium-launcher" data-claudium-launcher title="${esc(aria)}" aria-label="${esc(aria)}"><span class="claudium-coin" aria-hidden="true"></span>${esc(label)}</button>`;
   }
 
   // One-line aura effect summary HTML for the buff/debuff tooltip: the pure descriptor
@@ -11422,6 +11431,11 @@ export class Hud {
    */
   toggleClaudium(): void {
     this.claudiumWindow.toggle();
+  }
+
+  async refreshClaudium(): Promise<void> {
+    if (!this.claudiumWindow.isOpen) return;
+    await this.claudiumWindow.render();
   }
 
   // -------------------------------------------------------------------------

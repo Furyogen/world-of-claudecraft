@@ -84,6 +84,7 @@ import {
   NATIVE_APP,
   type ReleaseEntry,
 } from './net/online';
+import { openStripeCheckout } from './net/stripe_checkout';
 // The wallet module is loaded lazily via dynamic import() in the wallet
 // controller below, so it stays out of the main entry chunk and only loads when
 // the feature is enabled + used.
@@ -1657,7 +1658,30 @@ async function startGame(
         };
       },
       buy: (rail, sku) => {
-        void startClaudiumPurchase(economy, rail, sku);
+        void (async () => {
+          const refreshClaudium = () => {
+            void hud.refreshClaudium();
+          };
+          const result = await startClaudiumPurchase(economy, rail, sku, {
+            stripe: (intent) =>
+              openStripeCheckout(intent, {
+                title: t('hudChrome.claudium.checkoutTitle'),
+                close: t('hudChrome.claudium.checkoutClose'),
+                loading: t('hudChrome.claudium.checkoutLoading'),
+                failed: t('hudChrome.claudium.checkoutFailed'),
+              }, {
+                onComplete: () => {
+                  refreshClaudium();
+                  window.setTimeout(refreshClaudium, 1500);
+                  window.setTimeout(refreshClaudium, 4000);
+                  window.setTimeout(refreshClaudium, 8000);
+                },
+              }),
+          });
+          if ('ok' in result && !result.ok) hud.showError(t('hudChrome.claudium.checkoutUnavailable'));
+        })().catch(() => {
+          hud.showError(t('hudChrome.claudium.checkoutFailed'));
+        });
       },
       spend: (itemId, kind) => {
         void economy.spend({ itemId, kind, idempotencyKey: newIdempotencyKey() });
