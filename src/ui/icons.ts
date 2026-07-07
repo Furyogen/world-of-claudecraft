@@ -2636,6 +2636,7 @@ const ITEM_RECIPES: Record<string, IconRecipe> = {
   sutils_fortune: r('nature', 'leafGreen', ['coin', 'gem'], ['sparkle']),
   arthurs_round_band: r('earth', 'earthBrown', ['coin', 'gem'], ['glow']),
   signet_of_zyzz: r('holy', 'holyGold', ['coin', 'sigil_rune'], ['glow']),
+  architect: r('arcane', 'sky', ['coin', 'scroll'], ['glow']),
   yumis_best_pendant: r('storm', 'sky', ['gem'], ['sparkle', 'glow']),
   zense_meridian: r('arcane', 'arcanePink', ['moon', 'gem'], ['glow']),
   pendant_of_endless_profit: r('treasure', 'gold', ['coin', 'sunburst'], ['sparkle']),

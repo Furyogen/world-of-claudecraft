@@ -6356,6 +6356,9 @@ export const en_XA: EnTranslations = {
       "signet_of_zyzz": {
         "name": "[Šíĝñéţ óƒ Žýžž]"
       },
+      "architect": {
+        "name": "[Áŕçĥíţéçţ]"
+      },
       "yumis_best_pendant": {
         "name": "[Ýúɱí'š Ɓéšţ Þéñðáñţ]"
       },

@@ -3043,6 +3043,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'entities.items.sutils_fortune.name': '蘇蒂爾的財運',
   'entities.items.arthurs_round_band.name': '亞瑟的圓環',
   'entities.items.signet_of_zyzz.name': '茲茲的印戒',
+  'entities.items.architect.name': '建築師',
   'entities.items.yumis_best_pendant.name': '由美的至愛吊墜',
   'entities.items.zense_meridian.name': '澤恩斯子午墜',
   'entities.items.pendant_of_endless_profit.name': '無盡利潤吊墜',

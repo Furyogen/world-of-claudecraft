@@ -6356,6 +6356,9 @@ export const ru_RU: EnTranslations = {
       "signet_of_zyzz": {
         "name": "Печатка Зизза"
       },
+      "architect": {
+        "name": "Архитектор"
+      },
       "yumis_best_pendant": {
         "name": "Лучший кулон Юми"
       },

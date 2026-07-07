@@ -6356,6 +6356,9 @@ export const nl_NL: EnTranslations = {
       "signet_of_zyzz": {
         "name": "Signet of Zyzz"
       },
+      "architect": {
+        "name": "Architect"
+      },
       "yumis_best_pendant": {
         "name": "Yumi's Best Pendant"
       },

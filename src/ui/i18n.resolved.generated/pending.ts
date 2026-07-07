@@ -10,6 +10,7 @@
 
 export const pending: Record<string, readonly string[]> = {
   "es": [
+    "entities.items.architect.name",
     "entities.items.arthurs_round_band.name",
     "entities.items.heroic_mark.name",
     "entities.items.nielas_band.name",
@@ -29,6 +30,7 @@ export const pending: Record<string, readonly string[]> = {
     "itemUi.slots.ring"
   ],
   "es_ES": [
+    "entities.items.architect.name",
     "entities.items.arthurs_round_band.name",
     "entities.items.heroic_mark.name",
     "entities.items.nielas_band.name",
@@ -48,6 +50,7 @@ export const pending: Record<string, readonly string[]> = {
     "itemUi.slots.ring"
   ],
   "fr_FR": [
+    "entities.items.architect.name",
     "entities.items.arthurs_round_band.name",
     "entities.items.heroic_mark.name",
     "entities.items.nielas_band.name",
@@ -67,6 +70,7 @@ export const pending: Record<string, readonly string[]> = {
     "itemUi.slots.ring"
   ],
   "fr_CA": [
+    "entities.items.architect.name",
     "entities.items.arthurs_round_band.name",
     "entities.items.heroic_mark.name",
     "entities.items.nielas_band.name",
@@ -87,6 +91,7 @@ export const pending: Record<string, readonly string[]> = {
   ],
   "en_CA": [],
   "it_IT": [
+    "entities.items.architect.name",
     "entities.items.arthurs_round_band.name",
     "entities.items.heroic_mark.name",
     "entities.items.nielas_band.name",
@@ -106,6 +111,7 @@ export const pending: Record<string, readonly string[]> = {
     "itemUi.slots.ring"
   ],
   "de_DE": [
+    "entities.items.architect.name",
     "entities.items.arthurs_round_band.name",
     "entities.items.heroic_mark.name",
     "entities.items.nielas_band.name",
@@ -137,6 +143,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.roleTag.coredevs"
   ],
   "pt_BR": [
+    "entities.items.architect.name",
     "entities.items.arthurs_round_band.name",
     "entities.items.heroic_mark.name",
     "entities.items.nielas_band.name",
@@ -159,6 +166,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.roleTag.coredevs"
   ],
   "cs_CZ": [
+    "entities.items.architect.name",
     "entities.items.arthurs_round_band.name",
     "entities.items.heroic_mark.name",
     "entities.items.nielas_band.name",
@@ -178,6 +186,7 @@ export const pending: Record<string, readonly string[]> = {
     "itemUi.slots.ring"
   ],
   "nl_NL": [
+    "entities.items.architect.name",
     "entities.items.arthurs_round_band.name",
     "entities.items.heroic_mark.name",
     "entities.items.nielas_band.name",
@@ -197,6 +206,7 @@ export const pending: Record<string, readonly string[]> = {
     "itemUi.slots.ring"
   ],
   "pl_PL": [
+    "entities.items.architect.name",
     "entities.items.arthurs_round_band.name",
     "entities.items.heroic_mark.name",
     "entities.items.nielas_band.name",
@@ -216,6 +226,7 @@ export const pending: Record<string, readonly string[]> = {
     "itemUi.slots.ring"
   ],
   "id_ID": [
+    "entities.items.architect.name",
     "entities.items.arthurs_round_band.name",
     "entities.items.heroic_mark.name",
     "entities.items.nielas_band.name",
@@ -235,6 +246,7 @@ export const pending: Record<string, readonly string[]> = {
     "itemUi.slots.ring"
   ],
   "tr_TR": [
+    "entities.items.architect.name",
     "entities.items.arthurs_round_band.name",
     "entities.items.heroic_mark.name",
     "entities.items.nielas_band.name",
@@ -254,6 +266,7 @@ export const pending: Record<string, readonly string[]> = {
     "itemUi.slots.ring"
   ],
   "sv_SE": [
+    "entities.items.architect.name",
     "entities.items.arthurs_round_band.name",
     "entities.items.heroic_mark.name",
     "entities.items.nielas_band.name",
@@ -273,6 +286,7 @@ export const pending: Record<string, readonly string[]> = {
     "itemUi.slots.ring"
   ],
   "vi_VN": [
+    "entities.items.architect.name",
     "entities.items.arthurs_round_band.name",
     "entities.items.heroic_mark.name",
     "entities.items.nielas_band.name",
@@ -292,6 +306,7 @@ export const pending: Record<string, readonly string[]> = {
     "itemUi.slots.ring"
   ],
   "da_DK": [
+    "entities.items.architect.name",
     "entities.items.arthurs_round_band.name",
     "entities.items.heroic_mark.name",
     "entities.items.nielas_band.name",

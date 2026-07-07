@@ -6356,6 +6356,9 @@ export const ko_KR: EnTranslations = {
       "signet_of_zyzz": {
         "name": "지즈의 인장"
       },
+      "architect": {
+        "name": "건축가"
+      },
       "yumis_best_pendant": {
         "name": "유미의 소중한 펜던트"
       },

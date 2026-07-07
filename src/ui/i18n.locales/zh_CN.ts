@@ -3041,6 +3041,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.items.sutils_fortune.name': '苏蒂尔的财运',
   'entities.items.arthurs_round_band.name': '亚瑟的圆环',
   'entities.items.signet_of_zyzz.name': '兹兹的印戒',
+  'entities.items.architect.name': '建筑师',
   'entities.items.yumis_best_pendant.name': '由美的至爱吊坠',
   'entities.items.zense_meridian.name': '泽恩斯子午坠',
   'entities.items.pendant_of_endless_profit.name': '无尽利润吊坠',

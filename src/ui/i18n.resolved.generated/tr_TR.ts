@@ -6356,6 +6356,9 @@ export const tr_TR: EnTranslations = {
       "signet_of_zyzz": {
         "name": "Signet of Zyzz"
       },
+      "architect": {
+        "name": "Architect"
+      },
       "yumis_best_pendant": {
         "name": "Yumi's Best Pendant"
       },

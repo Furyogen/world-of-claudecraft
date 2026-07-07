@@ -3211,6 +3211,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.items.sutils_fortune.name': 'Удача Сутила',
   'entities.items.arthurs_round_band.name': 'Круглое кольцо Артура',
   'entities.items.signet_of_zyzz.name': 'Печатка Зизза',
+  'entities.items.architect.name': 'Архитектор',
   'entities.items.yumis_best_pendant.name': 'Лучший кулон Юми',
   'entities.items.zense_meridian.name': 'Меридиан Зенсе',
   'entities.items.pendant_of_endless_profit.name': 'Кулон бесконечной прибыли',

@@ -54,10 +54,10 @@ await page.evaluate(() => {
   sim.setPlayerLevel(20, pid);
   sim.addItem('yumis_best_pendant', 1, pid);
   sim.addItem('ring_of_the_nine', 1, pid);
-  sim.addItem('nielas_band', 1, pid);
+  sim.addItem('architect', 1, pid);
   sim.equipItem('yumis_best_pendant', pid);
   sim.equipItem('ring_of_the_nine', pid);
-  sim.equipItem('nielas_band', pid);
+  sim.equipItem('architect', pid);
   sim.tick();
   hud.toggleChar();
 });
@@ -84,5 +84,55 @@ await page.evaluate(() => {
 await new Promise((r) => setTimeout(r, 900));
 await page.screenshot({ path: 'tmp/heroic_vendor.png' });
 console.log('shot: tmp/heroic_vendor.png');
+
+// The gossip dialog with the browse-goods entry (close the shop first).
+await page.evaluate(() => {
+  const { sim, hud } = window.__game;
+  hud.closeHeroicVendor();
+  const npc = [...sim.entities.values()].find((e) => e.templateId === 'heroic_quartermaster');
+  hud.openQuestDialog(npc.id);
+});
+await new Promise((r) => setTimeout(r, 700));
+await page.screenshot({ path: 'tmp/heroic_gossip.png' });
+console.log('shot: tmp/heroic_gossip.png');
+
+// A ring tooltip with the item-level line and the both-rings compare: put one
+// ring in the bags while two are worn, enable the ilvl readout, hover the bag slot.
+const bagsState = await page.evaluate(() => {
+  const { sim, hud } = window.__game;
+  hud.closeQuestDialog();
+  const pid = sim.player.id;
+  sim.addItem('architect', 1, pid);
+  try {
+    hud.optionsHooks?.settings?.set?.('showItemLevel', true);
+  } catch {
+    // optional: the ilvl line is a nice-to-have on this shot
+  }
+  // The first toggle can read a blank inline display as "open" and close;
+  // toggle again until the window is actually shown.
+  hud.toggleBags();
+  if (document.querySelector('#bags')?.style.display === 'none') hud.toggleBags();
+  const bags = document.querySelector('#bags');
+  return {
+    display: bags?.style.display,
+    rows: document.querySelectorAll('#bags .bag-item').length,
+  };
+});
+console.log('bags:', JSON.stringify(bagsState));
+await new Promise((r) => setTimeout(r, 700));
+await page.evaluate(() => {
+  const rows = [...document.querySelectorAll('#bags .bag-item')];
+  const target = rows.find((el) => /Architect/.test(el.getAttribute('aria-label') ?? ''));
+  const el = target ?? rows[0];
+  const r = el.getBoundingClientRect();
+  for (const type of ['mouseenter', 'mousemove']) {
+    el.dispatchEvent(
+      new MouseEvent(type, { bubbles: true, clientX: r.x + r.width / 2, clientY: r.y + 4 }),
+    );
+  }
+});
+await new Promise((r) => setTimeout(r, 600));
+await page.screenshot({ path: 'tmp/heroic_tooltip.png' });
+console.log('shot: tmp/heroic_tooltip.png');
 
 await browser.close();

@@ -1032,6 +1032,7 @@ export const en = {
       sutils_fortune: { name: "Sutil's Fortune" },
       arthurs_round_band: { name: "Arthur's Round Band" },
       signet_of_zyzz: { name: 'Signet of Zyzz' },
+      architect: { name: 'Architect' },
       yumis_best_pendant: { name: "Yumi's Best Pendant" },
       zense_meridian: { name: 'Zense Meridian' },
       pendant_of_endless_profit: { name: 'Pendant of Endless Profit' },
