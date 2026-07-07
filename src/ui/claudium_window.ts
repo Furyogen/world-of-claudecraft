@@ -36,6 +36,9 @@ import {
   giftRedeemUrl,
   isValidGiftEmail,
 } from './claudium_gift_view';
+// Re-exported so the HUD (and other consumers) can import the gift-quote input
+// type from the window module without reaching into the pure view-core directly.
+export type { ClaudiumGiftQuoteInput } from './claudium_gift_view';
 import {
   buildClaudiumQuotePanel,
   buildClaudiumView,
