@@ -327,6 +327,10 @@ export const COMMAND_NAMES = [
   'gauntlet_leave',
   'hc_queue',
   'hc_leave',
+  'gauntlet_trace',
+  'gauntlet_pull',
+  'gauntlet_wager',
+  'gauntlet_court',
 ] as const;
 
 // The union both the send path (`online.ts`) and the dispatch switch
@@ -533,7 +537,12 @@ export const COMMAND_FACETS = {
   lockpick_abort: 'IWorldDelves',
   collect_delve_chest_loot: 'IWorldDelves',
   delve_rite_choose: 'IWorldDelves',
-  // IWorldGauntlet: The Gauntlet survival event (join the lobby / leave the run).
+  // IWorldGauntlet: The Gauntlet survival event (join the lobby / leave the
+  // run, plus the per-trial inputs: trace, beat pull, wager act, court shove).
   gauntlet_join: 'IWorldGauntlet',
   gauntlet_leave: 'IWorldGauntlet',
+  gauntlet_trace: 'IWorldGauntlet',
+  gauntlet_pull: 'IWorldGauntlet',
+  gauntlet_wager: 'IWorldGauntlet',
+  gauntlet_court: 'IWorldGauntlet',
 } as const satisfies Partial<Record<ClientCommand, WorldFacet>>;
