@@ -6395,6 +6395,51 @@ export const ko_KR: EnTranslations = {
       "scourgehide_carapace": {
         "name": "재앙가죽 갑각"
       },
+      "cryptplate_helm": {
+        "name": "묘지판금 투구"
+      },
+      "shadowpulse_slippers": {
+        "name": "어둠파동 슬리퍼"
+      },
+      "bonechill_cord": {
+        "name": "뼈서리 허리끈"
+      },
+      "mistforged_pauldrons": {
+        "name": "안개주조 어깨보호구"
+      },
+      "tideguard_faceguard": {
+        "name": "조수방패 面갑"
+      },
+      "sunken_court_mantle": {
+        "name": "가라앉은 궁정의 망토"
+      },
+      "lunar_choir_leggings": {
+        "name": "달노래 각반"
+      },
+      "choir_blessed_spaulders": {
+        "name": "성가 축복의 어깨보호구"
+      },
+      "tideworn_warboots": {
+        "name": "조수마모 전투화"
+      },
+      "gravewyrm_claws": {
+        "name": "무덤용 발톱"
+      },
+      "gravescale_girdle": {
+        "name": "무덤비늘 허리띠"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "용노래 손싸개"
+      },
+      "deathless_greatblade": {
+        "name": "불사 대검"
+      },
+      "soulforged_warplate": {
+        "name": "혼주조 전투갑옷"
+      },
+      "stormcallers_focus": {
+        "name": "폭풍소환사의 매개체"
+      },
       "seal_of_the_nine_oaths": {
         "name": "아홉 맹세의 인장"
       },

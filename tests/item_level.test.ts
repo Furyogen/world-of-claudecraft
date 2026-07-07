@@ -287,3 +287,34 @@ describe('item level: purity and determinism', () => {
     expect(after).toEqual(before);
   });
 });
+
+describe('heroic set: class coverage', () => {
+  it('every class can use a broad slot spread of heroic epics', () => {
+    const ALL_CLASSES = [
+      'warrior',
+      'paladin',
+      'shaman',
+      'rogue',
+      'hunter',
+      'druid',
+      'mage',
+      'priest',
+      'warlock',
+    ] as const;
+    const ids = Object.values(HEROIC_BOSS_LOOT)
+      .flat()
+      .flatMap((e) => (e.itemId ? [e.itemId] : []));
+    for (const cls of ALL_CLASSES) {
+      const slots = new Set<string>();
+      for (const id of ids) {
+        const it: any = ITEMS[id];
+        const rc: string[] | undefined = it.requiredClass;
+        if (!rc || rc.includes(cls)) slots.add(it.slot);
+      }
+      // Every class reaches at least five of the eight droppable slots.
+      expect(slots.size, `${cls}: ${[...slots].sort().join(',')}`).toBeGreaterThanOrEqual(5);
+      // Every class has at least one usable weapon.
+      expect(slots.has('mainhand'), `${cls} has a weapon`).toBe(true);
+    }
+  });
+});

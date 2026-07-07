@@ -6395,6 +6395,51 @@ export const ru_RU: EnTranslations = {
       "scourgehide_carapace": {
         "name": "Панцирь бичевой шкуры"
       },
+      "cryptplate_helm": {
+        "name": "Гробничный латный шлем"
+      },
+      "shadowpulse_slippers": {
+        "name": "Туфли теневого пульса"
+      },
+      "bonechill_cord": {
+        "name": "Пояс костяного холода"
+      },
+      "mistforged_pauldrons": {
+        "name": "Наплечники туманной ковки"
+      },
+      "tideguard_faceguard": {
+        "name": "Лицевой щит стража приливов"
+      },
+      "sunken_court_mantle": {
+        "name": "Накидка затонувшего двора"
+      },
+      "lunar_choir_leggings": {
+        "name": "Поножи лунного хора"
+      },
+      "choir_blessed_spaulders": {
+        "name": "Наплечники хорового благословения"
+      },
+      "tideworn_warboots": {
+        "name": "Боевые сапоги приливного износа"
+      },
+      "gravewyrm_claws": {
+        "name": "Когти могильного змея"
+      },
+      "gravescale_girdle": {
+        "name": "Пояс могильной чешуи"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "Обмотки змеиного хора"
+      },
+      "deathless_greatblade": {
+        "name": "Бессмертный великий клинок"
+      },
+      "soulforged_warplate": {
+        "name": "Душекованый боевой доспех"
+      },
+      "stormcallers_focus": {
+        "name": "Средоточие буревестника"
+      },
       "seal_of_the_nine_oaths": {
         "name": "Печать девяти клятв"
       },

@@ -567,19 +567,34 @@ describe('dungeons: heroic boss drops', () => {
     return boss;
   }
 
-  it('a heroic final-boss corpse carries exactly one epic from that boss table', () => {
-    // Sweep several seeds so the single rollGroup lands on different entries;
-    // every kill drops exactly one, always from the boss's own heroic table.
-    const table = HEROIC_BOSS_LOOT.morthen.map((e) => e.itemId);
+  it('a heroic final-boss corpse carries two epics, one from each roll group', () => {
+    // Morthen has two rollGroups (morthen_heroic + morthen_heroic2), so each
+    // heroic kill drops exactly two epics, one per group. Sweep seeds so the
+    // groups land on different entries over the run.
+    const groups = ['morthen_heroic', 'morthen_heroic2'];
+    const byGroup: Record<string, string[]> = {};
+    for (const e of HEROIC_BOSS_LOOT.morthen) {
+      byGroup[e.rollGroup!] ??= [];
+      byGroup[e.rollGroup!].push(e.itemId!);
+    }
     const dropped = new Set<string>();
     for (let seed = 1; seed <= 8; seed++) {
       const sim = makeSim(seed);
       const boss = killFinalBoss(sim, 'hollow_crypt', 'morthen');
-      const epics = ((boss.loot?.items ?? []) as any[]).filter((s) => table.includes(s.itemId));
-      expect(epics.length, `seed ${seed}`).toBe(1);
-      dropped.add(epics[0].itemId);
+      const epics = ((boss.loot?.items ?? []) as any[]).filter((s) =>
+        HEROIC_BOSS_LOOT.morthen.some((e) => e.itemId === s.itemId),
+      );
+      expect(epics.length, `seed ${seed}`).toBe(2);
+      // Exactly one from each group.
+      for (const g of groups) {
+        expect(
+          epics.filter((s: any) => byGroup[g].includes(s.itemId)).length,
+          `${g} seed ${seed}`,
+        ).toBe(1);
+      }
+      for (const s of epics) dropped.add(s.itemId);
     }
-    expect(dropped.size).toBeGreaterThan(1); // the group actually varies
+    expect(dropped.size).toBeGreaterThan(2); // the groups actually vary
   });
 
   it('normal final bosses and heroic trash never drop the heroic epics', () => {
@@ -635,10 +650,10 @@ describe('dungeons: heroic boss drops', () => {
         'hit',
       );
       const epics = ((boss.loot?.items ?? []) as any[]).filter((s) => table.includes(s.itemId));
-      expect(epics.length, `seed ${seed}`).toBe(1);
-      dropped.add(epics[0].itemId);
+      expect(epics.length, `seed ${seed}`).toBe(2); // one per roll group
+      for (const s of epics) dropped.add(s.itemId);
     }
-    expect(dropped.size).toBeGreaterThan(1);
+    expect(dropped.size).toBeGreaterThan(2);
   });
 });
 

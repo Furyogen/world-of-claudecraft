@@ -6,7 +6,15 @@
 // content plus the heroic tier bump) and the epic quality bonus adds 6. Stat
 // sums are exact per the item-level budget (STAT_PER_ILVL x slot mult), pinned
 // by the tests/item_level.test.ts heroic sweep. requiredClass locks follow the
-// three established archetype groups so every class has pieces to chase.
+// established archetype groups so every class has a near-complete set to chase.
+//
+// Each final boss drops TWO heroic epics: one from its `_heroic` group and one
+// from its `_heroic2` group (each group's chances sum to 1, so exactly one item
+// drops per group). The set is built so every armor archetype covers all eight
+// droppable slots (helmet/shoulder/chest/waist/legs/gloves/feet + mainhand;
+// neck + rings come from the Heroic Quartermaster), and the mail casters
+// (elemental/resto shaman, holy paladin) and str plate get real coverage rather
+// than a single token piece.
 
 import type { ItemDef, LootEntry } from '../types';
 
@@ -15,13 +23,14 @@ import type { ItemDef, LootEntry } from '../types';
 // epic pieces land at item level 31 (25 + the epic bump of 6).
 export const HEROIC_LOOT_SOURCE_LEVEL = 25;
 
-const HEAVY = ['warrior', 'paladin', 'shaman'] as ItemDef['requiredClass'];
+const HEAVY = ['warrior', 'paladin', 'shaman'] as ItemDef['requiredClass']; // plate/mail
+const HEAL_MAIL = ['paladin', 'shaman'] as ItemDef['requiredClass']; // int/spi mail wearers
 const AGILE = ['rogue', 'hunter'] as ItemDef['requiredClass'];
 const AGILE_WILD = ['rogue', 'hunter', 'druid'] as ItemDef['requiredClass'];
 const CASTER = ['mage', 'priest', 'warlock', 'druid'] as ItemDef['requiredClass'];
 
 export const HEROIC_ITEMS: Record<string, ItemDef> = {
-  // ---- Heroic Hollow Crypt: Morthen ----
+  // ================= Heroic Hollow Crypt: Morthen =================
   morthens_cryptforged_hauberk: {
     id: 'morthens_cryptforged_hauberk',
     name: "Morthen's Cryptforged Hauberk",
@@ -58,7 +67,43 @@ export const HEROIC_ITEMS: Record<string, ItemDef> = {
     sellValue: 9500,
     requiredClass: AGILE,
   },
-  // ---- Heroic Sunken Bastion: Vael the Mistcaller ----
+  cryptplate_helm: {
+    id: 'cryptplate_helm',
+    name: 'Cryptplate Helm',
+    kind: 'armor',
+    armorType: 'mail',
+    slot: 'helmet',
+    quality: 'epic',
+    requiredLevel: 20,
+    stats: { armor: 292, str: 10, sta: 8 },
+    sellValue: 12000,
+    requiredClass: HEAVY,
+  },
+  shadowpulse_slippers: {
+    id: 'shadowpulse_slippers',
+    name: 'Shadowpulse Slippers',
+    kind: 'armor',
+    armorType: 'cloth',
+    slot: 'feet',
+    quality: 'epic',
+    requiredLevel: 20,
+    stats: { armor: 44, int: 8, spi: 6 },
+    sellValue: 9500,
+    requiredClass: CASTER,
+  },
+  bonechill_cord: {
+    id: 'bonechill_cord',
+    name: 'Bonechill Cord',
+    kind: 'armor',
+    armorType: 'leather',
+    slot: 'waist',
+    quality: 'epic',
+    requiredLevel: 20,
+    stats: { armor: 100, agi: 9, sta: 6 },
+    sellValue: 9500,
+    requiredClass: AGILE_WILD,
+  },
+  // ================= Heroic Sunken Bastion: Vael the Mistcaller =================
   mistcallers_fang: {
     id: 'mistcallers_fang',
     name: "Mistcaller's Fang",
@@ -95,7 +140,43 @@ export const HEROIC_ITEMS: Record<string, ItemDef> = {
     sellValue: 9500,
     requiredClass: CASTER,
   },
-  // ---- Heroic Drowned Temple: Ysolei ----
+  mistforged_pauldrons: {
+    id: 'mistforged_pauldrons',
+    name: 'Mistforged Pauldrons',
+    kind: 'armor',
+    armorType: 'mail',
+    slot: 'shoulder',
+    quality: 'epic',
+    requiredLevel: 20,
+    stats: { armor: 240, str: 9, sta: 7 },
+    sellValue: 11000,
+    requiredClass: HEAVY,
+  },
+  tideguard_faceguard: {
+    id: 'tideguard_faceguard',
+    name: 'Tideguard Faceguard',
+    kind: 'armor',
+    armorType: 'leather',
+    slot: 'helmet',
+    quality: 'epic',
+    requiredLevel: 20,
+    stats: { armor: 168, agi: 10, sta: 8 },
+    sellValue: 12000,
+    requiredClass: AGILE,
+  },
+  sunken_court_mantle: {
+    id: 'sunken_court_mantle',
+    name: 'Sunken Court Mantle',
+    kind: 'armor',
+    armorType: 'cloth',
+    slot: 'shoulder',
+    quality: 'epic',
+    requiredLevel: 20,
+    stats: { armor: 56, int: 9, spi: 7 },
+    sellValue: 11000,
+    requiredClass: CASTER,
+  },
+  // ================= Heroic Drowned Temple: Ysolei =================
   lunar_tide_greatstaff: {
     id: 'lunar_tide_greatstaff',
     name: 'Lunar Tide Greatstaff',
@@ -130,9 +211,45 @@ export const HEROIC_ITEMS: Record<string, ItemDef> = {
     requiredLevel: 20,
     stats: { armor: 292, int: 10, spi: 8 },
     sellValue: 12000,
+    requiredClass: HEAL_MAIL,
+  },
+  lunar_choir_leggings: {
+    id: 'lunar_choir_leggings',
+    name: 'Lunar Choir Leggings',
+    kind: 'armor',
+    armorType: 'cloth',
+    slot: 'legs',
+    quality: 'epic',
+    requiredLevel: 20,
+    stats: { armor: 72, int: 12, spi: 8 },
+    sellValue: 12000,
+    requiredClass: CASTER,
+  },
+  choir_blessed_spaulders: {
+    id: 'choir_blessed_spaulders',
+    name: 'Choir-Blessed Spaulders',
+    kind: 'armor',
+    armorType: 'mail',
+    slot: 'shoulder',
+    quality: 'epic',
+    requiredLevel: 20,
+    stats: { armor: 240, int: 9, spi: 7 },
+    sellValue: 11000,
+    requiredClass: HEAL_MAIL,
+  },
+  tideworn_warboots: {
+    id: 'tideworn_warboots',
+    name: 'Tideworn Warboots',
+    kind: 'armor',
+    armorType: 'mail',
+    slot: 'feet',
+    quality: 'epic',
+    requiredLevel: 20,
+    stats: { armor: 212, str: 8, sta: 6 },
+    sellValue: 9500,
     requiredClass: HEAVY,
   },
-  // ---- Heroic Gravewyrm Sanctum: Korzul the Gravewyrm ----
+  // ================= Heroic Gravewyrm Sanctum: Korzul the Gravewyrm =================
   gravewyrm_cleaver: {
     id: 'gravewyrm_cleaver',
     name: 'Gravewyrm Cleaver',
@@ -167,9 +284,45 @@ export const HEROIC_ITEMS: Record<string, ItemDef> = {
     requiredLevel: 20,
     stats: { armor: 104, agi: 9, sta: 6 },
     sellValue: 9500,
-    requiredClass: AGILE,
+    requiredClass: AGILE_WILD,
   },
-  // ---- Heroic Nythraxis, Scourge of Thornpeak ----
+  gravewyrm_claws: {
+    id: 'gravewyrm_claws',
+    name: 'Gravewyrm Claws',
+    kind: 'armor',
+    armorType: 'mail',
+    slot: 'gloves',
+    quality: 'epic',
+    requiredLevel: 20,
+    stats: { armor: 224, str: 9, sta: 6 },
+    sellValue: 9500,
+    requiredClass: HEAVY,
+  },
+  gravescale_girdle: {
+    id: 'gravescale_girdle',
+    name: 'Gravescale Girdle',
+    kind: 'armor',
+    armorType: 'mail',
+    slot: 'waist',
+    quality: 'epic',
+    requiredLevel: 20,
+    stats: { armor: 224, str: 9, sta: 6 },
+    sellValue: 9500,
+    requiredClass: HEAVY,
+  },
+  wyrmchoir_handwraps: {
+    id: 'wyrmchoir_handwraps',
+    name: 'Wyrmchoir Handwraps',
+    kind: 'armor',
+    armorType: 'mail',
+    slot: 'gloves',
+    quality: 'epic',
+    requiredLevel: 20,
+    stats: { armor: 224, int: 9, spi: 6 },
+    sellValue: 9500,
+    requiredClass: HEAL_MAIL,
+  },
+  // ================= Heroic Nythraxis, Scourge of Thornpeak (raid) =================
   scepter_of_the_deathless_court: {
     id: 'scepter_of_the_deathless_court',
     name: 'Scepter of the Deathless Court',
@@ -218,36 +371,87 @@ export const HEROIC_ITEMS: Record<string, ItemDef> = {
     sellValue: 14000,
     requiredClass: AGILE_WILD,
   },
+  deathless_greatblade: {
+    id: 'deathless_greatblade',
+    name: 'Deathless Greatblade',
+    kind: 'weapon',
+    slot: 'mainhand',
+    quality: 'epic',
+    requiredLevel: 20,
+    weapon: { min: 40, max: 62, speed: 3.4 },
+    stats: { str: 13, sta: 9 },
+    sellValue: 16000,
+    requiredClass: HEAVY,
+  },
+  soulforged_warplate: {
+    id: 'soulforged_warplate',
+    name: 'Soulforged Warplate',
+    kind: 'armor',
+    armorType: 'mail',
+    slot: 'chest',
+    quality: 'epic',
+    requiredLevel: 20,
+    stats: { armor: 335, int: 12, spi: 10 },
+    sellValue: 14000,
+    requiredClass: HEAL_MAIL,
+  },
+  stormcallers_focus: {
+    id: 'stormcallers_focus',
+    name: "Stormcaller's Focus",
+    kind: 'weapon',
+    slot: 'mainhand',
+    quality: 'epic',
+    requiredLevel: 20,
+    weapon: { min: 20, max: 36, speed: 2.5 },
+    stats: { int: 13, spi: 9 },
+    sellValue: 16000,
+    requiredClass: HEAL_MAIL,
+  },
 };
 
-// Heroic-only drop tables per final boss. Chances inside each rollGroup sum to
-// 1.0 so exactly ONE heroic epic drops per kill (the classic one-epic-per-boss
-// heroic cadence); loot_roll.ts rolls these only for a heroic-claimed instance.
+// Heroic-only drop tables per final boss, TWO rollGroups each (chances inside a
+// group sum to 1.0, so exactly one item drops per group => two heroic epics per
+// heroic kill). loot_roll.ts rolls these only for a heroic-claimed instance.
 export const HEROIC_BOSS_LOOT: Record<string, LootEntry[]> = {
   morthen: [
     { itemId: 'morthens_cryptforged_hauberk', chance: 0.34, rollGroup: 'morthen_heroic' },
     { itemId: 'shadowpulse_handwraps', chance: 0.33, rollGroup: 'morthen_heroic' },
     { itemId: 'bonechill_striders', chance: 0.33, rollGroup: 'morthen_heroic' },
+    { itemId: 'cryptplate_helm', chance: 0.34, rollGroup: 'morthen_heroic2' },
+    { itemId: 'shadowpulse_slippers', chance: 0.33, rollGroup: 'morthen_heroic2' },
+    { itemId: 'bonechill_cord', chance: 0.33, rollGroup: 'morthen_heroic2' },
   ],
   vael_the_mistcaller: [
     { itemId: 'mistcallers_fang', chance: 0.34, rollGroup: 'vael_heroic' },
     { itemId: 'tidebound_spaulders', chance: 0.33, rollGroup: 'vael_heroic' },
     { itemId: 'sash_of_the_sunken_court', chance: 0.33, rollGroup: 'vael_heroic' },
+    { itemId: 'mistforged_pauldrons', chance: 0.34, rollGroup: 'vael_heroic2' },
+    { itemId: 'tideguard_faceguard', chance: 0.33, rollGroup: 'vael_heroic2' },
+    { itemId: 'sunken_court_mantle', chance: 0.33, rollGroup: 'vael_heroic2' },
   ],
   ysolei: [
     { itemId: 'lunar_tide_greatstaff', chance: 0.34, rollGroup: 'ysolei_heroic' },
     { itemId: 'tidewoven_trousers', chance: 0.33, rollGroup: 'ysolei_heroic' },
     { itemId: 'choirmothers_casque', chance: 0.33, rollGroup: 'ysolei_heroic' },
+    { itemId: 'lunar_choir_leggings', chance: 0.34, rollGroup: 'ysolei_heroic2' },
+    { itemId: 'choir_blessed_spaulders', chance: 0.33, rollGroup: 'ysolei_heroic2' },
+    { itemId: 'tideworn_warboots', chance: 0.33, rollGroup: 'ysolei_heroic2' },
   ],
   korzul_the_gravewyrm: [
     { itemId: 'gravewyrm_cleaver', chance: 0.34, rollGroup: 'korzul_heroic' },
     { itemId: 'shroud_of_the_gravewyrm', chance: 0.33, rollGroup: 'korzul_heroic' },
     { itemId: 'sanctum_prowlers_grips', chance: 0.33, rollGroup: 'korzul_heroic' },
+    { itemId: 'gravewyrm_claws', chance: 0.34, rollGroup: 'korzul_heroic2' },
+    { itemId: 'gravescale_girdle', chance: 0.33, rollGroup: 'korzul_heroic2' },
+    { itemId: 'wyrmchoir_handwraps', chance: 0.33, rollGroup: 'korzul_heroic2' },
   ],
   nythraxis_scourge_of_thornpeak: [
     { itemId: 'scepter_of_the_deathless_court', chance: 0.25, rollGroup: 'nythraxis_heroic' },
     { itemId: 'deathless_warguard_legmail', chance: 0.25, rollGroup: 'nythraxis_heroic' },
     { itemId: 'soulrend_diadem', chance: 0.25, rollGroup: 'nythraxis_heroic' },
     { itemId: 'scourgehide_carapace', chance: 0.25, rollGroup: 'nythraxis_heroic' },
+    { itemId: 'deathless_greatblade', chance: 0.34, rollGroup: 'nythraxis_heroic2' },
+    { itemId: 'soulforged_warplate', chance: 0.33, rollGroup: 'nythraxis_heroic2' },
+    { itemId: 'stormcallers_focus', chance: 0.33, rollGroup: 'nythraxis_heroic2' },
   ],
 };

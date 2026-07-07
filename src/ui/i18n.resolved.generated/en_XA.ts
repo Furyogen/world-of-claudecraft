@@ -6395,6 +6395,51 @@ export const en_XA: EnTranslations = {
       "scourgehide_carapace": {
         "name": "[Šçóúŕĝéĥíðé Çáŕáþáçé]"
       },
+      "cryptplate_helm": {
+        "name": "[Çŕýþţþļáţé Ĥéļɱ]"
+      },
+      "shadowpulse_slippers": {
+        "name": "[Šĥáðóŵþúļšé Šļíþþéŕš]"
+      },
+      "bonechill_cord": {
+        "name": "[Ɓóñéçĥíļļ Çóŕð]"
+      },
+      "mistforged_pauldrons": {
+        "name": "[Ɱíšţƒóŕĝéð Þáúļðŕóñš]"
+      },
+      "tideguard_faceguard": {
+        "name": "[Ţíðéĝúáŕð Ƒáçéĝúáŕð]"
+      },
+      "sunken_court_mantle": {
+        "name": "[Šúñķéñ Çóúŕţ Ɱáñţļé]"
+      },
+      "lunar_choir_leggings": {
+        "name": "[Ļúñáŕ Çĥóíŕ Ļéĝĝíñĝš]"
+      },
+      "choir_blessed_spaulders": {
+        "name": "[Çĥóíŕ-Ɓļéššéð Šþáúļðéŕš]"
+      },
+      "tideworn_warboots": {
+        "name": "[Ţíðéŵóŕñ Ŵáŕƀóóţš]"
+      },
+      "gravewyrm_claws": {
+        "name": "[Ĝŕáʋéŵýŕɱ Çļáŵš]"
+      },
+      "gravescale_girdle": {
+        "name": "[Ĝŕáʋéšçáļé Ĝíŕðļé]"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "[Ŵýŕɱçĥóíŕ Ĥáñðŵŕáþš]"
+      },
+      "deathless_greatblade": {
+        "name": "[Ðéáţĥļéšš Ĝŕéáţƀļáðé]"
+      },
+      "soulforged_warplate": {
+        "name": "[Šóúļƒóŕĝéð Ŵáŕþļáţé]"
+      },
+      "stormcallers_focus": {
+        "name": "[Šţóŕɱçáļļéŕ'š Ƒóçúš]"
+      },
       "seal_of_the_nine_oaths": {
         "name": "[Šéáļ óƒ ţĥé Ñíñé Óáţĥš]"
       },

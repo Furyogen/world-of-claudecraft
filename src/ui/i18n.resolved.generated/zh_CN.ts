@@ -6395,6 +6395,51 @@ export const zh_CN: EnTranslations = {
       "scourgehide_carapace": {
         "name": "灾祸之皮甲壳"
       },
+      "cryptplate_helm": {
+        "name": "墓板头盔"
+      },
+      "shadowpulse_slippers": {
+        "name": "暗影脉冲便鞋"
+      },
+      "bonechill_cord": {
+        "name": "骨寒腰绳"
+      },
+      "mistforged_pauldrons": {
+        "name": "雾铸肩铠"
+      },
+      "tideguard_faceguard": {
+        "name": "守潮面甲"
+      },
+      "sunken_court_mantle": {
+        "name": "沉没王庭披肩"
+      },
+      "lunar_choir_leggings": {
+        "name": "月唱护腿"
+      },
+      "choir_blessed_spaulders": {
+        "name": "唱诗祝福肩铠"
+      },
+      "tideworn_warboots": {
+        "name": "潮蚀战靴"
+      },
+      "gravewyrm_claws": {
+        "name": "墓龙护爪"
+      },
+      "gravescale_girdle": {
+        "name": "墓鳞腰带"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "龙唱裹手"
+      },
+      "deathless_greatblade": {
+        "name": "不死巨刃"
+      },
+      "soulforged_warplate": {
+        "name": "铸魂战甲"
+      },
+      "stormcallers_focus": {
+        "name": "唤雷之核"
+      },
       "seal_of_the_nine_oaths": {
         "name": "九誓之印"
       },

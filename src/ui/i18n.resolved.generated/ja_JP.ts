@@ -6395,6 +6395,51 @@ export const ja_JP: EnTranslations = {
       "scourgehide_carapace": {
         "name": "スカージハイドの甲殻"
       },
+      "cryptplate_helm": {
+        "name": "クリプトプレートヘルム"
+      },
+      "shadowpulse_slippers": {
+        "name": "シャドウパルスのスリッパ"
+      },
+      "bonechill_cord": {
+        "name": "ボーンチルの帯"
+      },
+      "mistforged_pauldrons": {
+        "name": "ミストフォージの肩当て"
+      },
+      "tideguard_faceguard": {
+        "name": "タイドガードのフェイスガード"
+      },
+      "sunken_court_mantle": {
+        "name": "沈んだ宮廷のマント"
+      },
+      "lunar_choir_leggings": {
+        "name": "ルナクワイアのレギンス"
+      },
+      "choir_blessed_spaulders": {
+        "name": "聖歌祝福の肩当て"
+      },
+      "tideworn_warboots": {
+        "name": "潮蝕のウォーブーツ"
+      },
+      "gravewyrm_claws": {
+        "name": "グレイヴワームの爪"
+      },
+      "gravescale_girdle": {
+        "name": "グレイヴスケイルの帯"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "ワームクワイアの手巻き"
+      },
+      "deathless_greatblade": {
+        "name": "不死の大剣"
+      },
+      "soulforged_warplate": {
+        "name": "魂鍛の戦甲"
+      },
+      "stormcallers_focus": {
+        "name": "ストームコーラーの焦点"
+      },
       "seal_of_the_nine_oaths": {
         "name": "九誓の印章"
       },

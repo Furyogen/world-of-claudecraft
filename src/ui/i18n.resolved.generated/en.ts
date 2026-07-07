@@ -6395,6 +6395,51 @@ export const en: EnTranslations = {
       "scourgehide_carapace": {
         "name": "Scourgehide Carapace"
       },
+      "cryptplate_helm": {
+        "name": "Cryptplate Helm"
+      },
+      "shadowpulse_slippers": {
+        "name": "Shadowpulse Slippers"
+      },
+      "bonechill_cord": {
+        "name": "Bonechill Cord"
+      },
+      "mistforged_pauldrons": {
+        "name": "Mistforged Pauldrons"
+      },
+      "tideguard_faceguard": {
+        "name": "Tideguard Faceguard"
+      },
+      "sunken_court_mantle": {
+        "name": "Sunken Court Mantle"
+      },
+      "lunar_choir_leggings": {
+        "name": "Lunar Choir Leggings"
+      },
+      "choir_blessed_spaulders": {
+        "name": "Choir-Blessed Spaulders"
+      },
+      "tideworn_warboots": {
+        "name": "Tideworn Warboots"
+      },
+      "gravewyrm_claws": {
+        "name": "Gravewyrm Claws"
+      },
+      "gravescale_girdle": {
+        "name": "Gravescale Girdle"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "Wyrmchoir Handwraps"
+      },
+      "deathless_greatblade": {
+        "name": "Deathless Greatblade"
+      },
+      "soulforged_warplate": {
+        "name": "Soulforged Warplate"
+      },
+      "stormcallers_focus": {
+        "name": "Stormcaller's Focus"
+      },
       "seal_of_the_nine_oaths": {
         "name": "Seal of the Nine Oaths"
       },
