@@ -20,6 +20,7 @@ import {
   instanceOrigin,
   isArenaPos,
   isDelvePos,
+  isGauntletPos,
   MOBS,
   NPCS,
   WORLD_MAX_Z,
@@ -2913,6 +2914,14 @@ export class Renderer {
         });
         if (ev.entityId === this.sim.playerId) this.addShake(0.5);
         break;
+      case 'gauntletPoof': {
+        // A contestant hit zero event-vitality: a soft, non-graphic knockout
+        // puff at the spot. The gauntlet band floor is flat, so sample ground
+        // height the way spellfxAt does and drop the puff around body height.
+        const gy = groundHeight(ev.x, ev.z, this.sim.cfg.seed);
+        this.vfx.poof({ x: ev.x, y: gy + 0.5, z: ev.z });
+        break;
+      }
     }
   }
 
@@ -3696,8 +3705,15 @@ export class Renderer {
   private updateAmbience(px: number, camY: number, dt: number): void {
     const inside = px > DUNGEON_X_THRESHOLD;
     const pz = this.sim.player.pos.z;
+    // The Gauntlet band sits past DUNGEON_X_THRESHOLD (so `inside` is true) but is
+    // an open daylight field with no interiors: skip all interior building here
+    // and treat it as overworld below (the distance checks in the dungeon branch
+    // would never match the far x=9000 band anyway, but this makes it explicit).
+    const inGauntlet = inside && isGauntletPos(px);
     if (isDelvePos(px)) {
       this.ensureDelveInteriorsNear(px, pz);
+    } else if (inGauntlet) {
+      // open field: no interior copies to build
     } else if (inside && isArenaPos(px)) {
       void ensureDungeonAssets().catch(() => undefined);
       // build the Ashen Coliseum copy the player was matched into
@@ -3728,7 +3744,8 @@ export class Renderer {
     // the Drowned Temple reads as submerged: a teal murk instead of the
     // crypt's near-black, so its flooded halls feel underwater, not just dark
     const inDelve = inside && isDelvePos(px);
-    const interior = inside && !inDelve && !isArenaPos(px) ? dungeonAt(px)?.interior : null;
+    const interior =
+      inside && !inDelve && !inGauntlet && !isArenaPos(px) ? dungeonAt(px)?.interior : null;
     const inTemple = interior === 'temple';
     const inNythraxis = interior === 'nythraxis';
     const desired = inDelve
@@ -3737,7 +3754,8 @@ export class Renderer {
         ? 'temple'
         : inNythraxis
           ? 'nythraxis'
-          : inside
+          : // the gauntlet band is open daylight, never a dark interior
+            inside && !inGauntlet
             ? 'dungeon'
             : camY < waterLevelAt(px, pz) - 0.05
               ? 'underwater'
