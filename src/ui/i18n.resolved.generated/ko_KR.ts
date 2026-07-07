@@ -154,6 +154,38 @@ export const ko_KR: EnTranslations = {
     "spectate": {
       "banner": "{name} 관전 중"
     },
+    "gauntlet": {
+      "title": "시련의 관문",
+      "pitch": "모든 시련을 견뎌내라. 마지막까지 살아남는 자가 상금을 차지한다.",
+      "join": "시련의 관문 참가",
+      "withdraw": "기권",
+      "lobbyJoined": "대기실에 {count}명",
+      "lobbyCountdown": "{seconds}초 후 시작",
+      "vitality": "생명력",
+      "survivorsAria": "{total}명 중 {count}명 생존",
+      "prizeAria": "상금 풀: {amount}",
+      "trialLabel": "시련 {n} / {total}",
+      "go": "Go",
+      "stop": "Stop",
+      "phaseLobby": "도전자 모집 중",
+      "phaseStaging": "자리에 서라",
+      "phaseTrial": "횡단 시작",
+      "phaseInterlude": "시련 통과",
+      "phasePodium": "시련의 관문, 승자가 결정되었다",
+      "greenLight": "초록 불!",
+      "redLight": "빨간 불!",
+      "vitalityLost": "생명력을 {amount} 잃었다.",
+      "contestantOut": "{name} is out!",
+      "eliminated": "ELIMINATED",
+      "survivorsLeft": "{count}명 생존",
+      "spectating": "관전 중",
+      "leave": "나가기",
+      "victory": "승리",
+      "podiumTitle": "최종 순위",
+      "placeFirst": "1st",
+      "placeSecond": "2nd",
+      "placeThird": "3rd"
+    },
     "death": {
       "resurrectAtCorpse": "시신에서 부활",
       "resurrectAtHealer": "영혼 치유사 (부활의 후유증)",
@@ -6895,6 +6927,21 @@ export const ko_KR: EnTranslations = {
         "name": "영혼 치유사",
         "title": "죽은 자의 수호자",
         "greeting": "편히 쉬게, 영혼이여. 그대를 육신으로 돌려보낼 수 있으나, 돌아오는 길은 그대를 약하게 만들 것이네."
+      },
+      "gauntlet_recruiter": {
+        "name": "Maro Half-Mask",
+        "title": "시련의 관문 전령",
+        "greeting": "다른 이들과 함께 모래 위에 서라, {className}. 모든 시련을 견뎌내면 시상대는 그대의 것이다."
+      },
+      "gauntlet_watcher": {
+        "name": "돌의 감시자",
+        "title": "횡단의 수호자",
+        "greeting": "감시자는 눈을 깜빡이지 않는다."
+      },
+      "gauntlet_contestant": {
+        "name": "시련의 관문 참가자",
+        "title": "참가자",
+        "greeting": "앞을 보라. 감시자가 지켜보고 있다."
       },
       "tidewatcher_ondrel": {
         "name": "온드렐 베인",

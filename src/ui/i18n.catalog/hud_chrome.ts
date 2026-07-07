@@ -11,6 +11,42 @@ export const hudChromeStrings = {
   spectate: {
     banner: 'Spectating {name}',
   },
+  // The Gauntlet survival event: the recruiter dialog, the live HUD cluster, the
+  // green-light/red-light banners + logs, and the knockout / podium overlay.
+  // {placeholder} tokens: {count}/{total}/{n} are formatNumber counts, {seconds} a
+  // whole-second countdown, {amount} a formatMoney value, {name} a contestant name.
+  gauntlet: {
+    title: 'The Gauntlet',
+    pitch: 'Outlast every trial. The last one standing takes the purse.',
+    join: 'Join the Gauntlet',
+    withdraw: 'Withdraw',
+    lobbyJoined: '{count} in the lobby',
+    lobbyCountdown: 'The run begins in {seconds}s',
+    vitality: 'Vitality',
+    survivorsAria: '{count} of {total} still standing',
+    prizeAria: 'Prize pool: {amount}',
+    trialLabel: 'Trial {n} of {total}',
+    go: 'Go',
+    stop: 'Stop',
+    phaseLobby: 'Gathering challengers',
+    phaseStaging: 'Take your marks',
+    phaseTrial: 'The Crossing begins',
+    phaseInterlude: 'Trial cleared',
+    phasePodium: 'The Gauntlet is decided',
+    greenLight: 'Green light!',
+    redLight: 'Red light!',
+    vitalityLost: 'You lost {amount} vitality.',
+    contestantOut: '{name} is out!',
+    eliminated: 'ELIMINATED',
+    survivorsLeft: '{count} still standing',
+    spectating: 'Spectating',
+    leave: 'Leave',
+    victory: 'Victory',
+    podiumTitle: 'Final Standings',
+    placeFirst: '1st',
+    placeSecond: '2nd',
+    placeThird: '3rd',
+  },
   // WoW-style death loop overlay (release -> ghost run -> resurrect). The release
   // button and "You have died." title reuse the hud.core.* keys; these are the
   // ghost-state additions shown once the spirit has been released.

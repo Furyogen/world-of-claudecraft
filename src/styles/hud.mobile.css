@@ -2061,4 +2061,38 @@
       width: 190px;
     }
   }
+
+  /* ---------- gauntlet (mobile touch sizing) ---------- */
+  body.mobile-touch #gauntlet-hud {
+    top: 96px;
+    width: min(320px, 86vw);
+  }
+  body.mobile-touch #gauntlet-recruit {
+    width: min(360px, 92vw);
+  }
+  body.mobile-touch #gauntlet-recruit .gr-pitch {
+    font-size: 16px;
+  }
+  body.mobile-touch .go-title {
+    font-size: 40px;
+    letter-spacing: 2px;
+  }
+  body.mobile-touch .go-podium {
+    padding: 20px 22px;
+    max-width: 92vw;
+  }
+  body.mobile-touch .go-places {
+    min-width: 0;
+    width: 100%;
+  }
+  body.mobile-touch .go-spectate {
+    bottom: 140px;
+    max-width: 92vw;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  body.mobile-touch .go-leave,
+  body.mobile-touch #gauntlet-recruit .gr-action {
+    min-height: 44px;
+  }
 }

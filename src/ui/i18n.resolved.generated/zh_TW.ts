@@ -154,6 +154,38 @@ export const zh_TW: EnTranslations = {
     "spectate": {
       "banner": "正在觀察 {name}"
     },
+    "gauntlet": {
+      "title": "試煉迴廊",
+      "pitch": "熬過每一場試煉,笑到最後的人獨得獎金。",
+      "join": "加入試煉迴廊",
+      "withdraw": "退出",
+      "lobbyJoined": "大廳中有 {count} 人",
+      "lobbyCountdown": "距開始還有 {seconds} 秒",
+      "vitality": "生命力",
+      "survivorsAria": "{total} 人中還有 {count} 人存活",
+      "prizeAria": "獎金池:{amount}",
+      "trialLabel": "試煉 {n} / {total}",
+      "go": "Go",
+      "stop": "Stop",
+      "phaseLobby": "召集挑戰者",
+      "phaseStaging": "各就各位",
+      "phaseTrial": "橫渡開始",
+      "phaseInterlude": "試煉通過",
+      "phasePodium": "試煉迴廊已定勝負",
+      "greenLight": "綠燈!",
+      "redLight": "紅燈!",
+      "vitalityLost": "你失去了 {amount} 點生命力。",
+      "contestantOut": "{name} is out!",
+      "eliminated": "ELIMINATED",
+      "survivorsLeft": "還有 {count} 人存活",
+      "spectating": "觀戰中",
+      "leave": "離開",
+      "victory": "勝利",
+      "podiumTitle": "最終排名",
+      "placeFirst": "1st",
+      "placeSecond": "2nd",
+      "placeThird": "3rd"
+    },
     "death": {
       "resurrectAtCorpse": "在屍體旁復活",
       "resurrectAtHealer": "靈魂醫者（復活虛弱）",
@@ -6895,6 +6927,21 @@ export const zh_TW: EnTranslations = {
         "name": "靈魂醫者",
         "title": "亡者的守護者",
         "greeting": "安息吧，靈魂。我可以讓你重返軀體，但歸途會讓你變得虛弱。"
+      },
+      "gauntlet_recruiter": {
+        "name": "Maro Half-Mask",
+        "title": "試煉迴廊傳令官",
+        "greeting": "和其他人一起踏上沙場吧,{className}。熬過每一場試煉,頒獎台就是你的。"
+      },
+      "gauntlet_watcher": {
+        "name": "石之守望者",
+        "title": "橫渡守護者",
+        "greeting": "守望者從不眨眼。"
+      },
+      "gauntlet_contestant": {
+        "name": "試煉參賽者",
+        "title": "參賽者",
+        "greeting": "目視前方。守望者正盯著你。"
       },
       "tidewatcher_ondrel": {
         "name": "翁德瑞爾·韋恩",

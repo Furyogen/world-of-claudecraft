@@ -154,6 +154,38 @@ export const ja_JP: EnTranslations = {
     "spectate": {
       "banner": "{name}を観戦中"
     },
+    "gauntlet": {
+      "title": "ガントレット",
+      "pitch": "すべての試練を生き延びろ。最後まで立っていた者が賞金を総取りだ。",
+      "join": "ガントレットに参加",
+      "withdraw": "辞退",
+      "lobbyJoined": "ロビーに {count} 人",
+      "lobbyCountdown": "開始まで {seconds} 秒",
+      "vitality": "生命力",
+      "survivorsAria": "{total} 人中 {count} 人が生存",
+      "prizeAria": "賞金プール:{amount}",
+      "trialLabel": "試練 {n} / {total}",
+      "go": "Go",
+      "stop": "Stop",
+      "phaseLobby": "挑戦者を募集中",
+      "phaseStaging": "位置につけ",
+      "phaseTrial": "横断開始",
+      "phaseInterlude": "試練クリア",
+      "phasePodium": "ガントレットの勝者が決した",
+      "greenLight": "青信号!",
+      "redLight": "赤信号!",
+      "vitalityLost": "生命力を {amount} 失った。",
+      "contestantOut": "{name} is out!",
+      "eliminated": "ELIMINATED",
+      "survivorsLeft": "残り {count} 人",
+      "spectating": "観戦中",
+      "leave": "退出",
+      "victory": "勝利",
+      "podiumTitle": "最終順位",
+      "placeFirst": "1st",
+      "placeSecond": "2nd",
+      "placeThird": "3rd"
+    },
     "death": {
       "resurrectAtCorpse": "亡骸で復活",
       "resurrectAtHealer": "霊魂の癒し手（復活の後遺症）",
@@ -6895,6 +6927,21 @@ export const ja_JP: EnTranslations = {
         "name": "霊魂の癒し手",
         "title": "死者の番人",
         "greeting": "安らかに、魂よ。亡骸に戻すことはできるが、戻る道のりで弱ってしまうだろう。"
+      },
+      "gauntlet_recruiter": {
+        "name": "Maro Half-Mask",
+        "title": "ガントレットの伝令",
+        "greeting": "他の者たちと共に砂上に立て、{className}。すべての試練を生き延びれば、表彰台は君のものだ。"
+      },
+      "gauntlet_watcher": {
+        "name": "石の番人",
+        "title": "横断の守り手",
+        "greeting": "番人はまばたきひとつしない。"
+      },
+      "gauntlet_contestant": {
+        "name": "ガントレット参加者",
+        "title": "参加者",
+        "greeting": "前を向け。番人が見ている。"
       },
       "tidewatcher_ondrel": {
         "name": "オンドレル・ヴェイン",

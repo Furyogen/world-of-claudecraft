@@ -215,6 +215,7 @@ const HOT_PAINTERS: ReadonlyArray<{
   { file: 'unit_frame_painter.ts', allow: {}, reflowAllow: {} },
   { file: 'action_bar_painter.ts', allow: {}, reflowAllow: {} },
   { file: 'party_frames_painter.ts', allow: {}, reflowAllow: {} },
+  { file: 'gauntlet_hud_painter.ts', allow: {}, reflowAllow: {} },
   { file: 'auras_painter.ts', allow: { '.className': 3 }, reflowAllow: {} },
   {
     file: 'fct_painter.ts',

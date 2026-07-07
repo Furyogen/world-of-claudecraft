@@ -4186,4 +4186,302 @@
     font: 700 11px var(--title-font);
     letter-spacing: 0.4px;
   }
+
+  /* ---------- gauntlet HUD cluster ---------- */
+  /* The survival-event status cluster: shown only while a run is live (the painter
+     toggles display). Non-interactive chrome, so it never eats clicks. */
+  #gauntlet-hud {
+    position: absolute;
+    left: 50%;
+    top: 74px;
+    transform: translateX(-50%);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    width: 280px;
+    pointer-events: none;
+    z-index: 6;
+  }
+  #gauntlet-phase {
+    font-family: var(--title-font);
+    font-size: 15px;
+    color: var(--color-primary);
+    text-shadow: 1px 1px 3px #000;
+    letter-spacing: 0.5px;
+  }
+  #gauntlet-vitality {
+    position: relative;
+    width: 100%;
+    height: 20px;
+    border: 2px solid var(--border);
+    outline: 1px solid #000;
+    border-radius: 4px;
+    background: #100c08;
+    overflow: hidden;
+  }
+  #gauntlet-vitality .fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(#7ff09a, #1eb838 60%, #128a2a);
+    box-shadow: inset 0 1px 0 #fff5;
+    transition: width 0.18s linear;
+  }
+  #gauntlet-vitality .gh-text {
+    position: absolute;
+    inset: 0;
+    text-align: center;
+    line-height: 18px;
+    font-size: 11px;
+    color: #fff;
+    text-shadow: 1px 1px 2px #000;
+    font-variant-numeric: tabular-nums;
+  }
+  #gauntlet-countdown {
+    position: relative;
+    width: 100%;
+    height: 12px;
+    border: 2px solid var(--border);
+    outline: 1px solid #000;
+    border-radius: 4px;
+    background: #100c08;
+    overflow: hidden;
+  }
+  #gauntlet-countdown .fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(#ffe48a, #c9941a 60%, #9a6f12);
+  }
+  #gauntlet-countdown .timer {
+    position: absolute;
+    inset: 0;
+    text-align: center;
+    line-height: 9px;
+    font-size: 9px;
+    color: #fff;
+    text-shadow: 1px 1px 2px #000;
+    font-variant-numeric: tabular-nums;
+  }
+  #gauntlet-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .gh-chip {
+    font: 700 11px / 16px var(--body-font);
+    color: var(--color-text-light);
+    background: rgba(8, 8, 12, 0.82);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 1px 8px;
+    font-variant-numeric: tabular-nums;
+  }
+  .gh-light {
+    display: none;
+    font: 700 12px / 18px var(--title-font);
+    letter-spacing: 1px;
+    color: #fff;
+    border-radius: 9px;
+    padding: 1px 12px;
+    text-shadow: 1px 1px 2px #000;
+    border: 1px solid #000;
+  }
+  .gh-light.green {
+    background: linear-gradient(#3fd268, #1c8a3c);
+    box-shadow: 0 0 10px #35d06a99;
+  }
+  .gh-light.red {
+    background: linear-gradient(#ff6b5e, #b62c22);
+    box-shadow: 0 0 10px #ff5a4a99;
+  }
+
+  /* ---------- gauntlet recruiter window ---------- */
+  #gauntlet-recruit {
+    width: 320px;
+    max-width: 92%;
+    padding-bottom: 12px;
+  }
+  #gauntlet-recruit .gr-pitch {
+    padding: 10px 14px 4px;
+    font-family: var(--font-serif);
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--color-text-light);
+  }
+  #gauntlet-recruit .gr-status {
+    padding: 4px 14px 0;
+    font-size: 13px;
+    color: var(--color-text-muted);
+  }
+  #gauntlet-recruit .gr-countdown {
+    padding: 0 14px 2px;
+    font-size: 15px;
+    color: var(--color-primary);
+    font-variant-numeric: tabular-nums;
+  }
+  #gauntlet-recruit .gr-actions {
+    display: flex;
+    justify-content: center;
+    padding: 10px 14px 0;
+  }
+  #gauntlet-recruit .gr-action {
+    min-width: 160px;
+    min-height: 40px;
+  }
+  #gauntlet-recruit .gr-action[disabled] {
+    opacity: 0.5;
+    cursor: default;
+  }
+
+  /* ---------- gauntlet overlay ---------- */
+  /* Knockout splash -> spectator bar, and the podium ceremony. Sub-panels toggle by
+     the root's data-state; the root itself never eats clicks (each live panel opts
+     back into pointer events). */
+  #gauntlet-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 31;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  #gauntlet-overlay[hidden] {
+    display: none;
+  }
+  #gauntlet-overlay[data-state='eliminated'],
+  #gauntlet-overlay[data-state='podium'] {
+    background: radial-gradient(ellipse at center, #00000066 0%, #000000cc 100%);
+  }
+  #gauntlet-overlay .go-eliminated,
+  #gauntlet-overlay .go-spectate,
+  #gauntlet-overlay .go-podium {
+    display: none;
+  }
+  #gauntlet-overlay[data-state='eliminated'] .go-eliminated {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  #gauntlet-overlay[data-state='spectating'] .go-spectate {
+    display: flex;
+  }
+  #gauntlet-overlay[data-state='podium'] .go-podium {
+    display: flex;
+  }
+  .go-title {
+    font-family: var(--title-font);
+    font-size: 52px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--color-hostile);
+    text-shadow:
+      0 0 18px #ff2a1a55,
+      2px 2px 6px #000;
+    animation: go-pop 0.5s ease-out;
+  }
+  .go-sub {
+    font-size: 18px;
+    color: var(--color-text-light);
+    text-shadow: 1px 1px 3px #000;
+    font-variant-numeric: tabular-nums;
+  }
+  .go-spectate {
+    position: absolute;
+    bottom: 96px;
+    left: 50%;
+    transform: translateX(-50%);
+    align-items: center;
+    gap: 12px;
+    padding: 8px 14px;
+    background: rgba(8, 8, 12, 0.9);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    pointer-events: auto;
+  }
+  .go-spectate-label {
+    font-family: var(--title-font);
+    font-size: 15px;
+    color: var(--color-primary);
+    letter-spacing: 0.5px;
+  }
+  .go-spectate-count {
+    font-size: 13px;
+    color: var(--color-text-light);
+    font-variant-numeric: tabular-nums;
+  }
+  .go-podium {
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: 24px 32px;
+    background: rgba(10, 10, 15, 0.95);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    pointer-events: auto;
+  }
+  .go-podium-title {
+    font-family: var(--title-font);
+    font-size: 30px;
+    letter-spacing: 2px;
+    color: var(--color-text-light);
+    text-shadow: 1px 1px 4px #000;
+  }
+  #gauntlet-overlay.victory .go-podium-title {
+    color: var(--color-primary);
+    text-shadow:
+      0 0 16px var(--color-primary-glow-heavy),
+      1px 1px 4px #000;
+  }
+  .go-places {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 240px;
+  }
+  .go-places li {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .go-place {
+    font-family: var(--title-font);
+    font-size: 20px;
+    color: var(--color-primary);
+    width: 44px;
+    text-align: right;
+  }
+  .go-name {
+    font-size: 18px;
+    color: var(--color-text-light);
+  }
+  .go-leave {
+    min-width: 120px;
+    min-height: 40px;
+  }
+  @keyframes go-pop {
+    0% {
+      opacity: 0;
+      transform: scale(0.7);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #gauntlet-vitality .fill {
+      transition: none;
+    }
+    .go-title {
+      animation: none;
+    }
+  }
 }

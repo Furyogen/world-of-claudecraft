@@ -124,6 +124,9 @@ const NPC_IDS = [
   'brother_halven', // Collapsed Reliquary delve board NPC
   'brother_halven_marsh', // Drowned Litany delve board NPC (same character, marsh camp)
   'spirit_healer', // the graveyard angel (spawned at every graveyard + dungeon entry)
+  'gauntlet_recruiter', // Maro Half-Mask, the Herald of the Gauntlet (town square)
+  'gauntlet_watcher', // The Stone Warden (the sentinel-trial watcher, instance-local)
+  'gauntlet_contestant', // NPC backfill contestants (per-run rolled names override this)
 ] as const;
 
 const QUEST_IDS = [

@@ -154,6 +154,38 @@ export const ru_RU: EnTranslations = {
     "spectate": {
       "banner": "Наблюдение за {name}"
     },
+    "gauntlet": {
+      "title": "Гаунтлет",
+      "pitch": "Переживи каждое испытание. Последний, кто устоит, забирает весь приз.",
+      "join": "Вступить в Гаунтлет",
+      "withdraw": "Выйти",
+      "lobbyJoined": "В лобби: {count}",
+      "lobbyCountdown": "Забег начнётся через {seconds} с",
+      "vitality": "Жизненная сила",
+      "survivorsAria": "Осталось {count} из {total}",
+      "prizeAria": "Призовой фонд: {amount}",
+      "trialLabel": "Испытание {n} из {total}",
+      "go": "Go",
+      "stop": "Stop",
+      "phaseLobby": "Сбор участников",
+      "phaseStaging": "Занять места",
+      "phaseTrial": "Переправа началась",
+      "phaseInterlude": "Испытание пройдено",
+      "phasePodium": "Гаунтлет завершён",
+      "greenLight": "Зелёный свет!",
+      "redLight": "Красный свет!",
+      "vitalityLost": "Вы потеряли {amount} жизненной силы.",
+      "contestantOut": "{name} is out!",
+      "eliminated": "ELIMINATED",
+      "survivorsLeft": "Осталось {count}",
+      "spectating": "Наблюдение",
+      "leave": "Покинуть",
+      "victory": "Победа",
+      "podiumTitle": "Итоговые места",
+      "placeFirst": "1st",
+      "placeSecond": "2nd",
+      "placeThird": "3rd"
+    },
     "death": {
       "resurrectAtCorpse": "Воскреснуть у тела",
       "resurrectAtHealer": "Целитель душ (болезнь воскрешения)",
@@ -6895,6 +6927,21 @@ export const ru_RU: EnTranslations = {
         "name": "Целитель душ",
         "title": "Хранитель мёртвых",
         "greeting": "Покойся, дух. Я могу вернуть тебя в тело, но обратный путь оставит тебя ослабленным."
+      },
+      "gauntlet_recruiter": {
+        "name": "Maro Half-Mask",
+        "title": "Глашатай Гаунтлета",
+        "greeting": "Ступай на песок вместе с остальными, {className}. Переживи каждое испытание, и пьедестал твой."
+      },
+      "gauntlet_watcher": {
+        "name": "Каменный Страж",
+        "title": "Хранитель Переправы",
+        "greeting": "Страж не моргает."
+      },
+      "gauntlet_contestant": {
+        "name": "Участник Гаунтлета",
+        "title": "Участник",
+        "greeting": "Смотри вперёд. Страж наблюдает."
       },
       "tidewatcher_ondrel": {
         "name": "Ондрел Вейн",

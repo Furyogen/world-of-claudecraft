@@ -73,6 +73,18 @@ const baseEnTable = {
   'error.corpseNothingToHarvest': 'That corpse has nothing to harvest.',
   'error.gatherNodeMissing': 'That resource node does not exist.',
   'error.gatherNodeNotRespawned': 'This resource node has not respawned for you yet.',
+  // The Gauntlet join guards (src/sim/gauntlet/runs.ts). Placeholder-free, so the
+  // EXACT auto-build recognizes them; 'Leave the dungeon first.' / 'Leave the arena
+  // first.' are shared with the delve guards and localized by their existing RULES.
+  'error.gauntletCannotEnter': 'You cannot enter the Gauntlet right now.',
+  'error.gauntletClosed': 'The Gauntlet is not open right now.',
+  'error.gauntletAlreadyIn': 'You are already in the Gauntlet.',
+  'error.gauntletLeaveDelve': 'Leave the delve first.',
+  'error.gauntletTrading': 'You cannot enter the Gauntlet while trading.',
+  'error.gauntletDuel': 'You cannot enter the Gauntlet during a duel.',
+  'error.gauntletArenaMatch': 'You cannot enter the Gauntlet during an arena match.',
+  'error.gauntletHerald': 'You must speak to the Herald to enter the Gauntlet.',
+  'error.gauntletFull': 'The Gauntlet is full. Try again soon.',
   // Custom per-item ground-pickup lines (src/sim/content/ground_pickup_lines.ts).
   // Emitted via def.pickupDeny/def.pickupEnough (variable-routed, so the S3 guard
   // cannot see them); values must stay byte-identical to that table for the EXACT

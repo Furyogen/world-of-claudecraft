@@ -87,6 +87,7 @@ import {
   dist2d,
   type Entity,
   FISHING_CAST_ID,
+  type GauntletPhase,
   type ItemDef,
   isQuestTurnInNpc,
   MAX_LEVEL,
@@ -187,6 +188,11 @@ import { esc } from './esc';
 import { fctSpawnShape } from './fct_event';
 import { FctPainter } from './fct_painter';
 import { FocusManager, type FocusTrapHandle } from './focus_manager';
+import { GauntletClock } from './gauntlet_clock';
+import { GauntletHudPainter } from './gauntlet_hud_painter';
+import { gauntletHudModel } from './gauntlet_hud_view';
+import { GauntletOverlay } from './gauntlet_overlay';
+import { GauntletRecruitWindow } from './gauntlet_recruit_window';
 import {
   type AimPoint,
   abilityAoeRadius,
@@ -1959,6 +1965,10 @@ export class Hud {
       case 'vendor-window':
         this.closeVendor();
         break;
+      case 'gauntlet-recruit':
+        // Route through the module so focus returns to the opener (WCAG 2.4.3).
+        this.gauntletRecruit.close();
+        break;
       case 'crafting-window':
         this.closeCrafting();
         break;
@@ -3129,6 +3139,37 @@ export class Hud {
   private readonly minimapPainter = new MinimapPainter(this.writerFacet, classCss, (zoneId) =>
     zoneDisplayName(zoneId),
   );
+  // The Gauntlet HUD cluster painter (vitality / countdown / chips / light pill),
+  // driven per frame from the gauntletRun wire view via gauntletHudModel. All writes
+  // route through the shared elided-writer facet, like the other hot painters.
+  private readonly gauntletHudPainter = new GauntletHudPainter(this.writerFacet, {
+    root: $('#gauntlet-hud'),
+    phase: $('#gauntlet-phase'),
+    vitalityBar: $('#gauntlet-vitality'),
+    vitalityFill: $('#gauntlet-vitality .fill'),
+    vitalityText: $('#gauntlet-vitality .gh-text'),
+    countdownBar: $('#gauntlet-countdown'),
+    countdownFill: $('#gauntlet-countdown .fill'),
+    countdownTimer: $('#gauntlet-countdown .timer'),
+    survivors: $('#gauntlet-survivors'),
+    prize: $('#gauntlet-prize'),
+    light: $('#gauntlet-light'),
+  });
+  // Wall-clock estimator for the countdown (IWorld exposes no sim clock online); see
+  // gauntlet_clock.ts.
+  private readonly gauntletClock = new GauntletClock();
+  // The knockout / spectator / podium overlay; builds its own DOM lazily on show.
+  private readonly gauntletOverlay = new GauntletOverlay({
+    onLeave: () => this.sim.gauntletLeave(),
+  });
+  // The recruiter dialog (opened from the gauntlet_recruiter interact path).
+  private readonly gauntletRecruit = new GauntletRecruitWindow({
+    root: () => $('#gauntlet-recruit'),
+    closeOthers: () => this.closeOtherWindows('#gauntlet-recruit'),
+    ...this.windowFocus('#gauntlet-recruit'),
+    onJoin: () => this.sim.gauntletJoin(),
+    onLeave: () => this.sim.gauntletLeave(),
+  });
   private readonly presentationBag: PainterHostPresentation = {
     itemIcon: (item) => this.itemIcon(item),
     moneyHtml: (copper) => this.moneyHtml(copper),
@@ -5669,6 +5710,7 @@ export class Hud {
       this.updateTradeWindow();
       this.updateArenaStatus();
       this.updateFiestaHud();
+      this.updateGauntletHud();
       if ($('#map-window').style.display === 'block') this.updateMapWindow();
       if ($('#arena-window').style.display === 'block') this.arenaWindow.render();
       if (this.openLootMobId !== null) {
@@ -7872,6 +7914,53 @@ export class Hud {
           }
           break;
         }
+        case 'gauntletLight': {
+          if (ev.light === 'green') {
+            this.showBanner(t('hudChrome.gauntlet.greenLight'));
+            audio.gauntletChant(Math.max(0, ev.until - this.gauntletTimeNow()));
+          } else {
+            this.showBanner(t('hudChrome.gauntlet.redLight'));
+            audio.gauntletRedStinger();
+          }
+          break;
+        }
+        case 'gauntletDamage': {
+          this.combatLog(
+            t('hudChrome.gauntlet.vitalityLost', {
+              amount: formatNumber(ev.amount, { maximumFractionDigits: 0 }),
+            }),
+            '#ff7a6a',
+          );
+          this.renderer.addShake(0.14);
+          break;
+        }
+        case 'gauntletPoof': {
+          audio.gauntletPoof();
+          this.fiestaWordPop(
+            t('hudChrome.gauntlet.contestantOut', { name: ev.name }),
+            '#c98bff',
+            1,
+          );
+          break;
+        }
+        case 'gauntletEliminated': {
+          this.gauntletOverlay.showEliminated(this.sim.gauntletRun?.survivors ?? 0);
+          this.fiestaWordPop(t('hudChrome.gauntlet.eliminated'), '#ff5a4a', 3);
+          break;
+        }
+        case 'gauntletPodium': {
+          this.gauntletOverlay.showPodium(
+            { first: ev.first, second: ev.second, third: ev.third },
+            ev.won,
+          );
+          if (ev.won) audio.gauntletFanfare();
+          break;
+        }
+        case 'gauntletPhase': {
+          const line = this.gauntletPhaseBanner(ev.phase);
+          if (line) this.showSubzone(line);
+          break;
+        }
         case 'lockpickOffer':
           this.openLockpickAnte(ev.objectId, ev.bountiful);
           break;
@@ -8684,6 +8773,52 @@ export class Hud {
     this.renderFiestaRespawn(f);
     this.renderFiestaOffer(f);
     this.renderFiestaPending(f);
+  }
+
+  // -------------------------------------------------------------------------
+  // The Gauntlet: the live HUD cluster + the recruiter dialog + knockout/podium
+  // overlay. The cluster/overlay/recruit modules own the logic; Hud only feeds them
+  // the wire view and the estimated sim time each frame and routes the SimEvents.
+  // -------------------------------------------------------------------------
+
+  private updateGauntletHud(): void {
+    const run = this.sim.gauntletRun;
+    const time = this.gauntletTimeNow();
+    this.gauntletHudPainter.paint(gauntletHudModel({ run, time }));
+    if (this.gauntletRecruit.isOpen)
+      this.gauntletRecruit.update({ eventOpen: this.sim.gauntletOpen, run, time });
+    if (run) this.gauntletOverlay.update(run.survivors);
+    else if (this.gauntletOverlay.shown) this.gauntletOverlay.hide();
+  }
+
+  // Open the recruiter dialog (the gauntlet_recruiter interact branch).
+  openGauntletRecruit(): void {
+    this.gauntletRecruit.open({
+      eventOpen: this.sim.gauntletOpen,
+      run: this.sim.gauntletRun,
+      time: this.gauntletTimeNow(),
+    });
+  }
+
+  // The estimated absolute sim time for the active run's countdowns (0 when idle).
+  private gauntletTimeNow(): number {
+    const run = this.sim.gauntletRun;
+    return run ? this.gauntletClock.estimate(run, performance.now()) : 0;
+  }
+
+  private gauntletPhaseBanner(phase: GauntletPhase): string {
+    switch (phase) {
+      case 'staging':
+        return t('hudChrome.gauntlet.phaseStaging');
+      case 'trial':
+        return t('hudChrome.gauntlet.phaseTrial');
+      case 'interlude':
+        return t('hudChrome.gauntlet.phaseInterlude');
+      case 'podium':
+        return t('hudChrome.gauntlet.phasePodium');
+      default:
+        return '';
+    }
   }
 
   // "Augment pending" indicator: a banked offer waiting for the player's next

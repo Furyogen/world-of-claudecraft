@@ -154,6 +154,38 @@ export const de_DE: EnTranslations = {
     "spectate": {
       "banner": "{name} wird beobachtet"
     },
+    "gauntlet": {
+      "title": "The Gauntlet",
+      "pitch": "Outlast every trial. The last one standing takes the purse.",
+      "join": "Join the Gauntlet",
+      "withdraw": "Withdraw",
+      "lobbyJoined": "{count} in the lobby",
+      "lobbyCountdown": "The run begins in {seconds}s",
+      "vitality": "Vitality",
+      "survivorsAria": "{count} of {total} still standing",
+      "prizeAria": "Prize pool: {amount}",
+      "trialLabel": "Trial {n} of {total}",
+      "go": "Go",
+      "stop": "Stop",
+      "phaseLobby": "Gathering challengers",
+      "phaseStaging": "Take your marks",
+      "phaseTrial": "The Crossing begins",
+      "phaseInterlude": "Trial cleared",
+      "phasePodium": "The Gauntlet is decided",
+      "greenLight": "Green light!",
+      "redLight": "Red light!",
+      "vitalityLost": "You lost {amount} vitality.",
+      "contestantOut": "{name} is out!",
+      "eliminated": "ELIMINATED",
+      "survivorsLeft": "{count} still standing",
+      "spectating": "Spectating",
+      "leave": "Leave",
+      "victory": "Victory",
+      "podiumTitle": "Final Standings",
+      "placeFirst": "1st",
+      "placeSecond": "2nd",
+      "placeThird": "3rd"
+    },
     "death": {
       "resurrectAtCorpse": "Am Leichnam wiederbeleben",
       "resurrectAtHealer": "Der Bleiche Hüter (Zoll des Hüters)",
@@ -6895,6 +6927,21 @@ export const de_DE: EnTranslations = {
         "name": "Der Bleiche Hüter",
         "title": "Wächter der Toten",
         "greeting": "Ruhe nun, Geist. Ich kann dich in deinen Körper zurückbringen, doch die Rückkehr lässt dich geschwächt zurück."
+      },
+      "gauntlet_recruiter": {
+        "name": "Maro Half-Mask",
+        "title": "Herald of the Gauntlet",
+        "greeting": "Step onto the sand with the rest of them, {className}. Outlast every trial and the podium is yours."
+      },
+      "gauntlet_watcher": {
+        "name": "The Stone Warden",
+        "title": "Keeper of the Crossing",
+        "greeting": "The Warden does not blink."
+      },
+      "gauntlet_contestant": {
+        "name": "Gauntlet Contestant",
+        "title": "Contestant",
+        "greeting": "Eyes forward. The Warden is watching."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",

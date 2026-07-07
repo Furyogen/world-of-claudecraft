@@ -154,6 +154,38 @@ export const en_XA: EnTranslations = {
     "spectate": {
       "banner": "[Šþéçţáţíñĝ {name}]"
     },
+    "gauntlet": {
+      "title": "[Ţĥé Ĝáúñţļéţ]",
+      "pitch": "[Óúţļášţ éʋéŕý ţŕíáļ. Ţĥé ļášţ óñé šţáñðíñĝ ţáķéš ţĥé þúŕšé.]",
+      "join": "[Ĵóíñ ţĥé Ĝáúñţļéţ]",
+      "withdraw": "[Ŵíţĥðŕáŵ]",
+      "lobbyJoined": "[{count} íñ ţĥé ļóƀƀý]",
+      "lobbyCountdown": "[Ţĥé ŕúñ ƀéĝíñš íñ {seconds}š]",
+      "vitality": "[Ʋíţáļíţý]",
+      "survivorsAria": "[{count} óƒ {total} šţíļļ šţáñðíñĝ]",
+      "prizeAria": "[Þŕížé þóóļ: {amount}]",
+      "trialLabel": "[Ţŕíáļ {n} óƒ {total}]",
+      "go": "[Ĝó]",
+      "stop": "[Šţóþ]",
+      "phaseLobby": "[Ĝáţĥéŕíñĝ çĥáļļéñĝéŕš]",
+      "phaseStaging": "[Ţáķé ýóúŕ ɱáŕķš]",
+      "phaseTrial": "[Ţĥé Çŕóššíñĝ ƀéĝíñš]",
+      "phaseInterlude": "[Ţŕíáļ çļéáŕéð]",
+      "phasePodium": "[Ţĥé Ĝáúñţļéţ íš ðéçíðéð]",
+      "greenLight": "[Ĝŕééñ ļíĝĥţ!]",
+      "redLight": "[Ŕéð ļíĝĥţ!]",
+      "vitalityLost": "[Ýóú ļóšţ {amount} ʋíţáļíţý.]",
+      "contestantOut": "[{name} íš óúţ!]",
+      "eliminated": "[ÉĻÍⱮÍÑÁŢÉÐ]",
+      "survivorsLeft": "[{count} šţíļļ šţáñðíñĝ]",
+      "spectating": "[Šþéçţáţíñĝ]",
+      "leave": "[Ļéáʋé]",
+      "victory": "[Ʋíçţóŕý]",
+      "podiumTitle": "[Ƒíñáļ Šţáñðíñĝš]",
+      "placeFirst": "[1šţ]",
+      "placeSecond": "[2ñð]",
+      "placeThird": "[3ŕð]"
+    },
     "death": {
       "resurrectAtCorpse": "[Ŕéšúŕŕéçţ áţ Çóŕþšé]",
       "resurrectAtHealer": "[Ţĥé Þáļé Ķééþéŕ (Ķééþéŕ'š Ţóļļ)]",
@@ -6895,6 +6927,21 @@ export const en_XA: EnTranslations = {
         "name": "[Ţĥé Þáļé Ķééþéŕ]",
         "title": "[Ŵáŕðéñ óƒ ţĥé Ðéáð]",
         "greeting": "[Ŕéšţ ñóŵ, šþíŕíţ. Í çáñ ŕéţúŕñ ýóú ţó ýóúŕ ƀóðý, ƀúţ ţĥé çŕóššíñĝ ƀáçķ ļéáʋéš ýóú ŵéáķ.]"
+      },
+      "gauntlet_recruiter": {
+        "name": "[Ɱáŕó Ĥáļƒ-Ɱášķ]",
+        "title": "[Ĥéŕáļð óƒ ţĥé Ĝáúñţļéţ]",
+        "greeting": "[Šţéþ óñţó ţĥé šáñð ŵíţĥ ţĥé ŕéšţ óƒ ţĥéɱ, {className}. Óúţļášţ éʋéŕý ţŕíáļ áñð ţĥé þóðíúɱ íš ýóúŕš.]"
+      },
+      "gauntlet_watcher": {
+        "name": "[Ţĥé Šţóñé Ŵáŕðéñ]",
+        "title": "[Ķééþéŕ óƒ ţĥé Çŕóššíñĝ]",
+        "greeting": "[Ţĥé Ŵáŕðéñ ðóéš ñóţ ƀļíñķ.]"
+      },
+      "gauntlet_contestant": {
+        "name": "[Ĝáúñţļéţ Çóñţéšţáñţ]",
+        "title": "[Çóñţéšţáñţ]",
+        "greeting": "[Éýéš ƒóŕŵáŕð. Ţĥé Ŵáŕðéñ íš ŵáţçĥíñĝ.]"
       },
       "tidewatcher_ondrel": {
         "name": "[Óñðŕéļ Ʋáñé]",
