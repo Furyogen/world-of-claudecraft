@@ -6345,35 +6345,35 @@ export const ko_KR: EnTranslations = {
       "heroic_mark": {
         "name": "영웅의 징표"
       },
-      "ring_of_the_nine": {
-        "name": "아홉의 반지"
+      "seal_of_the_nine_oaths": {
+        "name": "아홉 맹세의 인장"
       },
-      "nielas_band": {
-        "name": "니엘라의 고리"
+      "nielas_coldlight_band": {
+        "name": "니엘라의 냉광 반지"
       },
-      "sutils_fortune": {
-        "name": "수틸의 행운"
+      "sutils_gambit": {
+        "name": "수틸의 도박"
       },
-      "arthurs_round_band": {
-        "name": "아서의 둥근 반지"
+      "oath_of_the_round_table": {
+        "name": "원탁의 맹세"
       },
-      "signet_of_zyzz": {
-        "name": "지즈의 인장"
+      "zyzzs_deathless_signet": {
+        "name": "지즈의 불멸의 인장"
       },
-      "band_of_the_architect": {
-        "name": "건축가의 고리"
+      "architects_cornerstone": {
+        "name": "건축가의 초석"
       },
-      "swiftstride_pendant": {
-        "name": "질주의 펜던트"
+      "swiftfang_talisman": {
+        "name": "신속한 송곳니 부적"
       },
-      "yumis_best_pendant": {
-        "name": "유미의 소중한 펜던트"
+      "yumis_keepsake_locket": {
+        "name": "유미의 추억 로켓"
       },
       "zense_meridian": {
         "name": "젠세의 자오선"
       },
-      "pendant_of_endless_profit": {
-        "name": "끝없는 이득의 펜던트"
+      "medallion_of_endless_profit": {
+        "name": "끝없는 이득의 메달"
       },
       "deathless_heartwood": {
         "name": "죽지 않는 왕관의 심재"

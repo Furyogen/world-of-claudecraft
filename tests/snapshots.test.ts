@@ -890,8 +890,8 @@ describe('dungeon difficulty wire', () => {
     send(undefined);
     // A valid string flows through; far from the quartermaster the sim refuses
     // with an error event rather than granting anything.
-    send('ring_of_the_nine');
-    expect(server.sim.countItem('ring_of_the_nine', session.pid)).toBe(0);
+    send('seal_of_the_nine_oaths');
+    expect(server.sim.countItem('seal_of_the_nine_oaths', session.pid)).toBe(0);
   });
 });
 

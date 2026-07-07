@@ -6345,35 +6345,35 @@ export const en_XA: EnTranslations = {
       "heroic_mark": {
         "name": "[Ĥéŕóíç Ɱáŕķ]"
       },
-      "ring_of_the_nine": {
-        "name": "[Ŕíñĝ óƒ ţĥé Ñíñé]"
+      "seal_of_the_nine_oaths": {
+        "name": "[Šéáļ óƒ ţĥé Ñíñé Óáţĥš]"
       },
-      "nielas_band": {
-        "name": "[Ñíéļá'š Ɓáñð]"
+      "nielas_coldlight_band": {
+        "name": "[Ñíéļá'š Çóļðļíĝĥţ Ɓáñð]"
       },
-      "sutils_fortune": {
-        "name": "[Šúţíļ'š Ƒóŕţúñé]"
+      "sutils_gambit": {
+        "name": "[Šúţíļ'š Ĝáɱƀíţ]"
       },
-      "arthurs_round_band": {
-        "name": "[Áŕţĥúŕ'š Ŕóúñð Ɓáñð]"
+      "oath_of_the_round_table": {
+        "name": "[Óáţĥ óƒ ţĥé Ŕóúñð Ţáƀļé]"
       },
-      "signet_of_zyzz": {
-        "name": "[Šíĝñéţ óƒ Žýžž]"
+      "zyzzs_deathless_signet": {
+        "name": "[Žýžž'š Ðéáţĥļéšš Šíĝñéţ]"
       },
-      "band_of_the_architect": {
-        "name": "[Ɓáñð óƒ ţĥé Áŕçĥíţéçţ]"
+      "architects_cornerstone": {
+        "name": "[Ţĥé Áŕçĥíţéçţ'š Çóŕñéŕšţóñé]"
       },
-      "swiftstride_pendant": {
-        "name": "[Šŵíƒţšţŕíðé Þéñðáñţ]"
+      "swiftfang_talisman": {
+        "name": "[Šŵíƒţƒáñĝ Ţáļíšɱáñ]"
       },
-      "yumis_best_pendant": {
-        "name": "[Ýúɱí'š Ɓéšţ Þéñðáñţ]"
+      "yumis_keepsake_locket": {
+        "name": "[Ýúɱí'š Ķééþšáķé Ļóçķéţ]"
       },
       "zense_meridian": {
         "name": "[Žéñšé Ɱéŕíðíáñ]"
       },
-      "pendant_of_endless_profit": {
-        "name": "[Þéñðáñţ óƒ Éñðļéšš Þŕóƒíţ]"
+      "medallion_of_endless_profit": {
+        "name": "[Ɱéðáļļíóñ óƒ Éñðļéšš Þŕóƒíţ]"
       },
       "deathless_heartwood": {
         "name": "[Ĥéáŕţŵóóð óƒ ţĥé Ðéáţĥļéšš Çŕóŵñ]"

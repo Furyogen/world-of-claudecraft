@@ -51,8 +51,8 @@ describe('heroic vendor stock: item-level and budget pins', () => {
   });
 
   it('pins the ring and neck stat budgets (11 and 12) and every stat sum matches', () => {
-    expect(expectedStatBudget(ITEMS.ring_of_the_nine)).toBe(11);
-    expect(expectedStatBudget(ITEMS.yumis_best_pendant)).toBe(12);
+    expect(expectedStatBudget(ITEMS.seal_of_the_nine_oaths)).toBe(11);
+    expect(expectedStatBudget(ITEMS.yumis_keepsake_locket)).toBe(12);
     for (const id of Object.keys(HEROIC_VENDOR_ITEMS)) {
       expect(primaryStatSum(ITEMS[id]), id).toBe(expectedStatBudget(ITEMS[id]));
     }
@@ -71,13 +71,13 @@ describe('heroic vendor buy path', () => {
     sim.addItem(HEROIC_MARK_ITEM_ID, 15, pid);
     sim.drainEvents();
 
-    sim.buyHeroicVendorItem('ring_of_the_nine', pid);
+    sim.buyHeroicVendorItem('seal_of_the_nine_oaths', pid);
 
-    expect(sim.countItem('ring_of_the_nine', pid)).toBe(1);
+    expect(sim.countItem('seal_of_the_nine_oaths', pid)).toBe(1);
     expect(sim.countItem(HEROIC_MARK_ITEM_ID, pid)).toBe(3); // 15 - 12
     expect(
       (sim.drainEvents() as any[]).some(
-        (e) => e.type === 'vendor' && e.action === 'buy' && e.itemId === 'ring_of_the_nine',
+        (e) => e.type === 'vendor' && e.action === 'buy' && e.itemId === 'seal_of_the_nine_oaths',
       ),
     ).toBe(true);
   });
@@ -89,11 +89,11 @@ describe('heroic vendor buy path', () => {
     sim.addItem(HEROIC_MARK_ITEM_ID, 11, pid);
     sim.drainEvents();
 
-    sim.buyHeroicVendorItem('ring_of_the_nine', pid);
+    sim.buyHeroicVendorItem('seal_of_the_nine_oaths', pid);
 
-    expect(sim.countItem('ring_of_the_nine', pid)).toBe(0);
+    expect(sim.countItem('seal_of_the_nine_oaths', pid)).toBe(0);
     expect(sim.countItem(HEROIC_MARK_ITEM_ID, pid)).toBe(11);
-    expect(errorTexts(sim)).toContain('You need 12 Heroic Marks to buy Ring of the Nine.');
+    expect(errorTexts(sim)).toContain('You need 12 Heroic Marks to buy Seal of the Nine Oaths.');
   });
 
   it('refuses away from the quartermaster and for junk item ids', () => {
@@ -103,8 +103,8 @@ describe('heroic vendor buy path', () => {
     sim.drainEvents();
 
     // Spawn position is nowhere near Highwatch.
-    sim.buyHeroicVendorItem('ring_of_the_nine', pid);
-    expect(sim.countItem('ring_of_the_nine', pid)).toBe(0);
+    sim.buyHeroicVendorItem('seal_of_the_nine_oaths', pid);
+    expect(sim.countItem('seal_of_the_nine_oaths', pid)).toBe(0);
     expect(errorTexts(sim)).toContain('Too far away.');
 
     atQuartermaster(sim, pid);
@@ -122,12 +122,12 @@ describe('heroic vendor buy path', () => {
     // Fill every remaining bag slot with non-stacking items.
     for (let i = 0; i < 40 && sim.canAddItem('worn_sword', 1, pid); i++)
       sim.addItem('worn_sword', 1, pid);
-    expect(sim.canAddItem('ring_of_the_nine', 1, pid)).toBe(false);
+    expect(sim.canAddItem('seal_of_the_nine_oaths', 1, pid)).toBe(false);
     sim.drainEvents();
 
-    sim.buyHeroicVendorItem('ring_of_the_nine', pid);
+    sim.buyHeroicVendorItem('seal_of_the_nine_oaths', pid);
 
-    expect(sim.countItem('ring_of_the_nine', pid)).toBe(0);
+    expect(sim.countItem('seal_of_the_nine_oaths', pid)).toBe(0);
     expect(sim.countItem(HEROIC_MARK_ITEM_ID, pid)).toBe(12);
   });
 });
@@ -141,8 +141,8 @@ describe('heroic vendor shop view (pure)', () => {
     );
     expect(view.rows.length).toBe(HEROIC_VENDOR_STOCK.length);
     expect(view.balance).toBe(12);
-    const ring = view.rows.find((r) => r.itemId === 'ring_of_the_nine');
-    const neck = view.rows.find((r) => r.itemId === 'yumis_best_pendant');
+    const ring = view.rows.find((r) => r.itemId === 'seal_of_the_nine_oaths');
+    const neck = view.rows.find((r) => r.itemId === 'yumis_keepsake_locket');
     expect(ring?.affordable).toBe(true); // 12 >= 12
     expect(neck?.affordable).toBe(false); // 12 < 16
   });

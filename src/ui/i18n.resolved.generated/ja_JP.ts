@@ -6345,35 +6345,35 @@ export const ja_JP: EnTranslations = {
       "heroic_mark": {
         "name": "英雄の証"
       },
-      "ring_of_the_nine": {
-        "name": "九人の指輪"
+      "seal_of_the_nine_oaths": {
+        "name": "九誓の印章"
       },
-      "nielas_band": {
-        "name": "ニエラの指輪"
+      "nielas_coldlight_band": {
+        "name": "ニエラの冷光の指輪"
       },
-      "sutils_fortune": {
-        "name": "スティルの幸運"
+      "sutils_gambit": {
+        "name": "スティルの賭け"
       },
-      "arthurs_round_band": {
-        "name": "アーサーの丸き指輪"
+      "oath_of_the_round_table": {
+        "name": "円卓の誓い"
       },
-      "signet_of_zyzz": {
-        "name": "ジズの印章指輪"
+      "zyzzs_deathless_signet": {
+        "name": "ジズの不滅の印章"
       },
-      "band_of_the_architect": {
-        "name": "アーキテクトの指輪"
+      "architects_cornerstone": {
+        "name": "アーキテクトの礎石"
       },
-      "swiftstride_pendant": {
-        "name": "疾駆のペンダント"
+      "swiftfang_talisman": {
+        "name": "迅牙のタリスマン"
       },
-      "yumis_best_pendant": {
-        "name": "ユミの一番のペンダント"
+      "yumis_keepsake_locket": {
+        "name": "ユミの形見のロケット"
       },
       "zense_meridian": {
         "name": "ゼンセの子午線"
       },
-      "pendant_of_endless_profit": {
-        "name": "無限の利益のペンダント"
+      "medallion_of_endless_profit": {
+        "name": "無限の利益のメダリオン"
       },
       "deathless_heartwood": {
         "name": "不死王冠の心材"

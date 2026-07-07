@@ -52,12 +52,12 @@ await page.evaluate(() => {
   const { sim, hud } = window.__game;
   const pid = sim.player.id;
   sim.setPlayerLevel(20, pid);
-  sim.addItem('yumis_best_pendant', 1, pid);
-  sim.addItem('ring_of_the_nine', 1, pid);
-  sim.addItem('band_of_the_architect', 1, pid);
-  sim.equipItem('yumis_best_pendant', pid);
-  sim.equipItem('ring_of_the_nine', pid);
-  sim.equipItem('band_of_the_architect', pid);
+  sim.addItem('yumis_keepsake_locket', 1, pid);
+  sim.addItem('seal_of_the_nine_oaths', 1, pid);
+  sim.addItem('architects_cornerstone', 1, pid);
+  sim.equipItem('yumis_keepsake_locket', pid);
+  sim.equipItem('seal_of_the_nine_oaths', pid);
+  sim.equipItem('architects_cornerstone', pid);
   sim.tick();
   hud.toggleChar();
 });
@@ -102,7 +102,7 @@ const bagsState = await page.evaluate(() => {
   const { sim, hud } = window.__game;
   hud.closeQuestDialog();
   const pid = sim.player.id;
-  sim.addItem('band_of_the_architect', 1, pid);
+  sim.addItem('architects_cornerstone', 1, pid);
   try {
     hud.optionsHooks?.settings?.set?.('showItemLevel', true);
   } catch {
@@ -123,7 +123,7 @@ await new Promise((r) => setTimeout(r, 700));
 await page.evaluate(() => {
   const rows = [...document.querySelectorAll('#bags .bag-item')];
   const target = rows.find((el) =>
-    /Band of the Architect/.test(el.getAttribute('aria-label') ?? ''),
+    /The Architect's Cornerstone/.test(el.getAttribute('aria-label') ?? ''),
   );
   const el = target ?? rows[0];
   const r = el.getBoundingClientRect();

@@ -24,8 +24,8 @@ function addCapped(sim: AnySim, cls: 'warrior' | 'mage', name: string): number {
 }
 
 describe('resolveEquipSlot (pure)', () => {
-  const RING = ITEMS.ring_of_the_nine;
-  const NECK = ITEMS.yumis_best_pendant;
+  const RING = ITEMS.seal_of_the_nine_oaths;
+  const NECK = ITEMS.yumis_keepsake_locket;
   const CHEST = ITEMS.recruit_tunic;
 
   it('passes non-ring slots straight through', () => {
@@ -36,9 +36,11 @@ describe('resolveEquipSlot (pure)', () => {
 
   it('fills ring1 first, then ring2, then swaps ring1', () => {
     expect(resolveEquipSlot(RING, {})).toBe('ring1');
-    expect(resolveEquipSlot(RING, { ring1: 'nielas_band' })).toBe('ring2');
-    expect(resolveEquipSlot(RING, { ring2: 'nielas_band' })).toBe('ring1');
-    expect(resolveEquipSlot(RING, { ring1: 'nielas_band', ring2: 'sutils_fortune' })).toBe('ring1');
+    expect(resolveEquipSlot(RING, { ring1: 'nielas_coldlight_band' })).toBe('ring2');
+    expect(resolveEquipSlot(RING, { ring2: 'nielas_coldlight_band' })).toBe('ring1');
+    expect(resolveEquipSlot(RING, { ring1: 'nielas_coldlight_band', ring2: 'sutils_gambit' })).toBe(
+      'ring1',
+    );
   });
 });
 
@@ -47,37 +49,37 @@ describe('jewelry equip flow', () => {
     const sim = makeSim();
     const pid = addCapped(sim, 'warrior', 'Ringo');
     const meta = sim.players.get(pid) as any;
-    sim.addItem('ring_of_the_nine', 1, pid);
-    sim.addItem('nielas_band', 1, pid);
-    sim.addItem('sutils_fortune', 1, pid);
+    sim.addItem('seal_of_the_nine_oaths', 1, pid);
+    sim.addItem('nielas_coldlight_band', 1, pid);
+    sim.addItem('sutils_gambit', 1, pid);
 
-    sim.equipItem('ring_of_the_nine', pid);
-    expect(meta.equipment.ring1).toBe('ring_of_the_nine');
+    sim.equipItem('seal_of_the_nine_oaths', pid);
+    expect(meta.equipment.ring1).toBe('seal_of_the_nine_oaths');
     expect(meta.equipment.ring2).toBeUndefined();
 
-    sim.equipItem('nielas_band', pid);
-    expect(meta.equipment.ring2).toBe('nielas_band');
+    sim.equipItem('nielas_coldlight_band', pid);
+    expect(meta.equipment.ring2).toBe('nielas_coldlight_band');
 
-    sim.equipItem('sutils_fortune', pid);
-    expect(meta.equipment.ring1).toBe('sutils_fortune');
-    expect(meta.equipment.ring2).toBe('nielas_band');
+    sim.equipItem('sutils_gambit', pid);
+    expect(meta.equipment.ring1).toBe('sutils_gambit');
+    expect(meta.equipment.ring2).toBe('nielas_coldlight_band');
     // The swapped-out ring returns to the bags.
-    expect(sim.countItem('ring_of_the_nine', pid)).toBe(1);
+    expect(sim.countItem('seal_of_the_nine_oaths', pid)).toBe(1);
   });
 
   it('equips and unequips a neckpiece through the neck slot', () => {
     const sim = makeSim();
     const pid = addCapped(sim, 'warrior', 'Necko');
     const meta = sim.players.get(pid) as any;
-    sim.addItem('yumis_best_pendant', 1, pid);
+    sim.addItem('yumis_keepsake_locket', 1, pid);
 
-    sim.equipItem('yumis_best_pendant', pid);
-    expect(meta.equipment.neck).toBe('yumis_best_pendant');
-    expect(sim.countItem('yumis_best_pendant', pid)).toBe(0);
+    sim.equipItem('yumis_keepsake_locket', pid);
+    expect(meta.equipment.neck).toBe('yumis_keepsake_locket');
+    expect(sim.countItem('yumis_keepsake_locket', pid)).toBe(0);
 
     expect(sim.unequipItem('neck', pid)).toBe(true);
     expect(meta.equipment.neck).toBeUndefined();
-    expect(sim.countItem('yumis_best_pendant', pid)).toBe(1);
+    expect(sim.countItem('yumis_keepsake_locket', pid)).toBe(1);
   });
 
   it('folds jewelry stats through recalcPlayerStats', () => {
@@ -85,8 +87,8 @@ describe('jewelry equip flow', () => {
     const pid = addCapped(sim, 'warrior', 'Statty');
     const p = sim.entities.get(pid) as AnyEntity;
     const before = { str: p.stats.str, sta: p.stats.sta };
-    sim.addItem('ring_of_the_nine', 1, pid);
-    sim.equipItem('ring_of_the_nine', pid);
+    sim.addItem('seal_of_the_nine_oaths', 1, pid);
+    sim.equipItem('seal_of_the_nine_oaths', pid);
     expect(p.stats.str).toBe(before.str + 7);
     expect(p.stats.sta).toBe(before.sta + 4);
   });
@@ -95,22 +97,22 @@ describe('jewelry equip flow', () => {
     const sim = makeSim();
     const pid = addCapped(sim, 'mage', 'Maggie');
     const meta = sim.players.get(pid) as any;
-    sim.addItem('ring_of_the_nine', 1, pid); // a str ring, still wearable
-    sim.equipItem('ring_of_the_nine', pid);
-    expect(meta.equipment.ring1).toBe('ring_of_the_nine');
+    sim.addItem('seal_of_the_nine_oaths', 1, pid); // a str ring, still wearable
+    sim.equipItem('seal_of_the_nine_oaths', pid);
+    expect(meta.equipment.ring1).toBe('seal_of_the_nine_oaths');
   });
 
   it('refuses jewelry below the level requirement', () => {
     const sim = makeSim();
     const pid = sim.addPlayer('warrior', 'Lowbie'); // level 1
     const meta = sim.players.get(pid) as any;
-    sim.addItem('ring_of_the_nine', 1, pid);
+    sim.addItem('seal_of_the_nine_oaths', 1, pid);
     sim.drainEvents();
 
-    sim.equipItem('ring_of_the_nine', pid);
+    sim.equipItem('seal_of_the_nine_oaths', pid);
 
     expect(meta.equipment.ring1).toBeUndefined();
-    expect(sim.countItem('ring_of_the_nine', pid)).toBe(1);
+    expect(sim.countItem('seal_of_the_nine_oaths', pid)).toBe(1);
     expect(
       (sim.drainEvents() as any[]).some(
         (e) => e.type === 'error' && e.pid === pid && /must be level/.test(e.text),

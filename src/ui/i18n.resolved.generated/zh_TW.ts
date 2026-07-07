@@ -6345,35 +6345,35 @@ export const zh_TW: EnTranslations = {
       "heroic_mark": {
         "name": "英雄徽記"
       },
-      "ring_of_the_nine": {
-        "name": "九人之戒"
+      "seal_of_the_nine_oaths": {
+        "name": "九誓之印"
       },
-      "nielas_band": {
-        "name": "妮拉之環"
+      "nielas_coldlight_band": {
+        "name": "妮拉的冷光指環"
       },
-      "sutils_fortune": {
-        "name": "蘇蒂爾的財運"
+      "sutils_gambit": {
+        "name": "蘇蒂爾的賭局"
       },
-      "arthurs_round_band": {
-        "name": "亞瑟的圓環"
+      "oath_of_the_round_table": {
+        "name": "圓桌誓約"
       },
-      "signet_of_zyzz": {
-        "name": "茲茲的印戒"
+      "zyzzs_deathless_signet": {
+        "name": "茲茲的不朽印戒"
       },
-      "band_of_the_architect": {
-        "name": "建築師之環"
+      "architects_cornerstone": {
+        "name": "建築師的奠基石"
       },
-      "swiftstride_pendant": {
-        "name": "疾行者吊墜"
+      "swiftfang_talisman": {
+        "name": "迅牙護符"
       },
-      "yumis_best_pendant": {
-        "name": "由美的至愛吊墜"
+      "yumis_keepsake_locket": {
+        "name": "由美的紀念小盒"
       },
       "zense_meridian": {
         "name": "澤恩斯子午墜"
       },
-      "pendant_of_endless_profit": {
-        "name": "無盡利潤吊墜"
+      "medallion_of_endless_profit": {
+        "name": "無盡利潤勳章"
       },
       "deathless_heartwood": {
         "name": "不朽王冠之心木"

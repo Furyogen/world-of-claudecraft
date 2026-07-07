@@ -49,12 +49,16 @@ describe('char_view: paperdoll data model', () => {
 
   it('resolves jewelry slots: neck in the left column, both rings in the right', () => {
     const view = buildPaperdollView(
-      { neck: 'yumis_best_pendant', ring1: 'ring_of_the_nine', ring2: 'nielas_band' },
+      {
+        neck: 'yumis_keepsake_locket',
+        ring1: 'seal_of_the_nine_oaths',
+        ring2: 'nielas_coldlight_band',
+      },
       ITEMS,
     );
-    expect(view.left[1].item).toBe(ITEMS.yumis_best_pendant);
-    expect(view.right[4].item).toBe(ITEMS.ring_of_the_nine);
-    expect(view.right[5].item).toBe(ITEMS.nielas_band);
+    expect(view.left[1].item).toBe(ITEMS.yumis_keepsake_locket);
+    expect(view.right[4].item).toBe(ITEMS.seal_of_the_nine_oaths);
+    expect(view.right[5].item).toBe(ITEMS.nielas_coldlight_band);
   });
 
   it('renders an empty cell for an unequipped slot or an unknown item id', () => {

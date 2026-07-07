@@ -6345,35 +6345,35 @@ export const de_DE: EnTranslations = {
       "heroic_mark": {
         "name": "Heroic Mark"
       },
-      "ring_of_the_nine": {
-        "name": "Ring of the Nine"
+      "seal_of_the_nine_oaths": {
+        "name": "Seal of the Nine Oaths"
       },
-      "nielas_band": {
-        "name": "Niela's Band"
+      "nielas_coldlight_band": {
+        "name": "Niela's Coldlight Band"
       },
-      "sutils_fortune": {
-        "name": "Sutil's Fortune"
+      "sutils_gambit": {
+        "name": "Sutil's Gambit"
       },
-      "arthurs_round_band": {
-        "name": "Arthur's Round Band"
+      "oath_of_the_round_table": {
+        "name": "Oath of the Round Table"
       },
-      "signet_of_zyzz": {
-        "name": "Signet of Zyzz"
+      "zyzzs_deathless_signet": {
+        "name": "Zyzz's Deathless Signet"
       },
-      "band_of_the_architect": {
-        "name": "Band of the Architect"
+      "architects_cornerstone": {
+        "name": "The Architect's Cornerstone"
       },
-      "swiftstride_pendant": {
-        "name": "Swiftstride Pendant"
+      "swiftfang_talisman": {
+        "name": "Swiftfang Talisman"
       },
-      "yumis_best_pendant": {
-        "name": "Yumi's Best Pendant"
+      "yumis_keepsake_locket": {
+        "name": "Yumi's Keepsake Locket"
       },
       "zense_meridian": {
         "name": "Zense Meridian"
       },
-      "pendant_of_endless_profit": {
-        "name": "Pendant of Endless Profit"
+      "medallion_of_endless_profit": {
+        "name": "Medallion of Endless Profit"
       },
       "deathless_heartwood": {
         "name": "Herzholz der todlosen Krone"

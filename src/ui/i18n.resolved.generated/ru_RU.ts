@@ -6345,35 +6345,35 @@ export const ru_RU: EnTranslations = {
       "heroic_mark": {
         "name": "Героический знак"
       },
-      "ring_of_the_nine": {
-        "name": "Кольцо девяти"
+      "seal_of_the_nine_oaths": {
+        "name": "Печать девяти клятв"
       },
-      "nielas_band": {
-        "name": "Обруч Ниэлы"
+      "nielas_coldlight_band": {
+        "name": "Кольцо холодного света Ниэлы"
       },
-      "sutils_fortune": {
-        "name": "Удача Сутила"
+      "sutils_gambit": {
+        "name": "Гамбит Сутила"
       },
-      "arthurs_round_band": {
-        "name": "Круглое кольцо Артура"
+      "oath_of_the_round_table": {
+        "name": "Клятва Круглого стола"
       },
-      "signet_of_zyzz": {
-        "name": "Печатка Зизза"
+      "zyzzs_deathless_signet": {
+        "name": "Бессмертная печатка Зизза"
       },
-      "band_of_the_architect": {
-        "name": "Кольцо архитектора"
+      "architects_cornerstone": {
+        "name": "Краеугольный камень архитектора"
       },
-      "swiftstride_pendant": {
-        "name": "Кулон быстрой поступи"
+      "swiftfang_talisman": {
+        "name": "Талисман быстрого клыка"
       },
-      "yumis_best_pendant": {
-        "name": "Лучший кулон Юми"
+      "yumis_keepsake_locket": {
+        "name": "Медальон-память Юми"
       },
       "zense_meridian": {
         "name": "Меридиан Зенсе"
       },
-      "pendant_of_endless_profit": {
-        "name": "Кулон бесконечной прибыли"
+      "medallion_of_endless_profit": {
+        "name": "Медальон бесконечной прибыли"
       },
       "deathless_heartwood": {
         "name": "Сердцевина бессмертной короны"
