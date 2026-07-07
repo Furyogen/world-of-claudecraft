@@ -25,21 +25,24 @@ function teleport(sim: AnySim, e: AnyEntity, x: number, z: number, y?: number): 
   sim.rebucket(e);
 }
 
-// Enter the Nythraxis arena with a full attuned raid, then pull the tank + four mages
-// into the throne room so playersInNythraxisRoom sees them (enterDungeon only places
-// the entering tank, at the door).
-function setup() {
+// Enter the Nythraxis arena with a full attuned raid, then pull the tank + the
+// dps into the throne room so playersInNythraxisRoom sees them (enterDungeon
+// only places the entering tank, at the door). Heroic claims and a larger raid
+// are opt-in so the default keeps every pre-heroic assertion byte-identical.
+function setup(opts: { difficulty?: 'normal' | 'heroic'; dpsCount?: number } = {}) {
+  const { difficulty = 'normal', dpsCount = 4 } = opts;
   const sim = new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true }) as AnySim;
   const tankPid = sim.addPlayer('warrior', 'Tank') as number;
   sim.players.get(tankPid)!.questsDone.add('q_nythraxis_bound_guardian');
   const dpsPids: number[] = [];
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < dpsCount; i++) {
     const pid = sim.addPlayer('mage', `Dps${i}`) as number;
     sim.partyInvite(pid, tankPid);
     sim.partyAccept(pid);
     dpsPids.push(pid);
   }
   sim.convertPartyToRaid(tankPid);
+  if (difficulty === 'heroic') sim.setDungeonDifficulty('heroic', tankPid);
   sim.enterDungeon('nythraxis_boss_arena', tankPid);
   const tank = sim.entities.get(tankPid) as AnyEntity;
   const boss = [...sim.entities.values()].find(
@@ -108,6 +111,24 @@ describe('Nythraxis encounter module (N1)', () => {
     );
     expect(wards.length).toBe(3);
     expect(wards.every((w) => w.auras.some((a) => a.id === 'nythraxis_wardstone_lit'))).toBe(true);
+  });
+
+  it('heroic Soul Rend marks six distinct non-tank players', () => {
+    // Eight raiders total: seven non-tank candidates, so all six heroic marks
+    // land and stay distinct (the same rng.int splice pick as normal).
+    const { ctx, boss, tank } = setup({ difficulty: 'heroic', dpsCount: 7 });
+    const st = nythraxis.initNythraxisEncounter(boss);
+    st.phase = 2;
+    nythraxis.castNythraxisSoulRend(ctx, boss, st);
+
+    expect(st.soulRendMarks.length).toBe(6);
+    const markedIds = st.soulRendMarks.map((m) => m.playerId);
+    expect(new Set(markedIds).size).toBe(6); // distinct
+    expect(markedIds).not.toContain(tank.id); // never the aggro target
+    for (const id of markedIds) {
+      const p = ctx.entities.get(id) as AnyEntity;
+      expect(p.auras.some((a) => a.id === 'nythraxis_soul_rend')).toBe(true);
+    }
   });
 
   it('Soul Rend marks up to three distinct non-tank players (the rng.int pick)', () => {

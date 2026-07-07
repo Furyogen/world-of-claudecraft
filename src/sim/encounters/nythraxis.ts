@@ -78,6 +78,11 @@ const NYTHRAXIS_PHASE_TWO_HP = 0.7;
 const NYTHRAXIS_SOUL_REND_EVERY = 30;
 const NYTHRAXIS_SOUL_REND_DURATION = 8;
 const NYTHRAXIS_SOUL_REND_STACK_RANGE = 5;
+// Soul Rend mark counts. Heroic doubles the marked players (6 of the raid must
+// collapse onto the stack point inside 8s); the extra rng picks draw ONLY on a
+// heroic claim, so the normal trace and the parity golden are unchanged.
+const NYTHRAXIS_SOUL_REND_MARKS = 3;
+const NYTHRAXIS_SOUL_REND_MARKS_HEROIC = 6;
 const NYTHRAXIS_DEATHLESS_EVERY = 45;
 const NYTHRAXIS_DEATHLESS_CAST = 10;
 const NYTHRAXIS_DEATHLESS_CHANNEL = 5;
@@ -726,8 +731,11 @@ export function castNythraxisSoulRend(
     st.soulRendTimer = 3;
     return;
   }
+  const inst = ctx.instances.find((i) => i.partyKey !== null && i.mobIds.includes(boss.id));
+  const markCount =
+    inst?.difficulty === 'heroic' ? NYTHRAXIS_SOUL_REND_MARKS_HEROIC : NYTHRAXIS_SOUL_REND_MARKS;
   const picked: Entity[] = [];
-  while (picked.length < 3 && candidates.length > 0) {
+  while (picked.length < markCount && candidates.length > 0) {
     const idx = ctx.rng.int(0, candidates.length - 1);
     picked.push(candidates.splice(idx, 1)[0]);
   }
