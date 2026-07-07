@@ -17,24 +17,27 @@ export interface HeroicDungeonTuning {
   finalBossId: string;
 }
 
-// Tuning model follows classic-era (TBC) heroics: every mob jumps to the cap
-// band (the level-20 pin) and then carries a LARGE flat multiplier, so a
-// heroic mob lands at roughly 3x the health and 2.5x the damage of its own
-// normal-mode version for the leveling dungeons. The level-20 pin already
-// supplies part of that for low dungeons (Hollow Crypt L10 mobs gain ~1.6x
-// health from the level bump alone), so the per-dungeon multipliers below
-// SHRINK as the dungeon's normal tuning level rises; Gravewyrm Sanctum
-// (already L20 on normal) carries its whole heroic jump in the multiplier,
-// at the smaller endgame-dungeon ratio (~1.8x health, ~1.5x damage), like a
-// cap-level dungeon's heroic. Mechanic damage/heals scale with these too
-// (mechanicDamageMult/mechanicHealMult in ../instances/difficulty.ts).
+// Tuning model follows classic-era (TBC) heroics, calibrated against MEASURED
+// database pairs (normal vs heroic raw melee damage): Watchkeeper Gargolmar
+// 3.00x, Nazan 3.28x, Omor 3.42x, and, critically, the cap-level Shattered
+// Halls' Kargath Bladefist ALSO 3.50x, so the damage jump was flat across
+// leveling and endgame dungeons. Health followed the cap-band level jump
+// (roughly 3x for leveling dungeons, a smaller ~1.5-2x for already-cap
+// normals). One deliberate deviation: TBC tanks mitigated 60-70% of raw
+// swings while a level-20 tank here mitigates ~15%, so the multipliers below
+// target TBC's EFFECTIVE severity (boss on tank ~20-30% of tank HP per
+// swing, trash on cloth ~40-60%) rather than the raw 3.5x, which lands the
+// overall raw ratios at ~2.7-3.2x. Recompute the bands with the level-20 pin
+// included: e.g. Hollow Crypt L10 mobs already gain ~1.6x health and ~1.8x
+// damage from the level bump alone. Mechanic damage/heals scale with these
+// too (mechanicDamageMult/mechanicHealMult in ../instances/difficulty.ts).
 export const HEROIC_DUNGEON_TUNING: Record<string, HeroicDungeonTuning> = {
   hollow_crypt: {
     id: 'hollow_crypt',
     difficulty: 'heroic',
     level: 20,
     healthMultiplier: 1.9,
-    damageMultiplier: 1.55,
+    damageMultiplier: 1.8,
     armorMultiplier: 1.3,
     finalBossId: 'morthen',
   },
@@ -43,7 +46,7 @@ export const HEROIC_DUNGEON_TUNING: Record<string, HeroicDungeonTuning> = {
     difficulty: 'heroic',
     level: 20,
     healthMultiplier: 2.0,
-    damageMultiplier: 1.6,
+    damageMultiplier: 2.2,
     armorMultiplier: 1.3,
     finalBossId: 'vael_the_mistcaller',
   },
@@ -52,7 +55,7 @@ export const HEROIC_DUNGEON_TUNING: Record<string, HeroicDungeonTuning> = {
     difficulty: 'heroic',
     level: 20,
     healthMultiplier: 2.6,
-    damageMultiplier: 2.2,
+    damageMultiplier: 2.8,
     armorMultiplier: 1.25,
     finalBossId: 'ysolei',
   },
@@ -60,8 +63,8 @@ export const HEROIC_DUNGEON_TUNING: Record<string, HeroicDungeonTuning> = {
     id: 'gravewyrm_sanctum',
     difficulty: 'heroic',
     level: 20,
-    healthMultiplier: 1.8,
-    damageMultiplier: 1.5,
+    healthMultiplier: 2.0,
+    damageMultiplier: 2.7,
     armorMultiplier: 1.2,
     finalBossId: 'korzul_the_gravewyrm',
   },
