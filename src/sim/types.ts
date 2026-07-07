@@ -1613,6 +1613,13 @@ export interface Entity {
   // multiply by these AFTER the rng draw. undefined = 1 (normal difficulty).
   mechanicDamageMult?: number;
   mechanicHealMult?: number;
+  // Entity-level CC/snare immunity, the per-spawn twin of the MobTemplate
+  // ccImmune/slowImmune flags (which are read from the base MOBS table, so a
+  // spawn-time template transform cannot grant them). Heroic instances set
+  // both on boss-flagged mobs (applyHeroicMobTuning); the applyAura gates and
+  // the polymorph cast gate check template OR entity.
+  ccImmune?: boolean;
+  slowImmune?: boolean;
   healedThisPull: boolean; // desperation self-heal already used this pull
   nythraxis?: NythraxisEncounterState; // sim-only state for the Nythraxis raid encounter
   spawnPos: Vec3;

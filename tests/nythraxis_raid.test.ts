@@ -187,7 +187,7 @@ describe('Nythraxis raid encounter', () => {
     const origin = enterRaid(sim, pid);
     expect(sim.entities.get(pid)!.pos.x).toBeGreaterThan(3000);
     const boss = mob(sim, 'nythraxis_scourge_of_thornpeak');
-    expect(boss.maxHp).toBe(51239);
+    expect(boss.maxHp).toBe(60000);
     expect(boss.weapon.min).toBe(325);
     expect(boss.weapon.max).toBe(507);
     expect(visualKeyFor(boss)).toBe('skel_golem');

@@ -3645,7 +3645,7 @@ export class Sim {
       return;
     if (
       target.kind === 'mob' &&
-      MOBS[target.templateId]?.ccImmune &&
+      (MOBS[target.templateId]?.ccImmune || target.ccImmune) &&
       this.isControlAura(aura.kind) &&
       aura.sourceId !== target.id &&
       !this.isNythraxisScriptedControl(target, aura)
@@ -3654,9 +3654,10 @@ export class Sim {
     // Slow immunity is separate from ccImmune: snares (kind 'slow') are not control auras,
     // so a slowImmune raid boss shrugs off Frostbolt/Hamstring-style movement snares while
     // still taking a self-applied slow (e.g. a scripted mechanic) through sourceId === self.
+    // The entity-level flags are the heroic-spawn twins (see Entity.ccImmune).
     if (
       target.kind === 'mob' &&
-      MOBS[target.templateId]?.slowImmune &&
+      (MOBS[target.templateId]?.slowImmune || target.slowImmune) &&
       aura.kind === 'slow' &&
       aura.sourceId !== target.id
     )

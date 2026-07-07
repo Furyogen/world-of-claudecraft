@@ -34,7 +34,7 @@
       "tick": 1,
       "time": 0.05,
       "nextId": 410,
-      "state": "13ba26bc",
+      "state": "823f5380",
       "events": "0f2e03b0",
       "rng": {
         "draws": 4,
@@ -500,13 +500,13 @@
           "facing": 3.141593,
           "fiveSecondRule": 99,
           "hostile": true,
-          "hp": 51239,
+          "hp": 60000,
           "id": 405,
           "inCombat": true,
           "kind": "mob",
           "level": 20,
           "lootFfaTimer": "Infinity",
-          "maxHp": 51239,
+          "maxHp": 60000,
           "moveSpeed": 10.5,
           "nythraxis": {
             "deathlessTimer": 45,
@@ -553,7 +553,7 @@
       "tick": 10,
       "time": 0.5,
       "nextId": 410,
-      "state": "6658ee6b",
+      "state": "f9adad47",
       "events": "741638a5",
       "rng": {
         "draws": 4,
@@ -564,7 +564,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 410,
-      "state": "2fda7510",
+      "state": "ab91b724",
       "events": "8ec065b1",
       "rng": {
         "draws": 4,
@@ -575,7 +575,7 @@
       "tick": 30,
       "time": 1.5,
       "nextId": 410,
-      "state": "239023c8",
+      "state": "31c7b01c",
       "events": "88af2565",
       "rng": {
         "draws": 5,
@@ -586,7 +586,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 410,
-      "state": "2207658a",
+      "state": "cf9c068a",
       "events": "741638a5",
       "rng": {
         "draws": 5,
@@ -597,7 +597,7 @@
       "tick": 42,
       "time": 2.1,
       "nextId": 412,
-      "state": "7db34531",
+      "state": "281d7795",
       "events": "5fe64d91",
       "rng": {
         "draws": 11,
@@ -1065,13 +1065,13 @@
           "facing": 3.141593,
           "fiveSecondRule": 99,
           "hostile": true,
-          "hp": 51239,
+          "hp": 60000,
           "id": 405,
           "inCombat": true,
           "kind": "mob",
           "level": 20,
           "lootFfaTimer": "Infinity",
-          "maxHp": 51239,
+          "maxHp": 60000,
           "moveSpeed": 10.5,
           "nythraxis": {
             "deathlessTimer": 45,
@@ -1225,7 +1225,7 @@
       "tick": 43,
       "time": 2.15,
       "nextId": 413,
-      "state": "4ed205d6",
+      "state": "2c4084c3",
       "events": "96c02951",
       "rng": {
         "draws": 15,
@@ -1759,13 +1759,13 @@
           "facing": 3.141593,
           "fiveSecondRule": 99,
           "hostile": true,
-          "hp": 35354,
+          "hp": 41400,
           "id": 405,
           "inCombat": true,
           "kind": "mob",
           "level": 20,
           "lootFfaTimer": "Infinity",
-          "maxHp": 51239,
+          "maxHp": 60000,
           "moveSpeed": 10.5,
           "nythraxis": {
             "deathlessTimer": 45,
@@ -2128,7 +2128,7 @@
       "tick": 50,
       "time": 2.5,
       "nextId": 413,
-      "state": "9259de14",
+      "state": "acb294bb",
       "events": "741638a5",
       "rng": {
         "draws": 37,
@@ -2139,7 +2139,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 413,
-      "state": "f394d1bd",
+      "state": "ef731fee",
       "events": "741638a5",
       "rng": {
         "draws": 76,
@@ -2150,7 +2150,7 @@
       "tick": 70,
       "time": 3.5,
       "nextId": 413,
-      "state": "032380e2",
+      "state": "5f306623",
       "events": "741638a5",
       "rng": {
         "draws": 113,
@@ -2161,7 +2161,7 @@
       "tick": 80,
       "time": 4,
       "nextId": 413,
-      "state": "3504f361",
+      "state": "cebe8a54",
       "events": "d70c6b65",
       "rng": {
         "draws": 166,
@@ -2172,7 +2172,7 @@
       "tick": 90,
       "time": 4.5,
       "nextId": 413,
-      "state": "5ac0b982",
+      "state": "ba350693",
       "events": "0e26bd94",
       "rng": {
         "draws": 228,
@@ -2183,7 +2183,7 @@
       "tick": 100,
       "time": 5,
       "nextId": 413,
-      "state": "01c4771b",
+      "state": "520a5d3e",
       "events": "741638a5",
       "rng": {
         "draws": 287,
@@ -2194,7 +2194,7 @@
       "tick": 110,
       "time": 5.5,
       "nextId": 413,
-      "state": "ff6472f3",
+      "state": "dbe5e7de",
       "events": "741638a5",
       "rng": {
         "draws": 341,
@@ -2205,7 +2205,7 @@
       "tick": 120,
       "time": 6,
       "nextId": 413,
-      "state": "81ba7fb2",
+      "state": "94f3edcb",
       "events": "741638a5",
       "rng": {
         "draws": 391,
@@ -2216,7 +2216,7 @@
       "tick": 130,
       "time": 6.5,
       "nextId": 413,
-      "state": "ca7ea0ee",
+      "state": "76e62899",
       "events": "65057bf0",
       "rng": {
         "draws": 452,
@@ -2227,7 +2227,7 @@
       "tick": 140,
       "time": 7,
       "nextId": 413,
-      "state": "b3ba2be1",
+      "state": "729238d6",
       "events": "25dfc55b",
       "rng": {
         "draws": 517,
@@ -2238,7 +2238,7 @@
       "tick": 150,
       "time": 7.5,
       "nextId": 413,
-      "state": "5dbed767",
+      "state": "ab5c1b58",
       "events": "741638a5",
       "rng": {
         "draws": 558,
@@ -2249,7 +2249,7 @@
       "tick": 160,
       "time": 8,
       "nextId": 413,
-      "state": "ef940762",
+      "state": "85d4763d",
       "events": "741638a5",
       "rng": {
         "draws": 613,
@@ -2260,7 +2260,7 @@
       "tick": 170,
       "time": 8.5,
       "nextId": 413,
-      "state": "6e528f2e",
+      "state": "f4288f73",
       "events": "c8ee4281",
       "rng": {
         "draws": 684,
@@ -2271,7 +2271,7 @@
       "tick": 180,
       "time": 9,
       "nextId": 413,
-      "state": "9e0a8c2f",
+      "state": "8c41e048",
       "events": "7b7262dc",
       "rng": {
         "draws": 781,
@@ -2282,7 +2282,7 @@
       "tick": 190,
       "time": 9.5,
       "nextId": 413,
-      "state": "637b54fa",
+      "state": "0ca8de89",
       "events": "941a7f97",
       "rng": {
         "draws": 856,
@@ -2293,7 +2293,7 @@
       "tick": 200,
       "time": 10,
       "nextId": 413,
-      "state": "322c7367",
+      "state": "05d9b5f0",
       "events": "741638a5",
       "rng": {
         "draws": 922,
@@ -2304,7 +2304,7 @@
       "tick": 203,
       "time": 10.15,
       "nextId": 413,
-      "state": "a70dd812",
+      "state": "97df9691",
       "events": "741638a5",
       "rng": {
         "draws": 938,
@@ -2805,13 +2805,13 @@
           "facing": 3.141593,
           "fiveSecondRule": 99,
           "hostile": true,
-          "hp": 35354,
+          "hp": 41400,
           "id": 405,
           "inCombat": true,
           "kind": "mob",
           "level": 20,
           "lootFfaTimer": "Infinity",
-          "maxHp": 51239,
+          "maxHp": 60000,
           "moveSpeed": 10.5,
           "nythraxis": {
             "deathlessTimer": 999,
@@ -3168,7 +3168,7 @@
       "tick": 204,
       "time": 10.2,
       "nextId": 413,
-      "state": "2d6a1ca1",
+      "state": "a5207a98",
       "events": "9d903729",
       "rng": {
         "draws": 942,
@@ -3680,13 +3680,13 @@
           "facing": 3.141593,
           "fiveSecondRule": 99,
           "hostile": true,
-          "hp": 35354,
+          "hp": 41400,
           "id": 405,
           "inCombat": true,
           "kind": "mob",
           "level": 20,
           "lootFfaTimer": "Infinity",
-          "maxHp": 51239,
+          "maxHp": 60000,
           "moveSpeed": 10.5,
           "nythraxis": {
             "deathlessTimer": 998.95,
@@ -4043,7 +4043,7 @@
       "tick": 210,
       "time": 10.5,
       "nextId": 413,
-      "state": "010f36d5",
+      "state": "c63543a0",
       "events": "741638a5",
       "rng": {
         "draws": 959,
@@ -4054,7 +4054,7 @@
       "tick": 220,
       "time": 11,
       "nextId": 413,
-      "state": "b03e5b77",
+      "state": "c855ce7e",
       "events": "4cd7279a",
       "rng": {
         "draws": 1005,
@@ -4065,7 +4065,7 @@
       "tick": 230,
       "time": 11.5,
       "nextId": 413,
-      "state": "f3e860c0",
+      "state": "5ddb6579",
       "events": "741638a5",
       "rng": {
         "draws": 1055,
@@ -4076,7 +4076,7 @@
       "tick": 240,
       "time": 12,
       "nextId": 413,
-      "state": "dd8c5f60",
+      "state": "23f4f42b",
       "events": "eccb321a",
       "rng": {
         "draws": 1101,
@@ -4087,7 +4087,7 @@
       "tick": 250,
       "time": 12.5,
       "nextId": 413,
-      "state": "8eef99ec",
+      "state": "4a19012b",
       "events": "741638a5",
       "rng": {
         "draws": 1139,
@@ -4098,7 +4098,7 @@
       "tick": 260,
       "time": 13,
       "nextId": 413,
-      "state": "e307aefe",
+      "state": "7478d20d",
       "events": "741638a5",
       "rng": {
         "draws": 1190,
@@ -4109,7 +4109,7 @@
       "tick": 270,
       "time": 13.5,
       "nextId": 413,
-      "state": "22fcd378",
+      "state": "fcd118d3",
       "events": "a481fd2e",
       "rng": {
         "draws": 1230,
@@ -4120,7 +4120,7 @@
       "tick": 280,
       "time": 14,
       "nextId": 413,
-      "state": "8a4b5021",
+      "state": "eb0564d6",
       "events": "741638a5",
       "rng": {
         "draws": 1288,
@@ -4131,7 +4131,7 @@
       "tick": 290,
       "time": 14.5,
       "nextId": 413,
-      "state": "099e4528",
+      "state": "2107bdc1",
       "events": "372a5a69",
       "rng": {
         "draws": 1345,
@@ -4142,7 +4142,7 @@
       "tick": 300,
       "time": 15,
       "nextId": 413,
-      "state": "15ed0c04",
+      "state": "3f77f5b9",
       "events": "741638a5",
       "rng": {
         "draws": 1387,
@@ -4153,7 +4153,7 @@
       "tick": 310,
       "time": 15.5,
       "nextId": 413,
-      "state": "cd642ef7",
+      "state": "108d1bce",
       "events": "6e107d71",
       "rng": {
         "draws": 1447,
@@ -4164,7 +4164,7 @@
       "tick": 320,
       "time": 16,
       "nextId": 413,
-      "state": "99cf69c9",
+      "state": "dc42afb4",
       "events": "741638a5",
       "rng": {
         "draws": 1505,
@@ -4175,7 +4175,7 @@
       "tick": 330,
       "time": 16.5,
       "nextId": 413,
-      "state": "ffd86f76",
+      "state": "fdc5e70b",
       "events": "c30af9bf",
       "rng": {
         "draws": 1538,
@@ -4186,7 +4186,7 @@
       "tick": 340,
       "time": 17,
       "nextId": 413,
-      "state": "289a376b",
+      "state": "933faba4",
       "events": "6bd9268f",
       "rng": {
         "draws": 1583,
@@ -4197,7 +4197,7 @@
       "tick": 350,
       "time": 17.5,
       "nextId": 413,
-      "state": "15b01ff6",
+      "state": "5f356335",
       "events": "741638a5",
       "rng": {
         "draws": 1623,
@@ -4208,7 +4208,7 @@
       "tick": 360,
       "time": 18,
       "nextId": 413,
-      "state": "a8c3e6ca",
+      "state": "2ace5e15",
       "events": "67597a4b",
       "rng": {
         "draws": 1677,
@@ -4219,7 +4219,7 @@
       "tick": 370,
       "time": 18.5,
       "nextId": 413,
-      "state": "c61cce2f",
+      "state": "0005350e",
       "events": "d2f50b34",
       "rng": {
         "draws": 1732,
@@ -4230,7 +4230,7 @@
       "tick": 380,
       "time": 19,
       "nextId": 413,
-      "state": "7d40ed03",
+      "state": "47301dde",
       "events": "741638a5",
       "rng": {
         "draws": 1798,
@@ -4241,7 +4241,7 @@
       "tick": 386,
       "time": 19.3,
       "nextId": 413,
-      "state": "f73ba9e5",
+      "state": "2f3ae8fe",
       "events": "95e82b3c",
       "rng": {
         "draws": 1825,
@@ -4729,13 +4729,13 @@
           "facing": 3.141593,
           "fiveSecondRule": 99,
           "hostile": true,
-          "hp": 35354,
+          "hp": 41400,
           "id": 405,
           "inCombat": true,
           "kind": "mob",
           "level": 20,
           "lootFfaTimer": "Infinity",
-          "maxHp": 51239,
+          "maxHp": 60000,
           "moveSpeed": 10.5,
           "nythraxis": {
             "deathlessCastRemaining": 10,
@@ -5098,7 +5098,7 @@
       "tick": 390,
       "time": 19.5,
       "nextId": 413,
-      "state": "7d4c0abc",
+      "state": "83e39acb",
       "events": "2d597b1e",
       "rng": {
         "draws": 1856,
@@ -5109,7 +5109,7 @@
       "tick": 400,
       "time": 20,
       "nextId": 413,
-      "state": "8ea06bdd",
+      "state": "b06d954a",
       "events": "1e22793b",
       "rng": {
         "draws": 1908,
@@ -5120,7 +5120,7 @@
       "tick": 410,
       "time": 20.5,
       "nextId": 413,
-      "state": "0b744533",
+      "state": "ff4a0940",
       "events": "1e22793b",
       "rng": {
         "draws": 1947,
@@ -5131,7 +5131,7 @@
       "tick": 420,
       "time": 21,
       "nextId": 413,
-      "state": "2bcb33b2",
+      "state": "a1f0d1a9",
       "events": "1e22793b",
       "rng": {
         "draws": 2001,
@@ -5142,7 +5142,7 @@
       "tick": 430,
       "time": 21.5,
       "nextId": 413,
-      "state": "a3d93dee",
+      "state": "f490f305",
       "events": "1e22793b",
       "rng": {
         "draws": 2050,
@@ -5153,7 +5153,7 @@
       "tick": 440,
       "time": 22,
       "nextId": 413,
-      "state": "e1d7bb07",
+      "state": "1ac4b43c",
       "events": "1e22793b",
       "rng": {
         "draws": 2112,
@@ -5164,7 +5164,7 @@
       "tick": 450,
       "time": 22.5,
       "nextId": 413,
-      "state": "44018975",
+      "state": "46911b12",
       "events": "1e22793b",
       "rng": {
         "draws": 2158,
@@ -5175,7 +5175,7 @@
       "tick": 460,
       "time": 23,
       "nextId": 413,
-      "state": "d84d35d8",
+      "state": "ddf808af",
       "events": "1e22793b",
       "rng": {
         "draws": 2195,
@@ -5186,7 +5186,7 @@
       "tick": 470,
       "time": 23.5,
       "nextId": 413,
-      "state": "f0ba0ae7",
+      "state": "dddb4e6c",
       "events": "1e22793b",
       "rng": {
         "draws": 2241,
@@ -5197,7 +5197,7 @@
       "tick": 480,
       "time": 24,
       "nextId": 413,
-      "state": "b57cc05a",
+      "state": "a5a359a1",
       "events": "1e22793b",
       "rng": {
         "draws": 2283,
@@ -5208,7 +5208,7 @@
       "tick": 490,
       "time": 24.5,
       "nextId": 413,
-      "state": "37963880",
+      "state": "2a15e93f",
       "events": "da62b8d5",
       "rng": {
         "draws": 2331,
@@ -5219,7 +5219,7 @@
       "tick": 500,
       "time": 25,
       "nextId": 413,
-      "state": "06d06158",
+      "state": "065627ff",
       "events": "741638a5",
       "rng": {
         "draws": 2383,
@@ -5230,7 +5230,7 @@
       "tick": 506,
       "time": 25.3,
       "nextId": 413,
-      "state": "1e854303",
+      "state": "18b394e0",
       "events": "741638a5",
       "rng": {
         "draws": 2418,
@@ -5726,13 +5726,13 @@
           "facing": 3.141593,
           "fiveSecondRule": 99,
           "hostile": true,
-          "hp": 35354,
+          "hp": 41400,
           "id": 405,
           "inCombat": true,
           "kind": "mob",
           "level": 20,
           "lootFfaTimer": "Infinity",
-          "maxHp": 51239,
+          "maxHp": 60000,
           "moveSpeed": 10.5,
           "nythraxis": {
             "deathlessStunRemaining": 4.05,
@@ -6098,7 +6098,7 @@
       "tick": 510,
       "time": 25.5,
       "nextId": 413,
-      "state": "f894a58a",
+      "state": "e525dfdd",
       "events": "741638a5",
       "rng": {
         "draws": 2433,
@@ -6109,7 +6109,7 @@
       "tick": 520,
       "time": 26,
       "nextId": 413,
-      "state": "32e24cda",
+      "state": "4d3fd63d",
       "events": "741638a5",
       "rng": {
         "draws": 2479,
@@ -6120,7 +6120,7 @@
       "tick": 530,
       "time": 26.5,
       "nextId": 413,
-      "state": "233fe728",
+      "state": "0a968eeb",
       "events": "741638a5",
       "rng": {
         "draws": 2536,
@@ -6131,7 +6131,7 @@
       "tick": 540,
       "time": 27,
       "nextId": 413,
-      "state": "22e33400",
+      "state": "83ab7963",
       "events": "741638a5",
       "rng": {
         "draws": 2573,
@@ -6142,7 +6142,7 @@
       "tick": 550,
       "time": 27.5,
       "nextId": 413,
-      "state": "6903ebe6",
+      "state": "61d2bf65",
       "events": "741638a5",
       "rng": {
         "draws": 2625,
@@ -6153,7 +6153,7 @@
       "tick": 560,
       "time": 28,
       "nextId": 413,
-      "state": "d5861926",
+      "state": "6bd06ced",
       "events": "741638a5",
       "rng": {
         "draws": 2658,
@@ -6164,7 +6164,7 @@
       "tick": 570,
       "time": 28.5,
       "nextId": 413,
-      "state": "91a0eb7c",
+      "state": "2260351b",
       "events": "741638a5",
       "rng": {
         "draws": 2704,
@@ -6175,7 +6175,7 @@
       "tick": 580,
       "time": 29,
       "nextId": 413,
-      "state": "484cab56",
+      "state": "b6b2fe11",
       "events": "741638a5",
       "rng": {
         "draws": 2763,
@@ -6186,7 +6186,7 @@
       "tick": 590,
       "time": 29.5,
       "nextId": 413,
-      "state": "1438c753",
+      "state": "c96b6758",
       "events": "4974233d",
       "rng": {
         "draws": 2817,
@@ -6197,7 +6197,7 @@
       "tick": 600,
       "time": 30,
       "nextId": 413,
-      "state": "5c5cd557",
+      "state": "474830ba",
       "events": "0f474324",
       "rng": {
         "draws": 2860,
@@ -6208,7 +6208,7 @@
       "tick": 610,
       "time": 30.5,
       "nextId": 413,
-      "state": "df83bf3f",
+      "state": "10e0e960",
       "events": "741638a5",
       "rng": {
         "draws": 2906,
@@ -6219,7 +6219,7 @@
       "tick": 620,
       "time": 31,
       "nextId": 413,
-      "state": "9a7f1759",
+      "state": "90974e0a",
       "events": "741638a5",
       "rng": {
         "draws": 2957,
@@ -6230,7 +6230,7 @@
       "tick": 627,
       "time": 31.35,
       "nextId": 413,
-      "state": "9a176618",
+      "state": "84462365",
       "events": "351e896e",
       "rng": {
         "draws": 2991,
@@ -6728,13 +6728,13 @@
           "facing": 3.141593,
           "fiveSecondRule": 99,
           "hostile": true,
-          "hp": 2049,
+          "hp": 2400,
           "id": 405,
           "inCombat": true,
           "kind": "mob",
           "level": 20,
           "lootFfaTimer": "Infinity",
-          "maxHp": 51239,
+          "maxHp": 60000,
           "moveSpeed": 10.5,
           "nythraxis": {
             "deathlessTimer": 43.05,
@@ -7100,8 +7100,8 @@
       "tick": 628,
       "time": 31.4,
       "nextId": 413,
-      "state": "ddebc7a9",
-      "events": "0e6a4daa",
+      "state": "62954f6a",
+      "events": "67a5da17",
       "rng": {
         "draws": 3002,
         "digest": "1aed0b18"
@@ -7122,7 +7122,7 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
-            "damageDealt": 5189,
+            "damageDealt": 5540,
             "damageTaken": 5913,
             "kills": 3,
             "xpGained": 249
@@ -7654,7 +7654,7 @@
             404
           ],
           "lootable": true,
-          "maxHp": 51239,
+          "maxHp": 60000,
           "moveSpeed": 10.5,
           "nythraxis": {
             "deathSpoken": true,
@@ -8017,7 +8017,7 @@
       "tick": 630,
       "time": 31.5,
       "nextId": 413,
-      "state": "b6104cdc",
+      "state": "45379493",
       "events": "741638a5",
       "rng": {
         "draws": 3009,
@@ -8028,7 +8028,7 @@
       "tick": 640,
       "time": 32,
       "nextId": 413,
-      "state": "9a6accdb",
+      "state": "f7c7c0b0",
       "events": "741638a5",
       "rng": {
         "draws": 3055,
@@ -8039,7 +8039,7 @@
       "tick": 650,
       "time": 32.5,
       "nextId": 413,
-      "state": "53a3671b",
+      "state": "a10df8b8",
       "events": "741638a5",
       "rng": {
         "draws": 3091,
@@ -8050,7 +8050,7 @@
       "tick": 660,
       "time": 33,
       "nextId": 413,
-      "state": "15f7bd40",
+      "state": "03603ca7",
       "events": "741638a5",
       "rng": {
         "draws": 3146,
@@ -8061,7 +8061,7 @@
       "tick": 670,
       "time": 33.5,
       "nextId": 413,
-      "state": "b243c102",
+      "state": "27d5b245",
       "events": "741638a5",
       "rng": {
         "draws": 3209,
@@ -8072,7 +8072,7 @@
       "tick": 680,
       "time": 34,
       "nextId": 413,
-      "state": "a3b793a1",
+      "state": "9b34fa4a",
       "events": "741638a5",
       "rng": {
         "draws": 3263,
@@ -8083,7 +8083,7 @@
       "tick": 688,
       "time": 34.4,
       "nextId": 413,
-      "state": "8baf28a6",
+      "state": "f3719a4d",
       "events": "80bf9354",
       "rng": {
         "draws": 3299,
@@ -8105,7 +8105,7 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
-            "damageDealt": 5189,
+            "damageDealt": 5540,
             "damageTaken": 5913,
             "kills": 3,
             "xpGained": 249
@@ -8637,7 +8637,7 @@
             404
           ],
           "lootable": true,
-          "maxHp": 51239,
+          "maxHp": 60000,
           "moveSpeed": 10.5,
           "nythraxis": {
             "deathSpoken": true,

@@ -349,7 +349,8 @@ export function castAbility(
           if (
             fam === 'undead' ||
             target.templateId === 'gorrak' ||
-            MOBS[target.templateId]?.ccImmune
+            MOBS[target.templateId]?.ccImmune ||
+            target.ccImmune
           ) {
             ctx.error(p.id, 'This creature cannot be polymorphed.');
             return;

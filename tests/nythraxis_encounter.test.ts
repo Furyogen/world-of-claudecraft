@@ -131,6 +131,56 @@ describe('Nythraxis encounter module (N1)', () => {
     }
   });
 
+  it('heroic Soul Rend deals 150% of max hp split across the stack (75% for a pair)', () => {
+    const { ctx, boss, dps } = setup({ difficulty: 'heroic', dpsCount: 7 });
+    const st = nythraxis.initNythraxisEncounter(boss);
+    st.phase = 2;
+    // Two marked players standing on each other: each takes ceil(1.5x/2) = 75%.
+    const [a, b] = dps;
+    b.pos = { ...a.pos };
+    a.maxHp = 1000;
+    a.hp = 1000;
+    b.maxHp = 1000;
+    b.hp = 1000;
+    st.soulRendMarks = [
+      { playerId: a.id, remaining: 0 },
+      { playerId: b.id, remaining: 0 },
+    ];
+
+    nythraxis.updateNythraxisSoulRend(ctx, boss, st);
+
+    expect(a.hp).toBe(250);
+    expect(b.hp).toBe(250);
+  });
+
+  it('heroic Deathless Rage is lethal on a failed wardstone channel (115% max hp)', () => {
+    const heroic = setup({ difficulty: 'heroic' });
+    let st = nythraxis.initNythraxisEncounter(heroic.boss);
+    st.phase = 2;
+    st.deathlessCastRemaining = 0.01; // completes this update, no channels ran
+    for (const p of [heroic.tank, ...heroic.dps]) {
+      p.maxHp = 1000;
+      p.hp = 1000;
+    }
+    nythraxis.updateNythraxisDeathlessRage(heroic.ctx, heroic.boss, st);
+    for (const p of [heroic.tank, ...heroic.dps]) expect(p.dead).toBe(true);
+
+    // Normal keeps the survivable 82%.
+    const normal = setup();
+    st = nythraxis.initNythraxisEncounter(normal.boss);
+    st.phase = 2;
+    st.deathlessCastRemaining = 0.01;
+    for (const p of [normal.tank, ...normal.dps]) {
+      p.maxHp = 1000;
+      p.hp = 1000;
+    }
+    nythraxis.updateNythraxisDeathlessRage(normal.ctx, normal.boss, st);
+    for (const p of [normal.tank, ...normal.dps]) {
+      expect(p.dead).toBe(false);
+      expect(p.hp).toBe(180);
+    }
+  });
+
   it('Soul Rend marks up to three distinct non-tank players (the rng.int pick)', () => {
     const { ctx, boss, tank, dps } = setup();
     const st = nythraxis.initNythraxisEncounter(boss);

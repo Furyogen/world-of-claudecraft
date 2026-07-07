@@ -93,8 +93,9 @@ describe('heroic tuning data contract', () => {
       gravewyrm_sanctum: [2.0, 4.6, 1.2],
       // The raid multiplier is smaller in RELATIVE terms because normal
       // Nythraxis already lands the game's hardest hits (see the tuning
-      // table's comment); percentage mechanics stay difficulty-neutral.
-      nythraxis_boss_arena: [1.6, 1.6, 1.2],
+      // table's comment); its percentage mechanics scale separately in
+      // encounters/nythraxis.ts (Soul Rend 1.5x, lethal Deathless Rage).
+      nythraxis_boss_arena: [1.6, 2.0, 1.2],
     });
   });
 });
@@ -129,9 +130,15 @@ describe('mobTemplateForDungeonDifficulty', () => {
     expect(heroic.dmgBase).toBeCloseTo(68, 10);
     expect(heroic.dmgPerLevel).toBeCloseTo(6.8, 10);
     expect(heroic.armorPerLevel).toBeCloseTo(5.2, 10);
+    // Every heroic mob is floored to the anti-kite speed (player RUN_SPEED is
+    // 7); a template already at or above the floor keeps its own speed.
+    expect(heroic.moveSpeed).toBe(8);
+    expect(
+      mobTemplateForDungeonDifficulty({ ...SYNTHETIC, moveSpeed: 10.5 }, 'hollow_crypt', 'heroic')
+        .moveSpeed,
+    ).toBe(10.5);
     // Untouched fields carry over; the base template is never mutated.
     expect(heroic.attackSpeed).toBe(SYNTHETIC.attackSpeed);
-    expect(heroic.moveSpeed).toBe(SYNTHETIC.moveSpeed);
     expect(JSON.stringify(SYNTHETIC)).toBe(before);
   });
 });
@@ -156,5 +163,22 @@ describe('applyHeroicMobTuning', () => {
     expect(normalMob.mechanicDamageMult).toBeUndefined();
     applyHeroicMobTuning(normalMob, 'no_such_dungeon', 'heroic');
     expect(normalMob.mechanicDamageMult).toBeUndefined();
+  });
+
+  it('grants CC and snare immunity to boss-flagged heroic spawns only', () => {
+    const boss = { templateId: 'morthen' } as Entity;
+    applyHeroicMobTuning(boss, 'hollow_crypt', 'heroic');
+    expect(boss.ccImmune).toBe(true);
+    expect(boss.slowImmune).toBe(true);
+
+    const trash = { templateId: 'crypt_shambler' } as Entity;
+    applyHeroicMobTuning(trash, 'hollow_crypt', 'heroic');
+    expect(trash.ccImmune).toBeUndefined();
+    expect(trash.slowImmune).toBeUndefined();
+
+    const normalBoss = { templateId: 'morthen' } as Entity;
+    applyHeroicMobTuning(normalBoss, 'hollow_crypt', 'normal');
+    expect(normalBoss.ccImmune).toBeUndefined();
+    expect(normalBoss.slowImmune).toBeUndefined();
   });
 });
