@@ -15,4 +15,7 @@ export interface IWorldDungeons {
   raidLockouts(): RaidLockout[];
   dungeonDifficulty(): DungeonDifficulty;
   setDungeonDifficulty(difficulty: DungeonDifficulty): void;
+  // Buy one Heroic Quartermaster offer (src/sim/content/heroic_vendor.ts),
+  // paying its Heroic Marks price from the buyer's bags. Server-validated.
+  buyHeroicVendorItem(itemId: string): void;
 }

@@ -113,6 +113,7 @@ export {
 } from './content/delves';
 
 import { DELVE_ITEMS } from './content/delves/items';
+import { HEROIC_VENDOR_ITEMS } from './content/heroic_vendor';
 import { DELVE_MODULE_LAYOUTS, type DelveModuleId, delveModuleSpan } from './delve_layout';
 
 function mergeItems(...parts: Record<string, ItemDef>[]): Record<string, ItemDef> {
@@ -153,6 +154,7 @@ export const ITEMS: Record<string, ItemDef> = mergeItems(
   ZONE3_ITEMS,
   TEMPLE_ITEMS,
   DELVE_ITEMS,
+  HEROIC_VENDOR_ITEMS,
 );
 
 export type { AggregatedSetEffect } from './content/item_sets';

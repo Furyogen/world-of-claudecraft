@@ -136,7 +136,7 @@ import {
   runDespawnDecay,
   tickGroundAoEs,
 } from './entity_roster';
-import { canEquipItem } from './equipment_rules';
+import { canEquipItem, resolveEquipSlot } from './equipment_rules';
 import { fleeSpeed } from './flee_speed';
 import { formatMoney } from './format_money';
 import * as interaction from './interaction';
@@ -271,6 +271,7 @@ import {
   updateDoorTriggers as updateDoorTriggersImpl,
   updateInstances as updateInstancesImpl,
 } from './instances/dungeons';
+import { buyHeroicVendorItem as buyHeroicVendorItemImpl } from './instances/heroic_vendor';
 import * as questCommands from './quests/quest_commands';
 import {
   checkQuestReady,
@@ -845,6 +846,10 @@ export interface PlayerMeta {
   companionUpgrades: Record<string, number>;
   delveLoreUnlocked: Set<string>;
   delveDaily: { date: string; firstClearXp: Set<string>; markClears: number };
+  // Heroic-mark daily income gate (persisted): dungeon ids whose heroic final
+  // boss already paid this player a Heroic Mark on `date` (host UTC day).
+  // See awardHeroicMarks in instances/dungeons.ts; at most 4 marks per day.
+  heroicDaily: { date: string; marked: Set<string> };
   // World-boss loot lockouts live in `raidLockouts` (keyed worldboss:<mobId>), so the
   // eligibility gate and the rendered raid-lockout countdown are one value. See
   // world_boss.ts (markWorldBossLooted / isWorldBossLootEligible).
@@ -942,6 +947,7 @@ export interface CharacterState {
   companionUpgrades?: Record<string, number>;
   delveLoreUnlocked?: string[];
   delveDaily?: { date: string; firstClearXp: string[]; markClears: number };
+  heroicDaily?: { date: string; marked: string[] };
   // Ravenpost welcome letter already sent (optional so pre-mail saves load
   // cleanly and receive the announcement letter once on their next login).
   mailWelcomed?: boolean;
@@ -1513,6 +1519,7 @@ export class Sim {
       companionUpgrades: {},
       delveLoreUnlocked: new Set(),
       delveDaily: { date: '', firstClearXp: new Set(), markClears: 0 },
+      heroicDaily: { date: '', marked: new Set() },
     };
     // A fresh character sets out provisioned (class-defined starter rations);
     // a saved character loads its own bags from savedState below.
@@ -1617,6 +1624,9 @@ export class Sim {
           firstClearXp: new Set(s.delveDaily.firstClearXp),
           markClears: s.delveDaily.markClears,
         };
+      }
+      if (s.heroicDaily) {
+        meta.heroicDaily = { date: s.heroicDaily.date, marked: new Set(s.heroicDaily.marked) };
       }
     }
 
@@ -1869,6 +1879,7 @@ export class Sim {
         firstClearXp: [...meta.delveDaily.firstClearXp],
         markClears: meta.delveDaily.markClears,
       },
+      heroicDaily: { date: meta.heroicDaily.date, marked: [...meta.heroicDaily.marked] },
       mailWelcomed: meta.mailWelcomed,
       // World-boss lockouts serialize via raidLockouts (above), not a separate field.
     };
@@ -5218,7 +5229,11 @@ export class Sim {
       if (next && (!cur || next.min + next.max > cur.min + cur.max))
         this.equipItem(itemId, meta.entityId);
     } else {
-      const cur = meta.equipment[def.slot] ? ITEMS[meta.equipment[def.slot]!] : null;
+      // resolveEquipSlot maps a ring item to its concrete ring1/ring2 key
+      // (empty-first), so auto-equip fills an open jewelry slot too.
+      const slot = resolveEquipSlot(def, meta.equipment);
+      const curId = slot ? meta.equipment[slot] : undefined;
+      const cur = curId ? ITEMS[curId] : null;
       if (!cur || (def.stats?.armor ?? 0) > (cur.stats?.armor ?? 0))
         this.equipItem(itemId, meta.entityId);
     }
@@ -6180,6 +6195,12 @@ export class Sim {
   // C1 death hub reaches it through the seam, this delegate keeps the facade.
   awardHeroicMarks(mob: Entity, recipients: PlayerMeta[]): void {
     awardHeroicMarksImpl(this.ctx, mob, recipients);
+  }
+
+  // Heroic Quartermaster purchase (owned by instances/heroic_vendor.ts): the
+  // heroic_buy command dispatch and the offline HUD resolve it on the facade.
+  buyHeroicVendorItem(itemId: string, pid?: number): void {
+    buyHeroicVendorItemImpl(this.ctx, itemId, pid);
   }
 
   private dungeonDifficultyForPid(pid: number): DungeonDifficulty {

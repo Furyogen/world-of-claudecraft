@@ -612,6 +612,12 @@ export const en = {
   // Delve UI chrome + companion/boss/lore flavor (board, run tracker, completion
   // summary, affixes, module/objective labels). Rendered through t() from hud.ts.
   // {playerName} / {className} interpolate at render time.
+  heroicShop: {
+    // The Heroic Quartermaster window: title/price/buy reuse the vendor and
+    // delve-shop keys; only the marks-specific strings live here.
+    balance: 'Heroic Marks: {count}',
+    buyAria: 'Buy {item} for {marks} Heroic Marks',
+  },
   delveUi: {
     board: {
       title: 'Delve Board',
@@ -1021,6 +1027,14 @@ export const en = {
       kings_signet: { name: "King's Signet" },
       event_skin_token: { name: 'Mysterious Cosmetic Cache' },
       heroic_mark: { name: 'Heroic Mark' },
+      ring_of_the_nine: { name: 'Ring of the Nine' },
+      nielas_band: { name: "Niela's Band" },
+      sutils_fortune: { name: "Sutil's Fortune" },
+      arthurs_round_band: { name: "Arthur's Round Band" },
+      signet_of_zyzz: { name: 'Signet of Zyzz' },
+      yumis_best_pendant: { name: "Yumi's Best Pendant" },
+      zense_meridian: { name: 'Zense Meridian' },
+      pendant_of_endless_profit: { name: 'Pendant of Endless Profit' },
       deathless_heartwood: { name: 'Heartwood of the Deathless Crown' },
       kingsbane_last_oath: { name: 'Thronebane, Last Oath of Thornpeak' },
       crownforged_dreadhelm: { name: 'Bonewrought Dreadhelm' },

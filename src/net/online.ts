@@ -2345,6 +2345,9 @@ export class ClientWorld implements IWorld {
     this.selectedDungeonDifficulty = difficulty;
     this.cmd({ cmd: 'set_dungeon_difficulty', difficulty });
   }
+  buyHeroicVendorItem(itemId: string): void {
+    this.cmd({ cmd: 'heroic_buy', itemId });
+  }
   // Raid lockouts mirrored from snapshot self as {dungeonId: expiryEpochMs}; the
   // remaining time is derived locally so the countdown ticks down without traffic.
   private selfLockouts: Record<string, number> = {};

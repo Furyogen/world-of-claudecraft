@@ -1066,6 +1066,18 @@ export const ZONE3_NPCS: Record<string, NpcDef> = {
     vendorItems: ['highwatch_warblade', 'craghorn_staff', 'icevein_dirk'],
     greeting: 'Forge is hot and the grindstone is turning. If it cuts, I sell it.',
   },
+  heroic_quartermaster: {
+    id: 'heroic_quartermaster',
+    name: 'Quartermaster Vex',
+    title: 'Heroic Quartermaster',
+    pos: { x: -8, z: 665 },
+    facing: 1.2,
+    color: 0x8e44ad,
+    questIds: [],
+    heroicVendor: true,
+    greeting:
+      'Proof of the heroic depths buys the finest rings and pendants in Highwatch. Show me your marks.',
+  },
   loremaster_caddis: {
     id: 'loremaster_caddis',
     name: 'Loremaster Caddis',

@@ -19,7 +19,7 @@
 import { addStacked, bagsFullError, equipBag as equipBagCmd } from './bags';
 import { ITEMS } from './data';
 import { recalcPlayerStats } from './entity';
-import { canEquipItem } from './equipment_rules';
+import { canEquipItem, resolveEquipSlot } from './equipment_rules';
 import { formatMoney } from './format_money';
 import { meetsLevelRequirement, requiredLevelFor } from './item_level_req';
 import type { ItemUseResult, PlayerMeta } from './sim';
@@ -76,7 +76,9 @@ export function equipItem(ctx: SimContext, itemId: string, pid?: number): void {
     ctx.error(meta.entityId, `You must be level ${requiredLevelFor(def)} to equip that.`);
     return;
   }
-  const slot = def.slot;
+  // Rings declare slot 'ring'; the resolver picks ring1/ring2 (empty-first).
+  const slot = resolveEquipSlot(def, meta.equipment);
+  if (!slot) return;
   const old = meta.equipment[slot];
   ctx.removeItem(itemId, 1, meta.entityId);
   if (old) addItemSilent(old, 1, meta);

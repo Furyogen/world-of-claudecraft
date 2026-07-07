@@ -17,12 +17,15 @@ const itemStringsEn = {
     slots: {
       mainhand: 'Main Hand',
       helmet: 'Helmet',
+      neck: 'Neck',
       shoulder: 'Shoulder',
       chest: 'Chest',
       waist: 'Waist',
       legs: 'Legs',
       gloves: 'Gloves',
       feet: 'Feet',
+      // One label for the ring slot kind and both worn ring slots.
+      ring: 'Finger',
     },
     quality: {
       poor: 'Poor',
@@ -208,12 +211,14 @@ export const itemStrings = {
       slots: {
         mainhand: 'Mano principal',
         helmet: 'Cabeza',
+        neck: 'Cuello',
         shoulder: 'Hombros',
         chest: 'Pecho',
         waist: 'Cintura',
         legs: 'Piernas',
         gloves: 'Manos',
         feet: 'Pies',
+        ring: 'Dedo',
       },
       quality: {
         poor: 'Pobre',
@@ -366,12 +371,14 @@ export const itemStrings = {
       slots: {
         mainhand: 'Main droite',
         helmet: 'Tête',
+        neck: 'Cou',
         shoulder: 'Épaules',
         chest: 'Torse',
         waist: 'Taille',
         legs: 'Jambes',
         gloves: 'Mains',
         feet: 'Pieds',
+        ring: 'Doigt',
       },
       quality: {
         poor: 'Médiocre',
@@ -525,12 +532,14 @@ export const itemStrings = {
       slots: {
         mainhand: 'Mano principale',
         helmet: 'Testa',
+        neck: 'Collo',
         shoulder: 'Spalle',
         chest: 'Torace',
         waist: 'Vita',
         legs: 'Gambe',
         gloves: 'Mani',
         feet: 'Piedi',
+        ring: 'Dito',
       },
       quality: {
         poor: 'Scadente',
@@ -680,12 +689,14 @@ export const itemStrings = {
       slots: {
         mainhand: 'Waffenhand',
         helmet: 'Kopf',
+        neck: 'Hals',
         shoulder: 'Schultern',
         chest: 'Brust',
         waist: 'Taille',
         legs: 'Beine',
         gloves: 'Hände',
         feet: 'Füße',
+        ring: 'Finger',
       },
       quality: {
         poor: 'Schlecht',
@@ -837,12 +848,14 @@ export const itemStrings = {
       slots: {
         mainhand: '主手',
         helmet: '头部',
+        neck: '颈部',
         shoulder: '肩部',
         chest: '胸部',
         waist: '腰部',
         legs: '腿部',
         gloves: '手部',
         feet: '脚部',
+        ring: '手指',
       },
       quality: {
         poor: '粗糙',
@@ -987,12 +1000,14 @@ export const itemStrings = {
       slots: {
         mainhand: '主手',
         helmet: '頭部',
+        neck: '頸部',
         shoulder: '肩部',
         chest: '胸部',
         waist: '腰部',
         legs: '腿部',
         gloves: '手部',
         feet: '腳部',
+        ring: '手指',
       },
       quality: {
         poor: '粗糙',
@@ -1137,12 +1152,14 @@ export const itemStrings = {
       slots: {
         mainhand: '주장비',
         helmet: '머리',
+        neck: '목',
         shoulder: '어깨',
         chest: '가슴',
         waist: '허리',
         legs: '다리',
         gloves: '손',
         feet: '발',
+        ring: '손가락',
       },
       quality: {
         poor: '하급',
@@ -1291,12 +1308,14 @@ export const itemStrings = {
       slots: {
         mainhand: 'メインハンド',
         helmet: '頭',
+        neck: '首',
         shoulder: '肩',
         chest: '胸',
         waist: '腰',
         legs: '脚',
         gloves: '手',
         feet: '足',
+        ring: '指',
       },
       quality: {
         poor: '粗悪',
@@ -1445,12 +1464,14 @@ export const itemStrings = {
       slots: {
         mainhand: 'Mão principal',
         helmet: 'Cabeça',
+        neck: 'Pescoço',
         shoulder: 'Ombros',
         chest: 'Peito',
         waist: 'Cintura',
         legs: 'Pernas',
         gloves: 'Mãos',
         feet: 'Pés',
+        ring: 'Dedo',
       },
       quality: {
         poor: 'Ruim',
@@ -1599,12 +1620,14 @@ export const itemStrings = {
       slots: {
         mainhand: 'Правая рука',
         helmet: 'Голова',
+        neck: 'Шея',
         shoulder: 'Плечи',
         chest: 'Грудь',
         waist: 'Пояс',
         legs: 'Ноги',
         gloves: 'Кисти рук',
         feet: 'Ступни',
+        ring: 'Палец',
       },
       quality: {
         poor: 'Низкое',

@@ -2629,6 +2629,16 @@ const ITEM_RECIPES: Record<string, IconRecipe> = {
   ),
   // Heroic-dungeon participation token (final-boss personal drop).
   heroic_mark: r('holy', 'holyGold', ['sigil_rune'], ['glow']),
+  // Heroic Quartermaster jewelry (marks-vendor rings and pendants); a coin
+  // base reads as the band, the overlay carries the stat identity.
+  ring_of_the_nine: r('fury', 'blood', ['coin', 'gem'], ['glow']),
+  nielas_band: r('arcane', 'arcanePink', ['coin', 'gem'], ['glow']),
+  sutils_fortune: r('nature', 'leafGreen', ['coin', 'gem'], ['sparkle']),
+  arthurs_round_band: r('earth', 'earthBrown', ['coin', 'gem'], ['glow']),
+  signet_of_zyzz: r('holy', 'holyGold', ['coin', 'sigil_rune'], ['glow']),
+  yumis_best_pendant: r('storm', 'sky', ['gem'], ['sparkle', 'glow']),
+  zense_meridian: r('arcane', 'arcanePink', ['moon', 'gem'], ['glow']),
+  pendant_of_endless_profit: r('treasure', 'gold', ['coin', 'sunburst'], ['sparkle']),
   // misc UI icons (not real items)
   coin_gold: r('treasure', 'gold', ['coin'], ['sparkle']),
   slot_empty: r('junk', 'silverWhite', []),

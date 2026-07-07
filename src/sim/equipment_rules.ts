@@ -1,4 +1,4 @@
-import type { ArmorType, ItemDef, PlayerClass } from './types';
+import type { ArmorType, EquipSlot, ItemDef, PlayerClass } from './types';
 
 type WeaponArchetype = 'warrior' | 'caster' | 'rogue';
 
@@ -35,7 +35,23 @@ function subsetOf(classes: readonly PlayerClass[], allowed: ReadonlySet<PlayerCl
 
 export function armorTypeForItem(item: ItemDef): ArmorType | null {
   if (item.kind !== 'armor') return null;
-  return item.armorType;
+  // Jewelry (neck/ring) is kind 'armor' with no armor class.
+  return item.armorType ?? null;
+}
+
+// Resolve the concrete equipment key an item equips into. Rings declare the
+// slot KIND 'ring' and land in whichever ring slot is empty (ring1 first);
+// with both full the swap replaces ring1, the classic behavior. Every other
+// item names its equipment slot directly. Returns null for slotless items.
+export function resolveEquipSlot(
+  item: ItemDef,
+  equipment: Partial<Record<EquipSlot, string>>,
+): EquipSlot | null {
+  if (!item.slot) return null;
+  if (item.slot !== 'ring') return item.slot;
+  if (!equipment.ring1) return 'ring1';
+  if (!equipment.ring2) return 'ring2';
+  return 'ring1';
 }
 
 export function maxArmorTypeForClass(cls: PlayerClass): ArmorType {

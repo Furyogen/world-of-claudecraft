@@ -3287,6 +3287,12 @@ export class GameServer {
         if (isDungeonDifficulty(msg.difficulty)) sim.setDungeonDifficulty(msg.difficulty, pid);
         break;
       }
+      case 'heroic_buy': {
+        // Range, stock, balance, and bag space all re-validate in the sim
+        // handler (instances/heroic_vendor.ts); the client only sends intent.
+        if (typeof msg.itemId === 'string') sim.buyHeroicVendorItem(msg.itemId, pid);
+        break;
+      }
       case 'enter_delve': {
         if (typeof msg.delveId !== 'string' || typeof msg.tierId !== 'string') break;
         const e = sim.entities.get(pid);

@@ -20,25 +20,49 @@ const FULL: Partial<Record<EquipSlot, string>> = {
 };
 
 describe('char_view: paperdoll data model', () => {
-  it('lays the classic two columns: head/shoulder/chest/weapon, then hands/waist/legs/feet', () => {
-    expect(PAPERDOLL_LEFT_SLOTS).toEqual(['helmet', 'shoulder', 'chest', 'mainhand']);
-    expect(PAPERDOLL_RIGHT_SLOTS).toEqual(['gloves', 'waist', 'legs', 'feet']);
+  it('lays the classic two columns: head/neck/shoulder/chest/weapon, then hands/waist/legs/feet/rings', () => {
+    expect(PAPERDOLL_LEFT_SLOTS).toEqual(['helmet', 'neck', 'shoulder', 'chest', 'mainhand']);
+    expect(PAPERDOLL_RIGHT_SLOTS).toEqual(['gloves', 'waist', 'legs', 'feet', 'ring1', 'ring2']);
   });
 
   it('resolves every equipped slot to its item, in column order', () => {
     const view = buildPaperdollView(FULL, ITEMS);
-    expect(view.left.map((c) => c.slot)).toEqual(['helmet', 'shoulder', 'chest', 'mainhand']);
-    expect(view.right.map((c) => c.slot)).toEqual(['gloves', 'waist', 'legs', 'feet']);
+    expect(view.left.map((c) => c.slot)).toEqual([
+      'helmet',
+      'neck',
+      'shoulder',
+      'chest',
+      'mainhand',
+    ]);
+    expect(view.right.map((c) => c.slot)).toEqual([
+      'gloves',
+      'waist',
+      'legs',
+      'feet',
+      'ring1',
+      'ring2',
+    ]);
     expect(view.left[0].item).toBe(ITEMS.cryptbone_helm);
-    expect(view.left[3].item).toBe(ITEMS.worn_sword);
+    expect(view.left[4].item).toBe(ITEMS.worn_sword);
     expect(view.right[3].item).toBe(ITEMS.oiled_boots);
+  });
+
+  it('resolves jewelry slots: neck in the left column, both rings in the right', () => {
+    const view = buildPaperdollView(
+      { neck: 'yumis_best_pendant', ring1: 'ring_of_the_nine', ring2: 'nielas_band' },
+      ITEMS,
+    );
+    expect(view.left[1].item).toBe(ITEMS.yumis_best_pendant);
+    expect(view.right[4].item).toBe(ITEMS.ring_of_the_nine);
+    expect(view.right[5].item).toBe(ITEMS.nielas_band);
   });
 
   it('renders an empty cell for an unequipped slot or an unknown item id', () => {
     const view = buildPaperdollView({ helmet: 'cryptbone_helm', chest: 'no_such_item' }, ITEMS);
     expect(view.left[0].item).toBe(ITEMS.cryptbone_helm);
-    expect(view.left[1].item).toBeNull(); // shoulder: unequipped
-    expect(view.left[2].item).toBeNull(); // chest: id present but unknown -> empty
+    expect(view.left[1].item).toBeNull(); // neck: unequipped
+    expect(view.left[2].item).toBeNull(); // shoulder: unequipped
+    expect(view.left[3].item).toBeNull(); // chest: id present but unknown -> empty
     // every right-column slot is empty when nothing is equipped there
     expect(view.right.every((c) => c.item === null)).toBe(true);
   });

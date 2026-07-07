@@ -255,25 +255,37 @@ export interface WeaponInfo {
 export type EquipSlot =
   | 'mainhand'
   | 'helmet'
+  | 'neck'
   | 'shoulder'
   | 'chest'
   | 'waist'
   | 'legs'
   | 'gloves'
-  | 'feet';
+  | 'feet'
+  | 'ring1'
+  | 'ring2';
 
-// The eight equip slots, in the canonical paperdoll order. Single source for
+// The eleven equip slots, in the canonical paperdoll order. Single source for
 // the entity loop and the server's unequip-command validation.
 export const EQUIP_SLOTS: readonly EquipSlot[] = [
   'mainhand',
   'helmet',
+  'neck',
   'shoulder',
   'chest',
   'waist',
   'legs',
   'gloves',
   'feet',
+  'ring1',
+  'ring2',
 ];
+
+// What an ITEM declares as its slot. Rings declare the slot KIND ('ring'); the
+// equip path resolves the concrete ring1/ring2 equipment key at equip time
+// (resolveEquipSlot in equipment_rules.ts). Every other item names its
+// equipment slot directly. Items never carry 'ring1'/'ring2'.
+export type ItemSlot = EquipSlot | 'ring';
 
 export type SkinCatalog = 'class' | 'mech';
 
@@ -310,7 +322,7 @@ type ItemKind =
 interface BaseItemDef {
   id: string;
   name: string;
-  slot?: EquipSlot;
+  slot?: ItemSlot;
   weapon?: WeaponInfo;
   stats?: Partial<Stats>;
   // Spell Power affix (caster gear): flat Spell Power, summed in recalcPlayerStats.
@@ -390,8 +402,19 @@ export interface ItemSet {
 
 export interface ArmorItemDef extends BaseItemDef {
   kind: 'armor';
-  slot: Exclude<EquipSlot, 'mainhand'>;
+  slot: Exclude<EquipSlot, 'mainhand' | 'neck' | 'ring1' | 'ring2'>;
   armorType: ArmorType;
+  weapon?: never;
+}
+
+// Jewelry: neck and ring pieces. kind 'armor' so the equip/budget/tooltip paths
+// treat it as gear, but it carries NO armor class: equipment_rules falls through
+// the armorType gate, so any class can wear jewelry (requiredClass still applies
+// when set). Rings declare slot 'ring'; see resolveEquipSlot.
+export interface JewelryItemDef extends BaseItemDef {
+  kind: 'armor';
+  slot: 'neck' | 'ring';
+  armorType?: never;
   weapon?: never;
 }
 
@@ -407,7 +430,7 @@ export interface OtherItemDef extends BaseItemDef {
   armorType?: never;
 }
 
-export type ItemDef = ArmorItemDef | WeaponItemDef | OtherItemDef;
+export type ItemDef = ArmorItemDef | WeaponItemDef | JewelryItemDef | OtherItemDef;
 
 // Per-instance item payload (#1165). Additive and OPTIONAL: most items stay plain
 // {itemId, count} with no instance payload (fungible, market-listable). A slot
@@ -1275,6 +1298,9 @@ export interface NpcDef {
   // The Merchant: talking to this NPC opens the player-driven World Market
   // (auction house) instead of a fixed vendor stock.
   market?: boolean;
+  // The Heroic Quartermaster: talking to this NPC opens the Heroic Marks
+  // shop (src/sim/content/heroic_vendor.ts) instead of a copper vendor stock.
+  heroicVendor?: boolean;
   greeting: string;
   // Registered but not surface-placed at world init. The owning system spawns
   // the entity on demand (e.g. the Nythraxis encounter walks Brother Aldric in

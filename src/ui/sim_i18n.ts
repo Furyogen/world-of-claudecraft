@@ -169,6 +169,7 @@ const baseEnTable = {
   'log.dungeonDifficultyNormal': 'Dungeon difficulty set to Normal.',
   'log.dungeonDifficultyIsHeroic': 'Dungeon difficulty: Heroic. Use /dungeon normal to change it.',
   'log.dungeonDifficultyIsNormal': 'Dungeon difficulty: Normal. Use /dungeon heroic to change it.',
+  'error.heroicMarksNeeded': 'You need {marks} Heroic Marks to buy {name}.',
   'error.channelUsage': 'Usage: /{action} <channel>. Channels: {list}.',
   'error.generalAlwaysOn': 'The General channel is always on - just use /general.',
   'error.noSuchChannel': "There is no channel named '{name}'. Channels: {list}.",
@@ -5420,6 +5421,10 @@ const RULES: Rule[] = [
   {
     re: /^You need (.+) Delve Marks to buy (.+)\.$/,
     build: (m) => t('sim.delve.shopMarksRequired', { marks: m[1], name: locItem(m[2]) }),
+  },
+  {
+    re: /^You need (.+) Heroic Marks to buy (.+)\.$/,
+    build: (m) => tSim('error.heroicMarksNeeded', { marks: m[1], name: locItem(m[2]) }),
   },
   {
     re: /^You pass through the tombstone into (.+)\.$/,

@@ -26,6 +26,8 @@ import {
 import { isFriendlyPet, mobTooltipConColor } from '../render/reaction';
 import type { Renderer } from '../render/renderer';
 import { type AugmentCategory, augmentCategory } from '../sim/content/augments';
+import { HEROIC_MARK_ITEM_ID } from '../sim/content/dungeon_difficulty';
+import { HEROIC_VENDOR_STOCK } from '../sim/content/heroic_vendor';
 import {
   EVENT_SKIN_TIERS,
   MECH_CHROMAS,
@@ -72,6 +74,7 @@ import type {
   CalendarResultCode,
   EquipSlot,
   InvSlot,
+  ItemSlot,
   LootRollChoice,
   MailResultCode,
   PetMode,
@@ -198,6 +201,8 @@ import {
   enterGroundAim,
   type GroundAimState,
 } from './ground_aim';
+import { buildHeroicVendorView } from './heroic_vendor_view';
+import { renderHeroicVendorWindow } from './heroic_vendor_window';
 import {
   holderTierBadgeDataUrl,
   holderTierByIndex,
@@ -541,15 +546,21 @@ const PET_MODE_DESC_KEYS: Record<PetMode, TranslationKey> = {
   aggressive: 'hud.pet.aggressiveDesc',
 };
 type ItemQuality = NonNullable<ItemDef['quality']>;
-const ITEM_SLOT_LABEL_KEYS: Record<EquipSlot, TranslationKey> = {
+const ITEM_SLOT_LABEL_KEYS: Record<ItemSlot, TranslationKey> = {
   mainhand: 'itemUi.slots.mainhand',
   helmet: 'itemUi.slots.helmet',
+  neck: 'itemUi.slots.neck',
   shoulder: 'itemUi.slots.shoulder',
   chest: 'itemUi.slots.chest',
   waist: 'itemUi.slots.waist',
   legs: 'itemUi.slots.legs',
   gloves: 'itemUi.slots.gloves',
   feet: 'itemUi.slots.feet',
+  // The three ring forms share one player-facing label ("Finger"): items
+  // declare 'ring', the paperdoll cells are the concrete ring1/ring2 keys.
+  ring: 'itemUi.slots.ring',
+  ring1: 'itemUi.slots.ring',
+  ring2: 'itemUi.slots.ring',
 };
 const ITEM_QUALITY_LABEL_KEYS: Record<ItemQuality, TranslationKey> = {
   poor: 'itemUi.quality.poor',
@@ -1005,6 +1016,7 @@ export class Hud {
     { event: Extract<SimEvent, { type: 'masterLoot' }>; receivedAt: number; durationMs: number }
   >();
   private openVendorNpcId: number | null = null;
+  private openHeroicVendorNpcId: number | null = null;
   private openDelveBoardNpcId: number | null = null;
   private lastDelveTrackerSig = '';
   private selectedDelveTier: 'normal' | 'heroic' = 'normal';
@@ -1959,6 +1971,7 @@ export class Hud {
         break;
       case 'vendor-window':
         this.closeVendor();
+        this.closeHeroicVendor();
         break;
       case 'crafting-window':
         this.closeCrafting();
@@ -3831,7 +3844,14 @@ export class Hud {
   // works identically offline and online.
   private itemCompareBlock(item: ItemDef): string {
     if (!item.slot) return '';
-    const equippedId = this.sim.equipment[item.slot];
+    // A hovered ring compares against BOTH worn rings (classic behavior); every
+    // other slot kind is its own single equipment key.
+    const slots: readonly EquipSlot[] = item.slot === 'ring' ? ['ring1', 'ring2'] : [item.slot];
+    return slots.map((slot) => this.itemCompareBlockForSlot(item, slot)).join('');
+  }
+
+  private itemCompareBlockForSlot(item: ItemDef, slot: EquipSlot): string {
+    const equippedId = this.sim.equipment[slot];
     if (!equippedId || equippedId === item.id) return '';
     const equipped = ITEMS[equippedId];
     if (!equipped) return '';
@@ -3938,6 +3958,8 @@ export class Hud {
     if ($('#bags').style.display !== 'none') this.renderBags();
     if (this.openVendorNpcId !== null && $('#vendor-window').style.display === 'block')
       this.renderVendor();
+    if (this.openHeroicVendorNpcId !== null && $('#vendor-window').style.display === 'block')
+      this.renderHeroicVendor();
     if (this.marketWindow.isOpen) this.marketWindow.render();
     this.charWindow.renderIfOpen();
     // The arena window's render-skip signature is text-independent (offline sentinel or a
@@ -5684,6 +5706,10 @@ export class Hud {
         const npc = sim.entities.get(this.openVendorNpcId);
         if (!npc || dist2d(p.pos, npc.pos) > 8) this.closeVendor();
       }
+      if (this.openHeroicVendorNpcId !== null) {
+        const npc = sim.entities.get(this.openHeroicVendorNpcId);
+        if (!npc || dist2d(p.pos, npc.pos) > 8) this.closeHeroicVendor();
+      }
       // Close the quest/gossip dialog once the player walks out of talking range
       // (or the NPC is gone), the same way the vendor window auto-closes above. You
       // open within INTERACT_RANGE (5), so the wider 8 threshold never fires on open.
@@ -7381,6 +7407,9 @@ export class Hud {
         case 'vendor': {
           if ($('#bags').style.display !== 'none') this.renderBags();
           if (this.openVendorNpcId !== null) this.renderVendor();
+          // A Heroic Marks purchase rides the same 'vendor' event; refresh the
+          // shop so the balance and per-offer affordability update after a buy.
+          if (this.openHeroicVendorNpcId !== null) this.renderHeroicVendor();
           // A delve Marks purchase rides the same 'vendor' event; refresh the shop
           // tab so the balance and per-offer affordability update after a buy.
           if (this.openDelveBoardNpcId !== null) this.renderDelveBoard();
@@ -9017,6 +9046,9 @@ export class Hud {
     if (def?.market) {
       html += `<button type="button" class="qd-list-item" data-market="1" aria-label="${esc(t('questUi.dialog.worldMarketAria'))}"><span class="gold">${svgIcon('market')}</span> ${esc(t('questUi.dialog.worldMarket'))}</button>`;
     }
+    if (def?.heroicVendor) {
+      html += `<button type="button" class="qd-list-item" data-heroic-shop="1" aria-label="${esc(t('questUi.dialog.browseGoodsAria', { name: npcName }))}"><span class="quest-complete">$</span> ${esc(t('questUi.dialog.browseGoods'))}</button>`;
+    }
     if (Object.values(DELVES).some((d) => d.boardNpcId === npc.templateId)) {
       const delveForNpc = Object.values(DELVES).find((d) => d.boardNpcId === npc.templateId);
       const openLabel = delveForNpc
@@ -9040,6 +9072,10 @@ export class Hud {
     el.querySelector('[data-vendor]')?.addEventListener('click', () => {
       this.closeQuestDialog(false);
       this.openVendor(npc.id);
+    });
+    el.querySelector('[data-heroic-shop]')?.addEventListener('click', () => {
+      this.closeQuestDialog(false);
+      this.openHeroicVendor(npc.id);
     });
     el.querySelector('[data-market]')?.addEventListener('click', () => {
       this.closeQuestDialog(false);
@@ -9576,6 +9612,7 @@ export class Hud {
 
   openVendor(npcId: number): void {
     this.closeOtherWindows(['#vendor-window', '#bags']);
+    this.openHeroicVendorNpcId = null; // the marks shop shares the container
     this.openVendorNpcId = npcId;
     document.body.classList.add('vendor-open');
     this.renderVendor();
@@ -9623,6 +9660,40 @@ export class Hud {
         },
       },
     );
+  }
+
+  openHeroicVendor(npcId: number): void {
+    this.closeOtherWindows('#vendor-window');
+    this.openVendorNpcId = null; // shares the container with the copper vendor
+    this.openHeroicVendorNpcId = npcId;
+    this.renderHeroicVendor();
+  }
+
+  private renderHeroicVendor(): void {
+    if (this.openHeroicVendorNpcId === null) return;
+    const npc = this.sim.entities.get(this.openHeroicVendorNpcId);
+    if (!npc) return;
+    const balance = this.sim.inventory
+      .filter((slot) => slot.itemId === HEROIC_MARK_ITEM_ID)
+      .reduce((sum, slot) => sum + slot.count, 0);
+    renderHeroicVendorWindow(
+      $('#vendor-window'),
+      entityDisplayName(npc),
+      buildHeroicVendorView(HEROIC_VENDOR_STOCK, ITEMS, balance),
+      {
+        ...this.presentationBag,
+        hideTooltip: () => this.hideTooltip(),
+        onBuy: (itemId) => this.sim.buyHeroicVendorItem(itemId),
+        onClose: () => this.closeHeroicVendor(),
+      },
+    );
+  }
+
+  closeHeroicVendor(): void {
+    if (this.openHeroicVendorNpcId === null) return;
+    $('#vendor-window').style.display = 'none';
+    this.openHeroicVendorNpcId = null;
+    this.hideTooltip();
   }
 
   closeVendor(): void {
@@ -12379,7 +12450,7 @@ function resourceDisplayName(resourceType: ResourceType | null): string {
   return t(RESOURCE_LABEL_KEYS[resourceType ?? 'mana']);
 }
 
-function itemSlotName(slot: EquipSlot): string {
+function itemSlotName(slot: ItemSlot): string {
   return t(ITEM_SLOT_LABEL_KEYS[slot]);
 }
 

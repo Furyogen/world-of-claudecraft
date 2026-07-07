@@ -877,6 +877,22 @@ describe('dungeon difficulty wire', () => {
     send('normal');
     expect(server.sim.dungeonDifficulty(session.pid)).toBe('normal');
   });
+
+  it('dispatches heroic_buy through the wire and validates the itemId', () => {
+    const server = new GameServer();
+    const fc = fakeWs();
+    const session = joinServer(server, fc, 1, 'Hero');
+    const send = (itemId: unknown) =>
+      server.handleMessage(session, JSON.stringify({ t: 'cmd', cmd: 'heroic_buy', itemId }));
+
+    // Junk payloads never reach the sim handler (typeof string guard).
+    send(7);
+    send(undefined);
+    // A valid string flows through; far from the quartermaster the sim refuses
+    // with an error event rather than granting anything.
+    send('ring_of_the_nine');
+    expect(server.sim.countItem('ring_of_the_nine', session.pid)).toBe(0);
+  });
 });
 
 describe('restart countdown', () => {
