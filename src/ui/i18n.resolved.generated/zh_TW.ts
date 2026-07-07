@@ -205,6 +205,8 @@ export const zh_TW: EnTranslations = {
       "wagerPartner": "{name}:{count}",
       "wagerRound": "本輪:{seconds}秒",
       "wagerStake": "賭注",
+      "stakeDown": "降低賭注",
+      "stakeUp": "提高賭注",
       "wagerHide": "藏起你的彈珠",
       "wagerGuess": "單還是雙?",
       "odd": "單",

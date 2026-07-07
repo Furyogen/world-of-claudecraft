@@ -6130,6 +6130,8 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gauntlet.wagerPartner': '{name}:{count}',
   'hudChrome.gauntlet.wagerRound': 'ラウンド:{seconds}秒',
   'hudChrome.gauntlet.wagerStake': '賭け金',
+  'hudChrome.gauntlet.stakeDown': '賭け金を下げる',
+  'hudChrome.gauntlet.stakeUp': '賭け金を上げる',
   'hudChrome.gauntlet.wagerHide': 'ビー玉を隠す',
   'hudChrome.gauntlet.wagerGuess': '丁か半か?',
   'hudChrome.gauntlet.odd': '半',

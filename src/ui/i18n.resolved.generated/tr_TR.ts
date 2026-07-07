@@ -205,6 +205,8 @@ export const tr_TR: EnTranslations = {
       "wagerPartner": "{name}: {count}",
       "wagerRound": "Round: {seconds}s",
       "wagerStake": "Stake",
+      "stakeDown": "Lower the stake",
+      "stakeUp": "Raise the stake",
       "wagerHide": "Hide your marbles",
       "wagerGuess": "Odd or even?",
       "odd": "Odd",

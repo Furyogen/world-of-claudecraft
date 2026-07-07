@@ -205,6 +205,8 @@ export const en_XA: EnTranslations = {
       "wagerPartner": "[{name}: {count}]",
       "wagerRound": "[Ŕóúñð: {seconds}š]",
       "wagerStake": "[Šţáķé]",
+      "stakeDown": "[Ļóŵéŕ ţĥé šţáķé]",
+      "stakeUp": "[Ŕáíšé ţĥé šţáķé]",
       "wagerHide": "[Ĥíðé ýóúŕ ɱáŕƀļéš]",
       "wagerGuess": "[Óðð óŕ éʋéñ?]",
       "odd": "[Óðð]",

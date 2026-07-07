@@ -205,6 +205,8 @@ export const ru_RU: EnTranslations = {
       "wagerPartner": "{name}: {count}",
       "wagerRound": "Раунд: {seconds}с",
       "wagerStake": "Ставка",
+      "stakeDown": "Понизить ставку",
+      "stakeUp": "Повысить ставку",
       "wagerHide": "Спрячьте шарики",
       "wagerGuess": "Чёт или нечет?",
       "odd": "Нечет",

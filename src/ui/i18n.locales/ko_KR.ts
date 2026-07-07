@@ -6119,6 +6119,8 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gauntlet.wagerPartner': '{name}: {count}',
   'hudChrome.gauntlet.wagerRound': '라운드: {seconds}초',
   'hudChrome.gauntlet.wagerStake': '판돈',
+  'hudChrome.gauntlet.stakeDown': '판돈 낮추기',
+  'hudChrome.gauntlet.stakeUp': '판돈 올리기',
   'hudChrome.gauntlet.wagerHide': '구슬을 숨기세요',
   'hudChrome.gauntlet.wagerGuess': '홀 아니면 짝?',
   'hudChrome.gauntlet.odd': '홀',

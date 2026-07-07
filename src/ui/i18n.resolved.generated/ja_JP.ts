@@ -205,6 +205,8 @@ export const ja_JP: EnTranslations = {
       "wagerPartner": "{name}:{count}",
       "wagerRound": "ラウンド:{seconds}秒",
       "wagerStake": "賭け金",
+      "stakeDown": "賭け金を下げる",
+      "stakeUp": "賭け金を上げる",
       "wagerHide": "ビー玉を隠す",
       "wagerGuess": "丁か半か?",
       "odd": "半",

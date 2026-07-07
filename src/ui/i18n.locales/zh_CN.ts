@@ -5799,6 +5799,8 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gauntlet.wagerPartner': '{name}:{count}',
   'hudChrome.gauntlet.wagerRound': '本轮:{seconds}秒',
   'hudChrome.gauntlet.wagerStake': '赌注',
+  'hudChrome.gauntlet.stakeDown': '降低赌注',
+  'hudChrome.gauntlet.stakeUp': '提高赌注',
   'hudChrome.gauntlet.wagerHide': '藏起你的弹珠',
   'hudChrome.gauntlet.wagerGuess': '单还是双?',
   'hudChrome.gauntlet.odd': '单',

@@ -6249,6 +6249,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gauntlet.wagerPartner': '{name}: {count}',
   'hudChrome.gauntlet.wagerRound': 'Раунд: {seconds}с',
   'hudChrome.gauntlet.wagerStake': 'Ставка',
+  'hudChrome.gauntlet.stakeDown': 'Понизить ставку',
+  'hudChrome.gauntlet.stakeUp': 'Повысить ставку',
   'hudChrome.gauntlet.wagerHide': 'Спрячьте шарики',
   'hudChrome.gauntlet.wagerGuess': 'Чёт или нечет?',
   'hudChrome.gauntlet.odd': 'Нечет',

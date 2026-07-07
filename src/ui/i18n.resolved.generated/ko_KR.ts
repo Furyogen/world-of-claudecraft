@@ -205,6 +205,8 @@ export const ko_KR: EnTranslations = {
       "wagerPartner": "{name}: {count}",
       "wagerRound": "라운드: {seconds}초",
       "wagerStake": "판돈",
+      "stakeDown": "판돈 낮추기",
+      "stakeUp": "판돈 올리기",
       "wagerHide": "구슬을 숨기세요",
       "wagerGuess": "홀 아니면 짝?",
       "odd": "홀",

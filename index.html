@@ -265,6 +265,15 @@
         <span id="gauntlet-prize" class="gh-chip"></span>
         <span id="gauntlet-light" class="gh-light"></span>
       </div>
+      <!-- Keeper's Wager strip (trial 4): the stake stepper + round clock;
+           the duel itself plays out on the table (marbles, stones, pebbles). -->
+      <div id="gauntlet-wager-strip" class="gh-wager">
+        <span class="gh-wager-label"></span>
+        <button type="button" id="gauntlet-wager-dec" class="btn gh-wager-btn">-</button>
+        <span id="gauntlet-wager-stake" class="gh-chip"></span>
+        <button type="button" id="gauntlet-wager-inc" class="btn gh-wager-btn">+</button>
+        <span id="gauntlet-wager-round" class="gh-chip"></span>
+      </div>
       <!-- The Final Court role chip + shove button (trial 6). -->
       <div id="gauntlet-court" class="gh-court">
         <span id="gauntlet-court-role" class="gh-court-role"></span>
@@ -399,7 +408,6 @@
     <div id="quest-log-window" class="window panel"></div>
     <div id="vendor-window" class="window panel"></div>
     <div id="gauntlet-recruit" class="window panel"></div>
-    <div id="gauntlet-wager" class="window panel gauntlet-trial-panel"></div>
     <div id="crafting-window" class="window panel"></div>
     <div id="map-window" class="window panel">
       <button type="button" class="x-btn" id="map-close" data-i18n-title="hud.core.closeMap" data-i18n-aria="hud.core.closeMap" title="Close map" aria-label="Close map" data-icon="close"></button>
