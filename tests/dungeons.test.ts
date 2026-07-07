@@ -591,9 +591,11 @@ describe('dungeons: heroic Nythraxis raid arena', () => {
     const marks = ((boss.loot?.items ?? []) as any[]).filter(
       (s) => s.itemId === HEROIC_MARK_ITEM_ID,
     );
-    expect(marks).toHaveLength(raiders.length);
+    // The raid pays THREE marks per participant (marksPerParticipant), one
+    // personal slot each so a single loot click takes all three.
+    expect(marks).toHaveLength(raiders.length * 3);
     expect(marks.flatMap((s) => s.personalFor).sort((a, b) => a - b)).toEqual(
-      [...raiders].sort((a, b) => a - b),
+      raiders.flatMap((pid) => [pid, pid, pid]).sort((a, b) => a - b),
     );
   });
 });

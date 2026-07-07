@@ -75,6 +75,21 @@ describe('Nythraxis encounter module (N1)', () => {
     expect(nythraxis.isNythraxisScriptedControl(add, { id: 'frost_nova' } as never)).toBe(false);
   });
 
+  it('Raise Fallen seeds and re-arms on the 30 second cadence (both difficulties)', () => {
+    const { ctx, boss } = setup();
+    nythraxis.updateNythraxisEncounter(ctx, boss); // engage initializes the state
+    const st = boss.nythraxis!;
+    // The first wave is telegraphed one full interval after engage.
+    expect(st.raiseFallenTimer).toBeCloseTo(30, 0);
+
+    const before = (boss.summonedIds as number[]).length;
+    st.raiseFallenTimer = 0.0001;
+    nythraxis.updateNythraxisRaiseFallen(ctx, boss, st);
+
+    expect((boss.summonedIds as number[]).length).toBe(before + 2);
+    expect(st.raiseFallenTimer).toBe(30); // re-armed to the 30s cadence
+  });
+
   it('transitions to phase two at 70%: room War Stomp stun + Aldric + lit wardstones', () => {
     const { ctx, boss, tank } = setup();
     boss.hp = Math.floor(boss.maxHp * 0.69);

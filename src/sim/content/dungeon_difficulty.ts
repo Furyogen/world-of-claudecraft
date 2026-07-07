@@ -12,9 +12,12 @@ export interface HeroicDungeonTuning {
   healthMultiplier: number;
   damageMultiplier: number;
   armorMultiplier: number;
-  // The dungeon's last boss: killing it in a heroic instance drops one Heroic
-  // Mark per eligible participant.
+  // The dungeon's last boss: killing it in a heroic instance drops Heroic
+  // Marks for every eligible participant.
   finalBossId: string;
+  // Marks each participant can loot from the final-boss corpse (one
+  // personalFor slot per mark, so a single loot click takes them all).
+  marksPerParticipant: number;
 }
 
 // Tuning model follows classic-era (TBC) heroics: measured database pairs put
@@ -42,6 +45,7 @@ export const HEROIC_DUNGEON_TUNING: Record<string, HeroicDungeonTuning> = {
     damageMultiplier: 3.4,
     armorMultiplier: 1.3,
     finalBossId: 'morthen',
+    marksPerParticipant: 1,
   },
   sunken_bastion: {
     id: 'sunken_bastion',
@@ -51,6 +55,7 @@ export const HEROIC_DUNGEON_TUNING: Record<string, HeroicDungeonTuning> = {
     damageMultiplier: 3.8,
     armorMultiplier: 1.3,
     finalBossId: 'vael_the_mistcaller',
+    marksPerParticipant: 1,
   },
   drowned_temple: {
     id: 'drowned_temple',
@@ -60,6 +65,7 @@ export const HEROIC_DUNGEON_TUNING: Record<string, HeroicDungeonTuning> = {
     damageMultiplier: 4.2,
     armorMultiplier: 1.25,
     finalBossId: 'ysolei',
+    marksPerParticipant: 1,
   },
   gravewyrm_sanctum: {
     id: 'gravewyrm_sanctum',
@@ -69,6 +75,7 @@ export const HEROIC_DUNGEON_TUNING: Record<string, HeroicDungeonTuning> = {
     damageMultiplier: 4.6,
     armorMultiplier: 1.2,
     finalBossId: 'korzul_the_gravewyrm',
+    marksPerParticipant: 1,
   },
   // The 10-player raid arena. Normal Nythraxis already swings ~3.7x harder
   // than Korzul, so the raid's heroic multiplier is small in RELATIVE terms
@@ -88,5 +95,6 @@ export const HEROIC_DUNGEON_TUNING: Record<string, HeroicDungeonTuning> = {
     damageMultiplier: 1.6,
     armorMultiplier: 1.2,
     finalBossId: 'nythraxis_scourge_of_thornpeak',
+    marksPerParticipant: 3,
   },
 };

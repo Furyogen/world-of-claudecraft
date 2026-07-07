@@ -302,12 +302,14 @@ function freeInstance(ctx: SimContext, inst: InstanceSlot): void {
   inst.emptyFor = 0;
 }
 
-// Heroic participation reward: the final boss of a heroic instance drops one
-// personal Heroic Mark per eligible participant. `recipients` is the same
-// downed-members-included snapshot handleDeath uses for XP and loot rights,
-// so everyone who took part in the kill can pick up exactly one mark; each
-// slot is personalFor a single player, so nobody can take another's. Draws no
-// rng, so the corpse loot draw order is untouched.
+// Heroic participation reward: the final boss of a heroic instance drops
+// Heroic Marks for every eligible participant (marksPerParticipant on the
+// tuning record: 1 for the five-mans, 3 for the Nythraxis raid). `recipients`
+// is the same downed-members-included snapshot handleDeath uses for XP and
+// loot rights. Each mark is its own personalFor slot (the loot pickup arm
+// grants one item per personal slot, so a single loot click takes them all)
+// and nobody can take another player's. Draws no rng, so the corpse loot
+// draw order is untouched.
 export function awardHeroicMarks(ctx: SimContext, mob: Entity, recipients: PlayerMeta[]): void {
   if (recipients.length === 0) return;
   const inst = ctx.instances.find((i) => i.partyKey !== null && i.mobIds.includes(mob.id));
@@ -316,7 +318,9 @@ export function awardHeroicMarks(ctx: SimContext, mob: Entity, recipients: Playe
   if (!tuning || mob.templateId !== tuning.finalBossId) return;
   const loot = mob.loot ?? { copper: 0, items: [] };
   for (const meta of recipients) {
-    loot.items.push({ itemId: HEROIC_MARK_ITEM_ID, count: 1, personalFor: [meta.entityId] });
+    for (let i = 0; i < tuning.marksPerParticipant; i++) {
+      loot.items.push({ itemId: HEROIC_MARK_ITEM_ID, count: 1, personalFor: [meta.entityId] });
+    }
   }
   mob.loot = loot;
   mob.lootable = true;

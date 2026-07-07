@@ -70,7 +70,10 @@ const NYTHRAXIS_GRAVEBREAKER_RANGE = 11;
 const NYTHRAXIS_GRAVEBREAKER_HALF_ARC = Math.PI / 3;
 const NYTHRAXIS_OPENER_SECOND_YELL_DELAY = 4;
 const NYTHRAXIS_DIALOGUE_LINE_SECONDS = 2.6;
-const NYTHRAXIS_RAISE_FALLEN_EVERY = 45;
+// Raise Fallen add-wave cadence, both difficulties (heroic scales the ADDS,
+// not the cadence). Was 45s; tightened to 30s so the waves stay pressure the
+// raid must answer all fight.
+const NYTHRAXIS_RAISE_FALLEN_EVERY = 30;
 const NYTHRAXIS_PHASE_TWO_HP = 0.7;
 const NYTHRAXIS_SOUL_REND_EVERY = 30;
 const NYTHRAXIS_SOUL_REND_DURATION = 8;
