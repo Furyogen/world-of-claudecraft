@@ -138,6 +138,53 @@ website download page offers the AppImage (not the deb): it runs on immutable
 Fedora atomic desktops (Bazzite, Steam Deck) with no system install, just
 `chmod +x` and launch, which the deb cannot do there.
 
+## Linux publish from CI
+
+Linux is the one channel published automatically: the
+`.github/workflows/desktop-linux-publish.yml` workflow builds the Linux artifacts
+(AppImage + deb, x64 + arm64), generates `SHA256SUMS`, and uploads everything plus
+both per-arch feed files to the update host over R2's S3 API. macOS and Windows
+stay on the manual steps below until their signing secrets are provisioned in CI.
+
+Triggers:
+
+- Pushing a release tag `v<version>` (the tagged commit must be on `main`, the tag
+  must match `package.json` `version`, and `DESKTOP_VERSION` must match too; the
+  workflow hard-fails on any mismatch so a half-bumped release cannot publish).
+- Manual `workflow_dispatch` (Actions tab, "Desktop Linux publish", pick a
+  branch), for backfilling the version currently on that ref. The same version
+  lockstep guards run; only the tag and main-ancestry checks are skipped.
+
+Upload order is artifacts first, `latest-linux.yml` + `latest-linux-arm64.yml`
+last, so installed apps are never offered an update whose file is not yet
+downloadable.
+
+One-time provisioning (maintainer):
+
+1. Cloudflare R2: create a bucket (any name, e.g. `woc-desktop-updates`) and
+   connect the custom domain `updates.worldofclaudecraft.com` to it (R2 bucket
+   settings, Custom Domains; the zone must be on the same Cloudflare account).
+   Objects are uploaded under the `desktop/` prefix, matching the
+   `/desktop/` path the feed URL and download page already use.
+2. R2 API token: create an "Object Read and Write" API token scoped to that one
+   bucket (Cloudflare dashboard, R2, Manage API Tokens). Note the Access Key ID,
+   Secret Access Key, and your Cloudflare account id.
+3. GitHub repo secrets (Settings, Secrets and variables, Actions):
+   `R2_ACCOUNT_ID`, `R2_BUCKET`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`.
+4. Public read: the custom domain makes the bucket publicly readable through
+   that hostname only, which is exactly what the updater and download page need;
+   do not additionally enable the `r2.dev` public URL.
+
+Verify after the first publish:
+
+```bash
+curl -sI https://updates.worldofclaudecraft.com/desktop/latest-linux.yml | head -1
+curl -s https://updates.worldofclaudecraft.com/desktop/SHA256SUMS
+```
+
+Users verify a download against the published checksums with
+`sha256sum -c SHA256SUMS --ignore-missing` from their download directory.
+
 ## Publishing a website update
 
 1. Bump `version` in `package.json` (the feed is version-ordered; see rollback),
@@ -156,7 +203,9 @@ Fedora atomic desktops (Bazzite, Steam Deck) with no system install, just
      verify the emitted installer filename and the `path` in `latest.yml` on the
      first Windows build. To ship separate per-arch installers instead, set
      `build.nsis.buildUniversalInstaller: false`.
-   - Linux: `...-linux-x86_64.AppImage` (x64) / `...-linux-arm64.AppImage`
+   - Linux: handled by CI (see "Linux publish from CI" above); the manual list,
+     should CI ever be bypassed: `...-linux-x86_64.AppImage` (x64) /
+     `...-linux-arm64.AppImage`
      (electron-builder names the x64 AppImage `x86_64`; blockmap data is
      embedded), the debs `...-linux-amd64.deb` (x64) / `...-linux-arm64.deb` for
      the download page, plus BOTH per-arch feed files `latest-linux.yml` (x64)
