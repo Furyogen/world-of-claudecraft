@@ -768,6 +768,10 @@ export const da_DK: EnTranslations = {
       "leaderOption": "Bytteleder: Leder (dig)",
       "masterOption": "Bytteleder: {name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "Set Dungeon Difficulty: Heroic",
+      "setNormal": "Set Dungeon Difficulty: Normal"
+    },
     "bags": {
       "filterGroupAria": "Filtrér tasker efter kategori",
       "filterAll": "Alle",

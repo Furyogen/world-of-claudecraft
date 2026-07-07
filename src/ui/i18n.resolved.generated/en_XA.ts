@@ -768,6 +768,10 @@ export const en_XA: EnTranslations = {
       "leaderOption": "[Ɱášţéŕ Ļóóţéŕ: Ļéáðéŕ (Ýóú)]",
       "masterOption": "[Ɱášţéŕ Ļóóţéŕ: {name}]"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "[Šéţ Ðúñĝéóñ Ðíƒƒíçúļţý: Ĥéŕóíç]",
+      "setNormal": "[Šéţ Ðúñĝéóñ Ðíƒƒíçúļţý: Ñóŕɱáļ]"
+    },
     "bags": {
       "filterGroupAria": "[Ƒíļţéŕ ƀáĝš ƀý çáţéĝóŕý]",
       "filterAll": "[Áļļ]",

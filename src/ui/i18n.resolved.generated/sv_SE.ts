@@ -768,6 +768,10 @@ export const sv_SE: EnTranslations = {
       "leaderOption": "Bytesmästare: Ledare (Du)",
       "masterOption": "Bytesmästare: {name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "Set Dungeon Difficulty: Heroic",
+      "setNormal": "Set Dungeon Difficulty: Normal"
+    },
     "bags": {
       "filterGroupAria": "Filtrera väskor efter kategori",
       "filterAll": "Alla",

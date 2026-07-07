@@ -177,6 +177,8 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.lootSettings.title': '拾取设置',
   'hudChrome.lootSettings.close': '关闭拾取设置',
   'hudChrome.lootSettings.menuItem': '拾取设置',
+  'hudChrome.dungeonDifficulty.setHeroic': '设置地下城难度：英雄',
+  'hudChrome.dungeonDifficulty.setNormal': '设置地下城难度：普通',
   'hudChrome.lootSettings.method': '拾取方式',
   'hudChrome.lootSettings.rollThreshold': '掷骰门槛',
   'hudChrome.lootSettings.groupLoot': '小队拾取',

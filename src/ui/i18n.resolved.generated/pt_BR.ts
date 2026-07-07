@@ -768,6 +768,10 @@ export const pt_BR: EnTranslations = {
       "leaderOption": "Saqueador Mestre: Líder (Você)",
       "masterOption": "Saqueador Mestre: {name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "Set Dungeon Difficulty: Heroic",
+      "setNormal": "Set Dungeon Difficulty: Normal"
+    },
     "bags": {
       "filterGroupAria": "Filtrar bolsas por categoria",
       "filterAll": "Todos",

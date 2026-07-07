@@ -58,6 +58,27 @@ describe('heroic tuning data contract', () => {
     }
     expect(ITEMS[HEROIC_MARK_ITEM_ID]).toBeTruthy();
   });
+
+  it('pins the classic-era heroic multipliers per dungeon', () => {
+    // TBC-style heroic tuning: leveling dungeons land at ~3x health / ~2.5x
+    // damage of their own normal mode once the level-20 pin is included; the
+    // cap-tuned Gravewyrm Sanctum carries the smaller endgame ratio. Exact
+    // literals so an accidental retune (or a revert to the old ~1.1x elite
+    // bump) reddens deliberately.
+    expect(
+      Object.fromEntries(
+        Object.values(HEROIC_DUNGEON_TUNING).map((t) => [
+          t.id,
+          [t.healthMultiplier, t.damageMultiplier, t.armorMultiplier],
+        ]),
+      ),
+    ).toEqual({
+      hollow_crypt: [1.9, 1.55, 1.3],
+      sunken_bastion: [2.0, 1.6, 1.3],
+      drowned_temple: [2.6, 2.2, 1.25],
+      gravewyrm_sanctum: [1.8, 1.5, 1.2],
+    });
+  });
 });
 
 describe('claimDifficultyForDungeon', () => {
@@ -81,15 +102,15 @@ describe('mobTemplateForDungeonDifficulty', () => {
   it('produces an exact heroic transform without mutating the base template', () => {
     const before = JSON.stringify(SYNTHETIC);
     const heroic = mobTemplateForDungeonDifficulty(SYNTHETIC, 'hollow_crypt', 'heroic');
-    // hollow_crypt tuning: health x1.15, damage x1.1, armor x1.05, level 20.
+    // hollow_crypt tuning: health x1.9, damage x1.55, armor x1.3, level 20.
     expect(heroic).not.toBe(SYNTHETIC);
     expect(heroic.minLevel).toBe(20);
     expect(heroic.maxLevel).toBe(20);
-    expect(heroic.hpBase).toBeCloseTo(115, 10);
-    expect(heroic.hpPerLevel).toBeCloseTo(11.5, 10);
-    expect(heroic.dmgBase).toBeCloseTo(22, 10);
-    expect(heroic.dmgPerLevel).toBeCloseTo(2.2, 10);
-    expect(heroic.armorPerLevel).toBeCloseTo(4.2, 10);
+    expect(heroic.hpBase).toBeCloseTo(190, 10);
+    expect(heroic.hpPerLevel).toBeCloseTo(19, 10);
+    expect(heroic.dmgBase).toBeCloseTo(31, 10);
+    expect(heroic.dmgPerLevel).toBeCloseTo(3.1, 10);
+    expect(heroic.armorPerLevel).toBeCloseTo(5.2, 10);
     // Untouched fields carry over; the base template is never mutated.
     expect(heroic.attackSpeed).toBe(SYNTHETIC.attackSpeed);
     expect(heroic.moveSpeed).toBe(SYNTHETIC.moveSpeed);

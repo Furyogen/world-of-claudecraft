@@ -11,28 +11,40 @@
 export const pending: Record<string, readonly string[]> = {
   "es": [
     "entities.items.heroic_mark.name",
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal"
   ],
   "es_ES": [
     "entities.items.heroic_mark.name",
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal"
   ],
   "fr_FR": [
     "entities.items.heroic_mark.name",
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal"
   ],
   "fr_CA": [
     "entities.items.heroic_mark.name",
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal"
   ],
   "en_CA": [],
   "it_IT": [
     "entities.items.heroic_mark.name",
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal"
   ],
   "de_DE": [
     "entities.items.heroic_mark.name",
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal"
   ],
   "zh_CN": [
     "hudChrome.discord.roleTag.coredevs"
@@ -48,41 +60,59 @@ export const pending: Record<string, readonly string[]> = {
   ],
   "pt_BR": [
     "entities.items.heroic_mark.name",
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal"
   ],
   "ru_RU": [
     "hudChrome.discord.roleTag.coredevs"
   ],
   "cs_CZ": [
     "entities.items.heroic_mark.name",
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal"
   ],
   "nl_NL": [
     "entities.items.heroic_mark.name",
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal"
   ],
   "pl_PL": [
     "entities.items.heroic_mark.name",
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal"
   ],
   "id_ID": [
     "entities.items.heroic_mark.name",
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal"
   ],
   "tr_TR": [
     "entities.items.heroic_mark.name",
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal"
   ],
   "sv_SE": [
     "entities.items.heroic_mark.name",
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal"
   ],
   "vi_VN": [
     "entities.items.heroic_mark.name",
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal"
   ],
   "da_DK": [
     "entities.items.heroic_mark.name",
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal"
   ]
 };

@@ -768,6 +768,10 @@ export const nl_NL: EnTranslations = {
       "leaderOption": "Buitmeester: Leider (jij)",
       "masterOption": "Buitmeester: {name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "Set Dungeon Difficulty: Heroic",
+      "setNormal": "Set Dungeon Difficulty: Normal"
+    },
     "bags": {
       "filterGroupAria": "Tassen filteren op categorie",
       "filterAll": "Alle",
