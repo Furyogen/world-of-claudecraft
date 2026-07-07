@@ -2611,6 +2611,30 @@ describe('server tick rate on the snap head', () => {
     // share perfProfile), rounded for the wire
     expect(server.perfProfile().tickHz).toBeCloseTo(20, 1);
   });
+
+  it('throttles tickHz on the head, re-emitting once the interval elapses', () => {
+    const server = new GameServer();
+    const fc = fakeWs();
+    joinServer(server, fc, 1, 'Ticky');
+    const internals = server as any;
+    internals.tickRateMeter.record(0, 1);
+    for (let t = 50; t <= 3000; t += 50) internals.tickRateMeter.record(t, 1);
+    internals.tickHz = internals.tickRateMeter.rate(3000);
+    // first head after warm-up carries the value
+    broadcast(server);
+    expect(lastSnap(fc.sent).tickHz).toBeCloseTo(20, 1);
+    // a second head within the throttle window (no sim.time advance) omits it,
+    // so the slow-moving scalar does not ride every 20 Hz snapshot. The client
+    // holds its last reading across that gap (see the mirror test below).
+    fc.sent.length = 0;
+    broadcast(server);
+    expect(lastSnap(fc.sent).tickHz).toBeUndefined();
+    // once sim.time advances past the interval, the next head carries it again
+    for (let i = 0; i < 20; i++) server.sim.tick(); // ~1s of sim time
+    fc.sent.length = 0;
+    broadcast(server);
+    expect(lastSnap(fc.sent).tickHz).toBeCloseTo(20, 1);
+  });
 });
 
 describe('client mirror of the server tick rate', () => {

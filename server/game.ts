@@ -124,6 +124,11 @@ const FULL_RATE_RADIUS_SQ = 55 * 55;
 const HALF_RATE_RADIUS_SQ = 80 * 80;
 const HALF_RATE_DIVISOR = 2;
 const QUARTER_RATE_DIVISOR = 4;
+// How often the achieved tick rate rides the snapshot head. The meter's 3s
+// sliding window moves slowly and the client holds the last value across
+// omissions, so ~2 Hz keeps the overlay live without paying the scalar on
+// every 20 Hz head. In sim seconds (the head already carries sim.time).
+const TICK_HZ_HEAD_INTERVAL_S = 0.5;
 // cached wire fragments of despawned entities are swept once a minute
 const WIRE_CACHE_SWEEP_TICKS = 1200;
 const EVENT_RADIUS = 90;
@@ -776,9 +781,12 @@ export class GameServer {
   private tickMsAvg = 0;
   // Achieved sim ticks per wall-clock second. The cost metrics above go blind
   // when the dt clamp discards wall time under saturation; this is the number
-  // that actually sags. Rides every snapshot head + perfProfile().
+  // that actually sags. Rides the snapshot head (throttled) + perfProfile().
   private readonly tickRateMeter = new TickRateMeter();
   private tickHz: number | null = null;
+  // sim.time (seconds) of the last head that carried tickHz; throttles the
+  // scalar to TICK_HZ_HEAD_INTERVAL_S so it does not ride every 20 Hz head.
+  private lastTickHzHeadTime: number | null = null;
   // Rolling per-phase loop timing, localizes a stutter to a phase. Always-on
   // (the hot path allocates nothing); read via perfProfile() for admin/ops.
   private readonly tickProfiler = new TickProfiler([
@@ -3222,11 +3230,23 @@ export class GameServer {
   private broadcastSnapshots(): void {
     if (this.clients.size === 0) return;
     const tick = this.sim.tickCount;
-    // tickHz is omitted while the meter warms up (first ~1s) so a fresh server
-    // never shows a bogus reading. A warmed meter reports a positive rate: a
-    // window with zero committed ticks cannot coexist with a firing broadcast
-    // (acc accrues every callback), and a fully stalled loop sends nothing.
-    const tickHzJson = this.tickHz == null ? '' : `,"tickHz":${round2(this.tickHz)}`;
+    // tickHz rides the head at ~2 Hz, not on every snapshot: it is omitted while
+    // the meter warms up (first ~1s, so a fresh server never shows a bogus
+    // reading), and between-emissions the client holds the last value. A warmed
+    // meter reports a positive rate: a window with zero committed ticks cannot
+    // coexist with a firing broadcast (acc accrues every callback), and a fully
+    // stalled loop sends nothing. Old clients and warm-up read alike as absent.
+    let tickHzJson = '';
+    if (this.tickHz != null) {
+      const now = this.sim.time;
+      if (
+        this.lastTickHzHeadTime == null ||
+        now - this.lastTickHzHeadTime >= TICK_HZ_HEAD_INTERVAL_S
+      ) {
+        tickHzJson = `,"tickHz":${round2(this.tickHz)}`;
+        this.lastTickHzHeadTime = now;
+      }
+    }
     const head = `{"t":"snap","tick":${tick},"time":${round2(this.sim.time)}${tickHzJson}`;
     // Guard each session: a throw while building one player's snapshot must not
     // starve every other session of its snapshot this tick (server/CLAUDE.md).
