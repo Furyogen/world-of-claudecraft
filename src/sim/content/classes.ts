@@ -1,4 +1,4 @@
-import type { AbilityDef, AbilityEffect, PlayerClass, Stats, WeaponInfo } from '../types';
+import type { AbilityDef, AbilityEffect, AuraKind, PlayerClass, Stats, WeaponInfo } from '../types';
 import type { TalentModifiers } from './talents';
 
 // ---------------------------------------------------------------------------
@@ -3621,6 +3621,38 @@ export interface KnownAbility {
   castWhileMoving?: boolean; // talent-granted mobility (def.castWhileMoving covers baseline)
 }
 
+// Aura kinds whose `value` is a multiplier or a 0..1 fraction, not a flat
+// magnitude (the per-kind semantics live on the sim apply sites; see the table in
+// src/ui/aura_effect.ts). Talent damage/heal percentages must never scale these,
+// and the integer rounding the flat kinds use would destroy them outright: a
+// restoration mastery's +14% healing turned Fleet Form's 1.4 speed multiplier
+// into Math.round(1.4) = 1 (no speed bonus), and a melee mastery turned
+// Ghostfoot's 0.5 dodge fraction into Math.round(0.55) = 1 (100% dodge).
+const RATIO_VALUED_AURA_KINDS: ReadonlySet<AuraKind> = new Set<AuraKind>([
+  'slow',
+  'attackspeed',
+  'buff_dodge',
+  'buff_speed',
+  'buff_haste',
+  'buff_allstats_pct',
+  'form_bear',
+  'form_cat',
+  'form_travel',
+  'stealth',
+  'defensive_stance',
+  'righteous_fury',
+  'mortal_wound',
+  'expose',
+  'spellvuln',
+  'vulnerability',
+  'hex',
+  'tongues',
+  'cost_tax',
+  'critvuln',
+  'buff_scale',
+  'buff_jump',
+]);
+
 // Scale one effect's damage/heal magnitudes, returning a NEW effect object — the
 // base content arrays are shared module data and must never be mutated. `flat`
 // is added once to the effect's primary magnitude.
@@ -3679,8 +3711,10 @@ function scaleEffect(
     case 'absorb':
       return { ...eff, amount: Math.round(eff.amount * healMult + flat) };
     case 'buffTarget':
+      if (RATIO_VALUED_AURA_KINDS.has(eff.kind)) return eff;
       return { ...eff, value: Math.round(eff.value * dmgMult + flat) };
     case 'selfBuff':
+      if (RATIO_VALUED_AURA_KINDS.has(eff.kind)) return eff;
       return { ...eff, value: Math.round(eff.value * dmgMult + flat) };
     case 'lifeTap':
       return { ...eff, mana: Math.round(eff.mana * dmgMult + flat) };
@@ -3715,11 +3749,12 @@ function applyTalentMods(entry: KnownAbility, mods: TalentModifiers): void {
     if (am.cooldownPct) entry.cooldown = Math.max(0, entry.cooldown * (1 + am.cooldownPct));
     if (am.castWhileMoving) entry.castWhileMoving = true;
     // buffPct strengthens the value of a (self/target) buff, e.g. Improved Devotion Aura
-    // giving more armor. Only the buff effects scale; damage on the same ability does not.
+    // giving more armor. Only the buff effects scale; damage on the same ability does not,
+    // and ratio-valued kinds (speed/stealth/dodge multipliers) pass through untouched.
     if (am.buffPct) {
       const mul = 1 + am.buffPct;
       entry.effects = entry.effects.map((e) =>
-        e.type === 'selfBuff' || e.type === 'buffTarget'
+        (e.type === 'selfBuff' || e.type === 'buffTarget') && !RATIO_VALUED_AURA_KINDS.has(e.kind)
           ? { ...e, value: Math.round(e.value * mul) }
           : e,
       );
