@@ -3166,6 +3166,7 @@ export class Hud {
     prize: $('#gauntlet-prize'),
     light: $('#gauntlet-light'),
     hint: $('#gauntlet-hint'),
+    tutorial: $('#gauntlet-tutorial'),
     echoStrip: $('#gauntlet-echo-strip'),
     echoRound: $('#gauntlet-echo-round'),
     echoClock: $('#gauntlet-echo-clock'),

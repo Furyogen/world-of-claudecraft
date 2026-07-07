@@ -4282,6 +4282,29 @@
     background: linear-gradient(#ff6b5e, #b62c22);
     box-shadow: 0 0 10px #ff5a4a99;
   }
+  /* The pre-trial tutorial banner: the upcoming trial's teaching line, big
+     and centered above mid-screen while the staging/interlude countdown runs
+     out (the painter shows it for the last TUTORIAL_LEAD_S seconds). */
+  #gauntlet-tutorial {
+    position: fixed;
+    left: 50%;
+    top: 30%;
+    transform: translate(-50%, -50%);
+    display: none;
+    width: max-content;
+    max-width: 86%;
+    padding: 10px 24px;
+    font: 700 20px / 28px var(--title-font);
+    letter-spacing: 0.5px;
+    color: var(--color-primary);
+    text-align: center;
+    text-shadow: 1px 1px 3px #000;
+    background: rgba(8, 8, 12, 0.78);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    pointer-events: none;
+    z-index: 6;
+  }
 
   /* ---------- gauntlet circles overlay ---------- */
   /* The Great Pull's input: one pooled circle, positioned per spawn via
