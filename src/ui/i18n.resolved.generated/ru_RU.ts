@@ -6360,8 +6360,11 @@ export const ru_RU: EnTranslations = {
       "signet_of_zyzz": {
         "name": "Печатка Зизза"
       },
-      "architect": {
-        "name": "Архитектор"
+      "band_of_the_architect": {
+        "name": "Кольцо архитектора"
+      },
+      "swiftstride_pendant": {
+        "name": "Кулон быстрой поступи"
       },
       "yumis_best_pendant": {
         "name": "Лучший кулон Юми"

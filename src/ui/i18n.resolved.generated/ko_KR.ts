@@ -6360,8 +6360,11 @@ export const ko_KR: EnTranslations = {
       "signet_of_zyzz": {
         "name": "지즈의 인장"
       },
-      "architect": {
-        "name": "건축가"
+      "band_of_the_architect": {
+        "name": "건축가의 고리"
+      },
+      "swiftstride_pendant": {
+        "name": "질주의 펜던트"
       },
       "yumis_best_pendant": {
         "name": "유미의 소중한 펜던트"

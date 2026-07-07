@@ -6360,8 +6360,11 @@ export const fr_FR: EnTranslations = {
       "signet_of_zyzz": {
         "name": "Signet of Zyzz"
       },
-      "architect": {
-        "name": "Architect"
+      "band_of_the_architect": {
+        "name": "Band of the Architect"
+      },
+      "swiftstride_pendant": {
+        "name": "Swiftstride Pendant"
       },
       "yumis_best_pendant": {
         "name": "Yumi's Best Pendant"

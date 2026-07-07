@@ -72,9 +72,9 @@ export const HEROIC_VENDOR_ITEMS: Record<string, ItemDef> = {
     stats: { spi: 6, int: 5 },
     sellValue: 4500,
   },
-  architect: {
-    id: 'architect',
-    name: 'Architect',
+  band_of_the_architect: {
+    id: 'band_of_the_architect',
+    name: 'Band of the Architect',
     kind: 'armor',
     slot: 'ring',
     quality: 'epic',
@@ -102,6 +102,16 @@ export const HEROIC_VENDOR_ITEMS: Record<string, ItemDef> = {
     stats: { int: 7, spi: 5 },
     sellValue: 6000,
   },
+  swiftstride_pendant: {
+    id: 'swiftstride_pendant',
+    name: 'Swiftstride Pendant',
+    kind: 'armor',
+    slot: 'neck',
+    quality: 'epic',
+    requiredLevel: 20,
+    stats: { str: 6, agi: 6 },
+    sellValue: 6000,
+  },
   pendant_of_endless_profit: {
     id: 'pendant_of_endless_profit',
     name: 'Pendant of Endless Profit',
@@ -120,8 +130,9 @@ export const HEROIC_VENDOR_STOCK: readonly HeroicVendorOffer[] = [
   { itemId: 'sutils_fortune', marks: 12 },
   { itemId: 'arthurs_round_band', marks: 12 },
   { itemId: 'signet_of_zyzz', marks: 12 },
-  { itemId: 'architect', marks: 12 },
+  { itemId: 'band_of_the_architect', marks: 12 },
   { itemId: 'yumis_best_pendant', marks: 16 },
   { itemId: 'zense_meridian', marks: 16 },
+  { itemId: 'swiftstride_pendant', marks: 16 },
   { itemId: 'pendant_of_endless_profit', marks: 16 },
 ];

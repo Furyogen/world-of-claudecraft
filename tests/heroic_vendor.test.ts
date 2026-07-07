@@ -38,7 +38,7 @@ function errorTexts(sim: AnySim): string[] {
 
 describe('heroic vendor stock: item-level and budget pins', () => {
   it('every offer is a real epic level-20 jewelry item at item level 26', () => {
-    expect(HEROIC_VENDOR_STOCK.length).toBe(9);
+    expect(HEROIC_VENDOR_STOCK.length).toBe(10);
     for (const offer of HEROIC_VENDOR_STOCK) {
       const item = ITEMS[offer.itemId];
       expect(item, offer.itemId).toBeTruthy();

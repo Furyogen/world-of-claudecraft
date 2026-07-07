@@ -6360,8 +6360,11 @@ export const zh_CN: EnTranslations = {
       "signet_of_zyzz": {
         "name": "兹兹的印戒"
       },
-      "architect": {
-        "name": "建筑师"
+      "band_of_the_architect": {
+        "name": "建筑师之环"
+      },
+      "swiftstride_pendant": {
+        "name": "疾行者吊坠"
       },
       "yumis_best_pendant": {
         "name": "由美的至爱吊坠"

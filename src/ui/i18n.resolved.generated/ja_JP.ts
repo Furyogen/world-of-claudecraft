@@ -6360,8 +6360,11 @@ export const ja_JP: EnTranslations = {
       "signet_of_zyzz": {
         "name": "ジズの印章指輪"
       },
-      "architect": {
-        "name": "アーキテクト"
+      "band_of_the_architect": {
+        "name": "アーキテクトの指輪"
+      },
+      "swiftstride_pendant": {
+        "name": "疾駆のペンダント"
       },
       "yumis_best_pendant": {
         "name": "ユミの一番のペンダント"

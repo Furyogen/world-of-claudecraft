@@ -6360,8 +6360,11 @@ export const en_XA: EnTranslations = {
       "signet_of_zyzz": {
         "name": "[Šíĝñéţ óƒ Žýžž]"
       },
-      "architect": {
-        "name": "[Áŕçĥíţéçţ]"
+      "band_of_the_architect": {
+        "name": "[Ɓáñð óƒ ţĥé Áŕçĥíţéçţ]"
+      },
+      "swiftstride_pendant": {
+        "name": "[Šŵíƒţšţŕíðé Þéñðáñţ]"
       },
       "yumis_best_pendant": {
         "name": "[Ýúɱí'š Ɓéšţ Þéñðáñţ]"
