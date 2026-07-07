@@ -369,7 +369,13 @@ export const ko_KR: EnTranslations = {
       "historyFilterLabel": "유형별 필터",
       "historyFilterAll": "모든 유형",
       "historyCredit": "+{amount}",
-      "historyDebit": "-{amount}"
+      "historyDebit": "-{amount}",
+      "inspectButton": "상세",
+      "inspectBack": "상점으로 돌아가기",
+      "inspectArtAlt": "{name} 미리보기",
+      "tryOnButton": "Try on",
+      "tryOnStopButton": "착용해보기 중단",
+      "tryOnActiveNote": "내 캐릭터에 미리 착용해보는 중입니다. 소유가 부여되지 않습니다."
     },
     "theme": {
       "preset": "UI 테마",

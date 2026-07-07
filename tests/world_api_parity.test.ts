@@ -1,6 +1,6 @@
 // W0c: the IWorld structural-parity gate.
 //
-// `IWorld` (src/world_api.ts, 198 members) is the ONE seam render/ui depend
+// `IWorld` (src/world_api.ts, 200 members) is the ONE seam render/ui depend
 // on. `tsc` already proves both the offline `Sim` and the online `ClientWorld` satisfy
 // it structurally, but the interface is erased at build: there is NO runtime member
 // list, so nothing catches a present-but-throws stub or a kind flip (method vs read).
@@ -9,7 +9,7 @@
 // IWORLD_MEMBERS below is the hand-maintained member list, the W0c analog of the
 // append-only CALLBACK_KEYS in tests/sim_context.test.ts. It is APPEND-ONLY WITH THE
 // INTERFACE: whenever a future slice adds (or removes/renames) a member on `IWorld`,
-// it lands the matching edit here in the SAME commit. The count pins (198 / 52 / 146)
+// it lands the matching edit here in the SAME commit. The count pins (200 / 52 / 148)
 // plus the sorted-name `toEqual` snapshots (modeled on the anti-loosening exclude-set
 // pin in tests/parity/harness.test.ts:131-162) are what force that: a dropped or
 // renamed member reddens deliberately, never silently.
@@ -68,8 +68,8 @@ interface IWorldMember {
   readonly kind: IWorldMemberKind;
 }
 
-// The 198 members of `interface IWorld`, in interface order (world_api.ts).
-// Partition: 52 `data` + 146 `method` (read-returning + command-void + async).
+// The 200 members of `interface IWorld`, in interface order (world_api.ts).
+// Partition: 52 `data` + 148 `method` (read-returning + command-void + async).
 // biome-ignore lint/suspicious/noExportsInTest: IWORLD_MEMBERS is the W0c pinned structural-parity contract (the authoritative IWorld member list)
 export const IWORLD_MEMBERS = [
   // --- core world / player roster + economy reads (data) ---
@@ -134,6 +134,8 @@ export const IWORLD_MEMBERS = [
   { name: 'changeSkin', kind: 'method' },
   { name: 'claimEventSkin', kind: 'method' },
   { name: 'unequipMechChroma', kind: 'method' },
+  { name: 'previewCosmetic', kind: 'method' },
+  { name: 'clearCosmeticPreview', kind: 'method' },
   { name: 'releaseSpirit', kind: 'method' },
   { name: 'resurrectAtCorpse', kind: 'method' },
   { name: 'resurrectAtSpiritHealer', kind: 'method' },
@@ -382,9 +384,9 @@ beforeAll(() => {
 
 describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => {
   it('pins total / data / method counts', () => {
-    expect(IWORLD_MEMBERS.length).toBe(198);
+    expect(IWORLD_MEMBERS.length).toBe(200);
     expect(DATA_MEMBERS.length).toBe(52);
-    expect(METHOD_MEMBERS.length).toBe(146);
+    expect(METHOD_MEMBERS.length).toBe(148);
   });
   it('has no duplicate member names', () => {
     const names = IWORLD_MEMBERS.map((m) => m.name);
@@ -431,6 +433,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'changeSkin',
       'chat',
       'claimEventSkin',
+      'clearCosmeticPreview',
       'clearMarker',
       'collectDelveChestLoot',
       'companionState',
@@ -532,6 +535,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'playerId',
       'prestige',
       'prestigeRank',
+      'previewCosmetic',
       'professionsState',
       'questLog',
       'questState',
@@ -680,6 +684,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'changeSkin',
       'chat',
       'claimEventSkin',
+      'clearCosmeticPreview',
       'clearMarker',
       'collectDelveChestLoot',
       'companionUpgrade',
@@ -755,6 +760,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'pickUpObject',
       'playEmote',
       'prestige',
+      'previewCosmetic',
       'questState',
       'raidLockouts',
       'releaseSpirit',
@@ -939,6 +945,8 @@ const FACET_COSMETICS = [
   'changeSkin',
   'claimEventSkin',
   'unequipMechChroma',
+  'previewCosmetic',
+  'clearCosmeticPreview',
 ] as const satisfies readonly (keyof IWorldCosmetics)[];
 type _ExhaustCosmetics = AssertNever<
   Exclude<keyof IWorldCosmetics, (typeof FACET_COSMETICS)[number]>
@@ -1226,8 +1234,8 @@ describe('W1: aggregate IWorld member set equals the disjoint union of the 24 fa
 
   it('the union of the 24 facets equals the pinned 198-member IWORLD_MEMBERS set', () => {
     const union = Object.values(FACET_MEMBER_ARRAYS).flatMap((arr) => [...arr]);
-    expect(union.length, 'union size before dedup (catches a duplicated member)').toBe(198);
-    expect(new Set(union).size, 'union size after dedup (catches a duplicated member)').toBe(198);
+    expect(union.length, 'union size before dedup (catches a duplicated member)').toBe(200);
+    expect(new Set(union).size, 'union size after dedup (catches a duplicated member)').toBe(200);
     const sortedUnion = [...union].sort();
     const pinned = IWORLD_MEMBERS.map((m) => m.name).sort();
     expect(sortedUnion).toEqual(pinned);

@@ -11,6 +11,8 @@
 // The one non-negotiable: when the balance is null (the service is off) the model
 // is a clean disabled/empty state, NEVER an error crash.
 
+import type { CosmeticPreview } from '../world_api/cosmetics';
+
 /** A price rung as returned by the service (usd + Claudium credited). */
 export interface ClaudiumSkuInput {
   sku: string;
@@ -30,6 +32,17 @@ export interface ClaudiumStoreItemInput {
   name: string;
   kind: 'cosmetic' | 'skin' | 'item';
   costClaudium: number;
+  /**
+   * Optional inspect/try-on payload the service MAY attach to a SKU. All optional
+   * so a service that omits them yields a name/kind/price-only inspect and no
+   * try-on; the view never fabricates them. `art` is a larger preview image URL;
+   * `description` is flavor text; `preview` is the local try-on appearance
+   * descriptor (skin index + catalog + held-weapon model). A SKU with no `preview`
+   * simply cannot be tried on.
+   */
+  art?: string | null;
+  description?: string | null;
+  preview?: CosmeticPreview | null;
 }
 
 /** The raw inputs, all sourced from the service via the SDK. */
@@ -54,6 +67,12 @@ export interface ClaudiumStoreRow {
   name: string;
   kind: 'cosmetic' | 'skin' | 'item';
   costClaudium: number;
+  /** The optional inspect art, carried through verbatim (null when the SKU had none). */
+  art: string | null;
+  /** The optional flavor/description, carried through verbatim (null when absent). */
+  description: string | null;
+  /** The optional try-on descriptor, carried through verbatim (null => no try-on). */
+  preview: CosmeticPreview | null;
 }
 
 /** Which purchase rails the window may enable. */
@@ -255,6 +274,9 @@ export function buildClaudiumView(input: ClaudiumViewInput): ClaudiumView {
     name: i.name,
     kind: i.kind,
     costClaudium: i.costClaudium,
+    art: i.art ?? null,
+    description: i.description ?? null,
+    preview: i.preview ?? null,
   }));
 
   return {

@@ -6139,4 +6139,9 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.claudium.discountBonus': '{base} 增至 {credited} 克劳迪姆 (+{bonus})',
   'hudChrome.claudium.wocIncentive': '使用 $WOC 支付 - 始终至少 15% 折扣',
   'hudChrome.claudium.wocPromoNote': '含限时促销',
+  'hudChrome.claudium.inspectButton': '详情',
+  'hudChrome.claudium.inspectBack': '返回商店',
+  'hudChrome.claudium.inspectArtAlt': '{name} 的预览',
+  'hudChrome.claudium.tryOnStopButton': '停止试穿',
+  'hudChrome.claudium.tryOnActiveNote': '正在你的角色上预览。这不会授予该物品。',
 };

@@ -145,6 +145,7 @@ const UI_PURE_CORES = [
   'src/ui/heroic_vendor_view.ts',
   'src/ui/claudium_view.ts',
   'src/ui/claudium_gift_view.ts',
+  'src/ui/claudium_inspect_view.ts',
   'src/ui/loot_settings_view.ts',
   'src/ui/crafting_view.ts',
   'src/ui/market_view.ts',

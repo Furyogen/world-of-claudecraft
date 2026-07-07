@@ -369,7 +369,13 @@ export const zh_TW: EnTranslations = {
       "historyFilterLabel": "依類型篩選",
       "historyFilterAll": "所有類型",
       "historyCredit": "+{amount}",
-      "historyDebit": "-{amount}"
+      "historyDebit": "-{amount}",
+      "inspectButton": "詳情",
+      "inspectBack": "返回商店",
+      "inspectArtAlt": "{name} 的預覽",
+      "tryOnButton": "Try on",
+      "tryOnStopButton": "停止試穿",
+      "tryOnActiveNote": "正在你的角色上預覽。這不會授予該物品。"
     },
     "theme": {
       "preset": "介面主題",

@@ -1,5 +1,6 @@
 import type {
   AccountCosmetics,
+  CosmeticPreview,
   DailyRewardHistory,
   DailyRewardLeaderboardPage,
   DailyRewardSpinResult,
@@ -2037,6 +2038,48 @@ export class Sim {
 
   changeSkin(skin: number, catalog: SkinCatalog = 'class'): void {
     this.setPlayerSkin(this.primaryId, skin, catalog);
+  }
+
+  // The real (owned) appearance stashed on the first try-on so clearCosmeticPreview
+  // restores it exactly. Null when nothing is being previewed. Kept off PlayerMeta
+  // on purpose: the preview is render-only and MUST NOT persist (serializeCharacter
+  // reads meta, never this), so a save/reload or logout drops it.
+  private cosmeticPreviewBackup: {
+    skin: number;
+    skinCatalog: SkinCatalog;
+    mainhandItemId: string | null;
+  } | null = null;
+
+  /** Local try-on: write only the render-only appearance fields on the primary
+   *  player entity, backing up the real ones on the first call. Grants nothing
+   *  (accountCosmetics + inventory untouched) and never writes meta, so it does
+   *  not persist. Satisfies IWorld.previewCosmetic. */
+  previewCosmetic(preview: CosmeticPreview): void {
+    const e = this.entities.get(this.primaryId);
+    if (!e) return;
+    if (!this.cosmeticPreviewBackup) {
+      this.cosmeticPreviewBackup = {
+        skin: e.skin,
+        skinCatalog: e.skinCatalog,
+        mainhandItemId: e.mainhandItemId,
+      };
+    }
+    e.skin = preview.skin;
+    e.skinCatalog = preview.catalog;
+    e.mainhandItemId = preview.mainhandItemId;
+  }
+
+  /** Revert an active try-on, restoring the backed-up real appearance. A no-op
+   *  when nothing is being previewed. Satisfies IWorld.clearCosmeticPreview. */
+  clearCosmeticPreview(): void {
+    const e = this.entities.get(this.primaryId);
+    const backup = this.cosmeticPreviewBackup;
+    if (e && backup) {
+      e.skin = backup.skin;
+      e.skinCatalog = backup.skinCatalog;
+      e.mainhandItemId = backup.mainhandItemId;
+    }
+    this.cosmeticPreviewBackup = null;
   }
 
   /** Set a player's guild name (online only) so it rides the entity wire and

@@ -6477,4 +6477,9 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.claudium.discountBonus': '{base}에서 {credited} 클라우디움으로 (+{bonus})',
   'hudChrome.claudium.wocIncentive': '$WOC로 결제 시 항상 15% 이상 할인',
   'hudChrome.claudium.wocPromoNote': '기간 한정 프로모션 포함',
+  'hudChrome.claudium.inspectButton': '상세',
+  'hudChrome.claudium.inspectBack': '상점으로 돌아가기',
+  'hudChrome.claudium.inspectArtAlt': '{name} 미리보기',
+  'hudChrome.claudium.tryOnStopButton': '착용해보기 중단',
+  'hudChrome.claudium.tryOnActiveNote': '내 캐릭터에 미리 착용해보는 중입니다. 소유가 부여되지 않습니다.',
 };

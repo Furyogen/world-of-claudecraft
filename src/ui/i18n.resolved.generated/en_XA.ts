@@ -369,7 +369,13 @@ export const en_XA: EnTranslations = {
       "historyFilterLabel": "[Ƒíļţéŕ ƀý ţýþé]",
       "historyFilterAll": "[Áļļ ţýþéš]",
       "historyCredit": "[+{amount}]",
-      "historyDebit": "[-{amount}]"
+      "historyDebit": "[-{amount}]",
+      "inspectButton": "[Ðéţáíļš]",
+      "inspectBack": "[Ɓáçķ ţó šţóŕé]",
+      "inspectArtAlt": "[Þŕéʋíéŵ óƒ {name}]",
+      "tryOnButton": "[Ţŕý óñ]",
+      "tryOnStopButton": "[Šţóþ ţŕýíñĝ óñ]",
+      "tryOnActiveNote": "[Þŕéʋíéŵíñĝ óñ ýóúŕ çĥáŕáçţéŕ. Ţĥíš ðóéš ñóţ ĝŕáñţ íţ.]"
     },
     "theme": {
       "preset": "[ÚÍ Ţĥéɱé]",

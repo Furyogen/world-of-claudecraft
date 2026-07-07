@@ -79,9 +79,52 @@ describe('buildClaudiumView funded state (service on)', () => {
   it('maps the store catalog verbatim into store rows', () => {
     const view = buildClaudiumView(funded);
     expect(view.storeRows).toEqual([
-      { itemId: 'hat', name: 'Golden Hat', kind: 'cosmetic', costClaudium: 500 },
-      { itemId: 'skin', name: 'Ember Skin', kind: 'skin', costClaudium: 2000 },
+      {
+        itemId: 'hat',
+        name: 'Golden Hat',
+        kind: 'cosmetic',
+        costClaudium: 500,
+        art: null,
+        description: null,
+        preview: null,
+      },
+      {
+        itemId: 'skin',
+        name: 'Ember Skin',
+        kind: 'skin',
+        costClaudium: 2000,
+        art: null,
+        description: null,
+        preview: null,
+      },
     ]);
+  });
+
+  it('carries a SKU inspect/try-on payload through to the store row verbatim', () => {
+    const preview = { skin: 3, catalog: 'mech' as const, mainhandItemId: 'wep_x' };
+    const view = buildClaudiumView({
+      ...funded,
+      storeItems: [
+        {
+          itemId: 'cloak',
+          name: 'Star Cloak',
+          kind: 'cosmetic',
+          costClaudium: 750,
+          art: '/ui/claudium/cloak.webp',
+          description: 'A cloak of woven starlight.',
+          preview,
+        },
+      ],
+    });
+    expect(view.storeRows[0]).toEqual({
+      itemId: 'cloak',
+      name: 'Star Cloak',
+      kind: 'cosmetic',
+      costClaudium: 750,
+      art: '/ui/claudium/cloak.webp',
+      description: 'A cloak of woven starlight.',
+      preview,
+    });
   });
 
   it('enables both rails when there are skus and the woc oracle price is present', () => {

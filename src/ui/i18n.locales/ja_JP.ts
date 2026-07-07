@@ -6485,4 +6485,9 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.claudium.discountBonus': '{base} から {credited} クラウジウムへ (+{bonus})',
   'hudChrome.claudium.wocIncentive': '$WOC で支払うと常に 15% 以上割引',
   'hudChrome.claudium.wocPromoNote': '期間限定プロモーションを含む',
+  'hudChrome.claudium.inspectButton': '詳細',
+  'hudChrome.claudium.inspectBack': 'ストアに戻る',
+  'hudChrome.claudium.inspectArtAlt': '{name} のプレビュー',
+  'hudChrome.claudium.tryOnStopButton': '試着をやめる',
+  'hudChrome.claudium.tryOnActiveNote': 'あなたのキャラクターで試着中です。これで入手はできません。',
 };

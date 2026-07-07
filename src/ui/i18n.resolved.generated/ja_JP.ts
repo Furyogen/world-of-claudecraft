@@ -369,7 +369,13 @@ export const ja_JP: EnTranslations = {
       "historyFilterLabel": "種類で絞り込む",
       "historyFilterAll": "すべての種類",
       "historyCredit": "+{amount}",
-      "historyDebit": "-{amount}"
+      "historyDebit": "-{amount}",
+      "inspectButton": "詳細",
+      "inspectBack": "ストアに戻る",
+      "inspectArtAlt": "{name} のプレビュー",
+      "tryOnButton": "Try on",
+      "tryOnStopButton": "試着をやめる",
+      "tryOnActiveNote": "あなたのキャラクターで試着中です。これで入手はできません。"
     },
     "theme": {
       "preset": "UIテーマ",

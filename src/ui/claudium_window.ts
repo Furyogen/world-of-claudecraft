@@ -36,9 +36,16 @@ import {
   giftRedeemUrl,
   isValidGiftEmail,
 } from './claudium_gift_view';
+
 // Re-exported so the HUD (and other consumers) can import the gift-quote input
 // type from the window module without reaching into the pure view-core directly.
 export type { ClaudiumGiftQuoteInput } from './claudium_gift_view';
+
+import {
+  buildClaudiumInspectModel,
+  type ClaudiumInspectModel,
+  type CosmeticPreview,
+} from './claudium_inspect_view';
 import {
   buildClaudiumQuotePanel,
   buildClaudiumView,
@@ -50,6 +57,7 @@ import {
   type ClaudiumRedeemResult,
   type ClaudiumSkuInput,
   type ClaudiumStoreItemInput,
+  type ClaudiumStoreRow,
   type ClaudiumView,
   claudiumRailOptions,
   claudiumToUsd,
@@ -141,6 +149,14 @@ export interface ClaudiumWindowDeps {
   buy(sku: string): void;
   /** Redeem a cosmetic for its Claudium cost. */
   spend(itemId: string, kind: 'cosmetic' | 'skin' | 'item'): void;
+  /**
+   * Locally preview a cosmetic / weapon skin on the player's own character model
+   * WITHOUT owning it (IWorld.previewCosmetic). Render-only; grants nothing and
+   * does not persist. Reverted via clearCosmeticPreview.
+   */
+  previewCosmetic(preview: CosmeticPreview): void;
+  /** Revert any active try-on preview (IWorld.clearCosmeticPreview). */
+  clearCosmeticPreview(): void;
   /** Quote a native-rail payment for a Claudium amount, crediting the caller. */
   nativeQuote?(rail: ClaudiumNativeRailId, claudium: number): Promise<ClaudiumQuotePayload>;
   /** Confirm a native payment by reference + the pasted on-chain signature. */
@@ -219,6 +235,12 @@ export class ClaudiumWindow {
   private historyLoaded = false;
   private historyError = false;
   private historyFilter: ClaudiumHistoryReason | 'all' = 'all';
+  // ---- Cosmetic-store inspect + try-on state ----
+  // The SKU currently open in the inspect detail view (null = the store list).
+  private inspectItemId: string | null = null;
+  // The SKU currently being tried on (null = nothing previewed). Toggling it drives
+  // deps.previewCosmetic / clearCosmeticPreview; it reverts on close/purchase/tab.
+  private tryingOnItemId: string | null = null;
 
   constructor(private readonly deps: ClaudiumWindowDeps) {}
 
@@ -240,9 +262,24 @@ export class ClaudiumWindow {
     void this.render('open');
   }
 
+  /**
+   * Revert an active try-on, if any. Called on window close, purchase, and tab
+   * switch so a preview never survives the store (it grants nothing and must not
+   * persist). A no-op when nothing is being tried on.
+   */
+  private stopTryOn(): void {
+    if (this.tryingOnItemId === null) return;
+    this.tryingOnItemId = null;
+    this.deps.clearCosmeticPreview();
+  }
+
   close(): void {
     const root = this.deps.root();
     this.stopCountdown();
+    // Always revert a try-on on close (covers close/logout): the preview is local
+    // and must not outlive the window.
+    this.stopTryOn();
+    this.inspectItemId = null;
     if (root.style.display !== 'block') {
       this.openerFocus = null;
       return;
@@ -365,6 +402,14 @@ export class ClaudiumWindow {
 
   private buyTabHtml(view: ClaudiumView): string {
     if (view.disabled) return '';
+    // When a SKU is open in the inspect detail view, that detail REPLACES the buy
+    // ladder + store list (a focused pre-purchase view with try-on). If the open id
+    // no longer exists in the snapshot, fall through to the store list.
+    if (this.inspectItemId !== null) {
+      const row = view.storeRows.find((r) => r.itemId === this.inspectItemId);
+      if (row) return this.inspectDetailHtml(view, row);
+      this.inspectItemId = null;
+    }
     return (
       `<section class="cl-section"><h3>${esc(t('hudChrome.claudium.buyTitle'))}</h3>` +
       this.railPickerHtml(view) +
@@ -372,6 +417,63 @@ export class ClaudiumWindow {
       `</section>` +
       this.storeHtml(view)
     );
+  }
+
+  /**
+   * The SKU inspect detail: the larger art, name, kind, Claudium price (with its USD
+   * equivalent), any flavor text the SKU carried, a try-on / stop-trying-on toggle
+   * (only when the SKU carries a preview descriptor), and the redeem/top-up action.
+   * The model is built by the pure core; this only paints and localizes it.
+   */
+  private inspectDetailHtml(view: ClaudiumView, row: ClaudiumStoreRow): string {
+    const model = buildClaudiumInspectModel(row, view.usdPerClaudium);
+    const kindLabel = this.kindLabel(model.kind);
+    const cost = t('hudChrome.claudium.amountWithUsd', {
+      amount: formatNumber(model.costClaudium, { maximumFractionDigits: 0 }),
+      usd: this.usdEquiv(model.costClaudium, view.usdPerClaudium),
+    });
+    const art = model.art
+      ? `<img class="cl-inspect-art" src="${esc(model.art)}" alt="${esc(t('hudChrome.claudium.inspectArtAlt', { name: model.name }))}" />`
+      : '';
+    const desc = model.description
+      ? `<p class="cl-inspect-desc">${esc(model.description)}</p>`
+      : '';
+    const tryingOn = this.tryingOnItemId === model.itemId;
+    // Try-on toggle: only when the SKU carries a preview descriptor. The active note
+    // makes clear it is a preview that grants nothing.
+    const tryOn = model.canTryOn
+      ? tryingOn
+        ? `<button type="button" class="cl-rail" data-tryon-stop aria-pressed="true">${esc(t('hudChrome.claudium.tryOnStopButton'))}</button>` +
+          `<p class="cl-inspect-note" role="status">${esc(t('hudChrome.claudium.tryOnActiveNote'))}</p>`
+        : `<button type="button" class="cl-rail" data-tryon="${esc(model.itemId)}" aria-pressed="false">${esc(t('hudChrome.claudium.tryOnButton'))}</button>`
+      : '';
+    const affordable = view.balance !== null && view.balance >= model.costClaudium;
+    const action = affordable
+      ? `<button type="button" class="cl-item-buy" data-item="${esc(model.itemId)}" data-kind="${esc(model.kind)}">${esc(t('hudChrome.claudium.spendButton'))}</button>`
+      : `<div class="cl-item-topup">` +
+        `<span class="cl-item-short">${esc(t('hudChrome.claudium.insufficientBalance'))}</span>` +
+        `<button type="button" class="cl-topup-btn" data-topup>${esc(t('hudChrome.claudium.topUpButton'))}</button>` +
+        `</div>`;
+    return (
+      `<section class="cl-section cl-inspect">` +
+      `<div class="cl-pay-actions"><button type="button" class="cl-rail" data-inspect-close>${esc(t('hudChrome.claudium.inspectBack'))}</button></div>` +
+      art +
+      `<h3 class="cl-inspect-name">${esc(model.name)}</h3>` +
+      `<span class="cl-item-kind">${esc(kindLabel)}</span>` +
+      desc +
+      `<div class="cl-inspect-cost">${esc(cost)}</div>` +
+      `<div class="cl-pay-actions">${tryOn}</div>` +
+      `<div class="cl-pay-actions">${action}</div>` +
+      `</section>`
+    );
+  }
+
+  private kindLabel(kind: 'cosmetic' | 'skin' | 'item'): string {
+    return kind === 'skin'
+      ? t('hudChrome.claudium.kindSkin')
+      : kind === 'item'
+        ? t('hudChrome.claudium.kindItem')
+        : t('hudChrome.claudium.kindCosmetic');
   }
 
   private railPickerHtml(view: ClaudiumView): string {
@@ -666,12 +768,7 @@ export class ClaudiumWindow {
 
   private storeHtml(view: ClaudiumView): string {
     if (view.disabled) return '';
-    const kindLabel = (kind: 'cosmetic' | 'skin' | 'item'): string =>
-      kind === 'skin'
-        ? t('hudChrome.claudium.kindSkin')
-        : kind === 'item'
-          ? t('hudChrome.claudium.kindItem')
-          : t('hudChrome.claudium.kindCosmetic');
+    const kindLabel = (kind: 'cosmetic' | 'skin' | 'item'): string => this.kindLabel(kind);
     const rows =
       view.storeRows.length === 0
         ? `<p class="cl-empty" role="status">${esc(t('hudChrome.claudium.storeEmpty'))}</p>`
@@ -692,11 +789,15 @@ export class ClaudiumWindow {
                   `<span class="cl-item-short">${esc(t('hudChrome.claudium.insufficientBalance'))}</span>` +
                   `<button type="button" class="cl-topup-btn" data-topup>${esc(t('hudChrome.claudium.topUpButton'))}</button>` +
                   `</div>`;
+              // The inspect affordance opens the detail view (larger art, flavor,
+              // and try-on) before any purchase decision.
+              const details = `<button type="button" class="cl-item-inspect" data-inspect="${esc(row.itemId)}">${esc(t('hudChrome.claudium.inspectButton'))}</button>`;
               return (
                 `<div class="cl-item">` +
                 `<span class="cl-item-name">${esc(row.name)}</span>` +
                 `<span class="cl-item-kind">${esc(kindLabel(row.kind))}</span>` +
                 `<span class="cl-item-cost">${esc(cost)}</span>` +
+                details +
                 action +
                 `</div>`
               );
@@ -1139,6 +1240,9 @@ export class ClaudiumWindow {
         const raw = btn.dataset.tab;
         const next: Tab = raw === 'redeem' || raw === 'gift' || raw === 'history' ? raw : 'buy';
         if (next === this.tab) return;
+        // Leaving the buy tab abandons any open inspect + active try-on preview.
+        this.stopTryOn();
+        this.inspectItemId = null;
         this.tab = next;
         this.paint(view);
         // Lazily load the first history page the first time the tab is opened.
@@ -1198,14 +1302,53 @@ export class ClaudiumWindow {
         const itemId = btn.dataset.item;
         const kind = btn.dataset.kind;
         if (itemId && (kind === 'cosmetic' || kind === 'skin' || kind === 'item')) {
+          // A purchase reverts any active try-on: the real (now owned) appearance
+          // applies via the normal equip path, not the local preview.
+          this.stopTryOn();
           this.deps.spend(itemId, kind);
         }
       });
+    });
+    // Cosmetic-store inspect: open the detail view for a SKU.
+    body.querySelectorAll<HTMLButtonElement>('[data-inspect]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const itemId = btn.dataset.inspect;
+        if (!itemId) return;
+        this.inspectItemId = itemId;
+        this.paint(view);
+      });
+    });
+    // Close the inspect detail, reverting any active try-on first.
+    body.querySelector<HTMLButtonElement>('[data-inspect-close]')?.addEventListener('click', () => {
+      this.stopTryOn();
+      this.inspectItemId = null;
+      this.paint(view);
+    });
+    // Try on the inspected SKU locally (only wired when the SKU carries a preview).
+    body.querySelectorAll<HTMLButtonElement>('[data-tryon]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const itemId = btn.dataset.tryon;
+        if (!itemId) return;
+        const row = view.storeRows.find((r) => r.itemId === itemId);
+        if (!row?.preview) return;
+        this.tryingOnItemId = itemId;
+        this.deps.previewCosmetic(row.preview);
+        this.paint(view);
+      });
+    });
+    // Stop trying on: revert to the real appearance.
+    body.querySelector<HTMLButtonElement>('[data-tryon-stop]')?.addEventListener('click', () => {
+      this.stopTryOn();
+      this.paint(view);
     });
     // D7: the store "top up" affordance jumps back to the buy tab (where the store
     // and the rail picker live) and scrolls the buy controls into view.
     body.querySelector<HTMLButtonElement>('[data-topup]')?.addEventListener('click', () => {
       if (this.tab !== 'buy') this.tab = 'buy';
+      // Top up leaves the inspect detail and reverts any active try-on so the buy
+      // ladder + store list are shown.
+      this.stopTryOn();
+      this.inspectItemId = null;
       this.clearQuote();
       this.paint(view);
       const railsEl = this.deps.root().querySelector('.cl-rails');

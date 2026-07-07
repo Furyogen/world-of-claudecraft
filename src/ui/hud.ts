@@ -3651,6 +3651,11 @@ export class Hud {
       }),
     buy: (sku) => this.claudiumHooks?.buy(sku),
     spend: (itemId, kind) => this.claudiumHooks?.spend(itemId, kind),
+    // Try-on is a purely local, render-only preview through the IWorld cosmetics
+    // seam (offline Sim or online ClientWorld); it grants nothing and never sends a
+    // command, so it is wired directly to the world, not gated on the economy hooks.
+    previewCosmetic: (preview) => this.sim.previewCosmetic(preview),
+    clearCosmeticPreview: () => this.sim.clearCosmeticPreview(),
     // The native-rail and redeem deps must always resolve a payload (the window
     // awaits them), so with no hooks (offline / service off) they resolve the same
     // typed unavailable state the disabled UI renders, never undefined.

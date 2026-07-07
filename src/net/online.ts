@@ -55,6 +55,7 @@ import {
   type ArenaInfo,
   type CharacterSearchResult,
   type ClientCommand,
+  type CosmeticPreview,
   type CraftResultView,
   type CupInfo,
   type DailyRewardHistory,
@@ -929,6 +930,17 @@ export class ClientWorld implements IWorld {
   // --- IWorldCosmetics: account cosmetics (completed-quest + mech-chroma ids),
   // mirrored from snapshot self. ---
   accountCosmetics: AccountCosmetics = { completedQuestIds: [], mechChromaIds: [] };
+  // Local try-on state. cosmeticPreview is the active preview (null when off);
+  // cosmeticPreviewBackup is the real server appearance to restore on clear. The
+  // preview is render-only, sends NO wire command, and grants nothing; a snapshot's
+  // authoritative self record would otherwise overwrite it, so applyWire re-asserts
+  // it for the local player (and refreshes the backup to the latest server truth).
+  private cosmeticPreview: CosmeticPreview | null = null;
+  private cosmeticPreviewBackup: {
+    skin: number;
+    skinCatalog: 'class' | 'mech';
+    mainhandItemId: string | null;
+  } | null = null;
   // --- IWorldProgressionXp: XP + post-cap progression scalars + unlocked
   // milestones, mirrored from snapshot self. ---
   xp = 0;
@@ -1530,6 +1542,19 @@ export class ClientWorld implements IWorld {
           e.questIds = def ? [...def.questIds] : [];
           e.vendorItems = def?.vendorItems ? [...def.vendorItems] : [];
         }
+        // Keep an active local try-on sticky: the authoritative self record just
+        // overwrote the render-only appearance fields, so refresh the backup to the
+        // new server truth (so a later revert restores it) and re-assert the preview.
+        if (w.id === this.playerId && this.cosmeticPreview) {
+          this.cosmeticPreviewBackup = {
+            skin: e.skin,
+            skinCatalog: e.skinCatalog,
+            mainhandItemId: e.mainhandItemId,
+          };
+          e.skin = this.cosmeticPreview.skin;
+          e.skinCatalog = this.cosmeticPreview.catalog;
+          e.mainhandItemId = this.cosmeticPreview.mainhandItemId;
+        }
       }
       // interpolation bases: re-anchor at the pose the renderer last drew,
       // not at the previous server pose — when a frame extrapolated past the
@@ -2123,6 +2148,36 @@ export class ClientWorld implements IWorld {
   claimEventSkin(skin: number): void {
     const idx = Math.max(0, Math.floor(skin));
     this.cmd({ cmd: 'claim_event_skin', skin: idx });
+  }
+  // Local try-on: write only the render-only appearance fields on the local player
+  // entity and send NO command (the server never learns of it). Grants nothing and
+  // does not persist; applyWire keeps it sticky across snapshots while it is active.
+  previewCosmetic(preview: CosmeticPreview): void {
+    this.cosmeticPreview = preview;
+    const p = this.entities.get(this.playerId);
+    if (p) {
+      if (!this.cosmeticPreviewBackup) {
+        this.cosmeticPreviewBackup = {
+          skin: p.skin,
+          skinCatalog: p.skinCatalog,
+          mainhandItemId: p.mainhandItemId,
+        };
+      }
+      p.skin = preview.skin;
+      p.skinCatalog = preview.catalog;
+      p.mainhandItemId = preview.mainhandItemId;
+    }
+  }
+  clearCosmeticPreview(): void {
+    const p = this.entities.get(this.playerId);
+    const backup = this.cosmeticPreviewBackup;
+    if (p && backup) {
+      p.skin = backup.skin;
+      p.skinCatalog = backup.skinCatalog;
+      p.mainhandItemId = backup.mainhandItemId;
+    }
+    this.cosmeticPreview = null;
+    this.cosmeticPreviewBackup = null;
   }
   unequipMechChroma(chromaId: string): void {
     const itemId = mechChromaItemId(chromaId);

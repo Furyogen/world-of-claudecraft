@@ -266,6 +266,13 @@ export const hudChromeStrings = {
     historyFilterAll: 'All types',
     historyCredit: '+{amount}',
     historyDebit: '-{amount}',
+    // ---- Cosmetic-store SKU inspect + try-on ----
+    inspectButton: 'Details',
+    inspectBack: 'Back to store',
+    inspectArtAlt: 'Preview of {name}',
+    tryOnButton: 'Try on',
+    tryOnStopButton: 'Stop trying on',
+    tryOnActiveNote: 'Previewing on your character. This does not grant it.',
   },
   theme: {
     preset: 'UI Theme',

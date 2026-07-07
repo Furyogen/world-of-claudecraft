@@ -369,7 +369,13 @@ export const ru_RU: EnTranslations = {
       "historyFilterLabel": "Фильтр по типу",
       "historyFilterAll": "Все типы",
       "historyCredit": "+{amount}",
-      "historyDebit": "-{amount}"
+      "historyDebit": "-{amount}",
+      "inspectButton": "Подробнее",
+      "inspectBack": "Назад в магазин",
+      "inspectArtAlt": "Предпросмотр: {name}",
+      "tryOnButton": "Try on",
+      "tryOnStopButton": "Прекратить примерку",
+      "tryOnActiveNote": "Примерка на вашем персонаже. Это не даёт предмет."
     },
     "theme": {
       "preset": "Тема интерфейса",

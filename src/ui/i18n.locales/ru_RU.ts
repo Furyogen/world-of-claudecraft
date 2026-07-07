@@ -6617,4 +6617,9 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.claudium.discountBonus': '{base} до {credited} Клаудиума (+{bonus})',
   'hudChrome.claudium.wocIncentive': 'Платите $WOC - всегда скидка от 15%',
   'hudChrome.claudium.wocPromoNote': 'Включает ограниченную по времени акцию',
+  'hudChrome.claudium.inspectButton': 'Подробнее',
+  'hudChrome.claudium.inspectBack': 'Назад в магазин',
+  'hudChrome.claudium.inspectArtAlt': 'Предпросмотр: {name}',
+  'hudChrome.claudium.tryOnStopButton': 'Прекратить примерку',
+  'hudChrome.claudium.tryOnActiveNote': 'Примерка на вашем персонаже. Это не даёт предмет.',
 };
