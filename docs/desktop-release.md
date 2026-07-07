@@ -161,9 +161,13 @@ Triggers:
 - Pushing a release tag `v<version>` (the tagged commit must be on `main`, the tag
   must match `package.json` `version`, and `DESKTOP_VERSION` must match too; the
   workflow hard-fails on any mismatch so a half-bumped release cannot publish).
-- Manual `workflow_dispatch` (Actions tab, "Desktop publish", pick a
-  branch), for backfilling the version currently on that ref. The same version
-  lockstep guard runs; only the tag and main-ancestry checks are skipped.
+- Manual `workflow_dispatch` (Actions tab, "Desktop publish", pick a branch).
+  By default this is a DRY RUN: it builds, signs, verifies, and checksums
+  exactly like a release, then attaches the artifacts to the workflow run
+  (7-day retention) for inspection instead of uploading, so the whole pipeline
+  can be rehearsed without touching the live host. Tick "publish" to really
+  upload (the backfill path). The same version lockstep guard runs; only the
+  tag and main-ancestry checks are skipped.
 
 Within each job, versioned artifacts upload first and the feed files
 (`latest-linux.yml` + `latest-linux-arm64.yml`, `latest-mac.yml`) last, so

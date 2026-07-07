@@ -16,8 +16,11 @@ name: Desktop publish
 #   - a release tag (v<version>) pushed to a commit that is on main; the tag
 #     must match package.json "version" and DESKTOP_VERSION, so the download
 #     page, the feed, and the artifacts stay in lockstep.
-#   - manual dispatch, to backfill the version currently on the chosen ref
-#     (same version lockstep guard, minus the tag and main-ancestry checks).
+#   - manual dispatch, which is a DRY RUN by default: it builds, signs,
+#     verifies, and checksums exactly like a release, then attaches the
+#     artifacts to the workflow run for inspection instead of uploading.
+#     Tick "publish" to really upload (the backfill path). The same version
+#     lockstep guard runs; only the tag and main-ancestry checks are skipped.
 #
 # The platform jobs are independent: a mac signing failure never blocks the
 # Linux publish and vice versa. Within each job, versioned artifacts upload
@@ -29,6 +32,11 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Upload to the live update host (leave unchecked for a build-only dry run)'
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -120,11 +128,45 @@ jobs:
       # Pin the exact expected artifact names instead of globbing: the x64
       # AppImage arch token is "x86_64" while the x64 deb is "amd64" (both
       # electron-builder conventions), and a silent rename here would strand
-      # the download page and the update feed. Versioned artifacts are
-      # immutable (cache for a year); the checksum and feed files live at
-      # stable keys that change each release, so they stay near-uncached.
-      # Feed files upload LAST.
+      # the download page and the update feed. Runs on dry runs too, so a
+      # rehearsal proves the same contract a release relies on.
+      - name: Verify expected artifacts
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          FILES=(
+            "world-of-claudecraft-${VERSION}-linux-x86_64.AppImage"
+            "world-of-claudecraft-${VERSION}-linux-arm64.AppImage"
+            "world-of-claudecraft-${VERSION}-linux-amd64.deb"
+            "world-of-claudecraft-${VERSION}-linux-arm64.deb"
+            "SHA256SUMS-linux"
+            "latest-linux.yml"
+            "latest-linux-arm64.yml"
+          )
+          for file in "${FILES[@]}"; do
+            if [ ! -f "release/${file}" ]; then
+              echo "Expected artifact release/${file} was not produced; refusing to publish a partial release." >&2
+              ls release >&2
+              exit 1
+            fi
+          done
+
+      - name: Attach artifacts to the run (dry run only)
+        if: github.event_name == 'workflow_dispatch' && !inputs.publish
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-linux
+          retention-days: 7
+          path: |
+            release/*.AppImage
+            release/*.deb
+            release/SHA256SUMS-linux
+            release/latest-linux*.yml
+
+      # Versioned artifacts are immutable (cache for a year); the checksum and
+      # feed files live at stable keys that change each release, so they stay
+      # near-uncached. Feed files upload LAST.
       - name: Upload to the update host (R2)
+        if: github.event_name == 'push' || inputs.publish
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
@@ -147,22 +189,6 @@ jobs:
             aws s3 cp "release/$1" "s3://${R2_BUCKET}/desktop/$1" \
               --endpoint-url "$ENDPOINT" --content-type "$2" --cache-control "$3"
           }
-          FILES=(
-            "world-of-claudecraft-${VERSION}-linux-x86_64.AppImage"
-            "world-of-claudecraft-${VERSION}-linux-arm64.AppImage"
-            "world-of-claudecraft-${VERSION}-linux-amd64.deb"
-            "world-of-claudecraft-${VERSION}-linux-arm64.deb"
-            "SHA256SUMS-linux"
-            "latest-linux.yml"
-            "latest-linux-arm64.yml"
-          )
-          for file in "${FILES[@]}"; do
-            if [ ! -f "release/${file}" ]; then
-              echo "Expected artifact release/${file} was not produced; refusing to publish a partial release." >&2
-              ls release >&2
-              exit 1
-            fi
-          done
           put "world-of-claudecraft-${VERSION}-linux-x86_64.AppImage" application/octet-stream "public,max-age=31536000,immutable"
           put "world-of-claudecraft-${VERSION}-linux-arm64.AppImage" application/octet-stream "public,max-age=31536000,immutable"
           put "world-of-claudecraft-${VERSION}-linux-amd64.deb" application/vnd.debian.binary-package "public,max-age=31536000,immutable"
@@ -242,10 +268,43 @@ jobs:
           shasum -a 256 *.dmg *.zip > SHA256SUMS-mac
           cat SHA256SUMS-mac
 
-      # Same rules as the Linux upload: pinned filenames, immutable caching
-      # for the versioned artifacts, near-uncached checksum + feed, and the
-      # feed file (latest-mac.yml) uploads LAST.
+      # Pinned filenames, same contract as the Linux job; runs on dry runs too.
+      - name: Verify expected artifacts
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          FILES=(
+            "world-of-claudecraft-${VERSION}-mac-universal.dmg"
+            "world-of-claudecraft-${VERSION}-mac-universal.zip"
+            "world-of-claudecraft-${VERSION}-mac-universal.zip.blockmap"
+            "SHA256SUMS-mac"
+            "latest-mac.yml"
+          )
+          for file in "${FILES[@]}"; do
+            if [ ! -f "release/${file}" ]; then
+              echo "Expected artifact release/${file} was not produced; refusing to publish a partial release." >&2
+              ls release >&2
+              exit 1
+            fi
+          done
+
+      - name: Attach artifacts to the run (dry run only)
+        if: github.event_name == 'workflow_dispatch' && !inputs.publish
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-mac
+          retention-days: 7
+          path: |
+            release/*.dmg
+            release/*.zip
+            release/*.zip.blockmap
+            release/SHA256SUMS-mac
+            release/latest-mac.yml
+
+      # Same rules as the Linux upload: immutable caching for the versioned
+      # artifacts, near-uncached checksum + feed, and the feed file
+      # (latest-mac.yml) uploads LAST.
       - name: Upload to the update host (R2)
+        if: github.event_name == 'push' || inputs.publish
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
@@ -266,20 +325,6 @@ jobs:
             aws s3 cp "release/$1" "s3://${R2_BUCKET}/desktop/$1" \
               --endpoint-url "$ENDPOINT" --content-type "$2" --cache-control "$3"
           }
-          FILES=(
-            "world-of-claudecraft-${VERSION}-mac-universal.dmg"
-            "world-of-claudecraft-${VERSION}-mac-universal.zip"
-            "world-of-claudecraft-${VERSION}-mac-universal.zip.blockmap"
-            "SHA256SUMS-mac"
-            "latest-mac.yml"
-          )
-          for file in "${FILES[@]}"; do
-            if [ ! -f "release/${file}" ]; then
-              echo "Expected artifact release/${file} was not produced; refusing to publish a partial release." >&2
-              ls release >&2
-              exit 1
-            fi
-          done
           put "world-of-claudecraft-${VERSION}-mac-universal.dmg" application/x-apple-diskimage "public,max-age=31536000,immutable"
           put "world-of-claudecraft-${VERSION}-mac-universal.zip" application/zip "public,max-age=31536000,immutable"
           put "world-of-claudecraft-${VERSION}-mac-universal.zip.blockmap" application/octet-stream "public,max-age=31536000,immutable"
