@@ -12,9 +12,12 @@ export interface HeroicDungeonTuning {
   healthMultiplier: number;
   damageMultiplier: number;
   armorMultiplier: number;
-  // The dungeon's last boss: killing it in a heroic instance drops one Heroic
-  // Mark per eligible participant.
+  // The dungeon's last boss: killing it in a heroic instance drops Heroic
+  // Marks for every eligible participant.
   finalBossId: string;
+  // Marks each participant can loot from the final-boss corpse (one
+  // personalFor slot per mark, so a single loot click takes them all).
+  marksPerParticipant: number;
 }
 
 // Tuning model follows classic-era (TBC) heroics: measured database pairs put
@@ -42,6 +45,7 @@ export const HEROIC_DUNGEON_TUNING: Record<string, HeroicDungeonTuning> = {
     damageMultiplier: 3.4,
     armorMultiplier: 1.3,
     finalBossId: 'morthen',
+    marksPerParticipant: 1,
   },
   sunken_bastion: {
     id: 'sunken_bastion',
@@ -51,6 +55,7 @@ export const HEROIC_DUNGEON_TUNING: Record<string, HeroicDungeonTuning> = {
     damageMultiplier: 3.8,
     armorMultiplier: 1.3,
     finalBossId: 'vael_the_mistcaller',
+    marksPerParticipant: 1,
   },
   drowned_temple: {
     id: 'drowned_temple',
@@ -60,6 +65,7 @@ export const HEROIC_DUNGEON_TUNING: Record<string, HeroicDungeonTuning> = {
     damageMultiplier: 4.2,
     armorMultiplier: 1.25,
     finalBossId: 'ysolei',
+    marksPerParticipant: 1,
   },
   gravewyrm_sanctum: {
     id: 'gravewyrm_sanctum',
@@ -69,24 +75,27 @@ export const HEROIC_DUNGEON_TUNING: Record<string, HeroicDungeonTuning> = {
     damageMultiplier: 4.6,
     armorMultiplier: 1.2,
     finalBossId: 'korzul_the_gravewyrm',
+    marksPerParticipant: 1,
   },
   // The 10-player raid arena. Normal Nythraxis already swings ~3.7x harder
   // than Korzul, so the raid's heroic multiplier is small in RELATIVE terms
   // while landing the hardest absolute hits in the game: the boss chews a
-  // geared tank for ~38% of max hp per 2.6s swing (a raid brings two or
-  // three healers), add waves hit cloth for ~40%, and the percentage
-  // mechanics (Soul Rend splits, the 82% Deathless Rage wardstone check)
-  // stay difficulty-neutral by design. The attunement dungeon
-  // nythraxis_crypt is story content and deliberately has NO heroic record.
-  // The daily raid lockout is keyed by dungeon id, so it is SHARED across
-  // difficulties: one Nythraxis kill per day, normal or heroic.
+  // geared tank for ~47% of max hp per 2.6s swing (a raid brings two or
+  // three healers), and add waves hit cloth for ~50%. The percentage
+  // mechanics scale on heroic in the encounter script (Soul Rend 1.5x,
+  // Deathless Rage lethal on a failed wardstone channel; see
+  // encounters/nythraxis.ts). The attunement dungeon nythraxis_crypt is
+  // story content and deliberately has NO heroic record. The daily raid
+  // lockout is keyed by dungeon id, so it is SHARED across difficulties:
+  // one Nythraxis kill per day, normal or heroic.
   nythraxis_boss_arena: {
     id: 'nythraxis_boss_arena',
     difficulty: 'heroic',
     level: 20,
     healthMultiplier: 1.6,
-    damageMultiplier: 1.6,
+    damageMultiplier: 2.0,
     armorMultiplier: 1.2,
     finalBossId: 'nythraxis_scourge_of_thornpeak',
+    marksPerParticipant: 3,
   },
 };

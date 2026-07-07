@@ -302,18 +302,20 @@ function freeInstance(ctx: SimContext, inst: InstanceSlot): void {
   inst.emptyFor = 0;
 }
 
-// Heroic participation reward: the final boss of a heroic instance drops one
-// personal Heroic Mark per eligible participant. `recipients` is the same
-// downed-members-included snapshot handleDeath uses for XP and loot rights,
-// so everyone who took part in the kill can pick up exactly one mark; each
-// slot is personalFor a single player, so nobody can take another's. Draws no
-// rng, so the corpse loot draw order is untouched.
+// Heroic participation reward: the final boss of a heroic instance drops
+// Heroic Marks for every eligible participant (marksPerParticipant on the
+// tuning record: 1 for the five-mans, 3 for the Nythraxis raid). `recipients`
+// is the same downed-members-included snapshot handleDeath uses for XP and
+// loot rights. Each mark is its own personalFor slot (the loot pickup arm
+// grants one item per personal slot, so a single loot click takes them all)
+// and nobody can take another player's. Draws no rng, so the corpse loot
+// draw order is untouched.
 //
 // Daily income gate: each dungeon pays a given character at most once per host
 // UTC day (delveDaily pattern), so the instance-reset farm cannot print marks.
-// Max income is one mark per heroic dungeon per day. The stamp lands when the
-// personal slot is CREATED (not when it is looted): an unlooted corpse still
-// consumed that day's slot, exactly like the delve first-clear XP set.
+// The stamp lands when the personal slots are CREATED (not when looted): an
+// unlooted corpse still consumed that day's slot, like the delve first-clear
+// XP set.
 export function awardHeroicMarks(ctx: SimContext, mob: Entity, recipients: PlayerMeta[]): void {
   if (recipients.length === 0) return;
   const inst = ctx.instances.find((i) => i.partyKey !== null && i.mobIds.includes(mob.id));
@@ -332,7 +334,9 @@ export function awardHeroicMarks(ctx: SimContext, mob: Entity, recipients: Playe
     }
     if (meta.heroicDaily.marked.has(inst.dungeonId)) continue;
     meta.heroicDaily.marked.add(inst.dungeonId);
-    loot.items.push({ itemId: HEROIC_MARK_ITEM_ID, count: 1, personalFor: [meta.entityId] });
+    for (let i = 0; i < tuning.marksPerParticipant; i++) {
+      loot.items.push({ itemId: HEROIC_MARK_ITEM_ID, count: 1, personalFor: [meta.entityId] });
+    }
     awarded = true;
   }
   if (!awarded) return;

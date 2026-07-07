@@ -1,7 +1,12 @@
 import { HEROIC_DUNGEON_TUNING } from '../content/dungeon_difficulty';
+import { MOBS } from '../data';
 import type { DungeonDifficulty, Entity, MobTemplate } from '../types';
 
 export const HEROIC_DUNGEON_IDS = new Set(Object.keys(HEROIC_DUNGEON_TUNING));
+
+// Every heroic-instance mob moves at least this fast (player RUN_SPEED is 7),
+// so heroic pulls cannot be kited on foot; escapes need a sprint cooldown.
+export const HEROIC_MIN_MOVE_SPEED = 8;
 
 export function claimDifficultyForDungeon(
   dungeonId: string,
@@ -27,6 +32,7 @@ export function mobTemplateForDungeonDifficulty(
     dmgBase: template.dmgBase * tuning.damageMultiplier,
     dmgPerLevel: template.dmgPerLevel * tuning.damageMultiplier,
     armorPerLevel: template.armorPerLevel * tuning.armorMultiplier,
+    moveSpeed: Math.max(template.moveSpeed, HEROIC_MIN_MOVE_SPEED),
   };
 }
 
@@ -45,6 +51,9 @@ export function mobLevelForDungeonDifficulty(
 // multipliers above cannot reach them. Instead a heroic spawn carries these
 // per-entity multipliers, applied at each fire site AFTER the rng draw (the
 // draw count and order stay identical to normal, which the parity gate pins).
+// Boss-flagged mobs additionally become CC- and snare-immune on heroic (the
+// entity-level twins of the template ccImmune/slowImmune flags, which are
+// also base-table reads): heroic bosses can be neither controlled nor kited.
 export function applyHeroicMobTuning(
   mob: Entity,
   dungeonId: string,
@@ -55,4 +64,8 @@ export function applyHeroicMobTuning(
   if (!tuning) return;
   mob.mechanicDamageMult = tuning.damageMultiplier;
   mob.mechanicHealMult = tuning.healthMultiplier;
+  if (MOBS[mob.templateId]?.boss) {
+    mob.ccImmune = true;
+    mob.slowImmune = true;
+  }
 }

@@ -187,7 +187,7 @@ describe('Nythraxis raid encounter', () => {
     const origin = enterRaid(sim, pid);
     expect(sim.entities.get(pid)!.pos.x).toBeGreaterThan(3000);
     const boss = mob(sim, 'nythraxis_scourge_of_thornpeak');
-    expect(boss.maxHp).toBe(51239);
+    expect(boss.maxHp).toBe(60000);
     expect(boss.weapon.min).toBe(325);
     expect(boss.weapon.max).toBe(507);
     expect(visualKeyFor(boss)).toBe('skel_golem');
@@ -1703,7 +1703,7 @@ describe('Nythraxis raid encounter', () => {
     expect(boss.hp).toBe(transitionBossHp);
   });
 
-  it('spawns Nythraxis add waves every 45 seconds in phase one', () => {
+  it('spawns Nythraxis add waves every 30 seconds in phase one', () => {
     const sim = makeWorld();
     const tankPid = sim.addPlayer('warrior', 'Tank');
     const origin = enterRaid(sim, tankPid);
@@ -1714,14 +1714,14 @@ describe('Nythraxis raid encounter', () => {
     teleport(sim, tankPid, origin.x, origin.z + 36);
     engage(boss, tank);
 
-    tickSeconds(sim, 31);
+    tickSeconds(sim, 28);
     expect(
       [...sim.entities.values()].filter(
         (e) => e.kind === 'mob' && e.templateId === 'nythraxis_skeleton_warrior' && !e.dead,
       ),
     ).toHaveLength(0);
 
-    tickSeconds(sim, 15);
+    tickSeconds(sim, 4);
     const adds = [...sim.entities.values()].filter(
       (e) => e.kind === 'mob' && e.templateId === 'nythraxis_skeleton_warrior' && !e.dead,
     );

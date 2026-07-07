@@ -176,6 +176,36 @@ describe('dungeons: heroic difficulty', () => {
       HEROIC_DUNGEON_TUNING.hollow_crypt.healthMultiplier,
     );
 
+    // Anti-kite floor: every heroic mob moves at least 8 (player run speed 7).
+    expect(heroicMorthen.moveSpeed).toBe(8);
+    // Heroic bosses can be neither controlled nor snared: a stun and a slow
+    // both bounce off (entity-level immunity, since the applyAura gates read
+    // the base MOBS table for the template flags).
+    const stunAura = (sourceId: number) => ({
+      id: 'test_stun',
+      name: 'Test Stun',
+      kind: 'stun' as const,
+      remaining: 3,
+      duration: 3,
+      value: 0,
+      sourceId,
+      school: 'physical' as const,
+    });
+    const slowAura = (sourceId: number) => ({
+      id: 'test_slow',
+      name: 'Test Slow',
+      kind: 'slow' as const,
+      remaining: 3,
+      duration: 3,
+      value: 0.5,
+      sourceId,
+      school: 'frost' as const,
+    });
+    (heroic as any).applyAura(heroicMorthen, stunAura(heroicPid));
+    (heroic as any).applyAura(heroicMorthen, slowAura(heroicPid));
+    expect(heroicMorthen.auras.some((a: any) => a.id === 'test_stun')).toBe(false);
+    expect(heroicMorthen.auras.some((a: any) => a.id === 'test_slow')).toBe(false);
+
     const normal = makeSim(123);
     const normalPid = normal.addPlayer('warrior', 'Normal');
     enterDungeon(normal.ctx, 'hollow_crypt', normalPid);
@@ -186,6 +216,12 @@ describe('dungeons: heroic difficulty', () => {
     expect(heroicMorthen.weapon.min).toBeGreaterThan(normalMorthen.weapon.min);
     expect(normalMorthen.mechanicDamageMult).toBeUndefined();
     expect(normalMorthen.mechanicHealMult).toBeUndefined();
+    // Normal Morthen keeps his template speed and stays controllable.
+    expect(normalMorthen.moveSpeed).toBe(7);
+    (normal as any).applyAura(normalMorthen, stunAura(normalPid));
+    (normal as any).applyAura(normalMorthen, slowAura(normalPid));
+    expect(normalMorthen.auras.some((a: any) => a.id === 'test_stun')).toBe(true);
+    expect(normalMorthen.auras.some((a: any) => a.id === 'test_slow')).toBe(true);
   });
 
   it('supports heroic mode across the four five-player dungeons only', () => {
@@ -567,7 +603,7 @@ describe('dungeons: heroic Nythraxis raid arena', () => {
   it('a normal raid claim is untransformed; a heroic kill pays marks to every raider', () => {
     const normal = raidSetup('normal');
     const nBoss = mobInInstance(normal.sim, normal.inst, NYTHRAXIS_BOSS_ID);
-    expect(nBoss.maxHp).toBe(51239); // the untransformed raid boss
+    expect(nBoss.maxHp).toBe(60000); // the untransformed raid boss (60k on normal)
     expect(nBoss.mechanicDamageMult).toBeUndefined();
     spawnNythraxisAdds(normal.sim.ctx, nBoss);
     const nAdd = normal.sim.entities.get((nBoss.summonedIds as number[])[0]) as AnyEntity;
@@ -593,9 +629,11 @@ describe('dungeons: heroic Nythraxis raid arena', () => {
     const marks = ((boss.loot?.items ?? []) as any[]).filter(
       (s) => s.itemId === HEROIC_MARK_ITEM_ID,
     );
-    expect(marks).toHaveLength(raiders.length);
+    // The raid pays THREE marks per participant (marksPerParticipant), one
+    // personal slot each so a single loot click takes all three.
+    expect(marks).toHaveLength(raiders.length * 3);
     expect(marks.flatMap((s) => s.personalFor).sort((a, b) => a - b)).toEqual(
-      [...raiders].sort((a, b) => a - b),
+      raiders.flatMap((pid) => [pid, pid, pid]).sort((a, b) => a - b),
     );
   });
 });
