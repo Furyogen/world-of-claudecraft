@@ -177,7 +177,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.unavailable",
     "hudChrome.claudium.usdAmount",
     "hudChrome.claudium.wocIncentive",
-    "hudChrome.claudium.wocPromoNote"
+    "hudChrome.claudium.wocPromoNote",
+    "hudChrome.perf.labels.predLead"
   ],
   "es_ES": [
     "guide.nav.professions",
@@ -347,7 +348,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.unavailable",
     "hudChrome.claudium.usdAmount",
     "hudChrome.claudium.wocIncentive",
-    "hudChrome.claudium.wocPromoNote"
+    "hudChrome.claudium.wocPromoNote",
+    "hudChrome.perf.labels.predLead"
   ],
   "fr_FR": [
     "guide.nav.professions",
@@ -517,7 +519,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.unavailable",
     "hudChrome.claudium.usdAmount",
     "hudChrome.claudium.wocIncentive",
-    "hudChrome.claudium.wocPromoNote"
+    "hudChrome.claudium.wocPromoNote",
+    "hudChrome.perf.labels.predLead"
   ],
   "fr_CA": [
     "guide.nav.professions",
@@ -687,7 +690,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.unavailable",
     "hudChrome.claudium.usdAmount",
     "hudChrome.claudium.wocIncentive",
-    "hudChrome.claudium.wocPromoNote"
+    "hudChrome.claudium.wocPromoNote",
+    "hudChrome.perf.labels.predLead"
   ],
   "en_CA": [],
   "it_IT": [
@@ -858,7 +862,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.unavailable",
     "hudChrome.claudium.usdAmount",
     "hudChrome.claudium.wocIncentive",
-    "hudChrome.claudium.wocPromoNote"
+    "hudChrome.claudium.wocPromoNote",
+    "hudChrome.perf.labels.predLead"
   ],
   "de_DE": [
     "guide.nav.professions",
@@ -1028,7 +1033,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.unavailable",
     "hudChrome.claudium.usdAmount",
     "hudChrome.claudium.wocIncentive",
-    "hudChrome.claudium.wocPromoNote"
+    "hudChrome.claudium.wocPromoNote",
+    "hudChrome.perf.labels.predLead"
   ],
   "zh_CN": [
     "hudChrome.claudium.codePlaceholder",
@@ -1262,7 +1268,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.unavailable",
     "hudChrome.claudium.usdAmount",
     "hudChrome.claudium.wocIncentive",
-    "hudChrome.claudium.wocPromoNote"
+    "hudChrome.claudium.wocPromoNote",
+    "hudChrome.perf.labels.predLead"
   ],
   "ru_RU": [
     "hudChrome.claudium.codePlaceholder",
@@ -1448,7 +1455,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.unavailable",
     "hudChrome.claudium.usdAmount",
     "hudChrome.claudium.wocIncentive",
-    "hudChrome.claudium.wocPromoNote"
+    "hudChrome.claudium.wocPromoNote",
+    "hudChrome.perf.labels.predLead"
   ],
   "nl_NL": [
     "guide.nav.professions",
@@ -1618,7 +1626,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.unavailable",
     "hudChrome.claudium.usdAmount",
     "hudChrome.claudium.wocIncentive",
-    "hudChrome.claudium.wocPromoNote"
+    "hudChrome.claudium.wocPromoNote",
+    "hudChrome.perf.labels.predLead"
   ],
   "pl_PL": [
     "guide.nav.professions",
@@ -1788,7 +1797,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.unavailable",
     "hudChrome.claudium.usdAmount",
     "hudChrome.claudium.wocIncentive",
-    "hudChrome.claudium.wocPromoNote"
+    "hudChrome.claudium.wocPromoNote",
+    "hudChrome.perf.labels.predLead"
   ],
   "id_ID": [
     "guide.nav.professions",
@@ -1958,7 +1968,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.unavailable",
     "hudChrome.claudium.usdAmount",
     "hudChrome.claudium.wocIncentive",
-    "hudChrome.claudium.wocPromoNote"
+    "hudChrome.claudium.wocPromoNote",
+    "hudChrome.perf.labels.predLead"
   ],
   "tr_TR": [
     "guide.nav.professions",
@@ -2128,7 +2139,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.unavailable",
     "hudChrome.claudium.usdAmount",
     "hudChrome.claudium.wocIncentive",
-    "hudChrome.claudium.wocPromoNote"
+    "hudChrome.claudium.wocPromoNote",
+    "hudChrome.perf.labels.predLead"
   ],
   "sv_SE": [
     "guide.nav.professions",
@@ -2298,7 +2310,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.unavailable",
     "hudChrome.claudium.usdAmount",
     "hudChrome.claudium.wocIncentive",
-    "hudChrome.claudium.wocPromoNote"
+    "hudChrome.claudium.wocPromoNote",
+    "hudChrome.perf.labels.predLead"
   ],
   "vi_VN": [
     "guide.nav.professions",
@@ -2468,7 +2481,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.unavailable",
     "hudChrome.claudium.usdAmount",
     "hudChrome.claudium.wocIncentive",
-    "hudChrome.claudium.wocPromoNote"
+    "hudChrome.claudium.wocPromoNote",
+    "hudChrome.perf.labels.predLead"
   ],
   "da_DK": [
     "guide.nav.professions",
@@ -2638,6 +2652,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.claudium.unavailable",
     "hudChrome.claudium.usdAmount",
     "hudChrome.claudium.wocIncentive",
-    "hudChrome.claudium.wocPromoNote"
+    "hudChrome.claudium.wocPromoNote",
+    "hudChrome.perf.labels.predLead"
   ]
 };
