@@ -277,11 +277,13 @@ describe('dungeons: heroic difficulty', () => {
     expect(normalInst.difficulty).toBe('normal');
     expect(mobInInstance(sim, normalInst, 'morthen').level).toBe(10);
 
-    // Leave and wait out the empty-instance reset; the freed slot clears back
-    // to normal and the pending heroic selection applies to the fresh claim.
+    // Leave and free the slot (fast-forward the empty-instance reset rather than
+    // ticking out 300 real sim-seconds, which is slow under CI load); the freed
+    // slot clears back to normal and the pending heroic selection applies next.
     leaveDungeon(sim.ctx, pid);
     teleport(sim, sim.entities.get(pid) as AnyEntity, 0, 0);
-    for (let i = 0; i < 20 * 301 && normalInst.partyKey !== null; i++) sim.tick();
+    normalInst.emptyFor = 100000;
+    for (let i = 0; i < 40; i++) sim.tick();
     expect(normalInst.partyKey).toBeNull();
     expect(normalInst.difficulty).toBe('normal');
 
@@ -672,10 +674,12 @@ describe('dungeons: heroic daily lockouts', () => {
       null,
       'hit',
     );
-    // Leave and wait out the empty-instance reset so a re-entry must re-claim.
+    // Leave and free the claim so a re-entry must re-claim (fast-forward the
+    // empty-instance reset rather than ticking out 300 real sim-seconds).
     leaveDungeon(sim.ctx, pid);
     teleport(sim, sim.entities.get(pid) as AnyEntity, 0, 0);
-    for (let i = 0; i < 20 * 301 && inst.partyKey !== null; i++) sim.tick();
+    inst.emptyFor = 100000;
+    for (let i = 0; i < 40; i++) sim.tick();
   }
 
   it('a heroic clear locks the heroic claim for the day but not the normal run', () => {

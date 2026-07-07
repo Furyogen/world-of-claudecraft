@@ -2432,10 +2432,18 @@ describe('Nythraxis raid encounter', () => {
     expect(meta.raidLockouts.get('nythraxis_boss_arena:heroic')).toBe(reset);
     expect(meta.raidLockouts.has('nythraxis_boss_arena')).toBe(false);
 
-    // Leave and wait out the empty-instance reset so the heroic claim frees
+    // Leave and free the heroic claim so the normal re-entry can claim fresh
     // (the live-claim-wins rule otherwise rejoins the locked heroic instance).
+    // Fast-forward the empty-instance reset by marking the claim long-empty and
+    // running one reset cycle, rather than ticking out 300 real sim-seconds
+    // (6000 ticks), which times the test out under CI load.
     sim.leaveDungeon(tankPid);
-    for (let i = 0; i < 20 * 301; i++) sim.tick();
+    const heroicInst = (sim as any).instances.find(
+      (i: any) => i.dungeonId === 'nythraxis_boss_arena' && i.partyKey !== null,
+    );
+    heroicInst.emptyFor = 100000;
+    for (let i = 0; i < 40; i++) sim.tick();
+    expect(heroicInst.partyKey).toBeNull(); // the heroic claim actually freed
 
     // Heroic re-entry is still barred by the daily lockout...
     sim.setDungeonDifficulty('heroic', tankPid);
