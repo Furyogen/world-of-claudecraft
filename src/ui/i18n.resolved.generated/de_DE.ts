@@ -768,6 +768,10 @@ export const de_DE: EnTranslations = {
       "leaderOption": "Plündermeister: Anführer (Du)",
       "masterOption": "Plündermeister: {name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "Set Dungeon Difficulty: Heroic",
+      "setNormal": "Set Dungeon Difficulty: Normal"
+    },
     "bags": {
       "filterGroupAria": "Taschen nach Kategorie filtern",
       "filterAll": "Alle",

@@ -185,6 +185,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.lootSettings.title': 'Настройки добычи',
   'hudChrome.lootSettings.close': 'Закрыть настройки добычи',
   'hudChrome.lootSettings.menuItem': 'Настройки добычи',
+  'hudChrome.dungeonDifficulty.setHeroic': 'Установить сложность подземелий: героическая',
+  'hudChrome.dungeonDifficulty.setNormal': 'Установить сложность подземелий: обычная',
   'hudChrome.lootSettings.method': 'Способ добычи',
   'hudChrome.lootSettings.rollThreshold': 'Порог броска',
   'hudChrome.lootSettings.groupLoot': 'Групповая добыча',

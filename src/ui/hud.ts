@@ -11387,6 +11387,21 @@ export class Hud {
       html += `<div class="ctx-item" data-act="convert-party">${esc(t('hud.chat.context.convertToParty'))}</div>`;
     if (party)
       html += `<div class="ctx-item" data-act="loot-settings">${esc(t('hudChrome.lootSettings.menuItem'))}</div>`;
+    // Dungeon difficulty (classic portrait-menu placement): the label states
+    // the ACTION (switch to the other difficulty). Solo players and party
+    // leaders only; the sim refuses the change from other members. The
+    // confirmation toast comes back from the sim ("Dungeon difficulty set
+    // to ..."), re-localized by sim_i18n like every sim emit.
+    if (!party || party.leader === this.sim.playerId) {
+      const isHeroic = this.sim.dungeonDifficulty() === 'heroic';
+      html += `<div class="ctx-item" data-act="dungeon-difficulty">${esc(
+        t(
+          isHeroic
+            ? 'hudChrome.dungeonDifficulty.setNormal'
+            : 'hudChrome.dungeonDifficulty.setHeroic',
+        ),
+      )}</div>`;
+    }
     html += `<div class="ctx-item" data-act="close">${esc(t('hud.chat.context.cancel'))}</div>`;
     el.innerHTML = html;
     hydratePortraits(el);
@@ -11401,6 +11416,11 @@ export class Hud {
         this.sim.convertRaidToParty();
         this.socialWindow.selectRaidTab();
       } else if (act === 'loot-settings') this.openLootSettings();
+      else if (act === 'dungeon-difficulty') {
+        this.sim.setDungeonDifficulty(
+          this.sim.dungeonDifficulty() === 'heroic' ? 'normal' : 'heroic',
+        );
+      }
     });
   }
 

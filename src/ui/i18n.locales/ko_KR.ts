@@ -185,6 +185,8 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.lootSettings.title': '전리품 설정',
   'hudChrome.lootSettings.close': '전리품 설정 닫기',
   'hudChrome.lootSettings.menuItem': '전리품 설정',
+  'hudChrome.dungeonDifficulty.setHeroic': '던전 난이도 설정: 영웅',
+  'hudChrome.dungeonDifficulty.setNormal': '던전 난이도 설정: 일반',
   'hudChrome.lootSettings.method': '전리품 방식',
   'hudChrome.lootSettings.rollThreshold': '주사위 기준',
   'hudChrome.lootSettings.groupLoot': '파티 분배',

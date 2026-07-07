@@ -768,6 +768,10 @@ export const zh_CN: EnTranslations = {
       "leaderOption": "分配者：队长（你）",
       "masterOption": "分配者：{name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "设置地下城难度：英雄",
+      "setNormal": "设置地下城难度：普通"
+    },
     "bags": {
       "filterGroupAria": "按类别筛选背包",
       "filterAll": "全部",

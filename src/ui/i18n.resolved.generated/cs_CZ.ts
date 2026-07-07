@@ -768,6 +768,10 @@ export const cs_CZ: EnTranslations = {
       "leaderOption": "Master looter: vůdce (ty)",
       "masterOption": "Master looter: {name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "Set Dungeon Difficulty: Heroic",
+      "setNormal": "Set Dungeon Difficulty: Normal"
+    },
     "bags": {
       "filterGroupAria": "Filtrovat batohy podle kategorie",
       "filterAll": "Vše",

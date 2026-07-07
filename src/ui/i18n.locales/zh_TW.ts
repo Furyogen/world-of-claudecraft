@@ -177,6 +177,8 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.lootSettings.title': '拾取設定',
   'hudChrome.lootSettings.close': '關閉拾取設定',
   'hudChrome.lootSettings.menuItem': '拾取設定',
+  'hudChrome.dungeonDifficulty.setHeroic': '設定地城難度：英雄',
+  'hudChrome.dungeonDifficulty.setNormal': '設定地城難度：普通',
   'hudChrome.lootSettings.method': '拾取方式',
   'hudChrome.lootSettings.rollThreshold': '擲骰門檻',
   'hudChrome.lootSettings.groupLoot': '小隊拾取',

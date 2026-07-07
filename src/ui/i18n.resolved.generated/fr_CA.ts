@@ -768,6 +768,10 @@ export const fr_CA: EnTranslations = {
       "leaderOption": "Maître du butin : Chef (vous)",
       "masterOption": "Maître du butin : {name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "Set Dungeon Difficulty: Heroic",
+      "setNormal": "Set Dungeon Difficulty: Normal"
+    },
     "bags": {
       "filterGroupAria": "Filtrer les sacs par catégorie",
       "filterAll": "Tous",

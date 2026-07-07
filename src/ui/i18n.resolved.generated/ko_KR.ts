@@ -768,6 +768,10 @@ export const ko_KR: EnTranslations = {
       "leaderOption": "분배 담당자: 파티장(나)",
       "masterOption": "분배 담당자: {name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "던전 난이도 설정: 영웅",
+      "setNormal": "던전 난이도 설정: 일반"
+    },
     "bags": {
       "filterGroupAria": "가방을 분류별로 필터링",
       "filterAll": "전체",

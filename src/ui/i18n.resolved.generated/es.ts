@@ -768,6 +768,10 @@ export const es: EnTranslations = {
       "leaderOption": "Repartidor: líder (tú)",
       "masterOption": "Repartidor: {name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "Set Dungeon Difficulty: Heroic",
+      "setNormal": "Set Dungeon Difficulty: Normal"
+    },
     "bags": {
       "filterGroupAria": "Filtrar bolsas por categoría",
       "filterAll": "Todos",

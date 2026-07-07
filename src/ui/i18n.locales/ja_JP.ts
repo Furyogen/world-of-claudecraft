@@ -187,6 +187,8 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.lootSettings.title': '分配設定',
   'hudChrome.lootSettings.close': '分配設定を閉じる',
   'hudChrome.lootSettings.menuItem': '分配設定',
+  'hudChrome.dungeonDifficulty.setHeroic': 'ダンジョン難易度をヒロイックに設定',
+  'hudChrome.dungeonDifficulty.setNormal': 'ダンジョン難易度をノーマルに設定',
   'hudChrome.lootSettings.method': '分配方式',
   'hudChrome.lootSettings.rollThreshold': 'ロールしきい値',
   'hudChrome.lootSettings.groupLoot': 'グループルート',

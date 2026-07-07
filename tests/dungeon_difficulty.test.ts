@@ -37,11 +37,12 @@ const SYNTHETIC: MobTemplate = {
 };
 
 describe('heroic tuning data contract', () => {
-  it('covers exactly the four five-player dungeons with their final bosses', () => {
+  it('covers the four five-player dungeons plus the raid arena, with their final bosses', () => {
     expect([...HEROIC_DUNGEON_IDS].sort()).toEqual([
       'drowned_temple',
       'gravewyrm_sanctum',
       'hollow_crypt',
+      'nythraxis_boss_arena',
       'sunken_bastion',
     ]);
     expect(
@@ -51,6 +52,7 @@ describe('heroic tuning data contract', () => {
       sunken_bastion: 'vael_the_mistcaller',
       drowned_temple: 'ysolei',
       gravewyrm_sanctum: 'korzul_the_gravewyrm',
+      nythraxis_boss_arena: 'nythraxis_scourge_of_thornpeak',
     });
     for (const tuning of Object.values(HEROIC_DUNGEON_TUNING)) {
       expect(tuning.level).toBe(20);
@@ -58,15 +60,40 @@ describe('heroic tuning data contract', () => {
     }
     expect(ITEMS[HEROIC_MARK_ITEM_ID]).toBeTruthy();
   });
+
+  it('pins the classic-era heroic multipliers per dungeon', () => {
+    // Calibrated against measured TBC pairs (see the tuning table's comment):
+    // overall raw ratios ~2.7-3.2x damage / ~2-3x health once the level-20
+    // pin is included, clamped to TBC's EFFECTIVE severity for the local
+    // armor math. Exact literals so an accidental retune (or a revert to the
+    // old ~1.1x elite bump) reddens deliberately.
+    expect(
+      Object.fromEntries(
+        Object.values(HEROIC_DUNGEON_TUNING).map((t) => [
+          t.id,
+          [t.healthMultiplier, t.damageMultiplier, t.armorMultiplier],
+        ]),
+      ),
+    ).toEqual({
+      hollow_crypt: [1.9, 3.4, 1.3],
+      sunken_bastion: [2.0, 3.8, 1.3],
+      drowned_temple: [2.6, 4.2, 1.25],
+      gravewyrm_sanctum: [2.0, 4.6, 1.2],
+      // The raid multiplier is smaller in RELATIVE terms because normal
+      // Nythraxis already lands the game's hardest hits (see the tuning
+      // table's comment); percentage mechanics stay difficulty-neutral.
+      nythraxis_boss_arena: [1.6, 1.6, 1.2],
+    });
+  });
 });
 
 describe('claimDifficultyForDungeon', () => {
-  it('grants heroic only to the four supported dungeons', () => {
+  it('grants heroic to the supported dungeons and the raid arena only', () => {
     expect(claimDifficultyForDungeon('hollow_crypt', 'heroic')).toBe('heroic');
     expect(claimDifficultyForDungeon('gravewyrm_sanctum', 'heroic')).toBe('heroic');
-    // Nythraxis quest and raid ids stay normal even when heroic is selected.
+    expect(claimDifficultyForDungeon('nythraxis_boss_arena', 'heroic')).toBe('heroic');
+    // The attunement dungeon is story content: normal even when heroic is selected.
     expect(claimDifficultyForDungeon('nythraxis_crypt', 'heroic')).toBe('normal');
-    expect(claimDifficultyForDungeon('nythraxis_boss_arena', 'heroic')).toBe('normal');
     expect(claimDifficultyForDungeon('no_such_dungeon', 'heroic')).toBe('normal');
     expect(claimDifficultyForDungeon('hollow_crypt', 'normal')).toBe('normal');
   });
@@ -81,15 +108,15 @@ describe('mobTemplateForDungeonDifficulty', () => {
   it('produces an exact heroic transform without mutating the base template', () => {
     const before = JSON.stringify(SYNTHETIC);
     const heroic = mobTemplateForDungeonDifficulty(SYNTHETIC, 'hollow_crypt', 'heroic');
-    // hollow_crypt tuning: health x1.15, damage x1.1, armor x1.05, level 20.
+    // hollow_crypt tuning: health x1.9, damage x3.4, armor x1.3, level 20.
     expect(heroic).not.toBe(SYNTHETIC);
     expect(heroic.minLevel).toBe(20);
     expect(heroic.maxLevel).toBe(20);
-    expect(heroic.hpBase).toBeCloseTo(115, 10);
-    expect(heroic.hpPerLevel).toBeCloseTo(11.5, 10);
-    expect(heroic.dmgBase).toBeCloseTo(22, 10);
-    expect(heroic.dmgPerLevel).toBeCloseTo(2.2, 10);
-    expect(heroic.armorPerLevel).toBeCloseTo(4.2, 10);
+    expect(heroic.hpBase).toBeCloseTo(190, 10);
+    expect(heroic.hpPerLevel).toBeCloseTo(19, 10);
+    expect(heroic.dmgBase).toBeCloseTo(68, 10);
+    expect(heroic.dmgPerLevel).toBeCloseTo(6.8, 10);
+    expect(heroic.armorPerLevel).toBeCloseTo(5.2, 10);
     // Untouched fields carry over; the base template is never mutated.
     expect(heroic.attackSpeed).toBe(SYNTHETIC.attackSpeed);
     expect(heroic.moveSpeed).toBe(SYNTHETIC.moveSpeed);

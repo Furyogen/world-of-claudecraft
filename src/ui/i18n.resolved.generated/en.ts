@@ -768,6 +768,10 @@ export const en: EnTranslations = {
       "leaderOption": "Master Looter: Leader (You)",
       "masterOption": "Master Looter: {name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "Set Dungeon Difficulty: Heroic",
+      "setNormal": "Set Dungeon Difficulty: Normal"
+    },
     "bags": {
       "filterGroupAria": "Filter bags by category",
       "filterAll": "All",

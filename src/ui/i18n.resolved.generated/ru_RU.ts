@@ -768,6 +768,10 @@ export const ru_RU: EnTranslations = {
       "leaderOption": "Мастер добычи: лидер группы (вы)",
       "masterOption": "Мастер добычи: {name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "Установить сложность подземелий: героическая",
+      "setNormal": "Установить сложность подземелий: обычная"
+    },
     "bags": {
       "filterGroupAria": "Фильтровать сумки по категории",
       "filterAll": "Все",

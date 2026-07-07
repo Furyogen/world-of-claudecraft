@@ -768,6 +768,10 @@ export const tr_TR: EnTranslations = {
       "leaderOption": "Ganimet Yöneticisi: Lider (Sen)",
       "masterOption": "Ganimet Yöneticisi: {name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "Set Dungeon Difficulty: Heroic",
+      "setNormal": "Set Dungeon Difficulty: Normal"
+    },
     "bags": {
       "filterGroupAria": "Çantaları kategoriye göre filtrele",
       "filterAll": "Tümü",

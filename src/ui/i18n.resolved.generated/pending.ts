@@ -26,6 +26,8 @@ export const pending: Record<string, readonly string[]> = {
     "heroicShop.balance",
     "heroicShop.buyAria",
     "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal",
     "itemUi.slots.neck",
     "itemUi.slots.ring"
   ],
@@ -46,6 +48,8 @@ export const pending: Record<string, readonly string[]> = {
     "heroicShop.balance",
     "heroicShop.buyAria",
     "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal",
     "itemUi.slots.neck",
     "itemUi.slots.ring"
   ],
@@ -66,6 +70,8 @@ export const pending: Record<string, readonly string[]> = {
     "heroicShop.balance",
     "heroicShop.buyAria",
     "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal",
     "itemUi.slots.neck",
     "itemUi.slots.ring"
   ],
@@ -86,6 +92,8 @@ export const pending: Record<string, readonly string[]> = {
     "heroicShop.balance",
     "heroicShop.buyAria",
     "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal",
     "itemUi.slots.neck",
     "itemUi.slots.ring"
   ],
@@ -107,6 +115,8 @@ export const pending: Record<string, readonly string[]> = {
     "heroicShop.balance",
     "heroicShop.buyAria",
     "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal",
     "itemUi.slots.neck",
     "itemUi.slots.ring"
   ],
@@ -127,6 +137,8 @@ export const pending: Record<string, readonly string[]> = {
     "heroicShop.balance",
     "heroicShop.buyAria",
     "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal",
     "itemUi.slots.neck",
     "itemUi.slots.ring"
   ],
@@ -159,6 +171,8 @@ export const pending: Record<string, readonly string[]> = {
     "heroicShop.balance",
     "heroicShop.buyAria",
     "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal",
     "itemUi.slots.neck",
     "itemUi.slots.ring"
   ],
@@ -182,6 +196,8 @@ export const pending: Record<string, readonly string[]> = {
     "heroicShop.balance",
     "heroicShop.buyAria",
     "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal",
     "itemUi.slots.neck",
     "itemUi.slots.ring"
   ],
@@ -202,6 +218,8 @@ export const pending: Record<string, readonly string[]> = {
     "heroicShop.balance",
     "heroicShop.buyAria",
     "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal",
     "itemUi.slots.neck",
     "itemUi.slots.ring"
   ],
@@ -222,6 +240,8 @@ export const pending: Record<string, readonly string[]> = {
     "heroicShop.balance",
     "heroicShop.buyAria",
     "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal",
     "itemUi.slots.neck",
     "itemUi.slots.ring"
   ],
@@ -242,6 +262,8 @@ export const pending: Record<string, readonly string[]> = {
     "heroicShop.balance",
     "heroicShop.buyAria",
     "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal",
     "itemUi.slots.neck",
     "itemUi.slots.ring"
   ],
@@ -262,6 +284,8 @@ export const pending: Record<string, readonly string[]> = {
     "heroicShop.balance",
     "heroicShop.buyAria",
     "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal",
     "itemUi.slots.neck",
     "itemUi.slots.ring"
   ],
@@ -282,6 +306,8 @@ export const pending: Record<string, readonly string[]> = {
     "heroicShop.balance",
     "heroicShop.buyAria",
     "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal",
     "itemUi.slots.neck",
     "itemUi.slots.ring"
   ],
@@ -302,6 +328,8 @@ export const pending: Record<string, readonly string[]> = {
     "heroicShop.balance",
     "heroicShop.buyAria",
     "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal",
     "itemUi.slots.neck",
     "itemUi.slots.ring"
   ],
@@ -322,6 +350,8 @@ export const pending: Record<string, readonly string[]> = {
     "heroicShop.balance",
     "heroicShop.buyAria",
     "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.dungeonDifficulty.setHeroic",
+    "hudChrome.dungeonDifficulty.setNormal",
     "itemUi.slots.neck",
     "itemUi.slots.ring"
   ]

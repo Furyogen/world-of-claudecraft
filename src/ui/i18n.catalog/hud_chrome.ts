@@ -845,6 +845,14 @@ export const hudChromeStrings = {
     leaderOption: 'Master Looter: Leader (You)',
     masterOption: 'Master Looter: {name}',
   },
+  // Self-portrait context menu: the dungeon-difficulty toggle (classic
+  // portrait-menu placement). The labels are ACTION labels (what clicking
+  // does); shown only to solo players and party leaders, since the sim
+  // rejects the change from anyone else.
+  dungeonDifficulty: {
+    setHeroic: 'Set Dungeon Difficulty: Heroic',
+    setNormal: 'Set Dungeon Difficulty: Normal',
+  },
   // Modular bag filtering controls: the category chips, sort dropdown, and live
   // search above the bag grid, plus the "no items match" empty state.
   bags: {

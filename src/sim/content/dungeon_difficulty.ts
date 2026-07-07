@@ -17,41 +17,76 @@ export interface HeroicDungeonTuning {
   finalBossId: string;
 }
 
+// Tuning model follows classic-era (TBC) heroics: measured database pairs put
+// the heroic raw-damage jump at ~3.0-3.5x flat across leveling and endgame
+// dungeons (Gargolmar 3.00x, Nazan 3.28x, Omor 3.42x, cap-level Kargath
+// Bladefist 3.50x), with health following the cap-band level jump. The
+// damage multipliers below are calibrated against a GEARED level-20 roster
+// (endgame blues: tank ~1150 hp at 33% armor DR, cloth ~640 hp at 18%),
+// reproducing the TBC-heroic EXPERIENCE: a final boss chews a tank for
+// ~18-28% of max hp per swing (healers must actively pump), trash melee
+// takes ~30-55% of a clothie per hit, and boss melee on cloth is close to a
+// two-shot. That lands the raw heroic-vs-normal ratios above TBC's 3.5x
+// because this game's mitigation and hp pools are proportionally larger at
+// the cap; the EFFECTIVE severity is the calibration target. Recompute the
+// bands with the level-20 pin included (Hollow Crypt L10 mobs already gain
+// ~1.6x health and ~1.8x damage from the level bump alone). Mechanic damage
+// and support heals scale with the same multipliers
+// (mechanicDamageMult/mechanicHealMult in ../instances/difficulty.ts).
 export const HEROIC_DUNGEON_TUNING: Record<string, HeroicDungeonTuning> = {
   hollow_crypt: {
     id: 'hollow_crypt',
     difficulty: 'heroic',
     level: 20,
-    healthMultiplier: 1.15,
-    damageMultiplier: 1.1,
-    armorMultiplier: 1.05,
+    healthMultiplier: 1.9,
+    damageMultiplier: 3.4,
+    armorMultiplier: 1.3,
     finalBossId: 'morthen',
   },
   sunken_bastion: {
     id: 'sunken_bastion',
     difficulty: 'heroic',
     level: 20,
-    healthMultiplier: 1.12,
-    damageMultiplier: 1.08,
-    armorMultiplier: 1.05,
+    healthMultiplier: 2.0,
+    damageMultiplier: 3.8,
+    armorMultiplier: 1.3,
     finalBossId: 'vael_the_mistcaller',
   },
   drowned_temple: {
     id: 'drowned_temple',
     difficulty: 'heroic',
     level: 20,
-    healthMultiplier: 1.1,
-    damageMultiplier: 1.06,
-    armorMultiplier: 1.04,
+    healthMultiplier: 2.6,
+    damageMultiplier: 4.2,
+    armorMultiplier: 1.25,
     finalBossId: 'ysolei',
   },
   gravewyrm_sanctum: {
     id: 'gravewyrm_sanctum',
     difficulty: 'heroic',
     level: 20,
-    healthMultiplier: 1.08,
-    damageMultiplier: 1.05,
-    armorMultiplier: 1.03,
+    healthMultiplier: 2.0,
+    damageMultiplier: 4.6,
+    armorMultiplier: 1.2,
     finalBossId: 'korzul_the_gravewyrm',
+  },
+  // The 10-player raid arena. Normal Nythraxis already swings ~3.7x harder
+  // than Korzul, so the raid's heroic multiplier is small in RELATIVE terms
+  // while landing the hardest absolute hits in the game: the boss chews a
+  // geared tank for ~38% of max hp per 2.6s swing (a raid brings two or
+  // three healers), add waves hit cloth for ~40%, and the percentage
+  // mechanics (Soul Rend splits, the 82% Deathless Rage wardstone check)
+  // stay difficulty-neutral by design. The attunement dungeon
+  // nythraxis_crypt is story content and deliberately has NO heroic record.
+  // The daily raid lockout is keyed by dungeon id, so it is SHARED across
+  // difficulties: one Nythraxis kill per day, normal or heroic.
+  nythraxis_boss_arena: {
+    id: 'nythraxis_boss_arena',
+    difficulty: 'heroic',
+    level: 20,
+    healthMultiplier: 1.6,
+    damageMultiplier: 1.6,
+    armorMultiplier: 1.2,
+    finalBossId: 'nythraxis_scourge_of_thornpeak',
   },
 };
