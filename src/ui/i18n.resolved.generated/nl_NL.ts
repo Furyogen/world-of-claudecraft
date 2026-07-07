@@ -470,6 +470,7 @@ export const nl_NL: EnTranslations = {
         "ping": "Ping",
         "jitter": "Jitter",
         "snapshot": "Snapshotfrequentie",
+        "serverTick": "Server Tick Rate",
         "connection": "Verbinding",
         "drawCalls": "Draw Calls",
         "triangles": "Driehoeken",

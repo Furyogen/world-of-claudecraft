@@ -470,6 +470,7 @@ export const ja_JP: EnTranslations = {
         "ping": "Ping",
         "jitter": "ジッター",
         "snapshot": "スナップショットレート",
+        "serverTick": "サーバーティックレート",
         "connection": "接続",
         "drawCalls": "ドローコール",
         "triangles": "三角形",

@@ -305,6 +305,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.perf.labels.ping': 'Ping',
   'hudChrome.perf.labels.jitter': 'ジッター',
   'hudChrome.perf.labels.snapshot': 'スナップショットレート',
+  'hudChrome.perf.labels.serverTick': 'サーバーティックレート',
   'hudChrome.perf.labels.connection': '接続',
   'hudChrome.perf.labels.drawCalls': 'ドローコール',
   'hudChrome.perf.labels.triangles': '三角形',

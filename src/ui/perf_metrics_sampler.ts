@@ -36,6 +36,8 @@ export interface SamplerOnline {
   connected: boolean;
   /** ms between server snapshots; <=0 means unknown (snapshot row hidden). */
   snapInterval: number;
+  /** Server-measured achieved sim tick rate (Hz); null until reported (row hidden). */
+  serverTickHz: number | null;
 }
 
 export interface SamplerDeps {
@@ -58,7 +60,9 @@ export interface SamplerDeps {
 
 function defaultReadMemory(): { usedMb: number; limitMb: number | null } | null {
   if (typeof performance === 'undefined') return null;
-  const mem = (performance as unknown as { memory?: { usedJSHeapSize: number; jsHeapSizeLimit: number } }).memory;
+  const mem = (
+    performance as unknown as { memory?: { usedJSHeapSize: number; jsHeapSizeLimit: number } }
+  ).memory;
   if (!mem) return null;
   return { usedMb: mem.usedJSHeapSize / 1048576, limitMb: mem.jsHeapSizeLimit / 1048576 };
 }
@@ -99,6 +103,10 @@ export function createMetricsSampler(deps: SamplerDeps): () => MetricsSample {
       pingMs: isOnline && echo > 0 ? echo : null,
       jitterMs: isOnline && echo > 0 ? deps.getJitterMs() : null,
       snapshotHz: isOnline && online.snapInterval > 0 ? 1000 / online.snapInterval : null,
+      serverTickHz:
+        isOnline && online.serverTickHz != null && online.serverTickHz > 0
+          ? online.serverTickHz
+          : null,
       connectionType: readConnectionType(),
       drawCalls: r.calls,
       triangles: r.triangles,

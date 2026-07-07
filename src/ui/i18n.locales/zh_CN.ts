@@ -292,6 +292,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.perf.labels.ping': '延迟',
   'hudChrome.perf.labels.jitter': '抖动',
   'hudChrome.perf.labels.snapshot': '快照频率',
+  'hudChrome.perf.labels.serverTick': '服务器刻率',
   'hudChrome.perf.labels.connection': '连接',
   'hudChrome.perf.labels.drawCalls': '绘制调用',
   'hudChrome.perf.labels.triangles': '三角面',

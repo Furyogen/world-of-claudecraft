@@ -470,6 +470,7 @@ export const sv_SE: EnTranslations = {
         "ping": "Ping",
         "jitter": "Jitter",
         "snapshot": "Ögonblicksfrekvens",
+        "serverTick": "Server Tick Rate",
         "connection": "Anslutning",
         "drawCalls": "Ritanrop",
         "triangles": "Trianglar",

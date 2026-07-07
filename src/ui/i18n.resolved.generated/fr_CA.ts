@@ -470,6 +470,7 @@ export const fr_CA: EnTranslations = {
         "ping": "Ping",
         "jitter": "Gigue",
         "snapshot": "Fréquence d'instantanés",
+        "serverTick": "Server Tick Rate",
         "connection": "Connexion",
         "drawCalls": "Appels de rendu",
         "triangles": "Triangles",

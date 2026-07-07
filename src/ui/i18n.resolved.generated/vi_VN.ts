@@ -470,6 +470,7 @@ export const vi_VN: EnTranslations = {
         "ping": "Ping",
         "jitter": "Nhiễu Động",
         "snapshot": "Tốc Độ Ảnh Chụp",
+        "serverTick": "Server Tick Rate",
         "connection": "Kết Nối",
         "drawCalls": "Lệnh Vẽ",
         "triangles": "Tam Giác",

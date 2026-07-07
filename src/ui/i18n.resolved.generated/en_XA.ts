@@ -470,6 +470,7 @@ export const en_XA: EnTranslations = {
         "ping": "[Þíñĝ]",
         "jitter": "[Ĵíţţéŕ]",
         "snapshot": "[Šñáþšĥóţ Ŕáţé]",
+        "serverTick": "[Šéŕʋéŕ Ţíçķ Ŕáţé]",
         "connection": "[Çóññéçţíóñ]",
         "drawCalls": "[Ðŕáŵ Çáļļš]",
         "triangles": "[Ţŕíáñĝļéš]",

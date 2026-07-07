@@ -109,6 +109,7 @@ function bareClient(pid: number): ClientWorld {
   c.duelInfo = null;
   c.lastSnapAt = 0;
   c.snapInterval = 50;
+  c.serverTickHz = null;
   c.missingSince = new Map();
   c.pendingFacingDelta = 0;
   c.connected = true;
@@ -2581,5 +2582,55 @@ describe('entity-anchored world event scoping', () => {
         .filter((ev: { type: string }) => ev.type === 'delveRitePulse');
     expect(pulses(near)).toHaveLength(1);
     expect(pulses(far)).toHaveLength(0);
+  });
+});
+
+describe('server tick rate on the snap head', () => {
+  it('omits tickHz while the meter warms up, then reports the measured rate', () => {
+    const server = new GameServer();
+    const fc = fakeWs();
+    joinServer(server, fc, 1, 'Ticky');
+    broadcast(server);
+    // fresh server: nothing measured yet, so the head omits the field entirely
+    // and the ops profile reports null rather than a fake number
+    expect(lastSnap(fc.sent).tickHz).toBeUndefined();
+    expect(server.perfProfile().tickHz).toBeNull();
+    // Drive the meter the way start() does (one record per callback against
+    // wall ms); the loop timer itself cannot run under vitest without flaking.
+    const internals = server as any;
+    internals.tickRateMeter.record(0, 1);
+    for (let t = 50; t <= 3000; t += 50) internals.tickRateMeter.record(t, 1);
+    internals.tickHz = internals.tickRateMeter.rate(3000);
+    fc.sent.length = 0;
+    broadcast(server);
+    const snap = lastSnap(fc.sent);
+    // parsed by JSON.parse in fakeWs, so this also proves the head stays valid JSON
+    expect(snap.tickHz).toBeCloseTo(20, 1);
+    expect(snap.tick).toBeTypeOf('number');
+    // the same reading rides the ops /api/perf payload (both dispatch arms
+    // share perfProfile), rounded for the wire
+    expect(server.perfProfile().tickHz).toBeCloseTo(20, 1);
+  });
+});
+
+describe('client mirror of the server tick rate', () => {
+  it('mirrors tickHz from the snap head and keeps the last value when omitted', () => {
+    const client = bareClient(1);
+    expect(client.serverTickHz).toBeNull();
+    (client as any).applySnapshot({ t: 'snap', tickHz: 19.6, ents: [] });
+    expect(client.serverTickHz).toBe(19.6);
+    // a warm-up-era head omits the field: the mirror holds the last reading
+    (client as any).applySnapshot({ t: 'snap', ents: [] });
+    expect(client.serverTickHz).toBe(19.6);
+  });
+
+  it('rejects junk tickHz values instead of poisoning the mirror', () => {
+    const client = bareClient(1);
+    (client as any).applySnapshot({ t: 'snap', tickHz: 20, ents: [] });
+    // Infinity is the one value only Number.isFinite rejects (typeof passes, > 0 passes)
+    for (const junk of ['20', Number.NaN, Number.POSITIVE_INFINITY, -1, 0, null]) {
+      (client as any).applySnapshot({ t: 'snap', tickHz: junk, ents: [] });
+    }
+    expect(client.serverTickHz).toBe(20);
   });
 });

@@ -99,6 +99,7 @@ import type { Presence, PresenceStatus, SocialActor, SocialTransport } from './s
 import { SocialService } from './social';
 import { PgSocialDb } from './social_db';
 import { TickProfiler } from './tick_profiler';
+import { hrtimeToMs, TickRateMeter } from './tick_rate_meter';
 import { holderInfoForPubkey } from './woc_balance';
 import { isBackpressureExceeded } from './ws_backpressure';
 
@@ -773,6 +774,11 @@ export class GameServer {
   private readonly startedAt = Date.now();
   private peakOnline = 0;
   private tickMsAvg = 0;
+  // Achieved sim ticks per wall-clock second. The cost metrics above go blind
+  // when the dt clamp discards wall time under saturation; this is the number
+  // that actually sags. Rides every snapshot head + perfProfile().
+  private readonly tickRateMeter = new TickRateMeter();
+  private tickHz: number | null = null;
   // Rolling per-phase loop timing, localizes a stutter to a phase. Always-on
   // (the hot path allocates nothing); read via perfProfile() for admin/ops.
   private readonly tickProfiler = new TickProfiler([
@@ -1073,6 +1079,7 @@ export class GameServer {
             this.tickProfiler.add(phase, Number(t - mark) / 1e6);
             mark = t;
           };
+          let ticksRun = 0;
           while (acc >= DT) {
             this.clearStaleInputs();
             lap('stale');
@@ -1083,8 +1090,15 @@ export class GameServer {
             lap('events');
             this.runAntibotTick();
             lap('antibot');
+            ticksRun++;
             acc -= DT;
           }
+          // Anchor the achieved-rate meter to the wall clock (hrtime), never to
+          // callback counts: late timer fires and the dt clamp are exactly the
+          // losses it exists to expose.
+          const nowMs = hrtimeToMs(now);
+          this.tickRateMeter.record(nowMs, ticksRun);
+          this.tickHz = this.tickRateMeter.rate(nowMs);
           this.broadcastSnapshots();
           lap('broadcast');
           this.tickProfiler.add('bcastGrid', Number(this.bcastGridNs) / 1e6);
@@ -1893,10 +1907,13 @@ export class GameServer {
   }
 
   // Rolling per-phase loop timing for the admin/ops perf view + load harness.
-  perfProfile(): { online: number; simEntities: number } & ReturnType<TickProfiler['profile']> {
+  perfProfile(): { online: number; simEntities: number; tickHz: number | null } & ReturnType<
+    TickProfiler['profile']
+  > {
     return {
       online: this.clients.size,
       simEntities: this.sim.entities.size,
+      tickHz: this.tickHz == null ? null : round2(this.tickHz),
       ...this.tickProfiler.profile(),
     };
   }
@@ -1914,7 +1931,7 @@ export class GameServer {
     const p = this.tickProfiler.profile().phases;
     const fmt = (n: string) => `${n}=${p[n].p95}/${p[n].max}`;
     console.log(
-      `[perf] online=${this.clients.size} ents=${this.sim.entities.size} tickMs=${round2(tickMs)}${overBudget ? ' OVER' : ''}` +
+      `[perf] online=${this.clients.size} ents=${this.sim.entities.size} tickHz=${this.tickHz == null ? 'n/a' : round2(this.tickHz)} tickMs=${round2(tickMs)}${overBudget ? ' OVER' : ''}` +
         ` | p95/max ${['total', 'tick', 'broadcast', 'bcastSelf', 'bcastGrid', 'events', 'social'].map(fmt).join(' ')}` +
         ` | visits=${this.bcVisits} serializes=${this.bcSerializes} serializeMs=${round2(Number(this.bcSerializeNs) / 1e6)}`,
     );
@@ -3205,7 +3222,12 @@ export class GameServer {
   private broadcastSnapshots(): void {
     if (this.clients.size === 0) return;
     const tick = this.sim.tickCount;
-    const head = `{"t":"snap","tick":${tick},"time":${round2(this.sim.time)}`;
+    // tickHz is omitted while the meter warms up (first ~1s) so a fresh server
+    // never shows a bogus reading. A warmed meter reports a positive rate: a
+    // window with zero committed ticks cannot coexist with a firing broadcast
+    // (acc accrues every callback), and a fully stalled loop sends nothing.
+    const tickHzJson = this.tickHz == null ? '' : `,"tickHz":${round2(this.tickHz)}`;
+    const head = `{"t":"snap","tick":${tick},"time":${round2(this.sim.time)}${tickHzJson}`;
     // Guard each session: a throw while building one player's snapshot must not
     // starve every other session of its snapshot this tick (server/CLAUDE.md).
     forEachGuarded(

@@ -470,6 +470,7 @@ export const zh_CN: EnTranslations = {
         "ping": "延迟",
         "jitter": "抖动",
         "snapshot": "快照频率",
+        "serverTick": "服务器刻率",
         "connection": "连接",
         "drawCalls": "绘制调用",
         "triangles": "三角面",

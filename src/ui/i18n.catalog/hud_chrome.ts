@@ -472,6 +472,7 @@ export const hudChromeStrings = {
       ping: 'Ping',
       jitter: 'Jitter',
       snapshot: 'Snapshot Rate',
+      serverTick: 'Server Tick Rate',
       connection: 'Connection',
       drawCalls: 'Draw Calls',
       triangles: 'Triangles',
