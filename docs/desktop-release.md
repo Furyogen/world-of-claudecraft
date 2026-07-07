@@ -131,33 +131,45 @@ Reputation persists across releases signed with the same identity, so it fades.
 ## Linux
 
 No artifact signing (electron-builder 26 has none built in; per-file signatures are
-not customary). Publish SHA256 checksums next to the artifacts:
-`shasum -a 256 release/*.AppImage release/*.deb > SHA256SUMS`. AppImage is the
+not customary). Publish SHA256 checksums next to the artifacts (the CI publish
+does this as `SHA256SUMS-linux`; manually:
+`shasum -a 256 release/*.AppImage release/*.deb > SHA256SUMS-linux`). AppImage is the
 auto-updatable target; deb users update manually or via a future repo. The
 website download page offers the AppImage (not the deb): it runs on immutable
 Fedora atomic desktops (Bazzite, Steam Deck) with no system install, just
 `chmod +x` and launch, which the deb cannot do there.
 
-## Linux publish from CI
+## Publishing from CI (Linux + macOS)
 
-Linux is the one channel published automatically: the
-`.github/workflows/desktop-linux-publish.yml` workflow builds the Linux artifacts
-(AppImage + deb, x64 + arm64), generates `SHA256SUMS`, and uploads everything plus
-both per-arch feed files to the update host over R2's S3 API. macOS and Windows
-stay on the manual steps below until their signing secrets are provisioned in CI.
+The `.github/workflows/desktop-publish.yml` workflow publishes two of the three
+platforms automatically:
+
+- Linux: AppImage + deb (x64 + arm64), `SHA256SUMS-linux`, and both per-arch
+  feed files. No signing.
+- macOS: the signed + notarized universal dmg + zip + blockmap,
+  `SHA256SUMS-mac`, and `latest-mac.yml`. The job verifies the signature
+  (`codesign --verify --deep --strict`, `spctl -a -t exec`) before uploading
+  and refuses to run at all without the Apple secrets, so an ad-hoc build can
+  never publish.
+
+Windows stays on the manual steps below until Azure Artifact Signing is
+provisioned in CI. The platform jobs are independent: a mac signing failure
+never blocks the Linux publish and vice versa.
 
 Triggers:
 
 - Pushing a release tag `v<version>` (the tagged commit must be on `main`, the tag
   must match `package.json` `version`, and `DESKTOP_VERSION` must match too; the
   workflow hard-fails on any mismatch so a half-bumped release cannot publish).
-- Manual `workflow_dispatch` (Actions tab, "Desktop Linux publish", pick a
+- Manual `workflow_dispatch` (Actions tab, "Desktop publish", pick a
   branch), for backfilling the version currently on that ref. The same version
-  lockstep guards run; only the tag and main-ancestry checks are skipped.
+  lockstep guard runs; only the tag and main-ancestry checks are skipped.
 
-Upload order is artifacts first, `latest-linux.yml` + `latest-linux-arm64.yml`
-last, so installed apps are never offered an update whose file is not yet
-downloadable.
+Within each job, versioned artifacts upload first and the feed files
+(`latest-linux.yml` + `latest-linux-arm64.yml`, `latest-mac.yml`) last, so
+installed apps are never offered an update whose file is not yet downloadable.
+Versioned artifacts upload with immutable cache headers; checksum and feed
+files are near-uncached, matching the existing host convention.
 
 One-time provisioning (maintainer):
 
@@ -169,9 +181,18 @@ One-time provisioning (maintainer):
 2. R2 API token: create an "Object Read and Write" API token scoped to that one
    bucket (Cloudflare dashboard, R2, Manage API Tokens). Note the Access Key ID,
    Secret Access Key, and your Cloudflare account id.
-3. GitHub repo secrets (Settings, Secrets and variables, Actions):
+3. GitHub repo secrets (Settings, Secrets and variables, Actions), R2 set:
    `R2_ACCOUNT_ID`, `R2_BUCKET`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`.
-4. Public read: the custom domain makes the bucket publicly readable through
+4. GitHub repo secrets, Apple set (all five required or the mac job refuses to
+   run; sourced from the same credentials the manual mac build uses):
+   - `CSC_LINK`: the Developer ID Application `.p12` as base64
+     (`base64 -i <cert>.p12 | pbcopy`).
+   - `CSC_KEY_PASSWORD`: the `.p12` password.
+   - `APPLE_API_KEY_P8`: the raw text content of the App Store Connect API key
+     `.p8` file (the workflow writes it to disk and points `APPLE_API_KEY` at
+     it; note the manual flow passes a file path here instead).
+   - `APPLE_API_KEY_ID`, `APPLE_API_ISSUER`: as in the manual flow.
+5. Public read: the custom domain makes the bucket publicly readable through
    that hostname only, which is exactly what the updater and download page need;
    do not additionally enable the `r2.dev` public URL.
 
@@ -179,11 +200,13 @@ Verify after the first publish:
 
 ```bash
 curl -sI https://updates.worldofclaudecraft.com/desktop/latest-linux.yml | head -1
-curl -s https://updates.worldofclaudecraft.com/desktop/SHA256SUMS
+curl -sI https://updates.worldofclaudecraft.com/desktop/latest-mac.yml | head -1
+curl -s https://updates.worldofclaudecraft.com/desktop/SHA256SUMS-linux
 ```
 
 Users verify a download against the published checksums with
-`sha256sum -c SHA256SUMS --ignore-missing` from their download directory.
+`sha256sum -c SHA256SUMS-linux --ignore-missing` (or `shasum -a 256 -c
+SHA256SUMS-mac --ignore-missing` on macOS) from their download directory.
 
 ## Publishing a website update
 
@@ -193,8 +216,11 @@ Users verify a download against the published checksums with
    no-JS fallback; keep them on the same version). The page offers macOS (dmg)
    and Linux (AppImage); Windows stays "pending" until its installer is uploaded.
 2. Build on each OS runner with signing env present: `npm run electron:build`.
+   macOS and Linux are built and published by CI on the release tag (see
+   "Publishing from CI"); only Windows still needs a manual runner.
 3. Upload from `release/` to the update host directory (keep filenames exactly):
-   - macOS: `world-of-claudecraft-<v>-mac-universal.dmg` (download page),
+   - macOS: handled by CI; the manual list, should CI ever be bypassed:
+     `world-of-claudecraft-<v>-mac-universal.dmg` (download page),
      `...-mac-universal.zip` + `.zip.blockmap` (updater), `latest-mac.yml`.
    - Windows: with x64+arm64 and no `nsis` block, electron-builder's
      `buildUniversalInstaller` default (true) emits ONE combined NSIS installer
@@ -203,7 +229,7 @@ Users verify a download against the published checksums with
      verify the emitted installer filename and the `path` in `latest.yml` on the
      first Windows build. To ship separate per-arch installers instead, set
      `build.nsis.buildUniversalInstaller: false`.
-   - Linux: handled by CI (see "Linux publish from CI" above); the manual list,
+   - Linux: handled by CI (see "Publishing from CI" above); the manual list,
      should CI ever be bypassed: `...-linux-x86_64.AppImage` (x64) /
      `...-linux-arm64.AppImage`
      (electron-builder names the x64 AppImage `x86_64`; blockmap data is
