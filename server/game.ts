@@ -760,6 +760,10 @@ export class GameServer {
   private readonly moderation: ModerationService<ClientSession>;
   private wireCache = new Map<number, EntityWireCache>();
   private lastWireSweepTick = 0;
+  // The Gauntlet event window. Phase 1: a boot-time env opt-in (GAUNTLET_EVENT=1),
+  // fed to the sim each loop pass (the utcDay idiom); the /internal ops toggle
+  // will mutate this at runtime in a later phase.
+  gauntletWindowOpen = process.env.GAUNTLET_EVENT === '1';
   private interval: NodeJS.Timeout | null = null;
   private holderTierInterval: NodeJS.Timeout | null = null;
   private keepaliveInterval: NodeJS.Timeout | null = null;
@@ -1075,6 +1079,10 @@ export class GameServer {
           // Feed the authoritative UTC day to the sim so the delve daily reset (FR-5.1)
           // works without the sim reading the wall clock itself (determinism invariant).
           this.sim.utcDay = new Date().toISOString().slice(0, 10);
+          // Feed The Gauntlet event window the same way (the sim never reads env
+          // or the clock). Phase 1 gates on the GAUNTLET_EVENT env flag via this
+          // field; the /internal ops toggle mutates the field at runtime later.
+          this.sim.gauntletEventOpen = this.gauntletWindowOpen;
           this.bcastGridNs = 0n;
           this.bcastSelfNs = 0n;
           this.bcSerializeNs = 0n;
@@ -3313,6 +3321,17 @@ export class GameServer {
         sim.delveRiteChoose(msg.intensity, pid);
         break;
       }
+      // The Gauntlet: both are bare commands (no payload fields to validate);
+      // the sim gates everything (event window, recruiter radius, dead, run
+      // membership) and resolves every outcome.
+      case 'gauntlet_join': {
+        sim.gauntletJoin(pid);
+        break;
+      }
+      case 'gauntlet_leave': {
+        sim.gauntletLeave(pid);
+        break;
+      }
       case 'delve_buy': {
         if (typeof msg.delveId !== 'string' || typeof msg.itemId !== 'string') break;
         const e = sim.entities.get(pid);
@@ -3644,6 +3663,13 @@ export class GameServer {
     // shape used by the `/dev gather` chat cheat and existing consumers. Wire
     // key `gprof`; see TERSE_TO_IWORLD/ALL_DELTA_KEYS in tests/snapshots.test.ts.
     maybe('gprof', this.sim.gatheringProficiencyFor(anchorSession.pid));
+    // The Gauntlet: the event-window flag (a boolean, changes on open/close)
+    // and the viewer's run view. Deadlines inside the view are absolute
+    // sim-time, so on quiet ticks the serialized view is byte-identical and
+    // maybe() elides it. Wire keys `gopen`/`grun`, IWorld `gauntletOpen`/
+    // `gauntletRun` (see TERSE_TO_IWORLD/ALL_DELTA_KEYS in tests/snapshots.test.ts).
+    maybe('gopen', this.sim.gauntletEventOpen);
+    maybe('grun', this.sim.gauntletRunWire(anchorSession.pid));
     // stats + weapon stay per-tick: recalcPlayerStats re-derives them on every
     // stat-affecting aura gain/loss (Bear/Cat Form, shouts, debuffs, elixir
     // wear-off, a buff cast on you by someone else), none of which mark this

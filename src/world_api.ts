@@ -39,6 +39,7 @@
 //   professions.ts      IWorldProfessions    skill/craft/recipe/node read surface (#1164; node
 //                                            harvest read + action landed in #1121; recipe
 //                                            content + basic crafting action landed in #1127)
+//   gauntlet.ts         IWorldGauntlet       The Gauntlet survival event (join/leave + run view)
 //
 // THREE GATES pin this seam (run before any facet edit; the literal counts are
 // pinned THERE and re-stale here, so this prose stays count-free):
@@ -59,6 +60,7 @@ import type { IWorldDelves } from './world_api/delves';
 import type { IWorldDuelArena } from './world_api/duel_arena';
 import type { IWorldDungeons } from './world_api/dungeons';
 import type { IWorldEntityRoster } from './world_api/entity_roster';
+import type { IWorldGauntlet } from './world_api/gauntlet';
 import type { IWorldInteraction } from './world_api/interaction';
 import type { IWorldInventory } from './world_api/inventory';
 import type { IWorldLoot } from './world_api/loot';
@@ -114,6 +116,7 @@ export type {
   FiestaScoreboardPlayer,
 } from './world_api/duel_arena';
 export type { RaidLockout } from './world_api/dungeons';
+export type { GauntletRunView } from './world_api/gauntlet';
 export type { MailInfo, MailKindView, MailMessageView } from './world_api/mail';
 export type { MarketInfo, MarketListingView } from './world_api/market';
 export type { PartyInfo, PartyMemberAura, PartyMemberInfo } from './world_api/party';
@@ -161,7 +164,8 @@ export interface IWorld
     IWorldDelves,
     IWorldDailyRewards,
     IWorldTelemetry,
-    IWorldProfessions {}
+    IWorldProfessions,
+    IWorldGauntlet {}
 
 // ---------------------------------------------------------------------------
 // Command schema (W0b): the shared wire-token vocabulary.
@@ -310,6 +314,8 @@ export const COMMAND_NAMES = [
   'autoloot',
   'resurrect_corpse',
   'resurrect_healer',
+  'gauntlet_join',
+  'gauntlet_leave',
 ] as const;
 
 // The union both the send path (`online.ts`) and the dispatch switch
@@ -373,7 +379,8 @@ export type WorldFacet =
   | 'IWorldDungeons'
   | 'IWorldDelves'
   | 'IWorldDailyRewards'
-  | 'IWorldTelemetry';
+  | 'IWorldTelemetry'
+  | 'IWorldGauntlet';
 
 export const COMMAND_FACETS = {
   // IWorldCombat: ability casts, auto-attack, spirit release.
@@ -510,4 +517,7 @@ export const COMMAND_FACETS = {
   lockpick_abort: 'IWorldDelves',
   collect_delve_chest_loot: 'IWorldDelves',
   delve_rite_choose: 'IWorldDelves',
+  // IWorldGauntlet: The Gauntlet survival event (join the lobby / leave the run).
+  gauntlet_join: 'IWorldGauntlet',
+  gauntlet_leave: 'IWorldGauntlet',
 } as const satisfies Partial<Record<ClientCommand, WorldFacet>>;

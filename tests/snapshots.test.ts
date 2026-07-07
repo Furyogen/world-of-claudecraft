@@ -19,7 +19,8 @@ import { saveCharacterState } from '../server/db';
 import { type ClientSession, GameServer, wireEntity } from '../server/game';
 import { ClientWorld } from '../src/net/online';
 import { mechHeldWeaponOverride, visualKeyFor } from '../src/render/characters/manifest';
-import { DELVES } from '../src/sim/data';
+import { DELVES, gauntletOrigin } from '../src/sim/data';
+import { Rng } from '../src/sim/rng';
 import { Sim } from '../src/sim/sim';
 import { type Aura, DT, type PlayerClass } from '../src/sim/types';
 import { terrainHeight } from '../src/sim/world';
@@ -1850,7 +1851,9 @@ const ALL_DELTA_KEYS = [
   'drun',
   'duel',
   'equip',
+  'gopen',
   'gprof',
+  'grun',
   'inv',
   'lockouts',
   'lroll',
@@ -1889,7 +1892,9 @@ const TERSE_TO_IWORLD: Record<string, string> = {
   drun: 'delveRun',
   duel: 'duelInfo',
   equip: 'equipment',
+  gopen: 'gauntletOpen',
   gprof: 'gatheringProficiency',
+  grun: 'gauntletRun',
   inv: 'inventory',
   lockouts: 'selfLockouts',
   lroll: 'lootRollPrompts',
@@ -1996,6 +2001,53 @@ function dirtyEveryDeltaField(): {
     mechChromaIds: ['amber_crimson'],
   };
 
+  // `gopen`/`grun`: The Gauntlet event flag + the viewer's run view. A real
+  // gauntlet join is mutually exclusive with the delve run above (the join gate
+  // refuses in-delve players), so seed the run pool the encoder reads directly
+  // with a minimal lobby-phase run holding the leader.
+  sim.gauntletEventOpen = true;
+  sim.gauntletRuns.push({
+    id: 1,
+    slot: 0,
+    seed: 1,
+    rng: new Rng(1),
+    origin: gauntletOrigin(0),
+    phase: 'lobby',
+    trialIndex: 0,
+    phaseEndsAt: 60,
+    prizePool: 10000,
+    contestants: [
+      {
+        entityId: lp,
+        player: true,
+        name: 'Alld',
+        vitality: 100,
+        skill: 0,
+        eliminatedAtTrial: null,
+        script: { speed: 0, fumbleOnFlip: null },
+      },
+    ],
+    playerStates: new Map([
+      [
+        lp,
+        {
+          savedPos: { ...p.pos },
+          spectating: false,
+          momentumX: 0,
+          momentumZ: 0,
+          heldAt: null,
+          heldUntil: 0,
+          finishedAt: null,
+          bestZ: 0,
+        },
+      ],
+    ]),
+    trial: null,
+    watcherId: null,
+    podium: null,
+    emptyFor: 0,
+  });
+
   // Player Entity fields.
   p.cooldowns.set('heroic_strike', 5);
   p.stats = { ...p.stats, str: 12345 };
@@ -2099,6 +2151,9 @@ describe('full self-state snapshot delta fixture', () => {
     }); // prof -> professionsState
     expect(client.delveClears).toEqual({ 'collapsed_reliquary:heroic': 1 }); // dclears -> delveClears
     expect(client.delveDaily).toMatchObject({ markClears: 4 }); // delveDaily
+    expect(client.gauntletOpen).toBe(true); // gopen -> gauntletOpen
+    // grun -> gauntletRun (the seeded lobby-phase run, viewer-scoped)
+    expect(client.gauntletRun).toMatchObject({ phase: 'lobby', vitality: 100, prizePool: 10000 });
     // tal -> talents / talentSpec / loadouts / activeLoadout
     expect(client.talents).toEqual({ spec: 'arms', ranks: {}, choices: {} });
     expect(client.talentSpec).toBe('arms');
@@ -2147,9 +2202,9 @@ describe('full self-state snapshot delta fixture', () => {
 });
 
 describe('delta-key contract pins (anti-drift)', () => {
-  it('ALL_DELTA_KEYS contains exactly 31 unique keys in sorted order', () => {
-    expect(ALL_DELTA_KEYS).toHaveLength(31);
-    expect(new Set(ALL_DELTA_KEYS).size).toBe(31);
+  it('ALL_DELTA_KEYS contains exactly 33 unique keys in sorted order', () => {
+    expect(ALL_DELTA_KEYS).toHaveLength(33);
+    expect(new Set(ALL_DELTA_KEYS).size).toBe(33);
     expect([...ALL_DELTA_KEYS]).toEqual([...ALL_DELTA_KEYS].sort());
   });
 
@@ -2161,7 +2216,7 @@ describe('delta-key contract pins (anti-drift)', () => {
     const scraped = new Set<string>();
     for (let m = re.exec(src); m !== null; m = re.exec(src)) scraped.add(m[1]);
     expect(scraped.has('lockouts')).toBe(true); // the multi-line call IS captured
-    expect(scraped.size).toBe(31);
+    expect(scraped.size).toBe(33);
     expect([...scraped].sort()).toEqual([...ALL_DELTA_KEYS].sort());
   });
 

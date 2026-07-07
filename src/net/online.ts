@@ -67,6 +67,7 @@ import {
   type DevLeaderboardPage,
   type DuelInfo,
   type FriendInfo,
+  type GauntletRunView,
   type GuildLeaderboardPage,
   type IWorld,
   isOverheadEmoteId,
@@ -985,6 +986,10 @@ export class ClientWorld implements IWorld {
   // delveShopOffers can resolve the shop lock badge client-side.
   delveClears: Record<string, number> = {};
   delveDaily: DelveDailyInfo = { date: '', firstClearXp: [], markClears: 0 };
+  // --- IWorldGauntlet: The Gauntlet event window + the viewer's run, mirrored
+  // from the snapshot self (`s.gopen` / `s.grun`, delta-omitted). ---
+  gauntletOpen = false;
+  gauntletRun: GauntletRunView | null = null;
   // Gathering profession proficiency (Mining/Logging/Herbalism), the real
   // read surface for #1119; mirrored from the `prof` wire delta below.
   // Crafting/secondary professions still contribute nothing until later
@@ -1787,6 +1792,8 @@ export class ClientWorld implements IWorld {
       if (s.delveDaily !== undefined) this.delveDaily = s.delveDaily;
       if (s.prof !== undefined) this.professionsState = s.prof ?? { skills: [] };
       if (s.gprof !== undefined) this.gatheringProficiency = s.gprof ?? {};
+      if (s.gopen !== undefined) this.gauntletOpen = s.gopen ?? false;
+      if (s.grun !== undefined) this.gauntletRun = s.grun;
       // camera follows server-side facing changes when not mouselooking
       if (prevSelfFacing !== undefined && this.mouselookFacing === null) {
         let d = e.facing - prevSelfFacing;
@@ -2368,6 +2375,14 @@ export class ClientWorld implements IWorld {
   }
   collectDelveChestLoot(chestId: number): void {
     this.cmd({ cmd: 'collect_delve_chest_loot', objectId: chestId });
+  }
+  // --- IWorldGauntlet: join the filling lobby / leave (forfeit) the run. The
+  // run view + event-open flag ride the self snapshot (gopen/grun above). ---
+  gauntletJoin(): void {
+    this.cmd({ cmd: 'gauntlet_join' });
+  }
+  gauntletLeave(): void {
+    this.cmd({ cmd: 'gauntlet_leave' });
   }
   // Mirror the authoritative craftResult event into lastCraftResult (#1127).
   // The event still flows to the HUD (drainEvents) for a toast/log line.

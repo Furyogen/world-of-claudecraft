@@ -1689,6 +1689,8 @@ async function startGame(
     if (bestNpc !== null) {
       const npc = world.entities.get(bestNpc);
       if (npc?.kind === 'npc' && npc.templateId === 'brother_halven') hud.openDelveBoard(bestNpc);
+      else if (npc?.kind === 'npc' && npc.templateId === 'gauntlet_recruiter')
+        hud.openGauntletRecruit();
       else hud.openQuestDialog(bestNpc);
       return;
     }
@@ -2623,6 +2625,9 @@ async function startOffline(
     playerClass,
     playerName: name,
     devCommands: import.meta.env.DEV,
+    // The Gauntlet is always joinable offline (the server gates its own window
+    // via GAUNTLET_EVENT / the ops toggle; headless keeps the default closed).
+    gauntletAlwaysOpen: true,
     world,
   });
   sim.setPlayerSkin(sim.playerId, skin);
