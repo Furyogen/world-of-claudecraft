@@ -126,6 +126,11 @@ const KAYKIT_WEAPON_ACCESSORY: Record<string, string> = {
   frostbite: 'VAR_DAGGER',
   hoarfrost_vigil: 'VAR_STAFF',
   shard_of_everwinter: 'VAR_WAND',
+  solheim_last_light_of_the_dawn: 'VAR_SWORD',
+  astravyr_fang_of_the_fallen_star: 'VAR_DAGGER',
+  brasscap_hatchet: 'VAR_AXE',
+  knotted_oak_stave: 'VAR_STAFF',
+  whittler_s_knife: 'VAR_DAGGER',
 };
 
 // Per-family grip for the variant pack. The model origin IS the grip, so we attach
