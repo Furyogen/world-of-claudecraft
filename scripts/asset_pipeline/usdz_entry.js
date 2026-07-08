@@ -3,8 +3,9 @@
 // previews WITH TEXTURES in macOS Quick Look / Preview (which render .glb
 // poorly but .usdz natively). Runs in a real browser context, so canvas/image
 // decoding needed by the exporter is available.
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+
 import { USDZExporter } from 'three/examples/jsm/exporters/USDZExporter.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 function b64(u8) {
   let s = '';

@@ -332,8 +332,8 @@ describe('removeWeaponFromSources', () => {
     // BOTH items that mapped to the deleted model are gone; the sword item stays.
     expect(out.variants).not.toContain('notched_woodaxe');
     expect(out.variants).toContain("worn_sword: 'sword_a'");
-    expect(out.actions.some((a) => a.includes('KAYKIT_WEAPON_ACCESSORY'))).toBe(true);
-    expect(out.actions.some((a) => a.includes('ITEM_WEAPON_VARIANTS'))).toBe(true);
+    expect(out.actions.some((a: string) => a.includes('KAYKIT_WEAPON_ACCESSORY'))).toBe(true);
+    expect(out.actions.some((a: string) => a.includes('ITEM_WEAPON_VARIANTS'))).toBe(true);
     // Brace balance holds on both edited sources.
     expect(bal(out.accessory)).toBe(bal(ACCESSORY));
     expect(bal(out.variants)).toBe(bal(VARIANTS));
@@ -345,7 +345,7 @@ describe('removeWeaponFromSources', () => {
       'worn_axe', // present in GRIP_FIXTURE
     );
     expect(out.grip).not.toContain('worn_axe');
-    expect(out.actions.some((a) => a.includes('worn_axe'))).toBe(true);
+    expect(out.actions.some((a: string) => a.includes('worn_axe'))).toBe(true);
   });
 
   it('round-trips register -> remove back to the original accessory source', () => {
