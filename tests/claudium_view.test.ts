@@ -59,9 +59,9 @@ describe('buildClaudiumView funded state (service on)', () => {
     expect(view.hasBalance).toBe(true);
     expect(view.balance).toBe(1250);
     expect(view.buyRows).toEqual([
-      { sku: 's1', usd: 1, claudium: 100 },
-      { sku: 's10', usd: 10, claudium: 1000 },
-      { sku: 's100', usd: 100, claudium: 10000 },
+      { sku: 's1', usd: 1, claudium: 100, stripeConfigured: true },
+      { sku: 's10', usd: 10, claudium: 1000, stripeConfigured: true },
+      { sku: 's100', usd: 100, claudium: 10000, stripeConfigured: true },
     ]);
   });
 
@@ -76,6 +76,22 @@ describe('buildClaudiumView funded state (service on)', () => {
   it('enables both rails when there are skus and the woc oracle price is present', () => {
     const view = buildClaudiumView(funded);
     expect(view.rails).toEqual({ stripe: true, woc: true });
+    expect(view.buyDisabled).toBe(false);
+  });
+
+  it('keeps unconfigured Stripe SKU rows visible but unavailable on the Stripe rail', () => {
+    const view = buildClaudiumView({
+      ...funded,
+      skus: [
+        { sku: 's1', usd: 1, claudium: 100, stripeConfigured: false },
+        { sku: 's10', usd: 10, claudium: 1000, stripeConfigured: false },
+      ],
+    });
+    expect(view.buyRows).toEqual([
+      { sku: 's1', usd: 1, claudium: 100, stripeConfigured: false },
+      { sku: 's10', usd: 10, claudium: 1000, stripeConfigured: false },
+    ]);
+    expect(view.rails).toEqual({ stripe: false, woc: true });
     expect(view.buyDisabled).toBe(false);
   });
 

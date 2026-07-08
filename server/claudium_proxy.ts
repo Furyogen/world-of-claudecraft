@@ -38,6 +38,7 @@ export interface ClaudiumSku {
   sku: string;
   usd: number;
   claudium: number;
+  stripeConfigured?: boolean;
 }
 
 /** The SKU ladder, empty when the service is off. */
@@ -205,7 +206,15 @@ export async function claudiumSkus(): Promise<ClaudiumSkusResult> {
   const skus = data.filter(
     (s): s is ClaudiumSku =>
       typeof s?.sku === 'string' && typeof s.usd === 'number' && typeof s.claudium === 'number',
-  );
+  ).map((s) => ({
+    sku: s.sku,
+    usd: s.usd,
+    claudium: s.claudium,
+    stripeConfigured:
+      typeof (s as { stripeConfigured?: unknown }).stripeConfigured === 'boolean'
+        ? (s as { stripeConfigured: boolean }).stripeConfigured
+        : undefined,
+  }));
   return { skus };
 }
 

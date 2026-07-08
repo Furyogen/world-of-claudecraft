@@ -180,8 +180,9 @@ export class ClaudiumWindow {
         const usd = this.usdLabel(row.usd);
         const claudium = formatNumber(row.claudium, { maximumFractionDigits: 0 });
         const label = t('hudChrome.claudium.skuRow', { usd, claudium });
+        const disabled = this.selectedRail === 'stripe' && !row.stripeConfigured;
         return (
-          `<button type="button" class="cl-sku" data-sku="${esc(row.sku)}" aria-label="${esc(label)}">` +
+          `<button type="button" class="cl-sku" data-sku="${esc(row.sku)}" aria-label="${esc(label)}" ${disabled ? 'disabled' : ''}>` +
           `<span class="cl-sku-usd">${esc(usd)}</span>` +
           `<span class="cl-sku-claudium">${esc(t('hudChrome.claudium.storeCost', { amount: claudium }))}</span>` +
           `<span class="cl-sku-buy">${esc(t('hudChrome.claudium.buyButton'))}</span>` +
@@ -253,6 +254,7 @@ export class ClaudiumWindow {
     });
     body.querySelectorAll<HTMLButtonElement>('[data-sku]').forEach((btn) => {
       btn.addEventListener('click', () => {
+        if (btn.disabled) return;
         const sku = btn.dataset.sku;
         if (sku) this.deps.buy(this.selectedRail, sku);
       });

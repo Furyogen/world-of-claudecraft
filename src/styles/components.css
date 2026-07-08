@@ -2056,6 +2056,13 @@
     outline: 2px solid var(--gold);
     outline-offset: 2px;
   }
+  .cl-sku:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+  .cl-sku:disabled .cl-sku-buy {
+    color: #b2a47d;
+  }
   .cl-sku-claudium {
     color: #ffe27a;
     font-size: 12px;

@@ -16,6 +16,8 @@ export interface ClaudiumSkuInput {
   sku: string;
   usd: number;
   claudium: number;
+  /** False when the Stripe price env var for this SKU is not configured. */
+  stripeConfigured?: boolean;
 }
 
 /** Per-rail price. usdPerClaudium fixes the display peg; woc base-units null => oracle down. */
@@ -46,6 +48,7 @@ export interface ClaudiumBuyRow {
   sku: string;
   usd: number;
   claudium: number;
+  stripeConfigured: boolean;
 }
 
 /** One cosmetic-store row: the item, its kind, and its Claudium cost, from the service. */
@@ -105,8 +108,9 @@ export function buildClaudiumView(input: ClaudiumViewInput): ClaudiumView {
     sku: s.sku,
     usd: s.usd,
     claudium: s.claudium,
+    stripeConfigured: s.stripeConfigured !== false,
   }));
-  const stripe = buyRows.length > 0;
+  const stripe = buyRows.some((row) => row.stripeConfigured);
   const woc = buyRows.length > 0 && input.price.wocBaseUnitsPerClaudium !== null;
   const storeRows: ClaudiumStoreRow[] = input.storeItems.map((i) => ({
     itemId: i.itemId,

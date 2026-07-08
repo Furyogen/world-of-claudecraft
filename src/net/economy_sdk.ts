@@ -25,6 +25,7 @@ export interface ClaudiumSku {
   sku: string;
   usd: number;
   claudium: number;
+  stripeConfigured?: boolean;
 }
 
 export interface ClaudiumStoreItem {
