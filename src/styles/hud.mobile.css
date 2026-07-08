@@ -2389,28 +2389,61 @@
     max-width: none;
     max-height: none;
     box-sizing: border-box;
+    overflow-x: hidden;
     overflow-y: auto;
   }
-  /* Issue 1577 round 2 (10): the full-screen character window used to stack the
-     paperdoll above the stat grid, wasting the wide landscape viewport and
-     forcing a scroll. Flow the body into 2 columns so the paperdoll and the stat
-     grid sit side by side. CSS multi-column (not flex) because the window is
-     shown with an inline display:block that would override a display change; the
-     header and share row span all columns, every card stays whole across the
-     column break. */
+  /* Keep the character sheet in one vertical flow on touch. Vertical scrolling is
+     acceptable here, while CSS multi-column can create off-screen columns in short
+     landscape viewports and force horizontal scrolling. */
   body.mobile-touch #char-window {
-    column-count: 2;
-    column-gap: 16px;
+    column-count: auto;
+    column-width: auto;
+    column-gap: normal;
   }
   body.mobile-touch #char-window > * {
     break-inside: avoid;
-  }
-  body.mobile-touch #char-window > .panel-title,
-  body.mobile-touch #char-window > .pc-share-row {
-    column-span: all;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   body.mobile-touch #char-window > .char-stats {
     margin-top: 6px;
+  }
+  body.mobile-touch #char-window .paperdoll {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  body.mobile-touch #char-window .char-model-panel {
+    min-width: 0;
+  }
+  @media (orientation: landscape) {
+    body.mobile-touch #char-window {
+      padding-left: calc(var(--window-pad) + env(safe-area-inset-left));
+    }
+    body.mobile-touch #char-window .char-model-panel {
+      flex: 0 1 180px;
+      width: 180px;
+      min-height: 132px;
+      height: 132px;
+    }
+    body.mobile-touch #char-window .char-model-preview {
+      min-height: 0;
+    }
+    body.mobile-touch #char-window .char-skin-row {
+      padding: 4px 0 5px;
+    }
+  }
+  body.mobile-touch #char-window .char-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+  body.mobile-touch #char-window .char-stats .stat-cell {
+    min-width: 0;
+    max-width: 100%;
+    margin-inline: 0;
+    overflow-wrap: anywhere;
   }
   /* Narrow the flanking equip columns so both fit beside the model on a phone. */
   body.mobile-touch .equip-col {

@@ -4931,6 +4931,10 @@
     justify-content: center;
     text-align: center;
   }
+  body.mobile-touch #charcreate-panel .mini-class {
+    font-size: 10.5px;
+    line-height: 1.05;
+  }
 
   /* ===================================================================
      Character-select & create screens (v2), full-height roster, no heavy
@@ -6154,7 +6158,15 @@
     }
     body.mobile-touch #charcreate-panel .mini-class {
       min-height: 38px;
-      padding: 6px 8px;
+      padding: 5px 4px;
+      gap: 5px;
+      font-size: 10px;
+      line-height: 1.05;
+    }
+    body.mobile-touch #charcreate-panel .mini-class-portrait {
+      width: 24px;
+      height: 24px;
+      border-radius: 5px;
     }
     body.mobile-touch #charcreate-panel .cs-create-col .skin-row {
       grid-template-columns: repeat(4, minmax(0, 1fr));
