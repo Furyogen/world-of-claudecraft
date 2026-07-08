@@ -78,7 +78,7 @@ async function pickGlbNative(prompt) {
   }
 }
 
-/** Step 5 — "Update Model": replace a model's working .glb with a newer file the
+/** Step 5, "Update Model": replace a model's working .glb with a newer file the
  *  operator picks from disk (e.g. the Blender-animated export). Copied in place
  *  and left UNCOMPRESSED; compression is deferred to export. */
 export async function updateModel(body) {
@@ -96,9 +96,9 @@ export async function updateModel(body) {
 
 const WOC_ASSETS_DIR = join(homedir(), 'Documents', 'WOC Assets');
 
-/** Step 6 — "Compress & Export": encode the working model to game format and
+/** Step 6, "Compress & Export": encode the working model to game format and
  *  write a clean, neatly-named copy to ~/Documents/WOC Assets for handoff.
- *  ANIMATED models keep their animation (WebP textures only — meshopt's
+ *  ANIMATED models keep their animation (WebP textures only; meshopt's
  *  quantization bakes node transforms that fight translation animation); STATIC
  *  models get the full meshopt + WebP game encode. Reveals the file in Finder. */
 export async function compressExport(body) {
@@ -401,7 +401,7 @@ export function applyAsset({ lane, jobId }) {
 
 /** Import an EXISTING .glb (no concept/generate, no Tripo spend): runs the lane
  *  with --model-file so it normalizes, icons and previews the supplied mesh into
- *  a reviewable job — then the operator reviews and saves it like any generated
+ *  a reviewable job; then the operator reviews and saves it like any generated
  *  asset. */
 export function importModel({ lane, name, family, modelFile }) {
   if (!LANES.has(lane)) throw new Error(`unsupported lane: ${lane}`);
@@ -437,7 +437,7 @@ function findJobByName(name) {
 
 /** Permanently delete a GENERATED/IMPORTED asset and free its name: removes the
  *  public GLB + icon, the generation job dir, and the asset's registry entries.
- *  Fails CLOSED — an asset with no generation job (every shipped/base weapon) is
+ *  Fails CLOSED: an asset with no generation job (every shipped/base weapon) is
  *  not deletable here, so this can never remove hand-authored content. Also
  *  refuses while a step is running for the job. Returns the action lines. */
 export function deleteAsset({ key, jobId }) {
@@ -449,11 +449,11 @@ export function deleteAsset({ key, jobId }) {
   if (!job) job = findJobByName(name);
   if (!job) {
     throw new Error(
-      `"${name}" has no generation job — only generated or imported assets can be deleted`,
+      `"${name}" has no generation job; only generated or imported assets can be deleted`,
     );
   }
   if (running.has(job)) {
-    throw new Error('a step is running for this asset — stop it before deleting');
+    throw new Error('a step is running for this asset; stop it before deleting');
   }
 
   const actions = [];

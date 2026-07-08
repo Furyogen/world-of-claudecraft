@@ -322,7 +322,7 @@ class Wizard {
         style:
           'gap:6px;border:1px dashed #4a5568;border-radius:8px;padding:10px;transition:border-color .15s',
       },
-      el('label', {}, 'Model file — drop a .glb here, or paste a path'),
+      el('label', {}, 'Model file: drop a .glb here, or paste a path'),
       fileIn,
       modelStatus,
     );
@@ -816,7 +816,7 @@ class Wizard {
           style:
             'gap:6px;border:1px dashed #4a5568;border-radius:8px;padding:10px;transition:border-color .15s',
         },
-        el('label', {}, 'Reference image (optional) — drop a PNG/JPG to guide the shape'),
+        el('label', {}, 'Reference image (optional): drop a PNG/JPG to guide the shape'),
         imgStatus,
       );
       attachDrop(imgDrop, async (f) => {
@@ -945,12 +945,12 @@ class Wizard {
       style: 'display:flex;gap:8px;align-items:center;flex-wrap:wrap',
     });
     // A finished generated job (its built GLB is present) can be saved straight
-    // into the game via an idempotent --apply — no re-running the wizard. A weapon
+    // into the game via an idempotent --apply, no re-running the wizard. A weapon
     // already registered as a VAR_* variant (asset.weaponKey) is shown as in-game.
     const built = asset.kind === 'job' && !!asset.repoGlb;
     const applied = asset.kind === 'job' && !!asset.weaponKey;
     if (applied) {
-      row.append(el('span', { class: 'wz-sub' }, '✓ In game'), regenBtn);
+      row.append(el('span', { class: 'wz-sub' }, 'In game'), regenBtn);
     } else if (built) {
       const statusEl = el('span', { class: 'wz-sub' });
       const saveBtn = el('button', { class: 'wz-btn primary' }, 'Save into game');
@@ -965,7 +965,7 @@ class Wizard {
   }
 
   // Copy a finished generated asset into the game (public/ + registries) via an
-  // idempotent --apply — no regeneration, no Tripo credits. Polls the apply step,
+  // idempotent --apply, no regeneration, no Tripo credits. Polls the apply step,
   // then reloads the library so the asset shows as applied (and, for weapons, its
   // grip Save unlocks).
   async applyFromDetail(info, buttons, statusEl) {
@@ -987,7 +987,7 @@ class Wizard {
       const st = await api(`/api/wizard/status?job=${encodeURIComponent(info.jobId)}`);
       if (!st.running) {
         if (Object.values(st.steps || {}).includes('error')) {
-          statusEl.textContent = ' Save failed — check the terminal log.';
+          statusEl.textContent = ' Save failed: check the terminal log.';
           for (const b of buttons) b.disabled = false;
           return;
         }

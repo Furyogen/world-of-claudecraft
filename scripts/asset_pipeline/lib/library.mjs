@@ -319,7 +319,7 @@ export function collectInventory() {
       // Let a generated weapon be grip-tuned + saved from the viewer. Resolve its
       // VAR_* grip in priority order: the live grip of an already --applied weapon
       // (KAYKIT_WEAPON_ACCESSORY), else the family the job was GENERATED with
-      // (job.json `family` — authoritative no matter how the weapon is named, e.g.
+      // (job.json `family`, authoritative no matter how the weapon is named, e.g.
       // "..._stave"/"..._knife"), else a last-resort guess from the name. The
       // override is keyed by name and honored once the weapon is --applied as that
       // variant. Anything that resolves to no VAR_* grip stays unsaveable.

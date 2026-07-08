@@ -202,7 +202,7 @@ async function conceptStage(job, { kind, description, family, image, rigType }) 
   // An imported model (--model-file) has a completed generate step but never ran
   // concept; a later `--redo texture` repaint (or finish) re-enters the lane with
   // no prompt. Since generate is already done, concept's output is unused
-  // downstream — skip it rather than abort demanding a --prompt/--image the import
+  // downstream; skip it rather than abort demanding a --prompt/--image the import
   // never had. A --redo generate cascade clears generate first, so this won't mask
   // a genuine from-scratch re-roll.
   if (job.state.steps.generate?.status === 'done') {
@@ -420,7 +420,7 @@ async function cmdWeapon() {
   // else infer from the name. finish/apply resume the lane WITHOUT re-passing
   // --family, so without the recorded fallback a weapon whose name carries no
   // family keyword (e.g. "skyrender_heaven_s_fracture") would fail every step
-  // after generate — even though it generated fine with the family picked in the UI.
+  // after generate, even though it generated fine with the family picked in the UI.
   const family = weaponFamilyFor(opt('family') ?? job.state.family ?? name);
   if (!family) {
     throw new Error(

@@ -2,7 +2,7 @@
 // glTF textures poorly (they show bare chrome), but render USDZ natively, so a
 // USDZ companion lets an operator preview the exported asset with textures on
 // their Mac. Uses three.js USDZExporter inside headless Chrome (a real browser
-// context, needed for the exporter's canvas/image work) — the same puppeteer +
+// context, needed for the exporter's canvas/image work): the same puppeteer +
 // esbuild + swiftshader approach as preview.mjs. The page is launched lazily and
 // reused across conversions.
 import { readFileSync, writeFileSync } from 'node:fs';

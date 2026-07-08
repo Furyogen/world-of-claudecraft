@@ -384,7 +384,7 @@ export async function normalizeWeapon(
 
   // Plain WebP encoding, no meshopt: these assets are tiny, and skipping meshopt
   // keeps them animation-friendly and readable everywhere without the meshopt
-  // decoder — matching the rigged/animated lane (CombatMech.glb style).
+  // decoder, matching the rigged/animated lane (CombatMech.glb style).
   await doc.transform(prune(), dedup(), ...(await textureTransforms(maxTex ?? 512)));
   await saveGlb(doc, outPath);
   return {
