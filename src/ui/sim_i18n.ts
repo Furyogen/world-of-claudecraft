@@ -85,6 +85,15 @@ const baseEnTable = {
   'error.gauntletArenaMatch': 'You cannot enter the Gauntlet during an arena match.',
   'error.gauntletHerald': 'You must speak to the Herald to enter the Gauntlet.',
   'error.gauntletFull': 'The Gauntlet is full. Try again soon.',
+  // The three join modes (src/sim/gauntlet/modes.ts + runs.ts): queue/spectate
+  // guards (error) and the queue/spectate status lines (notice). Placeholder-free.
+  'error.gauntletAlreadyQueued': 'You are already in the Gauntlet queue.',
+  'error.gauntletStopSpectating': 'Stop spectating before you enter the Gauntlet.',
+  'notice.gauntletQueueJoin': 'You join the Gauntlet queue.',
+  'notice.gauntletQueueLeave': 'You leave the Gauntlet queue.',
+  'notice.gauntletRejoin': 'You rejoin the Gauntlet queue.',
+  'notice.gauntletSpectateStart': 'You slip into the stands to watch the Gauntlet.',
+  'notice.gauntletSpectateStop': 'You leave the stands.',
   // Custom per-item ground-pickup lines (src/sim/content/ground_pickup_lines.ts).
   // Emitted via def.pickupDeny/def.pickupEnough (variable-routed, so the S3 guard
   // cannot see them); values must stay byte-identical to that table for the EXACT

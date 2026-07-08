@@ -21,6 +21,8 @@ const INT = { maximumFractionDigits: 0 } as const;
 export interface GauntletOverlayDeps {
   /** Forfeit the spectator seat / leave the podium (world.gauntletLeave()). */
   onLeave(): void;
+  /** From the podium, rejoin the rolling queue at the BACK (world.gauntletRejoin()). */
+  onRejoin(): void;
 }
 
 type OverlayState = 'hidden' | 'eliminated' | 'spectating' | 'podium';
@@ -31,6 +33,7 @@ export class GauntletOverlay {
   private spectateCount: HTMLElement | null = null;
   private podiumTitle: HTMLElement | null = null;
   private podiumNames: [HTMLElement, HTMLElement, HTMLElement] | null = null;
+  private podiumRejoinBtn: HTMLButtonElement | null = null;
   private holdTimer: number | null = null;
   private state: OverlayState = 'hidden';
 
@@ -51,8 +54,15 @@ export class GauntletOverlay {
     this.holdTimer = window.setTimeout(() => this.collapseToSpectator(), ELIMINATED_HOLD_MS);
   }
 
-  /** The podium ceremony; `won` flips the VICTORY styling. */
-  showPodium(podium: { first: string; second: string; third: string }, won: boolean): void {
+  /**
+   * The podium ceremony; `won` flips the VICTORY styling. `practice` hides the
+   * "Rejoin the Queue" action (a solo training run does not feed the queue).
+   */
+  showPodium(
+    podium: { first: string; second: string; third: string },
+    won: boolean,
+    practice: boolean,
+  ): void {
     const root = this.ensureDom();
     this.clearTimer();
     this.state = 'podium';
@@ -68,6 +78,7 @@ export class GauntletOverlay {
       this.podiumNames[1].textContent = podium.second;
       this.podiumNames[2].textContent = podium.third;
     }
+    if (this.podiumRejoinBtn) this.podiumRejoinBtn.hidden = practice;
   }
 
   /** Per-frame refresh of the live survivor count while spectating. */
@@ -159,7 +170,15 @@ export class GauntletOverlay {
       li.append(place, name);
       places.appendChild(li);
     }
-    podium.append(podiumTitle, places, this.leaveButton());
+    const podiumActions = document.createElement('div');
+    podiumActions.className = 'go-actions';
+    const rejoinBtn = document.createElement('button');
+    rejoinBtn.type = 'button';
+    rejoinBtn.className = 'go-rejoin btn';
+    rejoinBtn.textContent = t('hudChrome.gauntlet.rejoinQueue');
+    rejoinBtn.addEventListener('click', () => this.deps.onRejoin());
+    podiumActions.append(rejoinBtn, this.leaveButton());
+    podium.append(podiumTitle, places, podiumActions);
 
     root.append(elim, spectate, podium);
     document.body.appendChild(root);
@@ -169,6 +188,7 @@ export class GauntletOverlay {
     this.spectateCount = spectateCount;
     this.podiumTitle = podiumTitle;
     this.podiumNames = [names[0], names[1], names[2]];
+    this.podiumRejoinBtn = rejoinBtn;
     return root;
   }
 

@@ -14,21 +14,25 @@ export const hudChromeStrings = {
   // The Gauntlet survival event: the recruiter dialog, the live HUD cluster, the
   // green-light/red-light banners + logs, and the knockout / podium overlay.
   // {placeholder} tokens: {count}/{total}/{n} are formatNumber counts, {seconds} a
-  // whole-second countdown, {name} a contestant name; {amount} is a formatMoney
-  // value in prizeAria but a plain formatNumber vitality amount in vitalityLost.
+  // whole-second countdown, {name} a contestant name; {amount} is a plain
+  // formatNumber vitality amount in vitalityLost.
   gauntlet: {
     title: 'The Gauntlet',
     pitch: 'Outlast every trial. The last one standing takes the purse.',
     join: 'Join the Gauntlet',
     withdraw: 'Withdraw',
+    // The three rolling-event join modes and their inverses (recruiter dialog).
+    joinQueue: 'Join the Queue',
+    leaveQueue: 'Leave the Queue',
+    queuePosition: 'Queue position: {n}',
+    spectate: 'Spectate',
+    stopSpectating: 'Stop Spectating',
+    practice: 'Practice',
+    practiceNote: 'An instant solo run against a field of bots.',
+    rejoinQueue: 'Rejoin the Queue',
     lobbyJoined: '{count} in the lobby',
     lobbyCountdown: 'The run begins in {seconds}s',
-    vitality: 'Vitality',
-    survivorsAria: '{count} of {total} still standing',
-    prizeAria: 'Prize pool: {amount}',
     trialLabel: 'Trial {n} of {total}',
-    go: 'Go',
-    stop: 'Stop',
     phaseLobby: 'Gathering challengers',
     phaseStaging: 'Take your marks',
     phaseTrial: 'The Crossing begins',
@@ -43,8 +47,14 @@ export const hudChromeStrings = {
     redLight: 'Red light!',
     vitalityLost: 'You lost {amount} vitality.',
     contestantOut: '{name} is out!',
+    // Shown when YOU clear a trial's goal (cross the sentinel finish line).
+    passed: 'You passed!',
     eliminated: 'ELIMINATED',
     survivorsLeft: '{count} still standing',
+    // The top-left standings board: its heading, the accessible group name (the
+    // heading doubles as the aria-label), and the per-row knockout tag.
+    boardTitle: 'Standings',
+    boardOut: 'OUT',
     spectating: 'Spectating',
     leave: 'Leave',
     victory: 'Victory',
@@ -53,12 +63,9 @@ export const hudChromeStrings = {
     placeSecond: '2nd',
     placeThird: '3rd',
     // Trial chrome remnants: the trials play out IN THE WORLD (the sigil slab,
-    // the rope and drum, the echo stones, the rival shove), so only the court
-    // role chip, the shatter announcement, and the echo round strip keep HUD
-    // text. {n}/{total} are formatNumber counts, {seconds} a whole-second
-    // countdown.
-    roleAttacker: 'Attacker',
-    roleDefender: 'Defender',
+    // the rope, the echo stones, the court brawl), so only the shatter
+    // announcement and the echo round strip keep HUD text. {n}/{total} are
+    // formatNumber counts, {seconds} a whole-second countdown.
     sigilsShattered: 'The pane shattered!',
     echoRound: 'Round {n} of {total}',
     echoSeconds: '{seconds}s',
@@ -72,8 +79,17 @@ export const hudChromeStrings = {
       echoWatch: 'Watch the stones light up.',
       echoAnswer: 'Click the stones in the same order.',
       span: 'Cross the glass. Each pair hides one brittle panel.',
-      court: 'Click your rival when the ring flashes to shove them out.',
+      court: 'Last one standing wins. Click a foe and close in to fight.',
     },
+  },
+  // The Proving Grounds: the shared minigame-lobby room reached by the portal
+  // just outside Eastbrook, where the two event heralds stand.
+  hub: {
+    enter: 'You step through the shimmering portal into the Proving Grounds.',
+    leave: 'You step back into Eastbrook Vale.',
+    // The venue's on-map / above-the-portal display name (the minimap label
+    // inside the room and the floating header over the overworld entrance).
+    zoneName: 'The Athenaeum of Trials',
   },
   // Hodric's Castle Gauntlet: the Herald's race window, the in-race HUD strip
   // and board, banners, and log lines.

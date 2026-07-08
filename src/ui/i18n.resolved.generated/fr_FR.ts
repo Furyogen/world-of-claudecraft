@@ -159,14 +159,17 @@ export const fr_FR: EnTranslations = {
       "pitch": "Outlast every trial. The last one standing takes the purse.",
       "join": "Join the Gauntlet",
       "withdraw": "Withdraw",
+      "joinQueue": "Join the Queue",
+      "leaveQueue": "Leave the Queue",
+      "queuePosition": "Queue position: {n}",
+      "spectate": "Spectate",
+      "stopSpectating": "Stop Spectating",
+      "practice": "Practice",
+      "practiceNote": "An instant solo run against a field of bots.",
+      "rejoinQueue": "Rejoin the Queue",
       "lobbyJoined": "{count} in the lobby",
       "lobbyCountdown": "The run begins in {seconds}s",
-      "vitality": "Vitality",
-      "survivorsAria": "{count} of {total} still standing",
-      "prizeAria": "Prize pool: {amount}",
       "trialLabel": "Trial {n} of {total}",
-      "go": "Go",
-      "stop": "Stop",
       "phaseLobby": "Gathering challengers",
       "phaseStaging": "Take your marks",
       "phaseTrial": "The Crossing begins",
@@ -181,8 +184,11 @@ export const fr_FR: EnTranslations = {
       "redLight": "Red light!",
       "vitalityLost": "You lost {amount} vitality.",
       "contestantOut": "{name} is out!",
+      "passed": "You passed!",
       "eliminated": "ELIMINATED",
       "survivorsLeft": "{count} still standing",
+      "boardTitle": "Standings",
+      "boardOut": "OUT",
       "spectating": "Spectating",
       "leave": "Leave",
       "victory": "Victory",
@@ -190,8 +196,6 @@ export const fr_FR: EnTranslations = {
       "placeFirst": "1st",
       "placeSecond": "2nd",
       "placeThird": "3rd",
-      "roleAttacker": "Attacker",
-      "roleDefender": "Defender",
       "sigilsShattered": "The pane shattered!",
       "echoRound": "Round {n} of {total}",
       "echoSeconds": "{seconds}s",
@@ -202,8 +206,13 @@ export const fr_FR: EnTranslations = {
         "echoWatch": "Watch the stones light up.",
         "echoAnswer": "Click the stones in the same order.",
         "span": "Cross the glass. Each pair hides one brittle panel.",
-        "court": "Click your rival when the ring flashes to shove them out."
+        "court": "Last one standing wins. Click a foe and close in to fight."
       }
+    },
+    "hub": {
+      "enter": "You step through the shimmering portal into the Proving Grounds.",
+      "leave": "You step back into Eastbrook Vale.",
+      "zoneName": "The Athenaeum of Trials"
     },
     "hc": {
       "title": "Hodric's Castle",
@@ -7034,7 +7043,7 @@ export const fr_FR: EnTranslations = {
       },
       "gauntlet_recruiter": {
         "name": "Maro Half-Mask",
-        "title": "Herald of the Gauntlet",
+        "title": "The Gauntlet",
         "greeting": "Step onto the sand with the rest of them, {className}. Outlast every trial and the podium is yours."
       },
       "gauntlet_watcher": {
@@ -7094,7 +7103,7 @@ export const fr_FR: EnTranslations = {
       },
       "hodrics_herald": {
         "name": "Herald Osric",
-        "title": "Hodric's Gauntlet Herald",
+        "title": "Hodric's Castle",
         "greeting": "Lord Hodric opens his causeway to all comers! Race the Gauntlet, dodge the flails, take the crown!"
       },
       "tidewatcher_ondrel": {

@@ -32,7 +32,9 @@ export interface GauntletContestant {
   // replanned from run.rng whenever the light changes (planKey tracks the
   // window): a start hesitation (goAt), a stop lag after red (stopAt), this
   // green's speed multiplier, and an optional mid-run stutter (a pause is
-  // armed only while pauseUntil > pauseAt).
+  // armed only while pauseUntil > pauseAt). weavePhase + overshoot are the
+  // per-NPC human-feel seeds (a lateral running weave and how far past the
+  // finish line this bot coasts before milling), drawn once per trial.
   script: {
     speed: number;
     fumbleOnFlip: number | null;
@@ -42,6 +44,8 @@ export interface GauntletContestant {
     mult: number;
     pauseAt: number;
     pauseUntil: number;
+    weavePhase: number;
+    overshoot: number;
   };
 }
 
@@ -76,11 +80,12 @@ export interface GauntletSentinelState {
 // Trial 2: per-player etched shape + crack meter (trial_sigils.ts).
 export interface GauntletSigilsPlayer {
   shapeSeed: number; // (seed, shapeId) fully determine the outline everywhere
-  shapeId: number; // 0 ring, 1 wedge, 2 star, 3 crown (ascending difficulty)
+  shapeId: number; // 0 triangle, 1 circle, 2 star, 3 rectangle, 4 hexagon
   crack: number;
-  // Order-free freedraw coverage: one flag per outline vertex, marked as the
-  // stroke passes near that vertex's arc position; progress is the covered
-  // fraction (coveredCount / covered.length). Reset on shatter.
+  // Continuous-trace coverage: one flag per outline vertex. The covered set is a
+  // single contiguous arc that extends only from its live frontier (start
+  // anywhere, either direction); progress is the covered fraction (coveredCount /
+  // covered.length). Reset on shatter.
   covered: boolean[];
   coveredCount: number;
   // Fractional carve budget carried between batches (accrues at
@@ -113,6 +118,11 @@ export interface GauntletPullState {
   // run.rng the moment the previous one resolves (click or expiry).
   circles: Map<number, GauntletPullCircle>;
   nextCircleId: number;
+  // Per-player accumulated pull force (sum of every graded click's magnitude).
+  // The end-of-pull toll grades off this (contribution vs winThreshold), so an
+  // idle contestant is knocked out even if their side won and a hard puller who
+  // lost is only wounded. Players only; NPCs heave straight onto the marker.
+  pullContribution: Map<number, number>;
   // Every gripping contestant's base spot on the rope line (entity id ->
   // instance-local x/z); the whole line renders at base + the eased drag.
   gripBase: Map<number, { x: number; z: number }>;
@@ -143,28 +153,44 @@ export interface GauntletSpanState {
   kind: 'span';
   safeSide: number[]; // per step: 0 left safe, 1 right safe (server knowledge)
   revealed: number[]; // per step: -1 unknown, else the known safe side
-  npcCrossers: { entityId: number; step: number; fallStep: number | null }[];
-  nextNpcStepAt: number;
+  // Each seeded crosser runs and hops the span one panel at a time. `step` is
+  // the last panel it landed on (-1 = still at the start line). `fallStep` (set
+  // only for the expendable crossers the field can spare) is the panel it
+  // fatally guesses wrong on; `stumbleStep` (scouts) is a panel it guesses wrong
+  // ONCE then climbs back from the start (-1 = crosses clean). The rest is the
+  // locomotion cursor: `mode`, hop/plunge progress `segT`, and the instance-
+  // local origin of the current hop.
+  npcCrossers: {
+    entityId: number;
+    step: number;
+    fallStep: number | null;
+    stumbleStep: number;
+    mode: 'idle' | 'hop' | 'plunge' | 'done';
+    segT: number;
+    hopFromX: number;
+    hopFromZ: number;
+  }[];
   playerStep: Map<number, number>; // pid -> furthest safe step reached (-1 = none)
   finished: Set<number>;
 }
 
-// Trial 6: parallel court duels, one per surviving player (trial_court.ts).
-export interface GauntletCourtDuel {
-  pid: number;
-  rivalId: number; // entity id of the rival
-  rivalPid: number | null; // set when the rival is the other player
-  attacker: boolean; // is PID currently the attacker
-  swapAt: number;
-  shoveReadyAt: number;
-  rivalShoveAt: number;
-  laneX: number; // instance-local court center for this duel
-  done: boolean;
-  won: boolean;
+// Trial 6, The Final Court: one combat record per surviving contestant in the
+// standard-combat free-for-all (trial_court.ts). Players and NPCs share the
+// shape; the AI fields are only ever read for NPC fighters. Fighting is on real
+// hp; `savedMaxHp` banks a player's real maxHp so it can be restored when they
+// leave the court (NPCs are despawned, so theirs is unused).
+export interface GauntletCourtFighter {
+  entityId: number;
+  player: boolean;
+  skill: number; // 0..1 NPC skill (0 for players); scales AI reactions
+  targetId: number | null; // the foe this fighter is engaging
+  swingReadyAt: number; // absolute; next auto-attack swing allowed
+  savedMaxHp: number; // the player's real maxHp before normalization (restore on exit)
+  retargetAt: number; // NPC only: next target re-evaluation (reaction-latency gate)
 }
 export interface GauntletCourtState {
   kind: 'court';
-  duels: Map<number, GauntletCourtDuel>;
+  fighters: Map<number, GauntletCourtFighter>;
 }
 
 export type GauntletTrialState =
@@ -175,9 +201,38 @@ export type GauntletTrialState =
   | GauntletSpanState
   | GauntletCourtState;
 
+// One occupant of the podium ceremony: an entity posed on a winners' step, in
+// WORLD coordinates (gauntlet/podium.ts). Runtime-only, never wired or persisted.
+export interface GauntletPodiumSeat {
+  entityId: number;
+  x: number;
+  y: number;
+  z: number;
+  facing: number;
+}
+
+// One waiting entry in the fair, FIFO Gauntlet queue (gauntlet/modes.ts). The
+// matchmaker pulls from the FRONT; a player who rejoins after a game goes to the
+// BACK. `joinedAtTick` is only for stable diagnostics/ordering, never a draw.
+export interface GauntletQueueUnit {
+  pid: number;
+  joinedAtTick: number;
+}
+
+// Where a free-roaming spectator (gauntlet/modes.ts) came from, so they can be
+// sent home when they stop spectating or disconnect. Runtime-only, never wired.
+// (A spectator never fights, so no hp is banked: it simply regenerates.)
+export interface GauntletSpectatorState {
+  savedPos: Vec3;
+}
+
 export interface GauntletRun {
   id: number;
   slot: number;
+  // A private Practice run (solo vs NPC bots): the matchmaker and spectators skip
+  // it, the podium hides "rejoin queue", and it records no ladder stats. A normal
+  // rolling-queue game is false.
+  practice: boolean;
   seed: number;
   // Per-run deterministic stream (NEVER the shared sim stream): the roster,
   // trial schedules, and NPC scripts all draw from here, so an active run
@@ -194,5 +249,9 @@ export interface GauntletRun {
   trial: GauntletTrialState | null;
   watcherId: number | null;
   podium: { first: string; second: string; third: string; winnerEntityId: number | null } | null;
+  // The podium ceremony poses (set when the run enters the podium phase), one
+  // per occupied step; re-asserted each tick so the tableau holds. Optional:
+  // absent until computePodium seats the finishers, and runtime-only.
+  podiumSeats?: GauntletPodiumSeat[] | null;
   emptyFor: number; // seconds with no player attached; disposes the run
 }

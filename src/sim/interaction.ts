@@ -25,7 +25,14 @@
 
 import { bagCapacity, fitsAll } from './bags';
 import { HC_HERALD_NPC_ID } from './content/hodrics';
-import { ITEMS, MOBS, QUESTS, SPIRIT_HEALER_NPC_ID } from './data';
+import {
+  HUB_EXIT_TEMPLATE,
+  HUB_PORTAL_TEMPLATE,
+  ITEMS,
+  MOBS,
+  QUESTS,
+  SPIRIT_HEALER_NPC_ID,
+} from './data';
 import {
   activateNythraxisRelic,
   interactObjectForQuests,
@@ -39,6 +46,7 @@ import {
   lootSlotVisibleTo,
   pruneCorpseLoot,
 } from './loot/loot_roll';
+import { enterMinigameHub, leaveMinigameHub } from './minigame_hub';
 import {
   effectiveFocusComponents,
   HARVEST_COMPONENT_ITEMS,
@@ -356,6 +364,14 @@ export function interact(ctx: SimContext, pid?: number): void {
           ctx.leaveDungeon(p.id);
           return;
         }
+        if (target.templateId === HUB_PORTAL_TEMPLATE) {
+          enterMinigameHub(ctx, p.id);
+          return;
+        }
+        if (target.templateId === HUB_EXIT_TEMPLATE) {
+          leaveMinigameHub(ctx, p.id);
+          return;
+        }
         if (target.templateId === 'mailbox') {
           ctx.emit({ type: 'mailbox', pid: p.id });
           return;
@@ -417,6 +433,14 @@ export function interact(ctx: SimContext, pid?: number): void {
     }
     if (obj.templateId === 'dungeon_exit') {
       ctx.leaveDungeon(p.id);
+      return;
+    }
+    if (obj.templateId === HUB_PORTAL_TEMPLATE) {
+      enterMinigameHub(ctx, p.id);
+      return;
+    }
+    if (obj.templateId === HUB_EXIT_TEMPLATE) {
+      leaveMinigameHub(ctx, p.id);
       return;
     }
     if (obj.templateId === 'mailbox') {

@@ -16,15 +16,20 @@ export const HC_HERALD_NPC_ID = 'hodrics_herald';
  */
 export const HC_HERALD_ID = 1_000_000_100;
 
-/** A grassy rise on the edge of Eastbrook, where the road opens south. */
+/**
+ * Vestigial surface position. Osric now stands in the Proving Grounds hub (see
+ * data.ts MINIGAME_HUB + MINIGAME_HUB_OSRIC); spawnHcHerald places him there.
+ */
 export const HC_HERALD_POS = { x: -24, z: -6 };
 
 export const HC_HERALD: NpcDef = {
   id: HC_HERALD_NPC_ID,
   name: 'Herald Osric',
-  title: "Hodric's Gauntlet Herald",
+  // The nameplate subtitle is the game name he recruits for, shown beside Maro
+  // in the hub, not a personal role title.
+  title: "Hodric's Castle",
   // Placeholder position: never surface-placed (dynamic), spawned guarded at
-  // world init with the reserved id above.
+  // world init with the reserved id above, at the hub anchor.
   pos: { x: 0, z: 0 },
   facing: Math.PI * 0.75,
   // Hodric's purple, trimmed in gold: the banner colors of the castle.

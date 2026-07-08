@@ -142,8 +142,9 @@ import {
 import { canEquipItem } from './equipment_rules';
 import { fleeSpeed } from './flee_speed';
 import { formatMoney } from './format_money';
+import * as gauntletModesMod from './gauntlet/modes';
 import * as gauntletMod from './gauntlet/runs';
-import type { GauntletRun } from './gauntlet/state';
+import type { GauntletQueueUnit, GauntletRun, GauntletSpectatorState } from './gauntlet/state';
 import * as interaction from './interaction';
 import { meetsLevelRequirement } from './item_level_req';
 import * as items from './items';
@@ -173,6 +174,7 @@ import {
 import { type MailSave, PostOffice } from './mail/post_office';
 import { Market, type MarketListing, type MarketSave } from './market';
 import { defaultMarketQuery, type MarketQuery } from './market_query';
+import * as hubMod from './minigame_hub';
 import * as lifecycle from './mob/lifecycle';
 import { resetEvadingMob as resetEvadingMobFn, updateMob as updateMobFn } from './mob/locomotion';
 import { runMobSwingAffixes } from './mob/mob_swing';
@@ -1107,6 +1109,10 @@ export class Sim {
   gauntletRecruiterId: number | null = null;
   nextGauntletRunId = 1;
   gauntletEventOpen: boolean;
+  // The three join modes (gauntlet/modes.ts): the fair FIFO queue that rolls one
+  // game into the next, and the free-roaming spectators (pid -> pre-spectate spot).
+  gauntletQueue: GauntletQueueUnit[] = [];
+  gauntletSpectators = new Map<number, GauntletSpectatorState>();
   // Real-world UTC day ('YYYY-MM-DD') for the delve daily reset (FR-5.1). The sim
   // core must stay deterministic, so it never reads the wall clock itself: the host
   // (server/offline client) sets this each tick from `new Date()`. Empty string =
@@ -1294,9 +1300,12 @@ export class Sim {
     // Per-instance dungeon/raid healers spawn on claim (instances/dungeons.ts).
     // createNpc draws no rng, so world-gen determinism is preserved.
     spawnOverworldSpiritHealers(this.ctx);
-    // The Gauntlet Herald: guarded, reserved-id, zero rng (goldens never see
-    // him). See social/hodrics.ts spawnHcHerald and HC_HERALD_ID.
+    // The Proving Grounds hub: both event heralds (Osric for Hodric's Castle,
+    // Maro for The Gauntlet) plus the two portal fixtures. All guarded,
+    // reserved-id, zero rng, so the parity goldens never see them.
     hodricsMod.spawnHcHerald(this.ctx);
+    gauntletMod.spawnGauntletRecruiter(this.ctx);
+    hubMod.spawnMinigameHub(this.ctx);
 
     for (const delve of DELVE_LIST) {
       for (let i = 0; i < DELVE_SLOT_COUNT; i++) {
@@ -1795,6 +1804,7 @@ export class Sim {
     // A gauntlet participant leaving the world detaches from the run (a
     // mid-run departure forfeits; no teleport, the character is leaving).
     // Must run while the leaver is still in players/entities.
+    gauntletModesMod.gauntletModesOnPlayerRemoved(this.ctx, pid);
     gauntletMod.gauntletOnPlayerRemoved(this.ctx, pid);
     // leave social systems cleanly. removeFromParty lives on the PartyMachine now
     // (A1); reach it through the seam, keeping this call in its load-bearing
@@ -2486,6 +2496,17 @@ export class Sim {
       set nextGauntletRunId(v) {
         sim.nextGauntletRunId = v;
       },
+      // The Gauntlet queue is reassigned by prune filters (hcQueue idiom); the
+      // spectator Map is mutated in place (read-only ref).
+      get gauntletQueue() {
+        return sim.gauntletQueue;
+      },
+      set gauntletQueue(v) {
+        sim.gauntletQueue = v;
+      },
+      get gauntletSpectators() {
+        return sim.gauntletSpectators;
+      },
       get utcDay() {
         return sim.utcDay;
       },
@@ -2547,6 +2568,8 @@ export class Sim {
       endDuel: sim.endDuel.bind(sim),
       fiestaTakedown: sim.fiestaTakedown.bind(sim),
       fiestaDown: sim.fiestaDown.bind(sim),
+      gauntletCourtContestant: sim.gauntletCourtContestant.bind(sim),
+      gauntletCourtTakedown: sim.gauntletCourtTakedown.bind(sim),
       // A2: isArenaCrossTeam/arenaTeamOf/endArenaMatch/endDuel (above) now forward to
       // social/arena.ts + social/duel.ts via Sim's thin delegates. The block below is
       // what the moved code CONSUMES that stays on Sim (clearAurasFromSource has
@@ -2995,6 +3018,7 @@ export class Sim {
       if (!p.dead) {
         this.updatePlayerMovement(p, meta);
         this.updateDoorTriggers(p);
+        hubMod.updateHubPortalTriggers(this.ctx, p);
         this.updateCasting(p, meta);
         this.updatePlayerAutoAttack(p, meta);
         updateRegen(this.ctx, p, meta);
@@ -3063,6 +3087,11 @@ export class Sim {
     this.updateLootRolls();
     this.updateInstances();
     this.updateDelveRuns();
+    // The rolling queue matchmaker runs BEFORE the run driver each tick: it forms
+    // the next game from the front of the queue the moment the previous one is
+    // gone. A no-op (no draws, no writes) when the queue is empty, so idle worlds
+    // and the parity goldens are untouched.
+    this.updateGauntletQueue();
     this.updateGauntletRuns();
     this.market.update();
     this.postOffice.update();
@@ -5564,6 +5593,11 @@ export class Sim {
   }
 
   isHostileTo(attacker: Entity, target: Entity): boolean {
+    // The Gauntlet's Final Court is a standard-combat free-for-all: two live
+    // fellow contestants are mutually hostile, so vanilla targeting, the reticle,
+    // tab-cycling, auto-attack, and abilities all engage exactly as in the open
+    // world. Pure (draws no rng), so the world's draw order is untouched.
+    if (gauntletMod.gauntletCourtFoes(this.gauntletRuns, attacker, target)) return true;
     if (target.kind === 'mob') {
       if (target.templateId.startsWith('vision_')) return false;
       if (target.ownerId !== null) {
@@ -6637,12 +6671,38 @@ export class Sim {
     gauntletMod.updateGauntletRuns(this.ctx);
   }
 
+  // The rolling-queue matchmaker (gauntlet/modes.ts): forms the next game from the
+  // front of the queue whenever no live queue game is running.
+  private updateGauntletQueue(): void {
+    gauntletModesMod.updateGauntletQueue(this.ctx);
+  }
+
+  // The instant single-player join (offline + tests): open/join a lobby directly,
+  // starting on the spot when cfg.gauntletInstantLobby is set.
   gauntletJoin(pid?: number): void {
     gauntletMod.gauntletJoin(this.ctx, pid);
   }
 
+  // The three player-facing join modes (gauntlet/modes.ts).
+  gauntletQueueJoin(pid?: number): void {
+    gauntletModesMod.gauntletQueueJoin(this.ctx, pid);
+  }
+
+  gauntletSpectate(pid?: number): void {
+    gauntletModesMod.gauntletSpectate(this.ctx, pid);
+  }
+
+  gauntletPractice(pid?: number): void {
+    gauntletModesMod.gauntletPractice(this.ctx, pid);
+  }
+
+  gauntletRejoin(pid?: number): void {
+    gauntletModesMod.gauntletRejoin(this.ctx, pid);
+  }
+
+  // Leave dispatches across all states: dequeue, stop spectating, or leave a run.
   gauntletLeave(pid?: number): void {
-    gauntletMod.gauntletLeave(this.ctx, pid);
+    gauntletModesMod.gauntletLeave(this.ctx, pid);
   }
   gauntletTrace(pts: number[], pid?: number): void {
     gauntletMod.gauntletTrace(this.ctx, pid, pts);
@@ -6653,8 +6713,16 @@ export class Sim {
   gauntletEcho(stone: number, pid?: number): void {
     gauntletMod.gauntletEcho(this.ctx, pid, stone);
   }
-  gauntletCourt(pid?: number): void {
-    gauntletMod.gauntletCourt(this.ctx, pid);
+
+  // The Final Court's combat-core seam (gauntlet/trial_court.ts): dealDamage
+  // consults these through ctx to run a lethal blow as an event elimination (no
+  // death screen) instead of the normal death flow. Thin delegates.
+  private gauntletCourtContestant(target: Entity): boolean {
+    return gauntletMod.gauntletCourtContestant(this.ctx, target);
+  }
+
+  private gauntletCourtTakedown(target: Entity): void {
+    gauntletMod.gauntletCourtTakedown(this.ctx, target);
   }
 
   gauntletRunWire(pid: number): GauntletRunView | null {
@@ -6669,6 +6737,26 @@ export class Sim {
 
   get gauntletOpen(): boolean {
     return this.gauntletEventOpen;
+  }
+
+  // Per-viewer queue place / spectator flag (the server encodes these per session
+  // pid into the `gq`/`gsp` self-wire keys, like gauntletRunWire).
+  gauntletQueuePositionOf(pid: number): number {
+    return gauntletModesMod.gauntletQueuePosition(this.ctx, pid);
+  }
+
+  gauntletSpectatingOf(pid: number): boolean {
+    return this.gauntletSpectators.has(pid);
+  }
+
+  // The IWorldGauntlet data members (offline Sim side, the primary player; online
+  // mirrors the `gq`/`gsp` self-wire keys).
+  get gauntletQueuePosition(): number {
+    return this.gauntletQueuePositionOf(this.primaryId);
+  }
+
+  get gauntletSpectating(): boolean {
+    return this.gauntletSpectatingOf(this.primaryId);
   }
 
   private ejectToDelveDoor(pid: number, delve: DelveDef): void {

@@ -1,8 +1,10 @@
 import { HC_HERALD_NPC_ID } from '../sim/content/hodrics';
+import { HUB_EXIT_TEMPLATE, HUB_PORTAL_TEMPLATE } from '../sim/data';
 import { dist2d, type Entity, INTERACT_RANGE } from '../sim/types';
 import { t } from '../ui/i18n';
 import { tSim } from '../ui/sim_i18n';
 import type { IWorld } from '../world_api';
+import { isActiveFinalCourt } from '../world_api/gauntlet';
 import type { HoverCursorKind } from './cursors';
 
 export interface PickInteractionWorld {
@@ -11,9 +13,11 @@ export interface PickInteractionWorld {
   entities: IWorld['entities'];
   duelInfo?: IWorld['duelInfo'];
   arenaInfo?: IWorld['arenaInfo'];
+  gauntletRun?: IWorld['gauntletRun'];
   targetEntity(id: number | null): void;
   enterDungeon(dungeonId: string): void;
   leaveDungeon(): void;
+  interact(): void;
   pickUpObject(id: number): void;
   startAutoAttack(): void;
   resurrectAtSpiritHealer(): void;
@@ -35,7 +39,11 @@ export function isAttackHoverTarget(e: Entity | undefined): boolean {
 }
 
 export function activePvpOpponentIds(
-  world: Pick<PickInteractionWorld, 'player' | 'playerId' | 'duelInfo' | 'arenaInfo'>,
+  world: Pick<
+    PickInteractionWorld,
+    'player' | 'playerId' | 'duelInfo' | 'arenaInfo' | 'gauntletRun'
+  > &
+    Partial<Pick<PickInteractionWorld, 'entities'>>,
 ): Set<number> {
   const ids = new Set<number>();
   const selfId = world.playerId ?? world.player.id;
@@ -46,6 +54,17 @@ export function activePvpOpponentIds(
     if (match.oppPid !== selfId) ids.add(match.oppPid);
     for (const enemy of match.enemies) {
       if (enemy.pid !== selfId) ids.add(enemy.pid);
+    }
+  }
+  // The Gauntlet's Final Court is a free-for-all: every live fellow contestant
+  // (players and the NPC field) is a foe, so they take the attack cursor and
+  // right-click-to-engage like any enemy. The court arena holds only contestants,
+  // so every nearby player/npc is one; the server stays the authority (it rejects
+  // a swing at a spectator), this only shapes the local affordances.
+  if (world.entities && isActiveFinalCourt(world.gauntletRun)) {
+    for (const e of world.entities.values()) {
+      if (e.id === selfId || e.dead) continue;
+      if (e.kind === 'player' || e.kind === 'npc') ids.add(e.id);
     }
   }
   return ids;
@@ -81,7 +100,9 @@ export function isAttackableEntity(
 ): boolean {
   if (!e || e.dead || e.id === playerId) return false;
   if (e.kind === 'mob') return e.hostile;
-  return e.kind === 'player' && activePvpOpponentSet.has(e.id);
+  // Players (duel/arena) and, in the Final Court, the NPC field too are attackable
+  // only when named in the opponent set (built by activePvpOpponentIds).
+  return (e.kind === 'player' || e.kind === 'npc') && activePvpOpponentSet.has(e.id);
 }
 
 /** Which game cursor to show when hovering an entity. */
@@ -99,9 +120,12 @@ export function hoverCursorKind(
   return 'default';
 }
 
+// True for an entity the local player may swing at outside normal PvE: an active
+// duel/arena opponent, or a live Final Court foe (a fellow contestant, player OR
+// the NPC field). Drives the right-click-to-attack path.
 export function isActivePvpOpponent(world: PickInteractionWorld, e: Entity): boolean {
   return (
-    e.kind === 'player' &&
+    (e.kind === 'player' || e.kind === 'npc') &&
     isAttackableEntity(e, world.playerId ?? world.player.id, activePvpOpponentIds(world))
   );
 }
@@ -120,6 +144,14 @@ export function handlePickedEntity(
   if (e.kind !== 'object') world.targetEntity(id);
 
   if (button === 2) {
+    // A foe (a duel/arena opponent, or a live Final Court contestant, player OR
+    // the NPC field): right-click engages auto-attack. Checked first so a court
+    // NPC contestant attacks instead of opening a talk dialog. Hostile mobs are
+    // not matched here (they fall through to the mob branch below).
+    if (isActivePvpOpponent(world, e)) {
+      world.startAutoAttack();
+      return;
+    }
     const d = dist2d(world.player.pos, e.pos);
     // players: right-click only targets — the interaction menu lives on the
     // target portrait (right-click it), like classic-MMO unit frames
@@ -130,6 +162,8 @@ export function handlePickedEntity(
       }
       if (e.templateId === 'dungeon_door' && e.dungeonId) world.enterDungeon(e.dungeonId);
       else if (e.templateId === 'dungeon_exit') world.leaveDungeon();
+      else if (e.templateId === HUB_PORTAL_TEMPLATE || e.templateId === HUB_EXIT_TEMPLATE)
+        world.interact();
       else if (e.templateId === 'mailbox') {
         // Dead players (ghosts included) cannot use the mail; the server-side
         // interact path refuses too, this just keeps the window from opening.
@@ -170,6 +204,8 @@ export function handlePickedEntity(
       if (d > INTERACT_RANGE + 1) return;
       if (e.templateId === 'dungeon_door' && e.dungeonId) world.enterDungeon(e.dungeonId);
       else if (e.templateId === 'dungeon_exit') world.leaveDungeon();
+      else if (e.templateId === HUB_PORTAL_TEMPLATE || e.templateId === HUB_EXIT_TEMPLATE)
+        world.interact();
       else if (e.templateId === 'mailbox') {
         if (world.player.dead) hud.showError(tSim('error.cantWhileDead'));
         else hud.openMailbox();
@@ -177,7 +213,9 @@ export function handlePickedEntity(
     } else if (e.kind === 'mob' && e.dead && e.lootable) {
       const d = dist2d(world.player.pos, e.pos);
       if (d <= INTERACT_RANGE + 1) hud.openLoot(id, screenX, screenY);
-    } else if (e.kind === 'npc') {
+    } else if (e.kind === 'npc' && !isActivePvpOpponent(world, e)) {
+      // A live Final Court foe is a fellow contestant, not a talk NPC: left-click
+      // only targets it (done above), so skip the quest-dialog branch.
       // left-click talks too — Mac trackpads make right-click a chore;
       // out of range it just targets (no error spam while exploring)
       const d = dist2d(world.player.pos, e.pos);

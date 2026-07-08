@@ -7,24 +7,14 @@
 // round; clearing every round finishes the trial and banks the finish time.
 // All state lives on the run; every numeric knob is GAUNTLET.echo.
 
-import { GAUNTLET, GAUNTLET_VENUE } from '../content/gauntlet';
+import { echoStation, GAUNTLET } from '../content/gauntlet';
 import type { SimContext } from '../sim_context';
-import { placeContestantsAt } from './contestants';
+import { seatAllContestantsAt } from './contestants';
 import type { GauntletEchoPlayer, GauntletEchoState, GauntletRun } from './state';
 import { applyVitalityDamage, cullNpcsToward, trialDamageFromScore } from './vitality';
 
-// The player's mat sits this far west of the courtyard center; players beyond
-// the first spread along z so everyone faces their own stones.
-const MAT_OFFSET_X = 3.2;
-const ROW_SPACING_MAX = 5;
 // The breath between the round opening (or a miss) and the first flash.
 const SHOW_LEAD_S = 1;
-
-// The z row (instance-local) for player k of n, centered on the courtyard.
-function echoRowZ(k: number, n: number): number {
-  const spacing = n > 1 ? Math.min(ROW_SPACING_MAX, (GAUNTLET_VENUE.echo.size - 3) / (n - 1)) : 0;
-  return GAUNTLET_VENUE.echo.z + (k - (n - 1) / 2) * spacing;
-}
 
 // Deal a round's fresh sequence and schedule its watch + answer windows. The
 // sequence length grows with the round; every value is one run.rng draw, in a
@@ -52,15 +42,26 @@ function missRound(ctx: SimContext, run: GauntletRun, pid: number, ep: GauntletE
   dealRound(ctx, run, ep);
 }
 
+// Seat EVERY alive contestant (players and the NPC field alike) at their own
+// auto-assigned rune-stone desk, so the courtyard reads as a hall of memory
+// desks with someone at each rather than one table ringed by a crowd. The venue
+// draws a desk at every station and anchors the live rig to the viewer's own.
+// Positioning only (no state, no rng: aliveContestants is a stable order), so
+// runs.ts can call it during the interlude to stand everyone at their desks
+// while the countdown runs, and startEcho reuses it.
+export function seatEchoField(ctx: SimContext, run: GauntletRun): void {
+  seatAllContestantsAt(ctx, run, (i) => {
+    const s = echoStation(i);
+    return { x: s.matX, z: s.matZ, facing: s.facing };
+  });
+}
+
 export function startEcho(ctx: SimContext, run: GauntletRun): GauntletEchoState {
-  // The NPC field gathers as an audience along the courtyard's open side.
-  placeContestantsAt(ctx, run, GAUNTLET_VENUE.echo.x + 12, GAUNTLET_VENUE.echo.z, 6);
   const players = new Map<number, GauntletEchoPlayer>();
   const eligible = [...run.playerStates.keys()].filter(
     (pid) => !run.playerStates.get(pid)?.spectating,
   );
-  for (let k = 0; k < eligible.length; k++) {
-    const pid = eligible[k];
+  for (const pid of eligible) {
     const ep: GauntletEchoPlayer = {
       round: 0,
       seq: [],
@@ -72,19 +73,10 @@ export function startEcho(ctx: SimContext, run: GauntletRun): GauntletEchoState 
     };
     dealRound(ctx, run, ep);
     players.set(pid, ep);
-    // Seat the player at their own mat, facing their stones across the table
-    // (runs.ts pins them there for the trial). No rng draws here.
-    const player = ctx.entities.get(pid);
-    if (player) {
-      player.pos = ctx.groundPos(
-        run.origin.x + GAUNTLET_VENUE.echo.x - MAT_OFFSET_X,
-        run.origin.z + echoRowZ(k, eligible.length),
-      );
-      player.prevPos = { ...player.pos };
-      player.facing = Math.PI / 2; // faces +x, across the table
-      ctx.rebucket(player);
-    }
   }
+  // runs.ts pins the seated players at their desks for the trial; the same
+  // seating already ran when the interlude opened.
+  seatEchoField(ctx, run);
   return { kind: 'echo', players };
 }
 

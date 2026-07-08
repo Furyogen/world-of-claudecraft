@@ -1,11 +1,11 @@
-// Trial 2, Sugarglass Sigils: freedraw the seeded etched outline without
-// cracking it. The sim OWNS the scoring; the client only streams shape-local
-// trace points (it never decides progress or a shatter). Coverage is ORDER
-// FREE: each on-band point carves the outline vertices near its arc position
-// (drag forward, backward, or piecewise; your stroke carves whatever part of
-// the outline it passes near), capped at coverageCapPerS new vertices per
-// second so packet spam buys nothing. Straying outside the tolerance band is
-// what costs you: crack accrues (faster the further out), and a full crack
+// Trial 2, Sugarglass Sigils: trace the seeded etched outline in one continuous
+// pass without cracking it. The sim OWNS the scoring; the client only streams
+// shape-local trace points (it never decides progress or a shatter). Coverage is
+// CONTINUOUS: the covered set is a single contiguous arc that grows only from the
+// stroke's live frontier (start anywhere, drag either direction), so you must
+// walk the whole loop connected: a point that lands far from the covered arc is a
+// jump across the shape and carves nothing. Straying outside the tolerance band
+// is what costs you: crack accrues (faster the further out), and a full crack
 // meter shatters the pane (a vitality chunk and a fresh shape). The outline
 // geometry is the pure, shared sigil_shapes module; every numeric knob is
 // GAUNTLET.sigils.
@@ -27,9 +27,9 @@ import {
   trialDamageFromScore,
 } from './vitality';
 
-// Covered fraction that counts the etching finished: freedraw forgives the
-// last few vertices instead of demanding every sliver of the loop.
-const SIGIL_DONE = 0.95;
+// Covered fraction that counts the etching finished: near-total, forgiving only
+// the last sliver where the two frontier ends close the loop.
+const SIGIL_DONE = 0.98;
 // Crack accrues double once a point strays past this many tolerances out (a
 // wild stroke fails faster than a graze).
 const FAR_OFF_MULT_AT = 2;
@@ -71,18 +71,27 @@ function seatNpcsAtRingLecterns(ctx: SimContext, run: GauntletRun): void {
   }
 }
 
-export function startSigils(ctx: SimContext, run: GauntletRun): GauntletSigilsState {
-  // Everyone is at a station for this one: the players AT the interactive
-  // lectern (runs.ts pins them there for the trial), the NPC field at the
-  // cosmetic ring lecterns.
+// Seat the whole field at the etching pavilion: players AT the interactive
+// lecterns, the NPC field at the cosmetic ring lecterns. Positioning only (no
+// state, no rng), so runs.ts can call it during the interlude to stand everyone
+// at their stations while the countdown runs, and startSigils reuses it.
+export function seatSigilsField(ctx: SimContext, run: GauntletRun): void {
   seatLivePlayersAt(ctx, run, (i) => lecternSpot(i));
   seatNpcsAtRingLecterns(ctx, run);
+}
+
+export function startSigils(ctx: SimContext, run: GauntletRun): GauntletSigilsState {
+  // Everyone is at a station for this one (runs.ts pins the players there for
+  // the trial); the same seating already ran when the interlude opened.
+  seatSigilsField(ctx, run);
   const players = new Map<number, GauntletSigilsPlayer>();
   for (const [pid, ps] of run.playerStates) {
     if (ps.spectating) continue;
     players.set(pid, {
       shapeSeed: run.rng.int(1, 0x7fffffff),
-      shapeId: run.rng.int(0, 3),
+      // Any of the five shapes (0 triangle, 1 circle, 2 star, 3 rectangle,
+      // 4 hexagon). One rng draw, so the per-run stream's draw order is unchanged.
+      shapeId: run.rng.int(0, 4),
       crack: 0,
       covered: new Array<boolean>(GAUNTLET.sigils.outlinePoints).fill(false),
       coveredCount: 0,
@@ -152,17 +161,49 @@ function nearestAny(o: SigilOutline, px: number, py: number): Nearest {
   return { dist: bestDist, frac: bestFrac, thin: bestThin };
 }
 
-// Mark covered every vertex whose arc position lies within `tolerance` of the
-// hit's arc fraction (wrapped around the closed loop), spending one unit of
-// carve budget per NEW vertex. Returns the remaining budget.
-function carveWindow(sp: GauntletSigilsPlayer, frac: number, budget: number): number {
+// Extend the covered arc contiguously from the stroke's live frontier. The first
+// on-band point seeds coverage anywhere on the loop; after that a point only
+// carves if its arc position lands within `contiguityArcFrac` of an
+// already-covered vertex (either direction), filling the small gap up to it so a
+// fast drag leaves no holes. A point that lands further out (a jump across the
+// shape) carves NOTHING: you must trace the loop in one connected pass, not dab
+// disconnected pieces. Spends one unit of carve budget per NEW vertex; returns
+// the remaining budget. Wraps around the closed loop.
+function carveContiguous(sp: GauntletSigilsPlayer, frac: number, budget: number): number {
   const n = sp.covered.length;
-  const radius = GAUNTLET.sigils.tolerance * n;
-  const center = frac * n;
-  const lo = Math.ceil(center - radius);
-  const hi = Math.floor(center + radius);
-  for (let k = lo; k <= hi && budget >= 1; k++) {
-    const idx = ((k % n) + n) % n;
+  const wrap = (k: number): number => ((k % n) + n) % n;
+  const hit = wrap(Math.round(frac * n));
+  // Seed anywhere while the arc is empty.
+  if (sp.coveredCount === 0) {
+    if (budget >= 1 && !sp.covered[hit]) {
+      sp.covered[hit] = true;
+      sp.coveredCount++;
+      budget -= 1;
+    }
+    return budget;
+  }
+  if (sp.covered[hit]) return budget; // already on the covered arc: nothing new
+  // Find the nearest covered vertex within reach, either direction.
+  const reach = Math.max(1, Math.round(GAUNTLET.sigils.contiguityArcFrac * n));
+  let gap = 0;
+  let dir = 0;
+  for (let d = 1; d <= reach; d++) {
+    if (sp.covered[wrap(hit + d)]) {
+      gap = d;
+      dir = 1;
+      break;
+    }
+    if (sp.covered[wrap(hit - d)]) {
+      gap = d;
+      dir = -1;
+      break;
+    }
+  }
+  if (dir === 0) return budget; // a jump, not a continuation: carve nothing
+  // Fill from the hit up to (but not including) the covered neighbour, extending
+  // the contiguous arc toward the stroke.
+  for (let d = 0; d < gap && budget >= 1; d++) {
+    const idx = wrap(hit + dir * d);
     if (!sp.covered[idx]) {
       sp.covered[idx] = true;
       sp.coveredCount++;
@@ -210,7 +251,7 @@ export function gauntletTraceSigils(
       const far = near.dist > FAR_OFF_MULT_AT * t.tolerance ? 2 : 1;
       sp.crack += t.crackOffPath * dtPoint * (near.thin ? t.thinSectionMult : 1) * far;
     } else {
-      budget = carveWindow(sp, near.frac, budget);
+      budget = carveContiguous(sp, near.frac, budget);
     }
     if (sp.crack >= t.crackMax) {
       shatter(ctx, run, c, sp);

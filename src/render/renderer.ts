@@ -20,6 +20,8 @@ import {
   GAUNTLET_SLOT_COUNT,
   gauntletOrigin,
   HODRICS_SLOT_COUNT,
+  HUB_EXIT_TEMPLATE,
+  HUB_PORTAL_TEMPLATE,
   hodricsOrigin,
   INSTANCE_SLOT_COUNT,
   instanceOrigin,
@@ -27,6 +29,8 @@ import {
   isDelvePos,
   isGauntletPos,
   isHodricsPos,
+  isMinigameHubPos,
+  MINIGAME_HUB,
   MOBS,
   NPCS,
   WORLD_MAX_Z,
@@ -42,6 +46,7 @@ import { groundHeight, waterLevelAt, zoneBiomeAt } from '../sim/world';
 import { attachAvatarFallback } from '../ui/avatar_fallback';
 import { tEntity } from '../ui/entity_i18n';
 import type { IWorld } from '../world_api';
+import { isActiveFinalCourt } from '../world_api/gauntlet';
 import { isVisuallyDead } from './anim_state';
 import { AOE_RING_LIFETIME, aoeRingAnim } from './aoe_ring';
 import type { SpatialAudioSink, Surface } from './audio_sink';
@@ -80,10 +85,12 @@ import {
   urlForcedTier,
 } from './gfx';
 import { buildHodricsCastle, type HodricsCastleView } from './hodrics_castle';
+import { buildHubPortal } from './hub_portal';
 import { buildImpactSite, type ImpactSiteView } from './impact_site';
 import { ensureDelveInteriorKit } from './interior_kit';
 import { type LocoTrack, newLocoTrack, updateLocomotion } from './locomotion';
 import { buildMailboxPillar } from './mailbox';
+import { buildMinigameHub, type MinigameHubView } from './minigame_hub';
 import { buildMotes, type MotesView } from './motes';
 import { COMBO_PIP_MAX } from './nameplate_combo';
 import { NameplatePainter } from './nameplate_painter';
@@ -682,7 +689,11 @@ function setRenderCategory(obj: THREE.Object3D, category: RenderDiagnosticsCateg
 
 function isPersistentPortalObject(e: Entity): boolean {
   return (
-    e.kind === 'object' && (e.templateId === 'dungeon_door' || e.templateId === 'dungeon_exit')
+    e.kind === 'object' &&
+    (e.templateId === 'dungeon_door' ||
+      e.templateId === 'dungeon_exit' ||
+      e.templateId === HUB_PORTAL_TEMPLATE ||
+      e.templateId === HUB_EXIT_TEMPLATE)
   );
 }
 
@@ -2188,7 +2199,7 @@ export class Renderer {
 
   private objectPoolKeyFor(e: Entity): string | null {
     if (e.kind !== 'object' || !e.objectItemId) return null;
-    if (e.templateId === 'dungeon_door' || e.templateId === 'dungeon_exit') return null;
+    if (isPersistentPortalObject(e)) return null;
     return `object:${e.objectItemId}`;
   }
 
@@ -2950,7 +2961,7 @@ export class Renderer {
         const run = this.sim.gauntletRun;
         if (!run) break;
         const px = run.originX;
-        const pz = run.originZ + GAUNTLET_LAYOUT.podiumZ - 4;
+        const pz = run.originZ + GAUNTLET_LAYOUT.podium.z;
         const gy = groundHeight(px, pz, this.sim.cfg.seed);
         const schools = ['holy', 'arcane', 'fire', 'holy', 'arcane'];
         for (let i = 0; i < schools.length; i++) {
@@ -3244,8 +3255,26 @@ export class Renderer {
     let portal: THREE.Mesh | undefined;
     if (
       e.kind === 'object' &&
+      (e.templateId === HUB_PORTAL_TEMPLATE || e.templateId === HUB_EXIT_TEMPLATE)
+    ) {
+      // The Proving Grounds gateway: a runed frame around a swirling vortex (its
+      // own visual module, cooler than the dungeon-door arch it used to reuse).
+      // The entrance glows purple, the exit blue; the swirl disc is spun and
+      // pulsed by the shared per-frame portal hook below.
+      const built = buildHubPortal({
+        entering: e.templateId === HUB_PORTAL_TEMPLATE,
+        lowGfx: this.lowGfx,
+      });
+      body = built.group;
+      portal = built.portal;
+      height = built.height;
+      objectMesh = body!;
+    } else if (
+      e.kind === 'object' &&
       (e.templateId === 'dungeon_door' || e.templateId === 'dungeon_exit')
     ) {
+      // Dungeon doors keep the stone-arch + portal shimmer: the entrance reads as
+      // "entering", the exit as "leaving".
       const entering = e.templateId === 'dungeon_door';
       const built = this.buildDoorBody(entering, e.dungeonId);
       body = built.body;
@@ -3615,6 +3644,16 @@ export class Renderer {
   }
 
   private isHostileSelectionTarget(target: Entity): boolean {
+    // The Gauntlet's Final Court is a free-for-all: every live fellow contestant
+    // (players and the NPC field) is a foe, so the selection reticle reads hostile
+    // (red) like any enemy.
+    if (
+      target.id !== this.sim.playerId &&
+      !target.dead &&
+      (target.kind === 'player' || target.kind === 'npc') &&
+      isActiveFinalCourt(this.sim.gauntletRun)
+    )
+      return true;
     // A controlled pet inherits its owner's reaction (a player's pet is hostile
     // only in PvP), so route mobs through the owner-aware helper; everything
     // else falls back to the player-vs-player verdict.
@@ -3661,6 +3700,11 @@ export class Renderer {
   // light-reactive signal pieces.
   private gauntletVenues = new Map<number, GauntletVenueView>();
   private pendingGauntletSlots = new Set<number>();
+  // The Proving Grounds hub room: one SHARED venue (not per-slot), built once
+  // when the player first enters the hub band and kept for the session. It loads
+  // GLB library set pieces, so the build is async and `pending` gates re-schedule.
+  private minigameHub: MinigameHubView | null = null;
+  private pendingMinigameHub = false;
 
   // The venue for a run's instance origin (the run view carries originX/Z), or
   // null while that slot's venue is still streaming in.
@@ -3726,6 +3770,7 @@ export class Renderer {
     | 'nythraxis'
     | 'delve'
     | 'gauntlet'
+    | 'hub'
     | 'underwater' = 'outdoor';
 
   private buildInterior(interior: string, ox: number, oz: number): void {
@@ -3897,6 +3942,21 @@ export class Renderer {
             console.error("Failed to build Hodric's Castle:", err);
           });
       }
+    } else if (inside && isMinigameHubPos(px)) {
+      // The Proving Grounds library: one shared venue, raised once (kept for the
+      // session) when the player enters the band. Async: it loads GLB set pieces.
+      if (!this.minigameHub && !this.pendingMinigameHub) {
+        this.pendingMinigameHub = true;
+        void buildMinigameHub(this.scene, MINIGAME_HUB.x, MINIGAME_HUB.z)
+          .then((view) => {
+            this.minigameHub = view;
+            this.pendingMinigameHub = false;
+          })
+          .catch((err) => {
+            this.pendingMinigameHub = false;
+            console.error('Failed to build the Proving Grounds:', err);
+          });
+      }
     } else if (inside) {
       void ensureDungeonAssets().catch(() => undefined);
       // build the interior copy the player is standing in
@@ -3936,11 +3996,16 @@ export class Renderer {
             : // the castle course is open daylight, never a dark interior
               isHodricsPos(px)
               ? 'outdoor'
-              : inside
-                ? 'dungeon'
-                : camY < waterLevelAt(px, pz) - 0.05
-                  ? 'underwater'
-                  : 'outdoor';
+              : // the Proving Grounds is an enclosed torch-lit chamber, lit by
+                // its own braziers (its band predicate is checked before the
+                // generic dungeon fallback)
+                isMinigameHubPos(px)
+                ? 'hub'
+                : inside
+                  ? 'dungeon'
+                  : camY < waterLevelAt(px, pz) - 0.05
+                    ? 'underwater'
+                    : 'outdoor';
     const fog = this.scene.fog as THREE.Fog;
     if (desired !== this.fogState) {
       this.fogState = desired;
@@ -3972,6 +4037,12 @@ export class Renderer {
         fog.color.setHex(0xd3b48c);
         fog.near = 60;
         fog.far = 290;
+      } else if (desired === 'hub') {
+        // The Proving Grounds library: a warm amber haze that hides the flat
+        // band beyond the walls without dimming the candle-lit room.
+        fog.color.setHex(0x3a2a1a);
+        fog.near = 24;
+        fog.far = 98;
       } else if (desired === 'underwater') {
         fog.color.setHex(0x17506e);
         fog.near = 2;
@@ -4257,9 +4328,14 @@ export class Renderer {
       const d2 = cdx * cdx + cdz * cdz;
       const isSelf = id === p.id;
       if (isSelf) {
-        v.group.visible = true;
+        // Hide your own character while the Gauntlet camera is zoomed onto the
+        // sigil slab: the etched shape you are tracing sits right behind where
+        // the body stands, so the head would block it. The wire's `sigils`
+        // member is non-null only for a live etcher (null for spectators).
+        const hideForSigils = this.sim.gauntletRun?.sigils != null;
+        v.group.visible = !hideForSigils;
         v.isFar = false;
-        v.visual?.setShadow(true);
+        v.visual?.setShadow(!hideForSigils);
         v.visual?.setProxyShadow(false);
       }
       if (id !== p.id) {
@@ -4476,6 +4552,9 @@ export class Renderer {
         e.templateId === 'spirit_healer'; // the graveyard angel is an ethereal figure
       active.setGhost(ghost);
       active.setSoulRend(characterSoulRendActive(e));
+      // A free-roaming Gauntlet spectator renders faint to OTHER players (never to
+      // themselves, so they keep a clear view of their own body while watching).
+      active.setSpectator(e.spectator === true && e.id !== this.sim.playerId);
       v.visual.root.visible = active === v.visual;
       // distant rigs swap to the single-draw baked idle-pose mesh
       v.visual.setFar(v.isFar && active === v.visual);
@@ -4818,6 +4897,9 @@ export class Renderer {
     // The viewer's position anchors the echo table rig to their own row.
     for (const venue of this.gauntletVenues.values())
       venue.update(this.time, this.sim.gauntletRun, p.pos);
+    // The Proving Grounds room: a gentle torch flicker plus the roof cull (the
+    // ceiling drops when the boom rises through it). No-op cost when unbuilt.
+    this.minigameHub?.update(this.time, this.camera.position, this.cameraLookAt);
     worldStart = markWorldPhase('props', worldStart);
     this.foliage.update(
       p.pos.x,

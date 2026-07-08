@@ -42,13 +42,13 @@ const SPAN_CROSSER_EXIT_MARGIN = 2;
 // glass, squarely in front of a panel column, never off beside the deck).
 const SPAN_START_MARGIN = 2;
 
-export function startSpan(ctx: SimContext, run: GauntletRun): GauntletSpanState {
-  const t = GAUNTLET.span;
-  // The NPC crowd gathers on the approach behind the start line...
+// Stand the field at the crossing: the NPC crowd on the approach behind the
+// start line, every live player squared up in front of a panel column (left/
+// right alternating), one stride from the first pair. Positioning only (no
+// state, no rng), so runs.ts can call it during the interlude to line everyone
+// up at the span while the countdown runs, and startSpan reuses the seating.
+export function seatSpanField(ctx: SimContext, run: GauntletRun): void {
   placeContestantsAt(ctx, run, GAUNTLET_VENUE.span.x, spanZStart() - SPAN_START_MARGIN - 3, 4);
-  // ...and every live player is then set directly IN FRONT of a panel column
-  // (alternating left/right), one stride from the first pair, so the trial
-  // opens with the glass right at your feet. Fixed playerStates order, no rng.
   let lane = 0;
   for (const [pid, ps] of run.playerStates) {
     if (ps.spectating) continue;
@@ -65,18 +65,27 @@ export function startSpan(ctx: SimContext, run: GauntletRun): GauntletSpanState 
     ctx.rebucket(e);
     lane++;
   }
+}
+
+export function startSpan(ctx: SimContext, run: GauntletRun): GauntletSpanState {
+  const t = GAUNTLET.span;
+  // The field is already lined up at the crossing (the interlude seated them);
+  // reassert it so a mid-run start is safe.
+  seatSpanField(ctx, run);
   // A salted sub-stream so the layout is one fixed draw regardless of the
   // mid-trial draws around it.
   const layoutRng = new Rng((run.seed ^ 0x5eed5) >>> 0);
   const safeSide: number[] = [];
   for (let i = 0; i < t.steps; i++) safeSide.push(layoutRng.chance(0.5) ? 0 : 1);
 
-  // Seed the NPC crossers: the most skilled surviving contestants go first. Cap
-  // the count to the field's slack above this trial's survivor target, so their
-  // falls never thin the NPC field below it (cullNpcsToward only ever removes
-  // DOWN to the target, never replenishes, so a trial must not drop beneath it);
-  // with no slack there are simply no crossers and the players probe the span
-  // themselves.
+  // Seed the NPC crossers: the most skilled surviving contestants go first, up
+  // to npcAheadCount of them. Only the field's SLACK above this trial's survivor
+  // target may FALL (cullNpcsToward only ever removes DOWN to the target, never
+  // replenishes, so a trial must not drop beneath it); a crosser beyond the
+  // slack still scouts the glass but crosses clean. This used to cap the crosser
+  // COUNT to the slack, so a late run thinned to its target (a survivor or two)
+  // seated ZERO crossers and no bot ever stepped onto the panels, reading as a
+  // dead trial. Now the remnant always scouts.
   const target = GAUNTLET.targetSurvivorsPerTrial[run.trialIndex] ?? 0;
   const alive = aliveContestants(run);
   const alivePlayers = alive.filter((c) => c.player).length;
@@ -84,19 +93,35 @@ export function startSpan(ctx: SimContext, run: GauntletRun): GauntletSpanState 
     .filter((c) => !c.player)
     .sort((a, b) => b.skill - a.skill || a.entityId - b.entityId);
   const keep = Math.max(0, target - alivePlayers);
-  const crosserCount = Math.min(t.npcAheadCount, Math.max(0, npcs.length - keep));
+  const slack = Math.max(0, npcs.length - keep);
+  const crosserCount = Math.min(t.npcAheadCount, npcs.length);
 
-  // Precompute each crosser's fall step deterministically, in a fixed order,
-  // each inheriting the reveals of those ahead of it (the field learns as it
-  // crosses). The plan array is a scratch copy: trial.revealed starts blank and
-  // is filled by the ACTUAL crossings (crossers and players) at runtime.
+  // Precompute each sacrificeable crosser's fatal fall step deterministically,
+  // in a fixed order, each inheriting the reveals of those ahead of it (the
+  // field learns as it crosses). Scouts beyond the slack cross clean UNLESS a
+  // salted roll gives them ONE honest wrong guess (a stumble they respawn from
+  // and finish), so the field is never thinned below target. Only the fallers
+  // draw from run.rng, and slack <= npcs so the faller count is unchanged, so the
+  // main draw order matches the old fall-capped seeding exactly; the stumble
+  // rolls use a separate salted stream. The plan array is a scratch copy:
+  // trial.revealed starts blank and is filled by the ACTUAL crossings at runtime.
   const revealedPlan = safeSide.map(() => -1);
+  const stumbleRng = new Rng((run.seed ^ 0x57a3b1e) >>> 0);
   const npcCrossers: GauntletSpanState['npcCrossers'] = [];
   for (let i = 0; i < crosserCount; i++) {
+    const scout = i >= slack;
+    const fallStep = scout ? null : planCrosserFall(run.rng, safeSide, revealedPlan);
+    const stumbleStep =
+      scout && stumbleRng.chance(t.npcStumbleChance) ? stumbleRng.int(0, t.steps - 1) : -1;
     npcCrossers.push({
       entityId: npcs[i].entityId,
       step: -1,
-      fallStep: planCrosserFall(run.rng, safeSide, revealedPlan),
+      fallStep,
+      stumbleStep,
+      mode: 'idle',
+      segT: 0,
+      hopFromX: 0,
+      hopFromZ: 0,
     });
   }
 
@@ -105,18 +130,16 @@ export function startSpan(ctx: SimContext, run: GauntletRun): GauntletSpanState 
     safeSide,
     revealed: safeSide.map(() => -1),
     npcCrossers,
-    nextNpcStepAt: ctx.time + t.npcStepPeriodS,
     playerStep: new Map(),
     finished: new Set(),
   };
 }
 
 export function updateSpan(ctx: SimContext, run: GauntletRun, dt: number): boolean {
-  void dt;
   const trial = run.trial;
   if (!trial || trial.kind !== 'span') return true;
 
-  advanceCrossers(ctx, run, trial);
+  updateCrossers(ctx, run, trial, dt);
   detectPlayers(ctx, run, trial);
 
   if (ctx.time >= run.phaseEndsAt || spanAllFinished(run)) {
@@ -141,46 +164,151 @@ export function planCrosserFall(rng: Rng, safeSide: number[], revealed: number[]
   return null;
 }
 
-// One NPC crosser step per cadence: the lead (first not-yet-done) crosser
-// advances a single panel. A known pair is walked on its safe side; a still
-// unknown pair is revealed by the step, and if it is this crosser's planned
-// fall the brittle guess poofs them (their death teaches the field the safe
-// side). Cosmetic position writes only; no rng.
-function advanceCrossers(ctx: SimContext, run: GauntletRun, trial: GauntletSpanState): void {
+// The side (0/1) a crosser hops onto for the still-unknown panel `toStep`: a
+// known pair is walked on its proven safe side; an unknown pair is a guess, and
+// it guesses WRONG on its one scripted panel (the expendable's fatal fallStep or
+// a scout's honest stumbleStep) and right (revealing the safe side) everywhere
+// else.
+function crosserHopSide(trial: GauntletSpanState, cr: SpanCrosser, toStep: number): number {
+  if (trial.revealed[toStep] >= 0) return trial.revealed[toStep];
+  if (toStep === cr.fallStep || toStep === cr.stumbleStep) return 1 - trial.safeSide[toStep];
+  return trial.safeSide[toStep];
+}
+
+type SpanCrosser = GauntletSpanState['npcCrossers'][number];
+
+// Per-tick crosser locomotion: the lead (first not-yet-done, still-alive)
+// crosser actually RUNS and HOPS the span one panel at a time, so only one is
+// ever mid-air and the reveal order stays the seeded one. Each landing proves
+// its pair (teaching the whole field the safe side); a wrong guess drops the
+// crosser through the shattered panel into the pit, where an expendable crosser
+// is knocked out and a scout climbs back at the start to try again. Draw-free.
+function updateCrossers(
+  ctx: SimContext,
+  run: GauntletRun,
+  trial: GauntletSpanState,
+  dt: number,
+): void {
   const t = GAUNTLET.span;
-  if (ctx.time < trial.nextNpcStepAt) return;
-  trial.nextNpcStepAt = ctx.time + t.npcStepPeriodS;
+  let lead: SpanCrosser | null = null;
   for (const cr of trial.npcCrossers) {
+    if (cr.mode === 'done') continue;
     const c = run.contestants.find((k) => k.entityId === cr.entityId);
-    if (!c || c.eliminatedAtTrial !== null || cr.step >= t.steps) continue; // done: skip
-    cr.step++;
-    const s = cr.step;
-    const e = ctx.entities.get(cr.entityId);
-    if (s >= t.steps) {
-      if (e)
-        placeCrosser(
-          ctx,
-          run,
-          e,
-          GAUNTLET_VENUE.span.x,
-          spanFieldEndZ() + SPAN_CROSSER_EXIT_MARGIN,
-        );
-      return;
+    if (!c || c.eliminatedAtTrial !== null || !ctx.entities.has(cr.entityId)) {
+      cr.mode = 'done'; // fell to a cull, or the entity is gone: retire the slot
+      continue;
     }
-    if (trial.revealed[s] >= 0) {
-      if (e) placeCrosser(ctx, run, e, spanSideCenterX(trial.revealed[s]), spanStepCenterZ(s));
-      return;
+    lead = cr;
+    break;
+  }
+  if (!lead) return;
+  const e = ctx.entities.get(lead.entityId);
+  if (!e) return;
+
+  if (lead.mode === 'idle') {
+    // Break from the crowd: the first hop starts from wherever they were waiting.
+    lead.hopFromX = e.pos.x - run.origin.x;
+    lead.hopFromZ = e.pos.z - run.origin.z;
+    lead.segT = 0;
+    lead.mode = 'hop';
+  }
+
+  if (lead.mode === 'hop') {
+    const toStep = lead.step + 1;
+    const exiting = toStep >= t.steps;
+    const side = exiting ? 0 : crosserHopSide(trial, lead, toStep);
+    const toX = exiting ? GAUNTLET_VENUE.span.x : spanSideCenterX(side);
+    const toZ = exiting ? spanFieldEndZ() + SPAN_CROSSER_EXIT_MARGIN : spanStepCenterZ(toStep);
+    lead.segT = Math.min(1, lead.segT + dt / t.npcHopS);
+    placeArc(ctx, run, e, lead.hopFromX, lead.hopFromZ, toX, toZ, lead.segT, t.npcJumpHeight);
+    if (lead.segT >= 1) {
+      lead.step = toStep;
+      if (exiting) {
+        lead.mode = 'done'; // cleared the whole span
+        return;
+      }
+      trial.revealed[toStep] = trial.safeSide[toStep]; // the landing proves the pair
+      if (side !== trial.safeSide[toStep]) {
+        lead.segT = 0;
+        lead.mode = 'plunge'; // stepped on the brittle side: it shatters underfoot
+      } else {
+        lead.hopFromX = toX; // bound straight into the next hop
+        lead.hopFromZ = toZ;
+        lead.segT = 0;
+      }
     }
-    // First onto this pair: stepping on it reveals the safe side either way.
-    trial.revealed[s] = trial.safeSide[s];
-    if (s === cr.fallStep) {
-      if (e) placeCrosser(ctx, run, e, spanSideCenterX(1 - trial.safeSide[s]), spanStepCenterZ(s));
-      applyVitalityDamage(ctx, run, c, c.vitality, 'caught');
-      return;
-    }
-    if (e) placeCrosser(ctx, run, e, spanSideCenterX(trial.safeSide[s]), spanStepCenterZ(s));
     return;
   }
+
+  // Plunge: drop straight through the shattered brittle side into the pit.
+  lead.segT = Math.min(1, lead.segT + dt / t.npcPlungeS);
+  placePlunge(
+    ctx,
+    run,
+    e,
+    spanSideCenterX(1 - trial.safeSide[lead.step]),
+    spanStepCenterZ(lead.step),
+    lead.segT,
+    t.npcPlungeDrop,
+  );
+  if (lead.segT < 1) return;
+  const c = run.contestants.find((k) => k.entityId === lead.entityId);
+  if (lead.step === lead.fallStep) {
+    // The expendable crosser's scripted knockout (the show's drama, and it
+    // teaches the field the safe side on the way down).
+    if (c) applyVitalityDamage(ctx, run, c, c.vitality, 'caught');
+    lead.mode = 'done';
+  } else {
+    // A scout's honest mistake: climb back out at the start and try again. The
+    // panel it fell on is revealed now, so it will not trip on it twice.
+    placeCrosser(ctx, run, e, spanSideCenterX(0), spanZStart() - SPAN_RESPAWN_MARGIN);
+    lead.step = -1;
+    lead.segT = 0;
+    lead.mode = 'idle';
+  }
+}
+
+// A smooth run-and-hop from one instance-local point to another over segT in
+// 0..1, with a parabolic jump arc: the crosser leaves the deck at takeoff,
+// peaks mid-gap, and lands on the far panel, facing where it is leaping.
+function placeArc(
+  ctx: SimContext,
+  run: GauntletRun,
+  e: Entity,
+  fromX: number,
+  fromZ: number,
+  toX: number,
+  toZ: number,
+  segT: number,
+  jumpH: number,
+): void {
+  const fromY = ctx.groundPos(run.origin.x + fromX, run.origin.z + fromZ).y;
+  const toY = ctx.groundPos(run.origin.x + toX, run.origin.z + toZ).y;
+  e.prevPos = { ...e.pos };
+  e.pos = {
+    x: run.origin.x + fromX + (toX - fromX) * segT,
+    y: fromY + (toY - fromY) * segT + jumpH * Math.sin(Math.PI * segT),
+    z: run.origin.z + fromZ + (toZ - fromZ) * segT,
+  };
+  e.facing = Math.atan2(toX - fromX, toZ - fromZ);
+  ctx.rebucket(e);
+}
+
+// The plunge: hold the shattered brittle side and sink from the deck into the
+// pit over segT in 0..1.
+function placePlunge(
+  ctx: SimContext,
+  run: GauntletRun,
+  e: Entity,
+  localX: number,
+  localZ: number,
+  segT: number,
+  drop: number,
+): void {
+  const baseY = ctx.groundPos(run.origin.x + localX, run.origin.z + localZ).y;
+  e.prevPos = { ...e.pos };
+  e.pos = { x: run.origin.x + localX, y: baseY - drop * segT, z: run.origin.z + localZ };
+  ctx.rebucket(e);
 }
 
 // Authoritative per-tick position detection for every live player. Standing on a
@@ -196,6 +324,12 @@ function detectPlayers(ctx: SimContext, run: GauntletRun, trial: GauntletSpanSta
     const ps = run.playerStates.get(c.entityId);
     const e = ctx.entities.get(c.entityId);
     if (!ps || !e || ps.spectating || ps.finishedAt !== null) continue;
+    // Foot-contact detection: resolve only the panel the player is STANDING on.
+    // While airborne (a jump), no panel is chosen yet, so a diagonal hop clears
+    // the gap and lands on the far panel instead of being "caught" in mid-air
+    // over the gap. The step resolves on the landing tick (physics sets onGround
+    // before this trial driver runs in the same tick).
+    if (!e.onGround) continue;
     const lx = e.pos.x - run.origin.x;
     const lz = e.pos.z - run.origin.z;
     if (lz >= fieldEnd) {

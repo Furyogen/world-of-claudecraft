@@ -606,6 +606,7 @@ function dynamicFields(e: Entity): Record<string, unknown> {
   };
   if (e.dead) out.dead = 1;
   if (e.ghost) out.gh = 1; // released spirit (ghost form); renders translucent
+  if (e.spectator) out.spec = 1; // free-roaming Gauntlet spectator; renders faint to others
   if (e.lootable) out.loot = 1;
   if (e.hostile) out.h = 1;
   // The target frame's resource bar: type + current/max, sent only for entities
@@ -3338,11 +3339,28 @@ export class GameServer {
         sim.delveRiteChoose(msg.intensity, pid);
         break;
       }
-      // The Gauntlet: both are bare commands (no payload fields to validate);
-      // the sim gates everything (event window, recruiter radius, dead, run
-      // membership) and resolves every outcome.
+      // The Gauntlet: all bare commands (no payload fields to validate); the sim
+      // gates everything (event window, recruiter radius, dead, run/queue/spectate
+      // membership) and resolves every outcome. gauntlet_join is the instant
+      // walk-up path; queue/spectate/practice/rejoin are the three player modes.
       case 'gauntlet_join': {
         sim.gauntletJoin(pid);
+        break;
+      }
+      case 'gauntlet_queue_join': {
+        sim.gauntletQueueJoin(pid);
+        break;
+      }
+      case 'gauntlet_spectate': {
+        sim.gauntletSpectate(pid);
+        break;
+      }
+      case 'gauntlet_practice': {
+        sim.gauntletPractice(pid);
+        break;
+      }
+      case 'gauntlet_rejoin': {
+        sim.gauntletRejoin(pid);
         break;
       }
       case 'gauntlet_leave': {
@@ -3370,10 +3388,6 @@ export class GameServer {
         const stone = Number(msg.stone);
         if (!Number.isInteger(stone) || stone < 0 || stone > 7) break;
         sim.gauntletEcho(stone, pid);
-        break;
-      }
-      case 'gauntlet_court': {
-        sim.gauntletCourt(pid);
         break;
       }
       case 'delve_buy': {
@@ -3718,6 +3732,11 @@ export class GameServer {
     // `gauntletRun` (see TERSE_TO_IWORLD/ALL_DELTA_KEYS in tests/snapshots.test.ts).
     maybe('gopen', this.sim.gauntletEventOpen);
     maybe('grun', this.sim.gauntletRunWire(anchorSession.pid));
+    // The viewer's rolling-queue place (0 = not queued) and free-spectator flag,
+    // both scalars that change rarely, so maybe() elides quiet ticks. Wire keys
+    // `gq`/`gsp`, IWorld `gauntletQueuePosition`/`gauntletSpectating`.
+    maybe('gq', this.sim.gauntletQueuePositionOf(anchorSession.pid));
+    maybe('gsp', this.sim.gauntletSpectatingOf(anchorSession.pid));
     // stats + weapon stay per-tick: recalcPlayerStats re-derives them on every
     // stat-affecting aura gain/loss (Bear/Cat Form, shouts, debuffs, elixir
     // wear-off, a buff cast on you by someone else), none of which mark this

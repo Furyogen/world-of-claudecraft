@@ -13,10 +13,14 @@
 // podium, and the spectators' deck. West of the field, the five sealed arenas
 // of the future trials (etching pavilion, rope lane, echo courtyard, the
 // raised brittle span, the champions' ring), each barred until its trial
-// ships. Everything is procedural geometry + canvas textures except a handful
-// of CC0 GLB set pieces (banners, torches, pillars, arches), which are
-// measured at build time and normalized to a target height so kit scale never
-// surprises us.
+// ships. The gameplay-load-bearing geometry (the field lines, the sigil slab,
+// the tug rope, the echo rune stones, the span glass, the signal lamps) is
+// procedural so it sits at the sim's exact numbers, but the DRESSING is real
+// CC0 GLB kit set pieces (banners, torches, pillars, arches, barrels, crates,
+// kegs, hay, benches, market stalls, tents, campfires, statues, and the gilded
+// prize hoard on the podium), each measured at build time and normalized to a
+// target height so kit scale never surprises us. The result reads as a
+// lived-in festival ground, not boxes on sand.
 //
 // The venue is STATIC dressing: built once per slot on approach (the hodrics
 // idiom, no teardown), with a tiny per-frame update for the light-reactive
@@ -24,7 +28,15 @@
 // run is live the Warden idles and the lamps hold a low amber.
 
 import * as THREE from 'three';
-import { GAUNTLET, GAUNTLET_LAYOUT, GAUNTLET_VENUE, sigilRingAngle } from '../sim/content/gauntlet';
+import {
+  ECHO_MAT_GAP,
+  ECHO_STATIONS,
+  echoStation,
+  GAUNTLET,
+  GAUNTLET_LAYOUT,
+  GAUNTLET_VENUE,
+  sigilRingAngle,
+} from '../sim/content/gauntlet';
 import { sigilOutline } from '../sim/gauntlet/sigil_shapes';
 import type { GauntletRunView } from '../sim/types';
 import { loadGltf } from './assets/loader';
@@ -45,6 +57,29 @@ const VENUE_MODELS = {
   bannerWhite: 'models/dungeon/banner_patterna_white.glb',
   bannerGreen: 'models/dungeon/banner_patterna_green.glb',
   bannerYellow: 'models/dungeon/banner_patterna_yellow.glb',
+  // Festival dressing (crowd clutter, seating, the prize hoard, set pieces).
+  barrelLarge: 'models/dungeon/barrel_large.glb',
+  barrelSmall: 'models/dungeon/barrel_small.glb',
+  keg: 'models/dungeon/keg.glb',
+  crate: 'models/dungeon/crate_large.glb',
+  crates: 'models/dungeon/crates_stacked.glb',
+  rocks: 'models/dungeon/rocks.glb',
+  rocksSmall: 'models/dungeon/rocks_small.glb',
+  boulder: 'models/biome/desert_boulder_1.glb',
+  bench: 'models/dungeon/bench.glb',
+  haybale: 'models/dungeon/haybale.glb',
+  goldChest: 'models/dungeon/chest_large_gold.glb',
+  coinStack: 'models/dungeon/coin_stack_large.glb',
+  coinStackSmall: 'models/dungeon/coin_stack_medium.glb',
+  gemsPile: 'models/resources/gems_pile_large.glb',
+  lantern: 'models/dungeon/lantern_standing.glb',
+  bonfire: 'models/props/bonfire.glb',
+  marketStand: 'models/props/market_stand_1.glb',
+  marketStand2: 'models/props/market_stand_2.glb',
+  tent: 'models/props/tent_open.glb',
+  statueHead: 'models/props/statue_head.glb',
+  statueBlock: 'models/props/statue_block.glb',
+  signpost: 'models/biome/camp_signpost.glb',
 } as const;
 
 type VenueModelKey = keyof typeof VENUE_MODELS;
@@ -207,6 +242,56 @@ function runeTex(): THREE.CanvasTexture {
       const r0 = 30 + rnd() * 80;
       ctx.beginPath();
       ctx.arc(128, 128, r0, a0, a0 + 0.5 + rnd());
+      ctx.stroke();
+    }
+  });
+}
+
+// Churned, trodden dirt for the pull lane: brown with darker scuffs and
+// hollows where the teams have dug in.
+function dirtTex(): THREE.CanvasTexture {
+  return canvasTex('gauntletDirt', (ctx) => {
+    ctx.fillStyle = '#6b4f33';
+    ctx.fillRect(0, 0, 256, 256);
+    for (let i = 0; i < 1300; i++) {
+      const shade = rnd();
+      ctx.fillStyle =
+        shade < 0.4
+          ? 'rgba(40,26,14,0.30)'
+          : shade < 0.72
+            ? 'rgba(120,92,58,0.26)'
+            : 'rgba(156,126,84,0.22)';
+      ctx.fillRect(rnd() * 256, rnd() * 256, 0.6 + rnd() * 2.4, 0.6 + rnd() * 2.4);
+    }
+    for (let i = 0; i < 24; i++) {
+      ctx.fillStyle = 'rgba(28,18,10,0.30)';
+      ctx.beginPath();
+      ctx.ellipse(
+        rnd() * 256,
+        rnd() * 256,
+        5 + rnd() * 10,
+        3 + rnd() * 6,
+        rnd() * Math.PI,
+        0,
+        Math.PI * 2,
+      );
+      ctx.fill();
+    }
+  });
+}
+
+// Twisted hemp rope: diagonal light/dark strands so a thick cylinder reads as a
+// braided rope rather than a smooth bar.
+function ropeTex(): THREE.CanvasTexture {
+  return canvasTex('gauntletRope', (ctx) => {
+    ctx.fillStyle = '#9c7f52';
+    ctx.fillRect(0, 0, 256, 256);
+    ctx.lineWidth = 11;
+    for (let i = -8; i < 26; i++) {
+      ctx.strokeStyle = i % 2 === 0 ? 'rgba(70,52,30,0.6)' : 'rgba(198,170,122,0.55)';
+      ctx.beginPath();
+      ctx.moveTo(i * 20, -20);
+      ctx.lineTo(i * 20 + 96, 276);
       ctx.stroke();
     }
   });
@@ -464,6 +549,11 @@ function buildField(group: THREE.Group): WardenRig {
     }
     spans.push({ x0: side * (V.standX + 1), x1: side * (V.standX + 11), y: 6.6, z: z0 });
     spans.push({ x0: side * (V.standX + 1), x1: side * (V.standX + 11), y: 6.6, z: z1 });
+    // A knot of crowd clutter at the rail foot of each stand segment: hay to
+    // perch on and a crate left lying at the front.
+    const footX = side * (V.standX - 0.6);
+    placeProp(group, 'haybale', footX, 0, mid - 3, side * 0.4, 1.1);
+    placeProp(group, 'crate', footX, 0, mid + 3, 0.5, 1.2);
   }
   // A string across the start and the finish carries the festival into the field.
   spans.push({ x0: -halfW - 2, x1: halfW + 2, y: 7.4, z: -2 });
@@ -475,6 +565,10 @@ function buildField(group: THREE.Group): WardenRig {
     placeProp(group, 'torchLit', -(halfW + 2.6), 0, z, Math.PI / 2, 2.2);
     placeProp(group, 'torchLit', halfW + 2.6, 0, z, -Math.PI / 2, 2.2);
   }
+  // Two bonfires frame the mouth of the field where the runners break from the
+  // start line.
+  placeProp(group, 'bonfire', -(halfW + 3.6), 0, -1, 0, 2.2);
+  placeProp(group, 'bonfire', halfW + 3.6, 0, -1, 0, 2.2);
 
   // Dynamic-signal materials: OWN instances (never surfaceMat: its cache
   // dedupes by options, and recoloring a shared material would repaint every
@@ -546,9 +640,12 @@ function buildField(group: THREE.Group): WardenRig {
   warden.add(headGroup);
   group.add(warden);
 
-  // Braziers ring the warden's pedestal.
+  // Braziers ring the warden's pedestal, and two stone idols keep the watch
+  // beside it (the braziers still breathe with the signal light).
   brazier(group, -7, wz - 1, lampMat);
   brazier(group, 7, wz - 1, lampMat);
+  placeProp(group, 'statueBlock', -12, 0, wz - 1, Math.PI, 4.6);
+  placeProp(group, 'statueBlock', 12, 0, wz - 1, Math.PI, 4.6);
 
   return { headGroup, lampMat, eyeMat };
 }
@@ -576,21 +673,46 @@ function buildStaging(group: THREE.Group) {
     );
     placeProp(group, 'torchLit', side * 5.2, 0, -2.2, side > 0 ? -Math.PI / 2 : Math.PI / 2, 2.2);
   }
+  // A ring of festival stalls, a signpost, and stacked goods frame the plaza
+  // just outside the contestants' line-up (stagingHalfWidth), so the muster
+  // ground reads as a fairground gate, not bare pavement.
+  const sw = GAUNTLET_LAYOUT.stagingHalfWidth;
+  const sz = GAUNTLET_LAYOUT.stagingZ;
+  placeProp(group, 'marketStand', -(sw + 3.2), 0, sz + 2.5, Math.PI / 2, 3);
+  placeProp(group, 'marketStand2', sw + 3.2, 0, sz + 2.5, -Math.PI / 2, 3);
+  placeProp(group, 'tent', -(sw + 4), 0, sz - 5, Math.PI / 2, 3.2);
+  placeProp(group, 'signpost', sw + 1.5, 0, sz - 5.5, -0.6, 2);
+  placeProp(group, 'barrelLarge', -(sw + 1.5), 0, sz - 3.5, 0, 1.05);
+  placeProp(group, 'crate', sw + 2, 0, sz - 2.5, 0.4, 1.2);
+  placeProp(group, 'keg', sw + 1.2, 0, sz - 3.4, -0.5, 0.82);
 }
 
 // Stage: the podium, three steps behind the plaza.
 function buildPodium(group: THREE.Group, lampMat: THREE.MeshStandardMaterial) {
-  const z = GAUNTLET_LAYOUT.podiumZ - 4;
+  const P = GAUNTLET_LAYOUT.podium;
+  const z = P.z;
   const base = stoneMat(STONE_DARK);
-  box(group, 12, 0.5, 6, 0, 0.25, z, base);
-  box(group, 3.2, 1.5, 3.2, 0, 1.25, z, stoneMat(GOLD));
-  box(group, 3.2, 1.0, 3.2, -3.6, 1.0, z, stoneMat(SILVER));
-  box(group, 3.2, 0.7, 3.2, 3.6, 0.85, z, stoneMat(BRONZE));
+  box(group, 12, P.baseH, 6, 0, P.baseH / 2, z, base);
+  // The three winners' steps: gold centre, silver, bronze. Each box sits on the
+  // base slab (centre = baseH + h/2), so its top is the stand-on height the sim
+  // seats a champion at (gauntlet/podium.ts reads the same anchors).
+  const stepMats = [GOLD, SILVER, BRONZE];
+  for (let i = 0; i < P.steps.length; i++) {
+    const s = P.steps[i];
+    box(group, 3.2, s.h, 3.2, s.x, P.baseH + s.h / 2, z, stoneMat(stepMats[i]));
+  }
   const cloth = surfaceMat({ color: 0xffffff, map: clothTex(), roughness: 0.85 });
   bannerPole(group, -5.4, z - 3.4, 0, cloth);
   bannerPole(group, 5.4, z - 3.4, 0, cloth);
   brazier(group, -5.4, z + 2.6, lampMat);
   brazier(group, 5.4, z + 2.6, lampMat);
+  // The prize hoard: the event's gilded pot heaped behind the podium as the
+  // ceremony backdrop (a big gold chest flanked by coin stacks and loose gems).
+  placeProp(group, 'goldChest', 0, 0, z - 3.6, 0, 1.7);
+  placeProp(group, 'coinStack', -2.4, 0, z - 3.3, 0.5, 0.95);
+  placeProp(group, 'coinStack', 2.4, 0, z - 3.3, -0.5, 0.95);
+  placeProp(group, 'gemsPile', -1.2, 0, z - 2.5, 0.2, 0.5);
+  placeProp(group, 'coinStackSmall', 1.4, 0, z - 2.6, 0.9, 0.6);
 }
 
 // Stage: the spectators' terrace, sunk into the gap in the east grandstand.
@@ -612,8 +734,14 @@ function buildSpectatorDeck(group: THREE.Group) {
   rail.rotation.x = Math.PI / 2;
   rail.position.set(railX, 1.2, z);
   group.add(rail);
-  box(group, 1.2, 0.45, 8, x + 5, 0.55, z - 6, wood);
-  box(group, 1.2, 0.45, 8, x + 5, 0.55, z + 6, wood);
+  // Two rows of kit benches face the rail (the field the spectators just left),
+  // with a refreshment stall and a keg at the back of the terrace.
+  for (let i = -1; i <= 1; i++) {
+    placeProp(group, 'bench', x + 2.6, 0, z + i * 6.5, -Math.PI / 2, 0.7);
+    placeProp(group, 'bench', x + 5.2, 0, z + i * 6.5, -Math.PI / 2, 0.7);
+  }
+  placeProp(group, 'marketStand', x + 6.4, 0, z, -Math.PI / 2, 3);
+  placeProp(group, 'keg', x + 6.2, 0, z - 8.5, 0.4, 0.82);
   placeProp(group, 'torchLit', x, 0, z - 10.4, Math.PI, 2.2);
   placeProp(group, 'torchLit', x, 0, z + 10.4, 0, 2.2);
 }
@@ -715,6 +843,10 @@ interface SigilRig {
   tracedMat: THREE.Material;
   paleMat: THREE.Material;
   thinMat: THREE.Material;
+  // The flat translucent fill of the etched shape (a ShapeGeometry of the shared
+  // SVG outline laid on the slab), rebuilt per shape and disposed on clear.
+  reliefMat: THREE.Material;
+  relief: THREE.Mesh | null;
   outlineGroup: THREE.Group;
   segs: THREE.Mesh[];
   segThin: boolean[];
@@ -733,14 +865,11 @@ interface SigilRig {
 // The Great Pull rig: the rope IS the meter. Both teams stand ON the rope
 // (the sim seats and drags them), so the whole hand-height rope translates
 // with the ABSOLUTE wire marker (+ = team 0 winning = hauled toward -x), the
-// judge's knot marking its center. The drum by the pit is dressing now (the
-// input is the screen-space shrinking circles): it thumps once as the
-// viewer's circle spawns.
+// judge's knot marking its center. The input is the screen-space shrinking
+// circles, so the lane carries no separate beat prop.
 interface PullRig {
   knot: THREE.Group;
   rope: THREE.Mesh;
-  drum: THREE.Group;
-  drumSkinMat: THREE.MeshStandardMaterial;
   centerX: number;
   centerZ: number;
 }
@@ -756,6 +885,10 @@ interface EchoRig {
   stoneMats: THREE.MeshStandardMaterial[];
   pickList: { id: string; object: THREE.Object3D }[];
   baseZ: number; // the courtyard center row (instance-local)
+  // One cosmetic desk per grid station (see echoStation): static dressing so
+  // every seated contestant has a desk. The one the viewer sits at is hidden
+  // for the trial while the live rig (root) takes its place.
+  desks: { group: THREE.Group; deskX: number; deskZ: number }[];
 }
 
 // The echo stones' idle/flash emissive levels.
@@ -769,12 +902,9 @@ const ECHO_FLASH_DUTY = 0.72;
 const ECHO_JUDGE_S = 0.4;
 const ECHO_JUDGE_FLASH = 2.6;
 
-// The drum's flash length as the viewer's circle spawns, seconds.
-const DRUM_FLASH_S = 0.12;
-
 // Outline tint granularity: the polyline is grouped into this many tube
 // segments, tinted gold per the wire's coveredMask bits (one bit per segment;
-// freedraw is order-free, so segments light wherever the stroke has carved).
+// segments light along the contiguous arc the stroke has traced).
 const SIGIL_SEGMENTS = 24;
 // The freedraw stroke trail's FIFO capacity (points).
 const SIGIL_TRAIL_MAX = 64;
@@ -828,8 +958,22 @@ function buildSigilPavilion(group: THREE.Group, ox: number, oz: number): SigilRi
       a,
       4.8,
     );
+    // Standing lanterns between every other pillar light the etching ring.
+    if (i % 2 === 0) {
+      placeProp(
+        group,
+        'lantern',
+        x + Math.sin(a) * (radius + 2.7),
+        0,
+        z + Math.cos(a) * (radius + 2.7),
+        a,
+        1.5,
+      );
+    }
   }
   placeProp(group, 'bannerWhite', x, 3.2, z - radius - 1.4, 0, 2.2);
+  placeProp(group, 'crates', x - radius - 1.2, 0, z + radius - 1, 0.3, 1.5);
+  placeProp(group, 'barrelSmall', x + radius + 1.4, 0, z - radius + 1.5, -0.4, 0.7);
 
   // The interactive lectern at the pavilion center. Its face material is
   // venue-owned: the crack tint recolors it, and surfaceMat's cache would
@@ -859,7 +1003,23 @@ function buildSigilPavilion(group: THREE.Group, ox: number, oz: number): SigilRi
     emissiveIntensity: 0.6,
     roughness: 0.5,
   });
-  venueOwnedMats.push(faceMat, tracedMat, paleMat, thinMat);
+  // The flat sugarglass fill the outline traces around: a translucent amber pane
+  // laid on the slab (a ShapeGeometry of the shared SVG silhouette) so the shape
+  // reads as one form under the etched groove rather than a bare set of lines.
+  // DoubleSide + depthWrite off keeps the transparent pane artifact-free at any
+  // face tilt (placement-basis winding and slab z-fighting both stop mattering).
+  const reliefMat = new THREE.MeshStandardMaterial({
+    color: 0x6b4a1c,
+    emissive: 0xc98a2a,
+    emissiveIntensity: 0.28,
+    roughness: 0.3,
+    metalness: 0.05,
+    transparent: true,
+    opacity: 0.5,
+    side: THREE.DoubleSide,
+    depthWrite: false,
+  });
+  venueOwnedMats.push(faceMat, tracedMat, paleMat, thinMat, reliefMat);
   buildLectern(group, x, z, 0, faceMat);
 
   // The cosmetic lectern ring the NPC field mans during the trial (plain
@@ -900,7 +1060,7 @@ function buildSigilPavilion(group: THREE.Group, ox: number, oz: number): SigilRi
   const outlineGroup = new THREE.Group();
   group.add(outlineGroup);
   const mote = new THREE.Mesh(
-    new THREE.SphereGeometry(0.045, 8, 6),
+    new THREE.SphereGeometry(0.06, 10, 8),
     new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xffffff, emissiveIntensity: 2 }),
   );
   venueOwnedMats.push(mote.material as THREE.Material);
@@ -932,6 +1092,8 @@ function buildSigilPavilion(group: THREE.Group, ox: number, oz: number): SigilRi
     tracedMat,
     paleMat,
     thinMat,
+    reliefMat,
+    relief: null,
     outlineGroup,
     segs: [],
     segThin: [],
@@ -955,7 +1117,7 @@ function pushSigilStrokePoint(rig: SigilRig, u: number, v: number): void {
     .copy(rig.faceCenter)
     .addScaledVector(rig.uDir, (u * 2 - 1) * half)
     .addScaledVector(rig.vDir, (v * 2 - 1) * half)
-    .addScaledVector(rig.normal, 0.06);
+    .addScaledVector(rig.normal, 0.11); // above the raised relief + groove
   const arr = rig.strokePos.array as Float32Array;
   if (rig.strokeLen >= SIGIL_TRAIL_MAX) {
     arr.copyWithin(0, 3);
@@ -984,12 +1146,27 @@ function clearSigilOutline(rig: SigilRig): void {
   }
   rig.segs.length = 0;
   rig.segThin.length = 0;
+  if (rig.relief) {
+    rig.outlineGroup.remove(rig.relief);
+    rig.relief.geometry.dispose();
+    rig.relief = null;
+  }
 }
 
-// Rebuild the etched outline for a fresh shape (seed/id change): ~24 tube
-// segments along the shared deterministic sigilOutline polyline, mapped onto
-// the slab face through the SAME pad inset the trace input uses. Event-driven
-// (shape changes on shatter/advance), never per frame.
+// The etched groove is a thin guide line the player must hug: its tube radius is
+// a fraction of the sim's accept band (a shape-local tolerance maps to face
+// yards by 2*inner*etchHalf), so what shows reads as a fine line and the tight
+// band, not a fat line, sets the difficulty. The flat fill sits just under the
+// groove so the shape reads as one form, not a bare set of lines.
+const SIGIL_GROOVE_BAND_FRAC = 0.55;
+const SIGIL_FILL_LIFT = 0.02; // the flat fill's clearance off the slab face
+const SIGIL_GROOVE_LIFT = 0.045; // the groove tubes sit just above the fill
+
+// Rebuild the etched shape for a fresh seed/id: a FLAT translucent fill of the
+// SVG silhouette laid on the slab, ringed by ~24 tube segments (tinted per the
+// coverage mask) that form the groove the player traces. Both are mapped onto the
+// slab face through the SAME pad inset the trace input uses. Event-driven (shape
+// changes on shatter/advance), never per frame.
 function rebuildSigilOutline(rig: SigilRig, seed: number, shapeId: number): void {
   clearSigilOutline(rig);
   const slab = GAUNTLET_VENUE.sigils.slab;
@@ -997,12 +1174,46 @@ function rebuildSigilOutline(rig: SigilRig, seed: number, shapeId: number): void
   const n = o.xs.length;
   const per = Math.max(1, Math.floor(n / SIGIL_SEGMENTS));
   const inner = 1 - 2 * slab.padFrac;
+  // Shape-local (sx, sy) in 0..1 -> face offsets (across = vDir, down-slope =
+  // uDir) through the shared inset. Shared by the groove tubes and the fill.
+  const faceU = (sy: number): number => ((slab.padFrac + sy * inner) * 2 - 1) * slab.etchHalf;
+  const faceV = (sx: number): number => ((slab.padFrac + sx * inner) * 2 - 1) * slab.etchHalf;
   const toLocal = (sx: number, sy: number): THREE.Vector3 =>
     new THREE.Vector3()
       .copy(rig.faceCenter)
-      .addScaledVector(rig.uDir, ((slab.padFrac + sy * inner) * 2 - 1) * slab.etchHalf)
-      .addScaledVector(rig.vDir, ((slab.padFrac + sx * inner) * 2 - 1) * slab.etchHalf)
-      .addScaledVector(rig.normal, 0.02);
+      .addScaledVector(rig.uDir, faceU(sy))
+      .addScaledVector(rig.vDir, faceV(sx))
+      .addScaledVector(rig.normal, SIGIL_GROOVE_LIFT);
+
+  // The flat silhouette: a THREE.Shape in the face plane (X = across = vDir, Y =
+  // down-slope = uDir), triangulated by ShapeGeometry and laid FLAT on the slab
+  // face as a translucent pane. The fill material is DoubleSide + depthWrite off,
+  // so the winding of the (left-handed) placement basis is irrelevant and the
+  // transparent pane never z-fights the slab behind it.
+  const shape = new THREE.Shape();
+  for (let i = 0; i < n; i++) {
+    const px = faceV(o.xs[i]);
+    const py = faceU(o.ys[i]);
+    if (i === 0) shape.moveTo(px, py);
+    else shape.lineTo(px, py);
+  }
+  shape.closePath();
+  const fillGeo = new THREE.ShapeGeometry(shape);
+  // Orient the fill's local axes (X, Y) onto (vDir, uDir) at the face center,
+  // lifted a hair off the slab so it sits just under the groove tubes.
+  const basis = new THREE.Matrix4().makeBasis(rig.vDir, rig.uDir, rig.normal);
+  basis.setPosition(
+    rig.faceCenter.x + rig.normal.x * SIGIL_FILL_LIFT,
+    rig.faceCenter.y + rig.normal.y * SIGIL_FILL_LIFT,
+    rig.faceCenter.z + rig.normal.z * SIGIL_FILL_LIFT,
+  );
+  fillGeo.applyMatrix4(basis);
+  const relief = new THREE.Mesh(fillGeo, rig.reliefMat);
+  relief.castShadow = false;
+  rig.outlineGroup.add(relief);
+  rig.relief = relief;
+
+  const tubeRadius = GAUNTLET.sigils.tolerance * 2 * inner * slab.etchHalf * SIGIL_GROOVE_BAND_FRAC;
   for (let s = 0; s < SIGIL_SEGMENTS; s++) {
     const pts: THREE.Vector3[] = [];
     let thin = false;
@@ -1011,9 +1222,7 @@ function rebuildSigilOutline(rig: SigilRig, seed: number, shapeId: number): void
       pts.push(toLocal(o.xs[i], o.ys[i]));
       if (o.thin[i]) thin = true;
     }
-    // Radius sized so the visible line reads close to the sim's tolerance
-    // band rather than suggesting a hairline the scoring never demands.
-    const geo = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 6, 0.035, 5, false);
+    const geo = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 6, tubeRadius, 6, false);
     const mesh = new THREE.Mesh(geo, rig.paleMat);
     rig.outlineGroup.add(mesh);
     rig.segs.push(mesh);
@@ -1053,6 +1262,17 @@ function buildTrialArenas(
       z,
       surfaceMat({ color: 0xc7b58c, map: texWithRepeat(sandTex(), 5, 2), roughness: 0.95 }),
     );
+    // A churned dirt strip worn down the middle where the teams dig in, laid
+    // just over the sand so the lane reads as trodden ground, not clean sand.
+    groundPlane(
+      group,
+      length + 6,
+      width - 1,
+      x,
+      0.03,
+      z,
+      surfaceMat({ color: 0x7a5c3a, map: texWithRepeat(dirtTex(), 6, 2), roughness: 1 }),
+    );
     // The pit: a flush dark mouth with a low stone lip.
     groundPlane(
       group,
@@ -1079,13 +1299,25 @@ function buildTrialArenas(
       stake.castShadow = true;
       group.add(stake);
     }
-    // The rope: one hand-height line the teams hold; it slides through the
-    // pit rather than stretching, translated per frame with the marker.
-    const ropeMat = surfaceMat({ color: 0xa8895e, roughness: 1 });
-    const rope = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, length, 6), ropeMat);
+    // The rope: a thick braided hemp line the teams hold; it slides through the
+    // pit rather than stretching, translated per frame with the marker. The
+    // twist texture and the bound (whipped) ends make it read as a real rope
+    // rather than a smooth bar. Whipping bands are children so they ride with it.
+    const ropeMat = surfaceMat({
+      color: 0xb59463,
+      map: texWithRepeat(ropeTex(), 1, Math.round(length)),
+      roughness: 1,
+    });
+    const rope = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, length, 8), ropeMat);
     rope.rotation.z = Math.PI / 2;
     rope.position.set(x, ropeY, z);
     rope.castShadow = true;
+    const whipMat = stoneMat(0x3a2a18);
+    for (const end of [-1, 1]) {
+      const whip = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 0.26, 8), whipMat);
+      whip.position.y = end * (length / 2 - 0.4); // local Y runs along the rope
+      rope.add(whip);
+    }
     group.add(rope);
     // The knot: a wrapped coil with the judge's red streamer hanging under it,
     // riding the rope's center.
@@ -1100,31 +1332,48 @@ function buildTrialArenas(
     knot.add(streamer);
     knot.position.set(x, ropeY, z);
     group.add(knot);
-    // The beat drum south of the pit: wooden shell, glowing skin.
-    const drum = new THREE.Group();
-    drum.position.set(x, 0.5, z + pitHalfZ + 2.8);
-    const shell = new THREE.Mesh(new THREE.CylinderGeometry(0.85, 0.95, 1.1, 12), stoneMat(WOOD));
-    shell.position.y = 0.55;
-    shell.castShadow = true;
-    drum.add(shell);
-    const drumSkinMat = new THREE.MeshStandardMaterial({
-      color: 0xe8dcc2,
-      emissive: GOLD,
-      emissiveIntensity: 0.35,
-      roughness: 0.7,
-    });
-    venueOwnedMats.push(drumSkinMat);
-    const skin = new THREE.Mesh(new THREE.CylinderGeometry(0.82, 0.82, 0.08, 12), drumSkinMat);
-    skin.position.y = 1.14;
-    drum.add(skin);
-    group.add(drum);
-    placeProp(group, 'bannerRed', x, 3.2, z + width / 2 + 1.6, Math.PI, 2.2);
-    return { knot, rope, drum, drumSkinMat, centerX: x, centerZ: z };
+    // Dressing so the arena reads as a used, lived-in tug ground: low dug-in
+    // dirt mounds where the teams brace, loose kit rocks and hay along the
+    // sidelines, waiting barrels and a crate stack off the west end, and pitch
+    // torches at the corners.
+    const moundMat = surfaceMat({ color: 0x6f5236, map: dirtTex(), roughness: 1 });
+    const moundSpots: [number, number, number][] = [
+      [-length / 2 + 1, width / 2 + 1.4, 0.9],
+      [length / 2 - 2, -width / 2 - 1.2, 1.1],
+      [-2, -width / 2 - 1.7, 0.7],
+      [4, width / 2 + 1.8, 0.85],
+    ];
+    for (const [dx, dz, r] of moundSpots) {
+      const mound = new THREE.Mesh(new THREE.SphereGeometry(r, 8, 6), moundMat);
+      mound.scale.y = 0.4;
+      mound.position.set(x + dx, 0.06, z + dz);
+      mound.castShadow = true;
+      group.add(mound);
+    }
+    const pullRockKeys = ['rocksSmall', 'rocks', 'boulder'] as const;
+    for (let i = 0; i < 6; i++) {
+      const rx = x - length / 2 + 2 + (i * (length - 4)) / 5;
+      const rz = z + (i % 2 === 0 ? 1 : -1) * (width / 2 + 0.9 + (i % 3) * 0.35);
+      placeProp(group, pullRockKeys[i % 3], rx, 0, rz, i * 1.1, 0.62 + (i % 3) * 0.22);
+    }
+    placeProp(group, 'haybale', x - length / 2 + 3, 0, z - width / 2 - 2.2, 0.4, 1.1);
+    placeProp(group, 'haybale', x + length / 2 - 4, 0, z + width / 2 + 2.4, -0.7, 1.1);
+    for (const side of [-1, 1]) {
+      const rot = side > 0 ? -Math.PI / 2 : Math.PI / 2;
+      placeProp(group, 'torchLit', x + side * (length / 2 + 2.2), 0, z - width / 2 - 1, rot, 2.4);
+      placeProp(group, 'torchLit', x + side * (length / 2 + 2.2), 0, z + width / 2 + 1, rot, 2.4);
+    }
+    placeProp(group, 'barrelLarge', x - length / 2 - 1.4, 0, z + width / 2 + 2.3, 0, 1.05);
+    placeProp(group, 'keg', x - length / 2 - 0.3, 0, z + width / 2 + 2.7, 0.6, 0.82);
+    placeProp(group, 'crates', x - length / 2 - 1.8, 0, z - width / 2 - 2.4, -0.3, 1.5);
+    return { knot, rope, centerX: x, centerZ: z };
   })();
 
-  // Trial 4, the Keeper's Echo: a walled courtyard; the live rig is a low
-  // stone table with four floating rune stones, anchored to the viewer's own
-  // row. The stones flash the wire sequence and are the click targets.
+  // Trial 4, the Keeper's Echo: a walled courtyard of rune-stone desks, one per
+  // contestant (echoStation). Every desk is a low stone table with four floating
+  // rune stones; the cosmetic desks are static dressing, and the viewer's own is
+  // taken over by the live rig, which flashes the wire sequence and is the click
+  // target.
   const echoRig: EchoRig = (() => {
     const { x, z, size } = V.echo;
     groundPlane(
@@ -1140,37 +1389,62 @@ function buildTrialArenas(
     box(group, size, 1.6, 0.7, x, 0.8, z - size / 2, wall);
     box(group, size, 1.6, 0.7, x, 0.8, z + size / 2, wall);
     box(group, 0.7, 1.6, size, x - size / 2, 0.8, z, wall);
-    const mat = box(
-      group,
-      2.6,
-      0.12,
-      2.6,
-      x - 3.2,
-      0.12,
-      z,
-      surfaceMat({ color: PURPLE, roughness: 0.9 }),
-    );
-    mat.rotation.y = Math.PI / 4;
     placeProp(group, 'bannerGreen', x, 3.2, z + size / 2 - 0.4, Math.PI, 2.2);
+    // Corner lanterns and a back-wall crate stack (kept in the corners, clear
+    // of the desk grid and the contestants' mats along the west edge).
+    placeProp(group, 'lantern', x - size / 2 + 1.1, 0, z - size / 2 + 1.1, 0.8, 1.6);
+    placeProp(group, 'lantern', x - size / 2 + 1.1, 0, z + size / 2 - 1.1, -0.8, 1.6);
+    placeProp(group, 'crates', x + size / 2 - 1.6, 0, z + size / 2 - 1.6, 0.3, 1.5);
 
-    // The live rig, all children local to a root the update loop re-anchors to
-    // the viewer's row when their trial opens.
+    // Desk geometry: a table plus four rune stones in a row, one desk local
+    // origin (a mat-gap east of where a contestant stands). One box + one sphere
+    // geometry are shared across every desk (geometry.dispose is idempotent).
+    const tableGeo = new THREE.BoxGeometry(1.6, 0.9, 3.4);
+    const orbGeo = new THREE.SphereGeometry(0.26, 12, 10);
+    const orbLocalZ = (k: number) => -1.35 + k * 0.9;
+
+    // A cosmetic desk at each grid station: a table plus four idle rune stones
+    // (one shared dim material, they never flash), so every seated contestant
+    // has a desk. The viewer's own is hidden for the trial (the live rig takes
+    // its place); the rest stay lit as the hall of memory desks.
+    const deskOrbMat = new THREE.MeshStandardMaterial({
+      color: 0x2a3040,
+      emissive: GLASS_TINT,
+      emissiveIntensity: ECHO_IDLE,
+      roughness: 0.35,
+    });
+    venueOwnedMats.push(deskOrbMat);
+    const desks: { group: THREE.Group; deskX: number; deskZ: number }[] = [];
+    for (let i = 0; i < ECHO_STATIONS; i++) {
+      const st = echoStation(i);
+      const dg = new THREE.Group();
+      dg.position.set(st.deskX, 0, st.deskZ);
+      const dtable = new THREE.Mesh(tableGeo, stoneMat(STONE));
+      dtable.position.set(0.6, 0.45, 0);
+      dtable.castShadow = true;
+      dg.add(dtable);
+      for (let k = 0; k < GAUNTLET.echo.stones; k++) {
+        const orb = new THREE.Mesh(orbGeo, deskOrbMat);
+        orb.position.set(0.6, 1.35, orbLocalZ(k));
+        dg.add(orb);
+      }
+      group.add(dg);
+      desks.push({ group: dg, deskX: st.deskX, deskZ: st.deskZ });
+    }
+
+    // The live rig: hidden until the viewer's trial opens, then anchored onto
+    // (and replacing) the cosmetic desk the viewer sits at. Its four stones each
+    // carry their OWN material so a flash lights exactly one; they carry no
+    // numeral (you replay the sequence by clicking the orbs in the order they
+    // lit, not by index).
     const root = new THREE.Group();
     root.position.set(x, 0, z);
+    root.visible = false;
     group.add(root);
-    const table = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.9, 3.4), stoneMat(STONE));
+    const table = new THREE.Mesh(tableGeo, stoneMat(STONE));
     table.position.set(0.6, 0.45, 0);
     table.castShadow = true;
     root.add(table);
-    // Four rune stones in a row across the table, one dot to four dots, each
-    // with its OWN material so a flash lights exactly one.
-    const dotMat = new THREE.MeshStandardMaterial({
-      color: 0xf3ead2,
-      emissive: 0xf3ead2,
-      emissiveIntensity: 0.9,
-      roughness: 0.4,
-    });
-    venueOwnedMats.push(dotMat);
     const stones: THREE.Group[] = [];
     const stoneMats: THREE.MeshStandardMaterial[] = [];
     for (let k = 0; k < GAUNTLET.echo.stones; k++) {
@@ -1182,21 +1456,16 @@ function buildTrialArenas(
       });
       venueOwnedMats.push(m);
       const g2 = new THREE.Group();
-      g2.position.set(0.6, 1.35, -1.35 + k * 0.9);
-      const orb = new THREE.Mesh(new THREE.SphereGeometry(0.26, 12, 10), m);
+      g2.position.set(0.6, 1.35, orbLocalZ(k));
+      const orb = new THREE.Mesh(orbGeo, m);
       g2.add(orb);
-      for (let d = 0; d <= k; d++) {
-        const dot = new THREE.Mesh(new THREE.SphereGeometry(0.05, 8, 6), dotMat);
-        dot.position.set(-0.24, (d - k / 2) * 0.12, 0);
-        g2.add(dot);
-      }
       g2.visible = false;
       root.add(g2);
       stones.push(g2);
       stoneMats.push(m);
     }
     const pickList = stones.map((s, k) => ({ id: `echo:${k}`, object: s as THREE.Object3D }));
-    return { root, stones, stoneMats, pickList, baseZ: z };
+    return { root, stones, stoneMats, pickList, baseZ: z, desks };
   })();
 
   // Trial 5, The Brittle Span: paired panels over a dark pit, at ground level
@@ -1256,6 +1525,11 @@ function buildTrialArenas(
     placeProp(group, 'bannerWhite', x, 3.4, z - fieldLen / 2 - 3, 0, 2.4);
     placeProp(group, 'torchLit', x - sideX - 2.4, 0, zStart - 1.5, Math.PI / 2, 2.2);
     placeProp(group, 'torchLit', x + sideX + 2.4, 0, zStart - 1.5, -Math.PI / 2, 2.2);
+    // A signpost and stacked goods mark the crossing's near mouth, before the
+    // walk-on ramp (clear of the panels).
+    placeProp(group, 'signpost', x + sideX + 3, 0, z - fieldLen / 2 - 2.5, -0.5, 2);
+    placeProp(group, 'crates', x - sideX - 3, 0, z - fieldLen / 2 - 2.2, 0.4, 1.5);
+    placeProp(group, 'barrelLarge', x - sideX - 2.1, 0, z - fieldLen / 2 - 3.5, 0, 1.05);
     // Walk-on ramps at both crossing ends: the sim's ground skirt raises a
     // mover onto the deck over the same run, so what you climb is what you
     // see (venue_physics shares these numbers).
@@ -1274,50 +1548,66 @@ function buildTrialArenas(
     return { panels, unknownMat, safeMat, brittleMat };
   })();
 
-  // Trial 6, The Final Court: the duel lane (trial_court.ts geometry: entry
-  // line at -courtLength/2, neck line, head zone at the far end), painted like
-  // the crossing field.
+  // Trial 6, The Final Court: a circular melee arena. Fighters are clamped inside
+  // GAUNTLET.court.arenaRadius (trial_court.ts) so the low boundary curb reads as
+  // a real wall; a gold champion's medallion marks the centre and torches ring
+  // the rim.
   {
     const { x, z } = V.court;
-    const c = GAUNTLET.court;
-    const z0 = z - c.courtLength / 2;
-    groundPlane(
-      group,
-      c.courtHalfWidth * 2 + 4,
-      c.courtLength + 6,
-      x,
-      0.03,
-      z,
-      surfaceMat({ color: 0xc7b58c, map: texWithRepeat(sandTex(), 3, 5), roughness: 0.95 }),
+    const floorR = V.court.radius; // the dressed sand floor
+    const ringR = GAUNTLET.court.arenaRadius; // where the fighters are clamped
+    const floor = new THREE.Mesh(
+      new THREE.CylinderGeometry(floorR, floorR, 0.12, 48),
+      surfaceMat({ color: 0xc7b58c, map: texWithRepeat(sandTex(), 4, 4), roughness: 0.95 }),
     );
-    const lineMat = surfaceMat({ color: 0xf6f1e4, roughness: 0.8 });
-    for (const side of [-1, 1]) {
-      box(group, 0.35, 0.06, c.courtLength, x + side * c.courtHalfWidth, 0.06, z, lineMat);
-    }
-    box(group, c.courtHalfWidth * 2, 0.06, 0.35, x, 0.06, z0, lineMat);
-    box(group, c.courtHalfWidth * 2, 0.06, 0.35, x, 0.06, z0 + c.courtLength, lineMat);
-    // the neck: the attacker's movement penalty lifts past this line
-    box(group, c.courtHalfWidth * 2, 0.06, 0.2, x, 0.06, z0 + c.neckZ, lineMat);
-    const head = new THREE.Mesh(
-      new THREE.CylinderGeometry(2.2, 2.4, 0.18, 20),
+    floor.position.set(x, 0.06, z);
+    floor.receiveShadow = true;
+    group.add(floor);
+    // The boundary curb, a flat ring at the play radius.
+    const curb = new THREE.Mesh(
+      new THREE.TorusGeometry(ringR, 0.28, 8, 60),
+      surfaceMat({ color: 0xf6f1e4, roughness: 0.8 }),
+    );
+    curb.rotation.x = Math.PI / 2;
+    curb.position.set(x, 0.14, z);
+    curb.receiveShadow = true;
+    group.add(curb);
+    // The champion's medallion at the centre.
+    const medallion = new THREE.Mesh(
+      new THREE.CylinderGeometry(2.2, 2.4, 0.16, 24),
       surfaceMat({ color: GOLD, roughness: 0.6 }),
     );
-    head.position.set(x, 0.12, z0 + c.courtLength - 1.2);
-    head.receiveShadow = true;
-    group.add(head);
-    for (const side of [-1, 1]) {
-      placeProp(group, 'torchLit', x + side * (c.courtHalfWidth + 2), 0, z0 + 2, 0, 2.4);
+    medallion.position.set(x, 0.13, z);
+    medallion.receiveShadow = true;
+    group.add(medallion);
+    // Torches evenly around the rim, flanking idols, and a banner behind.
+    const torches = 8;
+    for (let i = 0; i < torches; i++) {
+      const a = (i / torches) * Math.PI * 2;
       placeProp(
         group,
         'torchLit',
-        x + side * (c.courtHalfWidth + 2),
+        x + Math.sin(a) * (floorR + 1.5),
         0,
-        z0 + c.courtLength - 2,
-        Math.PI,
+        z + Math.cos(a) * (floorR + 1.5),
+        a + Math.PI,
         2.4,
       );
     }
-    placeProp(group, 'bannerYellow', x, 3.2, z0 - 2, 0, 2.2);
+    for (const side of [-1, 1]) {
+      placeProp(
+        group,
+        'statueHead',
+        x + side * (floorR + 2.4),
+        0,
+        z,
+        side > 0 ? -Math.PI / 2 : Math.PI / 2,
+        2.8,
+      );
+    }
+    placeProp(group, 'bannerYellow', x, 3.2, z - floorR - 2, 0, 2.2);
+    placeProp(group, 'crates', x - floorR - 2.2, 0, z + floorR * 0.4, 0.3, 1.5);
+    placeProp(group, 'barrelLarge', x + floorR + 2.2, 0, z - floorR * 0.4, 0, 1.05);
   }
   return { spanRig, sigilRig, pullRig, echoRig };
 }
@@ -1382,7 +1672,14 @@ export async function buildGauntletVenue(
 
   // The dusk dome and its wide understory disc: the venue's own sky and
   // far-ground, so nothing past the apron ever reads as bare void. Both ignore
-  // scene fog (they ARE the horizon the fog fades into).
+  // scene fog (they ARE the horizon the fog fades into). The dome is a closed
+  // HEMISPHERE, not an open cylinder: it curves shut overhead so it reads as
+  // real sky instead of a surrounding wall. Its open bottom rim sits at ground
+  // level (y=0) and shares the understory disc's radius and center, so sky and
+  // far-ground meet on one horizon seam whatever way the camera faces. A
+  // hemisphere's UV v runs the full 0..1 from the zenith pole to that rim, the
+  // same span the old cylinder mapped top-to-bottom, so duskTex lands unchanged:
+  // deep violet at the pole down to the amber horizon at the rim.
   const domeMat = new THREE.MeshBasicMaterial({
     map: duskTex(),
     side: THREE.BackSide,
@@ -1390,8 +1687,11 @@ export async function buildGauntletVenue(
     depthWrite: false,
   });
   owned.push(domeMat);
-  const dome = new THREE.Mesh(new THREE.CylinderGeometry(235, 235, 130, 36, 1, true), domeMat);
-  dome.position.set(0, 40, 42);
+  const dome = new THREE.Mesh(
+    new THREE.SphereGeometry(235, 48, 24, 0, Math.PI * 2, 0, Math.PI / 2),
+    domeMat,
+  );
+  dome.position.set(0, 0, 42);
   group.add(dome);
   const understoryMat = new THREE.MeshBasicMaterial({ color: 0x8a744f, fog: false });
   owned.push(understoryMat);
@@ -1412,13 +1712,12 @@ export async function buildGauntletVenue(
   // (real per-frame CPU on thousands of prop nodes), then re-enable the
   // transform-animated children: the Warden's turning head, the sigil trace
   // mote (repositioned per stroke sample), and the pull rig's live pieces
-  // (rope halves, marker knot, pulsing drum).
+  // (the rope and the marker knot).
   freezeStaticMatrices(group);
   rig.headGroup.matrixAutoUpdate = true;
   sigilRig.mote.matrixAutoUpdate = true;
   pullRig.knot.matrixAutoUpdate = true;
   pullRig.rope.matrixAutoUpdate = true;
-  pullRig.drum.matrixAutoUpdate = true;
   echoRig.root.matrixAutoUpdate = true;
 
   let lastT = 0;
@@ -1435,10 +1734,12 @@ export async function buildGauntletVenue(
   let pullLayoutDue = true;
   // Echo rig state: show/anchor writes are elided on the composed round key,
   // the per-flash emissive on the step key; the rig anchors to the viewer's
-  // own table row once per trial (players sit at spread mats).
+  // own desk once per trial (every contestant sits at a grid station), and
+  // hiddenDesk is the cosmetic desk it replaced (restored when the trial ends).
   let lastEchoKey = 'unset';
   let lastEchoFlashKey = -2;
   let echoAnchored = false;
+  let hiddenDesk = -1;
   // The click-verdict flash (echoJudge): applied once when set, restored once
   // on expiry; the sequence-glow writer skips the judged stone while it holds.
   let echoJudgeState: { stone: number; ok: boolean; until: number; applied: boolean } | null = null;
@@ -1473,9 +1774,9 @@ export async function buildGauntletVenue(
         lastRevealed = revealed ? [...revealed] : [];
       }
       // The sigil slab: rebuild the etched outline on a fresh shape, tint the
-      // carved segments gold from the coverage mask (freedraw is order-free,
-      // so segments light wherever the stroke has carved), and lerp the face
-      // toward red with the crack. Every write is elided on a quantized key.
+      // carved segments gold from the coverage mask (they light along the
+      // contiguous arc the stroke has traced), and lerp the face toward red with
+      // the crack. Every write is elided on a quantized key.
       const sig = mine?.sigils ?? null;
       const shapeKey = sig ? `${sig.shapeSeed}:${sig.shapeId}` : '';
       if (shapeKey !== lastSigilShapeKey) {
@@ -1516,9 +1817,9 @@ export async function buildGauntletVenue(
       // The Great Pull: the rope rides the wire's `kx`, the SAME eased
       // translation the sim drags the gripping lines (and the players' pins)
       // by, so the rope and the pullers move as one body (a fast local ease
-      // only smooths the 0.05 wire quantization and the snapshot cadence).
-      // The drum is dressing, thumping once as the viewer's circle spawns
-      // (the input itself is the screen-space circle overlay).
+      // only smooths the 0.05 wire quantization and the snapshot cadence). The
+      // screen-space circle overlay is the only input cue; the lane has no beat
+      // prop of its own.
       const pull = mine?.pull ?? null;
       if (pull || pullLayoutDue) {
         const target = pull ? pull.kx : 0;
@@ -1527,15 +1828,6 @@ export async function buildGauntletVenue(
         const kx = pullRig.centerX + pullKnotX;
         pullRig.knot.position.x = kx;
         pullRig.rope.position.x = kx;
-        if (pull) {
-          const c = pull.circle;
-          const flash = c !== null && t >= c.spawnAt && t - c.spawnAt < DRUM_FLASH_S;
-          pullRig.drum.scale.setScalar(flash ? 1.12 : 1);
-          pullRig.drumSkinMat.emissiveIntensity = flash ? 1.9 : 0.35;
-        } else {
-          pullRig.drum.scale.setScalar(1);
-          pullRig.drumSkinMat.emissiveIntensity = 0.35;
-        }
         // Stay live while the trial runs or the knot is still easing home.
         pullLayoutDue = pull !== null || pullKnotX !== 0;
       }
@@ -1548,21 +1840,41 @@ export async function buildGauntletVenue(
         lastEchoKey = echoKey;
         lastEchoFlashKey = -2;
         if (!echo) {
-          echoAnchored = false;
+          // Trial over: retire the live rig and give the viewer's desk back.
+          if (echoAnchored) {
+            echoRig.root.visible = false;
+            if (hiddenDesk >= 0) echoRig.desks[hiddenDesk].group.visible = true;
+            hiddenDesk = -1;
+            echoAnchored = false;
+          }
           for (const s of echoRig.stones) s.visible = false;
         } else {
-          // Anchor once per trial: the sim seats the viewer at their own mat
-          // row, so their position IS the row (clamped into the courtyard).
-          if (!echoAnchored && viewer) {
-            echoAnchored = true;
-            const half = GAUNTLET_VENUE.echo.size / 2 - 1.5;
-            const rowZ = Math.max(
-              echoRig.baseZ - half,
-              Math.min(echoRig.baseZ + half, viewer.z - oz),
-            );
-            echoRig.root.position.z = rowZ;
-          }
           for (const s of echoRig.stones) s.visible = !echo.done;
+        }
+      }
+      // Anchor once per trial, retried each frame until the viewer entity has
+      // streamed in: the sim seats the viewer a mat-gap west of their own desk,
+      // so put the live rig on that desk (both x and z) and hide the cosmetic
+      // desk it replaces. The rest of the grid stays lit as idle memory desks.
+      if (echo && !echoAnchored && viewer) {
+        echoAnchored = true;
+        const rootX = viewer.x - ox + ECHO_MAT_GAP;
+        const rootZ = viewer.z - oz;
+        echoRig.root.position.set(rootX, 0, rootZ);
+        echoRig.root.visible = true;
+        let best = -1;
+        let bestD = Number.POSITIVE_INFINITY;
+        for (let d = 0; d < echoRig.desks.length; d++) {
+          const dk = echoRig.desks[d];
+          const dd = (dk.deskX - rootX) ** 2 + (dk.deskZ - rootZ) ** 2;
+          if (dd < bestD) {
+            bestD = dd;
+            best = d;
+          }
+        }
+        if (best >= 0) {
+          echoRig.desks[best].group.visible = false;
+          hiddenDesk = best;
         }
       }
       // The click-verdict flash rides over the sequence glow: applied once
@@ -1638,7 +1950,7 @@ export async function buildGauntletVenue(
         .copy(sigilRig.faceCenter)
         .addScaledVector(sigilRig.uDir, (p.u * 2 - 1) * half)
         .addScaledVector(sigilRig.vDir, (p.v * 2 - 1) * half)
-        .addScaledVector(sigilRig.normal, 0.05);
+        .addScaledVector(sigilRig.normal, 0.12); // floats above the raised relief + groove
       sigilRig.mote.visible = true;
       pushSigilStrokePoint(sigilRig, p.u, p.v);
     },

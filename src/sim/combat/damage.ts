@@ -264,6 +264,28 @@ export function dealDamage(
     }
   }
 
+  // The Gauntlet's Final Court is a standard-combat free-for-all fought on a
+  // shared hp pool. A lethal blow eliminates the contestant from the event (NPCs
+  // poof, players park as spectators) instead of the normal death flow, mirroring
+  // the Fiesta takedown; non-lethal hits fall through to the decrement + emit
+  // below, so the fight plays out on real floaties like any combat.
+  if (ctx.gauntletCourtContestant(target) && target.hp - amount <= 0) {
+    amount = Math.max(0, target.hp);
+    target.hp = 0;
+    ctx.emit({
+      type: 'damage',
+      sourceId: source?.id ?? -1,
+      targetId: target.id,
+      amount,
+      crit,
+      school,
+      ability,
+      kind,
+    });
+    ctx.gauntletCourtTakedown(target);
+    return;
+  }
+
   target.hp = Math.max(0, target.hp - amount);
   ctx.emit({
     type: 'damage',

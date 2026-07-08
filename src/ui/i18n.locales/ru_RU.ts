@@ -76,6 +76,9 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.hc.log.fall': 'Пропасть поглотила вас. Возврат к контрольной точке.',
   'hudChrome.hc.log.checkpoint': 'Контрольная точка {index} пройдена.',
   'hudChrome.hc.log.placed': 'Вы завершили Гонтлет на {place} месте.',
+  'hudChrome.hub.enter': 'Вы проходите сквозь мерцающий портал в Испытательную арену.',
+  'hudChrome.hub.leave': 'Вы возвращаетесь в Истврукскую долину.',
+  'hudChrome.hub.zoneName': 'Атеней испытаний',
   'hudChrome.hc.flavor.queueJoin':
     'Вы встали в очередь Гонтлета. Лорд Ходрик смазывает цепы в вашу честь.',
   'hudChrome.hc.flavor.gatesOpen':
@@ -6206,15 +6209,22 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.crafting.reagentLine': '{name}: {have}/{required}',
   // The Gauntlet event (v0.22.0).
   'hudChrome.gauntlet.title': 'Гаунтлет',
+  'hudChrome.gauntlet.passed': 'Вы прошли!',
+  'hudChrome.gauntlet.boardTitle': 'Рейтинг',
   'hudChrome.gauntlet.pitch':
     'Переживи каждое испытание. Последний, кто устоит, забирает весь приз.',
   'hudChrome.gauntlet.join': 'Вступить в Гаунтлет',
   'hudChrome.gauntlet.withdraw': 'Выйти',
+  'hudChrome.gauntlet.joinQueue': 'Встать в очередь',
+  'hudChrome.gauntlet.leaveQueue': 'Покинуть очередь',
+  'hudChrome.gauntlet.queuePosition': 'Место в очереди: {n}',
+  'hudChrome.gauntlet.spectate': 'Наблюдать',
+  'hudChrome.gauntlet.stopSpectating': 'Прекратить наблюдение',
+  'hudChrome.gauntlet.practice': 'Тренировка',
+  'hudChrome.gauntlet.practiceNote': 'Мгновенный одиночный забег против ботов.',
+  'hudChrome.gauntlet.rejoinQueue': 'Вернуться в очередь',
   'hudChrome.gauntlet.lobbyJoined': 'В лобби: {count}',
   'hudChrome.gauntlet.lobbyCountdown': 'Забег начнётся через {seconds} с',
-  'hudChrome.gauntlet.vitality': 'Жизненная сила',
-  'hudChrome.gauntlet.survivorsAria': 'Осталось {count} из {total}',
-  'hudChrome.gauntlet.prizeAria': 'Призовой фонд: {amount}',
   'hudChrome.gauntlet.trialLabel': 'Испытание {n} из {total}',
   'hudChrome.gauntlet.phaseLobby': 'Сбор участников',
   'hudChrome.gauntlet.phaseStaging': 'Занять места',
@@ -6234,8 +6244,6 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gauntlet.leave': 'Покинуть',
   'hudChrome.gauntlet.victory': 'Победа',
   'hudChrome.gauntlet.podiumTitle': 'Итоговые места',
-  'hudChrome.gauntlet.roleAttacker': 'Атакующий',
-  'hudChrome.gauntlet.roleDefender': 'Защитник',
   'hudChrome.gauntlet.sigilsShattered': 'Стекло разбилось!',
   'hudChrome.gauntlet.echoRound': 'Раунд {n} из {total}',
   'hudChrome.gauntlet.hint.sentinel': 'Беги на зелёный. Замри на красный.',
@@ -6246,7 +6254,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gauntlet.hint.echoAnswer': 'Кликайте по камням в том же порядке.',
   'hudChrome.gauntlet.hint.span': 'Перейдите по стеклу. В каждой паре одна панель хрупкая.',
   'hudChrome.gauntlet.hint.court':
-    'Когда кольцо вспыхнет, кликните по сопернику, чтобы вытолкнуть его.',
+    'Сразитесь с соперником: дойдите до короны в дальнем конце или вытолкните его с ринга. Роли меняются по таймеру.',
   'entities.npcs.gauntlet_recruiter.title': 'Глашатай Гаунтлета',
   'entities.npcs.gauntlet_recruiter.greeting':
     'Ступай на песок вместе с остальными, {className}. Переживи каждое испытание, и пьедестал твой.',

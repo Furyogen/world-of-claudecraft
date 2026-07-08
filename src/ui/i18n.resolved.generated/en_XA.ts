@@ -159,14 +159,17 @@ export const en_XA: EnTranslations = {
       "pitch": "[Óúţļášţ éʋéŕý ţŕíáļ. Ţĥé ļášţ óñé šţáñðíñĝ ţáķéš ţĥé þúŕšé.]",
       "join": "[Ĵóíñ ţĥé Ĝáúñţļéţ]",
       "withdraw": "[Ŵíţĥðŕáŵ]",
+      "joinQueue": "[Ĵóíñ ţĥé Ɋúéúé]",
+      "leaveQueue": "[Ļéáʋé ţĥé Ɋúéúé]",
+      "queuePosition": "[Ɋúéúé þóšíţíóñ: {n}]",
+      "spectate": "[Šþéçţáţé]",
+      "stopSpectating": "[Šţóþ Šþéçţáţíñĝ]",
+      "practice": "[Þŕáçţíçé]",
+      "practiceNote": "[Áñ íñšţáñţ šóļó ŕúñ áĝáíñšţ á ƒíéļð óƒ ƀóţš.]",
+      "rejoinQueue": "[Ŕéĵóíñ ţĥé Ɋúéúé]",
       "lobbyJoined": "[{count} íñ ţĥé ļóƀƀý]",
       "lobbyCountdown": "[Ţĥé ŕúñ ƀéĝíñš íñ {seconds}š]",
-      "vitality": "[Ʋíţáļíţý]",
-      "survivorsAria": "[{count} óƒ {total} šţíļļ šţáñðíñĝ]",
-      "prizeAria": "[Þŕížé þóóļ: {amount}]",
       "trialLabel": "[Ţŕíáļ {n} óƒ {total}]",
-      "go": "[Ĝó]",
-      "stop": "[Šţóþ]",
       "phaseLobby": "[Ĝáţĥéŕíñĝ çĥáļļéñĝéŕš]",
       "phaseStaging": "[Ţáķé ýóúŕ ɱáŕķš]",
       "phaseTrial": "[Ţĥé Çŕóššíñĝ ƀéĝíñš]",
@@ -181,8 +184,11 @@ export const en_XA: EnTranslations = {
       "redLight": "[Ŕéð ļíĝĥţ!]",
       "vitalityLost": "[Ýóú ļóšţ {amount} ʋíţáļíţý.]",
       "contestantOut": "[{name} íš óúţ!]",
+      "passed": "[Ýóú þáššéð!]",
       "eliminated": "[ÉĻÍⱮÍÑÁŢÉÐ]",
       "survivorsLeft": "[{count} šţíļļ šţáñðíñĝ]",
+      "boardTitle": "[Šţáñðíñĝš]",
+      "boardOut": "[ÓÚŢ]",
       "spectating": "[Šþéçţáţíñĝ]",
       "leave": "[Ļéáʋé]",
       "victory": "[Ʋíçţóŕý]",
@@ -190,8 +196,6 @@ export const en_XA: EnTranslations = {
       "placeFirst": "[1šţ]",
       "placeSecond": "[2ñð]",
       "placeThird": "[3ŕð]",
-      "roleAttacker": "[Áţţáçķéŕ]",
-      "roleDefender": "[Ðéƒéñðéŕ]",
       "sigilsShattered": "[Ţĥé þáñé šĥáţţéŕéð!]",
       "echoRound": "[Ŕóúñð {n} óƒ {total}]",
       "echoSeconds": "[{seconds}š]",
@@ -202,8 +206,13 @@ export const en_XA: EnTranslations = {
         "echoWatch": "[Ŵáţçĥ ţĥé šţóñéš ļíĝĥţ úþ.]",
         "echoAnswer": "[Çļíçķ ţĥé šţóñéš íñ ţĥé šáɱé óŕðéŕ.]",
         "span": "[Çŕóšš ţĥé ĝļášš. Éáçĥ þáíŕ ĥíðéš óñé ƀŕíţţļé þáñéļ.]",
-        "court": "[Çļíçķ ýóúŕ ŕíʋáļ ŵĥéñ ţĥé ŕíñĝ ƒļášĥéš ţó šĥóʋé ţĥéɱ óúţ.]"
+        "court": "[Ļášţ óñé šţáñðíñĝ ŵíñš. Çļíçķ á ƒóé áñð çļóšé íñ ţó ƒíĝĥţ.]"
       }
+    },
+    "hub": {
+      "enter": "[Ýóú šţéþ ţĥŕóúĝĥ ţĥé šĥíɱɱéŕíñĝ þóŕţáļ íñţó ţĥé Þŕóʋíñĝ Ĝŕóúñðš.]",
+      "leave": "[Ýóú šţéþ ƀáçķ íñţó Éášţƀŕóóķ Ʋáļé.]",
+      "zoneName": "[Ţĥé Áţĥéñáéúɱ óƒ Ţŕíáļš]"
     },
     "hc": {
       "title": "[Ĥóðŕíç'š Çášţļé]",
@@ -7034,7 +7043,7 @@ export const en_XA: EnTranslations = {
       },
       "gauntlet_recruiter": {
         "name": "[Ɱáŕó Ĥáļƒ-Ɱášķ]",
-        "title": "[Ĥéŕáļð óƒ ţĥé Ĝáúñţļéţ]",
+        "title": "[Ţĥé Ĝáúñţļéţ]",
         "greeting": "[Šţéþ óñţó ţĥé šáñð ŵíţĥ ţĥé ŕéšţ óƒ ţĥéɱ, {className}. Óúţļášţ éʋéŕý ţŕíáļ áñð ţĥé þóðíúɱ íš ýóúŕš.]"
       },
       "gauntlet_watcher": {
@@ -7094,7 +7103,7 @@ export const en_XA: EnTranslations = {
       },
       "hodrics_herald": {
         "name": "[Ĥéŕáļð Óšŕíç]",
-        "title": "[Ĥóðŕíç'š Ĝáúñţļéţ Ĥéŕáļð]",
+        "title": "[Ĥóðŕíç'š Çášţļé]",
         "greeting": "[Ļóŕð Ĥóðŕíç óþéñš ĥíš çáúšéŵáý ţó áļļ çóɱéŕš! Ŕáçé ţĥé Ĝáúñţļéţ, ðóðĝé ţĥé ƒļáíļš, ţáķé ţĥé çŕóŵñ!]"
       },
       "tidewatcher_ondrel": {

@@ -888,6 +888,29 @@ export const VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.35,
   },
+  // Maro Half-Mask, the Gauntlet recruiter in the Proving Grounds: the hooded,
+  // half-masked showman silhouette (the v2 rogue_hooded ships hood/mask/cape as
+  // its default look, no show filter). Purple event livery via the entity tint,
+  // no weapon (a herald, not a fighter). Deliberately distinct from Osric's
+  // plate-knight herald so the two hub heralds no longer read as one villager.
+  npc_gauntlet_recruiter: {
+    url: `${PLAYERS}/rogue_hooded.glb`,
+    height: HUMANOID_H,
+    clips: kaykit(['1H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.4,
+  },
+  // Herald Osric, the Hodric's Castle herald in the Proving Grounds: a helmeted,
+  // caped knight in the castle's purple-and-gold livery (the entity tint washes
+  // the plate toward Hodric's lavender). Ceremonial, so no attached weapon.
+  npc_hodrics_herald: {
+    url: `${PLAYERS}/knight.glb`,
+    height: HUMANOID_H,
+    clips: kaykit(['1H_Melee_Attack_Chop']),
+    show: ['Knight_Helmet', 'Knight_Cape'],
+    tint: 'entity',
+    tintStrength: 0.3,
+  },
   // Brother Halven, the Reliquary Keeper: a devout male guardian tending the crypt
   // door. Uses the KayKit paladin, one of the newer full-pack adventurer models
   // (unused elsewhere), for a sturdier, holier silhouette than the old hooded
@@ -1043,6 +1066,11 @@ const NPC_KEYS: Record<string, string> = {
   quartermaster_bree: 'npc_villager',
   brother_halven: 'npc_reliquary_keeper',
   brother_halven_marsh: 'npc_reliquary_keeper',
+  // The two Proving Grounds event heralds: distinct, on-theme silhouettes (a
+  // masked purple showman vs a liveried castle knight) instead of the shared
+  // villager fallback (sim/content/gauntlet.ts Maro + sim/content/hodrics.ts Osric).
+  gauntlet_recruiter: 'npc_gauntlet_recruiter',
+  hodrics_herald: 'npc_hodrics_herald',
   // The graveyard angel: a robed figure, rendered translucent (ethereal) with a
   // holy shimmer by the renderer (see the spirit_healer branches there).
   spirit_healer: 'npc_villager_robed',

@@ -10,6 +10,7 @@ import {
   nameplatePlanInto,
   newNameplatePlan,
 } from '../src/render/nameplate_view';
+import { HUB_EXIT_TEMPLATE, HUB_PORTAL_TEMPLATE } from '../src/sim/data';
 
 // The nameplate_view core: the pure DOM/Three/i18n-free decision model the
 // NameplatePainter consumes. These pin the exact visibility / anchor / urgent /
@@ -105,6 +106,13 @@ describe('nameplate_view - visibility', () => {
       plan(ent({ kind: 'object', templateId: 'delve_reward_chest', pos: { x: 0, y: 0, z: 30 } }))
         .hidden,
     ).toBe(true);
+  });
+
+  it('shows the Proving Grounds entrance portal header but never the exit portal', () => {
+    // The overworld entrance announces the venue it leads to (a standing header,
+    // like a dungeon door); the room's exit portal stays label-less.
+    expect(plan(ent({ kind: 'object', templateId: HUB_PORTAL_TEMPLATE })).hidden).toBe(false);
+    expect(plan(ent({ kind: 'object', templateId: HUB_EXIT_TEMPLATE })).hidden).toBe(true);
   });
 
   it('shows every marsh puzzle interactable (and its spent variant) near, hides it far', () => {
@@ -301,8 +309,11 @@ describe('nameplate_view - import absence (two-controller + purity, source scan)
 
   it('imports nothing from three, a painter, or the gfx module', () => {
     const froms = [...code.matchAll(/\bimport\b[^;]*\bfrom\s*['"]([^'"]+)['"]/g)].map((m) => m[1]);
-    // unique modules, robust to biome merging/splitting the type vs value sim import
+    // unique modules, robust to biome merging/splitting the type vs value sim import.
+    // sim/data is a pure, deterministic data module (the HUB_PORTAL_TEMPLATE id),
+    // on the sanctioned render->sim import allowlist; it pulls in no three/DOM.
     expect([...new Set(froms)].sort()).toEqual([
+      '../sim/data',
       '../sim/types',
       './nameplate_combo',
       './nameplate_threat',

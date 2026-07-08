@@ -10,6 +10,14 @@ export const GAUNTLET_RECRUITER_NPC_ID = 'gauntlet_recruiter';
 export const GAUNTLET_WATCHER_NPC_ID = 'gauntlet_watcher';
 export const GAUNTLET_CONTESTANT_NPC_ID = 'gauntlet_contestant';
 
+// Maro's RESERVED entity id. He now stands permanently in the Proving Grounds
+// hub (see data.ts MINIGAME_HUB), not a dynamic event-time spawn, so he is
+// spawned at world init OUTSIDE the nextId sequence with zero rng, exactly like
+// HC_HERALD_ID, and the parity goldens never see him. Spawned by
+// gauntlet/runs.ts spawnGauntletRecruiter; the event window still gates the
+// join, only his presence no longer signals it.
+export const GAUNTLET_RECRUITER_ID = 1_000_000_200;
+
 // The contestant field wears real adventurer kits (the Hodric's Castle bot
 // idiom): each NPC contestant rolls one of the nine classes and a skin, so
 // the roster reads as a crowd of varied challengers rather than identical
@@ -32,15 +40,18 @@ export function gauntletContestantNpcId(cls: PlayerClass): string {
 }
 
 // All three are `dynamic`: registered in NPCS (so the online client can resolve
-// their defs) but never surface-placed at world init. The gauntlet module spawns
-// the recruiter while the event window is open and the watcher/contestants per
-// run inside the instance slot.
+// their defs) but never surface-placed by the world-init NPC loop. The recruiter
+// is spawned at a reserved id in the Proving Grounds hub (spawnGauntletRecruiter),
+// and the watcher/contestants per run inside the instance slot; the `pos` on the
+// recruiter def below is vestigial (the hub anchor in data.ts is authoritative).
 export const GAUNTLET_NPCS: Record<string, NpcDef> = {
   [GAUNTLET_RECRUITER_NPC_ID]: {
     id: GAUNTLET_RECRUITER_NPC_ID,
     name: 'Maro Half-Mask',
-    title: 'Herald of the Gauntlet',
-    // east edge of the town square, facing the well
+    // The nameplate subtitle is the game name (the Proving Grounds heralds show
+    // the event they recruit for), not a personal role title.
+    title: 'The Gauntlet',
+    // Vestigial: the recruiter now stands at MINIGAME_HUB + MINIGAME_HUB_MARO.
     pos: { x: 14, z: 4 },
     facing: -Math.PI / 2,
     color: 0x9b59b6,
@@ -147,7 +158,21 @@ export const GAUNTLET_LAYOUT = {
   spectatorX: 26, // knocked-out players park here, beside the field
   spectatorZ: 40,
   watcherMargin: 6, // the watcher stands this far past the finish line
-  podiumZ: -16, // the podium ceremony anchor, behind the staging area
+  // The podium ceremony (gauntlet/podium.ts): the three-step winners' stand
+  // behind the staging plaza. `z` is the slab centre (instance-local), `baseH`
+  // the base slab height, and each step's `x` its lateral offset with `h` its
+  // box height, so the stand-on height above the venue floor is baseH + step.h.
+  // The renderer builds the steps and venue_physics blocks the block from these
+  // same numbers, so a champion stands exactly on the step you see.
+  podium: {
+    z: -20,
+    baseH: 0.5,
+    steps: [
+      { x: 0, h: 1.5 }, // 1st: the gold centre step
+      { x: -3.6, h: 1.0 }, // 2nd: silver
+      { x: 3.6, h: 0.7 }, // 3rd: bronze
+    ],
+  },
 } as const;
 
 // The six trial arenas of the venue complex, one anchor per trials[] entry
@@ -201,13 +226,16 @@ export const GAUNTLET_VENUE = {
     gripSpacing: 1.7, // spacing between grips along the rope
     knotTravel: 10, // rope translation at the win threshold (yards)
   },
-  // Trial 4, the Keeper's Echo: a walled courtyard of rune-stone tables.
-  echo: { x: -62, z: 104, size: 15 },
+  // Trial 4, the Keeper's Echo: a walled courtyard of rune-stone desks, one per
+  // contestant (see echoStation). The footprint holds the whole 4x3 desk grid.
+  echo: { x: -62, z: 104, size: 18 },
   // Trial 5, The Brittle Span: the twin-track glass crossing over a dark pit.
   // `length` tracks steps * panelLength (GAUNTLET.span): the crossing itself.
   span: { x: -105, z: 30, length: 56 },
-  // Trial 6, The Final Court: the champions' ring.
-  court: { x: -105, z: 95, radius: 9 },
+  // Trial 6, The Final Court: the champions' ring, a circular melee arena. The
+  // radius here is the DRESSED floor; the fighters are clamped a hair inside it
+  // (GAUNTLET.court.arenaRadius), so the wall reads as a real boundary.
+  court: { x: -105, z: 95, radius: 13 },
   // Grandstands flank the sentinel field on both sides.
   standX: 27, // inner edge of each grandstand (mirrored at -standX)
   standZMin: 14,
@@ -235,8 +263,11 @@ export const GAUNTLET_VENUE = {
   // screen-space circle overlay as its input).
   focus: {
     sigils: {
-      pos: { x: -59.8, y: 4.3, z: 6 },
-      lookAt: { x: -62, y: 1.2, z: 6 },
+      // Close over the slab so the etched shape fills the view for tracing; the
+      // character is hidden while this pose is held (see the renderer self-hide),
+      // so nothing blocks it.
+      pos: { x: -59.6, y: 4.2, z: 6 },
+      lookAt: { x: -62, y: 1.25, z: 6 },
     },
     // Over the echo table from behind the viewer's west mat: all four rune
     // stones in frame.
@@ -257,10 +288,48 @@ export function sigilRingAngle(i: number, count: number): number {
   return Math.PI / 2 + gap / 2 + ((2 * Math.PI - gap) * (i + 0.5)) / count;
 }
 
+// The Keeper's Echo seats every contestant at their OWN rune-stone desk: a
+// grid of ECHO_STATION_COLS x ECHO_STATION_ROWS stations centred on the echo
+// courtyard anchor. echoStation is the single source both hosts read, so a
+// contestant and their desk always share a spot: the sim seats contestant i at
+// station i's mat (contestants.ts seatAllContestantsAt), and the venue builds a
+// desk at every station + anchors the live rig to the viewer's own. The desks
+// face +x; each contestant stands one ECHO_MAT_GAP west and looks east across
+// the stones. Grid indexing is FIXED (never derived from the live count) so the
+// centring never shifts as contestants fall.
+export const ECHO_STATION_COLS = 4;
+export const ECHO_STATION_ROWS = 3;
+export const ECHO_STATIONS = ECHO_STATION_COLS * ECHO_STATION_ROWS;
+export const ECHO_MAT_GAP = 3.2;
+const ECHO_ROW_PITCH = 5; // desk-to-desk spacing along x (depth)
+const ECHO_COL_PITCH = 3.8; // desk-to-desk spacing along z (lateral)
+
+// Station i's desk root and the mat a contestant stands on, both instance-local
+// (add run.origin). Columns run along z, rows recede along x; index wraps past
+// the grid so an over-full field never throws (real runs reach the echo with at
+// most maxRealPlayers + a culled NPC remnant, well inside the grid).
+export function echoStation(i: number): {
+  deskX: number;
+  deskZ: number;
+  matX: number;
+  matZ: number;
+  facing: number;
+} {
+  const { x, z } = GAUNTLET_VENUE.echo;
+  const c = i % ECHO_STATION_COLS;
+  const r = Math.floor(i / ECHO_STATION_COLS);
+  const deskX = x + (r - (ECHO_STATION_ROWS - 1) / 2) * ECHO_ROW_PITCH;
+  const deskZ = z + (c - (ECHO_STATION_COLS - 1) / 2) * ECHO_COL_PITCH;
+  return { deskX, deskZ, matX: deskX - ECHO_MAT_GAP, matZ: deskZ, facing: Math.PI / 2 };
+}
+
 export const GAUNTLET: GauntletDef = {
   fieldSize: 30,
   vitalityMax: 100,
   lobbyFillS: 60,
+  // A queue-formed lobby uses a short countdown so games roll back to back
+  // ("when one ends the next starts"); the field backfills with NPCs at start.
+  queueCountdownS: 12,
   maxRealPlayers: 8,
   joinRadius: 12,
   emptyTimeoutS: 30,
@@ -273,9 +342,10 @@ export const GAUNTLET: GauntletDef = {
   prizePerElimination: 2500,
   // NPC attrition schedule, one entry per trials[i]: after that trial the NPC
   // field is culled toward this many survivors (players are never culled by
-  // targets; they live and die by their own vitality). The final court always
-  // crowns exactly one.
-  targetSurvivorsPerTrial: [14, 8, 4, 2, 2, 1],
+  // targets; they live and die by their own vitality). The tail keeps ~4 into
+  // the Final Court so the finale is a real melee, not a forced 1v1; the court
+  // itself crowns exactly one (last fighter standing).
+  targetSurvivorsPerTrial: [14, 8, 6, 5, 4, 1],
   npcSkillMin: 0.25,
   npcSkillMax: 0.95,
   trials: ['sentinel', 'sigils', 'pull', 'echo', 'span', 'court'],
@@ -300,7 +370,14 @@ export const GAUNTLET: GauntletDef = {
     pushbackYards: 6,
     momentumDecay: 0.82,
     momentumStopEps: 0.02,
-    damageMax: 30,
+    // End-of-trial toll at score 0 = the full vitality pool, so failing to
+    // cross (an idle player scores 0) is fatal from full health; any real
+    // progress scales the toll down (crossing clears >= 1 and takes nothing).
+    damageMax: 100,
+    // The scripted survivors' invisible attrition tithe. Its own small knob,
+    // NOT derived from damageMax: making player failure lethal must never shift
+    // the NPC field's standings.
+    npcTithe: 6,
     finishBonusMax: 0.25,
     npcSpeedMin: 5.2,
     npcSpeedMax: 7.2,
@@ -311,23 +388,46 @@ export const GAUNTLET: GauntletDef = {
     npcHesitateChance: 0.3,
     npcHesitateMinS: 0.3,
     npcHesitateMaxS: 0.9,
+    // Human feel: a gentle running weave, an overshoot past the line, and an
+    // end-zone mill so the field reads as a crowd of people rather than a
+    // conveyor belt that halts on the mark.
+    npcWeaveAmp: 1.1,
+    npcWeaveFreq: 2.4,
+    npcOvershootMin: 2.5,
+    npcOvershootMax: 7.0,
+    npcMillAmp: 0.9,
   },
   sigils: {
-    durationS: 90,
+    // Difficulty pass 4 (still read too soft): the trace is now a CONTINUOUS
+    // trace, not order-free freedraw. Coverage only extends contiguously from the
+    // stroke's live frontier (start anywhere, either direction), so you must walk
+    // the whole loop in one connected pass; dabbing disconnected pieces carves
+    // nothing. The accept band is tightened to 0.02 (hug the line), the off-band
+    // crack rate is raised (straying fails fast), and the finish threshold is
+    // near-total. The five shapes are flat SVGs (triangle, circle, star,
+    // rectangle, hexagon); the roll picks any of them (trial_sigils startSigils).
+    durationS: 80,
     outlinePoints: 96,
-    // Loosened twice after playtests: the first cut (0.06 tolerance) read as
-    // pixel-hunting, and the in-world slab (a projected surface, not a flat
-    // canvas) earns a wide band and gentle crack rates so the danger stays in
-    // the thin sections rather than in hand jitter.
-    tolerance: 0.14, // shape-local units (the outline lives in a unit square)
-    // Freedraw coverage: a clean continuous drag carves ~8 vertices/s of the
-    // 96, so 14 never caps honest play while spam buys nothing past it.
-    coverageCapPerS: 14,
+    tolerance: 0.02, // shape-local units (the outline lives in a unit square)
+    // ~0.02 of the loop (about 2 of the 96 vertices) per on-band point: the carve
+    // window that a single on-band point lights around its own arc position.
+    carveArcFrac: 0.02,
+    // The largest arc gap (fraction of the loop) a point may sit from the covered
+    // frontier and still count as CONTINUING the trace (gap is filled in). A hit
+    // further out than this is a jump across the shape and carves nothing, so
+    // scattered dabs never stitch the loop together.
+    contiguityArcFrac: 0.05,
+    // Anti-teleport rate cap only: contiguity is the real gate now, so this sits
+    // well above an honest continuous drag (~45 vertices/s) and just stops a
+    // single fat batch from carving the whole (index-ordered) outline at once.
+    coverageCapPerS: 45,
     crackMax: 100,
-    crackOffPath: 12,
-    thinSectionMult: 1.4,
-    shatterDamage: 12,
-    damageMax: 26,
+    crackOffPath: 30,
+    thinSectionMult: 1.7,
+    shatterDamage: 20,
+    // Full-pool toll at zero coverage: never tracing the etching is fatal from
+    // full health; the score curve scales it down with how much you carved.
+    damageMax: 100,
   },
   pull: {
     durationS: 75,
@@ -339,6 +439,9 @@ export const GAUNTLET: GauntletDef = {
     circleSpawnMaxS: 1.4,
     circleShrinkMinS: 1.3,
     circleShrinkMaxS: 2.8,
+    // Ramp to 45% by the end: late-trial circles spawn about twice as often and
+    // shrink about twice as fast, so the pull tightens the longer it runs.
+    circleRampMin: 0.45,
     circleStartSize: 200,
     circleTargetSize: 75,
     pullForceMax: 2.2,
@@ -347,7 +450,11 @@ export const GAUNTLET: GauntletDef = {
     npcForceMin: 0.7,
     npcForceMax: 1.05,
     winThreshold: 12,
-    lossDamage: 38,
+    // The end-of-pull toll at ZERO contribution = the full vitality pool. The
+    // toll scales down with how hard a player pulled (their accumulated force
+    // vs winThreshold), so an idle contestant is knocked out even if their side
+    // won on the NPC drift, while a hard puller who lost is only wounded.
+    lossDamage: 100,
   },
   echo: {
     durationS: 100,
@@ -357,7 +464,10 @@ export const GAUNTLET: GauntletDef = {
     stepS: 0.7,
     inputS: 10,
     missDamage: 10,
-    damageMax: 26,
+    // Full-pool toll at zero rounds cleared: never answering the stones is
+    // fatal from full health (on top of the per-timeout missDamage); clearing
+    // rounds scales it down.
+    damageMax: 100,
   },
   span: {
     durationS: 100,
@@ -370,21 +480,32 @@ export const GAUNTLET: GauntletDef = {
     panelGap: 1.4,
     fallDamage: 17,
     npcAheadCount: 3,
-    npcStepPeriodS: 1.6,
-    damageMax: 30,
+    npcHopS: 0.7, // a crosser bounds one panel every 0.7s (a brisk run-and-jump)
+    npcJumpHeight: 0.9,
+    npcPlungeS: 0.7,
+    npcPlungeDrop: 3.5,
+    npcStumbleChance: 0.55, // scouts are human: better than half the time one panel trips them
+    // Full-pool toll at zero progress: never stepping onto the span is fatal
+    // from full health; each proven panel scales the toll down.
+    damageMax: 100,
   },
   court: {
+    // A standard-combat brawl on a normalized hp pool: every fighter is set to
+    // maxHp and trades plain auto-attack swings (real `damage` events on real
+    // hp, no class/gear/level in play). The pool is vitalityMax (100), so the hp
+    // fraction the standings board + health frame show, and the damage floaties,
+    // land on one 0..100 scale (matching every other trial). ~12 swings to drop
+    // a foe 1v1, faster under focus-fire; the 90s clock is a comfortable ceiling.
     durationS: 90,
-    courtLength: 26,
-    courtHalfWidth: 7,
-    neckZ: 14,
-    preNeckSpeedMult: 0.55,
-    shoveCooldownS: 1.6,
-    shoveRange: 2.6,
-    shovePush: 4.5,
-    shoveDamage: 6,
-    outDamage: 20,
-    roleSwapS: 20,
-    rivalReactionS: 0.5,
+    arenaRadius: 11,
+    maxHp: 100, // = vitalityMax: the shared hp pool every fighter is normalized to
+    npcMoveSpeed: 7, // = RUN_SPEED: NPCs move exactly as fast as a player
+    strikeDamage: 8, // authored auto-attack hit (bypasses armor, so it is equal for all)
+    strikeIntervalS: 1.6, // seconds between swings
+    strikeRange: 4, // melee reach (a touch under MELEE_RANGE)
+    // NPC melee AI, all rolled from the per-run stream (skill-scaled 0..1):
+    npcReactMinS: 0.15, // target-decision latency at skill 1
+    npcReactMaxS: 0.75, // decision latency at skill 0
+    npcRetargetS: 3, // how often an NPC re-picks its foe
   },
 };

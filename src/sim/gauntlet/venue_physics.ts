@@ -98,7 +98,7 @@ export function gauntletVenueColliders(): Collider[] {
   out.push(circle(5.2, -2.2, 0.3));
 
   // The podium block (base + steps, one solid), its poles and braziers.
-  const pz = GAUNTLET_LAYOUT.podiumZ - 4;
+  const pz = GAUNTLET_LAYOUT.podium.z;
   out.push(obb(0, pz, 6, 3));
   out.push(circle(-5.4, pz - 3.4, 0.2));
   out.push(circle(5.4, pz - 3.4, 0.2));
@@ -130,12 +130,11 @@ export function gauntletVenueColliders(): Collider[] {
   }
   out.push(circle(S.x, S.z - S.radius - 1.4, 0.2));
 
-  // The pull lane: threshold stakes, the beat drum, the banner.
+  // The pull lane: the two threshold stakes (the lane itself is walk-on, and
+  // the sideline dressing is a walk-through prop scatter like the field torches).
   const P = V.pull;
   out.push(circle(P.x - P.knotTravel, P.z + P.pitHalfZ + 1.4, 0.15));
   out.push(circle(P.x + P.knotTravel, P.z + P.pitHalfZ + 1.4, 0.15));
-  out.push(circle(P.x, P.z + P.pitHalfZ + 2.8, 1.0));
-  out.push(circle(P.x, P.z + P.width / 2 + 1.6, 0.2));
 
   // The echo courtyard's three walls (the east side is the open entrance).
   const W = V.echo;
@@ -152,15 +151,17 @@ export function gauntletVenueColliders(): Collider[] {
   out.push(circle(SP.x + sideX + 2.4, SP.z - spanHalfLen - 1.5, 0.3));
   out.push(circle(SP.x, SP.z - spanHalfLen - 3, 0.2));
 
-  // The final court's corner torches and banner.
+  // The final court's rim torches (8 evenly around the arena, matching the
+  // renderer) and the banner behind. The arena itself is open: fighters are kept
+  // inside by the sim's clamp (trial_court.ts), not a wall collider.
   const C = V.court;
-  const c = GAUNTLET.court;
-  const cz0 = C.z - c.courtLength / 2;
-  for (const side of [-1, 1]) {
-    out.push(circle(C.x + side * (c.courtHalfWidth + 2), cz0 + 2, 0.3));
-    out.push(circle(C.x + side * (c.courtHalfWidth + 2), cz0 + c.courtLength - 2, 0.3));
+  const courtR = C.radius;
+  const courtTorches = 8;
+  for (let i = 0; i < courtTorches; i++) {
+    const a = (i / courtTorches) * Math.PI * 2;
+    out.push(circle(C.x + Math.sin(a) * (courtR + 1.5), C.z + Math.cos(a) * (courtR + 1.5), 0.3));
   }
-  out.push(circle(C.x, cz0 - 2, 0.2));
+  out.push(circle(C.x, C.z - courtR - 2, 0.2));
 
   // The colosseum shell: one OBB per wall segment, the same chord layout the
   // renderer builds its ring from (the pilasters and the recessed upper tier

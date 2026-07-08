@@ -156,6 +156,10 @@ function updatePlayers(
       ps.finishedAt = ctx.time;
       ps.momentumX = 0;
       ps.momentumZ = 0;
+      // One-shot "you passed" cue: the client turns this into a banner. Personal
+      // (pid-scoped), text-free like every gauntlet event; the client renders
+      // its own localized copy.
+      ctx.emit({ type: 'gauntletFinished', trialIndex: run.trialIndex, pid: c.entityId });
       continue;
     }
 
@@ -212,13 +216,14 @@ function endSentinel(ctx: SimContext, run: GauntletRun, t: GauntletSentinelTunin
       );
       applyVitalityDamage(ctx, run, c, trialDamageFromScore(score, t.damageMax), 'timeout');
     } else {
-      // A scripted survivor pays a small vitality tithe (the same attrition
-      // rules, just invisible); a fumbler that never got its flip in before
-      // the clock is caught where it stands.
+      // A scripted survivor pays a small, fixed vitality tithe (invisible
+      // attrition flavor, decoupled from the now-lethal player damageMax); a
+      // fumbler that never got its flip in before the clock is caught where it
+      // stands.
       if (c.script.fumbleOnFlip !== null) {
         applyVitalityDamage(ctx, run, c, c.vitality, 'caught');
       } else {
-        applyVitalityDamage(ctx, run, c, trialDamageFromScore(0.8, t.damageMax), 'trial');
+        applyVitalityDamage(ctx, run, c, t.npcTithe, 'trial');
       }
     }
   }

@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { GAUNTLET, GAUNTLET_VENUE } from '../src/sim/content/gauntlet';
 import type { GauntletPullState, GauntletRun } from '../src/sim/gauntlet/state';
-import { circleSizeAt } from '../src/sim/gauntlet/trial_pull';
+import { circleSizeAt, pullRampFactor } from '../src/sim/gauntlet/trial_pull';
 import { Sim } from '../src/sim/sim';
 import { groundHeight } from '../src/sim/world';
 
@@ -234,7 +234,7 @@ describe('gauntlet pull: teamwork', () => {
 });
 
 describe('gauntlet pull: resolution', () => {
-  it('a clean clicker drags the marker to a win; the idle team eats lossDamage', () => {
+  it('a clean clicker wins unscathed; the idle loser is knocked out', () => {
     const sim = makeSim(106, false); // real lobby so two players can both join
     const clicker = sim.addPlayer('warrior', 'Heaver');
     const idler = sim.addPlayer('warrior', 'Slacker');
@@ -243,7 +243,7 @@ describe('gauntlet pull: resolution', () => {
     const trial = pullState(sim); // hold the ref: run.trial is nulled at resolution
     expect(trial.teamOf.get(clicker)).toBe(0);
     expect(trial.teamOf.get(idler)).toBe(1);
-    keepNpcs(run, 2); // a little real NPC opposition, small enough that play decides
+    keepNpcs(run, 0); // no NPC drift: the marker (and each side's contribution) is pure play
 
     clickWhenSmall(sim, clicker, 60);
 
@@ -251,12 +251,18 @@ describe('gauntlet pull: resolution', () => {
     expect(trial.wonBy).toBe(0); // the clicker's side
     const cc = run.contestants.find((k) => k.entityId === clicker)!;
     const ic = run.contestants.find((k) => k.entityId === idler)!;
-    expect(cc.vitality).toBe(GAUNTLET.vitalityMax); // winner: no loss
-    expect(ic.vitality).toBe(GAUNTLET.vitalityMax - GAUNTLET.pull.lossDamage); // loser: the chunk
-    // lossDamage is not a kill, so neither player was knocked out.
+    // The clicker pulled a full win's worth of contribution, so the toll grades
+    // to zero: a winner who played takes nothing and banks a finish time.
+    expect(cc.vitality).toBe(GAUNTLET.vitalityMax);
     expect(run.playerStates.get(clicker)!.spectating).toBe(false);
-    expect(run.playerStates.get(idler)!.spectating).toBe(false);
     expect(run.playerStates.get(clicker)!.finishedAt).not.toBeNull();
+    // The idle loser contributed nothing, so the full-pool toll (lossDamage ===
+    // vitalityMax at zero contribution) knocks them out: failing a trial is now
+    // fatal, not a survivable chunk.
+    expect(GAUNTLET.pull.lossDamage).toBe(GAUNTLET.vitalityMax);
+    expect(ic.vitality).toBe(0);
+    expect(ic.eliminatedAtTrial).not.toBeNull();
+    expect(run.playerStates.get(idler)!.spectating).toBe(true);
   }, 40000);
 });
 
@@ -306,6 +312,24 @@ describe('gauntlet pull: rope wire sync', () => {
     const base = trial.gripBase.get(pid)!;
     expect(e.pos.x).toBeCloseTo(run.origin.x + base.x + trial.kx, 4);
   }, 20000);
+});
+
+describe('gauntlet pull: difficulty ramp (pure)', () => {
+  it('scales from 1x at the start down to rampMin at the deadline, clamped and monotonic', () => {
+    const min = GAUNTLET.pull.circleRampMin;
+    expect(pullRampFactor(0, min)).toBe(1); // start: no ramp
+    expect(pullRampFactor(1, min)).toBeCloseTo(min, 6); // end: full ramp
+    expect(pullRampFactor(0.5, min)).toBeCloseTo(1 - (1 - min) * 0.5, 6);
+    // clamped outside [0, 1]
+    expect(pullRampFactor(-1, min)).toBe(1);
+    expect(pullRampFactor(2, min)).toBeCloseTo(min, 6);
+    // strictly faster by the end: at the deadline even a max-length shrink
+    // scales below the un-ramped MINIMUM, so late circles shrink faster than
+    // any early one could.
+    expect(pullRampFactor(1, min) * GAUNTLET.pull.circleShrinkMaxS).toBeLessThan(
+      GAUNTLET.pull.circleShrinkMinS,
+    );
+  });
 });
 
 describe('gauntlet pull: rope dressing', () => {

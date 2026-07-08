@@ -14,7 +14,7 @@
 
 import type { TalentModifiers } from './content/talents';
 import type { DelayedEvent, GroundAoE } from './entity_roster';
-import type { GauntletRun } from './gauntlet/state';
+import type { GauntletQueueUnit, GauntletRun, GauntletSpectatorState } from './gauntlet/state';
 import type { PendingLootRoll } from './loot/loot_roll';
 import type { MarketListing } from './market';
 import type { PendingProjectile } from './projectile_travel';
@@ -145,6 +145,12 @@ export interface SimContextPrimitives {
   readonly gauntletEventOpen: boolean;
   gauntletRecruiterId: number | null;
   nextGauntletRunId: number;
+  // The fair, rolling Gauntlet queue (gauntlet/modes.ts): reassigned by prune
+  // filters (same live-view shape as hcQueue), so a read-write view. Free-roaming
+  // spectators keep their pre-spectate spot in `gauntletSpectators`, a Map mutated
+  // in place (read-only ref).
+  gauntletQueue: GauntletQueueUnit[];
+  readonly gauntletSpectators: Map<number, GauntletSpectatorState>;
   // Host-supplied UTC day string ('' = unknown) gating the delve daily reset.
   readonly utcDay: string;
   // Wild-respawn queue (P1b: completeTame pushes the tamed beast's respawn). Live view;
@@ -256,6 +262,12 @@ export interface SimContextCallbacks {
   arenaAllPids(match: ArenaMatch): number[];
   fiestaTakedown(match: ArenaMatch, killerPid: number, victim: Entity): void;
   fiestaDown(match: ArenaMatch, victim: Entity, killerPid: number | null): void;
+  // The Gauntlet Final Court (gauntlet/trial_court.ts): dealDamage consults these
+  // to run a lethal blow as an event elimination (no death screen) instead of the
+  // normal death flow, the Fiesta-takedown shape. Owned by the court module; Sim
+  // keeps thin delegates.
+  gauntletCourtContestant(target: Entity): boolean;
+  gauntletCourtTakedown(target: Entity): void;
   rollLoot(mob: Entity, meta: PlayerMeta, eligible?: PlayerMeta[]): void;
   // World-boss personal loot: an independent roll of the boss's loot table per
   // contributor (gated once-per-day per boss). Owned by world_boss.ts.
@@ -760,6 +772,15 @@ export function createSimContext(host: SimContextHost): SimContext {
     set nextGauntletRunId(v) {
       host.nextGauntletRunId = v;
     },
+    get gauntletQueue() {
+      return host.gauntletQueue;
+    },
+    set gauntletQueue(v) {
+      host.gauntletQueue = v;
+    },
+    get gauntletSpectators() {
+      return host.gauntletSpectators;
+    },
     get utcDay() {
       return host.utcDay;
     },
@@ -825,6 +846,8 @@ export function createSimContext(host: SimContextHost): SimContext {
     arenaAllPids: host.arenaAllPids,
     fiestaTakedown: host.fiestaTakedown,
     fiestaDown: host.fiestaDown,
+    gauntletCourtContestant: host.gauntletCourtContestant,
+    gauntletCourtTakedown: host.gauntletCourtTakedown,
     rollLoot: host.rollLoot,
     rollWorldBossLoot: host.rollWorldBossLoot,
     applyHeal: host.applyHeal,

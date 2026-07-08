@@ -102,7 +102,7 @@ import { desktopBridge } from './runtime';
 import { pathCrossesFence } from './sim/colliders';
 import { ABILITIES, CLASSES } from './sim/content/classes';
 import { HC_HERALD_NPC_ID } from './sim/content/hodrics';
-import { ITEMS, setActiveWorldContent } from './sim/data';
+import { HUB_EXIT_TEMPLATE, HUB_PORTAL_TEMPLATE, ITEMS, setActiveWorldContent } from './sim/data';
 import { canEquipItem } from './sim/equipment_rules';
 import { findPlayerPath, resolvePlayerDestination } from './sim/pathfind';
 import { Sim } from './sim/sim';
@@ -1687,6 +1687,12 @@ async function startGame(
         hud.openMailbox();
         return;
       }
+      if (obj.templateId === HUB_PORTAL_TEMPLATE || obj.templateId === HUB_EXIT_TEMPLATE) {
+        // The Proving Grounds portals: the sim's contextual interact() resolves
+        // the nearest one and teleports (enter outside, leave inside).
+        world.interact();
+        return;
+      }
       world.pickUpObject(bestObj);
       return;
     }
@@ -1791,10 +1797,8 @@ async function startGame(
       }
     }
     const id = renderer.pick(x, y);
-    // The Final Court: clicking the rival while the shove is ready IS the
-    // shove (the ring flash marks readiness); on cooldown the click falls
-    // through and just targets them.
-    if (button === 0 && id !== null && hud.gauntletCourtClick(id)) return;
+    // The Final Court melee targets with a normal click: it falls through to
+    // handlePickedEntity below, which selects the clicked rival like any target.
     // OSRS-style click feedback (its own toggle): a brief ground marker, gold for a
     // neutral click and red on a hostile. Both reference games only mark a real action,
     // so the marker stamps where a click actually does something: the click-to-move
@@ -2037,7 +2041,21 @@ async function startGame(
   // the release frame would drop the one-shot when release lands on a zero-tick
   // frame. Held here until consumed, then cleared.
   let pendingReleaseFacing: number | null = null;
+  // While the viewer plays The Great Pull, the camera (yaw + pitch) and the
+  // character facing are frozen (the trial is all screen-space circle taps, so
+  // orbiting or mouselook-turning just fights the input). Latched to the seated
+  // pose on the first locked frame; cleared when the lock lifts.
+  let pullLockedYaw: number | null = null;
+  let pullLockedPitch = 0;
   function updateCamera(frameDt: number, interpFacing: number): void {
+    // Pull lock: hold the camera where it was latched and skip the follow
+    // update, so no mouse/keyboard input can rotate the view this frame.
+    if (pullLockedYaw !== null) {
+      input.camYaw = pullLockedYaw;
+      input.camPitch = pullLockedPitch;
+      lastInterpFacing = interpFacing; // keep synced so releasing never snaps
+      return;
+    }
     const mi = input.readMoveInput();
     const clickMoving = !!input.clickMoveTarget && !input.suspendMovement && !movementFrozen();
     // When click-to-move ends, the player's facing snaps from the (camera-lagging)
@@ -2283,6 +2301,25 @@ async function startGame(
     perf.trace('input.hoverCursor', () => updateHoverCursor(), { active: input.hoverActive });
     perf.markInputFrame(performance.now());
 
+    // The Great Pull freezes the view: latch the seated facing on the first
+    // locked frame (updateCamera pins the yaw to it) and suppress every facing
+    // source below, so neither the camera nor the character can be rotated.
+    const pullLock = hud.gauntletPullLocksView();
+    if (pullLock) {
+      if (pullLockedYaw === null) {
+        pullLockedYaw = world.player.facing;
+        pullLockedPitch = input.camPitch;
+      }
+    } else {
+      pullLockedYaw = null;
+    }
+    // Every desk trial seats you facing your apparatus (the sigil slab, the rope
+    // circles, or the echo table), so suppress every facing source and the
+    // character keeps the seated heading (facing the shape / table) instead of
+    // spinning with the mouse. Only the pull additionally pins the camera yaw
+    // (above); the sigils/echo trials drive their own authored focus pose.
+    const facingLock = hud.gauntletFacingLocked();
+
     const mouselook = intro === null && input.isMouselookActive() && !movementFrozen();
     const controllerFacing = input.controllerFacingOverride();
     const renderFacing = renderFacingOverride();
@@ -2310,9 +2347,10 @@ async function startGame(
     }
     // A ghost (dead && ghost) is not movement-frozen and keeps its facing; only a
     // corpse-bound dead player (dead && !ghost) loses it.
-    const movementFacing = !movementFrozen()
-      ? (renderFacing ?? controllerFacing ?? pendingReleaseFacing)
-      : null;
+    const movementFacing =
+      !movementFrozen() && !facingLock
+        ? (renderFacing ?? controllerFacing ?? pendingReleaseFacing)
+        : null;
 
     if (offlineSim) {
       acc += frameDt;
@@ -2326,7 +2364,10 @@ async function startGame(
           offlineSim.player.facing,
         );
         Object.assign(offlineSim.moveInput, mi);
-        const stepFacing = movementFacing ?? facing;
+        // Desk-trial facing lock (pull or echo): leave the seated facing
+        // untouched (no turn from any source), so the sim's face-your-station
+        // heading holds.
+        const stepFacing = facingLock ? null : (movementFacing ?? facing);
         if (stepFacing !== null) offlineSim.player.facing = stepFacing;
         offlineSim.updateFiestaBots(); // dev: steer Fiesta practice bots (no-op unless active)
         perf.markInputSent(performance.now());
@@ -2386,7 +2427,9 @@ async function startGame(
       world.player.facing,
       onlineInputEchoMs,
     );
-    const netFacing = movementFacing ?? resolved.facing;
+    // Desk-trial facing lock (pull or echo): send no facing override, so the
+    // server keeps the seated face-your-station heading.
+    const netFacing = facingLock ? null : (movementFacing ?? resolved.facing);
     Object.assign(net.moveInput, resolved.mi);
     net.setMouselookFacing(netFacing);
     // Online streams facing every frame, so the latched release yaw is consumed

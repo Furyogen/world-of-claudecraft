@@ -872,10 +872,11 @@ describe('S3: every sim.ts emit is recognized (drift guard)', () => {
     fs.readFileSync(path.resolve(process.cwd(), 'src/sim/pet/pet_commands.ts'), 'utf8'),
     fs.readFileSync(path.resolve(process.cwd(), 'src/sim/instances/dungeons.ts'), 'utf8'),
     fs.readFileSync(path.resolve(process.cwd(), 'src/sim/delves/runs.ts'), 'utf8'),
-    // The Gauntlet join guards + "full" error emit (return-literals + ctx.error), the
-    // one gauntlet slice that emits player-facing English; the light/phase/poof events
-    // are text-free SimEvents, so this is the only gauntlet file the guard needs.
+    // The Gauntlet join guards + "full" error emit (return-literals + ctx.error);
+    // the light/phase/poof events are text-free SimEvents. modes.ts adds the three
+    // join modes' queue/spectate status notices + guards (ctx.notice / ctx.error).
     fs.readFileSync(path.resolve(process.cwd(), 'src/sim/gauntlet/runs.ts'), 'utf8'),
+    fs.readFileSync(path.resolve(process.cwd(), 'src/sim/gauntlet/modes.ts'), 'utf8'),
     fs.readFileSync(path.resolve(process.cwd(), 'src/sim/delves/lockpick_controller.ts'), 'utf8'),
     // DL1: Drowned Litany boss/rite/rooms emit surfaces.
     fs.readFileSync(path.resolve(process.cwd(), 'src/sim/delves/drowned_litany_boss.ts'), 'utf8'),
@@ -908,6 +909,9 @@ describe('S3: every sim.ts emit is recognized (drift guard)', () => {
     // #1121: per-player node harvest command denials (dead gate, unknown node,
     // range, respawn timer, bag-full pre-check).
     fs.readFileSync(path.resolve(process.cwd(), 'src/sim/professions/gathering.ts'), 'utf8'),
+    // The Proving Grounds hub: the two portal teleport log lines (enter/leave),
+    // recognized by hud.ts localizeSystemText (hudChrome.hub.enter/leave).
+    fs.readFileSync(path.resolve(process.cwd(), 'src/sim/minigame_hub.ts'), 'utf8'),
     socialSrc,
   ].join('\n');
   // Hardened S3: also scan the authoritative server's player-facing emits. The

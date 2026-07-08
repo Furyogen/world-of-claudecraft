@@ -21,6 +21,7 @@ import { SKIN_COUNTS } from '../content/skins';
 import { NPCS } from '../data';
 import { createNpc } from '../entity';
 import type { SimContext } from '../sim_context';
+import type { Entity } from '../types';
 import type { GauntletContestant, GauntletRun, GauntletSentinelState } from './state';
 import { aliveContestants, applyVitalityDamage } from './vitality';
 
@@ -56,6 +57,8 @@ export function idleScript(): GauntletContestant['script'] {
     mult: 1,
     pauseAt: 0,
     pauseUntil: 0,
+    weavePhase: 0,
+    overshoot: 0,
   };
 }
 
@@ -139,6 +142,31 @@ export function seatLivePlayersAt(
   }
 }
 
+// Seat every alive, non-spectating contestant (players AND the NPC field) at a
+// per-index station spot, auto-assigning stations in aliveContestants order.
+// The echo desk trial calls this so its whole field sits at its own apparatus
+// rather than a lone table plus an audience; spot(i, n) returns instance-local
+// x/z plus the facing to hold. No rng is drawn (aliveContestants is a stable
+// order), so the draw stream is untouched.
+export function seatAllContestantsAt(
+  ctx: SimContext,
+  run: GauntletRun,
+  spot: (i: number, n: number) => { x: number; z: number; facing: number },
+): void {
+  const seated = aliveContestants(run).filter(
+    (c) => !(c.player && run.playerStates.get(c.entityId)?.spectating),
+  );
+  for (let i = 0; i < seated.length; i++) {
+    const e = ctx.entities.get(seated[i].entityId);
+    if (!e) continue;
+    const s = spot(i, seated.length);
+    e.pos = ctx.groundPos(run.origin.x + s.x, run.origin.z + s.z);
+    e.prevPos = { ...e.pos };
+    e.facing = s.facing;
+    ctx.rebucket(e);
+  }
+}
+
 // A deterministic line-up spot on the staging area for the i-th of n
 // contestants: rows of even lateral spread south of the start line.
 export function stagingSpot(
@@ -177,6 +205,12 @@ export function planSentinelScripts(run: GauntletRun): void {
     c.script.speed = t.npcSpeedMin + (t.npcSpeedMax - t.npcSpeedMin) * c.skill;
     // Fumbler: keeps moving through a red flip early in the trial and poofs.
     if (i >= npcSurvivors) c.script.fumbleOnFlip = run.rng.int(1, 6);
+    // Human-feel seeds (cosmetic): a per-NPC weave phase so the running sway is
+    // desynced across the pack, and how far past the finish line this bot
+    // coasts before it settles into the end-zone mill. Drawn once here from the
+    // per-run stream, so the locomotion needs no per-tick rng.
+    c.script.weavePhase = run.rng.range(0, Math.PI * 2);
+    c.script.overshoot = run.rng.range(t.npcOvershootMin, t.npcOvershootMax);
   }
 }
 
@@ -211,8 +245,10 @@ function replanNpcWindow(
 
 // Per-tick locomotion + scripted fumbles for the sentinel trial. Survivor
 // NPCs sprint on green (late off the mark, sometimes stuttering mid-run,
-// braking a beat after red); fumblers overrun the grace window on their
-// scripted flip and are knocked out where they stand.
+// braking a beat after red), weaving a little as they go; fumblers overrun the
+// grace window on their scripted flip and are knocked out where they stand.
+// Once a bot crosses it coasts a couple yards past the line and mills there,
+// so the field never freezes in a row on the finish mark.
 export function updateSentinelNpcs(
   ctx: SimContext,
   run: GauntletRun,
@@ -225,31 +261,77 @@ export function updateSentinelNpcs(
     if (c.player || c.eliminatedAtTrial !== null) continue;
     const e = ctx.entities.get(c.entityId);
     if (!e) continue;
+    const s = c.script;
     const lz = e.pos.z - run.origin.z;
-    if (lz >= t.fieldLength) continue; // crossed; safe, stands past the line
-    if (c.script.planKey !== key) replanNpcWindow(run, c, trial, key, ctx.time);
+    // Past the line + its overshoot: mill in the end zone (a small idle lateral
+    // sway, never dipping back below the finish line so the trial still
+    // resolves) instead of standing frozen on the mark.
+    if (lz >= t.fieldLength + s.overshoot) {
+      millPastLine(ctx, run, c, e, dt);
+      continue;
+    }
+    if (s.planKey !== key) replanNpcWindow(run, c, trial, key, ctx.time);
     const fumbling =
-      trial.light === 'red' &&
-      c.script.fumbleOnFlip !== null &&
-      c.script.fumbleOnFlip <= trial.flipCount;
+      trial.light === 'red' && s.fumbleOnFlip !== null && s.fumbleOnFlip <= trial.flipCount;
     // A scripted fumbler dawdles short of the line until its flip arrives, so
     // it can never cross early and dodge its own script.
-    const dawdling = c.script.fumbleOnFlip !== null && lz >= t.fieldLength * 0.9 && !fumbling;
-    const s = c.script;
+    const dawdling = s.fumbleOnFlip !== null && lz >= t.fieldLength * 0.9 && !fumbling;
+    // Once over the line a survivor is safe: it keeps coasting to its overshoot
+    // mark regardless of the light (the red catch is a player-only rule).
+    const crossedLine = lz >= t.fieldLength;
     const pausing = s.pauseUntil > s.pauseAt && ctx.time >= s.pauseAt && ctx.time < s.pauseUntil;
-    const advancing = fumbling
+    const advancing = crossedLine
       ? true
-      : trial.light === 'green'
-        ? ctx.time >= s.goAt && !pausing
-        : ctx.time < s.stopAt; // brake lag; scripts, not detection, catch NPCs
+      : fumbling
+        ? true
+        : trial.light === 'green'
+          ? ctx.time >= s.goAt && !pausing
+          : ctx.time < s.stopAt; // brake lag; scripts, not detection, catch NPCs
     if (advancing && !dawdling) {
       e.prevPos = { ...e.pos };
       e.pos.z += s.speed * s.mult * dt;
-      e.facing = 0; // faces the finish line while advancing
+      // Weave: a small lateral sway while genuinely running forward (on green,
+      // or coasting past the line), never while stopped on red (that would read
+      // as moving on the red light). Forward z pace is untouched, so the weave
+      // is purely cosmetic curvature, not slower progress.
+      if (crossedLine || (trial.light === 'green' && !fumbling)) {
+        const sway = Math.sin(ctx.time * t.npcWeaveFreq + s.weavePhase) * t.npcWeaveAmp * dt;
+        e.pos.x = clampFieldX(run, e.pos.x + sway, t.fieldHalfWidth);
+      }
+      // Face where the body is actually moving, so the slight weave shows as a
+      // gentle turn rather than a straight-ahead slide.
+      e.facing = Math.atan2(e.pos.x - e.prevPos.x, e.pos.z - e.prevPos.z);
     }
     // The fumbler is caught once its overrun outlives the grace window.
     if (fumbling && ctx.time >= trial.graceUntil) {
       applyVitalityDamage(ctx, run, c, c.vitality, 'caught');
     }
   }
+}
+
+// The end-zone mill for a bot that has crossed and overshot the line: a gentle
+// lateral sway around its current lane (Math.sin off the seeded phase, so no
+// rng and fully deterministic), clamped to the field width and never allowed
+// back over the finish line. Cosmetic only; z holds where it settled.
+function millPastLine(
+  ctx: SimContext,
+  run: GauntletRun,
+  c: GauntletContestant,
+  e: Entity,
+  dt: number,
+): void {
+  const t = GAUNTLET.sentinel;
+  const s = c.script;
+  const sway = Math.cos(ctx.time * t.npcWeaveFreq * 0.5 + s.weavePhase) * t.npcMillAmp * dt;
+  e.prevPos = { ...e.pos };
+  e.pos.x = clampFieldX(run, e.pos.x + sway, t.fieldHalfWidth);
+  e.facing = Math.atan2(e.pos.x - e.prevPos.x, e.pos.z - e.prevPos.z);
+}
+
+// Keep a contestant within the field's lateral bounds (instance-local |x| <=
+// halfWidth), the same clamp the player detection applies in trial_sentinel.
+function clampFieldX(run: GauntletRun, x: number, halfWidth: number): number {
+  const lo = run.origin.x - halfWidth;
+  const hi = run.origin.x + halfWidth;
+  return x < lo ? lo : x > hi ? hi : x;
 }

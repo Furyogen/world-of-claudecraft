@@ -2,11 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { GAUNTLET } from '../src/sim/content/gauntlet';
 import type { GauntletPhase, GauntletRunView } from '../src/sim/types';
 import { GauntletClock } from '../src/ui/gauntlet_clock';
-import {
-  type GauntletHudInput,
-  gauntletHudModel,
-  TUTORIAL_LEAD_S,
-} from '../src/ui/gauntlet_hud_view';
+import { type GauntletHudInput, gauntletHudModel } from '../src/ui/gauntlet_hud_view';
 
 // A fully-populated run view; individual tests override the fields they exercise.
 function run(over: Partial<GauntletRunView> = {}): GauntletRunView {
@@ -21,15 +17,16 @@ function run(over: Partial<GauntletRunView> = {}): GauntletRunView {
     vitality: 70,
     vitalityMax: 100,
     spectating: false,
+    practice: false,
     finished: false,
     originX: 9000,
     originZ: -1250,
+    board: [],
     sentinel: { light: 'green', until: 105, fieldLength: 90 },
     sigils: null,
     pull: null,
     echo: null,
     span: null,
-    court: null,
     podium: null,
     ...over,
   };
@@ -40,7 +37,6 @@ describe('gauntletHudModel', () => {
     const m = gauntletHudModel({ run: null, time: 42 });
     expect(m.visible).toBe(false);
     expect(m.showCountdown).toBe(false);
-    expect(m.showLight).toBe(false);
   });
 
   it('is a pure function of its input (same input, same output)', () => {
@@ -73,21 +69,6 @@ describe('gauntletHudModel', () => {
     expect(m.vitalityMax).toBe(100);
   });
 
-  it('surfaces the red sentinel light during the crossing trial', () => {
-    const m = gauntletHudModel({
-      run: run({ sentinel: { light: 'red', until: 120, fieldLength: 90 } }),
-      time: 118,
-    });
-    expect(m.light).toBe('red');
-    expect(m.showLight).toBe(true);
-  });
-
-  it('reports no light outside the sentinel trial', () => {
-    const m = gauntletHudModel({ run: run({ phase: 'interlude', sentinel: null }), time: 0 });
-    expect(m.light).toBeNull();
-    expect(m.showLight).toBe(false);
-  });
-
   it('carries the spectating flag through', () => {
     const m = gauntletHudModel({ run: run({ spectating: true }), time: 0 });
     expect(m.spectating).toBe(true);
@@ -97,11 +78,6 @@ describe('gauntletHudModel', () => {
     const podium = { first: 'Bram Thistledown', second: 'Odessa Marshlight', third: 'Finn Pinch' };
     const m = gauntletHudModel({ run: run({ phase: 'podium', podium, sentinel: null }), time: 0 });
     expect(m.podium).toEqual(podium);
-  });
-
-  it('passes the raw prize pool copper through for the painter to format', () => {
-    const m = gauntletHudModel({ run: run({ prizePool: 37500 }), time: 0 });
-    expect(m.prizePool).toBe(37500);
   });
 
   it('hides the countdown only once the run is done', () => {
@@ -114,15 +90,6 @@ describe('gauntletHudModel', () => {
     expect(
       gauntletHudModel({ run: run({ phase: 'done', sentinel: null }), time: 0 }).showCountdown,
     ).toBe(false);
-  });
-
-  it('reports no court prompt outside that trial', () => {
-    // The pull trial has no HUD sub-cluster at all: its meter is the venue's
-    // rope + drum, driven from the raw wire view, never from this model.
-    const m = gauntletHudModel({ run: run(), time: 0 });
-    expect(m.court).toBeNull();
-    const hidden = gauntletHudModel({ run: null, time: 0 });
-    expect(hidden.court).toBeNull();
   });
 
   // An echo round: 4-step sequence flashing from t=100 (0.7s steps, so the
@@ -161,58 +128,16 @@ describe('gauntletHudModel', () => {
     expect(expired.echo?.answerSeconds).toBe(0);
   });
 
-  const courtRun = (over: Partial<NonNullable<GauntletRunView['court']>> = {}) =>
-    run({
-      sentinel: null,
-      court: { attacker: true, swapAt: 200, shoveReadyAt: 110, neckZ: 14, rivalId: 5, ...over },
-    });
-
-  it('carries the attacker/defender court role through', () => {
-    // The shove itself is a world click on the rival (the ready cue reads the
-    // raw view's shoveReadyAt), so the role is the model's whole court block.
-    expect(gauntletHudModel({ run: courtRun({ attacker: true }), time: 0 }).court?.attacker).toBe(
-      true,
-    );
-    expect(gauntletHudModel({ run: courtRun({ attacker: false }), time: 0 }).court?.attacker).toBe(
-      false,
-    );
-  });
-
-  it('picks the teaching hint from the live trial substate', () => {
-    expect(gauntletHudModel({ run: run(), time: 0 }).hint).toBe('sentinel');
-    const sigils = run({
-      sentinel: null,
-      sigils: { shapeSeed: 1, shapeId: 0, crack: 0, crackMax: 100, progress: 0, coveredMask: 0 },
-    });
-    expect(gauntletHudModel({ run: sigils, time: 0 }).hint).toBe('sigils');
-    const pull = run({
-      sentinel: null,
-      pull: { marker: 0, winThreshold: 12, kx: 0, circle: null },
-    });
-    expect(gauntletHudModel({ run: pull, time: 0 }).hint).toBe('pull');
-    const span = run({ sentinel: null, span: { steps: 14, revealed: [] } });
-    expect(gauntletHudModel({ run: span, time: 0 }).hint).toBe('span');
-    expect(gauntletHudModel({ run: courtRun(), time: 0 }).hint).toBe('court');
-  });
-
-  it('splits the echo hint by phase: watch the flashes, then answer', () => {
-    expect(gauntletHudModel({ run: echoRun(), time: 101 }).hint).toBe('echoWatch');
-    expect(gauntletHudModel({ run: echoRun(), time: 104 }).hint).toBe('echoAnswer');
-    // A finished duel teaches nothing.
-    expect(gauntletHudModel({ run: echoRun({ done: true }), time: 104 }).hint).toBeNull();
-  });
-
-  it('opens the tutorial banner for the last seconds of staging and interlude', () => {
+  it('shows the tutorial banner for the WHOLE staging and interlude (tied to the cooldown bar)', () => {
     // GAUNTLET.trials: sentinel, sigils, pull, echo, span, court.
     const staging = run({ phase: 'staging', trialIndex: 0, endsAt: 100, sentinel: null });
-    // Early in the window: no banner yet.
-    expect(gauntletHudModel({ run: staging, time: 100 - TUTORIAL_LEAD_S - 1 }).tutorial).toBeNull();
-    // Inside the lead window: the upcoming (first) trial's teaching line.
-    expect(gauntletHudModel({ run: staging, time: 100 - TUTORIAL_LEAD_S + 1 }).tutorial).toBe(
-      'sentinel',
-    );
-    // An interlude teaches the NEXT trial (trialIndex is the one just played).
+    // The full phase shows it now, early AND late, not just the last seconds.
+    expect(gauntletHudModel({ run: staging, time: 1 }).tutorial).toBe('sentinel');
+    expect(gauntletHudModel({ run: staging, time: 99 }).tutorial).toBe('sentinel');
+    // An interlude teaches the NEXT trial (trialIndex is the one just played),
+    // for the whole cooldown, not only near the end.
     const interlude = run({ phase: 'interlude', trialIndex: 1, endsAt: 100, sentinel: null });
+    expect(gauntletHudModel({ run: interlude, time: 1 }).tutorial).toBe('pull');
     expect(gauntletHudModel({ run: interlude, time: 97 }).tutorial).toBe('pull');
     // The echo teaches its watch phase.
     const beforeEcho = run({ phase: 'interlude', trialIndex: 2, endsAt: 100, sentinel: null });
@@ -231,16 +156,6 @@ describe('gauntletHudModel', () => {
     });
     expect(gauntletHudModel({ run: lastDone, time: 97 }).tutorial).toBeNull();
     expect(gauntletHudModel({ run: null, time: 0 }).tutorial).toBeNull();
-  });
-
-  it('shows no hint outside a live trial, when spectating, or when finished', () => {
-    expect(gauntletHudModel({ run: run({ phase: 'staging' }), time: 0 }).hint).toBeNull();
-    expect(
-      gauntletHudModel({ run: run({ phase: 'interlude', sentinel: null }), time: 0 }).hint,
-    ).toBeNull();
-    expect(gauntletHudModel({ run: run({ spectating: true }), time: 0 }).hint).toBeNull();
-    expect(gauntletHudModel({ run: run({ finished: true }), time: 0 }).hint).toBeNull();
-    expect(gauntletHudModel({ run: null, time: 0 }).hint).toBeNull();
   });
 });
 

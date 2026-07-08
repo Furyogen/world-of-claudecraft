@@ -1669,6 +1669,11 @@ export interface Entity {
   // every non-player entity. Owned by src/sim/spirit.ts.
   ghost: boolean;
   corpsePos: Vec3 | null;
+  // A free-roaming Gauntlet spectator (gauntlet/modes.ts): renders at 20% opacity
+  // to OTHER players so the watchers read as faint ghosts among the contestants.
+  // Runtime-only (never persisted); false for the living, the dead, and every
+  // non-player entity. Wired per-entity as the `spec` snapshot flag.
+  spectator: boolean;
   scale: number;
   color: number;
   skinCatalog: SkinCatalog; // player appearance catalog: class texture set or cosmetic body.
@@ -2086,7 +2091,9 @@ export type SimEvent = { pid?: number } & (
   // `gauntletEchoJudge`: the sim graded YOUR echo stone tap (trial 4); the
   // client flashes the clicked stone green (`ok`) or red so every click has
   // visible success/failure feedback.
-  // `gauntletPodium`: the run resolved; `won` is whether you took first.
+  // `gauntletFinished`: YOU cleared the current trial's goal (crossed the
+  // sentinel finish line), a one-shot cue the client turns into a "you passed"
+  // banner. `gauntletPodium`: the run resolved; `won` is whether you took first.
   | {
       type: 'gauntletPhase';
       phase: GauntletPhase;
@@ -2111,6 +2118,7 @@ export type SimEvent = { pid?: number } & (
       survivors: number;
     }
   | { type: 'gauntletEliminated'; trialIndex: number }
+  | { type: 'gauntletFinished'; trialIndex: number }
   | { type: 'gauntletPodium'; first: string; second: string; third: string; won: boolean }
 );
 
@@ -2128,8 +2136,8 @@ export type GauntletPhase = 'lobby' | 'staging' | 'trial' | 'interlude' | 'podiu
 
 // What dealt a vitality hit. 'caught' = a trial hard fail (moved on red light);
 // 'trial' = the end-of-trial performance score; 'timeout' = the trial clock ran
-// out before the contestant resolved.
-export type GauntletDamageCause = 'caught' | 'trial' | 'timeout';
+// out before the contestant resolved; 'struck' = a blow in the Final Court melee.
+export type GauntletDamageCause = 'caught' | 'trial' | 'timeout' | 'struck';
 
 export type GauntletTrialKind = 'sentinel' | 'sigils' | 'pull' | 'echo' | 'span' | 'court';
 
@@ -2153,7 +2161,8 @@ export interface GauntletSentinelTuning {
   pushbackYards: number; // set back toward the start line on a catch
   momentumDecay: number; // residual per-tick velocity multiplier after input release
   momentumStopEps: number; // residual speed (yards/tick) below this snaps to a stop
-  damageMax: number; // end-of-trial vitality damage at score 0 (scales down to ~0 at 1)
+  damageMax: number; // end-of-trial vitality damage at score 0 (= full pool: score 0 is fatal); scales to ~0 at 1
+  npcTithe: number; // scripted-survivor NPC attrition tithe (invisible; NOT derived from damageMax)
   finishBonusMax: number; // score bonus for finishing with the full clock remaining
   // NPC contestant improv: green-light pace is skill-lerped between the speed
   // bounds (yards/s; compare RUN_SPEED), then each light window rolls fresh
@@ -2168,6 +2177,17 @@ export interface GauntletSentinelTuning {
   npcHesitateChance: number; // chance per green window of a mid-run stutter
   npcHesitateMinS: number; // stutter length bounds
   npcHesitateMaxS: number;
+  // Human-feel locomotion on top of the pace above (all cosmetic, deterministic
+  // from a per-NPC seeded phase drawn once in planSentinelScripts, so no extra
+  // per-tick rng and no reordering of the shared stream). While running on
+  // green a bot weaves a little instead of tracking a straight line; on
+  // crossing it overshoots the finish line and mills in the end zone rather
+  // than freezing on the mark.
+  npcWeaveAmp: number; // lateral weave speed while running (yards/s peak)
+  npcWeaveFreq: number; // weave angular frequency (rad/s)
+  npcOvershootMin: number; // yards past the finish line a bot coasts before milling
+  npcOvershootMax: number;
+  npcMillAmp: number; // idle lateral sway speed while milling past the line (yards/s)
 }
 
 // Trial 2, Sugarglass Sigils: freedraw the seeded etched outline without
@@ -2178,14 +2198,23 @@ export interface GauntletSigilsTuning {
   durationS: number;
   outlinePoints: number; // polyline resolution a shape is sampled at
   tolerance: number; // max shape-local distance from the outline before crack accrues
-  // Max NEW outline vertices carved per second (a clean continuous drag never
-  // hits it; packet spam and teleport-taps buy nothing past it).
+  // The arc-coverage window a single on-band point carves, as a fraction of the
+  // whole loop (decoupled from `tolerance`).
+  carveArcFrac: number;
+  // The largest arc gap (fraction of the loop) a point may sit from the covered
+  // frontier and still CONTINUE the trace (the gap is filled). A hit further out
+  // is a jump across the shape and carves nothing, so coverage grows as one
+  // contiguous arc and scattered dabs never stitch the loop together.
+  contiguityArcFrac: number;
+  // Max NEW outline vertices carved per second (an anti-teleport rate cap; sits
+  // above an honest continuous drag, so it only stops a single fat batch from
+  // carving the whole outline at once).
   coverageCapPerS: number;
   crackMax: number; // the crack meter
   crackOffPath: number; // crack per second while tracing outside the tolerance
   thinSectionMult: number; // crack multiplier on a shape's marked thin segments
   shatterDamage: number; // vitality chunk on a shatter (a fresh shape follows)
-  damageMax: number; // end-of-trial damage at zero progress
+  damageMax: number; // end-of-trial damage at zero progress (= full pool: zero coverage is fatal)
 }
 
 // Trial 3, The Great Pull: team tug of war played on shrinking circles. Each
@@ -2200,6 +2229,10 @@ export interface GauntletPullTuning {
   circleSpawnMaxS: number;
   circleShrinkMinS: number; // full-shrink duration bounds (the per-circle "random speed")
   circleShrinkMaxS: number;
+  // The difficulty ramp: as the trial elapses (0..1), the spawn gap AND the
+  // shrink duration are both scaled from 1x down toward this factor, so circles
+  // come faster and shrink faster the longer the pull runs. 1 = no ramp.
+  circleRampMin: number;
   circleStartSize: number; // spawn size (abstract units, rendered as px 1:1)
   circleTargetSize: number; // click as close to this size as possible
   pullForceMax: number; // marker yards for a click at exactly the target size
@@ -2208,7 +2241,7 @@ export interface GauntletPullTuning {
   npcForceMin: number; // per-heave per-team NPC force draw bounds
   npcForceMax: number;
   winThreshold: number; // |marker| that decides the pull
-  lossDamage: number; // vitality damage dealt to every loser (big chunk, not death)
+  lossDamage: number; // end-of-pull toll at ZERO contribution (= full pool: an idle contestant is knocked out); scaled down by how hard a player pulled (contribution vs winThreshold)
 }
 
 // Trial 4, the Keeper's Echo: a memory duel against the Keeper's rune stones.
@@ -2224,7 +2257,7 @@ export interface GauntletEchoTuning {
   stepS: number; // seconds per flash during the watch phase
   inputS: number; // answer window once the flashes end
   missDamage: number; // vitality per wrong stone or timed-out round
-  damageMax: number; // end-of-trial damage at zero rounds cleared
+  damageMax: number; // end-of-trial damage at zero rounds cleared (= full pool: zero rounds is fatal)
 }
 
 // Trial 5, The Brittle Span: paired floor panels over the pit; one of each
@@ -2237,25 +2270,32 @@ export interface GauntletSpanTuning {
   panelGap: number; // lateral gap between the pair
   fallDamage: number; // brittle-panel chunk; respawn at the span start
   npcAheadCount: number; // seeded crossers that go first and reveal early panels
-  npcStepPeriodS: number; // cadence of the crossers
-  damageMax: number; // end-of-trial damage at zero progress
+  npcHopS: number; // seconds a crosser takes to run-and-hop one panel forward
+  npcJumpHeight: number; // peak height of a crosser's hop (yards)
+  npcPlungeS: number; // seconds a mis-stepped crosser takes to drop into the pit
+  npcPlungeDrop: number; // how far below the deck a plunging crosser falls (yards)
+  npcStumbleChance: number; // chance a scout guesses one panel wrong (then climbs back)
+  damageMax: number; // end-of-trial damage at zero progress (= full pool: never stepping on is fatal)
 }
 
-// Trial 6, The Final Court: the closing duel. Attacker reaches the head zone,
-// defender pushes them out; roles swap on a timer; damage goes to vitality.
+// Trial 6, The Final Court: a standard-combat free-for-all in a circular arena.
+// Every survivor (players and NPCs alike) is normalized to the SAME hp pool and
+// trades plain auto-attack swings on REAL hp (real `damage` events, real death
+// routed to elimination), so class, level, and gear can never touch the outcome.
+// Last fighter standing is champion; if the clock expires, the highest remaining
+// hp wins.
 export interface GauntletCourtTuning {
   durationS: number;
-  courtLength: number; // yards, entry line to the head zone
-  courtHalfWidth: number;
-  neckZ: number; // past this the attacker's movement penalty lifts
-  preNeckSpeedMult: number; // attacker speed multiplier before the neck (one-foot rule)
-  shoveCooldownS: number;
-  shoveRange: number;
-  shovePush: number; // yards of knockback per landed shove
-  shoveDamage: number; // vitality per landed shove
-  outDamage: number; // vitality chunk for being pushed out of bounds
-  roleSwapS: number; // attacker/defender swap timer
-  rivalReactionS: number; // NPC rival decision latency
+  arenaRadius: number; // the ring every fighter is clamped inside (yards)
+  maxHp: number; // the shared hp pool every fighter is normalized to at start
+  npcMoveSpeed: number; // NPC chase speed (yards/sec), matched to player RUN_SPEED
+  strikeDamage: number; // authored auto-attack hit (bypasses armor, equal for all)
+  strikeIntervalS: number; // auto-attack cadence (seconds between swings)
+  strikeRange: number; // melee reach for the auto-attack
+  // NPC melee AI, all rolled from the per-run stream (skill-scaled 0..1):
+  npcReactMinS: number; // target-decision latency at skill 1
+  npcReactMaxS: number; // decision latency at skill 0
+  npcRetargetS: number; // how often an NPC re-picks its foe
 }
 
 // The viewer-scoped wire projection of a run (the `grun` self-wire key and the
@@ -2274,9 +2314,18 @@ export interface GauntletRunView {
   vitality: number; // the viewer's own vitality
   vitalityMax: number;
   spectating: boolean;
+  // A solo Practice run (vs bots only): the podium hides the "rejoin queue" action
+  // and a practice run never records ladder stats. False for a live queue game.
+  practice: boolean;
   finished: boolean; // the viewer resolved the current trial (crossed the line)
   originX: number; // instance origin, so presentation can derive field-local coords
   originZ: number;
+  // The whole contestant field for the top-left standings board: one row per
+  // contestant (players first, then the NPC backfill), each with their event
+  // vitality, whether they have been knocked out, and whether the row is the
+  // viewer. Names are proper nouns (esc'd, never translated). This changes only
+  // on a vitality hit or a knockout, so the wire delta still elides quiet ticks.
+  board: { name: string; vitality: number; out: boolean; you: boolean }[];
   sentinel: { light: 'green' | 'red'; until: number; fieldLength: number } | null;
   // The viewer's own per-trial substate, one member per trial kind (only the
   // active trial's member is non-null). Values are quantized at the wire
@@ -2335,13 +2384,11 @@ export interface GauntletRunView {
     // Reveals are shared: every crosser's fate teaches the whole field.
     revealed: number[];
   } | null;
-  court: {
-    attacker: boolean;
-    swapAt: number;
-    shoveReadyAt: number;
-    neckZ: number;
-    rivalId: number; // entity id of the rival (another player or the NPC)
-  } | null;
+  // The Final Court free-for-all needs no viewer substate: the sim mirrors the
+  // fighter's foe onto the player's real target, so the standard target frame +
+  // world selection ring show it (exactly like a duel). The fight is plain
+  // auto-attack (no ability buttons); the standings board + health frame carry
+  // the rest.
   podium: { first: string; second: string; third: string } | null;
 }
 
@@ -2352,6 +2399,7 @@ export interface GauntletDef {
   fieldSize: number; // total contestants per run, players + NPC backfill
   vitalityMax: number; // the normalized event vitality pool (same for everyone)
   lobbyFillS: number; // how long a lobby waits for more players before starting
+  queueCountdownS: number; // the shorter fill window for a queue-formed lobby (rolling games)
   maxRealPlayers: number; // lobby starts early when this many have joined
   joinRadius: number; // yards from the recruiter within which gauntletJoin works
   emptyTimeoutS: number; // a run with no player attached disposes after this

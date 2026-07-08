@@ -4235,26 +4235,6 @@
     text-shadow: 1px 1px 2px #000;
     font-variant-numeric: tabular-nums;
   }
-  #gauntlet-meta {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-  /* The one-line teaching hint under the meta row: how the live trial is
-     played (the painter shows it only while the viewer can act). */
-  #gauntlet-hint {
-    display: none;
-    font: italic 600 11px / 15px var(--body-font);
-    color: var(--color-text-light);
-    background: rgba(8, 8, 12, 0.72);
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    padding: 2px 10px;
-    text-align: center;
-    text-shadow: 1px 1px 2px #000;
-  }
   .gh-chip {
     font: 700 11px / 16px var(--body-font);
     color: var(--color-text-light);
@@ -4263,24 +4243,6 @@
     border-radius: 9px;
     padding: 1px 8px;
     font-variant-numeric: tabular-nums;
-  }
-  .gh-light {
-    display: none;
-    font: 700 12px / 18px var(--title-font);
-    letter-spacing: 1px;
-    color: #fff;
-    border-radius: 9px;
-    padding: 1px 12px;
-    text-shadow: 1px 1px 2px #000;
-    border: 1px solid #000;
-  }
-  .gh-light.green {
-    background: linear-gradient(#3fd268, #1c8a3c);
-    box-shadow: 0 0 10px #35d06a99;
-  }
-  .gh-light.red {
-    background: linear-gradient(#ff6b5e, #b62c22);
-    box-shadow: 0 0 10px #ff5a4a99;
   }
   /* The pre-trial tutorial banner: the upcoming trial's teaching line, big
      and centered above mid-screen while the staging/interlude countdown runs
@@ -4304,6 +4266,111 @@
     border-radius: 12px;
     pointer-events: none;
     z-index: 6;
+  }
+
+  /* The Gauntlet standings board: a compact top-left list of every contestant's
+     vitality bar, the viewer's own row highlighted, knocked-out rows dimmed with
+     an OUT tag. Read-only chrome (built by gauntlet_board.ts), never eats clicks.
+     The top-center player frame is margin-auto centered, so the top-left corner
+     is free for it. */
+  #gauntlet-board {
+    position: absolute;
+    left: 12px;
+    top: 12px;
+    display: none;
+    flex-direction: column;
+    width: 190px;
+    max-height: calc(100vh - 200px);
+    overflow: hidden;
+    padding: 6px 8px;
+    background: rgba(8, 8, 12, 0.72);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    pointer-events: none;
+    z-index: 6;
+  }
+  #gauntlet-board .gb-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 3px;
+    margin-bottom: 3px;
+  }
+  #gauntlet-board .gb-title {
+    font-family: var(--title-font);
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    color: var(--color-primary);
+    text-shadow: 1px 1px 2px #000;
+  }
+  #gauntlet-board .gb-count {
+    font: 700 11px / 1 var(--body-font);
+    color: var(--color-text-light);
+    font-variant-numeric: tabular-nums;
+  }
+  #gauntlet-board .gb-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-height: 0;
+    overflow: hidden;
+  }
+  #gauntlet-board .gb-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 6px;
+    height: 15px;
+    padding: 0 3px;
+    border-radius: 4px;
+  }
+  #gauntlet-board .gb-row.me {
+    background: rgba(201, 148, 26, 0.22);
+    outline: 1px solid var(--color-primary);
+  }
+  #gauntlet-board .gb-name {
+    font: 600 11px / 15px var(--body-font);
+    color: var(--color-text-light);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 1px 1px 2px #000;
+  }
+  #gauntlet-board .gb-row.me .gb-name {
+    color: var(--color-primary);
+  }
+  #gauntlet-board .gb-bar {
+    position: relative;
+    width: 62px;
+    height: 7px;
+    border: 1px solid #000;
+    border-radius: 3px;
+    background: #241a12;
+    overflow: hidden;
+  }
+  #gauntlet-board .gb-fill {
+    display: block;
+    height: 100%;
+    background: linear-gradient(#5fe08a, #2c9a4c);
+  }
+  #gauntlet-board .gb-fill.low {
+    background: linear-gradient(#ff8a6a, #b6402c);
+  }
+  #gauntlet-board .gb-row.out {
+    opacity: 0.5;
+  }
+  #gauntlet-board .gb-row.out .gb-name {
+    text-decoration: line-through;
+  }
+  #gauntlet-board .gb-out {
+    font: 700 9px / 1 var(--body-font);
+    letter-spacing: 1px;
+    color: #ff8a7a;
   }
 
   /* ---------- gauntlet circles overlay ---------- */
@@ -4389,16 +4456,27 @@
   }
   #gauntlet-recruit .gr-actions {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
     padding: 10px 14px 0;
   }
-  #gauntlet-recruit .gr-action {
+  #gauntlet-recruit .gr-action,
+  #gauntlet-recruit .gr-spectate,
+  #gauntlet-recruit .gr-practice {
     min-width: 160px;
     min-height: 40px;
   }
-  #gauntlet-recruit .gr-action[disabled] {
+  #gauntlet-recruit .gr-action[disabled],
+  #gauntlet-recruit .gr-spectate[disabled] {
     opacity: 0.5;
     cursor: default;
+  }
+  #gauntlet-recruit .gr-note {
+    padding: 6px 14px 2px;
+    font-size: 12px;
+    color: var(--color-text-muted);
+    text-align: center;
   }
 
   /* ---------- gauntlet overlay ---------- */
@@ -4529,7 +4607,14 @@
     font-size: 18px;
     color: var(--color-text-light);
   }
-  .go-leave {
+  .go-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .go-leave,
+  .go-rejoin {
     min-width: 120px;
     min-height: 40px;
   }
@@ -4549,31 +4634,10 @@
     }
   }
 
-  /* ---------- gauntlet court role chip (trial 6) ---------- */
-  /* The shove is a click on the rival in the world; the chip only names the
-     viewer's current role. */
-  .gh-court {
-    display: none;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-  }
-  .gh-court-role {
-    font: 700 12px / 18px var(--title-font);
-    letter-spacing: 1px;
-    color: #fff;
-    border-radius: 9px;
-    padding: 2px 12px;
-    text-shadow: 1px 1px 2px #000;
-    border: 1px solid #000;
-    background: var(--color-text-muted);
-  }
-  .gh-court.attacker .gh-court-role {
-    background: linear-gradient(var(--color-hostile), #b62c22);
-  }
-  .gh-court.defender .gh-court-role {
-    background: linear-gradient(#4a86c8, #2a5a8a);
-  }
+  /* ---------- gauntlet court chip (trial 6) ---------- */
+  /* The Final Court is plain auto-attack and has no HUD controls: you target a
+     foe with a normal click and the standings board + health frame carry the
+     fight, so this section carries no rules (kept for the corpus manifest). */
 
   /* ---------- gauntlet echo strip (trial 4) ---------- */
   /* The round counter + answer clock row inside the gauntlet cluster; the

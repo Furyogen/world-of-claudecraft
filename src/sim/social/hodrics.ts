@@ -23,8 +23,16 @@
 //   band, falls are caught at the kill plane and respawn at the last
 //   checkpoint (or the gallery, for the eliminated).
 
-import { HC_HERALD, HC_HERALD_ID, HC_HERALD_POS } from '../content/hodrics';
-import { DUNGEON_X_THRESHOLD, HODRICS_SLOT_COUNT, hodricsOrigin, isHodricsPos } from '../data';
+import { HC_HERALD, HC_HERALD_ID } from '../content/hodrics';
+import {
+  DUNGEON_X_THRESHOLD,
+  HODRICS_SLOT_COUNT,
+  hodricsOrigin,
+  isHodricsPos,
+  isMinigameHubPos,
+  MINIGAME_HUB,
+  MINIGAME_HUB_OSRIC,
+} from '../data';
 import { createNpc } from '../entity';
 import {
   type HcCourse,
@@ -191,7 +199,16 @@ export function hcRoundSeed(seedBase: number, round: number): number {
  */
 export function spawnHcHerald(ctx: SimContext): void {
   if (ctx.entities.has(HC_HERALD_ID)) return;
-  const npc = createNpc(HC_HERALD_ID, HC_HERALD, ctx.groundPos(HC_HERALD_POS.x, HC_HERALD_POS.z));
+  // Osric stands in the Proving Grounds hub beside Maro (see data.ts
+  // MINIGAME_HUB): players reach both event heralds through the one portal.
+  const pos = ctx.groundPos(
+    MINIGAME_HUB.x + MINIGAME_HUB_OSRIC.x,
+    MINIGAME_HUB.z + MINIGAME_HUB_OSRIC.z,
+  );
+  const npc = createNpc(HC_HERALD_ID, HC_HERALD, pos);
+  // Face the centre of the ring, mirroring Maro across it.
+  npc.facing = Math.atan2(-MINIGAME_HUB_OSRIC.x, -MINIGAME_HUB_OSRIC.z);
+  npc.prevFacing = npc.facing;
   ctx.addEntity(npc);
 }
 
@@ -235,12 +252,19 @@ export function hcQueueJoin(ctx: SimContext, pid?: number): void {
     ctx.error(id, 'Leave the Coliseum before racing the Gauntlet.');
     return;
   }
-  // A Gauntlet event run (its lobby included) would teleport-fight a race pop.
-  if (ctx.gauntletRuns.some((run) => run.playerStates.has(id))) {
+  // A Gauntlet event run (its lobby included), a pending queue slot, or a
+  // spectator seat would all teleport-fight a race pop.
+  if (
+    ctx.gauntletRuns.some((run) => run.playerStates.has(id)) ||
+    ctx.gauntletQueue.some((u) => u.pid === id) ||
+    ctx.gauntletSpectators.has(id)
+  ) {
     ctx.error(id, 'You are already in the Gauntlet.');
     return;
   }
-  if (r.e.pos.x > DUNGEON_X_THRESHOLD) {
+  // The Proving Grounds hub is a far-off band too, but it is exactly where you
+  // talk to Osric to queue, so it is exempt from the instance guard.
+  if (r.e.pos.x > DUNGEON_X_THRESHOLD && !isMinigameHubPos(r.e.pos.x)) {
     ctx.error(id, 'You cannot queue from inside an instance.');
     return;
   }

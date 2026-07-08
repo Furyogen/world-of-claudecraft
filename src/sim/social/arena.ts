@@ -98,8 +98,13 @@ export function arenaQueueJoin(
     ctx.error(id, 'Finish your trade before queueing.');
     return;
   }
-  // A Gauntlet run (its lobby included) would teleport-fight an arena pop.
-  if (ctx.gauntletRuns.some((run) => run.playerStates.has(id))) {
+  // A Gauntlet run (its lobby included), a pending queue slot, or a spectator seat
+  // would all teleport-fight an arena pop.
+  if (
+    ctx.gauntletRuns.some((run) => run.playerStates.has(id)) ||
+    ctx.gauntletQueue.some((u) => u.pid === id) ||
+    ctx.gauntletSpectators.has(id)
+  ) {
     ctx.error(id, 'You are already in the Gauntlet.');
     return;
   }

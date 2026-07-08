@@ -11,13 +11,29 @@ export interface IWorldGauntlet {
   // gauntletJoin is accepted. Offline mirrors the Sim's host-fed flag; online
   // it rides the `gopen` self-wire key.
   gauntletOpen: boolean;
-  // The viewer's live run (lobby through podium), or null outside one. Online
-  // this mirrors the `grun` self-wire key; deadlines inside are absolute
-  // sim-time, so countdowns derive from `time` client-side.
+  // The viewer's live run (lobby through podium), or null outside one. A
+  // free-roaming spectator gets the watched run's board here too. Online this
+  // mirrors the `grun` self-wire key; deadlines inside are absolute sim-time, so
+  // countdowns derive from `time` client-side.
   gauntletRun: GauntletRunView | null;
-  // Join the filling lobby (server-gated to the recruiter's presence and
-  // radius); leave the lobby, forfeit a live run, or exit the spectator seats.
+  // The viewer's 1-based place in the rolling queue (0 = not queued), and whether
+  // they are currently free-roaming as a spectator. Online these mirror the `gq`
+  // and `gsp` self-wire keys.
+  gauntletQueuePosition: number;
+  gauntletSpectating: boolean;
+  // The instant walk-up join (offline + tests): join the filling lobby directly.
+  // The player-facing "Join Queue" button online is gauntletQueueJoin.
   gauntletJoin(): void;
+  // The three rolling-event join modes (all server-gated to the recruiter's
+  // presence and radius; Practice ignores the event window). Join the fair FIFO
+  // queue; drop into the stands as a free spectator; start an instant solo run vs
+  // NPC bots; or, from the podium, rejoin the queue at the BACK.
+  gauntletQueueJoin(): void;
+  gauntletSpectate(): void;
+  gauntletPractice(): void;
+  gauntletRejoin(): void;
+  // Leave whatever gauntlet state the player is in: dequeue, stop spectating,
+  // withdraw from the lobby, forfeit a live run, or exit the podium.
   gauntletLeave(): void;
   // Trial inputs, all validated sim-side against the viewer's LIVE trial (a
   // stale send after a knockout or phase flip drops silently).
@@ -28,6 +44,16 @@ export interface IWorldGauntlet {
   gauntletPullCircle(id: number): void;
   // Echo: tap a rune stone (0..stones-1) during the answer window.
   gauntletEcho(stone: number): void;
-  // Court: throw a shove (resolves in contact range, on cooldown).
-  gauntletCourt(): void;
+  // The Final Court is plain vanilla combat: no command. The player targets a foe
+  // (click or tab), auto-attacks, and casts abilities as in the open world; the
+  // server resolves the swings on the shared hp pool.
+}
+
+// True while the viewer is fighting the live Final Court (a standard-combat
+// free-for-all, the last trial in the run). The client uses this so every live
+// fellow contestant reads as a foe: the attack cursor, right-click-to-engage, and
+// the red selection reticle, exactly like open-world combat. The court is always
+// the last trial, so an active last trial IS the court.
+export function isActiveFinalCourt(run: GauntletRunView | null | undefined): boolean {
+  return !!run && run.phase === 'trial' && run.trialIndex === run.trialCount - 1;
 }

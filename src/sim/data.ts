@@ -553,6 +553,46 @@ export function isHodricsPos(x: number): boolean {
   return x >= HODRICS_X_MIN && x < HODRICS_X_MAX;
 }
 
+// ---------------------------------------------------------------------------
+// The Proving Grounds, the shared minigame-hub room. A glowing portal just
+// outside Eastbrook Vale drops every player into ONE shared circular room (not
+// a per-party instance) where the two event heralds stand: talk to Maro
+// Half-Mask to enter The Gauntlet, or Herald Osric to race Hodric's Castle.
+// Its own far-off flat-ground band east of Hodric's Castle (10800..11400), so
+// the floor is flat (world.groundHeight's default past DUNGEON_X_THRESHOLD)
+// and no other band predicate claims it. One shared location, so there is no
+// slot fan-out: a single room centre, and a radial clamp in colliders.ts keeps
+// movers inside the room.
+// ---------------------------------------------------------------------------
+
+export const MINIGAME_HUB_BAND_X_MIN = 11700; // x at/after this = the hub band
+export const MINIGAME_HUB_BAND_X_MAX = 12300;
+// The single shared room centre (one location; every player meets here).
+export const MINIGAME_HUB = { x: 12000, z: -1200 };
+// Inner room radius: the colliders.ts radial clamp holds movers inside this,
+// and the render wall shell sits just beyond it.
+export const MINIGAME_HUB_RADIUS = 18;
+
+// Instance-local anchors (added to MINIGAME_HUB), shared by sim spawn + render.
+export const MINIGAME_HUB_ENTRY = { x: 0, z: -8 }; // where the portal drops you
+export const MINIGAME_HUB_EXIT = { x: 0, z: -15 }; // the exit portal back to town
+export const MINIGAME_HUB_MARO = { x: -9, z: 7 }; // Maro Half-Mask (The Gauntlet)
+export const MINIGAME_HUB_OSRIC = { x: 9, z: 7 }; // Herald Osric (Hodric's Castle)
+
+// The overworld entrance portal, just outside the Eastbrook town ring (the
+// town hub is (0,0) radius 26). Walk into it or click it to enter the room.
+export const MINIGAME_HUB_PORTAL_POS = { x: 0, z: 34 };
+
+// Portal-object template ids: the interaction dispatcher (sim) and the renderer
+// both branch on these, so they live in data.ts (on the render import allowlist)
+// rather than the sim-logic module.
+export const HUB_PORTAL_TEMPLATE = 'minigame_portal'; // the overworld entrance
+export const HUB_EXIT_TEMPLATE = 'minigame_exit'; // the room's exit back to town
+
+export function isMinigameHubPos(x: number): boolean {
+  return x >= MINIGAME_HUB_BAND_X_MIN && x < MINIGAME_HUB_BAND_X_MAX;
+}
+
 export const DELVE_MODULES: Record<string, DelveModuleDef> = {
   ...COLLAPSED_RELIQUARY_MODULES,
   ...DROWNED_LITANY_MODULES,

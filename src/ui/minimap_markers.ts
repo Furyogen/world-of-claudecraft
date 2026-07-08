@@ -30,9 +30,15 @@
 // Markers carry the identity (the party class id) the painter resolves
 // to a color, never the resolved color.
 
-import { GATHER_NODES, isDelvePos, QUESTS, zoneAt } from '../sim/data';
+import { GATHER_NODES, isDelvePos, isMinigameHubPos, QUESTS, zoneAt } from '../sim/data';
 import { isQuestTurnInNpc } from '../sim/types';
 import type { IWorld } from '../world_api';
+
+// Sentinel zoneId the minimap emits inside the Proving Grounds so the label
+// names the venue instead of the far-off overworld z-band the room sits in. The
+// painter's localizeZone maps it to hudChrome.hub.zoneName (i18n stays painter-
+// side; this core is i18n-free).
+export const MINIGAME_HUB_ZONE_ID = 'minigame_hub';
 
 // Markers beyond (S/2 - RIM_INSET) from the centre are culled (entities) or pinned to
 // that rim as an arrow (party). Byte-faithful to the inline `S/2 - 7`.
@@ -127,7 +133,7 @@ export function createMinimapMarkers(): MinimapMarkers {
       const rim = half - RIM_INSET;
       const rim2 = rim * rim;
       markers.length = 0;
-      model.zoneId = zoneAt(p.pos.z).id;
+      model.zoneId = isMinigameHubPos(p.pos.x) ? MINIGAME_HUB_ZONE_ID : zoneAt(p.pos.z).id;
 
       // friend/guild lookup for colouring nearby allies; party members are drawn by the
       // party loop below, so the entity loop skips them (avoiding double dots). Built

@@ -892,6 +892,7 @@ function blankEntity(id: number): Entity {
     dead: false,
     ghost: false,
     corpsePos: null,
+    spectator: false,
     scale: 1,
     color: 0xffffff,
     skinCatalog: 'class',
@@ -997,6 +998,10 @@ export class ClientWorld implements IWorld {
   // from the snapshot self (`s.gopen` / `s.grun`, delta-omitted). ---
   gauntletOpen = false;
   gauntletRun: GauntletRunView | null = null;
+  // The viewer's queue place (0 = not queued) and free-spectator flag, mirrored
+  // from the `gq` / `gsp` self-wire keys below.
+  gauntletQueuePosition = 0;
+  gauntletSpectating = false;
   // Gathering profession proficiency (Mining/Logging/Herbalism), the real
   // read surface for #1119; mirrored from the `prof` wire delta below.
   // Crafting/secondary professions still contribute nothing until later
@@ -1569,6 +1574,7 @@ export class ClientWorld implements IWorld {
       if (typeof w.emoSeq === 'number') e.overheadEmoteSeq = w.emoSeq;
       e.dead = nowDead;
       e.ghost = !!w.gh; // released spirit: rendered translucent, runs faster
+      e.spectator = !!w.spec; // free-roaming Gauntlet spectator: rendered faint to others
       e.lootable = !!w.loot;
       e.hostile = !!w.h;
       e.castingAbility = w.cast ?? null;
@@ -1818,6 +1824,8 @@ export class ClientWorld implements IWorld {
       if (s.gprof !== undefined) this.gatheringProficiency = s.gprof ?? {};
       if (s.gopen !== undefined) this.gauntletOpen = s.gopen ?? false;
       if (s.grun !== undefined) this.gauntletRun = s.grun;
+      if (s.gq !== undefined) this.gauntletQueuePosition = s.gq ?? 0;
+      if (s.gsp !== undefined) this.gauntletSpectating = !!s.gsp;
       // camera follows server-side facing changes when not mouselooking
       if (prevSelfFacing !== undefined && this.mouselookFacing === null) {
         let d = e.facing - prevSelfFacing;
@@ -2411,10 +2419,22 @@ export class ClientWorld implements IWorld {
   collectDelveChestLoot(chestId: number): void {
     this.cmd({ cmd: 'collect_delve_chest_loot', objectId: chestId });
   }
-  // --- IWorldGauntlet: join the filling lobby / leave (forfeit) the run. The
-  // run view + event-open flag ride the self snapshot (gopen/grun above). ---
+  // --- IWorldGauntlet: the join modes + leave. The run view, queue place, and
+  // spectator/event-open flags ride the self snapshot (gopen/grun/gq/gsp above). ---
   gauntletJoin(): void {
     this.cmd({ cmd: 'gauntlet_join' });
+  }
+  gauntletQueueJoin(): void {
+    this.cmd({ cmd: 'gauntlet_queue_join' });
+  }
+  gauntletSpectate(): void {
+    this.cmd({ cmd: 'gauntlet_spectate' });
+  }
+  gauntletPractice(): void {
+    this.cmd({ cmd: 'gauntlet_practice' });
+  }
+  gauntletRejoin(): void {
+    this.cmd({ cmd: 'gauntlet_rejoin' });
   }
   gauntletLeave(): void {
     this.cmd({ cmd: 'gauntlet_leave' });
@@ -2429,9 +2449,6 @@ export class ClientWorld implements IWorld {
   }
   gauntletEcho(stone: number): void {
     this.cmd({ cmd: 'gauntlet_echo', stone });
-  }
-  gauntletCourt(): void {
-    this.cmd({ cmd: 'gauntlet_court' });
   }
   // Mirror the authoritative craftResult event into lastCraftResult (#1127).
   // The event still flows to the HUD (drainEvents) for a toast/log line.

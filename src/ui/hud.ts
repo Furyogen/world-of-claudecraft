@@ -28,7 +28,12 @@ import {
 import { isFriendlyPet, mobTooltipConColor } from '../render/reaction';
 import type { Renderer } from '../render/renderer';
 import { type AugmentCategory, augmentCategory } from '../sim/content/augments';
-import { GAUNTLET, GAUNTLET_CONTESTANT_NPC_ID, GAUNTLET_VENUE } from '../sim/content/gauntlet';
+import {
+  ECHO_MAT_GAP,
+  GAUNTLET,
+  GAUNTLET_CONTESTANT_NPC_ID,
+  GAUNTLET_VENUE,
+} from '../sim/content/gauntlet';
 import {
   EVENT_SKIN_TIERS,
   MECH_CHROMAS,
@@ -192,6 +197,7 @@ import { esc } from './esc';
 import { fctSpawnShape } from './fct_event';
 import { FctPainter } from './fct_painter';
 import { FocusManager, type FocusTrapHandle } from './focus_manager';
+import { GauntletBoard } from './gauntlet_board';
 import { GauntletCirclesPainter } from './gauntlet_circles_painter';
 import { gauntletCircleModel } from './gauntlet_circles_view';
 import { GauntletClock } from './gauntlet_clock';
@@ -276,7 +282,7 @@ import {
 } from './map_window_view';
 import { MarketWindow } from './market_window';
 import { Meters } from './meters';
-import { minimapMode } from './minimap_markers';
+import { MINIGAME_HUB_ZONE_ID, minimapMode } from './minimap_markers';
 import { MINIMAP_SIZE, MinimapPainter } from './minimap_painter';
 import {
   clampMinimapZoom,
@@ -3150,28 +3156,24 @@ export class Hud {
   // Overworld minimap canvas painter (the delve branch stays with delvePainter). Owns
   // the marker core; redraws from the fastHud (~10Hz) band. classCss colors the party
   // discs/arrows; zoneDisplayName localizes the '#zone-label' it writes via setText.
+  // The Proving Grounds sentinel resolves to the venue's display name instead.
   private readonly minimapPainter = new MinimapPainter(this.writerFacet, classCss, (zoneId) =>
-    zoneDisplayName(zoneId),
+    zoneId === MINIGAME_HUB_ZONE_ID ? t('hudChrome.hub.zoneName') : zoneDisplayName(zoneId),
   );
-  // The Gauntlet HUD cluster painter (vitality / countdown / chips / light pill),
-  // driven per frame from the gauntletRun wire view via gauntletHudModel. All writes
-  // route through the shared elided-writer facet, like the other hot painters.
+  // The Gauntlet HUD cluster painter (phase caption / countdown / echo strip /
+  // Final Court ability buttons / tutorial banner), driven per frame from the
+  // gauntletRun wire view via gauntletHudModel. All writes route through the
+  // shared elided-writer facet, like the other hot painters.
   private readonly gauntletHudPainter = new GauntletHudPainter(this.writerFacet, {
     root: $('#gauntlet-hud'),
     phase: $('#gauntlet-phase'),
     countdownBar: $('#gauntlet-countdown'),
     countdownFill: $('#gauntlet-countdown .fill'),
     countdownTimer: $('#gauntlet-countdown .timer'),
-    survivors: $('#gauntlet-survivors'),
-    prize: $('#gauntlet-prize'),
-    light: $('#gauntlet-light'),
-    hint: $('#gauntlet-hint'),
     tutorial: $('#gauntlet-tutorial'),
     echoStrip: $('#gauntlet-echo-strip'),
     echoRound: $('#gauntlet-echo-round'),
     echoClock: $('#gauntlet-echo-clock'),
-    court: $('#gauntlet-court'),
-    courtRole: $('#gauntlet-court-role'),
   });
   // The Great Pull's shrinking-circle input overlay: one pooled circle driven
   // per frame from the viewer's wire schedule (pure size math in
@@ -3207,21 +3209,38 @@ export class Hud {
   // Which desk-style trial currently holds the authored camera focus pose
   // (movement trials keep the chase cam and never appear here).
   private gauntletFocusKey: keyof typeof GAUNTLET_VENUE.focus | null = null;
-  // Edge detector for the court trial's shove-ready ring flash on the rival.
-  private gauntletShoveWasReady = false;
   // Wall-clock estimator for the countdown (IWorld exposes no sim clock online); see
   // gauntlet_clock.ts.
   private readonly gauntletClock = new GauntletClock();
+  // The top-left standings board (every contestant's vitality + knockout state),
+  // refreshed from the run view each frame with a signature diff.
+  private readonly gauntletBoard = new GauntletBoard({
+    root: () => $('#gauntlet-board'),
+  });
   // The knockout / spectator / podium overlay; builds its own DOM lazily on show.
   private readonly gauntletOverlay = new GauntletOverlay({
     onLeave: () => this.sim.gauntletLeave(),
+    onRejoin: () => this.sim.gauntletRejoin(),
   });
   // The recruiter dialog (opened from the gauntlet_recruiter interact path).
   private readonly gauntletRecruit = new GauntletRecruitWindow({
     root: () => $('#gauntlet-recruit'),
     closeOthers: () => this.closeOtherWindows('#gauntlet-recruit'),
     ...this.windowFocus('#gauntlet-recruit'),
-    onJoin: () => this.sim.gauntletJoin(),
+    // Entering the event dismisses the recruiter dialog straight away; the
+    // queue/lobby/run/spectate state shows on the HUD cluster + standings board.
+    onJoinQueue: () => {
+      this.sim.gauntletQueueJoin();
+      this.gauntletRecruit.close();
+    },
+    onSpectate: () => {
+      this.sim.gauntletSpectate();
+      this.gauntletRecruit.close();
+    },
+    onPractice: () => {
+      this.sim.gauntletPractice();
+      this.gauntletRecruit.close();
+    },
     onLeave: () => this.sim.gauntletLeave(),
   });
   private readonly presentationBag: PainterHostPresentation = {
@@ -8147,12 +8166,17 @@ export class Hud {
           break;
         }
         case 'gauntletPoof': {
+          // A contestant was knocked out: keep the poof SFX (the renderer plays
+          // the VFX off its own case), but no "someone is out" toast, the
+          // top-left standings board carries the eliminated state now.
           audio.gauntletPoof();
-          this.fiestaWordPop(
-            t('hudChrome.gauntlet.contestantOut', { name: ev.name }),
-            '#c98bff',
-            1,
-          );
+          break;
+        }
+        case 'gauntletFinished': {
+          // You cleared the trial's goal (crossed the sentinel finish line).
+          this.showBanner(t('hudChrome.gauntlet.passed'));
+          this.fiestaWordPop(t('hudChrome.gauntlet.passed'), '#7bd88f', 2);
+          audio.gauntletFanfare();
           break;
         }
         case 'gauntletEliminated': {
@@ -8164,6 +8188,7 @@ export class Hud {
           this.gauntletOverlay.showPodium(
             { first: ev.first, second: ev.second, third: ev.third },
             ev.won,
+            this.sim.gauntletRun?.practice ?? false,
           );
           if (ev.won) audio.gauntletFanfare();
           break;
@@ -8661,6 +8686,8 @@ export class Hud {
       'Trade cancelled.': 'hud.logs.tradeCancelled',
       'Loot method set to Group Loot.': 'hudChrome.masterLoot.methodGroup',
       'Loot Settings: Group Loot.': 'hudChrome.masterLoot.summaryGroup',
+      'You step through the shimmering portal into the Proving Grounds.': 'hudChrome.hub.enter',
+      'You step back into Eastbrook Vale.': 'hudChrome.hub.leave',
       'You join the Gauntlet queue. Lord Hodric oils the flails in your honor.':
         'hudChrome.hc.flavor.queueJoin',
       "The gates of Hodric's Castle grind open. Race to the crown!":
@@ -9021,6 +9048,8 @@ export class Hud {
     const run = this.sim.gauntletRun;
     const time = this.gauntletTimeNow();
     this.gauntletHudPainter.paint(gauntletHudModel({ run, time }));
+    // The top-left standings board (self-hides in the lobby / between runs).
+    this.gauntletBoard.update(run);
     // Trials are legs-only (the sim rejects every cast; see casting_lifecycle):
     // the ability rows hide so the bar cannot even suggest pressing one. The
     // frame stack (player frame, xp bar) stays.
@@ -9028,24 +9057,21 @@ export class Hud {
     this.setDisplay(this.actionbarEl, legsOnly ? 'none' : '');
     this.setDisplay(this.actionbar2El, legsOnly ? 'none' : '');
     if (this.gauntletRecruit.isOpen)
-      this.gauntletRecruit.update({ eventOpen: this.sim.gauntletOpen, run, time });
+      this.gauntletRecruit.update({
+        eventOpen: this.sim.gauntletOpen,
+        run,
+        queuePosition: this.sim.gauntletQueuePosition,
+        spectating: this.sim.gauntletSpectating,
+        time,
+      });
     // Trial input surfaces live in the world (the lectern slab, the echo
     // table); the desk-style trials also hold an authored camera focus pose.
     this.updateGauntletFocus();
     this.updateSigilsStage();
-    // Final Court: the moment the shove comes off cooldown, flash a ground
-    // ring at the rival sized to the shove range; clicking them IS the shove
-    // (the SHOVE button is gone), so the cue lives in the world too.
-    const court = this.gauntletContestantRun()?.court ?? null;
-    const shoveReady = !!court && time >= court.shoveReadyAt;
-    if (shoveReady && !this.gauntletShoveWasReady && court) {
-      const rival = this.sim.entities.get(court.rivalId);
-      if (rival)
-        this.renderer.spawnAoeRing(rival.pos.x, rival.pos.z, GAUNTLET.court.shoveRange, 'arcane');
-    }
-    this.gauntletShoveWasReady = shoveReady;
-    // The court Space shortcut is only meaningful during a run; bind it lazily.
-    if (run) this.bindGauntletKeys();
+    // The Final Court needs no bespoke target cue: the sim mirrors the fighter's
+    // foe onto the player's real target, so the standard target frame + the
+    // world selection ring already show who they are locked onto, exactly like a
+    // duel.
     if (run) this.gauntletOverlay.update(run.survivors);
     else if (this.gauntletOverlay.shown) this.gauntletOverlay.hide();
   }
@@ -9066,22 +9092,27 @@ export class Hud {
       return;
     }
     const f = GAUNTLET_VENUE.focus[key];
-    // The echo pose slides to the viewer's own table row: players spread
-    // along z, and the sim has already seated the viewer at their mat when
-    // the trial's view member appears.
+    // The echo pose slides to the viewer's own desk: every contestant sits at a
+    // grid station, and the sim has already seated the viewer a mat-gap west of
+    // their desk when the trial's view member appears, so shift the authored
+    // pose by the desk's offset from the courtyard anchor (both x and z).
+    let dx = 0;
     let dz = 0;
     if (key === 'echo') {
-      const pz = this.sim.player?.pos.z;
-      if (pz !== undefined) {
+      const p = this.sim.player?.pos;
+      if (p) {
         const w = GAUNTLET_VENUE.echo;
-        const half = w.size / 2 - 1.5;
-        const rowZ = Math.max(w.z - half, Math.min(w.z + half, pz - live.originZ));
-        dz = rowZ - w.z;
+        dx = p.x - live.originX + ECHO_MAT_GAP - w.x;
+        dz = p.z - live.originZ - w.z;
       }
     }
     this.renderer.setCameraFocus({
-      pos: { x: f.pos.x + live.originX, y: f.pos.y, z: f.pos.z + live.originZ + dz },
-      lookAt: { x: f.lookAt.x + live.originX, y: f.lookAt.y, z: f.lookAt.z + live.originZ + dz },
+      pos: { x: f.pos.x + live.originX + dx, y: f.pos.y, z: f.pos.z + live.originZ + dz },
+      lookAt: {
+        x: f.lookAt.x + live.originX + dx,
+        y: f.lookAt.y,
+        z: f.lookAt.z + live.originZ + dz,
+      },
     });
   }
 
@@ -9159,17 +9190,6 @@ export class Hud {
     this.worldAim = aim;
   }
 
-  /** main.ts handlePick intercept: during the court trial, clicking the RIVAL
-   * while the shove is ready IS the shove. A click during cooldown falls
-   * through to normal targeting (the ground ring flash marks readiness). */
-  gauntletCourtClick(id: number): boolean {
-    const run = this.gauntletContestantRun();
-    if (!run?.court || id !== run.court.rivalId) return false;
-    if (this.gauntletTimeNow() < run.court.shoveReadyAt) return false;
-    this.gauntletShoveNow();
-    return true;
-  }
-
   /** main.ts handlePick pre-empt: during a live echo duel, clicks on the
    * table's rune stones are the input (the sim only counts them inside the
    * answer window). Returns true when a stone consumed the click. */
@@ -9184,35 +9204,6 @@ export class Hud {
     return true;
   }
 
-  // Throw a shove, gated client-side on the shove cooldown so a spammed button (or
-  // the Space shortcut) does not flood the server with rejected sends.
-  private gauntletShoveNow(): void {
-    const run = this.sim.gauntletRun;
-    if (!run?.court) return;
-    if (this.gauntletTimeNow() < run.court.shoveReadyAt) return;
-    this.sim.gauntletCourt();
-    triggerHaptic(14, loadHapticsEnabled());
-  }
-
-  // Capture-phase Space handler for the court trial: Space fires the shove and
-  // is swallowed so it never doubles as jump. When the trial is not live it
-  // does nothing, so jump is untouched everywhere else. Bound once (idempotent).
-  private gauntletKeyHandler: ((e: KeyboardEvent) => void) | null = null;
-  private bindGauntletKeys(): void {
-    if (this.gauntletKeyHandler) return;
-    const handler = (e: KeyboardEvent): void => {
-      if (e.code !== 'Space' || e.repeat) return;
-      const run = this.sim.gauntletRun;
-      if (run?.court) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        this.gauntletShoveNow();
-      }
-    };
-    this.gauntletKeyHandler = handler;
-    window.addEventListener('keydown', handler, true); // capture: beats game input
-  }
-
   // The viewer's run while they are a LIVE contestant (staging through podium,
   // not a lobby wait, not knocked out to the spectator seats), else null. The
   // legs-only hotbar hide and the vitality-for-health frame swap key off this.
@@ -9222,11 +9213,41 @@ export class Hud {
     return run;
   }
 
+  // True while the viewer is a LIVE contestant in The Great Pull: the trial is
+  // played entirely with the screen-space circle taps, so main.ts freezes the
+  // camera (yaw + pitch, the follow cam has no authored pose here) for the
+  // duration. Read once per frame by the input loop.
+  gauntletPullLocksView(): boolean {
+    return this.gauntletContestantRun()?.pull != null;
+  }
+
+  // True while the viewer is a LIVE contestant at any desk trial (the sigil
+  // slab, the rope circles, or the echo table): they are seated facing their
+  // apparatus, so main.ts suppresses every facing source and the character
+  // keeps the seated heading (facing the shape / table) instead of spinning
+  // with the mouse. Read once per frame by the input loop.
+  gauntletFacingLocked(): boolean {
+    const run = this.gauntletContestantRun();
+    return !!run && (run.sigils != null || run.pull != null || run.echo != null);
+  }
+
+  // True while the viewer is a LIVE contestant in the Keeper's Echo: the sim
+  // seats them facing their own rune stones, so main.ts stops overwriting the
+  // character heading from the camera/input (the memory game is played by
+  // clicking the orbs, not by steering) and the seated face-your-stones pose
+  // holds. Unlike the pull it does NOT pin the camera (the echo has its own
+  // focus pose). Read once per frame by the input loop.
+  gauntletEchoLocksFacingView(): boolean {
+    return this.gauntletContestantRun()?.echo != null;
+  }
+
   // Open the recruiter dialog (the gauntlet_recruiter interact branch).
   openGauntletRecruit(): void {
     this.gauntletRecruit.open({
       eventOpen: this.sim.gauntletOpen,
       run: this.sim.gauntletRun,
+      queuePosition: this.sim.gauntletQueuePosition,
+      spectating: this.sim.gauntletSpectating,
       time: this.gauntletTimeNow(),
     });
   }

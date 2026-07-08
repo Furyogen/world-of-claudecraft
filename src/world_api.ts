@@ -324,13 +324,16 @@ export const COMMAND_NAMES = [
   'resurrect_corpse',
   'resurrect_healer',
   'gauntlet_join',
+  'gauntlet_queue_join',
+  'gauntlet_spectate',
+  'gauntlet_practice',
+  'gauntlet_rejoin',
   'gauntlet_leave',
   'hc_queue',
   'hc_leave',
   'gauntlet_trace',
   'gauntlet_pull_circle',
   'gauntlet_echo',
-  'gauntlet_court',
 ] as const;
 
 // The union both the send path (`online.ts`) and the dispatch switch
@@ -540,9 +543,12 @@ export const COMMAND_FACETS = {
   // IWorldGauntlet: The Gauntlet survival event (join the lobby / leave the
   // run, plus the per-trial inputs: trace, circle pull, echo tap, court shove).
   gauntlet_join: 'IWorldGauntlet',
+  gauntlet_queue_join: 'IWorldGauntlet',
+  gauntlet_spectate: 'IWorldGauntlet',
+  gauntlet_practice: 'IWorldGauntlet',
+  gauntlet_rejoin: 'IWorldGauntlet',
   gauntlet_leave: 'IWorldGauntlet',
   gauntlet_trace: 'IWorldGauntlet',
   gauntlet_pull_circle: 'IWorldGauntlet',
   gauntlet_echo: 'IWorldGauntlet',
-  gauntlet_court: 'IWorldGauntlet',
 } as const satisfies Partial<Record<ClientCommand, WorldFacet>>;

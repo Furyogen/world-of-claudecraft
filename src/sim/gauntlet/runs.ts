@@ -9,7 +9,13 @@
 // (run.rng, seeded at lobby creation exactly like fiesta's per-match stream);
 // an idle or active gauntlet never touches the shared sim rng.
 
-import { GAUNTLET, GAUNTLET_LAYOUT, GAUNTLET_RECRUITER_NPC_ID } from '../content/gauntlet';
+import {
+  GAUNTLET,
+  GAUNTLET_LAYOUT,
+  GAUNTLET_RECRUITER_ID,
+  GAUNTLET_RECRUITER_NPC_ID,
+  GAUNTLET_VENUE,
+} from '../content/gauntlet';
 import {
   dungeonAt,
   GAUNTLET_SLOT_COUNT,
@@ -17,6 +23,8 @@ import {
   isArenaPos,
   isDelvePos,
   isGauntletPos,
+  MINIGAME_HUB,
+  MINIGAME_HUB_MARO,
   NPCS,
 } from '../data';
 import { createNpc } from '../entity';
@@ -26,35 +34,57 @@ import type { SimContext } from '../sim_context';
 import { DT, type GauntletRunView } from '../types';
 import {
   idleScript,
+  placeContestantsAt,
   planSentinelScripts,
   rollNpcContestant,
   spawnNpcContestants,
   stagingSpot,
 } from './contestants';
+import { holdPodiumOccupants, releasePodiumSeat, seatPodium } from './podium';
 import type { GauntletRun } from './state';
-import { gauntletCourtShove, startCourt, updateCourt } from './trial_court';
-import { gauntletEchoTap, startEcho, updateEcho } from './trial_echo';
-import { gauntletPullCircleClick, startPull, updatePull } from './trial_pull';
+import { startCourt, updateCourt } from './trial_court';
+
+// The Final Court's combat-core seam, surfaced through the gauntlet's public
+// module so the Sim coordinator reaches it as gauntletMod.* (isHostileTo consults
+// gauntletCourtFoes; dealDamage consults the other two, bound onto SimContext).
+export {
+  gauntletCourtContestant,
+  gauntletCourtFoes,
+  gauntletCourtTakedown,
+} from './trial_court';
+
+import { gauntletEchoTap, seatEchoField, startEcho, updateEcho } from './trial_echo';
+import { gauntletPullCircleClick, seatPullField, startPull, updatePull } from './trial_pull';
 import { startSentinel, updateSentinel } from './trial_sentinel';
 import {
   gauntletTraceSigils,
+  seatSigilsField,
   sigilCoverage,
   sigilCoveredMask,
   startSigils,
   updateSigils,
 } from './trial_sigils';
-import { startSpan, updateSpan } from './trial_span';
+import { seatSpanField, startSpan, updateSpan } from './trial_span';
 import { aliveContestants, eliminateContestant, emitToRunPlayers } from './vitality';
 
 export function gauntletRunForPlayer(ctx: SimContext, pid: number): GauntletRun | null {
   return ctx.gauntletRuns.find((r) => r.playerStates.has(pid)) ?? null;
 }
 
-function canJoinGauntlet(ctx: SimContext, pid: number): string | null {
+export function canJoinGauntlet(
+  ctx: SimContext,
+  pid: number,
+  opts?: { ignoreEventOpen?: boolean },
+): string | null {
   const r = ctx.resolve(pid);
   if (!r || r.e.dead) return 'You cannot enter the Gauntlet right now.';
-  if (!ctx.gauntletEventOpen) return 'The Gauntlet is not open right now.';
+  // Practice ignores the event window (an always-on training harness); the queue
+  // and spectate still require the event to be open.
+  if (!opts?.ignoreEventOpen && !ctx.gauntletEventOpen)
+    return 'The Gauntlet is not open right now.';
   if (gauntletRunForPlayer(ctx, pid)) return 'You are already in the Gauntlet.';
+  if (ctx.gauntletQueue.some((u) => u.pid === pid)) return 'You are already in the Gauntlet queue.';
+  if (ctx.gauntletSpectators.has(pid)) return 'Stop spectating before you enter the Gauntlet.';
   if (dungeonAt(r.e.pos.x)) return 'Leave the dungeon first.';
   if (isArenaPos(r.e.pos.x)) return 'Leave the arena first.';
   if (isDelvePos(r.e.pos.x)) return 'Leave the delve first.';
@@ -81,9 +111,99 @@ function canJoinGauntlet(ctx: SimContext, pid: number): string | null {
   return null;
 }
 
-// Join the filling lobby (opening one if none is filling). Players stay where
-// they are during the lobby; the run teleports everyone to the staging area
-// when it starts.
+// True if a QUEUED player has since wandered into a conflicting activity (a
+// dungeon/arena/delve, an arena/hc match, a trade, or a duel), so the rolling
+// matchmaker must drop them from the queue before it teleports them into a game.
+// Mirrors the cross-activity guards in canJoinGauntlet (which additionally runs
+// the event-window + recruiter-radius gate that a waiting queuer is exempt from).
+export function gauntletQueueConflict(ctx: SimContext, pid: number): boolean {
+  const e = ctx.entities.get(pid);
+  if (!e) return true;
+  return (
+    !!dungeonAt(e.pos.x) ||
+    isArenaPos(e.pos.x) ||
+    isDelvePos(e.pos.x) ||
+    ctx.arenaMatches.has(pid) ||
+    ctx.hcMatches.has(pid) ||
+    !!ctx.tradeFor(pid) ||
+    !!ctx.duelFor(pid)
+  );
+}
+
+// Open a fresh run in a free venue slot, or null if the venue is full. The queue
+// matchmaker and Practice share this; `countdownS` sets the lobby fill window
+// (the long walk-up wait, or the short rolling-queue beat) and `practice` marks a
+// private solo run the matchmaker and spectators skip.
+export function openLobbyRun(
+  ctx: SimContext,
+  opts?: { practice?: boolean; countdownS?: number },
+): GauntletRun | null {
+  const usedSlots = new Set(ctx.gauntletRuns.map((g) => g.slot));
+  let slot = -1;
+  for (let i = 0; i < GAUNTLET_SLOT_COUNT; i++) {
+    if (!usedSlots.has(i)) {
+      slot = i;
+      break;
+    }
+  }
+  if (slot < 0) return null;
+  // Per-run deterministic stream, seeded off the sim clock + run id (the fiesta
+  // idiom): never the shared draw stream.
+  const seed = (ctx.tickCount * 2654435761 + ctx.nextGauntletRunId * 40503) >>> 0;
+  const run: GauntletRun = {
+    id: ctx.nextGauntletRunId++,
+    slot,
+    practice: opts?.practice ?? false,
+    seed,
+    rng: new Rng(seed),
+    origin: gauntletOrigin(slot),
+    phase: 'lobby',
+    trialIndex: 0,
+    phaseEndsAt: ctx.time + (opts?.countdownS ?? GAUNTLET.lobbyFillS),
+    prizePool: GAUNTLET.prizeBase,
+    contestants: [],
+    playerStates: new Map(),
+    trial: null,
+    watcherId: null,
+    podium: null,
+    emptyFor: 0,
+  };
+  ctx.gauntletRuns.push(run);
+  return run;
+}
+
+// Seat a player into a filling lobby (roster entry + saved state). The caller has
+// already gated eligibility and the roster cap.
+export function addPlayerToLobby(ctx: SimContext, run: GauntletRun, pid: number): void {
+  const e = ctx.entities.get(pid);
+  if (!e) return;
+  run.contestants.push({
+    entityId: pid,
+    player: true,
+    name: e.name,
+    vitality: GAUNTLET.vitalityMax,
+    skill: 0,
+    cls: 'warrior', // unused for players: they wear their own entity
+    skin: 0,
+    eliminatedAtTrial: null,
+    script: idleScript(),
+  });
+  run.playerStates.set(pid, {
+    savedPos: { ...e.pos },
+    savedHp: e.hp,
+    spectating: false,
+    momentumX: 0,
+    momentumZ: 0,
+    heldAt: null,
+    heldUntil: 0,
+    finishedAt: null,
+    bestZ: 0,
+  });
+}
+
+// The instant walk-up join (offline + tests): join the filling lobby (opening one
+// if none is filling), starting on the spot when cfg.gauntletInstantLobby is set.
+// The player-facing button online is gauntletQueueJoin (gauntlet/modes.ts).
 export function gauntletJoin(ctx: SimContext, pid?: number): void {
   const r = ctx.resolve(pid);
   if (!r) return;
@@ -93,73 +213,25 @@ export function gauntletJoin(ctx: SimContext, pid?: number): void {
     ctx.error(id, gate);
     return;
   }
-  let run = ctx.gauntletRuns.find((g) => g.phase === 'lobby');
-  // maxRealPlayers is a hard cap at the door, not just the start-early
-  // trigger: a same-tick join burst must never overfill the roster.
+  let run: GauntletRun | null =
+    ctx.gauntletRuns.find((g) => !g.practice && g.phase === 'lobby') ?? null;
+  // maxRealPlayers is a hard cap at the door, not just the start-early trigger: a
+  // same-tick join burst must never overfill the roster.
   if (run && run.contestants.filter((c) => c.player).length >= GAUNTLET.maxRealPlayers) {
     ctx.error(id, 'The Gauntlet is full. Try again soon.');
     return;
   }
   if (!run) {
-    const usedSlots = new Set(ctx.gauntletRuns.map((g) => g.slot));
-    let slot = -1;
-    for (let i = 0; i < GAUNTLET_SLOT_COUNT; i++) {
-      if (!usedSlots.has(i)) {
-        slot = i;
-        break;
-      }
-    }
-    if (slot < 0) {
+    run = openLobbyRun(ctx);
+    if (!run) {
       ctx.error(id, 'The Gauntlet is full. Try again soon.');
       return;
     }
-    // Per-run deterministic stream, seeded off the sim clock + run id (the
-    // fiesta idiom): never the shared draw stream.
-    const seed = (ctx.tickCount * 2654435761 + ctx.nextGauntletRunId * 40503) >>> 0;
-    run = {
-      id: ctx.nextGauntletRunId++,
-      slot,
-      seed,
-      rng: new Rng(seed),
-      origin: gauntletOrigin(slot),
-      phase: 'lobby',
-      trialIndex: 0,
-      phaseEndsAt: ctx.time + GAUNTLET.lobbyFillS,
-      prizePool: GAUNTLET.prizeBase,
-      contestants: [],
-      playerStates: new Map(),
-      trial: null,
-      watcherId: null,
-      podium: null,
-      emptyFor: 0,
-    };
-    ctx.gauntletRuns.push(run);
   }
-  run.contestants.push({
-    entityId: id,
-    player: true,
-    name: r.e.name,
-    vitality: GAUNTLET.vitalityMax,
-    skill: 0,
-    cls: 'warrior', // unused for players: they wear their own entity
-    skin: 0,
-    eliminatedAtTrial: null,
-    script: idleScript(),
-  });
-  run.playerStates.set(id, {
-    savedPos: { ...r.e.pos },
-    savedHp: r.e.hp,
-    spectating: false,
-    momentumX: 0,
-    momentumZ: 0,
-    heldAt: null,
-    heldUntil: 0,
-    finishedAt: null,
-    bestZ: 0,
-  });
+  addPlayerToLobby(ctx, run, id);
   emitLobbyState(ctx, run);
-  // Single-player worlds skip the fill window: nobody else can ever join, so
-  // the run backfills with contestants and starts on the spot.
+  // Single-player worlds skip the fill window: nobody else can ever join, so the
+  // run backfills with contestants and starts on the spot.
   if (ctx.cfg.gauntletInstantLobby && run.phase === 'lobby') startRun(ctx, run);
 }
 
@@ -176,7 +248,7 @@ export function gauntletLeave(ctx: SimContext, pid?: number): void {
 // Detach a player from the run. `restore` teleports them back to their saved
 // position (false when they are already elsewhere: died and released, or some
 // other system teleported them out of the band).
-function removePlayerFromRun(
+export function removePlayerFromRun(
   ctx: SimContext,
   run: GauntletRun,
   pid: number,
@@ -184,6 +256,17 @@ function removePlayerFromRun(
 ): void {
   const ps = run.playerStates.get(pid);
   if (!ps) return;
+  // The Final Court normalizes a fighter's maxHp; a player leaving mid-court
+  // (forfeit / disconnect / stranded) must have their real stats restored FIRST,
+  // so the hp restores below clamp against the real maxHp, not the pool.
+  if (run.trial?.kind === 'court') {
+    const f = run.trial.fighters.get(pid);
+    const fe = ctx.entities.get(pid);
+    if (f && fe && fe.maxHp !== f.savedMaxHp) ctx.recalcPlayer(fe);
+  }
+  // Leaving mid-ceremony: drop this player's podium pose so the per-tick pin
+  // stops yanking them back to the step after they have been sent home.
+  releasePodiumSeat(run, pid);
   const c = run.contestants.find((k) => k.entityId === pid);
   if (run.phase === 'lobby') {
     // The roster is not final yet: withdraw entirely.
@@ -195,6 +278,8 @@ function removePlayerFromRun(
   run.playerStates.delete(pid);
   const e = ctx.entities.get(pid);
   if (e && run.phase !== 'lobby') {
+    e.targetId = null; // drop any mirrored court foe so the open-world frame is clean
+    e.autoAttack = false; // stop swinging on leave (a mid-court forfeit must not keep auto-attacking)
     restorePlayerHp(ctx, pid, ps);
     if (restore) {
       e.pos = { ...ps.savedPos };
@@ -217,7 +302,7 @@ export function gauntletOnPlayerRemoved(ctx: SimContext, pid: number): void {
   if (run) removePlayerFromRun(ctx, run, pid, false);
 }
 
-function emitLobbyState(ctx: SimContext, run: GauntletRun): void {
+export function emitLobbyState(ctx: SimContext, run: GauntletRun): void {
   const remainingS = Math.max(0, run.phaseEndsAt - ctx.time);
   emitToRunPlayers(ctx, run, (pid) => ({
     type: 'gauntletPhase',
@@ -244,7 +329,7 @@ function emitPhase(ctx: SimContext, run: GauntletRun): void {
 
 // Lobby -> staging: finalize the roster (NPC backfill), spawn the field and
 // the watcher, teleport the players onto the staging line-up.
-function startRun(ctx: SimContext, run: GauntletRun): void {
+export function startRun(ctx: SimContext, run: GauntletRun): void {
   const players = run.contestants.filter((c) => c.player);
   const backfill = Math.max(0, GAUNTLET.fieldSize - run.contestants.length);
   for (let i = 0; i < backfill; i++) run.contestants.push(rollNpcContestant(run));
@@ -266,7 +351,7 @@ function startRun(ctx: SimContext, run: GauntletRun): void {
     e.targetId = null;
     e.autoAttack = false;
     ctx.rebucket(e);
-    meta.gauntletStats.runs++;
+    if (!run.practice) meta.gauntletStats.runs++; // Practice never touches the ladder
     const ps = run.playerStates.get(players[i].entityId);
     if (ps) {
       // Pin everyone on their mark until the trial opens ("take your marks"
@@ -324,6 +409,69 @@ function holdStagedPlayers(ctx: SimContext, run: GauntletRun): void {
 // at the station and held there (movement trials stay free).
 function isDeskTrial(kind: string | undefined): boolean {
   return kind === 'sigils' || kind === 'pull' || kind === 'echo';
+}
+
+// The instance-local arena a trial kind is played at, so the field can be moved
+// there the instant its interlude opens. Null for the sentinel (it has staging,
+// not an interlude) and unknown kinds.
+function trialArenaAnchor(kind: string | undefined): { x: number; z: number } | null {
+  const V = GAUNTLET_VENUE;
+  switch (kind) {
+    case 'sigils':
+      return { x: V.sigils.x, z: V.sigils.z };
+    case 'pull':
+      return { x: V.pull.x, z: V.pull.z + V.pull.width / 2 + 3 }; // south of the pit, not on it
+    case 'echo':
+      return { x: V.echo.x, z: V.echo.z };
+    case 'span':
+      return { x: V.span.x, z: V.span.z };
+    case 'court':
+      return { x: V.court.x, z: V.court.z };
+    default:
+      return null;
+  }
+}
+
+// Transport the whole field to the NEXT trial's arena and pin the live players
+// there for the interlude countdown, so you arrive as the 'trial cleared' +
+// countdown appear (not when the countdown finishes). It is a "waiting" line-up;
+// startTrial re-seats everyone at their exact stations when the trial begins
+// (and clears these pins for the movement trials).
+function positionFieldForNextTrial(ctx: SimContext, run: GauntletRun): void {
+  const nextKind = GAUNTLET.trials[run.trialIndex + 1];
+  const anchor = trialArenaAnchor(nextKind);
+  if (!anchor) return;
+  // Stand the field in the NEXT trial's REAL layout (lined up on the rope, at
+  // the etching lecterns, at the memory desks, squared up at the crossing), not
+  // a generic blob, so the interlude reads as "everyone's already in position."
+  // Each seat helper is positioning-only and rng-free. The court pairs its duels
+  // with an rng draw at its own start, so it keeps the generic gather here
+  // (drawing rng in the interlude would shift the court's stream).
+  switch (nextKind) {
+    case 'sigils':
+      seatSigilsField(ctx, run);
+      break;
+    case 'pull':
+      seatPullField(ctx, run);
+      break;
+    case 'echo':
+      seatEchoField(ctx, run);
+      break;
+    case 'span':
+      seatSpanField(ctx, run);
+      break;
+    default:
+      placeContestantsAt(ctx, run, anchor.x, anchor.z, 6);
+  }
+  for (const [pid, ps] of run.playerStates) {
+    if (ps.spectating) continue;
+    const e = ctx.entities.get(pid);
+    if (!e) continue;
+    ps.heldAt = { ...e.pos };
+    ps.heldUntil = run.phaseEndsAt;
+    ps.momentumX = 0;
+    ps.momentumZ = 0;
+  }
 }
 
 function startTrial(ctx: SimContext, run: GauntletRun): void {
@@ -437,14 +585,6 @@ export function gauntletEcho(ctx: SimContext, pid: number | undefined, stone: nu
   gauntletEchoTap(ctx, run, run.trial, r.meta.entityId, stone);
 }
 
-export function gauntletCourt(ctx: SimContext, pid: number | undefined): void {
-  const r = ctx.resolve(pid);
-  if (!r) return;
-  const run = liveTrialFor(ctx, r.meta.entityId);
-  if (!run || run.trial?.kind !== 'court') return;
-  gauntletCourtShove(ctx, run, run.trial, r.meta.entityId);
-}
-
 // Rank the field for the podium: live players by finish time then progress,
 // then surviving NPCs by skill, then the fallen in reverse elimination order.
 function computePodium(ctx: SimContext, run: GauntletRun): void {
@@ -469,14 +609,21 @@ function computePodium(ctx: SimContext, run: GauntletRun): void {
     third: names[2],
     winnerEntityId: ranked[0]?.entityId ?? null,
   };
-  for (const c of run.contestants) {
-    if (!c.player) continue;
-    const meta = ctx.players.get(c.entityId);
-    if (!meta) continue;
-    const cleared = c.eliminatedAtTrial === null ? GAUNTLET.trials.length : c.eliminatedAtTrial;
-    if (cleared > meta.gauntletStats.bestTrial) meta.gauntletStats.bestTrial = cleared;
-    if (run.podium.winnerEntityId === c.entityId) meta.gauntletStats.wins++;
+  // Practice is a training harness: it seats the podium and emits the ceremony
+  // below, but never records ladder stats (best trial / wins).
+  if (!run.practice) {
+    for (const c of run.contestants) {
+      if (!c.player) continue;
+      const meta = ctx.players.get(c.entityId);
+      if (!meta) continue;
+      const cleared = c.eliminatedAtTrial === null ? GAUNTLET.trials.length : c.eliminatedAtTrial;
+      if (cleared > meta.gauntletStats.bestTrial) meta.gauntletStats.bestTrial = cleared;
+      if (run.podium.winnerEntityId === c.entityId) meta.gauntletStats.wins++;
+    }
   }
+  // Pose the top finishers on the winners' stand for the ceremony (the champion
+  // arrives on the podium the instant it opens, not teleported home at the end).
+  seatPodium(ctx, run, ranked);
   emitToRunPlayers(ctx, run, (pid) => ({
     type: 'gauntletPodium',
     first: names[0],
@@ -513,24 +660,29 @@ function sweepStrandedPlayers(ctx: SimContext, run: GauntletRun): void {
   }
 }
 
-// Recruiter spawn management: stands in the town square only while the event
-// window is open.
-function updateRecruiter(ctx: SimContext): void {
-  const id = ctx.gauntletRecruiterId;
-  if (ctx.gauntletEventOpen && id === null) {
-    const def = NPCS[GAUNTLET_RECRUITER_NPC_ID];
-    const e = createNpc(ctx.nextId++, def, ctx.groundPos(def.pos.x, def.pos.z));
-    ctx.addEntity(e);
-    ctx.gauntletRecruiterId = e.id;
-  } else if (!ctx.gauntletEventOpen && id !== null) {
-    if (ctx.entities.has(id)) ctx.dropEntity(id);
-    ctx.gauntletRecruiterId = null;
-  }
+// Maro Half-Mask, the Gauntlet recruiter, stands PERMANENTLY in the Proving
+// Grounds hub (see data.ts MINIGAME_HUB): the join is still gated by the
+// host-fed `gauntletEventOpen` flag (canJoinGauntlet), but his presence no
+// longer signals the window. Spawned at world init at a reserved id with zero
+// rng (the spawnHcHerald idiom), so the parity goldens never see him.
+export function spawnGauntletRecruiter(ctx: SimContext): void {
+  if (ctx.entities.has(GAUNTLET_RECRUITER_ID)) return;
+  const def = NPCS[GAUNTLET_RECRUITER_NPC_ID];
+  const pos = ctx.groundPos(
+    MINIGAME_HUB.x + MINIGAME_HUB_MARO.x,
+    MINIGAME_HUB.z + MINIGAME_HUB_MARO.z,
+  );
+  const e = createNpc(GAUNTLET_RECRUITER_ID, def, pos);
+  // Face the centre of the ring (facing = atan2 toward the target; the room
+  // centre is at -local from Maro's mark).
+  e.facing = Math.atan2(-MINIGAME_HUB_MARO.x, -MINIGAME_HUB_MARO.z);
+  e.prevFacing = e.facing;
+  ctx.addEntity(e);
+  ctx.gauntletRecruiterId = e.id;
 }
 
 // The per-tick driver, called from the coordinator's end-of-tick system block.
 export function updateGauntletRuns(ctx: SimContext): void {
-  updateRecruiter(ctx);
   for (const run of [...ctx.gauntletRuns]) {
     if (run.phase !== 'lobby') sweepStrandedPlayers(ctx, run);
     if (run.playerStates.size === 0 && run.phase !== 'lobby') {
@@ -542,7 +694,11 @@ export function updateGauntletRuns(ctx: SimContext): void {
     } else {
       run.emptyFor = 0;
     }
-    if (run.phase !== 'lobby' && run.phase !== 'done') mirrorVitalityHp(ctx, run);
+    // The Final Court fights on REAL hp (normalized per fighter), reverse-
+    // mirroring vitality FROM hp itself, so the usual vitality->hp mirror is
+    // suppressed while it runs or it would fight the combat.
+    if (run.phase !== 'lobby' && run.phase !== 'done' && run.trial?.kind !== 'court')
+      mirrorVitalityHp(ctx, run);
     switch (run.phase) {
       case 'lobby': {
         const players = run.contestants.filter((c) => c.player).length;
@@ -573,18 +729,24 @@ export function updateGauntletRuns(ctx: SimContext): void {
           } else {
             run.phase = 'interlude';
             run.phaseEndsAt = ctx.time + GAUNTLET.interludeS;
+            // Transport to the next arena NOW (as the countdown appears), not
+            // when it finishes: you wait out the cooldown standing at the next
+            // game's venue.
+            positionFieldForNextTrial(ctx, run);
             emitPhase(ctx, run);
           }
         }
         break;
       }
       case 'interlude':
+        holdStagedPlayers(ctx, run); // keep the field pinned at the next arena for the countdown
         if (ctx.time >= run.phaseEndsAt) {
           run.trialIndex++;
           startTrial(ctx, run);
         }
         break;
       case 'podium':
+        holdPodiumOccupants(ctx, run); // keep the finishers posed on the stand
         if (ctx.time >= run.phaseEndsAt) endRun(ctx, run);
         break;
       case 'done':
@@ -593,12 +755,84 @@ export function updateGauntletRuns(ctx: SimContext): void {
   }
 }
 
+// Which live run a free-roaming spectator watches: the active (non-done,
+// non-practice) run nearest their position by origin distance, else null.
+// Deterministic (no rng); ties resolve by array order (slot allocation order).
+export function gauntletSpectatorWatchedRun(ctx: SimContext, pid: number): GauntletRun | null {
+  const live = ctx.gauntletRuns.filter((r) => !r.practice && r.phase !== 'done');
+  if (live.length === 0) return null;
+  const e = ctx.entities.get(pid);
+  if (!e) return live[0];
+  let best: GauntletRun | null = null;
+  let bestD = Number.POSITIVE_INFINITY;
+  for (const r of live) {
+    const d = Math.hypot(e.pos.x - r.origin.x, e.pos.z - r.origin.z);
+    if (d < bestD) {
+      bestD = d;
+      best = r;
+    }
+  }
+  return best;
+}
+
+// The watched-run view for a free-roaming spectator: the run's shared standings,
+// phase, and the global trial state the venue renders from (the warden light, the
+// rope drag, the span reveals), but no personal vitality or per-player trial input.
+function gauntletSpectatorWire(ctx: SimContext, pid: number): GauntletRunView | null {
+  if (!ctx.gauntletSpectators.has(pid)) return null;
+  const run = gauntletSpectatorWatchedRun(ctx, pid);
+  if (!run) return null;
+  const trial = run.trial;
+  return {
+    phase: run.phase,
+    trialIndex: run.trialIndex,
+    trialCount: GAUNTLET.trials.length,
+    endsAt: run.phaseEndsAt,
+    survivors: aliveContestants(run).length,
+    total: run.contestants.length,
+    prizePool: run.prizePool,
+    vitality: 0,
+    vitalityMax: GAUNTLET.vitalityMax,
+    spectating: true,
+    practice: false, // spectators never watch a private practice run
+    finished: false,
+    originX: run.origin.x,
+    originZ: run.origin.z,
+    board: run.contestants.map((k) => ({
+      name: k.name,
+      vitality: k.vitality,
+      out: k.eliminatedAtTrial !== null,
+      you: false,
+    })),
+    sentinel:
+      trial && trial.kind === 'sentinel'
+        ? { light: trial.light, until: trial.flipAt, fieldLength: GAUNTLET.sentinel.fieldLength }
+        : null,
+    sigils: null,
+    pull:
+      trial?.kind === 'pull'
+        ? {
+            marker: Math.round(trial.marker * 10) / 10,
+            winThreshold: GAUNTLET.pull.winThreshold,
+            kx: Math.round(trial.kx * 20) / 20,
+            circle: null,
+          }
+        : null,
+    echo: null,
+    span: trial?.kind === 'span' ? { steps: GAUNTLET.span.steps, revealed: trial.revealed } : null,
+    podium: run.podium
+      ? { first: run.podium.first, second: run.podium.second, third: run.podium.third }
+      : null,
+  };
+}
+
 // The viewer-scoped wire projection (the `grun` self key and
 // IWorldGauntlet.gauntletRun). Absolute deadlines only, so the serialized view
 // changes rarely and the wire delta can elide it.
 export function gauntletRunWire(ctx: SimContext, pid: number): GauntletRunView | null {
   const run = gauntletRunForPlayer(ctx, pid);
-  if (!run) return null;
+  // Free-roaming spectators are in no run: give them the watched run's board.
+  if (!run) return gauntletSpectatorWire(ctx, pid);
   const ps = run.playerStates.get(pid);
   const c = run.contestants.find((k) => k.entityId === pid);
   const trial = run.trial;
@@ -613,9 +847,20 @@ export function gauntletRunWire(ctx: SimContext, pid: number): GauntletRunView |
     vitality: c?.vitality ?? 0,
     vitalityMax: GAUNTLET.vitalityMax,
     spectating: ps?.spectating ?? false,
+    practice: run.practice,
     finished: ps?.finishedAt !== null && ps?.finishedAt !== undefined,
     originX: run.origin.x,
     originZ: run.origin.z,
+    // The standings board: every contestant in roster order (players first,
+    // then the NPC backfill). vitality is the raw event pool (integer already),
+    // out flags a knockout, you marks the viewer's own row. Only changes on a
+    // vitality hit or a knockout, so the wire delta elides quiet ticks.
+    board: run.contestants.map((k) => ({
+      name: k.name,
+      vitality: k.vitality,
+      out: k.eliminatedAtTrial !== null,
+      you: k.entityId === pid,
+    })),
     sentinel:
       trial && trial.kind === 'sentinel'
         ? { light: trial.light, until: trial.flipAt, fieldLength: GAUNTLET.sentinel.fieldLength }
@@ -679,18 +924,6 @@ export function gauntletRunWire(ctx: SimContext, pid: number): GauntletRunView |
       };
     })(),
     span: trial?.kind === 'span' ? { steps: GAUNTLET.span.steps, revealed: trial.revealed } : null,
-    court: (() => {
-      if (trial?.kind !== 'court') return null;
-      const duel = trial.duels.get(pid);
-      if (!duel) return null;
-      return {
-        attacker: duel.attacker,
-        swapAt: duel.swapAt,
-        shoveReadyAt: duel.shoveReadyAt,
-        neckZ: GAUNTLET.court.neckZ,
-        rivalId: duel.rivalId,
-      };
-    })(),
     podium: run.podium
       ? { first: run.podium.first, second: run.podium.second, third: run.podium.third }
       : null,

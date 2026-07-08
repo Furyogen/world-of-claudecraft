@@ -18,6 +18,7 @@
 // garbage on the hot path), mirroring the speedStreaksInto / cameraSpace out-param
 // idiom elsewhere in src/render.
 
+import { HUB_PORTAL_TEMPLATE } from '../sim/data';
 import type { Entity } from '../sim/types';
 import { INTERACT_RANGE } from '../sim/types';
 import { comboPipsFor } from './nameplate_combo';
@@ -98,7 +99,14 @@ export function nameplatePlanInto(
   const d2 = dx * dx + dz * dz;
   const isSelf = e.id === player.id;
   const hasOverheadEmote = !!(e.kind === 'player' && e.overheadEmoteId && !e.dead);
-  const isDoor = e.templateId === 'dungeon_door' || e.templateId === 'dungeon_exit';
+  // Door-like objects that announce themselves with a standing header: the
+  // dungeon doorways and the Proving Grounds overworld entrance portal (its
+  // header names the venue it leads to). The room's exit portal is not in the
+  // set: it carries no label.
+  const isDoor =
+    e.templateId === 'dungeon_door' ||
+    e.templateId === 'dungeon_exit' ||
+    e.templateId === HUB_PORTAL_TEMPLATE;
   const isDelveInteract =
     e.templateId === 'delve_locked_chest' ||
     e.templateId === 'delve_reward_chest' ||

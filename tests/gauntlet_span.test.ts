@@ -195,6 +195,42 @@ describe('the brittle span player detection', () => {
     expect(sim.gauntletRunWire(pid)!.finished).toBe(true);
   });
 
+  it('ignores a mid-air fly-over of the gap, then resolves on the landing foot-contact', () => {
+    const sim = makeSim(808);
+    const pid = sim.addPlayer('warrior', 'Jumper');
+    openAndJoin(sim, pid);
+    advanceToSpan(sim);
+    const run = sim.gauntletRuns[0]!;
+    const span = spanState(sim);
+    const i = 5;
+    const e = sim.entities.get(pid)!;
+    // Airborne over the gap centre at step i: on the ground this is an instant
+    // gap fall, but mid-jump it must be ignored (you are between panels, not on
+    // one). Hover 2.5yd up, still rising, so the physics keeps it airborne.
+    e.pos.x = run.origin.x + GAUNTLET_VENUE.span.x;
+    e.pos.z = run.origin.z + spanStepCenterZ(i);
+    e.pos.y = groundHeight(e.pos.x, e.pos.z, sim.cfg.seed) + 2.5;
+    e.prevPos = { ...e.pos };
+    e.vy = 1;
+    e.onGround = false;
+    (sim as any).rebucket(e);
+    const airborne = sim.tick();
+    expect(airborne.some((ev) => ev.type === 'gauntletDamage' && ev.pid === pid)).toBe(false);
+    expect(span.revealed[i]).toBe(-1); // a fly-over tests no panel
+    expect(span.playerStep.has(pid)).toBe(false);
+    // Now land on the safe panel of that step: foot contact resolves it safely.
+    e.pos.x = run.origin.x + spanSideCenterX(span.safeSide[i]);
+    e.pos.z = run.origin.z + spanStepCenterZ(i);
+    e.pos.y = groundHeight(e.pos.x, e.pos.z, sim.cfg.seed);
+    e.prevPos = { ...e.pos };
+    e.vy = 0;
+    e.onGround = true;
+    (sim as any).rebucket(e);
+    sim.tick();
+    expect(span.playerStep.get(pid)).toBe(i);
+    expect(span.revealed[i]).toBe(span.safeSide[i]);
+  });
+
   it('falls through the gap between the pair, revealing nothing', () => {
     const sim = makeSim(404);
     const pid = sim.addPlayer('warrior', 'Gapper');
@@ -242,6 +278,74 @@ describe('the brittle span crossers', () => {
     // at least one crosser met a brittle panel (per the seeded plan)
     expect(poofs.length).toBeGreaterThan(0);
   }, 20000);
+
+  it('still fields scouts when the survivor target leaves no slack, and they stumble but survive', () => {
+    // A survivor target above the whole field: no NPC can be spared, so the old
+    // fall-capped seeding put ZERO crossers on the glass and the trial read dead.
+    // Now the remnant still scouts: no fatal fall plan, but each may take ONE
+    // honest wrong guess (a stumble it climbs back from), never an elimination.
+    GAUNTLET.targetSurvivorsPerTrial = [40];
+    const sim = makeSim(808);
+    const pid = sim.addPlayer('warrior', 'Idle');
+    openAndJoin(sim, pid);
+    advanceToSpan(sim);
+    const span = spanState(sim);
+    // Scouts are seeded (not zero), none with a fatal fall plan, at least one
+    // armed to stumble like a human.
+    expect(span.npcCrossers.length).toBeGreaterThan(0);
+    expect(span.npcCrossers.every((c) => c.fallStep === null)).toBe(true);
+    expect(span.npcCrossers.some((c) => c.stumbleStep >= 0)).toBe(true);
+    // Park the player well south so ONLY the scouts act, then let them run it.
+    teleportLocal(sim, pid, GAUNTLET_VENUE.span.x, spanZStart() - 10);
+    const ids = span.npcCrossers.map((c) => c.entityId);
+    const poofs: SimEvent[] = [];
+    let minY = Number.POSITIVE_INFINITY;
+    let maxY = Number.NEGATIVE_INFINITY;
+    for (let i = 0; i < 20 * 40 && sim.gauntletRuns[0]?.phase === 'trial'; i++) {
+      for (const e of sim.tick()) if (e.type === 'gauntletPoof') poofs.push(e);
+      for (const id of ids) {
+        const e = sim.entities.get(id);
+        if (!e) continue;
+        minY = Math.min(minY, e.pos.y);
+        maxY = Math.max(maxY, e.pos.y);
+      }
+    }
+    // They lit up panels (they did something), and a scout DID plunge into the
+    // pit (a stumble)...
+    expect(span.revealed.filter((r) => r >= 0).length).toBeGreaterThan(0);
+    expect(maxY - minY).toBeGreaterThan(2);
+    // ...yet not one was ever knocked out: the field holds at its target.
+    expect(poofs.length).toBe(0);
+  }, 20000);
+
+  it('crossers run and hop the span (going airborne) and plunge into the pit on a wrong guess', () => {
+    const sim = makeSim(505);
+    const pid = sim.addPlayer('warrior', 'Idle');
+    openAndJoin(sim, pid);
+    advanceToSpan(sim);
+    const span = spanState(sim);
+    // Park the player south so ONLY the crossers move.
+    teleportLocal(sim, pid, GAUNTLET_VENUE.span.x, spanZStart() - 10);
+    const ids = span.npcCrossers.map((c) => c.entityId);
+    const yseen = new Set<number>();
+    let minY = Number.POSITIVE_INFINITY;
+    let maxY = Number.NEGATIVE_INFINITY;
+    for (let i = 0; i < 20 * 25 && sim.gauntletRuns[0]?.phase === 'trial'; i++) {
+      sim.tick();
+      for (const id of ids) {
+        const e = sim.entities.get(id);
+        if (!e) continue;
+        yseen.add(Math.round(e.pos.y * 100) / 100);
+        minY = Math.min(minY, e.pos.y);
+        maxY = Math.max(maxY, e.pos.y);
+      }
+    }
+    // Continuous vertical motion (a real jump arc), not the old constant-y
+    // one-teleport-per-cadence hop.
+    expect(yseen.size).toBeGreaterThan(6);
+    // A wrong guess carried a crosser well below the deck it hopped along.
+    expect(maxY - minY).toBeGreaterThan(2);
+  }, 20000);
 });
 
 describe('the brittle span resolution', () => {
@@ -272,6 +376,24 @@ describe('the brittle span resolution', () => {
     expect(near).toBe(trialDamageFromScore((2 + 1) / t.steps, t.damageMax));
     expect(far).toBe(trialDamageFromScore((12 + 1) / t.steps, t.damageMax));
   });
+
+  it('a player who never steps onto the span is knocked out at the timeout', () => {
+    const sim = makeSim(608);
+    const pid = sim.addPlayer('warrior', 'Frozen');
+    openAndJoin(sim, pid);
+    advanceToSpan(sim);
+    const run = sim.gauntletRuns[0]!;
+    const c = run.contestants.find((k) => k.entityId === pid)!;
+    // Park south of the first pair and never move: zero panels proved. The
+    // full-pool timeout toll (damageMax === vitalityMax) is lethal from full
+    // vitality, so idling the crossing is fatal, not a survivable chunk.
+    teleportLocal(sim, pid, GAUNTLET_VENUE.span.x, spanZStart() - 10);
+    for (let i = 0; i < 20 * 120 && sim.gauntletRuns[0]?.trial?.kind === 'span'; i++) sim.tick();
+    expect(GAUNTLET.span.damageMax).toBe(GAUNTLET.vitalityMax);
+    expect(c.vitality).toBe(0);
+    expect(c.eliminatedAtTrial).not.toBeNull();
+    expect(run.playerStates.get(pid)!.spectating).toBe(true);
+  }, 30000);
 });
 
 describe('the brittle span determinism', () => {

@@ -17,7 +17,8 @@
 // ui_tier_knobs.nameplateIntervalSec), which the renderer reads, not the painter.
 
 import * as THREE from 'three';
-import { GAUNTLET_CONTESTANT_NPC_ID } from '../sim/content/gauntlet';
+import { GAUNTLET_CONTESTANT_NPC_ID, GAUNTLET_RECRUITER_NPC_ID } from '../sim/content/gauntlet';
+import { HC_HERALD_NPC_ID } from '../sim/content/hodrics';
 import { ABILITIES, MOBS, QUESTS } from '../sim/data';
 import { specialRoleColor } from '../sim/discord_roles';
 import { type Entity, isQuestTurnInNpc } from '../sim/types';
@@ -204,7 +205,10 @@ export class NameplatePainter {
         // Nameplate" option on it renders exactly like another player's, so you can
         // see your name / level / hp / guild and all your flair the way others do.
         const suppressSelf = isSelf && !showOwnNameplate;
-        const opacity = e.auras.some((a) => a.kind === 'stealth') ? '0.55' : '1';
+        // Dim the plate for a stealthed unit, and for a free-roaming Gauntlet
+        // spectator seen by others (their body already renders faint).
+        const faint = e.auras.some((a) => a.kind === 'stealth') || (!isSelf && e.spectator);
+        const opacity = faint ? '0.55' : '1';
         const nameDisplay = suppressSelf ? 'none' : '';
         const hpDisplay = e.dead || suppressSelf ? 'none' : '';
         const guild = suppressSelf ? '' : e.guild;
@@ -250,6 +254,14 @@ export class NameplatePainter {
               ? e.name
               : npcDisplayName(e.templateId)
             : tEntity({ kind: 'mob', id: e.templateId, field: 'name' });
+        // Classic <Title> sub-line under the name, shown ONLY for the two
+        // Proving Grounds heralds (their subtitle is the minigame they run):
+        // Maro the Gauntlet recruiter and Osric the Hodric's Castle herald.
+        const npcTitle =
+          e.kind === 'npc' &&
+          (e.templateId === GAUNTLET_RECRUITER_NPC_ID || e.templateId === HC_HERALD_NPC_ID)
+            ? tEntity({ kind: 'npc', id: e.templateId, field: 'title' })
+            : '';
         let marker = '';
         let cls = '';
         // role-aware: '!' only at the quest's giver, '?' only at its turn-in
@@ -274,13 +286,15 @@ export class NameplatePainter {
         const markerClass = cls ? `np-marker ${cls}` : 'np-marker';
         this.setNameplateStatic(
           v,
-          `npc|${npcName}|${marker}|${markerClass}`,
+          `npc|${npcName}|${npcTitle}|${marker}|${markerClass}`,
           npcName,
           FRIENDLY,
           'none',
           marker,
           markerClass,
           '1',
+          '',
+          npcTitle,
         );
       } else {
         const diff = e.level - p.level;

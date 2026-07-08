@@ -200,6 +200,20 @@ describe("the Keeper's Echo: rounds and sequences", () => {
     expect(start - c.vitality).toBeGreaterThanOrEqual(expectedEnd);
   });
 
+  it('a fully idle player is knocked out by the timeout (zero rounds is fatal)', () => {
+    const { sim, pid } = reachEcho(11);
+    const run = sim.gauntletRuns[0]!;
+    const c = run.contestants.find((k) => k.entityId === pid)!;
+    // Never answer a single stone: every round times out for missDamage, and the
+    // full-pool end-of-trial toll (damageMax === vitalityMax) finishes an idler
+    // off. Waiting out the clock is fatal, not a survivable chunk.
+    for (let i = 0; i < 20 * 150 && sim.gauntletRuns[0]?.phase === 'trial'; i++) sim.tick();
+    expect(GAUNTLET.echo.damageMax).toBe(GAUNTLET.vitalityMax);
+    expect(c.vitality).toBe(0);
+    expect(c.eliminatedAtTrial).not.toBeNull();
+    expect(run.playerStates.get(pid)!.spectating).toBe(true);
+  }, 30000);
+
   it('two same-seed sims fed identical tap streams stay identical', () => {
     const scenario = () => {
       const { sim, pid } = reachEcho(9);

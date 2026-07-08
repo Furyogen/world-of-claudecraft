@@ -13,6 +13,9 @@ import {
   isDelvePos,
   isGauntletPos,
   isHodricsPos,
+  isMinigameHubPos,
+  MINIGAME_HUB,
+  MINIGAME_HUB_RADIUS,
 } from './data';
 import { type DelveModuleId, delveModuleColliders } from './delve_layout';
 import { isLitanyModuleId, litanyModuleLosColliders } from './delve_litany_layout';
@@ -26,6 +29,7 @@ import {
 } from './dungeon_layout';
 import { gauntletVenueColliders } from './gauntlet/venue_physics';
 import { hodricsCollidersAt } from './hodrics_course';
+import { minigameHubColliders } from './minigame_hub_layout';
 import type { WorldContent } from './types';
 import { generateDecorations, groundHeight } from './world';
 
@@ -450,6 +454,26 @@ export function resolvePosition(
     const o = gauntletOriginAt(z);
     const local = resolveAgainst(gauntletVenueColliders(), x - o.x, z - o.z, r, ignoreFences);
     return { x: local.x + o.x, z: local.z + o.z };
+  }
+  if (isMinigameHubPos(x)) {
+    // The Proving Grounds (the Athenaeum of Trials): one circular room furnished
+    // with bookcases, reading tables, and chairs. Resolve against those static
+    // set pieces first (the same anchors the renderer places them from), then a
+    // radial clamp holds the mover inside the wall shell.
+    const local = resolveAgainst(
+      minigameHubColliders(),
+      x - MINIGAME_HUB.x,
+      z - MINIGAME_HUB.z,
+      r,
+      ignoreFences,
+    );
+    const dist = Math.hypot(local.x, local.z);
+    const max = MINIGAME_HUB_RADIUS - r;
+    if (dist > max && dist > 1e-6) {
+      const s = max / dist;
+      return { x: MINIGAME_HUB.x + local.x * s, z: MINIGAME_HUB.z + local.z * s };
+    }
+    return { x: MINIGAME_HUB.x + local.x, z: MINIGAME_HUB.z + local.z };
   }
   if (x > DUNGEON_X_THRESHOLD) {
     const { ox, oz, interior } = instanceLocal(x, z);

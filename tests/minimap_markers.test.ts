@@ -10,9 +10,14 @@
 // canvas no-magic-values guard is in tests/minimap_painter.test.ts.
 
 import { describe, expect, it } from 'vitest';
-import { QUESTS } from '../src/sim/data';
+import { MINIGAME_HUB, QUESTS } from '../src/sim/data';
 import { isQuestTurnInNpc } from '../src/sim/types';
-import { createMinimapMarkers, type MinimapMarker, minimapMode } from '../src/ui/minimap_markers';
+import {
+  createMinimapMarkers,
+  MINIGAME_HUB_ZONE_ID,
+  type MinimapMarker,
+  minimapMode,
+} from '../src/ui/minimap_markers';
 import type { IWorld } from '../src/world_api';
 import { assertAllocationStable } from './util/alloc_probe';
 
@@ -227,6 +232,19 @@ describe('createMinimapMarkers: the discriminated union per draw kind', () => {
     const model = createMinimapMarkers().build(makeWorld('sim'), S, PPY);
     expect(typeof model.zoneId).toBe('string');
     expect(model.zoneId.length).toBeGreaterThan(0);
+  });
+
+  it('emits the Proving Grounds sentinel zone id inside the hub band', () => {
+    const w = makeWorld('sim') as unknown as { player: { pos: { x: number } } };
+    // an overworld position uses the real z-band zone; inside the hub band the
+    // label switches to the venue sentinel (painter maps it to the venue name).
+    expect(createMinimapMarkers().build(w as unknown as IWorld, S, PPY).zoneId).not.toBe(
+      MINIGAME_HUB_ZONE_ID,
+    );
+    w.player.pos.x = MINIGAME_HUB.x;
+    expect(createMinimapMarkers().build(w as unknown as IWorld, S, PPY).zoneId).toBe(
+      MINIGAME_HUB_ZONE_ID,
+    );
   });
 });
 

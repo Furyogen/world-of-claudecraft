@@ -1853,7 +1853,9 @@ const ALL_DELTA_KEYS = [
   'equip',
   'gopen',
   'gprof',
+  'gq',
   'grun',
+  'gsp',
   'hc',
   'inv',
   'lockouts',
@@ -1895,7 +1897,9 @@ const TERSE_TO_IWORLD: Record<string, string> = {
   equip: 'equipment',
   gopen: 'gauntletOpen',
   gprof: 'gatheringProficiency',
+  gq: 'gauntletQueuePosition',
   grun: 'gauntletRun',
+  gsp: 'gauntletSpectating',
   hc: 'hcInfo',
   inv: 'inventory',
   lockouts: 'selfLockouts',
@@ -2011,6 +2015,7 @@ function dirtyEveryDeltaField(): {
   sim.gauntletRuns.push({
     id: 1,
     slot: 0,
+    practice: false,
     seed: 1,
     rng: new Rng(1),
     origin: gauntletOrigin(0),
@@ -2037,6 +2042,8 @@ function dirtyEveryDeltaField(): {
           mult: 1,
           pauseAt: 0,
           pauseUntil: 0,
+          weavePhase: 0,
+          overshoot: 0,
         },
       },
     ],
@@ -2216,9 +2223,9 @@ describe('full self-state snapshot delta fixture', () => {
 });
 
 describe('delta-key contract pins (anti-drift)', () => {
-  it('ALL_DELTA_KEYS contains exactly 34 unique keys in sorted order', () => {
-    expect(ALL_DELTA_KEYS).toHaveLength(34);
-    expect(new Set(ALL_DELTA_KEYS).size).toBe(34);
+  it('ALL_DELTA_KEYS contains exactly 36 unique keys in sorted order', () => {
+    expect(ALL_DELTA_KEYS).toHaveLength(36);
+    expect(new Set(ALL_DELTA_KEYS).size).toBe(36);
     expect([...ALL_DELTA_KEYS]).toEqual([...ALL_DELTA_KEYS].sort());
   });
 
@@ -2230,7 +2237,7 @@ describe('delta-key contract pins (anti-drift)', () => {
     const scraped = new Set<string>();
     for (let m = re.exec(src); m !== null; m = re.exec(src)) scraped.add(m[1]);
     expect(scraped.has('lockouts')).toBe(true); // the multi-line call IS captured
-    expect(scraped.size).toBe(34);
+    expect(scraped.size).toBe(36);
     expect([...scraped].sort()).toEqual([...ALL_DELTA_KEYS].sort());
   });
 

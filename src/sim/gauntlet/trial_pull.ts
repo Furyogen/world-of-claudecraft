@@ -16,7 +16,13 @@
 import { GAUNTLET, GAUNTLET_VENUE } from '../content/gauntlet';
 import type { SimContext } from '../sim_context';
 import type { GauntletPullState, GauntletRun } from './state';
-import { aliveContestants, applyVitalityDamage, cullNpcsToward } from './vitality';
+import {
+  aliveContestants,
+  applyVitalityDamage,
+  clamp01,
+  cullNpcsToward,
+  trialDamageFromScore,
+} from './vitality';
 
 // The marker sign convention: team 0 heaves positive, team 1 heaves negative.
 function pullDir(team: 0 | 1): 1 | -1 {
@@ -67,9 +73,10 @@ function seatRopeLine(
   return base;
 }
 
-export function startPull(ctx: SimContext, run: GauntletRun): GauntletPullState {
-  // Team split: 2+ live players alternate 0, 1, 0, 1... in join (insertion)
-  // order; a lone player is team 0 against an all-NPC team 1.
+// The team split: 2+ live players alternate 0, 1, 0, 1... in join (insertion)
+// order; a lone player is team 0 against an all-NPC team 1. Pure and rng-free,
+// so both the interlude pre-seat and startPull derive the same teams.
+function computePullTeams(run: GauntletRun): Map<number, 0 | 1> {
   const teamOf = new Map<number, 0 | 1>();
   const livePids: number[] = [];
   for (const [pid, ps] of run.playerStates) {
@@ -80,7 +87,18 @@ export function startPull(ctx: SimContext, run: GauntletRun): GauntletPullState 
   } else {
     for (const pid of livePids) teamOf.set(pid, 0);
   }
+  return teamOf;
+}
 
+// Stand the whole field on the rope in its two lines. Positioning only (no
+// state, no rng), so runs.ts can call it during the interlude to line everyone
+// up on the rope while the countdown runs, and startPull reuses the seating.
+export function seatPullField(ctx: SimContext, run: GauntletRun): void {
+  seatRopeLine(ctx, run, computePullTeams(run));
+}
+
+export function startPull(ctx: SimContext, run: GauntletRun): GauntletPullState {
+  const teamOf = computePullTeams(run);
   const heaveAnchor = ctx.time + GAUNTLET.pull.leadInS;
   // The two per-team per-heave NPC pull means, drawn team 0 then team 1.
   const npcForce: [number, number] = [
@@ -98,6 +116,7 @@ export function startPull(ctx: SimContext, run: GauntletRun): GauntletPullState 
     npcForce,
     circles: new Map(),
     nextCircleId: 0,
+    pullContribution: new Map(),
     gripBase,
     kx: 0,
     resolved: false,
@@ -108,19 +127,43 @@ export function startPull(ctx: SimContext, run: GauntletRun): GauntletPullState 
   // so everyone has a beat to find the rope before the first circle appears.
   for (const [pid, ps] of run.playerStates) {
     if (ps.spectating || !teamOf.has(pid)) continue;
-    dealCircle(run, trial, pid, ctx.time + GAUNTLET.pull.leadInS);
+    dealCircle(ctx, run, trial, pid, ctx.time + GAUNTLET.pull.leadInS);
   }
   return trial;
 }
 
-// Deal the pid's next circle: a rolled gap after `at`, and a rolled
-// full-shrink duration (the circle's "random speed"). Two run.rng draws, so
-// call sites keep the fixed-order contract (playerStates iteration order in
-// the tick sweep; a click's arrival is its own well-defined moment).
-function dealCircle(run: GauntletRun, trial: GauntletPullState, pid: number, at: number): void {
+// The difficulty ramp factor for a given trial progress (0 at the start, 1 at
+// the deadline): 1x at the start, easing linearly to rampMin at the end. Pure,
+// Node-tested directly. Multiplies both the spawn gap and the shrink duration,
+// so circles come faster AND shrink faster the longer the pull runs.
+export function pullRampFactor(progress: number, rampMin: number): number {
+  const p = progress < 0 ? 0 : progress > 1 ? 1 : progress;
+  return 1 - (1 - rampMin) * p;
+}
+
+// The ramp at the current sim time: no rng, so it never perturbs the draw order.
+function pullRamp(ctx: SimContext, run: GauntletRun): number {
   const P = GAUNTLET.pull;
-  const gap = run.rng.range(P.circleSpawnMinS, P.circleSpawnMaxS);
-  const shrinkS = run.rng.range(P.circleShrinkMinS, P.circleShrinkMaxS);
+  const progress = 1 - (run.phaseEndsAt - ctx.time) / P.durationS;
+  return pullRampFactor(progress, P.circleRampMin);
+}
+
+// Deal the pid's next circle: a rolled gap after `at`, and a rolled full-shrink
+// duration (the circle's "random speed"), both scaled by the time-based ramp so
+// the pull tightens as it runs. Two run.rng draws, so call sites keep the
+// fixed-order contract (playerStates iteration order in the tick sweep; a
+// click's arrival is its own well-defined moment); the ramp adds no draw.
+function dealCircle(
+  ctx: SimContext,
+  run: GauntletRun,
+  trial: GauntletPullState,
+  pid: number,
+  at: number,
+): void {
+  const P = GAUNTLET.pull;
+  const ramp = pullRamp(ctx, run);
+  const gap = run.rng.range(P.circleSpawnMinS, P.circleSpawnMaxS) * ramp;
+  const shrinkS = run.rng.range(P.circleShrinkMinS, P.circleShrinkMaxS) * ramp;
   trial.circles.set(pid, { id: trial.nextCircleId++, spawnAt: at + gap, shrinkS });
 }
 
@@ -156,8 +199,13 @@ export function gauntletPullCircleClick(
   const P = GAUNTLET.pull;
   const size = circleSizeAt(c, ctx.time);
   const grade = Math.max(0, 1 - Math.abs(size - P.circleTargetSize) / P.circleTargetSize);
-  trial.marker += pullDir(team) * P.pullForceMax * grade ** P.gradePower;
-  dealCircle(run, trial, pid, ctx.time);
+  const pull = P.pullForceMax * grade ** P.gradePower;
+  trial.marker += pullDir(team) * pull;
+  // Bank the click's magnitude as this player's contribution: the end-of-pull
+  // toll grades off it, so participation (not which side the marker landed on)
+  // decides who is knocked out.
+  trial.pullContribution.set(pid, (trial.pullContribution.get(pid) ?? 0) + pull);
+  dealCircle(ctx, run, trial, pid, ctx.time);
 }
 
 // One tick of the tug. Returns true once the marker (or the clock) has decided
@@ -179,7 +227,7 @@ export function updatePull(ctx: SimContext, run: GauntletRun, dt: number): boole
       continue;
     }
     const c = trial.circles.get(pid);
-    if (c && ctx.time >= c.spawnAt + c.shrinkS) dealCircle(run, trial, pid, ctx.time);
+    if (c && ctx.time >= c.spawnAt + c.shrinkS) dealCircle(ctx, run, trial, pid, ctx.time);
   }
 
   // Every heave boundary since the last tick (a catch-up loop, so a slow tick
@@ -252,9 +300,13 @@ function resolveWinner(ctx: SimContext, run: GauntletRun, trial: GauntletPullSta
   return null;
 }
 
-// End-of-trial resolution: every live player on the losing team eats lossDamage
-// (a big chunk, not a kill unless they were already low); the winners take zero
-// and record their finish. Then the NPC field thins toward the trial target.
+// End-of-trial resolution: the pull is a participation test. Every live player
+// is graded by how hard they pulled (their accumulated contribution vs a full
+// win's worth, winThreshold): a full contribution takes nothing, zero effort
+// takes the full pool and is knocked out, even if their side won on the NPC
+// drift. The winning team additionally records a finish time (the per-trial
+// completion marker every trial sets). Then the NPC field thins toward the
+// trial target.
 function finishPull(
   ctx: SimContext,
   run: GauntletRun,
@@ -263,17 +315,17 @@ function finishPull(
 ): void {
   trial.resolved = true;
   trial.wonBy = winner;
-  const loser: 0 | 1 = winner === 0 ? 1 : 0;
+  const P = GAUNTLET.pull;
   for (const c of aliveContestants(run)) {
     if (!c.player) continue;
     const team = trial.teamOf.get(c.entityId);
     if (team === undefined) continue;
-    if (team === loser) {
-      applyVitalityDamage(ctx, run, c, GAUNTLET.pull.lossDamage, 'trial');
-    } else {
+    if (team === winner) {
       const ps = run.playerStates.get(c.entityId);
       if (ps && ps.finishedAt === null) ps.finishedAt = ctx.time;
     }
+    const score = clamp01((trial.pullContribution.get(c.entityId) ?? 0) / P.winThreshold);
+    applyVitalityDamage(ctx, run, c, trialDamageFromScore(score, P.lossDamage), 'trial');
   }
   cullNpcsToward(ctx, run);
 }

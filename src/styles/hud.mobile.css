@@ -2067,6 +2067,17 @@
     top: 96px;
     width: min(320px, 86vw);
   }
+  /* The standings board is read-only info: narrow it and give the tail room to
+     scroll off so it never crowds the touch controls on a small screen. */
+  body.mobile-touch #gauntlet-board {
+    top: 150px;
+    width: min(150px, 42vw);
+    max-height: calc(100dvh - 220px);
+    padding: 5px 6px;
+  }
+  body.mobile-touch #gauntlet-board .gb-bar {
+    width: 44px;
+  }
   body.mobile-touch #gauntlet-recruit {
     width: min(360px, 92vw);
   }
@@ -2093,7 +2104,10 @@
     justify-content: center;
   }
   body.mobile-touch .go-leave,
-  body.mobile-touch #gauntlet-recruit .gr-action {
+  body.mobile-touch .go-rejoin,
+  body.mobile-touch #gauntlet-recruit .gr-action,
+  body.mobile-touch #gauntlet-recruit .gr-spectate,
+  body.mobile-touch #gauntlet-recruit .gr-practice {
     min-height: 44px;
   }
 }
