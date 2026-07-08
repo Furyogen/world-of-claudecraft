@@ -398,7 +398,11 @@ describe('prompt builders', () => {
   });
 
   it('heavy-headed families are described head at the top', () => {
-    const p = prompts.conceptPrompt({ kind: 'weapon', description: 'a war hammer', family: hammer });
+    const p = prompts.conceptPrompt({
+      kind: 'weapon',
+      description: 'a war hammer',
+      family: hammer,
+    });
     expect(p).toContain('head at the top');
   });
 

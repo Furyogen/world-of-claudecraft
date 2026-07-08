@@ -120,7 +120,10 @@ export async function compressExport(body) {
   } catch {
     // sharp unavailable: keep original textures rather than failing the export.
   }
-  const hasAlpha = doc.getRoot().listMaterials().some((m) => m.getAlphaMode() !== 'OPAQUE');
+  const hasAlpha = doc
+    .getRoot()
+    .listMaterials()
+    .some((m) => m.getAlphaMode() !== 'OPAQUE');
   const steps = [prune(), dedup()];
   if (sharp) {
     // CORE glTF texture formats only (JPEG + PNG) so the model shows textured in
@@ -181,9 +184,7 @@ export async function compressExport(body) {
     exportPath,
     usdzPath,
     animated,
-    format: animated
-      ? 'JPEG/PNG textures, animation-safe'
-      : 'meshopt geometry + JPEG/PNG textures',
+    format: animated ? 'JPEG/PNG textures, animation-safe' : 'meshopt geometry + JPEG/PNG textures',
     sizeBefore: statSync(src).size,
     sizeAfter: statSync(exportPath).size,
     usdzBytes: usdzPath ? statSync(usdzPath).size : null,

@@ -13,13 +13,7 @@
 import { statSync } from 'node:fs';
 import { getBounds, NodeIO } from '@gltf-transform/core';
 import { ALL_EXTENSIONS } from '@gltf-transform/extensions';
-import {
-  dedup,
-  prune,
-  resample,
-  textureCompress,
-  transformMesh,
-} from '@gltf-transform/functions';
+import { dedup, prune, resample, textureCompress, transformMesh } from '@gltf-transform/functions';
 import { MeshoptDecoder, MeshoptEncoder } from 'meshoptimizer';
 
 let ioPromise = null;

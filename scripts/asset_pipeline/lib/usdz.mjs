@@ -29,7 +29,13 @@ async function launch() {
   const browser = await puppeteer.launch({
     executablePath: BROWSER_PATH,
     headless: true,
-    args: ['--use-angle=swiftshader', '--use-gl=angle', '--ignore-gpu-blocklist', '--no-sandbox', '--enable-webgl'],
+    args: [
+      '--use-angle=swiftshader',
+      '--use-gl=angle',
+      '--ignore-gpu-blocklist',
+      '--no-sandbox',
+      '--enable-webgl',
+    ],
   });
   const page = await browser.newPage();
   page.on('pageerror', (e) => console.error('[usdz page error]', e.message));
