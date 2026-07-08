@@ -265,7 +265,7 @@ describe('vale_cup hud.ts call sites', () => {
       "if ($('#valecup-window').style.display === 'block') this.valeCupWindow.render();",
     );
     expect(hud).toContain(
-      'this.vcupIndicator.update(buildVcupIndicatorView(this.sim.cupInfo, nearCupArena));',
+      'this.vcupIndicator.update(buildVcupIndicatorView(this.sim.cupInfo, atSowfield));',
     );
     expect(hud).toContain('this.vcupMatchHud.update(buildVcupHudView(this.sim.cupInfo));');
     expect(hud).toContain('this.vcupBriefing.update(buildVcupBriefingView(this.sim.cupInfo));');

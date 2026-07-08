@@ -194,18 +194,6 @@ export function isOnPitch(x: number, z: number): boolean {
   return x >= PITCH.xMin && x <= PITCH.xMax && z >= PITCH.zMin && z <= PITCH.zMax;
 }
 
-/**
- * Distance in yards from (x, z) to the Sowfield stadium footprint (0 anywhere
- * inside it). Point-to-rectangle distance, so the elongated pitch is measured
- * correctly along both axes. The HUD uses this to show the live-match score
- * indicator only to players near the arena, rather than realm-wide.
- */
-export function distanceToSowfield(x: number, z: number): number {
-  const dx = Math.max(SOWFIELD_FLAT.xMin - x, 0, x - SOWFIELD_FLAT.xMax);
-  const dz = Math.max(SOWFIELD_FLAT.zMin - z, 0, z - SOWFIELD_FLAT.zMax);
-  return Math.hypot(dx, dz);
-}
-
 // ---------------------------------------------------------------------------
 // Parallel practice instances. Practice matches play on private copies of the
 // pitch far from the one physical Sowfield, so many run at once without touching
