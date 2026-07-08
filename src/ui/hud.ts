@@ -500,11 +500,15 @@ const VCUP_THEATRE_RADIUS = 200;
 // paint carries no bare literal at the call site.
 const BOSS_SKULL_GLYPH = '☠';
 const COMBO_PIP_COUNT = 5;
-// The mob-hover tooltip's fixed bottom-right slot (the WoW default GameTooltip
-// corner), in author-space px: the right margin clears the sidebar icon rail,
-// the bottom margin the community-links row, both fixed right-edge chrome.
+// The mob-hover tooltip's fixed desktop bottom-right slot (the WoW default
+// GameTooltip corner), in author-space px: the right margin clears the sidebar
+// icon rail, the bottom margin the community-links row, both fixed right-edge
+// chrome. Touch uses the slot immediately left of the minimap instead so it does
+// not cover the bottom action controls.
 const MOB_TOOLTIP_MARGIN_RIGHT = 56;
 const MOB_TOOLTIP_MARGIN_BOTTOM = 60;
+const MOB_TOOLTIP_MOBILE_MINIMAP_GAP = 8;
+const MOB_TOOLTIP_MOBILE_EDGE_GAP = 8;
 // The descriptor for a hidden target frame (no target, or a targeted world object).
 // unitFrameView reads only `present` when hiding, so the rest are no-op defaults; a
 // shared const avoids allocating a fresh descriptor for every hidden frame.
@@ -2094,6 +2098,20 @@ export class Hud {
     // opens are already correct above; this only ever nudges a still-overflowing
     // menu up/left by a frame, never off the top/left edge.
     requestAnimationFrame(clamp);
+  }
+
+  private centerPopupInViewport(el: HTMLElement, margin = 10): void {
+    const z = getUiScale();
+    const vw = window.innerWidth / z;
+    const vh = window.innerHeight / z;
+    const rect = el.getBoundingClientRect();
+    const width = Math.min(rect.width / z, vw - margin * 2);
+    const height = Math.min(rect.height / z, vh - margin * 2);
+    el.style.left = `${Math.max(margin, (vw - width) / 2)}px`;
+    el.style.top = `${Math.max(margin, (vh - height) / 2)}px`;
+    el.style.right = 'auto';
+    el.style.bottom = 'auto';
+    el.style.transform = 'none';
   }
 
   private topmostOpenWindow(): HTMLElement | null {
@@ -3970,12 +3988,12 @@ export class Hud {
     return { w: tw, h: th };
   }
 
-  // Anchors the mob-hover tooltip to the viewport's bottom-right corner (the WoW
-  // default GameTooltip slot) instead of the cursor. Bottom-anchored, so a taller
-  // tooltip (quest lines) grows UPWARD from the same baseline. Deliberately NOT
-  // tied to the player frame: that frame is player-movable (MovableFrame), and an
-  // anchor riding it wanders wherever the frame was dragged. The margins clear
-  // the fixed right-edge chrome (the sidebar icon rail and the community row).
+  // Anchors the mob-hover tooltip to a fixed viewport corner instead of the
+  // cursor. Desktop keeps the WoW default bottom-right slot; touch moves to the
+  // left of the minimap so selected enemy info does not cover the bottom action
+  // controls.
+  // Deliberately NOT tied to the player frame: that frame is player-movable
+  // (MovableFrame), and an anchor riding it wanders wherever the frame was dragged.
   private paintMobTooltipBottomRight(html: string): void {
     this.tooltipEl.classList.add('mob-tooltip');
     this.tooltipEl.innerHTML = html;
@@ -3983,8 +4001,21 @@ export class Hud {
     const z = getUiScale();
     const tw = this.tooltipEl.offsetWidth,
       th = this.tooltipEl.offsetHeight;
-    const left = Math.max(8, window.innerWidth / z - tw - MOB_TOOLTIP_MARGIN_RIGHT);
-    const top = Math.max(8, window.innerHeight / z - th - MOB_TOOLTIP_MARGIN_BOTTOM);
+    const isMobileTouch = document.body.classList.contains('mobile-touch');
+    const minimapRect = isMobileTouch
+      ? (document.getElementById('minimap-wrap')?.getBoundingClientRect() ?? null)
+      : null;
+    const left =
+      minimapRect !== null
+        ? Math.max(
+            MOB_TOOLTIP_MOBILE_EDGE_GAP,
+            minimapRect.left / z - tw - MOB_TOOLTIP_MOBILE_MINIMAP_GAP,
+          )
+        : Math.max(8, window.innerWidth / z - tw - MOB_TOOLTIP_MARGIN_RIGHT);
+    const top =
+      minimapRect !== null
+        ? Math.max(MOB_TOOLTIP_MOBILE_EDGE_GAP, minimapRect.top / z)
+        : Math.max(8, window.innerHeight / z - th - MOB_TOOLTIP_MARGIN_BOTTOM);
     this.tooltipEl.style.left = `${left}px`;
     this.tooltipEl.style.top = `${top}px`;
   }
@@ -7304,10 +7335,8 @@ export class Hud {
     });
     el.appendChild(btn);
     el.querySelector('[data-close]')?.addEventListener('click', () => this.closeLoot());
-    el.style.left = `${Math.max(10, (window.innerWidth - 230) / 2)}px`;
-    el.style.top = `${Math.max(10, (window.innerHeight - 220) / 2)}px`;
-    el.style.transform = 'none';
     el.style.display = 'block';
+    this.centerPopupInViewport(el);
   }
 
   private bindLockpickKeys(): void {
@@ -11050,9 +11079,13 @@ export class Hud {
       });
     }
     el.querySelector('[data-close]')?.addEventListener('click', () => this.closeLoot());
-    this.placePopupAt(el, screenX - 115, screenY - 30, 260, 280, 10, 10);
-    el.style.transform = 'none'; // loot pops at the cursor, not the centred slot
     el.style.display = 'block';
+    if (document.body.classList.contains('mobile-touch')) {
+      this.centerPopupInViewport(el);
+    } else {
+      this.placePopupAt(el, screenX - 115, screenY - 30, 260, 280, 10, 10);
+      el.style.transform = 'none'; // loot pops at the cursor, not the centred slot
+    }
   }
 
   closeLoot(): void {

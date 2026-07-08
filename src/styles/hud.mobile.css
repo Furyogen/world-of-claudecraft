@@ -2372,6 +2372,29 @@
   body.mobile-touch #player-card-modal .pc-link-input {
     font-size: 16px;
   }
+  /* Mobile enemy select tooltip: compact and anchored from hud.ts to the left of
+     the minimap so it does not cover the bottom-right action controls. */
+  body.mobile-touch #tooltip.mob-tooltip {
+    max-width: min(
+      188px,
+      calc(100vw - 24px - env(safe-area-inset-left) - env(safe-area-inset-right))
+    );
+    padding: 5px 7px;
+    line-height: 1.25;
+    font-size: calc(10px * var(--tooltip-scale, 1));
+  }
+  body.mobile-touch #tooltip.mob-tooltip .tt-title {
+    font-size: calc(12px * var(--tooltip-scale, 1));
+    line-height: 1.1;
+  }
+  body.mobile-touch #tooltip.mob-tooltip .tt-sub,
+  body.mobile-touch #tooltip.mob-tooltip .tt-red,
+  body.mobile-touch #tooltip.mob-tooltip .tt-green,
+  body.mobile-touch #tooltip.mob-tooltip .tt-quest-name,
+  body.mobile-touch #tooltip.mob-tooltip .tt-quest-obj {
+    font-size: calc(10px * var(--tooltip-scale, 1));
+    line-height: 1.2;
+  }
   /* Char/talents mobile redo: the user explicitly prefers the character and
      talents windows covering the ENTIRE mobile screen over the old
      partial-sheet layout, so both go full-screen landscape-first overlays
