@@ -579,8 +579,9 @@ export async function serveLibrary({ port = 5180, refresh = null } = {}) {
   const { extname, join: pjoin, normalize: pnorm } = await import('node:path');
   const wiz = await import('./wizard.mjs');
   const threeBundle = await buildThreeBundle();
-  const liveModule = rf(join(REPO_ROOT, 'scripts/asset_pipeline/viewer_live.js'), 'utf8');
-  const wizardModule = rf(join(REPO_ROOT, 'scripts/asset_pipeline/wizard_ui.js'), 'utf8');
+  // Viewer page modules are read per request (not cached) so edits to the live
+  // viewer / wizard / VFX layer show up on a plain page reload.
+  const pageModule = (name) => rf(join(REPO_ROOT, `scripts/asset_pipeline/${name}`), 'utf8');
 
   // Only these repo subtrees are reachable via /repo/* (never .env, src, etc.).
   const ALLOWED = ['public/', 'tmp/asset_pipeline/'];
@@ -712,10 +713,12 @@ export async function serveLibrary({ port = 5180, refresh = null } = {}) {
       const url = decodeURIComponent((req.url || '/').split('?')[0]);
       if (url === '/api/wizard/upload' && req.method === 'POST') return void handleUpload(req, res);
       if (url.startsWith('/api/')) return void handleApi(req, res, url);
-      if (url === '/wizard_ui.js') return send(res, 200, MIME['.js'], wizardModule);
+      if (url === '/wizard_ui.js') return send(res, 200, MIME['.js'], pageModule('wizard_ui.js'));
       if (url === '/' || url === '/index.html') return void serveIndex(res);
       if (url === '/three.bundle.js') return send(res, 200, MIME['.js'], threeBundle);
-      if (url === '/viewer_live.js') return send(res, 200, MIME['.js'], liveModule);
+      if (url === '/viewer_live.js')
+        return send(res, 200, MIME['.js'], pageModule('viewer_live.js'));
+      if (url === '/weapon_vfx.js') return send(res, 200, MIME['.js'], pageModule('weapon_vfx.js'));
       if (url.startsWith('/thumbs/')) {
         const p = pjoin(LIBRARY_DIR, url.slice(1));
         if (ex(p) && st(p).isFile())

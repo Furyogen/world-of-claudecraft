@@ -10,12 +10,44 @@
 // Exposes window.LiveViewer.{open(asset, ui), close()} for the page's grid
 // script to drive on detail open/close.
 import {
+  EffectComposer,
   GLTFLoader,
   MeshoptDecoder,
   OrbitControls,
+  OutputPass,
+  RenderPass,
   THREE,
   TransformControls,
+  UnrealBloomPass,
 } from '/three.bundle.js';
+import {
+  bannerHtml,
+  createWeaponVfx,
+  DEFAULT_TUNING,
+  SCENE_PRESETS,
+  vfxSpecFor,
+} from '/weapon_vfx.js';
+
+// The VFX toggle survives across detail opens (a per-page preference).
+let vfxPref = true;
+
+// FX tuning multipliers + scene preset survive across opens AND page reloads.
+const TUNING_LS = 'woc_vfx_tuning';
+const SCENE_LS = 'woc_viewer_scene';
+let fxTuning = (() => {
+  try {
+    return { ...DEFAULT_TUNING, ...(JSON.parse(localStorage.getItem(TUNING_LS)) ?? {}) };
+  } catch {
+    return { ...DEFAULT_TUNING };
+  }
+})();
+let scenePref = (() => {
+  try {
+    return localStorage.getItem(SCENE_LS) || 'showcase';
+  } catch {
+    return 'showcase';
+  }
+})();
 
 const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
 const texLoader = new THREE.TextureLoader();
@@ -71,7 +103,10 @@ function makeLights(scene) {
   const rim = new THREE.DirectionalLight(0xffffff, 1.1);
   rim.position.set(0, 3, -6);
   scene.add(rim);
-  scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+  const amb = new THREE.AmbientLight(0xffffff, 0.5);
+  scene.add(amb);
+  // Returned so the VFX layer can dim the pedestal to night-showcase levels.
+  return [key, fill, rim, amb];
 }
 
 function disposeObject(obj) {
@@ -184,6 +219,9 @@ let session = null;
 function teardown() {
   if (!session) return;
   cancelAnimationFrame(session.raf);
+  session.vfx?.dispose();
+  session.composer?.dispose?.();
+  session.bloomPass?.dispose?.();
   session.gizmo?.dispose();
   session.controls.dispose();
   for (const root of session.roots) {
@@ -217,6 +255,13 @@ window.LiveViewer = {
       updateBtn,
       exportBtn,
       exportStatusEl,
+      vfxToggle,
+      inspectorEl,
+      sceneSelect,
+      fxBar,
+      fxInputs,
+      fxResetBtn,
+      fxStatusEl,
     } = ui;
     const setStatus = (t) => {
       if (statusEl) statusEl.textContent = t;
@@ -227,7 +272,8 @@ window.LiveViewer = {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     const scene = new THREE.Scene();
-    makeLights(scene);
+    const sceneLights = makeLights(scene);
+    const sceneLightBase = sceneLights.map((l) => l.intensity);
     const ground = new THREE.Mesh(
       new THREE.CircleGeometry(6, 48),
       new THREE.MeshStandardMaterial({ color: 0x262b34, roughness: 1 }),
@@ -251,13 +297,192 @@ window.LiveViewer = {
       mixers: [],
       raf: 0,
       onResize: null,
+      vfx: null,
+      composer: null,
+      bloomPass: null,
+      vfxTime: 0,
+      vfxFloat: null,
+      floatTarget: null,
+      floatBaseY: 0,
+      sceneActive: false,
     };
+
+    // --- Weapon-inspector VFX (the Armory Codex magical tiers) -----------
+    // Rarity-scaled runtime effects: derived emissive cores + bloom, particle
+    // systems and cast light, layered onto the untouched GLB. Weapons outside
+    // the codex tiers render exactly as before.
+    const vfxInfo = vfxSpecFor(asset);
+    const vfxWrap = vfxToggle ? (vfxToggle.closest('label') ?? vfxToggle.parentElement) : null;
+    if (vfxWrap) vfxWrap.style.display = vfxInfo ? '' : 'none';
+    if (vfxToggle) vfxToggle.checked = vfxPref;
+    if (vfxInfo && inspectorEl) {
+      inspectorEl.insertAdjacentHTML('afterbegin', bannerHtml(vfxInfo.spec));
+    }
+    const composerSize = () => {
+      if (!session.composer) return;
+      const r = canvas.getBoundingClientRect();
+      session.composer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      session.composer.setSize(Math.max(2, r.width), Math.max(2, r.height));
+    };
+    const ensureComposer = (bloom) => {
+      if (!session.composer) {
+        const composer = new EffectComposer(renderer);
+        composer.addPass(new RenderPass(scene, camera));
+        const bloomPass = new UnrealBloomPass(
+          new THREE.Vector2(2, 2),
+          bloom.strength,
+          bloom.radius,
+          bloom.threshold,
+        );
+        composer.addPass(bloomPass);
+        composer.addPass(new OutputPass());
+        session.composer = composer;
+        session.bloomPass = bloomPass;
+        composerSize();
+      } else {
+        session.bloomPass.strength = bloom.strength;
+        session.bloomPass.radius = bloom.radius;
+        session.bloomPass.threshold = bloom.threshold;
+      }
+    };
+    // --- Preview environment: scene presets + the showcase auto set -------
+    // The scene select relights the pedestal (lights, background, ground) so
+    // effects can be judged under game-world conditions; "showcase" keeps the
+    // studio look and lets an active VFX rig stage its own night set. A relit
+    // scene renders through the composer (ACES via the OutputPass) so bright
+    // and dark presets tone-map consistently with the VFX path.
+    const GROUND_BASE = 0x262b34;
+    const sceneLightColorBase = sceneLights.map((l) => l.color.getHex());
+    const applyEnvironment = () => {
+      const preset = SCENE_PRESETS[scenePref] ?? SCENE_PRESETS.showcase;
+      const vfxOn = !!session.vfx;
+      const tier = session.vfx?.tier ?? null;
+      session.sceneActive = Boolean(preset.lights);
+      if (!preset.lights) {
+        // Showcase: stock studio look; an active rig dims the pedestal and
+        // brings its own tier night sky.
+        const dim = vfxOn ? (tier.sceneDim ?? 0.5) : 1;
+        sceneLights.forEach((l, i) => {
+          l.color.setHex(sceneLightColorBase[i]);
+          l.intensity = sceneLightBase[i] * dim;
+        });
+        scene.background = vfxOn ? new THREE.Color(tier.background) : null;
+        ground.material.color.setHex(GROUND_BASE);
+        session.vfx?.setBackdropVisible(true);
+      } else {
+        preset.lights.forEach(([hex, intensity], idx) => {
+          sceneLights[idx].color.setHex(hex);
+          sceneLights[idx].intensity = intensity;
+        });
+        scene.background = new THREE.Color(preset.bg);
+        ground.material.color.setHex(preset.ground);
+        session.vfx?.setBackdropVisible(false);
+        if (!session.composer) ensureComposer({ strength: 0, radius: 0.5, threshold: 1 });
+      }
+      renderer.toneMapping =
+        vfxOn || session.sceneActive ? THREE.ACESFilmicToneMapping : THREE.NoToneMapping;
+      if (session.bloomPass) {
+        // Scene presets pin the bloom threshold so bright-scene characters
+        // stay out of the bloom while hot cores still cross it.
+        session.bloomPass.strength = vfxOn ? tier.bloom.strength * (fxTuning.bloom ?? 1) : 0;
+        session.bloomPass.threshold = vfxOn
+          ? (preset.bloomThreshold ?? tier.bloom.threshold)
+          : (preset.bloomThreshold ?? 1);
+      }
+      if (fxBar) fxBar.classList.toggle('on', vfxOn);
+    };
+    // (Re)build the VFX rig on the weapon root currently on display. Grounded
+    // mode adds the floor light pool + float animation; held mode keeps the
+    // effects hand-anchored only.
+    const makeVfx = (target, grounded) => {
+      if (session.floatTarget) {
+        session.floatTarget.position.y = session.floatBaseY;
+        session.floatTarget = null;
+      }
+      if (session.vfx) {
+        session.vfx.dispose();
+        session.vfx = null;
+      }
+      session.vfxFloat = null;
+      if (vfxInfo && target && (vfxToggle ? vfxToggle.checked : vfxPref)) {
+        const handle = createWeaponVfx(target, vfxInfo.spec, { grounded });
+        scene.add(handle.sceneExtras);
+        ensureComposer(handle.tier.bloom);
+        handle.setPixelScale(canvas.height);
+        handle.setTuning(fxTuning);
+        session.vfx = handle;
+        window.__wvfx = handle; // debug hook for the VFX shot harness
+        if (grounded) {
+          session.vfxFloat = handle.tier.float;
+          session.floatTarget = target;
+          session.floatBaseY = target.position.y;
+        }
+      }
+      applyEnvironment();
+    };
+
+    // Scene preset select: shared across assets, persisted across reloads.
+    if (sceneSelect) {
+      if (!sceneSelect.options.length) {
+        sceneSelect.innerHTML = Object.entries(SCENE_PRESETS)
+          .map(([k, p]) => `<option value="${k}">${p.label}</option>`)
+          .join('');
+      }
+      if (!SCENE_PRESETS[scenePref]) scenePref = 'showcase';
+      sceneSelect.value = scenePref;
+      sceneSelect.onchange = () => {
+        scenePref = SCENE_PRESETS[sceneSelect.value] ? sceneSelect.value : 'showcase';
+        try {
+          localStorage.setItem(SCENE_LS, scenePref);
+        } catch {
+          /* private mode: preference just does not persist */
+        }
+        applyEnvironment();
+      };
+    }
+
+    // FX tuning sliders: live per-channel multipliers over the authored spec.
+    const syncFxInputs = () => {
+      for (const [k, el] of Object.entries(fxInputs ?? {})) {
+        if (el) el.value = fxTuning[k] ?? 1;
+      }
+    };
+    const saveTuning = () => {
+      try {
+        localStorage.setItem(TUNING_LS, JSON.stringify(fxTuning));
+      } catch {
+        /* private mode: tuning just does not persist */
+      }
+    };
+    syncFxInputs();
+    for (const [k, el] of Object.entries(fxInputs ?? {})) {
+      if (!el) continue;
+      el.oninput = () => {
+        fxTuning[k] = Number(el.value);
+        saveTuning();
+        session.vfx?.setTuning(fxTuning);
+        applyEnvironment(); // the bloom multiplier lives on the composer pass
+        if (fxStatusEl) fxStatusEl.textContent = `${k} ${Number(el.value).toFixed(2)}x`;
+      };
+    }
+    if (fxResetBtn) {
+      fxResetBtn.onclick = () => {
+        fxTuning = { ...DEFAULT_TUNING };
+        saveTuning();
+        syncFxInputs();
+        session.vfx?.setTuning(fxTuning);
+        applyEnvironment();
+        if (fxStatusEl) fxStatusEl.textContent = 'reset to 1.00x';
+      };
+    }
 
     const resize = () => {
       const r = canvas.getBoundingClientRect();
       renderer.setSize(Math.max(2, r.width), Math.max(2, r.height), false);
       camera.aspect = Math.max(2, r.width) / Math.max(2, r.height);
       camera.updateProjectionMatrix();
+      composerSize();
+      session.vfx?.setPixelScale(canvas.height);
     };
     session.onResize = resize;
     window.addEventListener('resize', resize);
@@ -333,6 +558,7 @@ window.LiveViewer = {
         active = { mixer: null, clips: [] };
       }
       setClipOptions(clips);
+      makeVfx(obj, true);
       frameOn([obj]);
       setStatus(
         clips.length
@@ -539,6 +765,7 @@ window.LiveViewer = {
         holder = null;
       };
       const setHeldBy = async (repoGlb) => {
+        makeVfx(null, false); // drop the rig before its weapon root is disposed
         clearHolder();
         heldWeapon = null;
         if (gripBar) gripBar.classList.remove('on');
@@ -549,6 +776,7 @@ window.LiveViewer = {
             ? { mixer: session.mixers[0], clips }
             : { mixer: null, clips: [] };
           setClipOptions(clips);
+          makeVfx(obj, true);
           frameOn([obj]);
           setStatus('static model - drag to rotate');
           return;
@@ -582,6 +810,7 @@ window.LiveViewer = {
         }
         active = { mixer, clips: cg.animations ?? [] };
         setClipOptions(active.clips); // default to idle (setClipOptions' built-in preference)
+        if (attached) makeVfx(wg.scene, false); // hand-anchored effects, no floor pool
         frameOn([root]);
         if (attached && gripBar) {
           syncGripInputs();
@@ -604,13 +833,22 @@ window.LiveViewer = {
           heldBySelect.innerHTML = opts.join('');
           heldBySelect.onchange = () => setHeldBy(heldBySelect.value || null);
           // Weapons open EQUIPPED by default: the knight holding it in an idle
-          // pose, so the grip and scale are reviewable at a glance.
+          // pose, so the grip and scale are reviewable at a glance. Codex VFX
+          // weapons instead open on the pedestal, where the full effect rig
+          // (backdrop, light pool, float) shows; equip stays one select away.
           const knight = (charOptions ?? []).find((c) => c.label === 'knight');
-          if (knight) {
+          if (knight && !vfxInfo) {
             heldBySelect.value = knight.repoGlb;
             await setHeldBy(knight.repoGlb);
           }
         }
+      }
+      if (vfxToggle) {
+        vfxToggle.onchange = () => {
+          vfxPref = vfxToggle.checked;
+          if (holder && heldWeapon) makeVfx(heldWeapon.scene, false);
+          else makeVfx(obj, true);
+        };
       }
 
       // --- Model workflow: Update Model (step 5) + Compress & Export (step 6)
@@ -677,8 +915,22 @@ window.LiveViewer = {
       const dt = (now - last) / 1000;
       last = now;
       for (const m of session.mixers) m.update(dt);
+      if (session.vfx) {
+        session.vfx.update(dt);
+        session.vfxTime += dt;
+        const fl = session.vfxFloat;
+        if (fl && session.floatTarget) {
+          // Loot-inspect float: a slow hover (plus a lazy spin for legendary).
+          session.floatTarget.position.y =
+            session.floatBaseY +
+            (fl.lift ?? 0) +
+            fl.bob * (1 + Math.sin(session.vfxTime * 1.1)) * 0.5;
+          if (fl.spin) session.floatTarget.rotation.y += fl.spin * dt;
+        }
+      }
       controls.update();
-      renderer.render(scene, camera);
+      if ((session.vfx || session.sceneActive) && session.composer) session.composer.render();
+      else renderer.render(scene, camera);
       session.raf = requestAnimationFrame(tick);
     };
     tick();

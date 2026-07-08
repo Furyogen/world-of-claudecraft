@@ -53,6 +53,15 @@
   .livebar button:disabled { opacity: 0.4; cursor: default; }
   .gripbar { display: none; gap: 8px 6px; align-items: center; padding: 6px 10px; background: var(--panel2); border-top: 1px solid var(--line); font-size: 11px; color: var(--dim); flex-wrap: wrap; }
   .gripbar.on { display: flex; }
+  /* FX tuning sliders (VFX weapons in live mode only) */
+  .fxbar { display: none; gap: 6px 10px; align-items: center; padding: 6px 10px; background: var(--panel2); border-top: 1px solid var(--line); font-size: 11px; color: var(--dim); flex-wrap: wrap; }
+  .fxbar.on { display: flex; }
+  .fxbar .glabel { color: var(--gold); text-transform: uppercase; letter-spacing: 0.6px; font-size: 10px; }
+  .fxbar label { display: flex; gap: 4px; align-items: center; color: var(--text); }
+  .fxbar input[type=range] { width: 64px; accent-color: var(--gold); }
+  .fxbar button { background: var(--bg); border: 1px solid var(--line); color: var(--text); border-radius: 5px; padding: 3px 9px; font-size: 11px; cursor: pointer; }
+  .fxbar button:hover { border-color: var(--gold); color: var(--gold); }
+  .fxbar .gstatus { color: var(--dim); margin-left: auto; }
   .gripbar .glabel { color: var(--gold); text-transform: uppercase; letter-spacing: 0.6px; font-size: 10px; }
   .gripbar label { display: flex; gap: 3px; align-items: center; color: var(--text); }
   .gripbar input { width: 52px; background: var(--bg); border: 1px solid var(--line); color: var(--text); border-radius: 4px; padding: 2px 4px; font-size: 11px; }
@@ -77,6 +86,23 @@
   .pill.green { color: var(--green); } .pill.amber { color: var(--amber); }
   .pill.blue { color: var(--blue); } .pill.red { color: var(--red); }
   .mono { font-family: ui-monospace, monospace; font-size: 11.5px; }
+  /* Armory Codex rarity banner (injected by the live viewer for VFX weapons) */
+  .vfxband { border: 1px solid var(--line); border-radius: 8px; padding: 10px 44px 10px 12px; margin: 0 0 14px; background: linear-gradient(160deg, rgba(255,255,255,0.03), rgba(0,0,0,0.18)); }
+  .vfxband-epic { border-color: rgba(163, 53, 238, 0.55); box-shadow: 0 0 18px rgba(120, 190, 255, 0.09) inset, 0 0 14px rgba(163, 53, 238, 0.1); }
+  .vfxband-legendary { border-color: rgba(255, 128, 0, 0.55); box-shadow: 0 0 18px rgba(255, 170, 60, 0.1) inset, 0 0 14px rgba(255, 128, 0, 0.12); }
+  .vfxband-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .vfxband-tier { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+  .vfxband-epic .vfxband-tier { color: #c77dff; }
+  .vfxband-legendary .vfxband-tier { color: #ffab4d; }
+  .vfxband-dots i { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-left: 3px; background: var(--line); }
+  .vfxband-epic .vfxband-dots i.on { background: #a335ee; box-shadow: 0 0 6px rgba(163, 53, 238, 0.8); }
+  .vfxband-legendary .vfxband-dots i.on { background: #ff8000; box-shadow: 0 0 6px rgba(255, 128, 0, 0.8); }
+  .vfxband-name { font-size: 15px; margin-top: 5px; }
+  .vfxband-epic .vfxband-name { color: #d9b8ff; }
+  .vfxband-legendary .vfxband-name { color: #ffd9a3; }
+  .vfxband-hero { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--gold); border: 1px solid rgba(201, 169, 89, 0.5); border-radius: 9px; padding: 1px 7px; vertical-align: 2px; margin-left: 6px; }
+  .vfxband-lore { color: var(--dim); font-size: 12px; font-style: italic; margin-top: 5px; line-height: 1.5; }
+  .vfxband-fx { color: var(--dim); font-size: 11px; margin-top: 7px; opacity: 0.85; }
   .closebtn { position: absolute; top: 12px; right: 14px; z-index: 4; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0; background: var(--panel2); border: 1px solid var(--line); color: var(--text); border-radius: 6px; cursor: pointer; font-size: 22px; line-height: 1; }
   .closebtn:hover { color: #fff; background: var(--red); border-color: var(--red); }
   .delbtn { position: absolute; bottom: 14px; right: 18px; z-index: 3; background: var(--panel); border: 1px solid #7a2b2b; color: #e0736f; border-radius: 6px; padding: 4px 12px; cursor: pointer; font-size: 13px; }
@@ -132,12 +158,32 @@
           <select id="heldby" aria-label="Held by character"></select>
         </span>
         <label><input type="checkbox" id="ctxtoggle" /> vs player</label>
+        <label id="vfxwrap" style="display:none" title="Armory Codex rarity effects (bloom, particles, cast light)"><input type="checkbox" id="vfxtoggle" checked /> VFX</label>
+        <span id="scenewrap" style="display:flex;gap:4px;align-items:center">
+          <label for="scenesel">scene</label>
+          <select id="scenesel" aria-label="Preview scene lighting" title="Preview the asset under different world lighting"></select>
+        </span>
         <span class="status" id="livestatus"></span>
         <span class="glabel">model</span>
         <button type="button" id="revealfinder" title="reveal this file in Finder so you can drag it straight into Blender">Reveal in Finder</button>
         <button type="button" id="updatemodel" title="replace this model with a newer .glb from disk (stays uncompressed)">Update Model&hellip;</button>
         <button type="button" id="compressexport" title="compress to game format and export to ~/Documents/WOC Assets">Compress &amp; Export</button>
         <span class="status" id="exportstatus"></span>
+      </div>
+      <div class="fxbar" id="fxbar">
+        <span class="glabel">fx tuning</span>
+        <label title="emissive core intensity">glow<input type="range" id="fxglow" min="0" max="2" step="0.05" value="1" /></label>
+        <label title="bloom strength">bloom<input type="range" id="fxbloom" min="0" max="2" step="0.05" value="1" /></label>
+        <label title="cast light">light<input type="range" id="fxlight" min="0" max="2" step="0.05" value="1" /></label>
+        <label title="core star sprite">core<input type="range" id="fxcore" min="0" max="2" step="0.05" value="1" /></label>
+        <label title="orbiting motes">motes<input type="range" id="fxmotes" min="0" max="2" step="0.05" value="1" /></label>
+        <label title="aurora ribbons">aurora<input type="range" id="fxaurora" min="0" max="2" step="0.05" value="1" /></label>
+        <label title="vapor / ember drift">mist<input type="range" id="fxmist" min="0" max="2" step="0.05" value="1" /></label>
+        <label title="surface twinkles">sparkle<input type="range" id="fxsparkle" min="0" max="2" step="0.05" value="1" /></label>
+        <label title="fresnel rim shell">shell<input type="range" id="fxshell" min="0" max="2" step="0.05" value="1" /></label>
+        <label title="ground light pool">pool<input type="range" id="fxpool" min="0" max="2" step="0.05" value="1" /></label>
+        <button type="button" id="fxreset" title="reset all fx channels to the authored 1.0x">Reset</button>
+        <span class="gstatus" id="fxstatus"></span>
       </div>
       <div class="gripbar" id="gripbar">
         <span class="glabel">grip fit</span>
@@ -348,6 +394,9 @@ function openDetail(i) {
   state.open = i;
   const a = state.filtered[i];
   if (!a) return;
+  // Deep-linkable detail: #a=<name> mirrors the open asset (replaceState so
+  // history does not fill up while arrow-navigating).
+  try { history.replaceState(null, '', '#a=' + encodeURIComponent(a.name)); } catch { /* file:// */ }
   // Delete is offered ONLY for generated/imported assets (server marks them
   // deletable); base/shipped assets have no button.
   document.getElementById('delasset').style.display = a.registration?.deletable ? '' : 'none';
@@ -407,6 +456,19 @@ function openDetail(i) {
       updateBtn: document.getElementById('updatemodel'),
       exportBtn: document.getElementById('compressexport'),
       exportStatusEl: document.getElementById('exportstatus'),
+      vfxToggle: document.getElementById('vfxtoggle'),
+      inspectorEl: document.getElementById('inspector'),
+      sceneSelect: document.getElementById('scenesel'),
+      fxBar: document.getElementById('fxbar'),
+      fxInputs: {
+        glow: document.getElementById('fxglow'), bloom: document.getElementById('fxbloom'),
+        light: document.getElementById('fxlight'), core: document.getElementById('fxcore'),
+        motes: document.getElementById('fxmotes'), aurora: document.getElementById('fxaurora'),
+        mist: document.getElementById('fxmist'), sparkle: document.getElementById('fxsparkle'),
+        shell: document.getElementById('fxshell'), pool: document.getElementById('fxpool'),
+      },
+      fxResetBtn: document.getElementById('fxreset'),
+      fxStatusEl: document.getElementById('fxstatus'),
     });
   } else {
     if (window.LiveViewer) window.LiveViewer.close();
@@ -421,6 +483,29 @@ function closeDetail() {
   document.getElementById('overlay').classList.remove('open');
   document.getElementById('gripbar').classList.remove('on');
   if (window.LiveViewer) window.LiveViewer.close();
+  try { history.replaceState(null, '', location.pathname + location.search); } catch { /* file:// */ }
+}
+
+// Open an asset by exact name (the #a=<name> deep link). Clears any filter
+// that would hide it, then opens its detail overlay.
+function openByName(name) {
+  if (!name) return;
+  let idx = state.filtered.findIndex((a) => a.name === name);
+  if (idx === -1) {
+    if (!assets.some((a) => a.name === name)) return;
+    state.search = '';
+    state.cat = 'all';
+    state.status = 'all';
+    document.getElementById('search').value = '';
+    document.getElementById('status').value = 'all';
+    for (const x of document.querySelectorAll('#catChips .chip')) {
+      x.classList.toggle('on', x.dataset.cat === 'all');
+    }
+    saveFilters();
+    renderGrid();
+    idx = state.filtered.findIndex((a) => a.name === name);
+  }
+  if (idx !== -1) openDetail(idx);
 }
 
 // Wiring
@@ -521,7 +606,17 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowRight' && state.open < state.filtered.length - 1) openDetail(state.open + 1);
   if (e.key === 'ArrowLeft' && state.open > 0) openDetail(state.open - 1);
 });
+window.addEventListener('hashchange', () => {
+  const m = location.hash.match(/^#a=(.+)$/);
+  if (m) openByName(decodeURIComponent(m[1]));
+});
 renderGrid();
+{
+  // Honor a #a=<name> deep link on load. The live viewer module loads after
+  // this inline script, so wait a tick for window.LiveViewer to exist.
+  const m = location.hash.match(/^#a=(.+)$/);
+  if (m) setTimeout(() => openByName(decodeURIComponent(m[1])), 60);
+}
 </script>
 </body>
 </html>
