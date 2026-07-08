@@ -3,8 +3,11 @@
 // Decides the indicator's state from the CupInfo snapshot alone (works
 // identically against the offline Sim and the online ClientWorld mirror):
 //   - in my own match: hidden (the match strip owns the screen),
-//   - queued: bracket + position + queue size,
-//   - a live match is running at the Sowfield: nations + score + elapsed clock,
+//   - queued: bracket + position + queue size (shown realm-wide so you can roam
+//     while you wait),
+//   - a live match is running at the Sowfield AND you are near the arena
+//     (nearArena): nations + score + elapsed clock. The score is spectator
+//     awareness, so it does not follow you across the map,
 //   - otherwise hidden.
 // The indicator is gameplay chrome, never tier-shed (root CLAUDE.md
 // gameplay-neutral graphics invariant): no fx-tier input exists here on purpose.
@@ -39,7 +42,10 @@ export type VcupIndicatorView =
       sig: string;
     };
 
-export function buildVcupIndicatorView(info: CupInfo | null): VcupIndicatorView {
+export function buildVcupIndicatorView(
+  info: CupInfo | null,
+  nearArena: boolean,
+): VcupIndicatorView {
   if (!info) return { kind: 'hidden', sig: 'hidden' };
   // My own match: the match strip (vale_cup_hud.ts) takes over.
   if (info.match !== null) return { kind: 'hidden', sig: 'hidden' };
@@ -54,7 +60,10 @@ export function buildVcupIndicatorView(info: CupInfo | null): VcupIndicatorView 
       sig: `q|${info.bracket}|${info.position}|${waiting}`,
     };
   }
-  if (info.live) {
+  // The running Sowfield match's live score is spectator awareness, not
+  // actionable participant info (players in the match get the strip above), so
+  // it only surfaces to someone near the arena, not realm-wide.
+  if (info.live && nearArena) {
     const s = Math.max(0, Math.floor(info.live.clock));
     return {
       kind: 'live',

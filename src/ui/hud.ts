@@ -101,7 +101,7 @@ import {
   virtualLevel,
   xpUntilNextPrestige,
 } from '../sim/types';
-import { isAtSowfield } from '../sim/vale_cup_layout';
+import { distanceToSowfield, isAtSowfield } from '../sim/vale_cup_layout';
 import { worldBossIdFromLockout } from '../sim/world_boss';
 import {
   type DailyRewardStatus,
@@ -6459,8 +6459,13 @@ export class Hud {
       this.updateArenaStatus();
       this.updateFiestaHud();
       // Vale Cup surfaces (mediumHud like the arena/fiesta ones): the indicator
-      // button, the in-match strip, and the open window redraw.
-      this.vcupIndicator.update(buildVcupIndicatorView(this.sim.cupInfo));
+      // button, the in-match strip, and the open window redraw. The indicator's
+      // live-score state is gated to players near the Sowfield (same walk-up
+      // range as the goal/save theatre), so the running match's score is not
+      // visible realm-wide.
+      const nearCupArena =
+        !inDungeon && distanceToSowfield(p.pos.x, p.pos.z) <= VCUP_THEATRE_RADIUS;
+      this.vcupIndicator.update(buildVcupIndicatorView(this.sim.cupInfo, nearCupArena));
       this.vcupMatchHud.update(buildVcupHudView(this.sim.cupInfo));
       this.vcupBriefing.update(buildVcupBriefingView(this.sim.cupInfo));
       this.vcupBetting.update(buildVcupBettingView(this.sim.cupInfo));

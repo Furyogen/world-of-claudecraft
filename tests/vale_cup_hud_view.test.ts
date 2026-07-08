@@ -83,33 +83,50 @@ function makeMatch(
 
 describe('vale_cup_indicator_view', () => {
   it('hides with no snapshot and when nothing is happening', () => {
-    expect(buildVcupIndicatorView(null).kind).toBe('hidden');
-    expect(buildVcupIndicatorView(makeCupInfo('sim')).kind).toBe('hidden');
+    expect(buildVcupIndicatorView(null, true).kind).toBe('hidden');
+    expect(buildVcupIndicatorView(makeCupInfo('sim'), true).kind).toBe('hidden');
   });
 
   it('hides inside my own match (the match strip owns the screen)', () => {
-    const v = buildVcupIndicatorView(makeCupInfo('sim', { match: makeMatch() }));
+    const v = buildVcupIndicatorView(makeCupInfo('sim', { match: makeMatch() }), true);
     expect(v.kind).toBe('hidden');
   });
 
-  it('shows the queued state with bracket, position, and queue size', () => {
-    const v = buildVcupIndicatorView(
-      makeCupInfo('sim', {
-        queued: true,
-        bracket: 3,
-        role: 'striker',
-        position: 2,
-        queueSizes: { 1: 0, 2: 0, 3: 4, 4: 0, 5: 0 },
-      }),
-    );
-    expect(v).toEqual({
+  it('shows the queued state realm-wide (even far from the arena)', () => {
+    const queued = makeCupInfo('sim', {
+      queued: true,
+      bracket: 3,
+      role: 'striker',
+      position: 2,
+      queueSizes: { 1: 0, 2: 0, 3: 4, 4: 0, 5: 0 },
+    });
+    const expected = {
       kind: 'queued',
       bracket: 3,
       position: 2,
       waiting: 4,
       role: 'striker',
       sig: 'q|3|2|4',
+    };
+    // Queue status is not proximity-gated: you can roam while you wait.
+    expect(buildVcupIndicatorView(queued, true)).toEqual(expected);
+    expect(buildVcupIndicatorView(queued, false)).toEqual(expected);
+  });
+
+  it('hides the running-match live score when far from the arena', () => {
+    const live = makeCupInfo('sim', {
+      live: {
+        id: 8,
+        bracket: 2,
+        clock: 65,
+        scoreA: 1,
+        scoreB: 1,
+        nationA: 'vale',
+        nationB: 'vale',
+      },
     });
+    expect(buildVcupIndicatorView(live, false).kind).toBe('hidden');
+    expect(buildVcupIndicatorView(live, true).kind).toBe('live');
   });
 
   it('shows the live state with a split clock OUTSIDE the structural sig', () => {
@@ -126,6 +143,7 @@ describe('vale_cup_indicator_view', () => {
             nationB: 'vale',
           },
         }),
+        true,
       );
     const a = at(65);
     expect(a).toMatchObject({
@@ -155,8 +173,8 @@ describe('vale_cup_indicator_view', () => {
         nationB: 'moon',
       },
     };
-    expect(buildVcupIndicatorView(makeCupInfo('sim', over))).toEqual(
-      buildVcupIndicatorView(makeCupInfo('client', over)),
+    expect(buildVcupIndicatorView(makeCupInfo('sim', over), true)).toEqual(
+      buildVcupIndicatorView(makeCupInfo('client', over), true),
     );
   });
 });
