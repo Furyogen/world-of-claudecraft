@@ -540,10 +540,10 @@ describe('venue layout envelope', () => {
   it('keeps every venue anchor inside the ground apron and the slot envelope', () => {
     const V = GAUNTLET_VENUE;
     // The apron must stay inside the gauntlet band (no bleed into the
-    // battleground reserve at x 9600) and inside one slot's z pitch (400,
+    // battleground reserve at x 13800) and inside one slot's z pitch (400,
     // data.ts GAUNTLET_SLOT_SPACING) so neighboring runs never see it.
-    expect(isGauntletPos(9000 - V.groundHalfWidth)).toBe(true);
-    expect(isGauntletPos(9000 + V.groundHalfWidth)).toBe(true);
+    expect(isGauntletPos(13200 - V.groundHalfWidth)).toBe(true);
+    expect(isGauntletPos(13200 + V.groundHalfWidth)).toBe(true);
     expect(V.groundZMax - V.groundZMin).toBeLessThan(400);
     const inApron = (x: number, z: number, pad: number) => {
       expect(Math.abs(x) + pad).toBeLessThanOrEqual(V.groundHalfWidth);
@@ -823,7 +823,7 @@ describe('cross-activity exclusion and reconnect recovery', () => {
     // where that run no longer exists.
     const sim = makeSim(17);
     const pid = sim.addPlayer('warrior', 'Sleeper');
-    teleport(sim, pid, 9000, -1250);
+    teleport(sim, pid, 13200, -1250);
     const state = sim.serializeCharacter(pid)!;
     const sim2 = makeSim(18);
     const p2 = sim2.addPlayer('warrior', 'Sleeper', { state });

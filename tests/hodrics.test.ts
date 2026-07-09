@@ -525,7 +525,7 @@ describe('mid-race save and reload', () => {
     // A character saved mid-race with no hcReturnPos on file (e.g. an older
     // save format) must not relocate INTO the race band on reload.
     const state = sim.serializeCharacter(pid)!;
-    state.pos = { x: 11100, z: -1250 };
+    state.pos = { x: 15300, z: -1250 };
     state.hcReturnPos = undefined;
 
     const sim2 = new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });

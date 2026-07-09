@@ -132,12 +132,20 @@ describe('minimapMode (delve vs overworld discriminator)', () => {
       player: { pos: { x: number } };
       delveRun: unknown;
     };
-    // A real delve-band x: the band is bounded above by the gauntlet band
-    // (isDelvePos = DELVE_BAND_X_MIN <= x < GAUNTLET_BAND_X_MIN), so an
-    // arbitrary huge x no longer classifies as a delve.
+    // A real delve-band x: the band is no longer open-ended east. It sits west
+    // of both the Protect Yumi maze band (YUMI_BAND_X_MIN = 8000) and The
+    // Gauntlet band (GAUNTLET_BAND_X_MIN = 8800), so the old open-ended 100000
+    // probe now classifies as a neighbouring band. 5000 is comfortably inside
+    // the delve band regardless of which band caps its east edge.
     w.player.pos.x = 5000;
     w.delveRun = { delveId: 'd', modules: ['m'], moduleIndex: 0, origin: { x: 5000, z: 0 } };
     expect(minimapMode(w as unknown as IWorld)).toBe('delve');
+  });
+
+  it('returns yumiMaze anywhere in the Protect Yumi band, run or not', () => {
+    const w = makeWorld('client') as unknown as { player: { pos: { x: number } } };
+    w.player.pos.x = 8400;
+    expect(minimapMode(w as unknown as IWorld)).toBe('yumiMaze');
   });
 });
 

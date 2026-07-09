@@ -40,8 +40,7 @@ export class GauntletBoard {
    *  after the run resolves. The signature diff makes an unchanged frame free. */
   update(run: GauntletRunView | null): void {
     const root = this.deps.root();
-    const show =
-      !!run && run.phase !== 'lobby' && run.phase !== 'done' && run.board.length > 0;
+    const show = !!run && run.phase !== 'lobby' && run.phase !== 'done' && run.board.length > 0;
     if (!show || !run) {
       this.hide(root);
       return;

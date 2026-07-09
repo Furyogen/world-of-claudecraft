@@ -19,6 +19,7 @@ import { hodricsCastle } from './hodrics_castle';
 import { home } from './home';
 import { howToPlay } from './how_to_play';
 import { models } from './models';
+import { professions } from './professions';
 import { progression } from './progression';
 import { quests } from './quests';
 import { settings } from './settings';
@@ -26,6 +27,7 @@ import { social } from './social';
 import { stats } from './stats';
 import { talents } from './talents';
 import type { GuidePage, PageContext } from './types';
+import { valeCup } from './vale_cup';
 import { wishIKnew } from './wish_i_knew';
 import { world } from './world';
 
@@ -41,12 +43,14 @@ const PAGES: Record<string, GuidePage> = {
   models,
   world,
   gear,
+  professions,
   economy,
   quests,
   dungeons,
   delves,
   arena,
   'hodrics-castle': hodricsCastle,
+  'vale-cup': valeCup,
   combat,
   stats,
   progression,

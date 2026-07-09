@@ -46,7 +46,11 @@ import {
 } from './content/graveyards';
 import { GROUND_PICKUP_LINES } from './content/ground_pickup_lines';
 import { HC_HERALD, HC_HERALD_NPC_ID } from './content/hodrics';
-import { COMMON_RECIPES as COMMON_RECIPES_CONTENT } from './content/recipes';
+import {
+  ALL_RECIPES as ALL_RECIPES_CONTENT,
+  COMMON_RECIPES as COMMON_RECIPES_CONTENT,
+  TOOL_RECIPES as TOOL_RECIPES_CONTENT,
+} from './content/recipes';
 import {
   TEMPLE_CAMPS,
   TEMPLE_DUNGEON_DEFS,
@@ -59,7 +63,9 @@ import {
   TEMPLE_QUEST_ORDER,
   TEMPLE_QUESTS,
 } from './content/temple';
+import { VALE_CUP_BALL_MOB, VALE_CUP_BALL_TEMPLATE_ID } from './content/vale_cup';
 import { WARLOCK_PET_MOBS } from './content/warlock_pets';
+import { YUMI_MOBS } from './content/yumi';
 import {
   GRAVEYARD_POS,
   LAKE,
@@ -115,6 +121,8 @@ export {
 } from './content/delves';
 
 import { DELVE_ITEMS } from './content/delves/items';
+import { HEROIC_ITEMS } from './content/heroic_loot';
+import { HEROIC_VENDOR_ITEMS } from './content/heroic_vendor';
 import { DELVE_MODULE_LAYOUTS, type DelveModuleId, delveModuleSpan } from './delve_layout';
 
 function mergeItems(...parts: Record<string, ItemDef>[]): Record<string, ItemDef> {
@@ -155,6 +163,8 @@ export const ITEMS: Record<string, ItemDef> = mergeItems(
   ZONE3_ITEMS,
   TEMPLE_ITEMS,
   DELVE_ITEMS,
+  HEROIC_VENDOR_ITEMS,
+  HEROIC_ITEMS,
 );
 
 export type { AggregatedSetEffect } from './content/item_sets';
@@ -169,6 +179,10 @@ export const MOBS: Record<string, MobTemplate> = {
   ...TEMPLE_MOBS,
   ...TEMPLE_DUNGEON_MOBS,
   ...DELVE_MOBS,
+  ...YUMI_MOBS,
+  // The Vale Cup boarball: an inert, non-hostile ball entity (never camp-spawned;
+  // the match driver in social/vale_cup.ts spawns and despawns it).
+  [VALE_CUP_BALL_TEMPLATE_ID]: VALE_CUP_BALL_MOB,
 };
 
 export const NPCS: Record<string, NpcDef> = {
@@ -230,7 +244,12 @@ export const GROUND_OBJECTS: GroundObjectDef[] = [
 
 export const GATHER_NODES: GatherNodeDef[] = [...GATHER_NODES_CONTENT];
 
-export const COMMON_RECIPES = [...COMMON_RECIPES_CONTENT];
+export const COMMON_RECIPES = [...COMMON_RECIPES_CONTENT, ...TOOL_RECIPES_CONTENT];
+
+// Every recipe, common and combo alike (#1132 review): the recipeList read
+// surface below lists this, not just COMMON_RECIPES, so a combo recipe is
+// reachable in normal play.
+export const ALL_RECIPES = [...ALL_RECIPES_CONTENT];
 
 export const ROADS: { x: number; z: number }[][] = [...ZONE1_ROADS, ...ZONE2_ROADS, ...ZONE3_ROADS];
 
@@ -471,16 +490,10 @@ export function delveOrigin(delveIndex: number, slot: number): { x: number; z: n
   return { x: DELVE_X_MIN + delveIndex * 600, z: DELVE_Z0 + slot * DELVE_SLOT_SPACING };
 }
 
-// East edge of the delve band, equal to GAUNTLET_BAND_X_MIN (the next band
-// east; declared below, so the literal repeats here). Delve rooms sit at
-// DELVE_X_MIN + index*600, so the cap leaves room for indices 0..6 (4800 +
-// 6*600 = 8400, room walls well short of the edge); a delve at index 7+ would
-// cross into The Gauntlet band and must move the cap first (pinned by
-// tests/hodrics_course.test.ts's band-footprint checks).
-export const DELVE_BAND_X_MAX = 8800;
-
 export function isDelvePos(x: number): boolean {
-  return x >= DELVE_BAND_X_MIN && x < DELVE_BAND_X_MAX;
+  // Capped east by the Protect Yumi maze band, the same move the delve band
+  // made to isArenaPos when it was added.
+  return x >= DELVE_BAND_X_MIN && x < YUMI_BAND_X_MIN;
 }
 
 export function delveAt(x: number): DelveDef | null {
@@ -495,15 +508,15 @@ export function delveAt(x: number): DelveDef | null {
 // (world.groundHeight), and the band has NO static colliders (an open field;
 // colliders.ts never classifies it as a delve/arena interior because
 // isDelvePos/isArenaPos are both bounded away from it). Slots stack along z.
-// Delve indices 0..6 stay below (4800 + 6*600 = 8400), so the 8800 band edge
-// leaves the delve band five more delves of headroom.
+// Sits east of the Protect Yumi maze band (past YUMI_BAND_X_MAX = 12000), so
+// the delve, arena, and yumi bands to the west never overlap it.
 // ---------------------------------------------------------------------------
 
-export const GAUNTLET_X = 9000; // gauntlet instances share this x; slots stack along z
-export const GAUNTLET_BAND_X_MIN = 8800; // x at/after this = the gauntlet band
-// East edge: the 9600..10200 range beyond is reserved for the battleground
-// band (on its feature branch), and Hodric's Castle sits at 10800+.
-export const GAUNTLET_BAND_X_MAX = 9600;
+export const GAUNTLET_X = 13200; // gauntlet instances share this x; slots stack along z
+export const GAUNTLET_BAND_X_MIN = 13000; // x at/after this = the gauntlet band
+// East edge: the 13800..14400 range beyond is reserved for the battleground
+// band (on its feature branch), and Hodric's Castle sits at 15000+.
+export const GAUNTLET_BAND_X_MAX = 13800;
 export const GAUNTLET_SLOT_COUNT = 8; // concurrent runs the world can host
 const GAUNTLET_Z0 = -1250;
 // Covers the sentinel field (~90 long) + staging/spectator dressing with wide margin.
@@ -524,6 +537,49 @@ export function isGauntletPos(x: number): boolean {
   return x >= GAUNTLET_BAND_X_MIN && x < GAUNTLET_BAND_X_MAX;
 }
 
+// ---------------------------------------------------------------------------
+// Protect Yumi! maze instances, the easternmost band. Delve rooms are centred
+// at DELVE_X_MIN + index*600 with a ~26u wall face, so an 8000 band edge
+// leaves headroom for delve indexes 0..5 (4800 + 5*600 + 26 = 7826 < 8000).
+// Like every far-east band: flat ground (world.groundHeight) and one shared
+// instance-local collider set (sim/yumi_maze_layout.ts via sim/colliders.ts).
+// ---------------------------------------------------------------------------
+
+export const YUMI_BAND_X_MIN = 8000; // x at/after this = a yumi maze instance
+// Two-sided cap: the Vale Cup practice pitches sit further east (x = 30000,
+// src/sim/vale_cup_layout.ts vcPracticeOrigin), so the maze band must not
+// claim everything past 8000 the way the delve band once claimed everything
+// past 4773. 12000 leaves generous maze headroom.
+export const YUMI_BAND_X_MAX = 12000;
+export const YUMI_MAZE_X = 8400; // maze instances share this x; slots stack along z
+export const YUMI_MAZE_SLOT_COUNT = 4; // concurrent Protect Yumi matches
+const YUMI_MAZE_Z0 = -1250;
+const YUMI_MAZE_SLOT_SPACING = 200; // > the ~90u maze footprint so slots never overlap
+
+export function yumiMazeOrigin(slot: number): { x: number; z: number } {
+  return { x: YUMI_MAZE_X, z: YUMI_MAZE_Z0 + slot * YUMI_MAZE_SLOT_SPACING };
+}
+
+export function isYumiMazePos(x: number): boolean {
+  return x >= YUMI_BAND_X_MIN && x < YUMI_BAND_X_MAX;
+}
+
+// Nearest maze instance origin to a far-off position, matched by z-band (the
+// x is shared across slots). Mirrors arenaOriginAt.
+export function yumiMazeOriginAt(z: number): { x: number; z: number; slot: number } {
+  let best = 0,
+    bestD = Infinity;
+  for (let i = 0; i < YUMI_MAZE_SLOT_COUNT; i++) {
+    const d = Math.abs(z - yumiMazeOrigin(i).z);
+    if (d < bestD) {
+      bestD = d;
+      best = i;
+    }
+  }
+  const o = yumiMazeOrigin(best);
+  return { x: o.x, z: o.z, slot: best };
+}
+
 export const DELVES: Record<string, DelveDef> = {
   [COLLAPSED_RELIQUARY_DELVE.id]: COLLAPSED_RELIQUARY_DELVE,
   [DROWNED_LITANY_DELVE.id]: DROWNED_LITANY_DELVE,
@@ -532,15 +588,15 @@ export const DELVE_LIST: DelveDef[] = Object.values(DELVES).sort((a, b) => a.ind
 
 // ---------------------------------------------------------------------------
 // Hodric's Castle, the obstacle-race gauntlet. Its race instances live in
-// their own far-off x-band past the delve cap (and clear of x 9600..10200,
-// reserved for the battleground band on its feature branch). Unlike the other
+// their own far-off x-band east of the Protect Yumi maze band (and clear of
+// x 13800..14400, reserved for the battleground band on its feature branch). Unlike the other
 // instance bands the ground here is NOT flat: world.groundHeight routes the
 // band to the course terraces in sim/hodrics_layout.ts.
 // ---------------------------------------------------------------------------
 
-export const HODRICS_X = 11100; // race instances share this x; slots stack along z
-export const HODRICS_X_MIN = 10800;
-export const HODRICS_X_MAX = 11400;
+export const HODRICS_X = 15300; // race instances share this x; slots stack along z
+export const HODRICS_X_MIN = 15000;
+export const HODRICS_X_MAX = 15600;
 export const HODRICS_SLOT_COUNT = 2; // concurrent races the world can host
 const HODRICS_Z0 = -1250;
 const HODRICS_SLOT_SPACING = 800; // clears the course footprint (~280yd) + interest radius
@@ -558,17 +614,17 @@ export function isHodricsPos(x: number): boolean {
 // outside Eastbrook Vale drops every player into ONE shared circular room (not
 // a per-party instance) where the two event heralds stand: talk to Maro
 // Half-Mask to enter The Gauntlet, or Herald Osric to race Hodric's Castle.
-// Its own far-off flat-ground band east of Hodric's Castle (10800..11400), so
+// Its own far-off flat-ground band east of Hodric's Castle (15000..15600), so
 // the floor is flat (world.groundHeight's default past DUNGEON_X_THRESHOLD)
 // and no other band predicate claims it. One shared location, so there is no
 // slot fan-out: a single room centre, and a radial clamp in colliders.ts keeps
 // movers inside the room.
 // ---------------------------------------------------------------------------
 
-export const MINIGAME_HUB_BAND_X_MIN = 11700; // x at/after this = the hub band
-export const MINIGAME_HUB_BAND_X_MAX = 12300;
+export const MINIGAME_HUB_BAND_X_MIN = 15900; // x at/after this = the hub band
+export const MINIGAME_HUB_BAND_X_MAX = 16500;
 // The single shared room centre (one location; every player meets here).
-export const MINIGAME_HUB = { x: 12000, z: -1200 };
+export const MINIGAME_HUB = { x: 16200, z: -1200 };
 // Inner room radius: the colliders.ts radial clamp holds movers inside this,
 // and the render wall shell sits just beyond it.
 export const MINIGAME_HUB_RADIUS = 18;

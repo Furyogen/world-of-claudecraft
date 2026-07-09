@@ -41,8 +41,8 @@ describe('the Proving Grounds hub', () => {
     expect(isMinigameHubPos(MINIGAME_HUB.x)).toBe(true);
     expect(isMinigameHubPos(0)).toBe(false); // Eastbrook town
     expect(isMinigameHubPos(900)).toBe(false); // a dungeon band
-    expect(isMinigameHubPos(9000)).toBe(false); // the Gauntlet band
-    expect(isMinigameHubPos(11100)).toBe(false); // Hodric's Castle band
+    expect(isMinigameHubPos(13200)).toBe(false); // the Gauntlet band
+    expect(isMinigameHubPos(15300)).toBe(false); // Hodric's Castle band
   });
 
   it('spawns both heralds and both portal fixtures at reserved ids', () => {

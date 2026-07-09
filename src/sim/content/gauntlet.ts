@@ -250,7 +250,7 @@ export const GAUNTLET_VENUE = {
   // wide enough that every arena sits clear of its neighbors (playtest: the
   // packed first layout read as one overlapping jumble) and that the
   // colosseum shell ring fits inside it. Bounded by the gauntlet band
-  // (x 8800..9600) and the 400yd slot pitch.
+  // (x 13000..13800) and the 400yd slot pitch.
   groundHalfWidth: 160,
   groundZMin: -70,
   groundZMax: 165,

@@ -971,6 +971,19 @@
   .buff.debuff[data-school="holy"] {
     border-color: var(--color-debuff-holy);
   }
+  /* The LOCAL player's own auras on the target strip (auras_view ownFirst):
+     larger and gold-glowed so the dots/hots YOU are maintaining read at a
+     glance among other casters'. A debuff keeps its school border tint (the
+     size and glow carry the prominence). Extra information only, never less,
+     so no graphics tier sheds it (gameplay-neutral-graphics invariant). */
+  .buff.own {
+    width: 34px;
+    height: 34px;
+    box-shadow: 0 0 5px var(--color-primary-dim);
+  }
+  .buff.own:not(.debuff) {
+    border-color: var(--color-primary);
+  }
   /* The player's own cancelable buffs: right-click to drop, with a hover cue. */
   .buff.cancelable {
     cursor: context-menu;
@@ -1916,6 +1929,9 @@
     font-size: 11px;
     font-family: var(--ui-font);
     vertical-align: text-bottom;
+    /* dark digit on a gold fill: the tracker's inherited black text-shadow
+       only blurs it, so drop it inside the badge */
+    text-shadow: none;
   }
   #quest-tracker .qt-obj {
     color: var(--color-text-overlay);
@@ -2496,6 +2512,7 @@
   body.native-app .donate-cta,
   body.native-app .community-link.donate,
   body.native-app .social-link.donate,
+  body.native-app #mobile-donate,
   body.native-app #token-ca,
   body.native-app #nav-btn-download,
   body.native-app .cs-wallet,
@@ -3752,6 +3769,13 @@
     white-space: pre-wrap;
     word-break: break-word;
   }
+  /* The mobile keyboard-dismiss chevron is hidden by default (desktop AND mobile-when-
+     chat-closed); only body.mobile-touch.mobile-chat-open reveals it (hud.mobile.css,
+     a later @layer, so it wins there). Without this base hide the button would render
+     as a stray control on desktop, which has no mobile-touch-scoped rule to hide it. */
+  #chat-dismiss {
+    display: none;
+  }
 
   /* ---------- party frames ---------- */
   #party-frames {
@@ -3762,6 +3786,15 @@
     flex-direction: column;
     gap: 6px;
     z-index: 5;
+  }
+  /* The painter nests the member rows one level down in a .party-rows wrapper (so the
+     mobile collapse chip can sit alone on its own line). On desktop the wrapper is
+     transparent (display: contents), so the rows lay out as direct flex items of
+     #party-frames exactly as before the wrapper existed: the flex column gap and every
+     .party-frame rule apply unchanged. Mobile re-declares the wrapper as its own
+     2-column grid (hud.mobile.css). */
+  #party-frames .party-rows {
+    display: contents;
   }
   #party-frames.below-target {
     top: 96px;

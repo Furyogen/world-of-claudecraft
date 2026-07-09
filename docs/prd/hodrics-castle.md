@@ -203,9 +203,11 @@ in `src/game/music.ts` (horn/timpani/choir palette already exists).
 
 Follows the Gravemarch battleground playbook, one band over:
 
-- **Band**: the course lives in its own far-x band (past the delve cap at
-  x=9000 and clear of the battleground band 9600..10200 reserved on its
-  branch), origin near x=11100, slots z-stacked for concurrent matches.
+- **Band**: the course lives in its own far-x band (east of the Protect Yumi
+  maze band, which caps at x=12000, and clear of the battleground band
+  13800..14400 reserved on its branch), origin near x=15300, slots z-stacked
+  for concurrent matches. (The whole gauntlet family moved +4200 east of yumi
+  when release/v0.23.0 merged in; the Gauntlet event band is 13000..13800.)
 - **Single source layout**: `src/sim/hodrics_layout.ts` defines platforms,
   walls, heights, checkpoints, obstacle placements, and the analytic motion
   functions. Sim colliders and `src/render/hodrics_castle.ts` dressing are
