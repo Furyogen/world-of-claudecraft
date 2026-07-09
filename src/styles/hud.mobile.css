@@ -1397,8 +1397,127 @@
     display: none;
     z-index: 24;
   }
+  /* New model: tapping the Chat icon opens a centered READ panel; the composer is a
+     desktop-style bar at the TOP of that panel (main.ts moves #chat-input into
+     #chatlog-wrap as its first child on mobile), sitting above the tabs + log. Tapping
+     the composer bar raises the keyboard to type; hiding the keyboard returns to this read
+     view. Only the Chat icon closes the panel. One --mobile-chat-w var sizes the panel +
+     composer. Desktop is untouched; the long-press peek keeps its small bottom-left glance
+     (it clears mobile-chat-open, so none of this applies to it). */
+  body.mobile-touch.mobile-chat-open {
+    --mobile-chat-w: min(560px, calc(100vw - 24px));
+  }
   body.mobile-touch.mobile-chat-open #chatlog-wrap {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    left: 50%;
+    right: auto;
+    /* Read view (keyboard down): a LARGE centered panel. Top clears the top-left
+       Chat/Social/More trio (a ~54px row scaled up to ~1.1x) so the Chat button stays
+       tappable ABOVE the panel to close it. The bottom is player-resizable: dragging the
+       bottom handle sets --mobile-chat-bottom (the bottom inset), clamped so the panel
+       keeps a usable minimum height and never runs off-screen. top + bottom + height:auto
+       stretches the panel between them. Default bottom is small so the panel is big. */
+    top: calc(max(8px, env(safe-area-inset-top)) + 64px);
+    bottom: calc(
+      env(safe-area-inset-bottom) +
+      clamp(12px, var(--mobile-chat-bottom, 52px), calc(100vh - 320px))
+    );
+    transform: translateX(-50%);
+    width: var(--mobile-chat-w);
+    height: auto;
+    /* In front of the sibling in-HUD frames (the ~19-45 z band) inside #ui; #ui itself
+       (z 80 on the touch HUD) already sits above #mobile-controls (z 60). */
+    z-index: 50;
+  }
+  /* The composer bar is the panel's first child (above the tabs + log), sized to the
+     panel width. It FLOWS in the flex column (not absolutely positioned / docked); order
+     -1 keeps it first even if it were inserted elsewhere. Reset the base composer's
+     absolute seat + chevron padding, and force off iOS Safari's native light textarea
+     appearance so it stays a dark panel bar (not a white box). */
+  body.mobile-touch.mobile-chat-open #chat-input {
+    position: static;
+    order: -1;
+    flex: 0 0 auto;
+    left: auto;
+    right: auto;
+    top: auto;
+    bottom: auto;
+    transform: none;
+    width: 100%;
+    margin: 0 0 6px 0;
+    padding: 9px 12px;
+    min-height: 40px;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    appearance: none;
+    background: #0d0d14f2;
+    color: #e8e8e8;
+    border: 1px solid var(--gold-dim, #6f5a2a);
+    border-radius: 8px;
+  }
+  /* Mobile chat resize handle (hud.ts creates it as a BODY-LEVEL element): a visible grab
+     bar pinned to the open panel's bottom edge via the SAME --mobile-chat-bottom var, so it
+     tracks the panel with no JS. A very high z-index keeps it above any overlay (the mystery
+     white bar included), and touch-action:none makes a drag a resize, not a scroll. Shown
+     only while the read panel is open. */
+  .chat-mobile-resize {
+    display: none;
+  }
+  body.mobile-touch.mobile-chat-open .chat-mobile-resize {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    width: var(--mobile-chat-w);
+    /* Straddle the panel's bottom edge: the 30px bar is centred on the edge (edge - 15px). */
+    bottom: calc(
+      env(safe-area-inset-bottom) +
+      clamp(12px, var(--mobile-chat-bottom, 52px), calc(100vh - 320px)) -
+      15px
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    z-index: 300;
+    touch-action: none;
+    cursor: ns-resize;
+    pointer-events: auto;
+    border-radius: 0 0 8px 8px;
+    background: color-mix(in srgb, var(--panel-base, #14121c) 82%, transparent);
+    box-shadow: inset 0 1px 0 #ffffff10;
+  }
+  body.mobile-touch.mobile-chat-open .chat-mobile-resize::before {
+    content: "";
+    width: 56px;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--gold-dim, #6f5a2a);
+    box-shadow:
+      0 0 0 1px #00000066,
+      inset 0 1px 0 #ffffff33;
+  }
+  /* The tab strip keeps its natural height; the log frame fills the rest of the panel
+     (the ~4-line strip cap only applies while closed or peeking). */
+  body.mobile-touch.mobile-chat-open #chatlog-tabs {
+    flex: 0 0 auto;
+  }
+  body.mobile-touch.mobile-chat-open #chatlog-frame {
+    flex: 1 1 auto;
+    min-height: 0;
+    height: auto;
+    max-height: none;
+  }
+  /* Bottom-anchor the log so recent lines sit at the BOTTOM of the pane (nearest the
+     input bar), not clustered at the top of a mostly-empty frame. margin-top:auto pushes
+     content down when there is slack and collapses to 0 on overflow (no top clipping the
+     way justify-content:flex-end would). Scoped to the open touch chat; desktop untouched. */
+  body.mobile-touch.mobile-chat-open #chatlog-frame .chat-pane.active {
+    display: flex;
+    flex-direction: column;
+  }
+  body.mobile-touch.mobile-chat-open #chatlog-frame .chat-pane.active > :first-child {
+    margin-top: auto;
   }
   /* Long-pressing the Chat button toggles a read-only peek at the log without
      raising the keyboard composer. It must not eat taps meant for the world. */
@@ -1466,145 +1585,43 @@
        last 40px lands on the button. box-sizing: border-box keeps the outer width fixed. */
     padding-right: 46px;
   }
-  /* The mobile keyboard-dismiss chevron (#chat-dismiss): a down-chevron button seated at
-     the chat composer's right corner, shown only while chat is open AND the on-screen
-     keyboard is up. Tapping it blurs the composer so the keyboard drops WITHOUT closing
-     chat (main.ts). Its reveal is keyed on body.mobile-keyboard-open (as well as
-     mobile-chat-open) so it never lingers as a dead control after it has dismissed the
-     keyboard: with no keyboard up there is nothing to hide. Hidden by default (the button
-     exists in the template even off-chat). The chevron reuses the hydrated `next` triangle
-     rotated to point DOWN (the SVG-chevron pattern, no unicode arrow). */
+  /* The in-app keyboard-dismiss chevron (#chat-dismiss) is hidden in the current model:
+     the OS keyboard's own hide key drops the keyboard and returns to the read view, and
+     the Chat icon closes the panel. The button stays in the template (harmless), it is
+     just never shown on mobile. */
   body.mobile-touch #chat-dismiss {
     display: none;
   }
-  body.mobile-touch.mobile-chat-open.mobile-keyboard-open #chat-dismiss {
-    position: fixed;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    right: auto;
-    /* Seated at the COMPOSER's right corner (not the screen edge): the composer is
-       centered (left:50%, translateX(-50%)) at width min(360px * chrome-scale,
-       100vw-40px), so its right edge is 50% + half that width; park the 40px chevron
-       just inside that, aligned with the composer's keyboard-open bottom (docked just
-       above the keyboard's top edge, matching #chat-input below). It reads as the
-       composer's own dismiss affordance rather than a disconnected button. */
-    left: calc(50% + min(calc(360px * var(--mobile-chrome-scale, 1)), 100vw - 40px) / 2 - 40px);
-    top: auto;
-    bottom: calc(100vh - var(--mobile-keyboard-visible-vh, 100vh) + 8px);
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    border: 1px solid var(--mobile-glass-border, #cba43d8c);
-    border-radius: 10px;
-    background: var(--mobile-glass-bg, linear-gradient(160deg, #23212de3, #0e0d10eb));
-    -webkit-backdrop-filter: blur(var(--mobile-glass-blur, 8px));
-    backdrop-filter: blur(var(--mobile-glass-blur, 8px));
-    color: #d8b98a;
-    cursor: var(--cursor-point);
-    z-index: 26;
-    box-shadow:
-      inset 0 1px 0 #ffffff14,
-      0 2px 8px #0009;
-  }
-  body.mobile-touch.mobile-chat-open.mobile-keyboard-open #chat-dismiss:active {
-    border-color: var(--gold);
-    color: #fff;
-  }
-  /* The down chevron: the `next` triangle rotated a quarter turn to point down. */
-  body.mobile-touch #chat-dismiss .ui-icon {
-    width: 13px;
-    height: 13px;
-    transform: rotate(90deg);
-  }
-  /* Reply mode grows the composer to an 84px min-height; centre the 40px chevron on that
-     taller box so it reads as an attached part of the composer row (one unit) instead of
-     a button parked at the composer's bottom-right corner (the owner's "chevron floats
-     detached" report). It shares the composer's docked bottom (both keyed on
-     visible-vh), so the pair moves as one when the keyboard opens. The +30px is the base
-     +8px composer dock plus (84 - 40) / 2 = 22px to lift the chevron to the composer's
-     vertical centre. */
-  body.mobile-touch.mobile-chat-open.mobile-chat-reply.mobile-keyboard-open #chat-dismiss {
-    bottom: calc(100vh - var(--mobile-keyboard-visible-vh, 100vh) + 30px);
-  }
-  /* Issue 1577 (5) + the real-device chat-overlap fix: once the on-screen keyboard
-     opens (mobile-keyboard-open, toggled by keyboard_viewport_applier.ts off the
-     visualViewport resize event, the same signal main.ts/renderer.ts already use for
-     the stable game viewport), the log + composer abandon their normal bottom-anchored
-     seats -- which the keyboard would otherwise cover -- and re-lay as ONE
-     non-overlapping column above the keyboard. The wrap becomes a flex COLUMN anchored
-     from the safe-area top down to a bottom that RESERVES the docked composer's box:
-     the composer docks at (100vh - visible-vh + 8px) and autosizes while typing up to
-     the 110px CHAT_INPUT_MAX_H cap (main.ts autosizeChatInput; the 84px reply
-     min-height sits under that cap), so the wrap bottom sits that full 110px + an 8px
-     gap above the composer = +126px above the keyboard line. The tab strip keeps its
-     natural height at the TOP
-     of the column and the log frame FLEXES to fill only the space between the tabs and
-     the reserved composer, so neither the tabs nor the log can grow into the composer.
-     (The bug this fixes: the old height:100% frame plus the 40px tab strip overflowed
-     ~53px DOWN into the composer, interleaving the log text with the typed text.) */
+  /* Once the on-screen keyboard opens (mobile-keyboard-open, toggled by
+     keyboard_viewport_applier.ts off the visualViewport resize), the whole panel (composer
+     bar + tabs + log) re-lays as a flex column filling the space ABOVE the keyboard: the
+     composer stays at the TOP, the tab strip keeps its natural height, and the log frame
+     flexes to fill the rest. No composer reservation is needed, since the composer is a
+     flow item inside the panel (from the open rule above), not a separately-docked bar. */
   body.mobile-touch.mobile-keyboard-open.mobile-chat-open #chatlog-wrap {
     top: max(6px, env(safe-area-inset-top));
     bottom: auto;
-    /* A DEFINITE height (not top+bottom auto-stretch, which needs a full-height
-       positioned ancestor #chatlog-wrap does not have): the visible area above the
-       keyboard is --mobile-keyboard-visible-vh; subtract the top inset and the 126px
-       composer reservation (the 110px autosize cap + 8px gap + 8px dock; reserving
-       only the 84px reply min-height let a long multi-line draft grow the composer
-       up into the log) so the wrap bottom stops a clear gap above the composer. */
+    /* A DEFINITE height (not a top+bottom stretch): the visible-above-keyboard band
+       (--mobile-keyboard-visible-vh) minus the top inset and an 8px gap above the keyboard
+       line, so the panel never sits under the keyboard. */
     height: calc(
       var(--mobile-keyboard-visible-vh, 100vh) -
       max(6px, env(safe-area-inset-top)) -
-      126px
+      8px
     );
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
   }
-  body.mobile-touch.mobile-keyboard-open.mobile-chat-open #chatlog-tabs {
-    /* Natural height at the top of the column; never shrunk or clipped into the log. */
-    flex: 0 0 auto;
-  }
-  body.mobile-touch.mobile-keyboard-open.mobile-chat-open #chatlog-frame {
-    /* Fill ONLY the gap between the tabs and the reserved composer; scroll internally. */
-    flex: 1 1 auto;
-    min-height: 0;
-    height: auto;
-    max-height: none;
-  }
-  body.mobile-touch.mobile-keyboard-open.mobile-chat-open #chat-input {
-    top: auto;
-    bottom: calc(100vh - var(--mobile-keyboard-visible-vh, 100vh) + 8px);
-  }
-  /* The low-priority Chat/Social/More trio yields while the keyboard is up so the
-     docked tab strip owns a clean top-left instead of a strip layered over the round
-     buttons (the owner's "tabs at the absolute top edge, badly positioned" report).
-     Keeping the trio would either crowd the tabs at every size or, if the column were
-     pushed below it, starve the log to a couple of unreadable pixels on a realistic
-     keyboard-open viewport. The trio is fairness-neutral chrome (menu buttons, never
-     actionable combat info) and returns the instant the keyboard drops via the dismiss
-     chevron, from where a Chat tap closes chat. */
+  /* The low-priority Chat/Social/More trio yields while the keyboard is up: the panel top
+     rises to the safe-area top and would otherwise sit over it (and the panel, in #ui z 80,
+     paints above the trio anyway). Fairness-neutral menu chrome; it returns the instant the
+     keyboard drops. */
   body.mobile-touch.mobile-keyboard-open.mobile-chat-open #mobile-combat-controls {
     display: none;
   }
-  /* Issue 1577 round 2 (8): while actively replying with the keyboard open,
-     expand the composer to a comfortable multi-line box within the now-expanded
-     chatbox above. Builds on that seat, only growing the height/padding. */
-  body.mobile-touch.mobile-chat-reply.mobile-keyboard-open #chat-input {
-    min-height: 84px;
-    /* Keep the 46px right padding (the dismiss chevron overlays this seat while typing,
-       exactly when reply mode is active) even as reply mode grows the other paddings. */
-    padding: 10px 46px 10px 12px;
-    line-height: 1.4;
-  }
-  /* Issue 1577 round 2 (7): while actively replying (composer focused), fade the
-     chat window's background noticeably so the world behind it stays visible
-     while typing. --chat-opacity is the Chat Background Opacity var the frame's
-     background mixes against; dropping it here makes the panel much more
-     see-through than its normal state. */
-  body.mobile-touch.mobile-chat-reply #chatlog-frame {
-    --chat-opacity: 0.14;
-  }
+  /* The open chat frame stays a solid, readable panel (it uses the player's normal Chat
+     Background Opacity, --chat-opacity default 0.95). An earlier build faded it to ~0.14
+     while replying "to see the world behind it"; on a real device that made the chatbox
+     nearly invisible, which is the opposite of what an open chat wants. Glancing at the
+     log without opening it is the long-press peek's job instead. */
   /* Own HP/mana lives bottom-center, the one part of the screen every other
      mobile element deliberately leaves empty (move joystick bottom-left,
      combat cluster + hotbar bottom-right, low-frequency verbs + minimap rail
@@ -3537,14 +3554,8 @@
       bottom: calc(250px + env(safe-area-inset-bottom));
       width: min(calc(330px * var(--mobile-chrome-scale, 1)), 44vw);
     }
-    /* Follows the landscape composer's own centered width (330px * chrome-scale,
-       44vw): re-seat only the chevron's horizontal position; the keyboard-docked
-       bottom from the portrait-level rule still applies (the chevron only shows
-       while the keyboard is up). Same three-class selector as that rule so this
-       later landscape override wins the left seat. */
-    body.mobile-touch.mobile-chat-open.mobile-keyboard-open #chat-dismiss {
-      left: calc(50% + min(calc(330px * var(--mobile-chrome-scale, 1)), 44vw) / 2 - 40px);
-    }
+    /* The dismiss chevron tracks the shared --mobile-chat-w in every orientation, so
+       the portrait-level rule already seats it correctly here (no landscape override). */
     body.mobile-touch #player-frame {
       left: 50%;
       top: auto;
@@ -3731,6 +3742,27 @@
      short-viewport constraint the overlap audit still notes (never a hard fail). */
   body.mobile-touch.hud-mobile-compact #chat-input {
     bottom: calc(276px + env(safe-area-inset-bottom));
+  }
+  /* Compact (phones: width <= 700 or height <= 480, i.e. the primary case) uses the same
+     centered, in-front, PLAYER-RESIZABLE panel as the other tiers; the closed-seat
+     width/bottom rules above would otherwise pin the open chat to a narrow fixed strip. The
+     bottom MUST use the same --mobile-chat-bottom clamp as the base open rule, or the resize
+     handle moves but the panel does not (the bug that hid the resize on real phones). */
+  body.mobile-touch.hud-mobile-compact.mobile-chat-open #chatlog-wrap {
+    width: var(--mobile-chat-w);
+    bottom: calc(
+      env(safe-area-inset-bottom) +
+      clamp(12px, var(--mobile-chat-bottom, 52px), calc(100vh - 320px))
+    );
+  }
+  body.mobile-touch.hud-mobile-compact.mobile-chat-open #chatlog-frame {
+    flex: 1 1 auto;
+    min-height: 0;
+    height: auto;
+    max-height: none;
+  }
+  body.mobile-touch.hud-mobile-compact.mobile-chat-open #chat-input {
+    bottom: calc(env(safe-area-inset-bottom) + 68px);
   }
   body.mobile-touch.hud-mobile-compact #right-tracker-stack {
     width: calc(148px * var(--mobile-chrome-scale, 1));

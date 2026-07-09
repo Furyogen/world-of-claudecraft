@@ -115,7 +115,12 @@ export interface MobileControlCallbacks {
   onJump(): void;
   onInteract(): void;
   onAutorun(): boolean;
+  /** Open the composer focused (raise the keyboard): the keybind / whisper path. */
   onChat(): void;
+  /** Open the centered read view: composer bar visible but NOT focused (no keyboard). */
+  onChatOpen(): void;
+  /** Close chat entirely (hide the composer, drop the keyboard, recover the viewport). */
+  onChatClose(): void;
   onMenu(): void;
   onSocial(): void;
   /** Open the Discord entry (account panel when available, else the community invite). */
@@ -506,10 +511,17 @@ export class MobileControls {
     } else {
       // Reset any composer left open ONLY on a real transition INTO touch (not on a
       // redundant re-activation while already active, which would clear a draft the
-      // player is typing). exitChatReply clears input.value, so gate it on !wasActive.
+      // player is typing). This clears input.value, so gate it on !wasActive.
       if (!wasActive) {
         document.body.classList.remove('mobile-chat-open', 'mobile-chat-reply');
-        this.exitChatReply();
+        const input = document.getElementById('chat-input') as HTMLTextAreaElement | null;
+        if (input) {
+          input.value = '';
+          input.style.display = 'none';
+          input.style.height = '';
+          input.style.overflowY = '';
+          input.blur();
+        }
       }
       // Arm the idle-fade once for this activation (idempotent via ??=).
       this.chromeFade ??= startChromeFade(document.body);
@@ -620,67 +632,26 @@ export class MobileControls {
     button.addEventListener('pointerleave', cancel);
   }
 
-  /** Toggle the read-only chat-log peek. Opening it makes sure the composer (and
-   * keyboard) is dismissed; opening the composer elsewhere clears the peek. */
+  /** Toggle the read-only chat-log peek. Opening a peek closes the full chat first (so a
+   *  peek and the open panel are never both up); opening the panel elsewhere clears it. */
   private toggleLogPeek(): void {
     const peeking = document.body.classList.toggle('mobile-chatlog-peek');
     if (peeking && document.body.classList.contains('mobile-chat-open')) {
-      this.toggleChat();
+      this.callbacks.onChatClose();
     }
   }
 
-  /** The single top-left Chat button owns a simple two-state toggle (issue
-   * 1577 uiux-overlap: the separate in-log reply pill overlapped the chatbox,
-   * so it was removed; a later round tried a three-state open/read/reply
-   * cycle, since simplified back to two): hidden, or shown, with the log AND
-   * the composer appearing together immediately, composer focused. There is
-   * no separate read-only step to tap through first. */
+  /** The single top-left Chat button toggles the chat panel. Tapping it OPEN shows the
+   *  centered read view: the log plus the composer bar above it, keyboard DOWN (tapping
+   *  the composer bar raises the keyboard to type). Tapping it again CLOSES the panel;
+   *  if the keyboard is up, closing drops it too (closeChat blurs the composer). */
   private tapChat(): void {
-    // Two states only: hidden, or shown (log AND composer visible together,
-    // composer focused immediately). No separate read-only step in between.
-    const open = document.body.classList.contains('mobile-chat-open');
-    if (!open) {
-      this.enterChatReply();
-    } else {
-      this.toggleChat();
-    }
-  }
-
-  private toggleChat(): void {
-    document.body.classList.remove('mobile-chatlog-peek');
-    document.body.classList.toggle('mobile-chat-open');
     if (document.body.classList.contains('mobile-chat-open')) {
-      // Open the log in a read state, NOT the composer: the keyboard only rises
-      // once the player taps the Chat button again to enter reply mode.
-      // The composer stays hidden until enterChatReply focuses it.
+      this.callbacks.onChatClose();
     } else {
-      this.exitChatReply();
-    }
-  }
-
-  /** Enter reply mode: raise the keyboard and show the composer via the shared
-   *  onChat path. Reached by tapping the Chat button again while the log is
-   *  already open in its read state. */
-  private enterChatReply(): void {
-    if (!document.body.classList.contains('mobile-chat-open')) {
+      document.body.classList.remove('mobile-chatlog-peek');
       document.body.classList.add('mobile-chat-open');
-    }
-    document.body.classList.remove('mobile-chatlog-peek');
-    document.body.classList.add('mobile-chat-reply');
-    this.callbacks.onChat();
-  }
-
-  /** Leave reply mode and reset the composer back to its collapsed state. */
-  private exitChatReply(): void {
-    document.body.classList.remove('mobile-chat-reply');
-    const input = document.getElementById('chat-input') as HTMLTextAreaElement | null;
-    if (input) {
-      input.value = '';
-      input.style.display = 'none';
-      // clear the autosized height so the next open starts at one line
-      input.style.height = '';
-      input.style.overflowY = '';
-      input.blur();
+      this.callbacks.onChatOpen();
     }
   }
 

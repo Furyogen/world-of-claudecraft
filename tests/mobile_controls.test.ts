@@ -491,6 +491,8 @@ function mobileCallbacks() {
     onInteract: noop,
     onAutorun: () => false,
     onChat: noop,
+    onChatOpen: noop,
+    onChatClose: noop,
     onMenu: noop,
     onSocial: noop,
     onDiscord: noop,
