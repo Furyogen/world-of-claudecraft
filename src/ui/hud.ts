@@ -1343,6 +1343,7 @@ export class Hud {
     this.emoteWheelSlots = this.loadEmoteWheelSlots();
     this.loadSlotMap();
     this.buildActionBar();
+    this.initMailIndicator();
     this.refreshKeybindLabels();
     this.buildXpTicks();
     document.addEventListener('woc:languagechange', () => this.refreshLocalizedDynamicUi());
@@ -1449,13 +1450,20 @@ export class Hud {
     this.clockEl = $('#minimap-clock');
     // raid-lockout badge on the minimap rim: a lock icon whose hover/tap panel
     // lists the player's raid lockouts (the unlock countdown). Always visible;
-    // it lights up (.locked) while any raid is on cooldown. attachTooltip already
-    // handles desktop hover, mobile tap, and keyboard focus uniformly.
+    // it lights up (.locked) while any raid is on cooldown. attachTooltip handles
+    // desktop hover, mobile long-press, and keyboard focus; mobile tap below opens
+    // the same panel immediately because the badge has no primary action.
     this.raidLockoutEl = document.getElementById('raid-lockout');
     if (this.raidLockoutEl) {
       this.raidLockoutEl.innerHTML = svgIcon('lock');
       this.raidLockoutEl.hidden = false;
       this.attachTooltip(this.raidLockoutEl, () => this.raidLockoutPanelView());
+      this.raidLockoutEl.addEventListener('click', (ev) => {
+        if (!document.body.classList.contains('mobile-touch')) return;
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.showRaidLockoutTooltip();
+      });
     }
     const dailyRewardsButton = document.getElementById(
       'daily-rewards-button',
@@ -3965,6 +3973,13 @@ export class Hud {
   hideTooltip(): void {
     this.tooltipEl.style.display = 'none';
     this.tooltipEl.classList.remove('mob-tooltip');
+  }
+
+  private showRaidLockoutTooltip(): void {
+    const el = this.raidLockoutEl;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    this.paintTooltipAt(this.raidLockoutPanelView(), rect.right, rect.top + rect.height / 2);
   }
 
   // Paints the shared #tooltip box at a screen point, used by attachTooltip's
@@ -6868,6 +6883,22 @@ export class Hud {
     if (slowHud && this.bankWindow.isOpen) this.bankWindow.refreshIfChanged();
     if (slowHud && this.calendarWindow.isOpen) this.calendarWindow.refreshIfChanged();
     if (slowHud) this.updateMailIndicator();
+  }
+
+  private initMailIndicator(): void {
+    const el = $('#mail-indicator') as HTMLButtonElement;
+    this.mailIndicatorEl = el;
+    el.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      this.openMailbox();
+    });
+    el.addEventListener('keydown', (ev) => {
+      if (ev.key !== 'Enter' && ev.key !== ' ') return;
+      ev.preventDefault();
+      ev.stopPropagation();
+      this.openMailbox();
+    });
   }
 
   // The envelope indicator by the minimap: visible while unread letters wait.

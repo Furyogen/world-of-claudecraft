@@ -4206,6 +4206,9 @@
     border: 1px solid #cc9a3c88;
     border-radius: 12px;
     color: var(--gold);
+    appearance: none;
+    cursor: pointer;
+    font: inherit;
     pointer-events: auto;
   }
   #mail-indicator[hidden] {
