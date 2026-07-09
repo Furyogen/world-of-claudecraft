@@ -9,25 +9,55 @@
 // Reproducibility is checked by tests/i18n_resolved_equivalence.test.ts.
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [],
-  "es_ES": [],
-  "fr_FR": [],
-  "fr_CA": [],
+  "es": [
+    "hud.core.mobileSettings"
+  ],
+  "es_ES": [
+    "hud.core.mobileSettings"
+  ],
+  "fr_FR": [
+    "hud.core.mobileSettings"
+  ],
+  "fr_CA": [
+    "hud.core.mobileSettings"
+  ],
   "en_CA": [],
-  "it_IT": [],
-  "de_DE": [],
+  "it_IT": [
+    "hud.core.mobileSettings"
+  ],
+  "de_DE": [
+    "hud.core.mobileSettings"
+  ],
   "zh_CN": [],
   "zh_TW": [],
   "ko_KR": [],
   "ja_JP": [],
-  "pt_BR": [],
+  "pt_BR": [
+    "hud.core.mobileSettings"
+  ],
   "ru_RU": [],
-  "cs_CZ": [],
-  "nl_NL": [],
-  "pl_PL": [],
-  "id_ID": [],
-  "tr_TR": [],
-  "sv_SE": [],
-  "vi_VN": [],
-  "da_DK": []
+  "cs_CZ": [
+    "hud.core.mobileSettings"
+  ],
+  "nl_NL": [
+    "hud.core.mobileSettings"
+  ],
+  "pl_PL": [
+    "hud.core.mobileSettings"
+  ],
+  "id_ID": [
+    "hud.core.mobileSettings"
+  ],
+  "tr_TR": [
+    "hud.core.mobileSettings"
+  ],
+  "sv_SE": [
+    "hud.core.mobileSettings"
+  ],
+  "vi_VN": [
+    "hud.core.mobileSettings"
+  ],
+  "da_DK": [
+    "hud.core.mobileSettings"
+  ]
 };

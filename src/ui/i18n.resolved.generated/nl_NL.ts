@@ -4149,6 +4149,7 @@ export const nl_NL: EnTranslations = {
       "mobileSocial": "Sociaal",
       "mobileArena": "Arena",
       "mobileMenu": "Menu",
+      "mobileSettings": "Settings",
       "mobileUse": "Gebruiken",
       "mobileMeters": "Meters",
       "mobileMap": "Kaart",

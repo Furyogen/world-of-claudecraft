@@ -1586,7 +1586,14 @@ describe('i18n Localization Key Coverage', () => {
     expect(html).toContain('data-i18n="hud.core.mobileMore"');
     expect(html).toContain('data-i18n="hud.core.mobileSocial"');
     expect(html).toContain('data-i18n="hud.core.mobileArena"');
-    expect(html).toContain('data-i18n="hud.core.mobileMenu"');
+    // The Settings button (promoted to the bar between Social and More) uses
+    // mobileSettings ("Settings"); the old mobileMenu ("Menu") key stays in the
+    // catalog but, like mobileTarget, no longer appears in the markup.
+    expect(html).toContain('data-i18n="hud.core.mobileSettings"');
+    expect(html).not.toContain('data-i18n="hud.core.mobileMenu"');
+    // The Quests button reuses the tracker's "Quests" label rather than the
+    // longer "Quest Log" title.
+    expect(html).toContain('data-i18n="questUi.tracker.title"');
     expect(html).toContain('data-i18n="hud.core.mobileUse"');
     // Note: the v0.7 layout moved damage meters from a mobile tray button to a
     // dedicated #meters-window, so there is no longer a mobile-meters button to
