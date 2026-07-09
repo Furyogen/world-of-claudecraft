@@ -135,6 +135,8 @@ import {
   createApiDispatcher,
   selectApiEntry,
 } from './http/dispatch';
+import { type GameStateSource, registerGameStateMetrics } from './http/game_metrics';
+import { setGameMetricsCounters } from './http/game_signals';
 import { handleLivez, handleMetricsGate, handleReadyz, markDraining } from './http/health';
 import { type Logger, logger } from './http/logger';
 import { createHttpMetrics } from './http/metrics';
@@ -2335,6 +2337,21 @@ export async function startServer(): Promise<http.Server> {
     bankBonusForAccount: async (id) => computeBankBonus(await bankBonusFactsForAccount(id)),
   });
   wsAuth.attachUpgrade(server, wss);
+
+  // Register the game-state gauges + throughput counters on the SAME registry the
+  // RED exporter built at module scope, then install the counter sink process-wide
+  // (mirrors setAttackSignalSink). Wired here, after `game` and `wss` exist, so the
+  // gauges read live state at scrape time; ws_connections is the raw open-socket
+  // count (joined or not), distinct from players_online (joined sessions).
+  const gameStateSource: GameStateSource = {
+    playersOnline: () => game.clients.size,
+    accountsOnline: () => game.liveAccountIds().size,
+    wsConnections: () => wss.clients.size,
+    simEntities: () => game.sim.entities.size,
+    simTickHz: () => game.simTickHz(),
+    tickPhaseMillis: () => game.tickPhaseMillis(),
+  };
+  setGameMetricsCounters(registerGameStateMetrics(httpMetrics.registry, gameStateSource));
 
   game.start();
   server.listen(config.port, () => {

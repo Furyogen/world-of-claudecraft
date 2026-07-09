@@ -85,6 +85,7 @@ import { formatDuration } from './duration';
 import { mergedPrsForLogin } from './github_contributors';
 import { githubForAccount } from './github_db';
 import { forEachGuarded, runGuarded } from './guarded_iter';
+import { gameMetricsCounters } from './http/game_signals';
 import { IpBlockList } from './ip_block';
 import { loadActiveBlockedIps } from './ip_block_db';
 import { LINKDEAD_GRACE_MS, planJoin } from './linkdead';
@@ -2303,6 +2304,24 @@ export class GameServer {
     };
   }
 
+  // Achieved sim Hz for the /metrics exporter (server/http/game_metrics.ts), or
+  // null while the rate meter is still warming up (its first second of uptime).
+  simTickHz(): number | null {
+    return this.tickHz == null ? null : round2(this.tickHz);
+  }
+
+  // Per-phase loop timing (p95 + max, in MILLISECONDS) for the /metrics exporter,
+  // keyed by phase name. The exporter converts to seconds and surfaces only its
+  // fixed WOC_TICK_PHASES subset, so the exported label set stays bounded.
+  tickPhaseMillis(): Record<string, { p95: number; max: number }> {
+    const { phases } = this.tickProfiler.profile();
+    const out: Record<string, { p95: number; max: number }> = {};
+    for (const [name, stats] of Object.entries(phases)) {
+      out[name] = { p95: stats.p95, max: stats.max };
+    }
+    return out;
+  }
+
   // Start an on-demand detailed capture (admin-triggered). Clears the profiler so the
   // window is clean, flips the detailed sub-phase timing on, and schedules the close
   // `durationMs` (clamped) out in sim ticks. A second call while one is running just
@@ -2697,6 +2716,7 @@ export class GameServer {
   // -------------------------------------------------------------------------
 
   handleMessage(session: ClientSession, raw: string): void {
+    gameMetricsCounters().wsMessage('in');
     const receivedAtMs = Date.now();
     const verdict = consumeMsgToken(session.msgRate, receivedAtMs / 1000);
     if (verdict === 'kick') {
@@ -3075,6 +3095,7 @@ export class GameServer {
           void route
             .then((sent) => {
               if (sent) {
+                gameMetricsCounters().chatMessage();
                 this.chatLog.log({
                   accountId: session.accountId,
                   characterId: session.characterId,
@@ -4565,6 +4586,7 @@ export class GameServer {
           void route
             .then((sent) => {
               if (sent) {
+                gameMetricsCounters().chatMessage();
                 this.chatLog.log({
                   accountId: session.accountId,
                   characterId: session.characterId,
@@ -4607,6 +4629,7 @@ export class GameServer {
 
   private logChat(session: ClientSession, sent: import('../src/sim/sim').SentChat | null): void {
     if (!sent) return;
+    gameMetricsCounters().chatMessage();
     this.chatLog.log({
       accountId: session.accountId,
       characterId: session.characterId,
@@ -4899,6 +4922,7 @@ export class GameServer {
       }
       return;
     }
+    gameMetricsCounters().wsMessage('out');
     session.ws.send(payload);
   }
 }
