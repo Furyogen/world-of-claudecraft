@@ -3,16 +3,6 @@ services:
     image: postgres:16-alpine
     container_name: eastbrook-db
     restart: unless-stopped
-    # Preload pg_stat_statements so monitoring can track per-query stats
-    # (slowest/most-frequent queries) via postgres_exporter. Takes effect on the
-    # next DB restart. One-time `CREATE EXTENSION pg_stat_statements;` is needed
-    # afterwards, handled idempotently by the monitoring deploy (woc-deploy).
-    command:
-      - "postgres"
-      - "-c"
-      - "shared_preload_libraries=pg_stat_statements"
-      - "-c"
-      - "pg_stat_statements.track=all"
     environment:
       POSTGRES_USER: eastbrook
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env. See .env.example.}
