@@ -21,11 +21,14 @@ import type { GroundAoE } from '../entity_roster';
 import type { PlayerMeta, ResolvedAbility } from '../sim';
 import type { SimContext } from '../sim_context';
 import {
+  abilityPowerStat,
   abilityScalingPower,
   directHealBonus,
   directHitBonus,
   dotTickBonus,
+  dotTickCoeff,
   hotTickBonus,
+  hotTickCoeff,
 } from '../spell_scaling';
 import { stunDrCategory } from '../stun_dr';
 import { addThreat } from '../threat';
@@ -198,6 +201,10 @@ export function runEffects(
         const hybridHeal = res.effects.some((e) => e.type === 'heal');
         const hotBase = Math.max(1, Math.round(eff.total / (eff.duration / eff.interval)));
         const hotSp = hybridHeal ? 0 : hotTickBonus(p.spellPower, eff.duration, eff.interval);
+        // Dynamic HoT: the Spell Power rider recomputes every tick off the caster's live
+        // Spell Power (tickBase + round(spellPower * tickPowerCoeff)); a hybrid HoT riding
+        // a direct heal keeps coeff 0 so it never double-dips. `value` stays the cast-time
+        // snapshot for tooltips/wire.
         ctx.applyAura(hotTarget, {
           id: ability.id,
           name: ability.name,
@@ -205,6 +212,9 @@ export function runEffects(
           remaining: eff.duration,
           duration: eff.duration,
           value: hotBase + hotSp,
+          tickBase: hotBase,
+          tickPowerCoeff: hybridHeal ? 0 : hotTickCoeff(eff.duration, eff.interval),
+          tickPowerStat: 'spell',
           tickInterval: eff.interval,
           tickTimer: eff.interval,
           sourceId: p.id,
@@ -390,6 +400,9 @@ export function runEffects(
         const dotSp = !hybrid
           ? dotTickBonus(abilityScalingPower(p, ability), ability, eff.duration, eff.interval)
           : 0;
+        // Dynamic DoT: the power rider recomputes every tick off the caster's live Spell
+        // Power (or Ranged/melee AP); a hybrid DoT keeps coeff 0 so it never double-dips
+        // the nuke's rider. `value` stays the cast-time snapshot for tooltips/wire.
         ctx.applyAura(target, {
           id: ability.id,
           name: ability.name,
@@ -397,6 +410,9 @@ export function runEffects(
           remaining: eff.duration,
           duration: eff.duration,
           value: dotBase + dotSp,
+          tickBase: dotBase,
+          tickPowerCoeff: hybrid ? 0 : dotTickCoeff(ability, eff.duration, eff.interval),
+          tickPowerStat: abilityPowerStat(ability),
           tickInterval: eff.interval,
           tickTimer: eff.interval,
           sourceId: p.id,
