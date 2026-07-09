@@ -40,7 +40,7 @@ export const WEAPON_GRIP_OVERRIDES: Record<string, WeaponGripOverride> = {
   knotted_oak_stave: { pos: [-0.1, 0.57, 0.02], rot: [-180, 0, 0], scale: 0.85 },
   redskull_sword: { scale: 1.3 },
   simple_farmhand_crossbow: { pos: [0.155, 0.0684, 0.2319], rot: [95.2624, 0, 0], scale: 0.65 },
-  guildmark_arming_sword: { pos: [0, 0.01, 0], rot: [15, 5, 0], scale: 0.75 },
+  guildmark_arming_sword: { pos: [0, 0.01, 0], rot: [15, 5, 0], scale: 0.95 },
   brasscap_hatchet: {
     pos: [0.0585, 0.0588, 0.0529],
     rot: [-162.524, 1.1883, -177.4091],
@@ -87,6 +87,37 @@ export const WEAPON_GRIP_OVERRIDES: Record<string, WeaponGripOverride> = {
   glaciersplit: { pos: [0.0713, 0.0779, -0.0096], rot: [180, -7.6717, -165.7991], scale: 1.35 },
   rimecrusher: { rot: [-50.9571, -60.9258, -57.8216], scale: 1.8 },
   frostbite: { pos: [0, -0.3643, 0], scale: 1.55 },
+  // Full Set drop (July 2026). The two bows also ship an ATTACK grip in their
+  // handoff position files (gripOverride + gripAttackOverride, blended during
+  // the draw animation); only the idle grip is registered until the engine
+  // grows a second-pose slot.
+  winterbite: {
+    pos: [-0.0439, -0.0034, 0.0066],
+    rot: [-164.6994, -29.0522, -148.7048],
+    scale: 1.05,
+  },
+  cinderlatch: {
+    pos: [0.1565, 0.1562, -0.0917],
+    rot: [94.6767, -12.6224, 138.9958],
+    scale: 0.65,
+  },
+  emberbite: { pos: [-0.0061, 0.1097, 0] },
+  smoulderfall: { rot: [0, 0, -12.429], scale: 0.9 },
+  ashspark_shiv: { pos: [0, -0.0745, 0.0717], rot: [14.7156, 0, 0] },
+  forgeheart_stave: { pos: [0, 0.1168, 0], scale: 1.1 },
+  emberwrought_wand: {
+    pos: [-0.1158, 0.7129, 0],
+    rot: [101.5834, 80.5884, 78.5684],
+    scale: 1.2,
+  },
+  tempered_flanged_mace: { pos: [0, 0.12, 0], rot: [5, 0, 0] },
+  guildmark_dirk: {
+    pos: [-0.0006, -0.0285, 0.0472],
+    rot: [-180, -89.2652, -180],
+    scale: 1.1,
+  },
+  lacquered_rod: { pos: [0.0606, 0.1259, -0.0094], rot: [0, 0, -46.2693] },
+  fletcher_s_guild_bow: { pos: [-0.2237, 0, 0.0851] },
 };
 
 export interface GripTransform {

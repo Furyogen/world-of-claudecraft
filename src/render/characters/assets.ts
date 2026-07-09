@@ -131,6 +131,19 @@ const KAYKIT_WEAPON_ACCESSORY: Record<string, string> = {
   brasscap_hatchet: 'VAR_AXE',
   knotted_oak_stave: 'VAR_STAFF',
   whittler_s_knife: 'VAR_DAGGER',
+  winterbite: 'VAR_BOW',
+  cinderbrand: 'VAR_SWORD',
+  emberbite: 'VAR_AXE',
+  smoulderfall: 'VAR_HAMMER',
+  ashspark_shiv: 'VAR_DAGGER',
+  forgeheart_stave: 'VAR_STAFF',
+  emberwrought_wand: 'VAR_WAND',
+  cinderlatch: 'VAR_CROSSBOW',
+  tempered_flanged_mace: 'VAR_MACE',
+  guildmark_dirk: 'VAR_DAGGER',
+  brasscrown_walking_staff: 'VAR_STAFF',
+  lacquered_rod: 'VAR_WAND',
+  fletcher_s_guild_bow: 'VAR_BOW',
 };
 
 // Per-family grip for the variant pack. The model origin IS the grip, so we attach
