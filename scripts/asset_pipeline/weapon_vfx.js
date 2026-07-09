@@ -40,8 +40,44 @@ const STAR = {
   violet: 0xa335ee,
   teal: 0x57e0c8,
 };
+const EMBER = {
+  glow: 0xff7a1e,
+  hot: 0xffb45e,
+  coal: 0xff5210,
+  ash: 0x9a8d80,
+};
 
 export const TIERS = {
+  // Tier 03, the "first true enchantment": a restrained banked-heat glow.
+  // Deliberately the lightest magical tier: emissive + bloom with a whisper of
+  // embers, no motes, no aurora, no core flare. Keep it visibly BELOW epic.
+  rare: {
+    label: 'Rare',
+    collection: 'Emberwrought',
+    hex: '#0070dd',
+    dots: 3,
+    fxNote: 'subtle glow: banked-ember emissive, faint heat wisps',
+    bloom: { strength: 0.55, radius: 0.45, threshold: 0.7 },
+    background: 0x0b0705,
+    backdrop: 'forge',
+    // Ember-orange runes, cracks and coals; hot metal joins in faintly.
+    emissive: {
+      hue: [8, 52],
+      minS: 0.35,
+      minL: 0.26,
+      whiteL: 0.9,
+      whiteScale: 0.12,
+      tint: 0xff7a1e,
+      intensity: 1.15,
+      pulse: 0.22,
+      pulseHz: 0.32,
+    },
+    shell: { color: EMBER.glow, strength: 0.14, power: 3.4 },
+    light: { color: 0xff8a3a, intensity: 3.5, distance: 5, flicker: 0.3, hz: 2.1 },
+    float: { bob: 0.02, spin: 0, lift: 0.02 },
+    sceneDim: 0.68,
+    pool: { color: 0xff7a2a, radius: 1.0, opacity: 0.22 },
+  },
   epic: {
     label: 'Epic',
     collection: 'Hoarfrost',
@@ -818,6 +854,600 @@ export const WEAPON_VFX = {
       },
     ],
   },
+
+  // --- Tier 04 Hoarfrost, the Full Set additions -------------------------
+
+  rimecrusher: {
+    tier: 'epic',
+    name: 'Rimecrusher',
+    type: 'mace',
+    lore: 'A cluster of jagged ice crystals around a glowing cyan core; hoarfrost creeps down the silvered haft.',
+    emissive: { intensity: 1.3 },
+    light: { at: { yF: 0.8 } },
+    fx: [
+      {
+        kind: 'coreSprite',
+        at: { yF: 0.8 },
+        size: 0.34,
+        color: ICE.core,
+        flare: 0.4,
+        hz: 0.5,
+        opacity: 0.55,
+      },
+      {
+        kind: 'drift',
+        line: [
+          { yF: 0.62, dx: -0.25 },
+          { yF: 0.98, dx: 0.25 },
+        ],
+        count: 40,
+        vel: [0, -0.16, 0],
+        spread: [0.16, 0.06, 0.16],
+        life: [2.4, 4.0],
+        size: [0.14, 0.28],
+        grow: 1.3,
+        swirl: 0.07,
+        colorA: 0xbfeaff,
+        colorB: 0x7fd4ff,
+        opacity: 0.22,
+      },
+      // Hoarfrost creeping down the haft: slow falling ice dust.
+      {
+        kind: 'drift',
+        line: [{ yF: 0.1 }, { yF: 0.6 }],
+        count: 18,
+        vel: [0, -0.24, 0],
+        spread: [0.06, 0.06, 0.06],
+        life: [2.8, 4.6],
+        size: [0.018, 0.045],
+        grow: 0,
+        swirl: 0.04,
+        colorA: 0xeafaff,
+        colorB: 0x9fd8ff,
+        opacity: 0.8,
+      },
+      {
+        kind: 'twinkles',
+        surface: { yMinF: 0.55, count: 60 },
+        size: [0.032, 0.062],
+        rate: [0.5, 1.3],
+        color: 0xdff6ff,
+        star: true,
+      },
+    ],
+  },
+
+  frostbite: {
+    tier: 'epic',
+    name: 'Frostbite',
+    type: 'dagger',
+    lore: 'A wickedly thin blade of clear blue ice, a glowing cyan vein down its center, needle frost bristling from the hilt.',
+    emissive: { intensity: 1.4 },
+    light: { at: { yF: 0.6 }, intensity: 6, distance: 6 },
+    fx: [
+      {
+        kind: 'coreSprite',
+        at: { yF: 0.58 },
+        size: 0.22,
+        color: ICE.core,
+        flare: 0.45,
+        hz: 0.6,
+        opacity: 0.5,
+      },
+      {
+        kind: 'drift',
+        line: [{ yF: 0.35 }, { yF: 1.0 }],
+        count: 26,
+        vel: [0, -0.12, 0],
+        spread: [0.05, 0.04, 0.05],
+        life: [2.4, 4.0],
+        size: [0.1, 0.2],
+        grow: 1.2,
+        swirl: 0.05,
+        colorA: 0xbfeaff,
+        colorB: 0x7fd4ff,
+        opacity: 0.2,
+      },
+      {
+        kind: 'drift',
+        line: [
+          { yF: 0.3, dx: -0.1 },
+          { yF: 1.0, dx: 0.1 },
+        ],
+        count: 22,
+        vel: [0, -0.3, 0],
+        spread: [0.12, 0.06, 0.1],
+        life: [2.6, 4.4],
+        size: [0.015, 0.04],
+        grow: 0,
+        swirl: 0.05,
+        colorA: 0xeafaff,
+        colorB: 0x9fd8ff,
+        opacity: 0.85,
+      },
+      {
+        kind: 'twinkles',
+        surface: { yMinF: 0.25, count: 46 },
+        size: [0.024, 0.05],
+        rate: [0.6, 1.4],
+        color: 0xdff6ff,
+        star: true,
+      },
+    ],
+  },
+
+  hoarfrost_vigil: {
+    tier: 'epic',
+    name: 'Hoarfrost Vigil',
+    type: 'staff',
+    lore: 'A silvered staff crowned with a slowly turning shard of glowing cyan ice, radiating crystals and cold vapor.',
+    emissive: { intensity: 1.35 },
+    light: { at: { yF: 0.88 }, intensity: 9 },
+    fx: [
+      {
+        kind: 'coreSprite',
+        at: { yF: 0.88 },
+        size: 0.42,
+        color: ICE.core,
+        flare: 0.45,
+        hz: 0.4,
+        opacity: 0.6,
+      },
+      // Cold rolling off the crown shard.
+      {
+        kind: 'drift',
+        line: [
+          { yF: 0.74, dx: -0.2 },
+          { yF: 1.0, dx: 0.2 },
+        ],
+        count: 38,
+        vel: [0, -0.15, 0],
+        spread: [0.14, 0.06, 0.14],
+        life: [2.6, 4.2],
+        size: [0.15, 0.3],
+        grow: 1.4,
+        swirl: 0.06,
+        colorA: 0xbfeaff,
+        colorB: 0x7fd4ff,
+        opacity: 0.24,
+      },
+      // Vapor sliding down the shaft.
+      {
+        kind: 'drift',
+        line: [{ yF: 0.1 }, { yF: 0.7 }],
+        count: 20,
+        vel: [0, -0.1, 0],
+        spread: [0.05, 0.05, 0.05],
+        life: [3.0, 4.8],
+        size: [0.09, 0.18],
+        grow: 1.2,
+        swirl: 0.05,
+        colorA: 0x9fd8ff,
+        colorB: 0x6fb8e8,
+        opacity: 0.18,
+      },
+      {
+        kind: 'twinkles',
+        surface: { yMinF: 0.6, count: 64 },
+        size: [0.034, 0.066],
+        rate: [0.45, 1.2],
+        color: 0xdff6ff,
+        star: true,
+      },
+    ],
+  },
+
+  shard_of_everwinter: {
+    tier: 'epic',
+    name: 'Shard of Everwinter',
+    type: 'wand',
+    lore: 'A single spike of glowing cyan glacier-ice; hoarfrost blooms from the silver collar in a faint cold mist.',
+    emissive: { intensity: 1.45 },
+    light: { at: { yF: 0.8 }, intensity: 6, distance: 6 },
+    fx: [
+      {
+        kind: 'coreSprite',
+        at: { yF: 0.82 },
+        size: 0.26,
+        color: ICE.core,
+        flare: 0.5,
+        hz: 0.55,
+        opacity: 0.55,
+      },
+      {
+        kind: 'drift',
+        line: [{ yF: 0.4 }, { yF: 1.0 }],
+        count: 24,
+        vel: [0, -0.11, 0],
+        spread: [0.06, 0.04, 0.06],
+        life: [2.6, 4.2],
+        size: [0.1, 0.2],
+        grow: 1.3,
+        swirl: 0.05,
+        colorA: 0xbfeaff,
+        colorB: 0x7fd4ff,
+        opacity: 0.22,
+      },
+      {
+        kind: 'twinkles',
+        surface: { yMinF: 0.3, count: 44 },
+        size: [0.026, 0.052],
+        rate: [0.55, 1.35],
+        color: 0xdff6ff,
+        star: true,
+      },
+    ],
+  },
+
+  winterbite: {
+    tier: 'epic',
+    name: 'Winterbite',
+    type: 'bow',
+    lore: 'A bow of silvered steel and blue ice, a glowing frozen core in the riser and a nocked arrow of solid ice trailing cold.',
+    emissive: { intensity: 1.35 },
+    light: { at: { yF: 0.5 }, intensity: 7 },
+    fx: [
+      // Frozen core in the riser (the grip midpoint).
+      {
+        kind: 'coreSprite',
+        at: { yF: 0.5 },
+        size: 0.3,
+        color: ICE.core,
+        flare: 0.5,
+        hz: 0.5,
+        opacity: 0.55,
+      },
+      // Cold vapor sliding off both limbs.
+      {
+        kind: 'drift',
+        line: [{ yF: 0.06 }, { yF: 0.94 }],
+        count: 42,
+        vel: [0, -0.13, 0],
+        spread: [0.1, 0.05, 0.08],
+        life: [2.5, 4.2],
+        size: [0.12, 0.24],
+        grow: 1.3,
+        swirl: 0.06,
+        colorA: 0xbfeaff,
+        colorB: 0x7fd4ff,
+        opacity: 0.2,
+      },
+      // Ice dust drifting from the string plane.
+      {
+        kind: 'drift',
+        line: [
+          { yF: 0.15, dz: 0.1 },
+          { yF: 0.85, dz: 0.1 },
+        ],
+        count: 24,
+        vel: [0, -0.26, 0],
+        spread: [0.08, 0.06, 0.08],
+        life: [2.6, 4.4],
+        size: [0.016, 0.04],
+        grow: 0,
+        swirl: 0.05,
+        colorA: 0xeafaff,
+        colorB: 0x9fd8ff,
+        opacity: 0.8,
+      },
+      {
+        kind: 'twinkles',
+        surface: { yMinF: 0.05, count: 66 },
+        size: [0.028, 0.058],
+        rate: [0.5, 1.3],
+        color: 0xdff6ff,
+        star: true,
+      },
+    ],
+  },
+
+  // --- Tier 03 Emberwrought (Rare): restrained banked heat ----------------
+  // The tier presets already carry the look (emissive de-bake, faint shell,
+  // small flickering light); each weapon adds only a whisper of embers plus,
+  // where the codex names a gem or coal, one small dim core sprite.
+
+  cinderbrand: {
+    tier: 'rare',
+    name: 'Cinderbrand',
+    type: 'sword',
+    lore: 'Dark forged steel, the fuller filled with ember-orange runes; a smouldering gem sits in the guard.',
+    light: { at: { yF: 0.45 } },
+    fx: [
+      {
+        kind: 'coreSprite',
+        at: { yF: 0.24 },
+        size: 0.12,
+        color: EMBER.coal,
+        flare: 0.3,
+        hz: 0.35,
+        opacity: 0.3,
+      },
+      {
+        kind: 'drift',
+        line: [{ yF: 0.3 }, { yF: 0.9 }],
+        count: 12,
+        vel: [0, 0.12, 0],
+        spread: [0.05, 0.04, 0.04],
+        life: [2.0, 3.6],
+        size: [0.014, 0.032],
+        grow: 0.2,
+        swirl: 0.04,
+        colorA: EMBER.coal,
+        colorB: EMBER.hot,
+        opacity: 0.55,
+      },
+      {
+        kind: 'twinkles',
+        surface: { yMinF: 0.25, count: 20 },
+        size: [0.02, 0.04],
+        rate: [0.3, 0.8],
+        color: EMBER.hot,
+        star: false,
+      },
+    ],
+  },
+
+  emberbite: {
+    tier: 'rare',
+    name: 'Emberbite',
+    type: 'axe',
+    lore: 'Blackened iron with ember-orange heat-cracks glowing through the bit; a banked-coal gem breathes in the cheek.',
+    light: { at: { yF: 0.78 } },
+    fx: [
+      {
+        kind: 'coreSprite',
+        at: { yF: 0.78 },
+        size: 0.14,
+        color: EMBER.coal,
+        flare: 0.3,
+        hz: 0.3,
+        opacity: 0.3,
+      },
+      {
+        kind: 'drift',
+        line: [
+          { yF: 0.6, dx: -0.15 },
+          { yF: 0.95, dx: 0.15 },
+        ],
+        count: 12,
+        vel: [0, 0.1, 0],
+        spread: [0.08, 0.04, 0.05],
+        life: [2.2, 3.8],
+        size: [0.05, 0.11],
+        grow: 0.8,
+        swirl: 0.04,
+        colorA: 0xff8a3a,
+        colorB: 0x7a4a20,
+        opacity: 0.16,
+      },
+      {
+        kind: 'twinkles',
+        surface: { yMinF: 0.55, count: 18 },
+        size: [0.02, 0.04],
+        rate: [0.3, 0.75],
+        color: EMBER.hot,
+        star: false,
+      },
+    ],
+  },
+
+  smoulderfall: {
+    tier: 'rare',
+    name: 'Smoulderfall',
+    type: 'mace',
+    lore: 'Dark iron flanges glowing ember-orange along their inner cracks; the head hides a molten-cored gem.',
+    light: { at: { yF: 0.8 } },
+    fx: [
+      {
+        kind: 'coreSprite',
+        at: { yF: 0.8 },
+        size: 0.15,
+        color: EMBER.coal,
+        flare: 0.3,
+        hz: 0.32,
+        opacity: 0.32,
+      },
+      {
+        kind: 'drift',
+        line: [{ yF: 0.62 }, { yF: 0.96 }],
+        count: 12,
+        vel: [0, 0.11, 0],
+        spread: [0.1, 0.05, 0.1],
+        life: [2.0, 3.6],
+        size: [0.014, 0.03],
+        grow: 0.2,
+        swirl: 0.05,
+        colorA: EMBER.coal,
+        colorB: EMBER.hot,
+        opacity: 0.5,
+      },
+      {
+        kind: 'twinkles',
+        surface: { yMinF: 0.55, count: 18 },
+        size: [0.02, 0.04],
+        rate: [0.3, 0.8],
+        color: EMBER.hot,
+        star: false,
+      },
+    ],
+  },
+
+  ashspark_shiv: {
+    tier: 'rare',
+    name: 'Ashspark Shiv',
+    type: 'dagger',
+    lore: 'A short blackened blade veined with glowing ember-orange; ash drifts from the tiny smouldering gem in the pommel.',
+    light: { at: { yF: 0.5 }, intensity: 2.8, distance: 4 },
+    fx: [
+      {
+        kind: 'coreSprite',
+        at: { yF: 0.08 },
+        size: 0.09,
+        color: EMBER.coal,
+        flare: 0.35,
+        hz: 0.4,
+        opacity: 0.3,
+      },
+      // Ash falling, embers rising: two small opposed drifts.
+      {
+        kind: 'drift',
+        line: [{ yF: 0.3 }, { yF: 0.95 }],
+        count: 10,
+        vel: [0, 0.1, 0],
+        spread: [0.04, 0.03, 0.03],
+        life: [1.8, 3.2],
+        size: [0.012, 0.028],
+        grow: 0.2,
+        swirl: 0.03,
+        colorA: EMBER.coal,
+        colorB: EMBER.hot,
+        opacity: 0.55,
+      },
+      {
+        kind: 'drift',
+        line: [{ yF: 0.2 }, { yF: 0.8 }],
+        count: 8,
+        vel: [0, -0.08, 0],
+        spread: [0.05, 0.04, 0.04],
+        life: [2.4, 4.0],
+        size: [0.014, 0.03],
+        grow: 0.3,
+        swirl: 0.04,
+        colorA: EMBER.ash,
+        colorB: 0x5a5048,
+        opacity: 0.4,
+      },
+    ],
+  },
+
+  forgeheart_stave: {
+    tier: 'rare',
+    name: 'Forgeheart Stave',
+    type: 'staff',
+    lore: 'An iron-shod staff crowned with a caged, glowing ember core; heat-shimmer rises past ember runes.',
+    emissive: { intensity: 1.3 },
+    light: { at: { yF: 0.86 }, intensity: 4.5 },
+    fx: [
+      {
+        kind: 'coreSprite',
+        at: { yF: 0.86 },
+        size: 0.2,
+        color: EMBER.glow,
+        flare: 0.35,
+        hz: 0.3,
+        opacity: 0.4,
+      },
+      // Rising heat shimmer above the cage.
+      {
+        kind: 'drift',
+        line: [
+          { yF: 0.78, dx: -0.08 },
+          { yF: 0.95, dx: 0.08 },
+        ],
+        count: 14,
+        vel: [0, 0.14, 0],
+        spread: [0.06, 0.04, 0.06],
+        life: [1.8, 3.2],
+        size: [0.06, 0.13],
+        grow: 0.9,
+        swirl: 0.05,
+        colorA: 0xff8a3a,
+        colorB: 0x7a4a20,
+        opacity: 0.15,
+      },
+      {
+        kind: 'drift',
+        line: [{ yF: 0.8 }, { yF: 0.98 }],
+        count: 10,
+        vel: [0, 0.12, 0],
+        spread: [0.05, 0.04, 0.05],
+        life: [2.0, 3.4],
+        size: [0.013, 0.03],
+        grow: 0.2,
+        swirl: 0.04,
+        colorA: EMBER.coal,
+        colorB: EMBER.hot,
+        opacity: 0.55,
+      },
+    ],
+  },
+
+  emberwrought_wand: {
+    tier: 'rare',
+    name: 'Emberwrought Wand',
+    type: 'wand',
+    lore: 'A blackened-metal wand tipped with a glowing ember coal held in iron claws; a warm inner light breathes.',
+    emissive: { intensity: 1.3 },
+    // The coal tip sits at the canonical model's LOW end (the in-hand grip
+    // rotation turns it forward), so the whole rig anchors near yF 0.
+    light: { at: { yF: 0.12 }, intensity: 3.2, distance: 4.5 },
+    fx: [
+      {
+        kind: 'coreSprite',
+        at: { yF: 0.1 },
+        size: 0.16,
+        color: EMBER.glow,
+        flare: 0.4,
+        hz: 0.35,
+        opacity: 0.42,
+      },
+      {
+        kind: 'drift',
+        line: [{ yF: 0.04 }, { yF: 0.3 }],
+        count: 9,
+        vel: [0, 0.1, 0],
+        spread: [0.04, 0.03, 0.04],
+        life: [1.8, 3.0],
+        size: [0.012, 0.026],
+        grow: 0.2,
+        swirl: 0.03,
+        colorA: EMBER.coal,
+        colorB: EMBER.hot,
+        opacity: 0.55,
+      },
+    ],
+  },
+
+  cinderlatch: {
+    tier: 'rare',
+    name: 'Cinderlatch',
+    type: 'crossbow',
+    lore: 'A blackened-steel crossbow, ember-orange glow seeping from cracks in the prod; a smouldering coal sits in the tiller.',
+    light: { at: { yF: 0.55 } },
+    fx: [
+      {
+        kind: 'coreSprite',
+        at: { yF: 0.55 },
+        size: 0.13,
+        color: EMBER.coal,
+        flare: 0.3,
+        hz: 0.33,
+        opacity: 0.3,
+      },
+      {
+        kind: 'drift',
+        line: [{ yF: 0.35 }, { yF: 0.9 }],
+        count: 11,
+        vel: [0, 0.1, 0],
+        spread: [0.06, 0.04, 0.04],
+        life: [2.0, 3.4],
+        size: [0.013, 0.028],
+        grow: 0.2,
+        swirl: 0.04,
+        colorA: EMBER.coal,
+        colorB: EMBER.hot,
+        opacity: 0.5,
+      },
+      {
+        kind: 'twinkles',
+        surface: { yMinF: 0.3, count: 16 },
+        size: [0.018, 0.036],
+        rate: [0.3, 0.7],
+        color: EMBER.hot,
+        star: false,
+      },
+    ],
+  },
 };
 
 /** Resolve the VFX spec key for a library asset (applied weapons + generated
@@ -918,6 +1548,10 @@ function skyTex(kind) {
       g.addColorStop(0, '#0b0a1c');
       g.addColorStop(0.55, '#070610');
       g.addColorStop(1, '#03030a');
+    } else if (kind === 'forge') {
+      g.addColorStop(0, '#0c0705');
+      g.addColorStop(0.6, '#080503');
+      g.addColorStop(1, '#120903');
     } else {
       g.addColorStop(0, '#0a1524');
       g.addColorStop(0.55, '#071019');
@@ -934,10 +1568,15 @@ function skyTex(kind) {
             ['rgba(60,170,160,0.08)', 0.72, 0.22, 0.26],
             ['rgba(230,140,40,0.06)', 0.5, 0.6, 0.38],
           ]
-        : [
-            ['rgba(110,170,220,0.08)', 0.42, 0.25, 0.36],
-            ['rgba(150,210,255,0.05)', 0.68, 0.5, 0.29],
-          ];
+        : kind === 'forge'
+          ? [
+              ['rgba(230,110,30,0.07)', 0.45, 0.78, 0.4],
+              ['rgba(255,150,60,0.045)', 0.66, 0.62, 0.28],
+            ]
+          : [
+              ['rgba(110,170,220,0.08)', 0.42, 0.25, 0.36],
+              ['rgba(150,210,255,0.05)', 0.68, 0.5, 0.29],
+            ];
     for (const [col, bx, by, br] of blobs) {
       const rg = cx.createRadialGradient(bx * s, by * s, 0, bx * s, by * s, br * s);
       rg.addColorStop(0, col);
@@ -946,7 +1585,7 @@ function skyTex(kind) {
       cx.fillRect(0, 0, s, s);
     }
     // Stars.
-    const n = kind === 'night' ? 420 : 150;
+    const n = kind === 'night' ? 420 : kind === 'forge' ? 70 : 150;
     for (let i = 0; i < n; i++) {
       const x = Math.random() * s;
       const y = Math.random() * s;
@@ -957,6 +1596,7 @@ function skyTex(kind) {
         col = Math.random() < 0.5 ? `rgba(255,190,110,${a})` : `rgba(130,225,210,${a * 0.9})`;
       }
       if (kind === 'frost') col = `rgba(205,235,255,${a * 0.8})`;
+      if (kind === 'forge') col = `rgba(255,${150 + Math.floor(Math.random() * 60)},60,${a * 0.5})`;
       cx.fillStyle = col;
       cx.beginPath();
       cx.arc(x, y, r, 0, Math.PI * 2);

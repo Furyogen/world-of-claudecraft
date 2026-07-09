@@ -7,8 +7,9 @@ is the reusable recipe for that loop: the prompt to run, the contract the agent 
 and where every piece lands in the repo.
 
 The first run of this playbook produced the Hoarfrost (Epic) and Fallen Star (Legendary)
-collections in `weapon_vfx.js`; use it again whenever a new collection drop needs effects
-(next up per the Armory Codex roadmap: Emberwrought, Rare, ember glow).
+collections in `weapon_vfx.js`; the second run (the Full Set drop) completed Hoarfrost,
+added the restrained Rare Emberwrought tier, and proved the loop on a dual-grip bow. Use
+it again whenever a new collection drop needs effects.
 
 ## The prompt
 

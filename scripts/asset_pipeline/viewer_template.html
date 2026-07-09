@@ -88,16 +88,20 @@
   .mono { font-family: ui-monospace, monospace; font-size: 11.5px; }
   /* Armory Codex rarity banner (injected by the live viewer for VFX weapons) */
   .vfxband { border: 1px solid var(--line); border-radius: 8px; padding: 10px 44px 10px 12px; margin: 0 0 14px; background: linear-gradient(160deg, rgba(255,255,255,0.03), rgba(0,0,0,0.18)); }
+  .vfxband-rare { border-color: rgba(0, 112, 221, 0.55); box-shadow: 0 0 18px rgba(255, 122, 30, 0.07) inset, 0 0 14px rgba(0, 112, 221, 0.1); }
   .vfxband-epic { border-color: rgba(163, 53, 238, 0.55); box-shadow: 0 0 18px rgba(120, 190, 255, 0.09) inset, 0 0 14px rgba(163, 53, 238, 0.1); }
   .vfxband-legendary { border-color: rgba(255, 128, 0, 0.55); box-shadow: 0 0 18px rgba(255, 170, 60, 0.1) inset, 0 0 14px rgba(255, 128, 0, 0.12); }
   .vfxband-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
   .vfxband-tier { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+  .vfxband-rare .vfxband-tier { color: #4da3ff; }
   .vfxband-epic .vfxband-tier { color: #c77dff; }
   .vfxband-legendary .vfxband-tier { color: #ffab4d; }
   .vfxband-dots i { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-left: 3px; background: var(--line); }
+  .vfxband-rare .vfxband-dots i.on { background: #0070dd; box-shadow: 0 0 6px rgba(0, 112, 221, 0.8); }
   .vfxband-epic .vfxband-dots i.on { background: #a335ee; box-shadow: 0 0 6px rgba(163, 53, 238, 0.8); }
   .vfxband-legendary .vfxband-dots i.on { background: #ff8000; box-shadow: 0 0 6px rgba(255, 128, 0, 0.8); }
   .vfxband-name { font-size: 15px; margin-top: 5px; }
+  .vfxband-rare .vfxband-name { color: #a9d0ff; }
   .vfxband-epic .vfxband-name { color: #d9b8ff; }
   .vfxband-legendary .vfxband-name { color: #ffd9a3; }
   .vfxband-hero { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--gold); border: 1px solid rgba(201, 169, 89, 0.5); border-radius: 9px; padding: 1px 7px; vertical-align: 2px; margin-left: 6px; }
