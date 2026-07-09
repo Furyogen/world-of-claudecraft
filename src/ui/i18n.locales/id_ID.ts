@@ -4470,6 +4470,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'hud.core.mobileControls': 'Kontrol seluler',
   'hud.core.mobileMap': 'Peta',
   'hud.core.mobileMenu': 'Menu',
+  'hud.core.mobileSettings': 'Pengaturan',
   'hud.core.mobileMeters': 'Meter',
   'hud.core.mobileMore': 'Lainnya',
   'hud.core.mobileMoreAria': 'Tampilkan lebih banyak menu',

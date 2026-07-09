@@ -1975,6 +1975,7 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'hud.core.mobileControls': 'Mobilní ovládání',
   'hud.core.mobileMap': 'Mapa',
   'hud.core.mobileMenu': 'Menu',
+  'hud.core.mobileSettings': 'Nastavení',
   'hud.core.mobileMeters': 'Měřiče',
   'hud.core.mobileMore': 'Více',
   'hud.core.mobileMoreAria': 'Zobrazit další menu',

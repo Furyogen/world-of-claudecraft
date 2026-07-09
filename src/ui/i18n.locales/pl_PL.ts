@@ -4415,6 +4415,7 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hud.core.mobileControls': 'Sterowanie mobilne',
   'hud.core.mobileMap': 'Mapa',
   'hud.core.mobileMenu': 'Menu',
+  'hud.core.mobileSettings': 'Ustawienia',
   'hud.core.mobileMeters': 'Liczniki',
   'hud.core.mobileMore': 'Więcej',
   'hud.core.mobileMoreAria': 'Pokaż więcej menu',

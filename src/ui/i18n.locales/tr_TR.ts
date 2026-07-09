@@ -4404,6 +4404,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'hud.core.mobileControls': 'Mobil kontroller',
   'hud.core.mobileMap': 'Harita',
   'hud.core.mobileMenu': 'Menü',
+  'hud.core.mobileSettings': 'Ayarlar',
   'hud.core.mobileMeters': 'Ölçerler',
   'hud.core.mobileMore': 'Daha Fazla',
   'hud.core.mobileMoreAria': 'Daha fazla menü göster',

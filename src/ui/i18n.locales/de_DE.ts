@@ -2021,6 +2021,7 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hud.core.mobileSocial': 'Soziales',
   'hud.core.mobileArena': 'Arena',
   'hud.core.mobileMenu': 'Menü',
+  'hud.core.mobileSettings': 'Einstellungen',
   'hud.core.mobileUse': 'Benutzen',
   'hud.core.mobileMeters': 'Anzeigen',
   'hud.core.mobileMap': 'Karte',

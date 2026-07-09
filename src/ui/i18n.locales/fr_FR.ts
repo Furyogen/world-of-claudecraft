@@ -2036,6 +2036,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hud.core.mobileSocial': 'Relations',
   'hud.core.mobileArena': 'Arène',
   'hud.core.mobileMenu': 'Menu',
+  'hud.core.mobileSettings': 'Paramètres',
   'hud.core.mobileUse': 'Utiliser',
   'hud.core.mobileMeters': 'Compteurs',
   'hud.core.mobileMap': 'Carte',

@@ -4382,6 +4382,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'hud.core.mobileControls': 'Mobilstyring',
   'hud.core.mobileMap': 'Kort',
   'hud.core.mobileMenu': 'Menu',
+  'hud.core.mobileSettings': 'Indstillinger',
   'hud.core.mobileMeters': 'Målere',
   'hud.core.mobileMore': 'Mere',
   'hud.core.mobileMoreAria': 'Vis flere menuer',

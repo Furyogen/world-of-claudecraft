@@ -4457,6 +4457,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hud.core.mobileControls': 'Mobiele besturing',
   'hud.core.mobileMap': 'Kaart',
   'hud.core.mobileMenu': 'Menu',
+  'hud.core.mobileSettings': 'Instellingen',
   'hud.core.mobileMeters': 'Meters',
   'hud.core.mobileMore': 'Meer',
   'hud.core.mobileMoreAria': "Meer menu's tonen",

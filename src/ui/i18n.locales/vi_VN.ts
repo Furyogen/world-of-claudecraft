@@ -4442,6 +4442,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hud.core.mobileControls': 'Điều khiển di động',
   'hud.core.mobileMap': 'Bản Đồ',
   'hud.core.mobileMenu': 'Menu',
+  'hud.core.mobileSettings': 'Cài Đặt',
   'hud.core.mobileMeters': 'Đồng Hồ',
   'hud.core.mobileMore': 'Thêm',
   'hud.core.mobileMoreAria': 'Hiện thêm menu',

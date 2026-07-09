@@ -2012,6 +2012,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hud.core.mobileSocial': 'Comunidad',
   'hud.core.mobileArena': 'Arena',
   'hud.core.mobileMenu': 'Menú',
+  'hud.core.mobileSettings': 'Ajustes',
   'hud.core.mobileUse': 'Usar',
   'hud.core.mobileMeters': 'Medidores',
   'hud.core.mobileMap': 'Mapa',

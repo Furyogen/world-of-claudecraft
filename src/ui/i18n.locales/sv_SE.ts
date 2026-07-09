@@ -4394,6 +4394,7 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hud.core.mobileControls': 'Mobila kontroller',
   'hud.core.mobileMap': 'Karta',
   'hud.core.mobileMenu': 'Meny',
+  'hud.core.mobileSettings': 'Inställningar',
   'hud.core.mobileMeters': 'Mätare',
   'hud.core.mobileMore': 'Mer',
   'hud.core.mobileMoreAria': 'Visa fler menyer',

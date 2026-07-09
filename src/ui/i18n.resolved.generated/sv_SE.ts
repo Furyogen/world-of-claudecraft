@@ -4149,7 +4149,7 @@ export const sv_SE: EnTranslations = {
       "mobileSocial": "Socialt",
       "mobileArena": "Arena",
       "mobileMenu": "Meny",
-      "mobileSettings": "Settings",
+      "mobileSettings": "Inställningar",
       "mobileUse": "Använd",
       "mobileMeters": "Mätare",
       "mobileMap": "Karta",

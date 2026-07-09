@@ -2001,6 +2001,7 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hud.core.mobileSocial': 'Comunidade',
   'hud.core.mobileArena': 'Arena',
   'hud.core.mobileMenu': 'Menu',
+  'hud.core.mobileSettings': 'Configurações',
   'hud.core.mobileUse': 'Usar',
   'hud.core.mobileMeters': 'Medidores',
   'hud.core.mobileMap': 'Mapa',
