@@ -7,8 +7,15 @@
 // assertion here compares exact inventories; the kit round-trip compares the
 // ABILITY list, not bags.
 
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { SPORT_KITS, VALE_CUP_BALL_TEMPLATE_ID } from '../src/sim/content/vale_cup';
+
+// The full-match bot sims here run thousands of deterministic ticks; the 5s
+// vitest default is too tight for them under CI's parallel load (they complete
+// in well under a second locally). Give the file the headroom the other heavy
+// sim suites use (climb_slope, sim, dungeons).
+vi.setConfig({ testTimeout: 30000 });
+
 import { DUNGEON_X_THRESHOLD, MOBS } from '../src/sim/data';
 import { Sim } from '../src/sim/sim';
 import {
