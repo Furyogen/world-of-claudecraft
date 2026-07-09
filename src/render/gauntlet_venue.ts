@@ -1791,12 +1791,14 @@ function buildTrialArenas(
     curb.position.set(x, 0.14, z);
     curb.receiveShadow = true;
     group.add(curb);
-    // The champion's medallion at the centre.
+    // The champion's medallion at the centre: a thin inlay whose top stays
+    // under the selection reticle's drape height (venue ground 0.12 + the
+    // ring's 0.08 lift), so targeting a fighter on it never buries the ring.
     const medallion = new THREE.Mesh(
-      new THREE.CylinderGeometry(2.2, 2.4, 0.16, 24),
+      new THREE.CylinderGeometry(2.2, 2.4, 0.06, 24),
       surfaceMat({ color: GOLD, roughness: 0.6 }),
     );
-    medallion.position.set(x, 0.13, z);
+    medallion.position.set(x, 0.15, z);
     medallion.receiveShadow = true;
     group.add(medallion);
     // Torches evenly around the rim, flanking idols, and a banner behind.

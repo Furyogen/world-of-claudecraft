@@ -333,8 +333,15 @@ describe('gauntlet court: the podium ceremony', () => {
     // teleported behind the staging plaza, onto the gold step (top of the block)
     expect(e.pos.x).toBeCloseTo(run.origin.x + gold.x, 5);
     expect(e.pos.z).toBeCloseTo(run.origin.z + P.z, 5);
-    const floor = groundHeight(e.pos.x, e.pos.z, sim.cfg.seed);
-    expect(e.pos.y).toBeCloseTo(floor + P.baseH + gold.h, 5);
+    // The podium tops are real WALKABLE ground (venue_physics): the champion
+    // stands exactly at groundHeight, and groundHeight on the gold step is the
+    // flat band floor raised by baseH + the step's height. This keeps the sim
+    // seat, the render geometry, and the online self pose (which rests on the
+    // shared groundHeight) all on the same stand-on plane.
+    const stepTop = groundHeight(e.pos.x, e.pos.z, sim.cfg.seed);
+    const bandFloor = groundHeight(run.origin.x, run.origin.z, sim.cfg.seed);
+    expect(stepTop).toBeCloseTo(bandFloor + P.baseH + gold.h, 5);
+    expect(e.pos.y).toBeCloseTo(stepTop, 5);
     expect(run.podiumSeats?.[0]?.entityId).toBe(pid);
   });
 

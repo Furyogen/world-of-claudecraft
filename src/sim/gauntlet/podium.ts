@@ -31,10 +31,10 @@ export function seatPodium(ctx: SimContext, run: GauntletRun, ranked: GauntletCo
     const step = P.steps[i];
     const wx = run.origin.x + step.x;
     const wz = run.origin.z + P.z;
-    // The step top sits baseH + step.h above the venue floor; groundPos gives
-    // the floor at this point (flat band, but resolved through the same helper
-    // every gauntlet placement uses).
-    const wy = ctx.groundPos(wx, wz).y + P.baseH + step.h;
+    // The podium tops are real WALKABLE ground (venue_physics), so groundPos
+    // here already returns this step's stand-on height: what the eye sees,
+    // what the sim seats at, and what the online self pose rests on all agree.
+    const wy = ctx.groundPos(wx, wz).y;
     const seat: GauntletPodiumSeat = { entityId: c.entityId, x: wx, y: wy, z: wz, facing: 0 };
     seats.push(seat);
     placeOnSeat(ctx, e, seat);

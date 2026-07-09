@@ -501,8 +501,11 @@ const PLAYER_PORTRAIT_KEY = 'player';
 // a NON-held tap (touch / gamepad / a mouse click on the slot) fires at.
 const SHOOT_CHARGE_MS = 850;
 const SHOOT_TAP_CHARGE = 0.6;
-// The Gauntlet podium ceremony's camera push-in length (seconds of entrance
-// dolly before the framing holds; see updateGauntletFocus).
+// The Gauntlet podium ceremony's camera push-in: a hold beat at the wide
+// framing first (long enough for the CameraFocus glide to settle and for the
+// clock calibration sample to land, so neither ever tugs a moving dolly),
+// then the push itself (see updateGauntletFocus).
+const GAUNTLET_PODIUM_DOLLY_DELAY_S = 1.2;
 const GAUNTLET_PODIUM_DOLLY_S = 5;
 // Vale Cup walk-up "theatre": the anchored kickoff/goal/save/golden/end/countdown
 // banners + crowd fx. Played only when the emitting match's pitch is within
@@ -3450,6 +3453,13 @@ export class Hud {
   // Which desk-style trial currently holds the authored camera focus pose
   // (movement trials keep the chase cam and never appear here).
   private gauntletFocusKey: keyof typeof GAUNTLET_VENUE.focus | 'podium' | null = null;
+  // Cached prefers-reduced-motion query for per-frame reads (the podium camera
+  // dolly): .matches is a cheap live getter, while matchMedia() every frame
+  // allocates a fresh MediaQueryList. Null under the Vitest plain-Node env.
+  private readonly reducedMotionQuery =
+    typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+      ? window.matchMedia('(prefers-reduced-motion: reduce)')
+      : null;
   // Wall-clock estimator for the countdown (IWorld exposes no sim clock online); see
   // gauntlet_clock.ts.
   private readonly gauntletClock = new GauntletClock();
@@ -10460,15 +10470,22 @@ export class Hud {
     if (run && run.phase === 'podium') {
       this.gauntletFocusKey = 'podium';
       const P = GAUNTLET_LAYOUT.podium;
-      // 0..1 push progress over the entrance, eased; then the pose holds.
-      // Reduced motion skips the dolly and goes straight to the held framing
-      // (the CameraFocus glide still smooths the one-off cut, as it does for
-      // the desk-trial focus poses).
-      const reduceMotion =
-        typeof window !== 'undefined' &&
-        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      // 0..1 push progress over the entrance, eased; then the pose holds. The
+      // push waits out a hold beat at the wide framing first, so the
+      // CameraFocus glide-in and the clock's calibration sample both settle
+      // BEFORE the pose starts moving (gliding onto a moving pose read as
+      // jerky). Reduced motion skips the dolly and goes straight to the held
+      // framing (the glide still smooths the one-off cut, as it does for the
+      // desk-trial focus poses). The media query is cached: matchMedia per
+      // frame allocates a fresh MediaQueryList.
+      const reduceMotion = this.reducedMotionQuery?.matches ?? false;
       const elapsed = GAUNTLET.podiumS - Math.max(0, run.endsAt - this.gauntletTimeNow());
-      const p = reduceMotion ? 1 : Math.min(1, Math.max(0, elapsed / GAUNTLET_PODIUM_DOLLY_S));
+      const p = reduceMotion
+        ? 1
+        : Math.min(
+            1,
+            Math.max(0, (elapsed - GAUNTLET_PODIUM_DOLLY_DELAY_S) / GAUNTLET_PODIUM_DOLLY_S),
+          );
       const k = p * p * (3 - 2 * p);
       this.renderer.setCameraFocus({
         pos: {

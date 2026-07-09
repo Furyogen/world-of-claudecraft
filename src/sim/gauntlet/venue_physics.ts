@@ -21,6 +21,15 @@ const DAIS_SKIRT = 0.6;
 // the two crossing ends.
 const SPAN_DECK_TOP = 0.58;
 const SPAN_RAMP = 0.9;
+// The final court's dressed floor disc: the fighters stand ON it (and the
+// selection reticle drapes over it instead of drowning under it), with a
+// short blend skirt at the rim.
+const COURT_FLOOR_TOP = 0.12;
+const COURT_SKIRT = 0.5;
+// The winners' podium base + step footprints (the renderer's box half-extents).
+const PODIUM_HALF_X = 6;
+const PODIUM_HALF_Z = 3;
+const PODIUM_STEP_HALF = 1.6;
 
 /** Venue ground height at an instance-local point (0 = the band floor). */
 export function gauntletVenueLocalGround(lx: number, lz: number): number {
@@ -39,6 +48,26 @@ export function gauntletVenueLocalGround(lx: number, lz: number): number {
   if (dx <= halfW && dz <= halfLen + SPAN_RAMP) {
     if (dz <= halfLen) return SPAN_DECK_TOP;
     return SPAN_DECK_TOP * (1 - (dz - halfLen) / SPAN_RAMP);
+  }
+  const C = GAUNTLET_VENUE.court;
+  const courtD = Math.hypot(lx - C.x, lz - C.z);
+  if (courtD < C.radius + COURT_SKIRT) {
+    if (courtD <= C.radius) return COURT_FLOOR_TOP;
+    return COURT_FLOOR_TOP * (1 - (courtD - C.radius) / COURT_SKIRT);
+  }
+  // The winners' podium: the base slab and the three steps are WALKABLE TOPS
+  // (the ceremony stands the champions on them, and every host's ground math
+  // agrees with what the eye sees, so the online self pose never sinks). The
+  // rises are sheer on purpose: the climb gate rejects walking up, so the
+  // block reads as solid from the ground with no wall collider, while an
+  // occupant can always step DOWN off it to leave.
+  const P = GAUNTLET_LAYOUT.podium;
+  if (Math.abs(lz - P.z) <= PODIUM_HALF_Z && Math.abs(lx) <= PODIUM_HALF_X) {
+    for (const s of P.steps) {
+      if (Math.abs(lx - s.x) <= PODIUM_STEP_HALF && Math.abs(lz - P.z) <= PODIUM_STEP_HALF)
+        return P.baseH + s.h;
+    }
+    return P.baseH;
   }
   return 0;
 }
@@ -97,9 +126,11 @@ export function gauntletVenueColliders(): Collider[] {
   out.push(circle(-5.2, -2.2, 0.3));
   out.push(circle(5.2, -2.2, 0.3));
 
-  // The podium block (base + steps, one solid), its poles and braziers.
+  // The podium's poles and braziers. The block itself is walkable tops in
+  // gauntletVenueLocalGround (sheer rises the climb gate rejects), never a
+  // wall collider: a collider would fight the ceremony's seated occupants
+  // every tick and sink the online self pose below the step it ejects from.
   const pz = GAUNTLET_LAYOUT.podium.z;
-  out.push(obb(0, pz, 6, 3));
   out.push(circle(-5.4, pz - 3.4, 0.2));
   out.push(circle(5.4, pz - 3.4, 0.2));
   out.push(circle(-5.4, pz + 2.6, 0.75));
