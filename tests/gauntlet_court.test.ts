@@ -343,6 +343,12 @@ describe('gauntlet court: the podium ceremony', () => {
     expect(stepTop).toBeCloseTo(bandFloor + P.baseH + gold.h, 5);
     expect(e.pos.y).toBeCloseTo(stepTop, 5);
     expect(run.podiumSeats?.[0]?.entityId).toBe(pid);
+    // Silver and bronze went to FALLEN NPCs (despawned at their knockout): the
+    // ceremony respawns them on their steps, so the stand is never half-empty.
+    expect(run.podiumSeats?.length).toBe(3);
+    for (const s of run.podiumSeats ?? []) {
+      expect(sim.entities.has(s.entityId)).toBe(true);
+    }
   });
 
   it('holds the champion on the step across the ceremony, then sends them home', () => {

@@ -17,6 +17,18 @@ export interface CameraFocusPose {
   lookAt: { x: number; y: number; z: number };
 }
 
+/** An authored camera move: hold at `from` for delayS, then ease to `to` over
+ * durationS and hold there. Animated INSIDE apply() on the renderer's frame
+ * clock, so it stays smooth no matter how rarely the HUD glue that armed it
+ * repaints (the gauntlet HUD section runs on the ~4Hz mediumHud band; a pose
+ * retargeted from there snaps between points and reads as low fps). */
+export interface CameraFocusDolly {
+  from: CameraFocusPose;
+  to: CameraFocusPose;
+  delayS: number;
+  durationS: number;
+}
+
 // Full glide duration, seconds (the blend eases with smoothstep on top).
 const GLIDE_S = 0.8;
 
@@ -25,10 +37,27 @@ const smoothstep = (t: number): number => t * t * (3 - 2 * t);
 export class CameraFocus {
   private pose: CameraFocusPose | null = null;
   private blend = 0;
+  private dolly: CameraFocusDolly | null = null;
+  private dollyT = 0;
+  // Scratch pose reused every dolly frame (no per-frame allocation).
+  private readonly dollyPose: CameraFocusPose = {
+    pos: { x: 0, y: 0, z: 0 },
+    lookAt: { x: 0, y: 0, z: 0 },
+  };
 
-  /** Set (or retarget) the focus pose; null releases back to the chase cam. */
+  /** Set (or retarget) the focus pose; null releases back to the chase cam.
+   * Clears any playing dolly. */
   set(pose: CameraFocusPose | null): void {
     this.pose = pose;
+    this.dolly = null;
+  }
+
+  /** Arm a dolly move (armed ONCE by the glue; plays out per frame in apply).
+   * Null clears it and releases the camera. */
+  setDolly(dolly: CameraFocusDolly | null): void {
+    this.dolly = dolly;
+    this.dollyT = 0;
+    this.pose = dolly ? dolly.from : null;
   }
 
   /** True while the focus influences the camera (holding or still blending out). */
@@ -41,6 +70,22 @@ export class CameraFocus {
    * frame after the chase path has produced its position + lookAt.
    */
   apply(position: THREE.Vector3, lookAt: THREE.Vector3, dt: number): void {
+    // A playing dolly recomputes the live pose on the frame clock: hold at
+    // `from` through the delay, smoothstep to `to`, then hold there.
+    if (this.dolly) {
+      this.dollyT += dt;
+      const d = this.dolly;
+      const raw = d.durationS > 0 ? (this.dollyT - d.delayS) / d.durationS : 1;
+      const k = smoothstep(raw < 0 ? 0 : raw > 1 ? 1 : raw);
+      const sp = this.dollyPose;
+      sp.pos.x = d.from.pos.x + (d.to.pos.x - d.from.pos.x) * k;
+      sp.pos.y = d.from.pos.y + (d.to.pos.y - d.from.pos.y) * k;
+      sp.pos.z = d.from.pos.z + (d.to.pos.z - d.from.pos.z) * k;
+      sp.lookAt.x = d.from.lookAt.x + (d.to.lookAt.x - d.from.lookAt.x) * k;
+      sp.lookAt.y = d.from.lookAt.y + (d.to.lookAt.y - d.from.lookAt.y) * k;
+      sp.lookAt.z = d.from.lookAt.z + (d.to.lookAt.z - d.from.lookAt.z) * k;
+      this.pose = sp;
+    }
     const dir = this.pose ? 1 : -1;
     this.blend = Math.min(1, Math.max(0, this.blend + (dir * dt) / GLIDE_S));
     if (this.blend <= 0) return;

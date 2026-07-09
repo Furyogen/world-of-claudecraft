@@ -10468,33 +10468,32 @@ export class Hud {
     // out, practice runs) and to free spectators watching it.
     const run = this.sim.gauntletRun;
     if (run && run.phase === 'podium') {
-      this.gauntletFocusKey = 'podium';
-      const P = GAUNTLET_LAYOUT.podium;
-      // 0..1 push progress over the entrance, eased; then the pose holds. The
-      // push waits out a hold beat at the wide framing first, so the
-      // CameraFocus glide-in and the clock's calibration sample both settle
-      // BEFORE the pose starts moving (gliding onto a moving pose read as
-      // jerky). Reduced motion skips the dolly and goes straight to the held
-      // framing (the glide still smooths the one-off cut, as it does for the
-      // desk-trial focus poses). The media query is cached: matchMedia per
-      // frame allocates a fresh MediaQueryList.
-      const reduceMotion = this.reducedMotionQuery?.matches ?? false;
-      const elapsed = GAUNTLET.podiumS - Math.max(0, run.endsAt - this.gauntletTimeNow());
-      const p = reduceMotion
-        ? 1
-        : Math.min(
-            1,
-            Math.max(0, (elapsed - GAUNTLET_PODIUM_DOLLY_DELAY_S) / GAUNTLET_PODIUM_DOLLY_S),
-          );
-      const k = p * p * (3 - 2 * p);
-      this.renderer.setCameraFocus({
-        pos: {
-          x: run.originX,
-          y: 8 + (3.6 - 8) * k,
-          z: run.originZ + P.z + 16 + (10.5 - 16) * k,
-        },
-        lookAt: { x: run.originX, y: 2.4 + (2.0 - 2.4) * k, z: run.originZ + P.z },
-      });
+      // Armed ONCE on entry: this HUD section repaints on the ~4Hz mediumHud
+      // band, so a pose retargeted from here snaps between points (reads as
+      // low fps). The dolly itself plays on the RENDER frame clock inside
+      // CameraFocus (hold a wide beat, then push in). Reduced motion skips
+      // the move and holds the final framing (the CameraFocus glide still
+      // smooths the one-off cut, as it does for the desk-trial poses).
+      if (this.gauntletFocusKey !== 'podium') {
+        this.gauntletFocusKey = 'podium';
+        const P = GAUNTLET_LAYOUT.podium;
+        const from = {
+          pos: { x: run.originX, y: 8, z: run.originZ + P.z + 16 },
+          lookAt: { x: run.originX, y: 2.4, z: run.originZ + P.z },
+        };
+        const to = {
+          pos: { x: run.originX, y: 3.6, z: run.originZ + P.z + 10.5 },
+          lookAt: { x: run.originX, y: 2.0, z: run.originZ + P.z },
+        };
+        if (this.reducedMotionQuery?.matches) this.renderer.setCameraFocus(to);
+        else
+          this.renderer.setCameraDolly({
+            from,
+            to,
+            delayS: GAUNTLET_PODIUM_DOLLY_DELAY_S,
+            durationS: GAUNTLET_PODIUM_DOLLY_S,
+          });
+      }
       return;
     }
     const live = this.gauntletContestantRun();

@@ -10,24 +10,30 @@
 // stands exactly on the step you see. Pure placement: no rng, so an active
 // ceremony never perturbs the world's global draw order.
 
-import { GAUNTLET_LAYOUT } from '../content/gauntlet';
+import {
+  GAUNTLET_CONTESTANT_NPC_ID,
+  GAUNTLET_LAYOUT,
+  gauntletContestantNpcId,
+} from '../content/gauntlet';
+import { NPCS } from '../data';
+import { createNpc } from '../entity';
 import type { SimContext } from '../sim_context';
 import type { Entity } from '../types';
 import type { GauntletContestant, GauntletPodiumSeat, GauntletRun } from './state';
 
 // Seat the top finishers on the podium steps. `ranked` is the podium order
-// (players first, then surviving NPCs, then the fallen); only the first three
-// whose entity still exists take a step (a knocked-out NPC is despawned and
-// simply leaves its step empty). Teleports each occupant onto its step now and
-// records the poses on the run for holdPodiumOccupants to re-assert.
+// (players first, then surviving NPCs, then the fallen). A fallen NPC in the
+// top three was DESPAWNED at its knockout, so the ceremony respawns its entity
+// (same rolled kit, name, and skin) on the step: silver and bronze must never
+// stand empty. Teleports each occupant onto its step now and records the poses
+// on the run for holdPodiumOccupants to re-assert; disposeRun drops a
+// respawned occupant with the rest of the field (c.entityId is repointed).
 export function seatPodium(ctx: SimContext, run: GauntletRun, ranked: GauntletContestant[]): void {
   const P = GAUNTLET_LAYOUT.podium;
   const seats: GauntletPodiumSeat[] = [];
   for (let i = 0; i < P.steps.length; i++) {
     const c = ranked[i];
     if (!c) break;
-    const e = ctx.entities.get(c.entityId);
-    if (!e) continue;
     const step = P.steps[i];
     const wx = run.origin.x + step.x;
     const wz = run.origin.z + P.z;
@@ -35,6 +41,16 @@ export function seatPodium(ctx: SimContext, run: GauntletRun, ranked: GauntletCo
     // here already returns this step's stand-on height: what the eye sees,
     // what the sim seats at, and what the online self pose rests on all agree.
     const wy = ctx.groundPos(wx, wz).y;
+    let e = ctx.entities.get(c.entityId);
+    if (!e && !c.player) {
+      const def = NPCS[gauntletContestantNpcId(c.cls)] ?? NPCS[GAUNTLET_CONTESTANT_NPC_ID];
+      e = createNpc(ctx.nextId++, def, { x: wx, y: wy, z: wz });
+      e.name = c.name;
+      e.skin = c.skin;
+      c.entityId = e.id;
+      ctx.addEntity(e);
+    }
+    if (!e || e.dead) continue;
     const seat: GauntletPodiumSeat = { entityId: c.entityId, x: wx, y: wy, z: wz, facing: 0 };
     seats.push(seat);
     placeOnSeat(ctx, e, seat);

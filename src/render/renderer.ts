@@ -62,7 +62,7 @@ import { AOE_RING_LIFETIME, aoeRingAnim } from './aoe_ring';
 import type { SpatialAudioSink, Surface } from './audio_sink';
 import { type BirdsView, buildBirds } from './birds';
 import { type CameraOcclusionState, stepCameraOcclusion } from './camera_collision';
-import { CameraFocus, type CameraFocusPose } from './camera_focus';
+import { CameraFocus, type CameraFocusDolly, type CameraFocusPose } from './camera_focus';
 import { characterSoulRendActive } from './character_effects';
 import { type AnimState, type CharacterVisual, createCharacterVisual } from './characters';
 import { mechAssetsReady, preloadMechAssets } from './characters/assets';
@@ -833,6 +833,12 @@ export class Renderer {
   /** Glide the camera to an authored framing; null releases the chase cam. */
   setCameraFocus(pose: CameraFocusPose | null): void {
     this.cameraFocus.set(pose);
+  }
+  /** Arm an authored camera dolly (hold, then push). Armed once by the HUD
+   * glue; the move itself plays on the RENDER frame clock inside CameraFocus,
+   * so it stays smooth regardless of the arming code's repaint cadence. */
+  setCameraDolly(dolly: CameraFocusDolly | null): void {
+    this.cameraFocus.setDolly(dolly);
   }
   // Map-editor 3D mode: when set, the camera uses this free-cam pose instead of
   // chasing the player (updateCamera honors it and returns early). Editor-only;

@@ -236,9 +236,11 @@ export class NameplatePainter {
         // Gauntlet contestants carry rolled proper-noun names (like player
         // names, never translated); every other NPC shows its localized
         // template name.
+        const isContestant =
+          e.kind === 'npc' && e.templateId.startsWith(GAUNTLET_CONTESTANT_NPC_ID);
         const npcName =
           e.kind === 'npc'
-            ? e.templateId.startsWith(GAUNTLET_CONTESTANT_NPC_ID)
+            ? isContestant
               ? e.name
               : npcDisplayName(e.templateId)
             : tEntity({ kind: 'mob', id: e.templateId, field: 'name' });
@@ -272,18 +274,24 @@ export class NameplatePainter {
           }
         }
         const markerClass = cls ? `np-marker ${cls}` : 'np-marker';
+        // Gauntlet contestants show an overhead hp bar for the whole run: the
+        // entity hp mirrors event vitality (and real hp in the Final Court),
+        // so the field's standing reads at a glance, exactly like a player's
+        // plate. Every other friendly NPC stays name-only.
+        const hpDisplay = isContestant && !e.dead ? '' : 'none';
         this.setNameplateStatic(
           v,
-          `npc|${npcName}|${npcTitle}|${marker}|${markerClass}`,
+          `npc|${npcName}|${npcTitle}|${marker}|${markerClass}|${hpDisplay}`,
           npcName,
           FRIENDLY,
-          'none',
+          hpDisplay,
           marker,
           markerClass,
           '1',
           '',
           npcTitle,
         );
+        if (isContestant) this.setNameplateHp(v, e);
       } else {
         const diff = e.level - p.level;
         const template = MOBS[e.templateId];
