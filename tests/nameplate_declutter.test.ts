@@ -1,5 +1,53 @@
 import { describe, expect, it } from 'vitest';
-import { declutterNameplates, type NameplateAnchor } from '../src/render/nameplate_declutter';
+import {
+  declutterNameplates,
+  declutterNameplatesInPlace,
+  type NameplateAnchor,
+} from '../src/render/nameplate_declutter';
+
+/**
+ * The original O(N^2) rescan, kept verbatim as the oracle: the spatial-hash hot
+ * path must agree with it anchor-for-anchor on every input, or nameplates would
+ * silently stack differently in a crowd than they do in the unit tests.
+ */
+function declutterReference(anchors: NameplateAnchor[]): NameplateAnchor[] {
+  const OVERLAP_X = 80;
+  const OVERLAP_Y = 18;
+  const STACK = 20;
+  const out = anchors.map((a) => ({ ...a }));
+  const byId = new Map(out.map((a) => [a.id, a]));
+  const visited = new Set<number>();
+  const ordered = [...out].sort((a, b) => a.id - b.id);
+  for (const anchor of ordered) {
+    if (visited.has(anchor.id)) continue;
+    const cluster = ordered.filter(
+      (other) =>
+        !visited.has(other.id) &&
+        Math.abs(other.sx - anchor.sx) <= OVERLAP_X &&
+        Math.abs(other.sy - anchor.sy) <= OVERLAP_Y,
+    );
+    if (cluster.length < 2) {
+      visited.add(anchor.id);
+      continue;
+    }
+    const baseSy = cluster.reduce((sum, a) => sum + a.sy, 0) / cluster.length;
+    cluster.forEach((member, i) => {
+      const target = byId.get(member.id);
+      if (target) target.sy = baseSy + (i - (cluster.length - 1) / 2) * STACK;
+      visited.add(member.id);
+    });
+  }
+  return out;
+}
+
+/** Deterministic LCG so a failure is reproducible. */
+function makeRng(seed: number): () => number {
+  let s = seed >>> 0;
+  return () => {
+    s = (s * 1664525 + 1013904223) >>> 0;
+    return s / 0x100000000;
+  };
+}
 
 describe('nameplate declutter', () => {
   it('leaves well-separated anchors untouched', () => {
@@ -74,5 +122,87 @@ describe('nameplate declutter', () => {
     const originalSy = anchors.map((n) => n.sy);
     declutterNameplates(anchors);
     expect(anchors.map((n) => n.sy)).toEqual(originalSy);
+  });
+});
+
+describe('nameplate declutter: spatial-hash hot path', () => {
+  it('mutates in place and hands back the same array', () => {
+    const anchors: NameplateAnchor[] = [
+      { id: 1, sx: 200, sy: 150 },
+      { id: 2, sx: 202, sy: 151 },
+    ];
+    const first = anchors[0];
+    const out = declutterNameplatesInPlace(anchors);
+    expect(out).toBe(anchors);
+    expect(out[0]).toBe(first); // element objects reused, not reallocated
+    expect(Math.abs(out[0].sy - out[1].sy)).toBeGreaterThanOrEqual(18);
+  });
+
+  it('matches the O(N^2) reference on dense random crowds', () => {
+    const rng = makeRng(0xc0ffee);
+    for (let trial = 0; trial < 60; trial++) {
+      const n = 2 + Math.floor(rng() * 60);
+      const anchors: NameplateAnchor[] = [];
+      for (let i = 0; i < n; i++)
+        anchors.push({
+          // a tight screen box, so clusters genuinely form and overlap
+          id: Math.floor(rng() * 100000),
+          sx: Math.round(rng() * 400),
+          sy: Math.round(rng() * 90),
+        });
+      // ids must be unique (entity ids are)
+      const seen = new Set<number>();
+      const uniq = anchors.filter((a) => !seen.has(a.id) && (seen.add(a.id), true));
+
+      const expected = declutterReference(uniq);
+      const actual = declutterNameplatesInPlace(uniq.map((a) => ({ ...a })));
+      const byId = (arr: NameplateAnchor[]) => new Map(arr.map((a) => [a.id, a]));
+      const e = byId(expected);
+      const a = byId(actual);
+      expect(a.size).toBe(e.size);
+      for (const [id, ea] of e) {
+        const aa = a.get(id);
+        expect(aa, `trial ${trial}, id ${id}`).toBeDefined();
+        expect(aa?.sx, `trial ${trial}, id ${id} sx`).toBeCloseTo(ea.sx, 9);
+        expect(aa?.sy, `trial ${trial}, id ${id} sy`).toBeCloseTo(ea.sy, 9);
+      }
+    }
+  });
+
+  it('matches the reference on sparse crowds where nothing collides', () => {
+    const rng = makeRng(7);
+    const anchors: NameplateAnchor[] = [];
+    for (let i = 0; i < 40; i++)
+      anchors.push({ id: i + 1, sx: i * 400 + rng(), sy: i * 100 + rng() });
+    const expected = declutterReference(anchors);
+    const actual = declutterNameplatesInPlace(anchors.map((a) => ({ ...a })));
+    for (let i = 0; i < anchors.length; i++) expect(actual[i].sy).toBeCloseTo(expected[i].sy, 9);
+  });
+
+  it('handles anchors that project to negative screen coords', () => {
+    const anchors: NameplateAnchor[] = [
+      { id: 1, sx: -30, sy: -12 },
+      { id: 2, sx: -28, sy: -11 },
+    ];
+    const expected = declutterReference(anchors);
+    const actual = declutterNameplatesInPlace(anchors.map((a) => ({ ...a })));
+    expect(actual[0].sy).toBeCloseTo(expected[0].sy, 9);
+    expect(actual[1].sy).toBeCloseTo(expected[1].sy, 9);
+    expect(Math.abs(actual[0].sy - actual[1].sy)).toBeGreaterThanOrEqual(18);
+  });
+
+  it('is reusable across calls of shrinking size (stale scratch never leaks)', () => {
+    const big: NameplateAnchor[] = [];
+    for (let i = 0; i < 50; i++) big.push({ id: i + 1, sx: 100, sy: 100 });
+    declutterNameplatesInPlace(big);
+
+    const small: NameplateAnchor[] = [
+      { id: 1, sx: 500, sy: 500 },
+      { id: 2, sx: 900, sy: 500 },
+    ];
+    const expected = declutterReference(small);
+    const actual = declutterNameplatesInPlace(small.map((a) => ({ ...a })));
+    expect(actual[0].sy).toBeCloseTo(expected[0].sy, 9);
+    expect(actual[1].sy).toBeCloseTo(expected[1].sy, 9);
   });
 });
