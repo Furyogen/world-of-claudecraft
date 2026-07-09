@@ -1037,6 +1037,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hud.core.mobileSocial': 'ソーシャル',
   'hud.core.mobileArena': 'アリーナ',
   'hud.core.mobileMenu': 'メニュー',
+  'hud.core.mobileSettings': '設定',
   'hud.core.mobileUse': '使用',
   'hud.core.mobileMeters': 'メーター',
   'hud.core.mobileMap': 'マップ',

@@ -308,12 +308,12 @@
     transform: scale(calc(var(--btn-scale, 1) * var(--mobile-chrome-scale, 1)));
     transform-origin: left top;
     display: grid;
-    /* Chat + Social + More: the low-priority trio sits alone at TOP-LEFT,
-       far from both thumb clusters (movement cluster bottom-left, combat ring
-       bottom-right) and off the top-centre band (pet bar, banners). Its 54px
-       row clears the target frame seat below it (top + 72px), so a live
-       target never renders under the buttons. */
-    grid-template-columns: repeat(3, 58px);
+    /* Chat, Social, Quests, Settings, More: the low-priority row sits alone at
+       TOP-LEFT, far from both thumb clusters (movement cluster bottom-left,
+       combat ring bottom-right) and off the top-centre band (pet bar, banners).
+       Its single 54px row clears the target frame seat below it (top + 72px),
+       so a live target never renders under the buttons. */
+    grid-template-columns: repeat(5, 58px);
     gap: 12px;
     pointer-events: auto;
     align-items: start;
@@ -879,13 +879,13 @@
      ring's). Collapsed by default and session-only: the row shows only under
      body.mobile-consumables-open, and empty slots collapse away so the open
      row is exactly as wide as what the player carries. The left anchor adds
-     the trio's SCALED width (3 columns + 2 gaps) to the trio's own safe-area
-     anchor so a grown --btn-scale never slides the trio under the chip. */
+     the bar's SCALED width (5 columns + 4 gaps) to the bar's own safe-area
+     anchor so a grown --btn-scale never slides the bar under the chip. */
   body.mobile-touch #mobile-consumables {
     position: absolute;
     left: calc(
       max(12px, env(safe-area-inset-left)) +
-      198px *
+      338px *
       var(--btn-scale, 1) *
       var(--mobile-chrome-scale, 1) +
       10px
@@ -2980,24 +2980,6 @@
     min-height: 40px;
     box-sizing: border-box;
   }
-  /* the quest side list has no room beside the small mobile map: flow it
-     under the canvas inside the window instead, and raise its track toggle
-     to the 40x40 touch floor */
-  body.mobile-touch #map-quests {
-    position: static;
-    width: auto;
-    max-height: 26vh;
-    margin-top: 8px;
-  }
-  body.mobile-touch #map-quests-toggle {
-    min-height: 40px;
-    box-sizing: border-box;
-  }
-  body.mobile-touch .mapq-track {
-    min-width: 40px;
-    min-height: 40px;
-    box-sizing: border-box;
-  }
   body.mobile-touch #controls-hint {
     max-width: min(360px, 92vw);
     margin-top: 18px;
@@ -3212,7 +3194,7 @@
          web in-game is landscape-locked regardless, so the trio never actually renders
          portrait in play. */
       transform: scale(var(--btn-scale, 1));
-      grid-template-columns: repeat(3, 42px);
+      grid-template-columns: repeat(5, 42px);
       gap: 6px;
     }
     body.mobile-touch .mobile-btn {
@@ -3220,11 +3202,11 @@
       height: 44px;
       font-size: 16px;
     }
-    /* Portrait trio is 3x42px + 2x6px gaps = 138px wide (native app: web
+    /* Portrait bar is 5x42px + 4x6px gaps = 234px wide (native app: web
        gameplay is landscape-locked); shrink the chip to the 44px button
-       height and re-dock it past the narrower trio. */
+       height and re-dock it past the narrower bar. */
     body.mobile-touch #mobile-consumables {
-      left: calc(max(12px, env(safe-area-inset-left)) + 138px * var(--btn-scale, 1) + 8px);
+      left: calc(max(12px, env(safe-area-inset-left)) + 234px * var(--btn-scale, 1) + 8px);
     }
     body.mobile-touch #mobile-consumables-toggle {
       height: 44px;
@@ -3370,15 +3352,15 @@
     }
     body.mobile-touch #mobile-combat-controls {
       top: max(6px, env(safe-area-inset-top));
-      grid-template-columns: repeat(3, 54px);
+      grid-template-columns: repeat(5, 54px);
       gap: 10px;
     }
-    /* Landscape trio is 3x54px + 2x10px gaps = 182px wide; keep the chip docked
+    /* Landscape bar is 5x54px + 4x10px gaps = 310px wide; keep the chip docked
        just past it on the same compressed top line. */
     body.mobile-touch #mobile-consumables {
       left: calc(
         max(12px, env(safe-area-inset-left)) +
-        182px *
+        310px *
         var(--btn-scale, 1) *
         var(--mobile-chrome-scale, 1) +
         10px

@@ -4149,6 +4149,7 @@ export const ja_JP: EnTranslations = {
       "mobileSocial": "ソーシャル",
       "mobileArena": "アリーナ",
       "mobileMenu": "メニュー",
+      "mobileSettings": "設定",
       "mobileUse": "使用",
       "mobileMeters": "メーター",
       "mobileMap": "マップ",

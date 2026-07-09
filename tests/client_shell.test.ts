@@ -1623,7 +1623,7 @@ describe('client HTML shell', () => {
     expect(marketWindowTs).not.toContain('<select data-market-filter=');
   });
 
-  it('keeps Chat, Social and More alone at top-left, away from both thumb clusters', () => {
+  it('keeps the mobile bar (Chat, Social, Quests, Settings, More) alone at top-left, away from both thumb clusters', () => {
     for (const [name, entry] of [
       ['index.html', html],
       ['play.html', playHtml],
@@ -1635,37 +1635,51 @@ describe('client HTML shell', () => {
       const primaryButtons = [...combatControls.matchAll(/<button class="mobile-btn"/g)];
       const chat = combatControls.indexOf('id="mobile-chat"');
       const social = combatControls.indexOf('id="mobile-social"');
+      const quest = combatControls.indexOf('id="mobile-quest"');
+      const settings = combatControls.indexOf('id="mobile-menu"');
       const more = combatControls.indexOf('id="mobile-more"');
-      // Chat/Social/More are deliberately the ONLY top-left buttons:
-      // everything a thumb needs mid-fight lives in the two bottom corner
-      // clusters, so the trio is hard to fat-finger but still one reach away.
-      expect(primaryButtons, name).toHaveLength(3);
+      // The mobile bar is deliberately the ONLY top-left cluster: everything a
+      // thumb needs mid-fight lives in the two bottom corner clusters, so the row
+      // is hard to fat-finger but still one reach away. Order: Chat, Social,
+      // Quests, Settings, More.
+      expect(primaryButtons, name).toHaveLength(5);
       expect(chat, name).toBeGreaterThanOrEqual(0);
       expect(social, name).toBeGreaterThan(chat);
-      expect(more, name).toBeGreaterThan(social);
-      // Social (Friends & Guild) was promoted OUT of the More tray to the top
-      // cluster; it must not reappear in the tray grid.
+      expect(quest, name).toBeGreaterThan(social);
+      expect(settings, name).toBeGreaterThan(quest);
+      expect(more, name).toBeGreaterThan(settings);
+      // Social (Friends & Guild), Quests and Settings live in the bar, promoted
+      // OUT of the More tray; none may reappear in the tray grid.
       const tray = entry.slice(
         entry.indexOf('<div id="mobile-extra-grid">'),
         entry.indexOf('<div id="mobile-window-backdrop"'),
       );
       expect(tray, name).not.toContain('id="mobile-social"');
+      expect(tray, name).not.toContain('id="mobile-quest"');
+      expect(tray, name).not.toContain('id="mobile-menu"');
       // No bottom-centre Target button: the one targeting helper on touch is
       // the Target swap button inside the action ring (#mobile-target-cycle),
       // never a third centre button (the old #mobile-target design).
       expect(entry, name).not.toContain('id="mobile-target"');
       expect(entry, name).not.toContain('data-i18n="hud.core.mobileTarget"');
     }
-    expect(hudMobileCss).toContain('grid-template-columns: repeat(3, 58px);');
-    expect(hudMobileCss).toContain('grid-template-columns: repeat(3, 54px);');
-    expect(hudMobileCss).toContain('grid-template-columns: repeat(3, 42px);');
-    // Top-LEFT anchor: the trio's 54px row clears the target-frame seat below
-    // it (top + 72px) and leaves the top-centre band to the pet bar.
+    expect(hudMobileCss).toContain('grid-template-columns: repeat(5, 58px);');
+    expect(hudMobileCss).toContain('grid-template-columns: repeat(5, 54px);');
+    expect(hudMobileCss).toContain('grid-template-columns: repeat(5, 42px);');
+    // The #mobile-consumables chip docks just PAST the bar, so its left offset must
+    // track the bar's 5-column scaled width in each orientation (base 5x58+4x12=338,
+    // portrait 5x42+4x6=234, landscape 5x54+4x10=310). Pinned so a future bar-width
+    // change updates both and the chip never slides back under the buttons.
+    expect(hudMobileCss).toContain('338px *'); // base consumables dock offset
+    expect(hudMobileCss).toContain('+ 234px * var(--btn-scale, 1) + 8px)'); // portrait dock
+    expect(hudMobileCss).toContain('310px *'); // landscape consumables dock offset
+    // Top-LEFT anchor: the bar's single 54px row clears the target-frame seat
+    // below it (top + 72px) and leaves the top-centre band to the pet bar.
     expect(hudMobileCss).toContain(
       'position: absolute;\n    left: max(12px, env(safe-area-inset-left));\n    top: max(8px, env(safe-area-inset-top));',
     );
     expect(hudMobileCss).toContain(
-      'top: max(6px, env(safe-area-inset-top));\n      grid-template-columns: repeat(3, 54px);',
+      'top: max(6px, env(safe-area-inset-top));\n      grid-template-columns: repeat(5, 54px);',
     );
     expect(hudMobileCss).toContain(
       'pointer-events: auto;\n    align-items: start;\n    z-index: 30;',

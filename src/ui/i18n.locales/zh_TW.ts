@@ -981,6 +981,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hud.core.mobileSocial': '社交',
   'hud.core.mobileArena': '競技場',
   'hud.core.mobileMenu': '選單',
+  'hud.core.mobileSettings': '設定',
   'hud.core.mobileUse': '使用',
   'hud.core.mobileMeters': '統計',
   'hud.core.mobileMap': '地圖',

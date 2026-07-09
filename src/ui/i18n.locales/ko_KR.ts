@@ -1028,6 +1028,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hud.core.mobileSocial': '소셜',
   'hud.core.mobileArena': '투기장',
   'hud.core.mobileMenu': '메뉴',
+  'hud.core.mobileSettings': '설정',
   'hud.core.mobileUse': '사용',
   'hud.core.mobileMeters': '미터',
   'hud.core.mobileMap': '지도',

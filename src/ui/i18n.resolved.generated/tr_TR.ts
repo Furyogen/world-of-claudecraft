@@ -4149,6 +4149,7 @@ export const tr_TR: EnTranslations = {
       "mobileSocial": "Sosyal",
       "mobileArena": "Arena",
       "mobileMenu": "Menü",
+      "mobileSettings": "Settings",
       "mobileUse": "Kullan",
       "mobileMeters": "Ölçerler",
       "mobileMap": "Harita",

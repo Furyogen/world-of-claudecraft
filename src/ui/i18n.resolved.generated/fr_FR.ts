@@ -4149,6 +4149,7 @@ export const fr_FR: EnTranslations = {
       "mobileSocial": "Relations",
       "mobileArena": "Arène",
       "mobileMenu": "Menu",
+      "mobileSettings": "Settings",
       "mobileUse": "Utiliser",
       "mobileMeters": "Compteurs",
       "mobileMap": "Carte",

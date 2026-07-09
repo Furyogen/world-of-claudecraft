@@ -274,11 +274,6 @@ import { lowHealthVignette } from './low_health';
 import { lowResourceView } from './low_resource';
 import { mailIndicatorView } from './mailbox_view';
 import { MailboxWindow } from './mailbox_window';
-import {
-  mapQuestListView,
-  parseUntrackedQuests,
-  serializeUntrackedQuests,
-} from './map_quest_list_view';
 import { type MapRegion, mapCanvasHeight, paintTerrainRows } from './map_terrain';
 import { MapWindowPainter } from './map_window_painter';
 import {
@@ -1229,14 +1224,6 @@ export class Hud {
   // The quest-giver glyphs of the last overworld map paint, for the hover
   // tooltip's hit-test (quest names + level requirements). Empty in delve mode.
   private mapNpcMarkers: MapNpcMarker[] = [];
-  // The map's quest side list: quests the player untracked (their blue areas
-  // are hidden), lazily loaded per character; and the render-skip signature so
-  // the 4Hz map cadence rebuilds the list DOM only when it actually changed.
-  private mapUntrackedQuests: Set<string> | null = null;
-  private mapQuestListSig = '';
-  // Whether the map's quest dropdown is unfolded (session-only; reopening the
-  // map keeps the last choice, a fresh session starts folded to a clean map).
-  private mapQuestsOpen = false;
   private windowDrag: {
     el: HTMLElement;
     pointerId: number;
@@ -1580,6 +1567,7 @@ export class Hud {
     $('#mm-map').addEventListener('click', () => this.toggleMap());
     $('#map-close').addEventListener('click', () => {
       $('#map-window').style.display = 'none';
+      this.hideTooltip(); // a touch marker tip can outlive the window otherwise
     });
     const mapCanvas = $('#map-canvas') as unknown as HTMLCanvasElement;
     mapCanvas.addEventListener(
@@ -1622,83 +1610,71 @@ export class Hud {
     };
     mapCanvas.addEventListener('pointerup', endDrag);
     mapCanvas.addEventListener('pointercancel', endDrag);
-    // Hovering the map shows context tooltips (mouse only: touch pans the map,
-    // no hover). Priority: a quest-giver glyph ('!'/'?', quest names + level
-    // requirements) sits ON TOP of the blobs, so it wins; otherwise a
-    // quest-objective area shows its objectives with live tracker progress.
-    // Both hit-tests run against the markers of the last paint, scaled from
-    // CSS px to the canvas backing space the model projects into.
+    // The map reveals a marker's quest text as a tooltip: on desktop it follows
+    // the mouse (hover); on touch there is no hover, so a TAP on a marker shows it
+    // (a press that moves beyond the tolerance is a pan, not a tap). Priority: a
+    // quest-giver glyph ('!'/'?', quest names + level requirements) sits ON TOP of
+    // the blobs, so it wins; otherwise a quest-objective area shows its objectives
+    // with live tracker progress. Both hit-tests run against the markers of the
+    // last paint, scaled from CSS px to the canvas backing space the model projects
+    // into.
+    const TAP_MOVE_TOLERANCE_PX = 10;
     let mapAreaTipShown = false;
+    let mapTapStart: { x: number; y: number } | null = null;
     const hideMapAreaTip = (): void => {
       if (!mapAreaTipShown) return;
       mapAreaTipShown = false;
       this.hideTooltip();
     };
-    mapCanvas.addEventListener('pointermove', (ev) => {
-      if (
-        ev.pointerType !== 'mouse' ||
-        this.mapDrag ||
-        (this.mapQuestAreas.length === 0 && this.mapNpcMarkers.length === 0)
-      ) {
-        hideMapAreaTip();
-        return;
-      }
+    // Paint the shared #tooltip for the marker under a client-space point and
+    // report whether one was shown (the attachTooltip idiom: map into author
+    // space, then clamp the tooltip box against the viewport).
+    const showMapTipAt = (clientX: number, clientY: number): boolean => {
+      if (this.mapQuestAreas.length === 0 && this.mapNpcMarkers.length === 0) return false;
       const rect = mapCanvas.getBoundingClientRect();
-      const cx = ((ev.clientX - rect.left) * mapCanvas.width) / rect.width;
-      const cy = ((ev.clientY - rect.top) * mapCanvas.height) / rect.height;
+      const cx = ((clientX - rect.left) * mapCanvas.width) / rect.width;
+      const cy = ((clientY - rect.top) * mapCanvas.height) / rect.height;
       const glyph = npcMarkerAt(this.mapNpcMarkers, cx, cy);
       const html = glyph
         ? this.questGiverTooltipHtml(glyph)
         : this.questAreaTooltipHtml(questAreaObjectivesAt(this.mapQuestAreas, cx, cy));
-      if (!html) {
+      if (!html) return false;
+      // Same as desktop hover: paint the tip at the pointer (a tap on touch, the
+      // cursor on mouse). paintTooltipAt clamps the box on-screen either way.
+      this.paintTooltipAt(html, clientX, clientY);
+      mapAreaTipShown = true;
+      return true;
+    };
+    mapCanvas.addEventListener('pointermove', (ev) => {
+      if (ev.pointerType !== 'mouse' || this.mapDrag) {
         hideMapAreaTip();
         return;
       }
-      // Paint the shared #tooltip beside the cursor (the attachTooltip
-      // mousemove idiom: map visual-space x/y into author space, then clamp
-      // the author-space tooltip box against the viewport).
-      this.tooltipEl.innerHTML = html;
-      this.tooltipEl.style.display = 'block';
-      const z = getUiScale();
-      const tw = this.tooltipEl.offsetWidth;
-      const th = this.tooltipEl.offsetHeight;
-      this.tooltipEl.style.left = `${Math.max(8, Math.min(window.innerWidth / z - tw - 8, ev.clientX / z + 14))}px`;
-      this.tooltipEl.style.top = `${Math.max(8, ev.clientY / z - th - 10)}px`;
-      mapAreaTipShown = true;
+      if (!showMapTipAt(ev.clientX, ev.clientY)) hideMapAreaTip();
     });
-    mapCanvas.addEventListener('pointerleave', hideMapAreaTip);
-    mapCanvas.addEventListener('pointerdown', hideMapAreaTip);
-    // The map's quest dropdown: the "Quests" button unfolds/folds the list.
-    $('#map-quests-toggle').addEventListener('click', () => {
-      this.mapQuestsOpen = !this.mapQuestsOpen;
-      this.mapQuestListSig = ''; // force the list render to re-apply visibility
-      this.updateMapWindow();
+    // Mouse only: a touch pointer fires pointerleave the instant the finger lifts
+    // (and again when a zoomed-in drag releases its pointer capture), which would
+    // wipe the tip the tap just opened. Touch dismisses via the next pointerdown.
+    mapCanvas.addEventListener('pointerleave', (ev) => {
+      if (ev.pointerType === 'mouse') hideMapAreaTip();
     });
-    // The map's quest side list: one delegated click listener toggles a
-    // quest's tracking (whether its blue areas + numbered badge paint).
-    $('#map-quests').addEventListener('click', (ev) => {
-      const btn = (ev.target as HTMLElement).closest<HTMLElement>('.mapq-track');
-      const questId = btn?.dataset.quest;
-      if (!questId) return;
-      const untracked = this.untrackedQuestSet();
-      if (untracked.has(questId)) untracked.delete(questId);
-      else untracked.add(questId);
-      try {
-        localStorage.setItem(this.mapUntrackedKey(), serializeUntrackedQuests(untracked));
-      } catch {
-        /* storage unavailable */
-      }
-      // The rebuild below replaces #map-quests's children, destroying a focused
-      // track button; restore focus to the same quest's rebuilt button so keyboard
-      // toggling stays in place and the flipped aria-pressed is announced (the
-      // toggleQuestTrackerCollapsed refocus idiom).
-      const refocus = document.activeElement === btn;
-      this.updateMapWindow();
-      if (refocus)
-        $('#map-quests')
-          .querySelector<HTMLElement>(`.mapq-track[data-quest="${CSS.escape(questId)}"]`)
-          ?.focus();
+    // A new press clears any open tip; for touch, remember where it started so the
+    // release can tell a stationary marker tap from a pan.
+    mapCanvas.addEventListener('pointerdown', (ev) => {
+      hideMapAreaTip();
+      mapTapStart = ev.pointerType === 'mouse' ? null : { x: ev.clientX, y: ev.clientY };
     });
+    // A stationary touch release reveals the marker under the finger. iOS can raise
+    // pointercancel (not pointerup) for a tap it briefly mistook for a gesture, so
+    // both end the tap; a release that moved past the tolerance was a pan.
+    const endMapTap = (ev: PointerEvent): void => {
+      if (ev.pointerType === 'mouse' || !mapTapStart) return;
+      const moved = Math.hypot(ev.clientX - mapTapStart.x, ev.clientY - mapTapStart.y);
+      mapTapStart = null;
+      if (moved <= TAP_MOVE_TOLERANCE_PX) showMapTipAt(ev.clientX, ev.clientY);
+    };
+    mapCanvas.addEventListener('pointerup', endMapTap);
+    mapCanvas.addEventListener('pointercancel', endMapTap);
     $('#mm-bag').addEventListener('click', () => this.toggleBags());
     // Drop an equipped piece dragged out of the paperdoll onto the bags window.
     const bagsEl = $('#bags');
@@ -7886,6 +7862,7 @@ export class Hud {
     const el = $('#map-window');
     if (el.style.display === 'block') {
       el.style.display = 'none';
+      this.hideTooltip(); // a touch marker tip can outlive the window otherwise
       return;
     }
     this.closeOtherWindows('#map-window');
@@ -7925,7 +7902,6 @@ export class Hud {
       // title is drawn on-canvas, since the world map has no DOM zone label).
       this.mapQuestAreas = [];
       this.mapNpcMarkers = [];
-      this.hideMapQuestList();
       this.delvePainter.paintWorldMapDelve(ctx, this.sim, S);
       const run = this.sim.delveRun;
       const area = run ? delveDisplayName(run.delveId) : '';
@@ -7946,90 +7922,12 @@ export class Hud {
       canvasSize: S,
       zoom: this.mapZoom,
       center: this.mapCenter,
-      untrackedQuestIds: this.untrackedQuestSet(),
     });
     this.mapView = result.view;
     this.mapQuestAreas = result.questAreas;
     this.mapNpcMarkers = result.npcs;
     if (!this.mapDrag) canvas.style.cursor = result.cursor;
-    this.renderMapQuestList();
     this.setText(summaryEl, t('hud.core.mapSummary', { zone: zoneDisplayName(zone.id) }));
-  }
-
-  // ---- the map's numbered quest side list (track/untrack the blue areas) ----
-
-  private mapUntrackedKey(): string {
-    return `woc_map_untracked_${this.sim.cfg.playerClass}_${this.sim.player.name}`;
-  }
-
-  private untrackedQuestSet(): Set<string> {
-    if (!this.mapUntrackedQuests) {
-      let raw: string | null = null;
-      try {
-        raw = localStorage.getItem(this.mapUntrackedKey());
-      } catch {
-        /* storage unavailable */
-      }
-      this.mapUntrackedQuests = parseUntrackedQuests(raw);
-    }
-    return this.mapUntrackedQuests;
-  }
-
-  private hideMapQuestList(): void {
-    if (this.mapQuestListSig === '') return;
-    this.mapQuestListSig = '';
-    const el = $('#map-quests');
-    el.classList.remove('on');
-    el.replaceChildren();
-    ($('#map-quests-toggle') as unknown as HTMLButtonElement).hidden = true;
-  }
-
-  // Rebuild the dropdown only when its content actually changed (the map
-  // repaints on the 4Hz cadence; the signature keeps the DOM quiet between
-  // real changes and covers a language switch via the current language salt).
-  // The "Quests" toggle button shows whenever the log has quests; the list
-  // itself only while the dropdown is unfolded.
-  private renderMapQuestList(): void {
-    const entries = mapQuestListView(this.sim.questLog, this.untrackedQuestSet());
-    if (entries.length === 0) {
-      this.hideMapQuestList();
-      return;
-    }
-    const sig = `${getLanguage()}|${this.mapQuestsOpen ? 1 : 0}|${entries
-      .map((e) => `${e.questId}:${e.number}:${e.ready ? 1 : 0}:${e.tracked ? 1 : 0}`)
-      .join('|')}`;
-    if (sig === this.mapQuestListSig) return;
-    this.mapQuestListSig = sig;
-    const toggle = $('#map-quests-toggle') as unknown as HTMLButtonElement;
-    toggle.hidden = false;
-    toggle.setAttribute('aria-expanded', this.mapQuestsOpen ? 'true' : 'false');
-    // U+25BE down / U+25B8 right triangle, the tracker header's chevron pair
-    toggle.textContent = `${this.mapQuestsOpen ? '▾' : '▸'} ${t('questUi.tracker.title')}`;
-    const listEl = $('#map-quests');
-    if (!this.mapQuestsOpen) {
-      listEl.classList.remove('on');
-      listEl.replaceChildren();
-      return;
-    }
-    const check = String.fromCharCode(0x2713); // escaped so no literal glyph in source
-    let html = `<div class="mapq-head">${esc(t('questUi.tracker.title'))}</div>`;
-    for (const e of entries) {
-      const title = questTitle(e.questId);
-      const label = t(e.tracked ? 'questUi.tracker.hideFromMap' : 'questUi.tracker.showOnMap', {
-        name: title,
-      });
-      html +=
-        `<div class="mapq-row${e.tracked ? '' : ' untracked'}">` +
-        `<span class="mapq-num">${esc(this.questNumber(e.number))}</span>` +
-        `<span class="mapq-title">${esc(title)}</span>` +
-        (e.ready
-          ? `<span class="mapq-complete">${esc(t('questUi.tracker.complete'))}</span>`
-          : '') +
-        `<button type="button" class="mapq-track" data-quest="${esc(e.questId)}" aria-pressed="${e.tracked}" title="${esc(label)}" aria-label="${esc(label)}">${e.tracked ? check : ''}</button>` +
-        `</div>`;
-    }
-    listEl.innerHTML = html;
-    listEl.classList.add('on');
   }
 
   // Tooltip body for a hovered quest-giver glyph on the world map: each quest

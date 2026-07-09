@@ -979,6 +979,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hud.core.mobileSocial': '社交',
   'hud.core.mobileArena': '竞技场',
   'hud.core.mobileMenu': '菜单',
+  'hud.core.mobileSettings': '设置',
   'hud.core.mobileUse': '使用',
   'hud.core.mobileMeters': '统计',
   'hud.core.mobileMap': '地图',
