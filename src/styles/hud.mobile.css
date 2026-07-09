@@ -3021,6 +3021,13 @@
     min-height: 40px;
     font-size: 16px;
   }
+  body.mobile-touch #ctx-menu {
+    box-sizing: border-box;
+    max-height: calc(var(--app-vh, 100vh) / var(--ui-scale, 1) - 20px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
   /* Phase 5 touch floors: the interactive descendants of the newly sheeted windows
      that render below the 40px tap target on desktop. Only the controls that need it
      are listed here; each window's list rows, primary buttons, and text inputs
