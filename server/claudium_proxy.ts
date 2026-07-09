@@ -16,6 +16,7 @@
 // value, they only pass through what the service returns.
 
 const SERVICE_TIMEOUT_MS = 5000;
+const NATIVE_CONFIRM_TIMEOUT_MS = 60_000;
 
 /** Integer Claudium balance for an account, or null when the service is off. */
 export interface ClaudiumBalanceResult {
@@ -30,7 +31,19 @@ export interface ClaudiumBalanceResult {
 export interface ClaudiumPriceResult {
   rail: string;
   usdPerClaudium: number | null;
-  wocBaseUnitsPerClaudium: number | null;
+  wocBaseUnitsPerClaudium: string | null;
+}
+
+export interface ClaudiumNativePriceResult {
+  rail: ClaudiumNativeRail;
+  claudium: number;
+  amountBase: string | null;
+  reason?: string;
+}
+
+export interface ClaudiumSolBalanceResult {
+  owner: string;
+  lamports: string | null;
 }
 
 /** One rung of the $1..$10000 SKU ladder. usd/claudium both come from the service. */
@@ -46,7 +59,8 @@ export interface ClaudiumSkusResult {
   skus: ClaudiumSku[];
 }
 
-export type ClaudiumRail = 'stripe' | 'woc';
+export type ClaudiumRail = 'stripe' | 'sol' | 'woc';
+export type ClaudiumNativeRail = 'sol' | 'woc';
 
 /** The stripe-rail purchase-intent leg (client uses clientSecret with Stripe.js). */
 export interface ClaudiumStripeIntent {
@@ -79,6 +93,31 @@ export interface ClaudiumPurchaseResult {
 
 export interface ClaudiumConfirmResult {
   credited: boolean;
+  balance: number | null;
+  reason: string | null;
+}
+
+export interface ClaudiumNativeRailsResult {
+  rails: Record<ClaudiumNativeRail, boolean>;
+}
+
+export interface ClaudiumNativeQuoteResult {
+  ok: boolean;
+  reference: string | null;
+  rail: ClaudiumNativeRail | null;
+  claudium: number | null;
+  amountBase: string | null;
+  destination: string | null;
+  mint: string | null;
+  memo: string | null;
+  quoteExpiryMs: number | null;
+  transactionBase64: string | null;
+  split: { burnBase: string; treasuryBase: string; treasury: string } | null;
+  reason: string | null;
+}
+
+export interface ClaudiumNativeConfirmResult {
+  settled: boolean;
   balance: number | null;
   reason: string | null;
 }
@@ -141,6 +180,7 @@ interface ServiceRequest {
   method: 'GET' | 'POST';
   path: string;
   body?: unknown;
+  timeoutMs?: number;
 }
 
 /**
@@ -164,7 +204,7 @@ async function callService<T>(req: ServiceRequest): Promise<T | null> {
       method: req.method,
       headers,
       body,
-      signal: AbortSignal.timeout(SERVICE_TIMEOUT_MS),
+      signal: AbortSignal.timeout(req.timeoutMs ?? SERVICE_TIMEOUT_MS),
     });
     if (!res.ok) throw new Error(`${req.method} ${req.path} -> ${res.status}`);
     return (await res.json()) as T;
@@ -188,33 +228,80 @@ export async function claudiumPrice(rail: ClaudiumRail): Promise<ClaudiumPriceRe
   const data = await callService<{
     rail: string;
     usdPerClaudium: number;
-    wocBaseUnitsPerClaudium: number | null;
+    wocBaseUnitsPerClaudium: string | number | null;
   }>({ method: 'GET', path: `price/${encodeURIComponent(rail)}` });
   if (!data) return { rail, usdPerClaudium: null, wocBaseUnitsPerClaudium: null };
+  const wocBaseUnits = data.wocBaseUnitsPerClaudium;
   return {
     rail: data.rail,
     usdPerClaudium: typeof data.usdPerClaudium === 'number' ? data.usdPerClaudium : null,
     wocBaseUnitsPerClaudium:
-      typeof data.wocBaseUnitsPerClaudium === 'number' ? data.wocBaseUnitsPerClaudium : null,
+      typeof wocBaseUnits === 'string'
+        ? wocBaseUnits
+        : typeof wocBaseUnits === 'number'
+          ? String(wocBaseUnits)
+          : null,
   };
+}
+
+export async function claudiumNativePrice(
+  rail: ClaudiumNativeRail,
+  claudium: number,
+): Promise<ClaudiumNativePriceResult> {
+  const data = await callService<{
+    rail?: ClaudiumNativeRail;
+    claudium?: number;
+    amountBase?: string | null;
+    reason?: string;
+  }>({
+    method: 'GET',
+    path: `native/price/${encodeURIComponent(rail)}?claudium=${encodeURIComponent(String(claudium))}`,
+  });
+  return {
+    rail: data?.rail ?? rail,
+    claudium: typeof data?.claudium === 'number' ? data.claudium : claudium,
+    amountBase: typeof data?.amountBase === 'string' ? data.amountBase : null,
+    reason: data?.reason ?? (data ? undefined : 'unavailable'),
+  };
+}
+
+export async function claudiumSolBalance(owner: string): Promise<ClaudiumSolBalanceResult> {
+  const data = await callService<{ owner?: string; lamports?: string | null }>({
+    method: 'GET',
+    path: `native/balance/sol/${encodeURIComponent(owner)}`,
+  });
+  return {
+    owner: data?.owner ?? owner,
+    lamports: typeof data?.lamports === 'string' ? data.lamports : null,
+  };
+}
+
+export async function claudiumNativeRails(): Promise<ClaudiumNativeRailsResult> {
+  const data = await callService<{ rails?: Partial<Record<ClaudiumNativeRail, boolean>> }>({
+    method: 'GET',
+    path: 'native/rails',
+  });
+  return { rails: { sol: data?.rails?.sol === true, woc: data?.rails?.woc === true } };
 }
 
 /** GET skus. Empty ladder when the service is off (stripe rail disabled). */
 export async function claudiumSkus(): Promise<ClaudiumSkusResult> {
   const data = await callService<ClaudiumSku[]>({ method: 'GET', path: 'skus' });
   if (!Array.isArray(data)) return { skus: [] };
-  const skus = data.filter(
-    (s): s is ClaudiumSku =>
-      typeof s?.sku === 'string' && typeof s.usd === 'number' && typeof s.claudium === 'number',
-  ).map((s) => ({
-    sku: s.sku,
-    usd: s.usd,
-    claudium: s.claudium,
-    stripeConfigured:
-      typeof (s as { stripeConfigured?: unknown }).stripeConfigured === 'boolean'
-        ? (s as { stripeConfigured: boolean }).stripeConfigured
-        : undefined,
-  }));
+  const skus = data
+    .filter(
+      (s): s is ClaudiumSku =>
+        typeof s?.sku === 'string' && typeof s.usd === 'number' && typeof s.claudium === 'number',
+    )
+    .map((s) => ({
+      sku: s.sku,
+      usd: s.usd,
+      claudium: s.claudium,
+      stripeConfigured:
+        typeof (s as { stripeConfigured?: unknown }).stripeConfigured === 'boolean'
+          ? (s as { stripeConfigured: boolean }).stripeConfigured
+          : undefined,
+    }));
   return { skus };
 }
 
@@ -269,6 +356,106 @@ export async function claudiumConfirmWoc(input: {
   return {
     credited: Boolean(data.credited),
     balance: typeof data.balance === 'number' ? data.balance : null,
+    reason: data.reason ?? null,
+  };
+}
+
+export async function claudiumNativeQuote(input: {
+  accountId: string;
+  rail: ClaudiumNativeRail;
+  sku: string;
+  payer: string;
+}): Promise<ClaudiumNativeQuoteResult> {
+  const skus = await claudiumSkus();
+  const sku = skus.skus.find((row) => row.sku === input.sku);
+  if (!sku) {
+    return {
+      ok: false,
+      reference: null,
+      rail: null,
+      claudium: null,
+      amountBase: null,
+      destination: null,
+      mint: null,
+      memo: null,
+      quoteExpiryMs: null,
+      transactionBase64: null,
+      split: null,
+      reason: 'unknown_sku',
+    };
+  }
+  const data = await callService<{
+    reference?: string;
+    rail?: ClaudiumNativeRail;
+    claudium?: number;
+    amountBase?: string;
+    destination?: string;
+    mint?: string | null;
+    memo?: string;
+    quoteExpiryMs?: number;
+    transactionBase64?: string;
+    split?: { burnBase: string; treasuryBase: string; treasury: string };
+    reason?: string;
+  }>({
+    method: 'POST',
+    path: 'native/quote',
+    body: {
+      rail: input.rail,
+      claudium: sku.claudium,
+      payer: input.payer,
+      fulfillment: { kind: 'credit', accountId: Number(input.accountId) },
+    },
+  });
+  if (!data?.reference || !data.transactionBase64) {
+    return {
+      ok: false,
+      reference: data?.reference ?? null,
+      rail: data?.rail ?? null,
+      claudium: typeof data?.claudium === 'number' ? data.claudium : null,
+      amountBase: data?.amountBase ?? null,
+      destination: data?.destination ?? null,
+      mint: data?.mint ?? null,
+      memo: data?.memo ?? null,
+      quoteExpiryMs: typeof data?.quoteExpiryMs === 'number' ? data.quoteExpiryMs : null,
+      transactionBase64: data?.transactionBase64 ?? null,
+      split: data?.split ?? null,
+      reason: data?.reason ?? 'unavailable',
+    };
+  }
+  return {
+    ok: true,
+    reference: data.reference,
+    rail: data.rail ?? input.rail,
+    claudium: typeof data.claudium === 'number' ? data.claudium : sku.claudium,
+    amountBase: data.amountBase ?? null,
+    destination: data.destination ?? null,
+    mint: data.mint ?? null,
+    memo: data.memo ?? null,
+    quoteExpiryMs: typeof data.quoteExpiryMs === 'number' ? data.quoteExpiryMs : null,
+    transactionBase64: data.transactionBase64,
+    split: data.split ?? null,
+    reason: data.reason ?? null,
+  };
+}
+
+export async function claudiumNativeConfirm(input: {
+  reference: string;
+  signature: string;
+}): Promise<ClaudiumNativeConfirmResult> {
+  const data = await callService<{
+    settled: boolean;
+    reason?: string;
+    fulfillment?: { balance?: number };
+  }>({
+    method: 'POST',
+    path: 'native/confirm',
+    body: input,
+    timeoutMs: NATIVE_CONFIRM_TIMEOUT_MS,
+  });
+  if (!data) return { settled: false, balance: null, reason: 'unavailable' };
+  return {
+    settled: Boolean(data.settled),
+    balance: typeof data.fulfillment?.balance === 'number' ? data.fulfillment.balance : null,
     reason: data.reason ?? null,
   };
 }

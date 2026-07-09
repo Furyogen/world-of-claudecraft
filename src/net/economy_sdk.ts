@@ -9,7 +9,8 @@
 
 import { apiUrl } from './online';
 
-export type ClaudiumRail = 'stripe' | 'woc';
+export type ClaudiumRail = 'stripe' | 'sol' | 'woc';
+export type ClaudiumNativeRail = 'sol' | 'woc';
 
 export interface ClaudiumBalance {
   balance: number | null;
@@ -18,7 +19,7 @@ export interface ClaudiumBalance {
 export interface ClaudiumPrice {
   rail: string;
   usdPerClaudium: number | null;
-  wocBaseUnitsPerClaudium: number | null;
+  wocBaseUnitsPerClaudium: string | null;
 }
 
 export interface ClaudiumSku {
@@ -65,6 +66,42 @@ export interface ClaudiumConfirm {
   reason: string | null;
 }
 
+export interface ClaudiumNativeRails {
+  rails: Record<ClaudiumNativeRail, boolean>;
+}
+
+export interface ClaudiumNativePrice {
+  rail: ClaudiumNativeRail;
+  claudium: number;
+  amountBase: string | null;
+  reason?: string;
+}
+
+export interface ClaudiumSolBalance {
+  owner: string;
+  lamports: string | null;
+}
+
+export interface ClaudiumNativeQuote {
+  ok: boolean;
+  reference: string | null;
+  rail: ClaudiumNativeRail | null;
+  claudium: number | null;
+  amountBase: string | null;
+  destination: string | null;
+  mint: string | null;
+  memo: string | null;
+  quoteExpiryMs: number | null;
+  transactionBase64: string | null;
+  reason: string | null;
+}
+
+export interface ClaudiumNativeConfirm {
+  settled: boolean;
+  balance: number | null;
+  reason: string | null;
+}
+
 export interface ClaudiumSpend {
   granted: boolean;
   balance: number | null;
@@ -86,6 +123,7 @@ const OFF_PRICE = (rail: string): ClaudiumPrice => ({
 });
 const OFF_SKUS: ClaudiumSku[] = [];
 const OFF_STORE: ClaudiumStoreItem[] = [];
+const OFF_NATIVE_RAILS: ClaudiumNativeRails = { rails: { sol: false, woc: false } };
 const OFF_PURCHASE: ClaudiumPurchase = {
   ok: false,
   purchaseId: null,
@@ -96,12 +134,43 @@ const OFF_PURCHASE: ClaudiumPurchase = {
   reason: 'unavailable',
 };
 const OFF_CONFIRM: ClaudiumConfirm = { credited: false, balance: null, reason: 'unavailable' };
+const OFF_NATIVE_QUOTE: ClaudiumNativeQuote = {
+  ok: false,
+  reference: null,
+  rail: null,
+  claudium: null,
+  amountBase: null,
+  destination: null,
+  mint: null,
+  memo: null,
+  quoteExpiryMs: null,
+  transactionBase64: null,
+  reason: 'unavailable',
+};
+const OFF_NATIVE_CONFIRM: ClaudiumNativeConfirm = {
+  settled: false,
+  balance: null,
+  reason: 'unavailable',
+};
 const OFF_SPEND: ClaudiumSpend = {
   granted: false,
   balance: null,
   costClaudium: null,
   reason: 'unavailable',
 };
+
+const NATIVE_CONFIRM_RETRY_REASONS = new Set([
+  'not_found_onchain',
+  'not_finalized',
+  'cannot_verify',
+  'unavailable',
+]);
+const NATIVE_CONFIRM_RETRY_DELAYS_MS = [1000, 1500, 2500, 4000, 6000, 8000, 10_000];
+
+export interface NativeConfirmRetryOptions {
+  delayMs?(ms: number): Promise<void>;
+  nowMs?(): number;
+}
 
 export class EconomyClient {
   constructor(private readonly cfg: EconomyClientConfig) {}
@@ -152,6 +221,26 @@ export class EconomyClient {
     return this.get('/api/claudium/store', { items: OFF_STORE }).then((r) => r.items ?? OFF_STORE);
   }
 
+  nativeRails(): Promise<ClaudiumNativeRails> {
+    return this.get('/api/claudium/native/rails', OFF_NATIVE_RAILS);
+  }
+
+  nativePrice(rail: ClaudiumNativeRail, claudium: number): Promise<ClaudiumNativePrice> {
+    return this.get(`/api/claudium/native/price/${rail}?claudium=${claudium}`, {
+      rail,
+      claudium,
+      amountBase: null,
+      reason: 'unavailable',
+    });
+  }
+
+  solBalance(owner: string): Promise<ClaudiumSolBalance> {
+    return this.get(`/api/claudium/native/balance/sol/${encodeURIComponent(owner)}`, {
+      owner,
+      lamports: null,
+    });
+  }
+
   purchase(input: {
     rail: ClaudiumRail;
     sku: string;
@@ -162,6 +251,18 @@ export class EconomyClient {
 
   confirmWoc(input: { purchaseId: string; inboundSignature: string }): Promise<ClaudiumConfirm> {
     return this.post('/api/claudium/purchase/woc/confirm', input, OFF_CONFIRM);
+  }
+
+  nativeQuote(input: {
+    rail: ClaudiumNativeRail;
+    sku: string;
+    payer: string;
+  }): Promise<ClaudiumNativeQuote> {
+    return this.post('/api/claudium/native/quote', input, OFF_NATIVE_QUOTE);
+  }
+
+  nativeConfirm(input: { reference: string; signature: string }): Promise<ClaudiumNativeConfirm> {
+    return this.post('/api/claudium/native/confirm', input, OFF_NATIVE_CONFIRM);
   }
 
   spend(input: {
@@ -180,6 +281,33 @@ export function newIdempotencyKey(): string {
   return `idem-${Date.now()}-${Math.random().toString(36).slice(2)}`;
 }
 
+function delayMs(ms: number): Promise<void> {
+  return new Promise((resolve) => window.setTimeout(resolve, ms));
+}
+
+function shouldRetryNativeConfirm(result: ClaudiumNativeConfirm): boolean {
+  return !result.settled && NATIVE_CONFIRM_RETRY_REASONS.has(result.reason ?? '');
+}
+
+export async function confirmNativeSettlement(
+  client: Pick<EconomyClient, 'nativeConfirm'>,
+  reference: string,
+  signature: string,
+  quoteExpiryMs: number | null,
+  opts: NativeConfirmRetryOptions = {},
+): Promise<ClaudiumNativeConfirm> {
+  const wait = opts.delayMs ?? delayMs;
+  const now = opts.nowMs ?? (() => Date.now());
+  let result = await client.nativeConfirm({ reference, signature });
+  for (const delay of NATIVE_CONFIRM_RETRY_DELAYS_MS) {
+    if (!shouldRetryNativeConfirm(result)) return result;
+    if (quoteExpiryMs !== null && now() + delay >= quoteExpiryMs) return result;
+    await wait(delay);
+    result = await client.nativeConfirm({ reference, signature });
+  }
+  return result;
+}
+
 /**
  * Optional client-side signers for the two purchase rails. main.ts passes these
  * once the live integrations exist; until then they are absent and the flow stops
@@ -193,7 +321,7 @@ export function newIdempotencyKey(): string {
  */
 export interface ClaudiumSigners {
   stripe?(intent: ClaudiumStripeIntent, purchaseId: string): Promise<void>;
-  wocSignAndSend?(intent: ClaudiumWocIntent, purchaseId: string): Promise<string>;
+  nativeSignAndSend?(transactionBase64: string, rail: ClaudiumNativeRail): Promise<string>;
 }
 
 /**
@@ -207,11 +335,10 @@ export async function startClaudiumPurchase(
   rail: ClaudiumRail,
   sku: string,
   signers: ClaudiumSigners = {},
-): Promise<ClaudiumPurchase | ClaudiumConfirm> {
-  const purchase = await client.purchase({ rail, sku, idempotencyKey: newIdempotencyKey() });
-  if (!purchase.ok || !purchase.purchaseId) return purchase;
-
+): Promise<ClaudiumPurchase | ClaudiumConfirm | ClaudiumNativeQuote | ClaudiumNativeConfirm> {
   if (rail === 'stripe') {
+    const purchase = await client.purchase({ rail, sku, idempotencyKey: newIdempotencyKey() });
+    if (!purchase.ok || !purchase.purchaseId) return purchase;
     // SEAM: the stripe confirmation needs Stripe.js + a live publishable key. When
     // a signer is wired, it confirms the PaymentIntent with the returned
     // clientSecret; otherwise the flow stops here with the server intent captured.
@@ -221,12 +348,12 @@ export async function startClaudiumPurchase(
     return purchase;
   }
 
-  // woc rail: sign the split transfer and post the signature to confirm.
-  // SEAM: wocSignAndSend needs a live wallet + a built split transaction (the repo
-  // Wallet Standard signAndSend path). Without it the flow stops after the intent.
-  if (purchase.woc && signers.wocSignAndSend) {
-    const inboundSignature = await signers.wocSignAndSend(purchase.woc, purchase.purchaseId);
-    return client.confirmWoc({ purchaseId: purchase.purchaseId, inboundSignature });
-  }
-  return purchase;
+  if (!signers.nativeSignAndSend) return OFF_NATIVE_QUOTE;
+  const wallet = await import('./wallet');
+  const payer = wallet.currentWallet().address;
+  if (!payer) return OFF_NATIVE_QUOTE;
+  const quote = await client.nativeQuote({ rail, sku, payer });
+  if (!quote.ok || !quote.reference || !quote.transactionBase64) return quote;
+  const signature = await signers.nativeSignAndSend(quote.transactionBase64, rail);
+  return confirmNativeSettlement(client, quote.reference, signature, quote.quoteExpiryMs);
 }

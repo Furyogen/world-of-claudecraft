@@ -27,6 +27,7 @@ services:
       args:
         # Build-time public client config inlined into the bundle (see .env.example).
         VITE_TURNSTILE_SITEKEY: ${VITE_TURNSTILE_SITEKEY:-}
+        VITE_WALLET_DISABLED: ${VITE_WALLET_DISABLED:-}
     container_name: eastbrook-game
     restart: unless-stopped
     depends_on:
@@ -83,6 +84,10 @@ services:
       WOC_DAILY_REWARD_SERVICE_URL: ${WOC_DAILY_REWARD_SERVICE_URL:-}
       WOC_DAILY_REWARD_SERVICE_SECRET: ${WOC_DAILY_REWARD_SERVICE_SECRET:-}
       WOC_DAILY_REWARD_CONFIG_TTL_MS: ${WOC_DAILY_REWARD_CONFIG_TTL_MS:-}
+      WOC_ECONOMY_SERVICE_URL: ${WOC_ECONOMY_SERVICE_URL:-}
+      WOC_ECONOMY_INTERNAL_SECRET: ${WOC_ECONOMY_INTERNAL_SECRET:-}
+      SOLANA_RPC_URL: ${SOLANA_RPC_URL:-}
+      WOC_MINT: ${WOC_MINT:-}
       META_CAPI_PIXEL_ID: ${META_CAPI_PIXEL_ID:-}
       META_CAPI_ACCESS_TOKEN: ${META_CAPI_ACCESS_TOKEN:-}
       META_CAPI_TEST_EVENT_CODE: ${META_CAPI_TEST_EVENT_CODE:-}
@@ -92,6 +97,8 @@ services:
       - "127.0.0.1:8787:8787"
     volumes:
       - ${EASTBROOK_MEDIA_DIR:-./media-cache}:/app/dist/media
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   discord-bot:
     image: eastbrook-game:${EASTBROOK_IMAGE_TAG:-local}

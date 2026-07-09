@@ -1680,16 +1680,58 @@ async function startGame(
     // The game therefore boots and plays with the service OFF: snapshot() resolves
     // to the disabled state and the window renders its empty notice.
     const economy = new EconomyClient({ token: () => api.token, base: api.base });
+    const wocBalanceBaseUnits = (balance: number | null): string | null => {
+      if (balance === null || !Number.isFinite(balance) || balance < 0) return null;
+      return String(Math.floor(balance * 1_000_000));
+    };
+    const nativePriceCache = new Map<string, { amountBase: string; atMs: number }>();
+    const nativePriceCacheTtlMs = 60_000;
+    const nativeAmountBase = (
+      rail: 'sol' | 'woc',
+      claudium: number,
+      amountBase: string | null | undefined,
+    ): string | null => {
+      const key = `${rail}:${claudium}`;
+      if (amountBase) {
+        nativePriceCache.set(key, { amountBase, atMs: Date.now() });
+        return amountBase;
+      }
+      const cached = nativePriceCache.get(key);
+      if (!cached || Date.now() - cached.atMs > nativePriceCacheTtlMs) return null;
+      return cached.amountBase;
+    };
     hud.attachClaudium({
       snapshot: async () => {
-        const [balance, skus, price, storeItems] = await Promise.all([
+        const [balance, skus, price, nativeRails, storeItems] = await Promise.all([
           economy.balance(),
           economy.skus(),
           // The peg display uses the stripe rail's USD-per-Claudium; the woc oracle
           // (base units per Claudium, null => oracle down) gates the woc rail only.
           economy.price('woc'),
+          economy.nativeRails(),
           economy.store(),
         ]);
+        const wallet = await loadWallet();
+        const walletAddress = wallet.currentWallet().address;
+        const [solBalance, wocBalance] = walletAddress
+          ? await Promise.all([
+              economy.solBalance(walletAddress),
+              wallet.fetchWocBalance(walletAddress, true),
+            ])
+          : [{ lamports: null }, null];
+        const nativePrices = await Promise.all(
+          skus.map(async (row) => {
+            const [sol, woc] = await Promise.all([
+              nativeRails.rails.sol ? economy.nativePrice('sol', row.claudium) : null,
+              nativeRails.rails.woc ? economy.nativePrice('woc', row.claudium) : null,
+            ]);
+            return {
+              sku: row.sku,
+              solAmountBase: nativeAmountBase('sol', row.claudium, sol?.amountBase),
+              wocAmountBase: nativeAmountBase('woc', row.claudium, woc?.amountBase),
+            };
+          }),
+        );
         return {
           balance: balance.balance,
           skus,
@@ -1697,33 +1739,64 @@ async function startGame(
             usdPerClaudium: price.usdPerClaudium,
             wocBaseUnitsPerClaudium: price.wocBaseUnitsPerClaudium,
           },
+          nativeRails: nativeRails.rails,
+          walletBalances: {
+            solLamports: solBalance.lamports,
+            wocBaseUnits: wocBalanceBaseUnits(wocBalance),
+          },
+          nativePrices,
           storeItems,
         };
       },
-      buy: (rail, sku) => {
-        void (async () => {
-          const refreshClaudium = () => {
+      buy: async (rail, sku) => {
+        await (async () => {
+          const refreshClaudiumLater = () => {
             void hud.refreshClaudium();
           };
           const result = await startClaudiumPurchase(economy, rail, sku, {
             stripe: (intent) =>
-              openStripeCheckout(intent, {
-                title: t('hudChrome.claudium.checkoutTitle'),
-                close: t('hudChrome.claudium.checkoutClose'),
-                loading: t('hudChrome.claudium.checkoutLoading'),
-                failed: t('hudChrome.claudium.checkoutFailed'),
-              }, {
-                onComplete: () => {
-                  refreshClaudium();
-                  window.setTimeout(refreshClaudium, 1500);
-                  window.setTimeout(refreshClaudium, 4000);
-                  window.setTimeout(refreshClaudium, 8000);
+              openStripeCheckout(
+                intent,
+                {
+                  title: t('hudChrome.claudium.checkoutTitle'),
+                  close: t('hudChrome.claudium.checkoutClose'),
+                  loading: t('hudChrome.claudium.checkoutLoading'),
+                  failed: t('hudChrome.claudium.checkoutFailed'),
                 },
-              }),
+                {
+                  onComplete: () => {
+                    refreshClaudiumLater();
+                    window.setTimeout(refreshClaudiumLater, 1500);
+                    window.setTimeout(refreshClaudiumLater, 4000);
+                    window.setTimeout(refreshClaudiumLater, 8000);
+                  },
+                },
+              ),
+            nativeSignAndSend: async (transactionBase64) => {
+              const wallet = await loadWallet();
+              return wallet.signAndSendTransactionBase64(transactionBase64);
+            },
           });
-          if ('ok' in result && !result.ok) hud.showError(t('hudChrome.claudium.checkoutUnavailable'));
-        })().catch(() => {
-          hud.showError(t('hudChrome.claudium.checkoutFailed'));
+          if ('ok' in result && !result.ok) {
+            throw new Error(t('hudChrome.claudium.checkoutUnavailable'));
+          }
+          if ('settled' in result && result.settled) {
+            await hud.refreshClaudium();
+            window.setTimeout(refreshClaudiumLater, 1500);
+            return;
+          }
+          if ('settled' in result && !result.settled) {
+            throw new Error(t('hudChrome.claudium.checkoutNotSettled'));
+          }
+        })().catch((err) => {
+          const message = err instanceof Error ? err.message : '';
+          if (/connect a wallet first/i.test(message)) {
+            throw new Error(t('hudChrome.claudium.checkoutWalletRequired'));
+          }
+          if (/wallet cannot sign and send transactions/i.test(message)) {
+            throw new Error(t('hudChrome.claudium.checkoutWalletUnsupported'));
+          }
+          throw new Error(message || t('hudChrome.claudium.checkoutFailed'));
         });
       },
       spend: (itemId, kind) => {

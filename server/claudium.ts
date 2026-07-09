@@ -15,14 +15,20 @@
 
 import type * as http from 'node:http';
 import {
+  type ClaudiumNativeRail,
   type ClaudiumRail,
   claudiumBalance,
   claudiumConfirmWoc,
   claudiumHistory,
+  claudiumNativeConfirm,
+  claudiumNativePrice,
+  claudiumNativeQuote,
+  claudiumNativeRails,
   claudiumPrice,
   claudiumPurchase,
   claudiumServiceConfigured,
   claudiumSkus,
+  claudiumSolBalance,
   claudiumSpend,
   claudiumStore,
 } from './claudium_proxy';
@@ -59,7 +65,11 @@ export function resetClaudiumDbForTests(): void {
 const activeGuard = createActiveGuard(() => claudiumGuardDb());
 
 function parseRail(value: unknown): ClaudiumRail | null {
-  return value === 'stripe' || value === 'woc' ? value : null;
+  return value === 'stripe' || value === 'woc' || value === 'sol' ? value : null;
+}
+
+function parseNativeRail(value: unknown): ClaudiumNativeRail | null {
+  return value === 'sol' || value === 'woc' ? value : null;
 }
 
 function parseSpendKind(value: unknown): 'cosmetic' | 'skin' | 'item' | null {
@@ -103,6 +113,27 @@ export async function handleClaudiumApi(
   if (req.method === 'GET' && path === '/api/claudium/skus') {
     return json(res, 200, await claudiumSkus());
   }
+  if (req.method === 'GET' && path === '/api/claudium/native/rails') {
+    return json(res, 200, await claudiumNativeRails());
+  }
+  const nativePriceMatch = /^\/api\/claudium\/native\/price\/(\w+)$/.exec(path);
+  if (req.method === 'GET' && nativePriceMatch) {
+    const rail = parseNativeRail(decodeURIComponent(nativePriceMatch[1]));
+    const claudium = Number(url.searchParams.get('claudium') ?? '1');
+    if (!rail || !Number.isInteger(claudium) || claudium <= 0) {
+      return json(res, 200, {
+        rail: rail ?? 'sol',
+        claudium,
+        amountBase: null,
+        reason: 'invalid_request',
+      });
+    }
+    return json(res, 200, await claudiumNativePrice(rail, claudium));
+  }
+  const solBalanceMatch = /^\/api\/claudium\/native\/balance\/sol\/(\w+)$/.exec(path);
+  if (req.method === 'GET' && solBalanceMatch) {
+    return json(res, 200, await claudiumSolBalance(decodeURIComponent(solBalanceMatch[1])));
+  }
   if (req.method === 'GET' && path === '/api/claudium/store') {
     return json(res, 200, await claudiumStore());
   }
@@ -139,6 +170,38 @@ export async function handleClaudiumApi(
       return json(res, 200, { credited: false, balance: null, reason: 'invalid_request' });
     }
     return json(res, 200, await claudiumConfirmWoc({ purchaseId, inboundSignature }));
+  }
+  if (req.method === 'POST' && path === '/api/claudium/native/quote') {
+    const body = (await readBody(req).catch(() => ({}))) as Record<string, unknown>;
+    const rail = parseNativeRail(body.rail);
+    const sku = typeof body.sku === 'string' ? body.sku : '';
+    const payer = typeof body.payer === 'string' ? body.payer : '';
+    if (!rail || sku === '' || payer === '') {
+      return json(res, 200, {
+        ok: false,
+        reference: null,
+        rail: null,
+        claudium: null,
+        amountBase: null,
+        destination: null,
+        mint: null,
+        memo: null,
+        quoteExpiryMs: null,
+        transactionBase64: null,
+        split: null,
+        reason: 'invalid_request',
+      });
+    }
+    return json(res, 200, await claudiumNativeQuote({ accountId: account, rail, sku, payer }));
+  }
+  if (req.method === 'POST' && path === '/api/claudium/native/confirm') {
+    const body = (await readBody(req).catch(() => ({}))) as Record<string, unknown>;
+    const reference = typeof body.reference === 'string' ? body.reference : '';
+    const signature = typeof body.signature === 'string' ? body.signature : '';
+    if (reference === '' || signature === '') {
+      return json(res, 200, { settled: false, balance: null, reason: 'invalid_request' });
+    }
+    return json(res, 200, await claudiumNativeConfirm({ reference, signature }));
   }
   if (req.method === 'POST' && path === '/api/claudium/spend') {
     const body = (await readBody(req).catch(() => ({}))) as Record<string, unknown>;
@@ -195,6 +258,29 @@ export const routes: RouteDef[] = [
   },
   {
     method: 'GET',
+    path: '/api/claudium/native/rails',
+    surface: 'api',
+    middleware: [activeGuard],
+    handler: claudiumHandler,
+  },
+  {
+    method: 'GET',
+    path: '/api/claudium/native/price/:rail',
+    surface: 'api',
+    meta: { publicRead: true },
+    middleware: [activeGuard],
+    handler: claudiumHandler,
+  },
+  {
+    method: 'GET',
+    path: '/api/claudium/native/balance/sol/:owner',
+    surface: 'api',
+    meta: { publicRead: true },
+    middleware: [activeGuard],
+    handler: claudiumHandler,
+  },
+  {
+    method: 'GET',
     path: '/api/claudium/store',
     surface: 'api',
     middleware: [activeGuard],
@@ -217,6 +303,20 @@ export const routes: RouteDef[] = [
   {
     method: 'POST',
     path: '/api/claudium/purchase/woc/confirm',
+    surface: 'api',
+    middleware: [activeGuard],
+    handler: claudiumHandler,
+  },
+  {
+    method: 'POST',
+    path: '/api/claudium/native/quote',
+    surface: 'api',
+    middleware: [activeGuard],
+    handler: claudiumHandler,
+  },
+  {
+    method: 'POST',
+    path: '/api/claudium/native/confirm',
     surface: 'api',
     middleware: [activeGuard],
     handler: claudiumHandler,

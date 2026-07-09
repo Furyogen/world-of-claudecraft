@@ -1949,15 +1949,43 @@
     max-height: 62vh;
     overflow-y: auto;
   }
-  .cl-balance {
+  .cl-loading {
+    min-height: 132px;
     display: flex;
-    align-items: baseline;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--color-text-muted);
+    font-size: 12px;
+  }
+  .cl-spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #463a1c;
+    border-top-color: #ffe27a;
+    border-radius: 50%;
+    animation: cl-spin 900ms linear infinite;
+  }
+  @keyframes cl-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .cl-balance {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
     justify-content: space-between;
     gap: 8px;
     padding: 8px 10px;
     border: 1px solid #463a1c;
     background: #ffffff08;
     border-radius: 4px;
+  }
+  .cl-balance-main,
+  .cl-wallet-balances {
+    display: grid;
+    gap: 2px;
   }
   .cl-balance-label {
     color: var(--color-text-muted);
@@ -1967,6 +1995,12 @@
     color: #ffe27a;
     font-size: 15px;
     font-weight: 700;
+  }
+  .cl-wallet-balances {
+    justify-items: end;
+    color: var(--color-text-muted);
+    font-size: 11px;
+    line-height: 1.35;
   }
   .cl-notice {
     margin: 10px 0 0;
@@ -1998,15 +2032,50 @@
     gap: 8px;
   }
   .cl-rail {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
     flex: 1;
-    min-height: 40px;
-    padding: 8px;
+    min-height: 44px;
+    padding: 8px 7px;
     border: 1px solid #463a1c;
     border-radius: 4px;
     background: #ffffff08;
     color: #f0e4c8;
     font-size: 13px;
     cursor: var(--cursor-pointer);
+  }
+  .cl-rail-icon {
+    flex: 0 0 auto;
+    width: 17px;
+    height: 17px;
+  }
+  .cl-rail-brand {
+    border-radius: 4px;
+    object-fit: cover;
+  }
+  .cl-rail-woc {
+    padding-top: 12px;
+  }
+  .cl-rail-discount {
+    position: absolute;
+    top: -7px;
+    right: 4px;
+    display: flex;
+    align-items: center;
+    min-height: 16px;
+    padding: 1px 5px;
+    border: 1px solid #f2cc62;
+    border-radius: 999px;
+    background: linear-gradient(#ffe17a, #c68b1e);
+    color: #1b1104;
+    font-size: 9px;
+    font-weight: 800;
+    line-height: 1;
+    text-transform: uppercase;
+    box-shadow: 0 0 10px rgba(245, 200, 67, 0.35);
   }
   .cl-rail[aria-pressed="true"] {
     border-color: #b8902a;
@@ -2030,6 +2099,34 @@
     margin: 10px 0 4px;
     color: var(--color-text-muted);
     font-size: 11px;
+  }
+  .cl-pending {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 6px 0;
+    padding: 7px 9px;
+    border: 1px solid #735d2b;
+    border-radius: 4px;
+    background: #221a0e;
+    color: #f3e6c4;
+    font-size: 12px;
+    line-height: 1.35;
+  }
+  .cl-pending .cl-spinner {
+    width: 14px;
+    height: 14px;
+    flex: 0 0 auto;
+  }
+  .cl-purchase-error {
+    margin: 6px 0;
+    padding: 7px 9px;
+    border: 1px solid #8a3a27;
+    border-radius: 4px;
+    background: #22100e;
+    color: #ffb07a;
+    font-size: 12px;
+    line-height: 1.35;
   }
   .cl-sku-list,
   .cl-item-list {
@@ -2063,6 +2160,11 @@
   .cl-sku:disabled .cl-sku-buy {
     color: #b2a47d;
   }
+  .cl-sku.pending {
+    border-color: #b8902a;
+    background: #f5c8431f;
+    opacity: 1;
+  }
   .cl-sku-claudium {
     color: #ffe27a;
     font-size: 12px;
@@ -2072,6 +2174,34 @@
     color: var(--gold);
     font-size: 12px;
     font-weight: 700;
+  }
+  .cl-sku-toggle-row {
+    display: flex;
+    justify-content: center;
+    padding-top: 6px;
+  }
+  .cl-sku-toggle {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid #463a1c;
+    border-radius: 999px;
+    background: #ffffff08;
+    color: var(--gold);
+    cursor: var(--cursor-pointer);
+  }
+  .cl-sku-toggle .ui-icon {
+    width: 18px;
+    height: 18px;
+    transform: rotate(90deg);
+  }
+  .cl-sku-toggle.expanded .ui-icon {
+    transform: rotate(-90deg);
+  }
+  .cl-sku-toggle:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
   }
   .cl-item {
     display: grid;
@@ -2107,6 +2237,13 @@
     color: #ffe27a;
     font-size: 12px;
     cursor: var(--cursor-pointer);
+  }
+  .cl-item-buy:disabled {
+    border-color: #514421;
+    background: #ffffff08;
+    color: #9f9271;
+    opacity: 0.48;
+    cursor: default;
   }
   .cl-empty {
     margin: 4px 0;

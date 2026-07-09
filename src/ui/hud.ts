@@ -443,7 +443,7 @@ export interface ReportHooks {
  */
 export interface ClaudiumHooks {
   snapshot(): Promise<ClaudiumSnapshot>;
-  buy(rail: ClaudiumRail, sku: string): void;
+  buy(rail: ClaudiumRail, sku: string): Promise<void>;
   spend(itemId: string, kind: 'cosmetic' | 'skin' | 'item'): void;
 }
 
@@ -3630,9 +3630,10 @@ export class Hud {
         balance: null,
         skus: [],
         price: { usdPerClaudium: null, wocBaseUnitsPerClaudium: null },
+        nativeRails: { sol: false, woc: false },
         storeItems: [],
       }),
-    buy: (rail, sku) => this.claudiumHooks?.buy(rail, sku),
+    buy: (rail, sku) => this.claudiumHooks?.buy(rail, sku) ?? Promise.resolve(),
     spend: (itemId, kind) => this.claudiumHooks?.spend(itemId, kind),
     ...this.windowFocus('#claudium-window'),
     onVisibilityChange: () => this.syncAnyWindowOpenState(),

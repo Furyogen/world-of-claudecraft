@@ -23,13 +23,20 @@ import { esc } from './esc';
 import { formatNumber, t } from './i18n';
 import { svgIcon } from './ui_icons';
 
-export type ClaudiumRail = 'stripe' | 'woc';
+export type ClaudiumRail = 'stripe' | 'sol' | 'woc';
 
 /** The service-sourced snapshot the window renders (all values from the service). */
 export interface ClaudiumSnapshot {
   balance: number | null;
   skus: readonly ClaudiumSkuInput[];
   price: ClaudiumPriceInput;
+  nativeRails?: Partial<Record<'sol' | 'woc', boolean>>;
+  walletBalances?: { solLamports: string | null; wocBaseUnits: string | null };
+  nativePrices?: readonly {
+    sku: string;
+    solAmountBase?: string | null;
+    wocAmountBase?: string | null;
+  }[];
   storeItems: readonly ClaudiumStoreItemInput[];
 }
 
@@ -48,7 +55,7 @@ export interface ClaudiumWindowDeps {
   /** Load the current service snapshot. Rejects only on an unexpected error. */
   snapshot(): Promise<ClaudiumSnapshot>;
   /** Begin a purchase on the chosen rail for the chosen SKU. */
-  buy(rail: ClaudiumRail, sku: string): void;
+  buy(rail: ClaudiumRail, sku: string): Promise<void>;
   /** Redeem a cosmetic for its Claudium cost. */
   spend(itemId: string, kind: 'cosmetic' | 'skin' | 'item'): void;
 }
@@ -60,10 +67,18 @@ const EMPTY_SNAPSHOT: ClaudiumSnapshot = {
   storeItems: [],
 };
 
+const WOC_DECIMALS = 6;
+const COMPACT_BUY_ROW_LIMIT = 5;
+const WOC_ICON_URL =
+  'https://raw.githubusercontent.com/levy-street/world-of-claudecraft/refs/heads/main/build/icon.ico';
+
 export class ClaudiumWindow {
   private openerFocus: HTMLElement | null = null;
   private renderSeq = 0;
   private selectedRail: ClaudiumRail = 'stripe';
+  private pendingPurchase: { rail: ClaudiumRail; sku: string } | null = null;
+  private purchaseError: string | null = null;
+  private buyRowsExpanded = false;
 
   constructor(private readonly deps: ClaudiumWindowDeps) {}
 
@@ -102,6 +117,7 @@ export class ClaudiumWindow {
     const seq = ++this.renderSeq;
     this.ensureShell();
     if (focus === 'open') (root.querySelector('[data-close]') as HTMLElement | null)?.focus();
+    this.paintLoading();
     let snapshot: ClaudiumSnapshot;
     try {
       snapshot = await this.deps.snapshot();
@@ -141,6 +157,16 @@ export class ClaudiumWindow {
     this.wire(body, view);
   }
 
+  private paintLoading(): void {
+    const body = this.deps.root().querySelector<HTMLElement>('.cl-body');
+    if (!body) return;
+    body.innerHTML =
+      `<div class="cl-loading" role="status" aria-live="polite">` +
+      `<span class="cl-spinner" aria-hidden="true"></span>` +
+      `<span>${esc(t('hudChrome.claudium.loading'))}</span>` +
+      `</div>`;
+  }
+
   private balanceHtml(view: ClaudiumView): string {
     // The balance is the ONE number the disabled state hides: with no service there
     // is no balance to show, so render a dash rather than a fabricated zero.
@@ -151,8 +177,23 @@ export class ClaudiumWindow {
       : t('hudChrome.claudium.balanceUnit', { amount: '--' });
     return (
       `<div class="cl-balance">` +
+      `<div class="cl-balance-main">` +
       `<span class="cl-balance-label">${esc(t('hudChrome.claudium.balanceLabel'))}</span>` +
       `<strong class="cl-balance-value">${esc(shown)}</strong>` +
+      `</div>` +
+      this.walletBalancesHtml(view) +
+      `</div>`
+    );
+  }
+
+  private walletBalancesHtml(view: ClaudiumView): string {
+    if (view.disabled) return '';
+    const sol = this.formatBaseUnits(view.walletBalances.solLamports, 9, 4);
+    const woc = this.formatBaseUnits(view.walletBalances.wocBaseUnits, WOC_DECIMALS, 2);
+    return (
+      `<div class="cl-wallet-balances">` +
+      `<span>${esc(t('hudChrome.claudium.solBalance', { amount: sol }))}</span>` +
+      `<span>${esc(t('hudChrome.claudium.wocBalance', { amount: woc }))}</span>` +
       `</div>`
     );
   }
@@ -164,42 +205,87 @@ export class ClaudiumWindow {
 
   private buyHtml(view: ClaudiumView): string {
     if (view.disabled) return '';
+    const pending = this.pendingPurchase;
     const stripeSel =
       this.selectedRail === 'stripe' ? ' aria-pressed="true"' : ' aria-pressed="false"';
+    const solSel = this.selectedRail === 'sol' ? ' aria-pressed="true"' : ' aria-pressed="false"';
     const wocSel = this.selectedRail === 'woc' ? ' aria-pressed="true"' : ' aria-pressed="false"';
     const railPicker =
       `<div class="cl-rails" role="group" aria-label="${esc(t('hudChrome.claudium.railLabel'))}">` +
-      `<button type="button" class="cl-rail" data-rail="stripe"${stripeSel} ${view.rails.stripe ? '' : 'disabled'}>${esc(t('hudChrome.claudium.railStripe'))}</button>` +
-      `<button type="button" class="cl-rail" data-rail="woc"${wocSel} ${view.rails.woc ? '' : 'disabled'}>${esc(t('hudChrome.claudium.railWoc'))}</button>` +
+      `<button type="button" class="cl-rail" data-rail="stripe"${stripeSel} ${view.rails.stripe && !pending ? '' : 'disabled'}>` +
+      this.railIconHtml('card') +
+      `<span>${esc(t('hudChrome.claudium.railStripe'))}</span>` +
+      `</button>` +
+      `<button type="button" class="cl-rail" data-rail="sol"${solSel} ${view.rails.sol && !pending ? '' : 'disabled'}>` +
+      this.railIconHtml('sol') +
+      `<span>${esc(t('hudChrome.claudium.railSol'))}</span>` +
+      `</button>` +
+      `<button type="button" class="cl-rail cl-rail-woc" data-rail="woc"${wocSel} ${view.rails.woc && !pending ? '' : 'disabled'}>` +
+      this.railIconHtml('woc') +
+      `<span>${esc(t('hudChrome.claudium.railWoc'))}</span>` +
+      `<span class="cl-rail-discount">${esc(t('hudChrome.claudium.railWocDiscount'))}</span>` +
+      `</button>` +
       `</div>`;
-    const wocNote = view.rails.woc
-      ? ''
-      : `<p class="cl-rail-note">${esc(t('hudChrome.claudium.railWocUnavailable'))}</p>`;
-    const rows = view.buyRows
+    const nativeNote =
+      view.rails.sol || view.rails.woc
+        ? ''
+        : `<p class="cl-rail-note">${esc(t('hudChrome.claudium.railNativeUnavailable'))}</p>`;
+    const visibleRows = this.buyRowsExpanded
+      ? view.buyRows
+      : view.buyRows.slice(0, COMPACT_BUY_ROW_LIMIT);
+    const rows = visibleRows
       .map((row) => {
-        const usd = this.usdLabel(row.usd);
+        const price = this.buyPriceLabel(row);
         const claudium = formatNumber(row.claudium, { maximumFractionDigits: 0 });
-        const label = t('hudChrome.claudium.skuRow', { usd, claudium });
-        const disabled = this.selectedRail === 'stripe' && !row.stripeConfigured;
+        const label = t('hudChrome.claudium.skuRow', { usd: price, claudium });
+        const isPending = pending?.rail === this.selectedRail && pending.sku === row.sku;
+        const disabled =
+          pending !== null ||
+          (this.selectedRail === 'stripe' && !row.stripeConfigured) ||
+          (this.selectedRail === 'sol' && (!view.rails.sol || !row.solAffordable)) ||
+          (this.selectedRail === 'woc' && (!view.rails.woc || !row.wocAffordable));
         return (
-          `<button type="button" class="cl-sku" data-sku="${esc(row.sku)}" aria-label="${esc(label)}" ${disabled ? 'disabled' : ''}>` +
-          `<span class="cl-sku-usd">${esc(usd)}</span>` +
+          `<button type="button" class="cl-sku${isPending ? ' pending' : ''}" data-sku="${esc(row.sku)}" aria-label="${esc(label)}" ${disabled ? 'disabled' : ''}>` +
+          `<span class="cl-sku-usd">${esc(price)}</span>` +
           `<span class="cl-sku-claudium">${esc(t('hudChrome.claudium.storeCost', { amount: claudium }))}</span>` +
-          `<span class="cl-sku-buy">${esc(t('hudChrome.claudium.buyButton'))}</span>` +
+          `<span class="cl-sku-buy">${esc(isPending ? t('hudChrome.claudium.checkoutPendingButton') : t('hudChrome.claudium.buyButton'))}</span>` +
           `</button>`
         );
       })
       .join('');
+    const toggle = this.buyRowsToggleHtml(view);
+    const pendingNote = pending
+      ? `<p class="cl-pending" role="status" aria-live="polite"><span class="cl-spinner" aria-hidden="true"></span>${esc(t('hudChrome.claudium.checkoutPending'))}</p>`
+      : '';
+    const errorNote =
+      this.purchaseError && !pending
+        ? `<p class="cl-purchase-error" role="alert">${esc(this.purchaseError)}</p>`
+        : '';
     const list = view.buyDisabled
       ? `<p class="cl-empty" role="status">${esc(t('hudChrome.claudium.buyUnavailable'))}</p>`
-      : `<div class="cl-sku-list">${rows}</div>`;
+      : `<div class="cl-sku-list">${rows}</div>${toggle}`;
     return (
       `<section class="cl-section"><h3>${esc(t('hudChrome.claudium.buyTitle'))}</h3>` +
       railPicker +
-      wocNote +
+      nativeNote +
       `<div class="cl-amount-label">${esc(t('hudChrome.claudium.amountLabel'))}</div>` +
+      pendingNote +
+      errorNote +
       list +
       `</section>`
+    );
+  }
+
+  private buyRowsToggleHtml(view: ClaudiumView): string {
+    if (view.buyRows.length <= COMPACT_BUY_ROW_LIMIT) return '';
+    const key = this.buyRowsExpanded ? 'hideAmounts' : 'showAmounts';
+    return (
+      `<div class="cl-sku-toggle-row">` +
+      `<button type="button" class="cl-sku-toggle${this.buyRowsExpanded ? ' expanded' : ''}" data-sku-toggle aria-label="${esc(t(`hudChrome.claudium.${key}`))}" title="${esc(t(`hudChrome.claudium.${key}`))}">` +
+      svgIcon('next') +
+      `<span class="visually-hidden">${esc(t(`hudChrome.claudium.${key}`))}</span>` +
+      `</button>` +
+      `</div>`
     );
   }
 
@@ -207,6 +293,55 @@ export class ClaudiumWindow {
     // The service sends whole-dollar SKUs ($1..$10000). Render with locale grouping
     // but no cents, so $10000 reads $10,000 in en and localizes elsewhere.
     return `$${formatNumber(usd, { maximumFractionDigits: 0 })}`;
+  }
+
+  private railIconHtml(kind: 'card' | 'sol' | 'woc'): string {
+    if (kind === 'woc') {
+      return `<img class="cl-rail-icon cl-rail-brand" src="${esc(WOC_ICON_URL)}" alt="" aria-hidden="true">`;
+    }
+    if (kind === 'sol') {
+      return (
+        `<svg class="cl-rail-icon" viewBox="0 0 24 24" aria-hidden="true">` +
+        `<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"></circle>` +
+        `<path d="M8 8h8l-2 2H6l2-2Zm0 3h8l-2 2H6l2-2Zm0 3h8l-2 2H6l2-2Z" fill="currentColor"></path>` +
+        `</svg>`
+      );
+    }
+    return (
+      `<svg class="cl-rail-icon" viewBox="0 0 24 24" aria-hidden="true">` +
+      `<rect x="3.5" y="5.5" width="17" height="13" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"></rect>` +
+      `<path d="M4.5 9h15M7 14.5h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>` +
+      `</svg>`
+    );
+  }
+
+  private buyPriceLabel(row: ClaudiumView['buyRows'][number]): string {
+    if (this.selectedRail === 'sol') {
+      return `${this.formatBaseUnits(row.solAmountBase, 9, 4)} SOL`;
+    }
+    if (this.selectedRail === 'woc') {
+      return `${this.formatBaseUnits(row.wocAmountBase, WOC_DECIMALS, 2)} WOC`;
+    }
+    return this.usdLabel(row.usd);
+  }
+
+  private formatBaseUnits(value: string | null, decimals: number, fractionDigits: number): string {
+    if (!value) return '--';
+    try {
+      const raw = BigInt(value);
+      const scale = 10n ** BigInt(decimals);
+      const whole = raw / scale;
+      const fraction = raw % scale;
+      const factor = 10n ** BigInt(fractionDigits);
+      const rounded = (fraction * factor + scale / 2n) / scale;
+      const amount = Number(whole) + Number(rounded) / Number(factor);
+      return formatNumber(amount, {
+        maximumFractionDigits: fractionDigits,
+        minimumFractionDigits: 0,
+      });
+    } catch {
+      return '--';
+    }
   }
 
   private storeHtml(view: ClaudiumView): string {
@@ -230,7 +365,7 @@ export class ClaudiumWindow {
                 `<span class="cl-item-name">${esc(row.name)}</span>` +
                 `<span class="cl-item-kind">${esc(kindLabel(row.kind))}</span>` +
                 `<span class="cl-item-cost">${esc(cost)}</span>` +
-                `<button type="button" class="cl-item-buy" data-item="${esc(row.itemId)}" data-kind="${esc(row.kind)}" aria-label="${esc(cost)}">${esc(t('hudChrome.claudium.spendButton'))}</button>` +
+                `<button type="button" class="cl-item-buy" data-item="${esc(row.itemId)}" data-kind="${esc(row.kind)}" aria-label="${esc(cost)}" ${row.affordable ? '' : 'disabled'}>${esc(t('hudChrome.claudium.spendButton'))}</button>` +
                 `</div>`
               );
             })
@@ -245,18 +380,42 @@ export class ClaudiumWindow {
   private wire(body: HTMLElement, view: ClaudiumView): void {
     body.querySelectorAll<HTMLButtonElement>('[data-rail]').forEach((btn) => {
       btn.addEventListener('click', () => {
-        const rail = btn.dataset.rail === 'woc' ? 'woc' : 'stripe';
+        const rail =
+          btn.dataset.rail === 'woc' ? 'woc' : btn.dataset.rail === 'sol' ? 'sol' : 'stripe';
         if (rail === 'woc' && !view.rails.woc) return;
+        if (rail === 'sol' && !view.rails.sol) return;
         if (rail === 'stripe' && !view.rails.stripe) return;
         this.selectedRail = rail;
+        this.purchaseError = null;
         this.paint(view);
       });
     });
+    body.querySelector<HTMLButtonElement>('[data-sku-toggle]')?.addEventListener('click', () => {
+      if (this.pendingPurchase) return;
+      this.buyRowsExpanded = !this.buyRowsExpanded;
+      this.paint(view);
+    });
     body.querySelectorAll<HTMLButtonElement>('[data-sku]').forEach((btn) => {
       btn.addEventListener('click', () => {
-        if (btn.disabled) return;
+        if (btn.disabled || this.pendingPurchase) return;
         const sku = btn.dataset.sku;
-        if (sku) this.deps.buy(this.selectedRail, sku);
+        if (!sku) return;
+        const rail = this.selectedRail;
+        this.pendingPurchase = { rail, sku };
+        this.purchaseError = null;
+        this.paint(view);
+        void this.deps
+          .buy(rail, sku)
+          .catch((err) => {
+            this.purchaseError =
+              err instanceof Error && err.message
+                ? err.message
+                : t('hudChrome.claudium.checkoutFailed');
+          })
+          .finally(() => {
+            this.pendingPurchase = null;
+            if (this.isOpen) void this.render();
+          });
       });
     });
     body.querySelectorAll<HTMLButtonElement>('[data-item]').forEach((btn) => {

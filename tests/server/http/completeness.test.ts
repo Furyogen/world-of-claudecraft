@@ -284,10 +284,15 @@ describe('registry completeness: migrated baseline (public reads + auth + charac
     { method: 'GET', path: '/api/claudium/balance' },
     { method: 'GET', path: '/api/claudium/price/:rail' },
     { method: 'GET', path: '/api/claudium/skus' },
+    { method: 'GET', path: '/api/claudium/native/rails' },
+    { method: 'GET', path: '/api/claudium/native/price/:rail' },
+    { method: 'GET', path: '/api/claudium/native/balance/sol/:owner' },
     { method: 'GET', path: '/api/claudium/store' },
     { method: 'GET', path: '/api/claudium/history' },
     { method: 'POST', path: '/api/claudium/purchase' },
     { method: 'POST', path: '/api/claudium/purchase/woc/confirm' },
+    { method: 'POST', path: '/api/claudium/native/quote' },
+    { method: 'POST', path: '/api/claudium/native/confirm' },
     { method: 'POST', path: '/api/claudium/spend' },
     // v0.20.0 third slice: the map editor surface, migrated in-merge. The custom
     // map family (server/maps_routes.ts) and the uploaded-GLB family
