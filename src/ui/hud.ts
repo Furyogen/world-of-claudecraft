@@ -365,7 +365,7 @@ import { localizeTalentTitle, roleLabel, tTalent } from './talent_i18n';
 import { TalentsWindow } from './talents_window';
 import type { PresetId, ThemeKnob, ThemeState } from './theme';
 import { TOOLTIP_PEEK_MS, TouchPeekGuard } from './touch_peek';
-import { bindTouchDoubleTap, bindTouchTap } from './touch_tap';
+import { bindTouchDoubleTap, bindTouchTap, CLICK_SUPPRESS_MS, TAP_SLOP_PX } from './touch_tap';
 import { buildTownFocusView, stepTownFocus } from './town_focus_view';
 import { renderTownFocusWindow } from './town_focus_window';
 import { TutorialOverlay } from './tutorial';
@@ -479,6 +479,7 @@ const PLAYER_PORTRAIT_KEY = 'player';
 // a NON-held tap (touch / gamepad / a mouse click on the slot) fires at.
 const SHOOT_CHARGE_MS = 850;
 const SHOOT_TAP_CHARGE = 0.6;
+const MOBILE_CONTEXT_LONG_PRESS_MS = 650;
 // Vale Cup walk-up "theatre": the anchored kickoff/goal/save/golden/end/countdown
 // banners + crowd fx. Played only when the emitting match's pitch is within
 // VCUP_THEATRE_RADIUS of the local player (the Sowfield you walked up to, or your
@@ -1527,9 +1528,13 @@ export class Hud {
       const pe = ev as PointerEvent;
       this.openTargetFrameMenuAt(pe.clientX, pe.clientY);
     });
+    this.bindMobileFrameLongPress($('#target-frame'), (x, y) => this.openTargetFrameMenuAt(x, y));
     $('#player-frame').addEventListener('contextmenu', (ev) => {
       ev.preventDefault();
       this.openSelfContextMenu((ev as MouseEvent).clientX, (ev as MouseEvent).clientY);
+    });
+    this.bindMobileFrameLongPress($('#player-frame'), (x, y) => this.openSelfContextMenu(x, y), {
+      ignoreSelector: 'button, #buff-bar, #debuff-bar',
     });
     $('#mm-char').addEventListener('click', () => this.toggleChar());
     $('#mm-spell').addEventListener('click', () => this.toggleSpellbook());
@@ -3968,6 +3973,65 @@ export class Hud {
       clearTouchTimer();
       pointerFocusPending = false;
     });
+  }
+
+  private bindMobileFrameLongPress(
+    el: HTMLElement,
+    onLongPress: (x: number, y: number) => void,
+    opts: { ignoreSelector?: string } = {},
+  ): void {
+    let timer: number | undefined;
+    let downId: number | null = null;
+    let downX = 0;
+    let downY = 0;
+    let suppressUntil = 0;
+    const clear = () => {
+      if (timer !== undefined) window.clearTimeout(timer);
+      timer = undefined;
+      downId = null;
+    };
+    el.addEventListener('pointerdown', (ev) => {
+      if (ev.pointerType !== 'touch' || !this.isMobileLayout()) return;
+      const target = ev.target as HTMLElement | null;
+      if (opts.ignoreSelector && target?.closest(opts.ignoreSelector)) return;
+      clear();
+      downId = ev.pointerId;
+      downX = ev.clientX;
+      downY = ev.clientY;
+      timer = window.setTimeout(() => {
+        timer = undefined;
+        suppressUntil = Date.now() + CLICK_SUPPRESS_MS;
+        onLongPress(downX, downY);
+      }, MOBILE_CONTEXT_LONG_PRESS_MS);
+    });
+    el.addEventListener('pointermove', (ev) => {
+      if (ev.pointerType !== 'touch' || ev.pointerId !== downId) return;
+      if (Math.hypot(ev.clientX - downX, ev.clientY - downY) > TAP_SLOP_PX) clear();
+    });
+    el.addEventListener('pointerup', (ev) => {
+      if (ev.pointerId === downId) clear();
+    });
+    el.addEventListener('pointercancel', (ev) => {
+      if (ev.pointerId === downId) clear();
+    });
+    el.addEventListener(
+      'click',
+      (ev) => {
+        if (Date.now() > suppressUntil) return;
+        ev.preventDefault();
+        ev.stopImmediatePropagation();
+      },
+      true,
+    );
+    el.addEventListener(
+      'contextmenu',
+      (ev) => {
+        if (!this.isMobileLayout() || Date.now() > suppressUntil) return;
+        ev.preventDefault();
+        ev.stopImmediatePropagation();
+      },
+      true,
+    );
   }
 
   hideTooltip(): void {
@@ -13099,9 +13163,11 @@ export class Hud {
     html += `<div class="ctx-item" data-act="close">${esc(t('hud.chat.context.cancel'))}</div>`;
     el.innerHTML = html;
     hydratePortraits(el);
-    el.style.left = `${Math.min(window.innerWidth - 170, x)}px`;
-    el.style.top = `${Math.min(window.innerHeight - 160, y)}px`;
     el.style.display = 'block';
+    const ctxItemCount = (html.match(/class="ctx-item"/g) ?? []).length;
+    const ctxReserveBottom = 80 + ctxItemCount * (this.isMobileLayout() ? 44 : 28);
+    this.placePopupAt(el, x, y, 170, ctxReserveBottom);
+    this.keepPopupOnScreen(el);
     this.bindContextMenuActions((act) => {
       if (act === 'convert-raid') {
         this.sim.convertPartyToRaid();
