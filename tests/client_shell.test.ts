@@ -1866,7 +1866,8 @@ describe('client HTML shell', () => {
     // The compact minimap shrink keeps the arc's vertical budget on a
     // 360px-tall phone holding (the daily-chest rail was folded into the
     // mobile More tray, issue #1577, so it no longer needs a coupled offset).
-    expect(hudMobileCss).toContain('transform: scale(calc(0.44 * var(--mobile-chrome-scale, 1)));');
+    // PR #1674 relaxed the shrink from 0.44 to 0.57 for minimap legibility.
+    expect(hudMobileCss).toContain('transform: scale(calc(0.57 * var(--mobile-chrome-scale, 1)));');
   });
 
   it('gates the camera joystick behind its opt-in setting (swipe-look is the primary camera)', () => {

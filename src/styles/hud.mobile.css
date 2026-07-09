@@ -3914,7 +3914,7 @@
   /* Compact (short landscape phones): shrink the whole combat cluster and hug
      the corner tighter so the arc's top button and the page toggle above the
      attack button clear the top-right minimap/chest strip even on a 360px-tall
-     viewport (the 0.44 minimap above is the other half of that budget). The
+     viewport (the 0.57 minimap above is the other half of that budget). The
      radius keeps the equal-chord arc rule: 160 * 2 * sin(11.25deg) = 62.4 =
      action-size 54 + an 8.4px edge gap. Every var also folds in the 0.85
      mobile-chrome-scale; the toggle (46 * 0.85 = 39.1) is clamped back to the 40px
