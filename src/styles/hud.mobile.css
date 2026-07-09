@@ -1839,8 +1839,82 @@
   body.mobile-touch #minimap-wrap {
     right: max(20px, calc(env(safe-area-inset-right) + 10px));
     top: max(8px, env(safe-area-inset-top));
-    transform: scale(calc(0.72 * var(--mobile-chrome-scale, 1)));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: scale(calc(0.94 * var(--mobile-chrome-scale, 1)));
     transform-origin: right top;
+  }
+  body.mobile-touch #zone-label {
+    order: 0;
+  }
+  body.mobile-touch #minimap-disc {
+    order: 1;
+  }
+  body.mobile-touch #minimap-coords {
+    order: 2;
+  }
+  body.mobile-touch #compass {
+    order: 3;
+  }
+  body.mobile-touch #minimap-clock {
+    position: static;
+    order: 4;
+    transform: none;
+    margin: 5px auto 0;
+  }
+  /* The minimap wrapper is scaled down on touch, so counter-scale the disc
+     controls and place them in a row below the aura strip, left of the map. */
+  body.mobile-touch #raid-lockout {
+    left: auto;
+    right: calc(100% + 10px);
+    top: 156px;
+    bottom: auto;
+    width: 44px;
+    height: 44px;
+    border-width: 2px;
+    transform: scale(1.25);
+    transform-origin: right top;
+  }
+  body.mobile-touch #raid-lockout svg {
+    width: 24px;
+    height: 24px;
+  }
+  body.mobile-touch #mail-indicator {
+    right: calc(100% + 74px);
+    top: 156px;
+    bottom: auto;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+    justify-content: center;
+    border-radius: 999px;
+    border-width: 2px;
+    transform: scale(1.25);
+    transform-origin: right top;
+  }
+  body.mobile-touch #mail-indicator .ui-icon {
+    width: 22px;
+    height: 22px;
+  }
+  body.mobile-touch #mail-indicator .mail-indicator-count {
+    position: absolute;
+    right: 3px;
+    top: 2px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 3px;
+    border-radius: 999px;
+    font-size: 11px;
+    line-height: 16px;
+  }
+  body.mobile-touch #minimap-zoom {
+    display: none;
+  }
+  body.mobile-touch #compass-heading {
+    display: none;
   }
   body.mobile-touch #right-tracker-stack {
     right: max(10px, env(safe-area-inset-right));
@@ -3668,7 +3742,12 @@
     body.mobile-touch #minimap-wrap {
       right: max(6px, env(safe-area-inset-right));
       top: max(6px, env(safe-area-inset-top));
-      transform: scale(calc(0.46 * var(--mobile-chrome-scale, 1)));
+      transform: scale(calc(0.6 * var(--mobile-chrome-scale, 1)));
+    }
+    body.mobile-touch #raid-lockout,
+    body.mobile-touch #mail-indicator {
+      top: 94px;
+      transform: scale(1.27);
     }
     body.mobile-touch #quest-tracker {
       display: none;
@@ -3796,12 +3875,9 @@
     font-size: 10px;
   }
   body.mobile-touch.hud-mobile-compact #minimap-wrap {
-    /* 0.44, tighter than the 0.46 landscape baseline (never larger): the wrap
-       (map circle + compass/coords band, ~170x258 unscaled) must clear the
-       combat arc's top button on a 360px-tall phone, where the vertical budget
-       is wrap bottom (~120px) + arc run (bottom inset + attack/2 + radius +
-       action/2, ~239px) against the full viewport height. */
-    transform: scale(calc(0.44 * var(--mobile-chrome-scale, 1)));
+    /* Keep compact phones slightly tighter than the landscape baseline while
+       still making the minimap materially larger than the old 0.44 scale. */
+    transform: scale(calc(0.57 * var(--mobile-chrome-scale, 1)));
   }
   /* A short landscape phone (the compact tier's primary trigger) has too little
      vertical room for a full chat log AND the action ring at once; drop the log
