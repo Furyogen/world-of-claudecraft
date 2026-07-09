@@ -280,6 +280,36 @@ function dirtTex(): THREE.CanvasTexture {
   });
 }
 
+// The echo desk top: a slate slab with four etched rune rings, one under each
+// stone, so a memory desk reads as a purpose-built apparatus rather than a
+// bare crate. The four rings run along the texture's y (the box top's z).
+function deskTex(): THREE.CanvasTexture {
+  return canvasTex('gauntletDesk', (ctx) => {
+    ctx.fillStyle = '#333a4c';
+    ctx.fillRect(0, 0, 256, 256);
+    for (let i = 0; i < 500; i++) {
+      ctx.fillStyle = rnd() < 0.5 ? 'rgba(18,22,32,0.25)' : 'rgba(120,136,168,0.14)';
+      ctx.fillRect(rnd() * 256, rnd() * 256, 1.4, 1.4);
+    }
+    ctx.lineWidth = 3;
+    for (let k = 0; k < 4; k++) {
+      const cy = 34 + k * 63;
+      ctx.strokeStyle = 'rgba(190,214,236,0.5)';
+      ctx.beginPath();
+      ctx.arc(128, cy, 22, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.strokeStyle = 'rgba(190,214,236,0.28)';
+      ctx.beginPath();
+      ctx.arc(128, cy, 11, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    // a thin border channel around the slab edge
+    ctx.strokeStyle = 'rgba(150,170,200,0.35)';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(10, 10, 236, 236);
+  });
+}
+
 // Twisted hemp rope: diagonal light/dark strands so a thick cylinder reads as a
 // braided rope rather than a smooth bar.
 function ropeTex(): THREE.CanvasTexture {
@@ -599,42 +629,164 @@ function buildField(group: THREE.Group): WardenRig {
     group.add(cage);
   }
 
-  // The Stone Warden: pedestal, robed monolith, hooded head. The body faces
-  // the field forever; only the head turns. Eyes sit on the head's local +z
-  // face, and the whole warden group is yawed PI so +z looks back down the
-  // field toward the start line.
+  // The Stone Warden: a monolithic hooded judge over a stepped plinth, sword
+  // planted before it and a signal-lantern staff in its off hand, watched over
+  // by a rune-studded stone halo. The body (and halo) face the field forever;
+  // only the head turns. Eyes sit on the head's local +z face, and the whole
+  // warden group is yawed PI so +z looks back down the field toward the start
+  // line. Every glowing piece (eyes, hem, belt runes, chest sigil, the staff
+  // lantern, the halo studs) rides eyeMat/lampMat, so the entire monument
+  // breathes with the signal light.
   const wz = L + GAUNTLET_LAYOUT.watcherMargin + 4;
   const warden = new THREE.Group();
   warden.position.set(0, 0, wz);
   warden.rotation.y = Math.PI;
-  const ped = new THREE.Mesh(new THREE.CylinderGeometry(4.6, 5.4, 1.6, 10), stoneMat(STONE_DARK));
-  ped.position.y = 0.8;
-  ped.castShadow = true;
-  ped.receiveShadow = true;
-  warden.add(ped);
-  const robe = new THREE.Mesh(new THREE.CylinderGeometry(1.9, 3.6, 8.4, 10), stoneMat(STONE));
-  robe.position.y = 5.8;
-  robe.castShadow = true;
-  warden.add(robe);
-  for (const side of [-1, 1]) {
-    const pauldron = new THREE.Mesh(new THREE.BoxGeometry(2.2, 1.4, 2.6), stoneMat(STONE_DARK));
-    pauldron.position.set(side * 2.1, 9.4, 0);
-    pauldron.rotation.z = side * -0.28;
-    pauldron.castShadow = true;
-    warden.add(pauldron);
+  const wAdd = (mesh: THREE.Mesh): THREE.Mesh => {
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    warden.add(mesh);
+    return mesh;
+  };
+  // Stepped plinth: two weathered tiers.
+  const plinthA = wAdd(
+    new THREE.Mesh(new THREE.CylinderGeometry(5.0, 5.8, 1.0, 10), stoneMat(STONE_DARK)),
+  );
+  plinthA.position.y = 0.5;
+  const plinthB = wAdd(
+    new THREE.Mesh(new THREE.CylinderGeometry(4.0, 4.7, 0.9, 10), stoneMat(STONE)),
+  );
+  plinthB.position.y = 1.45;
+  // The robe: a flared skirt under a squared torso, with a glowing hem ring
+  // where stone meets pedestal and a rune-studded belt at the waist.
+  const skirt = wAdd(
+    new THREE.Mesh(new THREE.CylinderGeometry(2.1, 3.8, 6.2, 10), stoneMat(STONE)),
+  );
+  skirt.position.y = 4.9;
+  const hem = new THREE.Mesh(new THREE.CylinderGeometry(3.7, 3.9, 0.28, 10), lampMat);
+  hem.position.y = 2.1;
+  warden.add(hem);
+  const torso = wAdd(
+    new THREE.Mesh(new THREE.CylinderGeometry(2.4, 2.05, 3.6, 10), stoneMat(STONE)),
+  );
+  torso.position.y = 9.2;
+  const belt = wAdd(
+    new THREE.Mesh(new THREE.CylinderGeometry(2.5, 2.55, 0.55, 10), stoneMat(STONE_DARK)),
+  );
+  belt.position.y = 7.55;
+  for (let i = 0; i < 4; i++) {
+    const a = (i / 4) * Math.PI * 2 + Math.PI / 4;
+    const stud = new THREE.Mesh(new THREE.SphereGeometry(0.17, 8, 6), lampMat);
+    stud.position.set(Math.sin(a) * 2.55, 7.55, Math.cos(a) * 2.55);
+    warden.add(stud);
   }
-  const headGroup = new THREE.Group();
-  headGroup.position.y = 11.2;
-  const head = new THREE.Mesh(new THREE.BoxGeometry(2.3, 2.7, 2.3), stoneMat(STONE));
-  head.castShadow = true;
-  headGroup.add(head);
-  const hood = new THREE.Mesh(new THREE.ConeGeometry(1.9, 2.6, 8), stoneMat(STONE_DARK));
-  hood.position.set(0, 1.6, -0.4);
-  hood.castShadow = true;
-  headGroup.add(hood);
+  // Chest plate + the etched sigil that glows with the signal.
+  const chest = wAdd(new THREE.Mesh(new THREE.BoxGeometry(2.7, 2.1, 0.7), stoneMat(STONE_DARK)));
+  chest.position.set(0, 9.9, 1.85);
+  const sigil = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.62, 0.18), lampMat);
+  sigil.position.set(0, 9.9, 2.28);
+  sigil.rotation.z = Math.PI / 4;
+  warden.add(sigil);
+  // Layered pauldrons and the arms: sword hand forward on the pommel, staff
+  // hand raised to the signal lantern.
   for (const side of [-1, 1]) {
-    const eye = new THREE.Mesh(new THREE.SphereGeometry(0.3, 10, 8), eyeMat);
-    eye.position.set(side * 0.55, 0.25, 1.18);
+    const pauldron = wAdd(
+      new THREE.Mesh(new THREE.BoxGeometry(2.4, 1.3, 2.8), stoneMat(STONE_DARK)),
+    );
+    pauldron.position.set(side * 2.55, 11.0, 0);
+    pauldron.rotation.z = side * -0.3;
+    const plate = wAdd(new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.8, 2.2), stoneMat(STONE)));
+    plate.position.set(side * 2.95, 11.75, 0);
+    plate.rotation.z = side * -0.45;
+  }
+  // Arms reach down-forward to the planted sword and the beacon staff. Both
+  // props stand at radial ~4.1 from the body axis, clear of the skirt's widest
+  // flare (3.8), so nothing pierces the robe.
+  const armGeo = new THREE.CylinderGeometry(0.5, 0.62, 4.4, 8);
+  const swordArm = wAdd(new THREE.Mesh(armGeo, stoneMat(STONE)));
+  swordArm.position.set(-2.8, 9.35, 1.4);
+  swordArm.rotation.x = 0.7;
+  swordArm.rotation.z = -0.12;
+  const staffArm = wAdd(new THREE.Mesh(armGeo, stoneMat(STONE)));
+  staffArm.position.set(2.8, 9.4, 1.4);
+  staffArm.rotation.x = 0.7;
+  staffArm.rotation.z = 0.12;
+  const handGeo = new THREE.SphereGeometry(0.62, 8, 6);
+  const swordHand = wAdd(new THREE.Mesh(handGeo, stoneMat(STONE_DARK)));
+  swordHand.position.set(-3.0, 7.7, 2.8);
+  const staffHand = wAdd(new THREE.Mesh(handGeo, stoneMat(STONE_DARK)));
+  staffHand.position.set(3.0, 7.8, 2.8);
+  // The planted greatsword (point buried in the plinth, hand on the pommel).
+  const blade = wAdd(new THREE.Mesh(new THREE.BoxGeometry(0.55, 5.2, 0.18), stoneMat(SILVER)));
+  blade.position.set(-3.0, 4.5, 2.8);
+  const guard = wAdd(new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.3, 0.5), stoneMat(BRONZE)));
+  guard.position.set(-3.0, 7.0, 2.8);
+  const grip = wAdd(
+    new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 0.85, 8), stoneMat(WOOD)),
+  );
+  grip.position.set(-3.0, 7.45, 2.8);
+  const pommel = wAdd(new THREE.Mesh(new THREE.SphereGeometry(0.28, 8, 6), stoneMat(BRONZE)));
+  pommel.position.set(-3.0, 7.95, 2.8);
+  // The signal-lantern staff: the raised beacon the whole field reads.
+  const staff = wAdd(
+    new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.19, 7.4, 8), stoneMat(STONE_DARK)),
+  );
+  staff.position.set(3.0, 5.6, 2.8);
+  const cageFoot = wAdd(
+    new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.34, 0.3, 8), stoneMat(STONE_DARK)),
+  );
+  cageFoot.position.set(3.0, 9.4, 2.8);
+  const beacon = new THREE.Mesh(new THREE.SphereGeometry(0.55, 12, 10), lampMat);
+  beacon.position.set(3.0, 10.0, 2.8);
+  warden.add(beacon);
+  const finial = wAdd(new THREE.Mesh(new THREE.ConeGeometry(0.3, 0.55, 8), stoneMat(STONE_DARK)));
+  finial.position.set(3.0, 10.75, 2.8);
+  // Cowl mantle the head sits into, and the rune-studded stone halo behind it
+  // (mounted on the BODY: the aureole holds still while the head turns).
+  const mantle = wAdd(
+    new THREE.Mesh(new THREE.CylinderGeometry(1.7, 2.3, 1.1, 10), stoneMat(STONE_DARK)),
+  );
+  mantle.position.y = 11.6;
+  const halo = wAdd(
+    new THREE.Mesh(new THREE.TorusGeometry(2.6, 0.18, 8, 24), stoneMat(STONE_DARK)),
+  );
+  halo.position.set(0, 13.4, -1.7);
+  for (let i = 0; i < 5; i++) {
+    const a = (i / 4 - 0.5) * Math.PI; // an arc over the crown of the ring
+    const stud = new THREE.Mesh(new THREE.SphereGeometry(0.16, 8, 6), lampMat);
+    stud.position.set(Math.sin(a) * 2.6, 13.4 + Math.cos(a) * 2.6, -1.7);
+    warden.add(stud);
+  }
+  // The turning head: a hooded judge's visage. The hood cone fully crowns the
+  // narrower head block (no poking corners), side cheeks and a back flap wrap
+  // it, and the eyes burn in a dark recessed face under a heavy brow.
+  const headGroup = new THREE.Group();
+  headGroup.position.y = 13.1;
+  const hAdd = (mesh: THREE.Mesh): THREE.Mesh => {
+    mesh.castShadow = true;
+    headGroup.add(mesh);
+    return mesh;
+  };
+  hAdd(new THREE.Mesh(new THREE.BoxGeometry(1.9, 2.2, 1.9), stoneMat(STONE)));
+  const facePlate = hAdd(new THREE.Mesh(new THREE.BoxGeometry(1.3, 1.5, 0.25), stoneMat(0x1c202c)));
+  facePlate.position.set(0, 0.02, 0.9);
+  const brow = hAdd(new THREE.Mesh(new THREE.BoxGeometry(1.7, 0.32, 0.55), stoneMat(STONE_DARK)));
+  brow.position.set(0, 0.78, 0.85);
+  brow.rotation.x = -0.18;
+  // The peaked hood: base sized to the head's top diagonal so it CROWNS the
+  // block (brim just overhanging, no corners poking through, face left clear).
+  const hood = hAdd(new THREE.Mesh(new THREE.ConeGeometry(1.55, 2.4, 8), stoneMat(STONE_DARK)));
+  hood.position.set(0, 2.15, 0);
+  const backFlap = hAdd(new THREE.Mesh(new THREE.BoxGeometry(1.7, 2.4, 0.5), stoneMat(STONE_DARK)));
+  backFlap.position.set(0, 0.15, -1.05);
+  backFlap.rotation.x = 0.14;
+  for (const side of [-1, 1]) {
+    const cheek = hAdd(new THREE.Mesh(new THREE.BoxGeometry(0.38, 1.7, 1.5), stoneMat(STONE_DARK)));
+    cheek.position.set(side * 1.02, 0.12, 0.1);
+    cheek.rotation.z = side * -0.1;
+  }
+  for (const side of [-1, 1]) {
+    const eye = new THREE.Mesh(new THREE.SphereGeometry(0.27, 10, 8), eyeMat);
+    eye.position.set(side * 0.42, 0.18, 1.08);
     headGroup.add(eye);
   }
   warden.add(headGroup);
@@ -901,6 +1053,13 @@ const ECHO_FLASH_DUTY = 0.72;
 // red (a miss) this long, overriding the sequence glow.
 const ECHO_JUDGE_S = 0.4;
 const ECHO_JUDGE_FLASH = 2.6;
+// The four rune stones each carry their OWN signature hue (the Simon-says
+// idiom): a flash sequence reads back far better as "blue, then gold" than as
+// four identical pale orbs. The wire's stone indices map to these fixed hues
+// on every desk (cosmetic and live alike). Order: azure, gold, emerald, violet.
+const ECHO_STONE_COLORS = [0x4fa3e8, 0xd9a53c, 0x3fd98a, 0xb06ae8] as const;
+// The stones' dark crystal body under the emissive glow.
+const ECHO_STONE_BODY = 0x232a38;
 
 // Outline tint granularity: the polyline is grouped into this many tube
 // segments, tinted gold per the wire's coveredMask bits (one bit per segment;
@@ -1385,49 +1544,108 @@ function buildTrialArenas(
       z,
       surfaceMat({ color: 0x9aa2b2, map: texWithRepeat(paveTex(), 3, 3), roughness: 0.9 }),
     );
+    // A great etched rune circle inlaid at the courtyard's heart, showing in
+    // the aisles between the desk grid.
+    const inlay = new THREE.Mesh(
+      new THREE.CircleGeometry(size * 0.42, 28),
+      surfaceMat({ color: 0x39415a, map: runeTex(), roughness: 0.7 }),
+    );
+    inlay.rotation.x = -Math.PI / 2;
+    inlay.position.set(x, 0.035, z);
+    inlay.receiveShadow = true;
+    group.add(inlay);
     const wall = stoneMat(STONE_DARK);
     box(group, size, 1.6, 0.7, x, 0.8, z - size / 2, wall);
     box(group, size, 1.6, 0.7, x, 0.8, z + size / 2, wall);
     box(group, 0.7, 1.6, size, x - size / 2, 0.8, z, wall);
+    // A pale cap course along the wall tops (the worked-masonry silhouette).
+    const cap = stoneMat(SAND_EDGE);
+    box(group, size + 0.3, 0.18, 0.9, x, 1.69, z - size / 2, cap);
+    box(group, size + 0.3, 0.18, 0.9, x, 1.69, z + size / 2, cap);
+    box(group, 0.9, 0.18, size + 0.3, x - size / 2, 1.69, z, cap);
+    // Corner pillars anchor the yard; green event banners face both walls, and
+    // pennant strings cross the courtyard overhead.
+    placeProp(group, 'pillar', x - size / 2 + 0.9, 0, z - size / 2 + 0.9, 0.8, 5.2);
+    placeProp(group, 'pillar', x - size / 2 + 0.9, 0, z + size / 2 - 0.9, -0.8, 5.2);
+    placeProp(group, 'pillar', x + size / 2 - 0.9, 0, z - size / 2 + 0.9, 2.4, 5.2);
+    placeProp(group, 'pillar', x + size / 2 - 0.9, 0, z + size / 2 - 0.9, -2.4, 5.2);
     placeProp(group, 'bannerGreen', x, 3.2, z + size / 2 - 0.4, Math.PI, 2.2);
+    placeProp(group, 'bannerGreen', x, 3.2, z - size / 2 + 0.4, 0, 2.2);
+    buildPennants(group, [
+      { x0: x - size / 2, x1: x + size / 2, y: 6.4, z: z - size / 4 },
+      { x0: x - size / 2, x1: x + size / 2, y: 6.4, z: z + size / 4 },
+    ]);
     // Corner lanterns and a back-wall crate stack (kept in the corners, clear
     // of the desk grid and the contestants' mats along the west edge).
-    placeProp(group, 'lantern', x - size / 2 + 1.1, 0, z - size / 2 + 1.1, 0.8, 1.6);
-    placeProp(group, 'lantern', x - size / 2 + 1.1, 0, z + size / 2 - 1.1, -0.8, 1.6);
+    placeProp(group, 'lantern', x - size / 2 + 1.9, 0, z - size / 2 + 1.4, 0.8, 1.6);
+    placeProp(group, 'lantern', x - size / 2 + 1.9, 0, z + size / 2 - 1.4, -0.8, 1.6);
     placeProp(group, 'crates', x + size / 2 - 1.6, 0, z + size / 2 - 1.6, 0.3, 1.5);
+    placeProp(group, 'barrelSmall', x + size / 2 - 1.3, 0, z - size / 2 + 1.5, 0.5, 0.7);
 
-    // Desk geometry: a table plus four rune stones in a row, one desk local
-    // origin (a mat-gap east of where a contestant stands). One box + one sphere
-    // geometry are shared across every desk (geometry.dispose is idempotent).
-    const tableGeo = new THREE.BoxGeometry(1.6, 0.9, 3.4);
-    const orbGeo = new THREE.SphereGeometry(0.26, 12, 10);
+    // Desk geometry: a stone base under a slate slab etched with four rune
+    // rings, a carved cradle socket under each floating stone, and the stones
+    // themselves as faceted crystals with a bronze girdle band. One geometry of
+    // each kind is shared across every desk (geometry.dispose is idempotent);
+    // the desk local origin sits a mat-gap east of where a contestant stands.
+    const tableGeo = new THREE.BoxGeometry(1.5, 0.72, 3.3);
+    const topGeo = new THREE.BoxGeometry(1.9, 0.16, 3.7);
+    const cradleGeo = new THREE.CylinderGeometry(0.17, 0.26, 0.3, 6);
+    const orbGeo = new THREE.IcosahedronGeometry(0.3, 0);
+    const ringGeo = new THREE.TorusGeometry(0.31, 0.045, 6, 12);
+    const topMat = surfaceMat({ color: 0x9fb0c8, map: deskTex(), roughness: 0.55 });
+    const cradleMat = stoneMat(STONE_DARK);
+    const ringMat = stoneMat(BRONZE);
     const orbLocalZ = (k: number) => -1.35 + k * 0.9;
+    const ORB_Y = 1.32; // stone centre height over the desk (the click target)
+    // Build the shared desk body + stone dressing into any parent; the stone
+    // MESH itself is excluded on the live rig (it carries its own flashing
+    // material and group there), so `orbMats` supplies the per-stone material.
+    const buildDesk = (parent: THREE.Group, orbMats: THREE.Material[] | null) => {
+      const base = new THREE.Mesh(tableGeo, stoneMat(STONE));
+      base.position.set(0.6, 0.36, 0);
+      base.castShadow = true;
+      parent.add(base);
+      const top = new THREE.Mesh(topGeo, topMat);
+      top.position.set(0.6, 0.8, 0);
+      top.castShadow = true;
+      parent.add(top);
+      for (let k = 0; k < GAUNTLET.echo.stones; k++) {
+        const cradle = new THREE.Mesh(cradleGeo, cradleMat);
+        cradle.position.set(0.6, 1.03, orbLocalZ(k));
+        parent.add(cradle);
+        if (orbMats) {
+          const orb = new THREE.Mesh(orbGeo, orbMats[k % orbMats.length]);
+          orb.position.set(0.6, ORB_Y, orbLocalZ(k));
+          parent.add(orb);
+          const band = new THREE.Mesh(ringGeo, ringMat);
+          band.rotation.x = Math.PI / 2;
+          band.position.set(0.6, ORB_Y, orbLocalZ(k));
+          parent.add(band);
+        }
+      }
+    };
 
-    // A cosmetic desk at each grid station: a table plus four idle rune stones
-    // (one shared dim material, they never flash), so every seated contestant
-    // has a desk. The viewer's own is hidden for the trial (the live rig takes
-    // its place); the rest stay lit as the hall of memory desks.
-    const deskOrbMat = new THREE.MeshStandardMaterial({
-      color: 0x2a3040,
-      emissive: GLASS_TINT,
-      emissiveIntensity: ECHO_IDLE,
-      roughness: 0.35,
+    // A cosmetic desk at each grid station, its four stones idle-lit in the
+    // shared per-index hues (they never flash), so every seated contestant has
+    // a desk. The viewer's own is hidden for the trial (the live rig takes its
+    // place); the rest stay lit as the hall of memory desks.
+    const deskOrbMats = ECHO_STONE_COLORS.map((hue) => {
+      const m = new THREE.MeshStandardMaterial({
+        color: ECHO_STONE_BODY,
+        emissive: hue,
+        emissiveIntensity: ECHO_IDLE,
+        roughness: 0.3,
+        flatShading: true,
+      });
+      venueOwnedMats.push(m);
+      return m;
     });
-    venueOwnedMats.push(deskOrbMat);
     const desks: { group: THREE.Group; deskX: number; deskZ: number }[] = [];
     for (let i = 0; i < ECHO_STATIONS; i++) {
       const st = echoStation(i);
       const dg = new THREE.Group();
       dg.position.set(st.deskX, 0, st.deskZ);
-      const dtable = new THREE.Mesh(tableGeo, stoneMat(STONE));
-      dtable.position.set(0.6, 0.45, 0);
-      dtable.castShadow = true;
-      dg.add(dtable);
-      for (let k = 0; k < GAUNTLET.echo.stones; k++) {
-        const orb = new THREE.Mesh(orbGeo, deskOrbMat);
-        orb.position.set(0.6, 1.35, orbLocalZ(k));
-        dg.add(orb);
-      }
+      buildDesk(dg, deskOrbMats);
       group.add(dg);
       desks.push({ group: dg, deskX: st.deskX, deskZ: st.deskZ });
     }
@@ -1435,30 +1653,31 @@ function buildTrialArenas(
     // The live rig: hidden until the viewer's trial opens, then anchored onto
     // (and replacing) the cosmetic desk the viewer sits at. Its four stones each
     // carry their OWN material so a flash lights exactly one; they carry no
-    // numeral (you replay the sequence by clicking the orbs in the order they
-    // lit, not by index).
+    // numeral (you replay the sequence by clicking the stones in the order they
+    // lit, helped by each stone's fixed signature hue).
     const root = new THREE.Group();
     root.position.set(x, 0, z);
     root.visible = false;
     group.add(root);
-    const table = new THREE.Mesh(tableGeo, stoneMat(STONE));
-    table.position.set(0.6, 0.45, 0);
-    table.castShadow = true;
-    root.add(table);
+    buildDesk(root, null);
     const stones: THREE.Group[] = [];
     const stoneMats: THREE.MeshStandardMaterial[] = [];
     for (let k = 0; k < GAUNTLET.echo.stones; k++) {
       const m = new THREE.MeshStandardMaterial({
-        color: 0x2a3040,
-        emissive: GLASS_TINT,
+        color: ECHO_STONE_BODY,
+        emissive: ECHO_STONE_COLORS[k % ECHO_STONE_COLORS.length],
         emissiveIntensity: ECHO_IDLE,
-        roughness: 0.35,
+        roughness: 0.3,
+        flatShading: true,
       });
       venueOwnedMats.push(m);
       const g2 = new THREE.Group();
-      g2.position.set(0.6, 1.35, orbLocalZ(k));
+      g2.position.set(0.6, ORB_Y, orbLocalZ(k));
       const orb = new THREE.Mesh(orbGeo, m);
       g2.add(orb);
+      const band = new THREE.Mesh(ringGeo, ringMat);
+      band.rotation.x = Math.PI / 2;
+      g2.add(band);
       g2.visible = false;
       root.add(g2);
       stones.push(g2);
@@ -1622,8 +1841,14 @@ let venueOwnedMats: THREE.Material[] = [];
 
 export interface GauntletVenueView {
   group: THREE.Group;
+  /** `t` is the renderer's smooth local clock (eases, idle sweeps); `simTime`
+   * is the IWorld sim clock, the only clock the wire's ABSOLUTE schedules
+   * (the echo flash timeline) may be compared against. Offline they coincide;
+   * online the renderer clock starts at page load while sim time is hours in,
+   * so mixing them silently kills every schedule-driven cue. */
   update(
     t: number,
+    simTime: number,
     run: GauntletRunView | null,
     viewer?: { x: number; y: number; z: number },
   ): void;
@@ -1745,7 +1970,12 @@ export async function buildGauntletVenue(
   let echoJudgeState: { stone: number; ok: boolean; until: number; applied: boolean } | null = null;
   return {
     group,
-    update(t: number, run: GauntletRunView | null, viewer?: { x: number; y: number; z: number }) {
+    update(
+      t: number,
+      simTime: number,
+      run: GauntletRunView | null,
+      viewer?: { x: number; y: number; z: number },
+    ) {
       const dt = Math.min(0.1, Math.max(0, t - lastT));
       lastT = t;
       const mine = run && run.originX === ox && run.originZ === oz ? run : null;
@@ -1833,7 +2063,7 @@ export async function buildGauntletVenue(
       }
       // The Keeper's Echo: the stones show/anchor on one composed key, and the
       // per-flash emissive writes are elided on a step key derived from the
-      // wire's absolute flash schedule (t here tracks sim time).
+      // wire's absolute flash schedule (compared against simTime below).
       const echo = mine?.echo ?? null;
       const echoKey = echo ? `${echo.round}:${echo.showStartAt}:${echo.done}` : '';
       if (echoKey !== lastEchoKey) {
@@ -1883,7 +2113,7 @@ export async function buildGauntletVenue(
       if (echoJudgeState) {
         const jm = echoRig.stoneMats[echoJudgeState.stone];
         if (t >= echoJudgeState.until || !echo || echo.done) {
-          jm.emissive.setHex(GLASS_TINT);
+          jm.emissive.setHex(ECHO_STONE_COLORS[echoJudgeState.stone % ECHO_STONE_COLORS.length]);
           jm.emissiveIntensity = ECHO_IDLE;
           echoJudgeState = null;
           lastEchoFlashKey = -2;
@@ -1895,9 +2125,11 @@ export async function buildGauntletVenue(
       }
       if (echo && !echo.done) {
         // Which stone burns right now: step k of the watch phase while inside
-        // its flash duty window, else none (idle glow). One int key.
-        const step = Math.floor((t - echo.showStartAt) / Math.max(0.01, echo.stepS));
-        const frac = (t - echo.showStartAt) / Math.max(0.01, echo.stepS) - step;
+        // its flash duty window, else none (idle glow). One int key. The wire's
+        // showStartAt is ABSOLUTE sim time, so this is the one venue cue that
+        // must read the sim clock (simTime), never the local render clock.
+        const step = Math.floor((simTime - echo.showStartAt) / Math.max(0.01, echo.stepS));
+        const frac = (simTime - echo.showStartAt) / Math.max(0.01, echo.stepS) - step;
         const flashing =
           step >= 0 && step < echo.seq.length && frac < ECHO_FLASH_DUTY ? echo.seq[step] : -1;
         if (flashing !== lastEchoFlashKey) {
@@ -1932,7 +2164,7 @@ export async function buildGauntletVenue(
       if (echoJudgeState?.applied) {
         // A rapid follow-up tap: restore the previous stone before re-arming.
         const prev = echoRig.stoneMats[echoJudgeState.stone];
-        prev.emissive.setHex(GLASS_TINT);
+        prev.emissive.setHex(ECHO_STONE_COLORS[echoJudgeState.stone % ECHO_STONE_COLORS.length]);
         prev.emissiveIntensity = ECHO_IDLE;
         lastEchoFlashKey = -2;
       }

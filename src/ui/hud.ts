@@ -33,6 +33,7 @@ import {
   ECHO_MAT_GAP,
   GAUNTLET,
   GAUNTLET_CONTESTANT_NPC_ID,
+  GAUNTLET_LAYOUT,
   GAUNTLET_VENUE,
 } from '../sim/content/gauntlet';
 import { HEROIC_VENDOR_STOCK } from '../sim/content/heroic_vendor';
@@ -500,6 +501,9 @@ const PLAYER_PORTRAIT_KEY = 'player';
 // a NON-held tap (touch / gamepad / a mouse click on the slot) fires at.
 const SHOOT_CHARGE_MS = 850;
 const SHOOT_TAP_CHARGE = 0.6;
+// The Gauntlet podium ceremony's camera push-in length (seconds of entrance
+// dolly before the framing holds; see updateGauntletFocus).
+const GAUNTLET_PODIUM_DOLLY_S = 5;
 // Vale Cup walk-up "theatre": the anchored kickoff/goal/save/golden/end/countdown
 // banners + crowd fx. Played only when the emitting match's pitch is within
 // VCUP_THEATRE_RADIUS of the local player (the Sowfield you walked up to, or your
@@ -3445,7 +3449,7 @@ export class Hud {
   private sigilsLastCrack = 0;
   // Which desk-style trial currently holds the authored camera focus pose
   // (movement trials keep the chase cam and never appear here).
-  private gauntletFocusKey: keyof typeof GAUNTLET_VENUE.focus | null = null;
+  private gauntletFocusKey: keyof typeof GAUNTLET_VENUE.focus | 'podium' | null = null;
   // Wall-clock estimator for the countdown (IWorld exposes no sim clock online); see
   // gauntlet_clock.ts.
   private readonly gauntletClock = new GauntletClock();
@@ -3474,8 +3478,9 @@ export class Hud {
       this.sim.gauntletSpectate();
       this.gauntletRecruit.close();
     },
-    onPractice: () => {
-      this.sim.gauntletPractice();
+    onPractice: (trial) => {
+      // trial = the picked game's index into the trial sequence, null = full run.
+      this.sim.gauntletPractice(trial ?? undefined);
       this.gauntletRecruit.close();
     },
     onLeave: () => this.sim.gauntletLeave(),
@@ -10445,6 +10450,36 @@ export class Hud {
   // cam) when its view member goes null, the viewer spectates, or the run
   // ends. Key-diffed so the renderer sees one set per transition.
   private updateGauntletFocus(): void {
+    // The podium ceremony: a cinematic push-in onto the winners' stand, then a
+    // held front-on framing while the fireworks run. The pose retargets every
+    // frame (CameraFocus glides toward the live pose), so the dolly is one
+    // smooth zoom from wherever the chase cam was when the ceremony opened.
+    // Applies to everyone still attached to the run (champions, the knocked
+    // out, practice runs) and to free spectators watching it.
+    const run = this.sim.gauntletRun;
+    if (run && run.phase === 'podium') {
+      this.gauntletFocusKey = 'podium';
+      const P = GAUNTLET_LAYOUT.podium;
+      // 0..1 push progress over the entrance, eased; then the pose holds.
+      // Reduced motion skips the dolly and goes straight to the held framing
+      // (the CameraFocus glide still smooths the one-off cut, as it does for
+      // the desk-trial focus poses).
+      const reduceMotion =
+        typeof window !== 'undefined' &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const elapsed = GAUNTLET.podiumS - Math.max(0, run.endsAt - this.gauntletTimeNow());
+      const p = reduceMotion ? 1 : Math.min(1, Math.max(0, elapsed / GAUNTLET_PODIUM_DOLLY_S));
+      const k = p * p * (3 - 2 * p);
+      this.renderer.setCameraFocus({
+        pos: {
+          x: run.originX,
+          y: 8 + (3.6 - 8) * k,
+          z: run.originZ + P.z + 16 + (10.5 - 16) * k,
+        },
+        lookAt: { x: run.originX, y: 2.4 + (2.0 - 2.4) * k, z: run.originZ + P.z },
+      });
+      return;
+    }
     const live = this.gauntletContestantRun();
     // The pull holds no pose: it is standard third person, locked in place by
     // the station pin, with the circle overlay as its input.

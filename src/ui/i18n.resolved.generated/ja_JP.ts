@@ -166,6 +166,17 @@ export const ja_JP: EnTranslations = {
       "stopSpectating": "観戦をやめる",
       "practice": "練習",
       "practiceNote": "ボットのみを相手にする即時のソロ挑戦。",
+      "eventClosedNote": "現在イベントは開催されていないため、待機列と観戦は利用できません。練習はいつでも可能です。",
+      "practicePickTitle": "練習する種目を選ぼう",
+      "practiceFull": "ガントレット全試練",
+      "trialNames": {
+        "sentinel": "歩哨の横断",
+        "sigils": "飴ガラスの印章",
+        "pull": "大綱引き",
+        "echo": "番人の残響",
+        "span": "脆き橋",
+        "court": "最終決戦の場"
+      },
       "rejoinQueue": "待機列に再参加",
       "lobbyJoined": "ロビーに {count} 人",
       "lobbyCountdown": "開始まで {seconds} 秒",

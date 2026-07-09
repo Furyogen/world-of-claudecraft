@@ -29,6 +29,23 @@ export const hudChromeStrings = {
     stopSpectating: 'Stop Spectating',
     practice: 'Practice',
     practiceNote: 'An instant solo run against a field of bots.',
+    // Shown while the event window is closed: why the queue and the stands
+    // are shut (Practice stays open around the clock).
+    eventClosedNote:
+      'The games are not running right now, so the queue and the stands are closed. Practice is always open.',
+    // The practice picker: choose one game to drill, or the full run.
+    practicePickTitle: 'Pick a game to practice',
+    practiceFull: 'Full Gauntlet',
+    // The six trials' display names (the practice picker; anywhere a trial is
+    // named outside its phase banner).
+    trialNames: {
+      sentinel: "Sentinel's Crossing",
+      sigils: 'Sugarglass Sigils',
+      pull: 'The Great Pull',
+      echo: "The Keeper's Echo",
+      span: 'The Brittle Span',
+      court: 'The Final Court',
+    },
     rejoinQueue: 'Rejoin the Queue',
     lobbyJoined: '{count} in the lobby',
     lobbyCountdown: 'The run begins in {seconds}s',

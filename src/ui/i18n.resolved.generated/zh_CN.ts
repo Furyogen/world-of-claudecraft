@@ -166,6 +166,17 @@ export const zh_CN: EnTranslations = {
       "stopSpectating": "停止观战",
       "practice": "练习",
       "practiceNote": "立即开始一场只对抗电脑对手的单人试炼。",
+      "eventClosedNote": "赛事目前未开放，队列与观战暂时关闭。练习随时开放。",
+      "practicePickTitle": "选择要练习的项目",
+      "practiceFull": "完整试炼回廊",
+      "trialNames": {
+        "sentinel": "哨卫横渡",
+        "sigils": "糖玻璃符印",
+        "pull": "拔河大赛",
+        "echo": "看守人的回响",
+        "span": "脆桥",
+        "court": "终局之场"
+      },
       "rejoinQueue": "重新加入队列",
       "lobbyJoined": "大厅中有 {count} 人",
       "lobbyCountdown": "距开始还有 {seconds} 秒",

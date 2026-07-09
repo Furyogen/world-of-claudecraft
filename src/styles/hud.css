@@ -4511,6 +4511,87 @@
     color: var(--color-text-muted);
     text-align: center;
   }
+  /* Why the queue/stands are shut while the event window is closed. */
+  #gauntlet-recruit .gr-closed-note {
+    margin: 8px 14px 0;
+    padding: 7px 10px;
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--color-text-light);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.25);
+  }
+  /* The practice pick stage: pushed over the main stage by Practice, popped
+     by Back. One card per game (name over its how-it-plays line), the
+     featured full run on top. */
+  #gauntlet-recruit .gr-picker {
+    padding: 8px 14px 12px;
+  }
+  #gauntlet-recruit .gr-picker-title {
+    padding: 2px 0 8px;
+    font-family: var(--font-serif);
+    font-size: 14px;
+    color: var(--color-primary);
+    text-align: center;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 8px;
+  }
+  #gauntlet-recruit .gr-picker-list {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    max-height: min(52vh, 440px);
+    overflow-y: auto;
+    padding-right: 2px;
+  }
+  #gauntlet-recruit .gr-pick {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    min-height: 44px;
+    padding: 7px 12px;
+    text-align: left;
+  }
+  #gauntlet-recruit .gr-pick-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-serif);
+    font-size: 14px;
+  }
+  #gauntlet-recruit .gr-pick-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1px solid var(--color-border);
+    font-size: 11px;
+    font-family: var(--font-sans, inherit);
+    color: var(--color-text-muted);
+  }
+  #gauntlet-recruit .gr-pick-desc {
+    font-size: 11px;
+    line-height: 1.35;
+    color: var(--color-text-muted);
+    text-transform: none;
+    letter-spacing: normal;
+  }
+  #gauntlet-recruit .gr-pick-desc span + span {
+    margin-left: 0.35em;
+  }
+  #gauntlet-recruit .gr-pick-full {
+    border-color: var(--color-primary);
+  }
+  #gauntlet-recruit .gr-back {
+    width: 100%;
+    min-height: 40px;
+    margin-top: 8px;
+  }
 
   /* ---------- gauntlet overlay ---------- */
   /* Knockout splash -> spectator bar, and the podium ceremony. Sub-panels toggle by
@@ -4529,9 +4610,15 @@
   #gauntlet-overlay[hidden] {
     display: none;
   }
-  #gauntlet-overlay[data-state="eliminated"],
-  #gauntlet-overlay[data-state="podium"] {
+  /* Only the knockout splash dims the world; the podium ceremony stays a
+     minimal top banner so the real 3D podium tableau (and its fireworks) is
+     the show. */
+  #gauntlet-overlay[data-state="eliminated"] {
     background: radial-gradient(ellipse at center, #00000066 0%, #000000cc 100%);
+  }
+  #gauntlet-overlay[data-state="podium"] {
+    justify-content: flex-start;
+    padding-top: 14px;
   }
   #gauntlet-overlay .go-eliminated,
   #gauntlet-overlay .go-spectate,
@@ -4595,16 +4682,17 @@
   .go-podium {
     flex-direction: column;
     align-items: center;
-    gap: 14px;
-    padding: 24px 32px;
-    background: rgba(10, 10, 15, 0.95);
-    border: 2px solid var(--border);
-    border-radius: 12px;
+    gap: 8px;
+    padding: 10px 20px 12px;
+    background: rgba(8, 8, 12, 0.72);
+    border: 1px solid var(--border);
+    border-radius: 10px;
     pointer-events: auto;
+    max-width: min(92vw, 560px);
   }
   .go-podium-title {
     font-family: var(--title-font);
-    font-size: 30px;
+    font-size: 22px;
     letter-spacing: 2px;
     color: var(--color-text-light);
     text-shadow: 1px 1px 4px #000;
@@ -4620,24 +4708,23 @@
     margin: 0;
     padding: 0;
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-    min-width: 240px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px 18px;
   }
   .go-places li {
     display: flex;
     align-items: baseline;
-    gap: 12px;
+    gap: 7px;
   }
   .go-place {
     font-family: var(--title-font);
-    font-size: 20px;
+    font-size: 15px;
     color: var(--color-primary);
-    width: 44px;
-    text-align: right;
   }
   .go-name {
-    font-size: 18px;
+    font-size: 14px;
     color: var(--color-text-light);
   }
   .go-actions {

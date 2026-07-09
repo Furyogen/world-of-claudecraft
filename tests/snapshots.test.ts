@@ -162,6 +162,27 @@ describe('self stat wire round-trip', () => {
   });
 });
 
+describe('sim clock mirror (IWorld `time` from the snap head)', () => {
+  it('mirrors the head time, clamps extrapolation, and re-anchors on the next snap', () => {
+    const client = bareClient(1);
+    const internals = client as unknown as { applySnapshot(snapshot: unknown): void };
+    // No snapshot yet: the clock reads 0 (consumers treat it as "not warmed up").
+    expect(client.time).toBe(0);
+    internals.applySnapshot({ t: 'snap', time: 12345.6, ents: [], keep: [] });
+    // Anchored on the head value; wall-clock extrapolation is clamped to +1s so a
+    // stalled connection can never run the clock ahead of the server.
+    expect(client.time).toBeGreaterThanOrEqual(12345.6);
+    expect(client.time).toBeLessThan(12346.7);
+    // The next snapshot re-anchors the clock forward.
+    internals.applySnapshot({ t: 'snap', time: 12350.0, ents: [], keep: [] });
+    expect(client.time).toBeGreaterThanOrEqual(12350.0);
+    expect(client.time).toBeLessThan(12351.1);
+    // A malformed head leaves the previous anchor in place (delta-guard idiom).
+    internals.applySnapshot({ t: 'snap', ents: [], keep: [] });
+    expect(client.time).toBeGreaterThanOrEqual(12350.0);
+  });
+});
+
 describe('spectate client POV', () => {
   it('follows observed self, aligns on entry and respawn, then restores identity', () => {
     const client = bareClient(1);
@@ -2177,6 +2198,7 @@ function dirtyEveryDeltaField(): {
     id: 1,
     slot: 0,
     practice: false,
+    practiceTrial: null,
     seed: 1,
     rng: new Rng(1),
     origin: gauntletOrigin(0),

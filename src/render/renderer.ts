@@ -2,6 +2,11 @@ import * as THREE from 'three';
 import { coerceFxTier, nameplateIntervalSec } from '../game/ui_tier_knobs';
 import { cameraOcclusion } from '../sim/colliders';
 import { GAUNTLET_LAYOUT } from '../sim/content/gauntlet';
+
+// The Gauntlet podium firework palette: event gold, recruiter purple, silver,
+// and the signal green (matches the venue's dressing colors).
+const GAUNTLET_FIREWORK_COLORS = [0xd9a53c, 0x9b59b6, 0xc9d1dc, 0x3fd98a] as const;
+
 import {
   ABILITIES,
   ARENA_SLOT_COUNT,
@@ -1000,6 +1005,10 @@ export class Renderer {
   private valeCupSky = new ValeCupPracticeSky();
   private valeCupTeamRings: ValeCupTeamRingsView;
   private vcupFireworks: { at: number; x: number; z: number; colors: readonly number[] }[] = [];
+  // The Gauntlet podium ceremony show: queued shells (the vcup idiom) plus a
+  // rolling beat timer that keeps volleys coming for the whole ceremony.
+  private gauntletFireworks: { at: number; x: number; z: number }[] = [];
+  private gauntletFireworkNextAt = 0;
   private valeCupBallDust: ValeCupBallDust | null = null;
   private valeCupBallTrail: ValeCupBallTrail | null = null;
   // seed-bound ground sampler, built once so the per-frame Vale Cup ring update
@@ -3065,22 +3074,20 @@ export class Renderer {
         break;
       }
       case 'gauntletPodium': {
-        // The run resolved: a firework volley over the podium steps (the
-        // ceremony anchor lives in the layout data; the run view carries the
-        // instance origin). Winners get a little camera kick on top.
+        // The run resolved: an opening firework barrage over the podium steps
+        // (the ceremony anchor lives in the layout data; the run view carries
+        // the instance origin). tickGauntletPodiumFx keeps the show rolling
+        // for the rest of the ceremony. Winners get a camera kick on top.
         const run = this.sim.gauntletRun;
         if (!run) break;
         const px = run.originX;
         const pz = run.originZ + GAUNTLET_LAYOUT.podium.z;
-        const gy = groundHeight(px, pz, this.sim.cfg.seed);
-        const schools = ['holy', 'arcane', 'fire', 'holy', 'arcane'];
-        for (let i = 0; i < schools.length; i++) {
-          this.vfx.burst(
-            new THREE.Vector3(px - 6 + i * 3, gy + 7 + (i % 2) * 3, pz - 2 + (i % 3)),
-            schools[i],
-            26,
-            1.6,
-          );
+        for (let i = 0; i < 7; i++) {
+          this.gauntletFireworks.push({
+            at: this.time + i * 0.26 + Math.random() * 0.12,
+            x: px + (Math.random() - 0.5) * 14,
+            z: pz - 2 - Math.random() * 7,
+          });
         }
         if (ev.won) this.addShake(0.5);
         break;
@@ -3142,6 +3149,40 @@ export class Renderer {
       const gy = groundHeight(s.x, s.z, this.sim.cfg.seed);
       this.tmpV.set(s.x, gy + 9 + Math.random() * 4, s.z);
       this.vfx.fireworkBurst(this.tmpV, s.colors, 46, 1.15);
+    }
+  }
+
+  // The Gauntlet podium show: while the viewer's run holds its ceremony, keep
+  // festival shells (event gold / recruiter purple / silver / signal green)
+  // bursting behind the winners' stand on a loose beat, and drain the queued
+  // shells (the opening barrage from the gauntletPodium event uses the same
+  // queue). No-op cost outside the ceremony.
+  private tickGauntletPodiumFx(): void {
+    const run = this.sim.gauntletRun;
+    if (run && run.phase === 'podium') {
+      if (this.time >= this.gauntletFireworkNextAt) {
+        const px = run.originX;
+        const pz = run.originZ + GAUNTLET_LAYOUT.podium.z;
+        const shells = 1 + Math.floor(Math.random() * 2);
+        for (let i = 0; i < shells; i++) {
+          this.gauntletFireworks.push({
+            at: this.time + i * 0.22 + Math.random() * 0.1,
+            x: px + (Math.random() - 0.5) * 12,
+            z: pz - 2 - Math.random() * 6,
+          });
+        }
+        this.gauntletFireworkNextAt = this.time + 0.9 + Math.random() * 0.9;
+      }
+    } else if (this.gauntletFireworks.length === 0) {
+      return;
+    }
+    for (let i = this.gauntletFireworks.length - 1; i >= 0; i--) {
+      const s = this.gauntletFireworks[i];
+      if (this.time < s.at) continue;
+      this.gauntletFireworks.splice(i, 1);
+      const gy = groundHeight(s.x, s.z, this.sim.cfg.seed);
+      this.tmpV.set(s.x, gy + 8 + Math.random() * 5, s.z);
+      this.vfx.fireworkBurst(this.tmpV, GAUNTLET_FIREWORK_COLORS, 42, 1.1);
     }
   }
 
@@ -5091,6 +5132,7 @@ export class Renderer {
     for (const view of this.yumiMazeViews.values()) view.update(this.sim);
     this.yumiTeamMarkers.update(this.sim, this.views);
     this.tickValeCupFx(dt);
+    this.tickGauntletPodiumFx();
     worldStart = markWorldPhase('vfx', worldStart);
 
     this.updateCamera(selfPos, dt);
@@ -5124,9 +5166,12 @@ export class Renderer {
     for (const castle of this.hodricsCastles.values()) castle.update(this.time);
     // The Gauntlet venue reacts to the viewer's own run: the Warden's gaze and
     // the signal pylons follow the sentinel light state (idle amber otherwise).
-    // The viewer's position anchors the echo table rig to their own row.
+    // The viewer's position anchors the echo table rig to their own row. The
+    // second clock is the IWorld sim time: online the render clock starts at
+    // page load while the wire's schedules (echo flashes) are absolute sim
+    // time, so the venue takes both and compares schedules only against this.
     for (const venue of this.gauntletVenues.values())
-      venue.update(this.time, this.sim.gauntletRun, p.pos);
+      venue.update(this.time, this.sim.time, this.sim.gauntletRun, p.pos);
     // The Proving Grounds room: a gentle torch flicker plus the roof cull (the
     // ceiling drops when the boom rises through it). No-op cost when unbuilt.
     this.minigameHub?.update(this.time, this.camera.position, this.cameraLookAt);

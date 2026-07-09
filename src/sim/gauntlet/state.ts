@@ -233,6 +233,12 @@ export interface GauntletRun {
   // it, the podium hides "rejoin queue", and it records no ladder stats. A normal
   // rolling-queue game is false.
   practice: boolean;
+  // Practice-a-single-game: the chosen trial index (into GAUNTLET.trials), or
+  // null for the full six-trial run. When set, the run starts AT that trial
+  // (the field is stood at its arena for the staging countdown) and goes to
+  // the podium as soon as it resolves, instead of on to the next trial. Only
+  // ever non-null on a practice run.
+  practiceTrial: number | null;
   seed: number;
   // Per-run deterministic stream (NEVER the shared sim stream): the roster,
   // trial schedules, and NPC scripts all draw from here, so an active run

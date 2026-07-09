@@ -1094,6 +1094,10 @@ export class ClientWorld implements IWorld {
   // server-measured achieved sim tick rate (Hz), mirrored from the snap head;
   // null until the server's meter warms up (perf overlay hides the row)
   serverTickHz: number | null = null;
+  // the authoritative sim clock (seconds), mirrored from the snap head's `time`;
+  // the `time` getter below extrapolates between snapshots with the wall clock
+  private serverTime = 0;
+  private serverTimeAnchorMs = 0;
   // entity id -> performance.now() when it first went missing from a snapshot;
   // used for the despawn grace window (anti-flicker), cleared once it returns
   private missingSince = new Map<number, number>();
@@ -1223,6 +1227,17 @@ export class ClientWorld implements IWorld {
 
   get player(): Entity {
     return this.entities.get(this.playerId) ?? blankEntity(-1);
+  }
+
+  // IWorld `time`: the authoritative sim clock, mirrored from the snap head and
+  // extrapolated between snapshots with the wall clock (clamped so a stalled
+  // connection never runs ahead by more than a second). 0 until the first snap.
+  // Presentation timing only; nothing gameplay-authoritative derives from it.
+  get time(): number {
+    const base = this.serverTime ?? 0;
+    if (!base) return 0;
+    const sinceS = (performance.now() - this.serverTimeAnchorMs) / 1000;
+    return base + Math.min(1, Math.max(0, sinceS));
   }
 
   drainEvents(): SimEvent[] {
@@ -1517,6 +1532,13 @@ export class ClientWorld implements IWorld {
     // cadence undercounts sag: catch-up runs several sim ticks per broadcast).
     if (typeof snap.tickHz === 'number' && Number.isFinite(snap.tickHz) && snap.tickHz > 0) {
       this.serverTickHz = snap.tickHz;
+    }
+    // The authoritative sim clock from the snap head: the IWorld `time` getter
+    // extrapolates from this anchor so absolute sim-time schedules on the wire
+    // (gauntlet echo flashes, phase deadlines) can be compared client-side.
+    if (typeof snap.time === 'number' && Number.isFinite(snap.time)) {
+      this.serverTime = snap.time;
+      this.serverTimeAnchorMs = now;
     }
 
     // lazy init (not the field initializer alone): tests build bare instances
@@ -2591,8 +2613,10 @@ export class ClientWorld implements IWorld {
   gauntletSpectate(): void {
     this.cmd({ cmd: 'gauntlet_spectate' });
   }
-  gauntletPractice(): void {
-    this.cmd({ cmd: 'gauntlet_practice' });
+  gauntletPractice(trial?: number): void {
+    // `trial` picks a single game to practice; omitted = the full run. The
+    // server passes it to the sim raw, which validates the index.
+    this.cmd(trial == null ? { cmd: 'gauntlet_practice' } : { cmd: 'gauntlet_practice', trial });
   }
   gauntletRejoin(): void {
     this.cmd({ cmd: 'gauntlet_rejoin' });

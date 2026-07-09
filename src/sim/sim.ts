@@ -7092,8 +7092,11 @@ export class Sim {
     gauntletModesMod.gauntletSpectate(this.ctx, pid);
   }
 
-  gauntletPractice(pid?: number): void {
-    gauntletModesMod.gauntletPractice(this.ctx, pid);
+  // `trial` picks a single game to practice (an index into GAUNTLET.trials);
+  // omitted means the full run. Arg order matches the other gauntlet commands
+  // (payload first, pid last).
+  gauntletPractice(trial?: number | null, pid?: number): void {
+    gauntletModesMod.gauntletPractice(this.ctx, pid, trial);
   }
 
   gauntletRejoin(pid?: number): void {

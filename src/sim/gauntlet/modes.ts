@@ -109,7 +109,11 @@ export function gauntletRejoin(ctx: SimContext, pid?: number): void {
 // Practice
 // ---------------------------------------------------------------------------
 
-export function gauntletPractice(ctx: SimContext, pid?: number): void {
+// `trial` picks a single game to practice (an index into GAUNTLET.trials): the
+// run opens at that trial and podiums when it resolves. Omitted/invalid means
+// the full six-trial run. Validated here (the server passes the wire value
+// through raw), so a garbage index can never land on the run.
+export function gauntletPractice(ctx: SimContext, pid?: number, trial?: number | null): void {
   const r = ctx.resolve(pid);
   if (!r) return;
   const id = r.meta.entityId;
@@ -120,7 +124,14 @@ export function gauntletPractice(ctx: SimContext, pid?: number): void {
     ctx.error(id, gate);
     return;
   }
-  const run = openLobbyRun(ctx, { practice: true });
+  const practiceTrial =
+    typeof trial === 'number' &&
+    Number.isInteger(trial) &&
+    trial >= 0 &&
+    trial < GAUNTLET.trials.length
+      ? trial
+      : null;
+  const run = openLobbyRun(ctx, { practice: true, practiceTrial });
   if (!run) {
     ctx.error(id, 'The Gauntlet is full. Try again soon.');
     return;

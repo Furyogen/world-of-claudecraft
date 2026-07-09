@@ -10,4 +10,10 @@ export interface IWorldEntityRoster {
   moveInput: MoveInput;
   // the realm (world/shard) this character lives on; '' in offline play
   realm: string;
+  // The absolute sim clock (seconds). Offline this is the Sim's own tick clock;
+  // online the ClientWorld mirrors the snapshot head's `time` and extrapolates
+  // between snapshots with the wall clock. Consumers compare it against the
+  // absolute sim-time deadlines/schedules the wire carries (e.g. the gauntlet
+  // echo flash schedule); it is presentation timing, never a gameplay input.
+  time: number;
 }

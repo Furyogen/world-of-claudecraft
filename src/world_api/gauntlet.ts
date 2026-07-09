@@ -30,7 +30,10 @@ export interface IWorldGauntlet {
   // NPC bots; or, from the podium, rejoin the queue at the BACK.
   gauntletQueueJoin(): void;
   gauntletSpectate(): void;
-  gauntletPractice(): void;
+  // Practice takes an optional single game to drill (an index into the trial
+  // sequence, sim-validated): the run opens at that trial and podiums when it
+  // resolves. Omitted means the full six-trial run.
+  gauntletPractice(trial?: number): void;
   gauntletRejoin(): void;
   // Leave whatever gauntlet state the player is in: dequeue, stop spectating,
   // withdraw from the lobby, forfeit a live run, or exit the podium.

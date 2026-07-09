@@ -166,6 +166,17 @@ export const ko_KR: EnTranslations = {
       "stopSpectating": "관전 종료",
       "practice": "연습",
       "practiceNote": "봇만 상대하는 즉시 솔로 도전.",
+      "eventClosedNote": "지금은 대회가 열려 있지 않아 대기열과 관전을 이용할 수 없습니다. 연습은 언제든 가능합니다.",
+      "practicePickTitle": "연습할 종목을 선택하세요",
+      "practiceFull": "시련의 관문 전체",
+      "trialNames": {
+        "sentinel": "보초의 횡단",
+        "sigils": "설탕유리 인장",
+        "pull": "줄다리기 대전",
+        "echo": "파수꾼의 메아리",
+        "span": "부서지는 다리",
+        "court": "최후의 결투장"
+      },
       "rejoinQueue": "대기열 재참가",
       "lobbyJoined": "대기실에 {count}명",
       "lobbyCountdown": "{seconds}초 후 시작",

@@ -3729,10 +3729,11 @@ export class GameServer {
         sim.delveRiteChoose(msg.intensity, pid);
         break;
       }
-      // The Gauntlet: all bare commands (no payload fields to validate); the sim
-      // gates everything (event window, recruiter radius, dead, run/queue/spectate
-      // membership) and resolves every outcome. gauntlet_join is the instant
-      // walk-up path; queue/spectate/practice/rejoin are the three player modes.
+      // The Gauntlet: bare commands (practice alone carries an optional trial
+      // index, shape-checked at its case); the sim gates everything (event
+      // window, recruiter radius, dead, run/queue/spectate membership) and
+      // resolves every outcome. gauntlet_join is the instant walk-up path;
+      // queue/spectate/practice/rejoin are the three player modes.
       case 'gauntlet_join': {
         sim.gauntletJoin(pid);
         break;
@@ -3746,7 +3747,14 @@ export class GameServer {
         break;
       }
       case 'gauntlet_practice': {
-        sim.gauntletPractice(pid);
+        // Optional single-game pick: a small integer index into the trial
+        // sequence. Shape-checked here; the sim re-validates the range against
+        // GAUNTLET.trials and falls back to the full run on garbage.
+        const trial = Number(msg.trial);
+        sim.gauntletPractice(
+          Number.isInteger(trial) && trial >= 0 && trial < 16 ? trial : undefined,
+          pid,
+        );
         break;
       }
       case 'gauntlet_rejoin': {

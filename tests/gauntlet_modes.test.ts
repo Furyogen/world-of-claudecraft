@@ -118,7 +118,7 @@ describe('The Gauntlet Practice (instant, solo vs bots, always available)', () =
     sim.gauntletQueueJoin(a);
     expect(sim.gauntletQueuePositionOf(a)).toBe(0); // rejected while closed
 
-    sim.gauntletPractice(a);
+    sim.gauntletPractice(undefined, a);
     const run = gauntletRunForPlayer(sim.ctx, a);
     expect(run).not.toBeNull();
     expect(run!.practice).toBe(true);
@@ -131,7 +131,7 @@ describe('The Gauntlet Practice (instant, solo vs bots, always available)', () =
   it('records no ladder stats (practice never inflates runs/wins)', () => {
     const sim = makeSim();
     const a = addNear(sim, 'Trainee');
-    sim.gauntletPractice(a);
+    sim.gauntletPractice(undefined, a);
     expect(sim.gauntletRuns[0]!.practice).toBe(true);
     const meta = sim.players.get(a)!;
     expect(meta.gauntletStats.runs).toBe(0);
@@ -140,7 +140,7 @@ describe('The Gauntlet Practice (instant, solo vs bots, always available)', () =
   it('is invisible to the queue matchmaker (does not block a rolling game)', () => {
     const sim = makeSim();
     const practicer = addNear(sim, 'Solo');
-    sim.gauntletPractice(practicer);
+    sim.gauntletPractice(undefined, practicer);
     // A separate player queues; the matchmaker must still form their game despite
     // the live practice run occupying a slot.
     const q = addNear(sim, 'Queuer');
@@ -148,6 +148,53 @@ describe('The Gauntlet Practice (instant, solo vs bots, always available)', () =
     advanceUntil(sim, () => gauntletRunForPlayer(sim.ctx, q) !== null);
     expect(gauntletRunForPlayer(sim.ctx, q)).not.toBeNull();
     expect(gauntletRunForPlayer(sim.ctx, q)!.practice).toBe(false);
+  });
+
+  it('practicing a picked game opens AT that trial, seated at its arena', () => {
+    const sim = makeSim(7, false); // practice ignores the closed window
+    const a = addNear(sim, 'Driller');
+    const echoIndex = GAUNTLET.trials.indexOf('echo');
+    sim.gauntletPractice(echoIndex, a);
+    const run = gauntletRunForPlayer(sim.ctx, a)!;
+    expect(run.practice).toBe(true);
+    expect(run.practiceTrial).toBe(echoIndex);
+    expect(run.trialIndex).toBe(echoIndex); // opens at the picked game, not trial 0
+    expect(run.phase).toBe('staging');
+    // The roster is the field that trial would actually see (the previous
+    // trial's survivor target), never the full 30-body starting field.
+    expect(run.contestants.length).toBe(GAUNTLET.targetSurvivorsPerTrial[echoIndex - 1]);
+    // The field stands at the echo courtyard for the countdown, not on the
+    // sentinel staging line (stagingZ = -10; the courtyard is ~100yd north).
+    const e = sim.entities.get(a)!;
+    expect(e.pos.z - run.origin.z).toBeGreaterThan(50);
+    // Staging elapses into the picked trial itself.
+    advanceUntil(sim, () => run.phase === 'trial');
+    expect(run.trial?.kind).toBe('echo');
+  });
+
+  it('a picked-game practice run podiums when its one trial resolves', () => {
+    const sim = makeSim(7, false);
+    const a = addNear(sim, 'Driller');
+    const echoIndex = GAUNTLET.trials.indexOf('echo');
+    sim.gauntletPractice(echoIndex, a);
+    const run = gauntletRunForPlayer(sim.ctx, a)!;
+    advanceUntil(sim, () => run.phase === 'trial');
+    // Ride out the whole trial window without answering: the trial resolves on
+    // its clock, and a single-game practice goes straight to the podium (never
+    // to an interlude for the next trial).
+    advanceUntil(sim, () => run.phase !== 'trial', 20 * (GAUNTLET.echo.durationS + 10));
+    expect(run.phase).toBe('podium');
+    // No ladder stats from practice, exactly like the full-run harness.
+    expect(sim.players.get(a)!.gauntletStats.runs).toBe(0);
+  });
+
+  it('an out-of-range trial pick falls back to the full run from trial 0', () => {
+    const sim = makeSim(7, false);
+    const a = addNear(sim, 'Driller');
+    sim.gauntletPractice(99, a);
+    const run = gauntletRunForPlayer(sim.ctx, a)!;
+    expect(run.practiceTrial).toBeNull();
+    expect(run.trialIndex).toBe(0);
   });
 });
 

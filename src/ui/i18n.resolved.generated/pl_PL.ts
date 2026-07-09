@@ -166,6 +166,17 @@ export const pl_PL: EnTranslations = {
       "stopSpectating": "Stop Spectating",
       "practice": "Practice",
       "practiceNote": "An instant solo run against a field of bots.",
+      "eventClosedNote": "The games are not running right now, so the queue and the stands are closed. Practice is always open.",
+      "practicePickTitle": "Pick a game to practice",
+      "practiceFull": "Full Gauntlet",
+      "trialNames": {
+        "sentinel": "Sentinel's Crossing",
+        "sigils": "Sugarglass Sigils",
+        "pull": "The Great Pull",
+        "echo": "The Keeper's Echo",
+        "span": "The Brittle Span",
+        "court": "The Final Court"
+      },
       "rejoinQueue": "Rejoin the Queue",
       "lobbyJoined": "{count} in the lobby",
       "lobbyCountdown": "The run begins in {seconds}s",

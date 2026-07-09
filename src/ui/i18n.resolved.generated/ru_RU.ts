@@ -166,6 +166,17 @@ export const ru_RU: EnTranslations = {
       "stopSpectating": "Прекратить наблюдение",
       "practice": "Тренировка",
       "practiceNote": "Мгновенный одиночный забег против ботов.",
+      "eventClosedNote": "Сейчас игры не проводятся: очередь и трибуны закрыты. Тренировка открыта всегда.",
+      "practicePickTitle": "Выберите испытание для тренировки",
+      "practiceFull": "Полный Гаунтлет",
+      "trialNames": {
+        "sentinel": "Переправа Стража",
+        "sigils": "Печати из сахарного стекла",
+        "pull": "Великое перетягивание",
+        "echo": "Эхо Хранителя",
+        "span": "Хрупкий мост",
+        "court": "Последняя арена"
+      },
       "rejoinQueue": "Вернуться в очередь",
       "lobbyJoined": "В лобби: {count}",
       "lobbyCountdown": "Забег начнётся через {seconds} с",

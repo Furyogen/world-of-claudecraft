@@ -135,7 +135,7 @@ export function gauntletQueueConflict(ctx: SimContext, pid: number): boolean {
 // private solo run the matchmaker and spectators skip.
 export function openLobbyRun(
   ctx: SimContext,
-  opts?: { practice?: boolean; countdownS?: number },
+  opts?: { practice?: boolean; countdownS?: number; practiceTrial?: number | null },
 ): GauntletRun | null {
   const usedSlots = new Set(ctx.gauntletRuns.map((g) => g.slot));
   let slot = -1;
@@ -153,6 +153,7 @@ export function openLobbyRun(
     id: ctx.nextGauntletRunId++,
     slot,
     practice: opts?.practice ?? false,
+    practiceTrial: opts?.practice ? (opts?.practiceTrial ?? null) : null,
     seed,
     rng: new Rng(seed),
     origin: gauntletOrigin(slot),
@@ -330,7 +331,18 @@ function emitPhase(ctx: SimContext, run: GauntletRun): void {
 // the watcher, teleport the players onto the staging line-up.
 export function startRun(ctx: SimContext, run: GauntletRun): void {
   const players = run.contestants.filter((c) => c.player);
-  const backfill = Math.max(0, GAUNTLET.fieldSize - run.contestants.length);
+  // A practice run that opens at a later trial fields the roster that trial
+  // would actually see: the NPC backfill fills toward the PREVIOUS trial's
+  // survivor target, not the full starting field (30 bodies at the 12 echo
+  // desks or on one rope would swamp every later arena's seating).
+  const fieldTarget =
+    run.practiceTrial !== null && run.practiceTrial > 0
+      ? Math.max(
+          players.length,
+          GAUNTLET.targetSurvivorsPerTrial[run.practiceTrial - 1] ?? GAUNTLET.fieldSize,
+        )
+      : GAUNTLET.fieldSize;
+  const backfill = Math.max(0, fieldTarget - run.contestants.length);
   for (let i = 0; i < backfill; i++) run.contestants.push(rollNpcContestant(run));
   spawnNpcContestants(ctx, run, players.length);
   // No watcher ENTITY: the venue's Stone Warden effigy is the watcher (its
@@ -338,6 +350,10 @@ export function startRun(ctx: SimContext, run: GauntletRun): void {
   // standing under a monument reads as a glitch. run.watcherId stays null.
   run.phase = 'staging';
   run.phaseEndsAt = ctx.time + GAUNTLET.stagingS;
+  // Practice-a-single-game: the run opens AT the chosen trial. Set the index
+  // before the phase emit below so the client banners/clock key off the real
+  // trial from the first frame.
+  if (run.practiceTrial !== null) run.trialIndex = run.practiceTrial;
   for (let i = 0; i < players.length; i++) {
     const e = ctx.entities.get(players[i].entityId);
     const meta = ctx.players.get(players[i].entityId);
@@ -363,6 +379,13 @@ export function startRun(ctx: SimContext, run: GauntletRun): void {
       // mirror below takes the entity hp over for the run's duration.
       ps.savedHp = e.hp;
     }
+  }
+  // Stand the practice field at the chosen game's arena for the staging
+  // countdown (a no-op for the sentinel, whose arena IS the staging field:
+  // trialArenaAnchor returns null and the line-up above stands). Re-pins the
+  // players at the arena, overriding the staging pins set just above.
+  if (run.practiceTrial !== null) {
+    moveFieldToTrial(ctx, run, GAUNTLET.trials[run.trialIndex]);
   }
   emitPhase(ctx, run);
 }
@@ -431,22 +454,23 @@ function trialArenaAnchor(kind: string | undefined): { x: number; z: number } | 
   }
 }
 
-// Transport the whole field to the NEXT trial's arena and pin the live players
-// there for the interlude countdown, so you arrive as the 'trial cleared' +
-// countdown appear (not when the countdown finishes). It is a "waiting" line-up;
-// startTrial re-seats everyone at their exact stations when the trial begins
-// (and clears these pins for the movement trials).
-function positionFieldForNextTrial(ctx: SimContext, run: GauntletRun): void {
-  const nextKind = GAUNTLET.trials[run.trialIndex + 1];
-  const anchor = trialArenaAnchor(nextKind);
+// Transport the whole field to a trial's arena and pin the live players there
+// for the current phase's countdown. The interlude uses this for the NEXT
+// trial (you arrive as the 'trial cleared' + countdown appear, not when the
+// countdown finishes), and a practice-a-single-game run uses it at startRun to
+// stand the field at the chosen arena for the staging countdown. It is a
+// "waiting" line-up; startTrial re-seats everyone at their exact stations when
+// the trial begins (and clears these pins for the movement trials).
+function moveFieldToTrial(ctx: SimContext, run: GauntletRun, kind: string | undefined): void {
+  const anchor = trialArenaAnchor(kind);
   if (!anchor) return;
-  // Stand the field in the NEXT trial's REAL layout (lined up on the rope, at
+  // Stand the field in the trial's REAL layout (lined up on the rope, at
   // the etching lecterns, at the memory desks, squared up at the crossing), not
-  // a generic blob, so the interlude reads as "everyone's already in position."
+  // a generic blob, so the wait reads as "everyone's already in position."
   // Each seat helper is positioning-only and rng-free. The court pairs its duels
   // with an rng draw at its own start, so it keeps the generic gather here
-  // (drawing rng in the interlude would shift the court's stream).
-  switch (nextKind) {
+  // (drawing rng in the wait would shift the court's stream).
+  switch (kind) {
     case 'sigils':
       seatSigilsField(ctx, run);
       break;
@@ -720,7 +744,9 @@ export function updateGauntletRuns(ctx: SimContext): void {
         const done = updateTrial(ctx, run);
         if (done) {
           run.trial = null;
-          if (run.trialIndex + 1 >= GAUNTLET.trials.length) {
+          // A practice-a-single-game run ends at its chosen trial: straight to
+          // the podium, never on to the next arena.
+          if (run.trialIndex + 1 >= GAUNTLET.trials.length || run.practiceTrial !== null) {
             run.phase = 'podium';
             run.phaseEndsAt = ctx.time + GAUNTLET.podiumS;
             computePodium(ctx, run);
@@ -731,7 +757,7 @@ export function updateGauntletRuns(ctx: SimContext): void {
             // Transport to the next arena NOW (as the countdown appears), not
             // when it finishes: you wait out the cooldown standing at the next
             // game's venue.
-            positionFieldForNextTrial(ctx, run);
+            moveFieldToTrial(ctx, run, GAUNTLET.trials[run.trialIndex + 1]);
             emitPhase(ctx, run);
           }
         }
