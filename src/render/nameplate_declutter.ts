@@ -31,6 +31,22 @@ const STACK_OFFSET_PX = 20;
 // more than one cell apart on either axis and a 3x3 neighbourhood is exhaustive.
 const CELL_BIAS = 1 << 15; // keeps negative (just-offscreen) cells non-negative
 const CELL_STRIDE = 1 << 16;
+// A point projected near the camera plane lands arbitrarily far off-screen, so
+// clamp each cell coord into 16 bits. `cx * STRIDE + cy` is then an INJECTIVE
+// packing of the clamped cell (both fields fit their lane), never a lossy hash.
+//
+// Anchors beyond the clamp collapse onto an edge cell. That only makes one bucket
+// hold extra candidates: membership is decided by the exact |dx| / |dy| test
+// below, never by the key, and a true neighbour always lands in the scanned 3x3
+// neighbourhood. So clustering is identical to the reference at any coordinate.
+const CELL_MIN = -CELL_BIAS;
+const CELL_MAX = CELL_BIAS - 1;
+
+function cellCoord(v: number, size: number): number {
+  const c = Math.floor(v / size);
+  if (!(c > CELL_MIN)) return CELL_MIN + CELL_BIAS; // also catches NaN
+  return (c > CELL_MAX ? CELL_MAX : c) + CELL_BIAS;
+}
 
 // ---------------------------------------------------------------------------
 // Reusable workspace. The painter calls this once per frame on one thread, so a
@@ -74,8 +90,8 @@ export function declutterNameplatesInPlace(
   order.sort((a, b) => anchors[a].id - anchors[b].id);
 
   for (let i = 0; i < n; i++) {
-    const cx = Math.floor(anchors[i].sx / OVERLAP_THRESHOLD_X_PX) + CELL_BIAS;
-    const cy = Math.floor(anchors[i].sy / OVERLAP_THRESHOLD_Y_PX) + CELL_BIAS;
+    const cx = cellCoord(anchors[i].sx, OVERLAP_THRESHOLD_X_PX);
+    const cy = cellCoord(anchors[i].sy, OVERLAP_THRESHOLD_Y_PX);
     const key = cx * CELL_STRIDE + cy;
     let bucket = cells.get(key);
     if (!bucket) {
@@ -93,8 +109,8 @@ export function declutterNameplatesInPlace(
 
     // gather this anchor's collision cluster from the 3x3 cell neighbourhood
     cluster.length = 0;
-    const cx = Math.floor(ax / OVERLAP_THRESHOLD_X_PX) + CELL_BIAS;
-    const cy = Math.floor(ay / OVERLAP_THRESHOLD_Y_PX) + CELL_BIAS;
+    const cx = cellCoord(ax, OVERLAP_THRESHOLD_X_PX);
+    const cy = cellCoord(ay, OVERLAP_THRESHOLD_Y_PX);
     for (let dx = -1; dx <= 1; dx++) {
       for (let dy = -1; dy <= 1; dy++) {
         const bucket = cells.get((cx + dx) * CELL_STRIDE + (cy + dy));

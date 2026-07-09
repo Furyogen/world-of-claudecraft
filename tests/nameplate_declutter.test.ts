@@ -191,6 +191,53 @@ describe('nameplate declutter: spatial-hash hot path', () => {
     expect(Math.abs(actual[0].sy - actual[1].sy)).toBeGreaterThanOrEqual(18);
   });
 
+  it('matches the reference for anchors projected millions of pixels off-screen', () => {
+    const anchors: NameplateAnchor[] = [
+      { id: 1, sx: 4e7, sy: 3e6 },
+      { id: 2, sx: 4e7 + 30, sy: 3e6 + 5 }, // collides with 1
+      { id: 3, sx: -4e7, sy: -3e6 }, // far away, must not join
+      { id: 4, sx: 500, sy: 500 },
+    ];
+    const expected = declutterReference(anchors);
+    const actual = declutterNameplatesInPlace(anchors.map((a) => ({ ...a })));
+    for (let i = 0; i < anchors.length; i++) expect(actual[i].sy).toBeCloseTo(expected[i].sy, 6);
+    expect(Math.abs(actual[0].sy - actual[1].sy)).toBeGreaterThanOrEqual(18);
+    expect(actual[2].sy).toBe(-3e6); // untouched
+    expect(actual[3].sy).toBe(500); // untouched
+  });
+
+  it('anchors past the cell clamp share an edge bucket yet cluster like the reference', () => {
+    // Beyond ~2.6M px the cell coords clamp, so ALL of these land in one bucket.
+    // Membership must still be decided by the exact |dx| / |dy| test: the two
+    // distant pairs must not merge into a single stack.
+    const anchors: NameplateAnchor[] = [
+      { id: 1, sx: 5e6, sy: 1e6 },
+      { id: 2, sx: 5e6 + 10, sy: 1e6 + 2 }, // pair A
+      { id: 3, sx: 9e6, sy: 2e6 },
+      { id: 4, sx: 9e6 + 10, sy: 2e6 + 2 }, // pair B, same clamped cell as A
+    ];
+    const expected = declutterReference(anchors);
+    const actual = declutterNameplatesInPlace(anchors.map((x) => ({ ...x })));
+    for (let i = 0; i < anchors.length; i++) expect(actual[i].sy).toBeCloseTo(expected[i].sy, 6);
+
+    // each pair stacked with its own neighbour, and the two pairs stayed apart
+    expect(Math.abs(actual[0].sy - actual[1].sy)).toBeGreaterThanOrEqual(18);
+    expect(Math.abs(actual[2].sy - actual[3].sy)).toBeGreaterThanOrEqual(18);
+    expect(Math.abs(actual[0].sy - actual[2].sy)).toBeGreaterThan(1000);
+  });
+
+  it('survives a non-finite projection without throwing', () => {
+    const anchors: NameplateAnchor[] = [
+      { id: 1, sx: Number.NaN, sy: Number.NaN },
+      { id: 2, sx: Number.POSITIVE_INFINITY, sy: 10 },
+      { id: 3, sx: 100, sy: 100 },
+      { id: 4, sx: 104, sy: 101 },
+    ];
+    expect(() => declutterNameplatesInPlace(anchors)).not.toThrow();
+    // the two real, colliding anchors still separated
+    expect(Math.abs(anchors[2].sy - anchors[3].sy)).toBeGreaterThanOrEqual(18);
+  });
+
   it('is reusable across calls of shrinking size (stale scratch never leaks)', () => {
     const big: NameplateAnchor[] = [];
     for (let i = 0; i < 50; i++) big.push({ id: i + 1, sx: 100, sy: 100 });

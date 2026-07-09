@@ -224,6 +224,9 @@ export function mergeSkinnedParts(root: THREE.Object3D): void {
     merged.scale.copy(canon.scale);
     merged.castShadow = canon.castShadow;
     merged.receiveShadow = canon.receiveShadow;
+    // A skinned mesh's bind-pose bounds do not follow the animation, so the rig
+    // owner decides culling (visual.ts turns it off); inherit, never re-decide.
+    merged.frustumCulled = canon.frustumCulled;
     merged.userData = { ...canon.userData };
     merged.bind(canon.skeleton, canon.bindMatrix);
     canon.parent?.add(merged);
