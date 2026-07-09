@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { GAUNTLET } from '../src/sim/content/gauntlet';
+import { GAUNTLET, GAUNTLET_LAYOUT, gauntletSpectatorSpot } from '../src/sim/content/gauntlet';
 import { gauntletRunForPlayer } from '../src/sim/gauntlet/runs';
+import { applyVitalityDamage } from '../src/sim/gauntlet/vitality';
 import { Sim } from '../src/sim/sim';
 import { groundHeight } from '../src/sim/world';
 
@@ -195,6 +196,32 @@ describe('The Gauntlet Practice (instant, solo vs bots, always available)', () =
     const run = gauntletRunForPlayer(sim.ctx, a)!;
     expect(run.practiceTrial).toBeNull();
     expect(run.trialIndex).toBe(0);
+  });
+
+  it('a knockout parks the fallen beside the LIVE arena; the podium gathers everyone', () => {
+    const sim = makeSim(7, false);
+    const a = addNear(sim, 'Faller');
+    const echoIndex = GAUNTLET.trials.indexOf('echo');
+    sim.gauntletPractice(echoIndex, a);
+    const run = gauntletRunForPlayer(sim.ctx, a)!;
+    advanceUntil(sim, () => run.phase === 'trial');
+    // Knock the player out mid-echo: they park at the echo courtyard's viewing
+    // spot (inside the ~90yd player interest radius), NOT the sentinel-field
+    // terrace 100+ yards away.
+    const c = run.contestants.find((k) => k.entityId === a)!;
+    applyVitalityDamage(sim.ctx, run, c, GAUNTLET.vitalityMax, 'trial');
+    expect(run.playerStates.get(a)!.spectating).toBe(true);
+    const e = sim.entities.get(a)!;
+    const spot = gauntletSpectatorSpot('echo');
+    const dPark = Math.hypot(e.pos.x - (run.origin.x + spot.x), e.pos.z - (run.origin.z + spot.z));
+    expect(dPark).toBeLessThan(1);
+    // The NPC field finishes without them; the single-game practice podiums,
+    // and the ceremony gathers the fallen player onto the plaza in front of
+    // the winners' stand (again inside interest range of the champions).
+    advanceUntil(sim, () => run.phase === 'podium', 20 * (GAUNTLET.echo.durationS + 30));
+    expect(run.phase).toBe('podium');
+    const plazaZ = run.origin.z + GAUNTLET_LAYOUT.podium.z + 12;
+    expect(Math.abs(e.pos.z - plazaZ)).toBeLessThan(6);
   });
 });
 

@@ -4,7 +4,7 @@
 // Trials land one per release phase; `trials` below is the currently shipped
 // sequence and grows as later trials are implemented.
 
-import type { GauntletDef, NpcDef, PlayerClass } from '../types';
+import type { GauntletDef, GauntletTrialKind, NpcDef, PlayerClass } from '../types';
 
 export const GAUNTLET_RECRUITER_NPC_ID = 'gauntlet_recruiter';
 export const GAUNTLET_WATCHER_NPC_ID = 'gauntlet_watcher';
@@ -277,6 +277,36 @@ export const GAUNTLET_VENUE = {
     },
   },
 } as const;
+
+// Where a knocked-out contestant parks to watch the rest of the run: beside
+// the arena the named trial plays at. The sentinel keeps the original
+// grandstand terrace; every later arena parks its fallen a few yards off its
+// own anchor, because the terrace sits 130+ yards from the west arenas, past
+// the ~90yd player interest radius, so a fallen player parked there would
+// watch an empty field for the rest of the run. Instance-local yards; spots
+// are authored clear of each arena's play surface and dressing.
+export function gauntletSpectatorSpot(kind: GauntletTrialKind | undefined): {
+  x: number;
+  z: number;
+} {
+  const V = GAUNTLET_VENUE;
+  switch (kind) {
+    case 'sigils':
+      return { x: V.sigils.x + V.sigils.radius + 4, z: V.sigils.z };
+    case 'pull':
+      return { x: V.pull.x, z: V.pull.z - V.pull.width / 2 - 5.5 };
+    case 'echo':
+      // the courtyard's open east side, outside the walls
+      return { x: V.echo.x + V.echo.size / 2 + 3, z: V.echo.z };
+    case 'span':
+      return { x: V.span.x + 12, z: V.span.z };
+    case 'court':
+      // outside the torch ring and the flanking idols
+      return { x: V.court.x + V.court.radius + 5, z: V.court.z };
+    default:
+      return { x: GAUNTLET_LAYOUT.spectatorX, z: GAUNTLET_LAYOUT.spectatorZ };
+  }
+}
 
 // The i-th ring lectern's angle (the venue's sin/cos convention: position =
 // anchor + (sin a, cos a) * radius). The ring spreads evenly around the dais

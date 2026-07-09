@@ -7,7 +7,7 @@
 //
 // The score-to-damage curves are pure and Node-tested directly.
 
-import { GAUNTLET, GAUNTLET_LAYOUT } from '../content/gauntlet';
+import { GAUNTLET, gauntletSpectatorSpot } from '../content/gauntlet';
 import type { SimContext } from '../sim_context';
 import type { GauntletDamageCause } from '../types';
 import type { GauntletContestant, GauntletRun } from './state';
@@ -124,9 +124,10 @@ export function eliminateContestant(
     if (ctx.entities.has(c.entityId)) ctx.dropEntity(c.entityId);
     return;
   }
-  // Player knockout: park them on the spectator platform beside the field.
-  // They keep watching (all run events still reach them) and can leave any
-  // time via gauntletLeave.
+  // Player knockout: park them at the LIVE trial's viewing spot (beside the
+  // arena they just fell at, inside the player interest radius; runs.ts moves
+  // them along with the field between trials). They keep watching (all run
+  // events still reach them) and can leave any time via gauntletLeave.
   const ps = run.playerStates.get(c.entityId);
   if (ps) {
     ps.spectating = true;
@@ -135,10 +136,8 @@ export function eliminateContestant(
     ps.momentumZ = 0;
   }
   if (parkPlayer && e) {
-    e.pos = ctx.groundPos(
-      run.origin.x + GAUNTLET_LAYOUT.spectatorX,
-      run.origin.z + GAUNTLET_LAYOUT.spectatorZ,
-    );
+    const spot = gauntletSpectatorSpot(GAUNTLET.trials[run.trialIndex]);
+    e.pos = ctx.groundPos(run.origin.x + spot.x, run.origin.z + spot.z);
     e.prevPos = { ...e.pos };
     ctx.rebucket(e);
   }

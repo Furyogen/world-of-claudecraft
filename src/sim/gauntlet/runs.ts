@@ -11,9 +11,11 @@
 
 import {
   GAUNTLET,
+  GAUNTLET_LAYOUT,
   GAUNTLET_RECRUITER_ID,
   GAUNTLET_RECRUITER_NPC_ID,
   GAUNTLET_VENUE,
+  gauntletSpectatorSpot,
 } from '../content/gauntlet';
 import {
   dungeonAt,
@@ -30,7 +32,7 @@ import { createNpc } from '../entity';
 import { restorePetFromDelveStash, stowPetForDelve } from '../pet/pet_commands';
 import { Rng } from '../rng';
 import type { SimContext } from '../sim_context';
-import { DT, type GauntletRunView } from '../types';
+import { DT, type GauntletRunView, type GauntletTrialKind } from '../types';
 import {
   idleScript,
   placeContestantsAt,
@@ -461,7 +463,11 @@ function trialArenaAnchor(kind: string | undefined): { x: number; z: number } | 
 // stand the field at the chosen arena for the staging countdown. It is a
 // "waiting" line-up; startTrial re-seats everyone at their exact stations when
 // the trial begins (and clears these pins for the movement trials).
-function moveFieldToTrial(ctx: SimContext, run: GauntletRun, kind: string | undefined): void {
+function moveFieldToTrial(
+  ctx: SimContext,
+  run: GauntletRun,
+  kind: GauntletTrialKind | undefined,
+): void {
   const anchor = trialArenaAnchor(kind);
   if (!anchor) return;
   // Stand the field in the trial's REAL layout (lined up on the rope, at
@@ -494,6 +500,19 @@ function moveFieldToTrial(ctx: SimContext, run: GauntletRun, kind: string | unde
     ps.heldUntil = run.phaseEndsAt;
     ps.momentumX = 0;
     ps.momentumZ = 0;
+  }
+  // Parked spectators follow the show: re-park every knocked-out player at
+  // this arena's viewing spot, so the games stay inside their ~90yd player
+  // interest radius (the sentinel terrace is 130+ yards from the west arenas,
+  // which would leave the fallen staring at an empty field).
+  const spot = gauntletSpectatorSpot(kind);
+  for (const [pid, ps] of run.playerStates) {
+    if (!ps.spectating) continue;
+    const e = ctx.entities.get(pid);
+    if (!e) continue;
+    e.pos = ctx.groundPos(run.origin.x + spot.x, run.origin.z + spot.z);
+    e.prevPos = { ...e.pos };
+    ctx.rebucket(e);
   }
 }
 
@@ -647,6 +666,24 @@ function computePodium(ctx: SimContext, run: GauntletRun): void {
   // Pose the top finishers on the winners' stand for the ceremony (the champion
   // arrives on the podium the instant it opens, not teleported home at the end).
   seatPodium(ctx, run, ranked);
+  // Gather every OTHER attached player (fallen spectators and non-podium
+  // finishers alike) onto the plaza in front of the stand: the last trial
+  // played 140+ yards away, past the player interest radius, so anyone left
+  // there would watch the ceremony framing point at an empty podium.
+  const seated = new Set((run.podiumSeats ?? []).map((s) => s.entityId));
+  let gathered = 0;
+  for (const pid of run.playerStates.keys()) {
+    if (seated.has(pid)) continue;
+    const e = ctx.entities.get(pid);
+    if (!e) continue;
+    const wx = run.origin.x + (gathered % 2 === 0 ? -1 : 1) * (2 + Math.floor(gathered / 2) * 2);
+    e.pos = ctx.groundPos(wx, run.origin.z + GAUNTLET_LAYOUT.podium.z + 12);
+    e.prevPos = { ...e.pos };
+    e.facing = Math.PI; // face the stand (it sits south, at -z, of the plaza spot)
+    e.prevFacing = e.facing;
+    ctx.rebucket(e);
+    gathered++;
+  }
   emitToRunPlayers(ctx, run, (pid) => ({
     type: 'gauntletPodium',
     first: names[0],
