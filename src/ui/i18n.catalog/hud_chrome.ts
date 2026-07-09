@@ -597,6 +597,12 @@ export const hudChromeStrings = {
     interfaceModeTouch: 'Touch',
     interfaceModeNote:
       'Auto picks desktop or touch controls from your device. Choose Desktop to force keyboard and mouse (useful on a tablet with a keyboard), or Touch for the on-screen controls.',
+    // Opt-in display-only self-motion prediction (Graphics panel, off by
+    // default while its collision interactions are tuned; see BOOL_SETTINGS
+    // selfMotionPrediction in src/game/settings.ts).
+    motionPrediction: 'Motion Prediction',
+    motionPredictionNote:
+      'Predicts your own movement between server updates so moving feels more responsive online. Can look off around walls and obstacles; when disabled, the classic smoothing is used.',
     // Audio panel toggle for the per-footfall step clips (off by default).
     footstepSounds: 'Footstep Sounds',
     // Toggle for the OSRS-style click-feedback marker: entity targets and

@@ -550,6 +550,8 @@ export const pl_PL: EnTranslations = {
       "interfaceModeDesktop": "Komputer",
       "interfaceModeTouch": "Dotyk",
       "interfaceModeNote": "Tryb Auto dobiera sterowanie komputerowe lub dotykowe na podstawie urządzenia. Wybierz Komputer, aby wymusić klawiaturę i mysz (przydatne na tablecie z klawiaturą), lub Dotyk, aby korzystać ze sterowania ekranowego.",
+      "motionPrediction": "Przewidywanie ruchu",
+      "motionPredictionNote": "Przewiduje ruch twojej postaci między aktualizacjami serwera, dzięki czemu poruszanie się online jest bardziej responsywne. Może wyglądać nienaturalnie przy ścianach i przeszkodach; po wyłączeniu używane jest klasyczne wygładzanie.",
       "footstepSounds": "Dźwięki kroków",
       "clickFeedback": "Znacznik kliknięcia",
       "lockCursorOnRotate": "Blokuj kursor podczas obracania",

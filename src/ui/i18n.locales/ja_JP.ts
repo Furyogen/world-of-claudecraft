@@ -242,6 +242,9 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.interfaceModeTouch': 'タッチ',
   'hudChrome.options.interfaceModeNote':
     '自動では、デバイスに応じてデスクトップ操作かタッチ操作を選びます。デスクトップを選ぶとキーボードとマウスに固定され（キーボード付きタブレットなどに便利）、タッチを選ぶと画面上の操作になります。',
+  'hudChrome.options.motionPrediction': '移動予測',
+  'hudChrome.options.motionPredictionNote':
+    'サーバー更新の間に自分の移動を予測し、オンラインでの移動の反応を良くします。壁や障害物の近くでは表示が乱れることがあります。オフの場合は従来のスムージングを使用します。',
   'hudChrome.statInfo.fromYour': 'あなたの{stat}{value}による効果:',
   'hudChrome.statInfo.names.spellPower': '呪文威力',
   'hudChrome.statInfo.names.critRating': 'クリティカルレーティング',

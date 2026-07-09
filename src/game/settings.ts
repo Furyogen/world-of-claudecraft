@@ -176,6 +176,14 @@ export const BOOL_SETTINGS = {
   // vacated top spot) so incoming debuffs keep one glanceable classic corner.
   // Desktop only; the mobile layout keeps its own aura placement.
   aurasOnPlayerFrame: { def: false },
+  // off by default: the online display-only self extrapolation of your OWN
+  // character (src/render/self_motion.ts), hiding input echo latency between
+  // server snapshots. Opt-in (Graphics panel) while its collision interactions
+  // are tuned (v0.23 dev feedback); off keeps the classic lead-smoothing.
+  // ?nopredict force-disables it regardless of this setting (live-ops escape
+  // hatch, see SELF_MOTION_DISABLED in main.ts). Display-only either way: the
+  // server stays authoritative, so neither state confers a gameplay advantage.
+  selfMotionPrediction: { def: false },
 
   // --- Interface & Comfort pack (booleans). ---
   // off by default: drop every HUD cross-fade / panel animation, for players

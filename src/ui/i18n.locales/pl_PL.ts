@@ -5062,6 +5062,9 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.interfaceModeDesktop': 'Komputer',
   'hudChrome.options.interfaceModeNote':
     'Tryb Auto dobiera sterowanie komputerowe lub dotykowe na podstawie urządzenia. Wybierz Komputer, aby wymusić klawiaturę i mysz (przydatne na tablecie z klawiaturą), lub Dotyk, aby korzystać ze sterowania ekranowego.',
+  'hudChrome.options.motionPrediction': 'Przewidywanie ruchu',
+  'hudChrome.options.motionPredictionNote':
+    'Przewiduje ruch twojej postaci między aktualizacjami serwera, dzięki czemu poruszanie się online jest bardziej responsywne. Może wyglądać nienaturalnie przy ścianach i przeszkodach; po wyłączeniu używane jest klasyczne wygładzanie.',
   'hudChrome.options.interfaceModeTouch': 'Dotyk',
   'hudChrome.options.keybindHelpLockCursorOnRotate':
     'Utrzymuje kursor myszy wewnątrz okna podczas przeciągania w celu obracania kamery, aby nie mógł dotrzeć do krawędzi ekranu ani przejść na inny monitor. Wyłącz, jeśli wolisz swobodny kursor.',

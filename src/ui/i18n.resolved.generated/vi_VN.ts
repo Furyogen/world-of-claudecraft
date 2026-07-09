@@ -550,6 +550,8 @@ export const vi_VN: EnTranslations = {
       "interfaceModeDesktop": "Máy Tính",
       "interfaceModeTouch": "Cảm Ứng",
       "interfaceModeNote": "Tự Động chọn điều khiển máy tính hoặc cảm ứng theo thiết bị của bạn. Chọn Máy Tính để buộc dùng bàn phím và chuột (hữu ích trên máy tính bảng có bàn phím), hoặc Cảm Ứng để dùng các điều khiển trên màn hình.",
+      "motionPrediction": "Dự đoán chuyển động",
+      "motionPredictionNote": "Dự đoán chuyển động của nhân vật giữa các lần cập nhật từ máy chủ, giúp di chuyển trực tuyến phản hồi nhanh hơn. Có thể hiển thị sai lệch gần tường và vật cản; khi tắt sẽ dùng cách làm mượt cổ điển.",
       "footstepSounds": "Âm Thanh Bước Chân",
       "clickFeedback": "Dấu Nhấp Chuột",
       "lockCursorOnRotate": "Khóa Con Trỏ Khi Xoay",

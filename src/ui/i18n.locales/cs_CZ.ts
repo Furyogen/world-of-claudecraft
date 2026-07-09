@@ -2950,6 +2950,9 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.interfaceModeDesktop': 'Desktop',
   'hudChrome.options.interfaceModeNote':
     'Automatika vybere desktopové nebo dotykové ovládání podle zařízení. Zvol Desktop pro vynucení klávesnice a myši (užitečné na tabletu s klávesnicí), nebo Dotyk pro ovládání na obrazovce.',
+  'hudChrome.options.motionPrediction': 'Predikce pohybu',
+  'hudChrome.options.motionPredictionNote':
+    'Předvídá pohyb tvé postavy mezi aktualizacemi serveru, takže pohyb online působí svižněji. U zdí a překážek může vypadat nepřesně; při vypnutí se použije klasické vyhlazování.',
   'hudChrome.options.interfaceModeTouch': 'Dotyk',
   'hudChrome.options.itemLevelLine': 'Úroveň předmětu {level}',
   'hudChrome.options.itemScoreLine': 'Skóre {score}',

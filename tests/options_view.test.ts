@@ -111,7 +111,32 @@ describe('options_view: graphics dispatch matrix (cluster 3)', () => {
       'fullscreen',
       'showOverflowXp',
       'weather',
+      'selfMotionPrediction',
+      'note:hudChrome.options.motionPredictionNote',
     ]);
+  });
+
+  it('surfaces the opt-in motion prediction toggle on desktop and touch alike', () => {
+    // Off by default (the sim-authoritative classic smoothing stays the baseline);
+    // the row mirrors the stored value and is not gated on the interface kind.
+    for (const touch of [false, true]) {
+      const off = buildGraphicsControls(makeSource({}, {}), { touch, nativeShell: false });
+      expect(find(off, 'selfMotionPrediction')).toMatchObject({
+        control: 'boolToggle',
+        labelKey: 'hudChrome.options.motionPrediction',
+        on: false,
+      });
+      const on = buildGraphicsControls(makeSource({}, { selfMotionPrediction: true }), {
+        touch,
+        nativeShell: false,
+      });
+      expect(find(on, 'selfMotionPrediction')).toMatchObject({ control: 'boolToggle', on: true });
+      // the explainer note rides directly under the toggle
+      const keys = keysOf(on);
+      expect(keys[keys.indexOf('selfMotionPrediction') + 1]).toBe(
+        'note:hudChrome.options.motionPredictionNote',
+      );
+    }
   });
 
   it('the graphics preset picker is an enumerated choice [1..5] that re-renders', () => {

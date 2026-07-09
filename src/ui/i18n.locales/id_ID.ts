@@ -5106,6 +5106,9 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.interfaceModeDesktop': 'Desktop',
   'hudChrome.options.interfaceModeNote':
     'Otomatis memilih kontrol desktop atau sentuh dari perangkat Anda. Pilih Desktop untuk memaksa keyboard dan mouse (berguna pada tablet dengan keyboard), atau Sentuh untuk kontrol di layar.',
+  'hudChrome.options.motionPrediction': 'Prediksi Gerakan',
+  'hudChrome.options.motionPredictionNote':
+    'Memprediksi gerakan karaktermu di antara pembaruan server agar pergerakan online terasa lebih responsif. Bisa terlihat aneh di dekat dinding dan rintangan; jika dimatikan, penghalusan klasik yang digunakan.',
   'hudChrome.options.interfaceModeTouch': 'Sentuh',
   'hudChrome.options.keybindHelpLockCursorOnRotate':
     'Menjaga kursor mouse tetap di dalam jendela saat Anda menyeret untuk memutar kamera, sehingga tidak mencapai tepi layar atau berpindah ke monitor lain. Matikan jika Anda lebih suka kursor bebas.',

@@ -550,6 +550,8 @@ export const nl_NL: EnTranslations = {
       "interfaceModeDesktop": "Desktop",
       "interfaceModeTouch": "Aanraking",
       "interfaceModeNote": "Automatisch kiest desktop- of aanraakbesturing op basis van je apparaat. Kies Desktop om toetsenbord en muis af te dwingen (handig op een tablet met toetsenbord), of Aanraking voor de besturing op het scherm.",
+      "motionPrediction": "Bewegingsvoorspelling",
+      "motionPredictionNote": "Voorspelt je eigen beweging tussen serverupdates, zodat bewegen online directer aanvoelt. Kan er vreemd uitzien bij muren en obstakels; uitgeschakeld wordt de klassieke vloeiende weergave gebruikt.",
       "footstepSounds": "Voetstapgeluiden",
       "clickFeedback": "Klikmarkering",
       "lockCursorOnRotate": "Aanwijzer vergrendelen tijdens draaien",

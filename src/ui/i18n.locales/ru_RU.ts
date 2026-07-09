@@ -241,6 +241,9 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.interfaceModeTouch': 'Сенсорный',
   'hudChrome.options.interfaceModeNote':
     'В режиме «Авто» управление для компьютера или сенсорное выбирается по вашему устройству. Выберите «Компьютер», чтобы включить клавиатуру и мышь (удобно на планшете с клавиатурой), или «Сенсорный» для экранного управления.',
+  'hudChrome.options.motionPrediction': 'Прогноз движения',
+  'hudChrome.options.motionPredictionNote':
+    'Предсказывает движение вашего персонажа между обновлениями сервера, делая перемещение в сети отзывчивее. Возле стен и препятствий может выглядеть неточно; при отключении используется классическое сглаживание.',
   'hudChrome.statInfo.fromYour': 'От вашей характеристики ({value} {stat}):',
   'hudChrome.statInfo.names.spellPower': 'Сила заклинаний',
   'hudChrome.statInfo.names.critRating': 'Рейтинг крит. удара',

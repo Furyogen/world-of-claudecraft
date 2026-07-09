@@ -5028,6 +5028,9 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.interfaceModeDesktop': 'Skrivebord',
   'hudChrome.options.interfaceModeNote':
     'Auto vælger skrivebords- eller touchstyring ud fra din enhed. Vælg Skrivebord for at tvinge tastatur og mus (nyttigt på en tablet med tastatur), eller Touch for skærmstyringen.',
+  'hudChrome.options.motionPrediction': 'Bevægelsesforudsigelse',
+  'hudChrome.options.motionPredictionNote':
+    'Forudsiger din egen bevægelse mellem serveropdateringer, så det føles mere responsivt at bevæge sig online. Kan se forkert ud nær vægge og forhindringer; slået fra bruges den klassiske udjævning.',
   'hudChrome.options.interfaceModeTouch': 'Touch',
   'hudChrome.options.keybindHelpLockCursorOnRotate':
     'Holder musemarkøren inde i vinduet, mens du trækker for at dreje kameraet, så den ikke kan nå skærmkanten eller flytte til en anden skærm. Slå fra, hvis du foretrækker en fri markør.',

@@ -550,6 +550,8 @@ export const tr_TR: EnTranslations = {
       "interfaceModeDesktop": "Masaüstü",
       "interfaceModeTouch": "Dokunmatik",
       "interfaceModeNote": "Otomatik, cihazınıza göre masaüstü veya dokunmatik denetimleri seçer. Klavye ve fareyi zorlamak için Masaüstü'nü seçin (klavyeli bir tablette kullanışlıdır) ya da ekran üzeri denetimler için Dokunmatik'i seçin.",
+      "motionPrediction": "Hareket Tahmini",
+      "motionPredictionNote": "Sunucu güncellemeleri arasında kendi hareketini tahmin ederek çevrimiçi hareketi daha akıcı hissettirir. Duvar ve engellerin yakınında hatalı görünebilir; kapalıyken klasik yumuşatma kullanılır.",
       "footstepSounds": "Ayak Sesleri",
       "clickFeedback": "Tıklama İşareti",
       "lockCursorOnRotate": "Döndürürken İmleci Kilitle",

@@ -550,6 +550,8 @@ export const zh_CN: EnTranslations = {
       "interfaceModeDesktop": "桌面",
       "interfaceModeTouch": "触控",
       "interfaceModeNote": "自动会根据你的设备选择桌面或触控操作。选择桌面可强制使用键盘和鼠标（适合带键盘的平板），选择触控则使用屏幕上的操作控件。",
+      "motionPrediction": "移动预测",
+      "motionPredictionNote": "在服务器更新之间预测你自己的移动，让联机移动更跟手。在墙壁和障碍物附近可能表现异常；关闭时使用经典平滑处理。",
       "footstepSounds": "脚步声",
       "clickFeedback": "点击标记",
       "lockCursorOnRotate": "旋转时锁定光标",

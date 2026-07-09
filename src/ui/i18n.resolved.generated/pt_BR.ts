@@ -550,6 +550,8 @@ export const pt_BR: EnTranslations = {
       "interfaceModeDesktop": "Desktop",
       "interfaceModeTouch": "Touch",
       "interfaceModeNote": "Auto escolhe os controles Desktop ou Touch conforme o seu dispositivo. Escolha Desktop para forçar teclado e mouse (útil em um tablet com teclado), ou Touch para os controles na tela.",
+      "motionPrediction": "Previsão de movimento",
+      "motionPredictionNote": "Prevê o seu próprio movimento entre as atualizações do servidor, deixando a movimentação online mais responsiva. Pode parecer estranho perto de paredes e obstáculos; quando desativada, é usada a suavização clássica.",
       "footstepSounds": "Sons de passos",
       "clickFeedback": "Marcador de clique",
       "lockCursorOnRotate": "Bloquear cursor ao girar",

@@ -232,6 +232,9 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.interfaceModeTouch': '觸控',
   'hudChrome.options.interfaceModeNote':
     '自動會根據你的裝置選擇桌面或觸控操作。選擇桌面可強制使用鍵盤與滑鼠（適合有鍵盤的平板），選擇觸控則使用螢幕上的操作控制項。',
+  'hudChrome.options.motionPrediction': '移動預測',
+  'hudChrome.options.motionPredictionNote':
+    '在伺服器更新之間預測你自己的移動，讓連線移動更即時。在牆壁和障礙物附近可能表現異常；關閉時使用經典平滑處理。',
   'hudChrome.statInfo.fromYour': '來自你的 {value} 點{stat}：',
   'hudChrome.statInfo.names.spellPower': '法術強度',
   'hudChrome.statInfo.names.critRating': '暴擊等級',

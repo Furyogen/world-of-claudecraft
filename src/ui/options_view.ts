@@ -306,6 +306,11 @@ export function buildGraphicsControls(s: OptionsSettingsSource, env: OptionsEnv)
   out.push(toggle(s, 'showOverflowXp', 'game.settings.showOverflowXp'));
   if (env.touch) out.push(slider(s, 'touchOpacity', 'hud.options.touchOpacity'));
   out.push(toggle(s, 'weather', 'game.settings.weather'));
+  // Opt-in display-only self-motion prediction (src/render/self_motion.ts). Off
+  // by default while its collision interactions are tuned; main.ts reads the
+  // stored value live each frame, so the switch applies without a reload.
+  out.push(boolToggle(s, 'selfMotionPrediction', 'hudChrome.options.motionPrediction'));
+  out.push(note('hudChrome.options.motionPredictionNote'));
   if (env.touch) out.push(slider(s, 'joystickScale', 'hud.options.joystickSize'));
   if (env.touch) out.push(slider(s, 'actionButtonScale', 'hud.options.buttonSize'));
   if (env.touch) out.push(slider(s, 'joystickDeadzone', 'hud.options.joystickDeadzone'));

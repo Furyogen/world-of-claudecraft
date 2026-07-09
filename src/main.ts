@@ -228,7 +228,9 @@ const ATTACK_MOVE_ACQUIRE_RANGE = 12; // yards; an attack-move toward open groun
 // marker shows a "held" state instead of looking like a stuck game.
 const IMMOBILE_AURA_KINDS = new Set(['stun', 'root', 'incapacitate', 'polymorph']);
 // Live-ops escape hatch for the online display-only self extrapolation
-// (src/render/self_motion.ts): ?nopredict restores the pre-prediction behavior.
+// (src/render/self_motion.ts): ?nopredict restores the pre-prediction behavior
+// no matter what the opt-in Graphics toggle (selfMotionPrediction) says. The
+// toggle itself is read live each frame in the online loop below.
 const SELF_MOTION_DISABLED = new URLSearchParams(location.search).has('nopredict');
 const IMMOBILE_NOTE_THROTTLE_MS = 1200; // min gap between "Can't move!" floats while held
 const HOMEPAGE_MUSIC_MUTED_KEY = 'woc_homepage_music_muted';
@@ -2535,26 +2537,30 @@ async function startGame(
       lastSnapAge: net.lastSnapAt > 0 ? Math.round(performance.now() - net.lastSnapAt) : -1,
       alpha: Math.round(alpha * 100) / 100,
     });
-    // Display-only self extrapolation (src/render/self_motion.ts). Off while
-    // spectating, corpse-frozen, or CC'd (playerImmobilized covers stun/root/
+    // Display-only self extrapolation (src/render/self_motion.ts). Opt-in via
+    // the Graphics toggle (selfMotionPrediction, read live so it applies without
+    // a reload; the renderer's handoff smoothing absorbs mid-session flips), and
+    // ?nopredict force-disables it regardless. Off while spectating,
+    // corpse-frozen, or CC'd (playerImmobilized covers stun/root/
     // incapacitate/polymorph, and fear is a fear_incap incapacitate aura; the
     // fear steer and the charge/follow modes run server-side only), and inside
     // a delve (the portcullis door clamps are not mirrored client-side).
-    const selfMotion: SelfMotionFrame | null = SELF_MOTION_DISABLED
-      ? null
-      : {
-          enabled:
-            net.spectating === null &&
-            !movementFrozen() &&
-            !playerImmobilized() &&
-            !isDelvePos(pe.pos.x),
-          moveInput: resolved.mi,
-          displayFacing: netFacing ?? interpServerFacing,
-          echoMs: onlineInputEchoMs,
-          jitterMs: onlineJitterMs,
-          alpha,
-          frameDt,
-        };
+    const selfMotion: SelfMotionFrame | null =
+      SELF_MOTION_DISABLED || !settings.get('selfMotionPrediction')
+        ? null
+        : {
+            enabled:
+              net.spectating === null &&
+              !movementFrozen() &&
+              !playerImmobilized() &&
+              !isDelvePos(pe.pos.x),
+            moveInput: resolved.mi,
+            displayFacing: netFacing ?? interpServerFacing,
+            echoMs: onlineInputEchoMs,
+            jitterMs: onlineJitterMs,
+            alpha,
+            frameDt,
+          };
     perf.trace('camera.follow', () => updateCamera(frameDt, kbFacing ?? interpServerFacing), {
       mode: 'online',
       alpha,

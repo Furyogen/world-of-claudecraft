@@ -550,6 +550,8 @@ export const en_CA: EnTranslations = {
       "interfaceModeDesktop": "Desktop",
       "interfaceModeTouch": "Touch",
       "interfaceModeNote": "Auto picks desktop or touch controls from your device. Choose Desktop to force keyboard and mouse (useful on a tablet with a keyboard), or Touch for the on-screen controls.",
+      "motionPrediction": "Motion Prediction",
+      "motionPredictionNote": "Predicts your own movement between server updates so moving feels more responsive online. Can look off around walls and obstacles; when disabled, the classic smoothing is used.",
       "footstepSounds": "Footstep Sounds",
       "clickFeedback": "Click Marker",
       "lockCursorOnRotate": "Lock Cursor While Rotating",

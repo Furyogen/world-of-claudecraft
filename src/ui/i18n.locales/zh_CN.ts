@@ -232,6 +232,9 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.interfaceModeTouch': '触控',
   'hudChrome.options.interfaceModeNote':
     '自动会根据你的设备选择桌面或触控操作。选择桌面可强制使用键盘和鼠标（适合带键盘的平板），选择触控则使用屏幕上的操作控件。',
+  'hudChrome.options.motionPrediction': '移动预测',
+  'hudChrome.options.motionPredictionNote':
+    '在服务器更新之间预测你自己的移动，让联机移动更跟手。在墙壁和障碍物附近可能表现异常；关闭时使用经典平滑处理。',
   'hudChrome.statInfo.fromYour': '来自你的 {value} 点{stat}：',
   'hudChrome.statInfo.names.spellPower': '法术强度',
   'hudChrome.statInfo.names.critRating': '暴击等级',

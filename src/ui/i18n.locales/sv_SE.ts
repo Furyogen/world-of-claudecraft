@@ -5025,6 +5025,9 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.interfaceModeDesktop': 'Skrivbord',
   'hudChrome.options.interfaceModeNote':
     'Auto väljer skrivbords- eller pekkontroller utifrån din enhet. Välj Skrivbord för att tvinga fram tangentbord och mus (användbart på en surfplatta med tangentbord), eller Pek för skärmkontrollerna.',
+  'hudChrome.options.motionPrediction': 'Rörelseprediktion',
+  'hudChrome.options.motionPredictionNote':
+    'Förutsäger din egen rörelse mellan serveruppdateringar så att det känns mer responsivt att röra sig online. Kan se fel ut nära väggar och hinder; avstängd används den klassiska utjämningen.',
   'hudChrome.options.interfaceModeTouch': 'Pek',
   'hudChrome.options.keybindHelpLockCursorOnRotate':
     'Håller muspekaren inuti fönstret medan du drar för att rotera kameran, så att den inte kan nå skärmkanten eller flytta till en annan skärm. Stäng av om du föredrar en fri pekare.',

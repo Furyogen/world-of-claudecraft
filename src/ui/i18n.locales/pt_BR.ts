@@ -1227,6 +1227,9 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.interfaceModeTouch': 'Touch',
   'hudChrome.options.interfaceModeNote':
     'Auto escolhe os controles Desktop ou Touch conforme o seu dispositivo. Escolha Desktop para forçar teclado e mouse (útil em um tablet com teclado), ou Touch para os controles na tela.',
+  'hudChrome.options.motionPrediction': 'Previsão de movimento',
+  'hudChrome.options.motionPredictionNote':
+    'Prevê o seu próprio movimento entre as atualizações do servidor, deixando a movimentação online mais responsiva. Pode parecer estranho perto de paredes e obstáculos; quando desativada, é usada a suavização clássica.',
   'hudChrome.options.lockCursorOnRotate': 'Bloquear cursor ao girar',
   'hudChrome.options.keybindHelpLockCursorOnRotate':
     'Mantém o cursor do mouse dentro da janela enquanto você arrasta para girar a câmera, para que ele não alcance a borda da tela nem passe para outro monitor. Desative se preferir um cursor livre.',

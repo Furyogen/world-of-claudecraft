@@ -550,6 +550,8 @@ export const ko_KR: EnTranslations = {
       "interfaceModeDesktop": "데스크톱",
       "interfaceModeTouch": "터치",
       "interfaceModeNote": "자동은 기기에 따라 데스크톱 또는 터치 조작을 선택합니다. 데스크톱을 선택하면 키보드와 마우스로 고정되며(키보드가 있는 태블릿 등에 유용), 터치를 선택하면 화면 조작이 됩니다.",
+      "motionPrediction": "이동 예측",
+      "motionPredictionNote": "서버 업데이트 사이에 자신의 이동을 예측하여 온라인에서 움직임이 더 즉각적으로 느껴집니다. 벽이나 장애물 근처에서는 어색해 보일 수 있으며, 끄면 기존 스무딩을 사용합니다.",
       "footstepSounds": "발소리",
       "clickFeedback": "클릭 표시",
       "lockCursorOnRotate": "회전 중 커서 고정",

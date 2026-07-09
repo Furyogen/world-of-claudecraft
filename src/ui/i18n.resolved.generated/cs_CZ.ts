@@ -550,6 +550,8 @@ export const cs_CZ: EnTranslations = {
       "interfaceModeDesktop": "Desktop",
       "interfaceModeTouch": "Dotyk",
       "interfaceModeNote": "Automatika vybere desktopové nebo dotykové ovládání podle zařízení. Zvol Desktop pro vynucení klávesnice a myši (užitečné na tabletu s klávesnicí), nebo Dotyk pro ovládání na obrazovce.",
+      "motionPrediction": "Predikce pohybu",
+      "motionPredictionNote": "Předvídá pohyb tvé postavy mezi aktualizacemi serveru, takže pohyb online působí svižněji. U zdí a překážek může vypadat nepřesně; při vypnutí se použije klasické vyhlazování.",
       "footstepSounds": "Zvuky kroků",
       "clickFeedback": "Značka kliknutí",
       "lockCursorOnRotate": "Zamknout kurzor při otáčení",

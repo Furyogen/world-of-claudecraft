@@ -5037,6 +5037,9 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.interfaceModeDesktop': 'Masaüstü',
   'hudChrome.options.interfaceModeNote':
     "Otomatik, cihazınıza göre masaüstü veya dokunmatik denetimleri seçer. Klavye ve fareyi zorlamak için Masaüstü'nü seçin (klavyeli bir tablette kullanışlıdır) ya da ekran üzeri denetimler için Dokunmatik'i seçin.",
+  'hudChrome.options.motionPrediction': 'Hareket Tahmini',
+  'hudChrome.options.motionPredictionNote':
+    'Sunucu güncellemeleri arasında kendi hareketini tahmin ederek çevrimiçi hareketi daha akıcı hissettirir. Duvar ve engellerin yakınında hatalı görünebilir; kapalıyken klasik yumuşatma kullanılır.',
   'hudChrome.options.interfaceModeTouch': 'Dokunmatik',
   'hudChrome.options.keybindHelpLockCursorOnRotate':
     'Kamerayı döndürmek için sürüklerken fare imlecini pencerenin içinde tutar, böylece ekran kenarına ulaşamaz veya başka bir monitöre geçemez. Serbest imleç tercih ediyorsanız kapatın.',

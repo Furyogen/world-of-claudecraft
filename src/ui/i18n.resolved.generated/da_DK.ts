@@ -550,6 +550,8 @@ export const da_DK: EnTranslations = {
       "interfaceModeDesktop": "Skrivebord",
       "interfaceModeTouch": "Touch",
       "interfaceModeNote": "Auto vælger skrivebords- eller touchstyring ud fra din enhed. Vælg Skrivebord for at tvinge tastatur og mus (nyttigt på en tablet med tastatur), eller Touch for skærmstyringen.",
+      "motionPrediction": "Bevægelsesforudsigelse",
+      "motionPredictionNote": "Forudsiger din egen bevægelse mellem serveropdateringer, så det føles mere responsivt at bevæge sig online. Kan se forkert ud nær vægge og forhindringer; slået fra bruges den klassiske udjævning.",
       "footstepSounds": "Fodtrinslyde",
       "clickFeedback": "Klikmarkør",
       "lockCursorOnRotate": "Lås markør under drejning",

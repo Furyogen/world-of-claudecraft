@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import {
+  BOOL_SETTINGS,
   clickMoveButtonLabel,
   normalizeClickMoveButton,
   SETTING_RANGES,
@@ -46,6 +47,20 @@ describe('Settings', () => {
     expect(new Settings().get('graphicsDefaultApplied')).toBe(true);
     s.reset();
     expect(s.get('graphicsDefaultApplied')).toBe(false);
+  });
+
+  it('ships self-motion prediction OFF by default, opt-in, and reset restores off', () => {
+    const s = new Settings();
+    // Off by default: the predictor is opt-in while its collision interactions are
+    // tuned (v0.23 dev feedback); the classic lead-smoothing stays the baseline.
+    expect(BOOL_SETTINGS.selfMotionPrediction.def).toBe(false);
+    expect(s.get('selfMotionPrediction')).toBe(false);
+    // an explicit opt-in persists across sessions...
+    s.set('selfMotionPrediction', true);
+    expect(new Settings().get('selfMotionPrediction')).toBe(true);
+    // ...and Reset to Defaults turns it back off.
+    s.reset();
+    expect(s.get('selfMotionPrediction')).toBe(false);
   });
 
   it('starts at the documented defaults (camera calmer than the old 1.0)', () => {
