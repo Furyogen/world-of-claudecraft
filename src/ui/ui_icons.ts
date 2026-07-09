@@ -52,7 +52,13 @@ export type UiIconName =
   | 'vibrate'
   | 'lock'
   | 'mail'
-  | 'ball';
+  | 'ball'
+  // the Gauntlet trial emblems (practice picker cards)
+  | 'eye'
+  | 'trace'
+  | 'tug'
+  | 'stones'
+  | 'shatter';
 
 // Inner SVG markup per icon (one or more <path>). Default fill rule is nonzero
 // (correct for game-icons.net art incl. overlaps); the two hand-authored cut-out
@@ -134,6 +140,22 @@ const ICONS: Record<UiIconName, string> = {
   // hand-authored boarball (the Vale Cup): a stitched ball, ring + two seams
   // with cross-stitch ticks so it reads at micro-button size
   ball: '<path fill-rule="evenodd" d="M256 64a192 192 0 1 0 0 384 192 192 0 0 0 0-384zm0 40a152 152 0 1 1 0 304 152 152 0 0 1 0-304z"/><path d="M148 148c60 52 60 164 0 216l24 24c72-64 72-200 0-264zM364 148c-60 52-60 164 0 216l-24 24c-72-64-72-200 0-264z"/><path d="M238 160h36v28h-36zM238 324h36v28h-36zM220 238h72v36h-72z"/>',
+  // ── the Gauntlet trial emblems (hand-authored to the geometrics' weight) ──
+  // The Warden's unblinking eye (Sentinel's Crossing, red light / green light):
+  // an almond lid cut hollow by evenodd, iris ring, solid pupil.
+  eye: '<path fill-rule="evenodd" d="M256 140c-116 0-200 82-228 116 28 34 112 116 228 116s200-82 228-116c-28-34-112-116-228-116zm0 32a84 84 0 1 1 0 168 84 84 0 0 1 0-168z"/><circle cx="256" cy="256" r="44"/>',
+  // A traced etching (Sugarglass Sigils): a triangle outline with the tracing
+  // mote burning at its apex.
+  trace:
+    '<path d="M256 120 428 408H84Z" stroke="currentColor" stroke-width="34" fill="none" stroke-linejoin="round"/><circle cx="256" cy="120" r="42"/>',
+  // The Great Pull: a taut rope with the judge's knot, hauled both ways.
+  tug: '<path d="M96 256 176 190v132zM416 256 336 190v132zM168 238h176v36H168z"/><circle cx="256" cy="256" r="46"/>',
+  // The Keeper's Echo: the four rune stones (a Simon pad).
+  stones:
+    '<rect x="108" y="108" width="132" height="132" rx="26"/><rect x="272" y="108" width="132" height="132" rx="26"/><rect x="108" y="272" width="132" height="132" rx="26"/><rect x="272" y="272" width="132" height="132" rx="26"/>',
+  // The Brittle Span: a glass pane, cracked by a lightning fracture.
+  shatter:
+    '<path fill-rule="evenodd" d="M96 96h320v320H96zm36 36v248h248V132z"/><path d="M282 132 196 274h58l-34 106 116-158h-62l46-90z"/>',
 };
 
 export function hasUiIcon(name: string): name is UiIconName {

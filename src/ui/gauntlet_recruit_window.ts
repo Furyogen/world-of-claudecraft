@@ -22,7 +22,7 @@ import type { GauntletRunView } from '../world_api/gauntlet';
 import { markDialogRoot } from './dialog_root';
 import { esc } from './esc';
 import { formatNumber, type TranslationKey, t } from './i18n';
-import { svgIcon } from './ui_icons';
+import { svgIcon, type UiIconName } from './ui_icons';
 
 const INT = { maximumFractionDigits: 0 } as const;
 
@@ -47,6 +47,18 @@ const TRIAL_DESC_KEYS: Record<GauntletTrialKind, TranslationKey[]> = {
   echo: ['hudChrome.gauntlet.hint.echoWatch', 'hudChrome.gauntlet.hint.echoAnswer'],
   span: ['hudChrome.gauntlet.hint.span'],
   court: ['hudChrome.gauntlet.hint.court'],
+};
+
+// Each pick card's emblem (ui_icons.ts): the Warden's eye, the traced sigil,
+// the tug rope, the Simon stones, the cracked pane, and the crossed blades;
+// the featured full run wears the crown.
+const TRIAL_ICONS: Record<GauntletTrialKind, UiIconName> = {
+  sentinel: 'eye',
+  sigils: 'trace',
+  pull: 'tug',
+  echo: 'stones',
+  span: 'shatter',
+  court: 'attack',
 };
 
 /** Hud-supplied glue; the window reaches into Hud only through these. */
@@ -228,7 +240,7 @@ export class GauntletRecruitWindow {
       `<div class="gr-picker" hidden>` +
       `<div class="gr-picker-title" id="gauntlet-practice-pick-title">${esc(t('hudChrome.gauntlet.practicePickTitle'))}</div>` +
       `<div class="gr-picker-list" role="group" aria-labelledby="gauntlet-practice-pick-title"></div>` +
-      `<button type="button" class="btn gr-back">${esc(t('hud.options.back'))}</button>` +
+      `<button type="button" class="btn gr-back">${svgIcon('prev')}<span>${esc(t('hud.options.back'))}</span></button>` +
       `</div>`;
     el.querySelector('[data-close]')?.addEventListener('click', () => this.close());
     this.mainEl = el.querySelector('.gr-main');
@@ -241,9 +253,11 @@ export class GauntletRecruitWindow {
     this.practiceBtn = el.querySelector('.gr-practice');
     this.pickerEl = el.querySelector('.gr-picker');
     this.backBtn = el.querySelector('.gr-back');
-    // One pick card per choice: the featured full run first, then the six
-    // games in trial order, each a name over its how-it-plays line. Built and
-    // labeled once with stable listeners (the pick stage is static).
+    // One pick card per choice: the featured full run first (wearing the
+    // crown), then the six games in trial order, each an emblem beside a name
+    // over its how-it-plays line. Custom cards, not .btn (the stock button's
+    // title-font casing and single-line metrics fight two-line content).
+    // Built and labeled once with stable listeners (the pick stage is static).
     const list = el.querySelector('.gr-picker-list');
     this.pickerBtns = [];
     if (list) {
@@ -252,21 +266,18 @@ export class GauntletRecruitWindow {
         const kind = trial === null ? null : GAUNTLET.trials[trial];
         const btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = trial === null ? 'btn gr-pick gr-pick-full' : 'btn gr-pick';
+        btn.className = trial === null ? 'gr-pick gr-pick-full' : 'gr-pick';
+        const emblem = document.createElement('span');
+        emblem.className = 'gr-pick-icon';
+        emblem.innerHTML = svgIcon(kind === null ? 'crown' : TRIAL_ICONS[kind]);
+        btn.appendChild(emblem);
+        const body = document.createElement('span');
+        body.className = 'gr-pick-body';
         const name = document.createElement('span');
         name.className = 'gr-pick-name';
-        if (kind !== null) {
-          const num = document.createElement('span');
-          num.className = 'gr-pick-num';
-          num.textContent = formatNumber((trial ?? 0) + 1, INT);
-          name.appendChild(num);
-        }
-        name.appendChild(
-          document.createTextNode(
-            kind === null ? t('hudChrome.gauntlet.practiceFull') : t(TRIAL_NAME_KEYS[kind]),
-          ),
-        );
-        btn.appendChild(name);
+        name.textContent =
+          kind === null ? t('hudChrome.gauntlet.practiceFull') : t(TRIAL_NAME_KEYS[kind]);
+        body.appendChild(name);
         const desc = document.createElement('span');
         desc.className = 'gr-pick-desc';
         const descKeys =
@@ -278,7 +289,8 @@ export class GauntletRecruitWindow {
           part.textContent = t(key);
           desc.appendChild(part);
         }
-        btn.appendChild(desc);
+        body.appendChild(desc);
+        btn.appendChild(body);
         btn.addEventListener('click', () => this.deps.onPractice(trial));
         list.appendChild(btn);
         this.pickerBtns.push({ btn, trial });

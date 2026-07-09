@@ -4518,13 +4518,17 @@
     font-size: 12px;
     line-height: 1.4;
     color: var(--color-text-light);
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--border);
     border-radius: 4px;
     background: rgba(0, 0, 0, 0.25);
   }
   /* The practice pick stage: pushed over the main stage by Practice, popped
-     by Back. One card per game (name over its how-it-plays line), the
-     featured full run on top. */
+     by Back. One CARD per game (an emblem beside a gold name over its
+     how-it-plays line), the featured full run on top wearing the crown.
+     Custom cards, not .btn: the stock button's title-font casing and
+     single-line metrics fight two-line content. flex: none on each card is
+     load-bearing: the scrolling column would otherwise flex-shrink the cards
+     under their content and clip the text. */
   #gauntlet-recruit .gr-picker {
     padding: 8px 14px 12px;
   }
@@ -4534,63 +4538,113 @@
     font-size: 14px;
     color: var(--color-primary);
     text-align: center;
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--border);
     margin-bottom: 8px;
   }
   #gauntlet-recruit .gr-picker-list {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: 6px;
+    gap: 8px;
     max-height: min(52vh, 440px);
     overflow-y: auto;
     padding-right: 2px;
   }
   #gauntlet-recruit .gr-pick {
+    flex: none;
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 2px;
-    min-height: 44px;
-    padding: 7px 12px;
-    text-align: left;
-  }
-  #gauntlet-recruit .gr-pick-name {
-    display: flex;
+    flex-direction: row;
     align-items: center;
-    gap: 8px;
-    font-family: var(--font-serif);
-    font-size: 14px;
+    gap: 12px;
+    min-height: 56px;
+    padding: 9px 12px;
+    text-align: left;
+    appearance: none;
+    font: inherit;
+    color: var(--color-text-light);
+    background: linear-gradient(180deg, rgba(46, 37, 27, 0.92), rgba(24, 19, 14, 0.95));
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow:
+      inset 0 1px 0 #ffffff14,
+      0 2px 5px #0007;
+    cursor: var(--cursor-point);
+    transition:
+      border-color var(--transition-speed),
+      filter var(--transition-speed);
   }
-  #gauntlet-recruit .gr-pick-num {
+  #gauntlet-recruit .gr-pick:hover {
+    border-color: var(--color-primary);
+    filter: brightness(1.12);
+  }
+  #gauntlet-recruit .gr-pick:focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 2px;
+  }
+  /* The emblem chip: a rune-coin medallion tinted by the gold theme. */
+  #gauntlet-recruit .gr-pick-icon {
+    flex: none;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 18px;
-    height: 18px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    border: 1px solid var(--color-border);
-    font-size: 11px;
-    font-family: var(--font-sans, inherit);
-    color: var(--color-text-muted);
+    border: 1px solid var(--border);
+    background: radial-gradient(circle at 35% 30%, rgba(217, 165, 60, 0.26), rgba(0, 0, 0, 0.4));
+    box-shadow: inset 0 0 8px #0009;
+    color: var(--color-primary);
+  }
+  #gauntlet-recruit .gr-pick-icon .ui-icon {
+    width: 22px;
+    height: 22px;
+  }
+  #gauntlet-recruit .gr-pick-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+    min-width: 0;
+  }
+  #gauntlet-recruit .gr-pick-name {
+    font-family: var(--font-serif);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-primary);
+    text-shadow: 1px 1px 1px #000;
   }
   #gauntlet-recruit .gr-pick-desc {
-    font-size: 11px;
-    line-height: 1.35;
+    font-size: 11.5px;
+    line-height: 1.4;
     color: var(--color-text-muted);
+    font-family: var(--font-serif);
+    font-variant: normal;
     text-transform: none;
     letter-spacing: normal;
   }
   #gauntlet-recruit .gr-pick-desc span + span {
     margin-left: 0.35em;
   }
+  /* The featured full-run card: gold-edged with a warmer field. */
   #gauntlet-recruit .gr-pick-full {
+    border-color: var(--color-primary);
+    background: linear-gradient(180deg, rgba(84, 60, 24, 0.9), rgba(40, 28, 13, 0.95));
+  }
+  #gauntlet-recruit .gr-pick-full .gr-pick-icon {
     border-color: var(--color-primary);
   }
   #gauntlet-recruit .gr-back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     width: 100%;
     min-height: 40px;
-    margin-top: 8px;
+    margin-top: 10px;
+  }
+  #gauntlet-recruit .gr-back .ui-icon {
+    width: 13px;
+    height: 13px;
   }
 
   /* ---------- gauntlet overlay ---------- */
