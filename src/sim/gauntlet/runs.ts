@@ -756,8 +756,16 @@ export function updateGauntletRuns(ctx: SimContext): void {
     }
     // The Final Court fights on REAL hp (normalized per fighter), reverse-
     // mirroring vitality FROM hp itself, so the usual vitality->hp mirror is
-    // suppressed while it runs or it would fight the combat.
-    if (run.phase !== 'lobby' && run.phase !== 'done' && run.trial?.kind !== 'court')
+    // suppressed while it runs or it would fight the combat. The podium is
+    // also exempt: the fighters' real hp is already restored for the ceremony
+    // and the mirror would pin the champion's frame at their last court
+    // fraction (and block regen) for the whole tableau.
+    if (
+      run.phase !== 'lobby' &&
+      run.phase !== 'done' &&
+      run.phase !== 'podium' &&
+      run.trial?.kind !== 'court'
+    )
       mirrorVitalityHp(ctx, run);
     switch (run.phase) {
       case 'lobby': {

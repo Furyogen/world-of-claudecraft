@@ -115,6 +115,16 @@ export function updateCourt(ctx: SimContext, run: GauntletRun, dt: number): bool
     if (!c || c.eliminatedAtTrial !== null) continue; // knocked out earlier this tick
     const e = ctx.entities.get(f.entityId);
     if (!e) continue;
+    // Re-assert the shared-pool normalization every tick: a mid-court
+    // recalcPlayerStats (an aura expiring; casts are barred in the run)
+    // restores the fighter's REAL maxHp, which would leave them fighting a
+    // 100-point field with a thousand-point pool. recalc preserves the hp
+    // FRACTION, so re-normalizing by fraction is a lossless round-trip.
+    if (f.player && !e.dead && e.maxHp !== GAUNTLET.court.maxHp) {
+      const frac = e.maxHp > 0 ? e.hp / e.maxHp : 1;
+      e.maxHp = GAUNTLET.court.maxHp;
+      e.hp = Math.max(1, Math.round(frac * GAUNTLET.court.maxHp));
+    }
     // Players fight with their OWN vanilla combat (auto-attack + abilities,
     // resolved in the per-player tick BEFORE this end-of-tick driver): the court
     // never swings or targets for them. Only the NPC field is driven here.

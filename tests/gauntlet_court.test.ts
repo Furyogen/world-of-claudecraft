@@ -117,6 +117,23 @@ describe('gauntlet court: setup', () => {
     // the player's real maxHp is banked for restore
     expect(trial.fighters.get(pid)!.savedMaxHp).toBeGreaterThan(0);
   });
+
+  it('re-normalizes a fighter whose maxHp recalc reverted mid-court (aura expiry)', () => {
+    const sim = makeSim(102);
+    const pid = startCourtTrial(sim, 'Buffed');
+    const e = sim.entities.get(pid)!;
+    // Simulate a mid-court recalcPlayerStats (a pre-run buff expiring): the
+    // real pool comes back, hp FRACTION preserved (entity.ts recalc keeps the
+    // ratio). Without the per-tick re-normalization this fighter would face
+    // the 100-point field with a thousand-point pool.
+    e.hp = Math.round(e.hp * 0.4); // fight at 40% of the shared pool
+    const frac = e.hp / e.maxHp;
+    e.maxHp = 2000;
+    e.hp = Math.round(2000 * frac);
+    sim.tick();
+    expect(e.maxHp).toBe(ct.maxHp);
+    expect(e.hp).toBe(Math.max(1, Math.round(ct.maxHp * frac)));
+  });
 });
 
 describe('gauntlet court: vanilla combat (hostility + targeting)', () => {
