@@ -144,6 +144,7 @@ const KAYKIT_WEAPON_ACCESSORY: Record<string, string> = {
   brasscrown_walking_staff: 'VAR_STAFF',
   lacquered_rod: 'VAR_WAND',
   fletcher_s_guild_bow: 'VAR_BOW',
+  rude_awakening_sword: 'VAR_SWORD',
 };
 
 // Per-family grip for the variant pack. The model origin IS the grip, so we attach

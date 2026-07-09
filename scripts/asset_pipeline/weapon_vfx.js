@@ -855,6 +855,119 @@ export const WEAPON_VFX = {
     ],
   },
 
+  rude_awakening_sword: {
+    tier: 'legendary',
+    hero: true,
+    name: 'Rude Awakening',
+    type: 'sword',
+    lore: 'A gunblade forged for the first shot of dawn: six star-rounds spin in its brass cylinder, and the cosmos-black blade splits with molten daybreak.',
+    emissive: { intensity: 1.45 },
+    light: { at: { yF: 0.42 }, intensity: 11 },
+    fx: [
+      // The chambered star-round burning inside the cylinder.
+      {
+        kind: 'coreSprite',
+        at: { yF: 0.25 },
+        size: 0.16,
+        color: STAR.molten,
+        flare: 0.55,
+        hz: 0.95,
+        opacity: 0.5,
+      },
+      // The cylinder itself: six rounds in a tight, flat, fast ring.
+      {
+        kind: 'motes',
+        at: { yF: 0.25 },
+        radius: [0.24, 0.27],
+        count: 0,
+        heroCount: 6,
+        size: [0.03, 0.05],
+        heroSize: 0.075,
+        speed: [1.5, 1.7],
+        tilt: 0.06,
+        bob: 0.008,
+        colorA: STAR.molten,
+        colorB: STAR.gold,
+        opacity: 1.0,
+      },
+      // The dawn court: a grand slow orbit around the blade.
+      {
+        kind: 'motes',
+        at: { yF: 0.62 },
+        radius: [0.36, 0.52],
+        count: 14,
+        heroCount: 3,
+        size: [0.024, 0.055],
+        heroSize: 0.11,
+        speed: [0.4, 0.9],
+        tilt: 0.45,
+        bob: 0.04,
+        colorA: STAR.gold,
+        colorB: STAR.starlight,
+        opacity: 0.95,
+      },
+      // Daybreak ribbon winding the blade.
+      {
+        kind: 'aurora',
+        helix: { from: { yF: 0.3 }, to: { yF: 1.02 }, radius: 0.2, turns: 1.4 },
+        width: 0.13,
+        amp: 0.05,
+        speed: 0.6,
+        opacity: 0.55,
+      },
+      // A second shimmer arcing off the cutting edge.
+      {
+        kind: 'aurora',
+        arc: { center: { yF: 0.62 }, radius: 0.5, fromDeg: -40, toDeg: 62, axis: 'z' },
+        width: 0.12,
+        amp: 0.04,
+        speed: 0.5,
+        opacity: 0.4,
+      },
+      // Muzzle starfire streaming from the spine vents.
+      {
+        kind: 'drift',
+        line: [{ yF: 0.45 }, { yF: 0.98 }],
+        count: 30,
+        vel: [0, 0.32, 0],
+        spread: [0.06, 0.06, 0.05],
+        life: [1.2, 2.2],
+        size: [0.016, 0.042],
+        grow: 0.3,
+        swirl: 0.04,
+        colorA: STAR.starlight,
+        colorB: STAR.molten,
+        opacity: 0.95,
+      },
+      // Powder smoke curling off the fired chamber.
+      {
+        kind: 'drift',
+        line: [
+          { yF: 0.2, dx: -0.08 },
+          { yF: 0.34, dx: 0.08 },
+        ],
+        count: 12,
+        vel: [0, 0.12, 0],
+        spread: [0.07, 0.04, 0.06],
+        life: [2.2, 3.8],
+        size: [0.07, 0.15],
+        grow: 1.2,
+        swirl: 0.06,
+        colorA: 0xc9a066,
+        colorB: 0x6a5a48,
+        opacity: 0.16,
+      },
+      {
+        kind: 'twinkles',
+        surface: { yMinF: 0.15, count: 72 },
+        size: [0.03, 0.065],
+        rate: [0.6, 1.6],
+        color: STAR.starlight,
+        star: true,
+      },
+    ],
+  },
+
   // --- Tier 04 Hoarfrost, the Full Set additions -------------------------
 
   rimecrusher: {
