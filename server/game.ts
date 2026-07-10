@@ -108,6 +108,22 @@ import { consumeMsgToken, createMsgRateBucket, type MsgRateBucketState } from '.
 import { nextRaidResetMs } from './raid_reset';
 import { REALM, REALM_PUBLIC_ORIGIN, REALM_RESET_TIME_ZONE } from './realm';
 import { createSerialWriter } from './serial_writer';
+import {
+  decideKnownRecord,
+  INTEREST_QUERY_RADIUS,
+  INTEREST_RADIUS,
+  type SentEntityVersions,
+  withinInterest,
+} from './snapshot_fanout/interest_rules';
+import { SnapshotFanoutPool } from './snapshot_fanout/pool';
+import {
+  F64_PER_SLOT,
+  FLAG_NPC,
+  FLAG_STEALTHED_PLAYER,
+  FLAG_VALE_BALL,
+  I32_PER_SLOT,
+  type SessionJob,
+} from './snapshot_fanout/protocol';
 import type { Presence, PresenceStatus, SocialActor, SocialTransport } from './social';
 import { SocialService } from './social';
 import { PgSocialDb } from './social_db';
@@ -118,25 +134,9 @@ import { isBackpressureExceeded } from './ws_backpressure';
 
 const WORLD_SEED = 20061;
 const ALDRIC_METEOR_QUEST_ID = 'q_aldrics_fallen_star';
-// Interest management: the client renders entities out to 80yd, so new
-// entities enter interest just past that, and known entities persist a
-// little farther so the boundary doesn't churn create/destroy cycles.
-const INTEREST_RADIUS = 90;
-const INTEREST_DROP_RADIUS = 100;
-// Stationary quest/vendor npcs anchor map markers, so they keep the legacy
-// radius; once known they cost a handful of bytes per snapshot anyway.
-const NPC_INTEREST_RADIUS = 120;
-const NPC_DROP_RADIUS = 130;
-// the widest radius any entity kind can be relevant at
-const INTEREST_QUERY_RADIUS = NPC_DROP_RADIUS;
-// Distance-tiered update rates: full snapshot rate inside nameplate range
-// (55yd, beyond every ability range), half rate out to the 80yd draw range,
-// quarter rate beyond. The viewer's target and anything attacking the
-// viewer always update at full rate regardless of distance.
-const FULL_RATE_RADIUS_SQ = 55 * 55;
-const HALF_RATE_RADIUS_SQ = 80 * 80;
-const HALF_RATE_DIVISOR = 2;
-const QUARTER_RATE_DIVISOR = 4;
+// Interest management radii and distance-tiered update rates live in
+// server/snapshot_fanout/interest_rules.ts, one pure module shared verbatim
+// with the snapshot-fanout worker so the two build paths cannot drift.
 // How often the achieved tick rate rides the snapshot head. The meter's 3s
 // sliding window moves slowly and the client holds the last value across
 // omissions, so ~2 Hz keeps the overlay live without paying the scalar on
@@ -543,17 +543,8 @@ export interface ClientSession {
   } | null;
 }
 
-interface SentEntityVersions {
-  idVer: number;
-  dynVer: number;
-  // sim tick of the last full/lite record, so distance-tiered rates hold
-  // even when one broadcast covers several catch-up sim ticks
-  sentAtTick: number;
-  // an entity whose state stopped changing gets one final "settle" record
-  // before riding the keep list — without it the client's extrapolation
-  // would leave it rendered slightly past where it actually stopped
-  settled: boolean;
-}
+// SentEntityVersions (idVer/dynVer/sentAtTick/settled) lives with the shared
+// interest rules in server/snapshot_fanout/interest_rules.ts.
 
 export interface AdminServerStats {
   online: number;
@@ -786,41 +777,8 @@ export function wireEntity(e: Entity): Record<string, unknown> {
   return { id: e.id, ...identityFields(e), ...dynamicFields(e) };
 }
 
-// npcs stay visible to the legacy radius (see the constants above);
-// everything else enters at INTEREST_RADIUS and known entities persist to
-// the drop radius — hysteresis against churn at the boundary
-function interestLimitSq(e: Entity, known: boolean): number {
-  if (e.kind === 'npc') {
-    return known ? NPC_DROP_RADIUS * NPC_DROP_RADIUS : NPC_INTEREST_RADIUS * NPC_INTEREST_RADIUS;
-  }
-  return known ? INTEREST_DROP_RADIUS * INTEREST_DROP_RADIUS : INTEREST_RADIUS * INTEREST_RADIUS;
-}
-
 function isStealthed(e: Entity): boolean {
   return e.stealthed; // cached in the sim's updateAuras; see Entity.stealthed
-}
-
-// full rate close up and for anything the viewer is fighting; mid range
-// updates every other tick, far entities every fourth. Measured against
-// the per-session last-sent tick rather than a tick-parity stagger: when
-// the event loop degrades and one broadcast covers several sim ticks, a
-// parity check can stay permanently false and starve entities frozen
-function isUpdateDue(
-  tick: number,
-  e: Entity,
-  d2: number,
-  viewer: Entity,
-  sentAtTick: number,
-): boolean {
-  // The one Vale Cup ball is watched by the whole Sowfield: a far keeper sits
-  // past the 55yd full-rate tier and the stands past 80yd, where a ~25 yd/s
-  // ball turns visibly steppy at half/quarter rate. One entity at full rate
-  // costs one lite record per tick, so it is always due.
-  if (e.templateId === VALE_CUP_BALL_TEMPLATE_ID) return true;
-  if (d2 <= FULL_RATE_RADIUS_SQ) return true;
-  if (viewer.targetId === e.id || e.aggroTargetId === viewer.id) return true;
-  const divisor = d2 <= HALF_RATE_RADIUS_SQ ? HALF_RATE_DIVISOR : QUARTER_RATE_DIVISOR;
-  return tick - sentAtTick >= divisor;
 }
 
 // Per-entity wire fragments, refreshed lazily at most once per tick and
@@ -980,7 +938,43 @@ export class GameServer {
   private lastPerfLogTick = 0;
   private readonly ipSessionCounts = new Map<string, number>();
 
-  constructor() {
+  // Snapshot-fanout worker pool (null = in-thread broadcast only). Created
+  // only when the host passes an explicit worker count + worker bundle path
+  // (server/main.ts wires SNAPSHOT_WORKERS); bare `new GameServer()` in tests
+  // never spawns threads.
+  private readonly snapshotFanout: SnapshotFanoutPool | null = null;
+  // Per-session self/head captured at fanout dispatch, paired with the worker
+  // reply of the SAME tick so a frame's pieces never mix sim states.
+  private readonly pendingFanoutFrames = new Map<
+    number,
+    { tick: number; head: string; selfJson: string }
+  >();
+
+  constructor(opts: { snapshotWorkers?: number; snapshotWorkerPath?: string } = {}) {
+    if ((opts.snapshotWorkers ?? 0) > 0 && opts.snapshotWorkerPath) {
+      this.snapshotFanout = new SnapshotFanoutPool(
+        opts.snapshotWorkers ?? 0,
+        opts.snapshotWorkerPath,
+        {
+          deliverFrame: (sid, tick, ents, keep) => this.deliverFanoutFrame(sid, tick, ents, keep),
+          collectFragmentDeltas: (ledger, out) => {
+            for (const [id, cache] of this.wireCache) {
+              const shipped = ledger.get(id);
+              if (shipped && shipped.idVer === cache.idVer && shipped.dynVer === cache.dynVer)
+                continue;
+              if (shipped) {
+                shipped.idVer = cache.idVer;
+                shipped.dynVer = cache.dynVer;
+              } else {
+                ledger.set(id, { idVer: cache.idVer, dynVer: cache.dynVer });
+              }
+              out.push([id, cache.idVer, cache.dynVer, cache.fullJson, cache.liteJson]);
+            }
+          },
+          log: (line) => console.error(line),
+        },
+      );
+    }
     this.sim = new Sim({
       seed: WORLD_SEED,
       playerClass: 'warrior',
@@ -1110,6 +1104,7 @@ export class GameServer {
     moderator.lastArenaWireTick = -ARENA_WIRE_INTERVAL_TICKS;
     moderator.lastVcupWireTick = -VC_WIRE_INTERVAL_TICKS;
     moderator.sentEnts.clear();
+    this.snapshotFanout?.resetSession(moderator.pid);
     this.send(moderator, { t: 'spectate', name: target.name });
     this.sendSystemNotice(moderator, `Now spectating ${target.name}.`);
   }
@@ -1134,6 +1129,7 @@ export class GameServer {
     moderator.lastArenaWireTick = -ARENA_WIRE_INTERVAL_TICKS;
     moderator.lastVcupWireTick = -VC_WIRE_INTERVAL_TICKS;
     moderator.sentEnts.clear();
+    this.snapshotFanout?.resetSession(moderator.pid);
     this.send(moderator, { t: 'spectate', name: null });
     if (announce) this.sendSystemNotice(moderator, 'Stopped spectating.');
   }
@@ -1396,6 +1392,7 @@ export class GameServer {
   }
 
   stop(): void {
+    this.snapshotFanout?.shutdown();
     if (this.interval) clearInterval(this.interval);
     if (this.holderTierInterval) clearInterval(this.holderTierInterval);
     if (this.playtimeInterval) clearInterval(this.playtimeInterval);
@@ -1990,6 +1987,7 @@ export class GameServer {
     session.lastInputAt = this.sim.time;
     session.lastSent = {};
     session.sentEnts = new Map();
+    this.snapshotFanout?.resetSession(session.pid);
     session.selfHeavyDirty = true;
     session.lastWireRev = -1;
     session.lastArenaWireTick = -ARENA_WIRE_INTERVAL_TICKS;
@@ -2099,6 +2097,8 @@ export class GameServer {
     if (session.spectating) this.exitSpectate(session, false);
     session.left = true;
     this.clients.delete(session.pid);
+    this.snapshotFanout?.dropSession(session.pid);
+    this.pendingFanoutFrames.delete(session.pid);
     this.botDetector.releaseTrackingContext(session.botTrackingContext);
     this.releaseIpSession(session.ip);
     void this.recordOnlineSnapshot();
@@ -3832,111 +3832,228 @@ export class GameServer {
       }
     }
     const head = `{"t":"snap","tick":${tick},"time":${round2(this.sim.time)}${tickHzJson}`;
-    // Guard each session: a throw while building one player's snapshot must not
-    // starve every other session of its snapshot this tick (server/CLAUDE.md).
-    forEachGuarded(
-      this.clients.values(),
-      (session) => {
-        // no transport while linkdead; the resume path resets sentEnts/lastSent
-        // so the fresh socket starts from a full snapshot anyway
-        if (session.linkdead) return;
-        const p = this.sim.entities.get(session.pid);
-        const meta = this.sim.meta(session.pid);
-        if (!p || !meta) return;
-        let anchorEntity = p;
-        let anchorMeta = meta;
-        let anchorSession = session;
-        if (session.spectating) {
-          const spectateName = session.spectating.name;
-          const target = this.sessionByCharacterId(session.spectating.characterId);
-          const targetEntity = target ? this.sim.entities.get(target.pid) : null;
-          const targetMeta = target ? this.sim.meta(target.pid) : null;
-          if (!target || target.left || !targetEntity || !targetMeta) {
-            this.exitSpectate(session, false);
-            this.sendChatNotice(session, `${spectateName} is no longer online; spectate ended.`);
-          } else {
-            anchorEntity = targetEntity;
-            anchorMeta = targetMeta;
-            anchorSession = target;
-          }
-        }
-        const ents: string[] = [];
-        const keep: number[] = [];
-        const present = new Set<number>();
-        const gridStart = this.perfDetailActive ? process.hrtime.bigint() : 0n;
-        this.sim.grid.forEachInRadius(
-          anchorEntity.pos.x,
-          anchorEntity.pos.z,
-          INTEREST_QUERY_RADIUS,
-          (e, d2) => {
-            if (this.perfDetailActive) this.bcVisits++;
-            if (e.id === anchorEntity.id) return;
-            if (!this.canObserveEntity(anchorEntity, e, d2)) return;
-            const known = session.sentEnts.get(e.id);
-            // the viewer's current target stays in interest to the widest drop
-            // radius so its unit frame doesn't vanish mid-chase
-            const limitSq =
-              anchorEntity.targetId === e.id
-                ? NPC_DROP_RADIUS * NPC_DROP_RADIUS
-                : interestLimitSq(e, known !== undefined);
-            if (d2 > limitSq) return;
-            present.add(e.id);
-            const cache = this.wireCacheFor(e);
-            if (known === undefined) {
-              // first sight carries the at-rest state exactly, so no settle
-              // record is owed until it moves again
-              ents.push(cache.fullJson);
-              session.sentEnts.set(e.id, {
-                idVer: cache.idVer,
-                dynVer: cache.dynVer,
-                sentAtTick: tick,
-                settled: true,
-              });
-              return;
-            }
-            if (known.idVer !== cache.idVer) {
-              ents.push(cache.fullJson);
-              known.idVer = cache.idVer;
-              known.dynVer = cache.dynVer;
-              known.sentAtTick = tick;
-              known.settled = false;
-              return;
-            }
-            if (
-              !isUpdateDue(tick, e, d2, anchorEntity, known.sentAtTick) ||
-              (known.dynVer === cache.dynVer && known.settled)
-            ) {
-              // not due at this distance tier yet, or unchanged and already
-              // settled: a bare id keeps it alive on the client
-              keep.push(e.id);
-              return;
-            }
-            // due, and either changed or owing its one settle record
-            known.settled = known.dynVer === cache.dynVer;
-            known.dynVer = cache.dynVer;
-            known.sentAtTick = tick;
-            ents.push(cache.liteJson);
-          },
-        );
-        // forget entities that left interest, so a re-entry sends identity again
-        for (const id of session.sentEnts.keys()) {
-          if (!present.has(id)) session.sentEnts.delete(id);
-        }
-        const selfStart = this.perfDetailActive ? process.hrtime.bigint() : 0n;
-        if (this.perfDetailActive) this.bcastGridNs += selfStart - gridStart;
-        const selfJson = this.selfWireJson(session, anchorEntity, anchorMeta, nowMs, anchorSession);
-        if (this.perfDetailActive) this.bcastSelfNs += process.hrtime.bigint() - selfStart;
-        const keepJson = keep.length > 0 ? `,"keep":[${keep.join(',')}]` : '';
-        this.sendRaw(session, `${head},"self":${selfJson},"ents":[${ents.join(',')}]${keepJson}}`);
-      },
-      (err, session) =>
-        console.error(`[snap] failed to build snapshot for pid ${session.pid}, skipping:`, err),
-    );
+    const fanout = this.snapshotFanout;
+    if (fanout?.isEnabled() && this.sim.entities.size <= fanout.capacity) {
+      this.broadcastViaFanout(fanout, tick, nowMs, head);
+    } else {
+      // Guard each session: a throw while building one player's snapshot must
+      // not starve every other session of its snapshot this tick
+      // (server/CLAUDE.md).
+      forEachGuarded(
+        this.clients.values(),
+        (session) => this.buildSessionSnapshotInThread(session, tick, nowMs, head),
+        (err, session) =>
+          console.error(`[snap] failed to build snapshot for pid ${session.pid}, skipping:`, err),
+      );
+    }
     // >= rather than a modulo check: catch-up broadcasts can skip ticks
     if (tick - this.lastWireSweepTick >= WIRE_CACHE_SWEEP_TICKS) {
       this.lastWireSweepTick = tick;
       this.sweepWireCache();
     }
+  }
+
+  // The spectate-aware snapshot anchor: whose surroundings and self state this
+  // session renders. A vanished spectate target ends the spectate and falls
+  // back to the moderator's own body, exactly as the in-loop block always did.
+  private resolveSnapshotAnchor(
+    session: ClientSession,
+  ): { anchorEntity: Entity; anchorMeta: PlayerMeta; anchorSession: ClientSession } | null {
+    const p = this.sim.entities.get(session.pid);
+    const meta = this.sim.meta(session.pid);
+    if (!p || !meta) return null;
+    let anchorEntity = p;
+    let anchorMeta = meta;
+    let anchorSession = session;
+    if (session.spectating) {
+      const spectateName = session.spectating.name;
+      const target = this.sessionByCharacterId(session.spectating.characterId);
+      const targetEntity = target ? this.sim.entities.get(target.pid) : null;
+      const targetMeta = target ? this.sim.meta(target.pid) : null;
+      if (!target || target.left || !targetEntity || !targetMeta) {
+        this.exitSpectate(session, false);
+        this.sendChatNotice(session, `${spectateName} is no longer online; spectate ended.`);
+      } else {
+        anchorEntity = targetEntity;
+        anchorMeta = targetMeta;
+        anchorSession = target;
+      }
+    }
+    return { anchorEntity, anchorMeta, anchorSession };
+  }
+
+  private buildSessionSnapshotInThread(
+    session: ClientSession,
+    tick: number,
+    nowMs: number,
+    head: string,
+  ): void {
+    // no transport while linkdead; the resume path resets sentEnts/lastSent
+    // so the fresh socket starts from a full snapshot anyway
+    if (session.linkdead) return;
+    const anchor = this.resolveSnapshotAnchor(session);
+    if (!anchor) return;
+    const { anchorEntity, anchorMeta, anchorSession } = anchor;
+    const ents: string[] = [];
+    const keep: number[] = [];
+    const present = new Set<number>();
+    const gridStart = this.perfDetailActive ? process.hrtime.bigint() : 0n;
+    this.sim.grid.forEachInRadius(
+      anchorEntity.pos.x,
+      anchorEntity.pos.z,
+      INTEREST_QUERY_RADIUS,
+      (e, d2) => {
+        if (this.perfDetailActive) this.bcVisits++;
+        if (e.id === anchorEntity.id) return;
+        if (!this.canObserveEntity(anchorEntity, e, d2)) return;
+        const known = session.sentEnts.get(e.id);
+        const targeted = anchorEntity.targetId === e.id;
+        if (!withinInterest(d2, e.kind === 'npc', known !== undefined, targeted)) return;
+        present.add(e.id);
+        const cache = this.wireCacheFor(e);
+        if (known === undefined) {
+          // first sight carries the at-rest state exactly, so no settle
+          // record is owed until it moves again
+          ents.push(cache.fullJson);
+          session.sentEnts.set(e.id, {
+            idVer: cache.idVer,
+            dynVer: cache.dynVer,
+            sentAtTick: tick,
+            settled: true,
+          });
+          return;
+        }
+        const action = decideKnownRecord(
+          tick,
+          d2,
+          known,
+          cache.idVer,
+          cache.dynVer,
+          e.templateId === VALE_CUP_BALL_TEMPLATE_ID,
+          targeted,
+          e.aggroTargetId === anchorEntity.id,
+        );
+        if (action === 'keep') keep.push(e.id);
+        else ents.push(action === 'full' ? cache.fullJson : cache.liteJson);
+      },
+    );
+    // forget entities that left interest, so a re-entry sends identity again
+    for (const id of session.sentEnts.keys()) {
+      if (!present.has(id)) session.sentEnts.delete(id);
+    }
+    const selfStart = this.perfDetailActive ? process.hrtime.bigint() : 0n;
+    if (this.perfDetailActive) this.bcastGridNs += selfStart - gridStart;
+    const selfJson = this.selfWireJson(session, anchorEntity, anchorMeta, nowMs, anchorSession);
+    if (this.perfDetailActive) this.bcastSelfNs += process.hrtime.bigint() - selfStart;
+    const keepJson = keep.length > 0 ? `,"keep":[${keep.join(',')}]` : '';
+    this.sendRaw(session, `${head},"self":${selfJson},"ents":[${ents.join(',')}]${keepJson}}`);
+  }
+
+  // Fan the per-session ents/keep builds out to the worker pool: write the
+  // entity mirror + refresh every wire fragment (the workers' inputs), then
+  // dispatch jobs and pair each reply with the self JSON captured now, at
+  // this tick's sim state. Sessions the pool could not take (busy/dead shard)
+  // build in-thread immediately; per-session interleaving of the two paths is
+  // safe because both only ever emit current state (see pool.ts).
+  private broadcastViaFanout(
+    fanout: SnapshotFanoutPool,
+    tick: number,
+    nowMs: number,
+    head: string,
+  ): void {
+    const f64 = fanout.mirrorF64;
+    const i32 = fanout.mirrorI32;
+    let slot = 0;
+    let stealthed: Entity[] | null = null;
+    for (const e of this.sim.entities.values()) {
+      const cache = this.wireCacheFor(e);
+      const fBase = slot * F64_PER_SLOT;
+      const iBase = slot * I32_PER_SLOT;
+      f64[fBase] = e.pos.x;
+      f64[fBase + 1] = e.pos.z;
+      i32[iBase] = e.id;
+      let flags = 0;
+      if (e.kind === 'npc') flags |= FLAG_NPC;
+      else if (e.kind === 'player' && isStealthed(e)) {
+        flags |= FLAG_STEALTHED_PLAYER;
+        (stealthed ??= []).push(e);
+      }
+      if (e.templateId === VALE_CUP_BALL_TEMPLATE_ID) flags |= FLAG_VALE_BALL;
+      i32[iBase + 1] = flags;
+      i32[iBase + 2] = e.aggroTargetId ?? -1;
+      i32[iBase + 3] = cache.idVer;
+      i32[iBase + 4] = cache.dynVer;
+      slot++;
+    }
+    fanout.headerI32[0] = slot;
+    fanout.headerI32[1] = tick;
+    const jobs: SessionJob[] = [];
+    forEachGuarded(
+      this.clients.values(),
+      (session) => {
+        if (session.linkdead) return;
+        const anchor = this.resolveSnapshotAnchor(session);
+        if (!anchor) return;
+        const { anchorEntity, anchorMeta, anchorSession } = anchor;
+        // Stealth visibility needs live sim social state (hostility, party,
+        // duel, detection radius), so it resolves here and ships as a small
+        // denied-ids list; the worker only consults it for entities flagged
+        // stealthed. Checked against every stealthed entity the worker could
+        // possibly visit (query radius + the grid's 1yd drift pad).
+        let denied: number[] | undefined;
+        if (stealthed !== null) {
+          const checkR = INTEREST_QUERY_RADIUS + 2;
+          for (const s of stealthed) {
+            if (s.id === anchorEntity.id) continue;
+            const dx = s.pos.x - anchorEntity.pos.x;
+            const dz = s.pos.z - anchorEntity.pos.z;
+            const d2 = dx * dx + dz * dz;
+            if (d2 <= checkR * checkR && !this.canObserveEntity(anchorEntity, s, d2)) {
+              (denied ??= []).push(s.id);
+            }
+          }
+        }
+        const selfJson = this.selfWireJson(session, anchorEntity, anchorMeta, nowMs, anchorSession);
+        this.pendingFanoutFrames.set(session.pid, { tick, head, selfJson });
+        jobs.push({
+          sid: session.pid,
+          anchorId: anchorEntity.id,
+          anchorX: anchorEntity.pos.x,
+          anchorZ: anchorEntity.pos.z,
+          anchorTargetId: anchorEntity.targetId ?? -1,
+          denied,
+        });
+      },
+      (err, session) =>
+        console.error(`[snap] failed to prepare fanout job for pid ${session.pid}:`, err),
+    );
+    const result = fanout.dispatchTick(tick, jobs);
+    for (const job of result.undispatched) {
+      this.pendingFanoutFrames.delete(job.sid);
+      const session = this.clients.get(job.sid);
+      if (!session) continue;
+      runGuarded(
+        () => this.buildSessionSnapshotInThread(session, tick, nowMs, head),
+        (err) =>
+          console.error(`[snap] failed to build snapshot for pid ${session.pid}, skipping:`, err),
+      );
+    }
+  }
+
+  // Worker reply: splice the stored head/self of the SAME tick around the
+  // worker-built ents/keep blocks and send. A session that left, went
+  // linkdead, or was re-dispatched since simply drops the frame.
+  private deliverFanoutFrame(sid: number, tick: number, ents: string, keep: string): void {
+    const pending = this.pendingFanoutFrames.get(sid);
+    if (!pending || pending.tick !== tick) return;
+    this.pendingFanoutFrames.delete(sid);
+    const session = this.clients.get(sid);
+    if (!session || session.left || session.linkdead) return;
+    const keepJson = keep !== '' ? `,"keep":[${keep}]` : '';
+    this.sendRaw(
+      session,
+      `${pending.head},"self":${pending.selfJson},"ents":[${ents}]${keepJson}}`,
+    );
   }
 
   private canObserveEntity(viewer: Entity, e: Entity, d2: number): boolean {
@@ -3995,9 +4112,15 @@ export class GameServer {
   }
 
   private sweepWireCache(): void {
+    let removed: number[] | null = null;
     for (const id of this.wireCache.keys()) {
-      if (!this.sim.entities.has(id)) this.wireCache.delete(id);
+      if (!this.sim.entities.has(id)) {
+        this.wireCache.delete(id);
+        (removed ??= []).push(id);
+      }
     }
+    // fanout workers evict the same ids from their fragment caches
+    if (removed !== null) this.snapshotFanout?.noteRemovedEntities(removed);
   }
 
   private selfWireJson(
