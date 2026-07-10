@@ -38,6 +38,12 @@ const STOW_GESTURE_TIMESCALE = 1.15;
 // Frozen-pose sweep of the chop: the hand peaks beside the shoulder (right
 // where the on-back hilt sits) at ~28% in; by 40% the downswing has started.
 const STOW_SWAP_FRACTION = 0.28;
+// Additive post-mixer raise on the right upper arm so the hand climbs clearly
+// above the shoulder toward the hilt (the clip alone tops out at shoulder
+// height). Negative X lifts on this rig; past ~-1.0 the oversized helmet hides
+// the whole arm from the chase camera, so -0.85 is the readable peak.
+const STOW_ARM_BONE = 'upperarmr';
+const STOW_ARM_LIFT_RAD = -0.85;
 const HIT_REACT_COOLDOWN = 0.9;
 // Lie_Idle already lays the rig flat — a touch of extra pitch reads as a
 // surface glide; clip-less rigs (creatures) get the full procedural prone
@@ -89,6 +95,10 @@ export class CharacterVisual {
   private skinIndex: number;
   private weaponItemId: string | null;
   private stow = createStowTransition();
+  // The gesture's additive arm-raise window: t rises 0..dur (peak at dur/2,
+  // the swap moment); -1 = inactive. Bone resolved lazily once (null = absent).
+  private stowLift = { t: -1, dur: 0 };
+  private stowArmBone: THREE.Object3D | null | undefined;
   private disposed = false;
   private ghosted = false;
   private mixer: THREE.AnimationMixer;
@@ -286,7 +296,35 @@ export class CharacterVisual {
     if (animate) {
       this.mixer.update(this.pendingDt);
       this.pendingDt = 0;
+      // AFTER the mixer wrote the sampled pose: the sheathe gesture's additive
+      // arm raise (never applied on skipped-mixer frames, so it cannot accumulate).
+      this.applyStowArmLift(dt);
     }
+  }
+
+  /** Ease the extra arm raise in toward the swap moment and back out after it;
+   *  an attack/hit one-shot stealing the gesture cancels the lift outright. */
+  private applyStowArmLift(dt: number): void {
+    const lift = this.stowLift;
+    if (lift.t < 0 || lift.dur <= 0) return;
+    const clip = this.def.clips.stow;
+    const gesture = clip ? this.action(clip) : null;
+    if (this.deadLock || !gesture || (this.currentIsOneShot && this.current !== gesture)) {
+      lift.t = -1;
+      return;
+    }
+    lift.t += dt;
+    const p = lift.t / lift.dur;
+    if (p >= 1) {
+      lift.t = -1;
+      return;
+    }
+    const bone = this.stowArmBone ?? (this.stowArmBone = this.model.getObjectByName(STOW_ARM_BONE));
+    if (!bone) {
+      lift.t = -1;
+      return;
+    }
+    bone.rotation.x += STOW_ARM_LIFT_RAD * Math.sin(Math.PI * p);
   }
 
   // -------------------------------------------------------------------------
@@ -516,6 +554,9 @@ export class CharacterVisual {
     const swapDelay = (gesture.getClip().duration / STOW_GESTURE_TIMESCALE) * STOW_SWAP_FRACTION;
     if (requestStow(this.stow, stowed, swapDelay)) {
       this.playOneShot(clip as string, STOW_GESTURE_TIMESCALE);
+      // Arm-raise window: peaks exactly at the swap, eases back out after it.
+      this.stowLift.t = 0;
+      this.stowLift.dur = swapDelay * 2;
     }
   }
 
