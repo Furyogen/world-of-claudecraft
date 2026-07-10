@@ -33,12 +33,12 @@
     "da_DK"
   ],
   "counts": {
-    "keys": 6796,
-    "rows": 142716,
-    "translated": 142523,
+    "keys": 6797,
+    "rows": 142737,
+    "translated": 142544,
     "pending": 0,
     "blocked": 193,
-    "blockedSource": 95
+    "blockedSource": 97
   },
   "keys": {
     "main:a11y.characterActions": {
@@ -668325,6 +668325,120 @@
         }
       }
     },
+    "sim:log.channelInterrupted": {
+      "scope": "sim",
+      "enHash": "0aadb2fff2238ba0",
+      "placeholders": [
+        "mechanic"
+      ],
+      "locales": {
+        "es": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "es_ES": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "fr_FR": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "fr_CA": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "en_CA": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "it_IT": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "de_DE": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "zh_CN": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "zh_TW": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "ko_KR": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "ja_JP": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "pt_BR": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "ru_RU": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "cs_CZ": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "nl_NL": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "pl_PL": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "id_ID": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "tr_TR": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "sv_SE": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "vi_VN": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "da_DK": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        }
+      }
+    },
     "sim:log.channelJoined": {
       "scope": "sim",
       "enHash": "01fedc85c8e4020d",
@@ -763941,6 +764055,16 @@
       "channel": "sim",
       "reason": "v0.7 in-game slash-command / diagnostic surface; ships English as a documented backstop pending a dedicated localization pass (follow-up).",
       "text": "[dev] Could not spawn the test vendor."
+    },
+    {
+      "channel": "sim",
+      "reason": "v0.7 in-game slash-command / diagnostic surface; ships English as a documented backstop pending a dedicated localization pass (follow-up).",
+      "text": "[dev] God mode OFF."
+    },
+    {
+      "channel": "sim",
+      "reason": "v0.7 in-game slash-command / diagnostic surface; ships English as a documented backstop pending a dedicated localization pass (follow-up).",
+      "text": "[dev] God mode ON."
     },
     {
       "channel": "sim",
