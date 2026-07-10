@@ -1068,20 +1068,20 @@ export const fr_FR: EnTranslations = {
       "spawn": "{name} se dresse sur les Hauteurs de Thornpeak !"
     },
     "auth": {
-      "forgotPrompt": "Forgot password?",
-      "forgotTitle": "Reset your password",
-      "forgotHint": "Enter your username and we will email a reset link to the address on file.",
-      "forgotUsername": "Username",
-      "forgotSubmit": "Send reset link",
-      "forgotSent": "If an account with that username has an email on file, we have sent a reset link. Check your inbox.",
-      "forgotBack": "Back to log in",
-      "resetTitle": "Choose a new password",
-      "resetNewPassword": "New password",
-      "resetConfirm": "Confirm new password",
-      "resetSubmit": "Update password",
-      "resetDone": "Your password has been updated. You can now log in.",
-      "resetMismatch": "The passwords do not match.",
-      "resetErrInvalid": "This reset link is invalid or has expired. Request a new one."
+      "forgotPrompt": "Mot de passe oublié ?",
+      "forgotTitle": "Réinitialiser votre mot de passe",
+      "forgotHint": "Saisissez votre nom d’utilisateur et nous enverrons un lien de réinitialisation à l’adresse e-mail enregistrée.",
+      "forgotUsername": "Nom d’utilisateur",
+      "forgotSubmit": "Envoyer le lien de réinitialisation",
+      "forgotSent": "Si un compte avec ce nom d’utilisateur possède une adresse e-mail enregistrée, nous avons envoyé un lien de réinitialisation. Consultez votre boîte de réception.",
+      "forgotBack": "Retour à la connexion",
+      "resetTitle": "Choisissez un nouveau mot de passe",
+      "resetNewPassword": "Nouveau mot de passe",
+      "resetConfirm": "Confirmez le nouveau mot de passe",
+      "resetSubmit": "Mettre à jour le mot de passe",
+      "resetDone": "Votre mot de passe a été mis à jour. Vous pouvez maintenant vous connecter.",
+      "resetMismatch": "Les mots de passe ne correspondent pas.",
+      "resetErrInvalid": "Ce lien de réinitialisation est invalide ou a expiré. Demandez-en un nouveau."
     },
     "loot": {
       "chestTitle": "Coffre"

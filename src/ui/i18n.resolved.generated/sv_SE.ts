@@ -1068,20 +1068,20 @@ export const sv_SE: EnTranslations = {
       "spawn": "{name} reser sig över Törntoppshöjderna!"
     },
     "auth": {
-      "forgotPrompt": "Forgot password?",
-      "forgotTitle": "Reset your password",
-      "forgotHint": "Enter your username and we will email a reset link to the address on file.",
-      "forgotUsername": "Username",
-      "forgotSubmit": "Send reset link",
-      "forgotSent": "If an account with that username has an email on file, we have sent a reset link. Check your inbox.",
-      "forgotBack": "Back to log in",
-      "resetTitle": "Choose a new password",
-      "resetNewPassword": "New password",
-      "resetConfirm": "Confirm new password",
-      "resetSubmit": "Update password",
-      "resetDone": "Your password has been updated. You can now log in.",
-      "resetMismatch": "The passwords do not match.",
-      "resetErrInvalid": "This reset link is invalid or has expired. Request a new one."
+      "forgotPrompt": "Glömt lösenordet?",
+      "forgotTitle": "Återställ ditt lösenord",
+      "forgotHint": "Ange ditt användarnamn så skickar vi en återställningslänk till den registrerade e-postadressen.",
+      "forgotUsername": "Användarnamn",
+      "forgotSubmit": "Skicka återställningslänk",
+      "forgotSent": "Om ett konto med det användarnamnet har en registrerad e-postadress har vi skickat en återställningslänk. Kolla din inkorg.",
+      "forgotBack": "Tillbaka till inloggning",
+      "resetTitle": "Välj ett nytt lösenord",
+      "resetNewPassword": "Nytt lösenord",
+      "resetConfirm": "Bekräfta nytt lösenord",
+      "resetSubmit": "Uppdatera lösenord",
+      "resetDone": "Ditt lösenord har uppdaterats. Du kan nu logga in.",
+      "resetMismatch": "Lösenorden stämmer inte överens.",
+      "resetErrInvalid": "Den här återställningslänken är ogiltig eller har gått ut. Begär en ny."
     },
     "loot": {
       "chestTitle": "Kista"

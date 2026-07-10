@@ -1068,20 +1068,20 @@ export const cs_CZ: EnTranslations = {
       "spawn": "{name} povstává nad Thornpeak Heights!"
     },
     "auth": {
-      "forgotPrompt": "Forgot password?",
-      "forgotTitle": "Reset your password",
-      "forgotHint": "Enter your username and we will email a reset link to the address on file.",
-      "forgotUsername": "Username",
-      "forgotSubmit": "Send reset link",
-      "forgotSent": "If an account with that username has an email on file, we have sent a reset link. Check your inbox.",
-      "forgotBack": "Back to log in",
-      "resetTitle": "Choose a new password",
-      "resetNewPassword": "New password",
-      "resetConfirm": "Confirm new password",
-      "resetSubmit": "Update password",
-      "resetDone": "Your password has been updated. You can now log in.",
-      "resetMismatch": "The passwords do not match.",
-      "resetErrInvalid": "This reset link is invalid or has expired. Request a new one."
+      "forgotPrompt": "Zapomenuté heslo?",
+      "forgotTitle": "Obnovení hesla",
+      "forgotHint": "Zadejte své uživatelské jméno a na uloženou e-mailovou adresu pošleme odkaz pro obnovení.",
+      "forgotUsername": "Uživatelské jméno",
+      "forgotSubmit": "Poslat odkaz pro obnovení",
+      "forgotSent": "Pokud má účet s tímto uživatelským jménem uloženou e-mailovou adresu, poslali jsme odkaz pro obnovení. Zkontrolujte svou schránku.",
+      "forgotBack": "Zpět na přihlášení",
+      "resetTitle": "Zvolte nové heslo",
+      "resetNewPassword": "Nové heslo",
+      "resetConfirm": "Potvrďte nové heslo",
+      "resetSubmit": "Aktualizovat heslo",
+      "resetDone": "Vaše heslo bylo aktualizováno. Nyní se můžete přihlásit.",
+      "resetMismatch": "Hesla se neshodují.",
+      "resetErrInvalid": "Tento odkaz pro obnovení je neplatný nebo vypršel. Požádejte o nový."
     },
     "loot": {
       "chestTitle": "Truhla"

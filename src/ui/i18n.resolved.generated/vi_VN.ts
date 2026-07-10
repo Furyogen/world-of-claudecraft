@@ -1068,20 +1068,20 @@ export const vi_VN: EnTranslations = {
       "spawn": "{name} trỗi dậy trên Cao Nguyên Đỉnh Gai!"
     },
     "auth": {
-      "forgotPrompt": "Forgot password?",
-      "forgotTitle": "Reset your password",
-      "forgotHint": "Enter your username and we will email a reset link to the address on file.",
-      "forgotUsername": "Username",
-      "forgotSubmit": "Send reset link",
-      "forgotSent": "If an account with that username has an email on file, we have sent a reset link. Check your inbox.",
-      "forgotBack": "Back to log in",
-      "resetTitle": "Choose a new password",
-      "resetNewPassword": "New password",
-      "resetConfirm": "Confirm new password",
-      "resetSubmit": "Update password",
-      "resetDone": "Your password has been updated. You can now log in.",
-      "resetMismatch": "The passwords do not match.",
-      "resetErrInvalid": "This reset link is invalid or has expired. Request a new one."
+      "forgotPrompt": "Quên mật khẩu?",
+      "forgotTitle": "Đặt lại mật khẩu",
+      "forgotHint": "Nhập tên người dùng của bạn và chúng tôi sẽ gửi liên kết đặt lại tới địa chỉ email đã đăng ký.",
+      "forgotUsername": "Tên người dùng",
+      "forgotSubmit": "Gửi liên kết đặt lại",
+      "forgotSent": "Nếu tài khoản với tên người dùng đó có địa chỉ email đã đăng ký, chúng tôi đã gửi liên kết đặt lại. Hãy kiểm tra hộp thư của bạn.",
+      "forgotBack": "Quay lại đăng nhập",
+      "resetTitle": "Chọn mật khẩu mới",
+      "resetNewPassword": "Mật khẩu mới",
+      "resetConfirm": "Xác nhận mật khẩu mới",
+      "resetSubmit": "Cập nhật mật khẩu",
+      "resetDone": "Mật khẩu của bạn đã được cập nhật. Bây giờ bạn có thể đăng nhập.",
+      "resetMismatch": "Mật khẩu không khớp.",
+      "resetErrInvalid": "Liên kết đặt lại này không hợp lệ hoặc đã hết hạn. Hãy yêu cầu liên kết mới."
     },
     "loot": {
       "chestTitle": "Rương"

@@ -1068,20 +1068,20 @@ export const es: EnTranslations = {
       "spawn": "¡{name} se alza sobre las Alturas de Thornpeak!"
     },
     "auth": {
-      "forgotPrompt": "Forgot password?",
-      "forgotTitle": "Reset your password",
-      "forgotHint": "Enter your username and we will email a reset link to the address on file.",
-      "forgotUsername": "Username",
-      "forgotSubmit": "Send reset link",
-      "forgotSent": "If an account with that username has an email on file, we have sent a reset link. Check your inbox.",
-      "forgotBack": "Back to log in",
-      "resetTitle": "Choose a new password",
-      "resetNewPassword": "New password",
-      "resetConfirm": "Confirm new password",
-      "resetSubmit": "Update password",
-      "resetDone": "Your password has been updated. You can now log in.",
-      "resetMismatch": "The passwords do not match.",
-      "resetErrInvalid": "This reset link is invalid or has expired. Request a new one."
+      "forgotPrompt": "¿Olvidaste tu contraseña?",
+      "forgotTitle": "Restablece tu contraseña",
+      "forgotHint": "Introduce tu nombre de usuario y enviaremos un enlace de restablecimiento al correo registrado.",
+      "forgotUsername": "Nombre de usuario",
+      "forgotSubmit": "Enviar enlace de restablecimiento",
+      "forgotSent": "Si una cuenta con ese nombre de usuario tiene un correo registrado, hemos enviado un enlace de restablecimiento. Revisa tu bandeja de entrada.",
+      "forgotBack": "Volver a iniciar sesión",
+      "resetTitle": "Elige una nueva contraseña",
+      "resetNewPassword": "Nueva contraseña",
+      "resetConfirm": "Confirma la nueva contraseña",
+      "resetSubmit": "Actualizar contraseña",
+      "resetDone": "Tu contraseña se ha actualizado. Ya puedes iniciar sesión.",
+      "resetMismatch": "Las contraseñas no coinciden.",
+      "resetErrInvalid": "Este enlace de restablecimiento no es válido o ha caducado. Solicita uno nuevo."
     },
     "loot": {
       "chestTitle": "Cofre"

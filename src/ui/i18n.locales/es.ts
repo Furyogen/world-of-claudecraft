@@ -6674,4 +6674,21 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'yumi.queue.leave': 'Sales de la cola de Protege a Yumi.',
   'yumi.queue.teamLeave': 'Tu equipo sale de la cola de Protege a Yumi.',
   'yumi.respawn.title': '¡ABATIDO!',
+  'hudChrome.auth.forgotPrompt': '¿Olvidaste tu contraseña?',
+  'hudChrome.auth.forgotTitle': 'Restablece tu contraseña',
+  'hudChrome.auth.forgotHint':
+    'Introduce tu nombre de usuario y enviaremos un enlace de restablecimiento al correo registrado.',
+  'hudChrome.auth.forgotUsername': 'Nombre de usuario',
+  'hudChrome.auth.forgotSubmit': 'Enviar enlace de restablecimiento',
+  'hudChrome.auth.forgotSent':
+    'Si una cuenta con ese nombre de usuario tiene un correo registrado, hemos enviado un enlace de restablecimiento. Revisa tu bandeja de entrada.',
+  'hudChrome.auth.forgotBack': 'Volver a iniciar sesión',
+  'hudChrome.auth.resetTitle': 'Elige una nueva contraseña',
+  'hudChrome.auth.resetNewPassword': 'Nueva contraseña',
+  'hudChrome.auth.resetConfirm': 'Confirma la nueva contraseña',
+  'hudChrome.auth.resetSubmit': 'Actualizar contraseña',
+  'hudChrome.auth.resetDone': 'Tu contraseña se ha actualizado. Ya puedes iniciar sesión.',
+  'hudChrome.auth.resetMismatch': 'Las contraseñas no coinciden.',
+  'hudChrome.auth.resetErrInvalid':
+    'Este enlace de restablecimiento no es válido o ha caducado. Solicita uno nuevo.',
 };

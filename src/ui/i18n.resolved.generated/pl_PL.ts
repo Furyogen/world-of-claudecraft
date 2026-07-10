@@ -1068,20 +1068,20 @@ export const pl_PL: EnTranslations = {
       "spawn": "{name} powstaje nad Wyżynami Ciernistego Szczytu!"
     },
     "auth": {
-      "forgotPrompt": "Forgot password?",
-      "forgotTitle": "Reset your password",
-      "forgotHint": "Enter your username and we will email a reset link to the address on file.",
-      "forgotUsername": "Username",
-      "forgotSubmit": "Send reset link",
-      "forgotSent": "If an account with that username has an email on file, we have sent a reset link. Check your inbox.",
-      "forgotBack": "Back to log in",
-      "resetTitle": "Choose a new password",
-      "resetNewPassword": "New password",
-      "resetConfirm": "Confirm new password",
-      "resetSubmit": "Update password",
-      "resetDone": "Your password has been updated. You can now log in.",
-      "resetMismatch": "The passwords do not match.",
-      "resetErrInvalid": "This reset link is invalid or has expired. Request a new one."
+      "forgotPrompt": "Nie pamiętasz hasła?",
+      "forgotTitle": "Zresetuj hasło",
+      "forgotHint": "Podaj nazwę użytkownika, a wyślemy link do resetowania na zapisany adres e-mail.",
+      "forgotUsername": "Nazwa użytkownika",
+      "forgotSubmit": "Wyślij link do resetowania",
+      "forgotSent": "Jeśli konto o tej nazwie użytkownika ma zapisany adres e-mail, wysłaliśmy link do resetowania. Sprawdź swoją skrzynkę.",
+      "forgotBack": "Powrót do logowania",
+      "resetTitle": "Wybierz nowe hasło",
+      "resetNewPassword": "Nowe hasło",
+      "resetConfirm": "Potwierdź nowe hasło",
+      "resetSubmit": "Zaktualizuj hasło",
+      "resetDone": "Twoje hasło zostało zaktualizowane. Możesz się teraz zalogować.",
+      "resetMismatch": "Hasła nie są zgodne.",
+      "resetErrInvalid": "Ten link do resetowania jest nieprawidłowy lub wygasł. Poproś o nowy."
     },
     "loot": {
       "chestTitle": "Skrzynia"

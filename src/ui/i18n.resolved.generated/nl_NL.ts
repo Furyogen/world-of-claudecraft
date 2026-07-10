@@ -1068,20 +1068,20 @@ export const nl_NL: EnTranslations = {
       "spawn": "{name} verrijst boven Doorntop-Hoogten!"
     },
     "auth": {
-      "forgotPrompt": "Forgot password?",
-      "forgotTitle": "Reset your password",
-      "forgotHint": "Enter your username and we will email a reset link to the address on file.",
-      "forgotUsername": "Username",
-      "forgotSubmit": "Send reset link",
-      "forgotSent": "If an account with that username has an email on file, we have sent a reset link. Check your inbox.",
-      "forgotBack": "Back to log in",
-      "resetTitle": "Choose a new password",
-      "resetNewPassword": "New password",
-      "resetConfirm": "Confirm new password",
-      "resetSubmit": "Update password",
-      "resetDone": "Your password has been updated. You can now log in.",
-      "resetMismatch": "The passwords do not match.",
-      "resetErrInvalid": "This reset link is invalid or has expired. Request a new one."
+      "forgotPrompt": "Wachtwoord vergeten?",
+      "forgotTitle": "Wachtwoord opnieuw instellen",
+      "forgotHint": "Voer je gebruikersnaam in en we sturen een herstellink naar het geregistreerde e-mailadres.",
+      "forgotUsername": "Gebruikersnaam",
+      "forgotSubmit": "Herstellink versturen",
+      "forgotSent": "Als een account met die gebruikersnaam een e-mailadres heeft, hebben we een herstellink gestuurd. Controleer je inbox.",
+      "forgotBack": "Terug naar inloggen",
+      "resetTitle": "Kies een nieuw wachtwoord",
+      "resetNewPassword": "Nieuw wachtwoord",
+      "resetConfirm": "Bevestig nieuw wachtwoord",
+      "resetSubmit": "Wachtwoord bijwerken",
+      "resetDone": "Je wachtwoord is bijgewerkt. Je kunt nu inloggen.",
+      "resetMismatch": "De wachtwoorden komen niet overeen.",
+      "resetErrInvalid": "Deze herstellink is ongeldig of verlopen. Vraag een nieuwe aan."
     },
     "loot": {
       "chestTitle": "Kist"

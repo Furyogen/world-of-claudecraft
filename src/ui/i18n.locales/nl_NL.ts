@@ -6631,4 +6631,21 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'yumi.queue.leave': 'Je verlaat de Bescherm Yumi-wachtrij.',
   'yumi.queue.teamLeave': 'Je team verlaat de Bescherm Yumi-wachtrij.',
   'yumi.respawn.title': 'NEERGEHAALD!',
+  'hudChrome.auth.forgotPrompt': 'Wachtwoord vergeten?',
+  'hudChrome.auth.forgotTitle': 'Wachtwoord opnieuw instellen',
+  'hudChrome.auth.forgotHint':
+    'Voer je gebruikersnaam in en we sturen een herstellink naar het geregistreerde e-mailadres.',
+  'hudChrome.auth.forgotUsername': 'Gebruikersnaam',
+  'hudChrome.auth.forgotSubmit': 'Herstellink versturen',
+  'hudChrome.auth.forgotSent':
+    'Als een account met die gebruikersnaam een e-mailadres heeft, hebben we een herstellink gestuurd. Controleer je inbox.',
+  'hudChrome.auth.forgotBack': 'Terug naar inloggen',
+  'hudChrome.auth.resetTitle': 'Kies een nieuw wachtwoord',
+  'hudChrome.auth.resetNewPassword': 'Nieuw wachtwoord',
+  'hudChrome.auth.resetConfirm': 'Bevestig nieuw wachtwoord',
+  'hudChrome.auth.resetSubmit': 'Wachtwoord bijwerken',
+  'hudChrome.auth.resetDone': 'Je wachtwoord is bijgewerkt. Je kunt nu inloggen.',
+  'hudChrome.auth.resetMismatch': 'De wachtwoorden komen niet overeen.',
+  'hudChrome.auth.resetErrInvalid':
+    'Deze herstellink is ongeldig of verlopen. Vraag een nieuwe aan.',
 };

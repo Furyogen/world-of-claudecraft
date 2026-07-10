@@ -1068,20 +1068,20 @@ export const da_DK: EnTranslations = {
       "spawn": "{name} rejser sig over Tornetop Højder!"
     },
     "auth": {
-      "forgotPrompt": "Forgot password?",
-      "forgotTitle": "Reset your password",
-      "forgotHint": "Enter your username and we will email a reset link to the address on file.",
-      "forgotUsername": "Username",
-      "forgotSubmit": "Send reset link",
-      "forgotSent": "If an account with that username has an email on file, we have sent a reset link. Check your inbox.",
-      "forgotBack": "Back to log in",
-      "resetTitle": "Choose a new password",
-      "resetNewPassword": "New password",
-      "resetConfirm": "Confirm new password",
-      "resetSubmit": "Update password",
-      "resetDone": "Your password has been updated. You can now log in.",
-      "resetMismatch": "The passwords do not match.",
-      "resetErrInvalid": "This reset link is invalid or has expired. Request a new one."
+      "forgotPrompt": "Glemt adgangskode?",
+      "forgotTitle": "Nulstil din adgangskode",
+      "forgotHint": "Indtast dit brugernavn, så sender vi et nulstillingslink til den registrerede e-mailadresse.",
+      "forgotUsername": "Brugernavn",
+      "forgotSubmit": "Send nulstillingslink",
+      "forgotSent": "Hvis en konto med det brugernavn har en registreret e-mailadresse, har vi sendt et nulstillingslink. Tjek din indbakke.",
+      "forgotBack": "Tilbage til log ind",
+      "resetTitle": "Vælg en ny adgangskode",
+      "resetNewPassword": "Ny adgangskode",
+      "resetConfirm": "Bekræft ny adgangskode",
+      "resetSubmit": "Opdater adgangskode",
+      "resetDone": "Din adgangskode er opdateret. Du kan nu logge ind.",
+      "resetMismatch": "Adgangskoderne stemmer ikke overens.",
+      "resetErrInvalid": "Dette nulstillingslink er ugyldigt eller udløbet. Anmod om et nyt."
     },
     "loot": {
       "chestTitle": "Kiste"

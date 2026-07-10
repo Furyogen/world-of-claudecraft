@@ -1068,20 +1068,20 @@ export const it_IT: EnTranslations = {
       "spawn": "{name} si erge sulle Alture di Thornpeak!"
     },
     "auth": {
-      "forgotPrompt": "Forgot password?",
-      "forgotTitle": "Reset your password",
-      "forgotHint": "Enter your username and we will email a reset link to the address on file.",
-      "forgotUsername": "Username",
-      "forgotSubmit": "Send reset link",
-      "forgotSent": "If an account with that username has an email on file, we have sent a reset link. Check your inbox.",
-      "forgotBack": "Back to log in",
-      "resetTitle": "Choose a new password",
-      "resetNewPassword": "New password",
-      "resetConfirm": "Confirm new password",
-      "resetSubmit": "Update password",
-      "resetDone": "Your password has been updated. You can now log in.",
-      "resetMismatch": "The passwords do not match.",
-      "resetErrInvalid": "This reset link is invalid or has expired. Request a new one."
+      "forgotPrompt": "Password dimenticata?",
+      "forgotTitle": "Reimposta la password",
+      "forgotHint": "Inserisci il tuo nome utente e invieremo un link di reimpostazione all’indirizzo e-mail registrato.",
+      "forgotUsername": "Nome utente",
+      "forgotSubmit": "Invia link di reimpostazione",
+      "forgotSent": "Se un account con quel nome utente ha un indirizzo e-mail registrato, abbiamo inviato un link di reimpostazione. Controlla la tua casella di posta.",
+      "forgotBack": "Torna all’accesso",
+      "resetTitle": "Scegli una nuova password",
+      "resetNewPassword": "Nuova password",
+      "resetConfirm": "Conferma la nuova password",
+      "resetSubmit": "Aggiorna password",
+      "resetDone": "La tua password è stata aggiornata. Ora puoi accedere.",
+      "resetMismatch": "Le password non coincidono.",
+      "resetErrInvalid": "Questo link di reimpostazione non è valido o è scaduto. Richiedine uno nuovo."
     },
     "loot": {
       "chestTitle": "Scrigno"

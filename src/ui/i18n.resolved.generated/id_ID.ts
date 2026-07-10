@@ -1068,20 +1068,20 @@ export const id_ID: EnTranslations = {
       "spawn": "{name} bangkit di atas Dataran Tinggi Thornpeak!"
     },
     "auth": {
-      "forgotPrompt": "Forgot password?",
-      "forgotTitle": "Reset your password",
-      "forgotHint": "Enter your username and we will email a reset link to the address on file.",
-      "forgotUsername": "Username",
-      "forgotSubmit": "Send reset link",
-      "forgotSent": "If an account with that username has an email on file, we have sent a reset link. Check your inbox.",
-      "forgotBack": "Back to log in",
-      "resetTitle": "Choose a new password",
-      "resetNewPassword": "New password",
-      "resetConfirm": "Confirm new password",
-      "resetSubmit": "Update password",
-      "resetDone": "Your password has been updated. You can now log in.",
-      "resetMismatch": "The passwords do not match.",
-      "resetErrInvalid": "This reset link is invalid or has expired. Request a new one."
+      "forgotPrompt": "Lupa kata sandi?",
+      "forgotTitle": "Atur ulang kata sandimu",
+      "forgotHint": "Masukkan nama penggunamu dan kami akan mengirim tautan pengaturan ulang ke alamat email yang terdaftar.",
+      "forgotUsername": "Nama pengguna",
+      "forgotSubmit": "Kirim tautan pengaturan ulang",
+      "forgotSent": "Jika akun dengan nama pengguna itu memiliki email terdaftar, kami telah mengirim tautan pengaturan ulang. Periksa kotak masukmu.",
+      "forgotBack": "Kembali ke masuk",
+      "resetTitle": "Pilih kata sandi baru",
+      "resetNewPassword": "Kata sandi baru",
+      "resetConfirm": "Konfirmasi kata sandi baru",
+      "resetSubmit": "Perbarui kata sandi",
+      "resetDone": "Kata sandimu telah diperbarui. Sekarang kamu bisa masuk.",
+      "resetMismatch": "Kata sandi tidak cocok.",
+      "resetErrInvalid": "Tautan pengaturan ulang ini tidak valid atau sudah kedaluwarsa. Minta yang baru."
     },
     "loot": {
       "chestTitle": "Peti"
