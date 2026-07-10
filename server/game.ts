@@ -110,20 +110,18 @@ import { REALM, REALM_PUBLIC_ORIGIN, REALM_RESET_TIME_ZONE } from './realm';
 import { createSerialWriter } from './serial_writer';
 import {
   decideKnownRecord,
-  INTEREST_QUERY_RADIUS,
-  INTEREST_RADIUS,
-  type SentEntityVersions,
-  withinInterest,
-} from './snapshot_fanout/interest_rules';
-import { SnapshotFanoutPool } from './snapshot_fanout/pool';
-import {
   F64_PER_SLOT,
   FLAG_NPC,
   FLAG_STEALTHED_PLAYER,
   FLAG_VALE_BALL,
   I32_PER_SLOT,
+  INTEREST_QUERY_RADIUS,
+  INTEREST_RADIUS,
+  type SentEntityVersions,
   type SessionJob,
-} from './snapshot_fanout/protocol';
+  SnapshotFanoutPool,
+  withinInterest,
+} from './snapshot_fanout';
 import type { Presence, PresenceStatus, SocialActor, SocialTransport } from './social';
 import { SocialService } from './social';
 import { PgSocialDb } from './social_db';
