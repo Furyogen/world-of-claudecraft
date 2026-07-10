@@ -115,7 +115,7 @@ describe('ActionBarPainter: routes every write through the elided writers', () =
       { m: 'toggleClass', args: [CONTAINER, 'many-spells', true] },
       { m: 'setStyleProp', args: [el.label, 'background-image', 'URL(ability:fireball)'] },
       { m: 'setText', args: [el.countEl, ''] },
-      { m: 'setStyleProp', args: [el.cdOverlay, 'height', '50%'] },
+      { m: 'setStyleProp', args: [el.cdOverlay, '--cd-fill', '50%'] },
       { m: 'setText', args: [el.cdText, '3'] },
       { m: 'toggleClass', args: [el.btn, 'empty', false] },
       { m: 'toggleClass', args: [el.btn, 'unusable', true] },
