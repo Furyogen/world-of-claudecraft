@@ -1320,7 +1320,13 @@
     justify-content: center;
     font-size: 13px;
     color: var(--gold);
-    text-shadow: 1px 1px 2px #000;
+    /* Same legible outline as the action bar cdtext (issue 1660). */
+    text-shadow:
+      0 0 4px #000,
+      1px 1px 1px #000,
+      -1px -1px 1px #000,
+      1px -1px 1px #000,
+      -1px 1px 1px #000;
     font-weight: bold;
     pointer-events: none;
   }
@@ -1414,16 +1420,23 @@
     justify-content: center;
     font-size: 17px;
     color: var(--gold);
-    text-shadow: 1px 1px 2px #000;
+    /* Crisp dark outline plus a soft halo so the gold number stays legible on
+       bright or warm icons, not just a thin 1px shadow that the art swallows. */
+    text-shadow:
+      0 0 4px #000,
+      1px 1px 1px #000,
+      -1px -1px 1px #000,
+      1px -1px 1px #000,
+      -1px 1px 1px #000;
   }
   .action-btn .cd-overlay {
     position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: #000d;
-    height: 0%;
-    border-radius: 0 0 4px 4px;
+    inset: 0;
+    /* Classic radial clock wipe: the dark wedge covers the remaining cooldown
+       (--cd-fill, written by action_bar_painter) and sweeps away clockwise as it
+       recovers, instead of the old bottom-up height fill. */
+    background: conic-gradient(#000d 0 var(--cd-fill, 0%), transparent var(--cd-fill, 0%));
+    border-radius: 4px;
   }
   .action-btn.unusable .icon-label {
     filter: grayscale(1) brightness(0.5);
