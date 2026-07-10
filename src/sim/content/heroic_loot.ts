@@ -675,13 +675,12 @@ export const HEROIC_BOSS_LOOT: Record<string, LootEntry[]> = {
     { itemId: 'soulflame_mantle_heroic', chance: 0.33, rollGroup: 'nythraxis_heroic_3' },
     { itemId: 'soulrend_diadem', chance: 0.33, rollGroup: 'nythraxis_heroic_3' },
     // Healing mail.
-    { itemId: 'stormcallers_crown_heroic', chance: 0.34, rollGroup: 'nythraxis_heroic_4' },
+    { itemId: 'stormcallers_crown_heroic', chance: 0.5, rollGroup: 'nythraxis_heroic_4' },
     {
       itemId: 'stormcallers_spaulders_heroic',
-      chance: 0.33,
+      chance: 0.5,
       rollGroup: 'nythraxis_heroic_4',
     },
-    { itemId: 'soulforged_warplate', chance: 0.33, rollGroup: 'nythraxis_heroic_4' },
     // Weapons.
     { itemId: 'kingsbane_last_oath_heroic', chance: 0.03, rollGroup: 'nythraxis_heroic_5' },
     { itemId: 'deathless_heartwood_heroic', chance: 0.03, rollGroup: 'nythraxis_heroic_5' },

@@ -139,19 +139,20 @@ describe('aggregateSetBonuses (pure resolver)', () => {
 });
 
 describe('item set tooltip model', () => {
-  it('counts base and Heroic alternatives as one logical member of every item set', () => {
-    const logicalMembers = new Map<string, Set<string>>();
-    for (const item of Object.values(ITEMS)) {
-      if (!item.set) continue;
-      const members = logicalMembers.get(item.set) ?? new Set<string>();
-      members.add(item.heroicOf ?? item.id);
-      logicalMembers.set(item.set, members);
-    }
-    const expectedCounts = Object.fromEntries(
-      [...logicalMembers].map(([setId, members]) => [setId, members.size]),
-    );
-
-    expect(itemSetMemberCounts()).toEqual(expectedCounts);
+  it('counts each set as its distinct equip slots (base + all heroic versions are one piece)', () => {
+    const counts = itemSetMemberCounts();
+    // The t2 sets are 5 slots (soulflame cloth is 4). The normal piece, its
+    // auto-generated heroic variant, and any bespoke heroic raid piece for the
+    // same slot all collapse to one member, so the "X/N" denominator reflects the
+    // real number of collectible pieces (not the parallel heroic-variant ids).
+    expect(counts.crownforged).toBe(5);
+    expect(counts.nighttalon).toBe(5);
+    expect(counts.soulflame).toBe(4);
+    expect(counts.stormcallers).toBe(5);
+    // Leveling haste kits: 3 pieces each.
+    expect(counts.vale_arcanist).toBe(3);
+    expect(counts.boundstone_vanguard).toBe(3);
+    expect(counts.greyjaw_stalker).toBe(3);
   });
 
   it('keeps four-piece families at four and the Boundstone family at three', () => {

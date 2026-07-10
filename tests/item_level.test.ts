@@ -235,9 +235,10 @@ describe('item level: heroic boss drops are budget-exact (five-mans 31, raid 33/
     const ids = Object.values(HEROIC_BOSS_LOOT)
       .flat()
       .flatMap((e) => (e.itemId ? [e.itemId] : []));
-    expect(ids.length).toBeGreaterThanOrEqual(16); // the authored heroic set
-    // Seven bespoke epics, eight heroic set versions, and two heroic legendaries.
-    expect(raidIds.size).toBe(17);
+    expect(ids.length).toBeGreaterThanOrEqual(15); // the authored heroic set
+    // Six bespoke epics, eight heroic set versions, and two heroic legendaries
+    // (the out-of-place int/spi Soulforged Warplate was cut from the healing-mail group).
+    expect(raidIds.size).toBe(16);
     for (const id of ids) {
       const item = ITEMS[id];
       const raid = raidIds.has(id);
