@@ -707,7 +707,7 @@ function dynamicFields(e: Entity): Record<string, unknown> {
   };
   if (e.dead) out.dead = 1;
   if (e.ghost) out.gh = 1; // released spirit (ghost form); renders translucent
-  if (e.spectator) out.spec = 1; // free-roaming Gauntlet spectator; renders faint to others
+  if (e.spectator) out.spec = 1; // Gauntlet spectator (watcher or fallen); renders faint to others
   if (e.lootable) out.loot = 1;
   if (e.hostile) out.h = 1;
   // The target frame's resource bar: type + current/max, sent only for entities

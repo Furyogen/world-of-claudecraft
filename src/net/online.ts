@@ -1674,7 +1674,7 @@ export class ClientWorld implements IWorld {
       if (typeof w.emoSeq === 'number') e.overheadEmoteSeq = w.emoSeq;
       e.dead = nowDead;
       e.ghost = !!w.gh; // released spirit: rendered translucent, runs faster
-      e.spectator = !!w.spec; // free-roaming Gauntlet spectator: rendered faint to others
+      e.spectator = !!w.spec; // Gauntlet spectator (watcher or fallen): rendered faint to others
       e.lootable = !!w.loot;
       e.hostile = !!w.h;
       e.castingAbility = w.cast ?? null;

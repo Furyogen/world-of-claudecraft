@@ -117,11 +117,10 @@ export function placeContestantsAt(
 // players there for the trial). NPC crowd placement stays with
 // placeContestantsAt; iteration is playerStates insertion order, and no rng
 // is drawn. spot(i, n) returns instance-local x/z plus the facing to hold.
-export function seatLivePlayersAt(
-  ctx: SimContext,
-  run: GauntletRun,
-  spot: (i: number, n: number) => { x: number; z: number; facing: number },
-): void {
+/** The run's live, non-spectating players in playerStates insertion order (a
+ * stable order that draws no rng): the order every desk trial hands out its
+ * stations in. */
+export function livePlayerIds(run: GauntletRun): number[] {
   const live: number[] = [];
   for (const [pid, ps] of run.playerStates) {
     if (ps.spectating) continue;
@@ -129,6 +128,15 @@ export function seatLivePlayersAt(
     if (!c || c.eliminatedAtTrial !== null) continue;
     live.push(pid);
   }
+  return live;
+}
+
+export function seatLivePlayersAt(
+  ctx: SimContext,
+  run: GauntletRun,
+  spot: (i: number, n: number) => { x: number; z: number; facing: number },
+): void {
+  const live = livePlayerIds(run);
   for (let i = 0; i < live.length; i++) {
     const e = ctx.entities.get(live[i]);
     if (!e) continue;

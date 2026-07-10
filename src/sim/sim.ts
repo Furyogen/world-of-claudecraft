@@ -111,6 +111,7 @@ import {
   isDelvePos,
   isGauntletPos,
   isHodricsPos,
+  isMinigameHubPos,
   MOBS,
   NPCS,
   QUESTS,
@@ -1718,7 +1719,11 @@ export class Sim {
       // them to an unrelated dungeon door. Rejoin at the world start (the
       // recruiter stands in town when the event is open).
       savedPos = null;
-    } else if (savedPos && savedPos.x > DUNGEON_X_THRESHOLD) {
+    } else if (savedPos && savedPos.x > DUNGEON_X_THRESHOLD && !isMinigameHubPos(savedPos.x)) {
+      // The minigame-hub exemption: the Proving Grounds is ONE persistent
+      // shared room spawned at world init, not a per-party instance, so a
+      // character saved inside it logs back in right where they stood instead
+      // of being ejected to a dungeon door.
       const dungeon = dungeonAt(savedPos.x) ?? DUNGEON_LIST[0];
       savedPos = { x: dungeon.doorPos.x, z: dungeon.doorPos.z - 4 };
     }

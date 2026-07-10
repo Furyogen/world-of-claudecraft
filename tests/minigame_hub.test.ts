@@ -131,6 +131,30 @@ describe('the Proving Grounds hub', () => {
     expect(blocked(MINIGAME_HUB_OSRIC.x, MINIGAME_HUB_OSRIC.z)).toBe(false);
   });
 
+  it('logs a character saved inside the hub back in inside the hub, alive', () => {
+    const sim = makeSim();
+    const pid = sim.addPlayer('warrior', 'Scholar');
+    const p = sim.entities.get(pid)!;
+    // walk in through the portal, then save from the landing spot inside
+    teleport(sim, pid, MINIGAME_HUB_PORTAL_POS.x, MINIGAME_HUB_PORTAL_POS.z);
+    sim.tick();
+    expect(isMinigameHubPos(p.pos.x)).toBe(true);
+    const state = sim.serializeCharacter(pid)!;
+    expect(isMinigameHubPos(state.pos.x)).toBe(true);
+    expect(state.dead).toBeFalsy();
+
+    // The hub is a persistent shared room, not a per-run instance: a reload
+    // must NOT eject the character to a dungeon door (the generic
+    // saved-inside-an-instance fallback), let alone get them killed there.
+    const sim2 = makeSim();
+    const pid2 = sim2.addPlayer('warrior', 'Scholar', { state });
+    const e2 = sim2.entities.get(pid2)!;
+    expect(isMinigameHubPos(e2.pos.x)).toBe(true);
+    expect(e2.pos.x).toBeCloseTo(state.pos.x, 5);
+    expect(e2.pos.z).toBeCloseTo(state.pos.z, 5);
+    expect(e2.dead).toBe(false);
+  });
+
   it('lets you join the Gauntlet from beside Maro in the hub', () => {
     const sim = makeSim({ gauntletAlwaysOpen: true });
     const pid = sim.addPlayer('warrior', 'Fighter');

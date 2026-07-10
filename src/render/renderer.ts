@@ -4803,8 +4803,9 @@ export class Renderer {
         e.templateId === 'spirit_healer'; // the graveyard angel is an ethereal figure
       active.setGhost(ghost);
       active.setSoulRend(characterSoulRendActive(e));
-      // A free-roaming Gauntlet spectator renders faint to OTHER players (never to
-      // themselves, so they keep a clear view of their own body while watching).
+      // A Gauntlet spectator (free-roaming watcher or knocked-out contestant)
+      // renders faint to OTHER players (never to themselves, so they keep a
+      // clear view of their own body while watching).
       active.setSpectator(e.spectator === true && e.id !== this.sim.playerId);
       v.visual.root.visible = active === v.visual;
       // distant rigs swap to the single-draw baked idle-pose mesh
@@ -5172,7 +5173,8 @@ export class Renderer {
     for (const castle of this.hodricsCastles.values()) castle.update(this.time);
     // The Gauntlet venue reacts to the viewer's own run: the Warden's gaze and
     // the signal pylons follow the sentinel light state (idle amber otherwise).
-    // The viewer's position anchors the echo table rig to their own row. The
+    // The viewer's position anchors the echo table rig to their own row, and the
+    // live etching lectern to their own station on the sigil ring. The
     // second clock is the IWorld sim time: online the render clock starts at
     // page load while the wire's schedules (echo flashes) are absolute sim
     // time, so the venue takes both and compares schedules only against this.

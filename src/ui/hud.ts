@@ -35,6 +35,8 @@ import {
   GAUNTLET_CONTESTANT_NPC_ID,
   GAUNTLET_LAYOUT,
   GAUNTLET_VENUE,
+  nearestSigilRingSlot,
+  sigilFocusPose,
 } from '../sim/content/gauntlet';
 import { HEROIC_VENDOR_STOCK } from '../sim/content/heroic_vendor';
 import {
@@ -3451,8 +3453,10 @@ export class Hud {
   private readonly sigilsTrace = new GauntletTraceBatcher();
   private sigilsLastCrack = 0;
   // Which desk-style trial currently holds the authored camera focus pose
-  // (movement trials keep the chase cam and never appear here).
+  // (movement trials keep the chase cam and never appear here), and for the
+  // sigils trial the ring station its pose was resolved for (-1 otherwise).
   private gauntletFocusKey: keyof typeof GAUNTLET_VENUE.focus | 'podium' | null = null;
+  private gauntletFocusSlot = -1;
   // Cached prefers-reduced-motion query for per-frame reads (the podium camera
   // dolly): .matches is a cheap live getter, while matchMedia() every frame
   // allocates a fresh MediaQueryList. Null under the Vitest plain-Node env.
@@ -10513,10 +10517,29 @@ export class Hud {
     // The pull holds no pose: it is standard third person, locked in place by
     // the station pin, with the circle overlay as its input.
     const key = live?.sigils ? ('sigils' as const) : live?.echo ? ('echo' as const) : null;
-    if (key === this.gauntletFocusKey) return;
+    // Every etcher mans their OWN lectern on the pavilion ring, so the sigils
+    // pose rides the station the viewer stands at (the sim pins them there for
+    // the trial, so it is stable). Latched on the station too: a pose resolved
+    // before the seated position landed corrects itself on the next frame.
+    const slot = key === 'sigils' && live ? this.gauntletSigilSlot(live.originX, live.originZ) : -1;
+    if (key === 'sigils' && slot < 0) return; // the station is not known yet; retry
+    if (key === this.gauntletFocusKey && slot === this.gauntletFocusSlot) return;
     this.gauntletFocusKey = key;
+    this.gauntletFocusSlot = slot;
     if (!key || !live) {
       this.renderer.setCameraFocus(null);
+      return;
+    }
+    if (key === 'sigils') {
+      const pose = sigilFocusPose(slot);
+      this.renderer.setCameraFocus({
+        pos: { x: pose.pos.x + live.originX, y: pose.pos.y, z: pose.pos.z + live.originZ },
+        lookAt: {
+          x: pose.lookAt.x + live.originX,
+          y: pose.lookAt.y,
+          z: pose.lookAt.z + live.originZ,
+        },
+      });
       return;
     }
     const f = GAUNTLET_VENUE.focus[key];
@@ -10526,7 +10549,7 @@ export class Hud {
     // pose by the desk's offset from the courtyard anchor (both x and z).
     let dx = 0;
     let dz = 0;
-    if (key === 'echo') {
+    {
       const p = this.sim.player?.pos;
       if (p) {
         const w = GAUNTLET_VENUE.echo;
@@ -10542,6 +10565,17 @@ export class Hud {
         z: f.lookAt.z + live.originZ + dz,
       },
     });
+  }
+
+  // Which pavilion lectern the viewer is manning, read straight off where the
+  // sim seated them (the renderer anchors the live etching rig the same way, so
+  // the pose and the slab can never disagree). -1 while their position is still
+  // streaming in.
+  private gauntletSigilSlot(originX: number, originZ: number): number {
+    const p = this.sim.player?.pos;
+    if (!p) return -1;
+    const w = GAUNTLET_VENUE.sigils;
+    return nearestSigilRingSlot(p.x - originX - w.x, p.z - originZ - w.z);
   }
 
   // The in-world sigils stage. While the trial is live for the viewer (a LIVE
@@ -10566,7 +10600,10 @@ export class Hud {
     this.sigilsLastCrack = sigils.crack;
     if (!this.sigilsSurface) {
       const rect = this.renderer.gauntletSigilSlabRect(live.originX, live.originZ);
-      if (!rect) return; // venue still streaming in; retry next frame
+      // Null while the venue is still streaming in, or before its live rig has
+      // anchored to the viewer's own ring lectern. Retry next frame: latching a
+      // rect early would aim the stroke at somebody else's slab.
+      if (!rect) return;
       this.sigilsOrigin = { x: live.originX, z: live.originZ };
       this.sigilsTrace.reset();
       const surface: WorldAimSurface = {

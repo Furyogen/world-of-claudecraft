@@ -38,9 +38,10 @@ const SWIM_RISE = 0.95; // body must break the surface or only the hat floats
 const MIXER_DT_CAP = 0.3; // throttled entities never integrate a huge step
 const GHOST_OPACITY = 0.34;
 const SOUL_REND_OPACITY = 0.58;
-// A free-roaming Gauntlet spectator renders at 20% opacity to other players (they
-// asked to appear as a faint watcher among the contestants).
-const SPECTATOR_OPACITY = 0.2;
+// A Gauntlet spectator (free-roaming watcher or knocked-out contestant) renders
+// at 10% opacity to other players: the gallery must not distract the field still
+// playing the trial.
+const SPECTATOR_OPACITY = 0.1;
 const SOUL_REND_TINT = new THREE.Color(0x4f0505);
 
 // shared invisible click capsule — raycaster ignores `visible`, render doesn't
@@ -409,7 +410,7 @@ export class CharacterVisual {
     this.applyVisualMaterials();
   }
 
-  // A free-roaming Gauntlet spectator, drawn faint to other players.
+  // A Gauntlet spectator (watcher or fallen), drawn faint to other players.
   setSpectator(on: boolean): void {
     if (on === this.spectator) return;
     this.spectator = on;

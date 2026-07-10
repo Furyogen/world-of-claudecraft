@@ -10,9 +10,9 @@
 // geometry is the pure, shared sigil_shapes module; every numeric knob is
 // GAUNTLET.sigils.
 
-import { GAUNTLET, GAUNTLET_VENUE, sigilRingAngle } from '../content/gauntlet';
+import { GAUNTLET, sigilRingOffset, sigilStation } from '../content/gauntlet';
 import type { SimContext } from '../sim_context';
-import { seatLivePlayersAt } from './contestants';
+import { livePlayerIds, seatLivePlayersAt } from './contestants';
 import { type SigilOutline, sigilOutline } from './sigil_shapes';
 import type {
   GauntletContestant,
@@ -37,47 +37,39 @@ const FAR_OFF_MULT_AT = 2;
 // tints its outline segments from these bits).
 export const SIGIL_MASK_BITS = 24;
 
-// Where the i-th live player stands for the etching. There is ONE interactive
-// lectern: the first player takes the etcher's mark dead ahead of the slab
-// face (facing -x, the slab tilts toward +x); any extra players (online runs)
-// park in a small arc around it and share the slab view (the v1 answer to the
-// one-lectern design gap).
-function lecternSpot(i: number): { x: number; z: number; facing: number } {
-  const { x, z } = GAUNTLET_VENUE.sigils;
-  const ang = i === 0 ? 0 : (i % 2 === 1 ? 1 : -1) * 0.55 * Math.ceil(i / 2);
-  const px = x + 1.8 * Math.cos(ang);
-  const pz = z + 1.8 * Math.sin(ang);
-  return { x: px, z: pz, facing: Math.atan2(x - px, z - pz) };
-}
-
-// The NPC field mans the cosmetic lectern ring: one etcher per station facing
-// its own slab (and the pavilion center), extras ranked up behind, so the
-// pavilion reads as a working hall rather than a waiting crowd. Direct pos
-// writes, no rng draws.
-function seatNpcsAtRingLecterns(ctx: SimContext, run: GauntletRun): void {
-  const { x, z, ring } = GAUNTLET_VENUE.sigils;
+// The NPC field takes the stations the players did not: one etcher per lectern
+// facing its own slab (and the pavilion center), the overflow ranked up behind,
+// so the pavilion reads as a working hall rather than a waiting crowd. Direct
+// pos writes, no rng draws.
+function seatNpcsAtRingLecterns(
+  ctx: SimContext,
+  run: GauntletRun,
+  offset: number,
+  taken: number,
+): void {
   const npcs = aliveContestants(run).filter((c) => !c.player);
   for (let i = 0; i < npcs.length; i++) {
     const e = ctx.entities.get(npcs[i].entityId);
     if (!e) continue;
-    const a = sigilRingAngle(i % ring.count, ring.count);
-    const r = ring.radius + 1.6 + Math.floor(i / ring.count) * 1.6;
-    const px = run.origin.x + x + Math.sin(a) * r;
-    const pz = run.origin.z + z + Math.cos(a) * r;
-    e.pos = ctx.groundPos(px, pz);
+    const st = sigilStation(taken + i, offset);
+    e.pos = ctx.groundPos(run.origin.x + st.x, run.origin.z + st.z);
     e.prevPos = { ...e.pos };
-    e.facing = Math.atan2(run.origin.x + x - px, run.origin.z + z - pz);
+    e.facing = st.facing;
     ctx.rebucket(e);
   }
 }
 
-// Seat the whole field at the etching pavilion: players AT the interactive
-// lecterns, the NPC field at the cosmetic ring lecterns. Positioning only (no
-// state, no rng), so runs.ts can call it during the interlude to stand everyone
-// at their stations while the countdown runs, and startSigils reuses it.
+// Seat the whole field at the etching pavilion, one contestant per lectern:
+// every live player claims a station of their own (rotated per run, so nobody
+// is handed the same lectern every game and nobody shares a circle), then the
+// NPC field fills the stations that are left. Positioning only (no state, no
+// rng), so runs.ts can call it during the interlude to stand everyone at their
+// stations while the countdown runs, and startSigils reuses it.
 export function seatSigilsField(ctx: SimContext, run: GauntletRun): void {
-  seatLivePlayersAt(ctx, run, (i) => lecternSpot(i));
-  seatNpcsAtRingLecterns(ctx, run);
+  const offset = sigilRingOffset(run.seed);
+  const players = livePlayerIds(run).length;
+  seatLivePlayersAt(ctx, run, (i) => sigilStation(i, offset));
+  seatNpcsAtRingLecterns(ctx, run, offset, players);
 }
 
 export function startSigils(ctx: SimContext, run: GauntletRun): GauntletSigilsState {

@@ -135,6 +135,10 @@ export function eliminateContestant(
     ps.momentumX = 0;
     ps.momentumZ = 0;
   }
+  // The fallen join the gallery: the entity flag makes them render faint to the
+  // contestants still playing (10% opacity), exactly like a free-roaming
+  // watcher. Cleared when they leave the run (runs.ts removePlayerFromRun).
+  if (ps && e) e.spectator = true;
   if (parkPlayer && e) {
     const spot = gauntletSpectatorSpot(GAUNTLET.trials[run.trialIndex]);
     e.pos = ctx.groundPos(run.origin.x + spot.x, run.origin.z + spot.z);

@@ -1,7 +1,16 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { GAUNTLET, GAUNTLET_VENUE, sigilRingAngle } from '../src/sim/content/gauntlet';
+import {
+  GAUNTLET,
+  GAUNTLET_VENUE,
+  nearestSigilRingSlot,
+  sigilFocusPose,
+  sigilRingOffset,
+  sigilStation,
+} from '../src/sim/content/gauntlet';
 import { type SigilOutline, sigilOutline } from '../src/sim/gauntlet/sigil_shapes';
+import { seatSigilsField } from '../src/sim/gauntlet/trial_sigils';
 import { Sim } from '../src/sim/sim';
+import type { SimContext } from '../src/sim/sim_context';
 import { groundHeight } from '../src/sim/world';
 
 // --- local helpers (not shared; copied idioms from gauntlet.test.ts) ---
@@ -143,21 +152,148 @@ describe('sigil trial scoring', () => {
     );
   });
 
-  it('the NPC field mans the ring lecterns during the trial', () => {
-    const { sim, run } = startTrialSim(31);
-    const { x, z, ring } = GAUNTLET_VENUE.sigils;
+  it('the field mans the ring lecterns: the player first, the NPCs behind them', () => {
+    const { sim, run, pid } = startTrialSim(31);
+    const { ring } = GAUNTLET_VENUE.sigils;
+    const offset = sigilRingOffset(run.seed);
     const npcs = run.contestants.filter((c) => !c.player && c.eliminatedAtTrial === null);
     expect(npcs.length).toBeGreaterThan(ring.count); // the ring fills, extras rank behind
-    for (let i = 0; i < ring.count; i++) {
-      const e = sim.entities.get(npcs[i].entityId)!;
-      const a = sigilRingAngle(i, ring.count);
-      expect(e.pos.x).toBeCloseTo(run.origin.x + x + Math.sin(a) * (ring.radius + 1.6), 3);
-      expect(e.pos.z).toBeCloseTo(run.origin.z + z + Math.cos(a) * (ring.radius + 1.6), 3);
+
+    // Station seq 0 is the lone player's; the NPC field starts at seq 1, so no
+    // bot is ever standing in the player's circle.
+    const atStation = (id: number, seq: number) => {
+      const st = sigilStation(seq, offset);
+      const e = sim.entities.get(id)!;
+      expect(e.pos.x).toBeCloseTo(run.origin.x + st.x, 3);
+      expect(e.pos.z).toBeCloseTo(run.origin.z + st.z, 3);
+      expect(e.facing).toBeCloseTo(st.facing, 3);
+      return st;
+    };
+    const mine = atStation(pid, 0);
+    for (let i = 0; i < ring.count - 1; i++) {
+      const st = atStation(npcs[i].entityId, 1 + i);
+      expect(st.slot).not.toBe(mine.slot);
     }
-    // the overflow rank stands one step further out at the same station angle
-    const extra = sim.entities.get(npcs[ring.count].entityId)!;
-    const a0 = sigilRingAngle(0, ring.count);
-    expect(extra.pos.x).toBeCloseTo(run.origin.x + x + Math.sin(a0) * (ring.radius + 3.2), 3);
+    // Every lectern of the ring is manned exactly once before anyone doubles up.
+    const slots = [
+      mine.slot,
+      ...Array.from({ length: ring.count - 1 }, (_, i) => sigilStation(1 + i, offset).slot),
+    ];
+    expect(new Set(slots).size).toBe(ring.count);
+
+    // The overflow rank stands one step further out, back at the first angle.
+    const extra = sigilStation(ring.count, offset);
+    expect(extra.slot).toBe(mine.slot);
+    expect(
+      Math.hypot(extra.x - GAUNTLET_VENUE.sigils.x, extra.z - GAUNTLET_VENUE.sigils.z),
+    ).toBeCloseTo(ring.radius + 3.2, 3);
+    const e = sim.entities.get(npcs[ring.count - 1].entityId)!;
+    expect(e.pos.x).toBeCloseTo(run.origin.x + extra.x, 3);
+  });
+
+  it('two players each claim their own lectern, nobody shares a circle', () => {
+    // NOT the instant-lobby sim: that starts the run on the first join, so a
+    // second player could never be seated. Let the fill window run instead.
+    const sim = new Sim({
+      seed: 77,
+      playerClass: 'warrior',
+      noPlayer: true,
+      gauntletAlwaysOpen: true,
+    });
+    const a = sim.addPlayer('warrior', 'Etcher');
+    const b = sim.addPlayer('mage', 'Scribe');
+    sim.tick(); // spawn the recruiter
+    const r = recruiter(sim)!;
+    teleport(sim, a, r.pos.x, r.pos.z);
+    teleport(sim, b, r.pos.x, r.pos.z);
+    sim.gauntletJoin(a); // both land in the same lobby before it fills
+    sim.gauntletJoin(b);
+    advanceToTrial(sim, 20 * 90);
+    const run = sim.gauntletRuns[0]!;
+    expect(run.contestants.filter((c) => c.player).length).toBe(2);
+
+    const offset = sigilRingOffset(run.seed);
+    const stA = sigilStation(0, offset);
+    const stB = sigilStation(1, offset);
+    expect(stA.slot).not.toBe(stB.slot); // the whole point: separate podiums
+    const ea = sim.entities.get(a)!;
+    const eb = sim.entities.get(b)!;
+    expect(ea.pos.x).toBeCloseTo(run.origin.x + stA.x, 3);
+    expect(ea.pos.z).toBeCloseTo(run.origin.z + stA.z, 3);
+    expect(eb.pos.x).toBeCloseTo(run.origin.x + stB.x, 3);
+    expect(eb.pos.z).toBeCloseTo(run.origin.z + stB.z, 3);
+    // Not stacked in the middle: they stand a lectern apart, and neither is on
+    // the dais centre the old seating crowded.
+    const V = GAUNTLET_VENUE.sigils;
+    expect(Math.hypot(ea.pos.x - eb.pos.x, ea.pos.z - eb.pos.z)).toBeGreaterThan(2);
+    for (const e of [ea, eb]) {
+      const rad = Math.hypot(e.pos.x - run.origin.x - V.x, e.pos.z - run.origin.z - V.z);
+      expect(rad).toBeCloseTo(V.ring.radius + 1.6, 3);
+    }
+    // Each host resolves the same station back from the position it seated.
+    expect(nearestSigilRingSlot(ea.pos.x - run.origin.x - V.x, ea.pos.z - run.origin.z - V.z)).toBe(
+      stA.slot,
+    );
+    expect(nearestSigilRingSlot(eb.pos.x - run.origin.x - V.x, eb.pos.z - run.origin.z - V.z)).toBe(
+      stB.slot,
+    );
+    // No NPC crowds either of them.
+    for (const c of run.contestants.filter((k) => !k.player && k.eliminatedAtTrial === null)) {
+      const e = sim.entities.get(c.entityId)!;
+      expect(Math.hypot(e.pos.x - ea.pos.x, e.pos.z - ea.pos.z)).toBeGreaterThan(1);
+      expect(Math.hypot(e.pos.x - eb.pos.x, e.pos.z - eb.pos.z)).toBeGreaterThan(1);
+    }
+
+    // One of them walks out: the field recompacts on the next re-seat, so the
+    // survivor takes the FIRST station and the NPC field shifts up behind them.
+    // (seatSigilsField runs twice per trial, at the interlude and at the start,
+    // and both calls must agree on a shrunk roster.)
+    sim.gauntletLeave(a);
+    seatSigilsField((sim as unknown as { ctx: SimContext }).ctx, run);
+    expect(eb.pos.x).toBeCloseTo(run.origin.x + stA.x, 3); // b moved up to a's lectern
+    expect(eb.pos.z).toBeCloseTo(run.origin.z + stA.z, 3);
+    const firstNpc = run.contestants.find((k) => !k.player && k.eliminatedAtTrial === null)!;
+    const en = sim.entities.get(firstNpc.entityId)!;
+    expect(en.pos.x).toBeCloseTo(run.origin.x + stB.x, 3); // the NPCs close the gap
+    expect(Math.hypot(en.pos.x - eb.pos.x, en.pos.z - eb.pos.z)).toBeGreaterThan(1);
+  });
+
+  it('the seeded ring rotation moves the field off the same lecterns run to run', () => {
+    const slots = new Set<number>();
+    for (let seed = 0; seed < 24; seed++) slots.add(sigilStation(0, sigilRingOffset(seed)).slot);
+    expect(slots.size).toBe(GAUNTLET_VENUE.sigils.ring.count); // every station gets used
+    // But it is a pure function of the seed: the interlude re-seat and the
+    // trial's own re-seat must agree, or the field would shuffle mid-countdown.
+    expect(sigilRingOffset(9)).toBe(sigilRingOffset(9));
+    expect(sigilStation(3, 5)).toEqual(sigilStation(3, 5));
+  });
+
+  it('the camera pose rides onto whichever lectern the viewer is manning', () => {
+    const V = GAUNTLET_VENUE.sigils;
+    const f = GAUNTLET_VENUE.focus.sigils;
+    const standoff = Math.hypot(f.pos.x - V.x, f.pos.z - V.z); // the authored standoff
+    for (let slot = 0; slot < V.ring.count; slot++) {
+      const st = sigilStation(slot);
+      const pose = sigilFocusPose(slot);
+      // Looking straight at THIS lectern's slab, at the authored slab height.
+      expect(pose.lookAt.x).toBeCloseTo(st.lecternX, 6);
+      expect(pose.lookAt.z).toBeCloseTo(st.lecternZ, 6);
+      expect(pose.lookAt.y).toBe(f.lookAt.y);
+      // Camera the authored standoff back along the radial (the etcher's side),
+      // at the authored height: never inside the dais, never past the etcher.
+      expect(Math.hypot(pose.pos.x - st.lecternX, pose.pos.z - st.lecternZ)).toBeCloseTo(
+        standoff,
+        6,
+      );
+      expect(pose.pos.y).toBe(f.pos.y);
+      // Radially OUTSIDE the lectern, on the etcher's side: never inside the dais.
+      const fromAnchor = Math.hypot(pose.pos.x - V.x, pose.pos.z - V.z);
+      expect(fromAnchor).toBeCloseTo(V.ring.radius + standoff, 6);
+      expect(fromAnchor).toBeGreaterThan(V.ring.radius);
+    }
+    // Distinct stations get distinct poses (the whole point of carrying it).
+    expect(sigilFocusPose(0).pos).not.toEqual(sigilFocusPose(1).pos);
+    expect(sigilFocusPose(0).lookAt).not.toEqual(sigilFocusPose(1).lookAt);
   });
 
   it('the shape roll picks any of the five shapes (0..4) with real variety', () => {
@@ -357,6 +493,31 @@ describe('sigil trial scoring', () => {
     }
     expect(sp.coveredCount).toBeGreaterThan(0);
   }, 20000);
+
+  it('a knocked-out etcher loses the sigils substate while the trial runs on', () => {
+    const { sim, pid, run, sp } = startTrialSim(13, 1);
+    const c = run.contestants.find((k) => k.entityId === pid)!;
+    expect(sim.gauntletRunWire(pid)!.sigils).not.toBeNull(); // live: they have a pane
+    // One more shatter is lethal, so the next off-band stroke knocks them out
+    // mid-trial (not at the clock).
+    c.vitality = GAUNTLET.sigils.shatterDamage;
+    // The shatter (and the knockout it deals) lands inside the trace command, so
+    // break BEFORE the tick that would resolve this solo trial: we want the wire
+    // as the rest of the field would still see it, mid-trial.
+    for (let i = 0; i < 20 * 30 && c.eliminatedAtTrial === null; i++) {
+      sim.gauntletTrace([0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5], pid);
+      if (c.eliminatedAtTrial !== null) break;
+      sim.tick();
+    }
+    expect(c.eliminatedAtTrial).not.toBeNull();
+    expect(sp.shatters).toBe(1);
+    // The trial is still live, but the fallen etcher is parked at the viewing
+    // spot: no pane, so the venue retires the live rig off the ring lectern they
+    // vacated instead of leaving it glowing there.
+    expect(sim.gauntletRuns[0]!.trial?.kind).toBe('sigils');
+    expect(run.playerStates.get(pid)!.spectating).toBe(true);
+    expect(sim.gauntletRunWire(pid)!.sigils).toBeNull();
+  }, 30000);
 
   it('a player who traced nothing is knocked out at the timeout (zero coverage is fatal)', () => {
     const { sim, run } = startTrialSim(8);

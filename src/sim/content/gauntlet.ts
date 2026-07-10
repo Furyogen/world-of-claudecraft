@@ -184,20 +184,21 @@ export const GAUNTLET_LAYOUT = {
 // inline in render code.
 export const GAUNTLET_VENUE = {
   // Trial 2, Sugarglass Sigils: a circular etching pavilion. The slab block is
-  // the etched lectern at the pavilion center (the trial's input surface):
-  // sized/tilted here so the venue mesh, the world-aim interaction rect, and
-  // the trace input mapping share one source of truth. The face tilts toward
-  // +x (the approach from the crossing field); the etching is a centered
-  // square of half-extent etchHalf on the face, and the outline is inset by
-  // padFrac within it (gauntlet_trace_core maps input through the same inset).
+  // one lectern (the trial's input surface): sized/tilted here so the venue
+  // mesh, the world-aim interaction rect, and the trace input mapping share one
+  // source of truth. The face tilts radially outward, toward the etcher who
+  // mans it; the etching is a centered square of half-extent etchHalf on the
+  // face, and the outline is inset by padFrac within it (gauntlet_trace_core
+  // maps input through the same inset).
   sigils: {
     x: -62,
     z: 6,
     radius: 10,
-    // The cosmetic lectern ring around the interactive one: the NPC field
-    // mans these stations during the trial (one etcher per lectern, extras
-    // ranked behind). Venue geometry and sim placement share these numbers
-    // plus sigilRingAngle below.
+    // The lectern ring: EVERY contestant mans one of these stations during the
+    // trial (see sigilStation below), players first and the NPC field behind
+    // them. The viewer's own lectern is the live, etched one; the rest are
+    // cosmetic. Venue geometry and sim placement share these numbers plus
+    // sigilRingAngle below. The lectern on the dais centre is dressing.
     ring: { count: 12, radius: 6.5 },
     slab: {
       faceAcross: 2.2, // face width, the etching's x axis (yards)
@@ -265,7 +266,9 @@ export const GAUNTLET_VENUE = {
     sigils: {
       // Close over the slab so the etched shape fills the view for tracing; the
       // character is hidden while this pose is held (see the renderer self-hide),
-      // so nothing blocks it.
+      // so nothing blocks it. Authored for a lectern at the dais centre; every
+      // etcher's real pose is this one carried onto their own ring station by
+      // sigilFocusPose, so only the standoff and the two heights matter.
       pos: { x: -59.6, y: 4.2, z: 6 },
       lookAt: { x: -62, y: 1.25, z: 6 },
     },
@@ -316,6 +319,109 @@ export function gauntletSpectatorSpot(kind: GauntletTrialKind | undefined): {
 export function sigilRingAngle(i: number, count: number): number {
   const gap = 0.9; // the approach wedge (radians)
   return Math.PI / 2 + gap / 2 + ((2 * Math.PI - gap) * (i + 0.5)) / count;
+}
+
+// How far outside their lectern an etcher stands, and how far the overflow
+// ranks up behind the ring when the field outnumbers the stations.
+export const SIGIL_ETCHER_STANDOFF = 1.6;
+export const SIGIL_RANK_PITCH = 1.6;
+
+/** Which lectern a run's first contestant claims. Rotating the whole ring by a
+ * run-stable amount means a player is not handed the same station every game,
+ * while staying a pure function of the seed (no rng draw, so a re-seat during
+ * the interlude and at the trial's start agree). */
+export function sigilRingOffset(seed: number): number {
+  const n = GAUNTLET_VENUE.sigils.ring.count;
+  return ((Math.trunc(seed) % n) + n) % n;
+}
+
+/**
+ * The `seq`-th etching station of the pavilion ring (instance-local yards): a
+ * lectern on the ring plus the spot its etcher stands on, one standoff further
+ * out and facing the dais. Stations are handed out in sequence and rotated by
+ * `offset`, so contestant `seq` never shares a lectern with contestant `seq+1`.
+ *
+ * The sim seats live players at stations 0..P-1 and the NPC field from P on
+ * (trial_sigils.ts), and the venue anchors the viewer's live etching rig to the
+ * lectern they are standing at (render/gauntlet_venue.ts), so a contestant and
+ * their slab always share a spot. Only the NPC field ever overflows the ring
+ * and ranks up behind it: maxRealPlayers (8) is under ring.count (12), so every
+ * live player owns a lectern outright.
+ */
+export function sigilStation(
+  seq: number,
+  offset = 0,
+): {
+  slot: number; // ring station index
+  angle: number; // its sigilRingAngle
+  lecternX: number;
+  lecternZ: number;
+  lecternYaw: number; // slab yaw: the face tilts radially out, toward the etcher
+  x: number; // where the etcher stands
+  z: number;
+  facing: number; // holding the dais in view
+} {
+  const { x, z, ring } = GAUNTLET_VENUE.sigils;
+  const slot = (((offset + seq) % ring.count) + ring.count) % ring.count;
+  const rank = Math.floor(seq / ring.count);
+  const angle = sigilRingAngle(slot, ring.count);
+  const sin = Math.sin(angle);
+  const cos = Math.cos(angle);
+  const standR = ring.radius + SIGIL_ETCHER_STANDOFF + rank * SIGIL_RANK_PITCH;
+  const px = x + sin * standR;
+  const pz = z + cos * standR;
+  return {
+    slot,
+    angle,
+    lecternX: x + sin * ring.radius,
+    lecternZ: z + cos * ring.radius,
+    lecternYaw: angle - Math.PI / 2,
+    x: px,
+    z: pz,
+    facing: Math.atan2(x - px, z - pz),
+  };
+}
+
+/** The ring station a contestant standing at (dx, dz) FROM the pavilion anchor
+ * is manning: the lectern whose angle theirs is nearest. Both hosts derive the
+ * viewer's station this way (the renderer for the live rig, the HUD for the
+ * camera pose) rather than wiring the index. */
+export function nearestSigilRingSlot(dx: number, dz: number): number {
+  const { ring } = GAUNTLET_VENUE.sigils;
+  const a = Math.atan2(dx, dz);
+  let best = 0;
+  let bestGap = Number.POSITIVE_INFINITY;
+  for (let i = 0; i < ring.count; i++) {
+    const d = sigilRingAngle(i, ring.count) - a;
+    // atan2(sin, cos) folds the difference into (-PI, PI], so the gap is the
+    // real angular distance and never wraps the long way round.
+    const gap = Math.abs(Math.atan2(Math.sin(d), Math.cos(d)));
+    if (gap < bestGap) {
+      bestGap = gap;
+      best = i;
+    }
+  }
+  return best;
+}
+
+/** The sigils trial's camera pose, carried onto the given ring station. The
+ * authored `focus.sigils` pose is the one a lectern at the dais centre gets
+ * (looking in from the +x approach); this rotates it around the ring so every
+ * etcher sees their OWN slab filling the view. */
+export function sigilFocusPose(slot: number): {
+  pos: { x: number; y: number; z: number };
+  lookAt: { x: number; y: number; z: number };
+} {
+  const { x, z, ring } = GAUNTLET_VENUE.sigils;
+  const f = GAUNTLET_VENUE.focus.sigils;
+  const dist = Math.hypot(f.pos.x - x, f.pos.z - z); // the authored standoff
+  const a = sigilRingAngle(slot, ring.count);
+  const lx = x + Math.sin(a) * ring.radius;
+  const lz = z + Math.cos(a) * ring.radius;
+  return {
+    pos: { x: lx + Math.sin(a) * dist, y: f.pos.y, z: lz + Math.cos(a) * dist },
+    lookAt: { x: lx, y: f.lookAt.y, z: lz },
+  };
 }
 
 // The Keeper's Echo seats every contestant at their OWN rune-stone desk: a
@@ -383,25 +489,61 @@ export const GAUNTLET: GauntletDef = {
   npcSkillMax: 0.95,
   trials: ['sentinel', 'sigils', 'pull', 'echo', 'span', 'court'],
   sentinel: {
-    // Playtest verdict (twice): the clock must BITE. 45s on a 90yd field
-    // means roughly 25s of green time at the ~55 percent duty cycle, so a
-    // clean run needs near-constant motion and the shrinking windows matter.
-    durationS: 45,
+    // Playtest verdict (three times): the clock must BITE. 35s on a 90yd field
+    // leaves roughly 21s of green on an average draw against the ~13s of pure
+    // running the crossing costs, so a clean run needs motion on every single
+    // green and the shrinking windows really matter. Two catches (6yd back +
+    // a 1.5s pin each) is about all the slack there is. Shortening this again
+    // means re-checking the green machine below: the clock and greenMinS /
+    // accelPerCycle together decide whether the crossing is winnable at all.
+    durationS: 35,
     fieldLength: 90,
     fieldHalfWidth: 18,
-    greenMinS: 3.0,
+    // The green side carries the CROSSING, and the shortened clock made its
+    // cruellest draw unwinnable: at greenMinS 3.0 / accel 0.88, a run that drew
+    // the minimum green and the maximum red every cycle banked only ~94yd of
+    // running against a 90yd field, so a single catch's 6yd setback put the
+    // finish line out of reach no matter how well you played after it. The
+    // floor a flawless runner must always clear is "field + one catch", pinned
+    // in tests/gauntlet.test.ts. Red stays exactly as brutal; the tolerance
+    // belongs on the side you are allowed to move.
+    greenMinS: 3.4,
     greenMaxS: 6.5,
     redMinS: 2.0,
     redMaxS: 4.0,
-    accelPerCycle: 0.88,
+    // Green still shrinks every cycle (the trial accelerates), just gently
+    // enough that the late windows stay worth sprinting through.
+    accelPerCycle: 0.91,
+    // Never binds at the 35s clock (five cycles in); it guards a longer variant.
     greenFloorS: 1.4,
     telegraphS: 0.8,
+    // The grace pays for the braked slide the player cannot cancel (0.1s from
+    // full run speed) BEFORE it pays for any reaction, so only what is left
+    // over is a real window: 0.3s here, a trained player's ~0.25s visual
+    // reaction plus a little network headroom. Read that number from
+    // sentinelReactionBudgetS, never from this constant: raising graceS while
+    // softening redMomentumDecay buys the player nothing.
+    // Note this is the SAME 0.35 the trial first shipped with. It was inert
+    // then: at the green coast's decay the slide alone outran it, so the window
+    // was negative and even a perfect stop convicted. The brake is what turned
+    // this number into forgiveness rather than decoration.
+    // Anticipation still wins races (gauntletLight ships the exact `until` of
+    // the window, so the flip is never a surprise), and red stays red: the
+    // grace is under a fifth of the shortest red window. Both floors, plus the
+    // "a perfect stop is never convicted" invariant, are pinned in
+    // tests/gauntlet.test.ts.
     graceS: 0.35,
     redMoveEps: 0.06,
     hardFailDamage: 14,
     stunS: 1.5,
     pushbackYards: 6,
     momentumDecay: 0.82,
+    // Once the light is red the contestant digs in, so the residual slide dies
+    // four times faster: 2 ticks from full run speed instead of 9. The brake is
+    // what buys the reaction window (the slide is charged to the grace first),
+    // so soften it and the window shrinks tick for tick. It is not a mercy: the
+    // free coast on green is what makes anticipating each flip worth anything.
+    redMomentumDecay: 0.4,
     momentumStopEps: 0.02,
     // End-of-trial toll at score 0 = the full vitality pool, so failing to
     // cross (an idle player scores 0) is fatal from full health; any real

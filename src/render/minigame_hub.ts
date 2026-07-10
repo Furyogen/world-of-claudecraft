@@ -39,8 +39,6 @@ const HUB_MODELS = {
   chair: 'models/dungeon/chair.glb',
   bookBrown: 'models/dungeon/book_brown.glb',
   bookGrey: 'models/dungeon/book_grey.glb',
-  bookTan: 'models/dungeon/book_tan.glb',
-  candles: 'models/dungeon/shelf_small_candles.glb',
   candle: 'models/dungeon/candle_thin_lit.glb',
   torch: 'models/dungeon/torch_lit.glb',
   bannerRed: 'models/dungeon/banner_patterna_red.glb',
@@ -52,6 +50,7 @@ type HubModelKey = keyof typeof HUB_MODELS;
 
 const modelCache = new Map<HubModelKey, THREE.Object3D>();
 const modelHeight = new Map<HubModelKey, number>();
+const modelMinY = new Map<HubModelKey, number>();
 let assetsPromise: Promise<void> | null = null;
 
 export function ensureMinigameHubAssets(): Promise<void> {
@@ -61,6 +60,7 @@ export function ensureMinigameHubAssets(): Promise<void> {
         modelCache.set(key, gltf.scene);
         const box = new THREE.Box3().setFromObject(gltf.scene);
         modelHeight.set(key, Math.max(0.001, box.max.y - box.min.y));
+        modelMinY.set(key, box.min.y);
       }),
     ),
   ).then(() => undefined);
@@ -72,6 +72,10 @@ if (typeof window !== 'undefined') registerPreload(ensureMinigameHubAssets());
 // Clone a cached set piece scaled so its bounding height equals targetH yards
 // (kit pieces ship at whatever scale their pack chose; measuring beats
 // guessing). Marked sharedGeometry so dispose() leaves the source cache alone.
+// alignBase treats y as the height the prop's bounding BOTTOM rests on, for
+// kit pieces whose origin is not at their base (the books are centre-origin);
+// wall-mounted pieces (torch, banner) hang from their authored origin and must
+// stay on the default.
 function placeProp(
   group: THREE.Group,
   key: HubModelKey,
@@ -80,13 +84,15 @@ function placeProp(
   z: number,
   rotY: number,
   targetH: number,
+  alignBase = false,
 ): THREE.Object3D {
   const src = modelCache.get(key);
   if (!src) throw new Error(`minigame hub asset not preloaded: ${key}`);
   const obj = src.clone(true);
   obj.userData.sharedGeometry = true;
-  obj.scale.setScalar(targetH / (modelHeight.get(key) ?? 1));
-  obj.position.set(x, y, z);
+  const scale = targetH / (modelHeight.get(key) ?? 1);
+  obj.scale.setScalar(scale);
+  obj.position.set(x, alignBase ? y - (modelMinY.get(key) ?? 0) * scale : y, z);
   obj.rotation.y = rotY;
   obj.traverse((o) => {
     if ((o as THREE.Mesh).isMesh) {
@@ -196,23 +202,28 @@ export async function buildMinigameHub(
         break;
       case 'tableRound': {
         // a round reading table with scattered books + a candle, flanked by the
-        // chair entries below (east and west of the rug)
+        // chair entries below (east and west of the rug); the props rest their
+        // bounding bottoms on the 1.1-high tabletop via alignBase
         placeProp(group, 'tableRound', f.x, 0, f.z, f.rot, 1.1);
         const side = f.x < 0 ? -1 : 1;
-        placeProp(group, 'candle', f.x, 1.15, f.z, 0, 0.7);
-        placeProp(group, 'bookBrown', f.x + 0.35, 1.05, f.z + 0.2, side * 0.6, 0.18);
-        placeProp(group, 'bookGrey', f.x - 0.3, 1.05, f.z - 0.15, side * 1.4, 0.18);
+        placeProp(group, 'candle', f.x, 1.1, f.z, 0, 0.7, true);
+        placeProp(group, 'bookBrown', f.x + 0.35, 1.1, f.z + 0.2, side * 0.6, 0.18, true);
+        placeProp(group, 'bookGrey', f.x - 0.3, 1.1, f.z - 0.15, side * 1.4, 0.18, true);
         break;
       }
       case 'chair':
         placeProp(group, 'chair', f.x, 0, f.z, f.rot, 1.6);
         break;
       case 'tableLong':
-        // the long study table with stacked books + candles behind the heralds
-        placeProp(group, 'tableLong', f.x, 0, f.z, f.rot, 1.1);
-        placeProp(group, 'bookTan', f.x - 0.6, 1.1, f.z, 0.3, 0.2);
-        placeProp(group, 'bookBrown', f.x + 0.5, 1.1, f.z + 0.1, -0.5, 0.2);
-        placeProp(group, 'candles', f.x + 1.4, 1.05, f.z - 0.1, 0, 0.6);
+        // The long study table behind the heralds. The 'decorated' kit piece
+        // carries its books + candles baked onto the tabletop, so no loose
+        // props here. Its long axis is the GLB's local z while the layout's
+        // OBB collider is wide along local x, hence the quarter turn on top of
+        // the shared rot. Raw model: 1.886 bounding height, tabletop at 1.0,
+        // half-length 2.0; the 1.886 * 0.75 bounding target scales it so the
+        // rotated footprint is +-1.5 by +-0.77 (the collider is 1.5 by 0.6)
+        // with the tabletop at 0.75.
+        placeProp(group, 'tableLong', f.x, 0, f.z, f.rot + Math.PI / 2, 1.886 * 0.75);
         break;
     }
   }

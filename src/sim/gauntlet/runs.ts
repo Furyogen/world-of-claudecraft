@@ -282,6 +282,9 @@ export function removePlayerFromRun(
   if (e && run.phase !== 'lobby') {
     e.targetId = null; // drop any mirrored court foe so the open-world frame is clean
     e.autoAttack = false; // stop swinging on leave (a mid-court forfeit must not keep auto-attacking)
+    // A knocked-out contestant joined the gallery (vitality.ts); leaving the run
+    // takes them back out of it, so they render solid in the open world again.
+    e.spectator = false;
     restorePlayerHp(ctx, pid, ps);
     if (restore) {
       e.pos = { ...ps.savedPos };
@@ -940,7 +943,11 @@ export function gauntletRunWire(ctx: SimContext, pid: number): GauntletRunView |
     // still elides quiet ticks.
     sigils: (() => {
       if (trial?.kind !== 'sigils') return null;
-      const sp = trial.players.get(pid);
+      // A knocked-out etcher is parked at the viewing spot, not at their lectern
+      // (the pull view gates the same way): keep the substate out of their view
+      // so the venue retires the live rig off their vacated station instead of
+      // leaving it there glowing with a shape they can no longer trace.
+      const sp = ps?.spectating ? undefined : trial.players.get(pid);
       if (!sp) return null;
       return {
         shapeSeed: sp.shapeSeed,

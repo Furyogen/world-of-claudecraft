@@ -4,12 +4,15 @@
 // light is red (past a short grace window) is a catch: a vitality chunk, a
 // short pin, and a set-back, then you keep playing until the clock ends or
 // you fall. Detection is authoritative and per-tick: actual displacement is
-// what convicts, never input intent. Momentum makes stopping something you
-// must anticipate: released input keeps sliding for a few ticks and that
-// slide counts as movement.
+// what convicts, never input intent. Momentum still makes stopping something
+// you anticipate (released input keeps sliding, and the slide counts as
+// movement), but the grace window is sized so a fair REACTION also clears it:
+// it pays for a human's reaction plus the braked slide that reaction cannot
+// cancel (sentinel_reaction.ts).
 //
 // The light machine draws its windows from run.rng only; the pure helpers
-// (nextGreenWindowS, the score math in vitality.ts) are Node-tested directly.
+// (nextGreenWindowS, sentinelReactionBudgetS, the score math in vitality.ts)
+// are Node-tested directly.
 
 import { GAUNTLET } from '../content/gauntlet';
 import type { SimContext } from '../sim_context';
@@ -126,7 +129,12 @@ function updatePlayers(
 
     // Momentum: while the core moved the player this tick, remember the
     // velocity; on release, keep sliding it (decayed) until it fades. The
-    // slide is real movement and is judged like any other.
+    // slide is real movement and is judged like any other. Under a red light
+    // the contestant digs in, so the slide decays on the harder brake: the
+    // grace window is sized to cover exactly that braked slide plus a human
+    // reaction (see sentinel_reaction.ts), and a free coast on green is what
+    // makes anticipating the flip worth anything.
+    const decay = trial.light === 'red' ? t.redMomentumDecay : t.momentumDecay;
     const dx = e.pos.x - e.prevPos.x;
     const dz = e.pos.z - e.prevPos.z;
     const moved = Math.hypot(dx, dz);
@@ -134,8 +142,8 @@ function updatePlayers(
       ps.momentumX = dx;
       ps.momentumZ = dz;
     } else {
-      ps.momentumX *= t.momentumDecay;
-      ps.momentumZ *= t.momentumDecay;
+      ps.momentumX *= decay;
+      ps.momentumZ *= decay;
       if (Math.hypot(ps.momentumX, ps.momentumZ) > t.momentumStopEps) {
         e.pos.x += ps.momentumX;
         e.pos.z += ps.momentumZ;

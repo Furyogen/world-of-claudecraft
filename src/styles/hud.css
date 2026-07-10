@@ -4744,6 +4744,14 @@
     color: var(--color-text-light);
     font-variant-numeric: tabular-nums;
   }
+  /* The shared .btn base carries the stacked-dialog margins (top 10, right 8).
+     In this one-line bar `gap` owns the spacing, and an asymmetric top margin
+     drops the button below the label's centerline while the right margin adds
+     to the bar's own padding: reset both so the three items share a centerline
+     and the bar's left/right padding stays symmetric. */
+  .go-spectate .go-leave {
+    margin: 0;
+  }
   .go-podium {
     flex-direction: column;
     align-items: center;

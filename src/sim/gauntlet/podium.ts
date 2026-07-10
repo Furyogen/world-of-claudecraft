@@ -52,6 +52,11 @@ export function seatPodium(ctx: SimContext, run: GauntletRun, ranked: GauntletCo
       ctx.addEntity(e);
     }
     if (!e || e.dead) continue;
+    // Stepping onto the stand takes an occupant back out of the gallery. A small
+    // live field ranks the FALLEN into the top three, and vitality.ts flags the
+    // knocked-out as spectators (10% opacity), so without this a runner-up would
+    // stand on their own podium step as a faint ghost.
+    e.spectator = false;
     const seat: GauntletPodiumSeat = { entityId: c.entityId, x: wx, y: wy, z: wz, facing: 0 };
     seats.push(seat);
     placeOnSeat(ctx, e, seat);

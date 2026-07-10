@@ -6,9 +6,14 @@ import {
   GAUNTLET,
   GAUNTLET_LAYOUT,
   GAUNTLET_VENUE,
+  nearestSigilRingSlot,
+  sigilRingOffset,
+  sigilStation,
 } from '../src/sim/content/gauntlet';
 import { SKIN_COUNTS } from '../src/sim/content/skins';
 import { gauntletOrigin, isGauntletPos } from '../src/sim/data';
+import { seatPodium } from '../src/sim/gauntlet/podium';
+import { sentinelReactionBudgetS, slideStopS } from '../src/sim/gauntlet/sentinel_reaction';
 import { nextGreenWindowS } from '../src/sim/gauntlet/trial_sentinel';
 import {
   aliveContestants,
@@ -17,7 +22,7 @@ import {
   trialDamageFromScore,
 } from '../src/sim/gauntlet/vitality';
 import { Sim } from '../src/sim/sim';
-import { DT, type GauntletPhase, type SimEvent } from '../src/sim/types';
+import { DT, type GauntletPhase, RUN_SPEED, type SimEvent } from '../src/sim/types';
 import { groundHeight } from '../src/sim/world';
 
 // --- local helpers (not shared; copied idioms from arena.test.ts / sim.test.ts) ---
@@ -161,6 +166,73 @@ describe('gauntlet sentinel scoring (pure)', () => {
     expect(clamp01(2)).toBe(1);
     expect(clamp01(0.4)).toBe(0.4);
   });
+
+  // Green time banked by the CRUELLEST possible draw of the light machine: the
+  // minimum green every cycle (still shrinking by accelPerCycle) against the
+  // maximum red. The trial's floor case, and the one that decides whether the
+  // crossing is winnable at all.
+  function worstCaseGreenS(t: typeof GAUNTLET.sentinel): number {
+    let elapsed = 0;
+    let green = 0;
+    for (let cycle = 0; elapsed < t.durationS && cycle < 60; cycle++) {
+      const window = Math.min(nextGreenWindowS(t.greenMinS, cycle, t), t.durationS - elapsed);
+      green += window;
+      elapsed += window + t.redMaxS;
+    }
+    return green;
+  }
+
+  it('even the cruellest light draw leaves a flawless runner room to cross AND eat one catch', () => {
+    // Red is a reaction/anticipation test; the CLOCK must never be the thing
+    // that decides the trial behind the player's back. On the worst draw a
+    // clean run has to clear the field with a catch's setback still in hand, or
+    // one mistake is unrecoverable no matter how well you play after it.
+    const need = t.fieldLength + t.pushbackYards;
+    expect(worstCaseGreenS(t) * RUN_SPEED).toBeGreaterThanOrEqual(need);
+    // Exactly what the shortened clock broke, and why the green side widened:
+    // the pre-tuning green machine could not pay for the 35s crossing.
+    expect(worstCaseGreenS({ ...t, greenMinS: 3.0, accelPerCycle: 0.88 }) * RUN_SPEED).toBeLessThan(
+      need,
+    );
+    // Green still ACCELERATES; the tolerance is not a flat window.
+    expect(nextGreenWindowS(t.greenMinS, 4, t)).toBeLessThan(t.greenMinS);
+  });
+
+  it('slideStopS counts the ticks a released slide needs to fall under the epsilon', () => {
+    // 0.4/tick halving: 0.2, 0.1, 0.05 -> the third tick is the first at/under 0.05.
+    expect(slideStopS(0.4, 0.5, 0.05, DT)).toBeCloseTo(3 * DT, 6);
+    expect(slideStopS(0.04, 0.5, 0.05, DT)).toBe(0); // already slower than the epsilon
+    expect(slideStopS(0.4, 1, 0.05, DT)).toBe(Number.POSITIVE_INFINITY); // never decays
+  });
+
+  it('the red-light grace pays for the braked slide AND a real reaction, without softening red', () => {
+    // The grace is charged for the slide the player cannot cancel BEFORE it
+    // pays for any reaction, so the leftover is the only number that matters.
+    // Floor: a trained player's ~0.25s visual reaction must fit, or the trial
+    // scores reflex hardware and network latency rather than attention (and at
+    // zero, a perfect stop convicts on its own momentum, which is a bug, not
+    // difficulty).
+    // Counted in TICKS, the sim's real quantum (and free of the float dust a
+    // 0.35 - 0.1 subtraction leaves): 5 ticks is 0.25s of reaction.
+    const budget = sentinelReactionBudgetS(t, RUN_SPEED, DT);
+    expect(Math.round(budget / DT)).toBeGreaterThanOrEqual(5);
+    // Ceiling: red must stay RED. The grace never eats a fifth of even the
+    // shortest red window, so it is forgiveness, not a free lane.
+    expect(t.graceS).toBeLessThanOrEqual(t.redMinS * 0.2);
+    // The brake is what buys the window. Softening it back to the green coast
+    // is exactly the tuning the trial first shipped with: the slide then
+    // outlives the whole grace and the budget goes NEGATIVE, so even a perfect
+    // zero-reaction stop was convicted.
+    expect(
+      sentinelReactionBudgetS({ ...t, redMomentumDecay: t.momentumDecay }, RUN_SPEED, DT),
+    ).toBeLessThan(0);
+    // And it really is a brake: the green coast decays slower, so a free coast
+    // on green is what makes anticipating each flip worth anything.
+    expect(t.redMomentumDecay).toBeLessThan(t.momentumDecay);
+    expect(slideStopS(RUN_SPEED * DT, t.redMomentumDecay, t.redMoveEps, DT)).toBeLessThan(
+      slideStopS(RUN_SPEED * DT, t.momentumDecay, t.redMoveEps, DT),
+    );
+  });
 });
 
 describe('gauntlet event window', () => {
@@ -262,6 +334,54 @@ describe('gauntlet sentinel trial', () => {
     );
   }, 20000);
 
+  it('a player who brakes inside the budget of every red flip is never caught', () => {
+    const t = GAUNTLET.sentinel;
+    const sim = makeSim(8);
+    const pid = sim.addPlayer('warrior', 'Braker');
+    openAndJoin(sim, pid);
+    advanceTo(sim, 'trial');
+    const run = sim.gauntletRuns[0]!;
+    const e = sim.entities.get(pid)!;
+    teleport(sim, pid, run.origin.x, run.origin.z + 20); // on the field, where red bites
+    const mi = sim.meta(pid)!.moveInput;
+    const budget = sentinelReactionBudgetS(t, e.moveSpeed, DT);
+
+    const flips = new Set<number>();
+    const caught: SimEvent[] = [];
+    let releaseAt = -1;
+    for (let i = 0; i < 20 * 40; i++) {
+      const trial = sim.gauntletRuns[0]?.trial;
+      if (!trial || trial.kind !== 'sentinel') break;
+      // Stop on a green light once enough flips have been survived, BEFORE the
+      // clock expires: the end-of-trial toll for not crossing is not a catch,
+      // and it would drown out the vitality assertion below.
+      if (flips.size >= 4 && trial.light === 'green') break;
+      if (trial.light === 'green') {
+        // Sprint every green, so each flip catches the runner at full speed.
+        // Reset short of the finish line (a direct pos set re-syncs prevPos, and
+        // it is a green light) so the judging never ends early on a crossing.
+        if (e.pos.z - run.origin.z > 60) teleport(sim, pid, run.origin.x, run.origin.z + 20);
+        mi.forward = true;
+        releaseAt = -1;
+      } else {
+        flips.add(trial.flipCount);
+        // The flip has landed. Keep running for the WHOLE budget the grace
+        // leaves over the braked slide (a human's reaction), then let go: the
+        // braked slide must die inside what remains of the grace, or the trial
+        // is convicting momentum nobody can cancel.
+        if (releaseAt < 0) releaseAt = trial.graceUntil - t.graceS + budget;
+        mi.forward = sim.time + DT < releaseAt;
+      }
+      caught.push(
+        ...sim.tick().filter((ev) => ev.type === 'gauntletDamage' && ev.cause === 'caught'),
+      );
+    }
+    mi.forward = false;
+    expect(flips.size).toBeGreaterThanOrEqual(4); // the light really did flip on them
+    expect(caught).toEqual([]); // and a fair reaction beat it, every time
+    expect(run.contestants.find((c) => c.entityId === pid)!.vitality).toBe(GAUNTLET.vitalityMax);
+  }, 20000);
+
   it('five caught hits knock the player out to the spectator platform; the run resolves without them', () => {
     const sim = makeSim(5);
     const pid = sim.addPlayer('warrior', 'Fallible');
@@ -292,6 +412,9 @@ describe('gauntlet sentinel trial', () => {
     const e = sim.entities.get(pid)!;
     expect(e.pos.x - run.origin.x).toBeCloseTo(GAUNTLET_LAYOUT.spectatorX, 5);
     expect(e.pos.z - run.origin.z).toBeCloseTo(GAUNTLET_LAYOUT.spectatorZ, 5);
+    // The fallen join the gallery: the entity flag is what renders them faint to
+    // the contestants still playing, and it rides the `spec` wire flag.
+    expect(e.spectator).toBe(true);
 
     // the run continues for the NPC field and resolves to a podium the spectator loses
     const tail = runToPodium(sim);
@@ -304,7 +427,28 @@ describe('gauntlet sentinel trial', () => {
     expect(aliveContestants(sim.gauntletRuns[0]!).length).toBe(
       GAUNTLET.targetSurvivorsPerTrial[GAUNTLET.trials.length - 1],
     );
+    // Nobody posed on the winners' stand is a faint gallery ghost.
+    for (const seat of sim.gauntletRuns[0]!.podiumSeats ?? [])
+      expect(sim.entities.get(seat.entityId)?.spectator).toBe(false);
   }, 40000);
+
+  it('a fallen runner-up steps out of the gallery when the podium seats them', () => {
+    // A small live field ranks the FALLEN into the top three, so a knocked-out
+    // player really can place: they must render solid on their own step.
+    const sim = makeSim(9);
+    const pid = sim.addPlayer('warrior', 'Placed');
+    openAndJoin(sim, pid);
+    advanceTo(sim, 'trial');
+    const run = sim.gauntletRuns[0]!;
+    const e = sim.entities.get(pid)!;
+    e.spectator = true; // exactly how vitality.ts flags a knockout
+    const c = run.contestants.find((k) => k.entityId === pid)!;
+
+    seatPodium((sim as any).ctx, run, [c]);
+
+    expect(run.podiumSeats!.map((s) => s.entityId)).toContain(pid);
+    expect(e.spectator).toBe(false);
+  }, 20000);
 
   it('an idle player who never leaves the start line is knocked out when the crossing times out', () => {
     const sim = makeSim(41);
@@ -401,6 +545,9 @@ describe('gauntlet leave, disconnect, and forfeit', () => {
     expect(eb.pos.x).toBeCloseTo(savedB.x, 5);
     expect(eb.pos.z).toBeCloseTo(savedB.z, 5);
     expect(isGauntletPos(eb.pos.x)).toBe(false);
+    // the forfeit ran them through the knockout, but leaving takes them back out
+    // of the gallery: they render solid again in the open world
+    expect(eb.spectator).toBe(false);
     // the field saw the forfeit as a knockout poof
     expect(pick(drained, 'gauntletPoof').some((e) => e.entityId === b)).toBe(true);
     // the run continues for the other player
@@ -866,7 +1013,7 @@ describe('desk-trial station lock', () => {
     return Math.hypot(e.pos.x - from.x, e.pos.z - from.z);
   }
 
-  it('sigils seats the player at the lectern, facing the slab, and holds them there', () => {
+  it('sigils seats the player at their own ring lectern, facing the slab, and holds them there', () => {
     spliceTrial('sigils');
     const sim = makeSim(21);
     const pid = sim.addPlayer('warrior', 'Etcher');
@@ -874,10 +1021,17 @@ describe('desk-trial station lock', () => {
     advanceTo(sim, 'trial');
     const run = sim.gauntletRuns[0]!;
     const e = sim.entities.get(pid)!;
+    // The lone player takes the run's first station: the seeded ring rotation,
+    // NOT the dais centre (which is dressing now).
+    const st = sigilStation(0, sigilRingOffset(run.seed));
+    expect(e.pos.x).toBeCloseTo(run.origin.x + st.x, 4);
+    expect(e.pos.z).toBeCloseTo(run.origin.z + st.z, 4);
+    expect(e.facing).toBeCloseTo(st.facing, 4);
+    // And the venue/HUD can read that station straight back off their position.
     const V = GAUNTLET_VENUE.sigils;
-    expect(e.pos.x).toBeCloseTo(run.origin.x + V.x + 1.8, 4);
-    expect(e.pos.z).toBeCloseTo(run.origin.z + V.z, 4);
-    expect(e.facing).toBeCloseTo(-Math.PI / 2, 4);
+    expect(nearestSigilRingSlot(e.pos.x - run.origin.x - V.x, e.pos.z - run.origin.z - V.z)).toBe(
+      st.slot,
+    );
     expect(driftUnderForward(sim, pid)).toBeLessThan(0.05);
     expect(run.phase).toBe('trial'); // still mid-trial: the hold did the work
   });

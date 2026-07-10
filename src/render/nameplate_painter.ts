@@ -193,8 +193,8 @@ export class NameplatePainter {
         // Nameplate" option on it renders exactly like another player's, so you can
         // see your name / level / hp / guild and all your flair the way others do.
         const suppressSelf = isSelf && !showOwnNameplate;
-        // Dim the plate for a stealthed unit, and for a free-roaming Gauntlet
-        // spectator seen by others (their body already renders faint).
+        // Dim the plate for a stealthed unit, and for a Gauntlet spectator seen
+        // by others (their body already renders faint).
         const faint = e.auras.some((a) => a.kind === 'stealth') || (!isSelf && e.spectator);
         const opacity = faint ? '0.55' : '1';
         const nameDisplay = suppressSelf ? 'none' : '';

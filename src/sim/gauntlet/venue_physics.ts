@@ -145,8 +145,10 @@ export function gauntletVenueColliders(): Collider[] {
   out.push(circle(dx, dz - 10.4, 0.3));
   out.push(circle(dx, dz + 10.4, 0.3));
 
-  // Sigils pavilion: the ringing pillars, every lectern (interactive one at
-  // the center, the cosmetic ring at the shared angles), the banner.
+  // Sigils pavilion: the ringing pillars, every lectern (the dais centre one,
+  // plus the manned ring at the shared angles), the banner. The viewer's live
+  // etched lectern stands ON a ring station, so the ring colliders already
+  // block it: no separate collider follows the rig.
   const S = V.sigils;
   for (let i = 0; i < 6; i++) {
     const a = (i / 6) * Math.PI * 2;

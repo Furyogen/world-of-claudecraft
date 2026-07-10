@@ -1915,10 +1915,11 @@ export interface Entity {
   // every non-player entity. Owned by src/sim/spirit.ts.
   ghost: boolean;
   corpsePos: Vec3 | null;
-  // A free-roaming Gauntlet spectator (gauntlet/modes.ts): renders at 20% opacity
-  // to OTHER players so the watchers read as faint ghosts among the contestants.
-  // Runtime-only (never persisted); false for the living, the dead, and every
-  // non-player entity. Wired per-entity as the `spec` snapshot flag.
+  // A Gauntlet spectator: a free-roaming watcher (gauntlet/modes.ts) OR a
+  // knocked-out contestant parked at the viewing spot (gauntlet/vitality.ts).
+  // Renders at 10% opacity to OTHER players so the gallery never distracts the
+  // field still playing the trial. Runtime-only (never persisted); false for the
+  // living, the dead, and every non-player entity. Wired as the `spec` flag.
   spectator: boolean;
   scale: number;
   color: number;
@@ -2484,12 +2485,16 @@ export interface GauntletSentinelTuning {
   accelPerCycle: number; // green window multiplier per completed cycle (< 1 accelerates)
   greenFloorS: number; // green window never shrinks below this
   telegraphS: number; // watcher turn animation lead time before red starts
-  graceS: number; // motion forgiveness after red starts (reaction budget)
+  // Motion forgiveness after red starts. It pays for the human's reaction AND
+  // the braked slide that reaction cannot cancel; keep it above
+  // sentinelReactionBudgetS's floor (gauntlet/sentinel_reaction.ts).
+  graceS: number;
   redMoveEps: number; // per-tick displacement (yards) beyond this while red = caught
   hardFailDamage: number; // vitality chunk when caught moving
   stunS: number; // root applied on a catch
   pushbackYards: number; // set back toward the start line on a catch
   momentumDecay: number; // residual per-tick velocity multiplier after input release
+  redMomentumDecay: number; // the harder brake once red is up (the contestant digs in)
   momentumStopEps: number; // residual speed (yards/tick) below this snaps to a stop
   damageMax: number; // end-of-trial vitality damage at score 0 (= full pool: score 0 is fatal); scales to ~0 at 1
   npcTithe: number; // scripted-survivor NPC attrition tithe (invisible; NOT derived from damageMax)

@@ -35,7 +35,9 @@ import {
   GAUNTLET,
   GAUNTLET_LAYOUT,
   GAUNTLET_VENUE,
+  nearestSigilRingSlot,
   sigilRingAngle,
+  sigilStation,
 } from '../sim/content/gauntlet';
 import { sigilOutline } from '../sim/gauntlet/sigil_shapes';
 import type { GauntletRunView } from '../sim/types';
@@ -986,11 +988,23 @@ interface SpanRig {
 // the outline tube segments rebuilt per shape, the crack-tinted face material,
 // and the cursor mote + freedraw stroke trail fed from the hud's stroke glue.
 interface SigilRig {
+  // The live lectern's world-space interaction rect. Only meaningful once the
+  // rig is anchored to the viewer's own station: sigilSlabRect() withholds it
+  // until then, so the HUD's world-aim surface never latches the wrong slab.
   rect: {
     center: { x: number; y: number; z: number };
     u: { x: number; y: number; z: number };
     v: { x: number; y: number; z: number };
   };
+  anchored: boolean;
+  ox: number; // the run origin, for the world-space rect
+  oz: number;
+  // The etched lectern the viewer traces on, moved onto their own ring station
+  // for the trial, plus the cosmetic ring it stands in (the station it takes
+  // over is hidden while it is anchored there; -1 when none).
+  live: THREE.Group;
+  ringLecterns: THREE.Group[];
+  hiddenLectern: number;
   faceMat: THREE.MeshStandardMaterial;
   tracedMat: THREE.Material;
   paleMat: THREE.Material;
@@ -1069,15 +1083,15 @@ const SIGIL_SEGMENTS = 24;
 const SIGIL_TRAIL_MAX = 64;
 
 // One lectern: a stone stand on the dais with the angled sugarglass slab.
-// Returns the slab mesh (the interactive one carries the crack-tinted face
-// material; the cosmetic ring copies share a cached material).
+// Returns its group (the live rig's is repositioned onto the viewer's station;
+// a cosmetic one is hidden when the live rig replaces it).
 function buildLectern(
   parent: THREE.Group,
   x: number,
   z: number,
   yaw: number,
   faceMat: THREE.Material,
-): THREE.Mesh {
+): THREE.Group {
   const s = GAUNTLET_VENUE.sigils.slab;
   const g = new THREE.Group();
   g.position.set(x, 0, z);
@@ -1091,10 +1105,10 @@ function buildLectern(
   g.add(stand);
   const slab = new THREE.Mesh(new THREE.BoxGeometry(s.faceSlope, s.thick, s.faceAcross), faceMat);
   slab.position.set(0, s.centerY, 0);
-  slab.rotation.z = -s.tiltRad; // face normal tilts toward local +x (the approach)
+  slab.rotation.z = -s.tiltRad; // face normal tilts toward local +x (the etcher)
   slab.castShadow = true;
   g.add(slab);
-  return slab;
+  return g;
 }
 
 function buildSigilPavilion(group: THREE.Group, ox: number, oz: number): SigilRig {
@@ -1134,9 +1148,9 @@ function buildSigilPavilion(group: THREE.Group, ox: number, oz: number): SigilRi
   placeProp(group, 'crates', x - radius - 1.2, 0, z + radius - 1, 0.3, 1.5);
   placeProp(group, 'barrelSmall', x + radius + 1.4, 0, z - radius + 1.5, -0.4, 0.7);
 
-  // The interactive lectern at the pavilion center. Its face material is
-  // venue-owned: the crack tint recolors it, and surfaceMat's cache would
-  // repaint every consumer of a shared entry.
+  // The live etching lectern's face material is venue-owned: the crack tint
+  // recolors it, and surfaceMat's cache would repaint every consumer of a
+  // shared entry.
   const faceMat = new THREE.MeshStandardMaterial({
     color: 0x232b3d,
     roughness: 0.25,
@@ -1179,42 +1193,35 @@ function buildSigilPavilion(group: THREE.Group, ox: number, oz: number): SigilRi
     depthWrite: false,
   });
   venueOwnedMats.push(faceMat, tracedMat, paleMat, thinMat, reliefMat);
-  buildLectern(group, x, z, 0, faceMat);
 
-  // The cosmetic lectern ring the NPC field mans during the trial (plain
+  // The cosmetic lectern ring EVERY contestant mans during the trial (plain
   // glass, no etching): stations at the SAME shared angles the sim seats the
-  // etchers from, each slab tilted radially outward toward its etcher.
+  // etchers from (sigilStation), each slab tilted radially outward toward its
+  // etcher. The one the viewer stands at is hidden for the trial, the live rig
+  // taking its place. The lectern on the dais centre is dressing.
   const cosmeticFace = surfaceMat({ color: 0x2b3450, roughness: 0.3 });
   const { ring } = GAUNTLET_VENUE.sigils;
+  buildLectern(group, x, z, 0, cosmeticFace);
+  const ringLecterns: THREE.Group[] = [];
   for (let i = 0; i < ring.count; i++) {
     const a = sigilRingAngle(i, ring.count);
-    buildLectern(
-      group,
-      x + Math.sin(a) * ring.radius,
-      z + Math.cos(a) * ring.radius,
-      a - Math.PI / 2,
-      cosmeticFace,
+    ringLecterns.push(
+      buildLectern(
+        group,
+        x + Math.sin(a) * ring.radius,
+        z + Math.cos(a) * ring.radius,
+        a - Math.PI / 2,
+        cosmeticFace,
+      ),
     );
   }
 
-  // Face axes (instance-local; the venue group is unrotated, so world = local
-  // + origin). The face normal tilts toward +x; uDir runs down-slope toward
-  // the approaching player (the etching's y axis, top of the shape up-slope);
-  // vDir is the player's RIGHT across the face (the etching's x axis).
-  const tilt = slab.tiltRad;
-  const normal = new THREE.Vector3(Math.sin(tilt), Math.cos(tilt), 0);
-  const uDir = new THREE.Vector3(Math.cos(tilt), -Math.sin(tilt), 0);
-  const vDir = new THREE.Vector3(0, 0, -1);
-  const faceCenter = new THREE.Vector3(
-    x + normal.x * (slab.thick / 2),
-    slab.centerY + normal.y * (slab.thick / 2),
-    z + normal.z * (slab.thick / 2),
-  );
-  const rect = {
-    center: { x: faceCenter.x + ox, y: faceCenter.y, z: faceCenter.z + oz },
-    u: { x: uDir.x * slab.etchHalf, y: uDir.y * slab.etchHalf, z: uDir.z * slab.etchHalf },
-    v: { x: vDir.x * slab.etchHalf, y: vDir.y * slab.etchHalf, z: vDir.z * slab.etchHalf },
-  };
+  // The live rig: hidden until the viewer's trial opens, then moved onto (and
+  // replacing) the cosmetic lectern of the station the viewer is manning. Built
+  // at the ring's first station so the mesh exists before any anchor; its face
+  // basis and interaction rect are (re)derived per anchor by anchorSigilRig.
+  const live = buildLectern(group, 0, 0, 0, faceMat);
+  live.visible = false;
 
   const outlineGroup = new THREE.Group();
   group.add(outlineGroup);
@@ -1245,8 +1252,14 @@ function buildSigilPavilion(group: THREE.Group, ox: number, oz: number): SigilRi
   stroke.visible = false;
   group.add(stroke);
 
-  return {
-    rect,
+  const rig: SigilRig = {
+    rect: { center: { x: 0, y: 0, z: 0 }, u: { x: 0, y: 0, z: 0 }, v: { x: 0, y: 0, z: 0 } },
+    anchored: false,
+    ox,
+    oz,
+    live,
+    ringLecterns,
+    hiddenLectern: -1,
     faceMat,
     tracedMat,
     paleMat,
@@ -1260,11 +1273,73 @@ function buildSigilPavilion(group: THREE.Group, ox: number, oz: number): SigilRi
     stroke,
     strokePos,
     strokeLen: 0,
-    faceCenter,
-    uDir,
-    vDir,
-    normal,
+    faceCenter: new THREE.Vector3(),
+    uDir: new THREE.Vector3(),
+    vDir: new THREE.Vector3(),
+    normal: new THREE.Vector3(),
   };
+  setSigilStation(rig, 0); // a valid basis before the first anchor; `live` stays hidden
+  return rig;
+}
+
+// Reusable axis for the yaw rotations below (module scope: no per-anchor alloc).
+const SIGIL_YAW_AXIS = new THREE.Vector3(0, 1, 0);
+
+// Stand the live etching lectern at ring station `slot` and re-derive the face
+// basis + the world-space interaction rect from it. The slab's local face
+// normal tilts toward local +x (buildLectern), so yawing the lectern by the
+// station's lecternYaw carries the whole basis with it: the etching, the trace
+// cursor, and the world-aim rect all follow one rotation. Instance-local
+// vectors (the venue group is unrotated, so world = local + origin).
+function setSigilStation(rig: SigilRig, slot: number): void {
+  const { slab } = GAUNTLET_VENUE.sigils;
+  const st = sigilStation(slot);
+  const yaw = st.lecternYaw;
+  const tilt = slab.tiltRad;
+  // normal: out of the face. uDir: down-slope, toward the etcher (the etching's
+  // y axis, top of the shape up-slope). vDir: the etcher's RIGHT across the
+  // face (the etching's x axis).
+  rig.normal.set(Math.sin(tilt), Math.cos(tilt), 0).applyAxisAngle(SIGIL_YAW_AXIS, yaw);
+  rig.uDir.set(Math.cos(tilt), -Math.sin(tilt), 0).applyAxisAngle(SIGIL_YAW_AXIS, yaw);
+  rig.vDir.set(0, 0, -1).applyAxisAngle(SIGIL_YAW_AXIS, yaw);
+  rig.faceCenter
+    .set(st.lecternX, slab.centerY, st.lecternZ)
+    .addScaledVector(rig.normal, slab.thick / 2);
+
+  rig.live.position.set(st.lecternX, 0, st.lecternZ);
+  rig.live.rotation.y = yaw;
+  rig.rect = {
+    center: { x: rig.faceCenter.x + rig.ox, y: rig.faceCenter.y, z: rig.faceCenter.z + rig.oz },
+    u: {
+      x: rig.uDir.x * slab.etchHalf,
+      y: rig.uDir.y * slab.etchHalf,
+      z: rig.uDir.z * slab.etchHalf,
+    },
+    v: {
+      x: rig.vDir.x * slab.etchHalf,
+      y: rig.vDir.y * slab.etchHalf,
+      z: rig.vDir.z * slab.etchHalf,
+    },
+  };
+}
+
+// Claim the viewer's station for the trial: the live etched lectern takes the
+// place of the cosmetic one they are standing at. Only ever called once the
+// viewer entity has streamed in (their position IS the station).
+function anchorSigilRig(rig: SigilRig, slot: number): void {
+  setSigilStation(rig, slot);
+  rig.live.visible = true;
+  rig.ringLecterns[slot].visible = false;
+  rig.hiddenLectern = slot;
+  rig.anchored = true;
+}
+
+// Trial over: retire the live rig and give the cosmetic lectern back.
+function releaseSigilRig(rig: SigilRig): void {
+  rig.live.visible = false;
+  if (rig.hiddenLectern >= 0) rig.ringLecterns[rig.hiddenLectern].visible = true;
+  rig.hiddenLectern = -1;
+  rig.anchored = false;
 }
 
 // Append the newest stroke point to the trail (FIFO shift once full). Event
@@ -1854,12 +1929,14 @@ export interface GauntletVenueView {
     run: GauntletRunView | null,
     viewer?: { x: number; y: number; z: number },
   ): void;
-  /** The sigil slab's interaction rect, WORLD space (center + half-extent u/v). */
+  /** The viewer's OWN sigil slab's interaction rect, WORLD space (center +
+   * half-extent u/v), or null until the live rig has anchored to their ring
+   * station (the viewer entity may still be streaming in). */
   sigilSlabRect(): {
     center: { x: number; y: number; z: number };
     u: { x: number; y: number; z: number };
     v: { x: number; y: number; z: number };
-  };
+  } | null;
   /** Place the trace cursor mote at a rect-local 0..1 point and extend the
    * freedraw stroke trail behind it; null hides the mote and clears the trail
    * (stroke end). */
@@ -1938,11 +2015,13 @@ export async function buildGauntletVenue(
   // The venue never moves after build: freeze the whole subtree's matrices
   // (real per-frame CPU on thousands of prop nodes), then re-enable the
   // transform-animated children: the Warden's turning head, the sigil trace
-  // mote (repositioned per stroke sample), and the pull rig's live pieces
-  // (the rope and the marker knot).
+  // mote (repositioned per stroke sample), the live etching lectern (moved onto
+  // the viewer's station once per trial), and the pull rig's live pieces (the
+  // rope and the marker knot).
   freezeStaticMatrices(group);
   rig.headGroup.matrixAutoUpdate = true;
   sigilRig.mote.matrixAutoUpdate = true;
+  sigilRig.live.matrixAutoUpdate = true;
   pullRig.knot.matrixAutoUpdate = true;
   pullRig.rope.matrixAutoUpdate = true;
   echoRig.root.matrixAutoUpdate = true;
@@ -2005,11 +2084,25 @@ export async function buildGauntletVenue(
         }
         lastRevealed = revealed ? [...revealed] : [];
       }
-      // The sigil slab: rebuild the etched outline on a fresh shape, tint the
-      // carved segments gold from the coverage mask (they light along the
-      // contiguous arc the stroke has traced), and lerp the face toward red with
-      // the crack. Every write is elided on a quantized key.
-      const sig = mine?.sigils ?? null;
+      // The sigil slab. Anchor once per trial, retried each frame until the
+      // viewer entity has streamed in: the sim stands every contestant at their
+      // own ring station, so the live etched lectern takes over the cosmetic one
+      // the viewer is manning (nearestSigilRingSlot reads the station straight
+      // off their position, so no index has to ride the wire). Everything below
+      // draws on the anchored basis, so nothing paints before it exists.
+      const trialSigils = mine?.sigils ?? null;
+      if (trialSigils && !sigilRig.anchored && viewer) {
+        const V = GAUNTLET_VENUE.sigils;
+        anchorSigilRig(sigilRig, nearestSigilRingSlot(viewer.x - ox - V.x, viewer.z - oz - V.z));
+        lastSigilShapeKey = ''; // the outline must be rebuilt on the new basis
+      } else if (!trialSigils && sigilRig.anchored) {
+        releaseSigilRig(sigilRig);
+      }
+      // Rebuild the etched outline on a fresh shape, tint the carved segments
+      // gold from the coverage mask (they light along the contiguous arc the
+      // stroke has traced), and lerp the face toward red with the crack. Every
+      // write is elided on a quantized key.
+      const sig = sigilRig.anchored ? trialSigils : null;
       const shapeKey = sig ? `${sig.shapeSeed}:${sig.shapeId}` : '';
       if (shapeKey !== lastSigilShapeKey) {
         lastSigilShapeKey = shapeKey;
@@ -2156,7 +2249,7 @@ export async function buildGauntletVenue(
       rig.lampMat.emissiveIntensity = light ? 1.6 : 0.7;
     },
     sigilSlabRect() {
-      return sigilRig.rect;
+      return sigilRig.anchored ? sigilRig.rect : null;
     },
     pickTargets() {
       return echoRig.pickList;
@@ -2173,8 +2266,9 @@ export async function buildGauntletVenue(
       echoJudgeState = { stone, ok, until: lastT + ECHO_JUDGE_S, applied: false };
     },
     setSigilCursor(p: { u: number; v: number } | null) {
-      if (!p) {
-        // Stroke end: the mote lifts and the freedraw trail clears with it.
+      if (!p || !sigilRig.anchored) {
+        // Stroke end (or a stroke that outran the anchor): the mote lifts and
+        // the freedraw trail clears with it.
         sigilRig.mote.visible = false;
         clearSigilStroke(sigilRig);
         return;
