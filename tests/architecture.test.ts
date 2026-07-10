@@ -249,6 +249,7 @@ const BARE_NAMED = [
   'src/ui/live_region_politeness.ts',
   'src/ui/mobile_hud_layout.ts',
   'src/ui/chat_mobile_panel.ts',
+  'src/ui/chat_bubble_style.ts',
   'src/game/ui_effects_profile.ts',
   'src/game/ui_tier_knobs.ts',
   'src/game/menu_gamepad_nav.ts',
