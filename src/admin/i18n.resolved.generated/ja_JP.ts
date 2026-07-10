@@ -289,6 +289,8 @@ export const ja_JP: AdminTranslations = {
   "moderationHistory.actionForceRename": "強制的な名前変更",
   "moderationHistory.actionKick": "Kicked",
   "moderationHistory.actionKill": "Killed",
+  "moderationHistory.actionJail": "Jailed",
+  "moderationHistory.actionUnjail": "Released from jail",
   "moderationHistory.actionNote": "注記",
   "moderationHistory.actionResetPassword": "パスワードリセット",
   "moderationHistory.actionIpBlock": "IP blocked",

@@ -722,6 +722,8 @@ export const cs_CZ: EnTranslations = {
     "tips": {
       "joinChannels": "Tip: napiš /join world nebo /join lfg a chatuj s hráči napříč světem."
     },
+    "itemHeroicTag": "[HEROIC]",
+    "itemSoulbound": "Soulbound",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1067,6 +1069,22 @@ export const cs_CZ: EnTranslations = {
     "worldBoss": {
       "spawn": "{name} povstává nad Thornpeak Heights!"
     },
+    "auth": {
+      "forgotPrompt": "Zapomenuté heslo?",
+      "forgotTitle": "Obnovení hesla",
+      "forgotHint": "Zadejte své uživatelské jméno a na uloženou e-mailovou adresu pošleme odkaz pro obnovení.",
+      "forgotUsername": "Uživatelské jméno",
+      "forgotSubmit": "Poslat odkaz pro obnovení",
+      "forgotSent": "Pokud má účet s tímto uživatelským jménem uloženou e-mailovou adresu, poslali jsme odkaz pro obnovení. Zkontrolujte svou schránku.",
+      "forgotBack": "Zpět na přihlášení",
+      "resetTitle": "Zvolte nové heslo",
+      "resetNewPassword": "Nové heslo",
+      "resetConfirm": "Potvrďte nové heslo",
+      "resetSubmit": "Aktualizovat heslo",
+      "resetDone": "Vaše heslo bylo aktualizováno. Nyní se můžete přihlásit.",
+      "resetMismatch": "Hesla se neshodují.",
+      "resetErrInvalid": "Tento odkaz pro obnovení je neplatný nebo vypršel. Požádejte o nový."
+    },
     "loot": {
       "chestTitle": "Truhla"
     },
@@ -1296,6 +1314,8 @@ export const cs_CZ: EnTranslations = {
       "parcelsLabel": "Balíky",
       "parcelsHint": "Klikni na předmět v batozích a přilož ho.",
       "removeParcelAria": "Odebrat {item} z dopisu",
+      "parcelQtyDecreaseAria": "Send one fewer {item}",
+      "parcelQtyIncreaseAria": "Send one more {item}",
       "sendButton": "Odeslat dopis",
       "postageNote": "Poštovné: {amount}. Havran poletí asi {seconds} s.",
       "arrivedBanner": "Havran přistál: pošta od {name}.",

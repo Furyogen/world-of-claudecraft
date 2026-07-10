@@ -674,6 +674,9 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     // (content/heroic_vendor.ts) does not eat a bag slot per mark.
     stackSize: 20,
     sellValue: 0,
+    // Bound to the earner: marks can only be spent at the Heroic Quartermaster,
+    // never traded, mailed, listed, or destroyed. See the soulbound flag in types.ts.
+    soulbound: true,
   },
   raw_mirror_trout: {
     id: 'raw_mirror_trout',

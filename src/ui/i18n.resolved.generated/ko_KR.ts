@@ -722,6 +722,8 @@ export const ko_KR: EnTranslations = {
     "tips": {
       "joinChannels": "팁: /join world 또는 /join lfg를 입력하면 월드 전역의 플레이어와 대화할 수 있습니다."
     },
+    "itemHeroicTag": "[HEROIC]",
+    "itemSoulbound": "귀속",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1067,6 +1069,22 @@ export const ko_KR: EnTranslations = {
     "worldBoss": {
       "spawn": "{name}이(가) 쏜피크 고지에 솟아올랐습니다!"
     },
+    "auth": {
+      "forgotPrompt": "비밀번호를 잊으셨나요?",
+      "forgotTitle": "비밀번호 재설정",
+      "forgotHint": "사용자 이름을 입력하면 등록된 이메일로 재설정 링크를 보내드립니다.",
+      "forgotUsername": "사용자 이름",
+      "forgotSubmit": "재설정 링크 보내기",
+      "forgotSent": "해당 사용자 이름의 계정에 등록된 이메일이 있으면 재설정 링크를 보냈습니다. 받은 편지함을 확인하세요.",
+      "forgotBack": "로그인으로 돌아가기",
+      "resetTitle": "새 비밀번호 설정",
+      "resetNewPassword": "새 비밀번호",
+      "resetConfirm": "새 비밀번호 확인",
+      "resetSubmit": "비밀번호 업데이트",
+      "resetDone": "비밀번호가 업데이트되었습니다. 이제 로그인할 수 있습니다.",
+      "resetMismatch": "비밀번호가 일치하지 않습니다.",
+      "resetErrInvalid": "이 재설정 링크가 유효하지 않거나 만료되었습니다. 새 링크를 요청하세요."
+    },
     "loot": {
       "chestTitle": "상자"
     },
@@ -1296,6 +1314,8 @@ export const ko_KR: EnTranslations = {
       "parcelsLabel": "소포",
       "parcelsHint": "가방의 아이템을 클릭하면 첨부됩니다.",
       "removeParcelAria": "편지에서 {item} 제거",
+      "parcelQtyDecreaseAria": "{item} 하나 적게 보내기",
+      "parcelQtyIncreaseAria": "{item} 하나 더 보내기",
       "sendButton": "편지 보내기",
       "postageNote": "우편 요금: {amount}. 까마귀가 약 {seconds}초 동안 날아갑니다.",
       "arrivedBanner": "까마귀가 도착했습니다: {name}의 우편.",

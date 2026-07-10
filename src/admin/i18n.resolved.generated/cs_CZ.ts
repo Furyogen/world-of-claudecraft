@@ -289,6 +289,8 @@ export const cs_CZ: AdminTranslations = {
   "moderationHistory.actionForceRename": "Vynuceno přejmenování",
   "moderationHistory.actionKick": "Kicked",
   "moderationHistory.actionKill": "Killed",
+  "moderationHistory.actionJail": "Jailed",
+  "moderationHistory.actionUnjail": "Released from jail",
   "moderationHistory.actionNote": "Poznámka",
   "moderationHistory.actionResetPassword": "Reset hesla",
   "moderationHistory.actionIpBlock": "IP blocked",

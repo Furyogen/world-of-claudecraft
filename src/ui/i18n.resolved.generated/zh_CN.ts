@@ -722,6 +722,8 @@ export const zh_CN: EnTranslations = {
     "tips": {
       "joinChannels": "提示：输入 /join world 或 /join lfg，与全服玩家聊天。"
     },
+    "itemHeroicTag": "[HEROIC]",
+    "itemSoulbound": "灵魂绑定",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1067,6 +1069,22 @@ export const zh_CN: EnTranslations = {
     "worldBoss": {
       "spawn": "{name}在荆峰高地崛起！"
     },
+    "auth": {
+      "forgotPrompt": "忘记密码？",
+      "forgotTitle": "重置密码",
+      "forgotHint": "输入您的用户名，我们会将重置链接发送到登记的邮箱。",
+      "forgotUsername": "用户名",
+      "forgotSubmit": "发送重置链接",
+      "forgotSent": "如果该用户名对应的账户已登记邮箱，我们已发送重置链接。请查收您的收件箱。",
+      "forgotBack": "返回登录",
+      "resetTitle": "设置新密码",
+      "resetNewPassword": "新密码",
+      "resetConfirm": "确认新密码",
+      "resetSubmit": "更新密码",
+      "resetDone": "您的密码已更新。现在可以登录了。",
+      "resetMismatch": "两次输入的密码不一致。",
+      "resetErrInvalid": "此重置链接无效或已过期。请重新申请一个。"
+    },
     "loot": {
       "chestTitle": "宝箱"
     },
@@ -1296,6 +1314,8 @@ export const zh_CN: EnTranslations = {
       "parcelsLabel": "包裹",
       "parcelsHint": "点击背包中的物品即可附上。",
       "removeParcelAria": "从信件中移除 {item}",
+      "parcelQtyDecreaseAria": "少寄一个{item}",
+      "parcelQtyIncreaseAria": "多寄一个{item}",
       "sendButton": "寄出信件",
       "postageNote": "邮资：{amount}。渡鸦飞行约 {seconds} 秒。",
       "arrivedBanner": "渡鸦已降落：来自 {name} 的邮件。",

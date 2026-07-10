@@ -289,6 +289,8 @@ export const da_DK: AdminTranslations = {
   "moderationHistory.actionForceRename": "Tvunget omdøbning",
   "moderationHistory.actionKick": "Kicked",
   "moderationHistory.actionKill": "Killed",
+  "moderationHistory.actionJail": "Jailed",
+  "moderationHistory.actionUnjail": "Released from jail",
   "moderationHistory.actionNote": "Note",
   "moderationHistory.actionResetPassword": "Adgangskode nulstillet",
   "moderationHistory.actionIpBlock": "IP blocked",

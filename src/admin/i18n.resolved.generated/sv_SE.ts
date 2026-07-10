@@ -289,6 +289,8 @@ export const sv_SE: AdminTranslations = {
   "moderationHistory.actionForceRename": "Tvingat byta namn",
   "moderationHistory.actionKick": "Kicked",
   "moderationHistory.actionKill": "Killed",
+  "moderationHistory.actionJail": "Jailed",
+  "moderationHistory.actionUnjail": "Released from jail",
   "moderationHistory.actionNote": "Notera",
   "moderationHistory.actionResetPassword": "Lösenordsåterställning",
   "moderationHistory.actionIpBlock": "IP blocked",

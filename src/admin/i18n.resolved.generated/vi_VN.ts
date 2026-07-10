@@ -289,6 +289,8 @@ export const vi_VN: AdminTranslations = {
   "moderationHistory.actionForceRename": "Buộc đổi tên",
   "moderationHistory.actionKick": "Kicked",
   "moderationHistory.actionKill": "Killed",
+  "moderationHistory.actionJail": "Jailed",
+  "moderationHistory.actionUnjail": "Released from jail",
   "moderationHistory.actionNote": "Ghi chú",
   "moderationHistory.actionResetPassword": "Đã đặt lại mật khẩu",
   "moderationHistory.actionIpBlock": "IP blocked",

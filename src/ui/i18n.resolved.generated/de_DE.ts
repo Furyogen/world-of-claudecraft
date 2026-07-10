@@ -722,6 +722,8 @@ export const de_DE: EnTranslations = {
     "tips": {
       "joinChannels": "Tipp: Gebt /join world oder /join lfg ein, um mit Spielern in der ganzen Welt zu chatten."
     },
+    "itemHeroicTag": "[HEROIC]",
+    "itemSoulbound": "Soulbound",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1067,6 +1069,22 @@ export const de_DE: EnTranslations = {
     "worldBoss": {
       "spawn": "{name} erhebt sich über den Thornpeak-Höhen!"
     },
+    "auth": {
+      "forgotPrompt": "Passwort vergessen?",
+      "forgotTitle": "Passwort zurücksetzen",
+      "forgotHint": "Gib deinen Benutzernamen ein und wir senden einen Link zum Zurücksetzen an die hinterlegte E-Mail-Adresse.",
+      "forgotUsername": "Benutzername",
+      "forgotSubmit": "Link zum Zurücksetzen senden",
+      "forgotSent": "Falls ein Konto mit diesem Benutzernamen eine E-Mail-Adresse hinterlegt hat, haben wir einen Link zum Zurücksetzen gesendet. Prüfe deinen Posteingang.",
+      "forgotBack": "Zurück zur Anmeldung",
+      "resetTitle": "Neues Passwort wählen",
+      "resetNewPassword": "Neues Passwort",
+      "resetConfirm": "Neues Passwort bestätigen",
+      "resetSubmit": "Passwort aktualisieren",
+      "resetDone": "Dein Passwort wurde aktualisiert. Du kannst dich jetzt anmelden.",
+      "resetMismatch": "Die Passwörter stimmen nicht überein.",
+      "resetErrInvalid": "Dieser Link zum Zurücksetzen ist ungültig oder abgelaufen. Fordere einen neuen an."
+    },
     "loot": {
       "chestTitle": "Truhe"
     },
@@ -1296,6 +1314,8 @@ export const de_DE: EnTranslations = {
       "parcelsLabel": "Pakete",
       "parcelsHint": "Klicke einen Gegenstand in deinen Taschen an, um ihn beizulegen.",
       "removeParcelAria": "{item} aus dem Brief entfernen",
+      "parcelQtyDecreaseAria": "Send one fewer {item}",
+      "parcelQtyIncreaseAria": "Send one more {item}",
       "sendButton": "Brief senden",
       "postageNote": "Porto: {amount}. Der Rabe ist etwa {seconds}s unterwegs.",
       "arrivedBanner": "Der Rabe ist gelandet: Post von {name}.",

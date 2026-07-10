@@ -722,6 +722,8 @@ export const fr_FR: EnTranslations = {
     "tips": {
       "joinChannels": "Conseil : tapez /join world ou /join lfg pour discuter avec les joueurs du monde entier."
     },
+    "itemHeroicTag": "[HEROIC]",
+    "itemSoulbound": "Soulbound",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1067,6 +1069,22 @@ export const fr_FR: EnTranslations = {
     "worldBoss": {
       "spawn": "{name} se dresse sur les Hauteurs de Thornpeak !"
     },
+    "auth": {
+      "forgotPrompt": "Mot de passe oublié ?",
+      "forgotTitle": "Réinitialiser votre mot de passe",
+      "forgotHint": "Saisissez votre nom d’utilisateur et nous enverrons un lien de réinitialisation à l’adresse e-mail enregistrée.",
+      "forgotUsername": "Nom d’utilisateur",
+      "forgotSubmit": "Envoyer le lien de réinitialisation",
+      "forgotSent": "Si un compte avec ce nom d’utilisateur possède une adresse e-mail enregistrée, nous avons envoyé un lien de réinitialisation. Consultez votre boîte de réception.",
+      "forgotBack": "Retour à la connexion",
+      "resetTitle": "Choisissez un nouveau mot de passe",
+      "resetNewPassword": "Nouveau mot de passe",
+      "resetConfirm": "Confirmez le nouveau mot de passe",
+      "resetSubmit": "Mettre à jour le mot de passe",
+      "resetDone": "Votre mot de passe a été mis à jour. Vous pouvez maintenant vous connecter.",
+      "resetMismatch": "Les mots de passe ne correspondent pas.",
+      "resetErrInvalid": "Ce lien de réinitialisation est invalide ou a expiré. Demandez-en un nouveau."
+    },
     "loot": {
       "chestTitle": "Coffre"
     },
@@ -1296,6 +1314,8 @@ export const fr_FR: EnTranslations = {
       "parcelsLabel": "Colis",
       "parcelsHint": "Cliquez sur un objet dans vos sacs pour le joindre.",
       "removeParcelAria": "Retirer {item} de la lettre",
+      "parcelQtyDecreaseAria": "Send one fewer {item}",
+      "parcelQtyIncreaseAria": "Send one more {item}",
       "sendButton": "Envoyer la lettre",
       "postageNote": "Affranchissement : {amount}. Le corbeau vole environ {seconds}s.",
       "arrivedBanner": "Le corbeau s'est posé : du courrier de {name}.",

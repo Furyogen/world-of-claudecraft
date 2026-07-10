@@ -722,6 +722,8 @@ export const en: EnTranslations = {
     "tips": {
       "joinChannels": "Tip: type /join world or /join lfg to chat with players across the world."
     },
+    "itemHeroicTag": "[HEROIC]",
+    "itemSoulbound": "Soulbound",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1067,6 +1069,22 @@ export const en: EnTranslations = {
     "worldBoss": {
       "spawn": "{name} rises over Thornpeak Heights!"
     },
+    "auth": {
+      "forgotPrompt": "Forgot password?",
+      "forgotTitle": "Reset your password",
+      "forgotHint": "Enter your username and we will email a reset link to the address on file.",
+      "forgotUsername": "Username",
+      "forgotSubmit": "Send reset link",
+      "forgotSent": "If an account with that username has an email on file, we have sent a reset link. Check your inbox.",
+      "forgotBack": "Back to log in",
+      "resetTitle": "Choose a new password",
+      "resetNewPassword": "New password",
+      "resetConfirm": "Confirm new password",
+      "resetSubmit": "Update password",
+      "resetDone": "Your password has been updated. You can now log in.",
+      "resetMismatch": "The passwords do not match.",
+      "resetErrInvalid": "This reset link is invalid or has expired. Request a new one."
+    },
     "loot": {
       "chestTitle": "Chest"
     },
@@ -1296,6 +1314,8 @@ export const en: EnTranslations = {
       "parcelsLabel": "Parcels",
       "parcelsHint": "Click an item in your bags to attach it.",
       "removeParcelAria": "Remove {item} from the letter",
+      "parcelQtyDecreaseAria": "Send one fewer {item}",
+      "parcelQtyIncreaseAria": "Send one more {item}",
       "sendButton": "Send letter",
       "postageNote": "Postage: {amount}. The raven flies for about {seconds}s.",
       "arrivedBanner": "The raven has landed: mail from {name}.",

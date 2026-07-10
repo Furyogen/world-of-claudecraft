@@ -49,7 +49,7 @@ export function discardItem(ctx: SimContext, itemId: string, count = 1, pid?: nu
     ctx.error(meta.entityId, "You don't have that item.");
     return;
   }
-  if (def.noDiscard) return;
+  if (def.noDiscard || def.soulbound) return;
   const discardCount = Number.isFinite(count) ? Math.min(Math.floor(count), available) : 0;
   if (discardCount <= 0) return;
   ctx.removeItem(itemId, discardCount, meta.entityId);
@@ -327,7 +327,7 @@ export function sellItem(ctx: SimContext, itemId: string, count = 1, pid?: numbe
     ctx.error(meta.entityId, 'There is no merchant nearby.');
     return;
   }
-  if (def.noVendorSell) {
+  if (def.noVendorSell || def.soulbound) {
     ctx.error(meta.entityId, 'That item is not for sale.');
     return;
   }
@@ -368,7 +368,12 @@ export function sellAllJunk(ctx: SimContext, pid?: number): void {
     .filter((s) => {
       const def = ITEMS[s.itemId];
       return (
-        !!def && def.quality === 'poor' && def.kind !== 'quest' && !def.noVendorSell && s.count > 0
+        !!def &&
+        def.quality === 'poor' &&
+        def.kind !== 'quest' &&
+        !def.noVendorSell &&
+        !def.soulbound &&
+        s.count > 0
       );
     })
     .map((s) => ({ itemId: s.itemId, count: s.count }));

@@ -6583,4 +6583,21 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'yumi.queue.leave': 'Opuszczasz kolejkę Ochrony Yumi.',
   'yumi.queue.teamLeave': 'Twoja drużyna opuszcza kolejkę Ochrony Yumi.',
   'yumi.respawn.title': 'POWALONY!',
+  'hudChrome.auth.forgotPrompt': 'Nie pamiętasz hasła?',
+  'hudChrome.auth.forgotTitle': 'Zresetuj hasło',
+  'hudChrome.auth.forgotHint':
+    'Podaj nazwę użytkownika, a wyślemy link do resetowania na zapisany adres e-mail.',
+  'hudChrome.auth.forgotUsername': 'Nazwa użytkownika',
+  'hudChrome.auth.forgotSubmit': 'Wyślij link do resetowania',
+  'hudChrome.auth.forgotSent':
+    'Jeśli konto o tej nazwie użytkownika ma zapisany adres e-mail, wysłaliśmy link do resetowania. Sprawdź swoją skrzynkę.',
+  'hudChrome.auth.forgotBack': 'Powrót do logowania',
+  'hudChrome.auth.resetTitle': 'Wybierz nowe hasło',
+  'hudChrome.auth.resetNewPassword': 'Nowe hasło',
+  'hudChrome.auth.resetConfirm': 'Potwierdź nowe hasło',
+  'hudChrome.auth.resetSubmit': 'Zaktualizuj hasło',
+  'hudChrome.auth.resetDone': 'Twoje hasło zostało zaktualizowane. Możesz się teraz zalogować.',
+  'hudChrome.auth.resetMismatch': 'Hasła nie są zgodne.',
+  'hudChrome.auth.resetErrInvalid':
+    'Ten link do resetowania jest nieprawidłowy lub wygasł. Poproś o nowy.',
 };

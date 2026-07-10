@@ -722,6 +722,8 @@ export const pl_PL: EnTranslations = {
     "tips": {
       "joinChannels": "Wskazówka: wpisz /join world lub /join lfg, aby rozmawiać z graczami z całego świata."
     },
+    "itemHeroicTag": "[HEROIC]",
+    "itemSoulbound": "Soulbound",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1067,6 +1069,22 @@ export const pl_PL: EnTranslations = {
     "worldBoss": {
       "spawn": "{name} powstaje nad Wyżynami Ciernistego Szczytu!"
     },
+    "auth": {
+      "forgotPrompt": "Nie pamiętasz hasła?",
+      "forgotTitle": "Zresetuj hasło",
+      "forgotHint": "Podaj nazwę użytkownika, a wyślemy link do resetowania na zapisany adres e-mail.",
+      "forgotUsername": "Nazwa użytkownika",
+      "forgotSubmit": "Wyślij link do resetowania",
+      "forgotSent": "Jeśli konto o tej nazwie użytkownika ma zapisany adres e-mail, wysłaliśmy link do resetowania. Sprawdź swoją skrzynkę.",
+      "forgotBack": "Powrót do logowania",
+      "resetTitle": "Wybierz nowe hasło",
+      "resetNewPassword": "Nowe hasło",
+      "resetConfirm": "Potwierdź nowe hasło",
+      "resetSubmit": "Zaktualizuj hasło",
+      "resetDone": "Twoje hasło zostało zaktualizowane. Możesz się teraz zalogować.",
+      "resetMismatch": "Hasła nie są zgodne.",
+      "resetErrInvalid": "Ten link do resetowania jest nieprawidłowy lub wygasł. Poproś o nowy."
+    },
     "loot": {
       "chestTitle": "Skrzynia"
     },
@@ -1296,6 +1314,8 @@ export const pl_PL: EnTranslations = {
       "parcelsLabel": "Paczki",
       "parcelsHint": "Kliknij przedmiot w torbach, aby go załączyć.",
       "removeParcelAria": "Usuń {item} z listu",
+      "parcelQtyDecreaseAria": "Send one fewer {item}",
+      "parcelQtyIncreaseAria": "Send one more {item}",
       "sendButton": "Wyślij list",
       "postageNote": "Opłata pocztowa: {amount}. Kruk leci około {seconds} s.",
       "arrivedBanner": "Kruk wylądował: poczta od {name}.",

@@ -61,6 +61,7 @@ import {
   DT,
   dist2d,
   type Entity,
+  emptyMoveInput,
   INSTANCE_EMPTY_TIMEOUT,
   type RiteIntensity,
   type Vec3,
@@ -639,6 +640,7 @@ export function ejectToDelveDoor(
   p.combatTimer = 99;
   p.inCombat = false;
   p.autoAttack = false;
+  Object.assign(r.meta.moveInput, emptyMoveInput());
 }
 
 export function failDelveRun(ctx: SimContext, run: DelveRun): void {

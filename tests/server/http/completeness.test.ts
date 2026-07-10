@@ -254,6 +254,7 @@ describe('registry completeness: migrated baseline (public reads + auth + charac
     { method: 'GET', path: '/api/auth/discord/callback' },
     { method: 'POST', path: '/api/auth/discord/login/new' },
     { method: 'POST', path: '/api/auth/discord/login/link' },
+    { method: 'POST', path: '/api/auth/discord/native/exchange' },
     { method: 'GET', path: '/api/discord' },
     { method: 'DELETE', path: '/api/discord' },
     { method: 'POST', path: '/api/discord/swag/claim' },

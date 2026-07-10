@@ -722,6 +722,8 @@ export const tr_TR: EnTranslations = {
     "tips": {
       "joinChannels": "İpucu: Dünya genelindeki oyuncularla sohbet etmek için /join world ya da /join lfg yaz."
     },
+    "itemHeroicTag": "[HEROIC]",
+    "itemSoulbound": "Soulbound",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1067,6 +1069,22 @@ export const tr_TR: EnTranslations = {
     "worldBoss": {
       "spawn": "{name}, Dikenzirve Tepeleri'nin üzerinde yükseliyor!"
     },
+    "auth": {
+      "forgotPrompt": "Şifreni mi unuttun?",
+      "forgotTitle": "Şifreni sıfırla",
+      "forgotHint": "Kullanıcı adını gir, kayıtlı e-posta adresine bir sıfırlama bağlantısı gönderelim.",
+      "forgotUsername": "Kullanıcı adı",
+      "forgotSubmit": "Sıfırlama bağlantısı gönder",
+      "forgotSent": "Bu kullanıcı adına sahip hesabın kayıtlı bir e-posta adresi varsa bir sıfırlama bağlantısı gönderdik. Gelen kutunu kontrol et.",
+      "forgotBack": "Girişe geri dön",
+      "resetTitle": "Yeni bir şifre seç",
+      "resetNewPassword": "Yeni şifre",
+      "resetConfirm": "Yeni şifreyi onayla",
+      "resetSubmit": "Şifreyi güncelle",
+      "resetDone": "Şifren güncellendi. Artık giriş yapabilirsin.",
+      "resetMismatch": "Şifreler eşleşmiyor.",
+      "resetErrInvalid": "Bu sıfırlama bağlantısı geçersiz veya süresi dolmuş. Yeni bir tane iste."
+    },
     "loot": {
       "chestTitle": "Sandık"
     },
@@ -1296,6 +1314,8 @@ export const tr_TR: EnTranslations = {
       "parcelsLabel": "Paketler",
       "parcelsHint": "Eklemek için çantandaki bir eşyaya tıkla.",
       "removeParcelAria": "{item} paketini mektuptan çıkar",
+      "parcelQtyDecreaseAria": "Send one fewer {item}",
+      "parcelQtyIncreaseAria": "Send one more {item}",
       "sendButton": "Mektubu Gönder",
       "postageNote": "Posta ücreti: {amount}. Kuzgun yaklaşık {seconds} saniye uçar.",
       "arrivedBanner": "Kuzgun kondu: {name} sana posta gönderdi.",

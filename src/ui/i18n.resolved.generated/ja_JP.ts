@@ -722,6 +722,8 @@ export const ja_JP: EnTranslations = {
     "tips": {
       "joinChannels": "ヒント：/join world または /join lfg と入力すると、ワールド全体のプレイヤーとチャットできます。"
     },
+    "itemHeroicTag": "[HEROIC]",
+    "itemSoulbound": "魂縛",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1067,6 +1069,22 @@ export const ja_JP: EnTranslations = {
     "worldBoss": {
       "spawn": "{name}がソーンピーク高地に立ち上がった！"
     },
+    "auth": {
+      "forgotPrompt": "パスワードをお忘れですか？",
+      "forgotTitle": "パスワードをリセット",
+      "forgotHint": "ユーザー名を入力してください。登録されているメールアドレスにリセットリンクをお送りします。",
+      "forgotUsername": "ユーザー名",
+      "forgotSubmit": "リセットリンクを送信",
+      "forgotSent": "そのユーザー名のアカウントにメールアドレスが登録されている場合、リセットリンクを送信しました。受信トレイをご確認ください。",
+      "forgotBack": "ログインに戻る",
+      "resetTitle": "新しいパスワードを設定",
+      "resetNewPassword": "新しいパスワード",
+      "resetConfirm": "新しいパスワード（確認）",
+      "resetSubmit": "パスワードを更新",
+      "resetDone": "パスワードを更新しました。ログインできます。",
+      "resetMismatch": "パスワードが一致しません。",
+      "resetErrInvalid": "このリセットリンクは無効か、有効期限が切れています。新しいリンクをリクエストしてください。"
+    },
     "loot": {
       "chestTitle": "宝箱"
     },
@@ -1296,6 +1314,8 @@ export const ja_JP: EnTranslations = {
       "parcelsLabel": "小包",
       "parcelsHint": "バッグ内のアイテムをクリックして添付します。",
       "removeParcelAria": "手紙から{item}を取り除く",
+      "parcelQtyDecreaseAria": "{item}を1つ減らして送る",
+      "parcelQtyIncreaseAria": "{item}を1つ増やして送る",
       "sendButton": "手紙を送る",
       "postageNote": "郵送料：{amount}。ワタリガラスの飛行時間は約{seconds}秒です。",
       "arrivedBanner": "ワタリガラスが到着：{name}からの手紙。",

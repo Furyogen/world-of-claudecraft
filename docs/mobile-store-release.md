@@ -73,6 +73,25 @@ VITE_API_ORIGIN=http://192.168.1.247 npm run native:sync
 Replace the IP with the Mac's current Wi-Fi/LAN address. Do not use
 `localhost` for a physical phone; that resolves to the phone itself.
 
+## Native Discord Authentication
+
+Discord login and account linking open the system browser, return through the
+`worldofclaudecraft://discord-auth` app URL, and exchange a short-lived,
+single-use handoff code with the game server. The exchange also requires an
+app-generated verifier that never appears in the callback URL, so another app
+cannot use an intercepted custom-scheme callback. Starting the flow also uses
+the existing Apple DeviceCheck or Play Integrity proof, which prevents another
+app from initiating its own handoff with the shared URL scheme. The native return URL
+never carries a bearer session token or first-login link token. Discord itself
+continues to redirect to the existing
+HTTPS `/api/auth/discord/callback` URL, so no additional Discord Developer Portal
+redirect is required.
+
+Release QA must cover returning-user login, the first-time create-or-link chooser,
+linking from an existing signed-in account, cancellation, and an expired handoff
+on both iOS and Android. Confirm each browser flow returns to the app and that a
+consumed handoff code cannot be reused.
+
 ## Over The Air Updates
 
 The native apps include the Ionic Appflow Capacitor Live Updates SDK. It is

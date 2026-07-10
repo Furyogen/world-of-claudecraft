@@ -289,6 +289,8 @@ export const tr_TR: AdminTranslations = {
   "moderationHistory.actionForceRename": "Zorunlu yeniden adlandırma",
   "moderationHistory.actionKick": "Kicked",
   "moderationHistory.actionKill": "Killed",
+  "moderationHistory.actionJail": "Jailed",
+  "moderationHistory.actionUnjail": "Released from jail",
   "moderationHistory.actionNote": "Not",
   "moderationHistory.actionResetPassword": "Parola sıfırlandı",
   "moderationHistory.actionIpBlock": "IP blocked",
