@@ -2,11 +2,12 @@
 // (public/models/props/ruin_statue.glb, placed via ZONE2_PROPS.statues).
 // Boots the offline world, teleports the player to the statue's anchor
 // (109, 429), and frames it at max graphics.
-import puppeteer from 'puppeteer-core';
+
 import fs from 'node:fs';
+import puppeteer from 'puppeteer-core';
 import { BROWSER_PATH } from './browser_path.mjs';
 
-const URL = (process.env.GAME_URL ?? 'http://localhost:5173') + '/?gfx=ultra';
+const URL = `${process.env.GAME_URL ?? 'http://localhost:5173'}/?gfx=ultra`;
 fs.mkdirSync('tmp', { recursive: true });
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
