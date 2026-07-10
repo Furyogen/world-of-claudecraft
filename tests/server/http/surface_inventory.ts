@@ -477,7 +477,7 @@ export const SURFACE_INVENTORY: readonly SurfaceRoute[] = [
     handler: 'handleApi arm: /api/account/password/forgot (handleAccountPasswordForgot)',
     contentType: PROBLEM_JSON,
     authScope: AUTH_SCOPE.public,
-    limiter: null,
+    limiter: 'rateLimited',
     requireOwnedExpected: null,
   },
   {
@@ -487,7 +487,7 @@ export const SURFACE_INVENTORY: readonly SurfaceRoute[] = [
     handler: 'handleApi arm: /api/account/password/reset (handleAccountPasswordReset)',
     contentType: PROBLEM_JSON,
     authScope: AUTH_SCOPE.public,
-    limiter: null,
+    limiter: 'rateLimited',
     requireOwnedExpected: null,
   },
   {
