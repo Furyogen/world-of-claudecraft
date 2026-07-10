@@ -537,7 +537,7 @@ export function assembleModel(def: VisualDef, weaponItemId?: string | null): THR
 
 // The target bone for one attachment: its authored bone normally, the chest bone
 // while a handslot prop is sheathed. GLTFLoader sanitizes node names
-// (PropertyBinding strips [].:/ chars), so "handslot.r" arrives as "handslotr" —
+// (PropertyBinding strips [].:/ chars), so "handslot.r" arrives as "handslotr";
 // resolveBone tries both.
 function attachTargetBone(
   root: THREE.Object3D,
