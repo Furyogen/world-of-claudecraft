@@ -319,12 +319,14 @@ export class CharacterVisual {
       lift.t = -1;
       return;
     }
-    const bone = this.stowArmBone ?? (this.stowArmBone = this.model.getObjectByName(STOW_ARM_BONE));
-    if (!bone) {
+    if (this.stowArmBone === undefined) {
+      this.stowArmBone = this.model.getObjectByName(STOW_ARM_BONE) ?? null;
+    }
+    if (!this.stowArmBone) {
       lift.t = -1;
       return;
     }
-    bone.rotation.x += STOW_ARM_LIFT_RAD * Math.sin(Math.PI * p);
+    this.stowArmBone.rotation.x += STOW_ARM_LIFT_RAD * Math.sin(Math.PI * p);
   }
 
   // -------------------------------------------------------------------------
