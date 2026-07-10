@@ -36,6 +36,7 @@ import { ALL_CLASSES, type Entity, type SimEvent } from '../sim/types';
 import { isAtSowfield } from '../sim/vale_cup_layout';
 import { groundHeight, waterLevelAt, zoneBiomeAt } from '../sim/world';
 import { attachAvatarFallback } from '../ui/avatar_fallback';
+import type { ChatBubbleStyle } from '../ui/chat_bubble_style';
 import { tEntity } from '../ui/entity_i18n';
 import type { IWorld } from '../world_api';
 import { isVisuallyDead } from './anim_state';
@@ -5467,7 +5468,10 @@ export class Renderer {
 
   // Hang a speech bubble over an entity's head; it follows the entity and
   // fades out after a few seconds (longer for longer messages).
-  showChatBubble(entityId: number, text: string, yell: boolean): void {
+  showChatBubble(entityId: number, text: string, style?: boolean | ChatBubbleStyle): void {
+    // Back-compat: the older 3-arg call passes a bare `yell` boolean; the chat
+    // gate passes a full descriptor (the party channel tint).
+    const s: ChatBubbleStyle = typeof style === 'boolean' ? { yell: style } : (style ?? {});
     let b = this.chatBubbles.get(entityId);
     if (!b) {
       const el = document.createElement('div');
@@ -5477,7 +5481,12 @@ export class Renderer {
       this.chatBubbles.set(entityId, b);
     }
     b.el.textContent = text; // textContent: chat is player input, never HTML
-    b.el.classList.toggle('yell', yell);
+    b.el.classList.toggle('yell', s.yell === true);
+    // Channel bubbles (party/guild/officer) tint the BORDER only; the near-white
+    // background and dark text stay for legibility. Clearing to '' restores the
+    // stylesheet default (and the `.yell` border) when a reused bubble switches
+    // channel, so say/yell/emote stay byte-identical.
+    b.el.style.borderColor = s.border ?? '';
     // wall-clock ttl: sim/render time can run slower than real time under
     // frame-delta clamping, which would keep bubbles up too long
     b.until = performance.now() + 1000 * Math.min(10, 3.5 + text.length * 0.045);

@@ -193,6 +193,7 @@ const UI_PURE_CORES = [
   'src/ui/town_focus_view.ts',
   'src/ui/window_frame_view.ts',
   'src/ui/chat_mobile_panel.ts',
+  'src/ui/chat_bubble_style.ts',
   'src/game/ui_effects_profile.ts',
   'src/game/ui_tier_knobs.ts',
   'src/game/menu_gamepad_nav.ts',
