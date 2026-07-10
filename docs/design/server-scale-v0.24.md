@@ -91,28 +91,41 @@ Multi-core pass (server/snapshot_fanout/, see its CLAUDE.md):
   SNAPSHOT_WORKERS=auto|0|N, auto = min(6, cores - 2), so small boxes
   auto-disable.
 
-## Results (same machine, same scenarios)
+## Results (same machine, same scenarios, join counts VERIFIED)
 
-250 clustered fighting bots, tick p95:
+An earlier draft of this table quoted a "1000 bots at 29 ms" run; its hub
+processes had silently lost ~40% of their bots to username collisions
+(fixed in server_load_jitter.mjs via BOT_PREFIX), so that number was really
+~600. Everything below is from runs whose joined counts were verified
+(entity count = players + ~400 world entities).
+
+250 clustered fighting bots in ONE camp (the worst-case density), tick p95:
 
 | build | total | broadcast | sim |
 |---|---|---|---|
 | baseline v0.24 | 182.7 ms | 136.7 ms | 58.3 ms |
 | single-thread pass, workers OFF | 27.4 ms | 24.1 ms | 2.1 ms |
-| workers ON (6) | 8.8 ms | 6.0 ms | 1.9 ms |
+| workers ON (6) | 8.3 ms | 5.2 ms | 2.1 ms |
 
-1000 bots across 5 camps (200 each), workers ON: total p95 29.0 ms,
-broadcast 22.1 ms, sim 4.0 ms, achieved 20 Hz, and a clean independent
-observer: snapshot-gap p50 50.0 ms / p95 67.7 ms / zero gaps over 100 ms.
-The same 1000-bot topology before the busy-skip + cadence fixes stalled at
-204 ms p95; before the whole pass it was unreachable.
+Dense multi-hub fleets (hubs of 200 bots all fighting in a 12 yd circle,
+every player seeing ~200 entities at full combat churn; deliberately
+crueler than any organic population):
 
-Summary: ~20x at the 250-bot worst case, ~6.7x with workers off (the 2-vCPU
-production profile), and one realm process now holds 1000+ CCU with 40%+
-tick headroom on an 8-performance-core box. With the existing realm
-sharding, ten such realms are the nominal 100x of the old 100-CCU comfort
-point; a single realm's next ceiling is the main-thread self encode + socket
-writes (see below).
+| verified load | total p95 | verdict |
+|---|---|---|
+| 600 (3 hubs), 6 workers | 45.8 ms | inside the 50 ms budget |
+| 1000 (5 hubs), 10 workers | ~127 ms | over budget; sim holds 20 Hz, snapshot cadence degrades gracefully (busy shards skip, nobody stalls) |
+
+Summary: ~22x at the 250-dense worst case, ~6.7x with workers off (the
+2-vCPU production profile), and a verified 600 SIMULTANEOUSLY-FIGHTING
+dense players per realm process on an 8-performance-core box, where the
+baseline could not hold 250. Spread-out populations (normal play, most
+players NOT stacked in 200-player melee balls) sit well above these
+numbers, and realms remain the horizontal multiplier past one process.
+At a true dense 1000 the wall is MAIN-thread residue, not the workers:
+self encode x1000, the per-worker fragment-delta postMessage copies
+(O(changed x workers) at full combat churn), socket writes, and the GC
+those copies feed; see the levers below.
 
 ## What we deliberately did NOT change
 
@@ -126,21 +139,26 @@ writes (see below).
 
 ## Next levers, in measured order
 
-1. Self encode on main (~10-20 us per player per tick): a hand serializer
+1. Fragment shipping as SharedArrayBuffer bytes instead of per-worker
+   postMessage string copies: at full dense-combat churn ~1200 fragments
+   change per tick and are structured-clone copied to EVERY worker
+   (O(changed x workers) main-thread copy + the GC it feeds). Encode once
+   into a shared byte region, let workers decode. Biggest verified term in
+   the true-1000 dense wall.
+2. Self encode on main (~10-20 us per player per tick): a hand serializer
    is blocked by res/mres/rtype overwriting dynamic-field positions in the
    self record; either accept a wire-format v2 for self or mirror the meta
-   into the fanout. Biggest single remaining main-thread term at 1000+.
-2. Socket writes (~9.4 us per send on main): gateway processes (cluster-style
-   handle passing) would move WS I/O off the sim process entirely; that is
-   the 5k+ CCU shape.
-3. healingThreat full-entity scan per heal event: needs a live
+   into the fanout.
+3. Socket writes (~9.4 us per small send on main, far more at dense-crowd
+   30 KB frames): gateway processes (cluster-style handle passing) would
+   move WS I/O off the sim process entirely; that is the 5k+ CCU shape.
+4. healingThreat full-entity scan per heal event: needs a live
    mobs-with-threat reverse index (a grid query is NOT equivalent: distant
    chasing mobs are in the threat set). Matters for raid-scale heal spam.
-4. Fragment shipping as SharedArrayBuffer bytes instead of postMessage
-   string copies (one encode, W decodes) if fanout dispatch cost shows up.
 5. Bandwidth: snapshots remain uncompressed JSON (~150 KB/s per player in a
-   50-crowd). Egress at 1000+ CCU is an infra cost question; a binary or
-   compressed transport is a separate, client-visible project.
+   50-crowd, several times that in a 200-crowd). Egress at scale is an
+   infra cost question; a binary or compressed transport is a separate,
+   client-visible project.
 
 ## How to re-measure
 
