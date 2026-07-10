@@ -33,6 +33,7 @@ import {
   type ArenaStanding,
   DT,
   type Entity,
+  emptyMoveInput,
 } from '../types';
 
 // Ashen Coliseum 1v1 arena tuning consts (moved with the slice). FIESTA_COUNTDOWN
@@ -852,6 +853,10 @@ export function readyArenaFighter(ctx: SimContext, e: Entity, opts: { clearPrep:
   e.resource = e.resourceType === 'mana' ? e.maxResource : e.resourceType === 'energy' ? 100 : 0;
   e.targetId = null;
   e.autoAttack = false;
+  // Drop any held movement intent so a fighter placed/respawned into the arena does
+  // not drift from a stale forward/back flag with no key held (issue 1651); bots
+  // already reset theirs on spawn.
+  if (meta) Object.assign(meta.moveInput, emptyMoveInput());
   e.queuedOnSwing = null;
   delete e.queuedOnSwingFree;
   e.queuedCastAbility = null;
