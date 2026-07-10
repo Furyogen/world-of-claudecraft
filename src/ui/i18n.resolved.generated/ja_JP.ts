@@ -396,7 +396,8 @@ export const ja_JP: EnTranslations = {
       "targetFriendly": "最も近い味方をターゲット",
       "targetFriendlyNext": "味方ターゲットを順に切り替え",
       "discord": "Discord",
-      "valecup": "ヴェイルカップ"
+      "valecup": "ヴェイルカップ",
+      "sheathe": "武器を納刀/抜刀"
     },
     "vcup": {
       "title": "ヴェイルカップ",

@@ -396,7 +396,8 @@ export const cs_CZ: EnTranslations = {
       "targetFriendly": "Zacílit nejbližšího spojence",
       "targetFriendlyNext": "Procházet spojenecké cíle",
       "discord": "Discord",
-      "valecup": "Pohár údolí"
+      "valecup": "Pohár údolí",
+      "sheathe": "Sheathe/Unsheathe Weapon"
     },
     "vcup": {
       "title": "Pohár údolí",

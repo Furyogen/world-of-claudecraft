@@ -396,7 +396,8 @@ export const it_IT: EnTranslations = {
       "targetFriendly": "Bersaglia l'amico più vicino",
       "targetFriendlyNext": "Scorri i bersagli amici",
       "discord": "Discord",
-      "valecup": "Coppa della Valle"
+      "valecup": "Coppa della Valle",
+      "sheathe": "Sheathe/Unsheathe Weapon"
     },
     "vcup": {
       "title": "La Coppa della Valle",

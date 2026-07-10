@@ -396,7 +396,8 @@ export const pl_PL: EnTranslations = {
       "targetFriendly": "Obierz najbliższego sojusznika",
       "targetFriendlyNext": "Przełączaj przyjazny cel",
       "discord": "Discord",
-      "valecup": "Puchar Doliny"
+      "valecup": "Puchar Doliny",
+      "sheathe": "Sheathe/Unsheathe Weapon"
     },
     "vcup": {
       "title": "Puchar Doliny",

@@ -24,6 +24,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auth.appleLoginCta",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound",
+    "hudChrome.keybinds.sheathe",
     "hudChrome.mailbox.parcelQtyDecreaseAria",
     "hudChrome.mailbox.parcelQtyIncreaseAria"
   ],
@@ -42,6 +43,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auth.appleLoginCta",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound",
+    "hudChrome.keybinds.sheathe",
     "hudChrome.mailbox.parcelQtyDecreaseAria",
     "hudChrome.mailbox.parcelQtyIncreaseAria"
   ],
@@ -60,6 +62,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auth.appleLoginCta",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound",
+    "hudChrome.keybinds.sheathe",
     "hudChrome.mailbox.parcelQtyDecreaseAria",
     "hudChrome.mailbox.parcelQtyIncreaseAria"
   ],
@@ -78,6 +81,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auth.appleLoginCta",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound",
+    "hudChrome.keybinds.sheathe",
     "hudChrome.mailbox.parcelQtyDecreaseAria",
     "hudChrome.mailbox.parcelQtyIncreaseAria"
   ],
@@ -97,6 +101,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auth.appleLoginCta",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound",
+    "hudChrome.keybinds.sheathe",
     "hudChrome.mailbox.parcelQtyDecreaseAria",
     "hudChrome.mailbox.parcelQtyIncreaseAria"
   ],
@@ -115,6 +120,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auth.appleLoginCta",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound",
+    "hudChrome.keybinds.sheathe",
     "hudChrome.mailbox.parcelQtyDecreaseAria",
     "hudChrome.mailbox.parcelQtyIncreaseAria"
   ],
@@ -145,6 +151,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auth.appleLoginCta",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound",
+    "hudChrome.keybinds.sheathe",
     "hudChrome.mailbox.parcelQtyDecreaseAria",
     "hudChrome.mailbox.parcelQtyIncreaseAria"
   ],
@@ -163,6 +170,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auth.appleLoginCta",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound",
+    "hudChrome.keybinds.sheathe",
     "hudChrome.mailbox.parcelQtyDecreaseAria",
     "hudChrome.mailbox.parcelQtyIncreaseAria"
   ],
@@ -178,6 +186,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auth.appleLoginCta",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound",
+    "hudChrome.keybinds.sheathe",
     "hudChrome.mailbox.parcelQtyDecreaseAria",
     "hudChrome.mailbox.parcelQtyIncreaseAria"
   ],
@@ -193,6 +202,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auth.appleLoginCta",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound",
+    "hudChrome.keybinds.sheathe",
     "hudChrome.mailbox.parcelQtyDecreaseAria",
     "hudChrome.mailbox.parcelQtyIncreaseAria"
   ],
@@ -208,6 +218,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auth.appleLoginCta",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound",
+    "hudChrome.keybinds.sheathe",
     "hudChrome.mailbox.parcelQtyDecreaseAria",
     "hudChrome.mailbox.parcelQtyIncreaseAria"
   ],
@@ -223,6 +234,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auth.appleLoginCta",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound",
+    "hudChrome.keybinds.sheathe",
     "hudChrome.mailbox.parcelQtyDecreaseAria",
     "hudChrome.mailbox.parcelQtyIncreaseAria"
   ],
@@ -238,6 +250,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auth.appleLoginCta",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound",
+    "hudChrome.keybinds.sheathe",
     "hudChrome.mailbox.parcelQtyDecreaseAria",
     "hudChrome.mailbox.parcelQtyIncreaseAria"
   ],
@@ -253,6 +266,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auth.appleLoginCta",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound",
+    "hudChrome.keybinds.sheathe",
     "hudChrome.mailbox.parcelQtyDecreaseAria",
     "hudChrome.mailbox.parcelQtyIncreaseAria"
   ],
@@ -268,6 +282,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.auth.appleLoginCta",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound",
+    "hudChrome.keybinds.sheathe",
     "hudChrome.mailbox.parcelQtyDecreaseAria",
     "hudChrome.mailbox.parcelQtyIncreaseAria"
   ]

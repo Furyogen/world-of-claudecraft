@@ -396,7 +396,8 @@ export const id_ID: EnTranslations = {
       "targetFriendly": "Bidik Sekutu Terdekat",
       "targetFriendlyNext": "Putar Bidikan Sekutu",
       "discord": "Discord",
-      "valecup": "Piala Lembah"
+      "valecup": "Piala Lembah",
+      "sheathe": "Sheathe/Unsheathe Weapon"
     },
     "vcup": {
       "title": "Piala Lembah",

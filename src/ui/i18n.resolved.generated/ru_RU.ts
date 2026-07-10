@@ -396,7 +396,8 @@ export const ru_RU: EnTranslations = {
       "targetFriendly": "Ближайший союзник",
       "targetFriendlyNext": "Следующий союзник",
       "discord": "Discord",
-      "valecup": "Кубок Долины"
+      "valecup": "Кубок Долины",
+      "sheathe": "Убрать/обнажить оружие"
     },
     "vcup": {
       "title": "Кубок Долины",

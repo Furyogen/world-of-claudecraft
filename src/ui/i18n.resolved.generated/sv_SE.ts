@@ -396,7 +396,8 @@ export const sv_SE: EnTranslations = {
       "targetFriendly": "Måltavla närmaste vänlig",
       "targetFriendlyNext": "Växla vänligt mål",
       "discord": "Discord",
-      "valecup": "Dalcupen"
+      "valecup": "Dalcupen",
+      "sheathe": "Sheathe/Unsheathe Weapon"
     },
     "vcup": {
       "title": "Dalcupen",

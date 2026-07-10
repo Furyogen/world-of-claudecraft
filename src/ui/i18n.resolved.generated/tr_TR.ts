@@ -396,7 +396,8 @@ export const tr_TR: EnTranslations = {
       "targetFriendly": "En Yakın Dostu Hedefle",
       "targetFriendlyNext": "Dost Hedefler Arasında Geç",
       "discord": "Discord",
-      "valecup": "Vadi Kupası"
+      "valecup": "Vadi Kupası",
+      "sheathe": "Sheathe/Unsheathe Weapon"
     },
     "vcup": {
       "title": "Vadi Kupası",

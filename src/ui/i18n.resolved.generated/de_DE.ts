@@ -396,7 +396,8 @@ export const de_DE: EnTranslations = {
       "targetFriendly": "Nächsten Verbündeten anvisieren",
       "targetFriendlyNext": "Freundliches Ziel wechseln",
       "discord": "Discord",
-      "valecup": "Talpokal"
+      "valecup": "Talpokal",
+      "sheathe": "Sheathe/Unsheathe Weapon"
     },
     "vcup": {
       "title": "Der Talpokal",

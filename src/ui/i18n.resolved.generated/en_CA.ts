@@ -396,7 +396,8 @@ export const en_CA: EnTranslations = {
       "targetFriendly": "Target Nearest Friendly",
       "targetFriendlyNext": "Cycle Friendly Target",
       "discord": "Discord",
-      "valecup": "Vale Cup"
+      "valecup": "Vale Cup",
+      "sheathe": "Sheathe/Unsheathe Weapon"
     },
     "vcup": {
       "title": "The Vale Cup",

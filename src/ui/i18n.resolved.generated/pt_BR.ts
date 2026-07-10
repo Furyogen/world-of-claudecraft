@@ -396,7 +396,8 @@ export const pt_BR: EnTranslations = {
       "targetFriendly": "Selecionar aliado mais próximo",
       "targetFriendlyNext": "Alternar alvo aliado",
       "discord": "Discord",
-      "valecup": "Copa do Vale"
+      "valecup": "Copa do Vale",
+      "sheathe": "Sheathe/Unsheathe Weapon"
     },
     "vcup": {
       "title": "A Copa do Vale",

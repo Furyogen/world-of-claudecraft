@@ -187,6 +187,18 @@ export class GameAudio {
     this.tone(440, 0.05, 0.06, 'triangle', 0.01);
   }
 
+  weaponSheathe(): void {
+    // steel sliding home over a leather strap, then a soft catch
+    this.noise(0.16, 2200, 0.15, 0.8, 'bandpass');
+    this.tone(520, 0.08, 0.05, 'triangle', 0.09, 320);
+  }
+
+  weaponUnsheathe(): void {
+    // brighter draw: a rising metallic ring over the scrape
+    this.noise(0.14, 3600, 0.16, 0.75, 'highpass');
+    this.tone(760, 0.12, 0.07, 'triangle', 0.02, 1500);
+  }
+
   whisper(): void {
     this.tone(1175, 0.09, 0.09, 'sine');
     this.tone(1568, 0.12, 0.07, 'sine', 0.07);

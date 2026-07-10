@@ -396,7 +396,8 @@ export const da_DK: EnTranslations = {
       "targetFriendly": "Sigt mod nærmeste allierede",
       "targetFriendlyNext": "Skift allieret mål",
       "discord": "Discord",
-      "valecup": "Dalpokalen"
+      "valecup": "Dalpokalen",
+      "sheathe": "Sheathe/Unsheathe Weapon"
     },
     "vcup": {
       "title": "Dalpokalen",

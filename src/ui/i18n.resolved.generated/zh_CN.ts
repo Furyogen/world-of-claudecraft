@@ -396,7 +396,8 @@ export const zh_CN: EnTranslations = {
       "targetFriendly": "选中最近友方",
       "targetFriendlyNext": "切换友方目标",
       "discord": "Discord",
-      "valecup": "溪谷杯"
+      "valecup": "溪谷杯",
+      "sheathe": "收起/拔出武器"
     },
     "vcup": {
       "title": "溪谷杯",

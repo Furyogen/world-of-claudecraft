@@ -157,6 +157,7 @@ const BIND_ACTION_LABEL_KEYS: Partial<Record<string, TranslationKey>> = {
   targetFriendlyNext: 'hudChrome.keybinds.targetFriendlyNext',
   discord: 'hudChrome.keybinds.discord',
   valecup: 'hudChrome.keybinds.valecup',
+  sheathe: 'hudChrome.keybinds.sheathe',
   // Reuse the existing window/feature names so these labels localize everywhere
   // without duplicating strings (these two ids were previously absent from the
   // map and fell back to the raw English BIND_ACTIONS labels).

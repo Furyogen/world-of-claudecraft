@@ -396,7 +396,8 @@ export const ko_KR: EnTranslations = {
       "targetFriendly": "가장 가까운 아군 대상 지정",
       "targetFriendlyNext": "아군 대상 순환",
       "discord": "Discord",
-      "valecup": "베일 컵"
+      "valecup": "베일 컵",
+      "sheathe": "무기 넣기/빼기"
     },
     "vcup": {
       "title": "베일 컵",

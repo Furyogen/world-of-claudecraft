@@ -222,6 +222,13 @@ export const BIND_ACTIONS: BindAction[] = [
     kind: 'held',
     defaults: ['KeyX'],
   },
+  {
+    id: 'sheathe',
+    label: 'Sheathe/Unsheathe Weapon',
+    category: 'Interface',
+    kind: 'edge',
+    defaults: ['KeyZ'],
+  },
   // Action bar (slot 0 = Attack)
   ...SLOT_DEFAULTS.map(
     (code, i): BindAction => ({

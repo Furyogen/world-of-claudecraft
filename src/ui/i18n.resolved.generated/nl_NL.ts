@@ -396,7 +396,8 @@ export const nl_NL: EnTranslations = {
       "targetFriendly": "Dichtstbijzijnde Bondgenoot Aanwijzen",
       "targetFriendlyNext": "Door Bondgenoten Bladeren",
       "discord": "Discord",
-      "valecup": "Dalbeker"
+      "valecup": "Dalbeker",
+      "sheathe": "Sheathe/Unsheathe Weapon"
     },
     "vcup": {
       "title": "De Dalbeker",

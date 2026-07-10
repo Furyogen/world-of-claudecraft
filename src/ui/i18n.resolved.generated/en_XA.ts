@@ -396,7 +396,8 @@ export const en_XA: EnTranslations = {
       "targetFriendly": "[Ţáŕĝéţ Ñéáŕéšţ Ƒŕíéñðļý]",
       "targetFriendlyNext": "[Çýçļé Ƒŕíéñðļý Ţáŕĝéţ]",
       "discord": "[Ðíšçóŕð]",
-      "valecup": "[Ʋáļé Çúþ]"
+      "valecup": "[Ʋáļé Çúþ]",
+      "sheathe": "[Šĥéáţĥé/Úñšĥéáţĥé Ŵéáþóñ]"
     },
     "vcup": {
       "title": "[Ţĥé Ʋáļé Çúþ]",

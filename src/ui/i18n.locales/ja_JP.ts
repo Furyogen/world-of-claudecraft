@@ -393,6 +393,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     '最近、報告を複数回送信しています。しばらく待ってから送信してください。',
   'hudChrome.bugReport.failed': 'バグ報告を送信できませんでした。もう一度お試しください。',
   'hudChrome.keybinds.emoteWheel': 'エモートホイール',
+  'hudChrome.keybinds.sheathe': '武器を納刀/抜刀',
   'hudChrome.keybinds.targetFriendly': '最も近い味方をターゲット',
   'hudChrome.keybinds.targetFriendlyNext': '味方ターゲットを順に切り替え',
   'hudChrome.options.clickMoveLeft': '左クリック',
