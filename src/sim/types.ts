@@ -268,7 +268,7 @@ export interface Aura {
   tickTimer?: number;
   // Dynamic dot/hot recompute (updateAuras). A dot/hot's live per-tick damage is
   // tickBase (the static rank/talent amount) PLUS the caster's CURRENT power rider,
-  // round(scalingPower * tickPowerCoeff), recomputed every tick — so a dot tracks live
+  // round(scalingPower * tickPowerCoeff), recomputed every tick, so a dot tracks live
   // Spell/Attack Power buffs without a recast. tickPowerStat selects which rating the
   // rider (and the haste that raises the tick RATE) read. All three are absent on auras
   // with no power scaling (mob bleeds), which fall back to the snapshot `value`. `value`
