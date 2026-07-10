@@ -29,7 +29,7 @@ import { isStunned } from '../combat/cc';
 import { ITEMS, MOBS, NPCS, QUESTS } from '../data';
 import { createMob, createNpc } from '../entity';
 import { applyHeroicMobTuning, mobTemplateForDungeonDifficulty } from '../instances/difficulty';
-import { heroicLockoutId } from '../instances/dungeons';
+import { heroicLockoutId, instanceLockoutMetas } from '../instances/dungeons';
 import type { PlayerMeta } from '../sim';
 import type { SimContext } from '../sim_context';
 import { clearThreat, threatEntries } from '../threat';
@@ -506,7 +506,14 @@ export function grantNythraxisLockout(ctx: SimContext, boss: Entity): void {
   const lockId = isHeroicNythraxis(ctx, boss)
     ? heroicLockoutId('nythraxis_boss_arena')
     : 'nythraxis_boss_arena';
-  for (const meta of nythraxisRoomMetas(ctx, boss)) {
+  // The kill locks the WHOLE owning raid group plus anyone inside the arena
+  // (instanceLockoutMetas), not just the players standing in the boss room: a
+  // raider who released, camped the entrance, or never zoned in must not stay
+  // unlocked, or one unlocked member re-claims the arena for the locked raid.
+  // Room-radius survives only as the fallback for a boss outside any claim.
+  const inst = ctx.instances.find((i) => i.partyKey !== null && i.mobIds.includes(boss.id));
+  const metas = inst ? instanceLockoutMetas(ctx, inst) : nythraxisRoomMetas(ctx, boss);
+  for (const meta of metas) {
     meta.raidLockouts.set(lockId, until);
   }
 }

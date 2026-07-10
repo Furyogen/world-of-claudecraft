@@ -217,6 +217,12 @@ export interface SimContextCallbacks {
   dungeonDifficulty(pid?: number): DungeonDifficulty;
   setDungeonDifficulty(difficulty: DungeonDifficulty, pid?: number): void;
   awardHeroicMarks(mob: Entity, recipients: PlayerMeta[]): void;
+  // grantHeroicKillLockout is awardHeroicMarks' sibling on the death path, owned by
+  // instances/dungeons: the C1 death hub calls it for EVERY mob death (credit or no
+  // credit). A heroic claim's final-boss kill locks the whole owning group (plus
+  // anyone inside the instance) to the :heroic key until the daily reset, so the
+  // lockout cannot be dodged by camping the door or releasing before the kill.
+  grantHeroicKillLockout(mob: Entity): void;
 
   // C1 damage/death hub + the casting/leash/arena/duel/fiesta/loot teardown it
   // drives mid-tick. `dealDamage` is the post-mitigation entry (crit/dodge/miss and
@@ -861,6 +867,7 @@ export function createSimContext(host: SimContextHost): SimContext {
     dungeonDifficulty: host.dungeonDifficulty,
     setDungeonDifficulty: host.setDungeonDifficulty,
     awardHeroicMarks: host.awardHeroicMarks,
+    grantHeroicKillLockout: host.grantHeroicKillLockout,
     dealDamage: host.dealDamage,
     handleDeath: host.handleDeath,
     cancelCast: host.cancelCast,
