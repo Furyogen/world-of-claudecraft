@@ -221,6 +221,7 @@ export function initNythraxisEncounter(boss: Entity): NonNullable<Entity['nythra
   if (!boss.nythraxis) {
     boss.nythraxis = {
       phase: 1,
+      heroicSummonStarted: false,
       introSpoken: false,
       transitionStarted: false,
       transitionTimer: 0,
@@ -365,6 +366,22 @@ export function updateNythraxisEncounter(ctx: SimContext, boss: Entity): void {
       school: 'shadow',
       fx: 'nova',
     });
+  }
+
+  // Heroic: raise the court (Aldren / Malric / Voss) ASAP once engaged, rather
+  // than waiting on a wardstone-driven Deathless stun that a lone tester (or an
+  // uncoordinated raid) cannot reliably produce. One-shot, and only when nothing
+  // else is mid-cast; the wardstone-stun path still re-summons later as designed.
+  if (
+    !st.heroicSummonStarted &&
+    isHeroicNythraxis(ctx, boss) &&
+    st.deathlessStunRemaining <= 0 &&
+    (st.heroicSummonChannelRemaining ?? 0) <= 0 &&
+    st.deathlessCastRemaining <= 0
+  ) {
+    st.heroicSummonStarted = true;
+    startNythraxisHeroicSummon(ctx, boss, st);
+    return;
   }
 
   if (st.deathlessStunRemaining > 0) {

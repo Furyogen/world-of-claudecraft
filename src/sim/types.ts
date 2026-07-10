@@ -2132,6 +2132,10 @@ export interface NythraxisEncounterState {
   deathlessCastRemaining: number;
   deathlessStunRemaining: number;
   heroicSummonChannelRemaining?: number;
+  // Heroic only: the boss raises his court (Aldren/Malric/Voss) ASAP once engaged,
+  // not just off a wardstone-driven Deathless stun, so the adds reliably appear
+  // (and are testable without a full raid). This one-shot latch gates that.
+  heroicSummonStarted?: boolean;
   dreadCurseTimer?: number;
   dreadCurseTargetId?: number | null;
   dreadCurseStacks?: number;
