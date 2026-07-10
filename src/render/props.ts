@@ -107,6 +107,8 @@ const PROP_ASSET_DEFS: Record<string, PropAssetDef> = {
   // No yaw here: the geometry is CACHED and shared by every delve marker, so a
   // per-delve flip is applied to the placed group in buildProps, never baked.
   delveEntrance2: { url: '/models/dungeon/delve_entrance_2.glb', kit: 'dungeon' },
+  // Tripo-generated weathered stone idol, standalone decorative statue.
+  ruinStatue: { url: '/models/props/ruin_statue.glb', kit: 'nature' },
 };
 
 type PropKey = keyof typeof PROP_ASSET_DEFS;
@@ -1081,6 +1083,19 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
     });
     g.position.set(r.x - 2, fy, r.z - 3);
     group.add(shadowed(g));
+  }
+
+  // ---- ruin statue: solitary Tripo-generated stone idol, no collision ------
+  for (const st of getActiveWorldContent().props.statues ?? []) {
+    const g = new THREE.Group();
+    const asset = propAsset('ruinStatue');
+    const targetHeight = 3.2;
+    const s = targetHeight / asset.size.y;
+    addParts(g, 'ruinStatue', { scale: s, euler: new THREE.Euler(0, st.rot ?? 0, 0) });
+    const y = ground(st.x, st.z);
+    g.position.set(st.x, y, st.z);
+    group.add(shadowed(g));
+    registerHideable(g, circleFootprint(st.x, st.z, 1.4, y + targetHeight));
   }
 
   // ---- mine entrances: timber portal, rock mound, ore cart, lantern --------
