@@ -75,3 +75,41 @@ describe('/dev god cheat', () => {
     expect(before - boss.hp).toBe(100); // no amp: plain 100
   });
 });
+
+describe('/dev attune + /dev raid cheats', () => {
+  it('/dev attune marks every quest done, opening the raid attunement gate', () => {
+    const { sim, pid } = godSim();
+    sim.chat('/dev attune', pid);
+    const meta = sim.players.get(pid)!;
+    expect(meta.questsDone.has('q_nythraxis_bound_guardian')).toBe(true);
+  });
+
+  it('/dev raid heroic zones a lone player into the heroic Nythraxis arena', () => {
+    const { sim, pid } = godSim();
+    sim.chat('/dev raid heroic', pid);
+    const inst = (
+      sim as unknown as {
+        instances: { dungeonId: string; difficulty: string; partyKey: string | null }[];
+      }
+    ).instances.find((i) => i.dungeonId === 'nythraxis_boss_arena' && i.partyKey !== null);
+    expect(inst).toBeTruthy();
+    expect(inst!.difficulty).toBe('heroic');
+  });
+
+  it('/dev raid reset clears raid lockouts', () => {
+    const { sim, pid } = godSim();
+    const meta = sim.players.get(pid)!;
+    meta.raidLockouts.set('nythraxis_boss_arena:heroic', 999999);
+    sim.chat('/dev raid reset', pid);
+    expect(meta.raidLockouts.size).toBe(0);
+  });
+
+  it('is gated: without dev commands, /dev raid does not zone in', () => {
+    const { sim, pid } = godSim(false);
+    sim.chat('/dev raid heroic', pid);
+    const claimed = (
+      sim as unknown as { instances: { dungeonId: string; partyKey: string | null }[] }
+    ).instances.some((i) => i.dungeonId === 'nythraxis_boss_arena' && i.partyKey !== null);
+    expect(claimed).toBe(false);
+  });
+});

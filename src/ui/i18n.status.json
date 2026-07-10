@@ -38,7 +38,7 @@
     "translated": 142544,
     "pending": 0,
     "blocked": 193,
-    "blockedSource": 97
+    "blockedSource": 100
   },
   "keys": {
     "main:a11y.characterActions": {
@@ -764054,7 +764054,17 @@
     {
       "channel": "sim",
       "reason": "v0.7 in-game slash-command / diagnostic surface; ships English as a documented backstop pending a dedicated localization pass (follow-up).",
+      "text": "[dev] Attuned: marked 5 quests complete."
+    },
+    {
+      "channel": "sim",
+      "reason": "v0.7 in-game slash-command / diagnostic surface; ships English as a documented backstop pending a dedicated localization pass (follow-up).",
       "text": "[dev] Could not spawn the test vendor."
+    },
+    {
+      "channel": "sim",
+      "reason": "v0.7 in-game slash-command / diagnostic surface; ships English as a documented backstop pending a dedicated localization pass (follow-up).",
+      "text": "[dev] Entering Nythraxis raid (Aki)."
     },
     {
       "channel": "sim",
@@ -764070,6 +764080,11 @@
       "channel": "sim",
       "reason": "v0.7 in-game slash-command / diagnostic surface; ships English as a documented backstop pending a dedicated localization pass (follow-up).",
       "text": "[dev] Level set to 5."
+    },
+    {
+      "channel": "sim",
+      "reason": "v0.7 in-game slash-command / diagnostic surface; ships English as a documented backstop pending a dedicated localization pass (follow-up).",
+      "text": "[dev] Raid lockouts cleared."
     },
     {
       "channel": "sim",
