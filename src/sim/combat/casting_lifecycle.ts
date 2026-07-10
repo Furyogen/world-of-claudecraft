@@ -49,6 +49,7 @@ import {
   MELEE_RANGE,
   normAngle,
 } from '../types';
+import { drawWeapon } from '../weapon_stow';
 import { isLockedOut, isSilenced, isStunned, tonguesMult } from './cc';
 import {
   consumeNextAttackCrit,
@@ -450,6 +451,7 @@ export function castAbility(
   }
 
   if (p.sitting) ctx.standUp(p);
+  if (p.weaponStowed) drawWeapon(p);
   if (ability.id !== 'ghost_wolf' && p.auras.some((a) => a.id === 'ghost_wolf')) {
     ctx.breakGhostWolf(p);
   }

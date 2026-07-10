@@ -423,6 +423,7 @@ import {
   virtualLevel,
   xpToReachLevel,
 } from './types';
+import * as weaponStowMod from './weapon_stow';
 import {
   groundHeight,
   nearSteepWalls,
@@ -1095,6 +1096,9 @@ export interface CharacterState {
   // none). Persisted so the penalty cannot be shed by logging out and back in.
   resSickness?: number | null;
   jail?: JailState;
+  // Z-key sheathed-weapon toggle (JSONB; written only while sheathed, so pre-feature
+  // saves and unsheathed characters stay byte-equal and load with the weapon drawn).
+  weaponStowed?: boolean;
   skin?: number; // appearance index (JSONB; optional so pre-skin saves load as 0)
   skinCatalog?: SkinCatalog;
   // Pending skin-select event rank (JSONB; optional so older saves load as null).
@@ -1898,6 +1902,8 @@ export class Sim {
       if (s.heroicDaily) {
         meta.heroicDaily = { date: s.heroicDaily.date, marked: new Set(s.heroicDaily.marked) };
       }
+      // Resume with the weapon sheathed exactly as saved (absent = drawn).
+      if (s.weaponStowed) player.weaponStowed = true;
     }
 
     // Host-stamped bank bonus slots (see the opt doc above). Applied on BOTH the
@@ -2156,6 +2162,8 @@ export class Sim {
       arena2v2Rating: meta.arena2v2Rating,
       arena2v2Wins: meta.arena2v2Wins,
       arena2v2Losses: meta.arena2v2Losses,
+      // Absent until sheathed (back-compat + parity-stable saves).
+      ...(e.weaponStowed ? { weaponStowed: true } : {}),
       // Absent until the first cup result (back-compat + parity-stable saves).
       ...(meta.vcupWins || meta.vcupLosses || meta.vcupDraws
         ? { vcupWins: meta.vcupWins, vcupLosses: meta.vcupLosses, vcupDraws: meta.vcupDraws }
@@ -2227,6 +2235,15 @@ export class Sim {
 
   changeSkin(skin: number, catalog: SkinCatalog = 'class'): void {
     this.setPlayerSkin(this.primaryId, skin, catalog);
+  }
+
+  /** Z-key sheathe toggle (IWorld.toggleWeaponStow; server `stow_weapon` command).
+   *  Cosmetic only: flips Entity.weaponStowed, which rides the entity wire and the
+   *  renderer maps to the on-back weapon pose. Refused while dead (like /sit). */
+  toggleWeaponStow(pid?: number): void {
+    const r = this.resolve(pid);
+    if (!r) return;
+    weaponStowMod.toggleWeaponStow(r.e);
   }
 
   /** Set a player's guild name (online only) so it rides the entity wire and
