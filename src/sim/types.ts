@@ -1638,6 +1638,8 @@ export interface ZonePropsDef {
   // delveId resolves to the delve's localized name at render time (the carved
   // entrance sign), so the marker carries no hardcoded English label.
   delveMarkers?: { x: number; z: number; delveId: string }[];
+  // standalone decorative statue anchor (Tripo-generated GLB), no collision
+  statues?: { x: number; z: number; rot?: number }[];
 }
 
 export function emptyZoneProps(): ZonePropsDef {

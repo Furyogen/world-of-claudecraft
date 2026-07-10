@@ -1987,6 +1987,13 @@ describe('spell visuals', () => {
     );
   });
 
+  it('a decorative statue merges from zone content into PROPS.statues and does not block movement', () => {
+    expect(PROPS.statues?.length).toBeGreaterThan(0);
+    const st = PROPS.statues![0];
+    const seed = 12345;
+    expect(isBlocked(seed, st.x, st.z, 0.5)).toBe(false);
+  });
+
   it('ranged auto shot does not fire through dungeon walls', () => {
     const sim = makeSim('hunter');
     const origin = instanceOrigin(2, 0);
