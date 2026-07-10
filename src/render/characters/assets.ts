@@ -13,6 +13,7 @@ import { clone as cloneSkinned } from 'three/addons/utils/SkeletonUtils.js';
 import { loadGltf, loadTexture } from '../assets/loader';
 import { registerPreload } from '../assets/preload';
 import { addRimGlow, GFX } from '../gfx';
+import { backGripFor } from './back_grips';
 import {
   type AttachDef,
   characterPreloadUrls,
@@ -223,6 +224,13 @@ function flattenWeaponScene(src: THREE.Object3D): THREE.Object3D {
 // touching fixed offhands (rogue's second dagger, the warlock spellbook).
 const SWAP_WEAPON_TAG = 'swapWeaponHolder';
 
+// Marks EVERY attached prop holder (swap slots AND fixed offhands), so the
+// sheathe toggle can strip and re-attach the full held set at once.
+const HELD_PROP_TAG = 'heldPropHolder';
+
+// Sheathed props re-parent onto the chest bone (shared KayKit Rig_Medium).
+const STOW_BONE = 'chest';
+
 // Grip for a variant-pack weapon. Its origin is authored AT the grip, so we attach
 // at the origin (no recenter) and only clamp an oversized model so its blade does
 // not drag. `lift` nudges along the hand bone; the side picks the 180-degree flip.
@@ -246,12 +254,14 @@ function attachProp(
   bone: THREE.Object3D,
   att: AttachDef,
   markSwap = false,
+  stowed = false,
 ): void {
   const payload = flattenWeaponScene(cloneSkinned(resolvedGltf(att.url).scene));
   payload.traverse((o) => {
     if ((o as THREE.Mesh).isMesh) o.userData.weaponMesh = true;
   });
   if (markSwap) payload.userData[SWAP_WEAPON_TAG] = true;
+  payload.userData[HELD_PROP_TAG] = true;
   const variantGrip = isHandslotBone(att.bone) ? variantGripFor(att.url) : null;
   if (variantGrip) {
     applyVariantGrip(payload, att.bone, variantGrip);
@@ -263,6 +273,14 @@ function attachProp(
     if (ref) copyAccessoryTransform(payload, ref);
   } else if (isHandslotBone(att.bone)) {
     applyHandGrip(payload, root, att.bone, att.url);
+  }
+  // Sheathed: override where the prop SITS (on-back position/lean, chest-bone
+  // space; the caller resolved the chest bone) but keep the SCALE the normal
+  // grip pass just computed, so variant-pack size clamps carry over.
+  if (stowed && isHandslotBone(att.bone)) {
+    const grip = backGripFor(kaykitAccessoryFor(att.url), handSide(att.bone));
+    payload.position.set(...grip.position);
+    payload.quaternion.set(...grip.quaternion);
   }
   bone.add(payload);
 }
@@ -504,19 +522,7 @@ export function assembleModel(def: VisualDef, weaponItemId?: string | null): THR
   }
   // Weapons and held props are gameplay-readable silhouettes, not decoration.
   // Low tier still downgrades body/material cost, but keeps attachments visible.
-  const attachments = visibleAttachmentsForGraphics(def);
-  for (let i = 0; i < attachments.length; i++) {
-    const isSwap = def.weaponSlots?.includes(i) ?? false;
-    // Swappable slots take the equipped item's model (when given); every other
-    // attachment is fixed (the warlock's spellbook offhand). The rogue lists both
-    // hand slots so a dagger shows in both.
-    const att = isSwap ? swapAttachDef(attachments[i], weaponItemId) : attachments[i];
-    // GLTFLoader sanitizes node names (PropertyBinding strips [].:/ chars),
-    // so the authored "handslot.r" arrives as "handslotr" — try both
-    const bone = resolveBone(root, att.bone);
-    if (!bone) continue; // manifest/bone mismatch — ship without the prop
-    attachProp(root, bone, att, isSwap);
-  }
+  attachAllProps(root, def, weaponItemId ?? null, false);
   // Re-orient mis-baked built-in weapon nodes (e.g. the golem axe) in place.
   for (const fix of def.weaponFix ?? []) {
     const node =
@@ -529,16 +535,49 @@ export function assembleModel(def: VisualDef, weaponItemId?: string | null): THR
   return root;
 }
 
+// The target bone for one attachment: its authored bone normally, the chest bone
+// while a handslot prop is sheathed. GLTFLoader sanitizes node names
+// (PropertyBinding strips [].:/ chars), so "handslot.r" arrives as "handslotr" —
+// resolveBone tries both.
+function attachTargetBone(
+  root: THREE.Object3D,
+  att: AttachDef,
+  stowed: boolean,
+): THREE.Object3D | null {
+  return resolveBone(root, stowed && isHandslotBone(att.bone) ? STOW_BONE : att.bone);
+}
+
+// Attach every authored prop: swappable slots take the equipped item's model (when
+// given); every other attachment is fixed (the warlock's spellbook offhand). The
+// rogue lists both hand slots so a dagger shows in both. A manifest/bone mismatch
+// ships without that prop.
+function attachAllProps(
+  root: THREE.Object3D,
+  def: VisualDef,
+  weaponItemId: string | null,
+  stowed: boolean,
+): void {
+  const attachments = visibleAttachmentsForGraphics(def);
+  for (let i = 0; i < attachments.length; i++) {
+    const isSwap = def.weaponSlots?.includes(i) ?? false;
+    const att = isSwap ? swapAttachDef(attachments[i], weaponItemId) : attachments[i];
+    const bone = attachTargetBone(root, att, stowed);
+    if (!bone) continue;
+    attachProp(root, bone, att, isSwap, stowed);
+  }
+}
+
 /** Replace the equipped-weapon attachment(s) on an already-assembled model in place,
  *  for a runtime gear swap. No-op for visuals without `weaponSlots` (hunter keeps its
  *  crossbow; mobs/NPCs are fixed). Re-attaches every swap slot (the rogue has two, so
- *  both hands update). The caller must re-apply materials and re-snapshot the
- *  original-material map afterwards (see CharacterVisual.setWeapon), since the new
- *  weapon meshes start on the source GLB's raw materials. */
+ *  both hands update), honoring an active sheathe. The caller must re-apply materials
+ *  and re-snapshot the original-material map afterwards (see CharacterVisual.setWeapon),
+ *  since the new weapon meshes start on the source GLB's raw materials. */
 export function setHeldWeapon(
   root: THREE.Object3D,
   def: VisualDef,
   weaponItemId: string | null,
+  stowed = false,
 ): void {
   if (!def.weaponSlots?.length) return;
   const stale: THREE.Object3D[] = [];
@@ -550,10 +589,29 @@ export function setHeldWeapon(
     const base = def.attach?.[i];
     if (!base) continue;
     const att = swapAttachDef(base, weaponItemId);
-    const bone = resolveBone(root, att.bone);
+    const bone = attachTargetBone(root, att, stowed);
     if (!bone) continue;
-    attachProp(root, bone, att, true);
+    attachProp(root, bone, att, true, stowed);
   }
+}
+
+/** Move every held prop (swap slots AND fixed offhands: the rogue's second dagger,
+ *  the hunter crossbow, the warlock spellbook) between the hands and the on-back
+ *  sheathed pose, in place. Same caller contract as setHeldWeapon: re-apply
+ *  materials and re-snapshot originals afterwards (CharacterVisual.setWeaponStowed). */
+export function setWeaponsStowed(
+  root: THREE.Object3D,
+  def: VisualDef,
+  weaponItemId: string | null,
+  stowed: boolean,
+): void {
+  if (!def.attach?.length) return;
+  const stale: THREE.Object3D[] = [];
+  root.traverse((o) => {
+    if (o.userData[HELD_PROP_TAG]) stale.push(o);
+  });
+  for (const o of stale) o.removeFromParent();
+  attachAllProps(root, def, weaponItemId, stowed);
 }
 
 // ---------------------------------------------------------------------------

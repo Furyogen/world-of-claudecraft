@@ -19,6 +19,7 @@ import {
   ensureSkinTexture,
   prepareVisual,
   setHeldWeapon,
+  setWeaponsStowed,
   skinEmissiveTexture,
   skinTexture,
   tintedFarMaterials,
@@ -79,6 +80,7 @@ export class CharacterVisual {
   private entityColor: number;
   private skinIndex: number;
   private weaponItemId: string | null;
+  private weaponStowed = false;
   private disposed = false;
   private ghosted = false;
   private mixer: THREE.AnimationMixer;
@@ -464,7 +466,7 @@ export class CharacterVisual {
     if (weaponItemId === this.weaponItemId) return;
     this.weaponItemId = weaponItemId;
     if (!this.def.weaponSlots?.length) return;
-    setHeldWeapon(this.model, this.def, weaponItemId);
+    setHeldWeapon(this.model, this.def, weaponItemId, this.weaponStowed);
     applyMaterials(
       this.model,
       this.def,
@@ -474,6 +476,26 @@ export class CharacterVisual {
     );
     // the model graph changed (weapon meshes added/removed): rebuild the caster
     // list and re-snapshot originals, then re-apply ghost/stealth overlays.
+    this.originalMaterials.clear();
+    this.rebuildCasters();
+    this.applyVisualMaterials();
+  }
+
+  /** Move every held prop between the hands and the sheathed on-back pose (the
+   *  Z-key stow toggle). Same shape as setWeapon: re-attach, re-run the material
+   *  pass, re-snapshot originals, re-apply overlays; mixer state is untouched. */
+  setWeaponStowed(stowed: boolean): void {
+    if (stowed === this.weaponStowed) return;
+    this.weaponStowed = stowed;
+    if (!this.def.attach?.length) return;
+    setWeaponsStowed(this.model, this.def, this.weaponItemId, stowed);
+    applyMaterials(
+      this.model,
+      this.def,
+      this.entityColor,
+      skinTexture(this.key, this.skinIndex),
+      skinEmissiveTexture(this.key, this.skinIndex),
+    );
     this.originalMaterials.clear();
     this.rebuildCasters();
     this.applyVisualMaterials();
