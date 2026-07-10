@@ -6568,4 +6568,21 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'yumi.queue.leave': 'Bạn rời hàng chờ Bảo Vệ Yumi.',
   'yumi.queue.teamLeave': 'Đội của bạn rời hàng chờ Bảo Vệ Yumi.',
   'yumi.respawn.title': 'GỤC NGÃ!',
+  'hudChrome.auth.forgotPrompt': 'Quên mật khẩu?',
+  'hudChrome.auth.forgotTitle': 'Đặt lại mật khẩu',
+  'hudChrome.auth.forgotHint':
+    'Nhập tên người dùng của bạn và chúng tôi sẽ gửi liên kết đặt lại tới địa chỉ email đã đăng ký.',
+  'hudChrome.auth.forgotUsername': 'Tên người dùng',
+  'hudChrome.auth.forgotSubmit': 'Gửi liên kết đặt lại',
+  'hudChrome.auth.forgotSent':
+    'Nếu tài khoản với tên người dùng đó có địa chỉ email đã đăng ký, chúng tôi đã gửi liên kết đặt lại. Hãy kiểm tra hộp thư của bạn.',
+  'hudChrome.auth.forgotBack': 'Quay lại đăng nhập',
+  'hudChrome.auth.resetTitle': 'Chọn mật khẩu mới',
+  'hudChrome.auth.resetNewPassword': 'Mật khẩu mới',
+  'hudChrome.auth.resetConfirm': 'Xác nhận mật khẩu mới',
+  'hudChrome.auth.resetSubmit': 'Cập nhật mật khẩu',
+  'hudChrome.auth.resetDone': 'Mật khẩu của bạn đã được cập nhật. Bây giờ bạn có thể đăng nhập.',
+  'hudChrome.auth.resetMismatch': 'Mật khẩu không khớp.',
+  'hudChrome.auth.resetErrInvalid':
+    'Liên kết đặt lại này không hợp lệ hoặc đã hết hạn. Hãy yêu cầu liên kết mới.',
 };

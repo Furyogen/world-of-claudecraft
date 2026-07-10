@@ -6528,4 +6528,21 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'yumi.queue.leave': 'Du forlader Beskyt Yumi-køen.',
   'yumi.queue.teamLeave': 'Dit hold forlader Beskyt Yumi-køen.',
   'yumi.respawn.title': 'SLÅET NED!',
+  'hudChrome.auth.forgotPrompt': 'Glemt adgangskode?',
+  'hudChrome.auth.forgotTitle': 'Nulstil din adgangskode',
+  'hudChrome.auth.forgotHint':
+    'Indtast dit brugernavn, så sender vi et nulstillingslink til den registrerede e-mailadresse.',
+  'hudChrome.auth.forgotUsername': 'Brugernavn',
+  'hudChrome.auth.forgotSubmit': 'Send nulstillingslink',
+  'hudChrome.auth.forgotSent':
+    'Hvis en konto med det brugernavn har en registreret e-mailadresse, har vi sendt et nulstillingslink. Tjek din indbakke.',
+  'hudChrome.auth.forgotBack': 'Tilbage til log ind',
+  'hudChrome.auth.resetTitle': 'Vælg en ny adgangskode',
+  'hudChrome.auth.resetNewPassword': 'Ny adgangskode',
+  'hudChrome.auth.resetConfirm': 'Bekræft ny adgangskode',
+  'hudChrome.auth.resetSubmit': 'Opdater adgangskode',
+  'hudChrome.auth.resetDone': 'Din adgangskode er opdateret. Du kan nu logge ind.',
+  'hudChrome.auth.resetMismatch': 'Adgangskoderne stemmer ikke overens.',
+  'hudChrome.auth.resetErrInvalid':
+    'Dette nulstillingslink er ugyldigt eller udløbet. Anmod om et nyt.',
 };

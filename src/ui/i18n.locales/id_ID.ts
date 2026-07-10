@@ -6629,4 +6629,21 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'yumi.queue.leave': 'Kau keluar dari antrean Lindungi Yumi.',
   'yumi.queue.teamLeave': 'Timmu keluar dari antrean Lindungi Yumi.',
   'yumi.respawn.title': 'TUMBANG!',
+  'hudChrome.auth.forgotPrompt': 'Lupa kata sandi?',
+  'hudChrome.auth.forgotTitle': 'Atur ulang kata sandimu',
+  'hudChrome.auth.forgotHint':
+    'Masukkan nama penggunamu dan kami akan mengirim tautan pengaturan ulang ke alamat email yang terdaftar.',
+  'hudChrome.auth.forgotUsername': 'Nama pengguna',
+  'hudChrome.auth.forgotSubmit': 'Kirim tautan pengaturan ulang',
+  'hudChrome.auth.forgotSent':
+    'Jika akun dengan nama pengguna itu memiliki email terdaftar, kami telah mengirim tautan pengaturan ulang. Periksa kotak masukmu.',
+  'hudChrome.auth.forgotBack': 'Kembali ke masuk',
+  'hudChrome.auth.resetTitle': 'Pilih kata sandi baru',
+  'hudChrome.auth.resetNewPassword': 'Kata sandi baru',
+  'hudChrome.auth.resetConfirm': 'Konfirmasi kata sandi baru',
+  'hudChrome.auth.resetSubmit': 'Perbarui kata sandi',
+  'hudChrome.auth.resetDone': 'Kata sandimu telah diperbarui. Sekarang kamu bisa masuk.',
+  'hudChrome.auth.resetMismatch': 'Kata sandi tidak cocok.',
+  'hudChrome.auth.resetErrInvalid':
+    'Tautan pengaturan ulang ini tidak valid atau sudah kedaluwarsa. Minta yang baru.',
 };

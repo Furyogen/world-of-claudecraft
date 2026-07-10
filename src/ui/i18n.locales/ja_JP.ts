@@ -32,6 +32,24 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mailbox.toLabel': '宛先',
   'itemUi.kind.bag': 'バッグ',
   'itemUi.tooltip.bagSlots': '{slots}スロットのバッグ',
+  'hudChrome.auth.forgotPrompt': 'パスワードをお忘れですか？',
+  'hudChrome.auth.forgotTitle': 'パスワードをリセット',
+  'hudChrome.auth.forgotHint':
+    'ユーザー名を入力してください。登録されているメールアドレスにリセットリンクをお送りします。',
+  'hudChrome.auth.forgotUsername': 'ユーザー名',
+  'hudChrome.auth.forgotSubmit': 'リセットリンクを送信',
+  'hudChrome.auth.forgotSent':
+    'そのユーザー名のアカウントにメールアドレスが登録されている場合、リセットリンクを送信しました。受信トレイをご確認ください。',
+  'hudChrome.auth.forgotBack': 'ログインに戻る',
+  'hudChrome.auth.resetTitle': '新しいパスワードを設定',
+  'hudChrome.auth.resetNewPassword': '新しいパスワード',
+  'hudChrome.auth.resetConfirm': '新しいパスワード（確認）',
+  'hudChrome.auth.resetSubmit': 'パスワードを更新',
+  'hudChrome.auth.resetDone': 'パスワードを更新しました。ログインできます。',
+  'hudChrome.auth.resetMismatch': 'パスワードが一致しません。',
+  'hudChrome.auth.resetErrInvalid':
+    'このリセットリンクは無効か、有効期限が切れています。新しいリンクをリクエストしてください。',
+  // Guild roster last-seen (M16 non-Latin fill)
   'hudChrome.social.lastSeen': '最終ログイン: {when}',
   'hudChrome.social.lastSeenNever': 'なし',
   'hudChrome.dailyRewards.title': 'デイリー報酬',
@@ -5255,6 +5273,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.wyrmshadow.bonus3': '敏捷性が15、クリティカル率が2%上昇します。',
   'entities.itemSets.wyrmshadow.bonus4':
     '武器のクリティカルヒット時に50%の確率で「ファングラッシュ」が発動し、攻撃速度が8秒間25%上昇します。',
+  'hudChrome.itemSoulbound': '魂縛',
   'hudChrome.itemSet.header': '{name} ({have}/{total})',
   'hudChrome.itemProc.onMeleeHit': '命中時に確率（{chance}%）：{effect}',
   'hudChrome.itemProc.onSpellDamage': 'ダメージ呪文で確率（{chance}%）：{effect}',

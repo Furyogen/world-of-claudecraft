@@ -6545,4 +6545,21 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'yumi.queue.leave': "Yumi'yi Koru kuyruğundan ayrılıyorsun.",
   'yumi.queue.teamLeave': "Takımın Yumi'yi Koru kuyruğundan ayrılıyor.",
   'yumi.respawn.title': 'DÜŞTÜN!',
+  'hudChrome.auth.forgotPrompt': 'Şifreni mi unuttun?',
+  'hudChrome.auth.forgotTitle': 'Şifreni sıfırla',
+  'hudChrome.auth.forgotHint':
+    'Kullanıcı adını gir, kayıtlı e-posta adresine bir sıfırlama bağlantısı gönderelim.',
+  'hudChrome.auth.forgotUsername': 'Kullanıcı adı',
+  'hudChrome.auth.forgotSubmit': 'Sıfırlama bağlantısı gönder',
+  'hudChrome.auth.forgotSent':
+    'Bu kullanıcı adına sahip hesabın kayıtlı bir e-posta adresi varsa bir sıfırlama bağlantısı gönderdik. Gelen kutunu kontrol et.',
+  'hudChrome.auth.forgotBack': 'Girişe geri dön',
+  'hudChrome.auth.resetTitle': 'Yeni bir şifre seç',
+  'hudChrome.auth.resetNewPassword': 'Yeni şifre',
+  'hudChrome.auth.resetConfirm': 'Yeni şifreyi onayla',
+  'hudChrome.auth.resetSubmit': 'Şifreyi güncelle',
+  'hudChrome.auth.resetDone': 'Şifren güncellendi. Artık giriş yapabilirsin.',
+  'hudChrome.auth.resetMismatch': 'Şifreler eşleşmiyor.',
+  'hudChrome.auth.resetErrInvalid':
+    'Bu sıfırlama bağlantısı geçersiz veya süresi dolmuş. Yeni bir tane iste.',
 };

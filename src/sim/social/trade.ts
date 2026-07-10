@@ -101,7 +101,7 @@ export function tradeSetOffer(
     if (!slot || typeof slot.itemId !== 'string' || !Number.isFinite(slot.count)) continue;
     const count = Math.max(1, Math.floor(slot.count));
     const def = ITEMS[slot.itemId];
-    if (!def || def.kind === 'quest') continue; // quest items are soulbound-ish
+    if (!def || def.kind === 'quest' || def.soulbound) continue; // quest + soulbound items never trade
     merged.set(slot.itemId, (merged.get(slot.itemId) ?? 0) + count);
   }
   const cleaned: InvSlot[] = [];

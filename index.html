@@ -750,6 +750,97 @@
             <span id="auth-switch-prompt" data-i18n="auth.noAccountPrompt">New to the world?</span>
             <button type="button" class="auth-link" id="btn-auth-toggle" data-i18n="auth.createAccount">Create Account</button>
           </p>
+          <p class="auth-switch">
+            <button type="button" class="auth-link" id="btn-forgot-open" data-i18n="hudChrome.auth.forgotPrompt">Forgot password?</button>
+          </p>
+        </form>
+
+        <!-- Password reset step 1: request a reset link. Always shows the same
+             "if an account exists we've sent a link" message on submit so it can
+             never be used to check whether a username exists (main.ts). -->
+        <form id="forgot-panel" class="panel auth-panel auth-panel-premium" hidden novalidate>
+          <h2 class="auth-title" data-i18n="hudChrome.auth.forgotTitle">Reset your password</h2>
+          <p class="account-hint" data-i18n="hudChrome.auth.forgotHint">Enter your username and we will email a reset link to the address on file.</p>
+
+          <div class="auth-field">
+            <label for="forgot-user" class="auth-label" data-i18n="hudChrome.auth.forgotUsername">Username</label>
+            <input
+              id="forgot-user"
+              name="username"
+              type="text"
+              maxlength="24"
+              data-i18n-placeholder="auth.usernamePlaceholder"
+              placeholder="Enter username"
+              autocomplete="username"
+              required
+            />
+          </div>
+
+          <div id="forgot-status" class="auth-error" aria-live="polite"></div>
+
+          <div class="auth-actions auth-actions-row">
+            <button type="button" class="btn btn-back" id="btn-forgot-back" data-i18n="hudChrome.auth.forgotBack">Back to log in</button>
+            <button type="submit" class="btn btn-primary" id="btn-forgot-submit" data-i18n="hudChrome.auth.forgotSubmit">Send reset link</button>
+          </div>
+        </form>
+
+        <!-- Password reset step 2: set a new password. Shown at load when the URL
+             carries a valid ?reset=<64-hex-token> (main.ts RESET_TOKEN). -->
+        <form id="reset-panel" class="panel auth-panel auth-panel-premium" hidden novalidate>
+          <h2 class="auth-title" data-i18n="hudChrome.auth.resetTitle">Choose a new password</h2>
+
+          <div class="auth-field">
+            <label for="reset-pass" class="auth-label" data-i18n="hudChrome.auth.resetNewPassword">New password</label>
+            <div class="password-wrapper">
+              <input
+                id="reset-pass"
+                name="new-password"
+                type="password"
+                maxlength="128"
+                data-i18n-placeholder="auth.passwordPlaceholder"
+                placeholder="Enter password"
+                autocomplete="new-password"
+                required
+              />
+              <button type="button" class="password-toggle" id="btn-toggle-reset-password" data-i18n-aria="auth.showPassword" aria-label="Show password" aria-pressed="false">
+                <svg class="eye-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <line class="eye-slash" x1="2" y1="2" x2="22" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="auth-field">
+            <label for="reset-pass2" class="auth-label" data-i18n="hudChrome.auth.resetConfirm">Confirm new password</label>
+            <div class="password-wrapper">
+              <input
+                id="reset-pass2"
+                name="confirm-password"
+                type="password"
+                maxlength="128"
+                data-i18n-placeholder="auth.passwordPlaceholder"
+                placeholder="Enter password"
+                autocomplete="new-password"
+                required
+              />
+              <button type="button" class="password-toggle" id="btn-toggle-reset-password2" data-i18n-aria="auth.showPassword" aria-label="Show password" aria-pressed="false">
+                <svg class="eye-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <line class="eye-slash" x1="2" y1="2" x2="22" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div id="reset-status" class="auth-error" aria-live="polite"></div>
+
+          <div class="auth-actions auth-actions-row">
+            <button type="button" class="btn btn-back" id="btn-reset-back" data-i18n="hudChrome.auth.forgotBack">Back to log in</button>
+            <button type="submit" class="btn btn-primary" id="btn-reset-submit" data-i18n="hudChrome.auth.resetSubmit">Update password</button>
+          </div>
         </form>
 
         <!-- First-time Discord login chooser: create a new account, or link an

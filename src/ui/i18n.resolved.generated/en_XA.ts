@@ -722,6 +722,8 @@ export const en_XA: EnTranslations = {
     "tips": {
       "joinChannels": "[Ţíþ: ţýþé /ĵóíñ ŵóŕļð óŕ /ĵóíñ ļƒĝ ţó çĥáţ ŵíţĥ þļáýéŕš áçŕóšš ţĥé ŵóŕļð.]"
     },
+    "itemHeroicTag": "[[ĤÉŔÓÍÇ]]",
+    "itemSoulbound": "[Šóúļƀóúñð]",
     "itemSet": {
       "header": "[{name} ({have}/{total})]",
       "bonusLine": "[({pieces}) {bonus}]"
@@ -1066,6 +1068,22 @@ export const en_XA: EnTranslations = {
     },
     "worldBoss": {
       "spawn": "[{name} ŕíšéš óʋéŕ Ţĥóŕñþéáķ Ĥéíĝĥţš!]"
+    },
+    "auth": {
+      "forgotPrompt": "[Ƒóŕĝóţ þáššŵóŕð?]",
+      "forgotTitle": "[Ŕéšéţ ýóúŕ þáššŵóŕð]",
+      "forgotHint": "[Éñţéŕ ýóúŕ úšéŕñáɱé áñð ŵé ŵíļļ éɱáíļ á ŕéšéţ ļíñķ ţó ţĥé áððŕéšš óñ ƒíļé.]",
+      "forgotUsername": "[Úšéŕñáɱé]",
+      "forgotSubmit": "[Šéñð ŕéšéţ ļíñķ]",
+      "forgotSent": "[Íƒ áñ áççóúñţ ŵíţĥ ţĥáţ úšéŕñáɱé ĥáš áñ éɱáíļ óñ ƒíļé, ŵé ĥáʋé šéñţ á ŕéšéţ ļíñķ. Çĥéçķ ýóúŕ íñƀóẋ.]",
+      "forgotBack": "[Ɓáçķ ţó ļóĝ íñ]",
+      "resetTitle": "[Çĥóóšé á ñéŵ þáššŵóŕð]",
+      "resetNewPassword": "[Ñéŵ þáššŵóŕð]",
+      "resetConfirm": "[Çóñƒíŕɱ ñéŵ þáššŵóŕð]",
+      "resetSubmit": "[Úþðáţé þáššŵóŕð]",
+      "resetDone": "[Ýóúŕ þáššŵóŕð ĥáš ƀééñ úþðáţéð. Ýóú çáñ ñóŵ ļóĝ íñ.]",
+      "resetMismatch": "[Ţĥé þáššŵóŕðš ðó ñóţ ɱáţçĥ.]",
+      "resetErrInvalid": "[Ţĥíš ŕéšéţ ļíñķ íš íñʋáļíð óŕ ĥáš éẋþíŕéð. Ŕéɋúéšţ á ñéŵ óñé.]"
     },
     "loot": {
       "chestTitle": "[Çĥéšţ]"
