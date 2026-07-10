@@ -80,6 +80,15 @@ function rotY(lx: number, lz: number, rot: number): { x: number; z: number } {
   return { x: lx * c + lz * s, z: -lx * s + lz * c };
 }
 
+// The moored rowboat props.ts draws beside each fishing-dock (dock-local, a
+// ~2.4u hull) had no collider, so the player walked straight through it. A
+// circle rather than an OBB, because props.ts jitters the boat heading per dock:
+// a heading-invariant shape covers the hull whichever way it is moored. The
+// radius conservatively spans the hull length.
+const BOAT_LOCAL_X = 2.4;
+const BOAT_LOCAL_Z = -5.0;
+const BOAT_RADIUS = 1.1;
+
 // ---------------------------------------------------------------------------
 // Collider sets
 // ---------------------------------------------------------------------------
@@ -132,7 +141,7 @@ function staticWorldColliders(seed: number): Collider[] {
     out.push({ type: 'circle', x, z, r: 5, cameraTopY: topY(seed, x, z, 5.2), camGhost: true });
   }
 
-  // dock huts
+  // dock huts + the moored rowboat beside each dock
   for (const d of PROPS.docks) {
     const hut = rotY(d.hutLocal.x, d.hutLocal.z, d.rot);
     const x = d.x + hut.x,
@@ -145,6 +154,20 @@ function staticWorldColliders(seed: number): Collider[] {
       hd: d.hutLocal.hd,
       rot: d.rot,
       cameraTopY: topY(seed, x, z, 2.9),
+      camGhost: true,
+    });
+    // The rowboat (props.ts draws it at BOAT_LOCAL_X/Z beside the deck) was
+    // walk-through; give it its own circle at the world position the renderer
+    // places it. Both docks share this geometry, so this covers zone1 and zone2.
+    const boat = rotY(BOAT_LOCAL_X, BOAT_LOCAL_Z, d.rot);
+    const bx = d.x + boat.x,
+      bz = d.z + boat.z;
+    out.push({
+      type: 'circle',
+      x: bx,
+      z: bz,
+      r: BOAT_RADIUS,
+      cameraTopY: topY(seed, bx, bz, 1.0),
       camGhost: true,
     });
   }
