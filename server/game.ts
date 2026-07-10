@@ -3979,7 +3979,8 @@ export class GameServer {
       if (e.kind === 'npc') flags |= FLAG_NPC;
       else if (e.kind === 'player' && isStealthed(e)) {
         flags |= FLAG_STEALTHED_PLAYER;
-        (stealthed ??= []).push(e);
+        if (stealthed === null) stealthed = [];
+        stealthed.push(e);
       }
       if (e.templateId === VALE_CUP_BALL_TEMPLATE_ID) flags |= FLAG_VALE_BALL;
       i32[iBase + 1] = flags;
@@ -4012,7 +4013,8 @@ export class GameServer {
             const dz = s.pos.z - anchorEntity.pos.z;
             const d2 = dx * dx + dz * dz;
             if (d2 <= checkR * checkR && !this.canObserveEntity(anchorEntity, s, d2)) {
-              (denied ??= []).push(s.id);
+              if (denied === undefined) denied = [];
+              denied.push(s.id);
             }
           }
         }
@@ -4124,7 +4126,8 @@ export class GameServer {
     for (const id of this.wireCache.keys()) {
       if (!this.sim.entities.has(id)) {
         this.wireCache.delete(id);
-        (removed ??= []).push(id);
+        if (removed === null) removed = [];
+        removed.push(id);
       }
     }
     // fanout workers evict the same ids from their fragment caches
