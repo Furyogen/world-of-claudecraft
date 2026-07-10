@@ -6585,4 +6585,15 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'Mật khẩu không khớp.',
   'hudChrome.auth.resetErrInvalid':
     'Liên kết đặt lại này không hợp lệ hoặc đã hết hạn. Hãy yêu cầu liên kết mới.',
+  'entities.items.chunk_of_ore.name': 'Mảnh quặng',
+  'entities.quests.q_prof_intro.objectives.0.label': 'Mảnh quặng',
+  'entities.quests.q_prof_intro.title': 'Một nghề cho mỗi đôi tay',
+  'entities.quests.q_prof_intro.text':
+    'Ai ở Eastbrook cũng làm một nghề ngoài việc cầm kiếm, {playerName}. Các mạch quặng nằm rải rác quanh thị trấn, vậy hãy vung cuốc chim và mang cho ta 5 mảnh. Tự tay đào lấy, nhớ đấy; ta sẽ biết sự khác biệt.',
+  'entities.quests.q_prof_intro.completion':
+    'Thấy chưa? Quặng trong túi và vết chai trên tay. Hãy tiếp tục khai mỏ, đốn gỗ và hái thảo mộc khi đi đường, rồi lúc về thị trấn, nhớ bảng Trọng tâm Thị trấn cạnh chợ và bàn chế tạo gần đó. Có một nghề tử tế đang chờ trong tất cả việc ấy, nếu ngươi muốn.',
+  'hudChrome.itemSoulbound': 'Ràng buộc linh hồn',
+  'hudChrome.mailbox.parcelQtyDecreaseAria': 'Gửi ít hơn một {item}',
+  'hudChrome.mailbox.parcelQtyIncreaseAria': 'Gửi thêm một {item}',
+  'hudChrome.itemHeroicTag': '[ANH HUNG]',
 };

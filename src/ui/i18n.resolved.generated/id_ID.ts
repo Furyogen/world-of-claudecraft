@@ -722,8 +722,8 @@ export const id_ID: EnTranslations = {
     "tips": {
       "joinChannels": "Tips: ketik /join world atau /join lfg untuk mengobrol dengan pemain di seluruh dunia."
     },
-    "itemHeroicTag": "[HEROIC]",
-    "itemSoulbound": "Soulbound",
+    "itemHeroicTag": "[HEROIK]",
+    "itemSoulbound": "Terikat jiwa",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1314,8 +1314,8 @@ export const id_ID: EnTranslations = {
       "parcelsLabel": "Bingkisan",
       "parcelsHint": "Klik barang di tasmu untuk melampirkannya.",
       "removeParcelAria": "Keluarkan {item} dari surat",
-      "parcelQtyDecreaseAria": "Send one fewer {item}",
-      "parcelQtyIncreaseAria": "Send one more {item}",
+      "parcelQtyDecreaseAria": "Kirim satu {item} lebih sedikit",
+      "parcelQtyIncreaseAria": "Kirim satu {item} lagi",
       "sendButton": "Kirim surat",
       "postageNote": "Perangko: {amount}. Gagak terbang selama sekitar {seconds} detik.",
       "arrivedBanner": "Gagak telah mendarat: surat dari {name}.",
@@ -5839,7 +5839,7 @@ export const id_ID: EnTranslations = {
         "name": "Taring Greyjaw Tua"
       },
       "chunk_of_ore": {
-        "name": "Chunk of Ore"
+        "name": "Bongkah bijih"
       },
       "weathered_ledger_page": {
         "name": "Halaman Buku Besar Lapuk"
@@ -7513,12 +7513,12 @@ export const id_ID: EnTranslations = {
     },
     "quests": {
       "q_prof_intro": {
-        "title": "A Trade for Every Hand",
-        "text": "Every soul in Eastbrook works a trade besides the sword, {playerName}. There's ore veins scattered round town, so go swing a pick and bring me 5 chunks. Mine them yourself, mind; I'll know the difference.",
-        "completion": "See? Ore in your pack and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
+        "title": "Keterampilan untuk setiap tangan",
+        "text": "Setiap orang di Eastbrook punya keterampilan selain pedang, {playerName}. Urat bijih tersebar di sekitar kota, jadi ayunkan beliung dan bawakan aku 5 bongkah. Tambang sendiri, ingat; aku akan tahu bedanya.",
+        "completion": "Lihat? Bijih di tasmu dan kapalan di tanganmu. Teruslah menambang, menebang, dan memetik herba saat menempuh jalan, lalu saat kembali ke kota, perhatikan papan Fokus Kota di dekat pasar dan meja kerajinan di dekatnya. Ada pekerjaan yang layak di sana, kalau kau mau.",
         "objectives": {
           "0": {
-            "label": "Chunk of Ore"
+            "label": "Bongkah bijih"
           }
         }
       },

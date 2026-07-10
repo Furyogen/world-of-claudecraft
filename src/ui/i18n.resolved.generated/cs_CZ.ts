@@ -722,8 +722,8 @@ export const cs_CZ: EnTranslations = {
     "tips": {
       "joinChannels": "Tip: napiš /join world nebo /join lfg a chatuj s hráči napříč světem."
     },
-    "itemHeroicTag": "[HEROIC]",
-    "itemSoulbound": "Soulbound",
+    "itemHeroicTag": "[HRDINSKE]",
+    "itemSoulbound": "Vázáno na duši",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1314,8 +1314,8 @@ export const cs_CZ: EnTranslations = {
       "parcelsLabel": "Balíky",
       "parcelsHint": "Klikni na předmět v batozích a přilož ho.",
       "removeParcelAria": "Odebrat {item} z dopisu",
-      "parcelQtyDecreaseAria": "Send one fewer {item}",
-      "parcelQtyIncreaseAria": "Send one more {item}",
+      "parcelQtyDecreaseAria": "Poslat o jeden {item} méně",
+      "parcelQtyIncreaseAria": "Poslat o jeden {item} více",
       "sendButton": "Odeslat dopis",
       "postageNote": "Poštovné: {amount}. Havran poletí asi {seconds} s.",
       "arrivedBanner": "Havran přistál: pošta od {name}.",
@@ -5839,7 +5839,7 @@ export const cs_CZ: EnTranslations = {
         "name": "Tesák starého Šedočelista"
       },
       "chunk_of_ore": {
-        "name": "Chunk of Ore"
+        "name": "Kus rudy"
       },
       "weathered_ledger_page": {
         "name": "Ošlehaná stránka účetní knihy"
@@ -7513,12 +7513,12 @@ export const cs_CZ: EnTranslations = {
     },
     "quests": {
       "q_prof_intro": {
-        "title": "A Trade for Every Hand",
-        "text": "Every soul in Eastbrook works a trade besides the sword, {playerName}. There's ore veins scattered round town, so go swing a pick and bring me 5 chunks. Mine them yourself, mind; I'll know the difference.",
-        "completion": "See? Ore in your pack and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
+        "title": "Řemeslo pro každou ruku",
+        "text": "Každý v Eastbrooku má kromě meče i nějaké řemeslo, {playerName}. Kolem města jsou roztroušené rudné žíly, tak vezmi krumpáč a přines mi 5 kusů. Vytěž je sám; poznám rozdíl.",
+        "completion": "Vidíš? Ruda v batohu a mozoly na rukou. Pokračuj v těžbě, dřevorubectví a sběru bylin, až budeš cestovat po cestách, a až se vrátíš do města, všimni si tabule Městského zaměření u trhu a blízké dílny. Je v tom poctivé řemeslo, jestli o něj stojíš.",
         "objectives": {
           "0": {
-            "label": "Chunk of Ore"
+            "label": "Kus rudy"
           }
         }
       },

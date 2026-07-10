@@ -722,8 +722,8 @@ export const de_DE: EnTranslations = {
     "tips": {
       "joinChannels": "Tipp: Gebt /join world oder /join lfg ein, um mit Spielern in der ganzen Welt zu chatten."
     },
-    "itemHeroicTag": "[HEROIC]",
-    "itemSoulbound": "Soulbound",
+    "itemHeroicTag": "[HELDENHAFT]",
+    "itemSoulbound": "Seelengebunden",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1314,8 +1314,8 @@ export const de_DE: EnTranslations = {
       "parcelsLabel": "Pakete",
       "parcelsHint": "Klicke einen Gegenstand in deinen Taschen an, um ihn beizulegen.",
       "removeParcelAria": "{item} aus dem Brief entfernen",
-      "parcelQtyDecreaseAria": "Send one fewer {item}",
-      "parcelQtyIncreaseAria": "Send one more {item}",
+      "parcelQtyDecreaseAria": "Ein {item} weniger senden",
+      "parcelQtyIncreaseAria": "Ein {item} mehr senden",
       "sendButton": "Brief senden",
       "postageNote": "Porto: {amount}. Der Rabe ist etwa {seconds}s unterwegs.",
       "arrivedBanner": "Der Rabe ist gelandet: Post von {name}.",
@@ -5839,7 +5839,7 @@ export const de_DE: EnTranslations = {
         "name": "Zahn des alten Greyjaw"
       },
       "chunk_of_ore": {
-        "name": "Chunk of Ore"
+        "name": "Erzbrocken"
       },
       "weathered_ledger_page": {
         "name": "Verwitterte Buchseite"
@@ -7513,12 +7513,12 @@ export const de_DE: EnTranslations = {
     },
     "quests": {
       "q_prof_intro": {
-        "title": "A Trade for Every Hand",
-        "text": "Every soul in Eastbrook works a trade besides the sword, {playerName}. There's ore veins scattered round town, so go swing a pick and bring me 5 chunks. Mine them yourself, mind; I'll know the difference.",
-        "completion": "See? Ore in your pack and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
+        "title": "Ein Handwerk für jede Hand",
+        "text": "Jede Seele in Eastbrook hat neben dem Schwert ein Handwerk, {playerName}. Überall in der Stadt liegen Erzadern verstreut, also schwing eine Spitzhacke und bring mir 5 Brocken. Bau sie selbst ab; ich merke den Unterschied.",
+        "completion": "Siehst du? Erz im Rucksack und Schwielen an den Händen. Bleib beim Bergbau, Holzfällen und Kräutersammeln, während du die Straßen bereist, und denk in der Stadt an die Stadtfokus-Tafel beim Markt und die Werkbank daneben. Darin wartet ein ehrliches Handwerk, wenn du es willst.",
         "objectives": {
           "0": {
-            "label": "Chunk of Ore"
+            "label": "Erzbrocken"
           }
         }
       },

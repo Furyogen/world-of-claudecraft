@@ -6146,4 +6146,5 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
     '邀請好友：當好友升到 10 級，你們各獲得 2 個格子，最多 5 位好友。',
   'hudChrome.bank.bonusSectionAria': '獎勵銀行格子及獲取方式',
   'entities.mobs.yumi_cat.name': '由美',
+  'hudChrome.itemHeroicTag': '[英雄]',
 };

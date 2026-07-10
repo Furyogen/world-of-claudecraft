@@ -722,8 +722,8 @@ export const fr_CA: EnTranslations = {
     "tips": {
       "joinChannels": "Conseil : tapez /join world ou /join lfg pour discuter avec les joueurs du monde entier."
     },
-    "itemHeroicTag": "[HEROIC]",
-    "itemSoulbound": "Soulbound",
+    "itemHeroicTag": "[HEROIQUE]",
+    "itemSoulbound": "Lié à l’âme",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1314,8 +1314,8 @@ export const fr_CA: EnTranslations = {
       "parcelsLabel": "Colis",
       "parcelsHint": "Cliquez sur un objet dans vos sacs pour le joindre.",
       "removeParcelAria": "Retirer {item} de la lettre",
-      "parcelQtyDecreaseAria": "Send one fewer {item}",
-      "parcelQtyIncreaseAria": "Send one more {item}",
+      "parcelQtyDecreaseAria": "Envoyer un {item} de moins",
+      "parcelQtyIncreaseAria": "Envoyer un {item} de plus",
       "sendButton": "Envoyer la lettre",
       "postageNote": "Affranchissement : {amount}. Le corbeau vole environ {seconds}s.",
       "arrivedBanner": "Le corbeau s'est posé : du courrier de {name}.",
@@ -5839,7 +5839,7 @@ export const fr_CA: EnTranslations = {
         "name": "Croc du vieux Greyjaw"
       },
       "chunk_of_ore": {
-        "name": "Chunk of Ore"
+        "name": "Morceau de minerai"
       },
       "weathered_ledger_page": {
         "name": "Page de registre usée"
@@ -7513,12 +7513,12 @@ export const fr_CA: EnTranslations = {
     },
     "quests": {
       "q_prof_intro": {
-        "title": "A Trade for Every Hand",
-        "text": "Every soul in Eastbrook works a trade besides the sword, {playerName}. There's ore veins scattered round town, so go swing a pick and bring me 5 chunks. Mine them yourself, mind; I'll know the difference.",
-        "completion": "See? Ore in your pack and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
+        "title": "Un métier pour chaque main",
+        "text": "Chaque âme d’Eastbrook exerce un métier en plus de l’épée, {playerName}. Des filons de minerai sont dispersés autour du village, alors prends une pioche et rapporte-moi 5 morceaux. Mine-les toi-même, attention; je verrai la différence.",
+        "completion": "Tu vois? Du minerai dans ton sac et des cals aux mains. Continue la mine, la coupe du bois et la cueillette des herbes sur les routes, puis de retour en ville, passe par le panneau de concentration près du marché et l’établi voisin. Il y a un métier honnête dans tout ça, si tu le veux.",
         "objectives": {
           "0": {
-            "label": "Chunk of Ore"
+            "label": "Morceau de minerai"
           }
         }
       },

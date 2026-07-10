@@ -722,8 +722,8 @@ export const nl_NL: EnTranslations = {
     "tips": {
       "joinChannels": "Tip: typ /join world of /join lfg om te chatten met spelers over de hele wereld."
     },
-    "itemHeroicTag": "[HEROIC]",
-    "itemSoulbound": "Soulbound",
+    "itemHeroicTag": "[HELDHAFTIG]",
+    "itemSoulbound": "Zielsgebonden",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1314,8 +1314,8 @@ export const nl_NL: EnTranslations = {
       "parcelsLabel": "Pakketten",
       "parcelsHint": "Klik op een voorwerp in je tassen om het bij te voegen.",
       "removeParcelAria": "Verwijder {item} uit de brief",
-      "parcelQtyDecreaseAria": "Send one fewer {item}",
-      "parcelQtyIncreaseAria": "Send one more {item}",
+      "parcelQtyDecreaseAria": "Een {item} minder verzenden",
+      "parcelQtyIncreaseAria": "Een {item} meer verzenden",
       "sendButton": "Brief versturen",
       "postageNote": "Porto: {amount}. De raaf vliegt ongeveer {seconds}s.",
       "arrivedBanner": "De raaf is geland: post van {name}.",
@@ -5839,7 +5839,7 @@ export const nl_NL: EnTranslations = {
         "name": "Tand van Oude Grijskaak"
       },
       "chunk_of_ore": {
-        "name": "Chunk of Ore"
+        "name": "Stuk erts"
       },
       "weathered_ledger_page": {
         "name": "Verweerd Grootboekblad"
@@ -7513,12 +7513,12 @@ export const nl_NL: EnTranslations = {
     },
     "quests": {
       "q_prof_intro": {
-        "title": "A Trade for Every Hand",
-        "text": "Every soul in Eastbrook works a trade besides the sword, {playerName}. There's ore veins scattered round town, so go swing a pick and bring me 5 chunks. Mine them yourself, mind; I'll know the difference.",
-        "completion": "See? Ore in your pack and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
+        "title": "Een ambacht voor elke hand",
+        "text": "Iedere ziel in Eastbrook heeft naast het zwaard een ambacht, {playerName}. Er liggen ertsaders rond de stad verspreid, dus pak een pikhouweel en breng me 5 stukken. Mijn ze zelf, let op; ik merk het verschil.",
+        "completion": "Zie je? Erts in je tas en eelt op je handen. Blijf mijnen, hout hakken en kruiden plukken terwijl je over de wegen reist, en let terug in de stad op het Stadsfocusbord bij de markt en de werkbank daarnaast. Er wacht eerlijk werk in dit alles, als je het wilt.",
         "objectives": {
           "0": {
-            "label": "Chunk of Ore"
+            "label": "Stuk erts"
           }
         }
       },

@@ -722,8 +722,8 @@ export const es: EnTranslations = {
     "tips": {
       "joinChannels": "Consejo: escribe /join world o /join lfg para chatear con jugadores de todas partes del mundo."
     },
-    "itemHeroicTag": "[HEROIC]",
-    "itemSoulbound": "Soulbound",
+    "itemHeroicTag": "[HEROICO]",
+    "itemSoulbound": "Ligado al alma",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1314,8 +1314,8 @@ export const es: EnTranslations = {
       "parcelsLabel": "Paquetes",
       "parcelsHint": "Haz clic en un objeto de tus bolsas para adjuntarlo.",
       "removeParcelAria": "Quitar {item} de la carta",
-      "parcelQtyDecreaseAria": "Send one fewer {item}",
-      "parcelQtyIncreaseAria": "Send one more {item}",
+      "parcelQtyDecreaseAria": "Enviar un {item} menos",
+      "parcelQtyIncreaseAria": "Enviar un {item} más",
       "sendButton": "Enviar carta",
       "postageNote": "Franqueo: {amount}. El cuervo vuela durante unos {seconds}s.",
       "arrivedBanner": "El cuervo ha aterrizado: correo de {name}.",
@@ -5839,7 +5839,7 @@ export const es: EnTranslations = {
         "name": "Colmillo del viejo Greyjaw"
       },
       "chunk_of_ore": {
-        "name": "Chunk of Ore"
+        "name": "Trozo de mena"
       },
       "weathered_ledger_page": {
         "name": "Página de libro mayor ajada"
@@ -7513,12 +7513,12 @@ export const es: EnTranslations = {
     },
     "quests": {
       "q_prof_intro": {
-        "title": "A Trade for Every Hand",
-        "text": "Every soul in Eastbrook works a trade besides the sword, {playerName}. There's ore veins scattered round town, so go swing a pick and bring me 5 chunks. Mine them yourself, mind; I'll know the difference.",
-        "completion": "See? Ore in your pack and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
+        "title": "Un oficio para cada mano",
+        "text": "Toda alma de Eastbrook trabaja un oficio además de la espada, {playerName}. Hay vetas de mena desperdigadas por el pueblo, así que empuña un pico y tráeme 5 trozos. Sácalos tú mismo, ojo; notaré la diferencia.",
+        "completion": "¿Ves? Mena en la mochila y callos en las manos. Sigue con la minería, la tala y la herboristería mientras recorres los caminos, y cuando vuelvas al pueblo, acuérdate del tablón de Enfoque de la ciudad junto al mercado y del banco de artesanía cercano. Hay un buen oficio esperándote en esta labor, si lo quieres.",
         "objectives": {
           "0": {
-            "label": "Chunk of Ore"
+            "label": "Trozo de mena"
           }
         }
       },

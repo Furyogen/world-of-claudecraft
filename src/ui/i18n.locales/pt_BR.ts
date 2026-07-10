@@ -6649,4 +6649,15 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'As senhas não coincidem.',
   'hudChrome.auth.resetErrInvalid':
     'Este link de redefinição é inválido ou expirou. Solicite um novo.',
+  'entities.items.chunk_of_ore.name': 'Pedaço de minério',
+  'entities.quests.q_prof_intro.objectives.0.label': 'Pedaço de minério',
+  'entities.quests.q_prof_intro.title': 'Um ofício para cada mão',
+  'entities.quests.q_prof_intro.text':
+    'Toda alma em Eastbrook trabalha em um ofício além da espada, {playerName}. Há veios de minério espalhados pela cidade, então pegue uma picareta e traga 5 pedaços. Mine você mesmo, ouviu; vou perceber a diferença.',
+  'entities.quests.q_prof_intro.completion':
+    'Viu? Minério na bolsa e calos nas mãos. Continue minerando, cortando madeira e colhendo ervas enquanto viaja pelas estradas, e quando voltar à cidade, lembre-se do quadro de Foco da Cidade perto do mercado e da bancada de criação ali perto. Há um ofício honesto esperando em tudo isso, se você quiser.',
+  'hudChrome.itemSoulbound': 'Vinculado à alma',
+  'hudChrome.mailbox.parcelQtyDecreaseAria': 'Enviar um {item} a menos',
+  'hudChrome.mailbox.parcelQtyIncreaseAria': 'Enviar mais um {item}',
+  'hudChrome.itemHeroicTag': '[HEROICO]',
 };

@@ -6481,4 +6481,5 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     '友達を招待しましょう：友達がレベル10に達すると、お互いに2スロット獲得できます。友達は最大5人までです。',
   'hudChrome.bank.bonusSectionAria': 'ボーナス銀行スロットと獲得方法',
   'entities.mobs.yumi_cat.name': 'ユミ',
+  'hudChrome.itemHeroicTag': '[英雄]',
 };

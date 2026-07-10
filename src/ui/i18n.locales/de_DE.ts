@@ -6712,4 +6712,15 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'Die Passwörter stimmen nicht überein.',
   'hudChrome.auth.resetErrInvalid':
     'Dieser Link zum Zurücksetzen ist ungültig oder abgelaufen. Fordere einen neuen an.',
+  'entities.items.chunk_of_ore.name': 'Erzbrocken',
+  'entities.quests.q_prof_intro.objectives.0.label': 'Erzbrocken',
+  'entities.quests.q_prof_intro.title': 'Ein Handwerk für jede Hand',
+  'entities.quests.q_prof_intro.text':
+    'Jede Seele in Eastbrook hat neben dem Schwert ein Handwerk, {playerName}. Überall in der Stadt liegen Erzadern verstreut, also schwing eine Spitzhacke und bring mir 5 Brocken. Bau sie selbst ab; ich merke den Unterschied.',
+  'entities.quests.q_prof_intro.completion':
+    'Siehst du? Erz im Rucksack und Schwielen an den Händen. Bleib beim Bergbau, Holzfällen und Kräutersammeln, während du die Straßen bereist, und denk in der Stadt an die Stadtfokus-Tafel beim Markt und die Werkbank daneben. Darin wartet ein ehrliches Handwerk, wenn du es willst.',
+  'hudChrome.itemSoulbound': 'Seelengebunden',
+  'hudChrome.mailbox.parcelQtyDecreaseAria': 'Ein {item} weniger senden',
+  'hudChrome.mailbox.parcelQtyIncreaseAria': 'Ein {item} mehr senden',
+  'hudChrome.itemHeroicTag': '[HELDENHAFT]',
 };

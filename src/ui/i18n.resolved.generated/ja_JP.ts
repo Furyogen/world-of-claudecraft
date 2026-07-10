@@ -722,7 +722,7 @@ export const ja_JP: EnTranslations = {
     "tips": {
       "joinChannels": "ヒント：/join world または /join lfg と入力すると、ワールド全体のプレイヤーとチャットできます。"
     },
-    "itemHeroicTag": "[HEROIC]",
+    "itemHeroicTag": "[英雄]",
     "itemSoulbound": "魂縛",
     "itemSet": {
       "header": "{name} ({have}/{total})",

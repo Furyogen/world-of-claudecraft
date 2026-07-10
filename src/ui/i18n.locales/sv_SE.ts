@@ -6562,4 +6562,15 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'Lösenorden stämmer inte överens.',
   'hudChrome.auth.resetErrInvalid':
     'Den här återställningslänken är ogiltig eller har gått ut. Begär en ny.',
+  'entities.items.chunk_of_ore.name': 'Malmstycke',
+  'entities.quests.q_prof_intro.objectives.0.label': 'Malmstycke',
+  'entities.quests.q_prof_intro.title': 'Ett hantverk för varje hand',
+  'entities.quests.q_prof_intro.text':
+    'Varenda själ i Eastbrook har ett hantverk vid sidan av svärdet, {playerName}. Malmådror ligger utspridda runt staden, så ta en hacka och hämta 5 stycken åt mig. Bryt dem själv, hör du; jag märker skillnaden.',
+  'entities.quests.q_prof_intro.completion':
+    'Ser du? Malm i packningen och valkar på händerna. Fortsätt med gruvdrift, skogshuggning och örtplockning när du färdas längs vägarna, och när du är tillbaka i staden, tänk på Stadens fokus-tavla vid marknaden och hantverksbänken intill. Det finns ett hederligt hantverk i allt det där, om du vill ha det.',
+  'hudChrome.itemSoulbound': 'Själsbunden',
+  'hudChrome.mailbox.parcelQtyDecreaseAria': 'Skicka en {item} färre',
+  'hudChrome.mailbox.parcelQtyIncreaseAria': 'Skicka en {item} till',
+  'hudChrome.itemHeroicTag': '[HJALTE]',
 };

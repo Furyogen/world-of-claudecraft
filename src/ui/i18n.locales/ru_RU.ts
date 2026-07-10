@@ -6608,4 +6608,5 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
     'Пригласите друга: когда он достигнет 10 уровня, вы оба получите по 2 ячейки, до 5 друзей.',
   'hudChrome.bank.bonusSectionAria': 'Бонусные ячейки банка и способы их получить',
   'entities.mobs.yumi_cat.name': 'Юми',
+  'hudChrome.itemHeroicTag': '[ГЕРОИЧЕСКОЕ]',
 };

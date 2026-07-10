@@ -722,8 +722,8 @@ export const it_IT: EnTranslations = {
     "tips": {
       "joinChannels": "Suggerimento: digita /join world o /join lfg per chattare con i giocatori di tutto il mondo."
     },
-    "itemHeroicTag": "[HEROIC]",
-    "itemSoulbound": "Soulbound",
+    "itemHeroicTag": "[EROICO]",
+    "itemSoulbound": "Vincolato all’anima",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1314,8 +1314,8 @@ export const it_IT: EnTranslations = {
       "parcelsLabel": "Pacchi",
       "parcelsHint": "Clicca un oggetto nelle tue borse per allegarlo.",
       "removeParcelAria": "Rimuovi {item} dalla lettera",
-      "parcelQtyDecreaseAria": "Send one fewer {item}",
-      "parcelQtyIncreaseAria": "Send one more {item}",
+      "parcelQtyDecreaseAria": "Invia un {item} in meno",
+      "parcelQtyIncreaseAria": "Invia un {item} in più",
       "sendButton": "Invia lettera",
       "postageNote": "Affrancatura: {amount}. Il corvo vola per circa {seconds}s.",
       "arrivedBanner": "Il corvo è atterrato: posta da {name}.",
@@ -5839,7 +5839,7 @@ export const it_IT: EnTranslations = {
         "name": "Zanna del vecchio Greyjaw"
       },
       "chunk_of_ore": {
-        "name": "Chunk of Ore"
+        "name": "Pezzo di minerale"
       },
       "weathered_ledger_page": {
         "name": "Pagina di registro logora"
@@ -7513,12 +7513,12 @@ export const it_IT: EnTranslations = {
     },
     "quests": {
       "q_prof_intro": {
-        "title": "A Trade for Every Hand",
-        "text": "Every soul in Eastbrook works a trade besides the sword, {playerName}. There's ore veins scattered round town, so go swing a pick and bring me 5 chunks. Mine them yourself, mind; I'll know the difference.",
-        "completion": "See? Ore in your pack and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
+        "title": "Un mestiere per ogni mano",
+        "text": "Ogni anima di Eastbrook ha un mestiere oltre alla spada, {playerName}. Ci sono vene di minerale sparse intorno al paese, quindi prendi un piccone e portami 5 pezzi. Scavali tu, bada bene; saprò riconoscere la differenza.",
+        "completion": "Vedi? Minerale nello zaino e calli sulle mani. Continua con estrazione, taglio del legno ed erboristeria mentre percorri le strade, e quando torni in città ricordati della bacheca del Focus cittadino vicino al mercato e del banco da lavoro lì accanto. C’è un mestiere onesto in tutto questo, se lo vuoi.",
         "objectives": {
           "0": {
-            "label": "Chunk of Ore"
+            "label": "Pezzo di minerale"
           }
         }
       },

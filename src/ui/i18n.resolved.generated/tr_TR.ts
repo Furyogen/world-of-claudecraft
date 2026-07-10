@@ -722,8 +722,8 @@ export const tr_TR: EnTranslations = {
     "tips": {
       "joinChannels": "İpucu: Dünya genelindeki oyuncularla sohbet etmek için /join world ya da /join lfg yaz."
     },
-    "itemHeroicTag": "[HEROIC]",
-    "itemSoulbound": "Soulbound",
+    "itemHeroicTag": "[KAHRAMANCA]",
+    "itemSoulbound": "Ruha bağlı",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1314,8 +1314,8 @@ export const tr_TR: EnTranslations = {
       "parcelsLabel": "Paketler",
       "parcelsHint": "Eklemek için çantandaki bir eşyaya tıkla.",
       "removeParcelAria": "{item} paketini mektuptan çıkar",
-      "parcelQtyDecreaseAria": "Send one fewer {item}",
-      "parcelQtyIncreaseAria": "Send one more {item}",
+      "parcelQtyDecreaseAria": "Bir {item} daha az gönder",
+      "parcelQtyIncreaseAria": "Bir {item} daha gönder",
       "sendButton": "Mektubu Gönder",
       "postageNote": "Posta ücreti: {amount}. Kuzgun yaklaşık {seconds} saniye uçar.",
       "arrivedBanner": "Kuzgun kondu: {name} sana posta gönderdi.",
@@ -5839,7 +5839,7 @@ export const tr_TR: EnTranslations = {
         "name": "Yaşlı Greyjaw'un Dişi"
       },
       "chunk_of_ore": {
-        "name": "Chunk of Ore"
+        "name": "Cevher parçası"
       },
       "weathered_ledger_page": {
         "name": "Yıpranmış Defter Sayfası"
@@ -7513,12 +7513,12 @@ export const tr_TR: EnTranslations = {
     },
     "quests": {
       "q_prof_intro": {
-        "title": "A Trade for Every Hand",
-        "text": "Every soul in Eastbrook works a trade besides the sword, {playerName}. There's ore veins scattered round town, so go swing a pick and bring me 5 chunks. Mine them yourself, mind; I'll know the difference.",
-        "completion": "See? Ore in your pack and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
+        "title": "Her el için bir zanaat",
+        "text": "Eastbrook’taki herkes kılıcın yanında bir zanaatla da uğraşır, {playerName}. Kasabanın çevresinde cevher damarları var, kazmayı savur ve bana 5 parça getir. Kendin çıkar, dikkat et; farkı anlarım.",
+        "completion": "Gördün mü? Çantanda cevher, ellerinde nasır. Yollarda ilerlerken madenciliği, odunculuğu ve ot toplamayı sürdür; kasabaya dönünce pazarın yanındaki Kasaba Odağı panosuna ve yakındaki üretim tezgahına bak. İstersen tüm bunlarda dürüst bir zanaat var.",
         "objectives": {
           "0": {
-            "label": "Chunk of Ore"
+            "label": "Cevher parçası"
           }
         }
       },

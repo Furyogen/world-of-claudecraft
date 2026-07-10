@@ -6469,4 +6469,5 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '친구를 초대하세요: 친구가 10레벨에 도달하면 서로 2칸씩 얻으며, 최대 5명까지 가능합니다.',
   'hudChrome.bank.bonusSectionAria': '보너스 은행 칸과 획득 방법',
   'entities.mobs.yumi_cat.name': '유미',
+  'hudChrome.itemHeroicTag': '[영웅]',
 };

@@ -6600,4 +6600,15 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'Hasła nie są zgodne.',
   'hudChrome.auth.resetErrInvalid':
     'Ten link do resetowania jest nieprawidłowy lub wygasł. Poproś o nowy.',
+  'entities.items.chunk_of_ore.name': 'Kawał rudy',
+  'entities.quests.q_prof_intro.objectives.0.label': 'Kawał rudy',
+  'entities.quests.q_prof_intro.title': 'Rzemiosło dla każdej dłoni',
+  'entities.quests.q_prof_intro.text':
+    'Każda dusza w Eastbrook zna jakiś fach oprócz miecza, {playerName}. Wokół miasta rozsiane są żyły rudy, więc chwyć kilof i przynieś mi 5 kawałków. Wydobądź je samodzielnie; poznam różnicę.',
+  'entities.quests.q_prof_intro.completion':
+    'Widzisz? Ruda w plecaku i odciski na dłoniach. Ćwicz górnictwo, drwalstwo i zielarstwo, gdy będziesz przemierzać drogi, a po powrocie do miasta zajrzyj na tablicę Skupienia Miasta przy targu i do pobliskiego warsztatu. Czeka w tym uczciwy fach, jeśli go zechcesz.',
+  'hudChrome.itemSoulbound': 'Związane z duszą',
+  'hudChrome.mailbox.parcelQtyDecreaseAria': 'Wyślij o jeden {item} mniej',
+  'hudChrome.mailbox.parcelQtyIncreaseAria': 'Wyślij o jeden {item} więcej',
+  'hudChrome.itemHeroicTag': '[HEROICZNE]',
 };

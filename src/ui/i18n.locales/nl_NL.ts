@@ -6648,4 +6648,15 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'De wachtwoorden komen niet overeen.',
   'hudChrome.auth.resetErrInvalid':
     'Deze herstellink is ongeldig of verlopen. Vraag een nieuwe aan.',
+  'entities.items.chunk_of_ore.name': 'Stuk erts',
+  'entities.quests.q_prof_intro.objectives.0.label': 'Stuk erts',
+  'entities.quests.q_prof_intro.title': 'Een ambacht voor elke hand',
+  'entities.quests.q_prof_intro.text':
+    'Iedere ziel in Eastbrook heeft naast het zwaard een ambacht, {playerName}. Er liggen ertsaders rond de stad verspreid, dus pak een pikhouweel en breng me 5 stukken. Mijn ze zelf, let op; ik merk het verschil.',
+  'entities.quests.q_prof_intro.completion':
+    'Zie je? Erts in je tas en eelt op je handen. Blijf mijnen, hout hakken en kruiden plukken terwijl je over de wegen reist, en let terug in de stad op het Stadsfocusbord bij de markt en de werkbank daarnaast. Er wacht eerlijk werk in dit alles, als je het wilt.',
+  'hudChrome.itemSoulbound': 'Zielsgebonden',
+  'hudChrome.mailbox.parcelQtyDecreaseAria': 'Een {item} minder verzenden',
+  'hudChrome.mailbox.parcelQtyIncreaseAria': 'Een {item} meer verzenden',
+  'hudChrome.itemHeroicTag': '[HELDHAFTIG]',
 };

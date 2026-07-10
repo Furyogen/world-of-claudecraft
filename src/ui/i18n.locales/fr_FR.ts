@@ -6741,4 +6741,15 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'Les mots de passe ne correspondent pas.',
   'hudChrome.auth.resetErrInvalid':
     'Ce lien de réinitialisation est invalide ou a expiré. Demandez-en un nouveau.',
+  'entities.items.chunk_of_ore.name': 'Morceau de minerai',
+  'entities.quests.q_prof_intro.objectives.0.label': 'Morceau de minerai',
+  'entities.quests.q_prof_intro.title': 'Un métier pour chaque main',
+  'entities.quests.q_prof_intro.text':
+    'Chaque âme d’Eastbrook exerce un métier en plus de l’épée, {playerName}. Des filons de minerai sont éparpillés autour du village, alors prends une pioche et rapporte-moi 5 morceaux. Mine-les toi-même, attention; je verrai la différence.',
+  'entities.quests.q_prof_intro.completion':
+    'Tu vois? Du minerai dans ton sac et des cals aux mains. Continue la mine, la coupe du bois et la cueillette des herbes sur les routes, puis de retour en ville, passe par le panneau de concentration près du marché et l’établi voisin. Il y a un métier honnête dans tout ça, si tu le veux.',
+  'hudChrome.itemSoulbound': 'Lié à l’âme',
+  'hudChrome.mailbox.parcelQtyDecreaseAria': 'Envoyer un {item} de moins',
+  'hudChrome.mailbox.parcelQtyIncreaseAria': 'Envoyer un {item} de plus',
+  'hudChrome.itemHeroicTag': '[HEROIQUE]',
 };

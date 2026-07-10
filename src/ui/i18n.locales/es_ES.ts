@@ -292,4 +292,15 @@ export const es_ES: Partial<Record<TranslationKey, string>> = {
   // Corpse-harvest window + mobile hotbar page toggle.
   'hudChrome.corpseHarvest.title': 'Recolección',
   'hudChrome.corpseHarvest.components.gills': 'Branquias',
+  'entities.items.chunk_of_ore.name': 'Trozo de mena',
+  'entities.quests.q_prof_intro.objectives.0.label': 'Trozo de mena',
+  'entities.quests.q_prof_intro.title': 'Un oficio para cada mano',
+  'entities.quests.q_prof_intro.text':
+    'Toda alma de Eastbrook trabaja un oficio además de la espada, {playerName}. Hay vetas de mena desperdigadas por el pueblo, así que empuña un pico y tráeme 5 trozos. Sácalos tú mismo, ojo; notaré la diferencia.',
+  'entities.quests.q_prof_intro.completion':
+    '¿Ves? Mena en la mochila y callos en las manos. Sigue con la minería, la tala y la herboristería mientras recorres los caminos, y cuando vuelvas al pueblo, acuérdate del tablón de Enfoque de la ciudad junto al mercado y del banco de artesanía cercano. Hay un buen oficio esperándote en esta labor, si lo quieres.',
+  'hudChrome.itemSoulbound': 'Ligado al alma',
+  'hudChrome.mailbox.parcelQtyDecreaseAria': 'Enviar un {item} menos',
+  'hudChrome.mailbox.parcelQtyIncreaseAria': 'Enviar un {item} más',
+  'hudChrome.itemHeroicTag': '[HEROICO]',
 };

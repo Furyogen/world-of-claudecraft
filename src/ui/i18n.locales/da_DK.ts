@@ -6545,4 +6545,15 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'Adgangskoderne stemmer ikke overens.',
   'hudChrome.auth.resetErrInvalid':
     'Dette nulstillingslink er ugyldigt eller udløbet. Anmod om et nyt.',
+  'entities.items.chunk_of_ore.name': 'Stykke malm',
+  'entities.quests.q_prof_intro.objectives.0.label': 'Stykke malm',
+  'entities.quests.q_prof_intro.title': 'Et håndværk til hver hånd',
+  'entities.quests.q_prof_intro.text':
+    'Hver eneste sjæl i Eastbrook har et håndværk ud over sværdet, {playerName}. Der ligger malmårer spredt omkring byen, så sving en hakke og bring mig 5 stykker. Udvind dem selv, vel at mærke; jeg kan kende forskel.',
+  'entities.quests.q_prof_intro.completion':
+    'Ser du? Malm i tasken og hård hud på hænderne. Fortsæt med minedrift, skovhugst og urtesamling, mens du rejser ad vejene, og når du er tilbage i byen, så husk Byfokus-tavlen ved markedet og arbejdsbænken ved siden af. Der venter et ærligt håndværk i det hele, hvis du vil have det.',
+  'hudChrome.itemSoulbound': 'Sjælebundet',
+  'hudChrome.mailbox.parcelQtyDecreaseAria': 'Send en {item} færre',
+  'hudChrome.mailbox.parcelQtyIncreaseAria': 'Send en {item} mere',
+  'hudChrome.itemHeroicTag': '[HELTEMODIG]',
 };

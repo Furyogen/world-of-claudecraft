@@ -6562,4 +6562,15 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'Şifreler eşleşmiyor.',
   'hudChrome.auth.resetErrInvalid':
     'Bu sıfırlama bağlantısı geçersiz veya süresi dolmuş. Yeni bir tane iste.',
+  'entities.items.chunk_of_ore.name': 'Cevher parçası',
+  'entities.quests.q_prof_intro.objectives.0.label': 'Cevher parçası',
+  'entities.quests.q_prof_intro.title': 'Her el için bir zanaat',
+  'entities.quests.q_prof_intro.text':
+    'Eastbrook’taki herkes kılıcın yanında bir zanaatla da uğraşır, {playerName}. Kasabanın çevresinde cevher damarları var, kazmayı savur ve bana 5 parça getir. Kendin çıkar, dikkat et; farkı anlarım.',
+  'entities.quests.q_prof_intro.completion':
+    'Gördün mü? Çantanda cevher, ellerinde nasır. Yollarda ilerlerken madenciliği, odunculuğu ve ot toplamayı sürdür; kasabaya dönünce pazarın yanındaki Kasaba Odağı panosuna ve yakındaki üretim tezgahına bak. İstersen tüm bunlarda dürüst bir zanaat var.',
+  'hudChrome.itemSoulbound': 'Ruha bağlı',
+  'hudChrome.mailbox.parcelQtyDecreaseAria': 'Bir {item} daha az gönder',
+  'hudChrome.mailbox.parcelQtyIncreaseAria': 'Bir {item} daha gönder',
+  'hudChrome.itemHeroicTag': '[KAHRAMANCA]',
 };

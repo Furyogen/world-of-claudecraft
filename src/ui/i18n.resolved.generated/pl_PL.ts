@@ -722,8 +722,8 @@ export const pl_PL: EnTranslations = {
     "tips": {
       "joinChannels": "Wskazówka: wpisz /join world lub /join lfg, aby rozmawiać z graczami z całego świata."
     },
-    "itemHeroicTag": "[HEROIC]",
-    "itemSoulbound": "Soulbound",
+    "itemHeroicTag": "[HEROICZNE]",
+    "itemSoulbound": "Związane z duszą",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1314,8 +1314,8 @@ export const pl_PL: EnTranslations = {
       "parcelsLabel": "Paczki",
       "parcelsHint": "Kliknij przedmiot w torbach, aby go załączyć.",
       "removeParcelAria": "Usuń {item} z listu",
-      "parcelQtyDecreaseAria": "Send one fewer {item}",
-      "parcelQtyIncreaseAria": "Send one more {item}",
+      "parcelQtyDecreaseAria": "Wyślij o jeden {item} mniej",
+      "parcelQtyIncreaseAria": "Wyślij o jeden {item} więcej",
       "sendButton": "Wyślij list",
       "postageNote": "Opłata pocztowa: {amount}. Kruk leci około {seconds} s.",
       "arrivedBanner": "Kruk wylądował: poczta od {name}.",
@@ -5839,7 +5839,7 @@ export const pl_PL: EnTranslations = {
         "name": "Kieł Starego Szaroszczękiego"
       },
       "chunk_of_ore": {
-        "name": "Chunk of Ore"
+        "name": "Kawał rudy"
       },
       "weathered_ledger_page": {
         "name": "Zniszczona strona księgi"
@@ -7513,12 +7513,12 @@ export const pl_PL: EnTranslations = {
     },
     "quests": {
       "q_prof_intro": {
-        "title": "A Trade for Every Hand",
-        "text": "Every soul in Eastbrook works a trade besides the sword, {playerName}. There's ore veins scattered round town, so go swing a pick and bring me 5 chunks. Mine them yourself, mind; I'll know the difference.",
-        "completion": "See? Ore in your pack and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
+        "title": "Rzemiosło dla każdej dłoni",
+        "text": "Każda dusza w Eastbrook zna jakiś fach oprócz miecza, {playerName}. Wokół miasta rozsiane są żyły rudy, więc chwyć kilof i przynieś mi 5 kawałków. Wydobądź je samodzielnie; poznam różnicę.",
+        "completion": "Widzisz? Ruda w plecaku i odciski na dłoniach. Ćwicz górnictwo, drwalstwo i zielarstwo, gdy będziesz przemierzać drogi, a po powrocie do miasta zajrzyj na tablicę Skupienia Miasta przy targu i do pobliskiego warsztatu. Czeka w tym uczciwy fach, jeśli go zechcesz.",
         "objectives": {
           "0": {
-            "label": "Chunk of Ore"
+            "label": "Kawał rudy"
           }
         }
       },

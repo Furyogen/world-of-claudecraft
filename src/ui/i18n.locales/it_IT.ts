@@ -6676,4 +6676,15 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'Le password non coincidono.',
   'hudChrome.auth.resetErrInvalid':
     'Questo link di reimpostazione non è valido o è scaduto. Richiedine uno nuovo.',
+  'entities.items.chunk_of_ore.name': 'Pezzo di minerale',
+  'entities.quests.q_prof_intro.objectives.0.label': 'Pezzo di minerale',
+  'entities.quests.q_prof_intro.title': 'Un mestiere per ogni mano',
+  'entities.quests.q_prof_intro.text':
+    'Ogni anima di Eastbrook ha un mestiere oltre alla spada, {playerName}. Ci sono vene di minerale sparse intorno al paese, quindi prendi un piccone e portami 5 pezzi. Scavali tu, bada bene; saprò riconoscere la differenza.',
+  'entities.quests.q_prof_intro.completion':
+    'Vedi? Minerale nello zaino e calli sulle mani. Continua con estrazione, taglio del legno ed erboristeria mentre percorri le strade, e quando torni in città ricordati della bacheca del Focus cittadino vicino al mercato e del banco da lavoro lì accanto. C’è un mestiere onesto in tutto questo, se lo vuoi.',
+  'hudChrome.itemSoulbound': 'Vincolato all’anima',
+  'hudChrome.mailbox.parcelQtyDecreaseAria': 'Invia un {item} in meno',
+  'hudChrome.mailbox.parcelQtyIncreaseAria': 'Invia un {item} in più',
+  'hudChrome.itemHeroicTag': '[EROICO]',
 };

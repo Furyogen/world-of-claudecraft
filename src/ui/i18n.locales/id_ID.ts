@@ -6646,4 +6646,15 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'Kata sandi tidak cocok.',
   'hudChrome.auth.resetErrInvalid':
     'Tautan pengaturan ulang ini tidak valid atau sudah kedaluwarsa. Minta yang baru.',
+  'entities.items.chunk_of_ore.name': 'Bongkah bijih',
+  'entities.quests.q_prof_intro.objectives.0.label': 'Bongkah bijih',
+  'entities.quests.q_prof_intro.title': 'Keterampilan untuk setiap tangan',
+  'entities.quests.q_prof_intro.text':
+    'Setiap orang di Eastbrook punya keterampilan selain pedang, {playerName}. Urat bijih tersebar di sekitar kota, jadi ayunkan beliung dan bawakan aku 5 bongkah. Tambang sendiri, ingat; aku akan tahu bedanya.',
+  'entities.quests.q_prof_intro.completion':
+    'Lihat? Bijih di tasmu dan kapalan di tanganmu. Teruslah menambang, menebang, dan memetik herba saat menempuh jalan, lalu saat kembali ke kota, perhatikan papan Fokus Kota di dekat pasar dan meja kerajinan di dekatnya. Ada pekerjaan yang layak di sana, kalau kau mau.',
+  'hudChrome.itemSoulbound': 'Terikat jiwa',
+  'hudChrome.mailbox.parcelQtyDecreaseAria': 'Kirim satu {item} lebih sedikit',
+  'hudChrome.mailbox.parcelQtyIncreaseAria': 'Kirim satu {item} lagi',
+  'hudChrome.itemHeroicTag': '[HEROIK]',
 };

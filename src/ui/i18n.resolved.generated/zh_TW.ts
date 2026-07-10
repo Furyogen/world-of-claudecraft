@@ -722,7 +722,7 @@ export const zh_TW: EnTranslations = {
     "tips": {
       "joinChannels": "提示：輸入 /join world 或 /join lfg 可與全世界的玩家聊天。"
     },
-    "itemHeroicTag": "[HEROIC]",
+    "itemHeroicTag": "[英雄]",
     "itemSoulbound": "靈魂綁定",
     "itemSet": {
       "header": "{name} ({have}/{total})",

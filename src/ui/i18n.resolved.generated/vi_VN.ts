@@ -722,8 +722,8 @@ export const vi_VN: EnTranslations = {
     "tips": {
       "joinChannels": "Mẹo: gõ /join world hoặc /join lfg để trò chuyện với người chơi khắp thế giới."
     },
-    "itemHeroicTag": "[HEROIC]",
-    "itemSoulbound": "Soulbound",
+    "itemHeroicTag": "[ANH HUNG]",
+    "itemSoulbound": "Ràng buộc linh hồn",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1314,8 +1314,8 @@ export const vi_VN: EnTranslations = {
       "parcelsLabel": "Bưu Kiện",
       "parcelsHint": "Nhấp một vật phẩm trong túi để đính kèm.",
       "removeParcelAria": "Gỡ {item} khỏi lá thư",
-      "parcelQtyDecreaseAria": "Send one fewer {item}",
-      "parcelQtyIncreaseAria": "Send one more {item}",
+      "parcelQtyDecreaseAria": "Gửi ít hơn một {item}",
+      "parcelQtyIncreaseAria": "Gửi thêm một {item}",
       "sendButton": "Gửi thư",
       "postageNote": "Bưu phí: {amount}. Quạ thư bay mất khoảng {seconds} giây.",
       "arrivedBanner": "Quạ thư đã đáp xuống: thư từ {name}.",
@@ -5839,7 +5839,7 @@ export const vi_VN: EnTranslations = {
         "name": "Nanh Của Greyjaw Già"
       },
       "chunk_of_ore": {
-        "name": "Chunk of Ore"
+        "name": "Mảnh quặng"
       },
       "weathered_ledger_page": {
         "name": "Trang Sổ Cái Phong Sương"
@@ -7513,12 +7513,12 @@ export const vi_VN: EnTranslations = {
     },
     "quests": {
       "q_prof_intro": {
-        "title": "A Trade for Every Hand",
-        "text": "Every soul in Eastbrook works a trade besides the sword, {playerName}. There's ore veins scattered round town, so go swing a pick and bring me 5 chunks. Mine them yourself, mind; I'll know the difference.",
-        "completion": "See? Ore in your pack and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
+        "title": "Một nghề cho mỗi đôi tay",
+        "text": "Ai ở Eastbrook cũng làm một nghề ngoài việc cầm kiếm, {playerName}. Các mạch quặng nằm rải rác quanh thị trấn, vậy hãy vung cuốc chim và mang cho ta 5 mảnh. Tự tay đào lấy, nhớ đấy; ta sẽ biết sự khác biệt.",
+        "completion": "Thấy chưa? Quặng trong túi và vết chai trên tay. Hãy tiếp tục khai mỏ, đốn gỗ và hái thảo mộc khi đi đường, rồi lúc về thị trấn, nhớ bảng Trọng tâm Thị trấn cạnh chợ và bàn chế tạo gần đó. Có một nghề tử tế đang chờ trong tất cả việc ấy, nếu ngươi muốn.",
         "objectives": {
           "0": {
-            "label": "Chunk of Ore"
+            "label": "Mảnh quặng"
           }
         }
       },

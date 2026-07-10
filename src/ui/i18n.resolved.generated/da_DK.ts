@@ -722,8 +722,8 @@ export const da_DK: EnTranslations = {
     "tips": {
       "joinChannels": "Tip: skriv /join world eller /join lfg for at chatte med spillere på tværs af verdenen."
     },
-    "itemHeroicTag": "[HEROIC]",
-    "itemSoulbound": "Soulbound",
+    "itemHeroicTag": "[HELTEMODIG]",
+    "itemSoulbound": "Sjælebundet",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1314,8 +1314,8 @@ export const da_DK: EnTranslations = {
       "parcelsLabel": "Pakker",
       "parcelsHint": "Klik på en genstand i dine tasker for at vedhæfte den.",
       "removeParcelAria": "Fjern {item} fra brevet",
-      "parcelQtyDecreaseAria": "Send one fewer {item}",
-      "parcelQtyIncreaseAria": "Send one more {item}",
+      "parcelQtyDecreaseAria": "Send en {item} færre",
+      "parcelQtyIncreaseAria": "Send en {item} mere",
       "sendButton": "Send brev",
       "postageNote": "Porto: {amount}. Ravnen er undervejs i omtrent {seconds}s.",
       "arrivedBanner": "Ravnen er landet: post fra {name}.",
@@ -5839,7 +5839,7 @@ export const da_DK: EnTranslations = {
         "name": "Gamle Gråkæbes Hugtand"
       },
       "chunk_of_ore": {
-        "name": "Chunk of Ore"
+        "name": "Stykke malm"
       },
       "weathered_ledger_page": {
         "name": "Forvitret Regnskabsside"
@@ -7513,12 +7513,12 @@ export const da_DK: EnTranslations = {
     },
     "quests": {
       "q_prof_intro": {
-        "title": "A Trade for Every Hand",
-        "text": "Every soul in Eastbrook works a trade besides the sword, {playerName}. There's ore veins scattered round town, so go swing a pick and bring me 5 chunks. Mine them yourself, mind; I'll know the difference.",
-        "completion": "See? Ore in your pack and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
+        "title": "Et håndværk til hver hånd",
+        "text": "Hver eneste sjæl i Eastbrook har et håndværk ud over sværdet, {playerName}. Der ligger malmårer spredt omkring byen, så sving en hakke og bring mig 5 stykker. Udvind dem selv, vel at mærke; jeg kan kende forskel.",
+        "completion": "Ser du? Malm i tasken og hård hud på hænderne. Fortsæt med minedrift, skovhugst og urtesamling, mens du rejser ad vejene, og når du er tilbage i byen, så husk Byfokus-tavlen ved markedet og arbejdsbænken ved siden af. Der venter et ærligt håndværk i det hele, hvis du vil have det.",
         "objectives": {
           "0": {
-            "label": "Chunk of Ore"
+            "label": "Stykke malm"
           }
         }
       },

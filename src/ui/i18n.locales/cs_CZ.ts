@@ -6490,4 +6490,15 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'Hesla se neshodují.',
   'hudChrome.auth.resetErrInvalid':
     'Tento odkaz pro obnovení je neplatný nebo vypršel. Požádejte o nový.',
+  'entities.items.chunk_of_ore.name': 'Kus rudy',
+  'entities.quests.q_prof_intro.objectives.0.label': 'Kus rudy',
+  'entities.quests.q_prof_intro.title': 'Řemeslo pro každou ruku',
+  'entities.quests.q_prof_intro.text':
+    'Každý v Eastbrooku má kromě meče i nějaké řemeslo, {playerName}. Kolem města jsou roztroušené rudné žíly, tak vezmi krumpáč a přines mi 5 kusů. Vytěž je sám; poznám rozdíl.',
+  'entities.quests.q_prof_intro.completion':
+    'Vidíš? Ruda v batohu a mozoly na rukou. Pokračuj v těžbě, dřevorubectví a sběru bylin, až budeš cestovat po cestách, a až se vrátíš do města, všimni si tabule Městského zaměření u trhu a blízké dílny. Je v tom poctivé řemeslo, jestli o něj stojíš.',
+  'hudChrome.itemSoulbound': 'Vázáno na duši',
+  'hudChrome.mailbox.parcelQtyDecreaseAria': 'Poslat o jeden {item} méně',
+  'hudChrome.mailbox.parcelQtyIncreaseAria': 'Poslat o jeden {item} více',
+  'hudChrome.itemHeroicTag': '[HRDINSKE]',
 };
