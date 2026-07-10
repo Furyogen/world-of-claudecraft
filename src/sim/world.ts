@@ -469,17 +469,29 @@ function featureShortlistsAt(x: number, z: number): TerrainFeatureShortlists {
 }
 
 // The camp-flatten target height (baseHeight at the camp's center) is a pure
-// constant per (camp, seed); terrainHeight used to recompute the full noise
-// cascade for it on every sample near a camp.
-const campCenterHeightCache = new WeakMap<CampT, { seed: number; h: number }>();
+// constant per (camp, seed) FOR FROZEN CONTENT; the map editor mutates camp
+// objects in place, so entries also carry the feature-cache generation and go
+// stale together with the shortlists on invalidateTerrainFeatures().
+let terrainFeatureGen = 0;
+const campCenterHeightCache = new WeakMap<CampT, { seed: number; gen: number; h: number }>();
 
 function campCenterHeight(camp: CampT, seed: number): number {
   let entry = campCenterHeightCache.get(camp);
-  if (!entry || entry.seed !== seed) {
-    entry = { seed, h: baseHeight(camp.center.x, camp.center.z, seed) };
+  if (!entry || entry.seed !== seed || entry.gen !== terrainFeatureGen) {
+    entry = { seed, gen: terrainFeatureGen, h: baseHeight(camp.center.x, camp.center.z, seed) };
     campCenterHeightCache.set(camp, entry);
   }
   return entry.h;
+}
+
+// Drops the terrain-feature caches for the ACTIVE content (editor-only: call
+// after mutating hubs/lakes/camps in place, the invalidateTerrainEditIndex /
+// invalidateStaticColliders pattern). Hosts never mutate content in place, so
+// the sim/server never need this. The exact export name is a contract with
+// the editor lane: do not rename.
+export function invalidateTerrainFeatures(): void {
+  featureShortlistCache.delete(world().content);
+  terrainFeatureGen++;
 }
 
 function baseHeight(x: number, z: number, seed: number): number {

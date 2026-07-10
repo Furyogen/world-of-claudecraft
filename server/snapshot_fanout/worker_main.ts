@@ -44,9 +44,15 @@ interface Fragment {
 const CELL = 32; // yards; matches src/sim/spatial.ts so scan windows agree
 const CELL_OFFSET = 32768;
 
-let headerI32: Int32Array | null = null;
-let mirrorF64: Float64Array | null = null;
-let mirrorI32: Int32Array | null = null;
+interface BoundMirror {
+  headerI32: Int32Array;
+  f64: Float64Array;
+  i32: Int32Array;
+}
+
+// Double-buffered (see protocol.ts): each tick message names the buffer it
+// was written into, pinned by the pool until this worker replies.
+let boundMirrors: BoundMirror[] = [];
 
 const fragments = new Map<number, Fragment>();
 const sessions = new Map<number, Map<number, SentEntityVersions>>();
@@ -56,10 +62,12 @@ const sessions = new Map<number, Map<number, SentEntityVersions>>();
 // incremental-consistency bugs).
 const cells = new Map<number, number[]>();
 
-function bindMirror(m: MirrorBuffers): void {
-  headerI32 = new Int32Array(m.header);
-  mirrorF64 = new Float64Array(m.f64);
-  mirrorI32 = new Int32Array(m.i32);
+function bindMirrors(mirrors: MirrorBuffers[]): void {
+  boundMirrors = mirrors.map((m) => ({
+    headerI32: new Int32Array(m.header),
+    f64: new Float64Array(m.f64),
+    i32: new Int32Array(m.i32),
+  }));
 }
 
 function rebuildGrid(count: number, f64: Float64Array): void {
@@ -157,10 +165,9 @@ function onMessage(msg: MainToWorker): void {
       fragments.set(id, { idVer, dynVer, fullJson, liteJson });
     }
     for (const id of msg.removed) fragments.delete(id);
-    const header = headerI32;
-    const f64 = mirrorF64;
-    const i32 = mirrorI32;
-    if (!header || !f64 || !i32 || !parentPort) return;
+    const mirror = boundMirrors[msg.buffer];
+    if (!mirror || !parentPort) return;
+    const { headerI32: header, f64, i32 } = mirror;
     rebuildGrid(header[0], f64);
     const ents: string[] = [];
     const keep: number[] = [];
@@ -187,7 +194,7 @@ function onMessage(msg: MainToWorker): void {
     return;
   }
   if (msg.t === 'init') {
-    bindMirror(msg.mirror);
+    bindMirrors(msg.mirrors);
   }
 }
 

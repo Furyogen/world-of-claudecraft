@@ -30,6 +30,13 @@ main thread keeps only O(sessions) work per tick.
   own ledger at dispatch, so a busy/respawned worker always catches up before
   building. Stealth visibility needs live social state, so it resolves on the
   main thread and ships as per-session denied ids.
+- **The mirror is double-buffered with ownership, never torn.** A dispatched
+  tick pins its buffer (`pendingBuffer`) until the worker replies; the main
+  thread writes only a buffer `acquireMirror()` reports free, and skips the
+  fanout tick entirely when every buffer is pinned by slow workers. A worker
+  running past a tick boundary therefore always reads the complete,
+  unchanged buffer its job named; no atomics needed beyond the postMessage
+  happens-before edge.
 - **Frame pairing:** self JSON + head are captured at dispatch and paired
   with the worker reply of the SAME tick (`pendingFanoutFrames`); a mismatch
   drops the frame rather than mixing sim states.

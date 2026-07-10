@@ -4,9 +4,13 @@
 // Data split, chosen so the sim never leaves the main thread and the workers
 // never see a live Entity:
 // - Numeric per-entity facts the interest scan needs (position, kind flags,
-//   aggro, wire-fragment versions) ride a SharedArrayBuffer MIRROR the main
-//   thread rewrites every tick. postMessage of the tick job is the
-//   happens-before edge, so workers read the mirror without atomics.
+//   aggro, wire-fragment versions) ride SharedArrayBuffer MIRRORS. The set is
+//   DOUBLE-BUFFERED with ownership: a dispatched tick pins its buffer until
+//   every worker holding a job on it replies, and the main thread only ever
+//   writes a buffer with no in-flight readers, so a worker that runs long can
+//   never observe a torn (partially overwritten) mirror. postMessage of the
+//   tick job is the happens-before edge for the chosen buffer's contents, so
+//   workers still read without atomics.
 // - The wire-fragment STRINGS (fullJson/liteJson built by wireCacheFor, the
 //   single serializer both paths share) cannot ride shared memory; they ship
 //   inside the tick message as deltas keyed by version, so an unchanged
@@ -28,6 +32,11 @@ export interface MirrorBuffers {
   f64: SharedArrayBuffer;
   i32: SharedArrayBuffer;
 }
+
+// Two buffers cover the steady state (workers reply within the tick, so the
+// other buffer is always free); when BOTH are pinned by slow workers the pool
+// skips the fanout tick rather than tear a read.
+export const MIRROR_BUFFER_COUNT = 2;
 
 export function createMirrorBuffers(): MirrorBuffers {
   return {
@@ -54,12 +63,14 @@ export interface SessionJob {
 
 export interface InitMessage {
   t: 'init';
-  mirror: MirrorBuffers;
+  mirrors: MirrorBuffers[];
 }
 
 export interface TickMessage {
   t: 'tick';
   tick: number;
+  // which mirror buffer this tick was written into; pinned until the reply
+  buffer: number;
   changed: FragmentDelta[];
   removed: number[];
   sessions: SessionJob[];

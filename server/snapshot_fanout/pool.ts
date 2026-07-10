@@ -24,6 +24,7 @@ import {
   createMirrorBuffers,
   type FragmentDelta,
   type FramesMessage,
+  MIRROR_BUFFER_COUNT,
   MIRROR_CAPACITY,
   type MirrorBuffers,
   type SessionJob,
@@ -48,6 +49,8 @@ export interface ShippedVers {
 interface WorkerSlot {
   worker: Worker | null;
   pendingTick: number | null;
+  // mirror buffer the in-flight job reads; pins that buffer against rewrite
+  pendingBuffer: number | null;
   busySinceMs: number;
   respawnAtMs: number;
   failures: number;
@@ -78,11 +81,16 @@ export interface DispatchResult {
   dispatched: number;
 }
 
+export interface MirrorViews {
+  index: number;
+  headerI32: Int32Array;
+  f64: Float64Array;
+  i32: Int32Array;
+}
+
 export class SnapshotFanoutPool {
-  readonly mirror: MirrorBuffers = createMirrorBuffers();
-  readonly headerI32 = new Int32Array(this.mirror.header);
-  readonly mirrorF64 = new Float64Array(this.mirror.f64);
-  readonly mirrorI32 = new Int32Array(this.mirror.i32);
+  private readonly mirrors: MirrorBuffers[] = [];
+  private readonly views: MirrorViews[] = [];
 
   private readonly slots: WorkerSlot[] = [];
   private disabled = false;
@@ -96,10 +104,21 @@ export class SnapshotFanoutPool {
     private readonly workerPath: string,
     private readonly host: FanoutHost,
   ) {
+    for (let b = 0; b < MIRROR_BUFFER_COUNT; b++) {
+      const m = createMirrorBuffers();
+      this.mirrors.push(m);
+      this.views.push({
+        index: b,
+        headerI32: new Int32Array(m.header),
+        f64: new Float64Array(m.f64),
+        i32: new Int32Array(m.i32),
+      });
+    }
     for (let i = 0; i < workerCount; i++) {
       this.slots.push({
         worker: null,
         pendingTick: null,
+        pendingBuffer: null,
         busySinceMs: 0,
         respawnAtMs: 0,
         failures: 0,
@@ -114,6 +133,24 @@ export class SnapshotFanoutPool {
     return MIRROR_CAPACITY;
   }
 
+  // A mirror buffer with no in-flight reader, for the caller to write this
+  // tick's entity facts into, or null when every buffer is pinned by a slow
+  // worker (the caller then skips the fanout for this tick entirely; tearing
+  // a busy reader's buffer is never an option).
+  acquireMirror(): MirrorViews | null {
+    for (const view of this.views) {
+      let pinned = false;
+      for (const slot of this.slots) {
+        if (slot.pendingBuffer === view.index) {
+          pinned = true;
+          break;
+        }
+      }
+      if (!pinned) return view;
+    }
+    return null;
+  }
+
   isEnabled(): boolean {
     return !this.disabled && this.workerCount > 0;
   }
@@ -122,6 +159,7 @@ export class SnapshotFanoutPool {
     const slot = this.slots[index];
     slot.worker = null;
     slot.pendingTick = null;
+    slot.pendingBuffer = null;
     slot.failures++;
     slot.respawnAtMs = Date.now() + RESPAWN_DELAY_MS;
     this.host.log(`[fanout] worker ${index} ${what}${err !== undefined ? `: ${err}` : ''}`);
@@ -142,6 +180,7 @@ export class SnapshotFanoutPool {
         if (msg.t !== 'frames') return;
         if (slot.worker !== worker) return; // reply from a replaced worker
         slot.pendingTick = null;
+        slot.pendingBuffer = null;
         this.totalDelivered += msg.frames.length;
         for (const [sid, ents, keep] of msg.frames) {
           this.host.deliverFrame(sid, msg.tick, ents, keep);
@@ -153,9 +192,10 @@ export class SnapshotFanoutPool {
       worker.on('exit', (code) => {
         if (slot.worker === worker && code !== 0) this.failSlot(index, `exited (${code})`);
       });
-      worker.postMessage({ t: 'init', mirror: this.mirror });
+      worker.postMessage({ t: 'init', mirrors: this.mirrors });
       slot.worker = worker;
       slot.pendingTick = null;
+      slot.pendingBuffer = null;
       // fresh isolate: empty caches; an empty ledger makes the next delta
       // ship the complete current fragment set
       slot.shipped.clear();
@@ -191,9 +231,10 @@ export class SnapshotFanoutPool {
   }
 
   // Split jobs across alive, idle workers by sid; hand back everything that
-  // could not be dispatched. The caller has already written the mirror and
-  // set headerI32[0] (count) and [1] (tick).
-  dispatchTick(tick: number, jobs: SessionJob[]): DispatchResult {
+  // could not be dispatched. The caller has already written the acquired
+  // mirror buffer (headerI32[0] = count, [1] = tick) and passes its index;
+  // every dispatched job pins that buffer until the worker replies.
+  dispatchTick(tick: number, bufferIndex: number, jobs: SessionJob[]): DispatchResult {
     if (this.disabled || this.workerCount === 0) {
       return { fallback: jobs, skipped: [], dispatched: 0 };
     }
@@ -233,9 +274,17 @@ export class SnapshotFanoutPool {
       // message entirely.
       if (mine.length === 0 && changed.length === 0 && removed.length === 0) continue;
       slot.pendingRemovals = [];
-      const msg: TickMessage = { t: 'tick', tick, changed, removed, sessions: mine };
+      const msg: TickMessage = {
+        t: 'tick',
+        tick,
+        buffer: bufferIndex,
+        changed,
+        removed,
+        sessions: mine,
+      };
       slot.worker.postMessage(msg);
       slot.pendingTick = tick;
+      slot.pendingBuffer = bufferIndex;
       slot.busySinceMs = nowMs;
       dispatched += mine.length;
       this.totalDispatched += mine.length;
@@ -248,6 +297,7 @@ export class SnapshotFanoutPool {
       const w = slot.worker;
       slot.worker = null;
       slot.pendingTick = null;
+      slot.pendingBuffer = null;
       if (w) void w.terminate();
     }
   }

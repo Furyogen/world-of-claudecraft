@@ -3964,8 +3964,14 @@ export class GameServer {
     nowMs: number,
     head: string,
   ): void {
-    const f64 = fanout.mirrorF64;
-    const i32 = fanout.mirrorI32;
+    // A free (unpinned) mirror buffer to write this tick's facts into; when
+    // every buffer is still being read by a slow worker, skip the fanout tick
+    // outright, tearing a busy reader's buffer is never an option, and the
+    // per-session skip semantics below already cover a missed tick.
+    const mirror = fanout.acquireMirror();
+    if (mirror === null) return;
+    const f64 = mirror.f64;
+    const i32 = mirror.i32;
     let slot = 0;
     let stealthed: Entity[] | null = null;
     for (const e of this.sim.entities.values()) {
@@ -3989,8 +3995,8 @@ export class GameServer {
       i32[iBase + 4] = cache.dynVer;
       slot++;
     }
-    fanout.headerI32[0] = slot;
-    fanout.headerI32[1] = tick;
+    mirror.headerI32[0] = slot;
+    mirror.headerI32[1] = tick;
     const jobs: SessionJob[] = [];
     forEachGuarded(
       this.clients.values(),
@@ -4032,7 +4038,7 @@ export class GameServer {
       (err, session) =>
         console.error(`[snap] failed to prepare fanout job for pid ${session.pid}:`, err),
     );
-    const result = fanout.dispatchTick(tick, jobs);
+    const result = fanout.dispatchTick(tick, mirror.index, jobs);
     // Dead shard: build in-thread so nobody freezes while the worker
     // respawns. Busy shard (result.skipped): drop this tick's frame instead,
     // clients coast on interpolation; see pool.ts on why in-thread fallback
