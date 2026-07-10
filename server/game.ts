@@ -87,6 +87,7 @@ import { mergedPrsForLogin } from './github_contributors';
 import { githubForAccount } from './github_db';
 import { forEachGuarded, runGuarded } from './guarded_iter';
 import { gameMetricsCounters } from './http/game_signals';
+import { parseInputFrameFast } from './input_frame_fast';
 import { IpBlockList } from './ip_block';
 import { loadActiveBlockedIps } from './ip_block_db';
 import { LINKDEAD_GRACE_MS, planJoin } from './linkdead';
@@ -2747,17 +2748,22 @@ export class GameServer {
       return;
     }
     if (verdict === 'drop') return;
-    let msg: unknown;
-    try {
-      msg = JSON.parse(raw);
-    } catch {
-      this.botDetector.observeProtocolAnomaly(
-        session.botTrackingContext,
-        'invalid_json',
-        raw,
-        receivedAtMs,
-      );
-      return;
+    // Movement frames arrive 20x/s from EVERY client; the hand parser covers
+    // the canonical encoding and null means "shape not covered", never
+    // "invalid", so everything else takes the JSON.parse path unchanged.
+    let msg: unknown = parseInputFrameFast(raw);
+    if (msg === null) {
+      try {
+        msg = JSON.parse(raw);
+      } catch {
+        this.botDetector.observeProtocolAnomaly(
+          session.botTrackingContext,
+          'invalid_json',
+          raw,
+          receivedAtMs,
+        );
+        return;
+      }
     }
     // a malformed payload must never take down the server for everyone
     try {
