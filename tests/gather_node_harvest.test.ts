@@ -235,6 +235,54 @@ describe('gather node harvest (#1121)', () => {
     expect(sim.nodeHarvestableByMeFor(NODE_ID, pid)).toBe(true);
   });
 
+  it('a granted harvest emits exactly one personal gatherResult carrying pid, profession, node, and a valid rarity (#1729)', () => {
+    const sim = makeWorld();
+    const pid = sim.addPlayer('warrior', 'Harvester');
+    // A second player, standing on the same node, who never harvests: proves the
+    // emitted event is delivered personally (carries the harvesting player's pid),
+    // not proximity-broadcast to everyone near the node.
+    const bystanderPid = sim.addPlayer('warrior', 'Bystander');
+    teleportOntoNode(sim, pid, NODE_ID);
+    teleportOntoNode(sim, bystanderPid, NODE_ID);
+
+    const node = mustNode(NODE_ID);
+    const entry = NODE_HARVEST_TABLE[node.type];
+
+    sim.harvestNode(NODE_ID, pid);
+    const events = sim.tick();
+    const gatherResults = events.filter((e) => e.type === 'gatherResult');
+    expect(gatherResults).toHaveLength(1);
+    const ev = gatherResults[0];
+    // Personal: the event's pid is the harvesting player's own entity id, never
+    // the bystander's and never absent (an absent pid would broadcast it).
+    expect(ev.pid).toBe(pid);
+    expect(ev.pid).not.toBe(bystanderPid);
+    expect(ev.professionId).toBe(entry.professionId);
+    expect(ev.nodeId).toBe(NODE_ID);
+    expect(ev.itemId).toBe(entry.itemId);
+    // Rarity is one of the material ladder tiers (poor is excluded from harvests).
+    expect(['common', 'uncommon', 'rare', 'epic', 'legendary']).toContain(ev.rarity);
+  });
+
+  it('a denied/blocked harvest emits no gatherResult (#1729)', () => {
+    const sim = makeWorld();
+    const pid = sim.addPlayer('warrior', 'Blocked');
+    teleportOntoNode(sim, pid, NODE_ID);
+
+    // First harvest succeeds and emits the event.
+    sim.harvestNode(NODE_ID, pid);
+    expect(sim.tick().filter((e) => e.type === 'gatherResult')).toHaveLength(1);
+
+    // Immediately harvesting again is denied (this player's own timer has not
+    // elapsed): no gatherResult is emitted on the denial path.
+    sim.harvestNode(NODE_ID, pid);
+    expect(sim.tick().filter((e) => e.type === 'gatherResult')).toHaveLength(0);
+
+    // An unknown node id is likewise denied with no event.
+    sim.harvestNode('not_a_real_node', pid);
+    expect(sim.tick().filter((e) => e.type === 'gatherResult')).toHaveLength(0);
+  });
+
   it('spends exactly one rng draw on a granted harvest and none on any denial path', () => {
     const sim = makeWorld();
     const pid = sim.addPlayer('warrior', 'DrawCount');

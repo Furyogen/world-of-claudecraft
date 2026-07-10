@@ -231,6 +231,20 @@ export function harvestNode(ctx: SimContext, nodeId: string, pid?: number): void
     return;
   }
   ctx.addItem(result.itemId!, 1, meta.entityId);
+  // Personal gather-success cue (#1729, part 1): text-free structured event the
+  // client can hook a gather SFX onto. Carries `pid` (the harvesting player's
+  // own entity id) so it stays personal, never proximity-broadcast, and the
+  // rolled rarity from resolveHarvest. Additive read only: it consumes no rng
+  // (the one rarity draw already happened inside resolveHarvest above) and does
+  // not change the tick phase or draw order.
+  ctx.emit({
+    type: 'gatherResult',
+    pid: meta.entityId,
+    professionId: entry.professionId,
+    nodeId: node.id,
+    itemId: entry.itemId,
+    rarity: result.rarity!,
+  });
   // Resolved against the timer/bags gates above, before the timer-consuming
   // resolveHarvest call, so a full-bags quest item never eats the node's
   // per-player respawn timer on its own.

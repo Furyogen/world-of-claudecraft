@@ -2426,6 +2426,20 @@ export type SimEvent = { pid?: number } & (
         | 'throttled'
         | 'not_at_hub';
     }
+  // Successful gathering-node harvest (#1729, part 1): a personal (carries `pid`)
+  // one-shot cue the client can hook a gather SFX onto, mirroring skinEvent/
+  // craftResult. Text-free on purpose: the client renders any copy off the
+  // structured fields, so no sim/server i18n matcher rule is needed. Carries the
+  // harvesting profession, the node and material granted, and the rolled material
+  // rarity (so a fancier cue can react to a rare-or-better haul). Emitted only on a
+  // granted harvest; a denied/blocked harvest emits nothing.
+  | {
+      type: 'gatherResult';
+      professionId: GatheringProfessionId;
+      nodeId: string;
+      itemId: string;
+      rarity: Exclude<NonNullable<ItemDef['quality']>, 'poor'>;
+    }
 );
 
 export interface MoveInput {
