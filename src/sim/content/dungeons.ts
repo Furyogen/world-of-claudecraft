@@ -482,21 +482,30 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
     maxLevel: 20,
     family: 'undead',
     elite: true,
-    ccImmune: true,
-    hpBase: 130,
-    hpPerLevel: 24,
+    // Deliberately CC-able (unlike the other adds): the raid MUST stun/silence him
+    // to break his escalating heal channel. See channelHeal and the priest-add
+    // exemption in the Nythraxis control-immunity gate (sim.applyAura).
+    ccImmune: false,
+    // Squishy: low health so a focused raid can burn him, but his heal is strong,
+    // so stunning/silencing is usually the better answer than racing his HP.
+    hpBase: 80,
+    hpPerLevel: 14,
     dmgBase: 12,
     dmgPerLevel: 2.6,
     attackSpeed: 2.4,
-    armorPerLevel: 18,
+    armorPerLevel: 14,
     moveSpeed: 9.5,
     aggroRadius: 14,
-    wardAllies: {
-      radius: 35,
-      every: 8,
-      amount: 900,
-      duration: 7,
-      name: "Malric's Ward",
+    // Escalating channeled heal on Nythraxis: starts at 700 and grows by 500 each
+    // uninterrupted tick (every 3s) up to 5000, so an unchecked Malric out-heals
+    // the raid's damage over time. A stun/incapacitate/silence resets the ramp.
+    channelHeal: {
+      radius: 45,
+      every: 3,
+      baseHeal: 700,
+      rampAdd: 500,
+      maxHeal: 5000,
+      name: "Malric's Mending",
       school: 'shadow',
     },
     loot: [],
@@ -510,13 +519,16 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
     maxLevel: 20,
     family: 'undead',
     elite: true,
-    ccImmune: true,
-    hpBase: 120,
-    hpPerLevel: 22,
-    dmgBase: 10.4,
-    dmgPerLevel: 2.24,
+    // Untauntable (ignoreTaunt) but CC-able: the raid cannot tank-lock him onto a
+    // target, they have to stun/root him off the healers. Low health so a peel
+    // plus CC handles him. See the controllable-add exemption in sim.applyAura.
+    ccImmune: false,
+    hpBase: 90,
+    hpPerLevel: 16,
+    dmgBase: 16,
+    dmgPerLevel: 3.4,
     attackSpeed: 2.0,
-    armorPerLevel: 18,
+    armorPerLevel: 16,
     moveSpeed: 11,
     aggroRadius: 14,
     ignoreTaunt: true,

@@ -39,7 +39,7 @@ import {
   spendResource as spendResourceImpl,
   updateCasting as updateCastingImpl,
 } from './combat/casting_lifecycle';
-import { isRooted, isStunned } from './combat/cc';
+import { isRooted, isSilenced, isStunned } from './combat/cc';
 import {
   dealDamage as dealDamageImpl,
   grantXp as grantXpImpl,
@@ -3820,6 +3820,7 @@ export class Sim {
     if (target.kind === 'npc' && isRejectedFriendlyNpcAura(aura)) return;
     if (
       this.isNythraxisRaidEnemy(target) &&
+      !nythraxis.isNythraxisControllableAdd(target) && // priest + stalker are meant to be CC'd
       this.isNythraxisControlAura(aura.kind) &&
       aura.sourceId !== target.id &&
       !this.isNythraxisScriptedControl(target, aura)
@@ -4692,6 +4693,7 @@ export class Sim {
         !tmpl.desperateHeal &&
         !tmpl.mendAlly &&
         !tmpl.wardAllies &&
+        !tmpl.channelHeal &&
         !tmpl.rally &&
         !tmpl.warcry)
     )
@@ -4827,6 +4829,63 @@ export class Sim {
               school,
             });
           }
+        }
+      }
+    }
+    // Channeled ESCALATING heal ("Hierophant's Mending"): heal the strongest
+    // friendly mob in range (its protectee, the raid boss) for a base amount plus
+    // a ramp that grows each uninterrupted tick. Any stun/incapacitate/silence
+    // (isStunned covers stun/incap/polymorph) breaks the channel and RESETS the
+    // ramp, so a raid that fails to lock the caster down watches the boss heal for
+    // more and more. The caster is CC-able by design (ccImmune: false).
+    if (tmpl.channelHeal) {
+      const ch = tmpl.channelHeal;
+      const interrupted = this.ctx.isStunned(mob) || isSilenced(mob);
+      if (interrupted) {
+        if (mob.channelRamp > 0) {
+          mob.channelRamp = 0;
+          this.emit({
+            type: 'log',
+            text: `${mob.name}'s ${ch.name} is interrupted!`,
+            color: '#ffcc66',
+            entityId: mob.id,
+          });
+        }
+        mob.channelTimer = ch.every;
+      } else {
+        mob.channelTimer -= DT;
+        if (mob.channelTimer <= 0) {
+          mob.channelTimer = ch.every;
+          let protectee: Entity | null = null;
+          for (const ally of this.entities.values()) {
+            if (ally.kind !== 'mob' || ally.dead || ally.ownerId !== null) continue; // skip players, pets, corpses
+            if (ally.hostile !== mob.hostile || ally.id === mob.id) continue; // same-faction, not self
+            if (dist2d(ally.pos, mob.pos) > ch.radius) continue;
+            if (!protectee || ally.maxHp > protectee.maxHp) protectee = ally; // the boss = biggest pool
+          }
+          if (protectee && protectee.hp < protectee.maxHp) {
+            const amount = Math.round(
+              Math.min(ch.maxHeal, ch.baseHeal + mob.channelRamp) * (mob.mechanicHealMult ?? 1),
+            );
+            const school = ch.school ?? 'shadow';
+            this.emit({
+              type: 'spellfx',
+              sourceId: mob.id,
+              targetId: protectee.id,
+              school,
+              fx: 'beam',
+            });
+            this.emit({
+              type: 'log',
+              text: `${mob.name} channels ${ch.name}, mending ${protectee.name} for ${amount}.`,
+              color: '#66ff99',
+              entityId: mob.id,
+            });
+            this.applyHeal(mob, protectee, amount, ch.name);
+          }
+          // The ramp grows each uninterrupted tick (capped so base+ramp never
+          // exceeds maxHeal), so an ignored channel heals more and more over time.
+          mob.channelRamp = Math.min(ch.maxHeal - ch.baseHeal, mob.channelRamp + ch.rampAdd);
         }
       }
     }

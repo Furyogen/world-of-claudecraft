@@ -842,6 +842,23 @@ export interface MobTemplate {
     name: string;
     school?: Aura['school'];
   };
+  // Channeled ESCALATING heal ("Hierophant's Mending"): every `every`s the caster
+  // heals the highest-max-hp friendly mob in `radius` (its protector, e.g. a raid
+  // boss) for `baseHeal` plus a ramp that GROWS by `rampAdd` each uninterrupted
+  // tick, capped so a tick never exceeds `maxHeal`. Any stun/incapacitate/silence
+  // (see combat/cc.ts) breaks the channel and RESETS the ramp to zero, so a raid
+  // that fails to lock the caster down watches the boss heal for more and more.
+  // The caster must be CC-able (template `ccImmune: false`) for the reset to
+  // matter. Rides applyHeal; no new aura kind. Resets on evade/respawn.
+  channelHeal?: {
+    radius: number;
+    every: number;
+    baseHeal: number;
+    rampAdd: number;
+    maxHeal: number;
+    name: string;
+    school?: Aura['school'];
+  };
   // Commander mechanic ("Rallying Banner"): periodically empowers every friendly
   // mob in range (including the caster) with a refreshing `buff_ap` aura worth
   // `ap` attack power for `duration`s — the support twin of mendAlly, granting
@@ -1842,6 +1859,8 @@ export interface Entity {
   detonateTimer: number; // Death Throes fuse on a volatile corpse; Infinity = no pending detonation
   mendTimer: number; // mendAlly support-heal cast countdown
   wardTimer: number; // wardAllies support-shield cast countdown
+  channelTimer: number; // channelHeal escalating-heal tick countdown
+  channelRamp: number; // channelHeal accumulated bonus heal; reset to 0 on interrupt (CC)
   rallyTimer: number; // rally commander-buff cast countdown
   warcryTimer: number; // warcry ally-haste pulse countdown
   firedSummons: number; // summonAdds thresholds already triggered

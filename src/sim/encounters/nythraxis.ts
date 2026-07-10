@@ -148,6 +148,18 @@ export function isNythraxisRaidEnemy(target: Entity): boolean {
   );
 }
 
+// The two Nythraxis adds the raid is MEANT to control (their templates carry
+// ccImmune: false): Malric the priest (stun/silence to break his heal channel)
+// and Voss the stalker (untauntable, so root/stun him off the healers). The
+// scripted control-immunity gate exempts both; the warrior add stays CC-immune.
+export function isNythraxisControllableAdd(target: Entity): boolean {
+  return (
+    target.kind === 'mob' &&
+    (target.templateId === 'nythraxis_heroic_priest_add' ||
+      target.templateId === 'nythraxis_heroic_rogue_add')
+  );
+}
+
 export function isNythraxisScriptedControl(target: Entity, aura: Aura): boolean {
   return (
     target.kind === 'mob' &&
