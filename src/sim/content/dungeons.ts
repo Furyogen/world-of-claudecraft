@@ -496,15 +496,19 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
     armorPerLevel: 14,
     moveSpeed: 9.5,
     aggroRadius: 14,
-    // Escalating channeled heal on Nythraxis: starts at 700 and grows by 500 each
-    // uninterrupted tick (every 3s) up to 5000, so an unchecked Malric out-heals
-    // the raid's damage over time. A stun/incapacitate/silence resets the ramp.
+    // Escalating channeled heal on Nythraxis. Tuned against ~550 raid DPS (10 x
+    // ~55) at the heroic gear level: the adds inherit mechanicHealMult (1.6), so
+    // the raw 400 -> 1800 ramp lands ~640 (a light drain early) up to ~2880 per 3s
+    // at cap (~960 HPS, ~1.7x raid DPS). Ignoring Malric a few ticks lets the boss
+    // gain ground; a stun/incapacitate/silence resets the ramp. Even a max-geared
+    // raid (~850 DPS) cannot out-damage a capped channel, so the interrupt stays
+    // mandatory rather than optional.
     channelHeal: {
       radius: 45,
       every: 3,
-      baseHeal: 700,
-      rampAdd: 500,
-      maxHeal: 5000,
+      baseHeal: 400,
+      rampAdd: 300,
+      maxHeal: 1800,
       name: "Malric's Mending",
       school: 'shadow',
     },

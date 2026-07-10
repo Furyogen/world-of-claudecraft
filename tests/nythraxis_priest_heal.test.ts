@@ -55,9 +55,9 @@ describe('heroic Nythraxis priest: escalating channeled heal', () => {
     expect(t.channelHeal).toEqual({
       radius: 45,
       every: 3,
-      baseHeal: 700,
-      rampAdd: 500,
-      maxHeal: 5000,
+      baseHeal: 400,
+      rampAdd: 300,
+      maxHeal: 1800,
       name: "Malric's Mending",
       school: 'shadow',
     });
@@ -69,12 +69,14 @@ describe('heroic Nythraxis priest: escalating channeled heal', () => {
     const malric = spawn(sim, 8002, 'nythraxis_heroic_priest_add');
     boss.pos = { x: 4, y: 0, z: 0 };
 
+    // Standalone spawn has no mechanicHealMult (the heroic 1.6x only applies in a
+    // claimed heroic instance), so these are the raw base/ramp values.
     const first = tickOneChannel(sim, malric, boss);
     const second = tickOneChannel(sim, malric, boss);
     const third = tickOneChannel(sim, malric, boss);
-    expect(first).toBe(700); // baseHeal
-    expect(second).toBe(1200); // +rampAdd
-    expect(third).toBe(1700); // +rampAdd again
+    expect(first).toBe(400); // baseHeal
+    expect(second).toBe(700); // +rampAdd
+    expect(third).toBe(1000); // +rampAdd again
     expect(second).toBeGreaterThan(first);
     expect(third).toBeGreaterThan(second);
   });
@@ -85,9 +87,9 @@ describe('heroic Nythraxis priest: escalating channeled heal', () => {
     const malric = spawn(sim, 8012, 'nythraxis_heroic_priest_add');
     boss.pos = { x: 4, y: 0, z: 0 };
 
-    tickOneChannel(sim, malric, boss); // 700
-    const ramped = tickOneChannel(sim, malric, boss); // 1200 (ramp built)
-    expect(ramped).toBe(1200);
+    tickOneChannel(sim, malric, boss); // 400
+    const ramped = tickOneChannel(sim, malric, boss); // 700 (ramp built)
+    expect(ramped).toBe(700);
 
     // Stun Malric: the next interval heals for nothing and the ramp resets.
     malric.auras.push(stun(0));
@@ -98,7 +100,7 @@ describe('heroic Nythraxis priest: escalating channeled heal', () => {
     // After the stun clears the channel restarts from base, not where it left off.
     malric.auras = [];
     const afterStun = tickOneChannel(sim, malric, boss);
-    expect(afterStun).toBe(700);
+    expect(afterStun).toBe(400);
   });
 
   it('the priest (and stalker) accept player CC; the warrior add does not', () => {
