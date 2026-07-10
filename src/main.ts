@@ -1701,6 +1701,7 @@ async function startGame(
       return cached.amountBase;
     };
     hud.attachClaudium({
+      balance: async () => (await economy.balance()).balance,
       snapshot: async () => {
         const [balance, skus, price, nativeRails, storeItems] = await Promise.all([
           economy.balance(),

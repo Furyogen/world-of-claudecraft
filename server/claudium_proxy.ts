@@ -153,6 +153,10 @@ export interface ClaudiumStoreResult {
   items: ClaudiumStoreItem[];
 }
 
+export interface ClaudiumStripeWebhookResult {
+  received: boolean;
+}
+
 function serviceUrl(): string {
   return (process.env.WOC_ECONOMY_SERVICE_URL ?? '').trim();
 }
@@ -211,6 +215,33 @@ async function callService<T>(req: ServiceRequest): Promise<T | null> {
   } catch (err) {
     logFailure(err);
     return null;
+  }
+}
+
+export async function claudiumStripeWebhook(
+  rawBody: Buffer,
+  signatureHeader: string,
+): Promise<ClaudiumStripeWebhookResult> {
+  const base = serviceUrl();
+  if (base === '') return { received: false };
+  try {
+    const url = new URL('stripe/webhook', base.endsWith('/') ? base : `${base}/`);
+    const body = new Uint8Array(rawBody);
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'stripe-signature': signatureHeader,
+      },
+      body,
+      signal: AbortSignal.timeout(SERVICE_TIMEOUT_MS),
+    });
+    if (!res.ok && res.status !== 400) throw new Error(`POST stripe/webhook -> ${res.status}`);
+    const data = (await res.json()) as { received?: unknown };
+    return { received: data.received === true };
+  } catch (err) {
+    logFailure(err);
+    return { received: false };
   }
 }
 

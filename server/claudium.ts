@@ -31,12 +31,15 @@ import {
   claudiumSolBalance,
   claudiumSpend,
   claudiumStore,
+  claudiumStripeWebhook,
 } from './claudium_proxy';
 import { accountAndScopeForToken, moderationStatusForAccount } from './db';
 import { ctxAccountId } from './http/context';
 import { type BearerActiveGuardDb, createActiveGuard } from './http/middleware/bearer_active_guard';
 import type { Ctx, RouteDef } from './http/types';
-import { json, readBody } from './http_util';
+import { json, readBinaryBody, readBody } from './http_util';
+
+const STRIPE_WEBHOOK_MAX_BYTES = 1024 * 1024;
 
 function makeRealClaudiumDb() {
   return { accountAndScopeForToken, moderationStatusForAccount };
@@ -79,6 +82,16 @@ function parseSpendKind(value: unknown): 'cosmetic' | 'skin' | 'item' | null {
 /** Whether the economy service env is configured (does not confirm reachability). */
 export function claudiumConfigured(): boolean {
   return claudiumServiceConfigured();
+}
+
+export async function handleClaudiumStripeWebhook(
+  req: http.IncomingMessage,
+  res: http.ServerResponse,
+): Promise<void> {
+  const signature = String(req.headers['stripe-signature'] ?? '');
+  const rawBody = await readBinaryBody(req, STRIPE_WEBHOOK_MAX_BYTES);
+  const result = await claudiumStripeWebhook(rawBody, signature);
+  return json(res, result.received ? 200 : 400, result);
 }
 
 /**
@@ -232,6 +245,13 @@ function claudiumHandler(ctx: Ctx): Promise<void> {
 }
 
 export const routes: RouteDef[] = [
+  {
+    method: 'POST',
+    path: '/api/claudium/stripe/webhook',
+    surface: 'api',
+    meta: { publicRead: true },
+    handler: (ctx) => handleClaudiumStripeWebhook(ctx.req, ctx.res),
+  },
   {
     method: 'GET',
     path: '/api/claudium/balance',

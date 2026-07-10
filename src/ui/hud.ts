@@ -442,6 +442,7 @@ export interface ReportHooks {
  * purchase / cosmetic-redeem flows. All values originate in the economy service.
  */
 export interface ClaudiumHooks {
+  balance(): Promise<number | null>;
   snapshot(): Promise<ClaudiumSnapshot>;
   buy(rail: ClaudiumRail, sku: string): Promise<void>;
   spend(itemId: string, kind: 'cosmetic' | 'skin' | 'item'): void;
@@ -3621,18 +3622,26 @@ export class Hud {
   // hooks are null and the window renders its clean disabled/empty state. The
   // window computes NOTHING; every number rides in through these hooks.
   private claudiumHooks: ClaudiumHooks | null = null;
+  private claudiumLauncherBalance: number | null = null;
+  private claudiumLauncherBalancePending = false;
+  private claudiumLauncherBalanceLastMs = 0;
+  private claudiumLauncherBalanceSeq = 0;
   private readonly claudiumWindow = new ClaudiumWindow({
     root: () => $('#claudium-window'),
     closeOthers: () => this.closeOtherWindows('#claudium-window'),
-    snapshot: () =>
-      this.claudiumHooks?.snapshot() ??
-      Promise.resolve({
-        balance: null,
-        skus: [],
-        price: { usdPerClaudium: null, wocBaseUnitsPerClaudium: null },
-        nativeRails: { sol: false, woc: false },
-        storeItems: [],
-      }),
+    snapshot: async () => {
+      const snapshot =
+        (await this.claudiumHooks?.snapshot()) ??
+        ({
+          balance: null,
+          skus: [],
+          price: { usdPerClaudium: null, wocBaseUnitsPerClaudium: null },
+          nativeRails: { sol: false, woc: false },
+          storeItems: [],
+        } satisfies ClaudiumSnapshot);
+      this.setClaudiumLauncherBalance(snapshot.balance);
+      return snapshot;
+    },
     buy: (rail, sku) => this.claudiumHooks?.buy(rail, sku) ?? Promise.resolve(),
     spend: (itemId, kind) => this.claudiumHooks?.spend(itemId, kind),
     ...this.windowFocus('#claudium-window'),
@@ -3753,9 +3762,42 @@ export class Hud {
 
   private claudiumLauncherHtml(): string {
     if (!this.claudiumHooks) return '';
-    const label = t('hudChrome.claudium.title');
+    this.refreshClaudiumLauncherBalance();
+    const label =
+      this.claudiumLauncherBalance === null
+        ? '--'
+        : formatNumber(this.claudiumLauncherBalance, { maximumFractionDigits: 0 });
     const aria = t('hudChrome.claudium.open');
-    return `<button type="button" class="claudium-launcher" data-claudium-launcher title="${esc(aria)}" aria-label="${esc(aria)}"><span class="claudium-coin" aria-hidden="true"></span>${esc(label)}</button>`;
+    return `<button type="button" class="claudium-launcher" data-claudium-launcher title="${esc(aria)}" aria-label="${esc(aria)}"><span class="claudium-coin" aria-hidden="true"></span><span class="claudium-launcher-balance">${esc(label)}</span></button>`;
+  }
+
+  private setClaudiumLauncherBalance(balance: number | null): void {
+    this.claudiumLauncherBalance = balance;
+    this.claudiumLauncherBalanceLastMs = Date.now();
+  }
+
+  private refreshClaudiumLauncherBalance(force = false): void {
+    if (!this.claudiumHooks || this.claudiumLauncherBalancePending) return;
+    const now = Date.now();
+    if (!force && now - this.claudiumLauncherBalanceLastMs < 30_000) return;
+    this.claudiumLauncherBalancePending = true;
+    const seq = ++this.claudiumLauncherBalanceSeq;
+    void this.claudiumHooks
+      .balance()
+      .then((balance) => {
+        if (seq !== this.claudiumLauncherBalanceSeq) return;
+        this.setClaudiumLauncherBalance(balance);
+        if ($('#bags').style.display !== 'none') this.renderBags();
+      })
+      .catch(() => {
+        if (seq !== this.claudiumLauncherBalanceSeq) return;
+        this.setClaudiumLauncherBalance(null);
+      })
+      .finally(() => {
+        if (seq === this.claudiumLauncherBalanceSeq) {
+          this.claudiumLauncherBalancePending = false;
+        }
+      });
   }
 
   // One-line aura effect summary HTML for the buff/debuff tooltip: the pure descriptor
@@ -12500,6 +12542,11 @@ export class Hud {
   /** Inject the online economy hooks that back the Claudium window (main.ts, online only). */
   attachClaudium(hooks: ClaudiumHooks): void {
     this.claudiumHooks = hooks;
+    this.claudiumLauncherBalance = null;
+    this.claudiumLauncherBalanceLastMs = 0;
+    this.claudiumLauncherBalanceSeq++;
+    this.claudiumLauncherBalancePending = false;
+    this.refreshClaudiumLauncherBalance(true);
   }
 
   /**
@@ -12511,6 +12558,7 @@ export class Hud {
   }
 
   async refreshClaudium(): Promise<void> {
+    this.refreshClaudiumLauncherBalance(true);
     if (!this.claudiumWindow.isOpen) return;
     await this.claudiumWindow.render();
   }

@@ -49,7 +49,7 @@ import { configureAuthRuntime } from './auth_routes';
 import { BUG_DESCRIPTION_MAX, BugReportRateLimitError, createBugReport } from './bug_report_db';
 import { characterSheet, type SheetRank } from './character_sheet';
 import { configureCharactersRuntime } from './characters';
-import { handleClaudiumApi } from './claudium';
+import { handleClaudiumApi, handleClaudiumStripeWebhook } from './claudium';
 import { handleDailyRewardApi, handleDailyRewardInternalApi } from './daily_rewards';
 import {
   accountAndScopeForToken,
@@ -1676,6 +1676,9 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       const accountId = await bearerActiveAccount(req, res);
       if (accountId === null) return;
       return handleDailyRewardApi(req, res, accountId);
+    }
+    if (req.method === 'POST' && url === '/api/claudium/stripe/webhook') {
+      return handleClaudiumStripeWebhook(req, res);
     }
     if (url.startsWith('/api/claudium')) {
       const accountId = await bearerActiveAccount(req, res);
