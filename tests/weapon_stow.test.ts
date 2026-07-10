@@ -220,6 +220,43 @@ function bareClient(pid: number): ClientWorld {
   return c;
 }
 
+describe('ClientWorld optimistic nudge', () => {
+  it('respects the dead-gate locally and sends the stow_weapon token when alive', () => {
+    (globalThis as any).WebSocket = { OPEN: 1 };
+    const client = bareClient(7);
+    const sent: any[] = [];
+    (client as any).ws = { readyState: 1, send: (p: string) => sent.push(JSON.parse(p)) };
+    const internals = client as unknown as { applySnapshot(snapshot: unknown): void };
+    const self = (extra: Record<string, unknown>) => ({
+      id: 7,
+      k: 'player',
+      tid: 'warrior',
+      nm: 'Nudge',
+      lv: 1,
+      x: 0,
+      y: 0,
+      z: 0,
+      f: 0,
+      hp: 10,
+      mhp: 10,
+      ...extra,
+    });
+    // Dead: the local nudge must NOT flip (the command still goes up; the
+    // server-side Sim dead-gate is authoritative).
+    internals.applySnapshot({ self: self({ dead: 1 }), ents: [], keep: [] });
+    client.toggleWeaponStow();
+    expect(client.player.weaponStowed).toBe(false);
+    // Alive: the nudge flips instantly and the typed send carries the token.
+    internals.applySnapshot({ self: self({}), ents: [], keep: [] });
+    client.toggleWeaponStow();
+    expect(client.player.weaponStowed).toBe(true);
+    expect(sent.filter((m) => m.t === 'cmd' && m.cmd === 'stow_weapon')).toHaveLength(2);
+    // The next snapshot reconciles the optimistic state to the server's truth.
+    internals.applySnapshot({ self: self({}), ents: [], keep: [] });
+    expect(client.player.weaponStowed).toBe(false);
+  });
+});
+
 describe('weaponStowed over the wire', () => {
   it('wireEntity carries ws:1 only while sheathed (absent-means-unset)', () => {
     const sim = makeSim();
