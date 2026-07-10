@@ -4877,7 +4877,7 @@ export class Sim {
           mob.channelRamp = 0;
           this.emit({
             type: 'log',
-            text: `${mob.name}'s ${ch.name} is interrupted!`,
+            text: `${ch.name} is interrupted!`,
             color: '#ffcc66',
             entityId: mob.id,
           });
@@ -4906,9 +4906,12 @@ export class Sim {
               school,
               fx: 'beam',
             });
+            // Reuse the existing "{name} channels {mechanic}." log shape (localized
+            // by the broad channels rule in sim_i18n.ts); the heal amount surfaces
+            // through the heal event + beam above, so no bespoke number string ships.
             this.emit({
               type: 'log',
-              text: `${mob.name} channels ${ch.name}, mending ${protectee.name} for ${amount}.`,
+              text: `${mob.name} channels ${ch.name}.`,
               color: '#66ff99',
               entityId: mob.id,
             });
