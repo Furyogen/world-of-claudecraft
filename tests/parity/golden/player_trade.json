@@ -30,7 +30,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 407,
-      "state": "5ec7aef3",
+      "state": "38242533",
       "events": "d30fae8b",
       "rng": {
         "draws": 0,
@@ -78,8 +78,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         },
@@ -123,8 +122,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -234,7 +232,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 407,
-      "state": "054e7cee",
+      "state": "09a6709a",
       "events": "4a18b9e0",
       "rng": {
         "draws": 0,
@@ -282,8 +280,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         },
@@ -331,8 +328,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -442,7 +438,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 407,
-      "state": "054e7cee",
+      "state": "09a6709a",
       "events": "731b0526",
       "rng": {
         "draws": 0,
@@ -490,8 +486,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         },
@@ -539,8 +534,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -650,7 +644,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 407,
-      "state": "054e7cee",
+      "state": "09a6709a",
       "events": "a4aaa6a1",
       "rng": {
         "draws": 0,
@@ -698,8 +692,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         },
@@ -747,8 +740,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -858,7 +850,7 @@
       "tick": 1,
       "time": 0.05,
       "nextId": 407,
-      "state": "a04bdf11",
+      "state": "96791b85",
       "events": "c54759e2",
       "rng": {
         "draws": 0,
@@ -906,8 +898,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         },
@@ -955,8 +946,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -1066,7 +1056,7 @@
       "tick": 1,
       "time": 0.05,
       "nextId": 407,
-      "state": "a04bdf11",
+      "state": "96791b85",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -1114,8 +1104,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         },
@@ -1163,8 +1152,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }

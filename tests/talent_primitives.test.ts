@@ -466,6 +466,7 @@ describe('talent primitive P2: cast while moving', () => {
     const mods = emptyModifiers();
     mods.abilities.fireball = {
       dmgPct: 0,
+      dmgPctVsDotted: 0,
       flatDmg: 0,
       costPct: 0,
       cooldownPct: 0,
@@ -540,6 +541,7 @@ describe('talent primitives P4/P5', () => {
     const originalEffects = ABILITIES.fireball.effects;
     mods.abilities.fireball = {
       dmgPct: 0,
+      dmgPctVsDotted: 0,
       flatDmg: 0,
       costPct: 0,
       cooldownPct: 0,

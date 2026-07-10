@@ -16,7 +16,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 406,
-      "state": "bf8f6ae7",
+      "state": "d660446f",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -60,8 +60,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -124,7 +123,7 @@
       "tick": 10,
       "time": 0.5,
       "nextId": 419,
-      "state": "fdf6393a",
+      "state": "c4aa07e6",
       "events": "d9e43221",
       "rng": {
         "draws": 4,
@@ -135,7 +134,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 419,
-      "state": "0067222d",
+      "state": "c85292d5",
       "events": "9cfda0e2",
       "rng": {
         "draws": 4,
@@ -146,7 +145,7 @@
       "tick": 30,
       "time": 1.5,
       "nextId": 419,
-      "state": "efc869f0",
+      "state": "d5f67fac",
       "events": "356a26ae",
       "rng": {
         "draws": 5,
@@ -157,8 +156,8 @@
       "tick": 38,
       "time": 1.9,
       "nextId": 421,
-      "state": "25eccec6",
-      "events": "13255c68",
+      "state": "b067eb7e",
+      "events": "cd3e9e9b",
       "rng": {
         "draws": 8,
         "digest": "20464699"
@@ -218,8 +217,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {},
           "xp": 898
@@ -421,7 +419,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 421,
-      "state": "efcefe69",
+      "state": "360f667d",
       "events": "741638a5",
       "rng": {
         "draws": 8,
@@ -432,7 +430,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 421,
-      "state": "efcefe69",
+      "state": "360f667d",
       "events": "741638a5",
       "rng": {
         "draws": 8,
@@ -493,8 +491,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {},
           "xp": 898

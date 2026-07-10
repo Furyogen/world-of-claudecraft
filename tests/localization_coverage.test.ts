@@ -753,7 +753,11 @@ describe('i18n Localization Key Coverage', () => {
     expect(entityCount('class', 'description')).toBe(Object.keys(CLASSES).length);
     expect(entityCount('ability', 'name')).toBe(Object.keys(ABILITIES).length);
     expect(entityCount('ability', 'description')).toBe(Object.keys(ABILITIES).length);
-    expect(entityCount('item', 'name')).toBe(Object.keys(ITEMS).length);
+    // Heroic upgraded variants (heroicOf) have no name key: they share the base
+    // item name, so they are excluded from the entity manifest.
+    expect(entityCount('item', 'name')).toBe(
+      Object.values(ITEMS).filter((i) => !i.heroicOf).length,
+    );
     expect(entityCount('mob', 'name')).toBe(Object.keys(MOBS).length);
     expect(entityCount('npc', 'name')).toBe(Object.keys(NPCS).length);
     expect(entityCount('npc', 'title')).toBe(Object.keys(NPCS).length);
@@ -891,7 +895,10 @@ describe('i18n Localization Key Coverage', () => {
 
   it('should provide every item translation in every locale without canonical fallbacks', () => {
     const itemEntries = entityTranslationManifest().filter((entry) => entry.group === 'item');
-    expect(itemEntries).toHaveLength(Object.keys(ITEMS).length);
+    // Heroic upgraded variants (heroicOf) carry no name key: they share the base
+    // item name (see itemDisplayName), so they are not in the manifest.
+    const namedItems = Object.values(ITEMS).filter((i) => !i.heroicOf).length;
+    expect(itemEntries).toHaveLength(namedItems);
     expect(missingEntityTranslationsForGroups(['classAbility', 'item'])).toHaveLength(0);
 
     for (const lang of supportedLanguages) {
@@ -1113,33 +1120,31 @@ describe('i18n Localization Key Coverage', () => {
     // RELEASE-TIER ONLY: specific real-translation spot-checks (would render the
     // English fill, not these strings, for an untranslated key on a PR).
     if (RELEASE_TIER) {
+      const requiredTalentEntry = (id: string, field: 'name' | 'description') => {
+        const entry = talentEntries.find(
+          (candidate) => candidate.id === id && candidate.field === field,
+        );
+        if (!entry) throw new Error(`Missing talent manifest entry: ${id}.${field}`);
+        return entry;
+      };
+
       setLanguage('es');
       expect(
-        renderTalentManifestEntry(
-          talentEntries.find((entry) => entry.id === 'war_toughness' && entry.field === 'name')!,
-        ),
-      ).toContain('Dureza');
+        renderTalentManifestEntry(requiredTalentEntry('8.war_r8_concussive_clap', 'name')),
+      ).toContain('conmocionante');
       expect(
-        renderTalentManifestEntry(
-          talentEntries.find(
-            (entry) => entry.id === 'arms.mastery' && entry.field === 'description',
-          )!,
-        ),
+        renderTalentManifestEntry(requiredTalentEntry('arms.mastery', 'description')),
       ).toContain('daño');
 
       setLanguage('zh_CN');
       expect(
-        renderTalentManifestEntry(
-          talentEntries.find((entry) => entry.id === 'war_cruelty' && entry.field === 'name')!,
-        ),
-      ).toContain('残忍');
+        renderTalentManifestEntry(requiredTalentEntry('8.war_r8_concussive_clap', 'name')),
+      ).toContain('震荡');
 
       setLanguage('ko_KR');
       expect(
         renderTalentManifestEntry(
-          talentEntries.find(
-            (entry) => entry.id === 'prot_choice.pc_last_stand' && entry.field === 'description',
-          )!,
+          requiredTalentEntry('11.hun_r11_survival_instincts', 'description'),
         ),
       ).toContain('생명력');
     }

@@ -49,7 +49,7 @@ export function discardItem(ctx: SimContext, itemId: string, count = 1, pid?: nu
     ctx.error(meta.entityId, "You don't have that item.");
     return;
   }
-  if (def.noDiscard) return;
+  if (def.noDiscard || def.soulbound) return;
   const discardCount = Number.isFinite(count) ? Math.min(Math.floor(count), available) : 0;
   if (discardCount <= 0) return;
   ctx.removeItem(itemId, discardCount, meta.entityId);
@@ -256,7 +256,10 @@ export function buyItem(ctx: SimContext, npcId: number, itemId: string, pid?: nu
     ctx.error(meta.entityId, 'That item is not sold here.');
     return;
   }
-  if (!def?.buyValue) {
+  // Dev free-epic vendor: on a dev-command realm this vendor sells its whole
+  // epic stock for free, bypassing the buyValue requirement below.
+  const freeVendor = ctx.devCommands && npc.devVendor === true;
+  if (!freeVendor && !def?.buyValue) {
     ctx.error(meta.entityId, 'That item is not for sale.');
     return;
   }
@@ -274,7 +277,7 @@ export function buyItem(ctx: SimContext, npcId: number, itemId: string, pid?: nu
   // the per-unit buyValue for every unit, so the per-unit price stays classic and
   // vendor buy price stays above the per-unit sell value (no buy-low/sell-high loop).
   const qty = vendorStackSize(def);
-  const cost = def.buyValue * qty;
+  const cost = freeVendor ? 0 : (def.buyValue ?? 0) * qty;
   if (meta.copper < cost) {
     ctx.error(meta.entityId, 'Not enough money.');
     return;
@@ -327,7 +330,7 @@ export function sellItem(ctx: SimContext, itemId: string, count = 1, pid?: numbe
     ctx.error(meta.entityId, 'There is no merchant nearby.');
     return;
   }
-  if (def.noVendorSell) {
+  if (def.noVendorSell || def.soulbound) {
     ctx.error(meta.entityId, 'That item is not for sale.');
     return;
   }
@@ -368,7 +371,12 @@ export function sellAllJunk(ctx: SimContext, pid?: number): void {
     .filter((s) => {
       const def = ITEMS[s.itemId];
       return (
-        !!def && def.quality === 'poor' && def.kind !== 'quest' && !def.noVendorSell && s.count > 0
+        !!def &&
+        def.quality === 'poor' &&
+        def.kind !== 'quest' &&
+        !def.noVendorSell &&
+        !def.soulbound &&
+        s.count > 0
       );
     })
     .map((s) => ({ itemId: s.itemId, count: s.count }));

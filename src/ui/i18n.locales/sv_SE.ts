@@ -1623,8 +1623,6 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.expose_armor.description':
     'Avslutande manöver som blottar målet och sänker dess rustning med {damage} i 30 sek.',
   'entities.abilities.expose_armor.name': 'Rustningsbräsch',
-  'entities.abilities.faerie_fire.description':
-    'Sänker målets rustning med {damage}% i 40 sek. Stackas inte med Rustningsklipp.',
   'entities.abilities.faerie_fire.name': 'Häxljus',
   'entities.abilities.fear.description':
     'Slår skräck i fienden och får den att huka sig i upp till 8 sek. All skada bryter effekten.',
@@ -1920,6 +1918,75 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.wing_clip.name': 'Fjättrande hugg',
   'entities.abilities.wrath.description': 'Slungar en pil av naturenergi för {damage} naturskada.',
   'entities.abilities.wrath.name': 'Vildbult',
+  'entities.abilities.aura_surge.name': 'Strålande Svall',
+  'entities.abilities.aura_surge.description':
+    'Överladdar din aura och härdar dig med 160 rustning i 10 sek. (Paladintalang)',
+  'entities.abilities.holy_shock.name': 'Helig chock',
+  'entities.abilities.holy_shock.description':
+    'Chockar ett vänligt mål med helig energi och läker det för {damage}. (Helig signatur)',
+  'entities.abilities.holy_shield.name': 'Helig sköld',
+  'entities.abilities.holy_shield.description':
+    'Skyddar dig med helig kraft i 10 sek, ökar rustning med 90 och slår närstridsangripare för 12 helig skada. (Skyddssignatur)',
+  'entities.abilities.bestial_wrath.name': 'Bestialisk vrede',
+  'entities.abilities.bestial_wrath.description':
+    'Driver dig in i bestialisk vrede och ökar attackkraft med 55 i 15 sek. (Odjursmästarsignatur)',
+  'entities.abilities.trueshot_aura.name': 'Träffsäkerhetsaura',
+  'entities.abilities.trueshot_aura.description':
+    'Inspirerar närliggande allierade och ökar attackkraft med 35 i 5 min. (Skytte signatur)',
+  'entities.abilities.wyvern_sting.name': 'Wyvernsting',
+  'entities.abilities.wyvern_sting.description':
+    'Sticker fienden på avstånd och försätter den ur strid i upp till 4 sek. All skada bryter effekten. (Överlevnadssignatur)',
+  'entities.abilities.arcane_power.name': 'Arkan kraft',
+  'entities.abilities.arcane_power.description':
+    'Ökar besvärjelseskada med 20% och besvärjelsehastighet med 10% i 10 sek. (Arkan signatur)',
+  'entities.abilities.combustion.name': 'Förbränning',
+  'entities.abilities.combustion.description':
+    'Ökar kritisk chans med besvärjelser med 50% i 15 sek. (Eldsignatur)',
+  'entities.abilities.icy_veins.name': 'Isiga Ådror',
+  'entities.abilities.icy_veins.description':
+    'Ökar besvärjelsehastighet med 30% och förhindrar avbrott och pushback i 10 sek. (Frostsignatur)',
+  'entities.abilities.cold_blood.name': 'Kallt blod',
+  'entities.abilities.cold_blood.description':
+    'Fokuserar din dödsavsikt så att din nästa attack blir en kritisk träff. (Lönnmordssignatur)',
+  'entities.abilities.blade_flurry.name': 'Klingflod',
+  'entities.abilities.blade_flurry.description':
+    'Släpper lös en flod av klingor och ökar attackhastighet med 20% i 12 sek. (Stridssignatur)',
+  'entities.abilities.hemorrhage.name': 'Blödning',
+  'entities.abilities.hemorrhage.description':
+    'Slår fienden för vapenskada plus {damage} och orsakar blödningsskada under 12 sek. Ger 1 kombopoäng. (Finesssignatur)',
+  'entities.abilities.power_infusion.name': 'Kraftinfusion',
+  'entities.abilities.power_infusion.description':
+    'Infuserar ett vänligt mål med kraft och ökar besvärjelsekraft med 28 i 15 sek. (Disciplin signatur)',
+  'entities.abilities.holy_nova.name': 'Helig nova',
+  'entities.abilities.holy_nova.description':
+    'Skapar en explosion av heligt ljus, läker närliggande allierade för {damage} och skadar närliggande fiender. (Helig signatur)',
+  'entities.abilities.shadowform.name': 'Skuggform',
+  'entities.abilities.shadowform.description':
+    'Anta skuggform och stärk skuggmagi tills du skiftar tillbaka. Kasta igen för att återgå till normal form. (Skuggsignatur)',
+  'entities.abilities.elemental_mastery.name': 'Elementär mästerskap',
+  'entities.abilities.elemental_mastery.description':
+    'Åkallar elementär mästerskap och gör din nästa besvärjelse omedelbar. (Elementär signatur)',
+  'entities.abilities.siphon_life.name': 'Livssifon',
+  'entities.abilities.siphon_life.description':
+    'Suger liv från fienden, orsakar {damage} skuggskada under 30 sek och läker dig för skadan som görs. (Lidandesignatur)',
+  'entities.abilities.conflagrate.name': 'Storbrand',
+  'entities.abilities.conflagrate.description':
+    'Förbrukar din Förbränna på fienden för att antända den för {damage} eldskada. (Förstörelsesignatur)',
+  'entities.abilities.moonkin_form.name': 'Månugglaform',
+  'entities.abilities.moonkin_form.description':
+    'Anta månugglaform och stärk besvärjelser tills du skiftar tillbaka. Kasta igen för att återgå till normal form. (Balanssignatur)',
+  'entities.abilities.feral_charge.name': 'Vild rusning',
+  'entities.abilities.feral_charge.description':
+    'Rusa mot en fiende och rota den i 1 sek. 8-25 m räckvidd. (Vildhetssignatur)',
+  'entities.abilities.swiftmend.name': 'Snabb läkning',
+  'entities.abilities.swiftmend.description':
+    'Förbrukar en läkning över tid-effekt på ett vänligt mål för att läka det för {damage}. (Återställningssignatur)',
+  'entities.abilities.crusader_strike.name': 'Korsfararslag',
+  'entities.abilities.crusader_strike.description':
+    'Träffar målet med vapenskada plus {damage} Helig skada. (paladintalang)',
+  'entities.abilities.metamorphosis.name': 'Metamorfos',
+  'entities.abilities.metamorphosis.description':
+    'Antar demonisk kraft och ökar rustning och attackkraft i 20 sek. (warlocktalang)',
   'entities.delves.collapsed_reliquary.enterText': 'Du stiger ner i det rasade relikvariet.',
   'entities.delves.collapsed_reliquary.leaveText':
     'Du klättrar tillbaka till broder Halven vid relikvarieruinen.',
@@ -1996,7 +2063,9 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'entities.items.crimson_amber_armor_plate.name': 'Karmosinbärnsten',
   'entities.items.crossroads_saber.name': 'Vägskälssabel',
   'entities.items.crownforged_dreadhelm.name': 'Bonewrought skräckhjälm',
+  'entities.items.crownforged_dreadhelm_heroic.name': 'Bonewrought skräckhjälm',
   'entities.items.crownforged_warspaulders.name': 'Bonewrought krigsskuldror',
+  'entities.items.crownforged_warspaulders_heroic.name': 'Bonewrought krigsskuldror',
   'entities.items.crypt_keystone.name': 'Kryptans slutsten',
   'entities.items.crypt_ritual_circle.name': 'Ritualcirkel',
   'entities.items.cryptbone_greaves.name': 'Kryptbensbenskenor',
@@ -2170,7 +2239,9 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'entities.items.nhalias_dirgeblade.name': 'Nhalias sorgeklinga',
   'entities.items.nhalias_funeral_wraps.name': 'Nhalias begravningslindor',
   'entities.items.nighttalon_crown.name': 'Direfang-krona',
+  'entities.items.nighttalon_crown_heroic.name': 'Direfang-krona',
   'entities.items.nighttalon_shoulderguards.name': 'Direfang-axelskydd',
+  'entities.items.nighttalon_shoulderguards_heroic.name': 'Direfang-axelskydd',
   'entities.items.nightwalk_jerkin.name': 'Nattvandrarväst',
   'entities.items.oathbound_greaves.name': 'Edbundna benskenor',
   'entities.items.ogre_bonecharm_staff.name': 'Ogerns benamulettstav',
@@ -2241,7 +2312,9 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'entities.items.soggy_boot.name': 'Genomblöt stövel',
   'entities.items.soggy_moccasin.name': 'Genomblöt mockasin',
   'entities.items.soulflame_cowl.name': 'Wraithfire-huva',
+  'entities.items.soulflame_cowl_heroic.name': 'Wraithfire-huva',
   'entities.items.soulflame_mantle.name': 'Wraithfire-mantel',
+  'entities.items.soulflame_mantle_heroic.name': 'Wraithfire-mantel',
   'entities.items.spider_leg.name': 'Ryckande spindelben',
   'entities.items.spring_water.name': 'Kallt brunnsvatten',
   'entities.items.staff_of_drowned_prayers.name': 'De dränkta bönernas stav',
@@ -2252,6 +2325,7 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'entities.items.steel_orange_armor_plate.name': 'Stålorange',
   'entities.items.storm_core.name': 'Stormkärna',
   'entities.items.stormcallers_crown.name': 'Galecall-krona',
+  'entities.items.stormcallers_crown_heroic.name': 'Galecall-krona',
   'entities.items.crownforged_gauntlets.name': 'Kronsmidda handskar',
   'entities.items.nighttalon_grips.name': 'Nattklogrepp',
   'entities.items.soulflame_gloves.name': 'Själslågshandskar',
@@ -2261,6 +2335,7 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'entities.items.soulflame_cord.name': 'Själslågssnöre',
   'entities.items.stormcallers_waistguard.name': 'Stormkallarens midjeskydd',
   'entities.items.stormcallers_spaulders.name': 'Galecall-axelskydd',
+  'entities.items.stormcallers_spaulders_heroic.name': 'Galecall-axelskydd',
   'entities.items.stormshard_leggings.name': 'Stormskärvebenkläder',
   'entities.items.sturdy_belt.name': 'Stadigt resenärsbälte',
   'entities.items.supply_crate.name': 'Stulen förrådslåda',
@@ -2306,6 +2381,156 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'entities.items.wolfhide_satchel.name': 'Vargskinnsväska',
   'entities.items.gravewoven_bag.name': 'Gravvävd väska',
   'entities.items.mistcallers_duffel.name': 'Fogbinderns sjösäck',
+  'entities.abilities.aspect_of_the_wild.name': 'Vildtands skepnad',
+  'entities.abilities.aspect_of_the_wild.description':
+    'Inspira a närliggande allierade con fuerza salvaje, aumentando attackkraft durante 5 min. (jägartalang)',
+  'entities.abilities.avatar.name': 'Koloss',
+  'entities.abilities.avatar.description':
+    'Te transforma en un coloso y aumenta attackkraft durante 20 sek. (krigartalang)',
+  'entities.abilities.avenging_wrath.name': 'Hämndvinge',
+  'entities.abilities.avenging_wrath.description':
+    'Invoca poder vengador y aumenta attackkraft y besvärjelsekraft durante 20 sek. (paladintalang)',
+  'entities.abilities.berserk.name': 'Röd dimma',
+  'entities.abilities.berserk.description': 'Aumenta attackkraft durante 15 sek. (druidtalang)',
+  'entities.abilities.bladestorm.name': 'Stålcyklon',
+  'entities.abilities.bladestorm.description':
+    'Te convierte en una tormenta de acero que golpea a närliggande fiender cada segundo por {damage}. (krigartalang)',
+  'entities.abilities.blink.name': 'Flimmersteg',
+  'entities.abilities.blink.description':
+    'Te teletransporta 15 m hacia delante y rompe raíces. (magikertalang)',
+  'entities.abilities.bloodlust.name': 'Krigstrummor',
+  'entities.abilities.bloodlust.description':
+    'Lleva a närliggande allierade al frenesí y aumenta su velocidad de ataque durante 15 sek. (shamantalang)',
+  'entities.abilities.chain_lightning.name': 'Gaffelblixt',
+  'entities.abilities.chain_lightning.description':
+    'Lanza relámpagos al área objetivo e inflige {damage} de daño a närliggande fiender. (shamantalang)',
+  'entities.abilities.chaos_bolt.name': 'Fördärvsbult',
+  'entities.abilities.chaos_bolt.description':
+    'Lanza una descarga de fuego caótico que inflige {damage} de daño de Eld. (häxmästartalang)',
+  'entities.abilities.cloak_of_shadows.name': 'Skuggmantel',
+  'entities.abilities.cloak_of_shadows.description':
+    'Te envuelve en sombras y absorbe daño durante 5 sek. (skurk talang)',
+  'entities.abilities.cone_of_cold.name': 'Frostsvep',
+  'entities.abilities.cone_of_cold.description':
+    'Golpea a närliggande fiender con escarcha e inflige {damage} de daño de Frost. (magikertalang)',
+  'entities.abilities.counter_shot.name': 'Tystande skott',
+  'entities.abilities.counter_shot.description':
+    'Avbryter kastandet och hindrar besvärjelser av den skolan i 4 sek. (jägartalang)',
+  'entities.abilities.counterspell.name': 'Trollbrott',
+  'entities.abilities.counterspell.description':
+    'Avbryter kastandet och hindrar besvärjelser av den skolan i 6 sek. (magikertalang)',
+  'entities.abilities.curse_of_exhaustion.name': 'Blytung förbannelse',
+  'entities.abilities.curse_of_exhaustion.description':
+    'Maldice a målet y reduce su velocidad de movimiento un 30% durante 12 sek. (häxmästartalang)',
+  'entities.abilities.death_coil.name': 'Gravspiral',
+  'entities.abilities.death_coil.description':
+    'Golpea a målet por {damage} de daño de Skugga y luego lo aterroriza durante 3 sek. Esta versión no sana al lanzador. (häxmästartalang)',
+  'entities.abilities.deep_freeze.name': 'Dödfrost',
+  'entities.abilities.deep_freeze.description':
+    'Congela profundamente a målet, inflige {damage} de daño de Frost y lo aturde durante 4 sek. (magikertalang)',
+  'entities.abilities.desperate_prayer.name': 'Sista bön',
+  'entities.abilities.desperate_prayer.description':
+    'Te sana al instante por {damage}. (prästtalang)',
+  'entities.abilities.deterrence.name': 'Borstvakt',
+  'entities.abilities.deterrence.description':
+    'Aumenta tu undvikelschans un 50% durante 10 sek. (jägartalang)',
+  'entities.abilities.divine_shield.name': 'Ljusvärn',
+  'entities.abilities.divine_shield.description':
+    'Te protege con poder sagrado y absorbe una enorme cantidad de daño durante 8 sek. (paladintalang)',
+  'entities.abilities.earthbind.name': 'Gripande jord',
+  'entities.abilities.earthbind.description':
+    'Ata a la tierra a närliggande fiender y los inmoviliza durante 2 sek. (shamantalang)',
+  'entities.abilities.evocation.name': 'Eterbrunn',
+  'entities.abilities.evocation.description': 'Restaura mana rápidamente. (magikertalang)',
+  'entities.abilities.frenzied_regeneration.name': 'Vild läkning',
+  'entities.abilities.frenzied_regeneration.description':
+    'Regenera salud durante 10 sek. Solo en Forma de oso. (druidtalang)',
+  'entities.abilities.frost_trap.name': 'Rimfälla',
+  'entities.abilities.frost_trap.description':
+    'Congela a los fiender en el área objetivo durante 3 sek. (jägartalang)',
+  'entities.abilities.ghostly_strike.name': 'Vålnadsslag',
+  'entities.abilities.ghostly_strike.description':
+    'Golpea a målet por daño de arma más {damage} y aumenta brevemente la evasión. Otorga 1 punto de combo. (skurk talang)',
+  'entities.abilities.hammer_of_wrath.name': 'Klingande hammare',
+  'entities.abilities.hammer_of_wrath.description':
+    'Lanza un martillo sagrado a un enemigo herido e inflige {damage} de daño de Helig. Solo se usa por debajo del 20% de salud. (paladintalang)',
+  'entities.abilities.healing_stream.name': 'Källbrunn',
+  'entities.abilities.healing_stream.description':
+    'Restaura a vänligt mål durante 12 sek. (shamantalang)',
+  'entities.abilities.heroic_leap.name': 'Krigssprång',
+  'entities.abilities.heroic_leap.description':
+    'Saltas al área objetivo e infliges {damage} de daño Fysisk a närliggande fiender. (krigartalang)',
+  'entities.abilities.holy_wrath.name': 'Helgonvrede',
+  'entities.abilities.holy_wrath.description':
+    'Desata poder sagrado e inflige {damage} de daño a närliggande fiender. (paladintalang)',
+  'entities.abilities.howl_of_terror.name': 'Skräckyl',
+  'entities.abilities.howl_of_terror.description':
+    'Aterroriza a närliggande fiender hasta 3 sek. El daño puede romper el efecto. (häxmästartalang)',
+  'entities.abilities.ice_block.name': 'Kall kista',
+  'entities.abilities.ice_block.description':
+    'Te encierra en hielo y absorbe una enorme cantidad de daño durante 8 sek. (magikertalang)',
+  'entities.abilities.inner_focus.name': 'Stillat sinne',
+  'entities.abilities.inner_focus.description':
+    'Hace que tu siguiente hechizo no tenga coste. Dura 60 sek. (prästtalang)',
+  'entities.abilities.innervate.name': 'Livssav',
+  'entities.abilities.innervate.description':
+    'Levande sav väller upp i dig i 10 sek och återställer 20 av din nuvarande resurs i vågor: mana, raseri eller energi; att byta form avbryter den inte. (Druidtalang)',
+  'entities.abilities.kick.name': 'Spark',
+  'entities.abilities.kick.description':
+    'Avbryter kastandet och hindrar besvärjelser av den skolan i 4 sek. (skurk talang)',
+  'entities.abilities.last_stand.name': 'Elfte timmen',
+  'entities.abilities.last_stand.description':
+    'Aumenta temporalmente Uthållighet durante 15 sek, aumentando la salud máxima. (krigartalang)',
+  'entities.abilities.mend_pet.name': 'Lappa ihop',
+  'entities.abilities.mend_pet.description':
+    'Sana a vänligt mål por {damage} durante 15 sek. (jägartalang)',
+  'entities.abilities.meteor.name': 'Himmelsten',
+  'entities.abilities.meteor.description':
+    'Hace caer un meteoro en el área objetivo, inflige {damage} de daño de Eld y quema el suelo. (magikertalang)',
+  'entities.abilities.mind_sear.name': 'Tankebrand',
+  'entities.abilities.mind_sear.description':
+    'Canaliza energía de Skugga en el área objetivo e inflige {damage} cada segundo a närliggande fiender. (prästtalang)',
+  'entities.abilities.multi_shot.name': 'Splitterskott',
+  'entities.abilities.multi_shot.description':
+    'Dispara varios proyectiles e inflige {damage} a närliggande fiender. (jägartalang)',
+  'entities.abilities.prayer_of_healing.name': 'Körläkning',
+  'entities.abilities.prayer_of_healing.description':
+    'Sana a närliggande allierade por {damage}. (prästtalang)',
+  'entities.abilities.preparation.name': 'Reservplan',
+  'entities.abilities.preparation.description':
+    'Termina el tiempo de reutilización de Sprint, Evasión y Vanish. (skurk talang)',
+  'entities.abilities.presence_of_mind.name': 'Rusande sinne',
+  'entities.abilities.presence_of_mind.description':
+    'Hace instantáneo tu siguiente hechizo con tiempo de lanzamiento. Dura 60 sek. (magikertalang)',
+  'entities.abilities.psychic_scream.name': 'Psykiskt skrik',
+  'entities.abilities.psychic_scream.description':
+    'Aterroriza a närliggande fiender hasta 4 sek. El daño puede romper el efecto. (prästtalang)',
+  'entities.abilities.pummel.name': 'Mörbulta',
+  'entities.abilities.pummel.description':
+    'Avbryter kastandet och hindrar besvärjelser av den skolan i 4 sek. (krigartalang)',
+  'entities.abilities.rallying_cry.name': 'Mönstring',
+  'entities.abilities.rallying_cry.description':
+    'Lanza un grito de reunión y aumenta attackkraft de närliggande allierade durante 10 sek. (krigartalang)',
+  'entities.abilities.rebuke.name': 'Tillrättavisning',
+  'entities.abilities.rebuke.description':
+    'Avbryter kastandet och hindrar besvärjelser av den skolan i 4 sek. (paladintalang)',
+  'entities.abilities.shadowstep.name': 'Skuggkliv',
+  'entities.abilities.shadowstep.description':
+    'Das un paso entre las sombras hacia tu målet. (skurk talang)',
+  'entities.abilities.shield_wall.name': 'Bålverk',
+  'entities.abilities.shield_wall.description':
+    'Alzas un muro de escudo y aumentas mucho la rustning durante 10 sek. (krigartalang)',
+  'entities.abilities.silence.name': 'Tystnad',
+  'entities.abilities.silence.description': 'Silencia a målet durante 4 sek. (prästtalang)',
+  'entities.abilities.skull_bash.name': 'Skallskall',
+  'entities.abilities.skull_bash.description':
+    'Avbryter kastandet och hindrar besvärjelser av den skolan i 4 sek. (druidtalang)',
+  'entities.abilities.spell_lock.name': 'Munkavleorder',
+  'entities.abilities.spell_lock.description':
+    'Avbryter kastandet och hindrar besvärjelser av den skolan i 5 sek. (häxmästartalang)',
+  'entities.abilities.tranquility.name': 'Gläntsång',
+  'entities.abilities.tranquility.description':
+    'Canaliza energía restauradora y sana a närliggande allierade cada segundo. (druidtalang)',
   'entities.items.worn_sword.name': 'Frätt kortsvärd',
   'entities.items.woven_robe.name': 'Dalvävd robe',
   'entities.items.wyrmcult_grand_robe.name': 'Lindormskultens praktrobe',
@@ -4396,7 +4621,6 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hud.core.mobileControls': 'Mobila kontroller',
   'hud.core.mobileMap': 'Karta',
   'hud.core.mobileMenu': 'Meny',
-  'hud.core.mobileSettings': 'Inställningar',
   'hud.core.mobileMeters': 'Mätare',
   'hud.core.mobileMore': 'Mer',
   'hud.core.mobileMoreAria': 'Visa fler menyer',
@@ -6018,6 +6242,8 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.wyrmshadow.name': 'Nightfang-skrud',
   'entities.itemSets.wyrmshadow.bonus2': 'Ökar attackkraft med 40.',
   'entities.itemSets.wyrmshadow.bonus3': 'Ökar smidighet med 15 och kritisk chans med 2%.',
+  'hudChrome.itemHeroicTag': '[HEROISK]',
+  'hudChrome.itemSoulbound': 'Själsbunden',
   'hudChrome.itemSet.header': '{name} ({have}/{total})',
   'hudChrome.itemSet.bonusLine': '({pieces}) {bonus}',
   'hud.combat.floatingResist': 'Motstod',
@@ -6500,12 +6726,18 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.bank.withdrawQuantityConfirm': 'Ta ut',
   'hudChrome.bank.withdrawQuantityInput': 'Antal att ta ut',
   'hudChrome.bank.withdrawQuantityTitle': 'Ta ut {item}',
+  'entities.abilities.faerie_fire.description':
+    'Sänker målets rustning med {damage}% i 40 sek. Stackas inte med Rustningsklipp.',
+  'hud.core.mobileSettings': 'Inställningar',
   'abilityUi.tooltip.selfOnly': 'Endast dig själv',
   'itemUi.lootRoll.rolled': '{answered}/{total} har rullat',
   'entities.abilities.sunder_armor.description':
     'Klyver målets rustning och sänker den med {damage}% per applicering. Stackas upp till 5 gånger. Vållar en stor mängd hot.',
   'entities.mobs.training_dummy.name': 'Träningsdocka',
   'entities.mobs.yumi_cat.name': 'Yumi',
+  'entities.mobs.nythraxis_heroic_priest_add.name': 'Malric, den odödlige hierofanten',
+  'entities.mobs.nythraxis_heroic_rogue_add.name': 'Voss, den odödliga kniven',
+  'entities.mobs.nythraxis_heroic_warrior_add.name': 'Aldren, den odödlige krigsvakten',
   'guide.arenaPage.yumiBody':
     'Skydda Yumi är ett lagbaserat målläge som spelas i en labyrint: varje sida vaktar sin egen kattföljeslagare samtidigt som den jagar den andra. Med jämna mellanrum blinkar båda katterna till nya hörn av labyrinten, så striden pendlar mellan att försvara, jaga och kappas om att hitta dem igen. Köa som tre mot tre eller fem mot fem; att falla i strid sätter dig bara på bänken en kort stund.',
   'guide.arenaPage.yumiHeading': 'Skydda Yumi',
@@ -6547,4 +6779,51 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'yumi.queue.leave': 'Du lämnar kön till Skydda Yumi.',
   'yumi.queue.teamLeave': 'Ditt lag lämnar kön till Skydda Yumi.',
   'yumi.respawn.title': 'NEDSLAGEN!',
+  'entities.abilities.chain_heal.name': 'Kedjeläkning',
+  'entities.abilities.chain_heal.description':
+    'Helar ett vänligt mål kraftigt och hoppar sedan till upp till 2 ytterligare allierade i närheten. Varje hopp helar 50% mindre. (Restaureringens signaturförmåga)',
+  'entities.abilities.razor_howl.name': 'Rakbladsvrål',
+  'entities.abilities.razor_howl.description':
+    'Ett stridsrop som saktar ned fiender inom 15 m med 50% i 8 sek. (Krigartalang)',
+  'entities.abilities.stormthrow.name': 'Stormkast',
+  'entities.abilities.stormthrow.description':
+    'Kasta ditt vapen för att bedöva ett mål i 3 sek. (Krigartalang)',
+  'entities.abilities.reckless_vow.name': 'Hänsynslöst löfte',
+  'entities.abilities.reckless_vow.description':
+    'Ökar all generering av raseri med 50% och chansen till kritiska träffar med 20% i 12 sek. (Krigartalang)',
+  'entities.abilities.red_banner.name': 'Rött baner',
+  'entities.abilities.red_banner.description':
+    'Du och allierade i närheten får 10% attackhastighet och 10% skada i 20 sek. (Krigartalang)',
+  'entities.items.chunk_of_ore.name': 'Malmbit',
+  'entities.quests.q_prof_intro.title': 'Ett yrke för varje hand',
+  'entities.quests.q_prof_intro.text':
+    'Alla i Eastbrook har ett yrke vid sidan av svärdet, {playerName}. Malmådror ligger spridda runt staden, så ta en hacka och hämta 5 bitar åt mig. Bryt dem själv; jag märker skillnaden.',
+  'entities.quests.q_prof_intro.completion':
+    'Ser du? Malm i väskan och valkar på händerna. Fortsätt bryta malm, hugga timmer och plocka örter längs vägarna. När du återvänder till staden, kom ihåg tavlan för Stadsfokus vid marknaden och arbetsbänken intill. I allt detta väntar ett hederligt yrke, om du vill ha det.',
+  'entities.quests.q_prof_intro.objectives.0.label': 'Malmbit',
+  'game.talents.readout.rowsSummary': 'Talanger: {head}, {picked}/{unlocked} valrader valda.',
+  'hudChrome.fct.absorbed': '{amount} absorberat',
+  'hudChrome.fct.cheap': 'Billigare!',
+  'hudChrome.mailbox.parcelQtyDecreaseAria': 'Skicka en {item} mindre',
+  'hudChrome.mailbox.parcelQtyIncreaseAria': 'Skicka en {item} mer',
+  'game.talents.choicesTab': 'Val',
+  'game.talents.rowUnlockToast': 'Ett nytt talangval har låsts upp!',
+  'game.talents.rowUnlocks': 'Låses upp på nivå {level}',
+  'hudChrome.auth.forgotPrompt': 'Glömt lösenordet?',
+  'hudChrome.auth.forgotTitle': 'Återställ ditt lösenord',
+  'hudChrome.auth.forgotHint':
+    'Ange ditt användarnamn så skickar vi en återställningslänk till den registrerade e-postadressen.',
+  'hudChrome.auth.forgotUsername': 'Användarnamn',
+  'hudChrome.auth.forgotSubmit': 'Skicka återställningslänk',
+  'hudChrome.auth.forgotSent':
+    'Om ett konto med det användarnamnet har en registrerad e-postadress har vi skickat en återställningslänk. Kolla din inkorg.',
+  'hudChrome.auth.forgotBack': 'Tillbaka till inloggning',
+  'hudChrome.auth.resetTitle': 'Välj ett nytt lösenord',
+  'hudChrome.auth.resetNewPassword': 'Nytt lösenord',
+  'hudChrome.auth.resetConfirm': 'Bekräfta nytt lösenord',
+  'hudChrome.auth.resetSubmit': 'Uppdatera lösenord',
+  'hudChrome.auth.resetDone': 'Ditt lösenord har uppdaterats. Du kan nu logga in.',
+  'hudChrome.auth.resetMismatch': 'Lösenorden stämmer inte överens.',
+  'hudChrome.auth.resetErrInvalid':
+    'Den här återställningslänken är ogiltig eller har gått ut. Begär en ny.',
 };

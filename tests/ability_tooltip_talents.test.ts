@@ -20,6 +20,7 @@ function modsFor(
   const m = emptyModifiers();
   m.abilities[ability] = {
     dmgPct: 0,
+    dmgPctVsDotted: 0,
     flatDmg: 0,
     costPct: 0,
     cooldownPct: 0,

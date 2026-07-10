@@ -85,6 +85,9 @@ export const da_DK: EnTranslations = {
       "title": "Talenter",
       "classTab": "Klasse",
       "specTab": "Specialisering",
+      "choicesTab": "Valg",
+      "rowUnlockToast": "Et nyt talentvalg er låst op!",
+      "rowUnlocks": "Låses op på niveau {level}",
       "available": "Tilgængelig",
       "spent": "Brugt",
       "pointSource": "Optjen 1 talentpoint per niveau fra niveau {first} til {cap}. Stig i niveau for at få flere point.",
@@ -143,6 +146,7 @@ export const da_DK: EnTranslations = {
         "noTree": "Din klasse har endnu ikke et talenttræ.",
         "locked": "Du har endnu ikke låst talenter op — de begynder ved niveau {level}.",
         "noSpec": "ingen specialisering",
+        "rowsSummary": "Talenter: {head}, {picked}/{unlocked} valgrupper valgt.",
         "summary": "Talenter: {head} — {spent}/{total} point brugt ({breakdown}).",
         "breakdownClass": "Klasse {classPts}",
         "breakdownSpec": "Klasse {classPts}, {spec} {specPts}",
@@ -151,7 +155,6 @@ export const da_DK: EnTranslations = {
     }
   },
   "hudChrome": {
-    "itemHeroicTag": "[HEROIC]",
     "spectate": {
       "banner": "Tilskuer til {name}"
     },
@@ -159,6 +162,10 @@ export const da_DK: EnTranslations = {
       "resurrectAtCorpse": "Genopstå ved liget",
       "resurrectAtHealer": "Den Blege Vogter (Vogterens Klokke)",
       "spiritHealerAlive": "Den Blege Vogter våger over de døde. Du er stadig blandt de levende."
+    },
+    "fct": {
+      "absorbed": "{amount} absorberet",
+      "cheap": "Billigere!"
     },
     "emotes": {
       "wave": "Vink",
@@ -723,6 +730,8 @@ export const da_DK: EnTranslations = {
     "tips": {
       "joinChannels": "Tip: skriv /join world eller /join lfg for at chatte med spillere på tværs af verdenen."
     },
+    "itemHeroicTag": "[HEROISK]",
+    "itemSoulbound": "Sjælebundet",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1068,6 +1077,22 @@ export const da_DK: EnTranslations = {
     "worldBoss": {
       "spawn": "{name} rejser sig over Tornetop Højder!"
     },
+    "auth": {
+      "forgotPrompt": "Glemt adgangskode?",
+      "forgotTitle": "Nulstil din adgangskode",
+      "forgotHint": "Indtast dit brugernavn, så sender vi et nulstillingslink til den registrerede e-mailadresse.",
+      "forgotUsername": "Brugernavn",
+      "forgotSubmit": "Send nulstillingslink",
+      "forgotSent": "Hvis en konto med det brugernavn har en registreret e-mailadresse, har vi sendt et nulstillingslink. Tjek din indbakke.",
+      "forgotBack": "Tilbage til log ind",
+      "resetTitle": "Vælg en ny adgangskode",
+      "resetNewPassword": "Ny adgangskode",
+      "resetConfirm": "Bekræft ny adgangskode",
+      "resetSubmit": "Opdater adgangskode",
+      "resetDone": "Din adgangskode er opdateret. Du kan nu logge ind.",
+      "resetMismatch": "Adgangskoderne stemmer ikke overens.",
+      "resetErrInvalid": "Dette nulstillingslink er ugyldigt eller udløbet. Anmod om et nyt."
+    },
     "loot": {
       "chestTitle": "Kiste"
     },
@@ -1297,6 +1322,8 @@ export const da_DK: EnTranslations = {
       "parcelsLabel": "Pakker",
       "parcelsHint": "Klik på en genstand i dine tasker for at vedhæfte den.",
       "removeParcelAria": "Fjern {item} fra brevet",
+      "parcelQtyDecreaseAria": "Send én {item} mindre",
+      "parcelQtyIncreaseAria": "Send én {item} mere",
       "sendButton": "Send brev",
       "postageNote": "Porto: {amount}. Ravnen er undervejs i omtrent {seconds}s.",
       "arrivedBanner": "Ravnen er landet: post fra {name}.",
@@ -5634,6 +5661,102 @@ export const da_DK: EnTranslations = {
         "name": "Sydende Raseri",
         "description": "Gå i et sydende raseri, og generér 20 raseri. (Krigertalent)"
       },
+      "crusader_strike": {
+        "name": "Korsfarerslag",
+        "description": "Slår målet for våbenskade plus {damage} hellig skade. (Paladin-talent)"
+      },
+      "chain_heal": {
+        "name": "Kædeheling",
+        "description": "Helbreder et venligt mål kraftigt og springer derefter til op til 2 yderligere allierede i nærheden. Hvert spring helbreder 50% mindre. (Restaurerings signaturfærdighed)"
+      },
+      "metamorphosis": {
+        "name": "Metamorfose",
+        "description": "Antag dæmonisk kraft og øg rustning og angrebskraft i 20 sek. (Warlock-talent)"
+      },
+      "aura_surge": {
+        "name": "Strålende Svulmen",
+        "description": "Overbelaster din aura og hærder dig med 160 rustning i 10 sek. (Paladintalent)"
+      },
+      "holy_shock": {
+        "name": "Hellig chok",
+        "description": "Chokerer et venligt mål med hellig energi og helbreder det for {damage}. (Hellig signatur)"
+      },
+      "holy_shield": {
+        "name": "Hellig skjold",
+        "description": "Beskytter dig med hellig kraft i 10 sek, øger rustning med 90 og rammer nærkampsangribere for 12 hellig skade. (Beskyttelsessignatur)"
+      },
+      "bestial_wrath": {
+        "name": "Bestialsk vrede",
+        "description": "Sender dig i bestialsk raseri, så angrebskraft øges med 55 i 15 sek. (Bæstmestersignatur)"
+      },
+      "trueshot_aura": {
+        "name": "Træfsikkerhedsaura",
+        "description": "Inspirerer nærliggende allierede og øger angrebskraft med 35 i 5 min. (Skytte signatur)"
+      },
+      "wyvern_sting": {
+        "name": "Wyvernstik",
+        "description": "Stikker fjenden på afstand og gør den ukampdygtig i op til 4 sek. Enhver skade bryder effekten. (Overlevelsessignatur)"
+      },
+      "arcane_power": {
+        "name": "Arkan kraft",
+        "description": "Øger besværgelsesskade med 20% og besværgelseshast med 10% i 10 sek. (Arcane-signatur)"
+      },
+      "combustion": {
+        "name": "Forbrænding",
+        "description": "Øger kritisk chance med besværgelser med 50% i 15 sek. (Fire-signatur)"
+      },
+      "icy_veins": {
+        "name": "Iskolde Årer",
+        "description": "Øger besværgelseshast med 30% og forhindrer afbrydelse og tilbageslag i 10 sek. (Frost-signatur)"
+      },
+      "cold_blood": {
+        "name": "Koldt blod",
+        "description": "Fokuserer din dræbervilje, så dit næste angreb bliver et kritisk træf. (Snigmordersignatur)"
+      },
+      "blade_flurry": {
+        "name": "Klingevirvel",
+        "description": "Udløser en byge af klinger og øger angrebshastighed med 20% i 12 sek. (Kampsignatur)"
+      },
+      "hemorrhage": {
+        "name": "Blødning",
+        "description": "Ramler fjenden for våbenskade plus {damage} og påfører blødningsskade over 12 sek. Giver 1 combopoint. (Underfundighedssignatur)"
+      },
+      "power_infusion": {
+        "name": "Kraftinfusion",
+        "description": "Indgyder et venligt mål med kraft og øger besværgelseskraft med 28 i 15 sek. (Disciplin signatur)"
+      },
+      "holy_nova": {
+        "name": "Hellig nova",
+        "description": "Udløser en eksplosion af helligt lys, helbreder nærliggende allierede for {damage} og skader nærliggende fjender. (Hellig signatur)"
+      },
+      "shadowform": {
+        "name": "Skyggeform",
+        "description": "Antag skyggeform, som styrker skyggemagi, indtil du skifter tilbage. Kast igen for at vende tilbage til normal form. (Skyggesignatur)"
+      },
+      "elemental_mastery": {
+        "name": "Elementær beherskelse",
+        "description": "Påkalder elementær beherskelse og gør din næste besværgelse øjeblikkelig. (Elementær signatur)"
+      },
+      "siphon_life": {
+        "name": "Sug liv",
+        "description": "Suger liv fra fjenden, påfører {damage} skyggeskade over 30 sek og helbreder dig for den skade, der bliver gjort. (Lidelsessignatur)"
+      },
+      "conflagrate": {
+        "name": "Antændelse",
+        "description": "Forbruger din Opbrænding på fjenden for at antænde den for {damage} ildskade. (Ødelæggelsessignatur)"
+      },
+      "moonkin_form": {
+        "name": "Månekinform",
+        "description": "Antag månekinform, som styrker besværgelser, indtil du skifter tilbage. Kast igen for at vende tilbage til normal form. (Balancesignatur)"
+      },
+      "feral_charge": {
+        "name": "Vild ladning",
+        "description": "Storm mod en fjende og rodfæst den i 1 sek. 8-25 m rækkevidde. (Vildskabssignatur)"
+      },
+      "swiftmend": {
+        "name": "Hurtig heling",
+        "description": "Forbruger en helbredelse over tid-effekt på et venligt mål for at helbrede det for {damage}. (Genoprettelsessignatur)"
+      },
       "summon_imp": {
         "name": "Tilkald Emberkin",
         "description": "Tilkalder en Emberkin under Heksemesterens kommando. Emberkinen slynger Askelyn mod dine fjender fra det fjerne. At tilkalde en ny dæmon bortsender din nuværende. Du kan have én dæmon ad gangen."
@@ -5661,6 +5784,226 @@ export const da_DK: EnTranslations = {
       "summon_doomguard": {
         "name": "Tilkald Wraithborn",
         "description": "Binder en Wraithborn til din vilje, en elitedæmon der regner tung Skygge skade ned på afstand. En lang nedkøling holder dens ødelæggende kraft i skak. At tilkalde en ny dæmon bortsender din nuværende. Du kan have én dæmon ad gangen."
+      },
+      "aspect_of_the_wild": {
+        "name": "Vildtands skikkelse",
+        "description": "Inspira a nærliggende allierede con fuerza salvaje, aumentando angrebskraft durante 5 min. (jægertalent)"
+      },
+      "avatar": {
+        "name": "Kolossen",
+        "description": "Te transforma en un coloso y aumenta angrebskraft durante 20 sek. (krigertalent)"
+      },
+      "avenging_wrath": {
+        "name": "Hævnerfløj",
+        "description": "Invoca poder vengador y aumenta angrebskraft y trolddomskraft durante 20 sek. (paladintalent)"
+      },
+      "berserk": {
+        "name": "Rød dis",
+        "description": "Aumenta angrebskraft durante 15 sek. (druidentalent)"
+      },
+      "bladestorm": {
+        "name": "Stålcyklon",
+        "description": "Te convierte en una tormenta de acero que golpea a nærliggende fjender cada segundo por {damage}. (krigertalent)"
+      },
+      "razor_howl": {
+        "name": "Skarpt hyl",
+        "description": "Et råb, der sænker fjender inden for 15 m med 50% i 8 sek. (Kriger-talent)"
+      },
+      "stormthrow": {
+        "name": "Stormkast",
+        "description": "Kast dit våben for at bedøve et mål i 3 sek. (Kriger-talent)"
+      },
+      "reckless_vow": {
+        "name": "Dumdristigt løfte",
+        "description": "Øger al generering af raseri med 50% og chancen for kritiske træffere med 20% i 12 sek. (Kriger-talent)"
+      },
+      "red_banner": {
+        "name": "Rødt banner",
+        "description": "Du og allierede i nærheden får 10% angrebshastighed og 10% skade i 20 sek. (Kriger-talent)"
+      },
+      "blink": {
+        "name": "Flimmertrin",
+        "description": "Te teletransporta 15 m hacia delante y rompe raíces. (magikertalent)"
+      },
+      "bloodlust": {
+        "name": "Krigstrommer",
+        "description": "Lleva a nærliggende allierede al frenesí y aumenta su velocidad de ataque durante 15 sek. (shamantent)"
+      },
+      "chain_lightning": {
+        "name": "Gaffellyn",
+        "description": "Lanza relámpagos al área objetivo e inflige {damage} de daño a nærliggende fjender. (shamantent)"
+      },
+      "chaos_bolt": {
+        "name": "Ruinbolt",
+        "description": "Lanza una descarga de fuego caótico que inflige {damage} de daño de Ild. (troldmandstalent)"
+      },
+      "cloak_of_shadows": {
+        "name": "Skyggekappe",
+        "description": "Te envuelve en sombras y absorbe daño durante 5 sek. (snigmordertalent)"
+      },
+      "cone_of_cold": {
+        "name": "Frostfej",
+        "description": "Golpea a nærliggende fjender con escarcha e inflige {damage} de daño de Frost. (magikertalent)"
+      },
+      "counter_shot": {
+        "name": "Dæmpende skud",
+        "description": "Afbryder besværgelse og forhindrer magi fra den skole i 4 sek. (jægertalent)"
+      },
+      "counterspell": {
+        "name": "Trolddomsbrud",
+        "description": "Afbryder besværgelse og forhindrer magi fra den skole i 6 sek. (magikertalent)"
+      },
+      "curse_of_exhaustion": {
+        "name": "Blytung forbandelse",
+        "description": "Maldice a målet y reduce su velocidad de movimiento un 30% durante 12 sek. (troldmandstalent)"
+      },
+      "death_coil": {
+        "name": "Gravspiral",
+        "description": "Golpea a målet por {damage} de daño de Skygge y luego lo aterroriza durante 3 sek. Esta versión no sana al lanzador. (troldmandstalent)"
+      },
+      "deep_freeze": {
+        "name": "Dødfrost",
+        "description": "Congela profundamente a målet, inflige {damage} de daño de Frost y lo aturde durante 4 sek. (magikertalent)"
+      },
+      "desperate_prayer": {
+        "name": "Sidste bøn",
+        "description": "Te sana al instante por {damage}. (præstetalent)"
+      },
+      "deterrence": {
+        "name": "Børsteværn",
+        "description": "Aumenta tu undvigelseschance un 50% durante 10 sek. (jægertalent)"
+      },
+      "divine_shield": {
+        "name": "Lysværn",
+        "description": "Te protege con poder sagrado y absorbe una enorme cantidad de daño durante 8 sek. (paladintalent)"
+      },
+      "earthbind": {
+        "name": "Gribende jord",
+        "description": "Ata a la tierra a nærliggende fjender y los inmoviliza durante 2 sek. (shamantent)"
+      },
+      "evocation": {
+        "name": "Æterbrønd",
+        "description": "Restaura mana rápidamente. (magikertalent)"
+      },
+      "frenzied_regeneration": {
+        "name": "Vild heling",
+        "description": "Regenera salud durante 10 sek. Solo en Forma de oso. (druidentalent)"
+      },
+      "frost_trap": {
+        "name": "Rimfælde",
+        "description": "Congela a los fjender en el área objetivo durante 3 sek. (jægertalent)"
+      },
+      "ghostly_strike": {
+        "name": "Genfærdsslag",
+        "description": "Golpea a målet por daño de arma más {damage} y aumenta brevemente la evasión. Otorga 1 punto de combo. (snigmordertalent)"
+      },
+      "hammer_of_wrath": {
+        "name": "Klanghammer",
+        "description": "Lanza un martillo sagrado a un enemigo herido e inflige {damage} de daño de Hellig. Solo se usa por debajo del 20% de salud. (paladintalent)"
+      },
+      "healing_stream": {
+        "name": "Kildebrønd",
+        "description": "Restaura a et venligt mål durante 12 sek. (shamantent)"
+      },
+      "heroic_leap": {
+        "name": "Krigsspring",
+        "description": "Saltas al área objetivo e infliges {damage} de daño Fysisk a nærliggende fjender. (krigertalent)"
+      },
+      "holy_wrath": {
+        "name": "Helgenvrede",
+        "description": "Desata poder sagrado e inflige {damage} de daño a nærliggende fjender. (paladintalent)"
+      },
+      "howl_of_terror": {
+        "name": "Rædselshyl",
+        "description": "Aterroriza a nærliggende fjender hasta 3 sek. El daño puede romper el efecto. (troldmandstalent)"
+      },
+      "ice_block": {
+        "name": "Kold kiste",
+        "description": "Te encierra en hielo y absorbe una enorme cantidad de daño durante 8 sek. (magikertalent)"
+      },
+      "inner_focus": {
+        "name": "Stillet sind",
+        "description": "Hace que tu siguiente hechizo no tenga coste. Dura 60 sek. (præstetalent)"
+      },
+      "innervate": {
+        "name": "Livssaft",
+        "description": "Levende saft vælder op i dig i 10 sek. og genopretter 20 af din nuværende ressource i bølger: mana, raseri eller energi; formskifte afbryder den ikke. (Druidetalent)"
+      },
+      "kick": {
+        "name": "Støvle",
+        "description": "Afbryder besværgelse og forhindrer magi fra den skole i 4 sek. (snigmordertalent)"
+      },
+      "last_stand": {
+        "name": "Ellevte time",
+        "description": "Aumenta temporalmente Udholdenhed durante 15 sek, aumentando la salud máxima. (krigertalent)"
+      },
+      "mend_pet": {
+        "name": "Lappe sammen",
+        "description": "Sana a et venligt mål por {damage} durante 15 sek. (jægertalent)"
+      },
+      "meteor": {
+        "name": "Himmelsten",
+        "description": "Hace caer un meteoro en el área objetivo, inflige {damage} de daño de Ild y quema el suelo. (magikertalent)"
+      },
+      "mind_sear": {
+        "name": "Tankebrand",
+        "description": "Canaliza energía de Skygge en el área objetivo e inflige {damage} cada segundo a nærliggende fjender. (præstetalent)"
+      },
+      "multi_shot": {
+        "name": "Splitskud",
+        "description": "Dispara varios proyectiles e inflige {damage} a nærliggende fjender. (jægertalent)"
+      },
+      "prayer_of_healing": {
+        "name": "Korhelbredelse",
+        "description": "Sana a nærliggende allierede por {damage}. (præstetalent)"
+      },
+      "preparation": {
+        "name": "Nødplan",
+        "description": "Termina el tiempo de reutilización de Sprint, Evasión y Vanish. (snigmordertalent)"
+      },
+      "presence_of_mind": {
+        "name": "Ræsende sind",
+        "description": "Hace instantáneo tu siguiente hechizo con tiempo de lanzamiento. Dura 60 sek. (magikertalent)"
+      },
+      "psychic_scream": {
+        "name": "Psykisk skrig",
+        "description": "Aterroriza a nærliggende fjender hasta 4 sek. El daño puede romper el efecto. (præstetalent)"
+      },
+      "pummel": {
+        "name": "Prygl",
+        "description": "Afbryder besværgelse og forhindrer magi fra den skole i 4 sek. (krigertalent)"
+      },
+      "rallying_cry": {
+        "name": "Mønstring",
+        "description": "Lanza un grito de reunión y aumenta angrebskraft de nærliggende allierede durante 10 sek. (krigertalent)"
+      },
+      "rebuke": {
+        "name": "Irettesættelse",
+        "description": "Afbryder besværgelse og forhindrer magi fra den skole i 4 sek. (paladintalent)"
+      },
+      "shadowstep": {
+        "name": "Skyggesmut",
+        "description": "Das un paso entre las sombras hacia tu målet. (snigmordertalent)"
+      },
+      "shield_wall": {
+        "name": "Bolværk",
+        "description": "Alzas un muro de escudo y aumentas mucho la rustning durante 10 sek. (krigertalent)"
+      },
+      "silence": {
+        "name": "Tavshed",
+        "description": "Silencia a målet durante 4 sek. (præstetalent)"
+      },
+      "skull_bash": {
+        "name": "Pandeskal",
+        "description": "Afbryder besværgelse og forhindrer magi fra den skole i 4 sek. (druidentalent)"
+      },
+      "spell_lock": {
+        "name": "Mundkurv",
+        "description": "Afbryder besværgelse og forhindrer magi fra den skole i 5 sek. (troldmandstalent)"
+      },
+      "tranquility": {
+        "name": "Lundens sang",
+        "description": "Canaliza energía restauradora y sana a nærliggende allierede cada segundo. (druidentalent)"
       },
       "bear_charge": {
         "name": "Bruin-storm",
@@ -5818,6 +6161,9 @@ export const da_DK: EnTranslations = {
       },
       "greyjaw_fang": {
         "name": "Gamle Gråkæbes Hugtand"
+      },
+      "chunk_of_ore": {
+        "name": "Stykke malm"
       },
       "weathered_ledger_page": {
         "name": "Forvitret Regnskabsside"
@@ -6900,49 +7246,49 @@ export const da_DK: EnTranslations = {
         "name": "Bonewrought Rædselshjelm"
       },
       "crownforged_dreadhelm_heroic": {
-        "name": "Bonewrought Dreadhelm"
+        "name": "Bonewrought Rædselshjelm"
       },
       "crownforged_warspaulders": {
         "name": "Bonewrought Krigsskulderplader"
       },
       "crownforged_warspaulders_heroic": {
-        "name": "Bonewrought Warspaulders"
+        "name": "Bonewrought Krigsskulderplader"
       },
       "nighttalon_crown": {
         "name": "Direfang-Krone"
       },
       "nighttalon_crown_heroic": {
-        "name": "Direfang Crown"
+        "name": "Direfang-Krone"
       },
       "nighttalon_shoulderguards": {
         "name": "Direfang-Skulderværn"
       },
       "nighttalon_shoulderguards_heroic": {
-        "name": "Direfang Shoulderguards"
+        "name": "Direfang-Skulderværn"
       },
       "soulflame_cowl": {
         "name": "Wraithfire-Hætte"
       },
       "soulflame_cowl_heroic": {
-        "name": "Wraithfire Cowl"
+        "name": "Wraithfire-Hætte"
       },
       "soulflame_mantle": {
         "name": "Wraithfire-Kappe"
       },
       "soulflame_mantle_heroic": {
-        "name": "Wraithfire Mantle"
+        "name": "Wraithfire-Kappe"
       },
       "stormcallers_crown": {
         "name": "Galecall-Krone"
       },
       "stormcallers_crown_heroic": {
-        "name": "Galecall Crown"
+        "name": "Galecall-Krone"
       },
       "stormcallers_spaulders": {
         "name": "Galecall-Skulderplader"
       },
       "stormcallers_spaulders_heroic": {
-        "name": "Galecall Spaulders"
+        "name": "Galecall-Skulderplader"
       },
       "unknown_alien_weaponry": {
         "name": "Ukendt Fremmedartet Våben"
@@ -7193,13 +7539,13 @@ export const da_DK: EnTranslations = {
         "name": "Genopstanden Kongelig Garder"
       },
       "nythraxis_heroic_warrior_add": {
-        "name": "Aldren, Deathless Warguard"
+        "name": "Aldren, Den Udødelige Krigsvagt"
       },
       "nythraxis_heroic_priest_add": {
-        "name": "Malric, Deathless Hierophant"
+        "name": "Malric, Den Udødelige Hierofant"
       },
       "nythraxis_heroic_rogue_add": {
-        "name": "Voss, Deathless Knife"
+        "name": "Voss, Den Udødelige Kniv"
       },
       "nythraxis_scourge_of_thornpeak": {
         "name": "Nythraxis, Tornetops Svøbe"
@@ -7529,6 +7875,16 @@ export const da_DK: EnTranslations = {
       }
     },
     "quests": {
+      "q_prof_intro": {
+        "title": "Et håndværk til hver hånd",
+        "text": "Alle i Eastbrook har et håndværk ved siden af sværdet, {playerName}. Der ligger malmårer spredt rundt om byen, så tag en hakke og hent 5 stykker til mig. Bryd dem selv; jeg kan se forskellen.",
+        "completion": "Kan du se det? Malm i tasken og hård hud på hænderne. Fortsæt med at bryde malm, hugge træ og samle urter langs vejene. Når du vender tilbage til byen, så husk tavlen for Byfokus ved markedet og arbejdsbænken ved siden af. I alt dette venter et ærligt håndværk, hvis du vil have det.",
+        "objectives": {
+          "0": {
+            "label": "Stykke malm"
+          }
+        }
+      },
       "q_wolves": {
         "title": "Ulve for Døren",
         "text": "Skovulvene bliver dristige og snapper efter rejsende på den nordlige vej. Tynd deres flok ud, {playerName}. Dræb 8 Skovulve, så kan Østbæk ånde lettere.",

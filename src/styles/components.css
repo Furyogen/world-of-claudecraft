@@ -2924,6 +2924,18 @@
     font-size: 11px;
     color: #ddd;
   }
+  .vendor-item .vi-sub {
+    display: block;
+    font-size: 10px;
+    color: #887c5c;
+  }
+  .vendor-item:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+  .vendor-item:disabled:hover {
+    background: transparent;
+  }
   .vendor-sell-junk {
     display: flex;
     align-items: center;
@@ -6783,10 +6795,70 @@
     border-radius: 6px;
     color: var(--color-text);
     font-size: 12.5px;
+  }
+  /* The icon+name pair inside a chip: the icon img is display: block
+     (.item-icon above), so this wrapper needs its own inline-flex or the
+     icon breaks onto its own line above the name. */
+  .mail-parcel-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .mail-parcel-qty {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .mail-parcel-qty-value {
+    min-width: 26px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .mail-parcel-step {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    font-family: var(--title-font);
+    font-size: 12px;
+    line-height: 1;
+    background: #ffffff10;
+    border: 1px solid #ffffff26;
+    border-radius: 4px;
+    color: var(--color-text);
     cursor: var(--cursor-point);
   }
-  .mail-parcel-chip:hover {
-    border-color: #ff9c8a55;
+  .mail-parcel-step:hover:not(:disabled) {
+    border-color: var(--color-border-focus);
+  }
+  .mail-parcel-step:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+  .mail-parcel-step:focus-visible,
+  .mail-parcel-remove-btn:focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 1px;
+  }
+  .mail-parcel-remove-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: var(--cursor-point);
+  }
+  .mail-parcel-remove-btn:hover .mail-parcel-remove {
+    color: #ff9c8a;
+  }
+  @media (pointer: coarse) {
+    .mail-parcel-step,
+    .mail-parcel-remove-btn {
+      min-width: 40px;
+      min-height: 40px;
+    }
   }
   .mail-parcel-remove {
     width: 10px;
@@ -7632,4 +7704,83 @@
       animation: none;
     }
   }
+}
+#talents-window .tal-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 4px;
+  overflow-y: auto;
+}
+#talents-window .tal-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+#talents-window .tal-row.locked {
+  opacity: 0.55;
+}
+#talents-window .tal-row-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 56px;
+  gap: 2px;
+}
+#talents-window .tal-row-lvl {
+  font-family: var(--font-display, serif);
+  font-size: 18px;
+  color: var(--gold);
+}
+#talents-window .tal-row-lock {
+  font-size: 10px;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+#talents-window .tal-row-opts {
+  display: flex;
+  flex: 1;
+  gap: 8px;
+}
+#talents-window .tal-row-opt {
+  display: flex;
+  flex: 1;
+  gap: 8px;
+  align-items: center;
+  padding: 8px;
+  border: 1px solid var(--color-border, #6f5a2a);
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: var(--cursor-point);
+}
+#talents-window .tal-row-opt:hover:not(:disabled),
+#talents-window .tal-row-opt:focus-visible {
+  background: #ffffff10;
+  border-color: var(--gold);
+}
+#talents-window .tal-row-opt:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: -2px;
+}
+#talents-window .tal-row-opt.sel {
+  background: #2c2410;
+  border-color: var(--gold);
+  box-shadow: inset 0 0 0 1px #ffd10033;
+}
+#talents-window .tal-row-opt:disabled {
+  cursor: default;
+}
+#talents-window .tal-row-opt .tco-icon {
+  width: 28px;
+  height: 28px;
+  flex: none;
+  background-size: cover;
+  border-radius: 3px;
+}
+#talents-window .tal-row-opt-name {
+  font-size: 12px;
+  line-height: 1.25;
 }

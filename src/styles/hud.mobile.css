@@ -862,6 +862,13 @@
       0 0 12px #ffd100aa,
       inset 0 0 0 1px #ffd10077;
   }
+  body.mobile-touch #mobile-action-ring button.empowered {
+    border-color: var(--gold);
+    box-shadow:
+      0 0 14px #ffd100dd,
+      inset 0 0 0 1px #fff0a6aa;
+    animation: action-empowered-pulse 1.15s ease-in-out infinite;
+  }
   body.mobile-touch #mobile-action-ring button.used {
     border-color: var(--gold);
   }
@@ -3064,12 +3071,13 @@
     min-height: 40px;
     box-sizing: border-box;
   }
-  /* Mailbox: the folder tab strip, the "back to inbox" link, and the Send-tab
-     remove-staged-parcel chip (a real <button>, base min-height 32px in
-     components.css, below the touch floor). */
+  /* Mailbox: the folder tab strip and the "back to inbox" link. The Send-tab
+     parcel chip is now a non-interactive span (the +/- stepper and remove
+     button are the real controls); their own pointer: coarse 40x40 floor
+     lives in components.css next to .mail-parcel-step / .mail-parcel-remove-btn,
+     the same convention as .yh-toggle. */
   body.mobile-touch #mailbox-window .mail-tab,
-  body.mobile-touch #mailbox-window .mail-back,
-  body.mobile-touch #mailbox-window .mail-parcel-chip {
+  body.mobile-touch #mailbox-window .mail-back {
     min-height: 40px;
     box-sizing: border-box;
   }

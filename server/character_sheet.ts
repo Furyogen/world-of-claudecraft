@@ -118,14 +118,19 @@ function normalizeAllocation(state: CharacterState): TalentAllocation {
   if (!a || typeof a !== 'object') return emptyAllocation();
   return {
     spec: typeof a.spec === 'string' ? a.spec : null,
-    ranks: a.ranks && typeof a.ranks === 'object' ? a.ranks : {},
-    choices: a.choices && typeof a.choices === 'object' ? a.choices : {},
+    rows: a.rows && typeof a.rows === 'object' ? { ...a.rows } : {},
   };
 }
 
-function talentMods(cls: PlayerClass, state: CharacterState): TalentModifiers | undefined {
+function talentMods(
+  cls: PlayerClass,
+  state: CharacterState,
+  level: number,
+): TalentModifiers | undefined {
   try {
-    return computeTalentModifiers(cls, normalizeAllocation(state));
+    // Pass the character's level so mastery level-scaling matches the live sim
+    // (a sub-20 character's sheet must not report full-strength mastery stats).
+    return computeTalentModifiers(cls, normalizeAllocation(state), level);
   } catch {
     return undefined; // never let a malformed allocation break a public read
   }
@@ -193,7 +198,7 @@ export function characterSheet(input: CharacterSheetInput): CharacterSheet {
       cls,
       level,
       state.equipment ?? {},
-      talentMods(cls, state),
+      talentMods(cls, state, level),
     );
     sheet.stats = { ...derived.stats };
     sheet.vitals = {

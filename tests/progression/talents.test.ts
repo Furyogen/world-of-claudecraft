@@ -8,11 +8,11 @@
 // coupling (a recompute mid-overlay reads playerMods, not raw talentMods).
 
 import { describe, expect, it } from 'vitest';
+import { CHOICE_ROW_LEVELS, CHOICE_ROWS } from '../../src/sim/content/choice_rows';
 import {
   computeTalentModifiers,
   emptyAllocation,
   type TalentAllocation,
-  talentPointsAtLevel,
 } from '../../src/sim/content/talents';
 import {
   applyTalentAllocation,
@@ -20,7 +20,6 @@ import {
   respecTalents,
   saveTalentLoadout,
   setTalentSpec,
-  spendTalentPoint,
   switchTalentLoadout,
   talentPointBudget,
 } from '../../src/sim/progression/talents';
@@ -49,27 +48,21 @@ function setup(seed = 5) {
 const knownIds = (meta: any): string[] => meta.known.map((k: any) => k.def.id).sort();
 
 describe('progression/talents: apply + respec', () => {
-  it('applies a spec build (bakes flat talentMods + flips known list), respec wipes ranks but keeps spec and reverts stats', () => {
-    const { ctx, meta, e } = setup();
-    const armorBase = e.stats.armor;
+  it('applies a spec + row build (bakes flat talentMods + flips known list), respec wipes rows but keeps spec', () => {
+    const { ctx, meta } = setup();
     const knownBase = knownIds(meta);
+    const r14 = CHOICE_ROWS.warrior.rows.find((r) => r.level === 14);
+    const grantOpt = r14?.options.find((o) => o.effect.grant)?.id as string;
 
-    expect(
-      applyTalentAllocation(
-        ctx,
-        alloc({ spec: 'arms', ranks: { war_toughness: 2, arms_imp_overpower: 2 } }),
-      ),
-    ).toBe(true);
+    expect(applyTalentAllocation(ctx, alloc({ spec: 'arms', rows: { 14: grantOpt } }))).toBe(true);
     expect(meta.talents.spec).toBe('arms');
     expect(meta.talentMods.spec).toBe('arms'); // the flat struct re-baked once
-    expect(meta.talents.ranks.war_toughness).toBe(2);
-    expect(e.stats.armor).toBeGreaterThan(armorBase); // war_toughness raised armor
-    expect(knownIds(meta)).not.toEqual(knownBase); // arms spec changed the known list
+    expect(meta.talents.rows[14]).toBe(grantOpt);
+    expect(knownIds(meta)).not.toEqual(knownBase); // spec signature + row grant changed the list
 
     expect(respecTalents(ctx)).toBe(true);
-    expect(meta.talents.ranks).toEqual({}); // ranks wiped
+    expect(meta.talents.rows).toEqual({}); // rows wiped
     expect(meta.talents.spec).toBe('arms'); // spec retained
-    expect(e.stats.armor).toBe(armorBase); // stats reverted
   });
 });
 
@@ -77,28 +70,28 @@ describe('progression/talents: loadouts', () => {
   it('saveLoadout (object-alloc overload) then switchLoadout restores the build + known list', () => {
     const { ctx, meta } = setup();
     // Save build A into slot 0 via the positional-alloc overload (the HUD path).
+    const r5 = CHOICE_ROWS.warrior.rows[0].options[0].id;
     expect(
       saveTalentLoadout(
         ctx,
         'Arms',
         ['mortal_strike', 'overpower'],
-        alloc({ spec: 'arms', ranks: { arms_imp_overpower: 2 } }),
+        alloc({ spec: 'arms', rows: { 5: r5 } }),
       ),
     ).toBe(0);
     expect(meta.activeLoadout).toBe(0);
     const knownArms = knownIds(meta);
 
     // Apply a different build: the known list changes.
-    expect(applyTalentAllocation(ctx, alloc({ spec: 'fury', ranks: { fury_cruelty: 2 } }))).toBe(
-      true,
-    );
+    const r5b = CHOICE_ROWS.warrior.rows[0].options[1].id;
+    expect(applyTalentAllocation(ctx, alloc({ spec: 'fury', rows: { 5: r5b } }))).toBe(true);
     expect(meta.talentMods.spec).toBe('fury');
     expect(knownIds(meta)).not.toEqual(knownArms);
 
     // Switch back to slot 0: the build + known list flip back.
     expect(switchTalentLoadout(ctx, 0)).toBe(true);
     expect(meta.talents.spec).toBe('arms');
-    expect(meta.talents.ranks.arms_imp_overpower).toBe(2);
+    expect(meta.talents.rows[5]).toBe(r5);
     expect(knownIds(meta)).toEqual(knownArms);
   });
 
@@ -112,30 +105,24 @@ describe('progression/talents: loadouts', () => {
 });
 
 describe('progression/talents: spec + point budget', () => {
-  it('setSpec drops the prior spec tree points, keeps class points, and flips the known list', () => {
+  it('setSpec keeps class-wide row picks and flips the known list', () => {
     const { ctx, meta } = setup();
-    expect(
-      applyTalentAllocation(
-        ctx,
-        alloc({ spec: 'arms', ranks: { war_toughness: 2, arms_imp_overpower: 2 } }),
-      ),
-    ).toBe(true);
+    const r5 = CHOICE_ROWS.warrior.rows[0].options[0].id;
+    expect(applyTalentAllocation(ctx, alloc({ spec: 'arms', rows: { 5: r5 } }))).toBe(true);
     const knownArms = knownIds(meta);
 
     expect(setTalentSpec(ctx, 'fury')).toBe(true);
     expect(meta.talents.spec).toBe('fury');
-    expect(meta.talents.ranks.arms_imp_overpower).toBeUndefined(); // spec-tree point dropped
-    expect(meta.talents.ranks.war_toughness).toBe(2); // class-tree point retained
+    expect(meta.talents.rows[5]).toBe(r5); // rows are class-wide, spec change keeps them
     expect(knownIds(meta)).not.toEqual(knownArms);
   });
 
-  it('talentPointBudget reports total from level + spent from the allocation; spendTalent increments', () => {
-    const { ctx, meta } = setup();
-    expect(talentPointBudget(ctx)).toEqual({ total: talentPointsAtLevel(MAX_LEVEL), spent: 0 });
-    expect(spendTalentPoint(ctx, 'war_toughness')).toBe(true);
-    expect(spendTalentPoint(ctx, 'war_toughness')).toBe(true);
-    expect(meta.talents.ranks.war_toughness).toBe(2);
-    expect(talentPointBudget(ctx).spent).toBe(2);
+  it('talentPointBudget reports rows unlocked at level and rows picked', () => {
+    const { ctx } = setup();
+    expect(talentPointBudget(ctx)).toEqual({ total: CHOICE_ROW_LEVELS.length, spent: 0 });
+    const r5 = CHOICE_ROWS.warrior.rows[0].options[0].id;
+    expect(applyTalentAllocation(ctx, alloc({ rows: { 5: r5 } }))).toBe(true);
+    expect(talentPointBudget(ctx).spent).toBe(1);
   });
 });
 

@@ -1616,8 +1616,6 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.expose_armor.description':
     'Afslutningstræk der blotlægger målet og sænker dets rustning med {damage} i 30 sek.',
   'entities.abilities.expose_armor.name': 'Rustningsbrud',
-  'entities.abilities.faerie_fire.description':
-    'Sænker målets rustning med {damage}% i 40 sek. Stakker ikke med Rustningsskær.',
   'entities.abilities.faerie_fire.name': 'Hekselys',
   'entities.abilities.fear.description':
     'Slår rædsel i fjenden, så den kryber sammen i op til 8 sek. Enhver skade bryder effekten.',
@@ -1913,6 +1911,75 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.wing_clip.name': 'Lænkende Snit',
   'entities.abilities.wrath.description': 'Slynger et lyn af naturenergi for {damage} Natur skade.',
   'entities.abilities.wrath.name': 'Vildlyn',
+  'entities.abilities.aura_surge.name': 'Strålende Svulmen',
+  'entities.abilities.aura_surge.description':
+    'Overbelaster din aura og hærder dig med 160 rustning i 10 sek. (Paladintalent)',
+  'entities.abilities.holy_shock.name': 'Hellig chok',
+  'entities.abilities.holy_shock.description':
+    'Chokerer et venligt mål med hellig energi og helbreder det for {damage}. (Hellig signatur)',
+  'entities.abilities.holy_shield.name': 'Hellig skjold',
+  'entities.abilities.holy_shield.description':
+    'Beskytter dig med hellig kraft i 10 sek, øger rustning med 90 og rammer nærkampsangribere for 12 hellig skade. (Beskyttelsessignatur)',
+  'entities.abilities.bestial_wrath.name': 'Bestialsk vrede',
+  'entities.abilities.bestial_wrath.description':
+    'Sender dig i bestialsk raseri, så angrebskraft øges med 55 i 15 sek. (Bæstmestersignatur)',
+  'entities.abilities.trueshot_aura.name': 'Træfsikkerhedsaura',
+  'entities.abilities.trueshot_aura.description':
+    'Inspirerer nærliggende allierede og øger angrebskraft med 35 i 5 min. (Skytte signatur)',
+  'entities.abilities.wyvern_sting.name': 'Wyvernstik',
+  'entities.abilities.wyvern_sting.description':
+    'Stikker fjenden på afstand og gør den ukampdygtig i op til 4 sek. Enhver skade bryder effekten. (Overlevelsessignatur)',
+  'entities.abilities.arcane_power.name': 'Arkan kraft',
+  'entities.abilities.arcane_power.description':
+    'Øger besværgelsesskade med 20% og besværgelseshast med 10% i 10 sek. (Arcane-signatur)',
+  'entities.abilities.combustion.name': 'Forbrænding',
+  'entities.abilities.combustion.description':
+    'Øger kritisk chance med besværgelser med 50% i 15 sek. (Fire-signatur)',
+  'entities.abilities.icy_veins.name': 'Iskolde Årer',
+  'entities.abilities.icy_veins.description':
+    'Øger besværgelseshast med 30% og forhindrer afbrydelse og tilbageslag i 10 sek. (Frost-signatur)',
+  'entities.abilities.cold_blood.name': 'Koldt blod',
+  'entities.abilities.cold_blood.description':
+    'Fokuserer din dræbervilje, så dit næste angreb bliver et kritisk træf. (Snigmordersignatur)',
+  'entities.abilities.blade_flurry.name': 'Klingevirvel',
+  'entities.abilities.blade_flurry.description':
+    'Udløser en byge af klinger og øger angrebshastighed med 20% i 12 sek. (Kampsignatur)',
+  'entities.abilities.hemorrhage.name': 'Blødning',
+  'entities.abilities.hemorrhage.description':
+    'Ramler fjenden for våbenskade plus {damage} og påfører blødningsskade over 12 sek. Giver 1 combopoint. (Underfundighedssignatur)',
+  'entities.abilities.power_infusion.name': 'Kraftinfusion',
+  'entities.abilities.power_infusion.description':
+    'Indgyder et venligt mål med kraft og øger besværgelseskraft med 28 i 15 sek. (Disciplin signatur)',
+  'entities.abilities.holy_nova.name': 'Hellig nova',
+  'entities.abilities.holy_nova.description':
+    'Udløser en eksplosion af helligt lys, helbreder nærliggende allierede for {damage} og skader nærliggende fjender. (Hellig signatur)',
+  'entities.abilities.shadowform.name': 'Skyggeform',
+  'entities.abilities.shadowform.description':
+    'Antag skyggeform, som styrker skyggemagi, indtil du skifter tilbage. Kast igen for at vende tilbage til normal form. (Skyggesignatur)',
+  'entities.abilities.elemental_mastery.name': 'Elementær beherskelse',
+  'entities.abilities.elemental_mastery.description':
+    'Påkalder elementær beherskelse og gør din næste besværgelse øjeblikkelig. (Elementær signatur)',
+  'entities.abilities.siphon_life.name': 'Sug liv',
+  'entities.abilities.siphon_life.description':
+    'Suger liv fra fjenden, påfører {damage} skyggeskade over 30 sek og helbreder dig for den skade, der bliver gjort. (Lidelsessignatur)',
+  'entities.abilities.conflagrate.name': 'Antændelse',
+  'entities.abilities.conflagrate.description':
+    'Forbruger din Opbrænding på fjenden for at antænde den for {damage} ildskade. (Ødelæggelsessignatur)',
+  'entities.abilities.moonkin_form.name': 'Månekinform',
+  'entities.abilities.moonkin_form.description':
+    'Antag månekinform, som styrker besværgelser, indtil du skifter tilbage. Kast igen for at vende tilbage til normal form. (Balancesignatur)',
+  'entities.abilities.feral_charge.name': 'Vild ladning',
+  'entities.abilities.feral_charge.description':
+    'Storm mod en fjende og rodfæst den i 1 sek. 8-25 m rækkevidde. (Vildskabssignatur)',
+  'entities.abilities.swiftmend.name': 'Hurtig heling',
+  'entities.abilities.swiftmend.description':
+    'Forbruger en helbredelse over tid-effekt på et venligt mål for at helbrede det for {damage}. (Genoprettelsessignatur)',
+  'entities.abilities.crusader_strike.name': 'Korsfarerslag',
+  'entities.abilities.crusader_strike.description':
+    'Slår målet for våbenskade plus {damage} hellig skade. (Paladin-talent)',
+  'entities.abilities.metamorphosis.name': 'Metamorfose',
+  'entities.abilities.metamorphosis.description':
+    'Antag dæmonisk kraft og øg rustning og angrebskraft i 20 sek. (Warlock-talent)',
   'entities.delves.collapsed_reliquary.enterText':
     'Du stiger ned i det sammenstyrtede relikvarium.',
   'entities.delves.collapsed_reliquary.leaveText':
@@ -1990,7 +2057,9 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.items.crimson_amber_armor_plate.name': 'Karmosin Rav',
   'entities.items.crossroads_saber.name': 'Korsvejssabel',
   'entities.items.crownforged_dreadhelm.name': 'Bonewrought Rædselshjelm',
+  'entities.items.crownforged_dreadhelm_heroic.name': 'Bonewrought Rædselshjelm',
   'entities.items.crownforged_warspaulders.name': 'Bonewrought Krigsskulderplader',
+  'entities.items.crownforged_warspaulders_heroic.name': 'Bonewrought Krigsskulderplader',
   'entities.items.crypt_keystone.name': 'Krypt-Nøglesten',
   'entities.items.crypt_ritual_circle.name': 'Ritualcirkel',
   'entities.items.cryptbone_greaves.name': 'Kryptben-Benskinner',
@@ -2164,7 +2233,9 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.items.nhalias_dirgeblade.name': 'Nhalias Sørgeklinge',
   'entities.items.nhalias_funeral_wraps.name': 'Nhalias Begravelsesomvikkel',
   'entities.items.nighttalon_crown.name': 'Direfang-Krone',
+  'entities.items.nighttalon_crown_heroic.name': 'Direfang-Krone',
   'entities.items.nighttalon_shoulderguards.name': 'Direfang-Skulderværn',
+  'entities.items.nighttalon_shoulderguards_heroic.name': 'Direfang-Skulderværn',
   'entities.items.nightwalk_jerkin.name': 'Natvandrer-Vams',
   'entities.items.oathbound_greaves.name': 'Edsbundne Benskinner',
   'entities.items.ogre_bonecharm_staff.name': 'Ogerens Benamulet-Stav',
@@ -2235,7 +2306,9 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.items.soggy_boot.name': 'Gennemvåd Støvle',
   'entities.items.soggy_moccasin.name': 'Gennemvåd Mokkasin',
   'entities.items.soulflame_cowl.name': 'Wraithfire-Hætte',
+  'entities.items.soulflame_cowl_heroic.name': 'Wraithfire-Hætte',
   'entities.items.soulflame_mantle.name': 'Wraithfire-Kappe',
+  'entities.items.soulflame_mantle_heroic.name': 'Wraithfire-Kappe',
   'entities.items.spider_leg.name': 'Dirrende Edderkoppeben',
   'entities.items.spring_water.name': 'Koldt Brøndvand',
   'entities.items.staff_of_drowned_prayers.name': 'Stav af Druknede Bønner',
@@ -2246,6 +2319,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.items.steel_orange_armor_plate.name': 'Stålorange',
   'entities.items.storm_core.name': 'Stormkerne',
   'entities.items.stormcallers_crown.name': 'Galecall-Krone',
+  'entities.items.stormcallers_crown_heroic.name': 'Galecall-Krone',
   'entities.items.crownforged_gauntlets.name': 'Kronesmedede Handsker',
   'entities.items.nighttalon_grips.name': 'Natteklo-Greb',
   'entities.items.soulflame_gloves.name': 'Sjæleflamme-Handsker',
@@ -2255,6 +2329,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.items.soulflame_cord.name': 'Sjæleflamme-Snor',
   'entities.items.stormcallers_waistguard.name': 'Stormkalderens Livværn',
   'entities.items.stormcallers_spaulders.name': 'Galecall-Skulderplader',
+  'entities.items.stormcallers_spaulders_heroic.name': 'Galecall-Skulderplader',
   'entities.items.stormshard_leggings.name': 'Stormskår-Benbeklædning',
   'entities.items.sturdy_belt.name': 'Robust Rejsebælte',
   'entities.items.supply_crate.name': 'Stjålen Forsyningskasse',
@@ -2300,6 +2375,156 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.items.wolfhide_satchel.name': 'Ulveskindstaske',
   'entities.items.gravewoven_bag.name': 'Gravvævet taske',
   'entities.items.mistcallers_duffel.name': 'Fogbinderens køjesæk',
+  'entities.abilities.aspect_of_the_wild.name': 'Vildtands skikkelse',
+  'entities.abilities.aspect_of_the_wild.description':
+    'Inspira a nærliggende allierede con fuerza salvaje, aumentando angrebskraft durante 5 min. (jægertalent)',
+  'entities.abilities.avatar.name': 'Kolossen',
+  'entities.abilities.avatar.description':
+    'Te transforma en un coloso y aumenta angrebskraft durante 20 sek. (krigertalent)',
+  'entities.abilities.avenging_wrath.name': 'Hævnerfløj',
+  'entities.abilities.avenging_wrath.description':
+    'Invoca poder vengador y aumenta angrebskraft y trolddomskraft durante 20 sek. (paladintalent)',
+  'entities.abilities.berserk.name': 'Rød dis',
+  'entities.abilities.berserk.description': 'Aumenta angrebskraft durante 15 sek. (druidentalent)',
+  'entities.abilities.bladestorm.name': 'Stålcyklon',
+  'entities.abilities.bladestorm.description':
+    'Te convierte en una tormenta de acero que golpea a nærliggende fjender cada segundo por {damage}. (krigertalent)',
+  'entities.abilities.blink.name': 'Flimmertrin',
+  'entities.abilities.blink.description':
+    'Te teletransporta 15 m hacia delante y rompe raíces. (magikertalent)',
+  'entities.abilities.bloodlust.name': 'Krigstrommer',
+  'entities.abilities.bloodlust.description':
+    'Lleva a nærliggende allierede al frenesí y aumenta su velocidad de ataque durante 15 sek. (shamantent)',
+  'entities.abilities.chain_lightning.name': 'Gaffellyn',
+  'entities.abilities.chain_lightning.description':
+    'Lanza relámpagos al área objetivo e inflige {damage} de daño a nærliggende fjender. (shamantent)',
+  'entities.abilities.chaos_bolt.name': 'Ruinbolt',
+  'entities.abilities.chaos_bolt.description':
+    'Lanza una descarga de fuego caótico que inflige {damage} de daño de Ild. (troldmandstalent)',
+  'entities.abilities.cloak_of_shadows.name': 'Skyggekappe',
+  'entities.abilities.cloak_of_shadows.description':
+    'Te envuelve en sombras y absorbe daño durante 5 sek. (snigmordertalent)',
+  'entities.abilities.cone_of_cold.name': 'Frostfej',
+  'entities.abilities.cone_of_cold.description':
+    'Golpea a nærliggende fjender con escarcha e inflige {damage} de daño de Frost. (magikertalent)',
+  'entities.abilities.counter_shot.name': 'Dæmpende skud',
+  'entities.abilities.counter_shot.description':
+    'Afbryder besværgelse og forhindrer magi fra den skole i 4 sek. (jægertalent)',
+  'entities.abilities.counterspell.name': 'Trolddomsbrud',
+  'entities.abilities.counterspell.description':
+    'Afbryder besværgelse og forhindrer magi fra den skole i 6 sek. (magikertalent)',
+  'entities.abilities.curse_of_exhaustion.name': 'Blytung forbandelse',
+  'entities.abilities.curse_of_exhaustion.description':
+    'Maldice a målet y reduce su velocidad de movimiento un 30% durante 12 sek. (troldmandstalent)',
+  'entities.abilities.death_coil.name': 'Gravspiral',
+  'entities.abilities.death_coil.description':
+    'Golpea a målet por {damage} de daño de Skygge y luego lo aterroriza durante 3 sek. Esta versión no sana al lanzador. (troldmandstalent)',
+  'entities.abilities.deep_freeze.name': 'Dødfrost',
+  'entities.abilities.deep_freeze.description':
+    'Congela profundamente a målet, inflige {damage} de daño de Frost y lo aturde durante 4 sek. (magikertalent)',
+  'entities.abilities.desperate_prayer.name': 'Sidste bøn',
+  'entities.abilities.desperate_prayer.description':
+    'Te sana al instante por {damage}. (præstetalent)',
+  'entities.abilities.deterrence.name': 'Børsteværn',
+  'entities.abilities.deterrence.description':
+    'Aumenta tu undvigelseschance un 50% durante 10 sek. (jægertalent)',
+  'entities.abilities.divine_shield.name': 'Lysværn',
+  'entities.abilities.divine_shield.description':
+    'Te protege con poder sagrado y absorbe una enorme cantidad de daño durante 8 sek. (paladintalent)',
+  'entities.abilities.earthbind.name': 'Gribende jord',
+  'entities.abilities.earthbind.description':
+    'Ata a la tierra a nærliggende fjender y los inmoviliza durante 2 sek. (shamantent)',
+  'entities.abilities.evocation.name': 'Æterbrønd',
+  'entities.abilities.evocation.description': 'Restaura mana rápidamente. (magikertalent)',
+  'entities.abilities.frenzied_regeneration.name': 'Vild heling',
+  'entities.abilities.frenzied_regeneration.description':
+    'Regenera salud durante 10 sek. Solo en Forma de oso. (druidentalent)',
+  'entities.abilities.frost_trap.name': 'Rimfælde',
+  'entities.abilities.frost_trap.description':
+    'Congela a los fjender en el área objetivo durante 3 sek. (jægertalent)',
+  'entities.abilities.ghostly_strike.name': 'Genfærdsslag',
+  'entities.abilities.ghostly_strike.description':
+    'Golpea a målet por daño de arma más {damage} y aumenta brevemente la evasión. Otorga 1 punto de combo. (snigmordertalent)',
+  'entities.abilities.hammer_of_wrath.name': 'Klanghammer',
+  'entities.abilities.hammer_of_wrath.description':
+    'Lanza un martillo sagrado a un enemigo herido e inflige {damage} de daño de Hellig. Solo se usa por debajo del 20% de salud. (paladintalent)',
+  'entities.abilities.healing_stream.name': 'Kildebrønd',
+  'entities.abilities.healing_stream.description':
+    'Restaura a et venligt mål durante 12 sek. (shamantent)',
+  'entities.abilities.heroic_leap.name': 'Krigsspring',
+  'entities.abilities.heroic_leap.description':
+    'Saltas al área objetivo e infliges {damage} de daño Fysisk a nærliggende fjender. (krigertalent)',
+  'entities.abilities.holy_wrath.name': 'Helgenvrede',
+  'entities.abilities.holy_wrath.description':
+    'Desata poder sagrado e inflige {damage} de daño a nærliggende fjender. (paladintalent)',
+  'entities.abilities.howl_of_terror.name': 'Rædselshyl',
+  'entities.abilities.howl_of_terror.description':
+    'Aterroriza a nærliggende fjender hasta 3 sek. El daño puede romper el efecto. (troldmandstalent)',
+  'entities.abilities.ice_block.name': 'Kold kiste',
+  'entities.abilities.ice_block.description':
+    'Te encierra en hielo y absorbe una enorme cantidad de daño durante 8 sek. (magikertalent)',
+  'entities.abilities.inner_focus.name': 'Stillet sind',
+  'entities.abilities.inner_focus.description':
+    'Hace que tu siguiente hechizo no tenga coste. Dura 60 sek. (præstetalent)',
+  'entities.abilities.innervate.name': 'Livssaft',
+  'entities.abilities.innervate.description':
+    'Levende saft vælder op i dig i 10 sek. og genopretter 20 af din nuværende ressource i bølger: mana, raseri eller energi; formskifte afbryder den ikke. (Druidetalent)',
+  'entities.abilities.kick.name': 'Støvle',
+  'entities.abilities.kick.description':
+    'Afbryder besværgelse og forhindrer magi fra den skole i 4 sek. (snigmordertalent)',
+  'entities.abilities.last_stand.name': 'Ellevte time',
+  'entities.abilities.last_stand.description':
+    'Aumenta temporalmente Udholdenhed durante 15 sek, aumentando la salud máxima. (krigertalent)',
+  'entities.abilities.mend_pet.name': 'Lappe sammen',
+  'entities.abilities.mend_pet.description':
+    'Sana a et venligt mål por {damage} durante 15 sek. (jægertalent)',
+  'entities.abilities.meteor.name': 'Himmelsten',
+  'entities.abilities.meteor.description':
+    'Hace caer un meteoro en el área objetivo, inflige {damage} de daño de Ild y quema el suelo. (magikertalent)',
+  'entities.abilities.mind_sear.name': 'Tankebrand',
+  'entities.abilities.mind_sear.description':
+    'Canaliza energía de Skygge en el área objetivo e inflige {damage} cada segundo a nærliggende fjender. (præstetalent)',
+  'entities.abilities.multi_shot.name': 'Splitskud',
+  'entities.abilities.multi_shot.description':
+    'Dispara varios proyectiles e inflige {damage} a nærliggende fjender. (jægertalent)',
+  'entities.abilities.prayer_of_healing.name': 'Korhelbredelse',
+  'entities.abilities.prayer_of_healing.description':
+    'Sana a nærliggende allierede por {damage}. (præstetalent)',
+  'entities.abilities.preparation.name': 'Nødplan',
+  'entities.abilities.preparation.description':
+    'Termina el tiempo de reutilización de Sprint, Evasión y Vanish. (snigmordertalent)',
+  'entities.abilities.presence_of_mind.name': 'Ræsende sind',
+  'entities.abilities.presence_of_mind.description':
+    'Hace instantáneo tu siguiente hechizo con tiempo de lanzamiento. Dura 60 sek. (magikertalent)',
+  'entities.abilities.psychic_scream.name': 'Psykisk skrig',
+  'entities.abilities.psychic_scream.description':
+    'Aterroriza a nærliggende fjender hasta 4 sek. El daño puede romper el efecto. (præstetalent)',
+  'entities.abilities.pummel.name': 'Prygl',
+  'entities.abilities.pummel.description':
+    'Afbryder besværgelse og forhindrer magi fra den skole i 4 sek. (krigertalent)',
+  'entities.abilities.rallying_cry.name': 'Mønstring',
+  'entities.abilities.rallying_cry.description':
+    'Lanza un grito de reunión y aumenta angrebskraft de nærliggende allierede durante 10 sek. (krigertalent)',
+  'entities.abilities.rebuke.name': 'Irettesættelse',
+  'entities.abilities.rebuke.description':
+    'Afbryder besværgelse og forhindrer magi fra den skole i 4 sek. (paladintalent)',
+  'entities.abilities.shadowstep.name': 'Skyggesmut',
+  'entities.abilities.shadowstep.description':
+    'Das un paso entre las sombras hacia tu målet. (snigmordertalent)',
+  'entities.abilities.shield_wall.name': 'Bolværk',
+  'entities.abilities.shield_wall.description':
+    'Alzas un muro de escudo y aumentas mucho la rustning durante 10 sek. (krigertalent)',
+  'entities.abilities.silence.name': 'Tavshed',
+  'entities.abilities.silence.description': 'Silencia a målet durante 4 sek. (præstetalent)',
+  'entities.abilities.skull_bash.name': 'Pandeskal',
+  'entities.abilities.skull_bash.description':
+    'Afbryder besværgelse og forhindrer magi fra den skole i 4 sek. (druidentalent)',
+  'entities.abilities.spell_lock.name': 'Mundkurv',
+  'entities.abilities.spell_lock.description':
+    'Afbryder besværgelse og forhindrer magi fra den skole i 5 sek. (troldmandstalent)',
+  'entities.abilities.tranquility.name': 'Lundens sang',
+  'entities.abilities.tranquility.description':
+    'Canaliza energía restauradora y sana a nærliggende allierede cada segundo. (druidentalent)',
   'entities.items.worn_sword.name': 'Rustæret Kortsværd',
   'entities.items.woven_robe.name': 'Dalvævet Kjortel',
   'entities.items.wyrmcult_grand_robe.name': 'Ormekultens Storkjortel',
@@ -4384,7 +4609,6 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'hud.core.mobileControls': 'Mobilstyring',
   'hud.core.mobileMap': 'Kort',
   'hud.core.mobileMenu': 'Menu',
-  'hud.core.mobileSettings': 'Indstillinger',
   'hud.core.mobileMeters': 'Målere',
   'hud.core.mobileMore': 'Mere',
   'hud.core.mobileMoreAria': 'Vis flere menuer',
@@ -6017,6 +6241,8 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.wyrmshadow.name': 'Nightfang klæder',
   'entities.itemSets.wyrmshadow.bonus2': 'Øger angrebskraft med 40.',
   'entities.itemSets.wyrmshadow.bonus3': 'Øger smidighed med 15 og kritisk chance med 2%.',
+  'hudChrome.itemHeroicTag': '[HEROISK]',
+  'hudChrome.itemSoulbound': 'Sjælebundet',
   'hudChrome.itemSet.header': '{name} ({have}/{total})',
   'hudChrome.itemSet.bonusLine': '({pieces}) {bonus}',
   'hud.combat.floatingResist': 'Modstået',
@@ -6483,12 +6709,18 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'hudChrome.bank.withdrawQuantityConfirm': 'Tag ud',
   'hudChrome.bank.withdrawQuantityInput': 'Antal at tage ud',
   'hudChrome.bank.withdrawQuantityTitle': 'Tag {item} ud',
+  'entities.abilities.faerie_fire.description':
+    'Sænker målets rustning med {damage}% i 40 sek. Stakker ikke med Rustningsskær.',
+  'hud.core.mobileSettings': 'Indstillinger',
   'abilityUi.tooltip.selfOnly': 'Kun på dig selv',
   'itemUi.lootRoll.rolled': '{answered}/{total} har slået',
   'entities.abilities.sunder_armor.description':
     'Flænger målets rustning og sænker den med {damage}% pr. anvendelse. Stakker op til 5 gange. Skaber en stor mængde trussel.',
   'entities.mobs.training_dummy.name': 'Træningsdukke',
   'entities.mobs.yumi_cat.name': 'Yumi',
+  'entities.mobs.nythraxis_heroic_priest_add.name': 'Malric, Den Udødelige Hierofant',
+  'entities.mobs.nythraxis_heroic_rogue_add.name': 'Voss, Den Udødelige Kniv',
+  'entities.mobs.nythraxis_heroic_warrior_add.name': 'Aldren, Den Udødelige Krigsvagt',
   'guide.arenaPage.yumiBody':
     'Beskyt Yumi er en holdbaseret måltilstand, der spilles i en labyrint: hver side vogter sin egen katfølgesvend, mens den jager modstanderens. Med jævne mellemrum blinker begge katte til nye hjørner af labyrinten, så kampen svinger mellem at forsvare, jage og kapløbet om at finde dem igen. Stil op som tre mod tre eller fem mod fem; at falde i kamp sætter dig kun på bænken et øjeblik.',
   'guide.arenaPage.yumiHeading': 'Beskyt Yumi',
@@ -6530,4 +6762,51 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'yumi.queue.leave': 'Du forlader Beskyt Yumi-køen.',
   'yumi.queue.teamLeave': 'Dit hold forlader Beskyt Yumi-køen.',
   'yumi.respawn.title': 'SLÅET NED!',
+  'entities.abilities.chain_heal.name': 'Kædeheling',
+  'entities.abilities.chain_heal.description':
+    'Helbreder et venligt mål kraftigt og springer derefter til op til 2 yderligere allierede i nærheden. Hvert spring helbreder 50% mindre. (Restaurerings signaturfærdighed)',
+  'entities.abilities.razor_howl.name': 'Skarpt hyl',
+  'entities.abilities.razor_howl.description':
+    'Et råb, der sænker fjender inden for 15 m med 50% i 8 sek. (Kriger-talent)',
+  'entities.abilities.stormthrow.name': 'Stormkast',
+  'entities.abilities.stormthrow.description':
+    'Kast dit våben for at bedøve et mål i 3 sek. (Kriger-talent)',
+  'entities.abilities.reckless_vow.name': 'Dumdristigt løfte',
+  'entities.abilities.reckless_vow.description':
+    'Øger al generering af raseri med 50% og chancen for kritiske træffere med 20% i 12 sek. (Kriger-talent)',
+  'entities.abilities.red_banner.name': 'Rødt banner',
+  'entities.abilities.red_banner.description':
+    'Du og allierede i nærheden får 10% angrebshastighed og 10% skade i 20 sek. (Kriger-talent)',
+  'entities.items.chunk_of_ore.name': 'Stykke malm',
+  'entities.quests.q_prof_intro.title': 'Et håndværk til hver hånd',
+  'entities.quests.q_prof_intro.text':
+    'Alle i Eastbrook har et håndværk ved siden af sværdet, {playerName}. Der ligger malmårer spredt rundt om byen, så tag en hakke og hent 5 stykker til mig. Bryd dem selv; jeg kan se forskellen.',
+  'entities.quests.q_prof_intro.completion':
+    'Kan du se det? Malm i tasken og hård hud på hænderne. Fortsæt med at bryde malm, hugge træ og samle urter langs vejene. Når du vender tilbage til byen, så husk tavlen for Byfokus ved markedet og arbejdsbænken ved siden af. I alt dette venter et ærligt håndværk, hvis du vil have det.',
+  'entities.quests.q_prof_intro.objectives.0.label': 'Stykke malm',
+  'game.talents.readout.rowsSummary': 'Talenter: {head}, {picked}/{unlocked} valgrupper valgt.',
+  'hudChrome.fct.absorbed': '{amount} absorberet',
+  'hudChrome.fct.cheap': 'Billigere!',
+  'hudChrome.mailbox.parcelQtyDecreaseAria': 'Send én {item} mindre',
+  'hudChrome.mailbox.parcelQtyIncreaseAria': 'Send én {item} mere',
+  'game.talents.choicesTab': 'Valg',
+  'game.talents.rowUnlockToast': 'Et nyt talentvalg er låst op!',
+  'game.talents.rowUnlocks': 'Låses op på niveau {level}',
+  'hudChrome.auth.forgotPrompt': 'Glemt adgangskode?',
+  'hudChrome.auth.forgotTitle': 'Nulstil din adgangskode',
+  'hudChrome.auth.forgotHint':
+    'Indtast dit brugernavn, så sender vi et nulstillingslink til den registrerede e-mailadresse.',
+  'hudChrome.auth.forgotUsername': 'Brugernavn',
+  'hudChrome.auth.forgotSubmit': 'Send nulstillingslink',
+  'hudChrome.auth.forgotSent':
+    'Hvis en konto med det brugernavn har en registreret e-mailadresse, har vi sendt et nulstillingslink. Tjek din indbakke.',
+  'hudChrome.auth.forgotBack': 'Tilbage til log ind',
+  'hudChrome.auth.resetTitle': 'Vælg en ny adgangskode',
+  'hudChrome.auth.resetNewPassword': 'Ny adgangskode',
+  'hudChrome.auth.resetConfirm': 'Bekræft ny adgangskode',
+  'hudChrome.auth.resetSubmit': 'Opdater adgangskode',
+  'hudChrome.auth.resetDone': 'Din adgangskode er opdateret. Du kan nu logge ind.',
+  'hudChrome.auth.resetMismatch': 'Adgangskoderne stemmer ikke overens.',
+  'hudChrome.auth.resetErrInvalid':
+    'Dette nulstillingslink er ugyldigt eller udløbet. Anmod om et nyt.',
 };

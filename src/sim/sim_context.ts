@@ -419,9 +419,12 @@ export interface SimContextCallbacks {
   grantNythraxisLockout(boss: Entity): void;
   frenzyPackmates(dead: Entity): void;
   armDeathThroes(dead: Entity): void;
-  // C1's grantXp level-up path AND G1a's talent application (progression/talents.ts)
-  // both consume refreshKnownAbilities: the talent path always passes announce=false
-  // (a silent re-resolve, no learnAbility spam); the level-up path passes announce=true.
+  // C1's grantXp level-up path AND G1a's talent application (progression/talents.ts) both
+  // consume refreshKnownAbilities with announce=true, so a spec pick / talent apply that
+  // grants a new ability (e.g. a spec signature) surfaces it: emits learnAbility (the HUD
+  // places it on the bar + spellbook) and a "You have learned" log. Character LOAD uses its
+  // OWN announce=false call (addPlayer/restore) so it never spams on login; the before/after
+  // diff in refreshKnownAbilities means only genuinely new abilities are announced.
   // G1a's talent module also consumes the core `error` sink (declared above). The talent
   // PUBLIC API (applyTalents/spendTalent/setSpec/respec/saveLoadout/switchLoadout/
   // deleteLoadout/talentPoints) is NOT on this seam: Sim keeps thin wrapper methods that
@@ -456,6 +459,17 @@ export interface SimContextCallbacks {
   swingIntervalMult(e: Entity): number;
   mobCanSwim(template: { family?: string; canSwim?: boolean } | undefined): boolean;
   resolveMovePoint(nx: number, nz: number, r: number, e: Entity): { x: number; z: number };
+  // From-point collision resolve (walls/fences/delve bounds) for swept teleports
+  // (repositionToAim/blinkForward): same body Sim movement uses, exposed on the seam.
+  resolveMove(
+    fromX: number,
+    fromZ: number,
+    nx: number,
+    nz: number,
+    r: number,
+    e: Entity,
+    ignoreFences?: boolean,
+  ): { x: number; z: number };
   // --- pet / delve-companion / boss-mechanic branches (owners: P1 / delve / M3-N1) ---
   updatePet(pet: Entity): void;
   isDelveCompanionMob(mob: Entity): boolean;
@@ -559,6 +573,7 @@ export interface SimContextCallbacks {
       weaponMult?: number;
       threatFlat?: number;
       threatMult?: number;
+      damageMult?: number;
     },
   ): boolean;
   effectiveAttackPower(e: Entity): number;
@@ -592,6 +607,8 @@ export interface SimContextCallbacks {
   // devCommands). Adds a stationary whisperable player near the primary; returns the
   // new pid, or -1 if the name is blank or already taken. Stays on Sim.
   spawnDevBot(name: string): number;
+  // /dev vendor: spawn the free-epic dev vendor next to the caller. Returns id or -1.
+  spawnDevVendor(pid?: number): number;
 
   // L2 inventory/vendor (src/sim/items.ts): the four helpers the moved useItem
   // dispatches to that STAY on Sim (their owning facets are decided later). W2 owns
@@ -945,6 +962,7 @@ export function createSimContext(host: SimContextHost): SimContext {
     swingIntervalMult: host.swingIntervalMult,
     mobCanSwim: host.mobCanSwim,
     resolveMovePoint: host.resolveMovePoint,
+    resolveMove: host.resolveMove,
     updatePet: host.updatePet,
     isDelveCompanionMob: host.isDelveCompanionMob,
     updateDelveCompanion: host.updateDelveCompanion,
@@ -1007,6 +1025,7 @@ export function createSimContext(host: SimContextHost): SimContext {
     setPlayerLevel: host.setPlayerLevel,
     notice: host.notice,
     spawnDevBot: host.spawnDevBot,
+    spawnDevVendor: host.spawnDevVendor,
     // L2 inventory/vendor (W2): the four still-on-Sim helpers the moved useItem dispatches to.
     startFishing: host.startFishing,
     unlockMechChromaFromItem: host.unlockMechChromaFromItem,

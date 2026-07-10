@@ -333,4 +333,6 @@ export const V07_SLASH = [
   '[dev] Level set to 5.',
   '[dev] Teleported to Aki, Aki.',
   "[dev] Unknown item 'Aki'.",
+  '[dev] Spawned the Test Quartermaster (free epic gear) next to you.',
+  '[dev] Could not spawn the test vendor.',
 ];

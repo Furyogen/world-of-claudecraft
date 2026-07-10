@@ -66,6 +66,13 @@ export function abilityDamageBonus(
       // Each ground pulse is an AoE hit: effect_dispatch snapshots
       // directHitBonus(..., aoe) into the zone's spBonus at cast time.
       return directHitBonus(power, def, res.castTime, true);
+    case 'aoeHeal':
+      // AoE heals take the same per-target coefficient penalty as aoeDamage.
+      return directHealBonus(scaling.spellPower, res.castTime);
+    case 'consumeAura':
+      if (eff.deal) return directHitBonus(power, def, res.castTime, false);
+      if (eff.heal) return directHealBonus(scaling.spellPower, res.castTime);
+      return 0;
     case 'heal':
       // Combat adds the direct-heal rider (full cast-time coefficient off Spell
       // Power, no AP scale-down) to every direct heal in effect_dispatch.

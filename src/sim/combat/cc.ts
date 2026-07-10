@@ -11,16 +11,28 @@
 
 import type { Aura, Entity } from '../types';
 
-// A stun freezes everything: movement, casts, melee, abilities. Incapacitate and
-// polymorph share the same total-lockout shape.
+// A stun freezes everything: movement, casts, melee, abilities. Stasis,
+// incapacitate, and polymorph share the same total-lockout shape.
 export function isStunned(e: Entity): boolean {
   return e.auras.some(
-    (a) => a.kind === 'stun' || a.kind === 'incapacitate' || a.kind === 'polymorph',
+    (a) =>
+      a.kind === 'stun' ||
+      a.kind === 'stasis' ||
+      a.kind === 'incapacitate' ||
+      a.kind === 'polymorph',
   );
+}
+
+export function isInStasis(e: Entity): boolean {
+  return e.auras.some((a) => a.kind === 'stasis');
 }
 
 export function isRooted(e: Entity): boolean {
   return isStunned(e) || e.auras.some((a) => a.kind === 'root');
+}
+
+export function isRootedOrChilled(e: Entity): boolean {
+  return isRooted(e) || e.auras.some((a) => a.kind === 'slow');
 }
 
 // Silence locks out spell (non-physical) casts but leaves physical abilities,

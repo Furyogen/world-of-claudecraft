@@ -17,7 +17,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 406,
-      "state": "9da6ecfe",
+      "state": "06b9e332",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -61,8 +61,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -123,8 +122,8 @@
       "tick": 20,
       "time": 1,
       "nextId": 412,
-      "state": "5f8dcd27",
-      "events": "f03ad5da",
+      "state": "e6957ddc",
+      "events": "ac5f82ce",
       "rng": {
         "draws": 54,
         "digest": "d9836924"
@@ -134,8 +133,8 @@
       "tick": 40,
       "time": 2,
       "nextId": 412,
-      "state": "87beef26",
-      "events": "2705da35",
+      "state": "803a94cf",
+      "events": "1a1eee41",
       "rng": {
         "draws": 95,
         "digest": "43c2d2eb"
@@ -145,8 +144,8 @@
       "tick": 60,
       "time": 3,
       "nextId": 412,
-      "state": "65cc25c2",
-      "events": "68a7c7c5",
+      "state": "e626d47d",
+      "events": "2e4754a2",
       "rng": {
         "draws": 224,
         "digest": "22d4749f"
@@ -156,7 +155,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 412,
-      "state": "f6029a9c",
+      "state": "cd393b97",
       "events": "741638a5",
       "rng": {
         "draws": 224,
@@ -203,8 +202,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -279,7 +277,7 @@
             "z": -2
           },
           "potionCooldownUntil": -1,
-          "resource": 55.444444,
+          "resource": 54,
           "resourceType": "rage",
           "spawnPos": {
             "x": 2,
@@ -606,7 +604,7 @@
       "tick": 64,
       "time": 3.2,
       "nextId": 412,
-      "state": "8595ed3b",
+      "state": "b34e614a",
       "events": "741638a5",
       "rng": {
         "draws": 244,
@@ -653,8 +651,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -729,7 +726,7 @@
             "z": -2
           },
           "potionCooldownUntil": -1,
-          "resource": 55.444444,
+          "resource": 54,
           "resourceType": "rage",
           "spawnPos": {
             "x": 2,

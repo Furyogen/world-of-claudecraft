@@ -1656,8 +1656,6 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.expose_armor.description':
     'Afmaakzet die het doelwit blootlegt en zijn pantser met {damage} verlaagt gedurende 30 sec.',
   'entities.abilities.expose_armor.name': 'Pantserbres',
-  'entities.abilities.faerie_fire.description':
-    'Verlaagt het pantser van het doelwit met {damage}% gedurende 40 sec. Stapelt niet met Pantserscheur.',
   'entities.abilities.faerie_fire.name': 'Heksenlicht',
   'entities.abilities.fear.description':
     'Jaagt de vijand de stuipen op het lijf, waardoor het maximaal 8 sec ineenkrimpt. Elke schade verbreekt het effect.',
@@ -1962,6 +1960,75 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.wrath.description':
     'Slingert een bout van natuurenergie voor {damage} Natuurschade.',
   'entities.abilities.wrath.name': 'Wildbout',
+  'entities.abilities.aura_surge.name': 'Stralende Golf',
+  'entities.abilities.aura_surge.description':
+    'Overlaadt je aura en verhardt je met 160 bepantsering gedurende 10 sec. (Paladijntalent)',
+  'entities.abilities.holy_shock.name': 'Heilige schok',
+  'entities.abilities.holy_shock.description':
+    'Schokt een bevriend doelwit met Heilige energie en geneest het voor {damage}. (Heilig signatuur)',
+  'entities.abilities.holy_shield.name': 'Heilig schild',
+  'entities.abilities.holy_shield.description':
+    'Beschermt je 10 sec met Heilige kracht, verhoogt pantser met 90 en raakt melee-aanvallers voor 12 Heilige schade. (Bescherming signatuur)',
+  'entities.abilities.bestial_wrath.name': 'Beestachtige woede',
+  'entities.abilities.bestial_wrath.description':
+    'Stuurt je in beestachtige razernij, waardoor aanvalskracht 15 sec met 55 toeneemt. (Beestbeheersing signatuur)',
+  'entities.abilities.trueshot_aura.name': 'Zuiver schot-aura',
+  'entities.abilities.trueshot_aura.description':
+    'Inspireert nabije bondgenoten, waardoor aanvalskracht 5 min met 35 toeneemt. (Scherpschutter signatuur)',
+  'entities.abilities.wyvern_sting.name': 'Wyvernsteek',
+  'entities.abilities.wyvern_sting.description':
+    'Steekt de vijand van afstand en maakt hem tot 4 sec uitgeschakeld. Elke schade verbreekt het effect. (Overleving signatuur)',
+  'entities.abilities.arcane_power.name': 'Arcanekracht',
+  'entities.abilities.arcane_power.description':
+    'Verhoogt spreukschade met 20% en spreukhaast met 10% gedurende 10 sec. (Arcane-signatuur)',
+  'entities.abilities.combustion.name': 'Verbranding',
+  'entities.abilities.combustion.description':
+    'Verhoogt de kritieke kans van spreuken met 50% gedurende 15 sec. (Fire-signatuur)',
+  'entities.abilities.icy_veins.name': 'IJzige Aders',
+  'entities.abilities.icy_veins.description':
+    'Verhoogt spreukhaast met 30% en voorkomt onderbreking en terugslag van spreuken gedurende 10 sec. (Frost-signatuur)',
+  'entities.abilities.cold_blood.name': 'Koud bloed',
+  'entities.abilities.cold_blood.description':
+    'Bundelt je dodelijke intentie zodat je volgende aanval een kritieke treffer is. (Moord signatuur)',
+  'entities.abilities.blade_flurry.name': 'Klingenvlaag',
+  'entities.abilities.blade_flurry.description':
+    'Ontketent een vlaag van klingen, waardoor aanvalssnelheid 12 sec met 20% toeneemt. (Gevecht signatuur)',
+  'entities.abilities.hemorrhage.name': 'Bloeding',
+  'entities.abilities.hemorrhage.description':
+    'Raakt de vijand voor wapenschade plus {damage} en veroorzaakt bloedschade gedurende 12 sec. Geeft 1 combopunt. (Subtiliteit signatuur)',
+  'entities.abilities.power_infusion.name': 'Krachtinfusie',
+  'entities.abilities.power_infusion.description':
+    'Doordrenkt een bevriend doelwit met kracht, waardoor spreukkracht 15 sec met 28 toeneemt. (Discipline signatuur)',
+  'entities.abilities.holy_nova.name': 'Heilige nova',
+  'entities.abilities.holy_nova.description':
+    'Veroorzaakt een explosie van Heilig licht, geneest nabije bondgenoten voor {damage} en beschadigt nabije vijanden. (Heilig signatuur)',
+  'entities.abilities.shadowform.name': 'Schaduwvorm',
+  'entities.abilities.shadowform.description':
+    'Neem schaduwvorm aan en versterk schaduwmagie totdat je terugschakelt. Spreek opnieuw uit om terug te keren naar normale vorm. (Schaduw signatuur)',
+  'entities.abilities.elemental_mastery.name': 'Elementaire meesterschap',
+  'entities.abilities.elemental_mastery.description':
+    'Roept elementaire meesterschap aan, waardoor je volgende spreuk onmiddellijk is. (Elementair signatuur)',
+  'entities.abilities.siphon_life.name': 'Levenshevel',
+  'entities.abilities.siphon_life.description':
+    'Hevelt leven uit de vijand, veroorzaakt {damage} Schaduwschade gedurende 30 sec en geneest je voor de toegebrachte schade. (Kwelling signatuur)',
+  'entities.abilities.conflagrate.name': 'Ontvlamming',
+  'entities.abilities.conflagrate.description':
+    'Verbruikt je Verbranden op de vijand om hem te ontsteken voor {damage} Vuurschade. (Vernietiging signatuur)',
+  'entities.abilities.moonkin_form.name': 'Maanuilvorm',
+  'entities.abilities.moonkin_form.description':
+    'Neem maanuilvorm aan en versterk spreuken totdat je terugschakelt. Spreek opnieuw uit om terug te keren naar normale vorm. (Balans signatuur)',
+  'entities.abilities.feral_charge.name': 'Wilde stormloop',
+  'entities.abilities.feral_charge.description':
+    'Storm op een vijand af en wortel hem 1 sec. Bereik 8-25 m. (Wildernis signatuur)',
+  'entities.abilities.swiftmend.name': 'Snelle genezing',
+  'entities.abilities.swiftmend.description':
+    'Verbruikt een genezing-over-tijd-effect op een bevriend doelwit om het voor {damage} te genezen. (Herstel signatuur)',
+  'entities.abilities.crusader_strike.name': 'Kruisvaardersslag',
+  'entities.abilities.crusader_strike.description':
+    'Treft het doel voor wapenschade plus {damage} Heilige schade. (paladijntalent)',
+  'entities.abilities.metamorphosis.name': 'Metamorfose',
+  'entities.abilities.metamorphosis.description':
+    'Neemt demonische kracht aan en verhoogt pantser en aanvalskracht 20 sec. lang. (heksenmeestertalent)',
   'entities.delves.collapsed_reliquary.enterText': 'Je daalt af in het ingestorte reliekschrijn.',
   'entities.delves.collapsed_reliquary.leaveText':
     'Je klimt terug omhoog naar Broeder Halven bij de reliekschrijnruïne.',
@@ -2040,7 +2107,9 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.items.crimson_amber_armor_plate.name': 'Karmijnen Amber',
   'entities.items.crossroads_saber.name': 'Kruispunt-Sabel',
   'entities.items.crownforged_dreadhelm.name': 'Bonewrought-Schrikhelm',
+  'entities.items.crownforged_dreadhelm_heroic.name': 'Bonewrought-Schrikhelm',
   'entities.items.crownforged_warspaulders.name': 'Bonewrought-Strijdschouderstukken',
+  'entities.items.crownforged_warspaulders_heroic.name': 'Bonewrought-Strijdschouderstukken',
   'entities.items.crypt_keystone.name': 'Crypte-Sluitsteen',
   'entities.items.crypt_ritual_circle.name': 'Rituele Cirkel',
   'entities.items.cryptbone_greaves.name': 'Cryptebeen-Scheenplaten',
@@ -2214,7 +2283,9 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.items.nhalias_dirgeblade.name': "Nhalia's Klaagzang-Kling",
   'entities.items.nhalias_funeral_wraps.name': "Nhalia's Grafwindsels",
   'entities.items.nighttalon_crown.name': 'Direfang-Kroon',
+  'entities.items.nighttalon_crown_heroic.name': 'Direfang-Kroon',
   'entities.items.nighttalon_shoulderguards.name': 'Direfang-Schouderstukken',
+  'entities.items.nighttalon_shoulderguards_heroic.name': 'Direfang-Schouderstukken',
   'entities.items.nightwalk_jerkin.name': 'Nachtloop-Wambuis',
   'entities.items.oathbound_greaves.name': 'Eedgebonden Scheenplaten',
   'entities.items.ogre_bonecharm_staff.name': 'Ogerse Bottalisman-Staf',
@@ -2285,7 +2356,9 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.items.soggy_boot.name': 'Doorweekte Laars',
   'entities.items.soggy_moccasin.name': 'Doorweekte Mocassin',
   'entities.items.soulflame_cowl.name': 'Wraithfire-Kap',
+  'entities.items.soulflame_cowl_heroic.name': 'Wraithfire-Kap',
   'entities.items.soulflame_mantle.name': 'Wraithfire-Mantel',
+  'entities.items.soulflame_mantle_heroic.name': 'Wraithfire-Mantel',
   'entities.items.spider_leg.name': 'Trillende Spinnenpoot',
   'entities.items.spring_water.name': 'Koud Putwater',
   'entities.items.staff_of_drowned_prayers.name': 'Staf der Verdronken Gebeden',
@@ -2296,6 +2369,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.items.steel_orange_armor_plate.name': 'Staaloranje',
   'entities.items.storm_core.name': 'Stormkern',
   'entities.items.stormcallers_crown.name': 'Galecall-Kroon',
+  'entities.items.stormcallers_crown_heroic.name': 'Galecall-Kroon',
   'entities.items.crownforged_gauntlets.name': 'Kroongesmede Handschoenen',
   'entities.items.nighttalon_grips.name': 'Nachtklauw-Grepen',
   'entities.items.soulflame_gloves.name': 'Zielsvlam-Handschoenen',
@@ -2305,6 +2379,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.items.soulflame_cord.name': 'Zielsvlam-Koord',
   'entities.items.stormcallers_waistguard.name': 'Lendenbescherming van de Stormroeper',
   'entities.items.stormcallers_spaulders.name': 'Galecall-Schouderstukken',
+  'entities.items.stormcallers_spaulders_heroic.name': 'Galecall-Schouderstukken',
   'entities.items.stormshard_leggings.name': 'Stormscherf-Beenbescherming',
   'entities.items.sturdy_belt.name': 'Stevige Reizigersgordel',
   'entities.items.supply_crate.name': 'Gestolen Voorradenkist',
@@ -2350,6 +2425,156 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.items.wolfhide_satchel.name': 'Wolfshuiden tas',
   'entities.items.gravewoven_bag.name': 'Grafgeweven tas',
   'entities.items.mistcallers_duffel.name': 'Fogbinders Plunjezak',
+  'entities.abilities.aspect_of_the_wild.name': 'Wildtandgedaante',
+  'entities.abilities.aspect_of_the_wild.description':
+    'Inspira a nabije bondgenoten con fuerza salvaje, aumentando aanvalskracht durante 5 min. (jagertalent)',
+  'entities.abilities.avatar.name': 'Kolossus',
+  'entities.abilities.avatar.description':
+    'Te transforma en un coloso y aumenta aanvalskracht durante 20 sec. (krijgerstalent)',
+  'entities.abilities.avenging_wrath.name': 'Wraakvleugel',
+  'entities.abilities.avenging_wrath.description':
+    'Invoca poder vengador y aumenta aanvalskracht y spreukkracht durante 20 sec. (paladijntalent)',
+  'entities.abilities.berserk.name': 'Rode nevel',
+  'entities.abilities.berserk.description': 'Aumenta aanvalskracht durante 15 sec. (druïdetalent)',
+  'entities.abilities.bladestorm.name': 'Stalen cycloon',
+  'entities.abilities.bladestorm.description':
+    'Te convierte en una tormenta de acero que golpea a nabije vijanden cada segundo por {damage}. (krijgerstalent)',
+  'entities.abilities.blink.name': 'Flikkerstap',
+  'entities.abilities.blink.description':
+    'Te teletransporta 15 m hacia delante y rompe raíces. (magiertalent)',
+  'entities.abilities.bloodlust.name': 'Oorlogstrommen',
+  'entities.abilities.bloodlust.description':
+    'Lleva a nabije bondgenoten al frenesí y aumenta su velocidad de ataque durante 15 sec. (sjamaantalent)',
+  'entities.abilities.chain_lightning.name': 'Gevorkte bliksem',
+  'entities.abilities.chain_lightning.description':
+    'Lanza relámpagos al área objetivo e inflige {damage} de daño a nabije vijanden. (sjamaantalent)',
+  'entities.abilities.chaos_bolt.name': 'Ruinenschicht',
+  'entities.abilities.chaos_bolt.description':
+    'Lanza una descarga de fuego caótico que inflige {damage} de daño de Vuur. (heksenmeestertalent)',
+  'entities.abilities.cloak_of_shadows.name': 'Schaduwmantel',
+  'entities.abilities.cloak_of_shadows.description':
+    'Te envuelve en sombras y absorbe daño durante 5 sec. (schurkentalent)',
+  'entities.abilities.cone_of_cold.name': 'Vorstveeg',
+  'entities.abilities.cone_of_cold.description':
+    'Golpea a nabije vijanden con escarcha e inflige {damage} de daño de Vorst. (magiertalent)',
+  'entities.abilities.counter_shot.name': 'Sussend schot',
+  'entities.abilities.counter_shot.description':
+    'Onderbreekt spreuken en voorkomt spreuken van die school gedurende 4 sec. (jagertalent)',
+  'entities.abilities.counterspell.name': 'Spreukbreuk',
+  'entities.abilities.counterspell.description':
+    'Onderbreekt spreuken en voorkomt spreuken van die school gedurende 6 sec. (magiertalent)',
+  'entities.abilities.curse_of_exhaustion.name': 'Loden vloek',
+  'entities.abilities.curse_of_exhaustion.description':
+    'Maldice a doelwit y reduce su velocidad de movimiento un 30% durante 12 sec. (heksenmeestertalent)',
+  'entities.abilities.death_coil.name': 'Grafspiraal',
+  'entities.abilities.death_coil.description':
+    'Golpea a doelwit por {damage} de daño de Schaduw y luego lo aterroriza durante 3 sec. Esta versión no sana al lanzador. (heksenmeestertalent)',
+  'entities.abilities.deep_freeze.name': 'Doodsvorst',
+  'entities.abilities.deep_freeze.description':
+    'Congela profundamente a doelwit, inflige {damage} de daño de Vorst y lo aturde durante 4 sec. (magiertalent)',
+  'entities.abilities.desperate_prayer.name': 'Laatste gebed',
+  'entities.abilities.desperate_prayer.description':
+    'Te sana al instante por {damage}. (priestertalent)',
+  'entities.abilities.deterrence.name': 'Borstelwacht',
+  'entities.abilities.deterrence.description':
+    'Aumenta tu ontwijkkans un 50% durante 10 sec. (jagertalent)',
+  'entities.abilities.divine_shield.name': 'Lichtwacht',
+  'entities.abilities.divine_shield.description':
+    'Te protege con poder sagrado y absorbe una enorme cantidad de daño durante 8 sec. (paladijntalent)',
+  'entities.abilities.earthbind.name': 'Grijpende aarde',
+  'entities.abilities.earthbind.description':
+    'Ata a la tierra a nabije vijanden y los inmoviliza durante 2 sec. (sjamaantalent)',
+  'entities.abilities.evocation.name': 'Etherbron',
+  'entities.abilities.evocation.description': 'Restaura mana rápidamente. (magiertalent)',
+  'entities.abilities.frenzied_regeneration.name': 'Wilde genezing',
+  'entities.abilities.frenzied_regeneration.description':
+    'Regenera salud durante 10 sec. Solo en Forma de oso. (druïdetalent)',
+  'entities.abilities.frost_trap.name': 'Rijpval',
+  'entities.abilities.frost_trap.description':
+    'Congela a los vijanden en el área objetivo durante 3 sec. (jagertalent)',
+  'entities.abilities.ghostly_strike.name': 'Spookslag',
+  'entities.abilities.ghostly_strike.description':
+    'Golpea a doelwit por daño de arma más {damage} y aumenta brevemente la evasión. Otorga 1 punto de combo. (schurkentalent)',
+  'entities.abilities.hammer_of_wrath.name': 'Klinkende hamer',
+  'entities.abilities.hammer_of_wrath.description':
+    'Lanza un martillo sagrado a un enemigo herido e inflige {damage} de daño de Heilig. Solo se usa por debajo del 20% de salud. (paladijntalent)',
+  'entities.abilities.healing_stream.name': 'Bronwel',
+  'entities.abilities.healing_stream.description':
+    'Restaura a vriendelijk doelwit durante 12 sec. (sjamaantalent)',
+  'entities.abilities.heroic_leap.name': 'Oorlogssprong',
+  'entities.abilities.heroic_leap.description':
+    'Saltas al área objetivo e infliges {damage} de daño Fysieke a nabije vijanden. (krijgerstalent)',
+  'entities.abilities.holy_wrath.name': 'Heiligenwoede',
+  'entities.abilities.holy_wrath.description':
+    'Desata poder sagrado e inflige {damage} de daño a nabije vijanden. (paladijntalent)',
+  'entities.abilities.howl_of_terror.name': 'Huiveringwekkende huil',
+  'entities.abilities.howl_of_terror.description':
+    'Aterroriza a nabije vijanden hasta 3 sec. El daño puede romper el efecto. (heksenmeestertalent)',
+  'entities.abilities.ice_block.name': 'Koude kist',
+  'entities.abilities.ice_block.description':
+    'Te encierra en hielo y absorbe una enorme cantidad de daño durante 8 sec. (magiertalent)',
+  'entities.abilities.inner_focus.name': 'Gestilde geest',
+  'entities.abilities.inner_focus.description':
+    'Hace que tu siguiente hechizo no tenga coste. Dura 60 sec. (priestertalent)',
+  'entities.abilities.innervate.name': 'Levenssap',
+  'entities.abilities.innervate.description':
+    'Levend sap welt 10 sec in je op en herstelt in golven 20 van je huidige energiebron: mana, woede of energie; van gedaante wisselen onderbreekt het niet. (Druïdetalent)',
+  'entities.abilities.kick.name': 'Schop',
+  'entities.abilities.kick.description':
+    'Onderbreekt spreuken en voorkomt spreuken van die school gedurende 4 sec. (schurkentalent)',
+  'entities.abilities.last_stand.name': 'Elfde uur',
+  'entities.abilities.last_stand.description':
+    'Aumenta temporalmente Uithoudingsvermogen durante 15 sec, aumentando la salud máxima. (krijgerstalent)',
+  'entities.abilities.mend_pet.name': 'Oplappen',
+  'entities.abilities.mend_pet.description':
+    'Sana a vriendelijk doelwit por {damage} durante 15 sec. (jagertalent)',
+  'entities.abilities.meteor.name': 'Hemelsteen',
+  'entities.abilities.meteor.description':
+    'Hace caer un meteoro en el área objetivo, inflige {damage} de daño de Vuur y quema el suelo. (magiertalent)',
+  'entities.abilities.mind_sear.name': 'Gedachtenbrand',
+  'entities.abilities.mind_sear.description':
+    'Canaliza energía de Schaduw en el área objetivo e inflige {damage} cada segundo a nabije vijanden. (priestertalent)',
+  'entities.abilities.multi_shot.name': 'Splijtschot',
+  'entities.abilities.multi_shot.description':
+    'Dispara varios proyectiles e inflige {damage} a nabije vijanden. (jagertalent)',
+  'entities.abilities.prayer_of_healing.name': 'Koorherstel',
+  'entities.abilities.prayer_of_healing.description':
+    'Sana a nabije bondgenoten por {damage}. (priestertalent)',
+  'entities.abilities.preparation.name': 'Noodplan',
+  'entities.abilities.preparation.description':
+    'Termina el tiempo de reutilización de Sprint, Evasión y Vanish. (schurkentalent)',
+  'entities.abilities.presence_of_mind.name': 'Razende geest',
+  'entities.abilities.presence_of_mind.description':
+    'Hace instantáneo tu siguiente hechizo con tiempo de lanzamiento. Dura 60 sec. (magiertalent)',
+  'entities.abilities.psychic_scream.name': 'Psychische schreeuw',
+  'entities.abilities.psychic_scream.description':
+    'Aterroriza a nabije vijanden hasta 4 sec. El daño puede romper el efecto. (priestertalent)',
+  'entities.abilities.pummel.name': 'Beuken',
+  'entities.abilities.pummel.description':
+    'Onderbreekt spreuken en voorkomt spreuken van die school gedurende 4 sec. (krijgerstalent)',
+  'entities.abilities.rallying_cry.name': 'Verzameling',
+  'entities.abilities.rallying_cry.description':
+    'Lanza un grito de reunión y aumenta aanvalskracht de nabije bondgenoten durante 10 sec. (krijgerstalent)',
+  'entities.abilities.rebuke.name': 'Berisping',
+  'entities.abilities.rebuke.description':
+    'Onderbreekt spreuken en voorkomt spreuken van die school gedurende 4 sec. (paladijntalent)',
+  'entities.abilities.shadowstep.name': 'Schaduwglip',
+  'entities.abilities.shadowstep.description':
+    'Das un paso entre las sombras hacia tu doelwit. (schurkentalent)',
+  'entities.abilities.shield_wall.name': 'Bolwerk',
+  'entities.abilities.shield_wall.description':
+    'Alzas un muro de escudo y aumentas mucho la pantser durante 10 sec. (krijgerstalent)',
+  'entities.abilities.silence.name': 'Stilte',
+  'entities.abilities.silence.description': 'Silencia a doelwit durante 4 sec. (priestertalent)',
+  'entities.abilities.skull_bash.name': 'Kopstoot',
+  'entities.abilities.skull_bash.description':
+    'Onderbreekt spreuken en voorkomt spreuken van die school gedurende 4 sec. (druïdetalent)',
+  'entities.abilities.spell_lock.name': 'Muilkorfbevel',
+  'entities.abilities.spell_lock.description':
+    'Onderbreekt spreuken en voorkomt spreuken van die school gedurende 5 sec. (heksenmeestertalent)',
+  'entities.abilities.tranquility.name': 'Woudlied',
+  'entities.abilities.tranquility.description':
+    'Canaliza energía restauradora y sana a nabije bondgenoten cada segundo. (druïdetalent)',
   'entities.items.worn_sword.name': 'Ingevreten Kortzwaard',
   'entities.items.woven_robe.name': 'Dalgeweven Gewaad',
   'entities.items.wyrmcult_grand_robe.name': 'Groot Gewaad van de Wurmcultus',
@@ -4459,7 +4684,6 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hud.core.mobileControls': 'Mobiele besturing',
   'hud.core.mobileMap': 'Kaart',
   'hud.core.mobileMenu': 'Menu',
-  'hud.core.mobileSettings': 'Instellingen',
   'hud.core.mobileMeters': 'Meters',
   'hud.core.mobileMore': 'Meer',
   'hud.core.mobileMoreAria': "Meer menu's tonen",
@@ -6099,6 +6323,8 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.wyrmshadow.name': 'Nightfang-Gewaden',
   'entities.itemSets.wyrmshadow.bonus2': 'Verhoogt aanvalskracht met 40.',
   'entities.itemSets.wyrmshadow.bonus3': 'Verhoogt behendigheid met 15 en kritieke kans met 2%.',
+  'hudChrome.itemHeroicTag': '[HEROÏSCH]',
+  'hudChrome.itemSoulbound': 'Zielsgebonden',
   'hudChrome.itemSet.header': '{name} ({have}/{total})',
   'hudChrome.itemSet.bonusLine': '({pieces}) {bonus}',
   'hud.combat.floatingResist': 'Weerstaan',
@@ -6586,12 +6812,18 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.bank.withdrawQuantityConfirm': 'Opnemen',
   'hudChrome.bank.withdrawQuantityInput': 'Aantal om op te nemen',
   'hudChrome.bank.withdrawQuantityTitle': '{item} opnemen',
+  'entities.abilities.faerie_fire.description':
+    'Verlaagt het pantser van het doelwit met {damage}% gedurende 40 sec. Stapelt niet met Pantserscheur.',
+  'hud.core.mobileSettings': 'Instellingen',
   'abilityUi.tooltip.selfOnly': 'Alleen jezelf',
   'itemUi.lootRoll.rolled': '{answered}/{total} geworpen',
   'entities.abilities.sunder_armor.description':
     'Scheurt het pantser van het doelwit open en verlaagt het met {damage}% per toepassing. Stapelt tot 5 keer. Genereert veel dreiging.',
   'entities.mobs.training_dummy.name': 'Oefenpop',
   'entities.mobs.yumi_cat.name': 'Yumi',
+  'entities.mobs.nythraxis_heroic_priest_add.name': 'Malric, Doodloze Hiërofant',
+  'entities.mobs.nythraxis_heroic_rogue_add.name': 'Voss, Doodloos Mes',
+  'entities.mobs.nythraxis_heroic_warrior_add.name': 'Aldren, Doodloze Krijgswacht',
   'guide.arenaPage.yumiBody':
     'Bescherm Yumi is een teamdoelspel dat in een doolhof wordt gespeeld: elke kant bewaakt zijn eigen kattenmetgezel terwijl hij die van de ander bejaagt. Zo nu en dan flitsen beide katten naar nieuwe hoeken van het doolhof, zodat het gevecht heen en weer gaat tussen verdedigen, jagen en de race om ze opnieuw te vinden. Sluit aan als drie tegen drie of vijf tegen vijf; sneuvelen in de strijd zet je maar even op de bank.',
   'guide.arenaPage.yumiHeading': 'Bescherm Yumi',
@@ -6633,4 +6865,51 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'yumi.queue.leave': 'Je verlaat de Bescherm Yumi-wachtrij.',
   'yumi.queue.teamLeave': 'Je team verlaat de Bescherm Yumi-wachtrij.',
   'yumi.respawn.title': 'NEERGEHAALD!',
+  'entities.abilities.chain_heal.name': 'Kettinggenezing',
+  'entities.abilities.chain_heal.description':
+    'Geneest een bevriend doelwit voor een grote hoeveelheid en springt daarna naar maximaal 2 extra bondgenoten in de buurt. Elke sprong geneest 50% minder. (Kenmerkende vaardigheid van Restauratie)',
+  'entities.abilities.razor_howl.name': 'Messcherpe huil',
+  'entities.abilities.razor_howl.description':
+    'Een kreet die vijanden binnen 15 m gedurende 8 sec. met 50% vertraagt. (Krijgertalent)',
+  'entities.abilities.stormthrow.name': 'Stormworp',
+  'entities.abilities.stormthrow.description':
+    'Slinger je wapen om een doelwit 3 sec. te verdoven. (Krijgertalent)',
+  'entities.abilities.reckless_vow.name': 'Roekeloze gelofte',
+  'entities.abilities.reckless_vow.description':
+    'Verhoogt alle woedeopwekking met 50% en de kans op een kritieke treffer met 20% gedurende 12 sec. (Krijgertalent)',
+  'entities.abilities.red_banner.name': 'Rode banier',
+  'entities.abilities.red_banner.description':
+    'Jij en nabije bondgenoten krijgen 10% aanvalssnelheid en 10% schade gedurende 20 sec. (Krijgertalent)',
+  'entities.items.chunk_of_ore.name': 'Brok erts',
+  'entities.quests.q_prof_intro.title': 'Een vak voor elke hand',
+  'entities.quests.q_prof_intro.text':
+    'Iedereen in Eastbrook beoefent naast het zwaard een vak, {playerName}. Er liggen overal rond de stad ertsaders, dus pak een houweel en breng me 5 brokken. Delf ze zelf; ik merk het verschil.',
+  'entities.quests.q_prof_intro.completion':
+    'Zie je wel? Erts in je tas en eelt op je handen. Blijf onderweg mijnen, houthakken en kruiden plukken. Denk bij terugkomst in de stad aan het bord voor Stadsfocus bij de markt en de werkbank ernaast. In al dat werk wacht een eerlijk vak, als je het wilt.',
+  'entities.quests.q_prof_intro.objectives.0.label': 'Brok erts',
+  'game.talents.readout.rowsSummary': 'Talenten: {head}, {picked}/{unlocked} keuzerijen gekozen.',
+  'hudChrome.fct.absorbed': '{amount} geabsorbeerd',
+  'hudChrome.fct.cheap': 'Goedkoper!',
+  'hudChrome.mailbox.parcelQtyDecreaseAria': 'Eén {item} minder verzenden',
+  'hudChrome.mailbox.parcelQtyIncreaseAria': 'Eén {item} meer verzenden',
+  'game.talents.choicesTab': 'Keuzes',
+  'game.talents.rowUnlockToast': 'Een nieuwe talentkeuze is ontgrendeld!',
+  'game.talents.rowUnlocks': 'Wordt ontgrendeld op niveau {level}',
+  'hudChrome.auth.forgotPrompt': 'Wachtwoord vergeten?',
+  'hudChrome.auth.forgotTitle': 'Wachtwoord opnieuw instellen',
+  'hudChrome.auth.forgotHint':
+    'Voer je gebruikersnaam in en we sturen een herstellink naar het geregistreerde e-mailadres.',
+  'hudChrome.auth.forgotUsername': 'Gebruikersnaam',
+  'hudChrome.auth.forgotSubmit': 'Herstellink versturen',
+  'hudChrome.auth.forgotSent':
+    'Als een account met die gebruikersnaam een e-mailadres heeft, hebben we een herstellink gestuurd. Controleer je inbox.',
+  'hudChrome.auth.forgotBack': 'Terug naar inloggen',
+  'hudChrome.auth.resetTitle': 'Kies een nieuw wachtwoord',
+  'hudChrome.auth.resetNewPassword': 'Nieuw wachtwoord',
+  'hudChrome.auth.resetConfirm': 'Bevestig nieuw wachtwoord',
+  'hudChrome.auth.resetSubmit': 'Wachtwoord bijwerken',
+  'hudChrome.auth.resetDone': 'Je wachtwoord is bijgewerkt. Je kunt nu inloggen.',
+  'hudChrome.auth.resetMismatch': 'De wachtwoorden komen niet overeen.',
+  'hudChrome.auth.resetErrInvalid':
+    'Deze herstellink is ongeldig of verlopen. Vraag een nieuwe aan.',
 };

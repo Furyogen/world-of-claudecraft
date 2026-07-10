@@ -85,6 +85,9 @@ export const id_ID: EnTranslations = {
       "title": "Talenta",
       "classTab": "Kelas",
       "specTab": "Spesialisasi",
+      "choicesTab": "Pilihan",
+      "rowUnlockToast": "Pilihan talenta baru terbuka!",
+      "rowUnlocks": "Terbuka pada level {level}",
       "available": "Tersedia",
       "spent": "Terpakai",
       "pointSource": "Dapatkan 1 poin talenta tiap level dari level {first} hingga {cap}. Naik level untuk mendapat lebih banyak poin.",
@@ -143,6 +146,7 @@ export const id_ID: EnTranslations = {
         "noTree": "Kelasmu belum memiliki pohon talenta.",
         "locked": "Kamu belum membuka talenta — talenta mulai tersedia di level {level}.",
         "noSpec": "tanpa spesialisasi",
+        "rowsSummary": "Talenta: {head}, {picked}/{unlocked} baris pilihan dipilih.",
         "summary": "Talenta: {head} — {spent}/{total} poin terpakai ({breakdown}).",
         "breakdownClass": "Kelas {classPts}",
         "breakdownSpec": "Kelas {classPts}, {spec} {specPts}",
@@ -151,7 +155,6 @@ export const id_ID: EnTranslations = {
     }
   },
   "hudChrome": {
-    "itemHeroicTag": "[HEROIC]",
     "spectate": {
       "banner": "Menonton {name}"
     },
@@ -159,6 +162,10 @@ export const id_ID: EnTranslations = {
       "resurrectAtCorpse": "Bangkit di Jasad",
       "resurrectAtHealer": "Sang Penjaga Pucat (Upeti Sang Penjaga)",
       "spiritHealerAlive": "Sang Penjaga Pucat mengawasi para mati. Kamu masih termasuk yang hidup."
+    },
+    "fct": {
+      "absorbed": "{amount} diserap",
+      "cheap": "Lebih murah!"
     },
     "emotes": {
       "wave": "Melambai",
@@ -723,6 +730,8 @@ export const id_ID: EnTranslations = {
     "tips": {
       "joinChannels": "Tips: ketik /join world atau /join lfg untuk mengobrol dengan pemain di seluruh dunia."
     },
+    "itemHeroicTag": "[HEROIK]",
+    "itemSoulbound": "Terikat jiwa",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1068,6 +1077,22 @@ export const id_ID: EnTranslations = {
     "worldBoss": {
       "spawn": "{name} bangkit di atas Dataran Tinggi Thornpeak!"
     },
+    "auth": {
+      "forgotPrompt": "Lupa kata sandi?",
+      "forgotTitle": "Atur ulang kata sandimu",
+      "forgotHint": "Masukkan nama penggunamu dan kami akan mengirim tautan pengaturan ulang ke alamat email yang terdaftar.",
+      "forgotUsername": "Nama pengguna",
+      "forgotSubmit": "Kirim tautan pengaturan ulang",
+      "forgotSent": "Jika akun dengan nama pengguna itu memiliki email terdaftar, kami telah mengirim tautan pengaturan ulang. Periksa kotak masukmu.",
+      "forgotBack": "Kembali ke masuk",
+      "resetTitle": "Pilih kata sandi baru",
+      "resetNewPassword": "Kata sandi baru",
+      "resetConfirm": "Konfirmasi kata sandi baru",
+      "resetSubmit": "Perbarui kata sandi",
+      "resetDone": "Kata sandimu telah diperbarui. Sekarang kamu bisa masuk.",
+      "resetMismatch": "Kata sandi tidak cocok.",
+      "resetErrInvalid": "Tautan pengaturan ulang ini tidak valid atau sudah kedaluwarsa. Minta yang baru."
+    },
     "loot": {
       "chestTitle": "Peti"
     },
@@ -1297,6 +1322,8 @@ export const id_ID: EnTranslations = {
       "parcelsLabel": "Bingkisan",
       "parcelsHint": "Klik barang di tasmu untuk melampirkannya.",
       "removeParcelAria": "Keluarkan {item} dari surat",
+      "parcelQtyDecreaseAria": "Kirim satu {item} lebih sedikit",
+      "parcelQtyIncreaseAria": "Kirim satu {item} lebih banyak",
       "sendButton": "Kirim surat",
       "postageNote": "Perangko: {amount}. Gagak terbang selama sekitar {seconds} detik.",
       "arrivedBanner": "Gagak telah mendarat: surat dari {name}.",
@@ -5634,6 +5661,102 @@ export const id_ID: EnTranslations = {
         "name": "Amukan Mendidih",
         "description": "Memasuki amukan mendidih, menghasilkan 20 amarah. (Talenta Prajurit)"
       },
+      "crusader_strike": {
+        "name": "Serangan Tentara Salib",
+        "description": "Menyerang target dengan kerusakan senjata ditambah {damage} kerusakan Suci. (talenta Paladin)"
+      },
+      "chain_heal": {
+        "name": "Penyembuhan Berantai",
+        "description": "Menyembuhkan target sekutu dalam jumlah besar, lalu melompat ke hingga 2 sekutu tambahan di dekatnya. Setiap lompatan menyembuhkan 50% lebih sedikit. (Kemampuan khas Pemulihan)"
+      },
+      "metamorphosis": {
+        "name": "Metamorfosis",
+        "description": "Mengambil kekuatan iblis, meningkatkan zirah dan daya serang selama 20 dtk. (talenta Warlock)"
+      },
+      "aura_surge": {
+        "name": "Gelombang Cemerlang",
+        "description": "Mengisi berlebih aura Anda, memperkuat dengan 160 zirah selama 10 detik. (talenta Paladin)"
+      },
+      "holy_shock": {
+        "name": "Kejutan Suci",
+        "description": "Mengejutkan target kawan dengan energi Suci dan memulihkannya sebesar {damage}. (ciri khas Suci)"
+      },
+      "holy_shield": {
+        "name": "Perisai Suci",
+        "description": "Melindungimu dengan kekuatan Suci selama 10 dtk, meningkatkan zirah sebesar 90, dan menghantam penyerang jarak dekat dengan 12 kerusakan Suci. (ciri khas Perlindungan)"
+      },
+      "bestial_wrath": {
+        "name": "Murka Buas",
+        "description": "Membawamu ke amarah buas, meningkatkan kekuatan serangan sebesar 55 selama 15 dtk. (ciri khas Penguasa Binatang)"
+      },
+      "trueshot_aura": {
+        "name": "Aura Tembakan Jitu",
+        "description": "Mengilhami sekutu di dekatmu, meningkatkan kekuatan serangan sebesar 35 selama 5 mnt. (ciri khas Penembakan)"
+      },
+      "wyvern_sting": {
+        "name": "Sengatan Wivern",
+        "description": "Menyengat musuh dari jarak jauh dan melumpuhkannya hingga 4 dtk. Kerusakan apa pun mematahkan efek ini. (ciri khas Bertahan Hidup)"
+      },
+      "arcane_power": {
+        "name": "Kekuatan Arkan",
+        "description": "Meningkatkan kerusakan mantra sebesar 20% dan haste mantra sebesar 10% selama 10 dtk. (signature Arcane)"
+      },
+      "combustion": {
+        "name": "Pembakaran",
+        "description": "Meningkatkan peluang kritis mantra sebesar 50% selama 15 dtk. (signature Fire)"
+      },
+      "icy_veins": {
+        "name": "Urat Es",
+        "description": "Meningkatkan haste mantra sebesar 30% dan mencegah interupsi serta pushback cast selama 10 dtk. (signature Frost)"
+      },
+      "cold_blood": {
+        "name": "Darah Dingin",
+        "description": "Memusatkan niat membunuhmu sehingga serangan berikutnya menjadi serangan kritis. (ciri khas Pembunuhan)"
+      },
+      "blade_flurry": {
+        "name": "Tebasan Bertubi",
+        "description": "Melepaskan hujan bilah, meningkatkan kecepatan serangan sebesar 20% selama 12 dtk. (ciri khas Pertarungan)"
+      },
+      "hemorrhage": {
+        "name": "Pendarahan",
+        "description": "Menyerang musuh dengan kerusakan senjata ditambah {damage} dan menyebabkan kerusakan berdarah selama 12 dtk. Memberi 1 poin kombo. (ciri khas Kelicikan)"
+      },
+      "power_infusion": {
+        "name": "Infusi Kekuatan",
+        "description": "Mengisi target kawan dengan kekuatan, meningkatkan kekuatan mantra sebesar 28 selama 15 dtk. (ciri khas Disiplin)"
+      },
+      "holy_nova": {
+        "name": "Nova Suci",
+        "description": "Menimbulkan ledakan cahaya Suci, memulihkan sekutu di dekatmu sebesar {damage} dan melukai musuh di dekatmu. (ciri khas Suci)"
+      },
+      "shadowform": {
+        "name": "Wujud Bayangan",
+        "description": "Mengambil wujud bayangan, memperkuat sihir bayangan sampai kamu berubah kembali. Gunakan lagi untuk kembali ke wujud normal. (ciri khas Bayangan)"
+      },
+      "elemental_mastery": {
+        "name": "Penguasaan Elemen",
+        "description": "Memanggil penguasaan elemen, membuat mantra berikutnya seketika. (ciri khas Elemen)"
+      },
+      "siphon_life": {
+        "name": "Sifon Nyawa",
+        "description": "Menyedot nyawa dari musuh, menimbulkan {damage} kerusakan Bayangan selama 30 dtk dan memulihkanmu sebesar kerusakan yang terjadi. (ciri khas Penderitaan)"
+      },
+      "conflagrate": {
+        "name": "Kobaran Api",
+        "description": "Menghabiskan Pembakaran milikmu pada musuh untuk menyulutnya dengan {damage} kerusakan Api. (ciri khas Penghancuran)"
+      },
+      "moonkin_form": {
+        "name": "Wujud Burung Bulan",
+        "description": "Mengambil wujud burung bulan, memperkuat perapalan mantra sampai kamu berubah kembali. Gunakan lagi untuk kembali ke wujud normal. (ciri khas Keseimbangan)"
+      },
+      "feral_charge": {
+        "name": "Terjangan Liar",
+        "description": "Menerjang musuh dan mengakarkannya selama 1 dtk. Jarak 8-25 m. (ciri khas Keganasan)"
+      },
+      "swiftmend": {
+        "name": "Pemulihan Cepat",
+        "description": "Menghabiskan efek pemulihan berkala pada target kawan untuk memulihkannya sebesar {damage}. (ciri khas Pemulihan)"
+      },
       "summon_imp": {
         "name": "Panggil Emberkin",
         "description": "Memanggil Emberkin di bawah perintah Penyihir Iblis. Emberkin melontarkan Ashbolt ke arah musuhmu dari kejauhan. Memanggil iblis baru akan membubarkan iblismu saat ini. Kau hanya boleh memiliki satu iblis pada satu waktu."
@@ -5661,6 +5784,226 @@ export const id_ID: EnTranslations = {
       "summon_doomguard": {
         "name": "Panggil Wraithborn",
         "description": "Mengikat Wraithborn pada kehendakmu, iblis elit yang menghujani kerusakan Bayangan berat dari kejauhan. Waktu jeda yang panjang membatasi kekuatannya yang menghancurkan. Memanggil iblis baru akan membubarkan iblismu saat ini. Kau hanya boleh memiliki satu iblis pada satu waktu."
+      },
+      "aspect_of_the_wild": {
+        "name": "Rupa Taring Liar",
+        "description": "Inspira a di dekat sekutu con fuerza salvaje, aumentando daya serang durante 5 mnt. (talenta hunter)"
+      },
+      "avatar": {
+        "name": "Kolosus",
+        "description": "Te transforma en un coloso y aumenta daya serang durante 20 detik. (talenta warrior)"
+      },
+      "avenging_wrath": {
+        "name": "Sayap Pembalas",
+        "description": "Invoca poder vengador y aumenta daya serang y daya sihir durante 20 detik. (talenta paladin)"
+      },
+      "berserk": {
+        "name": "Kabut Merah",
+        "description": "Aumenta daya serang durante 15 detik. (talenta druid)"
+      },
+      "bladestorm": {
+        "name": "Siklon Baja",
+        "description": "Te convierte en una tormenta de acero que golpea a di dekat musuh cada segundo por {damage}. (talenta warrior)"
+      },
+      "razor_howl": {
+        "name": "Raungan Tajam",
+        "description": "Teriakan yang memperlambat musuh dalam jarak 15 m sebesar 50% selama 8 dtk. (Talenta petarung)"
+      },
+      "stormthrow": {
+        "name": "Lemparan Badai",
+        "description": "Lemparkan senjatamu untuk membuat target pingsan selama 3 dtk. (Talenta petarung)"
+      },
+      "reckless_vow": {
+        "name": "Sumpah Nekat",
+        "description": "Meningkatkan semua perolehan amarah sebesar 50% dan peluang serangan kritis sebesar 20% selama 12 dtk. (Talenta petarung)"
+      },
+      "red_banner": {
+        "name": "Panji Merah",
+        "description": "Kamu dan sekutu di dekatmu memperoleh 10% kecepatan serangan dan 10% kerusakan selama 20 dtk. (Talenta petarung)"
+      },
+      "blink": {
+        "name": "Langkah Kilat",
+        "description": "Te teletransporta 15 m hacia delante y rompe raíces. (talenta mage)"
+      },
+      "bloodlust": {
+        "name": "Genderang Perang",
+        "description": "Lleva a di dekat sekutu al frenesí y aumenta su velocidad de ataque durante 15 detik. (talenta shaman)"
+      },
+      "chain_lightning": {
+        "name": "Petir Bercabang",
+        "description": "Lanza relámpagos al área objetivo e inflige {damage} de daño a di dekat musuh. (talenta shaman)"
+      },
+      "chaos_bolt": {
+        "name": "Baut Reruntuhan",
+        "description": "Lanza una descarga de fuego caótico que inflige {damage} de daño de Api. (talenta warlock)"
+      },
+      "cloak_of_shadows": {
+        "name": "Jubah Bayang",
+        "description": "Te envuelve en sombras y absorbe daño durante 5 detik. (talenta rogue)"
+      },
+      "cone_of_cold": {
+        "name": "Sapuan Beku",
+        "description": "Golpea a di dekat musuh con escarcha e inflige {damage} de daño de Es. (talenta mage)"
+      },
+      "counter_shot": {
+        "name": "Tembakan Peredam",
+        "description": "Menghentikan perapalan dan mencegah mantra sekolah itu selama 4 detik. (talenta hunter)"
+      },
+      "counterspell": {
+        "name": "Pematah Mantra",
+        "description": "Menghentikan perapalan dan mencegah mantra sekolah itu selama 6 detik. (talenta mage)"
+      },
+      "curse_of_exhaustion": {
+        "name": "Kutuk Timah",
+        "description": "Maldice a target y reduce su velocidad de movimiento un 30% durante 12 detik. (talenta warlock)"
+      },
+      "death_coil": {
+        "name": "Kumparan Kubur",
+        "description": "Golpea a target por {damage} de daño de Bayangan y luego lo aterroriza durante 3 detik. Esta versión no sana al lanzador. (talenta warlock)"
+      },
+      "deep_freeze": {
+        "name": "Embun Mati",
+        "description": "Congela profundamente a target, inflige {damage} de daño de Es y lo aturde durante 4 detik. (talenta mage)"
+      },
+      "desperate_prayer": {
+        "name": "Doa Terakhir",
+        "description": "Te sana al instante por {damage}. (talenta priest)"
+      },
+      "deterrence": {
+        "name": "Penjaga Duri",
+        "description": "Aumenta tu peluang menghindar un 50% durante 10 detik. (talenta hunter)"
+      },
+      "divine_shield": {
+        "name": "Pelindung Cahaya",
+        "description": "Te protege con poder sagrado y absorbe una enorme cantidad de daño durante 8 detik. (talenta paladin)"
+      },
+      "earthbind": {
+        "name": "Bumi Mencengkeram",
+        "description": "Ata a la tierra a di dekat musuh y los inmoviliza durante 2 detik. (talenta shaman)"
+      },
+      "evocation": {
+        "name": "Sumur Eter",
+        "description": "Restaura mana rápidamente. (talenta mage)"
+      },
+      "frenzied_regeneration": {
+        "name": "Pemulihan Liar",
+        "description": "Regenera salud durante 10 detik. Solo en Forma de oso. (talenta druid)"
+      },
+      "frost_trap": {
+        "name": "Jerat Rima",
+        "description": "Congela a los musuh en el área objetivo durante 3 detik. (talenta hunter)"
+      },
+      "ghostly_strike": {
+        "name": "Serangan Arwah",
+        "description": "Golpea a target por daño de arma más {damage} y aumenta brevemente la evasión. Otorga 1 punto de combo. (talenta rogue)"
+      },
+      "hammer_of_wrath": {
+        "name": "Palu Berdentang",
+        "description": "Lanza un martillo sagrado a un enemigo herido e inflige {damage} de daño de Suci. Solo se usa por debajo del 20% de salud. (talenta paladin)"
+      },
+      "healing_stream": {
+        "name": "Mata Air",
+        "description": "Restaura a target sekutu durante 12 detik. (talenta shaman)"
+      },
+      "heroic_leap": {
+        "name": "Lompatan Perang",
+        "description": "Saltas al área objetivo e infliges {damage} de daño Fisik a di dekat musuh. (talenta warrior)"
+      },
+      "holy_wrath": {
+        "name": "Murka Santo",
+        "description": "Desata poder sagrado e inflige {damage} de daño a di dekat musuh. (talenta paladin)"
+      },
+      "howl_of_terror": {
+        "name": "Lolongan Ngeri",
+        "description": "Aterroriza a di dekat musuh hasta 3 detik. El daño puede romper el efecto. (talenta warlock)"
+      },
+      "ice_block": {
+        "name": "Peti Es",
+        "description": "Te encierra en hielo y absorbe una enorme cantidad de daño durante 8 detik. (talenta mage)"
+      },
+      "inner_focus": {
+        "name": "Pikiran Hening",
+        "description": "Hace que tu siguiente hechizo no tenga coste. Dura 60 detik. (talenta priest)"
+      },
+      "innervate": {
+        "name": "Getah Hidup",
+        "description": "Getah hidup mengalir dalam dirimu selama 10 detik, memulihkan 20 sumber daya saat ini secara bergelombang: mana, amarah, atau energi; berganti wujud tidak memutusnya. (talenta Druid)"
+      },
+      "kick": {
+        "name": "Tendang",
+        "description": "Menghentikan perapalan dan mencegah mantra sekolah itu selama 4 detik. (talenta rogue)"
+      },
+      "last_stand": {
+        "name": "Jam Kesebelas",
+        "description": "Aumenta temporalmente Stamina durante 15 detik, aumentando la salud máxima. (talenta warrior)"
+      },
+      "mend_pet": {
+        "name": "Tambal Luka",
+        "description": "Sana a target sekutu por {damage} durante 15 detik. (talenta hunter)"
+      },
+      "meteor": {
+        "name": "Batu Langit",
+        "description": "Hace caer un meteoro en el área objetivo, inflige {damage} de daño de Api y quema el suelo. (talenta mage)"
+      },
+      "mind_sear": {
+        "name": "Bakar Pikir",
+        "description": "Canaliza energía de Bayangan en el área objetivo e inflige {damage} cada segundo a di dekat musuh. (talenta priest)"
+      },
+      "multi_shot": {
+        "name": "Tembakan Pecah",
+        "description": "Dispara varios proyectiles e inflige {damage} a di dekat musuh. (talenta hunter)"
+      },
+      "prayer_of_healing": {
+        "name": "Penyembuhan Koor",
+        "description": "Sana a di dekat sekutu por {damage}. (talenta priest)"
+      },
+      "preparation": {
+        "name": "Rencana Cadangan",
+        "description": "Termina el tiempo de reutilización de Sprint, Evasión y Vanish. (talenta rogue)"
+      },
+      "presence_of_mind": {
+        "name": "Pikiran Melaju",
+        "description": "Hace instantáneo tu siguiente hechizo con tiempo de lanzamiento. Dura 60 detik. (talenta mage)"
+      },
+      "psychic_scream": {
+        "name": "Jerit Psikis",
+        "description": "Aterroriza a di dekat musuh hasta 4 detik. El daño puede romper el efecto. (talenta priest)"
+      },
+      "pummel": {
+        "name": "Pukul Hantam",
+        "description": "Menghentikan perapalan dan mencegah mantra sekolah itu selama 4 detik. (talenta warrior)"
+      },
+      "rallying_cry": {
+        "name": "Seruan Kumpul",
+        "description": "Lanza un grito de reunión y aumenta daya serang de di dekat sekutu durante 10 detik. (talenta warrior)"
+      },
+      "rebuke": {
+        "name": "Teguran",
+        "description": "Menghentikan perapalan dan mencegah mantra sekolah itu selama 4 detik. (talenta paladin)"
+      },
+      "shadowstep": {
+        "name": "Selip Bayang",
+        "description": "Das un paso entre las sombras hacia tu target. (talenta rogue)"
+      },
+      "shield_wall": {
+        "name": "Benteng",
+        "description": "Alzas un muro de escudo y aumentas mucho la armor durante 10 detik. (talenta warrior)"
+      },
+      "silence": {
+        "name": "Senyap",
+        "description": "Silencia a target durante 4 detik. (talenta priest)"
+      },
+      "skull_bash": {
+        "name": "Benturan Kepala",
+        "description": "Menghentikan perapalan dan mencegah mantra sekolah itu selama 4 detik. (talenta druid)"
+      },
+      "spell_lock": {
+        "name": "Perintah Bungkam",
+        "description": "Menghentikan perapalan dan mencegah mantra sekolah itu selama 5 detik. (talenta warlock)"
+      },
+      "tranquility": {
+        "name": "Lagu Rimba",
+        "description": "Canaliza energía restauradora y sana a di dekat sekutu cada segundo. (talenta druid)"
       },
       "bear_charge": {
         "name": "Terjangan Bruin",
@@ -5818,6 +6161,9 @@ export const id_ID: EnTranslations = {
       },
       "greyjaw_fang": {
         "name": "Taring Greyjaw Tua"
+      },
+      "chunk_of_ore": {
+        "name": "Bongkahan Bijih"
       },
       "weathered_ledger_page": {
         "name": "Halaman Buku Besar Lapuk"
@@ -6900,49 +7246,49 @@ export const id_ID: EnTranslations = {
         "name": "Helm Seram Bonewrought"
       },
       "crownforged_dreadhelm_heroic": {
-        "name": "Bonewrought Dreadhelm"
+        "name": "Helm Seram Bonewrought"
       },
       "crownforged_warspaulders": {
         "name": "Bahu Perang Bonewrought"
       },
       "crownforged_warspaulders_heroic": {
-        "name": "Bonewrought Warspaulders"
+        "name": "Bahu Perang Bonewrought"
       },
       "nighttalon_crown": {
         "name": "Mahkota Direfang"
       },
       "nighttalon_crown_heroic": {
-        "name": "Direfang Crown"
+        "name": "Mahkota Direfang"
       },
       "nighttalon_shoulderguards": {
         "name": "Pelindung Bahu Direfang"
       },
       "nighttalon_shoulderguards_heroic": {
-        "name": "Direfang Shoulderguards"
+        "name": "Pelindung Bahu Direfang"
       },
       "soulflame_cowl": {
         "name": "Tudung Wraithfire"
       },
       "soulflame_cowl_heroic": {
-        "name": "Wraithfire Cowl"
+        "name": "Tudung Wraithfire"
       },
       "soulflame_mantle": {
         "name": "Mantel Wraithfire"
       },
       "soulflame_mantle_heroic": {
-        "name": "Wraithfire Mantle"
+        "name": "Mantel Wraithfire"
       },
       "stormcallers_crown": {
         "name": "Mahkota Galecall"
       },
       "stormcallers_crown_heroic": {
-        "name": "Galecall Crown"
+        "name": "Mahkota Galecall"
       },
       "stormcallers_spaulders": {
         "name": "Pelindung Bahu Galecall"
       },
       "stormcallers_spaulders_heroic": {
-        "name": "Galecall Spaulders"
+        "name": "Pelindung Bahu Galecall"
       },
       "unknown_alien_weaponry": {
         "name": "Persenjataan Alien Tak Dikenal"
@@ -7193,13 +7539,13 @@ export const id_ID: EnTranslations = {
         "name": "Pengawal Kerajaan Bangkit"
       },
       "nythraxis_heroic_warrior_add": {
-        "name": "Aldren, Deathless Warguard"
+        "name": "Aldren, Garda Perang Nirmaut"
       },
       "nythraxis_heroic_priest_add": {
-        "name": "Malric, Deathless Hierophant"
+        "name": "Malric, Hierofan Nirmaut"
       },
       "nythraxis_heroic_rogue_add": {
-        "name": "Voss, Deathless Knife"
+        "name": "Voss, Belati Nirmaut"
       },
       "nythraxis_scourge_of_thornpeak": {
         "name": "Nythraxis, Bencana Thornpeak"
@@ -7529,6 +7875,16 @@ export const id_ID: EnTranslations = {
       }
     },
     "quests": {
+      "q_prof_intro": {
+        "title": "Keahlian untuk Setiap Tangan",
+        "text": "Setiap orang di Eastbrook memiliki keahlian selain bermain pedang, {playerName}. Urat bijih tersebar di sekitar kota, jadi ambil beliung dan bawakan 5 bongkahan untukku. Tambang sendiri; aku akan tahu bedanya.",
+        "completion": "Lihat? Bijih di dalam tas dan kapalan di tanganmu. Teruslah menambang, menebang kayu, dan memetik herba sepanjang perjalanan. Saat kembali ke kota, ingat papan Fokus Kota di dekat pasar dan meja kerja di sebelahnya. Ada keahlian yang jujur dalam semua pekerjaan itu, jika kamu menginginkannya.",
+        "objectives": {
+          "0": {
+            "label": "Bongkahan Bijih"
+          }
+        }
+      },
       "q_wolves": {
         "title": "Serigala di Ambang Pintu",
         "text": "Serigala hutan kian berani, menerkam para pengelana di jalan utara. Kurangi jumlah mereka, {playerName}. Bunuh 8 Serigala Hutan dan Eastbrook akan bernapas lebih lega.",

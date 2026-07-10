@@ -85,6 +85,9 @@ export const pl_PL: EnTranslations = {
       "title": "Talenty",
       "classTab": "Klasa",
       "specTab": "Specjalizacja",
+      "choicesTab": "Wybory",
+      "rowUnlockToast": "Odblokowano nowy wybór talentu!",
+      "rowUnlocks": "Odblokowuje się na poziomie {level}",
       "available": "Dostępne",
       "spent": "Wydano",
       "pointSource": "Zdobywasz 1 punkt talentu na każdym poziomie od poziomu {first} do {cap}. Awansuj, aby zdobyć więcej punktów.",
@@ -143,6 +146,7 @@ export const pl_PL: EnTranslations = {
         "noTree": "Twoja klasa nie ma jeszcze drzewka talentów.",
         "locked": "Nie odblokowałeś jeszcze talentów — pojawiają się na poziomie {level}.",
         "noSpec": "brak specjalizacji",
+        "rowsSummary": "Talenty: {head}, wybrano {picked}/{unlocked} rzędów wyboru.",
         "summary": "Talenty: {head} — wydano {spent}/{total} punktów ({breakdown}).",
         "breakdownClass": "Klasa {classPts}",
         "breakdownSpec": "Klasa {classPts}, {spec} {specPts}",
@@ -151,7 +155,6 @@ export const pl_PL: EnTranslations = {
     }
   },
   "hudChrome": {
-    "itemHeroicTag": "[HEROIC]",
     "spectate": {
       "banner": "Obserwujesz {name}"
     },
@@ -159,6 +162,10 @@ export const pl_PL: EnTranslations = {
       "resurrectAtCorpse": "Odrodź się przy zwłokach",
       "resurrectAtHealer": "Blady Strażnik (Myto Strażnika)",
       "spiritHealerAlive": "Blady Strażnik czuwa nad umarłymi. Ty wciąż jesteś wśród żywych."
+    },
+    "fct": {
+      "absorbed": "Pochłonięto {amount}",
+      "cheap": "Taniej!"
     },
     "emotes": {
       "wave": "Pomachaj",
@@ -723,6 +730,8 @@ export const pl_PL: EnTranslations = {
     "tips": {
       "joinChannels": "Wskazówka: wpisz /join world lub /join lfg, aby rozmawiać z graczami z całego świata."
     },
+    "itemHeroicTag": "[HEROICZNY]",
+    "itemSoulbound": "Związany z duszą",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1068,6 +1077,22 @@ export const pl_PL: EnTranslations = {
     "worldBoss": {
       "spawn": "{name} powstaje nad Wyżynami Ciernistego Szczytu!"
     },
+    "auth": {
+      "forgotPrompt": "Nie pamiętasz hasła?",
+      "forgotTitle": "Zresetuj hasło",
+      "forgotHint": "Podaj nazwę użytkownika, a wyślemy link do resetowania na zapisany adres e-mail.",
+      "forgotUsername": "Nazwa użytkownika",
+      "forgotSubmit": "Wyślij link do resetowania",
+      "forgotSent": "Jeśli konto o tej nazwie użytkownika ma zapisany adres e-mail, wysłaliśmy link do resetowania. Sprawdź swoją skrzynkę.",
+      "forgotBack": "Powrót do logowania",
+      "resetTitle": "Wybierz nowe hasło",
+      "resetNewPassword": "Nowe hasło",
+      "resetConfirm": "Potwierdź nowe hasło",
+      "resetSubmit": "Zaktualizuj hasło",
+      "resetDone": "Twoje hasło zostało zaktualizowane. Możesz się teraz zalogować.",
+      "resetMismatch": "Hasła nie są zgodne.",
+      "resetErrInvalid": "Ten link do resetowania jest nieprawidłowy lub wygasł. Poproś o nowy."
+    },
     "loot": {
       "chestTitle": "Skrzynia"
     },
@@ -1297,6 +1322,8 @@ export const pl_PL: EnTranslations = {
       "parcelsLabel": "Paczki",
       "parcelsHint": "Kliknij przedmiot w torbach, aby go załączyć.",
       "removeParcelAria": "Usuń {item} z listu",
+      "parcelQtyDecreaseAria": "Wyślij o jeden {item} mniej",
+      "parcelQtyIncreaseAria": "Wyślij o jeden {item} więcej",
       "sendButton": "Wyślij list",
       "postageNote": "Opłata pocztowa: {amount}. Kruk leci około {seconds} s.",
       "arrivedBanner": "Kruk wylądował: poczta od {name}.",
@@ -5634,6 +5661,102 @@ export const pl_PL: EnTranslations = {
         "name": "Kipiąca furia",
         "description": "Wpadnij w kipiącą furię, generując 20 wściekłości. (Talent wojownika)"
       },
+      "crusader_strike": {
+        "name": "Cios krzyżowca",
+        "description": "Uderza cel za obrażenia broni plus {damage} obrażeń od Świętości. (talent paladyna)"
+      },
+      "chain_heal": {
+        "name": "Łańcuchowe leczenie",
+        "description": "Leczy sojuszniczy cel za dużą wartość, a następnie przeskakuje na maksymalnie 2 dodatkowych pobliskich sojuszników. Każdy przeskok leczy o 50% mniej. (Umiejętność specjalna Odnowy)"
+      },
+      "metamorphosis": {
+        "name": "Metamorfoza",
+        "description": "Przyjmujesz demoniczną moc, zwiększając pancerz i siłę ataku na 20 s. (talent czarnoksiężnika)"
+      },
+      "aura_surge": {
+        "name": "Promienna Fala",
+        "description": "Przeciąża twoją aurę, wzmacniając cię 160 pkt. pancerza na 10 sek. (talent Paladyna)"
+      },
+      "holy_shock": {
+        "name": "Święty wstrząs",
+        "description": "Razisz przyjazny cel Świętą energią, lecząc go za {damage}. (specjalizacja Świętość)"
+      },
+      "holy_shield": {
+        "name": "Święta tarcza",
+        "description": "Osłaniasz się Świętą mocą na 10 sek., zwiększając pancerz o 90 i rażąc napastników w zwarciu za 12 obrażeń Świętych. (specjalizacja Ochrona)"
+      },
+      "bestial_wrath": {
+        "name": "Bestialski gniew",
+        "description": "Wpadasz w bestialski szał, zwiększając siłę ataku o 55 na 15 sek. (specjalizacja Władca Bestii)"
+      },
+      "trueshot_aura": {
+        "name": "Aura celnego strzału",
+        "description": "Inspiruje pobliskich sojuszników, zwiększając siłę ataku o 35 na 5 min. (specjalizacja Strzelectwo)"
+      },
+      "wyvern_sting": {
+        "name": "Żądło wiwerny",
+        "description": "Żądli wroga z dystansu, obezwładniając go na maksymalnie 4 sek. Jakiekolwiek obrażenia przerywają efekt. (specjalizacja Przetrwanie)"
+      },
+      "arcane_power": {
+        "name": "Moc Arkanów",
+        "description": "Zwiększa obrażenia zaklęć o 20% i przyspieszenie zaklęć o 10% na 10 sek. (specjalizacja Arkana)"
+      },
+      "combustion": {
+        "name": "Zapłon",
+        "description": "Zwiększa szansę na krytyczny efekt zaklęć o 50% na 15 sek. (specjalizacja Ogień)"
+      },
+      "icy_veins": {
+        "name": "Lodowe Żyły",
+        "description": "Zwiększa przyspieszenie zaklęć o 30% oraz zapobiega przerwaniu i opóźnieniu rzucania na 10 sek. (specjalizacja Mróz)"
+      },
+      "cold_blood": {
+        "name": "Zimna krew",
+        "description": "Skupia twoją morderczą intencję, aby następny atak był trafieniem krytycznym. (specjalizacja Zabójstwo)"
+      },
+      "blade_flurry": {
+        "name": "Nawałnica ostrzy",
+        "description": "Uwalnia nawałnicę ostrzy, zwiększając szybkość ataku o 20% na 12 sek. (specjalizacja Walka)"
+      },
+      "hemorrhage": {
+        "name": "Krwotok",
+        "description": "Uderza wroga za obrażenia broni plus {damage} i powoduje krwawienie przez 12 sek. Daje 1 punkt combo. (specjalizacja Subtelność)"
+      },
+      "power_infusion": {
+        "name": "Infuzja mocy",
+        "description": "Napełnia przyjazny cel mocą, zwiększając moc zaklęć o 28 na 15 sek. (specjalizacja Dyscyplina)"
+      },
+      "holy_nova": {
+        "name": "Święta nova",
+        "description": "Wywołuje wybuch Świętego światła, leczy pobliskich sojuszników za {damage} i rani pobliskich wrogów. (specjalizacja Świętość)"
+      },
+      "shadowform": {
+        "name": "Postać cienia",
+        "description": "Przyjmujesz postać cienia, wzmacniając magię cienia do czasu powrotu. Rzuć ponownie, aby wrócić do zwykłej postaci. (specjalizacja Cień)"
+      },
+      "elemental_mastery": {
+        "name": "Mistrzostwo żywiołów",
+        "description": "Przywołuje mistrzostwo żywiołów, sprawiając, że następne zaklęcie jest natychmiastowe. (specjalizacja Żywioły)"
+      },
+      "siphon_life": {
+        "name": "Wyssanie życia",
+        "description": "Wysysa życie z wroga, zadając {damage} obrażeń od Cienia przez 30 sek. i lecząc cię za zadane obrażenia. (specjalizacja Udręka)"
+      },
+      "conflagrate": {
+        "name": "Pożoga",
+        "description": "Zużywa twoje podpalenie na wrogu, aby zajął się ogniem i otrzymał {damage} obrażeń od Ognia. (specjalizacja Zniszczenie)"
+      },
+      "moonkin_form": {
+        "name": "Postać księżycowej sowy",
+        "description": "Przyjmujesz postać księżycowej sowy, wzmacniając rzucanie zaklęć do czasu powrotu. Rzuć ponownie, aby wrócić do zwykłej postaci. (specjalizacja Równowaga)"
+      },
+      "feral_charge": {
+        "name": "Dzika szarża",
+        "description": "Szarżujesz na wroga i unieruchamiasz go na 1 sek. Zasięg 8-25 m. (specjalizacja Dzikość)"
+      },
+      "swiftmend": {
+        "name": "Szybkie uzdrowienie",
+        "description": "Zużywa efekt leczenia w czasie na przyjaznym celu, aby uleczyć go za {damage}. (specjalizacja Odnowa)"
+      },
       "summon_imp": {
         "name": "Przywołanie Emberkina",
         "description": "Przywołuje Emberkina pod komendę Czarnoksiężnika. Emberkin ciska popielnymi pociskami w twoich wrogów z oddali. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
@@ -5661,6 +5784,226 @@ export const pl_PL: EnTranslations = {
       "summon_doomguard": {
         "name": "Przywołanie Wraithborna",
         "description": "Wiąże Wraithborna z twoją wolą, elitarnego demona, który zsyła z oddali potężne obrażenia od Cienia. Długi czas odnowienia ogranicza jego niszczycielską moc. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
+      },
+      "aspect_of_the_wild": {
+        "name": "Postać Dzikiego Kła",
+        "description": "Inspira a pobliskich sojuszników con fuerza salvaje, aumentando siłę ataku durante 5 min. (talent łowcy)"
+      },
+      "avatar": {
+        "name": "Kolos",
+        "description": "Te transforma en un coloso y aumenta siłę ataku durante 20 s. (talent wojownika)"
+      },
+      "avenging_wrath": {
+        "name": "Skrzydło Zemsty",
+        "description": "Invoca poder vengador y aumenta siłę ataku y moc zaklęć durante 20 s. (talent paladyna)"
+      },
+      "berserk": {
+        "name": "Czerwona Mgła",
+        "description": "Aumenta siłę ataku durante 15 s. (talent druida)"
+      },
+      "bladestorm": {
+        "name": "Stalowy Cyklon",
+        "description": "Te convierte en una tormenta de acero que golpea a pobliskich wrogów cada segundo por {damage}. (talent wojownika)"
+      },
+      "razor_howl": {
+        "name": "Tnący ryk",
+        "description": "Okrzyk, który spowalnia wrogów w promieniu 15 m o 50% na 8 sek. (Talent wojownika)"
+      },
+      "stormthrow": {
+        "name": "Burzowy rzut",
+        "description": "Rzuć bronią, aby ogłuszyć cel na 3 sek. (Talent wojownika)"
+      },
+      "reckless_vow": {
+        "name": "Lekkomyślna przysięga",
+        "description": "Zwiększa całe generowanie szału o 50% i szansę na trafienie krytyczne o 20% na 12 sek. (Talent wojownika)"
+      },
+      "red_banner": {
+        "name": "Czerwony sztandar",
+        "description": "Ty i pobliscy sojusznicy zyskujecie 10% szybkości ataku i 10% obrażeń na 20 sek. (Talent wojownika)"
+      },
+      "blink": {
+        "name": "Migotliwy Krok",
+        "description": "Te teletransporta 15 m hacia delante y rompe raíces. (talent maga)"
+      },
+      "bloodlust": {
+        "name": "Bębny Wojny",
+        "description": "Lleva a pobliskich sojuszników al frenesí y aumenta su velocidad de ataque durante 15 s. (talent szamana)"
+      },
+      "chain_lightning": {
+        "name": "Rozgałęziona Błyskawica",
+        "description": "Lanza relámpagos al área objetivo e inflige {damage} de daño a pobliskich wrogów. (talent szamana)"
+      },
+      "chaos_bolt": {
+        "name": "Pocisk Ruiny",
+        "description": "Lanza una descarga de fuego caótico que inflige {damage} de daño de Ognia. (talent czarnoksiężnika)"
+      },
+      "cloak_of_shadows": {
+        "name": "Cieniopłaszcz",
+        "description": "Te envuelve en sombras y absorbe daño durante 5 s. (talent łotrzyka)"
+      },
+      "cone_of_cold": {
+        "name": "Mroźny Zamiatacz",
+        "description": "Golpea a pobliskich wrogów con escarcha e inflige {damage} de daño de Mrozu. (talent maga)"
+      },
+      "counter_shot": {
+        "name": "Wyciszający Strzał",
+        "description": "Przerywa rzucanie i blokuje zaklęcia tej szkoły na 4 s. (talent łowcy)"
+      },
+      "counterspell": {
+        "name": "Łamacz Zaklęć",
+        "description": "Przerywa rzucanie i blokuje zaklęcia tej szkoły na 6 s. (talent maga)"
+      },
+      "curse_of_exhaustion": {
+        "name": "Ołowiana Klątwa",
+        "description": "Maldice a cel y reduce su velocidad de movimiento un 30% durante 12 s. (talent czarnoksiężnika)"
+      },
+      "death_coil": {
+        "name": "Grobowa Spirala",
+        "description": "Golpea a cel por {damage} de daño de Cienia y luego lo aterroriza durante 3 s. Esta versión no sana al lanzador. (talent czarnoksiężnika)"
+      },
+      "deep_freeze": {
+        "name": "Martwy Mróz",
+        "description": "Congela profundamente a cel, inflige {damage} de daño de Mrozu y lo aturde durante 4 s. (talent maga)"
+      },
+      "desperate_prayer": {
+        "name": "Ostatnia Modlitwa",
+        "description": "Te sana al instante por {damage}. (talent kapłana)"
+      },
+      "deterrence": {
+        "name": "Kolczasta Straż",
+        "description": "Aumenta tu szansę na unik un 50% durante 10 s. (talent łowcy)"
+      },
+      "divine_shield": {
+        "name": "Straż Światła",
+        "description": "Te protege con poder sagrado y absorbe una enorme cantidad de daño durante 8 s. (talent paladyna)"
+      },
+      "earthbind": {
+        "name": "Chwytająca Ziemia",
+        "description": "Ata a la tierra a pobliskich wrogów y los inmoviliza durante 2 s. (talent szamana)"
+      },
+      "evocation": {
+        "name": "Studnia Eteru",
+        "description": "Restaura manę rápidamente. (talent maga)"
+      },
+      "frenzied_regeneration": {
+        "name": "Dzikie Gojenie",
+        "description": "Regenera salud durante 10 s. Solo en Forma de oso. (talent druida)"
+      },
+      "frost_trap": {
+        "name": "Szronowa Pułapka",
+        "description": "Congela a los wrogów en el área objetivo durante 3 s. (talent łowcy)"
+      },
+      "ghostly_strike": {
+        "name": "Widmowe Uderzenie",
+        "description": "Golpea a cel por daño de arma más {damage} y aumenta brevemente la evasión. Otorga 1 punto de combo. (talent łotrzyka)"
+      },
+      "hammer_of_wrath": {
+        "name": "Bijący Młot",
+        "description": "Lanza un martillo sagrado a un enemigo herido e inflige {damage} de daño de Świętości. Solo se usa por debajo del 20% de salud. (talent paladyna)"
+      },
+      "healing_stream": {
+        "name": "Źródlisko",
+        "description": "Restaura a przyjazny cel durante 12 s. (talent szamana)"
+      },
+      "heroic_leap": {
+        "name": "Wojenny Skok",
+        "description": "Saltas al área objetivo e infliges {damage} de daño Fizyczne a pobliskich wrogów. (talent wojownika)"
+      },
+      "holy_wrath": {
+        "name": "Gniew Świętego",
+        "description": "Desata poder sagrado e inflige {damage} de daño a pobliskich wrogów. (talent paladyna)"
+      },
+      "howl_of_terror": {
+        "name": "Wycie Grozy",
+        "description": "Aterroriza a pobliskich wrogów hasta 3 s. El daño puede romper el efecto. (talent czarnoksiężnika)"
+      },
+      "ice_block": {
+        "name": "Zimna Trumna",
+        "description": "Te encierra en hielo y absorbe una enorme cantidad de daño durante 8 s. (talent maga)"
+      },
+      "inner_focus": {
+        "name": "Wyciszony Umysł",
+        "description": "Hace que tu siguiente hechizo no tenga coste. Dura 60 s. (talent kapłana)"
+      },
+      "innervate": {
+        "name": "Życiodajna Soki",
+        "description": "Żywe soki wzbierają w tobie przez 10 sek., przywracając falami 20 twojego bieżącego zasobu: many, szału lub energii; zmiana postaci ich nie przerywa. (talent Druida)"
+      },
+      "kick": {
+        "name": "Kopniak",
+        "description": "Przerywa rzucanie i blokuje zaklęcia tej szkoły na 4 s. (talent łotrzyka)"
+      },
+      "last_stand": {
+        "name": "Jedenasta Godzina",
+        "description": "Aumenta temporalmente Wytrzymałość durante 15 s, aumentando la salud máxima. (talent wojownika)"
+      },
+      "mend_pet": {
+        "name": "Opatrunek",
+        "description": "Sana a przyjazny cel por {damage} durante 15 s. (talent łowcy)"
+      },
+      "meteor": {
+        "name": "Niebiański Kamień",
+        "description": "Hace caer un meteoro en el área objetivo, inflige {damage} de daño de Ognia y quema el suelo. (talent maga)"
+      },
+      "mind_sear": {
+        "name": "Myślopalenie",
+        "description": "Canaliza energía de Cienia en el área objetivo e inflige {damage} cada segundo a pobliskich wrogów. (talent kapłana)"
+      },
+      "multi_shot": {
+        "name": "Rozszczepiony Strzał",
+        "description": "Dispara varios proyectiles e inflige {damage} a pobliskich wrogów. (talent łowcy)"
+      },
+      "prayer_of_healing": {
+        "name": "Chóralne Uzdrowienie",
+        "description": "Sana a pobliskich sojuszników por {damage}. (talent kapłana)"
+      },
+      "preparation": {
+        "name": "Plan Awaryjny",
+        "description": "Termina el tiempo de reutilización de Sprint, Evasión y Vanish. (talent łotrzyka)"
+      },
+      "presence_of_mind": {
+        "name": "Pędzący Umysł",
+        "description": "Hace instantáneo tu siguiente hechizo con tiempo de lanzamiento. Dura 60 s. (talent maga)"
+      },
+      "psychic_scream": {
+        "name": "Psychiczny Krzyk",
+        "description": "Aterroriza a pobliskich wrogów hasta 4 s. El daño puede romper el efecto. (talent kapłana)"
+      },
+      "pummel": {
+        "name": "Okładanie",
+        "description": "Przerywa rzucanie i blokuje zaklęcia tej szkoły na 4 s. (talent wojownika)"
+      },
+      "rallying_cry": {
+        "name": "Zbiórka",
+        "description": "Lanza un grito de reunión y aumenta siłę ataku de pobliskich sojuszników durante 10 s. (talent wojownika)"
+      },
+      "rebuke": {
+        "name": "Nagana",
+        "description": "Przerywa rzucanie i blokuje zaklęcia tej szkoły na 4 s. (talent paladyna)"
+      },
+      "shadowstep": {
+        "name": "Cieniokrok",
+        "description": "Das un paso entre las sombras hacia tu cel. (talent łotrzyka)"
+      },
+      "shield_wall": {
+        "name": "Bastion",
+        "description": "Alzas un muro de escudo y aumentas mucho la pancerz durante 10 s. (talent wojownika)"
+      },
+      "silence": {
+        "name": "Cisza",
+        "description": "Silencia a cel durante 4 s. (talent kapłana)"
+      },
+      "skull_bash": {
+        "name": "Uderzenie Głową",
+        "description": "Przerywa rzucanie i blokuje zaklęcia tej szkoły na 4 s. (talent druida)"
+      },
+      "spell_lock": {
+        "name": "Rozkaz Knebla",
+        "description": "Przerywa rzucanie i blokuje zaklęcia tej szkoły na 5 s. (talent czarnoksiężnika)"
+      },
+      "tranquility": {
+        "name": "Pieśń Gaju",
+        "description": "Canaliza energía restauradora y sana a pobliskich sojuszników cada segundo. (talent druida)"
       },
       "bear_charge": {
         "name": "Szarża Bruina",
@@ -5818,6 +6161,9 @@ export const pl_PL: EnTranslations = {
       },
       "greyjaw_fang": {
         "name": "Kieł Starego Szaroszczękiego"
+      },
+      "chunk_of_ore": {
+        "name": "Bryła rudy"
       },
       "weathered_ledger_page": {
         "name": "Zniszczona strona księgi"
@@ -6900,49 +7246,49 @@ export const pl_PL: EnTranslations = {
         "name": "Hełm grozy Bonewrought"
       },
       "crownforged_dreadhelm_heroic": {
-        "name": "Bonewrought Dreadhelm"
+        "name": "Hełm grozy Bonewrought"
       },
       "crownforged_warspaulders": {
         "name": "Naramienniki bojowe Bonewrought"
       },
       "crownforged_warspaulders_heroic": {
-        "name": "Bonewrought Warspaulders"
+        "name": "Naramienniki bojowe Bonewrought"
       },
       "nighttalon_crown": {
         "name": "Korona Direfang"
       },
       "nighttalon_crown_heroic": {
-        "name": "Direfang Crown"
+        "name": "Korona Direfang"
       },
       "nighttalon_shoulderguards": {
         "name": "Naramienniki Direfang"
       },
       "nighttalon_shoulderguards_heroic": {
-        "name": "Direfang Shoulderguards"
+        "name": "Naramienniki Direfang"
       },
       "soulflame_cowl": {
         "name": "Kaptur Wraithfire"
       },
       "soulflame_cowl_heroic": {
-        "name": "Wraithfire Cowl"
+        "name": "Kaptur Wraithfire"
       },
       "soulflame_mantle": {
         "name": "Płaszcz Wraithfire"
       },
       "soulflame_mantle_heroic": {
-        "name": "Wraithfire Mantle"
+        "name": "Płaszcz Wraithfire"
       },
       "stormcallers_crown": {
         "name": "Korona Galecall"
       },
       "stormcallers_crown_heroic": {
-        "name": "Galecall Crown"
+        "name": "Korona Galecall"
       },
       "stormcallers_spaulders": {
         "name": "Naramienniki Galecall"
       },
       "stormcallers_spaulders_heroic": {
-        "name": "Galecall Spaulders"
+        "name": "Naramienniki Galecall"
       },
       "unknown_alien_weaponry": {
         "name": "Nieznana obca broń"
@@ -7193,13 +7539,13 @@ export const pl_PL: EnTranslations = {
         "name": "Powstały Strażnik Królewski"
       },
       "nythraxis_heroic_warrior_add": {
-        "name": "Aldren, Deathless Warguard"
+        "name": "Aldren, Nieśmiertelny Strażnik Wojenny"
       },
       "nythraxis_heroic_priest_add": {
-        "name": "Malric, Deathless Hierophant"
+        "name": "Malric, Nieśmiertelny Hierofant"
       },
       "nythraxis_heroic_rogue_add": {
-        "name": "Voss, Deathless Knife"
+        "name": "Voss, Nieśmiertelny Nóż"
       },
       "nythraxis_scourge_of_thornpeak": {
         "name": "Nythraxis, Plaga Ciernistego Szczytu"
@@ -7529,6 +7875,16 @@ export const pl_PL: EnTranslations = {
       }
     },
     "quests": {
+      "q_prof_intro": {
+        "title": "Fach dla każdej dłoni",
+        "text": "Każdy w Eastbrook poza władaniem mieczem zna jakiś fach, {playerName}. Wokół miasta rozsiane są żyły rudy, więc chwyć kilof i przynieś mi 5 brył. Wydobądź je samodzielnie; poznam różnicę.",
+        "completion": "Widzisz? Ruda w torbie i odciski na dłoniach. W drodze dalej wydobywaj rudę, ścinaj drewno i zbieraj zioła. Po powrocie do miasta pamiętaj o tablicy Priorytetów miasta przy rynku i pobliskim warsztacie. W każdej z tych prac czeka uczciwy fach, jeśli go zechcesz.",
+        "objectives": {
+          "0": {
+            "label": "Bryła rudy"
+          }
+        }
+      },
       "q_wolves": {
         "title": "Wilki u progu",
         "text": "Leśne wilki robią się zuchwałe, kąsają podróżnych na północnej drodze. Przerzedź ich szeregi, {playerName}. Zabij 8 Leśnych wilków, a Eastbrook odetchnie z ulgą.",

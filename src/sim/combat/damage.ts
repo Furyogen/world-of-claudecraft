@@ -22,6 +22,7 @@
 // `src/sim`-pure: no DOM/Three/render/ui/game/net imports, no Math.random/Date.now
 // (enforced by tests/architecture.test.ts).
 
+import { computeTalentModifiers } from '../content/talents';
 import { DELVES, GROUP_XP_BONUS, MOBS } from '../data';
 import { recalcPlayerStats } from '../entity';
 import { DAMAGE_IDLE_DESPAWN_MOB_IDS, DAMAGE_IDLE_DESPAWN_SECONDS } from '../entity_roster';
@@ -46,12 +47,15 @@ import {
   xpForLevel,
 } from '../types';
 import { WORLD_BOSS_CORPSE_SECONDS, worldBossLootContributors } from '../world_boss';
+import { onDamageTaken, onShieldConsumed, onSpellCrit, resetProcState } from './talent_procs';
 
 // How long a slain mob's corpse persists (seconds) before it is cleared. Sole user
 // is handleDeath, so the constant lives here with the death-domain code.
 const CORPSE_DURATION = 60;
 // Self attack-speed buff a wounded frenzyOnHit mob gains; sole user maybeFrenzyOnHit.
 const BLOOD_FRENZY_AURA_ID = 'blood_frenzy';
+const PURSUIT_AURA_ID = 'war_pursuit_speed';
+const BLOODBATH_AURA_ID = 'war_bloodbath';
 
 // A handful of casts ignore classic-era spell pushback (e.g. ghost_wolf). Sole user is
 // the dealDamage pushback branch, so the predicate lives here with it.
@@ -101,6 +105,10 @@ export function dealDamage(
   ) {
     amount = Math.round(amount * 0.9);
   }
+  if (source && source.id !== target.id && target.auras.some((a) => a.kind === 'die_by_sword')) {
+    const cut = target.hp <= target.maxHp * 0.3 ? 0.2 : 0.1;
+    amount = Math.round(amount * (1 - cut));
+  }
 
   // Expose: a cracked-guard debuff amplifies the physical damage the victim
   // takes (from any attacker) until it expires. Armor is already applied at the
@@ -137,6 +145,10 @@ export function dealDamage(
   if (source && source.id !== target.id) {
     const hexMult = ctx.hexOutputMult(source);
     if (hexMult !== 1) amount = Math.round(amount * hexMult);
+    let outgoing = 0;
+    for (const a of source.auras)
+      if (a.kind === 'buff_dmg_done') outgoing += a.value * (a.stacks ?? 1);
+    if (outgoing > 0) amount = Math.round(amount * (1 + outgoing));
   }
 
   // "Find Weakness": a critvuln debuff makes the target's exposed flesh take
@@ -159,6 +171,7 @@ export function dealDamage(
   }
 
   // absorb shields soak damage first
+  let totalAbsorbed = 0;
   if (amount > 0) {
     for (let i = target.auras.length - 1; i >= 0 && amount > 0; i--) {
       const a = target.auras[i];
@@ -166,14 +179,43 @@ export function dealDamage(
       const soaked = Math.min(a.value, amount);
       a.value -= soaked;
       amount -= soaked;
+      totalAbsorbed += soaked;
       if (a.value <= 0) {
         target.auras.splice(i, 1);
         ctx.emit({ type: 'aura', targetId: target.id, name: a.name, gained: false });
+        // Talent procs listening for a fully consumed shield (deterministic).
+        const shielder = ctx.entities.get(a.sourceId);
+        if (shielder && !shielder.dead && shielder.kind === 'player')
+          onShieldConsumed(ctx, shielder, a.id, target);
       }
     }
   }
 
-  // duels end at 1 hp — nobody dies
+  if (target.kind === 'player' && amount > 0) {
+    const meta = ctx.players.get(target.id);
+    const share = meta ? ctx.playerMods(meta).global.petDmgSharePct : 0;
+    const pet = share > 0 ? ctx.petOf(target.id) : null;
+    if (pet && !pet.dead) {
+      const redirected = Math.min(amount, Math.round(amount * share));
+      if (redirected > 0) {
+        amount -= redirected;
+        ctx.dealDamage(
+          source,
+          pet,
+          redirected,
+          crit,
+          school,
+          ability,
+          kind,
+          noRage,
+          threatOpts,
+          direct,
+        );
+      }
+    }
+  }
+
+  // duels end at 1 hp, nobody dies
   const duel = target.kind === 'player' ? ctx.duels.get(target.id) : undefined;
   if (
     duel &&
@@ -193,6 +235,7 @@ export function dealDamage(
         school,
         ability,
         kind,
+        absorbed: totalAbsorbed || undefined,
       });
       ctx.endDuel(duel, sourcePlayer.id);
       return;
@@ -235,6 +278,7 @@ export function dealDamage(
         school,
         ability,
         kind,
+        absorbed: totalAbsorbed || undefined,
       });
       ctx.fiestaTakedown(match, sourcePlayer.id, target);
       return;
@@ -291,6 +335,7 @@ export function dealDamage(
         school,
         ability,
         kind,
+        absorbed: totalAbsorbed || undefined,
       });
       handleDeath(ctx, target, source);
       const loserTeam = ctx.arenaTeamOf(match, target.id);
@@ -301,6 +346,33 @@ export function dealDamage(
     }
   }
 
+  // Cheat death (talent global): a killing blow leaves the player at 1 hp
+  // instead, gated by a long internal cooldown on procState. No rng.
+  if (target.kind === 'player' && amount >= target.hp && !target.dead) {
+    const meta = ctx.players.get(target.id);
+    const icd = meta ? ctx.playerMods(meta).global.cheatDeathIcd : 0;
+    if (icd > 0) {
+      if (!target.procState) target.procState = { counters: {}, icds: {} };
+      if (target.procState.icds.cheat_death === undefined) {
+        target.procState.icds.cheat_death = icd;
+        amount = Math.max(0, target.hp - 1);
+        // The save is a MOMENT: a golden ward bloom on the survivor.
+        ctx.emit({
+          type: 'spellfx',
+          sourceId: target.id,
+          targetId: target.id,
+          school: 'holy',
+          fx: 'wardBloom',
+        });
+        ctx.emit({
+          type: 'log',
+          pid: target.id,
+          text: 'Cheat Death saves you!',
+          color: '#ffd100',
+        });
+      }
+    }
+  }
   // A Protect Yumi cat: the yumi module owns the clamp, the sudden-death
   // taken-multiplier, tiebreak bookkeeping, and win detection. Amps and
   // absorb shields already resolved above, so a shielded cat soaks first.
@@ -322,6 +394,7 @@ export function dealDamage(
     school,
     ability,
     kind,
+    absorbed: totalAbsorbed || undefined,
   });
 
   if (amount > 0) {
@@ -330,13 +403,41 @@ export function dealDamage(
     }
     for (let i = target.auras.length - 1; i >= 0; i--) {
       if (target.auras[i].breaksOnDamage) {
+        const aura = target.auras[i];
+        if (aura.breakThreshold !== undefined) {
+          aura.damageAccrued = (aura.damageAccrued ?? 0) + amount;
+          if (aura.damageAccrued < aura.breakThreshold) continue;
+        }
         ctx.emit({
           type: 'aura',
           targetId: target.id,
-          name: target.auras[i].name,
+          name: aura.name,
           gained: false,
         });
         target.auras.splice(i, 1);
+      }
+    }
+  }
+
+  // A heal echo (talent proc watcher) fires when its carrier drops below the
+  // stored health fraction: consume the aura and deliver the stored heal.
+  if (amount > 0 && !target.dead && target.maxHp > 0) {
+    for (let i = target.auras.length - 1; i >= 0; i--) {
+      const a = target.auras[i];
+      if (a.kind !== 'heal_echo') continue;
+      if (target.hp >= target.maxHp * (a.value2 ?? 0)) continue;
+      target.auras.splice(i, 1);
+      ctx.emit({ type: 'aura', targetId: target.id, name: a.name, gained: false });
+      const healer = ctx.entities.get(a.sourceId);
+      if (healer && !healer.dead) {
+        ctx.applyHeal(healer, target, a.value, a.name);
+        ctx.emit({
+          type: 'spellfx',
+          sourceId: a.sourceId,
+          targetId: target.id,
+          school: a.school,
+          fx: 'echoBurst',
+        });
       }
     }
   }
@@ -391,20 +492,35 @@ export function dealDamage(
   if (source && source.kind === 'player' && source.id !== target.id) {
     const meta = ctx.players.get(source.id);
     if (meta) meta.counters.damageDealt += amount;
-    if (source.resourceType === 'rage' && !noRage && school === 'physical' && !ability) {
+    // Talent procs listening for spell crits (deterministic, no rng draw).
+    if (crit && school !== 'physical' && ability) onSpellCrit(ctx, source, ability, target);
+    if (meta && source.resourceType === 'rage' && !noRage && school === 'physical' && !ability) {
+      const mods = ctx.playerMods(meta).global;
+      const auraMult = source.auras.reduce(
+        (sum, aura) => sum + (aura.kind === 'buff_rage_gen' ? aura.value : 0),
+        0,
+      );
       source.resource = Math.min(
         source.maxResource,
-        source.resource + rageFromDealing(amount, source.level),
+        source.resource + Math.round(rageFromDealing(amount, source.level) * (1 + auraMult)),
       );
     }
   }
   if (target.kind === 'player') {
     const meta = ctx.players.get(target.id);
     if (meta) meta.counters.damageTaken += amount;
+    // Talent procs listening for big single hits (deterministic, ICD-gated).
+    if (amount > 0 && !target.dead) onDamageTaken(ctx, target, amount);
     if (target.resourceType === 'rage' && source && source.id !== target.id) {
+      const mods = meta ? ctx.playerMods(meta).global : null;
+      const auraMult = target.auras.reduce(
+        (sum, aura) => sum + (aura.kind === 'buff_rage_gen' ? aura.value : 0),
+        0,
+      );
+      const mult = 1 + auraMult;
       target.resource = Math.min(
         target.maxResource,
-        target.resource + rageFromTaking(amount, source.level),
+        target.resource + Math.round(rageFromTaking(amount, source.level) * mult),
       );
     }
     if (isConsuming(target)) {
@@ -536,6 +652,7 @@ function reflectSpellWard(
 }
 
 export function handleDeath(ctx: SimContext, e: Entity, killer: Entity | null): void {
+  resetProcState(e);
   e.dead = true;
   e.hp = 0;
   ctx.clearNonPlayerStatAuras(e);
@@ -689,6 +806,46 @@ export function handleDeath(ctx: SimContext, e: Entity, killer: Entity | null): 
 
       meta.counters.kills++;
       if (creditEntity.targetId === e.id) creditEntity.autoAttack = false;
+      const creditMods = ctx.playerMods(meta);
+      if (creditMods.global.onKillSpeedPct > 0) {
+        ctx.applyAura(creditEntity, {
+          id: PURSUIT_AURA_ID,
+          name: 'Hot Pursuit',
+          kind: 'buff_speed',
+          remaining: 6,
+          duration: 6,
+          value: 1 + creditMods.global.onKillSpeedPct,
+          sourceId: creditEntity.id,
+          school: 'physical',
+        });
+      }
+      if (creditMods.global.bloodbathPct > 0) {
+        const applyBloodbath = (kind: 'buff_dmg_done' | 'buff_crit', suffix: string) => {
+          const existing = creditEntity.auras.find(
+            (a) => a.id === `${BLOODBATH_AURA_ID}_${suffix}` && a.sourceId === creditEntity.id,
+          );
+          if (existing) {
+            existing.stacks = Math.min(5, (existing.stacks ?? 1) + 1);
+            existing.remaining = 8;
+            existing.duration = 8;
+            return;
+          }
+          ctx.applyAura(creditEntity, {
+            id: `${BLOODBATH_AURA_ID}_${suffix}`,
+            name: 'Red Harvest',
+            kind,
+            remaining: 8,
+            duration: 8,
+            value: creditMods.global.bloodbathPct,
+            stacks: 1,
+            sourceId: creditEntity.id,
+            school: 'physical',
+          });
+        };
+        applyBloodbath('buff_dmg_done', 'dmg');
+        applyBloodbath('buff_crit', 'crit');
+        recalcPlayerStats(creditEntity, meta.cls, meta.equipment, creditMods);
+      }
       // combo points are character-bound: unspent points survive the kill and
       // carry to the next target (they fade on their own via updateComboExpiry)
       for (const member of eligible) {
@@ -754,6 +911,10 @@ export function grantXp(
     meta.xp -= xpForLevel(p.level);
     p.level++;
     meta.counters.levelUps++;
+    // Re-bake the flat talent mods at the new level BEFORE the stat pass: spec mastery
+    // magnitudes scale with level (min(1, level/20) in accumulate), so a ding must
+    // strengthen the mastery without waiting for a respec/spec-pick/relog re-bake.
+    meta.talentMods = computeTalentModifiers(meta.cls, meta.talents, p.level);
     recalcPlayerStats(p, meta.cls, meta.equipment, ctx.playerMods(meta));
     p.hp = p.maxHp;
     if (p.resourceType === 'mana') p.resource = p.maxResource;

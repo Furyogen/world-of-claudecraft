@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { Sim } from '../src/sim/sim';
 import { ABILITIES, abilitiesKnownAt } from '../src/sim/content/classes';
+import { Sim } from '../src/sim/sim';
 import { terrainHeight } from '../src/sim/world';
 
 function makeSim(seed = 42) {
@@ -9,21 +9,30 @@ function makeSim(seed = 42) {
 
 function nearestMob(sim: Sim) {
   const p = sim.player;
-  let best: any = null, bestD = Infinity;
+  let best: any = null,
+    bestD = Infinity;
   for (const e of sim.entities.values()) {
     if (e.kind !== 'mob' || e.dead) continue;
     const d = Math.hypot(p.pos.x - e.pos.x, p.pos.z - e.pos.z);
-    if (d < bestD) { bestD = d; best = e; }
+    if (d < bestD) {
+      bestD = d;
+      best = e;
+    }
   }
   return best;
 }
 
 function teleportTo(sim: Sim, x: number, z: number) {
   const p = sim.player;
-  p.pos.x = x; p.pos.z = z;
+  p.pos.x = x;
+  p.pos.z = z;
   p.pos.y = terrainHeight(x, z, sim.cfg.seed);
   p.prevPos = { ...p.pos };
-  p.vx = 0; p.vz = 0; p.vy = 0; p.onGround = true; p.fallStartY = p.pos.y;
+  p.vx = 0;
+  p.vz = 0;
+  p.vy = 0;
+  p.onGround = true;
+  p.fallStartY = p.pos.y;
 }
 
 describe('Pyroblast (mage)', () => {
@@ -31,16 +40,16 @@ describe('Pyroblast (mage)', () => {
     const pyro = ABILITIES.pyroblast;
     expect(pyro).toBeTruthy();
     expect(pyro.class).toBe('mage');
-    expect(pyro.learnLevel).toBe(20);
+    expect(pyro.learnLevel).toBe(5);
     expect(pyro.school).toBe('fire');
     expect(pyro.castTime).toBeGreaterThan(3); // a deliberately long cast
     expect(pyro.effects.some((e: any) => e.type === 'directDamage')).toBe(true);
     expect(pyro.effects.some((e: any) => e.type === 'dot')).toBe(true);
   });
 
-  it('is learned only at level 20', () => {
-    expect(abilitiesKnownAt('mage', 19).some((k) => k.def.id === 'pyroblast')).toBe(false);
-    expect(abilitiesKnownAt('mage', 20).some((k) => k.def.id === 'pyroblast')).toBe(true);
+  it('is learned only at level 5', () => {
+    expect(abilitiesKnownAt('mage', 4).some((k) => k.def.id === 'pyroblast')).toBe(false);
+    expect(abilitiesKnownAt('mage', 5).some((k) => k.def.id === 'pyroblast')).toBe(true);
   });
 
   it('casts with its cast time and damages the target over time', () => {

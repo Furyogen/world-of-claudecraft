@@ -13,12 +13,12 @@ import {
   cloneAllocation,
   computeTalentModifiers,
   emptyAllocation,
-  pointsSpent,
   type Role,
+  rowsPicked,
+  rowsUnlockedAtLevel,
   SAVED_LOADOUT_BAR_SLOTS,
   type SavedLoadout,
   type TalentAllocation,
-  talentPointsAtLevel,
 } from '../sim/content/talents';
 import { resolveSportKit } from '../sim/content/vale_cup';
 import { ALL_RECIPES, abilitiesKnownAt, CLASSES, NPCS, resolveDelveShopOffers } from '../sim/data';
@@ -427,6 +427,18 @@ export class Api {
     await this.post('/api/account/password', { current, next });
   }
 
+  // Request a password-reset email (for a locked-out user). Always resolves: the
+  // server returns 200 whether or not the username exists, so the UI cannot be
+  // used to enumerate accounts.
+  async requestPasswordReset(username: string): Promise<void> {
+    await this.post('/api/account/password/forgot', { username });
+  }
+
+  // Complete a password reset with the emailed token and a new password.
+  async resetPassword(token: string, next: string): Promise<void> {
+    await this.post('/api/account/password/reset', { token, next });
+  }
+
   async logout(): Promise<void> {
     await this.post('/api/account/logout', {});
   }
@@ -816,6 +828,7 @@ function blankEntity(id: number): Entity {
     critChance: 0.05,
     critRating: 0,
     hasteRating: 0,
+    critDmgBonus: 0,
     dodgeChance: 0.05,
     moveSpeed: 7,
     hostile: false,
@@ -1697,6 +1710,7 @@ export class ClientWorld implements IWorld {
           // sends it only when defined (server/game.ts), so an ordinary aura or an old server
           // decodes to undefined and the badge falls back to the stacks path, exactly as before.
           rec.charges = a.charges;
+          rec.empowerAbilities = a.emp;
           // The caster's entity id, for the target strip's own-aura prominence
           // (auras_view ownFirst). An old server omits it; 0 matches no player id.
           rec.sourceId = a.src ?? 0;
@@ -1716,6 +1730,7 @@ export class ClientWorld implements IWorld {
           school: a.school ?? 'physical',
           stacks: a.stacks,
           charges: a.charges,
+          empowerAbilities: a.emp,
         }));
       }
       e.loot = w.lootList ?? null;
@@ -1862,7 +1877,7 @@ export class ClientWorld implements IWorld {
         : abilitiesKnownAt(
             this.cfg.playerClass,
             e.level,
-            computeTalentModifiers(this.cfg.playerClass, talents),
+            computeTalentModifiers(this.cfg.playerClass, talents, e.level),
           );
       // --- IWorldParty: party roster + raid markers, delta-omitted self-decode
       // (keep the prior value when absent; `marks: null` clears on disband). ---
@@ -2738,7 +2753,10 @@ export class ClientWorld implements IWorld {
   // Talents & Specializations: the server re-validates every allocation. ---
   talentPoints(): { total: number; spent: number } {
     const level = this.entities.get(this.playerId)?.level ?? 1;
-    return { total: talentPointsAtLevel(level), spent: pointsSpent(this.talents) };
+    return {
+      total: rowsUnlockedAtLevel(this.cfg.playerClass, level),
+      spent: rowsPicked(this.talents),
+    };
   }
   applyTalents(alloc: TalentAllocation): void {
     this.cmd({ cmd: 'applyTalents', alloc });
@@ -2769,7 +2787,7 @@ export class ClientWorld implements IWorld {
       this.known = abilitiesKnownAt(
         this.cfg.playerClass,
         this.player.level,
-        computeTalentModifiers(this.cfg.playerClass, this.talents),
+        computeTalentModifiers(this.cfg.playerClass, this.talents, this.player.level),
       );
     }
   }
@@ -2790,7 +2808,7 @@ export class ClientWorld implements IWorld {
         this.known = abilitiesKnownAt(
           this.cfg.playerClass,
           this.player.level,
-          computeTalentModifiers(this.cfg.playerClass, this.talents),
+          computeTalentModifiers(this.cfg.playerClass, this.talents, this.player.level),
         );
       }
     } else if (this.activeLoadout > index) this.activeLoadout -= 1;

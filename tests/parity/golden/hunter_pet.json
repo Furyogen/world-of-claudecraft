@@ -15,7 +15,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 406,
-      "state": "e31e290e",
+      "state": "cd2e74a2",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -63,8 +63,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -127,8 +126,8 @@
       "tick": 20,
       "time": 1,
       "nextId": 409,
-      "state": "4e0cfa23",
-      "events": "43ab1dd4",
+      "state": "c9bb0773",
+      "events": "aad1beb5",
       "rng": {
         "draws": 9,
         "digest": "381f4473"
@@ -138,7 +137,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 409,
-      "state": "2b8deeaa",
+      "state": "99618df6",
       "events": "741638a5",
       "rng": {
         "draws": 9,
@@ -149,8 +148,8 @@
       "tick": 60,
       "time": 3,
       "nextId": 409,
-      "state": "9af5856b",
-      "events": "d6d42245",
+      "state": "8ff1007b",
+      "events": "35c1ec5c",
       "rng": {
         "draws": 100,
         "digest": "a2f9eb23"
@@ -160,7 +159,7 @@
       "tick": 80,
       "time": 4,
       "nextId": 409,
-      "state": "8b05ee12",
+      "state": "1c03e07e",
       "events": "741638a5",
       "rng": {
         "draws": 195,
@@ -171,8 +170,8 @@
       "tick": 100,
       "time": 5,
       "nextId": 409,
-      "state": "5a86faae",
-      "events": "1b963611",
+      "state": "c89e06c2",
+      "events": "5a0db5c0",
       "rng": {
         "draws": 298,
         "digest": "dea1e796"
@@ -182,7 +181,7 @@
       "tick": 120,
       "time": 6,
       "nextId": 409,
-      "state": "c51d89a7",
+      "state": "6ad0552f",
       "events": "741638a5",
       "rng": {
         "draws": 405,
@@ -193,7 +192,7 @@
       "tick": 120,
       "time": 6,
       "nextId": 409,
-      "state": "c51d89a7",
+      "state": "6ad0552f",
       "events": "741638a5",
       "rng": {
         "draws": 405,
@@ -244,8 +243,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }

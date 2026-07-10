@@ -1,24 +1,22 @@
 import { describe, expect, it } from 'vitest';
-import { Sim } from '../src/sim/sim';
 import { ABILITIES, abilitiesKnownAt } from '../src/sim/content/classes';
+import { Sim } from '../src/sim/sim';
 
 describe('Commanding Shout', () => {
-  it('is a warrior physical stamina self-buff learned at level 14', () => {
+  it('is a warrior physical stamina self-buff learned at level 11', () => {
     const def = ABILITIES['commanding_shout'];
     expect(def).toBeTruthy();
     expect(def.class).toBe('warrior');
-    expect(def.learnLevel).toBe(14);
+    expect(def.learnLevel).toBe(11);
     expect(def.school).toBe('physical');
     expect(def.requiresTarget).toBe(false);
     expect(def.castTime).toBe(0);
-    expect(def.effects).toEqual([
-      { type: 'selfBuff', kind: 'buff_sta', value: 6, duration: 120 },
-    ]);
+    expect(def.effects).toEqual([{ type: 'selfBuff', kind: 'buff_sta', value: 6, duration: 120 }]);
   });
 
-  it('is unknown at level 13 and known from level 14 in the warrior kit', () => {
-    const before = abilitiesKnownAt('warrior', 13).map((k) => k.def.id);
-    const after = abilitiesKnownAt('warrior', 14).map((k) => k.def.id);
+  it('is unknown at level 10 and known from level 11 in the warrior kit', () => {
+    const before = abilitiesKnownAt('warrior', 10).map((k) => k.def.id);
+    const after = abilitiesKnownAt('warrior', 11).map((k) => k.def.id);
     expect(before).not.toContain('commanding_shout');
     expect(after).toContain('commanding_shout');
   });

@@ -35,7 +35,6 @@ import {
   computeTalentModifiers,
   defaultBuild,
   type TalentModifiers,
-  talentPointsAtLevel,
 } from '../content/talents';
 import { abilitiesKnownAt, arenaOrigin } from '../data';
 import { ARENA_SPAWNS_A_2v2, ARENA_SPAWNS_B_2v2 } from '../dungeon_layout';
@@ -110,6 +109,7 @@ export function mergeAugmentMods(base: TalentModifiers, augIds: string[]): Talen
     global: { ...base.global },
     abilities: {},
     grants: [...base.grants],
+    procs: [...base.procs],
   };
   for (const k in base.abilities) m.abilities[k] = { ...base.abilities[k] };
   for (const id of augIds) {
@@ -149,12 +149,14 @@ export function mergeAugmentMods(base: TalentModifiers, augIds: string[]): Talen
       if (!m.abilities[am.ability]) {
         m.abilities[am.ability] = {
           dmgPct: 0,
+          dmgPctVsDotted: 0,
           flatDmg: 0,
           costPct: 0,
           cooldownPct: 0,
           castPct: 0,
           buffPct: 0,
           castWhileMoving: false,
+          bonusCharges: 0,
           addEffects: [],
         };
       }
@@ -217,8 +219,8 @@ export function fiestaStandardize(ctx: SimContext, meta: PlayerMeta, e: Entity):
   if (meta.fiestaRestore) return;
   meta.fiestaRestore = { level: e.level, xp: meta.xp, talents: cloneAllocation(meta.talents) };
   e.level = FIESTA_STANDARD_LEVEL;
-  meta.talents = defaultBuild(meta.cls, talentPointsAtLevel(FIESTA_STANDARD_LEVEL));
-  meta.talentMods = computeTalentModifiers(meta.cls, meta.talents);
+  meta.talents = defaultBuild(meta.cls, FIESTA_STANDARD_LEVEL);
+  meta.talentMods = computeTalentModifiers(meta.cls, meta.talents, e.level);
   meta.known = abilitiesKnownAt(meta.cls, e.level, ctx.playerMods(meta));
   meta.wireRev++; // talents/loadouts swapped for the bout, refresh the wire promptly
   recalcPlayerStats(e, meta.cls, meta.equipment, ctx.playerMods(meta));
@@ -231,7 +233,7 @@ export function fiestaRestoreChar(meta: PlayerMeta, e: Entity): void {
   e.level = snap.level;
   meta.xp = snap.xp;
   meta.talents = snap.talents;
-  meta.talentMods = computeTalentModifiers(meta.cls, meta.talents);
+  meta.talentMods = computeTalentModifiers(meta.cls, meta.talents, e.level);
   meta.fiestaRestore = null;
   meta.known = abilitiesKnownAt(meta.cls, e.level, meta.talentMods);
   meta.wireRev++; // real talents restored, refresh the wire promptly

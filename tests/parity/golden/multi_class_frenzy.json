@@ -30,8 +30,8 @@
       "tick": 0,
       "time": 0,
       "nextId": 409,
-      "state": "fcc709e3",
-      "events": "a6bdb9f3",
+      "state": "df42e97d",
+      "events": "887ecfe6",
       "rng": {
         "draws": 3,
         "digest": "44b810ef"
@@ -75,8 +75,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         },
@@ -121,8 +120,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         },
@@ -163,8 +161,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -196,7 +193,7 @@
             "z": -30
           },
           "potionCooldownUntil": -1,
-          "resource": 29.963644,
+          "resource": 30,
           "resourceType": "rage",
           "spawnPos": {
             "x": 2,
@@ -400,8 +397,8 @@
       "tick": 0,
       "time": 0,
       "nextId": 409,
-      "state": "81c8acb8",
-      "events": "ea631a91",
+      "state": "37a5a736",
+      "events": "03d42c4c",
       "rng": {
         "draws": 6,
         "digest": "c15af9da"
@@ -445,8 +442,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         },
@@ -491,8 +487,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         },
@@ -533,8 +528,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -566,7 +560,7 @@
             "z": -30
           },
           "potionCooldownUntil": -1,
-          "resource": 59.927288,
+          "resource": 60,
           "resourceType": "rage",
           "spawnPos": {
             "x": 2,
@@ -770,8 +764,8 @@
       "tick": 0,
       "time": 0,
       "nextId": 409,
-      "state": "46f3cd2e",
-      "events": "ea631a91",
+      "state": "40b6f1f7",
+      "events": "03d42c4c",
       "rng": {
         "draws": 9,
         "digest": "88aac2f9"
@@ -815,8 +809,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         },
@@ -861,8 +854,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         },
@@ -903,8 +895,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -936,7 +927,7 @@
             "z": -30
           },
           "potionCooldownUntil": -1,
-          "resource": 89.890932,
+          "resource": 90,
           "resourceType": "rage",
           "spawnPos": {
             "x": 2,
@@ -1140,8 +1131,8 @@
       "tick": 0,
       "time": 0,
       "nextId": 409,
-      "state": "66b66d17",
-      "events": "ea631a91",
+      "state": "04d2fd7f",
+      "events": "03d42c4c",
       "rng": {
         "draws": 12,
         "digest": "1a1053bd"
@@ -1185,8 +1176,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         },
@@ -1231,8 +1221,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         },
@@ -1273,8 +1262,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -1510,8 +1498,8 @@
       "tick": 5,
       "time": 0.25,
       "nextId": 409,
-      "state": "c1de0d3d",
-      "events": "0085b1fd",
+      "state": "a1ff1085",
+      "events": "9ff1643e",
       "rng": {
         "draws": 15,
         "digest": "ca70052b"
@@ -1521,7 +1509,7 @@
       "tick": 10,
       "time": 0.5,
       "nextId": 409,
-      "state": "b3717938",
+      "state": "11f57764",
       "events": "741638a5",
       "rng": {
         "draws": 15,
@@ -1532,7 +1520,7 @@
       "tick": 10,
       "time": 0.5,
       "nextId": 409,
-      "state": "b3717938",
+      "state": "11f57764",
       "events": "741638a5",
       "rng": {
         "draws": 15,
@@ -1578,8 +1566,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         },
@@ -1624,8 +1611,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         },
@@ -1666,8 +1652,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }

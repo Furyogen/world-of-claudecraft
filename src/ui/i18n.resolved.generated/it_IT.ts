@@ -85,6 +85,9 @@ export const it_IT: EnTranslations = {
       "title": "Talenti",
       "classTab": "Classe",
       "specTab": "Specializzazione",
+      "choicesTab": "Scelte",
+      "rowUnlockToast": "Nuova scelta di talento disponibile!",
+      "rowUnlocks": "Si sblocca al livello {level}",
       "available": "Disponibili",
       "spent": "Spesi",
       "pointSource": "Ottieni 1 punto talento a ogni livello dal {first} al {cap}. Sali di livello per ottenerne altri.",
@@ -143,6 +146,7 @@ export const it_IT: EnTranslations = {
         "noTree": "La tua classe non ha ancora un albero dei talenti.",
         "locked": "Non hai ancora sbloccato i talenti; iniziano al livello {level}.",
         "noSpec": "nessuna specializzazione",
+        "rowsSummary": "Talenti: {head}, selezionate {picked}/{unlocked} righe di scelta.",
         "summary": "Talenti: {head} — {spent}/{total} punti spesi ({breakdown}).",
         "breakdownClass": "Classe {classPts}",
         "breakdownSpec": "Classe {classPts}, {spec} {specPts}",
@@ -151,7 +155,6 @@ export const it_IT: EnTranslations = {
     }
   },
   "hudChrome": {
-    "itemHeroicTag": "[HEROIC]",
     "spectate": {
       "banner": "Stai osservando {name}"
     },
@@ -159,6 +162,10 @@ export const it_IT: EnTranslations = {
       "resurrectAtCorpse": "Risorgi al cadavere",
       "resurrectAtHealer": "Il Custode Pallido (Mal di resurrezione)",
       "spiritHealerAlive": "Il Custode Pallido veglia sui morti. Tu sei ancora tra i vivi."
+    },
+    "fct": {
+      "absorbed": "Assorbito {amount}",
+      "cheap": "Costo ridotto!"
     },
     "emotes": {
       "wave": "Saluta",
@@ -723,6 +730,8 @@ export const it_IT: EnTranslations = {
     "tips": {
       "joinChannels": "Suggerimento: digita /join world o /join lfg per chattare con i giocatori di tutto il mondo."
     },
+    "itemHeroicTag": "[EROICA]",
+    "itemSoulbound": "Vincolato all’anima",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1068,6 +1077,22 @@ export const it_IT: EnTranslations = {
     "worldBoss": {
       "spawn": "{name} si erge sulle Alture di Thornpeak!"
     },
+    "auth": {
+      "forgotPrompt": "Password dimenticata?",
+      "forgotTitle": "Reimposta la password",
+      "forgotHint": "Inserisci il tuo nome utente e invieremo un link di reimpostazione all’indirizzo e-mail registrato.",
+      "forgotUsername": "Nome utente",
+      "forgotSubmit": "Invia link di reimpostazione",
+      "forgotSent": "Se un account con quel nome utente ha un indirizzo e-mail registrato, abbiamo inviato un link di reimpostazione. Controlla la tua casella di posta.",
+      "forgotBack": "Torna all’accesso",
+      "resetTitle": "Scegli una nuova password",
+      "resetNewPassword": "Nuova password",
+      "resetConfirm": "Conferma la nuova password",
+      "resetSubmit": "Aggiorna password",
+      "resetDone": "La tua password è stata aggiornata. Ora puoi accedere.",
+      "resetMismatch": "Le password non coincidono.",
+      "resetErrInvalid": "Questo link di reimpostazione non è valido o è scaduto. Richiedine uno nuovo."
+    },
     "loot": {
       "chestTitle": "Scrigno"
     },
@@ -1297,6 +1322,8 @@ export const it_IT: EnTranslations = {
       "parcelsLabel": "Pacchi",
       "parcelsHint": "Clicca un oggetto nelle tue borse per allegarlo.",
       "removeParcelAria": "Rimuovi {item} dalla lettera",
+      "parcelQtyDecreaseAria": "Invia un {item} in meno",
+      "parcelQtyIncreaseAria": "Invia un {item} in più",
       "sendButton": "Invia lettera",
       "postageNote": "Affrancatura: {amount}. Il corvo vola per circa {seconds}s.",
       "arrivedBanner": "Il corvo è atterrato: posta da {name}.",
@@ -5634,6 +5661,102 @@ export const it_IT: EnTranslations = {
         "name": "Furia Ribollente",
         "description": "Entri in una furia ribollente, generando 20 punti rabbia. (talento del guerriero)"
       },
+      "crusader_strike": {
+        "name": "Assalto del Crociato",
+        "description": "Colpisce il bersaglio infliggendo danni dell’arma più {damage} danni sacri. (talento da paladino)"
+      },
+      "chain_heal": {
+        "name": "Cura concatenata",
+        "description": "Cura notevolmente un bersaglio alleato, poi rimbalza su un massimo di altri 2 alleati vicini, con il 50% di cure in meno a ogni rimbalzo. (Abilità distintiva di Rigenerazione)"
+      },
+      "metamorphosis": {
+        "name": "Metamorfosi",
+        "description": "Assumi potere demoniaco, aumentando armatura e potenza d’attacco per 20 s. (talento da stregone)"
+      },
+      "aura_surge": {
+        "name": "Ondata Radiosa",
+        "description": "Sovraccarica la tua aura, indurendoti con 160 armatura per 10 sec. (talento del Paladino)"
+      },
+      "holy_shock": {
+        "name": "Shock Sacro",
+        "description": "Colpisce un bersaglio alleato con energia Sacra, curandolo di {damage}. (firma Sacro)"
+      },
+      "holy_shield": {
+        "name": "Scudo Sacro",
+        "description": "Ti protegge con potere Sacro per 10 s, aumentando l’armatura di 90 e colpendo gli assalitori in mischia per 12 danni Sacri. (firma Protezione)"
+      },
+      "bestial_wrath": {
+        "name": "Ira Bestiale",
+        "description": "Ti spinge in una furia bestiale, aumentando la potenza d’attacco di 55 per 15 s. (firma Affinità Animale)"
+      },
+      "trueshot_aura": {
+        "name": "Aura di Precisione",
+        "description": "Ispira gli alleati vicini, aumentando la potenza d’attacco di 35 per 5 min. (firma Precisione)"
+      },
+      "wyvern_sting": {
+        "name": "Morso della Viverna",
+        "description": "Punzecchia il nemico a distanza, incapacitandolo per un massimo di 4 s. Qualsiasi danno interrompe l’effetto. (firma Sopravvivenza)"
+      },
+      "arcane_power": {
+        "name": "Potere Arcano",
+        "description": "Aumenta i danni magici del 20% e la celerità magica del 10% per 10 s. (firma Arcano)"
+      },
+      "combustion": {
+        "name": "Combustione",
+        "description": "Aumenta la probabilità di critico magico del 50% per 15 s. (firma Fuoco)"
+      },
+      "icy_veins": {
+        "name": "Vene Gelide",
+        "description": "Aumenta la celerità magica del 30% e impedisce l’interruzione e il contraccolpo dei lanci per 10 s. (firma Gelo)"
+      },
+      "cold_blood": {
+        "name": "Sangue Freddo",
+        "description": "Concentra il tuo intento omicida, così il tuo prossimo attacco è un colpo critico. (firma Assassinio)"
+      },
+      "blade_flurry": {
+        "name": "Vortice di Lame",
+        "description": "Scatena un turbine di lame, aumentando la velocità d’attacco del 20% per 12 s. (firma Combattimento)"
+      },
+      "hemorrhage": {
+        "name": "Emorragia",
+        "description": "Colpisce il nemico per danni dell’arma più {damage} e causa danni da sanguinamento per 12 s. Conferisce 1 punto combo. (firma Scaltrezza)"
+      },
+      "power_infusion": {
+        "name": "Infusione di Potere",
+        "description": "Infone potere in un bersaglio alleato, aumentando la potenza magica di 28 per 15 s. (firma Disciplina)"
+      },
+      "holy_nova": {
+        "name": "Nova Sacra",
+        "description": "Provoca un’esplosione di luce Sacra, curando gli alleati vicini di {damage} e danneggiando i nemici vicini. (firma Sacro)"
+      },
+      "shadowform": {
+        "name": "Forma d'Ombra",
+        "description": "Assume Forma d’Ombra, potenziando la magia d’ombra finché non cambi di nuovo. Lancia ancora per tornare alla forma normale. (firma Ombra)"
+      },
+      "elemental_mastery": {
+        "name": "Maestria Elementale",
+        "description": "Invoca la maestria elementale, rendendo istantaneo il tuo prossimo incantesimo. (firma Elementale)"
+      },
+      "siphon_life": {
+        "name": "Risucchio Vitale",
+        "description": "Risucchia vita dal nemico, infliggendo {damage} danni da Ombra in 30 s e curandoti per i danni inflitti. (firma Afflizione)"
+      },
+      "conflagrate": {
+        "name": "Conflagrazione",
+        "description": "Consuma il tuo Immolazione sul nemico per incendiarlo, infliggendo {damage} danni da Fuoco. (firma Distruzione)"
+      },
+      "moonkin_form": {
+        "name": "Forma di Lunagufo",
+        "description": "Assume Forma di Lunagufo, potenziando il lancio di incantesimi finché non cambi di nuovo. Lancia ancora per tornare alla forma normale. (firma Equilibrio)"
+      },
+      "feral_charge": {
+        "name": "Carica Ferina",
+        "description": "Carica un nemico e lo immobilizza per 1 s. Portata 8-25 m. (firma Aggressore Ferino)"
+      },
+      "swiftmend": {
+        "name": "Rapidità di Guarigione",
+        "description": "Consuma un effetto di cura periodica su un bersaglio alleato per curarlo di {damage}. (firma Guarigione)"
+      },
       "summon_imp": {
         "name": "Evoca Emberkin",
         "description": "Evoca un Emberkin al comando dello stregone. L'Emberkin scaglia Dardi di cenere contro i tuoi nemici a distanza. Evocare un nuovo demone congeda quello attuale. Puoi avere un solo demone alla volta."
@@ -5661,6 +5784,226 @@ export const it_IT: EnTranslations = {
       "summon_doomguard": {
         "name": "Evoca Wraithborn",
         "description": "Vincola un Wraithborn al tuo volere: un demone d'élite che scaglia da lontano ingenti danni d'Ombra. Un lungo tempo di recupero ne limita la potenza devastante. Evocare un nuovo demone congeda quello attuale. Puoi avere un solo demone alla volta."
+      },
+      "aspect_of_the_wild": {
+        "name": "Aspetto Zannaferina",
+        "description": "Inspira a vicini alleati con fuerza salvaje, aumentando potenza d’attacco durante 5 min. (talento da cacciatore)"
+      },
+      "avatar": {
+        "name": "Colosso",
+        "description": "Te transforma en un coloso y aumenta potenza d’attacco durante 20 s. (talento da guerriero)"
+      },
+      "avenging_wrath": {
+        "name": "Alavendetta",
+        "description": "Invoca poder vengador y aumenta potenza d’attacco y potenza magica durante 20 s. (talento da paladino)"
+      },
+      "berserk": {
+        "name": "Bruma Rossa",
+        "description": "Aumenta potenza d’attacco durante 15 s. (talento da druido)"
+      },
+      "bladestorm": {
+        "name": "Ciclone d’Acciaio",
+        "description": "Te convierte en una tormenta de acero que golpea a vicini nemici cada segundo por {damage}. (talento da guerriero)"
+      },
+      "razor_howl": {
+        "name": "Ululato tagliente",
+        "description": "Un grido che rallenta del 50% i nemici entro 15 m per 8 s. (Talento del guerriero)"
+      },
+      "stormthrow": {
+        "name": "Lancio tempestoso",
+        "description": "Scaglia la tua arma per stordire un bersaglio per 3 s. (Talento del guerriero)"
+      },
+      "reckless_vow": {
+        "name": "Voto spericolato",
+        "description": "Aumenta del 50% tutta la generazione di rabbia e del 20% la probabilità di colpo critico per 12 s. (Talento del guerriero)"
+      },
+      "red_banner": {
+        "name": "Stendardo rosso",
+        "description": "Tu e gli alleati vicini ottenete il 10% di velocità d’attacco e il 10% di danni per 20 s. (Talento del guerriero)"
+      },
+      "blink": {
+        "name": "Passo Baleno",
+        "description": "Te teletransporta 15 m hacia delante y rompe raíces. (talento da mago)"
+      },
+      "bloodlust": {
+        "name": "Tamburi di Guerra",
+        "description": "Lleva a vicini alleati al frenesí y aumenta su velocidad de ataque durante 15 s. (talento da sciamano)"
+      },
+      "chain_lightning": {
+        "name": "Fulmine Biforcuto",
+        "description": "Lanza relámpagos al área objetivo e inflige {damage} de daño a vicini nemici. (talento da sciamano)"
+      },
+      "chaos_bolt": {
+        "name": "Dardo della Rovina",
+        "description": "Lanza una descarga de fuego caótico que inflige {damage} de daño de Fuoco. (talento da stregone)"
+      },
+      "cloak_of_shadows": {
+        "name": "Manto d’Ombra",
+        "description": "Te envuelve en sombras y absorbe daño durante 5 s. (talento da ladro)"
+      },
+      "cone_of_cold": {
+        "name": "Spazzata Gelida",
+        "description": "Golpea a vicini nemici con escarcha e inflige {damage} de daño de Gelo. (talento da mago)"
+      },
+      "counter_shot": {
+        "name": "Tiro Ammutolente",
+        "description": "Interrompe il lancio e impedisce incantesimi di quella scuola per 4 s. (talento da cacciatore)"
+      },
+      "counterspell": {
+        "name": "Spezzaincanti",
+        "description": "Interrompe il lancio e impedisce incantesimi di quella scuola per 6 s. (talento da mago)"
+      },
+      "curse_of_exhaustion": {
+        "name": "Maleficio Plum beo",
+        "description": "Maldice a bersaglio y reduce su velocidad de movimiento un 30% durante 12 s. (talento da stregone)"
+      },
+      "death_coil": {
+        "name": "Spira Sepolcrale",
+        "description": "Golpea a bersaglio por {damage} de daño de Ombra y luego lo aterroriza durante 3 s. Esta versión no sana al lanzador. (talento da stregone)"
+      },
+      "deep_freeze": {
+        "name": "Gelo Morto",
+        "description": "Congela profundamente a bersaglio, inflige {damage} de daño de Gelo y lo aturde durante 4 s. (talento da mago)"
+      },
+      "desperate_prayer": {
+        "name": "Ultima Preghiera",
+        "description": "Te sana al instante por {damage}. (talento da sacerdote)"
+      },
+      "deterrence": {
+        "name": "Guardia Ispida",
+        "description": "Aumenta tu probabilità di schivata un 50% durante 10 s. (talento da cacciatore)"
+      },
+      "divine_shield": {
+        "name": "Custodia di Luce",
+        "description": "Te protege con poder sagrado y absorbe una enorme cantidad de daño durante 8 s. (talento da paladino)"
+      },
+      "earthbind": {
+        "name": "Terra Avvinghiante",
+        "description": "Ata a la tierra a vicini nemici y los inmoviliza durante 2 s. (talento da sciamano)"
+      },
+      "evocation": {
+        "name": "Pozzo d’Etere",
+        "description": "Restaura mana rápidamente. (talento da mago)"
+      },
+      "frenzied_regeneration": {
+        "name": "Rammendo Selvaggio",
+        "description": "Regenera salud durante 10 s. Solo en Forma de oso. (talento da druido)"
+      },
+      "frost_trap": {
+        "name": "Trappola di Brina",
+        "description": "Congela a los nemici en el área objetivo durante 3 s. (talento da cacciatore)"
+      },
+      "ghostly_strike": {
+        "name": "Colpo Spettrale",
+        "description": "Golpea a bersaglio por daño de arma más {damage} y aumenta brevemente la evasión. Otorga 1 punto de combo. (talento da ladro)"
+      },
+      "hammer_of_wrath": {
+        "name": "Martello Rintoccante",
+        "description": "Lanza un martillo sagrado a un enemigo herido e inflige {damage} de daño de Sacro. Solo se usa por debajo del 20% de salud. (talento da paladino)"
+      },
+      "healing_stream": {
+        "name": "Fonte Viva",
+        "description": "Restaura a bersaglio alleato durante 12 s. (talento da sciamano)"
+      },
+      "heroic_leap": {
+        "name": "Balzo di Guerra",
+        "description": "Saltas al área objetivo e infliges {damage} de daño Fisico a vicini nemici. (talento da guerriero)"
+      },
+      "holy_wrath": {
+        "name": "Ira del Santo",
+        "description": "Desata poder sagrado e inflige {damage} de daño a vicini nemici. (talento da paladino)"
+      },
+      "howl_of_terror": {
+        "name": "Ululato del Terrore",
+        "description": "Aterroriza a vicini nemici hasta 3 s. El daño puede romper el efecto. (talento da stregone)"
+      },
+      "ice_block": {
+        "name": "Bara Fredda",
+        "description": "Te encierra en hielo y absorbe una enorme cantidad de daño durante 8 s. (talento da mago)"
+      },
+      "inner_focus": {
+        "name": "Mente Quietata",
+        "description": "Hace que tu siguiente hechizo no tenga coste. Dura 60 s. (talento da sacerdote)"
+      },
+      "innervate": {
+        "name": "Linfa Vitale",
+        "description": "La linfa vivente sgorga in te per 10 sec, ripristinando 20 della tua risorsa attuale a ondate: mana, rabbia o energia; cambiare forma non la interrompe. (talento del Druido)"
+      },
+      "kick": {
+        "name": "Pedata",
+        "description": "Interrompe il lancio e impedisce incantesimi di quella scuola per 4 s. (talento da ladro)"
+      },
+      "last_stand": {
+        "name": "Undicesima Ora",
+        "description": "Aumenta temporalmente Tempra durante 15 s, aumentando la salud máxima. (talento da guerriero)"
+      },
+      "mend_pet": {
+        "name": "Rattoppo",
+        "description": "Sana a bersaglio alleato por {damage} durante 15 s. (talento da cacciatore)"
+      },
+      "meteor": {
+        "name": "Pietra Celeste",
+        "description": "Hace caer un meteoro en el área objetivo, inflige {damage} de daño de Fuoco y quema el suelo. (talento da mago)"
+      },
+      "mind_sear": {
+        "name": "Bruciamente",
+        "description": "Canaliza energía de Ombra en el área objetivo e inflige {damage} cada segundo a vicini nemici. (talento da sacerdote)"
+      },
+      "multi_shot": {
+        "name": "Tiro Sdoppiato",
+        "description": "Dispara varios proyectiles e inflige {damage} a vicini nemici. (talento da cacciatore)"
+      },
+      "prayer_of_healing": {
+        "name": "Cura del Coro",
+        "description": "Sana a vicini alleati por {damage}. (talento da sacerdote)"
+      },
+      "preparation": {
+        "name": "Contingenza",
+        "description": "Termina el tiempo de reutilización de Sprint, Evasión y Vanish. (talento da ladro)"
+      },
+      "presence_of_mind": {
+        "name": "Mente Rapida",
+        "description": "Hace instantáneo tu siguiente hechizo con tiempo de lanzamiento. Dura 60 s. (talento da mago)"
+      },
+      "psychic_scream": {
+        "name": "Urlo Psichico",
+        "description": "Aterroriza a vicini nemici hasta 4 s. El daño puede romper el efecto. (talento da sacerdote)"
+      },
+      "pummel": {
+        "name": "Pestaggio",
+        "description": "Interrompe il lancio e impedisce incantesimi di quella scuola per 4 s. (talento da guerriero)"
+      },
+      "rallying_cry": {
+        "name": "Adunata",
+        "description": "Lanza un grito de reunión y aumenta potenza d’attacco de vicini alleati durante 10 s. (talento da guerriero)"
+      },
+      "rebuke": {
+        "name": "Rimprovero",
+        "description": "Interrompe il lancio e impedisce incantesimi di quella scuola per 4 s. (talento da paladino)"
+      },
+      "shadowstep": {
+        "name": "Scivolo d’Ombra",
+        "description": "Das un paso entre las sombras hacia tu bersaglio. (talento da ladro)"
+      },
+      "shield_wall": {
+        "name": "Baluardo",
+        "description": "Alzas un muro de escudo y aumentas mucho la armatura durante 10 s. (talento da guerriero)"
+      },
+      "silence": {
+        "name": "Silenzio",
+        "description": "Silencia a bersaglio durante 4 s. (talento da sacerdote)"
+      },
+      "skull_bash": {
+        "name": "Testata",
+        "description": "Interrompe il lancio e impedisce incantesimi di quella scuola per 4 s. (talento da druido)"
+      },
+      "spell_lock": {
+        "name": "Ordine di Bavaglio",
+        "description": "Interrompe il lancio e impedisce incantesimi di quella scuola per 5 s. (talento da stregone)"
+      },
+      "tranquility": {
+        "name": "Canto della Radura",
+        "description": "Canaliza energía restauradora y sana a vicini alleati cada segundo. (talento da druido)"
       },
       "bear_charge": {
         "name": "Carica di Bruin",
@@ -5818,6 +6161,9 @@ export const it_IT: EnTranslations = {
       },
       "greyjaw_fang": {
         "name": "Zanna del vecchio Greyjaw"
+      },
+      "chunk_of_ore": {
+        "name": "Pezzo di minerale"
       },
       "weathered_ledger_page": {
         "name": "Pagina di registro logora"
@@ -6900,49 +7246,49 @@ export const it_IT: EnTranslations = {
         "name": "Elmo del terrore Bonewrought"
       },
       "crownforged_dreadhelm_heroic": {
-        "name": "Bonewrought Dreadhelm"
+        "name": "Elmo del terrore Bonewrought"
       },
       "crownforged_warspaulders": {
         "name": "Spallacci da guerra Bonewrought"
       },
       "crownforged_warspaulders_heroic": {
-        "name": "Bonewrought Warspaulders"
+        "name": "Spallacci da guerra Bonewrought"
       },
       "nighttalon_crown": {
         "name": "Corona Direfang"
       },
       "nighttalon_crown_heroic": {
-        "name": "Direfang Crown"
+        "name": "Corona Direfang"
       },
       "nighttalon_shoulderguards": {
         "name": "Guardaspalle Direfang"
       },
       "nighttalon_shoulderguards_heroic": {
-        "name": "Direfang Shoulderguards"
+        "name": "Guardaspalle Direfang"
       },
       "soulflame_cowl": {
         "name": "Cappuccio Wraithfire"
       },
       "soulflame_cowl_heroic": {
-        "name": "Wraithfire Cowl"
+        "name": "Cappuccio Wraithfire"
       },
       "soulflame_mantle": {
         "name": "Manto Wraithfire"
       },
       "soulflame_mantle_heroic": {
-        "name": "Wraithfire Mantle"
+        "name": "Manto Wraithfire"
       },
       "stormcallers_crown": {
         "name": "Corona Galecall"
       },
       "stormcallers_crown_heroic": {
-        "name": "Galecall Crown"
+        "name": "Corona Galecall"
       },
       "stormcallers_spaulders": {
         "name": "Spallacci Galecall"
       },
       "stormcallers_spaulders_heroic": {
-        "name": "Galecall Spaulders"
+        "name": "Spallacci Galecall"
       },
       "unknown_alien_weaponry": {
         "name": "Armamento alieno sconosciuto"
@@ -7193,13 +7539,13 @@ export const it_IT: EnTranslations = {
         "name": "Guardia reale risorta"
       },
       "nythraxis_heroic_warrior_add": {
-        "name": "Aldren, Deathless Warguard"
+        "name": "Aldren, Guardiaguerra senza morte"
       },
       "nythraxis_heroic_priest_add": {
-        "name": "Malric, Deathless Hierophant"
+        "name": "Malric, Ierofante senza morte"
       },
       "nythraxis_heroic_rogue_add": {
-        "name": "Voss, Deathless Knife"
+        "name": "Voss, Lama senza morte"
       },
       "nythraxis_scourge_of_thornpeak": {
         "name": "Nythraxis, Flagello di Thornpeak"
@@ -7529,6 +7875,16 @@ export const it_IT: EnTranslations = {
       }
     },
     "quests": {
+      "q_prof_intro": {
+        "title": "Un mestiere per ogni mano",
+        "text": "Ogni anima di Eastbrook pratica un mestiere oltre alla spada, {playerName}. Ci sono filoni di minerale sparsi attorno alla città, quindi impugna un piccone e portami 5 pezzi. Estraili di persona; saprò riconoscere la differenza.",
+        "completion": "Vedi? Minerale nella borsa e calli sulle mani. Continua a estrarre, tagliare legna e raccogliere erbe lungo le strade e, quando torni in città, ricorda il tabellone delle Priorità della città vicino al mercato e il banco da lavoro lì accanto. In tutto questo ti aspetta un mestiere onesto, se lo desideri.",
+        "objectives": {
+          "0": {
+            "label": "Pezzo di minerale"
+          }
+        }
+      },
       "q_wolves": {
         "title": "Lupi alla porta",
         "text": "I lupi della foresta assaltano la strada del nord, {playerName}. Uccidine 8 prima che un altro carro sparisca tra i pini.",

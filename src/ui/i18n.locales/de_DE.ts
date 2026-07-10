@@ -1478,6 +1478,9 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'game.talents.title': 'Talente',
   'game.talents.classTab': 'Klasse',
   'game.talents.specTab': 'Spezialisierung',
+  'game.talents.choicesTab': 'Entscheidungen',
+  'game.talents.rowUnlockToast': 'Neue Talentwahl verfügbar!',
+  'game.talents.rowUnlocks': 'Wird auf Stufe {level} freigeschaltet',
   'game.talents.available': 'Verfügbar',
   'game.talents.spent': 'Ausgegeben',
   'game.talents.pointSource':
@@ -2021,7 +2024,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hud.core.mobileSocial': 'Soziales',
   'hud.core.mobileArena': 'Arena',
   'hud.core.mobileMenu': 'Menü',
-  'hud.core.mobileSettings': 'Einstellungen',
   'hud.core.mobileUse': 'Benutzen',
   'hud.core.mobileMeters': 'Anzeigen',
   'hud.core.mobileMap': 'Karte',
@@ -3144,8 +3146,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.bash.name': 'Erschüttern',
   'entities.abilities.bash.description': 'Betäubt das Ziel 2 Sek. lang. Nur in Bruin Form.',
   'entities.abilities.faerie_fire.name': 'Witchlight',
-  'entities.abilities.faerie_fire.description':
-    'Verringert die Rüstung des Ziels 40 Sek. lang um {damage}%. Nicht mit Rüstungsspalter kumulierbar.',
   'entities.abilities.hibernate.name': 'Schlummer',
   'entities.abilities.hibernate.description':
     'Versetzt das Ziel bis zu 8 Sek. in tiefen Schlaf. Jeglicher Schaden weckt es auf.',
@@ -3215,6 +3215,226 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.revive_pet.name': 'Begleiter wiederbeleben',
   'entities.abilities.revive_pet.description':
     'Belebt deinen toten Begleiter wieder und ruft ihn an deine Seite zurück.',
+  'entities.abilities.aura_surge.name': 'Strahlende Woge',
+  'entities.abilities.aura_surge.description':
+    'Überlädt Eure Aura und härtet Euch mit 160 Rüstung für 10 Sek. (Paladintalent)',
+  'entities.abilities.holy_shock.name': 'Heiliger Schock',
+  'entities.abilities.holy_shock.description':
+    'Schockt ein freundliches Ziel mit Heiliger Energie und heilt es um {damage}. (Heilig-Signatur)',
+  'entities.abilities.holy_shield.name': 'Heiliger Schild',
+  'entities.abilities.holy_shield.description':
+    'Schützt Euch 10 Sek. lang mit Heiliger Macht, erhöht die Rüstung um 90 und trifft Nahkampfangreifer mit 12 Heiligschaden. (Schutz-Signatur)',
+  'entities.abilities.bestial_wrath.name': 'Zorn des Wildtiers',
+  'entities.abilities.bestial_wrath.description':
+    'Versetzt Euch in einen bestialischen Zorn und erhöht die Angriffskraft 15 Sek. lang um 55. (Tierherrschafts-Signatur)',
+  'entities.abilities.trueshot_aura.name': 'Aura des Volltreffers',
+  'entities.abilities.trueshot_aura.description':
+    'Inspiriert nahe Verbündete und erhöht die Angriffskraft 5 Min. lang um 35. (Treffsicherheits-Signatur)',
+  'entities.abilities.wyvern_sting.name': 'Stich des Flügeldrachen',
+  'entities.abilities.wyvern_sting.description':
+    'Sticht den Gegner aus der Distanz und macht ihn bis zu 4 Sek. lang handlungsunfähig. Jeder Schaden bricht den Effekt. (Überlebens-Signatur)',
+  'entities.abilities.arcane_power.name': 'Arkane Macht',
+  'entities.abilities.arcane_power.description':
+    'Erhöht Zauberschaden um 20% und Zaubertempo um 10% für 10 Sek. (Arkan-Signatur)',
+  'entities.abilities.combustion.name': 'Verbrennung',
+  'entities.abilities.combustion.description':
+    'Erhöht die kritische Zaubertrefferchance 15 Sek. lang um 50%. (Feuer-Signatur)',
+  'entities.abilities.icy_veins.name': 'Eisige Adern',
+  'entities.abilities.icy_veins.description':
+    'Erhöht das Zaubertempo 10 Sek. lang um 30% und verhindert Unterbrechung sowie Zauberzeitverlust. (Frost-Signatur)',
+  'entities.abilities.cold_blood.name': 'Kaltblütigkeit',
+  'entities.abilities.cold_blood.description':
+    'Bündelt Eure Mordlust, sodass Euer nächster Angriff ein kritischer Treffer ist. (Meucheln-Signatur)',
+  'entities.abilities.blade_flurry.name': 'Klingenwirbel',
+  'entities.abilities.blade_flurry.description':
+    'Entfesselt einen Klingenwirbel und erhöht das Angriffstempo 12 Sek. lang um 20%. (Kampf-Signatur)',
+  'entities.abilities.hemorrhage.name': 'Blutsturz',
+  'entities.abilities.hemorrhage.description':
+    'Trifft den Gegner für Waffenschaden plus {damage} und verursacht 12 Sek. lang Blutungsschaden. Gewährt 1 Combopunkt. (Täuschungs-Signatur)',
+  'entities.abilities.power_infusion.name': 'Machtinfusion',
+  'entities.abilities.power_infusion.description':
+    'Erfüllt ein freundliches Ziel mit Macht und erhöht seine Zaubermacht 15 Sek. lang um 28. (Disziplin-Signatur)',
+  'entities.abilities.holy_nova.name': 'Heilige Nova',
+  'entities.abilities.holy_nova.description':
+    'Verursacht eine Explosion Heiligen Lichts, heilt nahe Verbündete um {damage} und schädigt nahe Gegner. (Heilig-Signatur)',
+  'entities.abilities.shadowform.name': 'Schattenform',
+  'entities.abilities.shadowform.description':
+    'Nehmt Schattenform an und verstärkt Schattenmagie, bis Ihr zurückwechselt. Erneut wirken, um zur normalen Gestalt zurückzukehren. (Schatten-Signatur)',
+  'entities.abilities.elemental_mastery.name': 'Elementarbeherrschung',
+  'entities.abilities.elemental_mastery.description':
+    'Ruft Elementarbeherrschung an und macht Euren nächsten Zauber sofort wirkbar. (Elementar-Signatur)',
+  'entities.abilities.siphon_life.name': 'Lebensentzug',
+  'entities.abilities.siphon_life.description':
+    'Entzieht dem Gegner Leben, verursacht über 30 Sek. {damage} Schattenschaden und heilt Euch um den verursachten Schaden. (Gebrechen-Signatur)',
+  'entities.abilities.conflagrate.name': 'Feuersbrunst',
+  'entities.abilities.conflagrate.description':
+    'Verbraucht Euer Feuerbrand auf dem Gegner, um ihn zu entzünden und {damage} Feuerschaden zu verursachen. (Zerstörungs-Signatur)',
+  'entities.abilities.moonkin_form.name': 'Mondkingestalt',
+  'entities.abilities.moonkin_form.description':
+    'Nehmt Mondkingestalt an und verstärkt Eure Zauber, bis Ihr zurückwechselt. Erneut wirken, um zur normalen Gestalt zurückzukehren. (Gleichgewichts-Signatur)',
+  'entities.abilities.feral_charge.name': 'Wilde Attacke',
+  'entities.abilities.feral_charge.description':
+    'Stürmt einen Gegner an und wurzelt ihn 1 Sek. lang. 8-25 m Reichweite. (Wildheits-Signatur)',
+  'entities.abilities.swiftmend.name': 'Rasche Heilung',
+  'entities.abilities.swiftmend.description':
+    'Verbraucht einen Heilung-über-Zeit-Effekt auf einem freundlichen Ziel, um es um {damage} zu heilen. (Wiederherstellungs-Signatur)',
+  'entities.abilities.crusader_strike.name': 'Kreuzfahrerstoß',
+  'entities.abilities.crusader_strike.description':
+    'Trifft das Ziel für Waffenschaden plus {damage} Heiligschaden. (Paladin-Talent)',
+  'entities.abilities.metamorphosis.name': 'Metamorphose',
+  'entities.abilities.metamorphosis.description':
+    'Nehmt dämonische Macht an und erhöht 20 Sek. lang Rüstung und Angriffskraft. (Hexenmeister-Talent)',
+  'entities.abilities.aspect_of_the_wild.name': 'Wildfanggewand',
+  'entities.abilities.aspect_of_the_wild.description':
+    'Inspira a nahe Verbündete con fuerza salvaje, aumentando Angriffskraft durante 5 Min.. (Jäger-Talent)',
+  'entities.abilities.avatar.name': 'Koloss',
+  'entities.abilities.avatar.description':
+    'Te transforma en un coloso y aumenta Angriffskraft durante 20 Sek.. (Krieger-Talent)',
+  'entities.abilities.avenging_wrath.name': 'Zornschwinge',
+  'entities.abilities.avenging_wrath.description':
+    'Invoca poder vengador y aumenta Angriffskraft y Zaubermacht durante 20 Sek.. (Paladin-Talent)',
+  'entities.abilities.berserk.name': 'Roter Dunst',
+  'entities.abilities.berserk.description':
+    'Aumenta Angriffskraft durante 15 Sek.. (Druiden-Talent)',
+  'entities.abilities.bladestorm.name': 'Stahlzyklon',
+  'entities.abilities.bladestorm.description':
+    'Te convierte en una tormenta de acero que golpea a nahe Gegner cada segundo por {damage}. (Krieger-Talent)',
+  'entities.abilities.blink.name': 'Flimmerschritt',
+  'entities.abilities.blink.description':
+    'Te teletransporta 15 m hacia delante y rompe raíces. (Magier-Talent)',
+  'entities.abilities.bloodlust.name': 'Kriegstrommeln',
+  'entities.abilities.bloodlust.description':
+    'Lleva a nahe Verbündete al frenesí y aumenta su velocidad de ataque durante 15 Sek.. (Schamanen-Talent)',
+  'entities.abilities.chain_lightning.name': 'Gabelblitz',
+  'entities.abilities.chain_lightning.description':
+    'Lanza relámpagos al área objetivo e inflige {damage} de daño a nahe Gegner. (Schamanen-Talent)',
+  'entities.abilities.chaos_bolt.name': 'Verderbensblitz',
+  'entities.abilities.chaos_bolt.description':
+    'Lanza una descarga de fuego caótico que inflige {damage} de daño de Feuer. (Hexenmeister-Talent)',
+  'entities.abilities.cloak_of_shadows.name': 'Schattenmantel',
+  'entities.abilities.cloak_of_shadows.description':
+    'Te envuelve en sombras y absorbe daño durante 5 Sek.. (Schurken-Talent)',
+  'entities.abilities.cone_of_cold.name': 'Frostfeger',
+  'entities.abilities.cone_of_cold.description':
+    'Golpea a nahe Gegner con escarcha e inflige {damage} de daño de Frost. (Magier-Talent)',
+  'entities.abilities.counter_shot.name': 'Dämpfender Schuss',
+  'entities.abilities.counter_shot.description':
+    'Unterbricht das Wirken und verhindert 4 Sek. lang Zauber dieser Schule. (Jäger-Talent)',
+  'entities.abilities.counterspell.name': 'Zauberbruch',
+  'entities.abilities.counterspell.description':
+    'Unterbricht das Wirken und verhindert 6 Sek. lang Zauber dieser Schule. (Magier-Talent)',
+  'entities.abilities.curse_of_exhaustion.name': 'Bleierner Fluch',
+  'entities.abilities.curse_of_exhaustion.description':
+    'Maldice a Ziel y reduce su velocidad de movimiento un 30% durante 12 Sek.. (Hexenmeister-Talent)',
+  'entities.abilities.death_coil.name': 'Grabspirale',
+  'entities.abilities.death_coil.description':
+    'Golpea a Ziel por {damage} de daño de Schatten y luego lo aterroriza durante 3 Sek.. Esta versión no sana al lanzador. (Hexenmeister-Talent)',
+  'entities.abilities.deep_freeze.name': 'Totenfrost',
+  'entities.abilities.deep_freeze.description':
+    'Congela profundamente a Ziel, inflige {damage} de daño de Frost y lo aturde durante 4 Sek.. (Magier-Talent)',
+  'entities.abilities.desperate_prayer.name': 'Letztes Gebet',
+  'entities.abilities.desperate_prayer.description':
+    'Te sana al instante por {damage}. (Priester-Talent)',
+  'entities.abilities.deterrence.name': 'Borstenwacht',
+  'entities.abilities.deterrence.description':
+    'Aumenta tu Ausweichchance un 50% durante 10 Sek.. (Jäger-Talent)',
+  'entities.abilities.divine_shield.name': 'Lichtwacht',
+  'entities.abilities.divine_shield.description':
+    'Te protege con poder sagrado y absorbe una enorme cantidad de daño durante 8 Sek.. (Paladin-Talent)',
+  'entities.abilities.earthbind.name': 'Greifende Erde',
+  'entities.abilities.earthbind.description':
+    'Ata a la tierra a nahe Gegner y los inmoviliza durante 2 Sek.. (Schamanen-Talent)',
+  'entities.abilities.evocation.name': 'Ätherbrunnen',
+  'entities.abilities.evocation.description': 'Restaura Mana rápidamente. (Magier-Talent)',
+  'entities.abilities.frenzied_regeneration.name': 'Wilde Heilung',
+  'entities.abilities.frenzied_regeneration.description':
+    'Regenera salud durante 10 Sek.. Solo en Forma de oso. (Druiden-Talent)',
+  'entities.abilities.frost_trap.name': 'Reifschlinge',
+  'entities.abilities.frost_trap.description':
+    'Congela a los Gegner en el área objetivo durante 3 Sek.. (Jäger-Talent)',
+  'entities.abilities.ghostly_strike.name': 'Geisterschlag',
+  'entities.abilities.ghostly_strike.description':
+    'Golpea a Ziel por daño de arma más {damage} y aumenta brevemente la evasión. Otorga 1 punto de combo. (Schurken-Talent)',
+  'entities.abilities.hammer_of_wrath.name': 'Läutender Hammer',
+  'entities.abilities.hammer_of_wrath.description':
+    'Lanza un martillo sagrado a un enemigo herido e inflige {damage} de daño de Heilig. Solo se usa por debajo del 20% de salud. (Paladin-Talent)',
+  'entities.abilities.healing_stream.name': 'Quellbrunnen',
+  'entities.abilities.healing_stream.description':
+    'Restaura a freundliches Ziel durante 12 Sek.. (Schamanen-Talent)',
+  'entities.abilities.heroic_leap.name': 'Kriegssprung',
+  'entities.abilities.heroic_leap.description':
+    'Saltas al área objetivo e infliges {damage} de daño physischen a nahe Gegner. (Krieger-Talent)',
+  'entities.abilities.holy_wrath.name': 'Heiligenzorn',
+  'entities.abilities.holy_wrath.description':
+    'Desata poder sagrado e inflige {damage} de daño a nahe Gegner. (Paladin-Talent)',
+  'entities.abilities.howl_of_terror.name': 'Schreckensheulen',
+  'entities.abilities.howl_of_terror.description':
+    'Aterroriza a nahe Gegner hasta 3 Sek.. El daño puede romper el efecto. (Hexenmeister-Talent)',
+  'entities.abilities.ice_block.name': 'Kalter Sarg',
+  'entities.abilities.ice_block.description':
+    'Te encierra en hielo y absorbe una enorme cantidad de daño durante 8 Sek.. (Magier-Talent)',
+  'entities.abilities.inner_focus.name': 'Stiller Geist',
+  'entities.abilities.inner_focus.description':
+    'Hace que tu siguiente hechizo no tenga coste. Dura 60 Sek.. (Priester-Talent)',
+  'entities.abilities.innervate.name': 'Lebenssaft',
+  'entities.abilities.innervate.description':
+    'Lebendiger Pflanzensaft quillt 10 Sek. lang in Euch auf und stellt in Wellen 20 Eurer aktuellen Ressource wieder her: Mana, Wut oder Energie; Gestaltwandel unterbricht ihn nicht. (Druidentalent)',
+  'entities.abilities.kick.name': 'Stiefeltritt',
+  'entities.abilities.kick.description':
+    'Unterbricht das Wirken und verhindert 4 Sek. lang Zauber dieser Schule. (Schurken-Talent)',
+  'entities.abilities.last_stand.name': 'Elfte Stunde',
+  'entities.abilities.last_stand.description':
+    'Aumenta temporalmente Ausdauer durante 15 Sek., aumentando la salud máxima. (Krieger-Talent)',
+  'entities.abilities.mend_pet.name': 'Zusammenflicken',
+  'entities.abilities.mend_pet.description':
+    'Sana a freundliches Ziel por {damage} durante 15 Sek.. (Jäger-Talent)',
+  'entities.abilities.meteor.name': 'Himmelsstein',
+  'entities.abilities.meteor.description':
+    'Hace caer un meteoro en el área objetivo, inflige {damage} de daño de Feuer y quema el suelo. (Magier-Talent)',
+  'entities.abilities.mind_sear.name': 'Gedankenbrand',
+  'entities.abilities.mind_sear.description':
+    'Canaliza energía de Schatten en el área objetivo e inflige {damage} cada segundo a nahe Gegner. (Priester-Talent)',
+  'entities.abilities.multi_shot.name': 'Spaltschuss',
+  'entities.abilities.multi_shot.description':
+    'Dispara varios proyectiles e inflige {damage} a nahe Gegner. (Jäger-Talent)',
+  'entities.abilities.prayer_of_healing.name': 'Chorheilung',
+  'entities.abilities.prayer_of_healing.description':
+    'Sana a nahe Verbündete por {damage}. (Priester-Talent)',
+  'entities.abilities.preparation.name': 'Notfallplan',
+  'entities.abilities.preparation.description':
+    'Termina el tiempo de reutilización de Sprint, Evasión y Vanish. (Schurken-Talent)',
+  'entities.abilities.presence_of_mind.name': 'Rasender Geist',
+  'entities.abilities.presence_of_mind.description':
+    'Hace instantáneo tu siguiente hechizo con tiempo de lanzamiento. Dura 60 Sek.. (Magier-Talent)',
+  'entities.abilities.psychic_scream.name': 'Schreckensschrei',
+  'entities.abilities.psychic_scream.description':
+    'Aterroriza a nahe Gegner hasta 4 Sek.. El daño puede romper el efecto. (Priester-Talent)',
+  'entities.abilities.pummel.name': 'Prügel',
+  'entities.abilities.pummel.description':
+    'Unterbricht das Wirken und verhindert 4 Sek. lang Zauber dieser Schule. (Krieger-Talent)',
+  'entities.abilities.rallying_cry.name': 'Sammelruf',
+  'entities.abilities.rallying_cry.description':
+    'Lanza un grito de reunión y aumenta Angriffskraft de nahe Verbündete durante 10 Sek.. (Krieger-Talent)',
+  'entities.abilities.rebuke.name': 'Tadel',
+  'entities.abilities.rebuke.description':
+    'Unterbricht das Wirken und verhindert 4 Sek. lang Zauber dieser Schule. (Paladin-Talent)',
+  'entities.abilities.shadowstep.name': 'Schattengleiten',
+  'entities.abilities.shadowstep.description':
+    'Das un paso entre las sombras hacia tu Ziel. (Schurken-Talent)',
+  'entities.abilities.shield_wall.name': 'Bollwerk',
+  'entities.abilities.shield_wall.description':
+    'Alzas un muro de escudo y aumentas mucho la Rüstung durante 10 Sek.. (Krieger-Talent)',
+  'entities.abilities.silence.name': 'Stille',
+  'entities.abilities.silence.description': 'Silencia a Ziel durante 4 Sek.. (Priester-Talent)',
+  'entities.abilities.skull_bash.name': 'Schädelstoß',
+  'entities.abilities.skull_bash.description':
+    'Unterbricht das Wirken und verhindert 4 Sek. lang Zauber dieser Schule. (Druiden-Talent)',
+  'entities.abilities.spell_lock.name': 'Knebelbefehl',
+  'entities.abilities.spell_lock.description':
+    'Unterbricht das Wirken und verhindert 5 Sek. lang Zauber dieser Schule. (Hexenmeister-Talent)',
+  'entities.abilities.tranquility.name': 'Hainlied',
+  'entities.abilities.tranquility.description':
+    'Canaliza energía restauradora y sana a nahe Verbündete cada segundo. (Druiden-Talent)',
   'entities.items.worn_sword.name': 'Abgenutztes Kurzschwert',
   'entities.items.gnarled_staff.name': 'Mooreichenstab',
   'entities.items.rusty_dagger.name': 'Rostiger Dolch',
@@ -4575,12 +4795,19 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'entities.items.kingsbane_last_oath.name': 'Thronebane, letzter Eid von Thornpeak',
   'entities.items.kingsbane_last_oath_heroic.name': 'Thronebane, letzter Eid von Thornpeak',
   'entities.items.crownforged_dreadhelm.name': 'Bonewrought-Schreckenshelm',
+  'entities.items.crownforged_dreadhelm_heroic.name': 'Bonewrought-Schreckenshelm',
   'entities.items.crownforged_warspaulders.name': 'Bonewrought-Kriegsschultern',
+  'entities.items.crownforged_warspaulders_heroic.name': 'Bonewrought-Kriegsschultern',
   'entities.items.nighttalon_crown.name': 'Direfang-Krone',
+  'entities.items.nighttalon_crown_heroic.name': 'Direfang-Krone',
   'entities.items.nighttalon_shoulderguards.name': 'Direfang-Schulterschützer',
+  'entities.items.nighttalon_shoulderguards_heroic.name': 'Direfang-Schulterschützer',
   'entities.items.soulflame_cowl.name': 'Wraithfire-Kapuze',
+  'entities.items.soulflame_cowl_heroic.name': 'Wraithfire-Kapuze',
   'entities.items.soulflame_mantle.name': 'Wraithfire-Mantel',
+  'entities.items.soulflame_mantle_heroic.name': 'Wraithfire-Mantel',
   'entities.items.stormcallers_crown.name': 'Galecall-Krone',
+  'entities.items.stormcallers_crown_heroic.name': 'Galecall-Krone',
   'entities.items.crownforged_gauntlets.name': 'Kronengeschmiedete Stulpen',
   'entities.items.nighttalon_grips.name': 'Nachtklauengriffe',
   'entities.items.soulflame_gloves.name': 'Seelenflammenhandschuhe',
@@ -4593,6 +4820,7 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.thunzharr_stormling.name': 'Geweckter Sturmling',
   'hudChrome.worldBoss.spawn': '{name} erhebt sich über den Thornpeak-Höhen!',
   'entities.items.stormcallers_spaulders.name': 'Galecall-Schulterplatten',
+  'entities.items.stormcallers_spaulders_heroic.name': 'Galecall-Schulterplatten',
   'hud.chat.context.convertToRaid': 'In Schlachtzug umwandeln',
   'hud.chat.context.convertToParty': 'In Gruppe umwandeln',
   'hudChrome.raidConvert.leaderOnly': 'Nur der Schlachtzugsleiter darf in eine Gruppe umwandeln.',
@@ -6167,6 +6395,8 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.wyrmshadow.bonus2': 'Erhöht Angriffskraft um 40.',
   'entities.itemSets.wyrmshadow.bonus3':
     'Erhöht Beweglichkeit um 15 und kritische Trefferchance um 2%.',
+  'hudChrome.itemHeroicTag': '[HEROISCH]',
+  'hudChrome.itemSoulbound': 'Seelengebunden',
   'hudChrome.itemSet.header': '{name} ({have}/{total})',
   'hudChrome.itemSet.bonusLine': '({pieces}) {bonus}',
   'hud.combat.floatingResist': 'Widerstand',
@@ -6646,12 +6876,18 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.bank.withdrawQuantityConfirm': 'Entnehmen',
   'hudChrome.bank.withdrawQuantityInput': 'Zu entnehmende Menge',
   'hudChrome.bank.withdrawQuantityTitle': '{item} entnehmen',
+  'hud.core.mobileSettings': 'Einstellungen',
+  'entities.abilities.faerie_fire.description':
+    'Verringert die Rüstung des Ziels 40 Sek. lang um {damage}%. Nicht mit Rüstungsspalter kumulierbar.',
   'abilityUi.tooltip.selfOnly': 'Nur auf Euch selbst',
   'itemUi.lootRoll.rolled': '{answered}/{total} gewürfelt',
   'entities.abilities.sunder_armor.description':
     'Spaltet die Rüstung des Ziels und verringert sie pro Anwendung um {damage}%. Stapelt sich bis zu 5-mal. Erzeugt sehr viel Bedrohung.',
   'entities.mobs.training_dummy.name': 'Trainingspuppe',
   'entities.mobs.yumi_cat.name': 'Yumi',
+  'entities.mobs.nythraxis_heroic_priest_add.name': 'Malric, Todloser Hierophant',
+  'entities.mobs.nythraxis_heroic_rogue_add.name': 'Voss, Todlose Klinge',
+  'entities.mobs.nythraxis_heroic_warrior_add.name': 'Aldren, Todlose Kriegswache',
   'guide.arenaPage.yumiBody':
     'Yumi beschützen ist ein Team-Zielmodus, der in einem Labyrinth ausgetragen wird: Jede Seite bewacht ihren eigenen Katzenbegleiter und jagt zugleich den der Gegner. Immer wieder blinzeln beide Katzen in neue Ecken des Labyrinths, sodass der Kampf zwischen Verteidigen, Jagen und dem Wettlauf, sie erneut aufzuspüren, hin und her schwingt. Melde dich als drei gegen drei oder fünf gegen fünf an; wer im Kampf fällt, muss nur einen Moment pausieren.',
   'guide.arenaPage.yumiHeading': 'Yumi beschützen',
@@ -6697,4 +6933,49 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'yumi.queue.leave': 'Ihr verlasst die Warteschlange für Yumi beschützen.',
   'yumi.queue.teamLeave': 'Euer Team verlässt die Warteschlange für Yumi beschützen.',
   'yumi.respawn.title': 'AM BODEN!',
+  'entities.abilities.chain_heal.name': 'Kettenheilung',
+  'entities.abilities.chain_heal.description':
+    'Heilt ein verbündetes Ziel stark und springt dann auf bis zu 2 weitere Verbündete in der Nähe über. Mit jedem Sprung wird 50 % weniger geheilt. (Signatur von Wiederherstellung)',
+  'entities.abilities.razor_howl.name': 'Klingenheulen',
+  'entities.abilities.razor_howl.description':
+    'Ein Ruf, der Gegner im Umkreis von 15 m 8 Sek. lang um 50 % verlangsamt. (Kriegertalent)',
+  'entities.abilities.stormthrow.name': 'Sturmwurf',
+  'entities.abilities.stormthrow.description':
+    'Schleudert Eure Waffe, um ein Ziel 3 Sek. lang zu betäuben. (Kriegertalent)',
+  'entities.abilities.reckless_vow.name': 'Tollkühner Schwur',
+  'entities.abilities.reckless_vow.description':
+    'Erhöht 12 Sek. lang sämtliche Wuterzeugung um 50 % und die kritische Trefferchance um 20 %. (Kriegertalent)',
+  'entities.abilities.red_banner.name': 'Rotes Banner',
+  'entities.abilities.red_banner.description':
+    'Ihr und Verbündete in der Nähe erhaltet 20 Sek. lang 10 % Angriffstempo und 10 % Schaden. (Kriegertalent)',
+  'entities.items.chunk_of_ore.name': 'Erzbrocken',
+  'entities.quests.q_prof_intro.title': 'Ein Handwerk für jede Hand',
+  'entities.quests.q_prof_intro.text':
+    'Jede Seele in Eastbrook geht neben dem Schwert einem Handwerk nach, {playerName}. Rund um die Stadt liegen Erzadern verstreut. Nehmt also eine Spitzhacke und bringt mir 5 Brocken. Baut sie selbst ab; ich erkenne den Unterschied.',
+  'entities.quests.q_prof_intro.completion':
+    'Seht Ihr? Erz im Beutel und Schwielen an den Händen. Baut auf Euren Reisen weiter Erz ab, fällt Holz und sammelt Kräuter. Wenn Ihr wieder in der Stadt seid, denkt an die Tafel für den Stadtfokus beim Markt und an die Werkbank daneben. In all dem wartet ein ehrliches Handwerk, wenn Ihr es wollt.',
+  'entities.quests.q_prof_intro.objectives.0.label': 'Erzbrocken',
+  'game.talents.readout.rowsSummary':
+    'Talente: {head}, {picked}/{unlocked} Entscheidungsreihen gewählt.',
+  'hudChrome.fct.absorbed': '{amount} absorbiert',
+  'hudChrome.fct.cheap': 'Günstiger!',
+  'hudChrome.mailbox.parcelQtyDecreaseAria': 'Ein {item} weniger senden',
+  'hudChrome.mailbox.parcelQtyIncreaseAria': 'Ein {item} mehr senden',
+  'hudChrome.auth.forgotPrompt': 'Passwort vergessen?',
+  'hudChrome.auth.forgotTitle': 'Passwort zurücksetzen',
+  'hudChrome.auth.forgotHint':
+    'Gib deinen Benutzernamen ein und wir senden einen Link zum Zurücksetzen an die hinterlegte E-Mail-Adresse.',
+  'hudChrome.auth.forgotUsername': 'Benutzername',
+  'hudChrome.auth.forgotSubmit': 'Link zum Zurücksetzen senden',
+  'hudChrome.auth.forgotSent':
+    'Falls ein Konto mit diesem Benutzernamen eine E-Mail-Adresse hinterlegt hat, haben wir einen Link zum Zurücksetzen gesendet. Prüfe deinen Posteingang.',
+  'hudChrome.auth.forgotBack': 'Zurück zur Anmeldung',
+  'hudChrome.auth.resetTitle': 'Neues Passwort wählen',
+  'hudChrome.auth.resetNewPassword': 'Neues Passwort',
+  'hudChrome.auth.resetConfirm': 'Neues Passwort bestätigen',
+  'hudChrome.auth.resetSubmit': 'Passwort aktualisieren',
+  'hudChrome.auth.resetDone': 'Dein Passwort wurde aktualisiert. Du kannst dich jetzt anmelden.',
+  'hudChrome.auth.resetMismatch': 'Die Passwörter stimmen nicht überein.',
+  'hudChrome.auth.resetErrInvalid':
+    'Dieser Link zum Zurücksetzen ist ungültig oder abgelaufen. Fordere einen neuen an.',
 };

@@ -6,7 +6,7 @@
 // parity drives both world shapes to identical output.
 
 import { describe, expect, it, vi } from 'vitest';
-import { type AbilityDef, type ItemDef, MELEE_RANGE } from '../src/sim/types';
+import { type AbilityDef, type Aura, type ItemDef, MELEE_RANGE } from '../src/sim/types';
 import {
   ABILITY_ICON_PREFIX,
   type ActionBarAbility,
@@ -87,6 +87,7 @@ interface WorldOpts {
   gcdRemaining?: number;
   potionCdRemaining?: number;
   queuedOnSwing?: string | null;
+  auras?: Pick<Aura, 'kind' | 'value' | 'empowerAbilities'>[];
   playerPos?: { x: number; y: number; z: number };
   targetPos?: { x: number; y: number; z: number } | null;
   targetDead?: boolean;
@@ -104,6 +105,7 @@ function world(opts: WorldOpts = {}): ActionBarWorldInput {
       gcdRemaining: opts.gcdRemaining ?? 0,
       potionCdRemaining: opts.potionCdRemaining ?? 0,
       queuedOnSwing: opts.queuedOnSwing ?? null,
+      auras: opts.auras,
       pos: opts.playerPos ?? { x: 0, y: 0, z: 0 },
     },
     target: targetPos === null ? null : { dead: opts.targetDead ?? false, pos: targetPos },
@@ -258,6 +260,71 @@ describe('actionBarView: ability cooldown / usable / range / queued math', () =>
     );
     expect(view.tick(world({ queuedOnSwing: 'heroicStrike' })).slots[0].queued).toBe(true);
     expect(view.tick(world({ queuedOnSwing: null })).slots[0].queued).toBe(false);
+  });
+
+  it('marks only scoped empowered abilities when a next-cast aura names ability ids', () => {
+    const view = createActionBarView(
+      descriptor(
+        slot(1, { ability: ability('holy_fire', { cost: 10 }) }),
+        slot(2, { ability: ability('smite', { cost: 10 }) }),
+      ),
+      fakeDeps(),
+    );
+    const state = view.tick(
+      world({
+        auras: [
+          {
+            kind: 'next_cast_free',
+            value: 0,
+            empowerAbilities: ['holy_fire'],
+          },
+        ],
+      }),
+    );
+
+    expect(state.slots[0].empowered).toBe(true);
+    expect(state.slots[1].empowered).toBe(false);
+  });
+
+  it('lets unscoped next-cast auras empower every eligible ability slot', () => {
+    const view = createActionBarView(
+      descriptor(
+        slot(1, { ability: ability('fire_blast', { cost: 20 }) }),
+        slot(2, { ability: ability('battle_shout', { cost: 0 }) }),
+      ),
+      fakeDeps(),
+    );
+    const state = view.tick(world({ auras: [{ kind: 'next_cast_free', value: 0 }] }));
+
+    expect(state.slots[0].empowered).toBe(true);
+    expect(state.slots[1].empowered).toBe(false);
+  });
+
+  it('marks instant empowerment only on non-physical cast-time non-channel abilities', () => {
+    const view = createActionBarView(
+      descriptor(
+        slot(1, {
+          ability: ability('fireball', { cost: 20, castTime: 2.5, school: 'fire' }),
+        }),
+        slot(2, {
+          ability: ability('arcane_missiles', {
+            cost: 20,
+            castTime: 0,
+            channel: { duration: 3, ticks: 3 },
+            school: 'arcane',
+          }),
+        }),
+        slot(3, {
+          ability: ability('slam', { cost: 20, castTime: 1.5, school: 'physical' }),
+        }),
+      ),
+      fakeDeps(),
+    );
+    const state = view.tick(world({ auras: [{ kind: 'next_cast_instant', value: 0 }] }));
+
+    expect(state.slots[0].empowered).toBe(true);
+    expect(state.slots[1].empowered).toBe(false);
+    expect(state.slots[2].empowered).toBe(false);
   });
 });
 

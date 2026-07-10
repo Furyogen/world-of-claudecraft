@@ -144,7 +144,6 @@ describe('axe: talents window', () => {
           stage = s;
         },
         playerClass: () => 'warrior',
-        totalPoints: () => 31,
         currentAllocation: () => ({ ranks: {}, choices: {} }) as TalentAllocation,
         activeLoadout: () => -1,
         loadouts: () => [],

@@ -85,6 +85,9 @@ export const en_CA: EnTranslations = {
       "title": "Talents",
       "classTab": "Class",
       "specTab": "Specialization",
+      "choicesTab": "Choices",
+      "rowUnlockToast": "New talent choice available!",
+      "rowUnlocks": "Unlocks at level {level}",
       "available": "Available",
       "spent": "Spent",
       "pointSource": "Earn 1 talent point each level from level {first} to {cap}. Level up to get more points.",
@@ -143,6 +146,7 @@ export const en_CA: EnTranslations = {
         "noTree": "Your class has no talent tree yet.",
         "locked": "You have not unlocked talents yet — they begin at level {level}.",
         "noSpec": "no specialization",
+        "rowsSummary": "Talents: {head}, {picked}/{unlocked} choice rows picked.",
         "summary": "Talents: {head} — {spent}/{total} points spent ({breakdown}).",
         "breakdownClass": "Class {classPts}",
         "breakdownSpec": "Class {classPts}, {spec} {specPts}",
@@ -151,7 +155,6 @@ export const en_CA: EnTranslations = {
     }
   },
   "hudChrome": {
-    "itemHeroicTag": "[HEROIC]",
     "spectate": {
       "banner": "Spectating {name}"
     },
@@ -159,6 +162,10 @@ export const en_CA: EnTranslations = {
       "resurrectAtCorpse": "Resurrect at Corpse",
       "resurrectAtHealer": "The Pale Keeper (Keeper's Toll)",
       "spiritHealerAlive": "The Pale Keeper watches over the dead. You are still among the living."
+    },
+    "fct": {
+      "absorbed": "Absorbed {amount}",
+      "cheap": "Cheap!"
     },
     "emotes": {
       "wave": "Wave",
@@ -723,6 +730,8 @@ export const en_CA: EnTranslations = {
     "tips": {
       "joinChannels": "Tip: type /join world or /join lfg to chat with players across the world."
     },
+    "itemHeroicTag": "[HEROIC]",
+    "itemSoulbound": "Soulbound",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1068,6 +1077,22 @@ export const en_CA: EnTranslations = {
     "worldBoss": {
       "spawn": "{name} rises over Thornpeak Heights!"
     },
+    "auth": {
+      "forgotPrompt": "Forgot password?",
+      "forgotTitle": "Reset your password",
+      "forgotHint": "Enter your username and we will email a reset link to the address on file.",
+      "forgotUsername": "Username",
+      "forgotSubmit": "Send reset link",
+      "forgotSent": "If an account with that username has an email on file, we have sent a reset link. Check your inbox.",
+      "forgotBack": "Back to log in",
+      "resetTitle": "Choose a new password",
+      "resetNewPassword": "New password",
+      "resetConfirm": "Confirm new password",
+      "resetSubmit": "Update password",
+      "resetDone": "Your password has been updated. You can now log in.",
+      "resetMismatch": "The passwords do not match.",
+      "resetErrInvalid": "This reset link is invalid or has expired. Request a new one."
+    },
     "loot": {
       "chestTitle": "Chest"
     },
@@ -1297,6 +1322,8 @@ export const en_CA: EnTranslations = {
       "parcelsLabel": "Parcels",
       "parcelsHint": "Click an item in your bags to attach it.",
       "removeParcelAria": "Remove {item} from the letter",
+      "parcelQtyDecreaseAria": "Send one fewer {item}",
+      "parcelQtyIncreaseAria": "Send one more {item}",
       "sendButton": "Send letter",
       "postageNote": "Postage: {amount}. The raven flies for about {seconds}s.",
       "arrivedBanner": "The raven has landed: mail from {name}.",
@@ -5634,6 +5661,102 @@ export const en_CA: EnTranslations = {
         "name": "Seething Fury",
         "description": "Enter a seething fury, generating 20 rage. (Warrior talent)"
       },
+      "crusader_strike": {
+        "name": "Crusader Strike",
+        "description": "Strikes the target for weapon damage plus {damage} Holy damage. (Paladin talent)"
+      },
+      "chain_heal": {
+        "name": "Chain Heal",
+        "description": "Heals a friendly target for a large amount, then jumps to up to 2 additional nearby allies, healing for 50% less with each jump. (Restoration signature)"
+      },
+      "metamorphosis": {
+        "name": "Dread Aspect",
+        "description": "Transform into a monstrous demon for 20 sec, increasing your spell damage by 20% and casting speed by 20%. Your demon gains 50% damage and 20% casting speed. (Demonology signature)"
+      },
+      "aura_surge": {
+        "name": "Radiant Swell",
+        "description": "Overcharges your aura, hardening you with 160 armor for 10 sec. (Paladin talent)"
+      },
+      "holy_shock": {
+        "name": "Holy Shock",
+        "description": "Shocks a friendly target with Holy energy to heal them, or an enemy for {damage} Holy damage. (Holy signature)"
+      },
+      "holy_shield": {
+        "name": "Hallowed Wall",
+        "description": "Hurls a radiant aegis at an enemy, dealing Holy damage and bouncing to 2 nearby enemies. (Protection signature)"
+      },
+      "bestial_wrath": {
+        "name": "Howling Rage",
+        "description": "Sends you into a bestial rage, increasing your attack power by 20% and your pet damage by 100% for 15 sec. (Beast Mastery signature)"
+      },
+      "trueshot_aura": {
+        "name": "Sureflight Aura",
+        "description": "Inspires nearby allies, increasing attack power by 10% for 30 min. (Marksmanship signature)"
+      },
+      "wyvern_sting": {
+        "name": "Wyvern Sting",
+        "description": "Stings the enemy from range, incapacitating it for up to 4 sec. Any damage breaks the effect. (Survival signature)"
+      },
+      "arcane_power": {
+        "name": "Aether Surge",
+        "description": "Increases spell damage by 20% and spell haste by 10% for 10 sec. (Arcane signature)"
+      },
+      "combustion": {
+        "name": "Flashfire",
+        "description": "Increases spell critical chance by 50% for 15 sec. (Fire signature)"
+      },
+      "icy_veins": {
+        "name": "Icy Veins",
+        "description": "Increases spell haste by 30% and prevents cast interruption and pushback for 10 sec. (Frost signature)"
+      },
+      "cold_blood": {
+        "name": "Killer's Calm",
+        "description": "Focuses your killing intent so your next attack is a critical strike. (Assassination signature)"
+      },
+      "blade_flurry": {
+        "name": "Mirrored Blades",
+        "description": "Unleashes a flurry of blades, increasing attack speed by 20% for 12 sec. (Combat signature)"
+      },
+      "hemorrhage": {
+        "name": "Red Ribbon",
+        "description": "Strikes the enemy for weapon damage plus {damage}, causes bleeding damage over 12 sec, and increases bleed damage taken by 40%. Awards 1 combo point. (Subtlety signature)"
+      },
+      "power_infusion": {
+        "name": "Anointing",
+        "description": "Infuses a friendly target with power, increasing spell haste by 20% for 15 sec. (Discipline signature)"
+      },
+      "holy_nova": {
+        "name": "Holy Nova",
+        "description": "Causes an explosion of holy radiance, healing nearby allies for {damage} and damaging nearby enemies. (Holy signature)"
+      },
+      "shadowform": {
+        "name": "Gloamveil Form",
+        "description": "Assume a Shadowform, increasing your Shadow damage by 15 and empowering shadow magic until you shift back. Cast again to return to normal form. (Shadow signature)"
+      },
+      "elemental_mastery": {
+        "name": "Primal Mastery",
+        "description": "Calls on the storm, making your next spell instant. (Elemental signature)"
+      },
+      "siphon_life": {
+        "name": "Veinleech",
+        "description": "Siphons life from the enemy, causing {damage} Shadow damage over 30 sec and healing you for the damage done. (Affliction signature)"
+      },
+      "conflagrate": {
+        "name": "Conflagrate",
+        "description": "Consumes your Immolate on the enemy to ignite them for {damage} Fire damage. (Destruction signature)"
+      },
+      "moonkin_form": {
+        "name": "Moonwing Form",
+        "description": "Shapeshift into a fearsome Moonkin, increasing your spell damage by 20% and your armor by 50%. Lasts until you shift out. Cast again to return to caster form. (Balance signature)"
+      },
+      "feral_charge": {
+        "name": "Primal Surge",
+        "description": "Unleash a primal surge. In Wolf Form, Energy regeneration is increased by 100% for 10 sec. In Bruin Form, instantly generates 50 Rage. (Feral signature)"
+      },
+      "swiftmend": {
+        "name": "Swiftmend",
+        "description": "Consumes a heal-over-time effect on a friendly target to heal them for {damage}. (Restoration signature)"
+      },
       "summon_imp": {
         "name": "Summon Emberkin",
         "description": "Summons an Emberkin under the command of the Warlock. The Emberkin hurls Ashbolts at your enemies from afar. Summoning a new demon dismisses your current one. You may have one demon at a time."
@@ -5661,6 +5784,226 @@ export const en_CA: EnTranslations = {
       "summon_doomguard": {
         "name": "Summon Wraithborn",
         "description": "Binds a Wraithborn to your will — an elite demon that rains heavy Shadow damage from afar. A long cooldown gates its devastating power. Summoning a new demon dismisses your current one. You may have one demon at a time."
+      },
+      "aspect_of_the_wild": {
+        "name": "Wildfang Guise",
+        "description": "Inspires nearby allies with wild strength, increasing attack power for 5 min. (Hunter talent)"
+      },
+      "avatar": {
+        "name": "Colossus",
+        "description": "Break control effects and become a colossus, increasing damage dealt by 20% for 20 sec. (Warrior talent)"
+      },
+      "avenging_wrath": {
+        "name": "Wrathwing",
+        "description": "Calls down avenging power, increasing attack power and spell power for 20 sec. (Paladin talent)"
+      },
+      "berserk": {
+        "name": "Red Haze",
+        "description": "Increases attack power for 15 sec. (Druid talent)"
+      },
+      "bladestorm": {
+        "name": "Steel Cyclone",
+        "description": "Become a storm of steel, striking nearby enemies each second for {damage}. (Warrior talent)"
+      },
+      "razor_howl": {
+        "name": "Razor Howl",
+        "description": "A shout that slows enemies within 15 yards by 50% for 8 sec. (Warrior talent)"
+      },
+      "stormthrow": {
+        "name": "Stormthrow",
+        "description": "Hurl your weapon to stun a target for 3 sec. (Warrior talent)"
+      },
+      "reckless_vow": {
+        "name": "Reckless Vow",
+        "description": "Increases all rage generation by 50% and critical strike chance by 20% for 12 sec. (Warrior talent)"
+      },
+      "red_banner": {
+        "name": "Red Banner",
+        "description": "You and nearby allies gain 10% attack speed and 10% damage for 20 sec. (Warrior talent)"
+      },
+      "blink": {
+        "name": "Flickerstep",
+        "description": "Teleports you 15 yd forward and breaks roots. (Mage talent)"
+      },
+      "bloodlust": {
+        "name": "War Drums",
+        "description": "Whips nearby allies into a frenzy, increasing attack speed for 15 sec. (Shaman talent)"
+      },
+      "chain_lightning": {
+        "name": "Forked Lightning",
+        "description": "Hurls lightning at the target area, damaging nearby enemies for {damage}. (Shaman talent)"
+      },
+      "chaos_bolt": {
+        "name": "Ruinbolt",
+        "description": "Hurls a bolt of chaotic fire for {damage} Fire damage. (Warlock talent)"
+      },
+      "cloak_of_shadows": {
+        "name": "Shadecloak",
+        "description": "Wraps you in shadows, absorbing damage for 5 sec. (Rogue talent)"
+      },
+      "cone_of_cold": {
+        "name": "Frostsweep",
+        "description": "Blasts nearby enemies with frost for {damage} Frost damage. (Mage talent)"
+      },
+      "counter_shot": {
+        "name": "Hushing Shot",
+        "description": "Interrupts spellcasting and prevents any spell in that school from being cast for 4 sec. (Hunter talent)"
+      },
+      "counterspell": {
+        "name": "Spellbreak",
+        "description": "Counters enemy spellcasting, preventing any spell in that school from being cast for 6 sec. (Mage talent)"
+      },
+      "curse_of_exhaustion": {
+        "name": "Leaden Hex",
+        "description": "Curses the target, slowing movement by 30% for 12 sec. (Warlock talent)"
+      },
+      "death_coil": {
+        "name": "Grave Coil",
+        "description": "Blasts the enemy for {damage} Shadow damage, then horrifies them for 3 sec. This version does not heal the caster. (Warlock talent)"
+      },
+      "deep_freeze": {
+        "name": "Deadfrost",
+        "description": "Deep freezes the target, dealing {damage} Frost damage and stunning it for 4 sec. (Mage talent)"
+      },
+      "desperate_prayer": {
+        "name": "Last Prayer",
+        "description": "Instantly heals you for {damage}. (Priest talent)"
+      },
+      "deterrence": {
+        "name": "Bristleguard",
+        "description": "Increases your dodge chance by 50% for 10 sec. (Hunter talent)"
+      },
+      "divine_shield": {
+        "name": "Lightward",
+        "description": "Shields you with holy power, absorbing a massive amount of damage for 8 sec. (Paladin talent)"
+      },
+      "earthbind": {
+        "name": "Gripping Earth",
+        "description": "Binds nearby enemies to the earth, rooting them for 2 sec. (Shaman talent)"
+      },
+      "evocation": {
+        "name": "Aetherwell",
+        "description": "Rapidly restores mana. (Mage talent)"
+      },
+      "frenzied_regeneration": {
+        "name": "Savage Mending",
+        "description": "Regenerates health over 10 sec. Bruin Form only. (Druid talent)"
+      },
+      "frost_trap": {
+        "name": "Rime Snare",
+        "description": "Freezes enemies at the target area in place for 3 sec. (Hunter talent)"
+      },
+      "ghostly_strike": {
+        "name": "Wraith Strike",
+        "description": "Strikes the enemy for weapon damage plus {damage} and briefly increases dodge. Awards 1 combo point. (Rogue talent)"
+      },
+      "hammer_of_wrath": {
+        "name": "Tolling Hammer",
+        "description": "Hurls a holy hammer at a wounded enemy for {damage} Holy damage. Only usable below 20% health. (Paladin talent)"
+      },
+      "healing_stream": {
+        "name": "Springwell",
+        "description": "Restores a friendly target over 12 sec. (Shaman talent)"
+      },
+      "heroic_leap": {
+        "name": "Warleap",
+        "description": "Leap to the target area, dealing {damage} Physical damage to nearby enemies. (Warrior talent)"
+      },
+      "holy_wrath": {
+        "name": "Saint's Ire",
+        "description": "Unleashes holy power, damaging nearby enemies for {damage}. (Paladin talent)"
+      },
+      "howl_of_terror": {
+        "name": "Dread Howl",
+        "description": "Frightens nearby enemies for up to 3 sec. Damage may break the effect. (Warlock talent)"
+      },
+      "ice_block": {
+        "name": "Cold Coffin",
+        "description": "Encases you in ice, absorbing a massive amount of damage for 8 sec. (Mage talent)"
+      },
+      "inner_focus": {
+        "name": "Stilled Mind",
+        "description": "Makes your next spell free. Lasts 60 sec. (Priest talent)"
+      },
+      "innervate": {
+        "name": "Lifesap",
+        "description": "Living sap wells up in you for 10 sec, restoring 20 of your current resource in waves: mana, Rage, or Energy, and shifting forms does not break it. Sleep, stun, or stasis stills the sap. (Druid talent)"
+      },
+      "kick": {
+        "name": "Boot",
+        "description": "Interrupts spellcasting and prevents any spell in that school from being cast for 4 sec. (Rogue talent)"
+      },
+      "last_stand": {
+        "name": "Eleventh Hour",
+        "description": "Temporarily increases Stamina for 15 sec, increasing maximum health. (Warrior talent)"
+      },
+      "mend_pet": {
+        "name": "Patch Up",
+        "description": "Heals a friendly target for {damage} over 15 sec. (Hunter talent)"
+      },
+      "meteor": {
+        "name": "Skystone",
+        "description": "Calls down a meteor at the target area, dealing {damage} Fire damage and burning the ground. (Mage talent)"
+      },
+      "mind_sear": {
+        "name": "Thoughtburn",
+        "description": "Channels shadow energy at the target area, damaging nearby enemies each second for {damage}. (Priest talent)"
+      },
+      "multi_shot": {
+        "name": "Splitshot",
+        "description": "Fires several missiles, striking nearby enemies for {damage}. (Hunter talent)"
+      },
+      "prayer_of_healing": {
+        "name": "Choirmend",
+        "description": "Heals nearby allies for {damage}. (Priest talent)"
+      },
+      "preparation": {
+        "name": "Contingency",
+        "description": "Finishes the cooldown on Sprint, Evasion, and Vanish. (Rogue talent)"
+      },
+      "presence_of_mind": {
+        "name": "Racing Mind",
+        "description": "Makes your next spell with a cast time instant. Lasts 60 sec. (Mage talent)"
+      },
+      "psychic_scream": {
+        "name": "Terror Shriek",
+        "description": "Frightens nearby enemies for up to 4 sec. Damage may break the effect. (Priest talent)"
+      },
+      "pummel": {
+        "name": "Jawcrack",
+        "description": "Interrupts spellcasting and prevents any spell in that school from being cast for 4 sec. (Warrior talent)"
+      },
+      "rallying_cry": {
+        "name": "Muster",
+        "description": "Lets loose a mustering cry, increasing nearby allies' attack power for 10 sec. (Warrior talent)"
+      },
+      "rebuke": {
+        "name": "Reproach",
+        "description": "Interrupts spellcasting and prevents any spell in that school from being cast for 4 sec. (Paladin talent)"
+      },
+      "shadowstep": {
+        "name": "Shadeslip",
+        "description": "Steps through the shadows toward your target. (Rogue talent)"
+      },
+      "shield_wall": {
+        "name": "Bulwark",
+        "description": "Raise an unbreakable bulwark, greatly increasing armor for 10 sec. (Warrior talent)"
+      },
+      "silence": {
+        "name": "Silent Treatment",
+        "description": "Silences the target for 4 sec. (Priest talent)"
+      },
+      "skull_bash": {
+        "name": "Headbutt",
+        "description": "Interrupts spellcasting and prevents any spell in that school from being cast for 4 sec. (Druid talent)"
+      },
+      "spell_lock": {
+        "name": "Gag Order",
+        "description": "Interrupts spellcasting and prevents any spell in that school from being cast for 5 sec. (Warlock talent)"
+      },
+      "tranquility": {
+        "name": "Gladesong",
+        "description": "Channels restorative energy, healing nearby allies each second. (Druid talent)"
       },
       "bear_charge": {
         "name": "Bruin Rush",
@@ -5818,6 +6161,9 @@ export const en_CA: EnTranslations = {
       },
       "greyjaw_fang": {
         "name": "Old Greyjaw's Fang"
+      },
+      "chunk_of_ore": {
+        "name": "Chunk of Ore"
       },
       "weathered_ledger_page": {
         "name": "Weathered Ledger Page"
@@ -7529,6 +7875,16 @@ export const en_CA: EnTranslations = {
       }
     },
     "quests": {
+      "q_prof_intro": {
+        "title": "A Trade for Every Hand",
+        "text": "Every soul in Eastbrook works a trade besides the sword, {playerName}. There's ore veins scattered round town, so go swing a pick and bring me 5 chunks. Mine them yourself, mind; I'll know the difference.",
+        "completion": "See? Ore in your pack and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
+        "objectives": {
+          "0": {
+            "label": "Chunk of Ore"
+          }
+        }
+      },
       "q_wolves": {
         "title": "Wolves at the Door",
         "text": "The forest wolves grow bold, snapping at travelers on the north road. Thin their numbers, {playerName}. Slay 8 Forest Wolves and Eastbrook will breathe easier.",

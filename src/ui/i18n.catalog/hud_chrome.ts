@@ -8,7 +8,6 @@
 // own module (no per-locale blocks) so new chrome keys are an English-only add.
 
 export const hudChromeStrings = {
-  itemHeroicTag: '[HEROIC]',
   spectate: {
     banner: 'Spectating {name}',
   },
@@ -19,6 +18,10 @@ export const hudChromeStrings = {
     resurrectAtCorpse: 'Resurrect at Corpse',
     resurrectAtHealer: "The Pale Keeper (Keeper's Toll)",
     spiritHealerAlive: 'The Pale Keeper watches over the dead. You are still among the living.',
+  },
+  fct: {
+    absorbed: 'Absorbed {amount}',
+    cheap: 'Cheap!',
   },
   // Overhead emote display names (wheel tooltips/labels, editor items, overhead
   // bubble text). Source ids/order mirror OVERHEAD_EMOTES in world_api.ts.
@@ -844,6 +847,13 @@ export const hudChromeStrings = {
   // Item-set (tier set) tooltip block. The set name and per-tier bonus text come
   // from content/item_sets.ts via entity_i18n; these two are the surrounding
   // chrome, with `name`/`bonus` spliced in already-localized.
+  // Tooltip tag appended to the quality/kind line of a Heroic upgraded drop variant
+  // (content/heroic_variants.ts), e.g. "Epic Armor [HEROIC]". The variant shares the
+  // base item's name; this tag is the only heroic marker, shown in gold.
+  itemHeroicTag: '[HEROIC]',
+  // Tooltip marker for a soulbound item (bound to its owner: cannot be traded, mailed,
+  // listed, sold, or destroyed). Currency-like reward tokens (Heroic Marks) carry this.
+  itemSoulbound: 'Soulbound',
   itemSet: {
     header: '{name} ({have}/{total})',
     bonusLine: '({pieces}) {bonus}',
@@ -1273,6 +1283,28 @@ export const hudChromeStrings = {
   worldBoss: {
     spawn: '{name} rises over Thornpeak Heights!',
   },
+  // Password-reset ("forgot password") flow: the login-panel entry link, the
+  // request-a-link panel, and the set-a-new-password panel (index.html +
+  // main.ts). English-only lives here; the reset-link error is re-localized in
+  // main.ts userFacingApiError. The generic "sent" copy never reveals whether an
+  // account exists.
+  auth: {
+    forgotPrompt: 'Forgot password?',
+    forgotTitle: 'Reset your password',
+    forgotHint: 'Enter your username and we will email a reset link to the address on file.',
+    forgotUsername: 'Username',
+    forgotSubmit: 'Send reset link',
+    forgotSent:
+      'If an account with that username has an email on file, we have sent a reset link. Check your inbox.',
+    forgotBack: 'Back to log in',
+    resetTitle: 'Choose a new password',
+    resetNewPassword: 'New password',
+    resetConfirm: 'Confirm new password',
+    resetSubmit: 'Update password',
+    resetDone: 'Your password has been updated. You can now log in.',
+    resetMismatch: 'The passwords do not match.',
+    resetErrInvalid: 'This reset link is invalid or has expired. Request a new one.',
+  },
   // Loot window title shown only when the chest entity is missing (the normal path
   // uses the chest's localized entity name); replaces a former hard-coded 'Chest'.
   loot: {
@@ -1540,6 +1572,8 @@ export const hudChromeStrings = {
     parcelsLabel: 'Parcels',
     parcelsHint: 'Click an item in your bags to attach it.',
     removeParcelAria: 'Remove {item} from the letter',
+    parcelQtyDecreaseAria: 'Send one fewer {item}',
+    parcelQtyIncreaseAria: 'Send one more {item}',
     sendButton: 'Send letter',
     postageNote: 'Postage: {amount}. The raven flies for about {seconds}s.',
     arrivedBanner: 'The raven has landed: mail from {name}.',

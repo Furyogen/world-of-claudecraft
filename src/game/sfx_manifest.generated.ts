@@ -51,6 +51,10 @@ export const SFX_CLIPS: Record<string, SfxEntry> =
     "url": "/audio/sfx/cast_arcane.mp3",
     "loop": true
   },
+  "cast_chain_heal": {
+    "url": "/audio/sfx/cast_chain_heal.wav",
+    "loop": false
+  },
   "cast_fire": {
     "url": "/audio/sfx/cast_fire.mp3",
     "loop": true

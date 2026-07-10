@@ -32,8 +32,8 @@
       "tick": 0,
       "time": 0,
       "nextId": 407,
-      "state": "1351b31d",
-      "events": "1fb00b9d",
+      "state": "8e519701",
+      "events": "3156212d",
       "rng": {
         "draws": 4,
         "digest": "65f0173a"
@@ -77,8 +77,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -111,7 +110,7 @@
             "z": -2
           },
           "potionCooldownUntil": -1,
-          "resource": 6.222222,
+          "resource": 6,
           "resourceType": "rage",
           "spawnPos": {
             "x": 2,
@@ -185,8 +184,8 @@
       "tick": 0,
       "time": 0,
       "nextId": 408,
-      "state": "5bbfe863",
-      "events": "6f63b2c8",
+      "state": "32e867d8",
+      "events": "126d656c",
       "rng": {
         "draws": 8,
         "digest": "284b8111"
@@ -230,8 +229,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -275,7 +273,7 @@
             "z": -2
           },
           "potionCooldownUntil": -1,
-          "resource": 10.822222,
+          "resource": 11,
           "resourceType": "rage",
           "spawnPos": {
             "x": 2,
@@ -393,8 +391,8 @@
       "tick": 0,
       "time": 0,
       "nextId": 409,
-      "state": "e085fbda",
-      "events": "42cb10c5",
+      "state": "563b59a9",
+      "events": "5244a413",
       "rng": {
         "draws": 13,
         "digest": "06ceb9a6"
@@ -438,8 +436,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -494,7 +491,7 @@
             "z": -2
           },
           "potionCooldownUntil": -1,
-          "resource": 17.211111,
+          "resource": 17,
           "resourceType": "rage",
           "spawnPos": {
             "x": 2,
@@ -657,7 +654,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 410,
-      "state": "18464240",
+      "state": "6b10532f",
       "events": "741638a5",
       "rng": {
         "draws": 15,
@@ -702,8 +699,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -758,7 +754,7 @@
             "z": -2
           },
           "potionCooldownUntil": -1,
-          "resource": 17.211111,
+          "resource": 17,
           "resourceType": "rage",
           "spawnPos": {
             "x": 2,
@@ -969,7 +965,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 411,
-      "state": "6eedce31",
+      "state": "7f8fe70c",
       "events": "741638a5",
       "rng": {
         "draws": 16,
@@ -1014,8 +1010,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -1070,7 +1065,7 @@
             "z": -2
           },
           "potionCooldownUntil": -1,
-          "resource": 17.211111,
+          "resource": 17,
           "resourceType": "rage",
           "spawnPos": {
             "x": 2,
@@ -1323,7 +1318,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 412,
-      "state": "1f44c71a",
+      "state": "41178fbb",
       "events": "c96afe7d",
       "rng": {
         "draws": 16,
@@ -1368,8 +1363,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -1424,7 +1418,7 @@
             "z": -2
           },
           "potionCooldownUntil": -1,
-          "resource": 17.211111,
+          "resource": 17,
           "resourceType": "rage",
           "spawnPos": {
             "x": 2,
@@ -1722,7 +1716,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 412,
-      "state": "db0c3c75",
+      "state": "bf20ec00",
       "events": "741638a5",
       "rng": {
         "draws": 16,
@@ -1767,8 +1761,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -1823,7 +1816,7 @@
             "z": -2
           },
           "potionCooldownUntil": -1,
-          "resource": 17.211111,
+          "resource": 17,
           "resourceType": "rage",
           "spawnPos": {
             "x": 2,
@@ -2122,7 +2115,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 412,
-      "state": "db0c3c75",
+      "state": "bf20ec00",
       "events": "741638a5",
       "rng": {
         "draws": 16,
@@ -2167,8 +2160,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -2223,7 +2215,7 @@
             "z": -2
           },
           "potionCooldownUntil": -1,
-          "resource": 17.211111,
+          "resource": 17,
           "resourceType": "rage",
           "spawnPos": {
             "x": 2,

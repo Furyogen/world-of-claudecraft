@@ -17,7 +17,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 406,
-      "state": "9da6ecfe",
+      "state": "06b9e332",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -61,8 +61,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -123,8 +122,8 @@
       "tick": 0,
       "time": 0,
       "nextId": 406,
-      "state": "9efc6b36",
-      "events": "092ab679",
+      "state": "946fbe59",
+      "events": "045bac9c",
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -168,11 +167,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {
-              "arms_imp_overpower": 2,
-              "war_cruelty": 2
-            },
+            "rows": {},
             "spec": "arms"
           },
           "townFocus": {}
@@ -184,7 +179,8 @@
           "attackPower": 122,
           "combatTimer": 99,
           "comboUntil": -1,
-          "critChance": 0.0895,
+          "critChance": 0.0695,
+          "critDmgBonus": 0.25,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0695,
           "fallStartY": 1.5,
@@ -234,7 +230,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 406,
-      "state": "b5ab2e8f",
+      "state": "946fbe59",
       "events": "cc9019b1",
       "rng": {
         "draws": 0,
@@ -279,8 +275,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {},
+            "rows": {},
             "spec": "arms"
           },
           "townFocus": {}
@@ -293,6 +288,7 @@
           "combatTimer": 99,
           "comboUntil": -1,
           "critChance": 0.0695,
+          "critDmgBonus": 0.25,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0695,
           "fallStartY": 1.5,
@@ -342,7 +338,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 406,
-      "state": "fc92cf1a",
+      "state": "1b6d8091",
       "events": "60bbc56d",
       "rng": {
         "draws": 0,
@@ -386,10 +382,7 @@
           "loadouts": [
             {
               "alloc": {
-                "choices": {},
-                "ranks": {
-                  "arms_imp_overpower": 2
-                },
+                "rows": {},
                 "spec": "arms"
               },
               "bar": [
@@ -403,10 +396,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {
-              "war_cruelty": 3
-            },
+            "rows": {},
             "spec": "arms"
           },
           "townFocus": {}
@@ -418,7 +408,8 @@
           "attackPower": 122,
           "combatTimer": 99,
           "comboUntil": -1,
-          "critChance": 0.0995,
+          "critChance": 0.0695,
+          "critDmgBonus": 0.25,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0695,
           "fallStartY": 1.5,
@@ -468,7 +459,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 406,
-      "state": "82bf8eff",
+      "state": "1b6d8091",
       "events": "033d2d51",
       "rng": {
         "draws": 0,
@@ -512,10 +503,7 @@
           "loadouts": [
             {
               "alloc": {
-                "choices": {},
-                "ranks": {
-                  "arms_imp_overpower": 2
-                },
+                "rows": {},
                 "spec": "arms"
               },
               "bar": [
@@ -529,10 +517,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {
-              "arms_imp_overpower": 2
-            },
+            "rows": {},
             "spec": "arms"
           },
           "townFocus": {}
@@ -545,6 +530,7 @@
           "combatTimer": 99,
           "comboUntil": -1,
           "critChance": 0.0695,
+          "critDmgBonus": 0.25,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0695,
           "fallStartY": 1.5,
@@ -594,8 +580,8 @@
       "tick": 0,
       "time": 0,
       "nextId": 406,
-      "state": "eece542f",
-      "events": "092ab679",
+      "state": "af459f93",
+      "events": "315b1ca5",
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -638,10 +624,7 @@
           "loadouts": [
             {
               "alloc": {
-                "choices": {},
-                "ranks": {
-                  "arms_imp_overpower": 2
-                },
+                "rows": {},
                 "spec": "arms"
               },
               "bar": [
@@ -655,8 +638,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {},
+            "rows": {},
             "spec": "fury"
           },
           "townFocus": {}
@@ -665,10 +647,10 @@
       "entities": [
         {
           "aiState": "idle",
-          "attackPower": 132,
+          "attackPower": 122,
           "combatTimer": 99,
           "comboUntil": -1,
-          "critChance": 0.1195,
+          "critChance": 0.1695,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0695,
           "fallStartY": 1.5,
@@ -718,7 +700,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 406,
-      "state": "eece542f",
+      "state": "af459f93",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -762,10 +744,7 @@
           "loadouts": [
             {
               "alloc": {
-                "choices": {},
-                "ranks": {
-                  "arms_imp_overpower": 2
-                },
+                "rows": {},
                 "spec": "arms"
               },
               "bar": [
@@ -779,8 +758,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {},
+            "rows": {},
             "spec": "fury"
           },
           "townFocus": {}
@@ -789,10 +767,10 @@
       "entities": [
         {
           "aiState": "idle",
-          "attackPower": 132,
+          "attackPower": 122,
           "combatTimer": 99,
           "comboUntil": -1,
-          "critChance": 0.1195,
+          "critChance": 0.1695,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.0695,
           "fallStartY": 1.5,

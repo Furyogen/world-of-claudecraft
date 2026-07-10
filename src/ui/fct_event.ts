@@ -26,6 +26,7 @@ export type FctSpawnSource =
       readonly isPlayerSource: boolean;
       readonly isPlayerTarget: boolean;
     }
+  | { readonly type: 'absorb' }
   | { readonly type: 'heal'; readonly crit: boolean; readonly isPlayerTarget: boolean }
   | { readonly type: 'xp' }
   | { readonly type: 'rested-xp' }
@@ -64,6 +65,8 @@ export function fctSpawnShape(src: FctSpawnSource): FctSpawnShape | null {
       if (src.isPlayerTarget) return { kind: 'damage-taken', isSelf: true, crit: src.crit };
       return null;
     }
+    case 'absorb':
+      return { kind: 'absorb', isSelf: true, crit: false };
     case 'heal':
       return { kind: 'heal', isSelf: src.isPlayerTarget, crit: src.crit };
     case 'xp':

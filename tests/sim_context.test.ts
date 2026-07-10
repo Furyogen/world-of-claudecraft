@@ -121,6 +121,7 @@ const CALLBACK_KEYS = [
   'swingIntervalMult',
   'mobCanSwim',
   'resolveMovePoint',
+  'resolveMove',
   'updatePet',
   'isDelveCompanionMob',
   'updateDelveCompanion',
@@ -194,6 +195,7 @@ const CALLBACK_KEYS = [
   'setPlayerLevel',
   'notice',
   'spawnDevBot',
+  'spawnDevVendor',
   // L2 inventory/vendor (W2): the four still-on-Sim helpers the moved useItem dispatches to.
   'startFishing',
   'unlockMechChromaFromItem',
@@ -389,6 +391,7 @@ function makeFakeHost() {
     swingIntervalMult: vi.fn(() => 1),
     mobCanSwim: vi.fn(() => false),
     resolveMovePoint: vi.fn(() => ({ x: 0, z: 0 })),
+    resolveMove: vi.fn(() => ({ x: 0, z: 0 })),
     updatePet: vi.fn(),
     isDelveCompanionMob: vi.fn(() => false),
     updateDelveCompanion: vi.fn(),
@@ -451,6 +454,7 @@ function makeFakeHost() {
     setPlayerLevel: vi.fn(),
     notice: vi.fn(),
     spawnDevBot: vi.fn(),
+    spawnDevVendor: vi.fn(),
     // L2 inventory/vendor (W2): the four still-on-Sim helpers the moved useItem dispatches to.
     startFishing: vi.fn(),
     unlockMechChromaFromItem: vi.fn(),

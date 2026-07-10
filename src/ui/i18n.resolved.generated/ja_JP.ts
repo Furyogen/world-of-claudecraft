@@ -85,6 +85,9 @@ export const ja_JP: EnTranslations = {
       "title": "タレント",
       "classTab": "クラス",
       "specTab": "専門化",
+      "choicesTab": "選択",
+      "rowUnlockToast": "新しいタレント選択が解放されました!",
+      "rowUnlocks": "レベル{level}で解放",
       "available": "使用可能",
       "spent": "使用済み",
       "pointSource": "レベル{first}から{cap}まで、レベルごとにタレントポイントを1獲得します。さらにポイントを得るにはレベルを上げてください。",
@@ -143,6 +146,7 @@ export const ja_JP: EnTranslations = {
         "noTree": "あなたのクラスにはまだタレントツリーがありません。",
         "locked": "タレントはまだ解除されていません——レベル{level}から始まります。",
         "noSpec": "専門化なし",
+        "rowsSummary": "タレント: {head}、選択済み行 {picked}/{unlocked}。",
         "summary": "タレント: {head}——{spent}/{total} ポイント使用済み（{breakdown}）。",
         "breakdownClass": "クラス {classPts}",
         "breakdownSpec": "クラス {classPts}、{spec} {specPts}",
@@ -151,7 +155,6 @@ export const ja_JP: EnTranslations = {
     }
   },
   "hudChrome": {
-    "itemHeroicTag": "[英雄]",
     "spectate": {
       "banner": "{name}を観戦中"
     },
@@ -159,6 +162,10 @@ export const ja_JP: EnTranslations = {
       "resurrectAtCorpse": "亡骸で復活",
       "resurrectAtHealer": "霊魂の癒し手（復活の後遺症）",
       "spiritHealerAlive": "霊魂の癒し手は死者を見守っている。あなたはまだ生者だ。"
+    },
+    "fct": {
+      "absorbed": "{amount} 吸収",
+      "cheap": "低コスト!"
     },
     "emotes": {
       "wave": "手を振る",
@@ -723,6 +730,8 @@ export const ja_JP: EnTranslations = {
     "tips": {
       "joinChannels": "ヒント：/join world または /join lfg と入力すると、ワールド全体のプレイヤーとチャットできます。"
     },
+    "itemHeroicTag": "[ヒロイック]",
+    "itemSoulbound": "魂縛",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1068,6 +1077,22 @@ export const ja_JP: EnTranslations = {
     "worldBoss": {
       "spawn": "{name}がソーンピーク高地に立ち上がった！"
     },
+    "auth": {
+      "forgotPrompt": "パスワードをお忘れですか？",
+      "forgotTitle": "パスワードをリセット",
+      "forgotHint": "ユーザー名を入力してください。登録されているメールアドレスにリセットリンクをお送りします。",
+      "forgotUsername": "ユーザー名",
+      "forgotSubmit": "リセットリンクを送信",
+      "forgotSent": "そのユーザー名のアカウントにメールアドレスが登録されている場合、リセットリンクを送信しました。受信トレイをご確認ください。",
+      "forgotBack": "ログインに戻る",
+      "resetTitle": "新しいパスワードを設定",
+      "resetNewPassword": "新しいパスワード",
+      "resetConfirm": "新しいパスワード（確認）",
+      "resetSubmit": "パスワードを更新",
+      "resetDone": "パスワードを更新しました。ログインできます。",
+      "resetMismatch": "パスワードが一致しません。",
+      "resetErrInvalid": "このリセットリンクは無効か、有効期限が切れています。新しいリンクをリクエストしてください。"
+    },
     "loot": {
       "chestTitle": "宝箱"
     },
@@ -1297,6 +1322,8 @@ export const ja_JP: EnTranslations = {
       "parcelsLabel": "小包",
       "parcelsHint": "バッグ内のアイテムをクリックして添付します。",
       "removeParcelAria": "手紙から{item}を取り除く",
+      "parcelQtyDecreaseAria": "{item}を1つ減らして送る",
+      "parcelQtyIncreaseAria": "{item}を1つ増やして送る",
       "sendButton": "手紙を送る",
       "postageNote": "郵送料：{amount}。ワタリガラスの飛行時間は約{seconds}秒です。",
       "arrivedBanner": "ワタリガラスが到着：{name}からの手紙。",
@@ -5634,6 +5661,102 @@ export const ja_JP: EnTranslations = {
         "name": "滾る怒り",
         "description": "滾る怒りに身を任せ、怒りを20生成します。（戦士タレント）"
       },
+      "crusader_strike": {
+        "name": "クルセイダー ストライク",
+        "description": "対象を攻撃し、武器ダメージに加えて {damage} の聖なるダメージを与えます。（パラディンのタレント）"
+      },
+      "chain_heal": {
+        "name": "チェインヒール",
+        "description": "味方1体を大きく回復し、近くの味方最大2体に連鎖します。連鎖するごとに回復量が50%減少します。（回復スペシャライゼーション）"
+      },
+      "metamorphosis": {
+        "name": "悪魔変身",
+        "description": "悪魔の力をまとい、20 秒間防御力と攻撃力を高めます。（ウォーロックのタレント）"
+      },
+      "aura_surge": {
+        "name": "光輝の高まり",
+        "description": "オーラを過負荷させ、10秒間160の防御力で身を固める。(パラディンの才能)"
+      },
+      "holy_shock": {
+        "name": "ホーリーショック",
+        "description": "聖なる力で味方を衝撃し、体力を{damage}回復します。（ホーリー特性のシグネチャ）"
+      },
+      "holy_shield": {
+        "name": "ホーリーシールド",
+        "description": "10秒間、聖なる力で自分を守り、防御力を90上げ、近接攻撃者に12の聖属性ダメージを与えます。（プロテクション特性のシグネチャ）"
+      },
+      "bestial_wrath": {
+        "name": "野獣の怒り",
+        "description": "野獣の怒りに入り、15秒間攻撃力が55上がります。（ビーストマスタリー特性のシグネチャ）"
+      },
+      "trueshot_aura": {
+        "name": "トゥルーショットオーラ",
+        "description": "近くの味方を鼓舞し、5分間攻撃力を35上げます。（マークスマンシップ特性のシグネチャ）"
+      },
+      "wyvern_sting": {
+        "name": "ワイバーンスティング",
+        "description": "遠距離から敵を刺し、最大4秒間行動不能にします。ダメージを受けると効果は解除されます。（サバイバル特性のシグネチャ）"
+      },
+      "arcane_power": {
+        "name": "アーケインパワー",
+        "description": "10秒間、呪文ダメージが20%、呪文ヘイストが10%上がります。（アーケイン特性のシグネチャ）"
+      },
+      "combustion": {
+        "name": "コンバッション",
+        "description": "15秒間、呪文クリティカル率が50%上がります。（ファイア特性のシグネチャ）"
+      },
+      "icy_veins": {
+        "name": "アイシーヴェインズ",
+        "description": "10秒間、呪文ヘイストが30%上がり、詠唱の中断と遅延を防ぎます。（フロスト特性のシグネチャ）"
+      },
+      "cold_blood": {
+        "name": "コールドブラッド",
+        "description": "殺意を集中し、次の攻撃をクリティカルにします。（アサシネーション特性のシグネチャ）"
+      },
+      "blade_flurry": {
+        "name": "ブレードフラリー",
+        "description": "刃の連撃を放ち、12秒間攻撃速度を20%上げます。（コンバット特性のシグネチャ）"
+      },
+      "hemorrhage": {
+        "name": "ヘモリッジ",
+        "description": "敵を攻撃して武器ダメージに加え{damage}を与え、12秒間出血ダメージを与えます。コンボポイントを1得ます。（サブテリティ特性のシグネチャ）"
+      },
+      "power_infusion": {
+        "name": "パワーインフュージョン",
+        "description": "味方に力を注ぎ、15秒間呪文力を28上げます。（ディシプリン特性のシグネチャ）"
+      },
+      "holy_nova": {
+        "name": "ホーリーノヴァ",
+        "description": "聖なる光を爆発させ、近くの味方を{damage}回復し、近くの敵にダメージを与えます。（ホーリー特性のシグネチャ）"
+      },
+      "shadowform": {
+        "name": "シャドウフォーム",
+        "description": "シャドウフォームになり、戻るまで影の魔法を強化します。再び唱えると通常形態に戻ります。（シャドウ特性のシグネチャ）"
+      },
+      "elemental_mastery": {
+        "name": "エレメンタルマスタリー",
+        "description": "元素の熟達を呼び、次の呪文を即時発動にします。（エレメンタル特性のシグネチャ）"
+      },
+      "siphon_life": {
+        "name": "サイフォンライフ",
+        "description": "敵の生命を吸い取り、30秒間で{damage}のシャドウダメージを与え、与えたダメージ分あなたを回復します。（アフリクション特性のシグネチャ）"
+      },
+      "conflagrate": {
+        "name": "コンフラグレート",
+        "description": "敵にかかったイモレートを消費して燃え上がらせ、{damage}のファイアダメージを与えます。（デストラクション特性のシグネチャ）"
+      },
+      "moonkin_form": {
+        "name": "ムーンキンフォーム",
+        "description": "ムーンキンフォームになり、戻るまで呪文詠唱を強化します。再び唱えると通常形態に戻ります。（バランス特性のシグネチャ）"
+      },
+      "feral_charge": {
+        "name": "フェラルチャージ",
+        "description": "敵に突撃し、1秒間足止めします。射程8-25ヤード。（フェラル特性のシグネチャ）"
+      },
+      "swiftmend": {
+        "name": "スウィフトメンド",
+        "description": "味方にかかった継続回復効果を消費し、体力を{damage}回復します。（レストレーション特性のシグネチャ）"
+      },
       "summon_imp": {
         "name": "エンバーキンの召喚",
         "description": "ウォーロックの命令に従うエンバーキンを召喚します。エンバーキンは遠くから敵にアッシュボルトを放ちます。新たな悪魔を召喚すると現在の悪魔は解放されます。悪魔は一度に1体しか従えられません。"
@@ -5661,6 +5784,226 @@ export const ja_JP: EnTranslations = {
       "summon_doomguard": {
         "name": "レイスボーンの召喚",
         "description": "レイスボーンを意のままに束縛します。遠方から強力なシャドウダメージを降らせるエリート悪魔です。長い再使用時間がその破壊的な力を制限します。新たな悪魔を召喚すると現在の悪魔は解放されます。悪魔は一度に1体しか従えられません。"
+      },
+      "aspect_of_the_wild": {
+        "name": "野牙の装い",
+        "description": "野生の力で周囲の味方を鼓舞し、攻撃力を高める。効果時間 5 分。（ハンタータレント）"
+      },
+      "avatar": {
+        "name": "巨像化",
+        "description": "操作不能効果を解除して巨像となり、20秒間、与えるダメージが20%増加します。（ウォリアータレント）"
+      },
+      "avenging_wrath": {
+        "name": "復讐の翼",
+        "description": "報復の力を呼び降ろし、攻撃力と呪文能力を高める。効果時間 20 秒。（パラディンタレント）"
+      },
+      "berserk": {
+        "name": "赤き霞",
+        "description": "攻撃力を高める。効果時間 15 秒。（ドルイドタレント）"
+      },
+      "bladestorm": {
+        "name": "鋼の旋風",
+        "description": "鋼の旋風となり、毎秒周囲の敵を攻撃して {damage} のダメージを与えます。（ウォリアータレント）"
+      },
+      "razor_howl": {
+        "name": "刃の咆哮",
+        "description": "15メートル以内の敵を8秒間50%遅くします。（ウォリアータレント）"
+      },
+      "stormthrow": {
+        "name": "嵐投げ",
+        "description": "武器を投げ、対象を3秒間スタンさせます。（ウォリアータレント）"
+      },
+      "reckless_vow": {
+        "name": "無謀の誓い",
+        "description": "12秒間、怒り生成が50%、クリティカル率が20%増加します。（ウォリアータレント）"
+      },
+      "red_banner": {
+        "name": "赤旗",
+        "description": "20秒間、自分と周囲の味方の攻撃速度とダメージがそれぞれ10%増加します。（ウォリアータレント）"
+      },
+      "blink": {
+        "name": "瞬き歩み",
+        "description": "前方 15 ヤードに瞬間移動し、移動不能効果を解除する。（メイジタレント）"
+      },
+      "bloodlust": {
+        "name": "戦の太鼓",
+        "description": "周囲の味方を狂乱させ、攻撃速度を高める。効果時間 15 秒。（シャーマンタレント）"
+      },
+      "chain_lightning": {
+        "name": "枝分かれの稲妻",
+        "description": "対象地点に稲妻を放ち、周囲の敵に {damage} のダメージを与える。（シャーマンタレント）"
+      },
+      "chaos_bolt": {
+        "name": "破滅の矢",
+        "description": "混沌の炎の矢を放ち、{damage} の火炎ダメージを与える。（ウォーロックタレント）"
+      },
+      "cloak_of_shadows": {
+        "name": "影まとい",
+        "description": "影で身を包み、ダメージを吸収する。効果時間 5 秒。（ローグタレント）"
+      },
+      "cone_of_cold": {
+        "name": "霜払い",
+        "description": "周囲の敵を冷気で吹き飛ばし、{damage} の冷気ダメージを与える。（メイジタレント）"
+      },
+      "counter_shot": {
+        "name": "沈黙の射撃",
+        "description": "詠唱を妨害し、その系統の呪文を 4 秒間詠唱不能にする。（ハンタータレント）"
+      },
+      "counterspell": {
+        "name": "呪文砕き",
+        "description": "敵の詠唱を打ち消し、その系統の呪文を 6 秒間詠唱不能にする。（メイジタレント）"
+      },
+      "curse_of_exhaustion": {
+        "name": "鉛の呪い",
+        "description": "対象を呪い、移動速度を 30% 低下させる。効果時間 12 秒。（ウォーロックタレント）"
+      },
+      "death_coil": {
+        "name": "墓所の螺旋",
+        "description": "敵に {damage} の暗影ダメージを与え、その後 3 秒間恐怖させる。この呪文は詠唱者を回復しない。（ウォーロックタレント）"
+      },
+      "deep_freeze": {
+        "name": "死霜",
+        "description": "対象を深く凍らせ、{damage} の冷気ダメージを与えて 4 秒間気絶させる。（メイジタレント）"
+      },
+      "desperate_prayer": {
+        "name": "最後の祈り",
+        "description": "自身を即座に {damage} 回復する。（プリーストタレント）"
+      },
+      "deterrence": {
+        "name": "針毛の守り",
+        "description": "回避率を 50% 高める。効果時間 10 秒。（ハンタータレント）"
+      },
+      "divine_shield": {
+        "name": "光の護り",
+        "description": "聖なる力で身を守り、大量のダメージを吸収する。効果時間 8 秒。（パラディンタレント）"
+      },
+      "earthbind": {
+        "name": "大地の縛り",
+        "description": "周囲の敵を大地に縛り付け、2 秒間移動不能にする。（シャーマンタレント）"
+      },
+      "evocation": {
+        "name": "エーテルの井戸",
+        "description": "マナを急速に回復する。（メイジタレント）"
+      },
+      "frenzied_regeneration": {
+        "name": "野生の癒し",
+        "description": "10 秒かけて体力を回復する。ブルーインフォーム限定。（ドルイドタレント）"
+      },
+      "frost_trap": {
+        "name": "霧氷の罠",
+        "description": "対象地点の敵を 3 秒間その場に凍結させる。（ハンタータレント）"
+      },
+      "ghostly_strike": {
+        "name": "亡霊の一撃",
+        "description": "敵に武器ダメージに加え {damage} のダメージを与え、短時間回避率を高める。コンボポイントを 1 獲得する。（ローグタレント）"
+      },
+      "hammer_of_wrath": {
+        "name": "鐘鳴りの槌",
+        "description": "傷ついた敵に聖なる鎚を投げ、{damage} の神聖ダメージを与える。体力が 20% 未満の対象にのみ使用可能。（パラディンタレント）"
+      },
+      "healing_stream": {
+        "name": "湧き水",
+        "description": "12 秒かけて味方一人を回復する。（シャーマンタレント）"
+      },
+      "heroic_leap": {
+        "name": "戦跳び",
+        "description": "対象地点へ跳躍し、周囲の敵に {damage} の物理ダメージを与える。（ウォリアータレント）"
+      },
+      "holy_wrath": {
+        "name": "聖者の怒り",
+        "description": "聖なる力を解き放ち、周囲の敵に {damage} のダメージを与える。（パラディンタレント）"
+      },
+      "howl_of_terror": {
+        "name": "恐怖の遠吠え",
+        "description": "周囲の敵を最大 3 秒間恐怖させる。ダメージで効果が解ける場合がある。（ウォーロックタレント）"
+      },
+      "ice_block": {
+        "name": "冷たき棺",
+        "description": "自身を氷に封じ、大量のダメージを吸収する。効果時間 8 秒。（メイジタレント）"
+      },
+      "inner_focus": {
+        "name": "静まる心",
+        "description": "次の呪文のコストを無料にする。効果時間 60 秒。（プリーストタレント）"
+      },
+      "innervate": {
+        "name": "生命の樹液",
+        "description": "生命の樹液が10秒間あふれ、現在のリソースを波状に20ずつ回復する。マナ、怒り、エナジーのいずれにも作用し、変身しても途切れない。(ドルイドの才能)"
+      },
+      "kick": {
+        "name": "蹴り",
+        "description": "詠唱を妨害し、その系統の呪文を 4 秒間詠唱不能にする。（ローグタレント）"
+      },
+      "last_stand": {
+        "name": "第十一刻",
+        "description": "一時的にスタミナを高め、最大体力を増加させる。効果時間 15 秒。（ウォリアータレント）"
+      },
+      "mend_pet": {
+        "name": "手当て",
+        "description": "15 秒かけて味方対象を {damage} 回復する。（ハンタータレント）"
+      },
+      "meteor": {
+        "name": "天の石",
+        "description": "対象地点に隕石を呼び降ろし、{damage} の火炎ダメージを与えて地面を燃やす。（メイジタレント）"
+      },
+      "mind_sear": {
+        "name": "思念焼き",
+        "description": "対象地点に暗影の力を注ぎ、毎秒周囲の敵に {damage} のダメージを与える。（プリーストタレント）"
+      },
+      "multi_shot": {
+        "name": "分裂射撃",
+        "description": "複数の矢を放ち、周囲の敵に {damage} のダメージを与える。（ハンタータレント）"
+      },
+      "prayer_of_healing": {
+        "name": "聖歌の癒し",
+        "description": "周囲の味方を {damage} 回復する。（プリーストタレント）"
+      },
+      "preparation": {
+        "name": "備え",
+        "description": "スプリント、回避、バニッシュのクールダウンを終了させる。（ローグタレント）"
+      },
+      "presence_of_mind": {
+        "name": "駆ける心",
+        "description": "次の詠唱時間のある呪文を即時詠唱にする。効果時間 60 秒。（メイジタレント）"
+      },
+      "psychic_scream": {
+        "name": "精神の絶叫",
+        "description": "周囲の敵を最大 4 秒間恐怖させる。ダメージで効果が解ける場合がある。（プリーストタレント）"
+      },
+      "pummel": {
+        "name": "顎砕き",
+        "description": "詠唱を妨害し、その系統の呪文を 4 秒間詠唱不能にする。（ウォリアータレント）"
+      },
+      "rallying_cry": {
+        "name": "奮起の叫び",
+        "description": "鼓舞の雄叫びを上げ、周囲の味方の攻撃力を高める。効果時間 10 秒。（ウォリアータレント）"
+      },
+      "rebuke": {
+        "name": "叱責",
+        "description": "詠唱を妨害し、その系統の呪文を 4 秒間詠唱不能にする。（パラディンタレント）"
+      },
+      "shadowstep": {
+        "name": "影すべり",
+        "description": "影を抜けて対象のもとへ移動する。（ローグタレント）"
+      },
+      "shield_wall": {
+        "name": "防壁",
+        "description": "揺るぎない防壁を築き、アーマーを大幅に高める。効果時間 10 秒。（ウォリアータレント）"
+      },
+      "silence": {
+        "name": "沈黙",
+        "description": "対象を 4 秒間沈黙させる。（プリーストタレント）"
+      },
+      "skull_bash": {
+        "name": "頭突き",
+        "description": "詠唱を妨害し、その系統の呪文を 4 秒間詠唱不能にする。（ドルイドタレント）"
+      },
+      "spell_lock": {
+        "name": "口封じ令",
+        "description": "詠唱を妨害し、その系統の呪文を 5 秒間詠唱不能にする。（ウォーロックタレント）"
+      },
+      "tranquility": {
+        "name": "木立の歌",
+        "description": "回復の力を注ぎ、毎秒周囲の味方を回復する。（ドルイドタレント）"
       },
       "bear_charge": {
         "name": "ブルーインラッシュ",
@@ -5818,6 +6161,9 @@ export const ja_JP: EnTranslations = {
       },
       "greyjaw_fang": {
         "name": "老グレイジョーの牙"
+      },
+      "chunk_of_ore": {
+        "name": "鉱石のかけら"
       },
       "weathered_ledger_page": {
         "name": "風化した帳簿のページ"
@@ -7529,6 +7875,16 @@ export const ja_JP: EnTranslations = {
       }
     },
     "quests": {
+      "q_prof_intro": {
+        "title": "剣以外にも稼ぎはある",
+        "text": "イーストブルックの誰もが剣以外の生業を持っているものだ、{playerName}。町の周りに鉱脈が散らばっている。つるはしを振るって鉱石を5個持ってきてくれ。自分で採掘するんだぞ、見ればわかる。",
+        "completion": "どうだ？鞄には鉱石、手にはマメだ。旅の道中も採掘、伐採、薬草採取を続けるといい。町に戻ったら、市場そばのタウンフォーカス掲示板と近くの製作台も気にかけてくれ。その気があれば、どれも実入りのいい仕事になる。",
+        "objectives": {
+          "0": {
+            "label": "鉱石のかけら"
+          }
+        }
+      },
       "q_wolves": {
         "title": "戸口の狼",
         "text": "森の狼が北の道で旅人に牙をむけています、{playerName}。8頭を討ち、イーストブルックに息をつかせてください。",

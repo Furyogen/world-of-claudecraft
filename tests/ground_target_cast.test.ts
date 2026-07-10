@@ -21,7 +21,7 @@ function place(sim: Sim, id: number, x: number, z: number): void {
 function makeMage(): { sim: Sim; pid: number } {
   const sim = new Sim({ seed: 7, playerClass: 'mage', noPlayer: true });
   const pid = sim.addPlayer('mage', 'Mag');
-  sim.setPlayerLevel(20, pid); // learns Flamestrike (learnLevel 20)
+  sim.setPlayerLevel(20, pid); // plenty of level for Flamestrike
   const me = sim.entities.get(pid);
   if (!me) throw new Error('no mage');
   me.resource = 9999; // plenty of mana for the cast

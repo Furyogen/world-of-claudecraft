@@ -940,6 +940,17 @@ export function handleDevChat(
     if (meta) queueGatheringGrant(meta, professionId, amount);
     return null;
   }
+  if (/^\/(?:dev\s+vendor|devvendor)\s*$/i.test(raw)) {
+    const vid = ctx.spawnDevVendor(pid);
+    if (vid < 0) ctx.error(pid, '[dev] Could not spawn the test vendor.');
+    else
+      ctx.emit({
+        type: 'log',
+        text: '[dev] Spawned the Test Quartermaster (free epic gear) next to you.',
+        pid,
+      });
+    return null;
+  }
   const botM = /^\/(?:dev\s+bot|devbot)\s+(\S+)\s*$/i.exec(raw);
   if (botM) {
     const botName = botM[1];
@@ -963,7 +974,7 @@ export function handleDevChat(
   if (/^\/dev(?:\s|$)/i.test(raw)) {
     ctx.error(
       pid,
-      'Dev commands: /dev level N, /dev tp X Z, /dev give itemId [count], /dev gold N, /dev quest questId, /dev quests, /dev gather professionId [amount], /dev bot name, /dev kill',
+      'Dev commands: /dev level N, /dev tp X Z, /dev give itemId [count], /dev gold N, /dev quest questId, /dev quests, /dev gather professionId [amount], /dev bot name, /dev vendor, /dev kill',
     );
     return null;
   }

@@ -1486,6 +1486,9 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'game.talents.title': 'Talents',
   'game.talents.classTab': 'Classe',
   'game.talents.specTab': 'Spécialisation',
+  'game.talents.choicesTab': 'Choix',
+  'game.talents.rowUnlockToast': 'Nouveau choix de talent disponible !',
+  'game.talents.rowUnlocks': 'Se débloque au niveau {level}',
   'game.talents.available': 'Disponibles',
   'game.talents.spent': 'Dépensés',
   'game.talents.pointSource':
@@ -2036,7 +2039,6 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hud.core.mobileSocial': 'Relations',
   'hud.core.mobileArena': 'Arène',
   'hud.core.mobileMenu': 'Menu',
-  'hud.core.mobileSettings': 'Paramètres',
   'hud.core.mobileUse': 'Utiliser',
   'hud.core.mobileMeters': 'Compteurs',
   'hud.core.mobileMap': 'Carte',
@@ -3167,8 +3169,6 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.bash.description':
     'Étourdit la cible pendant 2 s. Forme de Bruin uniquement.',
   'entities.abilities.faerie_fire.name': 'Witchlight',
-  'entities.abilities.faerie_fire.description':
-    "Diminue l'armure de la cible de {damage}% pendant 40 s. Ne se cumule pas avec Cisaillement d'armure.",
   'entities.abilities.hibernate.name': 'Sommeil',
   'entities.abilities.hibernate.description':
     'Plonge la cible dans un sommeil profond pendant 8 s maximum. Tout dégât la réveille.',
@@ -3238,6 +3238,226 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.revive_pet.name': 'Ranimer le familier',
   'entities.abilities.revive_pet.description':
     'Ranime votre familier mort et le ramène à vos côtés.',
+  'entities.abilities.aura_surge.name': 'Houle radieuse',
+  'entities.abilities.aura_surge.description':
+    "Surcharge votre aura et vous renforce de 160 points d'armure pendant 10 s. (talent de Paladin)",
+  'entities.abilities.holy_shock.name': 'Horion sacré',
+  'entities.abilities.holy_shock.description':
+    'Frappe une cible alliée avec de l’énergie sacrée et lui rend {damage} points de vie. (signature Sacré)',
+  'entities.abilities.holy_shield.name': 'Bouclier sacré',
+  'entities.abilities.holy_shield.description':
+    'Vous protège avec une puissance sacrée pendant 10 s, augmente l’armure de 90 et frappe les attaquants en mêlée pour 12 points de dégâts du Sacré. (signature Protection)',
+  'entities.abilities.bestial_wrath.name': 'Courroux bestial',
+  'entities.abilities.bestial_wrath.description':
+    'Vous plonge dans une rage bestiale, augmentant la puissance d’attaque de 55 pendant 15 s. (signature Maîtrise des bêtes)',
+  'entities.abilities.trueshot_aura.name': 'Aura de précision',
+  'entities.abilities.trueshot_aura.description':
+    'Inspire les alliés proches, augmentant leur puissance d’attaque de 35 pendant 5 min. (signature Précision)',
+  'entities.abilities.wyvern_sting.name': 'Piqûre de wyverne',
+  'entities.abilities.wyvern_sting.description':
+    'Pique l’ennemi à distance et le rend incapable d’agir pendant un maximum de 4 s. Tout dégât interrompt l’effet. (signature Survie)',
+  'entities.abilities.arcane_power.name': 'Pouvoir des Arcanes',
+  'entities.abilities.arcane_power.description':
+    'Augmente les dégâts des sorts de 20% et la hâte des sorts de 10% pendant 10 s. (signature Arcane)',
+  'entities.abilities.combustion.name': 'Combustion',
+  'entities.abilities.combustion.description':
+    'Augmente les chances de coup critique des sorts de 50% pendant 15 s. (signature Feu)',
+  'entities.abilities.icy_veins.name': 'Veines glaciales',
+  'entities.abilities.icy_veins.description':
+    'Augmente la hâte des sorts de 30% et empêche l’interruption et le recul des incantations pendant 10 s. (signature Givre)',
+  'entities.abilities.cold_blood.name': 'Sang froid',
+  'entities.abilities.cold_blood.description':
+    'Concentre votre intention meurtrière afin que votre prochaine attaque soit un coup critique. (signature Assassinat)',
+  'entities.abilities.blade_flurry.name': 'Déluge de lames',
+  'entities.abilities.blade_flurry.description':
+    'Déchaîne un déluge de lames, augmentant la vitesse d’attaque de 20% pendant 12 s. (signature Combat)',
+  'entities.abilities.hemorrhage.name': 'Hémorragie',
+  'entities.abilities.hemorrhage.description':
+    'Frappe l’ennemi pour les dégâts de l’arme plus {damage} et inflige des dégâts de saignement pendant 12 s. Confère 1 point de combo. (signature Finesse)',
+  'entities.abilities.power_infusion.name': 'Infusion de puissance',
+  'entities.abilities.power_infusion.description':
+    'Insuffle de la puissance à une cible alliée, augmentant sa puissance des sorts de 28 pendant 15 s. (signature Discipline)',
+  'entities.abilities.holy_nova.name': 'Nova sacrée',
+  'entities.abilities.holy_nova.description':
+    'Provoque une explosion de lumière sacrée, rend {damage} points de vie aux alliés proches et blesse les ennemis proches. (signature Sacré)',
+  'entities.abilities.shadowform.name': "Forme d'Ombre",
+  'entities.abilities.shadowform.description':
+    'Adopte la Forme d’Ombre, renforçant la magie de l’ombre jusqu’à ce que vous changiez de nouveau. Lancez à nouveau pour revenir à la forme normale. (signature Ombre)',
+  'entities.abilities.elemental_mastery.name': 'Maîtrise élémentaire',
+  'entities.abilities.elemental_mastery.description':
+    'Fait appel à la maîtrise élémentaire, rendant votre prochain sort instantané. (signature Élémentaire)',
+  'entities.abilities.siphon_life.name': 'Siphon de vie',
+  'entities.abilities.siphon_life.description':
+    'Siphonne la vie de l’ennemi, inflige {damage} points de dégâts d’Ombre en 30 s et vous soigne du montant des dégâts infligés. (signature Affliction)',
+  'entities.abilities.conflagrate.name': 'Conflagration',
+  'entities.abilities.conflagrate.description':
+    'Consume votre Immolation sur l’ennemi pour l’enflammer et lui infliger {damage} points de dégâts de Feu. (signature Destruction)',
+  'entities.abilities.moonkin_form.name': 'Forme de sélénien',
+  'entities.abilities.moonkin_form.description':
+    'Adopte la forme de sélénien, renforçant l’incantation jusqu’à ce que vous changiez de nouveau. Lancez à nouveau pour revenir à la forme normale. (signature Équilibre)',
+  'entities.abilities.feral_charge.name': 'Charge farouche',
+  'entities.abilities.feral_charge.description':
+    'Charge un ennemi et l’enracine pendant 1 s. Portée de 8-25 m. (signature Farouche)',
+  'entities.abilities.swiftmend.name': 'Prompte guérison',
+  'entities.abilities.swiftmend.description':
+    'Consume un effet de soins sur la durée sur une cible alliée pour lui rendre {damage} points de vie. (signature Restauration)',
+  'entities.abilities.crusader_strike.name': 'Frappe du croisé',
+  'entities.abilities.crusader_strike.description':
+    'Frappe la cible et inflige les dégâts de l’arme plus {damage} points de dégâts du Sacré. (talent de paladin)',
+  'entities.abilities.metamorphosis.name': 'Métamorphose',
+  'entities.abilities.metamorphosis.description':
+    'Vous adoptez une puissance démoniaque, ce qui augmente l’armure et la puissance d’attaque pendant 20 s. (talent de démoniste)',
+  'entities.abilities.aspect_of_the_wild.name': 'Apparence du Croc-sauvage',
+  'entities.abilities.aspect_of_the_wild.description':
+    'Inspira a proches alliés con fuerza salvaje, aumentando puissance d’attaque durante 5 min. (talent de chasseur)',
+  'entities.abilities.avatar.name': 'Colosse',
+  'entities.abilities.avatar.description':
+    'Te transforma en un coloso y aumenta puissance d’attaque durante 20 s. (talent de guerrier)',
+  'entities.abilities.avenging_wrath.name': 'Aile vengeresse',
+  'entities.abilities.avenging_wrath.description':
+    'Invoca poder vengador y aumenta puissance d’attaque y puissance des sorts durante 20 s. (talent de paladin)',
+  'entities.abilities.berserk.name': 'Brume rouge',
+  'entities.abilities.berserk.description':
+    'Aumenta puissance d’attaque durante 15 s. (talent de druide)',
+  'entities.abilities.bladestorm.name': 'Cyclone d’acier',
+  'entities.abilities.bladestorm.description':
+    'Te convierte en una tormenta de acero que golpea a proches ennemis cada segundo por {damage}. (talent de guerrier)',
+  'entities.abilities.blink.name': 'Pas scintillant',
+  'entities.abilities.blink.description':
+    'Te teletransporta 15 m hacia delante y rompe raíces. (talent de mage)',
+  'entities.abilities.bloodlust.name': 'Tambours de guerre',
+  'entities.abilities.bloodlust.description':
+    'Lleva a proches alliés al frenesí y aumenta su velocidad de ataque durante 15 s. (talent de chaman)',
+  'entities.abilities.chain_lightning.name': 'Éclair fourchu',
+  'entities.abilities.chain_lightning.description':
+    'Lanza relámpagos al área objetivo e inflige {damage} de daño a proches ennemis. (talent de chaman)',
+  'entities.abilities.chaos_bolt.name': 'Trait de ruine',
+  'entities.abilities.chaos_bolt.description':
+    'Lanza una descarga de fuego caótico que inflige {damage} de daño de Feu. (talent de démoniste)',
+  'entities.abilities.cloak_of_shadows.name': 'Cape d’ombre',
+  'entities.abilities.cloak_of_shadows.description':
+    'Te envuelve en sombras y absorbe daño durante 5 s. (talent de voleur)',
+  'entities.abilities.cone_of_cold.name': 'Balayage de givre',
+  'entities.abilities.cone_of_cold.description':
+    'Golpea a proches ennemis con escarcha e inflige {damage} de daño de Givre. (talent de mage)',
+  'entities.abilities.counter_shot.name': 'Tir assourdissant',
+  'entities.abilities.counter_shot.description':
+    'Interrompt l’incantation et empêche tout sort de cette école pendant 4 s. (talent de chasseur)',
+  'entities.abilities.counterspell.name': 'Brise-sort',
+  'entities.abilities.counterspell.description':
+    'Interrompt l’incantation et empêche tout sort de cette école pendant 6 s. (talent de mage)',
+  'entities.abilities.curse_of_exhaustion.name': 'Maléfice de plomb',
+  'entities.abilities.curse_of_exhaustion.description':
+    'Maldice a cible y reduce su velocidad de movimiento un 30% durante 12 s. (talent de démoniste)',
+  'entities.abilities.death_coil.name': 'Spirale funèbre',
+  'entities.abilities.death_coil.description':
+    'Golpea a cible por {damage} de daño de Ombre y luego lo aterroriza durante 3 s. Esta versión no sana al lanzador. (talent de démoniste)',
+  'entities.abilities.deep_freeze.name': 'Gel mort',
+  'entities.abilities.deep_freeze.description':
+    'Congela profundamente a cible, inflige {damage} de daño de Givre y lo aturde durante 4 s. (talent de mage)',
+  'entities.abilities.desperate_prayer.name': 'Dernière prière',
+  'entities.abilities.desperate_prayer.description':
+    'Te sana al instante por {damage}. (talent de prêtre)',
+  'entities.abilities.deterrence.name': 'Garde-hérissée',
+  'entities.abilities.deterrence.description':
+    'Aumenta tu chances d’esquive un 50% durante 10 s. (talent de chasseur)',
+  'entities.abilities.divine_shield.name': 'Garde-lumière',
+  'entities.abilities.divine_shield.description':
+    'Te protege con poder sagrado y absorbe una enorme cantidad de daño durante 8 s. (talent de paladin)',
+  'entities.abilities.earthbind.name': 'Terre agrippante',
+  'entities.abilities.earthbind.description':
+    'Ata a la tierra a proches ennemis y los inmoviliza durante 2 s. (talent de chaman)',
+  'entities.abilities.evocation.name': 'Puits d’éther',
+  'entities.abilities.evocation.description': 'Restaura mana rápidamente. (talent de mage)',
+  'entities.abilities.frenzied_regeneration.name': 'Régénération sauvage',
+  'entities.abilities.frenzied_regeneration.description':
+    'Regenera salud durante 10 s. Solo en Forma de oso. (talent de druide)',
+  'entities.abilities.frost_trap.name': 'Piège de givre',
+  'entities.abilities.frost_trap.description':
+    'Congela a los ennemis en el área objetivo durante 3 s. (talent de chasseur)',
+  'entities.abilities.ghostly_strike.name': 'Frappe spectrale',
+  'entities.abilities.ghostly_strike.description':
+    'Golpea a cible por daño de arma más {damage} y aumenta brevemente la evasión. Otorga 1 punto de combo. (talent de voleur)',
+  'entities.abilities.hammer_of_wrath.name': 'Marteau sonnant',
+  'entities.abilities.hammer_of_wrath.description':
+    'Lanza un martillo sagrado a un enemigo herido e inflige {damage} de daño de Sacré. Solo se usa por debajo del 20% de salud. (talent de paladin)',
+  'entities.abilities.healing_stream.name': 'Puits de source',
+  'entities.abilities.healing_stream.description':
+    'Restaura a cible alliée durante 12 s. (talent de chaman)',
+  'entities.abilities.heroic_leap.name': 'Bond de guerre',
+  'entities.abilities.heroic_leap.description':
+    'Saltas al área objetivo e infliges {damage} de daño Physique a proches ennemis. (talent de guerrier)',
+  'entities.abilities.holy_wrath.name': 'Courroux du saint',
+  'entities.abilities.holy_wrath.description':
+    'Desata poder sagrado e inflige {damage} de daño a proches ennemis. (talent de paladin)',
+  'entities.abilities.howl_of_terror.name': 'Hurlement d’effroi',
+  'entities.abilities.howl_of_terror.description':
+    'Aterroriza a proches ennemis hasta 3 s. El daño puede romper el efecto. (talent de démoniste)',
+  'entities.abilities.ice_block.name': 'Cercueil froid',
+  'entities.abilities.ice_block.description':
+    'Te encierra en hielo y absorbe una enorme cantidad de daño durante 8 s. (talent de mage)',
+  'entities.abilities.inner_focus.name': 'Esprit apaisé',
+  'entities.abilities.inner_focus.description':
+    'Hace que tu siguiente hechizo no tenga coste. Dura 60 s. (talent de prêtre)',
+  'entities.abilities.innervate.name': 'Sève vitale',
+  'entities.abilities.innervate.description':
+    "La sève vivante afflue en vous pendant 10 s, restaurant 20 de votre ressource actuelle par vagues : mana, rage ou énergie ; changer de forme ne l'interrompt pas. (talent de druide)",
+  'entities.abilities.kick.name': 'Botte',
+  'entities.abilities.kick.description':
+    'Interrompt l’incantation et empêche tout sort de cette école pendant 4 s. (talent de voleur)',
+  'entities.abilities.last_stand.name': 'Onzième heure',
+  'entities.abilities.last_stand.description':
+    'Aumenta temporalmente Endurance durante 15 s, aumentando la salud máxima. (talent de guerrier)',
+  'entities.abilities.mend_pet.name': 'Rapiécer',
+  'entities.abilities.mend_pet.description':
+    'Sana a cible alliée por {damage} durante 15 s. (talent de chasseur)',
+  'entities.abilities.meteor.name': 'Pierre du ciel',
+  'entities.abilities.meteor.description':
+    'Hace caer un meteoro en el área objetivo, inflige {damage} de daño de Feu y quema el suelo. (talent de mage)',
+  'entities.abilities.mind_sear.name': 'Brûle-pensée',
+  'entities.abilities.mind_sear.description':
+    'Canaliza energía de Ombre en el área objetivo e inflige {damage} cada segundo a proches ennemis. (talent de prêtre)',
+  'entities.abilities.multi_shot.name': 'Tir fendu',
+  'entities.abilities.multi_shot.description':
+    'Dispara varios proyectiles e inflige {damage} a proches ennemis. (talent de chasseur)',
+  'entities.abilities.prayer_of_healing.name': 'Soin du chœur',
+  'entities.abilities.prayer_of_healing.description':
+    'Sana a proches alliés por {damage}. (talent de prêtre)',
+  'entities.abilities.preparation.name': 'Contingence',
+  'entities.abilities.preparation.description':
+    'Termina el tiempo de reutilización de Sprint, Evasión y Vanish. (talent de voleur)',
+  'entities.abilities.presence_of_mind.name': 'Esprit fulgurant',
+  'entities.abilities.presence_of_mind.description':
+    'Hace instantáneo tu siguiente hechizo con tiempo de lanzamiento. Dura 60 s. (talent de mage)',
+  'entities.abilities.psychic_scream.name': 'Cri psychique',
+  'entities.abilities.psychic_scream.description':
+    'Aterroriza a proches ennemis hasta 4 s. El daño puede romper el efecto. (talent de prêtre)',
+  'entities.abilities.pummel.name': 'Rossée',
+  'entities.abilities.pummel.description':
+    'Interrompt l’incantation et empêche tout sort de cette école pendant 4 s. (talent de guerrier)',
+  'entities.abilities.rallying_cry.name': 'Ralliement',
+  'entities.abilities.rallying_cry.description':
+    'Lanza un grito de reunión y aumenta puissance d’attaque de proches alliés durante 10 s. (talent de guerrier)',
+  'entities.abilities.rebuke.name': 'Réprimande',
+  'entities.abilities.rebuke.description':
+    'Interrompt l’incantation et empêche tout sort de cette école pendant 4 s. (talent de paladin)',
+  'entities.abilities.shadowstep.name': 'Glissement d’ombre',
+  'entities.abilities.shadowstep.description':
+    'Das un paso entre las sombras hacia tu cible. (talent de voleur)',
+  'entities.abilities.shield_wall.name': 'Rempart',
+  'entities.abilities.shield_wall.description':
+    'Alzas un muro de escudo y aumentas mucho la armure durante 10 s. (talent de guerrier)',
+  'entities.abilities.silence.name': 'Silence',
+  'entities.abilities.silence.description': 'Silencia a cible durante 4 s. (talent de prêtre)',
+  'entities.abilities.skull_bash.name': 'Coup de crâne',
+  'entities.abilities.skull_bash.description':
+    'Interrompt l’incantation et empêche tout sort de cette école pendant 4 s. (talent de druide)',
+  'entities.abilities.spell_lock.name': 'Ordre de bâillon',
+  'entities.abilities.spell_lock.description':
+    'Interrompt l’incantation et empêche tout sort de cette école pendant 5 s. (talent de démoniste)',
+  'entities.abilities.tranquility.name': 'Chant du bosquet',
+  'entities.abilities.tranquility.description':
+    'Canaliza energía restauradora y sana a proches alliés cada segundo. (talent de druide)',
   'entities.items.worn_sword.name': 'Épée courte corrodée',
   'entities.items.gnarled_staff.name': 'Bâton de Bogoak',
   'entities.items.rusty_dagger.name': 'Dague rouillée',
@@ -4599,12 +4819,19 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.items.kingsbane_last_oath.name': 'Thronebane, dernier serment de Thornpeak',
   'entities.items.kingsbane_last_oath_heroic.name': 'Thronebane, dernier serment de Thornpeak',
   'entities.items.crownforged_dreadhelm.name': "Heaume d'effroi Bonewrought",
+  'entities.items.crownforged_dreadhelm_heroic.name': "Heaume d'effroi Bonewrought",
   'entities.items.crownforged_warspaulders.name': 'Spallières de guerre Bonewrought',
+  'entities.items.crownforged_warspaulders_heroic.name': 'Spallières de guerre Bonewrought',
   'entities.items.nighttalon_crown.name': 'Couronne de Direfang',
+  'entities.items.nighttalon_crown_heroic.name': 'Couronne de Direfang',
   'entities.items.nighttalon_shoulderguards.name': 'Garde-épaules de Direfang',
+  'entities.items.nighttalon_shoulderguards_heroic.name': 'Garde-épaules de Direfang',
   'entities.items.soulflame_cowl.name': 'Capuche Wraithfire',
+  'entities.items.soulflame_cowl_heroic.name': 'Capuche Wraithfire',
   'entities.items.soulflame_mantle.name': 'Mantelet Wraithfire',
+  'entities.items.soulflame_mantle_heroic.name': 'Mantelet Wraithfire',
   'entities.items.stormcallers_crown.name': 'Couronne de Galecall',
+  'entities.items.stormcallers_crown_heroic.name': 'Couronne de Galecall',
   'entities.items.crownforged_gauntlets.name': 'Gantelets Forgécouronne',
   'entities.items.nighttalon_grips.name': 'Poignes Serre-de-nuit',
   'entities.items.soulflame_gloves.name': "Gants Flamme-d'âme",
@@ -4617,6 +4844,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.thunzharr_stormling.name': 'Élémentaire de tempête éveillé',
   'hudChrome.worldBoss.spawn': '{name} se dresse sur les Hauteurs de Thornpeak !',
   'entities.items.stormcallers_spaulders.name': 'Spallières de Galecall',
+  'entities.items.stormcallers_spaulders_heroic.name': 'Spallières de Galecall',
   'hud.chat.context.convertToRaid': 'Convertir en raid',
   'hud.chat.context.convertToParty': 'Convertir en groupe',
   'hudChrome.raidConvert.leaderOnly': 'Seul le chef de raid peut convertir en groupe.',
@@ -6194,6 +6422,8 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.wyrmshadow.bonus2': "Augmente la puissance d'attaque de 40.",
   'entities.itemSets.wyrmshadow.bonus3':
     'Augmente l’agilité de 15 et les chances de critique de 2%.',
+  'hudChrome.itemHeroicTag': '[HÉROÏQUE]',
+  'hudChrome.itemSoulbound': 'Lié à l’âme',
   'hudChrome.itemSet.header': '{name} ({have}/{total})',
   'hudChrome.itemSet.bonusLine': '({pieces}) {bonus}',
   'hud.combat.floatingResist': 'Résisté',
@@ -6678,12 +6908,18 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.bank.withdrawQuantityConfirm': 'Retirer',
   'hudChrome.bank.withdrawQuantityInput': 'Quantité à retirer',
   'hudChrome.bank.withdrawQuantityTitle': 'Retirer {item}',
+  'hud.core.mobileSettings': 'Paramètres',
+  'entities.abilities.faerie_fire.description':
+    "Diminue l'armure de la cible de {damage}% pendant 40 s. Ne se cumule pas avec Cisaillement d'armure.",
   'abilityUi.tooltip.selfOnly': 'Sur soi uniquement',
   'itemUi.lootRoll.rolled': '{answered}/{total} ont lancé',
   'entities.abilities.sunder_armor.description':
     "Cisaille l'armure de la cible, la réduisant de {damage}% par application. Cumulable jusqu'à 5 fois. Génère beaucoup de menace.",
   'entities.mobs.training_dummy.name': "Mannequin d'entraînement",
   'entities.mobs.yumi_cat.name': 'Yumi',
+  'entities.mobs.nythraxis_heroic_priest_add.name': 'Malric, Hiérophante immortel',
+  'entities.mobs.nythraxis_heroic_rogue_add.name': 'Voss, Lame immortelle',
+  'entities.mobs.nythraxis_heroic_warrior_add.name': 'Aldren, Garde immortel',
   'guide.arenaPage.yumiBody':
     "Protégez Yumi est un mode d'objectif en équipe qui se joue dans un labyrinthe : chaque camp garde son propre familier félin tout en traquant celui de l'adversaire. De temps à autre, les deux chats se téléportent vers de nouveaux recoins du labyrinthe, si bien que le combat oscille entre défense, chasse et course pour les retrouver. Mettez-vous en file en trois contre trois ou cinq contre cinq ; tomber au combat ne vous met sur la touche qu'un instant.",
   'guide.arenaPage.yumiHeading': 'Protégez Yumi',
@@ -6725,4 +6961,50 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'yumi.queue.leave': 'Vous quittez la file de Protégez Yumi.',
   'yumi.queue.teamLeave': 'Votre équipe quitte la file de Protégez Yumi.',
   'yumi.respawn.title': 'À TERRE !',
+  'entities.abilities.chain_heal.name': 'Soins en chaîne',
+  'entities.abilities.chain_heal.description':
+    "Soigne grandement une cible alliée, puis rebondit vers jusqu'à 2 autres alliés proches, avec 50 % de soins en moins à chaque rebond. (Technique signature de Restauration)",
+  'entities.abilities.razor_howl.name': 'Hurlement tranchant',
+  'entities.abilities.razor_howl.description':
+    'Un cri qui ralentit de 50 % les ennemis à moins de 15 m pendant 8 s. (Talent de guerrier)',
+  'entities.abilities.stormthrow.name': 'Lancer-tempête',
+  'entities.abilities.stormthrow.description':
+    'Lance votre arme pour étourdir une cible pendant 3 s. (Talent de guerrier)',
+  'entities.abilities.reckless_vow.name': 'Vœu téméraire',
+  'entities.abilities.reckless_vow.description':
+    'Augmente toute la génération de rage de 50 % et les chances de coup critique de 20 % pendant 12 s. (Talent de guerrier)',
+  'entities.abilities.red_banner.name': 'Bannière rouge',
+  'entities.abilities.red_banner.description':
+    'Vous et les alliés proches gagnez 10 % de vitesse d’attaque et 10 % de dégâts pendant 20 s. (Talent de guerrier)',
+  'entities.items.chunk_of_ore.name': 'Morceau de minerai',
+  'entities.quests.q_prof_intro.title': 'Un métier pour chaque main',
+  'entities.quests.q_prof_intro.text':
+    "À Eastbrook, chacun exerce un métier en plus du maniement de l'épée, {playerName}. Des filons de minerai sont disséminés autour de la ville, alors prenez une pioche et rapportez-moi 5 morceaux. Extrayez-les vous-même; je saurai faire la différence.",
+  'entities.quests.q_prof_intro.completion':
+    "Vous voyez? Du minerai dans votre sac et des durillons aux mains. Continuez à miner, à couper du bois et à cueillir des plantes sur les routes. De retour en ville, pensez au tableau des Priorités de la ville près du marché et à l'établi voisin. Un métier honnête vous attend dans chacune de ces activités, si vous le souhaitez.",
+  'entities.quests.q_prof_intro.objectives.0.label': 'Morceau de minerai',
+  'game.talents.readout.rowsSummary':
+    'Talents : {head}, {picked}/{unlocked} rangées de choix sélectionnées.',
+  'hudChrome.fct.absorbed': 'Absorbé : {amount}',
+  'hudChrome.fct.cheap': 'Coût réduit !',
+  'hudChrome.mailbox.parcelQtyDecreaseAria': 'Envoyer un {item} de moins',
+  'hudChrome.mailbox.parcelQtyIncreaseAria': 'Envoyer un {item} de plus',
+  'hudChrome.auth.forgotPrompt': 'Mot de passe oublié ?',
+  'hudChrome.auth.forgotTitle': 'Réinitialiser votre mot de passe',
+  'hudChrome.auth.forgotHint':
+    'Saisissez votre nom d’utilisateur et nous enverrons un lien de réinitialisation à l’adresse e-mail enregistrée.',
+  'hudChrome.auth.forgotUsername': 'Nom d’utilisateur',
+  'hudChrome.auth.forgotSubmit': 'Envoyer le lien de réinitialisation',
+  'hudChrome.auth.forgotSent':
+    'Si un compte avec ce nom d’utilisateur possède une adresse e-mail enregistrée, nous avons envoyé un lien de réinitialisation. Consultez votre boîte de réception.',
+  'hudChrome.auth.forgotBack': 'Retour à la connexion',
+  'hudChrome.auth.resetTitle': 'Choisissez un nouveau mot de passe',
+  'hudChrome.auth.resetNewPassword': 'Nouveau mot de passe',
+  'hudChrome.auth.resetConfirm': 'Confirmez le nouveau mot de passe',
+  'hudChrome.auth.resetSubmit': 'Mettre à jour le mot de passe',
+  'hudChrome.auth.resetDone':
+    'Votre mot de passe a été mis à jour. Vous pouvez maintenant vous connecter.',
+  'hudChrome.auth.resetMismatch': 'Les mots de passe ne correspondent pas.',
+  'hudChrome.auth.resetErrInvalid':
+    'Ce lien de réinitialisation est invalide ou a expiré. Demandez-en un nouveau.',
 };

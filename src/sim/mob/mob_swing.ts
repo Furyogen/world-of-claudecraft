@@ -34,7 +34,10 @@ function isDevourableAura(a: Aura): boolean {
     (a.kind.startsWith('buff_') && a.value > 0) ||
     a.kind === 'hot' ||
     a.kind === 'absorb' ||
-    a.kind === 'imbue'
+    a.kind === 'imbue' ||
+    // Lifesap's regen surge is a rich beneficial aura: purgeable counterplay
+    // (the adversarial finding that it had none).
+    a.kind === 'resource_sap'
   );
 }
 
@@ -510,12 +513,13 @@ export function runMobSwingAffixes(
     if (ctx.applyKnockback(mob, target, knockback.distance) > 0) {
       const school = (knockback.school ?? 'physical') as Aura['school'];
       ctx.emit({ type: 'spellfx', sourceId: mob.id, targetId: target.id, school, fx: 'nova' });
-      ctx.emit({
-        type: 'log',
-        text: `${mob.name} unleashes ${knockback.name}!`,
-        color: '#ff9933',
-        entityId: mob.id,
-      });
+      if (!MOBS[mob.templateId]?.quietMechanics)
+        ctx.emit({
+          type: 'log',
+          text: `${mob.name} unleashes ${knockback.name}!`,
+          color: '#ff9933',
+          entityId: mob.id,
+        });
     }
   }
   // slowStrike: a landed hit may mire the victim, slowing their attack speed.

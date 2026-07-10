@@ -1648,8 +1648,6 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.expose_armor.description':
     'Đòn kết liễu phơi bày mục tiêu, giảm giáp của chúng đi {damage} trong 30 giây.',
   'entities.abilities.expose_armor.name': 'Xuyên Phá Giáp',
-  'entities.abilities.faerie_fire.description':
-    'Giảm giáp của mục tiêu đi {damage}% trong 40 giây. Không cộng dồn với Xẻ Giáp.',
   'entities.abilities.faerie_fire.name': 'Ánh Ma Trơi',
   'entities.abilities.fear.description':
     'Gieo nỗi kinh hoàng vào kẻ địch, khiến nó co rúm sợ hãi trong tối đa 8 giây. Mọi sát thương sẽ phá vỡ hiệu ứng.',
@@ -1952,6 +1950,75 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.wrath.description':
     'Phóng một tia năng lượng tự nhiên gây {damage} sát thương Tự Nhiên.',
   'entities.abilities.wrath.name': 'Tia Hoang Dã',
+  'entities.abilities.aura_surge.name': 'Sóng Hào Quang',
+  'entities.abilities.aura_surge.description':
+    'Quá tải hào quang của bạn, gia cố 160 giáp trong 10 giây. (thiên phú Paladin)',
+  'entities.abilities.holy_shock.name': 'Sốc Thánh',
+  'entities.abilities.holy_shock.description':
+    'Gây sốc một mục tiêu đồng minh bằng năng lượng Thánh, hồi cho họ {damage}. (dấu ấn Thánh)',
+  'entities.abilities.holy_shield.name': 'Khiên Thánh',
+  'entities.abilities.holy_shield.description':
+    'Bảo vệ bạn bằng sức mạnh Thánh trong 10 giây, tăng giáp thêm 90 và đánh kẻ tấn công cận chiến gây 12 sát thương Thánh. (dấu ấn Bảo Hộ)',
+  'entities.abilities.bestial_wrath.name': 'Cơn Thịnh Nộ Dã Thú',
+  'entities.abilities.bestial_wrath.description':
+    'Đưa bạn vào cơn giận dã thú, tăng sức mạnh tấn công thêm 55 trong 15 giây. (dấu ấn Thuần Thú)',
+  'entities.abilities.trueshot_aura.name': 'Hào Quang Bắn Chuẩn',
+  'entities.abilities.trueshot_aura.description':
+    'Truyền cảm hứng cho đồng minh gần đó, tăng sức mạnh tấn công thêm 35 trong 5 phút. (dấu ấn Thiện Xạ)',
+  'entities.abilities.wyvern_sting.name': 'Cú Chích Rồng Bay',
+  'entities.abilities.wyvern_sting.description':
+    'Chích kẻ địch từ xa, làm chúng bất động tối đa 4 giây. Bất kỳ sát thương nào cũng phá hiệu ứng. (dấu ấn Sinh Tồn)',
+  'entities.abilities.arcane_power.name': 'Sức Mạnh Bí Thuật',
+  'entities.abilities.arcane_power.description':
+    'Tăng sát thương phép 20% và tốc độ phép 10% trong 10 giây. (kỹ năng đặc trưng Arcane)',
+  'entities.abilities.combustion.name': 'Thiêu Đốt',
+  'entities.abilities.combustion.description':
+    'Tăng tỉ lệ chí mạng phép 50% trong 15 giây. (kỹ năng đặc trưng Fire)',
+  'entities.abilities.icy_veins.name': 'Huyết Mạch Băng Giá',
+  'entities.abilities.icy_veins.description':
+    'Tăng tốc độ phép 30% và ngăn gián đoạn cùng đẩy lùi thi triển trong 10 giây. (kỹ năng đặc trưng Frost)',
+  'entities.abilities.cold_blood.name': 'Máu Lạnh',
+  'entities.abilities.cold_blood.description':
+    'Tập trung sát ý để đòn tấn công tiếp theo của bạn là một cú chí mạng. (dấu ấn Ám Sát)',
+  'entities.abilities.blade_flurry.name': 'Loạn Đao',
+  'entities.abilities.blade_flurry.description':
+    'Tung ra một loạt lưỡi dao, tăng tốc độ tấn công thêm 20% trong 12 giây. (dấu ấn Chiến Đấu)',
+  'entities.abilities.hemorrhage.name': 'Xuất Huyết',
+  'entities.abilities.hemorrhage.description':
+    'Đánh kẻ địch gây sát thương vũ khí cộng {damage} và gây sát thương chảy máu trong 12 giây. Nhận 1 điểm combo. (dấu ấn Tinh Tế)',
+  'entities.abilities.power_infusion.name': 'Truyền Sức Mạnh',
+  'entities.abilities.power_infusion.description':
+    'Truyền sức mạnh cho một mục tiêu đồng minh, tăng sức mạnh phép thêm 28 trong 15 giây. (dấu ấn Kỷ Luật)',
+  'entities.abilities.holy_nova.name': 'Nova Thánh',
+  'entities.abilities.holy_nova.description':
+    'Gây một vụ nổ ánh sáng Thánh, hồi cho đồng minh gần đó {damage} và gây sát thương cho kẻ địch gần đó. (dấu ấn Thánh)',
+  'entities.abilities.shadowform.name': 'Dạng Bóng Tối',
+  'entities.abilities.shadowform.description':
+    'Nhận dạng bóng tối, cường hóa ma thuật bóng tối cho đến khi bạn đổi lại. Thi triển lần nữa để trở về dạng thường. (dấu ấn Bóng Tối)',
+  'entities.abilities.elemental_mastery.name': 'Tinh Thông Nguyên Tố',
+  'entities.abilities.elemental_mastery.description':
+    'Kêu gọi tinh thông nguyên tố, khiến phép tiếp theo của bạn thi triển tức thì. (dấu ấn Nguyên Tố)',
+  'entities.abilities.siphon_life.name': 'Hút Sự Sống',
+  'entities.abilities.siphon_life.description':
+    'Hút sự sống từ kẻ địch, gây {damage} sát thương Bóng Tối trong 30 giây và hồi cho bạn bằng lượng sát thương đã gây. (dấu ấn Đau Khổ)',
+  'entities.abilities.conflagrate.name': 'Bùng Cháy',
+  'entities.abilities.conflagrate.description':
+    'Tiêu thụ Thiêu Đốt của bạn trên kẻ địch để đốt chúng, gây {damage} sát thương Lửa. (dấu ấn Hủy Diệt)',
+  'entities.abilities.moonkin_form.name': 'Dạng Cú Mặt Trăng',
+  'entities.abilities.moonkin_form.description':
+    'Nhận dạng cú mặt trăng, cường hóa thi triển phép cho đến khi bạn đổi lại. Thi triển lần nữa để trở về dạng thường. (dấu ấn Cân Bằng)',
+  'entities.abilities.feral_charge.name': 'Xung Phong Hoang Dã',
+  'entities.abilities.feral_charge.description':
+    'Xung phong vào kẻ địch và trói chân chúng trong 1 giây. Tầm 8-25 m. (dấu ấn Hoang Dã)',
+  'entities.abilities.swiftmend.name': 'Hồi Phục Nhanh',
+  'entities.abilities.swiftmend.description':
+    'Tiêu thụ một hiệu ứng hồi máu theo thời gian trên mục tiêu đồng minh để hồi cho họ {damage}. (dấu ấn Phục Hồi)',
+  'entities.abilities.crusader_strike.name': 'Đòn Thập Tự',
+  'entities.abilities.crusader_strike.description':
+    'Đánh mục tiêu bằng sát thương vũ khí cộng {damage} sát thương Thánh. (tài năng Paladin)',
+  'entities.abilities.metamorphosis.name': 'Biến Hình',
+  'entities.abilities.metamorphosis.description':
+    'Nhận sức mạnh ác quỷ, tăng giáp và sức tấn công trong 20 giây. (tài năng Warlock)',
   'entities.delves.collapsed_reliquary.enterText': 'Bạn đi xuống thánh tích sụp đổ.',
   'entities.delves.collapsed_reliquary.leaveText':
     'Bạn trèo trở lại chỗ Tu Huynh Halven tại tàn tích thánh tích.',
@@ -2028,7 +2095,9 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'entities.items.crimson_amber_armor_plate.name': 'Hổ Phách Đỏ Thẫm',
   'entities.items.crossroads_saber.name': 'Mã Tấu Ngã Tư',
   'entities.items.crownforged_dreadhelm.name': 'Mũ Kinh Hoàng Bonewrought',
+  'entities.items.crownforged_dreadhelm_heroic.name': 'Mũ Kinh Hoàng Bonewrought',
   'entities.items.crownforged_warspaulders.name': 'Giáp Vai Chiến Bonewrought',
+  'entities.items.crownforged_warspaulders_heroic.name': 'Giáp Vai Chiến Bonewrought',
   'entities.items.crypt_keystone.name': 'Đá Khóa Hầm Mộ',
   'entities.items.crypt_ritual_circle.name': 'Vòng Tròn Nghi Lễ',
   'entities.items.cryptbone_greaves.name': 'Giáp Ống Chân Xương Mộ',
@@ -2202,7 +2271,9 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'entities.items.nhalias_dirgeblade.name': 'Ai Kiếm của Nhalia',
   'entities.items.nhalias_funeral_wraps.name': 'Vải Tang của Nhalia',
   'entities.items.nighttalon_crown.name': 'Vương Miện Direfang',
+  'entities.items.nighttalon_crown_heroic.name': 'Vương Miện Direfang',
   'entities.items.nighttalon_shoulderguards.name': 'Giáp Vai Direfang',
+  'entities.items.nighttalon_shoulderguards_heroic.name': 'Giáp Vai Direfang',
   'entities.items.nightwalk_jerkin.name': 'Áo Da Dạ Hành',
   'entities.items.oathbound_greaves.name': 'Giáp Ống Quyển Lời Thề',
   'entities.items.ogre_bonecharm_staff.name': 'Trượng Bùa Xương Ogre',
@@ -2273,7 +2344,9 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'entities.items.soggy_boot.name': 'Giày Ướt Sũng',
   'entities.items.soggy_moccasin.name': 'Giày Da Ướt Sũng',
   'entities.items.soulflame_cowl.name': 'Mũ Trùm Wraithfire',
+  'entities.items.soulflame_cowl_heroic.name': 'Mũ Trùm Wraithfire',
   'entities.items.soulflame_mantle.name': 'Áo Choàng Wraithfire',
+  'entities.items.soulflame_mantle_heroic.name': 'Áo Choàng Wraithfire',
   'entities.items.spider_leg.name': 'Chân Nhện Co Giật',
   'entities.items.spring_water.name': 'Nước Giếng Lạnh',
   'entities.items.staff_of_drowned_prayers.name': 'Trượng của Lời Cầu Chết Chìm',
@@ -2284,6 +2357,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'entities.items.steel_orange_armor_plate.name': 'Cam Thép',
   'entities.items.storm_core.name': 'Lõi Bão Tố',
   'entities.items.stormcallers_crown.name': 'Vương Miện Galecall',
+  'entities.items.stormcallers_crown_heroic.name': 'Vương Miện Galecall',
   'entities.items.crownforged_gauntlets.name': 'Găng Tay Rèn Vương Miện',
   'entities.items.nighttalon_grips.name': 'Bao Tay Dạ Trảo',
   'entities.items.soulflame_gloves.name': 'Găng Tay Hồn Hỏa',
@@ -2293,6 +2367,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'entities.items.soulflame_cord.name': 'Dây Lưng Hồn Hỏa',
   'entities.items.stormcallers_waistguard.name': 'Hộ Yêu của Triệu Bão Sư',
   'entities.items.stormcallers_spaulders.name': 'Giáp Vai Galecall',
+  'entities.items.stormcallers_spaulders_heroic.name': 'Giáp Vai Galecall',
   'entities.items.stormshard_leggings.name': 'Quần Giáp Mảnh Bão',
   'entities.items.sturdy_belt.name': 'Thắt Lưng Lữ Hành Bền Chắc',
   'entities.items.supply_crate.name': 'Thùng Tiếp Tế Bị Trộm',
@@ -2338,6 +2413,157 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'entities.items.wolfhide_satchel.name': 'Túi da sói',
   'entities.items.gravewoven_bag.name': 'Túi dệt mộ',
   'entities.items.mistcallers_duffel.name': 'Túi vải của Fogbinder',
+  'entities.abilities.aspect_of_the_wild.name': 'Dáng Nanh Hoang',
+  'entities.abilities.aspect_of_the_wild.description':
+    'Inspira a gần đó đồng minh con fuerza salvaje, aumentando sức tấn công durante 5 phút. (thiên phú thợ săn)',
+  'entities.abilities.avatar.name': 'Khổng Tượng',
+  'entities.abilities.avatar.description':
+    'Te transforma en un coloso y aumenta sức tấn công durante 20 giây. (thiên phú chiến binh)',
+  'entities.abilities.avenging_wrath.name': 'Cánh Báo Thù',
+  'entities.abilities.avenging_wrath.description':
+    'Invoca poder vengador y aumenta sức tấn công y sức mạnh phép durante 20 giây. (thiên phú hiệp sĩ)',
+  'entities.abilities.berserk.name': 'Sương Đỏ',
+  'entities.abilities.berserk.description':
+    'Aumenta sức tấn công durante 15 giây. (thiên phú druid)',
+  'entities.abilities.bladestorm.name': 'Lốc Thép',
+  'entities.abilities.bladestorm.description':
+    'Te convierte en una tormenta de acero que golpea a gần đó kẻ địch cada segundo por {damage}. (thiên phú chiến binh)',
+  'entities.abilities.blink.name': 'Bước Chớp',
+  'entities.abilities.blink.description':
+    'Te teletransporta 15 m hacia delante y rompe raíces. (thiên phú pháp sư)',
+  'entities.abilities.bloodlust.name': 'Trống Chiến',
+  'entities.abilities.bloodlust.description':
+    'Lleva a gần đó đồng minh al frenesí y aumenta su velocidad de ataque durante 15 giây. (thiên phú pháp sư tổ linh)',
+  'entities.abilities.chain_lightning.name': 'Sét Rẽ Nhánh',
+  'entities.abilities.chain_lightning.description':
+    'Lanza relámpagos al área objetivo e inflige {damage} de daño a gần đó kẻ địch. (thiên phú pháp sư tổ linh)',
+  'entities.abilities.chaos_bolt.name': 'Tia Hủy Diệt',
+  'entities.abilities.chaos_bolt.description':
+    'Lanza una descarga de fuego caótico que inflige {damage} de daño de Lửa. (thiên phú thuật sĩ)',
+  'entities.abilities.cloak_of_shadows.name': 'Áo Choàng Bóng',
+  'entities.abilities.cloak_of_shadows.description':
+    'Te envuelve en sombras y absorbe daño durante 5 giây. (thiên phú đạo tặc)',
+  'entities.abilities.cone_of_cold.name': 'Quét Băng',
+  'entities.abilities.cone_of_cold.description':
+    'Golpea a gần đó kẻ địch con escarcha e inflige {damage} de daño de Băng. (thiên phú pháp sư)',
+  'entities.abilities.counter_shot.name': 'Phát Bắn Nín Lặng',
+  'entities.abilities.counter_shot.description':
+    'Ngắt niệm phép và chặn phép cùng hệ trong 4 giây. (thiên phú thợ săn)',
+  'entities.abilities.counterspell.name': 'Phá Phép',
+  'entities.abilities.counterspell.description':
+    'Ngắt niệm phép và chặn phép cùng hệ trong 6 giây. (thiên phú pháp sư)',
+  'entities.abilities.curse_of_exhaustion.name': 'Lời Nguyền Chì',
+  'entities.abilities.curse_of_exhaustion.description':
+    'Maldice a mục tiêu y reduce su velocidad de movimiento un 30% durante 12 giây. (thiên phú thuật sĩ)',
+  'entities.abilities.death_coil.name': 'Vòng Xoáy Mộ',
+  'entities.abilities.death_coil.description':
+    'Golpea a mục tiêu por {damage} de daño de Bóng tối y luego lo aterroriza durante 3 giây. Esta versión no sana al lanzador. (thiên phú thuật sĩ)',
+  'entities.abilities.deep_freeze.name': 'Băng Chết',
+  'entities.abilities.deep_freeze.description':
+    'Congela profundamente a mục tiêu, inflige {damage} de daño de Băng y lo aturde durante 4 giây. (thiên phú pháp sư)',
+  'entities.abilities.desperate_prayer.name': 'Lời Cầu Cuối',
+  'entities.abilities.desperate_prayer.description':
+    'Te sana al instante por {damage}. (thiên phú tu sĩ)',
+  'entities.abilities.deterrence.name': 'Hộ Vệ Gai',
+  'entities.abilities.deterrence.description':
+    'Aumenta tu tỉ lệ né un 50% durante 10 giây. (thiên phú thợ săn)',
+  'entities.abilities.divine_shield.name': 'Hộ Vệ Ánh Sáng',
+  'entities.abilities.divine_shield.description':
+    'Te protege con poder sagrado y absorbe una enorme cantidad de daño durante 8 giây. (thiên phú hiệp sĩ)',
+  'entities.abilities.earthbind.name': 'Đất Níu Giữ',
+  'entities.abilities.earthbind.description':
+    'Ata a la tierra a gần đó kẻ địch y los inmoviliza durante 2 giây. (thiên phú pháp sư tổ linh)',
+  'entities.abilities.evocation.name': 'Giếng Ête',
+  'entities.abilities.evocation.description': 'Restaura mana rápidamente. (thiên phú pháp sư)',
+  'entities.abilities.frenzied_regeneration.name': 'Hồi Phục Hoang Dã',
+  'entities.abilities.frenzied_regeneration.description':
+    'Regenera salud durante 10 giây. Solo en Forma de oso. (thiên phú druid)',
+  'entities.abilities.frost_trap.name': 'Bẫy Sương Giá',
+  'entities.abilities.frost_trap.description':
+    'Congela a los kẻ địch en el área objetivo durante 3 giây. (thiên phú thợ săn)',
+  'entities.abilities.ghostly_strike.name': 'Đòn Ma Ảnh',
+  'entities.abilities.ghostly_strike.description':
+    'Golpea a mục tiêu por daño de arma más {damage} y aumenta brevemente la evasión. Otorga 1 punto de combo. (thiên phú đạo tặc)',
+  'entities.abilities.hammer_of_wrath.name': 'Búa Ngân Chuông',
+  'entities.abilities.hammer_of_wrath.description':
+    'Lanza un martillo sagrado a un enemigo herido e inflige {damage} de daño de Thánh. Solo se usa por debajo del 20% de salud. (thiên phú hiệp sĩ)',
+  'entities.abilities.healing_stream.name': 'Giếng Suối',
+  'entities.abilities.healing_stream.description':
+    'Restaura a mục tiêu thân thiện durante 12 giây. (thiên phú pháp sư tổ linh)',
+  'entities.abilities.heroic_leap.name': 'Bước Nhảy Chiến',
+  'entities.abilities.heroic_leap.description':
+    'Saltas al área objetivo e infliges {damage} de daño Vật lý a gần đó kẻ địch. (thiên phú chiến binh)',
+  'entities.abilities.holy_wrath.name': 'Cơn Giận Thánh',
+  'entities.abilities.holy_wrath.description':
+    'Desata poder sagrado e inflige {damage} de daño a gần đó kẻ địch. (thiên phú hiệp sĩ)',
+  'entities.abilities.howl_of_terror.name': 'Tiếng Hú Kinh Hoàng',
+  'entities.abilities.howl_of_terror.description':
+    'Aterroriza a gần đó kẻ địch hasta 3 giây. El daño puede romper el efecto. (thiên phú thuật sĩ)',
+  'entities.abilities.ice_block.name': 'Quan Tài Lạnh',
+  'entities.abilities.ice_block.description':
+    'Te encierra en hielo y absorbe una enorme cantidad de daño durante 8 giây. (thiên phú pháp sư)',
+  'entities.abilities.inner_focus.name': 'Tâm Trí Tĩnh',
+  'entities.abilities.inner_focus.description':
+    'Hace que tu siguiente hechizo no tenga coste. Dura 60 giây. (thiên phú tu sĩ)',
+  'entities.abilities.innervate.name': 'Nhựa Sống',
+  'entities.abilities.innervate.description':
+    'Nhựa sống trào dâng trong bạn trong 10 giây, hồi 20 tài nguyên hiện tại theo từng đợt: mana, nộ khí hoặc năng lượng; biến hình không làm gián đoạn. (thiên phú Druid)',
+  'entities.abilities.kick.name': 'Đá',
+  'entities.abilities.kick.description':
+    'Ngắt niệm phép và chặn phép cùng hệ trong 4 giây. (thiên phú đạo tặc)',
+  'entities.abilities.last_stand.name': 'Giờ Thứ Mười Một',
+  'entities.abilities.last_stand.description':
+    'Aumenta temporalmente Thể lực durante 15 giây, aumentando la salud máxima. (thiên phú chiến binh)',
+  'entities.abilities.mend_pet.name': 'Băng Bó',
+  'entities.abilities.mend_pet.description':
+    'Sana a mục tiêu thân thiện por {damage} durante 15 giây. (thiên phú thợ săn)',
+  'entities.abilities.meteor.name': 'Đá Trời',
+  'entities.abilities.meteor.description':
+    'Hace caer un meteoro en el área objetivo, inflige {damage} de daño de Lửa y quema el suelo. (thiên phú pháp sư)',
+  'entities.abilities.mind_sear.name': 'Thiêu Ý Nghĩ',
+  'entities.abilities.mind_sear.description':
+    'Canaliza energía de Bóng tối en el área objetivo e inflige {damage} cada segundo a gần đó kẻ địch. (thiên phú tu sĩ)',
+  'entities.abilities.multi_shot.name': 'Bắn Tách',
+  'entities.abilities.multi_shot.description':
+    'Dispara varios proyectiles e inflige {damage} a gần đó kẻ địch. (thiên phú thợ săn)',
+  'entities.abilities.prayer_of_healing.name': 'Hồi Phục Hợp Xướng',
+  'entities.abilities.prayer_of_healing.description':
+    'Sana a gần đó đồng minh por {damage}. (thiên phú tu sĩ)',
+  'entities.abilities.preparation.name': 'Dự Phòng',
+  'entities.abilities.preparation.description':
+    'Termina el tiempo de reutilización de Sprint, Evasión y Vanish. (thiên phú đạo tặc)',
+  'entities.abilities.presence_of_mind.name': 'Tâm Trí Tăng Tốc',
+  'entities.abilities.presence_of_mind.description':
+    'Hace instantáneo tu siguiente hechizo con tiempo de lanzamiento. Dura 60 giây. (thiên phú pháp sư)',
+  'entities.abilities.psychic_scream.name': 'Tiếng Thét Tâm Linh',
+  'entities.abilities.psychic_scream.description':
+    'Aterroriza a gần đó kẻ địch hasta 4 giây. El daño puede romper el efecto. (thiên phú tu sĩ)',
+  'entities.abilities.pummel.name': 'Nện',
+  'entities.abilities.pummel.description':
+    'Ngắt niệm phép và chặn phép cùng hệ trong 4 giây. (thiên phú chiến binh)',
+  'entities.abilities.rallying_cry.name': 'Hiệu Triệu',
+  'entities.abilities.rallying_cry.description':
+    'Lanza un grito de reunión y aumenta sức tấn công de gần đó đồng minh durante 10 giây. (thiên phú chiến binh)',
+  'entities.abilities.rebuke.name': 'Quở Trách',
+  'entities.abilities.rebuke.description':
+    'Ngắt niệm phép và chặn phép cùng hệ trong 4 giây. (thiên phú hiệp sĩ)',
+  'entities.abilities.shadowstep.name': 'Trượt Bóng',
+  'entities.abilities.shadowstep.description':
+    'Das un paso entre las sombras hacia tu mục tiêu. (thiên phú đạo tặc)',
+  'entities.abilities.shield_wall.name': 'Thành Lũy',
+  'entities.abilities.shield_wall.description':
+    'Alzas un muro de escudo y aumentas mucho la giáp durante 10 giây. (thiên phú chiến binh)',
+  'entities.abilities.silence.name': 'Câm Lặng',
+  'entities.abilities.silence.description': 'Silencia a mục tiêu durante 4 giây. (thiên phú tu sĩ)',
+  'entities.abilities.skull_bash.name': 'Cú Húc Đầu',
+  'entities.abilities.skull_bash.description':
+    'Ngắt niệm phép và chặn phép cùng hệ trong 4 giây. (thiên phú druid)',
+  'entities.abilities.spell_lock.name': 'Lệnh Bịt Miệng',
+  'entities.abilities.spell_lock.description':
+    'Ngắt niệm phép và chặn phép cùng hệ trong 5 giây. (thiên phú thuật sĩ)',
+  'entities.abilities.tranquility.name': 'Khúc Ca Rừng Thưa',
+  'entities.abilities.tranquility.description':
+    'Canaliza energía restauradora y sana a gần đó đồng minh cada segundo. (thiên phú druid)',
   'entities.items.worn_sword.name': 'Đoản Kiếm Rỗ Sét',
   'entities.items.woven_robe.name': 'Áo Choàng Dệt Thung Khê',
   'entities.items.wyrmcult_grand_robe.name': 'Đại Áo Choàng Long Giáo',
@@ -4444,7 +4670,6 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hud.core.mobileControls': 'Điều khiển di động',
   'hud.core.mobileMap': 'Bản Đồ',
   'hud.core.mobileMenu': 'Menu',
-  'hud.core.mobileSettings': 'Cài Đặt',
   'hud.core.mobileMeters': 'Đồng Hồ',
   'hud.core.mobileMore': 'Thêm',
   'hud.core.mobileMoreAria': 'Hiện thêm menu',
@@ -6057,6 +6282,8 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.wyrmshadow.name': 'Áo Lễ Nightfang',
   'entities.itemSets.wyrmshadow.bonus2': 'Tăng sức mạnh tấn công thêm 40.',
   'entities.itemSets.wyrmshadow.bonus3': 'Tăng nhanh nhẹn thêm 15 và tỉ lệ chí mạng thêm 2%.',
+  'hudChrome.itemHeroicTag': '[ANH HÙNG]',
+  'hudChrome.itemSoulbound': 'Ràng buộc linh hồn',
   'hudChrome.itemSet.header': '{name} ({have}/{total})',
   'hudChrome.itemSet.bonusLine': '({pieces}) {bonus}',
   'hud.combat.floatingResist': 'Kháng',
@@ -6523,12 +6750,18 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.bank.withdrawQuantityConfirm': 'Rút Ra',
   'hudChrome.bank.withdrawQuantityInput': 'Số lượng cần rút',
   'hudChrome.bank.withdrawQuantityTitle': 'Rút {item}',
+  'entities.abilities.faerie_fire.description':
+    'Giảm giáp của mục tiêu đi {damage}% trong 40 giây. Không cộng dồn với Xẻ Giáp.',
+  'hud.core.mobileSettings': 'Cài Đặt',
   'abilityUi.tooltip.selfOnly': 'Chỉ bản thân',
   'itemUi.lootRoll.rolled': 'Đã tung {answered}/{total}',
   'entities.abilities.sunder_armor.description':
     'Xẻ toạc giáp của mục tiêu, giảm {damage}% mỗi lần áp dụng. Cộng dồn tối đa 5 lần. Tạo ra lượng đe dọa lớn.',
   'entities.mobs.training_dummy.name': 'Hình Nộm Tập Luyện',
   'entities.mobs.yumi_cat.name': 'Yumi',
+  'entities.mobs.nythraxis_heroic_priest_add.name': 'Malric, Đại Tư Tế Bất Tử',
+  'entities.mobs.nythraxis_heroic_rogue_add.name': 'Voss, Lưỡi Dao Bất Tử',
+  'entities.mobs.nythraxis_heroic_warrior_add.name': 'Aldren, Vệ Chiến Bất Tử',
   'guide.arenaPage.yumiBody':
     'Bảo Vệ Yumi là chế độ tranh mục tiêu theo đội chơi trong một mê cung: mỗi bên canh giữ linh thú mèo của mình trong khi săn lùng con của đối phương. Thỉnh thoảng cả hai chú mèo lại chớp dịch tới những góc mới của mê cung, nên trận đấu xoay vần giữa việc phòng thủ, săn lùng và chạy đua đi tìm lại chúng. Xếp hàng chờ theo dạng ba đấu ba hoặc năm đấu năm; gục ngã trong trận chỉ khiến bạn phải ngồi ngoài trong chốc lát.',
   'guide.arenaPage.yumiHeading': 'Bảo Vệ Yumi',
@@ -6570,4 +6803,52 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'yumi.queue.leave': 'Bạn rời hàng chờ Bảo Vệ Yumi.',
   'yumi.queue.teamLeave': 'Đội của bạn rời hàng chờ Bảo Vệ Yumi.',
   'yumi.respawn.title': 'GỤC NGÃ!',
+  'entities.abilities.chain_heal.name': 'Hồi Máu Chuỗi',
+  'entities.abilities.chain_heal.description':
+    'Hồi một lượng lớn máu cho mục tiêu đồng minh, rồi truyền sang tối đa 2 đồng minh khác ở gần. Mỗi lần truyền hồi ít hơn 50%. (Kỹ năng đặc trưng của Hồi phục)',
+  'entities.abilities.razor_howl.name': 'Tiếng Hú Sắc Lẻm',
+  'entities.abilities.razor_howl.description':
+    'Một tiếng hét làm chậm kẻ địch trong phạm vi 15 m đi 50% trong 8 giây. (Tài năng chiến binh)',
+  'entities.abilities.stormthrow.name': 'Ném Bão',
+  'entities.abilities.stormthrow.description':
+    'Ném vũ khí để làm choáng mục tiêu trong 3 giây. (Tài năng chiến binh)',
+  'entities.abilities.reckless_vow.name': 'Lời Thề Liều Lĩnh',
+  'entities.abilities.reckless_vow.description':
+    'Tăng 50% toàn bộ lượng nộ tạo ra và 20% tỉ lệ chí mạng trong 12 giây. (Tài năng chiến binh)',
+  'entities.abilities.red_banner.name': 'Chiến Kỳ Đỏ',
+  'entities.abilities.red_banner.description':
+    'Bạn và đồng minh ở gần nhận 10% tốc độ đánh và 10% sát thương trong 20 giây. (Tài năng chiến binh)',
+  'entities.items.chunk_of_ore.name': 'Mẩu Quặng',
+  'entities.quests.q_prof_intro.title': 'Một Nghề Cho Mỗi Bàn Tay',
+  'entities.quests.q_prof_intro.text':
+    'Ai ở Eastbrook cũng làm một nghề bên cạnh việc cầm kiếm, {playerName}. Những mạch quặng nằm rải rác quanh thị trấn, vậy hãy cầm cuốc và mang về cho tôi 5 mẩu. Tự tay khai thác chúng; tôi sẽ nhận ra sự khác biệt.',
+  'entities.quests.q_prof_intro.completion':
+    'Thấy chưa? Quặng trong túi và vết chai trên tay. Hãy tiếp tục đào quặng, đốn gỗ và hái thảo dược trên đường đi. Khi trở lại thị trấn, nhớ ghé bảng Trọng Tâm Thị Trấn gần chợ và bàn chế tác bên cạnh. Nếu muốn, bạn sẽ tìm thấy một nghề lương thiện trong tất cả những việc đó.',
+  'entities.quests.q_prof_intro.objectives.0.label': 'Mẩu Quặng',
+  'game.talents.readout.rowsSummary':
+    'Tài năng: {head}, đã chọn {picked}/{unlocked} hàng lựa chọn.',
+  'hudChrome.fct.absorbed': 'Đã hấp thụ {amount}',
+  'hudChrome.fct.cheap': 'Giảm chi phí!',
+  'hudChrome.mailbox.parcelQtyDecreaseAria': 'Gửi bớt một {item}',
+  'hudChrome.mailbox.parcelQtyIncreaseAria': 'Gửi thêm một {item}',
+  'game.talents.choicesTab': 'Lựa chọn',
+  'game.talents.rowUnlockToast': 'Đã mở khóa một lựa chọn tài năng mới!',
+  'game.talents.rowUnlocks': 'Mở khóa ở cấp {level}',
+  'hudChrome.auth.forgotPrompt': 'Quên mật khẩu?',
+  'hudChrome.auth.forgotTitle': 'Đặt lại mật khẩu',
+  'hudChrome.auth.forgotHint':
+    'Nhập tên người dùng của bạn và chúng tôi sẽ gửi liên kết đặt lại tới địa chỉ email đã đăng ký.',
+  'hudChrome.auth.forgotUsername': 'Tên người dùng',
+  'hudChrome.auth.forgotSubmit': 'Gửi liên kết đặt lại',
+  'hudChrome.auth.forgotSent':
+    'Nếu tài khoản với tên người dùng đó có địa chỉ email đã đăng ký, chúng tôi đã gửi liên kết đặt lại. Hãy kiểm tra hộp thư của bạn.',
+  'hudChrome.auth.forgotBack': 'Quay lại đăng nhập',
+  'hudChrome.auth.resetTitle': 'Chọn mật khẩu mới',
+  'hudChrome.auth.resetNewPassword': 'Mật khẩu mới',
+  'hudChrome.auth.resetConfirm': 'Xác nhận mật khẩu mới',
+  'hudChrome.auth.resetSubmit': 'Cập nhật mật khẩu',
+  'hudChrome.auth.resetDone': 'Mật khẩu của bạn đã được cập nhật. Bây giờ bạn có thể đăng nhập.',
+  'hudChrome.auth.resetMismatch': 'Mật khẩu không khớp.',
+  'hudChrome.auth.resetErrInvalid':
+    'Liên kết đặt lại này không hợp lệ hoặc đã hết hạn. Hãy yêu cầu liên kết mới.',
 };

@@ -1,17 +1,20 @@
 import { beforeAll, describe, expect, it } from 'vitest';
+import { CHOICE_ROWS } from '../src/sim/content/choice_rows';
+import { ABILITIES } from '../src/sim/content/classes';
 import { TALENTS } from '../src/sim/content/talents';
+import { tEntity } from '../src/ui/entity_i18n';
 import { ensureLocaleLoaded, setLanguage } from '../src/ui/i18n';
-import { tTalent } from '../src/ui/talent_i18n';
+import { grantAbilityValues, tTalent } from '../src/ui/talent_i18n';
 
-// Talent descriptions are GENERATED from each node's `effect` data (in every locale,
-// English included; see tTalent). These guards make sure the displayed tooltip never
-// disagrees with what the talent actually does, and that the hand-written `description`
-// strings (still the translation-manifest source) stay numerically honest. Together they
-// stop the two drifts this suite was written for: vague text that hides the numbers, and
-// text that states a number the effect does not produce.
+// Talent descriptions are generated from effect data outside English. English remains
+// authored source text, so this suite keeps it numerically honest against the effect
+// records that power specs, masteries, and the new choice rows.
 
-// Pct-style fields are stored as fractions (0.10 = 10%); everything else is a flat value.
 const PCT_FIELDS = new Set([
+  'leechPct',
+  'hpFrac',
+  'belowFrac',
+  'dmgPctVsDotted',
   'crit',
   'dodge',
   'apPct',
@@ -23,9 +26,28 @@ const PCT_FIELDS = new Set([
   'intPct',
   'spiPct',
   'meleeDmgPct',
+  'meleeHastePct',
   'spellDmgPct',
   'healPct',
   'threatPct',
+  'critDmgPct',
+  'dotDmgPct',
+  'hotHealPct',
+  'absorbPct',
+  'critVsRooted',
+  'spellHastePct',
+  'petDmgPct',
+  'petDmgSharePct',
+  'secondWindPctPerSec',
+  'secondWindHpBelow',
+  'fearBreakPct',
+  'onKillSpeedPct',
+  'autoRagePct',
+  'abilityRagePct',
+  'battleRhythmRagePct',
+  'battleRhythmDmgPct',
+  'bloodbathPct',
+  'bloodbathMaxPct',
   'dmgPct',
   'costPct',
   'cooldownPct',
@@ -33,16 +55,35 @@ const PCT_FIELDS = new Set([
   'buffPct',
 ]);
 
-// Each effect magnitude as the exact token the tooltip should contain: pcts as "N%",
-// flats as "N" (per-rank value; the description says "... per rank").
-function expectedTokens(effect: unknown, maxRank: number): string[] {
-  void maxRank;
+function expectedTokens(effect: unknown): string[] {
   const toks: string[] = [];
   const walk = (obj: unknown) => {
     if (!obj || typeof obj !== 'object') return;
     for (const [key, value] of Object.entries(obj)) {
       if (typeof value === 'number') {
         if (value === 0) continue;
+        if (key === 'battleRhythm') continue;
+        if (key === 'critDmgPct' && value === 0.5) {
+          toks.push('double');
+          continue;
+        }
+        // A slow `mult` is stated as the percentage slowed (mult 0.5 = 50% slower).
+        if (key === 'mult' && value > 0 && value < 1) {
+          toks.push(`${+((1 - value) * 100).toFixed(1)}%`);
+          continue;
+        }
+        // castPct -1 means the cast becomes instant; tooltips say "instant".
+        if (key === 'castPct' && value === -1) {
+          toks.push('instant');
+          continue;
+        }
+        // A proc firing on EVERY matching cast (n: 1) reads as "every cast";
+        // no numeral is required in the copy.
+        if (key === 'n' && value === 1) continue;
+        if (key === 'bonusCharges') {
+          toks.push(`${value + 1}`);
+          continue;
+        }
         toks.push(
           PCT_FIELDS.has(key)
             ? `${+(Math.abs(value) * 100).toFixed(1)}%`
@@ -56,33 +97,54 @@ function expectedTokens(effect: unknown, maxRank: number): string[] {
   return toks;
 }
 
-// The set of numbers the effect legitimately produces: each magnitude as a per-rank value
-// and as a maxRank total, with pct fields scaled to whole percents.
-function legitNumbers(effect: unknown, maxRank: number): Set<number> {
+function legitNumbers(effect: unknown): Set<number> {
   const out = new Set<number>();
   const add = (value: number, isPct: boolean) => {
-    const per = isPct ? Math.round(Math.abs(value) * 100) : Math.abs(value);
-    out.add(per);
-    out.add(per * maxRank);
+    out.add(isPct ? Math.round(Math.abs(value) * 100) : Math.abs(value));
   };
   const walk = (obj: unknown) => {
     if (!obj || typeof obj !== 'object') return;
     for (const [key, value] of Object.entries(obj)) {
-      if (typeof value === 'number') add(value, PCT_FIELDS.has(key));
-      else if (Array.isArray(value)) value.forEach(walk);
+      if (typeof value === 'number') {
+        if (key === 'battleRhythm') continue;
+        add(value, PCT_FIELDS.has(key));
+        // Cheat death leaves the player at 1 health: the floor is intrinsic to
+        // the mechanic, so copy may state the 1.
+        if (key === 'cheatDeathIcd') out.add(1);
+        if (key === 'bonusCharges') out.add(value + 1);
+        // A slow mult also legitimizes the stated slow percentage (mult 0.5 = 50%).
+        if (key === 'mult' && value > 0 && value < 1) out.add(Math.round((1 - value) * 100));
+      } else if (Array.isArray(value)) value.forEach(walk);
       else if (typeof value === 'object') walk(value);
     }
   };
   walk(effect);
+  // A grant option's tooltip appends the granted ability's own description with
+  // its base (rank-1) values resolved, so every number the granted ability
+  // produces (damage min/max, buff, duration, absorb amount, dot total) is
+  // legitimate, not a contradiction. Walk the granted ability's effects too.
+  const grantId = (effect as { grant?: { ability?: string } })?.grant?.ability;
+  if (grantId && ABILITIES[grantId]) {
+    // Render the granted ability description exactly as the tooltip does (base
+    // values), so every number it actually shows counts as legitimate.
+    const { pcts, bare } = descriptionNumbers(
+      tEntity({
+        kind: 'ability',
+        id: grantId,
+        field: 'description',
+        values: grantAbilityValues(grantId),
+      }),
+    );
+    for (const n of pcts) out.add(n);
+    for (const n of bare) out.add(n);
+  }
   return out;
 }
 
-function hasNumericEffect(effect: unknown, maxRank: number): boolean {
-  return legitNumbers(effect, maxRank).size > 0;
+function hasNumericEffect(effect: unknown): boolean {
+  return legitNumbers(effect).size > 0;
 }
 
-// Numbers a human wrote in a description, excluding durations/ranges the effect never
-// carries (e.g. "for 4 sec", "within 8 yards") which are legitimately effect-external.
 function descriptionNumbers(text: string): { pcts: number[]; bare: number[] } {
   const pcts = [...text.matchAll(/(\d+(?:\.\d+)?)\s*%/g)].map((m) => Math.round(parseFloat(m[1])));
   const bare: number[] = [];
@@ -90,52 +152,33 @@ function descriptionNumbers(text: string): { pcts: number[]; bare: number[] } {
     const n = parseFloat(m[1]);
     const end = (m.index ?? 0) + m[0].length;
     const after = text.slice(end, end + 8).toLowerCase();
-    if (/^\s*%/.test(after)) continue; // already counted as a percent
-    if (/^\s*(sec|second|yard|yd|min|meter|m\b)/.test(after)) continue; // duration/range
+    if (/^\s*%/.test(after)) continue;
+    if (/^\s*(sec|second|yard|yd|min|meter|m\b)/.test(after)) continue;
     bare.push(n);
   }
   return { pcts, bare };
 }
 
-interface Entry {
+interface EffectEntry {
   cls: string;
   id: string;
   name: string;
   source: string;
   effect: unknown;
-  maxRank: number;
   render: () => string;
 }
 
-function allEntries(): Entry[] {
-  const entries: Entry[] = [];
+interface SpecEntry {
+  cls: string;
+  id: string;
+  abilityName: string;
+  render: () => string;
+}
+
+function effectEntries(): EffectEntry[] {
+  const entries: EffectEntry[] = [];
   for (const [cls, ct] of Object.entries(TALENTS)) {
     if (!ct) continue;
-    for (const node of ct.nodes) {
-      if (node.kind === 'choice') {
-        for (const choice of node.choices ?? []) {
-          entries.push({
-            cls,
-            id: `${node.id}.${choice.id}`,
-            name: choice.name,
-            source: choice.description,
-            effect: choice.effect,
-            maxRank: 1,
-            render: () => tTalent({ kind: 'talentChoice', choice, field: 'description' }),
-          });
-        }
-        continue;
-      }
-      entries.push({
-        cls,
-        id: node.id,
-        name: node.name,
-        source: node.description,
-        effect: node.effect,
-        maxRank: node.maxRank,
-        render: () => tTalent({ kind: 'talentNode', node, field: 'description' }),
-      });
-    }
     for (const spec of ct.specs) {
       entries.push({
         cls,
@@ -143,8 +186,35 @@ function allEntries(): Entry[] {
         name: spec.mastery.name,
         source: spec.mastery.description,
         effect: spec.mastery.effect,
-        maxRank: 1,
         render: () => tTalent({ kind: 'talentMastery', spec, field: 'description' }),
+      });
+    }
+    for (const row of CHOICE_ROWS[cls].rows) {
+      for (const choice of row.options) {
+        entries.push({
+          cls,
+          id: `${row.level}.${choice.id}`,
+          name: choice.name,
+          source: choice.description,
+          effect: choice.effect,
+          render: () => tTalent({ kind: 'talentChoice', choice, field: 'description' }),
+        });
+      }
+    }
+  }
+  return entries;
+}
+
+function specEntries(): SpecEntry[] {
+  const entries: SpecEntry[] = [];
+  for (const [cls, ct] of Object.entries(TALENTS)) {
+    if (!ct) continue;
+    for (const spec of ct.specs) {
+      entries.push({
+        cls,
+        id: spec.id,
+        abilityName: ABILITIES[spec.signature]?.name ?? spec.signature,
+        render: () => tTalent({ kind: 'talentSpec', spec, field: 'description' }),
       });
     }
   }
@@ -153,98 +223,119 @@ function allEntries(): Entry[] {
 
 const NO_EFFECT = 'Provides a specialization benefit.';
 
-describe('talent tooltip accuracy (all 9 classes x 3 specs)', () => {
+describe('talent tooltip accuracy for specs, masteries, and choice rows', () => {
   beforeAll(async () => {
     await ensureLocaleLoaded('en');
     setLanguage('en');
   });
 
-  const entries = allEntries();
+  const effects = effectEntries();
+  const specs = specEntries();
 
-  it('covers every class and a meaningful number of nodes', () => {
-    expect(new Set(entries.map((e) => e.cls)).size).toBe(9);
-    expect(entries.length).toBeGreaterThan(250);
+  it('covers every class, every spec, and every choice row option', () => {
+    expect(new Set(effects.map((e) => e.cls)).size).toBe(9);
+    expect(specs).toHaveLength(27);
+    expect(effects.length).toBe(27 + 9 * 6 * 3);
   });
 
-  it('every talent describes a real effect (none fall back to the generic blurb)', () => {
-    const blank = entries.filter(
-      (e) => e.render().trim() === NO_EFFECT || e.render().trim() === '',
+  it('every spec tooltip names its signature ability', () => {
+    const missing = specs
+      .filter((entry) => !entry.render().includes(entry.abilityName))
+      .map((entry) => `${entry.cls}:${entry.id} missing ${entry.abilityName}`);
+    expect(missing).toEqual([]);
+  });
+
+  it('every mastery and row option describes a real effect', () => {
+    const blank = effects.filter(
+      (entry) => entry.render().trim() === NO_EFFECT || entry.render().trim() === '',
     );
-    expect(blank.map((e) => `${e.cls}:${e.id}`)).toEqual([]);
+    expect(blank.map((entry) => `${entry.cls}:${entry.id}`)).toEqual([]);
   });
 
-  it('the rendered English tooltip states the numbers when the effect has any (no vague text)', () => {
-    const vague = entries
-      .filter((e) => hasNumericEffect(e.effect, e.maxRank) && !/\d/.test(e.render()))
-      .map((e) => `${e.cls}:${e.id} -> "${e.render()}"`);
+  it('the rendered English tooltip states numbers when the effect has any', () => {
+    const vague = effects
+      .filter(
+        (entry) =>
+          hasNumericEffect(entry.effect) &&
+          !/\d/.test(entry.render()) &&
+          !expectedTokens(entry.effect).every((token) => entry.render().includes(token)),
+      )
+      .map((entry) => `${entry.cls}:${entry.id} -> "${entry.render()}"`);
     expect(vague).toEqual([]);
   });
 
-  it('the tooltip is COMPLETE: every number the effect produces appears in the text', () => {
+  it('the tooltip is complete for every number the effect produces', () => {
     const incomplete: string[] = [];
-    for (const e of entries) {
-      const text = e.render();
-      const missing = expectedTokens(e.effect, e.maxRank).filter((t) => !text.includes(t));
-      if (missing.length)
-        incomplete.push(`${e.cls}:${e.id} missing ${missing.join(', ')} in "${text}"`);
+    for (const entry of effects) {
+      const text = entry.render();
+      const missing = expectedTokens(entry.effect).filter((token) => !text.includes(token));
+      if (missing.length) {
+        incomplete.push(`${entry.cls}:${entry.id} missing ${missing.join(', ')} in "${text}"`);
+      }
     }
     expect(incomplete, incomplete.join('\n')).toEqual([]);
   });
 
   it('no number in the rendered tooltip contradicts the effect data', () => {
     const bad: string[] = [];
-    for (const e of entries) {
-      const legit = legitNumbers(e.effect, e.maxRank);
-      const { pcts, bare } = descriptionNumbers(e.render());
-      for (const p of pcts)
-        if (!legit.has(p)) bad.push(`${e.cls}:${e.id} rendered "${p}%" not in effect`);
-      for (const n of bare)
-        if (!legit.has(n)) bad.push(`${e.cls}:${e.id} rendered "${n}" not in effect`);
+    for (const entry of effects) {
+      const legit = legitNumbers(entry.effect);
+      const { pcts, bare } = descriptionNumbers(entry.render());
+      for (const pct of pcts) {
+        if (!legit.has(pct)) bad.push(`${entry.cls}:${entry.id} rendered "${pct}%" not in effect`);
+      }
+      for (const n of bare) {
+        if (!legit.has(n)) bad.push(`${entry.cls}:${entry.id} rendered "${n}" not in effect`);
+      }
     }
     expect(bad).toEqual([]);
   });
 
   it('the hand-written source description never states a number the effect does not produce', () => {
     const bad: string[] = [];
-    for (const e of entries) {
-      const legit = legitNumbers(e.effect, e.maxRank);
-      const { pcts, bare } = descriptionNumbers(e.source);
-      for (const p of pcts)
-        if (!legit.has(p)) bad.push(`${e.cls}:${e.id} source "${p}%" not in effect`);
-      for (const n of bare)
-        if (!legit.has(n)) bad.push(`${e.cls}:${e.id} source "${n}" not in effect`);
+    for (const entry of effects) {
+      const legit = legitNumbers(entry.effect);
+      const { pcts, bare } = descriptionNumbers(entry.source);
+      for (const pct of pcts) {
+        if (!legit.has(pct)) bad.push(`${entry.cls}:${entry.id} source "${pct}%" not in effect`);
+      }
+      for (const n of bare) {
+        if (!legit.has(n)) bad.push(`${entry.cls}:${entry.id} source "${n}" not in effect`);
+      }
     }
     expect(bad, bad.join('\n')).toEqual([]);
   });
 
-  it('regression locks: vague tooltips now read real numbers; egregious effects honor their promise', () => {
+  it('regression locks: row and mastery tooltips state their real numbers', () => {
     setLanguage('en');
-    const render = (cls: string, finder: (e: Entry) => boolean) => {
-      const entry = entries.find((e) => e.cls === cls && finder(e));
-      if (!entry) throw new Error(`no talent entry matched for ${cls}`);
+    const render = (cls: string, id: string) => {
+      const entry = effects.find((candidate) => candidate.cls === cls && candidate.id.endsWith(id));
+      if (!entry) throw new Error(`no talent entry matched for ${cls}:${id}`);
       return entry.render();
     };
-    // Barrage was "Improves instant shots per rank." (vague) -> now the real per-rank
-    // numbers. Concussive Shot is a utility slow, so the talent cuts its cooldown (more
-    // frequent slows) rather than buffing its negligible damage.
-    const barrage = render('hunter', (e) => e.id === 'mm_barrage');
-    expect(barrage).toContain('Fell Shot');
-    expect(barrage).toContain('Rattling Shot');
-    expect(barrage).toContain('cooldown');
-    expect(barrage).toContain('10%');
-    expect(barrage).not.toContain('15%');
-    // Emberstorm promised "+10% Fire damage"; the 12% effect was bent down to honor it.
-    const ember = render('warlock', (e) => e.id === 'dest_choice.dest_choice_emberstorm');
-    expect(ember).toContain('10%');
-    expect(ember).not.toContain('12%');
-    // Arcane Mind promised "+8% Intellect"; the effect now grants intPct 0.08.
-    const arcane = render('mage', (e) => e.id === 'mag_school_focus.mag_school_arcane');
-    expect(arcane).toContain('Intellect');
-    expect(arcane).toContain('8%');
-    // Survival mastery promised "+10% Agility"; the effect now grants agiPct 0.10.
-    const lr = render('hunter', (e) => e.id === 'survival.mastery');
-    expect(lr).toContain('Agility');
-    expect(lr).toContain('10%');
-    expect(lr).toContain('dodge');
+
+    expect(render('warrior', 'war_r5_crushing_onrush')).toContain('50%');
+    expect(render('warrior', 'war_r17_red_harvest')).toContain('25%');
+    const survival = render('hunter', 'survival.mastery');
+    expect(survival).toContain('Agility');
+    expect(survival).toContain('15%');
+    expect(survival).toContain('physical ability damage');
+  });
+
+  it('localized thorns procs identify the ward and reflected melee strike trigger', async () => {
+    await ensureLocaleLoaded('es');
+    setLanguage('es');
+    const entry = effects.find(
+      (candidate) =>
+        candidate.cls === 'shaman' && candidate.id.endsWith('sha_r5_improved_lightning_shield'),
+    );
+    if (!entry) throw new Error('missing Improved Thunder Ward talent entry');
+
+    const rendered = entry.render();
+    expect(rendered).toContain(tEntity({ kind: 'ability', id: 'lightning_shield', field: 'name' }));
+    expect(rendered).toContain(
+      'Protege a un aliado para que los atacantes cuerpo a cuerpo se hieran al golpearlo.',
+    );
+    setLanguage('en');
   });
 });

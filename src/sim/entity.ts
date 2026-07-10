@@ -47,6 +47,7 @@ function baseEntity(id: number, pos: Vec3): Entity {
     critChance: 0.05,
     critRating: 0,
     hasteRating: 0,
+    critDmgBonus: 0,
     dodgeChance: 0.05,
     castPushbackReduction: 0,
     knockbackResistance: 0,
@@ -181,6 +182,10 @@ function manaFromIntellect(int: number): number {
   return Math.min(i, 20) + Math.max(0, i - 20) * 15;
 }
 
+export function pctValue(value: number): number {
+  return value > 1 ? value / 100 : value;
+}
+
 // Recompute all derived stats for the player from class, level, gear, buffs, and
 // precomputed talent modifiers. `mods` is the flat struct resolved at
 // allocation/respec time (computeTalentModifiers) — this never walks the tree.
@@ -242,6 +247,7 @@ export function recalcPlayerStats(
   let bonusDodge = 0;
   let bearForm = false;
   let catForm = false;
+  let moonkinForm = false;
   let scaleMul = 1; // Fiesta buff_scale: body-size multiplier (>1 also adds hp)
   // Percent raid buffs (Mark of the Wild / Arcane Intellect / Power Word: Fortitude /
   // Devotion Aura / Battle Shout / Blessing of Might). Accumulated as fractions here,
@@ -251,6 +257,7 @@ export function recalcPlayerStats(
   let staPct = 0;
   let buffArmorPct = 0;
   let buffApPct = 0;
+  let buffCrit = 0;
   for (const a of e.auras) {
     if (a.kind === 'buff_ap') bonusAp += a.value;
     // Attack-power debuff (Demoralizing Shout/Roar). Mobs fold this live in
@@ -281,7 +288,10 @@ export function recalcPlayerStats(
       s.int = Math.round(s.int * m);
       s.spi = Math.round(s.spi * m);
     } else if (a.kind === 'buff_dodge') bonusDodge += a.value;
+    else if (a.kind === 'buff_crit') buffCrit += a.value * (a.stacks ?? 1);
     else if (a.kind === 'buff_scale') scaleMul *= a.value;
+    // Metamorphosis: a temporary demon transform that also makes the caster larger.
+    else if (a.kind === 'form_metamorph') scaleMul *= 1.35;
     // Percent raid buffs store integer percent POINTS (5 = +5%) so they survive the
     // integer-rounding talent value multiplier; converted to a fraction here.
     else if (a.kind === 'buff_stats_pct') allStatsPct += a.value / 100;
@@ -291,6 +301,12 @@ export function recalcPlayerStats(
     else if (a.kind === 'buff_ap_pct') buffApPct += a.value / 100;
     else if (a.kind === 'form_bear') bearForm = true;
     else if (a.kind === 'form_cat') catForm = true;
+    // Caster forms (Shadowform, Moonkin Form) carry their Spell Power bonus in
+    // the form aura's value, so the bonus lives and dies with the one toggle.
+    else if (a.kind === 'form_shadow' || a.kind === 'form_moonkin') {
+      bonusSp += a.value;
+      if (a.kind === 'form_moonkin') moonkinForm = true;
+    }
   }
   // Talent passive stat modifiers (flat additions + a stamina percent before the
   // HP derivation below). AP/armor/maxHp percents are applied at their own steps.
@@ -334,6 +350,9 @@ export function recalcPlayerStats(
     bonusAp += 8 + lvl * 2;
     s.agi += Math.max(2, Math.floor(lvl / 2));
   }
+  // Moonkin Form: a hardy caster form that adds 50% armor (its +20% spell damage rides a
+  // separate buff_spelldmg aura the form applies).
+  if (moonkinForm) s.armor = Math.round(s.armor * 1.5);
   if (mods?.stats.armorPct) s.armor = Math.round(s.armor * (1 + mods.stats.armorPct));
   if (buffArmorPct) s.armor = Math.round(s.armor * (1 + buffArmorPct)); // Devotion Aura
   // Floor Spirit at 0 so a Spirit-siphoning debuff (negative buff_spi) can never
@@ -391,9 +410,13 @@ export function recalcPlayerStats(
   const hasteFrac = setEff.haste + hasteFractionFromRating(e.hasteRating);
   // Haste drives all three channels: faster melee and ranged auto-attack swings
   // AND shorter spell casts/channels.
-  e.meleeHaste = hasteFrac;
+  // Union of the rating system (#1471) and the spec masteries (#1543): ratings and
+  // set haste feed hasteFrac; a spec mastery's passive haste adds on its channel.
+  e.meleeHaste = hasteFrac + (mods?.global.meleeHastePct ?? 0);
   e.rangedHaste = hasteFrac;
-  e.spellHaste = hasteFrac;
+  // Spell haste also folds in a spec mastery's passive haste (spellHastePct), so a
+  // caster spec can shorten every cast; the cast-time tooltips read the same total.
+  e.spellHaste = hasteFrac + (mods?.global.spellHastePct ?? 0);
   e.setProcs = setEff.procs;
   if (e.setProcs.length > 0 && !e.procReadyAt) e.procReadyAt = {};
   // Crit: ~1% per 20 agi at low level
@@ -402,7 +425,10 @@ export function recalcPlayerStats(
     s.agi * 0.0005 +
     (mods?.stats.crit ?? 0) +
     setEff.crit +
+    buffCrit +
     critFractionFromRating(e.critRating);
+  // Extra crit damage from a spec mastery (e.g. Fire mage: spell crits deal double).
+  e.critDmgBonus = mods?.global.critDmgPct ?? 0;
   e.castPushbackReduction = setEff.castPushbackReduction;
   e.knockbackResistance = setEff.knockbackResistance;
   // Floored at 0: an off-balance debuff (negative buff_dodge) can drive dodge to nothing.
@@ -538,6 +564,7 @@ export function createNpc(id: number, def: NpcDef, pos: Vec3): Entity {
   e.color = def.color;
   e.questIds = [...def.questIds];
   e.vendorItems = [...(def.vendorItems ?? [])];
+  e.devVendor = def.devVendor ?? false;
   return e;
 }
 

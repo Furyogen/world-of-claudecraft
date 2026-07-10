@@ -1470,6 +1470,29 @@ describe('client-side delta merge', () => {
     ).toBe(0);
   });
 
+  it('round-trips next-cast empowerment scope for online action-bar glows', () => {
+    const sim = new Sim({ seed: 7, playerClass: 'priest', autoEquip: true });
+    const e = sim.entities.get(sim.playerId)!;
+    e.auras.push({
+      id: 'pri_searing_light',
+      name: 'Searing Light',
+      kind: 'next_cast_free',
+      remaining: 8,
+      duration: 8,
+      value: 0,
+      sourceId: e.id,
+      school: 'holy',
+      empowerAbilities: ['smite'],
+    });
+    const w = wireEntity(e) as { auras: { id: string; emp?: string[] }[] };
+    expect(w.auras.find((a) => a.id === 'pri_searing_light')?.emp).toEqual(['smite']);
+
+    const client = bareClient(e.id + 1000);
+    (client as any).applySnapshot({ t: 'snap', ents: [w] });
+    const aura = client.entities.get(e.id)?.auras.find((a) => a.id === 'pri_searing_light');
+    expect(aura?.empowerAbilities).toEqual(['smite']);
+  });
+
   it('snaps the interpolation anchor on a teleport but tweens normal moves', () => {
     const client = bareClient(1);
     const ent = (x: number, z: number) => ({

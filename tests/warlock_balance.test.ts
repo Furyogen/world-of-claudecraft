@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { CHOICE_ROWS } from '../src/sim/content/choice_rows';
 import { ABILITIES, abilitiesKnownAt } from '../src/sim/content/classes';
 import { WARLOCK_TALENTS } from '../src/sim/content/talents_classic';
 import { WARLOCK_PET_MOBS } from '../src/sim/content/warlock_pets';
@@ -15,22 +16,10 @@ function rawPetDps(templateId: keyof typeof WARLOCK_PET_MOBS, level = 20): numbe
   return (pet.dmgBase + pet.dmgPerLevel * (level - 1)) / pet.attackSpeed;
 }
 
-function node(id: string) {
-  const talent = WARLOCK_TALENTS.nodes.find((entry) => entry.id === id);
-  if (!talent) throw new Error(`Missing warlock talent ${id}`);
-  return talent;
-}
-
 function spec(id: string) {
   const talentSpec = WARLOCK_TALENTS.specs.find((entry) => entry.id === id);
   if (!talentSpec) throw new Error(`Missing warlock spec ${id}`);
   return talentSpec;
-}
-
-function abilityEffects(id: string) {
-  const effects = node(id).effect?.ability;
-  if (!effects) throw new Error(`Missing ability effects for warlock talent ${id}`);
-  return effects;
 }
 
 describe('warlock low-level sustained damage tuning', () => {
@@ -52,26 +41,23 @@ describe('warlock low-level sustained damage tuning', () => {
     expect(shadowBolt?.effects).toEqual([{ type: 'directDamage', min: 68, max: 84 }]);
   });
 
-  it('keeps affliction and destruction low-level talent amplification in line with other casters', () => {
-    expect(spec('affliction').mastery.effect.global?.spellDmgPct).toBe(0.04);
-    expect(spec('destruction').mastery.effect.global?.spellDmgPct).toBe(0.03);
+  it('keeps affliction and destruction talent amplification in line with the other caster masteries', () => {
+    // Masteries were made impactful across all specs (spec identity pass): affliction
+    // amplifies its damage-over-time effects, destruction doubles spell crit damage.
+    expect(spec('affliction').mastery.effect.global?.dotDmgPct).toBe(0.2);
+    expect(spec('destruction').mastery.effect.global?.critDmgPct).toBe(0.5);
+    expect(spec('destruction').mastery.effect.stats?.crit).toBe(0.02);
 
-    const afflictionPact = node('wlk_dark_pact').choices?.find(
-      (choice) => choice.id === 'wlk_pact_affliction',
-    );
-    expect(afflictionPact?.effect.global?.spellDmgPct).toBe(0.02);
-
-    expect(abilityEffects('aff_imp_agony')).toContainEqual({
-      ability: 'curse_of_agony',
-      dmgPct: 0.03,
-    });
-    expect(abilityEffects('aff_imp_corruption')).toContainEqual({
-      ability: 'corruption',
-      dmgPct: 0.03,
-    });
-    expect(abilityEffects('dest_bane')).toEqual([
-      { ability: 'shadow_bolt', castPct: -0.01 },
-      { ability: 'immolate', castPct: -0.01 },
-    ]);
+    // The point-tree amplifiers above lived in the deleted node trees; their
+    // successors are the warlock choice rows, which must stay DoT-flavored and
+    // bounded (no option may amplify the mastery axis, dotDmgPct).
+    for (const row of CHOICE_ROWS.warlock.rows) {
+      for (const option of row.options) {
+        expect(
+          option.effect.global?.dotDmgPct,
+          `${option.id} stacks the mastery axis`,
+        ).toBeUndefined();
+      }
+    }
   });
 });

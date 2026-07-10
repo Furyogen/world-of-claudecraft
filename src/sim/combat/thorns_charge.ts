@@ -11,6 +11,7 @@
 import type { SimContext } from '../sim_context';
 import type { Entity } from '../types';
 import { CAST_COMPLETE_EPS, DT } from '../types';
+import { onThornsReflect } from './talent_procs';
 
 export interface ThornsState {
   charges?: number; // remaining charges; undefined => unlimited (legacy thorns)
@@ -52,6 +53,8 @@ export function consumeThornsCharge(a: ThornsState): boolean {
 export function applyThornsReaction(ctx: SimContext, defender: Entity, attacker: Entity): void {
   for (const a of defender.auras) {
     if (a.kind === 'thorns' && consumeThornsCharge(a)) {
+      // Talent procs keyed to a fired reflect (deterministic, no rng draw).
+      if (defender.kind === 'player') onThornsReflect(ctx, defender);
       // Reflect (Thorns / Lightning Shield) is incidental, not a direct attack:
       // pass direct=false so it never walks the mob's leash anchor (else a kited
       // mob meleeing a shielded player would be re-anchored and never leash home).

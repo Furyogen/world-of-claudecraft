@@ -87,6 +87,7 @@ import type {
 } from '../sim/types';
 import {
   type AbilityEffect,
+  type AuraKind,
   CONSUME_DURATION,
   canPrestige,
   dist2d,
@@ -140,6 +141,7 @@ import {
   deferAutoAttackUntilCastEnd,
   hasAutoAttackTarget,
 } from './attack_on_ability';
+import { auraDisplayNameFromSource } from './aura_display_name';
 import { type AuraEffectInput, auraEffectDescriptor } from './aura_effect';
 import { AurasPainter, type AurasPainterDeps } from './auras_painter';
 import { type AurasDeps, createAurasView } from './auras_view';
@@ -331,6 +333,7 @@ import {
 } from './player_card_share';
 import { chatPlayerContextActions } from './player_context_menu';
 import { hydratePortraits, portraitChipHtml } from './portrait_chip';
+import { procAuraConsumeSelfNoteText, procAuraGainSelfNoteText } from './proc_fct_notes';
 import { maskProfanity } from './profanity';
 import { encodeItemLink, encodeQuestLink, parseChatSegments } from './quest_link';
 import { QuestProgressBanner } from './quest_progress_banner';
@@ -340,6 +343,7 @@ import { lockoutParts, lockoutShape } from './raid_lockout';
 import { type RaidLockoutI18n, raidLockoutPanelHtml } from './raid_lockout_view';
 import { restView } from './rest_indicator';
 import { RiteWindow } from './rite_window';
+import { isTalentRowUnlockLevel } from './row_unlock_toast';
 import { localizeServerText } from './server_i18n';
 import { localizeSimAuraName, localizeSimText } from './sim_i18n';
 import { SocialWindow } from './social_window';
@@ -356,7 +360,7 @@ import { type StatTooltipI18n, statCellHtml, statTooltipHtml } from './stat_tool
 import { nearestSubzone } from './subzone';
 import { swingTimerState } from './swing_timer';
 import { SwingTimerPainter } from './swing_timer_painter';
-import { localizeTalentTitle, roleLabel, tTalent } from './talent_i18n';
+import { roleLabel, tTalent } from './talent_i18n';
 import { TalentsWindow } from './talents_window';
 import type { PresetId, ThemeKnob, ThemeState } from './theme';
 import { TOOLTIP_PEEK_MS, TouchPeekGuard } from './touch_peek';
@@ -575,6 +579,7 @@ const MAIL_RESULT_ERROR_KEYS: Record<MailResultCode, TranslationKey> = {
   noRecipient: 'hudChrome.mailbox.result.noRecipient',
   tooManyParcels: 'hudChrome.mailbox.result.tooManyParcels',
   noMailQuestItems: 'hudChrome.mailbox.result.noMailQuestItems',
+  noMailSoulbound: 'hudChrome.itemSoulbound',
   notEnoughItems: 'hudChrome.mailbox.result.notEnoughItems',
   cantAffordPostage: 'hudChrome.mailbox.result.cantAffordPostage',
   recipientBoxFull: 'hudChrome.mailbox.result.recipientBoxFull',
@@ -816,6 +821,8 @@ function yellVoiceKey(text: string): string {
     .slice(0, 60)}`;
 }
 
+const CHEAT_DEATH_SAVE_TEXT = 'Cheat Death saves you!';
+
 export class Hud {
   // Ability slots across both rows: 1..11 on the primary bar, 12..22 on the
   // secondary bar (slot 0 is the fixed Attack toggle on the primary bar). The
@@ -872,6 +879,7 @@ export class Hud {
   // attack handler then falls back to the plain castSlot(0) toggle.
   onMobileAttackNearest: (() => void) | null = null;
   private hotbarActions: HotbarAction[] = []; // index = barSlot-1
+  private readonly pendingProcAuraNotes = new Set<string>();
   private loadedSlotMapFromStorage = false;
   private knownAbilityIdsAtLastSlotSync: Set<string> | null = null;
   private activeHotbarForm: HotbarForm = 'normal';
@@ -1166,7 +1174,9 @@ export class Hud {
   });
   private openGossipNpcId: number | null = null;
   private openQuestDetailId: string | null = null;
-  private pendingChatLinks = new Map<string, string>(); // display "[Name]" -> [[q:id]]/[[i:id]] token
+  // Ordered so two base/heroic items with the same display name retain their
+  // distinct tokens when the readable draft is converted for sending.
+  private pendingChatLinks: readonly { display: string; token: string }[] = [];
   private questDialogTrap: FocusTrapHandle | null = null;
   private questDialogOpenedAtMs = 0;
   // The NPC whose voice line is currently sounding, so update() can fade it by
@@ -2877,7 +2887,7 @@ export class Hud {
   // token it stands for, so applyPendingChatLinks can swap it back in on send.
   private insertChatLink(display: string, token: string): void {
     const input = $('#chat-input') as unknown as HTMLInputElement;
-    this.pendingChatLinks.set(display, token);
+    this.pendingChatLinks = [...this.pendingChatLinks, { display, token }];
     input.placeholder = this.activeChatPlaceholder();
     input.style.display = 'block';
     input.value =
@@ -2890,15 +2900,16 @@ export class Hud {
   // Drop any shift-click-inserted links that were never sent (chat closed/cleared),
   // so a stale [Name] entry can't silently rewrite a later message.
   clearPendingChatLinks(): void {
-    this.pendingChatLinks.clear();
+    this.pendingChatLinks = [];
   }
 
   // Replace any inserted readable [Name] with its [[q:id]]/[[i:id]] token, then forget them.
   private applyPendingChatLinks(typed: string): string {
-    if (this.pendingChatLinks.size === 0) return typed;
+    if (this.pendingChatLinks.length === 0) return typed;
+    const pending = this.pendingChatLinks;
+    this.pendingChatLinks = [];
     let out = typed;
-    for (const [display, token] of this.pendingChatLinks) out = out.split(display).join(token);
-    this.pendingChatLinks.clear();
+    for (const { display, token } of pending) out = out.replace(display, token);
     return out;
   }
 
@@ -3235,8 +3246,8 @@ export class Hud {
     document.getElementById('ui') as HTMLElement,
     (x, y, z) => this.renderer.worldToScreen(x, y, z),
     getUiScale,
-    // Tier the pool cap / TTL / drop-non-crit from the STATIC preset (data-fx-level),
-    // never the governor. spawn() reads this per event.
+    // Tier the pool cap / TTL from the STATIC preset (data-fx-level), never the
+    // governor. spawn() reads this per event.
     { getFxTier: () => this.fxTier() },
   );
   // The player frame is the FIRST instance of the unit_frame family. It owns
@@ -3484,7 +3495,7 @@ export class Hud {
       this.talentStage = s;
     },
     playerClass: () => this.sim.cfg.playerClass,
-    totalPoints: () => this.sim.talentPoints().total,
+    playerLevel: () => this.sim.player.level,
     currentAllocation: () => this.sim.talents,
     activeLoadout: () => this.sim.activeLoadout,
     loadouts: () => this.sim.loadouts,
@@ -3829,7 +3840,11 @@ export class Hud {
     hideTooltip: () => this.hideTooltip(),
     attachTooltip: (el, html) => this.attachTooltip(el, html),
     abilitySummary: (known) =>
-      describeAbilitySummary(known, this.sim.player.resourceType, this.sim.player.spellHaste),
+      describeAbilitySummary(
+        known,
+        this.sim.player.resourceType,
+        playerSpellHasteFrac(this.sim.player),
+      ),
     abilityTooltip: (known) => this.abilityTooltip(known),
     barAbilityIds: () =>
       this.hotbarActions.flatMap((a) => (a && a.type === 'ability' ? [a.id] : [])),
@@ -4224,12 +4239,19 @@ export class Hud {
   private itemTooltip(item: ItemDef, compare = true): string {
     const qColor = QUALITY_COLOR[item.quality ?? 'common'] ?? '#fff';
     let html = `<div class="tt-title" style="color:${qColor}">${esc(itemDisplayName(item))}</div>`;
-    const qualityKind = t('itemUi.tooltip.qualityKind', {
-      quality: itemQualityLabel(item.quality),
-      kind: itemKindLabel(item.kind),
-    });
-    const heroicTag = item.heroic ? ` ${t('hudChrome.itemHeroicTag')}` : '';
-    html += `<div class="tt-sub">${esc(`${qualityKind}${heroicTag}`)}</div>`;
+    // Quality/kind line, e.g. "Epic Armor". Heroic items (dungeon upgraded variants
+    // via heroicOf, bespoke heroic-tier raid gear via heroic) append a gold
+    // "[HEROIC]" tag here (never in the name) so the drop reads "Epic Armor [HEROIC]".
+    let qualityKindHtml = esc(
+      t('itemUi.tooltip.qualityKind', {
+        quality: itemQualityLabel(item.quality),
+        kind: itemKindLabel(item.kind),
+      }),
+    );
+    if (item.heroicOf || item.heroic) {
+      qualityKindHtml += ` <span style="color:#e5cc80">${esc(t('hudChrome.itemHeroicTag'))}</span>`;
+    }
+    html += `<div class="tt-sub">${qualityKindHtml}</div>`;
     if (item.slot) {
       // Classic layout: slot name on the left, armor subtype (Cloth/Leather/Mail)
       // right-aligned on the same line so it is clear which classes the gear suits.
@@ -4257,6 +4279,11 @@ export class Hud {
           t('hudChrome.options.itemScoreLine', { score: itemNumber(itemScore(item), 1) }),
         )}</div>`;
       }
+    }
+    // Bound-to-owner marker (marks and other soulbound tokens): shown like the
+    // classic "Soulbound" line so a player can see it cannot be traded or destroyed.
+    if (item.soulbound) {
+      html += `<div class="tt-sub" style="color:#ffd100">${esc(t('hudChrome.itemSoulbound'))}</div>`;
     }
     if (item.weapon) {
       const dps = (item.weapon.min + item.weapon.max) / 2 / item.weapon.speed;
@@ -4583,7 +4610,7 @@ export class Hud {
     const rangeLine = abilityRangeLine(a);
     if (rangeLine) costLine.push(rangeLine);
     if (costLine.length) html += `<div class="tt-stat">${costLine.map(esc).join(' &nbsp; ')}</div>`;
-    const castLine = [abilityCastLine(res, this.sim.player.spellHaste)];
+    const castLine = [abilityCastLine(res, playerSpellHasteFrac(this.sim.player))];
     // Use the RESOLVED cooldown (res.cooldown), not res.def.cooldown, so talents that
     // reduce cooldown (Improved Mortal Strike, Barrage, Improved Fire Blast, ...) show
     // their effect in the tooltip.
@@ -6712,6 +6739,7 @@ export class Hud {
     // routes through the elided writer facet; the aria-label keeps its per-frame t()
     // call IN the core while the painter elides the DOM setAttribute (Top risk 4).
     this.renderPetBar();
+    this.flushPendingProcAuraNotes();
     if (this.spellbookWindow.isOpen) this.spellbookWindow.tickOpen();
     this.actionBarPainter.paint(
       this.actionBarView.tick({ player: p, target: target ?? null, inventory: sim.inventory }),
@@ -8244,6 +8272,7 @@ export class Hud {
         const tgt = sim.entities.get(ev.targetId);
         if (!tgt) return;
         const tp = tgt.pos;
+        if ((ev.absorbed ?? 0) > 0) this.combat('combat_block', tp.x, tp.y, tp.z, 0.55);
         if (ev.kind === 'miss' || ev.kind === 'dodge' || ev.kind === 'resist') {
           this.combat('combat_dodge', tp.x, tp.y, tp.z, 0.5);
           return;
@@ -8282,6 +8311,12 @@ export class Hud {
       }
       case 'castStart': {
         const ent = sim.entities.get(ev.entityId);
+        // Chain Heal uses a custom one-shot healing cast clip (cast_chain_heal)
+        // instead of the earthy nature cast loop its school would otherwise pick.
+        if (ent && ev.ability === 'chain_heal') {
+          this.combat('cast_chain_heal', ent.pos.x, ent.pos.y, ent.pos.z, 0.45);
+          return;
+        }
         const key = castKeyForAbility(ev.ability);
         if (ent && key) {
           sfx.loop(`cast:${ev.entityId}`, key, 0.45 * COMBAT_GAIN, ent.pos.x, ent.pos.y, ent.pos.z);
@@ -8436,6 +8471,20 @@ export class Hud {
           const isPlayerSource = ev.sourceId === sim.playerId;
           const isPlayerTarget = ev.targetId === sim.playerId;
           if (isPlayerSource || isPlayerTarget) this.lastCombatEventAt = performance.now();
+          if (isPlayerTarget && (ev.absorbed ?? 0) > 0) {
+            const absorbShape = fctSpawnShape({ type: 'absorb' });
+            if (absorbShape)
+              this.fctPainter.spawn(
+                {
+                  ...absorbShape,
+                  text: t('hudChrome.fct.absorbed', {
+                    amount: formatNumber(ev.absorbed ?? 0, { maximumFractionDigits: 0 }),
+                  }),
+                  target: tgt,
+                },
+                now,
+              );
+          }
           if (ev.kind === 'miss' || ev.kind === 'dodge' || ev.kind === 'resist') {
             // self vs other (carried on the shape's isSelf) drives the avoidance colour
             // token (#bbb vs #fff); the localized word stays at the call site. A resisted
@@ -8585,6 +8634,10 @@ export class Hud {
           this.showBanner(t('hud.core.levelBanner', { level: ev.level }));
           this.log(t('hud.core.levelLog', { level: ev.level }), '#ffd100');
           audio.levelUp();
+          if (isTalentRowUnlockLevel(ev.level)) {
+            this.showBanner(t('game.talents.rowUnlockToast'));
+            sfx.playUi('quest_ready', { gain: 4.5 });
+          }
           if (ev.level === 5) {
             const characterId = (this.sim as unknown as { characterId?: number }).characterId;
             trackMetaPixel(
@@ -8620,6 +8673,9 @@ export class Hud {
           break;
         }
         case 'learnAbility':
+          // A newly granted ability (level-up or spec signature) must appear in
+          // an open spellbook right away, not on the next manual reopen.
+          if (this.spellbookWindow.isOpen) this.spellbookWindow.render();
           break; // logged by sim
         case 'comboPoint':
           break;
@@ -9418,6 +9474,7 @@ export class Hud {
         case 'log': {
           const text = this.localizeSystemText(ev.text);
           this.log(text, ev.color ?? '#ccc');
+          if (ev.text === CHEAT_DEATH_SAVE_TEXT) audio.fiestaRevive();
           const isNythraxisVisionLine = [
             'My king was a good man.',
             'I swore my blade to him.',
@@ -9468,6 +9525,8 @@ export class Hud {
           const auraName = auraDisplayNameFromSource(ev.name);
           if (ev.name === 'Polymorph' && ev.gained) audio.sheep();
           if (ev.targetId === sim.playerId) {
+            if (ev.gained) this.noteProcAuraGain(ev.name);
+            else this.noteProcAuraConsume(ev.auraKind);
             this.combatLog(
               t(ev.gained ? 'hud.combat.auraGain' : 'hud.combat.auraFade', { name: auraName }),
               '#d8a0d8',
@@ -9486,6 +9545,33 @@ export class Hud {
 
   log(text: string, color = '#ccc'): void {
     this.appendLog(this.chatLogEl, text, color, true, 'system');
+  }
+
+  private noteProcAuraGain(name: string): void {
+    const aura = this.sim.player.auras.find((a) => a.name === name);
+    if (aura) {
+      const text = procAuraGainSelfNoteText(name, aura.kind);
+      if (text) this.showSelfNote(text);
+      return;
+    }
+    if (this.pendingProcAuraNotes.size > 16) this.pendingProcAuraNotes.clear();
+    this.pendingProcAuraNotes.add(name);
+  }
+
+  private flushPendingProcAuraNotes(): void {
+    if (this.pendingProcAuraNotes.size === 0) return;
+    for (const name of Array.from(this.pendingProcAuraNotes)) {
+      const aura = this.sim.player.auras.find((a) => a.name === name);
+      if (!aura) continue;
+      this.pendingProcAuraNotes.delete(name);
+      const text = procAuraGainSelfNoteText(name, aura.kind);
+      if (text) this.showSelfNote(text);
+    }
+  }
+
+  private noteProcAuraConsume(kind: AuraKind | undefined): void {
+    const text = procAuraConsumeSelfNoteText(kind);
+    if (text) this.showSelfNote(text);
   }
 
   // Prepend a dim bracketed wall-clock prefix to a chat line when the "Show
@@ -14271,16 +14357,6 @@ function abilityDisplayNameFromSource(name: string): string {
   return localizeSimAuraName(name) ?? name;
 }
 
-// Localize an aura/buff name that surfaces by its raw English name (buff frame tooltip,
-// combat-log gain/fade). Most auras are granted by an ability or talent and have a
-// localized title already; a few are pure flavor (e.g. a hunter's "Tamed" pet buff) and
-// live in sim_i18n. Falls back to the English name only if nothing matches.
-function auraDisplayNameFromSource(name: string): string {
-  const viaTitle = localizeTalentTitle(name);
-  if (viaTitle !== name) return viaTitle;
-  return localizeSimAuraName(name) ?? name;
-}
-
 function combatAbilityName(name: string | null): string {
   return name ? abilityDisplayNameFromSource(name) : t('hud.combat.attack');
 }
@@ -14342,9 +14418,20 @@ function abilityRangeLine(def: AbilityDef): string | null {
   return t('abilityUi.tooltip.range', { range: formatAbilityNumber(def.range) });
 }
 
-// `spellHaste` (the live character's set-bonus spell haste, a fraction) shortens
-// the shown cast / channel time exactly as the sim does, so a hasted caster's
-// tooltips reflect the real, faster cast.
+// The live caster's TOTAL spell-haste fraction: the resolved stat (set bonuses + spec
+// mastery) PLUS active buff_spellhaste auras (Arcane Power, Icy Veins, Metamorphosis).
+// Mirrors the sim's spellHasteMult so a shown cast time never disagrees with the real one,
+// and an activated haste cooldown visibly shortens every cast tooltip.
+function playerSpellHasteFrac(p: Entity | null | undefined): number {
+  if (!p) return 0;
+  let frac = p.spellHaste;
+  for (const a of p.auras) if (a.kind === 'buff_spellhaste') frac += a.value;
+  return frac;
+}
+
+// `spellHaste` (the live character's total spell haste, a fraction) shortens the shown
+// cast / channel time exactly as the sim does, so a hasted caster's tooltips reflect the
+// real, faster cast.
 function abilityCastLine(known: ResolvedAbility, spellHaste = 0): string {
   const h = 1 + Math.max(0, spellHaste);
   if (known.def.channel) {
@@ -14403,10 +14490,19 @@ function abilityEffectText(res: ResolvedAbility, scaling?: AbilityScaling): stri
       case 'directDamage':
       case 'heal':
       case 'aoeDamage':
+      case 'aoeHeal':
       case 'aoeRoot':
       case 'groundAoE':
       case 'drainTick':
         return abilityAmountRange(primary.min, primary.max) + suffix(primary);
+      case 'consumeAura':
+        if (primary.deal) {
+          return abilityAmountRange(primary.deal.min, primary.deal.max) + suffix(primary);
+        }
+        if (primary.heal) {
+          return abilityAmountRange(primary.heal.min, primary.heal.max) + suffix(primary);
+        }
+        return '';
       case 'weaponDamage':
       case 'weaponStrike':
         return formatAbilityNumber(primary.bonus);

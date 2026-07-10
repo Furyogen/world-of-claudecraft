@@ -85,6 +85,9 @@ export const zh_TW: EnTranslations = {
       "title": "天賦",
       "classTab": "職業",
       "specTab": "專精",
+      "choicesTab": "抉擇",
+      "rowUnlockToast": "新的天賦抉擇已解鎖！",
+      "rowUnlocks": "在 {level} 級解鎖",
       "available": "可用",
       "spent": "已用",
       "pointSource": "從 {first} 級到 {cap} 級，每升一級獲得 1 點天賦點。繼續升級可獲得更多點數。",
@@ -143,6 +146,7 @@ export const zh_TW: EnTranslations = {
         "noTree": "你的職業尚無天賦樹。",
         "locked": "你尚未解鎖天賦，天賦將在 {level} 級開啟。",
         "noSpec": "未選擇專精",
+        "rowsSummary": "天賦：{head}，已選擇 {picked}/{unlocked} 列選項。",
         "summary": "天賦：{head} — 已用 {spent}/{total} 點（{breakdown}）。",
         "breakdownClass": "職業 {classPts}",
         "breakdownSpec": "職業 {classPts}，{spec} {specPts}",
@@ -151,7 +155,6 @@ export const zh_TW: EnTranslations = {
     }
   },
   "hudChrome": {
-    "itemHeroicTag": "[英雄]",
     "spectate": {
       "banner": "正在觀察 {name}"
     },
@@ -159,6 +162,10 @@ export const zh_TW: EnTranslations = {
       "resurrectAtCorpse": "在屍體旁復活",
       "resurrectAtHealer": "靈魂醫者（復活虛弱）",
       "spiritHealerAlive": "靈魂醫者只看護逝者。你仍是生者。"
+    },
+    "fct": {
+      "absorbed": "吸收 {amount}",
+      "cheap": "費用降低!"
     },
     "emotes": {
       "wave": "揮手",
@@ -723,6 +730,8 @@ export const zh_TW: EnTranslations = {
     "tips": {
       "joinChannels": "提示：輸入 /join world 或 /join lfg 可與全世界的玩家聊天。"
     },
+    "itemHeroicTag": "[英雄]",
+    "itemSoulbound": "靈魂綁定",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1068,6 +1077,22 @@ export const zh_TW: EnTranslations = {
     "worldBoss": {
       "spawn": "{name}在荊峰高地崛起！"
     },
+    "auth": {
+      "forgotPrompt": "忘記密碼？",
+      "forgotTitle": "重設密碼",
+      "forgotHint": "輸入您的使用者名稱，我們會將重設連結寄送到登記的電子郵件。",
+      "forgotUsername": "使用者名稱",
+      "forgotSubmit": "傳送重設連結",
+      "forgotSent": "如果該使用者名稱對應的帳戶已登記電子郵件，我們已寄出重設連結。請查看您的收件匣。",
+      "forgotBack": "返回登入",
+      "resetTitle": "設定新密碼",
+      "resetNewPassword": "新密碼",
+      "resetConfirm": "確認新密碼",
+      "resetSubmit": "更新密碼",
+      "resetDone": "您的密碼已更新。現在可以登入了。",
+      "resetMismatch": "兩次輸入的密碼不一致。",
+      "resetErrInvalid": "此重設連結無效或已過期。請重新申請一個。"
+    },
     "loot": {
       "chestTitle": "寶箱"
     },
@@ -1297,6 +1322,8 @@ export const zh_TW: EnTranslations = {
       "parcelsLabel": "包裹",
       "parcelsHint": "點擊背包中的物品即可附上。",
       "removeParcelAria": "從信件中移除 {item}",
+      "parcelQtyDecreaseAria": "少寄一個{item}",
+      "parcelQtyIncreaseAria": "多寄一個{item}",
       "sendButton": "寄出信件",
       "postageNote": "郵資：{amount}。渡鴉飛行約 {seconds} 秒。",
       "arrivedBanner": "渡鴉已降落：來自 {name} 的郵件。",
@@ -5634,6 +5661,102 @@ export const zh_TW: EnTranslations = {
         "name": "沸血狂怒",
         "description": "進入沸血狂怒，產生 20 點怒氣。（戰士天賦）"
       },
+      "crusader_strike": {
+        "name": "十字軍聖擊",
+        "description": "打擊目標，造成武器傷害外加 {damage} 點神聖傷害。（聖騎士天賦）"
+      },
+      "chain_heal": {
+        "name": "治療鏈",
+        "description": "大量治療一個友方目標，然後跳躍至多2個附近的盟友，每次跳躍的治療量降低50%。（恢復專精招牌）"
+      },
+      "metamorphosis": {
+        "name": "惡魔變形",
+        "description": "化為惡魔之力，使護甲和攻擊強度提高 20 秒。（術士天賦）"
+      },
+      "aura_surge": {
+        "name": "光輝湧動",
+        "description": "過載你的光環，使你在10秒內獲得160點護甲。（聖騎士天賦）"
+      },
+      "holy_shock": {
+        "name": "神聖震擊",
+        "description": "以神聖能量震擊一名友方目標，為其恢復{damage}點生命值。（神聖專精招牌）"
+      },
+      "holy_shield": {
+        "name": "神聖之盾",
+        "description": "以神聖之力保護你10秒，護甲提高90，並對近戰攻擊者造成12點神聖傷害。（防護專精招牌）"
+      },
+      "bestial_wrath": {
+        "name": "狂野怒火",
+        "description": "使你進入野獸怒火狀態，攻擊強度提高55點，持續15秒。（野獸控制專精招牌）"
+      },
+      "trueshot_aura": {
+        "name": "強擊光環",
+        "description": "鼓舞附近盟友，使攻擊強度提高35點，持續5分鐘。（射擊專精招牌）"
+      },
+      "wyvern_sting": {
+        "name": "翼龍釘刺",
+        "description": "從遠處釘刺敵人，使其癱瘓最多4秒。受到任何傷害都會打破效果。（生存專精招牌）"
+      },
+      "arcane_power": {
+        "name": "祕法強化",
+        "description": "法術傷害提高20%，法術加速提高10%，持續10秒。（祕法專精招牌）"
+      },
+      "combustion": {
+        "name": "燃燒",
+        "description": "法術致命一擊機率提高50%，持續15秒。（火焰專精招牌）"
+      },
+      "icy_veins": {
+        "name": "冰冷血脈",
+        "description": "法術加速提高30%，並防止施法被打斷或受到延遲，持續10秒。（冰霜專精招牌）"
+      },
+      "cold_blood": {
+        "name": "冷血",
+        "description": "集中你的殺意，使下一次攻擊造成致命一擊。（刺殺專精招牌）"
+      },
+      "blade_flurry": {
+        "name": "劍刃亂舞",
+        "description": "釋放劍刃亂舞，攻擊速度提高20%，持續12秒。（戰鬥專精招牌）"
+      },
+      "hemorrhage": {
+        "name": "出血",
+        "description": "攻擊敵人，造成武器傷害加{damage}點傷害，並在12秒內造成流血傷害。獎勵1個連擊點。（敏銳專精招牌）"
+      },
+      "power_infusion": {
+        "name": "能量灌注",
+        "description": "向一名友方目標灌注能量，使其法術強度提高28點，持續15秒。（戒律專精招牌）"
+      },
+      "holy_nova": {
+        "name": "神聖新星",
+        "description": "引發神聖之光爆炸，為附近盟友恢復{damage}點生命值並傷害附近敵人。（神聖專精招牌）"
+      },
+      "shadowform": {
+        "name": "暗影形態",
+        "description": "進入暗影形態，強化暗影魔法直到你切換回來。再次施放可返回普通形態。（暗影專精招牌）"
+      },
+      "elemental_mastery": {
+        "name": "元素精通",
+        "description": "呼喚元素精通，使你的下一個法術變為瞬發。（元素專精招牌）"
+      },
+      "siphon_life": {
+        "name": "生命虹吸",
+        "description": "虹吸敵人的生命，在30秒內造成{damage}點暗影傷害，並按造成的傷害治療你。（痛苦專精招牌）"
+      },
+      "conflagrate": {
+        "name": "燃盡",
+        "description": "吞噬敵人身上的獻祭，將其點燃並造成{damage}點火焰傷害。（毀滅專精招牌）"
+      },
+      "moonkin_form": {
+        "name": "梟獸形態",
+        "description": "進入梟獸形態，強化施法直到你切換回來。再次施放可返回普通形態。（平衡專精招牌）"
+      },
+      "feral_charge": {
+        "name": "野性衝鋒",
+        "description": "衝向敵人並使其定身1秒。8-25碼距離。（野性專精招牌）"
+      },
+      "swiftmend": {
+        "name": "迅癒",
+        "description": "吞噬友方目標身上的持續治療效果，為其恢復{damage}點生命值。（恢復專精招牌）"
+      },
       "summon_imp": {
         "name": "召喚燼裔",
         "description": "召喚一隻聽從術士命令的燼裔。燼裔會從遠處向你的敵人投擲灰燼箭。召喚新的惡魔會驅散你目前的惡魔。你同時只能擁有一隻惡魔。"
@@ -5661,6 +5784,226 @@ export const zh_TW: EnTranslations = {
       "summon_doomguard": {
         "name": "召喚怨魂裔",
         "description": "將一隻怨魂裔束縛於你的意志之下，這是一種精英惡魔，會從遠處降下沉重的暗影傷害。漫長的冷卻時間限制了牠的毀滅性力量。召喚新的惡魔會驅散你目前的惡魔。你同時只能擁有一隻惡魔。"
+      },
+      "aspect_of_the_wild": {
+        "name": "野牙偽裝",
+        "description": "以野性之力激勵附近的盟友，提高攻擊強度，持續 5 分鐘。（獵人天賦）"
+      },
+      "avatar": {
+        "name": "巨像化身",
+        "description": "解除控制效果並化為巨像，使造成的傷害提高 20%，持續 20 秒。（戰士天賦）"
+      },
+      "avenging_wrath": {
+        "name": "復仇之翼",
+        "description": "喚降復仇之力，提高攻擊強度與法術強度，持續 20 秒。（聖騎士天賦）"
+      },
+      "berserk": {
+        "name": "赤紅迷霧",
+        "description": "提高攻擊強度，持續 15 秒。（德魯伊天賦）"
+      },
+      "bladestorm": {
+        "name": "鋼鐵旋風",
+        "description": "化為鋼鐵旋風，每秒攻擊附近敵人，造成 {damage} 點傷害。（戰士天賦）"
+      },
+      "razor_howl": {
+        "name": "銳刃怒吼",
+        "description": "使 15 碼內的敵人減速 50%，持續 8 秒。（戰士天賦）"
+      },
+      "stormthrow": {
+        "name": "風暴投擲",
+        "description": "投擲武器，使目標昏迷 3 秒。（戰士天賦）"
+      },
+      "reckless_vow": {
+        "name": "魯莽誓言",
+        "description": "所有怒氣生成提高 50%，暴擊機率提高 20%，持續 12 秒。（戰士天賦）"
+      },
+      "red_banner": {
+        "name": "赤紅戰旗",
+        "description": "你和附近盟友的攻擊速度提高 10%，傷害提高 10%，持續 20 秒。（戰士天賦）"
+      },
+      "blink": {
+        "name": "閃爍步",
+        "description": "向前瞬移 15 碼並解除定身效果。（法師天賦）"
+      },
+      "bloodlust": {
+        "name": "戰鼓",
+        "description": "使附近的盟友陷入狂熱，提高攻擊速度，持續 15 秒。（薩滿天賦）"
+      },
+      "chain_lightning": {
+        "name": "叉狀閃電",
+        "description": "向目標區域擲出閃電，對附近敵人造成 {damage} 點傷害。（薩滿天賦）"
+      },
+      "chaos_bolt": {
+        "name": "毀滅箭",
+        "description": "擲出一枚混亂火焰之箭，造成 {damage} 點火焰傷害。（術士天賦）"
+      },
+      "cloak_of_shadows": {
+        "name": "暗影斗篷",
+        "description": "以暗影包裹自身，吸收傷害，持續 5 秒。（盜賊天賦）"
+      },
+      "cone_of_cold": {
+        "name": "寒霜橫掃",
+        "description": "以寒霜衝擊附近的敵人，造成 {damage} 點冰霜傷害。（法師天賦）"
+      },
+      "counter_shot": {
+        "name": "緘默射擊",
+        "description": "打斷施法，並使該系法術在 4 秒內無法施放。（獵人天賦）"
+      },
+      "counterspell": {
+        "name": "破法",
+        "description": "反制敵人的施法，使該系法術在 6 秒內無法施放。（法師天賦）"
+      },
+      "curse_of_exhaustion": {
+        "name": "鉛沉妖咒",
+        "description": "詛咒目標，使其移動速度降低 30%，持續 12 秒。（術士天賦）"
+      },
+      "death_coil": {
+        "name": "墓穴纏卷",
+        "description": "對敵人造成 {damage} 點暗影傷害，隨後使其恐懼 3 秒。此法術不會治療施法者。（術士天賦）"
+      },
+      "deep_freeze": {
+        "name": "死霜",
+        "description": "將目標深度凍結，造成 {damage} 點冰霜傷害並使其昏迷 4 秒。（法師天賦）"
+      },
+      "desperate_prayer": {
+        "name": "最後祈禱",
+        "description": "立即為你治療 {damage} 點生命值。（牧師天賦）"
+      },
+      "deterrence": {
+        "name": "鬃刺守衛",
+        "description": "提高你的閃躲機率 50%，持續 10 秒。（獵人天賦）"
+      },
+      "divine_shield": {
+        "name": "聖光守護",
+        "description": "以神聖之力護佑你，吸收大量傷害，持續 8 秒。（聖騎士天賦）"
+      },
+      "earthbind": {
+        "name": "攫握大地",
+        "description": "將附近的敵人束縛於大地，定身 2 秒。（薩滿天賦）"
+      },
+      "evocation": {
+        "name": "乙太之井",
+        "description": "快速恢復法力。（法師天賦）"
+      },
+      "frenzied_regeneration": {
+        "name": "野性癒合",
+        "description": "在 10 秒內恢復生命值。僅限蠻熊形態。（德魯伊天賦）"
+      },
+      "frost_trap": {
+        "name": "霜紋陷阱",
+        "description": "將目標區域的敵人凍結在原地，持續 3 秒。（獵人天賦）"
+      },
+      "ghostly_strike": {
+        "name": "幽魂打擊",
+        "description": "對敵人造成武器傷害外加 {damage} 點傷害，並短暫提高閃躲機率。獲得 1 個連擊點。（盜賊天賦）"
+      },
+      "hammer_of_wrath": {
+        "name": "鳴鐘之錘",
+        "description": "向受創的敵人擲出神聖之鎚，造成 {damage} 點神聖傷害。僅可對生命值低於 20% 的目標使用。（聖騎士天賦）"
+      },
+      "healing_stream": {
+        "name": "泉湧",
+        "description": "在 12 秒內治療一名友方目標。（薩滿天賦）"
+      },
+      "heroic_leap": {
+        "name": "戰躍",
+        "description": "躍向目標區域，對附近敵人造成 {damage} 點物理傷害。（戰士天賦）"
+      },
+      "holy_wrath": {
+        "name": "聖徒之怒",
+        "description": "釋放神聖之力，對附近敵人造成 {damage} 點傷害。（聖騎士天賦）"
+      },
+      "howl_of_terror": {
+        "name": "恐懼嚎叫",
+        "description": "恐嚇附近的敵人，最多持續 3 秒。受到傷害可能打破該效果。（術士天賦）"
+      },
+      "ice_block": {
+        "name": "寒冰棺",
+        "description": "將你封入寒冰之中，吸收大量傷害，持續 8 秒。（法師天賦）"
+      },
+      "inner_focus": {
+        "name": "靜心",
+        "description": "使你的下一個法術不消耗法力。持續 60 秒。（牧師天賦）"
+      },
+      "innervate": {
+        "name": "生命樹液",
+        "description": "生命樹液在你體內湧動10秒，如波浪般恢復20點當前資源：法力、怒氣或能量，變形也不會中斷。（德魯伊天賦）"
+      },
+      "kick": {
+        "name": "踢擊",
+        "description": "打斷施法，並使該系法術在 4 秒內無法施放。（盜賊天賦）"
+      },
+      "last_stand": {
+        "name": "第十一刻",
+        "description": "暫時提高耐力，持續 15 秒，提高最大生命值。（戰士天賦）"
+      },
+      "mend_pet": {
+        "name": "修補",
+        "description": "在 15 秒內為友方目標治療 {damage} 點生命值。（獵人天賦）"
+      },
+      "meteor": {
+        "name": "天石",
+        "description": "喚降一顆隕石轟擊目標區域，造成 {damage} 點火焰傷害並點燃地面。（法師天賦）"
+      },
+      "mind_sear": {
+        "name": "灼思",
+        "description": "向目標區域引導暗影能量，每秒對附近敵人造成 {damage} 點傷害。（牧師天賦）"
+      },
+      "multi_shot": {
+        "name": "分裂射擊",
+        "description": "射出多枚箭矢，對附近敵人造成 {damage} 點傷害。（獵人天賦）"
+      },
+      "prayer_of_healing": {
+        "name": "聖歌癒療",
+        "description": "治療附近的盟友 {damage} 點生命值。（牧師天賦）"
+      },
+      "preparation": {
+        "name": "應變",
+        "description": "結束疾跑、閃避和消失的冷卻時間。（盜賊天賦）"
+      },
+      "presence_of_mind": {
+        "name": "疾思",
+        "description": "使你的下一個有施法時間的法術立即完成。持續 60 秒。（法師天賦）"
+      },
+      "psychic_scream": {
+        "name": "心靈尖嘯",
+        "description": "恐嚇附近的敵人，最多持續 4 秒。受到傷害可能打破該效果。（牧師天賦）"
+      },
+      "pummel": {
+        "name": "裂顎擊",
+        "description": "打斷施法，並使該系法術在 4 秒內無法施放。（戰士天賦）"
+      },
+      "rallying_cry": {
+        "name": "集結",
+        "description": "發出激勵的吶喊，提高附近盟友的攻擊強度，持續 10 秒。（戰士天賦）"
+      },
+      "rebuke": {
+        "name": "斥責",
+        "description": "打斷施法，並使該系法術在 4 秒內無法施放。（聖騎士天賦）"
+      },
+      "shadowstep": {
+        "name": "影步",
+        "description": "穿過暗影，移動到目標身旁。（盜賊天賦）"
+      },
+      "shield_wall": {
+        "name": "壁壘",
+        "description": "築起堅不可摧的壁壘，大幅提高護甲，持續 10 秒。（戰士天賦）"
+      },
+      "silence": {
+        "name": "沉默",
+        "description": "沉默目標，持續 4 秒。（牧師天賦）"
+      },
+      "skull_bash": {
+        "name": "顱擊",
+        "description": "打斷施法，並使該系法術在 4 秒內無法施放。（德魯伊天賦）"
+      },
+      "spell_lock": {
+        "name": "封口令",
+        "description": "打斷施法，並使該系法術在 5 秒內無法施放。（術士天賦）"
+      },
+      "tranquility": {
+        "name": "林地之歌",
+        "description": "引導恢復之力，每秒治療附近的盟友。（德魯伊天賦）"
       },
       "bear_charge": {
         "name": "巨熊衝鋒",
@@ -5818,6 +6161,9 @@ export const zh_TW: EnTranslations = {
       },
       "greyjaw_fang": {
         "name": "老灰顎的尖牙"
+      },
+      "chunk_of_ore": {
+        "name": "礦石塊"
       },
       "weathered_ledger_page": {
         "name": "風化帳頁"
@@ -7529,6 +7875,16 @@ export const zh_TW: EnTranslations = {
       }
     },
     "quests": {
+      "q_prof_intro": {
+        "title": "人人都有一技之長",
+        "text": "伊斯特布魯克的每個人都有除了劍術之外的手藝，{playerName}。鎮子周圍散落著礦脈，去揮鎬採上5塊礦石帶給我。要親自採，別耍花招，我看得出來。",
+        "completion": "看到了吧？礦石進了包裡，手上也磨出了繭子。繼續在路上採礦、伐木、採藥，回到鎮上時，留意市場旁的城鎮專注面板和附近的製作台。只要你願意，這裡面都有正經買賣等著你。",
+        "objectives": {
+          "0": {
+            "label": "礦石塊"
+          }
+        }
+      },
       "q_wolves": {
         "title": "門前群狼",
         "text": "森林狼已敢撲咬北路旅人，{playerName}。擊敗8隻森林狼，讓東溪能鬆一口氣。",
