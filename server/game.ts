@@ -354,6 +354,11 @@ function isVcBracket(value: unknown): value is VcBracket {
 // a steady source of GC pressure, when a crowd gathers. The small/dynamic fields
 // (position, resource, target, party HP, cooldowns, ...) still diff every tick.
 const HEAVY_SELF_REFRESH_TICKS = 40; // ~2 s backstop; staggered per session so refreshes don't synchronize into a spike
+// Secondary self panels (mail/bank/market/professions/delve meta/lockouts)
+// re-diff on this pid-staggered cadence instead of every tick: <=200ms added
+// change-detection latency on panel UI, in exchange for 4x fewer accessor
+// builds + stringifies per player. A selfHeavyDirty session re-diffs at once.
+const SELF_SECONDARY_INTERVAL_TICKS = 4;
 const HEAVY_SELF_CMDS = new Set<string>([
   'equip',
   'unequip_item',
@@ -4028,7 +4033,12 @@ export class GameServer {
         console.error(`[snap] failed to prepare fanout job for pid ${session.pid}:`, err),
     );
     const result = fanout.dispatchTick(tick, jobs);
-    for (const job of result.undispatched) {
+    // Dead shard: build in-thread so nobody freezes while the worker
+    // respawns. Busy shard (result.skipped): drop this tick's frame instead,
+    // clients coast on interpolation; see pool.ts on why in-thread fallback
+    // for an OVERLOADED shard would defeat the fanout.
+    for (const job of result.skipped) this.pendingFanoutFrames.delete(job.sid);
+    for (const job of result.fallback) {
       this.pendingFanoutFrames.delete(job.sid);
       const session = this.clients.get(job.sid);
       if (!session) continue;
@@ -4184,23 +4194,7 @@ export class GameServer {
     // Dynamic / latency-sensitive fields: diffed every tick. These change from
     // outside this session's own commands/events, party member HP from another
     // player taking damage, cooldowns counting down, an incoming trade/duel,
-    // so they can't be gated behind this session's dirty flag. They're also
-    // cheap (mostly null, or a small map) so the per-tick diff is negligible.
-    // Raid lockouts as {dungeonId: expiryEpochMs}, future-only. Absolute expiry
-    // (not a countdown) so the serialized form is stable between resets and the
-    // delta guard ships it only on grant / reset / expiry; the client derives the
-    // remaining time from its own clock. Small, and granted from sim events that
-    // don't mark this session dirty, so kept per-tick rather than gated.
-    // The no-lockout common case (the overwhelming majority of players every
-    // tick) skips the spread+filter+fromEntries allocation and the stringify.
-    if (meta.raidLockouts.size === 0) {
-      maybeJson('lockouts', '{}');
-    } else {
-      maybe(
-        'lockouts',
-        Object.fromEntries([...meta.raidLockouts].filter(([, until]) => until > nowMs)),
-      );
-    }
+    // so they can't be gated behind this session's dirty flag.
     // Where the player's corpse lies while their spirit is a ghost (null otherwise).
     // Delta-guarded: ships on death-release and clears on resurrect. The client
     // draws the corpse marker and gates the resurrect-at-corpse button on it.
@@ -4240,16 +4234,6 @@ export class GameServer {
       session.lastVcupWireTick = this.sim.tickCount;
       maybe('vcup', this.sim.cupInfoFor(anchorSession.pid));
     }
-    // market info is null unless the player is standing at the Merchant, so it
-    // only rides the wire for players actually browsing the World Market
-    maybe('market', this.sim.marketInfoFor(anchorSession.pid));
-    maybe('mail', this.sim.mailInfoFor(anchorSession.pid));
-    maybe('mailU', this.sim.mailUnreadFor(anchorSession.pid));
-    // bank info is null unless the player is standing at a banker, so it only
-    // rides the wire for players actually browsing their deposit box (the mail
-    // pattern). Not heavy-gated: it appears from proximity, not this session's
-    // own dirty-marking commands.
-    maybe('bank', this.sim.bankInfoFor(anchorSession.pid));
     // open need-greed rolls this player can still answer, so a client that
     // missed the transient lootRoll event re-shows the prompt from state. Stays
     // per-tick (it's interactive state that appears from others' actions).
@@ -4258,24 +4242,57 @@ export class GameServer {
     // so every party member's roll frame shows the live vote strip and stays up
     // after they answer. Per-tick for the same reason as lroll.
     maybe('lrollg', this.sim.lootRollGroupStatus(anchorSession.pid));
+    // live delve HUD state (run progress, companion vitals): per-tick, it is
+    // active-gameplay UI
     maybe('drun', this.sim.delveRunWire(anchorSession.pid));
     maybe('dcompanion', this.sim.delveCompanionWire(anchorSession.pid));
-    maybe('dmarks', this.sim.delveMarksFor(anchorSession.pid));
-    maybe('dcomp', this.sim.companionUpgradesFor(anchorSession.pid));
-    maybe('dclears', this.sim.delveClearsFor(anchorSession.pid));
-    maybe('delveDaily', this.sim.delveDailyWire(anchorSession.pid));
-    // per-player read, so kept per-tick like the other small maps above. Wire
-    // key `prof` and IWorld member `professionsState` are the settled names
-    // for the professions facet (#1164, src/sim/professions/CLAUDE.md). `gprof`
-    // mirrors the raw per-craft proficiency map for the `gatheringProficiency`
-    // IWorld data member (#1119), independent of the `professionsState` view.
-    maybe('prof', this.sim.professionsStateFor(anchorSession.pid));
-    maybe('tfocus', this.sim.townFocusFor(anchorSession.pid));
-    // Raw gathering-profession proficiency map (IWorld `gatheringProficiency`,
-    // #1119), a second small read alongside `prof` for the ORIGINAL flat-map
-    // shape used by the `/dev gather` chat cheat and existing consumers. Wire
-    // key `gprof`; see TERSE_TO_IWORLD/ALL_DELTA_KEYS in tests/snapshots.test.ts.
-    maybe('gprof', this.sim.gatheringProficiencyFor(anchorSession.pid));
+    // Secondary panels: mail, bank, market, professions, delve meta, raid
+    // lockouts. Each is a delta-guarded accessor whose value changes rarely,
+    // but BUILDING it to discover "unchanged" used to run 20x/s per player,
+    // which is a top per-player cost at high population. They re-diff on a
+    // pid-staggered 4-tick cadence (<=200ms added detection latency on a
+    // change, imperceptible for panel/meta UI: nothing here is state a player
+    // reacts to in combat, the graphics-fairness bar). A heavy-dirty session
+    // re-diffs immediately, so a player's OWN mail/bank/craft action still
+    // reflects on the next snapshot.
+    const secondaryDue =
+      session.selfHeavyDirty ||
+      (this.sim.tickCount + session.pid) % SELF_SECONDARY_INTERVAL_TICKS === 0;
+    if (secondaryDue) {
+      // Raid lockouts as {dungeonId: expiryEpochMs}, future-only; the client
+      // derives remaining time from its own clock.
+      if (meta.raidLockouts.size === 0) {
+        maybeJson('lockouts', '{}');
+      } else {
+        maybe(
+          'lockouts',
+          Object.fromEntries([...meta.raidLockouts].filter(([, until]) => until > nowMs)),
+        );
+      }
+      // market info is null unless the player is standing at the Merchant, so
+      // it only rides the wire for players actually browsing the World Market
+      maybe('market', this.sim.marketInfoFor(anchorSession.pid));
+      maybe('mail', this.sim.mailInfoFor(anchorSession.pid));
+      maybe('mailU', this.sim.mailUnreadFor(anchorSession.pid));
+      // bank info is null unless the player is standing at a banker, so it
+      // only rides the wire for players actually browsing their deposit box
+      // (the mail pattern). Not heavy-gated: it appears from proximity, not
+      // this session's own dirty-marking commands.
+      maybe('bank', this.sim.bankInfoFor(anchorSession.pid));
+      maybe('dmarks', this.sim.delveMarksFor(anchorSession.pid));
+      maybe('dcomp', this.sim.companionUpgradesFor(anchorSession.pid));
+      maybe('dclears', this.sim.delveClearsFor(anchorSession.pid));
+      maybe('delveDaily', this.sim.delveDailyWire(anchorSession.pid));
+      // Wire key `prof` and IWorld member `professionsState` are the settled
+      // names for the professions facet (#1164, src/sim/professions/CLAUDE.md).
+      // `gprof` mirrors the raw per-craft proficiency map for the
+      // `gatheringProficiency` IWorld data member (#1119), independent of the
+      // `professionsState` view; see TERSE_TO_IWORLD/ALL_DELTA_KEYS in
+      // tests/snapshots.test.ts.
+      maybe('prof', this.sim.professionsStateFor(anchorSession.pid));
+      maybe('tfocus', this.sim.townFocusFor(anchorSession.pid));
+      maybe('gprof', this.sim.gatheringProficiencyFor(anchorSession.pid));
+    }
     // Heavy, rarely-changing fields: building + stringifying these every tick for
     // every player is the dominant avoidable broadcast cost. Skip them unless a
     // heavy command/event marked this session dirty, or its staggered safety

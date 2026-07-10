@@ -65,9 +65,16 @@ const RESPAWN_DELAY_MS = 1000;
 const MAX_FAILURES = 8;
 
 export interface DispatchResult {
-  // jobs that were NOT handed to any worker this tick; the caller builds
-  // these in-thread (dead/busy shard, pool disabled)
-  undispatched: SessionJob[];
+  // jobs whose shard worker is DEAD (or the pool is disabled); the caller
+  // builds these in-thread so nobody freezes while a worker respawns
+  fallback: SessionJob[];
+  // jobs whose shard worker is still building the previous tick: SKIPPED.
+  // Falling back in-thread here would re-serialize the whole overloaded
+  // shard on the main thread, the exact cost the pool exists to remove; a
+  // session skipping a tick just coasts on interpolation until its worker
+  // catches up (effective per-session cadence degrades to the worker's
+  // throughput instead of stalling the sim for everyone).
+  skipped: SessionJob[];
   dispatched: number;
 }
 
@@ -188,7 +195,7 @@ export class SnapshotFanoutPool {
   // set headerI32[0] (count) and [1] (tick).
   dispatchTick(tick: number, jobs: SessionJob[]): DispatchResult {
     if (this.disabled || this.workerCount === 0) {
-      return { undispatched: jobs, dispatched: 0 };
+      return { fallback: jobs, skipped: [], dispatched: 0 };
     }
     const nowMs = Date.now();
     // watchdog + respawn pass
@@ -202,15 +209,17 @@ export class SnapshotFanoutPool {
         this.spawn(i);
       }
     }
-    if (this.disabled) return { undispatched: jobs, dispatched: 0 };
+    if (this.disabled) return { fallback: jobs, skipped: [], dispatched: 0 };
 
     const perWorker: SessionJob[][] = this.slots.map(() => []);
-    const undispatched: SessionJob[] = [];
+    const fallback: SessionJob[] = [];
+    const skipped: SessionJob[] = [];
     for (const job of jobs) {
       const index = job.sid % this.slots.length;
       const slot = this.slots[index];
       if (slot.worker && slot.pendingTick === null) perWorker[index].push(job);
-      else undispatched.push(job);
+      else if (slot.worker) skipped.push(job);
+      else fallback.push(job);
     }
     let dispatched = 0;
     for (let i = 0; i < this.slots.length; i++) {
@@ -231,7 +240,7 @@ export class SnapshotFanoutPool {
       dispatched += mine.length;
       this.totalDispatched += mine.length;
     }
-    return { undispatched, dispatched };
+    return { fallback, skipped, dispatched };
   }
 
   shutdown(): void {

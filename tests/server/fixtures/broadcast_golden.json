@@ -6,8 +6,8 @@
     "priest",
     "hunter"
   ],
-  "rawSnapsSha": "0778037d9647973c769e7935a4be485128c48d14b7319251c4213794af84029e",
-  "canonSnapsSha": "61bb6ed19b4d1567548f66b0c9b913def345276339a1b2bfec2249bc70b3fa58",
+  "rawSnapsSha": "ddbee97bbaad516288ddbc79a91aa06f9e318d8803d3f48c6322c161547f5611",
+  "canonSnapsSha": "c809f24eddb37ede605d6d62756421119e8eb9bfeae409b5e245431c2480588d",
   "rawEventsSha": "a50331608037efd58e487b68f174b370c3d254d153b0b4ec35e7a6425004e384",
   "snapFrames": 1600,
   "eventFrames": 344,

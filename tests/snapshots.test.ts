@@ -1833,8 +1833,18 @@ describe('delve self-state mirrors over the wire', () => {
     const meta = server.sim.meta(session.pid)!;
     meta.delveClears['collapsed_reliquary:heroic'] = 1;
     meta.delveDaily.markClears = 2;
-    broadcast(server);
-    const snap = lastSnap(fc.sent);
+    // Delve META (marks/clears/daily) rides the pid-staggered secondary
+    // cadence (SELF_SECONDARY_INTERVAL_TICKS): a sim-driven change reaches
+    // the client within 4 ticks (<=200ms), not necessarily the very next
+    // snapshot. Live delve HUD state (drun/dcompanion) stays per-tick.
+    let snap: any;
+    for (let i = 0; i < 4 && snap === undefined; i++) {
+      server.sim.tick();
+      broadcast(server);
+      const last = lastSnap(fc.sent);
+      if (last?.self?.dmarks !== undefined) snap = last;
+    }
+    expect(snap).toBeDefined();
     expect(snap.self.dmarks).toBe(5);
     expect(snap.self.dclears['collapsed_reliquary:heroic']).toBe(1);
     expect(snap.self.delveDaily.markClears).toBe(2);
