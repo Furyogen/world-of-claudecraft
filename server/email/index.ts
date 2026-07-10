@@ -62,8 +62,21 @@ export function passwordResetUrl(token: string, env?: NodeJS.ProcessEnv): string
 
 type Target = Pick<AccountMailTarget, 'id' | 'username' | 'email' | 'locale' | 'marketing_opt_in'>;
 
+// Provider errors can quote the recipient address (for example SES's
+// "Email address is not verified: a@b.com"), so scrub anything address-shaped
+// before the message reaches the ops log. The full address is still available
+// in the email_log audit table, which is the intended PII home.
+const ADDRESS_RE = /[^\s@<>,;:"'()[\]]+@[^\s@<>,;:"'()[\]]+\.[^\s@<>,;:"'()[\]]+/g;
+
+function scrubAddresses(text: string): string {
+  return text.replace(ADDRESS_RE, '[email redacted]');
+}
+
 function fire(p: Promise<unknown>): void {
-  void p.catch((err) => logger.error({ err }, 'email send failed'));
+  void p.catch((err) => {
+    const msg = err instanceof Error ? err.message : String(err);
+    logger.error({ err: scrubAddresses(msg) }, 'email send failed');
+  });
 }
 
 export function emailAccountCreated(t: Target): void {
