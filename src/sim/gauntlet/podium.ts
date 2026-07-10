@@ -1,9 +1,10 @@
 // The Gauntlet podium ceremony. Once the Final Court crowns a champion the run
-// enters its podium phase (GAUNTLET.podiumS seconds); this module poses the top
-// three finishers on the three-step winners' stand behind the staging plaza
-// (1st on the gold centre step, 2nd on silver, 3rd on bronze) and re-asserts
-// those poses each tick so the tableau holds through the ceremony, then endRun
-// sends everyone home.
+// enters its podium phase; this module poses the top three finishers on the
+// three-step winners' stand behind the staging plaza (1st on the gold centre
+// step, 2nd on silver, 3rd on bronze) and re-asserts those poses each tick so
+// the tableau holds through the ceremony. The ceremony has no clock: it stands
+// until each player leaves or rejoins the queue themselves, and the emptied
+// run is then swept away (runs.ts emptyFor).
 //
 // Positions derive from the SAME GAUNTLET_LAYOUT.podium anchors the renderer
 // builds the steps from and venue_physics blocks with a collider, so an occupant

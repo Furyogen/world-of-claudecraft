@@ -200,6 +200,7 @@ export const en_XA: EnTranslations = {
       "survivorsLeft": "[{count} šţíļļ šţáñðíñĝ]",
       "boardTitle": "[Šţáñðíñĝš]",
       "boardOut": "[ÓÚŢ]",
+      "boardMore": "[+ {count} ɱóŕé]",
       "spectating": "[Šþéçţáţíñĝ]",
       "leave": "[Ļéáʋé]",
       "victory": "[Ʋíçţóŕý]",

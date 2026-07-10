@@ -365,6 +365,9 @@ export const GAUNTLET: GauntletDef = {
   emptyTimeoutS: 30,
   stagingS: 8,
   interludeS: 10,
+  // Nominal ceremony pacing for presentation only (the HUD countdown window
+  // denominator). The podium phase itself has NO deadline: it holds until each
+  // player leaves or rejoins, and an emptied run sweeps after emptyTimeoutS.
   podiumS: 20,
   // Prize pool is pure theater in v1 (no payout): the advertised baseline plus
   // growth per knockout, in copper, shown on the HUD counter.

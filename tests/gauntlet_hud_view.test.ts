@@ -80,16 +80,20 @@ describe('gauntletHudModel', () => {
     expect(m.podium).toEqual(podium);
   });
 
-  it('hides the countdown only once the run is done', () => {
-    const phases: GauntletPhase[] = ['lobby', 'staging', 'trial', 'interlude', 'podium'];
+  it('hides the countdown once the run is done and on the deadline-free podium', () => {
+    const phases: GauntletPhase[] = ['lobby', 'staging', 'trial', 'interlude'];
     for (const phase of phases) {
       expect(gauntletHudModel({ run: run({ phase, sentinel: null }), time: 0 }).showCountdown).toBe(
         true,
       );
     }
-    expect(
-      gauntletHudModel({ run: run({ phase: 'done', sentinel: null }), time: 0 }).showCountdown,
-    ).toBe(false);
+    // The ceremony has no clock (it holds until the viewer leaves or rejoins),
+    // so the podium never shows a countdown bar.
+    for (const phase of ['podium', 'done'] as GauntletPhase[]) {
+      expect(gauntletHudModel({ run: run({ phase, sentinel: null }), time: 0 }).showCountdown).toBe(
+        false,
+      );
+    }
   });
 
   // An echo round: 4-step sequence flashing from t=100 (0.7s steps, so the

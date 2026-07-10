@@ -6260,6 +6260,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gauntlet.title': 'ガントレット',
   'hudChrome.gauntlet.passed': 'クリア!',
   'hudChrome.gauntlet.boardTitle': '順位',
+  'hudChrome.gauntlet.boardMore': 'ほか {count} 人',
   'hudChrome.gauntlet.pitch': 'すべての試練を生き延びろ。最後まで立っていた者が賞金を総取りだ。',
   'hudChrome.gauntlet.join': 'ガントレットに参加',
   'hudChrome.gauntlet.withdraw': '辞退',

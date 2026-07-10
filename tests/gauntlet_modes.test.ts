@@ -107,6 +107,30 @@ describe('The Gauntlet queue (fair, rolling)', () => {
     expect(gauntletRunForPlayer(sim.ctx, a)).toBeNull();
     expect(sim.gauntletQueue.map((u) => u.pid)).toEqual([b, a]);
   });
+
+  it('a finished game parked on its podium never blocks the next game from forming', () => {
+    const sim = makeSim();
+    const a = addNear(sim, 'Champion');
+    sim.gauntletQueueJoin(a);
+    advanceUntil(sim, () => (gauntletRunForPlayer(sim.ctx, a)?.phase ?? 'lobby') !== 'lobby');
+    const runA = gauntletRunForPlayer(sim.ctx, a)!;
+    // Fast-forward a's game to its ceremony. The podium has no clock (it holds
+    // until each player leaves or rejoins), so it can linger indefinitely; the
+    // matchmaker must treat it as finished competition, not a live game.
+    runA.trial = null;
+    runA.phase = 'podium';
+    runA.phaseEndsAt = sim.time;
+
+    const b = addNear(sim, 'Next');
+    sim.gauntletQueueJoin(b);
+    sim.tick();
+    const runB = gauntletRunForPlayer(sim.ctx, b);
+    expect(runB).not.toBeNull();
+    expect(runB).not.toBe(runA);
+    // The lingering ceremony is untouched: a stays attached on their podium.
+    expect(runA.phase).toBe('podium');
+    expect(gauntletRunForPlayer(sim.ctx, a)).toBe(runA);
+  });
 });
 
 describe('The Gauntlet Practice (instant, solo vs bots, always available)', () => {

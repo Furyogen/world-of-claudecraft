@@ -18,6 +18,18 @@ const INT = { maximumFractionDigits: 0 } as const;
 // Below this vitality fraction the bar reads as critical (adds the .low class so
 // the stylesheet tints it); a threshold, not a magic style value.
 const LOW_FRAC = 0.34;
+// The 30-strong field can be taller than the viewport, and the stylesheet's
+// height cap would then clip a row mid-glyph (broken-looking chrome). Cap the
+// RENDERED rows to what actually fits and fold the tail into one "+ N more"
+// row. Both constants mirror the stylesheets: a row is 15px + the 2px list
+// gap, and the chrome around the rows is the board's viewport reserve plus its
+// padding + header, sized to the TIGHTEST variant (hud.mobile.css reserves
+// 220px against 100dvh; desktop hud.css reserves 200px) so no host clips.
+const ROW_PX = 17;
+const CHROME_PX = 252;
+// Never collapse below this many rows, however short the viewport: the board
+// must always read as a standings list, not a lone banner.
+const MIN_ROWS = 4;
 
 type BoardRow = GauntletRunView['board'][number];
 
@@ -45,14 +57,18 @@ export class GauntletBoard {
       this.hide(root);
       return;
     }
-    const sig = boardSignature(run.board);
+    // The row cap folds into the signature so a viewport resize repaints on
+    // the next board update (innerHeight is a cheap viewport metric, not a
+    // layout-forcing read).
+    const cap = rowCap(run.board.length);
+    const sig = (boardSignature(run.board) * 31 + cap) | 0;
     if (this.visible && sig === this.lastSig) return; // nothing changed this frame
     this.lastSig = sig;
     if (!this.visible) {
       root.style.display = 'flex';
       this.visible = true;
     }
-    root.innerHTML = this.render(run);
+    root.innerHTML = this.render(run, cap);
   }
 
   /** Tear the board down (the run went null, or the lobby/done phase). */
@@ -64,7 +80,7 @@ export class GauntletBoard {
     this.lastSig = -1;
   }
 
-  private render(run: GauntletRunView): string {
+  private render(run: GauntletRunView, cap: number): string {
     const board = run.board;
     const alive = board.reduce((n, b) => n + (b.out ? 0 : 1), 0);
     const count = `${formatNumber(alive, INT)} / ${formatNumber(board.length, INT)}`;
@@ -72,8 +88,24 @@ export class GauntletBoard {
     const head =
       `<div class="gb-head"><span class="gb-title">${esc(title)}</span>` +
       `<span class="gb-count">${esc(count)}</span></div>`;
-    const rows = board.map((b) => this.row(b, run.vitalityMax)).join('');
-    return `${head}<ol class="gb-list">${rows}</ol>`;
+    // Over the cap, the last slot becomes the "+ N more" tail. Roster order is
+    // players-first, so the hidden tail is NPC backfill; the viewer's own row
+    // is hoisted into the last visible slot if it would ever fall past the cap.
+    let shown = board as readonly BoardRow[];
+    let hidden = 0;
+    if (cap < board.length) {
+      const rows = board.slice(0, cap - 1);
+      const meIdx = board.findIndex((b) => b.you);
+      if (meIdx >= rows.length) rows[rows.length - 1] = board[meIdx];
+      shown = rows;
+      hidden = board.length - rows.length;
+    }
+    const rows = shown.map((b) => this.row(b, run.vitalityMax)).join('');
+    const more =
+      hidden > 0
+        ? `<li class="gb-row gb-more">${esc(t(K.more, { count: formatNumber(hidden, INT) }))}</li>`
+        : '';
+    return `${head}<ol class="gb-list">${rows}${more}</ol>`;
   }
 
   private row(b: BoardRow, vitalityMax: number): string {
@@ -91,6 +123,14 @@ export class GauntletBoard {
     const bar = `<span class="gb-bar"><span class="${fillCls}" style="width:${pct}"></span></span>`;
     return `<li class="${cls.join(' ')}">${name}${bar}</li>`;
   }
+}
+
+// How many list rows (contestants + the possible tail) fit the stylesheet's
+// height cap right now. The Vitest env has no viewport; render everything there.
+function rowCap(total: number): number {
+  if (typeof window === 'undefined') return total;
+  const fit = Math.floor((window.innerHeight - CHROME_PX) / ROW_PX);
+  return Math.max(MIN_ROWS, Math.min(total, fit));
 }
 
 // A cheap order-sensitive numeric hash of the field's mutable state (vitality +
@@ -111,4 +151,5 @@ function boardSignature(board: readonly BoardRow[]): number {
 const K = {
   title: 'hudChrome.gauntlet.boardTitle',
   out: 'hudChrome.gauntlet.boardOut',
+  more: 'hudChrome.gauntlet.boardMore',
 } satisfies Record<string, TranslationKey>;

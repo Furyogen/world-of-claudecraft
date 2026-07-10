@@ -200,6 +200,7 @@ export const ru_RU: EnTranslations = {
       "survivorsLeft": "Осталось {count}",
       "boardTitle": "Рейтинг",
       "boardOut": "OUT",
+      "boardMore": "и ещё {count}",
       "spectating": "Наблюдение",
       "leave": "Покинуть",
       "victory": "Победа",

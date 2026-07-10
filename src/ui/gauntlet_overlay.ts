@@ -81,6 +81,23 @@ export class GauntletOverlay {
     if (this.podiumRejoinBtn) this.podiumRejoinBtn.hidden = practice;
   }
 
+  /**
+   * View-driven backstop for the ceremony: the gauntletPodium EVENT is the
+   * primary trigger (it carries the authoritative `won`), but the podium now
+   * persists until the viewer leaves, so a viewer who missed the event (a
+   * reconnect mid-ceremony, or an eliminated splash racing the phase flip)
+   * must still get the standings. No-op once the podium is already up, so the
+   * event's styling always wins when both fire.
+   */
+  ensurePodium(
+    podium: { first: string; second: string; third: string },
+    won: boolean,
+    practice: boolean,
+  ): void {
+    if (this.state === 'podium') return;
+    this.showPodium(podium, won, practice);
+  }
+
   /** Per-frame refresh of the live survivor count while spectating. */
   update(survivors: number): void {
     if (this.state === 'spectating' || this.state === 'eliminated')

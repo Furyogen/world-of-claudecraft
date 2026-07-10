@@ -200,6 +200,7 @@ export const ja_JP: EnTranslations = {
       "survivorsLeft": "残り {count} 人",
       "boardTitle": "順位",
       "boardOut": "OUT",
+      "boardMore": "ほか {count} 人",
       "spectating": "観戦中",
       "leave": "退出",
       "victory": "勝利",

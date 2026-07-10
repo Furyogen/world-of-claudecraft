@@ -75,9 +75,10 @@ export function updateGauntletQueue(ctx: SimContext): void {
   }
   if (ctx.gauntletQueue.length === 0 || !ctx.gauntletEventOpen) return;
   // Sequential rolling: only one live queue game at a time. Wait while any
-  // non-practice run exists; it disposes at the end of its podium, and the next
-  // tick forms the next game from the front of the queue.
-  if (ctx.gauntletRuns.some((run) => !run.practice)) return;
+  // non-practice run is still PLAYING. A run parked on its podium is finished
+  // competition: the ceremony holds until its players choose to leave, so it
+  // must never block the next game from forming.
+  if (ctx.gauntletRuns.some((run) => !run.practice && run.phase !== 'podium')) return;
   // Form the next game: a short-countdown lobby seated from the front of the queue
   // (up to the real-player cap); startRun backfills the rest of the field with NPCs.
   const run = openLobbyRun(ctx, { countdownS: GAUNTLET.queueCountdownS });

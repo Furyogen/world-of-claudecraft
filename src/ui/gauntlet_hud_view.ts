@@ -54,7 +54,8 @@ export interface GauntletHudModel {
    *  fill) plus the raw remaining seconds (the painter ceils + formats). */
   countdownFrac: number;
   countdownSeconds: number;
-  /** False only once the run is over (phase 'done'); every live phase has a deadline. */
+  /** False once the run is over (phase 'done') and on the podium, which has no
+   *  deadline (the ceremony holds until the viewer leaves or rejoins). */
   showCountdown: boolean;
   /** The Keeper's Echo strip during a live duel, else null. The duel itself
    *  plays on the table (the flashing rune stones); the strip carries only
@@ -186,7 +187,7 @@ export function gauntletHudModel(input: GauntletHudInput): GauntletHudModel {
     vitalityMax: run.vitalityMax,
     countdownFrac: window > 0 ? clamp01(remaining / window) : 0,
     countdownSeconds: remaining,
-    showCountdown: run.phase !== 'done',
+    showCountdown: run.phase !== 'done' && run.phase !== 'podium',
     echo,
     spectating: run.spectating,
     finished: run.finished,

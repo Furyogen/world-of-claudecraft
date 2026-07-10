@@ -6374,6 +6374,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gauntlet.title': 'Гаунтлет',
   'hudChrome.gauntlet.passed': 'Вы прошли!',
   'hudChrome.gauntlet.boardTitle': 'Рейтинг',
+  'hudChrome.gauntlet.boardMore': 'и ещё {count}',
   'hudChrome.gauntlet.pitch':
     'Переживи каждое испытание. Последний, кто устоит, забирает весь приз.',
   'hudChrome.gauntlet.join': 'Вступить в Гаунтлет',

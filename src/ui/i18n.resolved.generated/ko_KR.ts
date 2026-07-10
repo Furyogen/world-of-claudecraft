@@ -200,6 +200,7 @@ export const ko_KR: EnTranslations = {
       "survivorsLeft": "{count}명 생존",
       "boardTitle": "순위",
       "boardOut": "OUT",
+      "boardMore": "외 {count}명",
       "spectating": "관전 중",
       "leave": "나가기",
       "victory": "승리",

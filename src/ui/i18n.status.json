@@ -33,10 +33,10 @@
     "da_DK"
   ],
   "counts": {
-    "keys": 6705,
-    "rows": 140805,
-    "translated": 137972,
-    "pending": 2640,
+    "keys": 6706,
+    "rows": 140826,
+    "translated": 137978,
+    "pending": 2655,
     "blocked": 193,
     "blockedSource": 93
   },
@@ -489118,6 +489118,90 @@
           "state": "translated",
           "srcHash": "47b300bc71c9759e",
           "by": "human"
+        }
+      }
+    },
+    "main:hudChrome.gauntlet.boardMore": {
+      "scope": "main",
+      "enHash": "f95b2ddb0e137634",
+      "placeholders": [
+        "count"
+      ],
+      "locales": {
+        "es": {
+          "state": "pending"
+        },
+        "es_ES": {
+          "state": "pending"
+        },
+        "fr_FR": {
+          "state": "pending"
+        },
+        "fr_CA": {
+          "state": "pending"
+        },
+        "en_CA": {
+          "state": "translated",
+          "srcHash": "f95b2ddb0e137634",
+          "by": "human"
+        },
+        "it_IT": {
+          "state": "pending"
+        },
+        "de_DE": {
+          "state": "pending"
+        },
+        "zh_CN": {
+          "state": "translated",
+          "srcHash": "f95b2ddb0e137634",
+          "by": "human"
+        },
+        "zh_TW": {
+          "state": "translated",
+          "srcHash": "f95b2ddb0e137634",
+          "by": "human"
+        },
+        "ko_KR": {
+          "state": "translated",
+          "srcHash": "f95b2ddb0e137634",
+          "by": "human"
+        },
+        "ja_JP": {
+          "state": "translated",
+          "srcHash": "f95b2ddb0e137634",
+          "by": "human"
+        },
+        "pt_BR": {
+          "state": "pending"
+        },
+        "ru_RU": {
+          "state": "translated",
+          "srcHash": "f95b2ddb0e137634",
+          "by": "human"
+        },
+        "cs_CZ": {
+          "state": "pending"
+        },
+        "nl_NL": {
+          "state": "pending"
+        },
+        "pl_PL": {
+          "state": "pending"
+        },
+        "id_ID": {
+          "state": "pending"
+        },
+        "tr_TR": {
+          "state": "pending"
+        },
+        "sv_SE": {
+          "state": "pending"
+        },
+        "vi_VN": {
+          "state": "pending"
+        },
+        "da_DK": {
+          "state": "pending"
         }
       }
     },

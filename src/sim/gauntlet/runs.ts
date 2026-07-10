@@ -694,12 +694,6 @@ function computePodium(ctx: SimContext, run: GauntletRun): void {
   }));
 }
 
-// Tear the run down: send remaining players home, drop the field.
-function endRun(ctx: SimContext, run: GauntletRun): void {
-  for (const pid of [...run.playerStates.keys()]) removePlayerFromRun(ctx, run, pid, true);
-  disposeRun(ctx, run);
-}
-
 function disposeRun(ctx: SimContext, run: GauntletRun): void {
   for (const c of run.contestants) {
     if (!c.player && c.entityId !== 0 && ctx.entities.has(c.entityId)) ctx.dropEntity(c.entityId);
@@ -793,7 +787,10 @@ export function updateGauntletRuns(ctx: SimContext): void {
           // the podium, never on to the next arena.
           if (run.trialIndex + 1 >= GAUNTLET.trials.length || run.practiceTrial !== null) {
             run.phase = 'podium';
-            run.phaseEndsAt = ctx.time + GAUNTLET.podiumS;
+            // The ceremony has NO deadline: it holds until each player leaves
+            // or rejoins the queue on their own (the podium case below). A zero
+            // remaining window keeps the client countdown dark.
+            run.phaseEndsAt = ctx.time;
             computePodium(ctx, run);
             emitPhase(ctx, run);
           } else {
@@ -816,8 +813,11 @@ export function updateGauntletRuns(ctx: SimContext): void {
         }
         break;
       case 'podium':
+        // The ceremony never times anyone out: the tableau (and its fireworks)
+        // holds until each player chooses Leave or Rejoin themselves. Once the
+        // last player detaches, the emptyFor sweep at the top of this loop
+        // disposes the run and frees the venue slot.
         holdPodiumOccupants(ctx, run); // keep the finishers posed on the stand
-        if (ctx.time >= run.phaseEndsAt) endRun(ctx, run);
         break;
       case 'done':
         break;

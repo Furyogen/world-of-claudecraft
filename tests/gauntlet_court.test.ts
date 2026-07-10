@@ -351,7 +351,7 @@ describe('gauntlet court: the podium ceremony', () => {
     }
   });
 
-  it('holds the champion on the step across the ceremony, then sends them home', () => {
+  it('holds the champion on the step until THEY leave, then sends them home', () => {
     const sim = makeSim(121);
     const pid = startCourtTrial(sim, 'Champ');
     const run = sim.gauntletRuns[0]!;
@@ -365,18 +365,51 @@ describe('gauntlet court: the podium ceremony', () => {
     for (let i = 0; i < 20; i++) {
       sim.meta(pid)!.moveInput.forward = true;
       sim.tick();
-      if (run.phase !== 'podium') break;
     }
-    if (run.phase === 'podium') {
-      expect(e.pos.x).toBeCloseTo(seat.x, 5);
-      expect(e.pos.z).toBeCloseTo(seat.z, 5);
-    }
+    expect(run.phase).toBe('podium');
+    expect(e.pos.x).toBeCloseTo(seat.x, 5);
+    expect(e.pos.z).toBeCloseTo(seat.z, 5);
 
-    // Run the ceremony out: the winner is returned to where they entered.
-    for (let i = 0; i < 20 * (GAUNTLET.podiumS + 2) && sim.gauntletRuns[0]; i++) sim.tick();
-    expect(sim.gauntletRuns[0]).toBeUndefined();
+    // The ceremony has NO clock: it holds well past the old nominal window
+    // (and no countdown is promised: the phase deadline is already spent).
+    expect(run.phaseEndsAt).toBeLessThanOrEqual(sim.time);
+    for (let i = 0; i < 20 * (GAUNTLET.podiumS + 5); i++) sim.tick();
+    expect(run.phase).toBe('podium');
+    expect(sim.gauntletRuns[0]).toBe(run);
+
+    // Only the player's own Leave ends it: sent home on the spot, and the
+    // emptied run sweeps away after the empty timeout, freeing the slot.
+    sim.gauntletLeave(pid);
     expect(e.pos.x).toBeCloseTo(home.x, 5);
     expect(e.pos.z).toBeCloseTo(home.z, 5);
+    for (let i = 0; i < 20 * (GAUNTLET.emptyTimeoutS + 2) && sim.gauntletRuns[0]; i++) sim.tick();
+    expect(sim.gauntletRuns[0]).toBeUndefined();
+  }, 20000);
+
+  it('an ELIMINATED viewer still gets the ceremony: the podium event and standings', () => {
+    const sim = makeSim(122);
+    const pid = startCourtTrial(sim, 'Fallen');
+    const run = sim.gauntletRuns[0]!;
+    // Knock the player out mid-court; the NPC brawl crowns a champion without them.
+    const c = run.contestants.find((k) => k.entityId === pid)!;
+    eliminateContestant(sim.ctx, run, c);
+    const evs: SimEvent[] = [];
+    for (let i = 0; i < 20 * (ct.durationS + 5) && run.phase !== 'podium'; i++)
+      evs.push(...sim.tick());
+    expect(run.phase).toBe('podium');
+    // The personal podium event reaches the eliminated (spectating) viewer too.
+    const mine = pick(evs, 'gauntletPodium').find((ev) => ev.pid === pid);
+    expect(mine).toBeTruthy();
+    expect(mine!.won).toBe(false);
+    // And their run view carries the standings for the ceremony's whole
+    // (unbounded) duration, so the client can back-fill a missed event.
+    for (let i = 0; i < 20 * 5; i++) sim.tick();
+    const view = sim.gauntletRunWire(pid)!;
+    expect(view.phase).toBe('podium');
+    expect(view.spectating).toBe(true);
+    expect(view.podium?.first).toBeTruthy();
+    expect(view.podium?.second).toBeTruthy();
+    expect(view.podium?.third).toBeTruthy();
   }, 20000);
 });
 

@@ -200,6 +200,7 @@ export const vi_VN: EnTranslations = {
       "survivorsLeft": "{count} still standing",
       "boardTitle": "Standings",
       "boardOut": "OUT",
+      "boardMore": "+ {count} more",
       "spectating": "Spectating",
       "leave": "Leave",
       "victory": "Victory",

@@ -69,9 +69,11 @@ export const hudChromeStrings = {
     eliminated: 'ELIMINATED',
     survivorsLeft: '{count} still standing',
     // The top-left standings board: its heading, the accessible group name (the
-    // heading doubles as the aria-label), and the per-row knockout tag.
+    // heading doubles as the aria-label), the per-row knockout tag, and the
+    // tail row summarizing rows that do not fit the viewport.
     boardTitle: 'Standings',
     boardOut: 'OUT',
+    boardMore: '+ {count} more',
     spectating: 'Spectating',
     leave: 'Leave',
     victory: 'Victory',

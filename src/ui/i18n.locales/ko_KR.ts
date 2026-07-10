@@ -6243,6 +6243,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gauntlet.title': '시련의 관문',
   'hudChrome.gauntlet.passed': '통과!',
   'hudChrome.gauntlet.boardTitle': '순위',
+  'hudChrome.gauntlet.boardMore': '외 {count}명',
   'hudChrome.gauntlet.pitch': '모든 시련을 견뎌내라. 마지막까지 살아남는 자가 상금을 차지한다.',
   'hudChrome.gauntlet.join': '시련의 관문 참가',
   'hudChrome.gauntlet.withdraw': '기권',

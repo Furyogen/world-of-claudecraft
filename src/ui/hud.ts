@@ -10451,6 +10451,19 @@ export class Hud {
     // foe onto the player's real target, so the standard target frame + the
     // world selection ring already show who they are locked onto, exactly like a
     // duel.
+    // The ceremony standings backstop: the ceremony persists until the viewer
+    // leaves, so every attached viewer (the champion AND the eliminated) must
+    // see first/second/third for however long they stay. The one-shot
+    // gauntletPodium event stays primary (it carries the authoritative `won`);
+    // this covers a viewer who missed it. Free-roaming spectators are excluded
+    // (they are in no run; Rejoin/Leave on the podium panel is not theirs).
+    if (run && run.phase === 'podium' && run.podium && !this.sim.gauntletSpectating) {
+      this.gauntletOverlay.ensurePodium(
+        run.podium,
+        run.podium.first === (this.sim.player?.name ?? ''),
+        run.practice,
+      );
+    }
     if (run) this.gauntletOverlay.update(run.survivors);
     else if (this.gauntletOverlay.shown) this.gauntletOverlay.hide();
   }

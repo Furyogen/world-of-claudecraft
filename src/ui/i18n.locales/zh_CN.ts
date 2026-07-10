@@ -5932,6 +5932,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gauntlet.title': '试炼回廊',
   'hudChrome.gauntlet.passed': '通过!',
   'hudChrome.gauntlet.boardTitle': '排名',
+  'hudChrome.gauntlet.boardMore': '另有 {count} 人',
   'hudChrome.gauntlet.pitch': '熬过每一场试炼,笑到最后的人独得奖金。',
   'hudChrome.gauntlet.join': '加入试炼回廊',
   'hudChrome.gauntlet.withdraw': '退出',

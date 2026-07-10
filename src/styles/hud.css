@@ -4364,7 +4364,10 @@
   }
   #gauntlet-board .gb-row.me {
     background: rgba(201, 148, 26, 0.22);
+    /* Drawn INSIDE the row box: the list clips overflow, so an outward outline
+       would lose its edges against the panel bounds. */
     outline: 1px solid var(--color-primary);
+    outline-offset: -1px;
   }
   #gauntlet-board .gb-name {
     font: 600 11px / 15px var(--body-font);
@@ -4404,6 +4407,14 @@
     font: 700 9px / 1 var(--body-font);
     letter-spacing: 1px;
     color: #ff8a7a;
+  }
+  /* The "+ N more" tail when the field is taller than the viewport (the board
+     caps rendered rows instead of clipping one mid-glyph). */
+  #gauntlet-board .gb-more {
+    display: block;
+    font: 600 10px / 15px var(--body-font);
+    color: var(--color-text-light);
+    opacity: 0.7;
   }
 
   /* ---------- gauntlet circles overlay ---------- */

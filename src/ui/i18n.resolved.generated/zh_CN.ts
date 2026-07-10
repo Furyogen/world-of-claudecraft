@@ -200,6 +200,7 @@ export const zh_CN: EnTranslations = {
       "survivorsLeft": "还有 {count} 人存活",
       "boardTitle": "排名",
       "boardOut": "OUT",
+      "boardMore": "另有 {count} 人",
       "spectating": "观战中",
       "leave": "离开",
       "victory": "胜利",
