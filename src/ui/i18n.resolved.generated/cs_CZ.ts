@@ -154,6 +154,12 @@ export const cs_CZ: EnTranslations = {
     "spectate": {
       "banner": "Sleduješ {name}"
     },
+    "readyCheck": {
+      "prompt": "{name} has started a ready check. Are you ready?",
+      "ready": "Ready",
+      "notReady": "Not Ready",
+      "result": "Ready check: {ready} ready, {notReady} not ready, {noResponse} no response."
+    },
     "death": {
       "resurrectAtCorpse": "Vzkřísit u mrtvoly",
       "resurrectAtHealer": "Bledý strážce (Strážcovo mýto)",
@@ -306,7 +312,6 @@ export const cs_CZ: EnTranslations = {
       "chat": "Přeskočit na chat"
     },
     "mobile": {
-      "autorun": "Automatický běh",
       "jump": "Skok",
       "leaderboard": "Žebříčky",
       "dailyRewards": "Odměny",
@@ -397,7 +402,13 @@ export const cs_CZ: EnTranslations = {
       "targetFriendly": "Zacílit nejbližšího spojence",
       "targetFriendlyNext": "Procházet spojenecké cíle",
       "discord": "Discord",
-      "valecup": "Pohár údolí"
+      "valecup": "Pohár údolí",
+      "categoryPet": "Pet",
+      "petAttack": "Pet: Attack",
+      "petStop": "Pet: Stop",
+      "petTaunt": "Pet: Taunt",
+      "petDefensive": "Pet: Defensive",
+      "petAggressive": "Pet: Aggressive"
     },
     "vcup": {
       "title": "Pohár údolí",
@@ -1070,6 +1081,10 @@ export const cs_CZ: EnTranslations = {
       "spawn": "{name} povstává nad Thornpeak Heights!"
     },
     "auth": {
+      "appleLoginCta": "Continue with Apple",
+      "appleError": "Could not sign in with Apple. Please try again.",
+      "appleChoiceIntro": "Create a new account, or link Apple to one you already have.",
+      "appleChoiceExpired": "That Apple sign-in expired. Please sign in with Apple again.",
       "forgotPrompt": "Zapomenuté heslo?",
       "forgotTitle": "Obnovení hesla",
       "forgotHint": "Zadejte své uživatelské jméno a na uloženou e-mailovou adresu pošleme odkaz pro obnovení.",
@@ -5870,6 +5885,15 @@ export const cs_CZ: EnTranslations = {
       },
       "linen_scrap": {
         "name": "Lněný útržek"
+      },
+      "arcane_dust": {
+        "name": "Arkánní prach"
+      },
+      "arcane_essence": {
+        "name": "Arkánní esence"
+      },
+      "arcane_shard": {
+        "name": "Arkánní střep"
       },
       "fen_muster_order": {
         "name": "Fenbridgeský svolávací rozkaz"

@@ -154,6 +154,12 @@ export const tr_TR: EnTranslations = {
     "spectate": {
       "banner": "{name} izleniyor"
     },
+    "readyCheck": {
+      "prompt": "{name} has started a ready check. Are you ready?",
+      "ready": "Ready",
+      "notReady": "Not Ready",
+      "result": "Ready check: {ready} ready, {notReady} not ready, {noResponse} no response."
+    },
     "death": {
       "resurrectAtCorpse": "Cesedinin Başında Diril",
       "resurrectAtHealer": "Solgun Bekçi (Bekçinin Bedeli)",
@@ -306,7 +312,6 @@ export const tr_TR: EnTranslations = {
       "chat": "Sohbete Atla"
     },
     "mobile": {
-      "autorun": "Otomatik Koşu",
       "jump": "Zıpla",
       "leaderboard": "Sıralama",
       "dailyRewards": "Ödüller",
@@ -397,7 +402,13 @@ export const tr_TR: EnTranslations = {
       "targetFriendly": "En Yakın Dostu Hedefle",
       "targetFriendlyNext": "Dost Hedefler Arasında Geç",
       "discord": "Discord",
-      "valecup": "Vadi Kupası"
+      "valecup": "Vadi Kupası",
+      "categoryPet": "Pet",
+      "petAttack": "Pet: Attack",
+      "petStop": "Pet: Stop",
+      "petTaunt": "Pet: Taunt",
+      "petDefensive": "Pet: Defensive",
+      "petAggressive": "Pet: Aggressive"
     },
     "vcup": {
       "title": "Vadi Kupası",
@@ -1070,6 +1081,10 @@ export const tr_TR: EnTranslations = {
       "spawn": "{name}, Dikenzirve Tepeleri'nin üzerinde yükseliyor!"
     },
     "auth": {
+      "appleLoginCta": "Continue with Apple",
+      "appleError": "Could not sign in with Apple. Please try again.",
+      "appleChoiceIntro": "Create a new account, or link Apple to one you already have.",
+      "appleChoiceExpired": "That Apple sign-in expired. Please sign in with Apple again.",
       "forgotPrompt": "Şifreni mi unuttun?",
       "forgotTitle": "Şifreni sıfırla",
       "forgotHint": "Kullanıcı adını gir, kayıtlı e-posta adresine bir sıfırlama bağlantısı gönderelim.",
@@ -5870,6 +5885,15 @@ export const tr_TR: EnTranslations = {
       },
       "linen_scrap": {
         "name": "Keten Parçası"
+      },
+      "arcane_dust": {
+        "name": "Ezoterik Toz"
+      },
+      "arcane_essence": {
+        "name": "Ezoterik Öz"
+      },
+      "arcane_shard": {
+        "name": "Ezoterik Kırıntı"
       },
       "fen_muster_order": {
         "name": "Fenbridge Seferberlik Emri"

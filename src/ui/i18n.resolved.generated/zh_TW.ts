@@ -154,6 +154,12 @@ export const zh_TW: EnTranslations = {
     "spectate": {
       "banner": "正在觀察 {name}"
     },
+    "readyCheck": {
+      "prompt": "{name} 發起了準備確認。你準備好了嗎？",
+      "ready": "準備就緒",
+      "notReady": "未準備",
+      "result": "準備確認：{ready} 人就緒，{notReady} 人未準備，{noResponse} 人未回應。"
+    },
     "death": {
       "resurrectAtCorpse": "在屍體旁復活",
       "resurrectAtHealer": "靈魂醫者（復活虛弱）",
@@ -306,7 +312,6 @@ export const zh_TW: EnTranslations = {
       "chat": "跳至聊天"
     },
     "mobile": {
-      "autorun": "自動奔跑",
       "jump": "跳躍",
       "leaderboard": "排行榜",
       "dailyRewards": "獎勵",
@@ -397,7 +402,13 @@ export const zh_TW: EnTranslations = {
       "targetFriendly": "選取最近友方",
       "targetFriendlyNext": "切換友方目標",
       "discord": "Discord",
-      "valecup": "溪谷盃"
+      "valecup": "溪谷盃",
+      "categoryPet": "寵物",
+      "petAttack": "寵物：攻擊",
+      "petStop": "寵物：停止",
+      "petTaunt": "寵物：嘲諷",
+      "petDefensive": "寵物：防禦",
+      "petAggressive": "寵物：攻擊性"
     },
     "vcup": {
       "title": "溪谷盃",
@@ -1070,6 +1081,10 @@ export const zh_TW: EnTranslations = {
       "spawn": "{name}在荊峰高地崛起！"
     },
     "auth": {
+      "appleLoginCta": "透過 Apple 繼續",
+      "appleError": "無法透過 Apple 登入。請再試一次。",
+      "appleChoiceIntro": "建立新帳戶，或將 Apple 連結到現有帳戶。",
+      "appleChoiceExpired": "Apple 登入已過期。請再次使用 Apple 登入。",
       "forgotPrompt": "忘記密碼？",
       "forgotTitle": "重設密碼",
       "forgotHint": "輸入您的使用者名稱，我們會將重設連結寄送到登記的電子郵件。",
@@ -5870,6 +5885,15 @@ export const zh_TW: EnTranslations = {
       },
       "linen_scrap": {
         "name": "亞麻碎布"
+      },
+      "arcane_dust": {
+        "name": "奧術之塵"
+      },
+      "arcane_essence": {
+        "name": "奧術精華"
+      },
+      "arcane_shard": {
+        "name": "奧術碎片"
       },
       "fen_muster_order": {
         "name": "芬橋集結令"

@@ -132,4 +132,16 @@ describe('wireEntity aura serialization', () => {
     expect(w).not.toHaveProperty('value');
     expect(w).not.toHaveProperty('src');
   });
+
+  it('rides value across the wire raw, not rounded', () => {
+    // w.value = a.value (not round2(a.value)) so a tiny negative survives instead of
+    // collapsing to -0 -> 0, which would flip a stat-sap's isAuraDebuff classification
+    // on the client. This fails if a future edit swaps in round2(a.value).
+    const sim = new Sim({ seed: 1, playerClass: 'warrior' });
+    const e = sim.player;
+    e.auras = [baseAura({ value: -0.004 })];
+
+    const w = wireAuras(e)[0];
+    expect(w.value).toBe(-0.004);
+  });
 });

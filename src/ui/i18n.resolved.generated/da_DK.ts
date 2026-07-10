@@ -154,6 +154,12 @@ export const da_DK: EnTranslations = {
     "spectate": {
       "banner": "Tilskuer til {name}"
     },
+    "readyCheck": {
+      "prompt": "{name} has started a ready check. Are you ready?",
+      "ready": "Ready",
+      "notReady": "Not Ready",
+      "result": "Ready check: {ready} ready, {notReady} not ready, {noResponse} no response."
+    },
     "death": {
       "resurrectAtCorpse": "Genopstå ved liget",
       "resurrectAtHealer": "Den Blege Vogter (Vogterens Klokke)",
@@ -306,7 +312,6 @@ export const da_DK: EnTranslations = {
       "chat": "Spring til chat"
     },
     "mobile": {
-      "autorun": "Autoløb",
       "jump": "Hop",
       "leaderboard": "Rangliste",
       "dailyRewards": "Belønninger",
@@ -397,7 +402,13 @@ export const da_DK: EnTranslations = {
       "targetFriendly": "Sigt mod nærmeste allierede",
       "targetFriendlyNext": "Skift allieret mål",
       "discord": "Discord",
-      "valecup": "Dalpokalen"
+      "valecup": "Dalpokalen",
+      "categoryPet": "Pet",
+      "petAttack": "Pet: Attack",
+      "petStop": "Pet: Stop",
+      "petTaunt": "Pet: Taunt",
+      "petDefensive": "Pet: Defensive",
+      "petAggressive": "Pet: Aggressive"
     },
     "vcup": {
       "title": "Dalpokalen",
@@ -1070,6 +1081,10 @@ export const da_DK: EnTranslations = {
       "spawn": "{name} rejser sig over Tornetop Højder!"
     },
     "auth": {
+      "appleLoginCta": "Continue with Apple",
+      "appleError": "Could not sign in with Apple. Please try again.",
+      "appleChoiceIntro": "Create a new account, or link Apple to one you already have.",
+      "appleChoiceExpired": "That Apple sign-in expired. Please sign in with Apple again.",
       "forgotPrompt": "Glemt adgangskode?",
       "forgotTitle": "Nulstil din adgangskode",
       "forgotHint": "Indtast dit brugernavn, så sender vi et nulstillingslink til den registrerede e-mailadresse.",
@@ -5870,6 +5885,15 @@ export const da_DK: EnTranslations = {
       },
       "linen_scrap": {
         "name": "Lærredslap"
+      },
+      "arcane_dust": {
+        "name": "Arkanstøv"
+      },
+      "arcane_essence": {
+        "name": "Arkanessens"
+      },
+      "arcane_shard": {
+        "name": "Arkanskår"
       },
       "fen_muster_order": {
         "name": "Kærbro Mønstringsordre"

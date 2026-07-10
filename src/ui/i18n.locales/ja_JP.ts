@@ -14,6 +14,12 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ja_JP: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.auth.appleLoginCta': 'Appleで続ける',
+  'hudChrome.auth.appleError': 'Appleでサインインできませんでした。もう一度お試しください。',
+  'hudChrome.auth.appleChoiceIntro':
+    '新しいアカウントを作成するか、Appleを既存のアカウントに連携します。',
+  'hudChrome.auth.appleChoiceExpired':
+    'Appleでのサインインの有効期限が切れました。もう一度お試しください。',
   'hudChrome.vcup.guildBoardWl': '{wins} 勝 {losses} 敗',
   'hudChrome.vcup.shootPower': 'パワー',
   'hudChrome.discord.roleTag.coredevs': 'コア開発者',
@@ -106,6 +112,11 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     'WOCの価格を取得できないため、報酬は一時的にロックされています。',
   'hudChrome.keybinds.discord': 'Discord',
   'hudChrome.spectate.banner': '{name}を観戦中',
+  'hudChrome.readyCheck.prompt': '{name} が準備確認を開始しました。準備はいいですか？',
+  'hudChrome.readyCheck.ready': '準備完了',
+  'hudChrome.readyCheck.notReady': '準備未完了',
+  'hudChrome.readyCheck.result':
+    '準備確認：{ready} 人準備完了、{notReady} 人準備未完了、{noResponse} 人未回答。',
   'hudChrome.loot.chestTitle': '宝箱',
   'hudChrome.itemTooltip.requiresLevel': '必要レベル {level}',
   'hudChrome.spellbook.addToBarAria': '{name}をアクションバーに追加',
@@ -2326,6 +2337,9 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.items.tallow_candle.name': '脂ぎった獣脂の塊',
   'entities.items.spider_leg.name': 'ぴくつく蜘蛛の脚',
   'entities.items.bone_fragments.name': '骨の破片',
+  'entities.items.arcane_dust.name': '秘術の粉塵',
+  'entities.items.arcane_essence.name': '秘術の精髄',
+  'entities.items.arcane_shard.name': '秘術のかけら',
   'entities.items.linen_scrap.name': 'リネンの切れ端',
   'entities.items.fen_muster_order.name': 'フェンブリッジ召集令',
   'entities.items.mire_prowler_pelt.name': '沼の徘徊者の毛皮',
@@ -3612,7 +3626,6 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.meters.seconds': '{s}秒',
   'hudChrome.mobile.actionPageToggle': '行動ページ切替',
   'hudChrome.mobile.actionRing': '戦闘アクション',
-  'hudChrome.mobile.autorun': 'オートラン',
   'hudChrome.mobile.haptics': '振動',
   'hudChrome.mobile.hapticsOff': '振動オフ',
   'hudChrome.mobile.hotbarPage': 'スキル',
@@ -6237,6 +6250,12 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mobile.chatPlaceholder': '発言する...',
   // The Vale Cup boarball minigame (docs/prd/vale-cup.md).
   'hudChrome.keybinds.valecup': 'ヴェイルカップ',
+  'hudChrome.keybinds.categoryPet': 'ペット',
+  'hudChrome.keybinds.petAttack': 'ペット：攻撃',
+  'hudChrome.keybinds.petStop': 'ペット：停止',
+  'hudChrome.keybinds.petTaunt': 'ペット：挑発',
+  'hudChrome.keybinds.petDefensive': 'ペット：防御',
+  'hudChrome.keybinds.petAggressive': 'ペット：攻撃的',
   'hudChrome.vcup.title': 'ヴェイルカップ',
   'hudChrome.vcup.close': 'ヴェイルカップウィンドウを閉じる',
   'hudChrome.vcup.offlineNote': '対戦簿は閉じられている。ヴェイルカップは現在利用できない。',

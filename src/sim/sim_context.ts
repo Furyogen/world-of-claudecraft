@@ -46,6 +46,7 @@ import type {
   ItemInstancePayload,
   PlayerClass,
   QuestProgress,
+  ReadyCheck,
   SetProc,
   SimConfig,
   SimEvent,
@@ -152,6 +153,9 @@ export interface SimContextPrimitives {
   // it routes through ctx until that slice puts it on the seam. (trades/tradeInvites/
   // duelInvites are already declared above; deduped.)
   readonly partyInvites: Map<number, { fromPid: number; expires: number }>;
+  // Active party/raid ready checks (social/ready_check.ts), keyed by party id. Swept
+  // in the end-of-tick block by updateReadyChecks. Sim-internal, never wired.
+  readonly readyChecks: Map<number, ReadyCheck>;
   readonly chatTokens: Map<number, { tokens: number; at: number }>;
   readonly channelSubs: Map<number, Set<JoinableChannel>>;
   // L1 loot-distribution state. The pending need-greed rolls map is mutated in
@@ -351,6 +355,9 @@ export interface SimContextCallbacks {
   // Invite a player to the actor's party by pid (delegates to the PartyMachine);
   // used by the chat "/invite <name>" command in social/chat.ts.
   partyInvite(targetPid: number, pid?: number): void;
+  // Start a party/raid ready check as the actor (leader-gated); used by the chat
+  // "/ready" command in social/chat.ts. Delegates to social/ready_check.ts.
+  readyCheckStart(pid?: number): void;
   removeFromParty(pid: number, verb: string): void;
   // Drop a disbanded party's whole raid-marker set (points at T1's targeting store).
   dropPartyMarkers(partyId: number): void;
@@ -361,6 +368,16 @@ export interface SimContextCallbacks {
   // Fungible-only count (excludes per-instance slots, #1165); market.ts uses this
   // instead of countItem so an instanced copy is never listed as a plain stack member.
   countFungibleItem(itemId: string, pid?: number): number;
+  // Enchanting-eligible count/removal (#1712 review): counts/removes a plain
+  // fungible stack OR an instanced copy with no rolled.stats (crafted rare+
+  // gear), excluding only an already-enchanted (rolled.stats) copy. Used by
+  // professions/enchanting.ts instead of countFungibleItem/removeFungibleItem
+  // so crafted single-copy rares remain disenchantable/enchantable.
+  countEnchantableItem(itemId: string, pid?: number): number;
+  // Returns the consumed slots' `instance` payloads (removeItem's contract),
+  // so applyEnchant can merge a crafted copy's signer/rolled.quality into the
+  // freshly-enchanted instance instead of dropping them.
+  removeEnchantableItem(itemId: string, count: number, pid?: number): ItemInstancePayload[];
   completeQuestForDev(questId: string, pid?: number): boolean;
   completeCurrentQuestsForDev(pid?: number): number;
 
@@ -803,6 +820,9 @@ export function createSimContext(host: SimContextHost): SimContext {
     get partyInvites() {
       return host.partyInvites;
     },
+    get readyChecks() {
+      return host.readyChecks;
+    },
     get chatTokens() {
       return host.chatTokens;
     },
@@ -893,9 +913,12 @@ export function createSimContext(host: SimContextHost): SimContext {
     spendResource: host.spendResource,
     removeItem: host.removeItem,
     removeFungibleItem: host.removeFungibleItem,
+    countEnchantableItem: host.countEnchantableItem,
+    removeEnchantableItem: host.removeEnchantableItem,
     clearEntityMarker: host.clearEntityMarker,
     partyOf: host.partyOf,
     partyInvite: host.partyInvite,
+    readyCheckStart: host.readyCheckStart,
     removeFromParty: host.removeFromParty,
     dropPartyMarkers: host.dropPartyMarkers,
     onMobKilledForQuests: host.onMobKilledForQuests,

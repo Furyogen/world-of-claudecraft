@@ -11,6 +11,14 @@ export const hudChromeStrings = {
   spectate: {
     banner: 'Spectating {name}',
   },
+  // Raid/party ready-check prompt (the leader ran /ready). The buttons answer the
+  // yes/no prompt; the outcome is announced in chat by the sim.
+  readyCheck: {
+    prompt: '{name} has started a ready check. Are you ready?',
+    ready: 'Ready',
+    notReady: 'Not Ready',
+    result: 'Ready check: {ready} ready, {notReady} not ready, {noResponse} no response.',
+  },
   // WoW-style death loop overlay (release -> ghost run -> resurrect). The release
   // button and "You have died." title reuse the hud.core.* keys; these are the
   // ghost-state additions shown once the spirit has been released.
@@ -231,7 +239,6 @@ export const hudChromeStrings = {
   // On-screen / mobile control labels and their accessible names. char/bags/music
   // reuse existing keys (hud.keybinds.actions.*, hud.options.music) at the call site.
   mobile: {
-    autorun: 'Auto',
     jump: 'Jump',
     leaderboard: 'Ranks',
     dailyRewards: 'Rewards',
@@ -405,6 +412,13 @@ export const hudChromeStrings = {
     // Discord is a brand name; it stays identical across locales.
     discord: 'Discord',
     valecup: 'Vale Cup',
+    // Pet bar (Ctrl+1..5 by default) key-binding rows + category header.
+    categoryPet: 'Pet',
+    petAttack: 'Pet: Attack',
+    petStop: 'Pet: Stop',
+    petTaunt: 'Pet: Taunt',
+    petDefensive: 'Pet: Defensive',
+    petAggressive: 'Pet: Aggressive',
   },
   // The Vale Cup boarball minigame (docs/prd/vale-cup.md): the queue window,
   // the persistent indicator button, the in-match score strip, and the event
@@ -1285,6 +1299,10 @@ export const hudChromeStrings = {
   // main.ts userFacingApiError. The generic "sent" copy never reveals whether an
   // account exists.
   auth: {
+    appleLoginCta: 'Continue with Apple',
+    appleError: 'Could not sign in with Apple. Please try again.',
+    appleChoiceIntro: 'Create a new account, or link Apple to one you already have.',
+    appleChoiceExpired: 'That Apple sign-in expired. Please sign in with Apple again.',
     forgotPrompt: 'Forgot password?',
     forgotTitle: 'Reset your password',
     forgotHint: 'Enter your username and we will email a reset link to the address on file.',

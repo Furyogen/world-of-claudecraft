@@ -154,6 +154,12 @@ export const ja_JP: EnTranslations = {
     "spectate": {
       "banner": "{name}を観戦中"
     },
+    "readyCheck": {
+      "prompt": "{name} が準備確認を開始しました。準備はいいですか？",
+      "ready": "準備完了",
+      "notReady": "準備未完了",
+      "result": "準備確認：{ready} 人準備完了、{notReady} 人準備未完了、{noResponse} 人未回答。"
+    },
     "death": {
       "resurrectAtCorpse": "亡骸で復活",
       "resurrectAtHealer": "霊魂の癒し手（復活の後遺症）",
@@ -306,7 +312,6 @@ export const ja_JP: EnTranslations = {
       "chat": "チャットへスキップ"
     },
     "mobile": {
-      "autorun": "オートラン",
       "jump": "ジャンプ",
       "leaderboard": "ランキング",
       "dailyRewards": "報酬",
@@ -397,7 +402,13 @@ export const ja_JP: EnTranslations = {
       "targetFriendly": "最も近い味方をターゲット",
       "targetFriendlyNext": "味方ターゲットを順に切り替え",
       "discord": "Discord",
-      "valecup": "ヴェイルカップ"
+      "valecup": "ヴェイルカップ",
+      "categoryPet": "ペット",
+      "petAttack": "ペット：攻撃",
+      "petStop": "ペット：停止",
+      "petTaunt": "ペット：挑発",
+      "petDefensive": "ペット：防御",
+      "petAggressive": "ペット：攻撃的"
     },
     "vcup": {
       "title": "ヴェイルカップ",
@@ -1070,6 +1081,10 @@ export const ja_JP: EnTranslations = {
       "spawn": "{name}がソーンピーク高地に立ち上がった！"
     },
     "auth": {
+      "appleLoginCta": "Appleで続ける",
+      "appleError": "Appleでサインインできませんでした。もう一度お試しください。",
+      "appleChoiceIntro": "新しいアカウントを作成するか、Appleを既存のアカウントに連携します。",
+      "appleChoiceExpired": "Appleでのサインインの有効期限が切れました。もう一度お試しください。",
       "forgotPrompt": "パスワードをお忘れですか？",
       "forgotTitle": "パスワードをリセット",
       "forgotHint": "ユーザー名を入力してください。登録されているメールアドレスにリセットリンクをお送りします。",
@@ -5870,6 +5885,15 @@ export const ja_JP: EnTranslations = {
       },
       "linen_scrap": {
         "name": "リネンの切れ端"
+      },
+      "arcane_dust": {
+        "name": "秘術の粉塵"
+      },
+      "arcane_essence": {
+        "name": "秘術の精髄"
+      },
+      "arcane_shard": {
+        "name": "秘術のかけら"
       },
       "fen_muster_order": {
         "name": "フェンブリッジ召集令"

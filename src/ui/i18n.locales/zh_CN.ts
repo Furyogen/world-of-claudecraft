@@ -14,6 +14,10 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const zh_CN: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.auth.appleLoginCta': '通过 Apple 继续',
+  'hudChrome.auth.appleError': '无法通过 Apple 登录。请重试。',
+  'hudChrome.auth.appleChoiceIntro': '创建新帐户，或将 Apple 关联到现有帐户。',
+  'hudChrome.auth.appleChoiceExpired': 'Apple 登录已过期。请再次使用 Apple 登录。',
   'hudChrome.vcup.guildBoardWl': '{wins} 胜，{losses} 负',
   'hudChrome.vcup.shootPower': '力度',
   'hudChrome.discord.roleTag.coredevs': '核心开发者',
@@ -98,6 +102,11 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.dailyRewards.reason.price_unavailable': 'WOC 价格不可用，奖励暂时锁定。',
   'hudChrome.keybinds.discord': 'Discord',
   'hudChrome.spectate.banner': '正在观察 {name}',
+  'hudChrome.readyCheck.prompt': '{name} 发起了准备确认。你准备好了吗？',
+  'hudChrome.readyCheck.ready': '准备就绪',
+  'hudChrome.readyCheck.notReady': '未准备',
+  'hudChrome.readyCheck.result':
+    '准备确认：{ready} 人就绪，{notReady} 人未准备，{noResponse} 人未响应。',
   'hudChrome.loot.chestTitle': '宝箱',
   'hudChrome.itemTooltip.requiresLevel': '需要等级 {level}',
   'hudChrome.spellbook.addToBarAria': '将{name}添加到动作条',
@@ -2219,6 +2228,9 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.items.tallow_candle.name': '油腻兽脂块',
   'entities.items.spider_leg.name': '抽搐的蜘蛛腿',
   'entities.items.bone_fragments.name': '骨头碎片',
+  'entities.items.arcane_dust.name': '奥术之尘',
+  'entities.items.arcane_essence.name': '奥术精华',
+  'entities.items.arcane_shard.name': '奥术碎片',
   'entities.items.linen_scrap.name': '亚麻碎布',
   'entities.items.fen_muster_order.name': '芬桥集结令',
   'entities.items.mire_prowler_pelt.name': '泥沼潜伏者毛皮',
@@ -3467,7 +3479,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.meters.seconds': '{s}秒',
   'hudChrome.mobile.actionPageToggle': '切换动作页',
   'hudChrome.mobile.actionRing': '战斗动作',
-  'hudChrome.mobile.autorun': '自动奔跑',
   'hudChrome.mobile.haptics': '震动反馈',
   'hudChrome.mobile.hapticsOff': '震动反馈：关',
   'hudChrome.mobile.hotbarPage': '技能',
@@ -5908,6 +5919,12 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mobile.chatPlaceholder': '说点什么...',
   // The Vale Cup boarball minigame (docs/prd/vale-cup.md).
   'hudChrome.keybinds.valecup': '溪谷杯',
+  'hudChrome.keybinds.categoryPet': '宠物',
+  'hudChrome.keybinds.petAttack': '宠物：攻击',
+  'hudChrome.keybinds.petStop': '宠物：停止',
+  'hudChrome.keybinds.petTaunt': '宠物：嘲讽',
+  'hudChrome.keybinds.petDefensive': '宠物：防御',
+  'hudChrome.keybinds.petAggressive': '宠物：攻击性',
   'hudChrome.vcup.title': '溪谷杯',
   'hudChrome.vcup.close': '关闭溪谷杯窗口',
   'hudChrome.vcup.offlineNote': '赛程簿已合上。溪谷杯目前不可用。',

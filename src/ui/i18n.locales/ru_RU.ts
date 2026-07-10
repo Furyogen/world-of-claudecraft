@@ -14,6 +14,11 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ru_RU: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.auth.appleLoginCta': 'Продолжить с Apple',
+  'hudChrome.auth.appleError': 'Не удалось войти через Apple. Попробуйте ещё раз.',
+  'hudChrome.auth.appleChoiceIntro':
+    'Создайте новую учётную запись или привяжите Apple к существующей.',
+  'hudChrome.auth.appleChoiceExpired': 'Вход через Apple истёк. Войдите через Apple ещё раз.',
   'hudChrome.vcup.guildBoardWl': '{wins} побед, {losses} поражений',
   'hudChrome.vcup.shootPower': 'СИЛА',
   'hudChrome.discord.roleTag.coredevs': 'Ведущий разработчик',
@@ -103,6 +108,11 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
     'Цена WOC недоступна, награды временно заблокированы.',
   'hudChrome.keybinds.discord': 'Discord',
   'hudChrome.spectate.banner': 'Наблюдение за {name}',
+  'hudChrome.readyCheck.prompt': '{name} начал проверку готовности. Вы готовы?',
+  'hudChrome.readyCheck.ready': 'Готов',
+  'hudChrome.readyCheck.notReady': 'Не готов',
+  'hudChrome.readyCheck.result':
+    'Проверка готовности: {ready} готовы, {notReady} не готовы, {noResponse} без ответа.',
   'hudChrome.loot.chestTitle': 'Сундук',
   'hudChrome.itemTooltip.requiresLevel': 'Требуется уровень {level}',
   'hudChrome.spellbook.addToBarAria': 'Добавить {name} на панель действий',
@@ -2352,6 +2362,9 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.items.tallow_candle.name': 'Жирный кусок сала',
   'entities.items.spider_leg.name': 'Дергающаяся нога паука',
   'entities.items.bone_fragments.name': 'Фрагменты костей',
+  'entities.items.arcane_dust.name': 'Тайная пыль',
+  'entities.items.arcane_essence.name': 'Тайная эссенция',
+  'entities.items.arcane_shard.name': 'Тайный осколок',
   'entities.items.linen_scrap.name': 'Лоскут льна',
   'entities.items.fen_muster_order.name': 'Приказ о сборе в Фенбридже',
   'entities.items.mire_prowler_pelt.name': 'Шкура болотного хищника',
@@ -3652,7 +3665,6 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.meters.seconds': '{s} сек.',
   'hudChrome.mobile.actionPageToggle': 'Переключить страницу действий',
   'hudChrome.mobile.actionRing': 'Боевые действия',
-  'hudChrome.mobile.autorun': 'Автобег',
   'hudChrome.mobile.haptics': 'Вибрация',
   'hudChrome.mobile.hapticsOff': 'Вибрация выкл.',
   'hudChrome.mobile.hotbarPage': 'Навыки',
@@ -6351,6 +6363,12 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mobile.chatPlaceholder': 'Напишите сообщение...',
   // The Vale Cup boarball minigame (docs/prd/vale-cup.md).
   'hudChrome.keybinds.valecup': 'Кубок Долины',
+  'hudChrome.keybinds.categoryPet': 'Питомец',
+  'hudChrome.keybinds.petAttack': 'Питомец: атака',
+  'hudChrome.keybinds.petStop': 'Питомец: стоп',
+  'hudChrome.keybinds.petTaunt': 'Питомец: провокация',
+  'hudChrome.keybinds.petDefensive': 'Питомец: защита',
+  'hudChrome.keybinds.petAggressive': 'Питомец: агрессия',
   'hudChrome.vcup.title': 'Кубок Долины',
   'hudChrome.vcup.close': 'Закрыть окно Кубка Долины',
   'hudChrome.vcup.offlineNote': 'Книга матчей закрыта. Кубок Долины сейчас недоступен.',

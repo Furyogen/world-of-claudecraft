@@ -154,6 +154,12 @@ export const ko_KR: EnTranslations = {
     "spectate": {
       "banner": "{name} 관전 중"
     },
+    "readyCheck": {
+      "prompt": "{name} 님이 준비 확인을 시작했습니다. 준비되셨습니까?",
+      "ready": "준비 완료",
+      "notReady": "준비 안 됨",
+      "result": "준비 확인: {ready}명 준비 완료, {notReady}명 준비 안 됨, {noResponse}명 무응답."
+    },
     "death": {
       "resurrectAtCorpse": "시신에서 부활",
       "resurrectAtHealer": "영혼 치유사 (부활의 후유증)",
@@ -306,7 +312,6 @@ export const ko_KR: EnTranslations = {
       "chat": "채팅으로 건너뛰기"
     },
     "mobile": {
-      "autorun": "자동 달리기",
       "jump": "점프",
       "leaderboard": "순위",
       "dailyRewards": "보상",
@@ -397,7 +402,13 @@ export const ko_KR: EnTranslations = {
       "targetFriendly": "가장 가까운 아군 대상 지정",
       "targetFriendlyNext": "아군 대상 순환",
       "discord": "Discord",
-      "valecup": "베일 컵"
+      "valecup": "베일 컵",
+      "categoryPet": "펫",
+      "petAttack": "펫: 공격",
+      "petStop": "펫: 정지",
+      "petTaunt": "펫: 도발",
+      "petDefensive": "펫: 방어",
+      "petAggressive": "펫: 공격적"
     },
     "vcup": {
       "title": "베일 컵",
@@ -1070,6 +1081,10 @@ export const ko_KR: EnTranslations = {
       "spawn": "{name}이(가) 쏜피크 고지에 솟아올랐습니다!"
     },
     "auth": {
+      "appleLoginCta": "Apple로 계속하기",
+      "appleError": "Apple로 로그인할 수 없습니다. 다시 시도해 주세요.",
+      "appleChoiceIntro": "새 계정을 만들거나 Apple을 기존 계정에 연결하세요.",
+      "appleChoiceExpired": "Apple 로그인이 만료되었습니다. Apple로 다시 로그인해 주세요.",
       "forgotPrompt": "비밀번호를 잊으셨나요?",
       "forgotTitle": "비밀번호 재설정",
       "forgotHint": "사용자 이름을 입력하면 등록된 이메일로 재설정 링크를 보내드립니다.",
@@ -5870,6 +5885,15 @@ export const ko_KR: EnTranslations = {
       },
       "linen_scrap": {
         "name": "아마포 조각"
+      },
+      "arcane_dust": {
+        "name": "비전 가루"
+      },
+      "arcane_essence": {
+        "name": "비전 정수"
+      },
+      "arcane_shard": {
+        "name": "비전 파편"
       },
       "fen_muster_order": {
         "name": "펜브리지 소집 명령서"

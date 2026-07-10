@@ -14,6 +14,10 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const zh_TW: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.auth.appleLoginCta': '透過 Apple 繼續',
+  'hudChrome.auth.appleError': '無法透過 Apple 登入。請再試一次。',
+  'hudChrome.auth.appleChoiceIntro': '建立新帳戶，或將 Apple 連結到現有帳戶。',
+  'hudChrome.auth.appleChoiceExpired': 'Apple 登入已過期。請再次使用 Apple 登入。',
   'hudChrome.vcup.guildBoardWl': '{wins} 勝，{losses} 敗',
   'hudChrome.vcup.shootPower': '力道',
   'hudChrome.discord.roleTag.coredevs': '核心開發者',
@@ -98,6 +102,11 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.dailyRewards.reason.price_unavailable': '無法取得 WOC 價格，獎勵暫時鎖定。',
   'hudChrome.keybinds.discord': 'Discord',
   'hudChrome.spectate.banner': '正在觀察 {name}',
+  'hudChrome.readyCheck.prompt': '{name} 發起了準備確認。你準備好了嗎？',
+  'hudChrome.readyCheck.ready': '準備就緒',
+  'hudChrome.readyCheck.notReady': '未準備',
+  'hudChrome.readyCheck.result':
+    '準備確認：{ready} 人就緒，{notReady} 人未準備，{noResponse} 人未回應。',
   'hudChrome.loot.chestTitle': '寶箱',
   'hudChrome.itemTooltip.requiresLevel': '需要等級 {level}',
   'hudChrome.spellbook.addToBarAria': '將 {name} 加入動作列',
@@ -2221,6 +2230,9 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'entities.items.tallow_candle.name': '油膩獸脂塊',
   'entities.items.spider_leg.name': '抽搐的蜘蛛腿',
   'entities.items.bone_fragments.name': '骨頭碎片',
+  'entities.items.arcane_dust.name': '奧術之塵',
+  'entities.items.arcane_essence.name': '奧術精華',
+  'entities.items.arcane_shard.name': '奧術碎片',
   'entities.items.linen_scrap.name': '亞麻碎布',
   'entities.items.fen_muster_order.name': '芬橋集結令',
   'entities.items.mire_prowler_pelt.name': '泥沼潛伏者毛皮',
@@ -3468,7 +3480,6 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.meters.seconds': '{s}秒',
   'hudChrome.mobile.actionPageToggle': '切換動作頁',
   'hudChrome.mobile.actionRing': '戰鬥動作',
-  'hudChrome.mobile.autorun': '自動奔跑',
   'hudChrome.mobile.haptics': '觸覺回饋',
   'hudChrome.mobile.hapticsOff': '觸覺回饋已關閉',
   'hudChrome.mobile.hotbarPage': '技能',
@@ -5909,6 +5920,12 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mobile.chatPlaceholder': '說點什麼...',
   // The Vale Cup boarball minigame (docs/prd/vale-cup.md).
   'hudChrome.keybinds.valecup': '溪谷盃',
+  'hudChrome.keybinds.categoryPet': '寵物',
+  'hudChrome.keybinds.petAttack': '寵物：攻擊',
+  'hudChrome.keybinds.petStop': '寵物：停止',
+  'hudChrome.keybinds.petTaunt': '寵物：嘲諷',
+  'hudChrome.keybinds.petDefensive': '寵物：防禦',
+  'hudChrome.keybinds.petAggressive': '寵物：攻擊性',
   'hudChrome.vcup.title': '溪谷盃',
   'hudChrome.vcup.close': '關閉溪谷盃視窗',
   'hudChrome.vcup.offlineNote': '賽程簿已闔上。溪谷盃目前無法使用。',

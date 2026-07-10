@@ -154,6 +154,12 @@ export const sv_SE: EnTranslations = {
     "spectate": {
       "banner": "Åskådar {name}"
     },
+    "readyCheck": {
+      "prompt": "{name} has started a ready check. Are you ready?",
+      "ready": "Ready",
+      "notReady": "Not Ready",
+      "result": "Ready check: {ready} ready, {notReady} not ready, {noResponse} no response."
+    },
     "death": {
       "resurrectAtCorpse": "Återuppstå vid liket",
       "resurrectAtHealer": "Den bleka väktaren (Väktartullen)",
@@ -306,7 +312,6 @@ export const sv_SE: EnTranslations = {
       "chat": "Hoppa till chatt"
     },
     "mobile": {
-      "autorun": "Autospring",
       "jump": "Hoppa",
       "leaderboard": "Ranking",
       "dailyRewards": "Belöningar",
@@ -397,7 +402,13 @@ export const sv_SE: EnTranslations = {
       "targetFriendly": "Måltavla närmaste vänlig",
       "targetFriendlyNext": "Växla vänligt mål",
       "discord": "Discord",
-      "valecup": "Dalcupen"
+      "valecup": "Dalcupen",
+      "categoryPet": "Pet",
+      "petAttack": "Pet: Attack",
+      "petStop": "Pet: Stop",
+      "petTaunt": "Pet: Taunt",
+      "petDefensive": "Pet: Defensive",
+      "petAggressive": "Pet: Aggressive"
     },
     "vcup": {
       "title": "Dalcupen",
@@ -1070,6 +1081,10 @@ export const sv_SE: EnTranslations = {
       "spawn": "{name} reser sig över Törntoppshöjderna!"
     },
     "auth": {
+      "appleLoginCta": "Continue with Apple",
+      "appleError": "Could not sign in with Apple. Please try again.",
+      "appleChoiceIntro": "Create a new account, or link Apple to one you already have.",
+      "appleChoiceExpired": "That Apple sign-in expired. Please sign in with Apple again.",
       "forgotPrompt": "Glömt lösenordet?",
       "forgotTitle": "Återställ ditt lösenord",
       "forgotHint": "Ange ditt användarnamn så skickar vi en återställningslänk till den registrerade e-postadressen.",
@@ -5870,6 +5885,15 @@ export const sv_SE: EnTranslations = {
       },
       "linen_scrap": {
         "name": "Linnetrasa"
+      },
+      "arcane_dust": {
+        "name": "Arkanstoft"
+      },
+      "arcane_essence": {
+        "name": "Arkanessens"
+      },
+      "arcane_shard": {
+        "name": "Arkanskärva"
       },
       "fen_muster_order": {
         "name": "Kärrbros mönstringsorder"

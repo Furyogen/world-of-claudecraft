@@ -4476,7 +4476,6 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.meters.perSecond': '{value}/s',
   'hudChrome.meters.perSecondRow': '{total} ({rate})',
   'hudChrome.meters.seconds': '{s}s',
-  'hudChrome.mobile.autorun': 'Corrida automática',
   'hudChrome.mobile.haptics': 'Vibração',
   'hudChrome.mobile.hapticsOff': 'Vibração desligada',
   'hudChrome.mobile.hotbarPage': 'Habilidades',

@@ -24,6 +24,7 @@ import {
 } from './game/click_move';
 import { clientEnvBits, installPageStateTracking, pageStateBits } from './game/client_env';
 import { getClientSeed } from './game/client_seed';
+import { shouldClearAutorunOnDeath } from './game/death_input_reset';
 import { initDesktopDownload } from './game/desktop_download';
 import { initDesktopShellIntegration } from './game/desktop_shell_integration';
 import { takeEditorPlaytestRequest } from './game/editor_playtest';
@@ -79,6 +80,11 @@ import {
   sortCharacters,
 } from './net/char_sort';
 import { charselectPrimaryAction } from './net/charselect_action';
+import {
+  isAppleAuthorizationCancellation,
+  isNativeIos,
+  signInWithNativeApple,
+} from './net/native_apple_auth';
 import { createNativeAttestationProof } from './net/native_attestation';
 import {
   createNativeDiscordProof,
@@ -1107,6 +1113,13 @@ async function startGame(
       onTab: () => world.tabTarget(),
       onTargetFriendly: () => world.targetNearestFriendly(),
       onCycleFriendly: () => world.friendlyTabTarget(),
+      // Pet bar (Ctrl+1..5 by default): drive the existing IWorld pet commands.
+      onPet: (action) => {
+        if (action === 'attack') world.petAttack();
+        else if (action === 'taunt') world.petTaunt();
+        else if (action === 'stop') world.setPetMode('passive');
+        else world.setPetMode(action); // 'defensive' | 'aggressive'
+      },
       // slot 0 (key 1) is Attack for every class, auto-attack without needing
       // right-click; keys and clicks share the Hud's remappable slot layout
       onAbility: (slot) => hud.castSlot(slot),
@@ -1201,7 +1214,6 @@ async function startGame(
     onCycleTarget: () => world.tabTarget(),
     onJump: () => input.triggerTouchJump(),
     onInteract: () => interactKey(),
-    onAutorun: () => input.toggleAutorun(),
     onChat: () => openChat(),
     onChatOpen: () => openChatRead(),
     onChatClose: () => closeChat(),
@@ -2091,6 +2103,7 @@ async function startGame(
   let last = performance.now();
   let acc = 0;
   let onlineInputEchoMs = 0;
+  let playerWasDead = world.player.dead;
   // Smoothed input-echo jitter (mean absolute deviation of RTT samples) for the
   // perf overlay's Jitter row.
   let onlineJitterMs = 0;
@@ -2355,6 +2368,12 @@ async function startGame(
     // character behind it (other windows stay non-modal, as before); the
     // first-spawn intro cinematic holds movement the same way until it lands
     input.setSuspendMovement(!gameInputReady || hud.isModalOpen() || intro !== null);
+    const playerDead = world.player.dead;
+    if (shouldClearAutorunOnDeath(playerWasDead, playerDead)) {
+      input.setAutorun(false);
+      mobileControls.syncAutorun(false);
+    }
+    playerWasDead = playerDead;
     perf.trace('input.updateTouchLook', () => input.updateTouchLook(frameDt), {
       frameDtMs: frameDt * 1000,
     });
@@ -6264,12 +6283,13 @@ async function maybePromptRecoveryEmail(): Promise<void> {
 const DISCORD_CHOICE_KEY = 'woc_discord_choice';
 const DISCORD_CHOICE_TTL_MS = 15 * 60 * 1000;
 
-interface DiscordLoginChoice {
+interface ExternalAuthLoginChoice {
+  provider: 'apple' | 'discord';
   linkToken: string;
   username: string;
 }
 
-function readDiscordChoice(): DiscordLoginChoice | null {
+function readDiscordChoice(): ExternalAuthLoginChoice | null {
   let raw: string | null = null;
   try {
     raw = localStorage.getItem(DISCORD_CHOICE_KEY);
@@ -6282,6 +6302,7 @@ function readDiscordChoice(): DiscordLoginChoice | null {
     const fresh = typeof d.ts === 'number' && Date.now() - d.ts < DISCORD_CHOICE_TTL_MS;
     if (typeof d.linkToken === 'string' && d.linkToken && fresh) {
       return {
+        provider: 'discord',
         linkToken: d.linkToken,
         username: typeof d.username === 'string' ? d.username : '',
       };
@@ -7623,7 +7644,34 @@ function wireStartScreens(): void {
   setupNavBtn($('#nav-btn-logout'), '#hero-view', logoutAccount);
   trackCommunityLinkClicks();
   setupAccountPortal();
+  let showExternalAuthChoice: ((choice: ExternalAuthLoginChoice) => void) | null = null;
   // "Continue with Discord": first-class login at the top of the auth form.
+  const appleLoginBtn = $('#btn-login-apple');
+  if (appleLoginBtn && NATIVE_APP && isNativeIos()) {
+    appleLoginBtn.hidden = false;
+    appleLoginBtn.addEventListener('click', (event) => {
+      event.preventDefault();
+      appleLoginBtn.setAttribute('disabled', 'true');
+      void signInWithNativeApple(api)
+        .then((result) => {
+          if (result.choose && result.linkToken) {
+            showExternalAuthChoice?.({
+              provider: 'apple',
+              linkToken: result.linkToken,
+              username: result.username,
+            });
+            return;
+          }
+          return completeOnlineAuth();
+        })
+        .catch((error) => {
+          if (isAppleAuthorizationCancellation(error)) return;
+          console.error('[apple] could not sign in', error);
+          loginError(t('hudChrome.auth.appleError'));
+        })
+        .finally(() => appleLoginBtn.removeAttribute('disabled'));
+    });
+  }
   const discordLoginBtn = $('#btn-login-discord');
   const discordOrDivider = document.getElementById('auth-or-divider');
   if (discordLoginBtn && DISCORD_BUILD_ENABLED) {
@@ -7643,12 +7691,21 @@ function wireStartScreens(): void {
       startDiscordOAuth('login');
     });
   }
+  if (discordOrDivider && NATIVE_APP && isNativeIos()) discordOrDivider.hidden = false;
   wireDiscordCtaBanner();
   wireDiscordKeepModal();
   wireRecoveryEmailModal();
 
   // First-time Discord login chooser: create a new account, or link an existing one.
-  let pendingDiscordChoice: DiscordLoginChoice | null = null;
+  let pendingDiscordChoice: ExternalAuthLoginChoice | null = null;
+  let discordChoiceBusy = false;
+  const setDiscordChoiceBusy = (busy: boolean) => {
+    discordChoiceBusy = busy;
+    const create = document.getElementById('btn-discord-create') as HTMLButtonElement | null;
+    const submit = document.getElementById('btn-discord-link-submit') as HTMLButtonElement | null;
+    if (create) create.disabled = busy;
+    if (submit) submit.disabled = busy;
+  };
   const discordChoiceError = (msg: string) => {
     const el = document.getElementById('discord-choice-error');
     if (el) el.textContent = msg;
@@ -7670,9 +7727,14 @@ function wireStartScreens(): void {
     // A dead/used pending token (400) can't be retried: clear it and ask the player
     // to sign in with Discord again. Other errors stay on the chooser to retry.
     if ((err as { status?: number })?.status === 400) {
+      const provider = pendingDiscordChoice?.provider;
       clearDiscordChoice();
       pendingDiscordChoice = null;
-      discordChoiceError(t('hudChrome.discord.choice.expired'));
+      discordChoiceError(
+        provider === 'apple'
+          ? t('hudChrome.auth.appleChoiceExpired')
+          : t('hudChrome.discord.choice.expired'),
+      );
       return;
     }
     // Codes best shown as the chooser's own generic: already_linked (a unique-link
@@ -7688,32 +7750,58 @@ function wireStartScreens(): void {
     }
     discordChoiceError(userFacingApiError(err));
   };
-  const showDiscordChoice = (choice: DiscordLoginChoice) => {
+  const showDiscordChoice = (choice: ExternalAuthLoginChoice) => {
     pendingDiscordChoice = choice;
+    const title = document.querySelector<HTMLElement>('#discord-choice-panel .auth-title');
     const greet = document.getElementById('discord-choice-greeting');
-    if (greet && choice.username) {
-      greet.textContent = t('hudChrome.discord.choice.greeting', { name: choice.username });
+    if (choice.provider === 'apple') {
+      if (title) {
+        title.dataset.i18n = 'hudChrome.auth.appleLoginCta';
+        title.textContent = t('hudChrome.auth.appleLoginCta');
+      }
+      if (greet) {
+        greet.dataset.i18n = 'hudChrome.auth.appleChoiceIntro';
+        greet.textContent = t('hudChrome.auth.appleChoiceIntro');
+      }
+    } else {
+      if (title) {
+        title.dataset.i18n = 'hudChrome.discord.choice.title';
+        title.textContent = t('hudChrome.discord.choice.title');
+      }
+      if (greet) {
+        greet.dataset.i18n = 'hudChrome.discord.choice.intro';
+        greet.textContent = choice.username
+          ? t('hudChrome.discord.choice.greeting', { name: choice.username })
+          : t('hudChrome.discord.choice.intro');
+      }
     }
     const linkBlock = document.getElementById('discord-link-existing');
     if (linkBlock) linkBlock.hidden = true;
     const twoFaField = document.getElementById('discord-link-2fa-field');
     if (twoFaField) twoFaField.hidden = true;
     document.getElementById('btn-discord-link-toggle')?.setAttribute('aria-expanded', 'false');
+    setDiscordChoiceBusy(false);
     discordChoiceError('');
     show('#discord-choice-panel');
   };
+  showExternalAuthChoice = showDiscordChoice;
   const wireDiscordChoice = () => {
     // The first-login chooser lives only on the main entry (index.html); play.html omits
     // it (Discord OAuth always redirects to '/'), so bail before touching nodes that are
     // not present, mirroring the null-guarded sibling wirings (CTA banner, keep modal).
     if (!document.getElementById('discord-choice-panel')) return;
     $('#btn-discord-create').addEventListener('click', () => {
-      if (!pendingDiscordChoice) return;
+      if (!pendingDiscordChoice || discordChoiceBusy) return;
+      setDiscordChoiceBusy(true);
       discordChoiceError('');
-      void api
-        .discordLoginNew(pendingDiscordChoice.linkToken)
+      const request =
+        pendingDiscordChoice.provider === 'apple'
+          ? api.appleLoginNew(pendingDiscordChoice.linkToken)
+          : api.discordLoginNew(pendingDiscordChoice.linkToken);
+      void request
         .then(finishDiscordChoice)
-        .catch(onDiscordChoiceError);
+        .catch(onDiscordChoiceError)
+        .finally(() => setDiscordChoiceBusy(false));
     });
     $('#btn-discord-link-toggle').addEventListener('click', () => {
       const linkBlock = document.getElementById('discord-link-existing');
@@ -7724,7 +7812,7 @@ function wireStartScreens(): void {
       if (reveal) ($('#discord-link-user') as HTMLInputElement).focus();
     });
     const submitLink = () => {
-      if (!pendingDiscordChoice) return;
+      if (!pendingDiscordChoice || discordChoiceBusy) return;
       const username = ($('#discord-link-user') as HTMLInputElement).value.trim();
       const password = ($('#discord-link-pass') as HTMLInputElement).value;
       const twoFaField = document.getElementById('discord-link-2fa-field');
@@ -7735,15 +7823,25 @@ function wireStartScreens(): void {
         discordChoiceError(t('hudChrome.discord.choice.error'));
         return;
       }
+      setDiscordChoiceBusy(true);
       discordChoiceError('');
-      void api
-        .discordLoginLink(
-          pendingDiscordChoice.linkToken,
-          username,
-          password,
-          factor.code,
-          factor.recoveryCode,
-        )
+      const request =
+        pendingDiscordChoice.provider === 'apple'
+          ? api.appleLoginLink(
+              pendingDiscordChoice.linkToken,
+              username,
+              password,
+              factor.code,
+              factor.recoveryCode,
+            )
+          : api.discordLoginLink(
+              pendingDiscordChoice.linkToken,
+              username,
+              password,
+              factor.code,
+              factor.recoveryCode,
+            );
+      void request
         .then((res) => {
           if (res.twoFactorRequired) {
             // Password accepted; the account needs a second factor. Reveal the code
@@ -7755,7 +7853,8 @@ function wireStartScreens(): void {
           }
           finishDiscordChoice();
         })
-        .catch(onDiscordChoiceError);
+        .catch(onDiscordChoiceError)
+        .finally(() => setDiscordChoiceBusy(false));
     };
     $('#btn-discord-link-submit').addEventListener('click', submitLink);
     ($('#discord-link-pass') as HTMLInputElement).addEventListener('keydown', (e) => {
@@ -7776,7 +7875,7 @@ function wireStartScreens(): void {
       show('#mode-select');
     });
   };
-  if (DISCORD_BUILD_ENABLED) wireDiscordChoice();
+  wireDiscordChoice();
 
   // A just-completed Discord login should land straight in online play, not home.
   let discordOnboarding = false;
