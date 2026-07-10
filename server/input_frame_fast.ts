@@ -44,6 +44,11 @@ function numberEnd(raw: string, i: number): number {
     else break;
   }
   if (j === d0) return i; // no integer digits
+  // JSON integers are 0 | [1-9][0-9]*: a leading zero followed by more digits
+  // ("007") is not JSON, so it must fall back (and be rejected) like any
+  // other non-JSON shape, keeping "accepted implies JSON.parse-identical"
+  // exactly true.
+  if (j - d0 > 1 && raw.charCodeAt(d0) === 48 /* 0 */) return i;
   if (raw.charCodeAt(j) === 46 /* . */) {
     j++;
     const f0 = j;
