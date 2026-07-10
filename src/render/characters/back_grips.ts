@@ -46,26 +46,28 @@ export function quatFromEulerXYZ(
 // lean one way; a left-hand prop (rogue offhand dagger, the warlock spellbook)
 // mirrors across X so dual-wield reads as crossed blades.
 const DEFAULT_BACK: BackGripSpec = {
-  position: [0.1, 0.05, -0.14],
-  euler: [0, 0, Math.PI * 0.85],
+  position: [0.16, 0.14, -0.27],
+  euler: [0.1, 0, Math.PI * 0.72],
 };
 
 const BACK_GRIPS: Record<string, BackGripSpec> = {
-  '1H_Sword': { position: [0.1, 0.05, -0.14], euler: [0, 0, Math.PI * 0.85] },
-  '2H_Sword': { position: [0.08, 0.0, -0.18], euler: [0, 0, Math.PI * 0.8] },
-  '1H_Axe': { position: [0.1, 0.05, -0.14], euler: [0, 0, Math.PI * 0.85] },
-  '2H_Axe': { position: [0.08, 0.0, -0.18], euler: [0, 0, Math.PI * 0.8] },
-  '2H_Staff': { position: [0.08, -0.1, -0.18], euler: [0, 0, Math.PI * 0.78] },
-  Knife: { position: [0.1, 0.15, -0.12], euler: [0, 0, Math.PI * 0.9] },
-  '1H_Wand': { position: [0.1, 0.15, -0.12], euler: [0, 0, Math.PI * 0.9] },
-  '1H_Crossbow': { position: [0.05, 0.05, -0.2], euler: [0, Math.PI / 2, Math.PI] },
-  '2H_Crossbow': { position: [0.05, 0.05, -0.22], euler: [0, Math.PI / 2, Math.PI] },
-  VAR_SWORD: { position: [0.1, 0.05, -0.14], euler: [0, 0, Math.PI * 0.85] },
-  VAR_DAGGER: { position: [0.1, 0.15, -0.12], euler: [0, 0, Math.PI * 0.9] },
-  VAR_STAFF: { position: [0.08, -0.1, -0.18], euler: [0, 0, Math.PI * 0.78] },
-  VAR_AXE: { position: [0.1, 0.05, -0.14], euler: [0, 0, Math.PI * 0.85] },
-  VAR_POLEARM: { position: [0.08, -0.1, -0.18], euler: [0, 0, Math.PI * 0.78] },
-  VAR_WAND: { position: [0.1, 0.15, -0.12], euler: [0, 0, Math.PI * 0.9] },
+  '1H_Sword': { position: [0.16, 0.14, -0.27], euler: [0.1, 0, Math.PI * 0.72] },
+  '2H_Sword': { position: [0.14, 0.1, -0.3], euler: [0.1, 0, Math.PI * 0.75] },
+  '1H_Axe': { position: [0.16, 0.14, -0.27], euler: [0.1, 0, Math.PI * 0.72] },
+  '2H_Axe': { position: [0.14, 0.1, -0.3], euler: [0.1, 0, Math.PI * 0.75] },
+  '2H_Staff': { position: [0.12, 0.0, -0.3], euler: [0.1, 0, Math.PI * 0.78] },
+  // Short blades tuck at the belt, hilt up (long hair covers a shoulder carry
+  // on the rogue rig, so the waist reads better from every angle).
+  Knife: { position: [0.22, -0.08, -0.14], euler: [0, 0, Math.PI * 0.95] },
+  '1H_Wand': { position: [0.2, -0.05, -0.16], euler: [0, 0, Math.PI * 0.9] },
+  '1H_Crossbow': { position: [0.0, 0.1, -0.3], euler: [0, Math.PI / 2, Math.PI] },
+  '2H_Crossbow': { position: [0.0, 0.1, -0.32], euler: [0, Math.PI / 2, Math.PI] },
+  VAR_SWORD: { position: [0.16, 0.14, -0.27], euler: [0.1, 0, Math.PI * 0.72] },
+  VAR_DAGGER: { position: [0.22, -0.08, -0.14], euler: [0, 0, Math.PI * 0.95] },
+  VAR_STAFF: { position: [0.12, 0.0, -0.3], euler: [0.1, 0, Math.PI * 0.78] },
+  VAR_AXE: { position: [0.16, 0.14, -0.27], euler: [0.1, 0, Math.PI * 0.72] },
+  VAR_POLEARM: { position: [0.12, 0.0, -0.3], euler: [0.1, 0, Math.PI * 0.78] },
+  VAR_WAND: { position: [0.2, -0.05, -0.16], euler: [0, 0, Math.PI * 0.9] },
 };
 
 /** The on-back transform for a sheathed prop: family-specific, mirrored across X

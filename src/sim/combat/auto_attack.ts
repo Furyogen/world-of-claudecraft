@@ -32,7 +32,6 @@ import { scheduleProjectile } from '../projectile_travel';
 import type { PlayerMeta } from '../sim';
 import type { SimContext } from '../sim_context';
 import { addThreat } from '../threat';
-import { drawWeapon } from '../weapon_stow';
 import {
   angleTo,
   armorReduction,
@@ -44,6 +43,7 @@ import {
   normAngle,
   swingMissChance,
 } from '../types';
+import { drawWeapon } from '../weapon_stow';
 import { spendResource } from './casting_lifecycle';
 import { blindMissBonus, isDisarmed, isStunned } from './cc';
 import { consumeNextAttackCrit } from './empower_next';
