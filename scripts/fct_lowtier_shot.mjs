@@ -174,8 +174,7 @@ function burst(mobId, playerId) {
 // animation keeps the nodes re-rasterizing (a FROZEN node sits on a stale, empty
 // compositor layer in headless and never paints; nameplates render for the same reason,
 // they re-raster every frame). Two quick waves so several numbers are on screen.
-const feed = (evs) =>
-  page.evaluate((e) => window.__game.hud.handleEvents(e), evs);
+const feed = (evs) => page.evaluate((e) => window.__game.hud.handleEvents(e), evs);
 // The floaters only rasterize into the screenshot while their rise animation is live
 // (a frozen node sits on a stale, empty compositor layer). So keep re-feeding waves and
 // capture a burst of frames; the numbers rise as a legible column above the enemy. Pick
@@ -217,7 +216,12 @@ const diag = await page.evaluate(() => {
           color: cs.color,
           fontSize: cs.fontSize,
           visibility: cs.visibility,
-          rect: { x: Math.round(r.x), y: Math.round(r.y), w: Math.round(r.width), h: Math.round(r.height) },
+          rect: {
+            x: Math.round(r.x),
+            y: Math.round(r.y),
+            w: Math.round(r.width),
+            h: Math.round(r.height),
+          },
         }
       : null,
     mountId: document.querySelector('.fct')?.parentElement?.id,
