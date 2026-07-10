@@ -148,16 +148,19 @@ export function enterDungeon(ctx: SimContext, dungeonId: string, pid?: number): 
     }
   }
   // A locked player may walk back into a LIVE heroic claim only when its final
-  // boss is already down (the corpse-run / loot-retrieval path the kill lockout
-  // deliberately leaves open). While that boss is alive, the lockout bars the
-  // door: without this, one unlocked member (a fresh recruit, or a camper the
-  // kill never locked) could claim a fresh heroic instance and ferry the whole
-  // locked party into another full run.
+  // boss is already down AND that kill is the one their lock came from (the
+  // claim's clearedBy set): the corpse-run / loot-retrieval path the kill
+  // lockout deliberately leaves open. Anything else bars the door. Without the
+  // boss-alive arm, one unlocked member (a fresh recruit, or a camper the kill
+  // never locked) could claim a fresh heroic instance and ferry the whole
+  // locked party into another full run; without the clearedBy arm, a player
+  // locked by an EARLIER run could walk into someone else's cleared claim and
+  // loot its epics through the tapper's-party corpse rights.
   if (
     inst &&
     inst.difficulty === 'heroic' &&
     isRaidLocked(ctx, r.meta, heroicLockoutId(dungeonId)) &&
-    heroicFinalBossAlive(ctx, inst)
+    (heroicFinalBossAlive(ctx, inst) || !inst.clearedBy.has(r.meta.entityId))
   ) {
     ctx.error(r.meta.entityId, `You are locked to Heroic ${dungeon.name}.`);
     return;
@@ -291,6 +294,7 @@ function claimInstance(
   inst.partyKey = key;
   inst.difficulty = difficulty;
   inst.emptyFor = 0;
+  inst.clearedBy = new Set();
   const origin = instanceOriginOf(inst);
   for (const spawn of dungeon.spawns) {
     const template = MOBS[spawn.mobId];
@@ -362,6 +366,7 @@ function freeInstance(ctx: SimContext, inst: InstanceSlot): void {
   inst.objectIds = [];
   inst.exitId = null;
   inst.emptyFor = 0;
+  inst.clearedBy = new Set();
 }
 
 // Kill-time lockout recipients for a claimed instance: every CURRENT member of
@@ -384,13 +389,32 @@ export function instanceLockoutMetas(ctx: SimContext, inst: InstanceSlot): Playe
   return out;
 }
 
+// Stamp one player's heroic daily lockout for this claim. A player whose lock
+// FIRST lands with this kill also joins the claim's `clearedBy` set: the
+// heroic door's cleared-run exception (enterDungeon) admits only them, so a
+// player locked by an EARLIER run can never treat someone else's cleared claim
+// as their own loot run (corpse loot rights ride the tapper's current party,
+// so an open door would hand them the epics too).
+function lockToHeroicClaim(
+  ctx: SimContext,
+  inst: InstanceSlot,
+  meta: PlayerMeta,
+  lockedUntil: number,
+): void {
+  const lockId = heroicLockoutId(inst.dungeonId);
+  if (!isRaidLocked(ctx, meta, lockId)) inst.clearedBy.add(meta.entityId);
+  meta.raidLockouts.set(lockId, lockedUntil);
+}
+
 // Heroic KILL lockout, the sibling of awardHeroicMarks on the death path.
 // combat/damage.ts calls it for EVERY mob death (credit or no credit): when the
 // dead mob is the final boss of a heroic claim, the whole owning group (plus
 // anyone inside) is locked to that heroic dungeon until the daily reset (the
 // same realm-local boundary the Nythraxis raid uses), scoped to the :heroic
 // key so the normal difficulty is never consumed. Marks stay participation-
-// gated below; the lockout deliberately is not.
+// gated below; the lockout deliberately is not. Death-time reward recipients
+// (a departed tap holder) are the third arm of the union, stamped in
+// awardHeroicMarks where that snapshot exists.
 export function grantHeroicKillLockout(ctx: SimContext, mob: Entity): void {
   const inst = ctx.instances.find((i) => i.partyKey !== null && i.mobIds.includes(mob.id));
   if (!inst || inst.difficulty !== 'heroic') return;
@@ -398,7 +422,7 @@ export function grantHeroicKillLockout(ctx: SimContext, mob: Entity): void {
   if (!tuning || mob.templateId !== tuning.finalBossId) return;
   const lockedUntil = ctx.raidResetMs(ctx.lockoutNowMs());
   for (const meta of instanceLockoutMetas(ctx, inst)) {
-    meta.raidLockouts.set(heroicLockoutId(inst.dungeonId), lockedUntil);
+    lockToHeroicClaim(ctx, inst, meta, lockedUntil);
   }
 }
 
@@ -424,8 +448,16 @@ export function awardHeroicMarks(ctx: SimContext, mob: Entity, recipients: Playe
   const tuning = HEROIC_DUNGEON_TUNING[inst.dungeonId];
   if (!tuning || mob.templateId !== tuning.finalBossId) return;
   const loot = mob.loot ?? { copper: 0, items: [] };
+  // Death-time reward recipients are the third arm of the kill-lockout union
+  // (grantHeroicKillLockout covers the owning group and the occupants): a tap
+  // holder who left the party and the instance before the kill still walks
+  // away with the mark slot and the corpse loot rights, so they must carry the
+  // daily lockout too. Stamped before the marks daily gate below, like the
+  // pre-split code, so an already-marked recipient is still locked.
+  const lockedUntil = ctx.raidResetMs(ctx.lockoutNowMs());
   const earners: number[] = [];
   for (const meta of recipients) {
+    lockToHeroicClaim(ctx, inst, meta, lockedUntil);
     // `utcDay` comes from the host, never the wall clock (determinism). Both
     // hosts stamp it (server/game.ts, main.ts); with an empty day the set
     // simply never resets, the same semantics as delveDaily.

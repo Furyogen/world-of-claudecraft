@@ -724,6 +724,11 @@ export interface InstanceSlot {
   objectIds: number[];
   exitId: number | null;
   emptyFor: number;
+  // Players whose heroic daily lockout FIRST landed with THIS claim's final-boss
+  // kill (instances/dungeons lockToHeroicClaim). The heroic door's cleared-run
+  // exception admits only these: a player locked by an earlier run can never
+  // treat someone else's cleared claim as their own loot run.
+  clearedBy: Set<number>;
 }
 
 export interface ResolvedAbility {
@@ -1459,6 +1464,7 @@ export class Sim {
             objectIds: [],
             exitId: null,
             emptyFor: 0,
+            clearedBy: new Set(),
           });
         }
         continue;
@@ -1485,6 +1491,7 @@ export class Sim {
           objectIds: [],
           exitId: null,
           emptyFor: 0,
+          clearedBy: new Set(),
         });
       }
     }
