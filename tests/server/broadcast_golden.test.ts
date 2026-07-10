@@ -70,7 +70,8 @@ function sha(parts: string[]): string {
 // the parsed frame (JSON.stringify keeps original key insertion order).
 function canonSnap(raw: string): string {
   const snap = JSON.parse(raw);
-  if (Array.isArray(snap.ents)) snap.ents.sort((a: { id: number }, b: { id: number }) => a.id - b.id);
+  if (Array.isArray(snap.ents))
+    snap.ents.sort((a: { id: number }, b: { id: number }) => a.id - b.id);
   if (Array.isArray(snap.keep)) snap.keep.sort((a: number, b: number) => a - b);
   return JSON.stringify(snap);
 }
@@ -83,14 +84,7 @@ function runScenario(): {
   const bots: Bot[] = classes.map((cls, i) => {
     const sent: string[] = [];
     const ws = { readyState: 1, send: (payload: string) => sent.push(payload) };
-    const session = server.join(
-      ws as never,
-      1000 + i,
-      1000 + i,
-      `Golden${cls}`,
-      cls,
-      null,
-    );
+    const session = server.join(ws as never, 1000 + i, 1000 + i, `Golden${cls}`, cls, null);
     if ('error' in session) throw new Error(session.error);
     session.blockListLoaded = true;
     return { cls, sent, session };
@@ -113,7 +107,12 @@ function runScenario(): {
   // Arm the fleet: level 12 at the Wolf Run camp, a few yards apart.
   bots.forEach((bot, i) => {
     msg(bot, { cmd: 'dev_level', level: 12, t: 'cmd' });
-    msg(bot, { cmd: 'dev_teleport', t: 'cmd', x: -2 + (i % 2) * 6 - 3, z: 70 + Math.floor(i / 2) * 6 - 3 });
+    msg(bot, {
+      cmd: 'dev_teleport',
+      t: 'cmd',
+      x: -2 + (i % 2) * 6 - 3,
+      z: 70 + Math.floor(i / 2) * 6 - 3,
+    });
   });
 
   const NUKE: Record<string, string> = {

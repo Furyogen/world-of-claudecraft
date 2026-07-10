@@ -2332,8 +2332,10 @@ describe('delta-key contract pins (anti-drift)', () => {
   it('ALL_DELTA_KEYS equals the maybe(...) keys scraped from server/game.ts (multi-line lockouts incl.)', () => {
     const src = readFileSync(resolve(process.cwd(), 'server/game.ts'), 'utf8');
     // tolerate whitespace/newline between `(` and the quote so the multi-line
-    // maybe('lockouts', ...) call (game.ts ~2166-2169) is captured, not undercounted
-    const re = /\bmaybe\(\s*['"](\w+)['"]/g;
+    // maybe('lockouts', ...) call (game.ts ~2166-2169) is captured, not undercounted.
+    // maybeJson('key', ...) is the same delta mechanism fed a pre-serialized
+    // string (per-party caches, empty-map fast paths), so it counts equally.
+    const re = /\bmaybe(?:Json)?\(\s*['"](\w+)['"]/g;
     const scraped = new Set<string>();
     for (let m = re.exec(src); m !== null; m = re.exec(src)) scraped.add(m[1]);
     expect(scraped.has('lockouts')).toBe(true); // the multi-line call IS captured

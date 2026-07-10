@@ -82,6 +82,7 @@ import { enqueueActivity } from './discord_activity';
 import { discordFlairForAccount, grantRewardPoints } from './discord_db';
 import { enqueueRelay } from './discord_relay';
 import { formatDuration } from './duration';
+import { indexEventsForRouting, mergeCandidates } from './event_routing';
 import { mergedPrsForLogin } from './github_contributors';
 import { githubForAccount } from './github_db';
 import { forEachGuarded, runGuarded } from './guarded_iter';
@@ -483,6 +484,14 @@ export interface ClientSession {
   // serialized form of each delta self field as last sent to this client;
   // a field is omitted from a snapshot while its serialization is unchanged
   lastSent: Record<string, string>;
+  // Object-identity gates for delta self fields whose sim source is REPLACED,
+  // never mutated in place (stats/weapon via entity.ts recalc): while the
+  // reference is unchanged the serialized form cannot have changed, so the
+  // per-tick JSON.stringify diff in maybe() is skipped. Self-healing across
+  // every lastSent reset: the gate also fires whenever the key is absent from
+  // lastSent, so no reset site needs to know these exist.
+  lastStatsRef?: unknown;
+  lastWeaponRef?: unknown;
   // arena readout is reconciled at UI cadence instead of snapshot cadence
   lastArenaWireTick: number;
   // Vale Cup readout, same idea at its own cadence (VC_WIRE_HZ)
@@ -913,6 +922,8 @@ export class GameServer {
   private readonly startedAt = Date.now();
   private peakOnline = 0;
   private tickMsAvg = 0;
+  // Next wall-clock ms at which the sim's utcDay string is recomputed (1 Hz).
+  private utcDayRefreshAtMs = 0;
   // Achieved sim ticks per wall-clock second. The cost metrics above go blind
   // when the dt clamp discards wall time under saturation; this is the number
   // that actually sags. Rides the snapshot head (throttled) + perfProfile().
@@ -1252,7 +1263,13 @@ export class GameServer {
           acc += dt;
           // Feed the authoritative UTC day to the sim so the delve daily reset (FR-5.1)
           // works without the sim reading the wall clock itself (determinism invariant).
-          this.sim.utcDay = new Date().toISOString().slice(0, 10);
+          // Recomputed at most once a second: the Date + ISO-string allocation is
+          // pointless 20x/s, and a day flip still lands within a second.
+          const nowWallMs = Date.now();
+          if (nowWallMs >= this.utcDayRefreshAtMs) {
+            this.utcDayRefreshAtMs = nowWallMs + 1000;
+            this.sim.utcDay = new Date(nowWallMs).toISOString().slice(0, 10);
+          }
           this.bcastGridNs = 0n;
           this.bcastSelfNs = 0n;
           this.bcSerializeNs = 0n;
@@ -1562,6 +1579,10 @@ export class GameServer {
 
   private runAntibotTick(): void {
     const now = Date.now();
+    // A detector that declares it never reads runtime snapshots (the no-op
+    // stub) skips the 20-field snapshot allocation per player per tick; the
+    // flag is absent on older implementations, which keep receiving them.
+    const buildSnapshots = this.botDetector.wantsTickSnapshots !== false;
     for (const session of this.clients.values()) {
       // Enforcement gating lives in the detector's own runtime config (which
       // defaults to the ANTIBOT_ENFORCE env var and is operator-tunable live),
@@ -1570,7 +1591,7 @@ export class GameServer {
         session.botTrackingContext,
         now,
         true,
-        this.captureBotDetectionSnapshot(session, now),
+        buildSnapshots ? this.captureBotDetectionSnapshot(session, now) : null,
       );
       if (action === 'kick') {
         void this.kickSession(session, 'rejected by server', 'disconnected');
@@ -3784,6 +3805,9 @@ export class GameServer {
   private broadcastSnapshots(): void {
     if (this.clients.size === 0) return;
     const tick = this.sim.tickCount;
+    // One wall-clock read for the whole broadcast; selfWireJson's lockout
+    // filter was calling Date.now() once per player per tick.
+    const nowMs = Date.now();
     // tickHz rides the head at ~2 Hz, not on every snapshot: it is omitted while
     // the meter warms up (first ~1s, so a fresh server never shows a bogus
     // reading), and between-emissions the client holds the last value. A warmed
@@ -3894,7 +3918,7 @@ export class GameServer {
         }
         const selfStart = this.perfDetailActive ? process.hrtime.bigint() : 0n;
         if (this.perfDetailActive) this.bcastGridNs += selfStart - gridStart;
-        const selfJson = this.selfWireJson(session, anchorEntity, anchorMeta, anchorSession);
+        const selfJson = this.selfWireJson(session, anchorEntity, anchorMeta, nowMs, anchorSession);
         if (this.perfDetailActive) this.bcastSelfNs += process.hrtime.bigint() - selfStart;
         const keepJson = keep.length > 0 ? `,"keep":[${keep.join(',')}]` : '';
         this.sendRaw(session, `${head},"self":${selfJson},"ents":[${ents.join(',')}]${keepJson}}`);
@@ -3974,6 +3998,7 @@ export class GameServer {
     session: ClientSession,
     p: Entity,
     meta: PlayerMeta,
+    nowMs: number,
     anchorSession: ClientSession = session,
   ): string {
     const self = wireEntity(p);
@@ -4019,6 +4044,14 @@ export class GameServer {
         extra += `,"${key}":${s}`;
       }
     };
+    // Same diff against a value something else already serialized this tick
+    // (the per-party caches), so N party members cost one stringify, not N.
+    const maybeJson = (key: string, s: string): void => {
+      if (sent[key] !== s) {
+        sent[key] = s;
+        extra += `,"${key}":${s}`;
+      }
+    };
     // Dynamic / latency-sensitive fields: diffed every tick. These change from
     // outside this session's own commands/events, party member HP from another
     // player taking damage, cooldowns counting down, an incoming trade/duel,
@@ -4029,19 +4062,41 @@ export class GameServer {
     // delta guard ships it only on grant / reset / expiry; the client derives the
     // remaining time from its own clock. Small, and granted from sim events that
     // don't mark this session dirty, so kept per-tick rather than gated.
-    maybe(
-      'lockouts',
-      Object.fromEntries([...meta.raidLockouts].filter(([, until]) => until > Date.now())),
-    );
+    // The no-lockout common case (the overwhelming majority of players every
+    // tick) skips the spread+filter+fromEntries allocation and the stringify.
+    if (meta.raidLockouts.size === 0) {
+      maybeJson('lockouts', '{}');
+    } else {
+      maybe(
+        'lockouts',
+        Object.fromEntries([...meta.raidLockouts].filter(([, until]) => until > nowMs)),
+      );
+    }
     // Where the player's corpse lies while their spirit is a ghost (null otherwise).
     // Delta-guarded: ships on death-release and clears on resurrect. The client
     // draws the corpse marker and gates the resurrect-at-corpse button on it.
     maybe('corpse', p.corpsePos);
-    maybe('cds', Object.fromEntries([...p.cooldowns.entries()].map(([k, v]) => [k, round2(v)])));
-    maybe('stats', p.stats);
-    maybe('weapon', p.weapon);
-    maybe('party', this.partyWire(anchorSession.pid));
-    maybe('marks', this.markersWire(anchorSession.pid));
+    // Empty cooldown map: skip the per-tick fromEntries+map+round2 allocation.
+    if (p.cooldowns.size === 0) {
+      maybeJson('cds', '{}');
+    } else {
+      maybe('cds', Object.fromEntries([...p.cooldowns.entries()].map(([k, v]) => [k, round2(v)])));
+    }
+    // stats/weapon are REPLACED by the sim on recalc, never mutated in place
+    // (entity.ts), so an unchanged reference cannot serialize differently and
+    // the stringify diff is skipped. The `in` check self-heals after any
+    // lastSent reset (fresh socket, spectate flip): an absent key re-runs the
+    // full diff regardless of the reference.
+    if (session.lastStatsRef !== p.stats || sent.stats === undefined) {
+      session.lastStatsRef = p.stats;
+      maybe('stats', p.stats);
+    }
+    if (session.lastWeaponRef !== p.weapon || sent.weapon === undefined) {
+      session.lastWeaponRef = p.weapon;
+      maybe('weapon', p.weapon);
+    }
+    maybeJson('party', this.partyWireJson(anchorSession.pid));
+    maybeJson('marks', this.markersWireJson(anchorSession.pid));
     maybe('trade', this.tradeWire(anchorSession.pid));
     maybe('duel', this.duelWire(anchorSession.pid));
     if (this.sim.tickCount - session.lastArenaWireTick >= ARENA_WIRE_INTERVAL_TICKS) {
@@ -4132,9 +4187,49 @@ export class GameServer {
     return extra === '' ? json : `${json.slice(0, -1)}${extra}}`;
   }
 
-  private partyWire(pid: number): unknown {
+  // Per-tick caches for party-scoped self fields. The serialized payload is
+  // identical for every member of one party (nothing in it depends on the
+  // viewing pid), so a 40-player raid costs one build+stringify per tick, not
+  // 40. Keyed by party object identity; cleared at the first access of each
+  // new tick so disbanded parties cannot accumulate.
+  private partyJsonTick = -1;
+  private readonly partyJsonByParty = new Map<object, string>();
+  private readonly markersJsonByParty = new Map<object, string>();
+
+  private partyScopedJson(
+    pid: number,
+    cache: Map<object, string>,
+    build: (party: NonNullable<ReturnType<Sim['partyOf']>>) => string,
+  ): string {
     const party = this.sim.partyOf(pid);
-    if (!party) return null;
+    if (!party) return 'null';
+    if (this.partyJsonTick !== this.sim.tickCount) {
+      this.partyJsonTick = this.sim.tickCount;
+      this.partyJsonByParty.clear();
+      this.markersJsonByParty.clear();
+    }
+    let json = cache.get(party);
+    if (json === undefined) {
+      json = build(party);
+      cache.set(party, json);
+    }
+    return json;
+  }
+
+  private partyWireJson(pid: number): string {
+    return this.partyScopedJson(pid, this.partyJsonByParty, (party) =>
+      JSON.stringify(this.partyWire(party)),
+    );
+  }
+
+  private markersWireJson(pid: number): string {
+    return this.partyScopedJson(pid, this.markersJsonByParty, (party) =>
+      // markersFor only reads party.id, identical for every member.
+      JSON.stringify(this.sim.markersFor(party.members[0] ?? -1)),
+    );
+  }
+
+  private partyWire(party: NonNullable<ReturnType<Sim['partyOf']>>): unknown {
     return {
       leader: party.leader,
       raid: party.raid,
@@ -4174,14 +4269,6 @@ export class GameServer {
         })
         .filter(Boolean),
     };
-  }
-
-  // Raid markers the player's party can see, as { entityId: markerId }; null
-  // when the player is in no party. Pure read — the sim owns marker cleanup.
-  private markersWire(pid: number): unknown {
-    const party = this.sim.partyOf(pid);
-    if (!party) return null;
-    return this.sim.markersFor(pid);
   }
 
   private tradeWire(pid: number): unknown {
@@ -4414,6 +4501,14 @@ export class GameServer {
     // batch (dropped for every session and declined in the sim), not per
     // receiving session, so spectators of the target never see them either.
     const suppressedInvites = this.suppressBlockedSocialInvites(events);
+    // Index the batch by pid once, so each session visits only its own
+    // candidates (its pid, its spectate anchor's pid, and the rare world
+    // events) instead of scanning the whole batch, in exact batch order
+    // (mergeCandidates); the decision logic per candidate is unchanged.
+    const { byPid, world } = indexEventsForRouting(events);
+    // World events route by distance; resolve each anchor once per batch, not
+    // once per session per event.
+    const worldAnchors = new Map(world.map((w) => [w.ev, this.eventAnchor(w.ev)]));
     // Guard each session: a throw while routing events to one player must not
     // drop this tick's events for every other session (server/CLAUDE.md).
     forEachGuarded(
@@ -4430,9 +4525,12 @@ export class GameServer {
           anchorPid = target.pid;
           anchorPos = targetEntity.pos;
         }
+        const own = byPid.get(session.pid);
+        const anchor = anchorPid === session.pid ? own : byPid.get(anchorPid);
+        if (own === undefined && anchor === undefined && world.length === 0) return;
         const mine: SimEvent[] = [];
-        for (const ev of events) {
-          if (suppressedInvites !== null && suppressedInvites.has(ev)) continue;
+        const visit = (ev: SimEvent): void => {
+          if (suppressedInvites !== null && suppressedInvites.has(ev)) return;
           // ignore list: drop chat originating from a character this player has
           // blocked, before it ever reaches their client
           if (
@@ -4441,7 +4539,7 @@ export class GameServer {
             session.blockedIds.size > 0 &&
             this.isBlockedSender(session, ev.fromPid)
           )
-            continue;
+            return;
           if (ev.pid !== undefined) {
             if (
               session.spectating &&
@@ -4450,13 +4548,13 @@ export class GameServer {
               ev.channel !== 'say' &&
               ev.channel !== 'yell'
             ) {
-              if (this.isBlockedSender(session, ev.fromPid)) continue;
+              if (this.isBlockedSender(session, ev.fromPid)) return;
               mine.push(ev);
               if (ev.channel === 'whisper' && ev.to === undefined && ev.fromPid !== session.pid) {
                 session.lastWhisperFrom = ev.from;
               }
               this.botDetector.observeEvent(session.botTrackingContext, ev, eventTime);
-              continue;
+              return;
             }
             if (ev.pid === anchorPid) {
               if (
@@ -4465,7 +4563,7 @@ export class GameServer {
                 ev.channel !== 'say' &&
                 ev.channel !== 'yell'
               ) {
-                continue;
+                return;
               }
               mine.push(ev);
               // a sim-driven change to a heavy self field (loot, level-up, quest
@@ -4486,14 +4584,15 @@ export class GameServer {
                 this.botDetector.observeEvent(session.botTrackingContext, ev, eventTime);
               }
             }
-            continue;
+            return;
           }
           // world events: only those near this player
-          const anchor = this.eventAnchor(ev);
-          if (anchor === null || dist2d(anchorPos, anchor) <= EVENT_RADIUS) {
+          const evAnchor = worldAnchors.get(ev) ?? null;
+          if (evAnchor === null || dist2d(anchorPos, evAnchor) <= EVENT_RADIUS) {
             mine.push(ev);
           }
-        }
+        };
+        mergeCandidates(own, anchor, world, visit);
         if (mine.length > 0) this.send(session, { t: 'events', list: mine });
       },
       (err, session) =>
