@@ -667,9 +667,12 @@ describe('dungeons: heroic boss drops', () => {
       groups.set(group, [...(groups.get(group) ?? []), entry]);
     }
     expect(groups.size).toBe(5);
-    expect(new Set(table).size).toBe(17);
+    // Four armor groups of two heroic set pieces (helm + shoulder) plus one
+    // weapon/legendary group of five: eight set pieces + three weapons + two
+    // legendaries = 13.
+    expect(new Set(table).size).toBe(13);
     for (const entries of groups.values()) {
-      expect(entries.length).toBeGreaterThanOrEqual(3);
+      expect(entries.length).toBeGreaterThanOrEqual(2);
       expect(entries.reduce((sum, entry) => sum + entry.chance, 0)).toBeCloseTo(1, 10);
     }
     const dropped = new Set<string>();

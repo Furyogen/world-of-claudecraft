@@ -33,12 +33,12 @@
     "da_DK"
   ],
   "counts": {
-    "keys": 6985,
-    "rows": 146685,
-    "translated": 146492,
+    "keys": 6982,
+    "rows": 146622,
+    "translated": 146429,
     "pending": 0,
     "blocked": 193,
-    "blockedSource": 96
+    "blockedSource": 101
   },
   "keys": {
     "main:a11y.characterActions": {
@@ -172170,118 +172170,6 @@
         }
       }
     },
-    "main:entities.items.deathless_warguard_legmail.name": {
-      "scope": "main",
-      "enHash": "697baf31a4e1d47f",
-      "placeholders": [],
-      "locales": {
-        "es": {
-          "state": "translated",
-          "srcHash": "697baf31a4e1d47f",
-          "by": "human"
-        },
-        "es_ES": {
-          "state": "translated",
-          "srcHash": "697baf31a4e1d47f",
-          "by": "human"
-        },
-        "fr_FR": {
-          "state": "translated",
-          "srcHash": "697baf31a4e1d47f",
-          "by": "human"
-        },
-        "fr_CA": {
-          "state": "translated",
-          "srcHash": "697baf31a4e1d47f",
-          "by": "human"
-        },
-        "en_CA": {
-          "state": "translated",
-          "srcHash": "697baf31a4e1d47f",
-          "by": "human"
-        },
-        "it_IT": {
-          "state": "translated",
-          "srcHash": "697baf31a4e1d47f",
-          "by": "human"
-        },
-        "de_DE": {
-          "state": "translated",
-          "srcHash": "697baf31a4e1d47f",
-          "by": "human"
-        },
-        "zh_CN": {
-          "state": "translated",
-          "srcHash": "697baf31a4e1d47f",
-          "by": "human"
-        },
-        "zh_TW": {
-          "state": "translated",
-          "srcHash": "697baf31a4e1d47f",
-          "by": "human"
-        },
-        "ko_KR": {
-          "state": "translated",
-          "srcHash": "697baf31a4e1d47f",
-          "by": "human"
-        },
-        "ja_JP": {
-          "state": "translated",
-          "srcHash": "697baf31a4e1d47f",
-          "by": "human"
-        },
-        "pt_BR": {
-          "state": "translated",
-          "srcHash": "697baf31a4e1d47f",
-          "by": "human"
-        },
-        "ru_RU": {
-          "state": "translated",
-          "srcHash": "697baf31a4e1d47f",
-          "by": "human"
-        },
-        "cs_CZ": {
-          "state": "translated",
-          "srcHash": "697baf31a4e1d47f",
-          "by": "human"
-        },
-        "nl_NL": {
-          "state": "translated",
-          "srcHash": "697baf31a4e1d47f",
-          "by": "human"
-        },
-        "pl_PL": {
-          "state": "translated",
-          "srcHash": "697baf31a4e1d47f",
-          "by": "human"
-        },
-        "id_ID": {
-          "state": "translated",
-          "srcHash": "697baf31a4e1d47f",
-          "by": "human"
-        },
-        "tr_TR": {
-          "state": "translated",
-          "srcHash": "697baf31a4e1d47f",
-          "by": "human"
-        },
-        "sv_SE": {
-          "state": "translated",
-          "srcHash": "697baf31a4e1d47f",
-          "by": "human"
-        },
-        "vi_VN": {
-          "state": "translated",
-          "srcHash": "697baf31a4e1d47f",
-          "by": "human"
-        },
-        "da_DK": {
-          "state": "translated",
-          "srcHash": "697baf31a4e1d47f",
-          "by": "human"
-        }
-      }
-    },
     "main:entities.items.deathlord_legguards.name": {
       "scope": "main",
       "enHash": "ed0c939d94379785",
@@ -199610,118 +199498,6 @@
         }
       }
     },
-    "main:entities.items.scourgehide_carapace.name": {
-      "scope": "main",
-      "enHash": "896345565a913100",
-      "placeholders": [],
-      "locales": {
-        "es": {
-          "state": "translated",
-          "srcHash": "896345565a913100",
-          "by": "human"
-        },
-        "es_ES": {
-          "state": "translated",
-          "srcHash": "896345565a913100",
-          "by": "human"
-        },
-        "fr_FR": {
-          "state": "translated",
-          "srcHash": "896345565a913100",
-          "by": "human"
-        },
-        "fr_CA": {
-          "state": "translated",
-          "srcHash": "896345565a913100",
-          "by": "human"
-        },
-        "en_CA": {
-          "state": "translated",
-          "srcHash": "896345565a913100",
-          "by": "human"
-        },
-        "it_IT": {
-          "state": "translated",
-          "srcHash": "896345565a913100",
-          "by": "human"
-        },
-        "de_DE": {
-          "state": "translated",
-          "srcHash": "896345565a913100",
-          "by": "human"
-        },
-        "zh_CN": {
-          "state": "translated",
-          "srcHash": "896345565a913100",
-          "by": "human"
-        },
-        "zh_TW": {
-          "state": "translated",
-          "srcHash": "896345565a913100",
-          "by": "human"
-        },
-        "ko_KR": {
-          "state": "translated",
-          "srcHash": "896345565a913100",
-          "by": "human"
-        },
-        "ja_JP": {
-          "state": "translated",
-          "srcHash": "896345565a913100",
-          "by": "human"
-        },
-        "pt_BR": {
-          "state": "translated",
-          "srcHash": "896345565a913100",
-          "by": "human"
-        },
-        "ru_RU": {
-          "state": "translated",
-          "srcHash": "896345565a913100",
-          "by": "human"
-        },
-        "cs_CZ": {
-          "state": "translated",
-          "srcHash": "896345565a913100",
-          "by": "human"
-        },
-        "nl_NL": {
-          "state": "translated",
-          "srcHash": "896345565a913100",
-          "by": "human"
-        },
-        "pl_PL": {
-          "state": "translated",
-          "srcHash": "896345565a913100",
-          "by": "human"
-        },
-        "id_ID": {
-          "state": "translated",
-          "srcHash": "896345565a913100",
-          "by": "human"
-        },
-        "tr_TR": {
-          "state": "translated",
-          "srcHash": "896345565a913100",
-          "by": "human"
-        },
-        "sv_SE": {
-          "state": "translated",
-          "srcHash": "896345565a913100",
-          "by": "human"
-        },
-        "vi_VN": {
-          "state": "translated",
-          "srcHash": "896345565a913100",
-          "by": "human"
-        },
-        "da_DK": {
-          "state": "translated",
-          "srcHash": "896345565a913100",
-          "by": "human"
-        }
-      }
-    },
     "main:entities.items.seal_of_the_nine_oaths.name": {
       "scope": "main",
       "enHash": "738a120248c77174",
@@ -202854,230 +202630,6 @@
         "da_DK": {
           "state": "translated",
           "srcHash": "06185b0cfb2e2b19",
-          "by": "human"
-        }
-      }
-    },
-    "main:entities.items.soulforged_warplate.name": {
-      "scope": "main",
-      "enHash": "7cbe2559f8fd7237",
-      "placeholders": [],
-      "locales": {
-        "es": {
-          "state": "translated",
-          "srcHash": "7cbe2559f8fd7237",
-          "by": "human"
-        },
-        "es_ES": {
-          "state": "translated",
-          "srcHash": "7cbe2559f8fd7237",
-          "by": "human"
-        },
-        "fr_FR": {
-          "state": "translated",
-          "srcHash": "7cbe2559f8fd7237",
-          "by": "human"
-        },
-        "fr_CA": {
-          "state": "translated",
-          "srcHash": "7cbe2559f8fd7237",
-          "by": "human"
-        },
-        "en_CA": {
-          "state": "translated",
-          "srcHash": "7cbe2559f8fd7237",
-          "by": "human"
-        },
-        "it_IT": {
-          "state": "translated",
-          "srcHash": "7cbe2559f8fd7237",
-          "by": "human"
-        },
-        "de_DE": {
-          "state": "translated",
-          "srcHash": "7cbe2559f8fd7237",
-          "by": "human"
-        },
-        "zh_CN": {
-          "state": "translated",
-          "srcHash": "7cbe2559f8fd7237",
-          "by": "human"
-        },
-        "zh_TW": {
-          "state": "translated",
-          "srcHash": "7cbe2559f8fd7237",
-          "by": "human"
-        },
-        "ko_KR": {
-          "state": "translated",
-          "srcHash": "7cbe2559f8fd7237",
-          "by": "human"
-        },
-        "ja_JP": {
-          "state": "translated",
-          "srcHash": "7cbe2559f8fd7237",
-          "by": "human"
-        },
-        "pt_BR": {
-          "state": "translated",
-          "srcHash": "7cbe2559f8fd7237",
-          "by": "human"
-        },
-        "ru_RU": {
-          "state": "translated",
-          "srcHash": "7cbe2559f8fd7237",
-          "by": "human"
-        },
-        "cs_CZ": {
-          "state": "translated",
-          "srcHash": "7cbe2559f8fd7237",
-          "by": "human"
-        },
-        "nl_NL": {
-          "state": "translated",
-          "srcHash": "7cbe2559f8fd7237",
-          "by": "human"
-        },
-        "pl_PL": {
-          "state": "translated",
-          "srcHash": "7cbe2559f8fd7237",
-          "by": "human"
-        },
-        "id_ID": {
-          "state": "translated",
-          "srcHash": "7cbe2559f8fd7237",
-          "by": "human"
-        },
-        "tr_TR": {
-          "state": "translated",
-          "srcHash": "7cbe2559f8fd7237",
-          "by": "human"
-        },
-        "sv_SE": {
-          "state": "translated",
-          "srcHash": "7cbe2559f8fd7237",
-          "by": "human"
-        },
-        "vi_VN": {
-          "state": "translated",
-          "srcHash": "7cbe2559f8fd7237",
-          "by": "human"
-        },
-        "da_DK": {
-          "state": "translated",
-          "srcHash": "7cbe2559f8fd7237",
-          "by": "human"
-        }
-      }
-    },
-    "main:entities.items.soulrend_diadem.name": {
-      "scope": "main",
-      "enHash": "39b65e31bb8b9b82",
-      "placeholders": [],
-      "locales": {
-        "es": {
-          "state": "translated",
-          "srcHash": "39b65e31bb8b9b82",
-          "by": "human"
-        },
-        "es_ES": {
-          "state": "translated",
-          "srcHash": "39b65e31bb8b9b82",
-          "by": "human"
-        },
-        "fr_FR": {
-          "state": "translated",
-          "srcHash": "39b65e31bb8b9b82",
-          "by": "human"
-        },
-        "fr_CA": {
-          "state": "translated",
-          "srcHash": "39b65e31bb8b9b82",
-          "by": "human"
-        },
-        "en_CA": {
-          "state": "translated",
-          "srcHash": "39b65e31bb8b9b82",
-          "by": "human"
-        },
-        "it_IT": {
-          "state": "translated",
-          "srcHash": "39b65e31bb8b9b82",
-          "by": "human"
-        },
-        "de_DE": {
-          "state": "translated",
-          "srcHash": "39b65e31bb8b9b82",
-          "by": "human"
-        },
-        "zh_CN": {
-          "state": "translated",
-          "srcHash": "39b65e31bb8b9b82",
-          "by": "human"
-        },
-        "zh_TW": {
-          "state": "translated",
-          "srcHash": "39b65e31bb8b9b82",
-          "by": "human"
-        },
-        "ko_KR": {
-          "state": "translated",
-          "srcHash": "39b65e31bb8b9b82",
-          "by": "human"
-        },
-        "ja_JP": {
-          "state": "translated",
-          "srcHash": "39b65e31bb8b9b82",
-          "by": "human"
-        },
-        "pt_BR": {
-          "state": "translated",
-          "srcHash": "39b65e31bb8b9b82",
-          "by": "human"
-        },
-        "ru_RU": {
-          "state": "translated",
-          "srcHash": "39b65e31bb8b9b82",
-          "by": "human"
-        },
-        "cs_CZ": {
-          "state": "translated",
-          "srcHash": "39b65e31bb8b9b82",
-          "by": "human"
-        },
-        "nl_NL": {
-          "state": "translated",
-          "srcHash": "39b65e31bb8b9b82",
-          "by": "human"
-        },
-        "pl_PL": {
-          "state": "translated",
-          "srcHash": "39b65e31bb8b9b82",
-          "by": "human"
-        },
-        "id_ID": {
-          "state": "translated",
-          "srcHash": "39b65e31bb8b9b82",
-          "by": "human"
-        },
-        "tr_TR": {
-          "state": "translated",
-          "srcHash": "39b65e31bb8b9b82",
-          "by": "human"
-        },
-        "sv_SE": {
-          "state": "translated",
-          "srcHash": "39b65e31bb8b9b82",
-          "by": "human"
-        },
-        "vi_VN": {
-          "state": "translated",
-          "srcHash": "39b65e31bb8b9b82",
-          "by": "human"
-        },
-        "da_DK": {
-          "state": "translated",
-          "srcHash": "39b65e31bb8b9b82",
           "by": "human"
         }
       }
@@ -221004,336 +220556,336 @@
     },
     "main:entities.mobs.nythraxis_heroic_priest_add.name": {
       "scope": "main",
-      "enHash": "f5dab5a5a8708ede",
+      "enHash": "97387a2947c8aeef",
       "placeholders": [],
       "locales": {
         "es": {
           "state": "translated",
-          "srcHash": "f5dab5a5a8708ede",
+          "srcHash": "97387a2947c8aeef",
           "by": "human"
         },
         "es_ES": {
           "state": "translated",
-          "srcHash": "f5dab5a5a8708ede",
+          "srcHash": "97387a2947c8aeef",
           "by": "human"
         },
         "fr_FR": {
           "state": "translated",
-          "srcHash": "f5dab5a5a8708ede",
+          "srcHash": "97387a2947c8aeef",
           "by": "human"
         },
         "fr_CA": {
           "state": "translated",
-          "srcHash": "f5dab5a5a8708ede",
+          "srcHash": "97387a2947c8aeef",
           "by": "human"
         },
         "en_CA": {
           "state": "translated",
-          "srcHash": "f5dab5a5a8708ede",
+          "srcHash": "97387a2947c8aeef",
           "by": "human"
         },
         "it_IT": {
           "state": "translated",
-          "srcHash": "f5dab5a5a8708ede",
+          "srcHash": "97387a2947c8aeef",
           "by": "human"
         },
         "de_DE": {
           "state": "translated",
-          "srcHash": "f5dab5a5a8708ede",
+          "srcHash": "97387a2947c8aeef",
           "by": "human"
         },
         "zh_CN": {
           "state": "translated",
-          "srcHash": "f5dab5a5a8708ede",
+          "srcHash": "97387a2947c8aeef",
           "by": "human"
         },
         "zh_TW": {
           "state": "translated",
-          "srcHash": "f5dab5a5a8708ede",
+          "srcHash": "97387a2947c8aeef",
           "by": "human"
         },
         "ko_KR": {
           "state": "translated",
-          "srcHash": "f5dab5a5a8708ede",
+          "srcHash": "97387a2947c8aeef",
           "by": "human"
         },
         "ja_JP": {
           "state": "translated",
-          "srcHash": "f5dab5a5a8708ede",
+          "srcHash": "97387a2947c8aeef",
           "by": "human"
         },
         "pt_BR": {
           "state": "translated",
-          "srcHash": "f5dab5a5a8708ede",
+          "srcHash": "97387a2947c8aeef",
           "by": "human"
         },
         "ru_RU": {
           "state": "translated",
-          "srcHash": "f5dab5a5a8708ede",
+          "srcHash": "97387a2947c8aeef",
           "by": "human"
         },
         "cs_CZ": {
           "state": "translated",
-          "srcHash": "f5dab5a5a8708ede",
+          "srcHash": "97387a2947c8aeef",
           "by": "human"
         },
         "nl_NL": {
           "state": "translated",
-          "srcHash": "f5dab5a5a8708ede",
+          "srcHash": "97387a2947c8aeef",
           "by": "human"
         },
         "pl_PL": {
           "state": "translated",
-          "srcHash": "f5dab5a5a8708ede",
+          "srcHash": "97387a2947c8aeef",
           "by": "human"
         },
         "id_ID": {
           "state": "translated",
-          "srcHash": "f5dab5a5a8708ede",
+          "srcHash": "97387a2947c8aeef",
           "by": "human"
         },
         "tr_TR": {
           "state": "translated",
-          "srcHash": "f5dab5a5a8708ede",
+          "srcHash": "97387a2947c8aeef",
           "by": "human"
         },
         "sv_SE": {
           "state": "translated",
-          "srcHash": "f5dab5a5a8708ede",
+          "srcHash": "97387a2947c8aeef",
           "by": "human"
         },
         "vi_VN": {
           "state": "translated",
-          "srcHash": "f5dab5a5a8708ede",
+          "srcHash": "97387a2947c8aeef",
           "by": "human"
         },
         "da_DK": {
           "state": "translated",
-          "srcHash": "f5dab5a5a8708ede",
+          "srcHash": "97387a2947c8aeef",
           "by": "human"
         }
       }
     },
     "main:entities.mobs.nythraxis_heroic_rogue_add.name": {
       "scope": "main",
-      "enHash": "c63e11646dc74205",
+      "enHash": "739ecf0b955caf1c",
       "placeholders": [],
       "locales": {
         "es": {
           "state": "translated",
-          "srcHash": "c63e11646dc74205",
+          "srcHash": "739ecf0b955caf1c",
           "by": "human"
         },
         "es_ES": {
           "state": "translated",
-          "srcHash": "c63e11646dc74205",
+          "srcHash": "739ecf0b955caf1c",
           "by": "human"
         },
         "fr_FR": {
           "state": "translated",
-          "srcHash": "c63e11646dc74205",
+          "srcHash": "739ecf0b955caf1c",
           "by": "human"
         },
         "fr_CA": {
           "state": "translated",
-          "srcHash": "c63e11646dc74205",
+          "srcHash": "739ecf0b955caf1c",
           "by": "human"
         },
         "en_CA": {
           "state": "translated",
-          "srcHash": "c63e11646dc74205",
+          "srcHash": "739ecf0b955caf1c",
           "by": "human"
         },
         "it_IT": {
           "state": "translated",
-          "srcHash": "c63e11646dc74205",
+          "srcHash": "739ecf0b955caf1c",
           "by": "human"
         },
         "de_DE": {
           "state": "translated",
-          "srcHash": "c63e11646dc74205",
+          "srcHash": "739ecf0b955caf1c",
           "by": "human"
         },
         "zh_CN": {
           "state": "translated",
-          "srcHash": "c63e11646dc74205",
+          "srcHash": "739ecf0b955caf1c",
           "by": "human"
         },
         "zh_TW": {
           "state": "translated",
-          "srcHash": "c63e11646dc74205",
+          "srcHash": "739ecf0b955caf1c",
           "by": "human"
         },
         "ko_KR": {
           "state": "translated",
-          "srcHash": "c63e11646dc74205",
+          "srcHash": "739ecf0b955caf1c",
           "by": "human"
         },
         "ja_JP": {
           "state": "translated",
-          "srcHash": "c63e11646dc74205",
+          "srcHash": "739ecf0b955caf1c",
           "by": "human"
         },
         "pt_BR": {
           "state": "translated",
-          "srcHash": "c63e11646dc74205",
+          "srcHash": "739ecf0b955caf1c",
           "by": "human"
         },
         "ru_RU": {
           "state": "translated",
-          "srcHash": "c63e11646dc74205",
+          "srcHash": "739ecf0b955caf1c",
           "by": "human"
         },
         "cs_CZ": {
           "state": "translated",
-          "srcHash": "c63e11646dc74205",
+          "srcHash": "739ecf0b955caf1c",
           "by": "human"
         },
         "nl_NL": {
           "state": "translated",
-          "srcHash": "c63e11646dc74205",
+          "srcHash": "739ecf0b955caf1c",
           "by": "human"
         },
         "pl_PL": {
           "state": "translated",
-          "srcHash": "c63e11646dc74205",
+          "srcHash": "739ecf0b955caf1c",
           "by": "human"
         },
         "id_ID": {
           "state": "translated",
-          "srcHash": "c63e11646dc74205",
+          "srcHash": "739ecf0b955caf1c",
           "by": "human"
         },
         "tr_TR": {
           "state": "translated",
-          "srcHash": "c63e11646dc74205",
+          "srcHash": "739ecf0b955caf1c",
           "by": "human"
         },
         "sv_SE": {
           "state": "translated",
-          "srcHash": "c63e11646dc74205",
+          "srcHash": "739ecf0b955caf1c",
           "by": "human"
         },
         "vi_VN": {
           "state": "translated",
-          "srcHash": "c63e11646dc74205",
+          "srcHash": "739ecf0b955caf1c",
           "by": "human"
         },
         "da_DK": {
           "state": "translated",
-          "srcHash": "c63e11646dc74205",
+          "srcHash": "739ecf0b955caf1c",
           "by": "human"
         }
       }
     },
     "main:entities.mobs.nythraxis_heroic_warrior_add.name": {
       "scope": "main",
-      "enHash": "205229fe9b308920",
+      "enHash": "936d29cc685cc483",
       "placeholders": [],
       "locales": {
         "es": {
           "state": "translated",
-          "srcHash": "205229fe9b308920",
+          "srcHash": "936d29cc685cc483",
           "by": "human"
         },
         "es_ES": {
           "state": "translated",
-          "srcHash": "205229fe9b308920",
+          "srcHash": "936d29cc685cc483",
           "by": "human"
         },
         "fr_FR": {
           "state": "translated",
-          "srcHash": "205229fe9b308920",
+          "srcHash": "936d29cc685cc483",
           "by": "human"
         },
         "fr_CA": {
           "state": "translated",
-          "srcHash": "205229fe9b308920",
+          "srcHash": "936d29cc685cc483",
           "by": "human"
         },
         "en_CA": {
           "state": "translated",
-          "srcHash": "205229fe9b308920",
+          "srcHash": "936d29cc685cc483",
           "by": "human"
         },
         "it_IT": {
           "state": "translated",
-          "srcHash": "205229fe9b308920",
+          "srcHash": "936d29cc685cc483",
           "by": "human"
         },
         "de_DE": {
           "state": "translated",
-          "srcHash": "205229fe9b308920",
+          "srcHash": "936d29cc685cc483",
           "by": "human"
         },
         "zh_CN": {
           "state": "translated",
-          "srcHash": "205229fe9b308920",
+          "srcHash": "936d29cc685cc483",
           "by": "human"
         },
         "zh_TW": {
           "state": "translated",
-          "srcHash": "205229fe9b308920",
+          "srcHash": "936d29cc685cc483",
           "by": "human"
         },
         "ko_KR": {
           "state": "translated",
-          "srcHash": "205229fe9b308920",
+          "srcHash": "936d29cc685cc483",
           "by": "human"
         },
         "ja_JP": {
           "state": "translated",
-          "srcHash": "205229fe9b308920",
+          "srcHash": "936d29cc685cc483",
           "by": "human"
         },
         "pt_BR": {
           "state": "translated",
-          "srcHash": "205229fe9b308920",
+          "srcHash": "936d29cc685cc483",
           "by": "human"
         },
         "ru_RU": {
           "state": "translated",
-          "srcHash": "205229fe9b308920",
+          "srcHash": "936d29cc685cc483",
           "by": "human"
         },
         "cs_CZ": {
           "state": "translated",
-          "srcHash": "205229fe9b308920",
+          "srcHash": "936d29cc685cc483",
           "by": "human"
         },
         "nl_NL": {
           "state": "translated",
-          "srcHash": "205229fe9b308920",
+          "srcHash": "936d29cc685cc483",
           "by": "human"
         },
         "pl_PL": {
           "state": "translated",
-          "srcHash": "205229fe9b308920",
+          "srcHash": "936d29cc685cc483",
           "by": "human"
         },
         "id_ID": {
           "state": "translated",
-          "srcHash": "205229fe9b308920",
+          "srcHash": "936d29cc685cc483",
           "by": "human"
         },
         "tr_TR": {
           "state": "translated",
-          "srcHash": "205229fe9b308920",
+          "srcHash": "936d29cc685cc483",
           "by": "human"
         },
         "sv_SE": {
           "state": "translated",
-          "srcHash": "205229fe9b308920",
+          "srcHash": "936d29cc685cc483",
           "by": "human"
         },
         "vi_VN": {
           "state": "translated",
-          "srcHash": "205229fe9b308920",
+          "srcHash": "936d29cc685cc483",
           "by": "human"
         },
         "da_DK": {
           "state": "translated",
-          "srcHash": "205229fe9b308920",
+          "srcHash": "936d29cc685cc483",
           "by": "human"
         }
       }
@@ -687777,6 +687329,120 @@
         }
       }
     },
+    "sim:log.channelInterrupted": {
+      "scope": "sim",
+      "enHash": "0aadb2fff2238ba0",
+      "placeholders": [
+        "mechanic"
+      ],
+      "locales": {
+        "es": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "es_ES": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "fr_FR": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "fr_CA": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "en_CA": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "it_IT": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "de_DE": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "zh_CN": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "zh_TW": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "ko_KR": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "ja_JP": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "pt_BR": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "ru_RU": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "cs_CZ": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "nl_NL": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "pl_PL": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "id_ID": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "tr_TR": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "sv_SE": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "vi_VN": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        },
+        "da_DK": {
+          "state": "translated",
+          "srcHash": "0aadb2fff2238ba0",
+          "by": "human"
+        }
+      }
+    },
     "sim:log.channelJoined": {
       "scope": "sim",
       "enHash": "01fedc85c8e4020d",
@@ -785202,12 +784868,37 @@
     {
       "channel": "sim",
       "reason": "v0.7 in-game slash-command / diagnostic surface; ships English as a documented backstop pending a dedicated localization pass (follow-up).",
+      "text": "[dev] Attuned: marked 5 quests complete (in-progress quests untouched)."
+    },
+    {
+      "channel": "sim",
+      "reason": "v0.7 in-game slash-command / diagnostic surface; ships English as a documented backstop pending a dedicated localization pass (follow-up).",
       "text": "[dev] Could not spawn the test vendor."
     },
     {
       "channel": "sim",
       "reason": "v0.7 in-game slash-command / diagnostic surface; ships English as a documented backstop pending a dedicated localization pass (follow-up).",
+      "text": "[dev] Entering Nythraxis raid (Aki)."
+    },
+    {
+      "channel": "sim",
+      "reason": "v0.7 in-game slash-command / diagnostic surface; ships English as a documented backstop pending a dedicated localization pass (follow-up).",
+      "text": "[dev] God mode OFF."
+    },
+    {
+      "channel": "sim",
+      "reason": "v0.7 in-game slash-command / diagnostic surface; ships English as a documented backstop pending a dedicated localization pass (follow-up).",
+      "text": "[dev] God mode ON."
+    },
+    {
+      "channel": "sim",
+      "reason": "v0.7 in-game slash-command / diagnostic surface; ships English as a documented backstop pending a dedicated localization pass (follow-up).",
       "text": "[dev] Level set to 5."
+    },
+    {
+      "channel": "sim",
+      "reason": "v0.7 in-game slash-command / diagnostic surface; ships English as a documented backstop pending a dedicated localization pass (follow-up).",
+      "text": "[dev] Raid lockouts cleared."
     },
     {
       "channel": "sim",

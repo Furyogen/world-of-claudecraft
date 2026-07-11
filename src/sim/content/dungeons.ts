@@ -456,7 +456,7 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
   },
   nythraxis_heroic_warrior_add: {
     id: 'nythraxis_heroic_warrior_add',
-    name: 'Aldren, Deathless Warguard',
+    name: 'Spirit of Aldren',
     minLevel: 20,
     maxLevel: 20,
     family: 'undead',
@@ -477,26 +477,43 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
   },
   nythraxis_heroic_priest_add: {
     id: 'nythraxis_heroic_priest_add',
-    name: 'Malric, Deathless Hierophant',
+    name: 'Spirit of Malric',
+    quietMechanics: true,
     minLevel: 20,
     maxLevel: 20,
     family: 'undead',
     elite: true,
-    ccImmune: true,
-    hpBase: 130,
-    hpPerLevel: 24,
+    // Deliberately CC-able (unlike the other adds): the raid MUST stun/silence him
+    // to break his escalating heal channel. See channelHeal and the priest-add
+    // exemption in the Nythraxis control-immunity gate (sim.applyAura).
+    ccImmune: false,
+    // Squishy: low health so a focused raid can burn him, but his heal is strong,
+    // so stunning/silencing is usually the better answer than racing his HP.
+    hpBase: 80,
+    hpPerLevel: 14,
     dmgBase: 12,
     dmgPerLevel: 2.6,
     attackSpeed: 2.4,
-    armorPerLevel: 18,
+    armorPerLevel: 14,
     moveSpeed: 9.5,
     aggroRadius: 14,
-    wardAllies: {
-      radius: 35,
-      every: 8,
-      amount: 900,
-      duration: 7,
-      name: "Malric's Ward",
+    // Escalating channeled heal on Nythraxis. Tuned against ~550 raid DPS (10 x
+    // ~55) at the heroic gear level: the adds inherit mechanicHealMult (1.6), so
+    // the raw 400 -> 1800 ramp lands ~640 (a light drain early) up to ~2880 per 3s
+    // at cap (~960 HPS, ~1.7x raid DPS). Ignoring Malric a few ticks lets the boss
+    // gain ground; a stun/incapacitate/silence resets the ramp. Even a max-geared
+    // raid (~850 DPS) cannot out-damage a capped channel, so the interrupt stays
+    // mandatory rather than optional.
+    channelHeal: {
+      radius: 45,
+      // 4s per cast: slow enough that each heal is a visible, reactable channel (the
+      // old 3s felt too fast), with the per-heal amount cut ~20% so he is not
+      // out-healing a fair raid DPS check.
+      every: 4,
+      baseHeal: 320,
+      rampAdd: 240,
+      maxHeal: 1440,
+      name: "Malric's Mending",
       school: 'shadow',
     },
     loot: [],
@@ -505,18 +522,21 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
   },
   nythraxis_heroic_rogue_add: {
     id: 'nythraxis_heroic_rogue_add',
-    name: 'Voss, Deathless Knife',
+    name: 'Spirit of Voss',
     minLevel: 20,
     maxLevel: 20,
     family: 'undead',
     elite: true,
-    ccImmune: true,
-    hpBase: 120,
-    hpPerLevel: 22,
-    dmgBase: 10.4,
-    dmgPerLevel: 2.24,
+    // Untauntable (ignoreTaunt) but CC-able: the raid cannot tank-lock him onto a
+    // target, they have to stun/root him off the healers. Low health so a peel
+    // plus CC handles him. See the controllable-add exemption in sim.applyAura.
+    ccImmune: false,
+    hpBase: 90,
+    hpPerLevel: 16,
+    dmgBase: 16,
+    dmgPerLevel: 3.4,
     attackSpeed: 2.0,
-    armorPerLevel: 18,
+    armorPerLevel: 16,
     moveSpeed: 11,
     aggroRadius: 14,
     ignoreTaunt: true,

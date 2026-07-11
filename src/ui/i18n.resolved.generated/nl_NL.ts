@@ -7434,15 +7434,6 @@ export const nl_NL: EnTranslations = {
       "scepter_of_the_deathless_court": {
         "name": "Scepter van het Doodloze Hof"
       },
-      "deathless_warguard_legmail": {
-        "name": "Doodloze Krijgswacht-Beenmalie"
-      },
-      "soulrend_diadem": {
-        "name": "Zielscheur-Diadeem"
-      },
-      "scourgehide_carapace": {
-        "name": "Geselhuid-Pantser"
-      },
       "cryptplate_helm": {
         "name": "Kryptplaat-Helm"
       },
@@ -7481,9 +7472,6 @@ export const nl_NL: EnTranslations = {
       },
       "deathless_greatblade": {
         "name": "Doodloos Grootzwaard"
-      },
-      "soulforged_warplate": {
-        "name": "Zielgesmede Krijgsplaat"
       },
       "stormcallers_focus": {
         "name": "Stormroepers Focus"

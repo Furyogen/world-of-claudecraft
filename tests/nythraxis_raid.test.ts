@@ -191,21 +191,31 @@ describe('Nythraxis raid encounter', () => {
       dmgBase: 26,
       dmgPerLevel: 5.6,
     });
+    // Malric: CC-able (must be stunned/silenced to break his heal channel), squishy,
+    // and channels an escalating heal on the boss instead of a shield.
     expect(MOBS.nythraxis_heroic_priest_add).toMatchObject({
       family: 'undead',
       elite: true,
-      ccImmune: true,
+      ccImmune: false,
       minLevel: 20,
       maxLevel: 20,
-      wardAllies: expect.objectContaining({ radius: 35, every: 8 }),
+      channelHeal: expect.objectContaining({
+        every: 4,
+        baseHeal: 320,
+        rampAdd: 240,
+        maxHeal: 1440,
+      }),
     });
+    expect(MOBS.nythraxis_heroic_priest_add.wardAllies).toBeUndefined();
+    // Voss: untauntable but CC-able, medium damage, low health.
     expect(MOBS.nythraxis_heroic_rogue_add).toMatchObject({
       family: 'undead',
       elite: true,
-      ccImmune: true,
+      ccImmune: false,
       minLevel: 20,
       maxLevel: 20,
       ignoreTaunt: true,
+      dmgBase: 16,
     });
 
     const sim = makeWorld();

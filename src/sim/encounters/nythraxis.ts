@@ -135,6 +135,27 @@ function isNythraxisRaidAddTemplate(templateId: string): boolean {
   );
 }
 
+// True while any member of the heroic court (Aldren / Malric / Voss) is still
+// alive OR a summon channel is in flight. The phase-2 re-summon is gated on this
+// so a raid that does not clear the court inside a Deathless Rage cycle does NOT
+// stack a second (then third) set of adds, which would be unwinnable and grow the
+// entity count without bound.
+function nythraxisHeroicCourtPending(
+  ctx: SimContext,
+  st: NonNullable<Entity['nythraxis']>,
+): boolean {
+  if ((st.heroicSummonChannelRemaining ?? 0) > 0) return true;
+  for (const e of ctx.entities.values()) {
+    if (
+      e.kind === 'mob' &&
+      !e.dead &&
+      NYTHRAXIS_HEROIC_ADD_IDS.includes(e.templateId as (typeof NYTHRAXIS_HEROIC_ADD_IDS)[number])
+    )
+      return true;
+  }
+  return false;
+}
+
 // ----- CC-immunity predicates (consumed by the hot applyAura path on Sim) ---------
 
 export function isNythraxisControlAura(ctx: SimContext, kind: AuraKind): boolean {
@@ -145,6 +166,18 @@ export function isNythraxisRaidEnemy(target: Entity): boolean {
   return (
     target.kind === 'mob' &&
     (target.templateId === NYTHRAXIS_BOSS_ID || isNythraxisRaidAddTemplate(target.templateId))
+  );
+}
+
+// The two Nythraxis adds the raid is MEANT to control (their templates carry
+// ccImmune: false): Malric the priest (stun/silence to break his heal channel)
+// and Voss the stalker (untauntable, so root/stun him off the healers). The
+// scripted control-immunity gate exempts both; the warrior add stays CC-immune.
+export function isNythraxisControllableAdd(target: Entity): boolean {
+  return (
+    target.kind === 'mob' &&
+    (target.templateId === 'nythraxis_heroic_priest_add' ||
+      target.templateId === 'nythraxis_heroic_rogue_add')
   );
 }
 
@@ -357,8 +390,15 @@ export function updateNythraxisEncounter(ctx: SimContext, boss: Entity): void {
 
   if (st.deathlessStunRemaining > 0) {
     st.deathlessStunRemaining = Math.max(0, st.deathlessStunRemaining - DT);
-    if (st.deathlessStunRemaining <= 0 && isHeroicNythraxis(ctx, boss))
+    // Interrupted Deathless Rage: the court rises again once the boss shakes off
+    // the wardstone stun, but only if the previous court has fallen.
+    if (
+      st.deathlessStunRemaining <= 0 &&
+      isHeroicNythraxis(ctx, boss) &&
+      !nythraxisHeroicCourtPending(ctx, st)
+    ) {
       startNythraxisHeroicSummon(ctx, boss, st);
+    }
     return;
   }
   if ((st.heroicSummonChannelRemaining ?? 0) > 0) {
@@ -1055,6 +1095,12 @@ export function updateNythraxisDeathlessRage(
       'hit',
       true,
     );
+  }
+  // Heroic: an uninterrupted Deathless Rage (the pillar cast) raises the court
+  // right after it lands, and it repeats each Deathless Rage cycle in phase 2 -
+  // but only once the previous court has fallen, so the adds never stack.
+  if (isHeroicNythraxis(ctx, boss) && !nythraxisHeroicCourtPending(ctx, st)) {
+    startNythraxisHeroicSummon(ctx, boss, st);
   }
 }
 

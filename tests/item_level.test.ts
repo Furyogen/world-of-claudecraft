@@ -235,9 +235,11 @@ describe('item level: heroic boss drops are budget-exact (five-mans 31, raid 33/
     const ids = Object.values(HEROIC_BOSS_LOOT)
       .flat()
       .flatMap((e) => (e.itemId ? [e.itemId] : []));
-    expect(ids.length).toBeGreaterThanOrEqual(16); // the authored heroic set
-    // Seven bespoke epics, eight heroic set versions, and two heroic legendaries.
-    expect(raidIds.size).toBe(17);
+    expect(ids.length).toBeGreaterThanOrEqual(12); // the authored heroic set
+    // Eight heroic set pieces (helm + shoulder per set), three heroic-only weapons,
+    // and two heroic legendaries. The bespoke legs/chest armor was cut so each set is
+    // a clean 4-piece and every armor drop is a real heroic set piece.
+    expect(raidIds.size).toBe(13);
     for (const id of ids) {
       const item = ITEMS[id];
       const raid = raidIds.has(id);

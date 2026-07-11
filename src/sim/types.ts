@@ -1035,6 +1035,23 @@ export interface MobTemplate {
     name: string;
     school?: Aura['school'];
   };
+  // Channeled ESCALATING heal ("Hierophant's Mending"): every `every`s the caster
+  // heals the highest-max-hp friendly mob in `radius` (its protector, e.g. a raid
+  // boss) for `baseHeal` plus a ramp that GROWS by `rampAdd` each uninterrupted
+  // tick, capped so a tick never exceeds `maxHeal`. Any stun/incapacitate/silence
+  // (see combat/cc.ts) breaks the channel and RESETS the ramp to zero, so a raid
+  // that fails to lock the caster down watches the boss heal for more and more.
+  // The caster must be CC-able (template `ccImmune: false`) for the reset to
+  // matter. Rides applyHeal; no new aura kind. Resets on evade/respawn.
+  channelHeal?: {
+    radius: number;
+    every: number;
+    baseHeal: number;
+    rampAdd: number;
+    maxHeal: number;
+    name: string;
+    school?: Aura['school'];
+  };
   // Commander mechanic ("Rallying Banner"): periodically empowers every friendly
   // mob in range (including the caster) with a refreshing `buff_ap` aura worth
   // `ap` attack power for `duration`s — the support twin of mendAlly, granting
@@ -2275,6 +2292,9 @@ export interface Entity {
   detonateTimer: number; // Death Throes fuse on a volatile corpse; Infinity = no pending detonation
   mendTimer: number; // mendAlly support-heal cast countdown
   wardTimer: number; // wardAllies support-shield cast countdown
+  channelTimer: number; // channelHeal escalating-heal tick countdown
+  channelRamp: number; // channelHeal accumulated bonus heal; reset to 0 on interrupt (CC)
+  healProtecteeId?: number | null; // channelHeal: cached protectee (the ally healed), re-scanned lazily
   rallyTimer: number; // rally commander-buff cast countdown
   warcryTimer: number; // warcry ally-haste pulse countdown
   firedSummons: number; // summonAdds thresholds already triggered
@@ -2307,6 +2327,9 @@ export interface Entity {
   /** GM character: invulnerable (dealDamage no-ops). Server-set from the
    *  characters.is_gm column; never user-settable. */
   gm?: boolean;
+  // [dev] /dev god cheat state, kept OFF the production gm flag so it never touches a
+  // real game master (who could otherwise deal 100x or have their invuln toggled).
+  devGod?: boolean;
   /** Moderation-jailed player: prisoners are mutually hostile (the jail brawl,
    *  see isHostileTo). Server-set via setJailed on jail/unjail and at join
    *  restore; never true offline, never user-settable. */

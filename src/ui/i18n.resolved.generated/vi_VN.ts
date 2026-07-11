@@ -7434,15 +7434,6 @@ export const vi_VN: EnTranslations = {
       "scepter_of_the_deathless_court": {
         "name": "Vương Trượng Triều Đình Bất Tử"
       },
-      "deathless_warguard_legmail": {
-        "name": "Giáp Chân Lưới Vệ Chiến Bất Tử"
-      },
-      "soulrend_diadem": {
-        "name": "Vương Miện Xé Hồn"
-      },
-      "scourgehide_carapace": {
-        "name": "Giáp Mai Da Tai Ương"
-      },
       "cryptplate_helm": {
         "name": "Mũ Giáp Tấm Hầm Mộ"
       },
@@ -7481,9 +7472,6 @@ export const vi_VN: EnTranslations = {
       },
       "deathless_greatblade": {
         "name": "Đại Kiếm Bất Tử"
-      },
-      "soulforged_warplate": {
-        "name": "Chiến Giáp Rèn Hồn"
       },
       "stormcallers_focus": {
         "name": "Pháp Khí của Kẻ Gọi Bão"

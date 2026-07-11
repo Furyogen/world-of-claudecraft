@@ -336,4 +336,9 @@ export const V07_SLASH = [
   "[dev] Unknown item 'Aki'.",
   '[dev] Spawned the Test Quartermaster (free epic gear) next to you.',
   '[dev] Could not spawn the test vendor.',
+  '[dev] God mode ON.',
+  '[dev] God mode OFF.',
+  '[dev] Attuned: marked 5 quests complete (in-progress quests untouched).',
+  '[dev] Raid lockouts cleared.',
+  '[dev] Entering Nythraxis raid (Aki).',
 ];
