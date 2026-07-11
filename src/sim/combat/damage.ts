@@ -89,11 +89,11 @@ export function dealDamage(
   // wild-mob leash recovery, and must not inherit this immunity from stale state.
   if (target.kind === 'mob' && target.aiState === 'evade' && target.ownerId === null) return;
   amount = Math.max(0, amount);
-  // [dev] A god-mode player (/dev god) hits for 500x so a solo tester can blow
-  // through raid bosses (even with an add healing them) to inspect drops. Gated on
-  // devCommands so it can NEVER apply in production (where gm marks real,
-  // non-fighting game masters). Draws no rng.
-  if (source?.gm && source.kind === 'player' && ctx.devCommands) amount = Math.round(amount * 500);
+  // [dev] A god-mode player (/dev god) hits for 100x so a solo tester can chew
+  // through raid bosses to inspect drops without one-shotting them past their phase
+  // transitions. Gated on devCommands so it can NEVER apply in production (where gm
+  // marks real, non-fighting game masters). Draws no rng.
+  if (source?.gm && source.kind === 'player' && ctx.devCommands) amount = Math.round(amount * 100);
 
   // Defensive Stance, classic: deal 10% less, take 10% less (and +30% threat below)
   if (

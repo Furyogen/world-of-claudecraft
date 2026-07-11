@@ -53,14 +53,14 @@ describe('/dev god cheat', () => {
     expect(p.gm).toBe(false);
   });
 
-  it('makes a god-mode player hit for 500x so a solo tester can down a raid boss', () => {
+  it('makes a god-mode player hit for 100x so a solo tester can down a raid boss', () => {
     const { sim, pid } = godSim();
     const p = sim.player;
     sim.chat('/dev god', pid);
     const boss = spawnMob(sim, 100000);
     const before = boss.hp;
-    deal(sim, p, boss, 100); // base 100 -> 500x = 50000 before armor (armor 0 here)
-    expect(before - boss.hp).toBe(50000);
+    deal(sim, p, boss, 100); // base 100 -> 100x = 10000 before armor (armor 0 here)
+    expect(before - boss.hp).toBe(10000);
   });
 
   it('is gated: without dev commands, /dev god does nothing', () => {
