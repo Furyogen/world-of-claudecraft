@@ -113,7 +113,7 @@ import {
   ModerationService,
 } from './moderation_service';
 import { consumeMsgToken, createMsgRateBucket, type MsgRateBucketState } from './msg_rate_limit';
-import { isMutableChannel, parseMuteChatCommand } from './mute_commands';
+import { isMutableChannel, isMuteWriteCommand, parseMuteChatCommand } from './mute_commands';
 import { nextRaidResetMs } from './raid_reset';
 import { REALM, REALM_PUBLIC_ORIGIN, REALM_RESET_TIME_ZONE } from './realm';
 import { createSerialWriter } from './serial_writer';
@@ -164,6 +164,12 @@ const LOCKPICK_ACTIONS = new Set<PickAction>(['hardSet', 'set', 'steady', 'ease'
 const LEAVE_SAVE_MAX_ATTEMPTS = 5;
 const LEAVE_SAVE_RETRY_BASE_MS = 250;
 const LEAVE_SAVE_RETRY_MAX_MS = 4000;
+// Usage notices for the two chat-suppression tiers. Kept as constants because the
+// S3 localization guard scans sendChatNotice literals, and src/ui/server_i18n.ts
+// carries the matching rules.
+const MUTE_USAGE = 'Usage: /mute <name>, /unmute <name>, /mutelist.';
+const BLOCK_USAGE = 'Usage: /block <name>, /unblock <name>, /blocklist.';
+
 const CHAT_RATE_BURST = 5;
 const CHAT_RATE_REFILL_PER_SECOND = 1 / 3; // sustained 20 messages/minute
 const CHAT_RATE_ERROR_COOLDOWN_SECONDS = 4;
@@ -4830,26 +4836,46 @@ export class GameServer {
     return sender ? recipient.mutedIds.has(sender.characterId) : false;
   }
 
-  // "/mute <name>", "/unmute <name>", "/mutelist" (and their /ignore aliases).
-  // Returns true when the text was a mute command and has been handled, so the
-  // caller stops before the chat pipeline treats it as something to broadcast.
+  // The mute (/mute, /unmute, /mutelist) and block (/block, /unblock, /blocklist,
+  // and the /ignore aliases) commands. Returns true when the text was one of them
+  // and has been handled, so the caller stops before the chat pipeline treats it
+  // as something to broadcast.
   private handleMuteChatCommand(session: ClientSession, text: string): boolean {
     const parsed = parseMuteChatCommand(text);
     if (!parsed) return false;
     const actor = this.actorFor(session);
-    if (parsed.kind === 'list') {
-      void this.social.muteList(actor).catch((err) => console.error('mute list failed:', err));
-      return true;
+
+    // The two list commands are reads and stay free: they must work even for a
+    // GM-silenced player, and echoing your own list back must never burn a token
+    // toward the chat cooldown. The four WRITE commands each cost a chat token:
+    // they INSERT/DELETE and then push a full social snapshot, so they are the
+    // most expensive thing on the chat path and must not be the one thing on it
+    // that is unmetered.
+    if (isMuteWriteCommand(parsed) && !this.consumeChatToken(session)) return true;
+
+    // An if-chain, NOT a switch: tests/command_schema.test.ts scrapes `case '<x>':`
+    // labels out of this region of game.ts to derive the dispatched wire
+    // vocabulary, so switching on these kinds would register 'mute'/'block'/... as
+    // phantom wire commands and fail the gate.
+    const logErr = (err: unknown) => console.error('mute/block command failed:', err);
+    const kind = parsed.kind;
+    if (kind === 'muteList') {
+      void this.social.muteList(actor).catch(logErr);
+    } else if (kind === 'blockList') {
+      void this.social.blockList(actor).catch(logErr);
+    } else if (kind === 'mute') {
+      if (!parsed.name) this.sendChatNotice(session, MUTE_USAGE);
+      else void this.social.muteAdd(actor, parsed.name).catch(logErr);
+    } else if (kind === 'unmute') {
+      if (!parsed.name) this.sendChatNotice(session, MUTE_USAGE);
+      else void this.social.muteRemove(actor, parsed.name).catch(logErr);
+    } else if (kind === 'block') {
+      if (!parsed.name) this.sendChatNotice(session, BLOCK_USAGE);
+      else void this.social.blockAdd(actor, parsed.name).catch(logErr);
+    } else {
+      if (!parsed.name) this.sendChatNotice(session, BLOCK_USAGE);
+      else void this.social.blockRemove(actor, parsed.name).catch(logErr);
     }
-    if (!parsed.name) {
-      this.sendChatNotice(session, 'Usage: /mute <name>, /unmute <name>, /mutelist.');
-      return true;
-    }
-    const run =
-      parsed.kind === 'mute'
-        ? this.social.muteAdd(actor, parsed.name)
-        : this.social.muteRemove(actor, parsed.name);
-    void run.catch((err) => console.error('mute command failed:', err));
     return true;
   }
 

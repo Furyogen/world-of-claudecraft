@@ -2511,9 +2511,10 @@ export class ClientWorld implements IWorld {
     const wanted = name.trim();
     if (!wanted) return null;
     try {
+      // No Authorization header: this route is a public read (meta.publicRead) and
+      // ignores one, so sending the bearer would leak it for nothing.
       const res = await fetch(
         apiUrl(`/api/public/characters/${encodeURIComponent(wanted)}/sheet`, this.base),
-        { headers: { Authorization: `Bearer ${this.token}` } },
       );
       if (!res.ok) return null;
       const sheet = await res.json();

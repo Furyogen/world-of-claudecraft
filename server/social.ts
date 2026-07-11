@@ -455,6 +455,19 @@ export class SocialService {
     this.push(actor.characterId);
   }
 
+  // "/blocklist" (aka "/ignorelist"): echo the blocked names back to the actor.
+  async blockList(actor: SocialActor): Promise<void> {
+    const blocks = await this.db.listBlocks(actor.characterId);
+    if (blocks.length === 0) {
+      this.info(actor.characterId, 'Your ignore list is empty.');
+      return;
+    }
+    this.info(
+      actor.characterId,
+      `Ignored (${blocks.length}): ${blocks.map((b) => b.name).join(', ')}`,
+    );
+  }
+
   // -------------------------------------------------------------------------
   // Mutes (chat-only). A block is the heavy tool: it also drops invites, mail,
   // whispers, and /who visibility. A mute only hides their public chat from

@@ -176,9 +176,8 @@ describe('mute commands survive the chat pipeline gates', () => {
     expect(fa.sent.length).toBeGreaterThan(before);
   });
 
-  it('/mutelist does not burn a chat token toward the rate-limit cooldown', () => {
-    // The interception also sits BEFORE consumeChatToken, so managing your mute
-    // list can never lock your own chat.
+  it('reading your mute list is free: it never burns a chat token', () => {
+    // Echoing your own list back must not be able to lock your own chat.
     const server = new GameServer();
     const fa = fakeWs();
     const muter = joinServer(server, fa, 1, 'Muter');
@@ -188,5 +187,19 @@ describe('mute commands survive the chat pipeline gates', () => {
 
     expect(muter.chatTokens).toBe(tokensBefore);
     expect(muter.chatCooldownUntil).toBe(0);
+  });
+
+  it('WRITING a mute costs a chat token: the DB-write path is not unmetered', () => {
+    // /mute INSERTs and then pushes a full social snapshot, making it the most
+    // expensive command on the chat path. It must not be the one thing on that
+    // path an attacker can spin for free.
+    const server = new GameServer();
+    const fa = fakeWs();
+    const muter = joinServer(server, fa, 1, 'Muter');
+    const tokensBefore = muter.chatTokens;
+
+    cmd(server, muter, { cmd: 'chat', text: '/mute Spammer' });
+
+    expect(muter.chatTokens).toBeLessThan(tokensBefore);
   });
 });
