@@ -1,8 +1,9 @@
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { WEAPON_VFX } from '../src/render/weapon_vfx';
 import {
+  resolveActiveWeaponSkin,
   skinnableWeaponTypesFor,
   WEAPON_TYPE_BY_ITEM,
   weaponSkinTypeMatches,
@@ -17,6 +18,7 @@ import {
 } from '../src/sim/content/weapon_skins';
 import { ITEMS } from '../src/sim/data';
 import { ITEM_WEAPON_VARIANTS } from '../src/ui/weapon_variants';
+import { armorySkinArt } from '../src/ui/woc_store_view';
 
 const ROOT = join(__dirname, '..');
 
@@ -59,6 +61,8 @@ describe('season 1 weapon skin catalog', () => {
   it('every skin ships its rarity-themed store thumbnail (scripts/armory_thumbs.mjs)', () => {
     for (const skin of WEAPON_SKIN_LIST) {
       expect(existsSync(join(ROOT, `public/ui/store/armory/${skin.id}.webp`)), skin.id).toBe(true);
+      // The store card art url stays in lockstep with the shipped file.
+      expect(armorySkinArt(skin.id)).toBe(`/ui/store/armory/${skin.id}.webp`);
     }
   });
 
@@ -169,6 +173,84 @@ describe('skin apply rule', () => {
     for (const t of skinnableWeaponTypesFor('hunter', 'worn_sword')) reachable.add(t);
     for (const skin of WEAPON_SKIN_LIST) {
       expect(reachable.has(skin.weaponType), `${skin.id} (${skin.weaponType})`).toBe(true);
+    }
+  });
+});
+
+describe('active skin resolution', () => {
+  it('skips a stale loadout entry whose skin no longer targets that type', () => {
+    // An axe skin stranded under the sword key (a hand-edited save or a
+    // catalog re-type) must never render on a sword.
+    expect(
+      resolveActiveWeaponSkin('warrior', 'worn_sword', { sword: 'glaciersplit_axe' }),
+    ).toBeNull();
+  });
+
+  it('resolves null for a missing loadout or no equipped mainhand', () => {
+    expect(resolveActiveWeaponSkin('warrior', 'worn_sword', null)).toBeNull();
+    expect(resolveActiveWeaponSkin('warrior', 'worn_sword', undefined)).toBeNull();
+    expect(resolveActiveWeaponSkin('warrior', null, { sword: 'ice_fang_sword' })).toBeNull();
+  });
+
+  it('prefers the crossbow skin over the bow skin for hunters (native visual)', () => {
+    expect(
+      resolveActiveWeaponSkin('hunter', 'rusty_hatchet', {
+        bow: 'winterbite',
+        crossbow: 'cinderlatch_crossbow',
+      }),
+    ).toBe('cinderlatch_crossbow');
+    expect(resolveActiveWeaponSkin('hunter', 'rusty_hatchet', { bow: 'winterbite' })).toBe(
+      'winterbite',
+    );
+  });
+});
+
+// The render registries are parsed as source text (the same pattern
+// tests/asset_pipeline.test.ts uses): entries are 2-space-indented bare keys,
+// so comment lines and nested props never count as entries.
+describe('render registry integrity', () => {
+  function registryKeys(file: string, anchor: string): string[] {
+    const src = readFileSync(join(ROOT, file), 'utf8');
+    const start = src.indexOf(anchor);
+    expect(start, `${anchor} in ${file}`).toBeGreaterThanOrEqual(0);
+    const end = src.indexOf('\n};', start);
+    expect(end, `${anchor} block end`).toBeGreaterThan(start);
+    return [...src.slice(start, end).matchAll(/^ {2}([a-z0-9_]+):/gm)].map((m) => m[1]);
+  }
+
+  it('every skin model has a KAYKIT_WEAPON_ACCESSORY grip family', () => {
+    // Without a grip family the model attaches at the bone origin untransformed.
+    const gripped = new Set(
+      registryKeys('src/render/characters/assets.ts', 'const KAYKIT_WEAPON_ACCESSORY'),
+    );
+    expect(gripped.size).toBeGreaterThan(30);
+    for (const skin of WEAPON_SKIN_LIST) {
+      expect(gripped.has(skin.model), `${skin.id} model ${skin.model} has no grip family`).toBe(
+        true,
+      );
+    }
+  });
+
+  it('WEAPON_GRIP_OVERRIDES carries no orphan keys', () => {
+    // Every per-weapon fine-tune key must name a real held model: a Season 1
+    // skin model, a legacy per-item variant, or a shipped GLB. A typo or a
+    // removed model would otherwise leave a silent dead override.
+    const keys = registryKeys(
+      'src/render/characters/weapon_grip.ts',
+      'export const WEAPON_GRIP_OVERRIDES',
+    );
+    expect(keys.length).toBeGreaterThan(0);
+    const skinModels = new Set(WEAPON_SKIN_LIST.map((s) => s.model));
+    const legacyVariants = new Set(Object.values(ITEM_WEAPON_VARIANTS));
+    for (const key of keys) {
+      const known =
+        skinModels.has(key) ||
+        legacyVariants.has(key) ||
+        existsSync(join(ROOT, `public/models/weapons/${key}.glb`));
+      expect(
+        known,
+        `WEAPON_GRIP_OVERRIDES.${key} matches no skin model, item variant, or shipped GLB`,
+      ).toBe(true);
     }
   });
 });

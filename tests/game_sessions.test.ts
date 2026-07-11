@@ -610,10 +610,7 @@ describe('GameServer sessions', () => {
 // write). Warriors join holding worn_sword, a sword; ice_fang_sword is a sword
 // skin and glaciersplit_axe an axe skin.
 describe('GameServer weapon skin commands', () => {
-  const ownedSkins = (
-    weaponSkinIds: string[],
-    weaponSkinLoadout: Record<string, string> = {},
-  ) => ({
+  const ownedSkins = (weaponSkinIds: string[], weaponSkinLoadout: Record<string, string> = {}) => ({
     accountCosmetics: {
       completedQuestIds: [],
       mechChromaIds: [],
