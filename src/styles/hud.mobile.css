@@ -2264,6 +2264,16 @@
     border-top: 1px solid var(--rarity);
     border-left: none;
   }
+  /* Touch-target floor: the desktop toggles are compact; give thumbs 40px. */
+  body.mobile-touch .armory-mode-toggle button,
+  body.mobile-touch .armory-scene-toggle button {
+    min-height: 40px;
+    padding: 10px 14px;
+    font-size: 12px;
+  }
+  body.mobile-touch .armory-inspect-actions button {
+    min-height: 44px;
+  }
   body.mobile-touch .woc-store-card {
     min-height: 214px;
   }

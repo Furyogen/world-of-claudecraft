@@ -88,6 +88,7 @@ export class ArmoryInspect {
   private row: ArmorySkinRow | null = null;
   private mode: ArmoryPreviewMode = 'character';
   private sceneKey: ArmorySceneKey = 'day';
+  private openerFocus: HTMLElement | null = null;
 
   constructor(private readonly deps: ArmoryInspectDeps) {}
 
@@ -102,10 +103,29 @@ export class ArmoryInspect {
   open(row: ArmorySkinRow): void {
     this.close();
     this.row = row;
+    this.openerFocus =
+      document.activeElement instanceof HTMLElement ? document.activeElement : null;
     const overlay = document.createElement('div');
     overlay.className = 'armory-inspect-overlay open';
     overlay.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') this.close();
+      if (event.key === 'Escape') {
+        this.close();
+        return;
+      }
+      // Modal Tab trap: cycle within the dialog's enabled buttons.
+      if (event.key !== 'Tab') return;
+      const focusables = overlay.querySelectorAll<HTMLElement>('button:not([disabled])');
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement;
+      if (event.shiftKey && (active === first || !overlay.contains(active))) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && (active === last || !overlay.contains(active))) {
+        event.preventDefault();
+        first.focus();
+      }
     });
     overlay.addEventListener('mousedown', (event) => {
       if (event.target === overlay) this.close();
@@ -178,11 +198,14 @@ export class ArmoryInspect {
   }
 
   close(): void {
+    const wasOpen = this.overlay !== null;
     this.preview?.dispose();
     this.preview = null;
     this.overlay?.remove();
     this.overlay = null;
     this.row = null;
+    if (wasOpen && this.openerFocus?.isConnected) this.openerFocus.focus();
+    this.openerFocus = null;
   }
 
   private syncToggles(): void {

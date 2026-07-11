@@ -433,10 +433,6 @@ export const WEAPON_SKIN_COLLECTIONS: readonly string[] = [
   S1.fallenStar,
 ];
 
-export function weaponSkinById(id: string): WeaponSkinDef | null {
-  return WEAPON_SKINS[id] ?? null;
-}
-
 export function weaponSkinClaudiumCost(def: WeaponSkinDef): number {
   return def.priceUsd * WEAPON_SKIN_CLAUDIUM_PER_USD;
 }
