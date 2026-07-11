@@ -241,6 +241,33 @@ export const ru_RU: EnTranslations = {
         "price_unavailable": "Цена WOC недоступна, награды временно заблокированы."
       }
     },
+    "wocStore": {
+      "title": "Магазин WOC",
+      "close": "Закрыть магазин WOC",
+      "tabsLabel": "Разделы магазина WOC",
+      "storeTab": "Магазин",
+      "rewardsTab": "Ежедневные награды",
+      "loading": "Загрузка магазина WOC…",
+      "error": "Магазин WOC сейчас недоступен. Повторите попытку позже.",
+      "eyebrow": "Избранная коллекция",
+      "featuredTitle": "Оружие, выкованное за границей фронтира",
+      "featuredBody": "Получайте премиальные облики оружия за Claudium. Облики не влияют на боевую мощь.",
+      "balance": "Баланс Claudium",
+      "buyClaudium": "Купить Claudium",
+      "category": "Косметика",
+      "weapons": "Коллекция оружия",
+      "empty": "Сейчас облики оружия недоступны.",
+      "weaponCosmetic": "Облик оружия",
+      "purchaseAria": "Купить {item} за {cost} Claudium",
+      "owned": "Получено",
+      "ownedAria": "Предмет {item} уже получен",
+      "needMoreTitle": "Требуется больше Claudium",
+      "needMoreBody": "Для покупки {item} не хватает {shortfall} Claudium.",
+      "cancel": "Отмена",
+      "confirmTitle": "Подтвердить покупку облика",
+      "confirmBody": "Купить {item} за {cost} Claudium?",
+      "confirmPurchase": "Купить"
+    },
     "claudium": {
       "title": "Claudium",
       "open": "Открыть Claudium",

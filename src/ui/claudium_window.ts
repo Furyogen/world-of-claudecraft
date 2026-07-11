@@ -2,8 +2,8 @@
 //
 // The consumer half of the pure-core + thin-consumer split (reference
 // daily_rewards_window.ts / vendor_window.ts). It paints #claudium-window from
-// the ClaudiumView (claudium_view.ts) and wires buy / spend / close. It owns NO
-// currency logic: every number (balance, SKU credit, price, store cost) arrives
+// the ClaudiumView (claudium_view.ts) and wires currency purchases / close. It owns NO
+// currency logic: every number (balance, SKU credit, price) arrives
 // through the injected deps, which read the economy SDK. When the service is off
 // the view is the disabled/empty state and this paints a clean notice, never a
 // crash.
@@ -43,7 +43,7 @@ export interface ClaudiumSnapshot {
 /**
  * Hud-supplied glue. The window paints from what these return and reports clicks
  * back; it never reaches into Hud. balance()/skus()/price()/storeItems() are the
- * async service reads; buy()/spend() start the (client-signed) purchase/spend
+ * async service reads; buy() starts the client-signed purchase
  * flows; the focus pair comes from Hud.windowFocus().
  */
 export interface ClaudiumWindowDeps {
@@ -56,8 +56,6 @@ export interface ClaudiumWindowDeps {
   snapshot(): Promise<ClaudiumSnapshot>;
   /** Begin a purchase on the chosen rail for the chosen SKU. */
   buy(rail: ClaudiumRail, sku: string): Promise<void>;
-  /** Redeem a cosmetic for its Claudium cost. */
-  spend(itemId: string, kind: 'cosmetic' | 'skin' | 'item'): void;
 }
 
 const EMPTY_SNAPSHOT: ClaudiumSnapshot = {
@@ -68,7 +66,6 @@ const EMPTY_SNAPSHOT: ClaudiumSnapshot = {
 };
 
 const WOC_DECIMALS = 6;
-const COMPACT_BUY_ROW_LIMIT = 5;
 const WOC_ICON_URL =
   'https://raw.githubusercontent.com/levy-street/world-of-claudecraft/refs/heads/main/build/icon.ico';
 
@@ -78,7 +75,6 @@ export class ClaudiumWindow {
   private selectedRail: ClaudiumRail = 'stripe';
   private pendingPurchase: { rail: ClaudiumRail; sku: string } | null = null;
   private purchaseError: string | null = null;
-  private buyRowsExpanded = false;
 
   constructor(private readonly deps: ClaudiumWindowDeps) {}
 
@@ -149,11 +145,7 @@ export class ClaudiumWindow {
     const body = this.deps.root().querySelector<HTMLElement>('.cl-body');
     if (!body) return;
     body.innerHTML =
-      this.balanceHtml(view) +
-      this.noticeHtml(view) +
-      this.buyHtml(view) +
-      this.storeHtml(view) +
-      this.disclosureHtml();
+      this.balanceHtml(view) + this.noticeHtml(view) + this.buyHtml(view) + this.disclosureHtml();
     this.wire(body, view);
   }
 
@@ -177,6 +169,7 @@ export class ClaudiumWindow {
       : t('hudChrome.claudium.balanceUnit', { amount: '--' });
     return (
       `<div class="cl-balance">` +
+      `<img class="cl-balance-art" src="/claudium/claudium_coin_hero_3q.webp" alt="">` +
       `<div class="cl-balance-main">` +
       `<span class="cl-balance-label">${esc(t('hudChrome.claudium.balanceLabel'))}</span>` +
       `<strong class="cl-balance-value">${esc(shown)}</strong>` +
@@ -230,11 +223,8 @@ export class ClaudiumWindow {
       view.rails.sol || view.rails.woc
         ? ''
         : `<p class="cl-rail-note">${esc(t('hudChrome.claudium.railNativeUnavailable'))}</p>`;
-    const visibleRows = this.buyRowsExpanded
-      ? view.buyRows
-      : view.buyRows.slice(0, COMPACT_BUY_ROW_LIMIT);
-    const rows = visibleRows
-      .map((row) => {
+    const rows = view.buyRows
+      .map((row, index) => {
         const price = this.buyPriceLabel(row);
         const claudium = formatNumber(row.claudium, { maximumFractionDigits: 0 });
         const label = t('hudChrome.claudium.skuRow', { usd: price, claudium });
@@ -245,15 +235,15 @@ export class ClaudiumWindow {
           (this.selectedRail === 'sol' && (!view.rails.sol || !row.solAffordable)) ||
           (this.selectedRail === 'woc' && (!view.rails.woc || !row.wocAffordable));
         return (
-          `<button type="button" class="cl-sku${isPending ? ' pending' : ''}" data-sku="${esc(row.sku)}" aria-label="${esc(label)}" ${disabled ? 'disabled' : ''}>` +
+          `<button type="button" class="cl-sku cl-pack${isPending ? ' pending' : ''}" data-pack-tier="${index + 1}" data-sku="${esc(row.sku)}" aria-label="${esc(label)}" ${disabled ? 'disabled' : ''}>` +
+          `<span class="cl-pack-art"><img src="${esc(this.packArt(row.claudium))}" alt=""></span>` +
+          `<span class="cl-sku-claudium"><img src="/claudium/icons/claudium_coin_64.webp" alt="">${esc(t('hudChrome.claudium.storeCost', { amount: claudium }))}</span>` +
           `<span class="cl-sku-usd">${esc(price)}</span>` +
-          `<span class="cl-sku-claudium">${esc(t('hudChrome.claudium.storeCost', { amount: claudium }))}</span>` +
           `<span class="cl-sku-buy">${esc(isPending ? t('hudChrome.claudium.checkoutPendingButton') : t('hudChrome.claudium.buyButton'))}</span>` +
           `</button>`
         );
       })
       .join('');
-    const toggle = this.buyRowsToggleHtml(view);
     const pendingNote = pending
       ? `<p class="cl-pending" role="status" aria-live="polite"><span class="cl-spinner" aria-hidden="true"></span>${esc(t('hudChrome.claudium.checkoutPending'))}</p>`
       : '';
@@ -263,7 +253,7 @@ export class ClaudiumWindow {
         : '';
     const list = view.buyDisabled
       ? `<p class="cl-empty" role="status">${esc(t('hudChrome.claudium.buyUnavailable'))}</p>`
-      : `<div class="cl-sku-list">${rows}</div>${toggle}`;
+      : `<div class="cl-sku-list">${rows}</div>`;
     return (
       `<section class="cl-section"><h3>${esc(t('hudChrome.claudium.buyTitle'))}</h3>` +
       railPicker +
@@ -276,23 +266,13 @@ export class ClaudiumWindow {
     );
   }
 
-  private buyRowsToggleHtml(view: ClaudiumView): string {
-    if (view.buyRows.length <= COMPACT_BUY_ROW_LIMIT) return '';
-    const key = this.buyRowsExpanded ? 'hideAmounts' : 'showAmounts';
-    return (
-      `<div class="cl-sku-toggle-row">` +
-      `<button type="button" class="cl-sku-toggle${this.buyRowsExpanded ? ' expanded' : ''}" data-sku-toggle aria-label="${esc(t(`hudChrome.claudium.${key}`))}" title="${esc(t(`hudChrome.claudium.${key}`))}">` +
-      svgIcon('next') +
-      `<span class="visually-hidden">${esc(t(`hudChrome.claudium.${key}`))}</span>` +
-      `</button>` +
-      `</div>`
-    );
+  private usdLabel(usd: number): string {
+    return `$${formatNumber(usd, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}`;
   }
 
-  private usdLabel(usd: number): string {
-    // The service sends whole-dollar SKUs ($1..$10000). Render with locale grouping
-    // but no cents, so $10000 reads $10,000 in en and localizes elsewhere.
-    return `$${formatNumber(usd, { maximumFractionDigits: 0 })}`;
+  private packArt(claudium: number): string {
+    const size = claudium >= 4000 ? 'large' : claudium >= 1050 ? 'small' : 'single';
+    return `/claudium/icons/stack_${size}_256.webp`;
   }
 
   private railIconHtml(kind: 'card' | 'sol' | 'woc'): string {
@@ -344,35 +324,6 @@ export class ClaudiumWindow {
     }
   }
 
-  private storeHtml(view: ClaudiumView): string {
-    if (view.disabled) return '';
-    const kindLabel = (kind: 'cosmetic' | 'skin' | 'item'): string =>
-      kind === 'skin'
-        ? t('hudChrome.claudium.kindSkin')
-        : kind === 'item'
-          ? t('hudChrome.claudium.kindItem')
-          : t('hudChrome.claudium.kindCosmetic');
-    const rows =
-      view.storeRows.length === 0
-        ? `<p class="cl-empty" role="status">${esc(t('hudChrome.claudium.storeEmpty'))}</p>`
-        : view.storeRows
-            .map((row) => {
-              const cost = t('hudChrome.claudium.storeCost', {
-                amount: formatNumber(row.costClaudium, { maximumFractionDigits: 0 }),
-              });
-              return (
-                `<div class="cl-item">` +
-                `<span class="cl-item-name">${esc(row.name)}</span>` +
-                `<span class="cl-item-kind">${esc(kindLabel(row.kind))}</span>` +
-                `<span class="cl-item-cost">${esc(cost)}</span>` +
-                `<button type="button" class="cl-item-buy" data-item="${esc(row.itemId)}" data-kind="${esc(row.kind)}" aria-label="${esc(cost)}" ${row.affordable ? '' : 'disabled'}>${esc(t('hudChrome.claudium.spendButton'))}</button>` +
-                `</div>`
-              );
-            })
-            .join('');
-    return `<section class="cl-section"><h3>${esc(t('hudChrome.claudium.storeTitle'))}</h3><div class="cl-item-list">${rows}</div></section>`;
-  }
-
   private disclosureHtml(): string {
     return `<p class="cl-disclosure">${esc(t('hudChrome.claudium.disclosure'))}</p>`;
   }
@@ -389,11 +340,6 @@ export class ClaudiumWindow {
         this.purchaseError = null;
         this.paint(view);
       });
-    });
-    body.querySelector<HTMLButtonElement>('[data-sku-toggle]')?.addEventListener('click', () => {
-      if (this.pendingPurchase) return;
-      this.buyRowsExpanded = !this.buyRowsExpanded;
-      this.paint(view);
     });
     body.querySelectorAll<HTMLButtonElement>('[data-sku]').forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -416,15 +362,6 @@ export class ClaudiumWindow {
             this.pendingPurchase = null;
             if (this.isOpen) void this.render();
           });
-      });
-    });
-    body.querySelectorAll<HTMLButtonElement>('[data-item]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const itemId = btn.dataset.item;
-        const kind = btn.dataset.kind;
-        if (itemId && (kind === 'cosmetic' || kind === 'skin' || kind === 'item')) {
-          this.deps.spend(itemId, kind);
-        }
       });
     });
   }

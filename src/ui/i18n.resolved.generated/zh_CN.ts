@@ -241,6 +241,33 @@ export const zh_CN: EnTranslations = {
         "price_unavailable": "WOC 价格不可用，奖励暂时锁定。"
       }
     },
+    "wocStore": {
+      "title": "WOC 商店",
+      "close": "关闭 WOC 商店",
+      "tabsLabel": "WOC 商店分区",
+      "storeTab": "商店",
+      "rewardsTab": "每日奖励",
+      "loading": "正在加载 WOC 商店…",
+      "error": "WOC 商店暂时不可用，请稍后再试。",
+      "eyebrow": "精选系列",
+      "featuredTitle": "边疆之外锻造的武器",
+      "featuredBody": "使用 Claudium 获取高级武器外观。外观物品不会改变战斗能力。",
+      "balance": "Claudium 余额",
+      "buyClaudium": "购买 Claudium",
+      "category": "外观物品",
+      "weapons": "武器系列",
+      "empty": "目前没有可用的武器外观。",
+      "weaponCosmetic": "武器外观",
+      "purchaseAria": "用 {cost} Claudium 购买 {item}",
+      "owned": "已拥有",
+      "ownedAria": "已拥有 {item}",
+      "needMoreTitle": "需要更多 Claudium",
+      "needMoreBody": "还需要 {shortfall} Claudium 才能购买 {item}。",
+      "cancel": "取消",
+      "confirmTitle": "确认购买外观",
+      "confirmBody": "要用 {cost} Claudium 购买 {item} 吗？",
+      "confirmPurchase": "购买"
+    },
     "claudium": {
       "title": "Claudium",
       "open": "打开 Claudium",

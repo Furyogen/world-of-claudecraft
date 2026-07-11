@@ -4,6 +4,7 @@ import { markDialogRoot } from './dialog_root';
 import { esc } from './esc';
 import { formatDateTime, formatNumber, t } from './i18n';
 import { svgIcon } from './ui_icons';
+import { buildWocStoreRows, type WocStoreItemInput, type WocStoreItemRow } from './woc_store_view';
 
 function reasonText(reason: DailyRewardStatus['eligibility']['reason']): string {
   switch (reason) {
@@ -27,8 +28,12 @@ export interface DailyRewardsWindowDeps {
   onVisibilityChange?(): void;
   onStatus?(status: DailyRewardStatus): void;
   onWalletConnect?(): void;
-  showChestButton?(): boolean;
-  setShowChestButton?(show: boolean): void;
+  storeSnapshot?(): Promise<{ balance: number | null; items: WocStoreItemInput[] }>;
+  spendStoreItem?(
+    itemId: string,
+    kind: 'cosmetic' | 'skin' | 'item',
+  ): Promise<{ granted: boolean; balance: number | null }>;
+  openClaudium?(): void;
   confirmDialog?(
     title: string,
     body: string,
@@ -45,6 +50,12 @@ export class DailyRewardsWindow {
   private renderSeq = 0;
   private lastHistory: DailyRewardHistory = { payouts: [] };
   private spinOverlay: HTMLElement | null = null;
+  private tab: 'store' | 'rewards' = 'store';
+  private storeBalance: number | null = null;
+  private storeRows: WocStoreItemRow[] = [];
+  private storeLoading = false;
+  private storeReady = false;
+  private storeError = false;
 
   private readonly wheelValues = [20, 30, 40, 50, 75, 100, 150, 250];
 
@@ -65,9 +76,9 @@ export class DailyRewardsWindow {
     root.style.display = 'block';
     this.deps.onVisibilityChange?.();
     this.ensureShell();
-    void this.render('open');
+    void this.renderCurrent('open');
     this.poll = window.setInterval(() => {
-      if (this.isOpen) void this.render(null);
+      if (this.isOpen) void this.renderCurrent(null);
     }, 15_000);
     this.countdownPoll = window.setInterval(() => {
       if (this.isOpen) this.paintCountdowns();
@@ -120,9 +131,140 @@ export class DailyRewardsWindow {
   private ensureShell(): void {
     const root = this.deps.root();
     markDialogRoot(root, { labelledBy: 'daily-rewards-title' });
-    if (root.querySelector('.dr-body')) return;
-    root.innerHTML = this.titleHtml() + this.loadingHtml();
+    if (root.querySelector('.woc-store-body')) return;
+    root.innerHTML = this.titleHtml() + this.tabsHtml() + this.loadingHtml();
     root.querySelector('[data-close]')?.addEventListener('click', () => this.close());
+    root.querySelectorAll<HTMLButtonElement>('[data-woc-store-tab]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const tab = button.dataset.wocStoreTab;
+        if (tab !== 'store' && tab !== 'rewards') return;
+        this.tab = tab;
+        this.syncTabs();
+        void this.renderCurrent(null);
+      });
+    });
+  }
+
+  private async renderCurrent(focus: 'open' | null): Promise<void> {
+    this.syncTabs();
+    if (this.tab === 'store') {
+      await this.renderStore(focus);
+      return;
+    }
+    await this.render(focus);
+  }
+
+  private syncTabs(): void {
+    this.deps.root().classList.toggle('store-active', this.tab === 'store');
+    this.deps
+      .root()
+      .querySelectorAll<HTMLButtonElement>('[data-woc-store-tab]')
+      .forEach((button) => {
+        const selected = button.dataset.wocStoreTab === this.tab;
+        button.classList.toggle('active', selected);
+        button.setAttribute('aria-selected', selected ? 'true' : 'false');
+        button.tabIndex = selected ? 0 : -1;
+      });
+  }
+
+  private async renderStore(focus: 'open' | null): Promise<void> {
+    const root = this.deps.root();
+    const body = root.querySelector<HTMLElement>('.dr-body');
+    if (!body) return;
+    if (focus === 'open')
+      root.querySelector<HTMLButtonElement>('[data-woc-store-tab="store"]')?.focus();
+    this.storeLoading = true;
+    this.storeError = false;
+    this.syncStoreLoading();
+    try {
+      const snapshot = (await this.deps.storeSnapshot?.()) ?? { balance: null, items: [] };
+      if (!this.isOpen || this.tab !== 'store') return;
+      this.storeBalance = snapshot.balance;
+      this.storeRows = buildWocStoreRows(snapshot.balance, snapshot.items);
+      this.storeReady = true;
+    } catch {
+      this.storeError = !this.storeReady;
+    } finally {
+      this.storeLoading = false;
+      this.syncStoreLoading();
+    }
+    if (this.isOpen && this.tab === 'store') this.paintStore(body);
+  }
+
+  private paintStore(body: HTMLElement): void {
+    if (this.storeError || this.storeBalance === null) {
+      body.innerHTML = `<div class="dr-empty dr-error" role="alert">${esc(t('hudChrome.wocStore.error'))}</div>`;
+      return;
+    }
+    const balance = formatNumber(this.storeBalance, { maximumFractionDigits: 0 });
+    const cards = this.storeRows.length
+      ? this.storeRows.map((row) => this.storeCardHtml(row)).join('')
+      : `<div class="woc-store-empty">${esc(t('hudChrome.wocStore.empty'))}</div>`;
+    body.innerHTML =
+      `<div class="woc-store-hero"><div><span>${esc(t('hudChrome.wocStore.eyebrow'))}</span><h2>${esc(t('hudChrome.wocStore.featuredTitle'))}</h2><p>${esc(t('hudChrome.wocStore.featuredBody'))}</p></div>` +
+      `<div class="woc-store-balance"><img src="/claudium/icons/claudium_coin_64.webp" alt=""><span>${esc(t('hudChrome.wocStore.balance'))}</span><strong>${balance}</strong><button type="button" data-buy-claudium>${esc(t('hudChrome.wocStore.buyClaudium'))}</button></div></div>` +
+      `<div class="woc-store-section-title"><div><span>${esc(t('hudChrome.wocStore.category'))}</span><h3>${esc(t('hudChrome.wocStore.weapons'))}</h3></div></div>` +
+      `<div class="woc-store-grid">${cards}</div>`;
+    body.querySelector<HTMLButtonElement>('[data-buy-claudium]')?.addEventListener('click', () => {
+      this.deps.openClaudium?.();
+    });
+    body.querySelectorAll<HTMLButtonElement>('[data-store-item]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const row = this.storeRows.find((item) => item.itemId === button.dataset.storeItem);
+        if (row) this.requestStorePurchase(row);
+      });
+    });
+  }
+
+  private storeCardHtml(row: WocStoreItemRow): string {
+    const cost = formatNumber(row.costClaudium, { maximumFractionDigits: 0 });
+    const buttonContent = row.owned
+      ? `<strong>${esc(t('hudChrome.wocStore.owned'))}</strong>`
+      : `<img src="/claudium/icons/claudium_coin_64.webp" alt=""><strong>${cost}</strong>`;
+    return (
+      `<article class="woc-store-card${row.owned ? ' owned' : row.affordable ? '' : ' short'}">` +
+      `<img src="${esc(row.art)}" alt="">` +
+      (row.owned
+        ? `<span class="woc-store-owned">${esc(t('hudChrome.wocStore.owned'))}</span>`
+        : '') +
+      `<div class="woc-store-card-copy"><span>${esc(t('hudChrome.wocStore.weaponCosmetic'))}</span><h4>${esc(row.name)}</h4>` +
+      `<button type="button" data-store-item="${esc(row.itemId)}" aria-label="${esc(row.owned ? t('hudChrome.wocStore.ownedAria', { item: row.name }) : t('hudChrome.wocStore.purchaseAria', { item: row.name, cost }))}"${row.owned ? ' disabled' : ''}>` +
+      `${buttonContent}</button></div></article>`
+    );
+  }
+
+  private requestStorePurchase(row: WocStoreItemRow): void {
+    if (row.owned) return;
+    const cost = formatNumber(row.costClaudium, { maximumFractionDigits: 0 });
+    if (!row.affordable) {
+      const shortfall = formatNumber(row.shortfall, { maximumFractionDigits: 0 });
+      this.deps.confirmDialog?.(
+        t('hudChrome.wocStore.needMoreTitle'),
+        t('hudChrome.wocStore.needMoreBody', { item: row.name, shortfall }),
+        t('hudChrome.wocStore.buyClaudium'),
+        t('hudChrome.wocStore.cancel'),
+        () => this.deps.openClaudium?.(),
+      );
+      return;
+    }
+    this.deps.confirmDialog?.(
+      t('hudChrome.wocStore.confirmTitle'),
+      t('hudChrome.wocStore.confirmBody', { item: row.name, cost }),
+      t('hudChrome.wocStore.confirmPurchase'),
+      t('hudChrome.wocStore.cancel'),
+      () => void this.purchaseStoreItem(row),
+    );
+  }
+
+  private async purchaseStoreItem(row: WocStoreItemRow): Promise<void> {
+    const result = await this.deps.spendStoreItem?.(row.itemId, row.kind);
+    if (!result?.granted) {
+      this.storeError = true;
+      const body = this.deps.root().querySelector<HTMLElement>('.dr-body');
+      if (body) this.paintStore(body);
+      return;
+    }
+    await this.renderStore(null);
   }
 
   private paint(view: DailyRewardsView): void {
@@ -151,25 +293,6 @@ export class DailyRewardsWindow {
       ?.addEventListener('click', () => {
         this.deps.onWalletConnect?.();
       });
-    body.querySelector<HTMLButtonElement>('[data-chest-toggle]')?.addEventListener('click', () => {
-      if (this.showChestButton()) {
-        // Hiding the HUD shortcut is easy to trigger by accident amid the task
-        // list and not obviously reversible, so confirm before persisting it.
-        this.deps.confirmDialog?.(
-          t('hudChrome.dailyRewards.hideChestConfirmTitle'),
-          t('hudChrome.dailyRewards.hideChestConfirmBody'),
-          t('hudChrome.dailyRewards.hideChestConfirmOk'),
-          t('hudChrome.dailyRewards.hideChestConfirmCancel'),
-          () => {
-            this.deps.setShowChestButton?.(false);
-            this.paint(view);
-          },
-        );
-        return;
-      }
-      this.deps.setShowChestButton?.(true);
-      this.paint(view);
-    });
   }
 
   private async spin(): Promise<void> {
@@ -191,13 +314,29 @@ export class DailyRewardsWindow {
 
   private titleHtml(): string {
     return (
-      `<div class="panel-title"><span id="daily-rewards-title">${esc(t('hudChrome.dailyRewards.title'))}</span>` +
-      `<button type="button" class="x-btn" data-close aria-label="${esc(t('hudChrome.dailyRewards.close'))}">${svgIcon('close')}</button></div>`
+      `<div class="panel-title"><span id="daily-rewards-title">${esc(t('hudChrome.wocStore.title'))}</span>` +
+      `<button type="button" class="x-btn" data-close aria-label="${esc(t('hudChrome.wocStore.close'))}">${svgIcon('close')}</button></div>`
+    );
+  }
+
+  private tabsHtml(): string {
+    return (
+      `<div class="woc-store-tabs" role="tablist" aria-label="${esc(t('hudChrome.wocStore.tabsLabel'))}">` +
+      `<button type="button" role="tab" data-woc-store-tab="store">${esc(t('hudChrome.wocStore.storeTab'))}</button>` +
+      `<button type="button" role="tab" data-woc-store-tab="rewards">${esc(t('hudChrome.wocStore.rewardsTab'))}</button>` +
+      `<span class="woc-store-loading" data-woc-store-loading role="status" aria-live="polite" aria-label="${esc(t('hudChrome.wocStore.loading'))}" aria-busy="false"><i aria-hidden="true"></i></span></div>`
     );
   }
 
   private loadingHtml(): string {
-    return `<div class="dr-body"><div class="dr-empty" role="status" aria-busy="true">${esc(t('hudChrome.dailyRewards.loading'))}</div></div>`;
+    return '<div class="dr-body woc-store-body"></div>';
+  }
+
+  private syncStoreLoading(): void {
+    const indicator = this.deps.root().querySelector<HTMLElement>('[data-woc-store-loading]');
+    if (!indicator) return;
+    indicator.classList.toggle('active', this.storeLoading);
+    indicator.setAttribute('aria-busy', this.storeLoading ? 'true' : 'false');
   }
 
   private summaryHtml(view: Extract<DailyRewardsView, { kind: 'ready' }>): string {
@@ -361,19 +500,11 @@ export class DailyRewardsWindow {
         return `<li class="${task.completed ? 'done' : ''}"><span>${esc(task.title)}</span><small><span>${esc(task.description)}</span>${multiplier}</small><b>${formatNumber(task.points, { maximumFractionDigits: 0 })}</b></li>`;
       })
       .join('');
-    const chestToggle = this.showChestButton()
-      ? t('hudChrome.dailyRewards.hideChestButton')
-      : t('hudChrome.dailyRewards.showChestButton');
     return (
       `<section class="dr-section"><h3>${esc(t('hudChrome.dailyRewards.tasks'))}</h3>` +
       `<ul class="dr-tasks">${rows}</ul>` +
-      `<button type="button" class="lb-page-btn dr-chest-toggle" data-chest-toggle>${esc(chestToggle)}</button>` +
       `</section>`
     );
-  }
-
-  private showChestButton(): boolean {
-    return this.deps.showChestButton?.() ?? true;
   }
 
   private leaderboardHtml(status: DailyRewardStatus): string {

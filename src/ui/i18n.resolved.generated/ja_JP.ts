@@ -241,6 +241,33 @@ export const ja_JP: EnTranslations = {
         "price_unavailable": "WOCの価格を取得できないため、報酬は一時的にロックされています。"
       }
     },
+    "wocStore": {
+      "title": "WOCストア",
+      "close": "WOCストアを閉じる",
+      "tabsLabel": "WOCストアのセクション",
+      "storeTab": "ストア",
+      "rewardsTab": "デイリー報酬",
+      "loading": "WOCストアを読み込み中…",
+      "error": "WOCストアは現在利用できません。しばらくしてからお試しください。",
+      "eyebrow": "注目コレクション",
+      "featuredTitle": "辺境の彼方で鍛えられた武器",
+      "featuredBody": "Claudiumで特別な武器外見を入手できます。外見は戦闘力に影響しません。",
+      "balance": "Claudium残高",
+      "buyClaudium": "Claudiumを購入",
+      "category": "外見アイテム",
+      "weapons": "武器コレクション",
+      "empty": "現在利用できる武器外見はありません。",
+      "weaponCosmetic": "武器外見",
+      "purchaseAria": "{item}を{cost} Claudiumで購入",
+      "owned": "所有済み",
+      "ownedAria": "{item}はすでに所有しています",
+      "needMoreTitle": "Claudiumが不足しています",
+      "needMoreBody": "{item}の購入にはあと{shortfall} Claudium必要です。",
+      "cancel": "キャンセル",
+      "confirmTitle": "外見の購入を確認",
+      "confirmBody": "{item}を{cost} Claudiumで購入しますか？",
+      "confirmPurchase": "購入"
+    },
     "claudium": {
       "title": "Claudium",
       "open": "Claudiumを開く",

@@ -146,6 +146,7 @@ export interface ClaudiumStoreItem {
   name: string;
   kind: 'cosmetic' | 'skin' | 'item';
   costClaudium: number;
+  owned: boolean;
 }
 
 /** The cosmetic store catalog, empty when the service is off. */
@@ -524,14 +525,18 @@ export async function claudiumHistory(accountId: string): Promise<ClaudiumHistor
 }
 
 /** GET store. The cosmetic catalog, priced in Claudium by the service. Empty when off. */
-export async function claudiumStore(): Promise<ClaudiumStoreResult> {
-  const data = await callService<ClaudiumStoreItem[]>({ method: 'GET', path: 'store' });
+export async function claudiumStore(accountId: string): Promise<ClaudiumStoreResult> {
+  const data = await callService<ClaudiumStoreItem[]>({
+    method: 'GET',
+    path: `store/${encodeURIComponent(accountId)}`,
+  });
   if (!Array.isArray(data)) return { items: [] };
   const items = data.filter(
     (i): i is ClaudiumStoreItem =>
       typeof i?.itemId === 'string' &&
       typeof i.name === 'string' &&
       typeof i.costClaudium === 'number' &&
+      typeof i.owned === 'boolean' &&
       (i.kind === 'cosmetic' || i.kind === 'skin' || i.kind === 'item'),
   );
   return { items };

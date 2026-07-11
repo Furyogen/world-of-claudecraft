@@ -241,6 +241,33 @@ export const ko_KR: EnTranslations = {
         "price_unavailable": "WOC 가격을 확인할 수 없어 보상이 일시적으로 잠겨 있습니다."
       }
     },
+    "wocStore": {
+      "title": "WOC 상점",
+      "close": "WOC 상점 닫기",
+      "tabsLabel": "WOC 상점 구역",
+      "storeTab": "상점",
+      "rewardsTab": "일일 보상",
+      "loading": "WOC 상점 불러오는 중…",
+      "error": "현재 WOC 상점을 이용할 수 없습니다. 잠시 후 다시 시도해 주세요.",
+      "eyebrow": "추천 컬렉션",
+      "featuredTitle": "개척지 너머에서 벼린 무기",
+      "featuredBody": "Claudium으로 고급 무기 외형을 획득하세요. 외형은 전투 능력에 영향을 주지 않습니다.",
+      "balance": "Claudium 잔액",
+      "buyClaudium": "Claudium 구매",
+      "category": "꾸미기 상품",
+      "weapons": "무기 컬렉션",
+      "empty": "현재 이용 가능한 무기 외형이 없습니다.",
+      "weaponCosmetic": "무기 외형",
+      "purchaseAria": "{item}을(를) {cost} Claudium으로 구매",
+      "owned": "보유 중",
+      "ownedAria": "{item}은(는) 이미 보유 중입니다",
+      "needMoreTitle": "Claudium이 더 필요합니다",
+      "needMoreBody": "{item} 구매에 Claudium {shortfall}개가 더 필요합니다.",
+      "cancel": "취소",
+      "confirmTitle": "꾸미기 상품 구매 확인",
+      "confirmBody": "{item}을(를) {cost} Claudium으로 구매할까요?",
+      "confirmPurchase": "구매"
+    },
     "claudium": {
       "title": "Claudium",
       "open": "Claudium 열기",

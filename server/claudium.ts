@@ -148,7 +148,7 @@ export async function handleClaudiumApi(
     return json(res, 200, await claudiumSolBalance(decodeURIComponent(solBalanceMatch[1])));
   }
   if (req.method === 'GET' && path === '/api/claudium/store') {
-    return json(res, 200, await claudiumStore());
+    return json(res, 200, await claudiumStore(account));
   }
   if (req.method === 'GET' && path === '/api/claudium/history') {
     return json(res, 200, await claudiumHistory(account));

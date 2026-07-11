@@ -32,6 +32,7 @@ export interface ClaudiumStoreItemInput {
   name: string;
   kind: 'cosmetic' | 'skin' | 'item';
   costClaudium: number;
+  owned: boolean;
 }
 
 export interface ClaudiumWalletBalancesInput {

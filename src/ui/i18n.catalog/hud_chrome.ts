@@ -108,6 +108,34 @@ export const hudChromeStrings = {
       price_unavailable: 'WOC price is unavailable, rewards are temporarily locked.',
     },
   },
+  wocStore: {
+    title: 'WOC Store',
+    close: 'Close WOC Store',
+    tabsLabel: 'WOC Store sections',
+    storeTab: 'Store',
+    rewardsTab: 'Daily Rewards',
+    loading: 'Loading WOC Store...',
+    error: 'The WOC Store is unavailable right now. Please try again shortly.',
+    eyebrow: 'Featured Collection',
+    featuredTitle: 'Weapons Forged Beyond the Frontier',
+    featuredBody:
+      'Claim premium weapon appearances with Claudium. Cosmetics never change combat power.',
+    balance: 'Claudium Balance',
+    buyClaudium: 'Purchase Claudium',
+    category: 'Cosmetics',
+    weapons: 'Weapon Collection',
+    empty: 'No weapon cosmetics are available right now.',
+    weaponCosmetic: 'Weapon Cosmetic',
+    purchaseAria: 'Purchase {item} for {cost} Claudium',
+    owned: 'Owned',
+    ownedAria: '{item} is already owned',
+    needMoreTitle: 'More Claudium Required',
+    needMoreBody: 'You need {shortfall} more Claudium to purchase {item}.',
+    cancel: 'Cancel',
+    confirmTitle: 'Confirm Cosmetic Purchase',
+    confirmBody: 'Purchase {item} for {cost} Claudium?',
+    confirmPurchase: 'Purchase',
+  },
   // CLAUDIUM: a server-authoritative soft currency. The game renders only what the
   // economy service returns (balance, SKU credits, prices, store costs); it
   // computes nothing. One-way: buy with money, spend on cosmetics, never cashes out.
@@ -290,7 +318,7 @@ export const hudChromeStrings = {
   mobile: {
     jump: 'Jump',
     leaderboard: 'Ranks',
-    dailyRewards: 'Rewards',
+    dailyRewards: 'Store',
     nameplates: 'Names',
     haptics: 'Haptics',
     hapticsOff: 'Haptics Off',
