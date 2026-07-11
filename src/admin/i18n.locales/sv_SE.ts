@@ -657,6 +657,8 @@ export const sv_SE: Record<string, string> = {
   'staff.viaScript': 'tilldelningsskript',
   'nav.history': 'Historik',
   'moderationHistory.actionKick': 'Utkastad',
+  'moderationHistory.actionJail': 'Fängslad',
+  'moderationHistory.actionUnjail': 'Frisläppt',
   'moderationHistory.actionKill': 'Dödad',
   'moderationHistory.actionIpBlock': 'IP-adress blockerad',
   'moderationHistory.actionIpUnblock': 'IP-adress avblockerad',

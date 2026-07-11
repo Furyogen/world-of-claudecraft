@@ -659,6 +659,8 @@ export const pt_BR: Record<string, string> = {
   'staff.viaScript': 'script de concessão',
   'nav.history': 'Histórico',
   'moderationHistory.actionKick': 'Expulso',
+  'moderationHistory.actionJail': 'Encarcerado',
+  'moderationHistory.actionUnjail': 'Libertado',
   'moderationHistory.actionKill': 'Morto',
   'moderationHistory.actionIpBlock': 'IP bloqueado',
   'moderationHistory.actionIpUnblock': 'IP desbloqueado',

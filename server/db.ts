@@ -4,6 +4,7 @@ import { LEADERBOARD_MAX } from '../src/sim/leaderboard_page';
 import { sanitizeRemovedZone1Content } from '../src/sim/removed_zone1_content';
 import type { CharacterState, MailSave, MarketSave } from '../src/sim/sim';
 import type { ArenaFormat, PlayerClass } from '../src/sim/types';
+import { APPLE_AUTH_SCHEMA } from './apple_auth_db';
 import type { BankBonusFacts } from './bank_entitlements';
 import { seedChatFilterDefaults } from './chat_filter_db';
 import type { ChatLogRow } from './chat_log';
@@ -32,20 +33,9 @@ import { USER_ASSETS_SCHEMA } from './user_assets_db';
 // consumers (the market tests) keep importing it from ./db unchanged.
 export { marketStateKey } from './market_backfill';
 
-try {
-  process.loadEnvFile?.();
-} catch {
-  // .env is optional; production usually injects DATABASE_URL directly.
-}
-try {
-  // Local-dev convenience: also load .env.local so the server can reuse the
-  // client's VITE_* values (e.g. the Solana RPC + $WOC mint) for the in-world
-  // holder-tier reads. Existing keys from .env are not overwritten. In
-  // production these come from real env vars (SOLANA_RPC_URL / WOC_MINT).
-  process.loadEnvFile?.('.env.local');
-} catch {
-  // .env.local is optional.
-}
+// The actual load lives in server/env.ts so import-time readers other than
+// db.ts (realm.ts via main.ts's first import) share one bootstrap.
+import './env';
 
 export const DATABASE_URL =
   process.env.DATABASE_URL ??
@@ -686,6 +676,7 @@ export async function ensureSchema(): Promise<void> {
     // unconditionally (idempotent) so the tables exist before the feature is
     // enabled, like the other schema modules.
     await client.query(DISCORD_SCHEMA);
+    await client.query(APPLE_AUTH_SCHEMA);
     // GitHub link tables (links + oauth states) for the developer badge.
     // FK-references accounts(id), so it runs after SCHEMA. Applied unconditionally
     // (idempotent), like the Discord tables.

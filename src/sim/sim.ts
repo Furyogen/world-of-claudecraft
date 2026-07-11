@@ -58,6 +58,7 @@ import {
 import { applySetProcs as applySetProcsImpl } from './combat/set_procs';
 import { spellCritBonusFromAuras, spellDamageMultFromAuras } from './combat/spell_combat';
 import { isSpellResisted } from './combat/spell_resist';
+import { ensureWarriorStance } from './combat/warrior_stances';
 // A3: the augment/power-up content helpers used by the Fiesta match logic
 // (AUGMENTS_BY_ID/AugmentDef/eligibleAugments/POWERUPS/PowerupDef/tierForWave)
 // moved to social/fiesta.ts with that logic; sim.ts keeps only the type used by
@@ -77,13 +78,20 @@ import {
   rollSkinRank,
 } from './content/skins';
 import {
+  computeModifiersWithRows,
+  emptyRowPicks,
+  type RowPicks,
+  rowTreeFor,
+  sanitizeRowPicks,
+} from './content/talent_rows';
+import {
   cloneAllocation,
-  computeTalentModifiers,
   emptyAllocation,
   emptyModifiers,
   type Role,
   repairAllocation,
   type SavedLoadout,
+  SPEC_UNLOCK_LEVEL,
   type TalentAllocation,
   type TalentModifiers,
 } from './content/talents';
@@ -150,6 +158,7 @@ import { formatMoney } from './format_money';
 import * as interaction from './interaction';
 import { meetsLevelRequirement } from './item_level_req';
 import * as items from './items';
+import type { JailState } from './jail';
 import {
   type DevLeaderboardPage,
   type GuildLeaderboardPage,
@@ -225,6 +234,12 @@ import {
   type CraftResult,
   craftItem as craftItemImpl,
 } from './professions/crafting';
+import {
+  type ApplyEnchantResult,
+  applyEnchant as applyEnchantImpl,
+  type DisenchantResult,
+  disenchantItem as disenchantItemImpl,
+} from './professions/enchanting';
 import * as professionsFocus from './professions/focus';
 import {
   drainGatheringGrants,
@@ -246,6 +261,7 @@ import {
 import {
   applyTalentAllocation,
   deleteTalentLoadout,
+  pickChoiceRowTalent,
   respecTalents,
   saveTalentLoadout,
   setTalentSpec,
@@ -267,6 +283,7 @@ import {
   releasePlayerSpirit,
   resurrectAtCorpse,
   resurrectAtSpiritHealer,
+  revivePlayerAt,
   spawnOverworldSpiritHealers,
 } from './spirit';
 import {
@@ -362,6 +379,7 @@ import {
   armorReduction,
   type CrowdControlDrCategory,
   cloneInvSlot,
+  cloneItemInstancePayload,
   DELVE_COMPANION_HEAL_INTERVAL,
   type DelveDef,
   type DelveModuleDef,
@@ -393,12 +411,16 @@ import {
   MELEE_RANGE,
   type MobFamily,
   type MoveInput,
+  normAngle,
   type OverheadEmoteId,
+  PARRY_FRONT_ARC,
   PARTY_MEMBER_AURA_CAP,
   type PetMode,
   type PlayerClass,
   type QuestProgress,
   type QuestState,
+  REVENGE_FREE_CHANCE,
+  REVENGE_FREE_DURATION,
   type RiteIntensity,
   RUN_SPEED,
   type SetProc,
@@ -727,6 +749,7 @@ export interface ResolvedAbility {
   threatFlat: number; // classic bonus threat on a successful use
   threatMult: number; // classic multiplier on this ability's damage-threat
   castWhileMoving?: boolean; // talent-granted mobility (def.castWhileMoving covers baseline)
+  charges?: number; // stored uses (def maxCharges and/or Double Charge talent); undefined = 1
   bonusCharges?: number;
 }
 
@@ -807,6 +830,10 @@ export interface PlayerMeta {
   vendorBuyback: InvSlot[];
   copper: number;
   equipment: PlayerEquipment;
+  // Per-slot ItemInstancePayload for whichever equipped piece carries one (an
+  // enchanted item's rolled.stats, see src/sim/professions/enchanting.ts).
+  // Sparse: a slot with a plain (unenchanted) piece has no entry.
+  equipmentInstance: Partial<Record<EquipSlot, ItemInstancePayload>>;
   xp: number;
   // Post-cap progression (Max-Level XP Overflow). `lifetimeXp` is the monotonic
   // 64-bit-safe total of all XP ever earned — it keeps growing at the cap and is
@@ -843,6 +870,11 @@ export interface PlayerMeta {
   // wire-up): a future issue extends IWorldProfessions + ClientWorld +
   // server/game.ts the way craft_item/harvest_node already are.
   lastSalvageResult: SalvageResult | null;
+  // Outcome of this player's most recent disenchantItem/applyEnchant command
+  // (Enchanting profession), same session-only, not-yet-wired-onto-IWorld
+  // status as lastSalvageResult above.
+  lastDisenchantResult: DisenchantResult | null;
+  lastEnchantResult: ApplyEnchantResult | null;
   known: ResolvedAbility[];
   questLog: Map<string, QuestProgress>;
   questsDone: Set<string>;
@@ -851,6 +883,11 @@ export interface PlayerMeta {
   // sim.time when this character entered the world; powers /played. Session-only
   // (sim.time resets to 0 each server boot), so it reports time this session.
   joinedAt: number;
+  // Seconds played across every session BEFORE this one (loaded from the save;
+  // powers /playtime). Combined with `this.time - joinedAt` for the running
+  // lifetime total; folded into a new persisted baseline by serializeCharacter
+  // on save, so it only ever advances while the character is actually in the world.
+  totalPlayedSeconds: number;
   // Tick of the player's last deliberate action (movement, ability cast, or pet
   // command). Session-only, never persisted. Powers the anti-AFK gate on
   // aggressive pet auto-pull (see PET_OWNER_IDLE_TICKS) so an idle owner's pet
@@ -887,6 +924,14 @@ export interface PlayerMeta {
   // change (recomputeTalents), never walked on the combat or stat hot path.
   talents: TalentAllocation;
   talentMods: TalentModifiers;
+  // Choice-row talents (the Pandaria-style row system, content/talent_rows.ts):
+  // the picked option id per row (null = unpicked), folded into `talentMods` by
+  // the recompute alongside the point tree. Persisted in CharacterState.
+  rowPicks: RowPicks;
+  // Battle Rhythm's rolling cast counter (wraps 1-2-0; the cast that lands the
+  // wrap to 0 is the empowered third). Gameplay state advanced in runEffects;
+  // session-scoped (a relog restarts the rhythm), so it is not persisted.
+  abilityRhythm: number;
   // 2v2 Fiesta (session-only, never persisted). `fiestaAugments` is the ordered
   // list of augment ids picked this bout; `fiestaMods` is talentMods with those
   // augments folded in (the effective modifier the stat/ability hot paths use
@@ -987,6 +1032,12 @@ export interface CharacterState {
   unlockedMilestones?: string[];
   // Rested XP pool. Optional so pre-rested-XP saves load cleanly (defaults to 0).
   restedXp?: number;
+  // Lifetime played time in seconds (unfloored, for drift-free accumulation; only
+  // the display floors), accumulated across every prior session (this session's
+  // elapsed time is folded in at save; see PlayerMeta.totalPlayedSeconds and
+  // /playtime in social/chat.ts). Optional so pre-/playtime saves load cleanly
+  // (defaults to 0).
+  totalPlayedSeconds?: number;
   // Gathering profession proficiency (JSONB; optional so pre-professions saves
   // load cleanly, defaulting every profession to 0). `professions` is the legacy
   // pre-rename key, kept for back-compat with old saves; `gatheringProficiency`
@@ -1004,6 +1055,10 @@ export interface CharacterState {
   pos: { x: number; z: number };
   facing: number;
   equipment: PlayerEquipment;
+  // Per-slot ItemInstancePayload for whichever equipped piece carries one (an
+  // enchanted item's rolled.stats, see src/sim/professions/enchanting.ts).
+  // Optional so pre-Enchanting saves load cleanly (defaults to no enchants).
+  equipmentInstance?: Partial<Record<EquipSlot, ItemInstancePayload>>;
   inventory: InvSlot[];
   // Equipped bag sockets. Optional so pre-bag saves load cleanly (defaults to
   // 4 empty sockets; an over-capacity legacy inventory is tolerated).
@@ -1043,6 +1098,10 @@ export interface CharacterState {
   // Talents & Specializations (JSONB; no schema migration). All optional so
   // characters saved before talents existed load cleanly (default: no points spent).
   talents?: TalentAllocation;
+  // Choice-row picks (option id per row, null = unpicked). Additive field: old
+  // saves without it load as all-unpicked; sanitized against the current tree
+  // and level on load like `talents` is repaired.
+  rowPicks?: (string | null)[];
   loadouts?: SavedLoadout[];
   activeLoadout?: number;
   raidLockouts?: Record<string, number>;
@@ -1064,6 +1123,7 @@ export interface CharacterState {
   // The Keeper's Toll (Resurrection Sickness) remaining seconds (JSONB; optional/null when
   // none). Persisted so the penalty cannot be shed by logging out and back in.
   resSickness?: number | null;
+  jail?: JailState;
   skin?: number; // appearance index (JSONB; optional so pre-skin saves load as 0)
   skinCatalog?: SkinCatalog;
   // Pending skin-select event rank (JSONB; optional so older saves load as null).
@@ -1687,7 +1747,12 @@ export class Sim {
       bankBonusSources: [],
       vendorBuyback: [],
       copper: 0,
-      equipment: { mainhand: classDef.startWeapon, chest: classDef.startChest },
+      equipment: {
+        mainhand: classDef.startWeapon,
+        offhand: classDef.startOffhand,
+        chest: classDef.startChest,
+      },
+      equipmentInstance: {},
       xp: 0,
       lifetimeXp: 0,
       prestigeRank: 0,
@@ -1698,12 +1763,15 @@ export class Sim {
       nodeHarvestReadyAt: {},
       lastCraftResult: null,
       lastSalvageResult: null,
+      lastDisenchantResult: null,
+      lastEnchantResult: null,
       known: [],
       questLog: new Map(),
       questsDone: new Set(),
       counters: freshCounters(),
       autoEquip: opts?.autoEquip ?? false,
       joinedAt: this.time,
+      totalPlayedSeconds: Math.max(0, savedState?.totalPlayedSeconds ?? 0),
       lastActiveTick: this.tickCount,
       arenaRating: savedArena1v1.rating,
       arenaWins: savedArena1v1.wins,
@@ -1722,6 +1790,8 @@ export class Sim {
       vcupBetNet: savedState?.vcupBetNet ?? 0,
       talents: emptyAllocation(),
       talentMods: emptyModifiers(),
+      rowPicks: emptyRowPicks(),
+      abilityRhythm: 0,
       fiestaAugments: [],
       fiestaMods: null,
       fiestaSpecial: {},
@@ -1779,6 +1849,12 @@ export class Sim {
         for (const id of s.unlockedMilestones) meta.unlockedMilestones.add(id);
       meta.copper = s.copper;
       meta.equipment = { ...s.equipment };
+      meta.equipmentInstance = Object.fromEntries(
+        Object.entries(s.equipmentInstance ?? {}).map(([slot, inst]) => [
+          slot,
+          cloneItemInstancePayload(inst),
+        ]),
+      );
       meta.inventory = s.inventory.map(cloneInvSlot);
       if (s.bags === undefined) {
         // PRE-BAG save: the character earned this space under the infinite
@@ -1824,6 +1900,9 @@ export class Sim {
           },
           player.level,
         );
+      // Choice-row picks are revalidated the same way: unknown option ids and
+      // rows above the character's level are dropped before the bake below.
+      if (s.rowPicks) meta.rowPicks = sanitizeRowPicks(rowTreeFor(cls), s.rowPicks, player.level);
       if (s.loadouts)
         meta.loadouts = s.loadouts.map((l) => ({
           name: l.name,
@@ -1867,11 +1946,12 @@ export class Sim {
       meta.bankBonusSources = opts.bankBonus.sources.map((s) => ({ ...s }));
     }
 
-    // Resolve the flat talent struct once, before the stat pass + ability
-    // resolver below consume it (they only ever read these flat numbers).
-    meta.talentMods = computeTalentModifiers(cls, meta.talents, player.level);
+    // Resolve the flat talent struct once (point tree + choice-row picks),
+    // before the stat pass + ability resolver below consume it (they only ever
+    // read these flat numbers). The level scales spec-mastery magnitudes.
+    meta.talentMods = computeModifiersWithRows(cls, meta.talents, meta.rowPicks, player.level);
     this.refreshKnownAbilities(meta, false);
-    recalcPlayerStats(player, cls, meta.equipment, meta.talentMods);
+    recalcPlayerStats(player, cls, meta.equipment, meta.talentMods, meta.equipmentInstance);
     if (savedState) {
       player.hp = Math.max(1, Math.min(player.maxHp, savedState.hp));
       player.resource =
@@ -2069,6 +2149,10 @@ export class Sim {
       prestigeRank: meta.prestigeRank,
       unlockedMilestones: [...meta.unlockedMilestones],
       restedXp: meta.restedXp,
+      // Fold this session's elapsed time into the persisted baseline (see
+      // PlayerMeta.totalPlayedSeconds); /playtime reads the running total the
+      // same way without waiting for a save.
+      totalPlayedSeconds: meta.totalPlayedSeconds + Math.max(0, this.time - meta.joinedAt),
       professions: { ...meta.gatheringProficiency },
       gatheringProficiency: { ...meta.gatheringProficiency },
       copper: meta.copper,
@@ -2092,6 +2176,12 @@ export class Sim {
       // The Keeper's Toll persists across logout (it cannot be shed by relogging).
       resSickness: e.auras.find((a) => a.id === RESURRECTION_SICKNESS_ID)?.remaining ?? null,
       equipment: { ...meta.equipment },
+      equipmentInstance: Object.fromEntries(
+        Object.entries(meta.equipmentInstance).map(([slot, inst]) => [
+          slot,
+          cloneItemInstancePayload(inst),
+        ]),
+      ),
       inventory: meta.inventory.map(cloneInvSlot),
       bags: [...meta.bags],
       bank: {
@@ -2132,6 +2222,9 @@ export class Sim {
           }
         : {}),
       talents: cloneAllocation(restore ? restore.talents : meta.talents),
+      // Row picks are untouched by the Fiesta standardization (only talentMods is
+      // rebuilt for the bout), so the live array is always the real build.
+      rowPicks: [...meta.rowPicks],
       loadouts: meta.loadouts.map((l) => ({
         name: l.name,
         alloc: cloneAllocation(l.alloc),
@@ -2462,6 +2555,9 @@ export class Sim {
   get talents(): TalentAllocation {
     return this.primary.talents;
   }
+  get rowPicks(): RowPicks {
+    return this.primary.rowPicks;
+  }
   get talentSpec(): string | null {
     return this.primary.talentMods.spec;
   }
@@ -2778,6 +2874,7 @@ export class Sim {
       applyKnockback: sim.applyKnockback.bind(sim),
       diminishedCrowdControlDuration: sim.diminishedCrowdControlDuration.bind(sim),
       hostilesInRadius: sim.hostilesInRadius.bind(sim),
+      friendliesInRadius: sim.friendliesInRadius.bind(sim),
       breakStealth: sim.breakStealth.bind(sim),
       applyTaunt: sim.applyTaunt.bind(sim),
       summonPet: sim.summonPet.bind(sim),
@@ -2795,6 +2892,8 @@ export class Sim {
       // B1 bags capacity pre-check (stays on Sim next to the inventory hub).
       canAddItem: sim.canAddItem.bind(sim),
       removeFungibleItem: sim.removeFungibleItem.bind(sim),
+      countEnchantableItem: sim.countEnchantableItem.bind(sim),
+      removeEnchantableItem: sim.removeEnchantableItem.bind(sim),
       partyOf: sim.partyOf.bind(sim),
       partyInvite: (targetPid: number, pid?: number) => sim.party.partyInvite(targetPid, pid),
       removeFromParty: (pid: number, verb: string) => sim.party.removeFromParty(pid, verb),
@@ -2857,6 +2956,7 @@ export class Sim {
       syncPetLevel: sim.syncPetLevel.bind(sim),
       // M2 mob locomotion seam (all still on Sim; owners flip points-at later).
       moveToward: sim.moveToward.bind(sim),
+      attackerInFront: sim.attackerInFront.bind(sim),
       mobSwing: sim.mobSwing.bind(sim),
       updateRangedPetAttack: sim.updateRangedPetAttack.bind(sim),
       fleeMoveSpeed: sim.fleeMoveSpeed.bind(sim),
@@ -2981,7 +3081,8 @@ export class Sim {
       effectiveAttackPower: sim.effectiveAttackPower.bind(sim),
       hasLineOfSight: sim.hasLineOfSight.bind(sim),
       findChargePath: sim.findChargePath.bind(sim),
-      runEffects: (p, meta, target, res) => runEffectsImpl(sim.ctx, p, meta, target, res),
+      runEffects: (p, meta, target, res, opts) =>
+        runEffectsImpl(sim.ctx, p, meta, target, res, opts),
       applySetProcs: sim.applySetProcs.bind(sim),
       // P1a pet-AI seam: the helper the moved updatePet/petRangedAttack/petPickTarget
       // reach back for. syncPetAspect STAYS on Sim (pet-management, P1b owns it eventually);
@@ -3075,6 +3176,14 @@ export class Sim {
     if (r) r.e.gm = enabled;
   }
 
+  // Mark a player as moderation-jailed: prisoners are mutually hostile (the
+  // jail brawl arm in isHostileTo). Server-side only: set on jail/unjail and
+  // at join restore; the offline Sim never calls it.
+  setJailed(enabled: boolean, pid?: number): void {
+    const r = this.resolve(pid);
+    if (r) r.e.jailed = enabled;
+  }
+
   // Dev/test convenience: jump a player to a level (learns abilities, recalcs stats).
   setPlayerLevel(level: number, pid?: number): void {
     const r = this.resolve(pid);
@@ -3084,8 +3193,19 @@ export class Sim {
     // from a sane baseline (virtualLevel never falls below the real level). Only
     // ever raises it — lifetimeXp is monotonic.
     r.meta.lifetimeXp = Math.max(r.meta.lifetimeXp, xpToReachLevel(r.e.level));
-    r.meta.talentMods = computeTalentModifiers(r.meta.cls, r.meta.talents, r.e.level);
-    recalcPlayerStats(r.e, r.meta.cls, r.meta.equipment, this.playerMods(r.meta));
+    r.meta.talentMods = computeModifiersWithRows(
+      r.meta.cls,
+      r.meta.talents,
+      r.meta.rowPicks,
+      r.e.level,
+    );
+    recalcPlayerStats(
+      r.e,
+      r.meta.cls,
+      r.meta.equipment,
+      this.playerMods(r.meta),
+      r.meta.equipmentInstance,
+    );
     r.e.hp = r.e.maxHp;
     if (r.e.resourceType === 'mana') r.e.resource = r.e.maxResource;
     this.refreshKnownAbilities(r.meta, false);
@@ -3130,6 +3250,13 @@ export class Sim {
     return respecTalents(this.ctx, pid);
   }
 
+  // Pick (or clear, optionId null) a choice-row talent (the Pandaria-style row
+  // system, content/talent_rows.ts). Validated server-side: row unlocked by
+  // level, option belongs to the row, not in combat/arena.
+  pickRowTalent(rowIndex: number, optionId: string | null, pid?: number): boolean {
+    return pickChoiceRowTalent(this.ctx, rowIndex, optionId, pid);
+  }
+
   // Save the current build (talents + spec + the given action-bar slot map) as a
   // named loadout. A same-named loadout is overwritten; otherwise appended up to
   // MAX_LOADOUTS. Returns the loadout index (-1 on failure).
@@ -3168,13 +3295,28 @@ export class Sim {
     if (!r) return null;
     const found = r.meta.known.find((k) => k.def.id === abilityId) ?? null;
     if (!found) return null;
+    // This is the ONE cost choke point every affordability check and spend
+    // reads, so both cost adjusters fold here and stay in lockstep.
+    let cost = found.cost;
+    // Measured Fury (Arms passive): every listed rage cost is 10% cheaper. Gated
+    // on the passive being KNOWN and the caster having committed to the arms
+    // spec: measured_fury is spec-gated to arms, but a player with NO spec still
+    // carries the full kit (and its full, undiscounted costs), so the spec check
+    // keeps this strictly arms-only and leaves every no-spec/fury/prot cost
+    // byte-identical. Applied FIRST, so the cost_tax curse composes on top.
+    if (
+      cost > 0 &&
+      this.playerMods(r.meta).spec === 'arms' &&
+      r.meta.known.some((k) => k.def.passive && k.def.id === 'measured_fury')
+    ) {
+      cost = Math.max(0, Math.round(cost * 0.9));
+    }
     // A "draining curse" (cost_tax aura) inflates the resource cost of every
-    // ability the victim uses. Resolve it here, the single choke point all cost
-    // checks/spends read, so the affordability check and the spend stay in
-    // lockstep. Return a shallow copy so the cached known-list entry is never
-    // mutated.
+    // ability the victim uses.
     const tax = this.costTaxMult(r.e);
-    if (tax > 1 && found.cost > 0) return { ...found, cost: Math.ceil(found.cost * tax) };
+    if (tax > 1 && cost > 0) cost = Math.ceil(cost * tax);
+    // Return a shallow copy so the cached known-list entry is never mutated.
+    if (cost !== found.cost) return { ...found, cost };
     return found;
   }
 
@@ -3220,6 +3362,9 @@ export class Sim {
       const p = this.entities.get(meta.entityId);
       if (!p) continue;
       if (!p.dead) {
+        // Warriors always live in a stance valid for their spec: apply/reconcile
+        // it before this tick's combat so the stance bonus is live (no rng).
+        ensureWarriorStance(this.ctx, p, meta);
         this.updatePlayerMovement(p, meta);
         lap?.('p.move');
         this.updateDoorTriggers(p);
@@ -3494,8 +3639,14 @@ export class Sim {
   swingIntervalMult(e: Entity): number {
     let m = 1;
     for (const a of e.auras) {
-      if (a.kind === 'attackspeed') m *= a.value;
+      // 'sanguine' carries its swing multiplier in value (the damage half
+      // rides value2, read in dealDamage).
+      if (a.kind === 'attackspeed' || a.kind === 'sanguine') m *= a.value;
       if (a.kind === 'buff_haste') m /= a.value;
+      // Note: Fury Enrage's +25% haste is NOT applied here. It is folded into the
+      // real haste stat (meleeHaste/spellHaste) in recalcPlayerStats, so the swing
+      // timer's `/ (1 + meleeHaste)` divisor already carries it (and it shows in
+      // the Haste stat + speeds casts), instead of a bespoke swing-only divisor.
     }
     // Enrage frenzy: an enraged mob swings faster (mirrors the inline dmgMult
     // applied in mobSwing). Composes with any slow/haste auras above.
@@ -3517,6 +3668,54 @@ export class Sim {
       y: 0,
       z: w.z,
     }));
+  }
+
+  // Heroic Leap in flight: arc from `from` to `to` over `dur` seconds (parabolic
+  // rise cresting at the midpoint) instead of teleporting, then settle on the
+  // ground and fire the landing AoE. Returns true while it owns movement this tick.
+  private updateLeapMovement(p: Entity): boolean {
+    if (!p.leap) return false;
+    if (p.dead) {
+      // Death cancels the flight outright: a corpse (or released ghost) must never
+      // resume the arc, or the stored landing point would skip the corpse run.
+      p.leap = null;
+      return false;
+    }
+    const leap = p.leap;
+    leap.elapsed += DT;
+    const t = Math.min(1, leap.elapsed / leap.dur);
+    const groundY = leap.from.y + (leap.to.y - leap.from.y) * t;
+    p.pos.x = leap.from.x + (leap.to.x - leap.from.x) * t;
+    p.pos.z = leap.from.z + (leap.to.z - leap.from.z) * t;
+    p.pos.y = groundY + leap.apex * 4 * t * (1 - t);
+    p.onGround = false;
+    p.vy = 0;
+    if (t >= 1) {
+      p.pos.x = leap.to.x;
+      p.pos.z = leap.to.z;
+      p.pos.y = leap.to.y;
+      p.onGround = true;
+      p.fallStartY = p.pos.y;
+      const aoe = leap.aoe;
+      const ability = leap.ability;
+      p.leap = null;
+      if (aoe) {
+        this.emit({
+          type: 'spellfxAt',
+          x: p.pos.x,
+          z: p.pos.z,
+          school: 'physical',
+          fx: 'nova',
+          radius: aoe.radius,
+        });
+        for (const target of this.hostilesInRadius(p, p.pos, aoe.radius)) {
+          if (!this.hasLineOfSight(p, target)) continue;
+          const dmg = Math.round(this.rng.range(aoe.min, aoe.max));
+          this.dealDamage(p, target, dmg, false, 'physical', ability, 'hit');
+        }
+      }
+    }
+    return true;
   }
 
   // Charge in flight: forced movement toward the target along the pathfound
@@ -3649,6 +3848,7 @@ export class Sim {
     ) {
       meta.lastActiveTick = this.tickCount;
     }
+    if (this.updateLeapMovement(p)) return;
     if (this.updateChargeMovement(p)) return;
     if (this.updateFollowMovement(p, meta)) return;
     if (this.updateFearMovement(p)) return;
@@ -3778,6 +3978,15 @@ export class Sim {
     castAbilityImpl(this.ctx, abilityId, undefined, aim);
   }
 
+  // Mouseover cast (Clique-style): cast a friendly ability on an explicit
+  // target without touching the player's persistent selection. The IWorld
+  // surface behind the party-frame hover cast; the server routes the online
+  // {cmd:'cast', target} form here with its session pid.
+  castAbilityOn(abilityId: string, targetId: number, pid?: number): void {
+    // no ground aim: the override is an entity target, the two are exclusive
+    castAbilityImpl(this.ctx, abilityId, pid, undefined, targetId);
+  }
+
   // Voluntarily cancel one of a player's own helpful auras (the HUD right-click-a-buff
   // action). Authoritative: the pure predicate refuses debuffs, so a player can never
   // strip a silence/hex/root off themselves. Mirrors clearAurasFromSource's fade-event
@@ -3790,7 +3999,7 @@ export class Sim {
     if (!removed) return;
     this.emit({ type: 'aura', targetId: e.id, name: removed.name, gained: false });
     if (auraAffectsStats(removed)) {
-      recalcPlayerStats(e, meta.cls, meta.equipment, this.playerMods(meta));
+      recalcPlayerStats(e, meta.cls, meta.equipment, this.playerMods(meta), meta.equipmentInstance);
     }
   }
 
@@ -3887,7 +4096,14 @@ export class Sim {
     this.refreshMobLeashFromAction(source ?? null, target);
     if (target.kind === 'player') {
       const meta = this.players.get(target.id);
-      if (meta) recalcPlayerStats(target, meta.cls, meta.equipment, this.playerMods(meta));
+      if (meta)
+        recalcPlayerStats(
+          target,
+          meta.cls,
+          meta.equipment,
+          this.playerMods(meta),
+          meta.equipmentInstance,
+        );
     }
   }
 
@@ -4019,6 +4235,14 @@ export class Sim {
     return out;
   }
 
+  private friendliesInRadius(source: Entity, pos: Vec3, radius: number): Entity[] {
+    const out: Entity[] = [];
+    this.grid.forEachInRadius(pos.x, pos.z, radius, (e) => {
+      if (!e.dead && (e.id === source.id || this.isFriendlyTo(source, e))) out.push(e);
+    });
+    return out;
+  }
+
   private breakStealth(e: Entity): void {
     const idx = e.auras.findIndex((a) => a.kind === 'stealth');
     if (idx < 0) return;
@@ -4042,7 +4266,11 @@ export class Sim {
     const top = topThreatValue(mob);
     const mine = mob.threat.get(p.id) ?? 0;
     mob.threat.set(p.id, Math.max(mine, top, 1));
-    if (MOBS[mob.templateId]?.ignoreTaunt) {
+    // A training dummy takes the threat (it shows on the meters) but never
+    // turns, forces, or fights: without this guard a taunt (or an area taunt
+    // like Defiant Bellow in range) force-aggroed the dummy permanently and
+    // the aggro pinned the attacker in combat forever (2026-07-11 PBE bug).
+    if (MOBS[mob.templateId]?.ignoreTaunt || MOBS[mob.templateId]?.dummy) {
       this.enterCombat(p, mob);
       return;
     }
@@ -4204,6 +4432,10 @@ export class Sim {
       weaponMult?: number;
       threatFlat?: number;
       threatMult?: number;
+      onDealt?: (amount: number) => void;
+      // Emboldened (combat/sure_crit.ts): override the connected swing's crit
+      // OUTCOME; the crit rng inside meleeSwing is still drawn as before.
+      forceCrit?: boolean;
       damageMult?: number;
     },
   ): boolean {
@@ -4490,9 +4722,26 @@ export class Sim {
     return true;
   }
 
+  // True when `attacker` sits inside the defender's frontal 180-degree arc. Parry
+  // uses this: you cannot parry a blow from behind. A defender facing its attacker
+  // (the normal combat stance) parries; something striking your back does not.
+  private attackerInFront(defender: Entity, attacker: Entity): boolean {
+    return (
+      Math.abs(normAngle(angleTo(defender.pos, attacker.pos) - defender.facing)) < PARRY_FRONT_ARC
+    );
+  }
+
   mobSwing(mob: Entity, target: Entity): void {
     const missChance = swingMissChance(mob, target);
     const dodgeChance = target.kind === 'player' ? target.dodgeChance : 0.05;
+    // Parry is frontal only: a blow from behind can never be parried. Non-players
+    // and non-parry classes carry 0, so their hit table is byte-identical.
+    const parryChance =
+      target.kind === 'player' && this.attackerInFront(target, mob) ? target.parryChance : 0;
+    const blockChance =
+      target.kind === 'player' && this.attackerInFront(target, mob) && target.blockValue > 0
+        ? target.blockChance
+        : 0;
     const roll = this.rng.next();
     if (roll < missChance) {
       this.emit({
@@ -4507,7 +4756,16 @@ export class Sim {
       });
       return;
     }
-    if (roll < missChance + dodgeChance) {
+    // Avoidance: dodge (any angle) then parry (frontal only). Both reuse the SAME
+    // roll (no extra rng draw) and fully negate the hit; a dodge OR a parry can
+    // proc the Protection Revenge reset.
+    const avoided =
+      roll < missChance + dodgeChance
+        ? ('dodge' as const)
+        : roll < missChance + dodgeChance + parryChance
+          ? ('parry' as const)
+          : null;
+    if (avoided) {
       this.emit({
         type: 'damage',
         sourceId: mob.id,
@@ -4516,8 +4774,31 @@ export class Sim {
         crit: false,
         school: 'physical',
         ability: null,
-        kind: 'dodge',
+        kind: avoided,
       });
+      // Revenge proc (Protection): a dodge or parry against the warrior has a
+      // chance to make the next Revenge cost no rage. Only a defender who KNOWS
+      // Revenge (committed prot) rolls, so this conditional rng draw is scoped to
+      // prot warriors and stays deterministic through this.rng.
+      if (target.kind === 'player') {
+        const dmeta = this.players.get(target.id);
+        if (
+          dmeta &&
+          dmeta.known.some((k) => k.def.id === 'revenge') &&
+          this.rng.chance(REVENGE_FREE_CHANCE)
+        ) {
+          this.applyAura(target, {
+            id: 'revenge_free',
+            name: 'Revenge!',
+            kind: 'revenge_free',
+            remaining: REVENGE_FREE_DURATION,
+            duration: REVENGE_FREE_DURATION,
+            value: 0,
+            sourceId: target.id,
+            school: 'physical',
+          });
+        }
+      }
       return;
     }
     let dmg =
@@ -4530,6 +4811,9 @@ export class Sim {
     dmg *= this.petDamageMult(mob);
     const rawDmg = dmg; // pre-armor, post-crit/enrage — basis for cleave splash
     dmg *= 1 - armorReduction(this.effectiveArmor(target), mob.level);
+    if (blockChance > 0 && roll < missChance + dodgeChance + parryChance + blockChance) {
+      dmg = Math.max(1, dmg - target.blockValue);
+    }
     const dealt = Math.max(1, Math.round(dmg));
     this.dealDamage(mob, target, dealt, crit, 'physical', null, 'hit');
     runMobSwingAffixes(this.ctx, mob, target, { dealt, crit, rawDmg });
@@ -4541,7 +4825,8 @@ export class Sim {
   // module never reaches into the Sim players map directly.
   private recalcPlayer(target: Entity): void {
     const meta = this.players.get(target.id);
-    if (meta) recalcPlayerStats(target, meta.cls, meta.equipment, meta.talentMods);
+    if (meta)
+      recalcPlayerStats(target, meta.cls, meta.equipment, meta.talentMods, meta.equipmentInstance);
   }
 
   private updateRangedPetAttack(
@@ -4627,7 +4912,7 @@ export class Sim {
   }
 
   // Step `e` one tick toward `dest`. With `ignoreObstacles`, the mover phases
-  // straight through props — used to free a stuck evader, and forced on for
+  // straight through props, used to free a stuck evader, and forced on for
   // templates flagged `phasesThroughObstacles` (mountain-sized world bosses
   // that must never wedge on a collider mid-chase). Returns true on arrival.
   private moveToward(e: Entity, dest: Vec3, speed: number, ignoreObstacles = false): boolean {
@@ -5174,7 +5459,13 @@ export class Sim {
       pid: meta.entityId,
     });
     this.ctx.onInventoryChangedForQuests(meta);
-    if (meta.autoEquip && (def?.kind === 'weapon' || def?.kind === 'armor')) {
+    if (
+      meta.autoEquip &&
+      (def?.kind === 'weapon' ||
+        def?.kind === 'armor' ||
+        def?.kind === 'shield' ||
+        def?.kind === 'held_offhand')
+    ) {
       this.maybeAutoEquip(itemId, meta);
     }
   }
@@ -5235,6 +5526,62 @@ export class Sim {
       if (s.count <= 0) meta.inventory.splice(i, 1);
     }
     this.ctx.onInventoryChangedForQuests(meta);
+  }
+
+  // Enchanting-eligible count for `itemId` (#1712 review): a plain fungible
+  // stack counts, and so does an instanced copy that carries NO rolled.stats
+  // (e.g. crafting.ts's single-copy rare+ grant, which instances every
+  // rare-or-better craft for its signer/rolled-quality payload but does not
+  // itself apply an enchant). Only a copy that already has rolled.stats (i.e.
+  // is already enchanted) is excluded, so disenchant/apply-enchant never
+  // consumes an already-enchanted copy but DOES accept crafted gear, unlike
+  // the fungible-only gate this replaces for enchanting.ts specifically.
+  countEnchantableItem(itemId: string, pid?: number): number {
+    const r = this.resolve(pid);
+    if (!r) return 0;
+    let n = 0;
+    for (const s of r.meta.inventory) {
+      if (s.itemId !== itemId) continue;
+      if (s.instance?.rolled?.stats) continue;
+      n += s.count;
+    }
+    return n;
+  }
+
+  // Removal counterpart to countEnchantableItem above: prefers plain fungible
+  // stacks (matching removeFungibleItem's ordering within that subset) and only
+  // reaches for an instanced-but-unenchanted copy once no fungible copy is left.
+  // Never removes a copy that already carries rolled.stats. Returns the
+  // `instance` payload of every instanced slot actually consumed (matching
+  // removeItem's return contract) so a caller applying an enchant can merge a
+  // crafted copy's signer/rolled.quality into the freshly-enchanted instance
+  // instead of silently dropping them (#1712 round-3 review).
+  removeEnchantableItem(itemId: string, count: number, pid?: number): ItemInstancePayload[] {
+    const consumedInstances: ItemInstancePayload[] = [];
+    const r = this.resolve(pid);
+    if (!r) return consumedInstances;
+    const { meta } = r;
+    // Pass 1: plain fungible stacks only, same order removeFungibleItem uses.
+    for (let i = meta.inventory.length - 1; i >= 0 && count > 0; i--) {
+      const s = meta.inventory[i];
+      if (s.itemId !== itemId || s.instance) continue;
+      const take = Math.min(s.count, count);
+      s.count -= take;
+      count -= take;
+      if (s.count <= 0) meta.inventory.splice(i, 1);
+    }
+    // Pass 2: instanced copies without rolled.stats.
+    for (let i = meta.inventory.length - 1; i >= 0 && count > 0; i--) {
+      const s = meta.inventory[i];
+      if (s.itemId !== itemId || !s.instance || s.instance.rolled?.stats) continue;
+      consumedInstances.push(s.instance);
+      const take = Math.min(s.count, count);
+      s.count -= take;
+      count -= take;
+      if (s.count <= 0) meta.inventory.splice(i, 1);
+    }
+    this.ctx.onInventoryChangedForQuests(meta);
+    return consumedInstances;
   }
 
   // True when `count` copies of the item fit the player's pooled bag budget
@@ -5479,6 +5826,28 @@ export class Sim {
     return this.players.get(this.primaryId)?.lastSalvageResult ?? null;
   }
 
+  // Enchanting profession commands: same thin-delegate/stash-result/not-yet-
+  // wired-onto-IWorld shape as salvageItem/lastSalvageResult above.
+  disenchantItem(itemId: string, pid?: number): void {
+    const result = disenchantItemImpl(this.ctx, itemId, pid);
+    const meta = this.players.get(pid ?? this.primaryId);
+    if (meta) meta.lastDisenchantResult = result;
+  }
+
+  get lastDisenchantResult(): DisenchantResult | null {
+    return this.players.get(this.primaryId)?.lastDisenchantResult ?? null;
+  }
+
+  applyEnchant(itemId: string, enchantId: string, pid?: number): void {
+    const result = applyEnchantImpl(this.ctx, itemId, enchantId, pid);
+    const meta = this.players.get(pid ?? this.primaryId);
+    if (meta) meta.lastEnchantResult = result;
+  }
+
+  get lastEnchantResult(): ApplyEnchantResult | null {
+    return this.players.get(this.primaryId)?.lastEnchantResult ?? null;
+  }
+
   private maybeAutoEquip(itemId: string, meta: PlayerMeta): void {
     const def = ITEMS[itemId];
     if (!def?.slot) return;
@@ -5492,6 +5861,10 @@ export class Sim {
       const cur = meta.equipment.mainhand ? ITEMS[meta.equipment.mainhand]?.weapon : null;
       const next = def.weapon;
       if (next && (!cur || next.min + next.max > cur.min + cur.max))
+        this.equipItem(itemId, meta.entityId);
+    } else if (def.kind === 'shield' || def.kind === 'held_offhand') {
+      const cur = meta.equipment.offhand ? ITEMS[meta.equipment.offhand] : null;
+      if (!cur || (def.stats?.armor ?? 0) > (cur.stats?.armor ?? 0))
         this.equipItem(itemId, meta.entityId);
     } else {
       // resolveEquipSlot maps a ring item to its concrete ring1/ring2 key
@@ -5706,6 +6079,10 @@ export class Sim {
     resurrectAtSpiritHealer(this.ctx, pid);
   }
 
+  revivePlayerAt(pid: number, pos: Vec3, hpFrac = 1): void {
+    revivePlayerAt(this.ctx, pid, pos, hpFrac);
+  }
+
   // chatAllowed / handleDevChat / whisperMessageForName / resolveWhisperTarget
   // moved to social/chat.ts (G2). The chat() router below dispatches to them via
   // chatMod.*(this.ctx, ...); they had no callers outside chat().
@@ -5771,6 +6148,18 @@ export class Sim {
       ) {
         return true;
       }
+      // The jail brawl: prisoners are hostile to each other, always (pets
+      // resolve to their owner via pvpController above, so a prisoner's pet
+      // fights too). A visiting moderator is never jailed, so no prisoner
+      // action can ever target them; GM invulnerability (dealDamage) is the
+      // backstop. isFriendlyTo mirrors this, so prisoners cannot cross-heal.
+      if (attackerPlayer.jailed && target.jailed) return true;
+      // One-way warden arm: a GM (the visiting moderator; enterJailVisit sets
+      // the flag) MAY strike prisoners. Deliberately asymmetric: the reverse
+      // direction stays non-hostile, and any reflected/proc damage still
+      // bounces off GM invulnerability. Audited punishment stays /kill; this
+      // is for roughing up the cellblock.
+      if (attackerPlayer.gm && target.jailed) return true;
       // The Vale Cup: opposing fighters are hostile only while play is live so
       // the harvest-truce Shoulder can land on them (targeting also opens during
       // the countdown via targeting.ts; damage between seated fighters is
@@ -5933,11 +6322,19 @@ export class Sim {
       if (a.sourceId !== sourceId) continue;
       target.auras.splice(i, 1);
       this.emit({ type: 'aura', targetId: target.id, name: a.name, gained: false });
-      if (a.kind.startsWith('buff') || a.kind.startsWith('form')) statsDirty = true;
+      if (a.kind.startsWith('buff') || a.kind.startsWith('form') || a.kind === 'enrage')
+        statsDirty = true;
     }
     if (statsDirty && target.kind === 'player') {
       const meta = this.players.get(target.id);
-      if (meta) recalcPlayerStats(target, meta.cls, meta.equipment, this.playerMods(meta));
+      if (meta)
+        recalcPlayerStats(
+          target,
+          meta.cls,
+          meta.equipment,
+          this.playerMods(meta),
+          meta.equipmentInstance,
+        );
     }
   }
 
@@ -6660,6 +7057,10 @@ export class Sim {
                 level: e.level,
                 hp: e.hp,
                 mhp: e.maxHp,
+                absorb: e.auras.reduce(
+                  (sum, aura) => sum + (aura.kind === 'absorb' ? Math.max(0, aura.value) : 0),
+                  0,
+                ),
                 res: Math.round(e.resource),
                 mres: e.maxResource,
                 rtype: e.resourceType,

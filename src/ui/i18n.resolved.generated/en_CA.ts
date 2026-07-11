@@ -298,6 +298,7 @@ export const en_CA: EnTranslations = {
       "playerLabel": "Your Hero",
       "targetLabel": "Your Mark",
       "targetAnnounce": "Mark {name}",
+      "targetOfTargetLabel": "Mark's Mark",
       "partyLabel": "Your Band",
       "partyChip": "Party",
       "partyGroup": "Group {n}",
@@ -314,7 +315,6 @@ export const en_CA: EnTranslations = {
       "chat": "Skip to Chat"
     },
     "mobile": {
-      "autorun": "Auto",
       "jump": "Jump",
       "leaderboard": "Ranks",
       "dailyRewards": "Rewards",
@@ -574,13 +574,32 @@ export const en_CA: EnTranslations = {
       "startAttackOnAbility": "Auto-Attack on Ability Use",
       "walkByAutoloot": "Walk-by Autoloot",
       "groundReticle": "Ground-Targeting Reticle",
+      "mouseoverCast": "Mouseover Cast on Party Frames",
       "showItemLevel": "Show Item Level",
       "itemLevelLine": "Item Level {level}",
       "itemScoreLine": "Score {score}",
       "showSecondaryActionBar": "Show Secondary Action Bar",
+      "showTargetOfTarget": "Show Target of Target",
       "showDailyRewardsChest": "Show Daily Rewards Chest",
       "mobileCameraJoystick": "Camera joystick",
       "mobileLeftHanded": "Left-handed layout"
+    },
+    "talentRows": {
+      "tab": "Choices",
+      "defaultLoadout": "Default Loadout",
+      "comingSoon": "Coming soon"
+    },
+    "specPanel": {
+      "primaryAttr": "Primary attribute",
+      "complexity": "Complexity",
+      "complexityLow": "Low",
+      "complexityMedium": "Medium",
+      "complexityHigh": "High",
+      "exampleAbilities": "Example abilities",
+      "viewTalents": "View talents",
+      "selectSpec": "Select specialization",
+      "specUnlockBanner": "Specialization Unlocked!",
+      "specUnlockHint": "Press N to choose your specialization."
     },
     "controller": {
       "title": "Controller",
@@ -678,7 +697,9 @@ export const en_CA: EnTranslations = {
       "names": {
         "spellPower": "Spell Power",
         "critRating": "Crit Rating",
-        "hasteRating": "Haste Rating"
+        "hasteRating": "Haste Rating",
+        "haste": "Haste",
+        "parry": "Parry"
       },
       "desc": {
         "str": "Increases your attack power, so your weapon strikes land harder.",
@@ -693,7 +714,9 @@ export const en_CA: EnTranslations = {
         "critChance": "Your chance for an attack to strike critically, dealing double damage.",
         "dodge": "Your chance to completely avoid an incoming melee attack, taking no damage.",
         "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
-        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
+        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste.",
+        "haste": "Speeds up your weapon swings and spell casts. It does not reduce the global cooldown.",
+        "parry": "Your chance to fully parry a frontal melee attack, taking no damage. A blow from behind cannot be parried."
       },
       "effects": {
         "attackPower": "+{value} Attack Power",
@@ -811,6 +834,7 @@ export const en_CA: EnTranslations = {
       "failed": "Could not send the bug report. Please try again."
     },
     "paperdoll": {
+      "offhand": "Offhand",
       "unequipAria": "Unequip {item}",
       "unequipHint": "Click ×, right-click, or drag to bags to unequip"
     },
@@ -1061,9 +1085,24 @@ export const en_CA: EnTranslations = {
       "formCat": "Cat Form: melee damage and energy",
       "formTravel": "Fleet Form: movement speed increased by {pct}%",
       "defensiveStance": "Guarded Stance: reduced damage taken, more threat",
+      "battleStance": "Battle Stance: 10% more rage generation",
+      "berserkerStance": "Berserker Stance: crits 3% more often and hit 3% harder",
       "righteousFury": "Burning Oath: greatly increased threat from Holy damage",
       "scale": "Size increased by {pct}%",
       "jump": "Jump height increased by {pct}%",
+      "dmgDone": "Increases damage dealt by {pct}%",
+      "dmgDoneReduce": "Reduces damage dealt by {pct}%",
+      "crit": "Increases critical strike chance by {pct}%",
+      "rageGen": "Increases Rage generation by {pct}%",
+      "reckless": "Increases critical strike chance by {pct}% and Rage generation by {ragePct}%",
+      "avatar": "Colossus: damage dealt increased by {pct}%",
+      "bloodbath": "Increases critical strike chance and damage dealt by {pct}%",
+      "dieBySword": "Reduces damage taken by {pct}% ({lowPct}% while below {hpPct}% health)",
+      "sanguine": "Increases attack speed by {hastePct}% and damage dealt by {dmgPct}%",
+      "battleTrance": "Your next Reaver Strike or Maiming Strike costs no Rage",
+      "revengeFree": "Your next Revenge costs no Rage",
+      "victoryRush": "Victory Rush is ready",
+      "maxHpPct": "Increases maximum health by {pct}%",
       "school": {
         "physical": "Physical",
         "fire": "Fire",
@@ -1078,6 +1117,10 @@ export const en_CA: EnTranslations = {
       "spawn": "{name} rises over Thornpeak Heights!"
     },
     "auth": {
+      "appleLoginCta": "Continue with Apple",
+      "appleError": "Could not sign in with Apple. Please try again.",
+      "appleChoiceIntro": "Create a new account, or link Apple to one you already have.",
+      "appleChoiceExpired": "That Apple sign-in expired. Please sign in with Apple again.",
       "forgotPrompt": "Forgot password?",
       "forgotTitle": "Reset your password",
       "forgotHint": "Enter your username and we will email a reset link to the address on file.",
@@ -1984,11 +2027,19 @@ export const en_CA: EnTranslations = {
     },
     "abilityHook": {
       "heroic_strike": "Queues a heavier swing that spends rage on your next hit.",
+      "revenge": "A sweeping counterattack that hits everything in front of you, and comes cheaper right after you turn a blow aside.",
       "battle_shout": "A rallying cry that raises attack power for the party.",
       "commanding_shout": "Bolsters stamina so everyone has more staying power in a fight.",
       "charge": "Rushes a distant enemy to open the fight with a brief stun.",
       "rend": "Opens a bleed that wears the target down over time.",
       "thunder_clap": "Hits everything around you and slows their attacks.",
+      "cw_heroic_strike": "Queues a heavier swing that spends rage on your next hit.",
+      "cw_battle_shout": "A rallying cry that raises attack power for the party.",
+      "cw_commanding_shout": "Bolsters stamina so everyone has more staying power in a fight.",
+      "cw_charge": "Rushes a distant enemy to open the fight with a brief stun.",
+      "cw_rend": "Opens a bleed that wears the target down over time.",
+      "cw_thunder_clap": "Hits everything around you and slows their attacks.",
+      "hamstring": "Slashes the target's legs to slow it so it cannot run you down.",
       "seal_of_righteousness": "Imbues your swings with Holy damage, then spend it with Verdict.",
       "holy_light": "A steady, sizable heal for topping off an ally or yourself.",
       "devotion_aura": "A lasting self-buff that raises armor so hits land softer.",
@@ -3295,6 +3346,7 @@ export const en_CA: EnTranslations = {
   },
   "classes": {
     "warrior": "Warrior",
+    "warriorClassic": "Classic Warrior",
     "paladin": "Paladin",
     "hunter": "Hunter",
     "rogue": "Rogue",
@@ -4062,6 +4114,7 @@ export const en_CA: EnTranslations = {
     },
     "roles": {
       "warrior": "Tank / Melee DPS",
+      "warriorClassic": "Tank / Melee DPS",
       "paladin": "Healer / Tank / Melee DPS",
       "hunter": "Ranged DPS",
       "rogue": "Melee DPS",
@@ -4086,6 +4139,7 @@ export const en_CA: EnTranslations = {
     },
     "lore": {
       "warrior": "Warriors are battle-hardened melee fighters who build Rage as they deal or take damage. They absorb heavy hits or crush foes with powerful weapons.",
+      "warriorClassic": "The warrior exactly as it played before the combat rework: the original ability kit and rage pacing, kept alongside the new warrior so you can try both and tell us which one feels better.",
       "paladin": "Paladins are holy crusaders who support allies with blessings, heal wounds with Mending Light, and protect the weak in heavy armour.",
       "hunter": "Hunters are ranged specialists who fight beside a tamed beast, peppering enemies with aimed and rapid shots, slowing them with stings and concussive fire, and shifting aspects to suit the moment.",
       "rogue": "Rogues are stealthy assassins who spend Energy and Combo Points on backstabs and finishing moves from the shadows.",
@@ -4102,7 +4156,7 @@ export const en_CA: EnTranslations = {
     "title": "Play in Landscape Fullscreen",
     "continue": "Continue to Game",
     "rotateTitle": "Rotate to Landscape",
-    "rotateSub": "Play in landscape fullscreen for the best mobile experience.",
+    "rotateSub": "Portrait mode is not supported. Rotate your device to landscape to continue.",
     "baseLandscape": "Rotate your device to landscape before entering the world.",
     "basePerformance": "Mobile performance may be degraded. Close extra tabs and lower Render Quality if the game feels slow.",
     "iosStandaloneDetail": "You are in home-screen fullscreen mode. Keep the device in landscape.",
@@ -4386,6 +4440,7 @@ export const en_CA: EnTranslations = {
     "combat": {
       "floatingMiss": "Miss",
       "floatingDodge": "Dodge",
+      "floatingParry": "Parry",
       "floatingResist": "Resist",
       "cannotMove": "Can't move!",
       "attack": "attack",
@@ -4395,6 +4450,7 @@ export const en_CA: EnTranslations = {
       "damageTakenCrit": "{source} critically hits you for {amount}.",
       "miss": "Your {ability} misses {target}.",
       "dodged": "Your {ability} is dodged by {target}.",
+      "parried": "Your {ability} is parried by {target}.",
       "resisted": "Your {ability} is resisted by {target}.",
       "healSelf": "Your {ability} heals you for {amount}.",
       "healSelfCrit": "Your {ability} critically heals you for {amount}.",
@@ -4437,6 +4493,7 @@ export const en_CA: EnTranslations = {
       "notEnoughMana": "Not enough mana!",
       "notEnoughResource": "Not enough {resource}!",
       "notEnoughHealth": "Not enough health.",
+      "nothingToConsume": "Nothing to consume.",
       "targetMustDodge": "Your target must dodge first.",
       "requiresCombo": "That ability requires combo points.",
       "requiresForm": "You must be in {form} Form.",
@@ -4453,6 +4510,7 @@ export const en_CA: EnTranslations = {
       "facing": "You must be facing your target.",
       "targetHealthBelow": "That ability requires the target below {percent}% health.",
       "dagger": "You must wield a dagger.",
+      "needShield": "You must have a shield equipped.",
       "behindTarget": "You must be behind your target.",
       "polymorph": "This creature cannot be polymorphed.",
       "noSeal": "You have no active Seal.",
@@ -4828,6 +4886,7 @@ export const en_CA: EnTranslations = {
     },
     "slots": {
       "mainhand": "Main Hand",
+      "twoHand": "Two-Hand",
       "helmet": "Helmet",
       "neck": "Neck",
       "shoulder": "Shoulder",
@@ -5101,21 +5160,113 @@ export const en_CA: EnTranslations = {
         "name": "Earthquake",
         "description": "Shakes the target area for 6 sec, battering enemies for {damage} Nature damage every 1.5 sec."
       },
+      "chain_heal": {
+        "name": "Chain Heal",
+        "description": "Heals the target for {damage}, then arcs to up to 2 nearby allies, each arc healing half the previous amount."
+      },
       "heroic_strike": {
         "name": "Reaver Strike",
         "description": "A strong attack that increases melee damage by {damage}. Activates on your next swing."
       },
-      "battle_shout": {
+      "cw_heroic_strike": {
+        "name": "Reaver Strike",
+        "description": "A strong attack that increases melee damage by {damage}. Activates on your next swing."
+      },
+      "cw_battle_shout": {
         "name": "Iron Bellow",
         "description": "A shout that increases the attack power of all party members by {buff}% for 2 min."
       },
-      "commanding_shout": {
+      "cw_commanding_shout": {
         "name": "Bolstering Cry",
         "description": "Increases your Stamina by {buff} for 2 min."
       },
-      "demoralizing_shout": {
+      "cw_charge": {
+        "name": "Onrush",
+        "description": "Charges an enemy, generating 9 rage and stunning it for 1 sec. 8-25 yd range."
+      },
+      "cw_rend": {
+        "name": "Deep Gash",
+        "description": "Wounds the target, causing them to bleed for {damage} damage over {duration} sec."
+      },
+      "cw_thunder_clap": {
+        "name": "Quaking Blow",
+        "description": "Blasts nearby enemies for {damage} damage and slows their attacks by 10% for 10 sec."
+      },
+      "cw_hamstring": {
+        "name": "Hobbling Cut",
+        "description": "Maims the enemy for {damage} damage, slowing its movement by 50% for 15 sec."
+      },
+      "cw_bloodrage": {
+        "name": "Blood Toll",
+        "description": "Generates 10 rage at the cost of health."
+      },
+      "cw_overpower": {
+        "name": "Redhand",
+        "description": "Instant attack for weapon damage plus {damage}. Only usable after the target dodges. Cannot be dodged."
+      },
+      "cw_execute": {
+        "name": "Early Grave",
+        "description": "Attempt to finish off a wounded foe, causing {damage} damage. Only usable on enemies below 20% health."
+      },
+      "cw_slam": {
+        "name": "Brute Swing",
+        "description": "Slams the opponent for weapon damage plus {damage}."
+      },
+      "cw_cleave": {
+        "name": "Reaping Arc",
+        "description": "A sweeping strike that hits all enemies in front of you for {damage} damage."
+      },
+      "cw_defensive_stance": {
+        "name": "Guarded Stance",
+        "description": "A defensive combat stance: you generate 30% more threat but deal and take 10% less damage. Cast again to leave the stance."
+      },
+      "cw_demoralizing_shout": {
         "name": "Direhowl",
         "description": "Lets out a fearsome shout, reducing the attack power of all nearby enemies by {buff} for 30 sec."
+      },
+      "cw_sunder_armor": {
+        "name": "Armor Shear",
+        "description": "Sunders the target's armor, reducing it by {damage}% per application. Stacks up to 5 times. Generates a high amount of threat."
+      },
+      "cw_taunt": {
+        "name": "Goad",
+        "description": "Taunts the target: your threat rises to match its most hated enemy and it is compelled to attack you for 3 sec."
+      },
+      "cw_bloodthirst": {
+        "name": "Bloodletting",
+        "description": "Instantly attack in a blood frenzy for 60% weapon damage plus {damage}. (Fury signature)"
+      },
+      "cw_mortal_strike": {
+        "name": "Maiming Strike",
+        "description": "A vicious strike dealing weapon damage plus {damage}. (Arms signature)"
+      },
+      "cw_shield_slam": {
+        "name": "Shieldcrack",
+        "description": "Slam the target with your shield for 50% weapon damage plus {damage} and massive threat. (Protection signature)"
+      },
+      "cw_whirlwind": {
+        "name": "Bladed Gyre",
+        "description": "Spin in a deadly arc, striking all nearby enemies for {damage}. (Fury talent)"
+      },
+      "cw_berserker_rage": {
+        "name": "Seething Fury",
+        "description": "Enter a seething fury, generating 20 rage. (Warrior talent)"
+      },
+      "revenge": {
+        "name": "Revenge",
+        "description": "Attack in a wide arc, dealing Physical damage to all enemies in front of you. Above 5 targets the damage is reduced. When you dodge or parry, your next Revenge may cost no rage."
+      },
+      "battle_shout": {
+        "name": "Iron Bellow",
+        "description": "A shout that increases the attack power of all party members by {buff}% for 30 min."
+      },
+      "commanding_shout": {
+        "name": "Bolstering Cry",
+        "description": "Increases your Stamina by {buff} for 1 hour."
+      },
+      "demoralizing_shout": {
+        "name": "Direhowl",
+        "description": "Lets out a fearsome shout, reducing the damage dealt by all nearby enemies by {buff}% for 20 sec."
       },
       "charge": {
         "name": "Onrush",
@@ -5139,7 +5290,7 @@ export const en_CA: EnTranslations = {
       },
       "overpower": {
         "name": "Redhand",
-        "description": "Instant attack for weapon damage plus {damage}. Only usable after the target dodges. Cannot be dodged."
+        "description": "Instant attack (2 charges) for weapon damage plus {damage} that empowers your next Maiming Strike by 20% (stacks twice). Cannot be dodged."
       },
       "execute": {
         "name": "Early Grave",
@@ -5147,7 +5298,7 @@ export const en_CA: EnTranslations = {
       },
       "slam": {
         "name": "Brute Swing",
-        "description": "Slams the opponent for weapon damage plus {damage}."
+        "description": "Slams the opponent for 50% weapon damage plus {damage}, generating {rage} rage."
       },
       "cleave": {
         "name": "Reaping Arc",
@@ -5155,7 +5306,15 @@ export const en_CA: EnTranslations = {
       },
       "defensive_stance": {
         "name": "Guarded Stance",
-        "description": "A defensive combat stance: you generate 30% more threat but deal and take 10% less damage. Cast again to leave the stance."
+        "description": "A defensive combat stance: you generate 30% more threat but deal and take 10% less damage. Cast Battle Stance to return to the offensive."
+      },
+      "battle_stance": {
+        "name": "Battle Stance",
+        "description": "An aggressive combat stance: you generate 10% more rage. The default stance for Arms and Protection."
+      },
+      "berserker_stance": {
+        "name": "Berserker Stance",
+        "description": "A reckless combat stance: your critical strikes land 3% more often and hit for 3% more. The Fury warrior always fights in this stance."
       },
       "sunder_armor": {
         "name": "Armor Shear",
@@ -5643,11 +5802,79 @@ export const en_CA: EnTranslations = {
       },
       "mortal_strike": {
         "name": "Maiming Strike",
-        "description": "A vicious strike dealing weapon damage plus {damage}. (Arms signature)"
+        "description": "A vicious strike dealing weapon damage plus {damage} and reducing healing the target receives by 50% for 10 sec. Applies Gaping Wounds (bleed). (Arms signature)"
+      },
+      "sweeping_strikes": {
+        "name": "Widening Arc",
+        "description": "For 12 sec your single-target attacks also strike 1 nearby enemy for full damage. (Arms)"
+      },
+      "deep_wounds": {
+        "name": "Gaping Wounds",
+        "description": "Passive: your Maiming Strike leaves the target bleeding for Physical damage over 6 sec. (Arms)"
+      },
+      "enrage_passive": {
+        "name": "Mayhem",
+        "description": "Passive: while Enraged you deal 7% more damage, attack 25% faster and move 10% faster for 4 sec. Bloodletting has a 30% chance to Enrage you; Red Harvest always does. (Fury)"
       },
       "bloodthirst": {
         "name": "Bloodletting",
-        "description": "Instantly attack in a blood frenzy for 60% weapon damage plus {damage}. (Fury signature)"
+        "description": "Instantly attack in a blood frenzy for {damage}, healing you for 3% of your maximum health and generating 12 rage. (Fury signature)"
+      },
+      "raging_gale": {
+        "name": "Twinstrike",
+        "description": "Instantly strike with your weapon twice, each hit dealing 40% weapon damage plus {damage}, and generate {rage} rage. Stores up to 2 charges. (Fury)"
+      },
+      "red_harvest": {
+        "name": "Red Harvest",
+        "description": "Spend everything: strike three times in a frenzy for 65% weapon damage plus {damage} each, always Enraging you. (Fury)"
+      },
+      "furious_mending": {
+        "name": "Furious Mending",
+        "description": "For 10 sec you take 20% reduced damage, and while it lasts your Bloodletting heals you for 20% of your maximum health. (Fury)"
+      },
+      "emboldening_roar": {
+        "name": "Emboldening Roar",
+        "description": "Lets loose an emboldening roar: you and friendly players within 40 yards are Emboldened, and your next 3 abilities are guaranteed critical strikes. (Fury)"
+      },
+      "raised_guard": {
+        "name": "Raised Guard",
+        "description": "Brace behind your shield: you take 50% reduced Physical damage for 6 sec. Stores up to 2 charges. (Protection)"
+      },
+      "iron_resolve": {
+        "name": "Iron Resolve",
+        "description": "Grit your teeth and ignore the pain: consumes all of your rage (20 minimum) to absorb 4 damage per rage spent, lasting up to 10 sec. (Protection)"
+      },
+      "faultline": {
+        "name": "Faultline",
+        "description": "Send a shockwave through the ground: enemies in front of you within 8 yards take {damage} damage and are stunned for 3 sec. (Protection)"
+      },
+      "defiant_bellow": {
+        "name": "Defiant Bellow",
+        "description": "A defiant bellow: every enemy within 10 yards is taunted, compelled to attack you for 3 sec. (Protection)"
+      },
+      "breachmaker": {
+        "name": "Breachmaker",
+        "description": "Batter the target for weapon damage plus {damage} and crack its guard: your own attacks against it deal 20% more damage for 8 sec. (Arms)"
+      },
+      "measured_fury": {
+        "name": "Measured Fury",
+        "description": "Your measured fury sharpens your economy: your abilities cost 10% less rage. (Arms)"
+      },
+      "seasoned_soldier": {
+        "name": "Seasoned Soldier",
+        "description": "Your critical auto-attacks generate 10% more rage. (Arms)"
+      },
+      "diabolical_twinstrike": {
+        "name": "Diabolical Twinstrike",
+        "description": "While Enraged, your Twinstrike deals 15% more damage. (Fury)"
+      },
+      "cleaving_blows": {
+        "name": "Cleaving Blows",
+        "description": "Red Harvest always refunds a charge of Twinstrike. (Fury)"
+      },
+      "sudden_death": {
+        "name": "Sudden Death",
+        "description": "Your auto-attacks have a chance to let you cast Early Grave on a target at any health, costing no rage. (Arms)"
       },
       "shield_slam": {
         "name": "Shieldcrack",
@@ -5655,19 +5882,19 @@ export const en_CA: EnTranslations = {
       },
       "whirlwind": {
         "name": "Bladed Gyre",
-        "description": "Spin in a deadly arc, striking all nearby enemies for {damage}. (Fury talent)"
+        "description": "Spin in a deadly arc, striking all nearby enemies for {damage} and generating rage for each foe struck instead of costing any. Your next 2 single-target abilities also strike enemies near their target. (Fury talent)"
       },
       "berserker_rage": {
         "name": "Seething Fury",
         "description": "Enter a seething fury, generating 20 rage. (Warrior talent)"
       },
+      "holy_shock": {
+        "name": "Holy Shock",
+        "description": "Shocks a friendly target with Holy energy to heal them, or an enemy for {damage} Holy damage. (Holy signature)"
+      },
       "crusader_strike": {
         "name": "Crusader Strike",
         "description": "Strikes the target for weapon damage plus {damage} Holy damage. (Paladin talent)"
-      },
-      "chain_heal": {
-        "name": "Chain Heal",
-        "description": "Heals a friendly target for a large amount, then jumps to up to 2 additional nearby allies, healing for 50% less with each jump. (Restoration signature)"
       },
       "metamorphosis": {
         "name": "Dread Aspect",
@@ -5677,13 +5904,13 @@ export const en_CA: EnTranslations = {
         "name": "Radiant Swell",
         "description": "Overcharges your aura, hardening you with 160 armor for 10 sec. (Paladin talent)"
       },
-      "holy_shock": {
-        "name": "Holy Shock",
-        "description": "Shocks a friendly target with Holy energy to heal them, or an enemy for {damage} Holy damage. (Holy signature)"
-      },
       "holy_shield": {
         "name": "Hallowed Wall",
         "description": "Hurls a radiant aegis at an enemy, dealing Holy damage and bouncing to 2 nearby enemies. (Protection signature)"
+      },
+      "repentance": {
+        "name": "Repentance",
+        "description": "Puts the enemy in a state of meditation for up to 6 sec. Any damage breaks the effect. (Retribution signature)"
       },
       "bestial_wrath": {
         "name": "Howling Rage",
@@ -5727,19 +5954,31 @@ export const en_CA: EnTranslations = {
       },
       "holy_nova": {
         "name": "Holy Nova",
-        "description": "Causes an explosion of holy radiance, healing nearby allies for {damage} and damaging nearby enemies. (Holy signature)"
+        "description": "Causes an explosion of Mending Light, healing nearby allies for {damage} and damaging nearby enemies. (Holy signature)"
       },
       "shadowform": {
-        "name": "Gloamveil Form",
-        "description": "Assume a Shadowform, increasing your Shadow damage by 15 and empowering shadow magic until you shift back. Cast again to return to normal form. (Shadow signature)"
+        "name": "Gloamveil",
+        "description": "Assume a Gloamveil, empowering shadow magic until you shift back. Cast again to return to normal form. (Shadow signature)"
       },
       "elemental_mastery": {
         "name": "Primal Mastery",
-        "description": "Calls on the storm, making your next spell instant. (Elemental signature)"
+        "description": "Calls on primal mastery, making your next spell instant. (Elemental signature)"
+      },
+      "shamanistic_rage": {
+        "name": "Shamanistic Rage",
+        "description": "Releases shamanistic rage, restoring 160 mana. (Enhancement signature)"
+      },
+      "natures_swiftness": {
+        "name": "Nature's Swiftness",
+        "description": "Calls on nature to make your next spell instant. (Restoration signature)"
       },
       "siphon_life": {
         "name": "Veinleech",
         "description": "Siphons life from the enemy, causing {damage} Shadow damage over 30 sec and healing you for the damage done. (Affliction signature)"
+      },
+      "fel_domination": {
+        "name": "Fel Domination",
+        "description": "Dominates fel energies, making your next spell instant. (Demonology signature)"
       },
       "conflagrate": {
         "name": "Conflagrate",
@@ -5747,7 +5986,7 @@ export const en_CA: EnTranslations = {
       },
       "moonkin_form": {
         "name": "Moonwing Form",
-        "description": "Shapeshift into a fearsome Moonkin, increasing your spell damage by 20% and your armor by 50%. Lasts until you shift out. Cast again to return to caster form. (Balance signature)"
+        "description": "Assume Moonwing Form, empowering spellcasting until you shift back. Cast again to return to normal form. (Balance signature)"
       },
       "feral_charge": {
         "name": "Primal Surge",
@@ -5756,6 +5995,34 @@ export const en_CA: EnTranslations = {
       "swiftmend": {
         "name": "Swiftmend",
         "description": "Consumes a heal-over-time effect on a friendly target to heal them for {damage}. (Restoration signature)"
+      },
+      "storm_bolt": {
+        "name": "Storm Bolt",
+        "description": "Hurl your weapon at the target for {damage}, stunning it for 3 sec."
+      },
+      "piercing_howl": {
+        "name": "Piercing Howl",
+        "description": "A piercing shout that slows all enemies within 15 yards by 50% for 8 sec."
+      },
+      "die_by_sword": {
+        "name": "Die by the Sword",
+        "description": "Defensive cooldown: for 8 sec you take 30% less damage and dodge far more attacks."
+      },
+      "recklessness": {
+        "name": "Recklessness",
+        "description": "Enrage: your rage generation increases by 50% and your critical strike chance by 20% for 12 sec."
+      },
+      "sanguine_aura": {
+        "name": "Sanguine Aura",
+        "description": "Imbue your weapon with the blood of your foes: you and your melee allies gain 10% attack speed and 10% damage for 20 sec."
+      },
+      "victory_rush": {
+        "name": "Victory Rush",
+        "description": "Strike for weapon damage plus {damage} and heal 20% of your maximum health. Only usable within 20 sec of killing an enemy."
+      },
+      "intimidating_shout": {
+        "name": "Intimidating Shout",
+        "description": "A terrifying shout that sends up to 5 enemies within 8 yards fleeing in fear for 8 sec. Damage may break the effect."
       },
       "summon_imp": {
         "name": "Summon Emberkin",
@@ -5974,8 +6241,8 @@ export const en_CA: EnTranslations = {
         "description": "Interrupts spellcasting and prevents any spell in that school from being cast for 4 sec. (Warrior talent)"
       },
       "rallying_cry": {
-        "name": "Muster",
-        "description": "Lets loose a mustering cry, increasing nearby allies' attack power for 10 sec. (Warrior talent)"
+        "name": "Valor Roar",
+        "description": "Lets loose a valorous roar, granting you and party members within 40 yards 20% additional maximum health for 10 sec. Protection: they also take 5% less damage for the duration."
       },
       "rebuke": {
         "name": "Reproach",
@@ -6194,6 +6461,15 @@ export const en_CA: EnTranslations = {
       },
       "linen_scrap": {
         "name": "Linen Scrap"
+      },
+      "arcane_dust": {
+        "name": "Arcane Dust"
+      },
+      "arcane_essence": {
+        "name": "Arcane Essence"
+      },
+      "arcane_shard": {
+        "name": "Arcane Shard"
       },
       "fen_muster_order": {
         "name": "Fenbridge Muster Order"
@@ -7107,6 +7383,18 @@ export const en_CA: EnTranslations = {
       "heroic_mark": {
         "name": "Heroic Mark"
       },
+      "eastbrook_buckler": {
+        "name": "Eastbrook Buckler"
+      },
+      "highwatch_wallshield": {
+        "name": "Highwatch Wallshield"
+      },
+      "eastbrook_greatsword": {
+        "name": "Eastbrook Greatsword"
+      },
+      "highwatch_greatsword": {
+        "name": "Highwatch Greatsword"
+      },
       "morthens_cryptforged_hauberk": {
         "name": "Morthen's Cryptforged Hauberk"
       },
@@ -7289,6 +7577,18 @@ export const en_CA: EnTranslations = {
       },
       "stormcallers_spaulders_heroic": {
         "name": "Galecall Spaulders"
+      },
+      "bonewrought_greatsword": {
+        "name": "Bonewrought Greatsword"
+      },
+      "direfang_greatblade": {
+        "name": "Direfang Greatblade"
+      },
+      "bonewrought_bulwark": {
+        "name": "Bonewrought Bulwark"
+      },
+      "wraithfire_orb": {
+        "name": "Wraithfire Orb"
       },
       "unknown_alien_weaponry": {
         "name": "Unknown Alien Weaponry"

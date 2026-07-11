@@ -2,6 +2,165 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const sv_SE: Partial<Record<TranslationKey, string>> = {
+  'entities.abilities.cw_heroic_strike.name': 'Plundrarhugg',
+  'entities.abilities.cw_heroic_strike.description':
+    'Ett kraftfullt anfall som ökar närstridsskadan med {damage}. Aktiveras vid ditt nästa hugg.',
+  'entities.abilities.cw_battle_shout.name': 'Järnvrål',
+  'entities.abilities.cw_battle_shout.description': 'Ökar din attackkraft med {buff} i 2 min.',
+  'entities.abilities.cw_commanding_shout.name': 'Stärkande rop',
+  'entities.abilities.cw_commanding_shout.description': 'Ökar din uthållighet med {buff} i 2 min.',
+  'entities.abilities.cw_charge.name': 'Anstormning',
+  'entities.abilities.cw_charge.description':
+    'Stormar en fiende, genererar 9 raseri och bedövar den i 1 sek. 8-25 m räckvidd.',
+  'entities.abilities.cw_rend.name': 'Djup skåra',
+  'entities.abilities.cw_rend.description':
+    'Sårar målet och får det att blöda för {damage} skada över {duration} sek.',
+  'entities.abilities.cw_thunder_clap.name': 'Skälvande slag',
+  'entities.abilities.cw_thunder_clap.description':
+    'Spränger närliggande fiender för {damage} skada och saktar ner deras attacker med 10 % i 10 sek.',
+  'entities.abilities.cw_hamstring.name': 'Haltande hugg',
+  'entities.abilities.cw_hamstring.description':
+    'Stympar fienden för {damage} skada och saktar dess förflyttning med 50 % i 15 sek.',
+  'entities.abilities.cw_bloodrage.name': 'Blodstull',
+  'entities.abilities.cw_bloodrage.description': 'Genererar 10 raseri på bekostnad av hälsa.',
+  'entities.abilities.cw_overpower.name': 'Rödhand',
+  'entities.abilities.cw_overpower.description':
+    'Omedelbart anfall för vapenskada plus {damage}. Endast användbart efter att målet väjt undan. Kan inte väjas undan.',
+  'entities.abilities.cw_execute.name': 'Tidig grav',
+  'entities.abilities.cw_execute.description':
+    'Försöker göra slut på en sårad fiende och vållar {damage} skada. Endast användbar på fiender under 20 % hälsa.',
+  'entities.abilities.cw_slam.name': 'Brutalt sving',
+  'entities.abilities.cw_slam.description':
+    'Smäller till motståndaren för vapenskada plus {damage}.',
+  'entities.abilities.cw_cleave.name': 'Skördebåge',
+  'entities.abilities.cw_cleave.description':
+    'Ett svepande hugg som träffar alla fiender framför dig för {damage} skada.',
+  'entities.abilities.cw_defensive_stance.name': 'Gardställning',
+  'entities.abilities.cw_defensive_stance.description':
+    'En defensiv stridsställning: du genererar 30 % mer hot men vållar och tar 10 % mindre skada. Kasta igen för att lämna ställningen.',
+  'entities.abilities.cw_demoralizing_shout.name': 'Fasans tjut',
+  'entities.abilities.cw_demoralizing_shout.description':
+    'Utstöter ett skräckinjagande rop som sänker anfallskraften hos alla närliggande fiender med {buff} i 30 sek.',
+  'entities.abilities.cw_sunder_armor.name': 'Rustningsklipp',
+  'entities.abilities.cw_sunder_armor.description':
+    'Klyver målets rustning och sänker den med {damage}% per applicering. Stackas upp till 5 gånger. Vållar en stor mängd hot.',
+  'entities.abilities.cw_taunt.name': 'Egga',
+  'entities.abilities.cw_taunt.description':
+    'Hånar målet: ditt hot stiger till nivå med dess mest hatade fiende och det tvingas anfalla dig i 3 sek.',
+  'entities.abilities.cw_bloodthirst.name': 'Åderlåtning',
+  'entities.abilities.cw_bloodthirst.description':
+    'Attackera omedelbart i ett blodsraseri för 60 % vapenskada plus {damage}. (Raserisignatur)',
+  'entities.abilities.cw_mortal_strike.name': 'Stympande hugg',
+  'entities.abilities.cw_mortal_strike.description':
+    'Ett illvilligt hugg som vållar vapenskada plus {damage}. (Vapensignatur)',
+  'entities.abilities.cw_shield_slam.name': 'Sköldkross',
+  'entities.abilities.cw_shield_slam.description':
+    'Slå målet med din sköld för 50 % vapenskada plus {damage} och enormt hot. (Skyddssignatur)',
+  'entities.abilities.cw_whirlwind.name': 'Klingvirvel',
+  'entities.abilities.cw_whirlwind.description':
+    'Snurra i en dödlig båge och hugg alla närliggande fiender för {damage}. (Raserital)',
+  'entities.abilities.cw_berserker_rage.name': 'Sjudande raseri',
+  'entities.abilities.cw_berserker_rage.description':
+    'Gå in i ett sjudande raseri och generera 20 raseri. (Krigartalang)',
+  'entities.abilities.battle_stance.name': 'Stridsställning',
+  'entities.abilities.battle_stance.description':
+    'En aggressiv stridsställning: du genererar 10 % mer raseri. Standardställningen för Vapen och Beskydd.',
+  'entities.abilities.berserker_stance.name': 'Bärsärkaställning',
+  'entities.abilities.berserker_stance.description':
+    'En dumdristig stridsställning: dina kritiska träffar sker 3 % oftare och slår 3 % hårdare. Raserikrigaren strider alltid i den här ställningen.',
+  'entities.abilities.breachmaker.name': 'Bräschbrytare',
+  'entities.abilities.breachmaker.description':
+    'Slå målet för vapenskada plus {damage} och spräck dess gard: dina egna attacker mot det vållar 20 % mer skada i 8 sek. (Vapen)',
+  'entities.abilities.chain_heal.description':
+    'Läker målet för {damage} och hoppar sedan vidare till upp till 2 närliggande allierade, där varje hopp läker hälften av föregående mängd.',
+  'entities.abilities.cleaving_blows.name': 'Klyvande hugg',
+  'entities.abilities.cleaving_blows.description':
+    'Röd skörd återger alltid en laddning av Tvillingslag. (Raseri)',
+  'entities.abilities.deep_wounds.name': 'Gapande sår',
+  'entities.abilities.deep_wounds.description':
+    'Passiv: ditt Stympande hugg får målet att blöda för fysisk skada över 6 sek. (Vapen)',
+  'entities.abilities.defiant_bellow.name': 'Trotsigt vrål',
+  'entities.abilities.defiant_bellow.description':
+    'Ett trotsigt vrål: varje fiende inom 10 meter eggas och tvingas anfalla dig i 3 sek. (Beskydd)',
+  'entities.abilities.diabolical_twinstrike.name': 'Diaboliskt tvillingslag',
+  'entities.abilities.diabolical_twinstrike.description':
+    'Medan du är rasande vållar ditt Tvillingslag 15 % mer skada. (Raseri)',
+  'entities.abilities.die_by_sword.name': 'Dö för svärdet',
+  'entities.abilities.die_by_sword.description':
+    'Defensiv nedkylning: i 8 sek tar du 30 % mindre skada och väjer undan för långt fler attacker.',
+  'entities.abilities.emboldening_roar.name': 'Uppeldande vrål',
+  'entities.abilities.emboldening_roar.description':
+    'Släpper loss ett uppeldande vrål: du och vänligt sinnade spelare inom 40 meter blir uppeldade, och era nästa 3 förmågor blir garanterat kritiska träffar. (Raseri)',
+  'entities.abilities.enrage_passive.name': 'Kalabalik',
+  'entities.abilities.enrage_passive.description':
+    'Passiv: medan du är rasande vållar du 7 % mer skada, attackerar 25 % snabbare och rör dig 10 % snabbare i 4 sek. Åderlåtning har 30 % chans att göra dig rasande; Röd skörd gör det alltid. (Raseri)',
+  'entities.abilities.faultline.name': 'Förkastningslinje',
+  'entities.abilities.faultline.description':
+    'Skicka en chockvåg genom marken: fiender framför dig inom 8 meter tar {damage} skada och bedövas i 3 sek. (Beskydd)',
+  'entities.abilities.fel_domination.name': 'Demonisk dominans',
+  'entities.abilities.fel_domination.description':
+    'Behärskar demoniska energier och gör din nästa besvärjelse omedelbar. (Demonologisignatur)',
+  'entities.abilities.furious_mending.name': 'Rasande läkning',
+  'entities.abilities.furious_mending.description':
+    'I 10 sek tar du 20 % mindre skada, och medan det varar läker din Åderlåtning dig för 20 % av din maximala hälsa. (Raseri)',
+  'entities.abilities.intimidating_shout.name': 'Skräckinjagande rop',
+  'entities.abilities.intimidating_shout.description':
+    'Ett skräckinjagande rop som får upp till 5 fiender inom 8 meter att fly i skräck i 8 sek. Skada kan bryta effekten.',
+  'entities.abilities.iron_resolve.name': 'Järnvilja',
+  'entities.abilities.iron_resolve.description':
+    'Bit ihop och strunta i smärtan: förbrukar allt ditt raseri (minst 20) för att absorbera 4 skada per spenderat raseri, i upp till 10 sek. (Beskydd)',
+  'entities.abilities.measured_fury.name': 'Avmätt raseri',
+  'entities.abilities.measured_fury.description':
+    'Ditt avmätta raseri skärper din hushållning: dina förmågor kostar 10 % mindre raseri. (Vapen)',
+  'entities.abilities.natures_swiftness.name': 'Naturens snabbhet',
+  'entities.abilities.natures_swiftness.description':
+    'Åkallar naturen för att göra din nästa besvärjelse omedelbar. (Återställningssignatur)',
+  'entities.abilities.piercing_howl.name': 'Genomträngande tjut',
+  'entities.abilities.piercing_howl.description':
+    'Ett genomträngande rop som saktar ner alla fiender inom 15 meter med 50 % i 8 sek.',
+  'entities.abilities.raging_gale.name': 'Tvillingslag',
+  'entities.abilities.raging_gale.description':
+    'Slå omedelbart två gånger med ditt vapen, där varje träff vållar 40 % vapenskada plus {damage}, och generera {rage} raseri. Lagrar upp till 2 laddningar. (Raseri)',
+  'entities.abilities.raised_guard.name': 'Höjd gard',
+  'entities.abilities.raised_guard.description':
+    'Förskansa dig bakom din sköld: du tar 50 % mindre fysisk skada i 6 sek. Lagrar upp till 2 laddningar. (Beskydd)',
+  'entities.abilities.recklessness.name': 'Hänsynslöshet',
+  'entities.abilities.recklessness.description':
+    'Försätter dig i raseri: din raserigenerering ökar med 50 % och din kritiska träffchans med 20 % i 12 sek.',
+  'entities.abilities.red_harvest.name': 'Röd skörd',
+  'entities.abilities.red_harvest.description':
+    'Satsa allt: slå tre gånger i vilt raseri för 65 % vapenskada plus {damage} vardera, vilket alltid gör dig rasande. (Raseri)',
+  'entities.abilities.repentance.name': 'Ånger',
+  'entities.abilities.repentance.description':
+    'Försätter fienden i ett meditativt tillstånd i upp till 6 sek. All skada bryter effekten. (Vedergällningssignatur)',
+  'entities.abilities.revenge.name': 'Hämnd',
+  'entities.abilities.revenge.description':
+    'Anfall i en vid båge och vålla fysisk skada mot alla fiender framför dig. Över 5 mål minskas skadan. När du väjer undan eller parerar kan din nästa Hämnd kosta inget raseri.',
+  'entities.abilities.sanguine_aura.name': 'Blodröd aura',
+  'entities.abilities.sanguine_aura.description':
+    'Besjäla ditt vapen med dina fienders blod: du och dina närstridsallierade får 10 % attackhastighet och 10 % skada i 20 sek.',
+  'entities.abilities.seasoned_soldier.name': 'Härdad soldat',
+  'entities.abilities.seasoned_soldier.description':
+    'Dina kritiska autoattacker genererar 10 % mer raseri. (Vapen)',
+  'entities.abilities.shamanistic_rage.name': 'Schamanistiskt raseri',
+  'entities.abilities.shamanistic_rage.description':
+    'Släpper lös schamanistiskt raseri och återställer 160 mana. (Förstärkningssignatur)',
+  'entities.abilities.storm_bolt.name': 'Stormbult',
+  'entities.abilities.storm_bolt.description':
+    'Slunga ditt vapen mot målet för {damage} och bedöva det i 3 sek.',
+  'entities.abilities.sudden_death.name': 'Plötslig död',
+  'entities.abilities.sudden_death.description':
+    'Dina autoattacker har en chans att låta dig använda Tidig grav på ett mål oavsett hälsa, utan raserikostnad. (Vapen)',
+  'entities.abilities.sweeping_strikes.name': 'Vidgande båge',
+  'entities.abilities.sweeping_strikes.description':
+    'I 12 sek träffar dina enmålsattacker även 1 närliggande fiende för full skada. (Vapen)',
+  'entities.abilities.victory_rush.name': 'Segerrus',
+  'entities.abilities.victory_rush.description':
+    'Slå för vapenskada plus {damage} och läk 20 % av din maximala hälsa. Kan endast användas inom 20 sek efter att du dödat en fiende.',
+  'classDetails.roles.warriorClassic': 'Tank / Närstrids-DPS',
+  'classes.warriorClassic': 'Krigare',
+  'classDetails.lore.warriorClassic':
+    'Krigaren precis som den spelades före stridsomarbetningen: den ursprungliga uppsättningen förmågor och det gamla raseritempot, bevarad vid sidan av den nya krigaren så att du kan prova båda och berätta för oss vilken som känns bäst.',
   'entities.abilities.sport_boot.description':
     'En lång, hög spark mot siktpunkten. Publiken älskar den.',
   'entities.abilities.sport_boot.name': 'Storspark',
@@ -348,8 +507,14 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
     'Kritvärde från din utrustning och setbonusar, som höjer din chans till kritisk träff. Ungefär 10 i värde ger 1% krit.',
   'hudChrome.statInfo.desc.hasteRating':
     'Snabbhetsvärde från din utrustning och setbonusar, som snabbar upp dina attacker och besvärjelser. Ungefär 10 i värde ger 1% snabbhet.',
+  'hudChrome.statInfo.desc.haste':
+    'Snabbar upp dina vapensvingar och besvärjelsekast. Den minskar inte den globala nedkylningen.',
+  'hudChrome.statInfo.desc.parry':
+    'Din chans att helt parera ett närstridsanfall framifrån utan att ta någon skada. Ett slag bakifrån kan inte pareras.',
   'hudChrome.statInfo.names.critRating': 'Kritvärde',
+  'hudChrome.statInfo.names.haste': 'Snabbhet',
   'hudChrome.statInfo.names.hasteRating': 'Snabbhetsvärde',
+  'hudChrome.statInfo.names.parry': 'Parering',
   'itemUi.slots.neck': 'Hals',
   'itemUi.slots.ring': 'Finger',
   'auth.email': 'E-post',
@@ -1020,11 +1185,26 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mobTooltip.hostile': 'Fientlig',
   'hudChrome.mobTooltip.levelFamily': 'Nivå {level} {family}',
   'hudChrome.options.aurasOnPlayerFrame': 'Förstärkningar på spelarramen',
+  'hudChrome.options.mouseoverCast': 'Kasta via muspekaren på gruppramarna',
   'hudChrome.options.playerFrameScale': 'Spelarramens skala',
   'hudChrome.options.showDailyRewardsChest': 'Visa kistan för dagliga belöningar',
   'hudChrome.options.showOwnNameplate': 'Visa min namnskylt',
+  'hudChrome.options.showTargetOfTarget': 'Visa målets mål',
   'hudChrome.options.targetFrameScale': 'Målramens skala',
   'hudChrome.options.walkByAutoloot': 'Automatisk plundring i förbifarten',
+  'hudChrome.specPanel.complexity': 'Komplexitet',
+  'hudChrome.specPanel.complexityHigh': 'Hög',
+  'hudChrome.specPanel.complexityLow': 'Låg',
+  'hudChrome.specPanel.complexityMedium': 'Medel',
+  'hudChrome.specPanel.exampleAbilities': 'Exempel på förmågor',
+  'hudChrome.specPanel.primaryAttr': 'Primärt attribut',
+  'hudChrome.specPanel.selectSpec': 'Välj specialisering',
+  'hudChrome.specPanel.specUnlockBanner': 'Specialisering upplåst!',
+  'hudChrome.specPanel.specUnlockHint': 'Tryck på N för att välja din specialisering.',
+  'hudChrome.specPanel.viewTalents': 'Visa talanger',
+  'hudChrome.talentRows.comingSoon': 'Kommer snart',
+  'hudChrome.talentRows.defaultLoadout': 'Standarduppsättning',
+  'hudChrome.talentRows.tab': 'Val',
   'hudChrome.party.inviteUsage': 'Bjud in vem? Användning: /invite <namn>.',
   'hudChrome.playerFrame.lock': 'Lås spelarramen',
   'hudChrome.playerFrame.unlock': 'Flytta spelarramen',
@@ -1035,6 +1215,7 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.unitFrame.durationUnitDays': 'd',
   'hudChrome.unitFrame.durationUnitHours': 't',
   'hudChrome.unitFrame.durationUnitMinutes': 'm',
+  'hudChrome.unitFrame.targetOfTargetLabel': 'Målets mål',
   'hudChrome.worldBoss.spawn': '{name} reser sig över Törntoppshöjderna!',
   'itemUi.kind.bag': 'Väska',
   'itemUi.tooltip.bagSlots': 'Väska med {slots} platser',
@@ -1846,7 +2027,8 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.sinister_strike.description':
     'Ett omedelbart hugg för vapenskada plus {damage}. Ger 1 kombopoäng.',
   'entities.abilities.sinister_strike.name': 'Ondsint hugg',
-  'entities.abilities.slam.description': 'Smäller till motståndaren för vapenskada plus {damage}.',
+  'entities.abilities.slam.description':
+    'Smäller till motståndaren för 50 % vapenskada plus {damage} och genererar {rage} raseri.',
   'entities.abilities.slam.name': 'Brutalt sving',
   'entities.abilities.slice_and_dice.description':
     'Avslutande manöver som ökar attackhastigheten i närstrid med 30 %. Varar längre per kombopoäng.',
@@ -2030,6 +2212,9 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'entities.items.bogiron_mace.name': 'Kärrjärnsspira',
   'entities.items.bogiron_nugget.name': 'Kärrjärnsklimp',
   'entities.items.bone_fragments.name': 'Benfragment',
+  'entities.items.arcane_dust.name': 'Arkanstoft',
+  'entities.items.arcane_essence.name': 'Arkanessens',
+  'entities.items.arcane_shard.name': 'Arkanskärva',
   'entities.items.boneguard_breastplate.name': 'Benväktarens bröstplåt',
   'entities.items.boneplate_vest.name': 'Benplåtsväst',
   'entities.items.boundstone_girdle.name': 'Bundstensgördel',
@@ -2099,7 +2284,9 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'entities.items.drownstep_slippers.name': 'Dränkstegstofflor',
   'entities.items.drownstep_treads.name': 'Dränkstegsskor',
   'entities.items.eastbrook_arming_sword.name': 'Östbäcks väpnarsvärd',
+  'entities.items.eastbrook_buckler.name': 'Östbäcks rundsköld',
   'entities.items.eastbrook_chain_vest.name': 'Östbäcks ringbrynjeväst',
+  'entities.items.eastbrook_greatsword.name': 'Östbäcks storsvärd',
   'entities.items.eastbrook_wool_trousers.name': 'Östbäcks ullbyxor',
   'entities.items.eelscale_leggings.name': 'Ålfjällsbyxor',
   'entities.items.eelscale_treads.name': 'Ålfjällsskor',
@@ -2152,7 +2339,9 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'entities.items.healing_potion.name': 'Läkedryck',
   'entities.items.hickory_shortstaff.name': 'Hickory-kortstav',
   'entities.items.highwatch_breastplate.name': 'Högvakts bröstharnesk',
+  'entities.items.highwatch_greatsword.name': 'Högvakts storsvärd',
   'entities.items.highwatch_summons.name': 'Högvakts kallelse',
+  'entities.items.highwatch_wallshield.name': 'Högvakts mursköld',
   'entities.items.highwatch_warblade.name': 'Högvakts krigsklinga',
   'entities.items.hobnail_boots.name': 'Spikbeslagna stövlar',
   'entities.items.hollow_vigil_staff.name': 'Stav från den ihåliga vakan',
@@ -2336,6 +2525,10 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'entities.items.stormcallers_waistguard.name': 'Stormkallarens midjeskydd',
   'entities.items.stormcallers_spaulders.name': 'Galecall-axelskydd',
   'entities.items.stormcallers_spaulders_heroic.name': 'Galecall-axelskydd',
+  'entities.items.bonewrought_greatsword.name': 'Bonewrought storsvärd',
+  'entities.items.direfang_greatblade.name': 'Direfang-storklinga',
+  'entities.items.bonewrought_bulwark.name': 'Bonewrought bålverk',
+  'entities.items.wraithfire_orb.name': 'Wraithfire-sfär',
   'entities.items.stormshard_leggings.name': 'Stormskärvebenkläder',
   'entities.items.sturdy_belt.name': 'Stadigt resenärsbälte',
   'entities.items.supply_crate.name': 'Stulen förrådslåda',
@@ -3524,6 +3717,16 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
     'Frammanar drycker som återställer mana, så du kan fylla på mellan anstormningarna.',
   'guide.abilityHook.corruption':
     'Förmultnar ett mål med skugga som tickar medan du gör andra saker.',
+  'guide.abilityHook.cw_battle_shout': 'Ett samlande rop som höjer attackstyrkan för gruppen.',
+  'guide.abilityHook.cw_charge':
+    'Stormar mot en avlägsen fiende för att öppna striden med en kort bedövning.',
+  'guide.abilityHook.cw_commanding_shout':
+    'Stärker uthålligheten så alla har mer stryktålighet i en strid.',
+  'guide.abilityHook.cw_heroic_strike':
+    'Köar ett tyngre svingslag som förbrukar raseri på ditt nästa slag.',
+  'guide.abilityHook.cw_rend': 'Öppnar en blödning som sliter ner målet över tid.',
+  'guide.abilityHook.cw_thunder_clap':
+    'Slår allt runt omkring dig och saktar ner deras attacker.',
   'guide.abilityHook.demon_skin':
     'En varaktig självförstärkning som härdar din hud och ger rustning.',
   'guide.abilityHook.devotion_aura':
@@ -3544,6 +3747,8 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'guide.abilityHook.garrote': 'Öppna från smyg med en tråd som får målet att blöda över tid.',
   'guide.abilityHook.gouge':
     'Sätter målet ur spel en kort stund så du kan flytta dig eller skala av.',
+  'guide.abilityHook.hamstring':
+    'Skär upp målets ben för att sakta ner det så att det inte kan jaga ikapp dig.',
   'guide.abilityHook.healing_touch':
     'En stor enmålsläkning med lång kasttid, för att toppa upp någon.',
   'guide.abilityHook.healing_wave':
@@ -3579,6 +3784,8 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'guide.abilityHook.rend': 'Öppnar en blödning som sliter ner målet över tid.',
   'guide.abilityHook.renew':
     'En läkning som tickar över tid, bra att kasta och fortsätta röra dig.',
+  'guide.abilityHook.revenge':
+    'En svepande motattack som träffar allt framför dig, och som blir billigare direkt efter att du avvärjt ett slag.',
   'guide.abilityHook.rockbiter_weapon':
     'Besjälar ditt vapen så att varje sving landar hårdare i närstrid.',
   'guide.abilityHook.seal_of_righteousness':
@@ -4578,11 +4785,13 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hud.combat.dodged': 'Din {ability} undviks av {target}.',
   'hud.combat.floatingDodge': 'Undvek',
   'hud.combat.floatingMiss': 'Bom',
+  'hud.combat.floatingParry': 'Parerade',
   'hud.combat.healOther': 'Din {ability} läker {target} för {amount}.',
   'hud.combat.healOtherCrit': 'Din {ability} läker {target} kritiskt för {amount}.',
   'hud.combat.healSelf': 'Din {ability} läker dig för {amount}.',
   'hud.combat.healSelfCrit': 'Din {ability} läker dig kritiskt för {amount}.',
   'hud.combat.miss': 'Din {ability} missar {target}.',
+  'hud.combat.parried': 'Din {ability} pareras av {target}.',
   'hud.core.boss': 'BOSS',
   'hud.core.chatChannels.add': 'Lägg till chattkanal',
   'hud.core.chatChannels.addTitle': 'Lägg till kanal',
@@ -4668,6 +4877,7 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hud.errors.inCombat': 'Du kan inte göra det medan du är i strid.',
   'hud.errors.invalidAttackTarget': 'Ogiltigt anfallsmål.',
   'hud.errors.invitationExpired': 'Inbjudan har gått ut.',
+  'hud.errors.needShield': 'Du måste ha en sköld utrustad.',
   'hud.errors.noPet': 'Du har inget djur.',
   'hud.errors.noRecentWhisper': 'Ingen har viskat till dig nyligen.',
   'hud.errors.noSeal': 'Du har inget aktivt sigill.',
@@ -4677,6 +4887,7 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hud.errors.notEnoughMana': 'Inte tillräckligt med mana!',
   'hud.errors.notEnoughRage': 'Inte tillräckligt med raseri!',
   'hud.errors.notEnoughResource': 'Inte tillräckligt med {resource}!',
+  'hud.errors.nothingToConsume': 'Inget att förtära.',
   'hud.errors.notInParty': 'Du är inte i en grupp.',
   'hud.errors.outOfRange': 'Utom räckhåll.',
   'hud.errors.partyFull': 'Din grupp är full.',
@@ -5222,7 +5433,6 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.meters.perSecond': '{value}/s',
   'hudChrome.meters.perSecondRow': '{total} ({rate})',
   'hudChrome.meters.seconds': '{s} s',
-  'hudChrome.mobile.autorun': 'Autospring',
   'hudChrome.mobile.haptics': 'Haptik',
   'hudChrome.mobile.hapticsOff': 'Haptik av',
   'hudChrome.mobile.jump': 'Hoppa',
@@ -5258,6 +5468,7 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.showWalletOnCharacterScreen': 'Visa plånbok på karaktärsskärmen',
   'hudChrome.options.showWalletOnPlayerCard': 'Visa plånbok på spelarkortet',
   'hudChrome.options.uiScale': 'Gränssnittsskala',
+  'hudChrome.paperdoll.offhand': 'Bakre hand',
   'hudChrome.paperdoll.unequipAria': 'Ta av {item}',
   'hudChrome.paperdoll.unequipHint':
     'Klicka på ×, högerklicka, eller dra till väskor för att ta av',
@@ -5588,6 +5799,7 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'itemUi.slots.legs': 'Ben',
   'itemUi.slots.mainhand': 'Främre hand',
   'itemUi.slots.shoulder': 'Axlar',
+  'itemUi.slots.twoHand': 'Tvåhänt',
   'itemUi.slots.waist': 'Midja',
   'itemUi.stats.agi': 'Smidighet',
   'itemUi.stats.armor': 'Rustning',
@@ -6133,6 +6345,26 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraEffect.hot': 'Återställer {value} hälsa var {interval}:e s',
   'hudChrome.auraEffect.absorb': 'Absorberar {value} skada',
   'hudChrome.auraEffect.healAbsorb': 'Absorberar {value} inkommande läkning',
+  'hudChrome.auraEffect.avatar': 'Koloss: vållad skada ökad med {pct}%',
+  'hudChrome.auraEffect.battleStance': 'Stridsställning: 10% mer raserigenerering',
+  'hudChrome.auraEffect.battleTrance':
+    'Ditt nästa Plundrarhugg eller Stympande hugg kostar inget raseri',
+  'hudChrome.auraEffect.berserkerStance':
+    'Bärsärkaställning: kritiska träffar sker 3% oftare och slår 3% hårdare',
+  'hudChrome.auraEffect.bloodbath': 'Ökar kritisk träffchans och vållad skada med {pct}%',
+  'hudChrome.auraEffect.crit': 'Ökar kritisk träffchans med {pct}%',
+  'hudChrome.auraEffect.dieBySword':
+    'Minskar skadan du tar med {pct}% ({lowPct}% under {hpPct}% hälsa)',
+  'hudChrome.auraEffect.dmgDone': 'Ökar vållad skada med {pct}%',
+  'hudChrome.auraEffect.dmgDoneReduce': 'Minskar vållad skada med {pct}%',
+  'hudChrome.auraEffect.maxHpPct': 'Ökar maximal hälsa med {pct}%',
+  'hudChrome.auraEffect.rageGen': 'Ökar raserigenereringen med {pct}%',
+  'hudChrome.auraEffect.reckless':
+    'Ökar kritisk träffchans med {pct}% och raserigenereringen med {ragePct}%',
+  'hudChrome.auraEffect.revengeFree': 'Din nästa Hämnd kostar inget raseri',
+  'hudChrome.auraEffect.sanguine':
+    'Ökar attackhastigheten med {hastePct}% och vållad skada med {dmgPct}%',
+  'hudChrome.auraEffect.victoryRush': 'Segerrus är redo',
   'hudChrome.auraEffect.thorns': 'Verursacht bei Angreifern {value} {school}schaden',
   'hudChrome.auraEffect.slow': 'Verringert Bewegungstempo um {pct}%',
   'hudChrome.auraEffect.speed': 'Erhöht Bewegungstempo um {pct}%',
@@ -6780,8 +7012,6 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'yumi.queue.teamLeave': 'Ditt lag lämnar kön till Skydda Yumi.',
   'yumi.respawn.title': 'NEDSLAGEN!',
   'entities.abilities.chain_heal.name': 'Kedjeläkning',
-  'entities.abilities.chain_heal.description':
-    'Helar ett vänligt mål kraftigt och hoppar sedan till upp till 2 ytterligare allierade i närheten. Varje hopp helar 50% mindre. (Restaureringens signaturförmåga)',
   'entities.abilities.razor_howl.name': 'Rakbladsvrål',
   'entities.abilities.razor_howl.description':
     'Ett stridsrop som saktar ned fiender inom 15 m med 50% i 8 sek. (Krigartalang)',
@@ -6826,4 +7056,10 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'Lösenorden stämmer inte överens.',
   'hudChrome.auth.resetErrInvalid':
     'Den här återställningslänken är ogiltig eller har gått ut. Begär en ny.',
+  'hudChrome.auth.appleLoginCta': 'Fortsätt med Apple',
+  'hudChrome.auth.appleChoiceIntro':
+    'Skapa ett nytt konto, eller koppla Apple till ett du redan har.',
+  'hudChrome.auth.appleChoiceExpired':
+    'Apple-inloggningen har gått ut. Logga in med Apple igen.',
+  'hudChrome.auth.appleError': 'Det gick inte att logga in med Apple. Försök igen.',
 };

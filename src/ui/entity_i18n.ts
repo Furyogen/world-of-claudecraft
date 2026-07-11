@@ -128,6 +128,7 @@ export interface EntityTranslationFallback extends EntityTranslationManifestEntr
 
 const CLASS_NAME_KEYS: Record<PlayerClass, string> = {
   warrior: 'classes.warrior',
+  warrior_classic: 'classes.warriorClassic',
   paladin: 'classes.paladin',
   hunter: 'classes.hunter',
   rogue: 'classes.rogue',
@@ -140,6 +141,7 @@ const CLASS_NAME_KEYS: Record<PlayerClass, string> = {
 
 const CLASS_DESCRIPTION_KEYS: Record<PlayerClass, string> = {
   warrior: 'classDetails.lore.warrior',
+  warrior_classic: 'classDetails.lore.warriorClassic',
   paladin: 'classDetails.lore.paladin',
   hunter: 'classDetails.lore.hunter',
   rogue: 'classDetails.lore.rogue',
@@ -198,7 +200,8 @@ function interpolateSource(source: string, values?: InterpolationValues): string
 }
 
 function classDescriptionSource(id: PlayerClass): string {
-  return en.classDetails.lore[id];
+  // The catalog uses camelCase keys; the one multi-word class id maps by hand.
+  return en.classDetails.lore[id === 'warrior_classic' ? 'warriorClassic' : id];
 }
 
 function canonicalEntityText(request: EntityTranslationRequest): string {

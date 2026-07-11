@@ -659,6 +659,8 @@ export const vi_VN: Record<string, string> = {
   'staff.viaScript': 'tập lệnh cấp quyền',
   'nav.history': 'Lịch sử',
   'moderationHistory.actionKick': 'Đã đuổi',
+  'moderationHistory.actionJail': 'Đã bị giam',
+  'moderationHistory.actionUnjail': 'Đã được thả',
   'moderationHistory.actionKill': 'Đã giết',
   'moderationHistory.actionIpBlock': 'Đã chặn IP',
   'moderationHistory.actionIpUnblock': 'Đã bỏ chặn IP',

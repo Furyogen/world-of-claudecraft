@@ -289,6 +289,8 @@ export const ru_RU: AdminTranslations = {
   "moderationHistory.actionForceRename": "Принудительное переименование",
   "moderationHistory.actionKick": "Выгнан",
   "moderationHistory.actionKill": "Убит",
+  "moderationHistory.actionJail": "Заключен в тюрьму",
+  "moderationHistory.actionUnjail": "Освобожден",
   "moderationHistory.actionNote": "Примечание",
   "moderationHistory.actionResetPassword": "Сброс пароля",
   "moderationHistory.actionIpBlock": "IP-адрес заблокирован",

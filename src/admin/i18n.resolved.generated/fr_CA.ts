@@ -289,6 +289,8 @@ export const fr_CA: AdminTranslations = {
   "moderationHistory.actionForceRename": "Renommer forcé",
   "moderationHistory.actionKick": "Expulsé",
   "moderationHistory.actionKill": "Tué",
+  "moderationHistory.actionJail": "Emprisonné",
+  "moderationHistory.actionUnjail": "Libéré",
   "moderationHistory.actionNote": "Note",
   "moderationHistory.actionResetPassword": "Mot de passe réinitialisé",
   "moderationHistory.actionIpBlock": "IP bloquée",

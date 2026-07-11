@@ -663,6 +663,8 @@ export const de_DE: Record<string, string> = {
   'staff.viaScript': 'Grant-Skript',
   'nav.history': 'Verlauf',
   'moderationHistory.actionKick': 'Hinausgeworfen',
+  'moderationHistory.actionJail': 'Eingesperrt',
+  'moderationHistory.actionUnjail': 'Freigelassen',
   'moderationHistory.actionKill': 'Getötet',
   'moderationHistory.actionIpBlock': 'IP gesperrt',
   'moderationHistory.actionIpUnblock': 'IP entsperrt',

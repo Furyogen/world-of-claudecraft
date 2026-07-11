@@ -289,6 +289,8 @@ export const en_XA: AdminTranslations = {
   "moderationHistory.actionForceRename": "[Ƒóŕçéð ŕéñáɱé]",
   "moderationHistory.actionKick": "[Ķíçķéð]",
   "moderationHistory.actionKill": "[Ķíļļéð]",
+  "moderationHistory.actionJail": "[Ĵáíļéð]",
+  "moderationHistory.actionUnjail": "[Ŕéļéášéð ƒŕóɱ ĵáíļ]",
   "moderationHistory.actionNote": "[Ñóţé]",
   "moderationHistory.actionResetPassword": "[Þáššŵóŕð ŕéšéţ]",
   "moderationHistory.actionIpBlock": "[ÍÞ ƀļóçķéð]",

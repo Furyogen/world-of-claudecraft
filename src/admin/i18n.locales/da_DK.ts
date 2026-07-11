@@ -652,6 +652,8 @@ export const da_DK: Record<string, string> = {
   'staff.viaScript': 'tildelingsscript',
   'nav.history': 'Historik',
   'moderationHistory.actionKick': 'Smidt ud',
+  'moderationHistory.actionJail': 'Fængslet',
+  'moderationHistory.actionUnjail': 'Løsladt',
   'moderationHistory.actionKill': 'Dræbt',
   'moderationHistory.actionIpBlock': 'IP-adresse blokeret',
   'moderationHistory.actionIpUnblock': 'IP-adresse afblokeret',

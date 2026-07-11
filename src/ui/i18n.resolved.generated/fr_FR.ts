@@ -298,6 +298,7 @@ export const fr_FR: EnTranslations = {
       "playerLabel": "Votre personnage",
       "targetLabel": "Votre cible",
       "targetAnnounce": "Cible : {name}",
+      "targetOfTargetLabel": "Cible de la cible",
       "partyLabel": "Votre groupe",
       "partyChip": "Groupe",
       "partyGroup": "Groupe {n}",
@@ -314,7 +315,6 @@ export const fr_FR: EnTranslations = {
       "chat": "Aller à la discussion"
     },
     "mobile": {
-      "autorun": "Course automatique",
       "jump": "Sauter",
       "leaderboard": "Classement",
       "dailyRewards": "Récompenses",
@@ -574,13 +574,32 @@ export const fr_FR: EnTranslations = {
       "startAttackOnAbility": "Attaque auto à l'utilisation d'une compétence",
       "walkByAutoloot": "Ramassage auto au passage",
       "groundReticle": "Réticule de ciblage au sol",
+      "mouseoverCast": "Incantation au survol sur les cadres de groupe",
       "showItemLevel": "Afficher le niveau d'objet",
       "itemLevelLine": "Niveau d'objet {level}",
       "itemScoreLine": "Score {score}",
       "showSecondaryActionBar": "Afficher la barre d'action secondaire",
+      "showTargetOfTarget": "Afficher la cible de la cible",
       "showDailyRewardsChest": "Afficher le coffre des récompenses quotidiennes",
       "mobileCameraJoystick": "Manette de caméra",
       "mobileLeftHanded": "Disposition pour gaucher"
+    },
+    "talentRows": {
+      "tab": "Choix",
+      "defaultLoadout": "Configuration par défaut",
+      "comingSoon": "Bientôt disponible"
+    },
+    "specPanel": {
+      "primaryAttr": "Attribut principal",
+      "complexity": "Complexité",
+      "complexityLow": "Faible",
+      "complexityMedium": "Moyenne",
+      "complexityHigh": "Élevée",
+      "exampleAbilities": "Exemples de techniques",
+      "viewTalents": "Voir les talents",
+      "selectSpec": "Choisir une spécialisation",
+      "specUnlockBanner": "Spécialisation débloquée !",
+      "specUnlockHint": "Appuyez sur N pour choisir votre spécialisation."
     },
     "controller": {
       "title": "Manette",
@@ -678,7 +697,9 @@ export const fr_FR: EnTranslations = {
       "names": {
         "spellPower": "Puissance des sorts",
         "critRating": "Score de critique",
-        "hasteRating": "Score de hâte"
+        "hasteRating": "Score de hâte",
+        "haste": "Hâte",
+        "parry": "Parade"
       },
       "desc": {
         "str": "Augmente votre puissance d'attaque, vos coups d'arme frappent donc plus fort.",
@@ -693,7 +714,9 @@ export const fr_FR: EnTranslations = {
         "critChance": "Vos chances de porter un coup critique avec une attaque, infligeant le double des dégâts.",
         "dodge": "Vos chances d'éviter complètement une attaque de mêlée, sans subir aucun dégât.",
         "critRating": "Score de critique de votre équipement et de vos bonus de panoplie, augmentant vos chances de coup critique. Environ 10 points de score confèrent 1% de critique.",
-        "hasteRating": "Score de hâte de votre équipement et de vos bonus de panoplie, accélérant vos attaques et vos incantations. Environ 10 points de score confèrent 1% de hâte."
+        "hasteRating": "Score de hâte de votre équipement et de vos bonus de panoplie, accélérant vos attaques et vos incantations. Environ 10 points de score confèrent 1% de hâte.",
+        "haste": "Accélère vos attaques d'arme et vos incantations de sorts. Ne réduit pas le temps de recharge global.",
+        "parry": "Vos chances de parer entièrement une attaque de mêlée frontale, sans subir de dégâts. Un coup porté dans le dos ne peut pas être paré."
       },
       "effects": {
         "attackPower": "+{value} Puissance d'attaque",
@@ -811,6 +834,7 @@ export const fr_FR: EnTranslations = {
       "failed": "Impossible d'envoyer le rapport de bug. Veuillez réessayer."
     },
     "paperdoll": {
+      "offhand": "Main gauche",
       "unequipAria": "Déséquiper {item}",
       "unequipHint": "Cliquez sur ×, faites un clic droit ou glissez vers les sacs pour déséquiper"
     },
@@ -1061,9 +1085,24 @@ export const fr_FR: EnTranslations = {
       "formCat": "Forme de félin : dégâts de mêlée et énergie",
       "formTravel": "Forme de Fleet : vitesse de déplacement augmentée de {pct}%",
       "defensiveStance": "Posture de garde : dégâts subis réduits, menace accrue",
+      "battleStance": "Posture de combat : 10% de génération de rage en plus",
+      "berserkerStance": "Posture berserker : coups critiques 3% plus fréquents et 3% plus puissants",
       "righteousFury": "Serment ardent : menace des dégâts Sacré fortement augmentée",
       "scale": "Taille augmentée de {pct}%",
       "jump": "Hauteur de saut augmentée de {pct}%",
+      "dmgDone": "Augmente les dégâts infligés de {pct}%",
+      "dmgDoneReduce": "Réduit les dégâts infligés de {pct}%",
+      "crit": "Augmente les chances de coup critique de {pct}%",
+      "rageGen": "Augmente la génération de rage de {pct}%",
+      "reckless": "Augmente les chances de coup critique de {pct}% et la génération de rage de {ragePct}%",
+      "avatar": "Colosse : dégâts infligés augmentés de {pct}%",
+      "bloodbath": "Augmente les chances de coup critique et les dégâts infligés de {pct}%",
+      "dieBySword": "Réduit les dégâts subis de {pct}% ({lowPct}% sous {hpPct}% de points de vie)",
+      "sanguine": "Augmente la vitesse d'attaque de {hastePct}% et les dégâts infligés de {dmgPct}%",
+      "battleTrance": "Votre prochaine Frappe du pillard ou Frappe mutilante ne coûte aucune rage",
+      "revengeFree": "Votre prochaine Vengeance ne coûte aucune rage",
+      "victoryRush": "Ruée victorieuse est prête",
+      "maxHpPct": "Augmente les points de vie maximum de {pct}%",
       "school": {
         "physical": "Physique",
         "fire": "Feu",
@@ -1078,6 +1117,10 @@ export const fr_FR: EnTranslations = {
       "spawn": "{name} se dresse sur les Hauteurs de Thornpeak !"
     },
     "auth": {
+      "appleLoginCta": "Continuer avec Apple",
+      "appleError": "Impossible de se connecter avec Apple. Veuillez réessayer.",
+      "appleChoiceIntro": "Créez un nouveau compte, ou liez Apple à un compte que vous possédez déjà.",
+      "appleChoiceExpired": "Cette connexion avec Apple a expiré. Veuillez vous reconnecter avec Apple.",
       "forgotPrompt": "Mot de passe oublié ?",
       "forgotTitle": "Réinitialiser votre mot de passe",
       "forgotHint": "Saisissez votre nom d’utilisateur et nous enverrons un lien de réinitialisation à l’adresse e-mail enregistrée.",
@@ -1984,11 +2027,19 @@ export const fr_FR: EnTranslations = {
     },
     "abilityHook": {
       "heroic_strike": "Prépare un coup plus lourd qui dépense de la rage sur votre prochaine attaque.",
+      "revenge": "Une contre-attaque circulaire qui frappe tout ce qui se trouve devant vous, et coûte moins cher juste après que vous avez détourné un coup.",
       "battle_shout": "Un cri de ralliement qui augmente la puissance d'attaque du groupe.",
       "commanding_shout": "Renforce l'endurance pour que chacun tienne plus longtemps au combat.",
       "charge": "Fonce sur un ennemi lointain pour ouvrir le combat avec un bref étourdissement.",
       "rend": "Ouvre un saignement qui use la cible dans la durée.",
       "thunder_clap": "Frappe tout autour de vous et ralentit les attaques des ennemis.",
+      "cw_heroic_strike": "Prépare un coup plus lourd qui dépense de la rage sur votre prochaine attaque.",
+      "cw_battle_shout": "Un cri de ralliement qui augmente la puissance d'attaque du groupe.",
+      "cw_commanding_shout": "Renforce l'endurance pour que chacun tienne plus longtemps au combat.",
+      "cw_charge": "Fonce sur un ennemi lointain pour ouvrir le combat avec un bref étourdissement.",
+      "cw_rend": "Ouvre un saignement qui use la cible dans la durée.",
+      "cw_thunder_clap": "Frappe tout autour de vous et ralentit les attaques des ennemis.",
+      "hamstring": "Taillade les jambes de la cible pour la ralentir, afin qu'elle ne puisse pas vous rattraper.",
       "seal_of_righteousness": "Imprègne vos coups de dégâts sacrés, à dépenser ensuite avec Verdict.",
       "holy_light": "Un soin régulier et conséquent pour remettre d'aplomb un allié ou vous-même.",
       "devotion_aura": "Une amélioration personnelle durable qui augmente l'armure pour amortir les coups.",
@@ -3295,6 +3346,7 @@ export const fr_FR: EnTranslations = {
   },
   "classes": {
     "warrior": "Guerrier",
+    "warriorClassic": "Guerrier",
     "paladin": "Paladin",
     "hunter": "Chasseur",
     "rogue": "Voleur",
@@ -4062,6 +4114,7 @@ export const fr_FR: EnTranslations = {
     },
     "roles": {
       "warrior": "Tank / DPS mêlée",
+      "warriorClassic": "Tank / DPS mêlée",
       "paladin": "Soigneur / Tank / DPS mêlée",
       "hunter": "DPS à distance",
       "rogue": "DPS mêlée",
@@ -4086,6 +4139,7 @@ export const fr_FR: EnTranslations = {
     },
     "lore": {
       "warrior": "Les guerriers sont des combattants aguerris qui gagnent de la rage en infligeant ou subissant des dégâts. Ils encaissent les coups ou écrasent leurs ennemis.",
+      "warriorClassic": "Le guerrier exactement tel qu'il se jouait avant la refonte du combat : le kit de techniques d'origine et le rythme de la rage, conservés aux côtés du nouveau guerrier pour que vous puissiez essayer les deux et nous dire lequel vous convient le mieux.",
       "paladin": "Les paladins sont des croisés sacrés qui soutiennent leurs alliés par des bénédictions, soignent les blessures avec la Lumière guérisseuse et protègent les faibles sous une lourde armure.",
       "hunter": "Les chasseurs sont des spécialistes à distance qui combattent aux côtés d'une bête apprivoisée, criblant leurs ennemis de tirs précis et rapides, les ralentissant avec des morsures et un tir concussif, et changeant d'aspect selon le moment.",
       "rogue": "Les voleurs sont des assassins furtifs qui dépensent énergie et points de combo pour frapper depuis les ombres.",
@@ -4386,6 +4440,7 @@ export const fr_FR: EnTranslations = {
     "combat": {
       "floatingMiss": "Raté",
       "floatingDodge": "Esquive",
+      "floatingParry": "Parade",
       "floatingResist": "Résisté",
       "cannotMove": "Immobilisé !",
       "attack": "attaque",
@@ -4395,6 +4450,7 @@ export const fr_FR: EnTranslations = {
       "damageTakenCrit": "{source} vous inflige un coup critique pour {amount}.",
       "miss": "Votre {ability} rate {target}.",
       "dodged": "{target} esquive votre {ability}.",
+      "parried": "{target} pare votre {ability}.",
       "resisted": "{target} résiste à votre {ability}.",
       "healSelf": "Votre {ability} vous rend {amount} points de vie.",
       "healSelfCrit": "Votre {ability} vous rend un soin critique de {amount}.",
@@ -4437,6 +4493,7 @@ export const fr_FR: EnTranslations = {
       "notEnoughMana": "Pas assez de mana !",
       "notEnoughResource": "Pas assez de {resource} !",
       "notEnoughHealth": "Pas assez de points de vie.",
+      "nothingToConsume": "Rien à consommer.",
       "targetMustDodge": "Votre cible doit d'abord esquiver.",
       "requiresCombo": "Cette technique requiert des points de combo.",
       "requiresForm": "Vous devez être en forme de {form}.",
@@ -4453,6 +4510,7 @@ export const fr_FR: EnTranslations = {
       "facing": "Vous devez faire face à votre cible.",
       "targetHealthBelow": "Cette technique requiert une cible sous {percent} % de points de vie.",
       "dagger": "Vous devez porter une dague.",
+      "needShield": "Vous devez avoir un bouclier équipé.",
       "behindTarget": "Vous devez être derrière votre cible.",
       "polymorph": "Cette créature ne peut pas être métamorphosée.",
       "noSeal": "Vous n'avez aucun Sceau actif.",
@@ -4828,6 +4886,7 @@ export const fr_FR: EnTranslations = {
     },
     "slots": {
       "mainhand": "Main droite",
+      "twoHand": "Deux mains",
       "helmet": "Tête",
       "neck": "Cou",
       "shoulder": "Épaules",
@@ -5101,9 +5160,101 @@ export const fr_FR: EnTranslations = {
         "name": "Tremblement de terre",
         "description": "Fait trembler la zone visée pendant 6 s, frappant les ennemis pour {damage} points de dégâts de Nature toutes les 1.5 s."
       },
+      "chain_heal": {
+        "name": "Soins en chaîne",
+        "description": "Rend {damage} points de vie à la cible, puis l'effet rebondit sur jusqu'à 2 alliés proches, chaque rebond rendant la moitié du montant précédent."
+      },
       "heroic_strike": {
         "name": "Frappe du pillard",
         "description": "Une attaque puissante qui augmente les dégâts de mêlée de {damage}. S'active lors de votre prochaine frappe."
+      },
+      "cw_heroic_strike": {
+        "name": "Frappe du pillard",
+        "description": "Une attaque puissante qui augmente les dégâts de mêlée de {damage}. S'active lors de votre prochaine frappe."
+      },
+      "cw_battle_shout": {
+        "name": "Beuglement de fer",
+        "description": "Augmente votre puissance d'attaque de {buff} pendant 2 min."
+      },
+      "cw_commanding_shout": {
+        "name": "Cri fortifiant",
+        "description": "Augmente votre Endurance de {buff} pendant 2 min."
+      },
+      "cw_charge": {
+        "name": "Ruée",
+        "description": "Charge un ennemi, génère 9 rage et l'étourdit pendant 1 s. Portée de 8-25 m."
+      },
+      "cw_rend": {
+        "name": "Entaille profonde",
+        "description": "Blesse la cible et la fait saigner pour {damage} points de dégâts en {duration} s."
+      },
+      "cw_thunder_clap": {
+        "name": "Coup sismique",
+        "description": "Frappe les ennemis proches pour {damage} points de dégâts et ralentit leurs attaques de 10% pendant 10 s."
+      },
+      "cw_hamstring": {
+        "name": "Entaille estropiante",
+        "description": "Mutile l'ennemi pour {damage} points de dégâts et réduit sa vitesse de déplacement de 50% pendant 15 s."
+      },
+      "cw_bloodrage": {
+        "name": "Tribut de sang",
+        "description": "Génère 10 rage au prix de vos points de vie."
+      },
+      "cw_overpower": {
+        "name": "Redhand",
+        "description": "Attaque instantanée infligeant les dégâts de l'arme plus {damage}. Utilisable seulement après une esquive de la cible. Ne peut pas être esquivée."
+      },
+      "cw_execute": {
+        "name": "Tombe précoce",
+        "description": "Tente d'achever un ennemi blessé et inflige {damage} points de dégâts. Utilisable seulement sur les ennemis sous 20% de points de vie."
+      },
+      "cw_slam": {
+        "name": "Coup brutal",
+        "description": "Frappe l'adversaire pour les dégâts de l'arme plus {damage}."
+      },
+      "cw_cleave": {
+        "name": "Arc faucheur",
+        "description": "Une frappe circulaire qui touche tous les ennemis devant vous pour {damage} points de dégâts."
+      },
+      "cw_defensive_stance": {
+        "name": "Posture de garde",
+        "description": "Posture de combat défensive: vous générez 30% de menace en plus, mais infligez et subissez 10% de dégâts en moins. Relancez pour quitter la posture."
+      },
+      "cw_demoralizing_shout": {
+        "name": "Direhowl",
+        "description": "Pousse un cri terrifiant qui réduit la puissance d'attaque de tous les ennemis proches de {buff} pendant 30 s."
+      },
+      "cw_sunder_armor": {
+        "name": "Cisaillement d'armure",
+        "description": "Cisaille l'armure de la cible, la réduisant de {damage}% par application. Cumulable jusqu'à 5 fois. Génère beaucoup de menace."
+      },
+      "cw_taunt": {
+        "name": "Aiguillon",
+        "description": "Provoque la cible: votre menace rejoint celle de son ennemi le plus haï et elle est forcée de vous attaquer pendant 3 s."
+      },
+      "cw_bloodthirst": {
+        "name": "Saignée",
+        "description": "Attaque instantanément dans une frénésie sanguinaire pour 60% des dégâts de l'arme plus {damage}. (signature Fureur)"
+      },
+      "cw_mortal_strike": {
+        "name": "Frappe mutilante",
+        "description": "Frappe vicieuse infligeant les dégâts de l'arme plus {damage}. (signature Armes)"
+      },
+      "cw_shield_slam": {
+        "name": "Shieldcrack",
+        "description": "Heurte la cible avec votre bouclier pour 50% des dégâts de l'arme plus {damage} et génère une menace énorme. (signature Protection)"
+      },
+      "cw_whirlwind": {
+        "name": "Tournoiement de lames",
+        "description": "Tournoie dans un arc mortel et frappe tous les ennemis proches pour {damage}. (talent Fureur)"
+      },
+      "cw_berserker_rage": {
+        "name": "Fureur bouillonnante",
+        "description": "Entre dans une fureur bouillonnante et génère 20 points de rage. (talent de guerrier)"
+      },
+      "revenge": {
+        "name": "Vengeance",
+        "description": "Attaque dans un large arc et inflige des dégâts physiques à tous les ennemis devant vous. Au-delà de 5 cibles, les dégâts sont réduits. Quand vous esquivez ou parez, votre prochaine Vengeance peut ne coûter aucune rage."
       },
       "battle_shout": {
         "name": "Beuglement de fer",
@@ -5147,7 +5298,7 @@ export const fr_FR: EnTranslations = {
       },
       "slam": {
         "name": "Coup brutal",
-        "description": "Frappe l'adversaire pour les dégâts de l'arme plus {damage}."
+        "description": "Frappe l'adversaire pour 50 % des dégâts de l'arme plus {damage}, générant {rage} points de rage."
       },
       "cleave": {
         "name": "Arc faucheur",
@@ -5156,6 +5307,14 @@ export const fr_FR: EnTranslations = {
       "defensive_stance": {
         "name": "Posture de garde",
         "description": "Posture de combat défensive: vous générez 30% de menace en plus, mais infligez et subissez 10% de dégâts en moins. Relancez pour quitter la posture."
+      },
+      "battle_stance": {
+        "name": "Posture de combat",
+        "description": "Posture de combat agressive: vous générez 10% de rage en plus. La posture par défaut pour Armes et Protection."
+      },
+      "berserker_stance": {
+        "name": "Posture berserker",
+        "description": "Posture de combat téméraire: vos coups critiques surviennent 3% plus souvent et infligent 3% de dégâts en plus. Le guerrier Fureur combat toujours dans cette posture."
       },
       "sunder_armor": {
         "name": "Cisaillement d'armure",
@@ -5645,9 +5804,77 @@ export const fr_FR: EnTranslations = {
         "name": "Frappe mutilante",
         "description": "Frappe vicieuse infligeant les dégâts de l'arme plus {damage}. (signature Armes)"
       },
+      "sweeping_strikes": {
+        "name": "Arc élargi",
+        "description": "Pendant 12 s, vos attaques monocibles frappent aussi 1 ennemi proche pour la totalité des dégâts. (Armes)"
+      },
+      "deep_wounds": {
+        "name": "Plaies béantes",
+        "description": "Passif : votre Frappe mutilante fait saigner la cible, infligeant des dégâts physiques sur 6 s. (Armes)"
+      },
+      "enrage_passive": {
+        "name": "Carnage",
+        "description": "Passif : tant que vous êtes enragé, vous infligez 7% de dégâts en plus, attaquez 25% plus vite et vous déplacez 10% plus vite pendant 4 s. Saignée a 30% de chances de vous enrager ; Moisson rouge le fait toujours. (Fureur)"
+      },
       "bloodthirst": {
         "name": "Saignée",
         "description": "Attaque instantanément dans une frénésie sanguinaire pour 60% des dégâts de l'arme plus {damage}. (signature Fureur)"
+      },
+      "raging_gale": {
+        "name": "Double frappe",
+        "description": "Frappe instantanément deux fois avec votre arme, chaque coup infligeant 40% des dégâts de l'arme plus {damage}, et génère {rage} points de rage. Cumule jusqu'à 2 charges. (Fureur)"
+      },
+      "red_harvest": {
+        "name": "Moisson rouge",
+        "description": "Dépensez tout : frappez trois fois dans une frénésie, chaque coup infligeant 65% des dégâts de l'arme plus {damage}, ce qui vous rend toujours enragé. (Fureur)"
+      },
+      "furious_mending": {
+        "name": "Guérison furieuse",
+        "description": "Pendant 10 s, vous subissez 20% de dégâts en moins et, tant que l'effet dure, votre Saignée vous soigne de 20% de votre vie maximale. (Fureur)"
+      },
+      "emboldening_roar": {
+        "name": "Rugissement galvanisant",
+        "description": "Pousse un rugissement galvanisant : vous et les joueurs alliés dans un rayon de 40 mètres êtes galvanisés, et vos 3 prochaines techniques sont des coups critiques garantis. (Fureur)"
+      },
+      "raised_guard": {
+        "name": "Garde haute",
+        "description": "Arc-boutez-vous derrière votre bouclier : vous subissez 50% de dégâts physiques en moins pendant 6 s. Cumule jusqu'à 2 charges. (Protection)"
+      },
+      "iron_resolve": {
+        "name": "Résolution de fer",
+        "description": "Serrez les dents et ignorez la douleur : consomme toute votre rage (20 minimum) pour absorber 4 points de dégâts par point de rage dépensé, pendant un maximum de 10 s. (Protection)"
+      },
+      "faultline": {
+        "name": "Ligne de faille",
+        "description": "Envoie une onde de choc dans le sol : les ennemis devant vous dans un rayon de 8 mètres subissent {damage} points de dégâts et sont étourdis pendant 3 s. (Protection)"
+      },
+      "defiant_bellow": {
+        "name": "Beuglement de défi",
+        "description": "Un beuglement de défi : tous les ennemis dans un rayon de 10 mètres sont provoqués et forcés de vous attaquer pendant 3 s. (Protection)"
+      },
+      "breachmaker": {
+        "name": "Brise-garde",
+        "description": "Martèle la cible pour les dégâts de l'arme plus {damage} et fissure sa garde : vos propres attaques contre elle infligent 20% de dégâts en plus pendant 8 s. (Armes)"
+      },
+      "measured_fury": {
+        "name": "Fureur mesurée",
+        "description": "Votre fureur mesurée affine votre économie : vos techniques coûtent 10% de rage en moins. (Armes)"
+      },
+      "seasoned_soldier": {
+        "name": "Soldat aguerri",
+        "description": "Vos attaques automatiques critiques génèrent 10% de rage en plus. (Armes)"
+      },
+      "diabolical_twinstrike": {
+        "name": "Double frappe diabolique",
+        "description": "Tant que vous êtes enragé, votre Double frappe inflige 15% de dégâts en plus. (Fureur)"
+      },
+      "cleaving_blows": {
+        "name": "Coups pourfendeurs",
+        "description": "Moisson rouge rend toujours une charge de Double frappe. (Fureur)"
+      },
+      "sudden_death": {
+        "name": "Mort subite",
+        "description": "Vos attaques automatiques ont une chance de vous permettre de lancer Tombe précoce sur une cible quel que soit son niveau de vie, sans coût de rage. (Armes)"
       },
       "shield_slam": {
         "name": "Shieldcrack",
@@ -5661,13 +5888,13 @@ export const fr_FR: EnTranslations = {
         "name": "Fureur bouillonnante",
         "description": "Entre dans une fureur bouillonnante et génère 20 points de rage. (talent de guerrier)"
       },
+      "holy_shock": {
+        "name": "Horion sacré",
+        "description": "Frappe une cible alliée avec de l’énergie sacrée et lui rend {damage} points de vie. (signature Sacré)"
+      },
       "crusader_strike": {
         "name": "Frappe du croisé",
         "description": "Frappe la cible et inflige les dégâts de l’arme plus {damage} points de dégâts du Sacré. (talent de paladin)"
-      },
-      "chain_heal": {
-        "name": "Soins en chaîne",
-        "description": "Soigne grandement une cible alliée, puis rebondit vers jusqu'à 2 autres alliés proches, avec 50 % de soins en moins à chaque rebond. (Technique signature de Restauration)"
       },
       "metamorphosis": {
         "name": "Métamorphose",
@@ -5677,13 +5904,13 @@ export const fr_FR: EnTranslations = {
         "name": "Houle radieuse",
         "description": "Surcharge votre aura et vous renforce de 160 points d'armure pendant 10 s. (talent de Paladin)"
       },
-      "holy_shock": {
-        "name": "Horion sacré",
-        "description": "Frappe une cible alliée avec de l’énergie sacrée et lui rend {damage} points de vie. (signature Sacré)"
-      },
       "holy_shield": {
         "name": "Bouclier sacré",
         "description": "Vous protège avec une puissance sacrée pendant 10 s, augmente l’armure de 90 et frappe les attaquants en mêlée pour 12 points de dégâts du Sacré. (signature Protection)"
+      },
+      "repentance": {
+        "name": "Repentir",
+        "description": "Plonge l’ennemi dans un état de méditation pendant un maximum de 6 s. Tout dégât interrompt l’effet. (signature Vindicte)"
       },
       "bestial_wrath": {
         "name": "Courroux bestial",
@@ -5737,9 +5964,21 @@ export const fr_FR: EnTranslations = {
         "name": "Maîtrise élémentaire",
         "description": "Fait appel à la maîtrise élémentaire, rendant votre prochain sort instantané. (signature Élémentaire)"
       },
+      "shamanistic_rage": {
+        "name": "Rage chamanique",
+        "description": "Libère une rage chamanique et rend 160 points de mana. (signature Amélioration)"
+      },
+      "natures_swiftness": {
+        "name": "Rapidité de la nature",
+        "description": "Fait appel à la nature pour rendre votre prochain sort instantané. (signature Restauration)"
+      },
       "siphon_life": {
         "name": "Siphon de vie",
         "description": "Siphonne la vie de l’ennemi, inflige {damage} points de dégâts d’Ombre en 30 s et vous soigne du montant des dégâts infligés. (signature Affliction)"
+      },
+      "fel_domination": {
+        "name": "Domination corrompue",
+        "description": "Domine les énergies gangrenées, rendant votre prochain sort instantané. (signature Démonologie)"
       },
       "conflagrate": {
         "name": "Conflagration",
@@ -5756,6 +5995,34 @@ export const fr_FR: EnTranslations = {
       "swiftmend": {
         "name": "Prompte guérison",
         "description": "Consume un effet de soins sur la durée sur une cible alliée pour lui rendre {damage} points de vie. (signature Restauration)"
+      },
+      "storm_bolt": {
+        "name": "Projectile-tempête",
+        "description": "Lancez votre arme sur la cible, infligeant {damage} et l'étourdissant pendant 3 s."
+      },
+      "piercing_howl": {
+        "name": "Hurlement perçant",
+        "description": "Un cri perçant qui ralentit de 50% tous les ennemis dans un rayon de 15 mètres pendant 8 s."
+      },
+      "die_by_sword": {
+        "name": "Périr par l'épée",
+        "description": "Recours défensif : pendant 8 s, vous subissez 30% de dégâts en moins et esquivez bien plus d'attaques."
+      },
+      "recklessness": {
+        "name": "Témérité",
+        "description": "Enrage : votre génération de rage augmente de 50% et vos chances de coup critique de 20% pendant 12 s."
+      },
+      "sanguine_aura": {
+        "name": "Aura sanguine",
+        "description": "Imprégnez votre arme du sang de vos ennemis : vous et vos alliés de mêlée gagnez 10% de vitesse d'attaque et 10% de dégâts pendant 20 s."
+      },
+      "victory_rush": {
+        "name": "Ruée victorieuse",
+        "description": "Frappe infligeant les dégâts de l'arme plus {damage} et vous soignant de 20% de votre vie maximale. Utilisable seulement dans les 20 s suivant la mort d'un ennemi."
+      },
+      "intimidating_shout": {
+        "name": "Cri intimidant",
+        "description": "Un cri terrifiant qui fait fuir jusqu'à 5 ennemis dans un rayon de 8 mètres pendant 8 s. Les dégâts peuvent briser l'effet."
       },
       "summon_imp": {
         "name": "Invoquer un Emberkin",
@@ -6194,6 +6461,15 @@ export const fr_FR: EnTranslations = {
       },
       "linen_scrap": {
         "name": "Chute de lin"
+      },
+      "arcane_dust": {
+        "name": "Poussière arcanique"
+      },
+      "arcane_essence": {
+        "name": "Essence arcanique"
+      },
+      "arcane_shard": {
+        "name": "Éclat arcanique"
       },
       "fen_muster_order": {
         "name": "Ordre de rassemblement de Fenbridge"
@@ -7107,6 +7383,18 @@ export const fr_FR: EnTranslations = {
       "heroic_mark": {
         "name": "Marque héroïque"
       },
+      "eastbrook_buckler": {
+        "name": "Rondache d'Eastbrook"
+      },
+      "highwatch_wallshield": {
+        "name": "Pavois de Highwatch"
+      },
+      "eastbrook_greatsword": {
+        "name": "Espadon d'Eastbrook"
+      },
+      "highwatch_greatsword": {
+        "name": "Espadon de Highwatch"
+      },
       "morthens_cryptforged_hauberk": {
         "name": "Haubert Cryptforged de Morthen"
       },
@@ -7289,6 +7577,18 @@ export const fr_FR: EnTranslations = {
       },
       "stormcallers_spaulders_heroic": {
         "name": "Spallières de Galecall"
+      },
+      "bonewrought_greatsword": {
+        "name": "Espadon Bonewrought"
+      },
+      "direfang_greatblade": {
+        "name": "Grande lame de Direfang"
+      },
+      "bonewrought_bulwark": {
+        "name": "Rempart Bonewrought"
+      },
+      "wraithfire_orb": {
+        "name": "Orbe Wraithfire"
       },
       "unknown_alien_weaponry": {
         "name": "Armement alien inconnu"

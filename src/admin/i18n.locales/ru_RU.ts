@@ -658,6 +658,8 @@ export const ru_RU: Record<string, string> = {
   'staff.viaScript': 'скрипт выдачи',
   'nav.history': 'История',
   'moderationHistory.actionKick': 'Выгнан',
+  'moderationHistory.actionJail': 'Заключен в тюрьму',
+  'moderationHistory.actionUnjail': 'Освобожден',
   'moderationHistory.actionKill': 'Убит',
   'moderationHistory.actionIpBlock': 'IP-адрес заблокирован',
   'moderationHistory.actionIpUnblock': 'IP-адрес разблокирован',

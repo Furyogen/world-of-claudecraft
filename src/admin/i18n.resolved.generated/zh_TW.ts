@@ -289,6 +289,8 @@ export const zh_TW: AdminTranslations = {
   "moderationHistory.actionForceRename": "強制重命名",
   "moderationHistory.actionKick": "已踢出",
   "moderationHistory.actionKill": "已擊殺",
+  "moderationHistory.actionJail": "已監禁",
+  "moderationHistory.actionUnjail": "已釋放",
   "moderationHistory.actionNote": "筆記",
   "moderationHistory.actionResetPassword": "重設密碼",
   "moderationHistory.actionIpBlock": "IP 已封鎖",

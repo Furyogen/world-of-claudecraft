@@ -298,6 +298,7 @@ export const vi_VN: EnTranslations = {
       "playerLabel": "Anh Hùng Của Bạn",
       "targetLabel": "Mục Tiêu Của Bạn",
       "targetAnnounce": "Đánh Dấu {name}",
+      "targetOfTargetLabel": "Mục Tiêu Của Mục Tiêu",
       "partyLabel": "Đội Của Bạn",
       "partyChip": "Tổ Đội",
       "partyGroup": "Nhóm {n}",
@@ -314,7 +315,6 @@ export const vi_VN: EnTranslations = {
       "chat": "Chuyển tới Trò Chuyện"
     },
     "mobile": {
-      "autorun": "Tự Chạy",
       "jump": "Nhảy",
       "leaderboard": "Xếp Hạng",
       "dailyRewards": "Thưởng",
@@ -574,13 +574,32 @@ export const vi_VN: EnTranslations = {
       "startAttackOnAbility": "Tự Đánh Khi Dùng Kỹ Năng",
       "walkByAutoloot": "Tự Nhặt Đồ Khi Đi Ngang",
       "groundReticle": "Vòng ngắm mục tiêu mặt đất",
+      "mouseoverCast": "Thi Triển Khi Rê Chuột Trên Khung Tổ Đội",
       "showItemLevel": "Hiển Thị Cấp Vật Phẩm",
       "itemLevelLine": "Cấp Vật Phẩm {level}",
       "itemScoreLine": "Điểm {score}",
       "showSecondaryActionBar": "Hiện Thanh Hành Động Phụ",
+      "showTargetOfTarget": "Hiện Mục Tiêu Của Mục Tiêu",
       "showDailyRewardsChest": "Hiện Rương Phần Thưởng Hằng Ngày",
       "mobileCameraJoystick": "Cần điều khiển máy ảnh",
       "mobileLeftHanded": "Bố cục thuận tay trái"
+    },
+    "talentRows": {
+      "tab": "Lựa Chọn",
+      "defaultLoadout": "Cấu Hình Mặc Định",
+      "comingSoon": "Sắp ra mắt"
+    },
+    "specPanel": {
+      "primaryAttr": "Thuộc tính chính",
+      "complexity": "Độ Phức Tạp",
+      "complexityLow": "Thấp",
+      "complexityMedium": "Trung Bình",
+      "complexityHigh": "Cao",
+      "exampleAbilities": "Kỹ năng tiêu biểu",
+      "viewTalents": "Xem tài năng",
+      "selectSpec": "Chọn chuyên môn",
+      "specUnlockBanner": "Đã Mở Khóa Chuyên Môn!",
+      "specUnlockHint": "Nhấn N để chọn chuyên môn của bạn."
     },
     "controller": {
       "title": "Tay Cầm",
@@ -678,7 +697,9 @@ export const vi_VN: EnTranslations = {
       "names": {
         "spellPower": "Sức Mạnh Phép Thuật",
         "critRating": "Chỉ Số Chí Mạng",
-        "hasteRating": "Chỉ Số Thần Tốc"
+        "hasteRating": "Chỉ Số Thần Tốc",
+        "haste": "Thần Tốc",
+        "parry": "Gạt Đòn"
       },
       "desc": {
         "str": "Tăng sức công kích, giúp đòn vũ khí của bạn đánh mạnh hơn.",
@@ -693,7 +714,9 @@ export const vi_VN: EnTranslations = {
         "critChance": "Tỉ lệ một đòn tấn công đánh chí mạng, gây sát thương gấp đôi.",
         "dodge": "Tỉ lệ bạn né hoàn toàn một đòn cận chiến, không nhận sát thương.",
         "critRating": "Chỉ số chí mạng từ trang bị và phần thưởng bộ trang bị của bạn, nâng tỉ lệ chí mạng của bạn. Khoảng 10 điểm chỉ số ban 1% chí mạng.",
-        "hasteRating": "Chỉ số thần tốc từ trang bị và phần thưởng bộ trang bị của bạn, đẩy nhanh các đòn tấn công và việc thi triển phép của bạn. Khoảng 10 điểm chỉ số ban 1% thần tốc."
+        "hasteRating": "Chỉ số thần tốc từ trang bị và phần thưởng bộ trang bị của bạn, đẩy nhanh các đòn tấn công và việc thi triển phép của bạn. Khoảng 10 điểm chỉ số ban 1% thần tốc.",
+        "haste": "Đẩy nhanh các cú vung vũ khí và việc thi triển phép của bạn. Nó không làm giảm thời gian hồi chung.",
+        "parry": "Cơ hội để bạn gạt trọn vẹn một đòn cận chiến từ phía trước, không nhận chút sát thương nào. Đòn đánh từ phía sau không thể bị gạt."
       },
       "effects": {
         "attackPower": "+{value} Công Kích",
@@ -811,6 +834,7 @@ export const vi_VN: EnTranslations = {
       "failed": "Không thể gửi báo cáo lỗi. Vui lòng thử lại."
     },
     "paperdoll": {
+      "offhand": "Tay Phụ",
       "unequipAria": "Tháo {item}",
       "unequipHint": "Nhấp ×, nhấp chuột phải, hoặc kéo vào túi để tháo trang bị"
     },
@@ -1061,9 +1085,24 @@ export const vi_VN: EnTranslations = {
       "formCat": "Forma felina: daño cuerpo a cuerpo y energía",
       "formTravel": "Fleet Form: tốc độ di chuyển tăng {pct}%.",
       "defensiveStance": "Thế Thủ: giảm sát thương phải chịu, tăng đe dọa.",
+      "battleStance": "Thế Công: tạo nộ khí nhiều hơn 10%",
+      "berserkerStance": "Thế Cuồng Chiến: chí mạng thường xuyên hơn 3% và mạnh hơn 3%",
       "righteousFury": "Lời Thề Rực Cháy: tăng mạnh đe dọa từ sát thương Thánh.",
       "scale": "Tamaño aumentado un {pct}%",
       "jump": "Altura de salto aumentada un {pct}%",
+      "dmgDone": "Tăng sát thương gây ra thêm {pct}%",
+      "dmgDoneReduce": "Giảm sát thương gây ra đi {pct}%",
+      "crit": "Tăng tỉ lệ chí mạng thêm {pct}%",
+      "rageGen": "Tăng lượng nộ khí tạo ra thêm {pct}%",
+      "reckless": "Tăng tỉ lệ chí mạng thêm {pct}% và lượng nộ khí tạo ra thêm {ragePct}%",
+      "avatar": "Khổng Tượng: sát thương gây ra tăng {pct}%",
+      "bloodbath": "Tăng tỉ lệ chí mạng và sát thương gây ra thêm {pct}%",
+      "dieBySword": "Giảm sát thương phải chịu đi {pct}% ({lowPct}% khi dưới {hpPct}% máu)",
+      "sanguine": "Tăng tốc độ tấn công thêm {hastePct}% và sát thương gây ra thêm {dmgPct}%",
+      "battleTrance": "Đòn Cướp Phá hoặc Đòn Tàn Phế tiếp theo của bạn không tốn nộ khí",
+      "revengeFree": "Phục Thù tiếp theo của bạn không tốn nộ khí",
+      "victoryRush": "Đà Chiến Thắng đã sẵn sàng",
+      "maxHpPct": "Tăng máu tối đa thêm {pct}%",
       "school": {
         "physical": "Vật lý",
         "fire": "Lửa",
@@ -1078,6 +1117,10 @@ export const vi_VN: EnTranslations = {
       "spawn": "{name} trỗi dậy trên Cao Nguyên Đỉnh Gai!"
     },
     "auth": {
+      "appleLoginCta": "Tiếp tục với Apple",
+      "appleError": "Không thể đăng nhập bằng Apple. Vui lòng thử lại.",
+      "appleChoiceIntro": "Tạo tài khoản mới, hoặc liên kết Apple với tài khoản bạn đã có.",
+      "appleChoiceExpired": "Lượt đăng nhập Apple đó đã hết hạn. Vui lòng đăng nhập bằng Apple lần nữa.",
       "forgotPrompt": "Quên mật khẩu?",
       "forgotTitle": "Đặt lại mật khẩu",
       "forgotHint": "Nhập tên người dùng của bạn và chúng tôi sẽ gửi liên kết đặt lại tới địa chỉ email đã đăng ký.",
@@ -1984,11 +2027,19 @@ export const vi_VN: EnTranslations = {
     },
     "abilityHook": {
       "heroic_strike": "Đặt sẵn một cú vung nặng tay tiêu nộ khí vào đòn đánh kế tiếp của bạn.",
+      "revenge": "Một đòn phản kích quét rộng đánh trúng mọi thứ trước mặt bạn, và rẻ hơn ngay sau khi bạn vừa gạt được một đòn.",
       "battle_shout": "Một tiếng hô cổ vũ giúp tăng sức tấn công cho cả tổ đội.",
       "commanding_shout": "Tăng cường thể lực để mọi người trụ vững lâu hơn trong trận.",
       "charge": "Lao tới kẻ địch ở xa để mở màn trận đấu bằng một cú choáng ngắn.",
       "rend": "Mở một vết chảy máu bào mòn mục tiêu dần theo thời gian.",
       "thunder_clap": "Đánh trúng mọi thứ quanh bạn và làm chậm đòn tấn công của chúng.",
+      "cw_heroic_strike": "Đặt sẵn một cú vung nặng tay tiêu nộ khí vào đòn đánh kế tiếp của bạn.",
+      "cw_battle_shout": "Một tiếng hô cổ vũ giúp tăng sức tấn công cho cả tổ đội.",
+      "cw_commanding_shout": "Tăng cường thể lực để mọi người trụ vững lâu hơn trong trận.",
+      "cw_charge": "Lao tới kẻ địch ở xa để mở màn trận đấu bằng một cú choáng ngắn.",
+      "cw_rend": "Mở một vết chảy máu bào mòn mục tiêu dần theo thời gian.",
+      "cw_thunder_clap": "Đánh trúng mọi thứ quanh bạn và làm chậm đòn tấn công của chúng.",
+      "hamstring": "Chém vào chân mục tiêu để làm chậm nó, khiến nó không thể đuổi kịp bạn.",
       "seal_of_righteousness": "Phù chú đòn vung của bạn với sát thương Thánh, rồi giải phóng bằng Verdict.",
       "holy_light": "Một đòn trị liệu vững chãi, đáng kể để hồi đầy cho đồng đội hoặc bản thân.",
       "devotion_aura": "Một buff bản thân lâu dài giúp tăng giáp để đòn đánh giảm uy lực.",
@@ -3295,6 +3346,7 @@ export const vi_VN: EnTranslations = {
   },
   "classes": {
     "warrior": "Chiến Binh",
+    "warriorClassic": "Chiến Binh",
     "paladin": "Thánh Kỵ Sĩ",
     "hunter": "Thợ Săn",
     "rogue": "Đạo Tặc",
@@ -4062,6 +4114,7 @@ export const vi_VN: EnTranslations = {
     },
     "roles": {
       "warrior": "Đỡ Đòn / DPS Cận Chiến",
+      "warriorClassic": "Đỡ Đòn / DPS Cận Chiến",
       "paladin": "Trị Liệu / Đỡ Đòn / DPS Cận Chiến",
       "hunter": "DPS Tầm Xa",
       "rogue": "DPS Cận Chiến",
@@ -4086,6 +4139,7 @@ export const vi_VN: EnTranslations = {
     },
     "lore": {
       "warrior": "Chiến Binh là những đấu sĩ cận chiến dày dạn trận mạc, tích lũy Nộ Khí khi gây ra hoặc nhận sát thương. Họ hứng chịu những đòn nặng nề hoặc nghiền nát kẻ thù bằng vũ khí uy lực.",
+      "warriorClassic": "Chiến Binh đúng như cách nó vận hành trước đợt làm lại hệ thống chiến đấu: bộ kỹ năng nguyên bản cùng nhịp nộ khí cũ, được giữ song song với Chiến Binh mới để bạn thử cả hai và cho chúng tôi biết bản nào tạo cảm giác tốt hơn.",
       "paladin": "Thánh Kỵ Sĩ là những thập tự quân thần thánh, hỗ trợ đồng minh bằng các phúc lành, chữa lành vết thương bằng Thánh Quang Chữa Lành, và bảo vệ kẻ yếu trong bộ giáp nặng.",
       "hunter": "Thợ Săn là những chuyên gia tầm xa chiến đấu bên cạnh một mãnh thú đã thuần hóa, dội vào kẻ thù những phát bắn nhắm chuẩn và liên hồi, làm chậm chúng bằng các đòn chích nọc và hỏa lực chấn động, và chuyển đổi Linh Khí để thích ứng với từng khoảnh khắc.",
       "rogue": "Đạo Tặc là những sát thủ ẩn mình, tiêu hao Năng Lượng và Điểm Liên Hoàn cho những đòn đâm lén và đòn kết liễu từ trong bóng tối.",
@@ -4386,6 +4440,7 @@ export const vi_VN: EnTranslations = {
     "combat": {
       "floatingMiss": "Trượt",
       "floatingDodge": "Né",
+      "floatingParry": "Gạt Đòn",
       "floatingResist": "Kháng",
       "cannotMove": "Không thể di chuyển!",
       "attack": "tấn công",
@@ -4395,6 +4450,7 @@ export const vi_VN: EnTranslations = {
       "damageTakenCrit": "{source} chí mạng bạn gây {amount}.",
       "miss": "{ability} của bạn trượt {target}.",
       "dodged": "{ability} của bạn bị {target} né.",
+      "parried": "{ability} của bạn bị {target} gạt đòn.",
       "resisted": "{target} kháng lại {ability} của bạn.",
       "healSelf": "{ability} của bạn hồi {amount} máu cho bạn.",
       "healSelfCrit": "{ability} của bạn chí mạng hồi {amount} máu cho bạn.",
@@ -4437,6 +4493,7 @@ export const vi_VN: EnTranslations = {
       "notEnoughMana": "Không đủ mana!",
       "notEnoughResource": "Không đủ {resource}!",
       "notEnoughHealth": "Không đủ sinh lực.",
+      "nothingToConsume": "Không có gì để tiêu hao.",
       "targetMustDodge": "Mục tiêu của bạn phải né được trước đã.",
       "requiresCombo": "Kỹ năng đó cần điểm liên hoàn.",
       "requiresForm": "Bạn phải ở Hình {form}.",
@@ -4453,6 +4510,7 @@ export const vi_VN: EnTranslations = {
       "facing": "Bạn phải đối mặt với mục tiêu.",
       "targetHealthBelow": "Kỹ năng đó cần mục tiêu có sinh lực dưới {percent}%.",
       "dagger": "Bạn phải trang bị một con dao găm.",
+      "needShield": "Bạn phải trang bị một tấm khiên.",
       "behindTarget": "Bạn phải đứng phía sau mục tiêu.",
       "polymorph": "Sinh vật này không thể bị biến hình.",
       "noSeal": "Bạn không có Ấn nào đang kích hoạt.",
@@ -4828,6 +4886,7 @@ export const vi_VN: EnTranslations = {
     },
     "slots": {
       "mainhand": "Tay Chính",
+      "twoHand": "Hai Tay",
       "helmet": "Mũ Giáp",
       "neck": "Cổ",
       "shoulder": "Giáp Vai",
@@ -5101,9 +5160,101 @@ export const vi_VN: EnTranslations = {
         "name": "Động Đất",
         "description": "Làm rung chuyển khu vực mục tiêu trong 6 giây, quật ngã kẻ địch gây {damage} sát thương Thiên Nhiên mỗi 1.5 giây."
       },
+      "chain_heal": {
+        "name": "Hồi Máu Chuỗi",
+        "description": "Hồi {damage} máu cho mục tiêu, rồi lan tới tối đa 2 đồng minh lân cận, mỗi lần lan hồi bằng một nửa lượng trước đó."
+      },
       "heroic_strike": {
         "name": "Đòn Cướp Phá",
         "description": "Một đòn đánh mạnh tăng sát thương cận chiến thêm {damage}. Kích hoạt ở đòn đánh tiếp theo của bạn."
+      },
+      "cw_heroic_strike": {
+        "name": "Đòn Cướp Phá",
+        "description": "Một đòn đánh mạnh tăng sát thương cận chiến thêm {damage}. Kích hoạt ở đòn đánh tiếp theo của bạn."
+      },
+      "cw_battle_shout": {
+        "name": "Tiếng Gầm Thép",
+        "description": "Tăng sức mạnh tấn công của ngươi thêm {buff} trong 2 phút."
+      },
+      "cw_commanding_shout": {
+        "name": "Tiếng Hô Trợ Uy",
+        "description": "Tăng Thể Lực của ngươi thêm {buff} trong 2 phút."
+      },
+      "cw_charge": {
+        "name": "Xông Tới",
+        "description": "Lao vào kẻ địch, tạo 9 nộ khí và làm choáng nó trong 1 giây. Tầm 8-25 thước."
+      },
+      "cw_rend": {
+        "name": "Vết Rạch Sâu",
+        "description": "Gây vết thương cho mục tiêu, khiến chúng chảy máu nhận {damage} sát thương trong {duration} giây."
+      },
+      "cw_thunder_clap": {
+        "name": "Đòn Chấn Rung",
+        "description": "Giáng đòn lên các kẻ địch lân cận gây {damage} sát thương và làm chậm 10% đòn tấn công của chúng trong 10 giây."
+      },
+      "cw_hamstring": {
+        "name": "Nhát Cắt Què Chân",
+        "description": "Làm bị thương kẻ địch gây {damage} sát thương, làm chậm di chuyển của nó 50% trong 15 giây."
+      },
+      "cw_bloodrage": {
+        "name": "Giá Máu",
+        "description": "Tạo 10 nộ khí bằng cái giá sinh lực."
+      },
+      "cw_overpower": {
+        "name": "Bàn Tay Đẫm Máu",
+        "description": "Đòn tấn công tức thời gây sát thương vũ khí cộng thêm {damage}. Chỉ dùng được sau khi mục tiêu né đòn. Không thể bị né."
+      },
+      "cw_execute": {
+        "name": "Nấm Mồ Sớm",
+        "description": "Cố gắng kết liễu kẻ thù đang trọng thương, gây {damage} sát thương. Chỉ dùng được trên kẻ địch còn dưới 20% máu."
+      },
+      "cw_slam": {
+        "name": "Cú Vung Thô Bạo",
+        "description": "Giáng đòn vào đối thủ gây sát thương vũ khí cộng thêm {damage}."
+      },
+      "cw_cleave": {
+        "name": "Vòng Chém Gặt",
+        "description": "Một đòn chém quét trúng mọi kẻ địch phía trước ngươi gây {damage} sát thương."
+      },
+      "cw_defensive_stance": {
+        "name": "Thế Thủ",
+        "description": "Thế đứng phòng thủ: bạn tạo ra nhiều hơn 30% mối đe dọa nhưng gây và nhận ít hơn 10% sát thương. Thi triển lại để rời khỏi thế đứng."
+      },
+      "cw_demoralizing_shout": {
+        "name": "Tiếng Hú Hung Hiểm",
+        "description": "Bật ra tiếng hô đáng sợ, giảm sức tấn công của tất cả kẻ địch xung quanh đi {buff} trong 30 giây."
+      },
+      "cw_sunder_armor": {
+        "name": "Xẻ Giáp",
+        "description": "Xẻ toạc giáp của mục tiêu, giảm {damage}% mỗi lần áp dụng. Cộng dồn tối đa 5 lần. Tạo ra lượng đe dọa lớn."
+      },
+      "cw_taunt": {
+        "name": "Chọc Tức",
+        "description": "Khiêu khích mục tiêu: đe dọa của bạn tăng lên ngang bằng kẻ địch mà nó căm ghét nhất và nó buộc phải tấn công bạn trong 3 giây."
+      },
+      "cw_bloodthirst": {
+        "name": "Trích Huyết",
+        "description": "Tấn công tức thời trong cơn cuồng huyết gây 60% sát thương vũ khí cộng thêm {damage}. (Tuyệt chiêu Cuồng Nộ)"
+      },
+      "cw_mortal_strike": {
+        "name": "Đòn Tàn Phế",
+        "description": "Một đòn đánh hung hãn gây sát thương vũ khí cộng thêm {damage}. (Đặc trưng nhánh Vũ Khí)"
+      },
+      "cw_shield_slam": {
+        "name": "Giáng Nứt Khiên",
+        "description": "Giáng khiên vào mục tiêu gây 50% sát thương vũ khí cộng thêm {damage} và lượng đe dọa khổng lồ. (Đặc trưng Hộ Vệ)"
+      },
+      "cw_whirlwind": {
+        "name": "Vòng Xoáy Lưỡi Kiếm",
+        "description": "Xoay theo một vòng cung chết chóc, đánh tất cả kẻ địch lân cận gây {damage}. (Tài năng Cuồng Nộ)"
+      },
+      "cw_berserker_rage": {
+        "name": "Thịnh Nộ Sục Sôi",
+        "description": "Bước vào cơn thịnh nộ sục sôi, tạo 20 nộ khí. (Tài năng Chiến Binh)"
+      },
+      "revenge": {
+        "name": "Phục Thù",
+        "description": "Tấn công theo một vòng cung rộng, gây sát thương Vật Lý lên mọi kẻ địch phía trước bạn. Trên 5 mục tiêu thì sát thương bị giảm. Khi bạn né hoặc gạt đòn, Phục Thù tiếp theo của bạn có thể không tốn nộ khí."
       },
       "battle_shout": {
         "name": "Tiếng Gầm Thép",
@@ -5147,7 +5298,7 @@ export const vi_VN: EnTranslations = {
       },
       "slam": {
         "name": "Cú Vung Thô Bạo",
-        "description": "Giáng đòn vào đối thủ gây sát thương vũ khí cộng thêm {damage}."
+        "description": "Giáng đòn vào đối thủ gây 50% sát thương vũ khí cộng thêm {damage} và tạo {rage} nộ."
       },
       "cleave": {
         "name": "Vòng Chém Gặt",
@@ -5156,6 +5307,14 @@ export const vi_VN: EnTranslations = {
       "defensive_stance": {
         "name": "Thế Thủ",
         "description": "Thế đứng phòng thủ: bạn tạo ra nhiều hơn 30% mối đe dọa nhưng gây và nhận ít hơn 10% sát thương. Thi triển lại để rời khỏi thế đứng."
+      },
+      "battle_stance": {
+        "name": "Thế Công",
+        "description": "Thế đứng tấn công hung hãn: bạn tạo nộ khí nhiều hơn 10%. Thế đứng mặc định của nhánh Vũ Khí và nhánh Hộ Vệ."
+      },
+      "berserker_stance": {
+        "name": "Thế Cuồng Chiến",
+        "description": "Thế đứng liều lĩnh: các đòn chí mạng của bạn xuất hiện thường xuyên hơn 3% và đánh mạnh hơn 3%. Chiến Binh nhánh Cuồng Nộ luôn chiến đấu trong thế đứng này."
       },
       "sunder_armor": {
         "name": "Xẻ Giáp",
@@ -5645,9 +5804,77 @@ export const vi_VN: EnTranslations = {
         "name": "Đòn Tàn Phế",
         "description": "Một đòn đánh hung hãn gây sát thương vũ khí cộng thêm {damage}. (Đặc trưng nhánh Vũ Khí)"
       },
+      "sweeping_strikes": {
+        "name": "Vòng Cung Mở Rộng",
+        "description": "Trong 12 giây, các đòn tấn công đơn mục tiêu của bạn cũng đánh trúng 1 kẻ địch lân cận với toàn bộ sát thương. (nhánh Vũ Khí)"
+      },
+      "deep_wounds": {
+        "name": "Vết Thương Toác Rộng",
+        "description": "Nội tại: Đòn Tàn Phế của bạn khiến mục tiêu chảy máu, nhận sát thương Vật Lý trong 6 giây. (nhánh Vũ Khí)"
+      },
+      "enrage_passive": {
+        "name": "Cuồng Loạn",
+        "description": "Nội tại: khi Cuồng Hóa, bạn gây thêm 7% sát thương, tấn công nhanh hơn 25% và di chuyển nhanh hơn 10% trong 4 giây. Trích Huyết có 30% cơ hội khiến bạn Cuồng Hóa; Mùa Gặt Đỏ thì luôn luôn. (nhánh Cuồng Nộ)"
+      },
       "bloodthirst": {
         "name": "Trích Huyết",
         "description": "Tấn công tức thời trong cơn cuồng huyết gây 60% sát thương vũ khí cộng thêm {damage}. (Tuyệt chiêu Cuồng Nộ)"
+      },
+      "raging_gale": {
+        "name": "Song Kích",
+        "description": "Lập tức vung vũ khí đánh hai lần, mỗi đòn gây 40% sát thương vũ khí cộng thêm {damage}, và tạo {rage} nộ khí. Tích trữ tối đa 2 lượt dùng. (nhánh Cuồng Nộ)"
+      },
+      "red_harvest": {
+        "name": "Mùa Gặt Đỏ",
+        "description": "Dốc cạn tất cả: chém ba lần trong cơn điên cuồng, mỗi đòn gây 65% sát thương vũ khí cộng thêm {damage}, và luôn khiến bạn Cuồng Hóa. (nhánh Cuồng Nộ)"
+      },
+      "furious_mending": {
+        "name": "Hồi Phục Cuồng Nộ",
+        "description": "Trong 10 giây bạn nhận ít hơn 20% sát thương, và trong lúc hiệu ứng còn hiệu lực, Trích Huyết của bạn hồi cho bạn 20% máu tối đa. (nhánh Cuồng Nộ)"
+      },
+      "emboldening_roar": {
+        "name": "Tiếng Gầm Khích Lệ",
+        "description": "Bật lên một tiếng gầm khích lệ: bạn và những người chơi thân thiện trong vòng 40 thước được Khích Lệ, và 3 kỹ năng tiếp theo của bạn chắc chắn là đòn chí mạng. (nhánh Cuồng Nộ)"
+      },
+      "raised_guard": {
+        "name": "Giương Khiên",
+        "description": "Ghì chặt sau tấm khiên: bạn nhận ít hơn 50% sát thương Vật Lý trong 6 giây. Tích trữ tối đa 2 lượt dùng. (nhánh Hộ Vệ)"
+      },
+      "iron_resolve": {
+        "name": "Ý Chí Sắt Đá",
+        "description": "Nghiến răng phớt lờ cơn đau: tiêu hao toàn bộ nộ khí của bạn (tối thiểu 20) để hấp thụ 4 sát thương cho mỗi điểm nộ khí đã dùng, kéo dài tối đa 10 giây. (nhánh Hộ Vệ)"
+      },
+      "faultline": {
+        "name": "Vết Nứt Địa Tầng",
+        "description": "Truyền một chấn động xuyên qua mặt đất: kẻ địch phía trước bạn trong vòng 8 thước nhận {damage} sát thương và bị choáng trong 3 giây. (nhánh Hộ Vệ)"
+      },
+      "defiant_bellow": {
+        "name": "Tiếng Gầm Thách Thức",
+        "description": "Một tiếng gầm thách thức: mọi kẻ địch trong vòng 10 thước bị khiêu khích, buộc phải tấn công bạn trong 3 giây. (nhánh Hộ Vệ)"
+      },
+      "breachmaker": {
+        "name": "Đòn Công Thành",
+        "description": "Nện mục tiêu gây sát thương vũ khí cộng thêm {damage} và phá vỡ thế thủ của nó: các đòn tấn công của chính bạn lên mục tiêu này gây thêm 20% sát thương trong 8 giây. (nhánh Vũ Khí)"
+      },
+      "measured_fury": {
+        "name": "Thịnh Nộ Chừng Mực",
+        "description": "Cơn thịnh nộ chừng mực giúp bạn chi tiêu khôn ngoan hơn: các kỹ năng của bạn tốn ít hơn 10% nộ khí. (nhánh Vũ Khí)"
+      },
+      "seasoned_soldier": {
+        "name": "Người Lính Dày Dạn",
+        "description": "Các đòn đánh thường chí mạng của bạn tạo nộ khí nhiều hơn 10%. (nhánh Vũ Khí)"
+      },
+      "diabolical_twinstrike": {
+        "name": "Song Kích Hiểm Ác",
+        "description": "Khi đang Cuồng Hóa, Song Kích của bạn gây thêm 15% sát thương. (nhánh Cuồng Nộ)"
+      },
+      "cleaving_blows": {
+        "name": "Đòn Chém Bổ",
+        "description": "Mùa Gặt Đỏ luôn hoàn lại một lượt dùng Song Kích. (nhánh Cuồng Nộ)"
+      },
+      "sudden_death": {
+        "name": "Đột Tử",
+        "description": "Các đòn đánh thường của bạn có cơ hội cho phép bạn tung Nấm Mồ Sớm lên mục tiêu ở bất kỳ mức máu nào mà không tốn nộ khí. (nhánh Vũ Khí)"
       },
       "shield_slam": {
         "name": "Giáng Nứt Khiên",
@@ -5661,13 +5888,13 @@ export const vi_VN: EnTranslations = {
         "name": "Thịnh Nộ Sục Sôi",
         "description": "Bước vào cơn thịnh nộ sục sôi, tạo 20 nộ khí. (Tài năng Chiến Binh)"
       },
+      "holy_shock": {
+        "name": "Sốc Thánh",
+        "description": "Gây sốc một mục tiêu đồng minh bằng năng lượng Thánh, hồi cho họ {damage}. (dấu ấn Thánh)"
+      },
       "crusader_strike": {
         "name": "Đòn Thập Tự",
         "description": "Đánh mục tiêu bằng sát thương vũ khí cộng {damage} sát thương Thánh. (tài năng Paladin)"
-      },
-      "chain_heal": {
-        "name": "Hồi Máu Chuỗi",
-        "description": "Hồi một lượng lớn máu cho mục tiêu đồng minh, rồi truyền sang tối đa 2 đồng minh khác ở gần. Mỗi lần truyền hồi ít hơn 50%. (Kỹ năng đặc trưng của Hồi phục)"
       },
       "metamorphosis": {
         "name": "Biến Hình",
@@ -5677,13 +5904,13 @@ export const vi_VN: EnTranslations = {
         "name": "Sóng Hào Quang",
         "description": "Quá tải hào quang của bạn, gia cố 160 giáp trong 10 giây. (thiên phú Paladin)"
       },
-      "holy_shock": {
-        "name": "Sốc Thánh",
-        "description": "Gây sốc một mục tiêu đồng minh bằng năng lượng Thánh, hồi cho họ {damage}. (dấu ấn Thánh)"
-      },
       "holy_shield": {
         "name": "Khiên Thánh",
         "description": "Bảo vệ bạn bằng sức mạnh Thánh trong 10 giây, tăng giáp thêm 90 và đánh kẻ tấn công cận chiến gây 12 sát thương Thánh. (dấu ấn Bảo Hộ)"
+      },
+      "repentance": {
+        "name": "Sám Hối",
+        "description": "Đưa kẻ địch vào trạng thái thiền định tối đa 6 giây. Bất kỳ sát thương nào cũng phá vỡ hiệu ứng. (dấu ấn Trừng Phạt)"
       },
       "bestial_wrath": {
         "name": "Cơn Thịnh Nộ Dã Thú",
@@ -5737,9 +5964,21 @@ export const vi_VN: EnTranslations = {
         "name": "Tinh Thông Nguyên Tố",
         "description": "Kêu gọi tinh thông nguyên tố, khiến phép tiếp theo của bạn thi triển tức thì. (dấu ấn Nguyên Tố)"
       },
+      "shamanistic_rage": {
+        "name": "Thịnh Nộ Shaman",
+        "description": "Giải phóng cơn thịnh nộ shaman, phục hồi 160 mana. (dấu ấn Cường Hóa)"
+      },
+      "natures_swiftness": {
+        "name": "Thần Tốc Thiên Nhiên",
+        "description": "Kêu gọi thiên nhiên để phép tiếp theo của bạn thi triển tức thời. (dấu ấn Phục Hồi)"
+      },
       "siphon_life": {
         "name": "Hút Sự Sống",
         "description": "Hút sự sống từ kẻ địch, gây {damage} sát thương Bóng Tối trong 30 giây và hồi cho bạn bằng lượng sát thương đã gây. (dấu ấn Đau Khổ)"
+      },
+      "fel_domination": {
+        "name": "Thống Trị Tà Năng",
+        "description": "Thống trị nguồn tà năng, khiến phép tiếp theo của bạn thi triển tức thời. (dấu ấn Quỷ Thuật)"
       },
       "conflagrate": {
         "name": "Bùng Cháy",
@@ -5756,6 +5995,34 @@ export const vi_VN: EnTranslations = {
       "swiftmend": {
         "name": "Hồi Phục Nhanh",
         "description": "Tiêu thụ một hiệu ứng hồi máu theo thời gian trên mục tiêu đồng minh để hồi cho họ {damage}. (dấu ấn Phục Hồi)"
+      },
+      "storm_bolt": {
+        "name": "Cú Ném Bão Tố",
+        "description": "Ném vũ khí của bạn vào mục tiêu gây {damage} sát thương, làm choáng nó trong 3 giây."
+      },
+      "piercing_howl": {
+        "name": "Tiếng Hú Xuyên Thấu",
+        "description": "Một tiếng hét xuyên thấu làm chậm mọi kẻ địch trong vòng 15 thước đi 50% trong 8 giây."
+      },
+      "die_by_sword": {
+        "name": "Sống Chết Cùng Kiếm",
+        "description": "Kỹ năng phòng thủ hồi chiêu dài: trong 8 giây bạn nhận ít hơn 30% sát thương và né được nhiều đòn tấn công hơn hẳn."
+      },
+      "recklessness": {
+        "name": "Liều Lĩnh",
+        "description": "Cuồng Hóa: lượng nộ khí bạn tạo ra tăng 50% và tỉ lệ chí mạng tăng 20% trong 12 giây."
+      },
+      "sanguine_aura": {
+        "name": "Hào Quang Huyết Sắc",
+        "description": "Tẩm máu quân thù lên vũ khí của bạn: bạn và các đồng minh cận chiến nhận thêm 10% tốc độ tấn công và 10% sát thương trong 20 giây."
+      },
+      "victory_rush": {
+        "name": "Đà Chiến Thắng",
+        "description": "Giáng đòn gây sát thương vũ khí cộng thêm {damage} và hồi 20% máu tối đa của bạn. Chỉ dùng được trong vòng 20 giây sau khi hạ gục một kẻ địch."
+      },
+      "intimidating_shout": {
+        "name": "Tiếng Hét Uy Hiếp",
+        "description": "Một tiếng hét kinh hoàng khiến tối đa 5 kẻ địch trong vòng 8 thước bỏ chạy trong sợ hãi suốt 8 giây. Sát thương có thể phá vỡ hiệu ứng."
       },
       "summon_imp": {
         "name": "Triệu Hồi Emberkin",
@@ -6194,6 +6461,15 @@ export const vi_VN: EnTranslations = {
       },
       "linen_scrap": {
         "name": "Mảnh Vải Lanh"
+      },
+      "arcane_dust": {
+        "name": "Bụi Bí Thuật"
+      },
+      "arcane_essence": {
+        "name": "Tinh Chất Bí Thuật"
+      },
+      "arcane_shard": {
+        "name": "Mảnh Bí Thuật"
       },
       "fen_muster_order": {
         "name": "Lệnh Tập Hợp Fenbridge"
@@ -7107,6 +7383,18 @@ export const vi_VN: EnTranslations = {
       "heroic_mark": {
         "name": "Dấu Ấn Anh Hùng"
       },
+      "eastbrook_buckler": {
+        "name": "Khiên Nhỏ Đông Khê"
+      },
+      "highwatch_wallshield": {
+        "name": "Khiên Tường Highwatch"
+      },
+      "eastbrook_greatsword": {
+        "name": "Đại Kiếm Đông Khê"
+      },
+      "highwatch_greatsword": {
+        "name": "Đại Kiếm Highwatch"
+      },
       "morthens_cryptforged_hauberk": {
         "name": "Áo Giáp Lưới Rèn Hầm Mộ của Morthen"
       },
@@ -7289,6 +7577,18 @@ export const vi_VN: EnTranslations = {
       },
       "stormcallers_spaulders_heroic": {
         "name": "Giáp Vai Galecall"
+      },
+      "bonewrought_greatsword": {
+        "name": "Đại Kiếm Bonewrought"
+      },
+      "direfang_greatblade": {
+        "name": "Đại Đao Direfang"
+      },
+      "bonewrought_bulwark": {
+        "name": "Khiên Lũy Bonewrought"
+      },
+      "wraithfire_orb": {
+        "name": "Quả Cầu Wraithfire"
       },
       "unknown_alien_weaponry": {
         "name": "Vũ Khí Ngoài Hành Tinh Bí Ẩn"

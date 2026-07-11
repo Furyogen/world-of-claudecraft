@@ -116,7 +116,7 @@ export function releasePlayerSpirit(ctx: SimContext, pid?: number): void {
   // cannot be shed by dying. Every other aura clears when the spirit is released.
   p.auras = aurasSurvivingDeath(p.auras);
   p.ccDr.clear();
-  recalcPlayerStats(p, meta.cls, meta.equipment, ctx.playerMods(meta));
+  recalcPlayerStats(p, meta.cls, meta.equipment, ctx.playerMods(meta), meta.equipmentInstance);
   // A ghost shows a full (greyed) bar even though it is still `dead`. recalc forces
   // hp to 0 while dead, so set the display pools afterward.
   p.hp = p.maxHp;
@@ -173,6 +173,14 @@ export function resurrectOnInstanceReentry(
   ctx.emit({ type: 'respawn', pid: meta.entityId });
 }
 
+export function revivePlayerAt(ctx: SimContext, pid: number, pos: Vec3, hpFrac = 1): void {
+  const r = ctx.resolve(pid);
+  if (!r) return;
+  const wasDead = r.e.dead || r.e.ghost;
+  reviveAt(ctx, r.meta, r.e, pos, hpFrac, false);
+  if (wasDead) ctx.emit({ type: 'respawn', pid: r.meta.entityId });
+}
+
 // Whether a Spirit Healer NPC stands within reach of the spirit.
 function spiritHealerInRange(ctx: SimContext, p: Entity): boolean {
   for (const e of ctx.entities.values()) {
@@ -207,7 +215,7 @@ function reviveAt(
   // resurrection refreshes it to full duration via applyResurrectionSickness below.
   p.auras = aurasSurvivingDeath(p.auras);
   p.ccDr.clear();
-  recalcPlayerStats(p, meta.cls, meta.equipment, ctx.playerMods(meta));
+  recalcPlayerStats(p, meta.cls, meta.equipment, ctx.playerMods(meta), meta.equipmentInstance);
   p.hp = Math.max(1, Math.round(p.maxHp * hpFrac));
   p.resource = p.resourceType === 'mana' ? Math.round(p.maxResource * hpFrac) : 0;
   p.targetId = null;

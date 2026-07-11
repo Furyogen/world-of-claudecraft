@@ -53,6 +53,12 @@ const PCT_FIELDS = new Set([
   'cooldownPct',
   'castPct',
   'buffPct',
+  // Recompense (warrior prot mastery): armor granted as a fraction of Strength
+  // (entity.ts folds s.str * armorFromStrPct), shown as "70% of your Strength".
+  'armorFromStrPct',
+  // Master Armorer (warrior arms mastery): fraction of extra damage while wielding
+  // a two-handed weapon, applied at runtime in combat/damage.ts, shown as "10%".
+  'masteryTwoHandDmgPct',
 ]);
 
 function expectedTokens(effect: unknown): string[] {
@@ -233,9 +239,11 @@ describe('talent tooltip accuracy for specs, masteries, and choice rows', () => 
   const specs = specEntries();
 
   it('covers every class, every spec, and every choice row option', () => {
-    expect(new Set(effects.map((e) => e.cls)).size).toBe(9);
-    expect(specs).toHaveLength(27);
-    expect(effects.length).toBe(27 + 9 * 6 * 3);
+    // 10 classes: the 9 originals plus warrior_classic (the pre-overhaul PTR
+    // clone), each with 3 specs and 6 choice rows of 3 options.
+    expect(new Set(effects.map((e) => e.cls)).size).toBe(10);
+    expect(specs).toHaveLength(30);
+    expect(effects.length).toBe(30 + 10 * 6 * 3);
   });
 
   it('every spec tooltip names its signature ability', () => {

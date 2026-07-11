@@ -662,6 +662,8 @@ export const it_IT: Record<string, string> = {
   'staff.viaScript': 'script di concessione',
   'nav.history': 'Cronologia',
   'moderationHistory.actionKick': 'Espulso',
+  'moderationHistory.actionJail': 'Incarcerato',
+  'moderationHistory.actionUnjail': 'Scarcerato',
   'moderationHistory.actionKill': 'Ucciso',
   'moderationHistory.actionIpBlock': 'IP bloccato',
   'moderationHistory.actionIpUnblock': 'IP sbloccato',

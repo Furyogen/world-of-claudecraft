@@ -14,6 +14,70 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const de_DE: Partial<Record<TranslationKey, string>> = {
+  'entities.abilities.cw_heroic_strike.name': 'Reaver-Hieb',
+  'entities.abilities.cw_heroic_strike.description':
+    'Ein mächtiger Angriff, der den Nahkampfschaden um {damage} erhöht. Wird bei eurem nächsten Schwung ausgelöst.',
+  'entities.abilities.cw_battle_shout.name': 'Eisernes Gebrüll',
+  'entities.abilities.cw_battle_shout.description':
+    'Erhöht eure Angriffskraft 2 Min. lang um {buff}.',
+  'entities.abilities.cw_commanding_shout.name': 'Stärkender Ruf',
+  'entities.abilities.cw_commanding_shout.description':
+    'Erhöht eure Ausdauer 2 Min. lang um {buff}.',
+  'entities.abilities.cw_charge.name': 'Vorpreschen',
+  'entities.abilities.cw_charge.description':
+    'Stürmt auf einen Gegner zu, erzeugt 9 Wut und betäubt ihn 1 Sek. lang. Reichweite 8-25 m.',
+  'entities.abilities.cw_rend.name': 'Tiefe Wunde',
+  'entities.abilities.cw_rend.description':
+    'Verwundet das Ziel und lässt es über {duration} Sek. für {damage} Schaden bluten.',
+  'entities.abilities.cw_thunder_clap.name': 'Bebender Schlag',
+  'entities.abilities.cw_thunder_clap.description':
+    'Trifft nahe Gegner für {damage} Schaden und verlangsamt ihre Angriffe 10 Sek. lang um 10%.',
+  'entities.abilities.cw_hamstring.name': 'Lähmender Schnitt',
+  'entities.abilities.cw_hamstring.description':
+    'Verkrüppelt den Gegner für {damage} Schaden und verringert sein Bewegungstempo 15 Sek. lang um 50%.',
+  'entities.abilities.cw_bloodrage.name': 'Blutzoll',
+  'entities.abilities.cw_bloodrage.description': 'Erzeugt 10 Wut auf Kosten von Gesundheit.',
+  'entities.abilities.cw_overpower.name': 'Redhand',
+  'entities.abilities.cw_overpower.description':
+    'Sofortiger Angriff mit Waffenschaden plus {damage}. Nur einsetzbar, nachdem das Ziel ausgewichen ist. Kann nicht ausgewichen werden.',
+  'entities.abilities.cw_execute.name': 'Frühes Grab',
+  'entities.abilities.cw_execute.description':
+    'Versucht, einen verwundeten Gegner zu erledigen, und verursacht {damage} Schaden. Nur bei Gegnern unter 20% Gesundheit einsetzbar.',
+  'entities.abilities.cw_slam.name': 'Roher Schwung',
+  'entities.abilities.cw_slam.description':
+    'Zerschmettert den Gegner für Waffenschaden plus {damage}.',
+  'entities.abilities.cw_cleave.name': 'Sichelschwung',
+  'entities.abilities.cw_cleave.description':
+    'Ein weiter Hieb, der alle Gegner vor euch für {damage} Schaden trifft.',
+  'entities.abilities.cw_defensive_stance.name': 'Wehrhafte Haltung',
+  'entities.abilities.cw_defensive_stance.description':
+    'Defensive Kampfhaltung: Ihr erzeugt 30% mehr Bedrohung, verursacht und erleidet aber 10% weniger Schaden. Erneut wirken, um die Haltung zu verlassen.',
+  'entities.abilities.cw_demoralizing_shout.name': 'Direhowl',
+  'entities.abilities.cw_demoralizing_shout.description':
+    'Stößt einen furchterregenden Ruf aus und verringert die Angriffskraft aller nahen Gegner 30 Sek. lang um {buff}.',
+  'entities.abilities.cw_sunder_armor.name': 'Rüstungsspalter',
+  'entities.abilities.cw_sunder_armor.description':
+    'Spaltet die Rüstung des Ziels und verringert sie pro Anwendung um {damage}%. Stapelt sich bis zu 5-mal. Erzeugt sehr viel Bedrohung.',
+  'entities.abilities.cw_taunt.name': 'Anstacheln',
+  'entities.abilities.cw_taunt.description':
+    'Verspottet das Ziel: Eure Bedrohung steigt auf die seines meistgehassten Gegners und es wird 3 Sek. lang gezwungen, euch anzugreifen.',
+  'entities.abilities.cw_bloodthirst.name': 'Aderlass',
+  'entities.abilities.cw_bloodthirst.description':
+    'Greift sofort in blutiger Raserei an und verursacht 60% Waffenschaden plus {damage}. (Furor-Signatur)',
+  'entities.abilities.cw_mortal_strike.name': 'Verstümmelnder Hieb',
+  'entities.abilities.cw_mortal_strike.description':
+    'Ein bösartiger Schlag, der Waffenschaden plus {damage} verursacht. (Waffen-Signatur)',
+  'entities.abilities.cw_shield_slam.name': 'Shieldcrack',
+  'entities.abilities.cw_shield_slam.description':
+    'Schlägt das Ziel mit eurem Schild für 50% Waffenschaden plus {damage} und erzeugt enorme Bedrohung. (Schutz-Signatur)',
+  'entities.abilities.cw_whirlwind.name': 'Klingenwirbel',
+  'entities.abilities.cw_whirlwind.description':
+    'Dreht euch in einem tödlichen Bogen und trefft alle nahen Gegner für {damage}. (Furor-Talent)',
+  'entities.abilities.cw_berserker_rage.name': 'Brodelnde Raserei',
+  'entities.abilities.cw_berserker_rage.description':
+    'Ihr verfallt in brodelnde Raserei und erzeugt 20 Wut. (Krieger-Talent)',
+  'classDetails.roles.warriorClassic': 'Tank / Nahkampf-DPS',
+  'classes.warriorClassic': 'Krieger',
   'entities.abilities.sport_boot.description':
     'Ein hoher, weiter Schlag Richtung Zielpunkt. Die Menge liebt es.',
   'entities.abilities.sport_boot.name': 'Weitschlag',
@@ -378,6 +442,12 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
     'Tempowertung aus deiner Ausrüstung und deinen Setboni, die deine Angriffe und dein Zaubern beschleunigt. Etwa 10 Wertung gewähren 1% Tempo.',
   'hudChrome.statInfo.names.critRating': 'Kritische Trefferwertung',
   'hudChrome.statInfo.names.hasteRating': 'Tempowertung',
+  'hudChrome.statInfo.desc.haste':
+    'Beschleunigt deine Waffenschwünge und dein Zauberwirken. Die globale Abklingzeit verringert es nicht.',
+  'hudChrome.statInfo.desc.parry':
+    'Deine Chance, einen frontalen Nahkampfangriff vollständig zu parieren und keinen Schaden zu erleiden. Ein Schlag von hinten kann nicht pariert werden.',
+  'hudChrome.statInfo.names.haste': 'Tempo',
+  'hudChrome.statInfo.names.parry': 'Parieren',
   'itemUi.slots.neck': 'Hals',
   'itemUi.slots.ring': 'Finger',
   'auth.email': 'E-Mail',
@@ -1071,6 +1141,8 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.playerFrameScale': 'Skalierung des Spielerfensters',
   'hudChrome.options.showDailyRewardsChest': 'Truhe der täglichen Belohnungen anzeigen',
   'hudChrome.options.showOwnNameplate': 'Eigene Namensplakette anzeigen',
+  'hudChrome.options.mouseoverCast': 'Mouseover-Wirken auf Gruppenfenstern',
+  'hudChrome.options.showTargetOfTarget': 'Ziel des Ziels anzeigen',
   'hudChrome.options.targetFrameScale': 'Skalierung des Zielfensters',
   'hudChrome.options.walkByAutoloot': 'Plündern im Vorbeigehen',
   'hudChrome.party.inviteUsage': 'Wen einladen? Verwendung: /invite <name>.',
@@ -1083,6 +1155,19 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.unitFrame.durationUnitDays': 'T',
   'hudChrome.unitFrame.durationUnitHours': 'Std',
   'hudChrome.unitFrame.durationUnitMinutes': 'Min',
+  'hudChrome.specPanel.complexity': 'Komplexität',
+  'hudChrome.specPanel.complexityHigh': 'Hoch',
+  'hudChrome.specPanel.complexityLow': 'Niedrig',
+  'hudChrome.specPanel.complexityMedium': 'Mittel',
+  'hudChrome.specPanel.exampleAbilities': 'Beispielfähigkeiten',
+  'hudChrome.specPanel.primaryAttr': 'Primärattribut',
+  'hudChrome.specPanel.selectSpec': 'Spezialisierung wählen',
+  'hudChrome.specPanel.specUnlockBanner': 'Spezialisierung freigeschaltet!',
+  'hudChrome.specPanel.specUnlockHint': 'Drücke N, um deine Spezialisierung zu wählen.',
+  'hudChrome.specPanel.viewTalents': 'Talente ansehen',
+  'hudChrome.talentRows.comingSoon': 'Demnächst verfügbar',
+  'hudChrome.talentRows.defaultLoadout': 'Standardauswahl',
+  'hudChrome.talentRows.tab': 'Entscheidungen',
   'itemUi.kind.bag': 'Tasche',
   'itemUi.tooltip.bagSlots': 'Tasche mit {slots} Plätzen',
   'sim.delve.baptistryEggs':
@@ -1204,6 +1289,7 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.unitFrame.playerLabel': 'Euer Charakter',
   'hudChrome.unitFrame.targetAnnounce': 'Ziel: {name}',
   'hudChrome.unitFrame.targetLabel': 'Euer Ziel',
+  'hudChrome.unitFrame.targetOfTargetLabel': 'Ziel des Ziels',
   'seo.officialLabel': 'Offizielle Website von World of ClaudeCraft',
   'seo.officialBody':
     'worldofclaudecraft.com ist das offizielle kostenlose Browser-MMO für die Welt Claudemoon. Spiele online mit einem dauerhaften Charakter, erkunde solo offline, lies das Wiki und folge den verifizierten Community-Links auf dieser Website.',
@@ -1938,6 +2024,8 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'classDetails.weapons.macesAxes': 'Streitkolben, Äxte',
   'classDetails.lore.warrior':
     'Krieger sind kampferprobte Nahkämpfer, die Wut aufbauen, wenn sie Schaden verursachen oder erleiden. Sie halten schwere Treffer aus oder zerschmettern Gegner.',
+  'classDetails.lore.warriorClassic':
+    'Der Krieger genau so, wie er sich vor der Kampfüberarbeitung gespielt hat: das ursprüngliche Fähigkeitenrepertoire und das alte Wut-Tempo, erhalten neben dem neuen Krieger, damit du beide ausprobieren und uns sagen kannst, welcher sich besser anfühlt.',
   'classDetails.lore.paladin':
     'Paladine sind heilige Kreuzritter, die mit Segen unterstützen, Wunden mit Mending Light heilen und Schwache in schwerer Rüstung schützen.',
   'classDetails.lore.hunter':
@@ -2206,6 +2294,7 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hud.prompts.decline': 'Ablehnen',
   'hud.combat.floatingMiss': 'Verfehlt',
   'hud.combat.floatingDodge': 'Ausgewichen',
+  'hud.combat.floatingParry': 'Pariert',
   'hud.combat.attack': 'Angriff',
   'hud.combat.damageDone': 'Euer {ability} trifft {target} für {amount}.',
   'hud.combat.damageDoneCrit': 'Euer {ability} trifft {target} kritisch für {amount}.',
@@ -2213,6 +2302,7 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hud.combat.damageTakenCrit': '{source} trifft Euch kritisch für {amount}.',
   'hud.combat.miss': 'Euer {ability} verfehlt {target}.',
   'hud.combat.dodged': '{target} weicht Eurem {ability} aus.',
+  'hud.combat.parried': '{target} pariert Euer {ability}.',
   'hud.combat.healSelf': 'Euer {ability} heilt Euch um {amount}.',
   'hud.combat.healSelfCrit': 'Euer {ability} heilt Euch kritisch um {amount}.',
   'hud.combat.healOther': 'Euer {ability} heilt {target} um {amount}.',
@@ -2253,6 +2343,7 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hud.errors.notEnoughMana': 'Nicht genug Mana!',
   'hud.errors.notEnoughResource': 'Nicht genug {resource}!',
   'hud.errors.notEnoughHealth': 'Nicht genug Gesundheit.',
+  'hud.errors.nothingToConsume': 'Nichts zu verzehren.',
   'hud.errors.targetMustDodge': 'Euer Ziel muss zuerst ausweichen.',
   'hud.errors.requiresCombo': 'Diese Fähigkeit benötigt Combopunkte.',
   'hud.errors.requiresForm': 'Ihr müsst in {form}form sein.',
@@ -2273,6 +2364,7 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hud.errors.behindTarget': 'Ihr müsst hinter Eurem Ziel stehen.',
   'hud.errors.polymorph': 'Diese Kreatur kann nicht verwandelt werden.',
   'hud.errors.noSeal': 'Ihr habt kein aktives Siegel.',
+  'hud.errors.needShield': 'Ihr müsst einen Schild angelegt haben.',
   'hud.errors.cannotTaunt': 'Das könnt Ihr nicht verspotten.',
   'hud.errors.noPet': 'Ihr habt kein Begleittier.',
   'hud.errors.invalidAttackTarget': 'Ungültiges Angriffsziel.',
@@ -2573,6 +2665,7 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'itemUi.money.silver': 'Silber',
   'itemUi.money.copper': 'Kupfer',
   'itemUi.slots.mainhand': 'Waffenhand',
+  'itemUi.slots.twoHand': 'Zweihändig',
   'itemUi.slots.chest': 'Brust',
   'itemUi.slots.legs': 'Beine',
   'itemUi.slots.feet': 'Füße',
@@ -2798,9 +2891,104 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.execute.name': 'Frühes Grab',
   'entities.abilities.execute.description':
     'Versucht, einen verwundeten Gegner zu erledigen, und verursacht {damage} Schaden. Nur bei Gegnern unter 20% Gesundheit einsetzbar.',
+  'entities.abilities.battle_stance.name': 'Kampfhaltung',
+  'entities.abilities.battle_stance.description':
+    'Eine aggressive Kampfhaltung: Ihr erzeugt 10% mehr Wut. Die Standardhaltung für Waffen und Schutz.',
+  'entities.abilities.berserker_stance.name': 'Berserkerhaltung',
+  'entities.abilities.berserker_stance.description':
+    'Eine tollkühne Kampfhaltung: Eure kritischen Treffer gelingen 3% öfter und treffen 3% härter. Der Furor-Krieger kämpft stets in dieser Haltung.',
+  'entities.abilities.breachmaker.name': 'Breschenbrecher',
+  'entities.abilities.breachmaker.description':
+    'Prügelt auf das Ziel ein für Waffenschaden plus {damage} und brecht seine Deckung: Eure eigenen Angriffe gegen das Ziel verursachen 8 Sek. lang 20% mehr Schaden. (Waffen)',
+  'entities.abilities.chain_heal.description':
+    'Heilt das Ziel um {damage} und springt dann auf bis zu 2 nahe Verbündete über, wobei jeder Sprung um die Hälfte des vorherigen Werts heilt.',
+  'entities.abilities.cleaving_blows.name': 'Spaltende Hiebe',
+  'entities.abilities.cleaving_blows.description':
+    'Rote Ernte erstattet immer eine Aufladung von Zwillingsschlag zurück. (Furor)',
+  'entities.abilities.deep_wounds.name': 'Klaffende Wunden',
+  'entities.abilities.deep_wounds.description':
+    'Passiv: Euer Verstümmelnder Hieb lässt das Ziel bluten und verursacht über 6 Sek. physischen Schaden. (Waffen)',
+  'entities.abilities.defiant_bellow.name': 'Trotziges Gebrüll',
+  'entities.abilities.defiant_bellow.description':
+    'Ein trotziges Gebrüll: Jeder Gegner im Umkreis von 10 m wird verspottet und 3 Sek. lang gezwungen, Euch anzugreifen. (Schutz)',
+  'entities.abilities.diabolical_twinstrike.name': 'Diabolischer Zwillingsschlag',
+  'entities.abilities.diabolical_twinstrike.description':
+    'Solange Ihr wutentbrannt seid, verursacht Euer Zwillingsschlag 15% mehr Schaden. (Furor)',
+  'entities.abilities.die_by_sword.name': 'Tod durch das Schwert',
+  'entities.abilities.die_by_sword.description':
+    'Defensive Abklingzeit: 8 Sek. lang erleidet Ihr 30% weniger Schaden und weicht weit mehr Angriffen aus.',
+  'entities.abilities.emboldening_roar.name': 'Ermutigendes Gebrüll',
+  'entities.abilities.emboldening_roar.description':
+    'Stößt ein ermutigendes Gebrüll aus: Ihr und freundliche Spieler im Umkreis von 40 m erhaltet Ermutigung, und Eure nächsten 3 Fähigkeiten treffen garantiert kritisch. (Furor)',
+  'entities.abilities.enrage_passive.name': 'Gemetzel',
+  'entities.abilities.enrage_passive.description':
+    'Passiv: Solange Ihr wutentbrannt seid, verursacht Ihr 4 Sek. lang 7% mehr Schaden, greift 25% schneller an und bewegt Euch 10% schneller. Aderlass hat eine Chance von 30%, Euch wutentbrannt zu machen; Rote Ernte tut es immer. (Furor)',
+  'entities.abilities.faultline.name': 'Bruchlinie',
+  'entities.abilities.faultline.description':
+    'Schickt eine Schockwelle durch den Boden: Gegner vor Euch im Umkreis von 8 m erleiden {damage} Schaden und werden 3 Sek. lang betäubt. (Schutz)',
+  'entities.abilities.fel_domination.name': 'Dämonische Beherrschung',
+  'entities.abilities.fel_domination.description':
+    'Beherrscht dämonische Energien und macht Euren nächsten Zauber sofort wirkbar. (Dämonologie-Signatur)',
+  'entities.abilities.furious_mending.name': 'Rasende Heilung',
+  'entities.abilities.furious_mending.description':
+    '10 Sek. lang erleidet Ihr 20% weniger Schaden, und solange der Effekt anhält, heilt Euch Euer Aderlass um 20% Eurer maximalen Gesundheit. (Furor)',
+  'entities.abilities.intimidating_shout.name': 'Drohruf',
+  'entities.abilities.intimidating_shout.description':
+    'Ein furchteinflößender Schrei, der bis zu 5 Gegner im Umkreis von 8 m 8 Sek. lang in Furcht davonlaufen lässt. Schaden kann den Effekt brechen.',
+  'entities.abilities.iron_resolve.name': 'Eiserne Entschlossenheit',
+  'entities.abilities.iron_resolve.description':
+    'Beißt die Zähne zusammen und ignoriert den Schmerz: Verbraucht Eure gesamte Wut (mindestens 20), um je ausgegebenem Punkt Wut 4 Schaden zu absorbieren, bis zu 10 Sek. lang. (Schutz)',
+  'entities.abilities.measured_fury.name': 'Maßvoller Zorn',
+  'entities.abilities.measured_fury.description':
+    'Euer maßvoller Zorn lehrt Euch Sparsamkeit: Eure Fähigkeiten kosten 10% weniger Wut. (Waffen)',
+  'entities.abilities.natures_swiftness.name': 'Schnelligkeit der Natur',
+  'entities.abilities.natures_swiftness.description':
+    'Ruft die Natur an, um Euren nächsten Zauber sofort wirkbar zu machen. (Wiederherstellungs-Signatur)',
+  'entities.abilities.piercing_howl.name': 'Durchdringendes Heulen',
+  'entities.abilities.piercing_howl.description':
+    'Ein durchdringender Schrei, der alle Gegner im Umkreis von 15 m 8 Sek. lang um 50% verlangsamt.',
+  'entities.abilities.raging_gale.name': 'Zwillingsschlag',
+  'entities.abilities.raging_gale.description':
+    'Schlagt sofort zweimal mit Eurer Waffe zu, jeder Treffer verursacht 40% Waffenschaden plus {damage}, und erzeugt {rage} Wut. Speichert bis zu 2 Aufladungen. (Furor)',
+  'entities.abilities.raised_guard.name': 'Erhobene Deckung',
+  'entities.abilities.raised_guard.description':
+    'Verschanzt Euch hinter Eurem Schild: Ihr erleidet 6 Sek. lang 50% weniger physischen Schaden. Speichert bis zu 2 Aufladungen. (Schutz)',
+  'entities.abilities.recklessness.name': 'Tollkühnheit',
+  'entities.abilities.recklessness.description':
+    'Wutausbruch: Eure Wuterzeugung erhöht sich 12 Sek. lang um 50% und Eure kritische Trefferchance um 20%.',
+  'entities.abilities.red_harvest.name': 'Rote Ernte',
+  'entities.abilities.red_harvest.description':
+    'Setzt alles ein: Schlagt dreimal in Raserei zu, jeder Treffer verursacht 65% Waffenschaden plus {damage}, und werdet dabei immer wutentbrannt. (Furor)',
+  'entities.abilities.repentance.name': 'Buße',
+  'entities.abilities.repentance.description':
+    'Versetzt den Gegner bis zu 6 Sek. lang in einen Zustand der Meditation. Jeder Schaden bricht den Effekt. (Vergeltungs-Signatur)',
+  'entities.abilities.revenge.name': 'Rache',
+  'entities.abilities.revenge.description':
+    'Greift in einem weiten Bogen an und verursacht physischen Schaden an allen Gegnern vor Euch. Bei mehr als 5 Zielen ist der Schaden verringert. Wenn Ihr ausweicht oder pariert, kann Eure nächste Rache keine Wut kosten.',
+  'entities.abilities.sanguine_aura.name': 'Blutrote Aura',
+  'entities.abilities.sanguine_aura.description':
+    'Erfüllt Eure Waffe mit dem Blut Eurer Feinde: Ihr und Eure Nahkampfverbündeten erhaltet 20 Sek. lang 10% Angriffstempo und 10% Schaden.',
+  'entities.abilities.seasoned_soldier.name': 'Kampferprobter Soldat',
+  'entities.abilities.seasoned_soldier.description':
+    'Eure kritischen Auto-Angriffe erzeugen 10% mehr Wut. (Waffen)',
+  'entities.abilities.shamanistic_rage.name': 'Schamanistische Wut',
+  'entities.abilities.shamanistic_rage.description':
+    'Entfesselt schamanistische Wut und stellt 160 Mana wieder her. (Verstärkungs-Signatur)',
+  'entities.abilities.storm_bolt.name': 'Sturmblitz',
+  'entities.abilities.storm_bolt.description':
+    'Schleudert Eure Waffe für {damage} auf das Ziel und betäubt es 3 Sek. lang.',
+  'entities.abilities.sudden_death.name': 'Plötzlicher Tod',
+  'entities.abilities.sudden_death.description':
+    'Eure Auto-Angriffe haben eine Chance, Euch Frühes Grab auf ein Ziel mit beliebiger Gesundheit wirken zu lassen, ohne Wut zu kosten. (Waffen)',
+  'entities.abilities.sweeping_strikes.name': 'Ausladender Bogen',
+  'entities.abilities.sweeping_strikes.description':
+    '12 Sek. lang treffen Eure Einzelzielangriffe zusätzlich 1 nahen Gegner mit vollem Schaden. (Waffen)',
+  'entities.abilities.victory_rush.name': 'Siegesrausch',
+  'entities.abilities.victory_rush.description':
+    'Schlagt für Waffenschaden plus {damage} zu und heilt 20% Eurer maximalen Gesundheit. Nur innerhalb von 20 Sek. nach dem Töten eines Gegners einsetzbar.',
   'entities.abilities.slam.name': 'Roher Schwung',
   'entities.abilities.slam.description':
-    'Zerschmettert den Gegner für Waffenschaden plus {damage}.',
+    'Zerschmettert den Gegner für 50 % Waffenschaden plus {damage} und erzeugt {rage} Wut.',
   'entities.abilities.cleave.name': 'Sichelschwung',
   'entities.abilities.cleave.description':
     'Ein weiter Hieb, der alle Gegner vor euch für {damage} Schaden trifft.',
@@ -3501,6 +3689,13 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'entities.items.gravecaller_sigil.name': 'Gravecallers Siegel',
   'entities.items.blessed_wax.name': 'Gesegneter Talg',
   'entities.items.ghostly_essence.name': 'Geisterhafte Essenz',
+  'entities.items.arcane_dust.name': 'Arkaner Staub',
+  'entities.items.arcane_essence.name': 'Arkane Essenz',
+  'entities.items.arcane_shard.name': 'Arkaner Splitter',
+  'entities.items.eastbrook_buckler.name': 'Eastbrook-Faustschild',
+  'entities.items.eastbrook_greatsword.name': 'Eastbrook-Großschwert',
+  'entities.items.highwatch_greatsword.name': 'Highwatch-Großschwert',
+  'entities.items.highwatch_wallshield.name': 'Highwatch-Mauerschild',
   'entities.items.webwood_silk.name': 'Sableweb-Seidendrüse',
   'entities.items.supply_crate.name': 'Gestohlene Vorratskiste',
   'entities.items.greyjaw_fang.name': 'Zahn des alten Greyjaw',
@@ -4684,6 +4879,7 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.paperdoll.unequipAria': '{item} ablegen',
   'hudChrome.paperdoll.unequipHint':
     'Klicke auf ×, Rechtsklick oder in die Taschen ziehen zum Ablegen',
+  'hudChrome.paperdoll.offhand': 'Schildhand',
   'skinEvent.unlocked': 'Kosmetik freigeschaltet!',
   'errors.api.webLoginOnly': 'Anmeldungen sind nur über den Spiel-Client erlaubt.',
   'hudChrome.chatTimestamps.clock12h': '12-Stunden',
@@ -4735,7 +4931,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.meters.perSecond': '{value}/s',
   'hudChrome.meters.perSecondRow': '{total} ({rate})',
   'hudChrome.meters.seconds': '{s} Sek.',
-  'hudChrome.mobile.autorun': 'Auto-Laufen',
   'hudChrome.mobile.haptics': 'Haptik',
   'hudChrome.mobile.hapticsOff': 'Haptik aus',
   'hudChrome.mobile.hotbarPage': 'Fähigkeiten',
@@ -4821,6 +5016,10 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.worldBoss.spawn': '{name} erhebt sich über den Thornpeak-Höhen!',
   'entities.items.stormcallers_spaulders.name': 'Galecall-Schulterplatten',
   'entities.items.stormcallers_spaulders_heroic.name': 'Galecall-Schulterplatten',
+  'entities.items.bonewrought_greatsword.name': 'Bonewrought-Großschwert',
+  'entities.items.direfang_greatblade.name': 'Direfang-Großklinge',
+  'entities.items.bonewrought_bulwark.name': 'Bonewrought-Bollwerk',
+  'entities.items.wraithfire_orb.name': 'Wraithfire-Kugel',
   'hud.chat.context.convertToRaid': 'In Schlachtzug umwandeln',
   'hud.chat.context.convertToParty': 'In Gruppe umwandeln',
   'hudChrome.raidConvert.leaderOnly': 'Nur der Schlachtzugsleiter darf in eine Gruppe umwandeln.',
@@ -5373,6 +5572,17 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
     'Zaubert Getränke herbei, die Mana wiederherstellen, damit du zwischen den Pulls auffüllen kannst.',
   'guide.abilityHook.corruption':
     'Lässt ein Ziel mit Schatten verrotten, der tickt, während du anderes erledigst.',
+  'guide.abilityHook.cw_battle_shout':
+    'Ein aufrüttelnder Ruf, der die Angriffskraft der Gruppe erhöht.',
+  'guide.abilityHook.cw_charge':
+    'Stürmt auf einen entfernten Gegner zu und eröffnet den Kampf mit einer kurzen Betäubung.',
+  'guide.abilityHook.cw_commanding_shout':
+    'Stärkt die Ausdauer, damit alle in einem Kampf länger durchhalten.',
+  'guide.abilityHook.cw_heroic_strike':
+    'Reiht einen schwereren Schwung ein, der bei deinem nächsten Treffer Wut verbraucht.',
+  'guide.abilityHook.cw_rend': 'Eröffnet eine Blutung, die das Ziel über Zeit zermürbt.',
+  'guide.abilityHook.cw_thunder_clap':
+    'Trifft alles um dich herum und verlangsamt deren Angriffe.',
   'guide.abilityHook.demon_skin':
     'Eine anhaltende Selbststärkung, die deine Haut abhärtet und Rüstung verleiht.',
   'guide.abilityHook.devotion_aura':
@@ -5395,6 +5605,8 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
     'Eröffne aus der Verstohlenheit mit einem Draht, der das Ziel über Zeit bluten lässt.',
   'guide.abilityHook.gouge':
     'Macht das Ziel kurz kampfunfähig, damit du dich neu positionieren oder es ablenken kannst.',
+  'guide.abilityHook.hamstring':
+    'Zerschneidet die Beine des Ziels und verlangsamt es, damit es dich nicht einholen kann.',
   'guide.abilityHook.healing_touch':
     'Eine große Einzelzielheilung mit langer Zauberzeit, um jemanden wieder aufzufüllen.',
   'guide.abilityHook.healing_wave':
@@ -5431,6 +5643,8 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'guide.abilityHook.rend': 'Eröffnet eine Blutung, die das Ziel über Zeit zermürbt.',
   'guide.abilityHook.renew':
     'Eine Heilung, die über Zeit tickt, gut zu wirken und dann weiterzugehen.',
+  'guide.abilityHook.revenge':
+    'Ein ausholender Konterangriff, der alles vor dir trifft und direkt nach einem abgewehrten Schlag günstiger wird.',
   'guide.abilityHook.rockbiter_weapon':
     'Verzaubert deine Waffe, sodass jeder Schwung im Nahkampf härter landet.',
   'guide.abilityHook.seal_of_righteousness':
@@ -6341,6 +6555,27 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraEffect.school.shadow': 'Schatten',
   'hudChrome.auraEffect.school.holy': 'Heilig',
   'hudChrome.auraEffect.school.nature': 'Natur',
+  'hudChrome.auraEffect.avatar': 'Koloss: Verursachter Schaden um {pct}% erhöht',
+  'hudChrome.auraEffect.battleStance': 'Kampfhaltung: 10% mehr Wuterzeugung',
+  'hudChrome.auraEffect.battleTrance':
+    'Euer nächster Reaver-Hieb oder Verstümmelnder Hieb kostet keine Wut',
+  'hudChrome.auraEffect.berserkerStance':
+    'Berserkerhaltung: Kritische Treffer gelingen 3% öfter und treffen 3% härter',
+  'hudChrome.auraEffect.bloodbath':
+    'Erhöht kritische Trefferchance und verursachten Schaden um {pct}%',
+  'hudChrome.auraEffect.crit': 'Erhöht kritische Trefferchance um {pct}%',
+  'hudChrome.auraEffect.dieBySword':
+    'Verringert erlittenen Schaden um {pct}% ({lowPct}% unter {hpPct}% Gesundheit)',
+  'hudChrome.auraEffect.dmgDone': 'Erhöht verursachten Schaden um {pct}%',
+  'hudChrome.auraEffect.dmgDoneReduce': 'Verringert verursachten Schaden um {pct}%',
+  'hudChrome.auraEffect.maxHpPct': 'Erhöht maximale Gesundheit um {pct}%',
+  'hudChrome.auraEffect.rageGen': 'Erhöht Wuterzeugung um {pct}%',
+  'hudChrome.auraEffect.reckless':
+    'Erhöht kritische Trefferchance um {pct}% und Wuterzeugung um {ragePct}%',
+  'hudChrome.auraEffect.revengeFree': 'Eure nächste Rache kostet keine Wut',
+  'hudChrome.auraEffect.sanguine':
+    'Erhöht Angriffstempo um {hastePct}% und verursachten Schaden um {dmgPct}%',
+  'hudChrome.auraEffect.victoryRush': 'Siegesrausch ist bereit',
   'hudChrome.masterLoot.title': 'Pluendermeister',
   'hudChrome.masterLoot.enableLabel': 'Pluendermeister',
   'hudChrome.masterLoot.enableAria': 'Pluendermeister aktivieren',
@@ -6934,8 +7169,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'yumi.queue.teamLeave': 'Euer Team verlässt die Warteschlange für Yumi beschützen.',
   'yumi.respawn.title': 'AM BODEN!',
   'entities.abilities.chain_heal.name': 'Kettenheilung',
-  'entities.abilities.chain_heal.description':
-    'Heilt ein verbündetes Ziel stark und springt dann auf bis zu 2 weitere Verbündete in der Nähe über. Mit jedem Sprung wird 50 % weniger geheilt. (Signatur von Wiederherstellung)',
   'entities.abilities.razor_howl.name': 'Klingenheulen',
   'entities.abilities.razor_howl.description':
     'Ein Ruf, der Gegner im Umkreis von 15 m 8 Sek. lang um 50 % verlangsamt. (Kriegertalent)',
@@ -6978,4 +7211,10 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'Die Passwörter stimmen nicht überein.',
   'hudChrome.auth.resetErrInvalid':
     'Dieser Link zum Zurücksetzen ist ungültig oder abgelaufen. Fordere einen neuen an.',
+  'hudChrome.auth.appleLoginCta': 'Mit Apple fortfahren',
+  'hudChrome.auth.appleChoiceIntro':
+    'Erstelle ein neues Konto oder verknüpfe Apple mit einem Konto, das du bereits hast.',
+  'hudChrome.auth.appleChoiceExpired':
+    'Diese Apple-Anmeldung ist abgelaufen. Bitte melde dich erneut mit Apple an.',
+  'hudChrome.auth.appleError': 'Anmeldung mit Apple fehlgeschlagen. Bitte versuche es erneut.',
 };

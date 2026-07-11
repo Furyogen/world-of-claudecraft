@@ -645,6 +645,8 @@ export const zh_TW: Record<string, string> = {
   'staff.viaScript': '授權腳本',
   'nav.history': '歷史記錄',
   'moderationHistory.actionKick': '已踢出',
+  'moderationHistory.actionJail': '已監禁',
+  'moderationHistory.actionUnjail': '已釋放',
   'moderationHistory.actionKill': '已擊殺',
   'moderationHistory.actionIpBlock': 'IP 已封鎖',
   'moderationHistory.actionIpUnblock': 'IP 已解除封鎖',

@@ -60,32 +60,39 @@ export interface TalentTranslationManifestEntry {
 
 type StatKey = keyof StatModEffect;
 type GlobalKey = keyof GlobalModEffect;
+// Globals with no auto-generated tooltip label: critVsRooted (situational spell
+// crit) and the choice-row hook globals, whose row options carry hand-authored
+// descriptions instead of the generated "Increases X by Y%" form.
 type DisplayGlobalKey = Exclude<
   GlobalKey,
   | 'critVsRooted'
   | 'cheatDeathIcd'
-  | 'secondWindPctPerSec'
-  | 'secondWindHpBelow'
-  | 'fearBreakPct'
-  | 'onKillSpeedPct'
-  | 'onKillSpeedDuration'
   | 'autoRagePct'
   | 'abilityRagePct'
+  | 'onKillSpeedPct'
+  | 'onKillSpeedDuration'
+  | 'secondWindPctPerSec'
   | 'battleRhythm'
-  | 'battleRhythmEvery'
-  | 'battleRhythmRagePct'
-  | 'battleRhythmDmgPct'
   | 'bloodbathPct'
   | 'bloodbathDuration'
   | 'bloodbathMaxPct'
   | 'cdrPerRage'
+  // Combat Mastery's stance riders: applied at runtime (combat/damage.ts +
+  // combat/auto_attack.ts), its prose is the hand-written row description.
+  | 'stanceMastery'
+  | 'fearBreakPct'
+  // Master Armorer's 2H-gated damage: applied at runtime (combat/damage.ts), its
+  // prose is the hand-written mastery description, so no generated label.
+  | 'masteryTwoHandDmgPct'
 >;
 
 export interface TalentLocaleText {
   // Primary-attribute multipliers (strPct/agiPct/intPct/spiPct) reuse their base stat
-  // label ("+10% Agility"), so locales don't repeat them here.
+  // label ("+10% Agility"), so locales don't repeat them here. armorFromStrPct is
+  // likewise excluded: it appears only in the Protection mastery, which carries its
+  // own written description, so no auto-generated stat label is ever needed for it.
   statLabels: Record<
-    | Exclude<StatKey, 'strPct' | 'agiPct' | 'intPct' | 'spiPct'>
+    | Exclude<StatKey, 'strPct' | 'agiPct' | 'intPct' | 'spiPct' | 'armorFromStrPct'>
     | DisplayGlobalKey
     | 'damage'
     | 'cost'
@@ -98,6 +105,15 @@ export interface TalentLocaleText {
   noEffect: string;
   chooseOne: (name: string) => string;
   specDescription: (className: string, role: string, abilityName: string) => string;
+  // Hand-authored flavor prose per spec id, keyed exactly like the English
+  // SpecDef.description. Spec descriptions carry no numbers, so unlike node/mastery
+  // text they never drift from the effect and are safe to translate by hand. A locale
+  // that omits a spec id (or omits the map entirely) falls back to specDescription().
+  specDescriptions?: Record<string, string>;
+  // Hand-authored mastery prose per spec id, for masteries whose bonus is applied at
+  // runtime (e.g. Master Armorer's 2H-gated damage) so the effect object is empty and
+  // effectDescription() would otherwise fall back to the generic noEffect string.
+  masteryDescriptions?: Record<string, string>;
   grant: (abilityName: string) => string;
   increase: (target: string, amount: string, perRank: string) => string;
   reduce: (target: string, amount: string, perRank: string) => string;
@@ -193,6 +209,14 @@ const localeTextByBase = {
     chooseOne: (name) => `Elige una opción de ${name}.`,
     specDescription: (className, role, abilityName) =>
       `Especialización de ${className} centrada en ${role}. Habilidad distintiva: ${abilityName}.`,
+    specDescriptions: {
+      arms: 'Un maestro de las armas que convierte la disciplina y la técnica en su mayor fortaleza. Cada golpe está calculado para romper la defensa del enemigo, explotar sus puntos débiles y preparar un remate devastador. Su combate es preciso, metódico y letal, recompensando a quienes dominan el ritmo de la batalla.',
+      fury: 'Un berserker que lucha con un arma en cada mano y deja que la rabia guíe cada movimiento. Cuanto más combate, mayor es su Enfurecimiento, desatando una lluvia incesante de ataques que apenas da respiro a sus enemigos. Un estilo frenético, salvaje y agresivo, donde la ofensiva nunca se detiene. Consagrarse a esta especialización desbloquea la lucha con dos armas y, gracias al Agarre de Titán, incluso un arma a dos manos en cada mano.',
+      prot: 'El guardián que lidera la primera línea del combate con un escudo en alto y una voluntad inquebrantable. Resiste el asalto de innumerables enemigos, protege a sus aliados y controla el campo de batalla con autoridad. Convierte cada golpe bloqueado en una oportunidad para responder con contundencia.',
+    },
+    masteryDescriptions: {
+      arms: 'Mientras empuñas un arma a dos manos, infliges un 10% más de daño.',
+    },
     grant: (abilityName) => `Otorga ${abilityName}.`,
     increase: (target, amount, perRank) => `Aumenta ${target} en ${amount}${perRank}.`,
     reduce: (target, amount, perRank) => `Reduce ${target} en ${amount}${perRank}.`,
@@ -695,7 +719,7 @@ const titleOverrides: Partial<Record<SupportedLanguage, Record<string, string>>>
     'Baleful Rod': 'Especialización en varitas',
     Barbarity: 'Crueldad',
     'Battle Doctrine': 'Maestría táctica',
-    Battlecraft: 'Armas',
+    Battlecraft: 'Arte de Guerra',
     'Beast Tending': 'Reparar mascota mejorado',
     Beastpact: 'Vínculo bestial',
     Benison: 'Sagrado',
@@ -709,7 +733,7 @@ const titleOverrides: Partial<Record<SupportedLanguage, Record<string, string>>>
     'Blood Debt': 'Venganza',
     Bloodlather: 'Frenesí',
     Bloodletter: 'Sediento de sangre',
-    Bloodrush: 'Furia',
+    Bloodrush: 'Ímpetu Sanguíneo',
     Bonepiercer: 'Empalar',
     'Boundless Ire': 'Ira desenfrenada',
     Brackenstride: 'Abrecaminos',
@@ -855,7 +879,7 @@ const titleOverrides: Partial<Record<SupportedLanguage, Record<string, string>>>
     'Improved Wildbolt': 'Cólera mejorada',
     'Improved Wildward': 'Marca de lo Salvaje mejorada',
     'Iron Aim': 'Entrenamiento de disparo certero',
-    Ironguard: 'Protección',
+    Ironguard: 'Guardia de Hierro',
     Ironpelt: 'Piel gruesa',
     Ironsinew: 'Entrenamiento de aguante',
     "Killer's Calm": 'Sangre fría',
@@ -941,6 +965,7 @@ const titleOverrides: Partial<Record<SupportedLanguage, Record<string, string>>>
     Shadeslip: 'Paso de las Sombras',
     'Shared Quarry': 'Fuego concentrado',
     'Sharpened Blades': 'Hojas afiladas',
+    'Master Armorer': 'Maestro Armero',
     'Shattered Earth': 'Devastación elemental',
     Shieldbearer: 'Especialización en escudo',
     Shieldwright: 'Dominio de escudo',
@@ -1119,7 +1144,7 @@ const titleOverrides: Partial<Record<SupportedLanguage, Record<string, string>>>
     'Baleful Rod': 'Especialización con varitas',
     Barbarity: 'Crueldad',
     'Battle Doctrine': 'Maestría táctica',
-    Battlecraft: 'Armas',
+    Battlecraft: 'Arte de Guerra',
     'Beast Tending': 'Curar mascota mejorado',
     Beastpact: 'Vínculo bestial',
     Benison: 'Sagrado',
@@ -1133,7 +1158,7 @@ const titleOverrides: Partial<Record<SupportedLanguage, Record<string, string>>>
     'Blood Debt': 'Venganza',
     Bloodlather: 'Frenesí',
     Bloodletter: 'Sediento de sangre',
-    Bloodrush: 'Furia',
+    Bloodrush: 'Ímpetu Sanguíneo',
     Bonepiercer: 'Empalar',
     'Boundless Ire': 'Ira desatada',
     Brackenstride: 'Pionero',
@@ -1279,7 +1304,7 @@ const titleOverrides: Partial<Record<SupportedLanguage, Record<string, string>>>
     'Improved Wildbolt': 'Cólera mejorada',
     'Improved Wildward': 'Marca de lo Salvaje mejorada',
     'Iron Aim': 'Entrenamiento de disparo certero',
-    Ironguard: 'Protección',
+    Ironguard: 'Guardia de Hierro',
     Ironpelt: 'Piel gruesa',
     Ironsinew: 'Entrenamiento de aguante',
     "Killer's Calm": 'Sangre fría',
@@ -1365,6 +1390,7 @@ const titleOverrides: Partial<Record<SupportedLanguage, Record<string, string>>>
     Shadeslip: 'Paso de las Sombras',
     'Shared Quarry': 'Fuego concentrado',
     'Sharpened Blades': 'Hojas afiladas',
+    'Master Armorer': 'Maestro Armero',
     'Shattered Earth': 'Devastación elemental',
     Shieldbearer: 'Especialización con escudo',
     Shieldwright: 'Maestría con escudo',
@@ -1789,6 +1815,7 @@ const titleOverrides: Partial<Record<SupportedLanguage, Record<string, string>>>
     Shadeslip: "Pas de l'ombre",
     'Shared Quarry': 'Tir concentré',
     'Sharpened Blades': 'Lames affûtées',
+    'Master Armorer': 'Maître Armurier',
     'Shattered Earth': 'Dévastation élémentaire',
     Shieldbearer: 'Spécialisation bouclier',
     Shieldwright: 'Maîtrise du bouclier',
@@ -2213,6 +2240,7 @@ const titleOverrides: Partial<Record<SupportedLanguage, Record<string, string>>>
     Shadeslip: "Pas de l'ombre",
     'Shared Quarry': 'Tir concentré',
     'Sharpened Blades': 'Lames aiguisées',
+    'Master Armorer': 'Maître Armurier',
     'Shattered Earth': 'Dévastation élémentaire',
     Shieldbearer: 'Spécialisation du bouclier',
     Shieldwright: 'Maîtrise du bouclier',
@@ -2637,6 +2665,7 @@ const titleOverrides: Partial<Record<SupportedLanguage, Record<string, string>>>
     Shadeslip: "Passo d'ombra",
     'Shared Quarry': 'Fuoco focalizzato',
     'Sharpened Blades': 'Lame affilate',
+    'Master Armorer': 'Mastro Armaiolo',
     'Shattered Earth': 'Devastazione elementale',
     Shieldbearer: 'Specializzazione con scudo',
     Shieldwright: 'Maestria dello scudo',
@@ -3061,6 +3090,7 @@ const titleOverrides: Partial<Record<SupportedLanguage, Record<string, string>>>
     Shadeslip: 'Schattenschritt',
     'Shared Quarry': 'Gebündeltes Feuer',
     'Sharpened Blades': 'Geschärfte Klingen',
+    'Master Armorer': 'Waffenmeister',
     'Shattered Earth': 'Elementare Verwüstung',
     Shieldbearer: 'Schildspezialisierung',
     Shieldwright: 'Schildbeherrschung',
@@ -3485,6 +3515,7 @@ const titleOverrides: Partial<Record<SupportedLanguage, Record<string, string>>>
     Shadeslip: '暗影步',
     'Shared Quarry': '集中火力',
     'Sharpened Blades': '利刃',
+    'Master Armorer': '军械大师',
     'Shattered Earth': '元素毁灭',
     Shieldbearer: '盾牌专精',
     Shieldwright: '盾牌掌握',
@@ -3909,6 +3940,7 @@ const titleOverrides: Partial<Record<SupportedLanguage, Record<string, string>>>
     Shadeslip: '暗影步',
     'Shared Quarry': '集中火力',
     'Sharpened Blades': '利刃',
+    'Master Armorer': '軍械大師',
     'Shattered Earth': '元素摧殘',
     Shieldbearer: '盾牌專精',
     Shieldwright: '盾牌掌握',
@@ -4333,6 +4365,7 @@ const titleOverrides: Partial<Record<SupportedLanguage, Record<string, string>>>
     Shadeslip: '그림자 밟기',
     'Shared Quarry': '집중 사격',
     'Sharpened Blades': '예리한 칼날',
+    'Master Armorer': '무기 장인',
     'Shattered Earth': '원소 파멸',
     Shieldbearer: '방패 전문화',
     Shieldwright: '방패 숙련',
@@ -4757,6 +4790,7 @@ const titleOverrides: Partial<Record<SupportedLanguage, Record<string, string>>>
     Shadeslip: 'シャドウステップ',
     'Shared Quarry': '集中砲火',
     'Sharpened Blades': '研ぎ澄まされた刃',
+    'Master Armorer': '武具の達人',
     'Shattered Earth': 'エレメンタル・デバステーション',
     Shieldbearer: '盾専門化',
     Shieldwright: '盾熟達',
@@ -5181,6 +5215,7 @@ const titleOverrides: Partial<Record<SupportedLanguage, Record<string, string>>>
     Shadeslip: 'Passo Furtivo',
     'Shared Quarry': 'Fogo Concentrado',
     'Sharpened Blades': 'Lâminas Afiadas',
+    'Master Armorer': 'Mestre Armeiro',
     'Shattered Earth': 'Devastação Elemental',
     Shieldbearer: 'Especialização em Escudo',
     Shieldwright: 'Maestria de Escudo',
@@ -5605,6 +5640,7 @@ const titleOverrides: Partial<Record<SupportedLanguage, Record<string, string>>>
     Shadeslip: 'Прыжок сквозь тень',
     'Shared Quarry': 'Сосредоточенный огонь',
     'Sharpened Blades': 'Заточенные клинки',
+    'Master Armorer': 'Мастер-оружейник',
     'Shattered Earth': 'Опустошение стихий',
     Shieldbearer: 'Специализация по щитам',
     Shieldwright: 'Мастерство владения щитом',
@@ -5949,6 +5985,7 @@ const titleOverrides: Partial<Record<SupportedLanguage, Record<string, string>>>
     Shadeslip: 'Stínový skluz',
     'Shared Quarry': 'Společná kořist',
     'Sharpened Blades': 'Nabroušené čepele',
+    'Master Armorer': 'Mistr zbrojíř',
     'Shattered Earth': 'Roztříštěná zem',
     Shieldbearer: 'Štítonoš',
     Shieldwright: 'Mistr štítu',
@@ -6293,6 +6330,7 @@ const titleOverrides: Partial<Record<SupportedLanguage, Record<string, string>>>
     Shadeslip: 'Schaduwstap',
     'Shared Quarry': 'Gericht Vuur',
     'Sharpened Blades': 'Geslepen Klingen',
+    'Master Armorer': 'Meesterwapensmid',
     'Shattered Earth': 'Elementaire Verwoesting',
     Shieldbearer: 'Schildspecialisatie',
     Shieldwright: 'Schildmeesterschap',
@@ -6637,6 +6675,7 @@ const titleOverrides: Partial<Record<SupportedLanguage, Record<string, string>>>
     Shadeslip: 'Cienisty krok',
     'Shared Quarry': 'Skupiony ogień',
     'Sharpened Blades': 'Naostrzone ostrza',
+    'Master Armorer': 'Mistrz płatnerz',
     'Shattered Earth': 'Spustoszenie żywiołów',
     Shieldbearer: 'Specjalizacja w tarczy',
     Shieldwright: 'Władanie tarczą',
@@ -6981,6 +7020,7 @@ const titleOverrides: Partial<Record<SupportedLanguage, Record<string, string>>>
     Shadeslip: 'Langkah Bayangan',
     'Shared Quarry': 'Api Terfokus',
     'Sharpened Blades': 'Bilah Terasah',
+    'Master Armorer': 'Ahli Senjata',
     'Shattered Earth': 'Pemusnahan Elemental',
     Shieldbearer: 'Spesialisasi Perisai',
     Shieldwright: 'Penguasaan Perisai',
@@ -7325,6 +7365,7 @@ const titleOverrides: Partial<Record<SupportedLanguage, Record<string, string>>>
     Shadeslip: 'Gölge Adımı',
     'Shared Quarry': 'Odaklı Ateş',
     'Sharpened Blades': 'Bilenmiş Bıçaklar',
+    'Master Armorer': 'Silah Ustası',
     'Shattered Earth': 'Elementsel Tahribat',
     Shieldbearer: 'Kalkan Uzmanlığı',
     Shieldwright: 'Kalkan Hakimiyeti',
@@ -7669,6 +7710,7 @@ const titleOverrides: Partial<Record<SupportedLanguage, Record<string, string>>>
     Shadeslip: 'Skuggsteg',
     'Shared Quarry': 'Fokuserad eld',
     'Sharpened Blades': 'Vässade klingor',
+    'Master Armorer': 'Vapenmästare',
     'Shattered Earth': 'Elementär förödelse',
     Shieldbearer: 'Sköldspecialisering',
     Shieldwright: 'Sköldbemästring',
@@ -8013,6 +8055,7 @@ const titleOverrides: Partial<Record<SupportedLanguage, Record<string, string>>>
     Shadeslip: 'Bước Bóng Tối',
     'Shared Quarry': 'Hỏa Lực Tập Trung',
     'Sharpened Blades': 'Lưỡi Sắc Bén',
+    'Master Armorer': 'Bậc Thầy Vũ Khí',
     'Shattered Earth': 'Tàn Phá Nguyên Tố',
     Shieldbearer: 'Chuyên Môn Khiên',
     Shieldwright: 'Tinh Thông Khiên',
@@ -8358,6 +8401,7 @@ const titleOverrides: Partial<Record<SupportedLanguage, Record<string, string>>>
     Shadeslip: 'Skyggeskridt',
     'Shared Quarry': 'Fokuseret Ild',
     'Sharpened Blades': 'Skærpede Klinger',
+    'Master Armorer': 'Våbenmester',
     'Shattered Earth': 'Elementær Forødelse',
     Shieldbearer: 'Skjoldspecialisering',
     Shieldwright: 'Skjoldmestring',
@@ -8463,11 +8507,21 @@ function statAmount(stat: StatKey, value: number, lang: SupportedLanguage): stri
 
 function translateTitle(source: string, lang: SupportedLanguage): string {
   if (lang === 'en' || lang === 'en_CA') return source;
+  const override = titleOverrides[lang]?.[source];
   const abilityId = abilityIdByName.get(source);
-  if (abilityId) return tEntity({ kind: 'ability', id: abilityId, field: 'name' });
+  if (abilityId) {
+    const abilityTitle = tEntity({ kind: 'ability', id: abilityId, field: 'name' });
+    // A talent named identically to an ability normally reuses that ability's
+    // localized name (DRY, and they stay in sync). But when the ability name is
+    // still English (its locale fill is pending), a coincidental collision would
+    // leak English into the talent title; prefer the talent's own explicit
+    // override in that case so a translated title never regresses to English.
+    if (abilityTitle !== source || override === undefined) return abilityTitle;
+  }
+  // Warrior ported-talent titles carry their own locale overrides (the port set
+  // was renamed after the generic titleOverrides were authored).
   const warriorPortOverride = warriorPortTitleOverride(lang, source);
   if (warriorPortOverride !== undefined) return warriorPortOverride;
-  const override = titleOverrides[lang]?.[source];
   if (override !== undefined) return override;
   // Every shipped talent name has an explicit override (enforced by tests) or is an
   // ability name (resolved above). A bare return here only triggers for a newly-added
@@ -9181,15 +9235,22 @@ function effectDescription(
   for (const [key, value] of Object.entries(global) as [GlobalKey, number][]) {
     if (value === undefined || value === 0) continue;
     if (
-      key === 'critVsRooted' ||
-      key === 'cheatDeathIcd' ||
-      key === 'fearBreakPct' ||
+      key === 'autoRagePct' ||
+      key === 'abilityRagePct' ||
       key === 'onKillSpeedPct' ||
       key === 'onKillSpeedDuration' ||
+      key === 'secondWindPctPerSec' ||
+      key === 'battleRhythm' ||
       key === 'bloodbathPct' ||
       key === 'bloodbathDuration' ||
       key === 'bloodbathMaxPct' ||
-      key === 'cdrPerRage'
+      key === 'cdrPerRage' ||
+      key === 'stanceMastery' ||
+      key === 'fearBreakPct' ||
+      key === 'cheatDeathIcd' ||
+      key === 'masteryTwoHandDmgPct' ||
+      // critVsRooted is not a plain statLabels key; it gets its own "@ root" line below.
+      key === 'critVsRooted'
     )
       continue;
     parts.push(text.increase(text.statLabels[key], formatPercent(value, lang), perRank));
@@ -9329,18 +9390,22 @@ export function tTalent(request: TalentTranslationRequest): string {
   }
 
   if (request.kind === 'talentMastery') {
-    return request.field === 'name'
-      ? translateTitle(request.spec.mastery.name, lang)
-      : effectDescription(request.spec.mastery.effect, 1, lang);
+    if (request.field === 'name') return translateTitle(request.spec.mastery.name, lang);
+    return (
+      localeText[lang].masteryDescriptions?.[request.spec.id] ??
+      effectDescription(request.spec.mastery.effect, 1, lang)
+    );
   }
   if (request.kind === 'talentSpec') {
-    return request.field === 'name'
-      ? translateTitle(request.spec.name, lang)
-      : localeText[lang].specDescription(
-          className(request.spec.class),
-          localeText[lang].roleLabels[request.spec.role],
-          abilityName(request.spec.signature),
-        );
+    if (request.field === 'name') return translateTitle(request.spec.name, lang);
+    return (
+      localeText[lang].specDescriptions?.[request.spec.id] ??
+      localeText[lang].specDescription(
+        className(request.spec.class),
+        localeText[lang].roleLabels[request.spec.role],
+        abilityName(request.spec.signature),
+      )
+    );
   }
   if (request.kind === 'talentChoice') {
     if (request.field === 'name') return translateTitle(request.choice.name, lang);

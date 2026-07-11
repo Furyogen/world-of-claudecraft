@@ -14,6 +14,68 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const pt_BR: Partial<Record<TranslationKey, string>> = {
+  'entities.abilities.cw_heroic_strike.name': 'Golpe do Saqueador',
+  'entities.abilities.cw_heroic_strike.description':
+    'Um ataque forte que aumenta o dano corpo a corpo em {damage}. Ativa no seu próximo golpe.',
+  'entities.abilities.cw_battle_shout.name': 'Brado de Ferro',
+  'entities.abilities.cw_battle_shout.description':
+    'Aumenta seu poder de ataque em {buff} por 2 min.',
+  'entities.abilities.cw_commanding_shout.name': 'Brado Encorajador',
+  'entities.abilities.cw_commanding_shout.description': 'Aumenta seu Vigor em {buff} por 2 min.',
+  'entities.abilities.cw_charge.name': 'Arremetida',
+  'entities.abilities.cw_charge.description':
+    'Investe contra um inimigo, gera 9 de raiva e o atordoa por 1 s. Alcance de 8-25 m.',
+  'entities.abilities.cw_rend.name': 'Corte Profundo',
+  'entities.abilities.cw_rend.description':
+    'Fere o alvo, fazendo-o sangrar por {damage} de dano ao longo de {duration} s.',
+  'entities.abilities.cw_thunder_clap.name': 'Golpe Sísmico',
+  'entities.abilities.cw_thunder_clap.description':
+    'Atinge inimigos próximos com {damage} de dano e reduz seus ataques em 10% por 10 s.',
+  'entities.abilities.cw_hamstring.name': 'Corte Manquejante',
+  'entities.abilities.cw_hamstring.description':
+    'Mutila o inimigo, causando {damage} de dano e reduzindo sua velocidade de movimento em 50% por 15 s.',
+  'entities.abilities.cw_bloodrage.name': 'Tributo de Sangue',
+  'entities.abilities.cw_bloodrage.description': 'Gera 10 de raiva ao custo de vida.',
+  'entities.abilities.cw_overpower.name': 'Mão Vermelha',
+  'entities.abilities.cw_overpower.description':
+    'Ataque instantâneo com dano de arma mais {damage}. Só pode ser usado depois que o alvo esquiva. Não pode ser esquivado.',
+  'entities.abilities.cw_execute.name': 'Cova Prematura',
+  'entities.abilities.cw_execute.description':
+    'Tenta finalizar um inimigo ferido, causando {damage} de dano. Só pode ser usado em inimigos com menos de 20% de vida.',
+  'entities.abilities.cw_slam.name': 'Golpe Brutal',
+  'entities.abilities.cw_slam.description': 'Atinge o oponente com dano de arma mais {damage}.',
+  'entities.abilities.cw_cleave.name': 'Arco Ceifante',
+  'entities.abilities.cw_cleave.description':
+    'Um golpe amplo que atinge todos os inimigos à sua frente com {damage} de dano.',
+  'entities.abilities.cw_defensive_stance.name': 'Postura de Guarda',
+  'entities.abilities.cw_defensive_stance.description':
+    'Postura de combate defensiva: você gera 30% mais ameaça, mas causa e recebe 10% menos dano. Lance de novo para sair da postura.',
+  'entities.abilities.cw_demoralizing_shout.name': 'Uivo Sinistro',
+  'entities.abilities.cw_demoralizing_shout.description':
+    'Solta um grito apavorante, reduzindo o poder de ataque de todos os inimigos próximos em {buff} por 30 s.',
+  'entities.abilities.cw_sunder_armor.name': 'Retalhar Armadura',
+  'entities.abilities.cw_sunder_armor.description':
+    'Retalha a armadura do alvo, reduzindo-a em {damage}% por aplicação. Acumula até 5 vezes. Gera uma grande quantidade de ameaça.',
+  'entities.abilities.cw_taunt.name': 'Provocar',
+  'entities.abilities.cw_taunt.description':
+    'Provoca o alvo: sua ameaça sobe para igualar a do inimigo mais odiado por ele, que é forçado a atacar você por 3 s.',
+  'entities.abilities.cw_bloodthirst.name': 'Sangria',
+  'entities.abilities.cw_bloodthirst.description':
+    'Ataca instantaneamente em frenesi sangrento, causando 60% do dano de arma mais {damage}. (assinatura de Fúria)',
+  'entities.abilities.cw_mortal_strike.name': 'Golpe Mutilador',
+  'entities.abilities.cw_mortal_strike.description':
+    'Um golpe cruel que causa dano da arma mais {damage}. (assinatura de Armas)',
+  'entities.abilities.cw_shield_slam.name': 'Estrondo de Escudo',
+  'entities.abilities.cw_shield_slam.description':
+    'Golpeia o alvo com seu escudo, causando 50% do dano de arma mais {damage} e muita ameaça. (assinatura de Proteção)',
+  'entities.abilities.cw_whirlwind.name': 'Redemoinho de Lâminas',
+  'entities.abilities.cw_whirlwind.description':
+    'Gira em um arco mortal, atingindo todos os inimigos próximos por {damage}. (talento de Fúria)',
+  'entities.abilities.cw_berserker_rage.name': 'Fúria Fervente',
+  'entities.abilities.cw_berserker_rage.description':
+    'Entra em uma fúria fervente, gerando 20 de raiva. (talento de guerreiro)',
+  'classDetails.roles.warriorClassic': 'Tanque / DPS corpo a corpo',
+  'classes.warriorClassic': 'Guerreiro',
   'entities.abilities.sport_boot.description':
     'Um chutão alto e longo em direção ao ponto de mira. A torcida adora.',
   'entities.abilities.sport_boot.name': 'Chutão',
@@ -2774,7 +2836,8 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.execute.description':
     'Tenta finalizar um inimigo ferido, causando {damage} de dano. Só pode ser usado em inimigos com menos de 20% de vida.',
   'entities.abilities.slam.name': 'Golpe Brutal',
-  'entities.abilities.slam.description': 'Atinge o oponente com dano de arma mais {damage}.',
+  'entities.abilities.slam.description':
+    'Atinge o oponente com 50% do dano da arma mais {damage}, gerando {rage} de raiva.',
   'entities.abilities.cleave.name': 'Arco Ceifante',
   'entities.abilities.cleave.description':
     'Um golpe amplo que atinge todos os inimigos à sua frente com {damage} de dano.',
@@ -4696,7 +4759,6 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.meters.perSecond': '{value}/s',
   'hudChrome.meters.perSecondRow': '{total} ({rate})',
   'hudChrome.meters.seconds': '{s}s',
-  'hudChrome.mobile.autorun': 'Corrida automática',
   'hudChrome.mobile.haptics': 'Vibração',
   'hudChrome.mobile.hapticsOff': 'Vibração desligada',
   'hudChrome.mobile.hotbarPage': 'Habilidades',
@@ -4782,6 +4844,10 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.worldBoss.spawn': '{name} ergue-se sobre as Alturas de Thornpeak!',
   'entities.items.stormcallers_spaulders.name': 'Espaldares Galecall',
   'entities.items.stormcallers_spaulders_heroic.name': 'Espaldares Galecall',
+  'entities.items.bonewrought_greatsword.name': 'Espadão Bonewrought',
+  'entities.items.direfang_greatblade.name': 'Grande lâmina Direfang',
+  'entities.items.bonewrought_bulwark.name': 'Baluarte Bonewrought',
+  'entities.items.wraithfire_orb.name': 'Orbe Wraithfire',
   'hud.chat.context.convertToRaid': 'Converter em raide',
   'hud.chat.context.convertToParty': 'Converter em grupo',
   'hudChrome.raidConvert.leaderOnly': 'Só o líder da raide pode converter em um grupo.',
@@ -6871,8 +6937,6 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'yumi.queue.teamLeave': 'Sua equipe sai da fila do Proteja a Yumi.',
   'yumi.respawn.title': 'ABATIDO!',
   'entities.abilities.chain_heal.name': 'Cura Encadeada',
-  'entities.abilities.chain_heal.description':
-    'Cura bastante um alvo aliado e depois salta para até 2 aliados próximos adicionais, curando 50% menos a cada salto. (Habilidade exclusiva de Restauração)',
   'entities.abilities.razor_howl.name': 'Uivo Cortante',
   'entities.abilities.razor_howl.description':
     'Um grito que reduz em 50% a velocidade dos inimigos em um raio de 15 m por 8 s. (Talento de guerreiro)',
@@ -6915,4 +6979,177 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'As senhas não coincidem.',
   'hudChrome.auth.resetErrInvalid':
     'Este link de redefinição é inválido ou expirou. Solicite um novo.',
+  'hudChrome.auth.appleChoiceExpired':
+    'Esse login com a Apple expirou. Entre com a Apple novamente.',
+  'hudChrome.auth.appleChoiceIntro':
+    'Crie uma conta nova ou vincule a Apple a uma conta que você já tem.',
+  'hudChrome.auth.appleError': 'Não foi possível entrar com a Apple. Tente novamente.',
+  'hudChrome.auth.appleLoginCta': 'Continuar com a Apple',
+  'hud.combat.floatingParry': 'Aparou',
+  'hud.combat.parried': '{target} apara seu {ability}.',
+  'hud.errors.needShield': 'Você precisa ter um escudo equipado.',
+  'hud.errors.nothingToConsume': 'Nada para consumir.',
+  'itemUi.slots.twoHand': 'Duas mãos',
+  'classDetails.lore.warriorClassic':
+    'O guerreiro exatamente como se jogava antes da reformulação de combate: o conjunto original de habilidades e o ritmo de raiva, mantido ao lado do novo guerreiro para você experimentar os dois e nos dizer qual parece melhor.',
+  'entities.abilities.battle_stance.name': 'Postura de Batalha',
+  'entities.abilities.battle_stance.description':
+    'Postura de combate agressiva: você gera 10% mais raiva. A postura padrão de Armas e Proteção.',
+  'entities.abilities.berserker_stance.name': 'Postura de Berserker',
+  'entities.abilities.berserker_stance.description':
+    'Postura de combate imprudente: seus acertos críticos ocorrem 3% mais vezes e atingem com 3% mais força. O guerreiro de Fúria luta sempre nesta postura.',
+  'entities.abilities.breachmaker.name': 'Abre-Brechas',
+  'entities.abilities.breachmaker.description':
+    'Golpeia o alvo com dano da arma mais {damage} e racha sua guarda: seus próprios ataques contra ele causam 20% mais dano por 8 s. (Armas)',
+  'entities.abilities.chain_heal.description':
+    'Cura o alvo em {damage} e depois salta para até 2 aliados próximos, cada salto curando metade da quantia anterior.',
+  'entities.abilities.cleaving_blows.name': 'Golpes Ceifantes',
+  'entities.abilities.cleaving_blows.description':
+    'Colheita Vermelha sempre devolve uma carga de Golpe Gêmeo. (Fúria)',
+  'entities.abilities.deep_wounds.name': 'Feridas Abertas',
+  'entities.abilities.deep_wounds.description':
+    'Passiva: seu Golpe Mutilador deixa o alvo sangrando, sofrendo dano Físico ao longo de 6 s. (Armas)',
+  'entities.abilities.defiant_bellow.name': 'Brado Desafiador',
+  'entities.abilities.defiant_bellow.description':
+    'Um brado desafiador: todos os inimigos em um raio de 10 m são provocados e forçados a atacar você por 3 s. (Proteção)',
+  'entities.abilities.diabolical_twinstrike.name': 'Golpe Gêmeo Diabólico',
+  'entities.abilities.diabolical_twinstrike.description':
+    'Enquanto você está Enfurecido, seu Golpe Gêmeo causa 15% mais dano. (Fúria)',
+  'entities.abilities.die_by_sword.name': 'Morrer pela Espada',
+  'entities.abilities.die_by_sword.description':
+    'Recurso defensivo: por 8 s você recebe 30% menos dano e esquiva de muito mais ataques.',
+  'entities.abilities.emboldening_roar.name': 'Rugido Destemido',
+  'entities.abilities.emboldening_roar.description':
+    'Solta um rugido destemido: você e os jogadores aliados em um raio de 40 m ficam Destemidos, e suas próximas 3 habilidades são acertos críticos garantidos. (Fúria)',
+  'entities.abilities.enrage_passive.name': 'Pandemônio',
+  'entities.abilities.enrage_passive.description':
+    'Passiva: enquanto Enfurecido, você causa 7% mais dano, ataca 25% mais rápido e se move 10% mais rápido por 4 s. Sangria tem 30% de chance de Enfurecer você; Colheita Vermelha sempre enfurece. (Fúria)',
+  'entities.abilities.faultline.name': 'Linha de Falha',
+  'entities.abilities.faultline.description':
+    'Envia uma onda de choque pelo chão: inimigos à sua frente em um raio de 8 m sofrem {damage} de dano e são atordoados por 3 s. (Proteção)',
+  'entities.abilities.fel_domination.name': 'Dominação Vil',
+  'entities.abilities.fel_domination.description':
+    'Domina as energias vis, tornando seu próximo feitiço instantâneo. (assinatura de Demonologia)',
+  'entities.abilities.furious_mending.name': 'Remendo Furioso',
+  'entities.abilities.furious_mending.description':
+    'Por 10 s você recebe 20% menos dano e, enquanto durar, sua Sangria cura você em 20% da sua vida máxima. (Fúria)',
+  'entities.abilities.intimidating_shout.name': 'Brado Intimidador',
+  'entities.abilities.intimidating_shout.description':
+    'Um brado aterrorizante que faz até 5 inimigos em um raio de 8 m fugirem de medo por 8 s. O dano pode quebrar o efeito.',
+  'entities.abilities.iron_resolve.name': 'Determinação de Ferro',
+  'entities.abilities.iron_resolve.description':
+    'Cerre os dentes e ignore a dor: consome toda a sua raiva (mínimo de 20) para absorver 4 de dano por ponto de raiva gasto, durando até 10 s. (Proteção)',
+  'entities.abilities.measured_fury.name': 'Fúria Comedida',
+  'entities.abilities.measured_fury.description':
+    'Sua fúria comedida apura sua economia: suas habilidades custam 10% menos raiva. (Armas)',
+  'entities.abilities.natures_swiftness.name': 'Ligeireza da Natureza',
+  'entities.abilities.natures_swiftness.description':
+    'Invoca a natureza para tornar seu próximo feitiço instantâneo. (assinatura de Restauração)',
+  'entities.abilities.piercing_howl.name': 'Uivo Penetrante',
+  'entities.abilities.piercing_howl.description':
+    'Um grito penetrante que reduz em 50% a velocidade de todos os inimigos em um raio de 15 m por 8 s.',
+  'entities.abilities.raging_gale.name': 'Golpe Gêmeo',
+  'entities.abilities.raging_gale.description':
+    'Golpeia instantaneamente com sua arma duas vezes, cada acerto causando 40% do dano da arma mais {damage}, e gera {rage} de raiva. Acumula até 2 cargas. (Fúria)',
+  'entities.abilities.raised_guard.name': 'Guarda Erguida',
+  'entities.abilities.raised_guard.description':
+    'Firme-se atrás do seu escudo: você recebe 50% menos dano Físico por 6 s. Acumula até 2 cargas. (Proteção)',
+  'entities.abilities.recklessness.name': 'Imprudência',
+  'entities.abilities.recklessness.description':
+    'Enfurece você: sua geração de raiva aumenta em 50% e sua chance de acerto crítico em 20% por 12 s.',
+  'entities.abilities.red_harvest.name': 'Colheita Vermelha',
+  'entities.abilities.red_harvest.description':
+    'Gaste tudo: golpeia três vezes em frenesi, causando 65% do dano da arma mais {damage} por golpe, sempre Enfurecendo você. (Fúria)',
+  'entities.abilities.repentance.name': 'Arrependimento',
+  'entities.abilities.repentance.description':
+    'Põe o inimigo em estado de meditação por até 6 s. Qualquer dano quebra o efeito. (assinatura de Retribuição)',
+  'entities.abilities.revenge.name': 'Vingança',
+  'entities.abilities.revenge.description':
+    'Ataca em um arco amplo, causando dano Físico a todos os inimigos à sua frente. Acima de 5 alvos, o dano é reduzido. Quando você esquiva ou apara, sua próxima Vingança pode não custar raiva.',
+  'entities.abilities.sanguine_aura.name': 'Aura Sanguínea',
+  'entities.abilities.sanguine_aura.description':
+    'Imbui sua arma com o sangue dos seus inimigos: você e seus aliados corpo a corpo ganham 10% de velocidade de ataque e 10% de dano por 20 s.',
+  'entities.abilities.seasoned_soldier.name': 'Soldado Veterano',
+  'entities.abilities.seasoned_soldier.description':
+    'Seus ataques automáticos críticos geram 10% mais raiva. (Armas)',
+  'entities.abilities.shamanistic_rage.name': 'Fúria Xamânica',
+  'entities.abilities.shamanistic_rage.description':
+    'Libera fúria xamânica, restaurando 160 de mana. (assinatura de Aprimoramento)',
+  'entities.abilities.storm_bolt.name': 'Míssil da Tempestade',
+  'entities.abilities.storm_bolt.description':
+    'Arremessa sua arma no alvo, causando {damage} de dano e atordoando-o por 3 s.',
+  'entities.abilities.sudden_death.name': 'Morte Súbita',
+  'entities.abilities.sudden_death.description':
+    'Seus ataques automáticos têm uma chance de permitir lançar Cova Prematura em um alvo com qualquer quantidade de vida, sem custo de raiva. (Armas)',
+  'entities.abilities.sweeping_strikes.name': 'Arco Crescente',
+  'entities.abilities.sweeping_strikes.description':
+    'Por 12 s, seus ataques de alvo único também atingem 1 inimigo próximo com dano total. (Armas)',
+  'entities.abilities.victory_rush.name': 'Ímpeto da Vitória',
+  'entities.abilities.victory_rush.description':
+    'Golpeia com dano da arma mais {damage} e cura 20% da sua vida máxima. Só pode ser usado até 20 s depois de matar um inimigo.',
+  'entities.items.arcane_dust.name': 'Pó Arcano',
+  'entities.items.arcane_essence.name': 'Essência Arcana',
+  'entities.items.arcane_shard.name': 'Fragmento Arcano',
+  'entities.items.eastbrook_buckler.name': 'Broquel de Eastbrook',
+  'entities.items.eastbrook_greatsword.name': 'Montante de Eastbrook',
+  'entities.items.highwatch_greatsword.name': 'Montante de Highwatch',
+  'entities.items.highwatch_wallshield.name': 'Escudo-Muralha de Highwatch',
+  'guide.abilityHook.cw_battle_shout':
+    'Um grito de incentivo que aumenta o poder de ataque do grupo.',
+  'guide.abilityHook.cw_charge':
+    'Avança contra um inimigo distante para abrir a luta com um breve atordoamento.',
+  'guide.abilityHook.cw_commanding_shout':
+    'Reforça o vigor para que todos tenham mais resistência numa luta.',
+  'guide.abilityHook.cw_heroic_strike':
+    'Prepara um golpe mais pesado que gasta fúria no seu próximo ataque.',
+  'guide.abilityHook.cw_rend': 'Abre um sangramento que desgasta o alvo ao longo do tempo.',
+  'guide.abilityHook.cw_thunder_clap':
+    'Atinge tudo ao seu redor e reduz a velocidade dos ataques deles.',
+  'guide.abilityHook.hamstring':
+    'Corta as pernas do alvo para reduzir sua velocidade e impedir que ele alcance você.',
+  'guide.abilityHook.revenge':
+    'Um contra-ataque amplo que atinge tudo à sua frente e custa menos logo depois que você desvia um golpe.',
+  'hudChrome.auraEffect.avatar': 'Colosso: dano causado aumentado em {pct}%',
+  'hudChrome.auraEffect.battleStance': 'Postura de Batalha: 10% mais geração de raiva',
+  'hudChrome.auraEffect.battleTrance':
+    'Seu próximo Golpe do Saqueador ou Golpe Mutilador não custa raiva',
+  'hudChrome.auraEffect.berserkerStance':
+    'Postura de Berserker: críticos 3% mais frequentes e 3% mais fortes',
+  'hudChrome.auraEffect.bloodbath': 'Aumenta a chance de acerto crítico e o dano causado em {pct}%',
+  'hudChrome.auraEffect.crit': 'Aumenta a chance de acerto crítico em {pct}%',
+  'hudChrome.auraEffect.dieBySword':
+    'Reduz o dano recebido em {pct}% ({lowPct}% enquanto abaixo de {hpPct}% de vida)',
+  'hudChrome.auraEffect.dmgDone': 'Aumenta o dano causado em {pct}%',
+  'hudChrome.auraEffect.dmgDoneReduce': 'Reduz o dano causado em {pct}%',
+  'hudChrome.auraEffect.maxHpPct': 'Aumenta a vida máxima em {pct}%',
+  'hudChrome.auraEffect.rageGen': 'Aumenta a geração de raiva em {pct}%',
+  'hudChrome.auraEffect.reckless':
+    'Aumenta a chance de acerto crítico em {pct}% e a geração de raiva em {ragePct}%',
+  'hudChrome.auraEffect.revengeFree': 'Sua próxima Vingança não custa raiva',
+  'hudChrome.auraEffect.sanguine':
+    'Aumenta a velocidade de ataque em {hastePct}% e o dano causado em {dmgPct}%',
+  'hudChrome.auraEffect.victoryRush': 'Ímpeto da Vitória está pronto',
+  'hudChrome.options.mouseoverCast': 'Conjuração ao Apontar nos Quadros do Grupo',
+  'hudChrome.options.showTargetOfTarget': 'Mostrar Alvo do Alvo',
+  'hudChrome.paperdoll.offhand': 'Mão secundária',
+  'hudChrome.specPanel.complexity': 'Complexidade',
+  'hudChrome.specPanel.complexityHigh': 'Alta',
+  'hudChrome.specPanel.complexityLow': 'Baixa',
+  'hudChrome.specPanel.complexityMedium': 'Média',
+  'hudChrome.specPanel.exampleAbilities': 'Habilidades de exemplo',
+  'hudChrome.specPanel.primaryAttr': 'Atributo principal',
+  'hudChrome.specPanel.selectSpec': 'Selecionar especialização',
+  'hudChrome.specPanel.specUnlockBanner': 'Especialização Desbloqueada!',
+  'hudChrome.specPanel.specUnlockHint': 'Pressione N para escolher sua especialização.',
+  'hudChrome.specPanel.viewTalents': 'Ver talentos',
+  'hudChrome.statInfo.desc.haste':
+    'Acelera seus golpes com armas e suas conjurações de feitiços. Não reduz a recarga global.',
+  'hudChrome.statInfo.desc.parry':
+    'Sua chance de aparar completamente um ataque corpo a corpo frontal, sem sofrer dano. Um golpe pelas costas não pode ser aparado.',
+  'hudChrome.statInfo.names.haste': 'Aceleração',
+  'hudChrome.statInfo.names.parry': 'Aparar',
+  'hudChrome.talentRows.comingSoon': 'Em breve',
+  'hudChrome.talentRows.defaultLoadout': 'Conjunto Padrão',
+  'hudChrome.talentRows.tab': 'Escolhas',
+  'hudChrome.unitFrame.targetOfTargetLabel': 'Alvo do alvo',
 };

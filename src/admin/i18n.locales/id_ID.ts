@@ -657,6 +657,8 @@ export const id_ID: Record<string, string> = {
   'staff.viaScript': 'skrip pemberian',
   'nav.history': 'Riwayat',
   'moderationHistory.actionKick': 'Dikeluarkan',
+  'moderationHistory.actionJail': 'Dipenjara',
+  'moderationHistory.actionUnjail': 'Dibebaskan',
   'moderationHistory.actionKill': 'Dibunuh',
   'moderationHistory.actionIpBlock': 'IP diblokir',
   'moderationHistory.actionIpUnblock': 'Blokir IP dicabut',

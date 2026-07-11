@@ -645,6 +645,8 @@ export const zh_CN: Record<string, string> = {
   'staff.viaScript': '授权脚本',
   'nav.history': '历史记录',
   'moderationHistory.actionKick': '已踢出',
+  'moderationHistory.actionJail': '已监禁',
+  'moderationHistory.actionUnjail': '已释放',
   'moderationHistory.actionKill': '已击杀',
   'moderationHistory.actionIpBlock': 'IP 已封禁',
   'moderationHistory.actionIpUnblock': 'IP 已解封',

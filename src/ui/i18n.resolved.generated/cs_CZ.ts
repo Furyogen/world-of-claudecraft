@@ -298,6 +298,7 @@ export const cs_CZ: EnTranslations = {
       "playerLabel": "Tvůj hrdina",
       "targetLabel": "Tvoje značka",
       "targetAnnounce": "Označit {name}",
+      "targetOfTargetLabel": "Značka tvé značky",
       "partyLabel": "Tvoje družina",
       "partyChip": "Skupina",
       "partyGroup": "Skupina {n}",
@@ -314,7 +315,6 @@ export const cs_CZ: EnTranslations = {
       "chat": "Přeskočit na chat"
     },
     "mobile": {
-      "autorun": "Automatický běh",
       "jump": "Skok",
       "leaderboard": "Žebříčky",
       "dailyRewards": "Odměny",
@@ -574,13 +574,32 @@ export const cs_CZ: EnTranslations = {
       "startAttackOnAbility": "Automatický útok při použití schopnosti",
       "walkByAutoloot": "Automatická kořist při průchodu",
       "groundReticle": "Zaměřovací kruh na zemi",
+      "mouseoverCast": "Sesílání najetím myší na rámech skupiny",
       "showItemLevel": "Zobrazit úroveň předmětu",
       "itemLevelLine": "Úroveň předmětu {level}",
       "itemScoreLine": "Skóre {score}",
       "showSecondaryActionBar": "Zobrazit sekundární akční lištu",
+      "showTargetOfTarget": "Zobrazit cíl cíle",
       "showDailyRewardsChest": "Zobrazit truhlu denních odměn",
       "mobileCameraJoystick": "Joystick kamery",
       "mobileLeftHanded": "Rozvržení pro leváky"
+    },
+    "talentRows": {
+      "tab": "Volby",
+      "defaultLoadout": "Výchozí rozložení",
+      "comingSoon": "Již brzy"
+    },
+    "specPanel": {
+      "primaryAttr": "Hlavní vlastnost",
+      "complexity": "Složitost",
+      "complexityLow": "Nízká",
+      "complexityMedium": "Střední",
+      "complexityHigh": "Vysoká",
+      "exampleAbilities": "Ukázkové schopnosti",
+      "viewTalents": "Zobrazit talenty",
+      "selectSpec": "Vybrat specializaci",
+      "specUnlockBanner": "Specializace odemčena!",
+      "specUnlockHint": "Stiskni N a vyber si svou specializaci."
     },
     "controller": {
       "title": "Ovladač",
@@ -678,7 +697,9 @@ export const cs_CZ: EnTranslations = {
       "names": {
         "spellPower": "Síla kouzel",
         "critRating": "Hodnocení kritického zásahu",
-        "hasteRating": "Hodnocení rychlosti"
+        "hasteRating": "Hodnocení rychlosti",
+        "haste": "Rychlost",
+        "parry": "Odražení"
       },
       "desc": {
         "str": "Zvyšuje tvoji sílu útoku, takže údery zbraní dopadají tvrději.",
@@ -693,7 +714,9 @@ export const cs_CZ: EnTranslations = {
         "critChance": "Tvoje šance, že útok zasáhne kriticky a způsobí dvojnásobné poškození.",
         "dodge": "Tvoje šance úplně se vyhnout příchozímu útoku na blízko a neutrpět poškození.",
         "critRating": "Hodnocení kritického zásahu z tvé výbavy a bonusů sad, které zvyšuje tvoji šanci na kritický zásah. Přibližně 10 hodnocení dá 1 % kritického zásahu.",
-        "hasteRating": "Hodnocení rychlosti z tvé výbavy a bonusů sad, které zrychluje tvé útoky a sesílání kouzel. Přibližně 10 hodnocení dá 1 % rychlosti."
+        "hasteRating": "Hodnocení rychlosti z tvé výbavy a bonusů sad, které zrychluje tvé útoky a sesílání kouzel. Přibližně 10 hodnocení dá 1 % rychlosti.",
+        "haste": "Zrychluje tvoje údery zbraní i sesílání kouzel. Nezkracuje globální dobu obnovy.",
+        "parry": "Tvoje šance zcela odrazit čelní útok na blízko a neutrpět žádné poškození. Úder zezadu odrazit nelze."
       },
       "effects": {
         "attackPower": "+{value} síla útoku",
@@ -811,6 +834,7 @@ export const cs_CZ: EnTranslations = {
       "failed": "Hlášení chyby se nepodařilo odeslat. Zkus to prosím znovu."
     },
     "paperdoll": {
+      "offhand": "Vedlejší ruka",
       "unequipAria": "Sundat {item}",
       "unequipHint": "Klikni na x, pravé kliknutí, nebo přetáhni do batohů pro sundání"
     },
@@ -1061,9 +1085,24 @@ export const cs_CZ: EnTranslations = {
       "formCat": "Vlčí podoba: poškození na blízko a energie",
       "formTravel": "Cestovní podoba: rychlost pohybu zvýšena o {pct} %",
       "defensiveStance": "Obranný postoj: nižší obdržené poškození, větší hrozba",
+      "battleStance": "Bojový postoj: o 10 % vyšší generování vzteku",
+      "berserkerStance": "Postoj berserka: kritické zásahy o 3 % častěji a o 3 % tvrdší",
       "righteousFury": "Hořící přísaha: výrazně zvýšená hrozba ze svatého poškození",
       "scale": "Velikost zvýšena o {pct} %",
       "jump": "Výška skoku zvýšena o {pct} %",
+      "dmgDone": "Zvyšuje způsobené poškození o {pct} %",
+      "dmgDoneReduce": "Snižuje způsobené poškození o {pct} %",
+      "crit": "Zvyšuje šanci na kritický zásah o {pct} %",
+      "rageGen": "Zvyšuje generování vzteku o {pct} %",
+      "reckless": "Zvyšuje šanci na kritický zásah o {pct} % a generování vzteku o {ragePct} %",
+      "avatar": "Kolos: způsobené poškození zvýšeno o {pct} %",
+      "bloodbath": "Zvyšuje šanci na kritický zásah a způsobené poškození o {pct} %",
+      "dieBySword": "Snižuje obdržené poškození o {pct} % (o {lowPct} % pod {hpPct} % zdraví)",
+      "sanguine": "Zvyšuje rychlost útoku o {hastePct} % a způsobené poškození o {dmgPct} %",
+      "battleTrance": "Tvůj příští Nájezdnický úder nebo Mrzačící úder nestojí žádný vztek",
+      "revengeFree": "Tvá příští Odveta nestojí žádný vztek",
+      "victoryRush": "Vítězný nápor je připraven",
+      "maxHpPct": "Zvyšuje maximální zdraví o {pct} %",
       "school": {
         "physical": "Fyzické",
         "fire": "Oheň",
@@ -1078,6 +1117,10 @@ export const cs_CZ: EnTranslations = {
       "spawn": "{name} povstává nad Thornpeak Heights!"
     },
     "auth": {
+      "appleLoginCta": "Pokračovat přes Apple",
+      "appleError": "Přihlášení přes Apple se nezdařilo. Zkuste to prosím znovu.",
+      "appleChoiceIntro": "Vytvořte si nový účet, nebo propojte Apple s účtem, který už máte.",
+      "appleChoiceExpired": "Platnost přihlášení přes Apple vypršela. Přihlaste se přes Apple znovu.",
       "forgotPrompt": "Zapomenuté heslo?",
       "forgotTitle": "Obnovení hesla",
       "forgotHint": "Zadejte své uživatelské jméno a na uloženou e-mailovou adresu pošleme odkaz pro obnovení.",
@@ -1984,11 +2027,19 @@ export const cs_CZ: EnTranslations = {
     },
     "abilityHook": {
       "heroic_strike": "Zařadí těžší švih, který utratí vztek při příštím zásahu.",
+      "revenge": "Rozmáchlý protiútok, který zasáhne vše před tebou a je levnější hned poté, co odvrátíš úder.",
       "battle_shout": "Povzbuzující pokřik, který zvedne sílu útoku party.",
       "commanding_shout": "Posílí výdrž, aby všichni v boji vydrželi déle.",
       "charge": "Vyrazí k vzdálenému nepříteli a otevře boj krátkým omráčením.",
       "rend": "Otevře krvácení, které cíl postupně opotřebuje.",
       "thunder_clap": "Zasáhne vše kolem tebe a zpomalí jejich útoky.",
+      "cw_heroic_strike": "Zařadí těžší švih, který utratí vztek při příštím zásahu.",
+      "cw_battle_shout": "Povzbuzující pokřik, který zvedne sílu útoku party.",
+      "cw_commanding_shout": "Posílí výdrž, aby všichni v boji vydrželi déle.",
+      "cw_charge": "Vyrazí k vzdálenému nepříteli a otevře boj krátkým omráčením.",
+      "cw_rend": "Otevře krvácení, které cíl postupně opotřebuje.",
+      "cw_thunder_clap": "Zasáhne vše kolem tebe a zpomalí jejich útoky.",
+      "hamstring": "Sekne cíl do nohou a zpomalí ho, aby tě nemohl doběhnout.",
       "seal_of_righteousness": "Naplní tvé švihy svatým poškozením, které potom utratíš Verdiktem.",
       "holy_light": "Stabilní, výrazné léčení pro doléčení spojence nebo sebe.",
       "devotion_aura": "Trvalý self-buff zvedající zbroj, takže zásahy dopadají měkčeji.",
@@ -3295,6 +3346,7 @@ export const cs_CZ: EnTranslations = {
   },
   "classes": {
     "warrior": "Válečník",
+    "warriorClassic": "Válečník",
     "paladin": "Paladin",
     "hunter": "Lovec",
     "rogue": "Tulák",
@@ -4062,6 +4114,7 @@ export const cs_CZ: EnTranslations = {
     },
     "roles": {
       "warrior": "Tank / DPS na blízko",
+      "warriorClassic": "Tank / DPS na blízko",
       "paladin": "Léčitel / tank / DPS na blízko",
       "hunter": "DPS na dálku",
       "rogue": "DPS na blízko",
@@ -4086,6 +4139,7 @@ export const cs_CZ: EnTranslations = {
     },
     "lore": {
       "warrior": "Válečníci jsou bojem zocelení bojovníci na blízko, kteří získávají vztek při udělování nebo přijímání poškození. Pohlcují těžké zásahy nebo drtí nepřátele mocnými zbraněmi.",
+      "warriorClassic": "Válečník přesně tak, jak se hrál před přepracováním boje: původní sada schopností i tempo vzteku, zachované vedle nového válečníka, aby sis mohl(a) vyzkoušet oba a říct nám, který ti sedí víc.",
       "paladin": "Paladinové jsou svatí křižáci, kteří podporují spojence požehnáními, léčí zranění Hojivým světlem a chrání slabé v těžké zbroji.",
       "hunter": "Lovci jsou specialisté na boj z dálky, kteří bojují po boku ochočené šelmy, zasypávají nepřátele mířenými a rychlými střelami, zpomalují je bodnutím a omračující palbou a mění aspekty podle situace.",
       "rogue": "Tuláci jsou nenápadní zabijáci, kteří utrácejí energii a combo body za bodnutí do zad a dokončovací útoky ze stínů.",
@@ -4386,6 +4440,7 @@ export const cs_CZ: EnTranslations = {
     "combat": {
       "floatingMiss": "Minutí",
       "floatingDodge": "Vyhnutí",
+      "floatingParry": "Odraženo",
       "floatingResist": "Odoláno",
       "cannotMove": "Nemůžeš se hýbat!",
       "attack": "útok",
@@ -4395,6 +4450,7 @@ export const cs_CZ: EnTranslations = {
       "damageTakenCrit": "{source} tě kriticky zasahuje za {amount}.",
       "miss": "Tvoje {ability} míjí {target}.",
       "dodged": "{target} se vyhýbá tvé schopnosti {ability}.",
+      "parried": "{target} odráží tvoji schopnost {ability}.",
       "resisted": "{target} odolává tvé schopnosti {ability}.",
       "healSelf": "Tvoje {ability} tě léčí za {amount}.",
       "healSelfCrit": "Tvoje {ability} tě kriticky léčí za {amount}.",
@@ -4437,6 +4493,7 @@ export const cs_CZ: EnTranslations = {
       "notEnoughMana": "Nedostatek many!",
       "notEnoughResource": "Nedostatek zdroje: {resource}!",
       "notEnoughHealth": "Nedostatek zdraví.",
+      "nothingToConsume": "Není co pohltit.",
       "targetMustDodge": "Tvůj cíl se musí nejdřív vyhnout.",
       "requiresCombo": "Tato schopnost vyžaduje combo body.",
       "requiresForm": "Musíš být v podobě {form}.",
@@ -4453,6 +4510,7 @@ export const cs_CZ: EnTranslations = {
       "facing": "Musíš čelit svému cíli.",
       "targetHealthBelow": "Tato schopnost vyžaduje cíl pod {percent} % zdraví.",
       "dagger": "Musíš mít dýku.",
+      "needShield": "Musíš mít nasazený štít.",
       "behindTarget": "Musíš být za svým cílem.",
       "polymorph": "Toto stvoření nelze proměnit.",
       "noSeal": "Nemáš aktivní pečeť.",
@@ -4828,6 +4886,7 @@ export const cs_CZ: EnTranslations = {
     },
     "slots": {
       "mainhand": "Hlavní ruka",
+      "twoHand": "Obouruční",
       "helmet": "Helma",
       "neck": "Krk",
       "shoulder": "Ramena",
@@ -5101,9 +5160,101 @@ export const cs_CZ: EnTranslations = {
         "name": "Zemětřesení",
         "description": "Rozvibruje cílovou oblast po dobu 6 s a drtí nepřátele za {damage} přírodního poškození každých 1,5 s."
       },
+      "chain_heal": {
+        "name": "Řetězové léčení",
+        "description": "Vyléčí cíl za {damage}, poté přeskočí až na 2 blízké spojence a každý skok vyléčí polovinu předchozího množství."
+      },
       "heroic_strike": {
         "name": "Nájezdnický úder",
         "description": "Silný útok, který zvýší poškození na blízko o {damage}. Aktivuje se při tvém dalším úderu."
+      },
+      "cw_heroic_strike": {
+        "name": "Nájezdnický úder",
+        "description": "Silný útok, který zvýší poškození na blízko o {damage}. Aktivuje se při tvém dalším úderu."
+      },
+      "cw_battle_shout": {
+        "name": "Železný řev",
+        "description": "Zvýší tvoji sílu útoku o {buff} na 2 min."
+      },
+      "cw_commanding_shout": {
+        "name": "Povzbuzující pokřik",
+        "description": "Zvýší tvoji výdrž o {buff} na 2 min."
+      },
+      "cw_charge": {
+        "name": "Nápor",
+        "description": "Vyrazí k nepříteli, vygeneruje 9 vzteku a omráčí ho na 1 s. Dosah 8-25 yardů."
+      },
+      "cw_rend": {
+        "name": "Hluboká rána",
+        "description": "Zraní cíl a způsobí mu krvácení za {damage} poškození během {duration} s."
+      },
+      "cw_thunder_clap": {
+        "name": "Chvějící úder",
+        "description": "Zasáhne blízké nepřátele za {damage} poškození a zpomalí jejich útoky o 10 % na 10 s."
+      },
+      "cw_hamstring": {
+        "name": "Mrzačící řez",
+        "description": "Zmrzačí nepřítele za {damage} poškození a zpomalí jeho pohyb o 50 % na 15 s."
+      },
+      "cw_bloodrage": {
+        "name": "Krvavá daň",
+        "description": "Vygeneruje 10 vzteku za cenu zdraví."
+      },
+      "cw_overpower": {
+        "name": "Rudá ruka",
+        "description": "Okamžitý útok za poškození zbraně plus {damage}. Použitelné jen poté, co cíl uhne. Nelze mu uhnout."
+      },
+      "cw_execute": {
+        "name": "Předčasný hrob",
+        "description": "Pokusí se dorazit zraněného nepřítele a způsobí {damage} poškození. Použitelné jen na nepřátele pod 20 % zdraví."
+      },
+      "cw_slam": {
+        "name": "Hrubý švih",
+        "description": "Praští protivníka za poškození zbraně plus {damage}."
+      },
+      "cw_cleave": {
+        "name": "Žací oblouk",
+        "description": "Rozmáchlý úder, který zasáhne všechny nepřátele před tebou za {damage} poškození."
+      },
+      "cw_defensive_stance": {
+        "name": "Krytý postoj",
+        "description": "Obranný bojový postoj: vytváříš o 30 % více hrozby, ale způsobuješ i utrpíš o 10 % méně poškození. Sesláním znovu postoj opustíš."
+      },
+      "cw_demoralizing_shout": {
+        "name": "Děsivé vytí",
+        "description": "Vypustíš děsivý řev, který sníží sílu útoku všech blízkých nepřátel o {buff} na 30 s."
+      },
+      "cw_sunder_armor": {
+        "name": "Seřezání zbroje",
+        "description": "Rozpoltí zbroj cíle a sníží ji o {damage} za každou aplikaci. Stakuje se až 5 krát. Vytváří velké množství hrozby."
+      },
+      "cw_taunt": {
+        "name": "Provokace",
+        "description": "Vyprovokuje cíl: tvoje hrozba se zvýší na úroveň jeho nejnenáviděnějšího nepřítele a cíl je donucen tě 3 s útočit."
+      },
+      "cw_bloodthirst": {
+        "name": "Pouštění žilou",
+        "description": "Okamžitě zaútočíš v krvavém šílenství za 60 % poškození zbraně plus {damage}. (Hlavní schopnost Fury)"
+      },
+      "cw_mortal_strike": {
+        "name": "Mrzačící úder",
+        "description": "Zákeřný úder, který způsobí poškození zbraně plus {damage}. (Hlavní schopnost Arms)"
+      },
+      "cw_shield_slam": {
+        "name": "Proražení štítem",
+        "description": "Udeří cíl štítem za 50 % poškození zbraně plus {damage} a masivní hrozbu. (Hlavní schopnost Protection)"
+      },
+      "cw_whirlwind": {
+        "name": "Čepelový vír",
+        "description": "Roztočíš se v smrtícím oblouku a zasáhneš všechny blízké nepřátele za {damage}. (Talent Fury)"
+      },
+      "cw_berserker_rage": {
+        "name": "Vroucí zuřivost",
+        "description": "Vstoupíš do vroucí zuřivosti a získáš 20 vzteku. (Talent válečníka)"
+      },
+      "revenge": {
+        "name": "Odveta",
+        "description": "Zaútočíš širokým obloukem a způsobíš fyzické poškození všem nepřátelům před tebou. Při více než 5 cílech je poškození sníženo. Když se vyhneš útoku nebo ho odrazíš, tvá příští Odveta nemusí stát žádný vztek."
       },
       "battle_shout": {
         "name": "Železný řev",
@@ -5147,7 +5298,7 @@ export const cs_CZ: EnTranslations = {
       },
       "slam": {
         "name": "Hrubý švih",
-        "description": "Praští protivníka za poškození zbraně plus {damage}."
+        "description": "Praští protivníka za 50 % poškození zbraně plus {damage} a vygeneruje {rage} zuřivosti."
       },
       "cleave": {
         "name": "Žací oblouk",
@@ -5156,6 +5307,14 @@ export const cs_CZ: EnTranslations = {
       "defensive_stance": {
         "name": "Krytý postoj",
         "description": "Obranný bojový postoj: vytváříš o 30 % více hrozby, ale způsobuješ i utrpíš o 10 % méně poškození. Sesláním znovu postoj opustíš."
+      },
+      "battle_stance": {
+        "name": "Bojový postoj",
+        "description": "Útočný bojový postoj: vytváříš o 10 % více vzteku. Výchozí postoj pro Arms a Protection."
+      },
+      "berserker_stance": {
+        "name": "Postoj berserka",
+        "description": "Lehkomyslný bojový postoj: tvoje kritické zásahy padají o 3 % častěji a udeří o 3 % silněji. Válečník Fury bojuje vždy v tomto postoji."
       },
       "sunder_armor": {
         "name": "Seřezání zbroje",
@@ -5645,9 +5804,77 @@ export const cs_CZ: EnTranslations = {
         "name": "Mrzačící úder",
         "description": "Zákeřný úder, který způsobí poškození zbraně plus {damage}. (Hlavní schopnost Arms)"
       },
+      "sweeping_strikes": {
+        "name": "Široký oblouk",
+        "description": "Po dobu 12 s tvoje útoky na jeden cíl zasáhnou také 1 blízkého nepřítele za plné poškození. (Arms)"
+      },
+      "deep_wounds": {
+        "name": "Zející rány",
+        "description": "Pasivní: tvůj Mrzačící úder nechá cíl krvácet a působí mu fyzické poškození během 6 s. (Arms)"
+      },
+      "enrage_passive": {
+        "name": "Vřava",
+        "description": "Pasivní: když jsi rozzuřen(a), způsobuješ o 7 % více poškození, útočíš o 25 % rychleji a pohybuješ se o 10 % rychleji po dobu 4 s. Pouštění žilou má 30% šanci tě rozzuřit; Rudá žeň tě rozzuří vždy. (Fury)"
+      },
       "bloodthirst": {
         "name": "Pouštění žilou",
         "description": "Okamžitě zaútočíš v krvavém šílenství za 60 % poškození zbraně plus {damage}. (Hlavní schopnost Fury)"
+      },
+      "raging_gale": {
+        "name": "Dvojúder",
+        "description": "Okamžitě dvakrát udeříš zbraní, každý zásah způsobí 40 % poškození zbraně plus {damage}, a vygeneruješ {rage} vzteku. Ukládá až 2 nabití. (Fury)"
+      },
+      "red_harvest": {
+        "name": "Rudá žeň",
+        "description": "Vydej ze sebe vše: v šílenství třikrát udeříš, každý úder za 65 % poškození zbraně plus {damage}, a vždy tě to rozzuří. (Fury)"
+      },
+      "furious_mending": {
+        "name": "Zuřivé zacelení",
+        "description": "Po dobu 10 s utrpíš o 20 % méně poškození, a dokud efekt trvá, Pouštění žilou tě léčí za 20 % tvého maximálního zdraví. (Fury)"
+      },
+      "emboldening_roar": {
+        "name": "Osmělující řev",
+        "description": "Vydáš osmělující řev: ty a spřátelení hráči do 40 yardů jste Osměleni a vaše další 3 schopnosti budou zaručeně kritické zásahy. (Fury)"
+      },
+      "raised_guard": {
+        "name": "Zvednutý kryt",
+        "description": "Zapři se za štítem: po dobu 6 s utrpíš o 50 % méně fyzického poškození. Ukládá až 2 nabití. (Protection)"
+      },
+      "iron_resolve": {
+        "name": "Železné odhodlání",
+        "description": "Zatni zuby a ignoruj bolest: spotřebuje všechen tvůj vztek (nejméně 20) a pohltí 4 poškození za každý utracený bod vzteku, trvá až 10 s. (Protection)"
+      },
+      "faultline": {
+        "name": "Zlomová linie",
+        "description": "Vyšle zemí tlakovou vlnu: nepřátelé před tebou do 8 yardů utrpí {damage} poškození a jsou na 3 s omráčeni. (Protection)"
+      },
+      "defiant_bellow": {
+        "name": "Vzdorný řev",
+        "description": "Vzdorný řev: každý nepřítel do 10 yardů je vyprovokován a nucen na tebe 3 s útočit. (Protection)"
+      },
+      "breachmaker": {
+        "name": "Prolamovač",
+        "description": "Ztluče cíl za poškození zbraně plus {damage} a prolomí jeho kryt: tvoje vlastní útoky proti němu způsobují o 20 % více poškození po dobu 8 s. (Arms)"
+      },
+      "measured_fury": {
+        "name": "Odměřená zuřivost",
+        "description": "Tvá odměřená zuřivost zostřuje tvé hospodaření: schopnosti tě stojí o 10 % méně vzteku. (Arms)"
+      },
+      "seasoned_soldier": {
+        "name": "Ostřílený voják",
+        "description": "Tvoje kritické automatické útoky generují o 10 % více vzteku. (Arms)"
+      },
+      "diabolical_twinstrike": {
+        "name": "Ďábelský dvojúder",
+        "description": "Když jsi rozzuřen(a), tvůj Dvojúder způsobuje o 15 % více poškození. (Fury)"
+      },
+      "cleaving_blows": {
+        "name": "Rozpolcující údery",
+        "description": "Rudá žeň vždy vrátí jedno nabití Dvojúderu. (Fury)"
+      },
+      "sudden_death": {
+        "name": "Náhlá smrt",
+        "description": "Tvoje automatické útoky mají šanci ti dovolit seslat Předčasný hrob na cíl s libovolným zdravím, a to zcela bez ceny vzteku. (Arms)"
       },
       "shield_slam": {
         "name": "Proražení štítem",
@@ -5661,13 +5888,13 @@ export const cs_CZ: EnTranslations = {
         "name": "Vroucí zuřivost",
         "description": "Vstoupíš do vroucí zuřivosti a získáš 20 vzteku. (Talent válečníka)"
       },
+      "holy_shock": {
+        "name": "Svatý šok",
+        "description": "Šokuje spřátelený cíl Svatou energií a vyléčí ho, nebo nepříteli způsobí {damage} bodů Svatého poškození. (Charakteristická schopnost svatosti)"
+      },
       "crusader_strike": {
         "name": "Křižácký úder",
         "description": "Zasáhne cíl za poškození zbraní plus {damage} bodů Svatého poškození. (Paladinský talent)"
-      },
-      "chain_heal": {
-        "name": "Řetězové léčení",
-        "description": "Silně vyléčí spřátelený cíl a pak přeskočí až na 2 další spojence poblíž. Každý skok léčí o 50 % méně. (Charakteristická schopnost obnovy)"
       },
       "metamorphosis": {
         "name": "Děsivá podoba",
@@ -5677,13 +5904,13 @@ export const cs_CZ: EnTranslations = {
         "name": "Zářivý příboj",
         "description": "Přetíží tvou auru a zpevní tě 160 body brnění na 10 sek. (Paladinský talent)"
       },
-      "holy_shock": {
-        "name": "Svatý šok",
-        "description": "Šokuje spřátelený cíl Svatou energií a vyléčí ho, nebo nepříteli způsobí {damage} bodů Svatého poškození. (Charakteristická schopnost svatosti)"
-      },
       "holy_shield": {
         "name": "Posvátná hradba",
         "description": "Vrhně zářivou záštitu na nepřítele, způsobí Svaté poškození a odrazí se na 2 nepřátele poblíž. (Charakteristická schopnost ochrany)"
+      },
+      "repentance": {
+        "name": "Pokání",
+        "description": "Uvede nepřítele do stavu rozjímání až na 6 s. Jakékoli poškození efekt přeruší. (Charakteristická schopnost odplaty)"
       },
       "bestial_wrath": {
         "name": "Vyjící zuřivost",
@@ -5737,9 +5964,21 @@ export const cs_CZ: EnTranslations = {
         "name": "Prvotní mistrovství",
         "description": "Povolá bouři, díky níž bude tvé příští kouzlo okamžité. (Charakteristická schopnost živlů)"
       },
+      "shamanistic_rage": {
+        "name": "Šamanská zuřivost",
+        "description": "Uvolní šamanskou zuřivost a obnoví 160 many. (Charakteristická schopnost posílení)"
+      },
+      "natures_swiftness": {
+        "name": "Svižnost přírody",
+        "description": "Povolá přírodu, aby tvé příští kouzlo bylo okamžité. (Charakteristická schopnost obnovy)"
+      },
       "siphon_life": {
         "name": "Vysávání žil",
         "description": "Vysává z nepřítele život, způsobí {damage} bodů Stínového poškození za 30 sek. a vyléčí tě za způsobené poškození. (Charakteristická schopnost utrpení)"
+      },
+      "fel_domination": {
+        "name": "Běsovská nadvláda",
+        "description": "Ovládne běsovské energie a tvé příští kouzlo bude okamžité. (Charakteristická schopnost démonologie)"
       },
       "conflagrate": {
         "name": "Požár",
@@ -5756,6 +5995,34 @@ export const cs_CZ: EnTranslations = {
       "swiftmend": {
         "name": "Rychlé uzdravení",
         "description": "Spotřebuje efekt průběžného léčení na spřáteleném cíli a vyléčí ho za {damage}. (Charakteristická schopnost obnovy)"
+      },
+      "storm_bolt": {
+        "name": "Bouřná střela",
+        "description": "Mrštíš zbraní po cíli za {damage} poškození a omráčíš ho na 3 s."
+      },
+      "piercing_howl": {
+        "name": "Pronikavé zavytí",
+        "description": "Pronikavý pokřik, který na 8 s zpomalí všechny nepřátele do 15 yardů o 50 %."
+      },
+      "die_by_sword": {
+        "name": "Smrt s mečem v ruce",
+        "description": "Obranná schopnost: po dobu 8 s utrpíš o 30 % méně poškození a vyhneš se mnohem více útokům."
+      },
+      "recklessness": {
+        "name": "Bezhlavost",
+        "description": "Rozzuření: tvoje generování vzteku se zvýší o 50 % a šance na kritický zásah o 20 % na 12 s."
+      },
+      "sanguine_aura": {
+        "name": "Krvavá aura",
+        "description": "Naplň svou zbraň krví nepřátel: ty a tvoji spojenci na blízko získáte na 20 s o 10 % vyšší rychlost útoku a o 10 % vyšší poškození."
+      },
+      "victory_rush": {
+        "name": "Vítězný nápor",
+        "description": "Udeříš za poškození zbraně plus {damage} a vyléčíš se za 20 % svého maximálního zdraví. Použitelné jen do 20 s od zabití nepřítele."
+      },
+      "intimidating_shout": {
+        "name": "Zastrašující pokřik",
+        "description": "Děsivý pokřik, který až 5 nepřátel do 8 yardů zažene na 8 s na útěk hrůzou. Poškození může efekt přerušit."
       },
       "summon_imp": {
         "name": "Vyvolat Žhavorozeného",
@@ -6194,6 +6461,15 @@ export const cs_CZ: EnTranslations = {
       },
       "linen_scrap": {
         "name": "Lněný útržek"
+      },
+      "arcane_dust": {
+        "name": "Arkánní prach"
+      },
+      "arcane_essence": {
+        "name": "Arkánní esence"
+      },
+      "arcane_shard": {
+        "name": "Arkánní střep"
       },
       "fen_muster_order": {
         "name": "Fenbridgeský svolávací rozkaz"
@@ -7107,6 +7383,18 @@ export const cs_CZ: EnTranslations = {
       "heroic_mark": {
         "name": "Hrdinská značka"
       },
+      "eastbrook_buckler": {
+        "name": "Eastbrookský pukléř"
+      },
+      "highwatch_wallshield": {
+        "name": "Highwatchský hradební štít"
+      },
+      "eastbrook_greatsword": {
+        "name": "Eastbrookský obouruční meč"
+      },
+      "highwatch_greatsword": {
+        "name": "Highwatchský obouruční meč"
+      },
       "morthens_cryptforged_hauberk": {
         "name": "Morthenův kryptově kovaný hauberk"
       },
@@ -7289,6 +7577,18 @@ export const cs_CZ: EnTranslations = {
       },
       "stormcallers_spaulders_heroic": {
         "name": "Nárameníky volání vichru"
+      },
+      "bonewrought_greatsword": {
+        "name": "Obouruční meč z kosti"
+      },
+      "direfang_greatblade": {
+        "name": "Velká čepel děsivého tesáku"
+      },
+      "bonewrought_bulwark": {
+        "name": "Hradba z kosti"
+      },
+      "wraithfire_orb": {
+        "name": "Koule přízračného ohně"
       },
       "unknown_alien_weaponry": {
         "name": "Neznámé mimozemské zbraně"

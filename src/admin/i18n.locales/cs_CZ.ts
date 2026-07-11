@@ -652,6 +652,8 @@ export const cs_CZ: Record<string, string> = {
   'zone.thornpeak_heights': 'Thornpeakské výšiny',
   'nav.history': 'Historie',
   'moderationHistory.actionKick': 'Vyhozen',
+  'moderationHistory.actionJail': 'Uvězněn',
+  'moderationHistory.actionUnjail': 'Propuštěn',
   'moderationHistory.actionKill': 'Zabit',
   'moderationHistory.actionIpBlock': 'IP zablokována',
   'moderationHistory.actionIpUnblock': 'IP odblokována',

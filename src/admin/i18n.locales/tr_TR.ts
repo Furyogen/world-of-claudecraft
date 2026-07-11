@@ -661,6 +661,8 @@ export const tr_TR: Record<string, string> = {
   'staff.viaScript': 'yetki verme betiği',
   'nav.history': 'Geçmiş',
   'moderationHistory.actionKick': 'Sunucudan atıldı',
+  'moderationHistory.actionJail': 'Hapsedildi',
+  'moderationHistory.actionUnjail': 'Serbest bırakıldı',
   'moderationHistory.actionKill': 'Öldürüldü',
   'moderationHistory.actionIpBlock': 'IP adresi engellendi',
   'moderationHistory.actionIpUnblock': 'IP engeli kaldırıldı',

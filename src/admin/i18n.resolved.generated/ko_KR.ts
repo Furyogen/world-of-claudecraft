@@ -289,6 +289,8 @@ export const ko_KR: AdminTranslations = {
   "moderationHistory.actionForceRename": "강제 이름 바꾸기",
   "moderationHistory.actionKick": "강제 퇴장",
   "moderationHistory.actionKill": "처치",
+  "moderationHistory.actionJail": "수감됨",
+  "moderationHistory.actionUnjail": "석방됨",
   "moderationHistory.actionNote": "메모",
   "moderationHistory.actionResetPassword": "비밀번호 재설정",
   "moderationHistory.actionIpBlock": "IP 차단",

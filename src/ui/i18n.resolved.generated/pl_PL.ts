@@ -298,6 +298,7 @@ export const pl_PL: EnTranslations = {
       "playerLabel": "Twój bohater",
       "targetLabel": "Twój cel",
       "targetAnnounce": "Oznacz {name}",
+      "targetOfTargetLabel": "Cel celu",
       "partyLabel": "Twoja drużyna",
       "partyChip": "Drużyna",
       "partyGroup": "Grupa {n}",
@@ -314,7 +315,6 @@ export const pl_PL: EnTranslations = {
       "chat": "Przejdź do czatu"
     },
     "mobile": {
-      "autorun": "Autobieg",
       "jump": "Skok",
       "leaderboard": "Rankingi",
       "dailyRewards": "Nagrody",
@@ -574,13 +574,32 @@ export const pl_PL: EnTranslations = {
       "startAttackOnAbility": "Automatyczny atak przy użyciu umiejętności",
       "walkByAutoloot": "Automatyczny łup w przelocie",
       "groundReticle": "Celownik naziemny",
+      "mouseoverCast": "Rzucanie po najechaniu na ramki drużyny",
       "showItemLevel": "Pokaż poziom przedmiotu",
       "itemLevelLine": "Poziom przedmiotu {level}",
       "itemScoreLine": "Ocena {score}",
       "showSecondaryActionBar": "Pokaż dodatkowy pasek akcji",
+      "showTargetOfTarget": "Pokaż cel celu",
       "showDailyRewardsChest": "Pokaż skrzynię codziennych nagród",
       "mobileCameraJoystick": "Joystick aparatu",
       "mobileLeftHanded": "Układ leworęczny"
+    },
+    "talentRows": {
+      "tab": "Wybory",
+      "defaultLoadout": "Domyślny zestaw",
+      "comingSoon": "Wkrótce"
+    },
+    "specPanel": {
+      "primaryAttr": "Główny atrybut",
+      "complexity": "Złożoność",
+      "complexityLow": "Niska",
+      "complexityMedium": "Średnia",
+      "complexityHigh": "Wysoka",
+      "exampleAbilities": "Przykładowe umiejętności",
+      "viewTalents": "Zobacz talenty",
+      "selectSpec": "Wybierz specjalizację",
+      "specUnlockBanner": "Odblokowano specjalizację!",
+      "specUnlockHint": "Naciśnij N, aby wybrać specjalizację."
     },
     "controller": {
       "title": "Kontroler",
@@ -678,7 +697,9 @@ export const pl_PL: EnTranslations = {
       "names": {
         "spellPower": "Moc zaklęć",
         "critRating": "Ocena krytyczna",
-        "hasteRating": "Ocena pośpiechu"
+        "hasteRating": "Ocena pośpiechu",
+        "haste": "Pośpiech",
+        "parry": "Parowanie"
       },
       "desc": {
         "str": "Zwiększa twoją moc ataku, więc twoje ciosy bronią są mocniejsze.",
@@ -693,7 +714,9 @@ export const pl_PL: EnTranslations = {
         "critChance": "Twoja szansa na zadanie ataku krytycznego, zadającego podwójne obrażenia.",
         "dodge": "Twoja szansa na całkowite uniknięcie nadchodzącego ataku wręcz, bez otrzymania obrażeń.",
         "critRating": "Ocena krytyczna z twojego ekwipunku i bonusów zestawów, zwiększająca szansę na trafienie krytyczne. Około 10 oceny daje 1% trafienia krytycznego.",
-        "hasteRating": "Ocena pośpiechu z twojego ekwipunku i bonusów zestawów, przyspieszająca twoje ataki i rzucanie zaklęć. Około 10 oceny daje 1% pośpiechu."
+        "hasteRating": "Ocena pośpiechu z twojego ekwipunku i bonusów zestawów, przyspieszająca twoje ataki i rzucanie zaklęć. Około 10 oceny daje 1% pośpiechu.",
+        "haste": "Przyspiesza twoje zamachy bronią i rzucanie zaklęć. Nie skraca globalnego czasu odnowienia.",
+        "parry": "Twoja szansa na całkowite sparowanie ataku wręcz z przodu, bez otrzymania obrażeń. Ciosu zadanego od tyłu nie można sparować."
       },
       "effects": {
         "attackPower": "+{value} mocy ataku",
@@ -811,6 +834,7 @@ export const pl_PL: EnTranslations = {
       "failed": "Nie udało się wysłać zgłoszenia błędu. Spróbuj ponownie."
     },
     "paperdoll": {
+      "offhand": "Druga ręka",
       "unequipAria": "Zdejmij {item}",
       "unequipHint": "Kliknij ×, kliknij prawym przyciskiem lub przeciągnij do toreb, aby zdjąć"
     },
@@ -1061,9 +1085,24 @@ export const pl_PL: EnTranslations = {
       "formCat": "Katzengestalt: Nahkampfschaden und Energie",
       "formTravel": "Postać Fleet: prędkość ruchu zwiększona o {pct}%",
       "defensiveStance": "Czujna postawa: mniej otrzymywanych obrażeń, większe zagrożenie",
+      "battleStance": "Postawa bojowa: generowanie wściekłości zwiększone o 10%",
+      "berserkerStance": "Postawa berserkera: trafienia krytyczne o 3% częstsze i o 3% silniejsze",
       "righteousFury": "Płonąca przysięga: znacznie zwiększone zagrożenie od obrażeń od Świętości",
       "scale": "Größe um {pct}% erhöht",
       "jump": "Sprunghöhe um {pct}% erhöht",
+      "dmgDone": "Zwiększa zadawane obrażenia o {pct}%",
+      "dmgDoneReduce": "Zmniejsza zadawane obrażenia o {pct}%",
+      "crit": "Zwiększa szansę na trafienie krytyczne o {pct}%",
+      "rageGen": "Zwiększa generowanie wściekłości o {pct}%",
+      "reckless": "Zwiększa szansę na trafienie krytyczne o {pct}%, a generowanie wściekłości o {ragePct}%",
+      "avatar": "Kolos: zadawane obrażenia zwiększone o {pct}%",
+      "bloodbath": "Zwiększa szansę na trafienie krytyczne i zadawane obrażenia o {pct}%",
+      "dieBySword": "Zmniejsza otrzymywane obrażenia o {pct}% ({lowPct}% poniżej {hpPct}% zdrowia)",
+      "sanguine": "Zwiększa szybkość ataku o {hastePct}%, a zadawane obrażenia o {dmgPct}%",
+      "battleTrance": "Następny Cios łupieżcy lub Okaleczające uderzenie nie kosztuje wściekłości",
+      "revengeFree": "Twój następny Odwet nie kosztuje wściekłości",
+      "victoryRush": "Zryw zwycięstwa jest gotowy",
+      "maxHpPct": "Zwiększa maksymalne zdrowie o {pct}%",
       "school": {
         "physical": "Fizyczne",
         "fire": "Ogień",
@@ -1078,6 +1117,10 @@ export const pl_PL: EnTranslations = {
       "spawn": "{name} powstaje nad Wyżynami Ciernistego Szczytu!"
     },
     "auth": {
+      "appleLoginCta": "Kontynuuj z Apple",
+      "appleError": "Nie udało się zalogować przez Apple. Spróbuj ponownie.",
+      "appleChoiceIntro": "Utwórz nowe konto lub połącz Apple z kontem, które już masz.",
+      "appleChoiceExpired": "To logowanie przez Apple wygasło. Zaloguj się przez Apple jeszcze raz.",
       "forgotPrompt": "Nie pamiętasz hasła?",
       "forgotTitle": "Zresetuj hasło",
       "forgotHint": "Podaj nazwę użytkownika, a wyślemy link do resetowania na zapisany adres e-mail.",
@@ -1984,11 +2027,19 @@ export const pl_PL: EnTranslations = {
     },
     "abilityHook": {
       "heroic_strike": "Kolejkuje cięższy zamach, który zużywa wściekłość przy następnym ciosie.",
+      "revenge": "Zamaszysty kontratak, który trafia wszystko przed tobą, a tuż po odbiciu ciosu kosztuje mniej.",
       "battle_shout": "Mobilizujący okrzyk, który zwiększa siłę ataku całej drużyny.",
       "commanding_shout": "Wzmacnia wytrzymałość, by każdy dłużej wytrzymał w walce.",
       "charge": "Szarżujesz na odległego wroga, otwierając walkę krótkim ogłuszeniem.",
       "rend": "Otwiera krwawienie, które z czasem wyczerpuje cel.",
       "thunder_clap": "Uderza we wszystko wokół ciebie i spowalnia ataki wrogów.",
+      "cw_heroic_strike": "Kolejkuje cięższy zamach, który zużywa wściekłość przy następnym ciosie.",
+      "cw_battle_shout": "Mobilizujący okrzyk, który zwiększa siłę ataku całej drużyny.",
+      "cw_commanding_shout": "Wzmacnia wytrzymałość, by każdy dłużej wytrzymał w walce.",
+      "cw_charge": "Szarżujesz na odległego wroga, otwierając walkę krótkim ogłuszeniem.",
+      "cw_rend": "Otwiera krwawienie, które z czasem wyczerpuje cel.",
+      "cw_thunder_clap": "Uderza we wszystko wokół ciebie i spowalnia ataki wrogów.",
+      "hamstring": "Tnie nogi celu, spowalniając go, by nie mógł cię dogonić.",
       "seal_of_righteousness": "Nasyca twoje ciosy świętymi obrażeniami, które potem zużywasz Verdictem.",
       "holy_light": "Stabilne, pokaźne leczenie do uzupełnienia zdrowia sojusznika lub własnego.",
       "devotion_aura": "Trwałe wzmocnienie, które zwiększa pancerz, by ciosy mniej bolały.",
@@ -3295,6 +3346,7 @@ export const pl_PL: EnTranslations = {
   },
   "classes": {
     "warrior": "Wojownik",
+    "warriorClassic": "Wojownik",
     "paladin": "Paladyn",
     "hunter": "Łowca",
     "rogue": "Łotrzyk",
@@ -4062,6 +4114,7 @@ export const pl_PL: EnTranslations = {
     },
     "roles": {
       "warrior": "Tank / DPS wręcz",
+      "warriorClassic": "Tank / DPS wręcz",
       "paladin": "Uzdrowiciel / Tank / DPS wręcz",
       "hunter": "Dystansowy DPS",
       "rogue": "DPS wręcz",
@@ -4086,6 +4139,7 @@ export const pl_PL: EnTranslations = {
     },
     "lore": {
       "warrior": "Wojownicy to zaprawieni w boju wojownicy walki wręcz, którzy gromadzą Furię, zadając lub otrzymując obrażenia. Pochłaniają potężne ciosy lub miażdżą wrogów potężnym orężem.",
+      "warriorClassic": "Wojownik dokładnie taki, jakim grało się przed przebudową walki: pierwotny zestaw umiejętności i dawne tempo wściekłości, zachowane obok nowego wojownika, byś mógł wypróbować obie wersje i dać nam znać, którą gra się lepiej.",
       "paladin": "Paladyni to święci krzyżowcy, którzy wspierają sojuszników błogosławieństwami, leczą rany Kojącym Światłem i chronią słabych, odziani w ciężki pancerz.",
       "hunter": "Łowcy to specjaliści walki dystansowej, którzy walczą u boku oswojonej bestii, zasypując wrogów celnymi i szybkimi strzałami, spowalniając ich żądłami oraz ogłuszającym ostrzałem i zmieniając aspekty stosownie do chwili.",
       "rogue": "Łotrzykowie to skradający się zabójcy, którzy wydają Energię i Punkty Kombosów na ciosy w plecy i wykończenia z cienia.",
@@ -4386,6 +4440,7 @@ export const pl_PL: EnTranslations = {
     "combat": {
       "floatingMiss": "Pudło",
       "floatingDodge": "Unik",
+      "floatingParry": "Parowanie",
       "floatingResist": "Odparto",
       "cannotMove": "Nie można się ruszyć!",
       "attack": "atak",
@@ -4395,6 +4450,7 @@ export const pl_PL: EnTranslations = {
       "damageTakenCrit": "{source} trafia cię krytycznie, zadając {amount}.",
       "miss": "Twój {ability} chybia {target}.",
       "dodged": "Twój {ability} zostaje uniknięty przez {target}.",
+      "parried": "Twój {ability} zostaje sparowany przez {target}.",
       "resisted": "{target} odpiera twoje {ability}.",
       "healSelf": "Twój {ability} leczy cię o {amount}.",
       "healSelfCrit": "Twój {ability} leczy cię krytycznie o {amount}.",
@@ -4437,6 +4493,7 @@ export const pl_PL: EnTranslations = {
       "notEnoughMana": "Za mało many!",
       "notEnoughResource": "Za mało: {resource}!",
       "notEnoughHealth": "Za mało zdrowia.",
+      "nothingToConsume": "Nie ma nic do zużycia.",
       "targetMustDodge": "Twój cel musi najpierw zrobić unik.",
       "requiresCombo": "Ta umiejętność wymaga punktów kombinacji.",
       "requiresForm": "Musisz być w postaci: {form}.",
@@ -4453,6 +4510,7 @@ export const pl_PL: EnTranslations = {
       "facing": "Musisz być zwrócony przodem do celu.",
       "targetHealthBelow": "Ta umiejętność wymaga, by cel miał poniżej {percent}% zdrowia.",
       "dagger": "Musisz dzierżyć sztylet.",
+      "needShield": "Musisz mieć założoną tarczę.",
       "behindTarget": "Musisz znajdować się za swoim celem.",
       "polymorph": "Tego stworzenia nie można poddać polimorfii.",
       "noSeal": "Nie masz aktywnej Pieczęci.",
@@ -4828,6 +4886,7 @@ export const pl_PL: EnTranslations = {
     },
     "slots": {
       "mainhand": "Główna ręka",
+      "twoHand": "Dwuręczna",
       "helmet": "Hełm",
       "neck": "Szyja",
       "shoulder": "Barki",
@@ -5101,9 +5160,101 @@ export const pl_PL: EnTranslations = {
         "name": "Trzęsienie ziemi",
         "description": "Wstrząsa wybranym obszarem przez 6 sek., smagając wrogów i zadając {damage} obrażeń od sił natury co 1.5 sek."
       },
+      "chain_heal": {
+        "name": "Łańcuchowe leczenie",
+        "description": "Leczy cel za {damage}, a następnie przeskakuje na maksymalnie 2 pobliskich sojuszników, przy czym każdy przeskok leczy o połowę mniej niż poprzedni."
+      },
       "heroic_strike": {
         "name": "Cios łupieżcy",
         "description": "Potężny atak, który zwiększa obrażenia w zwarciu o {damage}. Aktywuje się przy następnym uderzeniu."
+      },
+      "cw_heroic_strike": {
+        "name": "Cios łupieżcy",
+        "description": "Potężny atak, który zwiększa obrażenia w zwarciu o {damage}. Aktywuje się przy następnym uderzeniu."
+      },
+      "cw_battle_shout": {
+        "name": "Żelazny ryk",
+        "description": "Zwiększa twoją moc ataku o {buff} na 2 min."
+      },
+      "cw_commanding_shout": {
+        "name": "Krzepiący okrzyk",
+        "description": "Zwiększa twoją kondycję o {buff} na 2 min."
+      },
+      "cw_charge": {
+        "name": "Natarcie",
+        "description": "Szarżuj na wroga, generując 9 wściekłości i ogłuszając go na 1 sek. Zasięg 8-25 jardów."
+      },
+      "cw_rend": {
+        "name": "Głęboka rana",
+        "description": "Rani cel, powodując krwawienie zadające {damage} obrażeń w ciągu {duration} sek."
+      },
+      "cw_thunder_clap": {
+        "name": "Trzęsący cios",
+        "description": "Razi pobliskich wrogów za {damage} obrażeń i spowalnia ich ataki o 10% na 10 sek."
+      },
+      "cw_hamstring": {
+        "name": "Kulawiące cięcie",
+        "description": "Okalecza wroga, zadając {damage} obrażeń i spowalniając jego ruch o 50% na 15 sek."
+      },
+      "cw_bloodrage": {
+        "name": "Krwawa danina",
+        "description": "Generuje 10 wściekłości kosztem zdrowia."
+      },
+      "cw_overpower": {
+        "name": "Krwawa ręka",
+        "description": "Natychmiastowy atak za obrażenia broni plus {damage}. Użyteczne tylko po uniku celu. Nie można uniknąć."
+      },
+      "cw_execute": {
+        "name": "Przedwczesny grób",
+        "description": "Próba dobicia rannego przeciwnika, zadająca {damage} obrażeń. Użyteczne tylko na wrogach poniżej 20% zdrowia."
+      },
+      "cw_slam": {
+        "name": "Brutalny zamach",
+        "description": "Wali przeciwnika, zadając obrażenia broni plus {damage}."
+      },
+      "cw_cleave": {
+        "name": "Kosiący łuk",
+        "description": "Zamaszyste uderzenie, które trafia wszystkich wrogów przed tobą, zadając {damage} obrażeń."
+      },
+      "cw_defensive_stance": {
+        "name": "Czujna postawa",
+        "description": "Defensywna postawa bojowa: generujesz o 30% więcej zagrożenia, lecz zadajesz i otrzymujesz o 10% mniej obrażeń. Rzuć ponownie, aby opuścić postawę."
+      },
+      "cw_demoralizing_shout": {
+        "name": "Złowieszcze wycie",
+        "description": "Wydaje przerażający okrzyk, zmniejszając moc ataku wszystkich pobliskich wrogów o {buff} na 30 sek."
+      },
+      "cw_sunder_armor": {
+        "name": "Rozdarcie pancerza",
+        "description": "Rozdziera pancerz celu, zmniejszając go o {damage}% za każde nałożenie. Kumuluje się do 5 razy. Generuje dużą ilość zagrożenia."
+      },
+      "cw_taunt": {
+        "name": "Podjudzenie",
+        "description": "Prowokuje cel: twoje zagrożenie wzrasta do poziomu jego najbardziej znienawidzonego wroga, a cel jest zmuszony atakować cię przez 3 sek."
+      },
+      "cw_bloodthirst": {
+        "name": "Upust krwi",
+        "description": "Natychmiast atakuj w krwawym szale, zadając 60% obrażeń broni plus {damage}. (Sygnatura furii)"
+      },
+      "cw_mortal_strike": {
+        "name": "Okaleczające uderzenie",
+        "description": "Bezlitosne uderzenie zadające obrażenia broni plus {damage}. (Sygnatura Oręża)"
+      },
+      "cw_shield_slam": {
+        "name": "Trzask tarczy",
+        "description": "Uderza cel tarczą, zadając 50% obrażeń broni plus {damage} i wzbudzając ogromne zagrożenie. (Znak rozpoznawczy Ochrony)"
+      },
+      "cw_whirlwind": {
+        "name": "Wir ostrzy",
+        "description": "Wirujesz w śmiercionośnym łuku, uderzając wszystkich pobliskich wrogów za {damage}. (Talent Furii)"
+      },
+      "cw_berserker_rage": {
+        "name": "Kipiąca furia",
+        "description": "Wpadnij w kipiącą furię, generując 20 wściekłości. (Talent wojownika)"
+      },
+      "revenge": {
+        "name": "Odwet",
+        "description": "Atakujesz szerokim łukiem, zadając obrażenia fizyczne wszystkim wrogom przed tobą. Powyżej 5 celów obrażenia są zmniejszone. Gdy unikniesz ciosu lub go sparujesz, twój następny Odwet może nie kosztować wściekłości."
       },
       "battle_shout": {
         "name": "Żelazny ryk",
@@ -5147,7 +5298,7 @@ export const pl_PL: EnTranslations = {
       },
       "slam": {
         "name": "Brutalny zamach",
-        "description": "Wali przeciwnika, zadając obrażenia broni plus {damage}."
+        "description": "Wali przeciwnika, zadając 50% obrażeń broni plus {damage} i generując {rage} furii."
       },
       "cleave": {
         "name": "Kosiący łuk",
@@ -5156,6 +5307,14 @@ export const pl_PL: EnTranslations = {
       "defensive_stance": {
         "name": "Czujna postawa",
         "description": "Defensywna postawa bojowa: generujesz o 30% więcej zagrożenia, lecz zadajesz i otrzymujesz o 10% mniej obrażeń. Rzuć ponownie, aby opuścić postawę."
+      },
+      "battle_stance": {
+        "name": "Postawa bojowa",
+        "description": "Agresywna postawa bojowa: generujesz o 10% więcej wściekłości. Domyślna postawa specjalizacji Broń i Ochrona."
+      },
+      "berserker_stance": {
+        "name": "Postawa berserkera",
+        "description": "Brawurowa postawa bojowa: twoje trafienia krytyczne zdarzają się o 3% częściej i zadają o 3% większe obrażenia. Wojownik specjalizacji Furia zawsze walczy w tej postawie."
       },
       "sunder_armor": {
         "name": "Rozdarcie pancerza",
@@ -5645,9 +5804,77 @@ export const pl_PL: EnTranslations = {
         "name": "Okaleczające uderzenie",
         "description": "Bezlitosne uderzenie zadające obrażenia broni plus {damage}. (Sygnatura Oręża)"
       },
+      "sweeping_strikes": {
+        "name": "Poszerzony łuk",
+        "description": "Przez 12 sek. twoje ataki na pojedynczy cel trafiają dodatkowo 1 pobliskiego wroga za pełne obrażenia. (specjalizacja Broń)"
+      },
+      "deep_wounds": {
+        "name": "Ziejące rany",
+        "description": "Pasywne: twoje Okaleczające uderzenie pozostawia na celu krwawienie zadające obrażenia fizyczne przez 6 sek. (specjalizacja Broń)"
+      },
+      "enrage_passive": {
+        "name": "Rzeź",
+        "description": "Pasywne: gdy jesteś w Szale, przez 4 sek. zadajesz o 7% większe obrażenia, atakujesz o 25% szybciej i poruszasz się o 10% szybciej. Upust krwi ma 30% szansy na wprawienie cię w Szał; Krwawe żniwo robi to zawsze. (specjalizacja Furia)"
+      },
       "bloodthirst": {
         "name": "Upust krwi",
         "description": "Natychmiast atakuj w krwawym szale, zadając 60% obrażeń broni plus {damage}. (Sygnatura furii)"
+      },
+      "raging_gale": {
+        "name": "Bliźniaczy cios",
+        "description": "Natychmiast uderzasz bronią dwukrotnie, każde trafienie zadaje 40% obrażeń broni plus {damage}, a ty generujesz {rage} wściekłości. Gromadzi maksymalnie 2 ładunki. (specjalizacja Furia)"
+      },
+      "red_harvest": {
+        "name": "Krwawe żniwo",
+        "description": "Stawiasz wszystko: w amoku uderzasz trzykrotnie, każdy cios zadaje 65% obrażeń broni plus {damage}, a ty zawsze wpadasz w Szał. (specjalizacja Furia)"
+      },
+      "furious_mending": {
+        "name": "Wściekłe gojenie",
+        "description": "Przez 10 sek. otrzymujesz o 20% mniejsze obrażenia, a póki efekt trwa, twój Upust krwi leczy cię o 20% maksymalnego zdrowia. (specjalizacja Furia)"
+      },
+      "emboldening_roar": {
+        "name": "Ośmielający ryk",
+        "description": "Wydajesz ośmielający ryk: ty i przyjaźni gracze w promieniu 40 jardów zostajecie Ośmieleni, a twoje następne 3 umiejętności są gwarantowanymi trafieniami krytycznymi. (specjalizacja Furia)"
+      },
+      "raised_guard": {
+        "name": "Podniesiona garda",
+        "description": "Zapierasz się za tarczą: otrzymujesz o 50% mniejsze obrażenia fizyczne przez 6 sek. Gromadzi maksymalnie 2 ładunki. (specjalizacja Ochrona)"
+      },
+      "iron_resolve": {
+        "name": "Żelazny hart",
+        "description": "Zaciskasz zęby i ignorujesz ból: zużywa całą twoją wściekłość (co najmniej 20), aby pochłaniać 4 punkty obrażeń za każdy wydany punkt wściekłości, przez maksymalnie 10 sek. (specjalizacja Ochrona)"
+      },
+      "faultline": {
+        "name": "Uskok",
+        "description": "Posyłasz falę uderzeniową przez ziemię: wrogowie przed tobą w promieniu 8 jardów otrzymują {damage} obrażeń i zostają ogłuszeni na 3 sek. (specjalizacja Ochrona)"
+      },
+      "defiant_bellow": {
+        "name": "Wyzywający ryk",
+        "description": "Wyzywający ryk: każdy wróg w promieniu 10 jardów zostaje sprowokowany i zmuszony do atakowania ciebie przez 3 sek. (specjalizacja Ochrona)"
+      },
+      "breachmaker": {
+        "name": "Wyłom",
+        "description": "Młóci cel za obrażenia broni plus {damage} i kruszy jego gardę: twoje ataki przeciwko niemu zadają o 20% większe obrażenia przez 8 sek. (specjalizacja Broń)"
+      },
+      "measured_fury": {
+        "name": "Wyważona furia",
+        "description": "Wyważona furia uczy cię oszczędności: twoje umiejętności kosztują o 10% mniej wściekłości. (specjalizacja Broń)"
+      },
+      "seasoned_soldier": {
+        "name": "Zaprawiony żołnierz",
+        "description": "Twoje krytyczne ataki automatyczne generują o 10% więcej wściekłości. (specjalizacja Broń)"
+      },
+      "diabolical_twinstrike": {
+        "name": "Diabelski bliźniaczy cios",
+        "description": "Gdy jesteś w Szale, twój Bliźniaczy cios zadaje o 15% większe obrażenia. (specjalizacja Furia)"
+      },
+      "cleaving_blows": {
+        "name": "Rozcinające ciosy",
+        "description": "Krwawe żniwo zawsze zwraca ładunek Bliźniaczego ciosu. (specjalizacja Furia)"
+      },
+      "sudden_death": {
+        "name": "Nagła śmierć",
+        "description": "Twoje ataki automatyczne mają szansę pozwolić ci użyć Przedwczesnego grobu na celu o dowolnym poziomie zdrowia, bez kosztu wściekłości. (specjalizacja Broń)"
       },
       "shield_slam": {
         "name": "Trzask tarczy",
@@ -5661,13 +5888,13 @@ export const pl_PL: EnTranslations = {
         "name": "Kipiąca furia",
         "description": "Wpadnij w kipiącą furię, generując 20 wściekłości. (Talent wojownika)"
       },
+      "holy_shock": {
+        "name": "Święty wstrząs",
+        "description": "Razisz przyjazny cel Świętą energią, lecząc go za {damage}. (specjalizacja Świętość)"
+      },
       "crusader_strike": {
         "name": "Cios krzyżowca",
         "description": "Uderza cel za obrażenia broni plus {damage} obrażeń od Świętości. (talent paladyna)"
-      },
-      "chain_heal": {
-        "name": "Łańcuchowe leczenie",
-        "description": "Leczy sojuszniczy cel za dużą wartość, a następnie przeskakuje na maksymalnie 2 dodatkowych pobliskich sojuszników. Każdy przeskok leczy o 50% mniej. (Umiejętność specjalna Odnowy)"
       },
       "metamorphosis": {
         "name": "Metamorfoza",
@@ -5677,13 +5904,13 @@ export const pl_PL: EnTranslations = {
         "name": "Promienna Fala",
         "description": "Przeciąża twoją aurę, wzmacniając cię 160 pkt. pancerza na 10 sek. (talent Paladyna)"
       },
-      "holy_shock": {
-        "name": "Święty wstrząs",
-        "description": "Razisz przyjazny cel Świętą energią, lecząc go za {damage}. (specjalizacja Świętość)"
-      },
       "holy_shield": {
         "name": "Święta tarcza",
         "description": "Osłaniasz się Świętą mocą na 10 sek., zwiększając pancerz o 90 i rażąc napastników w zwarciu za 12 obrażeń Świętych. (specjalizacja Ochrona)"
+      },
+      "repentance": {
+        "name": "Pokuta",
+        "description": "Wprowadza wroga w stan medytacji na maksymalnie 6 sek. Jakiekolwiek obrażenia przerywają efekt. (specjalizacja Odpłata)"
       },
       "bestial_wrath": {
         "name": "Bestialski gniew",
@@ -5737,9 +5964,21 @@ export const pl_PL: EnTranslations = {
         "name": "Mistrzostwo żywiołów",
         "description": "Przywołuje mistrzostwo żywiołów, sprawiając, że następne zaklęcie jest natychmiastowe. (specjalizacja Żywioły)"
       },
+      "shamanistic_rage": {
+        "name": "Szamański gniew",
+        "description": "Uwalnia szamański gniew, przywracając 160 many. (specjalizacja Wzmocnienie żywiołów)"
+      },
+      "natures_swiftness": {
+        "name": "Szybkość natury",
+        "description": "Wzywa naturę, aby twoje następne zaklęcie było natychmiastowe. (specjalizacja Odnowienie)"
+      },
       "siphon_life": {
         "name": "Wyssanie życia",
         "description": "Wysysa życie z wroga, zadając {damage} obrażeń od Cienia przez 30 sek. i lecząc cię za zadane obrażenia. (specjalizacja Udręka)"
+      },
+      "fel_domination": {
+        "name": "Plugawa dominacja",
+        "description": "Ujarzmia plugawe energie, sprawiając, że twoje następne zaklęcie jest natychmiastowe. (specjalizacja Demonologia)"
       },
       "conflagrate": {
         "name": "Pożoga",
@@ -5756,6 +5995,34 @@ export const pl_PL: EnTranslations = {
       "swiftmend": {
         "name": "Szybkie uzdrowienie",
         "description": "Zużywa efekt leczenia w czasie na przyjaznym celu, aby uleczyć go za {damage}. (specjalizacja Odnowa)"
+      },
+      "storm_bolt": {
+        "name": "Burzowy pocisk",
+        "description": "Ciskasz bronią w cel, zadając {damage} obrażeń i ogłuszając go na 3 sek."
+      },
+      "piercing_howl": {
+        "name": "Przeszywające wycie",
+        "description": "Przeszywający okrzyk, który spowalnia wszystkich wrogów w promieniu 15 jardów o 50% na 8 sek."
+      },
+      "die_by_sword": {
+        "name": "Śmierć od miecza",
+        "description": "Umiejętność obronna: przez 8 sek. otrzymujesz o 30% mniejsze obrażenia i unikasz znacznie większej liczby ataków."
+      },
+      "recklessness": {
+        "name": "Brawura",
+        "description": "Szał: twoje generowanie wściekłości zwiększa się o 50%, a szansa na trafienie krytyczne o 20% na 12 sek."
+      },
+      "sanguine_aura": {
+        "name": "Aura krwi",
+        "description": "Nasycasz swój oręż krwią wrogów: ty i twoi sojusznicy walczący wręcz zyskujecie 10% szybkości ataku i 10% obrażeń na 20 sek."
+      },
+      "victory_rush": {
+        "name": "Zryw zwycięstwa",
+        "description": "Uderzasz za obrażenia broni plus {damage} i leczysz się o 20% maksymalnego zdrowia. Można użyć tylko w ciągu 20 sek. od zabicia wroga."
+      },
+      "intimidating_shout": {
+        "name": "Zastraszający okrzyk",
+        "description": "Przerażający okrzyk, który zmusza maksymalnie 5 wrogów w promieniu 8 jardów do panicznej ucieczki na 8 sek. Obrażenia mogą przerwać efekt."
       },
       "summon_imp": {
         "name": "Przywołanie Emberkina",
@@ -6194,6 +6461,15 @@ export const pl_PL: EnTranslations = {
       },
       "linen_scrap": {
         "name": "Skrawek lnu"
+      },
+      "arcane_dust": {
+        "name": "Arkaniczny pył"
+      },
+      "arcane_essence": {
+        "name": "Arkaniczna esencja"
+      },
+      "arcane_shard": {
+        "name": "Arkaniczny odłamek"
       },
       "fen_muster_order": {
         "name": "Rozkaz zbiórki z Fenbridge"
@@ -7107,6 +7383,18 @@ export const pl_PL: EnTranslations = {
       "heroic_mark": {
         "name": "Znak heroiczny"
       },
+      "eastbrook_buckler": {
+        "name": "Puklerz ze Wschodniego Strumienia"
+      },
+      "highwatch_wallshield": {
+        "name": "Pawęż z Wysokiej Strażnicy"
+      },
+      "eastbrook_greatsword": {
+        "name": "Wielki miecz ze Wschodniego Strumienia"
+      },
+      "highwatch_greatsword": {
+        "name": "Wielki miecz z Wysokiej Strażnicy"
+      },
       "morthens_cryptforged_hauberk": {
         "name": "Kryptokuta kolczuga Morthena"
       },
@@ -7289,6 +7577,18 @@ export const pl_PL: EnTranslations = {
       },
       "stormcallers_spaulders_heroic": {
         "name": "Naramienniki Galecall"
+      },
+      "bonewrought_greatsword": {
+        "name": "Wielki miecz Bonewrought"
+      },
+      "direfang_greatblade": {
+        "name": "Wielkie ostrze Direfang"
+      },
+      "bonewrought_bulwark": {
+        "name": "Bastion Bonewrought"
+      },
+      "wraithfire_orb": {
+        "name": "Kula Wraithfire"
       },
       "unknown_alien_weaponry": {
         "name": "Nieznana obca broń"

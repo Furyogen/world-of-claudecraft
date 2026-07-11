@@ -41,6 +41,7 @@ import {
   QUALITY_STAT_MULT,
   SLOT_STAT_MULT,
   STAT_PER_ILVL,
+  TWOHAND_STAT_MULT,
 } from './item_budget';
 import type { ItemDef, ItemSlot, Stats } from './types';
 
@@ -54,6 +55,7 @@ export {
   QUALITY_STAT_MULT,
   SLOT_STAT_MULT,
   STAT_PER_ILVL,
+  TWOHAND_STAT_MULT,
 };
 
 // Raid loot is one tier above same-level 5-player dungeon loot: a 10-player raid
@@ -196,7 +198,13 @@ export function itemFromRaid(itemId: string): boolean {
 // quest objects, cosmetics) can exist in the item model, but should not get an
 // item-level readout or stat budget.
 export function isItemLevelEligible(item: ItemDef): boolean {
-  return !!item.slot && (item.kind === 'armor' || item.kind === 'weapon');
+  return (
+    !!item.slot &&
+    (item.kind === 'armor' ||
+      item.kind === 'weapon' ||
+      item.kind === 'shield' ||
+      item.kind === 'held_offhand')
+  );
 }
 
 // The item level (tier number) shown in the tooltip, or undefined when there is no
@@ -212,11 +220,15 @@ export function itemLevel(item: ItemDef): number | undefined {
 }
 
 // The budget an item is expected to carry given its own source/quality/slot, or
-// undefined when the item has no derivable item level.
+// undefined when the item has no derivable item level. A two-handed weapon gives
+// up the whole offhand, so it carries both hands' stats: 2x the mainhand line
+// (TWOHAND_STAT_MULT, the classic 2H convention).
 export function expectedStatBudget(item: ItemDef): number | undefined {
   const level = itemLevel(item);
   if (level === undefined) return undefined;
-  return primaryStatBudget(level, item.quality, item.slot);
+  const base = primaryStatBudget(level, item.quality, item.slot);
+  if (item.kind === 'weapon' && item.hand === 'twohand') return base * TWOHAND_STAT_MULT;
+  return base;
 }
 
 // The sum of an item's primary stats (its realized stat budget).

@@ -14,6 +14,72 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const it_IT: Partial<Record<TranslationKey, string>> = {
+  'entities.abilities.cw_heroic_strike.name': 'Colpo del Predone',
+  'entities.abilities.cw_heroic_strike.description':
+    'Un attacco potente che aumenta i danni in mischia di {damage}. Si attiva al tuo prossimo colpo.',
+  'entities.abilities.cw_battle_shout.name': 'Urlo di Ferro',
+  'entities.abilities.cw_battle_shout.description':
+    "Aumenta la tua potenza d'attacco di {buff} per 2 min.",
+  'entities.abilities.cw_commanding_shout.name': 'Grido Rincuorante',
+  'entities.abilities.cw_commanding_shout.description':
+    'Aumenta la tua Tempra di {buff} per 2 min.',
+  'entities.abilities.cw_charge.name': 'Irruzione',
+  'entities.abilities.cw_charge.description':
+    'Carica un nemico, genera 9 rabbia e lo stordisce per 1 s. Portata 8-25 m.',
+  'entities.abilities.cw_rend.name': 'Squarcio Profondo',
+  'entities.abilities.cw_rend.description':
+    'Ferisce il bersaglio e lo fa sanguinare per {damage} danni in {duration} sec.',
+  'entities.abilities.cw_thunder_clap.name': 'Colpo Sismico',
+  'entities.abilities.cw_thunder_clap.description':
+    'Colpisce i nemici vicini per {damage} danni e rallenta i loro attacchi del 10% per 10 s.',
+  'entities.abilities.cw_hamstring.name': 'Taglio Azzoppante',
+  'entities.abilities.cw_hamstring.description':
+    'Menoma il nemico per {damage} danni, riducendo la sua velocità di movimento del 50% per 15 sec.',
+  'entities.abilities.cw_bloodrage.name': 'Tributo di Sangue',
+  'entities.abilities.cw_bloodrage.description': 'Genera 10 rabbia al costo di salute.',
+  'entities.abilities.cw_overpower.name': 'Mano Rossa',
+  'entities.abilities.cw_overpower.description':
+    "Attacco istantaneo per danni dell'arma più {damage}. Utilizzabile solo dopo che il bersaglio schiva. Non può essere schivato.",
+  'entities.abilities.cw_execute.name': 'Tomba Prematura',
+  'entities.abilities.cw_execute.description':
+    'Tenta di finire un nemico ferito, infliggendo {damage} danni. Utilizzabile solo sui nemici sotto il 20% di salute.',
+  'entities.abilities.cw_slam.name': 'Colpo Brutale',
+  'entities.abilities.cw_slam.description':
+    "Schianta l'avversario per danni dell'arma più {damage}.",
+  'entities.abilities.cw_cleave.name': 'Arco Mietitore',
+  'entities.abilities.cw_cleave.description':
+    'Un colpo ampio che raggiunge tutti i nemici davanti a te per {damage} danni.',
+  'entities.abilities.cw_defensive_stance.name': 'Posizione Guardinga',
+  'entities.abilities.cw_defensive_stance.description':
+    'Posizione di combattimento difensiva: generi il 30% di minaccia in più, ma infliggi e subisci il 10% di danni in meno. Lanciala di nuovo per uscire dalla posizione.',
+  'entities.abilities.cw_demoralizing_shout.name': 'Ululato Sinistro',
+  'entities.abilities.cw_demoralizing_shout.description':
+    "Emette un urlo terrificante, riducendo la potenza d'attacco di tutti i nemici vicini di {buff} per 30 sec.",
+  'entities.abilities.cw_sunder_armor.name': 'Trancia Armatura',
+  'entities.abilities.cw_sunder_armor.description':
+    "Lacera l'armatura del bersaglio, riducendola del {damage}% per applicazione. Si accumula fino a 5 volte. Genera una grande quantità di minaccia.",
+  'entities.abilities.cw_taunt.name': 'Aizzare',
+  'entities.abilities.cw_taunt.description':
+    'Provoca il bersaglio: la tua minaccia sale fino a eguagliare quella del suo nemico più odiato e lo costringe ad attaccarti per 3 s.',
+  'entities.abilities.cw_bloodthirst.name': 'Salasso',
+  'entities.abilities.cw_bloodthirst.description':
+    "Attacca istantaneamente in una frenesia sanguigna per il 60% dei danni dell'arma più {damage}. (firma Furia)",
+  'entities.abilities.cw_mortal_strike.name': 'Colpo Mutilante',
+  'entities.abilities.cw_mortal_strike.description':
+    "Un colpo feroce che infligge danni dell'arma più {damage}. (firma Armi)",
+  'entities.abilities.cw_shield_slam.name': 'Frantumascudo',
+  'entities.abilities.cw_shield_slam.description':
+    "Colpisce il bersaglio con lo scudo per il 50% dei danni dell'arma più {damage} e genera una minaccia enorme. (firma Protezione)",
+  'entities.abilities.cw_whirlwind.name': 'Vortice di Lame',
+  'entities.abilities.cw_whirlwind.description':
+    'Ruoti in un arco letale, colpendo tutti i nemici vicini per {damage}. (talento Furia)',
+  'entities.abilities.cw_berserker_rage.name': 'Furia Ribollente',
+  'entities.abilities.cw_berserker_rage.description':
+    'Entri in una furia ribollente, generando 20 punti rabbia. (talento del guerriero)',
+  'classDetails.roles.warriorClassic': 'Tank / DPS da mischia',
+  'classes.warriorClassic': 'Guerriero',
+  'classDetails.lore.warriorClassic':
+    'Il guerriero esattamente come si giocava prima della revisione del combattimento: il kit di abilità originale e il ritmo della rabbia, mantenuti accanto al nuovo guerriero, così puoi provare entrambi e dirci quale ti sembra migliore.',
   'entities.abilities.sport_boot.description':
     'Un calcione alto e lungo verso il punto mirato. La folla lo adora.',
   'entities.abilities.sport_boot.name': 'Calcione',
@@ -380,6 +446,12 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
     "Indice di celerità dal tuo equipaggiamento e dai bonus di set, che accelera i tuoi attacchi e i tuoi lanci. Circa 10 punti conferiscono l'1% di celerità.",
   'hudChrome.statInfo.names.critRating': 'Indice di critico',
   'hudChrome.statInfo.names.hasteRating': 'Indice di celerità',
+  'hudChrome.statInfo.desc.haste':
+    'Accelera i colpi della tua arma e il lancio dei tuoi incantesimi. Non riduce il recupero globale.',
+  'hudChrome.statInfo.desc.parry':
+    'La tua probabilità di parare completamente un attacco in mischia frontale, senza subire danni. Un colpo alle spalle non può essere parato.',
+  'hudChrome.statInfo.names.haste': 'Celerità',
+  'hudChrome.statInfo.names.parry': 'Parata',
   'itemUi.slots.neck': 'Collo',
   'itemUi.slots.ring': 'Dito',
   'auth.email': 'Email',
@@ -939,6 +1011,27 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
     "Dodici morti, e la cresta brulica più del giorno in cui hai cominciato, {playerName}. Le bestie non si gettano contro un muro per fame. Qualcosa sull'alta cresta le sta spingendo in basso, e finché non saprò cosa, l'abbattimento non si ferma. Altri quattordici.",
   'entities.quests.q_stalkers_return.title': 'I braccatori ritornano',
   'hudChrome.auraEffect.allStatsPctReduce': 'Riduce tutti gli attributi del {pct}%',
+  'hudChrome.auraEffect.avatar': 'Colosso: danni inflitti aumentati del {pct}%',
+  'hudChrome.auraEffect.battleStance': 'Posizione di Battaglia: 10% di generazione di rabbia in più',
+  'hudChrome.auraEffect.battleTrance':
+    'Il tuo prossimo Colpo del Predone o Colpo Mutilante non costa rabbia',
+  'hudChrome.auraEffect.berserkerStance':
+    'Posizione del Berserker: colpi critici il 3% più frequenti e il 3% più potenti',
+  'hudChrome.auraEffect.bloodbath':
+    'Aumenta la probabilità di colpo critico e i danni inflitti del {pct}%',
+  'hudChrome.auraEffect.crit': 'Aumenta la probabilità di colpo critico del {pct}%',
+  'hudChrome.auraEffect.dieBySword':
+    'Riduce i danni subiti del {pct}% ({lowPct}% mentre sei sotto il {hpPct}% di salute)',
+  'hudChrome.auraEffect.dmgDone': 'Aumenta i danni inflitti del {pct}%',
+  'hudChrome.auraEffect.dmgDoneReduce': 'Riduce i danni inflitti del {pct}%',
+  'hudChrome.auraEffect.maxHpPct': 'Aumenta la salute massima del {pct}%',
+  'hudChrome.auraEffect.rageGen': 'Aumenta la generazione di rabbia del {pct}%',
+  'hudChrome.auraEffect.reckless':
+    'Aumenta la probabilità di colpo critico del {pct}% e la generazione di rabbia del {ragePct}%',
+  'hudChrome.auraEffect.revengeFree': 'La tua prossima Vendetta non costa rabbia',
+  'hudChrome.auraEffect.sanguine':
+    "Aumenta la velocità d'attacco del {hastePct}% e i danni inflitti del {dmgPct}%",
+  'hudChrome.auraEffect.victoryRush': 'Impeto della Vittoria è pronto',
   'hudChrome.bags.backpack': 'Zaino',
   'hudChrome.bags.bagSocketAria': '{name}: {slots}',
   'hudChrome.bags.capacity': '{used}/{total}',
@@ -1064,6 +1157,8 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.playerFrameScale': 'Scala del riquadro del giocatore',
   'hudChrome.options.showDailyRewardsChest': 'Mostra forziere delle ricompense giornaliere',
   'hudChrome.options.showOwnNameplate': 'Mostra la mia targhetta',
+  'hudChrome.options.mouseoverCast': 'Lancio al passaggio del mouse sui riquadri del gruppo',
+  'hudChrome.options.showTargetOfTarget': 'Mostra il bersaglio del bersaglio',
   'hudChrome.options.targetFrameScale': 'Scala del riquadro del bersaglio',
   'hudChrome.options.walkByAutoloot': 'Raccolta automatica al passaggio',
   'hudChrome.party.inviteUsage': 'Invitare chi? Uso: /invite <nome>.',
@@ -1193,6 +1288,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.unitFrame.playerLabel': 'Il tuo personaggio',
   'hudChrome.unitFrame.targetAnnounce': 'Bersaglio: {name}',
   'hudChrome.unitFrame.targetLabel': 'Il tuo bersaglio',
+  'hudChrome.unitFrame.targetOfTargetLabel': 'Il bersaglio del bersaglio',
   'seo.officialLabel': 'Sito ufficiale di World of ClaudeCraft',
   'seo.officialBody':
     "worldofclaudecraft.com è l'MMO gratuito ufficiale da browser del mondo Claudemoon. Gioca online con un personaggio persistente, esplora offline in solitaria, leggi il wiki e segui i link della community verificati da questo sito.",
@@ -2197,6 +2293,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hud.prompts.decline': 'Rifiuta',
   'hud.combat.floatingMiss': 'Mancato',
   'hud.combat.floatingDodge': 'Schivata',
+  'hud.combat.floatingParry': 'Parata',
   'hud.combat.attack': 'attacco',
   'hud.combat.damageDone': 'Il tuo {ability} colpisce {target} per {amount}.',
   'hud.combat.damageDoneCrit': 'Il tuo {ability} colpisce criticamente {target} per {amount}.',
@@ -2204,6 +2301,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hud.combat.damageTakenCrit': '{source} ti colpisce criticamente per {amount}.',
   'hud.combat.miss': 'Il tuo {ability} manca {target}.',
   'hud.combat.dodged': '{target} schiva il tuo {ability}.',
+  'hud.combat.parried': '{target} para il tuo {ability}.',
   'hud.combat.healSelf': 'Il tuo {ability} ti cura di {amount}.',
   'hud.combat.healSelfCrit': 'Il tuo {ability} ti cura criticamente di {amount}.',
   'hud.combat.healOther': 'Il tuo {ability} cura {target} di {amount}.',
@@ -2243,6 +2341,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hud.errors.notEnoughMana': 'Mana insufficiente!',
   'hud.errors.notEnoughResource': '{resource} insufficiente!',
   'hud.errors.notEnoughHealth': 'Salute insufficiente.',
+  'hud.errors.nothingToConsume': 'Niente da consumare.',
   'hud.errors.targetMustDodge': 'Il bersaglio deve prima schivare.',
   'hud.errors.requiresCombo': "Quell'abilità richiede punti combo.",
   'hud.errors.requiresForm': 'Devi essere in Forma di {form}.',
@@ -2263,6 +2362,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hud.errors.behindTarget': 'Devi essere dietro al bersaglio.',
   'hud.errors.polymorph': 'Questa creatura non può essere trasformata.',
   'hud.errors.noSeal': 'Non hai un Sigillo attivo.',
+  'hud.errors.needShield': 'Devi avere uno scudo equipaggiato.',
   'hud.errors.cannotTaunt': 'Non puoi provocare quello.',
   'hud.errors.noPet': 'Non hai un famiglio.',
   'hud.errors.invalidAttackTarget': 'Bersaglio di attacco non valido.',
@@ -2566,6 +2666,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'itemUi.slots.shoulder': 'Spalle',
   'itemUi.slots.waist': 'Vita',
   'itemUi.slots.gloves': 'Mani',
+  'itemUi.slots.twoHand': 'Due mani',
   'itemUi.quality.poor': 'Scadente',
   'itemUi.quality.common': 'Comune',
   'itemUi.quality.uncommon': 'Non comune',
@@ -2782,7 +2883,8 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.execute.description':
     'Tenta di finire un nemico ferito, infliggendo {damage} danni. Utilizzabile solo sui nemici sotto il 20% di salute.',
   'entities.abilities.slam.name': 'Colpo Brutale',
-  'entities.abilities.slam.description': "Schianta l'avversario per danni dell'arma più {damage}.",
+  'entities.abilities.slam.description':
+    "Schianta l'avversario per il 50% dei danni dell'arma più {damage}, generando {rage} rabbia.",
   'entities.abilities.cleave.name': 'Arco Mietitore',
   'entities.abilities.cleave.description':
     'Un colpo ampio che raggiunge tutti i nemici davanti a te per {damage} danni.',
@@ -3478,6 +3580,8 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'entities.items.tanned_leather_jerkin.name': 'Giaco di cuoio conciato',
   'entities.items.hobnail_boots.name': 'Stivali chiodati',
   'entities.items.eastbrook_wool_trousers.name': 'Pantaloni di lana di Eastbrook',
+  'entities.items.eastbrook_buckler.name': 'Brocchiero di Eastbrook',
+  'entities.items.eastbrook_greatsword.name': 'Spadone di Eastbrook',
   'entities.items.gravecaller_blade.name': 'Lama larga di Gravecaller',
   'entities.items.widowfang_dirk.name': 'Pugnale Zanna di Vedova',
   'entities.items.gravecaller_staff.name': 'Bastone del Vuoto',
@@ -3605,6 +3709,8 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'entities.items.craghorn_staff.name': 'Bastone di Corno Roccioso',
   'entities.items.icevein_dirk.name': 'Pugnale Venaghiaccio',
   'entities.items.highwatch_breastplate.name': 'Corazza di Highwatch',
+  'entities.items.highwatch_greatsword.name': 'Spadone di Highwatch',
+  'entities.items.highwatch_wallshield.name': 'Scudo da muro di Highwatch',
   'entities.items.peakwool_robe.name': 'Veste di lana delle vette',
   'entities.items.stalkerhide_jerkin.name': 'Giaco di pelle di predatore',
   'entities.items.cragwalker_boots.name': 'Stivali Camminarocce',
@@ -4658,6 +4764,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.paperdoll.unequipAria': 'Rimuovi {item}',
   'hudChrome.paperdoll.unequipHint':
     'Clicca su ×, clic destro o trascina nelle borse per rimuovere',
+  'hudChrome.paperdoll.offhand': 'Mano secondaria',
   'skinEvent.unlocked': 'Cosmetico sbloccato!',
   'errors.api.webLoginOnly': "L'accesso è consentito solo dal client di gioco.",
   'hudChrome.chatTimestamps.clock12h': '12 ore',
@@ -4709,7 +4816,6 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.meters.perSecond': '{value}/s',
   'hudChrome.meters.perSecondRow': '{total} ({rate})',
   'hudChrome.meters.seconds': '{s}s',
-  'hudChrome.mobile.autorun': 'Corsa automatica',
   'hudChrome.mobile.haptics': 'Vibrazione',
   'hudChrome.mobile.hapticsOff': 'Vibrazione disattivata',
   'hudChrome.mobile.hotbarPage': 'Abilità',
@@ -4795,6 +4901,10 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.worldBoss.spawn': '{name} si erge sulle Alture di Thornpeak!',
   'entities.items.stormcallers_spaulders.name': 'Spallacci Galecall',
   'entities.items.stormcallers_spaulders_heroic.name': 'Spallacci Galecall',
+  'entities.items.bonewrought_greatsword.name': 'Spadone Bonewrought',
+  'entities.items.direfang_greatblade.name': 'Gran lama Direfang',
+  'entities.items.bonewrought_bulwark.name': 'Baluardo Bonewrought',
+  'entities.items.wraithfire_orb.name': 'Sfera Wraithfire',
   'hud.chat.context.convertToRaid': 'Converti in incursione',
   'hud.chat.context.convertToParty': 'Converti in gruppo',
   'hudChrome.raidConvert.leaderOnly': 'Solo il capo incursione può convertire in un gruppo.',
@@ -5344,6 +5454,17 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
     "Evoca bevande che ripristinano il mana, così puoi rifornirti tra un pull e l'altro.",
   'guide.abilityHook.corruption':
     "Marcisce il bersaglio con l'ombra, che continua a pulsare mentre fai altro.",
+  'guide.abilityHook.cw_battle_shout':
+    "Un grido di incitamento che aumenta la potenza d'attacco del gruppo.",
+  'guide.abilityHook.cw_charge':
+    'Si scaglia su un nemico distante per aprire lo scontro con un breve stordimento.',
+  'guide.abilityHook.cw_commanding_shout':
+    'Rafforza la vigoria, così tutti hanno più resistenza in combattimento.',
+  'guide.abilityHook.cw_heroic_strike':
+    'Mette in coda un fendente più pesante che spende ira al tuo prossimo colpo.',
+  'guide.abilityHook.cw_rend': "Apre un'emorragia che logora il bersaglio nel tempo.",
+  'guide.abilityHook.cw_thunder_clap':
+    'Colpisce tutto ciò che ti circonda e rallenta i loro attacchi.',
   'guide.abilityHook.demon_skin':
     'Un potenziamento personale duraturo che irrobustisce la pelle e aggiunge corazza.',
   'guide.abilityHook.devotion_aura':
@@ -5366,6 +5487,8 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
     'Apri dalla furtività con un filo che fa sanguinare il bersaglio nel tempo.',
   'guide.abilityHook.gouge':
     'Mette fuori combattimento il bersaglio per un istante, così puoi riposizionarti o liberare un alleato.',
+  'guide.abilityHook.hamstring':
+    'Taglia le gambe del bersaglio per rallentarlo, così non riesce a raggiungerti.',
   'guide.abilityHook.healing_touch':
     'Una grande cura a bersaglio singolo dal lancio lungo, per rimettere in piedi qualcuno.',
   'guide.abilityHook.healing_wave':
@@ -5402,6 +5525,8 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'guide.abilityHook.rend': "Apre un'emorragia che logora il bersaglio nel tempo.",
   'guide.abilityHook.renew':
     'Una cura che pulsa nel tempo, ottima da lanciare per poi continuare a muoverti.',
+  'guide.abilityHook.revenge':
+    'Un contrattacco ad arco che colpisce tutto ciò che hai davanti, e costa meno subito dopo aver deviato un colpo.',
   'guide.abilityHook.rockbiter_weapon':
     'Imbeve la tua arma, così ogni fendente colpisce più forte in mischia.',
   'guide.abilityHook.seal_of_righteousness':
@@ -6900,7 +7025,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'yumi.respawn.title': 'ABBATTUTO!',
   'entities.abilities.chain_heal.name': 'Cura concatenata',
   'entities.abilities.chain_heal.description':
-    'Cura notevolmente un bersaglio alleato, poi rimbalza su un massimo di altri 2 alleati vicini, con il 50% di cure in meno a ogni rimbalzo. (Abilità distintiva di Rigenerazione)',
+    'Cura il bersaglio di {damage}, poi rimbalza su un massimo di 2 alleati vicini, e ogni rimbalzo cura la metà della quantità precedente.',
   'entities.abilities.razor_howl.name': 'Ululato tagliente',
   'entities.abilities.razor_howl.description':
     'Un grido che rallenta del 50% i nemici entro 15 m per 8 s. (Talento del guerriero)',
@@ -6913,7 +7038,103 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.red_banner.name': 'Stendardo rosso',
   'entities.abilities.red_banner.description':
     'Tu e gli alleati vicini ottenete il 10% di velocità d’attacco e il 10% di danni per 20 s. (Talento del guerriero)',
+  'entities.abilities.battle_stance.name': 'Posizione di Battaglia',
+  'entities.abilities.battle_stance.description':
+    'Posizione di combattimento aggressiva: generi il 10% di rabbia in più. La posizione predefinita per Armi e Protezione.',
+  'entities.abilities.berserker_stance.name': 'Posizione del Berserker',
+  'entities.abilities.berserker_stance.description':
+    'Posizione di combattimento temeraria: i tuoi colpi critici vanno a segno il 3% più spesso e colpiscono il 3% più forte. Il guerriero Furia combatte sempre in questa posizione.',
+  'entities.abilities.breachmaker.name': 'Apribreccia',
+  'entities.abilities.breachmaker.description':
+    "Martella il bersaglio per danni dell'arma più {damage} e ne incrina la guardia: i tuoi attacchi contro di esso infliggono il 20% di danni in più per 8 sec. (Armi)",
+  'entities.abilities.cleaving_blows.name': 'Colpi Fendenti',
+  'entities.abilities.cleaving_blows.description':
+    'Mietitura Rossa rimborsa sempre una carica di Colpo Gemello. (Furia)',
+  'entities.abilities.deep_wounds.name': 'Ferite Aperte',
+  'entities.abilities.deep_wounds.description':
+    'Passiva: il tuo Colpo Mutilante lascia il bersaglio sanguinante, infliggendo danni fisici in 6 sec. (Armi)',
+  'entities.abilities.defiant_bellow.name': 'Urlo di Sfida',
+  'entities.abilities.defiant_bellow.description':
+    'Un urlo di sfida: ogni nemico entro 10 metri viene provocato e costretto ad attaccarti per 3 sec. (Protezione)',
+  'entities.abilities.diabolical_twinstrike.name': 'Colpo Gemello Diabolico',
+  'entities.abilities.diabolical_twinstrike.description':
+    'Mentre sei Infuriato, il tuo Colpo Gemello infligge il 15% di danni in più. (Furia)',
+  'entities.abilities.die_by_sword.name': 'Morte per la Spada',
+  'entities.abilities.die_by_sword.description':
+    'Tempo di recupero difensivo: per 8 sec subisci il 30% di danni in meno e schivi molti più attacchi.',
+  'entities.abilities.emboldening_roar.name': 'Ruggito Ardimentoso',
+  'entities.abilities.emboldening_roar.description':
+    'Liberi un ruggito ardimentoso: tu e i giocatori alleati entro 40 metri diventate Ardimentosi, e le vostre 3 abilità successive sono colpi critici garantiti. (Furia)',
+  'entities.abilities.enrage_passive.name': 'Carneficina',
+  'entities.abilities.enrage_passive.description':
+    'Passiva: mentre sei Infuriato infliggi il 7% di danni in più, attacchi il 25% più velocemente e ti muovi il 10% più velocemente per 4 sec. Salasso ha il 30% di probabilità di renderti Infuriato; Mietitura Rossa lo fa sempre. (Furia)',
+  'entities.abilities.faultline.name': 'Faglia',
+  'entities.abilities.faultline.description':
+    "Scagli un'onda d'urto attraverso il terreno: i nemici davanti a te entro 8 metri subiscono {damage} danni e sono storditi per 3 sec. (Protezione)",
+  'entities.abilities.fel_domination.name': 'Dominio Vile',
+  'entities.abilities.fel_domination.description':
+    'Domina le energie vili, rendendo istantaneo il tuo prossimo incantesimo. (firma Demonologia)',
+  'entities.abilities.furious_mending.name': 'Rammendo Furioso',
+  'entities.abilities.furious_mending.description':
+    'Per 10 sec subisci il 20% di danni in meno e, finché dura, il tuo Salasso ti cura del 20% della tua salute massima. (Furia)',
+  'entities.abilities.intimidating_shout.name': 'Urlo Intimidatorio',
+  'entities.abilities.intimidating_shout.description':
+    "Un urlo terrificante che fa fuggire in preda alla paura fino a 5 nemici entro 8 metri per 8 sec. I danni possono interrompere l'effetto.",
+  'entities.abilities.iron_resolve.name': 'Fermezza di Ferro',
+  'entities.abilities.iron_resolve.description':
+    'Stringi i denti e ignori il dolore: consuma tutta la tua rabbia (minimo 20) per assorbire 4 danni per punto di rabbia speso, per un massimo di 10 sec. (Protezione)',
+  'entities.abilities.measured_fury.name': 'Furia Misurata',
+  'entities.abilities.measured_fury.description':
+    'La tua furia misurata affina la tua economia: le tue abilità costano il 10% di rabbia in meno. (Armi)',
+  'entities.abilities.natures_swiftness.name': 'Rapidità della Natura',
+  'entities.abilities.natures_swiftness.description':
+    'Invoca la natura per rendere istantaneo il tuo prossimo incantesimo. (firma Guarigione)',
+  'entities.abilities.piercing_howl.name': 'Ululato Penetrante',
+  'entities.abilities.piercing_howl.description':
+    'Un urlo penetrante che rallenta del 50% tutti i nemici entro 15 metri per 8 sec.',
+  'entities.abilities.raging_gale.name': 'Colpo Gemello',
+  'entities.abilities.raging_gale.description':
+    "Colpisci istantaneamente due volte con la tua arma: ogni colpo infligge il 40% dei danni dell'arma più {damage}, e generi {rage} rabbia. Accumula fino a 2 cariche. (Furia)",
+  'entities.abilities.raised_guard.name': 'Guardia Alzata',
+  'entities.abilities.raised_guard.description':
+    'Ti pianti dietro il tuo scudo: subisci il 50% di danni fisici in meno per 6 sec. Accumula fino a 2 cariche. (Protezione)',
+  'entities.abilities.recklessness.name': 'Temerarietà',
+  'entities.abilities.recklessness.description':
+    'Ti infuri: la tua generazione di rabbia aumenta del 50% e la tua probabilità di colpo critico del 20% per 12 sec.',
+  'entities.abilities.red_harvest.name': 'Mietitura Rossa',
+  'entities.abilities.red_harvest.description':
+    "Spendi tutto: colpisci tre volte in una frenesia per il 65% dei danni dell'arma più {damage} ciascuno, e diventi sempre Infuriato. (Furia)",
+  'entities.abilities.repentance.name': 'Pentimento',
+  'entities.abilities.repentance.description':
+    "Mette il nemico in uno stato di meditazione per un massimo di 6 sec. Qualsiasi danno interrompe l'effetto. (firma Castigo)",
+  'entities.abilities.revenge.name': 'Vendetta',
+  'entities.abilities.revenge.description':
+    'Attacchi con un arco ampio, infliggendo danni fisici a tutti i nemici davanti a te. Oltre i 5 bersagli i danni si riducono. Quando schivi o pari, la tua prossima Vendetta può non costare rabbia.',
+  'entities.abilities.sanguine_aura.name': 'Aura Sanguigna',
+  'entities.abilities.sanguine_aura.description':
+    "Intridi la tua arma del sangue dei tuoi nemici: tu e i tuoi alleati in mischia ottenete il 10% di velocità d'attacco e il 10% di danni per 20 sec.",
+  'entities.abilities.seasoned_soldier.name': 'Soldato Veterano',
+  'entities.abilities.seasoned_soldier.description':
+    'I tuoi attacchi automatici critici generano il 10% di rabbia in più. (Armi)',
+  'entities.abilities.shamanistic_rage.name': 'Furia Sciamanica',
+  'entities.abilities.shamanistic_rage.description':
+    'Libera la furia sciamanica, ripristinando 160 mana. (firma Potenziamento)',
+  'entities.abilities.storm_bolt.name': 'Dardo della Tempesta',
+  'entities.abilities.storm_bolt.description':
+    'Scagli la tua arma contro il bersaglio, infliggendo {damage} danni e stordendolo per 3 sec.',
+  'entities.abilities.sudden_death.name': 'Morte Improvvisa',
+  'entities.abilities.sudden_death.description':
+    'I tuoi attacchi automatici hanno una probabilità di permetterti di lanciare Tomba Prematura su un bersaglio a qualsiasi livello di salute, senza costo di rabbia. (Armi)',
+  'entities.abilities.sweeping_strikes.name': 'Arco Crescente',
+  'entities.abilities.sweeping_strikes.description':
+    'Per 12 sec i tuoi attacchi a bersaglio singolo colpiscono anche 1 nemico vicino per il danno completo. (Armi)',
+  'entities.abilities.victory_rush.name': 'Impeto della Vittoria',
+  'entities.abilities.victory_rush.description':
+    "Colpisci per danni dell'arma più {damage} e recuperi il 20% della tua salute massima. Utilizzabile solo entro 20 sec dall'uccisione di un nemico.",
   'entities.items.chunk_of_ore.name': 'Pezzo di minerale',
+  'entities.items.arcane_dust.name': 'Polvere arcana',
+  'entities.items.arcane_essence.name': 'Essenza arcana',
+  'entities.items.arcane_shard.name': 'Frammento arcano',
   'entities.quests.q_prof_intro.title': 'Un mestiere per ogni mano',
   'entities.quests.q_prof_intro.text':
     'Ogni anima di Eastbrook pratica un mestiere oltre alla spada, {playerName}. Ci sono filoni di minerale sparsi attorno alla città, quindi impugna un piccone e portami 5 pezzi. Estraili di persona; saprò riconoscere la differenza.',
@@ -6943,4 +7164,23 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'Le password non coincidono.',
   'hudChrome.auth.resetErrInvalid':
     'Questo link di reimpostazione non è valido o è scaduto. Richiedine uno nuovo.',
+  'hudChrome.auth.appleChoiceExpired':
+    "Quell'accesso con Apple è scaduto. Accedi di nuovo con Apple.",
+  'hudChrome.auth.appleChoiceIntro':
+    'Crea un nuovo account oppure collega Apple a un account che hai già.',
+  'hudChrome.auth.appleError': 'Impossibile accedere con Apple. Riprova.',
+  'hudChrome.auth.appleLoginCta': 'Continua con Apple',
+  'hudChrome.specPanel.complexity': 'Complessità',
+  'hudChrome.specPanel.complexityHigh': 'Alta',
+  'hudChrome.specPanel.complexityLow': 'Bassa',
+  'hudChrome.specPanel.complexityMedium': 'Media',
+  'hudChrome.specPanel.exampleAbilities': 'Abilità di esempio',
+  'hudChrome.specPanel.primaryAttr': 'Attributo primario',
+  'hudChrome.specPanel.selectSpec': 'Seleziona la specializzazione',
+  'hudChrome.specPanel.specUnlockBanner': 'Specializzazione sbloccata!',
+  'hudChrome.specPanel.specUnlockHint': 'Premi N per scegliere la tua specializzazione.',
+  'hudChrome.specPanel.viewTalents': 'Vedi i talenti',
+  'hudChrome.talentRows.comingSoon': 'In arrivo',
+  'hudChrome.talentRows.defaultLoadout': 'Assetto predefinito',
+  'hudChrome.talentRows.tab': 'Scelte',
 };

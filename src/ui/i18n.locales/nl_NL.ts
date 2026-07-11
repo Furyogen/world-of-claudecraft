@@ -2,6 +2,70 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const nl_NL: Partial<Record<TranslationKey, string>> = {
+  'entities.abilities.cw_heroic_strike.name': 'Plunderaarsslag',
+  'entities.abilities.cw_heroic_strike.description':
+    'Een sterke aanval die de slagschade met {damage} verhoogt. Activeert bij je volgende slag.',
+  'entities.abilities.cw_battle_shout.name': 'IJzeren Gebrul',
+  'entities.abilities.cw_battle_shout.description':
+    'Verhoogt je aanvalskracht met {buff} gedurende 2 min.',
+  'entities.abilities.cw_commanding_shout.name': 'Versterkende Kreet',
+  'entities.abilities.cw_commanding_shout.description':
+    'Verhoogt je Uithoudingsvermogen met {buff} gedurende 2 min.',
+  'entities.abilities.cw_charge.name': 'Bestorming',
+  'entities.abilities.cw_charge.description':
+    'Stormt op een vijand af, genereert 9 woede en verdooft hem gedurende 1 sec. Bereik 8-25 m.',
+  'entities.abilities.cw_rend.name': 'Diepe Snee',
+  'entities.abilities.cw_rend.description':
+    'Verwondt het doelwit, waardoor het {damage} schade bloedt gedurende {duration} sec.',
+  'entities.abilities.cw_thunder_clap.name': 'Schuddende Klap',
+  'entities.abilities.cw_thunder_clap.description':
+    'Treft nabije vijanden voor {damage} schade en vertraagt hun aanvallen met 10% gedurende 10 sec.',
+  'entities.abilities.cw_hamstring.name': 'Kreupelsnede',
+  'entities.abilities.cw_hamstring.description':
+    'Verminkt de vijand voor {damage} schade en vertraagt zijn beweging met 50% gedurende 15 sec.',
+  'entities.abilities.cw_bloodrage.name': 'Bloedtol',
+  'entities.abilities.cw_bloodrage.description': 'Genereert 10 woede ten koste van levenskracht.',
+  'entities.abilities.cw_overpower.name': 'Roodhand',
+  'entities.abilities.cw_overpower.description':
+    'Ogenblikkelijke aanval voor wapenschade plus {damage}. Alleen bruikbaar nadat het doelwit ontwijkt. Kan niet worden ontweken.',
+  'entities.abilities.cw_execute.name': 'Vroeg Graf',
+  'entities.abilities.cw_execute.description':
+    'Poging om een gewonde vijand af te maken voor {damage} schade. Alleen bruikbaar op vijanden met minder dan 20% levenskracht.',
+  'entities.abilities.cw_slam.name': 'Botte Zwaai',
+  'entities.abilities.cw_slam.description':
+    'Dreunt op de tegenstander in voor wapenschade plus {damage}.',
+  'entities.abilities.cw_cleave.name': 'Maaiboog',
+  'entities.abilities.cw_cleave.description':
+    'Een vegende slag die alle vijanden voor je raakt voor {damage} schade.',
+  'entities.abilities.cw_defensive_stance.name': 'Bewaakte Houding',
+  'entities.abilities.cw_defensive_stance.description':
+    'Een verdedigende gevechtshouding: je genereert 30% meer dreiging, maar brengt 10% minder schade toe en incasseert 10% minder. Activeer opnieuw om de houding te verlaten.',
+  'entities.abilities.cw_demoralizing_shout.name': 'Grimmig Gehuil',
+  'entities.abilities.cw_demoralizing_shout.description':
+    'Slaakt een angstaanjagende kreet die de aanvalskracht van alle nabije vijanden met {buff} verlaagt gedurende 30 sec.',
+  'entities.abilities.cw_sunder_armor.name': 'Pantserscheur',
+  'entities.abilities.cw_sunder_armor.description':
+    'Scheurt het pantser van het doelwit open en verlaagt het met {damage}% per toepassing. Stapelt tot 5 keer. Genereert veel dreiging.',
+  'entities.abilities.cw_taunt.name': 'Provoceren',
+  'entities.abilities.cw_taunt.description':
+    'Provoceert het doelwit: je dreiging stijgt tot het niveau van zijn meest gehate vijand en het wordt 3 sec lang gedwongen jou aan te vallen.',
+  'entities.abilities.cw_bloodthirst.name': 'Aderlating',
+  'entities.abilities.cw_bloodthirst.description':
+    'Val onmiddellijk aan in een bloedrazernij voor 60% wapenschade plus {damage}. (Razernij-kenmerk)',
+  'entities.abilities.cw_mortal_strike.name': 'Verminkende Slag',
+  'entities.abilities.cw_mortal_strike.description':
+    'Een venijnige slag die wapenschade plus {damage} toebrengt. (Wapens-handtekening)',
+  'entities.abilities.cw_shield_slam.name': 'Schildbreuk',
+  'entities.abilities.cw_shield_slam.description':
+    'Sla het doelwit met je schild voor 50% wapenschade plus {damage} en enorme dreiging. (Protectie-kenmerk)',
+  'entities.abilities.cw_whirlwind.name': 'Snijdende Wenteling',
+  'entities.abilities.cw_whirlwind.description':
+    'Draai in een dodelijke boog en tref alle nabije vijanden voor {damage}. (Razernij-talent)',
+  'entities.abilities.cw_berserker_rage.name': 'Kolkende Woede',
+  'entities.abilities.cw_berserker_rage.description':
+    'Ga in een kolkende woede en genereer 20 woede. (Krijger-talent)',
+  'classDetails.roles.warriorClassic': 'Tank / Melee-DPS',
+  'classes.warriorClassic': 'Krijger',
   'entities.abilities.sport_boot.description':
     'Een lange, hoge uithaal richting het richtpunt. Het publiek smult ervan.',
   'entities.abilities.sport_boot.name': 'Grote Uithaal',
@@ -1886,7 +1950,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
     'Een ogenblikkelijke slag voor wapenschade plus {damage}. Levert 1 combopunt op.',
   'entities.abilities.sinister_strike.name': 'Kwaadaardige Houw',
   'entities.abilities.slam.description':
-    'Dreunt op de tegenstander in voor wapenschade plus {damage}.',
+    'Dreunt op de tegenstander in voor 50% wapenschade plus {damage} en genereert {rage} woede.',
   'entities.abilities.slam.name': 'Botte Zwaai',
   'entities.abilities.slice_and_dice.description':
     'Afmaakzet die de melee-aanvalssnelheid met 30% verhoogt. Duurt langer per combopunt.',
@@ -2074,6 +2138,9 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.items.bogiron_mace.name': 'Moerasijzeren Strijdknots',
   'entities.items.bogiron_nugget.name': 'Moerasijzeren Klompje',
   'entities.items.bone_fragments.name': 'Botfragmenten',
+  'entities.items.arcane_dust.name': 'Arcaan stof',
+  'entities.items.arcane_essence.name': 'Arcane essentie',
+  'entities.items.arcane_shard.name': 'Arcane scherf',
   'entities.items.boneguard_breastplate.name': 'Botwacht-Borstplaat',
   'entities.items.boneplate_vest.name': 'Botplaten Vest',
   'entities.items.boundstone_girdle.name': 'Bandsteen-Gordel',
@@ -2380,6 +2447,10 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.items.stormcallers_waistguard.name': 'Lendenbescherming van de Stormroeper',
   'entities.items.stormcallers_spaulders.name': 'Galecall-Schouderstukken',
   'entities.items.stormcallers_spaulders_heroic.name': 'Galecall-Schouderstukken',
+  'entities.items.bonewrought_greatsword.name': 'Bonewrought-Grootzwaard',
+  'entities.items.direfang_greatblade.name': 'Direfang-Grootkling',
+  'entities.items.bonewrought_bulwark.name': 'Bonewrought-Bolwerk',
+  'entities.items.wraithfire_orb.name': 'Wraithfire-Orb',
   'entities.items.stormshard_leggings.name': 'Stormscherf-Beenbescherming',
   'entities.items.sturdy_belt.name': 'Stevige Reizigersgordel',
   'entities.items.supply_crate.name': 'Gestolen Voorradenkist',
@@ -5289,7 +5360,6 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.meters.perSecond': '{value}/s',
   'hudChrome.meters.perSecondRow': '{total} ({rate})',
   'hudChrome.meters.seconds': '{s}s',
-  'hudChrome.mobile.autorun': 'Autoloop',
   'hudChrome.mobile.haptics': 'Haptiek',
   'hudChrome.mobile.hapticsOff': 'Haptiek uit',
   'hudChrome.mobile.hotbarPage': 'Vaardigheden',
@@ -6866,8 +6936,6 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'yumi.queue.teamLeave': 'Je team verlaat de Bescherm Yumi-wachtrij.',
   'yumi.respawn.title': 'NEERGEHAALD!',
   'entities.abilities.chain_heal.name': 'Kettinggenezing',
-  'entities.abilities.chain_heal.description':
-    'Geneest een bevriend doelwit voor een grote hoeveelheid en springt daarna naar maximaal 2 extra bondgenoten in de buurt. Elke sprong geneest 50% minder. (Kenmerkende vaardigheid van Restauratie)',
   'entities.abilities.razor_howl.name': 'Messcherpe huil',
   'entities.abilities.razor_howl.description':
     'Een kreet die vijanden binnen 15 m gedurende 8 sec. met 50% vertraagt. (Krijgertalent)',
@@ -6912,4 +6980,174 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'De wachtwoorden komen niet overeen.',
   'hudChrome.auth.resetErrInvalid':
     'Deze herstellink is ongeldig of verlopen. Vraag een nieuwe aan.',
+  'classDetails.lore.warriorClassic':
+    'De krijger precies zoals hij speelde voor de gevechtsherziening: de oorspronkelijke vaardighedenset en het originele woedetempo, behouden naast de nieuwe krijger zodat je beide kunt uitproberen en ons kunt vertellen welke beter aanvoelt.',
+  'entities.abilities.battle_stance.name': 'Strijdhouding',
+  'entities.abilities.battle_stance.description':
+    'Een agressieve gevechtshouding: je genereert 10% meer woede. De standaardhouding voor Wapens en Protectie.',
+  'entities.abilities.berserker_stance.name': 'Berserkerhouding',
+  'entities.abilities.berserker_stance.description':
+    'Een roekeloze gevechtshouding: je kritieke treffers landen 3% vaker en raken 3% harder. De Razernij-krijger vecht altijd in deze houding.',
+  'entities.abilities.breachmaker.name': 'Bresmaker',
+  'entities.abilities.breachmaker.description':
+    'Beuk het doelwit voor wapenschade plus {damage} en breek zijn dekking open: je eigen aanvallen op dat doelwit brengen gedurende 8 sec 20% meer schade toe. (Wapens)',
+  'entities.abilities.chain_heal.description':
+    'Geneest het doelwit voor {damage} en springt daarna over naar maximaal 2 nabije bondgenoten, waarbij elke sprong de helft van de vorige geneest.',
+  'entities.abilities.cleaving_blows.name': 'Klievende Slagen',
+  'entities.abilities.cleaving_blows.description':
+    'Rode Oogst geeft altijd een lading Dubbelslag terug. (Razernij)',
+  'entities.abilities.deep_wounds.name': 'Gapende Wonden',
+  'entities.abilities.deep_wounds.description':
+    'Passief: je Verminkende Slag laat het doelwit bloeden voor Fysieke schade gedurende 6 sec. (Wapens)',
+  'entities.abilities.defiant_bellow.name': 'Tartend Gebrul',
+  'entities.abilities.defiant_bellow.description':
+    'Een tartend gebrul: elke vijand binnen 10 m wordt geprovoceerd en gedwongen jou gedurende 3 sec aan te vallen. (Protectie)',
+  'entities.abilities.diabolical_twinstrike.name': 'Diabolische Dubbelslag',
+  'entities.abilities.diabolical_twinstrike.description':
+    'Terwijl je Razend bent, brengt je Dubbelslag 15% meer schade toe. (Razernij)',
+  'entities.abilities.die_by_sword.name': 'Door het Zwaard',
+  'entities.abilities.die_by_sword.description':
+    'Defensieve afkoeltijd: gedurende 8 sec loop je 30% minder schade op en ontwijk je veel meer aanvallen.',
+  'entities.abilities.emboldening_roar.name': 'Bezielend Gebrul',
+  'entities.abilities.emboldening_roar.description':
+    'Laat een bezielend gebrul los: jij en bevriende spelers binnen 40 m worden Bezield, en je volgende 3 vaardigheden zijn gegarandeerd kritieke treffers. (Razernij)',
+  'entities.abilities.enrage_passive.name': 'Amok',
+  'entities.abilities.enrage_passive.description':
+    'Passief: terwijl je Razend bent, breng je 7% meer schade toe, val je 25% sneller aan en beweeg je 10% sneller gedurende 4 sec. Aderlating heeft 30% kans om je Razend te maken; Rode Oogst doet dat altijd. (Razernij)',
+  'entities.abilities.faultline.name': 'Breuklijn',
+  'entities.abilities.faultline.description':
+    'Stuur een schokgolf door de grond: vijanden voor je binnen 8 m lopen {damage} schade op en worden gedurende 3 sec verdoofd. (Protectie)',
+  'entities.abilities.fel_domination.name': 'Duivelse Dominantie',
+  'entities.abilities.fel_domination.description':
+    'Domineert duivelse energieën, waardoor je volgende spreuk onmiddellijk is. (Demonologie signatuur)',
+  'entities.abilities.furious_mending.name': 'Woedend Herstel',
+  'entities.abilities.furious_mending.description':
+    'Gedurende 10 sec loop je 20% minder schade op, en zolang het duurt geneest je Aderlating je voor 20% van je maximale gezondheid. (Razernij)',
+  'entities.abilities.intimidating_shout.name': 'Intimiderende Schreeuw',
+  'entities.abilities.intimidating_shout.description':
+    'Een angstaanjagende schreeuw die tot 5 vijanden binnen 8 m gedurende 8 sec in angst laat vluchten. Schade kan het effect verbreken.',
+  'entities.abilities.iron_resolve.name': 'IJzeren Vastberadenheid',
+  'entities.abilities.iron_resolve.description':
+    'Zet je tanden op elkaar en negeer de pijn: verbruikt al je woede (minimaal 20) om 4 schade per bestede woede te absorberen, tot 10 sec lang. (Protectie)',
+  'entities.abilities.measured_fury.name': 'Beheerste Woede',
+  'entities.abilities.measured_fury.description':
+    'Je beheerste woede scherpt je zuinigheid aan: je vaardigheden kosten 10% minder woede. (Wapens)',
+  'entities.abilities.natures_swiftness.name': 'Snelheid van de Natuur',
+  'entities.abilities.natures_swiftness.description':
+    'Roept de natuur aan om je volgende spreuk onmiddellijk te maken. (Herstel signatuur)',
+  'entities.abilities.piercing_howl.name': 'Doordringend Gehuil',
+  'entities.abilities.piercing_howl.description':
+    'Een doordringende schreeuw die alle vijanden binnen 15 m gedurende 8 sec met 50% vertraagt.',
+  'entities.abilities.raging_gale.name': 'Dubbelslag',
+  'entities.abilities.raging_gale.description':
+    'Sla onmiddellijk tweemaal toe met je wapen, waarbij elke treffer 40% wapenschade plus {damage} toebrengt, en genereer {rage} woede. Slaat maximaal 2 ladingen op. (Razernij)',
+  'entities.abilities.raised_guard.name': 'Geheven Schild',
+  'entities.abilities.raised_guard.description':
+    'Zet je schrap achter je schild: je loopt gedurende 6 sec 50% minder Fysieke schade op. Slaat maximaal 2 ladingen op. (Protectie)',
+  'entities.abilities.recklessness.name': 'Roekeloosheid',
+  'entities.abilities.recklessness.description':
+    'Maakt je Razend: gedurende 12 sec neemt je woedeopbouw met 50% toe en je kans op kritieke treffers met 20%.',
+  'entities.abilities.red_harvest.name': 'Rode Oogst',
+  'entities.abilities.red_harvest.description':
+    'Zet alles in: sla driemaal woest toe voor telkens 65% wapenschade plus {damage}, en word altijd Razend. (Razernij)',
+  'entities.abilities.repentance.name': 'Berouw',
+  'entities.abilities.repentance.description':
+    'Brengt de vijand tot 6 sec in een staat van meditatie. Elke schade verbreekt het effect. (Vergelding signatuur)',
+  'entities.abilities.revenge.name': 'Wraak',
+  'entities.abilities.revenge.description':
+    'Val aan in een brede boog en breng Fysieke schade toe aan alle vijanden voor je. Boven de 5 doelwitten wordt de schade verminderd. Wanneer je ontwijkt of pareert, kan je volgende Wraak geen woede kosten.',
+  'entities.abilities.sanguine_aura.name': 'Bloedrode Aura',
+  'entities.abilities.sanguine_aura.description':
+    'Doordring je wapen met het bloed van je vijanden: jij en je melee-bondgenoten krijgen gedurende 20 sec 10% aanvalssnelheid en 10% schade.',
+  'entities.abilities.seasoned_soldier.name': 'Doorgewinterde Soldaat',
+  'entities.abilities.seasoned_soldier.description':
+    'Je kritieke auto-aanvallen genereren 10% meer woede. (Wapens)',
+  'entities.abilities.shamanistic_rage.name': 'Sjamanistische Woede',
+  'entities.abilities.shamanistic_rage.description':
+    'Ontketent sjamanistische woede en herstelt 160 mana. (Versterking signatuur)',
+  'entities.abilities.storm_bolt.name': 'Stormbout',
+  'entities.abilities.storm_bolt.description':
+    'Slinger je wapen naar het doelwit voor {damage} en verdoof het gedurende 3 sec.',
+  'entities.abilities.sudden_death.name': 'Plotse Dood',
+  'entities.abilities.sudden_death.description':
+    'Je auto-aanvallen hebben een kans om je Vroeg Graf te laten inzetten op een doelwit ongeacht zijn gezondheid, zonder woedekosten. (Wapens)',
+  'entities.abilities.sweeping_strikes.name': 'Verbredende Boog',
+  'entities.abilities.sweeping_strikes.description':
+    'Gedurende 12 sec raken je aanvallen op een enkel doelwit ook 1 nabije vijand voor volledige schade. (Wapens)',
+  'entities.abilities.victory_rush.name': 'Overwinningsroes',
+  'entities.abilities.victory_rush.description':
+    'Sla toe voor wapenschade plus {damage} en genees 20% van je maximale gezondheid. Alleen bruikbaar binnen 20 sec na het doden van een vijand.',
+  'entities.items.eastbrook_buckler.name': 'Oostbeek-Beukelaar',
+  'entities.items.eastbrook_greatsword.name': 'Oostbeek-Grootzwaard',
+  'entities.items.highwatch_greatsword.name': 'Hoogwacht-Grootzwaard',
+  'entities.items.highwatch_wallshield.name': 'Hoogwacht-Muurschild',
+  'guide.abilityHook.cw_battle_shout':
+    'Een strijdkreet die de aanvalskracht van de groep verhoogt.',
+  'guide.abilityHook.cw_charge':
+    'Stormt op een verre vijand af om het gevecht te openen met een korte verdoving.',
+  'guide.abilityHook.cw_commanding_shout':
+    'Versterkt uithoudingsvermogen zodat iedereen meer staande blijft in een gevecht.',
+  'guide.abilityHook.cw_heroic_strike':
+    'Zet een zwaardere uithaal in de wachtrij die rage besteedt bij je volgende klap.',
+  'guide.abilityHook.cw_rend': 'Opent een bloeding die het doelwit na verloop van tijd uitput.',
+  'guide.abilityHook.cw_thunder_clap': 'Raakt alles om je heen en vertraagt hun aanvallen.',
+  'guide.abilityHook.hamstring':
+    'Snijdt in de benen van het doelwit om het te vertragen, zodat het je niet kan inhalen.',
+  'guide.abilityHook.revenge':
+    'Een vegende tegenaanval die alles voor je raakt, en goedkoper wordt vlak nadat je een klap hebt afgeweerd.',
+  'hud.combat.floatingParry': 'Parering',
+  'hud.combat.parried': 'Je {ability} wordt gepareerd door {target}.',
+  'hud.errors.needShield': 'Je moet een schild uitgerust hebben.',
+  'hud.errors.nothingToConsume': 'Niets om te verbruiken.',
+  'hudChrome.auraEffect.avatar': 'Kolossus: toegebrachte schade verhoogd met {pct}%',
+  'hudChrome.auraEffect.battleStance': 'Strijdhouding: 10% meer woedeopbouw',
+  'hudChrome.auraEffect.battleTrance':
+    'Je volgende Plunderaarsslag of Verminkende Slag kost geen woede',
+  'hudChrome.auraEffect.berserkerStance':
+    'Berserkerhouding: kritieke treffers landen 3% vaker en raken 3% harder',
+  'hudChrome.auraEffect.bloodbath':
+    'Verhoogt kans op kritieke treffers en toegebrachte schade met {pct}%',
+  'hudChrome.auraEffect.crit': 'Verhoogt kans op kritieke treffers met {pct}%',
+  'hudChrome.auraEffect.dieBySword':
+    'Vermindert opgelopen schade met {pct}% ({lowPct}% onder {hpPct}% gezondheid)',
+  'hudChrome.auraEffect.dmgDone': 'Verhoogt toegebrachte schade met {pct}%',
+  'hudChrome.auraEffect.dmgDoneReduce': 'Vermindert toegebrachte schade met {pct}%',
+  'hudChrome.auraEffect.maxHpPct': 'Verhoogt maximale gezondheid met {pct}%',
+  'hudChrome.auraEffect.rageGen': 'Verhoogt woedeopbouw met {pct}%',
+  'hudChrome.auraEffect.reckless':
+    'Verhoogt kans op kritieke treffers met {pct}% en woedeopbouw met {ragePct}%',
+  'hudChrome.auraEffect.revengeFree': 'Je volgende Wraak kost geen woede',
+  'hudChrome.auraEffect.sanguine':
+    'Verhoogt aanvalssnelheid met {hastePct}% en toegebrachte schade met {dmgPct}%',
+  'hudChrome.auraEffect.victoryRush': 'Overwinningsroes is gereed',
+  'hudChrome.auth.appleChoiceExpired':
+    'Die Apple-aanmelding is verlopen. Log opnieuw in met Apple.',
+  'hudChrome.auth.appleChoiceIntro':
+    'Maak een nieuw account aan, of koppel Apple aan een account dat je al hebt.',
+  'hudChrome.auth.appleError': 'Inloggen met Apple is niet gelukt. Probeer het opnieuw.',
+  'hudChrome.auth.appleLoginCta': 'Ga door met Apple',
+  'hudChrome.options.mouseoverCast': 'Mouseover-bezwering op groepsframes',
+  'hudChrome.options.showTargetOfTarget': 'Doelwit van doelwit tonen',
+  'hudChrome.paperdoll.offhand': 'Nevenhand',
+  'hudChrome.specPanel.complexity': 'Complexiteit',
+  'hudChrome.specPanel.complexityHigh': 'Hoog',
+  'hudChrome.specPanel.complexityLow': 'Laag',
+  'hudChrome.specPanel.complexityMedium': 'Gemiddeld',
+  'hudChrome.specPanel.exampleAbilities': 'Voorbeeldvaardigheden',
+  'hudChrome.specPanel.primaryAttr': 'Primair attribuut',
+  'hudChrome.specPanel.selectSpec': 'Kies specialisatie',
+  'hudChrome.specPanel.specUnlockBanner': 'Specialisatie ontgrendeld!',
+  'hudChrome.specPanel.specUnlockHint': 'Druk op N om je specialisatie te kiezen.',
+  'hudChrome.specPanel.viewTalents': 'Talenten bekijken',
+  'hudChrome.statInfo.desc.haste':
+    'Versnelt je wapenslagen en spreukbezwering. Het verkort de globale afkoeltijd niet.',
+  'hudChrome.statInfo.desc.parry':
+    'Je kans om een frontale melee-aanval volledig te pareren, zodat je geen schade oploopt. Een klap van achteren kan niet worden gepareerd.',
+  'hudChrome.statInfo.names.haste': 'Snelheid',
+  'hudChrome.statInfo.names.parry': 'Parering',
+  'hudChrome.talentRows.comingSoon': 'Binnenkort beschikbaar',
+  'hudChrome.talentRows.defaultLoadout': 'Standaardopstelling',
+  'hudChrome.talentRows.tab': 'Keuzes',
+  'hudChrome.unitFrame.targetOfTargetLabel': 'Doelwit van het doelwit',
+  'itemUi.slots.twoHand': 'Tweehandig',
 };

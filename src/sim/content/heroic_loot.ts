@@ -508,11 +508,14 @@ export const HEROIC_ITEMS: Record<string, ItemDef> = {
     name: 'Deathless Greatblade',
     kind: 'weapon',
     slot: 'mainhand',
+    hand: 'twohand',
     quality: 'epic',
     heroic: true,
     requiredLevel: 20,
     weapon: { min: 45, max: 68, speed: 3.4 },
-    stats: { str: 14, sta: 9 },
+    // Two-handers carry both hands' stat budgets (TWOHAND_STAT_MULT): the
+    // PR #1762 hand declaration re-statted 23 -> 46 points at ilvl 33.
+    stats: { str: 28, sta: 18 },
     sellValue: 16000,
     requiredClass: HEAVY,
   },

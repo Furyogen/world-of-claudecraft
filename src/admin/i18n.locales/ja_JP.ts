@@ -657,6 +657,8 @@ export const ja_JP: Record<string, string> = {
   'staff.viaScript': '付与スクリプト',
   'nav.history': '履歴',
   'moderationHistory.actionKick': '強制退出',
+  'moderationHistory.actionJail': '投獄済み',
+  'moderationHistory.actionUnjail': '釈放済み',
   'moderationHistory.actionKill': '強制死亡',
   'moderationHistory.actionIpBlock': 'IPをブロック',
   'moderationHistory.actionIpUnblock': 'IPのブロックを解除',

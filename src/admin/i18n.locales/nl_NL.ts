@@ -661,6 +661,8 @@ export const nl_NL: Record<string, string> = {
   'staff.viaScript': 'toekenningsscript',
   'nav.history': 'Geschiedenis',
   'moderationHistory.actionKick': 'Uit de server gezet',
+  'moderationHistory.actionJail': 'Opgesloten',
+  'moderationHistory.actionUnjail': 'Vrijgelaten',
   'moderationHistory.actionKill': 'Gedood',
   'moderationHistory.actionIpBlock': 'IP geblokkeerd',
   'moderationHistory.actionIpUnblock': 'IP-blokkering opgeheven',

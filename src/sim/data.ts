@@ -105,6 +105,7 @@ import {
   ZONE3_ZONE,
 } from './content/zone3';
 import { DUNGEON_WALL_HW } from './dungeon_layout';
+import { JAIL_BLOCKERS, JAIL_TERRAIN_EDITS } from './jail';
 
 export type { DelveShopEntry, DelveShopGate, DelveShopOffer } from './content/delves';
 // Delve affix/companion catalogs are consumed by the Sim delve engine; re-export
@@ -281,6 +282,7 @@ function mergeProps(sets: ZonePropsDef[]): ZonePropsDef {
 // Quest reward fallback by archetype: classes without an explicit entry use these.
 export const REWARD_ARCHETYPE: Record<PlayerClass, PlayerClass> = {
   warrior: 'warrior',
+  warrior_classic: 'warrior',
   paladin: 'warrior',
   shaman: 'warrior',
   rogue: 'rogue',
@@ -343,7 +345,8 @@ export const BUILTIN_WORLD: WorldContent = {
   roads: ROADS,
   props: PROPS,
   playerStart: PLAYER_START,
-  // No terrainEdits: the built-in heightfield is the pure (x,z,seed) function.
+  blockers: JAIL_BLOCKERS,
+  terrainEdits: JAIL_TERRAIN_EDITS,
 };
 
 let activeWorld: WorldContent = BUILTIN_WORLD;

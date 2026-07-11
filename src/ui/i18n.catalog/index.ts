@@ -400,6 +400,7 @@ export const en = {
   },
   classes: {
     warrior: 'Warrior',
+    warriorClassic: 'Classic Warrior',
     paladin: 'Paladin',
     hunter: 'Hunter',
     rogue: 'Rogue',
@@ -1075,6 +1076,11 @@ export const en = {
       kings_signet: { name: "King's Signet" },
       event_skin_token: { name: 'Mysterious Cosmetic Cache' },
       heroic_mark: { name: 'Heroic Mark' },
+      // Warrior offhand/2H gear (PR #1734): shields + the two vendor greatswords.
+      eastbrook_buckler: { name: 'Eastbrook Buckler' },
+      highwatch_wallshield: { name: 'Highwatch Wallshield' },
+      eastbrook_greatsword: { name: 'Eastbrook Greatsword' },
+      highwatch_greatsword: { name: 'Highwatch Greatsword' },
       morthens_cryptforged_hauberk: { name: "Morthen's Cryptforged Hauberk" },
       shadowpulse_handwraps: { name: 'Shadowpulse Handwraps' },
       bonechill_striders: { name: 'Bonechill Striders' },
@@ -1136,6 +1142,11 @@ export const en = {
       stormcallers_crown_heroic: { name: 'Galecall Crown' },
       stormcallers_spaulders: { name: 'Galecall Spaulders' },
       stormcallers_spaulders_heroic: { name: 'Galecall Spaulders' },
+      // Nythraxis raid (normal): the offhand-slot + two-hander epics.
+      bonewrought_greatsword: { name: 'Bonewrought Greatsword' },
+      direfang_greatblade: { name: 'Direfang Greatblade' },
+      bonewrought_bulwark: { name: 'Bonewrought Bulwark' },
+      wraithfire_orb: { name: 'Wraithfire Orb' },
       unknown_alien_weaponry: { name: 'Unknown Alien Weaponry' },
       alien_armor_plate: { name: 'Alien Armor Plate' },
       amber_crimson_armor_plate: { name: 'Amber Crimson' },

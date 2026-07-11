@@ -412,6 +412,8 @@ export const fr_CA: Record<string, string> = {
   'staff.viaScript': 'script d’attribution',
   'nav.history': 'Historique',
   'moderationHistory.actionKick': 'Expulsé',
+  'moderationHistory.actionJail': 'Emprisonné',
+  'moderationHistory.actionUnjail': 'Libéré',
   'moderationHistory.actionKill': 'Tué',
   'moderationHistory.actionIpBlock': 'IP bloquée',
   'moderationHistory.actionIpUnblock': 'IP débloquée',

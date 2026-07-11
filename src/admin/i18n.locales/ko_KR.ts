@@ -652,6 +652,8 @@ export const ko_KR: Record<string, string> = {
   'staff.viaScript': '부여 스크립트',
   'nav.history': '기록',
   'moderationHistory.actionKick': '강제 퇴장',
+  'moderationHistory.actionJail': '수감됨',
+  'moderationHistory.actionUnjail': '석방됨',
   'moderationHistory.actionKill': '처치',
   'moderationHistory.actionIpBlock': 'IP 차단',
   'moderationHistory.actionIpUnblock': 'IP 차단 해제',

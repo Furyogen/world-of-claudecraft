@@ -289,6 +289,8 @@ export const id_ID: AdminTranslations = {
   "moderationHistory.actionForceRename": "Ganti nama secara paksa",
   "moderationHistory.actionKick": "Dikeluarkan",
   "moderationHistory.actionKill": "Dibunuh",
+  "moderationHistory.actionJail": "Dipenjara",
+  "moderationHistory.actionUnjail": "Dibebaskan",
   "moderationHistory.actionNote": "Catatan",
   "moderationHistory.actionResetPassword": "Kata sandi diatur ulang",
   "moderationHistory.actionIpBlock": "IP diblokir",

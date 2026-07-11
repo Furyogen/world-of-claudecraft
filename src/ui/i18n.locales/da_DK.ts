@@ -2,6 +2,67 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const da_DK: Partial<Record<TranslationKey, string>> = {
+  'entities.abilities.cw_heroic_strike.name': 'Plyndrerslag',
+  'entities.abilities.cw_heroic_strike.description':
+    'Et stærkt angreb, der øger nærkampsskaden med {damage}. Aktiveres ved dit næste hug.',
+  'entities.abilities.cw_battle_shout.name': 'Jernbrøl',
+  'entities.abilities.cw_battle_shout.description': 'Øger din angrebskraft med {buff} i 2 min.',
+  'entities.abilities.cw_commanding_shout.name': 'Styrkende Råb',
+  'entities.abilities.cw_commanding_shout.description': 'Øger din Udholdenhed med {buff} i 2 min.',
+  'entities.abilities.cw_charge.name': 'Fremstorm',
+  'entities.abilities.cw_charge.description':
+    'Storm mod en fjende, generér 9 raseri og bedøv den i 1 sek. 8-25 m rækkevidde.',
+  'entities.abilities.cw_rend.name': 'Dyb Flænge',
+  'entities.abilities.cw_rend.description':
+    'Sårer målet og får det til at bløde for {damage} skade over {duration} sek.',
+  'entities.abilities.cw_thunder_clap.name': 'Rystende Slag',
+  'entities.abilities.cw_thunder_clap.description':
+    'Sprænger nærliggende fjender for {damage} skade og sløver deres angreb med 10 % i 10 sek.',
+  'entities.abilities.cw_hamstring.name': 'Lammende Snit',
+  'entities.abilities.cw_hamstring.description':
+    'Lemlæster fjenden for {damage} skade og sænker dens bevægelse med 50% i 15 sek.',
+  'entities.abilities.cw_bloodrage.name': 'Blodtold',
+  'entities.abilities.cw_bloodrage.description': 'Genererer 10 raseri på bekostning af helbred.',
+  'entities.abilities.cw_overpower.name': 'Rødhånd',
+  'entities.abilities.cw_overpower.description':
+    'Øjeblikkeligt angreb for våbenskade plus {damage}. Kan kun bruges efter målet undviger. Kan ikke undviges.',
+  'entities.abilities.cw_execute.name': 'Tidlig Grav',
+  'entities.abilities.cw_execute.description':
+    'Forsøg på at gøre det af med en såret fjende, hvilket volder {damage} skade. Kan kun bruges på fjender under 20% helbred.',
+  'entities.abilities.cw_slam.name': 'Brutalt Sving',
+  'entities.abilities.cw_slam.description': 'Drøner modstanderen for våbenskade plus {damage}.',
+  'entities.abilities.cw_cleave.name': 'Mejende Bue',
+  'entities.abilities.cw_cleave.description':
+    'Et fejende slag, der rammer alle fjender foran dig for {damage} skade.',
+  'entities.abilities.cw_defensive_stance.name': 'Værgende Stilling',
+  'entities.abilities.cw_defensive_stance.description':
+    'En defensiv kampstilling: du skaber 30% mere trussel, men volder og modtager 10% mindre skade. Aktivér igen for at forlade stillingen.',
+  'entities.abilities.cw_demoralizing_shout.name': 'Rædselshyl',
+  'entities.abilities.cw_demoralizing_shout.description':
+    'Udstøder et frygtindgydende råb, der sænker angrebsstyrken hos alle nærliggende fjender med {buff} i 30 sek.',
+  'entities.abilities.cw_sunder_armor.name': 'Rustningsskær',
+  'entities.abilities.cw_sunder_armor.description':
+    'Flænger målets rustning og sænker den med {damage}% pr. anvendelse. Stakker op til 5 gange. Skaber en stor mængde trussel.',
+  'entities.abilities.cw_taunt.name': 'Ægge',
+  'entities.abilities.cw_taunt.description':
+    'Håner målet: din trussel stiger til at matche dets mest forhadte fjende, og det tvinges til at angribe dig i 3 sek.',
+  'entities.abilities.cw_bloodthirst.name': 'Åreladning',
+  'entities.abilities.cw_bloodthirst.description':
+    'Angrib øjeblikkeligt i et blodraseri for 60% våbenskade plus {damage}. (Furie-signatur)',
+  'entities.abilities.cw_mortal_strike.name': 'Lemlæstende Slag',
+  'entities.abilities.cw_mortal_strike.description':
+    'Et ondskabsfuldt slag, der volder våbenskade plus {damage}. (Arms-signatur)',
+  'entities.abilities.cw_shield_slam.name': 'Skjoldknæk',
+  'entities.abilities.cw_shield_slam.description':
+    'Slå målet med dit skjold for 50% våbenskade plus {damage} og enorm trussel. (Beskyttelses-kendetegn)',
+  'entities.abilities.cw_whirlwind.name': 'Klingehvirvel',
+  'entities.abilities.cw_whirlwind.description':
+    'Snur i en dødelig bue og ram alle nærliggende fjender for {damage}. (Raseri-talent)',
+  'entities.abilities.cw_berserker_rage.name': 'Sydende Raseri',
+  'entities.abilities.cw_berserker_rage.description':
+    'Gå i et sydende raseri, og generér 20 raseri. (Krigertalent)',
+  'classDetails.roles.warriorClassic': 'Tank / Nærkamps-DPS',
+  'classes.warriorClassic': 'Kriger',
   'entities.abilities.sport_boot.description':
     'Et langt, højt spark mod sigtepunktet. Publikum elsker det.',
   'entities.abilities.sport_boot.name': 'Kæmpespark',
@@ -1840,7 +1901,8 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.sinister_strike.description':
     'Et øjeblikkeligt slag for våbenskade plus {damage}. Giver 1 kombopoint.',
   'entities.abilities.sinister_strike.name': 'Ondsindet Hug',
-  'entities.abilities.slam.description': 'Drøner modstanderen for våbenskade plus {damage}.',
+  'entities.abilities.slam.description':
+    'Drøner modstanderen for 50 % våbenskade plus {damage} og genererer {rage} raseri.',
   'entities.abilities.slam.name': 'Brutalt Sving',
   'entities.abilities.slice_and_dice.description':
     'Afslutningsangreb der øger nærkampsangrebshastighed med 30 %. Varer længere per kombopoint.',
@@ -2024,6 +2086,9 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.items.bogiron_mace.name': 'Mosejerns-Stridskølle',
   'entities.items.bogiron_nugget.name': 'Mosejerns-Klump',
   'entities.items.bone_fragments.name': 'Knoglefragmenter',
+  'entities.items.arcane_dust.name': 'Arkanstøv',
+  'entities.items.arcane_essence.name': 'Arkanessens',
+  'entities.items.arcane_shard.name': 'Arkanskår',
   'entities.items.boneguard_breastplate.name': 'Knoglevogter-Brystplade',
   'entities.items.boneplate_vest.name': 'Knoglepladevest',
   'entities.items.boundstone_girdle.name': 'Bundstens-Bælte',
@@ -2330,6 +2395,10 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.items.stormcallers_waistguard.name': 'Stormkalderens Livværn',
   'entities.items.stormcallers_spaulders.name': 'Galecall-Skulderplader',
   'entities.items.stormcallers_spaulders_heroic.name': 'Galecall-Skulderplader',
+  'entities.items.bonewrought_greatsword.name': 'Bonewrought-Storsværd',
+  'entities.items.direfang_greatblade.name': 'Direfang-Storklinge',
+  'entities.items.bonewrought_bulwark.name': 'Bonewrought-Bolværk',
+  'entities.items.wraithfire_orb.name': 'Wraithfire-Kugle',
   'entities.items.stormshard_leggings.name': 'Stormskår-Benbeklædning',
   'entities.items.sturdy_belt.name': 'Robust Rejsebælte',
   'entities.items.supply_crate.name': 'Stjålen Forsyningskasse',
@@ -5223,7 +5292,6 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'hudChrome.meters.perSecond': '{value}/s',
   'hudChrome.meters.perSecondRow': '{total} ({rate})',
   'hudChrome.meters.seconds': '{s}s',
-  'hudChrome.mobile.autorun': 'Autoløb',
   'hudChrome.mobile.haptics': 'Haptik',
   'hudChrome.mobile.hapticsOff': 'Haptik fra',
   'hudChrome.mobile.hotbarPage': 'Evner',
@@ -6763,8 +6831,6 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'yumi.queue.teamLeave': 'Dit hold forlader Beskyt Yumi-køen.',
   'yumi.respawn.title': 'SLÅET NED!',
   'entities.abilities.chain_heal.name': 'Kædeheling',
-  'entities.abilities.chain_heal.description':
-    'Helbreder et venligt mål kraftigt og springer derefter til op til 2 yderligere allierede i nærheden. Hvert spring helbreder 50% mindre. (Restaurerings signaturfærdighed)',
   'entities.abilities.razor_howl.name': 'Skarpt hyl',
   'entities.abilities.razor_howl.description':
     'Et råb, der sænker fjender inden for 15 m med 50% i 8 sek. (Kriger-talent)',
@@ -6809,4 +6875,172 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'Adgangskoderne stemmer ikke overens.',
   'hudChrome.auth.resetErrInvalid':
     'Dette nulstillingslink er ugyldigt eller udløbet. Anmod om et nyt.',
+  'hudChrome.auth.appleChoiceExpired':
+    'Dette Apple-login er udløbet. Log venligst ind med Apple igen.',
+  'hudChrome.auth.appleChoiceIntro': 'Opret en ny konto, eller knyt Apple til en, du allerede har.',
+  'hudChrome.auth.appleError': 'Kunne ikke logge ind med Apple. Prøv igen.',
+  'hudChrome.auth.appleLoginCta': 'Fortsæt med Apple',
+  'classDetails.lore.warriorClassic':
+    'Krigeren præcis som den spillede før kampomlægningen: det oprindelige evnesæt og raseritempo, bevaret side om side med den nye kriger, så du kan prøve begge og fortælle os, hvilken der føles bedst.',
+  'entities.abilities.battle_stance.name': 'Kampstilling',
+  'entities.abilities.battle_stance.description':
+    'En aggressiv kampstilling: du genererer 10% mere raseri. Standardstillingen for Arms og Beskyttelse.',
+  'entities.abilities.berserker_stance.name': 'Berserkerstilling',
+  'entities.abilities.berserker_stance.description':
+    'En dumdristig kampstilling: dine kritiske slag rammer 3% oftere og slår 3% hårdere. Furie-krigeren kæmper altid i denne stilling.',
+  'entities.abilities.breachmaker.name': 'Murbryder',
+  'entities.abilities.breachmaker.description':
+    'Hamrer løs på målet for våbenskade plus {damage} og slår hul i dets garde: dine egne angreb mod det volder 20% mere skade i 8 sek. (Arms)',
+  'entities.abilities.chain_heal.description':
+    'Helbreder målet for {damage} og springer derefter til op til 2 nærliggende allierede, hvor hvert spring helbreder halvdelen af det forrige.',
+  'entities.abilities.cleaving_blows.name': 'Kløvende Slag',
+  'entities.abilities.cleaving_blows.description':
+    'Rød Høst refunderer altid en ladning Tvillingeslag. (Furie)',
+  'entities.abilities.deep_wounds.name': 'Gabende Sår',
+  'entities.abilities.deep_wounds.description':
+    'Passiv: dit Lemlæstende Slag efterlader målet blødende for fysisk skade over 6 sek. (Arms)',
+  'entities.abilities.defiant_bellow.name': 'Trodsigt Brøl',
+  'entities.abilities.defiant_bellow.description':
+    'Et trodsigt brøl: hver fjende inden for 10 m hånes og tvinges til at angribe dig i 3 sek. (Beskyttelse)',
+  'entities.abilities.diabolical_twinstrike.name': 'Diabolsk Tvillingeslag',
+  'entities.abilities.diabolical_twinstrike.description':
+    'Mens du er Rasende, volder dit Tvillingeslag 15% mere skade. (Furie)',
+  'entities.abilities.die_by_sword.name': 'Dø ved Sværdet',
+  'entities.abilities.die_by_sword.description':
+    'Defensiv nedkøling: i 8 sek tager du 30% mindre skade og undviger langt flere angreb.',
+  'entities.abilities.emboldening_roar.name': 'Opildnende Brøl',
+  'entities.abilities.emboldening_roar.description':
+    'Udstøder et opildnende brøl: du og venlige spillere inden for 40 m bliver Opildnet, og de næste 3 evner er garanterede kritiske slag. (Furie)',
+  'entities.abilities.enrage_passive.name': 'Amok',
+  'entities.abilities.enrage_passive.description':
+    'Passiv: mens du er Rasende, volder du 7% mere skade, angriber 25% hurtigere og bevæger dig 10% hurtigere i 4 sek. Åreladning har 30% chance for at gøre dig Rasende; Rød Høst gør det altid. (Furie)',
+  'entities.abilities.faultline.name': 'Jordspalte',
+  'entities.abilities.faultline.description':
+    'Send en chokbølge gennem jorden: fjender foran dig inden for 8 m tager {damage} skade og bedøves i 3 sek. (Beskyttelse)',
+  'entities.abilities.fel_domination.name': 'Dæmonisk Dominans',
+  'entities.abilities.fel_domination.description':
+    'Behersker dæmoniske energier og gør din næste besværgelse øjeblikkelig. (Dæmonologisignatur)',
+  'entities.abilities.furious_mending.name': 'Rasende Heling',
+  'entities.abilities.furious_mending.description':
+    'I 10 sek tager du 20% mindre skade, og så længe det varer, helbreder din Åreladning dig for 20% af dit maksimale helbred. (Furie)',
+  'entities.abilities.intimidating_shout.name': 'Frygtindgydende Råb',
+  'entities.abilities.intimidating_shout.description':
+    'Et rædselsvækkende råb, der sender op til 5 fjender inden for 8 m på flugt i frygt i 8 sek. Skade kan bryde effekten.',
+  'entities.abilities.iron_resolve.name': 'Jernvilje',
+  'entities.abilities.iron_resolve.description':
+    'Bid tænderne sammen og ignorér smerten: forbruger alt dit raseri (mindst 20) for at absorbere 4 skade pr. brugt raseri, i op til 10 sek. (Beskyttelse)',
+  'entities.abilities.measured_fury.name': 'Afmålt Raseri',
+  'entities.abilities.measured_fury.description':
+    'Dit afmålte raseri skærper din økonomi: dine evner koster 10% mindre raseri. (Arms)',
+  'entities.abilities.natures_swiftness.name': 'Naturens Hurtighed',
+  'entities.abilities.natures_swiftness.description':
+    'Påkalder naturen og gør din næste besværgelse øjeblikkelig. (Genoprettelsessignatur)',
+  'entities.abilities.piercing_howl.name': 'Gennemtrængende Hyl',
+  'entities.abilities.piercing_howl.description':
+    'Et gennemtrængende råb, der sænker alle fjender inden for 15 m med 50% i 8 sek.',
+  'entities.abilities.raging_gale.name': 'Tvillingeslag',
+  'entities.abilities.raging_gale.description':
+    'Slå øjeblikkeligt to gange med dit våben, hvor hvert slag volder 40% våbenskade plus {damage}, og generér {rage} raseri. Gemmer op til 2 ladninger. (Furie)',
+  'entities.abilities.raised_guard.name': 'Hævet Garde',
+  'entities.abilities.raised_guard.description':
+    'Sæt dig fast bag dit skjold: du tager 50% mindre fysisk skade i 6 sek. Gemmer op til 2 ladninger. (Beskyttelse)',
+  'entities.abilities.recklessness.name': 'Dumdristighed',
+  'entities.abilities.recklessness.description':
+    'Gør dig Rasende: din raserigenerering øges med 50% og din chance for kritiske slag med 20% i 12 sek.',
+  'entities.abilities.red_harvest.name': 'Rød Høst',
+  'entities.abilities.red_harvest.description':
+    'Brug alt: slå tre gange i vildskab for 65% våbenskade plus {damage} hver, og bliv altid Rasende. (Furie)',
+  'entities.abilities.repentance.name': 'Bod',
+  'entities.abilities.repentance.description':
+    'Sætter fjenden i en meditativ tilstand i op til 6 sek. Enhver skade bryder effekten. (Gengældelsessignatur)',
+  'entities.abilities.revenge.name': 'Hævn',
+  'entities.abilities.revenge.description':
+    'Angrib i en bred bue og vold fysisk skade på alle fjender foran dig. Over 5 mål reduceres skaden. Når du undviger eller parerer, koster din næste Hævn muligvis intet raseri.',
+  'entities.abilities.sanguine_aura.name': 'Blodrød Aura',
+  'entities.abilities.sanguine_aura.description':
+    'Gennemtræng dit våben med dine fjenders blod: du og dine nærkampsallierede får 10% angrebshastighed og 10% skade i 20 sek.',
+  'entities.abilities.seasoned_soldier.name': 'Garvet Soldat',
+  'entities.abilities.seasoned_soldier.description':
+    'Dine kritiske autoangreb genererer 10% mere raseri. (Arms)',
+  'entities.abilities.shamanistic_rage.name': 'Shamanistisk Raseri',
+  'entities.abilities.shamanistic_rage.description':
+    'Udløser shamanistisk raseri og genopretter 160 mana. (Forbedringssignatur)',
+  'entities.abilities.storm_bolt.name': 'Stormbolt',
+  'entities.abilities.storm_bolt.description':
+    'Slyng dit våben mod målet for {damage} og bedøv det i 3 sek.',
+  'entities.abilities.sudden_death.name': 'Pludselig Død',
+  'entities.abilities.sudden_death.description':
+    'Dine autoangreb har en chance for at lade dig kaste Tidlig Grav på et mål uanset helbred, uden at det koster raseri. (Arms)',
+  'entities.abilities.sweeping_strikes.name': 'Voksende Bue',
+  'entities.abilities.sweeping_strikes.description':
+    'I 12 sek rammer dine enkeltmålsangreb også 1 nærliggende fjende for fuld skade. (Arms)',
+  'entities.abilities.victory_rush.name': 'Sejrsrus',
+  'entities.abilities.victory_rush.description':
+    'Slå for våbenskade plus {damage}, og helbred 20% af dit maksimale helbred. Kan kun bruges inden for 20 sek efter at have dræbt en fjende.',
+  'entities.items.eastbrook_buckler.name': 'Østbæk Rundskjold',
+  'entities.items.eastbrook_greatsword.name': 'Østbæk Storsværd',
+  'entities.items.highwatch_greatsword.name': 'Højvagt Storsværd',
+  'entities.items.highwatch_wallshield.name': 'Højvagt Murskjold',
+  'guide.abilityHook.cw_battle_shout': 'Et samlende råb der hæver angrebsstyrken for gruppen.',
+  'guide.abilityHook.cw_charge':
+    'Stormer mod en fjern fjende for at åbne kampen med en kort lammelse.',
+  'guide.abilityHook.cw_commanding_shout':
+    'Styrker udholdenheden så alle har mere modstandskraft i en kamp.',
+  'guide.abilityHook.cw_heroic_strike':
+    'Sætter et tungere sving i kø der bruger raseri på dit næste slag.',
+  'guide.abilityHook.cw_rend': 'Åbner en blødning der nedslider målet over tid.',
+  'guide.abilityHook.cw_thunder_clap': 'Rammer alt omkring dig og sløver deres angreb.',
+  'guide.abilityHook.hamstring':
+    'Flænser målets ben for at sløve det så det ikke kan indhente dig.',
+  'guide.abilityHook.revenge':
+    'Et fejende modangreb der rammer alt foran dig, og bliver billigere lige efter du har afværget et slag.',
+  'hud.combat.floatingParry': 'Pareret',
+  'hud.combat.parried': 'Din {ability} pareres af {target}.',
+  'hud.errors.needShield': 'Du skal bære et skjold.',
+  'hud.errors.nothingToConsume': 'Intet at fortære.',
+  'hudChrome.auraEffect.avatar': 'Kolossen: den skade, du volder, er øget med {pct}%',
+  'hudChrome.auraEffect.battleStance': 'Kampstilling: 10% mere raserigenerering',
+  'hudChrome.auraEffect.battleTrance':
+    'Dit næste Plyndrerslag eller Lemlæstende Slag koster intet raseri',
+  'hudChrome.auraEffect.berserkerStance':
+    'Berserkerstilling: kritiske slag rammer 3% oftere og slår 3% hårdere',
+  'hudChrome.auraEffect.bloodbath':
+    'Øger chancen for kritiske slag og den skade, du volder, med {pct}%',
+  'hudChrome.auraEffect.crit': 'Øger chancen for kritiske slag med {pct}%',
+  'hudChrome.auraEffect.dieBySword':
+    'Reducerer modtaget skade med {pct}% ({lowPct}% under {hpPct}% helbred)',
+  'hudChrome.auraEffect.dmgDone': 'Øger den skade, du volder, med {pct}%',
+  'hudChrome.auraEffect.dmgDoneReduce': 'Reducerer den skade, du volder, med {pct}%',
+  'hudChrome.auraEffect.maxHpPct': 'Øger maksimalt helbred med {pct}%',
+  'hudChrome.auraEffect.rageGen': 'Øger raserigenerering med {pct}%',
+  'hudChrome.auraEffect.reckless':
+    'Øger chancen for kritiske slag med {pct}% og raserigenerering med {ragePct}%',
+  'hudChrome.auraEffect.revengeFree': 'Din næste Hævn koster intet raseri',
+  'hudChrome.auraEffect.sanguine':
+    'Øger angrebshastighed med {hastePct}% og den skade, du volder, med {dmgPct}%',
+  'hudChrome.auraEffect.victoryRush': 'Sejrsrus er klar',
+  'hudChrome.options.mouseoverCast': 'Museover-kast på grupperammer',
+  'hudChrome.options.showTargetOfTarget': 'Vis målets mål',
+  'hudChrome.paperdoll.offhand': 'Sekundær hånd',
+  'hudChrome.specPanel.complexity': 'Kompleksitet',
+  'hudChrome.specPanel.complexityHigh': 'Høj',
+  'hudChrome.specPanel.complexityLow': 'Lav',
+  'hudChrome.specPanel.complexityMedium': 'Mellem',
+  'hudChrome.specPanel.exampleAbilities': 'Eksempler på evner',
+  'hudChrome.specPanel.primaryAttr': 'Primær attribut',
+  'hudChrome.specPanel.selectSpec': 'Vælg specialisering',
+  'hudChrome.specPanel.specUnlockBanner': 'Specialisering låst op!',
+  'hudChrome.specPanel.specUnlockHint': 'Tryk på N for at vælge din specialisering.',
+  'hudChrome.specPanel.viewTalents': 'Se talenter',
+  'hudChrome.statInfo.desc.haste':
+    'Gør dine våbensving og besværgelser hurtigere. Den reducerer ikke den globale nedkøling.',
+  'hudChrome.statInfo.desc.parry':
+    'Din chance for helt at parere et frontalt nærkampsangreb uden at tage skade. Et slag bagfra kan ikke pareres.',
+  'hudChrome.statInfo.names.haste': 'Hast',
+  'hudChrome.statInfo.names.parry': 'Parade',
+  'hudChrome.talentRows.comingSoon': 'Kommer snart',
+  'hudChrome.talentRows.defaultLoadout': 'Standardopsætning',
+  'hudChrome.talentRows.tab': 'Valg',
+  'hudChrome.unitFrame.targetOfTargetLabel': 'Målets Mål',
+  'itemUi.slots.twoHand': 'Tohåndsvåben',
 };

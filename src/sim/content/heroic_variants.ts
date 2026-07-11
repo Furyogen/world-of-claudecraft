@@ -19,6 +19,7 @@ import {
   primaryStatBudget,
   QUALITY_ILVL_BONUS,
   scaleWeaponDamage,
+  TWOHAND_STAT_MULT,
   weaponDpsBudget,
 } from '../item_budget';
 import type { ItemDef, MobTemplate } from '../types';
@@ -31,7 +32,10 @@ export function heroicVariantId(baseId: string): string {
 function makeHeroicVariant(base: ItemDef): ItemDef {
   const quality = base.quality ?? 'common';
   const targetLevel = HEROIC_VARIANT_SOURCE_LEVEL + (QUALITY_ILVL_BONUS[quality] ?? 0);
-  const targetBudget = primaryStatBudget(targetLevel, base.quality, base.slot);
+  // A two-handed base carries both hands' stat budgets, and its variant must
+  // too (mirrors item_level.expectedStatBudget's TWOHAND_STAT_MULT rule).
+  const handMult = base.kind === 'weapon' && base.hand === 'twohand' ? TWOHAND_STAT_MULT : 1;
+  const targetBudget = primaryStatBudget(targetLevel, base.quality, base.slot) * handMult;
   const baseBudget = base.stats
     ? PRIMARY_STATS.reduce((sum, stat) => sum + (base.stats?.[stat] ?? 0), 0)
     : 0;

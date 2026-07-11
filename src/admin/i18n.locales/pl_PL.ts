@@ -654,6 +654,8 @@ export const pl_PL: Record<string, string> = {
   'staff.viaScript': 'skrypt nadawania',
   'nav.history': 'Historia',
   'moderationHistory.actionKick': 'Wyrzucony',
+  'moderationHistory.actionJail': 'Uwięziony',
+  'moderationHistory.actionUnjail': 'Uwolniony',
   'moderationHistory.actionKill': 'Zabity',
   'moderationHistory.actionIpBlock': 'Adres IP zablokowany',
   'moderationHistory.actionIpUnblock': 'Adres IP odblokowany',

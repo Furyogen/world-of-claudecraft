@@ -112,6 +112,16 @@ export function updateMob(ctx: SimContext, mob: Entity): void {
     if (mob.combatTimer >= DUMMY_RESET_SECONDS) {
       mob.inCombat = false;
       mob.hp = mob.maxHp;
+      // FULL inert cleanup, mirroring the vision_ props below: if anything
+      // ever flips the dummy hostile-active (a taunt before the applyTaunt
+      // guard existed, a fear, a future mechanic), the state self-heals here.
+      // A lingering aggroTargetId is what pinned attackers in combat forever
+      // (engagedPids reads it every tick): the 2026-07-11 PBE combat-lock bug.
+      mob.aiState = 'idle';
+      mob.aggroTargetId = null;
+      mob.forcedTargetId = null;
+      mob.forcedTargetTimer = 0;
+      clearThreat(mob);
     } else {
       mob.inCombat = true;
     }

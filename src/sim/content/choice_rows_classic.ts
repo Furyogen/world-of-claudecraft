@@ -2387,3 +2387,209 @@ export const DRUID_CHOICE_ROWS: ClassChoiceRows = {
     },
   ],
 };
+
+// The pre-overhaul warrior rows, re-pointed at the cw_ classic ability clones
+// so the side-by-side test class mods its own records (see classes_warrior_classic.ts).
+export const WARRIOR_CLASSIC_CHOICE_ROWS: ClassChoiceRows = {
+  rows: [
+    {
+      level: 5,
+      theme: 'onslaught',
+      options: [
+        {
+          id: 'war_r5_twin_onrush',
+          name: 'Twin Onrush',
+          description:
+            "Blaine1705's playtested tuning: Onrush stores 2 uses, so you can charge twice in a row.",
+          icon: 'cw_charge',
+          effect: { ability: [{ ability: 'cw_charge', bonusCharges: 1 }] },
+        },
+        {
+          id: 'war_r5_hot_pursuit',
+          name: 'Hot Pursuit',
+          description:
+            "Blaine1705's playtested tuning: each enemy you kill grants 30% movement speed for 6 sec.",
+          icon: 'sprint',
+          effect: { global: { onKillSpeedPct: 0.3, onKillSpeedDuration: 6 } },
+        },
+        {
+          id: 'war_r5_crushing_onrush',
+          name: 'Crushing Onrush',
+          description:
+            "Blaine1705's playtested tuning: Onrush also roots the target for 4 sec and slows it by 50% for 15 sec.",
+          icon: 'cw_charge',
+          effect: {
+            ability: [
+              {
+                ability: 'cw_charge',
+                addEffects: [
+                  { type: 'root', duration: 4 },
+                  { type: 'slow', mult: 0.5, duration: 15 },
+                ],
+              },
+            ],
+          },
+        },
+      ],
+    },
+    {
+      level: 8,
+      theme: 'warcraft',
+      options: [
+        {
+          id: 'war_r8_pummel',
+          name: 'Jawcrack',
+          description: 'Interrupt spellcasting for a 4 sec school lockout.',
+          icon: 'pummel',
+          effect: { grant: { ability: 'pummel' } },
+        },
+        {
+          id: 'war_r8_concussive_clap',
+          name: 'Concussive Clap',
+          description: 'Quaking Blow also roots targets hit within 8 yd for 1 sec.',
+          icon: 'cw_thunder_clap',
+          effect: {
+            ability: [
+              {
+                ability: 'cw_thunder_clap',
+                addEffects: [{ type: 'aoeRoot', duration: 1, radius: 8, min: 0, max: 0 }],
+              },
+            ],
+          },
+        },
+        {
+          id: 'war_r8_crippling_strikes',
+          name: 'Crippling Strikes',
+          description: 'Hamstring costs 66% less and slows the target by 70% for 15 sec.',
+          icon: 'cw_hamstring',
+          effect: {
+            ability: [
+              {
+                ability: 'cw_hamstring',
+                costPct: -0.66,
+                addEffects: [{ type: 'slow', mult: 0.3, duration: 15 }],
+              },
+            ],
+          },
+        },
+      ],
+    },
+    {
+      level: 11,
+      theme: 'bloodlust',
+      options: [
+        {
+          id: 'war_r11_razor_howl',
+          name: 'Razor Howl',
+          description: 'Grants Razor Howl.',
+          icon: 'cw_demoralizing_shout',
+          effect: { grant: { ability: 'razor_howl' } },
+        },
+        {
+          id: 'war_r11_stormthrow',
+          name: 'Stormthrow',
+          description: 'Grants Stormthrow.',
+          icon: 'throwing_axe',
+          effect: { grant: { ability: 'stormthrow' } },
+        },
+        {
+          id: 'war_r11_lingering_dread',
+          name: 'Lingering Dread',
+          description:
+            "Blaine1705's playtested tuning: enemies feared by your shouts can endure 20% of their health in damage before the fear breaks.",
+          icon: 'intimidating_shout',
+          effect: { global: { fearBreakPct: 0.2 } },
+        },
+      ],
+    },
+    {
+      level: 14,
+      theme: 'arms_master',
+      options: [
+        {
+          id: 'war_r14_crippling_blows',
+          name: 'Crippling Blows',
+          description: 'Rend also cripples the target, slowing movement by 50% for 15 sec.',
+          icon: 'cw_hamstring',
+          effect: {
+            ability: [
+              { ability: 'cw_rend', addEffects: [{ type: 'slow', mult: 0.5, duration: 15 }] },
+            ],
+          },
+        },
+        {
+          id: 'war_r14_whirlwind',
+          name: 'Bladed Gyre',
+          description: 'Grants Whirlwind.',
+          icon: 'cw_whirlwind',
+          effect: { grant: { ability: 'cw_whirlwind' } },
+        },
+        {
+          id: 'war_r14_executioner',
+          name: 'Executioner',
+          description: 'Execute costs 50% less and deals 20% more damage.',
+          icon: 'cw_execute',
+          effect: { ability: [{ ability: 'cw_execute', costPct: -0.5, dmgPct: 0.2 }] },
+        },
+      ],
+    },
+    {
+      level: 17,
+      theme: 'bulwark',
+      options: [
+        {
+          id: 'war_r17_reckless_vow',
+          name: 'Reckless Vow',
+          description: 'Grants Reckless Vow.',
+          icon: 'cw_berserker_rage',
+          effect: { grant: { ability: 'reckless_vow' } },
+        },
+        {
+          id: 'war_r17_colossus',
+          name: 'Colossus',
+          description: 'Grants Colossus.',
+          icon: 'avatar',
+          effect: { grant: { ability: 'avatar' } },
+        },
+        {
+          id: 'war_r17_red_harvest',
+          name: 'Red Harvest',
+          description:
+            "Blaine1705's playtested tuning: each enemy you kill grants 5% critical strike and 5% damage dealt for 8 sec, stacking up to 25%.",
+          icon: 'cw_rend',
+          effect: {
+            global: { bloodbathPct: 0.05, bloodbathDuration: 8, bloodbathMaxPct: 0.25 },
+          },
+        },
+      ],
+    },
+    {
+      level: 20,
+      theme: 'avatar',
+      options: [
+        {
+          id: 'war_r20_giants_momentum',
+          name: "Giant's Momentum",
+          description:
+            "Blaine1705's playtested tuning: each rage spent reduces major offensive cooldowns by 0.1 sec.",
+          icon: 'avatar',
+          effect: { global: { cdrPerRage: 0.1 } },
+        },
+        {
+          id: 'war_r20_steel_cyclone',
+          name: 'Steel Cyclone',
+          description: 'Grants Steel Cyclone.',
+          icon: 'bladestorm',
+          effect: { grant: { ability: 'bladestorm' } },
+        },
+        {
+          id: 'war_r20_red_banner',
+          name: 'Red Banner',
+          description: 'Grants Red Banner.',
+          icon: 'rallying_cry',
+          effect: { grant: { ability: 'red_banner' } },
+        },
+      ],
+    },
+  ],
+};

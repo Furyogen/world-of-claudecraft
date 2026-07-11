@@ -2,6 +2,71 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const id_ID: Partial<Record<TranslationKey, string>> = {
+  'entities.abilities.cw_heroic_strike.name': 'Serangan Perampas',
+  'entities.abilities.cw_heroic_strike.description':
+    'Serangan kuat yang meningkatkan kerusakan jarak dekat sebesar {damage}. Aktif pada ayunan berikutnya.',
+  'entities.abilities.cw_battle_shout.name': 'Raungan Besi',
+  'entities.abilities.cw_battle_shout.description':
+    'Meningkatkan daya serangmu sebesar {buff} selama 2 menit.',
+  'entities.abilities.cw_commanding_shout.name': 'Seruan Penguat',
+  'entities.abilities.cw_commanding_shout.description':
+    'Meningkatkan Staminamu sebesar {buff} selama 2 menit.',
+  'entities.abilities.cw_charge.name': 'Serbuan',
+  'entities.abilities.cw_charge.description':
+    'Menerjang musuh, menghasilkan 9 amarah dan menyetrumnya selama 1 detik. Jangkauan 8-25 yard.',
+  'entities.abilities.cw_rend.name': 'Sayatan Dalam',
+  'entities.abilities.cw_rend.description':
+    'Melukai target, membuatnya berdarah sebesar {damage} kerusakan selama {duration} detik.',
+  'entities.abilities.cw_thunder_clap.name': 'Pukulan Gempa',
+  'entities.abilities.cw_thunder_clap.description':
+    'Menghantam musuh di sekitar sebesar {damage} kerusakan dan memperlambat serangan mereka sebesar 10% selama 10 detik.',
+  'entities.abilities.cw_hamstring.name': 'Sayatan Pincang',
+  'entities.abilities.cw_hamstring.description':
+    'Melukai musuh sebesar {damage} kerusakan, memperlambat gerakannya sebesar 50% selama 15 detik.',
+  'entities.abilities.cw_bloodrage.name': 'Tumbal Darah',
+  'entities.abilities.cw_bloodrage.description':
+    'Menghasilkan 10 amarah dengan mengorbankan nyawa.',
+  'entities.abilities.cw_overpower.name': 'Redhand',
+  'entities.abilities.cw_overpower.description':
+    'Serangan seketika sebesar kerusakan senjata ditambah {damage}. Hanya dapat digunakan setelah target mengelak. Tidak dapat dielakkan.',
+  'entities.abilities.cw_execute.name': 'Ajal Dini',
+  'entities.abilities.cw_execute.description':
+    'Berupaya menghabisi musuh yang terluka, menimbulkan {damage} kerusakan. Hanya dapat digunakan pada musuh di bawah 20% kesehatan.',
+  'entities.abilities.cw_slam.name': 'Ayunan Brutal',
+  'entities.abilities.cw_slam.description':
+    'Menghantam lawan sebesar kerusakan senjata ditambah {damage}.',
+  'entities.abilities.cw_cleave.name': 'Busur Penuai',
+  'entities.abilities.cw_cleave.description':
+    'Sabetan menyapu yang menghantam semua musuh di hadapanmu untuk {damage} kerusakan.',
+  'entities.abilities.cw_defensive_stance.name': 'Kuda-kuda Waspada',
+  'entities.abilities.cw_defensive_stance.description':
+    'Kuda-kuda tempur bertahan: kamu menghasilkan 30% lebih banyak ancaman tetapi memberi dan menerima 10% lebih sedikit kerusakan. Rapal lagi untuk meninggalkan kuda-kuda ini.',
+  'entities.abilities.cw_demoralizing_shout.name': 'Direhowl',
+  'entities.abilities.cw_demoralizing_shout.description':
+    'Melepaskan pekikan menyeramkan, mengurangi kekuatan serang semua musuh di sekitar sebesar {buff} selama 30 detik.',
+  'entities.abilities.cw_sunder_armor.name': 'Robek Zirah',
+  'entities.abilities.cw_sunder_armor.description':
+    'Merobek zirah target, menguranginya sebesar {damage}% per penerapan. Menumpuk hingga 5 kali. Menghasilkan ancaman dalam jumlah besar.',
+  'entities.abilities.cw_taunt.name': 'Hasutan',
+  'entities.abilities.cw_taunt.description':
+    'Memprovokasi target: ancamanmu naik menyamai musuhnya yang paling dibenci dan ia terpaksa menyerangmu selama 3 detik.',
+  'entities.abilities.cw_bloodthirst.name': 'Pertumpahan Darah',
+  'entities.abilities.cw_bloodthirst.description':
+    'Seketika menyerang dalam amukan darah untuk 60% kerusakan senjata ditambah {damage}. (Penanda Fury)',
+  'entities.abilities.cw_mortal_strike.name': 'Serangan Pelukai',
+  'entities.abilities.cw_mortal_strike.description':
+    'Serangan ganas yang menimbulkan kerusakan senjata ditambah {damage}. (Ciri khas Arms)',
+  'entities.abilities.cw_shield_slam.name': 'Shieldcrack',
+  'entities.abilities.cw_shield_slam.description':
+    'Menghantam target dengan perisaimu sebesar 50% kerusakan senjata ditambah {damage} dan ancaman besar. (Ciri khas Perlindungan)',
+  'entities.abilities.cw_whirlwind.name': 'Pusaran Berpisau',
+  'entities.abilities.cw_whirlwind.description':
+    'Berputar dalam busur mematikan, menyerang semua musuh di sekitar sebesar {damage}. (Talenta Murka)',
+  'entities.abilities.cw_berserker_rage.name': 'Amukan Mendidih',
+  'entities.abilities.cw_berserker_rage.description':
+    'Memasuki amukan mendidih, menghasilkan 20 amarah. (Talenta Prajurit)',
+  'classDetails.roles.warriorClassic': 'Tank / DPS Jarak Dekat',
+  'classes.warriorClassic': 'Prajurit',
   'entities.abilities.sport_boot.description':
     'Tendangan lambung jauh ke arah titik bidik. Penonton menyukainya.',
   'entities.abilities.sport_boot.name': 'Tendangan Jauh',
@@ -1902,7 +1967,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
     'Serangan seketika sebesar kerusakan senjata ditambah {damage}. Memberi 1 poin kombo.',
   'entities.abilities.sinister_strike.name': 'Tebasan Keji',
   'entities.abilities.slam.description':
-    'Menghantam lawan sebesar kerusakan senjata ditambah {damage}.',
+    'Menghantam lawan sebesar 50% kerusakan senjata ditambah {damage}, menghasilkan {rage} amarah.',
   'entities.abilities.slam.name': 'Ayunan Brutal',
   'entities.abilities.slice_and_dice.description':
     'Gerakan penutup yang meningkatkan kecepatan serangan jarak dekat sebesar 30%. Bertahan lebih lama per poin kombo.',
@@ -2090,6 +2155,9 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'entities.items.bogiron_mace.name': 'Gada Besi Rawa',
   'entities.items.bogiron_nugget.name': 'Bongkah Besi Rawa',
   'entities.items.bone_fragments.name': 'Serpihan Tulang',
+  'entities.items.arcane_dust.name': 'Debu Arkana',
+  'entities.items.arcane_essence.name': 'Esensi Arkana',
+  'entities.items.arcane_shard.name': 'Pecahan Arkana',
   'entities.items.boneguard_breastplate.name': 'Pelindung Dada Penjaga Tulang',
   'entities.items.boneplate_vest.name': 'Rompi Lempeng Tulang',
   'entities.items.boundstone_girdle.name': 'Sabuk Batu Terikat',
@@ -2396,6 +2464,10 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'entities.items.stormcallers_waistguard.name': 'Pelindung Pinggang Pemanggil Badai',
   'entities.items.stormcallers_spaulders.name': 'Pelindung Bahu Galecall',
   'entities.items.stormcallers_spaulders_heroic.name': 'Pelindung Bahu Galecall',
+  'entities.items.bonewrought_greatsword.name': 'Pedang Besar Bonewrought',
+  'entities.items.direfang_greatblade.name': 'Bilah Besar Direfang',
+  'entities.items.bonewrought_bulwark.name': 'Perisai Benteng Bonewrought',
+  'entities.items.wraithfire_orb.name': 'Orb Wraithfire',
   'entities.items.stormshard_leggings.name': 'Legging Serpihan Badai',
   'entities.items.sturdy_belt.name': 'Sabuk Pengembara Kokoh',
   'entities.items.supply_crate.name': 'Peti Pasokan Curian',
@@ -5301,7 +5373,6 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'hudChrome.meters.perSecond': '{value}/d',
   'hudChrome.meters.perSecondRow': '{total} ({rate})',
   'hudChrome.meters.seconds': '{s}d',
-  'hudChrome.mobile.autorun': 'Lari Otomatis',
   'hudChrome.mobile.haptics': 'Haptik',
   'hudChrome.mobile.hapticsOff': 'Haptik Nonaktif',
   'hudChrome.mobile.hotbarPage': 'Kemampuan',
@@ -6864,8 +6935,6 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'yumi.queue.teamLeave': 'Timmu keluar dari antrean Lindungi Yumi.',
   'yumi.respawn.title': 'TUMBANG!',
   'entities.abilities.chain_heal.name': 'Penyembuhan Berantai',
-  'entities.abilities.chain_heal.description':
-    'Menyembuhkan target sekutu dalam jumlah besar, lalu melompat ke hingga 2 sekutu tambahan di dekatnya. Setiap lompatan menyembuhkan 50% lebih sedikit. (Kemampuan khas Pemulihan)',
   'entities.abilities.razor_howl.name': 'Raungan Tajam',
   'entities.abilities.razor_howl.description':
     'Teriakan yang memperlambat musuh dalam jarak 15 m sebesar 50% selama 8 dtk. (Talenta petarung)',
@@ -6910,4 +6979,175 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'Kata sandi tidak cocok.',
   'hudChrome.auth.resetErrInvalid':
     'Tautan pengaturan ulang ini tidak valid atau sudah kedaluwarsa. Minta yang baru.',
+  'classDetails.lore.warriorClassic':
+    'Prajurit persis seperti sebelum perombakan sistem tempur: paket kemampuan asli dan ritme amarah aslinya, dipertahankan berdampingan dengan Prajurit baru agar kamu bisa mencoba keduanya dan memberi tahu kami mana yang terasa lebih baik.',
+  'entities.abilities.battle_stance.name': 'Kuda-kuda Tempur',
+  'entities.abilities.battle_stance.description':
+    'Kuda-kuda tempur agresif: kamu menghasilkan 10% lebih banyak amarah. Kuda-kuda bawaan untuk Arms dan Protection.',
+  'entities.abilities.berserker_stance.name': 'Kuda-kuda Berserker',
+  'entities.abilities.berserker_stance.description':
+    'Kuda-kuda tempur nekat: serangan kritismu mendarat 3% lebih sering dan menghantam 3% lebih keras. Prajurit Fury selalu bertarung dalam kuda-kuda ini.',
+  'entities.abilities.breachmaker.name': 'Breachmaker',
+  'entities.abilities.breachmaker.description':
+    'Menggempur target sebesar kerusakan senjata ditambah {damage} dan meretakkan pertahanannya: seranganmu sendiri terhadapnya memberikan 20% lebih banyak kerusakan selama 8 detik. (Arms)',
+  'entities.abilities.chain_heal.description':
+    'Menyembuhkan target sebesar {damage}, lalu melompat ke hingga 2 sekutu terdekat, setiap lompatan menyembuhkan setengah dari jumlah sebelumnya.',
+  'entities.abilities.cleaving_blows.name': 'Pukulan Membelah',
+  'entities.abilities.cleaving_blows.description':
+    'Panen Merah selalu mengembalikan satu muatan Twinstrike. (Fury)',
+  'entities.abilities.deep_wounds.name': 'Luka Menganga',
+  'entities.abilities.deep_wounds.description':
+    'Pasif: Serangan Pelukai-mu membuat target berdarah, menerima kerusakan Fisik selama 6 detik. (Arms)',
+  'entities.abilities.defiant_bellow.name': 'Raungan Menantang',
+  'entities.abilities.defiant_bellow.description':
+    'Raungan penuh tantangan: semua musuh dalam 10 yard terhasut, terpaksa menyerangmu selama 3 detik. (Protection)',
+  'entities.abilities.diabolical_twinstrike.name': 'Twinstrike Diabolis',
+  'entities.abilities.diabolical_twinstrike.description':
+    'Saat Mengamuk, Twinstrike-mu memberikan 15% lebih banyak kerusakan. (Fury)',
+  'entities.abilities.die_by_sword.name': 'Mati oleh Pedang',
+  'entities.abilities.die_by_sword.description':
+    'Kemampuan bertahan: selama 8 detik kamu menerima 30% lebih sedikit kerusakan dan mengelak jauh lebih banyak serangan.',
+  'entities.abilities.emboldening_roar.name': 'Auman Penyemangat',
+  'entities.abilities.emboldening_roar.description':
+    'Melepaskan auman penyemangat: kamu dan pemain kawan dalam 40 yard menjadi Bernyali, dan 3 kemampuanmu berikutnya dipastikan menjadi serangan kritis. (Fury)',
+  'entities.abilities.enrage_passive.name': 'Huru-hara',
+  'entities.abilities.enrage_passive.description':
+    'Pasif: saat Mengamuk kamu memberikan 7% lebih banyak kerusakan, menyerang 25% lebih cepat, dan bergerak 10% lebih cepat selama 4 detik. Pertumpahan Darah punya peluang 30% membuatmu Mengamuk; Panen Merah selalu melakukannya. (Fury)',
+  'entities.abilities.faultline.name': 'Faultline',
+  'entities.abilities.faultline.description':
+    'Mengirim gelombang kejut melalui tanah: musuh di hadapanmu dalam 8 yard menerima {damage} kerusakan dan terpana selama 3 detik. (Protection)',
+  'entities.abilities.fel_domination.name': 'Dominasi Fel',
+  'entities.abilities.fel_domination.description':
+    'Menundukkan energi fel, membuat mantramu berikutnya menjadi seketika. (Ciri khas Demonology)',
+  'entities.abilities.furious_mending.name': 'Pemulihan Murka',
+  'entities.abilities.furious_mending.description':
+    'Selama 10 detik kamu menerima kerusakan 20% lebih sedikit, dan selama itu berlangsung Pertumpahan Darah-mu menyembuhkanmu sebesar 20% dari nyawa maksimummu. (Fury)',
+  'entities.abilities.intimidating_shout.name': 'Teriakan Menggentarkan',
+  'entities.abilities.intimidating_shout.description':
+    'Teriakan menggentarkan yang membuat hingga 5 musuh dalam 8 yard lari ketakutan selama 8 detik. Kerusakan dapat mematahkan efeknya.',
+  'entities.abilities.iron_resolve.name': 'Tekad Besi',
+  'entities.abilities.iron_resolve.description':
+    'Mengertakkan gigi dan mengabaikan rasa sakit: menghabiskan seluruh amarahmu (minimum 20) untuk menyerap 4 kerusakan per amarah yang dihabiskan, bertahan hingga 10 detik. (Protection)',
+  'entities.abilities.measured_fury.name': 'Amarah Terukur',
+  'entities.abilities.measured_fury.description':
+    'Amarah terukurmu mempertajam penghematanmu: kemampuanmu membutuhkan 10% lebih sedikit amarah. (Arms)',
+  'entities.abilities.natures_swiftness.name': 'Kecepatan Alam',
+  'entities.abilities.natures_swiftness.description':
+    'Memanggil kekuatan alam untuk membuat mantramu berikutnya menjadi seketika. (Ciri khas Restoration)',
+  'entities.abilities.piercing_howl.name': 'Lolongan Menusuk',
+  'entities.abilities.piercing_howl.description':
+    'Teriakan menusuk yang memperlambat semua musuh dalam 15 yard sebesar 50% selama 8 detik.',
+  'entities.abilities.raging_gale.name': 'Twinstrike',
+  'entities.abilities.raging_gale.description':
+    'Seketika menyerang dengan senjatamu dua kali, setiap pukulan memberikan 40% kerusakan senjata ditambah {damage}, dan menghasilkan {rage} amarah. Menyimpan hingga 2 muatan. (Fury)',
+  'entities.abilities.raised_guard.name': 'Perisai Terangkat',
+  'entities.abilities.raised_guard.description':
+    'Bersiaga di balik perisaimu: kamu menerima kerusakan Fisik 50% lebih sedikit selama 6 detik. Menyimpan hingga 2 muatan. (Protection)',
+  'entities.abilities.recklessness.name': 'Kenekatan',
+  'entities.abilities.recklessness.description':
+    'Mengamuk: penghasilan amarahmu meningkat sebesar 50% dan peluang serangan kritismu sebesar 20% selama 12 detik.',
+  'entities.abilities.red_harvest.name': 'Panen Merah',
+  'entities.abilities.red_harvest.description':
+    'Menghabiskan segalanya: menyerang tiga kali dalam amukan untuk 65% kerusakan senjata ditambah {damage} setiap serangan, selalu membuatmu Mengamuk. (Fury)',
+  'entities.abilities.repentance.name': 'Pertobatan',
+  'entities.abilities.repentance.description':
+    'Menempatkan musuh dalam keadaan meditasi hingga 6 detik. Kerusakan apa pun mematahkan efeknya. (Ciri khas Retribution)',
+  'entities.abilities.revenge.name': 'Balas Dendam',
+  'entities.abilities.revenge.description':
+    'Menyerang dalam busur lebar, memberikan kerusakan Fisik kepada semua musuh di hadapanmu. Di atas 5 target kerusakannya berkurang. Saat kamu mengelak atau menangkis, Balas Dendam berikutnya mungkin tidak membutuhkan amarah.',
+  'entities.abilities.sanguine_aura.name': 'Aura Darah',
+  'entities.abilities.sanguine_aura.description':
+    'Mengisi senjatamu dengan darah musuh-musuhmu: kamu dan sekutu jarak dekatmu mendapatkan 10% kecepatan serangan dan 10% kerusakan selama 20 detik.',
+  'entities.abilities.seasoned_soldier.name': 'Serdadu Kawakan',
+  'entities.abilities.seasoned_soldier.description':
+    'Serangan otomatis kritismu menghasilkan 10% lebih banyak amarah. (Arms)',
+  'entities.abilities.shamanistic_rage.name': 'Amukan Dukun',
+  'entities.abilities.shamanistic_rage.description':
+    'Melepaskan amukan sang dukun, memulihkan 160 mana. (Ciri khas Enhancement)',
+  'entities.abilities.storm_bolt.name': 'Baut Badai',
+  'entities.abilities.storm_bolt.description':
+    'Melemparkan senjatamu ke target sebesar {damage}, membuatnya terpana selama 3 detik.',
+  'entities.abilities.sudden_death.name': 'Kematian Mendadak',
+  'entities.abilities.sudden_death.description':
+    'Serangan otomatismu punya peluang membuatmu bisa merapal Ajal Dini pada target dengan kesehatan berapa pun, tanpa membutuhkan amarah. (Arms)',
+  'entities.abilities.sweeping_strikes.name': 'Busur Melebar',
+  'entities.abilities.sweeping_strikes.description':
+    'Selama 12 detik serangan target-tunggalmu juga menghantam 1 musuh terdekat dengan kerusakan penuh. (Arms)',
+  'entities.abilities.victory_rush.name': 'Terjangan Kemenangan',
+  'entities.abilities.victory_rush.description':
+    'Menyerang sebesar kerusakan senjata ditambah {damage} dan memulihkan 20% dari nyawa maksimummu. Hanya dapat digunakan dalam 20 detik setelah membunuh musuh.',
+  'entities.items.eastbrook_buckler.name': 'Perisai Kecil Eastbrook',
+  'entities.items.eastbrook_greatsword.name': 'Pedang Agung Eastbrook',
+  'entities.items.highwatch_greatsword.name': 'Pedang Agung Highwatch',
+  'entities.items.highwatch_wallshield.name': 'Perisai Tembok Highwatch',
+  'guide.abilityHook.cw_battle_shout':
+    'Pekik penggugah semangat yang menaikkan daya serang seluruh kelompok.',
+  'guide.abilityHook.cw_charge':
+    'Menerjang musuh yang jauh untuk membuka pertarungan dengan pingsan singkat.',
+  'guide.abilityHook.cw_commanding_shout':
+    'Memperkuat stamina agar semua orang lebih tahan lama dalam pertarungan.',
+  'guide.abilityHook.cw_heroic_strike':
+    'Mengantrekan ayunan lebih berat yang menghabiskan amarah pada pukulanmu berikutnya.',
+  'guide.abilityHook.cw_rend': 'Membuka pendarahan yang menggerus sasaran seiring waktu.',
+  'guide.abilityHook.cw_thunder_clap':
+    'Menghantam segala sesuatu di sekitarmu dan melambatkan serangan mereka.',
+  'guide.abilityHook.hamstring':
+    'Menyabet kaki sasaran untuk melambatkannya sehingga ia tak bisa mengejarmu.',
+  'guide.abilityHook.revenge':
+    'Serangan balasan menyapu yang menghantam segala sesuatu di hadapanmu, dan menjadi lebih murah tepat setelah kamu menangkis sebuah pukulan.',
+  'hud.combat.floatingParry': 'Tangkis',
+  'hud.combat.parried': '{ability}-mu ditangkis oleh {target}.',
+  'hud.errors.needShield': 'Kamu harus mengenakan perisai.',
+  'hud.errors.nothingToConsume': 'Tidak ada yang bisa dikonsumsi.',
+  'hudChrome.auraEffect.avatar': 'Kolosus: kerusakan yang diberikan meningkat {pct}%',
+  'hudChrome.auraEffect.battleStance': 'Kuda-kuda Tempur: penghasilan amarah 10% lebih banyak',
+  'hudChrome.auraEffect.battleTrance':
+    'Serangan Perampas atau Serangan Pelukai berikutnya tidak membutuhkan Amarah',
+  'hudChrome.auraEffect.berserkerStance':
+    'Kuda-kuda Berserker: kritis 3% lebih sering dan menghantam 3% lebih keras',
+  'hudChrome.auraEffect.bloodbath':
+    'Meningkatkan peluang serangan kritis dan kerusakan yang diberikan sebesar {pct}%',
+  'hudChrome.auraEffect.crit': 'Meningkatkan peluang serangan kritis sebesar {pct}%',
+  'hudChrome.auraEffect.dieBySword':
+    'Mengurangi kerusakan yang diterima sebesar {pct}% ({lowPct}% saat di bawah {hpPct}% nyawa)',
+  'hudChrome.auraEffect.dmgDone': 'Meningkatkan kerusakan yang diberikan sebesar {pct}%',
+  'hudChrome.auraEffect.dmgDoneReduce': 'Mengurangi kerusakan yang diberikan sebesar {pct}%',
+  'hudChrome.auraEffect.maxHpPct': 'Meningkatkan nyawa maksimum sebesar {pct}%',
+  'hudChrome.auraEffect.rageGen': 'Meningkatkan penghasilan Amarah sebesar {pct}%',
+  'hudChrome.auraEffect.reckless':
+    'Meningkatkan peluang serangan kritis sebesar {pct}% dan penghasilan Amarah sebesar {ragePct}%',
+  'hudChrome.auraEffect.revengeFree': 'Balas Dendam berikutnya tidak membutuhkan Amarah',
+  'hudChrome.auraEffect.sanguine':
+    'Meningkatkan kecepatan serangan sebesar {hastePct}% dan kerusakan yang diberikan sebesar {dmgPct}%',
+  'hudChrome.auraEffect.victoryRush': 'Terjangan Kemenangan siap digunakan',
+  'hudChrome.auth.appleChoiceExpired':
+    'Sesi masuk dengan Apple itu sudah kedaluwarsa. Silakan masuk dengan Apple lagi.',
+  'hudChrome.auth.appleChoiceIntro':
+    'Buat akun baru, atau tautkan Apple ke akun yang sudah kamu miliki.',
+  'hudChrome.auth.appleError': 'Tidak dapat masuk dengan Apple. Silakan coba lagi.',
+  'hudChrome.auth.appleLoginCta': 'Lanjutkan dengan Apple',
+  'hudChrome.options.mouseoverCast': 'Rapal Saat Menyorot Bingkai Kelompok',
+  'hudChrome.options.showTargetOfTarget': 'Tampilkan Sasaran dari Sasaran',
+  'hudChrome.paperdoll.offhand': 'Tangan Pendamping',
+  'hudChrome.specPanel.complexity': 'Kompleksitas',
+  'hudChrome.specPanel.complexityHigh': 'Tinggi',
+  'hudChrome.specPanel.complexityLow': 'Rendah',
+  'hudChrome.specPanel.complexityMedium': 'Sedang',
+  'hudChrome.specPanel.exampleAbilities': 'Contoh kemampuan',
+  'hudChrome.specPanel.primaryAttr': 'Atribut utama',
+  'hudChrome.specPanel.selectSpec': 'Pilih spesialisasi',
+  'hudChrome.specPanel.specUnlockBanner': 'Spesialisasi Terbuka!',
+  'hudChrome.specPanel.specUnlockHint': 'Tekan N untuk memilih spesialisasimu.',
+  'hudChrome.specPanel.viewTalents': 'Lihat talenta',
+  'hudChrome.statInfo.desc.haste':
+    'Mempercepat ayunan senjata dan rapalan mantra Anda. Tidak mengurangi cooldown global.',
+  'hudChrome.statInfo.desc.parry':
+    'Peluang Anda untuk sepenuhnya menangkis serangan jarak dekat dari depan, tanpa menerima kerusakan. Pukulan dari belakang tidak dapat ditangkis.',
+  'hudChrome.statInfo.names.haste': 'Kecepatan',
+  'hudChrome.statInfo.names.parry': 'Tangkis',
+  'hudChrome.talentRows.comingSoon': 'Segera hadir',
+  'hudChrome.talentRows.defaultLoadout': 'Susunan Bawaan',
+  'hudChrome.talentRows.tab': 'Pilihan',
+  'hudChrome.unitFrame.targetOfTargetLabel': 'Sasaran dari Sasaran',
+  'itemUi.slots.twoHand': 'Dua Tangan',
 };

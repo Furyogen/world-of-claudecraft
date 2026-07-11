@@ -275,12 +275,16 @@ describe('item level: every level-20 item is balanced to budget', () => {
     expect(offBudget, offBudget.join('\n')).toEqual([]);
   });
 
-  it('level-20 items of the same item level + slot share one budget', () => {
+  it('level-20 items of the same item level + slot + hand share one budget', () => {
     const groups = new Map<string, Set<number>>();
     for (const id of Object.keys(ITEMS)) {
       const item = ITEMS[id];
       if (!item.slot || itemSourceLevel(id) !== 20) continue;
-      const key = `${itemLevel(item)}:${item.quality}:${item.slot}`;
+      // Two-handers carry TWOHAND_STAT_MULT x the one-hand budget, so the
+      // hand is part of the budget identity (a 26:epic:mainhand 2H and 1H
+      // legitimately differ; expectedStatBudget is hand-aware the same way).
+      const hand = item.kind === 'weapon' && item.hand === 'twohand' ? 'twohand' : 'onehand';
+      const key = `${itemLevel(item)}:${item.quality}:${item.slot}:${hand}`;
       let sums = groups.get(key);
       if (!sums) {
         sums = new Set();
