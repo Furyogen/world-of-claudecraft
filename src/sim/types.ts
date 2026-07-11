@@ -342,6 +342,20 @@ export type ItemSlot = EquipSlot | 'ring';
 
 export type SkinCatalog = 'class' | 'mech';
 
+// Season 1 Armory weapon-skin cosmetics (src/sim/content/weapon_skins.ts). The
+// loadout is the account-wide "applied skin per weapon type" selection; a skin
+// only shows while a weapon of its type is equipped (weapon_skin_rules.ts).
+export type WeaponSkinType =
+  | 'sword'
+  | 'axe'
+  | 'mace'
+  | 'dagger'
+  | 'staff'
+  | 'wand'
+  | 'bow'
+  | 'crossbow';
+export type WeaponSkinLoadout = Partial<Record<WeaponSkinType, string>>;
+
 export type ItemUse =
   | { type: 'fishing' }
   | { type: 'mechChroma'; chromaId: string }
@@ -1948,6 +1962,16 @@ export interface Entity {
   // client maps it to a held weapon model. Recomputed in recalcPlayerStats and
   // synced in identity fields (terse `mh`). The sim never reads it for gameplay.
   mainhandItemId: string | null;
+  // Account-wide weapon-skin loadout (players only; empty otherwise): the applied
+  // skin id per weapon type. Seeded by the host (server: account cosmetics;
+  // offline Sim: session-local via changeWeaponSkin). Sim-side source for the
+  // weaponSkinId resolution below; never read for gameplay.
+  weaponSkinLoadout: WeaponSkinLoadout;
+  // Resolved active weapon-skin id (players only; null otherwise): the loadout
+  // entry matching the equipped mainhand's weapon type, or null when none
+  // applies. Render-only: the client swaps the held weapon model and rarity VFX.
+  // Recomputed in recalcPlayerStats and synced in identity fields (terse `wsk`).
+  weaponSkinId: string | null;
   // Full worn equipment (players only; empty otherwise). Render-only mirror of
   // PlayerMeta.equipment, recomputed in recalcPlayerStats and synced in identity
   // fields (terse `eq`) so another player can be inspected. Like mainhandItemId,

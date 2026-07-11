@@ -805,6 +805,11 @@ export interface RequestMetadata {
 export interface AccountCosmetics {
   completedQuestIds: string[];
   mechChromaIds: string[];
+  // Season 1 Armory weapon skins: owned skin ids (granted on Claudium spend,
+  // reconciled from the economy service) and the applied-skin-per-weapon-type
+  // loadout. Account-wide by design; characters never carry either.
+  weaponSkinIds: string[];
+  weaponSkinLoadout: Record<string, string>;
 }
 
 function uniqueStrings(value: unknown): string[] {
@@ -819,11 +824,22 @@ function uniqueStrings(value: unknown): string[] {
   return out;
 }
 
+function stringRecord(value: unknown): Record<string, string> {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return {};
+  const out: Record<string, string> = {};
+  for (const [key, entry] of Object.entries(value as Record<string, unknown>)) {
+    if (typeof entry === 'string' && entry.length > 0) out[key] = entry;
+  }
+  return out;
+}
+
 export function normalizeAccountCosmetics(value: unknown): AccountCosmetics {
   const src = value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
   return {
     completedQuestIds: uniqueStrings(src.completedQuestIds),
     mechChromaIds: uniqueStrings(src.mechChromaIds),
+    weaponSkinIds: uniqueStrings(src.weaponSkinIds),
+    weaponSkinLoadout: stringRecord(src.weaponSkinLoadout),
   };
 }
 
@@ -872,6 +888,31 @@ export async function revokeAccountMechChroma(
   const cosmetics = await loadAccountCosmetics(accountId);
   const mechChromaIds = cosmetics.mechChromaIds.filter((id) => id !== chromaId);
   return saveAccountCosmetics(accountId, { ...cosmetics, mechChromaIds });
+}
+
+/** Additive union of owned weapon-skin ids (Claudium spend grant + the
+ *  economy-service ownership reconcile). No-ops to a plain load when every id
+ *  is already owned. */
+export async function grantAccountWeaponSkins(
+  accountId: number,
+  skinIds: string[],
+): Promise<AccountCosmetics> {
+  const cosmetics = await loadAccountCosmetics(accountId);
+  const missing = skinIds.filter((id) => id && !cosmetics.weaponSkinIds.includes(id));
+  if (missing.length === 0) return cosmetics;
+  return saveAccountCosmetics(accountId, {
+    ...cosmetics,
+    weaponSkinIds: [...cosmetics.weaponSkinIds, ...missing],
+  });
+}
+
+/** Replace the applied-skin-per-weapon-type loadout (attach/detach). */
+export async function setAccountWeaponSkinLoadout(
+  accountId: number,
+  loadout: Record<string, string>,
+): Promise<AccountCosmetics> {
+  const cosmetics = await loadAccountCosmetics(accountId);
+  return saveAccountCosmetics(accountId, { ...cosmetics, weaponSkinLoadout: loadout });
 }
 
 function cleanMetadataText(value: string | null | undefined, max: number): string | null {

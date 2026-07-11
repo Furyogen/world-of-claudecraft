@@ -410,6 +410,8 @@ describe('delta snapshots', () => {
       accountCosmetics: {
         completedQuestIds: ['q_aldrics_fallen_star'],
         mechChromaIds: ['amber_crimson'],
+        weaponSkinIds: [],
+        weaponSkinLoadout: {},
       },
     });
     if ('error' in joined) throw new Error(joined.error);
@@ -420,6 +422,8 @@ describe('delta snapshots', () => {
     expect(snap.self.cosmetics).toEqual({
       completedQuestIds: ['q_aldrics_fallen_star'],
       mechChromaIds: ['amber_crimson'],
+      weaponSkinIds: [],
+      weaponSkinLoadout: {},
     });
 
     const client = bareClient(session.pid);
@@ -427,6 +431,8 @@ describe('delta snapshots', () => {
     expect(client.accountCosmetics).toEqual({
       completedQuestIds: ['q_aldrics_fallen_star'],
       mechChromaIds: ['amber_crimson'],
+      weaponSkinIds: [],
+      weaponSkinLoadout: {},
     });
   });
 
@@ -2155,6 +2161,8 @@ function dirtyEveryDeltaField(): {
   leader.accountCosmetics = {
     completedQuestIds: ['q_aldrics_fallen_star'],
     mechChromaIds: ['amber_crimson'],
+    weaponSkinIds: [],
+    weaponSkinLoadout: {},
   };
 
   // Player Entity fields.
@@ -2232,6 +2240,8 @@ describe('full self-state snapshot delta fixture', () => {
     expect(client.accountCosmetics).toEqual({
       completedQuestIds: ['q_aldrics_fallen_star'],
       mechChromaIds: ['amber_crimson'],
+      weaponSkinIds: [],
+      weaponSkinLoadout: {},
     });
     expect([...client.questLog.values()]).toEqual([
       { questId: 'q_widows', counts: [10, 0], state: 'active' },

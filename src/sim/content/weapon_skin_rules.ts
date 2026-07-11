@@ -1,0 +1,170 @@
+// Weapon-type classification for every equippable weapon item, plus the rule for
+// which Season 1 Armory skin types a player may apply. A skin only attaches while
+// a weapon of its type is equipped; the server enforces this, the offline Sim
+// mirrors it, and the store UI reads it to enable or disable the Apply button.
+//
+// Every kind:'weapon' item in the merged ITEMS table must classify here (guarded
+// by tests/weapon_skins.test.ts). Heroic variants reuse their base row via the
+// heroic_ prefix strip. 'polearm' exists so spears and scythes classify honestly;
+// no skins target it.
+
+import type { WeaponSkinLoadout, WeaponSkinType } from '../types';
+import { WEAPON_SKINS } from './weapon_skins';
+
+export type ItemWeaponType = WeaponSkinType | 'polearm';
+
+export const WEAPON_TYPE_BY_ITEM: Record<string, ItemWeaponType> = {
+  // Swords
+  worn_sword: 'sword',
+  redbrook_blade: 'sword',
+  valeborn_spellblade: 'sword',
+  eastbrook_arming_sword: 'sword',
+  gravecaller_blade: 'sword',
+  verlans_oathblade: 'sword',
+  maldrecs_soulbinder: 'sword',
+  crossroads_saber: 'sword',
+  mistcallers_edge: 'sword',
+  zealotsbane_blade: 'sword',
+  emberfang_warblade: 'sword',
+  wyrmfang_greatblade: 'sword',
+  kingsbane_last_oath: 'sword',
+  highwatch_warblade: 'sword',
+  moonscale_saber: 'sword',
+  deathless_greatblade: 'sword',
+  // Daggers
+  rusty_dagger: 'dagger',
+  keen_dirk: 'dagger',
+  moggers_shiv: 'dagger',
+  vale_carving_knife: 'dagger',
+  widowfang_dirk: 'dagger',
+  gravewardens_shiv: 'dagger',
+  caravan_warden_dirk: 'dagger',
+  mistbinder_kris: 'dagger',
+  mirejaw_biteblade: 'dagger',
+  sloomtooth_tidefang: 'dagger',
+  nhalias_dirgeblade: 'dagger',
+  riptide_dirk: 'dagger',
+  mirefen_skinner: 'dagger',
+  cultist_flayer: 'dagger',
+  ironvein_pickblade: 'dagger',
+  skullsplitter_dirk: 'dagger',
+  gutripper_shiv: 'dagger',
+  fang_of_korzul: 'dagger',
+  icevein_dirk: 'dagger',
+  tideglass_dirk: 'dagger',
+  drownedmoon_kris: 'dagger',
+  mirejaw_fang_knife: 'dagger',
+  drowned_choir_fang: 'dagger',
+  mistcallers_fang: 'dagger',
+  // Maces
+  training_mace: 'mace',
+  bristleback_maul: 'mace',
+  moggers_copper_cudgel: 'mace',
+  bronzework_mace: 'mace',
+  voss_sanctified_mace: 'mace',
+  bogiron_mace: 'mace',
+  brutoks_maul: 'mace',
+  crag_warden_cudgel: 'mace',
+  drownedmoon_maul: 'mace',
+  nhalias_bell_maul: 'mace',
+  // Axes
+  rusty_hatchet: 'axe',
+  gorraks_cruel_chopper: 'axe',
+  tunnelkings_spade: 'axe',
+  gorraks_cleaver: 'axe',
+  tradesman_hatchet: 'axe',
+  deacons_cleaver: 'axe',
+  drogmars_skullcleaver: 'axe',
+  gravewyrm_cleaver: 'axe',
+  // Staves
+  gnarled_staff: 'staff',
+  apprentice_staff: 'staff',
+  hickory_shortstaff: 'staff',
+  gravecaller_staff: 'staff',
+  hollow_vigil_staff: 'staff',
+  drovers_staff: 'staff',
+  staff_of_drowned_prayers: 'staff',
+  mirejaw_oracle_staff: 'staff',
+  vaels_mist_staff: 'staff',
+  fenreed_staff: 'staff',
+  emberwood_staff: 'staff',
+  ironvein_lantern_staff: 'staff',
+  ogre_bonecharm_staff: 'staff',
+  staff_of_velkhar: 'staff',
+  staff_of_the_gravewyrm: 'staff',
+  deathless_heartwood: 'staff',
+  craghorn_staff: 'staff',
+  lunar_tide_greatstaff: 'staff',
+  // Wands
+  drowned_tide_scepter: 'wand',
+  palecoil_rod: 'wand',
+  drownedmoon_scepter: 'wand',
+  corpse_candle_focus: 'wand',
+  nhalias_litany_rod: 'wand',
+  scepter_of_the_deathless_court: 'wand',
+  stormcallers_focus: 'wand',
+  // Polearms (no skins target these)
+  tidereaver_gaff: 'polearm',
+  fen_reaver_glaive: 'polearm',
+};
+
+/**
+ * Weapon type for an item id; heroic variants (heroic_<base>) resolve through
+ * their base row. Null for non-weapons and unclassified ids.
+ */
+export function weaponTypeForItem(itemId: string | null | undefined): ItemWeaponType | null {
+  if (!itemId) return null;
+  const direct = WEAPON_TYPE_BY_ITEM[itemId];
+  if (direct) return direct;
+  if (itemId.startsWith('heroic_')) {
+    return WEAPON_TYPE_BY_ITEM[itemId.slice('heroic_'.length)] ?? null;
+  }
+  return null;
+}
+
+/**
+ * Skin types the player may apply right now. Requires an equipped mainhand
+ * weapon. Hunters always display the class ranged weapon regardless of the
+ * equipped item, so they may apply bow and crossbow skins; every other class
+ * displays the equipped item, so the skin must match that item's type.
+ */
+export function skinnableWeaponTypesFor(
+  cls: string,
+  mainhandItemId: string | null | undefined,
+): WeaponSkinType[] {
+  if (!mainhandItemId) return [];
+  // Crossbow first: it is the hunter's native visual, so with both types in the
+  // loadout the crossbow skin wins resolution deterministically.
+  if (cls === 'hunter') return ['crossbow', 'bow'];
+  const t = weaponTypeForItem(mainhandItemId);
+  if (!t || t === 'polearm') return [];
+  return [t];
+}
+
+/**
+ * The skin the player's held weapon should show right now: the first loadout
+ * entry whose weapon type is applicable to the equipped mainhand (and whose
+ * skin still targets that type), or null. Pure; both hosts and the renderer
+ * preview rely on this exact resolution.
+ */
+export function resolveActiveWeaponSkin(
+  cls: string,
+  mainhandItemId: string | null | undefined,
+  loadout: WeaponSkinLoadout | null | undefined,
+): string | null {
+  if (!loadout) return null;
+  for (const t of skinnableWeaponTypesFor(cls, mainhandItemId)) {
+    const skinId = loadout[t];
+    if (skinId && WEAPON_SKINS[skinId]?.weaponType === t) return skinId;
+  }
+  return null;
+}
+
+/** True when `skinType` may be applied with the given class and mainhand item. */
+export function weaponSkinTypeMatches(
+  cls: string,
+  mainhandItemId: string | null | undefined,
+  skinType: WeaponSkinType,
+): boolean {
+  return skinnableWeaponTypesFor(cls, mainhandItemId).includes(skinType);
+}

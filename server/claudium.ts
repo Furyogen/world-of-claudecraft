@@ -14,6 +14,7 @@
 // until the legacy ladder is removed.
 
 import type * as http from 'node:http';
+import { WEAPON_SKINS } from '../src/sim/content/weapon_skins';
 import {
   type ClaudiumNativeRail,
   type ClaudiumRail,
@@ -33,7 +34,7 @@ import {
   claudiumStore,
   claudiumStripeWebhook,
 } from './claudium_proxy';
-import { accountAndScopeForToken, moderationStatusForAccount } from './db';
+import { accountAndScopeForToken, grantAccountWeaponSkins, moderationStatusForAccount } from './db';
 import { ctxAccountId } from './http/context';
 import { type BearerActiveGuardDb, createActiveGuard } from './http/middleware/bearer_active_guard';
 import type { Ctx, RouteDef } from './http/types';
@@ -82,6 +83,33 @@ function parseSpendKind(value: unknown): 'cosmetic' | 'skin' | 'item' | null {
 /** Whether the economy service env is configured (does not confirm reachability). */
 export function claudiumConfigured(): boolean {
   return claudiumServiceConfigured();
+}
+
+// Live-game hooks, injected from server/main.ts exactly like configureDiscordRuntime
+// so `export const routes` stays a static array. The economy service is the
+// ownership source of truth for Claudium purchases; these hooks mirror weapon-skin
+// grants into accounts.cosmetics so the in-game equip gate and the identity wire
+// see them immediately (and the self-snapshot pushes to any live session).
+interface ClaudiumGameHooks {
+  grantWeaponSkins(accountId: number, skinIds: string[]): void;
+}
+let claudiumRuntime: ClaudiumGameHooks | null = null;
+
+export function configureClaudiumRuntime(rt: ClaudiumGameHooks): void {
+  claudiumRuntime = rt;
+}
+
+function noteWeaponSkinGrants(accountId: number, skinIds: string[]): void {
+  const known = skinIds.filter((id) => WEAPON_SKINS[id]);
+  if (known.length === 0) return;
+  if (claudiumRuntime) {
+    claudiumRuntime.grantWeaponSkins(accountId, known);
+    return;
+  }
+  // No live game wired (tests/tools): persist directly so ownership still lands.
+  void grantAccountWeaponSkins(accountId, known).catch((err) =>
+    console.error('failed to persist weapon skin grant:', err),
+  );
 }
 
 export async function handleClaudiumStripeWebhook(
@@ -148,7 +176,14 @@ export async function handleClaudiumApi(
     return json(res, 200, await claudiumSolBalance(decodeURIComponent(solBalanceMatch[1])));
   }
   if (req.method === 'GET' && path === '/api/claudium/store') {
-    return json(res, 200, await claudiumStore(account));
+    const store = await claudiumStore(account);
+    // Reconcile: the service's grant ledger is authoritative for purchases, so
+    // mirror any owned weapon skins the game DB does not know about yet.
+    noteWeaponSkinGrants(
+      accountId,
+      store.items.filter((i) => i.kind === 'skin' && i.owned).map((i) => i.itemId),
+    );
+    return json(res, 200, store);
   }
   if (req.method === 'GET' && path === '/api/claudium/history') {
     return json(res, 200, await claudiumHistory(account));
@@ -229,11 +264,13 @@ export async function handleClaudiumApi(
         reason: 'invalid_request',
       });
     }
-    return json(
-      res,
-      200,
-      await claudiumSpend({ accountId: account, itemId, kind, idempotencyKey }),
-    );
+    const result = await claudiumSpend({ accountId: account, itemId, kind, idempotencyKey });
+    // A granted (or replayed already-granted) weapon-skin spend also unlocks the
+    // skin account-wide in the game DB and on every live session.
+    if (kind === 'skin' && (result.granted || result.reason === 'already_granted')) {
+      noteWeaponSkinGrants(accountId, [itemId]);
+    }
+    return json(res, 200, result);
   }
   // An in-family unknown subpath / method (the account is already resolved).
   return json(res, 404, { error: 'unknown endpoint' });
