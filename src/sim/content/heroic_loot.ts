@@ -466,7 +466,6 @@ export const HEROIC_ITEMS: Record<string, ItemDef> = {
   },
   deathless_warguard_legmail: {
     id: 'deathless_warguard_legmail',
-    set: 'crownforged',
     name: 'Deathless Warguard Legmail',
     kind: 'armor',
     armorType: 'mail',
@@ -480,7 +479,6 @@ export const HEROIC_ITEMS: Record<string, ItemDef> = {
   },
   soulrend_diadem: {
     id: 'soulrend_diadem',
-    set: 'soulflame',
     name: 'Soulrend Diadem',
     kind: 'armor',
     armorType: 'cloth',
@@ -494,7 +492,6 @@ export const HEROIC_ITEMS: Record<string, ItemDef> = {
   },
   scourgehide_carapace: {
     id: 'scourgehide_carapace',
-    set: 'nighttalon',
     name: 'Scourgehide Carapace',
     kind: 'armor',
     armorType: 'leather',
@@ -521,7 +518,6 @@ export const HEROIC_ITEMS: Record<string, ItemDef> = {
   },
   soulforged_warplate: {
     id: 'soulforged_warplate',
-    set: 'stormcallers',
     name: 'Soulforged Warplate',
     kind: 'armor',
     armorType: 'mail',
@@ -654,26 +650,26 @@ export const HEROIC_BOSS_LOOT: Record<string, LootEntry[]> = {
   // Low-chance heroic legendary variants replace epics inside the weapon group,
   // keeping the total at five drops.
   nythraxis_scourge_of_thornpeak: [
+    // Each armor group drops one of the set's two raid-tier heroic pieces (helm /
+    // shoulder); the third slots come from the normal set sources. Weapons and
+    // legendaries are the heroic-only extras (last group).
     // Strength mail.
-    { itemId: 'crownforged_dreadhelm_heroic', chance: 0.34, rollGroup: 'nythraxis_heroic_1' },
+    { itemId: 'crownforged_dreadhelm_heroic', chance: 0.5, rollGroup: 'nythraxis_heroic_1' },
     {
       itemId: 'crownforged_warspaulders_heroic',
-      chance: 0.33,
+      chance: 0.5,
       rollGroup: 'nythraxis_heroic_1',
     },
-    { itemId: 'deathless_warguard_legmail', chance: 0.33, rollGroup: 'nythraxis_heroic_1' },
     // Agility leather.
-    { itemId: 'nighttalon_crown_heroic', chance: 0.34, rollGroup: 'nythraxis_heroic_2' },
+    { itemId: 'nighttalon_crown_heroic', chance: 0.5, rollGroup: 'nythraxis_heroic_2' },
     {
       itemId: 'nighttalon_shoulderguards_heroic',
-      chance: 0.33,
+      chance: 0.5,
       rollGroup: 'nythraxis_heroic_2',
     },
-    { itemId: 'scourgehide_carapace', chance: 0.33, rollGroup: 'nythraxis_heroic_2' },
     // Caster cloth.
-    { itemId: 'soulflame_cowl_heroic', chance: 0.34, rollGroup: 'nythraxis_heroic_3' },
-    { itemId: 'soulflame_mantle_heroic', chance: 0.33, rollGroup: 'nythraxis_heroic_3' },
-    { itemId: 'soulrend_diadem', chance: 0.33, rollGroup: 'nythraxis_heroic_3' },
+    { itemId: 'soulflame_cowl_heroic', chance: 0.5, rollGroup: 'nythraxis_heroic_3' },
+    { itemId: 'soulflame_mantle_heroic', chance: 0.5, rollGroup: 'nythraxis_heroic_3' },
     // Healing mail.
     { itemId: 'stormcallers_crown_heroic', chance: 0.5, rollGroup: 'nythraxis_heroic_4' },
     {

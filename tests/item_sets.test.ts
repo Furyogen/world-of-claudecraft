@@ -145,10 +145,10 @@ describe('item set tooltip model', () => {
     // auto-generated heroic variant, and any bespoke heroic raid piece for the
     // same slot all collapse to one member, so the "X/N" denominator reflects the
     // real number of collectible pieces (not the parallel heroic-variant ids).
-    expect(counts.crownforged).toBe(5);
-    expect(counts.nighttalon).toBe(5);
+    expect(counts.crownforged).toBe(4);
+    expect(counts.nighttalon).toBe(4);
     expect(counts.soulflame).toBe(4);
-    expect(counts.stormcallers).toBe(5);
+    expect(counts.stormcallers).toBe(4);
     // Leveling haste kits: 3 pieces each.
     expect(counts.vale_arcanist).toBe(3);
     expect(counts.boundstone_vanguard).toBe(3);
