@@ -154,6 +154,12 @@ export const ko_KR: EnTranslations = {
     "spectate": {
       "banner": "{name} 관전 중"
     },
+    "readyCheck": {
+      "prompt": "{name} 님이 준비 확인을 시작했습니다. 준비되셨습니까?",
+      "ready": "준비 완료",
+      "notReady": "준비 안 됨",
+      "result": "준비 확인: {ready}명 준비 완료, {notReady}명 준비 안 됨, {noResponse}명 무응답."
+    },
     "death": {
       "resurrectAtCorpse": "시신에서 부활",
       "resurrectAtHealer": "영혼 치유사 (부활의 후유증)",
@@ -397,7 +403,13 @@ export const ko_KR: EnTranslations = {
       "targetFriendlyNext": "아군 대상 순환",
       "discord": "Discord",
       "valecup": "베일 컵",
-      "sheathe": "무기 넣기/빼기"
+      "sheathe": "무기 넣기/빼기",
+      "categoryPet": "펫",
+      "petAttack": "펫: 공격",
+      "petStop": "펫: 정지",
+      "petTaunt": "펫: 도발",
+      "petDefensive": "펫: 방어",
+      "petAggressive": "펫: 공격적"
     },
     "vcup": {
       "title": "베일 컵",

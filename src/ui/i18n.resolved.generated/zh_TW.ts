@@ -154,6 +154,12 @@ export const zh_TW: EnTranslations = {
     "spectate": {
       "banner": "正在觀察 {name}"
     },
+    "readyCheck": {
+      "prompt": "{name} 發起了準備確認。你準備好了嗎？",
+      "ready": "準備就緒",
+      "notReady": "未準備",
+      "result": "準備確認：{ready} 人就緒，{notReady} 人未準備，{noResponse} 人未回應。"
+    },
     "death": {
       "resurrectAtCorpse": "在屍體旁復活",
       "resurrectAtHealer": "靈魂醫者（復活虛弱）",
@@ -397,7 +403,13 @@ export const zh_TW: EnTranslations = {
       "targetFriendlyNext": "切換友方目標",
       "discord": "Discord",
       "valecup": "溪谷盃",
-      "sheathe": "收起/拔出武器"
+      "sheathe": "收起/拔出武器",
+      "categoryPet": "寵物",
+      "petAttack": "寵物：攻擊",
+      "petStop": "寵物：停止",
+      "petTaunt": "寵物：嘲諷",
+      "petDefensive": "寵物：防禦",
+      "petAggressive": "寵物：攻擊性"
     },
     "vcup": {
       "title": "溪谷盃",

@@ -154,6 +154,12 @@ export const ru_RU: EnTranslations = {
     "spectate": {
       "banner": "Наблюдение за {name}"
     },
+    "readyCheck": {
+      "prompt": "{name} начал проверку готовности. Вы готовы?",
+      "ready": "Готов",
+      "notReady": "Не готов",
+      "result": "Проверка готовности: {ready} готовы, {notReady} не готовы, {noResponse} без ответа."
+    },
     "death": {
       "resurrectAtCorpse": "Воскреснуть у тела",
       "resurrectAtHealer": "Целитель душ (болезнь воскрешения)",
@@ -397,7 +403,13 @@ export const ru_RU: EnTranslations = {
       "targetFriendlyNext": "Следующий союзник",
       "discord": "Discord",
       "valecup": "Кубок Долины",
-      "sheathe": "Убрать/обнажить оружие"
+      "sheathe": "Убрать/обнажить оружие",
+      "categoryPet": "Питомец",
+      "petAttack": "Питомец: атака",
+      "petStop": "Питомец: стоп",
+      "petTaunt": "Питомец: провокация",
+      "petDefensive": "Питомец: защита",
+      "petAggressive": "Питомец: агрессия"
     },
     "vcup": {
       "title": "Кубок Долины",

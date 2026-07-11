@@ -179,6 +179,7 @@ export const IWORLD_MEMBERS = [
   { name: 'markerFor', kind: 'method' }, // read-returning (3/6)
   { name: 'setMarker', kind: 'method' },
   { name: 'clearMarker', kind: 'method' },
+  { name: 'readyCheckRespond', kind: 'method' },
   { name: 'tradeRequest', kind: 'method' },
   { name: 'tradeAccept', kind: 'method' },
   { name: 'tradeSetOffer', kind: 'method' },
@@ -558,6 +559,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'questState',
       'questsDone',
       'raidLockouts',
+      'readyCheckRespond',
       'realm',
       'recipeList',
       'releaseSpirit',
@@ -785,6 +787,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'prestige',
       'questState',
       'raidLockouts',
+      'readyCheckRespond',
       'releaseSpirit',
       'renamePet',
       'reportTelemetry',
@@ -1049,6 +1052,7 @@ const FACET_PARTY = [
   'markerFor',
   'setMarker',
   'clearMarker',
+  'readyCheckRespond',
 ] as const satisfies readonly (keyof IWorldParty)[];
 type _ExhaustParty = AssertNever<Exclude<keyof IWorldParty, (typeof FACET_PARTY)[number]>>;
 

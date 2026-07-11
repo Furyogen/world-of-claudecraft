@@ -43,6 +43,9 @@ export interface InputCallbacks {
   onTab(): void;
   onTargetFriendly(): void;
   onCycleFriendly(): void;
+  // Pet-bar command (bound to Ctrl+1..5 by default): attack the current target,
+  // stop (passive stance), taunt, or set the defensive/aggressive stance.
+  onPet(action: 'attack' | 'stop' | 'taunt' | 'defensive' | 'aggressive'): void;
   onAbility(slot: number): void;
   // Action-bar slot key DOWN / UP, so a slot can HOLD to charge (the Vale Cup
   // shoot) and release to fire. A tap is a down immediately followed by an up.
@@ -729,6 +732,12 @@ export class Input {
     }
     const edge = combo ? this.keybinds.edgeActionForCombo(combo) : null;
     if (edge !== null) {
+      // A matched chord that carries a modifier (Ctrl/Alt/Cmd) shadows a browser
+      // accelerator, e.g. Ctrl+number tab switching. Cancel the default so the
+      // game keeps the keypress. Some accelerators are not cancelable (Chrome and
+      // Edge reserve Ctrl+1..8 outright), but this reclaims the ones that are
+      // (Firefox) and is a no-op where there is nothing to cancel.
+      if (e.ctrlKey || e.altKey || e.metaKey) e.preventDefault?.();
       if (edge.startsWith('slot')) {
         // Slot keys use DOWN/UP so a slot can hold to charge; the HUD decides
         // whether a slot charges (shoot) or fires immediately (tap = down+up).
@@ -781,6 +790,21 @@ export class Input {
         return;
       case 'targetFriendlyNext':
         this.cb.onCycleFriendly();
+        return;
+      case 'petAttack':
+        this.cb.onPet('attack');
+        return;
+      case 'petStop':
+        this.cb.onPet('stop');
+        return;
+      case 'petTaunt':
+        this.cb.onPet('taunt');
+        return;
+      case 'petDefensive':
+        this.cb.onPet('defensive');
+        return;
+      case 'petAggressive':
+        this.cb.onPet('aggressive');
         return;
       case 'interact':
         this.cb.onUiKey('interact');
