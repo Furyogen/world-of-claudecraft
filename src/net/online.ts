@@ -21,6 +21,8 @@ import {
   talentPointsAtLevel,
 } from '../sim/content/talents';
 import { resolveSportKit } from '../sim/content/vale_cup';
+import { resolveActiveWeaponSkin } from '../sim/content/weapon_skin_rules';
+import { WEAPON_SKINS } from '../sim/content/weapon_skins';
 import { ALL_RECIPES, abilitiesKnownAt, CLASSES, NPCS, resolveDelveShopOffers } from '../sim/data';
 import { deadTargetSelectable } from '../sim/dead_target';
 import { LEADERBOARD_PAGE_SIZE } from '../sim/leaderboard_page';
@@ -50,6 +52,7 @@ import {
   type SportRole,
   type VcBracket,
   type VcNationId,
+  type WeaponSkinType,
 } from '../sim/types';
 import {
   type AccountCosmetics,
@@ -116,11 +119,22 @@ function stringList(value: unknown): string[] {
     : [];
 }
 
+function stringRecord(value: unknown): Record<string, string> {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return {};
+  const out: Record<string, string> = {};
+  for (const [key, entry] of Object.entries(value as Record<string, unknown>)) {
+    if (typeof entry === 'string' && entry.length > 0) out[key] = entry;
+  }
+  return out;
+}
+
 function normalizeAccountCosmetics(value: unknown): AccountCosmetics {
   const src = value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
   return {
     completedQuestIds: stringList(src.completedQuestIds),
     mechChromaIds: stringList(src.mechChromaIds),
+    weaponSkinIds: stringList(src.weaponSkinIds),
+    weaponSkinLoadout: stringRecord(src.weaponSkinLoadout),
   };
 }
 
@@ -991,6 +1005,8 @@ function blankEntity(id: number): Entity {
     skinCatalog: 'class',
     skin: 0,
     mainhandItemId: null,
+    weaponSkinLoadout: {},
+    weaponSkinId: null,
     equippedItems: {},
     equippedInstances: {},
     guild: '',
@@ -1020,7 +1036,12 @@ export class ClientWorld implements IWorld {
   copper = 0;
   // --- IWorldCosmetics: account cosmetics (completed-quest + mech-chroma ids),
   // mirrored from snapshot self. ---
-  accountCosmetics: AccountCosmetics = { completedQuestIds: [], mechChromaIds: [] };
+  accountCosmetics: AccountCosmetics = {
+    completedQuestIds: [],
+    mechChromaIds: [],
+    weaponSkinIds: [],
+    weaponSkinLoadout: {},
+  };
   // --- IWorldProgressionXp: XP + post-cap progression scalars + unlocked
   // milestones, mirrored from snapshot self. ---
   xp = 0;
@@ -1622,6 +1643,7 @@ export class ClientWorld implements IWorld {
         e.level = w.lv;
         e.skin = w.sk ?? 0;
         e.mainhandItemId = w.mh ?? null; // equipped mainhand → held weapon model (render-only)
+        e.weaponSkinId = w.wsk ?? null; // active weapon-skin cosmetic (render-only)
         e.equippedItems = w.eq ?? {}; // full worn set (render-only), for the inspect window
         e.skinCatalog = w.cat === 'mech' ? 'mech' : 'class';
         e.holderTier = w.ht ?? 0; // $WOC holder-tier flair (cosmetic, server-set)
@@ -2269,6 +2291,26 @@ export class ClientWorld implements IWorld {
       this.cosmeticsChanged = true;
     }
     this.cmd({ cmd: 'unequip_mech_chroma', chroma: chromaId });
+  }
+  changeWeaponSkin(skinId: string | null, weaponType?: WeaponSkinType): void {
+    // Optimistic local nudge mirroring the server's resolution, so the held
+    // weapon swaps without a round trip; the identity wire reconciles.
+    const p = this.entities.get(this.playerId);
+    const def = skinId ? WEAPON_SKINS[skinId] : null;
+    if (skinId !== null && !def) return;
+    const type = def ? def.weaponType : weaponType;
+    if (p && type) {
+      const next = { ...p.weaponSkinLoadout };
+      if (def) next[def.weaponType] = def.id;
+      else delete next[type];
+      p.weaponSkinLoadout = next;
+      p.weaponSkinId = resolveActiveWeaponSkin(p.templateId, p.mainhandItemId, next);
+      const loadout: Record<string, string> = {};
+      for (const [t, id] of Object.entries(next)) if (id) loadout[t] = id;
+      this.accountCosmetics = { ...this.accountCosmetics, weaponSkinLoadout: loadout };
+      this.cosmeticsChanged = true;
+    }
+    this.cmd({ cmd: 'change_weapon_skin', skin: skinId, wtype: type ?? null });
   }
   chat(text: string): void {
     this.cmd({ cmd: 'chat', text });
