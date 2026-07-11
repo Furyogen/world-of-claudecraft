@@ -506,7 +506,10 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
     // mandatory rather than optional.
     channelHeal: {
       radius: 45,
-      every: 3,
+      // 7.5s per cast (2.5x the old 3s): he was healing far too fast. Each instance
+      // of the channel now takes noticeably longer to land, giving the raid room to
+      // react and making the DPS check fairer.
+      every: 7.5,
       baseHeal: 400,
       rampAdd: 300,
       maxHeal: 1800,

@@ -36,9 +36,9 @@ const stun = (sourceId: number): Aura => ({
   school: 'physical',
 });
 
-// Advance until the channel's next heal lands (every=3s = 60 ticks, plus float
+// Advance until the channel's next heal lands (every=7.5s = 150 ticks, plus float
 // drift) and return the heal the boss received, or 0 if none fired (interrupted).
-function tickOneChannel(sim: Sim, malric: Entity, boss: Entity, maxTicks = 70): number {
+function tickOneChannel(sim: Sim, malric: Entity, boss: Entity, maxTicks = 160): number {
   const before = boss.hp;
   for (let i = 0; i < maxTicks; i++) {
     inner(sim).updateBossMechanics(malric);
@@ -54,7 +54,7 @@ describe('heroic Nythraxis priest: escalating channeled heal', () => {
     expect(t.wardAllies).toBeUndefined();
     expect(t.channelHeal).toEqual({
       radius: 45,
-      every: 3,
+      every: 7.5,
       baseHeal: 400,
       rampAdd: 300,
       maxHeal: 1800,
