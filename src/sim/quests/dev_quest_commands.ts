@@ -104,11 +104,13 @@ export function completeAllQuestsForDev(ctx: SimContext, pid?: number): number {
       added++;
     }
   }
-  meta.questLog.clear();
+  // Do NOT clear the quest log: it is persisted CharacterState, and wiping every
+  // in-progress quest is a destructive, irreversible edit to the character. Stamping
+  // questsDone is enough to open every requiresQuest / attunement gate.
   if (added > 0) meta.wireRev++;
   ctx.emit({
     type: 'log',
-    text: `[dev] Attuned: marked ${added} quests complete.`,
+    text: `[dev] Attuned: marked ${added} quests complete (in-progress quests untouched).`,
     pid: meta.entityId,
   });
   return added;

@@ -101,7 +101,7 @@ export function dealDamage(
   direct = true,
 ): void {
   if (target.dead) return;
-  if (target.gm) return; // GM characters are invulnerable — every damage path funnels here
+  if (target.gm || target.devGod) return; // GMs and /dev god are invulnerable (every damage path funnels here)
   // A wild mob that broke leash is in 'evade': it has dropped its hate table
   // and walks home without fighting back, healing to full only on arrival.
   // Classic mechanics make it immune while it retreats, so it can't be chipped
@@ -113,7 +113,8 @@ export function dealDamage(
   // through raid bosses to inspect drops without one-shotting them past their phase
   // transitions. Gated on devCommands so it can NEVER apply in production (where gm
   // marks real, non-fighting game masters). Draws no rng.
-  if (source?.gm && source.kind === 'player' && ctx.devCommands) amount = Math.round(amount * 100);
+  if (source?.devGod && source.kind === 'player' && ctx.devCommands)
+    amount = Math.round(amount * 100);
 
   // Master Armorer (Arms mastery): extra physical damage you deal WHILE wielding a
   // two-handed weapon. The magnitude lives on the mastery's talent effect

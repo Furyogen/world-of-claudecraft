@@ -338,7 +338,7 @@ export const V07_SLASH = [
   '[dev] Could not spawn the test vendor.',
   '[dev] God mode ON.',
   '[dev] God mode OFF.',
-  '[dev] Attuned: marked 5 quests complete.',
+  '[dev] Attuned: marked 5 quests complete (in-progress quests untouched).',
   '[dev] Raid lockouts cleared.',
   '[dev] Entering Nythraxis raid (Aki).',
 ];

@@ -1,3 +1,4 @@
+import { isLockedOut, isSilenced } from '../combat/cc';
 import { DUNGEON_X_THRESHOLD, MOBS } from '../data';
 import { combatProfileForMob, effectiveMobMeleeRange, type MobCombatProfile } from '../mob_combat';
 import type { SimContext } from '../sim_context';
@@ -10,6 +11,7 @@ import {
   LEASH_DISTANCE,
   steadyAngleTo,
 } from '../types';
+import { NYTHRAXIS_SPIRIT_MENDING_CAST_ID } from './healer_channel';
 import { retargetMob, updateMobTarget } from './targeting';
 
 export type MobCombatProfileResult = 'done' | 'runAttackMechanics';
@@ -99,26 +101,44 @@ export function updateMobCombatProfile(
 function updateHealerHold(ctx: SimContext, mob: Entity): MobCombatProfileResult | null {
   const heal = MOBS[mob.templateId]?.channelHeal;
   if (!heal) return null;
-  let protectee: Entity | null = null;
-  for (const ally of ctx.entities.values()) {
-    if (ally.kind !== 'mob' || ally.dead || ally.ownerId !== null) continue;
-    if (ally.hostile !== mob.hostile || ally.id === mob.id) continue;
-    if (dist2d(ally.pos, mob.pos) > heal.radius) continue;
-    if (!protectee || ally.maxHp > protectee.maxHp) protectee = ally;
+  // Cached protectee: only walk the whole entity map when the cached one is gone,
+  // dead, or out of range (mirrors the timer-gated mendAlly/wardAllies scans rather
+  // than scanning every tick while engaged).
+  let protectee =
+    mob.healProtecteeId != null ? (ctx.entities.get(mob.healProtecteeId) ?? null) : null;
+  if (!protectee || protectee.dead || dist2d(protectee.pos, mob.pos) > heal.radius) {
+    protectee = null;
+    for (const ally of ctx.entities.values()) {
+      if (ally.kind !== 'mob' || ally.dead || ally.ownerId !== null) continue;
+      if (ally.hostile !== mob.hostile || ally.id === mob.id) continue;
+      if (dist2d(ally.pos, mob.pos) > heal.radius) continue;
+      if (!protectee || ally.maxHp > protectee.maxHp) protectee = ally;
+    }
+    mob.healProtecteeId = protectee?.id ?? null;
   }
   if (!protectee) return null; // nobody to heal: fall back to melee AI
   mob.facing = Math.atan2(protectee.pos.x - mob.pos.x, protectee.pos.z - mob.pos.z);
+  const clearBar = () => {
+    mob.castingAbility = null;
+    mob.castTotal = 0;
+    mob.castRemaining = 0;
+    mob.channeling = false;
+  };
   const HEALER_STANDOFF = 6;
   if (dist2d(mob.pos, protectee.pos) > HEALER_STANDOFF) {
     ctx.moveToward(mob, protectee.pos, mob.moveSpeed * ctx.moveSpeedMult(mob));
     mob.aiState = 'chase';
-    mob.castingAbility = null;
-    mob.channeling = false;
-  } else {
-    // In position: stand still and channel (a visible cast bar counting down to the
-    // next heal tick, driven by the channelTimer in updateBossMechanics).
+    clearBar();
+  } else if (isSilenced(mob) || isLockedOut(mob, heal.school ?? 'shadow')) {
+    // Interrupted (silenced or school-locked): stand idle with no cast bar. The
+    // channelHeal break in updateBossMechanics has already reset the ramp.
     mob.aiState = 'attack';
-    mob.castingAbility = 'nythraxis_spirit_mending';
+    clearBar();
+  } else {
+    // In position and free: stand still and channel a visible cast bar counting
+    // down to the next heal tick (driven by channelTimer in updateBossMechanics).
+    mob.aiState = 'attack';
+    mob.castingAbility = NYTHRAXIS_SPIRIT_MENDING_CAST_ID;
     mob.castTotal = heal.every;
     mob.castRemaining = Math.max(0, mob.channelTimer);
     mob.channeling = true;

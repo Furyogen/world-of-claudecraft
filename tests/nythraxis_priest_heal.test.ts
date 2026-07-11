@@ -146,4 +146,74 @@ describe('heroic Nythraxis priest: escalating channeled heal', () => {
     expect(malric.pos.x).toBeLessThan(8); // did NOT chase the player at x=12
     expect(malric.castingAbility).toBe('nythraxis_spirit_mending'); // standing and casting
   });
+
+  it('a real interrupt (Pummel) locks out the channel and resets the ramp', () => {
+    const sim = new Sim({ seed: SEED, playerClass: 'warrior', autoEquip: true });
+    sim.setPlayerLevel(20);
+    const p = sim.player;
+    const boss = spawn(sim, 8300, 'forest_wolf');
+    boss.hostile = true;
+    boss.maxHp = 5000;
+    boss.hp = 2500;
+    boss.moveSpeed = 0;
+    boss.pos = { x: 0, y: 0, z: 0 };
+    boss.prevPos = { ...boss.pos };
+    const malric = spawn(sim, 8301, 'nythraxis_heroic_priest_add');
+    malric.hostile = true;
+    malric.pos = { x: 3, y: 0, z: 0 };
+    malric.prevPos = { ...malric.pos };
+    // Malric mid-channel with a built ramp and a rendered cast bar.
+    malric.castingAbility = 'nythraxis_spirit_mending';
+    malric.channelRamp = 240;
+    // Player next to Malric casts the baseline warrior interrupt at him.
+    p.pos = { x: 4, y: 0, z: 0 };
+    p.prevPos = { ...p.pos };
+    p.resource = p.maxResource;
+    sim.targetEntity(malric.id);
+    p.facing = Math.atan2(malric.pos.x - p.pos.x, malric.pos.z - p.pos.z);
+    sim.castAbility('pummel');
+    sim.tick();
+    // The scripted channel took a real shadow lockout, and the heal broke.
+    expect(malric.auras.some((a) => a.kind === 'lockout' && a.school === 'shadow')).toBe(true);
+    inner(sim).updateBossMechanics(malric);
+    expect(malric.channelRamp).toBe(0);
+    // The bar is cleared, not left frozen.
+    expect(malric.castingAbility).not.toBe('nythraxis_spirit_mending');
+  });
+
+  it('a silence breaks the channel and resets the ramp', () => {
+    const sim = new Sim({ seed: SEED, playerClass: 'warrior', noPlayer: true });
+    const boss = spawn(sim, 8401, 'nythraxis_scourge_of_thornpeak', 1000);
+    const malric = spawn(sim, 8402, 'nythraxis_heroic_priest_add');
+    boss.pos = { x: 4, y: 0, z: 0 };
+    tickOneChannel(sim, malric, boss); // 320
+    expect(tickOneChannel(sim, malric, boss)).toBe(560); // ramp built
+    malric.auras.push({
+      id: 'test_silence',
+      name: 'Test Silence',
+      kind: 'silence',
+      remaining: 10,
+      duration: 10,
+      value: 0,
+      sourceId: 0,
+      school: 'shadow',
+    });
+    expect(tickOneChannel(sim, malric, boss)).toBe(0); // silenced: no heal
+    expect(malric.channelRamp).toBe(0);
+  });
+
+  it('the ramp caps at maxHeal and the heroic heal multiplier applies', () => {
+    const sim = new Sim({ seed: SEED, playerClass: 'warrior', noPlayer: true });
+    const boss = spawn(sim, 8501, 'nythraxis_scourge_of_thornpeak', 1); // huge pool, deeply wounded
+    boss.maxHp = 1_000_000;
+    const malric = spawn(sim, 8502, 'nythraxis_heroic_priest_add');
+    malric.mechanicHealMult = 1.6; // the heroic-instance multiplier the balance rests on
+    boss.pos = { x: 4, y: 0, z: 0 };
+    // First tick reflects the 1.6x multiplier (a heal crit only adds on top).
+    const first = tickOneChannel(sim, malric, boss);
+    expect(first).toBeGreaterThanOrEqual(Math.round(320 * 1.6)); // baseHeal x mult
+    // The ramp is capped so base+ramp never exceeds maxHeal (1440): cap = 1440 - 320.
+    for (let i = 0; i < 12; i++) tickOneChannel(sim, malric, boss);
+    expect(malric.channelRamp).toBe(1440 - 320);
+  });
 });

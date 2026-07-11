@@ -40,7 +40,7 @@ import {
   spendResource as spendResourceImpl,
   updateCasting as updateCastingImpl,
 } from './combat/casting_lifecycle';
-import { isRooted, isSilenced, isStunned } from './combat/cc';
+import { isLockedOut, isRooted, isSilenced, isStunned } from './combat/cc';
 import {
   dealDamage as dealDamageImpl,
   grantXp as grantXpImpl,
@@ -191,6 +191,7 @@ import {
   mobEffectiveMeleeRange as mobEffectiveMeleeRangeFn,
   tryMobMeleeSwingInRange as tryMobMeleeSwingInRangeFn,
 } from './mob/combat_profile';
+import { NYTHRAXIS_SPIRIT_MENDING_CAST_ID } from './mob/healer_channel';
 import * as lifecycle from './mob/lifecycle';
 import { resetEvadingMob as resetEvadingMobFn, updateMob as updateMobFn } from './mob/locomotion';
 import { runMobSwingAffixes } from './mob/mob_swing';
@@ -5156,8 +5157,20 @@ export class Sim {
     // more and more. The caster is CC-able by design (ccImmune: false).
     if (tmpl.channelHeal) {
       const ch = tmpl.channelHeal;
-      const interrupted = this.ctx.isStunned(mob) || isSilenced(mob);
+      // Stun, a true silence, OR a school lockout (a real interrupt: Kick / Pummel /
+      // Counterspell lands a lockout of the channel's school) all break the channel
+      // and reset the ramp. This is what makes the interruptible cast bar honest.
+      const interrupted =
+        this.ctx.isStunned(mob) || isSilenced(mob) || isLockedOut(mob, ch.school ?? 'shadow');
       if (interrupted) {
+        // Clear the (scripted) channel bar so a stunned/interrupted healer is not
+        // left rendering a frozen cast; updateHealerHold re-arms it once free.
+        if (mob.castingAbility === NYTHRAXIS_SPIRIT_MENDING_CAST_ID) {
+          mob.castingAbility = null;
+          mob.castTotal = 0;
+          mob.castRemaining = 0;
+          mob.channeling = false;
+        }
         if (mob.channelRamp > 0) {
           mob.channelRamp = 0;
           if (!tmpl.quietMechanics)

@@ -1009,17 +1009,18 @@ export function handleDevChat(
     return null;
   }
   if (/^\/(?:dev\s+god|devgod)\s*$/i.test(raw)) {
-    // [dev] Toggle god mode: invulnerable (target.gm in dealDamage) and 100x
-    // outgoing damage (dev-gated), so a solo tester can survive and down raid
-    // bosses to inspect their drops. Enabling also tops off health and resource.
+    // [dev] Toggle god mode: invulnerable (target.devGod in dealDamage) and 100x
+    // outgoing damage (dev-gated), so a solo tester can survive and down raid bosses
+    // to inspect their drops. Enabling also tops off health and resource. Uses its
+    // OWN devGod flag, never the production gm flag, so it can never touch a real GM.
     const e = ctx.entities.get(pid);
     if (e) {
-      e.gm = !e.gm;
-      if (e.gm) {
+      e.devGod = !e.devGod;
+      if (e.devGod) {
         e.hp = e.maxHp;
         e.resource = e.maxResource;
       }
-      ctx.emit({ type: 'log', text: `[dev] God mode ${e.gm ? 'ON' : 'OFF'}.`, pid });
+      ctx.emit({ type: 'log', text: `[dev] God mode ${e.devGod ? 'ON' : 'OFF'}.`, pid });
     }
     return null;
   }

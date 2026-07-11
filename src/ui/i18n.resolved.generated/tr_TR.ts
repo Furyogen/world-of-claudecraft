@@ -7434,15 +7434,6 @@ export const tr_TR: EnTranslations = {
       "scepter_of_the_deathless_court": {
         "name": "Ölümsüz Saray Asası"
       },
-      "deathless_warguard_legmail": {
-        "name": "Ölümsüz Savaşmuhafızı Bacak Zırhı"
-      },
-      "soulrend_diadem": {
-        "name": "Ruhyırtan Tacı"
-      },
-      "scourgehide_carapace": {
-        "name": "Afetpostu Kabuğu"
-      },
       "cryptplate_helm": {
         "name": "Mezarzırh Miğferi"
       },
@@ -7481,9 +7472,6 @@ export const tr_TR: EnTranslations = {
       },
       "deathless_greatblade": {
         "name": "Ölümsüz Pala"
-      },
-      "soulforged_warplate": {
-        "name": "Ruhdövümü Savaş Zırhı"
       },
       "stormcallers_focus": {
         "name": "Fırtınaçağıranın Odağı"

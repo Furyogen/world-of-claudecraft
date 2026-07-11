@@ -2294,6 +2294,7 @@ export interface Entity {
   wardTimer: number; // wardAllies support-shield cast countdown
   channelTimer: number; // channelHeal escalating-heal tick countdown
   channelRamp: number; // channelHeal accumulated bonus heal; reset to 0 on interrupt (CC)
+  healProtecteeId?: number | null; // channelHeal: cached protectee (the ally healed), re-scanned lazily
   rallyTimer: number; // rally commander-buff cast countdown
   warcryTimer: number; // warcry ally-haste pulse countdown
   firedSummons: number; // summonAdds thresholds already triggered
@@ -2326,6 +2327,9 @@ export interface Entity {
   /** GM character: invulnerable (dealDamage no-ops). Server-set from the
    *  characters.is_gm column; never user-settable. */
   gm?: boolean;
+  // [dev] /dev god cheat state, kept OFF the production gm flag so it never touches a
+  // real game master (who could otherwise deal 100x or have their invuln toggled).
+  devGod?: boolean;
   /** Moderation-jailed player: prisoners are mutually hostile (the jail brawl,
    *  see isHostileTo). Server-set via setJailed on jail/unjail and at join
    *  restore; never true offline, never user-settable. */
@@ -2455,10 +2459,6 @@ export interface NythraxisEncounterState {
   deathlessCastRemaining: number;
   deathlessStunRemaining: number;
   heroicSummonChannelRemaining?: number;
-  // Heroic only: the boss raises his court (Aldren/Malric/Voss) ASAP once engaged,
-  // not just off a wardstone-driven Deathless stun, so the adds reliably appear
-  // (and are testable without a full raid). This one-shot latch gates that.
-  heroicSummonStarted?: boolean;
   dreadCurseTimer?: number;
   dreadCurseTargetId?: number | null;
   dreadCurseStacks?: number;

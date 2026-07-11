@@ -41,7 +41,7 @@ describe('/dev god cheat', () => {
     const p = sim.player;
     p.hp = Math.round(p.maxHp * 0.3);
     sim.chat('/dev god', pid);
-    expect(p.gm).toBe(true);
+    expect(p.devGod).toBe(true);
     expect(p.hp).toBe(p.maxHp); // topped off on enable
     // Invulnerable: a hit that would kill leaves hp untouched.
     const mob = spawnMob(sim);
@@ -50,7 +50,7 @@ describe('/dev god cheat', () => {
     expect(p.hp).toBe(p.maxHp);
     // Toggle off.
     sim.chat('/dev god', pid);
-    expect(p.gm).toBe(false);
+    expect(p.devGod).toBe(false);
   });
 
   it('makes a god-mode player hit for 100x so a solo tester can down a raid boss', () => {
@@ -66,10 +66,10 @@ describe('/dev god cheat', () => {
   it('is gated: without dev commands, /dev god does nothing', () => {
     const { sim, pid } = godSim(false);
     sim.chat('/dev god', pid);
-    expect(sim.player.gm).toBeFalsy();
+    expect(sim.player.devGod).toBeFalsy();
     // And even if gm were somehow set, the 100x amp is dev-gated.
     const boss = spawnMob(sim, 60000);
-    sim.player.gm = true;
+    sim.player.devGod = true;
     const before = boss.hp;
     deal(sim, sim.player, boss, 100);
     expect(before - boss.hp).toBe(100); // no amp: plain 100
@@ -82,6 +82,22 @@ describe('/dev attune + /dev raid cheats', () => {
     sim.chat('/dev attune', pid);
     const meta = sim.players.get(pid)!;
     expect(meta.questsDone.has('q_nythraxis_bound_guardian')).toBe(true);
+  });
+
+  it('/dev attune does NOT wipe the in-progress quest log', () => {
+    const { sim, pid } = godSim();
+    const meta = sim.players.get(pid)!;
+    const hadQuests = meta.questLog.size;
+    sim.chat('/dev attune', pid);
+    // Stamps questsDone but leaves any in-progress quest tracker intact.
+    expect(meta.questLog.size).toBe(hadQuests);
+  });
+
+  it('is gated: without dev commands, /dev attune does nothing', () => {
+    const { sim, pid } = godSim(false);
+    const meta = sim.players.get(pid)!;
+    sim.chat('/dev attune', pid);
+    expect(meta.questsDone.has('q_nythraxis_bound_guardian')).toBe(false);
   });
 
   it('/dev raid heroic zones a lone player into the heroic Nythraxis arena', () => {

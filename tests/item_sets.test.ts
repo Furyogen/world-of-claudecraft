@@ -234,14 +234,14 @@ describe('recalcPlayerStats applies equipped set bonuses (real raid/dungeon gear
   it('normal and heroic Nythraxis armor pieces mix for set thresholds', () => {
     const base = statsFor('mage', 20, {});
     const mixed = statsFor('mage', 20, {
-      helmet: 'soulrend_diadem',
+      helmet: 'soulflame_cowl_heroic', // heroic helmet mixed with normal pieces
       shoulder: 'soulflame_mantle',
       gloves: 'soulflame_gloves',
       waist: 'soulflame_cord',
     });
     expect(mixed.knockbackResistance).toBe(1);
-    expect(mixed.stats.int).toBe(base.stats.int + 11 + 9 + 8 + 8 + 15);
-    expect(mixed.stats.spi).toBe(base.stats.spi + 9 + 5 + 15);
+    expect(mixed.stats.int).toBe(base.stats.int + 13 + 9 + 8 + 8 + 15);
+    expect(mixed.stats.spi).toBe(base.stats.spi + 5 + 15);
   });
 
   it("Necromancer's (t1 caster): knockback resistance at 2pc, int/sta added at 3pc", () => {
