@@ -4181,7 +4181,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
   rallying_cry: {
     id: 'rallying_cry',
     castFx: 'shout',
-    name: 'Rallying Cry',
+    name: 'Valor Roar',
     class: 'warrior',
     learnLevel: 18,
     cost: 0,
@@ -4194,7 +4194,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     // health), 40yd (the classic raid-buff reach).
     effects: [{ type: 'aoeAllyMaxHp', pct: 0.2, duration: 10, radius: 40 }],
     description:
-      'Lets loose a rallying cry, granting you and party members within 40 yards 20% additional maximum health for 10 sec. Protection: they also take 5% less damage for the duration.',
+      'Lets loose a valorous roar, granting you and party members within 40 yards 20% additional maximum health for 10 sec. Protection: they also take 5% less damage for the duration.',
   },
   // ------ Choice-row talents (warrior_rows.ts grants; numbers are the owner's
   // design draft, tune VALUE not SHAPE) ------

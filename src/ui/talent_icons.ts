@@ -28,6 +28,10 @@ export function talentEffectIconRef(
   effect: TalentEffect | undefined,
   kind: TalentNode['kind'] | 'choice',
 ): TalentIconRef {
+  const chargeMod = effect?.ability?.find((mod) => mod.ability === 'charge');
+  if (chargeMod?.bonusCharges) return { kind: 'ability', id: 'double_charge' };
+  if (chargeMod?.addEffects?.length) return { kind: 'ability', id: 'crushing_charge' };
+
   const abilityId = effect?.grant?.ability ?? effect?.ability?.[0]?.ability;
   if (abilityId && ABILITIES[abilityId]) return { kind: 'ability', id: abilityId };
 
@@ -40,6 +44,7 @@ export function talentEffectIconRef(
     return { kind: 'ability', id: 'anger_management' };
   }
   if (effect?.global?.battleRhythm) return { kind: 'ability', id: 'battle_rhythm' };
+  if (effect?.global?.stanceMastery) return { kind: 'ability', id: 'combat_mastery' };
 
   const stat = effect?.stats ? Object.keys(effect.stats)[0] : undefined;
   if (stat) return { kind: 'crest', id: TALENT_STAT_CREST[stat] ?? 'talent_generic' };

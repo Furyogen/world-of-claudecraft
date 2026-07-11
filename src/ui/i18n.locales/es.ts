@@ -3603,9 +3603,9 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.pummel.name': 'Zurrar',
   'entities.abilities.pummel.description':
     'Interrumpe el lanzamiento de hechizos e impide lanzar hechizos de esa escuela durante 4 s. (talento de guerrero)',
-  'entities.abilities.rallying_cry.name': 'Arenga',
+  'entities.abilities.rallying_cry.name': 'Rugido de Valor',
   'entities.abilities.rallying_cry.description':
-    'Lanza un grito de reunión y aumenta poder de ataque de cercanos aliados durante 10 s. (talento de guerrero)',
+    'Profieres un rugido de valor que os otorga a ti y a los miembros del grupo en un radio de 40 yardas un 20% de salud máxima adicional durante 10 s. Protección: además reciben un 5% menos de daño mientras dura.',
   'entities.abilities.rebuke.name': 'Reprensión',
   'entities.abilities.rebuke.description':
     'Interrumpe el lanzamiento de hechizos e impide lanzar hechizos de esa escuela durante 4 s. (talento de paladín)',

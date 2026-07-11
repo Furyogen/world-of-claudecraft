@@ -124,16 +124,15 @@ export const WARRIOR_ROWS: RowTree = [
         effect: { global: { autoRagePct: 0.25, abilityRagePct: 0.15 } },
       },
       {
-        // Balance pass 2026-07-10 (owner): the Blood Toll empower was a rage
-        // GENERATION talent, dead for Fury (which never learns Blood Toll and
-        // swims in rage anyway). Reworked into Hardened Blood: spending rage
-        // hardens you, useful for all three specs and adding zero damage. The
-        // row id stays so saved row picks survive the rework.
+        // Reworked twice (owner): Blood Toll empower (dead for Fury) -> Hardened
+        // Blood (rage spent = armor stacks) -> Combat Mastery (owner 2026-07-11):
+        // each stance gains an extra effect, so every spec reads its own line and
+        // stance-dancers get all three. The row id stays so saved picks survive.
         id: 'war_row_blood_offering',
-        name: 'Hardened Blood',
+        name: 'Combat Mastery',
         description:
-          'Every 10 rage you spend on an ability hardens your blood: +2% armor for 8 sec, stacking up to 5 times.',
-        effect: { global: { hardenedBloodPct: 2 } },
+          'Your stances gain additional effects. Battle Stance: your ability criticals deal 15% more damage. Berserker Stance: your auto-attacks are 5% faster. Guarded Stance: a hit that would take at least 20% of your maximum health deals 15% less damage.',
+        effect: { global: { stanceMastery: 1 } },
       },
       {
         id: 'war_row_battle_rhythm',

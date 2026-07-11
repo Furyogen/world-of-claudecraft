@@ -3443,6 +3443,9 @@ export const ABILITY_IMAGE_IDS = new Set<string>([
   'attack',
   'whirlwind',
   'berserker_rage',
+  'double_charge',
+  'crushing_charge',
+  'combat_mastery',
   // mage (CraftPix premium pyromancer/cryomancer/lightning-mage packs — fire/frost/arcane;
   // aeromancer unused, mage has no wind). conjure_food and polymorph have no fit (no
   // bread/food or sheep art) and stay procedural.
@@ -3535,6 +3538,9 @@ export function abilityImageUrl(id: string): string | null {
     id === 'lingering_dread' ||
     id === 'anger_management' ||
     id === 'battle_rhythm' ||
+    id === 'double_charge' ||
+    id === 'crushing_charge' ||
+    id === 'combat_mastery' ||
     id === 'attack'
       ? 'warrior'
       : null);

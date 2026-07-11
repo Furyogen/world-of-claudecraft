@@ -331,6 +331,24 @@
       "sourcePack": "generic-skill100",
       "sourceFile": "skill icon 37.png",
       "output": "taunt.webp"
+    },
+    {
+      "abilityId": "double_charge",
+      "sourcePack": "custom-user",
+      "sourceFile": "C:/Users/joseg/Desktop/Doble carga.png",
+      "output": "double_charge.webp"
+    },
+    {
+      "abilityId": "crushing_charge",
+      "sourcePack": "custom-user",
+      "sourceFile": "C:/Users/joseg/Desktop/el otro cargar.png",
+      "output": "crushing_charge.webp"
+    },
+    {
+      "abilityId": "combat_mastery",
+      "sourcePack": "custom-user",
+      "sourceFile": "C:/Users/joseg/Desktop/Nuevo talento.png",
+      "output": "combat_mastery.webp"
     }
   ],
   "deferredStayProcedural": {}

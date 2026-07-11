@@ -6241,8 +6241,8 @@ export const en: EnTranslations = {
         "description": "Interrupts spellcasting and prevents any spell in that school from being cast for 4 sec. (Warrior talent)"
       },
       "rallying_cry": {
-        "name": "Muster",
-        "description": "Lets loose a mustering cry, increasing nearby allies' attack power for 10 sec. (Warrior talent)"
+        "name": "Valor Roar",
+        "description": "Lets loose a valorous roar, granting you and party members within 40 yards 20% additional maximum health for 10 sec. Protection: they also take 5% less damage for the duration."
       },
       "rebuke": {
         "name": "Reproach",

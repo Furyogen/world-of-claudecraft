@@ -43,6 +43,7 @@ import {
   MELEE_ARC,
   MELEE_RANGE,
   normAngle,
+  STANCE_MASTERY_BERSERKER_HASTE,
   SUDDEN_DEATH_CHANCE,
   SUDDEN_DEATH_DURATION,
   swingMissChance,
@@ -236,7 +237,9 @@ export function updatePlayerAutoAttack(ctx: SimContext, p: Entity, meta: PlayerM
     // Wolf Form swings at the rogue's fixed feral cadence, not the carried weapon's
     // speed (see combat/form_swing.ts); everyone else uses their weapon speed. Melee
     // haste (item-set bonus) then shortens whatever base interval that yields.
-    p.swingTimer = (baseSwingSpeed(p) * ctx.swingIntervalMult(p)) / (1 + p.meleeHaste);
+    p.swingTimer =
+      (baseSwingSpeed(p) * ctx.swingIntervalMult(p)) /
+      ((1 + p.meleeHaste) * (1 + stanceMasteryAutoHaste(ctx, p, meta)));
   }
   if (p.dualWielding && p.offhandWeapon && p.offhandSwingTimer <= 0) {
     const connected = meleeSwing(ctx, p, t, 0, null, {
@@ -262,8 +265,20 @@ export function updatePlayerAutoAttack(ctx: SimContext, p: Entity, meta: PlayerM
         school: 'physical',
       });
     }
-    p.offhandSwingTimer = (p.offhandWeapon.speed * ctx.swingIntervalMult(p)) / (1 + p.meleeHaste);
+    p.offhandSwingTimer =
+      (p.offhandWeapon.speed * ctx.swingIntervalMult(p)) /
+      ((1 + p.meleeHaste) * (1 + stanceMasteryAutoHaste(ctx, p, meta)));
   }
+}
+
+// Combat Mastery (choice-row talent), Berserker Stance arm: auto-attack swings
+// come STANCE_MASTERY_BERSERKER_HASTE faster while in Berserker Stance. Folded
+// into the two swing-timer resets above only, so it never touches casts, the
+// GCD, or ranged shots. Draws no rng.
+function stanceMasteryAutoHaste(ctx: SimContext, p: Entity, meta: PlayerMeta): number {
+  if (meta.cls !== 'warrior') return 0;
+  if (!p.auras.some((a) => a.kind === 'berserker_stance')) return 0;
+  return ctx.playerMods(meta).global.stanceMastery > 0 ? STANCE_MASTERY_BERSERKER_HASTE : 0;
 }
 
 export function rangedSwing(

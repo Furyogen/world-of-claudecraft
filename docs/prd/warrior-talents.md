@@ -149,7 +149,12 @@ showed the base warrior was badly rage-starved: signatures fired 1-3x/min (cap ~
 
 ## Naming (de-brand)
 New ability names must be original (not WoW). The locked rename table is `ip-refactor/NAME-MAP.md`.
-Known debt: 12 abilities still ship WoW names today (pummel, heroic_leap, rallying_cry, storm_bolt,
+`rallying_cry` is named "Valor Roar" in English and "Rugido de Valor" in Spanish (operator-locked
+2026-07-11). Its stable internal id remains unchanged. It is the level-18 base ability designed
+here: the caster and party members within 40 yards gain 20% maximum health for 10 sec; Protection
+also grants them 5% damage reduction for the duration. Stale PTR copy describing an attack-power
+"Muster" effect is incorrect and must not be restored.
+Known debt: 11 abilities still ship WoW names today (pummel, heroic_leap, storm_bolt,
 intimidating_shout, bladestorm, victory_rush, piercing_howl, die_by_sword, recklessness, avatar,
 sanguine_aura); the G0 scanner does not arm them yet. Flag to the maintainer, do not block on it.
 

@@ -1790,8 +1790,8 @@ const classAbilityNamesEn = {
       ],
       [
         'rallying_cry',
-        'Muster',
-        "Lets loose a mustering cry, increasing nearby allies' attack power for 10 sec. (Warrior talent)",
+        'Valor Roar',
+        'Lets loose a valorous roar, granting you and party members within 40 yards 20% additional maximum health for 10 sec. Protection: they also take 5% less damage for the duration.',
       ],
       [
         'rebuke',
@@ -2733,8 +2733,8 @@ export const classAbilityNames = {
         ],
         [
           'rallying_cry',
-          'Grito de guerra',
-          'Profieres un grito de guerra que os otorga a ti y a los miembros del grupo en un radio de 40 yardas un 20% de salud máxima adicional durante 10 s.',
+          'Rugido de Valor',
+          'Profieres un rugido de valor que os otorga a ti y a los miembros del grupo en un radio de 40 yardas un 20% de salud máxima adicional durante 10 s. Protección: además reciben un 5% menos de daño mientras dura.',
         ],
         [
           'summon_imp',

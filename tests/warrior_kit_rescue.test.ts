@@ -47,6 +47,9 @@ describe('base kit membership', () => {
     expect(ABILITIES.pummel.learnLevel).toBe(8);
     expect(ABILITIES.heroic_leap.learnLevel).toBe(6);
     expect(ABILITIES.rallying_cry.learnLevel).toBe(18);
+    expect(ABILITIES.rallying_cry.name).toBe('Valor Roar');
+    expect(ABILITIES.rallying_cry.description).toContain('20% additional maximum health');
+    expect(ABILITIES.rallying_cry.description).toContain('Protection');
     const at7 = abilitiesKnownAt('warrior', 7).map((k) => k.def.id);
     expect(at7).not.toContain('pummel');
     const at20 = abilitiesKnownAt('warrior', 20).map((k) => k.def.id);

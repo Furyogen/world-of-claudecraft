@@ -332,7 +332,6 @@ const baseEnTable = {
   'aura.bladedEcho': 'Bladed Echo',
   'aura.emboldened': 'Emboldened',
   'aura.enraged': 'Enraged',
-  'aura.hardenedBlood': 'Hardened Blood',
 } as const;
 
 const petEnTable = {
@@ -4659,9 +4658,6 @@ const AURA_NAME_KEY: Record<string, SimMessageKey> = {
   // Fury Enrage buff (the enrageChance case in src/sim/combat/effect_dispatch.ts),
   // procced by Bloodletting and Desenfreno / Rampage; shown on the buff bar.
   Enraged: 'aura.enraged',
-  // Hardened Blood stacks (the rage-spent armor talent, casting_lifecycle's
-  // spendAbilityCost); shown on the buff bar and combat log.
-  'Hardened Blood': 'aura.hardenedBlood',
   // Talent-proc buff/ward names (choice rows).
   'Searing Light': 'aura.searingLight',
   'Lingering Grace': 'aura.lingeringGraceWard',

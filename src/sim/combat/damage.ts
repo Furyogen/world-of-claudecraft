@@ -51,6 +51,9 @@ import {
   rageFromTaking,
   rageFromTakingClassic,
   rageGenAuraMult,
+  STANCE_MASTERY_BATTLE_CRIT_DMG,
+  STANCE_MASTERY_GUARDED_CUT,
+  STANCE_MASTERY_GUARDED_HP_PCT,
   VICTORY_RUSH_WINDOW,
   virtualLevel,
   xpForLevel,
@@ -265,6 +268,40 @@ export function dealDamage(
   if (crit && amount > 0 && source && source.id !== target.id) {
     const cd = berserkerCritDamage(source);
     if (cd > 0) amount = Math.round(amount * (1 + cd));
+  }
+
+  // Combat Mastery (choice-row talent), Battle Stance arm: the source's ABILITY
+  // criticals deal an extra fraction while in Battle Stance. Gated on a named
+  // ability so plain auto swings (ability null) never benefit. Draws no rng.
+  if (
+    crit &&
+    amount > 0 &&
+    ability !== null &&
+    source &&
+    source.id !== target.id &&
+    source.auras.some((a) => a.kind === 'battle_stance')
+  ) {
+    const srcMeta = ctx.players.get(source.id);
+    if (srcMeta && ctx.playerMods(srcMeta).global.stanceMastery > 0) {
+      amount = Math.round(amount * (1 + STANCE_MASTERY_BATTLE_CRIT_DMG));
+    }
+  }
+
+  // Combat Mastery, Guarded Stance arm: a heavy blow, one that would take at
+  // least STANCE_MASTERY_GUARDED_HP_PCT of the wearer's maximum health BEFORE
+  // this cut, deals STANCE_MASTERY_GUARDED_CUT less damage. Checked target-side
+  // after every other amp and reduction (so the threshold reads the damage that
+  // would actually land), before absorb shields soak. Draws no rng.
+  if (
+    source &&
+    source.id !== target.id &&
+    amount >= target.maxHp * STANCE_MASTERY_GUARDED_HP_PCT &&
+    target.auras.some((a) => a.kind === 'defensive_stance')
+  ) {
+    const tgtMeta = ctx.players.get(target.id);
+    if (tgtMeta && ctx.playerMods(tgtMeta).global.stanceMastery > 0) {
+      amount = Math.round(amount * (1 - STANCE_MASTERY_GUARDED_CUT));
+    }
   }
 
   // absorb shields soak damage first

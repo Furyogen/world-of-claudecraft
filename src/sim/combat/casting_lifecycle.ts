@@ -28,7 +28,6 @@
 // tests/architecture.test.ts.
 
 import { ITEMS, isDelvePos, MOBS } from '../data';
-import { recalcPlayerStats } from '../entity';
 import { scheduleProjectile } from '../projectile_travel';
 import type { PlayerMeta, ResolvedAbility } from '../sim';
 import type { SimContext } from '../sim_context';
@@ -46,9 +45,6 @@ import {
   dist2d,
   FACING_HOLD_DIST,
   FISHING_CAST_ID,
-  HARDENED_BLOOD_DURATION,
-  HARDENED_BLOOD_MAX_STACKS,
-  HARDENED_BLOOD_RAGE_PER_STACK,
   MELEE_ARC,
   MELEE_RANGE,
   normAngle,
@@ -725,39 +721,6 @@ function spendAbilityCost(
       if (cur === undefined) continue;
       if (cur <= refund) p.cooldowns.delete(id);
       else p.cooldowns.set(id, cur - refund);
-    }
-  }
-  // Hardened Blood (choice-row talent): every FULL 10 rage this one cast spends
-  // grants a stack of +hardenedBloodPct% armor (per-cast floor, no carryover:
-  // stateless and predictable; a 15-rage Execute is 1 stack, an 80-rage Red
-  // Harvest caps at 5). Bloodbath's stacking pattern verbatim; the aura is a
-  // plain buff_armor_pct, so recalcPlayerStats folds it and the buff* expiry
-  // arm in combat/auras.ts re-recalcs on fade. Draws no rng.
-  const hbPct = ctx.playerMods(meta).global.hardenedBloodPct;
-  if (hbPct > 0 && res.cost > 0 && p.resourceType === 'rage') {
-    const gained = Math.floor(res.cost / HARDENED_BLOOD_RAGE_PER_STACK);
-    if (gained > 0) {
-      const existing = p.auras.find((a) => a.id === 'hardened_blood');
-      if (existing) {
-        existing.stacks = Math.min(HARDENED_BLOOD_MAX_STACKS, (existing.stacks ?? 1) + gained);
-        existing.value = hbPct * existing.stacks;
-        existing.remaining = HARDENED_BLOOD_DURATION;
-        existing.duration = HARDENED_BLOOD_DURATION;
-      } else {
-        const stacks = Math.min(HARDENED_BLOOD_MAX_STACKS, gained);
-        ctx.applyAura(p, {
-          id: 'hardened_blood',
-          name: 'Hardened Blood',
-          kind: 'buff_armor_pct',
-          value: hbPct * stacks,
-          remaining: HARDENED_BLOOD_DURATION,
-          duration: HARDENED_BLOOD_DURATION,
-          sourceId: p.id,
-          school: 'physical',
-          stacks,
-        });
-      }
-      recalcPlayerStats(p, meta.cls, meta.equipment, ctx.playerMods(meta), meta.equipmentInstance);
     }
   }
 }

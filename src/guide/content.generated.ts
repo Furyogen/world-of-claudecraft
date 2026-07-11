@@ -218,7 +218,7 @@ export const GUIDE_CLASSES: GuideClassInfo[] = [
       },
       {
         "id": "rallying_cry",
-        "name": "Rallying Cry"
+        "name": "Valor Roar"
       },
       {
         "id": "emboldening_roar",

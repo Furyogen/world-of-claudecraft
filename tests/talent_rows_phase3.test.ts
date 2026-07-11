@@ -3,6 +3,7 @@
 
 import { describe, expect, it } from 'vitest';
 import { updateRegen } from '../src/sim/combat/auras';
+import { updatePlayerAutoAttack } from '../src/sim/combat/auto_attack';
 import { MOBS } from '../src/sim/data';
 import { Sim } from '../src/sim/sim';
 import {
@@ -11,6 +12,10 @@ import {
   MELEE_CLASSES,
   RECKLESSNESS_RAGE_GEN,
   SECOND_WIND_THRESHOLD,
+  STANCE_MASTERY_BATTLE_CRIT_DMG,
+  STANCE_MASTERY_BERSERKER_HASTE,
+  STANCE_MASTERY_GUARDED_CUT,
+  STANCE_MASTERY_GUARDED_HP_PCT,
   STANCE_RAGE_GEN,
 } from '../src/sim/types';
 import { terrainHeight } from '../src/sim/world';
@@ -66,79 +71,139 @@ describe('Storm Bolt', () => {
   });
 });
 
-describe('Hardened Blood (the reworked Blood Offering row pick)', () => {
-  // Balance pass 2026-07-10: the Blood Toll empower was a rage-GENERATION
-  // talent, dead for Fury; the row pick (same id, saved picks survive) is now
-  // Hardened Blood: every full 10 rage spent on one ability grants a stack of
-  // +2% armor for 8s, up to 5 stacks. Per-cast floor, no carryover.
-  function armsWithPick(pick: boolean): {
-    sim: Sim;
-    cast: (rage: number) => void;
-    aura: () => any;
-  } {
+describe('Combat Mastery (the reworked Blood Offering row pick)', () => {
+  // Reworked twice (owner): Blood Toll empower -> Hardened Blood -> Combat
+  // Mastery (2026-07-11): each stance gains an extra effect while the row pick
+  // (same id, saved picks survive) is worn. One test per stance arm, plus the
+  // no-pick negatives and the pre-cut threshold semantics of the Guarded arm.
+
+  it('Battle Stance: ability criticals deal 15% more, plain auto crits never do', () => {
     const sim = warriorAtCap(42);
     expect(sim.setSpec('arms')).toBe(true);
-    if (pick) expect(sim.pickRowTalent(3, 'war_row_blood_offering')).toBe(true);
-    const mob = mobsNear(sim, 1)[0];
-    standOff(sim, mob, 2);
-    sim.targetEntity(mob.id);
-    const p = sim.player;
-    const cast = (rage: number) => {
-      p.resource = rage;
-      (p as any).gcdRemaining = 0;
-      p.cooldowns.delete('mortal_strike');
-      sim.castAbility('mortal_strike'); // 30-rage spender: 3 full stacks per cast
-    };
-    return { sim, cast, aura: () => p.auras.find((a: any) => a.id === 'hardened_blood') };
-  }
-
-  it('spending rage grants a stack per full 10 actually spent, raising live armor', () => {
-    const { sim, cast, aura } = armsWithPick(true);
-    const p = sim.player;
-    const armor0 = p.stats.armor;
-    cast(100);
-    const a = aura();
-    expect(a).toBeTruthy();
-    // Maiming Strike lists 30 rage, but committed Arms bakes Measured Fury
-    // (-10% rage costs), so the RESOLVED spend is 27: floor(27 / 10) = 2 stacks.
-    // The hook reads the resolved cost, which is exactly what left the bar.
-    expect(a.stacks).toBe(2);
-    expect(a.value).toBe(4); // 2% x 2 stacks (buff_armor_pct reads whole percent)
-    expect(a.kind).toBe('buff_armor_pct');
-    expect(p.stats.armor).toBeGreaterThan(armor0); // recalced live, not on next tick
-  });
-
-  it('an 80-rage Red Harvest caps the stacks at 5 (+10%) in one cast', () => {
-    const sim = warriorAtCap(42);
-    expect(sim.setSpec('fury')).toBe(true);
     expect(sim.pickRowTalent(3, 'war_row_blood_offering')).toBe(true);
+    const p = sim.player;
+    expect(p.auras.some((a: any) => a.kind === 'battle_stance')).toBe(true);
     const mob = mobsNear(sim, 1)[0];
-    standOff(sim, mob, 2);
-    sim.targetEntity(mob.id);
-    const p = sim.player;
-    p.resource = 100;
-    (p as any).gcdRemaining = 0;
-    sim.castAbility('red_harvest'); // 80 spent -> floor(80/10) = 8, capped at 5
-    const a = p.auras.find((x: any) => x.id === 'hardened_blood');
-    expect(a?.stacks).toBe(5);
-    expect(a?.value).toBe(10);
+    mob.hp = 1_000_000;
+    mob.maxHp = 1_000_000;
+    const hit = (crit: boolean, ability: string | null) => {
+      const hp0 = mob.hp;
+      (sim as any).dealDamage(p, mob, 1000, crit, 'physical', ability, 'hit');
+      return hp0 - mob.hp;
+    };
+    // The named-ability crit is amplified; a plain auto (null ability) crit and
+    // a non-crit ability hit land untouched.
+    expect(hit(true, 'Maiming Strike')).toBe(
+      Math.round(1000 * (1 + STANCE_MASTERY_BATTLE_CRIT_DMG)),
+    );
+    expect(hit(true, null)).toBe(1000);
+    expect(hit(false, 'Maiming Strike')).toBe(1000);
   });
 
-  it('the armor falls off when the aura expires (buff* expiry recalc)', () => {
-    const { sim, cast, aura } = armsWithPick(true);
+  it('Battle Stance arm is inert without the pick', () => {
+    const sim = warriorAtCap(42);
+    expect(sim.setSpec('arms')).toBe(true);
     const p = sim.player;
-    const armor0 = p.stats.armor;
-    cast(100);
-    expect(p.stats.armor).toBeGreaterThan(armor0);
-    for (let i = 0; i < 20 * 9 && aura(); i++) sim.tick(); // > 8s duration
-    expect(aura()).toBeUndefined();
-    expect(p.stats.armor).toBe(armor0);
+    expect(p.auras.some((a: any) => a.kind === 'battle_stance')).toBe(true);
+    const mob = mobsNear(sim, 1)[0];
+    mob.hp = 1_000_000;
+    mob.maxHp = 1_000_000;
+    const hp0 = mob.hp;
+    (sim as any).dealDamage(p, mob, 1000, true, 'physical', 'Maiming Strike', 'hit');
+    expect(hp0 - mob.hp).toBe(1000);
   });
 
-  it('without the pick, spending rage grants nothing', () => {
-    const { cast, aura } = armsWithPick(false);
-    cast(100);
-    expect(aura()).toBeUndefined();
+  it('Berserker Stance: auto-attack swing timers rearm 5% faster with the pick', () => {
+    const timers = (pick: boolean) => {
+      const sim = warriorAtCap(42);
+      expect(sim.setSpec('fury')).toBe(true);
+      if (pick) expect(sim.pickRowTalent(3, 'war_row_blood_offering')).toBe(true);
+      sim.tick(); // the per-tick stance reconcile swaps Battle out for Berserker
+      const p = sim.player;
+      expect(p.auras.some((a: any) => a.kind === 'berserker_stance')).toBe(true);
+      const mob = mobsNear(sim, 1)[0];
+      mob.hp = 1_000_000;
+      mob.maxHp = 1_000_000;
+      standOff(sim, mob, 2);
+      sim.targetEntity(mob.id);
+      p.autoAttack = true;
+      p.swingTimer = 0;
+      updatePlayerAutoAttack((sim as any).ctx, p, metaOf(sim));
+      expect(p.swingTimer).toBeGreaterThan(0);
+      return p.swingTimer;
+    };
+    const withPick = timers(true);
+    const withoutPick = timers(false);
+    // Same seed and steps on both sims: the only difference is the pick, so the
+    // rearm interval divides by exactly (1 + the Berserker haste).
+    expect(withPick * (1 + STANCE_MASTERY_BERSERKER_HASTE)).toBeCloseTo(withoutPick, 5);
+  });
+
+  it('Guarded Stance: a heavy blow is blunted 15%, a light one never is', () => {
+    const sim = warriorAtCap(42);
+    expect(sim.setSpec('prot')).toBe(true);
+    expect(sim.pickRowTalent(3, 'war_row_blood_offering')).toBe(true);
+    const p = sim.player;
+    sim.castAbility('defensive_stance');
+    expect(p.auras.some((a: any) => a.kind === 'defensive_stance')).toBe(true);
+    const mob = mobsNear(sim, 1)[0];
+    const hit = (raw: number) => {
+      p.hp = p.maxHp;
+      const hp0 = p.hp;
+      (sim as any).dealDamage(mob, p, raw, false, 'physical', null, 'hit');
+      return hp0 - p.hp;
+    };
+    // Guarded Stance itself always cuts 10% first; the mastery blunts only the
+    // hit that would still take >= 20% of max health after that.
+    const heavy = Math.ceil(p.maxHp * 0.3);
+    const light = Math.ceil(p.maxHp * 0.1);
+    expect(hit(heavy)).toBe(Math.round(Math.round(heavy * 0.9) * (1 - STANCE_MASTERY_GUARDED_CUT)));
+    expect(hit(light)).toBe(Math.round(light * 0.9));
+  });
+
+  it('Guarded threshold reads the PRE-cut damage: the blunted hit may land below 20%', () => {
+    const sim = warriorAtCap(42);
+    expect(sim.setSpec('prot')).toBe(true);
+    expect(sim.pickRowTalent(3, 'war_row_blood_offering')).toBe(true);
+    const p = sim.player;
+    sim.castAbility('defensive_stance');
+    const mob = mobsNear(sim, 1)[0];
+    p.hp = p.maxHp;
+    // Post-stance amount sits just over the 20% threshold; the 15% cut then
+    // drops what actually lands BELOW 20% of max health, proving the threshold
+    // was evaluated before this reduction, not after it.
+    const raw = Math.ceil((p.maxHp * STANCE_MASTERY_GUARDED_HP_PCT) / 0.9) + 2;
+    const hp0 = p.hp;
+    (sim as any).dealDamage(mob, p, raw, false, 'physical', null, 'hit');
+    const landed = hp0 - p.hp;
+    expect(landed).toBe(Math.round(Math.round(raw * 0.9) * (1 - STANCE_MASTERY_GUARDED_CUT)));
+    expect(landed).toBeLessThan(p.maxHp * STANCE_MASTERY_GUARDED_HP_PCT);
+  });
+
+  it('Guarded arm is inert without the pick and outside Guarded Stance', () => {
+    // Without the pick: only the stance's own 10% cut applies.
+    const noPick = warriorAtCap(42);
+    expect(noPick.setSpec('prot')).toBe(true);
+    noPick.castAbility('defensive_stance');
+    const p1 = noPick.player;
+    const mob1 = mobsNear(noPick, 1)[0];
+    p1.hp = p1.maxHp;
+    const heavy1 = Math.ceil(p1.maxHp * 0.3);
+    const hp1 = p1.hp;
+    (noPick as any).dealDamage(mob1, p1, heavy1, false, 'physical', null, 'hit');
+    expect(hp1 - p1.hp).toBe(Math.round(heavy1 * 0.9));
+    // With the pick but in Battle Stance: no stance cut, no mastery cut.
+    const battle = warriorAtCap(42);
+    expect(battle.setSpec('prot')).toBe(true);
+    expect(battle.pickRowTalent(3, 'war_row_blood_offering')).toBe(true);
+    const p2 = battle.player;
+    expect(p2.auras.some((a: any) => a.kind === 'battle_stance')).toBe(true);
+    const mob2 = mobsNear(battle, 1)[0];
+    p2.hp = p2.maxHp;
+    const heavy2 = Math.ceil(p2.maxHp * 0.3);
+    const hp2 = p2.hp;
+    (battle as any).dealDamage(mob2, p2, heavy2, false, 'physical', null, 'hit');
+    expect(hp2 - p2.hp).toBe(heavy2);
   });
 });
 

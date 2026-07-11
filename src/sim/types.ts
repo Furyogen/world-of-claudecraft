@@ -3243,12 +3243,18 @@ export function rageGenAuraMult(e: Entity): number {
   return mult;
 }
 
-// Hardened Blood (choice-row talent): each full 10 rage spent on one ability
-// grants a stack of +hardenedBloodPct% armor (the aura is a plain
-// buff_armor_pct, folded by recalcPlayerStats and auto-recalced on expiry).
-export const HARDENED_BLOOD_RAGE_PER_STACK = 10;
-export const HARDENED_BLOOD_MAX_STACKS = 5;
-export const HARDENED_BLOOD_DURATION = 8;
+// Combat Mastery (choice-row talent): each stance gains an extra effect while
+// the talent is picked (global stanceMastery). Battle: ability CRITICALS deal
+// an extra fraction (never plain auto swings; folded in combat/damage.ts beside
+// the Berserker Stance crit amp). Berserker: auto-attack swings come faster
+// (auto-attack swing timers only, never casts or the GCD). Guarded: a heavy
+// blow, one that would take at least GUARDED_HP_PCT of the wearer's maximum
+// health BEFORE this cut, deals GUARDED_CUT less damage (combat/damage.ts,
+// after every other reduction so the threshold reads the real incoming hit).
+export const STANCE_MASTERY_BATTLE_CRIT_DMG = 0.15;
+export const STANCE_MASTERY_BERSERKER_HASTE = 0.05;
+export const STANCE_MASTERY_GUARDED_HP_PCT = 0.2;
+export const STANCE_MASTERY_GUARDED_CUT = 0.15;
 
 // Berserker Stance's crit-damage bonus: an extra fraction on a CRITICAL hit,
 // folded once in combat/damage.ts (mirroring the critVuln amp). 0 when the
