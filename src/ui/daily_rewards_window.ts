@@ -10,9 +10,7 @@ import {
   type ArmorySection,
   type ArmorySkinRow,
   buildArmorySections,
-  buildWocStoreRows,
   type WocStoreItemInput,
-  type WocStoreItemRow,
 } from './woc_store_view';
 
 function reasonText(reason: DailyRewardStatus['eligibility']['reason']): string {
@@ -61,7 +59,6 @@ export class DailyRewardsWindow {
   private spinOverlay: HTMLElement | null = null;
   private tab: 'store' | 'rewards' = 'store';
   private storeBalance: number | null = null;
-  private storeRows: WocStoreItemRow[] = [];
   private storeItems: WocStoreItemInput[] = [];
   private armorySections: ArmorySection[] = [];
   private armoryInspect: ArmoryInspect | null = null;
@@ -194,7 +191,6 @@ export class DailyRewardsWindow {
       if (!this.isOpen || this.tab !== 'store') return;
       this.storeBalance = snapshot.balance;
       this.storeItems = snapshot.items;
-      this.storeRows = buildWocStoreRows(snapshot.balance, snapshot.items);
       this.rebuildArmorySections();
       this.storeReady = true;
     } catch {
@@ -248,24 +244,13 @@ export class DailyRewardsWindow {
       return;
     }
     const balance = formatNumber(this.storeBalance, { maximumFractionDigits: 0 });
-    const cards = this.storeRows.length
-      ? this.storeRows.map((row) => this.storeCardHtml(row)).join('')
-      : `<div class="woc-store-empty">${esc(t('hudChrome.wocStore.empty'))}</div>`;
     const armory = this.armorySections.map((section) => this.armorySectionHtml(section)).join('');
     body.innerHTML =
       `<div class="woc-store-hero"><div><span>${esc(t('hudChrome.wocStore.armoryEyebrow'))}</span><h2>${esc(t('hudChrome.wocStore.armoryTitle'))}</h2><p>${esc(t('hudChrome.wocStore.armoryBody'))}</p></div>` +
       `<div class="woc-store-balance"><img src="/claudium/icons/claudium_coin_64.webp" alt=""><span>${esc(t('hudChrome.wocStore.balance'))}</span><strong>${balance}</strong><button type="button" data-buy-claudium>${esc(t('hudChrome.wocStore.buyClaudium'))}</button></div></div>` +
-      armory +
-      `<div class="woc-store-section-title"><div><span>${esc(t('hudChrome.wocStore.category'))}</span><h3>${esc(t('hudChrome.wocStore.weapons'))}</h3></div></div>` +
-      `<div class="woc-store-grid">${cards}</div>`;
+      armory;
     body.querySelector<HTMLButtonElement>('[data-buy-claudium]')?.addEventListener('click', () => {
       this.deps.openClaudium?.();
-    });
-    body.querySelectorAll<HTMLButtonElement>('[data-store-item]').forEach((button) => {
-      button.addEventListener('click', () => {
-        const row = this.storeRows.find((item) => item.itemId === button.dataset.storeItem);
-        if (row) this.requestStorePurchase(row);
-      });
     });
     body.querySelectorAll<HTMLButtonElement>('[data-armory-skin]').forEach((button) => {
       button.addEventListener('click', () => {
@@ -384,57 +369,6 @@ export class DailyRewardsWindow {
     }
     const fresh = this.armoryRowById(row.skin.id);
     if (fresh) this.armoryInspect?.refresh(fresh);
-  }
-
-  private storeCardHtml(row: WocStoreItemRow): string {
-    const cost = formatNumber(row.costClaudium, { maximumFractionDigits: 0 });
-    const buttonContent = row.owned
-      ? `<strong>${esc(t('hudChrome.wocStore.owned'))}</strong>`
-      : `<img src="/claudium/icons/claudium_coin_64.webp" alt=""><strong>${cost}</strong>`;
-    return (
-      `<article class="woc-store-card${row.owned ? ' owned' : row.affordable ? '' : ' short'}">` +
-      `<img src="${esc(row.art)}" alt="">` +
-      (row.owned
-        ? `<span class="woc-store-owned">${esc(t('hudChrome.wocStore.owned'))}</span>`
-        : '') +
-      `<div class="woc-store-card-copy"><span>${esc(t('hudChrome.wocStore.weaponCosmetic'))}</span><h4>${esc(row.name)}</h4>` +
-      `<button type="button" data-store-item="${esc(row.itemId)}" aria-label="${esc(row.owned ? t('hudChrome.wocStore.ownedAria', { item: row.name }) : t('hudChrome.wocStore.purchaseAria', { item: row.name, cost }))}"${row.owned ? ' disabled' : ''}>` +
-      `${buttonContent}</button></div></article>`
-    );
-  }
-
-  private requestStorePurchase(row: WocStoreItemRow): void {
-    if (row.owned) return;
-    const cost = formatNumber(row.costClaudium, { maximumFractionDigits: 0 });
-    if (!row.affordable) {
-      const shortfall = formatNumber(row.shortfall, { maximumFractionDigits: 0 });
-      this.deps.confirmDialog?.(
-        t('hudChrome.wocStore.needMoreTitle'),
-        t('hudChrome.wocStore.needMoreBody', { item: row.name, shortfall }),
-        t('hudChrome.wocStore.buyClaudium'),
-        t('hudChrome.wocStore.cancel'),
-        () => this.deps.openClaudium?.(),
-      );
-      return;
-    }
-    this.deps.confirmDialog?.(
-      t('hudChrome.wocStore.confirmTitle'),
-      t('hudChrome.wocStore.confirmBody', { item: row.name, cost }),
-      t('hudChrome.wocStore.confirmPurchase'),
-      t('hudChrome.wocStore.cancel'),
-      () => void this.purchaseStoreItem(row),
-    );
-  }
-
-  private async purchaseStoreItem(row: WocStoreItemRow): Promise<void> {
-    const result = await this.deps.spendStoreItem?.(row.itemId, row.kind);
-    if (!result?.granted) {
-      this.storeError = true;
-      const body = this.deps.root().querySelector<HTMLElement>('.dr-body');
-      if (body) this.paintStore(body);
-      return;
-    }
-    await this.renderStore(null);
   }
 
   private paint(view: DailyRewardsView): void {

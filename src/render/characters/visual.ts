@@ -7,7 +7,7 @@ import * as THREE from 'three';
 import { WEAPON_SKINS } from '../../sim/content/weapon_skins';
 import type { OverheadEmoteId } from '../../world_api';
 import { GFX } from '../gfx';
-import { createWeaponVfx, WEAPON_VFX, type WeaponVfxHandle } from '../weapon_vfx';
+import { createWeaponVfx, WEAPON_VFX, type WeaponVfxHandle, WORLD_TUNING } from '../weapon_vfx';
 import {
   type AnimState,
   type BaseState,
@@ -36,6 +36,19 @@ let weaponVfxViewportHeight = 1080;
 export function setWeaponVfxViewportHeight(heightPx: number): void {
   weaponVfxViewportHeight = Math.max(1, Math.round(heightPx));
 }
+
+// The VFX rig sizes point sprites for the inspector's 35 degree vertical fov.
+// Rendering under a different camera needs an equivalent-height correction or
+// particles draw the wrong size (the 60 degree world camera showed them ~1.8x
+// too large). Each visual carries the factor for the camera it renders under.
+const VFX_RIG_FOV_DEG = 35;
+
+export function weaponVfxSpriteScaleForFov(fovDeg: number): number {
+  return Math.tan((VFX_RIG_FOV_DEG * Math.PI) / 360) / Math.tan((fovDeg * Math.PI) / 360);
+}
+
+// World camera default (CAMERA_BASE_FOV = 60 in renderer.ts).
+const WORLD_FOV_SPRITE_SCALE = weaponVfxSpriteScaleForFov(60);
 
 const FADE = 0.22;
 const ONESHOT_FADE = 0.1;
@@ -91,6 +104,7 @@ export class CharacterVisual {
   private weaponItemId: string | null;
   private weaponSkinId: string | null = null;
   private weaponVfx: WeaponVfxHandle[] = [];
+  private weaponVfxSpriteScale = WORLD_FOV_SPRITE_SCALE;
   private disposed = false;
   private ghosted = false;
   private mixer: THREE.AnimationMixer;
@@ -540,7 +554,8 @@ export class CharacterVisual {
     for (const payload of payloads) {
       const handle = createWeaponVfx(payload, spec, { grounded: false });
       handle.setBackdropVisible(false);
-      handle.setPixelScale(weaponVfxViewportHeight);
+      handle.setTuning(WORLD_TUNING[spec.tier] ?? {});
+      handle.setPixelScale(weaponVfxViewportHeight * this.weaponVfxSpriteScale);
       // Tag the rig's own scene nodes: applyMaterials must never tint its
       // ShaderMaterials and the shadow pass has no business with sprite shells.
       handle.group.traverse((o) => {
@@ -560,7 +575,15 @@ export class CharacterVisual {
 
   /** Re-scale VFX point sprites after a viewport/pixel-ratio change. */
   setWeaponVfxPixelScale(heightPx: number): void {
-    for (const handle of this.weaponVfx) handle.setPixelScale(heightPx);
+    for (const handle of this.weaponVfx) {
+      handle.setPixelScale(heightPx * this.weaponVfxSpriteScale);
+    }
+  }
+
+  /** Set the camera fov this visual renders under (preview rigs differ from the
+   *  world camera); re-scales any live VFX sprites to match. */
+  setWeaponVfxCameraFov(fovDeg: number): void {
+    this.weaponVfxSpriteScale = weaponVfxSpriteScaleForFov(fovDeg);
   }
 
   private disposeWeaponVfx(): void {

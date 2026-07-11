@@ -12882,6 +12882,10 @@ export class Hud {
       `<div class="cd-actions"><button type="button" class="btn" data-cancel>${esc(cancelText)}</button><button type="button" class="btn cd-ok" data-ok>${esc(okText)}</button></div>`;
     document.body.appendChild(el);
     this.bringWindowToFront(el);
+    // A confirm prompt is the topmost modal by definition: the window band tops
+    // out at 89 and the armory inspect overlay sits at 90, so floor it above
+    // both or a purchase confirmation opens invisibly underneath.
+    el.style.zIndex = String(Math.max(Number(el.style.zIndex) || 0, 95));
     this.confirmTrap = this.focusManager.open({ root: () => el });
     el.querySelector<HTMLElement>('[data-ok]')?.focus();
     const close = () => {

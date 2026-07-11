@@ -22,6 +22,7 @@ import {
   TIERS,
   WEAPON_VFX,
   type WeaponVfxHandle,
+  WORLD_TUNING,
 } from './weapon_vfx';
 
 export type ArmorySceneKey = 'day' | 'dusk' | 'night';
@@ -115,6 +116,8 @@ export function createArmoryPreview(
     pv.weaponOverride,
   );
   characterGroup.add(visual.root);
+  // This rig's camera matches the VFX sprite math's native 35 degree fov.
+  visual.setWeaponVfxCameraFov(35);
 
   // Weapon-mode rig: the skin alone on a turntable, with its showcase extras.
   const weaponGroup = new THREE.Group();
@@ -191,6 +194,7 @@ export function createArmoryPreview(
     if (spec) {
       weaponVfx = createWeaponVfx(weaponModel, spec, { grounded: true });
       weaponVfx.setBackdropVisible(false);
+      weaponVfx.setTuning(WORLD_TUNING[spec.tier] ?? {});
       weaponVfx.setPixelScale(pixelHeight());
       weaponExtras = weaponVfx.sceneExtras;
       weaponExtras.position.set(0, -weaponGroup.position.y + 0.02, 0);

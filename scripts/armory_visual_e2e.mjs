@@ -163,7 +163,14 @@ async function enter(page, user, charName, cls) {
       timeout: 70000,
       polling: 500,
     });
-    await sleep(1500);
+    // A fresh character plays the first-spawn cinematic, which hides the whole
+    // #ui layer until the camera lands: skip it (Escape) and wait for the HUD.
+    await page.keyboard.press('Escape');
+    await page.waitForFunction(() => document.getElementById('ui')?.style.display !== 'none', {
+      timeout: 25000,
+      polling: 300,
+    });
+    await sleep(1200);
   } catch (err) {
     await dumpState(page, charName);
     throw err;
@@ -185,20 +192,19 @@ await db.query(
 await db.end();
 
 // Browse: open the store, wait for the armory sections + thumbnails.
-// Dismiss the tutorial/banner FIRST (their dismissal closes open windows a
-// beat later), then open the store via the hud API (the chest button binds
-// pointerdown, not click).
-await tidyHud(pageA);
-await sleep(1200);
+// Open the store via the hud API (the chest button binds pointerdown, not
+// click) and shoot IMMEDIATELY once the cards are painted: the tutorial system
+// re-closes windows on its own schedule, so any settle delay loses the race.
 await pageA.evaluate(() => window.__game.hud.toggleDailyRewards());
 await pageA.waitForSelector('.armory-section .armory-card img', { timeout: 12000 });
-await sleep(1400);
+await sleep(350);
 await pageA.evaluate(() => {
   const win = document.querySelector('#daily-rewards-window');
   if (win && win.style.display !== 'block') window.__game.hud.toggleDailyRewards();
 });
-await sleep(800);
 await pageA.screenshot({ path: 'tmp/armory_store.png' });
+await tidyHud(pageA);
+await sleep(600);
 
 // Inspect the legendary hero sword: try-on (day), night, then weapon-only.
 await pageA.evaluate(() => document.querySelector('[data-armory-skin="solheim_sword"]')?.click());
@@ -215,6 +221,8 @@ await pageA.screenshot({ path: 'tmp/armory_inspect_weapon.png' });
 // Buy through the panel (confirm dialog), then apply.
 await pageA.evaluate(() => document.querySelector('[data-armory-buy]')?.click());
 await pageA.waitForSelector('#confirm-dialog [data-ok]', { timeout: 8000 });
+await sleep(400);
+await pageA.screenshot({ path: 'tmp/armory_confirm_over_inspect.png' });
 await pageA.evaluate(() => document.querySelector('#confirm-dialog [data-ok]')?.click());
 await pageA.waitForSelector('[data-armory-apply]', { timeout: 12000 });
 await sleep(400);

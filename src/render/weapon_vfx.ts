@@ -259,6 +259,24 @@ export interface WeaponVfxScenePreset {
   bloomThreshold?: number;
 }
 
+// In-world softening per tier, applied by the game renderer and the armory
+// inspect preview (the offline viewer shows the raw authored specs). The
+// authored values are showcase-hot; in a lived-in scene the epic and legendary
+// glow reads overblown, so those tiers shed the most.
+export const WORLD_TUNING: Record<WeaponVfxTierName, Partial<WeaponVfxTuning>> = {
+  rare: { glow: 0.8, light: 0.7, core: 0.8, sparkle: 0.8, mist: 0.8, shell: 0.75 },
+  epic: { glow: 0.55, light: 0.5, core: 0.65, motes: 0.7, sparkle: 0.65, mist: 0.6, shell: 0.5 },
+  legendary: {
+    glow: 0.6,
+    light: 0.55,
+    core: 0.7,
+    motes: 0.75,
+    aurora: 0.65,
+    sparkle: 0.7,
+    shell: 0.55,
+  },
+};
+
 export const SCENE_PRESETS: Record<
   'showcase' | 'day' | 'dusk' | 'night' | 'dungeon' | 'snow',
   WeaponVfxScenePreset
