@@ -255,6 +255,10 @@ describe('registry completeness: migrated baseline (public reads + auth + charac
     { method: 'GET', path: '/api/auth/discord/callback' },
     { method: 'POST', path: '/api/auth/discord/login/new' },
     { method: 'POST', path: '/api/auth/discord/login/link' },
+    { method: 'POST', path: '/api/auth/discord/native/exchange' },
+    { method: 'POST', path: '/api/auth/apple' },
+    { method: 'POST', path: '/api/auth/apple/login/new' },
+    { method: 'POST', path: '/api/auth/apple/login/link' },
     { method: 'GET', path: '/api/discord' },
     { method: 'DELETE', path: '/api/discord' },
     { method: 'POST', path: '/api/discord/swag/claim' },
@@ -281,6 +285,7 @@ describe('registry completeness: migrated baseline (public reads + auth + charac
     // (server/claudium.ts). A brand-new /api/claudium/* prefix with NO legacy
     // ladder twin: registry-only, so every arm is asserted here. price/:rail is a
     // public enum param (publicRead), not an account-owned resource.
+    { method: 'POST', path: '/api/claudium/stripe/webhook' },
     { method: 'GET', path: '/api/claudium/balance' },
     { method: 'GET', path: '/api/claudium/price/:rail' },
     { method: 'GET', path: '/api/claudium/skus' },

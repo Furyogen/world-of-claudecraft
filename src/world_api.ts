@@ -39,6 +39,9 @@
 //   professions.ts      IWorldProfessions    skill/craft/recipe/node read surface (#1164; node
 //                                            harvest read + action landed in #1121; recipe
 //                                            content + basic crafting action landed in #1127)
+//   bank.ts             IWorldBank           per-character deposit box (proximity-gated info +
+//                                            deposit/withdraw/buy-slots)
+//   vale_cup.ts         IWorldValeCup        Vale Cup boarball queue/roles/betting/practice
 //
 // THREE GATES pin this seam (run before any facet edit; the literal counts are
 // pinned THERE and re-stale here, so this prose stays count-free):
@@ -51,6 +54,7 @@
 //                                          union of the facets.
 // ---------------------------------------------------------------------------
 
+import type { IWorldBank } from './world_api/bank';
 import type { IWorldChat } from './world_api/chat';
 import type { IWorldCombat } from './world_api/combat';
 import type { IWorldCosmetics } from './world_api/cosmetics';
@@ -85,6 +89,7 @@ export type {
 export type { ArenaCombatant, ArenaFormat, ArenaStanding, OverheadEmoteId } from './sim/types';
 
 // --- facet aux-type + value re-exports (each travels with its facet file) ---
+export type { BankBonusSource, BankInfo } from './world_api/bank';
 export { isOverheadEmoteId, OVERHEAD_EMOTES } from './world_api/chat';
 export type { AccountCosmetics } from './world_api/cosmetics';
 export type {
@@ -174,6 +179,7 @@ export interface IWorld
     IWorldDailyRewards,
     IWorldTelemetry,
     IWorldProfessions,
+    IWorldBank,
     IWorldValeCup {}
 
 // ---------------------------------------------------------------------------
@@ -245,6 +251,7 @@ export const COMMAND_NAMES = [
   'masterAssign',
   'setMarker',
   'clearMarker',
+  'readyrespond',
   'pet_abandon',
   'pet_rename',
   'pet_revive',
@@ -323,6 +330,9 @@ export const COMMAND_NAMES = [
   'autoloot',
   'resurrect_corpse',
   'resurrect_healer',
+  'bank_deposit',
+  'bank_withdraw',
+  'bank_buy_slots',
   'set_town_focus',
   'set_dungeon_difficulty',
   'heroic_buy',
@@ -396,6 +406,7 @@ export type WorldFacet =
   | 'IWorldDelves'
   | 'IWorldDailyRewards'
   | 'IWorldTelemetry'
+  | 'IWorldBank'
   | 'IWorldValeCup';
 
 export const COMMAND_FACETS = {
@@ -462,6 +473,7 @@ export const COMMAND_FACETS = {
   masterAssign: 'IWorldParty',
   setMarker: 'IWorldParty',
   clearMarker: 'IWorldParty',
+  readyrespond: 'IWorldParty',
   // IWorldTrade: peer-to-peer trade-window commands (tradeInfo is a snapshot read,
   // no send).
   trade_req: 'IWorldTrade',
@@ -535,6 +547,11 @@ export const COMMAND_FACETS = {
   lockpick_abort: 'IWorldDelves',
   collect_delve_chest_loot: 'IWorldDelves',
   delve_rite_choose: 'IWorldDelves',
+  // IWorldBank: the per-character deposit box (snake_case wire strings, by design).
+  // bankInfo is a proximity-gated snapshot read (no send, untagged).
+  bank_deposit: 'IWorldBank',
+  bank_withdraw: 'IWorldBank',
+  bank_buy_slots: 'IWorldBank',
   // IWorldValeCup: the Vale Cup boarball queue. cupInfo is a snapshot read (no
   // send); vcup_practice starts a private instanced practice bout (online + off).
   vcup_queue: 'IWorldValeCup',

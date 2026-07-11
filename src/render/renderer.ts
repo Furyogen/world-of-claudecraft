@@ -21,10 +21,13 @@ import {
   instanceOrigin,
   isArenaPos,
   isDelvePos,
+  isYumiMazePos,
   MOBS,
   NPCS,
   WORLD_MAX_Z,
   WORLD_MIN_Z,
+  YUMI_MAZE_SLOT_COUNT,
+  yumiMazeOrigin,
   ZONES,
 } from '../sim/data';
 import type { DelveModuleId } from '../sim/delve_layout';
@@ -73,6 +76,7 @@ import {
 } from './gfx';
 import { buildImpactSite, type ImpactSiteView } from './impact_site';
 import { ensureDelveInteriorKit } from './interior_kit';
+import { buildJailScene } from './jail_scene';
 import { type LocoTrack, newLocoTrack, updateLocomotion } from './locomotion';
 import { buildMailboxPillar } from './mailbox';
 import { buildMotes, type MotesView } from './motes';
@@ -118,6 +122,8 @@ import { buildValeCupTeamRings, type ValeCupTeamRingsView } from './vale_cup_tea
 import { SCHOOL_COLORS, Vfx } from './vfx';
 import { buildWater, type WaterView } from './water';
 import { Weather } from './weather';
+import { buildYumiMaze, type YumiMazeView } from './yumi_maze';
+import { YumiTeamMarkers } from './yumi_team_markers';
 
 // Entities further than this from the player are hidden entirely: their rigs
 // are several draw calls each and read as sub-pixel specks long before this.
@@ -259,6 +265,13 @@ const IBL_RAW_SCALE = 0.55;
 const DUNGEON_HEMI_INTENSITY = 0.22; // floor of readability — bosses crushed to black at 0.14
 // character rim glow scales up underground so silhouettes split from the murk
 const DUNGEON_RIM_BOOST = 2.4;
+// The Protect Yumi maze is a torch-lit NIGHT ARENA, not a crypt: a moon-key
+// plus a healthy hemisphere keep the whole competitive space readable, with
+// the braziers/torches adding warmth rather than carrying the scene alone.
+const YUMI_MAZE_SUN_INTENSITY = 1.2;
+const YUMI_MAZE_HEMI_INTENSITY = 0.42;
+const YUMI_MAZE_ENV_INTENSITY = 0.28;
+const YUMI_MAZE_RIM_BOOST = 1.7;
 const RENDERER_PHASE_SAMPLE_LIMIT = 720;
 const RENDER_DIAGNOSTICS_SAMPLE_MS = 2000;
 const RENDER_DIAGNOSTICS_IDLE_TIMEOUT_MS = 1000;
@@ -1334,6 +1347,10 @@ export class Renderer {
       setRenderCategory(this.placedAssetsView.group, 'props');
       this.scene.add(this.placedAssetsView.group);
     }
+
+    const jailScene = buildJailScene(this.sim.cfg.seed);
+    setRenderCategory(jailScene, 'props');
+    this.scene.add(jailScene);
 
     const gatherNodes = buildGatherNodes(this.sim.cfg.seed);
     setRenderCategory(gatherNodes.group, 'props');
@@ -2965,6 +2982,20 @@ export class Renderer {
       case 'delveEntered':
         this.prebuildDelveInteriors(ev.delveId);
         break;
+      case 'yumiTeleport': {
+        // Arcane burst at both ends of the cat's blink (the event is personal
+        // per participant; ignore copies addressed to other local pids so an
+        // offline multi-player sim never double-bursts).
+        if (ev.pid !== undefined && ev.pid !== this.sim.playerId) break;
+        const fromY = groundHeight(ev.fromX, ev.fromZ, this.sim.cfg.seed);
+        const toY = groundHeight(ev.toX, ev.toZ, this.sim.cfg.seed);
+        this.vfx.burst(new THREE.Vector3(ev.fromX, fromY + 1, ev.fromZ), 'arcane', 26, 1.2);
+        this.vfx.burst(new THREE.Vector3(ev.toX, toY + 1, ev.toZ), 'arcane', 26, 1.2);
+        // Snap the objective beacon to the landing spot NOW: online, the
+        // arenaInfo mirror the beacon polls refreshes only every 10s.
+        for (const view of this.yumiMazeViews.values()) view.noteTeleport(ev.catId, ev.toX, ev.toZ);
+        break;
+      }
       case 'delveRitePulse': {
         // The Drowned Reliquary Rite plays its sequence by pulsing each shrine
         // in turn; a school-coloured nova on the shrine entity shows which one
@@ -3674,6 +3705,11 @@ export class Renderer {
   // ---------------------------------------------------------------------
 
   private builtInteriors = new Set<string>();
+  // Protect Yumi maze interiors, one per match slot, built lazily like the
+  // arena copies; their update() anchors the team beacons each frame.
+  private yumiMazeViews = new Map<number, YumiMazeView>();
+  // Blue/red team arrows above every yumi fighter (yumi_team_markers.ts).
+  private readonly yumiTeamMarkers = new YumiTeamMarkers();
   // Delve module interiors build asynchronously; track in-flight keys so a
   // per-frame ensureDelveInteriorsNear does not re-schedule a build mid-load.
   private pendingInteriors = new Set<string>();
@@ -3683,6 +3719,7 @@ export class Renderer {
     | 'temple'
     | 'nythraxis'
     | 'delve'
+    | 'yumiMaze'
     | 'underwater'
     | 'practice' = 'outdoor';
 
@@ -3804,6 +3841,22 @@ export class Renderer {
     }
     if (isDelvePos(px) && !inPractice) {
       this.ensureDelveInteriorsNear(px, pz);
+    } else if (inside && isYumiMazePos(px)) {
+      // build the Protect Yumi maze copy the player was matched into; the
+      // update() call each frame lives in sync() (beacon anchors)
+      for (let i = 0; i < YUMI_MAZE_SLOT_COUNT; i++) {
+        if (this.yumiMazeViews.has(i)) continue;
+        const o = yumiMazeOrigin(i);
+        if (Math.abs(px - o.x) < 200 && Math.abs(pz - o.z) < 120) {
+          const view = buildYumiMaze(o, this.sim.cfg.seed, {
+            flames: this.flames,
+            fireLights: this.fireLights,
+            lowGfx: this.lowGfx,
+          });
+          this.scene.add(view.group);
+          this.yumiMazeViews.set(i, view);
+        }
+      }
     } else if (inside && isArenaPos(px)) {
       void ensureDungeonAssets().catch(() => undefined);
       // build the Ashen Coliseum copy the player was matched into
@@ -3834,22 +3887,26 @@ export class Renderer {
     // the Drowned Temple reads as submerged: a teal murk instead of the
     // crypt's near-black, so its flooded halls feel underwater, not just dark
     const inDelve = inside && isDelvePos(px);
-    const interior = inside && !inDelve && !isArenaPos(px) ? dungeonAt(px)?.interior : null;
+    const inYumiMaze = inside && isYumiMazePos(px);
+    const interior =
+      inside && !inDelve && !inYumiMaze && !isArenaPos(px) ? dungeonAt(px)?.interior : null;
     const inTemple = interior === 'temple';
     const inNythraxis = interior === 'nythraxis';
     const desired = inPractice
       ? 'practice'
       : inDelve
         ? 'delve'
-        : inTemple
-          ? 'temple'
-          : inNythraxis
-            ? 'nythraxis'
-            : inside
-              ? 'dungeon'
-              : camY < waterLevelAt(px, pz) - 0.05
-                ? 'underwater'
-                : 'outdoor';
+        : inYumiMaze
+          ? 'yumiMaze'
+          : inTemple
+            ? 'temple'
+            : inNythraxis
+              ? 'nythraxis'
+              : inside
+                ? 'dungeon'
+                : camY < waterLevelAt(px, pz) - 0.05
+                  ? 'underwater'
+                  : 'outdoor';
     const fog = this.scene.fog as THREE.Fog;
     if (desired !== this.fogState) {
       this.fogState = desired;
@@ -3874,6 +3931,13 @@ export class Renderer {
         fog.color.setHex(0x0e0705);
         fog.near = 14;
         fog.far = 74;
+      } else if (desired === 'yumiMaze') {
+        // the Protect Yumi maze is a COMPETITIVE arena: a lighter night-blue
+        // murk pushed well past the ~90yd footprint, so the torches + team
+        // beacons read across the maze instead of dissolving mid-corridor
+        fog.color.setHex(0x161d31);
+        fog.near = 30;
+        fog.far = 170;
       } else if (desired === 'practice') {
         // The private practice pitch under its futuristic sky: tint the fog to
         // the sky variant and push it well back so the pitch reads clear and lit
@@ -3895,17 +3959,32 @@ export class Renderer {
       // underground so the torch point lights own the scene; restore outside.
       // The rim glow cranks up instead — silhouettes must split from the murk.
       if (!this.lowGfx) {
+        const mazeNight = desired === 'yumiMaze';
         const underground =
           desired === 'dungeon' ||
           desired === 'temple' ||
           desired === 'nythraxis' ||
           desired === 'delve';
-        this.sun.intensity = underground ? DUNGEON_SUN_INTENSITY : SUN_INTENSITY;
-        this.hemi.intensity = underground ? DUNGEON_HEMI_INTENSITY : HEMI_INTENSITY;
-        this.scene.environmentIntensity = underground
-          ? DUNGEON_ENV_INTENSITY
-          : this.envOutdoorIntensity;
-        sharedUniforms.uRimBoost.value = underground ? DUNGEON_RIM_BOOST : 1;
+        this.sun.intensity = mazeNight
+          ? YUMI_MAZE_SUN_INTENSITY
+          : underground
+            ? DUNGEON_SUN_INTENSITY
+            : SUN_INTENSITY;
+        this.hemi.intensity = mazeNight
+          ? YUMI_MAZE_HEMI_INTENSITY
+          : underground
+            ? DUNGEON_HEMI_INTENSITY
+            : HEMI_INTENSITY;
+        this.scene.environmentIntensity = mazeNight
+          ? YUMI_MAZE_ENV_INTENSITY
+          : underground
+            ? DUNGEON_ENV_INTENSITY
+            : this.envOutdoorIntensity;
+        sharedUniforms.uRimBoost.value = mazeNight
+          ? YUMI_MAZE_RIM_BOOST
+          : underground
+            ? DUNGEON_RIM_BOOST
+            : 1;
       }
       return;
     }
@@ -4733,6 +4812,8 @@ export class Renderer {
     this.updateFiestaRing(dt);
     this.updateFiestaPowerups(dt);
     this.tickFiestaGlows(dt);
+    for (const view of this.yumiMazeViews.values()) view.update(this.sim);
+    this.yumiTeamMarkers.update(this.sim, this.views);
     this.tickValeCupFx(dt);
     worldStart = markWorldPhase('vfx', worldStart);
 

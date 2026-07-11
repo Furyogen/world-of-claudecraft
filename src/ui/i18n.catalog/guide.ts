@@ -943,6 +943,9 @@ export const guideStrings = {
       'The final wave: build-defining, screen-melting spikes meant to feel ridiculous in the best way.',
 
     // The grab-in-the-ring power-ups, named as playful flavor.
+    yumiHeading: 'Protect Yumi',
+    yumiBody:
+      'Protect Yumi is a team objective mode played in a maze: each side guards its own cat familiar while hunting the other. Every so often both cats blink to new corners of the maze, so the fight swings between defending, hunting, and racing to find them again. Queue as three versus three or five versus five; falling in battle only benches you for a moment.',
     powerupsTitle: 'Power-ups in the ring',
     powerupsBody:
       'Glowing orbs also drop into the arena mid-fight, free for whoever reaches them first. They are deliberately over the top and last only a short while: Speed Demon for a blink of blinding pace, Colossus to swell up into a lumbering giant, Moon Boots for a bouncing, low-gravity leap, and Berserker for a sudden surge of fury.',
@@ -1211,6 +1214,15 @@ export const guideStrings = {
     marksTitle: 'A second currency: Delve Marks',
     marksBody:
       'Coin is not the only thing you bank. Delves pay out Delve Marks, a separate currency you spend only at the delve keeper, on companion upgrades and gear you will not find elsewhere. They never mix with your coin.',
+
+    // The personal bank: The Gilded Strongbox branches, deposits, and growing the vault.
+    bankTitle: 'The bank',
+    bankBody:
+      'Every hub town keeps a branch of The Gilded Strongbox, the banking house of the realm. Speak to the bursar there to open your vault, a private store of room beyond your bags that your character keeps for life. Whatever you leave with them waits safely, whichever branch you visit next.',
+    bankHow:
+      'With the vault open, click an item in your bags to deposit it and click it in the vault to take it back. The vault holds goods only, never coin, and quest items stay with you. When your bags fill up mid-journey, one button sweeps all your crafting materials in at once.',
+    bankSlots:
+      'A fresh vault starts small and grows with you. The bursar sells further slots for coin at ever-steeper prices, and playing online earns bonus room on top, for things like a verified email, linked accounts, and friends you bring into the game.',
 
     // Buying and selling at a vendor.
     buyingTitle: 'Buying and selling',

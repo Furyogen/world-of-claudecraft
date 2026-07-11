@@ -223,6 +223,11 @@ export function rangedSwing(
     // 4-piece set procs keyed to weapon crits (ranged arm). Gated on setProcs
     // inside applySetProcs, so proc-less players draw no rng.
     if (crit && atk.kind === 'player') ctx.applySetProcs(atk, tgt, 'weaponCrit');
+    // Legendary on-hit weapon procs (e.g. Thronebane's Chain Arc) fire on a hunter's
+    // Auto Shot too, since it strikes with the equipped mainhand. Wand bolts do not
+    // swing the mainhand, so casters never roll it. No-op (no rng draw) unless the
+    // shooter wields a proc weapon with a weaponHit proc.
+    if (!ranged.wand) runWeaponProcs(ctx, atk, tgt, 'weaponHit');
   });
 }
 
@@ -334,7 +339,7 @@ export function meleeSwing(
     }
   }
   // Legendary on-hit weapon procs (e.g. Thronebane's Chain Arc). No-op (no rng
-  // draw) unless the attacker wields a proc weapon with a meleeHit proc.
-  runWeaponProcs(ctx, attacker, target, 'meleeHit');
+  // draw) unless the attacker wields a proc weapon with a weaponHit proc.
+  runWeaponProcs(ctx, attacker, target, 'weaponHit');
   return true;
 }

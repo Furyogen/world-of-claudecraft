@@ -322,17 +322,54 @@ export function runEffects(
       case 'drainTick':
         break; // handled per channel tick
       case 'buffTarget': {
-        const buffTarget = target ?? p;
-        ctx.applyAura(buffTarget, {
+        const applyBuff = (e: Entity) =>
+          ctx.applyAura(e, {
+            id: ability.id,
+            name: ability.name,
+            kind: eff.kind,
+            remaining: eff.duration,
+            duration: eff.duration,
+            value: eff.value,
+            sourceId: p.id,
+            school: ability.school,
+          });
+        if (eff.party) {
+          // Raid buff: land on the explicit target (self, ally, or a controlled pet),
+          // the caster, and every living member of the caster's party/raid, regardless
+          // of range. One cast buffs the whole group.
+          const party = ctx.partyOf(p.id);
+          const seen = new Set<number>();
+          const give = (e: Entity | null | undefined) => {
+            if (e && !e.dead && !seen.has(e.id)) {
+              seen.add(e.id);
+              applyBuff(e);
+            }
+          };
+          give(target ?? p);
+          give(p);
+          if (party) {
+            for (const pid of party.members) give(ctx.entities.get(pid));
+          }
+        } else {
+          applyBuff(target ?? p);
+        }
+        break;
+      }
+      case 'faerieFire': {
+        // Fixed-percent armor-reduction debuff (see effectiveArmor); does not stack
+        // with Sunder Armor. The percent is a constant, so the aura value is unused.
+        if (!target || target.dead) break;
+        ctx.applyAura(target, {
           id: ability.id,
           name: ability.name,
-          kind: eff.kind,
+          kind: 'faerie_fire',
           remaining: eff.duration,
           duration: eff.duration,
-          value: eff.value,
+          value: 0,
           sourceId: p.id,
           school: ability.school,
         });
+        ctx.enterCombat(p, target);
         break;
       }
       case 'dot': {
@@ -638,7 +675,13 @@ export function runEffects(
             p.auras.splice(existing, 1);
             if (eff.kind === 'stealth') p.stealthed = false; // toggled back out of stealth
             ctx.emit({ type: 'aura', targetId: p.id, name: ability.name, gained: false });
-            recalcPlayerStats(p, meta.cls, meta.equipment, ctx.playerMods(meta));
+            recalcPlayerStats(
+              p,
+              meta.cls,
+              meta.equipment,
+              ctx.playerMods(meta),
+              meta.equipmentInstance,
+            );
             break;
           }
         }
@@ -681,7 +724,13 @@ export function runEffects(
           charges: eff.charges,
           icdMax: eff.internalCooldown,
         });
-        recalcPlayerStats(p, meta.cls, meta.equipment, ctx.playerMods(meta));
+        recalcPlayerStats(
+          p,
+          meta.cls,
+          meta.equipment,
+          ctx.playerMods(meta),
+          meta.equipmentInstance,
+        );
         break;
       }
       case 'gainResource': {
@@ -755,9 +804,12 @@ export function runEffects(
           ctx.enterCombat(p, target);
           break;
         }
+        // Expose Armor (`full`) lands all stacks at once; warrior Sunder adds one.
         const existing = target.auras.find((a) => a.kind === 'sunder');
         if (existing) {
-          existing.stacks = Math.min(eff.maxStacks, (existing.stacks ?? 1) + 1);
+          existing.stacks = eff.full
+            ? eff.maxStacks
+            : Math.min(eff.maxStacks, (existing.stacks ?? 1) + 1);
           existing.value = eff.armor;
           existing.remaining = existing.duration;
           ctx.emit({ type: 'aura', targetId: target.id, name: ability.name, gained: true });
@@ -769,7 +821,7 @@ export function runEffects(
             remaining: 30,
             duration: 30,
             value: eff.armor,
-            stacks: 1,
+            stacks: eff.full ? eff.maxStacks : 1,
             sourceId: p.id,
             school: 'physical',
           });

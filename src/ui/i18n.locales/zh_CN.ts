@@ -14,6 +14,46 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const zh_CN: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.claudium.title': 'Claudium',
+  'hudChrome.claudium.open': '打开 Claudium',
+  'hudChrome.claudium.close': '关闭 Claudium',
+  'hudChrome.claudium.loading': '正在加载 Claudium…',
+  'hudChrome.claudium.balanceLabel': '余额',
+  'hudChrome.claudium.balanceUnit': '{amount} Claudium',
+  'hudChrome.claudium.unavailable':
+    'Claudium 商店暂时不可用。您的余额和购买不会受到影响，请稍后再试。',
+  'hudChrome.claudium.disclosure':
+    'Claudium 是单向软货币：可用真钱购买并用于兑换外观物品，不能赎回、转让或兑现。',
+  'hudChrome.claudium.buyTitle': '购买 Claudium',
+  'hudChrome.claudium.railLabel': '付款方式',
+  'hudChrome.claudium.railWocUnavailable': 'WOC 定价暂时不可用。',
+  'hudChrome.claudium.amountLabel': '数量',
+  'hudChrome.claudium.showAmounts': '显示所有 Claudium 数量',
+  'hudChrome.claudium.hideAmounts': '隐藏其他 Claudium 数量',
+  'hudChrome.claudium.skuRow': '{usd} 可购买 {claudium} Claudium',
+  'hudChrome.claudium.buyUnavailable': '暂时无法购买。',
+  'hudChrome.claudium.storeTitle': '外观商店',
+  'hudChrome.claudium.storeEmpty': '目前没有可用的外观物品。',
+  'hudChrome.claudium.storeCost': '{amount} Claudium',
+  'hudChrome.claudium.spendButton': '兑换',
+  'hudChrome.claudium.kindCosmetic': '外观物品',
+  'hudChrome.claudium.checkoutTitle': '完成购买',
+  'hudChrome.claudium.checkoutClose': '关闭结账',
+  'hudChrome.claudium.checkoutLoading': '正在加载结账页面…',
+  'hudChrome.claudium.checkoutPending': '交易正在进行。请在钱包中确认，并保持此面板打开。',
+  'hudChrome.claudium.checkoutPendingButton': '处理中',
+  'hudChrome.claudium.checkoutFailed': '无法加载结账页面，请重试。',
+  'hudChrome.claudium.checkoutUnavailable': '该 Claudium 购买项目暂时不可用。',
+  'hudChrome.claudium.checkoutWalletRequired':
+    '使用加密货币购买 Claudium 前，请先连接 Solana 钱包。',
+  'hudChrome.claudium.checkoutWalletUnsupported': '此钱包无法签署和发送 Solana 交易。',
+  'hudChrome.claudium.checkoutNotSettled': '交易已发送，但 Claudium 尚未到账，请稍后重试。',
+  'hudChrome.auth.appleLoginCta': '通过 Apple 继续',
+  'hudChrome.auth.appleError': '无法通过 Apple 登录。请重试。',
+  'hudChrome.auth.appleChoiceIntro': '创建新帐户，或将 Apple 关联到现有帐户。',
+  'hudChrome.auth.appleChoiceExpired': 'Apple 登录已过期。请再次使用 Apple 登录。',
+  'hudChrome.vcup.guildBoardWl': '{wins} 胜，{losses} 负',
+  'hudChrome.vcup.shootPower': '力度',
   'hudChrome.discord.roleTag.coredevs': '核心开发者',
   'hudChrome.options.version': 'v{version}（{build}）',
   'auth.emailPlaceholder': 'you@example.com',
@@ -30,10 +70,24 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mailbox.toLabel': '收件人',
   'itemUi.kind.bag': '背包',
   'itemUi.tooltip.bagSlots': '{slots} 格背包',
+  'hudChrome.auth.forgotPrompt': '忘记密码？',
+  'hudChrome.auth.forgotTitle': '重置密码',
+  'hudChrome.auth.forgotHint': '输入您的用户名，我们会将重置链接发送到登记的邮箱。',
+  'hudChrome.auth.forgotUsername': '用户名',
+  'hudChrome.auth.forgotSubmit': '发送重置链接',
+  'hudChrome.auth.forgotSent':
+    '如果该用户名对应的账户已登记邮箱，我们已发送重置链接。请查收您的收件箱。',
+  'hudChrome.auth.forgotBack': '返回登录',
+  'hudChrome.auth.resetTitle': '设置新密码',
+  'hudChrome.auth.resetNewPassword': '新密码',
+  'hudChrome.auth.resetConfirm': '确认新密码',
+  'hudChrome.auth.resetSubmit': '更新密码',
+  'hudChrome.auth.resetDone': '您的密码已更新。现在可以登录了。',
+  'hudChrome.auth.resetMismatch': '两次输入的密码不一致。',
+  'hudChrome.auth.resetErrInvalid': '此重置链接无效或已过期。请重新申请一个。',
   // Guild roster last-seen (M16 non-Latin fill)
   'hudChrome.social.lastSeen': '最后在线: {when}',
   'hudChrome.social.lastSeenNever': '从未',
-  // Daily rewards (M16 non-Latin fill)
   'hudChrome.dailyRewards.title': '每日奖励',
   'hudChrome.dailyRewards.close': '关闭每日奖励',
   'hudChrome.dailyRewards.loading': '正在加载每日奖励...',
@@ -82,6 +136,11 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.dailyRewards.reason.price_unavailable': 'WOC 价格不可用，奖励暂时锁定。',
   'hudChrome.keybinds.discord': 'Discord',
   'hudChrome.spectate.banner': '正在观察 {name}',
+  'hudChrome.readyCheck.prompt': '{name} 发起了准备确认。你准备好了吗？',
+  'hudChrome.readyCheck.ready': '准备就绪',
+  'hudChrome.readyCheck.notReady': '未准备',
+  'hudChrome.readyCheck.result':
+    '准备确认：{ready} 人就绪，{notReady} 人未准备，{noResponse} 人未响应。',
   'hudChrome.loot.chestTitle': '宝箱',
   'hudChrome.itemTooltip.requiresLevel': '需要等级 {level}',
   'hudChrome.spellbook.addToBarAria': '将{name}添加到动作条',
@@ -111,6 +170,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.unitFrame.durationUnitHours': '时',
   'hudChrome.unitFrame.durationUnitDays': '天',
   'hudChrome.unitFrame.partyLabel': '你的队伍',
+  'hudChrome.unitFrame.partyChip': '小队',
   'hudChrome.unitFrame.playerLabel': '你的角色',
   'hudChrome.unitFrame.targetAnnounce': '目标：{name}',
   'hudChrome.unitFrame.targetLabel': '你的目标',
@@ -231,7 +291,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.interfaceModeTouch': '触控',
   'hudChrome.options.interfaceModeNote':
     '自动会根据你的设备选择桌面或触控操作。选择桌面可强制使用键盘和鼠标（适合带键盘的平板），选择触控则使用屏幕上的操作控件。',
-  // Character-sheet stat tooltips (hudChrome.statInfo.*).
   'hudChrome.statInfo.fromYour': '来自你的 {value} 点{stat}：',
   'hudChrome.statInfo.names.spellPower': '法术强度',
   'hudChrome.statInfo.names.critRating': '暴击等级',
@@ -311,6 +370,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.perf.labels.jitter': '抖动',
   'hudChrome.perf.labels.predLead': '预测提前量',
   'hudChrome.perf.labels.snapshot': '快照频率',
+  'hudChrome.perf.labels.serverTick': '服务器刻率',
   'hudChrome.perf.labels.connection': '连接',
   'hudChrome.perf.labels.drawCalls': '绘制调用',
   'hudChrome.perf.labels.triangles': '三角面',
@@ -978,6 +1038,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hud.core.mobileSocial': '社交',
   'hud.core.mobileArena': '竞技场',
   'hud.core.mobileMenu': '菜单',
+  'hud.core.mobileSettings': '设置',
   'hud.core.mobileUse': '使用',
   'hud.core.mobileMeters': '统计',
   'hud.core.mobileMap': '地图',
@@ -1440,6 +1501,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'abilityUi.tooltip.offGlobalCooldown': '不触发公共冷却',
   'abilityUi.tooltip.friendlyTarget': '友方目标',
   'abilityUi.tooltip.enemyTarget': '敌方目标',
+  'abilityUi.tooltip.selfOnly': '仅对自己',
   'abilityUi.tooltip.damageRange': '{min} 到 {max}',
   'abilityUi.tooltip.finisherDamage': '{base} 加每个连击点 {perCombo}',
   'abilityUi.resources.mana': '法力',
@@ -1696,32 +1758,34 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'itemUi.lootRoll.greedAria': '贪婪 {item}',
   'itemUi.lootRoll.passAria': '放弃 {item}',
   'itemUi.lootRoll.everyonePassed': '所有人都放弃了 {item}。',
+  'itemUi.lootRoll.rolled': '{answered}/{total} 已投骰',
   'entities.abilities.heroic_strike.name': '劫掠打击',
   'entities.abilities.heroic_strike.description':
     '一次强力攻击，使近战伤害提高 {damage}。在你的下一次挥击时触发。',
   'entities.abilities.battle_shout.name': '铁血怒吼',
-  'entities.abilities.battle_shout.description': '使你的攻击强度提高 20，持续 2 分钟。',
+  'entities.abilities.battle_shout.description': '使你的攻击强度提高 {buff}，持续 2 分钟。',
   'entities.abilities.commanding_shout.name': '鼓舞呐喊',
-  'entities.abilities.commanding_shout.description': '使你的耐力提高 6，持续 2 分钟。',
+  'entities.abilities.commanding_shout.description': '使你的耐力提高 {buff}，持续 2 分钟。',
   'entities.abilities.demoralizing_shout.name': '恐怖嚎叫',
   'entities.abilities.demoralizing_shout.description':
-    '发出可怕的怒吼，使附近所有敌人的攻击强度降低 30，持续 30 秒。',
+    '发出可怕的怒吼，使附近所有敌人的攻击强度降低 {buff}，持续 30 秒。',
   'entities.abilities.charge.name': '突进',
   'entities.abilities.charge.description':
     '向一名敌人冲锋，产生 9 点怒气并使其昏迷 1 秒。8-25 码距离。',
   'entities.abilities.rend.name': '深创',
-  'entities.abilities.rend.description': '撕裂目标，使其在 9 秒内流血并受到 {damage} 点伤害。',
+  'entities.abilities.rend.description':
+    '撕裂目标，使其流血，在 {duration} 秒内受到 {damage} 点伤害。',
   'entities.abilities.thunder_clap.name': '震地一击',
   'entities.abilities.thunder_clap.description':
     '轰击附近敌人，造成 {damage} 点伤害，并使其攻击速度降低 10%，持续 10 秒。',
   'entities.abilities.hamstring.name': '致跛斩',
   'entities.abilities.hamstring.description':
-    '重创敌人，造成 5 点伤害，并使其移动速度降低 50%，持续 15 秒。',
+    '重创敌人，造成 {damage} 点伤害，并使其移动速度降低 50%，持续 15 秒。',
   'entities.abilities.bloodrage.name': '血之代价',
   'entities.abilities.bloodrage.description': '以生命值为代价产生 10 点怒气。',
   'entities.abilities.overpower.name': '血手',
   'entities.abilities.overpower.description':
-    '立即攻击，造成武器伤害 +5。只能在目标躲闪后使用。无法被躲闪。',
+    '立即攻击，造成武器伤害加 {damage}。只能在目标躲闪后使用。无法被躲闪。',
   'entities.abilities.execute.name': '早赴黄泉',
   'entities.abilities.execute.description':
     '尝试终结受伤的敌人，造成 {damage} 点伤害。只能对生命值低于 20% 的敌人使用。',
@@ -1734,30 +1798,32 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
     '防御战斗姿态：你产生的威胁值提高 30%，但造成和受到的伤害降低 10%。再次施放可离开该姿态。',
   'entities.abilities.sunder_armor.name': '削甲',
   'entities.abilities.sunder_armor.description':
-    '撕裂目标的护甲，每次使其降低 {damage}。最多叠加 5 次。产生大量威胁值。',
+    '撕裂目标的护甲，每次使其降低 {damage}%。最多叠加 5 次。产生大量威胁值。',
   'entities.abilities.taunt.name': '挑衅',
   'entities.abilities.taunt.description':
     '嘲讽目标：你的威胁值提高到其最仇恨敌人的水平，并强迫其攻击你 3 秒。',
   'entities.abilities.fireball.name': '余烬弹',
   'entities.abilities.rain_of_fire.name': '烈火之雨',
   'entities.abilities.rain_of_fire.description':
-    '在目标区域降下烈火之雨，灼烧敌人，造成 {damage} 点火焰伤害。',
+    '在目标区域降下烈火之雨，持续 4 秒，每秒灼烧敌人并造成 {damage} 点火焰伤害。',
   'entities.abilities.volley.name': '乱射',
-  'entities.abilities.volley.description': '向目标区域射出箭雨，对其中的敌人造成 {damage} 点伤害。',
+  'entities.abilities.volley.description':
+    '向目标区域射出箭雨，持续 3 秒，每 0.5 秒对其中的敌人造成 {damage} 点伤害。',
   'entities.abilities.hurricane.name': '飓风',
   'entities.abilities.hurricane.description':
-    '在目标区域召唤飓风，重击敌人，造成 {damage} 点自然伤害。',
+    '在目标区域召唤飓风，持续 6 秒，每秒重击敌人并造成 {damage} 点自然伤害。',
   'entities.abilities.earthquake.name': '地震',
-  'entities.abilities.earthquake.description': '撼动目标区域，重击敌人，造成 {damage} 点自然伤害。',
+  'entities.abilities.earthquake.description':
+    '撼动目标区域，持续 6 秒，每 1.5 秒重击敌人并造成 {damage} 点自然伤害。',
   'entities.abilities.flamestrike.name': '烈焰风暴',
   'entities.abilities.flamestrike.description':
     '在目标区域召唤一次烈焰爆发，对爆炸范围内的敌人造成 {damage} 点火焰伤害。',
   'entities.abilities.fireball.description':
     '投掷一团火球，造成 {damage} 点火焰伤害，并附加持续伤害。',
   'entities.abilities.frost_armor.name': '白霜护罩',
-  'entities.abilities.frost_armor.description': '以寒霜包裹自身，使护甲提高 30，持续 30 分钟。',
+  'entities.abilities.frost_armor.description': '以寒霜包裹自身，使护甲提高 {buff}，持续 30 分钟。',
   'entities.abilities.arcane_intellect.name': '以太睿智',
-  'entities.abilities.arcane_intellect.description': '使智力提高 2，持续 30 分钟。',
+  'entities.abilities.arcane_intellect.description': '使智力提高 {buff}，持续 30 分钟。',
   'entities.abilities.frostbolt.name': '凛霜之矛',
   'entities.abilities.frostbolt.description':
     '发射一支寒冰箭，造成 {damage} 点冰霜伤害，并使移动速度降低 40%。',
@@ -1774,7 +1840,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
     '向敌人发射以太飞镖，持续 3 秒，每秒造成 {damage} 点奥术伤害。',
   'entities.abilities.polymorph.name': '蛊惑',
   'entities.abilities.polymorph.description':
-    '将敌人变成蟾蜍，最多持续 15 秒。蟾蜍会四处游荡并快速恢复。任何伤害都会打破效果。仅限野兽和人型生物。',
+    '将敌人变成蟾蜍，最多持续 {duration} 秒。蟾蜍会四处游荡并快速恢复。任何伤害都会打破效果。仅限野兽和人型生物。',
   'entities.abilities.frost_nova.name': '冰缚',
   'entities.abilities.frost_nova.description':
     '将附近所有敌人冻结在原地，最多持续 8 秒，并造成 {damage} 点冰霜伤害。',
@@ -1787,18 +1853,19 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.pyroblast.description':
     '投掷一颗巨大的火焰陨石，造成 {damage} 点火焰伤害，并在一段时间内造成额外伤害。',
   'entities.abilities.ice_barrier.name': '霜帷',
-  'entities.abilities.ice_barrier.description': '以冰霜护盾保护你，吸收 130 点伤害，持续 60 秒。',
+  'entities.abilities.ice_barrier.description':
+    '以冰霜护盾保护你，吸收 {damage} 点伤害，持续 60 秒。',
   'entities.abilities.sinister_strike.name': '邪恶斩击',
   'entities.abilities.sinister_strike.description':
     '立即攻击，造成武器伤害加 {damage}。奖励 1 个连击点。',
   'entities.abilities.eviscerate.name': '长眠',
-  'entities.abilities.eviscerate.description': '终结技，根据连击点数造成伤害。',
+  'entities.abilities.eviscerate.description': '终结技，造成 {damage}。',
   'entities.abilities.backstab.name': '卑劣突刺',
   'entities.abilities.backstab.description':
     '背刺目标，造成 150% 武器伤害加 {damage}。必须位于目标背后。需要匕首。奖励 1 个连击点。',
   'entities.abilities.gouge.name': '戳眼',
   'entities.abilities.gouge.description':
-    '攻击目标，使其瘫痪 4 秒。任何伤害都会打破效果。奖励 1 个连击点。',
+    '攻击目标，造成 {damage} 点伤害，并使其瘫痪 4 秒。任何伤害都会打破效果。奖励 1 个连击点。',
   'entities.abilities.evasion.name': '鬼步',
   'entities.abilities.evasion.description': '使你的躲闪几率提高 50%，持续 15 秒。',
   'entities.abilities.slice_and_dice.name': '割喉节奏',
@@ -1819,19 +1886,19 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.adrenaline_rush.description': '热血沸腾，立即恢复 60 点能量。',
   'entities.abilities.garrote.name': '绞喉线',
   'entities.abilities.garrote.description':
-    '勒住敌人的喉咙，立即造成伤害，并使其流血，在 18 秒内受到 {damage} 点伤害。必须处于潜行状态。奖励 1 个连击点。',
+    '勒住敌人的喉咙，立即造成 {damage} 点伤害，并使其流血，在 18 秒内受到 {overTime} 点伤害。必须处于潜行状态。奖励 1 个连击点。',
   'entities.abilities.cheap_shot.name': '击腹拳',
   'entities.abilities.cheap_shot.description':
-    '攻击目标，使其昏迷 4 秒。必须处于潜行状态。奖励 2 个连击点。',
+    '攻击目标，造成 {damage} 点伤害，并使其昏迷 4 秒。必须处于潜行状态。奖励 2 个连击点。',
   'entities.abilities.sap.name': '闷棍',
   'entities.abilities.sap.description':
     '使目标无法行动，持续 8 秒。必须处于潜行状态且不在战斗中。任何伤害都会打破效果。',
   'entities.abilities.crippling_poison.name': '沉铅毒液',
   'entities.abilities.crippling_poison.description':
-    '以沉铅毒液攻击目标，造成 {damage} 点自然伤害，并使其移动速度降低 50%，持续 12 秒。',
+    '以沉铅毒液打击目标，造成 {damage} 点自然伤害，并使其移动速度降低 50%，持续 12 秒。',
   'entities.abilities.expose_armor.name': '护甲突破',
   'entities.abilities.expose_armor.description':
-    '终结技，使目标护甲值降低。消耗的连击点越多，削减得越深。',
+    '终结技，暴露目标，使其护甲降低 {damage}，持续 30 秒。',
   'entities.abilities.rupture.name': '血流不止',
   'entities.abilities.rupture.description':
     '终结技，撕裂目标，使其流血，在 16 秒内受到 {damage} 点伤害。',
@@ -1849,24 +1916,25 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
     '使目标失明，导致其神志不清地四处游荡，持续 8 秒。任何伤害都会打破效果。',
   'entities.abilities.seal_of_righteousness.name': '誓约烙印',
   'entities.abilities.seal_of_righteousness.description':
-    '使你充满神圣能量，持续 30 秒，使每次近战挥击造成 4 点额外神圣伤害。可用裁决释放。',
+    '使你充满神圣能量，持续 30 秒，使每次近战挥击造成 {damage} 点额外神圣伤害。可用裁决释放。',
   'entities.abilities.holy_light.name': '愈疗之光',
   'entities.abilities.holy_light.description': '为一个友方目标恢复 {damage} 点生命值。',
   'entities.abilities.devotion_aura.name': '坚定光环',
-  'entities.abilities.devotion_aura.description': '使你的护甲提高 40，持续 30 分钟。',
+  'entities.abilities.devotion_aura.description': '使你的护甲提高 {buff}，持续 30 分钟。',
   'entities.abilities.judgement.name': '裁决',
   'entities.abilities.judgement.description':
     '对敌人释放你当前的圣印，将其消耗以造成它所储存的神圣伤害。',
   'entities.abilities.blessing_of_might.name': '钢铁誓约',
   'entities.abilities.blessing_of_might.description':
-    '为一个友方目标施加祝福，使攻击强度提高 15，持续 5 分钟。',
+    '为一个友方目标施加祝福，使攻击强度提高 {buff}，持续 5 分钟。',
   'entities.abilities.divine_protection.name': '信仰守护',
-  'entities.abilities.divine_protection.description': '一道守护结界吸收 50 点伤害，持续 10 秒。',
+  'entities.abilities.divine_protection.description':
+    '一道守护结界吸收 {damage} 点伤害，持续 10 秒。',
   'entities.abilities.hammer_of_justice.name': '碎裂法槌',
-  'entities.abilities.hammer_of_justice.description': '使目标昏迷 3 秒。',
+  'entities.abilities.hammer_of_justice.description': '使目标昏迷 {duration} 秒。',
   'entities.abilities.lay_on_hands.name': '临终圣礼',
   'entities.abilities.lay_on_hands.description':
-    '巨大的治疗涌流：恢复 250 点生命值。10 分钟冷却时间。',
+    '巨大的治疗涌流：恢复 {damage} 点生命值。10 分钟冷却时间。',
   'entities.abilities.flash_of_light.name': '圣光愈合',
   'entities.abilities.flash_of_light.description':
     '一道快速而高效的圣光爆发，为一个友方目标恢复 {damage} 点生命值。',
@@ -1874,7 +1942,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.exorcism.description': '以神圣怒火驱逐邪恶，造成 {damage} 点神圣伤害。',
   'entities.abilities.consecration.name': '神圣领域',
   'entities.abilities.consecration.description':
-    '奉献你脚下的土地，灼烧附近敌人，造成 {damage} 点神圣伤害。',
+    '奉献你脚下的土地，持续 10 秒，每 2 秒灼烧附近敌人并造成 {damage} 点神圣伤害。',
   'entities.abilities.righteous_fury.name': '炽燃誓约',
   'entities.abilities.righteous_fury.description':
     '使你的神圣伤害产生的威胁值提高 60%，持续 30 分钟。防护圣骑士的核心技能。',
@@ -1888,21 +1956,23 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.dismiss_pet.description': '将你的宠物放归野外。',
   'entities.abilities.raptor_strike.name': '剖膛一击',
   'entities.abilities.raptor_strike.description':
-    '一次强力近战攻击，使伤害提高 5。在你的下一次挥击时触发。',
+    '一次强力近战攻击，使伤害提高 {damage}。在你的下一次挥击时触发。',
   'entities.abilities.aspect_of_the_hawk.name': '鹞鹰之姿',
   'entities.abilities.aspect_of_the_hawk.description':
-    '化为鹞鹰之姿，使攻击强度提高 20，持续 30 分钟。',
+    '化为鹞鹰之姿，使攻击强度提高 {buff}，持续 30 分钟。',
   'entities.abilities.serpent_sting.name': '毒液倒刺',
   'entities.abilities.serpent_sting.description': '钉刺目标，在 15 秒内造成 {damage} 点自然伤害。',
   'entities.abilities.arcane_shot.name': '凶邪射击',
   'entities.abilities.arcane_shot.description': '瞬发射击，造成 {damage} 点奥术伤害。',
   'entities.abilities.concussive_shot.name': '震颤射击',
-  'entities.abilities.concussive_shot.description': '使目标眩晕迟缓，移动速度降低 50%，持续 4 秒。',
+  'entities.abilities.concussive_shot.description':
+    '使目标眩晕迟缓，造成 {damage} 点伤害，并使移动速度降低 50%，持续 4 秒。',
   'entities.abilities.mongoose_bite.name': '反噬獠牙',
   'entities.abilities.mongoose_bite.description':
-    '在目标躲闪后反击，造成武器伤害加 12。无法被躲闪。',
+    '在目标躲闪后反击，造成武器伤害加 {damage}。无法被躲闪。',
   'entities.abilities.wing_clip.name': '束缚斩',
-  'entities.abilities.wing_clip.description': '造成伤口，使敌人移动速度降低 40%，持续 10 秒。',
+  'entities.abilities.wing_clip.description':
+    '造成伤口，造成 {damage} 点伤害，并使敌人移动速度降低 40%，持续 10 秒。',
   'entities.abilities.aspect_of_the_monkey.name': '松貂之姿',
   'entities.abilities.aspect_of_the_monkey.description':
     '化为松貂之姿，使躲闪几率提高 8%，持续 30 分钟。',
@@ -1918,11 +1988,12 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.lesser_heal.name': '低语祈祷',
   'entities.abilities.lesser_heal.description': '为一个友方目标恢复 {damage} 点生命值。',
   'entities.abilities.power_word_fortitude.name': '坚毅连祷',
-  'entities.abilities.power_word_fortitude.description': '使目标的耐力提高 3，持续 30 分钟。',
+  'entities.abilities.power_word_fortitude.description': '使目标的耐力提高 {buff}，持续 30 分钟。',
   'entities.abilities.shadow_word_pain.name': '腐朽挽歌',
   'entities.abilities.shadow_word_pain.description': '黑暗之语在 18 秒内造成 {damage} 点暗影伤害。',
   'entities.abilities.power_word_shield.name': '守护圣咏',
-  'entities.abilities.power_word_shield.description': '保护目标，吸收 48 点伤害，持续 30 秒。',
+  'entities.abilities.power_word_shield.description':
+    '保护目标，吸收 {damage} 点伤害，持续 30 秒。',
   'entities.abilities.renew.name': '萦绕恩泽',
   'entities.abilities.renew.description': '在 15 秒内为目标恢复 {damage} 点生命值。',
   'entities.abilities.mind_blast.name': '碎心术',
@@ -1938,7 +2009,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.lightning_bolt.description': '投掷一道闪电，造成 {damage} 点自然伤害。',
   'entities.abilities.rockbiter_weapon.name': '缚石武器',
   'entities.abilities.rockbiter_weapon.description':
-    '以大地之怒灌注你的武器：每次挥击额外造成 5 点伤害，持续 5 分钟。',
+    '以大地之怒灌注你的武器：每次挥击额外造成 {damage} 点伤害，持续 5 分钟。',
   'entities.abilities.healing_wave.name': '治愈之水',
   'entities.abilities.healing_wave.description': '为一个友方目标恢复 {damage} 点生命值。',
   'entities.abilities.earth_shock.name': '大地震击',
@@ -1946,19 +2017,19 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
     '立即以震荡之力冲击目标，造成 {damage} 点自然伤害。',
   'entities.abilities.lightning_shield.name': '雷霆护罩',
   'entities.abilities.lightning_shield.description':
-    '以爆裂闪电环绕自身：近战攻击者会受到 13 点自然伤害。',
+    '以爆裂闪电环绕自身：近战攻击者会受到 {buff} 点自然伤害，最多 3 次充能且每 5 秒最多触发一次。',
   'entities.abilities.flame_shock.name': '余烬震击',
   'entities.abilities.flame_shock.description':
-    '用火焰灼烧目标，造成 25 点伤害，并在 12 秒内额外造成 {damage}。',
+    '用火焰灼烧目标，造成 {damage} 点伤害，并在 12 秒内额外造成 {overTime}。',
   'entities.abilities.flametongue_weapon.name': '焰烙武器',
   'entities.abilities.flametongue_weapon.description':
-    '用元素之火灌注你的武器：每次挥击额外造成 8 点火焰伤害，持续 5 分钟。',
+    '用元素之火灌注你的武器：每次挥击额外造成 {damage} 点火焰伤害，持续 5 分钟。',
   'entities.abilities.frost_shock.name': '凛霜震击',
   'entities.abilities.frost_shock.description':
     '立即以冰霜冲击目标，造成 {damage} 点冰霜伤害，并使其移动速度降低 50%，持续 8 秒。',
   'entities.abilities.frostbrand_weapon.name': '缚霜武器',
   'entities.abilities.frostbrand_weapon.description':
-    '为你的武器附上刺骨寒霜：每次挥击额外造成 8 点伤害，持续 5 分钟。',
+    '为你的武器附上刺骨寒霜：每次挥击额外造成 {damage} 点伤害，持续 5 分钟。',
   'entities.abilities.ghost_wolf.name': '影狼',
   'entities.abilities.ghost_wolf.description': '化身为影狼，使移动速度提高 40%，持续 10 分钟。',
   'entities.abilities.stormstrike.name': '先祖打击',
@@ -1967,14 +2038,14 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.shadow_bolt.name': '幽暗箭',
   'entities.abilities.shadow_bolt.description': '向敌人发射暗影箭，造成 {damage} 点暗影伤害。',
   'entities.abilities.demon_skin.name': '邪魔硬皮',
-  'entities.abilities.demon_skin.description': '恶魔皮肤使你的护甲提高 30，持续 30 分钟。',
+  'entities.abilities.demon_skin.description': '恶魔皮肤使你的护甲提高 {buff}，持续 30 分钟。',
   'entities.abilities.immolate.name': '燃烧契约',
   'entities.abilities.immolate.description':
-    '灼烧敌人，造成 11 点火焰伤害，并在 15 秒内额外造成 {damage}。',
+    '灼烧敌人，造成 {damage} 点火焰伤害，并在 15 秒内额外造成 {overTime}。',
   'entities.abilities.corruption.name': '黑腐术',
   'entities.abilities.corruption.description': '腐蚀目标，在 18 秒内造成 {damage} 点暗影伤害。',
   'entities.abilities.life_tap.name': '苛酷交易',
-  'entities.abilities.life_tap.description': '将 30 点生命值转化为 30 点法力值。',
+  'entities.abilities.life_tap.description': '将 {damage} 点生命值转化为 {damage} 点法力值。',
   'entities.abilities.curse_of_agony.name': '苦楚妖术',
   'entities.abilities.curse_of_agony.description':
     '以痛苦诅咒目标：在 24 秒内造成 {damage} 点暗影伤害。',
@@ -1995,19 +2066,19 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.healing_touch.description': '为一个友方目标恢复 {damage} 点生命值。',
   'entities.abilities.mark_of_the_wild.name': '野性守护',
   'entities.abilities.mark_of_the_wild.description':
-    '为一个友方目标施加野性守护，使护甲提高 25，持续 30 分钟。',
+    '为一个友方目标施加野性守护，使护甲提高 {buff}，持续 30 分钟。',
   'entities.abilities.moonfire.name': '月光风暴',
   'entities.abilities.moonfire.description':
     '以月火灼烧敌人，造成 {damage} 点奥术伤害，并附加持续伤害。',
   'entities.abilities.rejuvenation.name': '野性绽放',
   'entities.abilities.rejuvenation.description': '在 12 秒内为目标恢复 {damage} 点生命值。',
   'entities.abilities.thorns.name': '荆棘守护',
-  'entities.abilities.thorns.description': '目标身上长出荆棘：近战攻击者受到 3 点自然伤害。',
+  'entities.abilities.thorns.description': '目标身上长出荆棘：近战攻击者受到 {buff} 点自然伤害。',
   'entities.abilities.entangling_roots.name': '缠握根须',
   'entities.abilities.entangling_roots.description': '将目标缠绕在原地，最多持续 12 秒。',
   'entities.abilities.bear_form.name': '巨熊形态',
   'entities.abilities.bear_form.description':
-    '变形为熊：护甲 +65%，攻击强度 +15，你的攻击会产生怒气并额外产生 30% 威胁值。再次施放可返回施法者形态。',
+    '变形为熊：护甲 +90%，攻击强度大幅提高，你的攻击会产生怒气并额外产生 30% 威胁值。再次施放可返回施法者形态。',
   'entities.abilities.maul.name': '碎骨击',
   'entities.abilities.maul.description':
     '一次猛击攻击，使近战伤害提高 {damage}，并产生大量威胁值。在你的下一次挥击时触发。仅限巨熊形态。',
@@ -2021,7 +2092,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.claw.description':
     '用利爪攻击敌人，造成武器伤害加 {damage}。奖励 1 个连击点。仅限狼形态。',
   'entities.abilities.ferocious_bite.name': '血噬',
-  'entities.abilities.ferocious_bite.description': '终结技，根据连击点数造成伤害。仅限狼形态。',
+  'entities.abilities.ferocious_bite.description': '终结技，造成 {damage}。仅限狼形态。',
   'entities.abilities.swipe.name': '横扫利爪',
   'entities.abilities.swipe.description':
     '横扫附近敌人，造成 {damage} 点伤害。造成额外威胁值。仅限巨熊形态。',
@@ -2040,7 +2111,8 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.bash.name': '震荡击',
   'entities.abilities.bash.description': '昏迷目标 2 秒。仅限巨熊形态。',
   'entities.abilities.faerie_fire.name': '巫光',
-  'entities.abilities.faerie_fire.description': '使目标的护甲降低 35，持续 40 秒。',
+  'entities.abilities.faerie_fire.description':
+    '使目标的护甲降低 {damage}%，持续 40 秒。无法与削甲叠加。',
   'entities.abilities.hibernate.name': '沉眠',
   'entities.abilities.hibernate.description':
     '迫使目标陷入深度睡眠，最多持续 8 秒。任何伤害都会将其唤醒。',
@@ -2055,16 +2127,17 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.tigers_fury.name': '狼血',
   'entities.abilities.tigers_fury.description': '使攻击强度提高 40，持续 6 秒。仅限狼形态。',
   'entities.abilities.rip.name': '割裂',
-  'entities.abilities.rip.description': '终结技，在 12 秒内造成流血伤害。消耗连击点。仅限狼形态。',
+  'entities.abilities.rip.description':
+    '终结技，在 12 秒内造成 {damage} 点流血伤害。消耗连击点。仅限狼形态。',
   'entities.abilities.mortal_strike.name': '致残打击',
   'entities.abilities.mortal_strike.description':
     '凶狠打击，造成武器伤害外加 {damage} 点伤害。（武器专精标志技能）',
   'entities.abilities.bloodthirst.name': '放血',
   'entities.abilities.bloodthirst.description':
-    '在鲜血狂怒中立即攻击，造成 {damage} 点伤害。（狂怒专精标志技能）',
+    '在鲜血狂怒中立即攻击，造成 60% 武器伤害加 {damage}。（狂怒专精标志技能）',
   'entities.abilities.shield_slam.name': '碎盾击',
   'entities.abilities.shield_slam.description':
-    '用盾牌猛击目标，造成 {damage} 点伤害并产生巨量威胁。（防护专精标志技能）',
+    '用盾牌猛击目标，造成 50% 武器伤害加 {damage} 并产生巨量威胁。（防护专精标志技能）',
   'entities.abilities.whirlwind.name': '利刃回旋',
   'entities.abilities.whirlwind.description':
     '以致命弧线旋转，打击附近所有敌人，造成 {damage} 点伤害。（狂怒天赋）',
@@ -2174,6 +2247,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.items.webwood_silk.name': '墨网丝腺',
   'entities.items.supply_crate.name': '被盗补给箱',
   'entities.items.greyjaw_fang.name': '老灰颚的尖牙',
+  'entities.items.chunk_of_ore.name': '矿石块',
   'entities.items.weathered_ledger_page.name': '风化账页',
   'entities.items.morthen_grimoire.name': '莫森的魔典',
   'entities.items.wolf_fang.name': '裂开的狼牙',
@@ -2188,6 +2262,9 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.items.tallow_candle.name': '油腻兽脂块',
   'entities.items.spider_leg.name': '抽搐的蜘蛛腿',
   'entities.items.bone_fragments.name': '骨头碎片',
+  'entities.items.arcane_dust.name': '奥术之尘',
+  'entities.items.arcane_essence.name': '奥术精华',
+  'entities.items.arcane_shard.name': '奥术碎片',
   'entities.items.linen_scrap.name': '亚麻碎布',
   'entities.items.fen_muster_order.name': '芬桥集结令',
   'entities.items.mire_prowler_pelt.name': '泥沼潜伏者毛皮',
@@ -2396,6 +2473,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.gravecaller_cultist.name': '唤墓者教徒',
   'entities.mobs.gravecaller_summoner.name': '唤墓者召唤师',
   'entities.mobs.deacon_voss.name': '执事沃斯',
+  'entities.mobs.training_dummy.name': '训练假人',
   'entities.mobs.ridge_stalker.name': '山脊潜猎者',
   'entities.mobs.deeprock_kobold.name': '深岩掘地者',
   'entities.mobs.thornpeak_ogre.name': '荆峰食人魔',
@@ -2540,6 +2618,12 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.tidewatcher_ondrel.title': '守潮者',
   'entities.npcs.tidewatcher_ondrel.greeting':
     '潭水饮尽月光，{className}，又将溺者吐还。我守望那道门户已有三十夜——而今夜，它开了。',
+  'entities.quests.q_prof_intro.title': '人人都有一技之长',
+  'entities.quests.q_prof_intro.text':
+    '伊斯特布鲁克的每个人都有除了剑术之外的手艺，{playerName}。镇子周围散落着矿脉，去挥镐采上5块矿石带给我。要亲自采，别耍花招，我看得出来。',
+  'entities.quests.q_prof_intro.completion':
+    '看到了吧？矿石进了包里，手上也磨出了茧子。继续在路上采矿、伐木、采药，回到镇上时，留意市场旁的城镇专注面板和附近的制作台。只要你愿意，这里面都有正经买卖等着你。',
+  'entities.quests.q_prof_intro.objectives.0.label': '矿石块',
   'entities.quests.q_wolves.title': '门前群狼',
   'entities.quests.q_wolves.text':
     '森林狼已经敢扑咬北路旅人，{playerName}。击败8只森林狼，让东溪能松一口气。',
@@ -3169,7 +3253,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'news.prerelease': '预发布',
   'news.viewOnGithub': '在 GitHub 上查看',
   'wiki.cta': '浏览百科指南',
-  // --- qol-changes: character profile, attack-move, login/create labels ---
   'character.portraitAlt': '{name}的头像',
   'character.viewProfile': '查看资料',
   'character.profile': '角色资料',
@@ -3184,7 +3267,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'auth.chromaOption': '配色 {n}',
   'auth.noAccountPrompt': '初来乍到？',
   'auth.haveAccountPrompt': '已有账号？',
-
   'entities.items.conjured_bread.name': '魔法燕麦饼',
   'entities.items.conjured_bread2.name': '魔法黑面包',
   'entities.items.conjured_bread3.name': '魔法蜜糕',
@@ -3245,7 +3327,12 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.items.elderwood_axe.name': '古木斧',
   'entities.items.goldleaf_sickle.name': '金叶镰刀',
   'entities.items.sunpetal_sickle.name': '阳瓣镰刀',
-  // v0.10.0 release fill (Fiesta / skin-select / NPC voices / chat channels / Brightwood Glade)
+  'entities.items.thorium_ore.name': '瑟银矿石',
+  'entities.items.arcanite_bar.name': '秘银锭',
+  'entities.items.ashwood_log.name': '灰木原木',
+  'entities.items.elderwood_log.name': '古老接骨木原木',
+  'entities.items.goldleaf_herb.name': '金叶草',
+  'entities.items.sunpetal_herb.name': '阳瓣草',
   'hud.core.chatChannels.add': '添加聊天频道',
   'hud.core.chatChannels.addTitle': '添加频道',
   'hud.core.chatChannels.close': '关闭{channel}标签',
@@ -3426,7 +3513,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.meters.seconds': '{s}秒',
   'hudChrome.mobile.actionPageToggle': '切换动作页',
   'hudChrome.mobile.actionRing': '战斗动作',
-  'hudChrome.mobile.autorun': '自动奔跑',
   'hudChrome.mobile.haptics': '震动反馈',
   'hudChrome.mobile.hapticsOff': '震动反馈：关',
   'hudChrome.mobile.hotbarPage': '技能',
@@ -3490,7 +3576,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.controller.resetButtons': '重置按键布局',
   'hudChrome.controller.menuAction': '游戏菜单',
   'hudChrome.controller.help': '左摇杆移动，右摇杆控制镜头。打开窗口即可使用屏幕指针。',
-  // New-adventurer tutorial (PR #729)
   'hud.tutorial.title': '新冒险者',
   'hud.tutorial.stepLabel': '第 {current} 步，共 {total} 步',
   'hud.tutorial.skip': '跳过教程',
@@ -3625,11 +3710,9 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.account.exportBtn': '下载我的数据',
   'hudChrome.account.exportDone': '你的数据已下载。我们已向你发送确认邮件。',
   'hudChrome.account.exportFailed': '无法导出你的数据。请稍后重试。',
-  // On-screen quest tracker (hudChrome.questTracker.*): collapsed count badge + header toggle hover hint.
   'hudChrome.questTracker.count': '（{count}）',
   'hudChrome.questTracker.collapseHint': '收起任务追踪器',
   'hudChrome.questTracker.expandHint': '展开任务追踪器',
-  // Modular bag filtering controls (hudChrome.bags.*).
   'hudChrome.bags.cannotDestroy': '该物品无法销毁。',
   'hudChrome.bags.rightClickDestroy': '右键单击以销毁',
   'hudChrome.bags.filterGroupAria': '按类别筛选背包',
@@ -3650,7 +3733,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.bags.backpack': '背包',
   'hudChrome.bags.socketEmpty': '空背包栏位',
   'hudChrome.bags.unequipHint': '点击移除此背包',
-  // Guide (/guide) localization.
   'guide.brand': 'World of ClaudeCraft',
   'guide.brandShort': 'ClaudeCraft',
   'guide.tagline': '一款可在浏览器中免费畅玩的经典风格 MMO。',
@@ -4003,7 +4085,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'guide.notFound.title': '我们找不到该页面',
   'guide.notFound.body': '你寻找的页面不存在,或者可能已被移动。',
   'guide.notFound.home': '返回概览',
-  // Guide (/guide) localization.
   'guide.bestiary.heading': '怪物图鉴',
   'guide.bestiary.intro':
     '世界中的各类生物，按种族分门别类。这些是你在野外会遇到的敌人。最致命之物则未列于此，潜伏在地下城的门后。',
@@ -4289,7 +4370,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
     '三片区域，自南向北，每一片的等级都更高一级。跟着任务线走，这片土地便会带你从山谷一路抵达群峰。',
   'guide.worldPage.places': '值得一看的地点',
   'guide.worldPage.residents': '你将遇见的人',
-  // guide.* enrichment fill (lore, gear, social, stats, economy, progression)
   'guide.arenaPage.powerupsBody':
     '激战正酣时，发光的能量球还会落入竞技场，谁先抢到便归谁。它们刻意夸张到极致，且只持续片刻：极速恶魔让你瞬间快得令人目眩，巨像将你膨胀成步履蹒跚的庞然大物，月靴带来低重力的弹跳腾跃，狂战士则让你猛然涌起一股暴怒。',
   'guide.arenaPage.powerupsTitle': '竞技场中的强化道具',
@@ -4631,7 +4711,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'guide.worldPage.gladeTitle': '宁静一隅：明木林地',
   'guide.worldPage.gladeBody':
     'the Vale 里的故事并不全都关于亡者。北方有一片阳光照耀的林地，名为 Brightwood Glade，自有它更为温和的节奏：尽是安静的小径，以及枝叶下斑驳的光影。它是你所追寻的踪迹之外一段柔和的对照，若道路给你余裕闲逛，很值得去看一看。',
-  // APM telemetry label from release/v0.14.0
   'hudChrome.perf.labels.apm': 'APM',
   'entities.zones.eastbrook_vale.pois.9.label': '明木林地',
   'entities.items.reliquary_plate_chest.name': '圣物库守卫锁甲',
@@ -4899,6 +4978,13 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraEffect.dodgeReduce': '躲闪几率降低 {pct}%',
   'hudChrome.auraEffect.armorFlat': '护甲降低 {value}',
   'hudChrome.auraEffect.armorFlatStacks': '护甲降低 {value}（{stacks} 层）',
+  'hudChrome.auraEffect.increasePct.ap': '攻击强度提高 {pct}%',
+  'hudChrome.auraEffect.increasePct.armor': '护甲提高 {pct}%',
+  'hudChrome.auraEffect.increasePct.int': '智力提高 {pct}%',
+  'hudChrome.auraEffect.increasePct.sta': '耐力提高 {pct}%',
+  'hudChrome.auraEffect.increasePct.allStats': '所有属性提高 {pct}%',
+  'hudChrome.auraEffect.armorPct': '护甲降低 {pct}%',
+  'hudChrome.auraEffect.armorPctStacks': '护甲降低 {pct}%（{stacks} 层）',
   'hudChrome.auraEffect.physVuln': '受到的物理伤害提高 {pct}%',
   'hudChrome.auraEffect.mortalWound': '受到的治疗降低 {pct}%',
   'hudChrome.auraEffect.vulnerability': '受到的伤害提高 {pct}%',
@@ -4976,6 +5062,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.wyrmshadow.bonus3': '敏捷提高 15 点，致命一击几率提高 2%。',
   'entities.itemSets.wyrmshadow.bonus4':
     '你的武器致命一击有 50% 的几率触发“獠牙疾袭”，使攻击速度提高 25%，持续 8 秒。',
+  'hudChrome.itemSoulbound': '灵魂绑定',
   'hudChrome.itemSet.header': '{name} ({have}/{total})',
   'hudChrome.itemProc.onMeleeHit': '命中时几率（{chance}%）：{effect}',
   'hudChrome.itemProc.onSpellDamage': '造成伤害的法术几率（{chance}%）：{effect}',
@@ -4988,7 +5075,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.itemProc.hot': '绽放{name}，一种持续治疗效果，在{duration}秒内恢复{total}点生命',
   'hudChrome.itemSet.bonusLine': '({pieces}) {bonus}',
   'hudChrome.abilityScaling.bonus': '(+{value})',
-  // Discord integration (two-way login, rewards, relay, in-game flair).
   'hudChrome.discord.close': '关闭',
   'hudChrome.discord.keybind': 'Discord 面板',
   'hudChrome.discord.disabled': 'Discord 集成当前不可用。',
@@ -5104,7 +5190,15 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.relay.wts.label': '出售',
   'hudChrome.discord.relay.wtb.label': '收购',
   'hudChrome.discord.relay.help.label': '求助',
-  // Developer badge (M16 non-Latin fills).
+  'hudChrome.crafting.title': '制作',
+  'hudChrome.crafting.close': '关闭制作',
+  'hudChrome.crafting.craft': '制作',
+  'hudChrome.crafting.reagentsNeeded': '需要:',
+  'hudChrome.crafting.empty': '尚无已知配方。',
+  'hudChrome.crafting.resultAria': '制作{name}',
+  'hudChrome.crafting.craftedToast': '已制作:{name}',
+  'hudChrome.crafting.insufficientMaterials': '你没有足够的材料。',
+  'hudChrome.crafting.unknownRecipe': '该配方不存在。',
   'hudChrome.devBadge.title': '开发者',
   'hudChrome.devBadge.tiers.tinkerer': '修补匠',
   'hudChrome.devBadge.tiers.artificer': '工巧师',
@@ -5142,7 +5236,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'desktop.crash.reload': '重新加载',
   'desktop.crash.quit': '退出',
   'desktop.crash.fatalBody': 'World of ClaudeCraft 遇到意外错误，需要关闭。',
-  // Map editor (/editor), added with the editor catalog domain.
   'editor.appTitle': '地图编辑器',
   'editor.docTitle': '地图编辑器 - World of ClaudeCraft',
   'editor.untitledMap': '未命名地图',
@@ -5607,15 +5700,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.dailyRewards.remainingMinutes': '{minutes}分',
   'hudChrome.dailyRewards.sol': '{amount} SOL',
   'hudChrome.dailyRewards.usd': '{amount} USD',
-  'hudChrome.crafting.title': '制作',
-  'hudChrome.crafting.close': '关闭制作',
-  'hudChrome.crafting.craft': '制作',
-  'hudChrome.crafting.reagentsNeeded': '需要:',
-  'hudChrome.crafting.empty': '尚无已知配方。',
-  'hudChrome.crafting.resultAria': '制作{name}',
-  'hudChrome.crafting.craftedToast': '已制作:{name}',
-  'hudChrome.crafting.insufficientMaterials': '你没有足够的材料。',
-  'hudChrome.crafting.unknownRecipe': '该配方不存在。',
   'guide.professions.intro':
     '除了战斗和任务之外，这个世界还会奖励你耕耘土地与锻造：采集原材料，在十种不同行业的制作站中将其打造成装备，并在这些行业所代表的十种命途之一中确立自己的身份。',
   'guide.professions.gatherTitle': '采集：采矿、伐木与草药学',
@@ -5657,7 +5741,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'guide.professions.archetypeIdentityTitle': '你的命途意味着什么',
   'guide.professions.archetypeIdentityBody':
     '你当前的命途，是关于你的角色在这个世界中是谁的一种宣告，会体现在他人与世界如何称呼你之中。它所附带的具体奖励与认可仍在完善之中；请随着系统的完善持续关注。',
-  // apiError.* server error-code catalog (M16 non-Latin fill, Phase 22)
   'apiError.validation.failed': '部分字段无效。请检查表单后重试。',
   'apiError.json.malformed': '无法读取该请求。请重试。',
   'apiError.body.too_large': '该请求过大。请减少数据后重试。',
@@ -5717,7 +5800,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'apiError.discord.swag_claimed': '你已经领取过此奖励。',
   'apiError.discord.swag_tier': '达到更高段位即可领取。',
   'apiError.discord.swag_points': '积分不足。',
-  // The Ravenpost mailbox (M16 non-Latin fill)
   'hudChrome.mailbox.title': '邮箱',
   'hudChrome.mailbox.subtitle': '渡鸦邮驿',
   'hudChrome.mailbox.close': '关闭邮箱',
@@ -5739,6 +5821,8 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mailbox.parcelsLabel': '包裹',
   'hudChrome.mailbox.parcelsHint': '点击背包中的物品即可附上。',
   'hudChrome.mailbox.removeParcelAria': '从信件中移除 {item}',
+  'hudChrome.mailbox.parcelQtyDecreaseAria': '少寄一个{item}',
+  'hudChrome.mailbox.parcelQtyIncreaseAria': '多寄一个{item}',
   'hudChrome.mailbox.sendButton': '寄出信件',
   'hudChrome.mailbox.postageNote': '邮资：{amount}。渡鸦飞行约 {seconds} 秒。',
   'hudChrome.mailbox.arrivedBanner': '渡鸦已降落：来自 {name} 的邮件。',
@@ -5760,7 +5844,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mailbox.result.letterGone': '那封信已不在你的邮箱里。',
   'hudChrome.mailbox.result.takeParcelsFirst': '请先取出包裹再丢弃信件。',
   'worldContent.mailboxName': '邮箱',
-  // Ravenpost authored letters (M16 non-Latin fill)
   'entities.letters.ravenpost_welcome.sender': '渡鸦邮驿',
   'entities.letters.ravenpost_welcome.subject': '渡鸦如今为你飞翔',
   'entities.letters.ravenpost_welcome.body':
@@ -5777,7 +5860,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.letters.letter_q_hollow.subject': '你在黑暗中所做的一切',
   'entities.letters.letter_q_hollow.body':
     '很少有人会知道那处洼地里埋葬着什么，愿意相信的人更少。但我知道，而且我不会忘记。\n\n愿你的道路常明。\n- 奥德里克修士',
-  // Event calendar (M16 non-Latin fill)
   'hudChrome.calendar.title': '活动日历',
   'hudChrome.calendar.close': '关闭日历',
   'hudChrome.calendar.keybindLabel': '活动日历',
@@ -5822,6 +5904,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gathering.herbalism': '草药学',
   'hudChrome.archetypeTitle.label': '称号',
   'hudChrome.archetypeTitle.none': '无',
+  'hudChrome.archetypeTitle.hobbyLabel': '爱好',
   'hudChrome.archetypeTitle.armorcrafting': '锻甲师',
   'hudChrome.archetypeTitle.weaponcrafting': '武器匠',
   'hudChrome.archetypeTitle.jewelcrafting': '珠宝匠',
@@ -5832,13 +5915,50 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.archetypeTitle.enchanting': '附魔师',
   'hudChrome.archetypeTitle.tailoring': '裁缝',
   'hudChrome.archetypeTitle.leatherworking': '制皮师',
-  // Release v0.22.0 locale fill.
   'hudChrome.crafting.reagentLine': '{name}: {have}/{required}',
+  // Protect Yumi locale fill (M16 wordy-key floor).
+  'yumi.hud.collapse': '折叠Protect Yumi血条',
+  'yumi.hud.expand': '展开Protect Yumi血条',
+  'guide.arenaPage.yumiHeading': '守护Yumi',
+  'guide.arenaPage.yumiBody':
+    'Protect Yumi是一种在迷宫中进行的团队目标模式：每队守护自己的猫咪使魔，同时猎杀对方的。两只猫咪会不时闪现到迷宫的新角落，战斗在防守、追猎与寻回之间不断摇摆。可选择3对3或5对5排队；阵亡只会让你短暂离场。',
+  'yumi.queue.join': '你加入了Protect Yumi队列。守好你的使魔……',
+  'yumi.queue.leave': '你离开了Protect Yumi队列。',
+  'yumi.queue.teamLeave': '你的队伍离开了Protect Yumi队列。',
+  'yumi.error.partyTooBig3': 'Protect Yumi 3v3最多允许三人小队。',
+  'yumi.error.partyTooBig5': 'Protect Yumi 5v5最多允许五人小队。',
+  'yumi.log.start': 'Protect Yumi！保卫你的使魔，猎杀敌方的使魔。',
+  'yumi.bracket3': 'Yumi 3v3',
+  'yumi.bracket5': 'Yumi 5v5',
+  'yumi.enterQueue': '加入Protect Yumi！',
+  'yumi.hud.title': '守护YUMI',
+  'yumi.hud.getReady': '做好准备……',
+  'yumi.hud.teleportIn': 'Yumi将在{s}秒后传送',
+  'yumi.hud.suddenDeath': '骤死战',
+  'yumi.hud.yourYumi': '我方Yumi',
+  'yumi.hud.enemyYumi': '敌方Yumi',
+  'yumi.hud.aria': '我方Yumi生命值{mine}/{max}，敌方Yumi生命值{theirs}。',
+  'yumi.respawn.title': '倒下了！',
+  'yumi.banner.sudden': '骤死战！Yumi不再传送！',
+  'yumi.banner.teleport': 'Yumi传送了！',
+  'yumi.end.win': '胜利！Yumi安全了！',
+  'yumi.end.loss': '战败！你的Yumi倒下了。',
   'hudChrome.crafting.comboRequirementUnmet': '你没有达到该配方所需组合的两项制造技能等级。',
+  'hudChrome.crafting.notAtHub': '必须达到所需等级并位于制作站，才能制作该物品。',
+  'hudChrome.crafting.throttled': '你制作得太快了，请稍等片刻后再试。',
+  'hudChrome.crafting.recipeNotLearned': '你还没有学会这个配方。',
   'hudChrome.mobile.actionPageIndicator': '第{page}页',
   'hudChrome.mobile.spellbookPageLabel': '页{page}',
+  'hudChrome.mobile.hideKeyboard': '隐藏键盘',
+  'hudChrome.mobile.chatPlaceholder': '说点什么...',
   // The Vale Cup boarball minigame (docs/prd/vale-cup.md).
   'hudChrome.keybinds.valecup': '溪谷杯',
+  'hudChrome.keybinds.categoryPet': '宠物',
+  'hudChrome.keybinds.petAttack': '宠物：攻击',
+  'hudChrome.keybinds.petStop': '宠物：停止',
+  'hudChrome.keybinds.petTaunt': '宠物：嘲讽',
+  'hudChrome.keybinds.petDefensive': '宠物：防御',
+  'hudChrome.keybinds.petAggressive': '宠物：攻击性',
   'hudChrome.vcup.title': '溪谷杯',
   'hudChrome.vcup.close': '关闭溪谷杯窗口',
   'hudChrome.vcup.offlineNote': '赛程簿已合上。溪谷杯目前不可用。',
@@ -5993,7 +6113,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.groundskeeper_bram.greeting':
     '休战约定在母猪场依然有效，{className}：只许用脚和肩膀。想为铜奶桶一战吗？',
   'entities.zones.eastbrook_vale.pois.10.label': '母猪场',
-  // The Vale Cup sport kit ability names + descriptions.
   'entities.abilities.sport_kick.name': '踢球',
   'entities.abilities.sport_kick.description': '沿地面把球踢向瞄准点。',
   'entities.abilities.sport_shoot.name': '射门',
@@ -6015,4 +6134,66 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.sport_shoulder.description': '一记符合丰收休战规矩的肩撞，把对手撞得摔离球。',
   'entities.abilities.sport_second_wind.name': '重振旗鼓',
   'entities.abilities.sport_second_wind.description': '找回状态：移动速度提高50%，持续4秒。',
+  'entities.npcs.bursar_fernando.name': '司库费尔南多',
+  'entities.npcs.bursar_fernando.title': '镀金保险箱',
+  'entities.npcs.bursar_fernando.greeting': '欢迎来到镀金保险箱。你的财物在我们的锁后安然无恙。',
+  'entities.npcs.bursar_petra_vell.name': '司库佩特拉·维尔',
+  'entities.npcs.bursar_petra_vell.title': '镀金保险箱',
+  'entities.npcs.bursar_petra_vell.greeting':
+    '镀金保险箱账目清晰，金库更是一尘不染。想让我们为你存放些什么？',
+  'entities.npcs.bursar_aldous_crane.name': '司库奥尔多斯·克莱恩',
+  'entities.npcs.bursar_aldous_crane.title': '镀金保险箱',
+  'entities.npcs.bursar_aldous_crane.greeting':
+    '每一只木箱、每一个钱柜、每一件饰物，交给镀金保险箱都万无一失。',
+  'guide.economy.bankBody':
+    '每座主城都设有镀金保险箱的分号，它是这片大陆的银行商号。与那里的司库交谈即可打开你的保险库：一处背包之外的私人储物空间，伴随角色终身。无论你下次造访哪家分号，寄存的物品都会安然等候。',
+  'guide.economy.bankHow':
+    '保险库打开后，点击背包中的物品即可存入，点击保险库中的物品即可取回。保险库只存放物品，不存放钱币，任务物品也会留在你身上。旅途中背包装满时，还有一个按钮可将全部制造材料一键存入。',
+  'guide.economy.bankSlots':
+    '新开的保险库空间不大，但会随你一同成长。司库出售更多格位，价格逐级走高；在线游玩还能获得额外空间，例如验证邮箱、关联账号，以及引荐好友加入游戏。',
+  'guide.economy.bankTitle': '银行',
+  'hudChrome.bank.title': '银行',
+  'hudChrome.bank.subtitle': '镀金保险箱',
+  'hudChrome.bank.close': '关闭银行',
+  'hudChrome.bank.capacity': '{used}/{total}',
+  'hudChrome.bank.capacityAria': '银行格已用：{used}/{total}',
+  'hudChrome.bank.empty': '你的银行是空的。',
+  'hudChrome.bank.tooFar': '你必须站在银行家旁才能查看银行。',
+  'hudChrome.bank.buySlots': '购买 {count} 个格子',
+  'hudChrome.bank.buySlotsMaxed': '已完全扩展',
+  'hudChrome.bank.buyConfirm': '花费 {price} 购买 {count} 个额外的银行格子吗？',
+  'hudChrome.bank.buyConfirmAccept': '购买',
+  'hudChrome.bank.withdrawHint': '点击取出',
+  'hudChrome.bank.withdrawPartialHint': 'Shift+点击取出部分数量',
+  'hudChrome.bank.depositHint': '点击存入',
+  'hudChrome.bank.depositPartialHint': 'Shift+点击存入部分数量',
+  'hudChrome.bank.cannotDeposit': '无法存入银行',
+  'hudChrome.bank.depositQuantityTitle': '存入 {item}',
+  'hudChrome.bank.depositQuantityInput': '要存入的数量',
+  'hudChrome.bank.depositQuantityConfirm': '存入',
+  'hudChrome.bank.withdrawQuantityTitle': '取出 {item}',
+  'hudChrome.bank.withdrawQuantityInput': '要取出的数量',
+  'hudChrome.bank.withdrawQuantityConfirm': '取出',
+  'hudChrome.bank.filterGroupAria': '按类别筛选银行',
+  'hudChrome.bank.sortAria': '排序银行物品',
+  'hudChrome.bank.searchAria': '按名称搜索银行物品',
+  'hudChrome.bank.depositAll': '存入所有材料',
+  'hudChrome.bank.depositAllDone': '已存入材料：{count}。',
+  'hudChrome.bank.depositAllFull': '已存入材料：{count}。银行已满。',
+  'hudChrome.bank.depositAllNone': '银行已满：未存入任何物品。',
+  'hudChrome.bank.bonusTitle': '奖励格子',
+  'hudChrome.bank.bonusEarned': '+{count}',
+  'hudChrome.bank.bonusStatusEarned': '+{count}',
+  'hudChrome.bank.bonusSourceEmail': '已验证邮箱',
+  'hudChrome.bank.bonusSourceDiscord': '已绑定 Discord',
+  'hudChrome.bank.bonusSourceWallet': '已绑定钱包',
+  'hudChrome.bank.bonusSourceReferral': '已推荐的好友',
+  'hudChrome.bank.bonusAdvertEmail': '验证邮箱可获得 2 个格子。',
+  'hudChrome.bank.bonusAdvertDiscord': '绑定 Discord 可获得 2 个格子。',
+  'hudChrome.bank.bonusAdvertWallet': '绑定钱包可获得 2 个格子。',
+  'hudChrome.bank.bonusReferralProgress': '{count}/{cap}',
+  'hudChrome.bank.bonusReferralExplainer':
+    '邀请好友：当好友升到 10 级，你们各获得 2 个格子，最多 5 位好友。',
+  'hudChrome.bank.bonusSectionAria': '奖励银行格子及获取方式',
+  'entities.mobs.yumi_cat.name': '由美',
 };

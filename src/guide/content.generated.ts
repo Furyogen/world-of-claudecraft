@@ -1594,6 +1594,16 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "model": "mob_dark_caster",
         "tint": "#533566",
         "still": "/guide-stills/mob_dark_caster__533566.webp"
+      },
+      {
+        "name": "Training Dummy",
+        "min": 20,
+        "max": 20,
+        "rare": false,
+        "templateId": "training_dummy",
+        "model": "mob_bandit",
+        "tint": "#6b3a32",
+        "still": "/guide-stills/mob_bandit__6b3a32.webp"
       }
     ]
   },

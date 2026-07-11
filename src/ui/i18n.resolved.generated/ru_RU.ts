@@ -154,6 +154,12 @@ export const ru_RU: EnTranslations = {
     "spectate": {
       "banner": "Наблюдение за {name}"
     },
+    "readyCheck": {
+      "prompt": "{name} начал проверку готовности. Вы готовы?",
+      "ready": "Готов",
+      "notReady": "Не готов",
+      "result": "Проверка готовности: {ready} готовы, {notReady} не готовы, {noResponse} без ответа."
+    },
     "death": {
       "resurrectAtCorpse": "Воскреснуть у тела",
       "resurrectAtHealer": "Целитель душ (болезнь воскрешения)",
@@ -237,46 +243,46 @@ export const ru_RU: EnTranslations = {
     },
     "claudium": {
       "title": "Claudium",
-      "open": "Open Claudium",
-      "close": "Close Claudium",
-      "loading": "Loading Claudium...",
-      "balanceLabel": "Balance",
+      "open": "Открыть Claudium",
+      "close": "Закрыть Claudium",
+      "loading": "Загрузка Claudium…",
+      "balanceLabel": "Баланс",
       "balanceUnit": "{amount} Claudium",
       "solBalance": "SOL: {amount}",
       "wocBalance": "WOC: {amount}",
-      "unavailable": "The Claudium store is unavailable right now. Your balance and purchases are unaffected; please check back shortly.",
-      "disclosure": "Claudium is a one-way soft currency: buy it with money and spend it on cosmetics. It cannot be redeemed, transferred, or cashed out.",
-      "buyTitle": "Buy Claudium",
-      "railLabel": "Payment method",
+      "unavailable": "Магазин Claudium сейчас недоступен. Ваш баланс и покупки не затронуты; повторите попытку позже.",
+      "disclosure": "Claudium — односторонняя игровая валюта: её можно купить за деньги и потратить на косметические предметы. Её нельзя вернуть, передать или обналичить.",
+      "buyTitle": "Купить Claudium",
+      "railLabel": "Способ оплаты",
       "railStripe": "Card",
       "railSol": "SOL",
       "railWoc": "WOC",
       "railWocDiscount": "20% off",
-      "railWocUnavailable": "WOC pricing is unavailable right now.",
+      "railWocUnavailable": "Цена WOC сейчас недоступна.",
       "railNativeUnavailable": "SOL/WOC off.",
-      "amountLabel": "Amount",
-      "showAmounts": "Show all Claudium amounts",
-      "hideAmounts": "Hide extra Claudium amounts",
-      "skuRow": "{usd} for {claudium} Claudium",
+      "amountLabel": "Количество",
+      "showAmounts": "Показать все варианты Claudium",
+      "hideAmounts": "Скрыть дополнительные варианты Claudium",
+      "skuRow": "{claudium} Claudium за {usd}",
       "buyButton": "Buy",
-      "buyUnavailable": "Purchasing is unavailable right now.",
-      "storeTitle": "Cosmetic Store",
-      "storeEmpty": "No cosmetics are available right now.",
+      "buyUnavailable": "Покупки сейчас недоступны.",
+      "storeTitle": "Магазин косметики",
+      "storeEmpty": "Сейчас косметические предметы недоступны.",
       "storeCost": "{amount} Claudium",
-      "spendButton": "Redeem",
-      "kindCosmetic": "Cosmetic",
+      "spendButton": "Обменять",
+      "kindCosmetic": "Косметика",
       "kindSkin": "Skin",
       "kindItem": "Item",
-      "checkoutTitle": "Complete purchase",
-      "checkoutClose": "Close checkout",
-      "checkoutLoading": "Loading checkout...",
-      "checkoutPending": "Transaction in progress. Confirm in your wallet and keep this panel open.",
-      "checkoutPendingButton": "Processing",
-      "checkoutFailed": "Checkout could not be loaded. Please try again.",
-      "checkoutUnavailable": "That Claudium purchase is not available right now.",
-      "checkoutWalletRequired": "Connect a Solana wallet before buying Claudium with crypto.",
-      "checkoutWalletUnsupported": "This wallet cannot sign and send Solana transactions.",
-      "checkoutNotSettled": "The transaction was sent but Claudium was not credited yet. Please try again shortly."
+      "checkoutTitle": "Завершить покупку",
+      "checkoutClose": "Закрыть оплату",
+      "checkoutLoading": "Загрузка оплаты…",
+      "checkoutPending": "Транзакция выполняется. Подтвердите её в кошельке и не закрывайте эту панель.",
+      "checkoutPendingButton": "Обработка",
+      "checkoutFailed": "Не удалось загрузить оплату. Повторите попытку.",
+      "checkoutUnavailable": "Эта покупка Claudium сейчас недоступна.",
+      "checkoutWalletRequired": "Подключите кошелёк Solana перед покупкой Claudium за криптовалюту.",
+      "checkoutWalletUnsupported": "Этот кошелёк не может подписывать и отправлять транзакции Solana.",
+      "checkoutNotSettled": "Транзакция отправлена, но Claudium ещё не зачислен. Повторите попытку позже."
     },
     "theme": {
       "preset": "Тема интерфейса",
@@ -334,6 +340,7 @@ export const ru_RU: EnTranslations = {
       "targetLabel": "Ваша цель",
       "targetAnnounce": "Цель: {name}",
       "partyLabel": "Ваша группа",
+      "partyChip": "Группа",
       "partyGroup": "Группа {n}",
       "durationUnitSeconds": "с",
       "durationUnitMinutes": "м",
@@ -348,7 +355,6 @@ export const ru_RU: EnTranslations = {
       "chat": "Перейти к чату"
     },
     "mobile": {
-      "autorun": "Автобег",
       "jump": "Прыжок",
       "leaderboard": "Рейтинг",
       "dailyRewards": "Награды",
@@ -363,7 +369,9 @@ export const ru_RU: EnTranslations = {
       "actionPageIndicator": "Стр. {page}",
       "targetCycle": "Сменить цель",
       "targetCycleShort": "Цель",
-      "spellbookPageLabel": "Страница {page}"
+      "spellbookPageLabel": "Страница {page}",
+      "hideKeyboard": "Скрыть клавиатуру",
+      "chatPlaceholder": "Напишите сообщение..."
     },
     "tutorial": {
       "moveBodyTouch": "Используйте джойстик передвижения, чтобы двигаться, и проведите по экрану, чтобы осмотреться. Сделайте несколько шагов, чтобы начать.",
@@ -437,11 +445,17 @@ export const ru_RU: EnTranslations = {
       "targetFriendly": "Ближайший союзник",
       "targetFriendlyNext": "Следующий союзник",
       "discord": "Discord",
-      "valecup": "Кубок Долины"
+      "valecup": "Кубок Долины",
+      "categoryPet": "Питомец",
+      "petAttack": "Питомец: атака",
+      "petStop": "Питомец: стоп",
+      "petTaunt": "Питомец: провокация",
+      "petDefensive": "Питомец: защита",
+      "petAggressive": "Питомец: агрессия"
     },
     "vcup": {
       "title": "Кубок Долины",
-      "shootPower": "POWER",
+      "shootPower": "СИЛА",
       "close": "Закрыть окно Кубка Долины",
       "offlineNote": "Книга матчей закрыта. Кубок Долины сейчас недоступен.",
       "recordLine": "Ваш счёт: побед {wins}, поражений {losses}, ничьих {draws}.",
@@ -499,7 +513,7 @@ export const ru_RU: EnTranslations = {
       "guildRecordLine": "Счёт вашей гильдии: {wins} побед, {losses} поражений.",
       "guildBoardHeading": "Знамёна гильдий",
       "guildBoardEmpty": "Пока ни одна гильдия не вышла на поле. Поднимите своё знамя!",
-      "guildBoardWl": "{wins} W, {losses} L",
+      "guildBoardWl": "{wins} побед, {losses} поражений",
       "practice": "Тренировка с ботами",
       "practiceNote": "Немедленно начинает полный матч с ботами на Свином поле.",
       "practicingNow": "Сейчас тренируются ({count}):",
@@ -665,6 +679,7 @@ export const ru_RU: EnTranslations = {
         "jitter": "Джиттер",
         "predLead": "Упреждение прогноза",
         "snapshot": "Частота снимков",
+        "serverTick": "Частота тиков сервера",
         "connection": "Соединение",
         "drawCalls": "Вызовы отрисовки",
         "triangles": "Треугольники",
@@ -761,6 +776,8 @@ export const ru_RU: EnTranslations = {
     "tips": {
       "joinChannels": "Совет: введите /join world или /join lfg, чтобы общаться с игроками по всему миру."
     },
+    "itemHeroicTag": "[HEROIC]",
+    "itemSoulbound": "Персональный",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1055,10 +1072,19 @@ export const ru_RU: EnTranslations = {
         "allStats": "Снижает все характеристики на {value}"
       },
       "allStatsPctReduce": "Снижает все характеристики на {pct}%",
+      "increasePct": {
+        "ap": "Повышает силу атаки на {pct}%",
+        "armor": "Повышает броню на {pct}%",
+        "int": "Повышает интеллект на {pct}%",
+        "sta": "Повышает выносливость на {pct}%",
+        "allStats": "Повышает все характеристики на {pct}%"
+      },
       "dodge": "Повышает шанс уклонения на {pct}%",
       "dodgeReduce": "Снижает шанс уклонения на {pct}%",
       "armorFlat": "Снижает броню на {value}",
       "armorFlatStacks": "Снижает броню на {value} ({stacks} зарядов)",
+      "armorPct": "Снижает броню на {pct}%",
+      "armorPctStacks": "Снижает броню на {pct}% ({stacks} зарядов)",
       "mortalWound": "Снижает получаемое исцеление на {pct}%",
       "vulnerability": "Увеличивает получаемый урон на {pct}%",
       "physVuln": "Увеличивает получаемый физический урон на {pct}%",
@@ -1096,6 +1122,26 @@ export const ru_RU: EnTranslations = {
     },
     "worldBoss": {
       "spawn": "{name} поднимается над Терновыми высотами!"
+    },
+    "auth": {
+      "appleLoginCta": "Продолжить с Apple",
+      "appleError": "Не удалось войти через Apple. Попробуйте ещё раз.",
+      "appleChoiceIntro": "Создайте новую учётную запись или привяжите Apple к существующей.",
+      "appleChoiceExpired": "Вход через Apple истёк. Войдите через Apple ещё раз.",
+      "forgotPrompt": "Забыли пароль?",
+      "forgotTitle": "Сброс пароля",
+      "forgotHint": "Введите имя пользователя, и мы отправим ссылку для сброса на указанный адрес электронной почты.",
+      "forgotUsername": "Имя пользователя",
+      "forgotSubmit": "Отправить ссылку для сброса",
+      "forgotSent": "Если для этого имени пользователя есть аккаунт с указанной почтой, мы отправили ссылку для сброса. Проверьте свой почтовый ящик.",
+      "forgotBack": "Вернуться ко входу",
+      "resetTitle": "Выберите новый пароль",
+      "resetNewPassword": "Новый пароль",
+      "resetConfirm": "Подтвердите новый пароль",
+      "resetSubmit": "Обновить пароль",
+      "resetDone": "Ваш пароль обновлён. Теперь вы можете войти.",
+      "resetMismatch": "Пароли не совпадают.",
+      "resetErrInvalid": "Эта ссылка для сброса недействительна или истекла. Запросите новую."
     },
     "loot": {
       "chestTitle": "Сундук"
@@ -1326,6 +1372,8 @@ export const ru_RU: EnTranslations = {
       "parcelsLabel": "Посылки",
       "parcelsHint": "Нажмите на предмет в сумке, чтобы приложить его.",
       "removeParcelAria": "Убрать {item} из письма",
+      "parcelQtyDecreaseAria": "Отправить на один {item} меньше",
+      "parcelQtyIncreaseAria": "Отправить на один {item} больше",
       "sendButton": "Отправить письмо",
       "postageNote": "Почтовый сбор: {amount}. Ворон летит около {seconds} с.",
       "arrivedBanner": "Ворон прилетел: письмо от {name}.",
@@ -1348,6 +1396,50 @@ export const ru_RU: EnTranslations = {
         "letterGone": "Этого письма больше нет в вашем ящике.",
         "takeParcelsFirst": "Сначала заберите посылки, затем удаляйте письмо."
       }
+    },
+    "bank": {
+      "title": "Банк",
+      "subtitle": "Золочёный сундук",
+      "close": "Закрыть банк",
+      "capacity": "{used}/{total}",
+      "capacityAria": "Занято ячеек банка: {used} из {total}",
+      "empty": "Ваш банк пуст.",
+      "tooFar": "Чтобы открыть банк, нужно стоять у банкира.",
+      "buySlots": "Купить {count} ячеек",
+      "buySlotsMaxed": "Полностью расширен",
+      "buyConfirm": "Купить {count} дополнительных ячеек банка за {price}?",
+      "buyConfirmAccept": "Купить",
+      "withdrawHint": "Нажмите, чтобы забрать",
+      "withdrawPartialHint": "Shift+клик, чтобы забрать часть",
+      "depositHint": "Нажмите, чтобы положить",
+      "depositPartialHint": "Shift+клик, чтобы положить часть",
+      "cannotDeposit": "Нельзя хранить в банке",
+      "depositQuantityTitle": "Положить {item}",
+      "depositQuantityInput": "Количество для внесения",
+      "depositQuantityConfirm": "Положить",
+      "withdrawQuantityTitle": "Забрать {item}",
+      "withdrawQuantityInput": "Количество для получения",
+      "withdrawQuantityConfirm": "Забрать",
+      "filterGroupAria": "Фильтровать банк по категории",
+      "sortAria": "Сортировать предметы в банке",
+      "searchAria": "Поиск предметов в банке по названию",
+      "depositAll": "Положить все материалы",
+      "depositAllDone": "Материалов положено: {count}.",
+      "depositAllFull": "Материалов положено: {count}. Банк заполнен.",
+      "depositAllNone": "Банк заполнен: ничего не положено.",
+      "bonusTitle": "Бонусные ячейки",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "Почта подтверждена",
+      "bonusSourceDiscord": "Discord привязан",
+      "bonusSourceWallet": "Кошелёк привязан",
+      "bonusSourceReferral": "Приглашённые друзья",
+      "bonusAdvertEmail": "Подтвердите почту, чтобы получить 2 ячейки.",
+      "bonusAdvertDiscord": "Привяжите Discord, чтобы получить 2 ячейки.",
+      "bonusAdvertWallet": "Привяжите кошелёк, чтобы получить 2 ячейки.",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "Пригласите друга: когда он достигнет 10 уровня, вы оба получите по 2 ячейки, до 5 друзей.",
+      "bonusSectionAria": "Бонусные ячейки банка и способы их получить"
     },
     "calendar": {
       "title": "Календарь событий",
@@ -1420,6 +1512,7 @@ export const ru_RU: EnTranslations = {
     "archetypeTitle": {
       "label": "Титул",
       "none": "Нет",
+      "hobbyLabel": "Хобби",
       "armorcrafting": "Бронник",
       "weaponcrafting": "Оружейник",
       "jewelcrafting": "Ювелир",
@@ -1442,7 +1535,10 @@ export const ru_RU: EnTranslations = {
       "craftedToast": "Создано: {name}",
       "insufficientMaterials": "У вас недостаточно материалов.",
       "unknownRecipe": "Такого рецепта не существует.",
-      "comboRequirementUnmet": "У вас нет обоих требуемых ремесел нужного уровня для этого рецепта."
+      "comboRequirementUnmet": "У вас нет обоих требуемых ремесел нужного уровня для этого рецепта.",
+      "notAtHub": "Чтобы создать это, вы должны находиться у ремесленного центра и иметь требуемый уровень.",
+      "throttled": "Вы создаете предметы слишком быстро. Подождите немного и попробуйте снова.",
+      "recipeNotLearned": "Вы еще не изучили этот рецепт."
     }
   },
   "apiError": {
@@ -2215,6 +2311,8 @@ export const ru_RU: EnTranslations = {
       "waveGoldBody": "Средняя волна: двусторонние сочетания, в которых ваша сборка начинает обретать форму и звучать в полную силу.",
       "wavePrismaticTitle": "Радужный",
       "wavePrismaticBody": "Финальная волна: определяющие сборку, выжигающие экран всплески, которым положено казаться нелепо мощными в самом лучшем смысле.",
+      "yumiHeading": "Защитите Yumi",
+      "yumiBody": "Protect Yumi: командный режим с целью, который разыгрывается в лабиринте. Каждая команда защищает свою кошку-фамильяра и охотится на чужую. Время от времени обе кошки переносятся в новые углы лабиринта, и бой качается между защитой, охотой и поиском. Очередь на 3 на 3 или 5 на 5; павший лишь ненадолго садится на скамью.",
       "powerupsTitle": "Усиления на ринге",
       "powerupsBody": "Прямо посреди схватки на арену падают и светящиеся сферы, доступные тому, кто доберётся до них первым. Они нарочно сделаны вызывающе яркими и держатся лишь короткий миг: Демон скорости дарит вспышку слепящей прыти, Колосс раздувает вас в неповоротливого великана, Лунные ботинки превращают шаг в прыжок при пониженной гравитации, а Берсерк дарует внезапный прилив неистовства.",
       "ladderHeading": "Восхождение по рейтингу",
@@ -2367,6 +2465,10 @@ export const ru_RU: EnTranslations = {
       "vendorsBody": "Города и заставы усеяны торговцами, у каждого из которых своё дело. Снабженцы держат еду и питьё, оружейники и бронники — снаряжение, а квартирмейстер хранит практичный походный набор. Подойдите к одному из них, чтобы увидеть, что он продаёт.",
       "marksTitle": "Вторая валюта: Метки Вылазок",
       "marksBody": "Монеты, это не единственное, что вы откладываете. Вылазки приносят Метки Вылазок, отдельную валюту, которую вы тратите только у хранителя вылазок, на улучшения спутницы и снаряжение, которого не найти больше нигде. С вашими монетами они никогда не смешиваются.",
+      "bankTitle": "Банк",
+      "bankBody": "В каждом узловом городе есть отделение Золочёного сундука, банкирского дома этих земель. Поговорите с казначеем, и он откроет ваше хранилище: личный запас места помимо сумок, который остаётся за персонажем навсегда. Всё, что вы оставили, будет спокойно ждать вас в любом отделении.",
+      "bankHow": "Пока хранилище открыто, щёлкните предмет в сумках, чтобы положить его, и щёлкните предмет в хранилище, чтобы забрать обратно. Хранилище принимает только вещи, но не монеты, а квестовые предметы всегда остаются при вас. Если сумки переполнились в дороге, отдельная кнопка разом убирает все ремесленные материалы.",
+      "bankSlots": "Свежее хранилище невелико, но растёт вместе с вами. Казначей продаёт дополнительные ячейки за монеты, и каждая следующая ступень дороже прежней. Игра онлайн приносит и бонусное место: за подтверждённую почту, привязанные аккаунты и друзей, которых вы привели в игру.",
       "buyingTitle": "Покупка и продажа",
       "buyingBody": "Встаньте рядом с торговцем, чтобы открыть его окно. Вы можете купить всё, что у него в запасе, если хватит средств, и продать за монеты почти всё из своих сумок. Если вы продали что-то по ошибке, торговец придержит ваши недавние продажи, чтобы вы могли выкупить их обратно.",
       "junkTitle": "Избавление от хлама",
@@ -3640,6 +3742,45 @@ export const ru_RU: EnTranslations = {
       "flavor": "Мёртвые отдали то, без чего могут обойтись."
     }
   },
+  "yumi": {
+    "bracket3": "Yumi 3 на 3",
+    "bracket5": "Yumi 5 на 5",
+    "enterQueue": "В бой за Yumi!",
+    "queue": {
+      "join": "Вы встаёте в очередь Protect Yumi. Берегите своего фамильяра…",
+      "leave": "Вы покидаете очередь Protect Yumi.",
+      "teamLeave": "Ваша команда покидает очередь Protect Yumi."
+    },
+    "error": {
+      "partyTooBig3": "В Protect Yumi 3 на 3 группа может быть не больше трёх игроков.",
+      "partyTooBig5": "В Protect Yumi 5 на 5 группа может быть не больше пяти игроков."
+    },
+    "log": {
+      "start": "Protect Yumi! Защищайте своего фамильяра и охотьтесь на чужого."
+    },
+    "hud": {
+      "title": "PROTECT YUMI",
+      "getReady": "Приготовьтесь…",
+      "teleportIn": "Yumi переместятся через {s}",
+      "suddenDeath": "ВНЕЗАПНАЯ СМЕРТЬ",
+      "yourYumi": "Ваша Yumi",
+      "enemyYumi": "Вражеская Yumi",
+      "aria": "Ваша Yumi: {mine} из {max} здоровья, вражеская Yumi: {theirs}.",
+      "collapse": "Свернуть полосы Protect Yumi",
+      "expand": "Развернуть полосы Protect Yumi"
+    },
+    "respawn": {
+      "title": "ВЫ ПАЛИ!"
+    },
+    "banner": {
+      "sudden": "ВНЕЗАПНАЯ СМЕРТЬ! Yumi больше не перемещаются!",
+      "teleport": "Yumi переместились!"
+    },
+    "end": {
+      "win": "ПОБЕДА! Yumi в безопасности!",
+      "loss": "ПОРАЖЕНИЕ! Ваша Yumi пала."
+    }
+  },
   "fiesta": {
     "bracket": "Fiesta",
     "enterQueue": "Присоединиться к Fiesta!",
@@ -4086,6 +4227,7 @@ export const ru_RU: EnTranslations = {
       "mobileSocial": "Общение",
       "mobileArena": "Арена",
       "mobileMenu": "Меню",
+      "mobileSettings": "Настройки",
       "mobileUse": "Использовать",
       "mobileMeters": "Счетчики",
       "mobileMap": "Карта",
@@ -4634,6 +4776,7 @@ export const ru_RU: EnTranslations = {
       "offGlobalCooldown": "Вне глобального восстановления",
       "friendlyTarget": "Дружественная цель",
       "enemyTarget": "Вражеская цель",
+      "selfOnly": "Только на себя",
       "damageRange": "от {min} до {max}",
       "finisherDamage": "{base} плюс {perCombo} за прием серии"
     },
@@ -4942,7 +5085,8 @@ export const ru_RU: EnTranslations = {
       "needAria": "Нужно: {item}",
       "greedAria": "Жадность: {item}",
       "passAria": "Пас: {item}",
-      "everyonePassed": "Все отказались от {item}."
+      "everyonePassed": "Все отказались от {item}.",
+      "rolled": "{answered}/{total} бросили"
     }
   },
   "entities": {
@@ -4993,19 +5137,19 @@ export const ru_RU: EnTranslations = {
       },
       "rain_of_fire": {
         "name": "Огненный дождь",
-        "description": "Обрушивает огненный дождь на указанную область, сжигая врагов и нанося {damage} ед. урона от огня."
+        "description": "Обрушивает огненный дождь на указанную область на 4 сек., сжигая врагов и нанося {damage} ед. урона от огня каждую секунду."
       },
       "volley": {
         "name": "Залп",
-        "description": "Осыпает указанную область стрелами, нанося {damage} ед. урона врагам в ней."
+        "description": "Осыпает указанную область стрелами в течение 3 сек., нанося {damage} ед. урона каждые 0.5 сек. врагам в ней."
       },
       "hurricane": {
         "name": "Ураган",
-        "description": "Обрушивает ураган на указанную область, нанося врагам {damage} ед. урона силами природы."
+        "description": "Обрушивает ураган на указанную область на 6 сек., нанося врагам {damage} ед. урона силами природы каждую секунду."
       },
       "earthquake": {
         "name": "Землетрясение",
-        "description": "Сотрясает указанную область, нанося врагам {damage} ед. урона силами природы."
+        "description": "Сотрясает указанную область в течение 6 сек., нанося врагам {damage} ед. урона силами природы каждые 1.5 сек."
       },
       "heroic_strike": {
         "name": "Удар разорителя",
@@ -5013,15 +5157,15 @@ export const ru_RU: EnTranslations = {
       },
       "battle_shout": {
         "name": "Железный рёв",
-        "description": "Повышает вашу силу атаки на 20 на 2 мин."
+        "description": "Повышает вашу силу атаки на {buff} на 2 мин."
       },
       "commanding_shout": {
         "name": "Ободряющий клич",
-        "description": "Повышает вашу выносливость на 6 на 2 мин."
+        "description": "Повышает вашу выносливость на {buff} на 2 мин."
       },
       "demoralizing_shout": {
         "name": "Зловещий вой",
-        "description": "Издает устрашающий крик, снижая силу атаки всех противников поблизости на 30 на 30 сек."
+        "description": "Издает устрашающий крик, снижая силу атаки всех противников поблизости на {buff} на 30 сек."
       },
       "charge": {
         "name": "Натиск",
@@ -5029,7 +5173,7 @@ export const ru_RU: EnTranslations = {
       },
       "rend": {
         "name": "Глубокий разрез",
-        "description": "Ранит цель, вызывая кровотечение на {damage} ед. урона за 9 сек."
+        "description": "Ранит цель, вызывая кровотечение на {damage} ед. урона за {duration} сек."
       },
       "thunder_clap": {
         "name": "Сотрясающий удар",
@@ -5037,7 +5181,7 @@ export const ru_RU: EnTranslations = {
       },
       "hamstring": {
         "name": "Калечащий надрез",
-        "description": "Калечит врага, нанося 5 ед. урона и снижая его скорость передвижения на 50% на 15 сек."
+        "description": "Калечит врага, нанося {damage} ед. урона и снижая его скорость передвижения на 50% на 15 сек."
       },
       "bloodrage": {
         "name": "Кровавая дань",
@@ -5045,7 +5189,7 @@ export const ru_RU: EnTranslations = {
       },
       "overpower": {
         "name": "Кровавая рука",
-        "description": "Мгновенная атака, наносящая урон оружием +5. Можно использовать только после уклонения цели. От нее нельзя уклониться."
+        "description": "Мгновенная атака, наносящая урон оружием плюс {damage}. Можно использовать только после уклонения цели. От нее нельзя уклониться."
       },
       "execute": {
         "name": "Ранняя могила",
@@ -5065,7 +5209,7 @@ export const ru_RU: EnTranslations = {
       },
       "sunder_armor": {
         "name": "Срез брони",
-        "description": "Раскалывает броню цели, снижая ее на {damage} за применение. Суммируется до 5 раз. Создает большое количество угрозы."
+        "description": "Раскалывает броню цели, снижая ее на {damage}% за применение. Суммируется до 5 раз. Создает большое количество угрозы."
       },
       "taunt": {
         "name": "Подстрекательство",
@@ -5077,11 +5221,11 @@ export const ru_RU: EnTranslations = {
       },
       "frost_armor": {
         "name": "Мантия инея",
-        "description": "Окутывает вас морозом, повышая броню на 30 на 30 мин."
+        "description": "Окутывает вас морозом, повышая броню на {buff} на 30 мин."
       },
       "arcane_intellect": {
         "name": "Постижение эфира",
-        "description": "Повышает интеллект на 2 на 30 мин."
+        "description": "Повышает интеллект на {buff} на 30 мин."
       },
       "frostbolt": {
         "name": "Копьё изморози",
@@ -5105,7 +5249,7 @@ export const ru_RU: EnTranslations = {
       },
       "polymorph": {
         "name": "Чары",
-        "description": "Превращает врага в жабу на срок до 15 сек. Жаба бродит и быстро восстанавливается. Любой урон прерывает эффект. Только звери и гуманоиды."
+        "description": "Превращает врага в жабу на срок до {duration} сек. Жаба бродит и быстро восстанавливается. Любой урон прерывает эффект. Только звери и гуманоиды."
       },
       "frost_nova": {
         "name": "Ледяные оковы",
@@ -5125,7 +5269,7 @@ export const ru_RU: EnTranslations = {
       },
       "ice_barrier": {
         "name": "Морозная завеса",
-        "description": "Защищает вас льдом, поглощая 130 ед. урона в течение 60 сек."
+        "description": "Защищает вас льдом, поглощая {damage} ед. урона в течение 60 сек."
       },
       "sinister_strike": {
         "name": "Злодейский разрез",
@@ -5133,7 +5277,7 @@ export const ru_RU: EnTranslations = {
       },
       "eviscerate": {
         "name": "Вечный сон",
-        "description": "Завершающий прием, наносящий урон за каждый прием серии."
+        "description": "Завершающий прием, наносящий {damage}."
       },
       "backstab": {
         "name": "Трусливый выпад",
@@ -5141,7 +5285,7 @@ export const ru_RU: EnTranslations = {
       },
       "gouge": {
         "name": "Тычок в глаз",
-        "description": "Поражает цель и выводит ее из строя на 4 сек. Любой урон прерывает эффект. Дает 1 прием серии."
+        "description": "Поражает цель, нанося {damage} ед. урона, и выводит ее из строя на 4 сек. Любой урон прерывает эффект. Дает 1 прием серии."
       },
       "evasion": {
         "name": "Призрачная поступь",
@@ -5173,11 +5317,11 @@ export const ru_RU: EnTranslations = {
       },
       "garrote": {
         "name": "Удавка",
-        "description": "Душит врага гарротой, нанося урон сразу и {damage} от кровотечения в течение 18 сек. Требуется незаметность. Дает 1 очко серии."
+        "description": "Душит врага гарротой, нанося {damage} ед. урона сразу и {overTime} от кровотечения в течение 18 сек. Требуется незаметность. Дает 1 очко серии."
       },
       "cheap_shot": {
         "name": "Удар под дых",
-        "description": "Бьет цель, оглушая ее на 4 сек. Требуется незаметность. Дает 2 очка серии."
+        "description": "Бьет цель, нанося {damage} ед. урона и оглушая ее на 4 сек. Требуется незаметность. Дает 2 очка серии."
       },
       "sap": {
         "name": "Ошеломление",
@@ -5185,11 +5329,11 @@ export const ru_RU: EnTranslations = {
       },
       "crippling_poison": {
         "name": "Свинцовый яд",
-        "description": "Поражает цель свинцовым ядом, нанося {damage} ед. урона от сил природы и замедляя её скорость передвижения на 50% в течение 12 сек."
+        "description": "Поражает цель свинцовым ядом, нанося {damage} ед. урона от сил природы и замедляя ее скорость передвижения на 50% на 12 сек."
       },
       "expose_armor": {
         "name": "Пролом брони",
-        "description": "Завершающий прием, который оголяет цель, снижая ее броню. Чем больше затрачено очков серии, тем глубже разрез."
+        "description": "Завершающий прием, который оголяет цель, снижая ее броню на {damage} на 30 сек."
       },
       "rupture": {
         "name": "Истечение кровью",
@@ -5213,7 +5357,7 @@ export const ru_RU: EnTranslations = {
       },
       "seal_of_righteousness": {
         "name": "Клеймо клятвы",
-        "description": "Наполняет вас силой Света на 30 сек., заставляя каждый удар в ближнем бою наносить 4 ед. дополнительного урона от светлой магии. Высвобождается Приговором."
+        "description": "Наполняет вас силой Света на 30 сек., заставляя каждый удар в ближнем бою наносить {damage} ед. дополнительного урона от светлой магии. Высвобождается Приговором."
       },
       "holy_light": {
         "name": "Целительный Свет",
@@ -5221,7 +5365,7 @@ export const ru_RU: EnTranslations = {
       },
       "devotion_aura": {
         "name": "Аура стойкости",
-        "description": "Повышает вашу броню на 40 на 30 мин."
+        "description": "Повышает вашу броню на {buff} на 30 мин."
       },
       "judgement": {
         "name": "Приговор",
@@ -5229,19 +5373,19 @@ export const ru_RU: EnTranslations = {
       },
       "blessing_of_might": {
         "name": "Клятва железа",
-        "description": "Накладывает Благословение на дружественную цель, повышая силу атаки на 15 на 5 мин."
+        "description": "Накладывает Благословение на дружественную цель, повышая силу атаки на {buff} на 5 мин."
       },
       "divine_protection": {
         "name": "Оберег веры",
-        "description": "Защитный оберег поглощает 50 ед. урона в течение 10 сек."
+        "description": "Защитный оберег поглощает {damage} ед. урона в течение 10 сек."
       },
       "hammer_of_justice": {
         "name": "Раскалывающий молот",
-        "description": "Оглушает цель на 3 сек."
+        "description": "Оглушает цель на {duration} сек."
       },
       "lay_on_hands": {
         "name": "Последний обряд",
-        "description": "Мощный поток исцеления: восстанавливает 250 здоровья. Время восстановления 10 мин."
+        "description": "Мощный поток исцеления: восстанавливает {damage} здоровья. Время восстановления 10 мин."
       },
       "flash_of_light": {
         "name": "Заживление Светом",
@@ -5253,7 +5397,7 @@ export const ru_RU: EnTranslations = {
       },
       "consecration": {
         "name": "Святая земля",
-        "description": "Освящает землю под вами, обжигая ближайших врагов на {damage} ед. урона от светлой магии."
+        "description": "Освящает землю под вами, обжигая ближайших врагов на {damage} ед. урона от светлой магии каждые 2 сек. в течение 10 сек."
       },
       "righteous_fury": {
         "name": "Пылающая клятва",
@@ -5273,11 +5417,11 @@ export const ru_RU: EnTranslations = {
       },
       "raptor_strike": {
         "name": "Потрошащий удар",
-        "description": "Сильная атака в ближнем бою, увеличивающая урон на 5. Срабатывает при следующем взмахе оружием."
+        "description": "Сильная атака в ближнем бою, увеличивающая урон на {damage}. Срабатывает при следующем взмахе оружием."
       },
       "aspect_of_the_hawk": {
         "name": "Облик луня",
-        "description": "Вы принимаете облик луня, повышая силу атаки на 20 на 30 мин."
+        "description": "Вы принимаете облик луня, повышая силу атаки на {buff} на 30 мин."
       },
       "serpent_sting": {
         "name": "Ядовитое жало",
@@ -5289,15 +5433,15 @@ export const ru_RU: EnTranslations = {
       },
       "concussive_shot": {
         "name": "Сотрясающий выстрел",
-        "description": "Ошеломляет цель, снижая скорость передвижения на 50% на 4 сек."
+        "description": "Ошеломляет цель, нанося {damage} ед. урона и снижая скорость передвижения на 50% на 4 сек."
       },
       "mongoose_bite": {
         "name": "Ответный клык",
-        "description": "Контратака после уклонения цели, наносящая урон оружием плюс 12. От нее нельзя уклониться."
+        "description": "Контратака после уклонения цели, наносящая урон оружием плюс {damage}. От нее нельзя уклониться."
       },
       "wing_clip": {
         "name": "Сковывающий разрез",
-        "description": "Наносит рану, замедляющую врага на 40% на 10 сек."
+        "description": "Наносит рану, нанося {damage} ед. урона и замедляя врага на 40% на 10 сек."
       },
       "aspect_of_the_monkey": {
         "name": "Облик куницы",
@@ -5325,7 +5469,7 @@ export const ru_RU: EnTranslations = {
       },
       "power_word_fortitude": {
         "name": "Литания стойкости",
-        "description": "Повышает выносливость цели на 3 на 30 мин."
+        "description": "Повышает выносливость цели на {buff} на 30 мин."
       },
       "shadow_word_pain": {
         "name": "Панихида распада",
@@ -5333,7 +5477,7 @@ export const ru_RU: EnTranslations = {
       },
       "power_word_shield": {
         "name": "Псалом ограждения",
-        "description": "Защищает цель, поглощая 48 ед. урона в течение 30 сек."
+        "description": "Защищает цель, поглощая {damage} ед. урона в течение 30 сек."
       },
       "renew": {
         "name": "Длящаяся благодать",
@@ -5361,7 +5505,7 @@ export const ru_RU: EnTranslations = {
       },
       "rockbiter_weapon": {
         "name": "Оружие каменных уз",
-        "description": "Насыщает ваше оружие яростью камня: каждый удар наносит 5 ед. дополнительного урона в течение 5 мин."
+        "description": "Насыщает ваше оружие яростью камня: каждый удар наносит {damage} ед. дополнительного урона в течение 5 мин."
       },
       "healing_wave": {
         "name": "Целебные воды",
@@ -5373,15 +5517,15 @@ export const ru_RU: EnTranslations = {
       },
       "lightning_shield": {
         "name": "Громовой оберег",
-        "description": "Окружает вас потрескивающей молнией: атакующие в ближнем бою получают 13 ед. урона от сил природы."
+        "description": "Окружает вас потрескивающей молнией: атакующие в ближнем бою получают {buff} ед. урона от сил природы, до 3 зарядов и не чаще одного раза в 5 секунд."
       },
       "flame_shock": {
         "name": "Пепельный толчок",
-        "description": "Обжигает цель огнем, нанося 25 ед. урона и еще {damage} за 12 сек."
+        "description": "Обжигает цель огнем, нанося {damage} ед. урона и еще {overTime} за 12 сек."
       },
       "flametongue_weapon": {
         "name": "Оружие пламенного клейма",
-        "description": "Насыщает ваше оружие стихийным огнем: каждый удар наносит 8 ед. дополнительного урона от огня в течение 5 мин."
+        "description": "Насыщает ваше оружие стихийным огнем: каждый удар наносит {damage} ед. дополнительного урона от огня в течение 5 мин."
       },
       "frost_shock": {
         "name": "Толчок изморози",
@@ -5389,7 +5533,7 @@ export const ru_RU: EnTranslations = {
       },
       "frostbrand_weapon": {
         "name": "Оружие изморози",
-        "description": "Насыщает ваше оружие кусающим холодом: каждый удар наносит 8 ед. дополнительного урона в течение 5 мин."
+        "description": "Насыщает ваше оружие кусающим холодом: каждый удар наносит {damage} ед. дополнительного урона в течение 5 мин."
       },
       "ghost_wolf": {
         "name": "Сумрачный волк",
@@ -5405,11 +5549,11 @@ export const ru_RU: EnTranslations = {
       },
       "demon_skin": {
         "name": "Шкура беса",
-        "description": "Демоническая кожа повышает вашу броню на 30 на 30 мин."
+        "description": "Демоническая кожа повышает вашу броню на {buff} на 30 мин."
       },
       "immolate": {
         "name": "Пылающий договор",
-        "description": "Сжигает врага, нанося 11 ед. урона от огня и еще {damage} за 15 сек."
+        "description": "Сжигает врага, нанося {damage} ед. урона от огня и еще {overTime} за 15 сек."
       },
       "corruption": {
         "name": "Чёрная гниль",
@@ -5417,7 +5561,7 @@ export const ru_RU: EnTranslations = {
       },
       "life_tap": {
         "name": "Тяжёлая сделка",
-        "description": "Преобразует 30 здоровья в 30 маны."
+        "description": "Преобразует {damage} здоровья в {damage} маны."
       },
       "curse_of_agony": {
         "name": "Порча муки",
@@ -5449,7 +5593,7 @@ export const ru_RU: EnTranslations = {
       },
       "mark_of_the_wild": {
         "name": "Оберег дикой природы",
-        "description": "Накладывает Оберег дикой природы на дружественную цель, повышая броню на 25 на 30 мин."
+        "description": "Накладывает Оберег дикой природы на дружественную цель, повышая броню на {buff} на 30 мин."
       },
       "moonfire": {
         "name": "Лунная буря",
@@ -5461,7 +5605,7 @@ export const ru_RU: EnTranslations = {
       },
       "thorns": {
         "name": "Терновая защита",
-        "description": "Из цели вырастают шипы: атакующие в ближнем бою получают 3 ед. урона от сил природы."
+        "description": "Из цели вырастают шипы: атакующие в ближнем бою получают {buff} ед. урона от сил природы."
       },
       "entangling_roots": {
         "name": "Хватающие корни",
@@ -5469,7 +5613,7 @@ export const ru_RU: EnTranslations = {
       },
       "bear_form": {
         "name": "Облик бурого",
-        "description": "Вы принимаете облик медведя: броня +65%, сила атаки +15, ваши атаки накапливают ярость и создают на 30% больше угрозы. Примените снова, чтобы вернуться к облику заклинателя."
+        "description": "Вы принимаете облик медведя: броня +90%, значительно повышенная сила атаки, ваши атаки накапливают ярость и создают на 30% больше угрозы. Примените снова, чтобы вернуться к облику заклинателя."
       },
       "maul": {
         "name": "Костолом",
@@ -5489,7 +5633,7 @@ export const ru_RU: EnTranslations = {
       },
       "ferocious_bite": {
         "name": "Кровавый укус",
-        "description": "Завершающий прием, наносящий урон за каждый прием серии. Только в облике волка."
+        "description": "Завершающий прием, наносящий {damage}. Только в облике волка."
       },
       "swipe": {
         "name": "Разящие когти",
@@ -5521,7 +5665,7 @@ export const ru_RU: EnTranslations = {
       },
       "faerie_fire": {
         "name": "Ведьмин огонь",
-        "description": "Снижает броню цели на 35 на 40 сек."
+        "description": "Снижает броню цели на {damage}% на 40 сек. Не суммируется со Срезом брони."
       },
       "hibernate": {
         "name": "Дремота",
@@ -5545,7 +5689,7 @@ export const ru_RU: EnTranslations = {
       },
       "rip": {
         "name": "Разрывание",
-        "description": "Завершающий прием, наносящий урон от кровотечения в течение 12 сек. Расходует приемы серии. Только в облике волка."
+        "description": "Завершающий прием, наносящий {damage} ед. урона от кровотечения в течение 12 сек. Расходует приемы серии. Только в облике волка."
       },
       "mortal_strike": {
         "name": "Калечащий удар",
@@ -5553,11 +5697,11 @@ export const ru_RU: EnTranslations = {
       },
       "bloodthirst": {
         "name": "Кровопускание",
-        "description": "Мгновенно атакует в кровавом исступлении, нанося {damage}. (ключевая способность ветки «Неистовство»)"
+        "description": "Мгновенно атакует в кровавом исступлении, нанося 60% урона оружием плюс {damage}. (ключевая способность ветки «Неистовство»)"
       },
       "shield_slam": {
         "name": "Раскол щита",
-        "description": "Бьет цель щитом, нанося {damage} и создавая огромную угрозу. (ключевая способность ветки «Защита»)"
+        "description": "Бьет цель щитом, нанося 50% урона оружием плюс {damage} и создавая огромную угрозу. (ключевая способность ветки «Защита»)"
       },
       "whirlwind": {
         "name": "Клинковый вихрь",
@@ -5752,6 +5896,9 @@ export const ru_RU: EnTranslations = {
       "greyjaw_fang": {
         "name": "Клык старого Серочелюста"
       },
+      "chunk_of_ore": {
+        "name": "Кусок руды"
+      },
       "weathered_ledger_page": {
         "name": "Выветренная страница книги учета"
       },
@@ -5781,6 +5928,15 @@ export const ru_RU: EnTranslations = {
       },
       "linen_scrap": {
         "name": "Лоскут льна"
+      },
+      "arcane_dust": {
+        "name": "Тайная пыль"
+      },
+      "arcane_essence": {
+        "name": "Тайная эссенция"
+      },
+      "arcane_shard": {
+        "name": "Тайный осколок"
       },
       "fen_muster_order": {
         "name": "Приказ о сборе в Фенбридже"
@@ -6207,6 +6363,24 @@ export const ru_RU: EnTranslations = {
       },
       "sunpetal_sickle": {
         "name": "Солнцелепестковый серп"
+      },
+      "thorium_ore": {
+        "name": "Ториевая руда"
+      },
+      "arcanite_bar": {
+        "name": "Слиток аркана"
+      },
+      "ashwood_log": {
+        "name": "Бревно пепельного дерева"
+      },
+      "elderwood_log": {
+        "name": "Бревно древней бузины"
+      },
+      "goldleaf_herb": {
+        "name": "Трава золотолист"
+      },
+      "sunpetal_herb": {
+        "name": "Трава солнцелепест"
       },
       "bristleback_maul": {
         "name": "Молот Гэллоугласа"
@@ -6906,6 +7080,9 @@ export const ru_RU: EnTranslations = {
       }
     },
     "mobs": {
+      "yumi_cat": {
+        "name": "Юми"
+      },
       "forest_wolf": {
         "name": "Лесной волк"
       },
@@ -6965,6 +7142,9 @@ export const ru_RU: EnTranslations = {
       },
       "deacon_voss": {
         "name": "Дьякон Восс"
+      },
+      "training_dummy": {
+        "name": "Тренировочный манекен"
       },
       "ridge_stalker": {
         "name": "Хребтовый охотник"
@@ -7352,6 +7532,21 @@ export const ru_RU: EnTranslations = {
         "title": "Хранитель мирового рынка",
         "greeting": "Мировой рынок доступен и здесь, {className}. Покупайте у искателей приключений всего королевства или выставляйте свои товары."
       },
+      "bursar_fernando": {
+        "name": "Казначей Фернандо",
+        "title": "Золочёный сундук",
+        "greeting": "Добро пожаловать в Золочёный сундук. Ваше добро надёжно хранится за нашими замками."
+      },
+      "bursar_petra_vell": {
+        "name": "Казначей Петра Велль",
+        "title": "Золочёный сундук",
+        "greeting": "В Золочёном сундуке чистые счётные книги и ещё более чистые хранилища. Что вам угодно оставить на хранение?"
+      },
+      "bursar_aldous_crane": {
+        "name": "Казначей Олдос Крейн",
+        "title": "Золочёный сундук",
+        "greeting": "Любой ящик, ларец и безделушка в Золочёном сундуке в полной сохранности."
+      },
       "brother_aldric_raid": {
         "name": "Брат Алдрик",
         "title": "Жрец долины",
@@ -7384,6 +7579,16 @@ export const ru_RU: EnTranslations = {
       }
     },
     "quests": {
+      "q_prof_intro": {
+        "title": "Ремесло для каждой руки",
+        "text": "Каждая душа в Иствруке владеет ремеслом помимо меча, {playerName}. Вокруг города разбросаны рудные жилы - возьми кирку и принеси мне 5 кусков руды. Добудь их сам, учти: я отличу.",
+        "completion": "Видишь? Руда в котомке, мозоли на руках. Продолжай добывать руду, валить лес и собирать травы в пути - а вернувшись в город, загляни на доску городского фокуса у рынка и на ближайший верстак. Честное ремесло ждёт тебя во всём этом, если пожелаешь.",
+        "objectives": {
+          "0": {
+            "label": "Кусок руды"
+          }
+        }
+      },
       "q_wolves": {
         "title": "Волки у дверей",
         "text": "Лесные волки осмелели и бросаются на путников у северной дороги, {playerName}. Убейте 8, чтобы Истврук вздохнул свободнее.",

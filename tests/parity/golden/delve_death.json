@@ -14,8 +14,8 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 402,
-      "state": "ba3bd899",
+      "nextId": 406,
+      "state": "7301c7f4",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -35,17 +35,20 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "rogue",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 401,
+          "entityId": 405,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -75,7 +78,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 62,
-          "id": 401,
+          "id": 405,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -120,9 +123,9 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 412,
-      "state": "ec89c28e",
-      "events": "a615b042",
+      "nextId": 416,
+      "state": "f9e81955",
+      "events": "652092ee",
       "rng": {
         "draws": 1,
         "digest": "8d59a9d6"
@@ -141,17 +144,20 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "rogue",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 401,
+          "entityId": 405,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -182,7 +188,7 @@
           "fallStartY": 2.077747,
           "fiveSecondRule": 99,
           "hp": 93,
-          "id": 401,
+          "id": 405,
           "kind": "player",
           "level": 7,
           "lootFfaTimer": "Infinity",
@@ -226,9 +232,9 @@
     {
       "tick": 2,
       "time": 0.1,
-      "nextId": 412,
-      "state": "d46bb8d1",
-      "events": "9207ac32",
+      "nextId": 416,
+      "state": "e2ed21c6",
+      "events": "84c4e002",
       "rng": {
         "draws": 1,
         "digest": "8d59a9d6"
@@ -247,17 +253,20 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "rogue",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 401,
+          "entityId": 405,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -288,7 +297,7 @@
           "fallStartY": 2.353205,
           "fiveSecondRule": 99.1,
           "hp": 185,
-          "id": 401,
+          "id": 405,
           "kind": "player",
           "level": 7,
           "lootFfaTimer": "Infinity",
@@ -333,8 +342,8 @@
     {
       "tick": 2,
       "time": 0.1,
-      "nextId": 412,
-      "state": "d46bb8d1",
+      "nextId": 416,
+      "state": "e2ed21c6",
       "events": "741638a5",
       "rng": {
         "draws": 1,
@@ -354,17 +363,20 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "rogue",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 401,
+          "entityId": 405,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -395,7 +407,7 @@
           "fallStartY": 2.353205,
           "fiveSecondRule": 99.1,
           "hp": 185,
-          "id": 401,
+          "id": 405,
           "kind": "player",
           "level": 7,
           "lootFfaTimer": "Infinity",

@@ -84,6 +84,8 @@ Each module owns the FUNCTIONS for one system; the backing STATE stays on `Sim` 
 | `social/trade.ts` + `social/chat.ts` | player trade + chat helpers (the `chat()` router itself stays on `Sim`) |
 | `targeting.ts` | player target selection + raid markers |
 | `market.ts` | the World Market (`Market` class) |
+| `mail/post_office.ts` | player mail (send/take/read/delete, the mailbox anchor gate) |
+| `bank.ts` | the personal pooled bank (The Gilded Strongbox): capacity math + the container-agnostic `moveBetweenContainers`, `bankDeposit`/`bankWithdraw`/`bankBuySlots`, `bankInfoFor` (boundary-clones), `sanitizeBankState` (the one load path), `nearBanker`; state on `PlayerMeta.bank`, the `bankerIds` anchor list on `Sim`; draws NO rng |
 | `loot/loot_roll.ts` | loot rolls, corpse loot, party-loot strategy, `rollLoot` |
 
 ## The SimContext seam (final shape)

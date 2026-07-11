@@ -1,5 +1,5 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
-import { join, relative, sep } from 'node:path';
+import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
@@ -124,6 +124,7 @@ const UI_PURE_CORES = [
   'src/ui/xp_bar.ts',
   'src/ui/absorb_bar.ts',
   'src/ui/party_frames.ts',
+  'src/ui/party_collapse.ts',
   'src/ui/rest_indicator.ts',
   'src/ui/low_health.ts',
   'src/ui/low_resource.ts',
@@ -138,12 +139,14 @@ const UI_PURE_CORES = [
   'src/ui/talents_view.ts',
   'src/ui/social_view.ts',
   'src/ui/bags_view.ts',
+  'src/ui/bank_view.ts',
   'src/ui/item_set_tooltip_view.ts',
   'src/ui/weapon_proc_view.ts',
   'src/ui/options_view.ts',
   'src/ui/vendor_view.ts',
   'src/ui/heroic_vendor_view.ts',
   'src/ui/claudium_view.ts',
+  'src/ui/loot_roll_status_view.ts',
   'src/ui/loot_settings_view.ts',
   'src/ui/crafting_view.ts',
   'src/ui/market_view.ts',
@@ -153,6 +156,7 @@ const UI_PURE_CORES = [
   'src/ui/map_window_view.ts',
   'src/ui/map_quest_list_view.ts',
   'src/ui/arena_window_view.ts',
+  'src/ui/yumi_match_view.ts',
   'src/ui/vale_cup_window_view.ts',
   'src/ui/vale_cup_indicator_view.ts',
   'src/ui/vale_cup_hud_view.ts',
@@ -217,6 +221,7 @@ const BARE_NAMED = [
   'src/ui/xp_bar.ts',
   'src/ui/absorb_bar.ts',
   'src/ui/party_frames.ts',
+  'src/ui/party_collapse.ts',
   'src/ui/rest_indicator.ts',
   'src/ui/low_health.ts',
   'src/ui/low_resource.ts',

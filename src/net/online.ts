@@ -27,7 +27,7 @@ import { LEADERBOARD_PAGE_SIZE } from '../sim/leaderboard_page';
 import type { Ante, PickAction } from '../sim/lockpick';
 import type { MarketQuery } from '../sim/market_query';
 import { normalizeMoveFacing, sanitizeMoveInput } from '../sim/move_input';
-import { getArchetypeTitle } from '../sim/professions/archetype';
+import { getArchetypeTitle, getHobbyCraft } from '../sim/professions/archetype';
 import type { MaterialRarity } from '../sim/professions/gathering';
 import { emptyCraftSkills } from '../sim/professions/wheel';
 import { computeQuestState, type ResolvedAbility } from '../sim/sim';
@@ -38,6 +38,7 @@ import {
   emptyMoveInput,
   type InvSlot,
   type LootRollChoice,
+  type LootRollGroupStatus,
   type LootRollPrompt,
   type MasterLootThreshold,
   type MoveInput,
@@ -53,6 +54,7 @@ import {
 import {
   type AccountCosmetics,
   type ArenaInfo,
+  type BankInfo,
   type CharacterSearchResult,
   type ClientCommand,
   type CraftResultView,
@@ -351,6 +353,57 @@ export class Api {
     return {};
   }
 
+  async appleLogin(
+    identityToken: string,
+    displayName: string,
+    nativeAttestation: unknown,
+  ): Promise<{ choose: boolean; linkToken: string; username: string }> {
+    const data = await this.post('/api/auth/apple', {
+      identityToken,
+      displayName,
+      nativeAttestation,
+    });
+    if (data.choose === true) {
+      return {
+        choose: true,
+        linkToken: typeof data.linkToken === 'string' ? data.linkToken : '',
+        username: typeof data.username === 'string' ? data.username : '',
+      };
+    }
+    this.token = data.token;
+    this.username = data.username;
+    this.emailMissing = data.emailMissing === true;
+    return { choose: false, linkToken: '', username: this.username ?? '' };
+  }
+
+  async appleLoginNew(linkToken: string): Promise<void> {
+    const data = await this.post('/api/auth/apple/login/new', { linkToken });
+    this.token = data.token;
+    this.username = data.username;
+    this.emailMissing = data.emailMissing === true;
+  }
+
+  async appleLoginLink(
+    linkToken: string,
+    username: string,
+    password: string,
+    code = '',
+    recoveryCode = '',
+  ): Promise<{ twoFactorRequired?: boolean }> {
+    const data = await this.post('/api/auth/apple/login/link', {
+      linkToken,
+      username,
+      password,
+      code,
+      recoveryCode,
+    });
+    if (data.twoFactorRequired && !data.token) return { twoFactorRequired: true };
+    this.token = data.token;
+    this.username = data.username;
+    this.emailMissing = data.emailMissing === true;
+    return {};
+  }
+
   async createDesktopLoginCode(): Promise<{ code: string; expiresInMs: number }> {
     const data = await this.post('/api/desktop-login/create', {});
     return {
@@ -423,6 +476,18 @@ export class Api {
 
   async changePassword(current: string, next: string): Promise<void> {
     await this.post('/api/account/password', { current, next });
+  }
+
+  // Request a password-reset email (for a locked-out user). Always resolves: the
+  // server returns 200 whether or not the username exists, so the UI cannot be
+  // used to enumerate accounts.
+  async requestPasswordReset(username: string): Promise<void> {
+    await this.post('/api/account/password/forgot', { username });
+  }
+
+  // Complete a password reset with the emailed token and a new password.
+  async resetPassword(token: string, next: string): Promise<void> {
+    await this.post('/api/account/password/reset', { token, next });
   }
 
   async logout(): Promise<void> {
@@ -605,8 +670,31 @@ export class Api {
   // ── Discord link/login + status ────────────────────────────────────────────
   // Returns the discord.com authorize URL the browser navigates to (login = new
   // session, link = attach to the current account).
-  async discordStart(mode: 'login' | 'link'): Promise<{ url: string }> {
-    return this.post(`/api/auth/discord/start?mode=${mode}`, {});
+  async discordStart(
+    mode: 'login' | 'link',
+    native = false,
+    challenge = '',
+    nativeAttestation: unknown = undefined,
+  ): Promise<{ url: string }> {
+    const nativeQuery = native ? `&native=1&challenge=${encodeURIComponent(challenge)}` : '';
+    return this.post(`/api/auth/discord/start?mode=${mode}${nativeQuery}`, { nativeAttestation });
+  }
+
+  async exchangeNativeDiscordCode(
+    code: string,
+    verifier: string,
+  ): Promise<{ choose: boolean; linkToken: string; username: string }> {
+    const data = await this.post('/api/auth/discord/native/exchange', { code, verifier });
+    if (data.choose === true) {
+      return {
+        choose: true,
+        linkToken: typeof data.linkToken === 'string' ? data.linkToken : '',
+        username: typeof data.username === 'string' ? data.username : '',
+      };
+    }
+    this.token = data.token;
+    this.username = data.username;
+    return { choose: false, linkToken: '', username: this.username ?? '' };
   }
 
   // First-time Discord login chooser: create a brand-new account for the verified
@@ -834,6 +922,8 @@ function blankEntity(id: number): Entity {
     gcdRemaining: 0,
     cooldowns: new Map(),
     queuedOnSwing: null,
+    queuedCastAbility: null,
+    queuedCastAim: null,
     fiveSecondRule: 99,
     comboPoints: 0,
     comboUntil: -1,
@@ -865,6 +955,7 @@ function blankEntity(id: number): Entity {
     enraged: false,
     healedThisPull: false,
     threat: new Map(),
+    bossDamagers: new Set(),
     forcedTargetId: null,
     forcedTargetTimer: 0,
     ownerId: null,
@@ -901,6 +992,7 @@ function blankEntity(id: number): Entity {
     skin: 0,
     mainhandItemId: null,
     equippedItems: {},
+    equippedInstances: {},
     guild: '',
   };
 }
@@ -980,6 +1072,10 @@ export class ClientWorld implements IWorld {
   // snapshot self (`s.mail` / `s.mailU`, delta-omitted). ---
   mailInfo: MailInfo | null = null;
   mailUnread = 0;
+  // --- IWorldBank: personal-bank contents view, mirrored from the snapshot self
+  // (`s.bank`, delta-omitted). Null away from a banker (proximity-gated by the
+  // server), so it only rides the wire while the player stands at a bursar. ---
+  bankInfo: BankInfo | null = null;
   // --- IWorldDelves: active delve run + companion + marks/upgrades + daily, all
   // mirrored from the snapshot self (delta-omitted). lockpickState is the exception:
   // it has NO snapshot field and is rebuilt from the lockpick* events by the private
@@ -996,9 +1092,9 @@ export class ClientWorld implements IWorld {
   // all-zero default until the wheel/mass-conservation follow-up wires a self-snap
   // field the way `dmarks`/`dcomp` do for delveMarks/companionUpgrades above.
   craftSkills: Record<string, number> = emptyCraftSkills();
-  // Gathering profession proficiency (Mining/Logging/Herbalism). NOT mirrored over
-  // the wire (see professionsState below, the real read surface); this stub keeps
-  // ClientWorld structurally satisfying IWorldProgressionXp.gatheringProficiency.
+  // Gathering profession proficiency (Mining/Logging/Herbalism, #1119), mirrored
+  // from the `gprof` self-wire delta below (the real read surface; see
+  // professionsState below for crafting/secondary professions).
   gatheringProficiency: Record<string, number> = {};
   // Per-delve clears (key `${delveId}:${tierId}`), mirrored from the self-wire so
   // delveShopOffers can resolve the shop lock badge client-side.
@@ -1048,15 +1144,28 @@ export class ClientWorld implements IWorld {
   get archetypeTitle(): string | null {
     return getArchetypeTitle(this.activeArchetype);
   }
+  // Hobby craft granted by the active archetype (#1294): derived the same way
+  // as archetypeTitle above, not a stored mirror field, so it stays correct
+  // once a future wire-up starts pushing `activeArchetype` snapshot updates
+  // (until then it tracks the stub default above, i.e. always null). See
+  // src/sim/professions/archetype.ts getHobbyCraft.
+  get hobbyCraft(): string | null {
+    return getHobbyCraft(this.activeArchetype);
+  }
   // --- IWorldParty: raid-target marker mirror, from the self-wire `marks` (markerFor
   // reads it, no send). ---
   markers: Record<number, number> = {}; // entityId -> markerId, mirrored from the self-wire
   private lootRollPrompts: LootRollPrompt[] = []; // open need-greed rolls, mirrored from the self-wire
+  // group-visible choices on the open rolls (the vote strip), mirrored from the self-wire
+  private lootRollGroup: LootRollGroupStatus[] = [];
   // bumped whenever a fresh social snapshot lands, so an open panel re-renders
   private socialDirty = false;
   // snapshot interpolation
   lastSnapAt = 0;
   snapInterval = 50; // ms, adapts to measured cadence
+  // server-measured achieved sim tick rate (Hz), mirrored from the snap head;
+  // null until the server's meter warms up (perf overlay hides the row)
+  serverTickHz: number | null = null;
   // entity id -> performance.now() when it first went missing from a snapshot;
   // used for the despawn grace window (anti-flicker), cleared once it returns
   private missingSince = new Map<number, number>();
@@ -1476,6 +1585,11 @@ export class ClientWorld implements IWorld {
       if (gap > 5 && gap < 500) this.snapInterval = this.snapInterval * 0.9 + gap * 0.1;
     }
     this.lastSnapAt = now;
+    // Achieved server sim tick rate, measured server-side (snapshot ARRIVAL
+    // cadence undercounts sag: catch-up runs several sim ticks per broadcast).
+    if (typeof snap.tickHz === 'number' && Number.isFinite(snap.tickHz) && snap.tickHz > 0) {
+      this.serverTickHz = snap.tickHz;
+    }
 
     // lazy init (not the field initializer alone): tests build bare instances
     // via Object.create(ClientWorld.prototype), which skips field initializers
@@ -1850,16 +1964,21 @@ export class ClientWorld implements IWorld {
       if (s.market !== undefined) this.marketInfo = s.market;
       if (s.mail !== undefined) this.mailInfo = s.mail;
       if (s.mailU !== undefined) this.mailUnread = s.mailU ?? 0;
+      // `bank` is delta-omitted when unchanged (an omitted key means unchanged, NOT
+      // "no bank"); away from a banker the server encodes it as null. Never default
+      // to null/empty on omission, that would wipe an open bank window's mirror.
+      if (s.bank !== undefined) this.bankInfo = s.bank;
       if (s.lroll !== undefined) this.lootRollPrompts = s.lroll ?? [];
+      if (s.lrollg !== undefined) this.lootRollGroup = s.lrollg ?? [];
       if (s.drun !== undefined) this.delveRun = s.drun;
       if (s.dcompanion !== undefined) this.companionState = s.dcompanion;
       if (s.dmarks !== undefined) this.delveMarks = s.dmarks ?? 0;
       if (s.dcomp !== undefined) this.companionUpgrades = s.dcomp ?? {};
       if (s.dclears !== undefined) this.delveClears = s.dclears ?? {};
       if (s.delveDaily !== undefined) this.delveDaily = s.delveDaily;
-      if (s.prof !== undefined) this.professionsState = s.prof ?? { skills: [] };
       if (s.tfocus !== undefined) this.townFocus = s.tfocus ?? {};
       if (s.gprof !== undefined) this.gatheringProficiency = s.gprof ?? {};
+      if (s.prof !== undefined) this.professionsState = s.prof ?? { skills: [] };
       // camera follows server-side facing changes when not mouselooking
       if (prevSelfFacing !== undefined && this.mouselookFacing === null) {
         let d = e.facing - prevSelfFacing;
@@ -2041,6 +2160,9 @@ export class ClientWorld implements IWorld {
   activeLootRolls(): LootRollPrompt[] {
     return this.lootRollPrompts;
   }
+  lootRollGroupStatus(): LootRollGroupStatus[] {
+    return this.lootRollGroup;
+  }
   pickUpObject(id: number): void {
     this.cmd({ cmd: 'pickup', id });
   }
@@ -2204,6 +2326,9 @@ export class ClientWorld implements IWorld {
   }
   partyAccept(): void {
     this.cmd({ cmd: 'paccept' });
+  }
+  readyCheckRespond(ready: boolean): void {
+    this.cmd({ cmd: 'readyrespond', ready });
   }
   partyDecline(): void {
     this.cmd({ cmd: 'pdecline' });
@@ -2414,6 +2539,20 @@ export class ClientWorld implements IWorld {
   }
   mailMarkRead(mailId: number): void {
     this.cmd({ cmd: 'mail_read', id: mailId });
+  }
+  // --- IWorldBank: personal-bank deposit/withdraw/buy-slots (snake_case wire
+  // strings). bankInfo is a snapshot read (the mirror field above); the server
+  // re-validates banker proximity, capacity, and quest-item rules on every send. The
+  // slotIndex rides as `slot` and the optional partial count as `count`, matching the
+  // castAbilityBySlot/discard wire idiom. ---
+  bankDeposit(slotIndex: number, count?: number): void {
+    this.cmd({ cmd: 'bank_deposit', slot: slotIndex, ...(count !== undefined ? { count } : {}) });
+  }
+  bankWithdraw(slotIndex: number, count?: number): void {
+    this.cmd({ cmd: 'bank_withdraw', slot: slotIndex, ...(count !== undefined ? { count } : {}) });
+  }
+  bankBuySlots(): void {
+    this.cmd({ cmd: 'bank_buy_slots' });
   }
   // --- IWorldDungeons: dungeon enter/leave sends + the raid-lockout countdown read.
   // selfLockouts mirrors the snapshot `s.lockouts`; raidLockouts derives the live

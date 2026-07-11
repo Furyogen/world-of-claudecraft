@@ -154,6 +154,12 @@ export const pl_PL: EnTranslations = {
     "spectate": {
       "banner": "Obserwujesz {name}"
     },
+    "readyCheck": {
+      "prompt": "{name} has started a ready check. Are you ready?",
+      "ready": "Ready",
+      "notReady": "Not Ready",
+      "result": "Ready check: {ready} ready, {notReady} not ready, {noResponse} no response."
+    },
     "death": {
       "resurrectAtCorpse": "Odrodź się przy zwłokach",
       "resurrectAtHealer": "Blady Strażnik (Myto Strażnika)",
@@ -334,6 +340,7 @@ export const pl_PL: EnTranslations = {
       "targetLabel": "Twój cel",
       "targetAnnounce": "Oznacz {name}",
       "partyLabel": "Twoja drużyna",
+      "partyChip": "Drużyna",
       "partyGroup": "Grupa {n}",
       "durationUnitSeconds": "s",
       "durationUnitMinutes": "m",
@@ -348,10 +355,9 @@ export const pl_PL: EnTranslations = {
       "chat": "Przejdź do czatu"
     },
     "mobile": {
-      "autorun": "Autobieg",
       "jump": "Skok",
       "leaderboard": "Rankingi",
-      "dailyRewards": "Rewards",
+      "dailyRewards": "Nagrody",
       "nameplates": "Nazwy",
       "haptics": "Wibracje",
       "hapticsOff": "Wibracje wył.",
@@ -363,7 +369,9 @@ export const pl_PL: EnTranslations = {
       "actionPageIndicator": "Str. {page}",
       "targetCycle": "Zmień cel",
       "targetCycleShort": "Cel",
-      "spellbookPageLabel": "Strona {page}"
+      "spellbookPageLabel": "Strona {page}",
+      "hideKeyboard": "Ukryj klawiaturę",
+      "chatPlaceholder": "Powiedz coś..."
     },
     "tutorial": {
       "moveBodyTouch": "Użyj gałki ruchu, aby się poruszać, i przeciągaj ekran, aby się rozglądać. Zrób kilka kroków, by zacząć.",
@@ -437,142 +445,148 @@ export const pl_PL: EnTranslations = {
       "targetFriendly": "Obierz najbliższego sojusznika",
       "targetFriendlyNext": "Przełączaj przyjazny cel",
       "discord": "Discord",
-      "valecup": "Vale Cup"
+      "valecup": "Puchar Doliny",
+      "categoryPet": "Pet",
+      "petAttack": "Pet: Attack",
+      "petStop": "Pet: Stop",
+      "petTaunt": "Pet: Taunt",
+      "petDefensive": "Pet: Defensive",
+      "petAggressive": "Pet: Aggressive"
     },
     "vcup": {
-      "title": "The Vale Cup",
-      "shootPower": "POWER",
-      "close": "Close the Vale Cup window",
-      "offlineNote": "The fixture book is closed. The Vale Cup is not available right now.",
-      "recordLine": "Your record: {wins} wins, {losses} losses, {draws} draws.",
-      "bracketsAria": "Match bracket",
-      "bracketLabel": "{n}v{n}",
-      "waitingCount": "{count} waiting",
-      "nationsHeading": "Banner nation",
+      "title": "Puchar Doliny",
+      "shootPower": "MOC",
+      "close": "Zamknij okno Pucharu Doliny",
+      "offlineNote": "Księga rozgrywek jest zamknięta. Puchar Doliny jest teraz niedostępny.",
+      "recordLine": "Twój bilans: zwycięstwa {wins}, porażki {losses}, remisy {draws}.",
+      "bracketsAria": "Format meczu",
+      "bracketLabel": "{n} na {n}",
+      "waitingCount": "Oczekuje: {count}",
+      "nationsHeading": "Sztandar nacji",
       "nation": {
-        "vale": "Eastbrook Vale",
-        "mirefen": "The Mirefen",
-        "thornpeak": "Thornpeak",
-        "coliseum": "The Ashen Coliseum",
-        "choir": "The Pale Choir",
-        "ogre": "The Ogre Clans",
-        "moon": "The Pale Moon",
-        "copperdig": "The Copper Dig"
+        "vale": "Dolina Wschodniego Strumienia",
+        "mirefen": "Mokrzaw",
+        "thornpeak": "Ciernisty Szczyt",
+        "coliseum": "Popielne Koloseum",
+        "choir": "Blady Chór",
+        "ogre": "Klany Ogrów",
+        "moon": "Blady Księżyc",
+        "copperdig": "Miedziane Wykopalisko"
       },
-      "awayNote": "If both sides fly the same banner, the away side plays the inverted palette.",
-      "rolesHeading": "Sport role",
+      "awayNote": "Jeśli obie strony niosą ten sam sztandar, goście grają w odwróconych barwach.",
+      "rolesHeading": "Rola sportowa",
       "role": {
         "allrounder": {
-          "name": "All-Rounder",
-          "desc": "A bit of everything: kick, boot, and a fair shoulder."
+          "name": "Wszechstronny",
+          "desc": "Wszystkiego po trochu: kopnięcie, wykop i uczciwy bark."
         },
         "striker": {
-          "name": "Striker",
-          "desc": "Lives for the long boot and the quick sidestep."
+          "name": "Napastnik",
+          "desc": "Żyje dla dalekiego wykopu i szybkiego zwodu."
         },
         "sweeper": {
-          "name": "Sweeper",
-          "desc": "Bumps runners off the ball and hoofs it clear."
+          "name": "Libero",
+          "desc": "Odpycha biegnących od piłki i wybija ją daleko."
         },
         "keeper": {
-          "name": "Keeper",
-          "desc": "Guards the goal box with grip, dive, and punt."
+          "name": "Bramkarz",
+          "desc": "Strzeże pola bramkowego chwytem, rzutem i wybiciem."
         }
       },
-      "queue": "Join the Queue",
-      "leaveQueue": "Leave the Queue",
-      "queueNote": "Queue from anywhere; the whistle calls you to the Sowfield.",
-      "queuedStatus": "Queued for {bracket}: position {position} of {count}.",
-      "blockNation": "Pick a banner nation first.",
-      "blockPartySize": "That bracket needs a smaller party.",
-      "blockNotLeader": "Only the party leader can queue the team.",
-      "inMatchNote": "Your team is on the pitch. Play on!",
-      "deserterNote": "The Groundskeeper remembers. You may queue again in {seconds} sec.",
-      "liveHeading": "Now at the Sowfield",
-      "liveAria": "Vale Cup: {nationA} {scoreA}, {nationB} {scoreB}",
-      "walkUp": "Walk up to the Sowfield to watch from the stands.",
-      "noLive": "The pitch is quiet. No match is being played.",
-      "boardHeading": "Winners board",
-      "boardEmpty": "No winners recorded yet. The Copper Pail waits.",
-      "boardWins": "{count} wins",
-      "enterAsGuild": "Enter under the banner of {guild}",
-      "guildRecordLine": "Your guild record: {wins} wins, {losses} losses.",
-      "guildBoardHeading": "Guild banners",
-      "guildBoardEmpty": "No guild has taken the field yet. Fly your banner!",
-      "guildBoardWl": "{wins} W, {losses} L",
-      "practice": "Practice vs. Bots",
-      "practiceNote": "Starts a private bot match on your own practice pitch right away.",
-      "practicingNow": "Practicing now ({count}):",
+      "queue": "Dołącz do kolejki",
+      "leaveQueue": "Opuść kolejkę",
+      "queueNote": "Do kolejki dołączysz z dowolnego miejsca; gwizdek wezwie cię na Maciorowe Błonie.",
+      "queuedStatus": "W kolejce do {bracket}: miejsce {position} z {count}.",
+      "blockNation": "Najpierw wybierz sztandar nacji.",
+      "blockPartySize": "Ten format wymaga mniejszej drużyny.",
+      "blockNotLeader": "Tylko przywódca drużyny może zapisać zespół do kolejki.",
+      "inMatchNote": "Twoja drużyna jest na boisku. Graj dalej!",
+      "deserterNote": "Opiekun Murawy pamięta. Do kolejki wrócisz za {seconds} s.",
+      "liveHeading": "Teraz na Maciorowym Błoniu",
+      "liveAria": "Puchar Doliny: {nationA} {scoreA}, {nationB} {scoreB}",
+      "walkUp": "Podejdź na Maciorowe Błonie, aby oglądać z trybun.",
+      "noLive": "Na boisku cisza. Żaden mecz się nie toczy.",
+      "boardHeading": "Tablica zwycięzców",
+      "boardEmpty": "Nie zapisano jeszcze zwycięzców. Miedziany Skopek czeka.",
+      "boardWins": "zwycięstwa: {count}",
+      "enterAsGuild": "Wystąp pod sztandarem gildii {guild}",
+      "guildRecordLine": "Bilans twojej gildii: zwycięstwa {wins}, porażki {losses}.",
+      "guildBoardHeading": "Sztandary gildii",
+      "guildBoardEmpty": "Żadna gildia nie wyszła jeszcze na boisko. Wznieś swój sztandar!",
+      "guildBoardWl": "{wins} Z, {losses} P",
+      "practice": "Trening z botami",
+      "practiceNote": "Od razu rozpoczyna prywatny mecz z botami na twoim własnym boisku treningowym.",
+      "practicingNow": "Trenują teraz ({count}):",
       "clock": "{minutes}:{seconds}",
-      "indicatorQueued": "Vale Cup queue: {bracket}, position {position} of {count}",
-      "indicatorLive": "Vale Cup",
-      "indicatorOpen": "Open the Vale Cup window",
-      "phaseCountdown": "Kickoff in {seconds}",
-      "phaseGoal": "GOAL!",
-      "phaseGolden": "GOLDEN GOAL",
-      "phaseOver": "FULL TIME",
-      "bannerFound": "The Vale Cup calls: {nationA} vs {nationB}!",
-      "bannerCountdown": "Kickoff in {seconds}...",
-      "bannerKickoff": "KICKOFF!",
-      "bannerGoal": "GOAL! {nation} scores!",
-      "bannerSave": "{name} SAVES!",
-      "bannerGolden": "GOLDEN GOAL: next score wins!",
-      "bannerEnd": "Full time: {nationA} {scoreA}, {nationB} {scoreB}",
-      "bannerWin": "Victory at the Sowfield!",
-      "bannerDraw": "A draw at the Sowfield.",
-      "bannerLoss": "Defeat at the Sowfield.",
-      "logQueued": "You join the Vale Cup queue for {bracket} (position {position}).",
-      "logUnqueued": "You leave the Vale Cup queue.",
-      "logFound": "Your Vale Cup match is ready: {nationA} vs {nationB}.",
-      "logRoster": "Your side: {allies}. Their side: {enemies}.",
-      "logGoal": "{name} scores for {nation}! {nationA} {scoreA}, {nationB} {scoreB}.",
-      "logSave": "{name} makes the save!",
-      "logWin": "You win the bout at the Sowfield.",
-      "logDraw": "The bout at the Sowfield ends in a draw.",
-      "logLoss": "You lose the bout at the Sowfield.",
-      "gossipOpen": "The book of fixtures",
-      "gossipOpenAria": "Open the Vale Cup window",
-      "mobileLabel": "Cup",
+      "indicatorQueued": "Kolejka Pucharu Doliny: {bracket}, miejsce {position} z {count}",
+      "indicatorLive": "Puchar Doliny",
+      "indicatorOpen": "Otwórz okno Pucharu Doliny",
+      "phaseCountdown": "Rozpoczęcie za {seconds}",
+      "phaseGoal": "GOL!",
+      "phaseGolden": "ZŁOTY GOL",
+      "phaseOver": "KONIEC MECZU",
+      "bannerFound": "Puchar Doliny wzywa: {nationA} kontra {nationB}!",
+      "bannerCountdown": "Pierwszy gwizdek za {seconds}...",
+      "bannerKickoff": "ROZPOCZĘCIE!",
+      "bannerGoal": "GOL! {nation} zdobywa bramkę!",
+      "bannerSave": "{name} BRONI!",
+      "bannerGolden": "ZŁOTY GOL: następna bramka wygrywa!",
+      "bannerEnd": "Koniec meczu: {nationA} {scoreA}, {nationB} {scoreB}",
+      "bannerWin": "Zwycięstwo na Maciorowym Błoniu!",
+      "bannerDraw": "Remis na Maciorowym Błoniu.",
+      "bannerLoss": "Porażka na Maciorowym Błoniu.",
+      "logQueued": "Dołączasz do kolejki Pucharu Doliny w formacie {bracket} (miejsce {position}).",
+      "logUnqueued": "Opuszczasz kolejkę Pucharu Doliny.",
+      "logFound": "Twój mecz Pucharu Doliny jest gotowy: {nationA} kontra {nationB}.",
+      "logRoster": "Twoja strona: {allies}. Ich strona: {enemies}.",
+      "logGoal": "{name} zdobywa gola dla {nation}! {nationA} {scoreA}, {nationB} {scoreB}.",
+      "logSave": "{name} broni!",
+      "logWin": "Wygrywasz starcie na Maciorowym Błoniu.",
+      "logDraw": "Starcie na Maciorowym Błoniu kończy się remisem.",
+      "logLoss": "Przegrywasz starcie na Maciorowym Błoniu.",
+      "gossipOpen": "Księga rozgrywek",
+      "gossipOpenAria": "Otwórz okno Pucharu Doliny",
+      "mobileLabel": "Puchar",
       "briefing": {
-        "subtitle": "Pre-match briefing",
-        "vs": "vs",
-        "rulesHeading": "How to play",
-        "rule1": "Kick or pass the ball into the enemy goal to score.",
-        "rule2": "First to 5 goals wins, or the most goals when full time blows.",
-        "rule3": "A level match at full time goes to golden goal: the next score wins.",
-        "rule4": "Tackles only tumble you over. Nobody gets hurt under the harvest truce.",
-        "rule5": "Anyone can walk up and cheer you on from the stands.",
-        "kitHeading": "Your kit",
-        "kitNote": "These moves replace your class abilities for the match.",
-        "rosterHeading": "The team sheet",
-        "you": "You",
+        "subtitle": "Odprawa przedmeczowa",
+        "vs": "kontra",
+        "rulesHeading": "Jak grać",
+        "rule1": "Kopnij lub podaj piłkę do bramki przeciwnika, aby zdobyć gola.",
+        "rule2": "Wygrywa strona, która pierwsza zdobędzie 5 goli, albo ta z większą liczbą goli po końcowym gwizdku.",
+        "rule3": "Remis po końcowym gwizdku przechodzi w złotego gola: następna bramka wygrywa.",
+        "rule4": "Wślizgi tylko cię przewracają. Podczas żniwnego rozejmu nikomu nie dzieje się krzywda.",
+        "rule5": "Każdy może podejść i kibicować ci z trybun.",
+        "kitHeading": "Twój zestaw",
+        "kitNote": "Te zagrania zastępują twoje umiejętności klasowe na czas meczu.",
+        "rosterHeading": "Skład drużyn",
+        "you": "Ty",
         "bot": "Bot",
-        "ready": "I'm ready",
-        "readyDone": "Ready",
-        "readyAria": "Ready up for kickoff",
-        "waiting": "Waiting for the other side to ready up...",
-        "whistle": "The whistle blows in {seconds}s.",
-        "readyCount": "{ready} of {total} ready"
+        "ready": "Zgłaszam gotowość",
+        "readyDone": "Gotowość",
+        "readyAria": "Zgłoś gotowość do rozpoczęcia",
+        "waiting": "Oczekiwanie, aż druga strona zgłosi gotowość...",
+        "whistle": "Gwizdek za {seconds} s.",
+        "readyCount": "Gotowych: {ready} z {total}"
       },
       "bet": {
-        "title": "Match Bets",
-        "aria": "Vale Cup match betting",
-        "closesIn": "Bets close in {seconds}s",
-        "closed": "Betting closed",
-        "prize": "Pool {amount}",
-        "splitAria": "Share of the betting pool on each team",
-        "expand": "View bets and wager",
-        "collapse": "Hide bets",
-        "oddsLabel": "Pays",
-        "back": "Back {team}",
-        "form": "{wins}W-{losses}L",
-        "mine": "Your bet: {amount} on {team}",
-        "none": "You have no bet on this match yet.",
-        "record": "Betting record: {wins}W-{losses}L, {sign}{net}",
-        "wonBanner": "Your bet won!",
-        "wonLog": "Your Vale Cup bet won: {amount} returned.",
-        "lostLog": "Your Vale Cup bet lost: {amount}.",
-        "refundLog": "Bets voided, your {amount} stake was returned."
+        "title": "Zakłady meczowe",
+        "aria": "Zakłady na mecz Pucharu Doliny",
+        "closesIn": "Zakłady zamykają się za {seconds} s",
+        "closed": "Zakłady zamknięte",
+        "prize": "Pula {amount}",
+        "splitAria": "Udział puli zakładów na każdą z drużyn",
+        "expand": "Zobacz zakłady i obstaw",
+        "collapse": "Ukryj zakłady",
+        "oddsLabel": "Kurs",
+        "back": "Postaw na {team}",
+        "form": "{wins}Z-{losses}P",
+        "mine": "Twój zakład: {amount} na {team}",
+        "none": "Nie masz jeszcze zakładu na ten mecz.",
+        "record": "Bilans zakładów: {wins}Z-{losses}P, {sign}{net}",
+        "wonBanner": "Twój zakład wygrał!",
+        "wonLog": "Twój zakład w Pucharze Doliny wygrał: zwrócono {amount}.",
+        "lostLog": "Twój zakład w Pucharze Doliny przegrał: {amount}.",
+        "refundLog": "Zakłady unieważnione, twoja stawka {amount} została zwrócona."
       }
     },
     "options": {
@@ -663,8 +677,9 @@ export const pl_PL: EnTranslations = {
         "fps01Low": "Min. 0,1%",
         "ping": "Ping",
         "jitter": "Drżenie",
-        "predLead": "Prediction Lead",
+        "predLead": "Wyprzedzenie predykcji",
         "snapshot": "Częstotliwość migawek",
+        "serverTick": "Częstotliwość tików serwera",
         "connection": "Połączenie",
         "drawCalls": "Wywołania rysowania",
         "triangles": "Trójkąty",
@@ -761,6 +776,8 @@ export const pl_PL: EnTranslations = {
     "tips": {
       "joinChannels": "Wskazówka: wpisz /join world lub /join lfg, aby rozmawiać z graczami z całego świata."
     },
+    "itemHeroicTag": "[HEROIC]",
+    "itemSoulbound": "Soulbound",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -962,13 +979,13 @@ export const pl_PL: EnTranslations = {
       }
     },
     "townFocus": {
-      "title": "Town Focus",
-      "hint": "Focus points add a bonus on top of every component's baseline yield. Unfocused components stay at baseline.",
-      "budgetLabel": "Points remaining: {remaining} / {budget}",
-      "saveButton": "Save Focus",
-      "notInTownHint": "You must be in town to set your focus.",
-      "increaseAria": "Increase focus on {component}",
-      "decreaseAria": "Decrease focus on {component}"
+      "title": "Priorytety miasta",
+      "hint": "Punkty priorytetu dodają premię ponad bazowy uzysk każdego elementu. Elementy bez priorytetu pozostają na poziomie bazowym.",
+      "budgetLabel": "Pozostałe punkty: {remaining} / {budget}",
+      "saveButton": "Zapisz priorytety",
+      "notInTownHint": "Musisz być w mieście, aby ustawić priorytety.",
+      "increaseAria": "Zwiększ priorytet: {component}",
+      "decreaseAria": "Zmniejsz priorytet: {component}"
     },
     "party": {
       "promoteLeader": "Mianuj przywódcą",
@@ -1055,10 +1072,19 @@ export const pl_PL: EnTranslations = {
         "allStats": "Verringert alle Attribute um {value}"
       },
       "allStatsPctReduce": "Zmniejsza wszystkie atrybuty o {pct}%",
+      "increasePct": {
+        "ap": "Zwiększa moc ataku o {pct}%",
+        "armor": "Zwiększa pancerz o {pct}%",
+        "int": "Zwiększa Intelekt o {pct}%",
+        "sta": "Zwiększa Wytrzymałość o {pct}%",
+        "allStats": "Zwiększa wszystkie atrybuty o {pct}%"
+      },
       "dodge": "Erhöht Ausweichchance um {pct}%",
       "dodgeReduce": "Verringert Ausweichchance um {pct}%",
       "armorFlat": "Verringert Rüstung um {value}",
       "armorFlatStacks": "Verringert Rüstung um {value} ({stacks} Stapel)",
+      "armorPct": "Zmniejsza pancerz o {pct}%",
+      "armorPctStacks": "Zmniejsza pancerz o {pct}% ({stacks} nałożeń)",
       "mortalWound": "Verringert erhaltene Heilung um {pct}%",
       "vulnerability": "Erhöht erlittenen Schaden um {pct}%",
       "physVuln": "Erhöht erlittenen physischen Schaden um {pct}%",
@@ -1096,6 +1122,26 @@ export const pl_PL: EnTranslations = {
     },
     "worldBoss": {
       "spawn": "{name} powstaje nad Wyżynami Ciernistego Szczytu!"
+    },
+    "auth": {
+      "appleLoginCta": "Continue with Apple",
+      "appleError": "Could not sign in with Apple. Please try again.",
+      "appleChoiceIntro": "Create a new account, or link Apple to one you already have.",
+      "appleChoiceExpired": "That Apple sign-in expired. Please sign in with Apple again.",
+      "forgotPrompt": "Nie pamiętasz hasła?",
+      "forgotTitle": "Zresetuj hasło",
+      "forgotHint": "Podaj nazwę użytkownika, a wyślemy link do resetowania na zapisany adres e-mail.",
+      "forgotUsername": "Nazwa użytkownika",
+      "forgotSubmit": "Wyślij link do resetowania",
+      "forgotSent": "Jeśli konto o tej nazwie użytkownika ma zapisany adres e-mail, wysłaliśmy link do resetowania. Sprawdź swoją skrzynkę.",
+      "forgotBack": "Powrót do logowania",
+      "resetTitle": "Wybierz nowe hasło",
+      "resetNewPassword": "Nowe hasło",
+      "resetConfirm": "Potwierdź nowe hasło",
+      "resetSubmit": "Zaktualizuj hasło",
+      "resetDone": "Twoje hasło zostało zaktualizowane. Możesz się teraz zalogować.",
+      "resetMismatch": "Hasła nie są zgodne.",
+      "resetErrInvalid": "Ten link do resetowania jest nieprawidłowy lub wygasł. Poproś o nowy."
     },
     "loot": {
       "chestTitle": "Skrzynia"
@@ -1326,6 +1372,8 @@ export const pl_PL: EnTranslations = {
       "parcelsLabel": "Paczki",
       "parcelsHint": "Kliknij przedmiot w torbach, aby go załączyć.",
       "removeParcelAria": "Usuń {item} z listu",
+      "parcelQtyDecreaseAria": "Send one fewer {item}",
+      "parcelQtyIncreaseAria": "Send one more {item}",
       "sendButton": "Wyślij list",
       "postageNote": "Opłata pocztowa: {amount}. Kruk leci około {seconds} s.",
       "arrivedBanner": "Kruk wylądował: poczta od {name}.",
@@ -1348,6 +1396,50 @@ export const pl_PL: EnTranslations = {
         "letterGone": "Tego listu nie ma już w twojej skrzynce.",
         "takeParcelsFirst": "Wyjmij paczki, zanim wyrzucisz list."
       }
+    },
+    "bank": {
+      "title": "Bank",
+      "subtitle": "Złocona Szkatuła",
+      "close": "Zamknij bank",
+      "capacity": "{used}/{total}",
+      "capacityAria": "Zajęte miejsca w banku: {used} z {total}",
+      "empty": "Twój bank jest pusty.",
+      "tooFar": "Musisz być przy bankierze, aby zajrzeć do swojego banku.",
+      "buySlots": "Kup {count} miejsc",
+      "buySlotsMaxed": "W pełni rozszerzony",
+      "buyConfirm": "Kupić {count} dodatkowych miejsc w banku za {price}?",
+      "buyConfirmAccept": "Kup",
+      "withdrawHint": "Kliknij, aby wyjąć",
+      "withdrawPartialHint": "Kliknij z Shiftem, aby wyjąć część",
+      "depositHint": "Kliknij, aby zdeponować",
+      "depositPartialHint": "Kliknij z Shiftem, aby zdeponować część",
+      "cannotDeposit": "Nie można zdeponować",
+      "depositQuantityTitle": "Zdeponuj: {item}",
+      "depositQuantityInput": "Liczba do zdeponowania",
+      "depositQuantityConfirm": "Zdeponuj",
+      "withdrawQuantityTitle": "Wyjmij: {item}",
+      "withdrawQuantityInput": "Liczba do wyjęcia",
+      "withdrawQuantityConfirm": "Wyjmij",
+      "filterGroupAria": "Filtruj bank według kategorii",
+      "sortAria": "Sortuj przedmioty w banku",
+      "searchAria": "Szukaj przedmiotów w banku po nazwie",
+      "depositAll": "Zdeponuj wszystkie materiały",
+      "depositAllDone": "Zdeponowane materiały: {count}.",
+      "depositAllFull": "Zdeponowane materiały: {count}. Bank jest teraz pełny.",
+      "depositAllNone": "Bank pełny: niczego nie zdeponowano.",
+      "bonusTitle": "Miejsca premiowe",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "Zweryfikowany e-mail",
+      "bonusSourceDiscord": "Połączony Discord",
+      "bonusSourceWallet": "Połączony portfel",
+      "bonusSourceReferral": "Zaproszeni przyjaciele",
+      "bonusAdvertEmail": "Zweryfikuj swój e-mail, aby zdobyć 2 miejsca.",
+      "bonusAdvertDiscord": "Połącz swój Discord, aby zdobyć 2 miejsca.",
+      "bonusAdvertWallet": "Połącz portfel, aby zdobyć 2 miejsca.",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "Zaproś przyjaciela: gdy osiągnie 10. poziom, oboje zdobywacie po 2 miejsca, maksymalnie za 5 przyjaciół.",
+      "bonusSectionAria": "Premiowe miejsca w banku i jak zdobyć ich więcej"
     },
     "calendar": {
       "title": "Kalendarz wydarzeń",
@@ -1420,6 +1512,7 @@ export const pl_PL: EnTranslations = {
     "archetypeTitle": {
       "label": "Tytuł",
       "none": "Brak",
+      "hobbyLabel": "Pasja",
       "armorcrafting": "Płatnerz",
       "weaponcrafting": "Zbrojmistrz",
       "jewelcrafting": "Jubiler",
@@ -1442,7 +1535,10 @@ export const pl_PL: EnTranslations = {
       "craftedToast": "Wykonane: {name}",
       "insufficientMaterials": "Nie masz na to materiałów.",
       "unknownRecipe": "Ten przepis nie istnieje.",
-      "comboRequirementUnmet": "Nie masz obu wymaganych rzemiosł na wymaganym poziomie dla tego przepisu."
+      "comboRequirementUnmet": "Nie masz obu wymaganych rzemiosł na wymaganym poziomie dla tego przepisu.",
+      "notAtHub": "Musisz być w warsztacie rzemieślniczym i mieć wymagany poziom, aby to wytworzyć.",
+      "throttled": "Wytwarzasz zbyt szybko. Zaczekaj chwilę i spróbuj ponownie.",
+      "recipeNotLearned": "Nie nauczyłeś się jeszcze tego przepisu."
     }
   },
   "apiError": {
@@ -1549,7 +1645,7 @@ export const pl_PL: EnTranslations = {
       "bestiary": "Bestiariusz",
       "models": "Modele 3D",
       "gear": "Ekwipunek i przedmioty",
-      "professions": "Professions",
+      "professions": "Profesje",
       "economy": "Ekonomia i handel",
       "social": "Społeczność i grupy",
       "stats": "Postać i statystyki",
@@ -1564,7 +1660,7 @@ export const pl_PL: EnTranslations = {
       "combat": "Walka",
       "talents": "Talenty",
       "arena": "Arena i PvP",
-      "valeCup": "Vale Cup",
+      "valeCup": "Puchar Doliny",
       "glossary": "Słowniczek",
       "wishIKnew": "Czego żałuję, że nie wiedziałem",
       "faq": "FAQ",
@@ -2215,36 +2311,38 @@ export const pl_PL: EnTranslations = {
       "waveGoldBody": "Środkowa fala: obosieczne kombinacje, w których twój build zaczyna nabierać kształtu i rozbrzmiewać.",
       "wavePrismaticTitle": "Pryzmatyczny",
       "wavePrismaticBody": "Ostatnia fala: definiujące build, rozsadzające ekran skoki mocy, które mają wydawać się absurdalne w najlepszym tego słowa znaczeniu.",
+      "yumiHeading": "Ochrona Yumi",
+      "yumiBody": "Ochrona Yumi to drużynowy tryb z zadaniem, rozgrywany w labiryncie: każda strona strzeże własnego kociego chowańca, jednocześnie polując na cudzego. Co jakiś czas oba koty przeskakują w nowe zakątki labiryntu, więc walka waha się między obroną, polowaniem i wyścigiem, by znaleźć je na nowo. Zapisuj się w trybie trzech na trzech lub pięciu na pięciu; upadek w boju odstawia cię jedynie na chwilę.",
       "powerupsTitle": "Wzmocnienia na ringu",
       "powerupsBody": "Na arenę w trakcie walki spadają też świecące kule, dostępne dla tego, kto pierwszy do nich dotrze. Są celowo przesadne i działają tylko przez chwilę: Demon Prędkości dla mgnienia oślepiającego tempa, Kolos, by rozrosnąć się w ociężałego giganta, Księżycowe Buty dla skocznego susu w niskiej grawitacji oraz Berserker dla nagłego przypływu furii.",
       "ladderHeading": "Wspinaczka po drabinie rankingowej",
       "ladderBody": "Rozgrywka rankingowa śledzi twoją pozycję w czasie. Sprawdź ranking, by zobaczyć, gdzie jesteś i kto dzierży szczyt królestwa."
     },
     "valeCupPage": {
-      "heading": "The Vale Cup",
-      "intro": "Boarball at the Sowfield: pick a banner, pick a role, and kick a stuffed boar hide past a keeper for the Copper Pail. No blood, no loot, just the roar of the stands.",
-      "loreHeading": "Boarball and the harvest truce",
-      "loreOldSow": "Long before the dead woke, Eastbrook's farmhands played boarball on the stubble fields after harvest: two mobs, one boar's hide stuffed with straw, and two wagon gates dragged to either end of the green. The first ball, the Old Sow, hangs bronzed above the tavern hearth.",
-      "loreTruce": "When the Ashen Coliseum began sanctioning war games, Marshal Redbrook answered with something gentler: a standing harvest truce on the old green. The wagon gates became goalposts, the green got walls, stands, and a name, the Sowfield, and the prize was always the same dented milk pail the winners drank from: the Copper Pail.",
-      "howHeading": "How to play",
-      "howQueue": "Queue from anywhere through the Vale Cup window, or talk to Groundskeeper Bram at the Sowfield gate. Pick a bracket from one-a-side up to five-a-side, a banner nation, and a sport role; queue solo or bring your party.",
-      "howMatch": "On kickoff your class kit is swapped for a sport kit and restored exactly afterward. Kicks aim at the ground reticle, the ball banks off the boards, and dribbling is just running with the ball. Score more goals than the other side before full time; a draw goes to golden goal.",
-      "howTruce": "Nobody bleeds at the Sowfield: tackles tumble, nothing hurts, and pets sit the match out.",
-      "spectateBody": "One match plays at a time at the stadium, and anyone can walk up and watch from the stands.",
-      "nationsHeading": "The eight banner nations",
-      "nationsBody": "Every team plays under a banner. The captain picks the nation, and if both sides fly the same one, the away side plays the inverted palette.",
-      "nationVale": "Green and gold, flying the wheat sheaf: the home side, farmhands to the bone.",
-      "nationMirefen": "Teal and grey under the heron: patient, long-legged, never hurried.",
-      "nationThornpeak": "Ice blue and white under the mountain peak: sure-footed and stubborn.",
-      "nationColiseum": "Red and black with crossed swords: they play like it is still a war game.",
-      "nationChoir": "Pale blue and silver under the bell: eerie, precise, and very quiet.",
-      "nationOgre": "Orange and umber behind the fist: shoulder-first and proud of it.",
-      "nationMoon": "Violet and silver under the crescent: night players, light on their feet.",
-      "nationCopperdig": "Copper and brown with the pickaxe: diggers who never stop running.",
-      "rolesHeading": "Sport roles",
-      "rolesBody": "Your role decides the kit you carry onto the pitch. Everyone kicks; the rest is temperament.",
-      "rewardsHeading": "Truce rules",
-      "rewardsBody": "Truce rules mean no experience and no loot: a decided match counts toward your record and the winners board, and daily-reward points come with it. Deserting a match benches your slot, and the Groundskeeper remembers."
+      "heading": "Puchar Doliny",
+      "intro": "Dzicza piłka na Maciorowym Błoniu: wybierz sztandar, wybierz rolę i kopnij wypchaną dziczą skórę za plecy bramkarza, by zdobyć Miedziany Skopek. Bez krwi, bez łupów, tylko ryk trybun.",
+      "loreHeading": "Dzicza piłka i żniwny rozejm",
+      "loreOldSow": "Na długo zanim zbudzili się umarli, parobkowie z Eastbrook grali w dziczą piłkę na ścierniskach po żniwach: dwie gromady, jedna dzicza skóra wypchana słomą i dwie wozowe bramy zaciągnięte na oba końce błonia. Pierwsza piłka, Stara Maciora, wisi odlana w brązie nad kominkiem tawerny.",
+      "loreTruce": "Gdy Popielne Koloseum zaczęło urządzać wojenne igrzyska, Marszałek Redbrook odpowiedział czymś łagodniejszym: stałym żniwnym rozejmem na starym błoniu. Wozowe bramy stały się słupkami, błonie zyskało mury, trybuny i nazwę, Maciorowe Błonie, a nagrodą zawsze był ten sam wgnieciony skopek na mleko, z którego pili zwycięzcy: Miedziany Skopek.",
+      "howHeading": "Jak grać",
+      "howQueue": "Do kolejki dołączysz z dowolnego miejsca przez okno Pucharu Doliny albo rozmawiając z Opiekunem Murawy Bramem przy bramie Maciorowego Błonia. Wybierz format od jeden na jednego do pięciu na pięciu, sztandar nacji i rolę sportową; stawaj w kolejce solo albo z drużyną.",
+      "howMatch": "Przy pierwszym gwizdku twój zestaw klasowy zostaje podmieniony na sportowy, a po meczu wraca dokładnie taki, jaki był. Kopnięcia celują w celownik na ziemi, piłka odbija się od band, a drybling to po prostu bieg z piłką. Zdobądź więcej goli niż przeciwnik przed końcem meczu; remis rozstrzyga złoty gol.",
+      "howTruce": "Na Maciorowym Błoniu nikt nie krwawi: wślizgi tylko przewracają, nic nie boli, a zwierzęta oglądają mecz z boku.",
+      "spectateBody": "Na stadionie toczy się jeden mecz naraz i każdy może podejść i oglądać go z trybun.",
+      "nationsHeading": "Osiem nacji pod sztandarami",
+      "nationsBody": "Każda drużyna gra pod sztandarem. Kapitan wybiera nację, a jeśli obie strony niosą ten sam sztandar, goście grają w odwróconych barwach.",
+      "nationVale": "Zieleń i złoto pod snopem pszenicy: gospodarze, parobkowie z krwi i kości.",
+      "nationMirefen": "Morska zieleń i szarość pod czaplą: cierpliwi, długonodzy, nigdy się nie spieszą.",
+      "nationThornpeak": "Lodowy błękit i biel pod górskim szczytem: pewni kroku i uparci.",
+      "nationColiseum": "Czerwień i czerń ze skrzyżowanymi mieczami: grają, jakby to wciąż były wojenne igrzyska.",
+      "nationChoir": "Bladobłękitni i srebrni pod dzwonem: niesamowici, precyzyjni i bardzo cisi.",
+      "nationOgre": "Pomarańcz i umbra za pięścią: grają barkiem naprzód i są z tego dumni.",
+      "nationMoon": "Fiolet i srebro pod półksiężycem: nocni gracze, lekcy na nogach.",
+      "nationCopperdig": "Miedź i brąz z kilofem: kopacze, którzy nigdy nie przestają biegać.",
+      "rolesHeading": "Role sportowe",
+      "rolesBody": "Rola decyduje o zestawie, z którym wychodzisz na boisko. Kopie każdy; reszta to kwestia temperamentu.",
+      "rewardsHeading": "Zasady rozejmu",
+      "rewardsBody": "Zasady rozejmu oznaczają brak doświadczenia i łupów: rozstrzygnięty mecz liczy się do twojego bilansu i tablicy zwycięzców, a wraz z nim przychodzą punkty nagród dziennych. Dezercja z meczu odsyła cię na ławkę, a Opiekun Murawy pamięta."
     },
     "wishPage": {
       "heading": "Rzeczy, które chciałbym wiedzieć wcześniej",
@@ -2331,33 +2429,33 @@ export const pl_PL: EnTranslations = {
       "cosmeticsApply": "Ustaw aktywny wygląd w wierszu wyglądu na ekranie postaci i swobodnie przełączaj się między wszystkim, co odblokowałeś."
     },
     "professions": {
-      "intro": "Beyond combat and quests, the world rewards you for working the land and the forge: gathering raw materials, turning them into gear at the crafting stations of ten different trades, and settling into an identity as one of the ten archetypes those trades represent.",
-      "gatherTitle": "Gathering: Mining, Logging, and Herbalism",
-      "gatherIntro": "Three gathering trades let you pull raw materials straight out of the world: Mining strikes ore and stone from veins, Logging fells timber from stands of trees, and Herbalism collects herbs and plants growing wild. Each is tracked separately, so working one never slows your progress in another.",
-      "gatherWhatTitle": "Resource nodes",
-      "gatherWhatBody": "Ore veins, wood stands, and herb patches are placed out in the zones as visible, unowned fixtures. Walk up to one and interact with it to harvest whatever it holds. Once you have harvested a node, it needs time to recover before you personally can harvest it again, though it never blocks anyone else: another player can harvest the very same node in the meantime.",
-      "gatherProficiencyTitle": "Proficiency and material quality",
-      "gatherProficiencyBody": "Every successful harvest builds your proficiency in that gathering trade. A higher proficiency shifts what you pull out of a node toward rarer grades of material, from common on up, though the rarest grades stay rare even at high proficiency. More practice never hurts your odds, it only ever improves them.",
-      "gatherToolsTitle": "Tools of the trade",
-      "gatherToolsBody": "Vendors sell basic tools for each gathering trade, and better ones can be crafted, so working a resource node is meant to feel more capable as you gear up for it rather than staying static. Higher-tier tools are the intended way to unlock access to richer nodes and to work them more efficiently over a long session.",
-      "craftTitle": "The ten crafts",
-      "craftIntro": "Ten crafting trades turn gathered materials into finished gear and goods: Armorcrafting, Weaponcrafting, and Jewelcrafting shape raw matter into wearable gear; Alchemy and Engineering are driven by trial and error; Cooking, Inscription, and Enchanting each touch other crafts' output; Tailoring and Leatherworking work from exact patterns. Together they form a wheel, with each craft sitting next to two neighbors and opposite one other.",
-      "craftRingTitle": "A wheel of specialties",
-      "craftRingBody": "The ten crafts are arranged in a fixed ring, and where a craft sits on that ring matters: crafts next to each other on the wheel share more in common with each other than crafts on opposite sides do. Committing to one craft is meant to feel like joining a family of related trades, not picking an isolated skill.",
-      "craftRecipesTitle": "Recipes and reagents",
-      "craftRecipesBody": "Every craft has its own recipes, each calling for specific reagents you gather or buy. The most basic recipes in each craft ask for nothing but common materials and are craftable from the very start, so you can begin working a trade the moment you pick it up rather than waiting to unlock it.",
-      "craftMasteryTitle": "Skill and mastery",
-      "craftMasteryBody": "Crafting successfully builds skill in that trade, and richer recipes are gated behind higher skill: the basic recipes are open to everyone, while progressively more advanced ones ask for progressively more mastery to attempt. Growing your skill in a craft is the path from simple starter goods to its more ambitious recipes.",
-      "craftComboTitle": "Combination recipes",
-      "craftComboBody": "Beyond a single craft's own recipe list, the wheel also supports combination recipes that call on two neighboring crafts at once, rewarding a character (or a pair of trading partners) who has invested in adjacent trades on the ring rather than one in isolation.",
-      "archetypeTitle": "The ten archetypes",
-      "archetypeIntro": "Each of the ten crafts also stands for an archetype, a broader identity you can adopt beyond just working that trade. Your active archetype is a single choice at a time, not a checklist: you carry one, and can change which one later if you choose to.",
-      "archetypeChooseTitle": "Choosing your archetype",
-      "archetypeChooseBody": "You declare your first archetype through an early, zone one story quest that formally accepts you into that identity. Until you complete that quest, you have not yet chosen an archetype at all.",
-      "archetypeSwitchTitle": "Changing your mind",
-      "archetypeSwitchBody": "Having declared an archetype once does not lock you into it forever. Changing to a different archetype means first completing a repeatable \"make amends\" quest for your old one, and each time you switch, the amends expected of you the next time grow a little steeper, so switching stays meaningful rather than costless.",
-      "archetypeIdentityTitle": "What your archetype means",
-      "archetypeIdentityBody": "Your active archetype is a statement about who your character is in the world, recognized in how others and the world address you. The exact rewards and recognition that come with it are still being finalized; check back as the system fills in."
+      "intro": "Poza walką i zadaniami świat nagradza pracę na roli i przy kuźni: zbieranie surowców, przekuwanie ich w ekwipunek przy stanowiskach dziesięciu różnych rzemiosł i wrastanie w tożsamość jednego z dziesięciu archetypów, które te fachy reprezentują.",
+      "gatherTitle": "Zbieractwo: Górnictwo, Wyrąb i Zielarstwo",
+      "gatherIntro": "Trzy fachy zbierackie pozwalają czerpać surowce prosto ze świata: Górnictwo wydobywa rudę i kamień z żył, Wyrąb pozyskuje drewno z kęp drzew, a Zielarstwo zbiera dziko rosnące zioła i rośliny. Każdy z nich liczony jest osobno, więc praca w jednym nigdy nie spowalnia postępów w innym.",
+      "gatherWhatTitle": "Węzły zasobów",
+      "gatherWhatBody": "Żyły rudy, kępy drzew i kępki ziół rozmieszczone są w strefach jako widoczne, niczyje obiekty. Podejdź do jednego z nich i użyj go, aby zebrać, co skrywa. Po zbiorze węzeł potrzebuje czasu, by się odnowić, zanim ty osobiście zbierzesz z niego ponownie, ale nigdy nie blokuje innych: inny gracz może w tym czasie zebrać z tego samego węzła.",
+      "gatherProficiencyTitle": "Wprawa i jakość materiałów",
+      "gatherProficiencyBody": "Każdy udany zbiór buduje twoją wprawę w danym fachu zbierackim. Wyższa wprawa przesuwa to, co pozyskujesz z węzła, ku rzadszym gatunkom materiału, od pospolitych wzwyż, choć najrzadsze gatunki pozostają rzadkie nawet przy wysokiej wprawie. Praktyka nigdy nie psuje twoich szans, zawsze je tylko poprawia.",
+      "gatherToolsTitle": "Narzędzia fachu",
+      "gatherToolsBody": "Sprzedawcy oferują podstawowe narzędzia dla każdego fachu zbierackiego, a lepsze można wytworzyć, więc praca przy węźle zasobów ma stawać się sprawniejsza wraz z lepszym wyposażeniem, a nie stać w miejscu. Narzędzia wyższego stopnia to zamierzona droga do bogatszych węzłów i wydajniejszej pracy podczas długiej sesji.",
+      "craftTitle": "Dziesięć rzemiosł",
+      "craftIntro": "Dziesięć rzemiosł przetwarza zebrane materiały w gotowy ekwipunek i towary: Płatnerstwo, Zbrojmistrzostwo i Jubilerstwo nadają surowej materii kształt noszonego ekwipunku; Alchemia i Inżynieria opierają się na próbach i błędach; Gotowanie, Inskrypcja i Zaklinanie sięgają po wytwory innych rzemiosł; Krawiectwo i Garbarstwo pracują według dokładnych wzorów. Razem tworzą koło, w którym każde rzemiosło sąsiaduje z dwoma innymi i leży naprzeciw jednego.",
+      "craftRingTitle": "Koło specjalności",
+      "craftRingBody": "Dziesięć rzemiosł ułożonych jest w stały krąg, a miejsce rzemiosła na tym kręgu ma znaczenie: rzemiosła sąsiadujące ze sobą na kole mają ze sobą więcej wspólnego niż te po przeciwnych stronach. Oddanie się jednemu rzemiosłu ma przypominać dołączenie do rodziny pokrewnych fachów, a nie wybór odosobnionej umiejętności.",
+      "craftRecipesTitle": "Przepisy i składniki",
+      "craftRecipesBody": "Każde rzemiosło ma własne przepisy, a każdy z nich wymaga konkretnych składników, które zbierasz lub kupujesz. Najprostsze przepisy w każdym rzemiośle potrzebują wyłącznie pospolitych materiałów i są dostępne od samego początku, więc możesz zacząć pracę w fachu od chwili, gdy go podejmiesz, zamiast czekać na odblokowanie.",
+      "craftMasteryTitle": "Umiejętność i biegłość",
+      "craftMasteryBody": "Udane wytwarzanie buduje umiejętność w danym fachu, a bogatsze przepisy zamknięte są za wyższą umiejętnością: podstawowe przepisy są dostępne dla każdego, natomiast coraz bardziej zaawansowane wymagają coraz większej biegłości. Rozwijanie umiejętności w rzemiośle to droga od prostych wyrobów na start do jego najambitniejszych przepisów.",
+      "craftComboTitle": "Przepisy łączone",
+      "craftComboBody": "Poza listą przepisów pojedynczego rzemiosła koło wspiera też przepisy łączone, które wymagają dwóch sąsiadujących rzemiosł naraz, nagradzając postać (lub parę partnerów handlowych), która zainwestowała w sąsiednie fachy na kręgu, a nie w jeden w izolacji.",
+      "archetypeTitle": "Dziesięć archetypów",
+      "archetypeIntro": "Każde z dziesięciu rzemiosł reprezentuje też archetyp, szerszą tożsamość, którą możesz przyjąć ponad samo uprawianie fachu. Aktywny archetyp to pojedynczy wybór, nie lista do odhaczenia: nosisz jeden i możesz go później zmienić, jeśli zechcesz.",
+      "archetypeChooseTitle": "Wybór archetypu",
+      "archetypeChooseBody": "Swój pierwszy archetyp deklarujesz podczas wczesnego zadania fabularnego w pierwszej strefie, które formalnie przyjmuje cię do tej tożsamości. Dopóki nie ukończysz tego zadania, nie masz jeszcze wybranego żadnego archetypu.",
+      "archetypeSwitchTitle": "Zmiana zdania",
+      "archetypeSwitchBody": "Raz zadeklarowany archetyp nie wiąże cię na zawsze. Zmiana na inny archetyp wymaga najpierw ukończenia powtarzalnego zadania \"zadośćuczynienia\" wobec starego, a z każdą kolejną zmianą oczekiwane zadośćuczynienie robi się nieco surowsze, dzięki czemu zmiana pozostaje znacząca, a nie darmowa.",
+      "archetypeIdentityTitle": "Co oznacza twój archetyp",
+      "archetypeIdentityBody": "Aktywny archetyp to deklaracja, kim twoja postać jest w świecie, widoczna w tym, jak zwracają się do ciebie inni i sam świat. Dokładne nagrody i wyróżnienia z nim związane wciąż są dopracowywane; zaglądaj tu, w miarę jak system się rozrasta."
     },
     "economy": {
       "intro": "Monety napędzają cały świat: kupują twoje wyposażenie, zaopatrzenie i ekwipunek podróżny oraz przechodzą z rąk do rąk między graczami. Zbierasz to wszystko po prostu grając, więc traktuj tę stronę jako mapę tego, skąd pochodzą i dokąd trafiają twoje pieniądze.",
@@ -2367,6 +2465,10 @@ export const pl_PL: EnTranslations = {
       "vendorsBody": "Miasta i posterunki są usiane kupcami, każdy z własnym fachem. Zaopatrzeniowcy mają jedzenie i napoje, płatnerze i zbrojmistrze noszą wyposażenie, a kwatermistrz trzyma praktyczny ekwipunek podróżny. Podejdź do jednego z nich, aby zobaczyć, co sprzedaje.",
       "marksTitle": "Druga waluta: Znaki Wypraw",
       "marksBody": "Monety to nie jedyne, co odkładasz. Wyprawy wypłacają Znaki Wypraw, osobną walutę, którą wydajesz wyłącznie u opiekuna wypraw, na ulepszenia towarzyszki i ekwipunek, którego nie znajdziesz gdzie indziej. Nigdy nie mieszają się z twoimi monetami.",
+      "bankTitle": "Bank",
+      "bankBody": "W każdym głównym mieście działa oddział Złoconej Szkatuły, domu bankowego królestwa. Porozmawiaj z tamtejszym skarbnikiem, aby otworzyć swój skarbiec, prywatny schowek poza torbami, który twoja postać zachowuje na całe życie. Cokolwiek tam zostawisz, czeka bezpiecznie, niezależnie od tego, który oddział odwiedzisz następnym razem.",
+      "bankHow": "Przy otwartym skarbcu kliknij przedmiot w torbach, aby go zdeponować, i kliknij go w skarbcu, aby zabrać z powrotem. Skarbiec przechowuje wyłącznie dobra, nigdy monety, a przedmioty zadań zostają przy tobie. Gdy torby zapełnią ci się w połowie drogi, jeden przycisk zgarnia do środka wszystkie materiały rzemieślnicze naraz.",
+      "bankSlots": "Świeży skarbiec zaczyna skromnie i rośnie razem z tobą. Skarbnik sprzedaje kolejne miejsca za monety po coraz wyższych cenach, a granie online przynosi na dodatek premiowe miejsca, na przykład za zweryfikowany e-mail, połączone konta i przyjaciół, których przyprowadzisz do gry.",
       "buyingTitle": "Kupowanie i sprzedawanie",
       "buyingBody": "Stań przy kupcu, aby otworzyć jego okno. Możesz kupić wszystko, co ma na składzie, jeśli cię na to stać, i sprzedać większość tego, co masz w torbach, za monety. Jeśli sprzedasz coś przez pomyłkę, sprzedawca zachowa twoje niedawne sprzedaże, abyś mógł je odkupić.",
       "junkTitle": "Pozbywanie się rupieci",
@@ -3640,6 +3742,45 @@ export const pl_PL: EnTranslations = {
       "flavor": "Umarli oddali to, bez czego mogą się obejść."
     }
   },
+  "yumi": {
+    "bracket3": "Yumi 3 na 3",
+    "bracket5": "Yumi 5 na 5",
+    "enterQueue": "Dołącz do Ochrony Yumi!",
+    "queue": {
+      "join": "Dołączasz do kolejki Ochrony Yumi. Strzeż swojego chowańca…",
+      "leave": "Opuszczasz kolejkę Ochrony Yumi.",
+      "teamLeave": "Twoja drużyna opuszcza kolejkę Ochrony Yumi."
+    },
+    "error": {
+      "partyTooBig3": "Ochrona Yumi 3 na 3 pozwala na drużynę liczącą do trzech osób.",
+      "partyTooBig5": "Ochrona Yumi 5 na 5 pozwala na drużynę liczącą do pięciu osób."
+    },
+    "log": {
+      "start": "Ochrona Yumi! Broń swojego chowańca i poluj na cudzego."
+    },
+    "hud": {
+      "title": "OCHRONA YUMI",
+      "getReady": "Przygotuj się…",
+      "teleportIn": "Yumi ruszają za {s}",
+      "suddenDeath": "NAGŁA ŚMIERĆ",
+      "yourYumi": "Twoja Yumi",
+      "enemyYumi": "Wroga Yumi",
+      "aria": "Twoja Yumi ma {mine} z {max} zdrowia, wroga Yumi ma {theirs}.",
+      "collapse": "Zwiń paski Ochrony Yumi",
+      "expand": "Rozwiń paski Ochrony Yumi"
+    },
+    "respawn": {
+      "title": "POWALONY!"
+    },
+    "banner": {
+      "sudden": "NAGŁA ŚMIERĆ! Yumi trzymają pozycje!",
+      "teleport": "Yumi się teleportują!"
+    },
+    "end": {
+      "win": "ZWYCIĘSTWO! Yumi jest bezpieczna!",
+      "loss": "PORAŻKA! Twoja Yumi padła."
+    }
+  },
   "fiesta": {
     "bracket": "Fiesta",
     "enterQueue": "Dołącz do Fiesty!",
@@ -4086,6 +4227,7 @@ export const pl_PL: EnTranslations = {
       "mobileSocial": "Społeczność",
       "mobileArena": "Arena",
       "mobileMenu": "Menu",
+      "mobileSettings": "Ustawienia",
       "mobileUse": "Użyj",
       "mobileMeters": "Liczniki",
       "mobileMap": "Mapa",
@@ -4634,6 +4776,7 @@ export const pl_PL: EnTranslations = {
       "offGlobalCooldown": "Poza globalnym czasem odnowienia",
       "friendlyTarget": "Cel przyjazny",
       "enemyTarget": "Cel wrogi",
+      "selfOnly": "Tylko na siebie",
       "damageRange": "{min} do {max}",
       "finisherDamage": "{base} plus {perCombo} za punkt kombinacji"
     },
@@ -4942,50 +5085,51 @@ export const pl_PL: EnTranslations = {
       "needAria": "Potrzeba na {item}",
       "greedAria": "Chciwość na {item}",
       "passAria": "Pasuj na {item}",
-      "everyonePassed": "Wszyscy spasowali na {item}."
+      "everyonePassed": "Wszyscy spasowali na {item}.",
+      "rolled": "{answered}/{total} rzuciło"
     }
   },
   "entities": {
     "abilities": {
       "sport_kick": {
-        "name": "Kick",
-        "description": "Knock the ball along the ground toward the aim point."
+        "name": "Kopnięcie",
+        "description": "Zagraj piłkę po ziemi w stronę punktu celowania."
       },
       "sport_shoot": {
-        "name": "Shoot",
-        "description": "Hold to build power, release to shoot at goal. Too much power sails over."
+        "name": "Strzał",
+        "description": "Przytrzymaj, aby nabrać mocy, i puść, aby strzelić na bramkę. Zbyt mocny strzał poszybuje nad poprzeczką."
       },
       "sport_pass": {
-        "name": "Pass",
-        "description": "Roll a firm pass to your targeted teammate, leading their run."
+        "name": "Podanie",
+        "description": "Mocne podanie po ziemi do wskazanego towarzysza, wyprzedzające jego bieg."
       },
       "sport_boot": {
-        "name": "Big Boot",
-        "description": "A long lofted boot toward the aim point. The crowd loves it."
+        "name": "Potężny Wykop",
+        "description": "Długie, wysokie wykopnięcie w stronę punktu celowania. Trybuny to uwielbiają."
       },
       "sport_hoof": {
-        "name": "Hoof It",
-        "description": "Hammer the ball low and hard up the field."
+        "name": "Na Pałę",
+        "description": "Huknij piłkę nisko i mocno w głąb boiska."
       },
       "sport_punt": {
-        "name": "Long Punt",
-        "description": "A keeper's punt, high and far."
+        "name": "Dalekie Wybicie",
+        "description": "Bramkarskie wybicie, wysoko i daleko."
       },
       "sport_feint": {
-        "name": "Feint",
-        "description": "A quick sidestep burst toward the aim point."
+        "name": "Zwód",
+        "description": "Szybki zwód i zryw w stronę punktu celowania."
       },
       "sport_dive": {
-        "name": "Dive",
-        "description": "Fling yourself toward the aim point. A crossing ball sticks to you."
+        "name": "Rzut do piłki",
+        "description": "Rzucasz się w stronę punktu celowania. Dośrodkowana piłka przywiera do ciebie."
       },
       "sport_shoulder": {
-        "name": "Shoulder",
-        "description": "A fair harvest-truce shoulder. Sends them tumbling off the ball."
+        "name": "Bark",
+        "description": "Uczciwe natarcie barkiem w duchu żniwnego rozejmu. Posyła rywala na ziemię, z dala od piłki."
       },
       "sport_second_wind": {
-        "name": "Fresh Legs",
-        "description": "Find your legs: move 50% faster for 4 sec."
+        "name": "Świeże Nogi",
+        "description": "Łapiesz oddech: poruszasz się o 50% szybciej przez 4 s."
       },
       "flamestrike": {
         "name": "Ognista nawała",
@@ -4993,19 +5137,19 @@ export const pl_PL: EnTranslations = {
       },
       "rain_of_fire": {
         "name": "Deszcz ognia",
-        "description": "Sprowadza deszcz ognia na wybrany obszar, paląc wrogów i zadając {damage} obrażeń od ognia."
+        "description": "Sprowadza deszcz ognia na wybrany obszar przez 4 sek., paląc wrogów i zadając {damage} obrażeń od ognia co sekundę."
       },
       "volley": {
         "name": "Salwa",
-        "description": "Zasypuje wybrany obszar strzałami, zadając {damage} obrażeń wrogom w jego obrębie."
+        "description": "Zasypuje wybrany obszar strzałami przez 3 sek., zadając {damage} obrażeń co 0.5 sek. wrogom w jego obrębie."
       },
       "hurricane": {
         "name": "Huragan",
-        "description": "Sprowadza huragan na wybrany obszar, smagając wrogów i zadając {damage} obrażeń od sił natury."
+        "description": "Sprowadza huragan na wybrany obszar przez 6 sek., smagając wrogów i zadając {damage} obrażeń od sił natury co sekundę."
       },
       "earthquake": {
         "name": "Trzęsienie ziemi",
-        "description": "Wstrząsa wybranym obszarem, smagając wrogów i zadając {damage} obrażeń od sił natury."
+        "description": "Wstrząsa wybranym obszarem przez 6 sek., smagając wrogów i zadając {damage} obrażeń od sił natury co 1.5 sek."
       },
       "heroic_strike": {
         "name": "Cios łupieżcy",
@@ -5013,15 +5157,15 @@ export const pl_PL: EnTranslations = {
       },
       "battle_shout": {
         "name": "Żelazny ryk",
-        "description": "Zwiększa twoją moc ataku o 20 na 2 min."
+        "description": "Zwiększa twoją moc ataku o {buff} na 2 min."
       },
       "commanding_shout": {
         "name": "Krzepiący okrzyk",
-        "description": "Zwiększa twoją kondycję o 6 na 2 min."
+        "description": "Zwiększa twoją kondycję o {buff} na 2 min."
       },
       "demoralizing_shout": {
         "name": "Złowieszcze wycie",
-        "description": "Wydaje przerażający okrzyk, zmniejszając moc ataku wszystkich pobliskich wrogów o 30 na 30 sek."
+        "description": "Wydaje przerażający okrzyk, zmniejszając moc ataku wszystkich pobliskich wrogów o {buff} na 30 sek."
       },
       "charge": {
         "name": "Natarcie",
@@ -5029,7 +5173,7 @@ export const pl_PL: EnTranslations = {
       },
       "rend": {
         "name": "Głęboka rana",
-        "description": "Rani cel, powodując krwawienie zadające {damage} obrażeń w ciągu 9 sek."
+        "description": "Rani cel, powodując krwawienie zadające {damage} obrażeń w ciągu {duration} sek."
       },
       "thunder_clap": {
         "name": "Trzęsący cios",
@@ -5037,7 +5181,7 @@ export const pl_PL: EnTranslations = {
       },
       "hamstring": {
         "name": "Kulawiące cięcie",
-        "description": "Okalecza wroga, zadając 5 obrażeń i spowalniając jego ruch o 50% na 15 sek."
+        "description": "Okalecza wroga, zadając {damage} obrażeń i spowalniając jego ruch o 50% na 15 sek."
       },
       "bloodrage": {
         "name": "Krwawa danina",
@@ -5045,7 +5189,7 @@ export const pl_PL: EnTranslations = {
       },
       "overpower": {
         "name": "Krwawa ręka",
-        "description": "Natychmiastowy atak za obrażenia broni +5. Użyteczne tylko po uniku celu. Nie można uniknąć."
+        "description": "Natychmiastowy atak za obrażenia broni plus {damage}. Użyteczne tylko po uniku celu. Nie można uniknąć."
       },
       "execute": {
         "name": "Przedwczesny grób",
@@ -5065,7 +5209,7 @@ export const pl_PL: EnTranslations = {
       },
       "sunder_armor": {
         "name": "Rozdarcie pancerza",
-        "description": "Strzaskuje pancerz celu, zmniejszając go o {damage} za każde nałożenie. Kumuluje się do 5 razy. Generuje wysokie zagrożenie."
+        "description": "Rozdziera pancerz celu, zmniejszając go o {damage}% za każde nałożenie. Kumuluje się do 5 razy. Generuje dużą ilość zagrożenia."
       },
       "taunt": {
         "name": "Podjudzenie",
@@ -5077,11 +5221,11 @@ export const pl_PL: EnTranslations = {
       },
       "frost_armor": {
         "name": "Płaszcz szronu",
-        "description": "Otacza cię szronem, zwiększając pancerz o 30 na 30 min."
+        "description": "Otacza cię szronem, zwiększając pancerz o {buff} na 30 min."
       },
       "arcane_intellect": {
         "name": "Wgląd eteru",
-        "description": "Zwiększa intelekt o 2 na 30 min."
+        "description": "Zwiększa intelekt o {buff} na 30 min."
       },
       "frostbolt": {
         "name": "Szronowa lanca",
@@ -5105,7 +5249,7 @@ export const pl_PL: EnTranslations = {
       },
       "polymorph": {
         "name": "Zauroczenie",
-        "description": "Przemienia wroga w ropuchę na nawet 15 sek. Ropucha błąka się i szybko się leczy. Każde obrażenie przerywa efekt. Tylko bestie i humanoidy."
+        "description": "Przemienia wroga w ropuchę na nawet {duration} sek. Ropucha błąka się i szybko się leczy. Każde obrażenie przerywa efekt. Tylko bestie i humanoidy."
       },
       "frost_nova": {
         "name": "Lodowe okowy",
@@ -5125,7 +5269,7 @@ export const pl_PL: EnTranslations = {
       },
       "ice_barrier": {
         "name": "Lodowa zasłona",
-        "description": "Osłania cię lodem, pochłaniając 130 obrażeń przez 60 sek."
+        "description": "Osłania cię lodem, pochłaniając {damage} obrażeń przez 60 sek."
       },
       "sinister_strike": {
         "name": "Nikczemne cięcie",
@@ -5133,7 +5277,7 @@ export const pl_PL: EnTranslations = {
       },
       "eviscerate": {
         "name": "Wieczny sen",
-        "description": "Ruch kończący, który zadaje obrażenia za każdy punkt kombinacji."
+        "description": "Ruch kończący, który zadaje {damage}."
       },
       "backstab": {
         "name": "Tchórzliwe pchnięcie",
@@ -5141,7 +5285,7 @@ export const pl_PL: EnTranslations = {
       },
       "gouge": {
         "name": "Cios w oko",
-        "description": "Uderza w cel, obezwładniając go na 4 sek. Każde obrażenie przerywa efekt. Przyznaje 1 punkt kombinacji."
+        "description": "Uderza w cel, zadając {damage} obrażeń i obezwładniając go na 4 sek. Każde obrażenie przerywa efekt. Przyznaje 1 punkt kombinacji."
       },
       "evasion": {
         "name": "Upiorny krok",
@@ -5173,11 +5317,11 @@ export const pl_PL: EnTranslations = {
       },
       "garrote": {
         "name": "Drut na gardło",
-        "description": "Dusi wroga garotą, zadając obrażenia natychmiast oraz powodując krwawienie za {damage} w ciągu 18 sek. Wymaga skradania. Przyznaje 1 punkt kombinacji."
+        "description": "Dusi wroga garotą, zadając {damage} obrażeń natychmiast oraz powodując krwawienie za {overTime} w ciągu 18 sek. Wymaga skradania. Przyznaje 1 punkt kombinacji."
       },
       "cheap_shot": {
         "name": "Cios w brzuch",
-        "description": "Uderz cel, ogłuszając go na 4 sek. Wymaga skradania się. Przyznaje 2 punkty kombinacji."
+        "description": "Uderz cel, zadając {damage} obrażeń i ogłuszając go na 4 sek. Wymaga skradania się. Przyznaje 2 punkty kombinacji."
       },
       "sap": {
         "name": "Ogłuszenie",
@@ -5185,11 +5329,11 @@ export const pl_PL: EnTranslations = {
       },
       "crippling_poison": {
         "name": "Ołowiany jad",
-        "description": "Uderza cel ołowianym jadem, zadając {damage} obrażeń natury i spowalniając jego prędkość ruchu o 50% na 12 sek."
+        "description": "Uderza cel ołowianym jadem, zadając {damage} obrażeń od Natury i spowalniając jego prędkość ruchu o 50% na 12 sek."
       },
       "expose_armor": {
         "name": "Wyłom w pancerzu",
-        "description": "Ruch kończący, który odsłania cel, zmniejszając jego pancerz. Więcej wydanych punktów kombinacji pogłębia cięcie."
+        "description": "Ruch kończący, który odsłania cel, zmniejszając jego pancerz o {damage} na 30 sek."
       },
       "rupture": {
         "name": "Wykrwawienie",
@@ -5213,7 +5357,7 @@ export const pl_PL: EnTranslations = {
       },
       "seal_of_righteousness": {
         "name": "Piętno przysięgi",
-        "description": "Napełnia cię mocą Świętości na 30 sek., sprawiając, że każde twoje uderzenie wręcz zadaje 4 dodatkowe obrażenia od Świętości. Uwolnij ją Verdictem."
+        "description": "Napełnia cię mocą Świętości na 30 sek., sprawiając, że każde twoje uderzenie wręcz zadaje {damage} dodatkowych obrażeń od Świętości. Uwolnij ją Verdictem."
       },
       "holy_light": {
         "name": "Kojące Światło",
@@ -5221,7 +5365,7 @@ export const pl_PL: EnTranslations = {
       },
       "devotion_aura": {
         "name": "Aura niezłomności",
-        "description": "Zwiększa twój pancerz o 40 na 30 min."
+        "description": "Zwiększa twój pancerz o {buff} na 30 min."
       },
       "judgement": {
         "name": "Verdict",
@@ -5229,19 +5373,19 @@ export const pl_PL: EnTranslations = {
       },
       "blessing_of_might": {
         "name": "Przysięga żelaza",
-        "description": "Nakłada błogosławieństwo na przyjazny cel, zwiększając moc ataku o 15 na 5 min."
+        "description": "Nakłada błogosławieństwo na przyjazny cel, zwiększając moc ataku o {buff} na 5 min."
       },
       "divine_protection": {
         "name": "Osłona wiary",
-        "description": "Ochronna osłona pochłania 50 obrażeń przez 10 sek."
+        "description": "Ochronna osłona pochłania {damage} obrażeń przez 10 sek."
       },
       "hammer_of_justice": {
         "name": "Druzgocący młot",
-        "description": "Ogłusza cel na 3 sek."
+        "description": "Ogłusza cel na {duration} sek."
       },
       "lay_on_hands": {
         "name": "Ostatnie namaszczenie",
-        "description": "Potężny przypływ uzdrowienia: przywraca 250 zdrowia. 10 min czasu odnowienia."
+        "description": "Potężny przypływ uzdrowienia: przywraca {damage} zdrowia. 10 min czasu odnowienia."
       },
       "flash_of_light": {
         "name": "Świetliste ukojenie",
@@ -5253,7 +5397,7 @@ export const pl_PL: EnTranslations = {
       },
       "consecration": {
         "name": "Święta ziemia",
-        "description": "Poświęca ziemię pod tobą, parząc pobliskich wrogów, zadając {damage} obrażeń świętych."
+        "description": "Poświęca ziemię pod tobą, parząc pobliskich wrogów i zadając {damage} obrażeń od Świętości co 2 sek. przez 10 sek."
       },
       "righteous_fury": {
         "name": "Płonąca przysięga",
@@ -5273,11 +5417,11 @@ export const pl_PL: EnTranslations = {
       },
       "raptor_strike": {
         "name": "Patroszące uderzenie",
-        "description": "Potężny atak w zwarciu, który zwiększa obrażenia o 5. Aktywuje się przy następnym uderzeniu."
+        "description": "Potężny atak w zwarciu, który zwiększa obrażenia o {damage}. Aktywuje się przy następnym uderzeniu."
       },
       "aspect_of_the_hawk": {
         "name": "Postać błotniaka",
-        "description": "Przyjmij postać błotniaka, zwiększając moc ataku o 20 na 30 min."
+        "description": "Przyjmij postać błotniaka, zwiększając moc ataku o {buff} na 30 min."
       },
       "serpent_sting": {
         "name": "Jadowity kolec",
@@ -5289,15 +5433,15 @@ export const pl_PL: EnTranslations = {
       },
       "concussive_shot": {
         "name": "Wstrząsający strzał",
-        "description": "Oszałamia cel, spowalniając ruch o 50% na 4 sek."
+        "description": "Oszałamia cel, zadając {damage} obrażeń i spowalniając ruch o 50% na 4 sek."
       },
       "mongoose_bite": {
         "name": "Odwetowy kieł",
-        "description": "Kontratak po uniku celu, zadający obrażenia broni plus 12. Nie można uniknąć."
+        "description": "Kontratak po uniku celu, zadający obrażenia broni plus {damage}. Nie można uniknąć."
       },
       "wing_clip": {
         "name": "Pętające cięcie",
-        "description": "Zadaje ranę, która spowalnia wroga o 40% na 10 sek."
+        "description": "Zadaje ranę, zadając {damage} obrażeń i spowalniając wroga o 40% na 10 sek."
       },
       "aspect_of_the_monkey": {
         "name": "Postać kuny",
@@ -5325,7 +5469,7 @@ export const pl_PL: EnTranslations = {
       },
       "power_word_fortitude": {
         "name": "Litania hartu",
-        "description": "Zwiększa wytrzymałość celu o 3 na 30 min."
+        "description": "Zwiększa wytrzymałość celu o {buff} na 30 min."
       },
       "shadow_word_pain": {
         "name": "Pieśń rozkładu",
@@ -5333,7 +5477,7 @@ export const pl_PL: EnTranslations = {
       },
       "power_word_shield": {
         "name": "Psalm ochrony",
-        "description": "Osłania cel, pochłaniając 48 obrażeń przez 30 sek."
+        "description": "Osłania cel, pochłaniając {damage} obrażeń przez 30 sek."
       },
       "renew": {
         "name": "Trwająca łaska",
@@ -5361,7 +5505,7 @@ export const pl_PL: EnTranslations = {
       },
       "rockbiter_weapon": {
         "name": "Oręż kamiennych okowów",
-        "description": "Nasyca twoją broń furią kamienia: każde uderzenie zadaje 5 dodatkowych obrażeń przez 5 min."
+        "description": "Nasyca twoją broń furią kamienia: każde uderzenie zadaje {damage} dodatkowych obrażeń przez 5 min."
       },
       "healing_wave": {
         "name": "Kojące wody",
@@ -5373,15 +5517,15 @@ export const pl_PL: EnTranslations = {
       },
       "lightning_shield": {
         "name": "Osłona gromu",
-        "description": "Otacza cię trzaskająca błyskawica: napastnicy w zwarciu otrzymują 13 obrażeń od natury."
+        "description": "Otacza cię trzaskająca błyskawica: napastnicy w zwarciu otrzymują {buff} obrażeń od natury, do 3 ładunków i najwyżej raz na 5 sek."
       },
       "flame_shock": {
         "name": "Żarowy wstrząs",
-        "description": "Spala cel ogniem, zadając 25 obrażeń oraz {damage} w ciągu 12 sek."
+        "description": "Spala cel ogniem, zadając {damage} obrażeń oraz {overTime} w ciągu 12 sek."
       },
       "flametongue_weapon": {
         "name": "Oręż żarowego piętna",
-        "description": "Przepaja twój oręż żywiołem ognia: każde uderzenie zadaje 8 dodatkowych obrażeń od ognia przez 5 min."
+        "description": "Przepaja twój oręż żywiołem ognia: każde uderzenie zadaje {damage} dodatkowych obrażeń od ognia przez 5 min."
       },
       "frost_shock": {
         "name": "Szronowy wstrząs",
@@ -5389,7 +5533,7 @@ export const pl_PL: EnTranslations = {
       },
       "frostbrand_weapon": {
         "name": "Oręż szronowych okowów",
-        "description": "Przepaja twój oręż kąsającym mrozem: każde uderzenie zadaje 8 dodatkowych obrażeń przez 5 min."
+        "description": "Przepaja twój oręż kąsającym mrozem: każde uderzenie zadaje {damage} dodatkowych obrażeń przez 5 min."
       },
       "ghost_wolf": {
         "name": "Shadewolf",
@@ -5405,11 +5549,11 @@ export const pl_PL: EnTranslations = {
       },
       "demon_skin": {
         "name": "Skóra plugawca",
-        "description": "Demoniczna skóra zwiększa twój pancerz o 30 na 30 min."
+        "description": "Demoniczna skóra zwiększa twój pancerz o {buff} na 30 min."
       },
       "immolate": {
         "name": "Płonący pakt",
-        "description": "Pali wroga, zadając 11 obrażeń od ognia oraz dodatkowe {damage} w ciągu 15 sek."
+        "description": "Pali wroga, zadając {damage} obrażeń od ognia oraz dodatkowe {overTime} w ciągu 15 sek."
       },
       "corruption": {
         "name": "Czarna zgnilizna",
@@ -5417,7 +5561,7 @@ export const pl_PL: EnTranslations = {
       },
       "life_tap": {
         "name": "Trudny targ",
-        "description": "Zamienia 30 zdrowia na 30 many."
+        "description": "Zamienia {damage} zdrowia na {damage} many."
       },
       "curse_of_agony": {
         "name": "Urok udręki",
@@ -5449,7 +5593,7 @@ export const pl_PL: EnTranslations = {
       },
       "mark_of_the_wild": {
         "name": "Dzika osłona",
-        "description": "Nakłada Dziką osłonę na sprzymierzony cel, zwiększając pancerz o 25 na 30 min."
+        "description": "Nakłada Dziką osłonę na sprzymierzony cel, zwiększając pancerz o {buff} na 30 min."
       },
       "moonfire": {
         "name": "Księżycowa nawałnica",
@@ -5461,7 +5605,7 @@ export const pl_PL: EnTranslations = {
       },
       "thorns": {
         "name": "Cierniowa straż",
-        "description": "Z celu wyrastają ciernie: atakujący wręcz otrzymują 3 obrażeń od Natury."
+        "description": "Z celu wyrastają ciernie: atakujący wręcz otrzymują {buff} obrażeń od Natury."
       },
       "entangling_roots": {
         "name": "Chwytające korzenie",
@@ -5469,7 +5613,7 @@ export const pl_PL: EnTranslations = {
       },
       "bear_form": {
         "name": "Postać Bruina",
-        "description": "Zmień postać w niedźwiedzia: pancerz +65%, moc ataku +15, twoje ataki budują wściekłość i generują 30% więcej zagrożenia. Rzuć ponownie, aby wrócić do postaci rzucającego."
+        "description": "Zmień postać w niedźwiedzia: pancerz +90%, znacznie zwiększona moc ataku, twoje ataki budują wściekłość i generują 30% więcej zagrożenia. Rzuć ponownie, aby wrócić do postaci rzucającego."
       },
       "maul": {
         "name": "Kruszenie kości",
@@ -5489,7 +5633,7 @@ export const pl_PL: EnTranslations = {
       },
       "ferocious_bite": {
         "name": "Krwawe ukąszenie",
-        "description": "Ruch kończący, który zadaje obrażenia za każdy punkt kombinacji. Tylko w postaci wilka."
+        "description": "Ruch kończący, który zadaje {damage}. Tylko w postaci wilka."
       },
       "swipe": {
         "name": "Zamaszyste pazury",
@@ -5521,7 +5665,7 @@ export const pl_PL: EnTranslations = {
       },
       "faerie_fire": {
         "name": "Wiedźmie światło",
-        "description": "Zmniejsza pancerz celu o 35 na 40 sek."
+        "description": "Zmniejsza pancerz celu o {damage}% na 40 sek. Nie kumuluje się z Rozdarciem pancerza."
       },
       "hibernate": {
         "name": "Uśpienie",
@@ -5545,7 +5689,7 @@ export const pl_PL: EnTranslations = {
       },
       "rip": {
         "name": "Rozszarpanie",
-        "description": "Cios kończący zadający obrażenia od Krwawienia w ciągu 12 sek. Zużywa punkty kombinacji. Tylko w Postaci wilka."
+        "description": "Cios kończący zadający {damage} obrażeń od Krwawienia w ciągu 12 sek. Zużywa punkty kombinacji. Tylko w Postaci wilka."
       },
       "mortal_strike": {
         "name": "Okaleczające uderzenie",
@@ -5553,11 +5697,11 @@ export const pl_PL: EnTranslations = {
       },
       "bloodthirst": {
         "name": "Upust krwi",
-        "description": "Natychmiast atakuj w krwawym szale, zadając {damage}. (Sygnatura furii)"
+        "description": "Natychmiast atakuj w krwawym szale, zadając 60% obrażeń broni plus {damage}. (Sygnatura furii)"
       },
       "shield_slam": {
         "name": "Trzask tarczy",
-        "description": "Uderza cel tarczą, zadając {damage} i wzbudzając ogromne zagrożenie. (Znak rozpoznawczy Ochrony)"
+        "description": "Uderza cel tarczą, zadając 50% obrażeń broni plus {damage} i wzbudzając ogromne zagrożenie. (Znak rozpoznawczy Ochrony)"
       },
       "whirlwind": {
         "name": "Wir ostrzy",
@@ -5752,6 +5896,9 @@ export const pl_PL: EnTranslations = {
       "greyjaw_fang": {
         "name": "Kieł Starego Szaroszczękiego"
       },
+      "chunk_of_ore": {
+        "name": "Chunk of Ore"
+      },
       "weathered_ledger_page": {
         "name": "Zniszczona strona księgi"
       },
@@ -5781,6 +5928,15 @@ export const pl_PL: EnTranslations = {
       },
       "linen_scrap": {
         "name": "Skrawek lnu"
+      },
+      "arcane_dust": {
+        "name": "Arkaniczny pył"
+      },
+      "arcane_essence": {
+        "name": "Arkaniczna esencja"
+      },
+      "arcane_shard": {
+        "name": "Arkaniczny odłamek"
       },
       "fen_muster_order": {
         "name": "Rozkaz zbiórki z Fenbridge"
@@ -6207,6 +6363,24 @@ export const pl_PL: EnTranslations = {
       },
       "sunpetal_sickle": {
         "name": "Sierp Słonecznopłatkowy"
+      },
+      "thorium_ore": {
+        "name": "Ruda Toru"
+      },
+      "arcanite_bar": {
+        "name": "Sztabka Arkanitu"
+      },
+      "ashwood_log": {
+        "name": "Kłoda Jesionu Popiołowego"
+      },
+      "elderwood_log": {
+        "name": "Kłoda Starego Bzu"
+      },
+      "goldleaf_herb": {
+        "name": "Ziele Złotolistne"
+      },
+      "sunpetal_herb": {
+        "name": "Ziele Słonecznego Płatka"
       },
       "bristleback_maul": {
         "name": "Młot Gallowglass"
@@ -6906,6 +7080,9 @@ export const pl_PL: EnTranslations = {
       }
     },
     "mobs": {
+      "yumi_cat": {
+        "name": "Yumi"
+      },
       "forest_wolf": {
         "name": "Leśny Wilk"
       },
@@ -6965,6 +7142,9 @@ export const pl_PL: EnTranslations = {
       },
       "deacon_voss": {
         "name": "Diakon Voss"
+      },
+      "training_dummy": {
+        "name": "Manekin treningowy"
       },
       "ridge_stalker": {
         "name": "Grzbietowy Tropiciel"
@@ -7352,6 +7532,21 @@ export const pl_PL: EnTranslations = {
         "title": "Strażnik Rynku Świata",
         "greeting": "Rynek Świata jest otwarty także tutaj, {className}. Kupuj od każdego poszukiwacza przygód w królestwie albo wystaw własne towary."
       },
+      "bursar_fernando": {
+        "name": "Skarbnik Fernando",
+        "title": "Złocona Szkatuła",
+        "greeting": "Witaj w Złoconej Szkatule. Twoje dobra spoczywają bezpiecznie za naszymi zamkami."
+      },
+      "bursar_petra_vell": {
+        "name": "Skarbniczka Petra Vell",
+        "title": "Złocona Szkatuła",
+        "greeting": "Złocona Szkatuła prowadzi czyste księgi i jeszcze czystsze skarbce. Co mamy dla ciebie przechować?"
+      },
+      "bursar_aldous_crane": {
+        "name": "Skarbnik Aldous Crane",
+        "title": "Złocona Szkatuła",
+        "greeting": "Każda skrzynia, kufer i błyskotka są bezpieczne w Złoconej Szkatule."
+      },
       "brother_aldric_raid": {
         "name": "Brat Aldric",
         "title": "Kapłan Doliny",
@@ -7373,9 +7568,9 @@ export const pl_PL: EnTranslations = {
         "greeting": "Spocznij, duchu. Mogę zwrócić cię twojemu ciału, lecz powrotna przeprawa pozostawia słabość."
       },
       "groundskeeper_bram": {
-        "name": "Groundskeeper Bram",
-        "title": "Keeper of the Sowfield",
-        "greeting": "The truce holds at the Sowfield, {className}: boots and shoulders only. Care to play for the Copper Pail?"
+        "name": "Opiekun Murawy Bram",
+        "title": "Opiekun Maciorowego Błonia",
+        "greeting": "Na Maciorowym Błoniu obowiązuje rozejm, {className}: tylko kopniaki i barki. Zagrasz o Miedziany Skopek?"
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
@@ -7384,6 +7579,16 @@ export const pl_PL: EnTranslations = {
       }
     },
     "quests": {
+      "q_prof_intro": {
+        "title": "A Trade for Every Hand",
+        "text": "Every soul in Eastbrook works a trade besides the sword, {playerName}. There's ore veins scattered round town, so go swing a pick and bring me 5 chunks. Mine them yourself, mind; I'll know the difference.",
+        "completion": "See? Ore in your pack and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
+        "objectives": {
+          "0": {
+            "label": "Chunk of Ore"
+          }
+        }
+      },
       "q_wolves": {
         "title": "Wilki u progu",
         "text": "Leśne wilki robią się zuchwałe, kąsają podróżnych na północnej drodze. Przerzedź ich szeregi, {playerName}. Zabij 8 Leśnych wilków, a Eastbrook odetchnie z ulgą.",
@@ -8286,7 +8491,7 @@ export const pl_PL: EnTranslations = {
             "label": "Polana Jasnoboru"
           },
           "10": {
-            "label": "The Sowfield"
+            "label": "Maciorowe Błonie"
           }
         }
       },

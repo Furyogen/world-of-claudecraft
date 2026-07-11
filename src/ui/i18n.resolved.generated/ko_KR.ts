@@ -154,6 +154,12 @@ export const ko_KR: EnTranslations = {
     "spectate": {
       "banner": "{name} 관전 중"
     },
+    "readyCheck": {
+      "prompt": "{name} 님이 준비 확인을 시작했습니다. 준비되셨습니까?",
+      "ready": "준비 완료",
+      "notReady": "준비 안 됨",
+      "result": "준비 확인: {ready}명 준비 완료, {notReady}명 준비 안 됨, {noResponse}명 무응답."
+    },
     "death": {
       "resurrectAtCorpse": "시신에서 부활",
       "resurrectAtHealer": "영혼 치유사 (부활의 후유증)",
@@ -237,46 +243,46 @@ export const ko_KR: EnTranslations = {
     },
     "claudium": {
       "title": "Claudium",
-      "open": "Open Claudium",
-      "close": "Close Claudium",
-      "loading": "Loading Claudium...",
-      "balanceLabel": "Balance",
+      "open": "Claudium 열기",
+      "close": "Claudium 닫기",
+      "loading": "Claudium 불러오는 중…",
+      "balanceLabel": "잔액",
       "balanceUnit": "{amount} Claudium",
       "solBalance": "SOL: {amount}",
       "wocBalance": "WOC: {amount}",
-      "unavailable": "The Claudium store is unavailable right now. Your balance and purchases are unaffected; please check back shortly.",
-      "disclosure": "Claudium is a one-way soft currency: buy it with money and spend it on cosmetics. It cannot be redeemed, transferred, or cashed out.",
-      "buyTitle": "Buy Claudium",
-      "railLabel": "Payment method",
+      "unavailable": "현재 Claudium 상점을 이용할 수 없습니다. 잔액과 구매 내역에는 영향이 없으니 잠시 후 다시 확인해 주세요.",
+      "disclosure": "Claudium은 단방향 게임 화폐입니다. 현금으로 구매해 꾸미기 상품에 사용할 수 있으며 환전, 양도 또는 현금화할 수 없습니다.",
+      "buyTitle": "Claudium 구매",
+      "railLabel": "결제 수단",
       "railStripe": "Card",
       "railSol": "SOL",
       "railWoc": "WOC",
       "railWocDiscount": "20% off",
-      "railWocUnavailable": "WOC pricing is unavailable right now.",
+      "railWocUnavailable": "현재 WOC 가격을 이용할 수 없습니다.",
       "railNativeUnavailable": "SOL/WOC off.",
-      "amountLabel": "Amount",
-      "showAmounts": "Show all Claudium amounts",
-      "hideAmounts": "Hide extra Claudium amounts",
-      "skuRow": "{usd} for {claudium} Claudium",
+      "amountLabel": "수량",
+      "showAmounts": "모든 Claudium 수량 표시",
+      "hideAmounts": "추가 Claudium 수량 숨기기",
+      "skuRow": "{usd}에 {claudium} Claudium",
       "buyButton": "Buy",
-      "buyUnavailable": "Purchasing is unavailable right now.",
-      "storeTitle": "Cosmetic Store",
-      "storeEmpty": "No cosmetics are available right now.",
+      "buyUnavailable": "현재 구매할 수 없습니다.",
+      "storeTitle": "꾸미기 상점",
+      "storeEmpty": "현재 이용 가능한 꾸미기 상품이 없습니다.",
       "storeCost": "{amount} Claudium",
-      "spendButton": "Redeem",
-      "kindCosmetic": "Cosmetic",
+      "spendButton": "교환",
+      "kindCosmetic": "꾸미기 상품",
       "kindSkin": "Skin",
       "kindItem": "Item",
-      "checkoutTitle": "Complete purchase",
-      "checkoutClose": "Close checkout",
-      "checkoutLoading": "Loading checkout...",
-      "checkoutPending": "Transaction in progress. Confirm in your wallet and keep this panel open.",
-      "checkoutPendingButton": "Processing",
-      "checkoutFailed": "Checkout could not be loaded. Please try again.",
-      "checkoutUnavailable": "That Claudium purchase is not available right now.",
-      "checkoutWalletRequired": "Connect a Solana wallet before buying Claudium with crypto.",
-      "checkoutWalletUnsupported": "This wallet cannot sign and send Solana transactions.",
-      "checkoutNotSettled": "The transaction was sent but Claudium was not credited yet. Please try again shortly."
+      "checkoutTitle": "구매 완료",
+      "checkoutClose": "결제 닫기",
+      "checkoutLoading": "결제 불러오는 중…",
+      "checkoutPending": "거래가 진행 중입니다. 지갑에서 확인하고 이 패널을 열어 두세요.",
+      "checkoutPendingButton": "처리 중",
+      "checkoutFailed": "결제를 불러오지 못했습니다. 다시 시도해 주세요.",
+      "checkoutUnavailable": "해당 Claudium 구매는 현재 이용할 수 없습니다.",
+      "checkoutWalletRequired": "암호화폐로 Claudium을 구매하기 전에 Solana 지갑을 연결하세요.",
+      "checkoutWalletUnsupported": "이 지갑은 Solana 거래에 서명하거나 전송할 수 없습니다.",
+      "checkoutNotSettled": "거래는 전송됐지만 Claudium이 아직 지급되지 않았습니다. 잠시 후 다시 시도해 주세요."
     },
     "theme": {
       "preset": "UI 테마",
@@ -334,6 +340,7 @@ export const ko_KR: EnTranslations = {
       "targetLabel": "내 대상",
       "targetAnnounce": "대상: {name}",
       "partyLabel": "내 파티",
+      "partyChip": "파티",
       "partyGroup": "{n}번 그룹",
       "durationUnitSeconds": "초",
       "durationUnitMinutes": "분",
@@ -348,7 +355,6 @@ export const ko_KR: EnTranslations = {
       "chat": "채팅으로 건너뛰기"
     },
     "mobile": {
-      "autorun": "자동 달리기",
       "jump": "점프",
       "leaderboard": "순위",
       "dailyRewards": "보상",
@@ -363,7 +369,9 @@ export const ko_KR: EnTranslations = {
       "actionPageIndicator": "{page}페이지",
       "targetCycle": "대상 전환",
       "targetCycleShort": "대상",
-      "spellbookPageLabel": "페이지 {page}"
+      "spellbookPageLabel": "페이지 {page}",
+      "hideKeyboard": "키보드 숨기기",
+      "chatPlaceholder": "메시지 입력..."
     },
     "tutorial": {
       "moveBodyTouch": "이동 스틱으로 이동하고 화면을 끌어 주위를 둘러보세요. 몇 걸음 움직여 시작하세요.",
@@ -437,11 +445,17 @@ export const ko_KR: EnTranslations = {
       "targetFriendly": "가장 가까운 아군 대상 지정",
       "targetFriendlyNext": "아군 대상 순환",
       "discord": "Discord",
-      "valecup": "베일 컵"
+      "valecup": "베일 컵",
+      "categoryPet": "펫",
+      "petAttack": "펫: 공격",
+      "petStop": "펫: 정지",
+      "petTaunt": "펫: 도발",
+      "petDefensive": "펫: 방어",
+      "petAggressive": "펫: 공격적"
     },
     "vcup": {
       "title": "베일 컵",
-      "shootPower": "POWER",
+      "shootPower": "파워",
       "close": "베일 컵 창 닫기",
       "offlineNote": "대진표가 닫혀 있습니다. 지금은 베일 컵을 이용할 수 없습니다.",
       "recordLine": "전적: {wins}승 {losses}패 {draws}무.",
@@ -499,7 +513,7 @@ export const ko_KR: EnTranslations = {
       "guildRecordLine": "길드 전적: {wins}승 {losses}패.",
       "guildBoardHeading": "길드 깃발",
       "guildBoardEmpty": "아직 출전한 길드가 없습니다. 깃발을 올리세요!",
-      "guildBoardWl": "{wins} W, {losses} L",
+      "guildBoardWl": "{wins}승 {losses}패",
       "practice": "봇 연습 경기",
       "practiceNote": "소우필드에서 봇과의 정식 경기를 즉시 시작합니다.",
       "practicingNow": "연습 중 ({count}):",
@@ -665,6 +679,7 @@ export const ko_KR: EnTranslations = {
         "jitter": "지터",
         "predLead": "예측 리드",
         "snapshot": "스냅샷 전송률",
+        "serverTick": "서버 틱 속도",
         "connection": "연결",
         "drawCalls": "드로우 콜",
         "triangles": "삼각형",
@@ -761,6 +776,8 @@ export const ko_KR: EnTranslations = {
     "tips": {
       "joinChannels": "팁: /join world 또는 /join lfg를 입력하면 월드 전역의 플레이어와 대화할 수 있습니다."
     },
+    "itemHeroicTag": "[HEROIC]",
+    "itemSoulbound": "귀속",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1055,10 +1072,19 @@ export const ko_KR: EnTranslations = {
         "allStats": "모든 능력치를 {value} 감소시킵니다"
       },
       "allStatsPctReduce": "모든 능력치를 {pct}% 감소시킵니다",
+      "increasePct": {
+        "ap": "공격력을 {pct}% 증가시킵니다",
+        "armor": "방어도를 {pct}% 증가시킵니다",
+        "int": "지능을 {pct}% 증가시킵니다",
+        "sta": "체력을 {pct}% 증가시킵니다",
+        "allStats": "모든 능력치를 {pct}% 증가시킵니다"
+      },
       "dodge": "회피 확률을 {pct}% 증가시킵니다",
       "dodgeReduce": "회피 확률을 {pct}% 감소시킵니다",
       "armorFlat": "방어도를 {value} 감소시킵니다",
       "armorFlatStacks": "방어도를 {value} 감소시킵니다 ({stacks}중첩)",
+      "armorPct": "방어도를 {pct}% 감소시킵니다",
+      "armorPctStacks": "방어도를 {pct}% 감소시킵니다 ({stacks}중첩)",
       "mortalWound": "받는 치유량을 {pct}% 감소시킵니다",
       "vulnerability": "받는 피해를 {pct}% 증가시킵니다",
       "physVuln": "받는 물리 피해를 {pct}% 증가시킵니다",
@@ -1096,6 +1122,26 @@ export const ko_KR: EnTranslations = {
     },
     "worldBoss": {
       "spawn": "{name}이(가) 쏜피크 고지에 솟아올랐습니다!"
+    },
+    "auth": {
+      "appleLoginCta": "Apple로 계속하기",
+      "appleError": "Apple로 로그인할 수 없습니다. 다시 시도해 주세요.",
+      "appleChoiceIntro": "새 계정을 만들거나 Apple을 기존 계정에 연결하세요.",
+      "appleChoiceExpired": "Apple 로그인이 만료되었습니다. Apple로 다시 로그인해 주세요.",
+      "forgotPrompt": "비밀번호를 잊으셨나요?",
+      "forgotTitle": "비밀번호 재설정",
+      "forgotHint": "사용자 이름을 입력하면 등록된 이메일로 재설정 링크를 보내드립니다.",
+      "forgotUsername": "사용자 이름",
+      "forgotSubmit": "재설정 링크 보내기",
+      "forgotSent": "해당 사용자 이름의 계정에 등록된 이메일이 있으면 재설정 링크를 보냈습니다. 받은 편지함을 확인하세요.",
+      "forgotBack": "로그인으로 돌아가기",
+      "resetTitle": "새 비밀번호 설정",
+      "resetNewPassword": "새 비밀번호",
+      "resetConfirm": "새 비밀번호 확인",
+      "resetSubmit": "비밀번호 업데이트",
+      "resetDone": "비밀번호가 업데이트되었습니다. 이제 로그인할 수 있습니다.",
+      "resetMismatch": "비밀번호가 일치하지 않습니다.",
+      "resetErrInvalid": "이 재설정 링크가 유효하지 않거나 만료되었습니다. 새 링크를 요청하세요."
     },
     "loot": {
       "chestTitle": "상자"
@@ -1326,6 +1372,8 @@ export const ko_KR: EnTranslations = {
       "parcelsLabel": "소포",
       "parcelsHint": "가방의 아이템을 클릭하면 첨부됩니다.",
       "removeParcelAria": "편지에서 {item} 제거",
+      "parcelQtyDecreaseAria": "{item} 하나 적게 보내기",
+      "parcelQtyIncreaseAria": "{item} 하나 더 보내기",
       "sendButton": "편지 보내기",
       "postageNote": "우편 요금: {amount}. 까마귀가 약 {seconds}초 동안 날아갑니다.",
       "arrivedBanner": "까마귀가 도착했습니다: {name}의 우편.",
@@ -1348,6 +1396,50 @@ export const ko_KR: EnTranslations = {
         "letterGone": "그 편지는 더 이상 우편함에 없습니다.",
         "takeParcelsFirst": "편지를 버리기 전에 소포를 먼저 꺼내세요."
       }
+    },
+    "bank": {
+      "title": "은행",
+      "subtitle": "도금 금고",
+      "close": "은행 닫기",
+      "capacity": "{used}/{total}",
+      "capacityAria": "사용 중인 은행 칸: {total}칸 중 {used}칸",
+      "empty": "은행이 비어 있습니다.",
+      "tooFar": "은행을 이용하려면 은행원 옆에 있어야 합니다.",
+      "buySlots": "{count}칸 구매",
+      "buySlotsMaxed": "완전히 확장됨",
+      "buyConfirm": "{price}에 은행 칸 {count}개를 추가로 구매하시겠습니까?",
+      "buyConfirmAccept": "구매",
+      "withdrawHint": "클릭하여 꺼내기",
+      "withdrawPartialHint": "Shift+클릭하여 일부만 꺼내기",
+      "depositHint": "클릭하여 넣기",
+      "depositPartialHint": "Shift+클릭하여 일부만 넣기",
+      "cannotDeposit": "은행에 보관할 수 없음",
+      "depositQuantityTitle": "{item} 넣기",
+      "depositQuantityInput": "넣을 수량",
+      "depositQuantityConfirm": "넣기",
+      "withdrawQuantityTitle": "{item} 꺼내기",
+      "withdrawQuantityInput": "꺼낼 수량",
+      "withdrawQuantityConfirm": "꺼내기",
+      "filterGroupAria": "은행을 분류별로 필터링",
+      "sortAria": "은행 아이템 정렬",
+      "searchAria": "이름으로 은행 아이템 검색",
+      "depositAll": "모든 재료 보관",
+      "depositAllDone": "보관한 재료: {count}.",
+      "depositAllFull": "보관한 재료: {count}. 은행이 가득 찼습니다.",
+      "depositAllNone": "은행이 가득 참: 아무것도 보관하지 못했습니다.",
+      "bonusTitle": "보너스 칸",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "이메일 인증됨",
+      "bonusSourceDiscord": "Discord 연동됨",
+      "bonusSourceWallet": "지갑 연동됨",
+      "bonusSourceReferral": "추천한 친구",
+      "bonusAdvertEmail": "이메일을 인증하면 2칸을 얻습니다.",
+      "bonusAdvertDiscord": "Discord를 연동하면 2칸을 얻습니다.",
+      "bonusAdvertWallet": "지갑을 연동하면 2칸을 얻습니다.",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "친구를 초대하세요: 친구가 10레벨에 도달하면 서로 2칸씩 얻으며, 최대 5명까지 가능합니다.",
+      "bonusSectionAria": "보너스 은행 칸과 획득 방법"
     },
     "calendar": {
       "title": "이벤트 달력",
@@ -1420,6 +1512,7 @@ export const ko_KR: EnTranslations = {
     "archetypeTitle": {
       "label": "칭호",
       "none": "없음",
+      "hobbyLabel": "취미",
       "armorcrafting": "방어구 장인",
       "weaponcrafting": "무기 장인",
       "jewelcrafting": "보석 세공사",
@@ -1442,7 +1535,10 @@ export const ko_KR: EnTranslations = {
       "craftedToast": "제작 완료:{name}",
       "insufficientMaterials": "재료가 부족합니다.",
       "unknownRecipe": "해당 제작법이 존재하지 않습니다.",
-      "comboRequirementUnmet": "이 조합 제작법에 필요한 두 제작 기술의 숙련도에 도달하지 못했습니다."
+      "comboRequirementUnmet": "이 조합 제작법에 필요한 두 제작 기술의 숙련도에 도달하지 못했습니다.",
+      "notAtHub": "그것을 제작하려면 필요한 레벨로 제작 거점에 있어야 합니다.",
+      "throttled": "너무 빨리 제작하고 있습니다. 잠시 후 다시 시도하세요.",
+      "recipeNotLearned": "아직 그 제작법을 배우지 않았습니다."
     }
   },
   "apiError": {
@@ -2215,6 +2311,8 @@ export const ko_KR: EnTranslations = {
       "waveGoldBody": "중반 웨이브: 양날의 조합으로, 이 무렵부터 당신의 빌드가 모습을 갖추고 노래하기 시작합니다.",
       "wavePrismaticTitle": "프리즘",
       "wavePrismaticBody": "마지막 웨이브: 빌드를 결정짓고 화면을 녹여 버리는 폭발적인 한 방으로, 더없이 통쾌하게 터무니없는 느낌을 주려는 것입니다.",
+      "yumiHeading": "Yumi를 지켜라",
+      "yumiBody": "Protect Yumi는 미로에서 펼쳐지는 팀 목표 모드입니다. 각 팀은 아군 고양이 소환수를 지키면서 상대의 소환수를 사냥합니다. 두 고양이는 이따금 미로의 새 구석으로 순간이동하므로 전투는 수비, 추격, 수색 사이를 오갑니다. 3대3 또는 5대5로 참가할 수 있으며, 쓰러져도 잠시 벤치에 앉을 뿐입니다.",
       "powerupsTitle": "원형 안의 강화 효과",
       "powerupsBody": "빛나는 구슬이 전투 도중 투기장 안으로 떨어지기도 하며, 먼저 닿는 사람이 임자입니다. 일부러 과장되게 만들어졌고 효과는 잠깐뿐입니다. 눈이 멀 듯한 속도를 주는 스피드 데몬, 굼뜬 거인으로 부풀어 오르는 콜로서스, 저중력으로 통통 튀어 오르게 하는 문 부츠, 그리고 분노가 한순간에 폭발하는 버서커가 있습니다.",
       "ladderHeading": "순위 올리기",
@@ -2367,6 +2465,10 @@ export const ko_KR: EnTranslations = {
       "vendorsBody": "마을과 전초기지에는 저마다 다른 물건을 다루는 상인들이 흩어져 있습니다. 보급상은 음식과 음료를 갖추고, 무기 제작자와 방어구 제작자는 장비를 다루며, 병참장교는 실용적인 여행 장비를 둡니다. 다가서면 그들이 무엇을 파는지 볼 수 있습니다.",
       "marksTitle": "두 번째 화폐: 탐굴 증표",
       "marksBody": "모아두는 것이 금화만 있는 것은 아닙니다. 탐굴은 탐굴 증표를 보상으로 주며, 이는 오직 탐굴 관리인에게서만 동료 강화와 다른 곳에서는 구할 수 없는 장비에 쓰는 별도의 화폐입니다. 탐굴 증표는 금화와 절대 섞이지 않습니다.",
+      "bankTitle": "은행",
+      "bankBody": "모든 거점 마을에는 이 땅의 은행 상회인 도금 금고의 지점이 있습니다. 그곳의 출납관에게 말을 걸면 자신의 금고가 열립니다. 가방과는 별개인 개인 보관 공간으로, 캐릭터가 평생 유지합니다. 맡겨 둔 물건은 다음에 어느 지점을 찾아가도 안전하게 기다리고 있습니다.",
+      "bankHow": "금고가 열린 상태에서 가방의 물건을 클릭하면 맡겨지고, 금고의 물건을 클릭하면 되찾습니다. 금고에는 물건만 보관할 수 있고 동전은 맡길 수 없으며, 퀘스트 아이템은 늘 몸에 지니게 됩니다. 여행 중에 가방이 가득 차면 제작 재료를 한 번에 맡기는 버튼도 있습니다.",
+      "bankSlots": "갓 연 금고는 작지만 당신과 함께 자랍니다. 출납관은 추가 칸을 동전에 판매하며 가격은 단계마다 높아집니다. 온라인으로 플레이하면 이메일 인증, 계정 연동, 친구 초대 등으로 보너스 공간도 얻을 수 있습니다.",
       "buyingTitle": "사고팔기",
       "buyingBody": "상인 가까이 서면 상점 창이 열립니다. 형편이 닿는 한 그들이 갖춘 물건은 무엇이든 살 수 있고, 가방 속 대부분은 동전을 받고 팔 수 있습니다. 실수로 무언가를 팔았다면, 상인이 최근 판매 내역을 보관해 두므로 되살 수 있습니다.",
       "junkTitle": "잡동사니 정리",
@@ -3640,6 +3742,45 @@ export const ko_KR: EnTranslations = {
       "flavor": "죽은 자들이 내어줄 수 있는 것을 내놓았습니다."
     }
   },
+  "yumi": {
+    "bracket3": "Yumi 3대3",
+    "bracket5": "Yumi 5대5",
+    "enterQueue": "Protect Yumi 참가!",
+    "queue": {
+      "join": "Protect Yumi 대기열에 참가했습니다. 소환수를 지키세요…",
+      "leave": "Protect Yumi 대기열에서 나갑니다.",
+      "teamLeave": "팀이 Protect Yumi 대기열에서 나갑니다."
+    },
+    "error": {
+      "partyTooBig3": "Protect Yumi 3대3은 최대 3인 파티까지 참가할 수 있습니다.",
+      "partyTooBig5": "Protect Yumi 5대5는 최대 5인 파티까지 참가할 수 있습니다."
+    },
+    "log": {
+      "start": "Protect Yumi! 아군 소환수를 지키고 적의 소환수를 사냥하세요."
+    },
+    "hud": {
+      "title": "PROTECT YUMI",
+      "getReady": "준비하세요…",
+      "teleportIn": "Yumi 이동까지 {s}초",
+      "suddenDeath": "서든 데스",
+      "yourYumi": "아군 Yumi",
+      "enemyYumi": "적군 Yumi",
+      "aria": "아군 Yumi 생명력 {mine}/{max}, 적군 Yumi {theirs}.",
+      "collapse": "Protect Yumi 게이지 접기",
+      "expand": "Protect Yumi 게이지 펼치기"
+    },
+    "respawn": {
+      "title": "쓰러졌습니다!"
+    },
+    "banner": {
+      "sudden": "서든 데스! Yumi가 더는 이동하지 않습니다!",
+      "teleport": "Yumi가 순간이동했습니다!"
+    },
+    "end": {
+      "win": "승리! Yumi를 지켜냈습니다!",
+      "loss": "패배! 아군 Yumi가 쓰러졌습니다."
+    }
+  },
   "fiesta": {
     "bracket": "Fiesta",
     "enterQueue": "Fiesta에 참가하세요!",
@@ -4086,6 +4227,7 @@ export const ko_KR: EnTranslations = {
       "mobileSocial": "소셜",
       "mobileArena": "투기장",
       "mobileMenu": "메뉴",
+      "mobileSettings": "설정",
       "mobileUse": "사용",
       "mobileMeters": "미터",
       "mobileMap": "지도",
@@ -4634,6 +4776,7 @@ export const ko_KR: EnTranslations = {
       "offGlobalCooldown": "공용 재사용 대기시간 없음",
       "friendlyTarget": "아군 대상",
       "enemyTarget": "적 대상",
+      "selfOnly": "자신에게만",
       "damageRange": "{min}에서 {max}",
       "finisherDamage": "기본 {base}, 연계 점수당 {perCombo}"
     },
@@ -4942,7 +5085,8 @@ export const ko_KR: EnTranslations = {
       "needAria": "{item} 필요",
       "greedAria": "{item} 탐욕",
       "passAria": "{item} 포기",
-      "everyonePassed": "모두 {item}을(를) 포기했습니다."
+      "everyonePassed": "모두 {item}을(를) 포기했습니다.",
+      "rolled": "{answered}/{total} 굴림 완료"
     }
   },
   "entities": {
@@ -4993,19 +5137,19 @@ export const ko_KR: EnTranslations = {
       },
       "rain_of_fire": {
         "name": "불의 비",
-        "description": "지정한 지역에 불의 비를 내려 적을 불태우고 {damage}의 화염 피해를 입힙니다."
+        "description": "지정한 지역에 4초 동안 불의 비를 내려 매초 적에게 {damage}의 화염 피해를 입힙니다."
       },
       "volley": {
         "name": "일제 사격",
-        "description": "지정한 지역에 화살을 쏟아부어 그 안의 적에게 {damage}의 피해를 입힙니다."
+        "description": "지정한 지역에 3초 동안 화살을 쏟아부어 그 안의 적에게 0.5초마다 {damage}의 피해를 입힙니다."
       },
       "hurricane": {
         "name": "폭풍우",
-        "description": "지정한 지역에 폭풍우를 일으켜 적을 강타하고 {damage}의 자연 피해를 입힙니다."
+        "description": "지정한 지역에 6초 동안 폭풍우를 일으켜 매초 적에게 {damage}의 자연 피해를 입힙니다."
       },
       "earthquake": {
         "name": "지진",
-        "description": "지정한 지역을 뒤흔들어 적을 강타하고 {damage}의 자연 피해를 입힙니다."
+        "description": "지정한 지역을 6초 동안 뒤흔들어 1.5초마다 적에게 {damage}의 자연 피해를 입힙니다."
       },
       "heroic_strike": {
         "name": "약탈자의 일격",
@@ -5013,15 +5157,15 @@ export const ko_KR: EnTranslations = {
       },
       "battle_shout": {
         "name": "강철의 외침",
-        "description": "2분 동안 전투력이 20만큼 증가합니다."
+        "description": "2분 동안 전투력이 {buff}만큼 증가합니다."
       },
       "commanding_shout": {
         "name": "북돋는 외침",
-        "description": "2분 동안 체력이 6만큼 증가합니다."
+        "description": "2분 동안 체력이 {buff}만큼 증가합니다."
       },
       "demoralizing_shout": {
         "name": "흉포한 울부짖음",
-        "description": "무시무시한 외침을 내질러 30초 동안 주위 모든 적의 전투력을 30만큼 감소시킵니다."
+        "description": "무시무시한 외침을 내질러 30초 동안 주위 모든 적의 전투력을 {buff}만큼 감소시킵니다."
       },
       "charge": {
         "name": "쇄도",
@@ -5029,7 +5173,7 @@ export const ko_KR: EnTranslations = {
       },
       "rend": {
         "name": "깊은 상처",
-        "description": "대상을 상처 입혀 9초에 걸쳐 {damage}의 출혈 피해를 입힙니다."
+        "description": "대상을 상처 입혀 {duration}초에 걸쳐 {damage}의 출혈 피해를 입힙니다."
       },
       "thunder_clap": {
         "name": "진동의 일격",
@@ -5037,7 +5181,7 @@ export const ko_KR: EnTranslations = {
       },
       "hamstring": {
         "name": "절뚝이는 베기",
-        "description": "적에게 5의 피해를 입히고 15초 동안 이동 속도를 50%만큼 감소시킵니다."
+        "description": "적에게 {damage}의 피해를 입히고 15초 동안 이동 속도를 50%만큼 감소시킵니다."
       },
       "bloodrage": {
         "name": "피의 대가",
@@ -5045,7 +5189,7 @@ export const ko_KR: EnTranslations = {
       },
       "overpower": {
         "name": "붉은 손",
-        "description": "무기 피해 +5를 즉시 입힙니다. 대상이 회피한 후에만 사용할 수 있습니다. 회피할 수 없습니다."
+        "description": "무기 피해에 {damage}를 더한 피해를 즉시 입힙니다. 대상이 회피한 후에만 사용할 수 있습니다. 회피할 수 없습니다."
       },
       "execute": {
         "name": "이른 무덤",
@@ -5065,7 +5209,7 @@ export const ko_KR: EnTranslations = {
       },
       "sunder_armor": {
         "name": "방어구 절단",
-        "description": "대상의 방어구를 가르고 적용마다 {damage}만큼 감소시킵니다. 최대 5번 중첩됩니다. 많은 위협 수준을 생성합니다."
+        "description": "대상의 방어구를 가르고 적용마다 {damage}%만큼 감소시킵니다. 최대 5번 중첩됩니다. 많은 위협 수준을 생성합니다."
       },
       "taunt": {
         "name": "부추김",
@@ -5077,11 +5221,11 @@ export const ko_KR: EnTranslations = {
       },
       "frost_armor": {
         "name": "서리 망토",
-        "description": "자신을 냉기로 감싸 30분 동안 방어도를 30만큼 증가시킵니다."
+        "description": "자신을 냉기로 감싸 30분 동안 방어도를 {buff}만큼 증가시킵니다."
       },
       "arcane_intellect": {
         "name": "에테르 통찰",
-        "description": "30분 동안 지능이 2만큼 증가합니다."
+        "description": "30분 동안 지능이 {buff}만큼 증가합니다."
       },
       "frostbolt": {
         "name": "서리 창",
@@ -5105,7 +5249,7 @@ export const ko_KR: EnTranslations = {
       },
       "polymorph": {
         "name": "홀리기",
-        "description": "적을 최대 15초 동안 두꺼비로 변이시킵니다. 두꺼비는 돌아다니며 빠르게 회복합니다. 피해를 받으면 효과가 해제됩니다. 야수와 인간형에게만 사용할 수 있습니다."
+        "description": "적을 최대 {duration}초 동안 두꺼비로 변이시킵니다. 두꺼비는 돌아다니며 빠르게 회복합니다. 피해를 받으면 효과가 해제됩니다. 야수와 인간형에게만 사용할 수 있습니다."
       },
       "frost_nova": {
         "name": "얼음 속박",
@@ -5125,7 +5269,7 @@ export const ko_KR: EnTranslations = {
       },
       "ice_barrier": {
         "name": "서리 장막",
-        "description": "얼음으로 자신을 보호해 60초 동안 130의 피해를 흡수합니다."
+        "description": "얼음으로 자신을 보호해 60초 동안 {damage}의 피해를 흡수합니다."
       },
       "sinister_strike": {
         "name": "사악한 베기",
@@ -5133,7 +5277,7 @@ export const ko_KR: EnTranslations = {
       },
       "eviscerate": {
         "name": "영면",
-        "description": "연계 점수당 피해를 입히는 결정타입니다."
+        "description": "결정타로 {damage}의 피해를 입힙니다."
       },
       "backstab": {
         "name": "비겁한 찌르기",
@@ -5141,7 +5285,7 @@ export const ko_KR: EnTranslations = {
       },
       "gouge": {
         "name": "눈 찌르기",
-        "description": "대상을 가격해 4초 동안 행동 불가 상태로 만듭니다. 피해를 받으면 효과가 해제됩니다. 연계 점수 1점을 얻습니다."
+        "description": "대상을 가격해 {damage}의 피해를 입히고 4초 동안 행동 불가 상태로 만듭니다. 피해를 받으면 효과가 해제됩니다. 연계 점수 1점을 얻습니다."
       },
       "evasion": {
         "name": "유령 걸음",
@@ -5173,11 +5317,11 @@ export const ko_KR: EnTranslations = {
       },
       "garrote": {
         "name": "철사 목조르기",
-        "description": "적의 목을 졸라 즉시 피해를 입히고 18초에 걸쳐 {damage}의 출혈 피해를 입힙니다. 은신 상태여야 합니다. 연계 점수 1점을 얻습니다."
+        "description": "적의 목을 졸라 즉시 {damage}의 피해를 입히고 18초에 걸쳐 {overTime}의 출혈 피해를 입힙니다. 은신 상태여야 합니다. 연계 점수 1점을 얻습니다."
       },
       "cheap_shot": {
         "name": "명치 가격",
-        "description": "대상을 가격해 4초 동안 기절시킵니다. 은신 상태여야 합니다. 연계 점수 2점을 얻습니다."
+        "description": "대상을 가격해 {damage}의 피해를 입히고 4초 동안 기절시킵니다. 은신 상태여야 합니다. 연계 점수 2점을 얻습니다."
       },
       "sap": {
         "name": "관자놀이 가격",
@@ -5185,11 +5329,11 @@ export const ko_KR: EnTranslations = {
       },
       "crippling_poison": {
         "name": "둔중한 독",
-        "description": "대상을 둔중한 독으로 가격해 {damage}의 자연 피해를 입히고 12초 동안 이동 속도를 50%만큼 감소시킵니다."
+        "description": "둔중한 독으로 대상을 가격해 {damage}의 자연 피해를 입히고 12초 동안 이동 속도를 50%만큼 감소시킵니다."
       },
       "expose_armor": {
         "name": "방어구 돌파",
-        "description": "대상의 약점을 드러내 방어도를 감소시키는 결정타입니다. 연계 점수를 많이 소모할수록 더 깊게 베어 들어갑니다."
+        "description": "대상의 약점을 드러내 30초 동안 방어도를 {damage}만큼 감소시키는 결정타입니다."
       },
       "rupture": {
         "name": "과다출혈",
@@ -5213,7 +5357,7 @@ export const ko_KR: EnTranslations = {
       },
       "seal_of_righteousness": {
         "name": "맹세의 낙인",
-        "description": "30초 동안 신성한 힘으로 가득 차 근접 공격마다 4의 추가 신성 피해를 입힙니다. 선고로 해방할 수 있습니다."
+        "description": "30초 동안 신성한 힘으로 가득 차 근접 공격마다 {damage}의 추가 신성 피해를 입힙니다. 선고로 해방할 수 있습니다."
       },
       "holy_light": {
         "name": "치유의 빛",
@@ -5221,7 +5365,7 @@ export const ko_KR: EnTranslations = {
       },
       "devotion_aura": {
         "name": "굳건함의 오라",
-        "description": "30분 동안 방어도가 40만큼 증가합니다."
+        "description": "30분 동안 방어도가 {buff}만큼 증가합니다."
       },
       "judgement": {
         "name": "선고",
@@ -5229,19 +5373,19 @@ export const ko_KR: EnTranslations = {
       },
       "blessing_of_might": {
         "name": "강철의 맹세",
-        "description": "아군 대상에게 축복을 내려 5분 동안 전투력을 15만큼 증가시킵니다."
+        "description": "아군 대상에게 축복을 내려 5분 동안 전투력을 {buff}만큼 증가시킵니다."
       },
       "divine_protection": {
         "name": "신념의 결계",
-        "description": "보호의 결계가 10초 동안 50의 피해를 흡수합니다."
+        "description": "보호의 결계가 10초 동안 {damage}의 피해를 흡수합니다."
       },
       "hammer_of_justice": {
         "name": "분쇄의 망치",
-        "description": "대상을 3초 동안 기절시킵니다."
+        "description": "대상을 {duration}초 동안 기절시킵니다."
       },
       "lay_on_hands": {
         "name": "마지막 의식",
-        "description": "막대한 치유의 힘으로 생명력 250을 회복시킵니다. 재사용 대기시간 10분."
+        "description": "막대한 치유의 힘으로 생명력을 {damage}만큼 회복시킵니다. 재사용 대기시간 10분."
       },
       "flash_of_light": {
         "name": "빛의 치유",
@@ -5253,7 +5397,7 @@ export const ko_KR: EnTranslations = {
       },
       "consecration": {
         "name": "신성한 땅",
-        "description": "발밑의 땅을 신성화하여 주위 적에게 {damage}의 신성 피해를 입힙니다."
+        "description": "발밑의 땅을 신성화하여 10초 동안 2초마다 주위 적에게 {damage}의 신성 피해를 입힙니다."
       },
       "righteous_fury": {
         "name": "불타는 맹세",
@@ -5273,11 +5417,11 @@ export const ko_KR: EnTranslations = {
       },
       "raptor_strike": {
         "name": "내장 가르기",
-        "description": "강력한 근접 공격으로 피해가 5만큼 증가합니다. 다음 무기 공격 시 발동됩니다."
+        "description": "강력한 근접 공격으로 피해가 {damage}만큼 증가합니다. 다음 무기 공격 시 발동됩니다."
       },
       "aspect_of_the_hawk": {
         "name": "새매의 상",
-        "description": "새매의 상을 취해 30분 동안 전투력이 20만큼 증가합니다."
+        "description": "새매의 상을 취해 30분 동안 전투력이 {buff}만큼 증가합니다."
       },
       "serpent_sting": {
         "name": "독 미늘",
@@ -5289,15 +5433,15 @@ export const ko_KR: EnTranslations = {
       },
       "concussive_shot": {
         "name": "뒤흔드는 사격",
-        "description": "대상을 멍하게 만들어 4초 동안 이동 속도를 50%만큼 감소시킵니다."
+        "description": "대상을 멍하게 만들어 {damage}의 피해를 입히고 4초 동안 이동 속도를 50%만큼 감소시킵니다."
       },
       "mongoose_bite": {
         "name": "반격의 송곳니",
-        "description": "대상이 회피한 후 반격하여 무기 피해에 12를 더한 피해를 입힙니다. 회피할 수 없습니다."
+        "description": "대상이 회피한 후 반격하여 무기 피해에 {damage}를 더한 피해를 입힙니다. 회피할 수 없습니다."
       },
       "wing_clip": {
         "name": "족쇄 베기",
-        "description": "상처를 내어 10초 동안 적의 이동 속도를 40%만큼 감소시킵니다."
+        "description": "상처를 내어 {damage}의 피해를 입히고 10초 동안 적의 이동 속도를 40%만큼 감소시킵니다."
       },
       "aspect_of_the_monkey": {
         "name": "담비의 상",
@@ -5325,7 +5469,7 @@ export const ko_KR: EnTranslations = {
       },
       "power_word_fortitude": {
         "name": "결의의 연도",
-        "description": "30분 동안 대상의 체력이 3만큼 증가합니다."
+        "description": "30분 동안 대상의 체력이 {buff}만큼 증가합니다."
       },
       "shadow_word_pain": {
         "name": "부패의 만가",
@@ -5333,7 +5477,7 @@ export const ko_KR: EnTranslations = {
       },
       "power_word_shield": {
         "name": "수호의 성가",
-        "description": "대상을 보호하여 30초 동안 48의 피해를 흡수합니다."
+        "description": "대상을 보호하여 30초 동안 {damage}의 피해를 흡수합니다."
       },
       "renew": {
         "name": "지속되는 은총",
@@ -5361,7 +5505,7 @@ export const ko_KR: EnTranslations = {
       },
       "rockbiter_weapon": {
         "name": "바위결속 무기",
-        "description": "바위의 분노로 무기를 강화합니다. 5분 동안 매 공격마다 5의 추가 피해를 입힙니다."
+        "description": "바위의 분노로 무기를 강화합니다. 5분 동안 매 공격마다 {damage}의 추가 피해를 입힙니다."
       },
       "healing_wave": {
         "name": "치유의 물결",
@@ -5373,15 +5517,15 @@ export const ko_KR: EnTranslations = {
       },
       "lightning_shield": {
         "name": "천둥 결계",
-        "description": "자신을 번개로 감싸 근접 공격자가 13의 자연 피해를 받게 합니다."
+        "description": "자신을 번개로 감싸 근접 공격자가 {buff}의 자연 피해를 받게 합니다. 최대 3회 충전되며 5초에 한 번만 발동합니다."
       },
       "flame_shock": {
         "name": "잉걸 충격",
-        "description": "대상을 불태워 25의 피해를 입히고 12초에 걸쳐 추가로 {damage}의 피해를 입힙니다."
+        "description": "대상을 불태워 {damage}의 피해를 입히고 12초에 걸쳐 추가로 {overTime}의 피해를 입힙니다."
       },
       "flametongue_weapon": {
         "name": "화염낙인 무기",
-        "description": "원소의 불꽃으로 무기를 강화합니다. 5분 동안 매 공격마다 8의 추가 화염 피해를 입힙니다."
+        "description": "원소의 불꽃으로 무기를 강화합니다. 5분 동안 매 공격마다 {damage}의 추가 화염 피해를 입힙니다."
       },
       "frost_shock": {
         "name": "서리 충격",
@@ -5389,7 +5533,7 @@ export const ko_KR: EnTranslations = {
       },
       "frostbrand_weapon": {
         "name": "서리결속 무기",
-        "description": "살을 에는 냉기로 무기를 강화합니다. 5분 동안 매 공격마다 8의 추가 피해를 입힙니다."
+        "description": "살을 에는 냉기로 무기를 강화합니다. 5분 동안 매 공격마다 {damage}의 추가 피해를 입힙니다."
       },
       "ghost_wolf": {
         "name": "그림자늑대",
@@ -5405,11 +5549,11 @@ export const ko_KR: EnTranslations = {
       },
       "demon_skin": {
         "name": "마귀 가죽",
-        "description": "악마의 피부가 30분 동안 방어도를 30만큼 증가시킵니다."
+        "description": "악마의 피부가 30분 동안 방어도를 {buff}만큼 증가시킵니다."
       },
       "immolate": {
         "name": "불타는 계약",
-        "description": "적을 불태워 11의 화염 피해를 입히고 15초에 걸쳐 추가로 {damage}의 피해를 입힙니다."
+        "description": "적을 불태워 {damage}의 화염 피해를 입히고 15초에 걸쳐 추가로 {overTime}의 피해를 입힙니다."
       },
       "corruption": {
         "name": "검은 부패",
@@ -5417,7 +5561,7 @@ export const ko_KR: EnTranslations = {
       },
       "life_tap": {
         "name": "가혹한 거래",
-        "description": "생명력 30을 마나 30으로 전환합니다."
+        "description": "생명력 {damage}을 마나 {damage}으로 전환합니다."
       },
       "curse_of_agony": {
         "name": "고뇌의 저주",
@@ -5449,7 +5593,7 @@ export const ko_KR: EnTranslations = {
       },
       "mark_of_the_wild": {
         "name": "야생의 수호",
-        "description": "아군 대상에게 야생의 수호를 걸어 30분 동안 방어도를 25만큼 증가시킵니다."
+        "description": "아군 대상에게 야생의 수호를 걸어 30분 동안 방어도를 {buff}만큼 증가시킵니다."
       },
       "moonfire": {
         "name": "달빛 폭풍",
@@ -5461,7 +5605,7 @@ export const ko_KR: EnTranslations = {
       },
       "thorns": {
         "name": "가시 수호",
-        "description": "대상에게 가시가 돋아 근접 공격자가 3의 자연 피해를 받습니다."
+        "description": "대상에게 가시가 돋아 근접 공격자가 {buff}의 자연 피해를 받습니다."
       },
       "entangling_roots": {
         "name": "옥죄는 뿌리",
@@ -5469,7 +5613,7 @@ export const ko_KR: EnTranslations = {
       },
       "bear_form": {
         "name": "큰곰 변신",
-        "description": "곰으로 변신합니다. 방어도 +65%, 전투력 +15, 공격이 분노와 30% 더 많은 위협 수준을 생성합니다. 다시 시전하면 시전자 형태로 돌아갑니다."
+        "description": "곰으로 변신합니다. 방어도 +90%, 전투력이 크게 증가하고, 공격이 분노와 30% 더 많은 위협 수준을 생성합니다. 다시 시전하면 시전자 형태로 돌아갑니다."
       },
       "maul": {
         "name": "뼈 분쇄",
@@ -5489,7 +5633,7 @@ export const ko_KR: EnTranslations = {
       },
       "ferocious_bite": {
         "name": "유혈 물어뜯기",
-        "description": "연계 점수당 피해를 입히는 결정타입니다. 늑대 변신 전용."
+        "description": "결정타로 {damage}의 피해를 입힙니다. 늑대 변신 전용."
       },
       "swipe": {
         "name": "휩쓰는 발톱",
@@ -5521,7 +5665,7 @@ export const ko_KR: EnTranslations = {
       },
       "faerie_fire": {
         "name": "마녀불빛",
-        "description": "대상의 방어도를 40초 동안 35만큼 감소시킵니다."
+        "description": "대상의 방어도를 40초 동안 {damage}%만큼 감소시킵니다. 방어구 절단과 중첩되지 않습니다."
       },
       "hibernate": {
         "name": "깊은 잠",
@@ -5545,7 +5689,7 @@ export const ko_KR: EnTranslations = {
       },
       "rip": {
         "name": "찢기",
-        "description": "12초에 걸쳐 출혈 피해를 입히는 결정타입니다. 연계 점수를 소모합니다. 늑대 변신 전용."
+        "description": "12초에 걸쳐 {damage}의 출혈 피해를 입히는 결정타입니다. 연계 점수를 소모합니다. 늑대 변신 전용."
       },
       "mortal_strike": {
         "name": "불구의 일격",
@@ -5553,11 +5697,11 @@ export const ko_KR: EnTranslations = {
       },
       "bloodthirst": {
         "name": "사혈",
-        "description": "피의 광란으로 즉시 공격하여 {damage}의 피해를 줍니다. (분노 특화 대표 기술)"
+        "description": "피의 광란으로 즉시 공격하여 무기 피해의 60%에 {damage}를 더한 피해를 줍니다. (분노 특화 대표 기술)"
       },
       "shield_slam": {
         "name": "방패 강타",
-        "description": "방패로 대상을 강타해 {damage}의 피해를 주고 막대한 위협을 생성합니다. (방어 특화 대표 기술)"
+        "description": "방패로 대상을 강타해 무기 피해의 50%에 {damage}를 더한 피해를 주고 막대한 위협을 생성합니다. (방어 특화 대표 기술)"
       },
       "whirlwind": {
         "name": "칼날 회오리",
@@ -5752,6 +5896,9 @@ export const ko_KR: EnTranslations = {
       "greyjaw_fang": {
         "name": "늙은 그레이죠의 송곳니"
       },
+      "chunk_of_ore": {
+        "name": "광석 조각"
+      },
       "weathered_ledger_page": {
         "name": "풍화된 장부 페이지"
       },
@@ -5781,6 +5928,15 @@ export const ko_KR: EnTranslations = {
       },
       "linen_scrap": {
         "name": "아마포 조각"
+      },
+      "arcane_dust": {
+        "name": "비전 가루"
+      },
+      "arcane_essence": {
+        "name": "비전 정수"
+      },
+      "arcane_shard": {
+        "name": "비전 파편"
       },
       "fen_muster_order": {
         "name": "펜브리지 소집 명령서"
@@ -6207,6 +6363,24 @@ export const ko_KR: EnTranslations = {
       },
       "sunpetal_sickle": {
         "name": "태양꽃잎 낫"
+      },
+      "thorium_ore": {
+        "name": "토륨 광석"
+      },
+      "arcanite_bar": {
+        "name": "비전 주괴"
+      },
+      "ashwood_log": {
+        "name": "잿빛나무 통나무"
+      },
+      "elderwood_log": {
+        "name": "고대 딱총나무 통나무"
+      },
+      "goldleaf_herb": {
+        "name": "금빛잎 약초"
+      },
+      "sunpetal_herb": {
+        "name": "태양꽃잎 약초"
       },
       "bristleback_maul": {
         "name": "갤로글래스 망치"
@@ -6906,6 +7080,9 @@ export const ko_KR: EnTranslations = {
       }
     },
     "mobs": {
+      "yumi_cat": {
+        "name": "유미"
+      },
       "forest_wolf": {
         "name": "숲늑대"
       },
@@ -6965,6 +7142,9 @@ export const ko_KR: EnTranslations = {
       },
       "deacon_voss": {
         "name": "부제 보스"
+      },
+      "training_dummy": {
+        "name": "훈련용 허수아비"
       },
       "ridge_stalker": {
         "name": "산등성이 추적자"
@@ -7352,6 +7532,21 @@ export const ko_KR: EnTranslations = {
         "title": "세계 시장 관리자",
         "greeting": "세계 시장은 이곳에서도 이용할 수 있습니다, {className}. 왕국의 모험가들에게서 물건을 사거나 자신의 물건을 내놓으십시오."
       },
+      "bursar_fernando": {
+        "name": "출납관 페르난도",
+        "title": "도금 금고",
+        "greeting": "도금 금고에 오신 것을 환영합니다. 당신의 물건은 우리의 자물쇠 뒤에서 안전하게 보관됩니다."
+      },
+      "bursar_petra_vell": {
+        "name": "출납관 페트라 벨",
+        "title": "도금 금고",
+        "greeting": "도금 금고는 장부도 깔끔하고 금고는 더욱 깨끗합니다. 무엇을 보관해 드릴까요?"
+      },
+      "bursar_aldous_crane": {
+        "name": "출납관 알도스 크레인",
+        "title": "도금 금고",
+        "greeting": "어떤 상자든, 금궤든, 장신구든 도금 금고에 맡기시면 안전합니다."
+      },
       "brother_aldric_raid": {
         "name": "알드릭 수사",
         "title": "계곡의 사제",
@@ -7384,6 +7579,16 @@ export const ko_KR: EnTranslations = {
       }
     },
     "quests": {
+      "q_prof_intro": {
+        "title": "검 말고도 할 수 있는 일",
+        "text": "이스트브룩의 모든 사람은 검 말고도 생업이 있다네, {playerName}. 마을 주변에 광맥이 흩어져 있지. 곡괭이를 휘둘러 광석 5덩이를 가져다 주게. 직접 캐야 하네, 내가 다 구분할 수 있으니까.",
+        "completion": "봤나? 가방엔 광석, 손엔 굳은살이지. 길을 다니며 채광, 벌목, 약초 채집을 계속해 보게. 마을에 돌아오면 시장 옆의 마을 집중 게시판과 근처 제작대도 눈여겨보고. 원한다면 그 안에 정직한 거래가 기다리고 있다네.",
+        "objectives": {
+          "0": {
+            "label": "광석 조각"
+          }
+        }
+      },
       "q_wolves": {
         "title": "문 앞의 늑대들",
         "text": "숲늑대들이 북쪽 길의 여행자들을 물어뜯고 있습니다, {playerName}. 8마리를 처치해 이스트브룩이 숨 돌리게 해 주십시오.",

@@ -53,6 +53,9 @@ export const CHANNEL_PUSHBACK_FRACTION = 0.25; // classic-era: each hit shaves 2
 // Tolerance for "this per-tick timer is effectively complete" comparisons (casting,
 // channels, ground-AoE pulses). Shared across sim modules (sim.ts + entity_roster.ts).
 export const CAST_COMPLETE_EPS = 1e-9;
+// classic-era spell queue: a press during the tail of a cast queues instead of
+// erroring, and fires the instant the current cast completes.
+export const CAST_QUEUE_WINDOW_SEC = 0.4;
 export const FISHING_CAST_ID = 'fishing';
 export const FISHING_CAST_NAME = 'Fishing';
 export const FISHING_CAST_TIME = 5;
@@ -95,8 +98,9 @@ export function isPetClass(cls: PlayerClass): boolean {
 }
 // '1v1'/'2v2' are the ranked Ashen Coliseum ladders; 'fiesta' is the
 // dopamine-maxxed 2v2 party mode (score-based, respawns, augments, a shrinking
-// ring) — see docs/design and the Fiesta region of sim.ts.
-export type ArenaFormat = '1v1' | '2v2' | 'fiesta';
+// ring); see docs/design and the Fiesta region of sim.ts. yumi3/yumi5 are the
+// Protect Yumi maze objective brackets (3v3 / 5v5, unranked; social/yumi.ts).
+export type ArenaFormat = '1v1' | '2v2' | 'fiesta' | 'yumi3' | 'yumi5';
 
 export type DungeonDifficulty = 'normal' | 'heroic';
 
@@ -202,7 +206,18 @@ export type AuraKind =
   | 'stealth'
   | 'defensive_stance'
   | 'righteous_fury'
+  // Warrior/rogue armor debuff. Now a PERCENTAGE reduction (2% per stack via
+  // effectiveArmor), not a flat armor subtraction. Does not stack with faerie_fire
+  // (effectiveArmor max-combines the two percents).
   | 'sunder'
+  // Mob corrosion (Acid Spit / Ledger Rot): a FLAT, stacking armor shred that
+  // subtracts value*stacks. Distinct from the now-percent `sunder` so the two never
+  // collide (effectiveArmor subtracts corrode flat, before the percent debuffs).
+  | 'corrode'
+  // Druid Faerie Fire: a fixed-percent armor reduction that does NOT stack with
+  // Sunder Armor (effectiveArmor takes the larger of the two percents). Own kind so
+  // it is never summed flat with sunder.
+  | 'faerie_fire'
   | 'mortal_wound'
   | 'silence'
   | 'blind'
@@ -223,7 +238,22 @@ export type AuraKind =
   // 2v2 Fiesta power-up buffs: `buff_scale` value = body-size multiplier (also
   // boosts max-hp when >1); `buff_jump` value = jump-height multiplier.
   | 'buff_scale'
-  | 'buff_jump';
+  | 'buff_jump'
+  // Percent raid buffs (vanilla group-buff style). Value is stored as integer percent
+  // POINTS (5 = +5%, 10 = +10%) so it survives the integer-rounding talent value
+  // multiplier; divided by 100 when folded in recalcPlayerStats. Distinct from
+  // `buff_allstats_pct`, which is a SIGNED FRACTION whole-block scale used only by
+  // Resurrection Sickness (see the aura loop in entity.ts):
+  //   buff_stats_pct  -> Mark of the Wild (+% to every primary attribute)
+  //   buff_int_pct    -> Arcane Intellect (+% Intellect)
+  //   buff_sta_pct    -> Power Word: Fortitude (+% Stamina)
+  //   buff_armor_pct  -> Devotion Aura (+% armor)
+  //   buff_ap_pct     -> Battle Shout / Blessing of Might (+% attack power)
+  | 'buff_stats_pct'
+  | 'buff_int_pct'
+  | 'buff_sta_pct'
+  | 'buff_armor_pct'
+  | 'buff_ap_pct';
 
 export interface Aura {
   id: string; // ability id that applied it
@@ -362,6 +392,12 @@ interface BaseItemDef {
   noVendorSell?: boolean;
   noDiscard?: boolean;
   noMarketList?: boolean;
+  // Soulbound: the item is bound to its owner. It cannot be traded, mailed,
+  // listed on the World Market, or destroyed (right-click discard). Currency-like
+  // reward tokens (heroic_mark) use this so they can only be spent at their vendor,
+  // never handed off or thrown away. Enforced in social/trade.ts, mail/post_office.ts,
+  // market.ts, and items.ts (discardItem/sellItem/sellAllJunk).
+  soulbound?: boolean;
   /** Shown when interacting with a ground quest object before the quest is active. */
   pickupDeny?: string;
   /** Shown when the quest is active but the collect count is already met. */
@@ -390,6 +426,12 @@ interface BaseItemDef {
   requiredLevel?: number;
   /** Set id this piece belongs to; equipping enough pieces grants the set bonuses (see ITEM_SETS). */
   set?: string;
+  // Heroic upgraded variant: the base item id this "Heroic X" copy was generated
+  // from (content/heroic_variants.ts). Set only on the generated variants, which
+  // drop in place of their base from a heroic dungeon's normal loot table. The
+  // client composes the display name as "Heroic {base name}" from this (see
+  // itemDisplayName), so a variant carries no translated name key of its own.
+  heroicOf?: string;
 }
 
 // Item-set bonuses (classic "tier set" style). Flat effects fold into
@@ -479,12 +521,15 @@ export interface WeaponItemDef extends BaseItemDef {
 }
 
 // A legendary weapon proc: a "chance on action" effect that rolls when the wielder
-// performs the trigger action (lands a melee swing, lands a damaging spell, or lands
+// performs the trigger action (lands a weapon strike, lands a damaging spell, or lands
 // a heal) and, on success, fires its effects. Handled by
 // src/sim/combat/equip_procs.ts. The proc's rng roll is gated on the wielder actually
 // carrying a proc weapon, so ordinary gear draws no extra rng and the deterministic
 // draw order (and every parity golden that equips no legendary) is unchanged.
-export type WeaponProcTrigger = 'meleeHit' | 'spellDamage' | 'heal';
+// `weaponHit` covers ANY weapon strike with the equipped mainhand: a melee swing OR a
+// hunter's Auto Shot (which fires with that same weapon). Caster wand bolts, which do
+// not swing the mainhand, never roll it.
+export type WeaponProcTrigger = 'weaponHit' | 'spellDamage' | 'heal';
 
 export type WeaponProcEffect =
   // Thunderfury-style arc: a bolt that strikes the primary target and then jumps to
@@ -551,12 +596,13 @@ export interface InvSlot {
   instance?: ItemInstancePayload;
 }
 
-// A shallow `{ ...slot }` aliases `instance` (and its mutable `charges`/`rolled.stats`
-// maps) between the live slot and a serialized/loaded copy: decrementing a charge on
-// one would silently mutate the other. Deep-clone at every save/load boundary instead.
-export function cloneInvSlot<T extends InvSlot>(slot: T): T {
-  if (!slot.instance) return { ...slot };
-  const src = slot.instance;
+// A shallow `{ ...instance }` aliases the mutable `charges`/`rolled.stats` maps
+// between a live payload and a serialized/loaded copy: decrementing a charge on
+// one would silently mutate the other. Deep-clones at every save/load boundary
+// instead. Shared by cloneInvSlot below and the equipped-instance map (an
+// enchanted piece's payload, src/sim/professions/enchanting.ts), so both copy
+// through the exact same rules.
+export function cloneItemInstancePayload(src: ItemInstancePayload): ItemInstancePayload {
   const instance: ItemInstancePayload = { ...src };
   if (src.charges) instance.charges = { ...src.charges };
   if (src.rolled)
@@ -564,7 +610,15 @@ export function cloneInvSlot<T extends InvSlot>(slot: T): T {
       ...src.rolled,
       ...(src.rolled.stats && { stats: { ...src.rolled.stats } }),
     };
-  return { ...slot, instance };
+  return instance;
+}
+
+// A shallow `{ ...slot }` aliases `instance` between the live slot and a
+// serialized/loaded copy; see cloneItemInstancePayload above for why that is
+// unsafe and what this clones instead.
+export function cloneInvSlot<T extends InvSlot>(slot: T): T {
+  if (!slot.instance) return { ...slot };
+  return { ...slot, instance: cloneItemInstancePayload(slot.instance) };
 }
 
 export interface LootSlot extends InvSlot {
@@ -572,6 +626,10 @@ export interface LootSlot extends InvSlot {
   personalFor?: number[];
   // Need/greed loot that everyone passed on becomes free-for-all corpse loot.
   openToAll?: boolean;
+  // Shared personal (participation tokens, e.g. Heroic Marks): a single loot
+  // action by ANY listed player grants `count` copies to EVERY player in
+  // `personalFor`, then consumes the slot. No one has to loot their own copy.
+  sharedPersonal?: boolean;
 }
 
 export interface CorpseLoot {
@@ -593,6 +651,28 @@ export interface LootRollPrompt {
   itemName: string;
   quality: ItemDef['quality'];
   expiresAt: number;
+}
+
+// One candidate's live vote on an open need-greed roll, as the whole group sees
+// it: the choice only. The 1-100 roll number stays server-side until resolution,
+// when every roll is broadcast as loot chat lines.
+export interface LootRollStatusEntry {
+  pid: number;
+  name: string;
+  choice: LootRollChoice | null;
+}
+
+// Group-visible mirror of an open need-greed roll: every party member (candidate
+// or not) sees who has answered and how while the window runs, so the HUD can
+// keep the roll frame up with a per-player choice strip until the server
+// resolves the roll.
+export interface LootRollGroupStatus {
+  rollId: number;
+  itemId: string;
+  itemName: string;
+  quality: ItemDef['quality'];
+  expiresAt: number;
+  entries: LootRollStatusEntry[];
 }
 
 // Master loot intercepts roll-worthy drops at/above a quality threshold and hands
@@ -672,6 +752,11 @@ export interface MobTemplate {
   // who damaged it (gated to once per day per boss). The spawn schedule + location
   // live in src/sim/world_boss.ts; the loot roll runs through rollWorldBossLoot.
   worldBoss?: boolean;
+  // Suppresses the per-mechanic combat-log barks ("<Name> unleashes <Mechanic>!"
+  // and "<Name> becomes enraged!") for a mob whose only voice should be its
+  // periodic zone-wide battle cry (a world boss). The mechanics still fire, with
+  // their spellfx and damage: only the noisy log line is silenced.
+  quietMechanics?: boolean;
   // Elite scaling, classic-style: ~2.3x health, ~1.5x damage, double XP.
   elite?: boolean;
   // Kill-XP multiplier (default 1). 0 marks a puzzle-object mob (e.g. the 1 HP
@@ -679,12 +764,25 @@ export interface MobTemplate {
   xpMult?: number;
   // Rare/miniboss controls.
   canSwim?: boolean;
+  // Every movement step (chase, flee, wander, leash return) uses Sim.moveToward's
+  // phasing mode: a straight line that ignores prop colliders, the waterline, and
+  // the steep-wall gate. For mountain-sized movers (world bosses) that must never
+  // wedge on camp furniture while closing on a target.
+  phasesThroughObstacles?: boolean;
   ccImmune?: boolean;
   // Immune to movement-speed slow auras (kind 'slow'). Distinct from ccImmune, which
   // blocks the hard control auras (stun/root/incapacitate/polymorph) but intentionally
   // leaves snares landing so most elites can still be kited; a raid boss sets both.
   slowImmune?: boolean;
   respawnMult?: number;
+  // Fixed respawn delay in seconds, overriding respawnSeconds*respawnMult; also
+  // caps corpse decay so the mob returns on schedule. (Training dummy: 10s.)
+  respawnSeconds?: number;
+  // Training dummy: a stationary practice target — attackable (so it counts for
+  // damage and the combat meters) but never moves, aggros, or retaliates; drops
+  // combat and heals to full a few seconds after the last hit. Guarded in
+  // enterCombat (sim.ts) and updateMob (mob/locomotion.ts).
+  dummy?: boolean;
   // Boss mechanic: periodic AoE pulse around the mob while in combat.
   aoePulse?: {
     min: number;
@@ -1262,7 +1360,17 @@ export type AbilityEffect =
   | { type: 'judgement' } // consume your imbue, deal its judgement damage to the target
   | { type: 'lifeTap'; hp: number; mana: number }
   | { type: 'drainTick'; min: number; max: number; healFrac: number } // channel tick that heals the caster
-  | { type: 'buffTarget'; kind: AuraKind; value: number; duration: number } // fortitude/might/mark on a friendly target
+  | {
+      type: 'buffTarget';
+      kind: AuraKind;
+      value: number;
+      duration: number;
+      // When true, the buff is a raid buff: it lands on the caster, the explicit
+      // target (a friendly or a controlled pet), and every living member of the
+      // caster's party/raid, regardless of range. Used by Mark of the Wild, Arcane
+      // Intellect, Power Word: Fortitude, Blessing of Might, Battle Shout, Devotion Aura.
+      party?: boolean;
+    } // fortitude/might/mark on a friendly target
   | { type: 'finisherDamage'; base: number; perCombo: number; variance: number } // eviscerate
   | { type: 'dot'; total: number; duration: number; interval: number }
   | { type: 'slow'; mult: number; duration: number }
@@ -1311,7 +1419,12 @@ export type AbilityEffect =
   | { type: 'gainResource'; amount: number } // bloodrage immediate
   | { type: 'selfDamagePctMax'; pct: number } // bloodrage cost
   | { type: 'charge' }
-  | { type: 'sunder'; armor: number; maxStacks: number } // sunder armor: stacking armor debuff + flat threat
+  // Sunder Armor: stacking PERCENT armor debuff (2% per stack via effectiveArmor) +
+  // flat threat. `full` lands all `maxStacks` at once (Expose Armor, a finisher that
+  // applies the cap in one cast) instead of building one stack per hit (warrior Sunder).
+  // `armor` is retained for the threat value; the reduction percent is a fixed constant.
+  | { type: 'sunder'; armor: number; maxStacks: number; full?: boolean }
+  | { type: 'faerieFire'; duration: number } // fixed-percent armor reduction (AuraKind 'faerie_fire')
   | { type: 'taunt' } // taunt/growl: match top threat and force-attack the caster
   | { type: 'tamePet' } // hunter tame beast: the targeted mob becomes the caster's pet
   | { type: 'dismissPet' } // release the caster's pet back to the wild
@@ -1406,6 +1519,9 @@ export interface NpcDef {
   // The Merchant: talking to this NPC opens the player-driven World Market
   // (auction house) instead of a fixed vendor stock.
   market?: boolean;
+  // A banker: talking to this NPC opens the player's bank (deposit box). The bank
+  // deposit/withdraw/buy-slots commands gate on standing near one of these.
+  banker?: true;
   // The Heroic Quartermaster: talking to this NPC opens the Heroic Marks
   // shop (src/sim/content/heroic_vendor.ts) instead of a copper vendor stock.
   heroicVendor?: boolean;
@@ -1694,6 +1810,11 @@ export interface Entity {
   cooldowns: Map<string, number>;
   queuedOnSwing: string | null; // heroic strike
   queuedOnSwingFree?: boolean; // next_cast_free consumed at queue time
+  // single-slot spell queue: a press during the tail of the current cast (see
+  // CAST_QUEUE_WINDOW_SEC), fired by updateCasting on cast completion. Distinct
+  // from queuedOnSwing (a melee on-next-swing queue, not a cast queue).
+  queuedCastAbility: string | null;
+  queuedCastAim: { x: number; z: number } | null;
   fiveSecondRule: number; // time since last mana spend
   comboPoints: number; // retail-style: character-bound, not anchored to a target
   comboUntil: number; // sim-time until which unspent combo points persist
@@ -1719,6 +1840,12 @@ export interface Entity {
    *  Wiped on evade/respawn/death; drives target selection with the 110%
    *  melee / 130% ranged pull-over rules. */
   threat: Map<number, number>;
+  /** World-boss loot roster: every player id (pet threat credited to the owner) that
+   *  has damaged this world boss since it was pulled. Unlike `threat`, it is NEVER
+   *  pruned when a contributor dies, releases their spirit, leaves range, or drops off
+   *  the hate table, so a raider who died to the boss keeps their personal loot rights.
+   *  Only ever written for `worldBoss` templates; empty on every other entity. */
+  bossDamagers: Set<number>;
   forcedTargetId: number | null; // taunt/growl: attack this target while the timer runs
   forcedTargetTimer: number; // seconds left on the forced-attack window
   ownerId: number | null; // controlled pets: owning player's entity id (null = wild)
@@ -1772,6 +1899,10 @@ export interface Entity {
   /** GM character: invulnerable (dealDamage no-ops). Server-set from the
    *  characters.is_gm column; never user-settable. */
   gm?: boolean;
+  /** Moderation-jailed player: prisoners are mutually hostile (the jail brawl,
+   *  see isHostileTo). Server-set via setJailed on jail/unjail and at join
+   *  restore; never true offline, never user-settable. */
+  jailed?: boolean;
   /** True for a mob spawned BY a delve affix (e.g. Restless Graves' Raised
    *  Bonewalker). Affix re-trigger checks exclude these so an affix-spawned mob's
    *  own death can never re-trigger the same affix (would otherwise chain forever). */
@@ -1822,6 +1953,13 @@ export interface Entity {
   // fields (terse `eq`) so another player can be inspected. Like mainhandItemId,
   // the sim never reads it for gameplay (no effect on stats).
   equippedItems: Partial<Record<EquipSlot, string>>;
+  // Render-only mirror of PlayerMeta.equipmentInstance (Enchanting): the per-slot
+  // ItemInstancePayload of whichever equipped piece carries one (an enchanted
+  // item's `rolled.stats`), keyed the same as equippedItems. Sparse: a slot with
+  // a plain (unenchanted) piece, or nothing equipped, has no entry. Recomputed in
+  // recalcPlayerStats alongside equippedItems; the sim reads the SOURCE
+  // (PlayerMeta.equipmentInstance) for the actual stat bonus, never this mirror.
+  equippedInstances: Partial<Record<EquipSlot, ItemInstancePayload>>;
   // $WOC holder-tier flair (cosmetic): 0/undefined = none, 1-10 = Ember…Sovereign.
   // Set server-side from the player's connected-wallet balance and synced in
   // identity fields like skin. The sim never reads it (no gameplay effect).
@@ -1902,6 +2040,7 @@ export type MailResultCode =
   | 'noRecipient'
   | 'tooManyParcels'
   | 'noMailQuestItems'
+  | 'noMailSoulbound'
   | 'notEnoughItems'
   | 'cantAffordPostage'
   | 'recipientBoxFull'
@@ -1918,6 +2057,18 @@ export type CalendarResultCode =
   | 'badInput'
   | 'calendarFull'
   | 'eventGone';
+
+// An in-flight party/raid ready check (social/ready_check.ts). Keyed on Sim by party
+// id. Each member is 'pending' until they answer; anyone still 'pending' when the
+// timeout fires is counted as "no response" (there is no separate afk state).
+// Sim-internal state, never wired to the client (the outcome is announced as
+// chat/log lines and the yes/no prompt rides the readyCheckStart event).
+export interface ReadyCheck {
+  partyId: number;
+  initiator: number; // pid who ran /ready
+  endsAt: number; // sim-clock seconds (ctx.time) when the check auto-finalizes
+  responses: Map<number, 'ready' | 'notready' | 'pending'>; // pid -> answer
+}
 
 // `pid` (when present) marks a personal event that should only be delivered to
 // that player entity's owner; events without pid are world-visible.
@@ -1982,6 +2133,10 @@ export type SimEvent = { pid?: number } & (
   // `collected` the coin taken, `tooManyParcels` the attachment cap). All
   // always carry pid.
   | { type: 'mailbox' }
+  // Asks the client to open the bank window (the interact path at a banker NPC).
+  // Structured data only (pid supplied by the union intersection); the client
+  // builds every visible string, the mailbox precedent.
+  | { type: 'bank' }
   | { type: 'mailArrived'; senderName: string; letterId?: string }
   | { type: 'mailResult'; code: MailResultCode; value?: number; name?: string }
   // Guild calendar outcome. Emitted only by the server's SocialService (the
@@ -2013,6 +2168,9 @@ export type SimEvent = { pid?: number } & (
       to?: string;
     }
   | { type: 'partyInvite'; fromPid: number; fromName: string }
+  // The party/raid leader started a ready check: the recipient's client plays a
+  // sound and shows a yes/no prompt (social/ready_check.ts). Personal (pid set).
+  | { type: 'readyCheckStart'; fromName: string }
   // a guild invitation from an online guild officer/leader; resolved by name
   // server-side so it carries no pid
   | { type: 'guildInvite'; fromName: string; guildName: string }
@@ -2061,6 +2219,28 @@ export type SimEvent = { pid?: number } & (
       n?: number;
     }
   | { type: 'fiestaDown'; seconds: number }
+  // Protect Yumi maze objective mode (social/yumi.ts). `yumiTeleport` is a
+  // world-visible relocation cue (renderer snap + VFX at both ends);
+  // `yumiDown` is your personal 10s bench countdown; `yumiSuddenDeath` fires
+  // once when teleports freeze and the bleed ramp starts; `yumiStatus` is the
+  // once-per-second personal scoreboard heartbeat (the arena wire field is
+  // rate-limited and the enemy cat can sit outside interest range, so the
+  // live bars ride the event queue like fiesta's dynamics do).
+  | { type: 'yumiTeleport'; catId: number; fromX: number; fromZ: number; toX: number; toZ: number }
+  | { type: 'yumiDown'; seconds: number }
+  | { type: 'yumiSuddenDeath' }
+  | {
+      type: 'yumiStatus';
+      myHp: number;
+      myMax: number;
+      enemyHp: number;
+      enemyMax: number;
+      teleportIn: number;
+      suddenDeathIn: number;
+      suddenDeath: boolean;
+      mult: number;
+      team: 'A' | 'B';
+    }
   | { type: 'augmentOffer'; tier: 'silver' | 'gold' | 'prismatic'; wave: number; choices: string[] }
   | { type: 'augmentChosen'; augmentId: string; byPid: number; byName: string; mine: boolean }
   // A fighter grabbed a ring power-up (world event so everyone sees the glow).
@@ -2238,7 +2418,13 @@ export type SimEvent = { pid?: number } & (
       itemId?: string;
       count?: number;
       quality?: ItemDef['quality'];
-      reason?: 'unknown_recipe' | 'insufficient_materials' | 'combo_requirement_unmet';
+      reason?:
+        | 'unknown_recipe'
+        | 'insufficient_materials'
+        | 'combo_requirement_unmet'
+        | 'recipe_not_learned'
+        | 'throttled'
+        | 'not_at_hub';
     }
 );
 
@@ -2672,6 +2858,12 @@ export const RANGED_SPELL_AP_SCALE = 0.15;
 // weapon-swing and finisher portions already carry AP through their own paths;
 // this only lifts the flat directDamage / DoT / AoE riders.
 export const MELEE_SPELL_AP_SCALE = 0.15;
+// Armor-reduction debuffs as PERCENTAGES (multiplicative on the target's armor).
+// Sunder Armor reduces 2% per stack (5 stacks = 10%); Faerie Fire reduces a flat
+// 10%. They do NOT stack with each other: effectiveArmor takes the larger percent.
+// Mob corrosion (kind 'corrode') is a separate FLAT shred, subtracted before these.
+export const SUNDER_ARMOR_PCT_PER_STACK = 0.02;
+export const FAERIE_FIRE_ARMOR_PCT = 0.1;
 
 // ---------------------------------------------------------------------------
 // Delves, replayable modular instances (see docs/prd/delves.md)
