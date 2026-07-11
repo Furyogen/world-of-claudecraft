@@ -21,6 +21,12 @@ vi.mock('../server/db', () => ({
   markAccountQuestComplete: vi.fn(async () => ({ completedQuestIds: [], mechChromaIds: [] })),
   grantAccountMechChroma: vi.fn(async () => ({ completedQuestIds: [], mechChromaIds: [] })),
   walletForAccount: vi.fn(async () => null),
+  // The character-lease surface game.leave/the autosave loop call (this mock was
+  // authored on the release branch, before the character-lease system landed).
+  acquireCharacterLease: vi.fn(async () => true),
+  releaseCharacterLease: vi.fn(async () => {}),
+  heartbeatCharacterLeases: vi.fn(async () => {}),
+  releaseAllCharacterLeases: vi.fn(async () => {}),
 }));
 
 import { dailyRewardService } from '../server/daily_rewards';
@@ -299,6 +305,9 @@ describe('vale cup: online integration (GameServer)', () => {
       won: true,
       bracket: 1,
       matchId: match.id,
+      rated: true,
+      hasBots: false,
+      practice: false,
     });
 
     // one Discord card for the decided match, tagging the winning side
@@ -330,7 +339,7 @@ describe('vale cup: online integration (GameServer)', () => {
     rewardSpy.mockRestore();
   });
 
-  it('gates the daily-reward arm: draws, matchless results, and unrated matches grant nothing', () => {
+  it('gates the daily-reward arm: draws and matchless results grant nothing, practice uses reduced path', () => {
     const rewardSpy = vi.spyOn(dailyRewardService, 'recordValeCupResult').mockResolvedValue(0);
     const fc = fakeWs();
     const session = joinServer(server, fc, 20, 'Gated');
@@ -343,13 +352,16 @@ describe('vale cup: online integration (GameServer)', () => {
     detect({ type: 'vcupResult', won: true, draw: false, pid: session.pid });
     expect(rewardSpy).not.toHaveBeenCalled();
 
-    // an unrated (bot-backfilled / practice) match earns neither points nor a card
-    const fakeMatch = {
+    // Private practice wins use the reduced bot-match task path and do not create a public card.
+    const fakeMatch: any = {
       id: 999,
       bracket: 1,
       rated: false,
+      practice: { ownerPid: session.pid, slot: 0 },
       teamA: [session.pid],
-      teamB: [],
+      teamB: [9999],
+      rosterA: [{ pid: session.pid, bot: false }],
+      rosterB: [{ pid: 9999, bot: true }],
       scoreA: 5,
       scoreB: 0,
       nationA: 'vale',
@@ -357,13 +369,50 @@ describe('vale cup: online integration (GameServer)', () => {
     };
     (server.sim as any).vcup.match = fakeMatch;
     detect({ type: 'vcupResult', won: true, draw: false, pid: session.pid });
-    expect(rewardSpy).not.toHaveBeenCalled();
+    expect(rewardSpy).toHaveBeenCalledTimes(1);
+    expect(rewardSpy).toHaveBeenLastCalledWith(
+      session.accountId,
+      expect.objectContaining({
+        won: true,
+        bracket: 1,
+        matchId: 999,
+        rated: false,
+        hasBots: true,
+        practice: true,
+      }),
+    );
     expect(drainActivity().filter((c) => c.kind === 'vale_cup')).toHaveLength(0);
 
-    // flipping the same match rated proves the gate was the rated flag
-    fakeMatch.rated = true;
-    detect({ type: 'vcupResult', won: true, draw: false, pid: session.pid });
+    detect({ type: 'vcupResult', won: false, draw: false, pid: session.pid });
     expect(rewardSpy).toHaveBeenCalledTimes(1);
+
+    // An unrated, non-practice bot-filled match earns reduced task points but no public card.
+    fakeMatch.practice = undefined;
+    detect({ type: 'vcupResult', won: true, draw: false, pid: session.pid });
+    expect(rewardSpy).toHaveBeenCalledTimes(2);
+    expect(rewardSpy).toHaveBeenLastCalledWith(
+      session.accountId,
+      expect.objectContaining({
+        won: true,
+        bracket: 1,
+        matchId: 999,
+        rated: false,
+        hasBots: true,
+        practice: false,
+      }),
+    );
+    expect(drainActivity().filter((c) => c.kind === 'vale_cup')).toHaveLength(0);
+
+    // A rated loss is still not a daily-reward task: the variant is wins only.
+    fakeMatch.rated = true;
+    fakeMatch.rosterB[0].bot = false;
+    detect({ type: 'vcupResult', won: false, draw: false, pid: session.pid });
+    expect(rewardSpy).toHaveBeenCalledTimes(2);
+    expect(drainActivity().filter((c) => c.kind === 'vale_cup')).toHaveLength(0);
+
+    // Flipping the same match to a rated win proves the full-value rated path.
+    detect({ type: 'vcupResult', won: true, draw: false, pid: session.pid });
+    expect(rewardSpy).toHaveBeenCalledTimes(3);
     expect(drainActivity().filter((c) => c.kind === 'vale_cup')).toHaveLength(1);
     (server.sim as any).vcup.match = null;
     rewardSpy.mockRestore();

@@ -12,7 +12,14 @@ import {
   readBrowserEnv,
 } from './game/browser_env';
 import { isCameraDrivenFacingActive } from './game/camera_driven_facing';
-import { cameraFollowShouldSettle, updateFollowCameraYaw, wrapAngle } from './game/camera_follow';
+import {
+  cameraFollowShouldSettle,
+  newCameraReleaseHold,
+  stepCameraReleaseHold,
+  updateFollowCameraYaw,
+  wrapAngle,
+} from './game/camera_follow';
+import { shouldRecoverOnComposerBlur } from './game/chat_keyboard_dismiss';
 import {
   clickMoveShouldWalk,
   clickMoveStep,
@@ -23,6 +30,7 @@ import {
 } from './game/click_move';
 import { clientEnvBits, installPageStateTracking, pageStateBits } from './game/client_env';
 import { getClientSeed } from './game/client_seed';
+import { shouldClearAutorunOnDeath } from './game/death_input_reset';
 import { initDesktopDownload } from './game/desktop_download';
 import { initDesktopShellIntegration } from './game/desktop_shell_integration';
 import { takeEditorPlaytestRequest } from './game/editor_playtest';
@@ -51,6 +59,7 @@ import {
 } from './game/mobile_controls';
 import { applyMobileHudLayout } from './game/mobile_hud_layout_applier';
 import { mouselookReleaseFacing } from './game/mouselook_release';
+import { diagonalMovementVisualFacing } from './game/movement_visual';
 import { music } from './game/music';
 import { createPerfMonitor } from './game/perf';
 import { startPerfReporter } from './game/perf_reporter';
@@ -79,9 +88,22 @@ import {
 } from './net/char_sort';
 import { charselectPrimaryAction } from './net/charselect_action';
 import { EconomyClient, newIdempotencyKey, startClaudiumPurchase } from './net/economy_sdk';
+import {
+  isAppleAuthorizationCancellation,
+  isNativeIos,
+  signInWithNativeApple,
+} from './net/native_apple_auth';
 import { createNativeAttestationProof } from './net/native_attestation';
 import {
+  createNativeDiscordProof,
+  installNativeDiscordUrlHandler,
+  type NativeDiscordResult,
+  openNativeDiscordOAuth,
+  takeNativeDiscordVerifier,
+} from './net/native_discord';
+import {
   Api,
+  ApiError,
   type CharacterSummary,
   ClientWorld,
   DESKTOP_APP,
@@ -178,6 +200,8 @@ import {
 } from './ui/i18n';
 import { defaultIconPrewarmEntries, prewarmIconCache } from './ui/icon_prewarm';
 import { iconDataUrl } from './ui/icons';
+import { createLoadingTipRotation, type LoadingTipRotation } from './ui/loading_tips';
+import { applyNativeDeviceLanguage } from './ui/native_language';
 import { scheduleNativeUpdateCheck } from './ui/native_update_prompt';
 import { createMetricsSampler } from './ui/perf_metrics_sampler';
 import { PerfOverlay } from './ui/perf_overlay';
@@ -263,6 +287,22 @@ function isNativeRuntime(): boolean {
   const cap = (window as unknown as { Capacitor?: { isNativePlatform?: () => boolean } }).Capacitor;
   return cap?.isNativePlatform?.() === true;
 }
+
+function localStorageOrNull(): Storage | null {
+  try {
+    return window.localStorage;
+  } catch {
+    return null;
+  }
+}
+
+applyNativeDeviceLanguage({
+  native: isNativeRuntime(),
+  locationSearch: window.location.search,
+  storage: localStorageOrNull(),
+  languages: navigator.languages,
+  language: navigator.language,
+});
 
 const SITE_URL = 'https://worldofclaudecraft.com/';
 
@@ -689,8 +729,11 @@ function requestPreferredFullscreen(): void {
 // ---------------------------------------------------------------------------
 
 const LOADING_FADE_MS = 350; // keep in sync with the #loading-screen CSS transition
+const LOADING_TIP_ROTATE_MS = 5000;
 
 let loadingHideTimer: number | null = null;
+let loadingTipRotation: LoadingTipRotation | null = null;
+let loadingTipTimer: number | null = null;
 
 function showLoadingScreen(statusText: string): void {
   const el = $('#loading-screen');
@@ -701,6 +744,7 @@ function showLoadingScreen(statusText: string): void {
   el.classList.remove('fade');
   el.classList.add('visible');
   setLoadingStatus(statusText);
+  startLoadingTips();
 }
 
 function setLoadingStatus(text: string): void {
@@ -712,10 +756,34 @@ function setLoadingProgress(done: number, total: number): void {
   setLoadingStatus(t('loading.worldProgress', { done, total }));
 }
 
+// Rotating "did you know" copy under the progress bar, purely cosmetic (no
+// gameplay-relevant info), so entering/leaving the loading screen sets it up
+// and tears it down independent of the actual asset/scene-build progress.
+function startLoadingTips(): void {
+  if (loadingTipTimer !== null) return; // already running
+  loadingTipRotation = createLoadingTipRotation();
+  const tipEl = document.querySelector<HTMLElement>('#ls-tip');
+  if (!tipEl) return;
+  tipEl.textContent = loadingTipRotation.current();
+  loadingTipTimer = window.setInterval(() => {
+    if (!loadingTipRotation) return;
+    tipEl.textContent = loadingTipRotation.next();
+  }, LOADING_TIP_ROTATE_MS);
+}
+
+function stopLoadingTips(): void {
+  if (loadingTipTimer !== null) {
+    window.clearInterval(loadingTipTimer);
+    loadingTipTimer = null;
+  }
+  loadingTipRotation = null;
+}
+
 function hideLoadingScreen(): void {
   const el = $('#loading-screen');
   if (!el.classList.contains('visible')) return;
   el.classList.add('fade');
+  stopLoadingTips();
   loadingHideTimer = window.setTimeout(() => {
     el.classList.remove('visible', 'fade');
     loadingHideTimer = null;
@@ -978,13 +1046,34 @@ async function startGame(
     hud.clearPendingChatLinks();
     recoverFromMobileKeyboard();
   };
+  // On the touch HUD the composer is a desktop-style bar at the TOP of the chat panel
+  // (above the tabs + log), so on mobile it lives INSIDE #chatlog-wrap as its first child
+  // rather than as an absolutely-positioned sibling. Move it there once, lazily, the first
+  // time chat opens (idempotent; a no-op on desktop and after the first move).
+  const ensureMobileComposerInPanel = (): void => {
+    if (!document.body.classList.contains('mobile-touch')) return;
+    const wrap = document.getElementById('chatlog-wrap');
+    if (!wrap || chatInput.parentElement === wrap) return;
+    wrap.insertBefore(chatInput, wrap.firstChild);
+  };
   function openChat(): void {
     // reflect the active chat-channel tab in the placeholder (e.g. "Message World")
+    ensureMobileComposerInPanel();
     chatInput.placeholder = hud.activeChatPlaceholder();
     chatInput.style.display = 'block';
     anchorChatInput();
     autosizeChatInput();
     chatInput.focus();
+  }
+  // Mobile read view: tapping the Chat button opens the centered panel with the composer
+  // bar VISIBLE but NOT focused (no keyboard). Tapping the composer focuses it and raises
+  // the keyboard (native + the focus handler). Same as openChat minus the focus.
+  function openChatRead(): void {
+    ensureMobileComposerInPanel();
+    chatInput.placeholder = hud.activeChatPlaceholder();
+    chatInput.style.display = 'block';
+    document.body.classList.remove('mobile-chat-reply');
+    autosizeChatInput();
   }
   // Fired for every open path (keybind, whisper context menu, mobile toggle)
   // since they all call focus().
@@ -1043,8 +1132,18 @@ async function startGame(
     }
   });
   chatInput.addEventListener('blur', () => {
-    if (chatInput.style.display === 'none') recoverFromMobileKeyboard();
+    // Recover the mobile-chat viewport ONLY when the composer is already hidden (the
+    // close path: closeChat hides then blurs). A keyboard dismiss (the OS hide-keyboard
+    // key) blurs while the composer is still shown, so this is false and chat stays open
+    // in its centered READ view, reflowed by the keyboard_viewport applier off the
+    // visualViewport resize. Only the Chat button closes chat.
+    if (shouldRecoverOnComposerBlur(chatInput.style.display)) recoverFromMobileKeyboard();
   });
+  // The mobile keyboard-dismiss chevron (hidden on mobile in the current model; kept wired
+  // for parity): blur the composer to drop the keyboard and return to the read view,
+  // WITHOUT closing chat.
+  const chatDismiss = document.getElementById('chat-dismiss');
+  chatDismiss?.addEventListener('click', () => chatInput.blur());
 
   const input = new Input(
     canvas,
@@ -1052,6 +1151,13 @@ async function startGame(
       onTab: () => world.tabTarget(),
       onTargetFriendly: () => world.targetNearestFriendly(),
       onCycleFriendly: () => world.friendlyTabTarget(),
+      // Pet bar (Ctrl+1..5 by default): drive the existing IWorld pet commands.
+      onPet: (action) => {
+        if (action === 'attack') world.petAttack();
+        else if (action === 'taunt') world.petTaunt();
+        else if (action === 'stop') world.setPetMode('passive');
+        else world.setPetMode(action); // 'defensive' | 'aggressive'
+      },
       // slot 0 (key 1) is Attack for every class, auto-attack without needing
       // right-click; keys and clicks share the Hud's remappable slot layout
       onAbility: (slot) => hud.castSlot(slot),
@@ -1122,14 +1228,16 @@ async function startGame(
       onEmoteWheel: (open) => hud.setEmoteWheelOpen(open),
       onClickPick: (x, y, button) => handlePick(x, y, button),
       onAttackMove: (x, y) => handleAttackMove(x, y),
-      canUseGameKeys: () => !hud.isModalOpen() && chatInput.style.display !== 'block',
+      canUseGameKeys: () =>
+        !hud.isModalOpen() && !hud.promptModalOpen() && chatInput.style.display !== 'block',
     },
     keybinds,
   );
   input.camYaw = world.player.facing;
   perf.setInputDebugProvider(() => ({
     ...input.debugState(),
-    canUseGameKeys: !hud.isModalOpen() && chatInput.style.display !== 'block',
+    canUseGameKeys:
+      !hud.isModalOpen() && !hud.promptModalOpen() && chatInput.style.display !== 'block',
     modalOpen: hud.isModalOpen(),
     chatOpen: chatInput.style.display === 'block',
     gameInputReady,
@@ -1144,8 +1252,9 @@ async function startGame(
     onCycleTarget: () => world.tabTarget(),
     onJump: () => input.triggerTouchJump(),
     onInteract: () => interactKey(),
-    onAutorun: () => input.toggleAutorun(),
     onChat: () => openChat(),
+    onChatOpen: () => openChatRead(),
+    onChatClose: () => closeChat(),
     onMenu: () => hud.toggleOptionsMenu(),
     onSocial: () => hud.toggleSocial(),
     onDiscord: () => openDiscordEntry(),
@@ -1189,7 +1298,8 @@ async function startGame(
     });
   }, APM_BEAT_MS);
   const gamepadBindings = new GamepadBindings();
-  const canUseGameKeysNow = () => !hud.isModalOpen() && chatInput.style.display !== 'block';
+  const canUseGameKeysNow = () =>
+    !hud.isModalOpen() && !hud.promptModalOpen() && chatInput.style.display !== 'block';
   function dispatchGamepadAction(id: string): void {
     if (id === 'escape') {
       if (hud.cancelGroundAim()) return;
@@ -1266,6 +1376,11 @@ async function startGame(
     onAction: (id) => dispatchGamepadAction(id),
     onInputEdge: () => inputMeter.record(performance.now()),
     isPointerMode: () => hud.isWindowOpen(),
+    // A focus trap (the Esc menu, other modals) switches the pad into deterministic
+    // menu-navigation mode, checked before pointer mode so the Esc menu uses real
+    // navigation instead of the virtual cursor.
+    isMenuMode: () => hud.isFocusTrapped(),
+    onMenuIntent: (intent) => hud.handleMenuGamepadIntent(intent),
     getPlayerHealth: () => (world.player.dead ? 0 : world.player.hp),
     onConnectionChange: () => hud.refreshControllerLabels(),
   });
@@ -1642,6 +1757,9 @@ async function startGame(
       // The connected pad's brand lives on the manager, not the (hardware-agnostic)
       // bindings, so surface it here for the Controller panel's glyph labels.
       kind: () => gamepad.getKind(),
+      // Live connection state, so the options footer shows the button-legend strip
+      // only while a pad is present.
+      connected: () => gamepad.isConnected(),
     },
   });
   if (online) {
@@ -2161,6 +2279,7 @@ async function startGame(
   let last = performance.now();
   let acc = 0;
   let onlineInputEchoMs = 0;
+  let playerWasDead = world.player.dead;
   // Smoothed input-echo jitter (mean absolute deviation of RTT samples) for the
   // perf overlay's Jitter row.
   let onlineJitterMs = 0;
@@ -2189,7 +2308,15 @@ async function startGame(
   // channel, passed through on the one engage-edge frame so the server still
   // sees a manual turn (breaks /follow, marks anti-AFK activity).
   const kbTurn = newKeyboardTurnState();
-  function updateCamera(frameDt: number, interpFacing: number): void {
+  // Release hold for camera-owned headings (touch swipe-look, the camera
+  // joystick, right-mouse mouselook, Mouse Camera movement): after the drag
+  // releases, the render-interpolated facing spends up to a tick offline (a
+  // round trip online) replaying facing commits the camera itself authored.
+  // Feeding that echo back through the rigid follow term overshoots the
+  // released heading and the settle then drags it back: the visible release
+  // bounce. The hold keeps follow disengaged until the echo converges.
+  const cameraReleaseHold = newCameraReleaseHold();
+  function updateCamera(frameDt: number, interpFacing: number, echoMs = 0): void {
     const mi = input.readMoveInput();
     const clickMoving = !!input.clickMoveTarget && !input.suspendMovement && !movementFrozen();
     // When click-to-move ends, the player's facing snaps from the (camera-lagging)
@@ -2199,15 +2326,25 @@ async function startGame(
     // handoff stays smooth even in pure-follow (non-camera-driven) mode.
     if (wasClickMoving && !clickMoving) lastInterpFacing = interpFacing;
     wasClickMoving = clickMoving;
+    const mouselook = input.isMouselookActive();
+    const mouseCameraDriven = input.isMouseCameraMode() && cameraMoveActive();
+    const releaseHold = stepCameraReleaseHold(cameraReleaseHold, {
+      cameraOwned: mouselook || mouseCameraDriven,
+      camYaw: input.camYaw,
+      interpFacing,
+      frameDt,
+      echoMs,
+      manualTurn: mi.turnLeft || mi.turnRight,
+    });
     const next = updateFollowCameraYaw({
       camYaw: input.camYaw,
       interpFacing,
       frameDt,
       lastInterpFacing,
-      mouselook: input.isMouselookActive(),
+      mouselook,
       moving: cameraFollowShouldSettle(mi, clickMoving),
       clickMoving,
-      cameraDriven: input.isMouseCameraMode() && cameraMoveActive(),
+      cameraDriven: mouseCameraDriven || releaseHold,
       orbiting: input.leftDown && input.isCameraDragActive(),
     });
     input.camYaw = next.camYaw;
@@ -2425,6 +2562,12 @@ async function startGame(
     // character behind it (other windows stay non-modal, as before); the
     // first-spawn intro cinematic holds movement the same way until it lands
     input.setSuspendMovement(!gameInputReady || hud.isModalOpen() || intro !== null);
+    const playerDead = world.player.dead;
+    if (shouldClearAutorunOnDeath(playerWasDead, playerDead)) {
+      input.setAutorun(false);
+      mobileControls.syncAutorun(false);
+    }
+    playerWasDead = playerDead;
     perf.trace('input.updateTouchLook', () => input.updateTouchLook(frameDt), {
       frameDtMs: frameDt * 1000,
     });
@@ -2463,6 +2606,10 @@ async function startGame(
       ? (renderFacing ?? controllerFacing ?? pendingReleaseFacing)
       : null;
 
+    const visualFacingFor = (
+      mi: ReturnType<typeof input.readMoveInput>,
+      baseFacing: number,
+    ): number | null => (!movementFrozen() ? diagonalMovementVisualFacing(mi, baseFacing) : null);
     if (offlineSim) {
       acc += frameDt;
       // Supply the UTC day for the delve daily reset (the sim never reads the wall
@@ -2509,8 +2656,11 @@ async function startGame(
       renderer.camDist = input.camDist;
       syncGroundAimReticle();
       perf.setNetwork(null);
+      const offlineRenderFacing =
+        visualFacingFor(input.readMoveInput(), movementFacing ?? offlineSim.player.facing) ??
+        movementFacing;
       perf.time('renderer', () =>
-        perf.trace('renderer.sync', () => renderer.sync(acc / DT, frameDt, movementFacing), {
+        perf.trace('renderer.sync', () => renderer.sync(acc / DT, frameDt, offlineRenderFacing), {
           mode: 'offline',
           views: renderer.views.size,
           alpha: acc / DT,
@@ -2566,6 +2716,8 @@ async function startGame(
     // close a feedback loop through the server that at high RTT never
     // converges (the observed self-spinning resonance under netem).
     const netFacing = foreignFacing ?? kbTurn.wireFacing;
+    const onlineRenderFacing =
+      visualFacingFor(resolved.mi, netFacing ?? kbFacing ?? interpServerFacing) ?? netFacing;
     Object.assign(net.moveInput, resolved.mi);
     if (kbTurn.suppressTurnFlags) {
       net.moveInput.turnLeft = false;
@@ -2633,12 +2785,16 @@ async function startGame(
           alpha,
           frameDt,
         };
-    perf.trace('camera.follow', () => updateCamera(frameDt, kbFacing ?? interpServerFacing), {
-      mode: 'online',
-      alpha,
-      frameDtMs: frameDt * 1000,
-      lastSnapAge: net.lastSnapAt > 0 ? performance.now() - net.lastSnapAt : -1,
-    });
+    perf.trace(
+      'camera.follow',
+      () => updateCamera(frameDt, kbFacing ?? interpServerFacing, onlineInputEchoMs),
+      {
+        mode: 'online',
+        alpha,
+        frameDtMs: frameDt * 1000,
+        lastSnapAge: net.lastSnapAt > 0 ? performance.now() - net.lastSnapAt : -1,
+      },
+    );
     introCameraTick(now);
     renderer.camYaw = input.camYaw;
     renderer.camPitch = input.camPitch;
@@ -2655,7 +2811,7 @@ async function startGame(
             // is applied server-side the moment it arrives, so the model may
             // show it immediately; without it the click-move yaw would lag
             // the predicted position by a round trip and corners would slide.
-            net.spectating === null ? netFacing : null,
+            net.spectating === null ? onlineRenderFacing : null,
             adaptiveSelfAlphaLead(onlineInputEchoMs, onlineJitterMs, net.snapInterval),
             selfMotion,
           ),
@@ -2754,7 +2910,21 @@ async function startGame(
     input.camDist = pose.dist;
     if (pose.done) finishIntro(false);
   };
-  if (playIntro && !introSeen && world.player.level <= 1 && !settings.get('reduceMotion')) {
+  // "Reduce motion" is the EFFECTIVE flag (the OS prefers-reduced-motion query OR the
+  // in-game switch, the ui_effects_profile model): the intro is exactly the kind of
+  // sweeping camera glide that contract exists for, and checking only the in-game
+  // switch left OS-level reduce-motion players watching it (it also hid #ui from
+  // them, silently dropping any focus() into the HUD while it ran).
+  const osReducedMotion =
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (
+    playIntro &&
+    !introSeen &&
+    world.player.level <= 1 &&
+    !settings.get('reduceMotion') &&
+    !osReducedMotion
+  ) {
     intro = {
       cinematic: spawnCinematicFor({
         yaw: input.camYaw,
@@ -2913,6 +3083,14 @@ const REFERRAL_SLUG = (() => {
   const raw = new URLSearchParams(location.search).get('ref') ?? '';
   const slug = raw.trim().toLowerCase();
   return /^[a-z0-9][a-z0-9-]{0,63}$/.test(slug) ? slug : '';
+})();
+
+// Password-reset token: a visitor who follows the emailed link arrives with
+// ?reset=<64-hex-token>. Read it once at load and validate the shape so a junk
+// param never opens the reset panel. Non-empty means "show the reset form".
+const RESET_TOKEN = (() => {
+  const raw = new URLSearchParams(location.search).get('reset') ?? '';
+  return /^[a-f0-9]{64}$/.test(raw.trim()) ? raw.trim() : '';
 })();
 
 let activeTransitionTimeout: number | null = null;
@@ -3228,6 +3406,8 @@ function show(el: string): void {
   const panels = [
     '#mode-select',
     '#login-panel',
+    '#forgot-panel',
+    '#reset-panel',
     '#discord-choice-panel',
     '#realm-panel',
     '#charselect-panel',
@@ -5672,9 +5852,8 @@ function flashWalletError(message: string): void {
 // Refreshed after login: ask the server which wallet (if any) this account has
 // linked, so the button can show the verified ✓ state.
 // ── Discord login/onboarding ─────────────────────────────────────────────────
-// Discord UI is on unless the native app build disables it.
-const DISCORD_BUILD_ENABLED =
-  !NATIVE_APP && String(import.meta.env.VITE_DISCORD_DISABLED ?? '').trim() !== '1';
+// Discord UI is available on web and native unless explicitly disabled at build time.
+const DISCORD_BUILD_ENABLED = String(import.meta.env.VITE_DISCORD_DISABLED ?? '').trim() !== '1';
 // Community links for the mobile More tray. The invite mirrors the hardcoded
 // invite on the shells' community links and is the fallback when the server-fed
 // discordInviteUrl() is not known yet (logged out, offline).
@@ -5696,6 +5875,19 @@ function startDiscordOAuth(mode: 'login' | 'link'): void {
     } catch {
       /* storage disabled */
     }
+    if (NATIVE_APP) {
+      void createNativeDiscordProof()
+        .then(async ({ verifier, challenge }) => {
+          const attestation = await createNativeAttestationProof(api.base, 'discord');
+          const { url } = await api.discordStart('login', true, challenge, attestation);
+          await openNativeDiscordOAuth(url, verifier);
+        })
+        .catch((err) => {
+          console.error('[discord] could not start native oauth', err);
+          flashDiscordError();
+        });
+      return;
+    }
     // LOGIN from the auth screen: a FULL-PAGE redirect, not a popup. The popup's
     // window.opener is severed by the cross-origin hop to Discord (COOP), so the
     // result never returns; a same-tab redirect always lands the callback, which
@@ -5707,6 +5899,19 @@ function startDiscordOAuth(mode: 'login' | 'link'): void {
       })
       .catch((err) => {
         console.error('[discord] could not start oauth', err);
+        flashDiscordError();
+      });
+    return;
+  }
+  if (NATIVE_APP) {
+    void createNativeDiscordProof()
+      .then(async ({ verifier, challenge }) => {
+        const attestation = await createNativeAttestationProof(api.base, 'discord');
+        const { url } = await api.discordStart('link', true, challenge, attestation);
+        await openNativeDiscordOAuth(url, verifier);
+      })
+      .catch((err) => {
+        console.error('[discord] could not start native oauth', err);
         flashDiscordError();
       });
     return;
@@ -5725,6 +5930,52 @@ function startDiscordOAuth(mode: 'login' | 'link'): void {
       popup?.close();
       flashDiscordError();
     });
+}
+
+async function handleNativeDiscordResult(result: NativeDiscordResult): Promise<void> {
+  if (!result.ok) {
+    flashDiscordError();
+    return;
+  }
+  if (result.mode === 'link') {
+    takeNativeDiscordVerifier();
+    await refreshDiscordStatus();
+    return;
+  }
+  if (!result.code) {
+    flashDiscordError();
+    return;
+  }
+  const verifier = takeNativeDiscordVerifier();
+  if (!verifier) {
+    flashDiscordError();
+    return;
+  }
+  try {
+    const exchange = await api.exchangeNativeDiscordCode(result.code, verifier);
+    if (exchange.choose && exchange.linkToken) {
+      localStorage.setItem(
+        'woc_discord_choice',
+        JSON.stringify({
+          linkToken: exchange.linkToken,
+          username: exchange.username,
+          ts: Date.now(),
+        }),
+      );
+    } else {
+      api.saveSession();
+    }
+    window.location.reload();
+  } catch (err) {
+    console.error('[discord] could not exchange native login code', err);
+    flashDiscordError();
+  }
+}
+
+if (NATIVE_APP && DISCORD_BUILD_ENABLED) {
+  void installNativeDiscordUrlHandler(handleNativeDiscordResult).catch((err) => {
+    console.error('[discord] could not install native url handler', err);
+  });
 }
 
 // Popup bounce-page result (link mode; login uses a full redirect). Same-origin only.
@@ -5953,8 +6204,8 @@ function updateDiscordCtaBanner(): void {
 
 // Show the Discord entry in the mobile "More" tray. Mobile has no keyboard, so
 // the U-key panel toggle is unreachable there; this button is the touch path to
-// Discord. Hidden only when the client build disables Discord entirely (native
-// app / VITE_DISCORD_DISABLED); what a tap opens is decided per-tap in
+// Discord. Hidden only when the client build disables Discord entirely through
+// VITE_DISCORD_DISABLED; what a tap opens is decided per-tap in
 // openDiscordEntry, so the entry works logged-out and offline too.
 function syncDiscordMobileEntry(): void {
   const btn = document.getElementById('mobile-discord');
@@ -6239,12 +6490,13 @@ async function maybePromptRecoveryEmail(): Promise<void> {
 const DISCORD_CHOICE_KEY = 'woc_discord_choice';
 const DISCORD_CHOICE_TTL_MS = 15 * 60 * 1000;
 
-interface DiscordLoginChoice {
+interface ExternalAuthLoginChoice {
+  provider: 'apple' | 'discord';
   linkToken: string;
   username: string;
 }
 
-function readDiscordChoice(): DiscordLoginChoice | null {
+function readDiscordChoice(): ExternalAuthLoginChoice | null {
   let raw: string | null = null;
   try {
     raw = localStorage.getItem(DISCORD_CHOICE_KEY);
@@ -6257,6 +6509,7 @@ function readDiscordChoice(): DiscordLoginChoice | null {
     const fresh = typeof d.ts === 'number' && Date.now() - d.ts < DISCORD_CHOICE_TTL_MS;
     if (typeof d.linkToken === 'string' && d.linkToken && fresh) {
       return {
+        provider: 'discord',
         linkToken: d.linkToken,
         username: typeof d.username === 'string' ? d.username : '',
       };
@@ -7134,6 +7387,106 @@ function wireStartScreens(): void {
     loginError('');
     show('#mode-select');
   });
+
+  // --- Password reset ("forgot password") flow -------------------------------
+  // Step 1 (#forgot-panel): request an emailed reset link. Step 2 (#reset-panel):
+  // set a new password from the emailed ?reset=<token> link (RESET_TOKEN).
+  // These panels live ONLY in index.html. play.html reuses the login chrome
+  // (#login-panel/#mode-select) without them, so guard the whole block on the
+  // panel's presence: a bare $('#btn-forgot-open') is querySelector(...) as T and
+  // returns null off index.html, so addEventListener would throw and abort the
+  // rest of wireStartScreens (the session-restore branch below included). The
+  // ?reset= restore branch further down already guards the same way (getElementById).
+  const forgotPanel = document.getElementById('forgot-panel') as HTMLFormElement | null;
+  if (forgotPanel) {
+    const forgotUserInput = $('#forgot-user') as HTMLInputElement;
+    const forgotStatus = $('#forgot-status');
+    const resetPanel = $('#reset-panel') as HTMLFormElement;
+    const resetPassInput = $('#reset-pass') as HTMLInputElement;
+    const resetPass2Input = $('#reset-pass2') as HTMLInputElement;
+    const resetStatus = $('#reset-status');
+
+    $('#btn-forgot-open').addEventListener('click', (e) => {
+      e.preventDefault();
+      if (forgotStatus) forgotStatus.textContent = '';
+      forgotUserInput.value = '';
+      show('#forgot-panel');
+      forgotUserInput.focus();
+    });
+
+    $('#btn-forgot-back').addEventListener('click', (e) => {
+      e.preventDefault();
+      show('#login-panel');
+    });
+
+    forgotPanel.addEventListener('submit', (e) => {
+      e.preventDefault();
+      void (async () => {
+        const username = forgotUserInput.value.trim();
+        try {
+          await api.requestPasswordReset(username);
+        } catch (err) {
+          // Never reveal whether the account exists. Only surface a rate-limit
+          // (429); any other failure (including a network error) falls through to
+          // the same generic "sent" message below.
+          if (err instanceof ApiError && err.status === 429) {
+            if (forgotStatus) forgotStatus.textContent = userFacingApiError(err);
+            return;
+          }
+        }
+        if (forgotStatus) forgotStatus.textContent = t('hudChrome.auth.forgotSent');
+      })();
+    });
+
+    // Password-visibility toggles for the two reset-password inputs.
+    const resetToggleBtn = $('#btn-toggle-reset-password') as HTMLButtonElement;
+    resetToggleBtn.addEventListener('click', () => {
+      togglePasswordVisibility(resetPassInput, resetToggleBtn);
+    });
+    const resetToggleBtn2 = $('#btn-toggle-reset-password2') as HTMLButtonElement;
+    resetToggleBtn2.addEventListener('click', () => {
+      togglePasswordVisibility(resetPass2Input, resetToggleBtn2);
+    });
+
+    // Drop the ?reset= token from the URL so a reload or share never re-opens the
+    // reset form (or leaks the token in history).
+    const clearResetParam = () => {
+      if (RESET_TOKEN) history.replaceState({}, '', location.pathname);
+    };
+
+    $('#btn-reset-back').addEventListener('click', (e) => {
+      e.preventDefault();
+      clearResetParam();
+      show('#login-panel');
+    });
+
+    resetPanel.addEventListener('submit', (e) => {
+      e.preventDefault();
+      void (async () => {
+        const next = resetPassInput.value;
+        const confirm = resetPass2Input.value;
+        if (!next || !confirm) {
+          if (resetStatus) resetStatus.textContent = t('auth.passwordError');
+          return;
+        }
+        if (next !== confirm) {
+          if (resetStatus) resetStatus.textContent = t('hudChrome.auth.resetMismatch');
+          return;
+        }
+        try {
+          await api.resetPassword(RESET_TOKEN, next);
+          if (resetStatus) resetStatus.textContent = t('hudChrome.auth.resetDone');
+          clearResetParam();
+          show('#login-panel');
+        } catch (err) {
+          // Server rejects an invalid/expired token or a too-short password; both
+          // are re-localized by userFacingApiError.
+          if (resetStatus) resetStatus.textContent = userFacingApiError(err);
+        }
+      })();
+    });
+  }
+
   const bridge = DESKTOP_APP ? desktopBridge() : null;
   if (bridge) {
     bridge.onLoginCode((code) => {
@@ -7498,7 +7851,34 @@ function wireStartScreens(): void {
   setupNavBtn($('#nav-btn-logout'), '#hero-view', logoutAccount);
   trackCommunityLinkClicks();
   setupAccountPortal();
+  let showExternalAuthChoice: ((choice: ExternalAuthLoginChoice) => void) | null = null;
   // "Continue with Discord": first-class login at the top of the auth form.
+  const appleLoginBtn = $('#btn-login-apple');
+  if (appleLoginBtn && NATIVE_APP && isNativeIos()) {
+    appleLoginBtn.hidden = false;
+    appleLoginBtn.addEventListener('click', (event) => {
+      event.preventDefault();
+      appleLoginBtn.setAttribute('disabled', 'true');
+      void signInWithNativeApple(api)
+        .then((result) => {
+          if (result.choose && result.linkToken) {
+            showExternalAuthChoice?.({
+              provider: 'apple',
+              linkToken: result.linkToken,
+              username: result.username,
+            });
+            return;
+          }
+          return completeOnlineAuth();
+        })
+        .catch((error) => {
+          if (isAppleAuthorizationCancellation(error)) return;
+          console.error('[apple] could not sign in', error);
+          loginError(t('hudChrome.auth.appleError'));
+        })
+        .finally(() => appleLoginBtn.removeAttribute('disabled'));
+    });
+  }
   const discordLoginBtn = $('#btn-login-discord');
   const discordOrDivider = document.getElementById('auth-or-divider');
   if (discordLoginBtn && DISCORD_BUILD_ENABLED) {
@@ -7518,12 +7898,21 @@ function wireStartScreens(): void {
       startDiscordOAuth('login');
     });
   }
+  if (discordOrDivider && NATIVE_APP && isNativeIos()) discordOrDivider.hidden = false;
   wireDiscordCtaBanner();
   wireDiscordKeepModal();
   wireRecoveryEmailModal();
 
   // First-time Discord login chooser: create a new account, or link an existing one.
-  let pendingDiscordChoice: DiscordLoginChoice | null = null;
+  let pendingDiscordChoice: ExternalAuthLoginChoice | null = null;
+  let discordChoiceBusy = false;
+  const setDiscordChoiceBusy = (busy: boolean) => {
+    discordChoiceBusy = busy;
+    const create = document.getElementById('btn-discord-create') as HTMLButtonElement | null;
+    const submit = document.getElementById('btn-discord-link-submit') as HTMLButtonElement | null;
+    if (create) create.disabled = busy;
+    if (submit) submit.disabled = busy;
+  };
   const discordChoiceError = (msg: string) => {
     const el = document.getElementById('discord-choice-error');
     if (el) el.textContent = msg;
@@ -7545,9 +7934,14 @@ function wireStartScreens(): void {
     // A dead/used pending token (400) can't be retried: clear it and ask the player
     // to sign in with Discord again. Other errors stay on the chooser to retry.
     if ((err as { status?: number })?.status === 400) {
+      const provider = pendingDiscordChoice?.provider;
       clearDiscordChoice();
       pendingDiscordChoice = null;
-      discordChoiceError(t('hudChrome.discord.choice.expired'));
+      discordChoiceError(
+        provider === 'apple'
+          ? t('hudChrome.auth.appleChoiceExpired')
+          : t('hudChrome.discord.choice.expired'),
+      );
       return;
     }
     // Codes best shown as the chooser's own generic: already_linked (a unique-link
@@ -7563,32 +7957,58 @@ function wireStartScreens(): void {
     }
     discordChoiceError(userFacingApiError(err));
   };
-  const showDiscordChoice = (choice: DiscordLoginChoice) => {
+  const showDiscordChoice = (choice: ExternalAuthLoginChoice) => {
     pendingDiscordChoice = choice;
+    const title = document.querySelector<HTMLElement>('#discord-choice-panel .auth-title');
     const greet = document.getElementById('discord-choice-greeting');
-    if (greet && choice.username) {
-      greet.textContent = t('hudChrome.discord.choice.greeting', { name: choice.username });
+    if (choice.provider === 'apple') {
+      if (title) {
+        title.dataset.i18n = 'hudChrome.auth.appleLoginCta';
+        title.textContent = t('hudChrome.auth.appleLoginCta');
+      }
+      if (greet) {
+        greet.dataset.i18n = 'hudChrome.auth.appleChoiceIntro';
+        greet.textContent = t('hudChrome.auth.appleChoiceIntro');
+      }
+    } else {
+      if (title) {
+        title.dataset.i18n = 'hudChrome.discord.choice.title';
+        title.textContent = t('hudChrome.discord.choice.title');
+      }
+      if (greet) {
+        greet.dataset.i18n = 'hudChrome.discord.choice.intro';
+        greet.textContent = choice.username
+          ? t('hudChrome.discord.choice.greeting', { name: choice.username })
+          : t('hudChrome.discord.choice.intro');
+      }
     }
     const linkBlock = document.getElementById('discord-link-existing');
     if (linkBlock) linkBlock.hidden = true;
     const twoFaField = document.getElementById('discord-link-2fa-field');
     if (twoFaField) twoFaField.hidden = true;
     document.getElementById('btn-discord-link-toggle')?.setAttribute('aria-expanded', 'false');
+    setDiscordChoiceBusy(false);
     discordChoiceError('');
     show('#discord-choice-panel');
   };
+  showExternalAuthChoice = showDiscordChoice;
   const wireDiscordChoice = () => {
     // The first-login chooser lives only on the main entry (index.html); play.html omits
     // it (Discord OAuth always redirects to '/'), so bail before touching nodes that are
     // not present, mirroring the null-guarded sibling wirings (CTA banner, keep modal).
     if (!document.getElementById('discord-choice-panel')) return;
     $('#btn-discord-create').addEventListener('click', () => {
-      if (!pendingDiscordChoice) return;
+      if (!pendingDiscordChoice || discordChoiceBusy) return;
+      setDiscordChoiceBusy(true);
       discordChoiceError('');
-      void api
-        .discordLoginNew(pendingDiscordChoice.linkToken)
+      const request =
+        pendingDiscordChoice.provider === 'apple'
+          ? api.appleLoginNew(pendingDiscordChoice.linkToken)
+          : api.discordLoginNew(pendingDiscordChoice.linkToken);
+      void request
         .then(finishDiscordChoice)
-        .catch(onDiscordChoiceError);
+        .catch(onDiscordChoiceError)
+        .finally(() => setDiscordChoiceBusy(false));
     });
     $('#btn-discord-link-toggle').addEventListener('click', () => {
       const linkBlock = document.getElementById('discord-link-existing');
@@ -7599,7 +8019,7 @@ function wireStartScreens(): void {
       if (reveal) ($('#discord-link-user') as HTMLInputElement).focus();
     });
     const submitLink = () => {
-      if (!pendingDiscordChoice) return;
+      if (!pendingDiscordChoice || discordChoiceBusy) return;
       const username = ($('#discord-link-user') as HTMLInputElement).value.trim();
       const password = ($('#discord-link-pass') as HTMLInputElement).value;
       const twoFaField = document.getElementById('discord-link-2fa-field');
@@ -7610,15 +8030,25 @@ function wireStartScreens(): void {
         discordChoiceError(t('hudChrome.discord.choice.error'));
         return;
       }
+      setDiscordChoiceBusy(true);
       discordChoiceError('');
-      void api
-        .discordLoginLink(
-          pendingDiscordChoice.linkToken,
-          username,
-          password,
-          factor.code,
-          factor.recoveryCode,
-        )
+      const request =
+        pendingDiscordChoice.provider === 'apple'
+          ? api.appleLoginLink(
+              pendingDiscordChoice.linkToken,
+              username,
+              password,
+              factor.code,
+              factor.recoveryCode,
+            )
+          : api.discordLoginLink(
+              pendingDiscordChoice.linkToken,
+              username,
+              password,
+              factor.code,
+              factor.recoveryCode,
+            );
+      void request
         .then((res) => {
           if (res.twoFactorRequired) {
             // Password accepted; the account needs a second factor. Reveal the code
@@ -7630,7 +8060,8 @@ function wireStartScreens(): void {
           }
           finishDiscordChoice();
         })
-        .catch(onDiscordChoiceError);
+        .catch(onDiscordChoiceError)
+        .finally(() => setDiscordChoiceBusy(false));
     };
     $('#btn-discord-link-submit').addEventListener('click', submitLink);
     ($('#discord-link-pass') as HTMLInputElement).addEventListener('keydown', (e) => {
@@ -7651,7 +8082,7 @@ function wireStartScreens(): void {
       show('#mode-select');
     });
   };
-  if (DISCORD_BUILD_ENABLED) wireDiscordChoice();
+  wireDiscordChoice();
 
   // A just-completed Discord login should land straight in online play, not home.
   let discordOnboarding = false;
@@ -7672,7 +8103,12 @@ function wireStartScreens(): void {
       : null;
   // Restore a persisted session: show the Account tab immediately, then confirm
   // the stored token is still valid against the server (clearing it if not).
-  if (parkedDiscordChoice) {
+  if (RESET_TOKEN && document.getElementById('reset-panel')) {
+    // Arrived via the emailed password-reset link: show the set-a-new-password
+    // form instead of the normal session restore (index.html only).
+    enterLoggedOutChrome();
+    show('#reset-panel');
+  } else if (parkedDiscordChoice) {
     enterLoggedOutChrome();
     showDiscordChoice(parkedDiscordChoice);
   } else if (api.restoreSession()) {
@@ -7881,35 +8317,43 @@ function wireStartScreens(): void {
   });
 
   // Initialize 3D character preview once assets are ready
-  assetsReady().then(() => {
-    const activePanelId = ['#charselect-panel', '#offline-select'].find(
-      (id) => !$(id).hasAttribute('hidden'),
-    );
-    const containerId =
-      activePanelId === '#offline-select'
-        ? '#offline-preview-container'
-        : '#online-preview-container';
-    const container = $(containerId);
-    const canvas = $('#char-preview-canvas') as HTMLCanvasElement | null;
-    if (container && canvas) {
-      characterPreview = new CharacterPreview(container, canvas);
-      // If a token auto-login already rendered the roster and selected a
-      // character before assets finished, show its real appearance; otherwise
-      // fall back to the selected class chip (create/offline panels).
-      if (charselectSelected) {
-        characterPreview.setAppearance(charselectAppearance(charselectSelected));
-      } else {
-        const selSelector =
-          activePanelId === '#offline-select'
-            ? '#offline-select .mini-class.sel'
-            : '#charcreate-panel .mini-class.sel';
-        const selEl = document.querySelector(selSelector) as HTMLElement | null;
-        const cls = selEl ? (selEl.dataset.class as PlayerClass) : 'warrior';
-        characterPreview.setClass(cls);
+  assetsReady()
+    .then(() => {
+      // ALL THREE play panels are init candidates, #charcreate-panel included: on
+      // a slow connection (a phone with a cold cache) assets finish AFTER the
+      // player has already registered and landed on the create panel, and the old
+      // two-panel list resolved to the hidden charselect container, so the canvas
+      // never reached #charcreate-preview-container and the create preview
+      // rendered nothing. show()'s own updatePreviewContainer call cannot repair
+      // it either: it no-ops until this constructor has run.
+      const activePanelId = ['#charselect-panel', '#charcreate-panel', '#offline-select'].find(
+        (id) => !$(id).hasAttribute('hidden'),
+      );
+      const container = $('#online-preview-container');
+      const canvas = $('#char-preview-canvas') as HTMLCanvasElement | null;
+      if (container && canvas) {
+        characterPreview = new CharacterPreview(container, canvas);
+        if (activePanelId) {
+          // The full panel wiring: re-homes the canvas into the active panel's
+          // container, applies the roster appearance or the selected class chip
+          // (+ skins), and runs the deferred size sync.
+          updatePreviewContainer(activePanelId);
+        } else if (charselectSelected) {
+          // Token auto-login selected a roster character before assets finished
+          // but no play panel is up yet: seed its real appearance for the reveal.
+          characterPreview.setAppearance(charselectAppearance(charselectSelected));
+        } else {
+          characterPreview.setClass('warrior');
+        }
       }
-    }
-    decorateClassChips();
-  });
+      decorateClassChips();
+    })
+    .catch((err) => {
+      // assetsReady rejects when ANY preload failed (a flaky connection on a
+      // phone's cold first load): degrade to a missing preview instead of an
+      // unhandled rejection. Dev-channel only; the panels stay fully usable.
+      console.warn('character preview init skipped: asset preload failed', err);
+    });
 }
 
 // Looping home-page theme. Browsers block audio autoplay until a user gesture,

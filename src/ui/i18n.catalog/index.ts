@@ -835,6 +835,45 @@ export const en = {
       flavor: 'The dead have surrendered what they can spare.',
     },
   },
+  yumi: {
+    bracket3: 'Yumi 3v3',
+    bracket5: 'Yumi 5v5',
+    enterQueue: 'Join Protect Yumi!',
+    queue: {
+      join: 'You join the Protect Yumi queue. Guard your familiar…',
+      leave: 'You leave the Protect Yumi queue.',
+      teamLeave: 'Your team leaves the Protect Yumi queue.',
+    },
+    error: {
+      partyTooBig3: 'Protect Yumi 3v3 allows a party of up to three.',
+      partyTooBig5: 'Protect Yumi 5v5 allows a party of up to five.',
+    },
+    log: {
+      start: 'Protect Yumi! Defend your familiar and hunt theirs.',
+    },
+    hud: {
+      title: 'PROTECT YUMI',
+      getReady: 'Get ready…',
+      teleportIn: 'Yumis move in {s}',
+      suddenDeath: 'SUDDEN DEATH',
+      yourYumi: 'Your Yumi',
+      enemyYumi: 'Enemy Yumi',
+      aria: 'Your Yumi at {mine} of {max} health, enemy Yumi at {theirs}.',
+      collapse: 'Collapse the Protect Yumi bars',
+      expand: 'Expand the Protect Yumi bars',
+    },
+    respawn: {
+      title: 'DOWNED!',
+    },
+    banner: {
+      sudden: 'SUDDEN DEATH! The Yumis hold their ground!',
+      teleport: 'The Yumis teleport!',
+    },
+    end: {
+      win: 'VICTORY! Yumi is safe!',
+      loss: 'DEFEAT! Your Yumi has fallen.',
+    },
+  },
   fiesta: {
     bracket: 'Fiesta',
     enterQueue: 'Join the Fiesta!',

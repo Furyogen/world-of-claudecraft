@@ -21,10 +21,13 @@ import {
   instanceOrigin,
   isArenaPos,
   isDelvePos,
+  isYumiMazePos,
   MOBS,
   NPCS,
   WORLD_MAX_Z,
   WORLD_MIN_Z,
+  YUMI_MAZE_SLOT_COUNT,
+  yumiMazeOrigin,
   ZONES,
 } from '../sim/data';
 import type { DelveModuleId } from '../sim/delve_layout';
@@ -39,7 +42,11 @@ import { isVisuallyDead } from './anim_state';
 import { AOE_RING_LIFETIME, aoeRingAnim } from './aoe_ring';
 import type { SpatialAudioSink, Surface } from './audio_sink';
 import { type BirdsView, buildBirds } from './birds';
-import { type CameraOcclusionState, stepCameraOcclusion } from './camera_collision';
+import {
+  type CameraOcclusionState,
+  resolveCameraBaseFov,
+  stepCameraOcclusion,
+} from './camera_collision';
 import { characterSoulRendActive } from './character_effects';
 import { type AnimState, type CharacterVisual, createCharacterVisual } from './characters';
 import { mechAssetsReady, preloadMechAssets } from './characters/assets';
@@ -47,6 +54,7 @@ import { skinCount, visualKeyFor } from './characters/manifest';
 import { CLICK_MARKER_LIFETIME, clickMarkerAnim, clickMarkerColor } from './click_marker';
 import { trackWebGLContext } from './context_release';
 import { buildCritters, type CritterField } from './critters';
+import { animatesEveryFrame, crowdLodScaleSq, midAnimCadence } from './crowd_lod';
 import { buildDelveModule } from './delve_interiors';
 import { buildDelveInteractable } from './delve_props';
 import { buildDoorBody } from './door_portal';
@@ -73,6 +81,7 @@ import {
 } from './gfx';
 import { buildImpactSite, type ImpactSiteView } from './impact_site';
 import { ensureDelveInteriorKit } from './interior_kit';
+import { buildJailScene } from './jail_scene';
 import { type LocoTrack, newLocoTrack, updateLocomotion } from './locomotion';
 import { buildMailboxPillar } from './mailbox';
 import { buildMotes, type MotesView } from './motes';
@@ -118,6 +127,8 @@ import { buildValeCupTeamRings, type ValeCupTeamRingsView } from './vale_cup_tea
 import { SCHOOL_COLORS, Vfx } from './vfx';
 import { buildWater, type WaterView } from './water';
 import { Weather } from './weather';
+import { buildYumiMaze, type YumiMazeView } from './yumi_maze';
+import { YumiTeamMarkers } from './yumi_team_markers';
 
 // Entities further than this from the player are hidden entirely: their rigs
 // are several draw calls each and read as sub-pixel specks long before this.
@@ -164,25 +175,9 @@ const SPARKLE_DRAW_RANGE_SQ = 40 * 40;
 // weapons stay readable on low while the 80u draw cap still bounds total cost.
 const ENTITY_LOD_RANGE_SQ = 58 * 58;
 
-// Crowd-adaptive character LOD. In a dense scene (capital, raid, world boss) the
-// dominant client cost is many full-articulated rigs plus their shadow passes,
-// which the frame-budget governor cannot shed (characters are non-governable).
-// Once the visible-rig count climbs past a soft knee, pull the articulated-LOD
-// and full-shadow distances in toward a floor so more of the throng collapses to
-// the single-draw far LOD + static proxy shadow. Below the knee (ordinary play,
-// a handful of rigs) the scale is exactly 1, so normal scenes are untouched.
-// FPS-first: in a crowd the frozen far-pose that shows a little sooner is a fair
-// trade for staying above 60. Distances compare squared, so scale is squared.
-const CROWD_LOD_SOFT_RIGS = 14;
-const CROWD_LOD_HARD_RIGS = 48;
-const CROWD_LOD_MIN_SCALE = 0.6;
-function crowdLodScaleSq(visibleRigs: number): number {
-  if (visibleRigs <= CROWD_LOD_SOFT_RIGS) return 1;
-  const span = CROWD_LOD_HARD_RIGS - CROWD_LOD_SOFT_RIGS;
-  const t = Math.min(1, (visibleRigs - CROWD_LOD_SOFT_RIGS) / span);
-  const scale = 1 - t * (1 - CROWD_LOD_MIN_SCALE);
-  return scale * scale;
-}
+// Crowd-adaptive character LOD (articulated-rig + shadow ranges, and the mid-band
+// animation cadence) lives in `crowd_lod.ts`: pure policy, unit-tested there.
+//
 // Feet-above-terrain margin that counts as "airborne" for the jump pose. Mirrors
 // the sim's own 0.4u grounded tolerance (sim.ts), so walking slopes doesn't trip
 // it but a jump (apex ~1.1u) does. Needed because online snapshots don't carry
@@ -259,6 +254,13 @@ const IBL_RAW_SCALE = 0.55;
 const DUNGEON_HEMI_INTENSITY = 0.22; // floor of readability — bosses crushed to black at 0.14
 // character rim glow scales up underground so silhouettes split from the murk
 const DUNGEON_RIM_BOOST = 2.4;
+// The Protect Yumi maze is a torch-lit NIGHT ARENA, not a crypt: a moon-key
+// plus a healthy hemisphere keep the whole competitive space readable, with
+// the braziers/torches adding warmth rather than carrying the scene alone.
+const YUMI_MAZE_SUN_INTENSITY = 1.2;
+const YUMI_MAZE_HEMI_INTENSITY = 0.42;
+const YUMI_MAZE_ENV_INTENSITY = 0.28;
+const YUMI_MAZE_RIM_BOOST = 1.7;
 const RENDERER_PHASE_SAMPLE_LIMIT = 720;
 const RENDER_DIAGNOSTICS_SAMPLE_MS = 2000;
 const RENDER_DIAGNOSTICS_IDLE_TIMEOUT_MS = 1000;
@@ -550,6 +552,12 @@ export interface EntityView {
   nameplateTransform: string;
   nameplateSig: string;
   nameplateHpWidth: string;
+  /** distance scale from the last plan, reapplied by the declutter re-anchor pass */
+  nameplateScale: number;
+  /** static plate opacity (stealth etc.); the distance fade multiplies it */
+  nameplateBaseOpacity: string;
+  /** last-written style.opacity, to diff cheaply (the fade writer owns the property) */
+  nameplateOpacity: string;
   comboSig: string; // cheap-diff for the combo pip row
   tierEl: HTMLImageElement; // $WOC holder-tier flair badge (other players)
   tierValue: number; // last-applied holderTier, to diff cheaply
@@ -794,6 +802,12 @@ export class Renderer {
   editorCam: { pos: THREE.Vector3; target: THREE.Vector3 } | null = null;
   // Smoothed chase-cam occlusion (1 = no pull-in); see updateCamera.
   private camOcclusion: CameraOcclusionState = { pullT: 1, lensT: 1, fov: CAMERA_BASE_FOV };
+  // The player's Field of View comfort setting (Settings.cameraFov, 55..100),
+  // resolved. setCameraFov writes it; updateCamera threads it through
+  // stepCameraOcclusion as the occlusion base every frame, so the slider changes
+  // the rendered FOV and the per-frame camera update preserves it (rather than
+  // forcing the shipped CAMERA_BASE_FOV back each frame).
+  private cameraBaseFov = CAMERA_BASE_FOV;
   showNameplates = true;
   // settings-backed developer-badge display toggle (nameplate glyph + outline);
   // initialized from Settings and kept live by main.ts's applySetting dispatcher.
@@ -1258,7 +1272,14 @@ export class Renderer {
       this.scene.add(cl);
     }
 
-    this.terrainView = buildTerrain(this.sim.cfg.seed);
+    // A returning character can log out anywhere in a zone, not only at a
+    // hub, so the far streaming queue is ordered by distance to the actual
+    // entry position (entity_roster.ts: this.sim.player.pos.x/z) rather than
+    // whatever row-major order the chunk grid happens to walk.
+    this.terrainView = buildTerrain(this.sim.cfg.seed, {
+      x: this.sim.player.pos.x,
+      z: this.sim.player.pos.z,
+    });
     setRenderCategory(this.terrainView.group, 'terrain');
     this.scene.add(this.terrainView.group);
     // Terrain chunks never move after build (the LOD update only toggles
@@ -1334,6 +1355,10 @@ export class Renderer {
       setRenderCategory(this.placedAssetsView.group, 'props');
       this.scene.add(this.placedAssetsView.group);
     }
+
+    const jailScene = buildJailScene(this.sim.cfg.seed);
+    setRenderCategory(jailScene, 'props');
+    this.scene.add(jailScene);
 
     const gatherNodes = buildGatherNodes(this.sim.cfg.seed);
     setRenderCategory(gatherNodes.group, 'props');
@@ -1596,9 +1621,12 @@ export class Renderer {
     return this.weatherOn ? 'snow' : 'stone'; // peaks: snowy when weather is on
   }
 
-  /** Vertical camera field of view in degrees (55..100, default 60). */
+  /** Vertical camera field of view in degrees (55..100, default 60). Stored as the
+   *  per-frame occlusion base so updateCamera keeps the player's choice instead of
+   *  snapping back to CAMERA_BASE_FOV each frame. */
   setCameraFov(deg: number): void {
-    this.camera.fov = Math.min(100, Math.max(55, deg));
+    this.cameraBaseFov = resolveCameraBaseFov(deg);
+    this.camera.fov = this.cameraBaseFov;
     this.camera.updateProjectionMatrix();
   }
 
@@ -2965,6 +2993,20 @@ export class Renderer {
       case 'delveEntered':
         this.prebuildDelveInteriors(ev.delveId);
         break;
+      case 'yumiTeleport': {
+        // Arcane burst at both ends of the cat's blink (the event is personal
+        // per participant; ignore copies addressed to other local pids so an
+        // offline multi-player sim never double-bursts).
+        if (ev.pid !== undefined && ev.pid !== this.sim.playerId) break;
+        const fromY = groundHeight(ev.fromX, ev.fromZ, this.sim.cfg.seed);
+        const toY = groundHeight(ev.toX, ev.toZ, this.sim.cfg.seed);
+        this.vfx.burst(new THREE.Vector3(ev.fromX, fromY + 1, ev.fromZ), 'arcane', 26, 1.2);
+        this.vfx.burst(new THREE.Vector3(ev.toX, toY + 1, ev.toZ), 'arcane', 26, 1.2);
+        // Snap the objective beacon to the landing spot NOW: online, the
+        // arenaInfo mirror the beacon polls refreshes only every 10s.
+        for (const view of this.yumiMazeViews.values()) view.noteTeleport(ev.catId, ev.toX, ev.toZ);
+        break;
+      }
       case 'delveRitePulse': {
         // The Drowned Reliquary Rite plays its sequence by pulsing each shrine
         // in turn; a school-coloured nova on the shrine entity shows which one
@@ -3539,6 +3581,9 @@ export class Renderer {
       nameplateTransform: '',
       nameplateSig: '',
       nameplateHpWidth: '',
+      nameplateScale: 1,
+      nameplateBaseOpacity: '1',
+      nameplateOpacity: '',
       comboSig: '',
       tierValue: 0,
       devTierValue: 0,
@@ -3674,6 +3719,11 @@ export class Renderer {
   // ---------------------------------------------------------------------
 
   private builtInteriors = new Set<string>();
+  // Protect Yumi maze interiors, one per match slot, built lazily like the
+  // arena copies; their update() anchors the team beacons each frame.
+  private yumiMazeViews = new Map<number, YumiMazeView>();
+  // Blue/red team arrows above every yumi fighter (yumi_team_markers.ts).
+  private readonly yumiTeamMarkers = new YumiTeamMarkers();
   // Delve module interiors build asynchronously; track in-flight keys so a
   // per-frame ensureDelveInteriorsNear does not re-schedule a build mid-load.
   private pendingInteriors = new Set<string>();
@@ -3683,6 +3733,7 @@ export class Renderer {
     | 'temple'
     | 'nythraxis'
     | 'delve'
+    | 'yumiMaze'
     | 'underwater'
     | 'practice' = 'outdoor';
 
@@ -3804,6 +3855,22 @@ export class Renderer {
     }
     if (isDelvePos(px) && !inPractice) {
       this.ensureDelveInteriorsNear(px, pz);
+    } else if (inside && isYumiMazePos(px)) {
+      // build the Protect Yumi maze copy the player was matched into; the
+      // update() call each frame lives in sync() (beacon anchors)
+      for (let i = 0; i < YUMI_MAZE_SLOT_COUNT; i++) {
+        if (this.yumiMazeViews.has(i)) continue;
+        const o = yumiMazeOrigin(i);
+        if (Math.abs(px - o.x) < 200 && Math.abs(pz - o.z) < 120) {
+          const view = buildYumiMaze(o, this.sim.cfg.seed, {
+            flames: this.flames,
+            fireLights: this.fireLights,
+            lowGfx: this.lowGfx,
+          });
+          this.scene.add(view.group);
+          this.yumiMazeViews.set(i, view);
+        }
+      }
     } else if (inside && isArenaPos(px)) {
       void ensureDungeonAssets().catch(() => undefined);
       // build the Ashen Coliseum copy the player was matched into
@@ -3834,22 +3901,26 @@ export class Renderer {
     // the Drowned Temple reads as submerged: a teal murk instead of the
     // crypt's near-black, so its flooded halls feel underwater, not just dark
     const inDelve = inside && isDelvePos(px);
-    const interior = inside && !inDelve && !isArenaPos(px) ? dungeonAt(px)?.interior : null;
+    const inYumiMaze = inside && isYumiMazePos(px);
+    const interior =
+      inside && !inDelve && !inYumiMaze && !isArenaPos(px) ? dungeonAt(px)?.interior : null;
     const inTemple = interior === 'temple';
     const inNythraxis = interior === 'nythraxis';
     const desired = inPractice
       ? 'practice'
       : inDelve
         ? 'delve'
-        : inTemple
-          ? 'temple'
-          : inNythraxis
-            ? 'nythraxis'
-            : inside
-              ? 'dungeon'
-              : camY < waterLevelAt(px, pz) - 0.05
-                ? 'underwater'
-                : 'outdoor';
+        : inYumiMaze
+          ? 'yumiMaze'
+          : inTemple
+            ? 'temple'
+            : inNythraxis
+              ? 'nythraxis'
+              : inside
+                ? 'dungeon'
+                : camY < waterLevelAt(px, pz) - 0.05
+                  ? 'underwater'
+                  : 'outdoor';
     const fog = this.scene.fog as THREE.Fog;
     if (desired !== this.fogState) {
       this.fogState = desired;
@@ -3874,6 +3945,13 @@ export class Renderer {
         fog.color.setHex(0x0e0705);
         fog.near = 14;
         fog.far = 74;
+      } else if (desired === 'yumiMaze') {
+        // the Protect Yumi maze is a COMPETITIVE arena: a lighter night-blue
+        // murk pushed well past the ~90yd footprint, so the torches + team
+        // beacons read across the maze instead of dissolving mid-corridor
+        fog.color.setHex(0x161d31);
+        fog.near = 30;
+        fog.far = 170;
       } else if (desired === 'practice') {
         // The private practice pitch under its futuristic sky: tint the fog to
         // the sky variant and push it well back so the pitch reads clear and lit
@@ -3895,17 +3973,32 @@ export class Renderer {
       // underground so the torch point lights own the scene; restore outside.
       // The rim glow cranks up instead — silhouettes must split from the murk.
       if (!this.lowGfx) {
+        const mazeNight = desired === 'yumiMaze';
         const underground =
           desired === 'dungeon' ||
           desired === 'temple' ||
           desired === 'nythraxis' ||
           desired === 'delve';
-        this.sun.intensity = underground ? DUNGEON_SUN_INTENSITY : SUN_INTENSITY;
-        this.hemi.intensity = underground ? DUNGEON_HEMI_INTENSITY : HEMI_INTENSITY;
-        this.scene.environmentIntensity = underground
-          ? DUNGEON_ENV_INTENSITY
-          : this.envOutdoorIntensity;
-        sharedUniforms.uRimBoost.value = underground ? DUNGEON_RIM_BOOST : 1;
+        this.sun.intensity = mazeNight
+          ? YUMI_MAZE_SUN_INTENSITY
+          : underground
+            ? DUNGEON_SUN_INTENSITY
+            : SUN_INTENSITY;
+        this.hemi.intensity = mazeNight
+          ? YUMI_MAZE_HEMI_INTENSITY
+          : underground
+            ? DUNGEON_HEMI_INTENSITY
+            : HEMI_INTENSITY;
+        this.scene.environmentIntensity = mazeNight
+          ? YUMI_MAZE_ENV_INTENSITY
+          : underground
+            ? DUNGEON_ENV_INTENSITY
+            : this.envOutdoorIntensity;
+        sharedUniforms.uRimBoost.value = mazeNight
+          ? YUMI_MAZE_RIM_BOOST
+          : underground
+            ? DUNGEON_RIM_BOOST
+            : 1;
       }
       return;
     }
@@ -4140,6 +4233,7 @@ export class Renderer {
     const crowdScaleSq = crowdLodScaleSq(this.lastVisibleRigCount);
     const lodRangeSq = ENTITY_LOD_RANGE_SQ * crowdScaleSq;
     const shadowRangeSq = ENTITY_SHADOW_RANGE_SQ * crowdScaleSq;
+    const midAnimCadenceFrames = midAnimCadence(this.lastVisibleRigCount);
     let visibleRigCount = 0;
 
     for (const [id, v] of this.views) {
@@ -4512,12 +4606,19 @@ export class Renderer {
       }
       v.wasAirborne = airborne;
       v.wasSwimming = swimming;
-      // distance-tiered mixer updates: near = every frame, mid = every 2nd,
-      // far (static LOD mesh visible) = every 6th; edges latch regardless
+      // Distance-tiered mixer updates: near = every frame, mid = every Nth,
+      // far (static LOD mesh visible) = every 6th; edges latch regardless.
+      // Both the near band and the mid cadence follow the same crowd-adaptive
+      // LOD the shadow bands use, because sampling clips + rebuilding bone
+      // matrices is the per-rig cost that actually scales with the crowd.
+      //
+      // Animation smoothness is cosmetic, but a cast windup is a telegraph the
+      // player reacts to, so the local player, the current target, and anything
+      // mid-cast always animate every frame no matter how dense the crowd.
       let animate = true;
-      if (id !== p.id) {
+      if (!animatesEveryFrame(id, p.id, p.targetId, e.castingAbility)) {
         if (v.isFar) animate = (this.frameIdx + e.id) % 6 === 0;
-        else if (d2 > ENTITY_SHADOW_RANGE_SQ) animate = ((this.frameIdx + e.id) & 1) === 0;
+        else if (d2 > shadowRangeSq) animate = (this.frameIdx + e.id) % midAnimCadenceFrames === 0;
       }
       active.update(dt, st, animate);
 
@@ -4733,6 +4834,8 @@ export class Renderer {
     this.updateFiestaRing(dt);
     this.updateFiestaPowerups(dt);
     this.tickFiestaGlows(dt);
+    for (const view of this.yumiMazeViews.values()) view.update(this.sim);
+    this.yumiTeamMarkers.update(this.sim, this.views);
     this.tickValeCupFx(dt);
     worldStart = markWorldPhase('vfx', worldStart);
 
@@ -5156,6 +5259,7 @@ export class Renderer {
       this.terrainView.rebuildRegion(region.minX, region.minZ, region.maxX, region.maxZ);
       return;
     }
+    this.terrainView.cancelStreaming();
     const old = this.terrainView.group;
     this.scene.remove(old);
     const firstMesh = old.children.find((c) => (c as THREE.Mesh).isMesh) as THREE.Mesh | undefined;
@@ -5277,7 +5381,7 @@ export class Renderer {
       // stays at the player's requested zoom instead of clamping inside the pit.
       this.camOcclusion.pullT = 1;
       this.camOcclusion.lensT = 1;
-      this.camOcclusion.fov = CAMERA_BASE_FOV;
+      this.camOcclusion.fov = this.cameraBaseFov;
     } else {
       // Camera collision for non-hideable blockers. Camera-ghost props are left
       // at the requested zoom and hidden in props.ts while keeping their shadows.
@@ -5310,8 +5414,10 @@ export class Renderer {
         CAMERA_PULL_IN_RATE,
         CAMERA_PULL_OUT_RATE,
         CAMERA_SOFT_PULL_WEIGHT,
-        CAMERA_BASE_FOV,
-        CAMERA_MAX_COMP_FOV,
+        this.cameraBaseFov,
+        // Never let the occlusion-compensation ceiling fall below the player's own
+        // base FOV, or a wide setting (up to 100) would briefly NARROW under a clamp.
+        Math.max(CAMERA_MAX_COMP_FOV, this.cameraBaseFov),
       );
     }
     const ct = this.camOcclusion.pullT;
@@ -5407,7 +5513,8 @@ export class Renderer {
       b.el.style.display = '';
       const sx = (this.tmpV.x * 0.5 + 0.5) * w;
       const sy = (-this.tmpV.y * 0.5 + 0.5) * h;
-      b.el.style.transform = nameplateScreenTransform(sx, sy);
+      // chat bubbles share the anchor transform but never distance-scale
+      b.el.style.transform = nameplateScreenTransform(sx, sy, 1);
     }
   }
 

@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { COMBO_RECIPES, COMMON_RECIPES, recipeById } from '../src/sim/content/recipes';
+import { CRAFTING_HUB_MIN_LEVEL, CRAFTING_HUB_POS } from '../src/sim/content/professions';
+import {
+  COMBO_RECIPES,
+  COMMON_RECIPES,
+  recipeById,
+  TOOL_RECIPES,
+} from '../src/sim/content/recipes';
 import {
   hasRecipeMaterials,
   meetsComboRequirement,
@@ -31,6 +37,47 @@ describe('recipe content (#1127)', () => {
   it('recipeById resolves a known id and returns undefined for an unknown one', () => {
     expect(recipeById(COMMON_RECIPES[0].id)?.id).toBe(COMMON_RECIPES[0].id);
     expect(recipeById('not_a_real_recipe')).toBeUndefined();
+  });
+});
+
+describe('TOOL_RECIPES (#1135 de-stub): tier 4/5 tool recipes', () => {
+  it('defines the six crafted base tools, each requiring skill', () => {
+    expect(TOOL_RECIPES.length).toBe(6);
+    for (const recipe of TOOL_RECIPES) {
+      expect(recipe.skillReq).toBeGreaterThan(0); // unlike common-tier, these gate on skill
+      expect(recipe.reagents.length).toBeGreaterThan(0);
+      expect(recipe.resultCount).toBeGreaterThan(0);
+      expect(recipe.professionId).toBe('engineering');
+    }
+  });
+
+  it('recipeById resolves tool recipes alongside common ones', () => {
+    for (const recipe of TOOL_RECIPES) {
+      expect(recipeById(recipe.id)?.id).toBe(recipe.id);
+    }
+  });
+
+  it('resolveCraft produces a tool from its recipe reagents', () => {
+    const sim = makeSim();
+    const pid = sim.playerId;
+    const recipe = recipeById('recipe_thorium_mining_pick')!;
+    // #1297: TOOL_RECIPES are station-bound, so this recipe now also requires
+    // presence at the level-20 crafting hub (see professions_crafting_hub.test.ts
+    // for the gate's own dedicated coverage).
+    sim.setPlayerLevel(CRAFTING_HUB_MIN_LEVEL);
+    const entity = (sim as any).entities.get(pid);
+    entity.pos.x = CRAFTING_HUB_POS.x;
+    entity.pos.z = CRAFTING_HUB_POS.z;
+    entity.prevPos = { ...entity.pos };
+    grantItem(sim, 'thorium_ore', 4, pid);
+    grantItem(sim, 'mithril_mining_pick', 1, pid);
+
+    const result = resolveCraft((sim as any).ctx, pid, recipe.id);
+
+    expect(result.ok).toBe(true);
+    expect(sim.countItem('thorium_ore', pid)).toBe(0);
+    expect(sim.countItem('mithril_mining_pick', pid)).toBe(0);
+    expect(sim.countItem('thorium_mining_pick', pid)).toBe(1);
   });
 });
 
@@ -198,10 +245,12 @@ describe('craftItem command (#1127)', () => {
     expect(sim.countItem('tough_jerky', pid)).toBe(1);
   });
 
-  it('the IWorld recipeList read surface exposes every recipe, common and combo alike (#1132 review)', () => {
+  it('the IWorld recipeList read surface exposes every recipe, common, tool, and combo alike (#1132 review)', () => {
     const sim = makeSim();
-    const allIds = [...COMMON_RECIPES, ...COMBO_RECIPES].map((r) => r.id).sort();
-    expect(sim.recipeList.length).toBe(COMMON_RECIPES.length + COMBO_RECIPES.length);
+    const allIds = [...COMMON_RECIPES, ...TOOL_RECIPES, ...COMBO_RECIPES].map((r) => r.id).sort();
+    expect(sim.recipeList.length).toBe(
+      COMMON_RECIPES.length + TOOL_RECIPES.length + COMBO_RECIPES.length,
+    );
     expect(sim.recipeList.map((r) => r.id).sort()).toEqual(allIds);
   });
 
@@ -211,6 +260,62 @@ describe('craftItem command (#1127)', () => {
     sim.craftItem('recipe_tough_jerky', pid);
     expect(sim.lastCraftResult?.ok).toBe(false);
     expect(sim.lastCraftResult?.reason).toBe('insufficient_materials');
+  });
+});
+
+// #1145: signed materials + the self-gathered crafting bonus. The chosen bonus
+// (see professions/crafting.ts) is a reduced required quantity: one fewer unit
+// of a reagent the crafter holds a self-signed instance of.
+describe('self-gathered crafting bonus (#1145)', () => {
+  it('a self-signed instance reduces that reagent requirement by one and is consumed', () => {
+    const sim = makeSim();
+    const pid = sim.playerId;
+    const meta = (sim as any).players.get(pid);
+    const recipe = recipeById('recipe_eastbrook_arming_sword')!; // needs bone_fragments x2, linen_scrap x1
+    // One self-signed bone_fragments (stamped with this player's own name) plus
+    // one plain bone_fragments: normally 2 would be required, the bonus drops it to 1.
+    sim.addItemInstance('bone_fragments', { signer: meta.name }, pid);
+    grantItem(sim, 'linen_scrap', 1, pid);
+
+    expect(hasRecipeMaterials((sim as any).ctx, recipe, pid)).toBe(true);
+    const result = resolveCraft((sim as any).ctx, pid, recipe.id);
+
+    expect(result.ok).toBe(true);
+    expect(result.selfSignedBonusApplied).toBe(true);
+    // The single signed copy (the only bone_fragments held) was consumed as
+    // part of satisfying the reduced (1-unit) requirement.
+    expect(sim.countItem('bone_fragments', pid)).toBe(0);
+    expect(sim.countItem('linen_scrap', pid)).toBe(0);
+    expect(sim.countItem('eastbrook_arming_sword', pid)).toBe(1);
+  });
+
+  it('a material signed by a DIFFERENT player grants no bonus (same as unsigned)', () => {
+    const sim = makeSim();
+    const pid = sim.playerId;
+    const recipe = recipeById('recipe_eastbrook_arming_sword')!;
+    // Signed by someone else: does not count toward the crafter's own bonus.
+    sim.addItemInstance('bone_fragments', { signer: 'SomeoneElse' }, pid);
+    grantItem(sim, 'linen_scrap', 1, pid);
+
+    // Still short: only 1 of the required 2 bone_fragments (no bonus reduction).
+    expect(hasRecipeMaterials((sim as any).ctx, recipe, pid)).toBe(false);
+    const result = resolveCraft((sim as any).ctx, pid, recipe.id);
+    expect(result.ok).toBe(false);
+    expect(result.reason).toBe('insufficient_materials');
+    expect(result.selfSignedBonusApplied).toBeUndefined();
+  });
+
+  it('an unsigned (plain fungible) material grants no bonus', () => {
+    const sim = makeSim();
+    const pid = sim.playerId;
+    const recipe = recipeById('recipe_eastbrook_arming_sword')!;
+    grantItem(sim, 'bone_fragments', 2, pid);
+    grantItem(sim, 'linen_scrap', 1, pid);
+
+    const result = resolveCraft((sim as any).ctx, pid, recipe.id);
+    expect(result.ok).toBe(true);
+    expect(result.selfSignedBonusApplied).toBe(false);
+    expect(sim.countItem('bone_fragments', pid)).toBe(0);
   });
 });
 
@@ -265,6 +370,10 @@ describe('tiered mastery gating (#1128)', () => {
   it('crafting two or more tiers below capability grants zero skill progress', () => {
     const sim = makeSim();
     const pid = sim.playerId;
+    // Set weaponcrafting as the active archetype so its empowerment ceiling (#1129/#1203) is
+    // unlimited: this isolates the raw tier-capability curve from the separate pre-archetype
+    // "uncapped-to-rare" (tier 2) ceiling that would otherwise also clamp a tier-3 raw skill.
+    sim.acceptArchetypeQuest('weaponcrafting');
     setSkill(sim, pid, 'weaponcrafting', 75); // tier-3 capability, recipe is tier-1
     grantItem(sim, 'bone_fragments', 1, pid);
 

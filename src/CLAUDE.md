@@ -15,8 +15,9 @@ lets the same `sim/` run offline, on the server, and headless.
 
 - `sim/` -> nothing else in `src/` **at runtime** (it is the pure, host-agnostic
   core). The one allowed edge is a *type-only* import of a few `world_api.ts` shapes
-  (e.g. `AccountCosmetics`, `LeaderboardEntry`) in `sim/sim.ts`; being `import type`
-  it is erased at build and adds no runtime dependency.
+  (e.g. `AccountCosmetics`, `LeaderboardEntry` in `sim/sim.ts`, `BankInfo` in
+  `sim/bank.ts`); being `import type` it is erased at build and adds no runtime
+  dependency.
 - `world_api.ts` -> `sim/` types only, it defines the `IWorld` seam.
 - `render/`, `ui/`, `game/` -> **`IWorld`** + their own area; **not** `net/`, **not**
   the server, **not** each other's mutable internals. Two narrow sanctioned exceptions

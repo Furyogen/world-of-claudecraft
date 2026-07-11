@@ -46,6 +46,7 @@ import type {
   ItemInstancePayload,
   PlayerClass,
   QuestProgress,
+  ReadyCheck,
   SetProc,
   SimConfig,
   SimEvent,
@@ -124,6 +125,14 @@ export interface SimContextPrimitives {
   arenaQueueFiesta: ArenaQueueUnit[];
   readonly arenaBusySlots: Set<number>;
   nextArenaMatchId: number;
+  // A4 Protect Yumi state. The two format queues are REASSIGNED by the
+  // matchmaker's prune filter (read-write, like the arena queues); the maze
+  // slot pool and the cat-entity -> live-match index are mutated in place.
+  // Backing fields stay on Sim.
+  arenaQueueYumi3: ArenaQueueUnit[];
+  arenaQueueYumi5: ArenaQueueUnit[];
+  readonly yumiBusySlots: Set<number>;
+  readonly yumiCatMatches: Map<number, ArenaMatch>;
   // I2a delve runs: the live run pool (seeded in the Sim ctor, never reassigned) and
   // the transient pet stash both stay Sim-owned (the disconnect path + serializePet
   // poke them); exposed here as live views the run module reads/mutates in place.
@@ -144,6 +153,9 @@ export interface SimContextPrimitives {
   // it routes through ctx until that slice puts it on the seam. (trades/tradeInvites/
   // duelInvites are already declared above; deduped.)
   readonly partyInvites: Map<number, { fromPid: number; expires: number }>;
+  // Active party/raid ready checks (social/ready_check.ts), keyed by party id. Swept
+  // in the end-of-tick block by updateReadyChecks. Sim-internal, never wired.
+  readonly readyChecks: Map<number, ReadyCheck>;
   readonly chatTokens: Map<number, { tokens: number; at: number }>;
   readonly channelSubs: Map<number, Set<JoinableChannel>>;
   // L1 loot-distribution state. The pending need-greed rolls map is mutated in
@@ -159,6 +171,11 @@ export interface SimContextPrimitives {
   // read-only view (never reassigned by the readout).
   readonly devCommands: boolean;
   readonly marketListings: MarketListing[];
+  // Bank system: the live array of every `banker: true` NPC id, seeded by
+  // the Sim ctor NPC loop. bank.ts reads it to gate deposit/withdraw/buy-slots on
+  // standing near a banker. Sim-owned, mutated only at construction (push), never
+  // reassigned, so a live read-only view like `marketListings`.
+  readonly bankerIds: number[];
   // The Vale Cup boarball state (social/vale_cup.ts): ONE holder object on Sim
   // (queues/deserters/botPids mutated in place, the match slot reassigned INSIDE
   // the holder), so a read-only live view suffices. Consumed by the vale_cup
@@ -200,6 +217,12 @@ export interface SimContextCallbacks {
   dungeonDifficulty(pid?: number): DungeonDifficulty;
   setDungeonDifficulty(difficulty: DungeonDifficulty, pid?: number): void;
   awardHeroicMarks(mob: Entity, recipients: PlayerMeta[]): void;
+  // grantHeroicKillLockout is awardHeroicMarks' sibling on the death path, owned by
+  // instances/dungeons: the C1 death hub calls it for EVERY mob death (credit or no
+  // credit). A heroic claim's final-boss kill locks the whole owning group (plus
+  // anyone inside the instance) to the :heroic key until the daily reset, so the
+  // lockout cannot be dodged by camping the door or releasing before the kill.
+  grantHeroicKillLockout(mob: Entity): void;
 
   // C1 damage/death hub + the casting/leash/arena/duel/fiesta/loot teardown it
   // drives mid-tick. `dealDamage` is the post-mitigation entry (crit/dodge/miss and
@@ -256,6 +279,23 @@ export interface SimContextCallbacks {
   arenaAllPids(match: ArenaMatch): number[];
   fiestaTakedown(match: ArenaMatch, killerPid: number, victim: Entity): void;
   fiestaDown(match: ArenaMatch, victim: Entity, killerPid: number | null): void;
+  // A4 Protect Yumi hooks (social/yumi.ts owns every body; Sim binds late-bound
+  // arrows). updateArena drives the first two + cleanup; the damage hub drives
+  // the cat-damage and player-down arms.
+  matchmakeYumi(): void;
+  updateYumiActive(match: ArenaMatch): void;
+  yumiPlayerDown(match: ArenaMatch, victim: Entity, killerPid: number | null): void;
+  yumiCatDamaged(
+    match: ArenaMatch,
+    source: Entity | null,
+    cat: Entity,
+    amount: number,
+    crit: boolean,
+    school: string,
+    ability: string | null,
+    kind: 'hit' | 'miss' | 'dodge',
+  ): void;
+  cleanupYumiMatch(match: ArenaMatch): void;
   rollLoot(mob: Entity, meta: PlayerMeta, eligible?: PlayerMeta[]): void;
   // World-boss personal loot: an independent roll of the boss's loot table per
   // contributor (gated once-per-day per boss). Owned by world_boss.ts.
@@ -303,7 +343,10 @@ export interface SimContextCallbacks {
   // mana spend; C4a exports it as a sibling fn, not yet a ctx callback) and removeItem
   // (feedPet consumes the inventory hub; L2 dedupes when it adds the identical decl).
   spendResource(p: Entity, cost: number): void;
-  removeItem(itemId: string, count: number, pid?: number): void;
+  // Returns the `instance` payload of every instanced slot actually consumed
+  // (see sim.ts removeItem), so a caller needing to attribute an effect to
+  // the specific removed copy (not just any matching slot) can do so.
+  removeItem(itemId: string, count: number, pid?: number): ItemInstancePayload[];
   // Fungible-only removal (#1165), skips instanced slots; market.ts escrows with this.
   removeFungibleItem(itemId: string, count: number, pid?: number): void;
 
@@ -318,6 +361,9 @@ export interface SimContextCallbacks {
   // Invite a player to the actor's party by pid (delegates to the PartyMachine);
   // used by the chat "/invite <name>" command in social/chat.ts.
   partyInvite(targetPid: number, pid?: number): void;
+  // Start a party/raid ready check as the actor (leader-gated); used by the chat
+  // "/ready" command in social/chat.ts. Delegates to social/ready_check.ts.
+  readyCheckStart(pid?: number): void;
   removeFromParty(pid: number, verb: string): void;
   // Drop a disbanded party's whole raid-marker set (points at T1's targeting store).
   dropPartyMarkers(partyId: number): void;
@@ -328,6 +374,16 @@ export interface SimContextCallbacks {
   // Fungible-only count (excludes per-instance slots, #1165); market.ts uses this
   // instead of countItem so an instanced copy is never listed as a plain stack member.
   countFungibleItem(itemId: string, pid?: number): number;
+  // Enchanting-eligible count/removal (#1712 review): counts/removes a plain
+  // fungible stack OR an instanced copy with no rolled.stats (crafted rare+
+  // gear), excluding only an already-enchanted (rolled.stats) copy. Used by
+  // professions/enchanting.ts instead of countFungibleItem/removeFungibleItem
+  // so crafted single-copy rares remain disenchantable/enchantable.
+  countEnchantableItem(itemId: string, pid?: number): number;
+  // Returns the consumed slots' `instance` payloads (removeItem's contract),
+  // so applyEnchant can merge a crafted copy's signer/rolled.quality into the
+  // freshly-enchanted instance instead of dropping them.
+  removeEnchantableItem(itemId: string, count: number, pid?: number): ItemInstancePayload[];
   completeQuestForDev(questId: string, pid?: number): boolean;
   completeCurrentQuestsForDev(pid?: number): number;
 
@@ -731,6 +787,24 @@ export function createSimContext(host: SimContextHost): SimContext {
     get arenaBusySlots() {
       return host.arenaBusySlots;
     },
+    get arenaQueueYumi3() {
+      return host.arenaQueueYumi3;
+    },
+    set arenaQueueYumi3(v) {
+      host.arenaQueueYumi3 = v;
+    },
+    get arenaQueueYumi5() {
+      return host.arenaQueueYumi5;
+    },
+    set arenaQueueYumi5(v) {
+      host.arenaQueueYumi5 = v;
+    },
+    get yumiBusySlots() {
+      return host.yumiBusySlots;
+    },
+    get yumiCatMatches() {
+      return host.yumiCatMatches;
+    },
     get nextArenaMatchId() {
       return host.nextArenaMatchId;
     },
@@ -751,6 +825,9 @@ export function createSimContext(host: SimContextHost): SimContext {
     },
     get partyInvites() {
       return host.partyInvites;
+    },
+    get readyChecks() {
+      return host.readyChecks;
     },
     get chatTokens() {
       return host.chatTokens;
@@ -773,6 +850,9 @@ export function createSimContext(host: SimContextHost): SimContext {
     get marketListings() {
       return host.marketListings;
     },
+    get bankerIds() {
+      return host.bankerIds;
+    },
     get vcup() {
       return host.vcup;
     },
@@ -787,6 +867,7 @@ export function createSimContext(host: SimContextHost): SimContext {
     dungeonDifficulty: host.dungeonDifficulty,
     setDungeonDifficulty: host.setDungeonDifficulty,
     awardHeroicMarks: host.awardHeroicMarks,
+    grantHeroicKillLockout: host.grantHeroicKillLockout,
     dealDamage: host.dealDamage,
     handleDeath: host.handleDeath,
     cancelCast: host.cancelCast,
@@ -814,6 +895,11 @@ export function createSimContext(host: SimContextHost): SimContext {
     arenaAllPids: host.arenaAllPids,
     fiestaTakedown: host.fiestaTakedown,
     fiestaDown: host.fiestaDown,
+    matchmakeYumi: host.matchmakeYumi,
+    updateYumiActive: host.updateYumiActive,
+    yumiPlayerDown: host.yumiPlayerDown,
+    yumiCatDamaged: host.yumiCatDamaged,
+    cleanupYumiMatch: host.cleanupYumiMatch,
     rollLoot: host.rollLoot,
     rollWorldBossLoot: host.rollWorldBossLoot,
     applyHeal: host.applyHeal,
@@ -834,9 +920,12 @@ export function createSimContext(host: SimContextHost): SimContext {
     spendResource: host.spendResource,
     removeItem: host.removeItem,
     removeFungibleItem: host.removeFungibleItem,
+    countEnchantableItem: host.countEnchantableItem,
+    removeEnchantableItem: host.removeEnchantableItem,
     clearEntityMarker: host.clearEntityMarker,
     partyOf: host.partyOf,
     partyInvite: host.partyInvite,
+    readyCheckStart: host.readyCheckStart,
     removeFromParty: host.removeFromParty,
     dropPartyMarkers: host.dropPartyMarkers,
     onMobKilledForQuests: host.onMobKilledForQuests,

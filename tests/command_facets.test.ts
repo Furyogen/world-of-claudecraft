@@ -284,3 +284,38 @@ describe('command facet tags (W10)', () => {
     }
   });
 });
+
+// Bank: append the personal-bank cluster's tags. The table-consistency invariants in
+// the W6 block above (no orphan tag, no dispatch-only leak) already cover these new
+// entries; this block pins the exact facet per bank command, keyed on the WIRE strings
+// (bank_deposit/bank_withdraw/bank_buy_slots), and that the proximity-gated bankInfo
+// read stays untagged (no wire send). The tokens are personal-bank only forever; a
+// future guild bank gets its own guild_bank_* tokens (state.md decision 16), never a
+// reuse of these. Append-only: never edit a tag.
+const BANK_TAGS: Readonly<Record<string, string>> = {
+  bank_deposit: 'IWorldBank',
+  bank_withdraw: 'IWorldBank',
+  bank_buy_slots: 'IWorldBank',
+};
+
+describe('command facet tags (bank)', () => {
+  const tags = COMMAND_FACETS as Readonly<Record<string, string>>;
+
+  it('tags every personal-bank command with the IWorldBank facet', () => {
+    for (const [cmd, facet] of Object.entries(BANK_TAGS)) {
+      expect(tags[cmd], `facet tag for '${cmd}'`).toBe(facet);
+    }
+  });
+
+  it('preserves the snake_case bank wire strings (never normalized to camelCase)', () => {
+    expect('bank_deposit' in tags).toBe(true);
+    expect('bank_withdraw' in tags).toBe(true);
+    expect('bank_buy_slots' in tags).toBe(true);
+    expect('bankDeposit' in tags).toBe(false);
+    expect('bankBuySlots' in tags).toBe(false);
+  });
+
+  it('does not tag bankInfo (proximity-gated snapshot read, no wire command)', () => {
+    expect('bankInfo' in tags).toBe(false);
+  });
+});

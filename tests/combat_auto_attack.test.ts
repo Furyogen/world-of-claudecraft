@@ -412,3 +412,39 @@ describe('rangedSwing damage: the 0.6 weapon coefficient is Auto Shot only', () 
     for (const h of hits) expect(h.amount).toBe(h.crit ? 240 : 120);
   });
 });
+
+// A hunter's Auto Shot strikes with the equipped mainhand, so an on-hit weapon proc
+// (Thronebane's Chain Arc, trigger 'weaponHit') must fire from a ranged shot too, not
+// just a melee swing. A caster's wand bolt does NOT swing the mainhand, so it never
+// rolls the mainhand's proc.
+describe('rangedSwing fires weaponHit procs (Thronebane on a hunter Auto Shot)', () => {
+  const chainArcs = (events: Ev[]) =>
+    events.filter((e) => e.type === 'damage' && e.ability === 'Chain Arc' && e.school === 'nature');
+
+  it('a hunter wielding Thronebane procs Chain Arc off Auto Shot', () => {
+    const { sim, p } = makeSim('hunter', 20);
+    const mob = spawnDummy(sim, p, 1, 20); // far below level -> floored miss chance
+    mob.stats = { ...mob.stats, armor: 0 };
+    p.mainhandItemId = 'kingsbane_last_oath'; // Thronebane: 10% weaponHit Chain Arc
+    p.critChance = 0;
+    const events = capture(sim);
+    for (let i = 0; i < 200; i++) rangedSwing(sim.ctx, p, mob, { min: 50, max: 50, speed: 2.8 });
+    for (let i = 0; i < 800 && sim.ctx.pendingProjectiles.length > 0; i++)
+      advancePendingProjectiles(sim.ctx);
+    // over ~200 landed shots at a 10% proc, the seeded run lands multiple arcs
+    expect(chainArcs(events).length).toBeGreaterThan(0);
+    expect(chainArcs(events)[0].amount).toBe(42); // Chain Arc primary damage
+  });
+
+  it('a wand caster wielding Thronebane never rolls the mainhand proc off a bolt', () => {
+    const { sim, p } = makeSim('mage', 20);
+    const mob = spawnDummy(sim, p, 1, 15);
+    p.mainhandItemId = 'kingsbane_last_oath';
+    const events = capture(sim);
+    for (let i = 0; i < 200; i++)
+      rangedSwing(sim.ctx, p, mob, { min: 50, max: 50, speed: 1.8, wand: true, school: 'arcane' });
+    for (let i = 0; i < 800 && sim.ctx.pendingProjectiles.length > 0; i++)
+      advancePendingProjectiles(sim.ctx);
+    expect(chainArcs(events).length).toBe(0);
+  });
+});

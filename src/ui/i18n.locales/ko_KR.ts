@@ -14,6 +14,93 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ko_KR: Partial<Record<TranslationKey, string>> = {
+  'itemUi.vendor.sellItemAria': '{item}을(를) {price}에 판매',
+  'hudChrome.itemHeroicTag': '[영웅]',
+  'hudChrome.options.done': '완료',
+  'hudChrome.options.keybindUnbound': '{action}에 지정된 키가 없습니다',
+  'hudChrome.options.legend.back': '뒤로',
+  'hudChrome.options.legend.page': '페이지',
+  'hudChrome.options.searchGoTo': '{category}로 이동',
+  'hudChrome.options.sec.chat': '채팅',
+  'hudChrome.options.sec.feel': '조작감',
+  'hudChrome.options.sec.look': '시점',
+  'hudChrome.options.sec.view': '시야',
+  'hudChrome.readyCheck.notInPartyError': '준비 확인을 시작하려면 파티에 속해 있어야 합니다.',
+  'hudChrome.readyCheck.inProgressError': '준비 확인이 이미 진행 중입니다.',
+  // Esc menu redesign (The Warden's Codex): category-rail IA (options_ia.ts).
+  'hudChrome.options.ia.railDisplay': '화면',
+  'hudChrome.options.ia.railInput': '입력',
+  'hudChrome.options.ia.railSystem': '시스템',
+  'hudChrome.options.ia.catOverviewName': '개요',
+  'hudChrome.options.ia.catOverviewSub': '고정한 필수 항목, 빠른 작업, 변경된 설정을 보여줍니다.',
+  'hudChrome.options.ia.catGraphicsSub': '품질, 시야, 월드 그래픽.',
+  'hudChrome.options.ia.catInterfaceSub': 'HUD 배율, 패널, 채팅, 유닛 프레임.',
+  'hudChrome.options.ia.catAccessibilityName': '접근성',
+  'hudChrome.options.ia.catAccessibilitySub': '모션, 대비, 콘텐츠 편의성.',
+  'hudChrome.options.ia.catControlsName': '조작',
+  'hudChrome.options.ia.catControlsSub': '카메라, 이동, 전투, 피드백.',
+  'hudChrome.options.ia.catKeybindsSub': '모든 동작에 키를 지정합니다.',
+  'hudChrome.options.ia.catControllerSub': '게임패드 감도와 버튼 배치.',
+  'hudChrome.options.ia.catTouchName': '터치',
+  'hudChrome.options.ia.catTouchSub': '화면 스틱, 시점, 버튼.',
+  'hudChrome.options.ia.catAudioSub': '음량과 사운드 토글.',
+  'hudChrome.options.ia.catSystemName': '시스템',
+  'hudChrome.options.ia.catSystemSub': '성능, 지원, 정보.',
+  // Esc menu redesign P2 (desktop chrome): search strip, reset-all confirm,
+  // status block, and the section heads. M16 fills.
+  'hudChrome.options.resetAllTitle': '모든 설정을 초기화할까요?',
+  'hudChrome.options.resetAllBody':
+    '모든 설정을 기본값으로 되돌립니다. 이 작업은 취소할 수 없습니다.',
+  'hudChrome.options.searchPlaceholder': '설정 검색',
+  'hudChrome.options.searchScopeAll': '모든 설정',
+  'hudChrome.options.searchScopeThis': '이 섹션',
+  'hudChrome.options.searchEmpty': '검색과 일치하는 설정이 없습니다.',
+  'hudChrome.options.modeOnline': '온라인',
+  'hudChrome.options.modeOffline': '오프라인',
+  'hudChrome.options.changed': '{count}개 변경됨',
+  'hudChrome.options.changedSummary': '기본값에서 {count}개 변경됨',
+  'hudChrome.options.legend.category': '카테고리',
+  'hudChrome.options.legend.navigate': '이동',
+  'hudChrome.options.legend.select': '선택',
+  'hudChrome.options.legend.reset': '초기화',
+  'hudChrome.options.legend.clear': '지우기',
+  'hudChrome.options.keybindCleared': '{action} 지움',
+  'hudChrome.options.keybindRebinding': '{action} 재설정 중입니다. 키를 누르거나 Esc로 취소하세요.',
+  'hudChrome.options.keybindEvicted':
+    '{key}을 {action}에 지정했습니다. {evicted}에서는 해제되었습니다.',
+  'hudChrome.options.keybindTaken': '키 해제됨',
+  'hudChrome.options.conflictDot': '키 충돌',
+  'hudChrome.options.overviewConflictAlert': '일부 키 지정이 충돌하거나 지정되지 않았습니다.',
+  'hudChrome.controller.duplicate': '{buttons}에도 지정됨',
+  'hudChrome.options.sec.quality': '품질',
+  'hudChrome.options.sec.general': '일반',
+  'hudChrome.options.sec.scaleText': '배율 및 텍스트',
+  'hudChrome.options.sec.panels': '패널',
+  'hudChrome.options.sec.unitFrames': '유닛 프레임',
+  'hudChrome.options.sec.actionBars': '액션 바',
+  'hudChrome.options.sec.combatTooltips': '전투 및 툴팁',
+  'hudChrome.options.sec.hudExtras': 'HUD 부가 기능',
+  'hudChrome.options.sec.motionContrast': '모션 및 대비',
+  'hudChrome.options.sec.content': '콘텐츠',
+  'hudChrome.options.sec.camera': '카메라',
+  'hudChrome.options.sec.movement': '이동',
+  'hudChrome.options.sec.combat': '전투',
+  'hudChrome.options.sec.feedback': '피드백',
+  'hudChrome.options.sec.inputMode': '입력 모드',
+  'hudChrome.options.sec.sticks': '스틱',
+  'hudChrome.options.sec.buttons': '버튼',
+  'hudChrome.options.sec.volume': '볼륨',
+  'hudChrome.options.sec.toggles': '켜기/끄기',
+  'hudChrome.options.sec.performance': '성능',
+  'hudChrome.options.sec.support': '지원',
+  'hudChrome.options.sec.about': '정보',
+  'hudChrome.auth.appleLoginCta': 'Apple로 계속하기',
+  'hudChrome.auth.appleError': 'Apple로 로그인할 수 없습니다. 다시 시도해 주세요.',
+  'hudChrome.auth.appleChoiceIntro': '새 계정을 만들거나 Apple을 기존 계정에 연결하세요.',
+  'hudChrome.auth.appleChoiceExpired':
+    'Apple 로그인이 만료되었습니다. Apple로 다시 로그인해 주세요.',
+  'hudChrome.vcup.guildBoardWl': '{wins}승 {losses}패',
+  'hudChrome.vcup.shootPower': '파워',
   'hudChrome.discord.roleTag.coredevs': '핵심 개발자',
   'hudChrome.options.version': 'v{version} ({build})',
   'auth.emailPlaceholder': 'you@example.com',
@@ -30,10 +117,25 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mailbox.toLabel': '받는 사람',
   'itemUi.kind.bag': '가방',
   'itemUi.tooltip.bagSlots': '{slots}칸 가방',
+  'hudChrome.auth.forgotPrompt': '비밀번호를 잊으셨나요?',
+  'hudChrome.auth.forgotTitle': '비밀번호 재설정',
+  'hudChrome.auth.forgotHint': '사용자 이름을 입력하면 등록된 이메일로 재설정 링크를 보내드립니다.',
+  'hudChrome.auth.forgotUsername': '사용자 이름',
+  'hudChrome.auth.forgotSubmit': '재설정 링크 보내기',
+  'hudChrome.auth.forgotSent':
+    '해당 사용자 이름의 계정에 등록된 이메일이 있으면 재설정 링크를 보냈습니다. 받은 편지함을 확인하세요.',
+  'hudChrome.auth.forgotBack': '로그인으로 돌아가기',
+  'hudChrome.auth.resetTitle': '새 비밀번호 설정',
+  'hudChrome.auth.resetNewPassword': '새 비밀번호',
+  'hudChrome.auth.resetConfirm': '새 비밀번호 확인',
+  'hudChrome.auth.resetSubmit': '비밀번호 업데이트',
+  'hudChrome.auth.resetDone': '비밀번호가 업데이트되었습니다. 이제 로그인할 수 있습니다.',
+  'hudChrome.auth.resetMismatch': '비밀번호가 일치하지 않습니다.',
+  'hudChrome.auth.resetErrInvalid':
+    '이 재설정 링크가 유효하지 않거나 만료되었습니다. 새 링크를 요청하세요.',
   // Guild roster last-seen (M16 non-Latin fill)
   'hudChrome.social.lastSeen': '마지막 접속: {when}',
   'hudChrome.social.lastSeenNever': '없음',
-  // Daily rewards (M16 non-Latin fill)
   'hudChrome.dailyRewards.title': '일일 보상',
   'hudChrome.dailyRewards.close': '일일 보상 닫기',
   'hudChrome.dailyRewards.loading': '일일 보상 불러오는 중...',
@@ -84,8 +186,14 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.dailyRewards.reason.under_minimum': '지갑이 최소 $20 USD WOC 기준에 미치지 못합니다.',
   'hudChrome.dailyRewards.reason.price_unavailable':
     'WOC 가격을 확인할 수 없어 보상이 일시적으로 잠겨 있습니다.',
+  'hudChrome.dailyRewards.reason.banned': '일일 보상 참여가 금지되었습니다. 사유: {reason}',
   'hudChrome.keybinds.discord': 'Discord',
   'hudChrome.spectate.banner': '{name} 관전 중',
+  'hudChrome.readyCheck.prompt': '{name} 님이 준비 확인을 시작했습니다. 준비되셨습니까?',
+  'hudChrome.readyCheck.ready': '준비 완료',
+  'hudChrome.readyCheck.notReady': '준비 안 됨',
+  'hudChrome.readyCheck.result':
+    '준비 확인: {ready}명 준비 완료, {notReady}명 준비 안 됨, {noResponse}명 무응답.',
   'hudChrome.loot.chestTitle': '상자',
   'hudChrome.itemTooltip.requiresLevel': '필요 레벨 {level}',
   'hudChrome.spellbook.addToBarAria': '{name}을(를) 행동 단축바에 추가',
@@ -115,6 +223,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.unitFrame.durationUnitHours': '시',
   'hudChrome.unitFrame.durationUnitDays': '일',
   'hudChrome.unitFrame.partyLabel': '내 파티',
+  'hudChrome.unitFrame.partyChip': '파티',
   'hudChrome.unitFrame.playerLabel': '내 캐릭터',
   'hudChrome.unitFrame.targetAnnounce': '대상: {name}',
   'hudChrome.unitFrame.targetLabel': '내 대상',
@@ -239,7 +348,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.interfaceModeTouch': '터치',
   'hudChrome.options.interfaceModeNote':
     '자동은 기기에 따라 데스크톱 또는 터치 조작을 선택합니다. 데스크톱을 선택하면 키보드와 마우스로 고정되며(키보드가 있는 태블릿 등에 유용), 터치를 선택하면 화면 조작이 됩니다.',
-  // Character-sheet stat tooltips (hudChrome.statInfo.*).
   'hudChrome.statInfo.fromYour': '당신의 {value} {stat}에서:',
   'hudChrome.statInfo.names.spellPower': '주문력',
   'hudChrome.statInfo.names.critRating': '치명타 등급',
@@ -325,6 +433,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.perf.labels.jitter': '지터',
   'hudChrome.perf.labels.predLead': '예측 리드',
   'hudChrome.perf.labels.snapshot': '스냅샷 전송률',
+  'hudChrome.perf.labels.serverTick': '서버 틱 속도',
   'hudChrome.perf.labels.connection': '연결',
   'hudChrome.perf.labels.drawCalls': '드로우 콜',
   'hudChrome.perf.labels.triangles': '삼각형',
@@ -387,6 +496,8 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.lockCursorOnRotate': '회전 중 커서 고정',
   'hudChrome.options.keybindHelpLockCursorOnRotate':
     '드래그하여 카메라를 회전하는 동안 마우스 커서를 창 안에 유지하여 화면 가장자리에 닿거나 다른 모니터로 이동하지 않도록 합니다. 자유로운 커서를 원하면 끄세요.',
+  'hudChrome.options.keybindModifierHint':
+    '팁: 조합 키를 지정할 수 있습니다. Shift, Ctrl 또는 Alt를 누른 채 키를 누르면 조합이 등록됩니다(예: Shift+1).',
   'hudChrome.options.showWalletOnCharacterScreen': '캐릭터 화면에 지갑 표시',
   'hudChrome.options.showWalletOnPlayerCard': '플레이어 카드에 지갑 표시',
   'hudChrome.options.showDevBadges': '개발자 배지 표시',
@@ -405,6 +516,10 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.landing.highContrastAria':
     '고대비 배경 전환: 움직이는 예고편을 꺼서 시작 화면 텍스트를 읽기 쉽게 유지합니다',
   'hudChrome.talents.defaultBuildName': '빌드 {n}',
+  'hudChrome.talents.choicesTab': '선택',
+  'hudChrome.talents.resetChoices': '선택 초기화',
+  'hudChrome.talents.tierLevel': '레벨 {n}',
+  'hudChrome.talents.tierLevelLabel': '레벨',
   'hudChrome.tips.joinChannels':
     '팁: /join world 또는 /join lfg를 입력하면 월드 전역의 플레이어와 대화할 수 있습니다.',
   'meta.builtOn': '{date} 빌드',
@@ -1027,6 +1142,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hud.core.mobileSocial': '소셜',
   'hud.core.mobileArena': '투기장',
   'hud.core.mobileMenu': '메뉴',
+  'hud.core.mobileSettings': '설정',
   'hud.core.mobileUse': '사용',
   'hud.core.mobileMeters': '미터',
   'hud.core.mobileMap': '지도',
@@ -1498,6 +1614,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'abilityUi.tooltip.offGlobalCooldown': '공용 재사용 대기시간 없음',
   'abilityUi.tooltip.friendlyTarget': '아군 대상',
   'abilityUi.tooltip.enemyTarget': '적 대상',
+  'abilityUi.tooltip.selfOnly': '자신에게만',
   'abilityUi.tooltip.damageRange': '{min}에서 {max}',
   'abilityUi.tooltip.finisherDamage': '기본 {base}, 연계 점수당 {perCombo}',
   'abilityUi.resources.mana': '마나',
@@ -1654,6 +1771,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'itemUi.vendor.buybackTitle': '되사기',
   'itemUi.vendor.buybackEmpty': '물품 없음',
   'itemUi.vendor.buybackAria': '{item}을(를) {price}에 되사기',
+  'itemUi.vendor.sellRolledWarning': '무작위 능력치는 되사기로 되돌릴 수 없습니다.',
   'itemUi.vendor.sellQuantityTitle': '{item} 판매',
   'itemUi.vendor.sellQuantityInput': '판매할 수량',
   'itemUi.vendor.sellQuantityConfirm': '판매',
@@ -1761,33 +1879,34 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'itemUi.lootRoll.greedAria': '{item} 탐욕',
   'itemUi.lootRoll.passAria': '{item} 포기',
   'itemUi.lootRoll.everyonePassed': '모두 {item}을(를) 포기했습니다.',
+  'itemUi.lootRoll.rolled': '{answered}/{total} 굴림 완료',
   'entities.abilities.heroic_strike.name': '약탈자의 일격',
   'entities.abilities.heroic_strike.description':
     '강력한 공격으로 근접 피해가 {damage}만큼 증가합니다. 다음 무기 공격 시 발동됩니다.',
   'entities.abilities.battle_shout.name': '강철의 외침',
-  'entities.abilities.battle_shout.description': '2분 동안 전투력이 20만큼 증가합니다.',
+  'entities.abilities.battle_shout.description': '2분 동안 전투력이 {buff}만큼 증가합니다.',
   'entities.abilities.commanding_shout.name': '북돋는 외침',
-  'entities.abilities.commanding_shout.description': '2분 동안 체력이 6만큼 증가합니다.',
+  'entities.abilities.commanding_shout.description': '2분 동안 체력이 {buff}만큼 증가합니다.',
   'entities.abilities.demoralizing_shout.name': '흉포한 울부짖음',
   'entities.abilities.demoralizing_shout.description':
-    '무시무시한 외침을 내질러 30초 동안 주위 모든 적의 전투력을 30만큼 감소시킵니다.',
+    '무시무시한 외침을 내질러 30초 동안 주위 모든 적의 전투력을 {buff}만큼 감소시킵니다.',
   'entities.abilities.charge.name': '쇄도',
   'entities.abilities.charge.description':
     '적에게 돌진하여 분노 9를 생성하고 1초 동안 기절시킵니다. 사거리 8-25yd.',
   'entities.abilities.rend.name': '깊은 상처',
   'entities.abilities.rend.description':
-    '대상을 상처 입혀 9초에 걸쳐 {damage}의 출혈 피해를 입힙니다.',
+    '대상을 상처 입혀 {duration}초에 걸쳐 {damage}의 출혈 피해를 입힙니다.',
   'entities.abilities.thunder_clap.name': '진동의 일격',
   'entities.abilities.thunder_clap.description':
     '주위 적에게 {damage}의 피해를 입히고 10초 동안 공격 속도를 10%만큼 늦춥니다.',
   'entities.abilities.hamstring.name': '절뚝이는 베기',
   'entities.abilities.hamstring.description':
-    '적에게 5의 피해를 입히고 15초 동안 이동 속도를 50%만큼 감소시킵니다.',
+    '적에게 {damage}의 피해를 입히고 15초 동안 이동 속도를 50%만큼 감소시킵니다.',
   'entities.abilities.bloodrage.name': '피의 대가',
   'entities.abilities.bloodrage.description': '생명력을 희생하여 분노 10을 생성합니다.',
   'entities.abilities.overpower.name': '붉은 손',
   'entities.abilities.overpower.description':
-    '무기 피해 +5를 즉시 입힙니다. 대상이 회피한 후에만 사용할 수 있습니다. 회피할 수 없습니다.',
+    '무기 피해에 {damage}를 더한 피해를 즉시 입힙니다. 대상이 회피한 후에만 사용할 수 있습니다. 회피할 수 없습니다.',
   'entities.abilities.execute.name': '이른 무덤',
   'entities.abilities.execute.description':
     '상처 입은 적을 끝내려 시도해 {damage}의 피해를 입힙니다. 생명력이 20% 미만인 적에게만 사용할 수 있습니다.',
@@ -1800,23 +1919,23 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '방어 전투 태세입니다. 위협 수준을 30% 더 생성하지만, 주고받는 피해가 10% 감소합니다. 다시 시전하면 태세를 해제합니다.',
   'entities.abilities.sunder_armor.name': '방어구 절단',
   'entities.abilities.sunder_armor.description':
-    '대상의 방어구를 가르고 적용마다 {damage}만큼 감소시킵니다. 최대 5번 중첩됩니다. 많은 위협 수준을 생성합니다.',
+    '대상의 방어구를 가르고 적용마다 {damage}%만큼 감소시킵니다. 최대 5번 중첩됩니다. 많은 위협 수준을 생성합니다.',
   'entities.abilities.taunt.name': '부추김',
   'entities.abilities.taunt.description':
     '대상을 도발합니다. 자신의 위협 수준이 대상이 가장 증오하는 적과 같아지며, 3초 동안 자신을 공격하게 만듭니다.',
   'entities.abilities.fireball.name': '잉걸 화살',
   'entities.abilities.rain_of_fire.name': '불의 비',
   'entities.abilities.rain_of_fire.description':
-    '지정한 지역에 불의 비를 내려 적을 불태우고 {damage}의 화염 피해를 입힙니다.',
+    '지정한 지역에 4초 동안 불의 비를 내려 매초 적에게 {damage}의 화염 피해를 입힙니다.',
   'entities.abilities.volley.name': '일제 사격',
   'entities.abilities.volley.description':
-    '지정한 지역에 화살을 쏟아부어 그 안의 적에게 {damage}의 피해를 입힙니다.',
+    '지정한 지역에 3초 동안 화살을 쏟아부어 그 안의 적에게 0.5초마다 {damage}의 피해를 입힙니다.',
   'entities.abilities.hurricane.name': '폭풍우',
   'entities.abilities.hurricane.description':
-    '지정한 지역에 폭풍우를 일으켜 적을 강타하고 {damage}의 자연 피해를 입힙니다.',
+    '지정한 지역에 6초 동안 폭풍우를 일으켜 매초 적에게 {damage}의 자연 피해를 입힙니다.',
   'entities.abilities.earthquake.name': '지진',
   'entities.abilities.earthquake.description':
-    '지정한 지역을 뒤흔들어 적을 강타하고 {damage}의 자연 피해를 입힙니다.',
+    '지정한 지역을 6초 동안 뒤흔들어 1.5초마다 적에게 {damage}의 자연 피해를 입힙니다.',
   'entities.abilities.flamestrike.name': '화염 폭발',
   'entities.abilities.flamestrike.description':
     '지정한 지역에 화염 폭발을 일으켜 폭발 범위 안의 적에게 {damage}의 화염 피해를 입힙니다.',
@@ -1824,9 +1943,9 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '불덩이를 날려 {damage}의 화염 피해와 추가 지속 피해를 입힙니다.',
   'entities.abilities.frost_armor.name': '서리 망토',
   'entities.abilities.frost_armor.description':
-    '자신을 냉기로 감싸 30분 동안 방어도를 30만큼 증가시킵니다.',
+    '자신을 냉기로 감싸 30분 동안 방어도를 {buff}만큼 증가시킵니다.',
   'entities.abilities.arcane_intellect.name': '에테르 통찰',
-  'entities.abilities.arcane_intellect.description': '30분 동안 지능이 2만큼 증가합니다.',
+  'entities.abilities.arcane_intellect.description': '30분 동안 지능이 {buff}만큼 증가합니다.',
   'entities.abilities.frostbolt.name': '서리 창',
   'entities.abilities.frostbolt.description':
     '냉기의 화살을 발사해 {damage}의 냉기 피해를 입히고 이동 속도를 40%만큼 늦춥니다.',
@@ -1844,7 +1963,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '적에게 에테르 화살을 발사하여 3초 동안 매초 {damage}의 비전 피해를 입힙니다.',
   'entities.abilities.polymorph.name': '홀리기',
   'entities.abilities.polymorph.description':
-    '적을 최대 15초 동안 두꺼비로 변이시킵니다. 두꺼비는 돌아다니며 빠르게 회복합니다. 피해를 받으면 효과가 해제됩니다. 야수와 인간형에게만 사용할 수 있습니다.',
+    '적을 최대 {duration}초 동안 두꺼비로 변이시킵니다. 두꺼비는 돌아다니며 빠르게 회복합니다. 피해를 받으면 효과가 해제됩니다. 야수와 인간형에게만 사용할 수 있습니다.',
   'entities.abilities.frost_nova.name': '얼음 속박',
   'entities.abilities.frost_nova.description':
     '주위 모든 적을 최대 8초 동안 제자리에 얼리고 {damage}의 냉기 피해를 입힙니다.',
@@ -1859,18 +1978,18 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '거대한 불덩이를 던져 {damage}의 화염 피해와 추가 지속 피해를 입힙니다.',
   'entities.abilities.ice_barrier.name': '서리 장막',
   'entities.abilities.ice_barrier.description':
-    '얼음으로 자신을 보호해 60초 동안 130의 피해를 흡수합니다.',
+    '얼음으로 자신을 보호해 60초 동안 {damage}의 피해를 흡수합니다.',
   'entities.abilities.sinister_strike.name': '사악한 베기',
   'entities.abilities.sinister_strike.description':
     '즉시 무기 피해에 {damage}를 더한 피해를 입힙니다. 연계 점수 1점을 얻습니다.',
   'entities.abilities.eviscerate.name': '영면',
-  'entities.abilities.eviscerate.description': '연계 점수당 피해를 입히는 결정타입니다.',
+  'entities.abilities.eviscerate.description': '결정타로 {damage}의 피해를 입힙니다.',
   'entities.abilities.backstab.name': '비겁한 찌르기',
   'entities.abilities.backstab.description':
     '대상을 등 뒤에서 찔러 무기 피해의 150%에 {damage}를 더한 피해를 입힙니다. 대상 뒤에 있어야 합니다. 단검이 필요합니다. 연계 점수 1점을 얻습니다.',
   'entities.abilities.gouge.name': '눈 찌르기',
   'entities.abilities.gouge.description':
-    '대상을 가격해 4초 동안 행동 불가 상태로 만듭니다. 피해를 받으면 효과가 해제됩니다. 연계 점수 1점을 얻습니다.',
+    '대상을 가격해 {damage}의 피해를 입히고 4초 동안 행동 불가 상태로 만듭니다. 피해를 받으면 효과가 해제됩니다. 연계 점수 1점을 얻습니다.',
   'entities.abilities.evasion.name': '유령 걸음',
   'entities.abilities.evasion.description': '15초 동안 회피 확률이 50%만큼 증가합니다.',
   'entities.abilities.slice_and_dice.name': '살수의 박자',
@@ -1891,19 +2010,19 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.adrenaline_rush.description': '피가 끓어올라 즉시 기력 60을 회복합니다.',
   'entities.abilities.garrote.name': '철사 목조르기',
   'entities.abilities.garrote.description':
-    '적의 목을 졸라 즉시 피해를 입히고 18초에 걸쳐 {damage}의 출혈 피해를 입힙니다. 은신 상태여야 합니다. 연계 점수 1점을 얻습니다.',
+    '적의 목을 졸라 즉시 {damage}의 피해를 입히고 18초에 걸쳐 {overTime}의 출혈 피해를 입힙니다. 은신 상태여야 합니다. 연계 점수 1점을 얻습니다.',
   'entities.abilities.cheap_shot.name': '명치 가격',
   'entities.abilities.cheap_shot.description':
-    '대상을 가격해 4초 동안 기절시킵니다. 은신 상태여야 합니다. 연계 점수 2점을 얻습니다.',
+    '대상을 가격해 {damage}의 피해를 입히고 4초 동안 기절시킵니다. 은신 상태여야 합니다. 연계 점수 2점을 얻습니다.',
   'entities.abilities.sap.name': '관자놀이 가격',
   'entities.abilities.sap.description':
     '대상을 8초 동안 무력화합니다. 은신 상태이며 전투 중이 아니어야 합니다. 피해를 받으면 효과가 해제됩니다.',
   'entities.abilities.crippling_poison.name': '둔중한 독',
   'entities.abilities.crippling_poison.description':
-    '대상을 둔중한 독으로 가격해 {damage}의 자연 피해를 입히고 12초 동안 이동 속도를 50%만큼 감소시킵니다.',
+    '둔중한 독으로 대상을 가격해 {damage}의 자연 피해를 입히고 12초 동안 이동 속도를 50%만큼 감소시킵니다.',
   'entities.abilities.expose_armor.name': '방어구 돌파',
   'entities.abilities.expose_armor.description':
-    '대상의 약점을 드러내 방어도를 감소시키는 결정타입니다. 연계 점수를 많이 소모할수록 더 깊게 베어 들어갑니다.',
+    '대상의 약점을 드러내 30초 동안 방어도를 {damage}만큼 감소시키는 결정타입니다.',
   'entities.abilities.rupture.name': '과다출혈',
   'entities.abilities.rupture.description':
     '대상에게 상처를 입혀 16초에 걸쳐 {damage}의 출혈 피해를 입히는 결정타입니다.',
@@ -1921,25 +2040,25 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '대상의 눈을 멀게 해 8초 동안 방향을 잃고 헤매게 만듭니다. 피해를 받으면 효과가 해제됩니다.',
   'entities.abilities.seal_of_righteousness.name': '맹세의 낙인',
   'entities.abilities.seal_of_righteousness.description':
-    '30초 동안 신성한 힘으로 가득 차 근접 공격마다 4의 추가 신성 피해를 입힙니다. 선고로 해방할 수 있습니다.',
+    '30초 동안 신성한 힘으로 가득 차 근접 공격마다 {damage}의 추가 신성 피해를 입힙니다. 선고로 해방할 수 있습니다.',
   'entities.abilities.holy_light.name': '치유의 빛',
   'entities.abilities.holy_light.description': '아군 대상의 생명력을 {damage}만큼 회복시킵니다.',
   'entities.abilities.devotion_aura.name': '굳건함의 오라',
-  'entities.abilities.devotion_aura.description': '30분 동안 방어도가 40만큼 증가합니다.',
+  'entities.abilities.devotion_aura.description': '30분 동안 방어도가 {buff}만큼 증가합니다.',
   'entities.abilities.judgement.name': '선고',
   'entities.abilities.judgement.description':
     '활성화된 문장을 적에게 해방하고 소모하여 축적된 신성 피해를 입힙니다.',
   'entities.abilities.blessing_of_might.name': '강철의 맹세',
   'entities.abilities.blessing_of_might.description':
-    '아군 대상에게 축복을 내려 5분 동안 전투력을 15만큼 증가시킵니다.',
+    '아군 대상에게 축복을 내려 5분 동안 전투력을 {buff}만큼 증가시킵니다.',
   'entities.abilities.divine_protection.name': '신념의 결계',
   'entities.abilities.divine_protection.description':
-    '보호의 결계가 10초 동안 50의 피해를 흡수합니다.',
+    '보호의 결계가 10초 동안 {damage}의 피해를 흡수합니다.',
   'entities.abilities.hammer_of_justice.name': '분쇄의 망치',
-  'entities.abilities.hammer_of_justice.description': '대상을 3초 동안 기절시킵니다.',
+  'entities.abilities.hammer_of_justice.description': '대상을 {duration}초 동안 기절시킵니다.',
   'entities.abilities.lay_on_hands.name': '마지막 의식',
   'entities.abilities.lay_on_hands.description':
-    '막대한 치유의 힘으로 생명력 250을 회복시킵니다. 재사용 대기시간 10분.',
+    '막대한 치유의 힘으로 생명력을 {damage}만큼 회복시킵니다. 재사용 대기시간 10분.',
   'entities.abilities.flash_of_light.name': '빛의 치유',
   'entities.abilities.flash_of_light.description':
     '빠르고 효율적인 빛줄기로 아군 대상의 생명력을 {damage}만큼 회복시킵니다.',
@@ -1948,7 +2067,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '신성한 분노로 악을 몰아내 {damage}의 신성 피해를 입힙니다.',
   'entities.abilities.consecration.name': '신성한 땅',
   'entities.abilities.consecration.description':
-    '발밑의 땅을 신성화하여 주위 적에게 {damage}의 신성 피해를 입힙니다.',
+    '발밑의 땅을 신성화하여 10초 동안 2초마다 주위 적에게 {damage}의 신성 피해를 입힙니다.',
   'entities.abilities.righteous_fury.name': '불타는 맹세',
   'entities.abilities.righteous_fury.description':
     '30분 동안 자신의 신성 피해가 생성하는 위협 수준이 60%만큼 증가합니다. 방어 성기사의 핵심입니다.',
@@ -1962,10 +2081,10 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.dismiss_pet.description': '소환수를 야생으로 돌려보냅니다.',
   'entities.abilities.raptor_strike.name': '내장 가르기',
   'entities.abilities.raptor_strike.description':
-    '강력한 근접 공격으로 피해가 5만큼 증가합니다. 다음 무기 공격 시 발동됩니다.',
+    '강력한 근접 공격으로 피해가 {damage}만큼 증가합니다. 다음 무기 공격 시 발동됩니다.',
   'entities.abilities.aspect_of_the_hawk.name': '새매의 상',
   'entities.abilities.aspect_of_the_hawk.description':
-    '새매의 상을 취해 30분 동안 전투력이 20만큼 증가합니다.',
+    '새매의 상을 취해 30분 동안 전투력이 {buff}만큼 증가합니다.',
   'entities.abilities.serpent_sting.name': '독 미늘',
   'entities.abilities.serpent_sting.description':
     '대상을 쏘아 15초에 걸쳐 {damage}의 자연 피해를 입힙니다.',
@@ -1973,13 +2092,13 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.arcane_shot.description': '즉시 사격하여 {damage}의 비전 피해를 입힙니다.',
   'entities.abilities.concussive_shot.name': '뒤흔드는 사격',
   'entities.abilities.concussive_shot.description':
-    '대상을 멍하게 만들어 4초 동안 이동 속도를 50%만큼 감소시킵니다.',
+    '대상을 멍하게 만들어 {damage}의 피해를 입히고 4초 동안 이동 속도를 50%만큼 감소시킵니다.',
   'entities.abilities.mongoose_bite.name': '반격의 송곳니',
   'entities.abilities.mongoose_bite.description':
-    '대상이 회피한 후 반격하여 무기 피해에 12를 더한 피해를 입힙니다. 회피할 수 없습니다.',
+    '대상이 회피한 후 반격하여 무기 피해에 {damage}를 더한 피해를 입힙니다. 회피할 수 없습니다.',
   'entities.abilities.wing_clip.name': '족쇄 베기',
   'entities.abilities.wing_clip.description':
-    '상처를 내어 10초 동안 적의 이동 속도를 40%만큼 감소시킵니다.',
+    '상처를 내어 {damage}의 피해를 입히고 10초 동안 적의 이동 속도를 40%만큼 감소시킵니다.',
   'entities.abilities.aspect_of_the_monkey.name': '담비의 상',
   'entities.abilities.aspect_of_the_monkey.description':
     '담비의 상을 취해 30분 동안 회피 확률이 8%만큼 증가합니다.',
@@ -1997,13 +2116,13 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.lesser_heal.description': '아군 대상의 생명력을 {damage}만큼 회복시킵니다.',
   'entities.abilities.power_word_fortitude.name': '결의의 연도',
   'entities.abilities.power_word_fortitude.description':
-    '30분 동안 대상의 체력이 3만큼 증가합니다.',
+    '30분 동안 대상의 체력이 {buff}만큼 증가합니다.',
   'entities.abilities.shadow_word_pain.name': '부패의 만가',
   'entities.abilities.shadow_word_pain.description':
     '어둠의 말로 18초에 걸쳐 {damage}의 암흑 피해를 입힙니다.',
   'entities.abilities.power_word_shield.name': '수호의 성가',
   'entities.abilities.power_word_shield.description':
-    '대상을 보호하여 30초 동안 48의 피해를 흡수합니다.',
+    '대상을 보호하여 30초 동안 {damage}의 피해를 흡수합니다.',
   'entities.abilities.renew.name': '지속되는 은총',
   'entities.abilities.renew.description': '15초에 걸쳐 대상의 생명력을 {damage}만큼 회복시킵니다.',
   'entities.abilities.mind_blast.name': '정신 파열',
@@ -2023,7 +2142,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '번개 화살을 던져 {damage}의 자연 피해를 입힙니다.',
   'entities.abilities.rockbiter_weapon.name': '바위결속 무기',
   'entities.abilities.rockbiter_weapon.description':
-    '바위의 분노로 무기를 강화합니다. 5분 동안 매 공격마다 5의 추가 피해를 입힙니다.',
+    '바위의 분노로 무기를 강화합니다. 5분 동안 매 공격마다 {damage}의 추가 피해를 입힙니다.',
   'entities.abilities.healing_wave.name': '치유의 물결',
   'entities.abilities.healing_wave.description': '아군 대상의 생명력을 {damage}만큼 회복시킵니다.',
   'entities.abilities.earth_shock.name': '대지의 충격',
@@ -2031,19 +2150,19 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '대상을 즉시 강타해 {damage}의 자연 피해를 입힙니다.',
   'entities.abilities.lightning_shield.name': '천둥 결계',
   'entities.abilities.lightning_shield.description':
-    '자신을 번개로 감싸 근접 공격자가 13의 자연 피해를 받게 합니다.',
+    '자신을 번개로 감싸 근접 공격자가 {buff}의 자연 피해를 받게 합니다. 최대 3회 충전되며 5초에 한 번만 발동합니다.',
   'entities.abilities.flame_shock.name': '잉걸 충격',
   'entities.abilities.flame_shock.description':
-    '대상을 불태워 25의 피해를 입히고 12초에 걸쳐 추가로 {damage}의 피해를 입힙니다.',
+    '대상을 불태워 {damage}의 피해를 입히고 12초에 걸쳐 추가로 {overTime}의 피해를 입힙니다.',
   'entities.abilities.flametongue_weapon.name': '화염낙인 무기',
   'entities.abilities.flametongue_weapon.description':
-    '원소의 불꽃으로 무기를 강화합니다. 5분 동안 매 공격마다 8의 추가 화염 피해를 입힙니다.',
+    '원소의 불꽃으로 무기를 강화합니다. 5분 동안 매 공격마다 {damage}의 추가 화염 피해를 입힙니다.',
   'entities.abilities.frost_shock.name': '서리 충격',
   'entities.abilities.frost_shock.description':
     '대상을 즉시 냉기로 강타해 {damage}의 냉기 피해를 입히고 8초 동안 이동 속도를 50%만큼 감소시킵니다.',
   'entities.abilities.frostbrand_weapon.name': '서리결속 무기',
   'entities.abilities.frostbrand_weapon.description':
-    '살을 에는 냉기로 무기를 강화합니다. 5분 동안 매 공격마다 8의 추가 피해를 입힙니다.',
+    '살을 에는 냉기로 무기를 강화합니다. 5분 동안 매 공격마다 {damage}의 추가 피해를 입힙니다.',
   'entities.abilities.ghost_wolf.name': '그림자늑대',
   'entities.abilities.ghost_wolf.description':
     '그림자늑대로 변신하여 10분 동안 이동 속도가 40%만큼 증가합니다.',
@@ -2055,15 +2174,15 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '적에게 어둠의 화살을 보내 {damage}의 암흑 피해를 입힙니다.',
   'entities.abilities.demon_skin.name': '마귀 가죽',
   'entities.abilities.demon_skin.description':
-    '악마의 피부가 30분 동안 방어도를 30만큼 증가시킵니다.',
+    '악마의 피부가 30분 동안 방어도를 {buff}만큼 증가시킵니다.',
   'entities.abilities.immolate.name': '불타는 계약',
   'entities.abilities.immolate.description':
-    '적을 불태워 11의 화염 피해를 입히고 15초에 걸쳐 추가로 {damage}의 피해를 입힙니다.',
+    '적을 불태워 {damage}의 화염 피해를 입히고 15초에 걸쳐 추가로 {overTime}의 피해를 입힙니다.',
   'entities.abilities.corruption.name': '검은 부패',
   'entities.abilities.corruption.description':
     '대상을 부패시켜 18초에 걸쳐 {damage}의 암흑 피해를 입힙니다.',
   'entities.abilities.life_tap.name': '가혹한 거래',
-  'entities.abilities.life_tap.description': '생명력 30을 마나 30으로 전환합니다.',
+  'entities.abilities.life_tap.description': '생명력 {damage}을 마나 {damage}으로 전환합니다.',
   'entities.abilities.curse_of_agony.name': '고뇌의 저주',
   'entities.abilities.curse_of_agony.description':
     '대상에게 고통의 저주를 걸어 24초에 걸쳐 {damage}의 암흑 피해를 입힙니다.',
@@ -2086,7 +2205,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.healing_touch.description': '아군 대상의 생명력을 {damage}만큼 회복시킵니다.',
   'entities.abilities.mark_of_the_wild.name': '야생의 수호',
   'entities.abilities.mark_of_the_wild.description':
-    '아군 대상에게 야생의 수호를 걸어 30분 동안 방어도를 25만큼 증가시킵니다.',
+    '아군 대상에게 야생의 수호를 걸어 30분 동안 방어도를 {buff}만큼 증가시킵니다.',
   'entities.abilities.moonfire.name': '달빛 폭풍',
   'entities.abilities.moonfire.description':
     '달빛불로 적을 태워 {damage}의 비전 피해와 지속 피해를 입힙니다.',
@@ -2095,12 +2214,12 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '12초에 걸쳐 대상의 생명력을 {damage}만큼 회복시킵니다.',
   'entities.abilities.thorns.name': '가시 수호',
   'entities.abilities.thorns.description':
-    '대상에게 가시가 돋아 근접 공격자가 3의 자연 피해를 받습니다.',
+    '대상에게 가시가 돋아 근접 공격자가 {buff}의 자연 피해를 받습니다.',
   'entities.abilities.entangling_roots.name': '옥죄는 뿌리',
   'entities.abilities.entangling_roots.description': '대상을 최대 12초 동안 제자리에 묶습니다.',
   'entities.abilities.bear_form.name': '큰곰 변신',
   'entities.abilities.bear_form.description':
-    '곰으로 변신합니다. 방어도 +65%, 전투력 +15, 공격이 분노와 30% 더 많은 위협 수준을 생성합니다. 다시 시전하면 시전자 형태로 돌아갑니다.',
+    '곰으로 변신합니다. 방어도 +90%, 전투력이 크게 증가하고, 공격이 분노와 30% 더 많은 위협 수준을 생성합니다. 다시 시전하면 시전자 형태로 돌아갑니다.',
   'entities.abilities.maul.name': '뼈 분쇄',
   'entities.abilities.maul.description':
     '근접 피해를 {damage}만큼 증가시키고 많은 위협 수준을 생성하는 난폭한 공격입니다. 다음 무기 공격 시 발동됩니다. 큰곰 변신 전용.',
@@ -2115,7 +2234,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '적을 할퀴어 무기 피해에 {damage}를 더한 피해를 입힙니다. 연계 점수 1점을 얻습니다. 늑대 변신 전용.',
   'entities.abilities.ferocious_bite.name': '유혈 물어뜯기',
   'entities.abilities.ferocious_bite.description':
-    '연계 점수당 피해를 입히는 결정타입니다. 늑대 변신 전용.',
+    '결정타로 {damage}의 피해를 입힙니다. 늑대 변신 전용.',
   'entities.abilities.swipe.name': '휩쓰는 발톱',
   'entities.abilities.swipe.description':
     '주위 적을 휘둘러 {damage}의 피해를 입힙니다. 추가 위협 수준을 생성합니다. 큰곰 변신 전용.',
@@ -2136,7 +2255,8 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.bash.name': '뇌진탕',
   'entities.abilities.bash.description': '대상을 2초 동안 기절시킵니다. 큰곰 변신 전용.',
   'entities.abilities.faerie_fire.name': '마녀불빛',
-  'entities.abilities.faerie_fire.description': '대상의 방어도를 40초 동안 35만큼 감소시킵니다.',
+  'entities.abilities.faerie_fire.description':
+    '대상의 방어도를 40초 동안 {damage}%만큼 감소시킵니다. 방어구 절단과 중첩되지 않습니다.',
   'entities.abilities.hibernate.name': '깊은 잠',
   'entities.abilities.hibernate.description':
     '대상을 최대 8초 동안 깊은 잠에 빠뜨립니다. 피해를 입으면 깨어납니다.',
@@ -2154,16 +2274,16 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '전투력을 6초 동안 40만큼 증가시킵니다. 늑대 변신 전용.',
   'entities.abilities.rip.name': '찢기',
   'entities.abilities.rip.description':
-    '12초에 걸쳐 출혈 피해를 입히는 결정타입니다. 연계 점수를 소모합니다. 늑대 변신 전용.',
+    '12초에 걸쳐 {damage}의 출혈 피해를 입히는 결정타입니다. 연계 점수를 소모합니다. 늑대 변신 전용.',
   'entities.abilities.mortal_strike.name': '불구의 일격',
   'entities.abilities.mortal_strike.description':
     '잔혹한 일격으로 무기 피해에 {damage}의 피해를 더합니다. (무기 특화 대표 기술)',
   'entities.abilities.bloodthirst.name': '사혈',
   'entities.abilities.bloodthirst.description':
-    '피의 광란으로 즉시 공격하여 {damage}의 피해를 줍니다. (분노 특화 대표 기술)',
+    '피의 광란으로 즉시 공격하여 무기 피해의 60%에 {damage}를 더한 피해를 줍니다. (분노 특화 대표 기술)',
   'entities.abilities.shield_slam.name': '방패 강타',
   'entities.abilities.shield_slam.description':
-    '방패로 대상을 강타해 {damage}의 피해를 주고 막대한 위협을 생성합니다. (방어 특화 대표 기술)',
+    '방패로 대상을 강타해 무기 피해의 50%에 {damage}를 더한 피해를 주고 막대한 위협을 생성합니다. (방어 특화 대표 기술)',
   'entities.abilities.whirlwind.name': '칼날 회오리',
   'entities.abilities.whirlwind.description':
     '치명적인 호를 그리며 돌아 주변 모든 적에게 {damage}의 피해를 줍니다. (분노 특성)',
@@ -2274,6 +2394,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.items.webwood_silk.name': '흑거미줄 비단샘',
   'entities.items.supply_crate.name': '도난당한 보급 상자',
   'entities.items.greyjaw_fang.name': '늙은 그레이죠의 송곳니',
+  'entities.items.chunk_of_ore.name': '광석 조각',
   'entities.items.weathered_ledger_page.name': '풍화된 장부 페이지',
   'entities.items.morthen_grimoire.name': '모르덴의 마법서',
   'entities.items.wolf_fang.name': '갈라진 늑대 송곳니',
@@ -2288,6 +2409,9 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.items.tallow_candle.name': '기름진 수지 덩어리',
   'entities.items.spider_leg.name': '꿈틀대는 거미 다리',
   'entities.items.bone_fragments.name': '뼈 조각',
+  'entities.items.arcane_dust.name': '비전 가루',
+  'entities.items.arcane_essence.name': '비전 정수',
+  'entities.items.arcane_shard.name': '비전 파편',
   'entities.items.linen_scrap.name': '아마포 조각',
   'entities.items.fen_muster_order.name': '펜브리지 소집 명령서',
   'entities.items.mire_prowler_pelt.name': '수렁 배회자 가죽',
@@ -2496,6 +2620,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.gravecaller_cultist.name': '무덤부름 교단원',
   'entities.mobs.gravecaller_summoner.name': '무덤부름 소환사',
   'entities.mobs.deacon_voss.name': '부제 보스',
+  'entities.mobs.training_dummy.name': '훈련용 허수아비',
   'entities.mobs.ridge_stalker.name': '산등성이 추적자',
   'entities.mobs.deeprock_kobold.name': '깊은바위 굴꾼',
   'entities.mobs.thornpeak_ogre.name': '쏜피크 오우거',
@@ -2649,6 +2774,12 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.tidewatcher_ondrel.title': '조수지기',
   'entities.npcs.tidewatcher_ondrel.greeting':
     '이 호수는 달빛을 마시고, {className}, 익사한 자들을 되돌려 보낸다네. 나는 서른 밤 동안 저 관문을 지켜보았지 — 그리고 오늘 밤, 마침내 그것이 열렸네.',
+  'entities.quests.q_prof_intro.title': '검 말고도 할 수 있는 일',
+  'entities.quests.q_prof_intro.text':
+    '이스트브룩의 모든 사람은 검 말고도 생업이 있다네, {playerName}. 마을 주변에 광맥이 흩어져 있지. 곡괭이를 휘둘러 광석 5덩이를 가져다 주게. 직접 캐야 하네, 내가 다 구분할 수 있으니까.',
+  'entities.quests.q_prof_intro.completion':
+    '봤나? 가방엔 광석, 손엔 굳은살이지. 길을 다니며 채광, 벌목, 약초 채집을 계속해 보게. 마을에 돌아오면 시장 옆의 마을 집중 게시판과 근처 제작대도 눈여겨보고. 원한다면 이 모든 일로 떳떳하게 생계를 꾸릴 수 있다네.',
+  'entities.quests.q_prof_intro.objectives.0.label': '광석 조각',
   'entities.quests.q_wolves.title': '문 앞의 늑대들',
   'entities.quests.q_wolves.text':
     '숲늑대들이 북쪽 길의 여행자들을 물어뜯고 있습니다, {playerName}. 8마리를 처치해 이스트브룩이 숨 돌리게 해 주십시오.',
@@ -3304,7 +3435,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'news.prerelease': '사전 출시',
   'news.viewOnGithub': 'GitHub에서 보기',
   'wiki.cta': '위키 둘러보기',
-  // --- qol-changes: character profile, attack-move, login/create labels ---
   'character.portraitAlt': '{name}의 초상화',
   'character.viewProfile': '프로필 보기',
   'character.profile': '프로필',
@@ -3319,7 +3449,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'auth.chromaOption': '색상 {n}',
   'auth.noAccountPrompt': '처음이신가요?',
   'auth.haveAccountPrompt': '이미 계정이 있으신가요?',
-
   'entities.items.conjured_bread.name': '마력의 귀리빵',
   'entities.items.conjured_bread2.name': '마력의 검은 빵',
   'entities.items.conjured_bread3.name': '마력의 꿀과자',
@@ -3380,7 +3509,12 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.items.elderwood_axe.name': '고목 도끼',
   'entities.items.goldleaf_sickle.name': '금엽 낫',
   'entities.items.sunpetal_sickle.name': '태양꽃잎 낫',
-  // v0.10.0 release fill (Fiesta / skin-select / NPC voices / chat channels / Brightwood Glade)
+  'entities.items.thorium_ore.name': '토륨 광석',
+  'entities.items.arcanite_bar.name': '비전 주괴',
+  'entities.items.ashwood_log.name': '잿빛나무 통나무',
+  'entities.items.elderwood_log.name': '고대 딱총나무 통나무',
+  'entities.items.goldleaf_herb.name': '금빛잎 약초',
+  'entities.items.sunpetal_herb.name': '태양꽃잎 약초',
   'hud.core.chatChannels.add': '채팅 채널 추가',
   'hud.core.chatChannels.addTitle': '채널 추가',
   'hud.core.chatChannels.close': '{channel} 탭 닫기',
@@ -3569,7 +3703,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.meters.seconds': '{s}초',
   'hudChrome.mobile.actionPageToggle': '행동 페이지 전환',
   'hudChrome.mobile.actionRing': '전투 행동',
-  'hudChrome.mobile.autorun': '자동 달리기',
   'hudChrome.mobile.haptics': '진동',
   'hudChrome.mobile.hapticsOff': '진동 꺼짐',
   'hudChrome.mobile.hotbarPage': '스킬',
@@ -3581,6 +3714,8 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mobile.targetCycle': '대상 전환',
   'hudChrome.mobile.targetCycleShort': '대상',
   'hudChrome.mobile.toggleHaptics': '진동 전환',
+  'hudChrome.mobile.showMenuButtons': '메뉴 버튼 표시',
+  'hudChrome.mobile.hideMenuButtons': '메뉴 버튼 숨기기',
   'hudChrome.rest.resting': '휴식 중',
   'hudChrome.swing.ready': '공격',
   'hudChrome.swing.seconds': '{seconds}초',
@@ -3642,7 +3777,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.controller.menuAction': '게임 메뉴',
   'hudChrome.controller.help':
     '왼쪽 스틱으로 이동, 오른쪽 스틱으로 시점 조작. 창을 열면 화면 포인터를 사용할 수 있습니다.',
-  // New-adventurer tutorial (PR #729)
   'hud.tutorial.title': '새내기 모험가',
   'hud.tutorial.stepLabel': '{total}단계 중 {current}단계',
   'hud.tutorial.skip': '튜토리얼 건너뛰기',
@@ -3789,11 +3923,9 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.account.exportBtn': '내 데이터 다운로드',
   'hudChrome.account.exportDone': '데이터가 다운로드되었습니다. 확인 메일을 보내드렸습니다.',
   'hudChrome.account.exportFailed': '데이터를 내보낼 수 없습니다. 잠시 후 다시 시도하세요.',
-  // On-screen quest tracker (hudChrome.questTracker.*): collapsed count badge + header toggle hover hint.
   'hudChrome.questTracker.count': '({count})',
   'hudChrome.questTracker.collapseHint': '퀘스트 추적기 접기',
   'hudChrome.questTracker.expandHint': '퀘스트 추적기 펼치기',
-  // Modular bag filtering controls (hudChrome.bags.*).
   'hudChrome.bags.cannotDestroy': '이 아이템은 파괴할 수 없습니다.',
   'hudChrome.bags.rightClickDestroy': '마우스 오른쪽 버튼으로 파괴',
   'hudChrome.bags.filterGroupAria': '가방을 분류별로 필터링',
@@ -3814,7 +3946,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.bags.backpack': '배낭',
   'hudChrome.bags.socketEmpty': '빈 가방 칸',
   'hudChrome.bags.unequipHint': '클릭하여 이 가방을 해제',
-  // Guide (/guide) localization.
   'guide.brand': 'World of ClaudeCraft',
   'guide.brandShort': 'ClaudeCraft',
   'guide.tagline': '브라우저에서 무료로 즐기는 클래식 스타일 MMO입니다.',
@@ -4199,7 +4330,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'guide.notFound.title': '해당 페이지를 찾을 수 없습니다',
   'guide.notFound.body': '찾으시는 페이지가 존재하지 않거나 이동되었을 수 있습니다.',
   'guide.notFound.home': '개요로 돌아가기',
-  // Guide (/guide) localization.
   'guide.bestiary.heading': '몬스터 도감',
   'guide.bestiary.intro':
     '세계의 생명체들을 종족별로 묶었습니다. 이들은 야외에서 마주치는 적입니다. 가장 치명적인 것들은 도감에 오르지 않은 채, 던전 문 너머에서 기다립니다.',
@@ -4526,7 +4656,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '남쪽에서 북쪽으로 이어지는 세 지역은 각각 레벨이 한 단계씩 높아집니다. 퀘스트 길을 따라가면 땅이 당신을 골짜기에서 봉우리까지 이끌어 줍니다.',
   'guide.worldPage.places': '주요 명소',
   'guide.worldPage.residents': '만나게 될 이들',
-  // guide.* enrichment fill (lore, gear, social, stats, economy, progression)
   'guide.arenaPage.powerupsBody':
     '빛나는 구슬이 전투 도중 투기장 안으로 떨어지기도 하며, 먼저 닿는 사람이 임자입니다. 일부러 과장되게 만들어졌고 효과는 잠깐뿐입니다. 눈이 멀 듯한 속도를 주는 스피드 데몬, 굼뜬 거인으로 부풀어 오르는 콜로서스, 저중력으로 통통 튀어 오르게 하는 문 부츠, 그리고 분노가 한순간에 폭발하는 버서커가 있습니다.',
   'guide.arenaPage.powerupsTitle': '원형 안의 강화 효과',
@@ -4882,7 +5011,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'guide.worldPage.gladeTitle': '고요한 한구석: 브라이트우드 숲',
   'guide.worldPage.gladeBody':
     '계곡의 모든 이야기가 죽은 자들에 관한 것은 아닙니다. 북쪽에는 브라이트우드 숲이라 불리는 햇살 드는 숲이 있어, 가지 아래로 어른거리는 빛과 조용한 길과 함께 더 부드러운 고유한 리듬을 지킵니다. 당신이 따라가는 흔적에 대한 차분한 대비이며, 길이 잠시 여유를 줄 때 둘러볼 만한 곳입니다.',
-  // APM telemetry label from release/v0.14.0
   'hudChrome.perf.labels.apm': 'APM',
   'entities.zones.eastbrook_vale.pois.9.label': '브라이트우드 숲',
   'entities.items.reliquary_plate_chest.name': '성물실 수호 갑옷',
@@ -5164,6 +5292,13 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraEffect.dodgeReduce': '회피 확률을 {pct}% 감소시킵니다',
   'hudChrome.auraEffect.armorFlat': '방어도를 {value} 감소시킵니다',
   'hudChrome.auraEffect.armorFlatStacks': '방어도를 {value} 감소시킵니다 ({stacks}중첩)',
+  'hudChrome.auraEffect.increasePct.ap': '공격력을 {pct}% 증가시킵니다',
+  'hudChrome.auraEffect.increasePct.armor': '방어도를 {pct}% 증가시킵니다',
+  'hudChrome.auraEffect.increasePct.int': '지능을 {pct}% 증가시킵니다',
+  'hudChrome.auraEffect.increasePct.sta': '체력을 {pct}% 증가시킵니다',
+  'hudChrome.auraEffect.increasePct.allStats': '모든 능력치를 {pct}% 증가시킵니다',
+  'hudChrome.auraEffect.armorPct': '방어도를 {pct}% 감소시킵니다',
+  'hudChrome.auraEffect.armorPctStacks': '방어도를 {pct}% 감소시킵니다 ({stacks}중첩)',
   'hudChrome.auraEffect.physVuln': '받는 물리 피해를 {pct}% 증가시킵니다',
   'hudChrome.auraEffect.mortalWound': '받는 치유량을 {pct}% 감소시킵니다',
   'hudChrome.auraEffect.vulnerability': '받는 피해를 {pct}% 증가시킵니다',
@@ -5241,6 +5376,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.wyrmshadow.bonus3': '민첩이 15, 치명타 확률이 2% 증가합니다.',
   'entities.itemSets.wyrmshadow.bonus4':
     '무기 치명타 적중 시 50% 확률로 "송곳니 질주"가 발동하여 공격 속도가 25% 증가합니다. 8초 동안 지속됩니다.',
+  'hudChrome.itemSoulbound': '귀속',
   'hudChrome.itemSet.header': '{name} ({have}/{total})',
   'hudChrome.itemProc.onMeleeHit': '적중 시 확률 ({chance}%): {effect}',
   'hudChrome.itemProc.onSpellDamage': '피해 주문 시 확률 ({chance}%): {effect}',
@@ -5253,7 +5389,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.itemProc.hot': '{name}을 피워 {duration}초 동안 {total}의 생명력을 회복시킵니다',
   'hudChrome.itemSet.bonusLine': '({pieces}) {bonus}',
   'hudChrome.abilityScaling.bonus': '(+{value})',
-  // Discord integration (two-way login, rewards, relay, in-game flair).
   'hudChrome.discord.close': '닫기',
   'hudChrome.discord.keybind': 'Discord 패널',
   'hudChrome.discord.disabled': '현재 Discord 연동을 사용할 수 없습니다.',
@@ -5370,7 +5505,15 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.relay.wts.label': '판매 희망',
   'hudChrome.discord.relay.wtb.label': '구매 희망',
   'hudChrome.discord.relay.help.label': '도움 요청',
-  // Developer badge (M16 non-Latin fills).
+  'hudChrome.crafting.title': '제작',
+  'hudChrome.crafting.close': '제작 닫기',
+  'hudChrome.crafting.craft': '제작',
+  'hudChrome.crafting.reagentsNeeded': '필요 재료:',
+  'hudChrome.crafting.empty': '알려진 제작법이 없습니다.',
+  'hudChrome.crafting.resultAria': '{name} 제작',
+  'hudChrome.crafting.craftedToast': '제작 완료:{name}',
+  'hudChrome.crafting.insufficientMaterials': '재료가 부족합니다.',
+  'hudChrome.crafting.unknownRecipe': '해당 제작법이 존재하지 않습니다.',
   'hudChrome.devBadge.title': '개발자',
   'hudChrome.devBadge.tiers.tinkerer': '수선공',
   'hudChrome.devBadge.tiers.artificer': '장인',
@@ -5412,7 +5555,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'desktop.crash.reload': '다시 불러오기',
   'desktop.crash.quit': '종료',
   'desktop.crash.fatalBody': 'World of ClaudeCraft에 예기치 않은 오류가 발생하여 종료해야 합니다.',
-  // Map editor (/editor), added with the editor catalog domain.
   'editor.appTitle': '맵 편집기',
   'editor.docTitle': '맵 편집기 - World of ClaudeCraft',
   'editor.untitledMap': '제목 없는 맵',
@@ -5916,15 +6058,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.dailyRewards.remainingMinutes': '{minutes}분',
   'hudChrome.dailyRewards.sol': '{amount} SOL',
   'hudChrome.dailyRewards.usd': '{amount} USD',
-  'hudChrome.crafting.title': '제작',
-  'hudChrome.crafting.close': '제작 닫기',
-  'hudChrome.crafting.craft': '제작',
-  'hudChrome.crafting.reagentsNeeded': '필요 재료:',
-  'hudChrome.crafting.empty': '알려진 제작법이 없습니다.',
-  'hudChrome.crafting.resultAria': '{name} 제작',
-  'hudChrome.crafting.craftedToast': '제작 완료:{name}',
-  'hudChrome.crafting.insufficientMaterials': '재료가 부족합니다.',
-  'hudChrome.crafting.unknownRecipe': '해당 제작법이 존재하지 않습니다.',
   'guide.professions.intro':
     '전투와 퀘스트를 넘어, 이 세계는 땅을 일구고 대장간에서 일하는 당신에게도 보상을 준다: 원재료를 채집하고, 열 가지 서로 다른 제작소에서 이를 장비로 바꾸며, 그 직업들이 상징하는 열 가지 원형 중 하나로서 정체성을 확립하는 것이다.',
   'guide.professions.gatherTitle': '채집: 채광, 벌목, 약초학',
@@ -5966,7 +6099,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'guide.professions.archetypeIdentityTitle': '당신의 원형이 의미하는 것',
   'guide.professions.archetypeIdentityBody':
     '당신의 현재 원형은 이 세계에서 당신의 캐릭터가 누구인지에 대한 선언이며, 다른 이들과 세계가 당신을 부르는 방식에 반영된다. 그에 따르는 구체적인 보상과 인정은 아직 다듬어지는 중이다. 시스템이 채워지는 대로 다시 확인해 보라.',
-  // apiError.* server error-code catalog (M16 non-Latin fill, Phase 22)
   'apiError.validation.failed': '일부 항목이 올바르지 않습니다. 양식을 확인하고 다시 시도하세요.',
   'apiError.json.malformed': '요청을 읽을 수 없습니다. 다시 시도해 주세요.',
   'apiError.body.too_large': '요청이 너무 큽니다. 데이터를 줄여 다시 시도하세요.',
@@ -6028,7 +6160,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'apiError.discord.swag_claimed': '이미 이 보상을 받았습니다.',
   'apiError.discord.swag_tier': '이 보상을 받으려면 더 높은 등급에 도달하세요.',
   'apiError.discord.swag_points': '포인트가 부족합니다.',
-  // The Ravenpost mailbox (M16 non-Latin fill)
   'hudChrome.mailbox.title': '우편함',
   'hudChrome.mailbox.subtitle': '레이븐포스트',
   'hudChrome.mailbox.close': '우편함 닫기',
@@ -6050,6 +6181,8 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mailbox.parcelsLabel': '소포',
   'hudChrome.mailbox.parcelsHint': '가방의 아이템을 클릭하면 첨부됩니다.',
   'hudChrome.mailbox.removeParcelAria': '편지에서 {item} 제거',
+  'hudChrome.mailbox.parcelQtyDecreaseAria': '{item} 하나 적게 보내기',
+  'hudChrome.mailbox.parcelQtyIncreaseAria': '{item} 하나 더 보내기',
   'hudChrome.mailbox.sendButton': '편지 보내기',
   'hudChrome.mailbox.postageNote': '우편 요금: {amount}. 까마귀가 약 {seconds}초 동안 날아갑니다.',
   'hudChrome.mailbox.arrivedBanner': '까마귀가 도착했습니다: {name}의 우편.',
@@ -6073,7 +6206,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mailbox.result.letterGone': '그 편지는 더 이상 우편함에 없습니다.',
   'hudChrome.mailbox.result.takeParcelsFirst': '편지를 버리기 전에 소포를 먼저 꺼내세요.',
   'worldContent.mailboxName': '우편함',
-  // Ravenpost authored letters (M16 non-Latin fill)
   'entities.letters.ravenpost_welcome.sender': '레이븐포스트',
   'entities.letters.ravenpost_welcome.subject': '이제 까마귀가 당신을 위해 날아갑니다',
   'entities.letters.ravenpost_welcome.body':
@@ -6090,7 +6222,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.letters.letter_q_hollow.subject': '그대가 어둠 속에서 해낸 일',
   'entities.letters.letter_q_hollow.body':
     '그 구렁에 무엇이 묻혀 있었는지 아는 이는 거의 없고, 믿을 이는 더 적을 것입니다. 저는 알고 있고, 잊지 않겠습니다.\n\n그대의 길에 늘 빛이 함께하기를.\n- 알드릭 수사',
-  // Event calendar (M16 non-Latin fill)
   'hudChrome.calendar.title': '이벤트 달력',
   'hudChrome.calendar.close': '달력 닫기',
   'hudChrome.calendar.keybindLabel': '이벤트 달력',
@@ -6141,6 +6272,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gathering.herbalism': '약초학',
   'hudChrome.archetypeTitle.label': '칭호',
   'hudChrome.archetypeTitle.none': '없음',
+  'hudChrome.archetypeTitle.hobbyLabel': '취미',
   'hudChrome.archetypeTitle.armorcrafting': '방어구 장인',
   'hudChrome.archetypeTitle.weaponcrafting': '무기 장인',
   'hudChrome.archetypeTitle.jewelcrafting': '보석 세공사',
@@ -6151,14 +6283,51 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.archetypeTitle.enchanting': '마법부여사',
   'hudChrome.archetypeTitle.tailoring': '재단사',
   'hudChrome.archetypeTitle.leatherworking': '가죽공예사',
-  // Release v0.22.0 locale fill.
   'hudChrome.crafting.reagentLine': '{name}: {have}/{required}',
+  // Protect Yumi locale fill (M16 wordy-key floor).
+  'yumi.hud.collapse': 'Protect Yumi 게이지 접기',
+  'yumi.hud.expand': 'Protect Yumi 게이지 펼치기',
+  'guide.arenaPage.yumiHeading': 'Yumi를 지켜라',
+  'guide.arenaPage.yumiBody':
+    'Protect Yumi는 미로에서 펼쳐지는 팀 목표 모드입니다. 각 팀은 아군 고양이 소환수를 지키면서 상대의 소환수를 사냥합니다. 두 고양이는 이따금 미로의 새 구석으로 순간이동하므로 전투는 수비, 추격, 수색 사이를 오갑니다. 3대3 또는 5대5로 참가할 수 있으며, 쓰러져도 잠시 벤치에 앉을 뿐입니다.',
+  'yumi.queue.join': 'Protect Yumi 대기열에 참가했습니다. 소환수를 지키세요…',
+  'yumi.queue.leave': 'Protect Yumi 대기열에서 나갑니다.',
+  'yumi.queue.teamLeave': '팀이 Protect Yumi 대기열에서 나갑니다.',
+  'yumi.error.partyTooBig3': 'Protect Yumi 3대3은 최대 3인 파티까지 참가할 수 있습니다.',
+  'yumi.error.partyTooBig5': 'Protect Yumi 5대5는 최대 5인 파티까지 참가할 수 있습니다.',
+  'yumi.log.start': 'Protect Yumi! 아군 소환수를 지키고 적의 소환수를 사냥하세요.',
+  'yumi.bracket3': 'Yumi 3대3',
+  'yumi.bracket5': 'Yumi 5대5',
+  'yumi.enterQueue': 'Protect Yumi 참가!',
+  'yumi.hud.title': 'PROTECT YUMI',
+  'yumi.hud.getReady': '준비하세요…',
+  'yumi.hud.teleportIn': 'Yumi 이동까지 {s}초',
+  'yumi.hud.suddenDeath': '서든 데스',
+  'yumi.hud.yourYumi': '아군 Yumi',
+  'yumi.hud.enemyYumi': '적군 Yumi',
+  'yumi.hud.aria': '아군 Yumi 생명력 {mine}/{max}, 적군 Yumi {theirs}.',
+  'yumi.respawn.title': '쓰러졌습니다!',
+  'yumi.banner.sudden': '서든 데스! Yumi가 더는 이동하지 않습니다!',
+  'yumi.banner.teleport': 'Yumi가 순간이동했습니다!',
+  'yumi.end.win': '승리! Yumi를 지켜냈습니다!',
+  'yumi.end.loss': '패배! 아군 Yumi가 쓰러졌습니다.',
   'hudChrome.crafting.comboRequirementUnmet':
     '이 조합 제작법에 필요한 두 제작 기술의 숙련도에 도달하지 못했습니다.',
+  'hudChrome.crafting.notAtHub': '그것을 제작하려면 필요한 레벨로 제작 거점에 있어야 합니다.',
+  'hudChrome.crafting.throttled': '너무 빨리 제작하고 있습니다. 잠시 후 다시 시도하세요.',
+  'hudChrome.crafting.recipeNotLearned': '아직 그 제작법을 배우지 않았습니다.',
   'hudChrome.mobile.actionPageIndicator': '{page}페이지',
   'hudChrome.mobile.spellbookPageLabel': '페이지 {page}',
+  'hudChrome.mobile.hideKeyboard': '키보드 숨기기',
+  'hudChrome.mobile.chatPlaceholder': '메시지 입력...',
   // The Vale Cup boarball minigame (docs/prd/vale-cup.md).
   'hudChrome.keybinds.valecup': '베일 컵',
+  'hudChrome.keybinds.categoryPet': '펫',
+  'hudChrome.keybinds.petAttack': '펫: 공격',
+  'hudChrome.keybinds.petStop': '펫: 정지',
+  'hudChrome.keybinds.petTaunt': '펫: 도발',
+  'hudChrome.keybinds.petDefensive': '펫: 방어',
+  'hudChrome.keybinds.petAggressive': '펫: 공격적',
   'hudChrome.vcup.title': '베일 컵',
   'hudChrome.vcup.close': '베일 컵 창 닫기',
   'hudChrome.vcup.offlineNote': '대진표가 닫혀 있습니다. 지금은 베일 컵을 이용할 수 없습니다.',
@@ -6319,7 +6488,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.groundskeeper_bram.greeting':
     '소우필드에서는 휴전이 지켜지고 있소, {className}. 발과 어깨만 쓸 수 있소. 구리 들통을 걸고 한판 하겠소?',
   'entities.zones.eastbrook_vale.pois.10.label': '소우필드',
-  // The Vale Cup sport kit ability names + descriptions.
   'entities.abilities.sport_kick.name': '킥',
   'entities.abilities.sport_kick.description': '조준 지점을 향해 공을 땅볼로 차 보냅니다.',
   'entities.abilities.sport_shoot.name': '슛',
@@ -6346,4 +6514,81 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.sport_second_wind.name': '재도약',
   'entities.abilities.sport_second_wind.description':
     '기운을 되찾습니다: 4초 동안 이동 속도가 50% 증가합니다.',
+  'entities.npcs.bursar_fernando.name': '출납관 페르난도',
+  'entities.npcs.bursar_fernando.title': '도금 금고',
+  'entities.npcs.bursar_fernando.greeting':
+    '도금 금고에 오신 것을 환영합니다. 당신의 물건은 우리의 자물쇠 뒤에서 안전하게 보관됩니다.',
+  'entities.npcs.bursar_petra_vell.name': '출납관 페트라 벨',
+  'entities.npcs.bursar_petra_vell.title': '도금 금고',
+  'entities.npcs.bursar_petra_vell.greeting':
+    '도금 금고는 장부도 깔끔하고 금고는 더욱 깨끗합니다. 무엇을 보관해 드릴까요?',
+  'entities.npcs.bursar_aldous_crane.name': '출납관 알도스 크레인',
+  'entities.npcs.bursar_aldous_crane.title': '도금 금고',
+  'entities.npcs.bursar_aldous_crane.greeting':
+    '어떤 상자든, 금궤든, 장신구든 도금 금고에 맡기시면 안전합니다.',
+  'guide.economy.bankBody':
+    '모든 거점 마을에는 이 땅의 은행 상회인 도금 금고의 지점이 있습니다. 그곳의 출납관에게 말을 걸면 자신의 금고가 열립니다. 가방과는 별개인 개인 보관 공간으로, 캐릭터가 평생 유지합니다. 맡겨 둔 물건은 다음에 어느 지점을 찾아가도 안전하게 기다리고 있습니다.',
+  'guide.economy.bankHow':
+    '금고가 열린 상태에서 가방의 물건을 클릭하면 맡겨지고, 금고의 물건을 클릭하면 되찾습니다. 금고에는 물건만 보관할 수 있고 동전은 맡길 수 없으며, 퀘스트 아이템은 늘 몸에 지니게 됩니다. 여행 중에 가방이 가득 차면 제작 재료를 한 번에 맡기는 버튼도 있습니다.',
+  'guide.economy.bankSlots':
+    '갓 연 금고는 작지만 당신과 함께 자랍니다. 출납관은 추가 칸을 동전에 판매하며 가격은 단계마다 높아집니다. 온라인으로 플레이하면 이메일 인증, 계정 연동, 친구 초대 등으로 보너스 공간도 얻을 수 있습니다.',
+  'guide.economy.bankTitle': '은행',
+  'hudChrome.bank.title': '은행',
+  'hudChrome.bank.subtitle': '도금 금고',
+  'hudChrome.bank.close': '은행 닫기',
+  'hudChrome.bank.capacity': '{used}/{total}',
+  'hudChrome.bank.capacityAria': '사용 중인 은행 칸: {total}칸 중 {used}칸',
+  'hudChrome.bank.empty': '은행이 비어 있습니다.',
+  'hudChrome.bank.tooFar': '은행을 이용하려면 은행원 옆에 있어야 합니다.',
+  'hudChrome.bank.buySlots': '{count}칸 구매',
+  'hudChrome.bank.buySlotsMaxed': '완전히 확장됨',
+  'hudChrome.bank.buyConfirm': '{price}에 은행 칸 {count}개를 추가로 구매하시겠습니까?',
+  'hudChrome.bank.buyConfirmAccept': '구매',
+  'hudChrome.bank.withdrawHint': '클릭하여 꺼내기',
+  'hudChrome.bank.withdrawPartialHint': 'Shift+클릭하여 일부만 꺼내기',
+  'hudChrome.bank.depositHint': '클릭하여 넣기',
+  'hudChrome.bank.depositPartialHint': 'Shift+클릭하여 일부만 넣기',
+  'hudChrome.bank.cannotDeposit': '은행에 보관할 수 없음',
+  'hudChrome.bank.depositQuantityTitle': '{item} 넣기',
+  'hudChrome.bank.depositQuantityInput': '넣을 수량',
+  'hudChrome.bank.depositQuantityConfirm': '넣기',
+  'hudChrome.bank.withdrawQuantityTitle': '{item} 꺼내기',
+  'hudChrome.bank.withdrawQuantityInput': '꺼낼 수량',
+  'hudChrome.bank.withdrawQuantityConfirm': '꺼내기',
+  'hudChrome.bank.filterGroupAria': '은행을 분류별로 필터링',
+  'hudChrome.bank.sortAria': '은행 아이템 정렬',
+  'hudChrome.bank.searchAria': '이름으로 은행 아이템 검색',
+  'hudChrome.bank.depositAll': '모든 재료 보관',
+  'hudChrome.bank.depositAllDone': '보관한 재료: {count}.',
+  'hudChrome.bank.depositAllFull': '보관한 재료: {count}. 은행이 가득 찼습니다.',
+  'hudChrome.bank.depositAllNone': '은행이 가득 참: 아무것도 보관하지 못했습니다.',
+  'hudChrome.bank.bonusTitle': '보너스 칸',
+  'hudChrome.bank.bonusEarned': '+{count}',
+  'hudChrome.bank.bonusStatusEarned': '+{count}',
+  'hudChrome.bank.bonusSourceEmail': '이메일 인증됨',
+  'hudChrome.bank.bonusSourceDiscord': 'Discord 연동됨',
+  'hudChrome.bank.bonusSourceWallet': '지갑 연동됨',
+  'hudChrome.bank.bonusSourceReferral': '추천한 친구',
+  'hudChrome.bank.bonusAdvertEmail': '이메일을 인증하면 2칸을 얻습니다.',
+  'hudChrome.bank.bonusAdvertDiscord': 'Discord를 연동하면 2칸을 얻습니다.',
+  'hudChrome.bank.bonusAdvertWallet': '지갑을 연동하면 2칸을 얻습니다.',
+  'hudChrome.bank.bonusReferralProgress': '{count}/{cap}',
+  'hudChrome.bank.bonusReferralExplainer':
+    '친구를 초대하세요: 친구가 10레벨에 도달하면 서로 2칸씩 얻으며, 최대 5명까지 가능합니다.',
+  'hudChrome.bank.bonusSectionAria': '보너스 은행 칸과 획득 방법',
+  'entities.mobs.yumi_cat.name': '유미',
+  'loading.tips.classes':
+    '팁: 9개 클래스는 저마다 플레이 방식이 다릅니다. 정하기 전에 몇 가지를 직접 해보세요.',
+  'loading.tips.talents':
+    '팁: 비전투 상태라면 언제든 특성을 초기화할 수 있어, 처음 선택도 절대 돌이킬 수 없는 것이 아닙니다.',
+  'loading.tips.dungeons':
+    '팁: 일반 던전 장비를 갖췄다면 영웅 난이도에 도전해 더 어렵고 보람찬 전투를 즐겨보세요.',
+  'loading.tips.market': '팁: 월드 마켓에서 서버 전체 플레이어와 거래할 수 있습니다.',
+  'loading.tips.guilds': '팁: 길드에 가입하면 전용 채팅 채널과 길드원 명단을 이용할 수 있습니다.',
+  'loading.tips.professions':
+    '팁: 채집이나 제작 같은 생활 전문 기술은 전투 클래스와 함께 키울 수 있습니다.',
+  'loading.tips.loadouts':
+    '팁: 특성 로드아웃을 여러 개 저장해 두면 포인트를 다시 쓰지 않고도 빌드를 바꿀 수 있습니다.',
+  'loading.tips.pvp':
+    '팁: 다른 플레이어에게 친선 결투를 신청하거나 잿빛 콜로세움 투기장에 참가해 빌드를 시험해보세요.',
 };

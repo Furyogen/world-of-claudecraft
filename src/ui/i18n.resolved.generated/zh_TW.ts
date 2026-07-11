@@ -154,6 +154,14 @@ export const zh_TW: EnTranslations = {
     "spectate": {
       "banner": "正在觀察 {name}"
     },
+    "readyCheck": {
+      "prompt": "{name} 發起了準備確認。你準備好了嗎？",
+      "ready": "準備就緒",
+      "notReady": "未準備",
+      "result": "準備確認：{ready} 人就緒，{notReady} 人未準備，{noResponse} 人未回應。",
+      "notInPartyError": "你必須加入隊伍才能發起就緒確認。",
+      "inProgressError": "就緒確認已在進行中。"
+    },
     "death": {
       "resurrectAtCorpse": "在屍體旁復活",
       "resurrectAtHealer": "靈魂醫者（復活虛弱）",
@@ -232,7 +240,8 @@ export const zh_TW: EnTranslations = {
         "eligible": "獎勵已解鎖。",
         "no_wallet": "請連接持有至少 $20 USD WOC 的錢包。",
         "under_minimum": "錢包低於 $20 USD 的 WOC 最低要求。",
-        "price_unavailable": "無法取得 WOC 價格，獎勵暫時鎖定。"
+        "price_unavailable": "無法取得 WOC 價格，獎勵暫時鎖定。",
+        "banned": "您已被禁止參加每日獎勵。原因：{reason}"
       }
     },
     "claudium": {
@@ -334,6 +343,7 @@ export const zh_TW: EnTranslations = {
       "targetLabel": "你的目標",
       "targetAnnounce": "目標：{name}",
       "partyLabel": "你的隊伍",
+      "partyChip": "隊伍",
       "partyGroup": "小隊 {n}",
       "durationUnitSeconds": "秒",
       "durationUnitMinutes": "分",
@@ -348,7 +358,6 @@ export const zh_TW: EnTranslations = {
       "chat": "跳至聊天"
     },
     "mobile": {
-      "autorun": "自動奔跑",
       "jump": "跳躍",
       "leaderboard": "排行榜",
       "dailyRewards": "獎勵",
@@ -356,6 +365,8 @@ export const zh_TW: EnTranslations = {
       "haptics": "觸覺回饋",
       "hapticsOff": "觸覺回饋已關閉",
       "toggleHaptics": "切換觸覺回饋",
+      "showMenuButtons": "顯示選單按鈕",
+      "hideMenuButtons": "隱藏選單按鈕",
       "hotbarPage": "技能",
       "hotbarPageAria": "顯示下一組技能",
       "actionRing": "戰鬥動作",
@@ -363,7 +374,9 @@ export const zh_TW: EnTranslations = {
       "actionPageIndicator": "第{page}頁",
       "targetCycle": "切換目標",
       "targetCycleShort": "目標",
-      "spellbookPageLabel": "頁{page}"
+      "spellbookPageLabel": "頁{page}",
+      "hideKeyboard": "隱藏鍵盤",
+      "chatPlaceholder": "說點什麼..."
     },
     "tutorial": {
       "moveBodyTouch": "使用搖桿移動，拖曳螢幕環顧四周。先走幾步開始吧。",
@@ -437,11 +450,17 @@ export const zh_TW: EnTranslations = {
       "targetFriendly": "選取最近友方",
       "targetFriendlyNext": "切換友方目標",
       "discord": "Discord",
-      "valecup": "溪谷盃"
+      "valecup": "溪谷盃",
+      "categoryPet": "寵物",
+      "petAttack": "寵物：攻擊",
+      "petStop": "寵物：停止",
+      "petTaunt": "寵物：嘲諷",
+      "petDefensive": "寵物：防禦",
+      "petAggressive": "寵物：攻擊性"
     },
     "vcup": {
       "title": "溪谷盃",
-      "shootPower": "POWER",
+      "shootPower": "力道",
       "close": "關閉溪谷盃視窗",
       "offlineNote": "賽程簿已闔上。溪谷盃目前無法使用。",
       "recordLine": "你的戰績：{wins} 勝，{losses} 敗，{draws} 平。",
@@ -499,7 +518,7 @@ export const zh_TW: EnTranslations = {
       "guildRecordLine": "你的公會戰績：{wins} 勝，{losses} 敗。",
       "guildBoardHeading": "公會旗幟榜",
       "guildBoardEmpty": "還沒有公會上場。揚起你的旗幟吧！",
-      "guildBoardWl": "{wins} W, {losses} L",
+      "guildBoardWl": "{wins} 勝，{losses} 敗",
       "practice": "與機器人練習賽",
       "practiceNote": "立即在母豬場開始一場完整的機器人比賽。",
       "practicingNow": "正在練習（{count}）：",
@@ -612,7 +631,84 @@ export const zh_TW: EnTranslations = {
       "showSecondaryActionBar": "顯示副動作列",
       "showDailyRewardsChest": "顯示每日獎勵寶箱",
       "mobileCameraJoystick": "攝影機搖桿",
-      "mobileLeftHanded": "左手配置"
+      "mobileLeftHanded": "左手配置",
+      "ia": {
+        "railDisplay": "顯示",
+        "railInput": "輸入",
+        "railSystem": "系統",
+        "catOverviewName": "總覽",
+        "catOverviewSub": "釘選的常用項、快捷操作，以及已變更的內容。",
+        "catGraphicsSub": "畫質、視野與世界畫面。",
+        "catInterfaceSub": "介面縮放、面板、聊天與單位框體。",
+        "catAccessibilityName": "無障礙",
+        "catAccessibilitySub": "動態效果、對比度與內容舒適度。",
+        "catControlsName": "控制",
+        "catControlsSub": "鏡頭、移動、戰鬥與回饋。",
+        "catKeybindsSub": "為每個操作綁定按鍵。",
+        "catControllerSub": "手把手感與按鍵配置。",
+        "catTouchName": "觸控",
+        "catTouchSub": "螢幕搖桿、視角與按鈕。",
+        "catAudioSub": "音量與聲音開關。",
+        "catSystemName": "系統",
+        "catSystemSub": "效能、支援與關於。"
+      },
+      "done": "完成",
+      "resetAllTitle": "重設所有設定？",
+      "resetAllBody": "這會將每項設定恢復為預設值。此操作無法復原。",
+      "searchPlaceholder": "搜尋設定",
+      "searchScopeAll": "所有設定",
+      "searchScopeThis": "目前區段",
+      "searchEmpty": "沒有符合搜尋的設定。",
+      "searchGoTo": "前往{category}",
+      "modeOnline": "線上",
+      "modeOffline": "離線",
+      "changed": "已更改 {count} 項",
+      "changedSummary": "已更改 {count} 項（相對預設）",
+      "legend": {
+        "category": "分類",
+        "navigate": "導覽",
+        "select": "選擇",
+        "back": "返回",
+        "reset": "重設",
+        "clear": "清除",
+        "page": "頁面"
+      },
+      "keybindCleared": "已清除 {action}",
+      "keybindRebinding": "正在重新綁定 {action}。請按一個按鍵，或按 Esc 取消。",
+      "keybindEvicted": "已將 {key} 綁定到 {action}；已從 {evicted} 移除。",
+      "keybindTaken": "按鍵已移除",
+      "keybindUnbound": "{action} 尚未綁定按鍵",
+      "keybindModifierHint": "提示：你可以綁定組合鍵。按住 Shift、Ctrl 或 Alt 的同時按下某個鍵即可錄製組合鍵（例如 Shift+1）。",
+      "conflictDot": "按鍵衝突",
+      "overviewConflictAlert": "部分按鍵綁定發生衝突或未綁定。",
+      "sec": {
+        "quality": "畫質",
+        "view": "視野",
+        "general": "一般",
+        "scaleText": "縮放與文字",
+        "panels": "面板",
+        "unitFrames": "單位框體",
+        "actionBars": "動作列",
+        "chat": "聊天",
+        "combatTooltips": "戰鬥與提示",
+        "hudExtras": "HUD 附加項",
+        "motionContrast": "動態與對比度",
+        "content": "內容",
+        "camera": "鏡頭",
+        "movement": "移動",
+        "combat": "戰鬥",
+        "feedback": "回饋",
+        "inputMode": "輸入模式",
+        "feel": "操作手感",
+        "sticks": "搖桿",
+        "look": "視角",
+        "buttons": "按鈕",
+        "volume": "音量",
+        "toggles": "開關",
+        "performance": "效能",
+        "support": "支援",
+        "about": "關於"
+      }
     },
     "controller": {
       "title": "手把",
@@ -624,7 +720,8 @@ export const zh_TW: EnTranslations = {
       "buttons": "按鍵配置",
       "resetButtons": "重設按鍵配置",
       "menuAction": "遊戲選單",
-      "help": "左搖桿移動，右搖桿控制鏡頭。開啟視窗即可使用螢幕指標。"
+      "help": "左搖桿移動，右搖桿控制鏡頭。開啟視窗即可使用螢幕指標。",
+      "duplicate": "也綁定到 {buttons}"
     },
     "perf": {
       "title": "效能監視器",
@@ -665,6 +762,7 @@ export const zh_TW: EnTranslations = {
         "jitter": "抖動",
         "predLead": "預測提前量",
         "snapshot": "快照速率",
+        "serverTick": "伺服器刻率",
         "connection": "連線",
         "drawCalls": "繪製呼叫",
         "triangles": "三角形",
@@ -756,11 +854,17 @@ export const zh_TW: EnTranslations = {
       }
     },
     "talents": {
-      "defaultBuildName": "配置 {n}"
+      "defaultBuildName": "配置 {n}",
+      "choicesTab": "天賦選擇",
+      "resetChoices": "重置選擇",
+      "tierLevel": "等級 {n}",
+      "tierLevelLabel": "等級"
     },
     "tips": {
       "joinChannels": "提示：輸入 /join world 或 /join lfg 可與全世界的玩家聊天。"
     },
+    "itemHeroicTag": "[英雄]",
+    "itemSoulbound": "靈魂綁定",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1055,10 +1159,19 @@ export const zh_TW: EnTranslations = {
         "allStats": "所有屬性降低 {value}"
       },
       "allStatsPctReduce": "所有屬性降低 {pct}%",
+      "increasePct": {
+        "ap": "攻擊強度提高 {pct}%",
+        "armor": "護甲提高 {pct}%",
+        "int": "智力提高 {pct}%",
+        "sta": "耐力提高 {pct}%",
+        "allStats": "所有屬性提高 {pct}%"
+      },
       "dodge": "閃躲機率提高 {pct}%",
       "dodgeReduce": "閃避機率降低 {pct}%",
       "armorFlat": "護甲降低 {value}",
       "armorFlatStacks": "護甲降低 {value}（{stacks} 層）",
+      "armorPct": "護甲降低 {pct}%",
+      "armorPctStacks": "護甲降低 {pct}%（{stacks} 層）",
       "mortalWound": "受到的治療降低 {pct}%",
       "vulnerability": "受到的傷害提高 {pct}%",
       "physVuln": "受到的物理傷害提高 {pct}%",
@@ -1096,6 +1209,26 @@ export const zh_TW: EnTranslations = {
     },
     "worldBoss": {
       "spawn": "{name}在荊峰高地崛起！"
+    },
+    "auth": {
+      "appleLoginCta": "透過 Apple 繼續",
+      "appleError": "無法透過 Apple 登入。請再試一次。",
+      "appleChoiceIntro": "建立新帳戶，或將 Apple 連結到現有帳戶。",
+      "appleChoiceExpired": "Apple 登入已過期。請再次使用 Apple 登入。",
+      "forgotPrompt": "忘記密碼？",
+      "forgotTitle": "重設密碼",
+      "forgotHint": "輸入您的使用者名稱，我們會將重設連結寄送到登記的電子郵件。",
+      "forgotUsername": "使用者名稱",
+      "forgotSubmit": "傳送重設連結",
+      "forgotSent": "如果該使用者名稱對應的帳戶已登記電子郵件，我們已寄出重設連結。請查看您的收件匣。",
+      "forgotBack": "返回登入",
+      "resetTitle": "設定新密碼",
+      "resetNewPassword": "新密碼",
+      "resetConfirm": "確認新密碼",
+      "resetSubmit": "更新密碼",
+      "resetDone": "您的密碼已更新。現在可以登入了。",
+      "resetMismatch": "兩次輸入的密碼不一致。",
+      "resetErrInvalid": "此重設連結無效或已過期。請重新申請一個。"
     },
     "loot": {
       "chestTitle": "寶箱"
@@ -1326,6 +1459,8 @@ export const zh_TW: EnTranslations = {
       "parcelsLabel": "包裹",
       "parcelsHint": "點擊背包中的物品即可附上。",
       "removeParcelAria": "從信件中移除 {item}",
+      "parcelQtyDecreaseAria": "少寄一個{item}",
+      "parcelQtyIncreaseAria": "多寄一個{item}",
       "sendButton": "寄出信件",
       "postageNote": "郵資：{amount}。渡鴉飛行約 {seconds} 秒。",
       "arrivedBanner": "渡鴉已降落：來自 {name} 的郵件。",
@@ -1348,6 +1483,50 @@ export const zh_TW: EnTranslations = {
         "letterGone": "那封信已不在你的郵箱裡。",
         "takeParcelsFirst": "請先取出包裹再丟棄信件。"
       }
+    },
+    "bank": {
+      "title": "銀行",
+      "subtitle": "鍍金保險箱",
+      "close": "關閉銀行",
+      "capacity": "{used}/{total}",
+      "capacityAria": "銀行格已用：{used}/{total}",
+      "empty": "你的銀行是空的。",
+      "tooFar": "你必須站在銀行家旁才能查看銀行。",
+      "buySlots": "購買 {count} 個格子",
+      "buySlotsMaxed": "已完全擴展",
+      "buyConfirm": "花費 {price} 購買 {count} 個額外的銀行格子嗎？",
+      "buyConfirmAccept": "購買",
+      "withdrawHint": "點擊取出",
+      "withdrawPartialHint": "Shift+點擊取出部分數量",
+      "depositHint": "點擊存入",
+      "depositPartialHint": "Shift+點擊存入部分數量",
+      "cannotDeposit": "無法存入銀行",
+      "depositQuantityTitle": "存入 {item}",
+      "depositQuantityInput": "要存入的數量",
+      "depositQuantityConfirm": "存入",
+      "withdrawQuantityTitle": "取出 {item}",
+      "withdrawQuantityInput": "要取出的數量",
+      "withdrawQuantityConfirm": "取出",
+      "filterGroupAria": "依類別篩選銀行",
+      "sortAria": "排序銀行物品",
+      "searchAria": "依名稱搜尋銀行物品",
+      "depositAll": "存入所有材料",
+      "depositAllDone": "已存入材料：{count}。",
+      "depositAllFull": "已存入材料：{count}。銀行已滿。",
+      "depositAllNone": "銀行已滿：未存入任何物品。",
+      "bonusTitle": "獎勵格子",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "已驗證電子郵件",
+      "bonusSourceDiscord": "已連結 Discord",
+      "bonusSourceWallet": "已連結錢包",
+      "bonusSourceReferral": "已推薦的好友",
+      "bonusAdvertEmail": "驗證電子郵件可獲得 2 個格子。",
+      "bonusAdvertDiscord": "連結 Discord 可獲得 2 個格子。",
+      "bonusAdvertWallet": "連結錢包可獲得 2 個格子。",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "邀請好友：當好友升到 10 級，你們各獲得 2 個格子，最多 5 位好友。",
+      "bonusSectionAria": "獎勵銀行格子及獲取方式"
     },
     "calendar": {
       "title": "活動日曆",
@@ -1420,6 +1599,7 @@ export const zh_TW: EnTranslations = {
     "archetypeTitle": {
       "label": "稱號",
       "none": "無",
+      "hobbyLabel": "愛好",
       "armorcrafting": "鍛甲師",
       "weaponcrafting": "武器匠",
       "jewelcrafting": "珠寶匠",
@@ -1442,7 +1622,10 @@ export const zh_TW: EnTranslations = {
       "craftedToast": "已製作:{name}",
       "insufficientMaterials": "你沒有足夠的材料。",
       "unknownRecipe": "該配方不存在。",
-      "comboRequirementUnmet": "你尚未達到該配方所需組合的兩項製造技能等級。"
+      "comboRequirementUnmet": "你尚未達到該配方所需組合的兩項製造技能等級。",
+      "notAtHub": "必須達到所需等級並位於製作站，才能製作該物品。",
+      "throttled": "你製作得太快了，請稍等片刻後再試。",
+      "recipeNotLearned": "你還沒有學會這個配方。"
     }
   },
   "apiError": {
@@ -2215,6 +2398,8 @@ export const zh_TW: EnTranslations = {
       "waveGoldBody": "中段那波：雙刃般的搭配組合，你的配套在此開始成形，奏出旋律。",
       "wavePrismaticTitle": "彩虹",
       "wavePrismaticBody": "最後那波：足以定義整套配套、能融化整個畫面的爆發，刻意設計得荒謬到讓人拍案叫絕。",
+      "yumiHeading": "守護Yumi",
+      "yumiBody": "Protect Yumi是一種在迷宮中進行的團隊目標模式：每隊守護自己的貓咪使魔，同時獵殺對方的。兩隻貓咪會不時閃現到迷宮的新角落，戰鬥在防守、追獵與尋回之間不斷搖擺。可選擇3對3或5對5排隊；陣亡只會讓你短暫離場。",
       "powerupsTitle": "鬥技場中的能量道具",
       "powerupsBody": "戰鬥進行到一半，發光的能量球也會落入競技場，誰先搶到就歸誰。它們刻意設計得誇張過火，且只持續短短一陣子：速度惡魔讓你瞬間飆出令人目眩的步伐，巨像讓你脹大成笨重的巨人，月靴帶來低重力的彈跳躍動，狂戰士則是一股突如其來的暴怒之潮。",
       "ladderHeading": "在天梯上攀升",
@@ -2367,6 +2552,10 @@ export const zh_TW: EnTranslations = {
       "vendorsBody": "城鎮與哨站裡到處是商人，各有各的生意。補給商備有食物與飲品，武器匠與盔甲匠出售裝備，軍需官則準備實用的旅行用品。走到他們面前，便能看到他們在賣什麼。",
       "marksTitle": "第二種貨幣：秘探印記",
       "marksBody": "錢幣並非你唯一能積攢的東西。秘探會給予秘探印記，這是一種獨立的貨幣，只能在秘探看守人處花用，用於同伴升級以及在別處找不到的裝備。它們絕不會與你的錢幣混在一起。",
+      "bankTitle": "銀行",
+      "bankBody": "每座主城都設有鍍金保險箱的分號，它是這片大陸的銀行商號。與那裡的司庫交談即可打開你的保險庫：一處背包之外的私人儲物空間，伴隨角色終身。無論你下次造訪哪家分號，寄存的物品都會安然等候。",
+      "bankHow": "保險庫打開後，點擊背包中的物品即可存入，點擊保險庫中的物品即可取回。保險庫只存放物品，不存放錢幣，任務物品也會留在你身上。旅途中背包裝滿時，還有一個按鈕可將全部製造材料一鍵存入。",
+      "bankSlots": "新開的保險庫空間不大，但會隨你一同成長。司庫出售更多格位，價格逐級走高；線上遊玩還能獲得額外空間，例如驗證信箱、連結帳號，以及引薦好友加入遊戲。",
       "buyingTitle": "買與賣",
       "buyingBody": "站在商人附近即可開啟他的視窗。只要你負擔得起，便能買下他所販售的任何商品，也能將背包裡大部分的東西換成錢幣。若你不小心賣錯了東西，商人會為你保留近期的售出物，讓你能買回來。",
       "junkTitle": "清理雜物",
@@ -3640,6 +3829,45 @@ export const zh_TW: EnTranslations = {
       "flavor": "亡者已交出他們所能割捨之物。"
     }
   },
+  "yumi": {
+    "bracket3": "Yumi 3v3",
+    "bracket5": "Yumi 5v5",
+    "enterQueue": "加入Protect Yumi！",
+    "queue": {
+      "join": "你加入了Protect Yumi佇列。守好你的使魔……",
+      "leave": "你離開了Protect Yumi佇列。",
+      "teamLeave": "你的隊伍離開了Protect Yumi佇列。"
+    },
+    "error": {
+      "partyTooBig3": "Protect Yumi 3v3最多允許三人隊伍。",
+      "partyTooBig5": "Protect Yumi 5v5最多允許五人隊伍。"
+    },
+    "log": {
+      "start": "Protect Yumi！保衛你的使魔，獵殺敵方的使魔。"
+    },
+    "hud": {
+      "title": "守護YUMI",
+      "getReady": "做好準備……",
+      "teleportIn": "Yumi將在{s}秒後傳送",
+      "suddenDeath": "驟死戰",
+      "yourYumi": "我方Yumi",
+      "enemyYumi": "敵方Yumi",
+      "aria": "我方Yumi生命值{mine}/{max}，敵方Yumi生命值{theirs}。",
+      "collapse": "摺疊Protect Yumi血條",
+      "expand": "展開Protect Yumi血條"
+    },
+    "respawn": {
+      "title": "倒下了！"
+    },
+    "banner": {
+      "sudden": "驟死戰！Yumi不再傳送！",
+      "teleport": "Yumi傳送了！"
+    },
+    "end": {
+      "win": "勝利！Yumi安全了！",
+      "loss": "戰敗！你的Yumi倒下了。"
+    }
+  },
   "fiesta": {
     "bracket": "Fiesta",
     "enterQueue": "加入Fiesta！",
@@ -3837,7 +4065,17 @@ export const zh_TW: EnTranslations = {
     "enterTimeout": "無法進入世界。連線已逾時。遊戲伺服器是否正在執行？",
     "connectionLost": "與伺服器的連線已中斷。",
     "reconnecting": "連線已中斷。正在重新連線...",
-    "connectionRejected": "伺服器已關閉連線。"
+    "connectionRejected": "伺服器已關閉連線。",
+    "tips": {
+      "classes": "提示：9 個職業玩法各不相同，投入之前不妨都試一試。",
+      "talents": "提示：只要不在戰鬥中，隨時都能重置天賦，因此早期的選擇不會成為陷阱。",
+      "dungeons": "提示：裝備超出普通難度要求後，試試地下城的英雄難度，享受更艱難也更有成就感的戰鬥。",
+      "market": "提示：世界市場可以讓你與全服玩家進行買賣交易。",
+      "guilds": "提示：加入公會可獲得專屬聊天頻道與公會成員名單。",
+      "professions": "提示：採集與製造類生活技能可以與你的戰鬥職業同時培養。",
+      "loadouts": "提示：保存多套天賦配置，即可在不同組合間切換而無需重新分配天賦點。",
+      "pvp": "提示：向其他玩家發起友誼決鬥，或報名灰燼競技場，來檢驗你的組合。"
+    }
   },
   "errors": {
     "nothingInteract": "附近沒有可互動目標。",
@@ -4086,6 +4324,7 @@ export const zh_TW: EnTranslations = {
       "mobileSocial": "社交",
       "mobileArena": "競技場",
       "mobileMenu": "選單",
+      "mobileSettings": "設定",
       "mobileUse": "使用",
       "mobileMeters": "統計",
       "mobileMap": "地圖",
@@ -4634,6 +4873,7 @@ export const zh_TW: EnTranslations = {
       "offGlobalCooldown": "不觸發公共冷卻",
       "friendlyTarget": "友方目標",
       "enemyTarget": "敵方目標",
+      "selfOnly": "僅對自己",
       "damageRange": "{min} 到 {max}",
       "finisherDamage": "{base} 加每個連擊點 {perCombo}"
     },
@@ -4830,6 +5070,8 @@ export const zh_TW: EnTranslations = {
       "buybackTitle": "買回",
       "buybackEmpty": "沒有物品",
       "buybackAria": "以 {price} 買回 {item}",
+      "sellItemAria": "以 {price} 的價格出售 {item}",
+      "sellRolledWarning": "隨機屬性無法透過買回找回。",
       "sellQuantityTitle": "出售 {item}",
       "sellQuantityInput": "要出售的數量",
       "sellQuantityConfirm": "出售",
@@ -4942,7 +5184,8 @@ export const zh_TW: EnTranslations = {
       "needAria": "需求 {item}",
       "greedAria": "貪婪 {item}",
       "passAria": "放棄 {item}",
-      "everyonePassed": "所有人都放棄了 {item}。"
+      "everyonePassed": "所有人都放棄了 {item}。",
+      "rolled": "{answered}/{total} 已擲骰"
     }
   },
   "entities": {
@@ -4993,19 +5236,19 @@ export const zh_TW: EnTranslations = {
       },
       "rain_of_fire": {
         "name": "烈火之雨",
-        "description": "在目標區域降下烈火之雨，灼燒敵人，造成 {damage} 點火焰傷害。"
+        "description": "在目標區域降下烈火之雨，持續 4 秒，每秒灼燒敵人造成 {damage} 點火焰傷害。"
       },
       "volley": {
         "name": "亂射",
-        "description": "向目標區域射出箭雨，對其中的敵人造成 {damage} 點傷害。"
+        "description": "向目標區域射出箭雨，持續 3 秒，每 0.5 秒對其中的敵人造成 {damage} 點傷害。"
       },
       "hurricane": {
         "name": "颶風",
-        "description": "在目標區域召喚颶風，重擊敵人，造成 {damage} 點自然傷害。"
+        "description": "在目標區域召喚颶風，持續 6 秒，每秒重擊敵人造成 {damage} 點自然傷害。"
       },
       "earthquake": {
         "name": "地震",
-        "description": "撼動目標區域，重擊敵人，造成 {damage} 點自然傷害。"
+        "description": "撼動目標區域，持續 6 秒，每 1.5 秒重擊敵人造成 {damage} 點自然傷害。"
       },
       "heroic_strike": {
         "name": "劫掠打擊",
@@ -5013,15 +5256,15 @@ export const zh_TW: EnTranslations = {
       },
       "battle_shout": {
         "name": "鐵嗓怒吼",
-        "description": "使你的攻擊強度提高 20，持續 2 分鐘。"
+        "description": "使你的攻擊強度提高 {buff}，持續 2 分鐘。"
       },
       "commanding_shout": {
         "name": "激勵吶喊",
-        "description": "使你的耐力提高 6，持續 2 分鐘。"
+        "description": "使你的耐力提高 {buff}，持續 2 分鐘。"
       },
       "demoralizing_shout": {
         "name": "厲嚎",
-        "description": "發出可怕的怒吼，使附近所有敵人的攻擊強度降低 30，持續 30 秒。"
+        "description": "發出可怕的怒吼，使附近所有敵人的攻擊強度降低 {buff}，持續 30 秒。"
       },
       "charge": {
         "name": "猛衝",
@@ -5029,7 +5272,7 @@ export const zh_TW: EnTranslations = {
       },
       "rend": {
         "name": "深切裂傷",
-        "description": "撕裂目標，使其在 9 秒內流血並受到 {damage} 點傷害。"
+        "description": "撕裂目標，使其在 {duration} 秒內流血並受到 {damage} 點傷害。"
       },
       "thunder_clap": {
         "name": "撼地一擊",
@@ -5037,7 +5280,7 @@ export const zh_TW: EnTranslations = {
       },
       "hamstring": {
         "name": "跛行斬",
-        "description": "重創敵人，造成 5 點傷害，並使其移動速度降低 50%，持續 15 秒。"
+        "description": "重創敵人，造成 {damage} 點傷害，並使其移動速度降低 50%，持續 15 秒。"
       },
       "bloodrage": {
         "name": "血之代價",
@@ -5045,7 +5288,7 @@ export const zh_TW: EnTranslations = {
       },
       "overpower": {
         "name": "血手",
-        "description": "立即攻擊，造成武器傷害 +5。只能在目標閃躲後使用。無法被閃躲。"
+        "description": "立即攻擊，造成武器傷害加 {damage}。只能在目標閃躲後使用。無法被閃躲。"
       },
       "execute": {
         "name": "提早入土",
@@ -5065,7 +5308,7 @@ export const zh_TW: EnTranslations = {
       },
       "sunder_armor": {
         "name": "削甲",
-        "description": "撕裂目標的護甲，每次使其降低 {damage}。最多疊加 5 次。產生大量威脅值。"
+        "description": "撕裂目標的護甲，每次使其降低 {damage}%。最多疊加 5 次。產生大量威脅值。"
       },
       "taunt": {
         "name": "挑釁",
@@ -5077,11 +5320,11 @@ export const zh_TW: EnTranslations = {
       },
       "frost_armor": {
         "name": "白霜披風",
-        "description": "以寒霜包裹自身，使護甲提高 30，持續 30 分鐘。"
+        "description": "以寒霜包裹自身，使護甲提高 {buff}，持續 30 分鐘。"
       },
       "arcane_intellect": {
         "name": "乙太洞察",
-        "description": "使智力提高 2，持續 30 分鐘。"
+        "description": "使智力提高 {buff}，持續 30 分鐘。"
       },
       "frostbolt": {
         "name": "凜霜矛",
@@ -5105,7 +5348,7 @@ export const zh_TW: EnTranslations = {
       },
       "polymorph": {
         "name": "蠱惑術",
-        "description": "將敵人變成蟾蜍，最多持續 15 秒。蟾蜍會四處遊蕩並快速恢復。任何傷害都會打破效果。僅限野獸和人型生物。"
+        "description": "將敵人變成蟾蜍，最多持續 {duration} 秒。蟾蜍會四處遊蕩並快速恢復。任何傷害都會打破效果。僅限野獸和人型生物。"
       },
       "frost_nova": {
         "name": "縛冰術",
@@ -5125,7 +5368,7 @@ export const zh_TW: EnTranslations = {
       },
       "ice_barrier": {
         "name": "冰霜帷幕",
-        "description": "以冰霜護盾保護你，吸收 130 點傷害，持續 60 秒。"
+        "description": "以冰霜護盾保護你，吸收 {damage} 點傷害，持續 60 秒。"
       },
       "sinister_strike": {
         "name": "邪惡揮斬",
@@ -5133,7 +5376,7 @@ export const zh_TW: EnTranslations = {
       },
       "eviscerate": {
         "name": "入土長眠",
-        "description": "終結技，根據連擊點數造成傷害。"
+        "description": "終結技，造成 {damage}。"
       },
       "backstab": {
         "name": "怯懦突刺",
@@ -5141,7 +5384,7 @@ export const zh_TW: EnTranslations = {
       },
       "gouge": {
         "name": "戳眼一擊",
-        "description": "攻擊目標，使其癱瘓 4 秒。任何傷害都會打破效果。獎勵 1 個連擊點。"
+        "description": "攻擊目標，造成 {damage} 點傷害，使其癱瘓 4 秒。任何傷害都會打破效果。獎勵 1 個連擊點。"
       },
       "evasion": {
         "name": "鬼影步",
@@ -5173,11 +5416,11 @@ export const zh_TW: EnTranslations = {
       },
       "garrote": {
         "name": "勒喉鋼絲",
-        "description": "勒住敵人的咽喉，立即造成傷害，並使其在 18 秒內流血損失 {damage} 點生命。必須處於潛行狀態。獎勵 1 個連擊點。"
+        "description": "勒住敵人的咽喉，立即造成 {damage} 點傷害，並使其在 18 秒內流血損失 {overTime}。必須處於潛行狀態。獎勵 1 個連擊點。"
       },
       "cheap_shot": {
         "name": "掏腹重擊",
-        "description": "攻擊目標，使其昏迷 4 秒。必須處於潛行狀態。獎勵 2 個連擊點。"
+        "description": "攻擊目標，造成 {damage} 點傷害，使其昏迷 4 秒。必須處於潛行狀態。獎勵 2 個連擊點。"
       },
       "sap": {
         "name": "悶棍",
@@ -5185,11 +5428,11 @@ export const zh_TW: EnTranslations = {
       },
       "crippling_poison": {
         "name": "沉鉛之毒",
-        "description": "以沉鉛之毒攻擊目標，造成 {damage} 點自然傷害，並使其移動速度降低 50%，持續 12 秒。"
+        "description": "用沉鉛之毒攻擊目標，造成 {damage} 點自然傷害，並使其移動速度降低 50%，持續 12 秒。"
       },
       "expose_armor": {
         "name": "裂甲",
-        "description": "終結技，使目標破綻盡露，降低其護甲。消耗越多連擊點，撕裂得越深。"
+        "description": "終結技，使目標破綻盡露，使其護甲降低 {damage}，持續 30 秒。"
       },
       "rupture": {
         "name": "血竭",
@@ -5213,7 +5456,7 @@ export const zh_TW: EnTranslations = {
       },
       "seal_of_righteousness": {
         "name": "誓約烙印",
-        "description": "使你充滿神聖能量，持續 30 秒，使每次近戰揮擊造成 4 點額外神聖傷害。可用裁決釋放。"
+        "description": "使你充滿神聖能量，持續 30 秒，使每次近戰揮擊造成 {damage} 點額外神聖傷害。可用裁決釋放。"
       },
       "holy_light": {
         "name": "療癒聖光",
@@ -5221,7 +5464,7 @@ export const zh_TW: EnTranslations = {
       },
       "devotion_aura": {
         "name": "堅定光環",
-        "description": "使你的護甲提高 40，持續 30 分鐘。"
+        "description": "使你的護甲提高 {buff}，持續 30 分鐘。"
       },
       "judgement": {
         "name": "裁決",
@@ -5229,19 +5472,19 @@ export const zh_TW: EnTranslations = {
       },
       "blessing_of_might": {
         "name": "鋼鐵誓約",
-        "description": "為一個友方目標施加祝福，使攻擊強度提高 15，持續 5 分鐘。"
+        "description": "為一個友方目標施加祝福，使攻擊強度提高 {buff}，持續 5 分鐘。"
       },
       "divine_protection": {
         "name": "信仰守護",
-        "description": "一道守護結界吸收 50 點傷害，持續 10 秒。"
+        "description": "一道神聖護盾吸收 {damage} 點傷害，持續 10 秒。"
       },
       "hammer_of_justice": {
         "name": "裂碎法槌",
-        "description": "使目標昏迷 3 秒。"
+        "description": "使目標昏迷 {duration} 秒。"
       },
       "lay_on_hands": {
         "name": "臨終聖禮",
-        "description": "巨大的治療湧流：恢復 250 點生命值。10 分鐘冷卻時間。"
+        "description": "巨大的治療湧流：恢復 {damage} 點生命值。10 分鐘冷卻時間。"
       },
       "flash_of_light": {
         "name": "光癒術",
@@ -5253,7 +5496,7 @@ export const zh_TW: EnTranslations = {
       },
       "consecration": {
         "name": "聖化之地",
-        "description": "奉獻你腳下的土地，灼燒附近敵人，造成 {damage} 點神聖傷害。"
+        "description": "奉獻你腳下的土地，持續 10 秒，每 2 秒灼燒附近敵人造成 {damage} 點神聖傷害。"
       },
       "righteous_fury": {
         "name": "燃燒誓言",
@@ -5273,11 +5516,11 @@ export const zh_TW: EnTranslations = {
       },
       "raptor_strike": {
         "name": "剖膛打擊",
-        "description": "一次強力近戰攻擊，使傷害提高 5。在你的下一次揮擊時觸發。"
+        "description": "一次強力近戰攻擊，使傷害提高 {damage}。在你的下一次揮擊時觸發。"
       },
       "aspect_of_the_hawk": {
         "name": "獵鷂之姿",
-        "description": "化為獵鷂之姿，使攻擊強度提高 20，持續 30 分鐘。"
+        "description": "化為獵鷂之姿，使攻擊強度提高 {buff}，持續 30 分鐘。"
       },
       "serpent_sting": {
         "name": "毒液倒刺",
@@ -5289,15 +5532,15 @@ export const zh_TW: EnTranslations = {
       },
       "concussive_shot": {
         "name": "震顫射擊",
-        "description": "使目標暈眩遲緩，移動速度降低 50%，持續 4 秒。"
+        "description": "使目標暈眩遲緩，造成 {damage} 點傷害，並使移動速度降低 50%，持續 4 秒。"
       },
       "mongoose_bite": {
         "name": "反噬獠牙",
-        "description": "在目標閃躲後反擊，造成武器傷害加 12。無法被閃躲。"
+        "description": "在目標閃躲後反擊，造成武器傷害加 {damage}。無法被閃躲。"
       },
       "wing_clip": {
         "name": "桎梏斬",
-        "description": "造成傷口，使敵人移動速度降低 40%，持續 10 秒。"
+        "description": "造成傷口，造成 {damage} 點傷害，並使敵人移動速度降低 40%，持續 10 秒。"
       },
       "aspect_of_the_monkey": {
         "name": "靈貂之姿",
@@ -5325,7 +5568,7 @@ export const zh_TW: EnTranslations = {
       },
       "power_word_fortitude": {
         "name": "堅毅連禱",
-        "description": "使目標的耐力提高 3，持續 30 分鐘。"
+        "description": "使目標的耐力提高 {buff}，持續 30 分鐘。"
       },
       "shadow_word_pain": {
         "name": "腐朽輓歌",
@@ -5333,7 +5576,7 @@ export const zh_TW: EnTranslations = {
       },
       "power_word_shield": {
         "name": "守護聖詠",
-        "description": "保護目標，吸收 48 點傷害，持續 30 秒。"
+        "description": "保護目標，吸收 {damage} 點傷害，持續 30 秒。"
       },
       "renew": {
         "name": "綿延恩典",
@@ -5361,7 +5604,7 @@ export const zh_TW: EnTranslations = {
       },
       "rockbiter_weapon": {
         "name": "縛石武器",
-        "description": "以大地之怒灌注你的武器：每次揮擊額外造成 5 點傷害，持續 5 分鐘。"
+        "description": "以大地之怒灌注你的武器：每次揮擊額外造成 {damage} 點傷害，持續 5 分鐘。"
       },
       "healing_wave": {
         "name": "療癒之水",
@@ -5373,15 +5616,15 @@ export const zh_TW: EnTranslations = {
       },
       "lightning_shield": {
         "name": "雷霆守護",
-        "description": "以爆裂閃電環繞自身：近戰攻擊者會受到 13 點自然傷害。"
+        "description": "以爆裂閃電環繞自身：近戰攻擊者會受到 {buff} 點自然傷害，最多 3 次充能，且每 5 秒最多觸發一次。"
       },
       "flame_shock": {
         "name": "燼焰震擊",
-        "description": "用火焰灼燒目標，造成 25 點傷害，並在 12 秒內額外造成 {damage}。"
+        "description": "用火焰灼燒目標，造成 {damage} 點傷害，並在 12 秒內額外造成 {overTime}。"
       },
       "flametongue_weapon": {
         "name": "焰烙武器",
-        "description": "用元素之火灌注你的武器：每次揮擊額外造成 8 點火焰傷害，持續 5 分鐘。"
+        "description": "用元素之火灌注你的武器：每次揮擊額外造成 {damage} 點火焰傷害，持續 5 分鐘。"
       },
       "frost_shock": {
         "name": "凜霜震擊",
@@ -5389,7 +5632,7 @@ export const zh_TW: EnTranslations = {
       },
       "frostbrand_weapon": {
         "name": "凜霜束縛武器",
-        "description": "為你的武器附上刺骨寒霜：每次揮擊額外造成 8 點傷害，持續 5 分鐘。"
+        "description": "為你的武器附上刺骨寒霜：每次揮擊額外造成 {damage} 點傷害，持續 5 分鐘。"
       },
       "ghost_wolf": {
         "name": "幽影狼",
@@ -5405,11 +5648,11 @@ export const zh_TW: EnTranslations = {
       },
       "demon_skin": {
         "name": "邪魔之皮",
-        "description": "惡魔皮膚使你的護甲提高 30，持續 30 分鐘。"
+        "description": "惡魔皮膚使你的護甲提高 {buff}，持續 30 分鐘。"
       },
       "immolate": {
         "name": "燃燒契約",
-        "description": "灼燒敵人，造成 11 點火焰傷害，並在 15 秒內額外造成 {damage}。"
+        "description": "灼燒敵人，造成 {damage} 點火焰傷害，並在 15 秒內額外造成 {overTime}。"
       },
       "corruption": {
         "name": "黑腐術",
@@ -5417,7 +5660,7 @@ export const zh_TW: EnTranslations = {
       },
       "life_tap": {
         "name": "苛刻交易",
-        "description": "將 30 點生命值轉化為 30 點法力值。"
+        "description": "將 {damage} 點生命值轉化為 {damage} 點法力值。"
       },
       "curse_of_agony": {
         "name": "苦楚邪咒",
@@ -5449,7 +5692,7 @@ export const zh_TW: EnTranslations = {
       },
       "mark_of_the_wild": {
         "name": "野性守護",
-        "description": "為一個友方目標施加野性守護，使護甲提高 25，持續 30 分鐘。"
+        "description": "為一個友方目標施加野性守護，使護甲提高 {buff}，持續 30 分鐘。"
       },
       "moonfire": {
         "name": "月光風暴",
@@ -5461,7 +5704,7 @@ export const zh_TW: EnTranslations = {
       },
       "thorns": {
         "name": "荊棘守衛",
-        "description": "目標身上長出荊棘：近戰攻擊者受到 3 點自然傷害。"
+        "description": "目標身上長出荊棘：近戰攻擊者受到 {buff} 點自然傷害。"
       },
       "entangling_roots": {
         "name": "攫纏根鬚",
@@ -5469,7 +5712,7 @@ export const zh_TW: EnTranslations = {
       },
       "bear_form": {
         "name": "巨熊形態",
-        "description": "變形為熊：護甲 +65%，攻擊強度 +15，你的攻擊會產生怒氣並額外產生 30% 威脅值。再次施放可返回施法者形態。"
+        "description": "變形為熊：護甲 +90%，攻擊強度大幅提高，你的攻擊會產生怒氣並額外產生 30% 威脅值。再次施放可返回施法者形態。"
       },
       "maul": {
         "name": "碎骨擊",
@@ -5489,7 +5732,7 @@ export const zh_TW: EnTranslations = {
       },
       "ferocious_bite": {
         "name": "血噬",
-        "description": "終結技，根據連擊點數造成傷害。僅限狼形態。"
+        "description": "終結技，造成 {damage}。僅限狼形態。"
       },
       "swipe": {
         "name": "橫掃利爪",
@@ -5521,7 +5764,7 @@ export const zh_TW: EnTranslations = {
       },
       "faerie_fire": {
         "name": "巫光",
-        "description": "使目標的護甲降低 35，持續 40 秒。"
+        "description": "使目標的護甲降低 {damage}%，持續 40 秒。無法與削甲疊加。"
       },
       "hibernate": {
         "name": "沉眠",
@@ -5545,7 +5788,7 @@ export const zh_TW: EnTranslations = {
       },
       "rip": {
         "name": "割裂",
-        "description": "終結技，在 12 秒內造成流血傷害。消耗連擊點。僅限狼形態。"
+        "description": "終結技，在 12 秒內造成 {damage} 點流血傷害。消耗連擊點。僅限狼形態。"
       },
       "mortal_strike": {
         "name": "致殘打擊",
@@ -5553,11 +5796,11 @@ export const zh_TW: EnTranslations = {
       },
       "bloodthirst": {
         "name": "放血",
-        "description": "在鮮血狂怒中立即攻擊，造成 {damage} 點傷害。（狂怒專精標誌技能）"
+        "description": "在鮮血狂怒中立即攻擊，造成 60% 武器傷害加 {damage}。（狂怒專精標誌技能）"
       },
       "shield_slam": {
         "name": "碎盾擊",
-        "description": "用盾牌猛擊目標，造成 {damage} 點傷害並產生巨量威脅。（防護專精標誌技能）"
+        "description": "用盾牌猛擊目標，造成 50% 武器傷害加 {damage} 並產生巨量威脅。（防護專精標誌技能）"
       },
       "whirlwind": {
         "name": "利刃迴旋",
@@ -5752,6 +5995,9 @@ export const zh_TW: EnTranslations = {
       "greyjaw_fang": {
         "name": "老灰顎的尖牙"
       },
+      "chunk_of_ore": {
+        "name": "礦石塊"
+      },
       "weathered_ledger_page": {
         "name": "風化帳頁"
       },
@@ -5781,6 +6027,15 @@ export const zh_TW: EnTranslations = {
       },
       "linen_scrap": {
         "name": "亞麻碎布"
+      },
+      "arcane_dust": {
+        "name": "奧術之塵"
+      },
+      "arcane_essence": {
+        "name": "奧術精華"
+      },
+      "arcane_shard": {
+        "name": "奧術碎片"
       },
       "fen_muster_order": {
         "name": "芬橋集結令"
@@ -6207,6 +6462,24 @@ export const zh_TW: EnTranslations = {
       },
       "sunpetal_sickle": {
         "name": "陽瓣鐮刀"
+      },
+      "thorium_ore": {
+        "name": "瑟銀礦石"
+      },
+      "arcanite_bar": {
+        "name": "秘銀錠"
+      },
+      "ashwood_log": {
+        "name": "灰木原木"
+      },
+      "elderwood_log": {
+        "name": "古老接骨木原木"
+      },
+      "goldleaf_herb": {
+        "name": "金葉草"
+      },
+      "sunpetal_herb": {
+        "name": "陽瓣草"
       },
       "bristleback_maul": {
         "name": "加洛格拉斯戰錘"
@@ -6906,6 +7179,9 @@ export const zh_TW: EnTranslations = {
       }
     },
     "mobs": {
+      "yumi_cat": {
+        "name": "由美"
+      },
       "forest_wolf": {
         "name": "森林狼"
       },
@@ -6965,6 +7241,9 @@ export const zh_TW: EnTranslations = {
       },
       "deacon_voss": {
         "name": "執事沃斯"
+      },
+      "training_dummy": {
+        "name": "訓練假人"
       },
       "ridge_stalker": {
         "name": "山脊潛獵者"
@@ -7352,6 +7631,21 @@ export const zh_TW: EnTranslations = {
         "title": "世界市場守護者",
         "greeting": "世界市場在此亦可使用，{className}。從王國各地的冒險者手中購買，或出售你自己的貨物。"
       },
+      "bursar_fernando": {
+        "name": "司庫費爾南多",
+        "title": "鍍金保險箱",
+        "greeting": "歡迎來到鍍金保險箱。你的財物在我們的鎖後安然無恙。"
+      },
+      "bursar_petra_vell": {
+        "name": "司庫佩特拉·維爾",
+        "title": "鍍金保險箱",
+        "greeting": "鍍金保險箱帳目清晰，金庫更是一塵不染。想讓我們為你存放些什麼？"
+      },
+      "bursar_aldous_crane": {
+        "name": "司庫奧爾多斯·克萊恩",
+        "title": "鍍金保險箱",
+        "greeting": "每一只木箱、每一個錢櫃、每一件飾物，交給鍍金保險箱都萬無一失。"
+      },
       "brother_aldric_raid": {
         "name": "奧德里克修士",
         "title": "山谷牧師",
@@ -7384,6 +7678,16 @@ export const zh_TW: EnTranslations = {
       }
     },
     "quests": {
+      "q_prof_intro": {
+        "title": "人人都有一技之長",
+        "text": "伊斯特布魯克的每個人都有除了劍術之外的手藝，{playerName}。鎮子周圍散落著礦脈，去揮鎬採上5塊礦石帶給我。要親自採，別耍花招，我看得出來。",
+        "completion": "看到了吧？礦石進了包裡，手上也磨出了繭子。繼續在路上採礦、伐木、採藥，回到鎮上時，留意市場旁的城鎮專注面板和附近的製作台。只要你願意，靠這些都能正經謀生。",
+        "objectives": {
+          "0": {
+            "label": "礦石塊"
+          }
+        }
+      },
       "q_wolves": {
         "title": "門前群狼",
         "text": "森林狼已敢撲咬北路旅人，{playerName}。擊敗8隻森林狼，讓東溪能鬆一口氣。",

@@ -1,8 +1,17 @@
 import type { TalentModifiers } from './content/talents';
 import { aggregateSetBonuses, CLASSES, ITEMS, MOBS, type NpcDef } from './data';
 import { meetsLevelRequirement } from './item_level_req';
-import type { Entity, EquipSlot, MobTemplate, PlayerClass, Stats, Vec3 } from './types';
+import type {
+  Entity,
+  EquipSlot,
+  ItemInstancePayload,
+  MobTemplate,
+  PlayerClass,
+  Stats,
+  Vec3,
+} from './types';
 import {
+  cloneItemInstancePayload,
   critFractionFromRating,
   EQUIP_SLOTS,
   hasteFractionFromRating,
@@ -71,6 +80,8 @@ function baseEntity(id: number, pos: Vec3): Entity {
     gcdRemaining: 0,
     cooldowns: new Map(),
     queuedOnSwing: null,
+    queuedCastAbility: null,
+    queuedCastAim: null,
     fiveSecondRule: 99,
     comboPoints: 0,
     comboUntil: -1,
@@ -106,6 +117,7 @@ function baseEntity(id: number, pos: Vec3): Entity {
     enraged: false,
     healedThisPull: false,
     threat: new Map(),
+    bossDamagers: new Set(),
     forcedTargetId: null,
     forcedTargetTimer: 0,
     ownerId: null,
@@ -142,6 +154,7 @@ function baseEntity(id: number, pos: Vec3): Entity {
     skin: 0,
     mainhandItemId: null,
     equippedItems: {},
+    equippedInstances: {},
     guild: '',
   };
 }
@@ -182,7 +195,8 @@ export function recalcPlayerStats(
   e: Entity,
   cls: PlayerClass,
   equipment: PlayerEquipment,
-  mods?: TalentModifiers,
+  mods: TalentModifiers | undefined,
+  equipmentInstance: Partial<Record<EquipSlot, ItemInstancePayload>>,
 ): void {
   const def = CLASSES[cls];
   const lvl = e.level;
@@ -213,13 +227,27 @@ export function recalcPlayerStats(
     bonusSp += item.spellPower ?? 0;
     bonusCritRating += item.critRating ?? 0;
     bonusHasteRating += item.hasteRating ?? 0;
-    if (!item.stats) continue;
-    s.str += item.stats.str ?? 0;
-    s.agi += item.stats.agi ?? 0;
-    s.sta += item.stats.sta ?? 0;
-    s.int += item.stats.int ?? 0;
-    s.spi += item.stats.spi ?? 0;
-    s.armor += item.stats.armor ?? 0;
+    if (item.stats) {
+      s.str += item.stats.str ?? 0;
+      s.agi += item.stats.agi ?? 0;
+      s.sta += item.stats.sta ?? 0;
+      s.int += item.stats.int ?? 0;
+      s.spi += item.stats.spi ?? 0;
+      s.armor += item.stats.armor ?? 0;
+    }
+    // Enchant bonus (Enchanting profession): additive on top of the item's own
+    // base stats, from this specific instance's rolled.stats (see
+    // src/sim/professions/enchanting.ts applyEnchant). A plain, unenchanted
+    // piece has no entry here, so this is a no-op for the common case.
+    const enchantStats = equipmentInstance?.[slot]?.rolled?.stats;
+    if (enchantStats) {
+      s.str += enchantStats.str ?? 0;
+      s.agi += enchantStats.agi ?? 0;
+      s.sta += enchantStats.sta ?? 0;
+      s.int += enchantStats.int ?? 0;
+      s.spi += enchantStats.spi ?? 0;
+      s.armor += enchantStats.armor ?? 0;
+    }
   }
   // Item-set bonuses from equipped pieces. Flat primary stats join the gear
   // totals so they feed every derivation below; AP/crit/pushback fold in at
@@ -237,6 +265,14 @@ export function recalcPlayerStats(
   let bearForm = false;
   let catForm = false;
   let scaleMul = 1; // Fiesta buff_scale: body-size multiplier (>1 also adds hp)
+  // Percent raid buffs (Mark of the Wild / Arcane Intellect / Power Word: Fortitude /
+  // Devotion Aura / Battle Shout / Blessing of Might). Accumulated as fractions here,
+  // then folded multiplicatively at the relevant derivation step below.
+  let allStatsPct = 0;
+  let intPct = 0;
+  let staPct = 0;
+  let buffArmorPct = 0;
+  let buffApPct = 0;
   for (const a of e.auras) {
     if (a.kind === 'buff_ap') bonusAp += a.value;
     // Attack-power debuff (Demoralizing Shout/Roar). Mobs fold this live in
@@ -268,6 +304,13 @@ export function recalcPlayerStats(
       s.spi = Math.round(s.spi * m);
     } else if (a.kind === 'buff_dodge') bonusDodge += a.value;
     else if (a.kind === 'buff_scale') scaleMul *= a.value;
+    // Percent raid buffs store integer percent POINTS (5 = +5%) so they survive the
+    // integer-rounding talent value multiplier; converted to a fraction here.
+    else if (a.kind === 'buff_stats_pct') allStatsPct += a.value / 100;
+    else if (a.kind === 'buff_int_pct') intPct += a.value / 100;
+    else if (a.kind === 'buff_sta_pct') staPct += a.value / 100;
+    else if (a.kind === 'buff_armor_pct') buffArmorPct += a.value / 100;
+    else if (a.kind === 'buff_ap_pct') buffApPct += a.value / 100;
     else if (a.kind === 'form_bear') bearForm = true;
     else if (a.kind === 'form_cat') catForm = true;
   }
@@ -291,6 +334,16 @@ export function recalcPlayerStats(
     if (m.intPct) s.int = Math.round(s.int * (1 + m.intPct));
     if (m.spiPct) s.spi = Math.round(s.spi * (1 + m.spiPct));
   }
+  // Percent stat raid buffs, folded multiplicatively on the computed (base + gear +
+  // flat + talent) primary stats so they feed every downstream derivation (AP from
+  // str/agi, Spell Power from int, HP from sta, crit/dodge from agi).
+  if (allStatsPct || intPct || staPct) {
+    s.str = Math.round(s.str * (1 + allStatsPct));
+    s.agi = Math.round(s.agi * (1 + allStatsPct));
+    s.sta = Math.round(s.sta * (1 + allStatsPct + staPct));
+    s.int = Math.round(s.int * (1 + allStatsPct + intPct));
+    s.spi = Math.round(s.spi * (1 + allStatsPct));
+  }
   // Floor Agility at 0 so a draining debuff (negative buff_agi) can never push the
   // derived armor/dodge below what zero Agility would give.
   s.agi = Math.max(0, s.agi);
@@ -304,6 +357,7 @@ export function recalcPlayerStats(
     s.agi += Math.max(2, Math.floor(lvl / 2));
   }
   if (mods?.stats.armorPct) s.armor = Math.round(s.armor * (1 + mods.stats.armorPct));
+  if (buffArmorPct) s.armor = Math.round(s.armor * (1 + buffArmorPct)); // Devotion Aura
   // Floor Spirit at 0 so a Spirit-siphoning debuff (negative buff_spi) can never
   // drive out-of-combat regen (updateRegen reads stats.spi) below zero.
   s.spi = Math.max(0, s.spi);
@@ -331,6 +385,18 @@ export function recalcPlayerStats(
   // owning PlayerMeta.equipment never aliases into the entity. Synced in the
   // identity wire (terse `eq`) for the inspect-another-player window.
   e.equippedItems = { ...equipment };
+  // Render-only mirror of PlayerMeta.equipmentInstance, same copy-not-alias
+  // reasoning as equippedItems above. Deep-cloned via cloneItemInstancePayload
+  // (not a shallow spread) since a payload's own rolled.stats map must not be
+  // aliased into the mirror.
+  e.equippedInstances = equipmentInstance
+    ? Object.fromEntries(
+        Object.entries(equipmentInstance).map(([slot, inst]) => [
+          slot,
+          cloneItemInstancePayload(inst),
+        ]),
+      )
+    : {};
   // Melee AP by class (classic-era-ish): warriors/paladins/shamans/druids 2/str,
   // rogues str+agi, hunters str+agi, pure casters str.
   const apFromStats =
@@ -341,11 +407,15 @@ export function recalcPlayerStats(
         : s.str;
   // Floor at 0 so a heavy debuff_ap stack can never bake a negative attack power
   // (mirrors effectiveAttackPower's mob floor and the agi/spi floors above).
-  e.attackPower = Math.max(0, Math.round((apFromStats + bonusAp) * (1 + (mods?.stats.apPct ?? 0))));
+  // buffApPct (Battle Shout / Blessing of Might) folds into the same AP multiplier.
+  e.attackPower = Math.max(
+    0,
+    Math.round((apFromStats + bonusAp) * (1 + (mods?.stats.apPct ?? 0) + buffApPct)),
+  );
   // Hunters: ranged AP = 2/agi (classic-era value)
   e.rangedPower =
     cls === 'hunter'
-      ? Math.max(0, Math.round((s.agi * 2 + bonusAp) * (1 + (mods?.stats.apPct ?? 0))))
+      ? Math.max(0, Math.round((s.agi * 2 + bonusAp) * (1 + (mods?.stats.apPct ?? 0) + buffApPct)))
       : 0;
   // Spell Power: Intellect converted via SPELL_POWER_PER_INT plus flat Spell Power
   // from gear/buffs. Floored at 0 so an Intellect-draining debuff can't go negative.
@@ -426,10 +496,11 @@ export function characterDerivedStats(
   level: number,
   equipment: PlayerEquipment,
   mods?: TalentModifiers,
+  equipmentInstance?: Partial<Record<EquipSlot, ItemInstancePayload>>,
 ): DerivedCharacterStats {
   const e = createPlayer(0, cls, { x: 0, y: 0, z: 0 }, '');
   e.level = Math.max(1, Math.floor(level));
-  recalcPlayerStats(e, cls, equipment, mods);
+  recalcPlayerStats(e, cls, equipment, mods, equipmentInstance ?? {});
   return {
     stats: e.stats,
     maxHp: e.maxHp,

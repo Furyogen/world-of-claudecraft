@@ -32,7 +32,7 @@ See `server/CLAUDE.md` for server conventions; read `server/game.ts` directly fo
 - **Delta invariant:** the server OMITS heavy/unchanged fields (`cds`, `inv`,
   `equip`, `qlog`, `qdone`, `tal`, `stats`, `party`…). Guard every one with
   `if (s.X !== undefined)` and keep the prior value otherwise; do NOT default a
-  missing field to empty, that wipes local state. The full delta-key set (the 25
+  missing field to empty, that wipes local state. The full delta-key set (the 35
   `maybe(...)` keys the encoder may omit) and the terse-key to IWorld-name mapping are
   pinned by `ALL_DELTA_KEYS` + `TERSE_TO_IWORLD` in `tests/snapshots.test.ts` (W0a).
 - **Lite vs full:** identity fields (`k`, `tid`, `nm`…) ride only in "full" records

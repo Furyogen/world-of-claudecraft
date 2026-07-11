@@ -14,8 +14,8 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 402,
-      "state": "ba3bd899",
+      "nextId": 406,
+      "state": "7301c7f4",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -35,17 +35,20 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "rogue",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 401,
+          "entityId": 405,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -75,7 +78,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 62,
-          "id": 401,
+          "id": 405,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -120,9 +123,9 @@
     {
       "tick": 20,
       "time": 1,
-      "nextId": 403,
-      "state": "b2d5cedb",
-      "events": "7b17622e",
+      "nextId": 407,
+      "state": "460b794c",
+      "events": "33293b2e",
       "rng": {
         "draws": 9,
         "digest": "8ecad8de"
@@ -131,9 +134,9 @@
     {
       "tick": 40,
       "time": 2,
-      "nextId": 403,
-      "state": "6b7c2e6d",
-      "events": "54582808",
+      "nextId": 407,
+      "state": "636ce5b6",
+      "events": "e29847dc",
       "rng": {
         "draws": 15,
         "digest": "843b3bf7"
@@ -142,9 +145,9 @@
     {
       "tick": 60,
       "time": 3,
-      "nextId": 403,
-      "state": "c947204b",
-      "events": "0eb7ed36",
+      "nextId": 407,
+      "state": "3e84eb60",
+      "events": "57dccdba",
       "rng": {
         "draws": 90,
         "digest": "0f3d4b16"
@@ -153,8 +156,8 @@
     {
       "tick": 72,
       "time": 3.6,
-      "nextId": 403,
-      "state": "b4ee7651",
+      "nextId": 407,
+      "state": "69ee5cea",
       "events": "741638a5",
       "rng": {
         "draws": 143,
@@ -174,6 +177,7 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "rogue",
           "companionUpgrades": {},
           "counters": {
@@ -181,13 +185,15 @@
             "damageTaken": 9
           },
           "craftSkills": {},
+          "craftThrottle": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 401,
+          "entityId": 405,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -221,7 +227,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 102.6,
           "hp": 49991,
-          "id": 401,
+          "id": 405,
           "inCombat": true,
           "kind": "player",
           "level": 10,
@@ -255,7 +261,7 @@
             "str": 26
           },
           "swingTimer": 0.05,
-          "targetId": 402,
+          "targetId": 406,
           "templateId": "rogue",
           "weapon": {
             "dagger": true,
@@ -265,7 +271,7 @@
           }
         },
         {
-          "aggroTargetId": 401,
+          "aggroTargetId": 405,
           "aiState": "attack",
           "combatTimer": 1.2,
           "comboUntil": -1,
@@ -277,7 +283,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 8921,
-          "id": 402,
+          "id": 406,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -307,12 +313,12 @@
             "armor": 40
           },
           "swingTimer": 0.45,
-          "tappedById": 401,
-          "targetId": 401,
+          "tappedById": 405,
+          "targetId": 405,
           "templateId": "forest_wolf",
           "threat": [
             [
-              401,
+              405,
               80
             ]
           ],

@@ -144,6 +144,7 @@ const CALLBACK_KEYS = [
   'dungeonDifficulty',
   'setDungeonDifficulty',
   'awardHeroicMarks',
+  'grantHeroicKillLockout',
   // M3 mob-swing affix cascade surface.
   'effectiveArmor',
   'recalcPlayer',
@@ -257,18 +258,29 @@ function makeFakeHost() {
     arenaQueue2v2: [],
     arenaQueueFiesta: [],
     arenaBusySlots: new Set(),
+    arenaQueueYumi3: [],
+    arenaQueueYumi5: [],
+    yumiBusySlots: new Set(),
+    yumiCatMatches: new Map(),
+    matchmakeYumi: vi.fn(),
+    updateYumiActive: vi.fn(),
+    yumiPlayerDown: vi.fn(),
+    yumiCatDamaged: vi.fn(),
+    cleanupYumiMatch: vi.fn(),
     nextArenaMatchId: 1,
     delveRuns: [],
     delvePetStash: new Map(),
     utcDay: '',
     pendingMobRespawns: [],
     partyInvites: new Map(),
+    readyChecks: new Map(),
     chatTokens: new Map(),
     channelSubs: new Map(),
     pendingLootRolls: new Map(),
     nextLootRollId: 1,
     devCommands: false,
     marketListings: [],
+    bankerIds: [],
     vcup: createVcState(),
     emit: vi.fn(),
     error: vi.fn(),
@@ -329,6 +341,8 @@ function makeFakeHost() {
     checkQuestReady: vi.fn(),
     countItem: vi.fn(() => 0),
     countFungibleItem: vi.fn(() => 0),
+    countEnchantableItem: vi.fn(() => 0),
+    removeEnchantableItem: vi.fn(),
     completeQuestForDev: vi.fn(() => false),
     completeCurrentQuestsForDev: vi.fn(() => 0),
     lockoutNowMs: vi.fn(() => 0),
@@ -340,6 +354,7 @@ function makeFakeHost() {
     dungeonDifficulty: vi.fn(() => 'normal' as const),
     setDungeonDifficulty: vi.fn(),
     awardHeroicMarks: vi.fn(),
+    grantHeroicKillLockout: vi.fn(),
     addEntity: vi.fn(),
     dropEntity: vi.fn(),
     rebucket: vi.fn(),
@@ -421,6 +436,7 @@ function makeFakeHost() {
     lineOfSightBlocked: vi.fn(() => false),
     stopFollow: vi.fn(),
     partyInvite: vi.fn(),
+    readyCheckStart: vi.fn(),
     tameError: vi.fn(() => null),
     standUp: vi.fn(),
     breakGhostWolf: vi.fn(),
@@ -483,6 +499,14 @@ describe('createSimContext (isolated, fake host)', () => {
     clock.tick = 7;
     expect(ctx.time).toBe(12.5);
     expect(ctx.tickCount).toBe(7);
+  });
+
+  it('exposes bankerIds as a live shared view (the marketListings idiom)', () => {
+    const { host } = makeFakeHost();
+    const ctx = createSimContext(host);
+    expect(ctx.bankerIds).toBe(host.bankerIds);
+    host.bankerIds.push(4242); // the Sim ctor pushes ids after the ctx is built
+    expect(ctx.bankerIds).toEqual([4242]);
   });
 
   it('passes every callback through to the host by identity (no rewrapping)', () => {

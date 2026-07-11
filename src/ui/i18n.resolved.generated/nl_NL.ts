@@ -154,6 +154,14 @@ export const nl_NL: EnTranslations = {
     "spectate": {
       "banner": "Toeschouwer bij {name}"
     },
+    "readyCheck": {
+      "prompt": "{name} heeft een gereedheidscontrole gestart. Ben je gereed?",
+      "ready": "Gereed",
+      "notReady": "Niet gereed",
+      "result": "Gereedheidscontrole: {ready} gereed, {notReady} niet gereed, {noResponse} geen antwoord.",
+      "notInPartyError": "Je moet in een groep zitten om een gereedheidscontrole te starten.",
+      "inProgressError": "Er is al een gereedheidscontrole bezig."
+    },
     "death": {
       "resurrectAtCorpse": "Herrijs bij je lijk",
       "resurrectAtHealer": "De Bleke Hoeder (Tol van de Hoeder)",
@@ -232,7 +240,8 @@ export const nl_NL: EnTranslations = {
         "eligible": "Beloningen ontgrendeld.",
         "no_wallet": "Verbind een portemonnee met minstens $20 USD aan WOC.",
         "under_minimum": "Portemonnee ligt onder het WOC-minimum van $20 USD.",
-        "price_unavailable": "WOC-prijs is niet beschikbaar, beloningen zijn tijdelijk vergrendeld."
+        "price_unavailable": "WOC-prijs is niet beschikbaar, beloningen zijn tijdelijk vergrendeld.",
+        "banned": "Je bent uitgesloten van dagelijkse beloningen. Reden: {reason}"
       }
     },
     "claudium": {
@@ -334,6 +343,7 @@ export const nl_NL: EnTranslations = {
       "targetLabel": "Je Doelwit",
       "targetAnnounce": "Markeer {name}",
       "partyLabel": "Je Bende",
+      "partyChip": "Groep",
       "partyGroup": "Groep {n}",
       "durationUnitSeconds": "s",
       "durationUnitMinutes": "m",
@@ -348,14 +358,15 @@ export const nl_NL: EnTranslations = {
       "chat": "Ga naar chat"
     },
     "mobile": {
-      "autorun": "Autoloop",
       "jump": "Springen",
       "leaderboard": "Ranglijst",
-      "dailyRewards": "Rewards",
+      "dailyRewards": "Beloningen",
       "nameplates": "Namen",
       "haptics": "Haptiek",
       "hapticsOff": "Haptiek uit",
       "toggleHaptics": "Haptiek aan/uit",
+      "showMenuButtons": "Menuknoppen tonen",
+      "hideMenuButtons": "Menuknoppen verbergen",
       "hotbarPage": "Vaardigheden",
       "hotbarPageAria": "Toon de volgende set vaardigheden",
       "actionRing": "Gevechtsacties",
@@ -363,7 +374,9 @@ export const nl_NL: EnTranslations = {
       "actionPageIndicator": "Pag. {page}",
       "targetCycle": "Wissel van doel",
       "targetCycleShort": "Doel",
-      "spellbookPageLabel": "Pagina {page}"
+      "spellbookPageLabel": "Pagina {page}",
+      "hideKeyboard": "Toetsenbord verbergen",
+      "chatPlaceholder": "Zeg iets..."
     },
     "tutorial": {
       "moveBodyTouch": "Gebruik de bewegingsstick om te bewegen en sleep over het scherm om rond te kijken. Zet een paar stappen om te beginnen.",
@@ -437,142 +450,148 @@ export const nl_NL: EnTranslations = {
       "targetFriendly": "Dichtstbijzijnde Bondgenoot Aanwijzen",
       "targetFriendlyNext": "Door Bondgenoten Bladeren",
       "discord": "Discord",
-      "valecup": "Vale Cup"
+      "valecup": "Dalbeker",
+      "categoryPet": "Huisdier",
+      "petAttack": "Huisdier: Aanvallen",
+      "petStop": "Huisdier: Stoppen",
+      "petTaunt": "Huisdier: Uitdagen",
+      "petDefensive": "Huisdier: Verdedigend",
+      "petAggressive": "Huisdier: Agressief"
     },
     "vcup": {
-      "title": "The Vale Cup",
-      "shootPower": "POWER",
-      "close": "Close the Vale Cup window",
-      "offlineNote": "The fixture book is closed. The Vale Cup is not available right now.",
-      "recordLine": "Your record: {wins} wins, {losses} losses, {draws} draws.",
-      "bracketsAria": "Match bracket",
+      "title": "De Dalbeker",
+      "shootPower": "KRACHT",
+      "close": "Sluit het Dalbeker-venster",
+      "offlineNote": "Het wedstrijdboek is gesloten. De Dalbeker is op dit moment niet beschikbaar.",
+      "recordLine": "Jouw staat van dienst: {wins} overwinningen, {losses} nederlagen, {draws} gelijke spelen.",
+      "bracketsAria": "Wedstrijdcategorie",
       "bracketLabel": "{n}v{n}",
-      "waitingCount": "{count} waiting",
-      "nationsHeading": "Banner nation",
+      "waitingCount": "{count} wachtend",
+      "nationsHeading": "Baniernatie",
       "nation": {
-        "vale": "Eastbrook Vale",
-        "mirefen": "The Mirefen",
-        "thornpeak": "Thornpeak",
-        "coliseum": "The Ashen Coliseum",
-        "choir": "The Pale Choir",
-        "ogre": "The Ogre Clans",
-        "moon": "The Pale Moon",
-        "copperdig": "The Copper Dig"
+        "vale": "Oostbeekdal",
+        "mirefen": "Het Slijkveen",
+        "thornpeak": "Doorntop",
+        "coliseum": "Het Asgrauwe Colosseum",
+        "choir": "Het Bleke Koor",
+        "ogre": "De Ogerclans",
+        "moon": "De Bleke Maan",
+        "copperdig": "De Kopergroeve"
       },
-      "awayNote": "If both sides fly the same banner, the away side plays the inverted palette.",
-      "rolesHeading": "Sport role",
+      "awayNote": "Als beide kanten dezelfde banier voeren, speelt de uitploeg in het omgekeerde kleurenpalet.",
+      "rolesHeading": "Sportrol",
       "role": {
         "allrounder": {
-          "name": "All-Rounder",
-          "desc": "A bit of everything: kick, boot, and a fair shoulder."
+          "name": "Allrounder",
+          "desc": "Van alles wat: trappen, uithalen en een eerlijke schouderduw."
         },
         "striker": {
-          "name": "Striker",
-          "desc": "Lives for the long boot and the quick sidestep."
+          "name": "Spits",
+          "desc": "Leeft voor de verre uithaal en de snelle zijstap."
         },
         "sweeper": {
-          "name": "Sweeper",
-          "desc": "Bumps runners off the ball and hoofs it clear."
+          "name": "Laatste Man",
+          "desc": "Duwt lopers van de bal en pegelt hem weg."
         },
         "keeper": {
           "name": "Keeper",
-          "desc": "Guards the goal box with grip, dive, and punt."
+          "desc": "Bewaakt het doelgebied met grip, duik en uittrap."
         }
       },
-      "queue": "Join the Queue",
-      "leaveQueue": "Leave the Queue",
-      "queueNote": "Queue from anywhere; the whistle calls you to the Sowfield.",
-      "queuedStatus": "Queued for {bracket}: position {position} of {count}.",
-      "blockNation": "Pick a banner nation first.",
-      "blockPartySize": "That bracket needs a smaller party.",
-      "blockNotLeader": "Only the party leader can queue the team.",
-      "inMatchNote": "Your team is on the pitch. Play on!",
-      "deserterNote": "The Groundskeeper remembers. You may queue again in {seconds} sec.",
-      "liveHeading": "Now at the Sowfield",
-      "liveAria": "Vale Cup: {nationA} {scoreA}, {nationB} {scoreB}",
-      "walkUp": "Walk up to the Sowfield to watch from the stands.",
-      "noLive": "The pitch is quiet. No match is being played.",
-      "boardHeading": "Winners board",
-      "boardEmpty": "No winners recorded yet. The Copper Pail waits.",
-      "boardWins": "{count} wins",
-      "enterAsGuild": "Enter under the banner of {guild}",
-      "guildRecordLine": "Your guild record: {wins} wins, {losses} losses.",
-      "guildBoardHeading": "Guild banners",
-      "guildBoardEmpty": "No guild has taken the field yet. Fly your banner!",
-      "guildBoardWl": "{wins} W, {losses} L",
-      "practice": "Practice vs. Bots",
-      "practiceNote": "Starts a private bot match on your own practice pitch right away.",
-      "practicingNow": "Practicing now ({count}):",
+      "queue": "Sluit je aan in de wachtrij",
+      "leaveQueue": "Wachtrij verlaten",
+      "queueNote": "Meld je aan vanaf elke plek; de fluit roept je naar het Zeugveld.",
+      "queuedStatus": "In de wachtrij voor {bracket}: plaats {position} van {count}.",
+      "blockNation": "Kies eerst een baniernatie.",
+      "blockPartySize": "Die categorie vraagt een kleinere groep.",
+      "blockNotLeader": "Alleen de groepsleider kan het team aanmelden.",
+      "inMatchNote": "Je team staat op het veld. Doorspelen!",
+      "deserterNote": "De Terreinmeester onthoudt het. Je mag je over {seconds} sec weer aanmelden.",
+      "liveHeading": "Nu op het Zeugveld",
+      "liveAria": "Dalbeker: {nationA} {scoreA}, {nationB} {scoreB}",
+      "walkUp": "Loop naar het Zeugveld om toe te kijken vanaf de tribunes.",
+      "noLive": "Het veld ligt er stil bij. Er wordt geen wedstrijd gespeeld.",
+      "boardHeading": "Winnaarsbord",
+      "boardEmpty": "Nog geen winnaars opgetekend. De Koperen Emmer wacht.",
+      "boardWins": "{count} overwinningen",
+      "enterAsGuild": "Treed aan onder de banier van {guild}",
+      "guildRecordLine": "Staat van dienst van je gilde: {wins} overwinningen, {losses} nederlagen.",
+      "guildBoardHeading": "Gildebanieren",
+      "guildBoardEmpty": "Nog geen gilde heeft het veld betreden. Hijs je banier!",
+      "guildBoardWl": "{wins} W, {losses} V",
+      "practice": "Oefenen tegen bots",
+      "practiceNote": "Start meteen een besloten botwedstrijd op je eigen oefenveld.",
+      "practicingNow": "Nu aan het oefenen ({count}):",
       "clock": "{minutes}:{seconds}",
-      "indicatorQueued": "Vale Cup queue: {bracket}, position {position} of {count}",
-      "indicatorLive": "Vale Cup",
-      "indicatorOpen": "Open the Vale Cup window",
-      "phaseCountdown": "Kickoff in {seconds}",
+      "indicatorQueued": "Dalbeker-wachtrij: {bracket}, plaats {position} van {count}",
+      "indicatorLive": "Dalbeker",
+      "indicatorOpen": "Open het Dalbeker-venster",
+      "phaseCountdown": "Aftrap over {seconds}",
       "phaseGoal": "GOAL!",
-      "phaseGolden": "GOLDEN GOAL",
-      "phaseOver": "FULL TIME",
-      "bannerFound": "The Vale Cup calls: {nationA} vs {nationB}!",
-      "bannerCountdown": "Kickoff in {seconds}...",
-      "bannerKickoff": "KICKOFF!",
-      "bannerGoal": "GOAL! {nation} scores!",
-      "bannerSave": "{name} SAVES!",
-      "bannerGolden": "GOLDEN GOAL: next score wins!",
-      "bannerEnd": "Full time: {nationA} {scoreA}, {nationB} {scoreB}",
-      "bannerWin": "Victory at the Sowfield!",
-      "bannerDraw": "A draw at the Sowfield.",
-      "bannerLoss": "Defeat at the Sowfield.",
-      "logQueued": "You join the Vale Cup queue for {bracket} (position {position}).",
-      "logUnqueued": "You leave the Vale Cup queue.",
-      "logFound": "Your Vale Cup match is ready: {nationA} vs {nationB}.",
-      "logRoster": "Your side: {allies}. Their side: {enemies}.",
-      "logGoal": "{name} scores for {nation}! {nationA} {scoreA}, {nationB} {scoreB}.",
-      "logSave": "{name} makes the save!",
-      "logWin": "You win the bout at the Sowfield.",
-      "logDraw": "The bout at the Sowfield ends in a draw.",
-      "logLoss": "You lose the bout at the Sowfield.",
-      "gossipOpen": "The book of fixtures",
-      "gossipOpenAria": "Open the Vale Cup window",
-      "mobileLabel": "Cup",
+      "phaseGolden": "GOUDEN GOAL",
+      "phaseOver": "EINDSIGNAAL",
+      "bannerFound": "De Dalbeker roept: {nationA} tegen {nationB}!",
+      "bannerCountdown": "Aftrap over {seconds}...",
+      "bannerKickoff": "AFTRAP!",
+      "bannerGoal": "GOAL! {nation} scoort!",
+      "bannerSave": "{name} REDT!",
+      "bannerGolden": "GOUDEN GOAL: de volgende treffer wint!",
+      "bannerEnd": "Eindstand: {nationA} {scoreA}, {nationB} {scoreB}",
+      "bannerWin": "Overwinning op het Zeugveld!",
+      "bannerDraw": "Een gelijkspel op het Zeugveld.",
+      "bannerLoss": "Nederlaag op het Zeugveld.",
+      "logQueued": "Je sluit je aan bij de Dalbeker-wachtrij voor {bracket} (plaats {position}).",
+      "logUnqueued": "Je verlaat de Dalbeker-wachtrij.",
+      "logFound": "Je Dalbeker-wedstrijd staat klaar: {nationA} tegen {nationB}.",
+      "logRoster": "Jouw kant: {allies}. Hun kant: {enemies}.",
+      "logGoal": "{name} scoort voor {nation}! {nationA} {scoreA}, {nationB} {scoreB}.",
+      "logSave": "{name} redt de bal!",
+      "logWin": "Je wint de partij op het Zeugveld.",
+      "logDraw": "De partij op het Zeugveld eindigt in een gelijkspel.",
+      "logLoss": "Je verliest de partij op het Zeugveld.",
+      "gossipOpen": "Het wedstrijdboek",
+      "gossipOpenAria": "Open het Dalbeker-venster",
+      "mobileLabel": "Beker",
       "briefing": {
-        "subtitle": "Pre-match briefing",
-        "vs": "vs",
-        "rulesHeading": "How to play",
-        "rule1": "Kick or pass the ball into the enemy goal to score.",
-        "rule2": "First to 5 goals wins, or the most goals when full time blows.",
-        "rule3": "A level match at full time goes to golden goal: the next score wins.",
-        "rule4": "Tackles only tumble you over. Nobody gets hurt under the harvest truce.",
-        "rule5": "Anyone can walk up and cheer you on from the stands.",
-        "kitHeading": "Your kit",
-        "kitNote": "These moves replace your class abilities for the match.",
-        "rosterHeading": "The team sheet",
-        "you": "You",
+        "subtitle": "Wedstrijdbespreking",
+        "vs": "tegen",
+        "rulesHeading": "Hoe je speelt",
+        "rule1": "Trap of speel de bal in het vijandelijke doel om te scoren.",
+        "rule2": "Wie het eerst 5 doelpunten maakt wint, of wie de meeste heeft bij het eindsignaal.",
+        "rule3": "Staat het gelijk bij het eindsignaal, dan volgt de gouden goal: de volgende treffer wint.",
+        "rule4": "Tackles laten je alleen omtuimelen. Niemand raakt gewond onder het oogstbestand.",
+        "rule5": "Iedereen kan aan komen lopen en je aanmoedigen vanaf de tribunes.",
+        "kitHeading": "Jouw uitrusting",
+        "kitNote": "Deze zetten vervangen je klassevaardigheden voor de duur van de wedstrijd.",
+        "rosterHeading": "De opstelling",
+        "you": "Jij",
         "bot": "Bot",
-        "ready": "I'm ready",
-        "readyDone": "Ready",
-        "readyAria": "Ready up for kickoff",
-        "waiting": "Waiting for the other side to ready up...",
-        "whistle": "The whistle blows in {seconds}s.",
-        "readyCount": "{ready} of {total} ready"
+        "ready": "Ik ben er klaar voor",
+        "readyDone": "Klaar",
+        "readyAria": "Meld je klaar voor de aftrap",
+        "waiting": "Wachten tot de tegenpartij zich klaar meldt...",
+        "whistle": "De fluit klinkt over {seconds}s.",
+        "readyCount": "{ready} van {total} klaar"
       },
       "bet": {
-        "title": "Match Bets",
-        "aria": "Vale Cup match betting",
-        "closesIn": "Bets close in {seconds}s",
-        "closed": "Betting closed",
-        "prize": "Pool {amount}",
-        "splitAria": "Share of the betting pool on each team",
-        "expand": "View bets and wager",
-        "collapse": "Hide bets",
-        "oddsLabel": "Pays",
-        "back": "Back {team}",
-        "form": "{wins}W-{losses}L",
-        "mine": "Your bet: {amount} on {team}",
-        "none": "You have no bet on this match yet.",
-        "record": "Betting record: {wins}W-{losses}L, {sign}{net}",
-        "wonBanner": "Your bet won!",
-        "wonLog": "Your Vale Cup bet won: {amount} returned.",
-        "lostLog": "Your Vale Cup bet lost: {amount}.",
-        "refundLog": "Bets voided, your {amount} stake was returned."
+        "title": "Wedstrijdweddenschappen",
+        "aria": "Weddenschappen op de Dalbeker-wedstrijd",
+        "closesIn": "Inzetten sluiten over {seconds}s",
+        "closed": "Inzetten gesloten",
+        "prize": "Pot {amount}",
+        "splitAria": "Aandeel van de wedpot per team",
+        "expand": "Weddenschappen bekijken en inzetten",
+        "collapse": "Weddenschappen verbergen",
+        "oddsLabel": "Keert uit",
+        "back": "Zet in op {team}",
+        "form": "{wins}W-{losses}V",
+        "mine": "Jouw inzet: {amount} op {team}",
+        "none": "Je hebt nog geen weddenschap op deze wedstrijd.",
+        "record": "Wedbalans: {wins}W-{losses}V, {sign}{net}",
+        "wonBanner": "Je weddenschap is gewonnen!",
+        "wonLog": "Je Dalbeker-weddenschap is gewonnen: {amount} uitgekeerd.",
+        "lostLog": "Je Dalbeker-weddenschap is verloren: {amount}.",
+        "refundLog": "Weddenschappen nietig verklaard, je inzet van {amount} is teruggegeven."
       }
     },
     "options": {
@@ -612,7 +631,84 @@ export const nl_NL: EnTranslations = {
       "showSecondaryActionBar": "Secundaire actiebalk tonen",
       "showDailyRewardsChest": "Kist met dagelijkse beloningen tonen",
       "mobileCameraJoystick": "Camerajoystick",
-      "mobileLeftHanded": "Linkshandige indeling"
+      "mobileLeftHanded": "Linkshandige indeling",
+      "ia": {
+        "railDisplay": "Weergave",
+        "railInput": "Invoer",
+        "railSystem": "Systeeminstellingen",
+        "catOverviewName": "Overzicht",
+        "catOverviewSub": "Vastgezette basisinstellingen, snelle acties en wijzigingen.",
+        "catGraphicsSub": "Kwaliteit, zicht en wereldweergave.",
+        "catInterfaceSub": "HUD-schaal, panelen, chat en eenheidsframes.",
+        "catAccessibilityName": "Toegankelijkheid",
+        "catAccessibilitySub": "Beweging, contrast en prettige inhoud.",
+        "catControlsName": "Besturing",
+        "catControlsSub": "Camera, beweging, gevechten en feedback.",
+        "catKeybindsSub": "Stel toetsen in voor elke actie.",
+        "catControllerSub": "Gamepadgevoel en knopindeling.",
+        "catTouchName": "Aanraakbediening",
+        "catTouchSub": "Schermsticks, kijkbediening en knoppen.",
+        "catAudioSub": "Volume en geluidsopties.",
+        "catSystemName": "Systeeminstellingen",
+        "catSystemSub": "Prestaties, hulp en informatie."
+      },
+      "done": "Klaar",
+      "resetAllTitle": "Alle instellingen herstellen?",
+      "resetAllBody": "Hiermee worden alle instellingen naar hun standaardwaarden hersteld. Dit kan niet ongedaan worden gemaakt.",
+      "searchPlaceholder": "Instellingen zoeken",
+      "searchScopeAll": "Alle instellingen",
+      "searchScopeThis": "Dit onderdeel",
+      "searchEmpty": "Geen instellingen komen overeen met je zoekopdracht.",
+      "searchGoTo": "Ga naar {category}",
+      "modeOnline": "Met verbinding",
+      "modeOffline": "Zonder verbinding",
+      "changed": "{count} gewijzigd",
+      "changedSummary": "{count} gewijzigd ten opzichte van de standaardwaarden",
+      "legend": {
+        "category": "Categorie",
+        "navigate": "Navigeren",
+        "select": "Selecteren",
+        "back": "Terug",
+        "reset": "Herstellen",
+        "clear": "Wissen",
+        "page": "Pagina"
+      },
+      "keybindCleared": "Toewijzing voor {action} gewist",
+      "keybindRebinding": "{action} opnieuw toewijzen. Druk op een toets of op Escape om te annuleren.",
+      "keybindEvicted": "{key} toegewezen aan {action}; verwijderd van {evicted}",
+      "keybindTaken": "Toets verwijderd",
+      "keybindUnbound": "{action} heeft geen toets",
+      "keybindModifierHint": "Tip: je kunt combinaties met modificatietoetsen toewijzen. Houd Shift, Ctrl of Alt ingedrukt terwijl je op een toets drukt om de combinatie vast te leggen, bijvoorbeeld Shift+1.",
+      "conflictDot": "Toewijzingsconflict",
+      "overviewConflictAlert": "Sommige toetstoewijzingen conflicteren of zijn niet ingesteld.",
+      "sec": {
+        "quality": "Kwaliteit",
+        "view": "Zicht",
+        "general": "Algemeen",
+        "scaleText": "Schaal en tekst",
+        "panels": "Panelen",
+        "unitFrames": "Eenheidsframes",
+        "actionBars": "Actiebalken",
+        "chat": "Gesprekken",
+        "combatTooltips": "Gevecht en hulpteksten",
+        "hudExtras": "HUD-extra’s",
+        "motionContrast": "Beweging en contrast",
+        "content": "Inhoud",
+        "camera": "Camerabediening",
+        "movement": "Beweging",
+        "combat": "Gevecht",
+        "feedback": "Terugkoppeling",
+        "inputMode": "Invoermodus",
+        "feel": "Gevoel",
+        "sticks": "Stuurknuppels",
+        "look": "Kijkbediening",
+        "buttons": "Knoppen",
+        "volume": "Geluidssterkte",
+        "toggles": "Schakelaars",
+        "performance": "Prestaties",
+        "support": "Hulp",
+        "about": "Informatie"
+      }
     },
     "controller": {
       "title": "Controller",
@@ -624,7 +720,8 @@ export const nl_NL: EnTranslations = {
       "buttons": "Knopindeling",
       "resetButtons": "Knopindeling resetten",
       "menuAction": "Spelmenu",
-      "help": "Linkerstick beweegt, rechterstick kijkt rond. Open een venster om de aanwijzer op het scherm te gebruiken."
+      "help": "Linkerstick beweegt, rechterstick kijkt rond. Open een venster om de aanwijzer op het scherm te gebruiken.",
+      "duplicate": "Ook toegewezen aan {buttons}"
     },
     "perf": {
       "title": "Prestatie-overlay",
@@ -663,8 +760,9 @@ export const nl_NL: EnTranslations = {
         "fps01Low": "0,1% Laag",
         "ping": "Ping",
         "jitter": "Jitter",
-        "predLead": "Prediction Lead",
+        "predLead": "Predictievoorsprong",
         "snapshot": "Snapshotfrequentie",
+        "serverTick": "Servertickfrequentie",
         "connection": "Verbinding",
         "drawCalls": "Draw Calls",
         "triangles": "Driehoeken",
@@ -756,11 +854,17 @@ export const nl_NL: EnTranslations = {
       }
     },
     "talents": {
-      "defaultBuildName": "Build {n}"
+      "defaultBuildName": "Build {n}",
+      "choicesTab": "Keuzes",
+      "resetChoices": "Keuzes herstellen",
+      "tierLevel": "Niveau {n}",
+      "tierLevelLabel": "Niveau"
     },
     "tips": {
       "joinChannels": "Tip: typ /join world of /join lfg om te chatten met spelers over de hele wereld."
     },
+    "itemHeroicTag": "[HELDHAFTIG]",
+    "itemSoulbound": "Zielsgebonden",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -962,13 +1066,13 @@ export const nl_NL: EnTranslations = {
       }
     },
     "townFocus": {
-      "title": "Town Focus",
-      "hint": "Focus points add a bonus on top of every component's baseline yield. Unfocused components stay at baseline.",
-      "budgetLabel": "Points remaining: {remaining} / {budget}",
-      "saveButton": "Save Focus",
-      "notInTownHint": "You must be in town to set your focus.",
-      "increaseAria": "Increase focus on {component}",
-      "decreaseAria": "Decrease focus on {component}"
+      "title": "Stadsfocus",
+      "hint": "Focuspunten geven een bonus bovenop de basisopbrengst van elk onderdeel. Onderdelen zonder focus blijven op het basisniveau.",
+      "budgetLabel": "Punten over: {remaining} / {budget}",
+      "saveButton": "Focus opslaan",
+      "notInTownHint": "Je moet in de stad zijn om je focus in te stellen.",
+      "increaseAria": "Vergroot de focus op {component}",
+      "decreaseAria": "Verminder de focus op {component}"
     },
     "party": {
       "promoteLeader": "Bevorderen tot leider",
@@ -1055,10 +1159,19 @@ export const nl_NL: EnTranslations = {
         "allStats": "Verringert alle Attribute um {value}"
       },
       "allStatsPctReduce": "Vermindert alle statistieken met {pct}%",
+      "increasePct": {
+        "ap": "Verhoogt aanvalskracht met {pct}%",
+        "armor": "Verhoogt pantser met {pct}%",
+        "int": "Verhoogt Intellect met {pct}%",
+        "sta": "Verhoogt Uithoudingsvermogen met {pct}%",
+        "allStats": "Verhoogt alle statistieken met {pct}%"
+      },
       "dodge": "Erhöht Ausweichchance um {pct}%",
       "dodgeReduce": "Verringert Ausweichchance um {pct}%",
       "armorFlat": "Verringert Rüstung um {value}",
       "armorFlatStacks": "Verringert Rüstung um {value} ({stacks} Stapel)",
+      "armorPct": "Vermindert pantser met {pct}%",
+      "armorPctStacks": "Vermindert pantser met {pct}% ({stacks} stapels)",
       "mortalWound": "Verringert erhaltene Heilung um {pct}%",
       "vulnerability": "Erhöht erlittenen Schaden um {pct}%",
       "physVuln": "Erhöht erlittenen physischen Schaden um {pct}%",
@@ -1096,6 +1209,26 @@ export const nl_NL: EnTranslations = {
     },
     "worldBoss": {
       "spawn": "{name} verrijst boven Doorntop-Hoogten!"
+    },
+    "auth": {
+      "appleLoginCta": "Ga verder met Apple",
+      "appleError": "Aanmelden met Apple is mislukt. Probeer het opnieuw.",
+      "appleChoiceIntro": "Maak een nieuw account of koppel Apple aan een bestaand account.",
+      "appleChoiceExpired": "Deze aanmelding bij Apple is verlopen. Meld je opnieuw aan met Apple.",
+      "forgotPrompt": "Wachtwoord vergeten?",
+      "forgotTitle": "Wachtwoord opnieuw instellen",
+      "forgotHint": "Voer je gebruikersnaam in en we sturen een herstellink naar het geregistreerde e-mailadres.",
+      "forgotUsername": "Gebruikersnaam",
+      "forgotSubmit": "Herstellink versturen",
+      "forgotSent": "Als een account met die gebruikersnaam een e-mailadres heeft, hebben we een herstellink gestuurd. Controleer je inbox.",
+      "forgotBack": "Terug naar inloggen",
+      "resetTitle": "Kies een nieuw wachtwoord",
+      "resetNewPassword": "Nieuw wachtwoord",
+      "resetConfirm": "Bevestig nieuw wachtwoord",
+      "resetSubmit": "Wachtwoord bijwerken",
+      "resetDone": "Je wachtwoord is bijgewerkt. Je kunt nu inloggen.",
+      "resetMismatch": "De wachtwoorden komen niet overeen.",
+      "resetErrInvalid": "Deze herstellink is ongeldig of verlopen. Vraag een nieuwe aan."
     },
     "loot": {
       "chestTitle": "Kist"
@@ -1326,6 +1459,8 @@ export const nl_NL: EnTranslations = {
       "parcelsLabel": "Pakketten",
       "parcelsHint": "Klik op een voorwerp in je tassen om het bij te voegen.",
       "removeParcelAria": "Verwijder {item} uit de brief",
+      "parcelQtyDecreaseAria": "Eén {item} minder versturen",
+      "parcelQtyIncreaseAria": "Eén {item} meer versturen",
       "sendButton": "Brief versturen",
       "postageNote": "Porto: {amount}. De raaf vliegt ongeveer {seconds}s.",
       "arrivedBanner": "De raaf is geland: post van {name}.",
@@ -1348,6 +1483,50 @@ export const nl_NL: EnTranslations = {
         "letterGone": "Die brief zit niet meer in je brievenbus.",
         "takeParcelsFirst": "Haal de pakketten eruit voordat je de brief weggooit."
       }
+    },
+    "bank": {
+      "title": "Bank",
+      "subtitle": "De Vergulde Geldkist",
+      "close": "Bank sluiten",
+      "capacity": "{used}/{total}",
+      "capacityAria": "Bankvakken gebruikt: {used} van {total}",
+      "empty": "Je bank is leeg.",
+      "tooFar": "Je moet bij een bankier zijn om je bank te bekijken.",
+      "buySlots": "Koop {count} vakken",
+      "buySlotsMaxed": "Volledig uitgebreid",
+      "buyConfirm": "{count} extra bankvakken kopen voor {price}?",
+      "buyConfirmAccept": "Kopen",
+      "withdrawHint": "Klik om op te nemen",
+      "withdrawPartialHint": "Shift-klik om een deel op te nemen",
+      "depositHint": "Klik om te storten",
+      "depositPartialHint": "Shift-klik om een deel te storten",
+      "cannotDeposit": "Kan niet in de bank",
+      "depositQuantityTitle": "{item} storten",
+      "depositQuantityInput": "Aantal om te storten",
+      "depositQuantityConfirm": "Storten",
+      "withdrawQuantityTitle": "{item} opnemen",
+      "withdrawQuantityInput": "Aantal om op te nemen",
+      "withdrawQuantityConfirm": "Opnemen",
+      "filterGroupAria": "Bank filteren op categorie",
+      "sortAria": "Bankvoorwerpen sorteren",
+      "searchAria": "Bankvoorwerpen zoeken op naam",
+      "depositAll": "Alle materialen storten",
+      "depositAllDone": "Materialen gestort: {count}.",
+      "depositAllFull": "Materialen gestort: {count}. De bank is nu vol.",
+      "depositAllNone": "Bank vol: niets gestort.",
+      "bonusTitle": "Bonusvakken",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "E-mailadres geverifieerd",
+      "bonusSourceDiscord": "Discord gekoppeld",
+      "bonusSourceWallet": "Portemonnee gekoppeld",
+      "bonusSourceReferral": "Aangebrachte vrienden",
+      "bonusAdvertEmail": "Verifieer je e-mailadres om 2 vakken te verdienen.",
+      "bonusAdvertDiscord": "Koppel je Discord om 2 vakken te verdienen.",
+      "bonusAdvertWallet": "Koppel een portemonnee om 2 vakken te verdienen.",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "Nodig een vriend uit: wanneer die niveau 10 bereikt, verdienen jullie allebei 2 vakken, tot 5 vrienden.",
+      "bonusSectionAria": "Bonusbankvakken en hoe je er meer verdient"
     },
     "calendar": {
       "title": "Evenementenkalender",
@@ -1420,6 +1599,7 @@ export const nl_NL: EnTranslations = {
     "archetypeTitle": {
       "label": "Titel",
       "none": "Geen",
+      "hobbyLabel": "Liefhebberij",
       "armorcrafting": "Harnasmaker",
       "weaponcrafting": "Wapensmid",
       "jewelcrafting": "Juwelier",
@@ -1442,7 +1622,10 @@ export const nl_NL: EnTranslations = {
       "craftedToast": "Gemaakt: {name}",
       "insufficientMaterials": "Daar heb je de materialen niet voor.",
       "unknownRecipe": "Dat recept bestaat niet.",
-      "comboRequirementUnmet": "Je hebt niet beide vereiste ambachten op het vereiste niveau voor dat recept."
+      "comboRequirementUnmet": "Je hebt niet beide vereiste ambachten op het vereiste niveau voor dat recept.",
+      "notAtHub": "Je moet bij de werkbank zijn, op het vereiste niveau, om dat te maken.",
+      "throttled": "Je maakt te snel. Wacht even en probeer het opnieuw.",
+      "recipeNotLearned": "Je hebt dat recept nog niet geleerd."
     }
   },
   "apiError": {
@@ -1549,7 +1732,7 @@ export const nl_NL: EnTranslations = {
       "bestiary": "Bestiarium",
       "models": "3D-modellen",
       "gear": "Uitrusting & Voorwerpen",
-      "professions": "Professions",
+      "professions": "Beroepen",
       "economy": "Economie & Handel",
       "social": "Sociaal & Groepen",
       "stats": "Personage & Statistieken",
@@ -1564,7 +1747,7 @@ export const nl_NL: EnTranslations = {
       "combat": "Gevecht",
       "talents": "Talenten",
       "arena": "Arena & PvP",
-      "valeCup": "Vale Cup",
+      "valeCup": "Dalbeker",
       "glossary": "Begrippenlijst",
       "wishIKnew": "Dingen die ik graag eerder had geweten",
       "faq": "FAQ",
@@ -2215,36 +2398,38 @@ export const nl_NL: EnTranslations = {
       "waveGoldBody": "De middelste golf: tweesnijdende combo's waar je build vorm begint te krijgen en gaat zingen.",
       "wavePrismaticTitle": "Prismatisch",
       "wavePrismaticBody": "De laatste golf: build-bepalende, schermversmeltende pieken bedoeld om belachelijk aan te voelen op de beste manier.",
+      "yumiHeading": "Bescherm Yumi",
+      "yumiBody": "Bescherm Yumi is een teamdoelspel dat in een doolhof wordt gespeeld: elke kant bewaakt zijn eigen kattenmetgezel terwijl hij die van de ander bejaagt. Zo nu en dan flitsen beide katten naar nieuwe hoeken van het doolhof, zodat het gevecht heen en weer gaat tussen verdedigen, jagen en de race om ze opnieuw te vinden. Sluit aan als drie tegen drie of vijf tegen vijf; sneuvelen in de strijd zet je maar even op de bank.",
       "powerupsTitle": "Power-ups in de ring",
       "powerupsBody": "Gloeiende bollen vallen ook middenin het gevecht in de arena, gratis voor wie ze als eerste bereikt. Ze zijn opzettelijk over de top en duren maar even: Speed Demon voor een flits van verblindend tempo, Colossus om uit te dijen tot een logge reus, Moon Boots voor een stuiterende sprong met lage zwaartekracht, en Berserker voor een plotselinge golf van razernij.",
       "ladderHeading": "De ladder beklimmen",
       "ladderBody": "Ranglijstspel volgt je positie over de tijd. Bekijk het scorebord om te zien waar je staat en wie de top van het rijk bezit."
     },
     "valeCupPage": {
-      "heading": "The Vale Cup",
-      "intro": "Boarball at the Sowfield: pick a banner, pick a role, and kick a stuffed boar hide past a keeper for the Copper Pail. No blood, no loot, just the roar of the stands.",
-      "loreHeading": "Boarball and the harvest truce",
-      "loreOldSow": "Long before the dead woke, Eastbrook's farmhands played boarball on the stubble fields after harvest: two mobs, one boar's hide stuffed with straw, and two wagon gates dragged to either end of the green. The first ball, the Old Sow, hangs bronzed above the tavern hearth.",
-      "loreTruce": "When the Ashen Coliseum began sanctioning war games, Marshal Redbrook answered with something gentler: a standing harvest truce on the old green. The wagon gates became goalposts, the green got walls, stands, and a name, the Sowfield, and the prize was always the same dented milk pail the winners drank from: the Copper Pail.",
-      "howHeading": "How to play",
-      "howQueue": "Queue from anywhere through the Vale Cup window, or talk to Groundskeeper Bram at the Sowfield gate. Pick a bracket from one-a-side up to five-a-side, a banner nation, and a sport role; queue solo or bring your party.",
-      "howMatch": "On kickoff your class kit is swapped for a sport kit and restored exactly afterward. Kicks aim at the ground reticle, the ball banks off the boards, and dribbling is just running with the ball. Score more goals than the other side before full time; a draw goes to golden goal.",
-      "howTruce": "Nobody bleeds at the Sowfield: tackles tumble, nothing hurts, and pets sit the match out.",
-      "spectateBody": "One match plays at a time at the stadium, and anyone can walk up and watch from the stands.",
-      "nationsHeading": "The eight banner nations",
-      "nationsBody": "Every team plays under a banner. The captain picks the nation, and if both sides fly the same one, the away side plays the inverted palette.",
-      "nationVale": "Green and gold, flying the wheat sheaf: the home side, farmhands to the bone.",
-      "nationMirefen": "Teal and grey under the heron: patient, long-legged, never hurried.",
-      "nationThornpeak": "Ice blue and white under the mountain peak: sure-footed and stubborn.",
-      "nationColiseum": "Red and black with crossed swords: they play like it is still a war game.",
-      "nationChoir": "Pale blue and silver under the bell: eerie, precise, and very quiet.",
-      "nationOgre": "Orange and umber behind the fist: shoulder-first and proud of it.",
-      "nationMoon": "Violet and silver under the crescent: night players, light on their feet.",
-      "nationCopperdig": "Copper and brown with the pickaxe: diggers who never stop running.",
-      "rolesHeading": "Sport roles",
-      "rolesBody": "Your role decides the kit you carry onto the pitch. Everyone kicks; the rest is temperament.",
-      "rewardsHeading": "Truce rules",
-      "rewardsBody": "Truce rules mean no experience and no loot: a decided match counts toward your record and the winners board, and daily-reward points come with it. Deserting a match benches your slot, and the Groundskeeper remembers."
+      "heading": "De Dalbeker",
+      "intro": "Zwijnenbal op het Zeugveld: kies een banier, kies een rol, en trap een opgezette zwijnenhuid langs een keeper voor de Koperen Emmer. Geen bloed, geen buit, alleen het gebrul van de tribunes.",
+      "loreHeading": "Zwijnenbal en het oogstbestand",
+      "loreOldSow": "Lang voordat de doden ontwaakten, speelden de boerenknechten van Oostbeek zwijnenbal op de stoppelvelden na de oogst: twee horden, één zwijnenhuid gevuld met stro, en twee wagenhekken die naar de uiteinden van het veld werden gesleept. De eerste bal, de Oude Zeug, hangt in brons boven de taveernehaard.",
+      "loreTruce": "Toen het Asgrauwe Colosseum oorlogsspelen begon te sanctioneren, antwoordde Maarschalk Redbrook met iets zachtaardigers: een blijvend oogstbestand op het oude veld. De wagenhekken werden doelpalen, het veld kreeg muren, tribunes en een naam, het Zeugveld, en de prijs was altijd dezelfde gedeukte melkemmer waar de winnaars uit dronken: de Koperen Emmer.",
+      "howHeading": "Hoe je speelt",
+      "howQueue": "Meld je vanaf elke plek aan via het Dalbeker-venster, of praat met Terreinmeester Bram bij de poort van het Zeugveld. Kies een categorie van één tegen één tot vijf tegen vijf, een baniernatie en een sportrol; meld je solo aan of neem je groep mee.",
+      "howMatch": "Bij de aftrap wordt je klasse-uitrusting omgeruild voor een sportuitrusting en daarna exact hersteld. Trappen mikken op het grondvizier, de bal kaatst tegen de boarding, en dribbelen is gewoon rennen met de bal. Maak meer doelpunten dan de tegenpartij voor het eindsignaal; bij een gelijkspel volgt de gouden goal.",
+      "howTruce": "Niemand bloedt op het Zeugveld: tackles laten je tuimelen, niets doet pijn, en huisdieren zitten de wedstrijd uit.",
+      "spectateBody": "Er wordt één wedstrijd tegelijk gespeeld in het stadion, en iedereen kan aan komen lopen en toekijken vanaf de tribunes.",
+      "nationsHeading": "De acht baniernaties",
+      "nationsBody": "Elk team speelt onder een banier. De aanvoerder kiest de natie, en als beide kanten dezelfde banier voeren, speelt de uitploeg in het omgekeerde kleurenpalet.",
+      "nationVale": "Groen en goud, onder de korenschoof: de thuisploeg, boerenknechten in hart en nieren.",
+      "nationMirefen": "Groenblauw en grijs onder de reiger: geduldig, met lange benen, nooit gehaast.",
+      "nationThornpeak": "IJsblauw en wit onder de bergtop: vast ter been en koppig.",
+      "nationColiseum": "Rood en zwart met gekruiste zwaarden: ze spelen alsof het nog steeds een oorlogsspel is.",
+      "nationChoir": "Bleekblauw en zilver onder de klok: onheilspellend, precies en heel stil.",
+      "nationOgre": "Oranje en omber achter de vuist: schouder eerst, en er trots op.",
+      "nationMoon": "Violet en zilver onder de maansikkel: nachtspelers, licht op de voeten.",
+      "nationCopperdig": "Koper en bruin met het houweel: delvers die nooit stoppen met rennen.",
+      "rolesHeading": "Sportrollen",
+      "rolesBody": "Je rol bepaalt de uitrusting die je het veld op draagt. Iedereen trapt; de rest is temperament.",
+      "rewardsHeading": "Bestandsregels",
+      "rewardsBody": "Bestandsregels betekenen geen ervaring en geen buit: een besliste wedstrijd telt mee voor je staat van dienst en het winnaarsbord, en er komen punten voor dagelijkse beloningen bij. Wie een wedstrijd verlaat, zet zijn plek op de bank, en de Terreinmeester onthoudt het."
     },
     "wishPage": {
       "heading": "Dingen die ik wou dat ik wist",
@@ -2331,33 +2516,33 @@ export const nl_NL: EnTranslations = {
       "cosmeticsApply": "Stel je actieve uiterlijk in vanaf de uiterlijkrij op je personagescherm, en wissel vrij tussen alles wat je hebt ontgrendeld."
     },
     "professions": {
-      "intro": "Beyond combat and quests, the world rewards you for working the land and the forge: gathering raw materials, turning them into gear at the crafting stations of ten different trades, and settling into an identity as one of the ten archetypes those trades represent.",
-      "gatherTitle": "Gathering: Mining, Logging, and Herbalism",
-      "gatherIntro": "Three gathering trades let you pull raw materials straight out of the world: Mining strikes ore and stone from veins, Logging fells timber from stands of trees, and Herbalism collects herbs and plants growing wild. Each is tracked separately, so working one never slows your progress in another.",
-      "gatherWhatTitle": "Resource nodes",
-      "gatherWhatBody": "Ore veins, wood stands, and herb patches are placed out in the zones as visible, unowned fixtures. Walk up to one and interact with it to harvest whatever it holds. Once you have harvested a node, it needs time to recover before you personally can harvest it again, though it never blocks anyone else: another player can harvest the very same node in the meantime.",
-      "gatherProficiencyTitle": "Proficiency and material quality",
-      "gatherProficiencyBody": "Every successful harvest builds your proficiency in that gathering trade. A higher proficiency shifts what you pull out of a node toward rarer grades of material, from common on up, though the rarest grades stay rare even at high proficiency. More practice never hurts your odds, it only ever improves them.",
-      "gatherToolsTitle": "Tools of the trade",
-      "gatherToolsBody": "Vendors sell basic tools for each gathering trade, and better ones can be crafted, so working a resource node is meant to feel more capable as you gear up for it rather than staying static. Higher-tier tools are the intended way to unlock access to richer nodes and to work them more efficiently over a long session.",
-      "craftTitle": "The ten crafts",
-      "craftIntro": "Ten crafting trades turn gathered materials into finished gear and goods: Armorcrafting, Weaponcrafting, and Jewelcrafting shape raw matter into wearable gear; Alchemy and Engineering are driven by trial and error; Cooking, Inscription, and Enchanting each touch other crafts' output; Tailoring and Leatherworking work from exact patterns. Together they form a wheel, with each craft sitting next to two neighbors and opposite one other.",
-      "craftRingTitle": "A wheel of specialties",
-      "craftRingBody": "The ten crafts are arranged in a fixed ring, and where a craft sits on that ring matters: crafts next to each other on the wheel share more in common with each other than crafts on opposite sides do. Committing to one craft is meant to feel like joining a family of related trades, not picking an isolated skill.",
-      "craftRecipesTitle": "Recipes and reagents",
-      "craftRecipesBody": "Every craft has its own recipes, each calling for specific reagents you gather or buy. The most basic recipes in each craft ask for nothing but common materials and are craftable from the very start, so you can begin working a trade the moment you pick it up rather than waiting to unlock it.",
-      "craftMasteryTitle": "Skill and mastery",
-      "craftMasteryBody": "Crafting successfully builds skill in that trade, and richer recipes are gated behind higher skill: the basic recipes are open to everyone, while progressively more advanced ones ask for progressively more mastery to attempt. Growing your skill in a craft is the path from simple starter goods to its more ambitious recipes.",
-      "craftComboTitle": "Combination recipes",
-      "craftComboBody": "Beyond a single craft's own recipe list, the wheel also supports combination recipes that call on two neighboring crafts at once, rewarding a character (or a pair of trading partners) who has invested in adjacent trades on the ring rather than one in isolation.",
-      "archetypeTitle": "The ten archetypes",
-      "archetypeIntro": "Each of the ten crafts also stands for an archetype, a broader identity you can adopt beyond just working that trade. Your active archetype is a single choice at a time, not a checklist: you carry one, and can change which one later if you choose to.",
-      "archetypeChooseTitle": "Choosing your archetype",
-      "archetypeChooseBody": "You declare your first archetype through an early, zone one story quest that formally accepts you into that identity. Until you complete that quest, you have not yet chosen an archetype at all.",
-      "archetypeSwitchTitle": "Changing your mind",
-      "archetypeSwitchBody": "Having declared an archetype once does not lock you into it forever. Changing to a different archetype means first completing a repeatable \"make amends\" quest for your old one, and each time you switch, the amends expected of you the next time grow a little steeper, so switching stays meaningful rather than costless.",
-      "archetypeIdentityTitle": "What your archetype means",
-      "archetypeIdentityBody": "Your active archetype is a statement about who your character is in the world, recognized in how others and the world address you. The exact rewards and recognition that come with it are still being finalized; check back as the system fills in."
+      "intro": "Naast gevecht en quests beloont de wereld je voor het bewerken van het land en de smidse: grondstoffen verzamelen, ze aan de werkbanken van tien verschillende vakken tot uitrusting maken, en een identiteit aannemen als een van de tien archetypen die deze vakken vertegenwoordigen.",
+      "gatherTitle": "Verzamelen: Mijnbouw, Houtkap en Kruidenkunde",
+      "gatherIntro": "Drie verzamelvakken laten je grondstoffen rechtstreeks uit de wereld halen: Mijnbouw slaat erts en steen uit aders, Houtkap velt timmerhout uit bomengroepen, en Kruidenkunde plukt kruiden en planten die in het wild groeien. Elk wordt apart bijgehouden, dus aan het ene werken vertraagt nooit je voortgang in het andere.",
+      "gatherWhatTitle": "Grondstofbronnen",
+      "gatherWhatBody": "Ertsaders, bomengroepen en kruidenveldjes staan in de gebieden als zichtbare, onbeheerde vaste punten. Loop ernaartoe en gebruik ze om te oogsten wat ze bevatten. Heb je een bron eenmaal geoogst, dan heeft die tijd nodig om te herstellen voordat jij persoonlijk er opnieuw kunt oogsten, maar niemand anders wordt geblokkeerd: een andere speler kan intussen precies dezelfde bron oogsten.",
+      "gatherProficiencyTitle": "Bedrevenheid en materiaalkwaliteit",
+      "gatherProficiencyBody": "Elke geslaagde oogst bouwt je bedrevenheid in dat verzamelvak op. Een hogere bedrevenheid verschuift wat je uit een bron haalt richting zeldzamere kwaliteiten materiaal, van gewoon opwaarts, al blijven de zeldzaamste kwaliteiten zeldzaam, ook bij hoge bedrevenheid. Meer oefening schaadt je kansen nooit, ze worden er alleen maar beter van.",
+      "gatherToolsTitle": "Gereedschap van het vak",
+      "gatherToolsBody": "Handelaren verkopen basisgereedschap voor elk verzamelvak, en beter gereedschap kan worden gemaakt, zodat het werken van een grondstofbron capabeler moet gaan voelen naarmate je je ervoor uitrust, in plaats van statisch te blijven. Gereedschap van hogere rang is de bedoelde weg om rijkere bronnen te ontsluiten en ze over een lange sessie efficiënter te bewerken.",
+      "craftTitle": "De tien ambachten",
+      "craftIntro": "Tien ambachten maken van verzamelde materialen afgewerkte uitrusting en goederen: Harnasmaken, Wapensmeden en Juwelenmaken vormen ruwe grondstoffen om tot draagbare uitrusting; Alchemie en Knutselwerk draaien op vallen en opstaan; Koken, Inscriptie en Betoveren raken elk het werk van andere ambachten; Kleermaken en Leerbewerken werken naar exacte patronen. Samen vormen ze een wiel, waarbij elk ambacht naast twee buren zit en tegenover één ander.",
+      "craftRingTitle": "Een wiel van specialiteiten",
+      "craftRingBody": "De tien ambachten staan in een vaste ring, en waar een ambacht op die ring zit doet ertoe: ambachten die naast elkaar op het wiel liggen hebben meer met elkaar gemeen dan ambachten die tegenover elkaar liggen. Je aan één ambacht verbinden moet voelen als toetreden tot een familie van verwante vakken, niet als het kiezen van een losstaande vaardigheid.",
+      "craftRecipesTitle": "Recepten en reagentia",
+      "craftRecipesBody": "Elk ambacht heeft zijn eigen recepten, elk met specifieke reagentia die je verzamelt of koopt. De meest eenvoudige recepten van elk ambacht vragen niets anders dan gewone materialen en zijn vanaf het allereerste begin te maken, zodat je een vak meteen kunt gaan uitoefenen zodra je het oppakt in plaats van te wachten tot het is ontgrendeld.",
+      "craftMasteryTitle": "Vaardigheid en meesterschap",
+      "craftMasteryBody": "Succesvol iets maken bouwt vaardigheid op in dat vak, en rijkere recepten zitten achter een hogere vaardigheid: de basisrecepten staan voor iedereen open, terwijl steeds geavanceerdere recepten steeds meer meesterschap vragen om te proberen. Je vaardigheid in een ambacht laten groeien is de weg van eenvoudige beginnerswaren naar de ambitieuzere recepten.",
+      "craftComboTitle": "Combinatierecepten",
+      "craftComboBody": "Naast de eigen receptenlijst van een ambacht ondersteunt het wiel ook combinatierecepten die twee naburige ambachten tegelijk aanspreken, als beloning voor een personage (of een paar handelspartners) dat in aangrenzende vakken op de ring heeft geïnvesteerd in plaats van in één vak alleen.",
+      "archetypeTitle": "De tien archetypen",
+      "archetypeIntro": "Elk van de tien ambachten staat ook voor een archetype, een bredere identiteit die je kunt aannemen en die verder gaat dan alleen dat vak uitoefenen. Je actieve archetype is één keuze tegelijk, geen afvinklijst: je draagt er één, en kunt later van keuze veranderen als je dat wilt.",
+      "archetypeChooseTitle": "Je archetype kiezen",
+      "archetypeChooseBody": "Je eerste archetype kies je via een vroege verhaalquest in het eerste gebied, die je formeel in die identiteit opneemt. Zolang je die quest niet hebt voltooid, heb je nog helemaal geen archetype gekozen.",
+      "archetypeSwitchTitle": "Van gedachten veranderen",
+      "archetypeSwitchBody": "Dat je ooit een archetype hebt gekozen, legt je niet voorgoed vast. Overstappen naar een ander archetype betekent eerst een herhaalbare \"goedmaak\"-quest voltooien voor je oude archetype, en elke keer dat je wisselt wordt wat er de volgende keer van je wordt verwacht iets zwaarder, zodat wisselen betekenisvol blijft in plaats van gratis.",
+      "archetypeIdentityTitle": "Wat je archetype betekent",
+      "archetypeIdentityBody": "Je actieve archetype is een uitspraak over wie je personage in de wereld is, herkenbaar in hoe anderen en de wereld je aanspreken. De precieze beloningen en erkenning die erbij horen worden nog uitgewerkt; kom later terug naarmate het systeem zich vult."
     },
     "economy": {
       "intro": "Munten smeren de hele wereld: ze kopen je uitrusting, voorraden en reisuitrusting, en wisselen van eigenaar tussen spelers. Je pikt dit alles vanzelf op door te spelen, dus zie deze pagina als een kaart van waar je geld vandaan komt en waar het heen gaat.",
@@ -2367,6 +2552,10 @@ export const nl_NL: EnTranslations = {
       "vendorsBody": "Steden en buitenposten zijn bezaaid met handelaren, elk met hun eigen vak. Proviandeurs hebben eten en drinken, wapensmeden en pantsersmeden voeren uitrusting, en een kwartiermeester houdt praktische reisuitrusting bij. Loop er een tegemoet om te zien wat ze verkopen.",
       "marksTitle": "Een tweede valuta: Delve-Tekens",
       "marksBody": "Munten zijn niet het enige dat je opspaart. Delves keren Delve-Tekens uit, een aparte valuta die je alleen bij de delvebewaarder uitgeeft, aan metgezelupgrades en uitrusting die je nergens anders vindt. Ze vermengen zich nooit met je munten.",
+      "bankTitle": "De bank",
+      "bankBody": "Elke hoofdplaats heeft een filiaal van De Vergulde Geldkist, het bankhuis van het rijk. Spreek daar met de thesaurier om je kluis te openen: een eigen bergruimte naast je tassen die je personage levenslang behoudt. Wat je bij hen achterlaat, wacht veilig op je, welk filiaal je daarna ook bezoekt.",
+      "bankHow": "Met de kluis open klik je op een voorwerp in je tassen om het te storten, en klik je erop in de kluis om het terug te nemen. De kluis bewaart alleen waren, nooit geld, en questvoorwerpen blijven bij je. Raken je tassen onderweg vol, dan veegt één knop al je ambachtsmaterialen in één keer naar binnen.",
+      "bankSlots": "Een nieuwe kluis begint klein en groeit met je mee. De thesaurier verkoopt extra vakken voor geld tegen steeds hogere prijzen, en online spelen levert daarbovenop bonusruimte op, voor zaken als een geverifieerd e-mailadres, gekoppelde accounts en vrienden die je naar het spel brengt.",
       "buyingTitle": "Kopen en verkopen",
       "buyingBody": "Ga bij een handelaar staan om hun venster te openen. Je kunt alles kopen wat ze op voorraad hebben als je het kunt betalen, en het meeste uit je tassen verkopen voor munten. Als je per ongeluk iets verkoopt, houdt een verkoper je recente verkopen vast zodat je ze kunt terugkopen.",
       "junkTitle": "Rommel opruimen",
@@ -3640,6 +3829,45 @@ export const nl_NL: EnTranslations = {
       "flavor": "De doden hebben afgestaan wat ze kunnen missen."
     }
   },
+  "yumi": {
+    "bracket3": "Bescherm Yumi 3v3",
+    "bracket5": "Bescherm Yumi 5v5",
+    "enterQueue": "Doe mee met Bescherm Yumi!",
+    "queue": {
+      "join": "Je sluit je aan bij de Bescherm Yumi-wachtrij. Bewaak je metgezel…",
+      "leave": "Je verlaat de Bescherm Yumi-wachtrij.",
+      "teamLeave": "Je team verlaat de Bescherm Yumi-wachtrij."
+    },
+    "error": {
+      "partyTooBig3": "Bescherm Yumi 3v3 staat een groep van maximaal drie toe.",
+      "partyTooBig5": "Bescherm Yumi 5v5 staat een groep van maximaal vijf toe."
+    },
+    "log": {
+      "start": "Bescherm Yumi! Verdedig je metgezel en bejaag die van hen."
+    },
+    "hud": {
+      "title": "BESCHERM YUMI",
+      "getReady": "Maak je klaar…",
+      "teleportIn": "Yumi's verplaatsen zich over {s}",
+      "suddenDeath": "PLOTSELINGE DOOD",
+      "yourYumi": "Jouw Yumi",
+      "enemyYumi": "Vijandige Yumi",
+      "aria": "Jouw Yumi op {mine} van {max} gezondheid, vijandige Yumi op {theirs}.",
+      "collapse": "De Bescherm Yumi-balken inklappen",
+      "expand": "De Bescherm Yumi-balken uitklappen"
+    },
+    "respawn": {
+      "title": "NEERGEHAALD!"
+    },
+    "banner": {
+      "sudden": "PLOTSELINGE DOOD! De Yumi's houden stand!",
+      "teleport": "De Yumi's teleporteren!"
+    },
+    "end": {
+      "win": "OVERWINNING! Yumi is veilig!",
+      "loss": "NEDERLAAG! Jouw Yumi is gevallen."
+    }
+  },
   "fiesta": {
     "bracket": "Fiesta",
     "enterQueue": "Doe mee aan de Fiesta!",
@@ -3837,7 +4065,17 @@ export const nl_NL: EnTranslations = {
     "enterTimeout": "Kon de wereld niet betreden. De verbinding is verlopen. Draait de gameserver?",
     "connectionLost": "De verbinding met de server is verbroken.",
     "reconnecting": "Verbinding verbroken. Opnieuw verbinding maken...",
-    "connectionRejected": "De server heeft de verbinding gesloten."
+    "connectionRejected": "De server heeft de verbinding gesloten.",
+    "tips": {
+      "classes": "Tip: elk van de 9 klassen speelt anders. Probeer er een paar voordat je er een kiest.",
+      "talents": "Tip: je kunt je talenten buiten gevechten altijd herstellen, dus een vroege keuze is nooit een valstrik.",
+      "dungeons": "Tip: probeer een kerker op heldhaftige moeilijkheid wanneer je uitrusting te goed is geworden voor normaal, voor een zwaarder en lonender gevecht.",
+      "market": "Tip: op de Wereldmarkt kun je kopen en verkopen met spelers uit het hele rijk.",
+      "guilds": "Tip: als je lid wordt van een gilde, krijg je een eigen chatkanaal en een gedeelde lijst met je gildeleden.",
+      "professions": "Tip: verzamel- en ambachtsberoepen kunnen naast je gevechtsklasse worden geleerd.",
+      "loadouts": "Tip: sla meer dan één talentuitrusting op om tussen builds te wisselen zonder punten dubbel uit te geven.",
+      "pvp": "Tip: daag een andere speler uit voor een vriendschappelijk duel, of sluit je aan bij de wachtrij voor de arena van het Asgrauwe Colosseum om je build te testen."
+    }
   },
   "errors": {
     "nothingInteract": "Niets om mee te interacteren.",
@@ -4086,6 +4324,7 @@ export const nl_NL: EnTranslations = {
       "mobileSocial": "Sociaal",
       "mobileArena": "Arena",
       "mobileMenu": "Menu",
+      "mobileSettings": "Instellingen",
       "mobileUse": "Gebruiken",
       "mobileMeters": "Meters",
       "mobileMap": "Kaart",
@@ -4634,6 +4873,7 @@ export const nl_NL: EnTranslations = {
       "offGlobalCooldown": "Buiten de globale afkoeltijd",
       "friendlyTarget": "Vriendelijk doelwit",
       "enemyTarget": "Vijandig doelwit",
+      "selfOnly": "Alleen jezelf",
       "damageRange": "{min} tot {max}",
       "finisherDamage": "{base} plus {perCombo} per combopunt"
     },
@@ -4830,6 +5070,8 @@ export const nl_NL: EnTranslations = {
       "buybackTitle": "Terugkopen",
       "buybackEmpty": "Geen voorwerpen",
       "buybackAria": "Koop {item} terug voor {price}",
+      "sellItemAria": "{item} verkopen voor {price}",
+      "sellRolledWarning": "Willekeurig bepaalde eigenschappen kunnen niet worden hersteld door het voorwerp terug te kopen.",
       "sellQuantityTitle": "{item} verkopen",
       "sellQuantityInput": "Aantal te verkopen",
       "sellQuantityConfirm": "Verkopen",
@@ -4942,50 +5184,51 @@ export const nl_NL: EnTranslations = {
       "needAria": "Nodig voor {item}",
       "greedAria": "Hebzucht voor {item}",
       "passAria": "{item} passeren",
-      "everyonePassed": "Iedereen passeerde {item}."
+      "everyonePassed": "Iedereen passeerde {item}.",
+      "rolled": "{answered}/{total} geworpen"
     }
   },
   "entities": {
     "abilities": {
       "sport_kick": {
-        "name": "Kick",
-        "description": "Knock the ball along the ground toward the aim point."
+        "name": "Trap",
+        "description": "Trap de bal over de grond richting het richtpunt."
       },
       "sport_shoot": {
-        "name": "Shoot",
-        "description": "Hold to build power, release to shoot at goal. Too much power sails over."
+        "name": "Schieten",
+        "description": "Houd ingedrukt om kracht op te bouwen, laat los om op doel te schieten. Te veel kracht en hij zeilt eroverheen."
       },
       "sport_pass": {
         "name": "Pass",
-        "description": "Roll a firm pass to your targeted teammate, leading their run."
+        "description": "Speel een strakke pass naar je aangewezen teamgenoot, in de loop."
       },
       "sport_boot": {
-        "name": "Big Boot",
-        "description": "A long lofted boot toward the aim point. The crowd loves it."
+        "name": "Grote Uithaal",
+        "description": "Een lange, hoge uithaal richting het richtpunt. Het publiek smult ervan."
       },
       "sport_hoof": {
-        "name": "Hoof It",
-        "description": "Hammer the ball low and hard up the field."
+        "name": "Pegel",
+        "description": "Ram de bal laag en hard het veld op."
       },
       "sport_punt": {
-        "name": "Long Punt",
-        "description": "A keeper's punt, high and far."
+        "name": "Verre Uittrap",
+        "description": "Een uittrap van de keeper, hoog en ver."
       },
       "sport_feint": {
-        "name": "Feint",
-        "description": "A quick sidestep burst toward the aim point."
+        "name": "Schijnbeweging",
+        "description": "Een snelle zijstap richting het richtpunt."
       },
       "sport_dive": {
-        "name": "Dive",
-        "description": "Fling yourself toward the aim point. A crossing ball sticks to you."
+        "name": "Duik",
+        "description": "Werp jezelf richting het richtpunt. Een voorzet blijft aan je plakken."
       },
       "sport_shoulder": {
-        "name": "Shoulder",
-        "description": "A fair harvest-truce shoulder. Sends them tumbling off the ball."
+        "name": "Schouderduw",
+        "description": "Een eerlijke schouderduw onder het oogstbestand. Stuurt ze tuimelend van de bal."
       },
       "sport_second_wind": {
-        "name": "Fresh Legs",
-        "description": "Find your legs: move 50% faster for 4 sec."
+        "name": "Frisse Benen",
+        "description": "Vind je benen terug: beweeg 4 sec lang 50% sneller."
       },
       "flamestrike": {
         "name": "Vlammenslag",
@@ -4993,19 +5236,19 @@ export const nl_NL: EnTranslations = {
       },
       "rain_of_fire": {
         "name": "Vuurregen",
-        "description": "Laat een vuurregen neerdalen op het doelgebied en verbrandt vijanden voor {damage} Vuurschade."
+        "description": "Laat gedurende 4 sec een vuurregen neerdalen op het doelgebied en verbrandt vijanden elke seconde voor {damage} Vuurschade."
       },
       "volley": {
         "name": "Pijlenregen",
-        "description": "Laat een pijlenregen neerdalen op het doelgebied en richt {damage} schade aan bij vijanden erin."
+        "description": "Laat gedurende 3 sec een pijlenregen neerdalen op het doelgebied en richt elke 0.5 sec {damage} schade aan bij vijanden erin."
       },
       "hurricane": {
         "name": "Orkaan",
-        "description": "Ontketent een orkaan boven het doelgebied en treft vijanden voor {damage} Natuurschade."
+        "description": "Ontketent gedurende 6 sec een orkaan boven het doelgebied en treft vijanden elke seconde voor {damage} Natuurschade."
       },
       "earthquake": {
         "name": "Aardbeving",
-        "description": "Laat het doelgebied beven, treft vijanden voor {damage} Natuurschade."
+        "description": "Laat het doelgebied 6 sec beven en treft vijanden elke 1.5 sec voor {damage} Natuurschade."
       },
       "heroic_strike": {
         "name": "Plunderaarsslag",
@@ -5013,15 +5256,15 @@ export const nl_NL: EnTranslations = {
       },
       "battle_shout": {
         "name": "IJzeren Gebrul",
-        "description": "Verhoogt je aanvalskracht met 20 gedurende 2 min."
+        "description": "Verhoogt je aanvalskracht met {buff} gedurende 2 min."
       },
       "commanding_shout": {
         "name": "Versterkende Kreet",
-        "description": "Verhoogt je Uithoudingsvermogen met 6 gedurende 2 min."
+        "description": "Verhoogt je Uithoudingsvermogen met {buff} gedurende 2 min."
       },
       "demoralizing_shout": {
         "name": "Grimmig Gehuil",
-        "description": "Slaakt een angstaanjagende kreet die de aanvalskracht van alle nabije vijanden met 30 verlaagt gedurende 30 sec."
+        "description": "Slaakt een angstaanjagende kreet die de aanvalskracht van alle nabije vijanden met {buff} verlaagt gedurende 30 sec."
       },
       "charge": {
         "name": "Bestorming",
@@ -5029,7 +5272,7 @@ export const nl_NL: EnTranslations = {
       },
       "rend": {
         "name": "Diepe Snee",
-        "description": "Verwondt het doelwit, waardoor het {damage} schade bloedt gedurende 9 sec."
+        "description": "Verwondt het doelwit, waardoor het {damage} schade bloedt gedurende {duration} sec."
       },
       "thunder_clap": {
         "name": "Schuddende Klap",
@@ -5037,7 +5280,7 @@ export const nl_NL: EnTranslations = {
       },
       "hamstring": {
         "name": "Kreupelsnede",
-        "description": "Verminkt de vijand voor 5 schade en vertraagt zijn beweging met 50% gedurende 15 sec."
+        "description": "Verminkt de vijand voor {damage} schade en vertraagt zijn beweging met 50% gedurende 15 sec."
       },
       "bloodrage": {
         "name": "Bloedtol",
@@ -5045,7 +5288,7 @@ export const nl_NL: EnTranslations = {
       },
       "overpower": {
         "name": "Roodhand",
-        "description": "Ogenblikkelijke aanval voor wapenschade +5. Alleen bruikbaar nadat het doelwit ontwijkt. Kan niet worden ontweken."
+        "description": "Ogenblikkelijke aanval voor wapenschade plus {damage}. Alleen bruikbaar nadat het doelwit ontwijkt. Kan niet worden ontweken."
       },
       "execute": {
         "name": "Vroeg Graf",
@@ -5065,7 +5308,7 @@ export const nl_NL: EnTranslations = {
       },
       "sunder_armor": {
         "name": "Pantserscheur",
-        "description": "Splijt het pantser van het doelwit en verlaagt het met {damage} per toepassing. Stapelt tot 5 keer. Wekt een grote hoeveelheid dreiging op."
+        "description": "Scheurt het pantser van het doelwit open en verlaagt het met {damage}% per toepassing. Stapelt tot 5 keer. Genereert veel dreiging."
       },
       "taunt": {
         "name": "Provoceren",
@@ -5077,11 +5320,11 @@ export const nl_NL: EnTranslations = {
       },
       "frost_armor": {
         "name": "Rijpmantel",
-        "description": "Omhult je in vorst en verhoogt het pantser met 30 gedurende 30 min."
+        "description": "Omhult je in vorst en verhoogt het pantser met {buff} gedurende 30 min."
       },
       "arcane_intellect": {
         "name": "Aether-inzicht",
-        "description": "Verhoogt Intellect met 2 gedurende 30 min."
+        "description": "Verhoogt Intellect met {buff} gedurende 30 min."
       },
       "frostbolt": {
         "name": "Rijplans",
@@ -5105,7 +5348,7 @@ export const nl_NL: EnTranslations = {
       },
       "polymorph": {
         "name": "Beheksen",
-        "description": "Verandert de vijand in een pad gedurende maximaal 15 sec. De pad dwaalt rond en geneest snel. Elke schade verbreekt het effect. Alleen beesten en humanoïden."
+        "description": "Verandert de vijand in een pad gedurende maximaal {duration} sec. De pad dwaalt rond en geneest snel. Elke schade verbreekt het effect. Alleen beesten en humanoïden."
       },
       "frost_nova": {
         "name": "IJsboei",
@@ -5125,7 +5368,7 @@ export const nl_NL: EnTranslations = {
       },
       "ice_barrier": {
         "name": "Vorstsluier",
-        "description": "Schermt je af met ijs en absorbeert 130 schade gedurende 60 sec."
+        "description": "Schermt je af met ijs en absorbeert {damage} schade gedurende 60 sec."
       },
       "sinister_strike": {
         "name": "Kwaadaardige Houw",
@@ -5133,7 +5376,7 @@ export const nl_NL: EnTranslations = {
       },
       "eviscerate": {
         "name": "Zandslaap",
-        "description": "Afmaakzet die schade toebrengt per combopunt."
+        "description": "Afmaakzet die {damage} veroorzaakt."
       },
       "backstab": {
         "name": "Laffe Steek",
@@ -5141,7 +5384,7 @@ export const nl_NL: EnTranslations = {
       },
       "gouge": {
         "name": "Oogstoot",
-        "description": "Treft het doelwit en maakt het 4 sec strijdongeschikt. Elke schade verbreekt het effect. Levert 1 combopunt op."
+        "description": "Treft het doelwit voor {damage} schade en maakt het 4 sec strijdongeschikt. Elke schade verbreekt het effect. Levert 1 combopunt op."
       },
       "evasion": {
         "name": "Spookvoet",
@@ -5173,11 +5416,11 @@ export const nl_NL: EnTranslations = {
       },
       "garrote": {
         "name": "Keeldraad",
-        "description": "Wurgt de vijand, brengt nu schade toe en laat het bloeden voor {damage} gedurende 18 sec. Vereist sluiptocht. Levert 1 combopunt op."
+        "description": "Wurgt de vijand, brengt nu {damage} schade toe en laat het bloeden voor {overTime} gedurende 18 sec. Vereist sluiptocht. Levert 1 combopunt op."
       },
       "cheap_shot": {
         "name": "Buikstoot",
-        "description": "Sla het doelwit en verdoof het gedurende 4 sec. Je moet onzichtbaar zijn. Levert 2 combopunten op."
+        "description": "Sla het doelwit voor {damage} schade en verdoof het gedurende 4 sec. Je moet onzichtbaar zijn. Levert 2 combopunten op."
       },
       "sap": {
         "name": "Verdoven",
@@ -5185,11 +5428,11 @@ export const nl_NL: EnTranslations = {
       },
       "crippling_poison": {
         "name": "Loodzwaar Gif",
-        "description": "Treft het doelwit met een loodzwaar gif, brengt {damage} Natuurschade toe en vertraagt zijn bewegingssnelheid met 50% gedurende 12 sec."
+        "description": "Treft het doelwit met een loodzwaar gif, brengt {damage} Natuurschade toe en vertraagt de bewegingssnelheid met 50% gedurende 12 sec."
       },
       "expose_armor": {
         "name": "Pantserbres",
-        "description": "Afmaakzet die het doelwit blootlegt en zijn pantser verlaagt. Meer bestede combopunten leiden tot een diepere snede."
+        "description": "Afmaakzet die het doelwit blootlegt en zijn pantser met {damage} verlaagt gedurende 30 sec."
       },
       "rupture": {
         "name": "Doodbloeden",
@@ -5213,7 +5456,7 @@ export const nl_NL: EnTranslations = {
       },
       "seal_of_righteousness": {
         "name": "Eedmerk",
-        "description": "Vult je 30 sec lang met Heilige kracht, waardoor elk van je melee-zwaaien 4 extra Heilige schade toebrengt. Ontketen met Verdict."
+        "description": "Vult je 30 sec lang met Heilige kracht, waardoor elk van je melee-zwaaien {damage} extra Heilige schade toebrengt. Ontketen met Verdict."
       },
       "holy_light": {
         "name": "Helend Licht",
@@ -5221,7 +5464,7 @@ export const nl_NL: EnTranslations = {
       },
       "devotion_aura": {
         "name": "Standvastige Aura",
-        "description": "Verhoogt je pantser met 40 gedurende 30 min."
+        "description": "Verhoogt je pantser met {buff} gedurende 30 min."
       },
       "judgement": {
         "name": "Verdict",
@@ -5229,19 +5472,19 @@ export const nl_NL: EnTranslations = {
       },
       "blessing_of_might": {
         "name": "Eed van IJzer",
-        "description": "Plaatst een Zegen op een bevriend doelwit, waardoor de aanvalskracht met 15 toeneemt gedurende 5 min."
+        "description": "Plaatst een Zegen op een bevriend doelwit, waardoor de aanvalskracht met {buff} toeneemt gedurende 5 min."
       },
       "divine_protection": {
         "name": "Wering van Geloof",
-        "description": "Een beschermende wering absorbeert 50 schade gedurende 10 sec."
+        "description": "Een beschermende wering absorbeert {damage} schade gedurende 10 sec."
       },
       "hammer_of_justice": {
         "name": "Splijtende Rechtershamer",
-        "description": "Verdooft het doelwit gedurende 3 sec."
+        "description": "Verdooft het doelwit gedurende {duration} sec."
       },
       "lay_on_hands": {
         "name": "Laatste Rite",
-        "description": "Een enorme golf van genezing: herstelt 250 levenskracht. 10 min hersteltijd."
+        "description": "Een enorme golf van genezing: herstelt {damage} levenskracht. 10 min hersteltijd."
       },
       "flash_of_light": {
         "name": "Lichtheling",
@@ -5253,7 +5496,7 @@ export const nl_NL: EnTranslations = {
       },
       "consecration": {
         "name": "Heilige Grond",
-        "description": "Wijdt de grond onder je en schroeit nabije vijanden voor {damage} Heilige schade."
+        "description": "Wijdt de grond onder je en schroeit nabije vijanden elke 2 sec voor {damage} Heilige schade gedurende 10 sec."
       },
       "righteous_fury": {
         "name": "Brandende Eed",
@@ -5273,11 +5516,11 @@ export const nl_NL: EnTranslations = {
       },
       "raptor_strike": {
         "name": "Ontweiende Slag",
-        "description": "Een sterke slagaanval die de schade met 5 verhoogt. Activeert bij je volgende slag."
+        "description": "Een sterke slagaanval die de schade met {damage} verhoogt. Activeert bij je volgende slag."
       },
       "aspect_of_the_hawk": {
         "name": "Gedaante van de Kiekendief",
-        "description": "Neem de gedaante van de kiekendief aan, waardoor je aanvalskracht met 20 toeneemt gedurende 30 min."
+        "description": "Neem de gedaante van de kiekendief aan, waardoor je aanvalskracht met {buff} toeneemt gedurende 30 min."
       },
       "serpent_sting": {
         "name": "Gifweerhaak",
@@ -5289,15 +5532,15 @@ export const nl_NL: EnTranslations = {
       },
       "concussive_shot": {
         "name": "Ratelend Schot",
-        "description": "Versuft het doelwit, waardoor de beweging met 50% wordt vertraagd gedurende 4 sec."
+        "description": "Versuft het doelwit voor {damage} schade, waardoor de beweging met 50% wordt vertraagd gedurende 4 sec."
       },
       "mongoose_bite": {
         "name": "Tegenbeet",
-        "description": "Tegenaanval nadat het doelwit ontwijkt voor wapenschade plus 12. Kan niet worden ontweken."
+        "description": "Tegenaanval nadat het doelwit ontwijkt voor wapenschade plus {damage}. Kan niet worden ontweken."
       },
       "wing_clip": {
         "name": "Kluisterende Houw",
-        "description": "Brengt een wond toe die de vijand 40% vertraagt gedurende 10 sec."
+        "description": "Brengt een wond toe voor {damage} schade die de vijand 40% vertraagt gedurende 10 sec."
       },
       "aspect_of_the_monkey": {
         "name": "Gedaante van de Marter",
@@ -5325,7 +5568,7 @@ export const nl_NL: EnTranslations = {
       },
       "power_word_fortitude": {
         "name": "Litanie van Vastberadenheid",
-        "description": "Verhoogt de Weerbaarheid van het doelwit met 3 gedurende 30 min."
+        "description": "Verhoogt de Weerbaarheid van het doelwit met {buff} gedurende 30 min."
       },
       "shadow_word_pain": {
         "name": "Klaaglied van Verval",
@@ -5333,7 +5576,7 @@ export const nl_NL: EnTranslations = {
       },
       "power_word_shield": {
         "name": "Psalm van Bescherming",
-        "description": "Schermt het doelwit af en absorbeert 48 schade gedurende 30 sec."
+        "description": "Schermt het doelwit af en absorbeert {damage} schade gedurende 30 sec."
       },
       "renew": {
         "name": "Aanhoudende Genade",
@@ -5361,7 +5604,7 @@ export const nl_NL: EnTranslations = {
       },
       "rockbiter_weapon": {
         "name": "Steengebonden Wapen",
-        "description": "Doordrenkt je wapen met de woede van steen: elke zwaai brengt 5 extra schade toe gedurende 5 min."
+        "description": "Doordrenkt je wapen met de woede van steen: elke zwaai brengt {damage} extra schade toe gedurende 5 min."
       },
       "healing_wave": {
         "name": "Helende Wateren",
@@ -5373,15 +5616,15 @@ export const nl_NL: EnTranslations = {
       },
       "lightning_shield": {
         "name": "Donderwering",
-        "description": "Omringt je met knetterende bliksem: aanvallers van dichtbij lijden 13 Natuurschade."
+        "description": "Omringt je met knetterende bliksem: aanvallers van dichtbij lijden {buff} Natuurschade, tot 3 ladingen en maximaal eens per 5 seconden."
       },
       "flame_shock": {
         "name": "Sintelschok",
-        "description": "Schroeit het doelwit met vuur voor 25 schade plus {damage} gedurende 12 sec."
+        "description": "Schroeit het doelwit met vuur voor {damage} schade plus {overTime} gedurende 12 sec."
       },
       "flametongue_weapon": {
         "name": "Vuurbrand-Wapen",
-        "description": "Doordringt je wapen met elementair vuur: elke slag brengt 8 extra Vuurschade toe gedurende 5 min."
+        "description": "Doordringt je wapen met elementair vuur: elke slag brengt {damage} extra Vuurschade toe gedurende 5 min."
       },
       "frost_shock": {
         "name": "Rijpschok",
@@ -5389,7 +5632,7 @@ export const nl_NL: EnTranslations = {
       },
       "frostbrand_weapon": {
         "name": "Rijpgebonden Wapen",
-        "description": "Doordringt je wapen met bijtende vorst: elke slag brengt 8 extra schade toe gedurende 5 min."
+        "description": "Doordringt je wapen met bijtende vorst: elke slag brengt {damage} extra schade toe gedurende 5 min."
       },
       "ghost_wolf": {
         "name": "Shadewolf",
@@ -5405,11 +5648,11 @@ export const nl_NL: EnTranslations = {
       },
       "demon_skin": {
         "name": "Duivelshuid",
-        "description": "Demonenhuid verhoogt je pantser met 30 gedurende 30 min."
+        "description": "Demonenhuid verhoogt je pantser met {buff} gedurende 30 min."
       },
       "immolate": {
         "name": "Brandpact",
-        "description": "Verbrandt de vijand voor 11 Vuurschade en nog eens {damage} gedurende 15 sec."
+        "description": "Verbrandt de vijand voor {damage} Vuurschade en nog eens {overTime} gedurende 15 sec."
       },
       "corruption": {
         "name": "Zwartrot",
@@ -5417,7 +5660,7 @@ export const nl_NL: EnTranslations = {
       },
       "life_tap": {
         "name": "Zware Koop",
-        "description": "Zet 30 levenskracht om in 30 mana."
+        "description": "Zet {damage} levenskracht om in {damage} mana."
       },
       "curse_of_agony": {
         "name": "Ban van Kwelling",
@@ -5449,7 +5692,7 @@ export const nl_NL: EnTranslations = {
       },
       "mark_of_the_wild": {
         "name": "Wildwering",
-        "description": "Plaatst de Wildward op een bevriend doelwit en verhoogt het pantser met 25 gedurende 30 min."
+        "description": "Plaatst de Wildward op een bevriend doelwit en verhoogt het pantser met {buff} gedurende 30 min."
       },
       "moonfire": {
         "name": "Maanstorm",
@@ -5461,7 +5704,7 @@ export const nl_NL: EnTranslations = {
       },
       "thorns": {
         "name": "Doornwacht",
-        "description": "Doornen schieten op uit het doelwit: melee-aanvallers lopen 3 Natuurschade op."
+        "description": "Doornen schieten op uit het doelwit: melee-aanvallers lopen {buff} Natuurschade op."
       },
       "entangling_roots": {
         "name": "Grijpende Wortels",
@@ -5469,7 +5712,7 @@ export const nl_NL: EnTranslations = {
       },
       "bear_form": {
         "name": "Bruingedaante",
-        "description": "Verander in een beer: pantser +65%, aanvalskracht +15, je aanvallen bouwen woede op en genereren 30% meer dreiging. Spreek opnieuw om terug te keren naar je oorspronkelijke gedaante."
+        "description": "Verander in een beer: pantser +90%, sterk verhoogde aanvalskracht, je aanvallen bouwen woede op en genereren 30% meer dreiging. Spreek opnieuw om terug te keren naar je oorspronkelijke gedaante."
       },
       "maul": {
         "name": "Botverbrijzelen",
@@ -5489,7 +5732,7 @@ export const nl_NL: EnTranslations = {
       },
       "ferocious_bite": {
         "name": "Bloedbeet",
-        "description": "Afmaakzet die schade toebrengt per combopunt. Alleen in Wolfsgedaante."
+        "description": "Afmaakzet die {damage} veroorzaakt. Alleen in Wolfsgedaante."
       },
       "swipe": {
         "name": "Vegende Klauwen",
@@ -5521,7 +5764,7 @@ export const nl_NL: EnTranslations = {
       },
       "faerie_fire": {
         "name": "Heksenlicht",
-        "description": "Verlaagt het pantser van het doelwit met 35 gedurende 40 sec."
+        "description": "Verlaagt het pantser van het doelwit met {damage}% gedurende 40 sec. Stapelt niet met Pantserscheur."
       },
       "hibernate": {
         "name": "Sluimer",
@@ -5545,7 +5788,7 @@ export const nl_NL: EnTranslations = {
       },
       "rip": {
         "name": "Verscheuren",
-        "description": "Afmaakzet die bloedschade toebrengt gedurende 12 sec. Verbruikt combopunten. Alleen in Wolfsgedaante."
+        "description": "Afmaakzet die {damage} Bloedschade toebrengt gedurende 12 sec. Verbruikt combopunten. Alleen in Wolfsgedaante."
       },
       "mortal_strike": {
         "name": "Verminkende Slag",
@@ -5553,11 +5796,11 @@ export const nl_NL: EnTranslations = {
       },
       "bloodthirst": {
         "name": "Aderlating",
-        "description": "Val onmiddellijk aan in een bloedrazernij voor {damage}. (Razernij-kenmerk)"
+        "description": "Val onmiddellijk aan in een bloedrazernij voor 60% wapenschade plus {damage}. (Razernij-kenmerk)"
       },
       "shield_slam": {
         "name": "Schildbreuk",
-        "description": "Sla het doelwit met je schild voor {damage} en enorme dreiging. (Protectie-kenmerk)"
+        "description": "Sla het doelwit met je schild voor 50% wapenschade plus {damage} en enorme dreiging. (Protectie-kenmerk)"
       },
       "whirlwind": {
         "name": "Snijdende Wenteling",
@@ -5752,6 +5995,9 @@ export const nl_NL: EnTranslations = {
       "greyjaw_fang": {
         "name": "Tand van Oude Grijskaak"
       },
+      "chunk_of_ore": {
+        "name": "Brok erts"
+      },
       "weathered_ledger_page": {
         "name": "Verweerd Grootboekblad"
       },
@@ -5781,6 +6027,15 @@ export const nl_NL: EnTranslations = {
       },
       "linen_scrap": {
         "name": "Linnen Lap"
+      },
+      "arcane_dust": {
+        "name": "Arcaan stof"
+      },
+      "arcane_essence": {
+        "name": "Arcane essentie"
+      },
+      "arcane_shard": {
+        "name": "Arcane scherf"
       },
       "fen_muster_order": {
         "name": "Veenbrug-Mobilisatiebevel"
@@ -6207,6 +6462,24 @@ export const nl_NL: EnTranslations = {
       },
       "sunpetal_sickle": {
         "name": "Zonneblaadjessikkel"
+      },
+      "thorium_ore": {
+        "name": "Thoriumerts"
+      },
+      "arcanite_bar": {
+        "name": "Arcaniet Staaf"
+      },
+      "ashwood_log": {
+        "name": "Essenhout Blok"
+      },
+      "elderwood_log": {
+        "name": "Oud Vlierhout Blok"
+      },
+      "goldleaf_herb": {
+        "name": "Goudbladkruid"
+      },
+      "sunpetal_herb": {
+        "name": "Zonnepetaalkruid"
       },
       "bristleback_maul": {
         "name": "Gallowglass-Hamer"
@@ -6906,6 +7179,9 @@ export const nl_NL: EnTranslations = {
       }
     },
     "mobs": {
+      "yumi_cat": {
+        "name": "Yumi"
+      },
       "forest_wolf": {
         "name": "Boswolf"
       },
@@ -6965,6 +7241,9 @@ export const nl_NL: EnTranslations = {
       },
       "deacon_voss": {
         "name": "Diaken Voss"
+      },
+      "training_dummy": {
+        "name": "Oefenpop"
       },
       "ridge_stalker": {
         "name": "Bergkam-Sluiper"
@@ -7352,6 +7631,21 @@ export const nl_NL: EnTranslations = {
         "title": "Hoeder van de Wereldmarkt",
         "greeting": "De Wereldmarkt is hier ook geopend, {className}. Koop van elke avonturier in het rijk, of stal je eigen waren uit."
       },
+      "bursar_fernando": {
+        "name": "Thesaurier Fernando",
+        "title": "De Vergulde Geldkist",
+        "greeting": "Welkom bij de Vergulde Geldkist. Je goederen rusten veilig achter onze sloten."
+      },
+      "bursar_petra_vell": {
+        "name": "Thesaurier Petra Vell",
+        "title": "De Vergulde Geldkist",
+        "greeting": "De Vergulde Geldkist houdt schone grootboeken en nog schonere kluizen. Wat zullen we voor je opbergen?"
+      },
+      "bursar_aldous_crane": {
+        "name": "Thesaurier Aldous Crane",
+        "title": "De Vergulde Geldkist",
+        "greeting": "Elke kist, koffer en snuisterij is veilig bij de Vergulde Geldkist."
+      },
       "brother_aldric_raid": {
         "name": "Broeder Aldric",
         "title": "Priester van het Dal",
@@ -7373,9 +7667,9 @@ export const nl_NL: EnTranslations = {
         "greeting": "Rust nu, geest. Ik kan je terugbrengen naar je lichaam, maar de overtocht terug laat je verzwakt achter."
       },
       "groundskeeper_bram": {
-        "name": "Groundskeeper Bram",
-        "title": "Keeper of the Sowfield",
-        "greeting": "The truce holds at the Sowfield, {className}: boots and shoulders only. Care to play for the Copper Pail?"
+        "name": "Terreinmeester Bram",
+        "title": "Hoeder van het Zeugveld",
+        "greeting": "Het bestand houdt stand op het Zeugveld, {className}: alleen trappen en schouders. Zin om te spelen voor de Koperen Emmer?"
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
@@ -7384,6 +7678,16 @@ export const nl_NL: EnTranslations = {
       }
     },
     "quests": {
+      "q_prof_intro": {
+        "title": "Een ambacht voor iedere hand",
+        "text": "Iedereen in Oostbeek beoefent naast het zwaard een ambacht, {playerName}. Er liggen ertsaders rond de stad, dus zwaai met een pikhouweel en breng me 5 brokken. Delf ze zelf, hoor; ik merk het verschil.",
+        "completion": "Zie je? Erts in je tas en eelt op je handen. Blijf mijnen, houthakken en kruiden plukken terwijl je over de wegen reist. Wanneer je terug in de stad bent, kijk dan naar het bord met de Stadsfocus bij de markt en de werkbank ernaast. Er valt met alles een eerlijke boterham te verdienen, als je dat wilt.",
+        "objectives": {
+          "0": {
+            "label": "Brok erts"
+          }
+        }
+      },
       "q_wolves": {
         "title": "Wolven voor de Deur",
         "text": "De boswolven worden brutaal en happen naar reizigers op de noordweg. Dun hun aantal uit, {playerName}. Dood 8 Boswolven en Oostbeek zal vrijer ademen.",
@@ -8286,7 +8590,7 @@ export const nl_NL: EnTranslations = {
             "label": "Lichtwoudgaarde"
           },
           "10": {
-            "label": "The Sowfield"
+            "label": "Het Zeugveld"
           }
         }
       },

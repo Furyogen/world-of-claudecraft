@@ -154,6 +154,14 @@ export const en_CA: EnTranslations = {
     "spectate": {
       "banner": "Spectating {name}"
     },
+    "readyCheck": {
+      "prompt": "{name} has started a ready check. Are you ready?",
+      "ready": "Ready",
+      "notReady": "Not Ready",
+      "result": "Ready check: {ready} ready, {notReady} not ready, {noResponse} no response.",
+      "notInPartyError": "You must be in a party to start a ready check.",
+      "inProgressError": "A ready check is already in progress."
+    },
     "death": {
       "resurrectAtCorpse": "Resurrect at Corpse",
       "resurrectAtHealer": "The Pale Keeper (Keeper's Toll)",
@@ -232,7 +240,8 @@ export const en_CA: EnTranslations = {
         "eligible": "Rewards unlocked.",
         "no_wallet": "Connect a wallet with at least $20 USD in WOC.",
         "under_minimum": "Wallet is below the $20 USD WOC minimum.",
-        "price_unavailable": "WOC price is unavailable, rewards are temporarily locked."
+        "price_unavailable": "WOC price is unavailable, rewards are temporarily locked.",
+        "banned": "You are banned from Daily Rewards. Reason: {reason}"
       }
     },
     "claudium": {
@@ -334,6 +343,7 @@ export const en_CA: EnTranslations = {
       "targetLabel": "Your Mark",
       "targetAnnounce": "Mark {name}",
       "partyLabel": "Your Band",
+      "partyChip": "Party",
       "partyGroup": "Group {n}",
       "durationUnitSeconds": "s",
       "durationUnitMinutes": "m",
@@ -348,7 +358,6 @@ export const en_CA: EnTranslations = {
       "chat": "Skip to Chat"
     },
     "mobile": {
-      "autorun": "Autorun",
       "jump": "Jump",
       "leaderboard": "Ranks",
       "dailyRewards": "Rewards",
@@ -356,6 +365,8 @@ export const en_CA: EnTranslations = {
       "haptics": "Haptics",
       "hapticsOff": "Haptics Off",
       "toggleHaptics": "Toggle haptics",
+      "showMenuButtons": "Show menu buttons",
+      "hideMenuButtons": "Hide menu buttons",
       "hotbarPage": "Skills",
       "hotbarPageAria": "Show next set of skills",
       "actionRing": "Combat actions",
@@ -363,7 +374,9 @@ export const en_CA: EnTranslations = {
       "actionPageIndicator": "{page}",
       "targetCycle": "Swap target",
       "targetCycleShort": "Target",
-      "spellbookPageLabel": "Page {page}"
+      "spellbookPageLabel": "Page {page}",
+      "hideKeyboard": "Hide keyboard",
+      "chatPlaceholder": "Say something..."
     },
     "tutorial": {
       "moveBodyTouch": "Use the movement stick to move and drag the screen to look around. Take a few steps to begin.",
@@ -437,7 +450,13 @@ export const en_CA: EnTranslations = {
       "targetFriendly": "Target Nearest Friendly",
       "targetFriendlyNext": "Cycle Friendly Target",
       "discord": "Discord",
-      "valecup": "Vale Cup"
+      "valecup": "Vale Cup",
+      "categoryPet": "Pet",
+      "petAttack": "Pet: Attack",
+      "petStop": "Pet: Stop",
+      "petTaunt": "Pet: Taunt",
+      "petDefensive": "Pet: Defensive",
+      "petAggressive": "Pet: Aggressive"
     },
     "vcup": {
       "title": "The Vale Cup",
@@ -612,7 +631,84 @@ export const en_CA: EnTranslations = {
       "showSecondaryActionBar": "Show Secondary Action Bar",
       "showDailyRewardsChest": "Show Daily Rewards Chest",
       "mobileCameraJoystick": "Camera joystick",
-      "mobileLeftHanded": "Left-handed layout"
+      "mobileLeftHanded": "Left-handed layout",
+      "ia": {
+        "railDisplay": "Display",
+        "railInput": "Input",
+        "railSystem": "System",
+        "catOverviewName": "Overview",
+        "catOverviewSub": "Pinned essentials, quick actions, and what changed.",
+        "catGraphicsSub": "Quality, view, and world visuals.",
+        "catInterfaceSub": "HUD scale, panels, chat, and unit frames.",
+        "catAccessibilityName": "Accessibility",
+        "catAccessibilitySub": "Motion, contrast, and content comfort.",
+        "catControlsName": "Controls",
+        "catControlsSub": "Camera, movement, combat, and feedback.",
+        "catKeybindsSub": "Bind keys for every action.",
+        "catControllerSub": "Gamepad feel and button layout.",
+        "catTouchName": "Touch",
+        "catTouchSub": "On-screen sticks, look, and buttons.",
+        "catAudioSub": "Volume and sound toggles.",
+        "catSystemName": "System",
+        "catSystemSub": "Performance, support, and about."
+      },
+      "done": "Done",
+      "resetAllTitle": "Reset all settings?",
+      "resetAllBody": "This restores every setting to its default. This cannot be undone.",
+      "searchPlaceholder": "Search settings",
+      "searchScopeAll": "All settings",
+      "searchScopeThis": "This section",
+      "searchEmpty": "No settings match your search.",
+      "searchGoTo": "Go to {category}",
+      "modeOnline": "Online",
+      "modeOffline": "Offline",
+      "changed": "{count} changed",
+      "changedSummary": "{count} changed from defaults",
+      "legend": {
+        "category": "Category",
+        "navigate": "Navigate",
+        "select": "Select",
+        "back": "Back",
+        "reset": "Reset",
+        "clear": "Clear",
+        "page": "Page"
+      },
+      "keybindCleared": "Cleared {action}",
+      "keybindRebinding": "Rebinding {action}. Press a key, or Escape to cancel.",
+      "keybindEvicted": "Bound {key} to {action}; removed from {evicted}",
+      "keybindTaken": "Key removed",
+      "keybindUnbound": "{action} has no key",
+      "keybindModifierHint": "Tip: you can bind modifier combinations. Hold Shift, Ctrl, or Alt while pressing a key to capture the combo (for example Shift+1).",
+      "conflictDot": "Binding conflict",
+      "overviewConflictAlert": "Some key bindings conflict or are unbound.",
+      "sec": {
+        "quality": "Quality",
+        "view": "View",
+        "general": "General",
+        "scaleText": "Scale and Text",
+        "panels": "Panels",
+        "unitFrames": "Unit Frames",
+        "actionBars": "Action Bars",
+        "chat": "Chat",
+        "combatTooltips": "Combat and Tooltips",
+        "hudExtras": "HUD Extras",
+        "motionContrast": "Motion and Contrast",
+        "content": "Content",
+        "camera": "Camera",
+        "movement": "Movement",
+        "combat": "Combat",
+        "feedback": "Feedback",
+        "inputMode": "Input Mode",
+        "feel": "Feel",
+        "sticks": "Sticks",
+        "look": "Look",
+        "buttons": "Buttons",
+        "volume": "Volume",
+        "toggles": "Toggles",
+        "performance": "Performance",
+        "support": "Support",
+        "about": "About"
+      }
     },
     "controller": {
       "title": "Controller",
@@ -624,7 +720,8 @@ export const en_CA: EnTranslations = {
       "buttons": "Button Layout",
       "resetButtons": "Reset Button Layout",
       "menuAction": "Game Menu",
-      "help": "Left stick moves, right stick looks. Open a window to use the on-screen pointer."
+      "help": "Left stick moves, right stick looks. Open a window to use the on-screen pointer.",
+      "duplicate": "Also bound to {buttons}"
     },
     "perf": {
       "title": "Performance Overlay",
@@ -665,6 +762,7 @@ export const en_CA: EnTranslations = {
         "jitter": "Jitter",
         "predLead": "Prediction Lead",
         "snapshot": "Snapshot Rate",
+        "serverTick": "Server Tick Rate",
         "connection": "Connection",
         "drawCalls": "Draw Calls",
         "triangles": "Triangles",
@@ -756,11 +854,17 @@ export const en_CA: EnTranslations = {
       }
     },
     "talents": {
-      "defaultBuildName": "Build {n}"
+      "defaultBuildName": "Build {n}",
+      "choicesTab": "Choices",
+      "resetChoices": "Reset choices",
+      "tierLevel": "Level {n}",
+      "tierLevelLabel": "Level"
     },
     "tips": {
       "joinChannels": "Tip: type /join world or /join lfg to chat with players across the world."
     },
+    "itemHeroicTag": "[HEROIC]",
+    "itemSoulbound": "Soulbound",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1055,10 +1159,19 @@ export const en_CA: EnTranslations = {
         "allStats": "Reduces all attributes by {value}"
       },
       "allStatsPctReduce": "Reduces all attributes by {pct}%",
+      "increasePct": {
+        "ap": "Increases attack power by {pct}%",
+        "armor": "Increases armor by {pct}%",
+        "int": "Increases Intellect by {pct}%",
+        "sta": "Increases Stamina by {pct}%",
+        "allStats": "Increases all attributes by {pct}%"
+      },
       "dodge": "Increases dodge chance by {pct}%",
       "dodgeReduce": "Reduces dodge chance by {pct}%",
       "armorFlat": "Reduces armor by {value}",
       "armorFlatStacks": "Reduces armor by {value} ({stacks} stacks)",
+      "armorPct": "Reduces armor by {pct}%",
+      "armorPctStacks": "Reduces armor by {pct}% ({stacks} stacks)",
       "mortalWound": "Reduces healing received by {pct}%",
       "vulnerability": "Increases damage taken by {pct}%",
       "physVuln": "Increases physical damage taken by {pct}%",
@@ -1096,6 +1209,26 @@ export const en_CA: EnTranslations = {
     },
     "worldBoss": {
       "spawn": "{name} rises over Thornpeak Heights!"
+    },
+    "auth": {
+      "appleLoginCta": "Continue with Apple",
+      "appleError": "Could not sign in with Apple. Please try again.",
+      "appleChoiceIntro": "Create a new account, or link Apple to one you already have.",
+      "appleChoiceExpired": "That Apple sign-in expired. Please sign in with Apple again.",
+      "forgotPrompt": "Forgot password?",
+      "forgotTitle": "Reset your password",
+      "forgotHint": "Enter your username and we will email a reset link to the address on file.",
+      "forgotUsername": "Username",
+      "forgotSubmit": "Send reset link",
+      "forgotSent": "If an account with that username has an email on file, we have sent a reset link. Check your inbox.",
+      "forgotBack": "Back to log in",
+      "resetTitle": "Choose a new password",
+      "resetNewPassword": "New password",
+      "resetConfirm": "Confirm new password",
+      "resetSubmit": "Update password",
+      "resetDone": "Your password has been updated. You can now log in.",
+      "resetMismatch": "The passwords do not match.",
+      "resetErrInvalid": "This reset link is invalid or has expired. Request a new one."
     },
     "loot": {
       "chestTitle": "Chest"
@@ -1326,6 +1459,8 @@ export const en_CA: EnTranslations = {
       "parcelsLabel": "Parcels",
       "parcelsHint": "Click an item in your bags to attach it.",
       "removeParcelAria": "Remove {item} from the letter",
+      "parcelQtyDecreaseAria": "Send one fewer {item}",
+      "parcelQtyIncreaseAria": "Send one more {item}",
       "sendButton": "Send letter",
       "postageNote": "Postage: {amount}. The raven flies for about {seconds}s.",
       "arrivedBanner": "The raven has landed: mail from {name}.",
@@ -1348,6 +1483,50 @@ export const en_CA: EnTranslations = {
         "letterGone": "That letter is no longer in your box.",
         "takeParcelsFirst": "Take the parcels out before discarding the letter."
       }
+    },
+    "bank": {
+      "title": "Bank",
+      "subtitle": "The Gilded Strongbox",
+      "close": "Close bank",
+      "capacity": "{used}/{total}",
+      "capacityAria": "Bank slots used: {used} of {total}",
+      "empty": "Your bank is empty.",
+      "tooFar": "You must be at a banker to view your bank.",
+      "buySlots": "Buy {count} slots",
+      "buySlotsMaxed": "Fully expanded",
+      "buyConfirm": "Purchase {count} additional bank slots for {price}?",
+      "buyConfirmAccept": "Purchase",
+      "withdrawHint": "Click to withdraw",
+      "withdrawPartialHint": "Shift-click to withdraw a partial amount",
+      "depositHint": "Click to deposit",
+      "depositPartialHint": "Shift-click to deposit a partial amount",
+      "cannotDeposit": "Cannot be banked",
+      "depositQuantityTitle": "Deposit {item}",
+      "depositQuantityInput": "Quantity to deposit",
+      "depositQuantityConfirm": "Deposit",
+      "withdrawQuantityTitle": "Withdraw {item}",
+      "withdrawQuantityInput": "Quantity to withdraw",
+      "withdrawQuantityConfirm": "Withdraw",
+      "filterGroupAria": "Filter bank by category",
+      "sortAria": "Sort bank items",
+      "searchAria": "Search bank items by name",
+      "depositAll": "Deposit all materials",
+      "depositAllDone": "Materials deposited: {count}.",
+      "depositAllFull": "Materials deposited: {count}. Bank now full.",
+      "depositAllNone": "Bank full: nothing deposited.",
+      "bonusTitle": "Bonus slots",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "Verified email",
+      "bonusSourceDiscord": "Discord linked",
+      "bonusSourceWallet": "Wallet linked",
+      "bonusSourceReferral": "Referred friends",
+      "bonusAdvertEmail": "Verify your email to earn 2 slots.",
+      "bonusAdvertDiscord": "Link your Discord to earn 2 slots.",
+      "bonusAdvertWallet": "Link a wallet to earn 2 slots.",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "Invite a friend: when they reach level 10 you each earn 2 slots, up to 5 friends.",
+      "bonusSectionAria": "Bonus bank slots and how to earn more"
     },
     "calendar": {
       "title": "Event Calendar",
@@ -1420,6 +1599,7 @@ export const en_CA: EnTranslations = {
     "archetypeTitle": {
       "label": "Title",
       "none": "None",
+      "hobbyLabel": "Hobby",
       "armorcrafting": "Armorer",
       "weaponcrafting": "Weaponsmith",
       "jewelcrafting": "Jeweler",
@@ -1442,7 +1622,10 @@ export const en_CA: EnTranslations = {
       "craftedToast": "Crafted: {name}",
       "insufficientMaterials": "You do not have the materials for that.",
       "unknownRecipe": "That recipe does not exist.",
-      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
+      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe.",
+      "notAtHub": "You must be at the crafting hub, at the required level, to craft that.",
+      "throttled": "You are crafting too quickly. Wait a moment and try again.",
+      "recipeNotLearned": "You have not learned that recipe yet."
     }
   },
   "apiError": {
@@ -1721,7 +1904,7 @@ export const en_CA: EnTranslations = {
       "talents": "Talents",
       "arena": "Arena",
       "leaderboard": "Leaderboard",
-      "abilities": "Use action bar abilities (the number row; a second bar sits on the numpad)",
+      "abilities": "Use action bar abilities (the number row plus Q and E; the secondary bar sits on the numpad or Shift+1 to Shift+0)",
       "targetFriendly": "Target nearest friendly",
       "cycleFriendly": "Cycle friendly target",
       "gameMenu": "Open game menu and options",
@@ -2215,6 +2398,8 @@ export const en_CA: EnTranslations = {
       "waveGoldBody": "The middle wave: two-edged combos where your build starts to take shape and sing.",
       "wavePrismaticTitle": "Prismatic",
       "wavePrismaticBody": "The final wave: build-defining, screen-melting spikes meant to feel ridiculous in the best way.",
+      "yumiHeading": "Protect Yumi",
+      "yumiBody": "Protect Yumi is a team objective mode played in a maze: each side guards its own cat familiar while hunting the other. Every so often both cats blink to new corners of the maze, so the fight swings between defending, hunting, and racing to find them again. Queue as three versus three or five versus five; falling in battle only benches you for a moment.",
       "powerupsTitle": "Power-ups in the ring",
       "powerupsBody": "Glowing orbs also drop into the arena mid-fight, free for whoever reaches them first. They are deliberately over the top and last only a short while: Speed Demon for a blink of blinding pace, Colossus to swell up into a lumbering giant, Moon Boots for a bouncing, low-gravity leap, and Berserker for a sudden surge of fury.",
       "ladderHeading": "Climbing the ladder",
@@ -2367,6 +2552,10 @@ export const en_CA: EnTranslations = {
       "vendorsBody": "Towns and outposts are dotted with merchants, each with their own trade. Provisioners stock food and drink, weaponsmiths and armorers carry gear, and a quartermaster keeps practical travel kit. Walk up to one to see what they sell.",
       "marksTitle": "A second currency: Delve Marks",
       "marksBody": "Coin is not the only thing you bank. Delves pay out Delve Marks, a separate currency you spend only at the delve keeper, on companion upgrades and gear you will not find elsewhere. They never mix with your coin.",
+      "bankTitle": "The bank",
+      "bankBody": "Every hub town keeps a branch of The Gilded Strongbox, the banking house of the realm. Speak to the bursar there to open your vault, a private store of room beyond your bags that your character keeps for life. Whatever you leave with them waits safely, whichever branch you visit next.",
+      "bankHow": "With the vault open, click an item in your bags to deposit it and click it in the vault to take it back. The vault holds goods only, never coin, and quest items stay with you. When your bags fill up mid-journey, one button sweeps all your crafting materials in at once.",
+      "bankSlots": "A fresh vault starts small and grows with you. The bursar sells further slots for coin at ever-steeper prices, and playing online earns bonus room on top, for things like a verified email, linked accounts, and friends you bring into the game.",
       "buyingTitle": "Buying and selling",
       "buyingBody": "Stand near a merchant to open their window. You can buy anything they stock if you can afford it, and sell most of what is in your bags for coin. If you sell something by mistake, a vendor will hold your recent sales so you can buy them back.",
       "junkTitle": "Clearing out junk",
@@ -3640,6 +3829,45 @@ export const en_CA: EnTranslations = {
       "flavor": "The dead have surrendered what they can spare."
     }
   },
+  "yumi": {
+    "bracket3": "Yumi 3v3",
+    "bracket5": "Yumi 5v5",
+    "enterQueue": "Join Protect Yumi!",
+    "queue": {
+      "join": "You join the Protect Yumi queue. Guard your familiar…",
+      "leave": "You leave the Protect Yumi queue.",
+      "teamLeave": "Your team leaves the Protect Yumi queue."
+    },
+    "error": {
+      "partyTooBig3": "Protect Yumi 3v3 allows a party of up to three.",
+      "partyTooBig5": "Protect Yumi 5v5 allows a party of up to five."
+    },
+    "log": {
+      "start": "Protect Yumi! Defend your familiar and hunt theirs."
+    },
+    "hud": {
+      "title": "PROTECT YUMI",
+      "getReady": "Get ready…",
+      "teleportIn": "Yumis move in {s}",
+      "suddenDeath": "SUDDEN DEATH",
+      "yourYumi": "Your Yumi",
+      "enemyYumi": "Enemy Yumi",
+      "aria": "Your Yumi at {mine} of {max} health, enemy Yumi at {theirs}.",
+      "collapse": "Collapse the Protect Yumi bars",
+      "expand": "Expand the Protect Yumi bars"
+    },
+    "respawn": {
+      "title": "DOWNED!"
+    },
+    "banner": {
+      "sudden": "SUDDEN DEATH! The Yumis hold their ground!",
+      "teleport": "The Yumis teleport!"
+    },
+    "end": {
+      "win": "VICTORY! Yumi is safe!",
+      "loss": "DEFEAT! Your Yumi has fallen."
+    }
+  },
   "fiesta": {
     "bracket": "Fiesta",
     "enterQueue": "Join the Fiesta!",
@@ -3837,7 +4065,17 @@ export const en_CA: EnTranslations = {
     "enterTimeout": "Could not enter world. The connection timed out. Is the game server running?",
     "connectionLost": "Connection to the server was lost.",
     "reconnecting": "Connection lost. Reconnecting...",
-    "connectionRejected": "The server closed the connection."
+    "connectionRejected": "The server closed the connection.",
+    "tips": {
+      "classes": "Tip: each of the 9 classes plays differently. Try a few before committing to one.",
+      "talents": "Tip: you can reset your talents any time you are out of combat, so an early pick is never a trap.",
+      "dungeons": "Tip: try a dungeon on heroic difficulty once you outgear normal for a tougher, more rewarding fight.",
+      "market": "Tip: the World Market lets you buy and sell with players across the whole realm.",
+      "guilds": "Tip: joining a guild gives you a private chat channel and a shared roster of your guildmates.",
+      "professions": "Tip: gathering and crafting professions can be trained alongside your combat class.",
+      "loadouts": "Tip: save more than one talent loadout to swap between builds without spending points twice.",
+      "pvp": "Tip: challenge another player to a friendly duel, or queue for the Ashen Coliseum arena, to test your build."
+    }
   },
   "errors": {
     "nothingInteract": "Nothing to interact with.",
@@ -4011,7 +4249,7 @@ export const en_CA: EnTranslations = {
     "title": "Play in Landscape Fullscreen",
     "continue": "Continue to Game",
     "rotateTitle": "Rotate to Landscape",
-    "rotateSub": "Play in landscape fullscreen for the best mobile experience.",
+    "rotateSub": "Portrait mode is not supported. Rotate your device to landscape to continue.",
     "baseLandscape": "Rotate your device to landscape before entering the world.",
     "basePerformance": "Mobile performance may be degraded. Close extra tabs and lower Render Quality if the game feels slow.",
     "iosStandaloneDetail": "You are in home-screen fullscreen mode. Keep the device in landscape.",
@@ -4086,6 +4324,7 @@ export const en_CA: EnTranslations = {
       "mobileSocial": "Social",
       "mobileArena": "Arena",
       "mobileMenu": "Menu",
+      "mobileSettings": "Settings",
       "mobileUse": "Interact",
       "mobileMeters": "Meters",
       "mobileMap": "Map",
@@ -4634,6 +4873,7 @@ export const en_CA: EnTranslations = {
       "offGlobalCooldown": "Off the global cooldown",
       "friendlyTarget": "Friendly target",
       "enemyTarget": "Enemy target",
+      "selfOnly": "Self only",
       "damageRange": "{min} to {max}",
       "finisherDamage": "{base} plus {perCombo} per combo point"
     },
@@ -4830,6 +5070,8 @@ export const en_CA: EnTranslations = {
       "buybackTitle": "Buyback",
       "buybackEmpty": "No items",
       "buybackAria": "Buy back {item} for {price}",
+      "sellItemAria": "Sell {item} for {price}",
+      "sellRolledWarning": "Rolled stats cannot be recovered by buyback.",
       "sellQuantityTitle": "Sell {item}",
       "sellQuantityInput": "Quantity to sell",
       "sellQuantityConfirm": "Sell",
@@ -4942,7 +5184,8 @@ export const en_CA: EnTranslations = {
       "needAria": "Need for {item}",
       "greedAria": "Greed for {item}",
       "passAria": "Pass on {item}",
-      "everyonePassed": "Everyone passed on {item}."
+      "everyonePassed": "Everyone passed on {item}.",
+      "rolled": "{answered}/{total} rolled"
     }
   },
   "entities": {
@@ -4993,19 +5236,19 @@ export const en_CA: EnTranslations = {
       },
       "rain_of_fire": {
         "name": "Rain of Fire",
-        "description": "Calls a rain of fire onto the target area, burning enemies for {damage} Fire damage."
+        "description": "Calls a rain of fire onto the target area for 4 sec, burning enemies for {damage} Fire damage each second."
       },
       "volley": {
         "name": "Volley",
-        "description": "Rains arrows on the target area, dealing {damage} damage to enemies caught in it."
+        "description": "Rains arrows on the target area for 3 sec, dealing {damage} damage every 0.5 sec to enemies caught in it."
       },
       "hurricane": {
         "name": "Hurricane",
-        "description": "Calls a hurricane onto the target area, battering enemies for {damage} Nature damage."
+        "description": "Calls a hurricane onto the target area for 6 sec, battering enemies for {damage} Nature damage each second."
       },
       "earthquake": {
         "name": "Earthquake",
-        "description": "Shakes the target area, battering enemies for {damage} Nature damage."
+        "description": "Shakes the target area for 6 sec, battering enemies for {damage} Nature damage every 1.5 sec."
       },
       "heroic_strike": {
         "name": "Reaver Strike",
@@ -5013,15 +5256,15 @@ export const en_CA: EnTranslations = {
       },
       "battle_shout": {
         "name": "Iron Bellow",
-        "description": "Increases your attack power by 20 for 2 min."
+        "description": "A shout that increases the attack power of all party members by {buff}% for 2 min."
       },
       "commanding_shout": {
         "name": "Bolstering Cry",
-        "description": "Increases your Stamina by 6 for 2 min."
+        "description": "Increases your Stamina by {buff} for 2 min."
       },
       "demoralizing_shout": {
         "name": "Direhowl",
-        "description": "Lets out a fearsome shout, reducing the attack power of all nearby enemies by 30 for 30 sec."
+        "description": "Lets out a fearsome shout, reducing the attack power of all nearby enemies by {buff} for 30 sec."
       },
       "charge": {
         "name": "Onrush",
@@ -5029,7 +5272,7 @@ export const en_CA: EnTranslations = {
       },
       "rend": {
         "name": "Deep Gash",
-        "description": "Wounds the target, causing them to bleed for {damage} damage over 9 sec."
+        "description": "Wounds the target, causing them to bleed for {damage} damage over {duration} sec."
       },
       "thunder_clap": {
         "name": "Quaking Blow",
@@ -5037,7 +5280,7 @@ export const en_CA: EnTranslations = {
       },
       "hamstring": {
         "name": "Hobbling Cut",
-        "description": "Maims the enemy for 5 damage, slowing its movement by 50% for 15 sec."
+        "description": "Maims the enemy for {damage} damage, slowing its movement by 50% for 15 sec."
       },
       "bloodrage": {
         "name": "Blood Toll",
@@ -5045,7 +5288,7 @@ export const en_CA: EnTranslations = {
       },
       "overpower": {
         "name": "Redhand",
-        "description": "Instant attack for weapon damage +5. Only usable after the target dodges. Cannot be dodged."
+        "description": "Instant attack for weapon damage plus {damage}. Only usable after the target dodges. Cannot be dodged."
       },
       "execute": {
         "name": "Early Grave",
@@ -5065,7 +5308,7 @@ export const en_CA: EnTranslations = {
       },
       "sunder_armor": {
         "name": "Armor Shear",
-        "description": "Sunders the target's armor, reducing it by {damage} per application. Stacks up to 5 times. Generates a high amount of threat."
+        "description": "Sunders the target's armor, reducing it by {damage}% per application. Stacks up to 5 times. Generates a high amount of threat."
       },
       "taunt": {
         "name": "Goad",
@@ -5077,11 +5320,11 @@ export const en_CA: EnTranslations = {
       },
       "frost_armor": {
         "name": "Hoarfrost Mantle",
-        "description": "Encases you in frost, increasing armor by 30 for 30 min."
+        "description": "Encases you in frost, increasing armor by {buff} for 30 min."
       },
       "arcane_intellect": {
         "name": "Aether Insight",
-        "description": "Increases Intellect by 2 for 30 min."
+        "description": "Increases the Intellect of all party members by {buff}% for 30 min."
       },
       "frostbolt": {
         "name": "Rimelance",
@@ -5105,7 +5348,7 @@ export const en_CA: EnTranslations = {
       },
       "polymorph": {
         "name": "Bewitch",
-        "description": "Transforms the enemy into a toad for up to 15 sec. The toad wanders and heals rapidly. Any damage breaks the effect. Beasts and humanoids only."
+        "description": "Transforms the enemy into a toad for up to {duration} sec. The toad wanders and heals rapidly. Any damage breaks the effect. Beasts and humanoids only."
       },
       "frost_nova": {
         "name": "Icebind",
@@ -5125,7 +5368,7 @@ export const en_CA: EnTranslations = {
       },
       "ice_barrier": {
         "name": "Frostveil",
-        "description": "Shields you in ice, absorbing 130 damage for 60 sec."
+        "description": "Shields you in ice, absorbing {damage} damage for 60 sec."
       },
       "sinister_strike": {
         "name": "Wicked Slash",
@@ -5133,7 +5376,7 @@ export const en_CA: EnTranslations = {
       },
       "eviscerate": {
         "name": "Dirt Nap",
-        "description": "Finishing move that causes damage per combo point."
+        "description": "Finishing move that causes {damage}."
       },
       "backstab": {
         "name": "Craven Thrust",
@@ -5141,7 +5384,7 @@ export const en_CA: EnTranslations = {
       },
       "gouge": {
         "name": "Eye Jab",
-        "description": "Strikes the target, incapacitating it for 4 sec. Any damage breaks the effect. Awards 1 combo point."
+        "description": "Strikes the target for {damage} damage, incapacitating it for 4 sec. Any damage breaks the effect. Awards 1 combo point."
       },
       "evasion": {
         "name": "Ghostfoot",
@@ -5173,11 +5416,11 @@ export const en_CA: EnTranslations = {
       },
       "garrote": {
         "name": "Throat Wire",
-        "description": "Garrote the enemy, causing damage now and bleeding it for {damage} over 18 sec. Must be stealthed. Awards 1 combo point."
+        "description": "Garrote the enemy, causing {damage} damage now and bleeding it for {overTime} over 18 sec. Must be stealthed. Awards 1 combo point."
       },
       "cheap_shot": {
         "name": "Gut Punch",
-        "description": "Strike the target, stunning it for 4 sec. Must be stealthed. Awards 2 combo points."
+        "description": "Strike the target for {damage} damage, stunning it for 4 sec. Must be stealthed. Awards 2 combo points."
       },
       "sap": {
         "name": "Sap",
@@ -5189,7 +5432,7 @@ export const en_CA: EnTranslations = {
       },
       "expose_armor": {
         "name": "Armor Breach",
-        "description": "Finishing move that exposes the target, reducing its armor. More combo points spent build into a deeper cut."
+        "description": "Finishing move that exposes the target, reducing its armor by {damage}% for 30 sec."
       },
       "rupture": {
         "name": "Bleed Out",
@@ -5213,7 +5456,7 @@ export const en_CA: EnTranslations = {
       },
       "seal_of_righteousness": {
         "name": "Oathbrand",
-        "description": "Fills you with Holy power for 30 sec, causing each of your melee swings to deal 4 additional Holy damage. Unleash with Verdict."
+        "description": "Fills you with Holy power for 30 sec, causing each of your melee swings to deal {damage} additional Holy damage. Unleash with Verdict."
       },
       "holy_light": {
         "name": "Mending Light",
@@ -5221,7 +5464,7 @@ export const en_CA: EnTranslations = {
       },
       "devotion_aura": {
         "name": "Steadfast Aura",
-        "description": "Increases your armor by 40 for 30 min."
+        "description": "Increases the armor of all party members by {buff}% for 30 min."
       },
       "judgement": {
         "name": "Verdict",
@@ -5229,19 +5472,19 @@ export const en_CA: EnTranslations = {
       },
       "blessing_of_might": {
         "name": "Oath of Iron",
-        "description": "Places a Blessing on a friendly target, increasing attack power by 15 for 5 min."
+        "description": "Blesses the party, increasing the attack power of all party members by {buff}% for 30 min."
       },
       "divine_protection": {
         "name": "Ward of Faith",
-        "description": "A protective ward absorbs 50 damage for 10 sec."
+        "description": "A protective ward absorbs {damage} damage for 10 sec."
       },
       "hammer_of_justice": {
         "name": "Sundering Gavel",
-        "description": "Stuns the target for 3 sec."
+        "description": "Stuns the target for {duration} sec."
       },
       "lay_on_hands": {
         "name": "Last Rite",
-        "description": "A massive surge of healing: restores 250 health. 10 min cooldown."
+        "description": "A massive surge of healing: restores {damage} health. 10 min cooldown."
       },
       "flash_of_light": {
         "name": "Lightmend",
@@ -5253,7 +5496,7 @@ export const en_CA: EnTranslations = {
       },
       "consecration": {
         "name": "Holy Ground",
-        "description": "Consecrates the ground beneath you, searing nearby enemies for {damage} Holy damage."
+        "description": "Consecrates the ground beneath you, searing nearby enemies for {damage} Holy damage every 2 sec for 10 sec."
       },
       "righteous_fury": {
         "name": "Burning Oath",
@@ -5273,11 +5516,11 @@ export const en_CA: EnTranslations = {
       },
       "raptor_strike": {
         "name": "Gutting Strike",
-        "description": "A strong melee attack that increases damage by 5. Activates on your next swing."
+        "description": "A strong melee attack that increases damage by {damage}. Activates on your next swing."
       },
       "aspect_of_the_hawk": {
         "name": "Harrier's Guise",
-        "description": "Take on the harrier's guise, increasing attack power by 20 for 30 min."
+        "description": "Take on the harrier's guise, increasing attack power by {buff} for 30 min."
       },
       "serpent_sting": {
         "name": "Venom Barb",
@@ -5289,15 +5532,15 @@ export const en_CA: EnTranslations = {
       },
       "concussive_shot": {
         "name": "Rattling Shot",
-        "description": "Dazes the target, slowing movement by 50% for 4 sec."
+        "description": "Dazes the target for {damage} damage, slowing movement by 50% for 4 sec."
       },
       "mongoose_bite": {
         "name": "Counterfang",
-        "description": "Counterattack after the target dodges for weapon damage plus 12. Cannot be dodged."
+        "description": "Counterattack after the target dodges for weapon damage plus {damage}. Cannot be dodged."
       },
       "wing_clip": {
         "name": "Fettering Slash",
-        "description": "Inflicts a wound that slows the enemy by 40% for 10 sec."
+        "description": "Inflicts a wound for {damage} damage, slowing the enemy by 40% for 10 sec."
       },
       "aspect_of_the_monkey": {
         "name": "Marten's Guise",
@@ -5325,7 +5568,7 @@ export const en_CA: EnTranslations = {
       },
       "power_word_fortitude": {
         "name": "Litany of Resolve",
-        "description": "Increases the target's Stamina by 3 for 30 min."
+        "description": "Increases the Stamina of all party members by {buff}% for 30 min."
       },
       "shadow_word_pain": {
         "name": "Dirge of Decay",
@@ -5333,7 +5576,7 @@ export const en_CA: EnTranslations = {
       },
       "power_word_shield": {
         "name": "Psalm of Warding",
-        "description": "Shields the target, absorbing 48 damage for 30 sec."
+        "description": "Shields the target, absorbing {damage} damage for 30 sec."
       },
       "renew": {
         "name": "Lingering Grace",
@@ -5361,7 +5604,7 @@ export const en_CA: EnTranslations = {
       },
       "rockbiter_weapon": {
         "name": "Stonebound Weapon",
-        "description": "Imbues your weapon with the fury of stone: each swing deals 5 additional damage for 5 min."
+        "description": "Imbues your weapon with the fury of stone: each swing deals {damage} additional damage for 5 min."
       },
       "healing_wave": {
         "name": "Mending Waters",
@@ -5373,15 +5616,15 @@ export const en_CA: EnTranslations = {
       },
       "lightning_shield": {
         "name": "Thunder Ward",
-        "description": "Surrounds you with crackling lightning: melee attackers take 13 Nature damage, up to 3 charges and at most once every 5 seconds."
+        "description": "Surrounds you with crackling lightning: melee attackers take {buff} Nature damage, up to 3 charges and at most once every 5 seconds."
       },
       "flame_shock": {
         "name": "Cinder Jolt",
-        "description": "Sears the target with fire for 25 damage plus {damage} over 12 sec."
+        "description": "Sears the target with fire for {damage} damage plus {overTime} over 12 sec."
       },
       "flametongue_weapon": {
         "name": "Pyrebrand Weapon",
-        "description": "Imbues your weapon with elemental fire: each swing deals 8 additional Fire damage for 5 min."
+        "description": "Imbues your weapon with elemental fire: each swing deals {damage} additional Fire damage for 5 min."
       },
       "frost_shock": {
         "name": "Rime Jolt",
@@ -5389,7 +5632,7 @@ export const en_CA: EnTranslations = {
       },
       "frostbrand_weapon": {
         "name": "Rimebound Weapon",
-        "description": "Imbues your weapon with biting frost: each swing deals 8 additional damage for 5 min."
+        "description": "Imbues your weapon with biting frost: each swing deals {damage} additional damage for 5 min."
       },
       "ghost_wolf": {
         "name": "Shadewolf",
@@ -5405,11 +5648,11 @@ export const en_CA: EnTranslations = {
       },
       "demon_skin": {
         "name": "Fiendhide",
-        "description": "Demonic skin increases your armor by 30 for 30 min."
+        "description": "Demonic skin increases your armor by {buff} for 30 min."
       },
       "immolate": {
         "name": "Burning Pact",
-        "description": "Burns the enemy for 11 Fire damage and an additional {damage} over 15 sec."
+        "description": "Burns the enemy for {damage} Fire damage and an additional {overTime} over 15 sec."
       },
       "corruption": {
         "name": "Blackrot",
@@ -5417,7 +5660,7 @@ export const en_CA: EnTranslations = {
       },
       "life_tap": {
         "name": "Hard Bargain",
-        "description": "Converts 30 health into 30 mana."
+        "description": "Converts {damage} health into {damage} mana."
       },
       "curse_of_agony": {
         "name": "Hex of Anguish",
@@ -5449,7 +5692,7 @@ export const en_CA: EnTranslations = {
       },
       "mark_of_the_wild": {
         "name": "Wildward",
-        "description": "Places the Wildward on a friendly target, increasing armor by 25 for 30 min."
+        "description": "Places the Wildward on the party, increasing all attributes of all party members by {buff}% for 30 min."
       },
       "moonfire": {
         "name": "Lunar Tempest",
@@ -5461,7 +5704,7 @@ export const en_CA: EnTranslations = {
       },
       "thorns": {
         "name": "Briarguard",
-        "description": "Thorns sprout from the target: melee attackers take 3 Nature damage."
+        "description": "Thorns sprout from the target: melee attackers take {buff} Nature damage."
       },
       "entangling_roots": {
         "name": "Gripping Roots",
@@ -5469,7 +5712,7 @@ export const en_CA: EnTranslations = {
       },
       "bear_form": {
         "name": "Bruin Form",
-        "description": "Shapeshift into a bear: armor +65%, attack power +15, your attacks build rage and generate 30% more threat. Cast again to return to caster form."
+        "description": "Shapeshift into a bear: armor +90%, greatly increased attack power, your attacks build rage and generate 30% more threat. Cast again to return to caster form."
       },
       "maul": {
         "name": "Bonecrush",
@@ -5489,7 +5732,7 @@ export const en_CA: EnTranslations = {
       },
       "ferocious_bite": {
         "name": "Gorebite",
-        "description": "Finishing move that causes damage per combo point. Wolf Form only."
+        "description": "Finishing move that causes {damage}. Wolf Form only."
       },
       "swipe": {
         "name": "Sweeping Claws",
@@ -5521,7 +5764,7 @@ export const en_CA: EnTranslations = {
       },
       "faerie_fire": {
         "name": "Witchlight",
-        "description": "Decreases the target's armor by 35 for 40 sec."
+        "description": "Decreases the target's armor by {damage}% for 40 sec. Does not stack with Armor Shear."
       },
       "hibernate": {
         "name": "Slumber",
@@ -5545,7 +5788,7 @@ export const en_CA: EnTranslations = {
       },
       "rip": {
         "name": "Rip",
-        "description": "Finishing move that causes Bleed damage over 12 sec. Consumes combo points. Wolf Form only."
+        "description": "Finishing move that causes {damage} Bleed damage over 12 sec. Consumes combo points. Wolf Form only."
       },
       "mortal_strike": {
         "name": "Maiming Strike",
@@ -5553,11 +5796,11 @@ export const en_CA: EnTranslations = {
       },
       "bloodthirst": {
         "name": "Bloodletting",
-        "description": "Instantly attack in a blood frenzy for {damage}. (Fury signature)"
+        "description": "Instantly attack in a blood frenzy for 60% weapon damage plus {damage}. (Fury signature)"
       },
       "shield_slam": {
         "name": "Shieldcrack",
-        "description": "Slam the target with your shield for {damage} and massive threat. (Protection signature)"
+        "description": "Slam the target with your shield for 50% weapon damage plus {damage} and massive threat. (Protection signature)"
       },
       "whirlwind": {
         "name": "Bladed Gyre",
@@ -5752,6 +5995,9 @@ export const en_CA: EnTranslations = {
       "greyjaw_fang": {
         "name": "Old Greyjaw's Fang"
       },
+      "chunk_of_ore": {
+        "name": "Chunk of Ore"
+      },
       "weathered_ledger_page": {
         "name": "Weathered Ledger Page"
       },
@@ -5781,6 +6027,15 @@ export const en_CA: EnTranslations = {
       },
       "linen_scrap": {
         "name": "Linen Scrap"
+      },
+      "arcane_dust": {
+        "name": "Arcane Dust"
+      },
+      "arcane_essence": {
+        "name": "Arcane Essence"
+      },
+      "arcane_shard": {
+        "name": "Arcane Shard"
       },
       "fen_muster_order": {
         "name": "Fenbridge Muster Order"
@@ -6207,6 +6462,24 @@ export const en_CA: EnTranslations = {
       },
       "sunpetal_sickle": {
         "name": "Sunpetal Sickle"
+      },
+      "thorium_ore": {
+        "name": "Thorium Ore"
+      },
+      "arcanite_bar": {
+        "name": "Arcanite Bar"
+      },
+      "ashwood_log": {
+        "name": "Ashwood Log"
+      },
+      "elderwood_log": {
+        "name": "Elderwood Log"
+      },
+      "goldleaf_herb": {
+        "name": "Goldleaf Herb"
+      },
+      "sunpetal_herb": {
+        "name": "Sunpetal Herb"
       },
       "bristleback_maul": {
         "name": "Gallowglass Hammer"
@@ -6906,6 +7179,9 @@ export const en_CA: EnTranslations = {
       }
     },
     "mobs": {
+      "yumi_cat": {
+        "name": "Yumi"
+      },
       "forest_wolf": {
         "name": "Forest Wolf"
       },
@@ -6965,6 +7241,9 @@ export const en_CA: EnTranslations = {
       },
       "deacon_voss": {
         "name": "Deacon Voss"
+      },
+      "training_dummy": {
+        "name": "Training Dummy"
       },
       "ridge_stalker": {
         "name": "Ridge Stalker"
@@ -7352,6 +7631,21 @@ export const en_CA: EnTranslations = {
         "title": "Keeper of the World Market",
         "greeting": "The World Market is open here too, {className}. Buy from every adventurer in the realm, or set out your own wares."
       },
+      "bursar_fernando": {
+        "name": "Bursar Fernando",
+        "title": "The Gilded Strongbox",
+        "greeting": "Welcome to the Gilded Strongbox. Your goods rest safe behind our locks."
+      },
+      "bursar_petra_vell": {
+        "name": "Bursar Petra Vell",
+        "title": "The Gilded Strongbox",
+        "greeting": "The Gilded Strongbox keeps clean ledgers and cleaner vaults. What shall we stow for you?"
+      },
+      "bursar_aldous_crane": {
+        "name": "Bursar Aldous Crane",
+        "title": "The Gilded Strongbox",
+        "greeting": "Every crate, coffer, and trinket is safe with the Gilded Strongbox."
+      },
       "brother_aldric_raid": {
         "name": "Brother Aldric",
         "title": "Priest of the Vale",
@@ -7384,6 +7678,16 @@ export const en_CA: EnTranslations = {
       }
     },
     "quests": {
+      "q_prof_intro": {
+        "title": "A Trade for Every Hand",
+        "text": "Every soul in Eastbrook works a trade besides the sword, {playerName}. There's ore veins scattered round town, so go swing a pick and bring me 5 chunks. Mine them yourself, mind; I'll know the difference.",
+        "completion": "See? Ore in your pack and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
+        "objectives": {
+          "0": {
+            "label": "Chunk of Ore"
+          }
+        }
+      },
       "q_wolves": {
         "title": "Wolves at the Door",
         "text": "The forest wolves grow bold, snapping at travelers on the north road. Thin their numbers, {playerName}. Slay 8 Forest Wolves and Eastbrook will breathe easier.",
