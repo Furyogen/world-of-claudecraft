@@ -10,6 +10,7 @@ import * as THREE from 'three';
 import type { GLTF } from 'three/addons/loaders/GLTFLoader.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { clone as cloneSkinned } from 'three/addons/utils/SkeletonUtils.js';
+import { WEAPON_SKINS } from '../../sim/content/weapon_skins';
 import { loadGltf, loadTexture } from '../assets/loader';
 import { registerPreload } from '../assets/preload';
 import { addRimGlow, GFX } from '../gfx';
@@ -23,6 +24,7 @@ import {
   type VisualDef,
   visibleAttachmentsForGraphics,
   visualAssetUrlForGraphics,
+  weaponSkinModelUrl,
 } from './manifest';
 
 const DEFAULT_TINT_STRENGTH = 0.4;
@@ -298,7 +300,7 @@ function attachProp(
   bone: THREE.Object3D,
   att: AttachDef,
   markSwap = false,
-): void {
+): THREE.Object3D {
   const payload = flattenWeaponScene(cloneSkinned(resolvedGltf(att.url).scene));
   payload.traverse((o) => {
     if ((o as THREE.Mesh).isMesh) o.userData.weaponMesh = true;
@@ -317,15 +319,45 @@ function attachProp(
     applyHandGrip(payload, root, att.bone, att.url);
   }
   bone.add(payload);
+  return payload;
 }
 
 // The AttachDef for the swappable mainhand slot, with the equipped item's model
-// substituted when one is mapped (else the class default). The grip resolves from
-// the item model's own family (KAYKIT_WEAPON_ACCESSORY), so any base position/
+// substituted when one is mapped (else the class default). An applied Season 1
+// Armory weapon skin wins over the item model (that is the point of the skin).
+// The grip resolves from the substituted model's own family
+// (KAYKIT_WEAPON_ACCESSORY + WEAPON_GRIP_OVERRIDES), so any base position/
 // rotationY/gripRef override is dropped for the substituted model.
-function swapAttachDef(base: AttachDef, weaponItemId: string | null | undefined): AttachDef {
-  const url = itemWeaponModelUrl(weaponItemId);
+function swapAttachDef(
+  base: AttachDef,
+  weaponItemId: string | null | undefined,
+  weaponSkinId: string | null | undefined = null,
+): AttachDef {
+  const url = weaponSkinModelUrl(weaponSkinId) ?? itemWeaponModelUrl(weaponItemId);
   return url ? { url, bone: base.bone } : base;
+}
+
+// Classes without weaponSlots keep a FIXED weapon visual (the hunter's ranged
+// crossbow). A bow/crossbow skin replaces that fixed attach instead of a
+// swappable slot, so those attaches join the swap/stale cycle too.
+const RANGED_SWAP_BASENAMES = new Set(['crossbow_1handed', 'crossbow_2handed']);
+
+function attachBasename(att: AttachDef): string {
+  return att.url.slice(att.url.lastIndexOf('/') + 1).replace(/\.glb$/, '');
+}
+
+function isRangedSwapAttach(att: AttachDef): boolean {
+  return RANGED_SWAP_BASENAMES.has(attachBasename(att));
+}
+
+// The fixed ranged attach with a bow/crossbow skin substituted, or null to keep
+// the base def (no skin, or a skin of a non-ranged type).
+function rangedSkinAttachDef(base: AttachDef, weaponSkinId: string | null): AttachDef | null {
+  if (!weaponSkinId) return null;
+  const def = WEAPON_SKINS[weaponSkinId];
+  if (!def || (def.weaponType !== 'bow' && def.weaponType !== 'crossbow')) return null;
+  const url = weaponSkinModelUrl(weaponSkinId);
+  return url ? { url, bone: base.bone } : null;
 }
 
 function resolveBone(root: THREE.Object3D, name: string): THREE.Object3D | null {
@@ -561,13 +593,15 @@ export function assembleModel(def: VisualDef, weaponItemId?: string | null): THR
     const isSwap = def.weaponSlots?.includes(i) ?? false;
     // Swappable slots take the equipped item's model (when given); every other
     // attachment is fixed (the warlock's spellbook offhand). The rogue lists both
-    // hand slots so a dagger shows in both.
+    // hand slots so a dagger shows in both. Fixed RANGED attaches (hunter) are
+    // still marked as swaps so a later bow/crossbow weapon skin can replace them
+    // in place (setHeldWeapon's stale cycle).
     const att = isSwap ? swapAttachDef(attachments[i], weaponItemId) : attachments[i];
     // GLTFLoader sanitizes node names (PropertyBinding strips [].:/ chars),
     // so the authored "handslot.r" arrives as "handslotr" — try both
     const bone = resolveBone(root, att.bone);
     if (!bone) continue; // manifest/bone mismatch — ship without the prop
-    attachProp(root, bone, att, isSwap);
+    attachProp(root, bone, att, isSwap || isRangedSwapAttach(attachments[i]));
   }
   // Re-orient mis-baked built-in weapon nodes (e.g. the golem axe) in place.
   for (const fix of def.weaponFix ?? []) {
@@ -582,30 +616,53 @@ export function assembleModel(def: VisualDef, weaponItemId?: string | null): THR
 }
 
 /** Replace the equipped-weapon attachment(s) on an already-assembled model in place,
- *  for a runtime gear swap. No-op for visuals without `weaponSlots` (hunter keeps its
- *  crossbow; mobs/NPCs are fixed). Re-attaches every swap slot (the rogue has two, so
- *  both hands update). The caller must re-apply materials and re-snapshot the
- *  original-material map afterwards (see CharacterVisual.setWeapon), since the new
- *  weapon meshes start on the source GLB's raw materials. */
+ *  for a runtime gear swap or a weapon-skin change. Re-attaches every swap slot (the
+ *  rogue has two, so both hands update) plus, for classes with a fixed ranged visual
+ *  (hunter), the fixed ranged attach that a bow/crossbow skin replaces. Returns the
+ *  attached weapon payload roots so the caller can hang rarity VFX off them. The
+ *  caller must re-apply materials and re-snapshot the original-material map
+ *  afterwards (see CharacterVisual.setWeapon), since the new weapon meshes start on
+ *  the source GLB's raw materials. */
 export function setHeldWeapon(
   root: THREE.Object3D,
   def: VisualDef,
   weaponItemId: string | null,
-): void {
-  if (!def.weaponSlots?.length) return;
+  weaponSkinId: string | null = null,
+): THREE.Object3D[] {
+  const attachments = def.attach ?? [];
+  const targets: number[] = [];
+  for (let i = 0; i < attachments.length; i++) {
+    if (def.weaponSlots?.includes(i) || isRangedSwapAttach(attachments[i])) targets.push(i);
+  }
+  if (targets.length === 0) return [];
   const stale: THREE.Object3D[] = [];
   root.traverse((o) => {
     if (o.userData[SWAP_WEAPON_TAG]) stale.push(o);
   });
   for (const o of stale) o.removeFromParent();
-  for (const i of def.weaponSlots) {
-    const base = def.attach?.[i];
-    if (!base) continue;
-    const att = swapAttachDef(base, weaponItemId);
+  const payloads: THREE.Object3D[] = [];
+  for (const i of targets) {
+    const base = attachments[i];
+    const att = def.weaponSlots?.includes(i)
+      ? swapAttachDef(base, weaponItemId, weaponSkinId)
+      : (rangedSkinAttachDef(base, weaponSkinId) ?? base);
     const bone = resolveBone(root, att.bone);
     if (!bone) continue;
-    attachProp(root, bone, att, true);
+    payloads.push(attachProp(root, bone, att, true));
   }
+  return payloads;
+}
+
+/** A standalone display clone of a weapon-skin model for the armory inspect
+ *  turntable (weapon-only mode). Origin is the grip, like every held model. */
+export function weaponSkinDisplayModel(skinId: string): THREE.Object3D | null {
+  const url = weaponSkinModelUrl(skinId);
+  if (!url) return null;
+  const payload = flattenWeaponScene(cloneSkinned(resolvedGltf(url).scene));
+  payload.traverse((o) => {
+    if ((o as THREE.Mesh).isMesh) o.userData.weaponMesh = true;
+  });
+  return payload;
 }
 
 // ---------------------------------------------------------------------------

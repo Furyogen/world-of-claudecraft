@@ -4,8 +4,10 @@
 // mid-distance band. All geometry/materials are shared caches — dispose()
 // only releases mixer bindings.
 import * as THREE from 'three';
+import { WEAPON_SKINS } from '../../sim/content/weapon_skins';
 import type { OverheadEmoteId } from '../../world_api';
 import { GFX } from '../gfx';
+import { createWeaponVfx, WEAPON_VFX, type WeaponVfxHandle } from '../weapon_vfx';
 import {
   type AnimState,
   type BaseState,
@@ -26,6 +28,14 @@ import {
 import type { EmoteClipSpec, VisualDef, WeaponLayoutOverride } from './manifest';
 
 export type { AnimState, BaseState } from './anim_state';
+
+// Current canvas height in device pixels, pushed by the renderer on resolution
+// changes so newly created weapon-skin VFX rigs size their point sprites right.
+let weaponVfxViewportHeight = 1080;
+
+export function setWeaponVfxViewportHeight(heightPx: number): void {
+  weaponVfxViewportHeight = Math.max(1, Math.round(heightPx));
+}
 
 const FADE = 0.22;
 const ONESHOT_FADE = 0.1;
@@ -79,6 +89,8 @@ export class CharacterVisual {
   private entityColor: number;
   private skinIndex: number;
   private weaponItemId: string | null;
+  private weaponSkinId: string | null = null;
+  private weaponVfx: WeaponVfxHandle[] = [];
   private disposed = false;
   private ghosted = false;
   private mixer: THREE.AnimationMixer;
@@ -464,7 +476,22 @@ export class CharacterVisual {
     if (weaponItemId === this.weaponItemId) return;
     this.weaponItemId = weaponItemId;
     if (!this.def.weaponSlots?.length) return;
-    setHeldWeapon(this.model, this.def, weaponItemId);
+    this.reattachHeldWeapon();
+  }
+
+  /** Apply or clear a Season 1 Armory weapon-skin cosmetic: the skin's model
+   *  replaces the held weapon (all swap slots, or the hunter's fixed ranged
+   *  attach) and its rarity VFX ride the new payloads. Null restores the
+   *  equipped item's own model. */
+  setWeaponSkin(weaponSkinId: string | null): void {
+    if (weaponSkinId === this.weaponSkinId) return;
+    this.weaponSkinId = weaponSkinId;
+    this.reattachHeldWeapon();
+  }
+
+  private reattachHeldWeapon(): void {
+    this.disposeWeaponVfx();
+    const payloads = setHeldWeapon(this.model, this.def, this.weaponItemId, this.weaponSkinId);
     applyMaterials(
       this.model,
       this.def,
@@ -477,6 +504,37 @@ export class CharacterVisual {
     this.originalMaterials.clear();
     this.rebuildCasters();
     this.applyVisualMaterials();
+    this.buildWeaponVfx(payloads);
+  }
+
+  /** Attach the skin's rarity VFX rig to each held payload (in-hand mode: no
+   *  backdrop dome, no ground pool; emissive + particles ride the weapon). */
+  private buildWeaponVfx(payloads: THREE.Object3D[]): void {
+    const skin = this.weaponSkinId ? WEAPON_SKINS[this.weaponSkinId] : null;
+    const spec = skin ? WEAPON_VFX[skin.model] : null;
+    if (!skin || !spec) return;
+    for (const payload of payloads) {
+      const handle = createWeaponVfx(payload, spec, { grounded: false });
+      handle.setBackdropVisible(false);
+      handle.setPixelScale(weaponVfxViewportHeight);
+      this.weaponVfx.push(handle);
+    }
+  }
+
+  /** Advance the weapon-skin VFX (shader time, pulse, flicker). Cheap no-op
+   *  without an active skin; the renderer calls it once per entity per frame. */
+  updateWeaponVfx(dt: number): void {
+    for (const handle of this.weaponVfx) handle.update(dt);
+  }
+
+  /** Re-scale VFX point sprites after a viewport/pixel-ratio change. */
+  setWeaponVfxPixelScale(heightPx: number): void {
+    for (const handle of this.weaponVfx) handle.setPixelScale(heightPx);
+  }
+
+  private disposeWeaponVfx(): void {
+    for (const handle of this.weaponVfx) handle.dispose();
+    this.weaponVfx.length = 0;
   }
 
   /** Rebuild the shadow-caster list and original-material snapshot after the model
@@ -496,6 +554,7 @@ export class CharacterVisual {
 
   dispose(): void {
     this.disposed = true;
+    this.disposeWeaponVfx();
     this.mixer.stopAllAction();
     this.mixer.uncacheRoot(this.model);
     this.root.removeFromParent();
