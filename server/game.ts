@@ -409,6 +409,7 @@ const HEAVY_SELF_CMDS = new Set<string>([
   'change_skin',
   'unequip_mech_chroma',
   'claim_event_skin',
+  'change_weapon_skin',
   'prestige',
   'market_list',
   'market_buy',
@@ -2046,9 +2047,13 @@ export class GameServer {
       delete weaponSkinLoadout[wtype];
     }
     this.updateLiveAccountCosmetics(session.accountId, { ...current, weaponSkinLoadout });
-    void setAccountWeaponSkinLoadout(session.accountId, weaponSkinLoadout)
-      .then((cosmetics) => this.updateLiveAccountCosmetics(session.accountId, cosmetics))
-      .catch((err) => console.error('failed to save weapon skin loadout:', err));
+    // Fire-and-forget: the optimistic state above IS the new truth and the DB
+    // write is a single atomic jsonb_set. Re-applying the RETURNING here could
+    // resurrect a detached skin when two rapid apply/detach round trips resolve
+    // out of order (the older RETURNING re-applied last).
+    void setAccountWeaponSkinLoadout(session.accountId, weaponSkinLoadout).catch((err) =>
+      console.error('failed to save weapon skin loadout:', err),
+    );
   }
 
   join(

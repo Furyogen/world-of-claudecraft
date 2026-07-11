@@ -245,7 +245,7 @@ class Wizard {
       'div',
       { class: 'wz-steps' },
       ...steps.map((s, i) =>
-        el('div', { class: 'wz-step' + (i === ai ? ' on' : i < ai ? ' done' : '') }, s),
+        el('div', { class: `wz-step${i === ai ? ' on' : i < ai ? ' done' : ''}` }, s),
       ),
     );
   }
@@ -433,7 +433,7 @@ class Wizard {
     const jobId = `${s.lane}_${safeName(s.name)}`;
     let existing = null;
     try {
-      existing = await api('/api/wizard/status?job=' + encodeURIComponent(jobId));
+      existing = await api(`/api/wizard/status?job=${encodeURIComponent(jobId)}`);
     } catch {}
     if (existing?.exists && existing.steps?.generate === 'done') {
       const fresh = window.confirm(
@@ -603,7 +603,7 @@ class Wizard {
         ? el(
             'div',
             { class: 'wz-note' },
-            'Validation warnings: ' + (val.errors || val.warnings || []).join('; '),
+            `Validation warnings: ${(val.errors || val.warnings || []).join('; ')}`,
           )
         : null,
       el(
@@ -715,7 +715,7 @@ class Wizard {
       ...list
         .slice(0, 10)
         .map((p) =>
-          el('img', { src: p.url + '?t=' + Math.floor(p.mtime), alt: p.name, title: p.name }),
+          el('img', { src: `${p.url}?t=${Math.floor(p.mtime)}`, alt: p.name, title: p.name }),
         ),
     );
   }
@@ -906,7 +906,7 @@ class Wizard {
     const jobId = this.state.jobId;
     for (;;) {
       if (!this.polling) return;
-      const st = await api('/api/wizard/status?job=' + encodeURIComponent(jobId));
+      const st = await api(`/api/wizard/status?job=${encodeURIComponent(jobId)}`);
       this._status = st;
       if (this._logBox) this._logBox.textContent = (st.log || '').trim() || 'working...';
       if (!st.running) break;

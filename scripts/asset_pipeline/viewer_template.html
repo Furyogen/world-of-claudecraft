@@ -217,7 +217,7 @@ const assets = DATA.assets;
 // Rewritten to true by `library --serve` (which also injects viewer_live.js).
 // Static file open leaves it false and uses the rendered thumbnail strip.
 window.__LIVE__ = false;
-const kb = (n) => n >= 1048576 ? (n / 1048576).toFixed(2) + ' MB' : (n / 1024).toFixed(0) + ' KB';
+const kb = (n) => n >= 1048576 ? `${(n / 1048576).toFixed(2)} MB` : `${(n / 1024).toFixed(0)} KB`;
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) =>
   ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
@@ -247,7 +247,7 @@ const state = {
 // A public/ asset URL that resolves in both modes: /repo/public/* when served,
 // ../../../public/* relative to the emitted index.html when opened as a file.
 function pubUrl(publicRel) {
-  return window.__LIVE__ ? '/repo/public/' + publicRel : '../../../public/' + publicRel;
+  return window.__LIVE__ ? `/repo/public/${publicRel}` : `../../../public/${publicRel}`;
 }
 
 // Character models a weapon can be "held by" in the live viewer: every player
@@ -259,7 +259,7 @@ function characterOptions() {
       opts.push({ label: a.name, repoGlb: a.repoGlb });
     }
     if (a.kind === 'job' && a.job?.lane === 'skinmodel' && a.repoGlb) {
-      opts.push({ label: a.name.replace(/^skinmodel: /, '') + ' (generated)', repoGlb: a.repoGlb });
+      opts.push({ label: `${a.name.replace(/^skinmodel: /, '')} (generated)`, repoGlb: a.repoGlb });
     }
   }
   return opts.sort((x, y) => x.label.localeCompare(y.label));
@@ -295,87 +295,87 @@ function applyFilters() {
 function renderGrid() {
   applyFilters();
   document.getElementById('count').textContent =
-    state.filtered.length + ' of ' + assets.length + ' assets';
+    `${state.filtered.length} of ${assets.length} assets`;
   const grid = document.getElementById('grid');
   grid.innerHTML = state.filtered.map((a, i) => {
     const img = a.thumb
-      ? '<img loading="lazy" src="' + esc(a.thumb) + '" alt="" />'
-      : '<span class="noimg">' + (a.error ? 'render failed' : 'no preview') + '</span>';
-    const tris = a.inspect ? a.inspect.tris + ' tris' : '';
-    const clips = a.inspect?.clips?.length ? ' · ' + a.inspect.clips.length + ' clips' : '';
-    return '<div class="card" tabindex="0" role="button" data-i="' + i + '">' +
-      '<div class="img">' + img + '</div>' +
-      '<div class="meta"><div class="name" title="' + esc(a.name) + '">' + esc(a.name) + '</div>' +
-      '<div class="tags"><span class="dot ' + DOT[statusOf(a)] + '"></span>' +
-      esc(a.category) + ' · ' + kb(a.bytes ?? 0) + (tris ? ' · ' + tris : '') + clips +
+      ? `<img loading="lazy" src="${esc(a.thumb)}" alt="" />`
+      : `<span class="noimg">${a.error ? 'render failed' : 'no preview'}</span>`;
+    const tris = a.inspect ? `${a.inspect.tris} tris` : '';
+    const clips = a.inspect?.clips?.length ? ` · ${a.inspect.clips.length} clips` : '';
+    return `<div class="card" tabindex="0" role="button" data-i="${i}">` +
+      `<div class="img">${img}</div>` +
+      `<div class="meta"><div class="name" title="${esc(a.name)}">${esc(a.name)}</div>` +
+      `<div class="tags"><span class="dot ${DOT[statusOf(a)]}"></span>` +
+      `${esc(a.category)} · ${kb(a.bytes ?? 0)}${tris ? ` · ${tris}` : ''}${clips}` +
       '</div></div></div>';
   }).join('');
 }
 
 function pills(list, cls) {
-  return (list ?? []).map((x) => '<span class="pill ' + (cls ?? '') + '">' + esc(x) + '</span>').join('') || '<span class="pill">none</span>';
+  return (list ?? []).map((x) => `<span class="pill ${cls ?? ''}">${esc(x)}</span>`).join('') || '<span class="pill">none</span>';
 }
 
 function inspectorHtml(a) {
   const st = statusOf(a);
-  let h = '<h2>' + esc(a.name) + '</h2><div class="path">' + esc(a.path) + '</div>';
-  h += '<span class="pill ' + (st === 'registered' ? 'green' : st === 'orphan' ? 'amber' : st === 'generated' ? 'blue' : 'red') + '">' + st + '</span>';
-  h += '<span class="pill">' + esc(a.category) + '</span>';
-  if (a.family) h += '<span class="pill gold">family: ' + esc(a.family) + '</span>';
-  if (a.error) h += '<h3>Error</h3><div class="mono">' + esc(a.error) + '</div>';
+  let h = `<h2>${esc(a.name)}</h2><div class="path">${esc(a.path)}</div>`;
+  h += `<span class="pill ${st === 'registered' ? 'green' : st === 'orphan' ? 'amber' : st === 'generated' ? 'blue' : 'red'}">${st}</span>`;
+  h += `<span class="pill">${esc(a.category)}</span>`;
+  if (a.family) h += `<span class="pill gold">family: ${esc(a.family)}</span>`;
+  if (a.error) h += `<h3>Error</h3><div class="mono">${esc(a.error)}</div>`;
 
   if (a.inspect) {
     const i = a.inspect;
     const b = i.bounds;
     const dims = b ? [0, 1, 2].map((k) => (b.max[k] - b.min[k]).toFixed(2)).join(' x ') : '?';
     h += '<h3>Geometry</h3><table>' +
-      '<tr><td>size</td><td>' + kb(a.bytes) + '</td></tr>' +
-      '<tr><td>triangles</td><td>' + i.tris + ' (' + i.verts + ' verts, ' + i.meshes + ' meshes)</td></tr>' +
-      '<tr><td>dimensions</td><td class="mono">' + dims + '</td></tr>' +
-      (b ? '<tr><td>base / grip y</td><td class="mono">' + b.min[1].toFixed(3) + ' .. ' + b.max[1].toFixed(3) + '</td></tr>' : '') +
-      '<tr><td>rig</td><td>' + (i.skins ? i.skins + ' skin, ' + i.joints + ' joints' : 'static') + '</td></tr>' +
+      `<tr><td>size</td><td>${kb(a.bytes)}</td></tr>` +
+      `<tr><td>triangles</td><td>${i.tris} (${i.verts} verts, ${i.meshes} meshes)</td></tr>` +
+      `<tr><td>dimensions</td><td class="mono">${dims}</td></tr>` +
+      (b ? `<tr><td>base / grip y</td><td class="mono">${b.min[1].toFixed(3)} .. ${b.max[1].toFixed(3)}</td></tr>` : '') +
+      `<tr><td>rig</td><td>${i.skins ? `${i.skins} skin, ${i.joints} joints` : 'static'}</td></tr>` +
       '</table>';
-    h += '<h3>Materials</h3>' + pills(i.materials.map((m) => m ?? 'unnamed'));
+    h += `<h3>Materials</h3>${pills(i.materials.map((m) => m ?? 'unnamed'))}`;
     if (i.textures.length) {
       h += '<h3>Textures</h3><table><tr><th>name</th><th>type</th><th>size</th><th>bytes</th></tr>' +
-        i.textures.map((t) => '<tr><td>' + esc(t.name ?? '?') + '</td><td>' + esc((t.mime ?? '').replace('image/', '')) + '</td><td>' + t.width + 'x' + t.height + '</td><td>' + kb(t.bytes) + '</td></tr>').join('') + '</table>';
+        i.textures.map((t) => `<tr><td>${esc(t.name ?? '?')}</td><td>${esc((t.mime ?? '').replace('image/', ''))}</td><td>${t.width}x${t.height}</td><td>${kb(t.bytes)}</td></tr>`).join('') + '</table>';
     } else if (a.kind === 'model') {
       h += '<h3>Textures</h3><span class="pill">untextured (color factors)</span>';
     }
     if (i.clips?.length) {
-      h += '<h3>Animation clips (' + i.clips.length + ')</h3><table>' +
-        i.clips.map((c) => '<tr><td>' + esc(c.name) + '</td><td>' + c.duration + 's</td></tr>').join('') + '</table>';
+      h += `<h3>Animation clips (${i.clips.length})</h3><table>` +
+        i.clips.map((c) => `<tr><td>${esc(c.name)}</td><td>${c.duration}s</td></tr>`).join('') + '</table>';
     }
   }
 
   const r = a.registration ?? {};
   h += '<h3>Registration</h3><table>';
   if (a.category === 'weapons') {
-    h += '<tr><td>grip family</td><td>' + (r.gripFamily ? '<span class="pill gold">' + esc(r.gripFamily) + '</span>' : '<span class="pill amber">not in KAYKIT_WEAPON_ACCESSORY</span>') + '</td></tr>';
-    h += '<tr><td>item ids</td><td>' + pills(r.itemIds, 'green') + '</td></tr>';
-    h += '<tr><td>HUD icon</td><td>' + (r.icon ? '<img src="' + esc(pubUrl(r.icon)) + '" width="40" style="vertical-align:middle;border-radius:4px" alt="icon" /> ' + esc(r.icon) : '<span class="pill amber">missing</span>') + '</td></tr>';
-    if (r.visualKeys?.length) h += '<tr><td>visual attach</td><td>' + pills(r.visualKeys, 'blue') + '</td></tr>';
+    h += `<tr><td>grip family</td><td>${r.gripFamily ? `<span class="pill gold">${esc(r.gripFamily)}</span>` : '<span class="pill amber">not in KAYKIT_WEAPON_ACCESSORY</span>'}</td></tr>`;
+    h += `<tr><td>item ids</td><td>${pills(r.itemIds, 'green')}</td></tr>`;
+    h += `<tr><td>HUD icon</td><td>${r.icon ? `<img src="${esc(pubUrl(r.icon))}" width="40" style="vertical-align:middle;border-radius:4px" alt="icon" /> ${esc(r.icon)}` : '<span class="pill amber">missing</span>'}</td></tr>`;
+    if (r.visualKeys?.length) h += `<tr><td>visual attach</td><td>${pills(r.visualKeys, 'blue')}</td></tr>`;
   } else if (a.kind === 'skin' && a.category === 'skins') {
-    h += '<tr><td>model</td><td>' + esc(a.model) + '.glb (classes: ' + esc((a.classes ?? []).join(', ')) + ')</td></tr>';
-    h += '<tr><td>skin slots</td><td>' + (r.isBase ? '<span class="pill gold">base atlas (default look source)</span>' : pills((r.slots ?? []).map((s) => s.key + ' [' + s.index + ']'), 'green')) + '</td></tr>';
+    h += `<tr><td>model</td><td>${esc(a.model)}.glb (classes: ${esc((a.classes ?? []).join(', '))})</td></tr>`;
+    h += `<tr><td>skin slots</td><td>${r.isBase ? '<span class="pill gold">base atlas (default look source)</span>' : pills((r.slots ?? []).map((s) => `${s.key} [${s.index}]`), 'green')}</td></tr>`;
   } else if (a.kind === 'skin') {
-    h += '<tr><td>chroma id</td><td class="mono">' + esc(a.chromaId) + '</td></tr>';
-    h += '<tr><td>rank</td><td>' + (r.rank ? '<span class="pill ' + (r.rank === 'epic' ? 'gold' : 'green') + '">' + esc(r.rank) + '</span>' : '<span class="pill amber">not in MECH_CHROMAS</span>') + '</td></tr>';
-    h += '<tr><td>emissive map</td><td>' + (r.hasEmissive ? 'yes (epic glow)' : 'no') + '</td></tr>';
+    h += `<tr><td>chroma id</td><td class="mono">${esc(a.chromaId)}</td></tr>`;
+    h += `<tr><td>rank</td><td>${r.rank ? `<span class="pill ${r.rank === 'epic' ? 'gold' : 'green'}">${esc(r.rank)}</span>` : '<span class="pill amber">not in MECH_CHROMAS</span>'}</td></tr>`;
+    h += `<tr><td>emissive map</td><td>${r.hasEmissive ? 'yes (epic glow)' : 'no'}</td></tr>`;
   } else if (a.kind === 'job') {
     const j = a.job;
-    h += '<tr><td>lane</td><td>' + esc(j.lane) + '</td></tr>';
-    h += '<tr><td>steps</td><td>' + Object.entries(j.steps).map(([k, v]) => '<span class="pill ' + (v === 'done' ? 'green' : v === 'failed' ? 'red' : '') + '">' + esc(k) + '</span>').join('') + '</td></tr>';
+    h += `<tr><td>lane</td><td>${esc(j.lane)}</td></tr>`;
+    h += `<tr><td>steps</td><td>${Object.entries(j.steps).map(([k, v]) => `<span class="pill ${v === 'done' ? 'green' : v === 'failed' ? 'red' : ''}">${esc(k)}</span>`).join('')}</td></tr>`;
     if (j.validation) {
-      h += '<tr><td>validation</td><td>' + (j.validation.ok ? '<span class="pill green">ok</span>' : pills(j.validation.errors, 'red')) + (j.validation.warnings?.length ? '<br/>' + pills(j.validation.warnings, 'amber') : '') + '</td></tr>';
+      h += `<tr><td>validation</td><td>${j.validation.ok ? '<span class="pill green">ok</span>' : pills(j.validation.errors, 'red')}${j.validation.warnings?.length ? `<br/>${pills(j.validation.warnings, 'amber')}` : ''}</td></tr>`;
     }
-    h += '<tr><td>tripo tasks</td><td class="mono">' + Object.entries(j.tasks).map(([k, v]) => esc(k) + ': ' + esc(v)).join('<br/>') + '</td></tr>';
+    h += `<tr><td>tripo tasks</td><td class="mono">${Object.entries(j.tasks).map(([k, v]) => `${esc(k)}: ${esc(v)}`).join('<br/>')}</td></tr>`;
   } else {
-    h += '<tr><td>visual keys</td><td>' + pills(r.visualKeys, 'blue') + '</td></tr>';
-    h += '<tr><td>referenced in src</td><td>' + (r.referenced ? '<span class="pill green">yes</span>' : '<span class="pill amber">no reference found</span>') + '</td></tr>';
+    h += `<tr><td>visual keys</td><td>${pills(r.visualKeys, 'blue')}</td></tr>`;
+    h += `<tr><td>referenced in src</td><td>${r.referenced ? '<span class="pill green">yes</span>' : '<span class="pill amber">no reference found</span>'}</td></tr>`;
   }
   h += '</table>';
-  if (a.hash) h += '<div class="navhint">content hash ' + esc(a.hash) + ' · arrows navigate, Esc closes</div>';
+  if (a.hash) h += `<div class="navhint">content hash ${esc(a.hash)} · arrows navigate, Esc closes</div>`;
   return h;
 }
 
@@ -400,7 +400,7 @@ function openDetail(i) {
   if (!a) return;
   // Deep-linkable detail: #a=<name> mirrors the open asset (replaceState so
   // history does not fill up while arrow-navigating).
-  try { history.replaceState(null, '', '#a=' + encodeURIComponent(a.name)); } catch { /* file:// */ }
+  try { history.replaceState(null, '', `#a=${encodeURIComponent(a.name)}`); } catch { /* file:// */ }
   // Delete is offered ONLY for generated/imported assets (server marks them
   // deletable); base/shipped assets have no button.
   document.getElementById('delasset').style.display = a.registration?.deletable ? '' : 'none';
@@ -421,7 +421,7 @@ function openDetail(i) {
     big.src = imgs[0]?.src ?? '';
     strip.style.display = 'flex';
     strip.innerHTML = imgs.map((im, k) =>
-      '<div><img src="' + esc(im.src) + '" data-k="' + k + '" class="' + (k === 0 ? 'on' : '') + '" alt="' + esc(im.label) + '" /><div class="lbl">' + esc(im.label) + '</div></div>').join('');
+      `<div><img src="${esc(im.src)}" data-k="${k}" class="${k === 0 ? 'on' : ''}" alt="${esc(im.label)}" /><div class="lbl">${esc(im.label)}</div></div>`).join('');
     strip.querySelectorAll('img').forEach((el) => {
       el.addEventListener('click', () => {
         big.src = imgs[Number(el.dataset.k)].src;
@@ -514,7 +514,7 @@ function openByName(name) {
 
 // Wiring
 document.getElementById('subtitle').textContent =
-  assets.length + ' assets · generated ' + DATA.generatedAt.replace('T', ' ').slice(0, 19) + ' UTC';
+  `${assets.length} assets · generated ${DATA.generatedAt.replace('T', ' ').slice(0, 19)} UTC`;
 // Header "Create asset" button: mirrors the floating +Create FAB (both open the
 // wizard via openNew). The wizard only exists when served live, so hide the
 // button in static-file mode where there is no backend to run a generation.
@@ -532,7 +532,7 @@ document.getElementById('search').value = state.search;
 document.getElementById('status').value = state.status;
 document.getElementById('sort').value = state.sort;
 chipBox.innerHTML = categories().map((c) =>
-  '<span class="chip' + (c === state.cat ? ' on' : '') + '" data-cat="' + esc(c) + '">' + esc(c) + '</span>').join('');
+  `<span class="chip${c === state.cat ? ' on' : ''}" data-cat="${esc(c)}">${esc(c)}</span>`).join('');
 chipBox.addEventListener('click', (e) => {
   const chip = e.target.closest('.chip');
   if (!chip) return;
@@ -557,8 +557,8 @@ document.getElementById('delasset').addEventListener('click', async () => {
   const a = state.filtered[state.open];
   if (!a || !a.registration?.deletable) return;
   const key = a.weaponKey || a.name.replace(/^[^:]+:\s*/, '');
-  if (!confirm('Permanently delete "' + a.name + '" and all its files (model, icon, generation job)?'
-    + '\n\nThis cannot be undone. The name will be freed so you can re-generate with it later.')) return;
+  if (!confirm(`Permanently delete "${a.name}" and all its files (model, icon, generation job)?` +
+    '\n\nThis cannot be undone. The name will be freed so you can re-generate with it later.')) return;
   try {
     const resp = await fetch('/api/asset/delete', {
       method: 'POST',
@@ -566,10 +566,10 @@ document.getElementById('delasset').addEventListener('click', async () => {
       body: JSON.stringify({ key, jobId: a.job?.id || a.registration?.jobId || null }),
     });
     const data = await resp.json();
-    if (!resp.ok) { alert('Delete failed: ' + (data.error || resp.status)); return; }
+    if (!resp.ok) { alert(`Delete failed: ${data.error || resp.status}`); return; }
     location.reload(); // re-inventory without the deleted asset; persisted filter holds the view
   } catch (err) {
-    alert('Delete failed: ' + (err.message || err));
+    alert(`Delete failed: ${err.message || err}`);
   }
 });
 // "Reveal in Finder": open the OS file browser at this asset's file (the weapon

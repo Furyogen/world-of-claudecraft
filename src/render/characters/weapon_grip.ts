@@ -56,11 +56,6 @@ export const WEAPON_GRIP_OVERRIDES: Record<string, WeaponGripOverride> = {
     rot: [4.898, 0.5818, -34.2432],
     scale: 1.3,
   },
-  skyrender_heaven_s_fracture: {
-    pos: [0.0974, 0.2418, 0.0362],
-    rot: [180, -5.4502, -160.0379],
-    scale: 1.3,
-  },
   cosmarch_spire_of_the_endless_void: {
     pos: [-0.0725, 0.7123, 0.0769],
     rot: [-149.1828, -80.6499, -141.918],

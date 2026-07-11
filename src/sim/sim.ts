@@ -2277,6 +2277,19 @@ export class Sim {
     e.weaponSkinLoadout = next;
     // For player entities templateId is the class id (createPlayer).
     e.weaponSkinId = resolveActiveWeaponSkin(e.templateId, e.mainhandItemId, next);
+    this.mirrorWeaponSkinLoadout(pid, e);
+  }
+
+  /** Keep the local player's accountCosmetics view of the loadout in step with
+   *  the entity, so the store's applied badges read the same on BOTH hosts
+   *  (ClientWorld mirrors optimistically; offline Sim mirrors here). */
+  private mirrorWeaponSkinLoadout(pid: number, e: Entity): void {
+    if (pid !== this.primaryId) return;
+    const weaponSkinLoadout: Record<string, string> = {};
+    for (const [t, skinId] of Object.entries(e.weaponSkinLoadout)) {
+      if (skinId) weaponSkinLoadout[t] = skinId;
+    }
+    this.accountCosmetics = { ...this.accountCosmetics, weaponSkinLoadout };
   }
 
   /** Apply (skinId) or detach (null + weaponType) one weapon-skin loadout entry.
@@ -2300,6 +2313,7 @@ export class Sim {
       e.weaponSkinLoadout = next;
     }
     e.weaponSkinId = resolveActiveWeaponSkin(cls, e.mainhandItemId, e.weaponSkinLoadout);
+    this.mirrorWeaponSkinLoadout(pid, e);
     return true;
   }
 
