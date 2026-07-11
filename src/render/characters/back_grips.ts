@@ -56,18 +56,25 @@ const BACK_GRIPS: Record<string, BackGripSpec> = {
   '1H_Axe': { position: [0.16, 0.14, -0.27], euler: [0.1, 0, Math.PI * 0.72] },
   '2H_Axe': { position: [0.14, 0.1, -0.3], euler: [0.1, 0, Math.PI * 0.75] },
   '2H_Staff': { position: [0.12, 0.0, -0.3], euler: [0.1, 0, Math.PI * 0.78] },
-  // Short blades tuck at the belt, hilt up (long hair covers a shoulder carry
-  // on the rogue rig, so the waist reads better from every angle).
-  Knife: { position: [0.22, -0.08, -0.14], euler: [0, 0, Math.PI * 0.95] },
-  '1H_Wand': { position: [0.2, -0.05, -0.16], euler: [0, 0, Math.PI * 0.9] },
+  // Short one-handers carry at the hip, hilt up and leaning outward. The chibi
+  // torso is a wide egg (about 0.3 half-width at the belt in chest-bone units)
+  // and the long-hair styles drape over the whole back, so anything narrower
+  // than about x 0.45 disappears inside the silhouette; these values keep the
+  // pommel and grip visible from front, side, and behind on the shared rig.
+  Knife: { position: [0.5, -0.38, -0.08], euler: [0.05, 0.15, Math.PI * 0.72] },
+  '1H_Wand': { position: [0.5, -0.38, -0.08], euler: [0.05, 0.15, Math.PI * 0.72] },
   '1H_Crossbow': { position: [0.0, 0.1, -0.3], euler: [0, Math.PI / 2, Math.PI] },
   '2H_Crossbow': { position: [0.0, 0.1, -0.32], euler: [0, Math.PI / 2, Math.PI] },
   VAR_SWORD: { position: [0.16, 0.14, -0.27], euler: [0.1, 0, Math.PI * 0.72] },
-  VAR_DAGGER: { position: [0.22, -0.08, -0.14], euler: [0, 0, Math.PI * 0.95] },
+  VAR_DAGGER: { position: [0.5, -0.38, -0.08], euler: [0.05, 0.15, Math.PI * 0.72] },
   VAR_STAFF: { position: [0.12, 0.0, -0.3], euler: [0.1, 0, Math.PI * 0.78] },
   VAR_AXE: { position: [0.16, 0.14, -0.27], euler: [0.1, 0, Math.PI * 0.72] },
   VAR_POLEARM: { position: [0.12, 0.0, -0.3], euler: [0.1, 0, Math.PI * 0.78] },
-  VAR_WAND: { position: [0.2, -0.05, -0.16], euler: [0, 0, Math.PI * 0.9] },
+  // Off-hand gear from the two-slot loadout (release/v0.24.0-ptr): a left-hand
+  // prop of any family above mirrors automatically via backGripFor's side
+  // argument. Families that branch introduces (shields, held off-hands like
+  // books or lanterns) get their own entries here when it merges; until then
+  // an unknown family falls back to DEFAULT_BACK instead of vanishing.
 };
 
 /** The on-back transform for a sheathed prop: family-specific, mirrored across X
