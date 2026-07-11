@@ -200,10 +200,10 @@ describe('Nythraxis raid encounter', () => {
       minLevel: 20,
       maxLevel: 20,
       channelHeal: expect.objectContaining({
-        every: 3,
-        baseHeal: 400,
-        rampAdd: 300,
-        maxHeal: 1800,
+        every: 4,
+        baseHeal: 320,
+        rampAdd: 240,
+        maxHeal: 1440,
       }),
     });
     expect(MOBS.nythraxis_heroic_priest_add.wardAllies).toBeUndefined();

@@ -36,9 +36,9 @@ const stun = (sourceId: number): Aura => ({
   school: 'physical',
 });
 
-// Advance until the channel's next heal lands (every=7.5s = 150 ticks, plus float
+// Advance until the channel's next heal lands (every=4s = 80 ticks, plus float
 // drift) and return the heal the boss received, or 0 if none fired (interrupted).
-function tickOneChannel(sim: Sim, malric: Entity, boss: Entity, maxTicks = 160): number {
+function tickOneChannel(sim: Sim, malric: Entity, boss: Entity, maxTicks = 90): number {
   const before = boss.hp;
   for (let i = 0; i < maxTicks; i++) {
     inner(sim).updateBossMechanics(malric);
@@ -54,10 +54,10 @@ describe('heroic Nythraxis priest: escalating channeled heal', () => {
     expect(t.wardAllies).toBeUndefined();
     expect(t.channelHeal).toEqual({
       radius: 45,
-      every: 7.5,
-      baseHeal: 400,
-      rampAdd: 300,
-      maxHeal: 1800,
+      every: 4,
+      baseHeal: 320,
+      rampAdd: 240,
+      maxHeal: 1440,
       name: "Malric's Mending",
       school: 'shadow',
     });
@@ -74,9 +74,9 @@ describe('heroic Nythraxis priest: escalating channeled heal', () => {
     const first = tickOneChannel(sim, malric, boss);
     const second = tickOneChannel(sim, malric, boss);
     const third = tickOneChannel(sim, malric, boss);
-    expect(first).toBe(400); // baseHeal
-    expect(second).toBe(700); // +rampAdd
-    expect(third).toBe(1000); // +rampAdd again
+    expect(first).toBe(320); // baseHeal
+    expect(second).toBe(560); // +rampAdd
+    expect(third).toBe(800); // +rampAdd again
     expect(second).toBeGreaterThan(first);
     expect(third).toBeGreaterThan(second);
   });
@@ -87,9 +87,9 @@ describe('heroic Nythraxis priest: escalating channeled heal', () => {
     const malric = spawn(sim, 8012, 'nythraxis_heroic_priest_add');
     boss.pos = { x: 4, y: 0, z: 0 };
 
-    tickOneChannel(sim, malric, boss); // 400
-    const ramped = tickOneChannel(sim, malric, boss); // 700 (ramp built)
-    expect(ramped).toBe(700);
+    tickOneChannel(sim, malric, boss); // 320
+    const ramped = tickOneChannel(sim, malric, boss); // 560 (ramp built)
+    expect(ramped).toBe(560);
 
     // Stun Malric: the next interval heals for nothing and the ramp resets.
     malric.auras.push(stun(0));
@@ -100,7 +100,7 @@ describe('heroic Nythraxis priest: escalating channeled heal', () => {
     // After the stun clears the channel restarts from base, not where it left off.
     malric.auras = [];
     const afterStun = tickOneChannel(sim, malric, boss);
-    expect(afterStun).toBe(400);
+    expect(afterStun).toBe(320);
   });
 
   it('the priest (and stalker) accept player CC; the warrior add does not', () => {

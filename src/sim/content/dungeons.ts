@@ -506,13 +506,13 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
     // mandatory rather than optional.
     channelHeal: {
       radius: 45,
-      // 7.5s per cast (2.5x the old 3s): he was healing far too fast. Each instance
-      // of the channel now takes noticeably longer to land, giving the raid room to
-      // react and making the DPS check fairer.
-      every: 7.5,
-      baseHeal: 400,
-      rampAdd: 300,
-      maxHeal: 1800,
+      // 4s per cast: slow enough that each heal is a visible, reactable channel (the
+      // old 3s felt too fast), with the per-heal amount cut ~20% so he is not
+      // out-healing a fair raid DPS check.
+      every: 4,
+      baseHeal: 320,
+      rampAdd: 240,
+      maxHeal: 1440,
       name: "Malric's Mending",
       school: 'shadow',
     },
