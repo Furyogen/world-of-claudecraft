@@ -1226,8 +1226,14 @@ describe('desk-trial station lock', () => {
     if (run.trial?.kind !== 'sigils') throw new Error('expected sigils live');
     const station = { ...sim.entities.get(pid)!.pos }; // the etcher's mark
     run.trial.players.get(pid)!.done = true; // finish instantly
-    sim.tick(); // the trial resolves; a single-trial run goes to the podium
-    expect(run.phase).toBe('podium');
+    // The victory beat (sigils.clearHoldS) holds the hall open on the finish, so
+    // the trial is still live a tick later; it resolves once the beat plays out.
+    sim.tick();
+    expect(run.phase).toBe('trial');
+    for (let i = 0; i < 20 * (GAUNTLET.sigils.clearHoldS + 2) && run.phase === 'trial'; i++) {
+      sim.tick();
+    }
+    expect(run.phase).toBe('podium'); // a single-trial run goes straight to the podium
     // No longer locked to the sigils lectern: the champion has been lifted off
     // the station and posed on the winners' stand behind the plaza.
     const e = sim.entities.get(pid)!;

@@ -540,7 +540,11 @@ function startTrial(ctx: SimContext, run: GauntletRun): void {
       run.trial = startSigils(ctx, run);
       break;
     case 'pull':
-      run.phaseEndsAt = ctx.time + GAUNTLET.pull.durationS;
+      // THE PULL HAS NO CLOCK: the rope decides it (the marker crossing the
+      // fraying threshold), never a deadline. phaseEndsAt is the sim time the
+      // trial OPENED, an anchor for the client's sim-time estimator; updatePull
+      // never reads it, and the HUD shows no countdown for this trial.
+      run.phaseEndsAt = ctx.time;
       run.trial = startPull(ctx, run);
       break;
     case 'echo':

@@ -181,10 +181,18 @@ describe("the Keeper's Echo: rounds and sequences", () => {
     expect(ep.done).toBe(true);
     expect(ep.round).toBe(GAUNTLET.echo.rounds);
     expect(run.playerStates.get(pid)!.finishedAt).not.toBeNull();
-    // a finisher takes no end-of-trial damage: run resolves on the next tick
+    // The victory beat: the hall holds OPEN for echo.clearHoldS after the last
+    // duellist beats the stones (so the camera can pull back and the fanfare can
+    // land), so the trial is still live a tick after the final answer.
     sim.tick();
-    expect(c.vitality).toBe(GAUNTLET.vitalityMax);
+    expect(run.phase).toBe('trial');
+    // Once the beat plays out the trial resolves, and a finisher takes no
+    // end-of-trial damage (endEcho only tolls the unfinished).
+    for (let i = 0; i < 20 * (GAUNTLET.echo.clearHoldS + 2) && run.phase === 'trial'; i++) {
+      sim.tick();
+    }
     expect(run.phase).toBe('podium'); // single-trial splice goes straight to podium
+    expect(c.vitality).toBe(GAUNTLET.vitalityMax);
   });
 
   it('an unfinished player takes damage scaled by rounds cleared at the cap', () => {

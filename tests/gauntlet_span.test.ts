@@ -282,8 +282,9 @@ describe('the brittle span crossers', () => {
   it('still fields scouts when the survivor target leaves no slack, and they stumble but survive', () => {
     // A survivor target above the whole field: no NPC can be spared, so the old
     // fall-capped seeding put ZERO crossers on the glass and the trial read dead.
-    // Now the remnant still scouts: no fatal fall plan, but each may take ONE
-    // honest wrong guess (a stumble it climbs back from), never an elimination.
+    // Now the remnant still scouts: no fatal fall plan, but each may take up to
+    // npcStumbleMax honest wrong guesses (stumbles it climbs back from), never an
+    // elimination.
     GAUNTLET.targetSurvivorsPerTrial = [40];
     const sim = makeSim(808);
     const pid = sim.addPlayer('warrior', 'Idle');
@@ -291,10 +292,13 @@ describe('the brittle span crossers', () => {
     advanceToSpan(sim);
     const span = spanState(sim);
     // Scouts are seeded (not zero), none with a fatal fall plan, at least one
-    // armed to stumble like a human.
+    // armed to stumble like a human, and none gambling past the cap.
     expect(span.npcCrossers.length).toBeGreaterThan(0);
     expect(span.npcCrossers.every((c) => c.fallStep === null)).toBe(true);
-    expect(span.npcCrossers.some((c) => c.stumbleStep >= 0)).toBe(true);
+    expect(span.npcCrossers.some((c) => c.stumbleSteps.length > 0)).toBe(true);
+    expect(
+      span.npcCrossers.every((c) => c.stumbleSteps.length <= GAUNTLET.span.npcStumbleMax),
+    ).toBe(true);
     // Park the player well south so ONLY the scouts act, then let them run it.
     teleportLocal(sim, pid, GAUNTLET_VENUE.span.x, spanZStart() - 10);
     const ids = span.npcCrossers.map((c) => c.entityId);

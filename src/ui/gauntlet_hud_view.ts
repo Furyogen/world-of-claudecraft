@@ -128,6 +128,11 @@ const clamp01 = (n: number): number => (n < 0 ? 0 : n > 1 ? 1 : n);
 // cosmetic countdown-bar fill. Trial phases use the current trial's tuning duration.
 // Exported so the HUD's countdown estimator (gauntlet_clock.ts) anchors to the same
 // window without re-deriving it.
+//
+// ZERO means the phase has no clock, and a zero window is what suppresses the
+// countdown (see showCountdown below). The Great Pull is the one trial with none:
+// the rope decides it, so its run.endsAt is the sim time it OPENED, not a deadline,
+// and counting down to it would be a lie.
 export function gauntletPhaseWindowSeconds(run: GauntletRunView): number {
   switch (run.phase) {
     case 'lobby':
@@ -144,7 +149,7 @@ export function gauntletPhaseWindowSeconds(run: GauntletRunView): number {
         case 'sigils':
           return GAUNTLET.sigils.durationS;
         case 'pull':
-          return GAUNTLET.pull.durationS;
+          return 0; // clockless: the marker ends it, not a deadline
         case 'echo':
           return GAUNTLET.echo.durationS;
         case 'span':
@@ -191,7 +196,9 @@ export function gauntletHudModel(input: GauntletHudInput): GauntletHudModel {
     vitalityMax: run.vitalityMax,
     countdownFrac: window > 0 ? clamp01(remaining / window) : 0,
     countdownSeconds: remaining,
-    showCountdown: run.phase !== 'done' && run.phase !== 'podium',
+    // A clockless phase (window 0, i.e. the pull) shows no countdown: there is no
+    // deadline to count down to.
+    showCountdown: run.phase !== 'done' && run.phase !== 'podium' && window > 0,
     echo,
     spectating: run.spectating,
     finished: run.finished,

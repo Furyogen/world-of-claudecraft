@@ -112,32 +112,39 @@ export function startSpan(ctx: SimContext, run: GauntletRun): GauntletSpanState 
   const slack = Math.max(0, npcs.length - keep);
   const crosserCount = Math.min(t.npcAheadCount, npcs.length);
 
-  // Precompute each sacrificeable crosser's fatal fall step deterministically,
-  // in a fixed order, each inheriting the reveals of those ahead of it (the
-  // field learns as it crosses). Scouts beyond the slack cross clean UNLESS a
-  // salted roll gives them ONE honest wrong guess (a stumble they respawn from
-  // and finish), so the field is never thinned below target. Only the fallers
-  // draw from run.rng, and slack <= npcs so the faller count is unchanged, so the
-  // main draw order matches the old fall-capped seeding exactly; the stumble
-  // rolls use a separate salted stream. The plan array is a scratch copy:
-  // trial.revealed starts blank and is filled by the ACTUAL crossings at runtime.
+  // Precompute each crosser's plan deterministically, in a fixed order, each
+  // inheriting the reveals of those ahead of it (the field learns as it crosses).
+  // An expendable crosser (inside the slack) gets the fatal step its FIRST wrong
+  // guess lands on; a scout beyond the slack gets every panel it honestly guesses
+  // wrong, capped at npcStumbleMax, each one a fall it climbs back from and
+  // finishes, so the field is never thinned below target. Only the fallers draw
+  // from run.rng, and slack <= npcs so the faller count is unchanged, so the main
+  // draw order matches the old fall-capped seeding exactly; the scout stumbles and
+  // the nerve rolls take their own salted streams (and every faller is seeded
+  // before any scout, so neither stream can perturb the run.rng order). The plan
+  // array is a scratch copy: trial.revealed starts blank and is filled by the
+  // ACTUAL crossings at runtime.
   const revealedPlan = safeSide.map(() => -1);
   const stumbleRng = new Rng((run.seed ^ 0x57a3b1e) >>> 0);
+  const nerveRng = new Rng((run.seed ^ 0x9e3779b9) >>> 0);
   const npcCrossers: GauntletSpanState['npcCrossers'] = [];
   for (let i = 0; i < crosserCount; i++) {
     const scout = i >= slack;
     const fallStep = scout ? null : planCrosserFall(run.rng, safeSide, revealedPlan);
-    const stumbleStep =
-      scout && stumbleRng.chance(t.npcStumbleChance) ? stumbleRng.int(0, t.steps - 1) : -1;
+    const stumbleSteps = scout
+      ? planScoutStumbles(stumbleRng, safeSide, revealedPlan, t.npcStumbleMax)
+      : [];
     npcCrossers.push({
       entityId: npcs[i].entityId,
       step: -1,
       fallStep,
-      stumbleStep,
+      stumbleSteps,
       mode: 'idle',
       segT: 0,
       hopFromX: 0,
       hopFromZ: 0,
+      ponderUntil: 0,
+      nerve: nerveRng.next(),
     });
   }
 
@@ -180,25 +187,57 @@ export function planCrosserFall(rng: Rng, safeSide: number[], revealed: number[]
   return null;
 }
 
-// The side (0/1) a crosser hops onto for the still-unknown panel `toStep`: a
-// known pair is walked on its proven safe side; an unknown pair is a guess, and
-// it guesses WRONG on its one scripted panel (the expendable's fatal fallStep or
-// a scout's honest stumbleStep) and right (revealing the safe side) everywhere
-// else.
+// The same walk for a SCOUT, the crosser the survivor target will not let fall:
+// it crosses the WHOLE span, so instead of stopping at its first wrong guess it
+// collects every one of them. Each is a fall it climbs back from (revealing the
+// pane it broke), so it keeps coming back to the frontier until the span is
+// crossed. Once it has spent `maxStumbles` honest guesses it stops gambling and
+// walks the proven side the rest of the way: still a body on the glass, but no
+// longer a body that can be lost. Known pairs are strided over for free. Mutates
+// `revealed` with everything the crossing proves (a landing and a break both
+// teach the field), so the next crosser inherits a span this one has walked end
+// to end. Returns the wrong-guess steps in ascending order.
+export function planScoutStumbles(
+  rng: Rng,
+  safeSide: number[],
+  revealed: number[],
+  maxStumbles: number,
+): number[] {
+  const stumbles: number[] = [];
+  for (let s = 0; s < safeSide.length; s++) {
+    if (revealed[s] >= 0) continue;
+    // Out of gambles: it walks this pair clean, and still proves it.
+    if (stumbles.length < maxStumbles) {
+      const pick = rng.chance(0.5) ? 0 : 1;
+      if (pick !== safeSide[s]) stumbles.push(s);
+    }
+    revealed[s] = safeSide[s];
+  }
+  return stumbles;
+}
+
+// The side (0/1) a crosser hops onto for the panel `toStep`: a known pair is
+// walked on its proven safe side; an unknown pair is a guess, and it guesses
+// WRONG on its scripted panels (the expendable's fatal fallStep, or any of a
+// scout's honest stumbleSteps) and right (revealing the safe side) everywhere
+// else. The proven-pair check comes first, so a scout that has already fallen on
+// a stumble step strides straight over it on the way back: it never trips twice.
 function crosserHopSide(trial: GauntletSpanState, cr: SpanCrosser, toStep: number): number {
   if (trial.revealed[toStep] >= 0) return trial.revealed[toStep];
-  if (toStep === cr.fallStep || toStep === cr.stumbleStep) return 1 - trial.safeSide[toStep];
+  if (toStep === cr.fallStep || cr.stumbleSteps.includes(toStep)) return 1 - trial.safeSide[toStep];
   return trial.safeSide[toStep];
 }
 
 type SpanCrosser = GauntletSpanState['npcCrossers'][number];
 
 // Per-tick crosser locomotion: the lead (first not-yet-done, still-alive)
-// crosser actually RUNS and HOPS the span one panel at a time, so only one is
-// ever mid-air and the reveal order stays the seeded one. Each landing proves
-// its pair (teaching the whole field the safe side); a wrong guess drops the
-// crosser through the shattered panel into the pit, where an expendable crosser
-// is knocked out and a scout climbs back at the start to try again. Draw-free.
+// crosser PONDERS at the lip of each pair, then RUNS and HOPS onto it, one panel
+// at a time, so only one is ever mid-air and the reveal order stays the seeded
+// one. Each landing proves its pair (teaching the whole field the safe side); a
+// wrong guess drops the crosser through the shattered panel into the pit, where
+// an expendable crosser is knocked out and a scout climbs back at the start to
+// try again. Draw-free: the plans are pre-rolled and the ponder/peek timing is a
+// pure function of the sim clock and the crosser's rolled nerve.
 function updateCrossers(
   ctx: SimContext,
   run: GauntletRun,
@@ -222,9 +261,23 @@ function updateCrossers(
   if (!e) return;
 
   if (lead.mode === 'idle') {
-    // Break from the crowd: the first hop starts from wherever they were waiting.
+    // Break from the crowd: the first hop starts from wherever they were waiting,
+    // but not before sizing up the first pair.
     lead.hopFromX = e.pos.x - run.origin.x;
     lead.hopFromZ = e.pos.z - run.origin.z;
+    lead.segT = 0;
+    beginPonder(ctx, trial, lead, t);
+  }
+
+  if (lead.mode === 'ponder') {
+    // Standing at the lip. An unproven pair gets a real deliberation, and it
+    // looks it: the head swings between the two panes until the crosser commits.
+    // Proven ground gets only a short stride-on beat, taken squared up.
+    const toStep = lead.step + 1;
+    const unproven = toStep < t.steps && trial.revealed[toStep] < 0;
+    e.prevPos = { ...e.pos }; // it is standing still: no interpolated drift
+    e.facing = unproven ? peekFacing(ctx.time, lead.nerve, t) : 0;
+    if (ctx.time < lead.ponderUntil) return;
     lead.segT = 0;
     lead.mode = 'hop';
   }
@@ -248,9 +301,10 @@ function updateCrossers(
         lead.segT = 0;
         lead.mode = 'plunge'; // stepped on the brittle side: it shatters underfoot
       } else {
-        lead.hopFromX = toX; // bound straight into the next hop
+        lead.hopFromX = toX; // landed clean: size up the next pair from here
         lead.hopFromZ = toZ;
         lead.segT = 0;
+        beginPonder(ctx, trial, lead, t);
       }
     }
     return;
@@ -282,6 +336,36 @@ function updateCrossers(
     lead.segT = 0;
     lead.mode = 'idle';
   }
+}
+
+// Stop at the lip of the next pair and set the beat the crosser holds there.
+// An UNPROVEN pair is a real decision (npcPonderMinS..MaxS: it has no idea which
+// pane holds); a pair another body has already stood on is not a decision at all,
+// just a short stride-on beat (npcStepPauseMinS..MaxS). Either band is lerped by
+// the crosser's rolled nerve, 1 = brave = the shortest beat, 0 = timid = the
+// longest, so the field reads as people rather than a conveyor belt. Draw-free:
+// the nerve was rolled once at startSpan.
+function beginPonder(
+  ctx: SimContext,
+  trial: GauntletSpanState,
+  cr: SpanCrosser,
+  t: GauntletSpanTuning,
+): void {
+  const toStep = cr.step + 1;
+  const unproven = toStep < t.steps && trial.revealed[toStep] < 0;
+  const lo = unproven ? t.npcPonderMinS : t.npcStepPauseMinS;
+  const hi = unproven ? t.npcPonderMaxS : t.npcStepPauseMaxS;
+  cr.ponderUntil = ctx.time + lo + (hi - lo) * (1 - cr.nerve);
+  cr.mode = 'ponder';
+}
+
+// The head swing of a crosser deliberating at an unproven pair: it looks from one
+// pane to the other, npcPeekAmp radians off the crossing axis at npcPeekFreq. The
+// nerve doubles as a phase offset, so no two crossers ever sway in lockstep. A
+// pure function of the sim clock (no rng, no wall clock), which is what keeps the
+// per-tick driver draw-free.
+function peekFacing(time: number, nerve: number, t: GauntletSpanTuning): number {
+  return Math.sin(time * t.npcPeekFreq + nerve * Math.PI * 2) * t.npcPeekAmp;
 }
 
 // A smooth run-and-hop from one instance-local point to another over segT in

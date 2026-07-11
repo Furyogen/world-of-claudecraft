@@ -314,21 +314,42 @@ describe('gauntlet pull: rope wire sync', () => {
   }, 20000);
 });
 
-describe('gauntlet pull: difficulty ramp (pure)', () => {
-  it('scales from 1x at the start down to rampMin at the deadline, clamped and monotonic', () => {
+describe('gauntlet pull: pace ramp (pure)', () => {
+  it('halves every half-life of ELAPSED pull, floored at rampMin, never rising', () => {
     const min = GAUNTLET.pull.circleRampMin;
-    expect(pullRampFactor(0, min)).toBe(1); // start: no ramp
-    expect(pullRampFactor(1, min)).toBeCloseTo(min, 6); // end: full ramp
-    expect(pullRampFactor(0.5, min)).toBeCloseTo(1 - (1 - min) * 0.5, 6);
-    // clamped outside [0, 1]
-    expect(pullRampFactor(-1, min)).toBe(1);
-    expect(pullRampFactor(2, min)).toBeCloseTo(min, 6);
-    // strictly faster by the end: at the deadline even a max-length shrink
-    // scales below the un-ramped MINIMUM, so late circles shrink faster than
-    // any early one could.
-    expect(pullRampFactor(1, min) * GAUNTLET.pull.circleShrinkMaxS).toBeLessThan(
-      GAUNTLET.pull.circleShrinkMinS,
-    );
+    const hl = GAUNTLET.pull.rampHalfLifeS;
+
+    // The whistle is full pace, and a negative or NaN elapsed can never be a
+    // speed-up (the pull is clockless, so `elapsed` is the ONLY input: there is
+    // no progress-toward-a-deadline to key on).
+    expect(pullRampFactor(0, hl, min)).toBe(1);
+    expect(pullRampFactor(-1, hl, min)).toBe(1);
+    expect(pullRampFactor(Number.NaN, hl, min)).toBe(1);
+
+    // The curve is a true HALVING per half-life, not a linear slide. Probed with
+    // a zero floor so the exponential is isolated from the clamp.
+    expect(pullRampFactor(hl, hl, 0)).toBeCloseTo(0.5, 6);
+    expect(pullRampFactor(2 * hl, hl, 0)).toBeCloseTo(0.25, 6);
+    expect(pullRampFactor(3 * hl, hl, 0)).toBeCloseTo(0.125, 6);
+
+    // Against the REAL floor: one half-life is still above it and halves cleanly,
+    // and a long rope clamps at rampMin exactly, never below.
+    expect(min).toBeLessThan(0.5); // precondition: the first halving clears the floor
+    expect(pullRampFactor(hl, hl, min)).toBeCloseTo(0.5, 6);
+    expect(pullRampFactor(hl * 20, hl, min)).toBe(min);
+
+    // Monotonically non-increasing across a long pull: the pace only ever tightens.
+    let prev = Number.POSITIVE_INFINITY;
+    for (let s = 0; s <= 300; s += 5) {
+      const f = pullRampFactor(s, hl, min);
+      expect(f).toBeLessThanOrEqual(prev);
+      prev = f;
+    }
+
+    // Strictly faster once the ramp is spent: at the floor even a max-length
+    // shrink scales below the un-ramped MINIMUM, so late circles shrink faster
+    // than any early one could.
+    expect(min * GAUNTLET.pull.circleShrinkMaxS).toBeLessThan(GAUNTLET.pull.circleShrinkMinS);
   });
 });
 
