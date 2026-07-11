@@ -101,10 +101,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.wocStore.rewardsTab': '일일 보상',
   'hudChrome.wocStore.loading': 'WOC 상점 불러오는 중…',
   'hudChrome.wocStore.error': '현재 WOC 상점을 이용할 수 없습니다. 잠시 후 다시 시도해 주세요.',
-  'hudChrome.wocStore.eyebrow': '추천 컬렉션',
-  'hudChrome.wocStore.featuredTitle': '개척지 너머에서 벼린 무기',
-  'hudChrome.wocStore.featuredBody':
-    'Claudium으로 고급 무기 외형을 획득하세요. 외형은 전투 능력에 영향을 주지 않습니다.',
   'hudChrome.wocStore.balance': 'Claudium 잔액',
   'hudChrome.wocStore.buyClaudium': 'Claudium 구매',
   'hudChrome.wocStore.category': '꾸미기 상품',

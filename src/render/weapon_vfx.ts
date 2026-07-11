@@ -22,8 +22,6 @@
 // hand. Scene-level dressing (night-sky dome, ground light pool) rides in a
 // separate group the viewer adds beside the weapon.
 //
-// Served at /weapon_vfx.js by `pipeline.mjs library --serve`; consumed by
-// viewer_live.js. Rarity is load-bearing: NEVER give an epic weapon the
 // legendary kit (orbit motes, aurora, spin) or vice versa; the escalation ramp
 // is the whole point of the collections.
 import * as THREE from 'three';

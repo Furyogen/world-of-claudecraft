@@ -597,13 +597,20 @@ export function setHeldWeapon(
 }
 
 /** A standalone display clone of a weapon-skin model for the armory inspect
- *  turntable (weapon-only mode). Origin is the grip, like every held model. */
+ *  turntable (weapon-only mode). Origin is the grip, like every held model.
+ *  Materials are cloned per call: the VFX emissive derive mutates them in
+ *  place, and SkeletonUtils.clone shares the cached GLTF source materials. */
 export function weaponSkinDisplayModel(skinId: string): THREE.Object3D | null {
   const url = weaponSkinModelUrl(skinId);
   if (!url) return null;
   const payload = flattenWeaponScene(cloneSkinned(resolvedGltf(url).scene));
   payload.traverse((o) => {
-    if ((o as THREE.Mesh).isMesh) o.userData.weaponMesh = true;
+    const mesh = o as THREE.Mesh;
+    if (!mesh.isMesh) return;
+    mesh.userData.weaponMesh = true;
+    mesh.material = Array.isArray(mesh.material)
+      ? mesh.material.map((m) => m.clone())
+      : mesh.material.clone();
   });
   return payload;
 }
@@ -715,6 +722,11 @@ export function applyMaterials(
   root.traverse((o) => {
     const mesh = o as THREE.Mesh;
     if (!mesh.isMesh) return;
+    // Weapon-skin VFX rigs own their ShaderMaterials, and a skinned weapon's
+    // payload materials are per-instance clones the VFX emissive derive mutates
+    // and restores. Tinting either (or re-deriving them from the shared cache
+    // on a body-skin change) corrupts live handles, so both stay untouched.
+    if (mesh.userData.weaponVfxMesh || mesh.userData.weaponSkinIsolated) return;
     // Always derive a skin/material variant from the assembled model's source
     // material. Reusing the last applied variant would retain its alternate map
     // when skin 0 asks to restore the embedded default texture.

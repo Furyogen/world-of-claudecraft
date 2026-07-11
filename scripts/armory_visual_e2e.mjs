@@ -49,7 +49,7 @@ async function tidyHud(page) {
     for (const b of document.querySelectorAll('button')) {
       if (b.textContent?.trim() === 'Skip Tutorial') b.click();
     }
-    document.querySelector('.discord-banner .x-btn, .discord-cta-close')?.click();
+    document.querySelector('#discord-cta-close')?.click();
   });
 }
 
@@ -191,17 +191,6 @@ await db.end();
 await tidyHud(pageA);
 await sleep(1200);
 await pageA.evaluate(() => window.__game.hud.toggleDailyRewards());
-await sleep(3500);
-{
-  const probe = await pageA.evaluate(() => ({
-    win: document.querySelector('#daily-rewards-window')?.style.display ?? 'missing',
-    body:
-      document.querySelector('#daily-rewards-window .dr-body')?.innerHTML?.slice(0, 260) ?? null,
-    cards: document.querySelectorAll('.armory-card').length,
-  }));
-  console.error('STORE PROBE', JSON.stringify(probe));
-  if (fails.length) console.error('PAGEERRS', JSON.stringify(fails));
-}
 await pageA.waitForSelector('.armory-section .armory-card img', { timeout: 12000 });
 await sleep(1400);
 await pageA.evaluate(() => {

@@ -267,6 +267,10 @@ export function createArmoryPreview(
       visual.dispose();
       composer.dispose();
       renderer.dispose();
+      // Reclaim the GL context NOW (mirrors CharacterPreview.dispose): browsers
+      // cap live contexts, and browsing many skins would otherwise evict the
+      // oldest context, potentially the world canvas.
+      renderer.forceContextLoss();
       untrack();
     },
   };

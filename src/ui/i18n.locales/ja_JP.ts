@@ -102,10 +102,6 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.wocStore.rewardsTab': 'デイリー報酬',
   'hudChrome.wocStore.loading': 'WOCストアを読み込み中…',
   'hudChrome.wocStore.error': 'WOCストアは現在利用できません。しばらくしてからお試しください。',
-  'hudChrome.wocStore.eyebrow': '注目コレクション',
-  'hudChrome.wocStore.featuredTitle': '辺境の彼方で鍛えられた武器',
-  'hudChrome.wocStore.featuredBody':
-    'Claudiumで特別な武器外見を入手できます。外見は戦闘力に影響しません。',
   'hudChrome.wocStore.balance': 'Claudium残高',
   'hudChrome.wocStore.buyClaudium': 'Claudiumを購入',
   'hudChrome.wocStore.category': '外見アイテム',
