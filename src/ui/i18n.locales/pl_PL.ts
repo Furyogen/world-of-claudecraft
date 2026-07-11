@@ -6613,4 +6613,33 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mailbox.parcelQtyDecreaseAria': 'Wyślij o jeden {item} mniej',
   'hudChrome.mailbox.parcelQtyIncreaseAria': 'Wyślij o jeden {item} więcej',
   'hudChrome.itemHeroicTag': '[HEROICZNE]',
+  'hudChrome.auth.appleChoiceExpired':
+    'To logowanie przez Apple wygasło. Zaloguj się ponownie przez Apple.',
+  'hudChrome.auth.appleChoiceIntro':
+    'Utwórz nowe konto albo połącz swój Apple ID z istniejącym kontem.',
+  'hudChrome.auth.appleError': 'Nie udało się kontynuować przez Apple. Spróbuj ponownie.',
+  'hudChrome.auth.appleLoginCta': 'Kontynuuj z Apple',
+  'hudChrome.keybinds.categoryPet': 'Towarzysz',
+  'hudChrome.keybinds.petAggressive': 'Towarzysz agresywnie',
+  'hudChrome.keybinds.petAttack': 'Atak towarzysza',
+  'hudChrome.keybinds.petDefensive': 'Towarzysz defensywnie',
+  'hudChrome.keybinds.petStop': 'Zatrzymaj towarzysza',
+  'hudChrome.keybinds.petTaunt': 'Prowokacja towarzysza',
+  'hudChrome.keybinds.sheathe': 'Schowaj broń',
+  'hudChrome.readyCheck.notReady': 'Nie gotów',
+  'hudChrome.readyCheck.prompt': '{name} rozpoczął sprawdzanie gotowości. Jesteś gotów?',
+  'hudChrome.readyCheck.ready': 'Gotów',
+  'hudChrome.readyCheck.result':
+    'Sprawdzanie gotowości: {ready} gotowych, {notReady} niegotowych, {pending} bez odpowiedzi.',
+  'loading.tips.classes': 'Wskazówka: 9 klas gra się inaczej, wypróbuj je przed wyborem.',
+  'loading.tips.dungeons':
+    'Wskazówka: podziemia nagradzają przygotowane grupy, weź jedzenie, napoje i materiały zużywalne.',
+  'loading.tips.guilds': 'Wskazówka: gildie ułatwiają znajdowanie grup i budowanie społeczności.',
+  'loading.tips.loadouts': 'Wskazówka: zapisuj zestawy, aby szybko zmieniać talenty i ekwipunek.',
+  'loading.tips.market':
+    'Wskazówka: Rynek Świata pozwala sprzedawać cenne przedmioty innym graczom.',
+  'loading.tips.professions':
+    'Wskazówka: profesje zmieniają zebrane materiały w ekwipunek i przydatne dobra.',
+  'loading.tips.pvp': 'Wskazówka: wchodź do PvP z naprawionym ekwipunkiem i przygotowanym paskiem.',
+  'loading.tips.talents': 'Wskazówka: talenty określają styl gry bardziej niż kilka punktów cech.',
 };

@@ -155,10 +155,10 @@ export const pt_BR: EnTranslations = {
       "banner": "Assistindo {name}"
     },
     "readyCheck": {
-      "prompt": "{name} has started a ready check. Are you ready?",
-      "ready": "Ready",
-      "notReady": "Not Ready",
-      "result": "Ready check: {ready} ready, {notReady} not ready, {noResponse} no response."
+      "prompt": "{name} iniciou uma verificação de prontidão. Você está pronto?",
+      "ready": "Pronto",
+      "notReady": "Não pronto",
+      "result": "Verificação de prontidão: {ready} prontos, {notReady} não prontos, {pending} sem resposta."
     },
     "death": {
       "resurrectAtCorpse": "Ressuscitar no Cadáver",
@@ -403,13 +403,13 @@ export const pt_BR: EnTranslations = {
       "targetFriendlyNext": "Alternar alvo aliado",
       "discord": "Discord",
       "valecup": "Copa do Vale",
-      "sheathe": "Sheathe/Unsheathe Weapon",
-      "categoryPet": "Pet",
-      "petAttack": "Pet: Attack",
-      "petStop": "Pet: Stop",
-      "petTaunt": "Pet: Taunt",
-      "petDefensive": "Pet: Defensive",
-      "petAggressive": "Pet: Aggressive"
+      "sheathe": "Guardar arma",
+      "categoryPet": "Mascote",
+      "petAttack": "Ataque do mascote",
+      "petStop": "Parar mascote",
+      "petTaunt": "Provocar do mascote",
+      "petDefensive": "Mascote defensivo",
+      "petAggressive": "Mascote agressivo"
     },
     "vcup": {
       "title": "A Copa do Vale",
@@ -1082,10 +1082,10 @@ export const pt_BR: EnTranslations = {
       "spawn": "{name} ergue-se sobre as Alturas de Thornpeak!"
     },
     "auth": {
-      "appleLoginCta": "Continue with Apple",
-      "appleError": "Could not sign in with Apple. Please try again.",
-      "appleChoiceIntro": "Create a new account, or link Apple to one you already have.",
-      "appleChoiceExpired": "That Apple sign-in expired. Please sign in with Apple again.",
+      "appleLoginCta": "Continuar com Apple",
+      "appleError": "Não foi possível continuar com Apple. Tente novamente.",
+      "appleChoiceIntro": "Crie uma nova conta ou vincule seu ID Apple a uma conta existente.",
+      "appleChoiceExpired": "Esse login com Apple expirou. Entre com Apple novamente.",
       "forgotPrompt": "Esqueceu a senha?",
       "forgotTitle": "Redefinir sua senha",
       "forgotHint": "Digite seu nome de usuário e enviaremos um link de redefinição para o e-mail cadastrado.",
@@ -3938,14 +3938,14 @@ export const pt_BR: EnTranslations = {
     "reconnecting": "Conexão perdida. Reconectando...",
     "connectionRejected": "O servidor encerrou a conexão.",
     "tips": {
-      "classes": "Tip: each of the 9 classes plays differently. Try a few before committing to one.",
-      "talents": "Tip: you can reset your talents any time you are out of combat, so an early pick is never a trap.",
-      "dungeons": "Tip: try a dungeon on heroic difficulty once you outgear normal for a tougher, more rewarding fight.",
-      "market": "Tip: the World Market lets you buy and sell with players across the whole realm.",
-      "guilds": "Tip: joining a guild gives you a private chat channel and a shared roster of your guildmates.",
-      "professions": "Tip: gathering and crafting professions can be trained alongside your combat class.",
-      "loadouts": "Tip: save more than one talent loadout to swap between builds without spending points twice.",
-      "pvp": "Tip: challenge another player to a friendly duel, or queue for the Ashen Coliseum arena, to test your build."
+      "classes": "Dica: as 9 classes jogam de formas diferentes, experimente todas antes de escolher.",
+      "talents": "Dica: talentos definem seu estilo de jogo mais do que alguns pontos de atributo.",
+      "dungeons": "Dica: masmorras recompensam grupos preparados, leve comida, bebida e consumíveis.",
+      "market": "Dica: o Mercado Mundial permite vender itens valiosos para outros jogadores.",
+      "guilds": "Dica: guildas ajudam a encontrar grupos e manter uma comunidade.",
+      "professions": "Dica: profissões transformam materiais coletados em equipamento e bens úteis.",
+      "loadouts": "Dica: salve configurações para trocar talentos e equipamento rapidamente.",
+      "pvp": "Dica: entre no JxJ com equipamento reparado e uma barra preparada."
     }
   },
   "errors": {
@@ -5898,13 +5898,13 @@ export const pt_BR: EnTranslations = {
         "name": "Retalho de linho"
       },
       "arcane_dust": {
-        "name": "Arcane Dust"
+        "name": "Pó Arcano"
       },
       "arcane_essence": {
-        "name": "Arcane Essence"
+        "name": "Essência Arcana"
       },
       "arcane_shard": {
-        "name": "Arcane Shard"
+        "name": "Estilhaço Arcano"
       },
       "fen_muster_order": {
         "name": "Ordem de convocação de Fenbridge"

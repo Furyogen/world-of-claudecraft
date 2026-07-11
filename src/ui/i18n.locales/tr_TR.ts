@@ -6575,4 +6575,34 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mailbox.parcelQtyDecreaseAria': 'Bir {item} daha az gönder',
   'hudChrome.mailbox.parcelQtyIncreaseAria': 'Bir {item} daha gönder',
   'hudChrome.itemHeroicTag': '[KAHRAMANCA]',
+  'hudChrome.auth.appleChoiceExpired':
+    'Bu Apple girişi süresi doldu. Lütfen Apple ile tekrar giriş yap.',
+  'hudChrome.auth.appleChoiceIntro':
+    'Yeni bir hesap oluştur veya Apple Kimliğini mevcut bir hesaba bağla.',
+  'hudChrome.auth.appleError': 'Apple ile devam edilemedi. Tekrar dene.',
+  'hudChrome.auth.appleLoginCta': 'Apple ile devam et',
+  'hudChrome.keybinds.categoryPet': 'Evcil hayvan',
+  'hudChrome.keybinds.petAggressive': 'Evcil hayvan saldırgan',
+  'hudChrome.keybinds.petAttack': 'Evcil hayvan saldırısı',
+  'hudChrome.keybinds.petDefensive': 'Evcil hayvan savunmacı',
+  'hudChrome.keybinds.petStop': 'Evcil hayvanı durdur',
+  'hudChrome.keybinds.petTaunt': 'Evcil hayvan kışkırtması',
+  'hudChrome.keybinds.sheathe': 'Silahı kınına koy',
+  'hudChrome.readyCheck.notReady': 'Hazır değil',
+  'hudChrome.readyCheck.prompt': '{name} bir hazır kontrolü başlattı. Hazır mısın?',
+  'hudChrome.readyCheck.ready': 'Hazır',
+  'hudChrome.readyCheck.result':
+    'Hazır kontrolü: {ready} hazır, {notReady} hazır değil, {pending} yanıtsız.',
+  'loading.tips.classes': 'İpucu: 9 sınıfın oynanışı farklıdır, karar vermeden önce hepsini dene.',
+  'loading.tips.dungeons':
+    'İpucu: Zindanlar hazırlıklı grupları ödüllendirir, yiyecek, içecek ve sarf malzemesi getir.',
+  'loading.tips.guilds': 'İpucu: Loncalar grup bulmayı ve topluluk kurmayı kolaylaştırır.',
+  'loading.tips.loadouts':
+    'İpucu: Yetenekler ve ekipman arasında hızlı geçmek için dizilimleri kaydet.',
+  'loading.tips.market': 'İpucu: Dünya Pazarı değerli eşyaları diğer oyunculara satmanı sağlar.',
+  'loading.tips.professions':
+    'İpucu: Meslekler toplanan malzemeleri ekipmana ve yararlı mallara dönüştürür.',
+  'loading.tips.pvp': 'İpucu: PvP’ye onarılmış ekipman ve hazır bir çubukla gir.',
+  'loading.tips.talents':
+    'İpucu: Yetenekler oyun tarzını birkaç nitelik puanından daha çok belirler.',
 };

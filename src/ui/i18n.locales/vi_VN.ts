@@ -6598,4 +6598,32 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mailbox.parcelQtyDecreaseAria': 'Gửi ít hơn một {item}',
   'hudChrome.mailbox.parcelQtyIncreaseAria': 'Gửi thêm một {item}',
   'hudChrome.itemHeroicTag': '[ANH HUNG]',
+  'hudChrome.auth.appleChoiceExpired':
+    'Lần đăng nhập Apple đó đã hết hạn. Vui lòng đăng nhập lại bằng Apple.',
+  'hudChrome.auth.appleChoiceIntro':
+    'Tạo tài khoản mới hoặc liên kết Apple ID của bạn với tài khoản hiện có.',
+  'hudChrome.auth.appleError': 'Không thể tiếp tục với Apple. Hãy thử lại.',
+  'hudChrome.auth.appleLoginCta': 'Tiếp tục với Apple',
+  'hudChrome.keybinds.categoryPet': 'Thú cưng',
+  'hudChrome.keybinds.petAggressive': 'Thú cưng hung hăng',
+  'hudChrome.keybinds.petAttack': 'Thú cưng tấn công',
+  'hudChrome.keybinds.petDefensive': 'Thú cưng phòng thủ',
+  'hudChrome.keybinds.petStop': 'Dừng thú cưng',
+  'hudChrome.keybinds.petTaunt': 'Thú cưng khiêu khích',
+  'hudChrome.keybinds.sheathe': 'Cất vũ khí',
+  'hudChrome.readyCheck.notReady': 'Chưa sẵn sàng',
+  'hudChrome.readyCheck.prompt': '{name} đã bắt đầu kiểm tra sẵn sàng. Bạn đã sẵn sàng chưa?',
+  'hudChrome.readyCheck.ready': 'Sẵn sàng',
+  'hudChrome.readyCheck.result':
+    'Kiểm tra sẵn sàng: {ready} sẵn sàng, {notReady} chưa sẵn sàng, {pending} chưa trả lời.',
+  'loading.tips.classes': 'Mẹo: 9 lớp chơi khác nhau, hãy thử trước khi chọn.',
+  'loading.tips.dungeons':
+    'Mẹo: hầm ngục thưởng cho nhóm chuẩn bị tốt, hãy mang thức ăn, đồ uống và vật phẩm tiêu hao.',
+  'loading.tips.guilds': 'Mẹo: bang hội giúp tìm nhóm và xây dựng cộng đồng dễ hơn.',
+  'loading.tips.loadouts': 'Mẹo: lưu bộ trang bị để đổi nhanh giữa tài năng và trang bị.',
+  'loading.tips.market': 'Mẹo: Chợ Thế Giới cho phép bạn bán vật phẩm giá trị cho người chơi khác.',
+  'loading.tips.professions':
+    'Mẹo: nghề nghiệp biến nguyên liệu thu thập thành trang bị và hàng hóa hữu ích.',
+  'loading.tips.pvp': 'Mẹo: vào PvP với trang bị đã sửa và thanh kỹ năng đã chuẩn bị.',
+  'loading.tips.talents': 'Mẹo: tài năng định hình lối chơi của bạn nhiều hơn vài điểm thuộc tính.',
 };

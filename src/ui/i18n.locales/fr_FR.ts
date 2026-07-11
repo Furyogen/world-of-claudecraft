@@ -6751,4 +6751,40 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mailbox.parcelQtyDecreaseAria': 'Envoyer un {item} de moins',
   'hudChrome.mailbox.parcelQtyIncreaseAria': 'Envoyer un {item} de plus',
   'hudChrome.itemHeroicTag': '[HEROIQUE]',
+  'entities.items.arcane_dust.name': 'Poussière arcanique',
+  'entities.items.arcane_essence.name': 'Essence arcanique',
+  'entities.items.arcane_shard.name': 'Éclat arcanique',
+  'hudChrome.auth.appleChoiceExpired':
+    'Cette connexion Apple a expiré. Connectez-vous à nouveau avec Apple.',
+  'hudChrome.auth.appleChoiceIntro':
+    'Créez un nouveau compte ou liez votre identifiant Apple à un compte existant.',
+  'hudChrome.auth.appleError': 'Impossible de continuer avec Apple. Réessayez.',
+  'hudChrome.auth.appleLoginCta': 'Continuer avec Apple',
+  'hudChrome.keybinds.categoryPet': 'Familier',
+  'hudChrome.keybinds.petAggressive': 'Familier agressif',
+  'hudChrome.keybinds.petAttack': 'Attaque du familier',
+  'hudChrome.keybinds.petDefensive': 'Familier défensif',
+  'hudChrome.keybinds.petStop': 'Arrêter le familier',
+  'hudChrome.keybinds.petTaunt': 'Provocation du familier',
+  'hudChrome.keybinds.sheathe': 'Rengainer l’arme',
+  'hudChrome.readyCheck.notReady': 'Pas prêt',
+  'hudChrome.readyCheck.prompt': '{name} a lancé un appel de préparation. Êtes-vous prêt ?',
+  'hudChrome.readyCheck.ready': 'Prêt',
+  'hudChrome.readyCheck.result':
+    'Appel de préparation : {ready} prêts, {notReady} pas prêts, {pending} sans réponse.',
+  'loading.tips.classes':
+    'Astuce : les 9 classes se jouent différemment, essayez-les avant de vous décider.',
+  'loading.tips.dungeons':
+    'Astuce : les donjons récompensent les groupes préparés, apportez nourriture, boisson et consommables.',
+  'loading.tips.guilds':
+    'Astuce : les guildes facilitent la recherche de groupe et la création d’une communauté durable.',
+  'loading.tips.loadouts':
+    'Astuce : enregistrez des configurations pour changer rapidement de talents et d’équipement.',
+  'loading.tips.market':
+    'Astuce : le Marché mondial permet de vendre des objets précieux aux autres joueurs.',
+  'loading.tips.professions':
+    'Astuce : les métiers transforment les matériaux récoltés en équipement et biens utiles.',
+  'loading.tips.pvp': 'Astuce : entrez en JcJ avec un équipement réparé et une barre prête.',
+  'loading.tips.talents':
+    'Astuce : les talents définissent votre style de jeu plus que quelques points de caractéristiques.',
 };

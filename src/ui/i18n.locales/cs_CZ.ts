@@ -6503,4 +6503,31 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mailbox.parcelQtyDecreaseAria': 'Poslat o jeden {item} méně',
   'hudChrome.mailbox.parcelQtyIncreaseAria': 'Poslat o jeden {item} více',
   'hudChrome.itemHeroicTag': '[HRDINSKE]',
+  'hudChrome.auth.appleChoiceExpired':
+    'Toto přihlášení přes Apple vypršelo. Přihlas se přes Apple znovu.',
+  'hudChrome.auth.appleChoiceIntro':
+    'Vytvoř nový účet nebo propoj své Apple ID s existujícím účtem.',
+  'hudChrome.auth.appleError': 'Nelze pokračovat přes Apple. Zkus to znovu.',
+  'hudChrome.auth.appleLoginCta': 'Pokračovat přes Apple',
+  'hudChrome.keybinds.categoryPet': 'Mazlíček',
+  'hudChrome.keybinds.petAggressive': 'Mazlíček agresivně',
+  'hudChrome.keybinds.petAttack': 'Útok mazlíčka',
+  'hudChrome.keybinds.petDefensive': 'Mazlíček obranně',
+  'hudChrome.keybinds.petStop': 'Zastavit mazlíčka',
+  'hudChrome.keybinds.petTaunt': 'Provokace mazlíčka',
+  'hudChrome.keybinds.sheathe': 'Schovat zbraň',
+  'hudChrome.readyCheck.notReady': 'Nepřipraven',
+  'hudChrome.readyCheck.prompt': '{name} spustil kontrolu připravenosti. Jsi připraven?',
+  'hudChrome.readyCheck.ready': 'Připraven',
+  'hudChrome.readyCheck.result':
+    'Kontrola připravenosti: {ready} připraveno, {notReady} nepřipraveno, {pending} bez odpovědi.',
+  'loading.tips.classes': 'Tip: 9 tříd se hraje odlišně, vyzkoušej je, než se rozhodneš.',
+  'loading.tips.dungeons':
+    'Tip: Dungeony odměňují připravené skupiny, vezmi si jídlo, pití a spotřební předměty.',
+  'loading.tips.guilds': 'Tip: Gildy pomáhají hledat skupiny a budovat komunitu.',
+  'loading.tips.loadouts': 'Tip: Ukládej výbavy pro rychlou změnu talentů a vybavení.',
+  'loading.tips.market': 'Tip: Světový trh ti umožní prodávat cenné předměty ostatním hráčům.',
+  'loading.tips.professions': 'Tip: Profese mění nasbírané suroviny na vybavení a užitečné zboží.',
+  'loading.tips.pvp': 'Tip: Do PvP vstupuj s opraveným vybavením a připravenou lištou.',
+  'loading.tips.talents': 'Tip: Talenty určují tvůj herní styl víc než pár bodů vlastností.',
 };

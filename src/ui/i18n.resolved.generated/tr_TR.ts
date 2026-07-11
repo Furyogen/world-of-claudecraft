@@ -155,10 +155,10 @@ export const tr_TR: EnTranslations = {
       "banner": "{name} izleniyor"
     },
     "readyCheck": {
-      "prompt": "{name} has started a ready check. Are you ready?",
-      "ready": "Ready",
-      "notReady": "Not Ready",
-      "result": "Ready check: {ready} ready, {notReady} not ready, {noResponse} no response."
+      "prompt": "{name} bir hazır kontrolü başlattı. Hazır mısın?",
+      "ready": "Hazır",
+      "notReady": "Hazır değil",
+      "result": "Hazır kontrolü: {ready} hazır, {notReady} hazır değil, {pending} yanıtsız."
     },
     "death": {
       "resurrectAtCorpse": "Cesedinin Başında Diril",
@@ -403,13 +403,13 @@ export const tr_TR: EnTranslations = {
       "targetFriendlyNext": "Dost Hedefler Arasında Geç",
       "discord": "Discord",
       "valecup": "Vadi Kupası",
-      "sheathe": "Sheathe/Unsheathe Weapon",
-      "categoryPet": "Pet",
-      "petAttack": "Pet: Attack",
-      "petStop": "Pet: Stop",
-      "petTaunt": "Pet: Taunt",
-      "petDefensive": "Pet: Defensive",
-      "petAggressive": "Pet: Aggressive"
+      "sheathe": "Silahı kınına koy",
+      "categoryPet": "Evcil hayvan",
+      "petAttack": "Evcil hayvan saldırısı",
+      "petStop": "Evcil hayvanı durdur",
+      "petTaunt": "Evcil hayvan kışkırtması",
+      "petDefensive": "Evcil hayvan savunmacı",
+      "petAggressive": "Evcil hayvan saldırgan"
     },
     "vcup": {
       "title": "Vadi Kupası",
@@ -1082,10 +1082,10 @@ export const tr_TR: EnTranslations = {
       "spawn": "{name}, Dikenzirve Tepeleri'nin üzerinde yükseliyor!"
     },
     "auth": {
-      "appleLoginCta": "Continue with Apple",
-      "appleError": "Could not sign in with Apple. Please try again.",
-      "appleChoiceIntro": "Create a new account, or link Apple to one you already have.",
-      "appleChoiceExpired": "That Apple sign-in expired. Please sign in with Apple again.",
+      "appleLoginCta": "Apple ile devam et",
+      "appleError": "Apple ile devam edilemedi. Tekrar dene.",
+      "appleChoiceIntro": "Yeni bir hesap oluştur veya Apple Kimliğini mevcut bir hesaba bağla.",
+      "appleChoiceExpired": "Bu Apple girişi süresi doldu. Lütfen Apple ile tekrar giriş yap.",
       "forgotPrompt": "Şifreni mi unuttun?",
       "forgotTitle": "Şifreni sıfırla",
       "forgotHint": "Kullanıcı adını gir, kayıtlı e-posta adresine bir sıfırlama bağlantısı gönderelim.",
@@ -3938,14 +3938,14 @@ export const tr_TR: EnTranslations = {
     "reconnecting": "Bağlantı kesildi. Yeniden bağlanılıyor...",
     "connectionRejected": "Sunucu bağlantıyı kapattı.",
     "tips": {
-      "classes": "Tip: each of the 9 classes plays differently. Try a few before committing to one.",
-      "talents": "Tip: you can reset your talents any time you are out of combat, so an early pick is never a trap.",
-      "dungeons": "Tip: try a dungeon on heroic difficulty once you outgear normal for a tougher, more rewarding fight.",
-      "market": "Tip: the World Market lets you buy and sell with players across the whole realm.",
-      "guilds": "Tip: joining a guild gives you a private chat channel and a shared roster of your guildmates.",
-      "professions": "Tip: gathering and crafting professions can be trained alongside your combat class.",
-      "loadouts": "Tip: save more than one talent loadout to swap between builds without spending points twice.",
-      "pvp": "Tip: challenge another player to a friendly duel, or queue for the Ashen Coliseum arena, to test your build."
+      "classes": "İpucu: 9 sınıfın oynanışı farklıdır, karar vermeden önce hepsini dene.",
+      "talents": "İpucu: Yetenekler oyun tarzını birkaç nitelik puanından daha çok belirler.",
+      "dungeons": "İpucu: Zindanlar hazırlıklı grupları ödüllendirir, yiyecek, içecek ve sarf malzemesi getir.",
+      "market": "İpucu: Dünya Pazarı değerli eşyaları diğer oyunculara satmanı sağlar.",
+      "guilds": "İpucu: Loncalar grup bulmayı ve topluluk kurmayı kolaylaştırır.",
+      "professions": "İpucu: Meslekler toplanan malzemeleri ekipmana ve yararlı mallara dönüştürür.",
+      "loadouts": "İpucu: Yetenekler ve ekipman arasında hızlı geçmek için dizilimleri kaydet.",
+      "pvp": "İpucu: PvP’ye onarılmış ekipman ve hazır bir çubukla gir."
     }
   },
   "errors": {

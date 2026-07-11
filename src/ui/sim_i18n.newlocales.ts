@@ -2,6 +2,8 @@
 /* eslint-disable */
 export const BASE_NEW = {
   cs_CZ: {
+    'error.readyCheckNotInParty': 'Pro spuštění kontroly připravenosti musíš být ve skupině.',
+    'error.readyCheckInProgress': 'Kontrola připravenosti už probíhá.',
     'error.heroicMarksNeeded': 'Potřebuješ {marks} Hrdinských značek k nákupu {name}.',
     'groundPickup.supplyCrateDeny': 'Bedna je zatlučená hřebíky.',
     'groundPickup.gravecallerSigilDeny': 'Pečeť odpuzuje tvůj dotyk.',
@@ -238,6 +240,8 @@ export const BASE_NEW = {
     'mechanic.siltHide': 'Bahenní kůže',
   },
   da_DK: {
+    'error.readyCheckNotInParty': 'Du skal være i en gruppe for at starte et klar tjek.',
+    'error.readyCheckInProgress': 'Et klar tjek er allerede i gang.',
     'error.heroicMarksNeeded': 'Du skal bruge {marks} Heroiske Mærker for at købe {name}.',
     'groundPickup.supplyCrateDeny': 'Kassen er sømmet til.',
     'groundPickup.gravecallerSigilDeny': 'Seglet frastøder din berøring.',
@@ -477,6 +481,9 @@ export const BASE_NEW = {
     'mechanic.siltHide': 'Dyndskjul',
   },
   id_ID: {
+    'error.readyCheckNotInParty':
+      'Anda harus berada dalam party untuk memulai pemeriksaan kesiapan.',
+    'error.readyCheckInProgress': 'Pemeriksaan kesiapan sudah berlangsung.',
     'error.heroicMarksNeeded': 'Kamu butuh {marks} Tanda Heroik untuk membeli {name}.',
     'groundPickup.supplyCrateDeny': 'Peti itu dipaku rapat.',
     'groundPickup.gravecallerSigilDeny': 'Sigil itu menolak sentuhanmu.',
@@ -720,6 +727,9 @@ export const BASE_NEW = {
     'aura.soulblaze': 'Nyala Jiwa',
   },
   nl_NL: {
+    'error.readyCheckNotInParty':
+      'Je moet in een groep zitten om een gereedheidscontrole te starten.',
+    'error.readyCheckInProgress': 'Er is al een gereedheidscontrole bezig.',
     'error.heroicMarksNeeded': 'Je hebt {marks} Heroïsche Merken nodig om {name} te kopen.',
     'groundPickup.supplyCrateDeny': 'De kist is dichtgespijkerd.',
     'groundPickup.gravecallerSigilDeny': 'Het zegel weert je aanraking af.',
@@ -960,6 +970,8 @@ export const BASE_NEW = {
     'mechanic.siltHide': 'Slibhuid',
   },
   pl_PL: {
+    'error.readyCheckNotInParty': 'Musisz być w drużynie, aby rozpocząć sprawdzanie gotowości.',
+    'error.readyCheckInProgress': 'Sprawdzanie gotowości już trwa.',
     'error.heroicMarksNeeded': 'Potrzebujesz {marks} Znaków heroicznych, aby kupić {name}.',
     'groundPickup.supplyCrateDeny': 'Skrzynia jest zabita gwoździami na głucho.',
     'groundPickup.gravecallerSigilDeny': 'Sygil odpycha twój dotyk.',
@@ -1200,6 +1212,8 @@ export const BASE_NEW = {
     'mechanic.siltHide': 'Mułowa skóra',
   },
   sv_SE: {
+    'error.readyCheckNotInParty': 'Du måste vara i en grupp för att starta en redo kontroll.',
+    'error.readyCheckInProgress': 'En redo kontroll pågår redan.',
     'error.heroicMarksNeeded': 'Du behöver {marks} Heroiska märken för att köpa {name}.',
     'groundPickup.supplyCrateDeny': 'Lådan är igenspikad.',
     'groundPickup.gravecallerSigilDeny': 'Sigillet stöter bort din beröring.',
@@ -1440,6 +1454,8 @@ export const BASE_NEW = {
     'mechanic.siltHide': 'Slamhud',
   },
   tr_TR: {
+    'error.readyCheckNotInParty': 'Hazır kontrolü başlatmak için bir grupta olmalısın.',
+    'error.readyCheckInProgress': 'Zaten devam eden bir hazır kontrolü var.',
     'error.heroicMarksNeeded': '{name} satın almak için {marks} Kahramanca Nişan gerekiyor.',
     'groundPickup.supplyCrateDeny': 'Sandık çiviyle çakılıp kapatılmış.',
     'groundPickup.gravecallerSigilDeny': 'Mühür dokunuşunu geri itiyor.',
@@ -1676,6 +1692,8 @@ export const BASE_NEW = {
     'aura.soulblaze': 'Ruhalazı',
   },
   vi_VN: {
+    'error.readyCheckNotInParty': 'Bạn phải ở trong một tổ đội để bắt đầu kiểm tra sẵn sàng.',
+    'error.readyCheckInProgress': 'Một kiểm tra sẵn sàng đang diễn ra.',
     'error.heroicMarksNeeded': 'Bạn cần {marks} Dấu Ấn Anh Hùng để mua {name}.',
     'groundPickup.supplyCrateDeny': 'Thùng gỗ đã bị đóng đinh chặt.',
     'groundPickup.gravecallerSigilDeny': 'Ấn phù đẩy bật tay bạn ra.',

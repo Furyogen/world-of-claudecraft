@@ -155,10 +155,10 @@ export const nl_NL: EnTranslations = {
       "banner": "Toeschouwer bij {name}"
     },
     "readyCheck": {
-      "prompt": "{name} has started a ready check. Are you ready?",
-      "ready": "Ready",
-      "notReady": "Not Ready",
-      "result": "Ready check: {ready} ready, {notReady} not ready, {noResponse} no response."
+      "prompt": "{name} is een gereedheidscontrole gestart. Ben je klaar?",
+      "ready": "Klaar",
+      "notReady": "Niet klaar",
+      "result": "Gereedheidscontrole: {ready} klaar, {notReady} niet klaar, {pending} zonder antwoord."
     },
     "death": {
       "resurrectAtCorpse": "Herrijs bij je lijk",
@@ -403,13 +403,13 @@ export const nl_NL: EnTranslations = {
       "targetFriendlyNext": "Door Bondgenoten Bladeren",
       "discord": "Discord",
       "valecup": "Dalbeker",
-      "sheathe": "Sheathe/Unsheathe Weapon",
-      "categoryPet": "Pet",
-      "petAttack": "Pet: Attack",
-      "petStop": "Pet: Stop",
-      "petTaunt": "Pet: Taunt",
-      "petDefensive": "Pet: Defensive",
-      "petAggressive": "Pet: Aggressive"
+      "sheathe": "Wapen opbergen",
+      "categoryPet": "Huisdier",
+      "petAttack": "Huisdier aanval",
+      "petStop": "Huisdier stoppen",
+      "petTaunt": "Huisdier uitdagen",
+      "petDefensive": "Huisdier defensief",
+      "petAggressive": "Huisdier agressief"
     },
     "vcup": {
       "title": "De Dalbeker",
@@ -1082,10 +1082,10 @@ export const nl_NL: EnTranslations = {
       "spawn": "{name} verrijst boven Doorntop-Hoogten!"
     },
     "auth": {
-      "appleLoginCta": "Continue with Apple",
-      "appleError": "Could not sign in with Apple. Please try again.",
-      "appleChoiceIntro": "Create a new account, or link Apple to one you already have.",
-      "appleChoiceExpired": "That Apple sign-in expired. Please sign in with Apple again.",
+      "appleLoginCta": "Doorgaan met Apple",
+      "appleError": "Doorgaan met Apple is mislukt. Probeer het opnieuw.",
+      "appleChoiceIntro": "Maak een nieuw account of koppel je Apple ID aan een bestaand account.",
+      "appleChoiceExpired": "Deze Apple aanmelding is verlopen. Meld je opnieuw aan met Apple.",
       "forgotPrompt": "Wachtwoord vergeten?",
       "forgotTitle": "Wachtwoord opnieuw instellen",
       "forgotHint": "Voer je gebruikersnaam in en we sturen een herstellink naar het geregistreerde e-mailadres.",
@@ -3938,14 +3938,14 @@ export const nl_NL: EnTranslations = {
     "reconnecting": "Verbinding verbroken. Opnieuw verbinding maken...",
     "connectionRejected": "De server heeft de verbinding gesloten.",
     "tips": {
-      "classes": "Tip: each of the 9 classes plays differently. Try a few before committing to one.",
-      "talents": "Tip: you can reset your talents any time you are out of combat, so an early pick is never a trap.",
-      "dungeons": "Tip: try a dungeon on heroic difficulty once you outgear normal for a tougher, more rewarding fight.",
-      "market": "Tip: the World Market lets you buy and sell with players across the whole realm.",
-      "guilds": "Tip: joining a guild gives you a private chat channel and a shared roster of your guildmates.",
-      "professions": "Tip: gathering and crafting professions can be trained alongside your combat class.",
-      "loadouts": "Tip: save more than one talent loadout to swap between builds without spending points twice.",
-      "pvp": "Tip: challenge another player to a friendly duel, or queue for the Ashen Coliseum arena, to test your build."
+      "classes": "Tip: de 9 klassen spelen allemaal anders, probeer ze voordat je kiest.",
+      "talents": "Tip: talenten bepalen je speelstijl meer dan een paar eigenschapspunten.",
+      "dungeons": "Tip: kerkers belonen voorbereide groepen, neem eten, drinken en verbruiksvoorwerpen mee.",
+      "market": "Tip: de Wereldmarkt laat je waardevolle voorwerpen aan andere spelers verkopen.",
+      "guilds": "Tip: gildes maken het makkelijker om groepen te vinden en een gemeenschap op te bouwen.",
+      "professions": "Tip: beroepen veranderen verzamelde materialen in uitrusting en nuttige goederen.",
+      "loadouts": "Tip: sla uitrustingen op om snel tussen talenten en uitrusting te wisselen.",
+      "pvp": "Tip: ga PvP in met gerepareerde uitrusting en een voorbereide actiebalk."
     }
   },
   "errors": {

@@ -155,10 +155,10 @@ export const vi_VN: EnTranslations = {
       "banner": "Đang xem {name}"
     },
     "readyCheck": {
-      "prompt": "{name} has started a ready check. Are you ready?",
-      "ready": "Ready",
-      "notReady": "Not Ready",
-      "result": "Ready check: {ready} ready, {notReady} not ready, {noResponse} no response."
+      "prompt": "{name} đã bắt đầu kiểm tra sẵn sàng. Bạn đã sẵn sàng chưa?",
+      "ready": "Sẵn sàng",
+      "notReady": "Chưa sẵn sàng",
+      "result": "Kiểm tra sẵn sàng: {ready} sẵn sàng, {notReady} chưa sẵn sàng, {pending} chưa trả lời."
     },
     "death": {
       "resurrectAtCorpse": "Hồi Sinh Tại Xác Chết",
@@ -403,13 +403,13 @@ export const vi_VN: EnTranslations = {
       "targetFriendlyNext": "Luân Phiên Mục Tiêu Đồng Minh",
       "discord": "Discord",
       "valecup": "Cúp Thung Lũng",
-      "sheathe": "Sheathe/Unsheathe Weapon",
-      "categoryPet": "Pet",
-      "petAttack": "Pet: Attack",
-      "petStop": "Pet: Stop",
-      "petTaunt": "Pet: Taunt",
-      "petDefensive": "Pet: Defensive",
-      "petAggressive": "Pet: Aggressive"
+      "sheathe": "Cất vũ khí",
+      "categoryPet": "Thú cưng",
+      "petAttack": "Thú cưng tấn công",
+      "petStop": "Dừng thú cưng",
+      "petTaunt": "Thú cưng khiêu khích",
+      "petDefensive": "Thú cưng phòng thủ",
+      "petAggressive": "Thú cưng hung hăng"
     },
     "vcup": {
       "title": "Cúp Thung Lũng",
@@ -1082,10 +1082,10 @@ export const vi_VN: EnTranslations = {
       "spawn": "{name} trỗi dậy trên Cao Nguyên Đỉnh Gai!"
     },
     "auth": {
-      "appleLoginCta": "Continue with Apple",
-      "appleError": "Could not sign in with Apple. Please try again.",
-      "appleChoiceIntro": "Create a new account, or link Apple to one you already have.",
-      "appleChoiceExpired": "That Apple sign-in expired. Please sign in with Apple again.",
+      "appleLoginCta": "Tiếp tục với Apple",
+      "appleError": "Không thể tiếp tục với Apple. Hãy thử lại.",
+      "appleChoiceIntro": "Tạo tài khoản mới hoặc liên kết Apple ID của bạn với tài khoản hiện có.",
+      "appleChoiceExpired": "Lần đăng nhập Apple đó đã hết hạn. Vui lòng đăng nhập lại bằng Apple.",
       "forgotPrompt": "Quên mật khẩu?",
       "forgotTitle": "Đặt lại mật khẩu",
       "forgotHint": "Nhập tên người dùng của bạn và chúng tôi sẽ gửi liên kết đặt lại tới địa chỉ email đã đăng ký.",
@@ -3938,14 +3938,14 @@ export const vi_VN: EnTranslations = {
     "reconnecting": "Mất kết nối. Đang kết nối lại...",
     "connectionRejected": "Máy chủ đã đóng kết nối.",
     "tips": {
-      "classes": "Tip: each of the 9 classes plays differently. Try a few before committing to one.",
-      "talents": "Tip: you can reset your talents any time you are out of combat, so an early pick is never a trap.",
-      "dungeons": "Tip: try a dungeon on heroic difficulty once you outgear normal for a tougher, more rewarding fight.",
-      "market": "Tip: the World Market lets you buy and sell with players across the whole realm.",
-      "guilds": "Tip: joining a guild gives you a private chat channel and a shared roster of your guildmates.",
-      "professions": "Tip: gathering and crafting professions can be trained alongside your combat class.",
-      "loadouts": "Tip: save more than one talent loadout to swap between builds without spending points twice.",
-      "pvp": "Tip: challenge another player to a friendly duel, or queue for the Ashen Coliseum arena, to test your build."
+      "classes": "Mẹo: 9 lớp chơi khác nhau, hãy thử trước khi chọn.",
+      "talents": "Mẹo: tài năng định hình lối chơi của bạn nhiều hơn vài điểm thuộc tính.",
+      "dungeons": "Mẹo: hầm ngục thưởng cho nhóm chuẩn bị tốt, hãy mang thức ăn, đồ uống và vật phẩm tiêu hao.",
+      "market": "Mẹo: Chợ Thế Giới cho phép bạn bán vật phẩm giá trị cho người chơi khác.",
+      "guilds": "Mẹo: bang hội giúp tìm nhóm và xây dựng cộng đồng dễ hơn.",
+      "professions": "Mẹo: nghề nghiệp biến nguyên liệu thu thập thành trang bị và hàng hóa hữu ích.",
+      "loadouts": "Mẹo: lưu bộ trang bị để đổi nhanh giữa tài năng và trang bị.",
+      "pvp": "Mẹo: vào PvP với trang bị đã sửa và thanh kỹ năng đã chuẩn bị."
     }
   },
   "errors": {

@@ -492,6 +492,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'aura.resurrectionSickness': "The Keeper's Toll",
   },
   es: {
+    'error.readyCheckNotInParty':
+      'Debes estar en un grupo para iniciar una comprobación de preparación.',
+    'error.readyCheckInProgress': 'Ya hay una comprobación de preparación en curso.',
     'error.heroicMarksNeeded': 'Necesitas {marks} Marcas Heroicas para comprar {name}.',
     'groundPickup.supplyCrateDeny': 'El cajón está cerrado con clavos.',
     'groundPickup.gravecallerSigilDeny': 'El sigilo repele tu tacto.',
@@ -736,6 +739,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'aura.soulblaze': 'Fulgor del Alma',
   },
   es_ES: {
+    'error.readyCheckNotInParty':
+      'Debes estar en un grupo para iniciar una comprobación de preparación.',
+    'error.readyCheckInProgress': 'Ya hay una comprobación de preparación en curso.',
     'error.heroicMarksNeeded': 'Necesitas {marks} Marcas Heroicas para comprar {name}.',
     'groundPickup.supplyCrateDeny': 'El cajón está cerrado con clavos.',
     'groundPickup.gravecallerSigilDeny': 'El sigilo repele tu contacto.',
@@ -980,6 +986,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'aura.soulblaze': 'Fulgor del Alma',
   },
   fr_FR: {
+    'error.readyCheckNotInParty':
+      'Vous devez être dans un groupe pour lancer un appel de préparation.',
+    'error.readyCheckInProgress': 'Un appel de préparation est déjà en cours.',
     'error.heroicMarksNeeded': 'Il vous faut {marks} Marques héroïques pour acheter {name}.',
     'groundPickup.supplyCrateDeny': 'La caisse est solidement clouée.',
     'groundPickup.gravecallerSigilDeny': 'Le sceau repousse votre main.',
@@ -1226,6 +1235,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'aura.soulblaze': "Embrasement d'âme",
   },
   fr_CA: {
+    'error.readyCheckNotInParty':
+      'Vous devez être dans un groupe pour lancer un appel de préparation.',
+    'error.readyCheckInProgress': 'Un appel de préparation est déjà en cours.',
     'error.heroicMarksNeeded': 'Il vous faut {marks} Marques héroïques pour acheter {name}.',
     'groundPickup.supplyCrateDeny': 'La caisse est solidement clouée.',
     'groundPickup.gravecallerSigilDeny': 'Le sceau repousse votre main.',
@@ -1639,6 +1651,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'aura.elixirBear': 'Might of the Bear',
   },
   it_IT: {
+    'error.readyCheckNotInParty': 'Devi essere in un gruppo per avviare un controllo di prontezza.',
+    'error.readyCheckInProgress': 'Un controllo di prontezza è già in corso.',
     'error.heroicMarksNeeded': 'Ti servono {marks} Marchi Eroici per comprare {name}.',
     'groundPickup.supplyCrateDeny': 'La cassa è inchiodata.',
     'groundPickup.gravecallerSigilDeny': 'Il sigillo respinge il tuo tocco.',
@@ -1880,6 +1894,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'aura.soulblaze': 'Vampanima',
   },
   de_DE: {
+    'error.readyCheckNotInParty':
+      'Du musst in einer Gruppe sein, um eine Bereitschaftsabfrage zu starten.',
+    'error.readyCheckInProgress': 'Eine Bereitschaftsabfrage läuft bereits.',
     'error.heroicMarksNeeded': 'Du brauchst {marks} Heroische Marken, um {name} zu kaufen.',
     'groundPickup.supplyCrateDeny': 'Die Kiste ist fest vernagelt.',
     'groundPickup.gravecallerSigilDeny': 'Das Siegel weist Eure Berührung ab.',
@@ -2123,6 +2140,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'aura.soulblaze': 'Seelenbrand',
   },
   zh_CN: {
+    'error.readyCheckNotInParty': '你必须在队伍中才能发起准备确认。',
+    'error.readyCheckInProgress': '准备确认已经在进行中。',
     'error.heroicMarksNeeded': '购买{name}需要{marks}个英雄徽记。',
     'aura.clearcasting': '清晰施法',
     'aura.gravemight': '墓冢之力',
@@ -2353,6 +2372,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'mechanic.siltWard': '淤泥护罩',
   },
   zh_TW: {
+    'error.readyCheckNotInParty': '你必須在隊伍中才能發起準備確認。',
+    'error.readyCheckInProgress': '準備確認已經在進行中。',
     'error.heroicMarksNeeded': '購買{name}需要{marks}個英雄徽記。',
     'aura.clearcasting': '清晰施法',
     'aura.gravemight': '墓塚之力',
@@ -2583,6 +2604,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'mechanic.siltWard': '淤泥守護',
   },
   ko_KR: {
+    'error.readyCheckNotInParty': '준비 확인을 시작하려면 파티에 있어야 합니다.',
+    'error.readyCheckInProgress': '이미 준비 확인이 진행 중입니다.',
     'error.heroicMarksNeeded': '{name}을(를) 구매하려면 영웅의 징표 {marks}개가 필요합니다.',
     'aura.clearcasting': '선명한 시전',
     'aura.gravemight': '무덤의 위력',
@@ -2821,6 +2844,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'mechanic.siltWard': '진흙 결계',
   },
   ja_JP: {
+    'error.readyCheckNotInParty': '準備確認を開始するにはパーティに入っている必要があります。',
+    'error.readyCheckInProgress': '準備確認はすでに進行中です。',
     'error.heroicMarksNeeded': '{name}を購入するには英雄の証が{marks}個必要です。',
     'aura.clearcasting': 'クリアキャスティング',
     'aura.gravemight': 'グレイブマイト',
@@ -3064,6 +3089,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'mechanic.siltWard': '沈泥の守り',
   },
   pt_BR: {
+    'error.readyCheckNotInParty':
+      'Você precisa estar em um grupo para iniciar uma verificação de prontidão.',
+    'error.readyCheckInProgress': 'Uma verificação de prontidão já está em andamento.',
     'error.heroicMarksNeeded': 'Você precisa de {marks} Marcas Heroicas para comprar {name}.',
     'groundPickup.supplyCrateDeny': 'O caixote está fechado com pregos.',
     'groundPickup.gravecallerSigilDeny': 'O sigilo repele seu toque.',
@@ -3306,6 +3334,8 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'aura.soulblaze': 'Chama da Alma',
   },
   ru_RU: {
+    'error.readyCheckNotInParty': 'Чтобы начать проверку готовности, нужно быть в группе.',
+    'error.readyCheckInProgress': 'Проверка готовности уже идет.',
     'error.heroicMarksNeeded': 'Вам нужно {marks} Героических знаков, чтобы купить {name}.',
     'aura.clearcasting': 'Ясность',
     'aura.gravemight': 'Могильная мощь',

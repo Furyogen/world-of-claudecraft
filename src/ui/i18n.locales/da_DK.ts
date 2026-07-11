@@ -6558,4 +6558,32 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mailbox.parcelQtyDecreaseAria': 'Send en {item} færre',
   'hudChrome.mailbox.parcelQtyIncreaseAria': 'Send en {item} mere',
   'hudChrome.itemHeroicTag': '[HELTEMODIG]',
+  'hudChrome.auth.appleChoiceExpired': 'Dette Apple login er udløbet. Log ind med Apple igen.',
+  'hudChrome.auth.appleChoiceIntro':
+    'Opret en ny konto, eller knyt dit Apple ID til en eksisterende konto.',
+  'hudChrome.auth.appleError': 'Kunne ikke fortsætte med Apple. Prøv igen.',
+  'hudChrome.auth.appleLoginCta': 'Fortsæt med Apple',
+  'hudChrome.keybinds.categoryPet': 'Kæledyr',
+  'hudChrome.keybinds.petAggressive': 'Kæledyr aggressiv',
+  'hudChrome.keybinds.petAttack': 'Kæledyrsangreb',
+  'hudChrome.keybinds.petDefensive': 'Kæledyr defensiv',
+  'hudChrome.keybinds.petStop': 'Stop kæledyr',
+  'hudChrome.keybinds.petTaunt': 'Kæledyr provoker',
+  'hudChrome.keybinds.sheathe': 'Sæt våben væk',
+  'hudChrome.readyCheck.notReady': 'Ikke klar',
+  'hudChrome.readyCheck.prompt': '{name} har startet et klar tjek. Er du klar?',
+  'hudChrome.readyCheck.ready': 'Klar',
+  'hudChrome.readyCheck.result':
+    'Klar tjek: {ready} klar, {notReady} ikke klar, {pending} uden svar.',
+  'loading.tips.classes': 'Tip: de 9 klasser spiller forskelligt, prøv dem før du vælger.',
+  'loading.tips.dungeons':
+    'Tip: dungeons belønner forberedte grupper, tag mad, drikke og forbrugsvarer med.',
+  'loading.tips.guilds': 'Tip: laug gør det lettere at finde grupper og bygge fællesskab.',
+  'loading.tips.loadouts': 'Tip: gem opsætninger for hurtigt at skifte talenter og udstyr.',
+  'loading.tips.market':
+    'Tip: Verdensmarkedet lader dig sælge værdifulde genstande til andre spillere.',
+  'loading.tips.professions':
+    'Tip: professioner gør indsamlede materialer til udstyr og nyttige varer.',
+  'loading.tips.pvp': 'Tip: gå ind i PvP med repareret udstyr og en klar handlingsbjælke.',
+  'loading.tips.talents': 'Tip: talenter former din spillestil mere end nogle få attributpoint.',
 };

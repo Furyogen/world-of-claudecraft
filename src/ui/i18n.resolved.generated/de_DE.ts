@@ -155,10 +155,10 @@ export const de_DE: EnTranslations = {
       "banner": "{name} wird beobachtet"
     },
     "readyCheck": {
-      "prompt": "{name} has started a ready check. Are you ready?",
-      "ready": "Ready",
-      "notReady": "Not Ready",
-      "result": "Ready check: {ready} ready, {notReady} not ready, {noResponse} no response."
+      "prompt": "{name} hat eine Bereitschaftsabfrage gestartet. Bist du bereit?",
+      "ready": "Bereit",
+      "notReady": "Nicht bereit",
+      "result": "Bereitschaftsabfrage: {ready} bereit, {notReady} nicht bereit, {pending} ohne Antwort."
     },
     "death": {
       "resurrectAtCorpse": "Am Leichnam wiederbeleben",
@@ -403,13 +403,13 @@ export const de_DE: EnTranslations = {
       "targetFriendlyNext": "Freundliches Ziel wechseln",
       "discord": "Discord",
       "valecup": "Talpokal",
-      "sheathe": "Sheathe/Unsheathe Weapon",
-      "categoryPet": "Pet",
-      "petAttack": "Pet: Attack",
-      "petStop": "Pet: Stop",
-      "petTaunt": "Pet: Taunt",
-      "petDefensive": "Pet: Defensive",
-      "petAggressive": "Pet: Aggressive"
+      "sheathe": "Waffe wegstecken",
+      "categoryPet": "Begleiter",
+      "petAttack": "Begleiterangriff",
+      "petStop": "Begleiter stoppen",
+      "petTaunt": "Begleiterspott",
+      "petDefensive": "Begleiter defensiv",
+      "petAggressive": "Begleiter aggressiv"
     },
     "vcup": {
       "title": "Der Talpokal",
@@ -1082,10 +1082,10 @@ export const de_DE: EnTranslations = {
       "spawn": "{name} erhebt sich über den Thornpeak-Höhen!"
     },
     "auth": {
-      "appleLoginCta": "Continue with Apple",
-      "appleError": "Could not sign in with Apple. Please try again.",
-      "appleChoiceIntro": "Create a new account, or link Apple to one you already have.",
-      "appleChoiceExpired": "That Apple sign-in expired. Please sign in with Apple again.",
+      "appleLoginCta": "Mit Apple fortfahren",
+      "appleError": "Mit Apple konnte nicht fortgefahren werden. Versuche es erneut.",
+      "appleChoiceIntro": "Erstelle ein neues Konto oder verknüpfe deine Apple ID mit einem bestehenden Konto.",
+      "appleChoiceExpired": "Diese Apple Anmeldung ist abgelaufen. Melde dich erneut mit Apple an.",
       "forgotPrompt": "Passwort vergessen?",
       "forgotTitle": "Passwort zurücksetzen",
       "forgotHint": "Gib deinen Benutzernamen ein und wir senden einen Link zum Zurücksetzen an die hinterlegte E-Mail-Adresse.",
@@ -3938,14 +3938,14 @@ export const de_DE: EnTranslations = {
     "reconnecting": "Verbindung verloren. Verbindung wird wieder hergestellt...",
     "connectionRejected": "Der Server hat die Verbindung geschlossen.",
     "tips": {
-      "classes": "Tip: each of the 9 classes plays differently. Try a few before committing to one.",
-      "talents": "Tip: you can reset your talents any time you are out of combat, so an early pick is never a trap.",
-      "dungeons": "Tip: try a dungeon on heroic difficulty once you outgear normal for a tougher, more rewarding fight.",
-      "market": "Tip: the World Market lets you buy and sell with players across the whole realm.",
-      "guilds": "Tip: joining a guild gives you a private chat channel and a shared roster of your guildmates.",
-      "professions": "Tip: gathering and crafting professions can be trained alongside your combat class.",
-      "loadouts": "Tip: save more than one talent loadout to swap between builds without spending points twice.",
-      "pvp": "Tip: challenge another player to a friendly duel, or queue for the Ashen Coliseum arena, to test your build."
+      "classes": "Tipp: Die 9 Klassen spielen sich unterschiedlich, probiere sie aus, bevor du dich festlegst.",
+      "talents": "Tipp: Talente prägen deinen Spielstil stärker als ein paar Attributpunkte.",
+      "dungeons": "Tipp: Dungeons belohnen vorbereitete Gruppen, bring Essen, Getränke und Verbrauchsgüter mit.",
+      "market": "Tipp: Auf dem Weltmarkt kannst du wertvolle Gegenstände an andere Spieler verkaufen.",
+      "guilds": "Tipp: Gilden erleichtern die Gruppensuche und den Aufbau einer Gemeinschaft.",
+      "professions": "Tipp: Berufe verwandeln gesammelte Materialien in Ausrüstung und nützliche Waren.",
+      "loadouts": "Tipp: Speichere Ausrüstungen, um Talente und Ausrüstung schnell zu wechseln.",
+      "pvp": "Tipp: Betritt PvP mit reparierter Ausrüstung und einer vorbereiteten Leiste."
     }
   },
   "errors": {
@@ -5898,13 +5898,13 @@ export const de_DE: EnTranslations = {
         "name": "Leinenfetzen"
       },
       "arcane_dust": {
-        "name": "Arcane Dust"
+        "name": "Arkaner Staub"
       },
       "arcane_essence": {
-        "name": "Arcane Essence"
+        "name": "Arkanessenz"
       },
       "arcane_shard": {
-        "name": "Arcane Shard"
+        "name": "Arkansplitter"
       },
       "fen_muster_order": {
         "name": "Musterungsbefehl von Fenbridge"

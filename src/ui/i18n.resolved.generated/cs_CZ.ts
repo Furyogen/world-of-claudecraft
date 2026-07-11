@@ -155,10 +155,10 @@ export const cs_CZ: EnTranslations = {
       "banner": "Sleduješ {name}"
     },
     "readyCheck": {
-      "prompt": "{name} has started a ready check. Are you ready?",
-      "ready": "Ready",
-      "notReady": "Not Ready",
-      "result": "Ready check: {ready} ready, {notReady} not ready, {noResponse} no response."
+      "prompt": "{name} spustil kontrolu připravenosti. Jsi připraven?",
+      "ready": "Připraven",
+      "notReady": "Nepřipraven",
+      "result": "Kontrola připravenosti: {ready} připraveno, {notReady} nepřipraveno, {pending} bez odpovědi."
     },
     "death": {
       "resurrectAtCorpse": "Vzkřísit u mrtvoly",
@@ -403,13 +403,13 @@ export const cs_CZ: EnTranslations = {
       "targetFriendlyNext": "Procházet spojenecké cíle",
       "discord": "Discord",
       "valecup": "Pohár údolí",
-      "sheathe": "Sheathe/Unsheathe Weapon",
-      "categoryPet": "Pet",
-      "petAttack": "Pet: Attack",
-      "petStop": "Pet: Stop",
-      "petTaunt": "Pet: Taunt",
-      "petDefensive": "Pet: Defensive",
-      "petAggressive": "Pet: Aggressive"
+      "sheathe": "Schovat zbraň",
+      "categoryPet": "Mazlíček",
+      "petAttack": "Útok mazlíčka",
+      "petStop": "Zastavit mazlíčka",
+      "petTaunt": "Provokace mazlíčka",
+      "petDefensive": "Mazlíček obranně",
+      "petAggressive": "Mazlíček agresivně"
     },
     "vcup": {
       "title": "Pohár údolí",
@@ -1082,10 +1082,10 @@ export const cs_CZ: EnTranslations = {
       "spawn": "{name} povstává nad Thornpeak Heights!"
     },
     "auth": {
-      "appleLoginCta": "Continue with Apple",
-      "appleError": "Could not sign in with Apple. Please try again.",
-      "appleChoiceIntro": "Create a new account, or link Apple to one you already have.",
-      "appleChoiceExpired": "That Apple sign-in expired. Please sign in with Apple again.",
+      "appleLoginCta": "Pokračovat přes Apple",
+      "appleError": "Nelze pokračovat přes Apple. Zkus to znovu.",
+      "appleChoiceIntro": "Vytvoř nový účet nebo propoj své Apple ID s existujícím účtem.",
+      "appleChoiceExpired": "Toto přihlášení přes Apple vypršelo. Přihlas se přes Apple znovu.",
       "forgotPrompt": "Zapomenuté heslo?",
       "forgotTitle": "Obnovení hesla",
       "forgotHint": "Zadejte své uživatelské jméno a na uloženou e-mailovou adresu pošleme odkaz pro obnovení.",
@@ -3938,14 +3938,14 @@ export const cs_CZ: EnTranslations = {
     "reconnecting": "Připojení ztraceno. Znovu se připojuje...",
     "connectionRejected": "Server ukončil připojení.",
     "tips": {
-      "classes": "Tip: each of the 9 classes plays differently. Try a few before committing to one.",
-      "talents": "Tip: you can reset your talents any time you are out of combat, so an early pick is never a trap.",
-      "dungeons": "Tip: try a dungeon on heroic difficulty once you outgear normal for a tougher, more rewarding fight.",
-      "market": "Tip: the World Market lets you buy and sell with players across the whole realm.",
-      "guilds": "Tip: joining a guild gives you a private chat channel and a shared roster of your guildmates.",
-      "professions": "Tip: gathering and crafting professions can be trained alongside your combat class.",
-      "loadouts": "Tip: save more than one talent loadout to swap between builds without spending points twice.",
-      "pvp": "Tip: challenge another player to a friendly duel, or queue for the Ashen Coliseum arena, to test your build."
+      "classes": "Tip: 9 tříd se hraje odlišně, vyzkoušej je, než se rozhodneš.",
+      "talents": "Tip: Talenty určují tvůj herní styl víc než pár bodů vlastností.",
+      "dungeons": "Tip: Dungeony odměňují připravené skupiny, vezmi si jídlo, pití a spotřební předměty.",
+      "market": "Tip: Světový trh ti umožní prodávat cenné předměty ostatním hráčům.",
+      "guilds": "Tip: Gildy pomáhají hledat skupiny a budovat komunitu.",
+      "professions": "Tip: Profese mění nasbírané suroviny na vybavení a užitečné zboží.",
+      "loadouts": "Tip: Ukládej výbavy pro rychlou změnu talentů a vybavení.",
+      "pvp": "Tip: Do PvP vstupuj s opraveným vybavením a připravenou lištou."
     }
   },
   "errors": {

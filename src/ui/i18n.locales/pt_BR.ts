@@ -6659,4 +6659,38 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mailbox.parcelQtyDecreaseAria': 'Enviar um {item} a menos',
   'hudChrome.mailbox.parcelQtyIncreaseAria': 'Enviar mais um {item}',
   'hudChrome.itemHeroicTag': '[HEROICO]',
+  'entities.items.arcane_dust.name': 'Pó Arcano',
+  'entities.items.arcane_essence.name': 'Essência Arcana',
+  'entities.items.arcane_shard.name': 'Estilhaço Arcano',
+  'hudChrome.auth.appleChoiceExpired': 'Esse login com Apple expirou. Entre com Apple novamente.',
+  'hudChrome.auth.appleChoiceIntro':
+    'Crie uma nova conta ou vincule seu ID Apple a uma conta existente.',
+  'hudChrome.auth.appleError': 'Não foi possível continuar com Apple. Tente novamente.',
+  'hudChrome.auth.appleLoginCta': 'Continuar com Apple',
+  'hudChrome.keybinds.categoryPet': 'Mascote',
+  'hudChrome.keybinds.petAggressive': 'Mascote agressivo',
+  'hudChrome.keybinds.petAttack': 'Ataque do mascote',
+  'hudChrome.keybinds.petDefensive': 'Mascote defensivo',
+  'hudChrome.keybinds.petStop': 'Parar mascote',
+  'hudChrome.keybinds.petTaunt': 'Provocar do mascote',
+  'hudChrome.keybinds.sheathe': 'Guardar arma',
+  'hudChrome.readyCheck.notReady': 'Não pronto',
+  'hudChrome.readyCheck.prompt': '{name} iniciou uma verificação de prontidão. Você está pronto?',
+  'hudChrome.readyCheck.ready': 'Pronto',
+  'hudChrome.readyCheck.result':
+    'Verificação de prontidão: {ready} prontos, {notReady} não prontos, {pending} sem resposta.',
+  'loading.tips.classes':
+    'Dica: as 9 classes jogam de formas diferentes, experimente todas antes de escolher.',
+  'loading.tips.dungeons':
+    'Dica: masmorras recompensam grupos preparados, leve comida, bebida e consumíveis.',
+  'loading.tips.guilds': 'Dica: guildas ajudam a encontrar grupos e manter uma comunidade.',
+  'loading.tips.loadouts':
+    'Dica: salve configurações para trocar talentos e equipamento rapidamente.',
+  'loading.tips.market':
+    'Dica: o Mercado Mundial permite vender itens valiosos para outros jogadores.',
+  'loading.tips.professions':
+    'Dica: profissões transformam materiais coletados em equipamento e bens úteis.',
+  'loading.tips.pvp': 'Dica: entre no JxJ com equipamento reparado e uma barra preparada.',
+  'loading.tips.talents':
+    'Dica: talentos definem seu estilo de jogo mais do que alguns pontos de atributo.',
 };

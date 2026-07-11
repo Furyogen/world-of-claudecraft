@@ -6661,4 +6661,36 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mailbox.parcelQtyDecreaseAria': 'Een {item} minder verzenden',
   'hudChrome.mailbox.parcelQtyIncreaseAria': 'Een {item} meer verzenden',
   'hudChrome.itemHeroicTag': '[HELDHAFTIG]',
+  'hudChrome.auth.appleChoiceExpired':
+    'Deze Apple aanmelding is verlopen. Meld je opnieuw aan met Apple.',
+  'hudChrome.auth.appleChoiceIntro':
+    'Maak een nieuw account of koppel je Apple ID aan een bestaand account.',
+  'hudChrome.auth.appleError': 'Doorgaan met Apple is mislukt. Probeer het opnieuw.',
+  'hudChrome.auth.appleLoginCta': 'Doorgaan met Apple',
+  'hudChrome.keybinds.categoryPet': 'Huisdier',
+  'hudChrome.keybinds.petAggressive': 'Huisdier agressief',
+  'hudChrome.keybinds.petAttack': 'Huisdier aanval',
+  'hudChrome.keybinds.petDefensive': 'Huisdier defensief',
+  'hudChrome.keybinds.petStop': 'Huisdier stoppen',
+  'hudChrome.keybinds.petTaunt': 'Huisdier uitdagen',
+  'hudChrome.keybinds.sheathe': 'Wapen opbergen',
+  'hudChrome.readyCheck.notReady': 'Niet klaar',
+  'hudChrome.readyCheck.prompt': '{name} is een gereedheidscontrole gestart. Ben je klaar?',
+  'hudChrome.readyCheck.ready': 'Klaar',
+  'hudChrome.readyCheck.result':
+    'Gereedheidscontrole: {ready} klaar, {notReady} niet klaar, {pending} zonder antwoord.',
+  'loading.tips.classes': 'Tip: de 9 klassen spelen allemaal anders, probeer ze voordat je kiest.',
+  'loading.tips.dungeons':
+    'Tip: kerkers belonen voorbereide groepen, neem eten, drinken en verbruiksvoorwerpen mee.',
+  'loading.tips.guilds':
+    'Tip: gildes maken het makkelijker om groepen te vinden en een gemeenschap op te bouwen.',
+  'loading.tips.loadouts':
+    'Tip: sla uitrustingen op om snel tussen talenten en uitrusting te wisselen.',
+  'loading.tips.market':
+    'Tip: de Wereldmarkt laat je waardevolle voorwerpen aan andere spelers verkopen.',
+  'loading.tips.professions':
+    'Tip: beroepen veranderen verzamelde materialen in uitrusting en nuttige goederen.',
+  'loading.tips.pvp': 'Tip: ga PvP in met gerepareerde uitrusting en een voorbereide actiebalk.',
+  'loading.tips.talents':
+    'Tip: talenten bepalen je speelstijl meer dan een paar eigenschapspunten.',
 };

@@ -155,10 +155,10 @@ export const pl_PL: EnTranslations = {
       "banner": "Obserwujesz {name}"
     },
     "readyCheck": {
-      "prompt": "{name} has started a ready check. Are you ready?",
-      "ready": "Ready",
-      "notReady": "Not Ready",
-      "result": "Ready check: {ready} ready, {notReady} not ready, {noResponse} no response."
+      "prompt": "{name} rozpoczął sprawdzanie gotowości. Jesteś gotów?",
+      "ready": "Gotów",
+      "notReady": "Nie gotów",
+      "result": "Sprawdzanie gotowości: {ready} gotowych, {notReady} niegotowych, {pending} bez odpowiedzi."
     },
     "death": {
       "resurrectAtCorpse": "Odrodź się przy zwłokach",
@@ -403,13 +403,13 @@ export const pl_PL: EnTranslations = {
       "targetFriendlyNext": "Przełączaj przyjazny cel",
       "discord": "Discord",
       "valecup": "Puchar Doliny",
-      "sheathe": "Sheathe/Unsheathe Weapon",
-      "categoryPet": "Pet",
-      "petAttack": "Pet: Attack",
-      "petStop": "Pet: Stop",
-      "petTaunt": "Pet: Taunt",
-      "petDefensive": "Pet: Defensive",
-      "petAggressive": "Pet: Aggressive"
+      "sheathe": "Schowaj broń",
+      "categoryPet": "Towarzysz",
+      "petAttack": "Atak towarzysza",
+      "petStop": "Zatrzymaj towarzysza",
+      "petTaunt": "Prowokacja towarzysza",
+      "petDefensive": "Towarzysz defensywnie",
+      "petAggressive": "Towarzysz agresywnie"
     },
     "vcup": {
       "title": "Puchar Doliny",
@@ -1082,10 +1082,10 @@ export const pl_PL: EnTranslations = {
       "spawn": "{name} powstaje nad Wyżynami Ciernistego Szczytu!"
     },
     "auth": {
-      "appleLoginCta": "Continue with Apple",
-      "appleError": "Could not sign in with Apple. Please try again.",
-      "appleChoiceIntro": "Create a new account, or link Apple to one you already have.",
-      "appleChoiceExpired": "That Apple sign-in expired. Please sign in with Apple again.",
+      "appleLoginCta": "Kontynuuj z Apple",
+      "appleError": "Nie udało się kontynuować przez Apple. Spróbuj ponownie.",
+      "appleChoiceIntro": "Utwórz nowe konto albo połącz swój Apple ID z istniejącym kontem.",
+      "appleChoiceExpired": "To logowanie przez Apple wygasło. Zaloguj się ponownie przez Apple.",
       "forgotPrompt": "Nie pamiętasz hasła?",
       "forgotTitle": "Zresetuj hasło",
       "forgotHint": "Podaj nazwę użytkownika, a wyślemy link do resetowania na zapisany adres e-mail.",
@@ -3938,14 +3938,14 @@ export const pl_PL: EnTranslations = {
     "reconnecting": "Połączenie utracone. Ponowne łączenie...",
     "connectionRejected": "Serwer zamknął połączenie.",
     "tips": {
-      "classes": "Tip: each of the 9 classes plays differently. Try a few before committing to one.",
-      "talents": "Tip: you can reset your talents any time you are out of combat, so an early pick is never a trap.",
-      "dungeons": "Tip: try a dungeon on heroic difficulty once you outgear normal for a tougher, more rewarding fight.",
-      "market": "Tip: the World Market lets you buy and sell with players across the whole realm.",
-      "guilds": "Tip: joining a guild gives you a private chat channel and a shared roster of your guildmates.",
-      "professions": "Tip: gathering and crafting professions can be trained alongside your combat class.",
-      "loadouts": "Tip: save more than one talent loadout to swap between builds without spending points twice.",
-      "pvp": "Tip: challenge another player to a friendly duel, or queue for the Ashen Coliseum arena, to test your build."
+      "classes": "Wskazówka: 9 klas gra się inaczej, wypróbuj je przed wyborem.",
+      "talents": "Wskazówka: talenty określają styl gry bardziej niż kilka punktów cech.",
+      "dungeons": "Wskazówka: podziemia nagradzają przygotowane grupy, weź jedzenie, napoje i materiały zużywalne.",
+      "market": "Wskazówka: Rynek Świata pozwala sprzedawać cenne przedmioty innym graczom.",
+      "guilds": "Wskazówka: gildie ułatwiają znajdowanie grup i budowanie społeczności.",
+      "professions": "Wskazówka: profesje zmieniają zebrane materiały w ekwipunek i przydatne dobra.",
+      "loadouts": "Wskazówka: zapisuj zestawy, aby szybko zmieniać talenty i ekwipunek.",
+      "pvp": "Wskazówka: wchodź do PvP z naprawionym ekwipunkiem i przygotowanym paskiem."
     }
   },
   "errors": {

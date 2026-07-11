@@ -6659,4 +6659,34 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mailbox.parcelQtyDecreaseAria': 'Kirim satu {item} lebih sedikit',
   'hudChrome.mailbox.parcelQtyIncreaseAria': 'Kirim satu {item} lagi',
   'hudChrome.itemHeroicTag': '[HEROIK]',
+  'hudChrome.auth.appleChoiceExpired': 'Login Apple itu kedaluwarsa. Masuk lagi dengan Apple.',
+  'hudChrome.auth.appleChoiceIntro':
+    'Buat akun baru atau tautkan ID Apple Anda ke akun yang sudah ada.',
+  'hudChrome.auth.appleError': 'Tidak dapat melanjutkan dengan Apple. Coba lagi.',
+  'hudChrome.auth.appleLoginCta': 'Lanjutkan dengan Apple',
+  'hudChrome.keybinds.categoryPet': 'Peliharaan',
+  'hudChrome.keybinds.petAggressive': 'Peliharaan agresif',
+  'hudChrome.keybinds.petAttack': 'Serangan peliharaan',
+  'hudChrome.keybinds.petDefensive': 'Peliharaan defensif',
+  'hudChrome.keybinds.petStop': 'Hentikan peliharaan',
+  'hudChrome.keybinds.petTaunt': 'Ejekan peliharaan',
+  'hudChrome.keybinds.sheathe': 'Sarungkan senjata',
+  'hudChrome.readyCheck.notReady': 'Belum siap',
+  'hudChrome.readyCheck.prompt': '{name} memulai pemeriksaan kesiapan. Apakah Anda siap?',
+  'hudChrome.readyCheck.ready': 'Siap',
+  'hudChrome.readyCheck.result':
+    'Pemeriksaan kesiapan: {ready} siap, {notReady} belum siap, {pending} belum menjawab.',
+  'loading.tips.classes': 'Kiat: 9 kelas dimainkan dengan cara berbeda, cobalah sebelum memilih.',
+  'loading.tips.dungeons':
+    'Kiat: dungeon memberi hadiah pada grup yang siap, bawa makanan, minuman, dan barang konsumsi.',
+  'loading.tips.guilds': 'Kiat: guild membantu menemukan grup dan membangun komunitas.',
+  'loading.tips.loadouts': 'Kiat: simpan loadout untuk cepat mengganti talenta dan perlengkapan.',
+  'loading.tips.market':
+    'Kiat: Pasar Dunia memungkinkan Anda menjual barang berharga kepada pemain lain.',
+  'loading.tips.professions':
+    'Kiat: profesi mengubah bahan yang dikumpulkan menjadi perlengkapan dan barang berguna.',
+  'loading.tips.pvp':
+    'Kiat: masuk PvP dengan perlengkapan yang sudah diperbaiki dan bilah yang siap.',
+  'loading.tips.talents':
+    'Kiat: talenta membentuk gaya bermain Anda lebih dari beberapa poin atribut.',
 };

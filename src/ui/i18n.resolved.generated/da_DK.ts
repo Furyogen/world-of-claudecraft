@@ -155,10 +155,10 @@ export const da_DK: EnTranslations = {
       "banner": "Tilskuer til {name}"
     },
     "readyCheck": {
-      "prompt": "{name} has started a ready check. Are you ready?",
-      "ready": "Ready",
-      "notReady": "Not Ready",
-      "result": "Ready check: {ready} ready, {notReady} not ready, {noResponse} no response."
+      "prompt": "{name} har startet et klar tjek. Er du klar?",
+      "ready": "Klar",
+      "notReady": "Ikke klar",
+      "result": "Klar tjek: {ready} klar, {notReady} ikke klar, {pending} uden svar."
     },
     "death": {
       "resurrectAtCorpse": "Genopstå ved liget",
@@ -403,13 +403,13 @@ export const da_DK: EnTranslations = {
       "targetFriendlyNext": "Skift allieret mål",
       "discord": "Discord",
       "valecup": "Dalpokalen",
-      "sheathe": "Sheathe/Unsheathe Weapon",
-      "categoryPet": "Pet",
-      "petAttack": "Pet: Attack",
-      "petStop": "Pet: Stop",
-      "petTaunt": "Pet: Taunt",
-      "petDefensive": "Pet: Defensive",
-      "petAggressive": "Pet: Aggressive"
+      "sheathe": "Sæt våben væk",
+      "categoryPet": "Kæledyr",
+      "petAttack": "Kæledyrsangreb",
+      "petStop": "Stop kæledyr",
+      "petTaunt": "Kæledyr provoker",
+      "petDefensive": "Kæledyr defensiv",
+      "petAggressive": "Kæledyr aggressiv"
     },
     "vcup": {
       "title": "Dalpokalen",
@@ -1082,10 +1082,10 @@ export const da_DK: EnTranslations = {
       "spawn": "{name} rejser sig over Tornetop Højder!"
     },
     "auth": {
-      "appleLoginCta": "Continue with Apple",
-      "appleError": "Could not sign in with Apple. Please try again.",
-      "appleChoiceIntro": "Create a new account, or link Apple to one you already have.",
-      "appleChoiceExpired": "That Apple sign-in expired. Please sign in with Apple again.",
+      "appleLoginCta": "Fortsæt med Apple",
+      "appleError": "Kunne ikke fortsætte med Apple. Prøv igen.",
+      "appleChoiceIntro": "Opret en ny konto, eller knyt dit Apple ID til en eksisterende konto.",
+      "appleChoiceExpired": "Dette Apple login er udløbet. Log ind med Apple igen.",
       "forgotPrompt": "Glemt adgangskode?",
       "forgotTitle": "Nulstil din adgangskode",
       "forgotHint": "Indtast dit brugernavn, så sender vi et nulstillingslink til den registrerede e-mailadresse.",
@@ -3938,14 +3938,14 @@ export const da_DK: EnTranslations = {
     "reconnecting": "Forbindelse mistet. Genopretter forbindelse...",
     "connectionRejected": "Serveren lukkede forbindelsen.",
     "tips": {
-      "classes": "Tip: each of the 9 classes plays differently. Try a few before committing to one.",
-      "talents": "Tip: you can reset your talents any time you are out of combat, so an early pick is never a trap.",
-      "dungeons": "Tip: try a dungeon on heroic difficulty once you outgear normal for a tougher, more rewarding fight.",
-      "market": "Tip: the World Market lets you buy and sell with players across the whole realm.",
-      "guilds": "Tip: joining a guild gives you a private chat channel and a shared roster of your guildmates.",
-      "professions": "Tip: gathering and crafting professions can be trained alongside your combat class.",
-      "loadouts": "Tip: save more than one talent loadout to swap between builds without spending points twice.",
-      "pvp": "Tip: challenge another player to a friendly duel, or queue for the Ashen Coliseum arena, to test your build."
+      "classes": "Tip: de 9 klasser spiller forskelligt, prøv dem før du vælger.",
+      "talents": "Tip: talenter former din spillestil mere end nogle få attributpoint.",
+      "dungeons": "Tip: dungeons belønner forberedte grupper, tag mad, drikke og forbrugsvarer med.",
+      "market": "Tip: Verdensmarkedet lader dig sælge værdifulde genstande til andre spillere.",
+      "guilds": "Tip: laug gør det lettere at finde grupper og bygge fællesskab.",
+      "professions": "Tip: professioner gør indsamlede materialer til udstyr og nyttige varer.",
+      "loadouts": "Tip: gem opsætninger for hurtigt at skifte talenter og udstyr.",
+      "pvp": "Tip: gå ind i PvP med repareret udstyr og en klar handlingsbjælke."
     }
   },
   "errors": {

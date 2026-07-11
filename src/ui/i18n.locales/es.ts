@@ -6701,4 +6701,40 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mailbox.parcelQtyDecreaseAria': 'Enviar un {item} menos',
   'hudChrome.mailbox.parcelQtyIncreaseAria': 'Enviar un {item} más',
   'hudChrome.itemHeroicTag': '[HEROICO]',
+  'entities.items.arcane_dust.name': 'Polvo arcano',
+  'entities.items.arcane_essence.name': 'Esencia arcana',
+  'entities.items.arcane_shard.name': 'Fragmento arcano',
+  'hudChrome.auth.appleChoiceExpired':
+    'Ese inicio de sesión con Apple caducó. Vuelve a iniciar sesión con Apple.',
+  'hudChrome.auth.appleChoiceIntro': 'Crea una cuenta nueva o vincula tu Apple ID a una existente.',
+  'hudChrome.auth.appleError': 'No se pudo continuar con Apple. Inténtalo de nuevo.',
+  'hudChrome.auth.appleLoginCta': 'Continuar con Apple',
+  'hudChrome.keybinds.categoryPet': 'Mascota',
+  'hudChrome.keybinds.petAggressive': 'Mascota agresiva',
+  'hudChrome.keybinds.petAttack': 'Ataque de mascota',
+  'hudChrome.keybinds.petDefensive': 'Mascota defensiva',
+  'hudChrome.keybinds.petStop': 'Detener mascota',
+  'hudChrome.keybinds.petTaunt': 'Provocar de mascota',
+  'hudChrome.keybinds.sheathe': 'Enfundar arma',
+  'hudChrome.readyCheck.notReady': 'No estoy listo',
+  'hudChrome.readyCheck.prompt':
+    '{name} ha iniciado una comprobación de preparación. ¿Estás listo?',
+  'hudChrome.readyCheck.ready': 'Listo',
+  'hudChrome.readyCheck.result':
+    'Comprobación de preparación: {ready} listos, {notReady} no listos, {pending} sin responder.',
+  'loading.tips.classes':
+    'Consejo: las 9 clases juegan de forma distinta, pruébalas antes de decidirte.',
+  'loading.tips.dungeons':
+    'Consejo: las mazmorras premian los grupos preparados, lleva comida, bebida y consumibles.',
+  'loading.tips.guilds':
+    'Consejo: las hermandades facilitan encontrar grupo y mantener una comunidad.',
+  'loading.tips.loadouts':
+    'Consejo: guarda configuraciones para cambiar rápido entre talentos y equipo.',
+  'loading.tips.market':
+    'Consejo: el Mercado Mundial te permite vender objetos valiosos a otros jugadores.',
+  'loading.tips.professions':
+    'Consejo: las profesiones convierten los materiales recolectados en equipo y bienes útiles.',
+  'loading.tips.pvp': 'Consejo: entra en JcJ con equipo reparado y una barra preparada.',
+  'loading.tips.talents':
+    'Consejo: los talentos definen tu estilo de juego más que unos pocos puntos de atributo.',
 };

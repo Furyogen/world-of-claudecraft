@@ -155,10 +155,10 @@ export const fr_FR: EnTranslations = {
       "banner": "Vous observez {name}"
     },
     "readyCheck": {
-      "prompt": "{name} has started a ready check. Are you ready?",
-      "ready": "Ready",
-      "notReady": "Not Ready",
-      "result": "Ready check: {ready} ready, {notReady} not ready, {noResponse} no response."
+      "prompt": "{name} a lancé un appel de préparation. Êtes-vous prêt ?",
+      "ready": "Prêt",
+      "notReady": "Pas prêt",
+      "result": "Appel de préparation : {ready} prêts, {notReady} pas prêts, {pending} sans réponse."
     },
     "death": {
       "resurrectAtCorpse": "Ressusciter près du cadavre",
@@ -403,13 +403,13 @@ export const fr_FR: EnTranslations = {
       "targetFriendlyNext": "Changer de cible alliée",
       "discord": "Discord",
       "valecup": "Coupe du Val",
-      "sheathe": "Sheathe/Unsheathe Weapon",
-      "categoryPet": "Pet",
-      "petAttack": "Pet: Attack",
-      "petStop": "Pet: Stop",
-      "petTaunt": "Pet: Taunt",
-      "petDefensive": "Pet: Defensive",
-      "petAggressive": "Pet: Aggressive"
+      "sheathe": "Rengainer l’arme",
+      "categoryPet": "Familier",
+      "petAttack": "Attaque du familier",
+      "petStop": "Arrêter le familier",
+      "petTaunt": "Provocation du familier",
+      "petDefensive": "Familier défensif",
+      "petAggressive": "Familier agressif"
     },
     "vcup": {
       "title": "La Coupe du Val",
@@ -1082,10 +1082,10 @@ export const fr_FR: EnTranslations = {
       "spawn": "{name} se dresse sur les Hauteurs de Thornpeak !"
     },
     "auth": {
-      "appleLoginCta": "Continue with Apple",
-      "appleError": "Could not sign in with Apple. Please try again.",
-      "appleChoiceIntro": "Create a new account, or link Apple to one you already have.",
-      "appleChoiceExpired": "That Apple sign-in expired. Please sign in with Apple again.",
+      "appleLoginCta": "Continuer avec Apple",
+      "appleError": "Impossible de continuer avec Apple. Réessayez.",
+      "appleChoiceIntro": "Créez un nouveau compte ou liez votre identifiant Apple à un compte existant.",
+      "appleChoiceExpired": "Cette connexion Apple a expiré. Connectez-vous à nouveau avec Apple.",
       "forgotPrompt": "Mot de passe oublié ?",
       "forgotTitle": "Réinitialiser votre mot de passe",
       "forgotHint": "Saisissez votre nom d’utilisateur et nous enverrons un lien de réinitialisation à l’adresse e-mail enregistrée.",
@@ -3938,14 +3938,14 @@ export const fr_FR: EnTranslations = {
     "reconnecting": "Connexion perdue. Reconnexion...",
     "connectionRejected": "Le serveur a fermé la connexion.",
     "tips": {
-      "classes": "Tip: each of the 9 classes plays differently. Try a few before committing to one.",
-      "talents": "Tip: you can reset your talents any time you are out of combat, so an early pick is never a trap.",
-      "dungeons": "Tip: try a dungeon on heroic difficulty once you outgear normal for a tougher, more rewarding fight.",
-      "market": "Tip: the World Market lets you buy and sell with players across the whole realm.",
-      "guilds": "Tip: joining a guild gives you a private chat channel and a shared roster of your guildmates.",
-      "professions": "Tip: gathering and crafting professions can be trained alongside your combat class.",
-      "loadouts": "Tip: save more than one talent loadout to swap between builds without spending points twice.",
-      "pvp": "Tip: challenge another player to a friendly duel, or queue for the Ashen Coliseum arena, to test your build."
+      "classes": "Astuce : les 9 classes se jouent différemment, essayez-les avant de vous décider.",
+      "talents": "Astuce : les talents définissent votre style de jeu plus que quelques points de caractéristiques.",
+      "dungeons": "Astuce : les donjons récompensent les groupes préparés, apportez nourriture, boisson et consommables.",
+      "market": "Astuce : le Marché mondial permet de vendre des objets précieux aux autres joueurs.",
+      "guilds": "Astuce : les guildes facilitent la recherche de groupe et la création d’une communauté durable.",
+      "professions": "Astuce : les métiers transforment les matériaux récoltés en équipement et biens utiles.",
+      "loadouts": "Astuce : enregistrez des configurations pour changer rapidement de talents et d’équipement.",
+      "pvp": "Astuce : entrez en JcJ avec un équipement réparé et une barre prête."
     }
   },
   "errors": {
@@ -5898,13 +5898,13 @@ export const fr_FR: EnTranslations = {
         "name": "Chute de lin"
       },
       "arcane_dust": {
-        "name": "Arcane Dust"
+        "name": "Poussière arcanique"
       },
       "arcane_essence": {
-        "name": "Arcane Essence"
+        "name": "Essence arcanique"
       },
       "arcane_shard": {
-        "name": "Arcane Shard"
+        "name": "Éclat arcanique"
       },
       "fen_muster_order": {
         "name": "Ordre de rassemblement de Fenbridge"

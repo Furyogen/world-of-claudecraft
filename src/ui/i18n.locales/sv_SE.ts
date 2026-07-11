@@ -6575,4 +6575,33 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mailbox.parcelQtyDecreaseAria': 'Skicka en {item} färre',
   'hudChrome.mailbox.parcelQtyIncreaseAria': 'Skicka en {item} till',
   'hudChrome.itemHeroicTag': '[HJALTE]',
+  'hudChrome.auth.appleChoiceExpired':
+    'Den Apple inloggningen har gått ut. Logga in med Apple igen.',
+  'hudChrome.auth.appleChoiceIntro':
+    'Skapa ett nytt konto eller länka ditt Apple ID till ett befintligt konto.',
+  'hudChrome.auth.appleError': 'Det gick inte att fortsätta med Apple. Försök igen.',
+  'hudChrome.auth.appleLoginCta': 'Fortsätt med Apple',
+  'hudChrome.keybinds.categoryPet': 'Husdjur',
+  'hudChrome.keybinds.petAggressive': 'Husdjur aggressivt',
+  'hudChrome.keybinds.petAttack': 'Husdjursattack',
+  'hudChrome.keybinds.petDefensive': 'Husdjur defensivt',
+  'hudChrome.keybinds.petStop': 'Stoppa husdjur',
+  'hudChrome.keybinds.petTaunt': 'Husdjursprovokation',
+  'hudChrome.keybinds.sheathe': 'Stoppa undan vapen',
+  'hudChrome.readyCheck.notReady': 'Inte redo',
+  'hudChrome.readyCheck.prompt': '{name} har startat en redo kontroll. Är du redo?',
+  'hudChrome.readyCheck.ready': 'Redo',
+  'hudChrome.readyCheck.result':
+    'Redo kontroll: {ready} redo, {notReady} inte redo, {pending} utan svar.',
+  'loading.tips.classes': 'Tips: de 9 klasserna spelas olika, prova dem innan du bestämmer dig.',
+  'loading.tips.dungeons':
+    'Tips: dungeons belönar förberedda grupper, ta med mat, dryck och förbrukningsvaror.',
+  'loading.tips.guilds': 'Tips: gillen gör det lättare att hitta grupper och bygga gemenskap.',
+  'loading.tips.loadouts': 'Tips: spara utrustningar för att snabbt byta talanger och utrustning.',
+  'loading.tips.market':
+    'Tips: Världsmarknaden låter dig sälja värdefulla föremål till andra spelare.',
+  'loading.tips.professions':
+    'Tips: yrken gör insamlade material till utrustning och nyttiga varor.',
+  'loading.tips.pvp': 'Tips: gå in i PvP med reparerad utrustning och en förberedd snabbpanel.',
+  'loading.tips.talents': 'Tips: talanger formar din spelstil mer än några attributpoäng.',
 };

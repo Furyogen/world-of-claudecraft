@@ -6686,4 +6686,41 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mailbox.parcelQtyDecreaseAria': 'Invia un {item} in meno',
   'hudChrome.mailbox.parcelQtyIncreaseAria': 'Invia un {item} in più',
   'hudChrome.itemHeroicTag': '[EROICO]',
+  'entities.items.arcane_dust.name': 'Polvere arcana',
+  'entities.items.arcane_essence.name': 'Essenza arcana',
+  'entities.items.arcane_shard.name': 'Frammento arcano',
+  'hudChrome.auth.appleChoiceExpired':
+    'Questo accesso con Apple è scaduto. Accedi di nuovo con Apple.',
+  'hudChrome.auth.appleChoiceIntro':
+    'Crea un nuovo account o collega il tuo ID Apple a un account esistente.',
+  'hudChrome.auth.appleError': 'Impossibile continuare con Apple. Riprova.',
+  'hudChrome.auth.appleLoginCta': 'Continua con Apple',
+  'hudChrome.keybinds.categoryPet': 'Famiglio',
+  'hudChrome.keybinds.petAggressive': 'Famiglio aggressivo',
+  'hudChrome.keybinds.petAttack': 'Attacco del famiglio',
+  'hudChrome.keybinds.petDefensive': 'Famiglio difensivo',
+  'hudChrome.keybinds.petStop': 'Ferma famiglio',
+  'hudChrome.keybinds.petTaunt': 'Provocazione del famiglio',
+  'hudChrome.keybinds.sheathe': 'Riponi arma',
+  'hudChrome.readyCheck.notReady': 'Non pronto',
+  'hudChrome.readyCheck.prompt': '{name} ha avviato un controllo di prontezza. Sei pronto?',
+  'hudChrome.readyCheck.ready': 'Pronto',
+  'hudChrome.readyCheck.result':
+    'Controllo di prontezza: {ready} pronti, {notReady} non pronti, {pending} senza risposta.',
+  'loading.tips.classes':
+    'Suggerimento: le 9 classi si giocano in modo diverso, provale prima di scegliere.',
+  'loading.tips.dungeons':
+    'Suggerimento: le spedizioni premiano i gruppi preparati, porta cibo, bevande e consumabili.',
+  'loading.tips.guilds':
+    'Suggerimento: le gilde aiutano a trovare gruppi e a costruire una comunità.',
+  'loading.tips.loadouts':
+    'Suggerimento: salva configurazioni per cambiare rapidamente talenti ed equipaggiamento.',
+  'loading.tips.market':
+    'Suggerimento: il Mercato Mondiale ti permette di vendere oggetti preziosi ad altri giocatori.',
+  'loading.tips.professions':
+    'Suggerimento: le professioni trasformano i materiali raccolti in equipaggiamento e beni utili.',
+  'loading.tips.pvp':
+    'Suggerimento: entra in PvP con l’equipaggiamento riparato e una barra pronta.',
+  'loading.tips.talents':
+    'Suggerimento: i talenti definiscono il tuo stile di gioco più di qualche punto caratteristica.',
 };

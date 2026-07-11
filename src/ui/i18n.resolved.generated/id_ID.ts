@@ -155,10 +155,10 @@ export const id_ID: EnTranslations = {
       "banner": "Menonton {name}"
     },
     "readyCheck": {
-      "prompt": "{name} has started a ready check. Are you ready?",
-      "ready": "Ready",
-      "notReady": "Not Ready",
-      "result": "Ready check: {ready} ready, {notReady} not ready, {noResponse} no response."
+      "prompt": "{name} memulai pemeriksaan kesiapan. Apakah Anda siap?",
+      "ready": "Siap",
+      "notReady": "Belum siap",
+      "result": "Pemeriksaan kesiapan: {ready} siap, {notReady} belum siap, {pending} belum menjawab."
     },
     "death": {
       "resurrectAtCorpse": "Bangkit di Jasad",
@@ -403,13 +403,13 @@ export const id_ID: EnTranslations = {
       "targetFriendlyNext": "Putar Bidikan Sekutu",
       "discord": "Discord",
       "valecup": "Piala Lembah",
-      "sheathe": "Sheathe/Unsheathe Weapon",
-      "categoryPet": "Pet",
-      "petAttack": "Pet: Attack",
-      "petStop": "Pet: Stop",
-      "petTaunt": "Pet: Taunt",
-      "petDefensive": "Pet: Defensive",
-      "petAggressive": "Pet: Aggressive"
+      "sheathe": "Sarungkan senjata",
+      "categoryPet": "Peliharaan",
+      "petAttack": "Serangan peliharaan",
+      "petStop": "Hentikan peliharaan",
+      "petTaunt": "Ejekan peliharaan",
+      "petDefensive": "Peliharaan defensif",
+      "petAggressive": "Peliharaan agresif"
     },
     "vcup": {
       "title": "Piala Lembah",
@@ -1082,10 +1082,10 @@ export const id_ID: EnTranslations = {
       "spawn": "{name} bangkit di atas Dataran Tinggi Thornpeak!"
     },
     "auth": {
-      "appleLoginCta": "Continue with Apple",
-      "appleError": "Could not sign in with Apple. Please try again.",
-      "appleChoiceIntro": "Create a new account, or link Apple to one you already have.",
-      "appleChoiceExpired": "That Apple sign-in expired. Please sign in with Apple again.",
+      "appleLoginCta": "Lanjutkan dengan Apple",
+      "appleError": "Tidak dapat melanjutkan dengan Apple. Coba lagi.",
+      "appleChoiceIntro": "Buat akun baru atau tautkan ID Apple Anda ke akun yang sudah ada.",
+      "appleChoiceExpired": "Login Apple itu kedaluwarsa. Masuk lagi dengan Apple.",
       "forgotPrompt": "Lupa kata sandi?",
       "forgotTitle": "Atur ulang kata sandimu",
       "forgotHint": "Masukkan nama penggunamu dan kami akan mengirim tautan pengaturan ulang ke alamat email yang terdaftar.",
@@ -3938,14 +3938,14 @@ export const id_ID: EnTranslations = {
     "reconnecting": "Koneksi terputus. Menyambungkan kembali...",
     "connectionRejected": "Server menutup koneksi.",
     "tips": {
-      "classes": "Tip: each of the 9 classes plays differently. Try a few before committing to one.",
-      "talents": "Tip: you can reset your talents any time you are out of combat, so an early pick is never a trap.",
-      "dungeons": "Tip: try a dungeon on heroic difficulty once you outgear normal for a tougher, more rewarding fight.",
-      "market": "Tip: the World Market lets you buy and sell with players across the whole realm.",
-      "guilds": "Tip: joining a guild gives you a private chat channel and a shared roster of your guildmates.",
-      "professions": "Tip: gathering and crafting professions can be trained alongside your combat class.",
-      "loadouts": "Tip: save more than one talent loadout to swap between builds without spending points twice.",
-      "pvp": "Tip: challenge another player to a friendly duel, or queue for the Ashen Coliseum arena, to test your build."
+      "classes": "Kiat: 9 kelas dimainkan dengan cara berbeda, cobalah sebelum memilih.",
+      "talents": "Kiat: talenta membentuk gaya bermain Anda lebih dari beberapa poin atribut.",
+      "dungeons": "Kiat: dungeon memberi hadiah pada grup yang siap, bawa makanan, minuman, dan barang konsumsi.",
+      "market": "Kiat: Pasar Dunia memungkinkan Anda menjual barang berharga kepada pemain lain.",
+      "guilds": "Kiat: guild membantu menemukan grup dan membangun komunitas.",
+      "professions": "Kiat: profesi mengubah bahan yang dikumpulkan menjadi perlengkapan dan barang berguna.",
+      "loadouts": "Kiat: simpan loadout untuk cepat mengganti talenta dan perlengkapan.",
+      "pvp": "Kiat: masuk PvP dengan perlengkapan yang sudah diperbaiki dan bilah yang siap."
     }
   },
   "errors": {

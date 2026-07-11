@@ -6722,4 +6722,41 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mailbox.parcelQtyDecreaseAria': 'Ein {item} weniger senden',
   'hudChrome.mailbox.parcelQtyIncreaseAria': 'Ein {item} mehr senden',
   'hudChrome.itemHeroicTag': '[HELDENHAFT]',
+  'entities.items.arcane_dust.name': 'Arkaner Staub',
+  'entities.items.arcane_essence.name': 'Arkanessenz',
+  'entities.items.arcane_shard.name': 'Arkansplitter',
+  'hudChrome.auth.appleChoiceExpired':
+    'Diese Apple Anmeldung ist abgelaufen. Melde dich erneut mit Apple an.',
+  'hudChrome.auth.appleChoiceIntro':
+    'Erstelle ein neues Konto oder verknüpfe deine Apple ID mit einem bestehenden Konto.',
+  'hudChrome.auth.appleError': 'Mit Apple konnte nicht fortgefahren werden. Versuche es erneut.',
+  'hudChrome.auth.appleLoginCta': 'Mit Apple fortfahren',
+  'hudChrome.keybinds.categoryPet': 'Begleiter',
+  'hudChrome.keybinds.petAggressive': 'Begleiter aggressiv',
+  'hudChrome.keybinds.petAttack': 'Begleiterangriff',
+  'hudChrome.keybinds.petDefensive': 'Begleiter defensiv',
+  'hudChrome.keybinds.petStop': 'Begleiter stoppen',
+  'hudChrome.keybinds.petTaunt': 'Begleiterspott',
+  'hudChrome.keybinds.sheathe': 'Waffe wegstecken',
+  'hudChrome.readyCheck.notReady': 'Nicht bereit',
+  'hudChrome.readyCheck.prompt': '{name} hat eine Bereitschaftsabfrage gestartet. Bist du bereit?',
+  'hudChrome.readyCheck.ready': 'Bereit',
+  'hudChrome.readyCheck.result':
+    'Bereitschaftsabfrage: {ready} bereit, {notReady} nicht bereit, {pending} ohne Antwort.',
+  'loading.tips.classes':
+    'Tipp: Die 9 Klassen spielen sich unterschiedlich, probiere sie aus, bevor du dich festlegst.',
+  'loading.tips.dungeons':
+    'Tipp: Dungeons belohnen vorbereitete Gruppen, bring Essen, Getränke und Verbrauchsgüter mit.',
+  'loading.tips.guilds':
+    'Tipp: Gilden erleichtern die Gruppensuche und den Aufbau einer Gemeinschaft.',
+  'loading.tips.loadouts':
+    'Tipp: Speichere Ausrüstungen, um Talente und Ausrüstung schnell zu wechseln.',
+  'loading.tips.market':
+    'Tipp: Auf dem Weltmarkt kannst du wertvolle Gegenstände an andere Spieler verkaufen.',
+  'loading.tips.professions':
+    'Tipp: Berufe verwandeln gesammelte Materialien in Ausrüstung und nützliche Waren.',
+  'loading.tips.pvp':
+    'Tipp: Betritt PvP mit reparierter Ausrüstung und einer vorbereiteten Leiste.',
+  'loading.tips.talents':
+    'Tipp: Talente prägen deinen Spielstil stärker als ein paar Attributpunkte.',
 };

@@ -155,10 +155,10 @@ export const sv_SE: EnTranslations = {
       "banner": "Åskådar {name}"
     },
     "readyCheck": {
-      "prompt": "{name} has started a ready check. Are you ready?",
-      "ready": "Ready",
-      "notReady": "Not Ready",
-      "result": "Ready check: {ready} ready, {notReady} not ready, {noResponse} no response."
+      "prompt": "{name} har startat en redo kontroll. Är du redo?",
+      "ready": "Redo",
+      "notReady": "Inte redo",
+      "result": "Redo kontroll: {ready} redo, {notReady} inte redo, {pending} utan svar."
     },
     "death": {
       "resurrectAtCorpse": "Återuppstå vid liket",
@@ -403,13 +403,13 @@ export const sv_SE: EnTranslations = {
       "targetFriendlyNext": "Växla vänligt mål",
       "discord": "Discord",
       "valecup": "Dalcupen",
-      "sheathe": "Sheathe/Unsheathe Weapon",
-      "categoryPet": "Pet",
-      "petAttack": "Pet: Attack",
-      "petStop": "Pet: Stop",
-      "petTaunt": "Pet: Taunt",
-      "petDefensive": "Pet: Defensive",
-      "petAggressive": "Pet: Aggressive"
+      "sheathe": "Stoppa undan vapen",
+      "categoryPet": "Husdjur",
+      "petAttack": "Husdjursattack",
+      "petStop": "Stoppa husdjur",
+      "petTaunt": "Husdjursprovokation",
+      "petDefensive": "Husdjur defensivt",
+      "petAggressive": "Husdjur aggressivt"
     },
     "vcup": {
       "title": "Dalcupen",
@@ -1082,10 +1082,10 @@ export const sv_SE: EnTranslations = {
       "spawn": "{name} reser sig över Törntoppshöjderna!"
     },
     "auth": {
-      "appleLoginCta": "Continue with Apple",
-      "appleError": "Could not sign in with Apple. Please try again.",
-      "appleChoiceIntro": "Create a new account, or link Apple to one you already have.",
-      "appleChoiceExpired": "That Apple sign-in expired. Please sign in with Apple again.",
+      "appleLoginCta": "Fortsätt med Apple",
+      "appleError": "Det gick inte att fortsätta med Apple. Försök igen.",
+      "appleChoiceIntro": "Skapa ett nytt konto eller länka ditt Apple ID till ett befintligt konto.",
+      "appleChoiceExpired": "Den Apple inloggningen har gått ut. Logga in med Apple igen.",
       "forgotPrompt": "Glömt lösenordet?",
       "forgotTitle": "Återställ ditt lösenord",
       "forgotHint": "Ange ditt användarnamn så skickar vi en återställningslänk till den registrerade e-postadressen.",
@@ -3938,14 +3938,14 @@ export const sv_SE: EnTranslations = {
     "reconnecting": "Anslutning förlorad. Återansluter...",
     "connectionRejected": "Servern stängde anslutningen.",
     "tips": {
-      "classes": "Tip: each of the 9 classes plays differently. Try a few before committing to one.",
-      "talents": "Tip: you can reset your talents any time you are out of combat, so an early pick is never a trap.",
-      "dungeons": "Tip: try a dungeon on heroic difficulty once you outgear normal for a tougher, more rewarding fight.",
-      "market": "Tip: the World Market lets you buy and sell with players across the whole realm.",
-      "guilds": "Tip: joining a guild gives you a private chat channel and a shared roster of your guildmates.",
-      "professions": "Tip: gathering and crafting professions can be trained alongside your combat class.",
-      "loadouts": "Tip: save more than one talent loadout to swap between builds without spending points twice.",
-      "pvp": "Tip: challenge another player to a friendly duel, or queue for the Ashen Coliseum arena, to test your build."
+      "classes": "Tips: de 9 klasserna spelas olika, prova dem innan du bestämmer dig.",
+      "talents": "Tips: talanger formar din spelstil mer än några attributpoäng.",
+      "dungeons": "Tips: dungeons belönar förberedda grupper, ta med mat, dryck och förbrukningsvaror.",
+      "market": "Tips: Världsmarknaden låter dig sälja värdefulla föremål till andra spelare.",
+      "guilds": "Tips: gillen gör det lättare att hitta grupper och bygga gemenskap.",
+      "professions": "Tips: yrken gör insamlade material till utrustning och nyttiga varor.",
+      "loadouts": "Tips: spara utrustningar för att snabbt byta talanger och utrustning.",
+      "pvp": "Tips: gå in i PvP med reparerad utrustning och en förberedd snabbpanel."
     }
   },
   "errors": {
