@@ -1035,6 +1035,15 @@ export const nl_NL: EnTranslations = {
       "promoteLeader": "Bevorderen tot leider",
       "inviteUsage": "Wie wil je uitnodigen? Gebruik: /invite <naam>."
     },
+    "playerMenu": {
+      "info": "Spelerinfo",
+      "mute": "Dempen",
+      "unmute": "Dempen opheffen",
+      "block": "Blokkeren",
+      "unblock": "Deblokkeren",
+      "openFor": "Spelersmenu voor {name} openen",
+      "profileUnavailable": "Geen profiel gevonden voor {name}."
+    },
     "lootSettings": {
       "title": "Buitinstellingen",
       "close": "Buitinstellingen sluiten",
@@ -1545,7 +1554,10 @@ export const nl_NL: EnTranslations = {
     },
     "social": {
       "lastSeen": "Laatst gezien: {when}",
-      "lastSeenNever": "nooit"
+      "lastSeenNever": "nooit",
+      "mutedSection": "Gedempt",
+      "blockedSection": "Geblokkeerd",
+      "stopMutingTitle": "{name} niet langer dempen"
     },
     "gathering": {
       "title": "Verzamelen",

@@ -6024,6 +6024,8 @@ export class Sim {
   friendRemove(_name: string): void {}
   blockAdd(_name: string): void {}
   blockRemove(_name: string): void {}
+  muteAdd(_name: string): void {}
+  muteRemove(_name: string): void {}
   guildCreate(_name: string): void {}
   guildInvite(_name: string): void {}
   guildAccept(): void {}
@@ -6038,6 +6040,9 @@ export class Sim {
   guildEventRemove(_eventId: number): void {}
   searchCharacters(_query: string): Promise<import('../world_api').CharacterSearchResult[]> {
     return Promise.resolve([]);
+  }
+  characterProfile(_name: string): Promise<import('../world_api').CharacterProfile | null> {
+    return Promise.resolve(null);
   }
 
   private updateDuels(): void {

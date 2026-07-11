@@ -1035,6 +1035,15 @@ export const ja_JP: EnTranslations = {
       "promoteLeader": "パーティリーダーに指定",
       "inviteUsage": "誰を招待しますか？使用法：/invite <名前>。"
     },
+    "playerMenu": {
+      "info": "プレイヤー情報",
+      "mute": "ミュート",
+      "unmute": "ミュート解除",
+      "block": "ブロック",
+      "unblock": "ブロック解除",
+      "openFor": "{name} のプレイヤーメニューを開く",
+      "profileUnavailable": "{name} のプロフィールが見つかりません。"
+    },
     "lootSettings": {
       "title": "分配設定",
       "close": "分配設定を閉じる",
@@ -1545,7 +1554,10 @@ export const ja_JP: EnTranslations = {
     },
     "social": {
       "lastSeen": "最終ログイン: {when}",
-      "lastSeenNever": "なし"
+      "lastSeenNever": "なし",
+      "mutedSection": "ミュート中",
+      "blockedSection": "ブロック中",
+      "stopMutingTitle": "{name} のミュートを解除"
     },
     "gathering": {
       "title": "採集",

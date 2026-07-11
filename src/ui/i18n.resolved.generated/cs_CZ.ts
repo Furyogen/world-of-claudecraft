@@ -1035,6 +1035,15 @@ export const cs_CZ: EnTranslations = {
       "promoteLeader": "Povýšit na vůdce",
       "inviteUsage": "Koho pozvat? Použití: /invite <jméno>."
     },
+    "playerMenu": {
+      "info": "Informace o hráči",
+      "mute": "Ztlumit",
+      "unmute": "Zrušit ztlumení",
+      "block": "Zablokovat",
+      "unblock": "Odblokovat",
+      "openFor": "Otevřít nabídku hráče {name}",
+      "profileUnavailable": "Profil hráče {name} nebyl nalezen."
+    },
     "lootSettings": {
       "title": "Nastavení kořisti",
       "close": "Zavřít nastavení kořisti",
@@ -1545,7 +1554,10 @@ export const cs_CZ: EnTranslations = {
     },
     "social": {
       "lastSeen": "Naposledy viděn(a): {when}",
-      "lastSeenNever": "nikdy"
+      "lastSeenNever": "nikdy",
+      "mutedSection": "Ztlumení",
+      "blockedSection": "Zablokovaní",
+      "stopMutingTitle": "Zrušit ztlumení hráče {name}"
     },
     "gathering": {
       "title": "Sběr",

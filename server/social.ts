@@ -76,6 +76,7 @@ export interface GuildView {
 export interface SocialSnapshot {
   friends: FriendEntry[];
   blocks: CharRef[];
+  mutes: CharRef[];
   guild: GuildView | null;
 }
 
@@ -94,6 +95,11 @@ export interface SocialDb {
   removeBlock(charId: number, blockedId: number): Promise<void>;
   listBlocks(charId: number): Promise<CharRef[]>;
   blockedIds(charId: number): Promise<number[]>;
+  // mutes (one-directional, chat-only; may coexist with a friendship)
+  addMute(charId: number, mutedId: number): Promise<void>;
+  removeMute(charId: number, mutedId: number): Promise<void>;
+  listMutes(charId: number): Promise<CharRef[]>;
+  mutedIds(charId: number): Promise<number[]>;
   // guilds (a character belongs to at most one)
   // create the guild and seat its leader in one transaction, so a racing or
   // duplicate create packet can never orphan a leaderless guild
@@ -152,9 +158,15 @@ export interface SocialTransport {
   pushSnapshot(characterId: number): void;
   // a character's block set changed; refresh the in-memory chat filter
   onBlocksChanged(characterId: number, blockedIds: number[]): void;
+  // a character's mute set changed; refresh the in-memory chat filter
+  onMutesChanged(characterId: number, mutedIds: number[]): void;
   // true if `recipientId` has `senderCharacterId` on their ignore list, so
   // guild/officer chat can honour the same filter say/whisper already apply
   isIgnoring(recipientId: number, senderCharacterId: number): boolean;
+  // true if `recipientId` has `senderCharacterId` muted. Guild and officer chat
+  // fan out through deliver() and never pass the routeEvents chat filter, so
+  // they must consult the mute list here, exactly as they do for ignores.
+  isMutingChat(recipientId: number, senderCharacterId: number): boolean;
 }
 
 export type SocialEvent =
@@ -177,6 +189,7 @@ export type CalendarResultCode =
 
 const FRIEND_LIMIT = 50;
 const BLOCK_LIMIT = 50;
+const MUTE_LIMIT = 50;
 const GUILD_MEMBER_LIMIT = 100;
 const GUILD_INVITE_TTL_MS = 60_000;
 const GUILD_MESSAGE_MAX = 200;
@@ -239,9 +252,10 @@ export class SocialService {
   // -------------------------------------------------------------------------
 
   async snapshot(charId: number): Promise<SocialSnapshot> {
-    const [friends, blocks, membership] = await Promise.all([
+    const [friends, blocks, mutes, membership] = await Promise.all([
       this.db.listFriends(charId),
       this.db.listBlocks(charId),
+      this.db.listMutes(charId),
       this.db.guildMembership(charId),
     ]);
     let guild: GuildView | null = null;
@@ -266,6 +280,7 @@ export class SocialService {
         .map((f) => ({ ...f, ...this.presence(f.id) }))
         .sort((a, b) => Number(b.online) - Number(a.online) || a.name.localeCompare(b.name)),
       blocks,
+      mutes,
       guild,
     };
   }
@@ -438,6 +453,62 @@ export class SocialService {
     this.info(actor.characterId, `${target.name} is no longer ignored.`);
     this.tx.onBlocksChanged(actor.characterId, await this.db.blockedIds(actor.characterId));
     this.push(actor.characterId);
+  }
+
+  // -------------------------------------------------------------------------
+  // Mutes (chat-only). A block is the heavy tool: it also drops invites, mail,
+  // whispers, and /who visibility. A mute only hides their public chat from
+  // you, so unlike a block it deliberately does NOT evict them from your
+  // friends list: muting a chatty friend is a normal thing to want.
+  // -------------------------------------------------------------------------
+
+  async muteAdd(actor: SocialActor, name: string): Promise<void> {
+    const target = await this.resolveTarget(actor, name);
+    if (!target) return;
+    if (target.id === actor.characterId) {
+      this.err(actor.characterId, 'You cannot mute yourself.');
+      return;
+    }
+    const mutes = await this.db.listMutes(actor.characterId);
+    if (mutes.some((m) => m.id === target.id)) {
+      this.err(actor.characterId, `${target.name} is already muted.`);
+      return;
+    }
+    if (mutes.length >= MUTE_LIMIT) {
+      this.err(actor.characterId, 'Your mute list is full.');
+      return;
+    }
+    await this.db.addMute(actor.characterId, target.id);
+    this.info(actor.characterId, `${target.name} is now muted.`);
+    this.tx.onMutesChanged(actor.characterId, await this.db.mutedIds(actor.characterId));
+    this.push(actor.characterId);
+  }
+
+  async muteRemove(actor: SocialActor, name: string): Promise<void> {
+    const target = await this.db.findCharacterByName(String(name ?? '').trim());
+    if (!target) {
+      this.err(actor.characterId, `No character named '${name}' on your mute list.`);
+      return;
+    }
+    const mutes = await this.db.listMutes(actor.characterId);
+    if (!mutes.some((m) => m.id === target.id)) {
+      this.err(actor.characterId, `${target.name} is not on your mute list.`);
+      return;
+    }
+    await this.db.removeMute(actor.characterId, target.id);
+    this.info(actor.characterId, `${target.name} is no longer muted.`);
+    this.tx.onMutesChanged(actor.characterId, await this.db.mutedIds(actor.characterId));
+    this.push(actor.characterId);
+  }
+
+  // "/mutelist": echo the muted names back to the actor as a chat readout.
+  async muteList(actor: SocialActor): Promise<void> {
+    const mutes = await this.db.listMutes(actor.characterId);
+    if (mutes.length === 0) {
+      this.info(actor.characterId, 'Your mute list is empty.');
+      return;
+    }
+    this.info(actor.characterId, `Muted (${mutes.length}): ${mutes.map((m) => m.name).join(', ')}`);
   }
 
   // -------------------------------------------------------------------------
@@ -744,9 +815,12 @@ export class SocialService {
     const members = await this.db.guildMembers(membership.guildId);
     for (const m of members) {
       if (!this.tx.isOnline(m.id)) continue;
-      // a player who ignores the speaker does not see their guild chat (the
-      // speaker always sees their own line); mirrors say/whisper filtering
+      // a player who ignores or mutes the speaker does not see their guild chat
+      // (the speaker always sees their own line); mirrors say/whisper filtering.
+      // Guild chat never passes through routeEvents, so the mute check has to
+      // happen here or muting a guildmate would do nothing in this channel.
       if (m.id !== actor.characterId && this.tx.isIgnoring(m.id, actor.characterId)) continue;
+      if (m.id !== actor.characterId && this.tx.isMutingChat(m.id, actor.characterId)) continue;
       this.tx.deliver(m.id, [event]);
     }
     return true;
@@ -770,8 +844,9 @@ export class SocialService {
     const members = await this.db.guildMembers(membership.guildId);
     for (const m of members) {
       if ((m.rank === 'officer' || m.rank === 'leader') && this.tx.isOnline(m.id)) {
-        // honour the recipient's ignore list, just like guild/say/whisper
+        // honour the recipient's ignore and mute lists, just like guild/say/whisper
         if (m.id !== actor.characterId && this.tx.isIgnoring(m.id, actor.characterId)) continue;
+        if (m.id !== actor.characterId && this.tx.isMutingChat(m.id, actor.characterId)) continue;
         this.tx.deliver(m.id, [{ type: 'chat', from: actor.name, text, channel: 'officer' }]);
       }
     }

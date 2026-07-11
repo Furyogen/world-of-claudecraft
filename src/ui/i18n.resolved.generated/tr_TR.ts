@@ -1035,6 +1035,15 @@ export const tr_TR: EnTranslations = {
       "promoteLeader": "Lider Yap",
       "inviteUsage": "Kimi davet edeyim? Kullanım: /invite <name>."
     },
+    "playerMenu": {
+      "info": "Oyuncu bilgisi",
+      "mute": "Sustur",
+      "unmute": "Susturmayı kaldır",
+      "block": "Engelle",
+      "unblock": "Engeli kaldır",
+      "openFor": "{name} için oyuncu menüsünü aç",
+      "profileUnavailable": "{name} için profil bulunamadı."
+    },
     "lootSettings": {
       "title": "Ganimet Ayarları",
       "close": "Ganimet ayarlarını kapat",
@@ -1545,7 +1554,10 @@ export const tr_TR: EnTranslations = {
     },
     "social": {
       "lastSeen": "Son görülme: {when}",
-      "lastSeenNever": "hiç"
+      "lastSeenNever": "hiç",
+      "mutedSection": "Susturulanlar",
+      "blockedSection": "Engellenenler",
+      "stopMutingTitle": "{name} susturmasını kaldır"
     },
     "gathering": {
       "title": "Toplama",

@@ -4355,6 +4355,21 @@
   .soc-empty-action {
     margin-top: 12px;
   }
+  /* Section heading in the Ignore tab, which lists the two tiers (Muted, Blocked)
+     as separate groups. */
+  .soc-section-title {
+    font-family: var(--title-font);
+    color: var(--gold);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 8px 4px 4px;
+    border-bottom: 1px solid var(--color-border-subtle);
+    margin-bottom: 4px;
+  }
+  .soc-section-title:first-child {
+    padding-top: 2px;
+  }
   .soc-guild-head {
     font-family: var(--title-font);
     color: var(--gold);

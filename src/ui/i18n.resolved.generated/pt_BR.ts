@@ -1035,6 +1035,15 @@ export const pt_BR: EnTranslations = {
       "promoteLeader": "Promover a Líder",
       "inviteUsage": "Convidar quem? Uso: /invite <nome>."
     },
+    "playerMenu": {
+      "info": "Info do jogador",
+      "mute": "Silenciar",
+      "unmute": "Dessilenciar",
+      "block": "Bloquear",
+      "unblock": "Desbloquear",
+      "openFor": "Abrir o menu do jogador {name}",
+      "profileUnavailable": "Nenhum perfil encontrado para {name}."
+    },
     "lootSettings": {
       "title": "Configurações de Saque",
       "close": "Fechar configurações de saque",
@@ -1545,7 +1554,10 @@ export const pt_BR: EnTranslations = {
     },
     "social": {
       "lastSeen": "Visto por último: {when}",
-      "lastSeenNever": "nunca"
+      "lastSeenNever": "nunca",
+      "mutedSection": "Silenciados",
+      "blockedSection": "Bloqueados",
+      "stopMutingTitle": "Parar de silenciar {name}"
     },
     "gathering": {
       "title": "Coleta",

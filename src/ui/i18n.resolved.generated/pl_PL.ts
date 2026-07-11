@@ -1035,6 +1035,15 @@ export const pl_PL: EnTranslations = {
       "promoteLeader": "Mianuj przywódcą",
       "inviteUsage": "Kogo zaprosić? Użycie: /invite <imię>."
     },
+    "playerMenu": {
+      "info": "Informacje o graczu",
+      "mute": "Wycisz",
+      "unmute": "Cofnij wyciszenie",
+      "block": "Zablokuj",
+      "unblock": "Odblokuj",
+      "openFor": "Otwórz menu gracza {name}",
+      "profileUnavailable": "Nie znaleziono profilu gracza {name}."
+    },
     "lootSettings": {
       "title": "Ustawienia łupów",
       "close": "Zamknij ustawienia łupów",
@@ -1545,7 +1554,10 @@ export const pl_PL: EnTranslations = {
     },
     "social": {
       "lastSeen": "Ostatnio widziano: {when}",
-      "lastSeenNever": "nigdy"
+      "lastSeenNever": "nigdy",
+      "mutedSection": "Wyciszeni",
+      "blockedSection": "Zablokowani",
+      "stopMutingTitle": "Cofnij wyciszenie gracza {name}"
     },
     "gathering": {
       "title": "Zbieractwo",

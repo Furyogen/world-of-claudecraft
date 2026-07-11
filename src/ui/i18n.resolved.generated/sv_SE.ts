@@ -1035,6 +1035,15 @@ export const sv_SE: EnTranslations = {
       "promoteLeader": "Befordra till ledare",
       "inviteUsage": "Bjud in vem? Användning: /invite <namn>."
     },
+    "playerMenu": {
+      "info": "Spelarinfo",
+      "mute": "Tysta",
+      "unmute": "Sluta tysta",
+      "block": "Blockera",
+      "unblock": "Avblockera",
+      "openFor": "Öppna spelarmenyn för {name}",
+      "profileUnavailable": "Ingen profil hittades för {name}."
+    },
     "lootSettings": {
       "title": "Byteinställningar",
       "close": "Stäng byteinställningar",
@@ -1545,7 +1554,10 @@ export const sv_SE: EnTranslations = {
     },
     "social": {
       "lastSeen": "Senast sedd: {when}",
-      "lastSeenNever": "aldrig"
+      "lastSeenNever": "aldrig",
+      "mutedSection": "Tystade",
+      "blockedSection": "Blockerade",
+      "stopMutingTitle": "Sluta tysta {name}"
     },
     "gathering": {
       "title": "Insamling",

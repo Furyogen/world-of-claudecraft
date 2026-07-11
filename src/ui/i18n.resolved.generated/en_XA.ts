@@ -1035,6 +1035,15 @@ export const en_XA: EnTranslations = {
       "promoteLeader": "[Þŕóɱóţé ţó Ļéáðéŕ]",
       "inviteUsage": "[Íñʋíţé ŵĥóɱ? Úšáĝé: /íñʋíţé <ñáɱé>.]"
     },
+    "playerMenu": {
+      "info": "[Þļáýéŕ Íñƒó]",
+      "mute": "[Ɱúţé]",
+      "unmute": "[Úñɱúţé]",
+      "block": "[Ɓļóçķ]",
+      "unblock": "[Úñƀļóçķ]",
+      "openFor": "[Óþéñ þļáýéŕ ɱéñú ƒóŕ {name}]",
+      "profileUnavailable": "[Ñó þŕóƒíļé ƒóúñð ƒóŕ {name}.]"
+    },
     "lootSettings": {
       "title": "[Ļóóţ Šéţţíñĝš]",
       "close": "[Çļóšé ļóóţ šéţţíñĝš]",
@@ -1545,7 +1554,10 @@ export const en_XA: EnTranslations = {
     },
     "social": {
       "lastSeen": "[Ļášţ šééñ: {when}]",
-      "lastSeenNever": "[ñéʋéŕ]"
+      "lastSeenNever": "[ñéʋéŕ]",
+      "mutedSection": "[Ɱúţéð]",
+      "blockedSection": "[Ɓļóçķéð]",
+      "stopMutingTitle": "[Šţóþ ɱúţíñĝ {name}]"
     },
     "gathering": {
       "title": "[Ĝáţĥéŕíñĝ]",

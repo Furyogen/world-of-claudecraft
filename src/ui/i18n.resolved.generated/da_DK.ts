@@ -1035,6 +1035,15 @@ export const da_DK: EnTranslations = {
       "promoteLeader": "Forfrem til leder",
       "inviteUsage": "Invitér hvem? Brug: /invite <navn>."
     },
+    "playerMenu": {
+      "info": "Spilleroplysninger",
+      "mute": "Slå fra",
+      "unmute": "Slå til",
+      "block": "Blokér",
+      "unblock": "Fjern blokering",
+      "openFor": "Åbn spillermenuen for {name}",
+      "profileUnavailable": "Ingen profil fundet for {name}."
+    },
     "lootSettings": {
       "title": "Bytteindstillinger",
       "close": "Luk byttindstillinger",
@@ -1545,7 +1554,10 @@ export const da_DK: EnTranslations = {
     },
     "social": {
       "lastSeen": "Sidst set: {when}",
-      "lastSeenNever": "aldrig"
+      "lastSeenNever": "aldrig",
+      "mutedSection": "Slået fra",
+      "blockedSection": "Blokerede",
+      "stopMutingTitle": "Slå {name} til igen"
     },
     "gathering": {
       "title": "Indsamling",

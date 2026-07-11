@@ -47,6 +47,9 @@ export interface GuildInfo {
 export interface SocialInfo {
   friends: FriendInfo[];
   blocks: { id: number; name: string }[];
+  // personal chat mutes: hides their public chat from you and nothing else.
+  // A block is the heavy tool (invites, whispers, mail, /who all die with it).
+  mutes: { id: number; name: string }[];
   guild: GuildInfo | null;
 }
 
@@ -56,6 +59,23 @@ export interface CharacterSearchResult {
   level: number;
 }
 
+// The public character sheet, as served by GET /api/public/characters/:name/sheet.
+// This is the already-crawlable subset (the same one behind the public /c/:name
+// page), so it deliberately carries NO wallet balance, Discord/GitHub identity,
+// or equipped gear: those stay on the proximity-gated entity wire, visible only
+// when you are actually standing next to the player.
+export interface CharacterProfile {
+  name: string;
+  cls: string;
+  classLabel: string;
+  spec: string;
+  level: number;
+  guild: string | null;
+  zone: string;
+  skin: number;
+  realm: string;
+}
+
 export interface IWorldSocialGraph {
   // persistent social: friends, ignore/block, guilds (online play only)
   socialInfo: SocialInfo | null;
@@ -63,6 +83,9 @@ export interface IWorldSocialGraph {
   friendRemove(name: string): void;
   blockAdd(name: string): void;
   blockRemove(name: string): void;
+  // personal chat mute: chat-only, and unlike a block it may coexist with a friendship
+  muteAdd(name: string): void;
+  muteRemove(name: string): void;
   guildCreate(name: string): void;
   guildInvite(name: string): void;
   guildAccept(): void;
@@ -79,4 +102,9 @@ export interface IWorldSocialGraph {
   guildEventRemove(eventId: number): void;
   // realm-scoped username typeahead for friend/ignore/guild search
   searchCharacters(query: string): Promise<CharacterSearchResult[]>;
+  // public profile for any character on the realm, by name. Lets the player menu
+  // show info for someone you have only seen in chat and who is nowhere near
+  // your ~120yd interest scope (so there is no entity to read locally).
+  // Resolves to null offline, and when the name does not exist.
+  characterProfile(name: string): Promise<CharacterProfile | null>;
 }

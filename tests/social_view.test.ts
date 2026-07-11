@@ -66,6 +66,7 @@ const SOCIAL: SocialInfo = {
     friend({ name: 'Borin', online: false }),
   ],
   blocks: [{ id: 9, name: 'Spammer' }],
+  mutes: [{ id: 11, name: 'Chatterbox' }],
   guild: {
     id: 7,
     name: 'Wolves',

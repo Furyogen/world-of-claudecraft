@@ -1035,6 +1035,15 @@ export const de_DE: EnTranslations = {
       "promoteLeader": "Zum Anführer befördern",
       "inviteUsage": "Wen einladen? Verwendung: /invite <name>."
     },
+    "playerMenu": {
+      "info": "Spielerinfo",
+      "mute": "Stumm",
+      "unmute": "Stumm aufheben",
+      "block": "Blockieren",
+      "unblock": "Blockierung aufheben",
+      "openFor": "Spielermenü für {name} öffnen",
+      "profileUnavailable": "Kein Profil für {name} gefunden."
+    },
     "lootSettings": {
       "title": "Beute-Einstellungen",
       "close": "Beute-Einstellungen schließen",
@@ -1545,7 +1554,10 @@ export const de_DE: EnTranslations = {
     },
     "social": {
       "lastSeen": "Zuletzt gesehen: {when}",
-      "lastSeenNever": "nie"
+      "lastSeenNever": "nie",
+      "mutedSection": "Stummgeschaltet",
+      "blockedSection": "Blockiert",
+      "stopMutingTitle": "{name} nicht mehr stummschalten"
     },
     "gathering": {
       "title": "Sammeln",

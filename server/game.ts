@@ -113,6 +113,7 @@ import {
   ModerationService,
 } from './moderation_service';
 import { consumeMsgToken, createMsgRateBucket, type MsgRateBucketState } from './msg_rate_limit';
+import { isMutableChannel, parseMuteChatCommand } from './mute_commands';
 import { nextRaidResetMs } from './raid_reset';
 import { REALM, REALM_PUBLIC_ORIGIN, REALM_RESET_TIME_ZONE } from './realm';
 import { createSerialWriter } from './serial_writer';
@@ -499,6 +500,11 @@ export interface ClientSession {
   // delivery. Loaded from the DB on join, kept in sync by social commands.
   blockedIds: Set<number>;
   blockListLoaded: boolean;
+  // character ids this player has muted. Muting is the chat-only sibling of a
+  // block: their PUBLIC chat is dropped before delivery, but their whispers,
+  // rolls, invites and mail still arrive. Loaded on join, kept in sync by the
+  // mute commands.
+  mutedIds: Set<number>;
   // name of the last player to whisper this session, for the /r reply
   lastWhisperFrom: string | null;
   // last explicit channel this player sent to; plain text follows it.
@@ -1381,6 +1387,14 @@ export class GameServer {
         const s = this.sessionByCharacterId(recipientId);
         return s ? s.blockedIds.has(senderCharacterId) : false;
       },
+      onMutesChanged: (id, ids) => {
+        const s = this.sessionByCharacterId(id);
+        if (s) s.mutedIds = new Set(ids);
+      },
+      isMutingChat: (recipientId, senderCharacterId) => {
+        const s = this.sessionByCharacterId(recipientId);
+        return s ? s.mutedIds.has(senderCharacterId) : false;
+      },
     };
   }
 
@@ -2080,6 +2094,7 @@ export class GameServer {
       chatStrikes: meta.chatStrikes ?? 0,
       blockedIds: new Set(),
       blockListLoaded: false,
+      mutedIds: new Set(),
       lastWhisperFrom: null,
       rememberedChat: { channel: 'say' },
       lastInputSeq: 0,
@@ -2281,6 +2296,11 @@ export class GameServer {
       session.blockListLoaded = true;
     } catch (err) {
       console.error('failed to load block list:', err);
+    }
+    try {
+      session.mutedIds = new Set(await this.socialDb.mutedIds(session.characterId));
+    } catch (err) {
+      console.error('failed to load mute list:', err);
     }
     await this.sendSocialSnapshot(session.characterId);
     await this.social
@@ -3321,6 +3341,13 @@ export class GameServer {
           this.moderation.handleChatCommand(session, text)
         )
           break;
+        // Personal mute commands. Deliberately BEFORE isChatMuted and the rate
+        // limiter: a GM-silenced player must still be able to manage their own
+        // mute list, and /mutelist must not burn a chat token toward the
+        // rate-limit cooldown. Deliberately AFTER the moderation router, which
+        // is what keeps a staff member's "/mute" the GM account silence: they
+        // never reach here, and use "/ignore" for a personal mute.
+        if (this.handleMuteChatCommand(session, text)) break;
         if (this.isChatMuted(session)) break;
         if (!this.consumeChatToken(session)) break;
         const whoMatch = /^\/who(?:\s+([\s\S]+))?$/i.exec(text);
@@ -3530,6 +3557,14 @@ export class GameServer {
       case 'block_remove':
         if (typeof msg.name === 'string')
           void this.social.blockRemove(this.actorFor(session), msg.name).catch(logSocialErr);
+        break;
+      case 'mute_add':
+        if (typeof msg.name === 'string')
+          void this.social.muteAdd(this.actorFor(session), msg.name).catch(logSocialErr);
+        break;
+      case 'mute_remove':
+        if (typeof msg.name === 'string')
+          void this.social.muteRemove(this.actorFor(session), msg.name).catch(logSocialErr);
         break;
       case 'social_refresh':
         void this.sendSocialSnapshot(session.characterId);
@@ -4710,6 +4745,16 @@ export class GameServer {
             this.isBlockedSender(session, ev.fromPid)
           )
             continue;
+          // mute list: drop PUBLIC chat from a muted character. Unlike a block
+          // this is chat-only, so their whispers and rolls still come through.
+          if (
+            !session.spectating &&
+            ev.type === 'chat' &&
+            session.mutedIds.size > 0 &&
+            isMutableChannel(ev.channel) &&
+            this.isMutedSender(session, ev.fromPid)
+          )
+            continue;
           if (ev.pid !== undefined) {
             if (
               session.spectating &&
@@ -4776,6 +4821,36 @@ export class GameServer {
     if (fromPid === recipient.pid) return false;
     const sender = this.clients.get(fromPid);
     return sender ? recipient.blockedIds.has(sender.characterId) : false;
+  }
+
+  // Same pid-to-character-id hop as isBlockedSender, against the mute set.
+  private isMutedSender(recipient: ClientSession, fromPid: number): boolean {
+    if (fromPid === recipient.pid) return false;
+    const sender = this.clients.get(fromPid);
+    return sender ? recipient.mutedIds.has(sender.characterId) : false;
+  }
+
+  // "/mute <name>", "/unmute <name>", "/mutelist" (and their /ignore aliases).
+  // Returns true when the text was a mute command and has been handled, so the
+  // caller stops before the chat pipeline treats it as something to broadcast.
+  private handleMuteChatCommand(session: ClientSession, text: string): boolean {
+    const parsed = parseMuteChatCommand(text);
+    if (!parsed) return false;
+    const actor = this.actorFor(session);
+    if (parsed.kind === 'list') {
+      void this.social.muteList(actor).catch((err) => console.error('mute list failed:', err));
+      return true;
+    }
+    if (!parsed.name) {
+      this.sendChatNotice(session, 'Usage: /mute <name>, /unmute <name>, /mutelist.');
+      return true;
+    }
+    const run =
+      parsed.kind === 'mute'
+        ? this.social.muteAdd(actor, parsed.name)
+        : this.social.muteRemove(actor, parsed.name);
+    void run.catch((err) => console.error('mute command failed:', err));
+    return true;
   }
 
   // ignore list: a party invite, trade request, or duel challenge from a

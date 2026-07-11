@@ -1035,6 +1035,15 @@ export const vi_VN: EnTranslations = {
       "promoteLeader": "Thăng Làm Đội Trưởng",
       "inviteUsage": "Mời ai? Cách dùng: /invite <name>."
     },
+    "playerMenu": {
+      "info": "Thông tin người chơi",
+      "mute": "Tắt tiếng",
+      "unmute": "Bật tiếng",
+      "block": "Chặn",
+      "unblock": "Bỏ chặn",
+      "openFor": "Mở menu người chơi {name}",
+      "profileUnavailable": "Không tìm thấy hồ sơ của {name}."
+    },
     "lootSettings": {
       "title": "Cài Đặt Chiến Lợi Phẩm",
       "close": "Đóng cài đặt chiến lợi phẩm",
@@ -1545,7 +1554,10 @@ export const vi_VN: EnTranslations = {
     },
     "social": {
       "lastSeen": "Lần cuối trực tuyến: {when}",
-      "lastSeenNever": "chưa bao giờ"
+      "lastSeenNever": "chưa bao giờ",
+      "mutedSection": "Đã tắt tiếng",
+      "blockedSection": "Đã chặn",
+      "stopMutingTitle": "Bỏ tắt tiếng {name}"
     },
     "gathering": {
       "title": "Thu thập",

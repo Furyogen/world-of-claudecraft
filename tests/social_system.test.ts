@@ -22,6 +22,7 @@ class FakeDb implements SocialDb {
   private chars = new Map<number, CharInfo>();
   private friends = new Map<number, Set<number>>();
   blocks = new Map<number, Set<number>>();
+  mutes = new Map<number, Set<number>>();
   private guilds = new Map<number, string>();
   private members = new Map<number, { guildId: number; rank: GuildRank }>();
   private nextGuildId = 1;
@@ -70,6 +71,22 @@ class FakeDb implements SocialDb {
   }
   async blockedIds(c: number): Promise<number[]> {
     return [...(this.blocks.get(c) ?? [])];
+  }
+
+  async addMute(c: number, m: number): Promise<void> {
+    (this.mutes.get(c) ?? this.mutes.set(c, new Set()).get(c)!).add(m);
+  }
+  async removeMute(c: number, m: number): Promise<void> {
+    this.mutes.get(c)?.delete(m);
+  }
+  async listMutes(c: number): Promise<CharRef[]> {
+    return [...(this.mutes.get(c) ?? [])].map((id) => {
+      const ch = this.chars.get(id)!;
+      return { id: ch.id, name: ch.name };
+    });
+  }
+  async mutedIds(c: number): Promise<number[]> {
+    return [...(this.mutes.get(c) ?? [])];
   }
 
   async createGuildWithLeader(
@@ -177,6 +194,7 @@ class FakeTransport implements SocialTransport {
   delivered = new Map<number, SocialEvent[]>();
   snapshotCount = new Map<number, number>();
   blockSets = new Map<number, number[]>();
+  muteSets = new Map<number, number[]>();
 
   constructor(private db: FakeDb) {}
 
@@ -216,6 +234,12 @@ class FakeTransport implements SocialTransport {
   }
   isIgnoring(recipientId: number, senderCharacterId: number): boolean {
     return !!this.db.blocks.get(recipientId)?.has(senderCharacterId);
+  }
+  onMutesChanged(id: number, ids: number[]): void {
+    this.muteSets.set(id, ids);
+  }
+  isMutingChat(recipientId: number, senderCharacterId: number): boolean {
+    return !!this.db.mutes.get(recipientId)?.has(senderCharacterId);
   }
 
   eventsFor(id: number): SocialEvent[] {

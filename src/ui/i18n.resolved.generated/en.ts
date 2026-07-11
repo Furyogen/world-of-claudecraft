@@ -1035,6 +1035,15 @@ export const en: EnTranslations = {
       "promoteLeader": "Promote to Leader",
       "inviteUsage": "Invite whom? Usage: /invite <name>."
     },
+    "playerMenu": {
+      "info": "Player Info",
+      "mute": "Mute",
+      "unmute": "Unmute",
+      "block": "Block",
+      "unblock": "Unblock",
+      "openFor": "Open player menu for {name}",
+      "profileUnavailable": "No profile found for {name}."
+    },
     "lootSettings": {
       "title": "Loot Settings",
       "close": "Close loot settings",
@@ -1545,7 +1554,10 @@ export const en: EnTranslations = {
     },
     "social": {
       "lastSeen": "Last seen: {when}",
-      "lastSeenNever": "never"
+      "lastSeenNever": "never",
+      "mutedSection": "Muted",
+      "blockedSection": "Blocked",
+      "stopMutingTitle": "Stop muting {name}"
     },
     "gathering": {
       "title": "Gathering",

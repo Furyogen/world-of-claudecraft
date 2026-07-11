@@ -55,6 +55,7 @@ import {
   type AccountCosmetics,
   type ArenaInfo,
   type BankInfo,
+  type CharacterProfile,
   type CharacterSearchResult,
   type ClientCommand,
   type CraftResultView,
@@ -1510,6 +1511,7 @@ export class ClientWorld implements IWorld {
       this.socialInfo = {
         friends: msg.friends ?? [],
         blocks: msg.blocks ?? [],
+        mutes: msg.mutes ?? [],
         guild: msg.guild ?? null,
       };
       this.socialDirty = true;
@@ -2446,6 +2448,12 @@ export class ClientWorld implements IWorld {
   blockRemove(name: string): void {
     this.cmd({ cmd: 'block_remove', name });
   }
+  muteAdd(name: string): void {
+    this.cmd({ cmd: 'mute_add', name });
+  }
+  muteRemove(name: string): void {
+    this.cmd({ cmd: 'mute_remove', name });
+  }
   guildCreate(name: string): void {
     this.cmd({ cmd: 'guild_create', name });
   }
@@ -2493,6 +2501,36 @@ export class ClientWorld implements IWorld {
       return (await res.json()).results ?? [];
     } catch {
       return [];
+    }
+  }
+  // Reads the EXISTING public character sheet, the same one behind the
+  // unauthenticated /c/:name page, so a chat-name lookup exposes nothing that
+  // was not already crawlable. The richer in-view inspect card (wallet balance,
+  // Discord/GitHub flair, gear) stays on the proximity-gated entity wire.
+  async characterProfile(name: string): Promise<CharacterProfile | null> {
+    const wanted = name.trim();
+    if (!wanted) return null;
+    try {
+      const res = await fetch(
+        apiUrl(`/api/public/characters/${encodeURIComponent(wanted)}/sheet`, this.base),
+        { headers: { Authorization: `Bearer ${this.token}` } },
+      );
+      if (!res.ok) return null;
+      const sheet = await res.json();
+      if (typeof sheet?.name !== 'string') return null;
+      return {
+        name: sheet.name,
+        cls: sheet.class,
+        classLabel: sheet.classLabel ?? sheet.class,
+        spec: sheet.spec ?? '',
+        level: sheet.level ?? 1,
+        guild: sheet.guild ?? null,
+        zone: sheet.zone ?? '',
+        skin: sheet.skin ?? 0,
+        realm: sheet.realm ?? '',
+      };
+    } catch {
+      return null;
     }
   }
   // --- IWorldMarket: World Market browse/list/buy/cancel/collect command sends

@@ -130,6 +130,7 @@ export type {
   LeaderboardEntry,
 } from './world_api/progression_xp';
 export type {
+  CharacterProfile,
   CharacterSearchResult,
   FriendInfo,
   GuildEventInfo,
@@ -342,6 +343,9 @@ export const COMMAND_NAMES = [
   'vcup_ready',
   'vcup_bet',
   'vcup_practice',
+  // personal chat mutes: the chat-only sibling of block_add/block_remove
+  'mute_add',
+  'mute_remove',
 ] as const;
 
 // The union both the send path (`online.ts`) and the dispatch switch
@@ -499,6 +503,8 @@ export const COMMAND_FACETS = {
   friend_remove: 'IWorldSocialGraph',
   block_add: 'IWorldSocialGraph',
   block_remove: 'IWorldSocialGraph',
+  mute_add: 'IWorldSocialGraph',
+  mute_remove: 'IWorldSocialGraph',
   guild_create: 'IWorldSocialGraph',
   guild_invite: 'IWorldSocialGraph',
   guild_accept: 'IWorldSocialGraph',

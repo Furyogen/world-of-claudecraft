@@ -1035,6 +1035,15 @@ export const id_ID: EnTranslations = {
       "promoteLeader": "Angkat jadi Pemimpin",
       "inviteUsage": "Mengundang siapa? Penggunaan: /invite <name>."
     },
+    "playerMenu": {
+      "info": "Info pemain",
+      "mute": "Bisukan",
+      "unmute": "Batalkan bisu",
+      "block": "Blokir",
+      "unblock": "Buka blokir",
+      "openFor": "Buka menu pemain {name}",
+      "profileUnavailable": "Profil {name} tidak ditemukan."
+    },
     "lootSettings": {
       "title": "Pengaturan Jarahan",
       "close": "Tutup pengaturan jarahan",
@@ -1545,7 +1554,10 @@ export const id_ID: EnTranslations = {
     },
     "social": {
       "lastSeen": "Terakhir terlihat: {when}",
-      "lastSeenNever": "tidak pernah"
+      "lastSeenNever": "tidak pernah",
+      "mutedSection": "Dibisukan",
+      "blockedSection": "Diblokir",
+      "stopMutingTitle": "Batalkan bisu {name}"
     },
     "gathering": {
       "title": "Pengumpulan",

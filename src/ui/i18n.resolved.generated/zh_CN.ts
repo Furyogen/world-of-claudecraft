@@ -1035,6 +1035,15 @@ export const zh_CN: EnTranslations = {
       "promoteLeader": "提升为队长",
       "inviteUsage": "邀请谁？用法：/invite <名称>。"
     },
+    "playerMenu": {
+      "info": "玩家信息",
+      "mute": "静音",
+      "unmute": "取消静音",
+      "block": "屏蔽",
+      "unblock": "取消屏蔽",
+      "openFor": "打开 {name} 的玩家菜单",
+      "profileUnavailable": "未找到 {name} 的资料。"
+    },
     "lootSettings": {
       "title": "拾取设置",
       "close": "关闭拾取设置",
@@ -1545,7 +1554,10 @@ export const zh_CN: EnTranslations = {
     },
     "social": {
       "lastSeen": "最后在线: {when}",
-      "lastSeenNever": "从未"
+      "lastSeenNever": "从未",
+      "mutedSection": "已静音",
+      "blockedSection": "已屏蔽",
+      "stopMutingTitle": "取消对 {name} 的静音"
     },
     "gathering": {
       "title": "采集",

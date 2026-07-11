@@ -1035,6 +1035,15 @@ export const ru_RU: EnTranslations = {
       "promoteLeader": "Назначить лидером",
       "inviteUsage": "Кого пригласить? Использование: /invite <имя>."
     },
+    "playerMenu": {
+      "info": "Об игроке",
+      "mute": "Заглушить",
+      "unmute": "Не заглушать",
+      "block": "Заблокировать",
+      "unblock": "Разблокировать",
+      "openFor": "Открыть меню игрока {name}",
+      "profileUnavailable": "Профиль игрока {name} не найден."
+    },
     "lootSettings": {
       "title": "Настройки добычи",
       "close": "Закрыть настройки добычи",
@@ -1545,7 +1554,10 @@ export const ru_RU: EnTranslations = {
     },
     "social": {
       "lastSeen": "Последний вход: {when}",
-      "lastSeenNever": "никогда"
+      "lastSeenNever": "никогда",
+      "mutedSection": "Заглушённые",
+      "blockedSection": "Заблокированные",
+      "stopMutingTitle": "Не заглушать {name}"
     },
     "gathering": {
       "title": "Собирательство",

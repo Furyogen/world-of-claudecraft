@@ -1035,6 +1035,15 @@ export const fr_CA: EnTranslations = {
       "promoteLeader": "Promouvoir chef",
       "inviteUsage": "Inviter qui ? Utilisation : /invite <nom>."
     },
+    "playerMenu": {
+      "info": "Infos joueur",
+      "mute": "Sourdine",
+      "unmute": "Retirer la sourdine",
+      "block": "Bloquer",
+      "unblock": "Débloquer",
+      "openFor": "Ouvrir le menu du joueur {name}",
+      "profileUnavailable": "Aucun profil trouvé pour {name}."
+    },
     "lootSettings": {
       "title": "Réglages de butin",
       "close": "Fermer les réglages de butin",
@@ -1545,7 +1554,10 @@ export const fr_CA: EnTranslations = {
     },
     "social": {
       "lastSeen": "Vu pour la dernière fois : {when}",
-      "lastSeenNever": "jamais"
+      "lastSeenNever": "jamais",
+      "mutedSection": "En sourdine",
+      "blockedSection": "Bloqués",
+      "stopMutingTitle": "Retirer {name} de la sourdine"
     },
     "gathering": {
       "title": "Récolte",
