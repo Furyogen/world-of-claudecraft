@@ -368,26 +368,14 @@ export function updateNythraxisEncounter(ctx: SimContext, boss: Entity): void {
     });
   }
 
-  // Heroic: raise the court (Aldren / Malric / Voss) ASAP once engaged, rather
-  // than waiting on a wardstone-driven Deathless stun that a lone tester (or an
-  // uncoordinated raid) cannot reliably produce. One-shot, and only when nothing
-  // else is mid-cast; the wardstone-stun path still re-summons later as designed.
-  if (
-    !st.heroicSummonStarted &&
-    isHeroicNythraxis(ctx, boss) &&
-    st.deathlessStunRemaining <= 0 &&
-    (st.heroicSummonChannelRemaining ?? 0) <= 0 &&
-    st.deathlessCastRemaining <= 0
-  ) {
-    st.heroicSummonStarted = true;
-    startNythraxisHeroicSummon(ctx, boss, st);
-    return;
-  }
-
   if (st.deathlessStunRemaining > 0) {
     st.deathlessStunRemaining = Math.max(0, st.deathlessStunRemaining - DT);
-    if (st.deathlessStunRemaining <= 0 && isHeroicNythraxis(ctx, boss))
+    // Interrupted Deathless Rage: the court rises once the boss shakes off the
+    // wardstone stun (latched so it summons only once per fight).
+    if (st.deathlessStunRemaining <= 0 && isHeroicNythraxis(ctx, boss) && !st.heroicSummonStarted) {
+      st.heroicSummonStarted = true;
       startNythraxisHeroicSummon(ctx, boss, st);
+    }
     return;
   }
   if ((st.heroicSummonChannelRemaining ?? 0) > 0) {
@@ -1084,6 +1072,14 @@ export function updateNythraxisDeathlessRage(
       'hit',
       true,
     );
+  }
+  // Heroic: an UNINTERRUPTED Deathless Rage (the pillar cast) raises the court
+  // right after it lands. This is the phase-2 summon a lone tester (who cannot pop
+  // the wardstones to force the interrupt/stun path above) will see. Latched so the
+  // court rises only once per fight.
+  if (isHeroicNythraxis(ctx, boss) && !st.heroicSummonStarted) {
+    st.heroicSummonStarted = true;
+    startNythraxisHeroicSummon(ctx, boss, st);
   }
 }
 
