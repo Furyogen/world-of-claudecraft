@@ -269,7 +269,50 @@ export const zh_TW: EnTranslations = {
       "cancel": "取消",
       "confirmTitle": "確認購買外觀",
       "confirmBody": "要用 {cost} Claudium 購買 {item} 嗎？",
-      "confirmPurchase": "購買"
+      "confirmPurchase": "購買",
+      "armoryEyebrow": "第一賽季",
+      "armoryTitle": "兵器庫",
+      "armoryBody": "第一賽季兵器庫限定武器外觀。全帳號通用，純裝飾性，周圍所有玩家都能看到。",
+      "collectionLine": "{collection}系列",
+      "seasonOne": "第一賽季",
+      "rarity": {
+        "uncommon": "優秀",
+        "rare": "精良",
+        "epic": "史詩",
+        "legendary": "傳說"
+      },
+      "wtype": {
+        "sword": "劍",
+        "axe": "斧",
+        "mace": "錘",
+        "dagger": "匕首",
+        "staff": "法杖",
+        "wand": "魔杖",
+        "bow": "弓",
+        "crossbow": "弩"
+      },
+      "badge": {
+        "flagship": "旗艦",
+        "hero": "英雄"
+      },
+      "inspectAria": "檢視{item}",
+      "viewModeLabel": "預覽模式",
+      "tryOn": "試穿",
+      "weaponOnly": "僅武器",
+      "sceneLabel": "場景光照",
+      "scene": {
+        "day": "白天",
+        "dusk": "黃昏",
+        "night": "夜晚"
+      },
+      "lore": "背景故事",
+      "usdApprox": "約 {usd} 美元",
+      "buySkin": "購買外觀",
+      "unavailable": "暫不可用",
+      "applied": "已裝備",
+      "apply": "裝備外觀",
+      "detach": "卸下外觀",
+      "equipHint": "裝備{type}後才能使用此外觀。"
     },
     "claudium": {
       "title": "Claudium",

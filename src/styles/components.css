@@ -1650,6 +1650,388 @@
     color: var(--color-text-muted);
     text-align: center;
   }
+  /* ── Season 1 Armory: rarity-themed skin sections + cards + inspect panel ──
+     Rarity accents follow the classic loot colors; the legendary tier gets an
+     animated sheen so it reads a clear step above epic. */
+  .armory-section {
+    --rarity: #8fa3ad;
+    --rarity-soft: rgb(143 163 173 / 0.16);
+    margin: 16px 0 4px;
+  }
+  .armory-section.rarity-uncommon {
+    --rarity: #1eff00;
+    --rarity-soft: rgb(30 255 0 / 0.12);
+  }
+  .armory-section.rarity-rare {
+    --rarity: #2f8dff;
+    --rarity-soft: rgb(47 141 255 / 0.14);
+  }
+  .armory-section.rarity-epic {
+    --rarity: #a335ee;
+    --rarity-soft: rgb(163 53 238 / 0.16);
+  }
+  .armory-section.rarity-legendary {
+    --rarity: #ff8000;
+    --rarity-soft: rgb(255 128 0 / 0.18);
+  }
+  .armory-section > header {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 8px 10px;
+    border: 1px solid var(--rarity);
+    border-bottom: none;
+    background: linear-gradient(180deg, var(--rarity-soft), transparent);
+  }
+  .armory-section > header span {
+    color: var(--rarity);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .armory-section > header h3 {
+    margin: 2px 0 0;
+    font-size: 15px;
+  }
+  .armory-section-price {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+  }
+  .armory-section-price img {
+    width: 16px;
+    height: 16px;
+  }
+  .armory-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid var(--rarity);
+    border-top: 1px solid rgb(255 255 255 / 0.06);
+    background: #0a1119;
+  }
+  .armory-card {
+    position: relative;
+    border: 1px solid var(--rarity);
+    background: #0d1620;
+    box-shadow: 0 0 0 rgb(0 0 0 / 0);
+    transition:
+      box-shadow 160ms ease,
+      transform 160ms ease;
+  }
+  .armory-card:hover,
+  .armory-card:focus-within {
+    box-shadow: 0 0 14px var(--rarity-soft);
+    transform: translateY(-1px);
+  }
+  .armory-section.rarity-legendary .armory-card {
+    border-width: 2px;
+    background:
+      linear-gradient(#0d1620, #0d1620) padding-box,
+      linear-gradient(120deg, #ff8000, #ffd27a, #ff8000) border-box;
+    border-color: transparent;
+    animation: armory-legend-sheen 4s linear infinite;
+    background-size:
+      auto,
+      300% 100%;
+  }
+  @keyframes armory-legend-sheen {
+    to {
+      background-position:
+        0 0,
+        300% 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .armory-section.rarity-legendary .armory-card {
+      animation: none;
+    }
+  }
+  .armory-card > button {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: none;
+    background: none;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+  .armory-card-art {
+    position: relative;
+    display: block;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: radial-gradient(circle at 50% 42%, var(--rarity-soft), #070d14 78%);
+  }
+  .armory-card-art img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 200ms ease;
+  }
+  .armory-card:hover .armory-card-art img,
+  .armory-card:focus-within .armory-card-art img {
+    transform: scale(1.05);
+  }
+  .armory-badge {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    z-index: 1;
+    padding: 2px 7px;
+    border: 1px solid var(--rarity, #ffd27a);
+    background: rgb(7 11 16 / 0.85);
+    color: var(--rarity, #ffd27a);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .armory-card-copy {
+    display: grid;
+    gap: 4px;
+    padding: 8px 9px 10px;
+  }
+  .armory-card-type {
+    color: var(--rarity);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .armory-card-copy h4 {
+    margin: 0;
+    font-size: 12.5px;
+    line-height: 1.25;
+  }
+  .armory-cost,
+  .armory-state {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .armory-cost img {
+    width: 14px;
+    height: 14px;
+  }
+  .armory-state {
+    color: #c9a85e;
+  }
+  .armory-state.applied {
+    color: #7fe07f;
+  }
+  /* Inspect overlay: viewport left, codex panel right. */
+  .armory-inspect-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    display: grid;
+    place-items: center;
+    padding: 18px;
+    background: rgb(4 8 12 / 0.78);
+  }
+  .armory-inspect {
+    --rarity: #8fa3ad;
+    --rarity-soft: rgb(143 163 173 / 0.16);
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(280px, 1fr);
+    width: min(980px, 100%);
+    max-height: min(640px, calc(100vh - 40px));
+    overflow: hidden;
+    border: 1px solid var(--rarity);
+    background: #0a1119;
+    box-shadow: 0 0 40px var(--rarity-soft);
+  }
+  .armory-inspect.rarity-uncommon {
+    --rarity: #1eff00;
+    --rarity-soft: rgb(30 255 0 / 0.12);
+  }
+  .armory-inspect.rarity-rare {
+    --rarity: #2f8dff;
+    --rarity-soft: rgb(47 141 255 / 0.14);
+  }
+  .armory-inspect.rarity-epic {
+    --rarity: #a335ee;
+    --rarity-soft: rgb(163 53 238 / 0.16);
+  }
+  .armory-inspect.rarity-legendary {
+    --rarity: #ff8000;
+    --rarity-soft: rgb(255 128 0 / 0.2);
+  }
+  .armory-inspect-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 2;
+  }
+  .armory-inspect-stage {
+    position: relative;
+    min-height: 380px;
+    background: #070d14;
+  }
+  .armory-inspect-stage canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .armory-inspect-controls {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .armory-mode-toggle,
+  .armory-scene-toggle {
+    display: inline-flex;
+    overflow: hidden;
+    border: 1px solid #3e4b51;
+    background: rgb(7 11 16 / 0.85);
+  }
+  .armory-mode-toggle button,
+  .armory-scene-toggle button {
+    padding: 6px 10px;
+    border: none;
+    background: none;
+    color: var(--color-text-muted);
+    font-size: 11px;
+    cursor: pointer;
+  }
+  .armory-mode-toggle button.active,
+  .armory-scene-toggle button.active {
+    background: var(--rarity-soft);
+    color: #fff;
+  }
+  .armory-inspect-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px 16px 14px;
+    overflow-y: auto;
+    border-left: 1px solid var(--rarity);
+  }
+  .armory-inspect-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+  .armory-collection {
+    color: var(--color-text-muted);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .armory-rarity-pill {
+    padding: 2px 8px;
+    border: 1px solid var(--rarity);
+    color: var(--rarity);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .armory-inspect-panel h2 {
+    margin: 0;
+    color: var(--rarity);
+    font-size: 19px;
+    line-height: 1.2;
+  }
+  .armory-type-line {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 12px;
+  }
+  .armory-look {
+    margin: 0;
+    font-size: 12.5px;
+    font-style: italic;
+    line-height: 1.45;
+  }
+  .armory-lore {
+    padding: 10px 12px;
+    border: 1px solid rgb(255 255 255 / 0.08);
+    border-left: 2px solid var(--rarity);
+    background: rgb(255 255 255 / 0.02);
+  }
+  .armory-lore h3 {
+    margin: 0 0 6px;
+    color: var(--rarity);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .armory-lore p {
+    margin: 0;
+    font-size: 12.5px;
+    line-height: 1.55;
+  }
+  .armory-inspect-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid rgb(255 255 255 / 0.08);
+  }
+  .armory-price {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .armory-price img {
+    width: 18px;
+    height: 18px;
+  }
+  .armory-price em {
+    color: var(--color-text-muted);
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 400;
+  }
+  .armory-inspect-actions button {
+    padding: 8px 16px;
+    border: 1px solid var(--rarity);
+    background: var(--rarity-soft);
+    color: #fff;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .armory-inspect-actions button:hover:not(:disabled) {
+    background: var(--rarity);
+    color: #06111a;
+  }
+  .armory-inspect-actions button:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+  .armory-owned-pill {
+    padding: 3px 10px;
+    border: 1px solid #c9a85e;
+    color: #c9a85e;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .armory-owned-pill.applied {
+    border-color: #7fe07f;
+    color: #7fe07f;
+  }
+  .armory-equip-hint {
+    color: var(--color-text-muted);
+    font-size: 11.5px;
+  }
   /* Title subtitle ("Lifetime XP, realm"): the muted-gold token + 11px the painter
      used to set with an inline style (keeps the literals out of TS). */
   .lb-subtitle {

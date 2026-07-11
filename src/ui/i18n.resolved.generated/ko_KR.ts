@@ -269,7 +269,50 @@ export const ko_KR: EnTranslations = {
       "cancel": "취소",
       "confirmTitle": "꾸미기 상품 구매 확인",
       "confirmBody": "{item}을(를) {cost} Claudium으로 구매할까요?",
-      "confirmPurchase": "구매"
+      "confirmPurchase": "구매",
+      "armoryEyebrow": "시즌 1",
+      "armoryTitle": "무기고",
+      "armoryBody": "시즌 1 무기고의 한정 무기 스킨입니다. 계정 전체에 적용되는 순수 장식이며 주변 모든 플레이어에게 보입니다.",
+      "collectionLine": "{collection} 컬렉션",
+      "seasonOne": "시즌 1",
+      "rarity": {
+        "uncommon": "고급",
+        "rare": "희귀",
+        "epic": "영웅",
+        "legendary": "전설"
+      },
+      "wtype": {
+        "sword": "검",
+        "axe": "도끼",
+        "mace": "둔기",
+        "dagger": "단검",
+        "staff": "지팡이",
+        "wand": "마법봉",
+        "bow": "활",
+        "crossbow": "석궁"
+      },
+      "badge": {
+        "flagship": "플래그십",
+        "hero": "영웅"
+      },
+      "inspectAria": "{item} 살펴보기",
+      "viewModeLabel": "미리보기 모드",
+      "tryOn": "착용해 보기",
+      "weaponOnly": "무기만 보기",
+      "sceneLabel": "장면 조명",
+      "scene": {
+        "day": "낮",
+        "dusk": "황혼",
+        "night": "밤"
+      },
+      "lore": "전승",
+      "usdApprox": "약 {usd} 달러",
+      "buySkin": "스킨 구매",
+      "unavailable": "이용 불가",
+      "applied": "적용됨",
+      "apply": "스킨 적용",
+      "detach": "스킨 해제",
+      "equipHint": "이 스킨을 적용하려면 {type}을(를) 장착하세요."
     },
     "claudium": {
       "title": "Claudium",

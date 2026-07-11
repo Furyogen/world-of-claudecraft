@@ -2463,6 +2463,22 @@
   body.mobile-touch .woc-store-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+  /* Season 1 Armory: two-up cards; the inspect panel stacks viewport over codex
+     so the lore stays scrollable under the 3D stage. */
+  body.mobile-touch .armory-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  body.mobile-touch .armory-inspect {
+    grid-template-columns: minmax(0, 1fr);
+    max-height: calc(100dvh - 24px);
+  }
+  body.mobile-touch .armory-inspect-stage {
+    min-height: 250px;
+  }
+  body.mobile-touch .armory-inspect-panel {
+    border-top: 1px solid var(--rarity);
+    border-left: none;
+  }
   body.mobile-touch .woc-store-card {
     min-height: 214px;
   }

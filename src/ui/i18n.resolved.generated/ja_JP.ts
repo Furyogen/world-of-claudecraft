@@ -269,7 +269,50 @@ export const ja_JP: EnTranslations = {
       "cancel": "キャンセル",
       "confirmTitle": "外見の購入を確認",
       "confirmBody": "{item}を{cost} Claudiumで購入しますか？",
-      "confirmPurchase": "購入"
+      "confirmPurchase": "購入",
+      "armoryEyebrow": "シーズン1",
+      "armoryTitle": "武器庫",
+      "armoryBody": "シーズン1武器庫の限定武器スキン。アカウント共有の純粋な装飾で、周囲のプレイヤー全員に表示されます。",
+      "collectionLine": "{collection}コレクション",
+      "seasonOne": "シーズン1",
+      "rarity": {
+        "uncommon": "アンコモン",
+        "rare": "レア",
+        "epic": "エピック",
+        "legendary": "レジェンダリー"
+      },
+      "wtype": {
+        "sword": "剣",
+        "axe": "斧",
+        "mace": "メイス",
+        "dagger": "短剣",
+        "staff": "杖",
+        "wand": "ワンド",
+        "bow": "弓",
+        "crossbow": "クロスボウ"
+      },
+      "badge": {
+        "flagship": "フラッグシップ",
+        "hero": "ヒーロー"
+      },
+      "inspectAria": "{item}を詳しく見る",
+      "viewModeLabel": "プレビューモード",
+      "tryOn": "試着する",
+      "weaponOnly": "武器のみ",
+      "sceneLabel": "シーンライティング",
+      "scene": {
+        "day": "昼",
+        "dusk": "夕暮れ",
+        "night": "夜"
+      },
+      "lore": "伝承",
+      "usdApprox": "約{usd}米ドル",
+      "buySkin": "スキンを購入",
+      "unavailable": "利用不可",
+      "applied": "適用中",
+      "apply": "スキンを適用",
+      "detach": "スキンを解除",
+      "equipHint": "このスキンを適用するには{type}を装備してください。"
     },
     "claudium": {
       "title": "Claudium",

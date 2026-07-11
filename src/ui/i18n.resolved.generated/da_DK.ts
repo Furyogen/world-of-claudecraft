@@ -269,7 +269,50 @@ export const da_DK: EnTranslations = {
       "cancel": "Cancel",
       "confirmTitle": "Confirm Cosmetic Purchase",
       "confirmBody": "Purchase {item} for {cost} Claudium?",
-      "confirmPurchase": "Purchase"
+      "confirmPurchase": "Purchase",
+      "armoryEyebrow": "Season 1",
+      "armoryTitle": "The Armory",
+      "armoryBody": "Limited weapon skins from the Season 1 Armory. Account-wide, purely cosmetic, and shown to everyone around you.",
+      "collectionLine": "{collection} Collection",
+      "seasonOne": "Season 1",
+      "rarity": {
+        "uncommon": "Uncommon",
+        "rare": "Rare",
+        "epic": "Epic",
+        "legendary": "Legendary"
+      },
+      "wtype": {
+        "sword": "Sword",
+        "axe": "Axe",
+        "mace": "Mace",
+        "dagger": "Dagger",
+        "staff": "Staff",
+        "wand": "Wand",
+        "bow": "Bow",
+        "crossbow": "Crossbow"
+      },
+      "badge": {
+        "flagship": "Flagship",
+        "hero": "Hero"
+      },
+      "inspectAria": "Inspect {item}",
+      "viewModeLabel": "Preview mode",
+      "tryOn": "Try it on",
+      "weaponOnly": "Weapon only",
+      "sceneLabel": "Scene lighting",
+      "scene": {
+        "day": "Day",
+        "dusk": "Dusk",
+        "night": "Night"
+      },
+      "lore": "Lore",
+      "usdApprox": "about {usd} USD",
+      "buySkin": "Purchase Skin",
+      "unavailable": "Unavailable",
+      "applied": "Applied",
+      "apply": "Apply Skin",
+      "detach": "Detach Skin",
+      "equipHint": "Equip a {type} to apply this skin."
     },
     "claudium": {
       "title": "Claudium",
