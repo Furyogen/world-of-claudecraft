@@ -178,7 +178,11 @@ export function gauntletHudModel(input: GauntletHudInput): GauntletHudModel {
         })()
       : null;
   return {
-    visible: true,
+    // The ceremony owns the screen: the standings overlay names the champion,
+    // and the cluster has nothing left to say (no countdown, no trial, no echo
+    // strip), so its lone phase caption would only bleed through the standings
+    // panel. The podium fields below still ride the model for its consumers.
+    visible: run.phase !== 'podium',
     phase: run.phase,
     trialIndex: run.trialIndex,
     trialCount: run.trialCount,

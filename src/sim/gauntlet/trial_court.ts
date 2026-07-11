@@ -9,13 +9,21 @@
 // death flow (no death screen), intercepted in dealDamage via gauntletCourtTakedown,
 // the same shape the Fiesta takedown uses (social/fiesta.ts).
 //
-// Equalized HP: at the bell every fighter is normalized to the same hp pool
-// (GAUNTLET.court.maxHp) so it stays a fair test; a player's real maxHp is banked
+// Equalized HP POOL, carried entry: at the bell every fighter is normalized to
+// the same maxHp pool (GAUNTLET.court.maxHp) so it stays a fair test, but each
+// enters at the vitality fraction carried from the earlier trials, so a cleaner
+// run buys a healthier start in the finale. A player's real maxHp is banked
 // and restored (ctx.recalcPlayer) the moment they leave the court. The player's
 // swings deal their real (gear-scaled) damage; the NPC field deals the authored,
 // flat strikeDamage through the normal damage path (dealDamage is post-mitigation,
 // so it never touches armor and stays equal for all). The vitality field the
 // standings board reads is reverse-mirrored from hp each tick.
+//
+// Equalized LEVEL, one direction only: the white-hit table is level-relative, so
+// the NPC field is pinned to courtNpcLevel (at or below every player in the
+// court). Without it a low-level player faced 100% miss+dodge against the
+// hardcoded level-10 contestants while the NPC strikes, which bypass the table,
+// always landed. A player's own level is persisted state and is never touched.
 //
 // Determinism: NPC target re-evaluation draws from run.rng in the fixed fighter
 // order (the trial.fighters Map's insertion order). Players fight with their own
@@ -24,7 +32,7 @@
 
 import { GAUNTLET, GAUNTLET_VENUE } from '../content/gauntlet';
 import type { SimContext } from '../sim_context';
-import { angleTo, dist2d, type Entity, type Vec3 } from '../types';
+import { angleTo, dist2d, type Entity, MAX_LEVEL, type Vec3 } from '../types';
 import type {
   GauntletContestant,
   GauntletCourtFighter,
@@ -38,6 +46,28 @@ function arenaCenter(run: GauntletRun): { cx: number; cz: number } {
   return { cx: run.origin.x + GAUNTLET_VENUE.court.x, cz: run.origin.z + GAUNTLET_VENUE.court.z };
 }
 
+/**
+ * The level the NPC field fights at: the LOWEST level any player brought into
+ * the court (never under 1), or the cap when the court is all bots.
+ *
+ * The white-hit table is level-relative (`meleeMissChance` in types.ts): a
+ * target more than four levels above the attacker saturates miss at 95%, and
+ * the NPC dodge term adds 0.5% per level of that gap. `createNpc` stamps every
+ * contestant level 10 and the Gauntlet has no level gate, so a level-1 player
+ * used to face 95% miss + 5% dodge, which is 100% avoidance: they could never
+ * land a single swing, while the NPC field's scripted strikes bypass the hit
+ * table entirely and always connect.
+ *
+ * Pinning the field at or below every player's level makes that gap zero or
+ * negative for all of them, so the table never decides the fight. Pure, and
+ * the contestants keep a sane con-colored nameplate (a solo champion at the
+ * cap fights peers at the cap, not level-1 fodder).
+ */
+export function courtNpcLevel(playerLevels: readonly number[]): number {
+  if (playerLevels.length === 0) return MAX_LEVEL;
+  return Math.max(1, Math.min(...playerLevels));
+}
+
 export function startCourt(ctx: SimContext, run: GauntletRun): GauntletCourtState {
   const t = GAUNTLET.court;
   const { cx, cz } = arenaCenter(run);
@@ -46,6 +76,11 @@ export function startCourt(ctx: SimContext, run: GauntletRun): GauntletCourtStat
   // out) stay parked on the terrace.
   const roster = aliveContestants(run).filter(
     (c) => !(c.player && run.playerStates.get(c.entityId)?.spectating),
+  );
+  // Resolved from the whole roster before anyone is normalized, so the field
+  // shares one level no matter what order the bell seats them in.
+  const npcLevel = courtNpcLevel(
+    roster.filter((c) => c.player).map((c) => ctx.entities.get(c.entityId)?.level ?? MAX_LEVEL),
   );
   const placeR = t.arenaRadius * 0.72; // start ringed just inside the wall
   for (let i = 0; i < roster.length; i++) {
@@ -59,10 +94,17 @@ export function startCourt(ctx: SimContext, run: GauntletRun): GauntletCourtStat
     e.targetId = null;
     e.autoAttack = false;
     const fighter = newFighter(ctx, c, e.maxHp);
-    // Normalize to the shared pool. Everyone starts full and equal at the bell.
+    // Normalize to the shared pool, entered at the vitality carried in from the
+    // earlier trials: the pool (maxHp) is equal for all, but a cleaner run
+    // through the first five trials is a real edge in the finale. c.vitality is
+    // left as carried; the per-tick reverse mirror keeps it tracking hp.
     e.maxHp = t.maxHp;
-    e.hp = t.maxHp;
-    c.vitality = GAUNTLET.vitalityMax;
+    e.hp = Math.max(1, Math.round((t.maxHp * c.vitality) / GAUNTLET.vitalityMax));
+    // And to a level that never gates a player's swing (see courtNpcLevel).
+    // NPC only: a player's level is persisted state, and their gear-scaled
+    // damage is deliberately real here. Contestants are despawned at the end of
+    // the run, so nothing has to be restored.
+    if (!c.player) e.level = npcLevel;
     ctx.rebucket(e);
     fighters.set(c.entityId, fighter);
   }

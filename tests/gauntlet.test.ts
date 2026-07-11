@@ -14,7 +14,11 @@ import { SKIN_COUNTS } from '../src/sim/content/skins';
 import { gauntletOrigin, isGauntletPos } from '../src/sim/data';
 import { seatPodium } from '../src/sim/gauntlet/podium';
 import { sentinelReactionBudgetS, slideStopS } from '../src/sim/gauntlet/sentinel_reaction';
-import { nextGreenWindowS } from '../src/sim/gauntlet/trial_sentinel';
+import {
+  nextGreenWindowS,
+  redWindowRangeS,
+  sentinelFrenzy01,
+} from '../src/sim/gauntlet/trial_sentinel';
 import {
   aliveContestants,
   clamp01,
@@ -167,19 +171,80 @@ describe('gauntlet sentinel scoring (pure)', () => {
     expect(clamp01(0.4)).toBe(0.4);
   });
 
+  it('sentinelFrenzy01 sleeps until the start fraction, then ramps linearly to 1', () => {
+    expect(sentinelFrenzy01(0, t)).toBe(0);
+    expect(sentinelFrenzy01(t.frenzyStartFrac, t)).toBe(0);
+    expect(sentinelFrenzy01(1, t)).toBe(1);
+    // linear between the two ends, monotone throughout
+    const mid = (t.frenzyStartFrac + 1) / 2;
+    expect(sentinelFrenzy01(mid, t)).toBeCloseTo(0.5, 6);
+    expect(sentinelFrenzy01(0.9, t)).toBeGreaterThan(sentinelFrenzy01(0.7, t));
+    // clamped: past the clock (a last flip landing on the final tick) never overshoots
+    expect(sentinelFrenzy01(1.2, t)).toBe(1);
+    // a variant with no ramp configured stays on the flat early machine
+    expect(sentinelFrenzy01(1, { ...t, frenzyStartFrac: 1 })).toBe(0);
+  });
+
+  it('redWindowRangeS: flat early, easing to the late bounds, with a bare-second late red', () => {
+    // before the ramp: exactly the early range
+    expect(redWindowRangeS(0, t)).toEqual({ minS: t.redMinS, maxS: t.redMaxS });
+    expect(redWindowRangeS(t.frenzyStartFrac, t)).toEqual({ minS: t.redMinS, maxS: t.redMaxS });
+    // at the buzzer: exactly the late range
+    const late = redWindowRangeS(1, t);
+    expect(late.minS).toBeCloseTo(t.redMinLateS, 6);
+    expect(late.maxS).toBeCloseTo(t.redMaxLateS, 6);
+    // the whole point of the frenzy, pinned: the late machine is FASTER (both
+    // bounds fall) and a late red can be a bare second
+    expect(t.redMinLateS).toBeLessThan(t.redMinS);
+    expect(t.redMaxLateS).toBeLessThan(t.redMaxS);
+    expect(t.redMinLateS).toBe(1.0);
+    // both bounds fall monotonically through the ramp and stay a real range
+    const early = redWindowRangeS(0.6, t);
+    const deep = redWindowRangeS(0.9, t);
+    expect(deep.minS).toBeLessThan(early.minS);
+    expect(deep.maxS).toBeLessThan(early.maxS);
+    expect(deep.minS).toBeLessThan(deep.maxS);
+  });
+
   // Green time banked by the CRUELLEST possible draw of the light machine: the
   // minimum green every cycle (still shrinking by accelPerCycle) against the
-  // maximum red. The trial's floor case, and the one that decides whether the
-  // crossing is winnable at all.
+  // maximum red the frenzy ramp allows at that moment. The trial's floor case,
+  // and the one that decides whether the crossing is winnable at all.
   function worstCaseGreenS(t: typeof GAUNTLET.sentinel): number {
     let elapsed = 0;
     let green = 0;
     for (let cycle = 0; elapsed < t.durationS && cycle < 60; cycle++) {
       const window = Math.min(nextGreenWindowS(t.greenMinS, cycle, t), t.durationS - elapsed);
       green += window;
-      elapsed += window + t.redMaxS;
+      elapsed += window + redWindowRangeS((elapsed + window) / t.durationS, t).maxS;
     }
     return green;
+  }
+
+  // Exhaustive adversarial sweep of the ramped machine: greens always draw
+  // their minimum, and at EVERY cycle the red draw takes either bound of its
+  // ramped range (banked green is monotone in each red draw, so the extremes
+  // are where the extremum lives). Returns the least green any policy banks.
+  function minBankedGreenS(t: typeof GAUNTLET.sentinel): number {
+    let worst = Number.POSITIVE_INFINITY;
+    const walk = (elapsed: number, cycle: number, green: number): void => {
+      if (elapsed >= t.durationS || cycle >= 60) {
+        worst = Math.min(worst, green);
+        return;
+      }
+      const window = Math.min(nextGreenWindowS(t.greenMinS, cycle, t), t.durationS - elapsed);
+      const afterGreen = elapsed + window;
+      const banked = green + window;
+      if (afterGreen >= t.durationS) {
+        worst = Math.min(worst, banked);
+        return;
+      }
+      const range = redWindowRangeS(afterGreen / t.durationS, t);
+      walk(afterGreen + range.maxS, cycle + 1, banked);
+      walk(afterGreen + range.minS, cycle + 1, banked);
+    };
+    walk(0, 0, 0);
+    return worst;
   }
 
   it('even the cruellest light draw leaves a flawless runner room to cross AND eat one catch', () => {
@@ -196,6 +261,19 @@ describe('gauntlet sentinel scoring (pure)', () => {
     );
     // Green still ACCELERATES; the tolerance is not a flat window.
     expect(nextGreenWindowS(t.greenMinS, 4, t)).toBeLessThan(t.greenMinS);
+  });
+
+  it('the frenzy never breaks winnability: every adversarial red policy leaves the floor intact', () => {
+    // The ramp may reshape the rhythm however it likes; what it must never do
+    // is starve a flawless runner of the green needed to cross plus eat one
+    // catch. Swept over EVERY min/max red policy, not just all-max: short
+    // early reds inflate flipCount and shrink later greens, so the cruellest
+    // mix is not obvious a priori.
+    const need = t.fieldLength + t.pushbackYards;
+    expect(minBankedGreenS(t) * RUN_SPEED).toBeGreaterThanOrEqual(need);
+    // And the sweep really is the binding floor: it never reports MORE green
+    // than the single all-max-red policy it contains.
+    expect(minBankedGreenS(t)).toBeLessThanOrEqual(worstCaseGreenS(t));
   });
 
   it('slideStopS counts the ticks a released slide needs to fall under the epsilon', () => {
@@ -219,6 +297,14 @@ describe('gauntlet sentinel scoring (pure)', () => {
     // Ceiling: red must stay RED. The grace never eats a fifth of even the
     // shortest red window, so it is forgiveness, not a free lane.
     expect(t.graceS).toBeLessThanOrEqual(t.redMinS * 0.2);
+    // The frenzy's bare-second late reds squeeze that ratio, but never past
+    // the point of meaning: even the shortest ramped red still leaves at
+    // least 0.6s (12 ticks) of enforced stillness after the grace runs out,
+    // so a snap red is a real red, not a strobe you can sprint through.
+    expect(t.redMinLateS - t.graceS).toBeGreaterThanOrEqual(0.6);
+    // And the telegraph still fits inside even a floor-length green, so a
+    // frenzy flip is never a surprise: the warning always precedes the red.
+    expect(t.telegraphS).toBeLessThan(t.greenFloorS);
     // The brake is what buys the window. Softening it back to the green coast
     // is exactly the tuning the trial first shipped with: the slide then
     // outlives the whole grace and the budget goes NEGATIVE, so even a perfect

@@ -24,6 +24,7 @@ import {
   aliveContestants,
   applyVitalityDamage,
   cullNpcsToward,
+  finishTrialFor,
   trialDamageFromScore,
 } from './vitality';
 
@@ -93,7 +94,7 @@ export function startSigils(ctx: SimContext, run: GauntletRun): GauntletSigilsSt
       done: false,
     });
   }
-  return { kind: 'sigils', players };
+  return { kind: 'sigils', players, clearedAt: null };
 }
 
 /** Covered fraction of the outline (the trial's 0..1 progress/score). */
@@ -250,9 +251,11 @@ export function gauntletTraceSigils(
       break;
     }
     if (sigilCoverage(sp) >= SIGIL_DONE) {
+      // The sigil is closed: bank the finish and fire the "you passed" cue. The
+      // trial does NOT resolve here (see updateSigils): it holds open for the
+      // victory beat so the client can pull the camera back off the slab.
       sp.done = true;
-      const ps = run.playerStates.get(pid);
-      if (ps && ps.finishedAt === null) ps.finishedAt = ctx.time;
+      finishTrialFor(ctx, run, pid);
       break;
     }
   }
@@ -278,8 +281,16 @@ export function updateSigils(ctx: SimContext, run: GauntletRun, dt: number): boo
   void dt; // NPCs kneel in place; the trial resolves on completion or the clock
   const trial = run.trial;
   if (!trial || trial.kind !== 'sigils') return true;
-  const expired = ctx.time >= run.phaseEndsAt;
-  if (!expired && !allSigilsDone(run, trial)) return false;
+  if (ctx.time < run.phaseEndsAt) {
+    if (!allSigilsDone(run, trial)) return false;
+    if (trial.clearedAt === null) trial.clearedAt = ctx.time;
+    // The victory beat: the last etcher has just closed their sigil, so hold the
+    // pavilion open while their camera glides back off the slab and the fanfare
+    // lands. Resolving on the finishing tick (as this used to) teleported a solo
+    // etcher to the next arena before either could play. A field that was
+    // knocked out rather than finishing has nothing to celebrate: no hold.
+    if (ctx.time < trial.clearedAt + clearHoldS(trial)) return false;
+  }
   endSigils(ctx, run, trial);
   return true;
 }
@@ -295,6 +306,12 @@ function allSigilsDone(run: GauntletRun, trial: GauntletSigilsState): boolean {
     if (!sp || !sp.done) return false;
   }
   return true;
+}
+
+// The victory beat only plays when somebody actually closed a sigil.
+function clearHoldS(trial: GauntletSigilsState): number {
+  for (const sp of trial.players.values()) if (sp.done) return GAUNTLET.sigils.clearHoldS;
+  return 0;
 }
 
 // End-of-trial damage: an unfinished player takes damage scaled by how little of

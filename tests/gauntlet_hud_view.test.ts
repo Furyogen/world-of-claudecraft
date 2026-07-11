@@ -80,6 +80,20 @@ describe('gauntletHudModel', () => {
     expect(m.podium).toEqual(podium);
   });
 
+  it('hides the whole cluster on the podium: the standings overlay owns that screen', () => {
+    // The ceremony's only caption would be the phase line ("The Gauntlet is
+    // decided"), which sat underneath the Final Standings panel and bled
+    // through it. Nothing else in the cluster is live on the podium.
+    const m = gauntletHudModel({ run: run({ phase: 'podium', sentinel: null }), time: 0 });
+    expect(m.visible).toBe(false);
+    expect(m.showCountdown).toBe(false);
+    expect(m.echo).toBeNull();
+    expect(m.tutorial).toBeNull();
+    // Every other phase still shows it.
+    for (const phase of ['lobby', 'staging', 'trial', 'interlude'] as GauntletPhase[])
+      expect(gauntletHudModel({ run: run({ phase, sentinel: null }), time: 0 }).visible).toBe(true);
+  });
+
   it('hides the countdown once the run is done and on the deadline-free podium', () => {
     const phases: GauntletPhase[] = ['lobby', 'staging', 'trial', 'interlude'];
     for (const phase of phases) {

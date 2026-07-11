@@ -193,13 +193,22 @@ export const GAUNTLET_VENUE = {
   sigils: {
     x: -62,
     z: 6,
-    radius: 10,
+    // The dais has to carry the whole ring plus the etchers who stand a
+    // standoff outside it, clear of the pillars at radius + 1.6.
+    radius: 13,
     // The lectern ring: EVERY contestant mans one of these stations during the
     // trial (see sigilStation below), players first and the NPC field behind
     // them. The viewer's own lectern is the live, etched one; the rest are
     // cosmetic. Venue geometry and sim placement share these numbers plus
     // sigilRingAngle below. The lectern on the dais centre is dressing.
-    ring: { count: 12, radius: 6.5 },
+    //
+    // `count` MUST cover the whole field that can reach this trial (the
+    // survivors of the crossing, targetSurvivorsPerTrial[0]), or the overflow
+    // ranks up BEHIND a station and two contestants share one lectern. Pinned
+    // in tests/gauntlet_sigils.test.ts. `radius` then follows from `count`: the
+    // slabs are faceAcross wide, so packing more stations onto the old 6.5
+    // circle made them touch. Grow them together, never one alone.
+    ring: { count: 16, radius: 9 },
     slab: {
       faceAcross: 2.2, // face width, the etching's x axis (yards)
       faceSlope: 1.6, // face run up the tilt, the etching's y axis
@@ -511,10 +520,25 @@ export const GAUNTLET: GauntletDef = {
     greenMaxS: 6.5,
     redMinS: 2.0,
     redMaxS: 4.0,
+    // Late-game frenzy: from halfway down the clock the red draw range eases
+    // toward [1.0, 3.0], so the final stretch flips fast (a red can be a bare
+    // second) and reads far more random (the span doubles relative to the
+    // mean). The quick cycles also advance flipCount faster, dragging the
+    // green shrink below along in real time, so the endgame is short greens
+    // against snap reds. Winnability is untouched: the cruellest draw is still
+    // max-red-every-cycle, and CAPPING late reds at 3.0 hands that worst case
+    // MORE banked green than the flat 4.0 machine did. The adversarial sweep
+    // in tests/gauntlet.test.ts walks every min/max red policy through the
+    // ramp and holds the field-plus-one-catch floor.
+    frenzyStartFrac: 0.5,
+    redMinLateS: 1.0,
+    redMaxLateS: 3.0,
     // Green still shrinks every cycle (the trial accelerates), just gently
     // enough that the late windows stay worth sprinting through.
     accelPerCycle: 0.91,
-    // Never binds at the 35s clock (five cycles in); it guards a longer variant.
+    // The frenzy's quick late cycles can reach this inside the 35s clock (the
+    // flat machine never did): it is the fairness guarantee that every green,
+    // however deep the frenzy, stays long enough to sprint through.
     greenFloorS: 1.4,
     telegraphS: 0.8,
     // The grace pays for the braked slide the player cannot cancel (0.1s from
@@ -603,20 +627,29 @@ export const GAUNTLET: GauntletDef = {
     // Full-pool toll at zero coverage: never tracing the etching is fatal from
     // full health; the score curve scales it down with how much you carved.
     damageMax: 100,
+    // The victory beat. Long enough to cover the HUD's ~4Hz repaint band plus
+    // the 0.8s camera glide back off the slab, with a wide shot held on top.
+    clearHoldS: 2.5,
   },
   pull: {
-    durationS: 75,
+    // NO durationS: the pull has no clock (see GauntletPullTuning in types.ts).
+    // It ends when the marker crosses the fraying threshold, and nothing else.
     leadInS: 2,
     // A good player's cycle is spawn gap + the shrink down to the target
-    // (~0.6 of shrinkS), so clicks land roughly every 2s; pullForceMax is
-    // sized so clean timing out-pulls the NPC drift by a wide margin.
+    // (~0.6 of shrinkS); pullForceMax is sized so clean timing out-pulls the NPC
+    // drift by a wide margin, and the ramp below is what shortens the cycle.
     circleSpawnMinS: 0.4,
     circleSpawnMaxS: 1.4,
     circleShrinkMinS: 1.3,
     circleShrinkMaxS: 2.8,
-    // Ramp to 45% by the end: late-trial circles spawn about twice as often and
-    // shrink about twice as fast, so the pull tightens the longer it runs.
-    circleRampMin: 0.45,
+    // Playtest verdict: the old deadline-relative linear ramp barely bit (still
+    // 0.85x twenty seconds in, and it only reached its 0.45 floor on a 75s clock
+    // that no longer exists). The pace now HALVES every 12s from the opening
+    // whistle and bottoms out at 0.32 (a 3.1x cadence) after ~20s, so the pull
+    // is visibly tightening within the first few circles and is frantic long
+    // before the fray starts. A clean puller crosses the threshold in ~9-15s.
+    rampHalfLifeS: 12,
+    circleRampMin: 0.32,
     circleStartSize: 200,
     circleTargetSize: 75,
     pullForceMax: 2.2,
@@ -625,10 +658,18 @@ export const GAUNTLET: GauntletDef = {
     npcForceMin: 0.7,
     npcForceMax: 1.05,
     winThreshold: 12,
+    // The fray. 26s of grace covers every honest win on a full rope (so a
+    // full-contribution puller is never taxed by it), then the marks close over
+    // 49s. Together they bound the trial at 75s, the same ceiling the old clock
+    // had, except the ROPE decides it, no countdown is ever shown, and both
+    // teams are brought equally close to winning instead of a clock awarding it.
+    frayGraceS: 26,
+    frayS: 49,
     // The end-of-pull toll at ZERO contribution = the full vitality pool. The
     // toll scales down with how hard a player pulled (their accumulated force
-    // vs winThreshold), so an idle contestant is knocked out even if their side
-    // won on the NPC drift, while a hard puller who lost is only wounded.
+    // vs winThreshold, always the BASE threshold, never the frayed one), so an
+    // idle contestant is knocked out even if their side won on the NPC drift,
+    // while a hard puller who lost is only wounded.
     lossDamage: 100,
   },
   echo: {
@@ -643,6 +684,7 @@ export const GAUNTLET: GauntletDef = {
     // fatal from full health (on top of the per-timeout missDamage); clearing
     // rounds scales it down.
     damageMax: 100,
+    clearHoldS: 2.5, // the victory beat, matching the sigils
   },
   span: {
     durationS: 100,
@@ -655,22 +697,44 @@ export const GAUNTLET: GauntletDef = {
     panelGap: 1.4,
     fallDamage: 17,
     npcAheadCount: 3,
-    npcHopS: 0.7, // a crosser bounds one panel every 0.7s (a brisk run-and-jump)
+    // Playtest verdict: the crossers read as a conveyor belt. They bounded the
+    // whole span at a flat 0.7s a panel, never paused, and (because every
+    // unscripted guess was silently the right one) they looked like they had the
+    // answer sheet. The hop is slower now, and the real fix is the ponder below:
+    // a body that stops at the lip of an unproven pair, looks from one pane to
+    // the other, and only then commits.
+    npcHopS: 1,
     npcJumpHeight: 0.9,
     npcPlungeS: 0.7,
     npcPlungeDrop: 3.5,
-    npcStumbleChance: 0.55, // scouts are human: better than half the time one panel trips them
     // Full-pool toll at zero progress: never stepping onto the span is fatal
     // from full health; each proven panel scales the toll down.
     damageMax: 100,
+    // An unproven pair is a coin flip and it takes them a moment to make it; a
+    // pair another body has already stood on is just a stride. The bounds are
+    // lerped by the crosser's rolled nerve, so a brave one steps out in under a
+    // second where a timid one agonizes for three.
+    npcPonderMinS: 0.8,
+    npcPonderMaxS: 2.6,
+    npcStepPauseMinS: 0.12,
+    npcStepPauseMaxS: 0.45,
+    npcPeekAmp: 0.6, // ~34 degrees of head swing between the two panes
+    npcPeekFreq: 1.3,
+    // Two honest wrong guesses is all a scout has in it: after that it stops
+    // gambling and walks the proven side. Expendable crossers need no cap (their
+    // first wrong guess is fatal), so this only bounds how long the trial's
+    // unkillable remnant can spend falling and climbing back.
+    npcStumbleMax: 2,
   },
   court: {
-    // A standard-combat brawl on a normalized hp pool: every fighter is set to
-    // maxHp and trades plain auto-attack swings (real `damage` events on real
+    // A standard-combat brawl on a normalized hp pool: every fighter shares the
+    // same maxHp, entering at the vitality fraction carried from the earlier
+    // trials, and trades plain auto-attack swings (real `damage` events on real
     // hp, no class/gear/level in play). The pool is vitalityMax (100), so the hp
     // fraction the standings board + health frame show, and the damage floaties,
     // land on one 0..100 scale (matching every other trial). ~12 swings to drop
-    // a foe 1v1, faster under focus-fire; the 90s clock is a comfortable ceiling.
+    // a full-health foe 1v1, faster under focus-fire; the 90s clock is a
+    // comfortable ceiling.
     durationS: 90,
     arenaRadius: 11,
     maxHp: 100, // = vitalityMax: the shared hp pool every fighter is normalized to

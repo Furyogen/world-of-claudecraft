@@ -6,11 +6,25 @@
 // reveals that pair's safe side to the whole field. Seeded NPC crossers go
 // first and light up the early panels.
 //
+// The NPC crossers are seeded PEOPLE, not a conveyor belt: none of them knows
+// which pane of a pair holds. Each stops at the lip of an unproven pair, swings
+// its head from one pane to the other for a rolled beat (long if it is timid,
+// short if it is brave), then commits to a coin flip. Where that coin lands is
+// pre-flipped at startSpan (planCrosserFall for the crossers the survivor target
+// can spare, whose first wrong guess is fatal; planScoutStumbles for the ones it
+// cannot, who fall, climb back, and try again up to npcStumbleMax times), so the
+// per-tick driver never draws. A pair another body has already stood on is not a
+// guess at all: they stride over it. That contrast, confident on proven ground
+// and frozen at the frontier, is the whole read.
+//
 // Frozen contracts: GauntletSpanTuning (types.ts), GauntletSpanState (state.ts),
 // the `span` view member (runs.ts gauntletRunWire), tuning GAUNTLET.span
 // (content/gauntlet.ts). Determinism: run.rng is drawn only at startSpan (the
-// crosser plans), in a fixed order; the per-tick logic is draw-free apart from
-// the single fixed-order cullNpcsToward at resolution. No Math.random/Date.now.
+// fatal crosser plans), in a fixed order; the scout stumbles and the per-crosser
+// nerve draw from their own salted streams, and the per-tick logic (ponder
+// timing, the head sway) is a pure function of the sim clock and that nerve, so
+// it is draw-free apart from the single fixed-order cullNpcsToward at
+// resolution. No Math.random/Date.now.
 //
 // Panel geometry (instance-local yards; the venue renderer draws the panels at
 // EXACTLY these rects, keep both in agreement). Crossing axis is +z. The field
@@ -24,13 +38,15 @@
 import { GAUNTLET, GAUNTLET_VENUE } from '../content/gauntlet';
 import { Rng } from '../rng';
 import type { SimContext } from '../sim_context';
-import type { Entity } from '../types';
+import type { Entity, GauntletSpanTuning } from '../types';
 import { placeContestantsAt } from './contestants';
 import type { GauntletContestant, GauntletRun, GauntletSpanState } from './state';
 import {
   aliveContestants,
   applyVitalityDamage,
+  clamp01,
   cullNpcsToward,
+  finishTrialFor,
   trialDamageFromScore,
 } from './vitality';
 

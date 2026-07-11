@@ -11,8 +11,8 @@
 // cancel (sentinel_reaction.ts).
 //
 // The light machine draws its windows from run.rng only; the pure helpers
-// (nextGreenWindowS, sentinelReactionBudgetS, the score math in vitality.ts)
-// are Node-tested directly.
+// (nextGreenWindowS, sentinelFrenzy01, redWindowRangeS, sentinelReactionBudgetS,
+// the score math in vitality.ts) are Node-tested directly.
 
 import { GAUNTLET } from '../content/gauntlet';
 import type { SimContext } from '../sim_context';
@@ -24,6 +24,7 @@ import {
   applyVitalityDamage,
   clamp01,
   emitToRunPlayers,
+  finishTrialFor,
   sentinelScore,
   trialDamageFromScore,
 } from './vitality';
@@ -32,6 +33,31 @@ import {
 // each completed cycle and never dips below the floor. Pure; tested directly.
 export function nextGreenWindowS(draw: number, cycle: number, t: GauntletSentinelTuning): number {
   return Math.max(t.greenFloorS, draw * t.accelPerCycle ** cycle);
+}
+
+// How deep into the late-trial frenzy the light machine is: 0 until
+// frenzyStartFrac of the trial clock has elapsed, then rising linearly to 1 as
+// the clock runs out. Pure; tested directly.
+export function sentinelFrenzy01(elapsedFrac: number, t: GauntletSentinelTuning): number {
+  if (t.frenzyStartFrac >= 1) return 0;
+  return clamp01((elapsedFrac - t.frenzyStartFrac) / (1 - t.frenzyStartFrac));
+}
+
+// The red-window draw bounds at a point in the trial: the early range eases
+// toward the late one as the frenzy deepens, so late reds come faster, can be
+// as short as redMinLateS, and (with the span widening relative to the mean)
+// are harder to anticipate. The quick late cycles also advance flipCount
+// faster, which drags nextGreenWindowS's shrink along in real time; that pair
+// is the whole difficulty ramp. Pure; tested directly.
+export function redWindowRangeS(
+  elapsedFrac: number,
+  t: GauntletSentinelTuning,
+): { minS: number; maxS: number } {
+  const f = sentinelFrenzy01(elapsedFrac, t);
+  return {
+    minS: t.redMinS + (t.redMinLateS - t.redMinS) * f,
+    maxS: t.redMaxS + (t.redMaxLateS - t.redMaxS) * f,
+  };
 }
 
 export function startSentinel(ctx: SimContext, run: GauntletRun): GauntletSentinelState {
@@ -88,7 +114,11 @@ function updateLightMachine(
     trial.light = 'red';
     trial.flipCount++;
     trial.graceUntil = ctx.time + t.graceS;
-    trial.flipAt = ctx.time + run.rng.range(t.redMinS, t.redMaxS);
+    // Reds draw from the frenzy-ramped range: the further down the trial
+    // clock, the faster and jitterier the flips (trial start is
+    // phaseEndsAt - durationS, so the elapsed fraction needs no extra state).
+    const range = redWindowRangeS(clamp01(1 - (run.phaseEndsAt - ctx.time) / t.durationS), t);
+    trial.flipAt = ctx.time + run.rng.range(range.minS, range.maxS);
   } else {
     trial.light = 'green';
     const draw = run.rng.range(t.greenMinS, t.greenMaxS);
@@ -161,13 +191,11 @@ function updatePlayers(
     if (lx < -t.fieldHalfWidth) e.pos.x = run.origin.x - t.fieldHalfWidth;
     if (ps.finishedAt === null && lz > ps.bestZ) ps.bestZ = Math.min(lz, t.fieldLength);
     if (ps.finishedAt === null && lz >= t.fieldLength) {
-      ps.finishedAt = ctx.time;
+      // Banks the finish time and fires the one-shot "you passed" cue (personal,
+      // text-free like every gauntlet event; the client renders its own copy).
+      finishTrialFor(ctx, run, c.entityId);
       ps.momentumX = 0;
       ps.momentumZ = 0;
-      // One-shot "you passed" cue: the client turns this into a banner. Personal
-      // (pid-scoped), text-free like every gauntlet event; the client renders
-      // its own localized copy.
-      ctx.emit({ type: 'gauntletFinished', trialIndex: run.trialIndex, pid: c.entityId });
       continue;
     }
 

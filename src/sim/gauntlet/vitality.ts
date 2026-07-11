@@ -40,6 +40,20 @@ export function aliveContestants(run: GauntletRun): GauntletContestant[] {
   return run.contestants.filter((c) => c.eliminatedAtTrial === null);
 }
 
+// One player cleared the current trial's goal: bank the finish time (the podium
+// ranks on it, earliest first) and fire the one-shot personal "you passed" cue.
+// The client turns that event into the banner + fanfare, and the desk trials use
+// it to release their authored camera pose back out to the chase cam, so EVERY
+// trial with a per-player goal must route its completion through here rather
+// than assigning finishedAt by hand. Idempotent: a second call for the same
+// player in the same trial does nothing (startTrial clears finishedAt).
+export function finishTrialFor(ctx: SimContext, run: GauntletRun, pid: number): void {
+  const ps = run.playerStates.get(pid);
+  if (!ps || ps.finishedAt !== null) return;
+  ps.finishedAt = ctx.time;
+  ctx.emit({ type: 'gauntletFinished', trialIndex: run.trialIndex, pid });
+}
+
 // Emit a personal copy of an event to every player still attached to the run
 // (spectators included: they are watching for exactly these).
 export function emitToRunPlayers(

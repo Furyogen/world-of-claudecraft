@@ -2422,9 +2422,14 @@ export type SimEvent = { pid?: number } & (
   // `gauntletEchoJudge`: the sim graded YOUR echo stone tap (trial 4); the
   // client flashes the clicked stone green (`ok`) or red so every click has
   // visible success/failure feedback.
-  // `gauntletFinished`: YOU cleared the current trial's goal (crossed the
-  // sentinel finish line), a one-shot cue the client turns into a "you passed"
-  // banner. `gauntletPodium`: the run resolved; `won` is whether you took first.
+  // `gauntletFinished`: YOU cleared the current trial's goal, a one-shot cue the
+  // client turns into a "you passed" banner (and the desk trials use to release
+  // their authored camera pose back to the chase cam). EVERY trial with a per-
+  // player goal fires it exactly once, on the tick the goal is met: the sentinel
+  // finish line, the etched sigil closed, the last echo round cleared, the span
+  // crossed. The Great Pull is the one exception (it resolves for both teams at
+  // once, so its result IS the trial ending). `gauntletPodium`: the run resolved;
+  // `won` is whether you took first.
   | {
       type: 'gauntletPhase';
       phase: GauntletPhase;
@@ -2482,6 +2487,15 @@ export interface GauntletSentinelTuning {
   greenMaxS: number;
   redMinS: number; // red-light window drawn from [redMinS, redMaxS]
   redMaxS: number;
+  // Late-trial frenzy: once frenzyStartFrac of the trial clock has elapsed the
+  // red draw range eases linearly toward [redMinLateS, redMaxLateS], so the
+  // light machine flips faster and jitterier the closer the clock is to
+  // running out (and the quicker cycles drag the per-cycle green shrink along
+  // with them in real time). greenFloorS plus the adversarial winnability
+  // sweep in tests/gauntlet.test.ts keep the frantic endgame crossable.
+  frenzyStartFrac: number; // trial-clock fraction where the red ramp begins
+  redMinLateS: number; // red draw bounds once the clock has fully run down
+  redMaxLateS: number;
   accelPerCycle: number; // green window multiplier per completed cycle (< 1 accelerates)
   greenFloorS: number; // green window never shrinks below this
   telegraphS: number; // watcher turn animation lead time before red starts
@@ -2550,6 +2564,12 @@ export interface GauntletSigilsTuning {
   thinSectionMult: number; // crack multiplier on a shape's marked thin segments
   shatterDamage: number; // vitality chunk on a shatter (a fresh shape follows)
   damageMax: number; // end-of-trial damage at zero progress (= full pool: zero coverage is fatal)
+  // The victory beat: once the last live etcher closes their sigil the trial
+  // stays open this long before it resolves, so the finisher's camera can pull
+  // back off the slab and the "you passed" fanfare can land instead of the
+  // interlude teleporting them away on the same tick. Skipped when nobody
+  // finished (a field that was knocked out has nothing to celebrate).
+  clearHoldS: number;
 }
 
 // Trial 3, The Great Pull: team tug of war played on shrinking circles. Each
@@ -2557,17 +2577,27 @@ export interface GauntletSigilsTuning {
 // a rolled speed, and a click is graded sim-side by how close the size is to
 // the target when it arrives; a circle that shrinks to nothing unclicked is a
 // miss. Sizes are ABSTRACT UNITS the client renders as CSS px 1:1.
+//
+// THE PULL HAS NO CLOCK. It ends when the rope decides it and never on a
+// deadline: there is no `durationS`, the run's `phaseEndsAt` is the sim time the
+// trial OPENED (an anchor for the client's sim-time estimator, never a
+// deadline), and the HUD shows no countdown for it. Two knobs make that safe:
+// the pace ramp below tightens the circles the longer the pull runs, and the
+// fray shrinks the deciding threshold, so a stalemate is impossible even with
+// no NPCs left on the rope and nobody clicking.
 export interface GauntletPullTuning {
-  durationS: number; // soft cap; the marker usually decides earlier
   leadInS: number; // pause after the trial opens before the first circle and NPC heave
   circleSpawnMinS: number; // gap bounds between a circle resolving and the next spawn
   circleSpawnMaxS: number;
   circleShrinkMinS: number; // full-shrink duration bounds (the per-circle "random speed")
   circleShrinkMaxS: number;
-  // The difficulty ramp: as the trial elapses (0..1), the spawn gap AND the
-  // shrink duration are both scaled from 1x down toward this factor, so circles
-  // come faster and shrink faster the longer the pull runs. 1 = no ramp.
-  circleRampMin: number;
+  // The pace ramp (pullRampFactor): the spawn gap AND the shrink duration are
+  // both scaled by a factor that HALVES every rampHalfLifeS of elapsed pull,
+  // floored at circleRampMin, so circles come faster and shrink faster the
+  // longer the pull runs. Keyed on elapsed seconds, never on progress toward a
+  // deadline (there is none).
+  rampHalfLifeS: number;
+  circleRampMin: number; // the ramp's floor (the fastest the pull ever gets)
   circleStartSize: number; // spawn size (abstract units, rendered as px 1:1)
   circleTargetSize: number; // click as close to this size as possible
   pullForceMax: number; // marker yards for a click at exactly the target size
@@ -2575,7 +2605,16 @@ export interface GauntletPullTuning {
   npcHeavePeriodS: number; // cadence of the per-team NPC field heave
   npcForceMin: number; // per-heave per-team NPC force draw bounds
   npcForceMax: number;
-  winThreshold: number; // |marker| that decides the pull
+  winThreshold: number; // the |marker| that decides a FRESH pull, and the scoring denominator
+  // The fray (pullWinThresholdAt): after frayGraceS of pulling, the rope's marks
+  // close in, the deciding |marker| easing from winThreshold to ZERO over frayS.
+  // This is what makes a clockless pull always resolve, symmetrically for both
+  // teams (a lead that would not have snapped a fresh rope snaps a frayed one),
+  // and it is the trial's only hard time bound: frayGraceS + frayS. The grace is
+  // sized so a clean win (roughly 9-15s of good clicking) lands on a full rope,
+  // and so a full-contribution puller is never taxed by an early fray.
+  frayGraceS: number;
+  frayS: number;
   lossDamage: number; // end-of-pull toll at ZERO contribution (= full pool: an idle contestant is knocked out); scaled down by how hard a player pulled (contribution vs winThreshold)
 }
 
@@ -2593,6 +2632,10 @@ export interface GauntletEchoTuning {
   inputS: number; // answer window once the flashes end
   missDamage: number; // vitality per wrong stone or timed-out round
   damageMax: number; // end-of-trial damage at zero rounds cleared (= full pool: zero rounds is fatal)
+  // The victory beat, exactly as GauntletSigilsTuning.clearHoldS: hold the hall
+  // open after the last duellist beats the stones so their camera can pull back
+  // off the desk and the fanfare can land. Skipped when nobody cleared it.
+  clearHoldS: number;
 }
 
 // Trial 5, The Brittle Span: paired floor panels over the pit; one of each
@@ -2609,8 +2652,25 @@ export interface GauntletSpanTuning {
   npcJumpHeight: number; // peak height of a crosser's hop (yards)
   npcPlungeS: number; // seconds a mis-stepped crosser takes to drop into the pit
   npcPlungeDrop: number; // how far below the deck a plunging crosser falls (yards)
-  npcStumbleChance: number; // chance a scout guesses one panel wrong (then climbs back)
   damageMax: number; // end-of-trial damage at zero progress (= full pool: never stepping on is fatal)
+  // Crosser hesitation (spanPonderS). A crosser stands at the lip of every pair
+  // before it commits: a long deliberation at an UNPROVEN pair (it has no idea
+  // which pane holds, and it looks it: npcPeek* sways its head between the two),
+  // a short stride-on beat at one another body has already proven. Both bounds
+  // are lerped by the crosser's rolled nerve (1 = brave = the min, 0 = timid =
+  // the max), so the field reads as people, not a conveyor belt.
+  npcPonderMinS: number;
+  npcPonderMaxS: number;
+  npcStepPauseMinS: number;
+  npcStepPauseMaxS: number;
+  npcPeekAmp: number; // radians the head swings off the crossing axis while deciding
+  npcPeekFreq: number; // rad/s of that sway
+  // How many panels a SCOUT (a crosser the survivor target will not let fall) may
+  // honestly guess wrong before it stops gambling and walks the proven side. Each
+  // wrong guess is a real coin flip at the frontier: it drops into the pit, climbs
+  // back at the start line, and the pane it broke is revealed to the whole field.
+  // Expendable crossers need no cap: their FIRST wrong guess is fatal.
+  npcStumbleMax: number;
 }
 
 // Trial 6, The Final Court: a standard-combat free-for-all in a circular arena.

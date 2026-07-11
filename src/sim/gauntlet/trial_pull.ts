@@ -3,18 +3,32 @@
 // after a rolled gap, shrinking at a rolled speed) and pulls by clicking it
 // (gauntletPullCircle): the closer the size is to the target when the click
 // arrives, the harder the pull, and a circle that shrinks to nothing unclicked
-// is a miss. The surviving NPC field heaves for both sides on a fixed cadence,
-// and the marker decides the trial when it crosses winThreshold or the clock
-// runs out. Every draw is run.rng in a fixed order (circle deals in
-// playerStates insertion order or at a click's arrival; NPC heaves team 0 then
-// team 1), so the trial never perturbs the shared world stream.
+// is a miss. The surviving NPC field heaves for both sides on a fixed cadence.
 //
-// Frozen contracts (do not edit here): GauntletPullTuning (types.ts, read as
-// GAUNTLET.pull), GauntletPullState (state.ts), the `pull` member of
+// THE PULL HAS NO CLOCK. The marker alone decides it: the trial ends the moment
+// |marker| reaches the deciding threshold, and the run's `phaseEndsAt` for this
+// phase is the sim time it OPENED, not a deadline (the HUD shows no countdown).
+// Two pure, Node-tested curves keep that honest:
+//   - pullRampFactor: the pace. The spawn gap and the shrink duration both halve
+//     every rampHalfLifeS of elapsed pull (floored at circleRampMin), so the
+//     circles come faster and faster the longer the rope holds.
+//   - pullWinThresholdAt: the fray. After frayGraceS the rope's marks close in,
+//     the deciding |marker| easing to ZERO over frayS. That is what makes a
+//     clockless pull always resolve (even with nobody clicking and no NPCs left
+//     on the rope) and it closes symmetrically, so it never picks a winner: the
+//     lean does.
+//
+// Every draw is run.rng in a fixed order (circle deals in playerStates insertion
+// order or at a click's arrival; NPC heaves team 0 then team 1), so the trial
+// never perturbs the shared world stream. Neither curve draws.
+//
+// Frozen contracts (defined elsewhere, not here): GauntletPullTuning (types.ts,
+// read as GAUNTLET.pull), GauntletPullState (state.ts), the `pull` member of
 // gauntletRunWire (runs.ts), and the trench geometry in GAUNTLET_VENUE.pull.
 
 import { GAUNTLET, GAUNTLET_VENUE } from '../content/gauntlet';
 import type { SimContext } from '../sim_context';
+import type { GauntletPullTuning } from '../types';
 import type { GauntletPullState, GauntletRun } from './state';
 import {
   aliveContestants,
@@ -99,6 +113,7 @@ export function seatPullField(ctx: SimContext, run: GauntletRun): void {
 
 export function startPull(ctx: SimContext, run: GauntletRun): GauntletPullState {
   const teamOf = computePullTeams(run);
+  const startedAt = ctx.time;
   const heaveAnchor = ctx.time + GAUNTLET.pull.leadInS;
   // The two per-team per-heave NPC pull means, drawn team 0 then team 1.
   const npcForce: [number, number] = [
@@ -111,6 +126,7 @@ export function startPull(ctx: SimContext, run: GauntletRun): GauntletPullState 
   const trial: GauntletPullState = {
     kind: 'pull',
     marker: 0,
+    startedAt,
     heaveAnchor,
     teamOf,
     npcForce,
@@ -132,20 +148,37 @@ export function startPull(ctx: SimContext, run: GauntletRun): GauntletPullState 
   return trial;
 }
 
-// The difficulty ramp factor for a given trial progress (0 at the start, 1 at
-// the deadline): 1x at the start, easing linearly to rampMin at the end. Pure,
-// Node-tested directly. Multiplies both the spawn gap and the shrink duration,
-// so circles come faster AND shrink faster the longer the pull runs.
-export function pullRampFactor(progress: number, rampMin: number): number {
-  const p = progress < 0 ? 0 : progress > 1 ? 1 : progress;
-  return 1 - (1 - rampMin) * p;
+// The pace factor after `elapsedS` of pulling: 1x on the opening whistle,
+// HALVING every halfLifeS, floored at rampMin. Multiplies both the spawn gap and
+// the shrink duration, so the circles come faster AND shrink faster the longer
+// the rope holds. Keyed on elapsed seconds because the pull has no deadline to
+// measure progress against. Pure, Node-tested directly.
+export function pullRampFactor(elapsedS: number, halfLifeS: number, rampMin: number): number {
+  if (!(elapsedS > 0)) return 1; // the whistle (and any NaN/negative) is full pace
+  return Math.max(rampMin, 2 ** (-elapsedS / halfLifeS));
 }
 
-// The ramp at the current sim time: no rng, so it never perturbs the draw order.
-function pullRamp(ctx: SimContext, run: GauntletRun): number {
+// The |marker| that decides the pull after `elapsedS`: the full winThreshold on a
+// fresh rope, then (once the frayGraceS of grace is spent) easing linearly to
+// ZERO across frayS as the rope's marks close in. Reaching zero is what
+// guarantees a clockless pull always resolves: at that point whichever side the
+// marker leans to has won, and a dead-even rope breaks toward team 1 (the same
+// drama tiebreak the deleted clock arm used). Pure, Node-tested directly.
+export function pullWinThresholdAt(elapsedS: number, t: GauntletPullTuning): number {
+  const frayed = elapsedS - t.frayGraceS;
+  if (frayed <= 0) return t.winThreshold;
+  return t.winThreshold * Math.max(0, 1 - frayed / t.frayS);
+}
+
+// Seconds of pulling so far. No rng, so neither curve perturbs the draw order.
+function pullElapsed(ctx: SimContext, trial: GauntletPullState): number {
+  return ctx.time - trial.startedAt;
+}
+
+// The pace at the current sim time.
+function pullRamp(ctx: SimContext, trial: GauntletPullState): number {
   const P = GAUNTLET.pull;
-  const progress = 1 - (run.phaseEndsAt - ctx.time) / P.durationS;
-  return pullRampFactor(progress, P.circleRampMin);
+  return pullRampFactor(pullElapsed(ctx, trial), P.rampHalfLifeS, P.circleRampMin);
 }
 
 // Deal the pid's next circle: a rolled gap after `at`, and a rolled full-shrink
@@ -161,7 +194,7 @@ function dealCircle(
   at: number,
 ): void {
   const P = GAUNTLET.pull;
-  const ramp = pullRamp(ctx, run);
+  const ramp = pullRamp(ctx, trial);
   const gap = run.rng.range(P.circleSpawnMinS, P.circleSpawnMaxS) * ramp;
   const shrinkS = run.rng.range(P.circleShrinkMinS, P.circleShrinkMaxS) * ramp;
   trial.circles.set(pid, { id: trial.nextCircleId++, spawnAt: at + gap, shrinkS });
@@ -242,20 +275,26 @@ export function updatePull(ctx: SimContext, run: GauntletRun, dt: number): boole
 
   dragRopeLine(ctx, run, trial, dt);
 
-  const winner = resolveWinner(ctx, run, trial);
+  const winner = resolveWinner(ctx, trial);
   if (winner === null) return false;
   finishPull(ctx, run, trial, winner);
   return true;
 }
 
-// Slide the whole line with the rope. The eased drag tracks the marker
-// (+ marker = team 0 winning = the rope hauled toward team 0's side, -x), and
-// every grip translates with it, players via their station pin so the winning
-// team visibly steps back while the losers are dragged onto the pit. Purely
-// deterministic (fixed DT ease, no rng); the venue eases its rope mesh toward
-// the same target so hands stay on the rope.
+// Slide the whole line with the rope. The eased drag tracks the marker as a
+// fraction of the LIVE (fraying) threshold (+ marker = team 0 winning = the rope
+// hauled toward team 0's side, -x), and every grip translates with it, players
+// via their station pin so the winning team visibly steps back while the losers
+// are dragged onto the pit. Reading the live threshold is what makes the fray
+// legible without a countdown: the same lean hauls the rope further the longer
+// the pull drags on, so the line visibly slides toward the edge as the marks
+// close. The floor keeps the ratio finite as the threshold reaches zero (the
+// trial resolves on that very tick, but the drag must not divide by it first).
+// Purely deterministic (fixed DT ease, no rng); the venue eases its rope mesh
+// toward the same target so hands stay on the rope.
 function dragRopeLine(ctx: SimContext, run: GauntletRun, trial: GauntletPullState, dt: number) {
-  const frac = Math.max(-1, Math.min(1, trial.marker / GAUNTLET.pull.winThreshold));
+  const th = Math.max(0.05, pullWinThresholdAt(pullElapsed(ctx, trial), GAUNTLET.pull));
+  const frac = Math.max(-1, Math.min(1, trial.marker / th));
   const target = -frac * GAUNTLET_VENUE.pull.knotTravel;
   trial.kx += (target - trial.kx) * Math.min(1, dt * 8);
   for (const [entityId, base] of trial.gripBase) {
@@ -290,23 +329,29 @@ function heaveNpcField(run: GauntletRun, trial: GauntletPullState): void {
   }
 }
 
-// The marker resolves to a winner on a threshold cross, or on the clock. On the
-// clock the larger marker magnitude wins; a dead-even (0) marker breaks toward
-// team 1, so team 0 loses the drama tiebreak.
-function resolveWinner(ctx: SimContext, run: GauntletRun, trial: GauntletPullState): 0 | 1 | null {
-  if (trial.marker >= GAUNTLET.pull.winThreshold) return 0;
-  if (trial.marker <= -GAUNTLET.pull.winThreshold) return 1;
-  if (ctx.time >= run.phaseEndsAt) return trial.marker > 0 ? 0 : 1;
+// The marker resolves to a winner on a threshold cross, and on NOTHING else:
+// there is no clock arm here, by design. The threshold frays toward zero, so a
+// pull that neither side can snap on a fresh rope still ends, decided by the
+// lean rather than by a deadline. Once the marks have fully closed a dead-even
+// (0) marker breaks toward team 1, the same drama tiebreak the deleted clock arm
+// applied, so team 0 never wins a rope it never moved.
+function resolveWinner(ctx: SimContext, trial: GauntletPullState): 0 | 1 | null {
+  const th = pullWinThresholdAt(pullElapsed(ctx, trial), GAUNTLET.pull);
+  if (th <= 0) return trial.marker > 0 ? 0 : 1;
+  if (trial.marker >= th) return 0;
+  if (trial.marker <= -th) return 1;
   return null;
 }
 
 // End-of-trial resolution: the pull is a participation test. Every live player
 // is graded by how hard they pulled (their accumulated contribution vs a full
-// win's worth, winThreshold): a full contribution takes nothing, zero effort
-// takes the full pool and is knocked out, even if their side won on the NPC
-// drift. The winning team additionally records a finish time (the per-trial
-// completion marker every trial sets). Then the NPC field thins toward the
-// trial target.
+// win's worth, the BASE winThreshold, never the frayed one: a pull that dragged
+// on must not hand out a cheaper pass): a full contribution takes nothing, zero
+// effort takes the full pool and is knocked out, even if their side won on the
+// NPC drift. The winning team additionally records a finish time (the per-trial
+// completion marker every trial sets), but fires no `gauntletFinished` cue: the
+// pull resolves for both teams at once, so the trial ending IS the result. Then
+// the NPC field thins toward the trial target.
 function finishPull(
   ctx: SimContext,
   run: GauntletRun,

@@ -69,6 +69,46 @@ describe('The Gauntlet queue (fair, rolling)', () => {
     expect(sim.gauntletRuns[0]!.practice).toBe(false);
   });
 
+  it('seats a late click into the still-filling lobby (friends queue seconds apart)', () => {
+    const sim = makeSim();
+    const a = addNear(sim, 'First');
+    sim.gauntletQueueJoin(a);
+    for (let i = 0; i < 20 * 2; i++) sim.tick(); // a's lobby opened; 2s of countdown pass
+    const b = addNear(sim, 'Second');
+    sim.gauntletQueueJoin(b);
+    sim.tick();
+    // b lands in a's forming game, never stranded behind it at queue position 1.
+    const run = gauntletRunForPlayer(sim.ctx, a)!;
+    expect(run.phase).toBe('lobby');
+    expect(gauntletRunForPlayer(sim.ctx, b)).toBe(run);
+    expect(sim.gauntletQueuePositionOf(b)).toBe(0);
+    advanceUntil(sim, () => run.phase !== 'lobby');
+    expect(run.playerStates.has(a)).toBe(true);
+    expect(run.playerStates.has(b)).toBe(true);
+  });
+
+  it('a fully abandoned run never stalls the next queue game', () => {
+    const sim = makeSim();
+    const a = addNear(sim, 'Quitter');
+    const b = addNear(sim, 'Friend');
+    sim.gauntletQueueJoin(a);
+    sim.gauntletQueueJoin(b);
+    advanceUntil(sim, () => (gauntletRunForPlayer(sim.ctx, a)?.phase ?? 'lobby') !== 'lobby');
+    // Both walk out mid-game (back to their saved spots beside the recruiter),
+    // then immediately re-queue.
+    sim.gauntletLeave(a);
+    sim.gauntletLeave(b);
+    sim.gauntletQueueJoin(a);
+    sim.gauntletQueueJoin(b);
+    sim.tick();
+    // Seated into a fresh lobby right away, NOT after the 30s empty-run sweep
+    // disposes the husk they abandoned.
+    const run2 = gauntletRunForPlayer(sim.ctx, a);
+    expect(run2).not.toBeNull();
+    expect(run2!.phase).toBe('lobby');
+    expect(gauntletRunForPlayer(sim.ctx, b)).toBe(run2);
+  });
+
   it('rolls sequentially: a new queuer waits for the running game, then gets the next', () => {
     const sim = makeSim();
     const a = addNear(sim, 'First');
@@ -85,7 +125,8 @@ describe('The Gauntlet queue (fair, rolling)', () => {
     expect(sim.gauntletQueuePositionOf(b)).toBeGreaterThan(0);
     expect(sim.gauntletRuns.length).toBe(1);
 
-    // a leaves; their run empties and times out, and the NEXT game forms for b.
+    // a leaves; the abandoned run stops blocking at once (no empty-timeout wait)
+    // and the NEXT game forms for b.
     sim.gauntletLeave(a);
     advanceUntil(sim, () => gauntletRunForPlayer(sim.ctx, b) !== null, 20 * 45);
     expect(gauntletRunForPlayer(sim.ctx, b)).not.toBeNull();

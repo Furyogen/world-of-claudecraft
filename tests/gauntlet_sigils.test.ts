@@ -4,6 +4,7 @@ import {
   GAUNTLET_VENUE,
   nearestSigilRingSlot,
   sigilFocusPose,
+  sigilRingAngle,
   sigilRingOffset,
   sigilStation,
 } from '../src/sim/content/gauntlet';
@@ -12,6 +13,12 @@ import { seatSigilsField } from '../src/sim/gauntlet/trial_sigils';
 import { Sim } from '../src/sim/sim';
 import type { SimContext } from '../src/sim/sim_context';
 import { groundHeight } from '../src/sim/world';
+
+// The PRODUCTION trial schedule, snapshotted at import: the scoring describe
+// below splices GAUNTLET.trials/targetSurvivorsPerTrial in a beforeAll, and the
+// pavilion must be sized against the real run, not a test harness's.
+const PROD_TRIALS = [...GAUNTLET.trials];
+const PROD_TARGETS = [...GAUNTLET.targetSurvivorsPerTrial];
 
 // --- local helpers (not shared; copied idioms from gauntlet.test.ts) ---
 
@@ -136,6 +143,45 @@ describe('sigil shapes (pure)', () => {
   });
 });
 
+describe('sigil pavilion capacity (pure)', () => {
+  const { ring, radius, slab } = GAUNTLET_VENUE.sigils;
+
+  it('the ring has a lectern for every contestant who can reach the etching', () => {
+    // The etching is trial 2, so its field is whoever survived the crossing.
+    // One station each, or the overflow ranks up BEHIND a lectern and two
+    // contestants share it (which is what the playtest screenshot caught).
+    const idx = PROD_TRIALS.indexOf('sigils');
+    expect(idx).toBeGreaterThan(0);
+    const field = PROD_TARGETS[idx - 1];
+    expect(field).toBeGreaterThan(0);
+    expect(ring.count).toBeGreaterThanOrEqual(field);
+    // And a lobby packed with real players can never outnumber the ring either.
+    expect(ring.count).toBeGreaterThanOrEqual(GAUNTLET.maxRealPlayers);
+    // The old 12-lectern ring is exactly what failed: 14 survivors, 12 stations.
+    expect(field).toBeGreaterThan(12);
+  });
+
+  it('the lecterns fit on their circle, and every etcher stands on the dais', () => {
+    // Slots are evenly spaced around the ring minus the approach wedge, so the
+    // arc between neighbouring lecterns has to clear the slab's own width or
+    // the slabs intersect. Growing `count` without `radius` breaks this.
+    const perSlot = Math.abs(sigilRingAngle(1, ring.count) - sigilRingAngle(0, ring.count));
+    expect(ring.radius * perSlot).toBeGreaterThan(slab.faceAcross);
+    // The etcher stands a standoff outside their lectern, and the overflow rank
+    // one pitch further: both must land on the dais, not off its rim.
+    const rank1 = sigilStation(ring.count, 0); // wraps to slot 0, one rank back
+    expect(
+      Math.hypot(rank1.x - GAUNTLET_VENUE.sigils.x, rank1.z - GAUNTLET_VENUE.sigils.z),
+    ).toBeLessThan(radius);
+    for (let i = 0; i < ring.count; i++) {
+      const st = sigilStation(i, 0);
+      const standR = Math.hypot(st.x - GAUNTLET_VENUE.sigils.x, st.z - GAUNTLET_VENUE.sigils.z);
+      expect(standR).toBeGreaterThan(ring.radius); // outside their own lectern
+      expect(standR).toBeLessThan(radius); // and still on the dais
+    }
+  });
+});
+
 describe('sigil trial scoring', () => {
   const savedTrials = [...GAUNTLET.trials];
   const savedTargets = [...GAUNTLET.targetSurvivorsPerTrial];
@@ -256,6 +302,35 @@ describe('sigil trial scoring', () => {
     const en = sim.entities.get(firstNpc.entityId)!;
     expect(en.pos.x).toBeCloseTo(run.origin.x + stB.x, 3); // the NPCs close the gap
     expect(Math.hypot(en.pos.x - eb.pos.x, en.pos.z - eb.pos.z)).toBeGreaterThan(1);
+  });
+
+  it('a real post-crossing field seats one contestant per lectern, nobody doubled up', () => {
+    // Field the etching the way the run really does: as many contestants as
+    // survive the crossing. Every one of them must own a station outright.
+    const field = PROD_TARGETS[PROD_TRIALS.indexOf('sigils') - 1];
+    const { sim, run } = startTrialSim(53);
+    const alive = run.contestants.filter((c) => c.eliminatedAtTrial === null);
+    // Trim the harness's inflated field (it splices a 30-body roster) down to
+    // the real survivor count, then re-seat.
+    for (const c of alive.slice(field)) c.eliminatedAtTrial = 0;
+    seatSigilsField((sim as unknown as { ctx: SimContext }).ctx, run);
+
+    const seated = run.contestants.filter((c) => c.eliminatedAtTrial === null);
+    expect(seated.length).toBe(field);
+    const V = GAUNTLET_VENUE.sigils;
+    const slots = seated.map((c) => {
+      const e = sim.entities.get(c.entityId)!;
+      return nearestSigilRingSlot(e.pos.x - run.origin.x - V.x, e.pos.z - run.origin.z - V.z);
+    });
+    expect(new Set(slots).size).toBe(field); // one lectern each, no sharing
+    // And nobody is standing on top of anybody: the tightest pair is a whole
+    // slot apart on the ring.
+    for (let i = 0; i < seated.length; i++)
+      for (let j = i + 1; j < seated.length; j++) {
+        const a = sim.entities.get(seated[i].entityId)!;
+        const b = sim.entities.get(seated[j].entityId)!;
+        expect(Math.hypot(a.pos.x - b.pos.x, a.pos.z - b.pos.z)).toBeGreaterThan(2);
+      }
   });
 
   it('the seeded ring rotation moves the field off the same lecterns run to run', () => {

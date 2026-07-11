@@ -1,8 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { GAUNTLET, GAUNTLET_LAYOUT, GAUNTLET_VENUE } from '../src/sim/content/gauntlet';
+import { courtNpcLevel } from '../src/sim/gauntlet/trial_court';
 import { aliveContestants, eliminateContestant } from '../src/sim/gauntlet/vitality';
 import { Sim } from '../src/sim/sim';
-import type { GauntletPhase, SimEvent } from '../src/sim/types';
+import { type GauntletPhase, MAX_LEVEL, type SimEvent } from '../src/sim/types';
 import { groundHeight } from '../src/sim/world';
 
 // --- Trial isolation: run ONLY the Final Court brawl, crowning a single
@@ -105,7 +106,8 @@ describe('gauntlet court: setup', () => {
     expect(trial.fighters.has(pid)).toBe(true);
     expect(alive.length).toBeGreaterThan(1); // a real brawl, not a walkover
 
-    // every fighter starts full and equal (same maxHp/hp), inside the ring
+    // every fighter shares the pool, and a fresh field (court-only schedule,
+    // no earlier wounds) starts full, inside the ring
     const c = center(run);
     for (const f of trial.fighters.values()) {
       const e = sim.entities.get(f.entityId)!;
@@ -116,6 +118,34 @@ describe('gauntlet court: setup', () => {
     }
     // the player's real maxHp is banked for restore
     expect(trial.fighters.get(pid)!.savedMaxHp).toBeGreaterThan(0);
+  });
+
+  it('carries each contestant vitality from the earlier trials into the court', () => {
+    const sim = makeSim(131);
+    const pid = sim.addPlayer('warrior', 'Scarred');
+    openAndJoin(sim, pid);
+    advanceTo(sim, 'staging');
+    const run = sim.gauntletRuns[0]!;
+    // Wounds carried in from the earlier trials: the player limps in at 40,
+    // one NPC at 25, while a second NPC arrives untouched.
+    const pc = run.contestants.find((c) => c.entityId === pid)!;
+    pc.vitality = 40;
+    const npcs = run.contestants.filter((c) => !c.player && c.eliminatedAtTrial === null);
+    expect(npcs.length).toBeGreaterThan(1);
+    npcs[0].vitality = 25;
+
+    advanceTo(sim, 'trial');
+
+    // The pool itself stays shared and equal; the ENTRY hp is the carried
+    // fraction, so a cleaner run through the earlier trials is a real edge.
+    const pe = sim.entities.get(pid)!;
+    expect(pe.maxHp).toBe(ct.maxHp);
+    expect(pe.hp).toBe(Math.max(1, Math.round((ct.maxHp * 40) / GAUNTLET.vitalityMax)));
+    expect(pc.vitality).toBe(40); // the standings meter keeps the carried value
+    const wounded = sim.entities.get(npcs[0].entityId)!;
+    expect(wounded.hp).toBe(Math.max(1, Math.round((ct.maxHp * 25) / GAUNTLET.vitalityMax)));
+    const fresh = sim.entities.get(npcs[1].entityId)!;
+    expect(fresh.hp).toBe(ct.maxHp); // an untouched run still starts full
   });
 
   it('re-normalizes a fighter whose maxHp recalc reverted mid-court (aura expiry)', () => {
@@ -217,6 +247,49 @@ describe('gauntlet court: vanilla combat (real damage + elimination)', () => {
     );
     expect(dmg?.amount).toBe(ct.strikeDamage);
   });
+
+  it('courtNpcLevel pins the field at or below every player in the court', () => {
+    expect(courtNpcLevel([1])).toBe(1);
+    expect(courtNpcLevel([20])).toBe(20);
+    expect(courtNpcLevel([20, 3, 11])).toBe(3); // the weakest player sets the bar
+    expect(courtNpcLevel([])).toBe(MAX_LEVEL); // an all-bot court
+    expect(courtNpcLevel([0, -5])).toBe(1); // never under a real level
+  });
+
+  it('the NPC field fights at the player level, so a low-level player can land a swing', () => {
+    // The regression: createNpc stamps contestants level 10, the white-hit table
+    // is level-relative, and the Gauntlet has no level gate. A level-1 player hit
+    // the above-level cliff (95% miss) plus the level-scaled NPC dodge (5%) for
+    // 100% avoidance, while the NPC strikes bypass the table and always landed.
+    const sim = makeSim(31);
+    const pid = sim.addPlayer('warrior', 'Rookie');
+    sim.setPlayerLevel(1, pid);
+    openAndJoin(sim, pid);
+    advanceTo(sim, 'trial');
+    const player = sim.entities.get(pid)!;
+    expect(player.level).toBe(1); // the player's own (persisted) level is untouched
+
+    const foes = aliveNpcs(sim);
+    expect(foes.length).toBeGreaterThan(0);
+    for (const c of foes) expect(sim.entities.get(c.entityId)!.level).toBe(1);
+
+    // Drive real auto-attack swings through the hit table and demand landings.
+    // Under the old level-10 field this loop produced miss/dodge forever.
+    const foe = sim.entities.get(foes[0].entityId)!;
+    teleport(sim, pid, foe.pos.x + 1.5, foe.pos.z);
+    player.facing = Math.atan2(foe.pos.x - player.pos.x, foe.pos.z - player.pos.z);
+    sim.targetEntity(foe.id, pid);
+    sim.startAutoAttack(pid);
+    const swings: SimEvent[] = [];
+    for (let i = 0; i < 20 * 30 && swings.filter((e) => e.type === 'damage').length < 3; i++) {
+      const foeE = sim.entities.get(foe.id);
+      if (!foeE || foeE.dead) break;
+      swings.push(...sim.tick().filter((e) => e.type === 'damage' && e.sourceId === pid));
+    }
+    const kinds = swings.filter((e) => e.type === 'damage').map((e) => e.kind);
+    expect(kinds.length).toBeGreaterThanOrEqual(3);
+    expect(kinds.some((k) => k !== 'miss' && k !== 'dodge')).toBe(true);
+  }, 20000);
 
   it('a vanilla killing blow eliminates the foe instead of a normal death', () => {
     const sim = makeSim(107);

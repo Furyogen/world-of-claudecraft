@@ -2,8 +2,9 @@
 // runs.ts:
 //   - Queue: a fair, FIFO, rolling matchmaker. Players wait in gauntletQueue; the
 //     matchmaker forms the next game from the FRONT the moment no live queue game
-//     is running (sequential rolling, "when one ends the next starts"). A rejoiner
-//     goes to the BACK so nobody jumps the wait.
+//     is running (sequential rolling, "when one ends the next starts"), and seats
+//     a late click straight into a still-filling lobby during its countdown. A
+//     rejoiner goes to the BACK so nobody jumps the wait.
 //   - Practice: an instant private solo run against a full field of NPC bots,
 //     available even when the event window is closed. Never records ladder stats.
 //   - Spectate: a free-roaming observer who is in no run, sees the watched run's
@@ -74,11 +75,32 @@ export function updateGauntletQueue(ctx: SimContext): void {
     });
   }
   if (ctx.gauntletQueue.length === 0 || !ctx.gauntletEventOpen) return;
+  // A queue game already forming: seat the front of the queue straight into the
+  // filling lobby (its countdown IS the fill window). Without this, a friend
+  // whose click lands a beat after the lobby opened is never seated and waits
+  // out the entire game they just missed.
+  const filling = ctx.gauntletRuns.find((g) => !g.practice && g.phase === 'lobby');
+  if (filling) {
+    const seats = GAUNTLET.maxRealPlayers - filling.contestants.filter((c) => c.player).length;
+    if (seats > 0) {
+      const seated = ctx.gauntletQueue.slice(0, seats);
+      ctx.gauntletQueue = ctx.gauntletQueue.slice(seated.length);
+      for (const u of seated) addPlayerToLobby(ctx, filling, u.pid);
+      emitLobbyState(ctx, filling);
+    }
+    return;
+  }
   // Sequential rolling: only one live queue game at a time. Wait while any
   // non-practice run is still PLAYING. A run parked on its podium is finished
-  // competition: the ceremony holds until its players choose to leave, so it
-  // must never block the next game from forming.
-  if (ctx.gauntletRuns.some((run) => !run.practice && run.phase !== 'podium')) return;
+  // competition (the ceremony holds until its players choose to leave), and a
+  // run every player has abandoned is a husk awaiting the empty-timeout sweep:
+  // neither may block the next game from forming.
+  if (
+    ctx.gauntletRuns.some(
+      (run) => !run.practice && run.phase !== 'podium' && run.playerStates.size > 0,
+    )
+  )
+    return;
   // Form the next game: a short-countdown lobby seated from the front of the queue
   // (up to the real-player cap); startRun backfills the rest of the field with NPCs.
   const run = openLobbyRun(ctx, { countdownS: GAUNTLET.queueCountdownS });

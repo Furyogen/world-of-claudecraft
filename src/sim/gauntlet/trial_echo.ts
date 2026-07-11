@@ -11,7 +11,12 @@ import { echoStation, GAUNTLET } from '../content/gauntlet';
 import type { SimContext } from '../sim_context';
 import { seatAllContestantsAt } from './contestants';
 import type { GauntletEchoPlayer, GauntletEchoState, GauntletRun } from './state';
-import { applyVitalityDamage, cullNpcsToward, trialDamageFromScore } from './vitality';
+import {
+  applyVitalityDamage,
+  cullNpcsToward,
+  finishTrialFor,
+  trialDamageFromScore,
+} from './vitality';
 
 // The breath between the round opening (or a miss) and the first flash.
 const SHOW_LEAD_S = 1;
@@ -77,7 +82,7 @@ export function startEcho(ctx: SimContext, run: GauntletRun): GauntletEchoState 
   // runs.ts pins the seated players at their desks for the trial; the same
   // seating already ran when the interlude opened.
   seatEchoField(ctx, run);
-  return { kind: 'echo', players };
+  return { kind: 'echo', players, clearedAt: null };
 }
 
 // A stone tap from the IWorld surface. Only counts during the answer window;
@@ -111,9 +116,11 @@ export function gauntletEchoTap(
   // Round cleared: the next one grows, or the trial is beaten.
   ep.round++;
   if (ep.round >= t.rounds) {
+    // The stones are beaten: bank the finish and fire the "you passed" cue. The
+    // trial does NOT resolve here (see updateEcho): it holds open for the
+    // victory beat so the client can pull the camera back off the desk.
     ep.done = true;
-    const ps = run.playerStates.get(pid);
-    if (ps && ps.finishedAt === null) ps.finishedAt = ctx.time;
+    finishTrialFor(ctx, run, pid);
     return;
   }
   dealRound(ctx, run, ep);
@@ -136,9 +143,25 @@ export function updateEcho(ctx: SimContext, run: GauntletRun, dt: number): boole
     if (!ep.done) allDone = false;
   }
 
-  if (!allDone && ctx.time < run.phaseEndsAt) return false;
+  if (ctx.time < run.phaseEndsAt) {
+    if (!allDone) return false;
+    if (trial.clearedAt === null) trial.clearedAt = ctx.time;
+    // The victory beat: hold the hall open after the last duellist beats the
+    // stones so their camera can glide back off the desk and the fanfare can
+    // land, instead of the interlude teleporting them away on the same tick. A
+    // field that was knocked out (or walked away) never cleared it: no hold.
+    if (ctx.time < trial.clearedAt + clearHoldS(trial)) return false;
+  }
   endEcho(ctx, run, trial);
   return true;
+}
+
+// The victory beat only plays when somebody actually beat the stones. `done` is
+// also set on a knockout and on a walkout, so the rounds counter is the test.
+function clearHoldS(trial: GauntletEchoState): number {
+  for (const ep of trial.players.values())
+    if (ep.round >= GAUNTLET.echo.rounds) return GAUNTLET.echo.clearHoldS;
+  return 0;
 }
 
 // End-of-trial damage: an unfinished player takes damage scaled by how few

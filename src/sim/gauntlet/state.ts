@@ -99,6 +99,11 @@ export interface GauntletSigilsPlayer {
 export interface GauntletSigilsState {
   kind: 'sigils';
   players: Map<number, GauntletSigilsPlayer>;
+  // The sim time every live etcher had finished, or null while any is still
+  // tracing. The trial then holds open for GAUNTLET.sigils.clearHoldS (the
+  // victory beat: the finisher's camera pulls back off the slab and the fanfare
+  // lands) before it resolves. Skipped when nobody actually finished.
+  clearedAt: number | null;
 }
 
 // Trial 3: one shared rope (trial_pull.ts). Each player pulls by clicking
@@ -111,6 +116,9 @@ export interface GauntletPullCircle {
 export interface GauntletPullState {
   kind: 'pull';
   marker: number; // + = team 0 (the players' side) winning
+  // Absolute sim time the trial opened. The pull has NO clock, so this (not a
+  // deadline) is what the pace ramp and the fray are keyed on.
+  startedAt: number;
   heaveAnchor: number; // absolute sim time of NPC heave index 0
   teamOf: Map<number, 0 | 1>; // pid -> team (solo runs put every player on 0)
   npcForce: [number, number]; // rolled per-heave NPC pull means per team
@@ -146,6 +154,8 @@ export interface GauntletEchoPlayer {
 export interface GauntletEchoState {
   kind: 'echo';
   players: Map<number, GauntletEchoPlayer>;
+  // The victory beat, exactly as GauntletSigilsState.clearedAt.
+  clearedAt: number | null;
 }
 
 // Trial 5: the shared brittle-panel crossing (trial_span.ts).
@@ -153,22 +163,32 @@ export interface GauntletSpanState {
   kind: 'span';
   safeSide: number[]; // per step: 0 left safe, 1 right safe (server knowledge)
   revealed: number[]; // per step: -1 unknown, else the known safe side
-  // Each seeded crosser runs and hops the span one panel at a time. `step` is
-  // the last panel it landed on (-1 = still at the start line). `fallStep` (set
-  // only for the expendable crossers the field can spare) is the panel it
-  // fatally guesses wrong on; `stumbleStep` (scouts) is a panel it guesses wrong
-  // ONCE then climbs back from the start (-1 = crosses clean). The rest is the
-  // locomotion cursor: `mode`, hop/plunge progress `segT`, and the instance-
-  // local origin of the current hop.
+  // Each seeded crosser walks the span one panel at a time, PONDERING at the lip
+  // of every pair before it hops. Every guess at an unproven pair is an honest
+  // coin: the crosser has no idea which pane holds, and the plan below is just
+  // that coin, pre-flipped at startSpan so the per-tick driver stays draw-free.
+  //
+  // `step` is the last panel it landed on (-1 = still at the start line).
+  // `fallStep` (expendable crossers only, the ones the survivor target can
+  // spare) is the panel their FIRST wrong guess lands on, and it is fatal.
+  // `stumbleSteps` (scouts, whom the target will not let fall) are the panels
+  // they guess wrong on and climb back from, capped at npcStumbleMax; empty
+  // means they cross clean. The rest is the locomotion cursor: `mode`,
+  // hop/plunge progress `segT`, the instance-local origin of the current hop,
+  // the absolute sim time the current ponder ends, and the crosser's rolled
+  // `nerve` (0 timid .. 1 brave), which sets how long it deliberates and
+  // desyncs its head-swing from the rest of the field.
   npcCrossers: {
     entityId: number;
     step: number;
     fallStep: number | null;
-    stumbleStep: number;
-    mode: 'idle' | 'hop' | 'plunge' | 'done';
+    stumbleSteps: number[];
+    mode: 'idle' | 'ponder' | 'hop' | 'plunge' | 'done';
     segT: number;
     hopFromX: number;
     hopFromZ: number;
+    ponderUntil: number;
+    nerve: number;
   }[];
   playerStep: Map<number, number>; // pid -> furthest safe step reached (-1 = none)
   finished: Set<number>;
