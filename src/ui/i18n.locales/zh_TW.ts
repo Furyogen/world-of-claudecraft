@@ -6164,4 +6164,13 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.bank.bonusSectionAria': '獎勵銀行格子及獲取方式',
   'entities.mobs.yumi_cat.name': '由美',
   'hudChrome.itemHeroicTag': '[英雄]',
+  'loading.tips.classes': '提示：9 個職業玩法各不相同，投入之前不妨都試一試。',
+  'loading.tips.talents': '提示：只要不在戰鬥中，隨時都能重置天賦，因此早期的選擇不會成為陷阱。',
+  'loading.tips.dungeons':
+    '提示：裝備超出普通難度要求後，試試地下城的英雄難度，享受更艱難也更有成就感的戰鬥。',
+  'loading.tips.market': '提示：世界市場可以讓你與全服玩家進行買賣交易。',
+  'loading.tips.guilds': '提示：加入公會可獲得專屬聊天頻道與公會成員名單。',
+  'loading.tips.professions': '提示：採集與製造類生活技能可以與你的戰鬥職業同時培養。',
+  'loading.tips.loadouts': '提示：保存多套天賦配置，即可在不同組合間切換而無需重新分配天賦點。',
+  'loading.tips.pvp': '提示：向其他玩家發起友誼決鬥，或報名灰燼競技場，來檢驗你的組合。',
 };

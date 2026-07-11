@@ -3935,7 +3935,17 @@ export const zh_CN: EnTranslations = {
     "enterTimeout": "无法进入世界。连接已超时。游戏服务器是否正在运行？",
     "connectionLost": "与服务器的连接已断开。",
     "reconnecting": "连接已断开。正在重新连接...",
-    "connectionRejected": "服务器关闭了连接。"
+    "connectionRejected": "服务器关闭了连接。",
+    "tips": {
+      "classes": "提示：9 个职业玩法各不相同，投入之前不妨都试一试。",
+      "talents": "提示：你可以在任意脱离战斗的时候重置天赋，因此早期的选择永远不会成为陷阱。",
+      "dungeons": "提示：装备超出普通难度要求后，试试地下城的英雄难度，享受更艰难也更有回报的战斗。",
+      "market": "提示：世界市场可以让你与全服玩家进行买卖交易。",
+      "guilds": "提示：加入公会可获得专属聊天频道和公会成员名单。",
+      "professions": "提示：采集与制造类生活技能可以与你的战斗职业同时培养。",
+      "loadouts": "提示：保存多套天赋配置，即可在不同 build 间切换而无需重新分配天赋点。",
+      "pvp": "提示：向其他玩家发起友谊决斗，或报名灰烬竞技场，来检验你的 build。"
+    }
   },
   "errors": {
     "nothingInteract": "附近没有可互动目标。",

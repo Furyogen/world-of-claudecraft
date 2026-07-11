@@ -3935,7 +3935,17 @@ export const pl_PL: EnTranslations = {
     "enterTimeout": "Nie udało się wejść do świata. Upłynął limit czasu połączenia. Czy serwer gry jest uruchomiony?",
     "connectionLost": "Połączenie z serwerem zostało utracone.",
     "reconnecting": "Połączenie utracone. Ponowne łączenie...",
-    "connectionRejected": "Serwer zamknął połączenie."
+    "connectionRejected": "Serwer zamknął połączenie.",
+    "tips": {
+      "classes": "Tip: each of the 9 classes plays differently. Try a few before committing to one.",
+      "talents": "Tip: you can reset your talents any time you are out of combat, so an early pick is never a trap.",
+      "dungeons": "Tip: try a dungeon on heroic difficulty once you outgear normal for a tougher, more rewarding fight.",
+      "market": "Tip: the World Market lets you buy and sell with players across the whole realm.",
+      "guilds": "Tip: joining a guild gives you a private chat channel and a shared roster of your guildmates.",
+      "professions": "Tip: gathering and crafting professions can be trained alongside your combat class.",
+      "loadouts": "Tip: save more than one talent loadout to swap between builds without spending points twice.",
+      "pvp": "Tip: challenge another player to a friendly duel, or queue for the Ashen Coliseum arena, to test your build."
+    }
   },
   "errors": {
     "nothingInteract": "Brak obiektu do interakcji.",

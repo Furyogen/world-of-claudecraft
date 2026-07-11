@@ -6501,4 +6501,19 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.bank.bonusSectionAria': 'ボーナス銀行スロットと獲得方法',
   'entities.mobs.yumi_cat.name': 'ユミ',
   'hudChrome.itemHeroicTag': '[英雄]',
+  'loading.tips.classes':
+    'ヒント：9つのクラスはそれぞれ遊び方が異なります。決める前にいくつか試してみましょう。',
+  'loading.tips.talents':
+    'ヒント：非戦闘中ならいつでも特性をリセットできるので、最初の選択が失敗になることはありません。',
+  'loading.tips.dungeons':
+    'ヒント：通常難易度の装備が整ったら、より歯応えのあるヒロイック難易度のダンジョンに挑戦してみましょう。',
+  'loading.tips.market': 'ヒント：ワールドマーケットではサーバー中のプレイヤーと売買ができます。',
+  'loading.tips.guilds':
+    'ヒント：ギルドに加入すると専用のチャットチャンネルとギルドメンバーの名簿が使えるようになります。',
+  'loading.tips.professions':
+    'ヒント：採集や製作の生産系スキルは、戦闘クラスと並行して育てられます。',
+  'loading.tips.loadouts':
+    'ヒント：複数の特性ロードアウトを保存しておけば、ポイントを使い直さずにビルドを切り替えられます。',
+  'loading.tips.pvp':
+    'ヒント：他のプレイヤーに友好的な決闘を申し込むか、灰塵のコロシアムに参加してビルドを試してみましょう。',
 };

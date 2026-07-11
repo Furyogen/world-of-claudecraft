@@ -191,6 +191,7 @@ import {
 } from './ui/i18n';
 import { defaultIconPrewarmEntries, prewarmIconCache } from './ui/icon_prewarm';
 import { iconDataUrl } from './ui/icons';
+import { createLoadingTipRotation, type LoadingTipRotation } from './ui/loading_tips';
 import { applyNativeDeviceLanguage } from './ui/native_language';
 import { scheduleNativeUpdateCheck } from './ui/native_update_prompt';
 import { createMetricsSampler } from './ui/perf_metrics_sampler';
@@ -719,8 +720,11 @@ function requestPreferredFullscreen(): void {
 // ---------------------------------------------------------------------------
 
 const LOADING_FADE_MS = 350; // keep in sync with the #loading-screen CSS transition
+const LOADING_TIP_ROTATE_MS = 5000;
 
 let loadingHideTimer: number | null = null;
+let loadingTipRotation: LoadingTipRotation | null = null;
+let loadingTipTimer: number | null = null;
 
 function showLoadingScreen(statusText: string): void {
   const el = $('#loading-screen');
@@ -731,6 +735,7 @@ function showLoadingScreen(statusText: string): void {
   el.classList.remove('fade');
   el.classList.add('visible');
   setLoadingStatus(statusText);
+  startLoadingTips();
 }
 
 function setLoadingStatus(text: string): void {
@@ -742,10 +747,34 @@ function setLoadingProgress(done: number, total: number): void {
   setLoadingStatus(t('loading.worldProgress', { done, total }));
 }
 
+// Rotating "did you know" copy under the progress bar, purely cosmetic (no
+// gameplay-relevant info), so entering/leaving the loading screen sets it up
+// and tears it down independent of the actual asset/scene-build progress.
+function startLoadingTips(): void {
+  if (loadingTipTimer !== null) return; // already running
+  loadingTipRotation = createLoadingTipRotation();
+  const tipEl = document.querySelector<HTMLElement>('#ls-tip');
+  if (!tipEl) return;
+  tipEl.textContent = loadingTipRotation.current();
+  loadingTipTimer = window.setInterval(() => {
+    if (!loadingTipRotation) return;
+    tipEl.textContent = loadingTipRotation.next();
+  }, LOADING_TIP_ROTATE_MS);
+}
+
+function stopLoadingTips(): void {
+  if (loadingTipTimer !== null) {
+    window.clearInterval(loadingTipTimer);
+    loadingTipTimer = null;
+  }
+  loadingTipRotation = null;
+}
+
 function hideLoadingScreen(): void {
   const el = $('#loading-screen');
   if (!el.classList.contains('visible')) return;
   el.classList.add('fade');
+  stopLoadingTips();
   loadingHideTimer = window.setTimeout(() => {
     el.classList.remove('visible', 'fade');
     loadingHideTimer = null;
