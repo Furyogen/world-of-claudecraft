@@ -155,6 +155,24 @@ export const DEFAULT_TUNING = {
   pool: 1, // ground light pool
 };
 
+// In-world softening per tier (twin of src/render/weapon_vfx.ts WORLD_TUNING;
+// keep the values in sync). The game renderer starts from these, so the viewer
+// seeds its sliders here for weapons with no saved per-weapon tuning: what you
+// see when the fx bar opens is what the game currently shows.
+export const WORLD_TUNING = {
+  rare: { glow: 0.8, light: 0.7, core: 0.8, sparkle: 0.8, mist: 0.8, shell: 0.75 },
+  epic: { glow: 0.55, light: 0.5, core: 0.65, motes: 0.7, sparkle: 0.65, mist: 0.6, shell: 0.5 },
+  legendary: {
+    glow: 0.6,
+    light: 0.55,
+    core: 0.7,
+    motes: 0.75,
+    aurora: 0.65,
+    sparkle: 0.7,
+    shell: 0.55,
+  },
+};
+
 const TUNE_KEY_BY_KIND = {
   coreSprite: 'core',
   motes: 'motes',

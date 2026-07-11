@@ -4,7 +4,10 @@
 // supplies the skins themselves (model, rarity, lore) and the apply rules
 // decide which skins the player can attach right now. DOM-free and unit-tested.
 
-import { skinnableWeaponTypesFor } from '../sim/content/weapon_skin_rules';
+import {
+  eligibleClassesForWeaponSkinType,
+  skinnableWeaponTypesFor,
+} from '../sim/content/weapon_skin_rules';
 import {
   WEAPON_SKIN_LIST,
   WEAPON_SKIN_RARITY_ORDER,
@@ -12,7 +15,7 @@ import {
   type WeaponSkinRarity,
   weaponSkinClaudiumCost,
 } from '../sim/content/weapon_skins';
-import type { WeaponSkinType } from '../sim/types';
+import type { PlayerClass, WeaponSkinType } from '../sim/types';
 import type { AccountCosmetics } from '../world_api/cosmetics';
 
 export interface WocStoreItemInput {
@@ -96,6 +99,8 @@ export interface ArmorySkinRow {
   canApplyNow: boolean;
   affordable: boolean;
   shortfall: number;
+  /** Classes that can ever apply this skin (the card's face chips). */
+  eligibleClasses: readonly PlayerClass[];
 }
 
 export interface ArmorySection {
@@ -143,6 +148,7 @@ export function buildArmorySections(
       canApplyNow: owned && applicableTypes.has(skin.weaponType),
       affordable: !owned && balance !== null && balance >= costClaudium,
       shortfall: owned || balance === null ? 0 : Math.max(0, costClaudium - balance),
+      eligibleClasses: eligibleClassesForWeaponSkinType(skin.weaponType),
     };
     let section = sections.get(skin.collection);
     if (!section) {

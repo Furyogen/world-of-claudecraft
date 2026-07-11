@@ -7,7 +7,8 @@ import * as THREE from 'three';
 import { WEAPON_SKINS } from '../../sim/content/weapon_skins';
 import type { OverheadEmoteId } from '../../world_api';
 import { GFX } from '../gfx';
-import { createWeaponVfx, WEAPON_VFX, type WeaponVfxHandle, WORLD_TUNING } from '../weapon_vfx';
+import { createWeaponVfx, WEAPON_VFX, type WeaponVfxHandle } from '../weapon_vfx';
+import { weaponVfxTuningFor } from '../weapon_vfx_tuning';
 import {
   type AnimState,
   type BaseState,
@@ -549,12 +550,13 @@ export class CharacterVisual {
   /** Attach the skin's rarity VFX rig to each held payload (in-hand mode: no
    *  backdrop dome, no ground pool; emissive + particles ride the weapon). */
   private buildWeaponVfx(payloads: THREE.Object3D[]): void {
-    const spec = this.weaponSkinVfxSpec();
-    if (!spec) return;
+    const skin = this.weaponSkinId ? WEAPON_SKINS[this.weaponSkinId] : null;
+    const spec = skin ? (WEAPON_VFX[skin.model] ?? null) : null;
+    if (!skin || !spec) return;
     for (const payload of payloads) {
       const handle = createWeaponVfx(payload, spec, { grounded: false });
       handle.setBackdropVisible(false);
-      handle.setTuning(WORLD_TUNING[spec.tier] ?? {});
+      handle.setTuning(weaponVfxTuningFor(skin.model, spec.tier));
       handle.setPixelScale(weaponVfxViewportHeight * this.weaponVfxSpriteScale);
       // Tag the rig's own scene nodes: applyMaterials must never tint its
       // ShaderMaterials and the shadow pass has no business with sprite shells.

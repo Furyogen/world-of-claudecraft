@@ -8,7 +8,9 @@
 // heroic_ prefix strip. 'polearm' exists so spears and scythes classify honestly;
 // no skins target it.
 
-import type { WeaponSkinLoadout, WeaponSkinType } from '../types';
+import { ITEMS } from '../data';
+import { canEquipItem } from '../equipment_rules';
+import type { PlayerClass, WeaponSkinLoadout, WeaponSkinType } from '../types';
 import { WEAPON_SKINS } from './weapon_skins';
 
 export type ItemWeaponType = WeaponSkinType | 'polearm';
@@ -167,4 +169,50 @@ export function weaponSkinTypeMatches(
   skinType: WeaponSkinType,
 ): boolean {
   return skinnableWeaponTypesFor(cls, mainhandItemId).includes(skinType);
+}
+
+// Canonical class display order for the eligibility chips (the PlayerClass
+// union order in ../types.ts).
+const CLASS_ORDER: readonly PlayerClass[] = [
+  'warrior',
+  'paladin',
+  'hunter',
+  'rogue',
+  'priest',
+  'shaman',
+  'mage',
+  'warlock',
+  'druid',
+];
+
+const eligibleByType = new Map<WeaponSkinType, readonly PlayerClass[]>();
+
+/**
+ * Every class that can ever APPLY a skin of this weapon type (the store card
+ * eligibility chips). Hunters always display the class ranged weapon, so bow
+ * and crossbow are hunter-only and hunters are never eligible for any other
+ * type. Other types derive from the item data: a class is eligible when it can
+ * equip a proficiency-locked weapon of the type (starter weapons carry no
+ * class lock and would mark every type all-class, so locked rows decide; a
+ * type with no locked rows falls back to the full equip check). Memoized: the
+ * item data is static content.
+ */
+export function eligibleClassesForWeaponSkinType(type: WeaponSkinType): readonly PlayerClass[] {
+  const memo = eligibleByType.get(type);
+  if (memo) return memo;
+  let out: readonly PlayerClass[];
+  if (type === 'bow' || type === 'crossbow') {
+    out = ['hunter'];
+  } else {
+    const items = Object.keys(WEAPON_TYPE_BY_ITEM)
+      .filter((id) => WEAPON_TYPE_BY_ITEM[id] === type)
+      .flatMap((id) => (ITEMS[id] ? [ITEMS[id]] : []));
+    const locked = items.filter((item) => item.requiredClass);
+    const pool = locked.length ? locked : items;
+    out = CLASS_ORDER.filter(
+      (cls) => cls !== 'hunter' && pool.some((item) => canEquipItem(cls, item)),
+    );
+  }
+  eligibleByType.set(type, out);
+  return out;
 }

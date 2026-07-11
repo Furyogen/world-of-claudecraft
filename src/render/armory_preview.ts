@@ -22,8 +22,8 @@ import {
   TIERS,
   WEAPON_VFX,
   type WeaponVfxHandle,
-  WORLD_TUNING,
 } from './weapon_vfx';
+import { weaponVfxTuningFor } from './weapon_vfx_tuning';
 
 export type ArmorySceneKey = 'day' | 'dusk' | 'night';
 export type ArmoryPreviewMode = 'character' | 'weapon';
@@ -158,7 +158,10 @@ export function createArmoryPreview(
     const def = skinId ? WEAPON_SKINS[skinId] : null;
     const spec = def ? WEAPON_VFX[def.model] : null;
     const tierBloom = spec ? TIERS[spec.tier]?.bloom : null;
-    bloom.strength = tierBloom?.strength ?? DEFAULT_BLOOM.strength;
+    // The per-weapon saved tuning carries a bloom multiplier (the inspector's
+    // bloom slider rides the composer pass, not the VFX handle).
+    const bloomTune = def && spec ? (weaponVfxTuningFor(def.model, spec.tier).bloom ?? 1) : 1;
+    bloom.strength = (tierBloom?.strength ?? DEFAULT_BLOOM.strength) * bloomTune;
     bloom.radius = tierBloom?.radius ?? DEFAULT_BLOOM.radius;
     bloom.threshold = preset.bloomThreshold ?? tierBloom?.threshold ?? DEFAULT_BLOOM.threshold;
   }
@@ -191,10 +194,10 @@ export function createArmoryPreview(
     weaponGroup.add(weaponModel);
     const def = WEAPON_SKINS[skinId];
     const spec = def ? WEAPON_VFX[def.model] : null;
-    if (spec) {
+    if (def && spec) {
       weaponVfx = createWeaponVfx(weaponModel, spec, { grounded: true });
       weaponVfx.setBackdropVisible(false);
-      weaponVfx.setTuning(WORLD_TUNING[spec.tier] ?? {});
+      weaponVfx.setTuning(weaponVfxTuningFor(def.model, spec.tier));
       weaponVfx.setPixelScale(pixelHeight());
       weaponExtras = weaponVfx.sceneExtras;
       weaponExtras.position.set(0, -weaponGroup.position.y + 0.02, 0);

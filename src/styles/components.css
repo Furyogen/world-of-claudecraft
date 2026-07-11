@@ -1794,6 +1794,40 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
+  /* Eligible-class face chips, top-right of the card art (badge sits top-left). */
+  .armory-classes {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    z-index: 1;
+    display: flex;
+  }
+  .armory-class-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 19px;
+    height: 19px;
+    margin-left: -6px;
+    overflow: hidden;
+    border: 1px solid var(--rarity, #ffd27a);
+    border-radius: 50%;
+    background: rgb(7 11 16 / 0.9);
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.55);
+  }
+  .armory-class-chip:first-child {
+    margin-left: 0;
+  }
+  .armory-card-art .armory-class-chip img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .armory-class-chip i {
+    font-style: normal;
+    font-size: 9px;
+    color: var(--color-text-light);
+  }
   .armory-card-copy {
     display: grid;
     gap: 4px;

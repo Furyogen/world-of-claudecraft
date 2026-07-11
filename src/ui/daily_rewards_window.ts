@@ -1,7 +1,9 @@
+import { playerPortraitDataUrl } from '../render/characters/portrait';
 import type { PlayerClass, WeaponSkinType } from '../sim/types';
 import type { DailyRewardHistory, DailyRewardStatus, IWorld } from '../world_api';
 import { ArmoryInspect, badgeLabel, rarityLabel, weaponTypeLabel } from './armory_inspect';
 import { buildDailyRewardsView, type DailyRewardsView } from './daily_rewards_view';
+import { tEntity } from './entity_i18n';
 import { esc } from './esc';
 import { formatDateTime, formatNumber, t } from './i18n';
 import { ensureWindowFrame } from './window_frame_mount';
@@ -301,11 +303,28 @@ export class DailyRewardsWindow {
     return (
       `<article class="armory-card rarity-${esc(row.skin.rarity)}${row.owned ? ' owned' : ''}${row.applied ? ' applied' : ''}">` +
       `<button type="button" data-armory-skin="${esc(row.skin.id)}" aria-label="${esc(t('hudChrome.wocStore.inspectAria', { item: row.skin.name }))}">` +
-      `<span class="armory-card-art"><img src="${esc(row.art)}" alt="" loading="lazy">${badge}</span>` +
+      `<span class="armory-card-art"><img src="${esc(row.art)}" alt="" loading="lazy">${badge}${this.armoryClassChipsHtml(row)}</span>` +
       `<span class="armory-card-copy"><span class="armory-card-type">${esc(weaponTypeLabel(row.skin.weaponType))}</span>` +
       `<h4>${esc(row.skin.name)}</h4>${state}</span>` +
       `</button></article>`
     );
+  }
+
+  /** Top-right face chips: the classes that can ever apply this skin. Class
+   *  names come from the entity matcher (already localized in every locale);
+   *  a portrait not yet rasterized falls back to the class initial. */
+  private armoryClassChipsHtml(row: ArmorySkinRow): string {
+    const chips = row.eligibleClasses
+      .map((cls) => {
+        const name = tEntity({ kind: 'class', id: cls, field: 'name' });
+        const url = playerPortraitDataUrl(cls, 0);
+        const face = url
+          ? `<img src="${esc(url)}" alt="${esc(name)}" title="${esc(name)}">`
+          : `<i role="img" aria-label="${esc(name)}" title="${esc(name)}">${esc(name.slice(0, 1))}</i>`;
+        return `<span class="armory-class-chip">${face}</span>`;
+      })
+      .join('');
+    return chips ? `<span class="armory-classes">${chips}</span>` : '';
   }
 
   private openArmoryInspect(row: ArmorySkinRow): void {

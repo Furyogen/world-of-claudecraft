@@ -86,6 +86,24 @@ export function parseGripOverrides(src) {
   return map;
 }
 
+/** weapon_vfx_tuning.ts source -> Map weaponKey -> flat channel-multiplier
+ *  object (the saved inspector slider state). Comments are stripped first so
+ *  an example row in a comment can never be mis-parsed as a real entry. */
+export function parseVfxTuning(src) {
+  const map = new Map();
+  const block = src.match(/WEAPON_VFX_TUNING[^{]*\{([\s\S]*?)\n\};/);
+  if (!block) return map;
+  const body = block[1].replace(/\/\/[^\n]*/g, '');
+  for (const m of body.matchAll(/([a-z0-9_]+):\s*\{([^}]*)\}/gi)) {
+    const o = {};
+    for (const ch of m[2].matchAll(/([a-z]+):\s*(-?[\d.]+)/g)) {
+      o[ch[1]] = Number(ch[2]);
+    }
+    map.set(m[1], o);
+  }
+  return map;
+}
+
 /** characters/manifest.ts source -> Map modelRelPath -> [visualKeys]. Resolves
  *  the PLAYERS/ENEMIES/CREATURES/WEAPONS template constants and collects both
  *  body urls and attach urls. */
@@ -191,6 +209,9 @@ export function collectInventory() {
     grip: parseGripOverrides(
       readFileSync(join(REPO_ROOT, 'src/render/characters/weapon_grip.ts'), 'utf8'),
     ),
+    vfxTuning: parseVfxTuning(
+      readFileSync(join(REPO_ROOT, 'src/render/weapon_vfx_tuning.ts'), 'utf8'),
+    ),
     visuals: parseVisualUrls(
       readFileSync(join(REPO_ROOT, 'src/render/characters/manifest.ts'), 'utf8'),
     ),
@@ -228,6 +249,7 @@ export function collectInventory() {
         icon: existsSync(join(REPO_ROOT, 'public', iconRel)) ? iconRel : null,
         visualKeys: registries.visuals.get(rel) ?? [],
         gripOverride: registries.grip.get(name) ?? null,
+        vfxTuning: registries.vfxTuning.get(name) ?? null,
         referenced: !!grip || items.length > 0 || (registries.visuals.get(rel) ?? []).length > 0,
       };
       entry.family = weaponFamilyFor(name)?.name ?? null;
@@ -364,6 +386,7 @@ export function collectInventory() {
           generated: true,
           gripFamily,
           gripOverride: registries.grip.get(name) ?? null,
+          vfxTuning: registries.vfxTuning.get(name) ?? null,
         },
       });
     }
@@ -620,6 +643,10 @@ export async function serveLibrary({ port = 5180, refresh = null } = {}) {
       if (url === '/api/grip/save') {
         const integrate = await import('./integrate.mjs');
         return sendJson(res, 200, { actions: integrate.saveGripOverride(body) });
+      }
+      if (url === '/api/vfx/save') {
+        const integrate = await import('./integrate.mjs');
+        return sendJson(res, 200, { actions: integrate.saveVfxTuning(body) });
       }
       if (url === '/api/wizard/model') return sendJson(res, 200, wiz.startModel(body));
       if (url === '/api/wizard/texture') return sendJson(res, 200, wiz.textureAsset(body));

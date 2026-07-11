@@ -99,6 +99,20 @@ describe('buildArmorySections', () => {
     expect(asHunter.find((r) => r.skin.id === 'winterbite')?.canApplyNow).toBe(true);
   });
 
+  it('threads the eligible-class chips onto every row', () => {
+    const rows = buildArmorySections(0, [], {
+      cosmetics: noCosmetics,
+      cls: 'warrior',
+      mainhandItemId: 'worn_sword',
+    }).flatMap((s) => s.rows);
+    expect(rows.every((r) => r.eligibleClasses.length > 0)).toBe(true);
+    const bow = rows.find((r) => r.skin.weaponType === 'bow');
+    expect(bow?.eligibleClasses).toEqual(['hunter']);
+    const sword = rows.find((r) => r.skin.weaponType === 'sword');
+    expect(sword?.eligibleClasses).toContain('warrior');
+    expect(sword?.eligibleClasses).not.toContain('hunter');
+  });
+
   it('leaves the legacy weapon-cosmetic grid untouched by skin rows', () => {
     const rows = buildWocStoreRows(1000, [
       serviceRow('ice_fang_sword', 3000),
