@@ -244,6 +244,33 @@ export const en_XA: EnTranslations = {
         "banned": "[Ýóú áŕé ƀáññéð ƒŕóɱ Ðáíļý Ŕéŵáŕðš. Ŕéášóñ: {reason}]"
       }
     },
+    "wocStore": {
+      "title": "[ŴÓÇ Šţóŕé]",
+      "close": "[Çļóšé ŴÓÇ Šţóŕé]",
+      "tabsLabel": "[ŴÓÇ Šţóŕé šéçţíóñš]",
+      "storeTab": "[Šţóŕé]",
+      "rewardsTab": "[Ðáíļý Ŕéŵáŕðš]",
+      "loading": "[Ļóáðíñĝ ŴÓÇ Šţóŕé...]",
+      "error": "[Ţĥé ŴÓÇ Šţóŕé íš úñáʋáíļáƀļé ŕíĝĥţ ñóŵ. Þļéášé ţŕý áĝáíñ šĥóŕţļý.]",
+      "eyebrow": "[Ƒéáţúŕéð Çóļļéçţíóñ]",
+      "featuredTitle": "[Ŵéáþóñš Ƒóŕĝéð Ɓéýóñð ţĥé Ƒŕóñţíéŕ]",
+      "featuredBody": "[Çļáíɱ þŕéɱíúɱ ŵéáþóñ áþþéáŕáñçéš ŵíţĥ Çļáúðíúɱ. Çóšɱéţíçš ñéʋéŕ çĥáñĝé çóɱƀáţ þóŵéŕ.]",
+      "balance": "[Çļáúðíúɱ Ɓáļáñçé]",
+      "buyClaudium": "[Þúŕçĥášé Çļáúðíúɱ]",
+      "category": "[Çóšɱéţíçš]",
+      "weapons": "[Ŵéáþóñ Çóļļéçţíóñ]",
+      "empty": "[Ñó ŵéáþóñ çóšɱéţíçš áŕé áʋáíļáƀļé ŕíĝĥţ ñóŵ.]",
+      "weaponCosmetic": "[Ŵéáþóñ Çóšɱéţíç]",
+      "purchaseAria": "[Þúŕçĥášé {item} ƒóŕ {cost} Çļáúðíúɱ]",
+      "owned": "[Óŵñéð]",
+      "ownedAria": "[{item} íš áļŕéáðý óŵñéð]",
+      "needMoreTitle": "[Ɱóŕé Çļáúðíúɱ Ŕéɋúíŕéð]",
+      "needMoreBody": "[Ýóú ñééð {shortfall} ɱóŕé Çļáúðíúɱ ţó þúŕçĥášé {item}.]",
+      "cancel": "[Çáñçéļ]",
+      "confirmTitle": "[Çóñƒíŕɱ Çóšɱéţíç Þúŕçĥášé]",
+      "confirmBody": "[Þúŕçĥášé {item} ƒóŕ {cost} Çļáúðíúɱ?]",
+      "confirmPurchase": "[Þúŕçĥášé]"
+    },
     "claudium": {
       "title": "[Çļáúðíúɱ]",
       "open": "[Óþéñ Çļáúðíúɱ]",
@@ -360,7 +387,7 @@ export const en_XA: EnTranslations = {
     "mobile": {
       "jump": "[Ĵúɱþ]",
       "leaderboard": "[Ŕáñķš]",
-      "dailyRewards": "[Ŕéŵáŕðš]",
+      "dailyRewards": "[Šţóŕé]",
       "nameplates": "[Ñáɱéš]",
       "haptics": "[Ĥáþţíçš]",
       "hapticsOff": "[Ĥáþţíçš Óƒƒ]",

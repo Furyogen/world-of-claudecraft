@@ -22,8 +22,8 @@ const funded: ClaudiumViewInput = {
     { sku: 's100', solAmountBase: '10000000000', wocAmountBase: '100000000' },
   ],
   storeItems: [
-    { itemId: 'hat', name: 'Golden Hat', kind: 'cosmetic', costClaudium: 500 },
-    { itemId: 'skin', name: 'Ember Skin', kind: 'skin', costClaudium: 2000 },
+    { itemId: 'hat', name: 'Golden Hat', kind: 'cosmetic', costClaudium: 500, owned: false },
+    { itemId: 'skin', name: 'Ember Skin', kind: 'skin', costClaudium: 2000, owned: false },
   ],
 };
 
@@ -50,7 +50,9 @@ describe('buildClaudiumView disabled state (service off)', () => {
       balance: null,
       skus: [{ sku: 's1', usd: 1, claudium: 100 }],
       price: { usdPerClaudium: 0.01, wocBaseUnitsPerClaudium: '42' },
-      storeItems: [{ itemId: 'hat', name: 'Hat', kind: 'cosmetic', costClaudium: 500 }],
+      storeItems: [
+        { itemId: 'hat', name: 'Hat', kind: 'cosmetic', costClaudium: 500, owned: false },
+      ],
     });
     expect(view.disabled).toBe(true);
     expect(view.buyRows).toEqual([]);

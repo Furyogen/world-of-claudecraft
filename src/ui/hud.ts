@@ -468,9 +468,13 @@ export interface ReportHooks {
  */
 export interface ClaudiumHooks {
   balance(): Promise<number | null>;
+  storeSnapshot(): Promise<Pick<ClaudiumSnapshot, 'balance' | 'storeItems'>>;
   snapshot(): Promise<ClaudiumSnapshot>;
   buy(rail: ClaudiumRail, sku: string): Promise<void>;
-  spend(itemId: string, kind: 'cosmetic' | 'skin' | 'item'): void;
+  spend(
+    itemId: string,
+    kind: 'cosmetic' | 'skin' | 'item',
+  ): Promise<{ granted: boolean; balance: number | null }>;
 }
 
 export interface BugReportPayload {
@@ -3836,8 +3840,20 @@ export class Hud {
     onWalletConnect: () => {
       window.dispatchEvent(new CustomEvent('woc:wallet-verify'));
     },
-    showChestButton: () => this.showDailyRewardsChestButton(),
-    setShowChestButton: (show) => this.setDailyRewardsChestButtonPreference(show),
+    storeSnapshot: async () => {
+      const snapshot = await this.claudiumHooks?.storeSnapshot();
+      if (!snapshot) return { balance: null, items: [] };
+      this.setClaudiumLauncherBalance(snapshot.balance);
+      return { balance: snapshot.balance, items: [...snapshot.storeItems] };
+    },
+    spendStoreItem: async (itemId, kind) => {
+      const result = await this.claudiumHooks?.spend(itemId, kind);
+      if (result?.balance !== null && result?.balance !== undefined) {
+        this.setClaudiumLauncherBalance(result.balance);
+      }
+      return result ?? { granted: false, balance: null };
+    },
+    openClaudium: () => this.claudiumWindow.toggle(),
     confirmDialog: (title, body, okText, cancelText, onOk) =>
       this.confirmDialog(title, body, okText, cancelText, onOk),
     ...this.windowFocus('#daily-rewards-window'),
@@ -3869,7 +3885,6 @@ export class Hud {
       return snapshot;
     },
     buy: (rail, sku) => this.claudiumHooks?.buy(rail, sku) ?? Promise.resolve(),
-    spend: (itemId, kind) => this.claudiumHooks?.spend(itemId, kind),
     ...this.windowFocus('#claudium-window'),
     onVisibilityChange: () => this.syncAnyWindowOpenState(),
   });
@@ -3995,7 +4010,7 @@ export class Hud {
         ? '--'
         : formatNumber(this.claudiumLauncherBalance, { maximumFractionDigits: 0 });
     const aria = t('hudChrome.claudium.open');
-    return `<button type="button" class="claudium-launcher" data-claudium-launcher title="${esc(aria)}" aria-label="${esc(aria)}"><span class="claudium-coin" aria-hidden="true"></span><span class="claudium-launcher-balance">${esc(label)}</span></button>`;
+    return `<button type="button" class="claudium-launcher" data-claudium-launcher title="${esc(aria)}" aria-label="${esc(aria)}"><img class="claudium-coin" src="/claudium/icons/claudium_coin_64.webp" alt=""><span class="claudium-launcher-balance">${esc(label)}</span></button>`;
   }
 
   private setClaudiumLauncherBalance(balance: number | null): void {

@@ -9,6 +9,7 @@ import { describe, expect, it } from 'vitest';
 const painter = readFileSync(new URL('../src/ui/bags_window.ts', import.meta.url), 'utf8');
 const tokens = readFileSync(new URL('../src/styles/tokens.css', import.meta.url), 'utf8');
 const hud = readFileSync(new URL('../src/ui/hud.ts', import.meta.url), 'utf8');
+const components = readFileSync(new URL('../src/styles/components.css', import.meta.url), 'utf8');
 
 describe('bags_window: no magic values', () => {
   it('carries no literal hex color in TS (the item-cell grammar resolves rarity in CSS)', () => {
@@ -36,6 +37,11 @@ describe('bags_window: no magic values', () => {
 });
 
 describe('bags_window: load-bearing behaviors preserved', () => {
+  it('uses the branded Claudium icon and matching balance color', () => {
+    expect(hud).toContain('src="/claudium/icons/claudium_coin_64.webp"');
+    expect(components).toMatch(/\.claudium-launcher\s*\{[^}]*color:\s*#9eeeff;/s);
+  });
+
   it('reuses bag_filter via buildBagGrid (does not re-derive the filter)', () => {
     expect(painter).toContain('buildBagGrid(');
     // the filter/sort stays in bag_filter.ts; the painter must not call it directly

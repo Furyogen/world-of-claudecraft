@@ -78,15 +78,20 @@ await new Promise((r) => setTimeout(r, 200));
 // balance + the SKU ladder + a couple store items, then re-open. The window
 // computes nothing; it renders exactly what these deps return.
 await page.evaluate(() => {
+  const packs = [
+    { sku: 'claudium_500', usd: 4.99, claudium: 500 },
+    { sku: 'claudium_1050', usd: 9.99, claudium: 1050 },
+    { sku: 'claudium_2200', usd: 19.99, claudium: 2200 },
+    { sku: 'claudium_4000', usd: 34.99, claudium: 4000 },
+    { sku: 'claudium_6000', usd: 49.99, claudium: 6000 },
+    { sku: 'claudium_13000', usd: 99.99, claudium: 13000 },
+  ];
   window.__game.hud.attachClaudium({
+    balance: async () => 1250,
+    storeSnapshot: async () => ({ balance: 1250, storeItems: [] }),
     snapshot: async () => ({
       balance: 1250,
-      skus: [
-        { sku: 's1', usd: 1, claudium: 100 },
-        { sku: 's5', usd: 5, claudium: 500 },
-        { sku: 's10', usd: 10, claudium: 1000 },
-        { sku: 's100', usd: 100, claudium: 10000 },
-      ],
+      skus: packs,
       price: { usdPerClaudium: 0.01, wocBaseUnitsPerClaudium: 42 },
       storeItems: [
         { itemId: 'hat_gold', name: 'Gilded Circlet', kind: 'cosmetic', costClaudium: 500 },
@@ -94,8 +99,8 @@ await page.evaluate(() => {
         { itemId: 'trail_frost', name: 'Frostfall Trail', kind: 'item', costClaudium: 750 },
       ],
     }),
-    buy: () => {},
-    spend: () => {},
+    buy: async () => {},
+    spend: async () => ({ granted: true, balance: 1250 }),
   });
   window.__game.hud.toggleClaudium();
 });

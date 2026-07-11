@@ -1820,6 +1820,10 @@ async function startGame(
     };
     hud.attachClaudium({
       balance: async () => (await economy.balance()).balance,
+      storeSnapshot: async () => {
+        const [balance, storeItems] = await Promise.all([economy.balance(), economy.store()]);
+        return { balance: balance.balance, storeItems };
+      },
       snapshot: async () => {
         const [balance, skus, price, nativeRails, storeItems] = await Promise.all([
           economy.balance(),
@@ -1918,8 +1922,13 @@ async function startGame(
           throw new Error(message || t('hudChrome.claudium.checkoutFailed'));
         });
       },
-      spend: (itemId, kind) => {
-        void economy.spend({ itemId, kind, idempotencyKey: newIdempotencyKey() });
+      spend: async (itemId, kind) => {
+        const result = await economy.spend({
+          itemId,
+          kind,
+          idempotencyKey: newIdempotencyKey(),
+        });
+        return { granted: result.granted, balance: result.balance };
       },
     });
   }

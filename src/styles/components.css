@@ -1386,6 +1386,270 @@
   #daily-rewards-window {
     width: 480px;
   }
+  #daily-rewards-window {
+    width: min(1040px, calc(100vw - 40px));
+    max-height: calc(100vh - 40px);
+    background:
+      radial-gradient(circle at 76% 8%, rgb(34 144 191 / 16%), transparent 34%),
+      linear-gradient(155deg, #07121b 0%, #081018 52%, #050a0f 100%);
+    border-color: #8d7138;
+    box-shadow: 0 24px 80px rgb(0 0 0 / 72%);
+  }
+  .woc-store-tabs {
+    display: flex;
+    gap: 2px;
+    padding: 0 12px;
+    border-bottom: 1px solid #463a1c;
+  }
+  .woc-store-tabs button {
+    min-height: 42px;
+    padding: 0 18px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    color: var(--color-text-muted);
+    font-family: var(--title-font);
+    letter-spacing: 0.06em;
+    cursor: pointer;
+  }
+  .woc-store-tabs button:hover,
+  .woc-store-tabs button.active {
+    color: #f3dfaa;
+    border-bottom-color: #c8a34a;
+  }
+  .woc-store-tabs button:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: -2px;
+  }
+  .woc-store-loading {
+    display: grid;
+    width: 42px;
+    min-height: 42px;
+    margin-left: auto;
+    place-items: center;
+    visibility: hidden;
+  }
+  .woc-store-loading.active {
+    visibility: visible;
+  }
+  .woc-store-loading i {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgb(200 163 74 / 28%);
+    border-top-color: #c8a34a;
+    border-radius: 50%;
+    animation: woc-store-spin 700ms linear infinite;
+  }
+  @keyframes woc-store-spin {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .woc-store-loading i {
+      animation: none;
+      border-color: #c8a34a;
+    }
+  }
+  #daily-rewards-window .woc-store-body {
+    max-height: calc(100vh - 138px);
+    padding: 14px;
+  }
+  .woc-store-hero {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 20px;
+    min-height: 168px;
+    padding: 26px 28px;
+    overflow: hidden;
+    border: 1px solid #6f592d;
+    background:
+      linear-gradient(90deg, rgb(3 10 16 / 96%) 0%, rgb(4 17 27 / 72%) 58%, transparent),
+      url("/claudium/claudium_coin_hero_3q.webp") 88% 50% / 270px auto no-repeat,
+      radial-gradient(circle at 86% 50%, rgb(44 184 232 / 24%), transparent 38%);
+  }
+  .woc-store-hero > div:first-child {
+    align-self: center;
+    max-width: 560px;
+  }
+  .woc-store-hero span,
+  .woc-store-section-title span,
+  .woc-store-card-copy > span {
+    color: #c8a34a;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .woc-store-hero h2 {
+    margin: 7px 0;
+    color: #f5ecd5;
+    font-family: var(--title-font);
+    font-size: clamp(24px, 3vw, 38px);
+    line-height: 1.05;
+  }
+  .woc-store-hero p {
+    max-width: 520px;
+    margin: 0;
+    color: #b9c3c9;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  .woc-store-balance {
+    z-index: 1;
+    align-self: start;
+    display: grid;
+    grid-template-columns: 30px auto;
+    align-items: center;
+    gap: 1px 8px;
+    min-width: 168px;
+    padding: 10px 12px;
+    border: 1px solid #866c35;
+    background: rgb(3 9 14 / 88%);
+  }
+  .woc-store-balance img {
+    grid-row: 1 / 3;
+    width: 30px;
+    height: 30px;
+  }
+  .woc-store-balance span {
+    color: var(--color-text-muted);
+    font-size: 10px;
+  }
+  .woc-store-balance strong {
+    color: #f3dfaa;
+    font-size: 18px;
+  }
+  .woc-store-balance button {
+    grid-column: 1 / -1;
+    min-height: 36px;
+    margin-top: 8px;
+    border: 1px solid #b18b3d;
+    background: linear-gradient(#6e5427, #3b2b16);
+    color: #fff0c5;
+    font-family: var(--title-font);
+    cursor: pointer;
+  }
+  .woc-store-section-title {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 20px;
+    margin: 22px 2px 10px;
+  }
+  .woc-store-section-title h3 {
+    margin: 2px 0 0;
+    color: #f5ecd5;
+    font-family: var(--title-font);
+    font-size: 20px;
+  }
+  .woc-store-section-title small {
+    max-width: 390px;
+    color: var(--color-text-muted);
+    text-align: right;
+  }
+  .woc-store-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .woc-store-card {
+    position: relative;
+    min-height: 250px;
+    overflow: hidden;
+    border: 1px solid #3e4b51;
+    background: #09141c;
+  }
+  .woc-store-card > img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    transition: opacity 160ms ease;
+  }
+  .woc-store-card:hover > img,
+  .woc-store-card:focus-within > img {
+    opacity: 0.82;
+  }
+  .woc-store-owned {
+    position: absolute;
+    top: 78px;
+    right: 0;
+    left: 0;
+    z-index: 1;
+    padding: 9px 12px;
+    border-top: 1px solid #c9a85e;
+    border-bottom: 1px solid #c9a85e;
+    background: rgb(5 14 20 / 88%);
+    color: #f4dda0;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-align: center;
+    text-transform: uppercase;
+  }
+  .woc-store-card-copy {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 6px 12px;
+    padding: 12px;
+    border-top: 1px solid #5c4c29;
+  }
+  .woc-store-card-copy > span {
+    grid-column: 1 / -1;
+  }
+  .woc-store-card h4 {
+    margin: 0;
+    overflow: hidden;
+    color: #e9e2d2;
+    font-size: 14px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .woc-store-card button {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    min-width: 82px;
+    min-height: 36px;
+    padding: 4px 10px;
+    border: 1px solid #9b7a36;
+    background: #17212a;
+    color: #f4dda0;
+    cursor: pointer;
+  }
+  .woc-store-card button:hover {
+    background: #253442;
+  }
+  .woc-store-card button:disabled {
+    border-color: #58636a;
+    background: #121b21;
+    color: #aeb6b8;
+    cursor: default;
+  }
+  .woc-store-card.owned > img {
+    opacity: 0.58;
+  }
+  .woc-store-card button:focus-visible,
+  .woc-store-balance button:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+  .woc-store-card button img {
+    width: 19px;
+    height: 19px;
+  }
+  .woc-store-card.short button {
+    border-color: #6f5b35;
+    color: #c8b98f;
+  }
+  .woc-store-empty {
+    grid-column: 1 / -1;
+    padding: 48px 20px;
+    border: 1px solid #3e4b51;
+    color: var(--color-text-muted);
+    text-align: center;
+  }
   /* Title subtitle ("Lifetime XP, realm"): the muted-gold token + 11px the painter
      used to set with an inline style (keeps the literals out of TS). */
   .lb-subtitle {
@@ -2034,11 +2298,17 @@
 
   /* ---------- claudium ---------- */
   #claudium-window {
-    width: min(440px, 92vw);
+    width: min(940px, calc(100vw - 40px));
+    max-height: calc(100vh - 40px);
+    border-color: #8d7138;
+    background:
+      radial-gradient(circle at 18% 0%, rgb(22 126 168 / 18%), transparent 34%),
+      linear-gradient(155deg, #07121b, #050a0f 72%);
+    box-shadow: 0 24px 80px rgb(0 0 0 / 72%);
   }
   .cl-body {
-    margin-top: 8px;
-    max-height: 62vh;
+    max-height: calc(100vh - 96px);
+    padding: 14px 18px 18px;
     overflow-y: auto;
   }
   .cl-loading {
@@ -2064,15 +2334,25 @@
     }
   }
   .cl-balance {
+    position: relative;
     display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: start;
+    grid-template-columns: 112px 1fr auto;
+    align-items: center;
     justify-content: space-between;
-    gap: 8px;
-    padding: 8px 10px;
-    border: 1px solid #463a1c;
-    background: #ffffff08;
-    border-radius: 4px;
+    gap: 18px;
+    min-height: 112px;
+    padding: 10px 24px 10px 10px;
+    overflow: hidden;
+    border: 1px solid #6f592d;
+    background:
+      linear-gradient(90deg, rgb(4 17 27 / 94%), rgb(3 10 16 / 78%)),
+      radial-gradient(circle at 12% 50%, rgb(44 184 232 / 22%), transparent 34%);
+  }
+  .cl-balance-art {
+    width: 112px;
+    height: 92px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 18px rgb(35 179 229 / 28%));
   }
   .cl-balance-main,
   .cl-wallet-balances {
@@ -2080,12 +2360,16 @@
     gap: 2px;
   }
   .cl-balance-label {
-    color: var(--color-text-muted);
-    font-size: 12px;
+    color: #c8a34a;
+    font-family: var(--title-font);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
   }
   .cl-balance-value {
-    color: #ffe27a;
-    font-size: 15px;
+    color: #f5ecd5;
+    font-family: var(--title-font);
+    font-size: 28px;
     font-weight: 700;
   }
   .cl-wallet-balances {
@@ -2111,17 +2395,18 @@
     line-height: 1.35;
   }
   .cl-section {
-    margin-top: 12px;
+    margin-top: 18px;
   }
   .cl-section h3 {
-    margin: 0 0 6px;
-    color: var(--gold);
+    margin: 0 0 10px;
+    color: #f5ecd5;
     font-family: var(--title-font);
-    font-size: 12px;
+    font-size: 19px;
   }
   .cl-rails {
     display: flex;
-    gap: 8px;
+    gap: 2px;
+    border-bottom: 1px solid #463a1c;
   }
   .cl-rail {
     position: relative;
@@ -2130,11 +2415,12 @@
     justify-content: center;
     gap: 6px;
     flex: 1;
-    min-height: 44px;
-    padding: 8px 7px;
-    border: 1px solid #463a1c;
-    border-radius: 4px;
-    background: #ffffff08;
+    min-height: 46px;
+    padding: 8px 18px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    background: transparent;
     color: #f0e4c8;
     font-size: 13px;
     cursor: var(--cursor-pointer);
@@ -2170,8 +2456,8 @@
     box-shadow: 0 0 10px rgba(245, 200, 67, 0.35);
   }
   .cl-rail[aria-pressed="true"] {
-    border-color: #b8902a;
-    background: #f5c84322;
+    border-bottom-color: #c8a34a;
+    background: linear-gradient(0deg, rgb(200 163 74 / 14%), transparent);
     color: #ffe27a;
   }
   .cl-rail:disabled {
@@ -2188,7 +2474,7 @@
     font-size: 11px;
   }
   .cl-amount-label {
-    margin: 10px 0 4px;
+    margin: 14px 0 8px;
     color: var(--color-text-muted);
     font-size: 11px;
   }
@@ -2223,18 +2509,22 @@
   .cl-sku-list,
   .cl-item-list {
     display: grid;
-    gap: 6px;
+    gap: 12px;
+  }
+  .cl-sku-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
   .cl-sku {
     display: grid;
-    grid-template-columns: 1fr 1fr auto;
-    align-items: center;
-    gap: 8px;
-    min-height: 40px;
-    padding: 8px 10px;
-    border: 1px solid #463a1c;
-    border-radius: 4px;
-    background: #ffffff08;
+    grid-template-columns: 1fr;
+    align-items: end;
+    gap: 6px;
+    min-height: 276px;
+    padding: 0 14px 14px;
+    overflow: hidden;
+    border: 1px solid #3e4b51;
+    border-radius: 0;
+    background: radial-gradient(circle at 50% 28%, rgb(42 180 226 / 14%), transparent 38%), #09141c;
     color: #f0e4c8;
     font-size: 13px;
     text-align: left;
@@ -2246,7 +2536,7 @@
     outline-offset: 2px;
   }
   .cl-sku:disabled {
-    opacity: 0.45;
+    opacity: 0.58;
     cursor: default;
   }
   .cl-sku:disabled .cl-sku-buy {
@@ -2258,42 +2548,53 @@
     opacity: 1;
   }
   .cl-sku-claudium {
-    color: #ffe27a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    color: #f5ecd5;
+    font-family: var(--title-font);
+    font-size: 17px;
+    text-align: center;
+  }
+  .cl-sku-claudium img {
+    width: 22px;
+    height: 22px;
+  }
+  .cl-pack-art {
+    display: grid;
+    min-height: 148px;
+    margin: 0 -14px 6px;
+    place-items: center;
+    border-bottom: 1px solid #5c4c29;
+    background: linear-gradient(180deg, rgb(5 13 19 / 20%), rgb(3 9 14 / 72%));
+  }
+  .cl-pack-art img {
+    width: 138px;
+    height: 132px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 17px rgb(39 181 230 / 28%));
+  }
+  .cl-pack[data-pack-tier="5"] .cl-pack-art img,
+  .cl-pack[data-pack-tier="6"] .cl-pack-art img {
+    width: 158px;
+  }
+  .cl-sku-usd {
+    color: #c8a34a;
     font-size: 12px;
+    text-align: center;
   }
   .cl-sku-buy {
-    justify-self: end;
-    color: var(--gold);
+    justify-self: stretch;
+    min-height: 36px;
+    padding: 8px 10px;
+    border: 1px solid #a8863f;
+    background: linear-gradient(#5f4823, #30220f);
+    color: #f9e8bc;
     font-size: 12px;
     font-weight: 700;
-  }
-  .cl-sku-toggle-row {
-    display: flex;
-    justify-content: center;
-    padding-top: 6px;
-  }
-  .cl-sku-toggle {
-    display: grid;
-    place-items: center;
-    width: 40px;
-    height: 40px;
-    border: 1px solid #463a1c;
-    border-radius: 999px;
-    background: #ffffff08;
-    color: var(--gold);
-    cursor: var(--cursor-pointer);
-  }
-  .cl-sku-toggle .ui-icon {
-    width: 18px;
-    height: 18px;
-    transform: rotate(90deg);
-  }
-  .cl-sku-toggle.expanded .ui-icon {
-    transform: rotate(-90deg);
-  }
-  .cl-sku-toggle:focus-visible {
-    outline: 2px solid var(--gold);
-    outline-offset: 2px;
+    text-align: center;
+    text-transform: uppercase;
   }
   .cl-item {
     display: grid;
@@ -3851,10 +4152,10 @@
     gap: 5px;
     min-height: 28px;
     padding: 3px 7px;
-    border: 1px solid #8a6427;
+    border: 1px solid #478ba5;
     border-radius: 4px;
-    background: #f5c84318;
-    color: #ffe27a;
+    background: #4ac9ef18;
+    color: #9eeeff;
     font: inherit;
     font-weight: 700;
     white-space: nowrap;
@@ -3862,20 +4163,19 @@
   }
   .claudium-launcher:hover,
   .claudium-launcher:focus-visible {
-    border-color: var(--gold);
-    background: #f5c84328;
+    border-color: #8cecff;
+    background: #4ac9ef28;
   }
   .claudium-launcher:focus-visible {
-    outline: 2px solid var(--gold);
+    outline: 2px solid var(--focus-ring);
     outline-offset: 2px;
   }
   .claudium-coin {
-    display: inline-block;
-    width: 11px;
-    height: 11px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 35% 30%, #fff0a5, #c28a22 58%, #51320c);
-    box-shadow: 0 0 5px rgba(245, 200, 67, 0.55);
+    display: block;
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 4px rgb(74 201 239 / 55%));
   }
   .woc-coin {
     display: inline-block;
