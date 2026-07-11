@@ -226,7 +226,7 @@ export class ArmoryInspect {
     const cost = formatNumber(row.costClaudium, { maximumFractionDigits: 0 });
     const price =
       `<span class="armory-price"><img src="/claudium/icons/claudium_coin_64.webp" alt="">` +
-      `<strong>${cost}</strong><em>${esc(t('hudChrome.wocStore.usdApprox', { usd: formatNumber(row.skin.priceUsd, { maximumFractionDigits: 0 }) }))}</em></span>`;
+      `<strong>${cost}</strong></span>`;
     let actions = '';
     if (!row.owned) {
       const label = row.purchasable

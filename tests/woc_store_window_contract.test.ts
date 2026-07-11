@@ -19,17 +19,22 @@ describe('WOC Store window contract', () => {
     expect(storeWindow).toContain('data-woc-store-tab="rewards"');
   });
 
-  it('offers a Claudium top-up when the selected cosmetic is unaffordable', () => {
-    const purchase = storeWindow.slice(storeWindow.indexOf('private requestStorePurchase'));
+  it('offers a Claudium top-up when the selected skin is unaffordable', () => {
+    const purchase = storeWindow.slice(storeWindow.indexOf('private requestArmoryPurchase'));
     expect(purchase).toContain('if (!row.affordable)');
     expect(purchase).toContain("t('hudChrome.wocStore.needMoreTitle')");
     expect(purchase).toContain('() => this.deps.openClaudium?.()');
   });
 
-  it('marks owned cosmetics and prevents another purchase attempt', () => {
-    expect(storeWindow).toContain('woc-store-owned');
-    expect(storeWindow).toContain("row.owned ? ' disabled' : ''");
-    expect(storeWindow).toContain('if (row.owned) return;');
+  it('marks owned skins and prevents another purchase attempt', () => {
+    expect(storeWindow).toContain('armory-state');
+    expect(storeWindow).toContain('if (row.owned || !row.purchasable) return;');
+  });
+
+  it('sells only the Season 1 Armory (no legacy cosmetics grid)', () => {
+    expect(storeWindow).not.toContain('woc-store-grid');
+    expect(storeWindow).not.toContain('storeCardHtml');
+    expect(storeWindow).not.toContain('buildWocStoreRows');
   });
 
   it('keeps the Claudium window focused on currency purchases', () => {

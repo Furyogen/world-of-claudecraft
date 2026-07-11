@@ -1387,8 +1387,9 @@
     width: 480px;
   }
   #daily-rewards-window {
+    top: 24px;
     width: min(1040px, calc(100vw - 40px));
-    max-height: calc(100vh - 40px);
+    max-height: calc(100vh - 48px);
     background:
       radial-gradient(circle at 76% 8%, rgb(34 144 191 / 16%), transparent 34%),
       linear-gradient(155deg, #07121b 0%, #081018 52%, #050a0f 100%);
@@ -1452,7 +1453,7 @@
     }
   }
   #daily-rewards-window .woc-store-body {
-    max-height: calc(100vh - 138px);
+    max-height: calc(100vh - 148px);
     padding: 14px;
   }
   .woc-store-hero {
@@ -1831,7 +1832,8 @@
   .armory-inspect-overlay {
     position: fixed;
     inset: 0;
-    z-index: 70;
+    /* Above the window-manager band (50-89), below the confirm dialog (95). */
+    z-index: 90;
     display: grid;
     place-items: center;
     padding: 18px;
@@ -1841,6 +1843,7 @@
     --rarity: #8fa3ad;
     --rarity-soft: rgb(143 163 173 / 0.16);
     position: relative;
+    color: var(--color-text-light);
     display: grid;
     grid-template-columns: minmax(0, 1.25fr) minmax(280px, 1fr);
     width: min(980px, 100%);
@@ -1961,15 +1964,16 @@
   }
   .armory-look {
     margin: 0;
+    color: #cdc4a9;
     font-size: 12.5px;
     font-style: italic;
-    line-height: 1.45;
+    line-height: 1.5;
   }
   .armory-lore {
-    padding: 10px 12px;
+    padding: 11px 13px;
     border: 1px solid rgb(255 255 255 / 0.08);
     border-left: 2px solid var(--rarity);
-    background: rgb(255 255 255 / 0.02);
+    background: rgb(0 0 0 / 0.35);
   }
   .armory-lore h3 {
     margin: 0 0 6px;
@@ -1980,8 +1984,9 @@
   }
   .armory-lore p {
     margin: 0;
-    font-size: 12.5px;
-    line-height: 1.55;
+    color: var(--color-text-light);
+    font-size: 13px;
+    line-height: 1.6;
   }
   .armory-inspect-actions {
     display: flex;
