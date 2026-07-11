@@ -375,6 +375,29 @@ describe('per-weapon vfx tuning', () => {
     const balance = (s: string) => s.split('{').length - s.split('}').length;
     expect(balance(out)).toBe(balance(src));
   });
+
+  it('the writer covers every WeaponVfxTuning channel (stays in sync with the TS interface)', async () => {
+    const { DEFAULT_TUNING } = await import('../src/render/weapon_vfx');
+    const halved = Object.fromEntries(Object.keys(DEFAULT_TUNING).map((k) => [k, 0.5]));
+    const body = integrate.formatVfxTuning(halved);
+    for (const k of Object.keys(DEFAULT_TUNING)) {
+      expect(body, `formatVfxTuning must serialize channel ${k}`).toContain(`${k}: 0.5`);
+    }
+  });
+
+  it('weaponVfxTuningFor prefers the saved row, else the tier baseline', async () => {
+    const { WEAPON_VFX_TUNING, weaponVfxTuningFor } = await import(
+      '../src/render/weapon_vfx_tuning'
+    );
+    const { WORLD_TUNING } = await import('../src/render/weapon_vfx');
+    expect(weaponVfxTuningFor('__unsaved__', 'epic')).toBe(WORLD_TUNING.epic);
+    WEAPON_VFX_TUNING.__vfx_probe__ = { glow: 0.3 };
+    try {
+      expect(weaponVfxTuningFor('__vfx_probe__', 'legendary')).toEqual({ glow: 0.3 });
+    } finally {
+      delete WEAPON_VFX_TUNING.__vfx_probe__;
+    }
+  });
 });
 
 // ---------------------------------------------------------------------------
