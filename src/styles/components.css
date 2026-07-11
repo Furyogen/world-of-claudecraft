@@ -1917,7 +1917,7 @@
   .armory-scene-toggle button:focus-visible,
   .armory-inspect-actions button:focus-visible,
   .armory-inspect-close:focus-visible {
-    outline: 2px solid var(--rarity, #c9a85e);
+    outline: 2px solid var(--rarity, var(--color-border-focus));
     outline-offset: 1px;
   }
   .armory-inspect-panel {
