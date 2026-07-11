@@ -226,7 +226,16 @@ of the family variant grip (lift + shrink clamp + hand flip) via `WEAPON_GRIP_OV
 free text reaches the source); "Reset" restores the family default (an identity override removes
 the key). Save is enabled only for APPLIED weapons (`public/models/weapons`, which have a stable
 registry key); generate + `--apply` a weapon first, then tune. After saving, restart/HMR the
-game client to pick up the new grip. Mechanics: `three_bundle_entry.js` is
+game client to pick up the new grip.
+
+For a weapon in an Armory Codex VFX tier, the "fx tuning" bar's sliders seed from what the GAME
+currently shows for that weapon: its saved row in `WEAPON_VFX_TUNING`
+(`src/render/weapon_vfx_tuning.ts`) when one exists, else the tier's `WORLD_TUNING` baseline
+(`src/render/weapon_vfx.ts`; twinned in `weapon_vfx.js`, keep the values in sync). "Save VFX"
+POSTs the current sliders to `/api/vfx/save` (`integrate.saveVfxTuning`, the same anchored
+numeric upsert), writing the row the world renderer and the armory inspect preview then use; a
+saved row REPLACES the tier baseline for that weapon. All-1.0 sliders remove the row (back to
+the tier default). The game dev client hot-reloads the file on save. Mechanics: `three_bundle_entry.js` is
 esbuild-bundled to `/three.bundle.js`, `viewer_live.js` is the browser module, and a guarded
 `/repo/*` route serves GLBs/atlases from `public/` and `tmp/asset_pipeline/` only (never `.env`
 or `src/`). The server runs until Ctrl-C.

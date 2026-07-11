@@ -26,6 +26,7 @@ import {
   DEFAULT_TUNING,
   SCENE_PRESETS,
   vfxSpecFor,
+  WORLD_TUNING,
 } from '/weapon_vfx.js';
 
 // The VFX toggle survives across detail opens (a per-page preference).
@@ -261,6 +262,7 @@ window.LiveViewer = {
       fxBar,
       fxInputs,
       fxResetBtn,
+      fxSaveBtn,
       fxStatusEl,
     } = ui;
     const setStatus = (t) => {
@@ -317,6 +319,17 @@ window.LiveViewer = {
     if (vfxToggle) vfxToggle.checked = vfxPref;
     if (vfxInfo && inspectorEl) {
       inspectorEl.insertAdjacentHTML('afterbegin', bannerHtml(vfxInfo.spec));
+    }
+    // Seed the sliders with what the GAME currently shows for this weapon: its
+    // saved per-weapon row (src/render/weapon_vfx_tuning.ts) when one exists,
+    // else the tier's in-world softening baseline. Tuning is per weapon from
+    // here; Save VFX writes the current sliders back as this weapon's row.
+    const savedVfxTuning = asset.registration?.vfxTuning ?? null;
+    if (vfxInfo) {
+      fxTuning = {
+        ...DEFAULT_TUNING,
+        ...(savedVfxTuning ?? WORLD_TUNING[vfxInfo.spec.tier] ?? {}),
+      };
     }
     const composerSize = () => {
       if (!session.composer) return;
@@ -474,6 +487,44 @@ window.LiveViewer = {
         applyEnvironment();
         if (fxStatusEl) fxStatusEl.textContent = 'reset to 1.00x';
       };
+    }
+    // Save VFX: write the current sliders as this weapon's in-game row
+    // (src/render/weapon_vfx_tuning.ts). All-1.0 sliders REMOVE the row, so the
+    // weapon falls back to its tier's WORLD_TUNING baseline.
+    if (fxSaveBtn) {
+      fxSaveBtn.style.display = vfxInfo ? '' : 'none';
+      fxSaveBtn.onclick = async () => {
+        if (!vfxInfo) return;
+        if (fxStatusEl) fxStatusEl.textContent = 'saving...';
+        try {
+          const resp = await fetch('/api/vfx/save', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ key: vfxInfo.key, tuning: { ...fxTuning } }),
+          });
+          const data = await resp.json();
+          if (resp.ok) {
+            // Persist into the in-memory asset so closing + reopening the viewer
+            // (without a page reload) re-seeds the sliders from what was just saved.
+            asset.registration = asset.registration || {};
+            asset.registration.vfxTuning = { ...fxTuning };
+          }
+          if (fxStatusEl) {
+            fxStatusEl.textContent = resp.ok
+              ? (data.actions?.[0] ?? 'saved')
+              : `save failed: ${data.error ?? resp.status}`;
+          }
+        } catch (err) {
+          if (fxStatusEl) {
+            fxStatusEl.textContent = `save failed: ${String(err.message ?? err).slice(0, 80)}`;
+          }
+        }
+      };
+    }
+    if (fxStatusEl && vfxInfo) {
+      fxStatusEl.textContent = savedVfxTuning
+        ? 'loaded: saved game tuning'
+        : 'loaded: tier default (game)';
     }
 
     const resize = () => {

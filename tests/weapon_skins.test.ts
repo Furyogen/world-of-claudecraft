@@ -3,6 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { WEAPON_VFX } from '../src/render/weapon_vfx';
 import {
+  eligibleClassesForWeaponSkinType,
   resolveActiveWeaponSkin,
   skinnableWeaponTypesFor,
   WEAPON_TYPE_BY_ITEM,
@@ -174,6 +175,46 @@ describe('skin apply rule', () => {
     for (const skin of WEAPON_SKIN_LIST) {
       expect(reachable.has(skin.weaponType), `${skin.id} (${skin.weaponType})`).toBe(true);
     }
+  });
+});
+
+describe('eligible classes per skin type (store card chips)', () => {
+  it('bow and crossbow are hunter-only (class-fixed ranged visual)', () => {
+    expect(eligibleClassesForWeaponSkinType('bow')).toEqual(['hunter']);
+    expect(eligibleClassesForWeaponSkinType('crossbow')).toEqual(['hunter']);
+  });
+
+  it('hunters are never eligible for a non-ranged type (mainhand never displays)', () => {
+    for (const skin of WEAPON_SKIN_LIST) {
+      if (skin.weaponType === 'bow' || skin.weaponType === 'crossbow') continue;
+      expect(
+        eligibleClassesForWeaponSkinType(skin.weaponType),
+        `${skin.weaponType} must not list hunter`,
+      ).not.toContain('hunter');
+    }
+  });
+
+  it('every paid skin type has at least one eligible class', () => {
+    for (const skin of WEAPON_SKIN_LIST) {
+      expect(
+        eligibleClassesForWeaponSkinType(skin.weaponType).length,
+        `${skin.id} (${skin.weaponType})`,
+      ).toBeGreaterThan(0);
+    }
+  });
+
+  it('proficiency groups decide the chips (spot checks against the item data)', () => {
+    expect(eligibleClassesForWeaponSkinType('sword')).toContain('warrior');
+    expect(eligibleClassesForWeaponSkinType('dagger')).toContain('rogue');
+    expect(eligibleClassesForWeaponSkinType('staff')).toContain('mage');
+    expect(eligibleClassesForWeaponSkinType('wand')).toContain('mage');
+    expect(eligibleClassesForWeaponSkinType('mace')).toContain('paladin');
+  });
+
+  it('memoizes per type (static content)', () => {
+    expect(eligibleClassesForWeaponSkinType('sword')).toBe(
+      eligibleClassesForWeaponSkinType('sword'),
+    );
   });
 });
 

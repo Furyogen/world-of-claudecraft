@@ -187,6 +187,7 @@
         <label title="fresnel rim shell">shell<input type="range" id="fxshell" min="0" max="2" step="0.05" value="1" /></label>
         <label title="ground light pool">pool<input type="range" id="fxpool" min="0" max="2" step="0.05" value="1" /></label>
         <button type="button" id="fxreset" title="reset all fx channels to the authored 1.0x">Reset</button>
+        <button type="button" id="fxsave" title="write this weapon's fx tuning to src/render/weapon_vfx_tuning.ts so the game uses it">Save VFX</button>
         <span class="gstatus" id="fxstatus"></span>
       </div>
       <div class="gripbar" id="gripbar">
@@ -472,6 +473,7 @@ function openDetail(i) {
         shell: document.getElementById('fxshell'), pool: document.getElementById('fxpool'),
       },
       fxResetBtn: document.getElementById('fxreset'),
+      fxSaveBtn: document.getElementById('fxsave'),
       fxStatusEl: document.getElementById('fxstatus'),
     });
   } else {

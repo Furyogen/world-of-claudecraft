@@ -298,6 +298,86 @@ describe('per-weapon grip overrides', () => {
 });
 
 // ---------------------------------------------------------------------------
+// 2b2. Per-weapon VFX tuning (formatVfxTuning / upsertVfxTuning; inspector "Save VFX")
+// ---------------------------------------------------------------------------
+
+const VFX_ANCHOR = 'export const WEAPON_VFX_TUNING: Record<string, Partial<WeaponVfxTuning>> = {';
+const VFX_FIXTURE = [
+  VFX_ANCHOR,
+  '  // Populated by the inspector Save VFX button, keyed by weapon model basename.',
+  '  worn_axe: { glow: 0.8, mist: 0.6 },',
+  '};',
+  '',
+].join('\n');
+
+describe('per-weapon vfx tuning', () => {
+  it('formatVfxTuning drops 1.0 channels and rounds to 2 decimals', () => {
+    expect(integrate.formatVfxTuning({})).toBe('');
+    expect(integrate.formatVfxTuning({ glow: 1, bloom: 1, pool: 1 })).toBe('');
+    expect(integrate.formatVfxTuning({ glow: 0.55, bloom: 1, sparkle: 0.649 })).toBe(
+      '{ glow: 0.55, sparkle: 0.65 }',
+    );
+  });
+
+  it('upsertVfxTuning inserts a new keyed row before the closing brace', () => {
+    const { src, action } = integrate.upsertVfxTuning(VFX_FIXTURE, 'emberfang_sword', {
+      glow: 0.55,
+      light: 0.5,
+    });
+    expect(src).toContain('  emberfang_sword: { glow: 0.55, light: 0.5 },');
+    expect(action).toContain('saved emberfang_sword');
+    expect(src).toContain('  worn_axe: { glow: 0.8, mist: 0.6 },');
+    const balance = (s: string) => s.split('{').length - s.split('}').length;
+    expect(balance(src)).toBe(balance(VFX_FIXTURE));
+  });
+
+  it('upsertVfxTuning replaces an existing row in place (no duplication)', () => {
+    const { src, action } = integrate.upsertVfxTuning(VFX_FIXTURE, 'worn_axe', { glow: 0.7 });
+    expect(src).toContain('  worn_axe: { glow: 0.7 },');
+    expect(src).not.toContain('mist: 0.6');
+    expect(src.match(/worn_axe:/g)).toHaveLength(1);
+    expect(action).toContain('updated worn_axe');
+  });
+
+  it('upsertVfxTuning removes the row on an all-default tuning or null', () => {
+    const reset = integrate.upsertVfxTuning(VFX_FIXTURE, 'worn_axe', { glow: 1 });
+    expect(reset.src).not.toContain('worn_axe');
+    expect(reset.src).toContain(VFX_ANCHOR);
+    expect(reset.action).toContain('removed worn_axe');
+    const viaNull = integrate.upsertVfxTuning(VFX_FIXTURE, 'worn_axe', null);
+    expect(viaNull.src).not.toContain('worn_axe');
+  });
+
+  it('upsertVfxTuning is idempotent on an unchanged row', () => {
+    const { src, action } = integrate.upsertVfxTuning(VFX_FIXTURE, 'worn_axe', {
+      glow: 0.8,
+      mist: 0.6,
+    });
+    expect(src).toBe(VFX_FIXTURE);
+    expect(action).toContain('skipped');
+  });
+
+  it('upsertVfxTuning rejects a bad key or out-of-range values', () => {
+    expect(() => integrate.upsertVfxTuning(VFX_FIXTURE, 'Bad-Key', { glow: 0.5 })).toThrow(
+      'snake_case',
+    );
+    expect(() =>
+      integrate.upsertVfxTuning(VFX_FIXTURE, 'ok', { glow: Number.POSITIVE_INFINITY }),
+    ).toThrow('finite');
+    expect(() => integrate.upsertVfxTuning(VFX_FIXTURE, 'ok', { glow: -0.1 })).toThrow('finite');
+    expect(() => integrate.upsertVfxTuning(VFX_FIXTURE, 'ok', { glow: 9 })).toThrow('finite');
+  });
+
+  it('the real weapon_vfx_tuning.ts carries the WEAPON_VFX_TUNING anchor', () => {
+    const src = readFileSync(join(ROOT, 'src/render/weapon_vfx_tuning.ts'), 'utf8');
+    expect(src).toContain(VFX_ANCHOR);
+    const { src: out } = integrate.upsertVfxTuning(src, '__vfx_test__', { glow: 0.5 });
+    const balance = (s: string) => s.split('{').length - s.split('}').length;
+    expect(balance(out)).toBe(balance(src));
+  });
+});
+
+// ---------------------------------------------------------------------------
 // 2c. removeWeaponFromSources (viewer "Delete asset" -- inverse of registerWeapon)
 // ---------------------------------------------------------------------------
 
@@ -643,6 +723,38 @@ describe('asset library registry parsers', () => {
     // The real (empty by default) registry parses without throwing.
     const realSrc = readFileSync(join(ROOT, 'src/render/characters/weapon_grip.ts'), 'utf8');
     expect(() => library.parseGripOverrides(realSrc)).not.toThrow();
+  });
+
+  it('the viewer twin WORLD_TUNING matches src/render/weapon_vfx.ts (values in sync)', async () => {
+    const { WORLD_TUNING } = await import('../src/render/weapon_vfx');
+    const library = await libraryImport;
+    const twinSrc = readFileSync(join(ROOT, 'scripts/asset_pipeline/weapon_vfx.js'), 'utf8');
+    const block = twinSrc.match(/export const WORLD_TUNING = \{([\s\S]*?)\n\};/);
+    expect(block, 'weapon_vfx.js twin must export WORLD_TUNING').toBeTruthy();
+    // Reuse the registry row parser: same `key: { channel: n }` row shape.
+    const parsed = library.parseVfxTuning(
+      `export const WEAPON_VFX_TUNING: twin = {${block?.[1]}\n};`,
+    );
+    expect(Object.fromEntries(parsed)).toEqual(WORLD_TUNING);
+  });
+
+  it('parses WEAPON_VFX_TUNING into weaponKey -> channel multipliers, ignoring comments', async () => {
+    const library = await libraryImport;
+    const src = [
+      'export const WEAPON_VFX_TUNING: Record<string, Partial<WeaponVfxTuning>> = {',
+      '  // ghost_sword: { glow: 9 } is only an example, never a real entry',
+      '  emberfang_sword: { glow: 0.55, light: 0.5, shell: 0.5 },',
+      '  worn_dagger: { mist: 0.7 },',
+      '};',
+    ].join('\n');
+    const map = library.parseVfxTuning(src);
+    expect(map.size).toBe(2);
+    expect(map.has('ghost_sword')).toBe(false);
+    expect(map.get('emberfang_sword')).toEqual({ glow: 0.55, light: 0.5, shell: 0.5 });
+    expect(map.get('worn_dagger')).toEqual({ mist: 0.7 });
+    // The real (empty by default) registry parses without throwing.
+    const realSrc = readFileSync(join(ROOT, 'src/render/weapon_vfx_tuning.ts'), 'utf8');
+    expect(() => library.parseVfxTuning(realSrc)).not.toThrow();
   });
 
   it('parses VISUALS urls into modelPath -> visualKeys (template dirs resolved)', async () => {

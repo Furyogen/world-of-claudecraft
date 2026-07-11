@@ -22,6 +22,7 @@ const FILES = {
   variants: 'src/ui/weapon_variants.ts',
   manifest: 'src/render/characters/manifest.ts',
   grip: 'src/render/characters/weapon_grip.ts',
+  vfxTuning: 'src/render/weapon_vfx_tuning.ts',
   skins: 'src/sim/content/skins.ts',
   credits: 'CREDITS.md',
 };
@@ -207,6 +208,84 @@ export function saveGripOverride({ key, override }) {
   const current = read(FILES.grip);
   const { src, action } = upsertGripOverride(current, key, override);
   if (src !== current) write(FILES.grip, src);
+  return [action];
+}
+
+// ---------------------------------------------------------------------------
+// Per-weapon VFX tuning (inspector "Save VFX"; gated by asset_pipeline.test.ts)
+// ---------------------------------------------------------------------------
+
+const VFX_TUNING_ANCHOR =
+  'export const WEAPON_VFX_TUNING: Record<string, Partial<WeaponVfxTuning>> = {';
+const VFX_TUNING_CHANNELS = [
+  'glow',
+  'bloom',
+  'light',
+  'core',
+  'motes',
+  'aurora',
+  'mist',
+  'sparkle',
+  'shell',
+  'pool',
+];
+
+/** Serialize a full slider state to a single-line object literal, dropping 1.0
+ *  channels (the authored default). An all-1.0 tuning serializes to '' so the
+ *  caller removes the key (the weapon falls back to the tier WORLD_TUNING).
+ *  Numbers round to 2 decimals (the sliders step by 0.05). */
+export function formatVfxTuning(tuning) {
+  const parts = [];
+  for (const ch of VFX_TUNING_CHANNELS) {
+    const v = Number(Number(tuning?.[ch] ?? 1).toFixed(2));
+    if (v !== 1) parts.push(`${ch}: ${v}`);
+  }
+  return parts.length ? `{ ${parts.join(', ')} }` : '';
+}
+
+/** Pure string edit: upsert (or, for `null` / an all-default tuning, remove)
+ *  one weapon's row in a WEAPON_VFX_TUNING source. Same contract as
+ *  upsertGripOverride: idempotent, numbers-only serialization (no injection
+ *  surface), returns the new source plus a human action line. */
+export function upsertVfxTuning(src, key, tuning) {
+  if (!/^[a-z0-9_]+$/.test(key)) throw new Error(`weapon key must be snake_case: ${key}`);
+  for (const ch of VFX_TUNING_CHANNELS) {
+    const v = tuning?.[ch];
+    if (v === undefined) continue;
+    if (typeof v !== 'number' || !Number.isFinite(v) || v < 0 || v > 4) {
+      throw new Error(`vfx tuning ${ch} must be a finite number in [0, 4]`);
+    }
+  }
+  if (!src.includes(VFX_TUNING_ANCHOR)) throw new Error('WEAPON_VFX_TUNING anchor not found');
+  const body = tuning === null ? '' : formatVfxTuning(tuning);
+  const lineRe = new RegExp(`^[^\\S\\n]*${key}:\\s*\\{[^}]*\\},?[^\\S\\n]*\\n?`, 'm');
+  const existing = lineRe.test(src);
+  if (!body) {
+    return existing
+      ? { src: src.replace(lineRe, ''), action: `removed ${key} (back to tier default)` }
+      : { src, action: `WEAPON_VFX_TUNING has no ${key} (nothing to reset)` };
+  }
+  const line = `  ${key}: ${body},`;
+  if (existing) {
+    const next = src.replace(lineRe, `${line}\n`);
+    return {
+      src: next,
+      action: next === src ? `${key} already ${body} (skipped)` : `updated ${key} -> ${body}`,
+    };
+  }
+  return {
+    src: insertIntoBlock(src, VFX_TUNING_ANCHOR, `${line}\n`),
+    action: `saved ${key}: ${body}`,
+  };
+}
+
+/** Persist an inspector-tuned per-weapon VFX row to WEAPON_VFX_TUNING
+ *  (src/render/weapon_vfx_tuning.ts), keyed by the weapon model basename.
+ *  `tuning: null` removes the row. Writes only when the source changes. */
+export function saveVfxTuning({ key, tuning }) {
+  const current = read(FILES.vfxTuning);
+  const { src, action } = upsertVfxTuning(current, key, tuning);
+  if (src !== current) write(FILES.vfxTuning, src);
   return [action];
 }
 

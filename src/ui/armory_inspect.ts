@@ -108,6 +108,10 @@ export class ArmoryInspect {
     const overlay = document.createElement('div');
     overlay.className = 'armory-inspect-overlay open';
     overlay.addEventListener('keydown', (event) => {
+      // A confirm prompt stacked above this overlay owns the keyboard: its own
+      // focus trap handles Tab, and Escape must not close the inspect panel out
+      // from under a live purchase prompt.
+      if (document.getElementById('confirm-dialog')) return;
       if (event.key === 'Escape') {
         this.close();
         return;
@@ -128,6 +132,7 @@ export class ArmoryInspect {
       }
     });
     overlay.addEventListener('mousedown', (event) => {
+      if (document.getElementById('confirm-dialog')) return;
       if (event.target === overlay) this.close();
     });
     overlay.innerHTML =
