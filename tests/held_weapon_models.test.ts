@@ -3,9 +3,13 @@ import { describe, expect, it } from 'vitest';
 
 import {
   itemWeaponModelUrl,
+  manifestUrls,
   mechHeldWeaponOverride,
   VISUALS,
+  weaponSkinModelUrl,
+  weaponSkinModelUrls,
 } from '../src/render/characters/manifest';
+import { WEAPON_SKIN_LIST } from '../src/sim/content/weapon_skins';
 import { ITEM_WEAPON_VARIANTS } from '../src/ui/weapon_variants';
 
 // The per-item held weapon models: each weapon item maps (via the shared
@@ -96,6 +100,31 @@ describe('held weapon models', () => {
       'druid',
     ] as const) {
       expect(mechHeldWeaponOverride(cls), `${cls} should not dual-wield on the mech`).toBeNull();
+    }
+  });
+});
+
+// Season 1 Armory weapon skins swap the held model exactly like per-item
+// variants, so every skin GLB must resolve by skin id and ride the boot preload
+// sweep: any nearby player can have any skin applied, and the attach path is
+// synchronous (resolvedGltf throws on an un-preloaded url).
+describe('weapon skin held models', () => {
+  it('weaponSkinModelUrl resolves catalog skins and ignores everything else', () => {
+    expect(weaponSkinModelUrl('ice_fang_sword')).toBe('models/weapons/ice_fang.glb');
+    expect(weaponSkinModelUrl('not_a_skin')).toBeNull();
+    expect(weaponSkinModelUrl(null)).toBeNull();
+    expect(weaponSkinModelUrl(undefined)).toBeNull();
+  });
+
+  it('ships 28 distinct skin model urls, all in the boot preload manifest', () => {
+    const urls = weaponSkinModelUrls();
+    expect(urls.length).toBe(WEAPON_SKIN_LIST.length);
+    expect(urls.length).toBe(28);
+    expect(new Set(urls).size).toBe(28);
+    const manifest = new Set(manifestUrls());
+    for (const url of urls) {
+      expect(url.startsWith('models/weapons/'), url).toBe(true);
+      expect(manifest.has(url), `${url} missing from manifestUrls()`).toBe(true);
     }
   });
 });
