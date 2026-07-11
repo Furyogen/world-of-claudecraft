@@ -1995,6 +1995,14 @@ export class GameServer {
     if (known.length === 0) return;
     const current = this.accountCosmeticsByAccount.get(accountId);
     if (current && known.every((id) => current.weaponSkinIds.includes(id))) return;
+    // Optimistic live union first (mirrors noteAccountMechChroma): the buyer can
+    // hit Apply the moment the spend response lands, without racing the write.
+    if (current) {
+      this.updateLiveAccountCosmetics(accountId, {
+        ...current,
+        weaponSkinIds: [...new Set([...current.weaponSkinIds, ...known])],
+      });
+    }
     void grantAccountWeaponSkins(accountId, known)
       .then((cosmetics) => this.updateLiveAccountCosmetics(accountId, cosmetics))
       .catch((err) => console.error('failed to grant account weapon skins:', err));

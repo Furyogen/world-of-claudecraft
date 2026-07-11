@@ -11728,6 +11728,9 @@ export class Hud {
 
   onCosmeticsChanged(): void {
     this.renderCharIfOpen();
+    // A grant or apply from another session on the account (or a server
+    // correction of an optimistic apply) must refresh an open armory too.
+    this.dailyRewardsWindow.onCosmeticsChanged();
   }
 
   private renderCharIfOpen(): void {

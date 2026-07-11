@@ -461,7 +461,10 @@ export class CharacterVisual {
     this.originalMaterials.clear();
     this.model.traverse((o) => {
       const mesh = o as THREE.Mesh;
-      if (mesh.isMesh) this.originalMaterials.set(mesh, mesh.material);
+      // VFX rig meshes stay out of the ghost/restore cycle: their shader
+      // materials are owned by the weapon-skin handle, never overlaid.
+      if (mesh.isMesh && !mesh.userData.weaponVfxMesh)
+        this.originalMaterials.set(mesh, mesh.material);
     });
     this.applyVisualMaterials();
   }
@@ -499,6 +502,23 @@ export class CharacterVisual {
       skinTexture(this.key, this.skinIndex),
       skinEmissiveTexture(this.key, this.skinIndex),
     );
+    // A VFX-tier skin's emissive derive mutates its payload materials in place,
+    // so give each payload exclusive clones BEFORE the caster snapshot: the
+    // shared tinted-material cache must never carry derived state (two players
+    // with one skin, or a rogue's two hands, would corrupt each other), and the
+    // ghost/stealth snapshot below must target the clones the rig restores.
+    if (this.weaponSkinVfxSpec()) {
+      for (const payload of payloads) {
+        payload.traverse((o) => {
+          const mesh = o as THREE.Mesh;
+          if (!mesh.isMesh) return;
+          mesh.material = Array.isArray(mesh.material)
+            ? mesh.material.map((m) => m.clone())
+            : mesh.material.clone();
+          mesh.userData.weaponSkinIsolated = true;
+        });
+      }
+    }
     // the model graph changed (weapon meshes added/removed): rebuild the caster
     // list and re-snapshot originals, then re-apply ghost/stealth overlays.
     this.originalMaterials.clear();
@@ -507,16 +527,27 @@ export class CharacterVisual {
     this.buildWeaponVfx(payloads);
   }
 
+  private weaponSkinVfxSpec() {
+    const skin = this.weaponSkinId ? WEAPON_SKINS[this.weaponSkinId] : null;
+    return skin ? (WEAPON_VFX[skin.model] ?? null) : null;
+  }
+
   /** Attach the skin's rarity VFX rig to each held payload (in-hand mode: no
    *  backdrop dome, no ground pool; emissive + particles ride the weapon). */
   private buildWeaponVfx(payloads: THREE.Object3D[]): void {
-    const skin = this.weaponSkinId ? WEAPON_SKINS[this.weaponSkinId] : null;
-    const spec = skin ? WEAPON_VFX[skin.model] : null;
-    if (!skin || !spec) return;
+    const spec = this.weaponSkinVfxSpec();
+    if (!spec) return;
     for (const payload of payloads) {
       const handle = createWeaponVfx(payload, spec, { grounded: false });
       handle.setBackdropVisible(false);
       handle.setPixelScale(weaponVfxViewportHeight);
+      // Tag the rig's own scene nodes: applyMaterials must never tint its
+      // ShaderMaterials and the shadow pass has no business with sprite shells.
+      handle.group.traverse((o) => {
+        o.userData.weaponVfxMesh = true;
+        const mesh = o as THREE.Mesh;
+        if (mesh.isMesh) mesh.castShadow = false;
+      });
       this.weaponVfx.push(handle);
     }
   }
@@ -543,7 +574,7 @@ export class CharacterVisual {
     this.casters.length = 0;
     this.model.traverse((o) => {
       const mesh = o as THREE.Mesh;
-      if (!mesh.isMesh) return;
+      if (!mesh.isMesh || mesh.userData.weaponVfxMesh) return;
       mesh.castShadow = this.shadowOn;
       mesh.receiveShadow = false;
       if ((mesh as unknown as THREE.SkinnedMesh).isSkinnedMesh) mesh.frustumCulled = false;

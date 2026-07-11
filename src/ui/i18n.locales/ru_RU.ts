@@ -21,10 +21,6 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.wocStore.rewardsTab': 'Ежедневные награды',
   'hudChrome.wocStore.loading': 'Загрузка магазина WOC…',
   'hudChrome.wocStore.error': 'Магазин WOC сейчас недоступен. Повторите попытку позже.',
-  'hudChrome.wocStore.eyebrow': 'Избранная коллекция',
-  'hudChrome.wocStore.featuredTitle': 'Оружие, выкованное за границей фронтира',
-  'hudChrome.wocStore.featuredBody':
-    'Получайте премиальные облики оружия за Claudium. Облики не влияют на боевую мощь.',
   'hudChrome.wocStore.balance': 'Баланс Claudium',
   'hudChrome.wocStore.buyClaudium': 'Купить Claudium',
   'hudChrome.wocStore.category': 'Косметика',

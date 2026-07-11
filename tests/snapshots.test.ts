@@ -13,6 +13,12 @@ vi.mock('../server/db', () => ({
   walletForAccount: vi.fn(async () => null),
   markAccountQuestComplete: vi.fn(async () => ({ completedQuestIds: [], mechChromaIds: [] })),
   grantAccountMechChroma: vi.fn(async () => ({ completedQuestIds: [], mechChromaIds: [] })),
+  setAccountWeaponSkinLoadout: vi.fn(async () => ({
+    completedQuestIds: [],
+    mechChromaIds: [],
+    weaponSkinIds: [],
+    weaponSkinLoadout: {},
+  })),
 }));
 
 import { saveCharacterState } from '../server/db';

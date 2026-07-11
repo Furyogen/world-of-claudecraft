@@ -219,6 +219,21 @@ export class DailyRewardsWindow {
     });
   }
 
+  /** Live account-cosmetics change (another session's grant/apply, or a server
+   *  correction of an optimistic apply): re-project the armory from the world's
+   *  cosmetics and repaint the open store grid + inspect actions. */
+  onCosmeticsChanged(): void {
+    if (!this.isOpen || this.tab !== 'store' || !this.storeReady) return;
+    this.rebuildArmorySections();
+    const body = this.deps.root().querySelector<HTMLElement>('.dr-body');
+    if (body) this.paintStore(body);
+    const open = this.armoryInspect?.openSkinId;
+    if (open) {
+      const row = this.armoryRowById(open);
+      if (row) this.armoryInspect?.refresh(row);
+    }
+  }
+
   private armoryRowById(skinId: string): ArmorySkinRow | null {
     for (const section of this.armorySections) {
       const row = section.rows.find((r) => r.skin.id === skinId);
@@ -354,12 +369,19 @@ export class DailyRewardsWindow {
   private async purchaseArmorySkin(row: ArmorySkinRow): Promise<void> {
     const result = await this.deps.spendStoreItem?.(row.skin.id, 'skin');
     if (!result?.granted) {
-      this.storeError = true;
-      const body = this.deps.root().querySelector<HTMLElement>('.dr-body');
-      if (body) this.paintStore(body);
-      return;
+      // Re-check before declaring an outage: a double-submit lands as the
+      // service's already_granted (not granted), yet the skin IS owned.
+      await this.renderStore(null);
+      const owned = this.armoryRowById(row.skin.id)?.owned ?? false;
+      if (!owned) {
+        this.storeError = true;
+        const body = this.deps.root().querySelector<HTMLElement>('.dr-body');
+        if (body) this.paintStore(body);
+        return;
+      }
+    } else {
+      await this.renderStore(null);
     }
-    await this.renderStore(null);
     const fresh = this.armoryRowById(row.skin.id);
     if (fresh) this.armoryInspect?.refresh(fresh);
   }
