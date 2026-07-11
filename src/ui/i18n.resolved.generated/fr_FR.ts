@@ -158,7 +158,7 @@ export const fr_FR: EnTranslations = {
       "prompt": "{name} a lancé un appel de préparation. Êtes-vous prêt ?",
       "ready": "Prêt",
       "notReady": "Pas prêt",
-      "result": "Appel de préparation : {ready} prêts, {notReady} pas prêts, {pending} sans réponse."
+      "result": "Appel de préparation : {ready} prêts, {notReady} pas prêts, {noResponse} sans réponse."
     },
     "death": {
       "resurrectAtCorpse": "Ressusciter près du cadavre",

@@ -158,7 +158,7 @@ export const tr_TR: EnTranslations = {
       "prompt": "{name} bir hazır kontrolü başlattı. Hazır mısın?",
       "ready": "Hazır",
       "notReady": "Hazır değil",
-      "result": "Hazır kontrolü: {ready} hazır, {notReady} hazır değil, {pending} yanıtsız."
+      "result": "Hazır kontrolü: {ready} hazır, {notReady} hazır değil, {noResponse} yanıtsız."
     },
     "death": {
       "resurrectAtCorpse": "Cesedinin Başında Diril",

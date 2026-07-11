@@ -158,7 +158,7 @@ export const es: EnTranslations = {
       "prompt": "{name} ha iniciado una comprobación de preparación. ¿Estás listo?",
       "ready": "Listo",
       "notReady": "No estoy listo",
-      "result": "Comprobación de preparación: {ready} listos, {notReady} no listos, {pending} sin responder."
+      "result": "Comprobación de preparación: {ready} listos, {notReady} no listos, {noResponse} sin responder."
     },
     "death": {
       "resurrectAtCorpse": "Resucitar en el cadáver",

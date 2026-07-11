@@ -6574,7 +6574,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'hudChrome.readyCheck.prompt': '{name} har startet et klar tjek. Er du klar?',
   'hudChrome.readyCheck.ready': 'Klar',
   'hudChrome.readyCheck.result':
-    'Klar tjek: {ready} klar, {notReady} ikke klar, {pending} uden svar.',
+    'Klar tjek: {ready} klar, {notReady} ikke klar, {noResponse} uden svar.',
   'loading.tips.classes': 'Tip: de 9 klasser spiller forskelligt, prøv dem før du vælger.',
   'loading.tips.dungeons':
     'Tip: dungeons belønner forberedte grupper, tag mad, drikke og forbrugsvarer med.',

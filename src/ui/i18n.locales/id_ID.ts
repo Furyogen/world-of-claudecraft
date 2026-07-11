@@ -6675,7 +6675,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'hudChrome.readyCheck.prompt': '{name} memulai pemeriksaan kesiapan. Apakah Anda siap?',
   'hudChrome.readyCheck.ready': 'Siap',
   'hudChrome.readyCheck.result':
-    'Pemeriksaan kesiapan: {ready} siap, {notReady} belum siap, {pending} belum menjawab.',
+    'Pemeriksaan kesiapan: {ready} siap, {notReady} belum siap, {noResponse} belum menjawab.',
   'loading.tips.classes': 'Kiat: 9 kelas dimainkan dengan cara berbeda, cobalah sebelum memilih.',
   'loading.tips.dungeons':
     'Kiat: dungeon memberi hadiah pada grup yang siap, bawa makanan, minuman, dan barang konsumsi.',

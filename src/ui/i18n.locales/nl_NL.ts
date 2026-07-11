@@ -6678,7 +6678,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.readyCheck.prompt': '{name} is een gereedheidscontrole gestart. Ben je klaar?',
   'hudChrome.readyCheck.ready': 'Klaar',
   'hudChrome.readyCheck.result':
-    'Gereedheidscontrole: {ready} klaar, {notReady} niet klaar, {pending} zonder antwoord.',
+    'Gereedheidscontrole: {ready} klaar, {notReady} niet klaar, {noResponse} zonder antwoord.',
   'loading.tips.classes': 'Tip: de 9 klassen spelen allemaal anders, probeer ze voordat je kiest.',
   'loading.tips.dungeons':
     'Tip: kerkers belonen voorbereide groepen, neem eten, drinken en verbruiksvoorwerpen mee.',

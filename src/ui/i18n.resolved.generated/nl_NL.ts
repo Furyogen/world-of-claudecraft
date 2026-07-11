@@ -158,7 +158,7 @@ export const nl_NL: EnTranslations = {
       "prompt": "{name} is een gereedheidscontrole gestart. Ben je klaar?",
       "ready": "Klaar",
       "notReady": "Niet klaar",
-      "result": "Gereedheidscontrole: {ready} klaar, {notReady} niet klaar, {pending} zonder antwoord."
+      "result": "Gereedheidscontrole: {ready} klaar, {notReady} niet klaar, {noResponse} zonder antwoord."
     },
     "death": {
       "resurrectAtCorpse": "Herrijs bij je lijk",

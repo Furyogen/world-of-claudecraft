@@ -6678,7 +6678,7 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.readyCheck.prompt': '{name} iniciou uma verificação de prontidão. Você está pronto?',
   'hudChrome.readyCheck.ready': 'Pronto',
   'hudChrome.readyCheck.result':
-    'Verificação de prontidão: {ready} prontos, {notReady} não prontos, {pending} sem resposta.',
+    'Verificação de prontidão: {ready} prontos, {notReady} não prontos, {noResponse} sem resposta.',
   'loading.tips.classes':
     'Dica: as 9 classes jogam de formas diferentes, experimente todas antes de escolher.',
   'loading.tips.dungeons':

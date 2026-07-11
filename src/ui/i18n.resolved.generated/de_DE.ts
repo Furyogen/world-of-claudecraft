@@ -158,7 +158,7 @@ export const de_DE: EnTranslations = {
       "prompt": "{name} hat eine Bereitschaftsabfrage gestartet. Bist du bereit?",
       "ready": "Bereit",
       "notReady": "Nicht bereit",
-      "result": "Bereitschaftsabfrage: {ready} bereit, {notReady} nicht bereit, {pending} ohne Antwort."
+      "result": "Bereitschaftsabfrage: {ready} bereit, {notReady} nicht bereit, {noResponse} ohne Antwort."
     },
     "death": {
       "resurrectAtCorpse": "Am Leichnam wiederbeleben",

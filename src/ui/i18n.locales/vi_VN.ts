@@ -6615,7 +6615,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.readyCheck.prompt': '{name} đã bắt đầu kiểm tra sẵn sàng. Bạn đã sẵn sàng chưa?',
   'hudChrome.readyCheck.ready': 'Sẵn sàng',
   'hudChrome.readyCheck.result':
-    'Kiểm tra sẵn sàng: {ready} sẵn sàng, {notReady} chưa sẵn sàng, {pending} chưa trả lời.',
+    'Kiểm tra sẵn sàng: {ready} sẵn sàng, {notReady} chưa sẵn sàng, {noResponse} chưa trả lời.',
   'loading.tips.classes': 'Mẹo: 9 lớp chơi khác nhau, hãy thử trước khi chọn.',
   'loading.tips.dungeons':
     'Mẹo: hầm ngục thưởng cho nhóm chuẩn bị tốt, hãy mang thức ăn, đồ uống và vật phẩm tiêu hao.',

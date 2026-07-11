@@ -158,7 +158,7 @@ export const sv_SE: EnTranslations = {
       "prompt": "{name} har startat en redo kontroll. Är du redo?",
       "ready": "Redo",
       "notReady": "Inte redo",
-      "result": "Redo kontroll: {ready} redo, {notReady} inte redo, {pending} utan svar."
+      "result": "Redo kontroll: {ready} redo, {notReady} inte redo, {noResponse} utan svar."
     },
     "death": {
       "resurrectAtCorpse": "Återuppstå vid liket",

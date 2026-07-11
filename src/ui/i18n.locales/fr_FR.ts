@@ -6771,7 +6771,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.readyCheck.prompt': '{name} a lancé un appel de préparation. Êtes-vous prêt ?',
   'hudChrome.readyCheck.ready': 'Prêt',
   'hudChrome.readyCheck.result':
-    'Appel de préparation : {ready} prêts, {notReady} pas prêts, {pending} sans réponse.',
+    'Appel de préparation : {ready} prêts, {notReady} pas prêts, {noResponse} sans réponse.',
   'loading.tips.classes':
     'Astuce : les 9 classes se jouent différemment, essayez-les avant de vous décider.',
   'loading.tips.dungeons':

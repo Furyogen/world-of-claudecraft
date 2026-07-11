@@ -6592,7 +6592,7 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.readyCheck.prompt': '{name} har startat en redo kontroll. Är du redo?',
   'hudChrome.readyCheck.ready': 'Redo',
   'hudChrome.readyCheck.result':
-    'Redo kontroll: {ready} redo, {notReady} inte redo, {pending} utan svar.',
+    'Redo kontroll: {ready} redo, {notReady} inte redo, {noResponse} utan svar.',
   'loading.tips.classes': 'Tips: de 9 klasserna spelas olika, prova dem innan du bestämmer dig.',
   'loading.tips.dungeons':
     'Tips: dungeons belönar förberedda grupper, ta med mat, dryck och förbrukningsvaror.',

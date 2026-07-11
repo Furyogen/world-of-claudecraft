@@ -158,7 +158,7 @@ export const id_ID: EnTranslations = {
       "prompt": "{name} memulai pemeriksaan kesiapan. Apakah Anda siap?",
       "ready": "Siap",
       "notReady": "Belum siap",
-      "result": "Pemeriksaan kesiapan: {ready} siap, {notReady} belum siap, {pending} belum menjawab."
+      "result": "Pemeriksaan kesiapan: {ready} siap, {notReady} belum siap, {noResponse} belum menjawab."
     },
     "death": {
       "resurrectAtCorpse": "Bangkit di Jasad",

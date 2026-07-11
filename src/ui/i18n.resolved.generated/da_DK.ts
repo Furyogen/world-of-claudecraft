@@ -158,7 +158,7 @@ export const da_DK: EnTranslations = {
       "prompt": "{name} har startet et klar tjek. Er du klar?",
       "ready": "Klar",
       "notReady": "Ikke klar",
-      "result": "Klar tjek: {ready} klar, {notReady} ikke klar, {pending} uden svar."
+      "result": "Klar tjek: {ready} klar, {notReady} ikke klar, {noResponse} uden svar."
     },
     "death": {
       "resurrectAtCorpse": "Genopstå ved liget",

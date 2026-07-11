@@ -6630,7 +6630,7 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.readyCheck.prompt': '{name} rozpoczął sprawdzanie gotowości. Jesteś gotów?',
   'hudChrome.readyCheck.ready': 'Gotów',
   'hudChrome.readyCheck.result':
-    'Sprawdzanie gotowości: {ready} gotowych, {notReady} niegotowych, {pending} bez odpowiedzi.',
+    'Sprawdzanie gotowości: {ready} gotowych, {notReady} niegotowych, {noResponse} bez odpowiedzi.',
   'loading.tips.classes': 'Wskazówka: 9 klas gra się inaczej, wypróbuj je przed wyborem.',
   'loading.tips.dungeons':
     'Wskazówka: podziemia nagradzają przygotowane grupy, weź jedzenie, napoje i materiały zużywalne.',

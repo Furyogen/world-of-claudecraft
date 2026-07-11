@@ -6520,7 +6520,7 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'hudChrome.readyCheck.prompt': '{name} spustil kontrolu připravenosti. Jsi připraven?',
   'hudChrome.readyCheck.ready': 'Připraven',
   'hudChrome.readyCheck.result':
-    'Kontrola připravenosti: {ready} připraveno, {notReady} nepřipraveno, {pending} bez odpovědi.',
+    'Kontrola připravenosti: {ready} připraveno, {notReady} nepřipraveno, {noResponse} bez odpovědi.',
   'loading.tips.classes': 'Tip: 9 tříd se hraje odlišně, vyzkoušej je, než se rozhodneš.',
   'loading.tips.dungeons':
     'Tip: Dungeony odměňují připravené skupiny, vezmi si jídlo, pití a spotřební předměty.',

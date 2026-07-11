@@ -158,7 +158,7 @@ export const pl_PL: EnTranslations = {
       "prompt": "{name} rozpoczął sprawdzanie gotowości. Jesteś gotów?",
       "ready": "Gotów",
       "notReady": "Nie gotów",
-      "result": "Sprawdzanie gotowości: {ready} gotowych, {notReady} niegotowych, {pending} bez odpowiedzi."
+      "result": "Sprawdzanie gotowości: {ready} gotowych, {notReady} niegotowych, {noResponse} bez odpowiedzi."
     },
     "death": {
       "resurrectAtCorpse": "Odrodź się przy zwłokach",

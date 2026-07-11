@@ -158,7 +158,7 @@ export const it_IT: EnTranslations = {
       "prompt": "{name} ha avviato un controllo di prontezza. Sei pronto?",
       "ready": "Pronto",
       "notReady": "Non pronto",
-      "result": "Controllo di prontezza: {ready} pronti, {notReady} non pronti, {pending} senza risposta."
+      "result": "Controllo di prontezza: {ready} pronti, {notReady} non pronti, {noResponse} senza risposta."
     },
     "death": {
       "resurrectAtCorpse": "Risorgi al cadavere",

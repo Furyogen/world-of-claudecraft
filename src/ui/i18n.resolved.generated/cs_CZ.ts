@@ -158,7 +158,7 @@ export const cs_CZ: EnTranslations = {
       "prompt": "{name} spustil kontrolu připravenosti. Jsi připraven?",
       "ready": "Připraven",
       "notReady": "Nepřipraven",
-      "result": "Kontrola připravenosti: {ready} připraveno, {notReady} nepřipraveno, {pending} bez odpovědi."
+      "result": "Kontrola připravenosti: {ready} připraveno, {notReady} nepřipraveno, {noResponse} bez odpovědi."
     },
     "death": {
       "resurrectAtCorpse": "Vzkřísit u mrtvoly",

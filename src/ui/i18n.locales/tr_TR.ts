@@ -6592,7 +6592,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.readyCheck.prompt': '{name} bir hazır kontrolü başlattı. Hazır mısın?',
   'hudChrome.readyCheck.ready': 'Hazır',
   'hudChrome.readyCheck.result':
-    'Hazır kontrolü: {ready} hazır, {notReady} hazır değil, {pending} yanıtsız.',
+    'Hazır kontrolü: {ready} hazır, {notReady} hazır değil, {noResponse} yanıtsız.',
   'loading.tips.classes': 'İpucu: 9 sınıfın oynanışı farklıdır, karar vermeden önce hepsini dene.',
   'loading.tips.dungeons':
     'İpucu: Zindanlar hazırlıklı grupları ödüllendirir, yiyecek, içecek ve sarf malzemesi getir.',

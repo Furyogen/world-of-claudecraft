@@ -158,7 +158,7 @@ export const vi_VN: EnTranslations = {
       "prompt": "{name} đã bắt đầu kiểm tra sẵn sàng. Bạn đã sẵn sàng chưa?",
       "ready": "Sẵn sàng",
       "notReady": "Chưa sẵn sàng",
-      "result": "Kiểm tra sẵn sàng: {ready} sẵn sàng, {notReady} chưa sẵn sàng, {pending} chưa trả lời."
+      "result": "Kiểm tra sẵn sàng: {ready} sẵn sàng, {notReady} chưa sẵn sàng, {noResponse} chưa trả lời."
     },
     "death": {
       "resurrectAtCorpse": "Hồi Sinh Tại Xác Chết",

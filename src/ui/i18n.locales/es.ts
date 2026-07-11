@@ -6721,7 +6721,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
     '{name} ha iniciado una comprobación de preparación. ¿Estás listo?',
   'hudChrome.readyCheck.ready': 'Listo',
   'hudChrome.readyCheck.result':
-    'Comprobación de preparación: {ready} listos, {notReady} no listos, {pending} sin responder.',
+    'Comprobación de preparación: {ready} listos, {notReady} no listos, {noResponse} sin responder.',
   'loading.tips.classes':
     'Consejo: las 9 clases juegan de forma distinta, pruébalas antes de decidirte.',
   'loading.tips.dungeons':

@@ -6742,7 +6742,7 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.readyCheck.prompt': '{name} hat eine Bereitschaftsabfrage gestartet. Bist du bereit?',
   'hudChrome.readyCheck.ready': 'Bereit',
   'hudChrome.readyCheck.result':
-    'Bereitschaftsabfrage: {ready} bereit, {notReady} nicht bereit, {pending} ohne Antwort.',
+    'Bereitschaftsabfrage: {ready} bereit, {notReady} nicht bereit, {noResponse} ohne Antwort.',
   'loading.tips.classes':
     'Tipp: Die 9 Klassen spielen sich unterschiedlich, probiere sie aus, bevor du dich festlegst.',
   'loading.tips.dungeons':
