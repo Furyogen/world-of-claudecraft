@@ -1,4 +1,3 @@
-import { playerPortraitDataUrl } from '../render/characters/portrait';
 import type { PlayerClass, WeaponSkinType } from '../sim/types';
 import type { DailyRewardHistory, DailyRewardStatus, IWorld } from '../world_api';
 import { ArmoryInspect, badgeLabel, rarityLabel, weaponTypeLabel } from './armory_inspect';
@@ -7,6 +6,7 @@ import { markDialogRoot } from './dialog_root';
 import { tEntity } from './entity_i18n';
 import { esc } from './esc';
 import { formatDateTime, formatNumber, t } from './i18n';
+import { portraitChipHtml } from './portrait_chip';
 import { svgIcon } from './ui_icons';
 import {
   type ArmorySection,
@@ -294,17 +294,14 @@ export class DailyRewardsWindow {
   }
 
   /** Top-right face chips: the classes that can ever apply this skin. Class
-   *  names come from the entity matcher (already localized in every locale);
-   *  a portrait not yet rasterized falls back to the class initial. */
+   *  names come from the entity matcher (already localized in every locale).
+   *  The shared portrait chip shows the class crest while the character GLBs
+   *  are still preloading and upgrades itself via the global ready hook. */
   private armoryClassChipsHtml(row: ArmorySkinRow): string {
     const chips = row.eligibleClasses
       .map((cls) => {
         const name = tEntity({ kind: 'class', id: cls, field: 'name' });
-        const url = playerPortraitDataUrl(cls, 0);
-        const face = url
-          ? `<img src="${esc(url)}" alt="${esc(name)}" title="${esc(name)}">`
-          : `<i role="img" aria-label="${esc(name)}" title="${esc(name)}">${esc(name.slice(0, 1))}</i>`;
-        return `<span class="armory-class-chip">${face}</span>`;
+        return `<span class="armory-class-chip" title="${esc(name)}">${portraitChipHtml({ cls, name, badge: false })}</span>`;
       })
       .join('');
     return chips ? `<span class="armory-classes">${chips}</span>` : '';
