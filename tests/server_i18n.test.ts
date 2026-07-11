@@ -6,6 +6,23 @@ import { localizeServerText, tServer } from '../src/ui/server_i18n';
 // re-render them in the active locale (friends/guild/world/who/moderation).
 describe('server-sent message localization', () => {
   const samples: string[] = [
+    // The two chat-suppression tiers. These are emitted from server/social.ts and
+    // server/game.ts, which the S3 drift guard only partially scans, so pin every
+    // one of them here: a drift between the emit literal and the server_i18n regex
+    // ships English to all 22 locales with an otherwise green gate.
+    'Mira is now muted.',
+    'Mira is no longer muted.',
+    'Mira is already muted.',
+    'Your mute list is full.',
+    'You cannot mute yourself.',
+    "No character named 'Zzz' on your mute list.",
+    'Mira is not on your mute list.',
+    'Your mute list is empty.',
+    'Muted (2): Mira, Bob',
+    'Usage: /mute <name>, /unmute <name>, /mutelist.',
+    'Your ignore list is empty.',
+    'Ignored (1): Mira',
+    'Usage: /block <name>, /unblock <name>, /blocklist.',
     'Mira added to friends.',
     'Your friends list is full.',
     "No character named 'Zzz' exists.",

@@ -400,6 +400,8 @@ describe('ignore / block', () => {
     h = setup();
     h.add(1, 'Aleph');
     h.add(2, 'Bet');
+    // a third party, so the mute tests can assert the two tiers stay independent
+    h.add(3, 'Gimel');
   });
 
   it('blocks a player and surfaces the updated block set to the transport', async () => {
@@ -432,6 +434,92 @@ describe('ignore / block', () => {
   it('refuses to block yourself', async () => {
     await h.svc.blockAdd(h.actor(1), 'Aleph');
     expect(h.tx.errorsFor(1).join()).toMatch(/yourself/i);
+  });
+
+  // --- mutes: the chat-only tier ------------------------------------------
+  // A mute must behave like a block in the plumbing (persisted, surfaced to the
+  // transport so routeEvents can enforce it) and UNLIKE a block everywhere the
+  // two tiers are supposed to differ.
+
+  it('mutes a player and surfaces the updated mute set to the transport', async () => {
+    await h.svc.muteAdd(h.actor(1), 'Bet');
+    expect((await h.svc.snapshot(1)).mutes.map((m) => m.name)).toEqual(['Bet']);
+    // this is the set GameServer copies into session.mutedIds; without it the
+    // chat filter has nothing to enforce
+    expect(h.tx.muteSets.get(1)).toEqual([2]);
+  });
+
+  it('muting someone does NOT remove them from friends (a block does)', async () => {
+    // The load-bearing difference between the two tiers: muting a chatty friend
+    // is a normal thing to want, so it must not quietly unfriend them.
+    await h.svc.friendAdd(h.actor(1), 'Bet');
+    await h.svc.muteAdd(h.actor(1), 'Bet');
+    const snap = await h.svc.snapshot(1);
+    expect(snap.friends.map((f) => f.name)).toEqual(['Bet']);
+    expect(snap.mutes.map((m) => m.name)).toEqual(['Bet']);
+    // and the contrast: blocking DOES evict them
+    await h.svc.blockAdd(h.actor(1), 'Bet');
+    expect((await h.svc.snapshot(1)).friends).toHaveLength(0);
+  });
+
+  it('muting someone leaves the block list alone, and vice versa', async () => {
+    await h.svc.muteAdd(h.actor(1), 'Bet');
+    expect((await h.svc.snapshot(1)).blocks).toHaveLength(0);
+    await h.svc.blockAdd(h.actor(1), 'Gimel');
+    const snap = await h.svc.snapshot(1);
+    expect(snap.mutes.map((m) => m.name)).toEqual(['Bet']);
+    expect(snap.blocks.map((b) => b.name)).toEqual(['Gimel']);
+  });
+
+  it('unmutes and clears the transport mute set', async () => {
+    await h.svc.muteAdd(h.actor(1), 'Bet');
+    await h.svc.muteRemove(h.actor(1), 'Bet');
+    expect((await h.svc.snapshot(1)).mutes).toHaveLength(0);
+    expect(h.tx.muteSets.get(1)).toEqual([]);
+  });
+
+  it('does not claim success when unmuting someone who is not muted', async () => {
+    await h.svc.muteRemove(h.actor(1), 'Bet');
+    expect(h.tx.errorsFor(1).join()).toMatch(/not on your mute list/i);
+    expect(h.tx.textFor(1).join()).not.toMatch(/no longer muted/i);
+  });
+
+  it('refuses to mute yourself', async () => {
+    await h.svc.muteAdd(h.actor(1), 'Aleph');
+    expect(h.tx.errorsFor(1).join()).toMatch(/yourself/i);
+    expect((await h.svc.snapshot(1)).mutes).toHaveLength(0);
+  });
+
+  it('refuses to mute the same player twice', async () => {
+    await h.svc.muteAdd(h.actor(1), 'Bet');
+    h.tx.clear();
+    await h.svc.muteAdd(h.actor(1), 'Bet');
+    expect(h.tx.errorsFor(1).join()).toMatch(/already muted/i);
+    expect((await h.svc.snapshot(1)).mutes).toHaveLength(1);
+  });
+
+  // These two readouts are the exact strings src/ui/server_i18n.ts matches with
+  // /^Your mute list is empty\.$/ and /^Muted \((\d+)\): (.+)$/, so pin them.
+  it('/mutelist reads out the empty list', async () => {
+    await h.svc.muteList(h.actor(1));
+    expect(h.tx.textFor(1).join()).toBe('Your mute list is empty.');
+  });
+
+  it('/mutelist reads out the muted names in the localizable format', async () => {
+    await h.svc.muteAdd(h.actor(1), 'Bet');
+    await h.svc.muteAdd(h.actor(1), 'Gimel');
+    h.tx.clear();
+    await h.svc.muteList(h.actor(1));
+    expect(h.tx.textFor(1).join()).toBe('Muted (2): Bet, Gimel');
+  });
+
+  it('/blocklist reads out the blocked names in the localizable format', async () => {
+    await h.svc.blockList(h.actor(1));
+    expect(h.tx.textFor(1).join()).toBe('Your ignore list is empty.');
+    await h.svc.blockAdd(h.actor(1), 'Bet');
+    h.tx.clear();
+    await h.svc.blockList(h.actor(1));
+    expect(h.tx.textFor(1).join()).toBe('Ignored (1): Bet');
   });
 
   it('refuses to friend a player you are ignoring', async () => {
@@ -671,6 +759,54 @@ describe('guilds', () => {
     expect(await h.svc.officerChat(h.actor(1), 'officers only')).toBe(true);
     expect(h.tx.eventsFor(1).some((e) => e.type === 'chat' && e.channel === 'officer')).toBe(true);
     expect(h.tx.eventsFor(2)).toHaveLength(0);
+  });
+
+  // Guild and officer chat fan out through tx.deliver and NEVER pass the
+  // routeEvents chat filter, so they must consult the mute list here. Without
+  // these two call sites, muting a guildmate does nothing in the one channel you
+  // actually read them in, and the routeEvents tests would still be green.
+  it('suppresses guild chat from a player the recipient has MUTED', async () => {
+    await h.svc.guildCreate(h.actor(1), 'Knights');
+    await h.svc.guildInvite(h.actor(1), 'Bet');
+    await h.svc.guildAccept(h.actor(2));
+    await h.svc.guildInvite(h.actor(1), 'Gimel');
+    await h.svc.guildAccept(h.actor(3));
+    // Bet mutes Aleph (a mute, NOT a block: they are still guildmates and Bet
+    // has not ignored them)
+    await h.svc.muteAdd(h.actor(2), 'Aleph');
+    h.tx.clear();
+
+    expect(await h.svc.guildChat(h.actor(1), 'hello guild')).toBe(true);
+
+    // the speaker still sees their own line, and an uninvolved member hears it
+    expect(h.tx.eventsFor(1).some((e) => e.type === 'chat' && e.text === 'hello guild')).toBe(true);
+    expect(h.tx.eventsFor(3).some((e) => e.type === 'chat' && e.text === 'hello guild')).toBe(true);
+    // Bet, who muted Aleph, receives nothing
+    expect(h.tx.eventsFor(2)).toHaveLength(0);
+  });
+
+  it('suppresses officer chat from an officer the recipient has MUTED', async () => {
+    await h.svc.guildCreate(h.actor(1), 'Knights');
+    await h.svc.guildInvite(h.actor(1), 'Bet');
+    await h.svc.guildAccept(h.actor(2));
+    await h.svc.guildSetRank(h.actor(1), 'Bet', 'officer');
+    await h.svc.muteAdd(h.actor(2), 'Aleph');
+    h.tx.clear();
+
+    expect(await h.svc.officerChat(h.actor(1), 'officers only')).toBe(true);
+
+    expect(h.tx.eventsFor(1).some((e) => e.type === 'chat' && e.channel === 'officer')).toBe(true);
+    expect(h.tx.eventsFor(2)).toHaveLength(0);
+  });
+
+  it('an unmuted guildmate still hears guild chat (the negative)', async () => {
+    await h.svc.guildCreate(h.actor(1), 'Knights');
+    await h.svc.guildInvite(h.actor(1), 'Bet');
+    await h.svc.guildAccept(h.actor(2));
+    h.tx.clear();
+
+    expect(await h.svc.guildChat(h.actor(1), 'hello guild')).toBe(true);
+    expect(h.tx.eventsFor(2).some((e) => e.type === 'chat' && e.text === 'hello guild')).toBe(true);
   });
 
   it('blocks guild chat from a non-member', async () => {

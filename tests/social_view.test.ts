@@ -4,6 +4,7 @@ import {
   friendRows,
   guildView,
   ignoreRows,
+  muteRows,
   raidView,
   type SocialTab,
   socialDot,
@@ -136,6 +137,10 @@ describe('per-tab row models', () => {
   it('derives ignore rows', () => {
     expect(ignoreRows(SOCIAL).map((r) => r.name)).toEqual(['Spammer']);
     expect(ignoreRows(null)).toEqual([]);
+    // the Ignore tab renders BOTH tiers, from their own lists: a cross-wire that
+    // fed blocks into the Muted section (or vice versa) trips on either row set
+    expect(muteRows(SOCIAL).map((r) => r.name)).toEqual(['Chatterbox']);
+    expect(muteRows(null)).toEqual([]);
   });
 
   it('resolves guild action permissions against the viewer rank', () => {

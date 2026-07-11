@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import {
   muteKey,
@@ -91,6 +92,28 @@ describe('resolvePlayerSocialFlags offline (no account, no server graph)', () =>
 
   it('reports an unmuted name as unmuted', () => {
     expect(resolvePlayerSocialFlags('Someone', null, new Set(['chatty'])).muted).toBe(false);
+  });
+});
+
+// Two source-level guards. The Hud's DOM path is out of reach in a Node test, but
+// both of these are one-line regressions with expensive, silent consequences, so
+// pin them by source scrape (the precedent is the BANK_FILTER_KEY pin in
+// tests/bank_window.test.ts).
+describe('hud.ts mute wiring (source guards)', () => {
+  const hud = readFileSync(new URL('../src/ui/hud.ts', import.meta.url), 'utf8');
+
+  it('consults the local mute list ONLY when offline', () => {
+    // Dropping the `socialInfo === null &&` guard resurrects the invisible second
+    // mute list: online, a stale local entry would keep hiding someone the player
+    // has already unmuted on their account, and nothing would explain why.
+    expect(hud).toContain(
+      'if (this.sim.socialInfo === null && this.localMutedNames.has(muteKey(ev.from))) break;',
+    );
+  });
+
+  it('keeps the HISTORICAL localStorage key, so existing offline lists survive', () => {
+    // Renaming this silently wipes every offline player's mute list.
+    expect(hud).toContain("const LOCAL_MUTES_KEY = 'woc_ignored_chat_names';");
   });
 });
 
