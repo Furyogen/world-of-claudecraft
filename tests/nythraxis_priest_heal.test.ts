@@ -118,4 +118,32 @@ describe('heroic Nythraxis priest: escalating channeled heal', () => {
     expect(voss.auras.some((a) => a.kind === 'stun')).toBe(true);
     expect(aldren.auras.some((a) => a.kind === 'stun')).toBe(false); // CC-immune like the boss
   });
+
+  it('holds a standoff near its protectee and channels, instead of chasing the player', () => {
+    const sim = new Sim({ seed: SEED, playerClass: 'warrior', autoEquip: true });
+    sim.setPlayerLevel(20);
+    const pid = sim.playerId;
+    // Player in aggro range to one side; Malric keeps him as a target but must NOT
+    // run him down, he holds near the boss instead.
+    sim.player.pos = { x: 12, y: 0, z: 0 };
+    sim.player.prevPos = { ...sim.player.pos };
+    const boss = spawn(sim, 8200, 'forest_wolf');
+    boss.hostile = true;
+    boss.maxHp = 5000;
+    boss.hp = 2500; // damaged, so there is healing to do
+    boss.moveSpeed = 0; // pin it so it doesn't wander out of Malric's standoff
+    boss.pos = { x: 0, y: 0, z: 0 };
+    boss.prevPos = { ...boss.pos };
+    const malric = spawn(sim, 8201, 'nythraxis_heroic_priest_add');
+    malric.hostile = true;
+    malric.pos = { x: 4, y: 0, z: 0 };
+    malric.prevPos = { ...malric.pos };
+    malric.aggroTargetId = pid;
+    malric.threat.set(pid, 1000);
+    for (let i = 0; i < 20 * 3; i++) sim.tick();
+    const distToBoss = Math.hypot(malric.pos.x - boss.pos.x, malric.pos.z - boss.pos.z);
+    expect(distToBoss).toBeLessThan(8); // held near the boss
+    expect(malric.pos.x).toBeLessThan(8); // did NOT chase the player at x=12
+    expect(malric.castingAbility).toBe('nythraxis_spirit_mending'); // standing and casting
+  });
 });

@@ -77,11 +77,53 @@ export function updateMobCombatProfile(
 
   onEngagedTick?.();
 
+  // A channelHeal caster (Malric, the Nythraxis spirit healer) is a HEALER, not a
+  // bruiser: it holds a standoff near its protectee (the boss) and channels a
+  // visible heal instead of running the raid down. Falls back to melee only when
+  // there is no ally in range to heal. The heal itself still resolves in
+  // updateBossMechanics; this only governs where the healer stands.
+  const healHold = updateHealerHold(ctx, mob);
+  if (healHold) return healHold;
+
   const spell = MOBS[mob.templateId]?.petSpell;
   if (spell) return updateCasterCombat(ctx, mob, target, profile, spell);
 
   updatePursuitProfileCombat(ctx, mob, target, profile);
   return mob.aiState === 'attack' ? 'runAttackMechanics' : 'done';
+}
+
+// Healer-hold behavior for channelHeal mobs: stand a short distance from the
+// biggest friendly mob in heal range (the boss) and channel; close the gap if too
+// far. Returns 'done' while healing (no melee), or null when there is nobody to
+// heal so the caller runs the normal melee AI.
+function updateHealerHold(ctx: SimContext, mob: Entity): MobCombatProfileResult | null {
+  const heal = MOBS[mob.templateId]?.channelHeal;
+  if (!heal) return null;
+  let protectee: Entity | null = null;
+  for (const ally of ctx.entities.values()) {
+    if (ally.kind !== 'mob' || ally.dead || ally.ownerId !== null) continue;
+    if (ally.hostile !== mob.hostile || ally.id === mob.id) continue;
+    if (dist2d(ally.pos, mob.pos) > heal.radius) continue;
+    if (!protectee || ally.maxHp > protectee.maxHp) protectee = ally;
+  }
+  if (!protectee) return null; // nobody to heal: fall back to melee AI
+  mob.facing = Math.atan2(protectee.pos.x - mob.pos.x, protectee.pos.z - mob.pos.z);
+  const HEALER_STANDOFF = 6;
+  if (dist2d(mob.pos, protectee.pos) > HEALER_STANDOFF) {
+    ctx.moveToward(mob, protectee.pos, mob.moveSpeed * ctx.moveSpeedMult(mob));
+    mob.aiState = 'chase';
+    mob.castingAbility = null;
+    mob.channeling = false;
+  } else {
+    // In position: stand still and channel (a visible cast bar counting down to the
+    // next heal tick, driven by the channelTimer in updateBossMechanics).
+    mob.aiState = 'attack';
+    mob.castingAbility = 'nythraxis_spirit_mending';
+    mob.castTotal = heal.every;
+    mob.castRemaining = Math.max(0, mob.channelTimer);
+    mob.channeling = true;
+  }
+  return 'done';
 }
 
 // The classic caster loop, keyed on the mob's engaged state: in attack it

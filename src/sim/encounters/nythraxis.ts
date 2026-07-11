@@ -370,10 +370,9 @@ export function updateNythraxisEncounter(ctx: SimContext, boss: Entity): void {
 
   if (st.deathlessStunRemaining > 0) {
     st.deathlessStunRemaining = Math.max(0, st.deathlessStunRemaining - DT);
-    // Interrupted Deathless Rage: the court rises once the boss shakes off the
-    // wardstone stun (latched so it summons only once per fight).
-    if (st.deathlessStunRemaining <= 0 && isHeroicNythraxis(ctx, boss) && !st.heroicSummonStarted) {
-      st.heroicSummonStarted = true;
+    // Interrupted Deathless Rage: the court rises again once the boss shakes off
+    // the wardstone stun.
+    if (st.deathlessStunRemaining <= 0 && isHeroicNythraxis(ctx, boss)) {
       startNythraxisHeroicSummon(ctx, boss, st);
     }
     return;
@@ -1073,12 +1072,11 @@ export function updateNythraxisDeathlessRage(
       true,
     );
   }
-  // Heroic: an UNINTERRUPTED Deathless Rage (the pillar cast) raises the court
+  // Heroic: EVERY uninterrupted Deathless Rage (the pillar cast) raises the court
   // right after it lands. This is the phase-2 summon a lone tester (who cannot pop
-  // the wardstones to force the interrupt/stun path above) will see. Latched so the
-  // court rises only once per fight.
-  if (isHeroicNythraxis(ctx, boss) && !st.heroicSummonStarted) {
-    st.heroicSummonStarted = true;
+  // the wardstones to force the interrupt/stun path above) will see, and it repeats
+  // on each Deathless Rage cycle in phase 2.
+  if (isHeroicNythraxis(ctx, boss)) {
     startNythraxisHeroicSummon(ctx, boss, st);
   }
 }

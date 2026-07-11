@@ -4875,12 +4875,13 @@ export class Sim {
       if (interrupted) {
         if (mob.channelRamp > 0) {
           mob.channelRamp = 0;
-          this.emit({
-            type: 'log',
-            text: `${ch.name} is interrupted!`,
-            color: '#ffcc66',
-            entityId: mob.id,
-          });
+          if (!tmpl.quietMechanics)
+            this.emit({
+              type: 'log',
+              text: `${ch.name} is interrupted!`,
+              color: '#ffcc66',
+              entityId: mob.id,
+            });
         }
         mob.channelTimer = ch.every;
       } else {
@@ -4909,12 +4910,15 @@ export class Sim {
             // Reuse the existing "{name} channels {mechanic}." log shape (localized
             // by the broad channels rule in sim_i18n.ts); the heal amount surfaces
             // through the heal event + beam above, so no bespoke number string ships.
-            this.emit({
-              type: 'log',
-              text: `${mob.name} channels ${ch.name}.`,
-              color: '#66ff99',
-              entityId: mob.id,
-            });
+            // quietMechanics healers (the Nythraxis spirit adds) stay silent: the
+            // beam + heal event are enough, no per-tick chat line.
+            if (!tmpl.quietMechanics)
+              this.emit({
+                type: 'log',
+                text: `${mob.name} channels ${ch.name}.`,
+                color: '#66ff99',
+                entityId: mob.id,
+              });
             this.applyHeal(mob, protectee, amount, ch.name);
           }
           // The ramp grows each uninterrupted tick (capped so base+ramp never

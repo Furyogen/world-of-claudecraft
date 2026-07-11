@@ -7539,13 +7539,13 @@ export const en_XA: EnTranslations = {
         "name": "[Ŕíšéñ Ŕóýáļ Ĝúáŕð]"
       },
       "nythraxis_heroic_warrior_add": {
-        "name": "[Áļðŕéñ, Ðéáţĥļéšš Ŵáŕĝúáŕð]"
+        "name": "[Šþíŕíţ óƒ Áļðŕéñ]"
       },
       "nythraxis_heroic_priest_add": {
-        "name": "[Ɱáļŕíç, Ðéáţĥļéšš Ĥíéŕóþĥáñţ]"
+        "name": "[Šþíŕíţ óƒ Ɱáļŕíç]"
       },
       "nythraxis_heroic_rogue_add": {
-        "name": "[Ʋóšš, Ðéáţĥļéšš Ķñíƒé]"
+        "name": "[Šþíŕíţ óƒ Ʋóšš]"
       },
       "nythraxis_scourge_of_thornpeak": {
         "name": "[Ñýţĥŕáẋíš, Šçóúŕĝé óƒ Ţĥóŕñþéáķ]"

@@ -456,7 +456,7 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
   },
   nythraxis_heroic_warrior_add: {
     id: 'nythraxis_heroic_warrior_add',
-    name: 'Aldren, Deathless Warguard',
+    name: 'Spirit of Aldren',
     minLevel: 20,
     maxLevel: 20,
     family: 'undead',
@@ -477,7 +477,8 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
   },
   nythraxis_heroic_priest_add: {
     id: 'nythraxis_heroic_priest_add',
-    name: 'Malric, Deathless Hierophant',
+    name: 'Spirit of Malric',
+    quietMechanics: true,
     minLevel: 20,
     maxLevel: 20,
     family: 'undead',
@@ -518,7 +519,7 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
   },
   nythraxis_heroic_rogue_add: {
     id: 'nythraxis_heroic_rogue_add',
-    name: 'Voss, Deathless Knife',
+    name: 'Spirit of Voss',
     minLevel: 20,
     maxLevel: 20,
     family: 'undead',
