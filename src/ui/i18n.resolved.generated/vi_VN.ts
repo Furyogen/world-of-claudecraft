@@ -403,6 +403,7 @@ export const vi_VN: EnTranslations = {
       "targetFriendlyNext": "Luân Phiên Mục Tiêu Đồng Minh",
       "discord": "Discord",
       "valecup": "Cúp Thung Lũng",
+      "sheathe": "Sheathe/Unsheathe Weapon",
       "categoryPet": "Pet",
       "petAttack": "Pet: Attack",
       "petStop": "Pet: Stop",

@@ -142,6 +142,7 @@ export const IWORLD_MEMBERS = [
   { name: 'changeSkin', kind: 'method' },
   { name: 'claimEventSkin', kind: 'method' },
   { name: 'unequipMechChroma', kind: 'method' },
+  { name: 'toggleWeaponStow', kind: 'method' },
   { name: 'releaseSpirit', kind: 'method' },
   { name: 'resurrectAtCorpse', kind: 'method' },
   { name: 'resurrectAtSpiritHealer', kind: 'method' },
@@ -594,6 +595,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'talents',
       'targetEntity',
       'targetNearestFriendly',
+      'toggleWeaponStow',
       'townFocus',
       'tradeAccept',
       'tradeCancel',
@@ -814,6 +816,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'talentPoints',
       'targetEntity',
       'targetNearestFriendly',
+      'toggleWeaponStow',
       'tradeAccept',
       'tradeCancel',
       'tradeConfirm',
@@ -970,6 +973,7 @@ const FACET_COSMETICS = [
   'changeSkin',
   'claimEventSkin',
   'unequipMechChroma',
+  'toggleWeaponStow',
 ] as const satisfies readonly (keyof IWorldCosmetics)[];
 type _ExhaustCosmetics = AssertNever<
   Exclude<keyof IWorldCosmetics, (typeof FACET_COSMETICS)[number]>

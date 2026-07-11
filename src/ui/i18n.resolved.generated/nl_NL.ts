@@ -403,6 +403,7 @@ export const nl_NL: EnTranslations = {
       "targetFriendlyNext": "Door Bondgenoten Bladeren",
       "discord": "Discord",
       "valecup": "Dalbeker",
+      "sheathe": "Sheathe/Unsheathe Weapon",
       "categoryPet": "Pet",
       "petAttack": "Pet: Attack",
       "petStop": "Pet: Stop",

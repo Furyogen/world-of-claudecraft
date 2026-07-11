@@ -403,6 +403,7 @@ export const fr_FR: EnTranslations = {
       "targetFriendlyNext": "Changer de cible alliée",
       "discord": "Discord",
       "valecup": "Coupe du Val",
+      "sheathe": "Sheathe/Unsheathe Weapon",
       "categoryPet": "Pet",
       "petAttack": "Pet: Attack",
       "petStop": "Pet: Stop",

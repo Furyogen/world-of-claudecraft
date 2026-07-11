@@ -11,4 +11,7 @@ export interface IWorldCosmetics {
   // the event token; the offline Sim resolves it directly.
   claimEventSkin(skin: number): void;
   unequipMechChroma(chromaId: string): void;
+  // Z-key sheathe toggle: held weapons render stowed on the back (cosmetic; the
+  // sim clears it on any deliberate combat action, WoW-style).
+  toggleWeaponStow(): void;
 }

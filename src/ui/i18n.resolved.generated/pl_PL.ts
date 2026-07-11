@@ -403,6 +403,7 @@ export const pl_PL: EnTranslations = {
       "targetFriendlyNext": "Przełączaj przyjazny cel",
       "discord": "Discord",
       "valecup": "Puchar Doliny",
+      "sheathe": "Sheathe/Unsheathe Weapon",
       "categoryPet": "Pet",
       "petAttack": "Pet: Attack",
       "petStop": "Pet: Stop",

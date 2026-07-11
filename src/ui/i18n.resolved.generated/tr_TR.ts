@@ -403,6 +403,7 @@ export const tr_TR: EnTranslations = {
       "targetFriendlyNext": "Dost Hedefler Arasında Geç",
       "discord": "Discord",
       "valecup": "Vadi Kupası",
+      "sheathe": "Sheathe/Unsheathe Weapon",
       "categoryPet": "Pet",
       "petAttack": "Pet: Attack",
       "petStop": "Pet: Stop",

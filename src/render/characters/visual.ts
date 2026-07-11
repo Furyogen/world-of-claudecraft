@@ -19,16 +19,31 @@ import {
   ensureSkinTexture,
   prepareVisual,
   setHeldWeapon,
+  setWeaponsStowed,
   skinEmissiveTexture,
   skinTexture,
   tintedFarMaterials,
 } from './assets';
 import type { EmoteClipSpec, VisualDef, WeaponLayoutOverride } from './manifest';
+import { createStowTransition, forceStow, requestStow, tickStow } from './stow_transition';
 
 export type { AnimState, BaseState } from './anim_state';
 
 const FADE = 0.22;
 const ONESHOT_FADE = 0.1;
+// Z-key sheathe gesture: the 1H chop's WINDUP raises the hand over the shoulder
+// toward the back (grabbing/planting the hilt). The held-prop swap lands at the
+// windup peak, where update() also cuts the clip so the downswing never plays.
+const STOW_GESTURE_TIMESCALE = 1.15;
+// Frozen-pose sweep of the chop: the hand peaks beside the shoulder (right
+// where the on-back hilt sits) at ~28% in; by 40% the downswing has started.
+const STOW_SWAP_FRACTION = 0.28;
+// Additive post-mixer raise on the right upper arm so the hand climbs clearly
+// above the shoulder toward the hilt (the clip alone tops out at shoulder
+// height). Negative X lifts on this rig; past ~-1.0 the oversized helmet hides
+// the whole arm from the chase camera, so -0.85 is the readable peak.
+const STOW_ARM_BONE = 'upperarmr';
+const STOW_ARM_LIFT_RAD = -0.85;
 const HIT_REACT_COOLDOWN = 0.9;
 // Lie_Idle already lays the rig flat — a touch of extra pitch reads as a
 // surface glide; clip-less rigs (creatures) get the full procedural prone
@@ -79,6 +94,11 @@ export class CharacterVisual {
   private entityColor: number;
   private skinIndex: number;
   private weaponItemId: string | null;
+  private stow = createStowTransition();
+  // The gesture's additive arm-raise window: t rises 0..dur (peak at dur/2,
+  // the swap moment); -1 = inactive. Bone resolved lazily once (null = absent).
+  private stowLift = { t: -1, dur: 0 };
+  private stowArmBone: THREE.Object3D | null | undefined;
   private disposed = false;
   private ghosted = false;
   private mixer: THREE.AnimationMixer;
@@ -213,6 +233,14 @@ export class CharacterVisual {
    *  edges still latch so the pose catches up when the entity nears. */
   update(dt: number, s: AnimState, animate: boolean): void {
     this.hitCooldown = Math.max(0, this.hitCooldown - dt);
+    // Deferred sheathe swap: lands at the gesture's windup peak (see
+    // setWeaponStowed), where the clip is also cut so the chop's downswing never
+    // plays. Ticks even when `animate` is false so a throttled rig still settles.
+    const stowTick = tickStow(this.stow, dt);
+    if (stowTick !== 'none') {
+      if (stowTick === 'swap') this.applyStowSwap();
+      this.endStowGesture();
+    }
 
     // death is a level sim-side — edge-trigger the clip locally
     if (s.dead && !this.wasDead) this.enterDeath();
@@ -268,7 +296,37 @@ export class CharacterVisual {
     if (animate) {
       this.mixer.update(this.pendingDt);
       this.pendingDt = 0;
+      // AFTER the mixer wrote the sampled pose: the sheathe gesture's additive
+      // arm raise (never applied on skipped-mixer frames, so it cannot accumulate).
+      this.applyStowArmLift(dt);
     }
+  }
+
+  /** Ease the extra arm raise in toward the swap moment and back out after it;
+   *  an attack/hit one-shot stealing the gesture cancels the lift outright. */
+  private applyStowArmLift(dt: number): void {
+    const lift = this.stowLift;
+    if (lift.t < 0 || lift.dur <= 0) return;
+    const clip = this.def.clips.stow;
+    const gesture = clip ? this.action(clip) : null;
+    if (this.deadLock || !gesture || (this.currentIsOneShot && this.current !== gesture)) {
+      lift.t = -1;
+      return;
+    }
+    lift.t += dt;
+    const p = lift.t / lift.dur;
+    if (p >= 1) {
+      lift.t = -1;
+      return;
+    }
+    if (this.stowArmBone === undefined) {
+      this.stowArmBone = this.model.getObjectByName(STOW_ARM_BONE) ?? null;
+    }
+    if (!this.stowArmBone) {
+      lift.t = -1;
+      return;
+    }
+    this.stowArmBone.rotation.x += STOW_ARM_LIFT_RAD * Math.sin(Math.PI * p);
   }
 
   // -------------------------------------------------------------------------
@@ -464,7 +522,7 @@ export class CharacterVisual {
     if (weaponItemId === this.weaponItemId) return;
     this.weaponItemId = weaponItemId;
     if (!this.def.weaponSlots?.length) return;
-    setHeldWeapon(this.model, this.def, weaponItemId);
+    setHeldWeapon(this.model, this.def, weaponItemId, this.stow.attached);
     applyMaterials(
       this.model,
       this.def,
@@ -474,6 +532,59 @@ export class CharacterVisual {
     );
     // the model graph changed (weapon meshes added/removed): rebuild the caster
     // list and re-snapshot originals, then re-apply ghost/stealth overlays.
+    this.originalMaterials.clear();
+    this.rebuildCasters();
+    this.applyVisualMaterials();
+  }
+
+  /** Move every held prop between the hands and the sheathed on-back pose (the
+   *  Z-key stow toggle). On a live rig this plays the ClipMap `stow` arm gesture
+   *  and defers the actual re-parent to the gesture's midpoint (stow_transition),
+   *  so the swap lands while the hand passes the shoulder; spawn-in sync, dead
+   *  rigs, and clip-less defs snap immediately instead. */
+  setWeaponStowed(stowed: boolean): void {
+    if (!this.def.attach?.length) {
+      forceStow(this.stow, stowed);
+      return;
+    }
+    const clip = this.def.clips.stow;
+    const gesture = clip ? this.action(clip) : null;
+    if (!this.initialized || this.deadLock || !gesture) {
+      if (forceStow(this.stow, stowed)) this.applyStowSwap();
+      return;
+    }
+    const swapDelay = (gesture.getClip().duration / STOW_GESTURE_TIMESCALE) * STOW_SWAP_FRACTION;
+    if (requestStow(this.stow, stowed, swapDelay)) {
+      this.playOneShot(clip as string, STOW_GESTURE_TIMESCALE);
+      // Arm-raise window: peaks exactly at the swap, eases back out after it.
+      this.stowLift.t = 0;
+      this.stowLift.dur = swapDelay * 2;
+    }
+  }
+
+  /** Cut the stow gesture at its windup peak: hand back to base so the chop
+   *  clip's downswing never plays (mirrors onFinished's one-shot hand-off). */
+  private endStowGesture(): void {
+    const clip = this.def.clips.stow;
+    const gesture = clip ? this.action(clip) : null;
+    if (!gesture || this.current !== gesture || this.deadLock) return;
+    this.currentIsOneShot = false;
+    this.currentOneShotIsEmote = false;
+    this.fadeTo(this.baseAction(), 0.18, false);
+  }
+
+  /** The deferred half of setWeaponStowed: re-attach every held prop to the pose
+   *  the transition just landed on, then re-run the shared material pass (same
+   *  caller contract as setWeapon; mixer state is untouched). */
+  private applyStowSwap(): void {
+    setWeaponsStowed(this.model, this.def, this.weaponItemId, this.stow.attached);
+    applyMaterials(
+      this.model,
+      this.def,
+      this.entityColor,
+      skinTexture(this.key, this.skinIndex),
+      skinEmissiveTexture(this.key, this.skinIndex),
+    );
     this.originalMaterials.clear();
     this.rebuildCasters();
     this.applyVisualMaterials();
@@ -717,6 +828,7 @@ function clipNamesOf(def: VisualDef): string[] {
     c.jump,
     c.walkBack,
     c.flourish,
+    c.stow,
     ...Object.values(c.emote ?? {}).flatMap((spec) => spec.clips),
   ].filter((n): n is string => !!n);
 }

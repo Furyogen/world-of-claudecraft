@@ -403,6 +403,7 @@ export const sv_SE: EnTranslations = {
       "targetFriendlyNext": "Växla vänligt mål",
       "discord": "Discord",
       "valecup": "Dalcupen",
+      "sheathe": "Sheathe/Unsheathe Weapon",
       "categoryPet": "Pet",
       "petAttack": "Pet: Attack",
       "petStop": "Pet: Stop",

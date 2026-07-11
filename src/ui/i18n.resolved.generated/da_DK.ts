@@ -403,6 +403,7 @@ export const da_DK: EnTranslations = {
       "targetFriendlyNext": "Skift allieret mål",
       "discord": "Discord",
       "valecup": "Dalpokalen",
+      "sheathe": "Sheathe/Unsheathe Weapon",
       "categoryPet": "Pet",
       "petAttack": "Pet: Attack",
       "petStop": "Pet: Stop",

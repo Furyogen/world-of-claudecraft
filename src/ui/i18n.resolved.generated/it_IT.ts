@@ -403,6 +403,7 @@ export const it_IT: EnTranslations = {
       "targetFriendlyNext": "Scorri i bersagli amici",
       "discord": "Discord",
       "valecup": "Coppa della Valle",
+      "sheathe": "Sheathe/Unsheathe Weapon",
       "categoryPet": "Pet",
       "petAttack": "Pet: Attack",
       "petStop": "Pet: Stop",

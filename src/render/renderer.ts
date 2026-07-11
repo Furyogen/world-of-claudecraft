@@ -523,6 +523,7 @@ export interface EntityView {
   travelVisual: CharacterVisual | null; // druid travel form (chicken-cow), built lazily
   skin: number; // last-rendered appearance skin — diffed each frame for live swaps
   mainhandItemId: string | null; // last-rendered equipped weapon — diffed for live held-weapon swaps
+  weaponStowed: boolean; // last-rendered sheathe state (Z key), diffed for live stow toggles
   /** unscaled height — nameplate/vfx anchor reads height * e.scale */
   height: number;
   /** last-applied entity scale (group.scale); diffed each frame for live size buffs */
@@ -3576,6 +3577,9 @@ export class Renderer {
       lastZ: e.pos.z,
       skin: e.skin,
       mainhandItemId: e.mainhandItemId,
+      // Born false so the per-frame diff below sheathes an already-stowed entity
+      // (a peer entering interest) on its first sync.
+      weaponStowed: false,
       liveScale: e.scale,
       loco: newLocoTrack(),
       stepAccum: 0,
@@ -4417,6 +4421,13 @@ export class Renderer {
       if (e.mainhandItemId !== v.mainhandItemId) {
         v.mainhandItemId = e.mainhandItemId;
         v.visual.setWeapon(e.mainhandItemId);
+      }
+
+      // live sheathe toggle (Z key): the sim's weaponStowed bit moves held
+      // props between the hands and the on-back pose (self or a peer)
+      if (e.weaponStowed !== v.weaponStowed) {
+        v.weaponStowed = e.weaponStowed;
+        v.visual.setWeaponStowed(e.weaponStowed);
       }
 
       // live body-size buffs (Fiesta power-ups): scale the whole group so the
