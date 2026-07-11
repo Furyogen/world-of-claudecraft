@@ -266,7 +266,50 @@ export const ru_RU: EnTranslations = {
       "cancel": "Отмена",
       "confirmTitle": "Подтвердить покупку облика",
       "confirmBody": "Купить {item} за {cost} Claudium?",
-      "confirmPurchase": "Купить"
+      "confirmPurchase": "Купить",
+      "armoryEyebrow": "Сезон 1",
+      "armoryTitle": "Арсенал",
+      "armoryBody": "Ограниченные облики оружия из Арсенала 1-го сезона. Общие для всей учётной записи, чисто косметические и видимые всем вокруг.",
+      "collectionLine": "Коллекция «{collection}»",
+      "seasonOne": "Сезон 1",
+      "rarity": {
+        "uncommon": "Необычный",
+        "rare": "Редкий",
+        "epic": "Эпический",
+        "legendary": "Легендарный"
+      },
+      "wtype": {
+        "sword": "Меч",
+        "axe": "Топор",
+        "mace": "Булава",
+        "dagger": "Кинжал",
+        "staff": "Посох",
+        "wand": "Жезл",
+        "bow": "Лук",
+        "crossbow": "Арбалет"
+      },
+      "badge": {
+        "flagship": "Флагман",
+        "hero": "Герой"
+      },
+      "inspectAria": "Осмотреть {item}",
+      "viewModeLabel": "Режим предпросмотра",
+      "tryOn": "Примерить",
+      "weaponOnly": "Только оружие",
+      "sceneLabel": "Освещение сцены",
+      "scene": {
+        "day": "День",
+        "dusk": "Сумерки",
+        "night": "Ночь"
+      },
+      "lore": "История",
+      "usdApprox": "около {usd} долл. США",
+      "buySkin": "Купить облик",
+      "unavailable": "Недоступно",
+      "applied": "Применён",
+      "apply": "Применить облик",
+      "detach": "Снять облик",
+      "equipHint": "Чтобы применить этот облик, возьмите в руки {type}."
     },
     "claudium": {
       "title": "Claudium",

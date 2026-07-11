@@ -266,7 +266,50 @@ export const en_XA: EnTranslations = {
       "cancel": "[Çáñçéļ]",
       "confirmTitle": "[Çóñƒíŕɱ Çóšɱéţíç Þúŕçĥášé]",
       "confirmBody": "[Þúŕçĥášé {item} ƒóŕ {cost} Çļáúðíúɱ?]",
-      "confirmPurchase": "[Þúŕçĥášé]"
+      "confirmPurchase": "[Þúŕçĥášé]",
+      "armoryEyebrow": "[Šéášóñ 1]",
+      "armoryTitle": "[Ţĥé Áŕɱóŕý]",
+      "armoryBody": "[Ļíɱíţéð ŵéáþóñ šķíñš ƒŕóɱ ţĥé Šéášóñ 1 Áŕɱóŕý. Áççóúñţ-ŵíðé, þúŕéļý çóšɱéţíç, áñð šĥóŵñ ţó éʋéŕýóñé áŕóúñð ýóú.]",
+      "collectionLine": "[{collection} Çóļļéçţíóñ]",
+      "seasonOne": "[Šéášóñ 1]",
+      "rarity": {
+        "uncommon": "[Úñçóɱɱóñ]",
+        "rare": "[Ŕáŕé]",
+        "epic": "[Éþíç]",
+        "legendary": "[Ļéĝéñðáŕý]"
+      },
+      "wtype": {
+        "sword": "[Šŵóŕð]",
+        "axe": "[Áẋé]",
+        "mace": "[Ɱáçé]",
+        "dagger": "[Ðáĝĝéŕ]",
+        "staff": "[Šţáƒƒ]",
+        "wand": "[Ŵáñð]",
+        "bow": "[Ɓóŵ]",
+        "crossbow": "[Çŕóššƀóŵ]"
+      },
+      "badge": {
+        "flagship": "[Ƒļáĝšĥíþ]",
+        "hero": "[Ĥéŕó]"
+      },
+      "inspectAria": "[Íñšþéçţ {item}]",
+      "viewModeLabel": "[Þŕéʋíéŵ ɱóðé]",
+      "tryOn": "[Ţŕý íţ óñ]",
+      "weaponOnly": "[Ŵéáþóñ óñļý]",
+      "sceneLabel": "[Šçéñé ļíĝĥţíñĝ]",
+      "scene": {
+        "day": "[Ðáý]",
+        "dusk": "[Ðúšķ]",
+        "night": "[Ñíĝĥţ]"
+      },
+      "lore": "[Ļóŕé]",
+      "usdApprox": "[áƀóúţ {usd} ÚŠÐ]",
+      "buySkin": "[Þúŕçĥášé Šķíñ]",
+      "unavailable": "[Úñáʋáíļáƀļé]",
+      "applied": "[Áþþļíéð]",
+      "apply": "[Áþþļý Šķíñ]",
+      "detach": "[Ðéţáçĥ Šķíñ]",
+      "equipHint": "[Éɋúíþ á {type} ţó áþþļý ţĥíš šķíñ.]"
     },
     "claudium": {
       "title": "[Çļáúðíúɱ]",
