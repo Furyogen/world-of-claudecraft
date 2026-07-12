@@ -68,7 +68,7 @@ const BOW_AIM_QUAT = new THREE.Quaternion().setFromEuler(
 // jutting out sideways. The shot itself keeps the hand-tuned grip.
 const GUN_CARRY_QUAT = new THREE.Quaternion()
   .setFromEuler(new THREE.Euler(Math.PI / 2, 0, 0, 'XYZ'))
-  .multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 2));
+  .multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), -Math.PI / 2));
 const BOW_PIN_BLEND_S = 0.12; // engage/disengage fade for the orientation pins
 
 const FADE = 0.22;
