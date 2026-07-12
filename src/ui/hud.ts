@@ -724,7 +724,7 @@ const CHAT_TEMPLATE_KEYS = {
   roll: 'hud.chat.templates.roll',
   say: 'hud.chat.templates.say',
 } satisfies Record<string, TranslationKey>;
-type HotbarForm = 'normal' | 'bear' | 'cat' | 'stealth' | 'sport';
+type HotbarForm = 'normal' | 'bear' | 'cat' | 'cat_stealth' | 'stealth' | 'sport';
 
 const DELVE_AFFIX_COLORS: Record<string, string> = {
   restless_graves: '#8b7355',
@@ -4682,7 +4682,10 @@ export class Hud {
     if (cupMatch && cupMatch.team !== null) return 'sport';
     if (this.sim.cfg.playerClass === 'druid') {
       if (this.sim.player.auras.some((a) => a.kind === 'form_bear')) return 'bear';
-      if (this.sim.player.auras.some((a) => a.kind === 'form_cat')) return 'cat';
+      if (this.sim.player.auras.some((a) => a.kind === 'form_cat')) {
+        if (this.sim.player.auras.some((a) => a.kind === 'stealth')) return 'cat_stealth';
+        return 'cat';
+      }
     }
     if (
       this.sim.cfg.playerClass === 'rogue' &&
@@ -4702,18 +4705,19 @@ export class Hud {
     );
   }
 
-  // Whether an ability belongs on a given form's default bar. Bear/cat bars hold
+  // Whether an ability belongs on a given form's default bar. Bear/Wolf bars hold
   // only that form's kit (its `requiresForm` abilities) plus the shift toggles;
   // the caster ('normal') bar excludes form-only abilities so they no longer
-  // auto-dump onto it. Rogue stealth has no `requiresForm` kit, so it keeps the
-  // full caster set.
+  // auto-dump onto it. Stealthed Wolf uses the same kit as ordinary Wolf Form.
+  // Rogue stealth has no `requiresForm` kit, so it keeps the full caster set.
   private shouldAutoPlaceOnForm(id: string, form: HotbarForm): boolean {
     // The sport bar holds ONLY the sport kit; conversely no sport id may ever
     // auto-place onto (and pollute) a persisted class bar.
     if (form === 'sport') return !!SPORT_ABILITIES[id];
     if (SPORT_ABILITIES[id]) return false;
-    if (form === 'bear' || form === 'cat') {
-      return ABILITIES[id]?.requiresForm === form || Hud.FORM_TOGGLE_IDS.has(id);
+    const abilityForm = form === 'cat_stealth' ? 'cat' : form;
+    if (abilityForm === 'bear' || abilityForm === 'cat') {
+      return ABILITIES[id]?.requiresForm === abilityForm || Hud.FORM_TOGGLE_IDS.has(id);
     }
     return !ABILITIES[id]?.requiresForm;
   }
@@ -4841,9 +4845,13 @@ export class Hud {
     const emptyFormMap =
       this.activeHotbarForm !== 'normal' && parsed.every((action) => action === null);
     if (emptyFormMap) {
+      // A new stealth page starts from the layout immediately beneath it, then
+      // persists independently as soon as the player edits or leaves the page.
+      // Rogue stealth inherits normal; stealthed Wolf inherits ordinary Wolf.
+      const fallbackForm = this.activeHotbarForm === 'cat_stealth' ? 'cat' : 'normal';
       let fallback: unknown = null;
       try {
-        fallback = JSON.parse(localStorage.getItem(this.slotMapKey('normal')) ?? 'null');
+        fallback = JSON.parse(localStorage.getItem(this.slotMapKey(fallbackForm)) ?? 'null');
       } catch {
         /* corrupt */
       }
@@ -4918,7 +4926,8 @@ export class Hud {
 
   private formToggleAbilityId(): string | null {
     if (this.activeHotbarForm === 'bear') return 'bear_form';
-    if (this.activeHotbarForm === 'cat') return 'cat_form';
+    if (this.activeHotbarForm === 'cat' || this.activeHotbarForm === 'cat_stealth')
+      return 'cat_form';
     return null;
   }
 
@@ -8324,7 +8333,10 @@ export class Hud {
         } else if (ev.crit && tgt.kind === 'mob' && shouldPlayCritSfxForTarget(tgt)) {
           const fam = mobVoiceFamily(tgt.templateId);
           if (fam && shouldPlayMobVoiceSfxForEntity(tgt))
-            this.combat(mobSfxKey(fam, tgt.templateId, 'attack'), tp.x, tp.y, tp.z, 0.6, { rate: 1.25, cooldown: 0.1 });
+            this.combat(mobSfxKey(fam, tgt.templateId, 'attack'), tp.x, tp.y, tp.z, 0.6, {
+              rate: 1.25,
+              cooldown: 0.1,
+            });
         }
         return;
       }
@@ -8404,7 +8416,14 @@ export class Hud {
       if (this.ensureMobEngaged(src)) return; // just fired the aggro alert
       const fam = mobVoiceFamily(src.templateId);
       if (fam && shouldPlayMobVoiceSfxForEntity(src))
-        this.combat(mobSfxKey(fam, src.templateId, 'attack'), src.pos.x, src.pos.y, src.pos.z, 0.55, { cooldown: 0.25 });
+        this.combat(
+          mobSfxKey(fam, src.templateId, 'attack'),
+          src.pos.x,
+          src.pos.y,
+          src.pos.z,
+          0.55,
+          { cooldown: 0.25 },
+        );
     } else if (src.kind === 'player') {
       this.combat(weaponSwingKey(src.templateId), src.pos.x, src.pos.y, src.pos.z, 0.5, {
         cooldown: 0.08,

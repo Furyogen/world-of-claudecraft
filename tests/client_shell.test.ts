@@ -2089,7 +2089,7 @@ describe('client HTML shell', () => {
     expect(hudMobileCss).not.toContain('body.mobile-touch #actionbar.many-spells');
   });
 
-  it('seeds druid form bars with the form kit, and only clones normal for rogue stealth', () => {
+  it('seeds druid form bars and clones the parent layout for stealth pages', () => {
     expect(hudTs).toContain('if (this.isFormKitBar()) {');
     expect(hudTs).toContain('if (this.seedFormBarIfNeeded(parsed)) return;');
     expect(hudTs).toMatch(
@@ -2098,7 +2098,10 @@ describe('client HTML shell', () => {
     expect(hudTs).toMatch(
       /const emptyFormMap =\s*this\.activeHotbarForm !== 'normal' && parsed\.every\(\(action\) => action === null\);/,
     );
-    expect(hudTs).toContain("localStorage.getItem(this.slotMapKey('normal'))");
+    expect(hudTs).toContain(
+      "const fallbackForm = this.activeHotbarForm === 'cat_stealth' ? 'cat' : 'normal';",
+    );
+    expect(hudTs).toContain('localStorage.getItem(this.slotMapKey(fallbackForm))');
     expect(hudTs).not.toContain(
       "this.loadedSlotMapFromStorage = stored || this.activeHotbarForm !== 'normal';",
     );
@@ -2118,7 +2121,9 @@ describe('client HTML shell', () => {
   it('keeps the active druid form toggle on its form action bar', () => {
     expect(hudTs).toContain("new Set(['bear_form', 'cat_form', 'travel_form'])");
     expect(hudTs).toContain("if (this.activeHotbarForm === 'bear') return 'bear_form';");
-    expect(hudTs).toContain("if (this.activeHotbarForm === 'cat') return 'cat_form';");
+    expect(hudTs).toContain(
+      "if (this.activeHotbarForm === 'cat' || this.activeHotbarForm === 'cat_stealth')",
+    );
     expect(hudTs).toContain(
       'if (formToggle && knownAbilityIds.includes(formToggle)) autoPlaceAbilityIds.add(formToggle);',
     );
