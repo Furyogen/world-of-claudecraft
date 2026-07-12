@@ -3,7 +3,7 @@ import { MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
 import { Sim } from '../src/sim/sim';
 import { terrainHeight } from '../src/sim/world';
-import { reconcileLootRolls } from '../src/ui/loot_roll_reconcile';
+import { LOOT_ROLL_REGRACE_MS, reconcileLootRolls } from '../src/ui/loot_roll_reconcile';
 
 // Loot-roll prompts were delivered only as a single best-effort `lootRoll`
 // event. A client that missed that one frame (reconnect, interest churn, a
@@ -96,12 +96,65 @@ describe('reconcileLootRolls (HUD decision)', () => {
     expect(d.confirmed).toEqual([1]);
   });
 
-  it('keeps shown rolls stable and restores a locally dismissed roll the server still offers', () => {
-    const d = reconcileLootRolls({ open: [1, 2], shown: [1], dismissed: [2], confirmed: [1] });
+  it('keeps shown rolls stable and restores a locally dismissed roll the server still offers past the grace', () => {
     // A tap is only a local intent. If the socket dropped it or the server rejected
-    // it, the authoritative self mirror still lists roll 2 and the buttons must retry.
+    // it, the authoritative self mirror still lists roll 2. Once that has held past
+    // the grace (a genuinely dropped submit, not a mirror that has not caught up),
+    // the buttons must retry.
+    const d = reconcileLootRolls({
+      open: [1, 2],
+      shown: [1],
+      dismissed: [2],
+      confirmed: [1],
+      dismissedAt: { 2: 1000 },
+      nowMs: 1000 + LOOT_ROLL_REGRACE_MS,
+    });
     expect(d.toShow).toEqual([2]);
     expect(d.toRetire).toEqual([]);
+  });
+
+  it('does NOT re-show a freshly answered roll while the mirror is still catching up (no flash)', () => {
+    // Online, a tap removes the prompt and sends the command, but the self mirror
+    // keeps listing the roll open for a round trip. Within the grace we must not
+    // re-create the just-answered prompt with live buttons.
+    const d = reconcileLootRolls({
+      open: [2],
+      shown: [],
+      dismissed: [2],
+      confirmed: [2],
+      dismissedAt: { 2: 1000 },
+      nowMs: 1000 + LOOT_ROLL_REGRACE_MS - 1,
+    });
+    expect(d.toShow).toEqual([]);
+    expect(d.toRetire).toEqual([]);
+    // Still suppressed (mirror lists it), so it is not pruned yet either.
+    expect(d.toPrune).toEqual([]);
+  });
+
+  it('re-shows a dropped submit once it stays open past the grace, but never after the mirror drops it', () => {
+    // The dropped-submit recovery: the server never recorded the choice, so the
+    // roll is still open well past the grace -> restore the retryable buttons.
+    const stillOpen = reconcileLootRolls({
+      open: [2],
+      shown: [],
+      dismissed: [2],
+      confirmed: [2],
+      dismissedAt: { 2: 1000 },
+      nowMs: 1000 + LOOT_ROLL_REGRACE_MS,
+    });
+    expect(stillOpen.toShow).toEqual([2]);
+    // The normal answer: the server recorded the choice before the grace elapsed,
+    // so the roll has already left the mirror -> nothing to re-show, and prune it.
+    const answered = reconcileLootRolls({
+      open: [],
+      shown: [],
+      dismissed: [2],
+      confirmed: [2],
+      dismissedAt: { 2: 1000 },
+      nowMs: 1000 + LOOT_ROLL_REGRACE_MS,
+    });
+    expect(answered.toShow).toEqual([]);
+    expect(answered.toPrune).toEqual([2]);
   });
 
   it('retires a mirror-confirmed shown roll once the server drops it', () => {
