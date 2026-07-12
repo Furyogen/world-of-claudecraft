@@ -210,6 +210,11 @@ import { fctSpawnShape } from './fct_event';
 import { FctPainter } from './fct_painter';
 import { FocusManager, type FocusTrapHandle } from './focus_manager';
 import {
+  PLAYER_FRAME_POS_KEY,
+  resetFramePositionsOnce,
+  TARGET_FRAME_POS_KEY,
+} from './frame_pos_reset';
+import {
   type AimPoint,
   abilityAoeRadius,
   cancelGroundAim,
@@ -694,9 +699,9 @@ const CHAT_GEOMETRY_KEY = 'woc_chat_geometry';
 // bottom resize handle. CSS clamps it to a valid range for the live viewport, so a value
 // saved in one orientation stays safe in another (never an off-screen / tiny panel).
 const MOBILE_CHAT_BOTTOM_KEY = 'woc_mobile_chat_bottom';
-// Persisted top-left for each movable unit frame (MovableFrame in movable_frame.ts).
-const TARGET_FRAME_POS_KEY = 'woc_target_frame_pos';
-const PLAYER_FRAME_POS_KEY = 'woc_player_frame_pos';
+// The persisted top-left keys for the movable unit frames live in
+// frame_pos_reset.ts (imported above) so the one-time reset clears the same
+// keys the MovableFrames read.
 const CHAT_TEMPLATE_KEYS = {
   party: 'hud.chat.templates.party',
   yell: 'hud.chat.templates.yell',
@@ -2567,6 +2572,10 @@ export class Hud {
   // -------------------------------------------------------------------------
 
   private initFrameMovers(): void {
+    // One-time v0.24.1 cleanup: drop frame drags saved against the reverted
+    // PR #1736 overhaul layout BEFORE the movers read them back (a saved
+    // position applies, and detaches the player frame, at construction).
+    resetFramePositionsOnce(localStorage);
     const isMobileLayout = () => this.isMobileLayout();
     // A live desktop-to-mobile viewport flip must re-home the anchored aura
     // bars (mobile owns its own aura placement), and the flip back re-anchors.
