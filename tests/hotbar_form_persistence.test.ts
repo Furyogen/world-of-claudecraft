@@ -140,9 +140,21 @@ describe('stealth action-bar persistence', () => {
     expect(hud.hotbarActions).toEqual(customStealth);
   });
 
+  it('preserves a pre-existing customized Rogue stealth page during migration', () => {
+    const normal = bar('sinister_strike', 'stealth');
+    const customStealth = bar('garrote', 'stealth');
+    const hud = makeHarness('rogue', ['sinister_strike', 'stealth', 'garrote'], normal);
+    localStorage.setItem('woc_hotbar_rogue_ActionbarTester_stealth', JSON.stringify(customStealth));
+
+    hud.sim.player.auras = [{ kind: 'stealth' }];
+    hud.syncActiveHotbarForm();
+
+    expect(hud.hotbarActions).toEqual(customStealth);
+  });
+
   it('preserves an intentionally empty Rogue stealth page', () => {
     const normal = bar('sinister_strike', 'stealth');
-    const hud = makeHarness('rogue', ['sinister_strike', 'stealth', 'ambush'], normal);
+    const hud = makeHarness('rogue', ['sinister_strike', 'stealth'], normal);
 
     hud.sim.player.auras = [{ kind: 'stealth' }];
     hud.syncActiveHotbarForm();
@@ -155,6 +167,8 @@ describe('stealth action-bar persistence', () => {
     hud.syncActiveHotbarForm();
 
     expect(hud.hotbarActions).toEqual(bar());
+    hud.knownAbilityIdsAtLastSlotSync = new Set(['sinister_strike', 'stealth']);
+    hud.sim.known = ['sinister_strike', 'stealth', 'ambush'].map((id) => ({ def: { id } }));
     hud.syncSlotMap();
     expect(hud.hotbarActions).toEqual(bar());
   });
