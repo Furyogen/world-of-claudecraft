@@ -135,6 +135,7 @@ function normalizeAccountCosmetics(value: unknown): AccountCosmetics {
     mechChromaIds: stringList(src.mechChromaIds),
     weaponSkinIds: stringList(src.weaponSkinIds),
     weaponSkinLoadout: stringRecord(src.weaponSkinLoadout),
+    hoverId: typeof src.hoverId === 'string' ? src.hoverId : null,
   };
 }
 
@@ -1007,6 +1008,7 @@ function blankEntity(id: number): Entity {
     mainhandItemId: null,
     weaponSkinLoadout: {},
     weaponSkinId: null,
+    hoverCosmeticId: null,
     equippedItems: {},
     equippedInstances: {},
     guild: '',
@@ -1041,6 +1043,7 @@ export class ClientWorld implements IWorld {
     mechChromaIds: [],
     weaponSkinIds: [],
     weaponSkinLoadout: {},
+    hoverId: null,
   };
   // --- IWorldProgressionXp: XP + post-cap progression scalars + unlocked
   // milestones, mirrored from snapshot self. ---
@@ -1644,6 +1647,7 @@ export class ClientWorld implements IWorld {
         e.skin = w.sk ?? 0;
         e.mainhandItemId = w.mh ?? null; // equipped mainhand → held weapon model (render-only)
         e.weaponSkinId = w.wsk ?? null; // active weapon-skin cosmetic (render-only)
+        e.hoverCosmeticId = w.hov ?? null; // applied hover cosmetic (render-only)
         e.equippedItems = w.eq ?? {}; // full worn set (render-only), for the inspect window
         e.skinCatalog = w.cat === 'mech' ? 'mech' : 'class';
         e.holderTier = w.ht ?? 0; // $WOC holder-tier flair (cosmetic, server-set)
@@ -2311,6 +2315,12 @@ export class ClientWorld implements IWorld {
       this.cosmeticsChanged = true;
     }
     this.cmd({ cmd: 'change_weapon_skin', skin: skinId, wtype: type ?? null });
+  }
+
+  changeHoverCosmetic(id: string | null): void {
+    const e = this.entities.get(this.playerId);
+    if (e) e.hoverCosmeticId = id; // optimistic; the identity wire confirms
+    this.cmd({ cmd: 'change_hover', id });
   }
   chat(text: string): void {
     this.cmd({ cmd: 'chat', text });

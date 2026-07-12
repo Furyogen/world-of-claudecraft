@@ -18,6 +18,7 @@ vi.mock('../server/db', () => ({
     mechChromaIds: [],
     weaponSkinIds: [],
     weaponSkinLoadout: {},
+    hoverId: null,
   })),
 }));
 
@@ -418,6 +419,7 @@ describe('delta snapshots', () => {
         mechChromaIds: ['amber_crimson'],
         weaponSkinIds: [],
         weaponSkinLoadout: {},
+        hoverId: null,
       },
     });
     if ('error' in joined) throw new Error(joined.error);
@@ -430,6 +432,7 @@ describe('delta snapshots', () => {
       mechChromaIds: ['amber_crimson'],
       weaponSkinIds: [],
       weaponSkinLoadout: {},
+      hoverId: null,
     });
 
     const client = bareClient(session.pid);
@@ -439,6 +442,7 @@ describe('delta snapshots', () => {
       mechChromaIds: ['amber_crimson'],
       weaponSkinIds: [],
       weaponSkinLoadout: {},
+      hoverId: null,
     });
   });
 
@@ -1821,6 +1825,7 @@ describe('weapon skin wire (weaponSkinId)', () => {
         mechChromaIds: [],
         weaponSkinIds: ['ice_fang_sword'],
         weaponSkinLoadout: {},
+        hoverId: null,
       },
     });
     if ('error' in joined) throw new Error(joined.error);
@@ -2274,6 +2279,7 @@ function dirtyEveryDeltaField(): {
     mechChromaIds: ['amber_crimson'],
     weaponSkinIds: [],
     weaponSkinLoadout: {},
+    hoverId: null,
   };
 
   // Player Entity fields.
@@ -2353,6 +2359,7 @@ describe('full self-state snapshot delta fixture', () => {
       mechChromaIds: ['amber_crimson'],
       weaponSkinIds: [],
       weaponSkinLoadout: {},
+      hoverId: null,
     });
     expect([...client.questLog.values()]).toEqual([
       { questId: 'q_widows', counts: [10, 0], state: 'active' },

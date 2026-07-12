@@ -270,6 +270,7 @@ describe('account cosmetics', () => {
       mechChromaIds: ['amber_crimson', 'onyx_gold'],
       weaponSkinIds: [],
       weaponSkinLoadout: {},
+      hoverId: null,
     });
 
     expect(dbMock.query.mock.calls[0][0]).toContain('cosmetics');
@@ -297,6 +298,7 @@ describe('account cosmetics', () => {
       mechChromaIds: ['onyx_gold'],
       weaponSkinIds: [],
       weaponSkinLoadout: {},
+      hoverId: null,
     });
 
     const [sql, params] = dbMock.query.mock.calls[1];
@@ -308,6 +310,7 @@ describe('account cosmetics', () => {
       mechChromaIds: ['onyx_gold'],
       weaponSkinIds: [],
       weaponSkinLoadout: {},
+      hoverId: null,
     });
   });
 
@@ -332,6 +335,7 @@ describe('account cosmetics', () => {
       mechChromaIds: ['amber_crimson'],
       weaponSkinIds: [],
       weaponSkinLoadout: {},
+      hoverId: null,
     });
   });
 
@@ -363,6 +367,7 @@ describe('account cosmetics', () => {
       mechChromaIds: ['onyx_gold'],
       weaponSkinIds: [],
       weaponSkinLoadout: {},
+      hoverId: null,
     });
 
     const [sql, params] = dbMock.query.mock.calls[1];
@@ -372,6 +377,7 @@ describe('account cosmetics', () => {
       mechChromaIds: ['onyx_gold'],
       weaponSkinIds: [],
       weaponSkinLoadout: {},
+      hoverId: null,
     });
   });
 });
@@ -401,6 +407,7 @@ describe('account weapon skin cosmetics', () => {
       mechChromaIds: [],
       weaponSkinIds: ['ice_fang_sword'],
       weaponSkinLoadout: { sword: 'ice_fang_sword' },
+      hoverId: null,
     });
 
     expect(dbMock.query).toHaveBeenCalledTimes(1);
@@ -439,6 +446,7 @@ describe('account weapon skin cosmetics', () => {
       mechChromaIds: [],
       weaponSkinIds: ['ice_fang_sword'],
       weaponSkinLoadout: { sword: 'ice_fang_sword' },
+      hoverId: null,
     });
 
     expect(dbMock.query).toHaveBeenCalledTimes(1);
@@ -450,12 +458,13 @@ describe('account weapon skin cosmetics', () => {
     expect(params).toEqual([7, JSON.stringify({ sword: 'ice_fang_sword' })]);
   });
 
-  it('normalizes a malformed RETURNING (no row) into the 4-field default shape', async () => {
+  it('normalizes a malformed RETURNING (no row) into the 5-field default shape', async () => {
     const defaults = {
       completedQuestIds: [],
       mechChromaIds: [],
       weaponSkinIds: [],
       weaponSkinLoadout: {},
+      hoverId: null,
     };
 
     dbMock.query.mockResolvedValueOnce({ rows: [] } as any);

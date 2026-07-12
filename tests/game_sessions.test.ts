@@ -20,6 +20,7 @@ const grantAccountWeaponSkins = vi.fn(async (_accountId: number, skinIds: string
   mechChromaIds: [],
   weaponSkinIds: [...skinIds],
   weaponSkinLoadout: {},
+  hoverId: null,
 }));
 const setAccountWeaponSkinLoadout = vi.fn(
   async (_accountId: number, loadout: Record<string, string>) => ({
@@ -102,6 +103,7 @@ describe('GameServer sessions', () => {
           mechChromaIds: [],
           weaponSkinIds: [],
           weaponSkinLoadout: {},
+          hoverId: null,
         },
       }),
     );
@@ -235,6 +237,7 @@ describe('GameServer sessions', () => {
           mechChromaIds: ['amber_crimson'],
           weaponSkinIds: [],
           weaponSkinLoadout: {},
+          hoverId: null,
         },
       }),
     );
@@ -261,6 +264,7 @@ describe('GameServer sessions', () => {
       mechChromaIds: ['amber_crimson'],
       weaponSkinIds: [],
       weaponSkinLoadout: {},
+      hoverId: null,
     };
     const first = expectJoined(
       server.join(fakeWs(), 11, 101, 'Mechone', 'shaman', null, false, {
@@ -616,6 +620,7 @@ describe('GameServer weapon skin commands', () => {
       mechChromaIds: [],
       weaponSkinIds,
       weaponSkinLoadout,
+      hoverId: null,
     },
   });
 
@@ -724,6 +729,7 @@ describe('GameServer weapon skin commands', () => {
       mechChromaIds: [],
       weaponSkinIds: ['ice_fang_sword'],
       weaponSkinLoadout: {},
+      hoverId: null,
     };
     const first = expectJoined(
       server.join(fakeWs(), 11, 101, 'Skinone', 'warrior', null, false, {
