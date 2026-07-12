@@ -4084,9 +4084,11 @@
   /* ---------- social ---------- */
   /* social: friends / guild / ignore */
   #social-window {
-    /* Wider than the other windows: the tab rail now carries FIVE tabs
-       (Friends, Guild, Ignored, Blocked, Raid) and the labels must not wrap. */
-    width: 420px;
+    /* Wider than the other windows: the tab rail carries FIVE tabs (Friends,
+       Guild, Ignored, Blocked, Raid) whose labels are locale-sized, and the guild
+       roster rows carry a name + rank + zone + last-seen line. */
+    width: 520px;
+    max-width: calc(100vw - 24px);
     height: 560px;
     max-height: calc(100vh - 24px);
     flex-direction: column;
@@ -4095,6 +4097,19 @@
   }
   #social-window.open {
     display: flex;
+  }
+  /* The social rail carries FIVE tabs (Friends, Guild, Ignored, Blocked, Raid) and
+     is the only frame rail that should span the window, so scope the fill here
+     rather than touching the shared `.tab` grammar. `flex: 1 0 auto` grows each tab
+     to share the width but never shrinks one below its own text, so a long locale
+     label (Russian "Игнорируемые" is far wider than "Ignored") overflows into the
+     rail's existing horizontal scroll instead of being clipped. */
+  #social-window .tab-rail {
+    padding: 0;
+  }
+  #social-window .tab {
+    flex: 1 0 auto;
+    text-align: center;
   }
   .soc-realm-tag {
     color: #7fd4ff;
@@ -4106,20 +4121,10 @@
     gap: 4px;
     margin: 6px 0 8px;
     flex: none;
-    /* FIVE tabs now (Friends, Guild, Ignored, Blocked, Raid) and the labels are
-       locale-sized: Russian "Игнорируемые" is far wider than "Ignored". Tabs grow
-       to fill when there is room but never shrink below their text, and the rail
-       scrolls rather than clipping a label in any locale. */
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .soc-tabs::-webkit-scrollbar {
-    display: none;
   }
   .soc-tab {
-    flex: 1 0 auto;
-    white-space: nowrap;
-    padding: 7px 8px;
+    flex: 1;
+    padding: 7px 0;
     font-size: 13px;
     font-family: var(--title-font);
     color: var(--color-text-muted);
