@@ -338,12 +338,12 @@ export const fr_CA: EnTranslations = {
       "talkBodyTouch": "Tiens-toi près du maréchal Redbrook et touche le bouton Utiliser pour lui parler, puis accepte sa mission.",
       "returnBodyTouch": "Ta mission est accomplie. Retourne voir le maréchal Redbrook et touche le bouton Utiliser pour la rendre.",
       "doneBodyTouch": "Tu maîtrises les bases, {name}. Le Val est à toi : touche Plus, puis Journal de quêtes, pour consulter ton journal de quêtes à tout moment. Bonne chasse !",
-      "slayTargetHint": "Debut en combat? Appuyez sur {targetKey} ou cliquez sur un loup pour le cibler, puis utilisez une technique de la barre d action pour l attaquer.",
-      "slayTargetHintTouch": "Debut en combat? Touchez un loup pour le cibler, puis touchez une technique de la barre d action pour l attaquer.",
-      "nextTipsTitle": "Ou aller ensuite",
-      "nextTipQuestLog": "Ouvrez votre journal de quetes ({key}) pour trouver votre prochaine tache proche.",
-      "nextTipMap": "Consultez la carte du monde ({key}) pour voir ou des quetes vous attendent.",
-      "nextTipSocial": "Ouvrez Social ({key}) pour trouver un groupe pour les combats plus difficiles."
+      "slayTargetHint": "Premier combat? Appuyez sur {targetKey} ou cliquez sur un loup pour le cibler, puis utilisez une technique de la barre d action pour l attaquer.",
+      "slayTargetHintTouch": "Premier combat? Touchez un loup pour le cibler, puis touchez une technique de la barre d action pour l attaquer.",
+      "nextTipsTitle": "Prochaine destination",
+      "nextTipQuestLog": "Consultez votre journal de quetes ({key}) pour trouver la prochaine tache proche.",
+      "nextTipMap": "Regardez la carte du monde ({key}) pour voir ou des quetes vous attendent.",
+      "nextTipSocial": "Passez par Social ({key}) pour trouver un groupe pour les combats plus difficiles."
     },
     "widgets": {
       "clockTitle": "Heure locale - cliquez pour basculer 12/24 heures",
@@ -412,7 +412,7 @@ export const fr_CA: EnTranslations = {
       "targetFriendlyNext": "Changer de cible alliée",
       "discord": "Discord",
       "valecup": "Coupe du Val",
-      "sheathe": "Ranger/sortir l arme",
+      "sheathe": "Remettre/sortir l arme",
       "categoryPet": "Familier",
       "petAttack": "Familier : attaquer",
       "petStop": "Familier : arrêter",
@@ -931,7 +931,7 @@ export const fr_CA: EnTranslations = {
     "corpseHarvest": {
       "title": "Dépeçage",
       "harvestButton": "Dépecer",
-      "harvestButtonTooltip": "Depecer: recuperez des materiaux d artisanat sur ce cadavre, comme peau, croc, soie et composants similaires, separement de tout butin. Tout le monde peut depecer; un seul joueur peut depecer un cadavre donne.",
+      "harvestButtonTooltip": "Depecer: ramassez des materiaux d artisanat sur ce cadavre, comme peau, croc, soie et composants similaires, a part de tout butin. Tout le monde peut depecer; un seul joueur peut depecer un cadavre donne.",
       "concentrateHint": "Moins vous choisissez de composants, plus la qualité de chacun est élevée.",
       "alreadyHarvested": "Ce cadavre a déjà été dépecé.",
       "componentAria": "Prélever {component}",
@@ -1113,7 +1113,7 @@ export const fr_CA: EnTranslations = {
     },
     "loot": {
       "chestTitle": "Coffre",
-      "takeAllTooltip": "Tout prendre: recuperez toutes les pieces et tous les objets de cette fenetre de butin."
+      "takeAllTooltip": "Tout ramasser: recuperez toutes les pieces et tous les objets de cette fenetre de butin."
     },
     "spellbook": {
       "addToBarAria": "Ajouter {name} à la barre d'action",

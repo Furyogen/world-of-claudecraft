@@ -237,19 +237,19 @@ export const fr_CA: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraEffect.school.holy': 'sacré',
   'hudChrome.auraEffect.school.nature': 'nature',
   'hudChrome.corpseHarvest.harvestButtonTooltip':
-    'Depecer: recuperez des materiaux d artisanat sur ce cadavre, comme peau, croc, soie et composants similaires, separement de tout butin. Tout le monde peut depecer; un seul joueur peut depecer un cadavre donne.',
-  'hudChrome.keybinds.sheathe': 'Ranger/sortir l arme',
+    'Depecer: ramassez des materiaux d artisanat sur ce cadavre, comme peau, croc, soie et composants similaires, a part de tout butin. Tout le monde peut depecer; un seul joueur peut depecer un cadavre donne.',
+  'hudChrome.keybinds.sheathe': 'Remettre/sortir l arme',
   'hudChrome.loot.takeAllTooltip':
-    'Tout prendre: recuperez toutes les pieces et tous les objets de cette fenetre de butin.',
+    'Tout ramasser: recuperez toutes les pieces et tous les objets de cette fenetre de butin.',
   'hudChrome.tutorial.nextTipMap':
-    'Consultez la carte du monde ({key}) pour voir ou des quetes vous attendent.',
+    'Regardez la carte du monde ({key}) pour voir ou des quetes vous attendent.',
   'hudChrome.tutorial.nextTipQuestLog':
-    'Ouvrez votre journal de quetes ({key}) pour trouver votre prochaine tache proche.',
+    'Consultez votre journal de quetes ({key}) pour trouver la prochaine tache proche.',
   'hudChrome.tutorial.nextTipSocial':
-    'Ouvrez Social ({key}) pour trouver un groupe pour les combats plus difficiles.',
-  'hudChrome.tutorial.nextTipsTitle': 'Ou aller ensuite',
+    'Passez par Social ({key}) pour trouver un groupe pour les combats plus difficiles.',
+  'hudChrome.tutorial.nextTipsTitle': 'Prochaine destination',
   'hudChrome.tutorial.slayTargetHint':
-    'Debut en combat? Appuyez sur {targetKey} ou cliquez sur un loup pour le cibler, puis utilisez une technique de la barre d action pour l attaquer.',
+    'Premier combat? Appuyez sur {targetKey} ou cliquez sur un loup pour le cibler, puis utilisez une technique de la barre d action pour l attaquer.',
   'hudChrome.tutorial.slayTargetHintTouch':
-    'Debut en combat? Touchez un loup pour le cibler, puis touchez une technique de la barre d action pour l attaquer.',
+    'Premier combat? Touchez un loup pour le cibler, puis touchez une technique de la barre d action pour l attaquer.',
 };

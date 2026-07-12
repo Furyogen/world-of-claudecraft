@@ -11,19 +11,23 @@
 // Keep the step list in sync with .github/workflows/ci.yml (and vice versa).
 import { spawnSync } from 'node:child_process';
 import os from 'node:os';
+import { hasRunnableFfprobe, resolveFfmpegPath } from './sfx/toolchain.mjs';
 
 const workers = Math.max(1, Math.floor(os.cpus().length / 2));
 // npm/npx resolve to .cmd files on Windows, which spawnSync only finds via a shell.
 const shell = process.platform === 'win32';
 
-const missingAudioTools = ['ffmpeg', 'ffprobe'].filter((tool) => {
-  const probe = spawnSync(tool, ['-version'], { stdio: 'ignore', shell });
-  return probe.error !== undefined || probe.status !== 0;
-});
+const ffmpegPath = resolveFfmpegPath('ffmpeg');
+const ffmpegProbe = spawnSync(ffmpegPath, ['-version'], { stdio: 'ignore', shell });
+const missingAudioTools = [];
+if (ffmpegProbe.error !== undefined || ffmpegProbe.status !== 0) missingAudioTools.push('ffmpeg');
+if (!hasRunnableFfprobe('ffprobe') && missingAudioTools.length > 0) {
+  missingAudioTools.push('ffprobe');
+}
 if (missingAudioTools.length > 0) {
   console.error(
-    `[gate] missing required SFX audio tooling on PATH: ${missingAudioTools.join(', ')}\n` +
-      '[gate] install FFmpeg (including ffprobe), then re-run npm run gate',
+    `[gate] missing required SFX audio tooling: ${missingAudioTools.join(', ')}\n` +
+      '[gate] install FFmpeg or restore the checked-in static toolchain, then re-run npm run gate',
   );
   process.exit(1);
 }

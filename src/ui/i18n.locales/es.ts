@@ -6743,10 +6743,10 @@ export const es: Partial<Record<TranslationKey, string>> = {
     'Debes estar en un grupo para iniciar una comprobación de disponibilidad.',
   'hudChrome.readyCheck.inProgressError': 'Ya hay una comprobación de disponibilidad en curso.',
   'hudChrome.corpseHarvest.harvestButtonTooltip':
-    'Recolectar: recoge materiales de artesania de este cadaver, como piel, colmillo, seda y componentes similares, aparte de cualquier botin. Cualquiera puede recolectar; solo un jugador puede recolectar un cadaver dado.',
+    'Recolectar: recoge materiales de artesania de este cadaver, como piel, colmillo, seda y componentes similares, aparte de cualquier tesoro. Cualquiera puede recolectar; solo un jugador puede recolectar un cadaver dado.',
   'hudChrome.keybinds.sheathe': 'Envainar/desenvainar arma',
   'hudChrome.loot.takeAllTooltip':
-    'Tomar todo: recoge todas las monedas y objetos de esta ventana de botin.',
+    'Saqueo total: recoge las monedas y objetos de esta ventana de botin.',
   'hudChrome.tutorial.nextTipMap':
     'Consulta el mapa del mundo ({key}) para ver donde esperan las misiones.',
   'hudChrome.tutorial.nextTipQuestLog':

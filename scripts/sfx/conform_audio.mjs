@@ -16,6 +16,7 @@ import {
   TARGET_PEAK_DBFS,
   TARGET_SAMPLE_RATE,
 } from './sfx_conform_rules.mjs';
+import { hasRunnableFfprobe, resolveFfmpegPath, resolveFfprobePath } from './toolchain.mjs';
 
 export const SFX_AUDIO_EXTENSIONS = new Set([
   '.mp3',
@@ -42,8 +43,12 @@ function run(binary, args, options = {}) {
 }
 
 export function probeSfxAudio(file, ffprobePath) {
+  const resolvedFfprobe = resolveFfprobePath(ffprobePath);
+  if (!hasRunnableFfprobe(resolvedFfprobe)) {
+    return probeSfxAudioWithFfmpeg(file, resolveFfmpegPath());
+  }
   const output = run(
-    ffprobePath,
+    resolvedFfprobe,
     ['-v', 'quiet', '-print_format', 'json', '-show_format', '-show_streams', file],
     { capture: true },
   );
@@ -69,15 +74,56 @@ export function probeSfxAudio(file, ffprobePath) {
   };
 }
 
-function captureFfmpegReport(file, filter, ffmpegPath) {
+function secondsFromDuration(value) {
+  const match = String(value).match(/(\d+):(\d+):(\d+(?:\.\d+)?)/);
+  if (!match) return 0;
+  return Number(match[1]) * 3600 + Number(match[2]) * 60 + Number(match[3]);
+}
+
+function channelsFromStream(stream) {
+  if (/\bmono\b/i.test(stream)) return 1;
+  if (/\bstereo\b/i.test(stream)) return 2;
+  const match = stream.match(/,\s*(\d+)\s+channels?\b/i);
+  return match ? Number(match[1]) : 0;
+}
+
+function probeSfxAudioWithFfmpeg(file, ffmpegPath) {
   const result = spawnSync(
     ffmpegPath,
-    ['-hide_banner', '-nostdin', '-i', file, '-af', filter, '-f', 'null', '-'],
+    ['-hide_banner', '-nostdin', '-i', file, '-f', 'null', '-'],
     { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024, stdio: ['ignore', 'ignore', 'pipe'] },
   );
   if (result.error) throw result.error;
   if (result.status !== 0) {
     throw new Error(String(result.stderr || `${basename(ffmpegPath)} failed`).trim());
+  }
+  const report = String(result.stderr ?? '');
+  const stream = report.match(/Stream #.*Audio:\s*([^\n]+)/i)?.[1] ?? '';
+  const duration = secondsFromDuration(report.match(/Duration:\s*([^,\n]+)/i)?.[1] ?? '');
+  const sampleRate = Number(stream.match(/\b(\d+)\s*Hz\b/i)?.[1] ?? 0);
+  const bitrate = Number(stream.match(/,\s*(\d+)\s*kb\/s\b/i)?.[1] ?? 0);
+  if (!(duration > 0) || !(sampleRate > 0)) {
+    throw new Error(`ffmpeg returned invalid audio metadata for ${basename(file)}`);
+  }
+  return {
+    duration,
+    bitrate,
+    sampleRate,
+    codec: stream.split(',')[0]?.trim().split(/\s+/)[0] ?? '',
+    channels: channelsFromStream(stream),
+  };
+}
+
+function captureFfmpegReport(file, filter, ffmpegPath) {
+  const resolvedFfmpeg = resolveFfmpegPath(ffmpegPath);
+  const result = spawnSync(
+    resolvedFfmpeg,
+    ['-hide_banner', '-nostdin', '-i', file, '-af', filter, '-f', 'null', '-'],
+    { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024, stdio: ['ignore', 'ignore', 'pipe'] },
+  );
+  if (result.error) throw result.error;
+  if (result.status !== 0) {
+    throw new Error(String(result.stderr || `${basename(resolvedFfmpeg)} failed`).trim());
   }
   return String(result.stderr ?? '');
 }
@@ -204,12 +250,14 @@ export function conformSfxAudio({ inputFile, outputFile, duration, ffmpegPath, p
 }
 
 export function inspectSfxConformance(file, { ffmpegPath, ffprobePath }) {
+  const resolvedFfmpeg = resolveFfmpegPath(ffmpegPath);
   const stats = probeSfxAudio(file, ffprobePath);
   const isLossless = LOSSLESS_EXTENSIONS.has(extname(file).toLowerCase());
   const preliminary = classify({ ...stats, isLossless });
   if (preliminary.reject) return { ...stats, isLossless, ...preliminary, peakDb: null, lufs: null };
-  const peakDb = preliminary.normBranch === 'peak' ? measureSfxTruePeakDb(file, ffmpegPath) : null;
-  const lufs = preliminary.normBranch === 'lufs' ? measureSfxLufs(file, ffmpegPath) : null;
+  const peakDb =
+    preliminary.normBranch === 'peak' ? measureSfxTruePeakDb(file, resolvedFfmpeg) : null;
+  const lufs = preliminary.normBranch === 'lufs' ? measureSfxLufs(file, resolvedFfmpeg) : null;
   return {
     ...stats,
     isLossless,

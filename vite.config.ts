@@ -299,7 +299,7 @@ export default defineConfig({
   // plugin is scoped to Vitest so it cannot affect production client builds.
   plugins: [
     svelte(),
-    ...(process.env.VITEST ? [svelteTesting()] : []),
+    ...(process.env.VITEST ? [svelteTesting({ autoCleanup: false })] : []),
     staticPageAliasPlugin(),
     i18nModulepreloadPlugin(),
     musicEditorSavePlugin(),

@@ -20,7 +20,7 @@ import {
 } from 'node:fs';
 import { basename, dirname, extname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { conformSfxAudio, inspectSfxConformance } from '../sfx/conform_audio.mjs';
+import { conformSfxAudio, inspectSfxConformance, probeSfxAudio } from '../sfx/conform_audio.mjs';
 import {
   readSfxMix,
   SFX_RUNTIME_PACK_PATH,
@@ -40,6 +40,7 @@ import {
 import { LOSSLESS_EXTENSIONS, MIN_SOURCE_BITRATE } from '../sfx/sfx_conform_rules.mjs';
 import { discoverSfxTracks } from '../sfx/sfx_manifest_builder.mjs';
 import { SFX } from '../sfx/sfx_prompts.mjs';
+import { resolveFfmpegPath, resolveFfprobePath } from '../sfx/toolchain.mjs';
 import { writeSfxProductionBundle } from './export_bundle.mjs';
 import {
   buildAuthoringPcmArgs,
@@ -88,6 +89,8 @@ const UPLOAD_EXTENSIONS = new Set([
 const renderLocks = new Map();
 let ffmpegFingerprintPromise = null;
 let mutationTail = Promise.resolve();
+const FFMPEG = resolveFfmpegPath('ffmpeg');
+const FFPROBE = resolveFfprobePath('ffprobe');
 
 function ensurePlainDirectory(path, parent) {
   const parentReal = realpathSync(parent);
@@ -271,10 +274,8 @@ function runBuffer(command, args, { maxBytes = 32 * 1024 * 1024 } = {}) {
 export async function toolchainStatus() {
   const status = { ffmpeg: null, ffprobe: null, ready: false };
   try {
-    status.ffmpeg = (await run('ffmpeg', ['-version'], { maxOutput: 10_000 })).stdout.split(
-      '\n',
-    )[0];
-    status.ffprobe = (await run('ffprobe', ['-version'], { maxOutput: 10_000 })).stdout.split(
+    status.ffmpeg = (await run(FFMPEG, ['-version'], { maxOutput: 10_000 })).stdout.split('\n')[0];
+    status.ffprobe = (await run(FFPROBE, ['-version'], { maxOutput: 10_000 })).stdout.split(
       '\n',
     )[0];
     status.ready = true;
@@ -285,35 +286,22 @@ export async function toolchainStatus() {
 }
 
 async function ffmpegFingerprint() {
-  ffmpegFingerprintPromise ??= run('ffmpeg', ['-version'], { maxOutput: 10_000 }).then(
-    ({ stdout }) => createHash('sha256').update(stdout.split('\n')[0]).digest('hex').slice(0, 16),
+  ffmpegFingerprintPromise ??= run(FFMPEG, ['-version'], { maxOutput: 10_000 }).then(({ stdout }) =>
+    createHash('sha256').update(stdout.split('\n')[0]).digest('hex').slice(0, 16),
   );
   return ffmpegFingerprintPromise;
 }
 
 export async function inspectAudio(path) {
-  const { stdout } = await run('ffprobe', [
-    '-v',
-    'error',
-    '-select_streams',
-    'a:0',
-    '-show_entries',
-    'stream=codec_name,sample_rate,channels,channel_layout,bit_rate,duration:format=duration,size,bit_rate',
-    '-of',
-    'json',
-    path,
-  ]);
-  const data = JSON.parse(stdout);
-  const stream = data.streams?.[0];
-  if (!stream) throw new Error('uploaded file has no audio stream');
+  const info = probeSfxAudio(path, FFPROBE);
   return {
-    codec: String(stream.codec_name ?? ''),
-    sampleRate: Number(stream.sample_rate) || 0,
-    channels: Number(stream.channels) || 0,
-    channelLayout: String(stream.channel_layout ?? ''),
-    duration: Number(stream.duration ?? data.format?.duration) || 0,
-    bitrate: Number(stream.bit_rate ?? data.format?.bit_rate) || 0,
-    bytes: Number(data.format?.size) || statSync(path).size,
+    codec: info.codec,
+    sampleRate: info.sampleRate,
+    channels: info.channels,
+    channelLayout: '',
+    duration: info.duration,
+    bitrate: info.bitrate * 1000,
+    bytes: statSync(path).size,
   };
 }
 
@@ -364,7 +352,7 @@ export function parseLoudnormReport(stderr) {
 }
 
 export async function analyzeLoudness(path) {
-  const { stderr } = await run('ffmpeg', [
+  const { stderr } = await run(FFMPEG, [
     '-hide_banner',
     '-nostdin',
     '-nostats',
@@ -381,7 +369,7 @@ export async function analyzeLoudness(path) {
 
 export async function analyzeLoopContinuity(path, channels) {
   if (![1, 2].includes(channels)) throw new Error('loop continuity requires mono or stereo audio');
-  const { stdout } = await runBuffer('ffmpeg', [
+  const { stdout } = await runBuffer(FFMPEG, [
     '-hide_banner',
     '-loglevel',
     'error',
@@ -1206,7 +1194,7 @@ async function renderMasterFile({ key, input, output, saved }) {
       loop,
       spatial,
     });
-    const report = parseLoudnormReport((await run('ffmpeg', plan.args)).stderr);
+    const report = parseLoudnormReport((await run(FFMPEG, plan.args)).stderr);
     measurement = report.measurement;
     if (!measurement) {
       throw new Error('EBU R128 normalization is below the absolute gate after 400 ms padding');
@@ -1226,7 +1214,7 @@ async function renderMasterFile({ key, input, output, saved }) {
       spatial,
       loudnessMeasurement: saved.project.normalize.enabled ? measurement : undefined,
     });
-    const render = await run('ffmpeg', plan.args);
+    const render = await run(FFMPEG, plan.args);
     let authoringMode = 'direct';
     if (saved.project.normalize.enabled) {
       authoringMode = parseLoudnormReport(render.stderr).normalizationType;
@@ -1242,7 +1230,7 @@ async function renderMasterFile({ key, input, output, saved }) {
       inputFile: authoring,
       outputFile: output,
       duration: authoringInfo.duration,
-      ffmpegPath: 'ffmpeg',
+      ffmpegPath: FFMPEG,
     });
     const info = await inspectAudio(output);
     const [loudness, loopContinuity] = await Promise.all([
@@ -1250,8 +1238,8 @@ async function renderMasterFile({ key, input, output, saved }) {
       loop ? analyzeLoopContinuity(output, info.channels) : Promise.resolve(null),
     ]);
     const conformance = inspectSfxConformance(output, {
-      ffmpegPath: 'ffmpeg',
-      ffprobePath: 'ffprobe',
+      ffmpegPath: FFMPEG,
+      ffprobePath: FFPROBE,
     });
     const verification = verifyProductionMaster(conformance, loopContinuity, loop);
     if (!verification.ok) {
@@ -1344,8 +1332,8 @@ export async function renderExactMaster(key, rawProject, expectedAudioWorkspaceH
             : Promise.resolve(null),
         ]);
         const conformance = inspectSfxConformance(output, {
-          ffmpegPath: 'ffmpeg',
-          ffprobePath: 'ffprobe',
+          ffmpegPath: FFMPEG,
+          ffprobePath: FFPROBE,
         });
         const verification = verifyProductionMaster(
           conformance,
@@ -1860,8 +1848,8 @@ export async function restoreVersion(
       restoredMix.mastering.mode === 'production-conform'
         ? verifyProductionMaster(
             inspectSfxConformance(archive.audio, {
-              ffmpegPath: 'ffmpeg',
-              ffprobePath: 'ffprobe',
+              ffmpegPath: FFMPEG,
+              ffprobePath: FFPROBE,
             }),
             loopContinuity,
             !!CATALOG.get(key)?.loop,

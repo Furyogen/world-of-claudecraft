@@ -30,6 +30,7 @@ import {
   TARGET_BITRATE,
   TARGET_SAMPLE_RATE,
 } from '../sfx/sfx_conform_rules.mjs';
+import { resolveFfmpegPath, resolveFfprobePath } from '../sfx/toolchain.mjs';
 import { buildDeterministicZip } from './zip.mjs';
 
 const EXPORT_FORMAT = 'woc-sfx-production-bundle';
@@ -63,8 +64,8 @@ function validateProductionTrack(path, identity, bytes) {
   try {
     writeFileSync(validationPath, bytes, { flag: 'wx', mode: 0o600 });
     report = inspectSfxConformance(validationPath, {
-      ffmpegPath: 'ffmpeg',
-      ffprobePath: 'ffprobe',
+      ffmpegPath: resolveFfmpegPath('ffmpeg'),
+      ffprobePath: resolveFfprobePath('ffprobe'),
     });
   } catch (error) {
     throw new Error(

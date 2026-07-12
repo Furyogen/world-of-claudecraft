@@ -338,12 +338,12 @@ export const es_ES: EnTranslations = {
       "talkBodyTouch": "Acércate al mariscal Redbrook y toca el botón Usar para hablar; luego acepta su tarea.",
       "returnBodyTouch": "Tu tarea está hecha. Vuelve con el mariscal Redbrook y toca el botón Usar para entregarla.",
       "doneBodyTouch": "Ya dominas lo básico, {name}. El Valle es tuyo para explorar: toca Más y luego Diario de misiones para revisar tu diario de misiones en cualquier momento. ¡Buena caza!",
-      "slayTargetHint": "Nuevo en combate? Pulsa {targetKey} o haz clic en un lobo para seleccionarlo, luego usa una habilidad de la barra de accion para atacarlo.",
-      "slayTargetHintTouch": "Nuevo en combate? Toca un lobo para seleccionarlo, luego toca una habilidad de la barra de accion para atacarlo.",
-      "nextTipsTitle": "A donde ir ahora",
-      "nextTipQuestLog": "Abre tu registro de misiones ({key}) para encontrar tu siguiente tarea cercana.",
-      "nextTipMap": "Consulta el mapa del mundo ({key}) para ver donde esperan las misiones.",
-      "nextTipSocial": "Abre Social ({key}) para encontrar un grupo para combates mas duros."
+      "slayTargetHint": "Primera pelea? Pulsa {targetKey} o haz clic en un lobo para seleccionarlo, luego usa una habilidad de la barra de accion para atacarlo.",
+      "slayTargetHintTouch": "Primera pelea? Toca un lobo para seleccionarlo, luego toca una habilidad de la barra de accion para atacarlo.",
+      "nextTipsTitle": "Siguiente destino",
+      "nextTipQuestLog": "Consulta tu registro de misiones ({key}) para encontrar la siguiente tarea cercana.",
+      "nextTipMap": "Mira el mapa del mundo ({key}) para ver donde te esperan las misiones.",
+      "nextTipSocial": "Entra en Social ({key}) para encontrar grupo para combates mas duros."
     },
     "widgets": {
       "clockTitle": "Hora local: haz clic para alternar 12/24 horas",
@@ -412,7 +412,7 @@ export const es_ES: EnTranslations = {
       "targetFriendlyNext": "Objetivo amistoso siguiente",
       "discord": "Discord",
       "valecup": "Copa del Valle",
-      "sheathe": "Envainar/desenvainar arma",
+      "sheathe": "Guardar/sacar arma",
       "categoryPet": "Mascota",
       "petAttack": "Mascota: atacar",
       "petStop": "Mascota: detenerse",
@@ -931,7 +931,7 @@ export const es_ES: EnTranslations = {
     "corpseHarvest": {
       "title": "Recolección",
       "harvestButton": "Recolectar",
-      "harvestButtonTooltip": "Recolectar: recoge materiales de artesania de este cadaver, como piel, colmillo, seda y componentes similares, aparte de cualquier botin. Cualquiera puede recolectar; solo un jugador puede recolectar un cadaver dado.",
+      "harvestButtonTooltip": "Desollar: recoge materiales de artesania de este cadaver, como piel, colmillo, seda y componentes similares, aparte de cualquier tesoro. Cualquiera puede desollar; solo un jugador puede desollar un cadaver dado.",
       "concentrateHint": "Cuantos menos componentes elijas, mayor será la calidad de cada uno.",
       "alreadyHarvested": "Este cadáver ya ha sido recolectado.",
       "componentAria": "Recolectar {component}",
@@ -1113,7 +1113,7 @@ export const es_ES: EnTranslations = {
     },
     "loot": {
       "chestTitle": "Cofre",
-      "takeAllTooltip": "Tomar todo: recoge todas las monedas y objetos de esta ventana de botin."
+      "takeAllTooltip": "Saqueo completo: recoge las monedas y objetos de esta ventana de botin."
     },
     "spellbook": {
       "addToBarAria": "Añadir {name} a la barra de acción",
