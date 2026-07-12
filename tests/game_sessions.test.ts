@@ -370,10 +370,7 @@ describe('GameServer sessions', () => {
       expect(saveCharacterAndMarketState).toHaveBeenCalledTimes(savesBefore + 1);
     });
 
-    server.handleMessage(
-      leaver,
-      JSON.stringify({ t: 'cmd', cmd: 'trade_req', id: stayer.pid }),
-    );
+    server.handleMessage(leaver, JSON.stringify({ t: 'cmd', cmd: 'trade_req', id: stayer.pid }));
     server.sim.tradeAccept(stayer.pid);
     const staleCommandOpenedTrade = server.sim.tradeFor(stayer.pid) !== null;
 
@@ -536,9 +533,9 @@ describe('GameServer sessions', () => {
     });
 
     // A queued DoT tick from the departing player must not reacquire the tap
-    // after preparePlayerLeave cleared it.
+    // after preparePlayerLeave transferred it to the eligible stayer.
     (server.sim as any).dealDamage(leaverEntity, boss, 1, false, 'physical', null, 'hit');
-    expect(boss.tappedById).toBeNull();
+    expect(boss.tappedById).toBe(stayer.pid);
 
     // Kill the final boss while leave() is parked after serializing the leaver.
     // No reward or lockout may mutate that stale, soon-to-be-discarded state.

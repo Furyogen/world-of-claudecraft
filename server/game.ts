@@ -2981,6 +2981,10 @@ export class GameServer {
   // -------------------------------------------------------------------------
 
   handleMessage(session: ClientSession, raw: string): void {
+    // A socket can deliver already-buffered frames after leave() removes its
+    // session and starts the awaited persistence flush. Never let that stale
+    // authority mutate live state after the character snapshot was captured.
+    if (session.left || this.clients.get(session.pid) !== session) return;
     gameMetricsCounters().wsMessage('in');
     const receivedAtMs = Date.now();
     const verdict = consumeMsgToken(session.msgRate, receivedAtMs / 1000);

@@ -406,6 +406,7 @@ import {
   type MoveInput,
   type OverheadEmoteId,
   PARTY_MEMBER_AURA_CAP,
+  PARTY_XP_RANGE,
   type PetMode,
   type PlayerClass,
   type QuestProgress,
@@ -486,7 +487,6 @@ const DEFAULT_RAID_LOCKOUT_MS = 24 * 60 * 60 * 1000;
 // (I1: read only by enterDungeon's raid gate).
 // DAMAGE_IDLE_DESPAWN_SECONDS / DAMAGE_IDLE_DESPAWN_MOB_IDS moved to entity_roster.ts
 // (the despawn prologue's home); imported above for the damage-path timer reset.
-// PARTY_XP_RANGE moved to types.ts (C1; read by the damage-core xp-split + M1 assist); no longer imported by sim.ts.
 // RESTED_* rested-XP tuning + isResting/updateRested moved to progression/xp.ts (G1b),
 // the only code that reads them.
 // A2: DUEL_COUNTDOWN/DUEL_FORFEIT_DISTANCE moved to social/duel.ts; the Ashen
@@ -2112,17 +2112,56 @@ export class Sim {
     const meta = this.players.get(pid);
     if (!meta) return;
     meta.leaving = true;
+    // Trades are not escrowed. Cancel before the leave snapshot so the other
+    // party cannot confirm during the persistence await and receive an item
+    // that the departing character's already-captured save still contains.
+    if (this.trades.has(pid)) this.tradeCancel(pid);
     // Forfeit unresolved rolls while the player, party, and source corpse are
     // still live, so every item goes to a remaining candidate or back to loot.
     removePlayerFromLootRolls(this.ctx, pid);
-    // Mirror removePlayer's tap cleanup before persistence yields. A remaining
-    // player or pet can then establish fresh credit on its killing hit instead
-    // of inheriting a departing tap whose rewards cannot be saved.
+    const party = this.partyOf(pid);
+    // Re-anchor taps before persistence yields. This preserves the party's
+    // death-time corpse rights and loot strategy after the original tapper is
+    // removed, and lets an already-queued leaver DoT settle a fatal heroic hit
+    // through an eligible remaining participant. Without a qualified party
+    // member, clearing the tap mirrors immediate removal.
     for (const entity of this.entities.values()) {
-      if (entity.kind === 'mob' && !entity.dead && entity.tappedById === pid) {
-        entity.tappedById = null;
+      if (entity.kind === 'mob' && entity.tappedById === pid) {
+        entity.tappedById = this.replacementTapperForLeave(entity, pid, party?.members ?? []);
       }
     }
+  }
+
+  private replacementTapperForLeave(
+    mob: Entity,
+    leavingPid: number,
+    partyPids: number[],
+  ): number | null {
+    const instance = this.instances.find(
+      (slot) => slot.partyKey !== null && slot.mobIds.includes(mob.id),
+    );
+    for (const candidatePid of partyPids) {
+      if (candidatePid === leavingPid) continue;
+      const candidate = this.players.get(candidatePid);
+      const entity = this.entities.get(candidatePid);
+      if (!candidate || candidate.leaving || !entity) continue;
+      // A corpse already owns an authoritative death-time recipient snapshot.
+      // Re-anchor only to someone in that snapshot, irrespective of where they
+      // moved after the kill.
+      if (mob.lootRecipientIds && mob.lootRecipientIds.length > 0) {
+        if (mob.lootRecipientIds.includes(candidatePid)) return candidatePid;
+        continue;
+      }
+      const matchingInstanceCorpse =
+        entity.ghost &&
+        entity.corpsePos &&
+        (!instance || entity.corpseInstanceId === instance.exitId)
+          ? entity.corpsePos
+          : null;
+      const participationPos = matchingInstanceCorpse ?? entity.pos;
+      if (dist2d(participationPos, mob.pos) <= PARTY_XP_RANGE) return candidatePid;
+    }
+    return null;
   }
 
   serializeCharacter(pid: number): CharacterState | null {
