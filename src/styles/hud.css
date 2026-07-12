@@ -4052,10 +4052,14 @@
      delaying the tag on a cheaper tier would be a settings-driven information
      difference, which the graphics-neutrality invariant forbids. */
   .ai-tag {
-    font-weight: 800;
+    font-weight: 700;
     letter-spacing: 0.4px;
-    /* The first colour REPEATS at the end so the 300% scroll wraps seamlessly. */
-    background-image: linear-gradient(90deg, #ff5f6d, #ffc371, #6bffb8, #6bc2ff, #c98bff, #ff5f6d);
+    /* Muted rainbow, not neon: the tag sits next to the sender name and must read as
+       a quiet mark, never as the brightest thing in the chat log. These stops are
+       desaturated and darkened well below the channel colours around them, so the
+       name stays the thing your eye lands on. The first colour REPEATS at the end so
+       the sweep wraps seamlessly. */
+    background-image: linear-gradient(90deg, #c07079, #c0996f, #74b394, #7398bd, #9a80bd, #c07079);
     background-size: 300% 100%;
     -webkit-background-clip: text;
     background-clip: text;
@@ -4066,18 +4070,40 @@
        drop-shadow of the painted pixels instead. */
     text-shadow: none;
     filter: drop-shadow(0 1px 1px #000);
-    animation: ai-tag-shift 6s linear infinite;
+    /* One full rainbow sweep per cycle (see the keyframes), so this duration reads
+       literally: 22s per sweep, a slow drift rather than a strobe. */
+    animation: ai-tag-shift 22s linear infinite;
     /* Ambient: paused + duration-calmed by the effect-tier tokens (no change at
        full Ultra, where --fx-ambient-anim=running and --motion-scale=1). */
-    animation-duration: calc(6s * var(--motion-scale, 1));
+    animation-duration: calc(22s * var(--motion-scale, 1));
     animation-play-state: var(--fx-ambient-anim, running);
   }
+  /* Chat only. The nameplate tag carries its own margin (.np-ai) and the unit-frame
+     flair line is a flex row with its own gap, so putting this on the shared .ai-tag
+     would double the spacing on both. In chat the tag butts straight against the
+     sender name, so the breathing room is added here and nowhere else. */
+  #chatlog .ai-tag {
+    margin-right: 3px;
+  }
+  /* Player-menu header. The tag is nested INSIDE .ctx-title-name (the header is a
+     flex row with a 9px gap, so a sibling would drift away from the name it
+     qualifies). The header font is the display serif, which the bracketed literal
+     inherits; nudge the size down so it does not out-weigh the name beside it. */
+  .ctx-title-ai {
+    margin-right: 5px;
+    font-size: 0.85em;
+  }
+  /* -150%, not -300%. background-position percentages resolve against
+     (element width - image width), which at background-size: 300% is -2W, so -150%
+     travels exactly 3W: ONE image width, i.e. one seamless rainbow sweep per cycle.
+     -300% travelled two, which silently made the tag cycle twice as fast as its
+     duration suggested. Keep this an integer multiple of the tile or the loop jumps. */
   @keyframes ai-tag-shift {
     from {
       background-position: 0 50%;
     }
     to {
-      background-position: -300% 50%;
+      background-position: -150% 50%;
     }
   }
   /* Reduced motion stops the SCROLL only; the tag keeps its full resting gradient. */

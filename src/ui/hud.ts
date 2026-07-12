@@ -13416,6 +13416,35 @@ export class Hud {
   }
 
   /**
+   * Is this account AI-operated? Same two sources, same precedence as
+   * streamerLinksFor: the by-name flair cache first (so it resolves for a player who
+   * is nowhere near you and only ever spoke in chat), then the live entity.
+   */
+  private isAiAccount(name: string, ent?: Entity): boolean {
+    return (
+      this.sim.accountFlair(name)?.ai ?? (ent?.kind === 'player' ? ent.aiAccount === true : false)
+    );
+  }
+
+  /**
+   * The player-menu header: portrait chip, then the name, with the [AI] mark inside
+   * the name span rather than beside it. The header is a flex row with a wide gap, so
+   * a sibling tag would drift away from the name it qualifies; nested, it stays glued
+   * to the name and the name's ellipsis still governs the overflow. Shared by both
+   * player menus (chat-name and nameplate) so the two cannot drift apart.
+   */
+  private ctxPlayerTitleHtml(name: string, entCls: PlayerClass | null, ent?: Entity): string {
+    const chip = entCls
+      ? portraitChipHtml({ cls: entCls, skin: ent?.skin ?? 0, name, variant: 'sm' })
+      : '';
+    const label = esc(t('hudChrome.playerMenu.aiTagTitle'));
+    const ai = this.isAiAccount(name, ent)
+      ? `<span class="ai-tag ctx-title-ai" role="img" aria-label="${label}" title="${label}">${esc(t('hudChrome.playerMenu.aiTag'))}</span>`
+      : '';
+    return `<div class="ctx-title ctx-title-player">${chip}<span class="ctx-title-name">${ai}${esc(name)}</span></div>`;
+  }
+
+  /**
    * NEVER interpolate `action.href` into this markup, not even inside a quoted
    * attribute. A streamer link is operator-entered text, and while
    * normalizeStreamerLink pins it to an https URL on the platform's own host, the
@@ -13461,7 +13490,7 @@ export class Hud {
     // An official streamer's own channels lead, right under the title, exactly as
     // they do on the chat-name menu (both build their rows from streamerMenuActions).
     const streamActions = this.streamerActionsFor(name, ent);
-    let html = `<div class="ctx-title ctx-title-player">${entCls ? portraitChipHtml({ cls: entCls, skin: ent?.skin ?? 0, name, variant: 'sm' }) : ''}<span class="ctx-title-name">${esc(name)}</span></div>`;
+    let html = this.ctxPlayerTitleHtml(name, entCls, ent);
     html += streamActions.map((a) => this.ctxItemHtml(a)).join('');
     html += `<div class="ctx-item" data-act="info">${esc(t('hudChrome.playerMenu.info'))}</div>`;
     if (pid !== this.sim.playerId)
@@ -13938,7 +13967,7 @@ export class Hud {
       streamerLinks: this.streamerLinksFor(name, ent),
     });
     const entCls = ent && ent.kind === 'player' ? (ent.templateId as PlayerClass) : null;
-    const titleHtml = `<div class="ctx-title ctx-title-player">${entCls ? portraitChipHtml({ cls: entCls, skin: ent?.skin ?? 0, name, variant: 'sm' }) : ''}<span class="ctx-title-name">${esc(name)}</span></div>`;
+    const titleHtml = this.ctxPlayerTitleHtml(name, entCls, ent);
     el.innerHTML = titleHtml + actions.map((a) => this.ctxItemHtml(a)).join('');
     hydratePortraits(el);
     el.style.display = 'block';
