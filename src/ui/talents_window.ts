@@ -38,6 +38,7 @@ import { esc } from './esc';
 import { t } from './i18n';
 import type { PainterHostPresentation } from './painter_host';
 import { rovingTarget } from './roving_index';
+import { talentBodyMaxHeight } from './talent_body_fit';
 import { roleLabel, tTalent } from './talent_i18n';
 import { talentChoiceIconDataUrl, talentNodeIconDataUrl } from './talent_icons';
 import { talentTreeFitScale } from './talent_tree_fit';
@@ -231,6 +232,34 @@ export class TalentsWindow {
       this.paintSpecTab(body, view, stage);
     }
     this.wireFooter(el, stage, total);
+    this.fitBodyToWindow(el, body);
+  }
+
+  // Bug fix (Talents window): the Specialization tab's extra chrome (the spec
+  // picker + Mastery banner, both inside #tal-body above the tree) can push
+  // #tal-body's natural height past the `.window` shell's own max-height
+  // budget. Since the Current/Create build panel (.tal-foot) is #tal-body's
+  // sibling right after it, the window's outer overflow:auto then swallows the
+  // last slice of the foot panel: it reads as the create-build card being cut
+  // off/overlapped rather than a window that needs scrolling. Desktop only
+  // (the mobile-touch layout already reflows body/foot into two CSS columns
+  // via hud.mobile.css and is unaffected): cap #tal-body's own height so it
+  // scrolls internally, leaving the foot panel's full natural height inside
+  // the window budget, always fully visible.
+  private fitBodyToWindow(win: HTMLElement, body: HTMLElement): void {
+    body.style.maxHeight = '';
+    body.style.overflowY = '';
+    if (document.body.classList.contains('mobile-touch')) return;
+    const foot = win.querySelector<HTMLElement>('.tal-foot');
+    if (!foot) return;
+    const winMaxHeight = Number.parseFloat(getComputedStyle(win).maxHeight);
+    const bodyTop = body.getBoundingClientRect().top - win.getBoundingClientRect().top;
+    const footHeight = foot.getBoundingClientRect().height;
+    const cap = talentBodyMaxHeight(winMaxHeight, bodyTop, footHeight);
+    if (cap !== null && body.scrollHeight > cap) {
+      body.style.maxHeight = `${cap}px`;
+      body.style.overflowY = 'auto';
+    }
   }
 
   private paintSpecTab(body: HTMLElement, view: TalentsView, stage: TalentAllocation): void {

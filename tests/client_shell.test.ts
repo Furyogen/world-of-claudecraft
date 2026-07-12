@@ -1097,9 +1097,12 @@ describe('client HTML shell', () => {
     expect(html).toContain('<details id="community-menu">');
     expect(html).toContain('<summary class="community-toggle"');
     expect(html).toContain('<div class="community-tray">');
-    expect(html).toContain('<a class="community-link discord"');
     expect(html).toContain('<a class="community-link github"');
     expect(html).toContain('<a class="community-link donate"');
+    // No separate Discord invite link here: it duplicated the Discord (U)
+    // icon-rail button (#mm-discord), the game HUD's single Discord entry
+    // point (see the fix/inspect-camera-talent-overlap-discord-dup PR).
+    expect(html).not.toContain('<a class="community-link discord"');
     expect(hudMobileCss).toContain('body.mobile-touch.game-active #ui {\n    z-index: 80;\n  }');
     expect(hudMobileCss).toContain('body.mobile-touch #community-hud {\n    display: none;\n  }');
     // No stray mobile-touch styling survives for the hidden rail (the old

@@ -1176,7 +1176,8 @@ export const id_ID: EnTranslations = {
         "connecting": "Membuka Discord...",
         "benefits": "Tautkan Discord-mu untuk meraih poin dari bermain dan aktivitas komunitas, serta naik tingkat status.",
         "error": "Tidak dapat menautkan Discord. Silakan coba lagi.",
-        "success": "Discord tertaut."
+        "success": "Discord tertaut.",
+        "joinServer": "Just join the Discord server"
       },
       "choice": {
         "title": "Lanjutkan dengan Discord",

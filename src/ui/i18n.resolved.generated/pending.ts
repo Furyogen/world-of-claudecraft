@@ -9,25 +9,55 @@
 // Reproducibility is checked by tests/i18n_resolved_equivalence.test.ts.
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [],
-  "es_ES": [],
-  "fr_FR": [],
-  "fr_CA": [],
+  "es": [
+    "hudChrome.discord.link.joinServer"
+  ],
+  "es_ES": [
+    "hudChrome.discord.link.joinServer"
+  ],
+  "fr_FR": [
+    "hudChrome.discord.link.joinServer"
+  ],
+  "fr_CA": [
+    "hudChrome.discord.link.joinServer"
+  ],
   "en_CA": [],
-  "it_IT": [],
-  "de_DE": [],
+  "it_IT": [
+    "hudChrome.discord.link.joinServer"
+  ],
+  "de_DE": [
+    "hudChrome.discord.link.joinServer"
+  ],
   "zh_CN": [],
   "zh_TW": [],
   "ko_KR": [],
   "ja_JP": [],
-  "pt_BR": [],
+  "pt_BR": [
+    "hudChrome.discord.link.joinServer"
+  ],
   "ru_RU": [],
-  "cs_CZ": [],
-  "nl_NL": [],
-  "pl_PL": [],
-  "id_ID": [],
-  "tr_TR": [],
-  "sv_SE": [],
-  "vi_VN": [],
-  "da_DK": []
+  "cs_CZ": [
+    "hudChrome.discord.link.joinServer"
+  ],
+  "nl_NL": [
+    "hudChrome.discord.link.joinServer"
+  ],
+  "pl_PL": [
+    "hudChrome.discord.link.joinServer"
+  ],
+  "id_ID": [
+    "hudChrome.discord.link.joinServer"
+  ],
+  "tr_TR": [
+    "hudChrome.discord.link.joinServer"
+  ],
+  "sv_SE": [
+    "hudChrome.discord.link.joinServer"
+  ],
+  "vi_VN": [
+    "hudChrome.discord.link.joinServer"
+  ],
+  "da_DK": [
+    "hudChrome.discord.link.joinServer"
+  ]
 };
