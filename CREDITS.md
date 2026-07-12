@@ -47,6 +47,7 @@ provided as a courtesy.
 | Assets | Author | Source | License |
 |---|---|---|---|
 | Quest event sound effects (`public/audio/sfx/quest_*.mp3`); original compositions | @jamiecypher | Original work | CC0 1.0 |
+| Generated weapon model + icon (encore_the_second_falling_star) | World of ClaudeCraft | Project-generated via scripts/asset_pipeline (Tripo AI 3D) | Project asset |
 
 Assets were optimized for shipping (animation clip pruning, meshopt compression,
 texture resizing) via `scripts/assets/build_assets.mjs`; raw packs are not

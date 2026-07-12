@@ -11,7 +11,7 @@
 // Pure over the skin catalog: no DOM, no three, Node-tested directly
 // (tests/weapon_skins.test.ts). CharacterVisual is the one consumer.
 
-import { WEAPON_SKINS } from '../../sim/content/weapon_skins';
+import { WEAPON_SKINS, type WeaponSkinDef } from '../../sim/content/weapon_skins';
 import { AUTO_SHOT_DRAW_S } from '../../sim/projectile_travel';
 
 export interface SkinAttackClips {
@@ -44,9 +44,26 @@ const BOW_ATTACK: SkinAttackClips = {
 // only the hunter pays the extra action.
 export const SKIN_ATTACK_CLIP_NAMES: readonly string[] = ['Bow_Draw_Shot'];
 
+/** How a ranged skin is held and fired: its weapon type, unless the def
+ *  carries a `handling` override (a bow-slot gun aims like a crossbow). */
+export function weaponSkinHandling(skin: WeaponSkinDef): string {
+  return skin.handling ?? skin.weaponType;
+}
+
 /** The attack-clip override for a displayed weapon skin, or null to keep the
- *  visual's authored attack. */
+ *  visual's authored attack. Keyed off the skin's HANDLING, not its store
+ *  slot: a bow-slot skin with crossbow handling keeps the shoulder-aim. */
 export function weaponSkinAttackClips(weaponSkinId: string | null): SkinAttackClips | null {
   const skin = weaponSkinId ? WEAPON_SKINS[weaponSkinId] : null;
-  return skin?.weaponType === 'bow' ? BOW_ATTACK : null;
+  return skin && weaponSkinHandling(skin) === 'bow' ? BOW_ATTACK : null;
+}
+
+/** The handslot a ranged skin occupies, by HANDLING. Bows sit in the LEFT
+ *  hand: in the ranged animation set the left arm is the FRONT arm (it
+ *  extends toward the target) and the right hand stays back at the shoulder
+ *  as the string hand, so a bow glued to the right hand reads backwards.
+ *  Crossbow handling (real crossbows, and guns that aim like them) keeps the
+ *  class's authored right-hand attach (stock in the trigger hand). */
+export function weaponSkinAttachBone(handling: string, baseBone: string): string {
+  return handling === 'bow' ? baseBone.replace(/\.r$/, '.l') : baseBone;
 }

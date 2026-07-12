@@ -883,6 +883,7 @@ export const MEDIA_ASSETS: Record<string, string> =
   "models/weapons/emberfang_sword.glb": "/media/models/weapons/emberfang_sword.5fc6c151f774.glb",
   "models/weapons/emberwish_mote_of_the_dying_sun.glb": "/media/models/weapons/emberwish_mote_of_the_dying_sun.56f611869f2e.glb",
   "models/weapons/emberwrought_wand.glb": "/media/models/weapons/emberwrought_wand.79686c656880.glb",
+  "models/weapons/encore_the_second_falling_star.glb": "/media/models/weapons/encore_the_second_falling_star.561d3dc1f5cf.glb",
   "models/weapons/fletcher_s_guild_bow.glb": "/media/models/weapons/fletcher_s_guild_bow.662669ee24ea.glb",
   "models/weapons/forgeheart_stave.glb": "/media/models/weapons/forgeheart_stave.5e6bed38dfb7.glb",
   "models/weapons/frostbite.glb": "/media/models/weapons/frostbite.d025ecc217ac.glb",

@@ -24,13 +24,13 @@ import { armorySkinArt } from '../src/ui/woc_store_view';
 const ROOT = join(__dirname, '..');
 
 describe('season 1 weapon skin catalog', () => {
-  it('ships exactly the 28 paid skins: 7 per collection, 4 collections', () => {
-    expect(WEAPON_SKIN_LIST.length).toBe(28);
+  it('ships exactly the 29 paid skins: 7 per collection plus the Fallen Star encore', () => {
+    expect(WEAPON_SKIN_LIST.length).toBe(29);
     for (const collection of WEAPON_SKIN_COLLECTIONS) {
       const inCollection = WEAPON_SKIN_LIST.filter((s) => s.collection === collection);
-      expect(inCollection.length, collection).toBe(7);
+      expect(inCollection.length, collection).toBe(collection === 'Fallen Star' ? 8 : 7);
       // One skin per weapon type within a collection.
-      expect(new Set(inCollection.map((s) => s.weaponType)).size).toBe(7);
+      expect(new Set(inCollection.map((s) => s.weaponType)).size).toBe(inCollection.length);
     }
   });
 
@@ -186,9 +186,10 @@ describe('bow skin attack animation (hunter draw instead of crossbow aim)', () =
       '../src/render/characters/skin_attack'
     );
     const { AUTO_SHOT_DRAW_S } = await import('../src/sim/projectile_travel');
+    const { weaponSkinHandling } = await import('../src/render/characters/skin_attack');
     for (const skin of WEAPON_SKIN_LIST) {
       const sub = weaponSkinAttackClips(skin.id);
-      if (skin.weaponType === 'bow') {
+      if (weaponSkinHandling(skin) === 'bow') {
         expect(sub?.clips, skin.id).toContain('Bow_Draw_Shot');
         // The clip's release keyframe and the sim's arrow release are the
         // same instant by construction.
@@ -199,9 +200,29 @@ describe('bow skin attack animation (hunter draw instead of crossbow aim)', () =
         expect(sub, `${skin.id} (${skin.weaponType}) must keep the authored attack`).toBeNull();
       }
     }
+    // The encore star-cannon is a bow-slot skin HANDLED like a crossbow: it
+    // keeps the shoulder-aim and the right hand.
+    expect(weaponSkinHandling(WEAPON_SKINS.encore_bow)).toBe('crossbow');
+    expect(weaponSkinAttackClips('encore_bow')).toBeNull();
     expect(BOW_RELEASE_AT).toBe(AUTO_SHOT_DRAW_S);
     expect(weaponSkinAttackClips(null)).toBeNull();
     expect(weaponSkinAttackClips('not_a_skin')).toBeNull();
+  });
+
+  it('bow handling sits in the LEFT hand (the draw front arm); crossbow handling stays right', async () => {
+    const { weaponSkinAttachBone, weaponSkinHandling } = await import(
+      '../src/render/characters/skin_attack'
+    );
+    expect(weaponSkinAttachBone('bow', 'handslot.r')).toBe('handslot.l');
+    expect(weaponSkinAttachBone('crossbow', 'handslot.r')).toBe('handslot.r');
+    // Slot vs handling: winterbite draws left-handed, the encore cannon
+    // shoulders right-handed, both from the bow store slot.
+    expect(weaponSkinAttachBone(weaponSkinHandling(WEAPON_SKINS.winterbite), 'handslot.r')).toBe(
+      'handslot.l',
+    );
+    expect(weaponSkinAttachBone(weaponSkinHandling(WEAPON_SKINS.encore_bow), 'handslot.r')).toBe(
+      'handslot.r',
+    );
   });
 
   it('the hunter ships the bow clip via animUrls and the GLB carries it', async () => {

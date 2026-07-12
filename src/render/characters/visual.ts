@@ -27,7 +27,7 @@ import {
   tintedFarMaterials,
 } from './assets';
 import type { EmoteClipSpec, VisualDef, WeaponLayoutOverride } from './manifest';
-import { SKIN_ATTACK_CLIP_NAMES, weaponSkinAttackClips } from './skin_attack';
+import { SKIN_ATTACK_CLIP_NAMES, weaponSkinAttackClips, weaponSkinHandling } from './skin_attack';
 
 export type { AnimState, BaseState } from './anim_state';
 
@@ -51,6 +51,16 @@ export function weaponVfxSpriteScaleForFov(fovDeg: number): number {
 
 // World camera default (CAMERA_BASE_FOV = 60 in renderer.ts).
 const WORLD_FOV_SPRITE_SCALE = weaponVfxSpriteScaleForFov(60);
+
+// Scratch quaternions for the per-frame bow orientation pin (no allocation).
+const BOW_Q_ROOT = new THREE.Quaternion();
+const BOW_Q_B = new THREE.Quaternion();
+const BOW_Q_TARGET = new THREE.Quaternion();
+// Root-relative aim orientation a firing bow blends to: upright limbs (the
+// variant convention authors limbs along +Y), belly toward the target. Yaw
+// square to the aim so the full bow profile reads from behind the archer.
+const BOW_AIM_QUAT = new THREE.Quaternion().setFromEuler(new THREE.Euler(0, Math.PI / 2, 0, 'XYZ'));
+const BOW_PIN_BLEND_S = 0.12; // engage/disengage fade for the aim pin
 
 const FADE = 0.22;
 const ONESHOT_FADE = 0.1;
@@ -107,6 +117,10 @@ export class CharacterVisual {
   private weaponItemId: string | null;
   private weaponSkinId: string | null = null;
   private weaponVfx: WeaponVfxHandle[] = [];
+  // Bow payloads whose orientation blends to the root-relative aim pin while
+  // the shot one-shot plays (see applyBowOrientation). qGrip is the authored
+  // grip-local orientation the bow rests at outside the shot.
+  private bowStable: { payload: THREE.Object3D; qGrip: THREE.Quaternion; blend: number }[] = [];
   private weaponVfxSpriteScale = WORLD_FOV_SPRITE_SCALE;
   private disposed = false;
   private ghosted = false;
@@ -513,6 +527,24 @@ export class CharacterVisual {
   private reattachHeldWeapon(): void {
     this.disposeWeaponVfx();
     const payloads = setHeldWeapon(this.model, this.def, this.weaponItemId, this.weaponSkinId);
+    // A bow rides the LEFT hand, the most animated bone of the ranged clip
+    // set: glued rotation turns the bow sideways mid-draw. While the shot
+    // one-shot plays, each bow payload's ORIENTATION blends to a root-relative
+    // upright aim (position still follows the hand); at rest it keeps the
+    // authored grip-local orientation captured here (applyBowOrientation).
+    {
+      const skin = this.weaponSkinId ? WEAPON_SKINS[this.weaponSkinId] : null;
+      // Keyed off HANDLING: a bow-slot skin fired like a crossbow (encore_bow)
+      // keeps the shoulder-aim and never takes the aim pin.
+      this.bowStable =
+        skin && weaponSkinHandling(skin) === 'bow'
+          ? payloads.map((payload) => ({
+              payload,
+              qGrip: payload.quaternion.clone(),
+              blend: 0,
+            }))
+          : [];
+    }
     applyMaterials(
       this.model,
       this.def,
@@ -573,9 +605,36 @@ export class CharacterVisual {
   }
 
   /** Advance the weapon-skin VFX (shader time, pulse, flicker). Cheap no-op
-   *  without an active skin; the renderer calls it once per entity per frame. */
+   *  without an active skin; the renderer calls it once per entity per frame.
+   *  Also re-pins bow payload orientation (see reattachHeldWeapon). */
   updateWeaponVfx(dt: number): void {
+    this.applyBowOrientation(dt);
     for (const handle of this.weaponVfx) handle.update(dt);
+  }
+
+  /** Keep a firing bow upright: while the shot one-shot plays (the string hand
+   *  is the most animated bone of the ranged set, and a glued bow would roll
+   *  sideways mid-draw), the payload's orientation blends to the root-relative
+   *  BOW_AIM_QUAT; at rest it eases back to the authored grip carry. Position
+   *  always follows the hand. No-op for non-bows. */
+  private applyBowOrientation(dt: number): void {
+    if (this.bowStable.length === 0) return;
+    const engaged = this.currentIsOneShot && !this.currentOneShotIsEmote;
+    const step = dt / BOW_PIN_BLEND_S;
+    this.root.getWorldQuaternion(BOW_Q_ROOT);
+    for (const entry of this.bowStable) {
+      const parent = entry.payload.parent;
+      if (!parent) continue;
+      entry.blend = Math.min(1, Math.max(0, entry.blend + (engaged ? step : -step)));
+      if (entry.blend === 0) {
+        entry.payload.quaternion.copy(entry.qGrip);
+        continue;
+      }
+      // pinned local = parentWorld^-1 * rootWorld * aim
+      parent.getWorldQuaternion(BOW_Q_B).invert();
+      BOW_Q_TARGET.copy(BOW_Q_B).multiply(BOW_Q_ROOT).multiply(BOW_AIM_QUAT);
+      entry.payload.quaternion.copy(entry.qGrip).slerp(BOW_Q_TARGET, entry.blend);
+    }
   }
 
   /** Re-scale VFX point sprites after a viewport/pixel-ratio change. */
