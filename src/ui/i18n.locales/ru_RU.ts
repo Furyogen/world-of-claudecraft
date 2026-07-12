@@ -148,12 +148,12 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.wocStore.apply': 'Применить облик',
   'hudChrome.wocStore.detach': 'Снять облик',
   'hudChrome.wocStore.equipHint': 'Чтобы применить этот облик, возьмите в руки {type}.',
-  'hudChrome.claudium.title': 'Claudium',
+  'hudChrome.claudium.title': 'Клаудиум',
   'hudChrome.claudium.open': 'Открыть Claudium',
   'hudChrome.claudium.close': 'Закрыть Claudium',
   'hudChrome.claudium.loading': 'Загрузка Claudium…',
   'hudChrome.claudium.balanceLabel': 'Баланс',
-  'hudChrome.claudium.balanceUnit': '{amount} Claudium',
+  'hudChrome.claudium.balanceUnit': '{amount} Клаудиум',
   'hudChrome.claudium.unavailable':
     'Магазин Claudium сейчас недоступен. Ваш баланс и покупки не затронуты; повторите попытку позже.',
   'hudChrome.claudium.disclosure':
@@ -168,7 +168,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.claudium.buyUnavailable': 'Покупки сейчас недоступны.',
   'hudChrome.claudium.storeTitle': 'Магазин косметики',
   'hudChrome.claudium.storeEmpty': 'Сейчас косметические предметы недоступны.',
-  'hudChrome.claudium.storeCost': '{amount} Claudium',
+  'hudChrome.claudium.storeCost': '{amount} Клаудиум',
   'hudChrome.claudium.spendButton': 'Обменять',
   'hudChrome.claudium.kindCosmetic': 'Косметика',
   'hudChrome.claudium.checkoutTitle': 'Завершить покупку',

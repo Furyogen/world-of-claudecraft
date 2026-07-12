@@ -146,12 +146,12 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.wocStore.apply': 'スキンを適用',
   'hudChrome.wocStore.detach': 'スキンを解除',
   'hudChrome.wocStore.equipHint': 'このスキンを適用するには{type}を装備してください。',
-  'hudChrome.claudium.title': 'Claudium',
+  'hudChrome.claudium.title': 'クラウディウム',
   'hudChrome.claudium.open': 'Claudiumを開く',
   'hudChrome.claudium.close': 'Claudiumを閉じる',
   'hudChrome.claudium.loading': 'Claudiumを読み込み中…',
   'hudChrome.claudium.balanceLabel': '残高',
-  'hudChrome.claudium.balanceUnit': '{amount} Claudium',
+  'hudChrome.claudium.balanceUnit': '{amount} クラウディウム',
   'hudChrome.claudium.unavailable':
     'Claudiumストアは現在利用できません。残高と購入内容に影響はありません。しばらくしてからお試しください。',
   'hudChrome.claudium.disclosure':
@@ -166,7 +166,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.claudium.buyUnavailable': '現在購入できません。',
   'hudChrome.claudium.storeTitle': '外見アイテムストア',
   'hudChrome.claudium.storeEmpty': '現在利用できる外見アイテムはありません。',
-  'hudChrome.claudium.storeCost': '{amount} Claudium',
+  'hudChrome.claudium.storeCost': '{amount} クラウディウム',
   'hudChrome.claudium.spendButton': '交換',
   'hudChrome.claudium.kindCosmetic': '外見アイテム',
   'hudChrome.claudium.checkoutTitle': '購入を完了',

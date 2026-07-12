@@ -963,6 +963,16 @@ export const SURFACE_INVENTORY: readonly SurfaceRoute[] = [
   },
   {
     dispatcher: DISPATCH.mainApi,
+    method: 'POST',
+    path: '/api/claudium/stripe/webhook',
+    handler: 'handleClaudiumStripeWebhook route',
+    contentType: PROBLEM_JSON,
+    authScope: AUTH_SCOPE.public,
+    limiter: null,
+    requireOwnedExpected: null,
+  },
+  {
+    dispatcher: DISPATCH.mainApi,
     method: 'GET',
     path: '/api/claudium/store',
     handler: 'handleClaudiumApi arm: /api/claudium/store',

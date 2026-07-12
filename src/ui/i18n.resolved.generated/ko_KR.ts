@@ -305,12 +305,12 @@ export const ko_KR: EnTranslations = {
       "equipHint": "이 스킨을 적용하려면 {type}을(를) 장착하세요."
     },
     "claudium": {
-      "title": "Claudium",
+      "title": "클라우디움",
       "open": "Claudium 열기",
       "close": "Claudium 닫기",
       "loading": "Claudium 불러오는 중…",
       "balanceLabel": "잔액",
-      "balanceUnit": "{amount} Claudium",
+      "balanceUnit": "{amount} 클라우디움",
       "solBalance": "SOL: {amount}",
       "wocBalance": "WOC: {amount}",
       "unavailable": "현재 Claudium 상점을 이용할 수 없습니다. 잔액과 구매 내역에는 영향이 없으니 잠시 후 다시 확인해 주세요.",
@@ -331,7 +331,7 @@ export const ko_KR: EnTranslations = {
       "buyUnavailable": "현재 구매할 수 없습니다.",
       "storeTitle": "꾸미기 상점",
       "storeEmpty": "현재 이용 가능한 꾸미기 상품이 없습니다.",
-      "storeCost": "{amount} Claudium",
+      "storeCost": "{amount} 클라우디움",
       "spendButton": "교환",
       "kindCosmetic": "꾸미기 상품",
       "kindSkin": "Skin",

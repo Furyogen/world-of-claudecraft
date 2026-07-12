@@ -305,12 +305,12 @@ export const ru_RU: EnTranslations = {
       "equipHint": "Чтобы применить этот облик, возьмите в руки {type}."
     },
     "claudium": {
-      "title": "Claudium",
+      "title": "Клаудиум",
       "open": "Открыть Claudium",
       "close": "Закрыть Claudium",
       "loading": "Загрузка Claudium…",
       "balanceLabel": "Баланс",
-      "balanceUnit": "{amount} Claudium",
+      "balanceUnit": "{amount} Клаудиум",
       "solBalance": "SOL: {amount}",
       "wocBalance": "WOC: {amount}",
       "unavailable": "Магазин Claudium сейчас недоступен. Ваш баланс и покупки не затронуты; повторите попытку позже.",
@@ -331,7 +331,7 @@ export const ru_RU: EnTranslations = {
       "buyUnavailable": "Покупки сейчас недоступны.",
       "storeTitle": "Магазин косметики",
       "storeEmpty": "Сейчас косметические предметы недоступны.",
-      "storeCost": "{amount} Claudium",
+      "storeCost": "{amount} Клаудиум",
       "spendButton": "Обменять",
       "kindCosmetic": "Косметика",
       "kindSkin": "Skin",

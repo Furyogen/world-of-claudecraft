@@ -305,12 +305,12 @@ export const ja_JP: EnTranslations = {
       "equipHint": "このスキンを適用するには{type}を装備してください。"
     },
     "claudium": {
-      "title": "Claudium",
+      "title": "クラウディウム",
       "open": "Claudiumを開く",
       "close": "Claudiumを閉じる",
       "loading": "Claudiumを読み込み中…",
       "balanceLabel": "残高",
-      "balanceUnit": "{amount} Claudium",
+      "balanceUnit": "{amount} クラウディウム",
       "solBalance": "SOL: {amount}",
       "wocBalance": "WOC: {amount}",
       "unavailable": "Claudiumストアは現在利用できません。残高と購入内容に影響はありません。しばらくしてからお試しください。",
@@ -331,7 +331,7 @@ export const ja_JP: EnTranslations = {
       "buyUnavailable": "現在購入できません。",
       "storeTitle": "外見アイテムストア",
       "storeEmpty": "現在利用できる外見アイテムはありません。",
-      "storeCost": "{amount} Claudium",
+      "storeCost": "{amount} クラウディウム",
       "spendButton": "交換",
       "kindCosmetic": "外見アイテム",
       "kindSkin": "Skin",

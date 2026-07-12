@@ -1,6 +1,7 @@
 import type { PlayerClass, WeaponSkinType } from '../sim/types';
 import type { DailyRewardHistory, DailyRewardStatus, IWorld } from '../world_api';
-import { ArmoryInspect, badgeLabel, rarityLabel, weaponTypeLabel } from './armory_inspect';
+import type { ArmoryInspect } from './armory_inspect';
+import { badgeLabel, rarityLabel, weaponTypeLabel } from './armory_labels';
 import { buildDailyRewardsView, type DailyRewardsView } from './daily_rewards_view';
 import { tEntity } from './entity_i18n';
 import { esc } from './esc';
@@ -79,6 +80,7 @@ export class DailyRewardsWindow {
   private storeItems: WocStoreItemInput[] = [];
   private armorySections: ArmorySection[] = [];
   private armoryInspect: ArmoryInspect | null = null;
+  private armoryInspectPromise: Promise<ArmoryInspect> | null = null;
   private storeLoading = false;
   private storeReady = false;
   private storeError = false;
@@ -275,7 +277,7 @@ export class DailyRewardsWindow {
     body.querySelectorAll<HTMLButtonElement>('[data-armory-skin]').forEach((button) => {
       button.addEventListener('click', () => {
         const row = this.armoryRowById(button.dataset.armorySkin ?? '');
-        if (row) this.openArmoryInspect(row);
+        if (row) void this.openArmoryInspect(row);
       });
     });
   }
@@ -325,30 +327,35 @@ export class DailyRewardsWindow {
     return chips ? `<span class="armory-classes">${chips}</span>` : '';
   }
 
-  private openArmoryInspect(row: ArmorySkinRow): void {
-    if (!this.armoryInspect) {
-      this.armoryInspect = new ArmoryInspect({
-        appearance: () => {
-          const player = this.deps.world().player;
-          return {
-            cls: player.templateId as PlayerClass,
-            skin: player.skin,
-            skinCatalog: player.skinCatalog,
-            mainhandItemId: player.mainhandItemId,
-          };
-        },
-        requestBuy: (target) => this.requestArmoryPurchase(target),
-        applySkin: (skinId) => {
-          this.deps.world().changeWeaponSkin(skinId);
-          this.afterArmoryChange(skinId);
-        },
-        detachSkin: (weaponType: WeaponSkinType) => {
-          this.deps.world().changeWeaponSkin(null, weaponType);
-          const open = this.armoryInspect?.openSkinId;
-          if (open) this.afterArmoryChange(open);
-        },
-      });
+  private async openArmoryInspect(row: ArmorySkinRow): Promise<void> {
+    if (!this.armoryInspectPromise) {
+      this.armoryInspectPromise = import('./armory_inspect').then(
+        ({ ArmoryInspect }) =>
+          new ArmoryInspect({
+            appearance: () => {
+              const player = this.deps.world().player;
+              return {
+                cls: player.templateId as PlayerClass,
+                skin: player.skin,
+                skinCatalog: player.skinCatalog,
+                mainhandItemId: player.mainhandItemId,
+              };
+            },
+            requestBuy: (target) => this.requestArmoryPurchase(target),
+            applySkin: (skinId) => {
+              this.deps.world().changeWeaponSkin(skinId);
+              this.afterArmoryChange(skinId);
+            },
+            detachSkin: (weaponType: WeaponSkinType) => {
+              this.deps.world().changeWeaponSkin(null, weaponType);
+              const open = this.armoryInspect?.openSkinId;
+              if (open) this.afterArmoryChange(open);
+            },
+          }),
+      );
     }
+    this.armoryInspect = await this.armoryInspectPromise;
+    if (!this.isOpen || this.tab !== 'store') return;
     this.armoryInspect.open(row);
   }
 

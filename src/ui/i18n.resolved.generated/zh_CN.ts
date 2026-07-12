@@ -305,12 +305,12 @@ export const zh_CN: EnTranslations = {
       "equipHint": "装备{type}后才能使用此外观。"
     },
     "claudium": {
-      "title": "Claudium",
+      "title": "克劳迪姆",
       "open": "打开 Claudium",
       "close": "关闭 Claudium",
       "loading": "正在加载 Claudium…",
       "balanceLabel": "余额",
-      "balanceUnit": "{amount} Claudium",
+      "balanceUnit": "{amount} 克劳迪姆",
       "solBalance": "SOL: {amount}",
       "wocBalance": "WOC: {amount}",
       "unavailable": "Claudium 商店暂时不可用。您的余额和购买不会受到影响，请稍后再试。",
@@ -331,7 +331,7 @@ export const zh_CN: EnTranslations = {
       "buyUnavailable": "暂时无法购买。",
       "storeTitle": "外观商店",
       "storeEmpty": "目前没有可用的外观物品。",
-      "storeCost": "{amount} Claudium",
+      "storeCost": "{amount} 克劳迪姆",
       "spendButton": "兑换",
       "kindCosmetic": "外观物品",
       "kindSkin": "Skin",

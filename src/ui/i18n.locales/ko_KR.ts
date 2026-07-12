@@ -145,12 +145,12 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.wocStore.apply': '스킨 적용',
   'hudChrome.wocStore.detach': '스킨 해제',
   'hudChrome.wocStore.equipHint': '이 스킨을 적용하려면 {type}을(를) 장착하세요.',
-  'hudChrome.claudium.title': 'Claudium',
+  'hudChrome.claudium.title': '클라우디움',
   'hudChrome.claudium.open': 'Claudium 열기',
   'hudChrome.claudium.close': 'Claudium 닫기',
   'hudChrome.claudium.loading': 'Claudium 불러오는 중…',
   'hudChrome.claudium.balanceLabel': '잔액',
-  'hudChrome.claudium.balanceUnit': '{amount} Claudium',
+  'hudChrome.claudium.balanceUnit': '{amount} 클라우디움',
   'hudChrome.claudium.unavailable':
     '현재 Claudium 상점을 이용할 수 없습니다. 잔액과 구매 내역에는 영향이 없으니 잠시 후 다시 확인해 주세요.',
   'hudChrome.claudium.disclosure':
@@ -165,7 +165,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.claudium.buyUnavailable': '현재 구매할 수 없습니다.',
   'hudChrome.claudium.storeTitle': '꾸미기 상점',
   'hudChrome.claudium.storeEmpty': '현재 이용 가능한 꾸미기 상품이 없습니다.',
-  'hudChrome.claudium.storeCost': '{amount} Claudium',
+  'hudChrome.claudium.storeCost': '{amount} 클라우디움',
   'hudChrome.claudium.spendButton': '교환',
   'hudChrome.claudium.kindCosmetic': '꾸미기 상품',
   'hudChrome.claudium.checkoutTitle': '구매 완료',

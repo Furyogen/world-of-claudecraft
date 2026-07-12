@@ -143,12 +143,12 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.wocStore.apply': '装备外观',
   'hudChrome.wocStore.detach': '卸下外观',
   'hudChrome.wocStore.equipHint': '装备{type}后才能使用此外观。',
-  'hudChrome.claudium.title': 'Claudium',
+  'hudChrome.claudium.title': '克劳迪姆',
   'hudChrome.claudium.open': '打开 Claudium',
   'hudChrome.claudium.close': '关闭 Claudium',
   'hudChrome.claudium.loading': '正在加载 Claudium…',
   'hudChrome.claudium.balanceLabel': '余额',
-  'hudChrome.claudium.balanceUnit': '{amount} Claudium',
+  'hudChrome.claudium.balanceUnit': '{amount} 克劳迪姆',
   'hudChrome.claudium.unavailable':
     'Claudium 商店暂时不可用。您的余额和购买不会受到影响，请稍后再试。',
   'hudChrome.claudium.disclosure':
@@ -163,7 +163,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.claudium.buyUnavailable': '暂时无法购买。',
   'hudChrome.claudium.storeTitle': '外观商店',
   'hudChrome.claudium.storeEmpty': '目前没有可用的外观物品。',
-  'hudChrome.claudium.storeCost': '{amount} Claudium',
+  'hudChrome.claudium.storeCost': '{amount} 克劳迪姆',
   'hudChrome.claudium.spendButton': '兑换',
   'hudChrome.claudium.kindCosmetic': '外观物品',
   'hudChrome.claudium.checkoutTitle': '完成购买',
