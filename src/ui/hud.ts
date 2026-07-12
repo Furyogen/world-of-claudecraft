@@ -1887,7 +1887,10 @@ export class Hud {
     document.addEventListener('pointerdown', (ev) => {
       const target = ev.target as HTMLElement | null;
       const el = target?.closest?.('.window.panel') as HTMLElement | null;
-      if (!el) return;
+      // The confirm prompt is a fixed topmost modal, not a managed window:
+      // no raise (bringWindowToFront would demote it into the window band)
+      // and no drag.
+      if (!el || el.id === 'confirm-dialog') return;
       this.bringWindowToFront(el);
       if (ev.button !== 0 || !target || !this.isWindowDragHandle(target, el)) return;
       ev.preventDefault();
@@ -2022,13 +2025,22 @@ export class Hud {
   }
 
   private bringWindowToFront(el: HTMLElement): void {
+    // The confirm/input prompt is the topmost modal by definition and never
+    // joins the 50-89 window band: banding it (a pointerdown raise, or the
+    // normalize sweep) drops it BEHIND the armory inspect overlay (z 90), so a
+    // real mouse press on the dialog demotes it mid-click and its own OK
+    // button becomes unclickable (the "phantom dead confirm" bug).
+    if (el.id === 'confirm-dialog') {
+      el.style.zIndex = String(Math.max(this.windowZValue(el), 95));
+      return;
+    }
     if (this.windowZ >= 89) this.normalizeWindowZ();
     el.style.zIndex = String(++this.windowZ);
   }
 
   private normalizeWindowZ(): void {
     const open = [...document.querySelectorAll<HTMLElement>('.window.panel')]
-      .filter((el) => this.isWindowVisible(el))
+      .filter((el) => el.id !== 'confirm-dialog' && this.isWindowVisible(el))
       .sort((a, b) => this.windowZValue(a) - this.windowZValue(b));
     this.windowZ = 50;
     for (const el of open) el.style.zIndex = String(++this.windowZ);

@@ -178,6 +178,36 @@ describe('skin apply rule', () => {
   });
 });
 
+describe('grip override wiring (editor saves reach the game)', () => {
+  it('the render attach path consumes WEAPON_GRIP_OVERRIDES via variantGripTransform', () => {
+    // Round-1 port regression guard: weapon_grip.ts (the registry the
+    // inspector's grip Save writes) was once dead code because assets.ts kept
+    // its own bare lift/flip/clamp. The attach path must compose the per-weapon
+    // override through the same pure transform the inspector previews.
+    const src = readFileSync(join(ROOT, 'src/render/characters/assets.ts'), 'utf8');
+    expect(src).toContain("from './weapon_grip'");
+    expect(src).toContain('variantGripTransform(');
+    expect(src).toContain('WEAPON_GRIP_OVERRIDES[');
+  });
+
+  it('variantGripTransform composes a saved override onto the bare grip', async () => {
+    const { variantGripTransform, WEAPON_GRIP_OVERRIDES } = await import(
+      '../src/render/characters/weapon_grip'
+    );
+    const bare = variantGripTransform(1.2, false, 0.05, 1.6, undefined);
+    expect(bare.position).toEqual([0, 0.05, 0]);
+    expect(bare.quaternion).toEqual([0, 1, 0, 0]);
+    expect(bare.scale).toBe(1);
+    const row = WEAPON_GRIP_OVERRIDES.solheim_last_light_of_the_dawn;
+    expect(row).toBeTruthy();
+    const tuned = variantGripTransform(1.2, false, 0.05, 1.6, row);
+    expect(tuned.scale).toBeCloseTo((row?.scale ?? 1) * 1, 5);
+    expect(tuned.position[0]).toBeCloseTo(row?.pos?.[0] ?? 0, 5);
+    expect(tuned.position[1]).toBeCloseTo(0.05 + (row?.pos?.[1] ?? 0), 5);
+    expect(tuned.quaternion).not.toEqual(bare.quaternion);
+  });
+});
+
 describe('eligible classes per skin type (store card chips)', () => {
   it('bow and crossbow are hunter-only (class-fixed ranged visual)', () => {
     expect(eligibleClassesForWeaponSkinType('bow')).toEqual(['hunter']);

@@ -26,6 +26,7 @@ import {
   visualAssetUrlForGraphics,
   weaponSkinModelUrl,
 } from './manifest';
+import { variantGripTransform, WEAPON_GRIP_OVERRIDES } from './weapon_grip';
 
 const DEFAULT_TINT_STRENGTH = 0.4;
 
@@ -280,19 +281,36 @@ const SWAP_WEAPON_TAG = 'swapWeaponHolder';
 // Grip for a variant-pack weapon. Its origin is authored AT the grip, so we attach
 // at the origin (no recenter) and only clamp an oversized model so its blade does
 // not drag. `lift` nudges along the hand bone; the side picks the 180-degree flip.
+// A WEAPON_GRIP_OVERRIDES row (hand-tuned in the asset-pipeline inspector's grip
+// bar) layers a per-weapon pos/rot/scale fine-tune on top, composed by the SAME
+// pure variantGripTransform the inspector previews, so the editor fit IS the
+// in-game fit. With no row the transform is exactly the bare lift/flip/clamp.
 const variantBox = new THREE.Box3();
 function variantGripFor(url: string): VariantGrip | null {
   const accessory = kaykitAccessoryFor(url);
   return accessory ? (VARIANT_GRIPS[accessory] ?? null) : null;
 }
-function applyVariantGrip(payload: THREE.Object3D, bone: string, grip: VariantGrip): void {
+function modelBasename(url: string): string {
+  return url.slice(url.lastIndexOf('/') + 1).replace(/\.glb$/, '');
+}
+function applyVariantGrip(
+  payload: THREE.Object3D,
+  bone: string,
+  grip: VariantGrip,
+  url: string,
+): void {
   variantBox.setFromObject(payload);
   const height = variantBox.max.y - variantBox.min.y;
-  const scale = height > 1e-3 ? Math.min(1, grip.maxHeight / height) : 1;
-  const left = handSide(bone) === 'l';
-  payload.position.set(0, grip.lift, 0);
-  payload.quaternion.set(0, left ? 0 : 1, 0, left ? 1 : 0);
-  payload.scale.setScalar(scale);
+  const t = variantGripTransform(
+    height,
+    handSide(bone) === 'l',
+    grip.lift,
+    grip.maxHeight,
+    WEAPON_GRIP_OVERRIDES[modelBasename(url)],
+  );
+  payload.position.set(t.position[0], t.position[1], t.position[2]);
+  payload.quaternion.set(t.quaternion[0], t.quaternion[1], t.quaternion[2], t.quaternion[3]);
+  payload.scale.setScalar(t.scale);
 }
 
 function attachProp(
@@ -308,7 +326,7 @@ function attachProp(
   if (markSwap) payload.userData[SWAP_WEAPON_TAG] = true;
   const variantGrip = isHandslotBone(att.bone) ? variantGripFor(att.url) : null;
   if (variantGrip) {
-    applyVariantGrip(payload, att.bone, variantGrip);
+    applyVariantGrip(payload, att.bone, variantGrip, att.url);
   } else if (att.position || att.rotationY !== undefined) {
     if (att.position) payload.position.set(...att.position);
     if (att.rotationY !== undefined) payload.rotation.y = att.rotationY;
@@ -343,7 +361,7 @@ function swapAttachDef(
 const RANGED_SWAP_BASENAMES = new Set(['crossbow_1handed', 'crossbow_2handed']);
 
 function attachBasename(att: AttachDef): string {
-  return att.url.slice(att.url.lastIndexOf('/') + 1).replace(/\.glb$/, '');
+  return modelBasename(att.url);
 }
 
 function isRangedSwapAttach(att: AttachDef): boolean {
