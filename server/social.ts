@@ -8,6 +8,8 @@
 // whoever happens to be online without knowing about sockets). game.ts wires
 // the real Postgres + socket implementations in.
 
+import type { ChatSenderFlair } from '../src/sim/account_flair';
+
 export type GuildRank = 'leader' | 'officer' | 'member';
 
 // Where a character is and what they're doing, for friend/guild rosters.
@@ -167,12 +169,25 @@ export interface SocialTransport {
   // officer chat fan out through deliver() and never pass the routeEvents chat
   // filter, so they must consult the ignore list here, exactly as for blocks.
   isIgnoringChat(recipientId: number, senderCharacterId: number): boolean;
+  // The sender's operator-set account flair (AI mark + streamer links), or undefined
+  // for an ordinary player. For the SAME reason as isIgnoringChat above: guild and
+  // officer chat never pass through routeEvents (which attaches flair to every other
+  // chat channel), so without this a guild line from a streamer would arrive bare.
+  chatFlairFor(senderCharacterId: number): ChatSenderFlair | undefined;
 }
 
 export type SocialEvent =
   | { type: 'log'; text: string; color?: string }
   | { type: 'error'; text: string }
-  | { type: 'chat'; from: string; text: string; channel: 'guild' | 'officer' }
+  // `flair` mirrors the SimEvent chat variant (src/sim/types.ts): the SENDER's
+  // account flair, attached at fan-out and absent for an ordinary player.
+  | {
+      type: 'chat';
+      from: string;
+      text: string;
+      channel: 'guild' | 'officer';
+      flair?: ChatSenderFlair;
+    }
   | { type: 'guildInvite'; fromName: string; guildName: string }
   // Structured guild-calendar outcome; the client renders the visible line
   // from the code (the sim's mailResult convention, so no server English here).
@@ -831,7 +846,15 @@ export class SocialService {
       this.err(actor.characterId, 'You are not in a guild.');
       return false;
     }
-    const event: SocialEvent = { type: 'chat', from: actor.name, text, channel: 'guild' };
+    // Built once for the whole fan-out, flair included: it belongs to the sender,
+    // not the recipient, so it is identical for every member who receives the line.
+    const event: SocialEvent = {
+      type: 'chat',
+      from: actor.name,
+      text,
+      channel: 'guild',
+      flair: this.tx.chatFlairFor(actor.characterId),
+    };
     const members = await this.db.guildMembers(membership.guildId);
     for (const m of members) {
       if (!this.tx.isOnline(m.id)) continue;
@@ -861,13 +884,20 @@ export class SocialService {
       this.err(actor.characterId, 'Only officers and the Guild Master can use officer chat.');
       return false;
     }
+    const event: SocialEvent = {
+      type: 'chat',
+      from: actor.name,
+      text,
+      channel: 'officer',
+      flair: this.tx.chatFlairFor(actor.characterId),
+    };
     const members = await this.db.guildMembers(membership.guildId);
     for (const m of members) {
       if ((m.rank === 'officer' || m.rank === 'leader') && this.tx.isOnline(m.id)) {
         // honour the recipient's block and ignore lists, just like guild/say/whisper
         if (m.id !== actor.characterId && this.tx.isBlocking(m.id, actor.characterId)) continue;
         if (m.id !== actor.characterId && this.tx.isIgnoringChat(m.id, actor.characterId)) continue;
-        this.tx.deliver(m.id, [{ type: 'chat', from: actor.name, text, channel: 'officer' }]);
+        this.tx.deliver(m.id, [event]);
       }
     }
     return true;

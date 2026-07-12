@@ -1,5 +1,7 @@
 // Persistent social state, mirrored from the server's SocialService. Mirrors
 // server/social.ts shapes; kept here so the HUD has no server-side imports.
+import type { PlayerFlair } from '../sim/account_flair';
+
 export type PresenceStatus = 'online' | 'combat' | 'dungeon' | 'dead';
 export type GuildRank = 'leader' | 'officer' | 'member';
 
@@ -108,4 +110,11 @@ export interface IWorldSocialGraph {
   // your ~120yd interest scope (so there is no entity to read locally).
   // Resolves to null offline, and when the name does not exist.
   characterProfile(name: string): Promise<CharacterProfile | null>;
+  // Operator-set account flair (cosmetic): the AI-operated mark and an official
+  // streamer's platform links, for the [AI] chat tag and the player menu's stream
+  // links. Resolves by NAME (not pid) because chat reaches you from players far
+  // outside your interest scope, where no entity exists. Null offline and for an
+  // unknown or unflagged name. A pure LOCAL read (the flair rides the entity wire
+  // and the chat event), so unlike characterProfile it is synchronous.
+  accountFlair(name: string): PlayerFlair | null;
 }

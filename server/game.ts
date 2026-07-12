@@ -1,5 +1,12 @@
 import type { WebSocket } from 'ws';
 import { createBotDetector } from '#bot-detector';
+import {
+  type AccountFlair,
+  type ChatSenderFlair,
+  EMPTY_ACCOUNT_FLAIR,
+  hasStreamerLink,
+  wireStreamerLinks,
+} from '../src/sim/account_flair';
 import { verifyChallenge } from '../src/sim/client_challenge';
 import { MECH_CHROMAS, mechChromaItemId, mechChromaSkinIndex } from '../src/sim/content/skins';
 import type { TalentAllocation } from '../src/sim/content/talents';
@@ -79,6 +86,7 @@ import {
   grantAccountMechChroma,
   heartbeatCharacterLeases,
   insertChatLogs,
+  loadAccountFlair,
   loadMailState,
   loadMarketState,
   markAccountQuestComplete,
@@ -476,6 +484,18 @@ export interface ClientSession {
   ws: WebSocket;
   accountId: number;
   accountCosmetics: AccountCosmetics;
+  // Operator-set account flair (AI mark + streamer links), loaded at join and kept
+  // current by applyAccountFlairLive. Held on the SESSION, not just the entity,
+  // because chat fan-out has to read the SENDER's flair for recipients who are
+  // nowhere near them (general/world/guild chat crosses the interest scope, where
+  // no entity record exists for the sender).
+  accountFlair: AccountFlair;
+  // The wire-ready ChatSenderFlair derived from accountFlair, or undefined for the
+  // ordinary player with no flair. Cached here (recomputed only in stampAccountFlair,
+  // i.e. at join and when an operator edits) because deriving it re-parses every
+  // stored link through `new URL()`, and the chat path would otherwise pay that on
+  // EVERY line a streamer sends, to every channel.
+  chatFlair: ChatSenderFlair | undefined;
   characterId: number;
   pid: number; // player entity id in the sim
   name: string;
@@ -731,11 +751,31 @@ function identityFields(e: Entity): Record<string, unknown> {
   if (e.devTier) out.dvt = e.devTier; // developer-badge tier (cosmetic)
   if (e.devMergedPrs) out.dvc = e.devMergedPrs; // merged-PR count, for inspect/card
   if (e.githubLogin) out.dgl = e.githubLogin; // GitHub login (inspect readout + profile link)
+  if (e.aiAccount) out.ai = 1; // operator-set AI-operated mark (name prefix)
+  // Official streamer's platform links (player menu). Already gated by
+  // wireStreamerLinks at the point they were set on the entity, so an account whose
+  // streamer flag is off has none here, whatever is stored against it.
+  if (e.streamerLinks && hasStreamerLink(e.streamerLinks)) out.slk = e.streamerLinks;
   if (e.guild) out.gd = e.guild;
   if (e.dungeonId) out.dgn = e.dungeonId;
   if (e.objectItemId) out.obj = e.objectItemId;
   if (e.scale !== 1) out.sc = e.scale;
   if (e.color !== 0xffffff) out.c = e.color;
+  return out;
+}
+
+/**
+ * The flair a chat line carries for its SENDER, or undefined when the account has
+ * none, so an ordinary player's chat event is byte-unchanged on the wire. The links
+ * run through the same wireStreamerLinks gate the entity encoding uses: an account
+ * whose streamer flag is off ships no links here either, whatever is stored.
+ */
+function chatSenderFlair(flair: AccountFlair): ChatSenderFlair | undefined {
+  const links = wireStreamerLinks(flair);
+  if (!flair.ai && !links) return undefined;
+  const out: ChatSenderFlair = {};
+  if (flair.ai) out.ai = true;
+  if (links) out.links = links;
   return out;
 }
 
@@ -1407,6 +1447,7 @@ export class GameServer {
         const s = this.sessionByCharacterId(recipientId);
         return s ? s.ignoredIds.has(senderCharacterId) : false;
       },
+      chatFlairFor: (senderCharacterId) => this.sessionByCharacterId(senderCharacterId)?.chatFlair,
     };
   }
 
@@ -1700,6 +1741,50 @@ export class GameServer {
       e.discordJoined = joined;
       e.discordRole = role;
     }
+  }
+
+  // Load one player's operator-set account flair (AI mark + streamer links) and
+  // stamp it on their entity + session. Best-effort and guarded against the player
+  // leaving mid-fetch, exactly like the Discord/holder/dev flair refreshes above.
+  private async refreshAccountFlair(session: ClientSession): Promise<void> {
+    const flair = await loadAccountFlair(session.accountId);
+    if (this.clients.get(session.pid) !== session) return;
+    this.stampAccountFlair(session, flair);
+  }
+
+  /**
+   * Apply an account's flair to one live session: the entity fields the wire encodes
+   * (the identity diff re-broadcasts them to nearby players on the next snapshot) and
+   * the session copy the chat fan-out reads. `streamerLinks` is set through
+   * wireStreamerLinks, so the entity never carries links for an account whose
+   * streamer flag is off.
+   */
+  private stampAccountFlair(session: ClientSession, flair: AccountFlair): void {
+    session.accountFlair = flair;
+    // Derived once, here, and read straight off the session by every chat fan-out.
+    session.chatFlair = chatSenderFlair(flair);
+    const e = this.sim.entities.get(session.pid);
+    if (!e) return;
+    e.aiAccount = flair.ai ? true : undefined;
+    e.streamerLinks = wireStreamerLinks(flair);
+  }
+
+  /**
+   * Push an operator's account-flair edit onto every live session of that account, so
+   * the AI mark and the streamer links change with no reconnect. Injected into the
+   * admin routes via configureAdminRuntime (server/admin.ts); a no-op when the
+   * account is offline (the next join loads the new row anyway).
+   */
+  applyAccountFlairLive(accountId: number, flair: AccountFlair): void {
+    for (const live of this.clients.values()) {
+      if (live.accountId !== accountId) continue;
+      this.stampAccountFlair(live, flair);
+    }
+  }
+
+  /** The chat flair of the session at `pid`, read from the SESSION, never an entity. */
+  private chatFlairForPid(pid: number): ChatSenderFlair | undefined {
+    return this.clients.get(pid)?.chatFlair;
   }
 
   // Intercept a leading "!" community command in chat (lfg/wts/...): broadcast it
@@ -2084,6 +2169,10 @@ export class GameServer {
       ws,
       accountId,
       accountCosmetics,
+      // Loaded right below by refreshAccountFlair; an account with no flair (every
+      // ordinary player) keeps these empty values and never touches the wire.
+      accountFlair: EMPTY_ACCOUNT_FLAIR,
+      chatFlair: undefined,
       characterId,
       pid,
       name,
@@ -2192,6 +2281,11 @@ export class GameServer {
     // a contributor-stats read must never affect joining the world).
     void this.refreshDevBadge(session).catch((err) =>
       console.error('dev badge refresh failed:', err),
+    );
+    // Stamp the operator-set account flair (AI mark + streamer links), same
+    // best-effort contract: a flair read must never affect joining the world.
+    void this.refreshAccountFlair(session).catch((err) =>
+      console.error('account flair refresh failed:', err),
     );
     return session;
   }
@@ -4725,6 +4819,16 @@ export class GameServer {
   private routeEvents(events: SimEvent[]): void {
     if (events.length === 0 || this.clients.size === 0) return;
     const eventTime = Date.now();
+    // Account flair of each chat line's SENDER, resolved once per event (not once
+    // per recipient) and read from the sender's SESSION rather than an entity:
+    // general/world/lfg chat reaches players far outside the sender's interest
+    // scope, where the recipient has no entity record for them. Sparse by design:
+    // an ordinary player's chat event is untouched.
+    for (const ev of events) {
+      if (ev.type !== 'chat') continue;
+      const flair = this.chatFlairForPid(ev.fromPid);
+      if (flair) ev.flair = flair;
+    }
     // ignore list: social invites from blocked senders are resolved once per
     // batch (dropped for every session and declined in the sim), not per
     // receiving session, so spectators of the target never see them either.

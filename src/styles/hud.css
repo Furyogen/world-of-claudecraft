@@ -54,6 +54,19 @@
     letter-spacing: 0.2px;
     margin-top: -1px;
   }
+  /* AI-operated-account tag, inline to the left of a player's name. The painter
+     toggles .ai-tag (the shared gradient mark, see its own section below) rather
+     than writing a colour, so no hex literal lives in the TS; without that class
+     the slot collapses, exactly like the hidden badges above. */
+  .np-ai {
+    display: none;
+    font-size: 11px;
+    vertical-align: middle;
+    margin-right: 3px;
+  }
+  .np-ai.ai-tag {
+    display: inline-block;
+  }
   /* $WOC holder-tier flair badge, inline to the left of a player's name */
   .np-tier {
     display: inline-block;
@@ -4027,6 +4040,74 @@
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+  }
+
+  /* ---------- ai account tag ---------- */
+  /* ONE class for all three surfaces the operator-set AI mark lands on: the chat
+     line (beside the sender name), the overhead nameplate (.np-ai), and the target
+     unit frame's flair line. An animated rainbow so it reads instantly as a mark
+     and never as part of the name.
+     GAMEPLAY-NEUTRAL: this is identity, never actionable state, and every arm below
+     may calm the MOTION but must leave the resting gradient fully painted. Hiding or
+     delaying the tag on a cheaper tier would be a settings-driven information
+     difference, which the graphics-neutrality invariant forbids. */
+  .ai-tag {
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    /* The first colour REPEATS at the end so the 300% scroll wraps seamlessly. */
+    background-image: linear-gradient(90deg, #ff5f6d, #ffc371, #6bffb8, #6bc2ff, #c98bff, #ff5f6d);
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    /* A text-shadow paints BEHIND the clipped background, so it smears straight
+       through the transparent glyphs. Both hosts set one (.chat-pane div and
+       .nameplate), so it is cleared here and the legibility halo is redrawn as a
+       drop-shadow of the painted pixels instead. */
+    text-shadow: none;
+    filter: drop-shadow(0 1px 1px #000);
+    animation: ai-tag-shift 6s linear infinite;
+    /* Ambient: paused + duration-calmed by the effect-tier tokens (no change at
+       full Ultra, where --fx-ambient-anim=running and --motion-scale=1). */
+    animation-duration: calc(6s * var(--motion-scale, 1));
+    animation-play-state: var(--fx-ambient-anim, running);
+  }
+  @keyframes ai-tag-shift {
+    from {
+      background-position: 0 50%;
+    }
+    to {
+      background-position: -300% 50%;
+    }
+  }
+  /* Reduced motion stops the SCROLL only; the tag keeps its full resting gradient. */
+  @media (prefers-reduced-motion: reduce) {
+    .ai-tag {
+      animation: none;
+    }
+  }
+  /* The forced palette has no gradients, and background-clip: text over it would
+     leave `color: transparent` with nothing to paint, i.e. an invisible tag. Fall
+     back to plain system text so the mark survives high-contrast mode. */
+  @media (forced-colors: active) {
+    .ai-tag {
+      background-image: none;
+      -webkit-background-clip: border-box;
+      background-clip: border-box;
+      color: CanvasText;
+      filter: none;
+    }
+  }
+  /* Stream-link rows in the player context menu: the platform brand mark sits
+     inline with the row label. */
+  #ctx-menu .ctx-item.ctx-stream {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  #ctx-menu .ctx-item .ui-icon {
+    width: 14px;
+    height: 14px;
   }
 
   /* ---------- prompts (invite/trade/duel) ---------- */

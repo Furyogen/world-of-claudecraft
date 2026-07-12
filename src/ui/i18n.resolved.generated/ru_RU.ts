@@ -1040,7 +1040,13 @@ export const ru_RU: EnTranslations = {
       "block": "Заблокировать",
       "unblock": "Разблокировать",
       "openFor": "Открыть меню игрока {name}",
-      "profileUnavailable": "Профиль игрока {name} не найден."
+      "profileUnavailable": "Профиль игрока {name} не найден.",
+      "aiTag": "[AI]",
+      "aiTagTitle": "Аккаунт под управлением ИИ",
+      "watchTwitch": "Смотреть на Twitch",
+      "watchX": "Открыть в X",
+      "watchKick": "Смотреть на Kick",
+      "watchYouTube": "Смотреть на YouTube"
     },
     "lootSettings": {
       "title": "Настройки добычи",

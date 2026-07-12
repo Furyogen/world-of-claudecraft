@@ -1040,7 +1040,13 @@ export const zh_TW: EnTranslations = {
       "block": "封鎖",
       "unblock": "取消封鎖",
       "openFor": "開啟 {name} 的玩家選單",
-      "profileUnavailable": "找不到 {name} 的資料。"
+      "profileUnavailable": "找不到 {name} 的資料。",
+      "aiTag": "[AI]",
+      "aiTagTitle": "AI 操作的帳號",
+      "watchTwitch": "在 Twitch 觀看",
+      "watchX": "在 X 檢視",
+      "watchKick": "在 Kick 觀看",
+      "watchYouTube": "在 YouTube 觀看"
     },
     "lootSettings": {
       "title": "拾取設定",

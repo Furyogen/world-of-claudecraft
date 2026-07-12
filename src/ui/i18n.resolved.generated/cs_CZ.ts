@@ -1040,7 +1040,13 @@ export const cs_CZ: EnTranslations = {
       "block": "Zablokovat",
       "unblock": "Odblokovat",
       "openFor": "Otevřít nabídku hráče {name}",
-      "profileUnavailable": "Profil hráče {name} nebyl nalezen."
+      "profileUnavailable": "Profil hráče {name} nebyl nalezen.",
+      "aiTag": "[AI]",
+      "aiTagTitle": "Účet ovládaný AI",
+      "watchTwitch": "Sledovat na Twitchi",
+      "watchX": "Zobrazit na X",
+      "watchKick": "Sledovat na Kicku",
+      "watchYouTube": "Sledovat na YouTube"
     },
     "lootSettings": {
       "title": "Nastavení kořisti",

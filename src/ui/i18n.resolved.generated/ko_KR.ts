@@ -1040,7 +1040,13 @@ export const ko_KR: EnTranslations = {
       "block": "차단",
       "unblock": "차단 해제",
       "openFor": "{name} 님의 플레이어 메뉴 열기",
-      "profileUnavailable": "{name} 님의 프로필을 찾을 수 없습니다."
+      "profileUnavailable": "{name} 님의 프로필을 찾을 수 없습니다.",
+      "aiTag": "[AI]",
+      "aiTagTitle": "AI 운영 계정",
+      "watchTwitch": "Twitch에서 시청",
+      "watchX": "X에서 보기",
+      "watchKick": "Kick에서 시청",
+      "watchYouTube": "YouTube에서 시청"
     },
     "lootSettings": {
       "title": "전리품 설정",

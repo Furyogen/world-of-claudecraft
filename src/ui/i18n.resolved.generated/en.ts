@@ -1040,7 +1040,13 @@ export const en: EnTranslations = {
       "block": "Block",
       "unblock": "Unblock",
       "openFor": "Open player menu for {name}",
-      "profileUnavailable": "No profile found for {name}."
+      "profileUnavailable": "No profile found for {name}.",
+      "aiTag": "[AI]",
+      "aiTagTitle": "AI-operated account",
+      "watchTwitch": "Watch on Twitch",
+      "watchX": "View on X",
+      "watchKick": "Watch on Kick",
+      "watchYouTube": "Watch on YouTube"
     },
     "lootSettings": {
       "title": "Loot Settings",

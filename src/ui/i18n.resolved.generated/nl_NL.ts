@@ -1040,7 +1040,13 @@ export const nl_NL: EnTranslations = {
       "block": "Blokkeren",
       "unblock": "Deblokkeren",
       "openFor": "Spelersmenu voor {name} openen",
-      "profileUnavailable": "Geen profiel gevonden voor {name}."
+      "profileUnavailable": "Geen profiel gevonden voor {name}.",
+      "aiTag": "[AI]",
+      "aiTagTitle": "Door AI bestuurd account",
+      "watchTwitch": "Bekijken op Twitch",
+      "watchX": "Bekijken op X",
+      "watchKick": "Bekijken op Kick",
+      "watchYouTube": "Bekijken op YouTube"
     },
     "lootSettings": {
       "title": "Buitinstellingen",

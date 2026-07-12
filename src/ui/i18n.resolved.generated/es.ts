@@ -1040,7 +1040,13 @@ export const es: EnTranslations = {
       "block": "Bloquear",
       "unblock": "Desbloquear",
       "openFor": "Abrir el menú de jugador de {name}",
-      "profileUnavailable": "No se encontró el perfil de {name}."
+      "profileUnavailable": "No se encontró el perfil de {name}.",
+      "aiTag": "[AI]",
+      "aiTagTitle": "Cuenta operada por IA",
+      "watchTwitch": "Ver en Twitch",
+      "watchX": "Ver en X",
+      "watchKick": "Ver en Kick",
+      "watchYouTube": "Ver en YouTube"
     },
     "lootSettings": {
       "title": "Ajustes de botín",

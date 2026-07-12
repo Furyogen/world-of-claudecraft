@@ -67,8 +67,8 @@ function getStats(file) {
   const info = ffprobe(file);
   const stream = info.streams.find((s) => s.codec_type === 'audio');
   const duration = parseFloat(info.format.duration ?? '0');
-  const bitrate = Math.round(parseInt(info.format.bit_rate ?? '0') / 1000);
-  const sampleRate = parseInt(stream?.sample_rate ?? '0');
+  const bitrate = Math.round(parseInt(info.format.bit_rate ?? '0', 10) / 1000);
+  const sampleRate = parseInt(stream?.sample_rate ?? '0', 10);
   return { duration, bitrate, sampleRate };
 }
 

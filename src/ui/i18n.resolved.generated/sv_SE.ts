@@ -1040,7 +1040,13 @@ export const sv_SE: EnTranslations = {
       "block": "Blockera",
       "unblock": "Avblockera",
       "openFor": "Öppna spelarmenyn för {name}",
-      "profileUnavailable": "Ingen profil hittades för {name}."
+      "profileUnavailable": "Ingen profil hittades för {name}.",
+      "aiTag": "[AI]",
+      "aiTagTitle": "AI-styrt konto",
+      "watchTwitch": "Titta på Twitch",
+      "watchX": "Visa på X",
+      "watchKick": "Titta på Kick",
+      "watchYouTube": "Titta på YouTube"
     },
     "lootSettings": {
       "title": "Byteinställningar",

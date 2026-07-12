@@ -26,6 +26,11 @@ import {
 } from '../render/characters/portrait';
 import { isFriendlyPet, mobTooltipConColor } from '../render/reaction';
 import type { Renderer } from '../render/renderer';
+import {
+  type ChatSenderFlair,
+  normalizeStreamerLink,
+  type StreamerLinks,
+} from '../sim/account_flair';
 import { type AugmentCategory, augmentCategory } from '../sim/content/augments';
 import { HEROIC_MARK_ITEM_ID } from '../sim/content/dungeon_difficulty';
 import { HEROIC_VENDOR_STOCK } from '../sim/content/heroic_vendor';
@@ -182,6 +187,7 @@ import {
   resolvePlayerSocialFlags,
   serializeIgnoreList,
 } from './chat_ignore_core';
+import { appendChatLineParts, CHAT_MESSAGE_TOKEN, CHAT_NAME_TOKEN, chatAiTagEl } from './chat_line';
 import { ChatMobileOverlay } from './chat_mobile_overlay';
 import { type ChatClock, clampChatClock, formatChatTimestamp } from './chat_timestamp';
 import { type ChatBoxGeometry, clampChatBox, parseChatBox, serializeChatBox } from './chat_window';
@@ -339,7 +345,13 @@ import {
   type PublishedCard,
   publishCard,
 } from './player_card_share';
-import { chatPlayerContextActions } from './player_context_menu';
+import {
+  chatPlayerContextActions,
+  type PlayerContextAction,
+  type PlayerContextActionId,
+  streamerActionPlatform,
+  streamerMenuActions,
+} from './player_context_menu';
 import { hydratePortraits, portraitChipHtml } from './portrait_chip';
 import { maskProfanity } from './profanity';
 import { encodeItemLink, encodeQuestLink, parseChatSegments } from './quest_link';
@@ -8837,6 +8849,7 @@ export class Hud {
                 CHAT_TEMPLATE_KEYS.party,
                 'party',
                 ev.fromPid,
+                ev.flair,
               );
               break;
             case 'yell':
@@ -8847,6 +8860,7 @@ export class Hud {
                 CHAT_TEMPLATE_KEYS.yell,
                 'yell',
                 ev.fromPid,
+                ev.flair,
               );
               break;
             case 'whisper':
@@ -8858,6 +8872,7 @@ export class Hud {
                   CHAT_TEMPLATE_KEYS.toWhisper,
                   'whisper',
                   ev.fromPid,
+                  ev.flair,
                 );
               else {
                 this.chatLogFrom(
@@ -8867,6 +8882,7 @@ export class Hud {
                   CHAT_TEMPLATE_KEYS.whisper,
                   'whisper',
                   ev.fromPid,
+                  ev.flair,
                 );
                 audio.whisper();
               }
@@ -8879,6 +8895,7 @@ export class Hud {
                 CHAT_TEMPLATE_KEYS.general,
                 'general',
                 ev.fromPid,
+                ev.flair,
               );
               break;
             case 'world':
@@ -8889,6 +8906,7 @@ export class Hud {
                 CHAT_TEMPLATE_KEYS.world,
                 'world',
                 ev.fromPid,
+                ev.flair,
               );
               break;
             case 'lfg':
@@ -8899,6 +8917,7 @@ export class Hud {
                 CHAT_TEMPLATE_KEYS.lfg,
                 'lfg',
                 ev.fromPid,
+                ev.flair,
               );
               break;
             case 'guild':
@@ -8909,6 +8928,7 @@ export class Hud {
                 CHAT_TEMPLATE_KEYS.guild,
                 'guild',
                 ev.fromPid,
+                ev.flair,
               );
               break;
             case 'officer':
@@ -8919,6 +8939,7 @@ export class Hud {
                 CHAT_TEMPLATE_KEYS.officer,
                 'officer',
                 ev.fromPid,
+                ev.flair,
               );
               break;
             case 'emote':
@@ -8929,6 +8950,7 @@ export class Hud {
                 CHAT_TEMPLATE_KEYS.emote,
                 'emote',
                 ev.fromPid,
+                ev.flair,
               );
               break;
             case 'roll':
@@ -8939,6 +8961,7 @@ export class Hud {
                 CHAT_TEMPLATE_KEYS.roll,
                 'roll',
                 ev.fromPid,
+                ev.flair,
               );
               break;
             default:
@@ -8949,6 +8972,7 @@ export class Hud {
                 CHAT_TEMPLATE_KEYS.say,
                 'say',
                 ev.fromPid,
+                ev.flair,
               );
               break;
           }
@@ -9613,6 +9637,7 @@ export class Hud {
     templateKey: TranslationKey,
     chan: string,
     fromPid?: number,
+    flair?: ChatSenderFlair,
   ): void {
     const wasNearBottom =
       this.chatLogEl.scrollHeight - this.chatLogEl.scrollTop - this.chatLogEl.clientHeight < 24;
@@ -9650,27 +9675,15 @@ export class Hud {
       ev.preventDefault();
       openUnderName();
     });
-    const nameToken = '__WOC_CHAT_NAME__';
-    const messageToken = '__WOC_CHAT_MESSAGE__';
-    const rendered = t(templateKey, { name: nameToken, message: messageToken });
-    let senderAppended = false;
-    let messageAppended = false;
-    for (const part of rendered.split(/(__WOC_CHAT_NAME__|__WOC_CHAT_MESSAGE__)/)) {
-      if (part === nameToken) {
-        div.append(sender);
-        senderAppended = true;
-      } else if (part === messageToken) {
-        this.appendChatMessageBody(div, text, fromPid);
-        messageAppended = true;
-      } else if (part) {
-        div.append(document.createTextNode(part));
-      }
-    }
-    if (!senderAppended || !messageAppended) {
-      div.textContent = '';
-      div.append(sender, document.createTextNode(': '));
-      this.appendChatMessageBody(div, text, fromPid);
-    }
+    // The [AI] tag rides the {name} slot, not the head of the line: the localized
+    // templates read '[General] {name}: {message}', so it must sit beside the name
+    // and not look like part of the channel prefix (see ./chat_line).
+    const rendered = t(templateKey, { name: CHAT_NAME_TOKEN, message: CHAT_MESSAGE_TOKEN });
+    appendChatLineParts(div, rendered, {
+      aiTag: flair?.ai ? chatAiTagEl(document) : null,
+      sender,
+      appendBody: (parent) => this.appendChatMessageBody(parent, text, fromPid),
+    });
     this.chatLogEl.appendChild(div);
     // Announce the player-chat line through the tab-independent #chat-live region.
     this.announceChatLine(div);
@@ -13384,6 +13397,54 @@ export class Hud {
     }
   }
 
+  /**
+   * The stream-link rows both player menus share. Resolved by NAME through
+   * IWorld.accountFlair, which works for a player far outside your ~120yd interest
+   * scope (a name you only ever saw in chat); the live entity's wire fields are the
+   * fallback for the in-view case. streamerMenuActions re-validates every URL, so a
+   * link that is not a plain https URL on that platform's own host never becomes a
+   * row at all.
+   */
+  private streamerLinksFor(name: string, ent?: Entity): StreamerLinks | undefined {
+    return (
+      this.sim.accountFlair(name)?.links ?? (ent?.kind === 'player' ? ent.streamerLinks : undefined)
+    );
+  }
+
+  private streamerActionsFor(name: string, ent?: Entity): PlayerContextAction[] {
+    return streamerMenuActions(this.streamerLinksFor(name, ent));
+  }
+
+  /**
+   * NEVER interpolate `action.href` into this markup, not even inside a quoted
+   * attribute. A streamer link is operator-entered text, and while
+   * normalizeStreamerLink pins it to an https URL on the platform's own host, the
+   * WHATWG URL parser leaves a single quote (and `&`) UNENCODED in the path: a
+   * legal-but-hostile `https://twitch.tv/a'onmouseover=alert(1)'` would break out
+   * of a single-quoted or unquoted attribute. The href is deliberately kept in the
+   * JS `actions` array and handed straight to window.open by openStreamerLink, so
+   * it never becomes HTML. Only the fixed enum id, the fixed-registry icon, and an
+   * esc()'d t() label are interpolated here. tests/chat_context_menu.test.ts pins this.
+   */
+  private ctxItemHtml(action: PlayerContextAction): string {
+    const icon = action.icon ? svgIcon(action.icon) : '';
+    return `<div class="ctx-item${action.icon ? ' ctx-stream' : ''}" data-act="${action.id}">${icon}${esc(action.label)}</div>`;
+  }
+
+  /**
+   * Open a stream-link row's channel, if `act` is one; false for every other row.
+   * The URL is re-validated HERE, at click time, even though the server validated it
+   * on write and streamerLinkList validated it again when the row was built: this is
+   * the last gate before an operator-entered string reaches window.open.
+   */
+  private openStreamerLink(act: string, actions: PlayerContextAction[]): boolean {
+    const platform = streamerActionPlatform(act as PlayerContextActionId);
+    if (!platform) return false;
+    const url = normalizeStreamerLink(platform, actions.find((a) => a.id === act)?.href);
+    if (url) window.open(url, '_blank', 'noopener,noreferrer');
+    return true;
+  }
+
   openContextMenu(pid: number, name: string, x: number, y: number): void {
     const el = $('#ctx-menu');
     const party = this.sim.partyInfo;
@@ -13397,7 +13458,11 @@ export class Hud {
     const alreadyGuilded = flags.alreadyGuilded;
     const ent = this.sim.entities.get(pid);
     const entCls = ent && ent.kind === 'player' ? (ent.templateId as PlayerClass) : null;
+    // An official streamer's own channels lead, right under the title, exactly as
+    // they do on the chat-name menu (both build their rows from streamerMenuActions).
+    const streamActions = this.streamerActionsFor(name, ent);
     let html = `<div class="ctx-title ctx-title-player">${entCls ? portraitChipHtml({ cls: entCls, skin: ent?.skin ?? 0, name, variant: 'sm' }) : ''}<span class="ctx-title-name">${esc(name)}</span></div>`;
+    html += streamActions.map((a) => this.ctxItemHtml(a)).join('');
     html += `<div class="ctx-item" data-act="info">${esc(t('hudChrome.playerMenu.info'))}</div>`;
     if (pid !== this.sim.playerId)
       html += `<div class="ctx-item" data-act="whisper">${esc(t('hud.chat.context.whisper'))}</div>`;
@@ -13434,6 +13499,7 @@ export class Hud {
     this.placePopupAt(el, x, y, 170, ctxReserveBottom);
     this.keepPopupOnScreen(el);
     this.bindContextMenuActions((act) => {
+      if (this.openStreamerLink(act, streamActions)) return;
       if (act === 'info') this.openPlayerInfo(name, pid);
       else if (act === 'whisper') this.startWhisper(name);
       else if (act === 'invite') this.sim.partyInvite(pid);
@@ -13459,9 +13525,13 @@ export class Hud {
     const tier = target.discordTier ?? 0;
     const showDevBadges = this.optionsHooks?.settings.get('showDevBadges') ?? true;
     const devIdx = showDevBadges ? (target.devTier ?? 0) : 0;
+    // The AI mark rides this line too, so it has to be in BOTH the early-out below
+    // and the signature: without it an AI account carrying no Discord/dev flair
+    // would never render the line at all, and a live flag flip would never repaint.
+    const isAi = target.aiAccount === true;
     if (
       target.kind !== 'player' ||
-      (!tier && !target.discordName && !target.discordRole && !devIdx)
+      (!tier && !target.discordName && !target.discordRole && !devIdx && !isAi)
     ) {
       if (this.targetDiscordSig !== '') {
         this.targetDiscordSig = '';
@@ -13473,7 +13543,7 @@ export class Hud {
     // This runs every frame the target frame updates; only rebuild when the Discord
     // content actually changes (else a fresh <img> per frame would re-fetch the
     // avatar and, on a failing CDN load, flicker between the broken glyph and hidden).
-    const sig = `${tier}|${target.discordName ?? ''}|${target.discordRole ?? ''}|${target.discordAvatar ?? ''}|${devIdx}`;
+    const sig = `${tier}|${target.discordName ?? ''}|${target.discordRole ?? ''}|${target.discordAvatar ?? ''}|${devIdx}|${isAi ? 1 : 0}`;
     if (sig === this.targetDiscordSig) return;
     this.targetDiscordSig = sig;
     const parts: string[] = [];
@@ -13495,6 +13565,20 @@ export class Hud {
     const devDef = devTierByIndex(devIdx);
     if (devDef) {
       parts.push(`<span class="uf-dc-chip dev">${esc(devTierDisplayName(devDef))}</span>`);
+    }
+    if (isAi) {
+      // The shared .ai-tag mark, and deliberately NOT a .uf-dc-chip: the chip rules
+      // live UNLAYERED in index.extra.css, and unlayered CSS beats every @layer rule,
+      // so the chip's own color/background would override the gradient in
+      // @layer components and paint straight over it. The flair line is a flex row,
+      // so a bare span sits inline beside the chips anyway.
+      parts.push(
+        // role=img + aria-label, not just title: this is a DISCLOSURE, and assistive
+        // tech announces `title` inconsistently on a non-focusable span. Screen-reader
+        // users must hear "AI-operated account", not the bare "[AI]" literal (or, if
+        // the title is skipped entirely, nothing at all). Mirrors chatAiTagEl.
+        `<span class="ai-tag" role="img" aria-label="${esc(t('hudChrome.playerMenu.aiTagTitle'))}" title="${esc(t('hudChrome.playerMenu.aiTagTitle'))}">${esc(t('hudChrome.playerMenu.aiTag'))}</span>`,
+      );
     }
     el.innerHTML = parts.join('');
     // Hide the external Discord avatar if its CDN image fails to load, so the line
@@ -13836,6 +13920,11 @@ export class Hud {
       return;
     }
     const flags = this.playerSocialFlags(name);
+    // A portrait chip only when the player is close enough to have a live entity;
+    // for a name seen in /world or /lfg the title is name-only. Player Info still
+    // works either way (it falls back to the public character sheet).
+    const livePidForMenu = this.playerPidByName(name);
+    const ent = livePidForMenu !== null ? this.sim.entities.get(livePidForMenu) : undefined;
     const actions = chatPlayerContextActions({
       playerName: name,
       selfName: this.sim.player.name,
@@ -13846,17 +13935,11 @@ export class Hud {
       canGuildInvite: flags.canGuildInvite,
       alreadyGuilded: flags.alreadyGuilded,
       canReport: !!this.reportHooks?.submitByName,
+      streamerLinks: this.streamerLinksFor(name, ent),
     });
-    // A portrait chip only when the player is close enough to have a live entity;
-    // for a name seen in /world or /lfg the title is name-only. Player Info still
-    // works either way (it falls back to the public character sheet).
-    const livePidForMenu = this.playerPidByName(name);
-    const ent = livePidForMenu !== null ? this.sim.entities.get(livePidForMenu) : undefined;
     const entCls = ent && ent.kind === 'player' ? (ent.templateId as PlayerClass) : null;
     const titleHtml = `<div class="ctx-title ctx-title-player">${entCls ? portraitChipHtml({ cls: entCls, skin: ent?.skin ?? 0, name, variant: 'sm' }) : ''}<span class="ctx-title-name">${esc(name)}</span></div>`;
-    el.innerHTML =
-      titleHtml +
-      actions.map((a) => `<div class="ctx-item" data-act="${a.id}">${esc(a.label)}</div>`).join('');
+    el.innerHTML = titleHtml + actions.map((a) => this.ctxItemHtml(a)).join('');
     hydratePortraits(el);
     el.style.display = 'block';
     // Reserve the real height (title + one row per action) instead of a fixed 240,
@@ -13866,6 +13949,7 @@ export class Hud {
     this.keepPopupOnScreen(el);
     this.ctxMenuOpener = opener ?? null;
     this.bindContextMenuActions((act) => {
+      if (this.openStreamerLink(act, actions)) return;
       const livePid = this.playerPidByName(name);
       if (act === 'info') this.openPlayerInfo(name, livePid);
       else if (act === 'whisper') this.startWhisper(name);

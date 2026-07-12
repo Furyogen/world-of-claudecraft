@@ -1040,7 +1040,13 @@ export const ja_JP: EnTranslations = {
       "block": "ブロック",
       "unblock": "ブロック解除",
       "openFor": "{name} のプレイヤーメニューを開く",
-      "profileUnavailable": "{name} のプロフィールが見つかりません。"
+      "profileUnavailable": "{name} のプロフィールが見つかりません。",
+      "aiTag": "[AI]",
+      "aiTagTitle": "AI操作アカウント",
+      "watchTwitch": "Twitch で視聴",
+      "watchX": "X で見る",
+      "watchKick": "Kick で視聴",
+      "watchYouTube": "YouTube で視聴"
     },
     "lootSettings": {
       "title": "分配設定",

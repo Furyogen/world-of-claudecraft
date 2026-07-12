@@ -1040,7 +1040,13 @@ export const id_ID: EnTranslations = {
       "block": "Blokir",
       "unblock": "Buka blokir",
       "openFor": "Buka menu pemain {name}",
-      "profileUnavailable": "Profil {name} tidak ditemukan."
+      "profileUnavailable": "Profil {name} tidak ditemukan.",
+      "aiTag": "[AI]",
+      "aiTagTitle": "Akun yang dijalankan AI",
+      "watchTwitch": "Tonton di Twitch",
+      "watchX": "Lihat di X",
+      "watchKick": "Tonton di Kick",
+      "watchYouTube": "Tonton di YouTube"
     },
     "lootSettings": {
       "title": "Pengaturan Jarahan",

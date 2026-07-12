@@ -1040,7 +1040,13 @@ export const pt_BR: EnTranslations = {
       "block": "Bloquear",
       "unblock": "Desbloquear",
       "openFor": "Abrir o menu do jogador {name}",
-      "profileUnavailable": "Nenhum perfil encontrado para {name}."
+      "profileUnavailable": "Nenhum perfil encontrado para {name}.",
+      "aiTag": "[AI]",
+      "aiTagTitle": "Conta operada por IA",
+      "watchTwitch": "Assistir na Twitch",
+      "watchX": "Ver no X",
+      "watchKick": "Assistir na Kick",
+      "watchYouTube": "Assistir no YouTube"
     },
     "lootSettings": {
       "title": "Configurações de Saque",

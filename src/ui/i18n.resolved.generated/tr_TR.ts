@@ -1040,7 +1040,13 @@ export const tr_TR: EnTranslations = {
       "block": "Engelle",
       "unblock": "Engeli kaldır",
       "openFor": "{name} için oyuncu menüsünü aç",
-      "profileUnavailable": "{name} için profil bulunamadı."
+      "profileUnavailable": "{name} için profil bulunamadı.",
+      "aiTag": "[AI]",
+      "aiTagTitle": "Yapay zeka ile yönetilen hesap",
+      "watchTwitch": "Twitch'te izle",
+      "watchX": "X'te görüntüle",
+      "watchKick": "Kick'te izle",
+      "watchYouTube": "YouTube'da izle"
     },
     "lootSettings": {
       "title": "Ganimet Ayarları",

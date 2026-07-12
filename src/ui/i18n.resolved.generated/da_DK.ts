@@ -1040,7 +1040,13 @@ export const da_DK: EnTranslations = {
       "block": "Blokér",
       "unblock": "Fjern blokering",
       "openFor": "Åbn spillermenuen for {name}",
-      "profileUnavailable": "Ingen profil fundet for {name}."
+      "profileUnavailable": "Ingen profil fundet for {name}.",
+      "aiTag": "[AI]",
+      "aiTagTitle": "AI-styret konto",
+      "watchTwitch": "Se på Twitch",
+      "watchX": "Vis på X",
+      "watchKick": "Se på Kick",
+      "watchYouTube": "Se på YouTube"
     },
     "lootSettings": {
       "title": "Bytteindstillinger",

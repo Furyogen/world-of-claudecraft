@@ -6044,6 +6044,12 @@ export class Sim {
   characterProfile(_name: string): Promise<import('../world_api').CharacterProfile | null> {
     return Promise.resolve(null);
   }
+  // Account flair is operator-set on an ACCOUNT, and offline play has none, so the
+  // offline world never has any to report. The sim must never read this for
+  // gameplay either way: it is cosmetic, server-set, and confers no effect.
+  accountFlair(_name: string): import('./account_flair').PlayerFlair | null {
+    return null;
+  }
 
   private updateDuels(): void {
     duelMod.updateDuels(this.ctx);

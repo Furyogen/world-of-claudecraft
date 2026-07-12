@@ -12,6 +12,7 @@ import {
   type SocialTransport,
   validateGuildName,
 } from '../server/social';
+import type { ChatSenderFlair } from '../src/sim/account_flair';
 
 // ---------------------------------------------------------------------------
 // In-memory fakes — let us exercise the full SocialService logic (friends,
@@ -240,6 +241,13 @@ class FakeTransport implements SocialTransport {
   }
   isIgnoringChat(recipientId: number, senderCharacterId: number): boolean {
     return !!this.db.ignores.get(recipientId)?.has(senderCharacterId);
+  }
+  // Operator-set account flair of the sender, attached to guild/officer chat at
+  // fan-out. Per-character, so a test can give one speaker flair and assert it
+  // rides their guild line; an unset character has none, like an ordinary player.
+  flair = new Map<number, ChatSenderFlair>();
+  chatFlairFor(senderCharacterId: number): ChatSenderFlair | undefined {
+    return this.flair.get(senderCharacterId);
   }
 
   eventsFor(id: number): SocialEvent[] {
@@ -807,6 +815,71 @@ describe('guilds', () => {
 
     expect(await h.svc.guildChat(h.actor(1), 'hello guild')).toBe(true);
     expect(h.tx.eventsFor(2).some((e) => e.type === 'chat' && e.text === 'hello guild')).toBe(true);
+  });
+
+  // Guild and officer chat fan out through tx.deliver and NEVER pass through
+  // routeEvents, which is where every OTHER channel gets its sender flair attached.
+  // So these two call sites are the only thing that puts an [AI] tag or a streamer's
+  // links on a guild/officer line: drop them and a flagged account speaking in the
+  // one channel their guild actually reads arrives bare, with no entity record to
+  // fall back on if they are outside the recipient's interest scope.
+  const SPEAKER_FLAIR = {
+    ai: true,
+    links: { twitch: 'https://twitch.tv/someone' },
+  } as const;
+
+  it('attaches the SPEAKER flair to guild chat, for every recipient', async () => {
+    await h.svc.guildCreate(h.actor(1), 'Knights');
+    await h.svc.guildInvite(h.actor(1), 'Bet');
+    await h.svc.guildAccept(h.actor(2));
+    // Aleph (character 1) is a flagged account; Bet is not.
+    h.tx.flair.set(1, { ...SPEAKER_FLAIR });
+    h.tx.clear();
+
+    expect(await h.svc.guildChat(h.actor(1), 'hello guild')).toBe(true);
+
+    const heard = h.tx.eventsFor(2).find((e) => e.type === 'chat');
+    expect(heard).toBeDefined();
+    expect(heard?.type === 'chat' && heard.flair).toEqual(SPEAKER_FLAIR);
+    // The speaker's own echo carries it too (the event is built once for the fan-out).
+    const echo = h.tx.eventsFor(1).find((e) => e.type === 'chat');
+    expect(echo?.type === 'chat' && echo.flair).toEqual(SPEAKER_FLAIR);
+  });
+
+  it('attaches the SPEAKER flair to officer chat', async () => {
+    await h.svc.guildCreate(h.actor(1), 'Knights');
+    await h.svc.guildInvite(h.actor(1), 'Bet');
+    await h.svc.guildAccept(h.actor(2));
+    await h.svc.guildSetRank(h.actor(1), 'Bet', 'officer');
+    h.tx.flair.set(1, { ...SPEAKER_FLAIR });
+    h.tx.clear();
+
+    expect(await h.svc.officerChat(h.actor(1), 'officers only')).toBe(true);
+
+    const heard = h.tx.eventsFor(2).find((e) => e.type === 'chat');
+    expect(heard?.type === 'chat' && heard.channel).toBe('officer');
+    expect(heard?.type === 'chat' && heard.flair).toEqual(SPEAKER_FLAIR);
+  });
+
+  it('leaves an UNFLAGGED speaker guild/officer line bare (no flair key at all)', async () => {
+    await h.svc.guildCreate(h.actor(1), 'Knights');
+    await h.svc.guildInvite(h.actor(1), 'Bet');
+    await h.svc.guildAccept(h.actor(2));
+    await h.svc.guildSetRank(h.actor(1), 'Bet', 'officer');
+    // No h.tx.flair entry for Aleph: an ordinary player.
+    h.tx.clear();
+
+    expect(await h.svc.guildChat(h.actor(1), 'hello guild')).toBe(true);
+    expect(await h.svc.officerChat(h.actor(1), 'officers only')).toBe(true);
+
+    // undefined, NOT {}. The absence is what keeps an ordinary chat line
+    // byte-unchanged on the wire, and what the client reads as "no evidence"
+    // rather than "this sender has no flair".
+    for (const e of h.tx.eventsFor(2)) {
+      if (e.type !== 'chat') continue;
+      expect(e.flair, e.channel).toBeUndefined();
+    }
+    expect(h.tx.eventsFor(2).filter((e) => e.type === 'chat')).toHaveLength(2);
   });
 
   it('blocks guild chat from a non-member', async () => {

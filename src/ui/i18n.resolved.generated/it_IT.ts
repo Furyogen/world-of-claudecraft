@@ -1040,7 +1040,13 @@ export const it_IT: EnTranslations = {
       "block": "Blocca",
       "unblock": "Sblocca",
       "openFor": "Apri il menu giocatore di {name}",
-      "profileUnavailable": "Nessun profilo trovato per {name}."
+      "profileUnavailable": "Nessun profilo trovato per {name}.",
+      "aiTag": "[AI]",
+      "aiTagTitle": "Account gestito da IA",
+      "watchTwitch": "Guarda su Twitch",
+      "watchX": "Vedi su X",
+      "watchKick": "Guarda su Kick",
+      "watchYouTube": "Guarda su YouTube"
     },
     "lootSettings": {
       "title": "Impostazioni Bottino",

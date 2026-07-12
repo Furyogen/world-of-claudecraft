@@ -1275,6 +1275,15 @@ export const hudChromeStrings = {
     openFor: 'Open player menu for {name}',
     // Shown when a profile lookup for an out-of-range player finds nothing.
     profileUnavailable: 'No profile found for {name}.',
+    // Operator-set account flair. The tag itself is the bracketed literal every
+    // classic client shows beside a name; the title is its hover explanation.
+    aiTag: '[AI]',
+    aiTagTitle: 'AI-operated account',
+    // Player-menu rows linking out to an official streamer's own channel.
+    watchTwitch: 'Watch on Twitch',
+    watchX: 'View on X',
+    watchKick: 'Watch on Kick',
+    watchYouTube: 'Watch on YouTube',
   },
   lootSettings: {
     title: 'Loot Settings',

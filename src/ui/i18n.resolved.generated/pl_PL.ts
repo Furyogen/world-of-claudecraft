@@ -1040,7 +1040,13 @@ export const pl_PL: EnTranslations = {
       "block": "Zablokuj",
       "unblock": "Odblokuj",
       "openFor": "Otwórz menu gracza {name}",
-      "profileUnavailable": "Nie znaleziono profilu gracza {name}."
+      "profileUnavailable": "Nie znaleziono profilu gracza {name}.",
+      "aiTag": "[AI]",
+      "aiTagTitle": "Konto prowadzone przez SI",
+      "watchTwitch": "Oglądaj na Twitchu",
+      "watchX": "Zobacz na X",
+      "watchKick": "Oglądaj na Kicku",
+      "watchYouTube": "Oglądaj na YouTube"
     },
     "lootSettings": {
       "title": "Ustawienia łupów",

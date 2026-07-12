@@ -1040,7 +1040,13 @@ export const en_XA: EnTranslations = {
       "block": "[Ɓļóçķ]",
       "unblock": "[Úñƀļóçķ]",
       "openFor": "[Óþéñ þļáýéŕ ɱéñú ƒóŕ {name}]",
-      "profileUnavailable": "[Ñó þŕóƒíļé ƒóúñð ƒóŕ {name}.]"
+      "profileUnavailable": "[Ñó þŕóƒíļé ƒóúñð ƒóŕ {name}.]",
+      "aiTag": "[[ÁÍ]]",
+      "aiTagTitle": "[ÁÍ-óþéŕáţéð áççóúñţ]",
+      "watchTwitch": "[Ŵáţçĥ óñ Ţŵíţçĥ]",
+      "watchX": "[Ʋíéŵ óñ Ẋ]",
+      "watchKick": "[Ŵáţçĥ óñ Ķíçķ]",
+      "watchYouTube": "[Ŵáţçĥ óñ ÝóúŢúƀé]"
     },
     "lootSettings": {
       "title": "[Ļóóţ Šéţţíñĝš]",

@@ -38,6 +38,15 @@ provided as a courtesy.
 | Meshy creature models (edda_reedhand, reedbound_acolyte, tolling_bell, spider_egg_sac from the Drowned Litany, yumi_cat from Protect Yumi, in `public/models/creatures/`) | World of ClaudeCraft | Project-generated via Meshy AI (text-to-3D; the humanoids and yumi_cat rigged and animated), owned under the Meshy paid-plan license | Project asset |
 | Class ability icons (`public/ui/skills/<class>/*.webp`, re-encoded from the source-pack PNGs to WebP via `scripts/convert_skill_icons_webp.mjs`; all 9 classes: paladin, hunter, priest, warlock, rogue, warrior, mage, druid, shaman; source packs paladin/archer/priest/warlock/thief/warrior/berserker/demon/druid/pyromancer/cryomancer/aeromancer/lightning-mage/earth-magician/100-rpg-skill-icons/100-skill-icons-pack-for-rpg + per-ability fill sets; all 152 abilities across the 9 classes covered) | CraftPix | https://craftpix.net | CraftPix premium (royalty-free commercial), purchased by Levy Street account (callum@levystreet.com) |
 
+## Brand marks
+
+The four streamer-platform marks inlined as SVG paths in `src/ui/ui_icons.ts`
+(Twitch, X, Kick, YouTube) are the trademarks of their respective platforms,
+reproduced monochrome and unmodified in shape solely to identify a link that
+points at that platform. They are not project assets, and no endorsement or
+affiliation is implied. The Discord (Clyde) mark in the same file is used the
+same way.
+
 ## Audio
 
 | Assets | Author | Source | License |

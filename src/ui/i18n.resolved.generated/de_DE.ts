@@ -1040,7 +1040,13 @@ export const de_DE: EnTranslations = {
       "block": "Blockieren",
       "unblock": "Blockierung aufheben",
       "openFor": "Spielermenü für {name} öffnen",
-      "profileUnavailable": "Kein Profil für {name} gefunden."
+      "profileUnavailable": "Kein Profil für {name} gefunden.",
+      "aiTag": "[AI]",
+      "aiTagTitle": "KI-gesteuertes Konto",
+      "watchTwitch": "Auf Twitch ansehen",
+      "watchX": "Auf X ansehen",
+      "watchKick": "Auf Kick ansehen",
+      "watchYouTube": "Auf YouTube ansehen"
     },
     "lootSettings": {
       "title": "Beute-Einstellungen",

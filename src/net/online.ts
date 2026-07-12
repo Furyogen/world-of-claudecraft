@@ -6,6 +6,12 @@ import {
   runtimeApiOrigin,
   runtimeWebSocketUrl,
 } from '../runtime';
+import {
+  hasStreamerLink,
+  normalizeStreamerLinks,
+  type PlayerFlair,
+  type StreamerLinks,
+} from '../sim/account_flair';
 import { bagCapacity } from '../sim/bags';
 import { signChallenge } from '../sim/client_challenge';
 import { mechChromaItemId, mechChromaSkinIndex } from '../sim/content/skins';
@@ -1066,6 +1072,12 @@ export class ClientWorld implements IWorld {
   // --- IWorldSocialGraph: persistent friends/blocks/guild, set ONLY by the
   // `social`/`socialpos` frames (there is no `s.social` snapshot field). ---
   socialInfo: SocialInfo | null = null;
+  // Operator-set account flair (cosmetic), keyed by LOWERCASED character name and
+  // read back by `accountFlair`. Fed from BOTH wire sources: the entity identity
+  // record (players inside the ~120yd interest scope) and the `flair` on a chat
+  // event (senders far outside it, where no entity exists). See rememberFlair for
+  // the write rule. NON-IWorld mirror: the seam exposes only `accountFlair`.
+  private playerFlair = new Map<string, PlayerFlair>();
   // --- IWorldMarket: World Market view, mirrored from the snapshot self
   // (`s.market`, delta-omitted). ---
   marketInfo: MarketInfo | null = null;
@@ -1503,6 +1515,7 @@ export class ClientWorld implements IWorld {
       for (const ev of msg.list) {
         this.applyLockpickEvent(ev as SimEvent);
         this.applyCraftResultEvent(ev as SimEvent);
+        this.applyChatFlairEvent(ev as SimEvent);
         this.eventQueue.push(ev as SimEvent);
       }
       return;
@@ -1636,6 +1649,18 @@ export class ClientWorld implements IWorld {
         e.devTier = w.dvt ?? 0; // developer-badge tier (cosmetic, server-set)
         e.devMergedPrs = typeof w.dvc === 'number' ? w.dvc : undefined; // merged-PR count
         e.githubLogin = typeof w.dgl === 'string' ? w.dgl : undefined; // GitHub login
+        // Account flair (cosmetic, operator-set): the AI-operated mark and, for a
+        // flagged streamer, their platform links. NEVER trust the wire: the links are
+        // re-sanitized here (they end up in a window.open), and stay sparse/undefined
+        // when there is nothing to show, like the discord/dev fields above.
+        e.aiAccount = w.ai === 1;
+        const streamerLinks = normalizeStreamerLinks(w.slk);
+        e.streamerLinks = hasStreamerLink(streamerLinks) ? streamerLinks : undefined;
+        // Feed the by-name flair cache. Players only: flair is an ACCOUNT property, so
+        // a mob or NPC sharing a player's name must never poison it. An identity record
+        // is authoritative and complete (the server re-sends one whenever flair
+        // changes), so this both sets and CLEARS.
+        if (e.kind === 'player') this.rememberFlair(e.name, e.aiAccount, streamerLinks);
         e.scale = w.sc ?? 1;
         e.color = w.c ?? 0xffffff;
         e.dungeonId = w.dgn ?? null;
@@ -2533,6 +2558,50 @@ export class ClientWorld implements IWorld {
     } catch {
       return null;
     }
+  }
+  // Operator-set account flair, by name. A pure LOCAL read (no round-trip): the flair
+  // already rode in on the entity identity record or on the sender's chat event, so
+  // this resolves for a player you can see AND for one you have only heard in chat.
+  accountFlair(name: string): PlayerFlair | null {
+    const key = name.trim().toLowerCase();
+    // lazy init: tests build bare instances via Object.create, skipping field initializers
+    if (!key || this.playerFlair === undefined) return null;
+    return this.playerFlair.get(key) ?? null;
+  }
+  // The ONE writer for the flair cache. An account with nothing to show is DELETED
+  // rather than stored as an empty record, so "never had flair" and "had it turned
+  // off since we last saw them" both resolve to null instead of a stale hit.
+  private rememberFlair(name: string, ai: boolean, links: StreamerLinks): void {
+    const key = name?.trim().toLowerCase();
+    if (!key) return;
+    if (this.playerFlair === undefined) this.playerFlair = new Map();
+    if (!ai && !hasStreamerLink(links)) {
+      this.playerFlair.delete(key);
+      return;
+    }
+    this.playerFlair.set(key, { ai, links });
+  }
+  // Cache the flair of a chat SENDER. This is the whole reason flair rides the chat
+  // event: general/world/lfg/guild chat reaches you from players far outside your
+  // ~120yd interest scope, where there is no entity record to read it off.
+  //
+  // ADD-ONLY, deliberately: an undecorated chat line does NOT clear a cached entry.
+  // The server omits `flair` entirely for an unflagged sender (keeping an ordinary
+  // chat line, the hottest path on the wire, byte-for-byte unchanged), so absence
+  // means "nothing to say", not "this player has no flair".
+  //
+  // The cost of that choice is bounded and worth naming: revoke a player's flair
+  // while a client has only ever HEARD them in chat, and that client's player menu
+  // can still offer their old stream links until the entry is refreshed. It cannot
+  // produce a phantom [AI] tag, because the chat tag renders from the per-event
+  // `ev.flair`, never from this cache. The entry self-heals the moment the player
+  // comes into interest scope (the identity record is authoritative and both sets
+  // and clears) or the client reloads. The alternative, stamping an explicit empty
+  // flair onto every chat line of every player forever, costs more than it buys.
+  private applyChatFlairEvent(ev: SimEvent): void {
+    if (ev.type !== 'chat' || !ev.flair) return;
+    // never trust the wire: re-sanitize the links, same as the identity decode
+    this.rememberFlair(ev.from, ev.flair.ai === true, normalizeStreamerLinks(ev.flair.links));
   }
   // --- IWorldMarket: World Market browse/list/buy/cancel/collect command sends
   // (snake_case wire strings). marketInfo is a snapshot read (mirror field above). ---

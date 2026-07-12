@@ -1040,7 +1040,13 @@ export const fr_CA: EnTranslations = {
       "block": "Bloquer",
       "unblock": "Débloquer",
       "openFor": "Ouvrir le menu du joueur {name}",
-      "profileUnavailable": "Aucun profil trouvé pour {name}."
+      "profileUnavailable": "Aucun profil trouvé pour {name}.",
+      "aiTag": "[AI]",
+      "aiTagTitle": "Compte géré par une IA",
+      "watchTwitch": "Regarder sur Twitch",
+      "watchX": "Voir sur X",
+      "watchKick": "Regarder sur Kick",
+      "watchYouTube": "Regarder sur YouTube"
     },
     "lootSettings": {
       "title": "Réglages de butin",

@@ -1040,7 +1040,13 @@ export const vi_VN: EnTranslations = {
       "block": "Chặn",
       "unblock": "Bỏ chặn",
       "openFor": "Mở menu người chơi {name}",
-      "profileUnavailable": "Không tìm thấy hồ sơ của {name}."
+      "profileUnavailable": "Không tìm thấy hồ sơ của {name}.",
+      "aiTag": "[AI]",
+      "aiTagTitle": "Tài khoản do AI điều khiển",
+      "watchTwitch": "Xem trên Twitch",
+      "watchX": "Xem trên X",
+      "watchKick": "Xem trên Kick",
+      "watchYouTube": "Xem trên YouTube"
     },
     "lootSettings": {
       "title": "Cài Đặt Chiến Lợi Phẩm",
