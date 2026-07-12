@@ -32,7 +32,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.wocStore.confirmPurchase': 'Купить',
   'hudChrome.wocStore.armoryEyebrow': 'Сезон 1',
   'hudChrome.wocStore.armoryTitle': 'Арсенал',
-  'hudChrome.wocStore.armoryBody': 'Ограниченные облики оружия из Арсенала 1-го сезона. Общие для всей учётной записи, чисто косметические и видимые всем вокруг.',
+  'hudChrome.wocStore.armoryBody':
+    'Ограниченные облики оружия из Арсенала 1-го сезона. Общие для всей учётной записи, чисто косметические и видимые всем вокруг.',
   'hudChrome.wocStore.collectionLine': 'Коллекция «{collection}»',
   'hudChrome.wocStore.seasonOne': 'Сезон 1',
   'hudChrome.wocStore.rarity.uncommon': 'Необычный',

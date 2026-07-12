@@ -32,7 +32,8 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.wocStore.confirmPurchase': '구매',
   'hudChrome.wocStore.armoryEyebrow': '시즌 1',
   'hudChrome.wocStore.armoryTitle': '무기고',
-  'hudChrome.wocStore.armoryBody': '시즌 1 무기고의 한정 무기 스킨입니다. 계정 전체에 적용되는 순수 장식이며 주변 모든 플레이어에게 보입니다.',
+  'hudChrome.wocStore.armoryBody':
+    '시즌 1 무기고의 한정 무기 스킨입니다. 계정 전체에 적용되는 순수 장식이며 주변 모든 플레이어에게 보입니다.',
   'hudChrome.wocStore.collectionLine': '{collection} 컬렉션',
   'hudChrome.wocStore.seasonOne': '시즌 1',
   'hudChrome.wocStore.rarity.uncommon': '고급',
