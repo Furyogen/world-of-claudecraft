@@ -804,6 +804,15 @@ function mobVoiceFamily(templateId: string): string | null {
   return fam && SFX_MOB_FAMILIES.has(fam) ? fam : null;
 }
 
+/** Most-specific SFX key for a mob action. Prefers the subfamily key
+ *  (mob_beast_wolf_attack) when that clip is loaded; falls back to the
+ *  family key (mob_beast_attack) otherwise. Resolved at runtime so new
+ *  creature-specific files just need a manifest rebuild, no code change. */
+function mobSfxKey(fam: string, templateId: string, action: string): string {
+  const subKey = `mob_${fam}_${templateId}_${action}`;
+  return sfx.hasVariants(subKey) ? subKey : `mob_${fam}_${action}`;
+}
+
 /** Sustained cast-loop clip for an ability's school, or null (physical/unknown). */
 function castKeyForAbility(ability: string): string | null {
   // Per-ability custom cast loop overrides (a player-provided clip that fits the
@@ -8339,7 +8348,7 @@ export class Hud {
         } else if (ev.crit && tgt.kind === 'mob' && shouldPlayCritSfxForTarget(tgt)) {
           const fam = mobVoiceFamily(tgt.templateId);
           if (fam && shouldPlayMobVoiceSfxForEntity(tgt))
-            this.combat(`mob_${fam}_attack`, tp.x, tp.y, tp.z, 0.6, { rate: 1.25, cooldown: 0.1 });
+            this.combat(mobSfxKey(fam, tgt.templateId, 'attack'), tp.x, tp.y, tp.z, 0.6, { rate: 1.25, cooldown: 0.1 });
         }
         return;
       }
@@ -8391,7 +8400,7 @@ export class Hud {
           this.mobAggroed.delete(ev.entityId);
           const fam = mobVoiceFamily(ent.templateId);
           if (fam && shouldPlayMobVoiceSfxForEntity(ent))
-            this.combat(`mob_${fam}_death`, p.x, p.y, p.z, 0.8);
+            this.combat(mobSfxKey(fam, ent.templateId, 'death'), p.x, p.y, p.z, 0.8);
         } else if (ent.kind === 'player' && ev.entityId !== sim.playerId) {
           this.combat('player_death', p.x, p.y, p.z, 0.7);
         }
@@ -8408,7 +8417,7 @@ export class Hud {
     this.mobAggroed.add(mob.id);
     const fam = mobVoiceFamily(mob.templateId);
     if (fam && shouldPlayMobVoiceSfxForEntity(mob))
-      this.combat(`mob_${fam}_aggro`, mob.pos.x, mob.pos.y, mob.pos.z, 0.7);
+      this.combat(mobSfxKey(fam, mob.templateId, 'aggro'), mob.pos.x, mob.pos.y, mob.pos.z, 0.7);
     return true;
   }
 
@@ -8419,7 +8428,7 @@ export class Hud {
       if (this.ensureMobEngaged(src)) return; // just fired the aggro alert
       const fam = mobVoiceFamily(src.templateId);
       if (fam && shouldPlayMobVoiceSfxForEntity(src))
-        this.combat(`mob_${fam}_attack`, src.pos.x, src.pos.y, src.pos.z, 0.55, { cooldown: 0.25 });
+        this.combat(mobSfxKey(fam, src.templateId, 'attack'), src.pos.x, src.pos.y, src.pos.z, 0.55, { cooldown: 0.25 });
     } else if (src.kind === 'player') {
       this.combat(weaponSwingKey(src.templateId), src.pos.x, src.pos.y, src.pos.z, 0.5, {
         cooldown: 0.08,
