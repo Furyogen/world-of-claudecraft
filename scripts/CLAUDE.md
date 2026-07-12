@@ -31,6 +31,7 @@ npm (see `package.json`); many more run directly.
 | Browser E2E (offline) | `smoke_browser.mjs`, `smoke_mage.mjs`, `smoke_rogue.mjs`, `check_directions.mjs` | dev |
 | MP E2E (browser) | `mp_browser.mjs`, `mp_combat_visibility.mjs`, `market_mp_e2e.mjs` | dev + server |
 | MP integration (ws) | `mp_integration.mjs`, `chat_e2e.mjs`, `chat_log_persistence.mjs`, `social_e2e.mjs`, `crypt_raid.mjs` | server (+`ALLOW_DEV_COMMANDS=1` for raid) |
+| Season 1 Armory | `armory_skins_e2e.mjs` (ws: buy/apply/wire/reconnect, 19 checks), `armory_visual_e2e.mjs` (browser: browse/inspect/buy/apply + screenshots), `armory_thumbs.mjs` (+ `armory_thumbs_entry.js`: pre-render the store thumbnails to `public/ui/store/armory/`), `browser_path_resolve.mjs` (lazy browser resolver for the asset pipeline) | server + economy service (+ dev for visual) / none (thumbs) |
 | Security | `ws_security_e2e.mjs` (server), `malware_scan.mjs` (release-gate malicious-code flagger over the whole tree; `security:scan` / `security:gate`, exits 1 on findings) | server / none |
 | Screenshot tours | `visual_tour.mjs`, `arena_visual.mjs`, `market_visual.mjs`, `social_visual.mjs`, `tour_expansion.mjs` | dev (some + server) |
 | SEO / homepage / i18n | `homepage_verify.mjs`, `seo_audit.mjs`, `localization_e2e.mjs` (locale-matrix homepage E2E) | dev (+ server) |

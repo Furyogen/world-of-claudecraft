@@ -4,8 +4,11 @@
 // mid-distance band. All geometry/materials are shared caches — dispose()
 // only releases mixer bindings.
 import * as THREE from 'three';
+import { WEAPON_SKINS } from '../../sim/content/weapon_skins';
 import type { OverheadEmoteId } from '../../world_api';
 import { GFX } from '../gfx';
+import { createWeaponVfx, WEAPON_VFX, type WeaponVfxHandle } from '../weapon_vfx';
+import { weaponVfxTuningFor } from '../weapon_vfx_tuning';
 import {
   type AnimState,
   type BaseState,
@@ -26,6 +29,27 @@ import {
 import type { EmoteClipSpec, VisualDef, WeaponLayoutOverride } from './manifest';
 
 export type { AnimState, BaseState } from './anim_state';
+
+// Current canvas height in device pixels, pushed by the renderer on resolution
+// changes so newly created weapon-skin VFX rigs size their point sprites right.
+let weaponVfxViewportHeight = 1080;
+
+export function setWeaponVfxViewportHeight(heightPx: number): void {
+  weaponVfxViewportHeight = Math.max(1, Math.round(heightPx));
+}
+
+// The VFX rig sizes point sprites for the inspector's 35 degree vertical fov.
+// Rendering under a different camera needs an equivalent-height correction or
+// particles draw the wrong size (the 60 degree world camera showed them ~1.8x
+// too large). Each visual carries the factor for the camera it renders under.
+const VFX_RIG_FOV_DEG = 35;
+
+export function weaponVfxSpriteScaleForFov(fovDeg: number): number {
+  return Math.tan((VFX_RIG_FOV_DEG * Math.PI) / 360) / Math.tan((fovDeg * Math.PI) / 360);
+}
+
+// World camera default (CAMERA_BASE_FOV = 60 in renderer.ts).
+const WORLD_FOV_SPRITE_SCALE = weaponVfxSpriteScaleForFov(60);
 
 const FADE = 0.22;
 const ONESHOT_FADE = 0.1;
@@ -79,6 +103,9 @@ export class CharacterVisual {
   private entityColor: number;
   private skinIndex: number;
   private weaponItemId: string | null;
+  private weaponSkinId: string | null = null;
+  private weaponVfx: WeaponVfxHandle[] = [];
+  private weaponVfxSpriteScale = WORLD_FOV_SPRITE_SCALE;
   private disposed = false;
   private ghosted = false;
   private mixer: THREE.AnimationMixer;
@@ -449,7 +476,10 @@ export class CharacterVisual {
     this.originalMaterials.clear();
     this.model.traverse((o) => {
       const mesh = o as THREE.Mesh;
-      if (mesh.isMesh) this.originalMaterials.set(mesh, mesh.material);
+      // VFX rig meshes stay out of the ghost/restore cycle: their shader
+      // materials are owned by the weapon-skin handle, never overlaid.
+      if (mesh.isMesh && !mesh.userData.weaponVfxMesh)
+        this.originalMaterials.set(mesh, mesh.material);
     });
     this.applyVisualMaterials();
   }
@@ -464,7 +494,22 @@ export class CharacterVisual {
     if (weaponItemId === this.weaponItemId) return;
     this.weaponItemId = weaponItemId;
     if (!this.def.weaponSlots?.length) return;
-    setHeldWeapon(this.model, this.def, weaponItemId);
+    this.reattachHeldWeapon();
+  }
+
+  /** Apply or clear a Season 1 Armory weapon-skin cosmetic: the skin's model
+   *  replaces the held weapon (all swap slots, or the hunter's fixed ranged
+   *  attach) and its rarity VFX ride the new payloads. Null restores the
+   *  equipped item's own model. */
+  setWeaponSkin(weaponSkinId: string | null): void {
+    if (weaponSkinId === this.weaponSkinId) return;
+    this.weaponSkinId = weaponSkinId;
+    this.reattachHeldWeapon();
+  }
+
+  private reattachHeldWeapon(): void {
+    this.disposeWeaponVfx();
+    const payloads = setHeldWeapon(this.model, this.def, this.weaponItemId, this.weaponSkinId);
     applyMaterials(
       this.model,
       this.def,
@@ -472,11 +517,80 @@ export class CharacterVisual {
       skinTexture(this.key, this.skinIndex),
       skinEmissiveTexture(this.key, this.skinIndex),
     );
+    // A VFX-tier skin's emissive derive mutates its payload materials in place,
+    // so give each payload exclusive clones BEFORE the caster snapshot: the
+    // shared tinted-material cache must never carry derived state (two players
+    // with one skin, or a rogue's two hands, would corrupt each other), and the
+    // ghost/stealth snapshot below must target the clones the rig restores.
+    if (this.weaponSkinVfxSpec()) {
+      for (const payload of payloads) {
+        payload.traverse((o) => {
+          const mesh = o as THREE.Mesh;
+          if (!mesh.isMesh) return;
+          mesh.material = Array.isArray(mesh.material)
+            ? mesh.material.map((m) => m.clone())
+            : mesh.material.clone();
+          mesh.userData.weaponSkinIsolated = true;
+        });
+      }
+    }
     // the model graph changed (weapon meshes added/removed): rebuild the caster
     // list and re-snapshot originals, then re-apply ghost/stealth overlays.
     this.originalMaterials.clear();
     this.rebuildCasters();
     this.applyVisualMaterials();
+    this.buildWeaponVfx(payloads);
+  }
+
+  private weaponSkinVfxSpec() {
+    const skin = this.weaponSkinId ? WEAPON_SKINS[this.weaponSkinId] : null;
+    return skin ? (WEAPON_VFX[skin.model] ?? null) : null;
+  }
+
+  /** Attach the skin's rarity VFX rig to each held payload (in-hand mode: no
+   *  backdrop dome, no ground pool; emissive + particles ride the weapon). */
+  private buildWeaponVfx(payloads: THREE.Object3D[]): void {
+    const skin = this.weaponSkinId ? WEAPON_SKINS[this.weaponSkinId] : null;
+    const spec = skin ? (WEAPON_VFX[skin.model] ?? null) : null;
+    if (!skin || !spec) return;
+    for (const payload of payloads) {
+      const handle = createWeaponVfx(payload, spec, { grounded: false });
+      handle.setBackdropVisible(false);
+      handle.setTuning(weaponVfxTuningFor(skin.model, spec.tier));
+      handle.setPixelScale(weaponVfxViewportHeight * this.weaponVfxSpriteScale);
+      // Tag the rig's own scene nodes: applyMaterials must never tint its
+      // ShaderMaterials and the shadow pass has no business with sprite shells.
+      handle.group.traverse((o) => {
+        o.userData.weaponVfxMesh = true;
+        const mesh = o as THREE.Mesh;
+        if (mesh.isMesh) mesh.castShadow = false;
+      });
+      this.weaponVfx.push(handle);
+    }
+  }
+
+  /** Advance the weapon-skin VFX (shader time, pulse, flicker). Cheap no-op
+   *  without an active skin; the renderer calls it once per entity per frame. */
+  updateWeaponVfx(dt: number): void {
+    for (const handle of this.weaponVfx) handle.update(dt);
+  }
+
+  /** Re-scale VFX point sprites after a viewport/pixel-ratio change. */
+  setWeaponVfxPixelScale(heightPx: number): void {
+    for (const handle of this.weaponVfx) {
+      handle.setPixelScale(heightPx * this.weaponVfxSpriteScale);
+    }
+  }
+
+  /** Set the camera fov this visual renders under (preview rigs differ from the
+   *  world camera); re-scales any live VFX sprites to match. */
+  setWeaponVfxCameraFov(fovDeg: number): void {
+    this.weaponVfxSpriteScale = weaponVfxSpriteScaleForFov(fovDeg);
+  }
+
+  private disposeWeaponVfx(): void {
+    for (const handle of this.weaponVfx) handle.dispose();
+    this.weaponVfx.length = 0;
   }
 
   /** Rebuild the shadow-caster list and original-material snapshot after the model
@@ -485,7 +599,7 @@ export class CharacterVisual {
     this.casters.length = 0;
     this.model.traverse((o) => {
       const mesh = o as THREE.Mesh;
-      if (!mesh.isMesh) return;
+      if (!mesh.isMesh || mesh.userData.weaponVfxMesh) return;
       mesh.castShadow = this.shadowOn;
       mesh.receiveShadow = false;
       if ((mesh as unknown as THREE.SkinnedMesh).isSkinnedMesh) mesh.frustumCulled = false;
@@ -496,6 +610,7 @@ export class CharacterVisual {
 
   dispose(): void {
     this.disposed = true;
+    this.disposeWeaponVfx();
     this.mixer.stopAllAction();
     this.mixer.uncacheRoot(this.model);
     this.root.removeFromParent();

@@ -60,7 +60,11 @@ import { bankLedgerIdle } from './bank_ledger';
 import { BUG_DESCRIPTION_MAX, BugReportRateLimitError, createBugReport } from './bug_report_db';
 import { characterSheet, type SheetRank } from './character_sheet';
 import { configureCharactersRuntime } from './characters';
-import { handleClaudiumApi, handleClaudiumStripeWebhook } from './claudium';
+import {
+  configureClaudiumRuntime,
+  handleClaudiumApi,
+  handleClaudiumStripeWebhook,
+} from './claudium';
 import { handleDailyRewardApi, handleDailyRewardInternalApi } from './daily_rewards';
 import {
   accountAndScopeForToken,
@@ -1990,6 +1994,13 @@ configureReportsRuntime({
 configureDiscordRuntime({
   isIpBlocked: (ip) => liveGame().isIpBlocked(ip),
   grantCosmetic: (accountId, chromaId) => liveGame().grantMechChromaToAccount(accountId, chromaId),
+});
+
+// Claudium routes mirror weapon-skin purchases into account cosmetics live (the
+// same deferred liveGame() closure pattern as the Discord hooks above).
+configureClaudiumRuntime({
+  grantWeaponSkins: (accountId, skinIds) =>
+    liveGame().grantWeaponSkinsToAccount(accountId, skinIds),
 });
 
 // configureAdminRuntime(game) and configureInternalRuntime(game) pass the live

@@ -1903,7 +1903,10 @@ export class Hud {
     document.addEventListener('pointerdown', (ev) => {
       const target = ev.target as HTMLElement | null;
       const el = target?.closest?.('.window.panel') as HTMLElement | null;
-      if (!el) return;
+      // The confirm prompt is a fixed topmost modal, not a managed window:
+      // no raise (bringWindowToFront would demote it into the window band)
+      // and no drag.
+      if (!el || el.id === 'confirm-dialog') return;
       this.bringWindowToFront(el);
       if (ev.button !== 0 || !target || !isWindowDragHandle(target, el)) return;
       ev.preventDefault();
@@ -2081,13 +2084,22 @@ export class Hud {
   }
 
   private bringWindowToFront(el: HTMLElement): void {
+    // The confirm/input prompt is the topmost modal by definition and never
+    // joins the 50-89 window band: banding it (a pointerdown raise, or the
+    // normalize sweep) drops it BEHIND the armory inspect overlay (z 90), so a
+    // real mouse press on the dialog demotes it mid-click and its own OK
+    // button becomes unclickable (the "phantom dead confirm" bug).
+    if (el.id === 'confirm-dialog') {
+      el.style.zIndex = String(Math.max(this.windowZValue(el), 95));
+      return;
+    }
     if (this.windowZ >= 89) this.normalizeWindowZ();
     el.style.zIndex = String(++this.windowZ);
   }
 
   private normalizeWindowZ(): void {
     const open = [...document.querySelectorAll<HTMLElement>('.window.panel')]
-      .filter((el) => this.isWindowVisible(el))
+      .filter((el) => el.id !== 'confirm-dialog' && this.isWindowVisible(el))
       .sort((a, b) => this.windowZValue(a) - this.windowZValue(b));
     this.windowZ = 50;
     for (const el of open) el.style.zIndex = String(++this.windowZ);
@@ -11813,6 +11825,9 @@ export class Hud {
 
   onCosmeticsChanged(): void {
     this.renderCharIfOpen();
+    // A grant or apply from another session on the account (or a server
+    // correction of an optimistic apply) must refresh an open armory too.
+    this.dailyRewardsWindow.onCosmeticsChanged();
   }
 
   private renderCharIfOpen(): void {
@@ -12964,6 +12979,10 @@ export class Hud {
       `<div class="cd-actions"><button type="button" class="btn" data-cancel>${esc(cancelText)}</button><button type="button" class="btn cd-ok" data-ok>${esc(okText)}</button></div>`;
     document.body.appendChild(el);
     this.bringWindowToFront(el);
+    // A confirm prompt is the topmost modal by definition: the window band tops
+    // out at 89 and the armory inspect overlay sits at 90, so floor it above
+    // both or a purchase confirmation opens invisibly underneath.
+    el.style.zIndex = String(Math.max(Number(el.style.zIndex) || 0, 95));
     this.confirmTrap = this.focusManager.open({ root: () => el });
     el.querySelector<HTMLElement>('[data-ok]')?.focus();
     const close = () => {

@@ -830,6 +830,11 @@ export interface RequestMetadata {
 export interface AccountCosmetics {
   completedQuestIds: string[];
   mechChromaIds: string[];
+  // Season 1 Armory weapon skins: owned skin ids (granted on Claudium spend,
+  // reconciled from the economy service) and the applied-skin-per-weapon-type
+  // loadout. Account-wide by design; characters never carry either.
+  weaponSkinIds: string[];
+  weaponSkinLoadout: Record<string, string>;
 }
 
 function uniqueStrings(value: unknown): string[] {
@@ -844,11 +849,22 @@ function uniqueStrings(value: unknown): string[] {
   return out;
 }
 
+function stringRecord(value: unknown): Record<string, string> {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return {};
+  const out: Record<string, string> = {};
+  for (const [key, entry] of Object.entries(value as Record<string, unknown>)) {
+    if (typeof entry === 'string' && entry.length > 0) out[key] = entry;
+  }
+  return out;
+}
+
 export function normalizeAccountCosmetics(value: unknown): AccountCosmetics {
   const src = value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
   return {
     completedQuestIds: uniqueStrings(src.completedQuestIds),
     mechChromaIds: uniqueStrings(src.mechChromaIds),
+    weaponSkinIds: uniqueStrings(src.weaponSkinIds),
+    weaponSkinLoadout: stringRecord(src.weaponSkinLoadout),
   };
 }
 
@@ -897,6 +913,47 @@ export async function revokeAccountMechChroma(
   const cosmetics = await loadAccountCosmetics(accountId);
   const mechChromaIds = cosmetics.mechChromaIds.filter((id) => id !== chromaId);
   return saveAccountCosmetics(accountId, { ...cosmetics, mechChromaIds });
+}
+
+/** Additive union of owned weapon-skin ids (Claudium spend grant + the
+ *  economy-service ownership reconcile). A single atomic jsonb_set on the one
+ *  key: unlike the read-modify-write helpers above, a concurrent quest or
+ *  chroma save can never clobber this write (and vice versa), which matters
+ *  because grants also fire from HTTP store opens, off the session flow. */
+export async function grantAccountWeaponSkins(
+  accountId: number,
+  skinIds: string[],
+): Promise<AccountCosmetics> {
+  const res = await pool.query(
+    `UPDATE accounts SET cosmetics = jsonb_set(
+       COALESCE(cosmetics, '{}'::jsonb), '{weaponSkinIds}',
+       (SELECT COALESCE(jsonb_agg(to_jsonb(v)), '[]'::jsonb) FROM (
+          SELECT DISTINCT v FROM (
+            SELECT jsonb_array_elements_text(
+              COALESCE(cosmetics -> 'weaponSkinIds', '[]'::jsonb)) AS v
+            UNION ALL
+            SELECT unnest($2::text[])
+          ) merged
+        ) uniq))
+     WHERE id = $1 RETURNING cosmetics`,
+    [accountId, skinIds.filter((id) => id)],
+  );
+  return normalizeAccountCosmetics(res.rows[0]?.cosmetics);
+}
+
+/** Replace the applied-skin-per-weapon-type loadout (attach/detach). Atomic
+ *  jsonb_set on the one key, same reasoning as grantAccountWeaponSkins. */
+export async function setAccountWeaponSkinLoadout(
+  accountId: number,
+  loadout: Record<string, string>,
+): Promise<AccountCosmetics> {
+  const res = await pool.query(
+    `UPDATE accounts SET cosmetics = jsonb_set(
+       COALESCE(cosmetics, '{}'::jsonb), '{weaponSkinLoadout}', $2::jsonb)
+     WHERE id = $1 RETURNING cosmetics`,
+    [accountId, JSON.stringify(loadout)],
+  );
+  return normalizeAccountCosmetics(res.rows[0]?.cosmetics);
 }
 
 function cleanMetadataText(value: string | null | undefined, max: number): string | null {
