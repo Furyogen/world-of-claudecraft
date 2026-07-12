@@ -110,7 +110,8 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.wocStore.confirmPurchase': '購買',
   'hudChrome.wocStore.armoryEyebrow': '第一賽季',
   'hudChrome.wocStore.armoryTitle': '兵器庫',
-  'hudChrome.wocStore.armoryBody': '第一賽季兵器庫限定武器外觀。全帳號通用，純裝飾性，周圍所有玩家都能看到。',
+  'hudChrome.wocStore.armoryBody':
+    '第一賽季兵器庫限定武器外觀。全帳號通用，純裝飾性，周圍所有玩家都能看到。',
   'hudChrome.wocStore.collectionLine': '{collection}系列',
   'hudChrome.wocStore.seasonOne': '第一賽季',
   'hudChrome.wocStore.rarity.uncommon': '優秀',

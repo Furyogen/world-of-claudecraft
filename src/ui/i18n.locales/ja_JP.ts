@@ -113,7 +113,8 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.wocStore.confirmPurchase': '購入',
   'hudChrome.wocStore.armoryEyebrow': 'シーズン1',
   'hudChrome.wocStore.armoryTitle': '武器庫',
-  'hudChrome.wocStore.armoryBody': 'シーズン1武器庫の限定武器スキン。アカウント共有の純粋な装飾で、周囲のプレイヤー全員に表示されます。',
+  'hudChrome.wocStore.armoryBody':
+    'シーズン1武器庫の限定武器スキン。アカウント共有の純粋な装飾で、周囲のプレイヤー全員に表示されます。',
   'hudChrome.wocStore.collectionLine': '{collection}コレクション',
   'hudChrome.wocStore.seasonOne': 'シーズン1',
   'hudChrome.wocStore.rarity.uncommon': 'アンコモン',
