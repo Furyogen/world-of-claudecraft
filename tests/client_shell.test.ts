@@ -2096,7 +2096,7 @@ describe('client HTML shell', () => {
       /buildDefaultFormBar\(\s*this\.formKitAbilityIds\(this\.activeHotbarForm\),\s*Hud\.BAR_ABILITY_SLOTS,\s*\)/,
     );
     expect(hudTs).toContain('if (this.isStealthHotbarForm()) {');
-    expect(hudTs).toContain('this.loadStealthSlotMap(parsed, stored);');
+    expect(hudTs).toContain('this.loadStealthSlotMap(parsed, stored, storedRaw);');
     expect(hudTs).toMatch(/Array\.from\(\{ length: Hud\.BAR_ABILITY_SLOTS \}, \(\) => null\)/);
     expect(hudTs).not.toContain('fallbackForm');
   });
