@@ -1,6 +1,7 @@
 import { existsSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
+import { KAYKIT_HAND_GRIPS, KAYKIT_WEAPON_ACCESSORY } from '../src/render/characters/assets';
 import {
   itemHeldModelUrl,
   mechHeldWeaponOverride,
@@ -29,6 +30,32 @@ describe('held weapon models', () => {
     expect(itemHeldModelUrl('chest_armor_not_a_weapon')).toBeNull();
     expect(itemHeldModelUrl(null)).toBeNull();
     expect(itemHeldModelUrl(undefined)).toBeNull();
+  });
+
+  it('uses KayKit authored per-variant left-hand shield seats', () => {
+    const seats = [
+      [
+        'shield_round',
+        'Round_Shield',
+        { position: [0, 0.017, 0.1771], quaternion: [0, 0, 0, 1], scale: 0.4413 },
+      ],
+      [
+        'shield_square',
+        'Rectangle_Shield',
+        { position: [0, 0.017, 0.1617], quaternion: [0, 0, 0, 1], scale: 0.5964 },
+      ],
+      [
+        'shield_badge',
+        'Badge_Shield',
+        { position: [0, -0.0123, 0.1341], quaternion: [0, 0, 0, 1], scale: 0.5108 },
+      ],
+    ] as const;
+
+    for (const [file, node, grip] of seats) {
+      expect(KAYKIT_WEAPON_ACCESSORY[file]).toBe(node);
+      expect(KAYKIT_HAND_GRIPS[node].l).toEqual(grip);
+    }
+    expect(KAYKIT_HAND_GRIPS).not.toHaveProperty('Shield');
   });
 
   // Every weapon variant must belong to a family that has a hand-grip mapping in

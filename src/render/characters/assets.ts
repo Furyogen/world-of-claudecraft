@@ -36,7 +36,7 @@ type HandGrip = {
 // KayKit adventurer standalone weapon glbs ship a left-hand mesh offset on a
 // lone child node. handslot.r/l children in the character glbs carry the
 // authored grip — copy those (or this fallback table) after flattening.
-const KAYKIT_WEAPON_ACCESSORY: Record<string, string> = {
+export const KAYKIT_WEAPON_ACCESSORY: Record<string, string> = {
   axe_1handed: '1H_Axe',
   axe_2handed: '2H_Axe',
   crossbow_1handed: '1H_Crossbow',
@@ -118,7 +118,7 @@ const VARIANT_GRIPS: Record<string, VariantGrip> = {
   VAR_WAND: { lift: 0.04, maxHeight: 1.2 },
 };
 
-const KAYKIT_HAND_GRIPS: Record<string, { r: HandGrip; l?: HandGrip }> = {
+export const KAYKIT_HAND_GRIPS: Record<string, { r: HandGrip; l?: HandGrip }> = {
   '1H_Axe': {
     r: { position: [0.231697, 0.382471, 0], quaternion: [0, 1, 0, 0], scale: 0.622211 },
     l: { position: [-0.231697, 0.382471, 0], quaternion: [0, 0, 0, 1], scale: 0.622211 },
