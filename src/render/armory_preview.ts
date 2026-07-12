@@ -121,11 +121,15 @@ export function createArmoryPreview(
 
   // Weapon-mode rig: the skin alone on a turntable, with its showcase extras.
   const weaponGroup = new THREE.Group();
-  weaponGroup.position.set(0, 1.05, 0);
   scene.add(weaponGroup);
   let weaponModel: THREE.Object3D | null = null;
   let weaponVfx: WeaponVfxHandle | null = null;
   let weaponExtras: THREE.Object3D | null = null;
+  // Loot-inspect float state (mirrors the offline inspector's grounded showcase).
+  let weaponFloat: { bob: number; spin: number; lift: number } | null = null;
+  let weaponFloatBase = 0;
+  let weaponFloatTime = 0;
+  let weaponTargetH = 2.0;
 
   let mode: ArmoryPreviewMode = 'character';
   let sceneKey: ArmorySceneKey = 'day';
@@ -139,8 +143,12 @@ export function createArmoryPreview(
       camera.position.set(0, 1.5, 5.4);
       camera.lookAt(0, 1.25, 0);
     } else {
-      camera.position.set(0, 1.55, 3.1);
-      camera.lookAt(0, 1.05, 0);
+      // Frame the grounded, normalized model (weaponTargetH tall, hovering by
+      // the tier float lift), matching the offline inspector's showcase: the
+      // whole blade plus the ground pool stay in view at the 35 degree fov.
+      const top = weaponTargetH + (weaponFloat?.lift ?? 0) + 0.15;
+      camera.position.set(0, top * 0.56, top * 1.8);
+      camera.lookAt(0, top * 0.5, 0);
     }
   }
 
@@ -179,6 +187,7 @@ export function createArmoryPreview(
       weaponModel.removeFromParent();
       weaponModel = null;
     }
+    weaponFloat = null;
   }
 
   function buildWeaponRig(): void {
@@ -186,21 +195,32 @@ export function createArmoryPreview(
     if (!skinId) return;
     weaponModel = weaponSkinDisplayModel(skinId);
     if (!weaponModel) return;
-    // Center the model on the turntable: held models origin at the grip, so
-    // lift by half the bounds to spin around the visual middle.
-    const bounds = new THREE.Box3().setFromObject(weaponModel);
-    const center = bounds.getCenter(new THREE.Vector3());
-    weaponModel.position.sub(center);
-    weaponGroup.add(weaponModel);
     const def = WEAPON_SKINS[skinId];
     const spec = def ? WEAPON_VFX[def.model] : null;
+    // Normalize exactly like the offline inspector's grounded showcase (scale
+    // to the family display height, center x/z, ground min.y at 0) so the
+    // weapon-to-rig-to-pool arrangement is 1:1 with what the artist tuned.
+    weaponTargetH = def?.weaponType === 'staff' ? 2.3 : def?.weaponType === 'dagger' ? 1.3 : 2.0;
+    const box = new THREE.Box3().setFromObject(weaponModel);
+    const h = box.max.y - box.min.y || 1;
+    weaponModel.scale.setScalar(weaponTargetH / h);
+    weaponModel.updateMatrixWorld(true);
+    const grounded = new THREE.Box3().setFromObject(weaponModel);
+    const center = grounded.getCenter(new THREE.Vector3());
+    weaponModel.position.x -= center.x;
+    weaponModel.position.z -= center.z;
+    weaponModel.position.y -= grounded.min.y;
+    weaponFloatBase = weaponModel.position.y;
+    weaponFloatTime = 0;
+    weaponFloat = spec ? (TIERS[spec.tier]?.float ?? null) : null;
+    weaponGroup.add(weaponModel);
     if (def && spec) {
       weaponVfx = createWeaponVfx(weaponModel, spec, { grounded: true });
       weaponVfx.setBackdropVisible(false);
       weaponVfx.setTuning(weaponVfxTuningFor(def.model, spec.tier));
       weaponVfx.setPixelScale(pixelHeight());
       weaponExtras = weaponVfx.sceneExtras;
-      weaponExtras.position.set(0, -weaponGroup.position.y + 0.02, 0);
+      weaponExtras.position.set(0, 0.02, 0);
       weaponGroup.add(weaponExtras);
     }
   }
@@ -224,6 +244,15 @@ export function createArmoryPreview(
       visual.updateWeaponVfx(dt);
     } else {
       weaponGroup.rotation.y += dt * 0.55;
+      // The offline inspector's loot float: a slow hover above the pool. Same
+      // formula (lift + half-sine bob); the turntable stands in for its spin.
+      if (weaponModel && weaponFloat) {
+        weaponFloatTime += dt;
+        weaponModel.position.y =
+          weaponFloatBase +
+          weaponFloat.lift +
+          weaponFloat.bob * (1 + Math.sin(weaponFloatTime * 1.1)) * 0.5;
+      }
       weaponVfx?.update(dt);
     }
     composer.render();
@@ -254,6 +283,9 @@ export function createArmoryPreview(
       visual.setWeaponVfxPixelScale(pixelHeight());
       buildWeaponRig();
       applyScene();
+      // The display height is per weapon family: re-frame in weapon mode so a
+      // dagger-to-sword swap does not keep the old framing.
+      frameCamera();
     },
     setMode(next: ArmoryPreviewMode): void {
       if (disposed || next === mode) return;
