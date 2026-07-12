@@ -1553,10 +1553,13 @@ export const da_DK: EnTranslations = {
     "social": {
       "lastSeen": "Sidst set: {when}",
       "lastSeenNever": "aldrig",
+      "ignoredTab": "Ignorerede",
       "blockedTab": "Blokerede",
-      "ignoredSection": "Ignorerede",
-      "blockedSection": "Blokerede",
-      "blockedEmpty": "Du har ikke ignoreret eller blokeret nogen.",
+      "ignoredEmpty": "Du ignorerer ingen.",
+      "blockedEmpty": "Du har ikke blokeret nogen.",
+      "blockSearchPlaceholder": "Spillernavn",
+      "blockAction": "Blokér",
+      "nowBlocking": "{name} blokeret.",
       "stopBlockingTitle": "Fjern blokering af {name}"
     },
     "gathering": {

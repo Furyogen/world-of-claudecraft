@@ -135,8 +135,8 @@ describe('per-tab row models', () => {
   });
 
   it('derives the two player tiers from their OWN lists, never from each other', () => {
-    // The Blocked tab renders both tiers as separate sections. A cross-wire that
-    // fed blocks into the Ignored section (or vice versa) trips on either row set.
+    // The Ignored and Blocked tabs render one tier each. A cross-wire that fed
+    // blocks into the Ignored tab (or vice versa) trips on either row set.
     expect(blockRows(SOCIAL).map((r) => r.name)).toEqual(['Spammer']);
     expect(blockRows(null)).toEqual([]);
     expect(ignoreRows(SOCIAL).map((r) => r.name)).toEqual(['Chatterbox']);
@@ -268,7 +268,7 @@ describe('ClientWorld-vs-Sim parity', () => {
   it('yields identical row + signature models from a Sim-shaped and a mirror-shaped source', () => {
     const sim = simShaped();
     const cli = clientShaped();
-    for (const tab of ['friends', 'guild', 'ignore', 'raid'] as SocialTab[]) {
+    for (const tab of ['friends', 'guild', 'ignore', 'block', 'raid'] as SocialTab[]) {
       expect(socialStructSig(tab, sim.social, sim.party)).toBe(
         socialStructSig(tab, cli.social, cli.party),
       );

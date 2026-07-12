@@ -79,7 +79,7 @@ afterEach(() => {
 });
 
 describe('SocialWindow: frame adoption', () => {
-  it('stamps the window-frame chrome on an INNER mount with a 4-tab rail', () => {
+  it('stamps the window-frame chrome on an INNER mount with a 5-tab rail', () => {
     const deps = fakeDeps();
     const w = new SocialWindow(deps);
     w.toggle();
@@ -92,11 +92,13 @@ describe('SocialWindow: frame adoption', () => {
     expect(frame?.querySelector('.window-titlebar')).not.toBeNull();
     expect(frame?.querySelector('.window-body')).not.toBeNull();
     expect(frame?.querySelector('[data-window-close]')).not.toBeNull();
-    // The four tabs live on the frame's tab rail (role=tablist / role=tab).
+    // The five tabs live on the frame's tab rail (role=tablist / role=tab):
+    // Friends, Guild, Ignored, Blocked, Raid. Ignored (chat-only) and Blocked
+    // (the heavy tier) are deliberately separate tabs, never one merged list.
     const rail = frame?.querySelector('.tab-rail[role="tablist"]');
     expect(rail).not.toBeNull();
     const tabs = rail?.querySelectorAll('[role="tab"]');
-    expect(tabs?.length).toBe(4);
+    expect(tabs?.length).toBe(5);
   });
 
   it('preserves the .open class visibility mechanism (never style.display)', () => {

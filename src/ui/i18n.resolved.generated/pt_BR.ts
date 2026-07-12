@@ -1553,10 +1553,13 @@ export const pt_BR: EnTranslations = {
     "social": {
       "lastSeen": "Visto por último: {when}",
       "lastSeenNever": "nunca",
+      "ignoredTab": "Ignorados",
       "blockedTab": "Bloqueados",
-      "ignoredSection": "Ignorados",
-      "blockedSection": "Bloqueados",
-      "blockedEmpty": "Você não ignorou nem bloqueou ninguém.",
+      "ignoredEmpty": "Você não está ignorando ninguém.",
+      "blockedEmpty": "Você não bloqueou ninguém.",
+      "blockSearchPlaceholder": "Nome do jogador",
+      "blockAction": "Bloquear",
+      "nowBlocking": "{name} bloqueado.",
       "stopBlockingTitle": "Parar de bloquear {name}"
     },
     "gathering": {

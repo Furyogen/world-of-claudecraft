@@ -1553,10 +1553,13 @@ export const sv_SE: EnTranslations = {
     "social": {
       "lastSeen": "Senast sedd: {when}",
       "lastSeenNever": "aldrig",
+      "ignoredTab": "Ignorerade",
       "blockedTab": "Blockerade",
-      "ignoredSection": "Ignorerade",
-      "blockedSection": "Blockerade",
-      "blockedEmpty": "Du har inte ignorerat eller blockerat någon.",
+      "ignoredEmpty": "Du ignorerar ingen.",
+      "blockedEmpty": "Du har inte blockerat någon.",
+      "blockSearchPlaceholder": "Spelarnamn",
+      "blockAction": "Blockera",
+      "nowBlocking": "{name} blockerad.",
       "stopBlockingTitle": "Avblockera {name}"
     },
     "gathering": {

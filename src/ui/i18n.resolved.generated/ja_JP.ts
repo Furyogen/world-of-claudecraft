@@ -1553,10 +1553,13 @@ export const ja_JP: EnTranslations = {
     "social": {
       "lastSeen": "最終ログイン: {when}",
       "lastSeenNever": "なし",
+      "ignoredTab": "無視中",
       "blockedTab": "ブロック",
-      "ignoredSection": "無視中",
-      "blockedSection": "ブロック",
-      "blockedEmpty": "無視またはブロックした相手はいません。",
+      "ignoredEmpty": "誰も無視していません。",
+      "blockedEmpty": "誰もブロックしていません。",
+      "blockSearchPlaceholder": "プレイヤー名",
+      "blockAction": "ブロック",
+      "nowBlocking": "{name} をブロックしました。",
       "stopBlockingTitle": "{name} のブロックを解除"
     },
     "gathering": {

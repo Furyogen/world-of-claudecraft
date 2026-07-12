@@ -1553,10 +1553,13 @@ export const nl_NL: EnTranslations = {
     "social": {
       "lastSeen": "Laatst gezien: {when}",
       "lastSeenNever": "nooit",
+      "ignoredTab": "Genegeerd",
       "blockedTab": "Geblokkeerd",
-      "ignoredSection": "Genegeerd",
-      "blockedSection": "Geblokkeerd",
-      "blockedEmpty": "Je hebt niemand genegeerd of geblokkeerd.",
+      "ignoredEmpty": "Je negeert niemand.",
+      "blockedEmpty": "Je hebt niemand geblokkeerd.",
+      "blockSearchPlaceholder": "Spelersnaam",
+      "blockAction": "Blokkeren",
+      "nowBlocking": "{name} geblokkeerd.",
       "stopBlockingTitle": "{name} deblokkeren"
     },
     "gathering": {

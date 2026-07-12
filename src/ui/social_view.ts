@@ -20,7 +20,7 @@ import type {
   SocialInfo,
 } from '../world_api';
 
-export type SocialTab = 'friends' | 'guild' | 'ignore' | 'raid';
+export type SocialTab = 'friends' | 'guild' | 'ignore' | 'block' | 'raid';
 
 /** Structural identity of the panel: which tab, online or not, and the guild
  *  membership/rank (which changes the footer) plus the raid roster shape.

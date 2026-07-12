@@ -1553,10 +1553,13 @@ export const id_ID: EnTranslations = {
     "social": {
       "lastSeen": "Terakhir terlihat: {when}",
       "lastSeenNever": "tidak pernah",
+      "ignoredTab": "Diabaikan",
       "blockedTab": "Diblokir",
-      "ignoredSection": "Diabaikan",
-      "blockedSection": "Diblokir",
-      "blockedEmpty": "Kamu belum mengabaikan atau memblokir siapa pun.",
+      "ignoredEmpty": "Kamu tidak mengabaikan siapa pun.",
+      "blockedEmpty": "Kamu belum memblokir siapa pun.",
+      "blockSearchPlaceholder": "Nama pemain",
+      "blockAction": "Blokir",
+      "nowBlocking": "{name} diblokir.",
       "stopBlockingTitle": "Buka blokir {name}"
     },
     "gathering": {

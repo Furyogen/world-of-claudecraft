@@ -1553,10 +1553,13 @@ export const tr_TR: EnTranslations = {
     "social": {
       "lastSeen": "Son görülme: {when}",
       "lastSeenNever": "hiç",
+      "ignoredTab": "Yok sayılanlar",
       "blockedTab": "Engellenenler",
-      "ignoredSection": "Yok sayılanlar",
-      "blockedSection": "Engellenenler",
-      "blockedEmpty": "Kimseyi yok saymadın veya engellemedin.",
+      "ignoredEmpty": "Kimseyi yok saymıyorsun.",
+      "blockedEmpty": "Kimseyi engellemedin.",
+      "blockSearchPlaceholder": "Oyuncu adı",
+      "blockAction": "Engelle",
+      "nowBlocking": "{name} engellendi.",
       "stopBlockingTitle": "{name} engelini kaldır"
     },
     "gathering": {

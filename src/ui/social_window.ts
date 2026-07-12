@@ -63,7 +63,8 @@ const SOCIAL_FRAME: WindowFrameDescriptor = {
   tabs: [
     { id: 'friends', labelKey: 'hud.social.friendsTab' },
     { id: 'guild', labelKey: 'hud.social.guildTab' },
-    { id: 'ignore', labelKey: 'hudChrome.social.blockedTab' },
+    { id: 'ignore', labelKey: 'hudChrome.social.ignoredTab' },
+    { id: 'block', labelKey: 'hudChrome.social.blockedTab' },
     { id: 'raid', labelKey: 'hud.social.raidTab' },
   ],
 };
@@ -343,7 +344,9 @@ export class SocialWindow {
             ? this.friendsHtml()
             : this.tab === 'guild'
               ? this.guildHtml()
-              : this.ignoreHtml();
+              : this.tab === 'block'
+                ? this.blockHtml()
+                : this.ignoreHtml();
   }
 
   // The single delegated row handler (click + whisper). Resolves the nearest
@@ -418,43 +421,42 @@ export class SocialWindow {
       .join('');
   }
 
-  // Two PLAYER tiers share this tab: IGNORED (chat-only) and BLOCKED (also kills
-  // invites, whispers, mail and /who). They are separate lists on the server and
-  // are shown as separate sections so a player can tell at a glance which one
-  // they applied. (Neither is the admin "mute".)
-  private ignoreHtml(): string {
-    const social = this.deps.world().socialInfo;
-    const ignored = ignoreRows(social);
-    const blocked = blockRows(social);
-    if (ignored.length === 0 && blocked.length === 0)
-      return `<div class="soc-empty">${esc(t('hudChrome.social.blockedEmpty'))}</div>`;
-
-    const section = (
-      heading: string,
-      rows: { name: string }[],
-      act: 'unignore' | 'unblock',
-      title: (name: string) => string,
-    ): string =>
-      rows.length === 0
-        ? ''
-        : `<div class="soc-section-title">${esc(heading)}</div>` +
-          rows
-            .map(
-              (r) =>
-                `<div class="soc-row">` +
-                `<span class="soc-name">${esc(r.name)}</span>` +
-                `<span class="soc-actions" style="margin-left:auto"><button type="button" class="soc-x" data-act="${act}" data-name="${esc(r.name)}" title="${esc(title(r.name))}">${svgIcon('close')}</button></span>` +
-                `</div>`,
-            )
-            .join('');
-
-    return (
-      section(t('hudChrome.social.ignoredSection'), ignored, 'unignore', (name) =>
-        t('hud.social.stopIgnoringTitle', { name }),
-      ) +
-      section(t('hudChrome.social.blockedSection'), blocked, 'unblock', (name) =>
-        t('hudChrome.social.stopBlockingTitle', { name }),
+  // The two PLAYER tiers get a tab each, so a row can never be mistaken for the
+  // other tier. IGNORED is chat-only; BLOCKED also kills whispers, invites, mail
+  // and /who. (Neither is the admin "mute".)
+  private listHtml(
+    rows: { name: string }[],
+    emptyKey: 'hudChrome.social.ignoredEmpty' | 'hudChrome.social.blockedEmpty',
+    act: 'unignore' | 'unblock',
+    title: (name: string) => string,
+  ): string {
+    if (rows.length === 0) return `<div class="soc-empty">${esc(t(emptyKey))}</div>`;
+    return rows
+      .map(
+        (r) =>
+          `<div class="soc-row">` +
+          `<span class="soc-name">${esc(r.name)}</span>` +
+          `<span class="soc-actions" style="margin-left:auto"><button type="button" class="soc-x" data-act="${act}" data-name="${esc(r.name)}" title="${esc(title(r.name))}">${svgIcon('close')}</button></span>` +
+          `</div>`,
       )
+      .join('');
+  }
+
+  private ignoreHtml(): string {
+    return this.listHtml(
+      ignoreRows(this.deps.world().socialInfo),
+      'hudChrome.social.ignoredEmpty',
+      'unignore',
+      (name) => t('hud.social.stopIgnoringTitle', { name }),
+    );
+  }
+
+  private blockHtml(): string {
+    return this.listHtml(
+      blockRows(this.deps.world().socialInfo),
+      'hudChrome.social.blockedEmpty',
+      'unblock',
+      (name) => t('hudChrome.social.stopBlockingTitle', { name }),
     );
   }
 
@@ -553,9 +555,18 @@ export class SocialWindow {
     if (this.tab === 'ignore')
       return this.addRow(
         'ignore',
-        'block-add',
+        'ignore-add',
         t('hud.social.ignoreSearchPlaceholder'),
         t('hud.social.ignoreAction'),
+        16,
+        true,
+      );
+    if (this.tab === 'block')
+      return this.addRow(
+        'block',
+        'block-add',
+        t('hudChrome.social.blockSearchPlaceholder'),
+        t('hudChrome.social.blockAction'),
         16,
         true,
       );
@@ -626,7 +637,8 @@ export class SocialWindow {
       '';
     const submit = (act: string | undefined): void => {
       if (act === 'friend-add') void this.resolveAndAct('friend', field('friend'));
-      else if (act === 'block-add') void this.resolveAndAct('ignore', field('ignore'));
+      else if (act === 'ignore-add') void this.resolveAndAct('ignore', field('ignore'));
+      else if (act === 'block-add') void this.resolveAndAct('block', field('block'));
       else if (act === 'guild-invite') void this.resolveAndAct('ginvite', field('ginvite'));
       else if (act === 'guild-create') {
         const n = field('gname');
@@ -665,8 +677,11 @@ export class SocialWindow {
     this.wireSuggest(el);
   }
 
-  private suggestKind(field: string): 'friend' | 'ignore' | 'ginvite' {
-    return field === 'friend' ? 'friend' : field === 'ignore' ? 'ignore' : 'ginvite';
+  private suggestKind(field: string): 'friend' | 'ignore' | 'block' | 'ginvite' {
+    if (field === 'friend') return 'friend';
+    if (field === 'ignore') return 'ignore';
+    if (field === 'block') return 'block';
+    return 'ginvite';
   }
 
   // Username typeahead: debounced search against same-realm characters, with
@@ -795,7 +810,7 @@ export class SocialWindow {
   // Authoritative existence check (realm-scoped) before acting, so we can give
   // clear inline "no such player" feedback instead of a silent failure.
   private async resolveAndAct(
-    kind: 'friend' | 'ignore' | 'ginvite',
+    kind: 'friend' | 'ignore' | 'block' | 'ginvite',
     rawName: string,
   ): Promise<void> {
     const name = rawName.trim();
@@ -822,9 +837,14 @@ export class SocialWindow {
       this.setNotice(t('hud.social.friendAdded', { name: exact.name }), false);
       this.clearInput('friend');
     } else if (kind === 'ignore') {
-      w.blockAdd(exact.name);
+      // the Ignored tab writes to the IGNORE list (chat-only), not the block list
+      w.ignoreAdd(exact.name);
       this.setNotice(t('hud.social.nowIgnoring', { name: exact.name }), false);
       this.clearInput('ignore');
+    } else if (kind === 'block') {
+      w.blockAdd(exact.name);
+      this.setNotice(t('hudChrome.social.nowBlocking', { name: exact.name }), false);
+      this.clearInput('block');
     } else {
       w.guildInvite(exact.name);
       this.setNotice(t('hud.social.guildInvited', { name: exact.name }), false);

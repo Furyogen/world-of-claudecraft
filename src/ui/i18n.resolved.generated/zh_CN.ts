@@ -1553,10 +1553,13 @@ export const zh_CN: EnTranslations = {
     "social": {
       "lastSeen": "最后在线: {when}",
       "lastSeenNever": "从未",
+      "ignoredTab": "已忽略",
       "blockedTab": "屏蔽",
-      "ignoredSection": "已忽略",
-      "blockedSection": "屏蔽",
-      "blockedEmpty": "你还没有忽略或屏蔽任何人。",
+      "ignoredEmpty": "你没有忽略任何人。",
+      "blockedEmpty": "你没有屏蔽任何人。",
+      "blockSearchPlaceholder": "玩家名称",
+      "blockAction": "屏蔽",
+      "nowBlocking": "已屏蔽 {name}。",
       "stopBlockingTitle": "取消对 {name} 的屏蔽"
     },
     "gathering": {

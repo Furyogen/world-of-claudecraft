@@ -4084,7 +4084,9 @@
   /* ---------- social ---------- */
   /* social: friends / guild / ignore */
   #social-window {
-    width: 348px;
+    /* Wider than the other windows: the tab rail now carries FIVE tabs
+       (Friends, Guild, Ignored, Blocked, Raid) and the labels must not wrap. */
+    width: 420px;
     height: 560px;
     max-height: calc(100vh - 24px);
     flex-direction: column;
@@ -4104,10 +4106,20 @@
     gap: 4px;
     margin: 6px 0 8px;
     flex: none;
+    /* FIVE tabs now (Friends, Guild, Ignored, Blocked, Raid) and the labels are
+       locale-sized: Russian "Игнорируемые" is far wider than "Ignored". Tabs grow
+       to fill when there is room but never shrink below their text, and the rail
+       scrolls rather than clipping a label in any locale. */
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .soc-tabs::-webkit-scrollbar {
+    display: none;
   }
   .soc-tab {
-    flex: 1;
-    padding: 7px 0;
+    flex: 1 0 auto;
+    white-space: nowrap;
+    padding: 7px 8px;
     font-size: 13px;
     font-family: var(--title-font);
     color: var(--color-text-muted);
@@ -4354,21 +4366,6 @@
   }
   .soc-empty-action {
     margin-top: 12px;
-  }
-  /* Section heading in the Ignore tab, which lists the two tiers (Muted, Blocked)
-     as separate groups. */
-  .soc-section-title {
-    font-family: var(--title-font);
-    color: var(--gold);
-    font-size: 12px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    padding: 8px 4px 4px;
-    border-bottom: 1px solid var(--color-border-subtle);
-    margin-bottom: 4px;
-  }
-  .soc-section-title:first-child {
-    padding-top: 2px;
   }
   .soc-guild-head {
     font-family: var(--title-font);

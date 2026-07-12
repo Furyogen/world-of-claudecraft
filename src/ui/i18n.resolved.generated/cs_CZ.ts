@@ -1553,10 +1553,13 @@ export const cs_CZ: EnTranslations = {
     "social": {
       "lastSeen": "Naposledy viděn(a): {when}",
       "lastSeenNever": "nikdy",
+      "ignoredTab": "Ignorovaní",
       "blockedTab": "Zablokovaní",
-      "ignoredSection": "Ignorovaní",
-      "blockedSection": "Zablokovaní",
-      "blockedEmpty": "Nikoho jsi neignoroval ani nezablokoval.",
+      "ignoredEmpty": "Nikoho neignoruješ.",
+      "blockedEmpty": "Nikoho jsi nezablokoval.",
+      "blockSearchPlaceholder": "Jméno hráče",
+      "blockAction": "Zablokovat",
+      "nowBlocking": "{name} zablokován.",
       "stopBlockingTitle": "Odblokovat hráče {name}"
     },
     "gathering": {

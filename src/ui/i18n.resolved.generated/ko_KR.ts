@@ -1553,10 +1553,13 @@ export const ko_KR: EnTranslations = {
     "social": {
       "lastSeen": "마지막 접속: {when}",
       "lastSeenNever": "없음",
+      "ignoredTab": "무시됨",
       "blockedTab": "차단",
-      "ignoredSection": "무시됨",
-      "blockedSection": "차단",
-      "blockedEmpty": "무시하거나 차단한 사람이 없습니다.",
+      "ignoredEmpty": "아무도 무시하고 있지 않습니다.",
+      "blockedEmpty": "아무도 차단하지 않았습니다.",
+      "blockSearchPlaceholder": "플레이어 이름",
+      "blockAction": "차단",
+      "nowBlocking": "{name} 님을 차단했습니다.",
       "stopBlockingTitle": "{name} 님 차단 해제"
     },
     "gathering": {

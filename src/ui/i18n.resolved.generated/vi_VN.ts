@@ -1553,10 +1553,13 @@ export const vi_VN: EnTranslations = {
     "social": {
       "lastSeen": "Lần cuối trực tuyến: {when}",
       "lastSeenNever": "chưa bao giờ",
+      "ignoredTab": "Đã bỏ qua",
       "blockedTab": "Đã chặn",
-      "ignoredSection": "Đã bỏ qua",
-      "blockedSection": "Đã chặn",
-      "blockedEmpty": "Bạn chưa bỏ qua hoặc chặn ai.",
+      "ignoredEmpty": "Bạn không bỏ qua ai.",
+      "blockedEmpty": "Bạn chưa chặn ai.",
+      "blockSearchPlaceholder": "Tên người chơi",
+      "blockAction": "Chặn",
+      "nowBlocking": "Đã chặn {name}.",
       "stopBlockingTitle": "Bỏ chặn {name}"
     },
     "gathering": {

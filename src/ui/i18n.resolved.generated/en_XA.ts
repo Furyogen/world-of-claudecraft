@@ -1553,10 +1553,13 @@ export const en_XA: EnTranslations = {
     "social": {
       "lastSeen": "[Ļášţ šééñ: {when}]",
       "lastSeenNever": "[ñéʋéŕ]",
+      "ignoredTab": "[Íĝñóŕéð]",
       "blockedTab": "[Ɓļóçķéð]",
-      "ignoredSection": "[Íĝñóŕéð]",
-      "blockedSection": "[Ɓļóçķéð]",
-      "blockedEmpty": "[Ýóú ĥáʋé ñóţ íĝñóŕéð óŕ ƀļóçķéð áñýóñé.]",
+      "ignoredEmpty": "[Ýóú áŕé ñóţ íĝñóŕíñĝ áñýóñé.]",
+      "blockedEmpty": "[Ýóú ĥáʋé ñóţ ƀļóçķéð áñýóñé.]",
+      "blockSearchPlaceholder": "[Þļáýéŕ ñáɱé]",
+      "blockAction": "[Ɓļóçķ]",
+      "nowBlocking": "[Ɓļóçķéð {name}.]",
       "stopBlockingTitle": "[Šţóþ ƀļóçķíñĝ {name}]"
     },
     "gathering": {

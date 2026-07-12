@@ -1553,10 +1553,13 @@ export const ru_RU: EnTranslations = {
     "social": {
       "lastSeen": "Последний вход: {when}",
       "lastSeenNever": "никогда",
+      "ignoredTab": "Игнорируемые",
       "blockedTab": "Заблокированные",
-      "ignoredSection": "Игнорируемые",
-      "blockedSection": "Заблокированные",
-      "blockedEmpty": "Вы никого не игнорируете и не блокируете.",
+      "ignoredEmpty": "Вы никого не игнорируете.",
+      "blockedEmpty": "Вы никого не заблокировали.",
+      "blockSearchPlaceholder": "Имя персонажа",
+      "blockAction": "Заблокировать",
+      "nowBlocking": "{name} заблокирован.",
       "stopBlockingTitle": "Разблокировать {name}"
     },
     "gathering": {
