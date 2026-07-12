@@ -571,8 +571,8 @@ export const cs_CZ: EnTranslations = {
       "interfaceModeDesktop": "Desktop",
       "interfaceModeTouch": "Dotyk",
       "interfaceModeNote": "Automatika vybere desktopové nebo dotykové ovládání podle zařízení. Zvol Desktop pro vynucení klávesnice a myši (užitečné na tabletu s klávesnicí), nebo Dotyk pro ovládání na obrazovce.",
-      "voiceChatEnabled": "Voice Chat (Proximity)",
-      "voiceChatMicDenied": "Microphone access was denied. Voice chat needs it to work.",
+      "voiceChatEnabled": "Hlasový chat (blízkost)",
+      "voiceChatMicDenied": "Přístup k mikrofonu byl odepřen. Hlasový chat ho potřebuje ke své funkci.",
       "footstepSounds": "Zvuky kroků",
       "clickFeedback": "Značka kliknutí",
       "lockCursorOnRotate": "Zamknout kurzor při otáčení",
@@ -1179,7 +1179,7 @@ export const cs_CZ: EnTranslations = {
         "benefits": "Propoj Discord, získávej body za hraní a komunitní aktivitu a stoupej ve statusových stupních.",
         "error": "Discord se nepodařilo propojit. Zkus to prosím znovu.",
         "success": "Discord propojen.",
-        "joinServer": "Just join the Discord server"
+        "joinServer": "Připojit se k serveru"
       },
       "choice": {
         "title": "Pokračovat přes Discord",

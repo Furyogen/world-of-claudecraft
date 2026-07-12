@@ -1236,6 +1236,9 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.interfaceModeTouch': 'Touch',
   'hudChrome.options.interfaceModeNote':
     'Auto sceglie i controlli Desktop o Touch in base al tuo dispositivo. Scegli Desktop per forzare tastiera e mouse (utile su un tablet con tastiera), oppure Touch per i controlli a schermo.',
+  'hudChrome.options.voiceChatEnabled': 'Chat vocale (prossimità)',
+  'hudChrome.options.voiceChatMicDenied':
+    'L’accesso al microfono è stato negato. La chat vocale ne ha bisogno per funzionare.',
   'hudChrome.options.lockCursorOnRotate': 'Blocca cursore durante la rotazione',
   'hudChrome.options.keybindHelpLockCursorOnRotate':
     "Mantiene il cursore del mouse dentro la finestra mentre trascini per ruotare la telecamera, così non può raggiungere il bordo dello schermo o passare a un altro monitor. Disattiva l'opzione se preferisci un cursore libero.",
@@ -6226,6 +6229,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.guildMember': 'Membro verificato',
   'hudChrome.discord.notMember': 'Non ancora nel server',
   'hudChrome.discord.joinCta': 'Unisciti al Discord',
+  'hudChrome.discord.link.joinServer': 'Entra nel server',
   'hudChrome.discord.online': '{count} online',
   'hudChrome.discord.community': 'Comunita',
   'hudChrome.discord.rewards': 'Ricompense',

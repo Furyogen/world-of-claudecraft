@@ -5086,6 +5086,9 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.interfaceModeDesktop': 'Masaüstü',
   'hudChrome.options.interfaceModeNote':
     "Otomatik, cihazınıza göre masaüstü veya dokunmatik denetimleri seçer. Klavye ve fareyi zorlamak için Masaüstü'nü seçin (klavyeli bir tablette kullanışlıdır) ya da ekran üzeri denetimler için Dokunmatik'i seçin.",
+  'hudChrome.options.voiceChatEnabled': 'Sesli Sohbet (Yakınlık)',
+  'hudChrome.options.voiceChatMicDenied':
+    'Mikrofon erişimi reddedildi. Sesli sohbetin çalışması için buna ihtiyacı var.',
   'hudChrome.options.interfaceModeTouch': 'Dokunmatik',
   'hudChrome.options.keybindHelpLockCursorOnRotate':
     'Kamerayı döndürmek için sürüklerken fare imlecini pencerenin içinde tutar, böylece ekran kenarına ulaşamaz veya başka bir monitöre geçemez. Serbest imleç tercih ediyorsanız kapatın.',
@@ -6169,6 +6172,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.guildMember': 'Onaylı üye',
   'hudChrome.discord.notMember': 'Henüz sunucuda değil',
   'hudChrome.discord.joinCta': "Discord'a katıl",
+  'hudChrome.discord.link.joinServer': 'Sunucuya Katıl',
   'hudChrome.discord.online': '{count} çevrimiçi',
   'hudChrome.discord.community': 'Topluluk',
   'hudChrome.discord.rewards': 'Ödüller',

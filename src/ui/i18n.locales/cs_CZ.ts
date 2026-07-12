@@ -2522,6 +2522,7 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.earnTitle': 'Jak získávat body',
   'hudChrome.discord.guildMember': 'Ověřený člen',
   'hudChrome.discord.joinCta': 'Připojit se na Discord',
+  'hudChrome.discord.link.joinServer': 'Připojit se k serveru',
   'hudChrome.discord.keep.body':
     'Tvůj účet se přihlašuje přes Discord. Nastav heslo, abys se po odpojení mohl(a) dál přihlašovat uživatelským jménem.',
   'hudChrome.discord.keep.cancel': 'Zrušit',
@@ -2950,6 +2951,9 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.interfaceModeDesktop': 'Desktop',
   'hudChrome.options.interfaceModeNote':
     'Automatika vybere desktopové nebo dotykové ovládání podle zařízení. Zvol Desktop pro vynucení klávesnice a myši (užitečné na tabletu s klávesnicí), nebo Dotyk pro ovládání na obrazovce.',
+  'hudChrome.options.voiceChatEnabled': 'Hlasový chat (blízkost)',
+  'hudChrome.options.voiceChatMicDenied':
+    'Přístup k mikrofonu byl odepřen. Hlasový chat ho potřebuje ke své funkci.',
   'hudChrome.options.interfaceModeTouch': 'Dotyk',
   'hudChrome.options.itemLevelLine': 'Úroveň předmětu {level}',
   'hudChrome.options.itemScoreLine': 'Skóre {score}',

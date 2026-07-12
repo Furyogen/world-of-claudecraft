@@ -5064,6 +5064,9 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.interfaceModeDesktop': 'Komputer',
   'hudChrome.options.interfaceModeNote':
     'Tryb Auto dobiera sterowanie komputerowe lub dotykowe na podstawie urządzenia. Wybierz Komputer, aby wymusić klawiaturę i mysz (przydatne na tablecie z klawiaturą), lub Dotyk, aby korzystać ze sterowania ekranowego.',
+  'hudChrome.options.voiceChatEnabled': 'Czat głosowy (w pobliżu)',
+  'hudChrome.options.voiceChatMicDenied':
+    'Odmówiono dostępu do mikrofonu. Czat głosowy potrzebuje go do działania.',
   'hudChrome.options.interfaceModeTouch': 'Dotyk',
   'hudChrome.options.keybindHelpLockCursorOnRotate':
     'Utrzymuje kursor myszy wewnątrz okna podczas przeciągania w celu obracania kamery, aby nie mógł dotrzeć do krawędzi ekranu ani przejść na inny monitor. Wyłącz, jeśli wolisz swobodny kursor.',
@@ -6161,6 +6164,7 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.guildMember': 'Zweryfikowany członek',
   'hudChrome.discord.notMember': 'Jeszcze nie na serwerze',
   'hudChrome.discord.joinCta': 'Dołącz do Discorda',
+  'hudChrome.discord.link.joinServer': 'Dołącz do serwera',
   'hudChrome.discord.online': '{count} online',
   'hudChrome.discord.community': 'Społeczność',
   'hudChrome.discord.rewards': 'Nagrody',

@@ -571,8 +571,8 @@ export const tr_TR: EnTranslations = {
       "interfaceModeDesktop": "Masaüstü",
       "interfaceModeTouch": "Dokunmatik",
       "interfaceModeNote": "Otomatik, cihazınıza göre masaüstü veya dokunmatik denetimleri seçer. Klavye ve fareyi zorlamak için Masaüstü'nü seçin (klavyeli bir tablette kullanışlıdır) ya da ekran üzeri denetimler için Dokunmatik'i seçin.",
-      "voiceChatEnabled": "Voice Chat (Proximity)",
-      "voiceChatMicDenied": "Microphone access was denied. Voice chat needs it to work.",
+      "voiceChatEnabled": "Sesli Sohbet (Yakınlık)",
+      "voiceChatMicDenied": "Mikrofon erişimi reddedildi. Sesli sohbetin çalışması için buna ihtiyacı var.",
       "footstepSounds": "Ayak Sesleri",
       "clickFeedback": "Tıklama İşareti",
       "lockCursorOnRotate": "Döndürürken İmleci Kilitle",
@@ -1179,7 +1179,7 @@ export const tr_TR: EnTranslations = {
         "benefits": "Oyun ve topluluk etkinliğinden puan kazanmak ve statü kademelerini tırmanmak için Discord hesabını bağla.",
         "error": "Discord bağlanamadı. Lütfen tekrar dene.",
         "success": "Discord bağlandı.",
-        "joinServer": "Just join the Discord server"
+        "joinServer": "Sunucuya Katıl"
       },
       "choice": {
         "title": "Discord ile devam et",

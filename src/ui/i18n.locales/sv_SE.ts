@@ -5027,6 +5027,9 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.interfaceModeDesktop': 'Skrivbord',
   'hudChrome.options.interfaceModeNote':
     'Auto väljer skrivbords- eller pekkontroller utifrån din enhet. Välj Skrivbord för att tvinga fram tangentbord och mus (användbart på en surfplatta med tangentbord), eller Pek för skärmkontrollerna.',
+  'hudChrome.options.voiceChatEnabled': 'Röstchatt (närhet)',
+  'hudChrome.options.voiceChatMicDenied':
+    'Åtkomst till mikrofonen nekades. Röstchatten behöver den för att fungera.',
   'hudChrome.options.interfaceModeTouch': 'Pek',
   'hudChrome.options.keybindHelpLockCursorOnRotate':
     'Håller muspekaren inuti fönstret medan du drar för att rotera kameran, så att den inte kan nå skärmkanten eller flytta till en annan skärm. Stäng av om du föredrar en fri pekare.',
@@ -6112,6 +6115,7 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.guildMember': 'Verifierad medlem',
   'hudChrome.discord.notMember': 'Inte med på servern ännu',
   'hudChrome.discord.joinCta': 'Gå med i Discord',
+  'hudChrome.discord.link.joinServer': 'Gå med i servern',
   'hudChrome.discord.online': '{count} online',
   'hudChrome.discord.community': 'Gemenskap',
   'hudChrome.discord.rewards': 'Belöningar',

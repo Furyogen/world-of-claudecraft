@@ -571,8 +571,8 @@ export const nl_NL: EnTranslations = {
       "interfaceModeDesktop": "Desktop",
       "interfaceModeTouch": "Aanraking",
       "interfaceModeNote": "Automatisch kiest desktop- of aanraakbesturing op basis van je apparaat. Kies Desktop om toetsenbord en muis af te dwingen (handig op een tablet met toetsenbord), of Aanraking voor de besturing op het scherm.",
-      "voiceChatEnabled": "Voice Chat (Proximity)",
-      "voiceChatMicDenied": "Microphone access was denied. Voice chat needs it to work.",
+      "voiceChatEnabled": "Voicechat (nabijheid)",
+      "voiceChatMicDenied": "Microfoontoegang is geweigerd. Voicechat heeft die nodig om te werken.",
       "footstepSounds": "Voetstapgeluiden",
       "clickFeedback": "Klikmarkering",
       "lockCursorOnRotate": "Aanwijzer vergrendelen tijdens draaien",
@@ -1179,7 +1179,7 @@ export const nl_NL: EnTranslations = {
         "benefits": "Koppel je Discord om punten te verdienen door spelen en gemeenschapsactiviteit, en klim door de statusrangen.",
         "error": "Kon Discord niet koppelen. Probeer het opnieuw.",
         "success": "Discord gekoppeld.",
-        "joinServer": "Just join the Discord server"
+        "joinServer": "Deelnemen aan server"
       },
       "choice": {
         "title": "Doorgaan met Discord",

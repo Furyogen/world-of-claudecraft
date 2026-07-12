@@ -571,8 +571,8 @@ export const da_DK: EnTranslations = {
       "interfaceModeDesktop": "Skrivebord",
       "interfaceModeTouch": "Touch",
       "interfaceModeNote": "Auto vælger skrivebords- eller touchstyring ud fra din enhed. Vælg Skrivebord for at tvinge tastatur og mus (nyttigt på en tablet med tastatur), eller Touch for skærmstyringen.",
-      "voiceChatEnabled": "Voice Chat (Proximity)",
-      "voiceChatMicDenied": "Microphone access was denied. Voice chat needs it to work.",
+      "voiceChatEnabled": "Stemmechat (nærhed)",
+      "voiceChatMicDenied": "Adgang til mikrofonen blev nægtet. Stemmechat kræver den for at fungere.",
       "footstepSounds": "Fodtrinslyde",
       "clickFeedback": "Klikmarkør",
       "lockCursorOnRotate": "Lås markør under drejning",
@@ -1179,7 +1179,7 @@ export const da_DK: EnTranslations = {
         "benefits": "Forbind din Discord for at optjene point fra spil og fællesskabsaktivitet og stige i statusrangene.",
         "error": "Kunne ikke forbinde Discord. Prøv igen.",
         "success": "Discord forbundet.",
-        "joinServer": "Just join the Discord server"
+        "joinServer": "Deltag i serveren"
       },
       "choice": {
         "title": "Fortsæt med Discord",

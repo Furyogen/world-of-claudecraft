@@ -571,8 +571,8 @@ export const id_ID: EnTranslations = {
       "interfaceModeDesktop": "Desktop",
       "interfaceModeTouch": "Sentuh",
       "interfaceModeNote": "Otomatis memilih kontrol desktop atau sentuh dari perangkat Anda. Pilih Desktop untuk memaksa keyboard dan mouse (berguna pada tablet dengan keyboard), atau Sentuh untuk kontrol di layar.",
-      "voiceChatEnabled": "Voice Chat (Proximity)",
-      "voiceChatMicDenied": "Microphone access was denied. Voice chat needs it to work.",
+      "voiceChatEnabled": "Obrolan Suara (Kedekatan)",
+      "voiceChatMicDenied": "Akses mikrofon ditolak. Obrolan suara membutuhkannya agar berfungsi.",
       "footstepSounds": "Suara Langkah Kaki",
       "clickFeedback": "Penanda Klik",
       "lockCursorOnRotate": "Kunci Kursor Saat Memutar",
@@ -1179,7 +1179,7 @@ export const id_ID: EnTranslations = {
         "benefits": "Tautkan Discord-mu untuk meraih poin dari bermain dan aktivitas komunitas, serta naik tingkat status.",
         "error": "Tidak dapat menautkan Discord. Silakan coba lagi.",
         "success": "Discord tertaut.",
-        "joinServer": "Just join the Discord server"
+        "joinServer": "Gabung Server"
       },
       "choice": {
         "title": "Lanjutkan dengan Discord",

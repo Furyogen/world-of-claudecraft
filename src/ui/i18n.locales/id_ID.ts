@@ -5156,6 +5156,9 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.interfaceModeDesktop': 'Desktop',
   'hudChrome.options.interfaceModeNote':
     'Otomatis memilih kontrol desktop atau sentuh dari perangkat Anda. Pilih Desktop untuk memaksa keyboard dan mouse (berguna pada tablet dengan keyboard), atau Sentuh untuk kontrol di layar.',
+  'hudChrome.options.voiceChatEnabled': 'Obrolan Suara (Kedekatan)',
+  'hudChrome.options.voiceChatMicDenied':
+    'Akses mikrofon ditolak. Obrolan suara membutuhkannya agar berfungsi.',
   'hudChrome.options.interfaceModeTouch': 'Sentuh',
   'hudChrome.options.keybindHelpLockCursorOnRotate':
     'Menjaga kursor mouse tetap di dalam jendela saat Anda menyeret untuk memutar kamera, sehingga tidak mencapai tepi layar atau berpindah ke monitor lain. Matikan jika Anda lebih suka kursor bebas.',
@@ -6253,6 +6256,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.guildMember': 'Anggota terverifikasi',
   'hudChrome.discord.notMember': 'Belum berada di server',
   'hudChrome.discord.joinCta': 'Gabung Discord',
+  'hudChrome.discord.link.joinServer': 'Gabung Server',
   'hudChrome.discord.online': '{count} daring',
   'hudChrome.discord.community': 'Komunitas',
   'hudChrome.discord.rewards': 'Hadiah',

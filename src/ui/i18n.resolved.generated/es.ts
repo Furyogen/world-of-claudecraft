@@ -571,8 +571,8 @@ export const es: EnTranslations = {
       "interfaceModeDesktop": "Escritorio",
       "interfaceModeTouch": "Táctil",
       "interfaceModeNote": "Auto elige los controles Desktop o Touch según tu dispositivo. Elige Desktop para forzar teclado y ratón (útil en una tableta con teclado), o Touch para los controles en pantalla.",
-      "voiceChatEnabled": "Voice Chat (Proximity)",
-      "voiceChatMicDenied": "Microphone access was denied. Voice chat needs it to work.",
+      "voiceChatEnabled": "Chat de voz (proximidad)",
+      "voiceChatMicDenied": "Se denegó el acceso al micrófono. El chat de voz lo necesita para funcionar.",
       "footstepSounds": "Sonidos de pasos",
       "clickFeedback": "Marcador de clic",
       "lockCursorOnRotate": "Bloquear cursor al rotar",
@@ -1179,7 +1179,7 @@ export const es: EnTranslations = {
         "benefits": "Vincula tu Discord para ganar puntos jugando y participando en la comunidad, y escalar los niveles de estatus.",
         "error": "No se pudo vincular Discord. Inténtalo de nuevo.",
         "success": "Discord vinculado.",
-        "joinServer": "Just join the Discord server"
+        "joinServer": "Unirse al servidor"
       },
       "choice": {
         "title": "Continuar con Discord",

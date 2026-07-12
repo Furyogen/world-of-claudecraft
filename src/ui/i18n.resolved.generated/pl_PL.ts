@@ -571,8 +571,8 @@ export const pl_PL: EnTranslations = {
       "interfaceModeDesktop": "Komputer",
       "interfaceModeTouch": "Dotyk",
       "interfaceModeNote": "Tryb Auto dobiera sterowanie komputerowe lub dotykowe na podstawie urządzenia. Wybierz Komputer, aby wymusić klawiaturę i mysz (przydatne na tablecie z klawiaturą), lub Dotyk, aby korzystać ze sterowania ekranowego.",
-      "voiceChatEnabled": "Voice Chat (Proximity)",
-      "voiceChatMicDenied": "Microphone access was denied. Voice chat needs it to work.",
+      "voiceChatEnabled": "Czat głosowy (w pobliżu)",
+      "voiceChatMicDenied": "Odmówiono dostępu do mikrofonu. Czat głosowy potrzebuje go do działania.",
       "footstepSounds": "Dźwięki kroków",
       "clickFeedback": "Znacznik kliknięcia",
       "lockCursorOnRotate": "Blokuj kursor podczas obracania",
@@ -1179,7 +1179,7 @@ export const pl_PL: EnTranslations = {
         "benefits": "Połącz Discord, aby zdobywać punkty za grę i aktywność w społeczności oraz wspinać się po progach statusu.",
         "error": "Nie udało się połączyć Discorda. Spróbuj ponownie.",
         "success": "Discord połączony.",
-        "joinServer": "Just join the Discord server"
+        "joinServer": "Dołącz do serwera"
       },
       "choice": {
         "title": "Kontynuuj z Discordem",

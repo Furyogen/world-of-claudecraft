@@ -571,8 +571,8 @@ export const sv_SE: EnTranslations = {
       "interfaceModeDesktop": "Skrivbord",
       "interfaceModeTouch": "Pek",
       "interfaceModeNote": "Auto väljer skrivbords- eller pekkontroller utifrån din enhet. Välj Skrivbord för att tvinga fram tangentbord och mus (användbart på en surfplatta med tangentbord), eller Pek för skärmkontrollerna.",
-      "voiceChatEnabled": "Voice Chat (Proximity)",
-      "voiceChatMicDenied": "Microphone access was denied. Voice chat needs it to work.",
+      "voiceChatEnabled": "Röstchatt (närhet)",
+      "voiceChatMicDenied": "Åtkomst till mikrofonen nekades. Röstchatten behöver den för att fungera.",
       "footstepSounds": "Fotstegsljud",
       "clickFeedback": "Klickmarkör",
       "lockCursorOnRotate": "Lås pekare under rotation",
@@ -1179,7 +1179,7 @@ export const sv_SE: EnTranslations = {
         "benefits": "Länka ditt Discord för att tjäna poäng från spel och gemenskapsaktivitet, och klättra på statusnivåerna.",
         "error": "Det gick inte att länka Discord. Försök igen.",
         "success": "Discord länkat.",
-        "joinServer": "Just join the Discord server"
+        "joinServer": "Gå med i servern"
       },
       "choice": {
         "title": "Fortsätt med Discord",

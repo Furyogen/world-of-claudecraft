@@ -5096,6 +5096,9 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.interfaceModeDesktop': 'Desktop',
   'hudChrome.options.interfaceModeNote':
     'Automatisch kiest desktop- of aanraakbesturing op basis van je apparaat. Kies Desktop om toetsenbord en muis af te dwingen (handig op een tablet met toetsenbord), of Aanraking voor de besturing op het scherm.',
+  'hudChrome.options.voiceChatEnabled': 'Voicechat (nabijheid)',
+  'hudChrome.options.voiceChatMicDenied':
+    'Microfoontoegang is geweigerd. Voicechat heeft die nodig om te werken.',
   'hudChrome.options.interfaceModeTouch': 'Aanraking',
   'hudChrome.options.keybindHelpLockCursorOnRotate':
     'Houdt de muisaanwijzer binnen het venster terwijl je sleept om de camera te draaien, zodat deze de schermrand niet kan bereiken of naar een ander beeldscherm kan gaan. Schakel uit als je liever een vrije aanwijzer hebt.',
@@ -6193,6 +6196,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.guildMember': 'Geverifieerd lid',
   'hudChrome.discord.notMember': 'Nog niet in de server',
   'hudChrome.discord.joinCta': 'Word lid van de Discord',
+  'hudChrome.discord.link.joinServer': 'Deelnemen aan server',
   'hudChrome.discord.online': '{count} online',
   'hudChrome.discord.community': 'Gemeenschap',
   'hudChrome.discord.rewards': 'Beloningen',

@@ -5121,6 +5121,9 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.interfaceModeDesktop': 'Máy Tính',
   'hudChrome.options.interfaceModeNote':
     'Tự Động chọn điều khiển máy tính hoặc cảm ứng theo thiết bị của bạn. Chọn Máy Tính để buộc dùng bàn phím và chuột (hữu ích trên máy tính bảng có bàn phím), hoặc Cảm Ứng để dùng các điều khiển trên màn hình.',
+  'hudChrome.options.voiceChatEnabled': 'Trò chuyện thoại (ở gần)',
+  'hudChrome.options.voiceChatMicDenied':
+    'Quyền truy cập micrô đã bị từ chối. Trò chuyện thoại cần quyền này để hoạt động.',
   'hudChrome.options.interfaceModeTouch': 'Cảm Ứng',
   'hudChrome.options.keybindHelpLockCursorOnRotate':
     'Giữ con trỏ chuột bên trong cửa sổ khi bạn kéo để xoay camera, để nó không thể chạm tới mép màn hình hoặc di chuyển sang màn hình khác. Hãy tắt nếu bạn thích con trỏ tự do.',
@@ -6199,6 +6202,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.guildMember': 'Thành viên đã xác minh',
   'hudChrome.discord.notMember': 'Chưa tham gia máy chủ',
   'hudChrome.discord.joinCta': 'Tham gia Discord',
+  'hudChrome.discord.link.joinServer': 'Tham gia máy chủ',
   'hudChrome.discord.online': '{count} đang trực tuyến',
   'hudChrome.discord.community': 'Cộng Đồng',
   'hudChrome.discord.rewards': 'Phần Thưởng',

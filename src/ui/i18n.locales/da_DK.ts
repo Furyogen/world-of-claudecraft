@@ -5030,6 +5030,9 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.interfaceModeDesktop': 'Skrivebord',
   'hudChrome.options.interfaceModeNote':
     'Auto vælger skrivebords- eller touchstyring ud fra din enhed. Vælg Skrivebord for at tvinge tastatur og mus (nyttigt på en tablet med tastatur), eller Touch for skærmstyringen.',
+  'hudChrome.options.voiceChatEnabled': 'Stemmechat (nærhed)',
+  'hudChrome.options.voiceChatMicDenied':
+    'Adgang til mikrofonen blev nægtet. Stemmechat kræver den for at fungere.',
   'hudChrome.options.interfaceModeTouch': 'Touch',
   'hudChrome.options.keybindHelpLockCursorOnRotate':
     'Holder musemarkøren inde i vinduet, mens du trækker for at dreje kameraet, så den ikke kan nå skærmkanten eller flytte til en anden skærm. Slå fra, hvis du foretrækker en fri markør.',
@@ -6111,6 +6114,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.guildMember': 'Verificeret medlem',
   'hudChrome.discord.notMember': 'Ikke på serveren endnu',
   'hudChrome.discord.joinCta': 'Tilslut Discord',
+  'hudChrome.discord.link.joinServer': 'Deltag i serveren',
   'hudChrome.discord.online': '{count} online',
   'hudChrome.discord.community': 'Fællesskab',
   'hudChrome.discord.rewards': 'Belønninger',
