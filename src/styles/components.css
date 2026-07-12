@@ -2984,6 +2984,111 @@
     padding-top: 6px;
   }
 
+  /* Slot cells: a fixed --slot-cell square (the classic bag look), the item icon
+     fills the cell, and the free-slot pad is a muted decorative cell. Fixed, not a
+     fluid aspect-ratio square that fills the auto-fill track: with an indefinite
+     auto-fill column size, CSS grid's auto row-track sizing does not reliably
+     resolve a row's height from a child's aspect-ratio, so it fell back to this
+     rule's min-height (40px) as the row height while each cell still rendered at
+     its full aspect-ratio height. A fixed cell size sidesteps the row-sizing bug
+     entirely, matches the fixed spell/action-bar icon grammar, and lets the grid
+     re-track its column count on resize instead of the cell size. The rarity
+     border, count corner, and focus ring come from the shared bag/bank item
+     grammar. */
+  .bag-grid .bag-item,
+  .bank-grid .bank-item {
+    width: var(--slot-cell);
+    height: var(--slot-cell);
+    padding: 0;
+    overflow: hidden;
+    font-family: var(--ui-font);
+  }
+
+  #bags .bag-tools .search-field input,
+  #bank-window .bag-tools .search-field input {
+    padding-left: var(--spacing-sm);
+    padding-right: var(--spacing-sm);
+  }
+
+  /* The buy-slots expansion row is the bank's sticky-footer bottom action: the
+     footer supplies the top border and padding, so drop the row's own separators and
+     let it fill the footer width (its .bank-buy-btn is already width:100%). */
+  #bank-window .window-footer .bank-buy-row {
+    flex: 1 1 auto;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+  /* The transient "banker too far" away state builds the frame (footer included)
+     but appends no buy row; hide the empty footer bar so it never shows as a bare
+     strip in that brief pre-grace-close flash. */
+  #bank-window .window-footer:empty {
+    display: none;
+  }
+
+  /* Touch: the grammar's own tap floors apply (spec 6.1; the 44px item-cell already
+     clears 40x40 via the column floor above, so only the 24px chip needs raising).
+     This components rule governs on touch because the hud-mobile layer carries no
+     .chip / .filter-row rule to outrank it. */
+  body.mobile-touch .window-frame .chip {
+    min-height: var(--touch-min);
+  }
+  /* Touch: the slot grids re-track to the larger --touch-cell floor and REFLOW to
+     fewer columns (live user feedback: the item icons read too small to tap inside
+     the 50/50 bank / market docks). Cell size is fixed (see .bag-item above); only
+     the COLUMN COUNT yields, both here and on desktop, so these re-tracks are
+     value-no-ops today but stay as the INDEPENDENT touch tap-size guarantee (they
+     keep holding if the desktop floor diverges) and the dock geometry (the 50/50
+     split rules in hud.mobile.css) is untouched. :is(), not a two-selector list:
+     the bank_window.test.ts scroll-contract slices anchor on this file's first
+     bank-grid rule OPENER, which must stay the base rule in the bank section below
+     (this block must not spell that opener out, even here). */
+  body.mobile-touch :is(.bag-grid, .bank-grid) {
+    grid-template-columns: repeat(auto-fill, var(--touch-cell));
+  }
+  body.mobile-touch .bag-grid .bag-item,
+  body.mobile-touch .bank-grid .bank-item {
+    width: var(--touch-cell);
+    height: var(--touch-cell);
+  }
+  /* The bag-bar sockets (backpack + 4 equip slots) grow to the same touch floor so
+     every icon target in the window reads one size; the bar wraps so the capacity
+     counter drops to its own line instead of overflowing the narrowest dock halves
+     (five 56px sockets + the counter no longer always fit half of a 740px phone). */
+  body.mobile-touch .bag-socket {
+    width: var(--touch-cell);
+    height: var(--touch-cell);
+  }
+  body.mobile-touch .bag-bar {
+    flex-wrap: wrap;
+  }
+  /* Short landscape phones: keep the bank-cluster chip filter-row ONE horizontally
+     scrollable row so a two-row wrap never squeezes the docked grid to a sliver
+     (the behavior the legacy .bag-chips rule protected, re-provided for the grammar
+     container; standalone bags and the vendor cluster keep the family wrap).
+     HOME NOTE (task 11): these bags/bank body.mobile-touch rules deliberately STAY
+     in components.css (the tidier home) rather than re-home into hud.mobile.css: the
+     hud-mobile layer carries no competing .chip/.filter-row rule, so layer order
+     makes them correct where they sit, grouped with the bags/bank grammar they
+     modify, and a lateral move would only add churn/regression risk. */
+  body.mobile-touch #bank-window .window-frame .filter-row,
+  body.mobile-touch.bank-open #bags .window-frame .filter-row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+  body.mobile-touch #bank-window .window-frame .filter-row .chip,
+  body.mobile-touch.bank-open #bags .window-frame .filter-row .chip {
+    flex: 0 0 auto;
+  }
+  /* The bank's own close hides under the 50/50 pairing (the visible bags close is
+     the cluster's single close control, bags_window.ts), re-providing the legacy
+     .panel-title .x-btn hide for the grammar close. */
+  body.mobile-touch.bank-open #bank-window .window-close {
+    display: none;
+  }
+
   /* ---------- bags ---------- */
   /* bags, centred in the bottom gap between the action cluster and micro-menu */
   #bags {
@@ -3055,7 +3160,7 @@
      badge in the bottom-right corner, and free capacity paints as empty sockets. */
   .bag-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(42px, 1fr));
+    grid-template-columns: repeat(auto-fill, var(--slot-cell));
     gap: 4px;
     padding: 2px;
     align-content: start;
@@ -3130,8 +3235,8 @@
   }
   .bag-socket {
     position: relative;
-    width: 40px;
-    height: 40px;
+    width: var(--slot-cell);
+    height: var(--slot-cell);
     flex: none;
     padding: 0;
     border: 1px solid #4a3d26;
@@ -3374,7 +3479,7 @@
   }
   .bank-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(42px, 1fr));
+    grid-template-columns: repeat(auto-fill, var(--slot-cell));
     gap: 4px;
     padding: 2px;
     align-content: start;

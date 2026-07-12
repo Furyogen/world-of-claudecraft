@@ -32,6 +32,9 @@
     --ui-font: var(--font-ui);
     --font-sans: var(--font-ui);
     --body-font: var(--font-ui);
+    --slot-cell: 56px;
+    --touch-cell: 56px;
+    --touch-min: 40px;
 
     /* --gold is the single source of truth for the primary accent */
     --color-primary: var(--gold);

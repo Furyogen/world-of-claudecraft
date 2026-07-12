@@ -168,6 +168,194 @@ describe('mobile target-size: in-game touch controls are >=40x40 in landscape', 
   });
 });
 
+// Touch slot-grid comfort floor: live user feedback on the bank-open 50/50 dock ("the
+// icons on the right seem too small for mobile screens"). On touch the bags/bank item
+// grids re-track to the --touch-cell floor (56px, tokens.css) and REFLOW to fewer
+// columns, and the bag-bar sockets grow to the same floor, in EVERY dock state: bags
+// standalone (full-screen), bank-open (bags right at half width), market-open (bags
+// right at half width). Old sizes (42px tracks -> ~43-47px cells, 40px sockets) fail
+// these floors. Real rendered geometry, mirroring the painter nesting
+// (#bags > .window-frame > .window-body, bags_window.ts / bank_window.ts render()).
+const CELL_FLOOR = 56;
+
+describe('mobile target-size: bag/bank slot cells stay comfortable in every dock state', () => {
+  beforeEach(() => {
+    // The mobile 50/50 dock split point is calc(var(--app-vw) / var(--ui-scale) / 2);
+    // main.ts (app_viewport.ts) syncs --app-vw on the real client, so the test must
+    // stand it in for the dock rules to resolve.
+    document.documentElement.style.setProperty('--app-vw', '844px');
+  });
+
+  afterEach(() => {
+    document.documentElement.style.removeProperty('--app-vw');
+  });
+
+  function expectAtLeast(node: HTMLElement, floor: number, label: string): void {
+    const { w, h } = measure(node);
+    expect(w, `${label} width ${w} < ${floor}`).toBeGreaterThanOrEqual(floor - EPSILON);
+    expect(h, `${label} height ${h} < ${floor}`).toBeGreaterThanOrEqual(floor - EPSILON);
+  }
+
+  // The real bags DOM: #bags > .window-frame > .window-body > bag bar + filter row +
+  // slot grid (bags_window.ts render()); hud.ts shows it with inline display:flex.
+  function buildBags(): { cell: HTMLElement; icon: HTMLElement; socket: HTMLElement } {
+    const bags = el('div', { id: 'bags', class: 'window panel' });
+    bags.style.display = 'flex';
+    const frame = el('div', { class: 'window-frame' });
+    const body = el('div', { class: 'window-body' });
+    const bar = el('div', { class: 'bag-bar' });
+    const socket = el('button', { class: 'bag-socket backpack' });
+    const emptySocket = el('button', { class: 'bag-socket empty' });
+    const capacity = el('span', { class: 'bag-capacity' });
+    capacity.textContent = '7/16';
+    bar.append(socket, emptySocket, capacity);
+    const filterBar = el('div', { class: 'bag-filter-bar' });
+    const chips = el('div', { class: 'filter-row' });
+    const chip = el('button', { class: 'chip' });
+    chip.textContent = 'All';
+    chips.appendChild(chip);
+    filterBar.appendChild(chips);
+    const grid = el('div', { class: 'bag-grid' });
+    const cell = el('button', { class: 'bag-item q-common' });
+    const icon = el('img', { class: 'item-icon', alt: '' });
+    cell.appendChild(icon);
+    grid.appendChild(cell);
+    for (let i = 0; i < 7; i++)
+      grid.appendChild(el('button', { class: 'bag-item q-common' }));
+    for (let i = 0; i < 4; i++)
+      grid.appendChild(el('div', { class: 'bag-item empty', 'aria-hidden': 'true' }));
+    body.append(bar, filterBar, grid);
+    frame.appendChild(body);
+    bags.appendChild(frame);
+    document.body.appendChild(bags);
+    return { cell, socket, icon };
+  }
+
+  // The bank half: #bank-window > .window-frame > .window-body > .bank-scroll >
+  // .bank-grid (bank_window.ts render()).
+  function buildBank(): { cell: HTMLElement } {
+    const bank = el('div', { id: 'bank-window', class: 'window panel' });
+    bank.style.display = 'flex';
+    const frame = el('div', { class: 'window-frame' });
+    const body = el('div', { class: 'window-body' });
+    const scroll = el('div', { class: 'bank-scroll' });
+    const grid = el('div', { class: 'bank-grid' });
+    const cell = el('button', { class: 'bank-item q-common' });
+    grid.appendChild(cell);
+    for (let i = 0; i < 7; i++)
+      grid.appendChild(el('button', { class: 'bank-item q-common' }));
+    scroll.appendChild(grid);
+    body.appendChild(scroll);
+    frame.appendChild(body);
+    bank.appendChild(frame);
+    document.body.appendChild(bank);
+    return { cell };
+  }
+
+  it('bags item cells, bag-bar sockets, and filter chips in each dock state', () => {
+    // '' = standalone full-screen bags; the dock classes halve the window width
+    // (bags right), which is exactly where the cells used to render smallest.
+    for (const dock of ['', 'bank-open', 'market-open']) {
+      document.body.className = `mobile-touch game-active ${dock}`.trim();
+      const { cell, socket, icon } = buildBags();
+      const state = dock === '' ? 'standalone' : dock;
+      expectAtLeast(cell, CELL_FLOOR, `${state} #bags .bag-item`);
+      expectAtLeast(socket, CELL_FLOOR, `${state} .bag-socket`);
+      // The icon fills its cell (inset 2px): easily clickable AND visibly larger.
+      const cellRect = measure(cell);
+      const iconRect = measure(icon);
+      expect(
+        iconRect.w,
+        `${state} .item-icon width ${iconRect.w} does not fill the ${cellRect.w} cell`,
+      ).toBeGreaterThanOrEqual(cellRect.w - 6);
+      expect(
+        iconRect.h,
+        `${state} .item-icon height ${iconRect.h} does not fill the ${cellRect.h} cell`,
+      ).toBeGreaterThanOrEqual(cellRect.h - 6);
+      // The category chips keep the shared 40px tap floor (text chips, not icons).
+      const chip = document.querySelector('#bags .filter-row .chip') as HTMLElement;
+      expectAtLeastFloor(chip, `${state} #bags .chip`);
+      cleanup();
+    }
+  });
+
+  it('bank grid cells at the docked half width', () => {
+    document.body.className = 'mobile-touch game-active bank-open';
+    const { cell } = buildBank();
+    expectAtLeast(cell, CELL_FLOOR, 'bank-open #bank-window .bank-item');
+  });
+
+  // Builds a bare .bag-grid (no mobile-touch) at the given pixel width with enough
+  // cells to wrap across multiple rows, mirroring the real bags_window.ts markup.
+  function buildBareGrid(
+    width: number,
+    cellCount: number,
+  ): { grid: HTMLElement; cells: HTMLElement[] } {
+    document.body.className = '';
+    const bags = el('div', { id: 'bags', class: 'window panel' });
+    bags.style.display = 'flex';
+    bags.style.width = `${width}px`;
+    const frame = el('div', { class: 'window-frame' });
+    const body = el('div', { class: 'window-body' });
+    const grid = el('div', { class: 'bag-grid' });
+    const cells: HTMLElement[] = [];
+    for (let i = 0; i < cellCount; i++) {
+      const cell = el('button', { class: 'bag-item q-common' });
+      grid.appendChild(cell);
+      cells.push(cell);
+    }
+    body.appendChild(grid);
+    frame.appendChild(body);
+    bags.appendChild(frame);
+    document.body.appendChild(bags);
+    return { grid, cells };
+  }
+
+  it('desktop bag cells stay pinned at the fixed --slot-cell size at any container width', () => {
+    // Regression guard: a fluid aspect-ratio cell (grid-template-columns:
+    // repeat(auto-fill, minmax(--slot-cell, 1fr))) grows past --slot-cell to fill
+    // whatever space is left over once the last full column is placed, so the
+    // rendered size drifted with the window's exact pixel width. Cells must now be
+    // a FIXED --slot-cell box: identical at a narrow width (412px, the dock half
+    // width) and a much wider one (700px), with only the column count differing.
+    const narrow = buildBareGrid(412, 8);
+    const narrowSize = measure(narrow.cells[0]);
+    cleanup();
+    const wide = buildBareGrid(700, 8);
+    const wideSize = measure(wide.cells[0]);
+    expect(narrowSize.w, 'desktop .bag-item width at 412px').toBe(CELL_FLOOR);
+    expect(narrowSize.h, 'desktop .bag-item height at 412px').toBe(CELL_FLOOR);
+    expect(wideSize.w, 'desktop .bag-item width must not grow with the window').toBe(narrowSize.w);
+    expect(wideSize.h, 'desktop .bag-item height must not grow with the window').toBe(
+      narrowSize.h,
+    );
+  });
+
+  it('desktop bag-grid rows never overlap once cells wrap past one row', () => {
+    // The exact bug this guards: a fluid aspect-ratio cell in an "auto"-sized grid
+    // row track does not reliably resolve its height from aspect-ratio during row
+    // sizing, so the row track locked to the cell's min-height (40px) while the
+    // cell itself rendered taller (up to ~90px) - every row after the first visibly
+    // overlapped the row above it. A 412px-wide grid with 8 cells wraps to multiple
+    // rows of 6 columns; every row's top must be at or below the previous row's
+    // bottom edge.
+    const { cells } = buildBareGrid(412, 8);
+    const rects = cells.map((c) => c.getBoundingClientRect());
+    const rowTops = [...new Set(rects.map((r) => Math.round(r.top)))].sort((a, b) => a - b);
+    expect(
+      rowTops.length,
+      'grid must wrap to more than one row for this guard to mean anything',
+    ).toBeGreaterThan(1);
+    for (let i = 1; i < rowTops.length; i++) {
+      const prevBottom = rowTops[i - 1] + CELL_FLOOR;
+      expect(
+        rowTops[i],
+        `row ${i} top ${rowTops[i]} overlaps row ${i - 1} bottom ${prevBottom}`,
+      ).toBeGreaterThanOrEqual(prevBottom - EPSILON);
+    }
+  });
+});
+
 // Desktop (fine-pointer, non-mobile) target-size: the dense list controls the WCAG row
 // named (bag cells, social rows / tabs) but never measured. Here the mobile 40px floors do
 // NOT apply (no body.mobile-touch class), so each must still clear the 24px SC 2.5.8 absolute
