@@ -70,6 +70,8 @@ describe('sampled GameAudio facade', () => {
       ['fiestaAugment', 'ui_fiesta_augment'],
       ['fiestaDown', 'ui_fiesta_down'],
       ['fiestaRevive', 'ui_fiesta_revive'],
+      ['weaponSheathe', 'melee_swing_light'],
+      ['weaponUnsheathe', 'melee_swing_blade'],
     ] as const;
 
     for (const [method, key] of routes) {

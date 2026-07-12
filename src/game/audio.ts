@@ -31,6 +31,8 @@ const UI_CUES = {
   fiestaAugment: 'ui_fiesta_augment',
   fiestaDown: 'ui_fiesta_down',
   fiestaRevive: 'ui_fiesta_revive',
+  weaponSheathe: 'melee_swing_light',
+  weaponUnsheathe: 'melee_swing_blade',
 } as const;
 
 type UiCue =
@@ -133,15 +135,11 @@ export class GameAudio {
   }
 
   weaponSheathe(): void {
-    // steel sliding home over a leather strap, then a soft catch
-    this.noise(0.16, 2200, 0.15, 0.8, 'bandpass');
-    this.tone(520, 0.08, 0.05, 'triangle', 0.09, 320);
+    this.play(UI_CUES.weaponSheathe);
   }
 
   weaponUnsheathe(): void {
-    // brighter draw: a rising metallic ring over the scrape
-    this.noise(0.14, 3600, 0.16, 0.75, 'highpass');
-    this.tone(760, 0.12, 0.07, 'triangle', 0.02, 1500);
+    this.play(UI_CUES.weaponUnsheathe);
   }
 
   whisper(): void {
