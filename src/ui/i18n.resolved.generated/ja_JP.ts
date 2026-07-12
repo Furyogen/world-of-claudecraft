@@ -571,6 +571,8 @@ export const ja_JP: EnTranslations = {
       "interfaceModeDesktop": "デスクトップ",
       "interfaceModeTouch": "タッチ",
       "interfaceModeNote": "自動では、デバイスに応じてデスクトップ操作かタッチ操作を選びます。デスクトップを選ぶとキーボードとマウスに固定され（キーボード付きタブレットなどに便利）、タッチを選ぶと画面上の操作になります。",
+      "voiceChatEnabled": "ボイスチャット（近接）",
+      "voiceChatMicDenied": "マイクへのアクセスが拒否されました。ボイスチャットにはマイクが必要です。",
       "footstepSounds": "足音",
       "clickFeedback": "クリックマーカー",
       "lockCursorOnRotate": "回転中はカーソルを固定",

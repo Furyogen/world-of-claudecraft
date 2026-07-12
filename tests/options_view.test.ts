@@ -226,11 +226,13 @@ describe('options_view: audio dispatch matrix (cluster 4)', () => {
       'voiceVolume',
       'musicToggle',
       'voiceEnabled',
+      'voiceChatEnabled',
       'footstepSfx',
       'clickFeedback',
     ]);
     expect(find(controls, 'sfxVolume')).toMatchObject({ control: 'slider' });
     expect(find(controls, 'voiceEnabled')).toMatchObject({ control: 'boolToggle' });
+    expect(find(controls, 'voiceChatEnabled')).toMatchObject({ control: 'boolToggle' });
   });
 });
 

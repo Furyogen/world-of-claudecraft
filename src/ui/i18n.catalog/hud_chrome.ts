@@ -633,6 +633,13 @@ export const hudChromeStrings = {
     interfaceModeTouch: 'Touch',
     interfaceModeNote:
       'Auto picks desktop or touch controls from your device. Choose Desktop to force keyboard and mouse (useful on a tablet with a keyboard), or Touch for the on-screen controls.',
+    // Audio panel toggle: proximity voice chat with the nearest ~8 other
+    // opted-in players (WebRTC, off by default). Enabling it prompts for
+    // microphone permission; distinct from the npcVoices toggle above.
+    voiceChatEnabled: 'Voice Chat (Proximity)',
+    // Toast shown when the browser denies the microphone permission prompt
+    // after enabling Voice Chat.
+    voiceChatMicDenied: 'Microphone access was denied. Voice chat needs it to work.',
     // Audio panel toggle for the per-footfall step clips (off by default).
     footstepSounds: 'Footstep Sounds',
     // Toggle for the OSRS-style click-feedback marker: entity targets and

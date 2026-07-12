@@ -10,54 +10,84 @@
 
 export const pending: Record<string, readonly string[]> = {
   "es": [
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
   ],
   "es_ES": [
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
   ],
   "fr_FR": [
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
   ],
   "fr_CA": [
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
   ],
   "en_CA": [],
   "it_IT": [
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
   ],
   "de_DE": [
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
   ],
   "zh_CN": [],
   "zh_TW": [],
   "ko_KR": [],
   "ja_JP": [],
   "pt_BR": [
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
   ],
   "ru_RU": [],
   "cs_CZ": [
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
   ],
   "nl_NL": [
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
   ],
   "pl_PL": [
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
   ],
   "id_ID": [
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
   ],
   "tr_TR": [
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
   ],
   "sv_SE": [
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
   ],
   "vi_VN": [
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
   ],
   "da_DK": [
-    "hudChrome.discord.link.joinServer"
+    "hudChrome.discord.link.joinServer",
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
   ]
 };

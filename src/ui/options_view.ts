@@ -333,6 +333,10 @@ export function buildAudioControls(s: OptionsSettingsSource): OptionsControl[] {
     slider(s, 'voiceVolume', 'hud.options.voiceVolume'),
     { control: 'musicToggle', labelKey: 'hud.options.music' },
     boolToggle(s, 'voiceEnabled', 'hud.options.npcVoices'),
+    // Proximity player voice chat (WebRTC mesh with the nearest opted-in
+    // players), distinct from voiceEnabled above (pre-rendered NPC dialogue
+    // clips). Off by default; enabling it prompts for microphone permission.
+    boolToggle(s, 'voiceChatEnabled', 'hudChrome.options.voiceChatEnabled'),
     boolToggle(s, 'footstepSfx', 'hudChrome.options.footstepSounds'),
     boolToggle(s, 'clickFeedback', 'hudChrome.options.clickFeedback'),
   ];

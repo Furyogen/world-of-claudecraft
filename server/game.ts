@@ -121,6 +121,7 @@ import { SocialService } from './social';
 import { PgSocialDb } from './social_db';
 import { TickProfiler } from './tick_profiler';
 import { hrtimeToMs, TickRateMeter } from './tick_rate_meter';
+import { nearestVoicePeers, type VoiceCandidate } from './voice_signaling';
 import { holderInfoForPubkey } from './woc_balance';
 import { isBackpressureExceeded } from './ws_backpressure';
 
@@ -531,6 +532,14 @@ export interface ClientSession {
   // last social snapshot. Drives the cheap periodic position push (no DB) that
   // keeps allies live on the world map.
   socialTrackedIds?: number[];
+  // Proximity voice chat: true once this player opted in via Settings. Off by
+  // default (privacy). voicePeerIds is the authoritative "who this session's
+  // WebRTC mesh should include right now", recomputed each broadcastVoicePeers
+  // tick (nearestVoicePeers); voiceoffer/voiceanswer/voiceice frames are only
+  // relayed to a pid present in it, so signaling can't be aimed at an arbitrary
+  // player.
+  voiceOptIn: boolean;
+  voicePeerIds: Set<number>;
   // IP address at join time (from requestMetadata); used for per-IP session counting.
   ip: string;
   userAgent: string;
@@ -946,6 +955,10 @@ export class GameServer {
   private devTierPids = new Set<number>();
   private saveTimer = 0;
   private socialPosTimer = 0;
+  // Recomputed on the same 1s cadence as socialPosTimer: proximity voice is
+  // cosmetic (not gameplay), so it rides an off-tick timer rather than the 20Hz
+  // sim loop.
+  private voicePeerTimer = 0;
   private saveAllInFlight: Promise<void> | null = null;
   private readonly characterSaveQueues = new Map<number, Promise<void>>();
   // Serializes every write of the single global Market blob (the 30s autosave
@@ -1423,6 +1436,46 @@ export class GameServer {
     }
   }
 
+  // Recompute each voice-opted-in player's nearest VOICE_PEER_CAP voice-opted-in
+  // neighbors and push the resulting list. The server is the single source of
+  // truth for pairing (both sides of a pair see it land in the same tick), which
+  // is what lets the client use a simple "lower pid offers" rule to avoid glare
+  // without a separate negotiation. voicePeerIds is also the signaling-relay
+  // allowlist: dropped here, offer/answer/ice to that pid stop relaying.
+  private broadcastVoicePeers(): void {
+    const candidates: VoiceCandidate[] = [];
+    const sessions: ClientSession[] = [];
+    for (const session of this.clients.values()) {
+      if (!session.voiceOptIn || session.linkdead) continue;
+      const e = this.sim.entities.get(session.pid);
+      if (!e || e.dead) continue;
+      candidates.push({ pid: session.pid, name: session.name, x: e.pos.x, z: e.pos.z });
+      sessions.push(session);
+    }
+    for (const session of sessions) {
+      const self = candidates.find((c) => c.pid === session.pid);
+      if (!self) continue;
+      const peers = nearestVoicePeers(self, candidates);
+      session.voicePeerIds = new Set(peers.map((p) => p.pid));
+      this.send(session, { t: 'voicepeers', list: peers });
+    }
+  }
+
+  // Relay a WebRTC signaling frame verbatim to its target: the server never
+  // parses SDP/ICE, only forwards. Gated on session.voicePeerIds so a client
+  // cannot aim signaling at a pid the server hasn't paired it with.
+  private relayVoiceSignal(
+    session: ClientSession,
+    kind: 'voiceoffer' | 'voiceanswer' | 'voiceice',
+    toPid: unknown,
+    payload: unknown,
+  ): void {
+    if (typeof toPid !== 'number' || !session.voicePeerIds.has(toPid)) return;
+    const target = this.clients.get(toPid);
+    if (!target || !target.voiceOptIn || !target.voicePeerIds.has(session.pid)) return;
+    this.send(target, { t: kind, fromPid: session.pid, payload });
+  }
+
   start(): void {
     let last = process.hrtime.bigint();
     let acc = 0;
@@ -1483,6 +1536,11 @@ export class GameServer {
           if (this.socialPosTimer >= 1) {
             this.socialPosTimer = 0;
             this.broadcastSocialPositions();
+          }
+          this.voicePeerTimer += dt;
+          if (this.voicePeerTimer >= 1) {
+            this.voicePeerTimer = 0;
+            this.broadcastVoicePeers();
           }
           lap('social');
           const tickMs = Number(process.hrtime.bigint() - now) / 1e6;
@@ -2091,6 +2149,8 @@ export class GameServer {
       selfHeavyDirty: true,
       lastWireRev: -1,
       sentEnts: new Map(),
+      voiceOptIn: false,
+      voicePeerIds: new Set(),
       ip: sessionIp,
       userAgent: meta.userAgent ?? '',
       fbp: meta.fbp ?? '',
@@ -3058,6 +3118,17 @@ export class GameServer {
         e.facing = frame.facing;
       }
       this.botDetector.observeInput(session.botTrackingContext, frame, receivedAtMs);
+      return;
+    }
+    // Proximity voice chat: opt-in toggle + WebRTC signaling relay. See
+    // voice_signaling.ts for the peer-selection this gates against.
+    if (msg.t === 'voiceoptin') {
+      session.voiceOptIn = !!msg.on;
+      if (!session.voiceOptIn) session.voicePeerIds = new Set();
+      return;
+    }
+    if (msg.t === 'voiceoffer' || msg.t === 'voiceanswer' || msg.t === 'voiceice') {
+      this.relayVoiceSignal(session, msg.t, msg.toPid, msg.payload);
       return;
     }
     if (msg.t !== 'cmd') {
