@@ -224,6 +224,64 @@ describe('loot_roll: need-greed resolution (module entry)', () => {
     const returned = mob.loot?.items.find((s) => s.itemId === 'greyjaw_hide_boots');
     expect(returned).toMatchObject({ count: 1, openToAll: true });
   });
+
+  it('resolves a two-needer roll when the leaver was the last undecided candidate, awarding a live winner', () => {
+    const resolveHolder = (seed: number) => {
+      const { sim, a, b, c } = partyOfThree(seed);
+      const mob = deadCorpse(sim, a, [a, b, c], {
+        copper: 0,
+        items: [{ itemId: 'greyjaw_hide_boots', count: 1 }],
+      });
+      awardSharedLootItem(sim.ctx, 'greyjaw_hide_boots', mob, playerMeta(sim, a));
+      // The roll pulls the item off the corpse; model that so a wrong
+      // return-to-corpse would surface as a leftover slot.
+      mob.loot = { copper: 0, items: [] };
+      const rollId = lootRollEvent(sim).rollId;
+      submitLootRoll(sim.ctx, rollId, 'need', b);
+      submitLootRoll(sim.ctx, rollId, 'need', c);
+      // `a` never answered: the leave itself is the last-candidate trigger that
+      // runs resolveLootRoll (the only leave-path branch that resolves a roll).
+      sim.removePlayer(a);
+      expect((sim as any).pendingLootRolls.has(rollId)).toBe(false);
+      expect(sim.countItem('greyjaw_hide_boots', a)).toBe(0);
+      // Won by a live needer, not scattered back to the corpse.
+      expect(mob.loot?.items.find((s) => s.itemId === 'greyjaw_hide_boots')).toBeUndefined();
+      const holder = [b, c].find((pid) => sim.countItem('greyjaw_hide_boots', pid) === 1);
+      return holder ?? -1;
+    };
+    const winner = resolveHolder(2024);
+    expect(winner).not.toBe(-1);
+    expect(resolveHolder(2024)).toBe(winner); // deterministic per seed
+  });
+
+  it('draws the resolve-time tie-break on the leave path when the two remaining needers tie', () => {
+    const { sim, a, b, c } = partyOfThree();
+    const mob = deadCorpse(sim, a, [a, b, c], {
+      copper: 0,
+      items: [{ itemId: 'greyjaw_hide_boots', count: 1 }],
+    });
+    awardSharedLootItem(sim.ctx, 'greyjaw_hide_boots', mob, playerMeta(sim, a));
+    mob.loot = { copper: 0, items: [] };
+    const rollId = lootRollEvent(sim).rollId;
+    // Force both needers to the same d100 so resolveLootRoll must break the tie;
+    // delegate every other draw so the unrelated leave teardown stays deterministic.
+    const realInt = sim.ctx.rng.int.bind(sim.ctx.rng);
+    const int = vi.spyOn(sim.ctx.rng, 'int').mockImplementation((min: number, max: number) => {
+      if (min === 1 && max === 100) return 50; // tie the two needers
+      if (min === 0 && max === 1) return 1; // tie-break selects the second contender
+      return realInt(min, max);
+    });
+
+    submitLootRoll(sim.ctx, rollId, 'need', b);
+    submitLootRoll(sim.ctx, rollId, 'need', c);
+    sim.removePlayer(a); // the leave resolves the tied roll and must draw the tie-break
+
+    expect(int).toHaveBeenCalledWith(0, 1); // the resolve-time tie-break fired on the leave path
+    expect((sim as any).pendingLootRolls.has(rollId)).toBe(false);
+    // Exactly one live needer holds it; the leaver never does.
+    expect(sim.countItem('greyjaw_hide_boots', a)).toBe(0);
+    expect(sim.countItem('greyjaw_hide_boots', b) + sim.countItem('greyjaw_hide_boots', c)).toBe(1);
+  });
 });
 
 describe('loot_roll: group roll status + resolution broadcast (module entry)', () => {
