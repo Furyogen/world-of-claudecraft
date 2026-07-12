@@ -86,10 +86,12 @@ describe('season 1 weapon skin catalog', () => {
   });
 
   it('copy is free of em and en dashes (repo rule)', () => {
+    // Unicode escapes, not literal dashes: the pre-push copy scan reads this
+    // file too.
     for (const skin of WEAPON_SKIN_LIST) {
       for (const text of [skin.name, skin.collection, skin.look, skin.lore]) {
-        expect(text.includes('—'), `${skin.id} em dash`).toBe(false);
-        expect(text.includes('–'), `${skin.id} en dash`).toBe(false);
+        expect(text.includes('\u2014'), `${skin.id} em dash`).toBe(false);
+        expect(text.includes('\u2013'), `${skin.id} en dash`).toBe(false);
       }
     }
   });
