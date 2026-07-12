@@ -16,14 +16,14 @@
     "petTaunt -> applyTaunt manual arm + PET_GROWL_INTERVAL cooldown",
     "stowPetForDelve/restorePetFromDelveStash (serializePet/restorePet round-trip)"
   ],
-  "draws": 161,
-  "drawDigest": "a8b17a61",
+  "draws": 158,
+  "drawDigest": "878ecdcb",
   "frames": [
     {
       "tick": 0,
       "time": 0,
       "nextId": 406,
-      "state": "e31e290e",
+      "state": "d5a08679",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -56,6 +56,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -135,7 +136,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 408,
-      "state": "326665f9",
+      "state": "14dc47d0",
       "events": "e042fd30",
       "rng": {
         "draws": 0,
@@ -168,6 +169,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -289,7 +291,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 408,
-      "state": "26543354",
+      "state": "ef04212f",
       "events": "97340448",
       "rng": {
         "draws": 0,
@@ -322,6 +324,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -457,33 +460,33 @@
       "tick": 20,
       "time": 1,
       "nextId": 408,
-      "state": "bc4627d2",
+      "state": "9ace25bd",
       "events": "d70fb9f2",
       "rng": {
-        "draws": 1,
-        "digest": "a3ecba71"
+        "draws": 0,
+        "digest": "811c9dc5"
       }
     },
     {
       "tick": 40,
       "time": 2,
       "nextId": 408,
-      "state": "9701463c",
+      "state": "437717a7",
       "events": "1a2734ed",
       "rng": {
-        "draws": 2,
-        "digest": "a0fe8174"
+        "draws": 0,
+        "digest": "811c9dc5"
       }
     },
     {
       "tick": 40,
       "time": 2,
       "nextId": 409,
-      "state": "015413c7",
+      "state": "f859ff56",
       "events": "741638a5",
       "rng": {
-        "draws": 2,
-        "digest": "a0fe8174"
+        "draws": 0,
+        "digest": "811c9dc5"
       },
       "label": "pet-taunt",
       "players": [
@@ -512,6 +515,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -709,11 +713,11 @@
       "tick": 40,
       "time": 2,
       "nextId": 409,
-      "state": "38b11e0d",
+      "state": "9bb4fb4c",
       "events": "5aadc799",
       "rng": {
-        "draws": 2,
-        "digest": "a0fe8174"
+        "draws": 0,
+        "digest": "811c9dc5"
       },
       "label": "pet-abandoned",
       "players": [
@@ -742,6 +746,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -878,11 +883,11 @@
       "tick": 40,
       "time": 2,
       "nextId": 411,
-      "state": "877bfbf7",
+      "state": "c77dad06",
       "events": "1b51753b",
       "rng": {
-        "draws": 2,
-        "digest": "a0fe8174"
+        "draws": 0,
+        "digest": "811c9dc5"
       },
       "label": "pet-dead",
       "players": [
@@ -911,6 +916,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1088,11 +1094,11 @@
       "tick": 40,
       "time": 2,
       "nextId": 411,
-      "state": "5fdc67bb",
+      "state": "c00dc452",
       "events": "39bbf203",
       "rng": {
-        "draws": 2,
-        "digest": "a0fe8174"
+        "draws": 0,
+        "digest": "811c9dc5"
       },
       "label": "pet-revived",
       "players": [
@@ -1121,6 +1127,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1298,11 +1305,11 @@
       "tick": 40,
       "time": 2,
       "nextId": 411,
-      "state": "38b11e0d",
+      "state": "9bb4fb4c",
       "events": "741638a5",
       "rng": {
-        "draws": 2,
-        "digest": "a0fe8174"
+        "draws": 0,
+        "digest": "811c9dc5"
       },
       "label": "pet-stowed",
       "players": [
@@ -1331,6 +1338,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1467,11 +1475,11 @@
       "tick": 40,
       "time": 2,
       "nextId": 412,
-      "state": "38b11e0d",
+      "state": "9bb4fb4c",
       "events": "741638a5",
       "rng": {
-        "draws": 2,
-        "digest": "a0fe8174"
+        "draws": 0,
+        "digest": "811c9dc5"
       },
       "label": "pet-restored",
       "players": [
@@ -1500,6 +1508,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1636,11 +1645,11 @@
       "tick": 40,
       "time": 2,
       "nextId": 414,
-      "state": "92d5945c",
+      "state": "273cbf24",
       "events": "d74bfbad",
       "rng": {
-        "draws": 2,
-        "digest": "a0fe8174"
+        "draws": 0,
+        "digest": "811c9dc5"
       },
       "label": "demon-heal-start",
       "players": [
@@ -1669,6 +1678,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1714,6 +1724,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1947,33 +1958,33 @@
       "tick": 60,
       "time": 3,
       "nextId": 414,
-      "state": "de388130",
-      "events": "d8764066",
+      "state": "1abb14a3",
+      "events": "9da7147b",
       "rng": {
-        "draws": 84,
-        "digest": "dae9f299"
+        "draws": 82,
+        "digest": "e2e5902a"
       }
     },
     {
       "tick": 80,
       "time": 4,
       "nextId": 414,
-      "state": "3deb1072",
+      "state": "89319e53",
       "events": "1005cba8",
       "rng": {
-        "draws": 161,
-        "digest": "a8b17a61"
+        "draws": 158,
+        "digest": "878ecdcb"
       }
     },
     {
       "tick": 80,
       "time": 4,
       "nextId": 414,
-      "state": "3deb1072",
+      "state": "89319e53",
       "events": "741638a5",
       "rng": {
-        "draws": 161,
-        "digest": "a8b17a61"
+        "draws": 158,
+        "digest": "878ecdcb"
       },
       "label": "demon-heal-tick",
       "players": [
@@ -1993,7 +2004,7 @@
           "cls": "hunter",
           "companionUpgrades": {},
           "counters": {
-            "damageTaken": 14
+            "damageTaken": 10
           },
           "craftSkills": {},
           "craftThrottle": {},
@@ -2004,6 +2015,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -2049,6 +2061,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -2082,7 +2095,7 @@
           "dodgeChance": 0.079,
           "fallStartY": 1.5,
           "fiveSecondRule": 103,
-          "hp": 49986,
+          "hp": 49990,
           "id": 405,
           "inCombat": true,
           "kind": "player",
@@ -2138,7 +2151,7 @@
           "forcedTargetId": 407,
           "forcedTargetTimer": 1,
           "hostile": true,
-          "hp": 49979,
+          "hp": 49983,
           "id": 408,
           "inCombat": true,
           "kind": "mob",
@@ -2179,7 +2192,7 @@
             ],
             [
               411,
-              21
+              17
             ]
           ],
           "weapon": {
@@ -2291,11 +2304,11 @@
       "tick": 80,
       "time": 4,
       "nextId": 416,
-      "state": "a8135a16",
+      "state": "d6b95091",
       "events": "d9be4bae",
       "rng": {
-        "draws": 161,
-        "digest": "a8b17a61"
+        "draws": 158,
+        "digest": "878ecdcb"
       },
       "label": "demon-resummoned",
       "players": [
@@ -2315,7 +2328,7 @@
           "cls": "hunter",
           "companionUpgrades": {},
           "counters": {
-            "damageTaken": 14
+            "damageTaken": 10
           },
           "craftSkills": {},
           "craftThrottle": {},
@@ -2326,6 +2339,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -2371,6 +2385,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -2404,7 +2419,7 @@
           "dodgeChance": 0.079,
           "fallStartY": 1.5,
           "fiveSecondRule": 103,
-          "hp": 49986,
+          "hp": 49990,
           "id": 405,
           "inCombat": true,
           "kind": "player",
@@ -2460,7 +2475,7 @@
           "forcedTargetId": 407,
           "forcedTargetTimer": 1,
           "hostile": true,
-          "hp": 49979,
+          "hp": 49983,
           "id": 408,
           "inCombat": true,
           "kind": "mob",
@@ -2501,7 +2516,7 @@
             ],
             [
               411,
-              21
+              17
             ]
           ],
           "weapon": {
@@ -2613,11 +2628,11 @@
       "tick": 80,
       "time": 4,
       "nextId": 418,
-      "state": "67e2b5ed",
+      "state": "2c5f4cbe",
       "events": "2cf8a2d5",
       "rng": {
-        "draws": 161,
-        "digest": "a8b17a61"
+        "draws": 158,
+        "digest": "878ecdcb"
       },
       "label": "demon-despawned",
       "players": [
@@ -2637,7 +2652,7 @@
           "cls": "hunter",
           "companionUpgrades": {},
           "counters": {
-            "damageTaken": 14
+            "damageTaken": 10
           },
           "craftSkills": {},
           "craftThrottle": {},
@@ -2648,6 +2663,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -2693,6 +2709,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -2726,7 +2743,7 @@
           "dodgeChance": 0.079,
           "fallStartY": 1.5,
           "fiveSecondRule": 103,
-          "hp": 49986,
+          "hp": 49990,
           "id": 405,
           "inCombat": true,
           "kind": "player",
@@ -2782,7 +2799,7 @@
           "forcedTargetId": 407,
           "forcedTargetTimer": 1,
           "hostile": true,
-          "hp": 49979,
+          "hp": 49983,
           "id": 408,
           "inCombat": true,
           "kind": "mob",
@@ -2823,7 +2840,7 @@
             ],
             [
               411,
-              21
+              17
             ]
           ],
           "weapon": {
@@ -2944,11 +2961,11 @@
       "tick": 80,
       "time": 4,
       "nextId": 418,
-      "state": "67e2b5ed",
+      "state": "2c5f4cbe",
       "events": "741638a5",
       "rng": {
-        "draws": 161,
-        "digest": "a8b17a61"
+        "draws": 158,
+        "digest": "878ecdcb"
       },
       "label": "final",
       "players": [
@@ -2968,7 +2985,7 @@
           "cls": "hunter",
           "companionUpgrades": {},
           "counters": {
-            "damageTaken": 14
+            "damageTaken": 10
           },
           "craftSkills": {},
           "craftThrottle": {},
@@ -2979,6 +2996,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -3024,6 +3042,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -3057,7 +3076,7 @@
           "dodgeChance": 0.079,
           "fallStartY": 1.5,
           "fiveSecondRule": 103,
-          "hp": 49986,
+          "hp": 49990,
           "id": 405,
           "inCombat": true,
           "kind": "player",
@@ -3113,7 +3132,7 @@
           "forcedTargetId": 407,
           "forcedTargetTimer": 1,
           "hostile": true,
-          "hp": 49979,
+          "hp": 49983,
           "id": 408,
           "inCombat": true,
           "kind": "mob",
@@ -3154,7 +3173,7 @@
             ],
             [
               411,
-              21
+              17
             ]
           ],
           "weapon": {

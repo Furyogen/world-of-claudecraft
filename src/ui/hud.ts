@@ -1,6 +1,7 @@
 import { audio } from '../game/audio';
 import type { GamepadKind } from '../game/gamepad_map';
 import type { Keybinds } from '../game/keybinds';
+import type { MenuIntentKind } from '../game/menu_gamepad_nav';
 import { music, musicZoneForLocation, shouldResetMusicForDungeonEntry } from '../game/music';
 import type { GameSettings, Settings } from '../game/settings';
 import { sfx } from '../game/sfx';
@@ -157,6 +158,16 @@ import {
 } from './character_appearance';
 import { ChatAnnouncer } from './chat_announcer';
 import {
+  CHAT_CATEGORIES,
+  type ChatCategory,
+  categoryForLine,
+  isChatCategoryVisible,
+  parseHiddenChatCategories,
+  type SystemChatCategory,
+  serializeHiddenChatCategories,
+  toggleChatCategory,
+} from './chat_categories';
+import {
   CHANNEL_LABEL_KEYS,
   CHAT_TAB_CHANNELS,
   type ChatOpenTab,
@@ -173,6 +184,7 @@ import {
   WHISPER_TAB,
   WHISPER_TAB_LABEL_KEY,
 } from './chat_channels';
+import { ChatMobileOverlay } from './chat_mobile_overlay';
 import { type ChatClock, clampChatClock, formatChatTimestamp } from './chat_timestamp';
 import { type ChatBoxGeometry, clampChatBox, parseChatBox, serializeChatBox } from './chat_window';
 import { formatClockTime } from './clock';
@@ -195,7 +207,7 @@ import { devTierBadgeDataUrl, devTierByIndex, devTierDisplayName } from './dev_t
 import { markDialogRoot } from './dialog_root';
 import { discordRoleTagLabel } from './discord_role_tag';
 import { discordStatusBadgeDataUrl, discordStatusDisplayName } from './discord_tier';
-import { dropdownKeyNav } from './dropdown_nav';
+import { dropdownKeyNav, TYPEAHEAD_MIN_OPTIONS, typeaheadTarget } from './dropdown_nav';
 import { emoteIconUrl } from './emote_icons';
 import {
   classDisplayName,
@@ -381,8 +393,8 @@ import { buildVcupHudView } from './vale_cup_hud_view';
 import { ValeCupIndicator } from './vale_cup_indicator';
 import { buildVcupIndicatorView } from './vale_cup_indicator_view';
 import { ValeCupWindow, vcupNationName } from './vale_cup_window';
-import { buildVendorView } from './vendor_view';
-import { renderVendorWindow } from './vendor_window';
+import { buildVendorSellRows, buildVendorView } from './vendor_view';
+import { renderVendorWindow, type VendorTab } from './vendor_window';
 import { nextVoicedYell, type VoicedYellState, voicedYellGain } from './voice_events';
 import {
   onWalletUiChange,
@@ -393,7 +405,9 @@ import {
   wocBalanceVerified,
 } from './wallet_balance';
 import { type WeaponProcEffectDesc, weaponProcLines } from './weapon_proc_view';
+import { isWindowDragHandle, STATIC_DIALOG_WINDOW_IDS } from './window_drag_handle';
 import { makeWindowFocus } from './window_focus';
+import { relocalizeWindowFrame } from './window_frame';
 import { installWindowResize, markResizableWindow } from './window_resize';
 import { formatXp, xpBarView } from './xp_bar';
 import { XpBarPainter } from './xp_bar_painter';
@@ -405,7 +419,9 @@ import { YumiMatchPainter } from './yumi_match_painter';
 // perf_overlay_settings.ts alongside the panel that consumes it.
 export interface OptionsHooks {
   logout(): void;
-  captureKey(cb: (code: string | null) => void): void;
+  // Arm a one-shot rebind capture; returns a canceller the rebind UI calls for its
+  // on-screen Cancel affordance and its focus-loss/blur exit (fires cb(null) once).
+  captureKey(cb: (code: string | null) => void): () => void;
   settings: Settings;
   onSettingChange(key: keyof GameSettings, value: GameSettings[keyof GameSettings]): void;
   // Switch the active locale at runtime (loads the locale chunk, relocalizes the page,
@@ -440,6 +456,9 @@ export interface GamepadBindingsHooks {
   // Detected brand of the connected pad, so the panel labels each button with the
   // glyph printed on that controller ('generic' combined labels when none/unknown).
   kind(): GamepadKind;
+  // Whether a pad is connected right now, so the options footer renders the
+  // controller button-legend strip only while one is present (spec section 5).
+  connected(): boolean;
 }
 
 export interface ReportHooks {
@@ -507,6 +526,10 @@ const MOB_TOOLTIP_MARGIN_RIGHT = 56;
 const MOB_TOOLTIP_MARGIN_BOTTOM = 60;
 const MOB_TOOLTIP_MOBILE_MINIMAP_GAP = 8;
 const MOB_TOOLTIP_MOBILE_EDGE_GAP = 8;
+// LT/RT page-scroll step for the generic gamepad menu fallback, as a fraction of
+// the trapped dialog's visible body height (mirrors the options window's
+// PAGE_SCROLL_FRACTION so paging feels identical across trapped dialogs).
+const TRAP_PAGE_SCROLL_FRACTION = 0.9;
 // The descriptor for a hidden target frame (no target, or a targeted world object).
 // unitFrameView reads only `present` when hiding, so the rest are no-op defaults; a
 // shared const avoids allocating a fresh descriptor for every hidden frame.
@@ -575,6 +598,7 @@ const MAIL_RESULT_ERROR_KEYS: Record<MailResultCode, TranslationKey> = {
   noRecipient: 'hudChrome.mailbox.result.noRecipient',
   tooManyParcels: 'hudChrome.mailbox.result.tooManyParcels',
   noMailQuestItems: 'hudChrome.mailbox.result.noMailQuestItems',
+  noMailSoulbound: 'hudChrome.itemSoulbound',
   notEnoughItems: 'hudChrome.mailbox.result.notEnoughItems',
   cantAffordPostage: 'hudChrome.mailbox.result.cantAffordPostage',
   recipientBoxFull: 'hudChrome.mailbox.result.recipientBoxFull',
@@ -686,13 +710,14 @@ const IGNORED_CHAT_NAMES_KEY = 'woc_ignored_chat_names';
 // implicit and never stored.
 const CHAT_TABS_KEY = 'woc_chat_tabs';
 const CHAT_ACTIVE_TAB_KEY = 'woc_chat_active_tab';
+// The categories the player has hidden from the combined All view (issue #1670);
+// see chat_categories.ts. Defaults to empty (everything visible).
+const CHAT_HIDDEN_CATEGORIES_KEY = 'woc_chat_hidden_categories';
 // Persisted chat-window geometry (drag position + resize size). Desktop only —
 // the mobile layout owns its own placement and ignores this.
 const CHAT_GEOMETRY_KEY = 'woc_chat_geometry';
-// Persisted MOBILE chat panel size: the panel's bottom inset in px, dragged via the
-// bottom resize handle. CSS clamps it to a valid range for the live viewport, so a value
-// saved in one orientation stays safe in another (never an off-screen / tiny panel).
-const MOBILE_CHAT_BOTTOM_KEY = 'woc_mobile_chat_bottom';
+// (The MOBILE chat panel geometry key lives with its controller in
+// chat_mobile_overlay.ts: one JSON blob for the movable/resizable open panel.)
 // Persisted top-left for each movable unit frame (MovableFrame in movable_frame.ts).
 const TARGET_FRAME_POS_KEY = 'woc_target_frame_pos';
 const PLAYER_FRAME_POS_KEY = 'woc_player_frame_pos';
@@ -710,6 +735,19 @@ const CHAT_TEMPLATE_KEYS = {
   roll: 'hud.chat.templates.roll',
   say: 'hud.chat.templates.say',
 } satisfies Record<string, TranslationKey>;
+// Short caption for each All-view filter-strip button (issue #1670).
+const CHAT_CATEGORY_LABEL_KEYS = {
+  game: 'hudChrome.chat.categories.game',
+  loot: 'hudChrome.chat.categories.loot',
+  xp: 'hudChrome.chat.categories.xp',
+  quest: 'hudChrome.chat.categories.quest',
+  event: 'hudChrome.chat.categories.event',
+  public: 'hudChrome.chat.categories.public',
+  party: 'hudChrome.chat.categories.party',
+  guild: 'hudChrome.chat.categories.guild',
+  channels: 'hudChrome.chat.categories.channels',
+  whispers: 'hudChrome.chat.categories.whispers',
+} satisfies Record<ChatCategory, TranslationKey>;
 type HotbarForm = 'normal' | 'bear' | 'cat' | 'stealth' | 'sport';
 
 const DELVE_AFFIX_COLORS: Record<string, string> = {
@@ -952,9 +990,16 @@ export class Hud {
   // shown, and drives both the log filter and the send channel.
   private chatTabs: ChatOpenTab[] = [];
   private activeChatTab: ChatTabId = 'all';
+  // Categories hidden from the combined All view (issue #1670): a channel tab
+  // still shows exactly its own channel, unaffected by this filter.
+  private hiddenChatCategories: ChatCategory[] = [];
   // Bind the tab-strip wheel-to-horizontal-scroll listener exactly once (renderChatTabs
   // rebuilds the strip's children but the bar element itself persists).
   private chatTabsWheelBound = false;
+  // Bind the category-strip wheel-to-horizontal-scroll listener exactly once,
+  // mirroring chatTabsWheelBound above (renderChatCategoryStrip rebuilds the
+  // strip's children but the strip element itself persists).
+  private chatCategoryStripWheelBound = false;
   // The control that opened the shared #ctx-menu (the chat "+" button), so the
   // outside-click closer can defer to that opener's own toggle click. Cleared on
   // every close path (closeContextMenu + item activation).
@@ -1138,6 +1183,9 @@ export class Hud {
     { event: Extract<SimEvent, { type: 'masterLoot' }>; receivedAt: number; durationMs: number }
   >();
   private openVendorNpcId: number | null = null;
+  // The copper vendor's active tab (Browse / Sell / Buyback). Hud-held so a
+  // snapshot repaint keeps it and each fresh open resets it to Browse.
+  private vendorTab: VendorTab = 'browse';
   private openHeroicVendorNpcId: number | null = null;
   private openDelveBoardNpcId: number | null = null;
   private lastDelveTrackerSig = '';
@@ -1166,7 +1214,9 @@ export class Hud {
   });
   private openGossipNpcId: number | null = null;
   private openQuestDetailId: string | null = null;
-  private pendingChatLinks = new Map<string, string>(); // display "[Name]" -> [[q:id]]/[[i:id]] token
+  // Ordered so two base/heroic items with the same display name retain their
+  // distinct tokens when the readable draft is converted for sending.
+  private pendingChatLinks: readonly { display: string; token: string }[] = [];
   private questDialogTrap: FocusTrapHandle | null = null;
   private questDialogOpenedAtMs = 0;
   // The NPC whose voice line is currently sounding, so update() can fade it by
@@ -1255,9 +1305,9 @@ export class Hud {
         startH: number;
       }
     | null = null;
-  // Mobile chat resize gesture (drag the bottom handle to set the panel's bottom inset).
-  private mobileChatResize: { pointerId: number; startY: number; startBottom: number } | null =
-    null;
+  // Mobile chat overlay controller (chat_mobile_overlay.ts): the move chip +
+  // bottom resize bar on the open touch panel, with persisted geometry.
+  private chatMobileOverlay: ChatMobileOverlay | null = null;
   // Movable unit frames (the shared MovableFrame controller, movable_frame.ts):
   // the target frame and the player frame each get a corner move/lock button, a
   // pointer drag, and a persisted top-left. Constructed once in initFrameMovers.
@@ -1594,6 +1644,7 @@ export class Hud {
     $('#map-close').addEventListener('click', () => {
       $('#map-window').style.display = 'none';
       this.hideTooltip(); // a touch marker tip can outlive the window otherwise
+      this.syncAnyWindowOpenState();
     });
     const mapCanvas = $('#map-canvas') as unknown as HTMLCanvasElement;
     mapCanvas.addEventListener(
@@ -1866,7 +1917,7 @@ export class Hud {
       const el = target?.closest?.('.window.panel') as HTMLElement | null;
       if (!el) return;
       this.bringWindowToFront(el);
-      if (ev.button !== 0 || !target || !this.isWindowDragHandle(target, el)) return;
+      if (ev.button !== 0 || !target || !isWindowDragHandle(target, el)) return;
       ev.preventDefault();
       this.hideTooltip();
       const rect = el.getBoundingClientRect();
@@ -1920,6 +1971,12 @@ export class Hud {
 
   private isWindowVisible(el: HTMLElement): boolean {
     if (el.id === 'social-window') return el.classList.contains('open');
+    // The mobile More tray is a class-driven modal (body.mobile-more-open): it
+    // stays display:flex and hides via visibility/opacity for its fade, so a
+    // computed-display test would read it as permanently open. Report its real
+    // open state from the body class, mirroring the social-window case above.
+    if (el.id === 'mobile-extra-controls')
+      return document.body.classList.contains('mobile-more-open');
     if (el.hidden || el.hasAttribute('hidden')) return false;
     return getComputedStyle(el).display !== 'none';
   }
@@ -1946,10 +2003,20 @@ export class Hud {
   }
 
   private syncAnyWindowOpenState(): void {
-    const anyOpen = [...document.querySelectorAll<HTMLElement>('.window.panel')]
+    const windows = [...document.querySelectorAll<HTMLElement>('.window.panel')];
+    const anyOpen = windows
       .filter((win) => win.id !== 'mobile-extra-controls')
       .some((win) => this.isWindowVisible(win));
     document.body.classList.toggle('mobile-window-open', anyOpen);
+    const mapWindow = document.getElementById('map-window');
+    const questLogWindow = document.getElementById('quest-log-window');
+    document.body.classList.toggle(
+      'mobile-map-quest-open',
+      !!mapWindow &&
+        !!questLogWindow &&
+        this.isWindowVisible(mapWindow) &&
+        this.isWindowVisible(questLogWindow),
+    );
   }
 
   private placeNewWindow(el: HTMLElement): void {
@@ -1958,25 +2025,62 @@ export class Hud {
     // their inset:0 CSS with an inline top/left/right:auto/bottom:auto that
     // never gets reset, breaking the full-screen layout for the rest of the
     // session (issue 1577 char/talents redo).
-    if (
-      document.body.classList.contains('mobile-touch') ||
-      el.dataset.windowMoved === '1' ||
-      el.id === 'loot-window' ||
-      el.id === 'confirm-dialog'
-    )
+    if (document.body.classList.contains('mobile-touch')) {
+      // A desktop session bakes inline cascade/drag geometry (left/top plus
+      // windowMoved); after an Interface Mode or rotation flip to touch that
+      // inline inset would beat the dock CSS for the rest of the session
+      // (inline wins over any layered rule), so clear it at show time. The
+      // cursor-anchored popups own their inline position in both modes and are
+      // left alone; inline width/height (the touch corner-band resize) stay.
+      if (el.id !== 'loot-window' && el.id !== 'confirm-dialog' && el.style.left !== '') {
+        el.style.removeProperty('left');
+        el.style.removeProperty('top');
+        el.style.removeProperty('right');
+        el.style.removeProperty('bottom');
+        el.style.removeProperty('transform');
+        delete el.dataset.windowMoved;
+      }
       return;
-    if (
-      document.body.classList.contains('vendor-open') &&
-      (el.id === 'vendor-window' || el.id === 'bags')
-    )
+    }
+    // The static-dialog family (quest/gossip, confirm, delve board/rite,
+    // lockpick, loot, report) is never cascade-offset: these are centered
+    // transient dialogs whose drag is disabled (STATIC_DIALOG_WINDOW_IDS), so
+    // a baked cascade position would stick for the session with no way to
+    // pull the window back. loot-window/confirm-dialog were already skipped
+    // (cursor-anchored / modal); the set subsumes both.
+    if (el.dataset.windowMoved === '1' || STATIC_DIALOG_WINDOW_IDS.has(el.id)) return;
+    // A window that already carries a baked inline position was cascaded (or
+    // otherwise pinned) before: re-cascading from that persisted rect would
+    // compound another 28px of drift on every reopen while any other window is
+    // open, so only a window still at its stylesheet position cascades. The
+    // reopen still re-clamps in place (the old compounding cascade incidentally
+    // did this), so a position persisted at a larger viewport cannot reopen
+    // off-screen.
+    if (el.style.left !== '') {
+      const rect = el.getBoundingClientRect();
+      this.setWindowPixelPosition(el, rect.left, rect.top, rect);
       return;
-    // The bank docks its bags companion the same way the vendor does (a fixed
-    // side-by-side cluster driven by body.bank-open, mobile-paired 50/50); baking a
-    // cascade-offset inline position onto either half would defeat that layout (the
-    // inline inset beats the docking CSS), so skip the cascade for the bank cluster.
+    }
+    // The vendor floats and cascades like the World Market, but its auto-opened
+    // bags companion must NOT be pinned: the cascade would bake an inline left/top
+    // onto #bags that outlives the pairing and beats the bank's later
+    // body.bank-open dock (inline wins over any layered rule), breaking the common
+    // vendor-then-bank hub flow.
+    if (document.body.classList.contains('vendor-open') && el.id === 'bags') return;
+    // The bank docks its bags companion side by side (a fixed cluster driven by
+    // body.bank-open, mobile-paired 50/50); baking a cascade-offset inline position
+    // onto either half would defeat that layout (the inline inset beats the docking
+    // CSS), so skip the cascade for the bank cluster.
     if (
       document.body.classList.contains('bank-open') &&
       (el.id === 'bank-window' || el.id === 'bags')
+    )
+      return;
+    // The market pairs its bags companion the same way on touch (body.market-open,
+    // 50/50 dock): a baked cascade inset on either half would beat the dock CSS.
+    if (
+      document.body.classList.contains('market-open') &&
+      (el.id === 'market-window' || el.id === 'bags')
     )
       return;
     const openCount = [...document.querySelectorAll<HTMLElement>('.window.panel')].filter(
@@ -2004,18 +2108,6 @@ export class Hud {
   private windowZValue(el: HTMLElement): number {
     const z = Number.parseInt(el.style.zIndex || getComputedStyle(el).zIndex || '', 10);
     return Number.isFinite(z) ? z : 0;
-  }
-
-  private isWindowDragHandle(target: HTMLElement, win: HTMLElement): boolean {
-    if (
-      target.closest(
-        'button, input, textarea, select, a, .x-btn, .ui-dd, [draggable="true"], #map-canvas, #map-zoom',
-      )
-    )
-      return false;
-    const title = target.closest('.panel-title');
-    if (title && win.contains(title)) return true;
-    return win.id === 'map-window' && target === win;
   }
 
   private setWindowPixelPosition(
@@ -2223,6 +2315,17 @@ export class Hud {
       case 'emote-editor':
         this.closeEmoteEditor();
         break;
+      case 'mobile-extra-controls':
+        // The More tray is class-driven (body.mobile-more-open), NOT inline
+        // display: setting el.style.display='none' here would stamp an inline
+        // rule that permanently outranks the stylesheet and the tray could never
+        // reopen. Close it the way its own controls do (the tap-outside handler
+        // + the X + mobile_controls.closeMoreModal all remove these three).
+        document.body.classList.remove('mobile-more-open');
+        document.getElementById('mobile-controls')?.classList.remove('expanded');
+        document.getElementById('mobile-more')?.classList.remove('active');
+        this.hideTooltip();
+        break;
       default:
         el.style.display = 'none';
         this.hideTooltip();
@@ -2241,13 +2344,16 @@ export class Hud {
   private initChatTabs(): void {
     let savedTabs: string | null = null;
     let savedActive: string | null = null;
+    let savedHiddenCategories: string | null = null;
     try {
       savedTabs = localStorage.getItem(CHAT_TABS_KEY);
       savedActive = localStorage.getItem(CHAT_ACTIVE_TAB_KEY);
+      savedHiddenCategories = localStorage.getItem(CHAT_HIDDEN_CATEGORIES_KEY);
     } catch {
       /* storage unavailable */
     }
     this.chatTabs = parseChatTabs(savedTabs);
+    this.hiddenChatCategories = parseHiddenChatCategories(savedHiddenCategories);
     this.activeChatTab =
       savedActive === 'all' ||
       savedActive === 'combat' ||
@@ -2259,6 +2365,7 @@ export class Hud {
     for (const ch of this.chatTabs)
       if (isChatTabChannel(ch) && channelNeedsJoin(ch)) this.sim.chat(`/join ${ch}`);
     this.renderChatTabs();
+    this.renderChatCategoryStrip();
     this.selectChatTab(this.activeChatTab, false);
   }
 
@@ -2269,6 +2376,60 @@ export class Hud {
     } catch {
       /* storage unavailable */
     }
+  }
+
+  private persistHiddenChatCategories(): void {
+    try {
+      localStorage.setItem(
+        CHAT_HIDDEN_CATEGORIES_KEY,
+        serializeHiddenChatCategories(this.hiddenChatCategories),
+      );
+    } catch {
+      /* storage unavailable */
+    }
+  }
+
+  // The compact category filter strip (issue #1670): one small labeled toggle
+  // button per category, shaping the combined All view without giving up
+  // channel tabs. Only meaningful on the All tab (a channel tab already shows
+  // exactly one channel), so it is hidden on every other tab.
+  private renderChatCategoryStrip(): void {
+    const strip = document.getElementById('chat-category-strip');
+    if (!strip) return;
+    if (!this.chatCategoryStripWheelBound) {
+      this.chatCategoryStripWheelBound = true;
+      strip.addEventListener(
+        'wheel',
+        (ev) => {
+          if (ev.deltaY === 0 || strip.scrollWidth <= strip.clientWidth) return;
+          ev.preventDefault();
+          strip.scrollLeft += ev.deltaY;
+        },
+        { passive: false },
+      );
+    }
+    strip.innerHTML = '';
+    for (const cat of CHAT_CATEGORIES) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'chat-category-toggle';
+      btn.dataset.cat = cat;
+      btn.textContent = t(CHAT_CATEGORY_LABEL_KEYS[cat]);
+      const visible = isChatCategoryVisible(this.hiddenChatCategories, cat);
+      btn.setAttribute('aria-pressed', visible ? 'true' : 'false');
+      btn.classList.toggle('off', !visible);
+      btn.title = t(visible ? 'hudChrome.chat.categories.hide' : 'hudChrome.chat.categories.show', {
+        category: btn.textContent,
+      });
+      btn.addEventListener('click', () => {
+        this.hiddenChatCategories = toggleChatCategory(this.hiddenChatCategories, cat);
+        this.persistHiddenChatCategories();
+        this.renderChatCategoryStrip();
+        this.applyChatFilter();
+      });
+      strip.append(btn);
+    }
+    strip.classList.toggle('active', this.activeChatTab === 'all');
   }
 
   // -------------------------------------------------------------------------
@@ -2295,35 +2456,11 @@ export class Hud {
     grip.setAttribute('aria-hidden', 'true');
     frame.appendChild(grip);
 
-    // Mobile-only resize handle: a BODY-LEVEL bar pinned by CSS to the open panel's bottom
-    // edge (it shares the panel's --mobile-chat-bottom var, so they move together) with a
-    // very high z-index so nothing can overlay it, and touch-action:none so a drag on it is
-    // a RESIZE, not a page scroll. Dragging it sets --mobile-chat-bottom (clamped by CSS).
-    // It is a direct child of body (not #ui / the wrap) so its z-index is not capped by an
-    // ancestor stacking context. Hidden on desktop via CSS.
-    const resizeHandle = document.createElement('div');
-    resizeHandle.className = 'chat-mobile-resize';
-    resizeHandle.title = t('hudChrome.chatWindow.resize');
-    resizeHandle.setAttribute('aria-hidden', 'true');
-    document.body.appendChild(resizeHandle);
-    resizeHandle.addEventListener('pointerdown', (ev) =>
-      this.onMobileChatResizeStart(ev, resizeHandle),
-    );
-    resizeHandle.addEventListener('pointermove', (ev) => this.onMobileChatResizeMove(ev));
-    const endMobileResize = (ev: PointerEvent) => this.onMobileChatResizeEnd(ev);
-    resizeHandle.addEventListener('pointerup', endMobileResize);
-    resizeHandle.addEventListener('pointercancel', endMobileResize);
-    try {
-      const savedBottom = localStorage.getItem(MOBILE_CHAT_BOTTOM_KEY);
-      if (savedBottom) {
-        // Clamp on restore so a value saved from a larger viewport (or an earlier build)
-        // cannot land out of range and make the first drag feel dead.
-        const clamped = this.clampMobileChatBottom(Number.parseInt(savedBottom, 10) || 52);
-        document.documentElement.style.setProperty('--mobile-chat-bottom', `${clamped}px`);
-      }
-    } catch {
-      /* storage unavailable */
-    }
+    // Mobile-only overlay controller: builds the bottom resize bar and the
+    // top-corner move chip, restores the persisted panel geometry, and drives
+    // the --mobile-chat-left/top/h vars the open-state CSS consumes. Both
+    // affordances are display:none on desktop.
+    this.chatMobileOverlay = new ChatMobileOverlay(wrap);
 
     // touch-action lives in CSS now: `none` on desktop so a touch-drag on the empty
     // strip moves the chat box (the move gesture is desktop-only, see
@@ -2436,57 +2573,6 @@ export class Hud {
     this.persistChatBoxGeometry();
   }
 
-  // Clamp the panel's bottom inset to the same range the CSS clamp uses (12px .. viewport
-  // minus a reserved top band), so the stored value never drifts out of range. If it did,
-  // the CSS clamps it for display but a drag starting from the out-of-range raw value would
-  // not move the (already-clamped) panel until the raw crossed back in, which reads as a
-  // dead drag. Clamping in JS too keeps the drag responsive from the first pixel.
-  private clampMobileChatBottom(v: number): number {
-    const hi = Math.max(12, window.innerHeight - 320);
-    return Math.min(hi, Math.max(12, v));
-  }
-
-  // Mobile chat resize: drag the bottom handle to set --mobile-chat-bottom (the panel's
-  // bottom inset). Dragging DOWN lowers the inset (taller panel); UP raises it (shorter).
-  // The handle has touch-action:none and captures the pointer, so the drag is a resize (not
-  // a scroll) and follows the finger.
-  private onMobileChatResizeStart(ev: PointerEvent, handle: HTMLElement): void {
-    if (!this.isMobileLayout()) return;
-    ev.preventDefault();
-    ev.stopPropagation();
-    const raw = document.documentElement.style.getPropertyValue('--mobile-chat-bottom');
-    const startBottom = this.clampMobileChatBottom(raw ? Number.parseInt(raw, 10) || 52 : 52);
-    this.mobileChatResize = { pointerId: ev.pointerId, startY: ev.clientY, startBottom };
-    document.body.classList.add('chat-box-dragging');
-    try {
-      handle.setPointerCapture?.(ev.pointerId);
-    } catch {
-      /* synthetic pointer */
-    }
-  }
-
-  private onMobileChatResizeMove(ev: PointerEvent): void {
-    const g = this.mobileChatResize;
-    if (!g || g.pointerId !== ev.pointerId) return;
-    ev.preventDefault();
-    // Finger moving down (clientY grows) shrinks the bottom inset so the panel grows down.
-    const bottom = this.clampMobileChatBottom(g.startBottom - (ev.clientY - g.startY));
-    document.documentElement.style.setProperty('--mobile-chat-bottom', `${Math.round(bottom)}px`);
-  }
-
-  private onMobileChatResizeEnd(ev: PointerEvent): void {
-    const g = this.mobileChatResize;
-    if (!g || g.pointerId !== ev.pointerId) return;
-    this.mobileChatResize = null;
-    document.body.classList.remove('chat-box-dragging');
-    const bottom = document.documentElement.style.getPropertyValue('--mobile-chat-bottom');
-    try {
-      if (bottom) localStorage.setItem(MOBILE_CHAT_BOTTOM_KEY, bottom.trim());
-    } catch {
-      /* storage unavailable */
-    }
-  }
-
   private applyChatBoxGeometry(): void {
     if (!this.chatBox || this.isMobileLayout()) return;
     const wrap = document.getElementById('chatlog-wrap');
@@ -2525,9 +2611,11 @@ export class Hud {
   }
 
   // Public: snap the chat window back to its stock CSS position/size and forget
-  // the saved geometry. Wired to the "Reset Chat Window" interface option.
+  // the saved geometry (both the desktop box and the mobile overlay panel).
+  // Wired to the "Reset Chat Window" interface option.
   resetChatWindow(): void {
     this.chatBox = null;
+    this.chatMobileOverlay?.reset();
     try {
       localStorage.removeItem(CHAT_GEOMETRY_KEY);
     } catch {
@@ -2735,6 +2823,7 @@ export class Hud {
     this.combatLogEl.classList.toggle('active', showCombat);
     if (!showCombat) this.applyChatFilter();
     this.updateActiveTabStyles();
+    document.getElementById('chat-category-strip')?.classList.toggle('active', tab === 'all');
     if (persist) this.persistChatTabs();
     this.syncChatPlaceholder();
   }
@@ -2829,18 +2918,28 @@ export class Hud {
     return tab !== null && isChatTabChannel(tab) ? tab : null;
   }
 
-  private applyChatFilter(): void {
+  // A line is hidden when either an active CHANNEL tab excludes it (exact
+  // chan match, unchanged), or, only on the combined All view, its
+  // CATEGORY is toggled off in the filter strip. A channel tab always shows
+  // exactly its own channel regardless of the category strip (issue #1670).
+  private isChatLineFiltered(chan: string, cat: ChatCategory): boolean {
     const filter = this.chatFilterTab();
+    if (filter !== null) return chan !== filter;
+    return !isChatCategoryVisible(this.hiddenChatCategories, cat);
+  }
+
+  private applyChatFilter(): void {
     for (const child of Array.from(this.chatLogEl.children)) {
-      const chan = (child as HTMLElement).dataset.chan;
-      (child as HTMLElement).classList.toggle('chat-hidden', filter !== null && chan !== filter);
+      const el = child as HTMLElement;
+      const chan = el.dataset.chan ?? 'system';
+      const cat = (el.dataset.cat as ChatCategory | undefined) ?? categoryForLine(chan);
+      el.classList.toggle('chat-hidden', this.isChatLineFiltered(chan, cat));
     }
     this.chatLogEl.scrollTop = this.chatLogEl.scrollHeight;
   }
 
-  private hideIfFiltered(div: HTMLElement, chan: string): void {
-    const filter = this.chatFilterTab();
-    if (filter !== null && chan !== filter) div.classList.add('chat-hidden');
+  private hideIfFiltered(div: HTMLElement, chan: string, cat: ChatCategory): void {
+    if (this.isChatLineFiltered(chan, cat)) div.classList.add('chat-hidden');
   }
 
   private syncChatPlaceholder(): void {
@@ -2877,7 +2976,7 @@ export class Hud {
   // token it stands for, so applyPendingChatLinks can swap it back in on send.
   private insertChatLink(display: string, token: string): void {
     const input = $('#chat-input') as unknown as HTMLInputElement;
-    this.pendingChatLinks.set(display, token);
+    this.pendingChatLinks = [...this.pendingChatLinks, { display, token }];
     input.placeholder = this.activeChatPlaceholder();
     input.style.display = 'block';
     input.value =
@@ -2890,15 +2989,16 @@ export class Hud {
   // Drop any shift-click-inserted links that were never sent (chat closed/cleared),
   // so a stale [Name] entry can't silently rewrite a later message.
   clearPendingChatLinks(): void {
-    this.pendingChatLinks.clear();
+    this.pendingChatLinks = [];
   }
 
   // Replace any inserted readable [Name] with its [[q:id]]/[[i:id]] token, then forget them.
   private applyPendingChatLinks(typed: string): string {
-    if (this.pendingChatLinks.size === 0) return typed;
+    if (this.pendingChatLinks.length === 0) return typed;
+    const pending = this.pendingChatLinks;
+    this.pendingChatLinks = [];
     let out = typed;
-    for (const [display, token] of this.pendingChatLinks) out = out.split(display).join(token);
-    this.pendingChatLinks.clear();
+    for (const { display, token } of pending) out = out.replace(display, token);
     return out;
   }
 
@@ -3235,8 +3335,8 @@ export class Hud {
     document.getElementById('ui') as HTMLElement,
     (x, y, z) => this.renderer.worldToScreen(x, y, z),
     getUiScale,
-    // Tier the pool cap / TTL / drop-non-crit from the STATIC preset (data-fx-level),
-    // never the governor. spawn() reads this per event.
+    // Tier the pool cap / TTL from the STATIC preset (data-fx-level), never the
+    // governor. spawn() reads this per event.
     { getFxTier: () => this.fxTier() },
   );
   // The player frame is the FIRST instance of the unit_frame family. It owns
@@ -3573,6 +3673,11 @@ export class Hud {
     showError: (text) => this.showError(text),
     slotName: (slot) => itemSlotName(slot),
     syncBags: (open) => {
+      // The market-open body class drives the touch 50/50 dock (market left,
+      // bags right, the vendor-open/bank-open pairing pattern): without it both
+      // sheets edge-pin to the SAME full-screen rect on mobile and the bags
+      // window stacks directly on top of the market (live bug, PR #1736).
+      document.body.classList.toggle('market-open', open);
       if (open) {
         this.renderBags();
         $('#bags').style.display = 'flex';
@@ -3786,6 +3891,11 @@ export class Hud {
       this.chatClock = clock;
       localStorage.setItem('chatClock', clock);
     },
+    // Authoritative online play (drives the Overview status readout + gates the
+    // online-only quick actions), and the shared confirm dialog for Reset all.
+    isOnline: () => this.sim.socialInfo !== null,
+    confirmDialog: (title, body, okText, cancelText, onOk) =>
+      this.confirmDialog(title, body, okText, cancelText, onOk),
   });
   // Leaderboard window painter (leaderboard_view.ts async-free core + leaderboard_
   // window.ts painter). It owns the page index + focus opener and the one
@@ -3861,6 +3971,7 @@ export class Hud {
     hideTooltip: () => this.hideTooltip(),
     focusFirstInteractive: (root, preferredSelector) =>
       this.focusManager.focusFirst(root, preferredSelector),
+    onVisibilityChange: () => this.syncAnyWindowOpenState(),
     confirmDialog: (title, body, okText, cancelText, onOk) =>
       this.confirmDialog(title, body, okText, cancelText, onOk),
     insertQuestChatLink: (questId) => this.insertQuestChatLink(questId),
@@ -4224,12 +4335,18 @@ export class Hud {
   private itemTooltip(item: ItemDef, compare = true): string {
     const qColor = QUALITY_COLOR[item.quality ?? 'common'] ?? '#fff';
     let html = `<div class="tt-title" style="color:${qColor}">${esc(itemDisplayName(item))}</div>`;
-    html += `<div class="tt-sub">${esc(
+    // Quality/kind line, e.g. "Epic Armor". Heroic upgraded variants append a gold
+    // "[HEROIC]" tag here (never in the name) so the drop reads "Epic Armor [HEROIC]".
+    let qualityKindHtml = esc(
       t('itemUi.tooltip.qualityKind', {
         quality: itemQualityLabel(item.quality),
         kind: itemKindLabel(item.kind),
       }),
-    )}</div>`;
+    );
+    if (item.heroicOf) {
+      qualityKindHtml += ` <span style="color:#e5cc80">${esc(t('hudChrome.itemHeroicTag'))}</span>`;
+    }
+    html += `<div class="tt-sub">${qualityKindHtml}</div>`;
     if (item.slot) {
       // Classic layout: slot name on the left, armor subtype (Cloth/Leather/Mail)
       // right-aligned on the same line so it is clear which classes the gear suits.
@@ -4257,6 +4374,11 @@ export class Hud {
           t('hudChrome.options.itemScoreLine', { score: itemNumber(itemScore(item), 1) }),
         )}</div>`;
       }
+    }
+    // Bound-to-owner marker (marks and other soulbound tokens): shown like the
+    // classic "Soulbound" line so a player can see it cannot be traded or destroyed.
+    if (item.soulbound) {
+      html += `<div class="tt-sub" style="color:#ffd100">${esc(t('hudChrome.itemSoulbound'))}</div>`;
     }
     if (item.weapon) {
       const dps = (item.weapon.min + item.weapon.max) / 2 / item.weapon.speed;
@@ -4514,6 +4636,15 @@ export class Hud {
   }
 
   private refreshLocalizedDynamicUi(): void {
+    // Frame chrome first: every MOUNTED window frame (open or closed; the
+    // ensureFrame reuse paths keep a closed frame's chrome alive) re-resolves
+    // its stamped t() text (title, tab labels, close aria-label) from the key
+    // data attributes, so no frame keeps the pre-switch language for the
+    // session. Runs before the per-window renders below so a window that
+    // interpolates its title (vendor, quest log, ...) re-stamps it after.
+    for (const frame of document.querySelectorAll<HTMLElement>('.window-frame')) {
+      relocalizeWindowFrame(frame);
+    }
     this.refreshKeybindLabels();
     this.updateQuestTracker();
     this.updateDelveTracker();
@@ -4527,9 +4658,13 @@ export class Hud {
     this.playerFrameMover?.relocalize();
     if (this.questlogWindow.isOpen) this.questlogWindow.render();
     if ($('#bags').style.display !== 'none') this.renderBags();
-    if (this.openVendorNpcId !== null && $('#vendor-window').style.display === 'block')
+    // Gate on visibility, not a literal display value: the vendor root opens
+    // display:flex on desktop (bounded frame) and display:block on the touch dock,
+    // so a hard-coded === 'block' would leave the open vendor's text stale after a
+    // live language switch until reopen.
+    if (this.openVendorNpcId !== null && $('#vendor-window').style.display !== 'none')
       this.renderVendor();
-    if (this.openHeroicVendorNpcId !== null && $('#vendor-window').style.display === 'block')
+    if (this.openHeroicVendorNpcId !== null && $('#vendor-window').style.display !== 'none')
       this.renderHeroicVendor();
     if (this.marketWindow.isOpen) this.marketWindow.render();
     if (this.bankWindow.isOpen) this.bankWindow.render();
@@ -7225,13 +7360,15 @@ export class Hud {
     if (npc?.kind !== 'npc') return;
     const delve = Object.values(DELVES).find((d) => d.boardNpcId === npc.templateId);
     if (!delve) return;
-    if ($('#delve-board').style.display !== 'block')
+    // display:flex (not block): the delve board is a bounded flex column so its
+    // body flex-fills and scrolls on a corner resize (see the #delve-board CSS).
+    if ($('#delve-board').style.display !== 'flex')
       this.delveTrap = this.focusManager.open({ root: () => $('#delve-board') });
     this.openDelveBoardNpcId = npcId;
     this.selectedDelveTier = 'normal';
     this.delveBoardTab = 'delve';
     this.closeOtherWindows('#delve-board');
-    $('#delve-board').style.display = 'block';
+    $('#delve-board').style.display = 'flex';
     this.renderDelveBoard(true);
   }
 
@@ -8077,6 +8214,7 @@ export class Hud {
     if (el.style.display === 'block') {
       el.style.display = 'none';
       this.hideTooltip(); // a touch marker tip can outlive the window otherwise
+      this.syncAnyWindowOpenState();
       return;
     }
     this.closeOtherWindows('#map-window');
@@ -8084,6 +8222,7 @@ export class Hud {
     this.mapCenter = null;
     el.style.display = 'block';
     this.updateMapWindow();
+    this.syncAnyWindowOpenState();
   }
 
   // scroll-wheel / button zoom for the world map (clamped to [1, MAP_MAX_ZOOM])
@@ -8575,15 +8714,16 @@ export class Hud {
             this.log(
               t('hud.core.xpGainRested', { amount: ev.amount, rested: ev.rested }),
               '#a980d8',
+              'xp',
             );
           } else {
-            this.log(t('hud.core.xpGain', { amount: ev.amount }), '#a980d8');
+            this.log(t('hud.core.xpGain', { amount: ev.amount }), '#a980d8', 'xp');
           }
           break;
         }
         case 'levelup': {
           this.showBanner(t('hud.core.levelBanner', { level: ev.level }));
-          this.log(t('hud.core.levelLog', { level: ev.level }), '#ffd100');
+          this.log(t('hud.core.levelLog', { level: ev.level }), '#ffd100', 'xp');
           audio.levelUp();
           if (ev.level === 5) {
             const characterId = (this.sim as unknown as { characterId?: number }).characterId;
@@ -8596,7 +8736,7 @@ export class Hud {
           // First talent point (and spec) unlock — nudge the player to the panel.
           if (ev.level === FIRST_TALENT_LEVEL && talentsFor(this.sim.cfg.playerClass)) {
             this.showBanner(t('game.talents.unlockBanner'));
-            this.log(t('game.talents.unlockHint'), '#ffd100');
+            this.log(t('game.talents.unlockHint'), '#ffd100', 'xp');
           }
           break;
         }
@@ -8608,6 +8748,7 @@ export class Hud {
           this.log(
             `${t('game.progression.virtualLevelUp')} ${formatNumber(ev.level, { maximumFractionDigits: 0 })}!`,
             '#ffd100',
+            'xp',
           );
           audio.levelUp();
           break;
@@ -8615,7 +8756,7 @@ export class Hud {
         case 'milestoneUnlocked': {
           const name = this.milestoneName(ev.milestoneId);
           this.showBanner(`${t('game.milestone.unlocked')}: ${name}`);
-          this.log(`${t('game.milestone.unlocked')}: ${name}`, '#ffd100');
+          this.log(`${t('game.milestone.unlocked')}: ${name}`, '#ffd100', 'xp');
           audio.levelUp();
           break;
         }
@@ -8624,7 +8765,7 @@ export class Hud {
         case 'comboPoint':
           break;
         case 'loot': {
-          this.log(this.localizeLootText(ev.text), '#7fdc4f');
+          this.log(this.localizeLootText(ev.text), '#7fdc4f', 'loot');
           if (
             / wins .+ \(\d+\)$/.test(ev.text) ||
             /^Everyone passed on .+\.$/.test(ev.text) ||
@@ -8733,7 +8874,7 @@ export class Hud {
         }
         case 'calendarResult': {
           if (ev.code === 'created' || ev.code === 'removed') {
-            this.log(t(CALENDAR_RESULT_KEYS[ev.code]), '#c8f7c5');
+            this.log(t(CALENDAR_RESULT_KEYS[ev.code]), '#c8f7c5', 'event');
           } else {
             this.showError(t(CALENDAR_RESULT_KEYS[ev.code]));
           }
@@ -8749,7 +8890,7 @@ export class Hud {
           break;
         case 'questProgress': {
           const progressText = this.localizeQuestProgressText(ev.questId, ev.text);
-          this.log(progressText, '#dcd29f');
+          this.log(progressText, '#dcd29f', 'quest');
           // The classic yellow top-center flash ("Forest Wolf slain: 3/8"); the
           // log line above stays the durable, announced copy.
           this.questBanner.show(progressText);
@@ -8972,6 +9113,19 @@ export class Hud {
             () => this.sim.partyDecline(),
           );
           break;
+        case 'readyCheckStart':
+          audio.readyCheck();
+          this.showPrompt(
+            t('hudChrome.readyCheck.prompt', { name: `<b>${esc(ev.fromName)}</b>` }),
+            t('hudChrome.readyCheck.ready'),
+            () => this.sim.readyCheckRespond(true),
+            () => this.sim.readyCheckRespond(false),
+            t('hudChrome.readyCheck.notReady'),
+            // Ignoring the prompt must read as "no response", not "not ready":
+            // let the sim's own 30s timeout bucket the straggler.
+            () => {},
+          );
+          break;
         case 'guildInvite':
           audio.questAccept();
           this.showPrompt(
@@ -9027,10 +9181,11 @@ export class Hud {
               position: formatNumber(ev.position, { maximumFractionDigits: 0 }),
             }),
             '#ffa040',
+            'event',
           );
           break;
         case 'arenaUnqueued':
-          this.log(t('hud.system.arenaUnqueued'), '#ffa040');
+          this.log(t('hud.system.arenaUnqueued'), '#ffa040', 'event');
           break;
         case 'arenaFound': {
           const name =
@@ -9044,6 +9199,7 @@ export class Hud {
               className: cls,
             }),
             '#ffa040',
+            'event',
           );
           audio.duelChallenge();
           break;
@@ -9190,19 +9346,21 @@ export class Hud {
               position: formatNumber(ev.position, { maximumFractionDigits: 0 }),
             }),
             '#ffa040',
+            'event',
           );
           break;
         case 'vcupUnqueued':
-          this.log(t('hudChrome.vcup.logUnqueued'), '#ffa040');
+          this.log(t('hudChrome.vcup.logUnqueued'), '#ffa040', 'event');
           break;
         case 'vcupFound': {
           const nationA = vcupNationName(ev.nationA);
           const nationB = vcupNationName(ev.nationB);
           this.showBanner(t('hudChrome.vcup.bannerFound', { nationA, nationB }));
-          this.log(t('hudChrome.vcup.logFound', { nationA, nationB }), '#ffa040');
+          this.log(t('hudChrome.vcup.logFound', { nationA, nationB }), '#ffa040', 'event');
           const allies = [t('hud.core.you'), ...ev.allies.map((c) => c.name)].join(', ');
           const enemies = ev.enemies.map((c) => c.name).join(', ');
-          if (enemies) this.log(t('hudChrome.vcup.logRoster', { allies, enemies }), '#ffa040');
+          if (enemies)
+            this.log(t('hudChrome.vcup.logRoster', { allies, enemies }), '#ffa040', 'event');
           audio.duelChallenge();
           break;
         }
@@ -9324,16 +9482,16 @@ export class Hud {
             this.renderer.fiestaAugmentBurst(this.sim.playerId);
             audio.fiestaAugment();
             this.showBanner(t('fiesta.banner.augmentGained', { name }));
-            this.log(t('fiesta.log.augmentGained', { name }), '#ff3df0');
+            this.log(t('fiesta.log.augmentGained', { name }), '#ff3df0', 'event');
           } else {
-            this.log(t('fiesta.log.allyAugment', { player: ev.byName, name }), '#c98bff');
+            this.log(t('fiesta.log.allyAugment', { player: ev.byName, name }), '#c98bff', 'event');
           }
           break;
         }
         case 'fiestaPowerup': {
           const name = tOptional(`fiesta.powerup.${ev.defId}.name`) ?? ev.defId;
           const who = sim.entities.get(ev.entityId)?.name ?? '?';
-          this.log(t('fiesta.log.powerup', { player: who, name }), '#ffd24a');
+          this.log(t('fiesta.log.powerup', { player: who, name }), '#ffd24a', 'event');
           if (ev.entityId === sim.playerId) {
             audio.fiestaAugment();
             this.showBanner(t('fiesta.banner.powerup', { name }));
@@ -9484,8 +9642,8 @@ export class Hud {
     }
   }
 
-  log(text: string, color = '#ccc'): void {
-    this.appendLog(this.chatLogEl, text, color, true, 'system');
+  log(text: string, color = '#ccc', category: SystemChatCategory = 'game'): void {
+    this.appendLog(this.chatLogEl, text, color, true, 'system', category);
   }
 
   // Prepend a dim bracketed wall-clock prefix to a chat line when the "Show
@@ -9517,7 +9675,9 @@ export class Hud {
     const div = document.createElement('div');
     div.style.color = color;
     div.dataset.chan = chan;
-    this.hideIfFiltered(div, chan);
+    const cat = categoryForLine(chan);
+    div.dataset.cat = cat;
+    this.hideIfFiltered(div, chan, cat);
     this.prependTimestamp(div);
     const sender = document.createElement('span');
     sender.className = 'chat-player-name';
@@ -9709,6 +9869,8 @@ export class Hud {
       'No one has whispered you recently.': 'hud.errors.noRecentWhisper',
       'You mutter to yourself. Nobody hears it.': 'hud.errors.whisperSelf',
       'You are not in a party.': 'hud.errors.notInParty',
+      'You must be in a party to start a ready check.': 'hudChrome.readyCheck.notInPartyError',
+      'A ready check is already in progress.': 'hudChrome.readyCheck.inProgressError',
       'Only the party leader can change the loot method.': 'hudChrome.masterLoot.leaderOnly',
       'Only the party leader may invite.': 'hud.errors.partyLeaderInvite',
       'Your party is full.': 'hud.errors.partyFull',
@@ -10058,6 +10220,7 @@ export class Hud {
     color: string,
     timestamp = false,
     chan = 'system',
+    category: SystemChatCategory = 'game',
   ): void {
     const wasNearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 24;
     const div = document.createElement('div');
@@ -10066,7 +10229,9 @@ export class Hud {
     // tag + filter only the chat pane; the combat pane is a separate view
     if (el === this.chatLogEl) {
       div.dataset.chan = chan;
-      this.hideIfFiltered(div, chan);
+      const cat = categoryForLine(chan, category);
+      div.dataset.cat = cat;
+      this.hideIfFiltered(div, chan, cat);
     }
     // Loot lines carry name-free item tokens ([[i:id]]); render those as clickable
     // links via the shared chat item-link renderer. Plain system/combat lines keep
@@ -11194,16 +11359,23 @@ export class Hud {
 
   openVendor(npcId: number): void {
     this.closeOtherWindows(['#vendor-window', '#bags']);
-    // The bags companion is exclusive (see openBank): close the bank cluster
-    // through the painter so onBankClosed clears body.bank-open before the
-    // vendor pairing takes over.
+    // The bank cluster is exclusive: close it through the painter so onBankClosed
+    // clears body.bank-open before the standalone vendor takes the container.
     if (this.bankWindowOpen) this.closeBank();
     this.openHeroicVendorNpcId = null; // the marks shop shares the container
     this.openVendorNpcId = npcId;
-    document.body.classList.add('vendor-open');
+    this.vendorTab = 'browse'; // every fresh open starts on Browse
+    // Market parity: the vendor is a standalone tabbed window, so it no longer
+    // force-docks Bags (Sell moved from the docked-bags flow into its own tab).
+    // Bags stays reachable on its own keybind.
     this.renderVendor();
-    this.renderBags();
-    $('#bags').style.display = 'flex';
+    // The painter never writes an inline display on open (the stylesheet owns it,
+    // #vendor-window:has(> .window-frame) shows the flex column). A FIRST open
+    // therefore produces no style mutation for the window observer to see (a
+    // REopen still does: the painter clears close's inline 'none'), so run the
+    // open-state sync (cascade, z-order, mobile-window-open) directly; it is
+    // idempotent when the observer also fires.
+    this.syncWindowOpenState($('#vendor-window'));
   }
 
   private renderVendor(): void {
@@ -11233,12 +11405,23 @@ export class Hud {
       $('#vendor-window'),
       entityDisplayName(npc),
       buildVendorView(npc.vendorItems, this.sim.vendorBuyback, ITEMS),
+      buildVendorSellRows(this.sim.inventory, ITEMS),
+      this.vendorTab,
       {
         ...this.presentationBag,
         hideTooltip: () => this.hideTooltip(),
         onBuy: (itemId) => buyAndRefresh(() => this.sim.buyItem(npc.id, itemId)),
         onBuyBack: (itemId) => buyAndRefresh(() => this.sim.buyBackItem(itemId)),
+        // The Sell tab dispatches the whole stack through the SAME sim sellItem
+        // command the bags Ctrl-click flow uses (byte-identical: itemId + count).
+        onSellItem: (itemId, count) => buyAndRefresh(() => this.sim.sellItem(itemId, count)),
+        confirmDialog: (title, body, okText, cancelText, onOk) =>
+          this.confirmDialog(title, body, okText, cancelText, onOk),
         onSellJunk: () => buyAndRefresh(() => this.sim.sellAllJunk()),
+        onTabChange: (tab) => {
+          this.vendorTab = tab;
+          this.renderVendor();
+        },
         onClose: () => this.closeVendor(),
         sellJunk: {
           enabled: junk.length > 0,
@@ -11324,6 +11507,12 @@ export class Hud {
   // -------------------------------------------------------------------------
 
   private townFocusDraft: Record<string, number> | null = null;
+  // WCAG 2.2 AA focus traps for the two standalone framed windows that lacked
+  // them: opening TRAPS Tab inside the dialog + lands focus on the first control,
+  // closing RETURNS focus to the opener (the shared FocusManager, like every other
+  // framed window). Held here so the close path can release the trap.
+  private townFocusTrap: FocusTrapHandle | null = null;
+  private craftingTrap: FocusTrapHandle | null = null;
 
   private isInTown(): boolean {
     const pos = this.sim.player.pos;
@@ -11338,7 +11527,11 @@ export class Hud {
     }
     this.closeOtherWindows('#town-focus-window');
     this.townFocusDraft = { ...this.sim.townFocus };
+    // Trap Tab inside the dialog and return focus to the opener on close (WCAG
+    // 2.4.3 / 2.1.2), like every other standalone framed window.
+    this.townFocusTrap = this.focusManager.open({ root: () => $('#town-focus-window') });
     this.renderTownFocus();
+    this.townFocusTrap.focusFirst();
   }
 
   private renderTownFocus(): void {
@@ -11370,6 +11563,8 @@ export class Hud {
   closeTownFocus(): void {
     $('#town-focus-window').style.display = 'none';
     this.townFocusDraft = null;
+    this.townFocusTrap?.release();
+    this.townFocusTrap = null;
     this.hideTooltip();
   }
 
@@ -11392,8 +11587,15 @@ export class Hud {
   }
 
   openCrafting(): void {
+    const wasHidden = $('#crafting-window').style.display !== 'block';
     this.closeOtherWindows('#crafting-window');
+    // Trap Tab inside the dialog and return focus to the opener on close (WCAG
+    // 2.4.3 / 2.1.2), like every other standalone framed window. Only install on a
+    // fresh open so a re-open while shown never stacks a second trap.
+    if (wasHidden)
+      this.craftingTrap = this.focusManager.open({ root: () => $('#crafting-window') });
     this.renderCrafting();
+    this.craftingTrap?.focusFirst();
   }
 
   private renderCrafting(): void {
@@ -11415,6 +11617,8 @@ export class Hud {
 
   closeCrafting(): void {
     $('#crafting-window').style.display = 'none';
+    this.craftingTrap?.release();
+    this.craftingTrap = null;
     this.hideTooltip();
   }
   // -------------------------------------------------------------------------
@@ -12918,7 +13122,30 @@ export class Hud {
     });
     root.addEventListener('keydown', (e) => {
       const action = dropdownKeyNav(e.key, isOpen(), focusedIndex(), items.length);
-      if (action.kind === 'none') return;
+      if (action.kind === 'none') {
+        // First-letter typeahead for long listboxes (7+ options, e.g. the language
+        // picker): a single printable key jumps to the next matching option. Below
+        // the threshold, arrow navigation is enough (WAI-ARIA listbox convention).
+        if (
+          isOpen() &&
+          items.length >= TYPEAHEAD_MIN_OPTIONS &&
+          e.key.length === 1 &&
+          !e.ctrlKey &&
+          !e.altKey &&
+          !e.metaKey
+        ) {
+          const target = typeaheadTarget(
+            items.map((it) => it.textContent ?? ''),
+            focusedIndex(),
+            e.key,
+          );
+          if (target !== null) {
+            e.preventDefault();
+            items[target].focus();
+          }
+        }
+        return;
+      }
       // Tab closes the menu and returns focus to the trigger button (a real
       // tab-order element) WITHOUT preventDefault, so the native Tab/Shift+Tab
       // then deterministically advances/retreats from there. Without returning
@@ -13873,6 +14100,12 @@ export class Hud {
     acceptLabel: string,
     onAccept: () => void,
     onDecline: () => void,
+    declineLabel: string = t('hud.prompts.decline'),
+    // Fired only when the prompt auto-dismisses after the wall-clock timeout.
+    // Defaults to onDecline so existing callers stay byte-identical; callers that
+    // want an ignored prompt to mean "no response" (ready check) pass a no-op and
+    // let their own server-side timeout own the outcome.
+    onTimeout: () => void = onDecline,
   ): void {
     const stack = $('#prompt-stack');
     const prompt = document.createElement('div');
@@ -13883,7 +14116,7 @@ export class Hud {
     accept.textContent = acceptLabel;
     const decline = document.createElement('button');
     decline.className = 'btn';
-    decline.textContent = t('hud.prompts.decline');
+    decline.textContent = declineLabel;
     accept.addEventListener('click', () => {
       prompt.remove();
       onAccept();
@@ -13897,7 +14130,7 @@ export class Hud {
     window.setTimeout(() => {
       if (prompt.isConnected) {
         prompt.remove();
-        onDecline();
+        onTimeout();
       }
     }, 28000);
   }
@@ -13993,7 +14226,13 @@ export class Hud {
     cancelBtn.className = 'btn';
     cancelBtn.textContent = t('hud.trade.cancel');
     cancelBtn.addEventListener('click', () => this.sim.tradeCancel());
-    el.append(acceptBtn, cancelBtn);
+    // One wrapper row for the primary actions: on touch it rides sticky at the
+    // window bottom so Accept/Cancel never sit below the fold of the root
+    // scroller on a short landscape phone (live bug, PR #1736 audit).
+    const actions = document.createElement('div');
+    actions.className = 'trade-actions';
+    actions.append(acceptBtn, cancelBtn);
+    el.append(actions);
     el.querySelector('[data-close]')?.addEventListener('click', () => this.sim.tradeCancel());
     el.querySelectorAll('.trade-item.mine').forEach((row) => {
       row.addEventListener('click', () => {
@@ -14071,6 +14310,51 @@ export class Hud {
   // controller can point at bag slots / vendor items, not just modal dialogs.
   isWindowOpen(): boolean {
     return this.isModalOpen() || this.topmostOpenWindow() !== null;
+  }
+
+  /** True while a focus trap owns the HUD (the Esc menu or another modal). The
+   *  gamepad reads this to switch into menu-navigation mode: while trapped it emits
+   *  menu intents and consumes every edge so world input never double-fires. */
+  isFocusTrapped(): boolean {
+    return this.focusManager.hasActiveTrap();
+  }
+
+  /** Route one resolved gamepad menu verb (spec section 5). When the Esc menu owns
+   *  focus it drives the full navigation; otherwise a generic fallback keeps any
+   *  other trapped dialog (quest reward, crafting, town focus, delve board, loot
+   *  settings, rite, skin event, card modal, confirm/prompt) operable: B closes it,
+   *  A activates the focused control, D-pad Up/Down steps focus over the trap
+   *  root's visible focusables, and LT/RT page-scroll its body. */
+  handleMenuGamepadIntent(intent: MenuIntentKind): void {
+    const optionsRoot = $('#options-menu');
+    const active = document.activeElement;
+    // Route to the Esc menu while focus is INSIDE it, and also when focus was
+    // dropped entirely (body/null, e.g. a repaint detached the focused node) while
+    // it is open: the menu self-heals by re-homing row focus. Focus resting inside
+    // a DIFFERENT element (a stacked confirm dialog) keeps the generic fallback so
+    // the top trap stays in charge.
+    const focusLost = !(active instanceof HTMLElement) || active === document.body;
+    if (this.optionsWindow.isOpen && (optionsRoot.contains(active) || focusLost)) {
+      this.optionsWindow.handleMenuIntent(intent);
+      return;
+    }
+    if (intent === 'back') {
+      this.closeAll();
+    } else if (intent === 'activate' && active instanceof HTMLElement) {
+      active.click();
+    } else if (intent === 'rowPrev' || intent === 'rowNext') {
+      // The generic focus step (mirrors OptionsWindow.stepRowFocus): the pad's
+      // virtual cursor is suppressed in menu mode, so without this every
+      // non-options trapped dialog would lose pad focus movement entirely.
+      this.focusManager.stepTrapFocus(intent === 'rowNext' ? 1 : -1);
+    } else if (intent === 'pageUp' || intent === 'pageDown') {
+      const root = this.focusManager.activeTrapRoot();
+      const scroll = root?.querySelector<HTMLElement>('.window-body') ?? root;
+      if (scroll) {
+        scroll.scrollTop +=
+          (intent === 'pageDown' ? 1 : -1) * scroll.clientHeight * TRAP_PAGE_SCROLL_FRACTION;
+      }
+    }
   }
 
   toggleOptionsMenu(): void {
