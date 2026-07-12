@@ -36,7 +36,17 @@ if (typeof window !== 'undefined') registerPreload(ensureInfernalAbyssAssets());
 function lavaMaterial(): THREE.ShaderMaterial {
   if (lavaMat) return lavaMat;
   lavaMat = new THREE.ShaderMaterial({
-    uniforms: { uTime: sharedUniforms.uTime },
+    // fog: true + the fog GLSL chunks require the fog uniforms to exist:
+    // refreshFogUniforms writes fogColor/fogNear/fogFar (or fogDensity) every
+    // frame and crashes the whole render loop on a material that lacks them.
+    // uTime stays the LIVE shared object (never cloned) so the lava animates.
+    uniforms: {
+      uTime: sharedUniforms.uTime,
+      fogColor: { value: new THREE.Color(0x140406) },
+      fogNear: { value: 1 },
+      fogFar: { value: 120 },
+      fogDensity: { value: 0.00025 },
+    },
     vertexShader: /* glsl */ `
       varying vec2 vP;
       #include <fog_pars_vertex>
