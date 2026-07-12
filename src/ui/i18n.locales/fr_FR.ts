@@ -6823,6 +6823,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.deeds.charTitleLabel': 'Titre',
   'hudChrome.deeds.charTitleNone': 'Aucun titre choisi',
   'hudChrome.deeds.close': 'Fermer le Livre des hauts faits',
+  'hudChrome.deeds.openBookHint': 'Ouvrir le Livre des hauts faits',
   'hudChrome.deeds.collapseHint': 'Réduire le suivi des hauts faits',
   'hudChrome.deeds.completionAria': 'Hauts faits obtenus: {earned} sur {total}',
   'hudChrome.deeds.countLabel': '{earned}/{total} hauts faits',

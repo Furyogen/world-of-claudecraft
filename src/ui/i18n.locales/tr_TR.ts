@@ -6710,6 +6710,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.deeds.charTitleLabel': 'Unvan',
   'hudChrome.deeds.charTitleNone': 'Unvan seçilmedi',
   'hudChrome.deeds.close': "Yiğitlikler Kitabı'nı kapat",
+  'hudChrome.deeds.openBookHint': "Yiğitlikler Kitabı'nı aç",
   'hudChrome.deeds.collapseHint': 'Yiğitlik takipçisini daralt',
   'hudChrome.deeds.completionAria': '{total} yiğitlikten {earned} tanesi kazanıldı',
   'hudChrome.deeds.countLabel': '{earned}/{total} yiğitlik',

@@ -6773,6 +6773,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.deeds.charTitleLabel': 'Título',
   'hudChrome.deeds.charTitleNone': 'Sin título elegido',
   'hudChrome.deeds.close': 'Cerrar el Libro de Gestas',
+  'hudChrome.deeds.openBookHint': 'Abrir el Libro de Gestas',
   'hudChrome.deeds.collapseHint': 'Contraer rastreador de gestas',
   'hudChrome.deeds.completionAria': 'Gestas conseguidas: {earned} de {total}',
   'hudChrome.deeds.countLabel': '{earned}/{total} gestas',

@@ -6646,6 +6646,7 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.deeds.charTitleLabel': 'Titel',
   'hudChrome.deeds.charTitleNone': 'Ingen titel vald',
   'hudChrome.deeds.close': 'Stäng Bedrifternas bok',
+  'hudChrome.deeds.openBookHint': 'Öppna Bedrifternas bok',
   'hudChrome.deeds.collapseHint': 'Fäll ihop bedriftsspåraren',
   'hudChrome.deeds.completionAria': 'Fullbordade bedrifter: {earned} av {total}',
   'hudChrome.deeds.countLabel': '{earned}/{total} bedrifter',

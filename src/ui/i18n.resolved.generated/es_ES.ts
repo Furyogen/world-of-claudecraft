@@ -1573,7 +1573,7 @@ export const es_ES: EnTranslations = {
       "trackerLabel": "Gestas",
       "collapseHint": "Contraer el seguimiento de gestas",
       "expandHint": "Expandir el seguimiento de gestas",
-      "openBookHint": "Open the Book of Deeds",
+      "openBookHint": "Abrir el Libro de gestas",
       "charTitleLabel": "Título",
       "charTitleNone": "Sin título elegido",
       "charOpenBook": "Libro de Gestas",

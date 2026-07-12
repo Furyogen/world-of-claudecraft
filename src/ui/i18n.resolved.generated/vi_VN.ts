@@ -1573,7 +1573,7 @@ export const vi_VN: EnTranslations = {
       "trackerLabel": "Kỳ Công",
       "collapseHint": "Thu gọn bảng theo dõi kỳ công",
       "expandHint": "Mở rộng bảng theo dõi kỳ công",
-      "openBookHint": "Open the Book of Deeds",
+      "openBookHint": "Mở Sách Kỳ Công",
       "charTitleLabel": "Danh Hiệu",
       "charTitleNone": "Chưa chọn danh hiệu",
       "charOpenBook": "Sách Kỳ Công",

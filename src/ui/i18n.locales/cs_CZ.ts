@@ -6575,6 +6575,7 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'hudChrome.deeds.charTitleLabel': 'Titul',
   'hudChrome.deeds.charTitleNone': 'Žádný titul nezvolen',
   'hudChrome.deeds.close': 'Zavřít Knihu skutků',
+  'hudChrome.deeds.openBookHint': 'Otevřít Knihu skutků',
   'hudChrome.deeds.collapseHint': 'Sbalit panel skutků',
   'hudChrome.deeds.completionAria': 'Vykonáno {earned} z {total} skutků',
   'hudChrome.deeds.countLabel': '{earned}/{total} skutků',

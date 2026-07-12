@@ -6732,6 +6732,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.deeds.charTitleLabel': 'Titel',
   'hudChrome.deeds.charTitleNone': 'Geen titel gekozen',
   'hudChrome.deeds.close': 'Sluit het Boek der Daden',
+  'hudChrome.deeds.openBookHint': 'Open het Boek der Daden',
   'hudChrome.deeds.collapseHint': 'Klap de dadenvolglijst in',
   'hudChrome.deeds.completionAria': 'Daden behaald: {earned} van {total}',
   'hudChrome.deeds.countLabel': '{earned}/{total} daden',

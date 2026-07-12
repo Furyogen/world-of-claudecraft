@@ -9,55 +9,25 @@
 // Reproducibility is checked by tests/i18n_resolved_equivalence.test.ts.
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [
-    "hudChrome.deeds.openBookHint"
-  ],
-  "es_ES": [
-    "hudChrome.deeds.openBookHint"
-  ],
-  "fr_FR": [
-    "hudChrome.deeds.openBookHint"
-  ],
-  "fr_CA": [
-    "hudChrome.deeds.openBookHint"
-  ],
+  "es": [],
+  "es_ES": [],
+  "fr_FR": [],
+  "fr_CA": [],
   "en_CA": [],
-  "it_IT": [
-    "hudChrome.deeds.openBookHint"
-  ],
-  "de_DE": [
-    "hudChrome.deeds.openBookHint"
-  ],
+  "it_IT": [],
+  "de_DE": [],
   "zh_CN": [],
   "zh_TW": [],
   "ko_KR": [],
   "ja_JP": [],
-  "pt_BR": [
-    "hudChrome.deeds.openBookHint"
-  ],
+  "pt_BR": [],
   "ru_RU": [],
-  "cs_CZ": [
-    "hudChrome.deeds.openBookHint"
-  ],
-  "nl_NL": [
-    "hudChrome.deeds.openBookHint"
-  ],
-  "pl_PL": [
-    "hudChrome.deeds.openBookHint"
-  ],
-  "id_ID": [
-    "hudChrome.deeds.openBookHint"
-  ],
-  "tr_TR": [
-    "hudChrome.deeds.openBookHint"
-  ],
-  "sv_SE": [
-    "hudChrome.deeds.openBookHint"
-  ],
-  "vi_VN": [
-    "hudChrome.deeds.openBookHint"
-  ],
-  "da_DK": [
-    "hudChrome.deeds.openBookHint"
-  ]
+  "cs_CZ": [],
+  "nl_NL": [],
+  "pl_PL": [],
+  "id_ID": [],
+  "tr_TR": [],
+  "sv_SE": [],
+  "vi_VN": [],
+  "da_DK": []
 };

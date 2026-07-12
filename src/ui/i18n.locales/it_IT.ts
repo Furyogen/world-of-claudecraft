@@ -6757,6 +6757,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.deeds.charTitleLabel': 'Titolo',
   'hudChrome.deeds.charTitleNone': 'Nessun titolo scelto',
   'hudChrome.deeds.close': 'Chiudi il Libro delle Imprese',
+  'hudChrome.deeds.openBookHint': 'Apri il Libro delle Imprese',
   'hudChrome.deeds.collapseHint': 'Comprimi il riquadro Imprese',
   'hudChrome.deeds.completionAria': 'Imprese ottenute: {earned} su {total}',
   'hudChrome.deeds.countLabel': '{earned}/{total} imprese',

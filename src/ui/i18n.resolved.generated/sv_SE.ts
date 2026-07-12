@@ -1573,7 +1573,7 @@ export const sv_SE: EnTranslations = {
       "trackerLabel": "Bedrifter",
       "collapseHint": "Fäll ihop bedriftsspåraren",
       "expandHint": "Fäll ut bedriftsspåraren",
-      "openBookHint": "Open the Book of Deeds",
+      "openBookHint": "Öppna Bedrifternas bok",
       "charTitleLabel": "Titel",
       "charTitleNone": "Ingen titel vald",
       "charOpenBook": "Bedrifternas bok",

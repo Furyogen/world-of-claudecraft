@@ -6794,6 +6794,7 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.deeds.charTitleLabel': 'Titel',
   'hudChrome.deeds.charTitleNone': 'Kein Titel gewählt',
   'hudChrome.deeds.close': 'Das Buch der Taten schließen',
+  'hudChrome.deeds.openBookHint': 'Das Buch der Taten öffnen',
   'hudChrome.deeds.collapseHint': 'Tatenverfolgung einklappen',
   'hudChrome.deeds.completionAria': 'Errungene Taten: {earned} von {total}',
   'hudChrome.deeds.countLabel': '{earned}/{total} Taten',

@@ -1573,7 +1573,7 @@ export const fr_FR: EnTranslations = {
       "trackerLabel": "Hauts faits",
       "collapseHint": "Réduire le suivi des hauts faits",
       "expandHint": "Déployer le suivi des hauts faits",
-      "openBookHint": "Open the Book of Deeds",
+      "openBookHint": "Ouvrir le Livre des hauts faits",
       "charTitleLabel": "Titre",
       "charTitleNone": "Aucun titre choisi",
       "charOpenBook": "Livre des hauts faits",

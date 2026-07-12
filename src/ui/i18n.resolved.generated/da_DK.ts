@@ -1573,7 +1573,7 @@ export const da_DK: EnTranslations = {
       "trackerLabel": "Bedrifter",
       "collapseHint": "Fold bedriftssporing sammen",
       "expandHint": "Fold bedriftssporing ud",
-      "openBookHint": "Open the Book of Deeds",
+      "openBookHint": "Åbn Bedrifternes Bog",
       "charTitleLabel": "Titel",
       "charTitleNone": "Ingen titel valgt",
       "charOpenBook": "Bedrifternes Bog",

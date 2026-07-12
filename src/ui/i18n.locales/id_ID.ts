@@ -6793,6 +6793,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'hudChrome.deeds.charTitleLabel': 'Gelar',
   'hudChrome.deeds.charTitleNone': 'Belum ada gelar dipilih',
   'hudChrome.deeds.close': 'Tutup Kitab Jasa',
+  'hudChrome.deeds.openBookHint': 'Buka Kitab Jasa',
   'hudChrome.deeds.collapseHint': 'Ciutkan pelacak jasa',
   'hudChrome.deeds.completionAria': 'Jasa yang diraih: {earned} dari {total}',
   'hudChrome.deeds.countLabel': '{earned}/{total} jasa',

@@ -6730,6 +6730,7 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.deeds.charTitleLabel': 'Título',
   'hudChrome.deeds.charTitleNone': 'Nenhum título escolhido',
   'hudChrome.deeds.close': 'Fechar o Livro dos Feitos',
+  'hudChrome.deeds.openBookHint': 'Abrir o Livro dos Feitos',
   'hudChrome.deeds.collapseHint': 'Recolher o rastreador de feitos',
   'hudChrome.deeds.completionAria': 'Feitos conquistados: {earned} de {total}',
   'hudChrome.deeds.countLabel': '{earned}/{total} feitos',

@@ -1573,7 +1573,7 @@ export const pt_BR: EnTranslations = {
       "trackerLabel": "Feitos",
       "collapseHint": "Recolher o rastreador de feitos",
       "expandHint": "Expandir o rastreador de feitos",
-      "openBookHint": "Open the Book of Deeds",
+      "openBookHint": "Abrir o Livro dos Feitos",
       "charTitleLabel": "Título",
       "charTitleNone": "Nenhum título escolhido",
       "charOpenBook": "Livro dos Feitos",

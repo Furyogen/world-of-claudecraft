@@ -6732,6 +6732,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.deeds.charTitleLabel': 'Danh Hiệu',
   'hudChrome.deeds.charTitleNone': 'Chưa chọn danh hiệu',
   'hudChrome.deeds.close': 'Đóng Sách Kỳ Công',
+  'hudChrome.deeds.openBookHint': 'Mở Sách Kỳ Công',
   'hudChrome.deeds.collapseHint': 'Thu gọn bảng theo dõi kỳ công',
   'hudChrome.deeds.completionAria': 'Kỳ công đã lập: {earned} trên {total}',
   'hudChrome.deeds.countLabel': '{earned}/{total} kỳ công',
