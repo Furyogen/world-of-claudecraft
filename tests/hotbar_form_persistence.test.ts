@@ -106,7 +106,7 @@ describe('stealth action-bar persistence', () => {
     hud.sim.player.auras = [{ kind: 'stealth' }];
     hud.syncActiveHotbarForm();
     expect(hud.activeHotbarForm).toBe('stealth');
-    expect(hud.hotbarActions).toEqual(normal);
+    expect(hud.hotbarActions).toEqual(bar());
 
     hud.hotbarActions = stealth;
     hud.saveSlotMap();
@@ -118,6 +118,26 @@ describe('stealth action-bar persistence', () => {
     hud.sim.player.auras = [{ kind: 'stealth' }];
     hud.syncActiveHotbarForm();
     expect(hud.hotbarActions).toEqual(stealth);
+  });
+
+  it('migrates a legacy Rogue clone to blank without overwriting later customization', () => {
+    const normal = bar('sinister_strike', 'stealth');
+    const customStealth = bar('garrote', 'stealth');
+    const hud = makeHarness('rogue', ['sinister_strike', 'stealth', 'garrote'], normal);
+    localStorage.setItem('woc_hotbar_rogue_ActionbarTester_stealth', JSON.stringify(normal));
+
+    hud.sim.player.auras = [{ kind: 'stealth' }];
+    hud.syncActiveHotbarForm();
+    expect(hud.hotbarActions).toEqual(bar());
+
+    hud.hotbarActions = customStealth;
+    hud.saveSlotMap();
+    hud.sim.player.auras = [];
+    hud.syncActiveHotbarForm();
+    hud.sim.player.auras = [{ kind: 'stealth' }];
+    hud.syncActiveHotbarForm();
+
+    expect(hud.hotbarActions).toEqual(customStealth);
   });
 
   it('preserves an intentionally empty Rogue stealth page', () => {
@@ -158,7 +178,7 @@ describe('stealth action-bar persistence', () => {
     hud.sim.player.auras = [{ kind: 'form_cat' }, { kind: 'stealth' }];
     hud.syncActiveHotbarForm();
     expect(hud.activeHotbarForm).toBe('cat_stealth');
-    expect(hud.hotbarActions).toEqual(wolf);
+    expect(hud.hotbarActions).toEqual(bar());
     hud.hotbarActions = stealthedWolf;
     hud.saveSlotMap();
 
@@ -180,7 +200,21 @@ describe('stealth action-bar persistence', () => {
     expect(hud.hotbarActions).toEqual(stealthedWolf);
   });
 
-  it('preserves an intentionally empty stealthed Wolf page except for its form toggle', () => {
+  it('migrates a legacy Wolf clone to blank', () => {
+    const wolf = bar('claw', 'prowl', 'cat_form');
+    const hud = makeHarness('druid', ['cat_form', 'claw', 'prowl', 'rake'], wolf);
+    hud.activeHotbarForm = 'cat';
+    localStorage.setItem('woc_hotbar_druid_ActionbarTester_cat', JSON.stringify(wolf));
+    localStorage.setItem('woc_hotbar_druid_ActionbarTester_cat_stealth', JSON.stringify(wolf));
+
+    hud.sim.player.auras = [{ kind: 'form_cat' }, { kind: 'stealth' }];
+    hud.syncActiveHotbarForm();
+
+    expect(hud.activeHotbarForm).toBe('cat_stealth');
+    expect(hud.hotbarActions).toEqual(bar());
+  });
+
+  it('preserves a completely empty stealthed Wolf page', () => {
     const caster = bar('wrath', 'cat_form');
     const wolf = bar('claw', 'prowl', 'cat_form');
     const hud = makeHarness('druid', ['wrath', 'cat_form', 'claw', 'prowl', 'pounce'], caster);
@@ -201,10 +235,10 @@ describe('stealth action-bar persistence', () => {
 
     expect(hud.hotbarActions).toEqual(bar());
     hud.syncSlotMap();
-    expect(hud.hotbarActions).toEqual(bar('cat_form'));
+    expect(hud.hotbarActions).toEqual(bar());
   });
 
-  it('uses the Wolf kit when seeding its stealth page', () => {
+  it('does not seed a default kit onto the Wolf stealth page', () => {
     const hud = makeHarness(
       'druid',
       ['wrath', 'cat_form', 'claw', 'prowl', 'rake', 'pounce'],
@@ -213,11 +247,10 @@ describe('stealth action-bar persistence', () => {
 
     const kit = hud.formKitAbilityIds('cat_stealth');
 
-    expect(kit).toEqual(['cat_form', 'claw', 'prowl', 'rake', 'pounce']);
-    expect(kit).not.toContain('wrath');
+    expect(kit).toEqual([]);
   });
 
-  it('auto-places newly learned Wolf abilities, but not caster spells, on the stealth page', () => {
+  it('does not auto-place newly learned abilities or the form toggle on the stealth page', () => {
     const hud = makeHarness('druid', ['wrath', 'cat_form', 'prowl'], bar('prowl'));
     hud.activeHotbarForm = 'cat_stealth';
     hud.loadedSlotMapFromStorage = true;
@@ -228,9 +261,7 @@ describe('stealth action-bar persistence', () => {
 
     hud.syncSlotMap();
 
-    expect(hud.hotbarActions).toEqual(bar('prowl', 'cat_form', 'pounce'));
-    expect(hud.hotbarActions.some((action) => action?.id === 'wrath')).toBe(false);
-    expect(hud.hotbarActions.some((action) => action?.id === 'moonfire')).toBe(false);
+    expect(hud.hotbarActions).toEqual(bar('prowl'));
   });
 
   it('keeps the Vale Cup sport page ahead of every class stealth page', () => {

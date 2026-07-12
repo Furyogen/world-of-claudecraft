@@ -2089,22 +2089,16 @@ describe('client HTML shell', () => {
     expect(hudMobileCss).not.toContain('body.mobile-touch #actionbar.many-spells');
   });
 
-  it('seeds druid form bars and clones the parent layout for stealth pages', () => {
+  it('seeds druid form bars and initializes stealth pages blank', () => {
     expect(hudTs).toContain('if (this.isFormKitBar()) {');
     expect(hudTs).toContain('if (this.seedFormBarIfNeeded(parsed)) return;');
     expect(hudTs).toMatch(
       /buildDefaultFormBar\(\s*this\.formKitAbilityIds\(this\.activeHotbarForm\),\s*Hud\.BAR_ABILITY_SLOTS,\s*\)/,
     );
-    expect(hudTs).toMatch(
-      /const emptyFormMap =\s*!stored &&\s*this\.activeHotbarForm !== 'normal' &&\s*parsed\.every\(\(action\) => action === null\);/,
-    );
-    expect(hudTs).toContain(
-      "const fallbackForm = this.activeHotbarForm === 'cat_stealth' ? 'cat' : 'normal';",
-    );
-    expect(hudTs).toContain('localStorage.getItem(this.slotMapKey(fallbackForm))');
-    expect(hudTs).not.toContain(
-      "this.loadedSlotMapFromStorage = stored || this.activeHotbarForm !== 'normal';",
-    );
+    expect(hudTs).toContain('if (this.isStealthHotbarForm()) {');
+    expect(hudTs).toContain('this.loadStealthSlotMap(parsed, stored);');
+    expect(hudTs).toMatch(/Array\.from\(\{ length: Hud\.BAR_ABILITY_SLOTS \}, \(\) => null\)/);
+    expect(hudTs).not.toContain('fallbackForm');
   });
 
   it('migrates a pre-existing form bar at most once via a per-form seeded marker', () => {
@@ -2121,9 +2115,8 @@ describe('client HTML shell', () => {
   it('keeps the active druid form toggle on its form action bar', () => {
     expect(hudTs).toContain("new Set(['bear_form', 'cat_form', 'travel_form'])");
     expect(hudTs).toContain("if (this.activeHotbarForm === 'bear') return 'bear_form';");
-    expect(hudTs).toContain(
-      "if (this.activeHotbarForm === 'cat' || this.activeHotbarForm === 'cat_stealth')",
-    );
+    expect(hudTs).toContain("if (this.activeHotbarForm === 'cat') return 'cat_form';");
+    expect(hudTs).not.toContain("this.activeHotbarForm === 'cat_stealth') return 'cat_form'");
     expect(hudTs).toContain(
       'if (formToggle && knownAbilityIds.includes(formToggle)) autoPlaceAbilityIds.add(formToggle);',
     );
