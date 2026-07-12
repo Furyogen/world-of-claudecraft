@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
+import { HEROIC_MARK_ITEM_ID } from '../src/sim/content/dungeon_difficulty';
 import { MECH_CHROMAS } from '../src/sim/content/skins';
 import { MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
@@ -354,6 +355,72 @@ describe('GameServer sessions', () => {
     expect(mob.loot?.items.find((slot) => slot.itemId === 'greyjaw_hide_boots')).toMatchObject({
       count: 1,
       openToAll: true,
+    });
+
+    resolveSave();
+    await leaving;
+  });
+
+  it('excludes a departing player from heroic rewards after the leave snapshot', async () => {
+    const server = new GameServer();
+    const leaver = expectJoined(server.join(fakeWs(), 11, 101, 'Leaver', 'warrior', null));
+    const stayer = expectJoined(server.join(fakeWs(), 12, 102, 'Stayer', 'mage', null));
+    server.sim.partyInvite(stayer.pid, leaver.pid);
+    server.sim.partyAccept(stayer.pid);
+    server.sim.setDungeonDifficulty('heroic', leaver.pid);
+    server.sim.enterDungeon('hollow_crypt', leaver.pid);
+    server.sim.enterDungeon('hollow_crypt', stayer.pid);
+
+    const inst = server.sim.ctx.instances.find(
+      (slot) => slot.partyKey !== null && slot.dungeonId === 'hollow_crypt',
+    );
+    if (!inst) throw new Error('expected claimed heroic instance');
+    expect(inst.difficulty).toBe('heroic');
+    const boss = inst.mobIds
+      .map((id) => server.sim.entities.get(id))
+      .find((entity) => entity?.templateId === 'morthen');
+    const leaverEntity = server.sim.entities.get(leaver.pid);
+    const stayerEntity = server.sim.entities.get(stayer.pid);
+    if (!boss || !leaverEntity || !stayerEntity) throw new Error('expected heroic actors');
+    leaverEntity.pos = { x: boss.pos.x - 1, y: boss.pos.y, z: boss.pos.z };
+    leaverEntity.prevPos = { ...leaverEntity.pos };
+    stayerEntity.pos = { x: boss.pos.x + 1, y: boss.pos.y, z: boss.pos.z };
+    stayerEntity.prevPos = { ...stayerEntity.pos };
+
+    let resolveSave!: () => void;
+    const slowSave = new Promise<void>((resolve) => {
+      resolveSave = resolve;
+    });
+    const savesBefore = vi.mocked(saveCharacterAndMarketState).mock.calls.length;
+    vi.mocked(saveCharacterAndMarketState).mockImplementationOnce(() => slowSave);
+
+    const leaving = server.leave(leaver, 'test');
+    await vi.waitFor(() => {
+      expect(saveCharacterAndMarketState).toHaveBeenCalledTimes(savesBefore + 1);
+    });
+
+    // Kill the final boss while leave() is parked after serializing the leaver.
+    // No reward or lockout may mutate that stale, soon-to-be-discarded state.
+    (server.sim as any).dealDamage(
+      stayerEntity,
+      boss,
+      boss.hp + 10,
+      false,
+      'physical',
+      null,
+      'hit',
+    );
+    expect(boss.dead).toBe(true);
+    expect({
+      stayerMarks: server.sim.countItem(HEROIC_MARK_ITEM_ID, stayer.pid),
+      leaverMarks: server.sim.countItem(HEROIC_MARK_ITEM_ID, leaver.pid),
+      stayerLocked: server.sim.meta(stayer.pid)?.raidLockouts.has('hollow_crypt:heroic'),
+      leaverLocked: server.sim.meta(leaver.pid)?.raidLockouts.has('hollow_crypt:heroic'),
+    }).toEqual({
+      stayerMarks: 1,
+      leaverMarks: 0,
+      stayerLocked: true,
+      leaverLocked: false,
     });
 
     resolveSave();
