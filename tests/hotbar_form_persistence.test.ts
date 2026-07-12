@@ -17,7 +17,7 @@ type HotbarHarness = {
     cfg: { playerClass: string };
     player: { name: string; auras: { kind: string }[] };
     known: { def: { id: string } }[];
-    cupInfo: null;
+    cupInfo: { match: { team: number | null } } | null;
   };
   activeHotbarForm: string;
   hotbarActions: HotbarAction[];
@@ -25,10 +25,20 @@ type HotbarHarness = {
   knownAbilityIdsAtLastSlotSync: Set<string> | null;
   dragAction: null;
   mobileActionPage: number;
+  mobileHotbarDrag: {
+    pointerId: number;
+    sourceIndex: number;
+    startX: number;
+    startY: number;
+    active: boolean;
+    timer: number;
+    targetIndex: number | null;
+  } | null;
   playerHotbarForm(): string;
   formKitAbilityIds(form: string): string[];
   saveSlotMap(): void;
   syncActiveHotbarForm(): void;
+  syncSlotMap(): void;
 };
 
 function bar(...abilityIds: string[]): HotbarAction[] {
@@ -56,6 +66,7 @@ function makeHarness(
   hud.knownAbilityIdsAtLastSlotSync = null;
   hud.dragAction = null;
   hud.mobileActionPage = 0;
+  hud.mobileHotbarDrag = null;
   return hud;
 }
 
@@ -75,7 +86,11 @@ function storageStub(): Storage {
 
 beforeEach(() => {
   vi.stubGlobal('localStorage', storageStub());
-  vi.stubGlobal('document', { querySelectorAll: () => [] });
+  vi.stubGlobal('document', {
+    body: { classList: { remove: vi.fn() } },
+    querySelectorAll: () => [],
+  });
+  vi.stubGlobal('window', { clearTimeout: vi.fn() });
 });
 
 afterEach(() => {
@@ -103,6 +118,25 @@ describe('stealth action-bar persistence', () => {
     hud.sim.player.auras = [{ kind: 'stealth' }];
     hud.syncActiveHotbarForm();
     expect(hud.hotbarActions).toEqual(stealth);
+  });
+
+  it('preserves an intentionally empty Rogue stealth page', () => {
+    const normal = bar('sinister_strike', 'stealth');
+    const hud = makeHarness('rogue', ['sinister_strike', 'stealth', 'ambush'], normal);
+
+    hud.sim.player.auras = [{ kind: 'stealth' }];
+    hud.syncActiveHotbarForm();
+    hud.hotbarActions = bar();
+    hud.saveSlotMap();
+
+    hud.sim.player.auras = [];
+    hud.syncActiveHotbarForm();
+    hud.sim.player.auras = [{ kind: 'stealth' }];
+    hud.syncActiveHotbarForm();
+
+    expect(hud.hotbarActions).toEqual(bar());
+    hud.syncSlotMap();
+    expect(hud.hotbarActions).toEqual(bar());
   });
 
   it('keeps the Druid caster, Wolf, and stealthed Wolf pages independently editable', () => {
@@ -146,6 +180,30 @@ describe('stealth action-bar persistence', () => {
     expect(hud.hotbarActions).toEqual(stealthedWolf);
   });
 
+  it('preserves an intentionally empty stealthed Wolf page except for its form toggle', () => {
+    const caster = bar('wrath', 'cat_form');
+    const wolf = bar('claw', 'prowl', 'cat_form');
+    const hud = makeHarness('druid', ['wrath', 'cat_form', 'claw', 'prowl', 'pounce'], caster);
+
+    hud.sim.player.auras = [{ kind: 'form_cat' }];
+    hud.syncActiveHotbarForm();
+    hud.hotbarActions = wolf;
+    hud.saveSlotMap();
+    hud.sim.player.auras = [{ kind: 'form_cat' }, { kind: 'stealth' }];
+    hud.syncActiveHotbarForm();
+    hud.hotbarActions = bar();
+    hud.saveSlotMap();
+
+    hud.sim.player.auras = [{ kind: 'form_cat' }];
+    hud.syncActiveHotbarForm();
+    hud.sim.player.auras = [{ kind: 'stealth' }, { kind: 'form_cat' }];
+    hud.syncActiveHotbarForm();
+
+    expect(hud.hotbarActions).toEqual(bar());
+    hud.syncSlotMap();
+    expect(hud.hotbarActions).toEqual(bar('cat_form'));
+  });
+
   it('uses the Wolf kit when seeding its stealth page', () => {
     const hud = makeHarness(
       'druid',
@@ -157,5 +215,53 @@ describe('stealth action-bar persistence', () => {
 
     expect(kit).toEqual(['cat_form', 'claw', 'prowl', 'rake', 'pounce']);
     expect(kit).not.toContain('wrath');
+  });
+
+  it('auto-places newly learned Wolf abilities, but not caster spells, on the stealth page', () => {
+    const hud = makeHarness('druid', ['wrath', 'cat_form', 'prowl'], bar('prowl'));
+    hud.activeHotbarForm = 'cat_stealth';
+    hud.loadedSlotMapFromStorage = true;
+    hud.knownAbilityIdsAtLastSlotSync = new Set(['wrath', 'cat_form', 'prowl']);
+    hud.sim.known = ['wrath', 'cat_form', 'prowl', 'moonfire', 'pounce'].map((id) => ({
+      def: { id },
+    }));
+
+    hud.syncSlotMap();
+
+    expect(hud.hotbarActions).toEqual(bar('prowl', 'cat_form', 'pounce'));
+    expect(hud.hotbarActions.some((action) => action?.id === 'wrath')).toBe(false);
+    expect(hud.hotbarActions.some((action) => action?.id === 'moonfire')).toBe(false);
+  });
+
+  it('keeps the Vale Cup sport page ahead of every class stealth page', () => {
+    const rogue = makeHarness('rogue', ['stealth'], bar('stealth'));
+    rogue.sim.cupInfo = { match: { team: 0 } };
+    rogue.sim.player.auras = [{ kind: 'stealth' }];
+
+    const druid = makeHarness('druid', ['cat_form', 'prowl'], bar('cat_form'));
+    druid.sim.cupInfo = { match: { team: 1 } };
+    druid.sim.player.auras = [{ kind: 'stealth' }, { kind: 'form_cat' }];
+
+    expect(rogue.playerHotbarForm()).toBe('sport');
+    expect(druid.playerHotbarForm()).toBe('sport');
+  });
+
+  it('cancels a mobile drag before loading a different stealth page', () => {
+    const hud = makeHarness('rogue', ['sinister_strike', 'stealth'], bar('stealth'));
+    hud.mobileHotbarDrag = {
+      pointerId: 7,
+      sourceIndex: 2,
+      startX: 10,
+      startY: 20,
+      active: true,
+      timer: 99,
+      targetIndex: 4,
+    };
+
+    hud.sim.player.auras = [{ kind: 'stealth' }];
+    hud.syncActiveHotbarForm();
+
+    expect(hud.mobileHotbarDrag).toBeNull();
+    expect(window.clearTimeout).toHaveBeenCalledWith(99);
   });
 });
