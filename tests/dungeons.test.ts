@@ -463,12 +463,18 @@ describe('dungeons: heroic marks', () => {
     const me = sim.entities.get(member) as AnyEntity;
     teleport(sim, le, morthen.pos.x + 1, morthen.pos.z);
     teleport(sim, me, morthen.pos.x - 1, morthen.pos.z);
+    const fullCapacity = sim.bagCapacity;
+    sim.players.get(leader)!.inventory = Array.from({ length: fullCapacity }, () => ({
+      itemId: 'worn_sword',
+      count: 1,
+    }));
 
     (sim as any).dealDamage(le, morthen, morthen.hp + 10, false, 'physical', null, 'hit');
 
     expect(morthen.dead).toBe(true);
     expect(sim.countItem(HEROIC_MARK_ITEM_ID, leader)).toBe(1);
     expect(sim.countItem(HEROIC_MARK_ITEM_ID, member)).toBe(1);
+    expect(sim.players.get(leader)!.inventory).toHaveLength(fullCapacity + 1);
     const markSlots = ((morthen.loot?.items ?? []) as any[]).filter(
       (s) => s.itemId === HEROIC_MARK_ITEM_ID,
     );
@@ -914,11 +920,10 @@ describe('dungeons: heroic daily lockouts', () => {
     teleport(sim, re, 0, 0);
     (sim as any).dealDamage(le, morthen, morthen.hp + 10, false, 'physical', null, 'hit');
     expect(morthen.dead).toBe(true);
-    const marks = ((morthen.loot?.items ?? []) as any[]).filter(
-      (s) => s.itemId === HEROIC_MARK_ITEM_ID,
-    );
-    expect(marks).toHaveLength(1);
-    expect(marks[0].personalFor).toEqual([runner]); // the reward really went to the runner
+    expect(sim.countItem(HEROIC_MARK_ITEM_ID, runner)).toBe(1);
+    expect(
+      ((morthen.loot?.items ?? []) as any[]).some((s) => s.itemId === HEROIC_MARK_ITEM_ID),
+    ).toBe(false);
 
     // The rewarded runner carries the daily lockout like everyone else: a
     // rewarded-but-unlocked runner could otherwise claim a fresh solo heroic
@@ -926,8 +931,8 @@ describe('dungeons: heroic daily lockouts', () => {
     expect(sim.players.get(runner)!.raidLockouts.has('hollow_crypt:heroic')).toBe(true);
     expect(sim.players.get(leader)!.raidLockouts.has('hollow_crypt:heroic')).toBe(true);
 
-    // Rejoining the party still lets the runner back into the CLEARED claim to
-    // collect the mark (this clear is theirs).
+    // Rejoining the party still lets the runner back into the CLEARED claim
+    // (this clear is theirs), even though the mark was already delivered.
     sim.partyInvite(runner, leader);
     sim.partyAccept(runner);
     sim.drainEvents();
@@ -1086,9 +1091,9 @@ describe('dungeons: heroic Nythraxis raid arena', () => {
 
     expect(boss.dead).toBe(true);
     for (const pid of raiders) expect(sim.countItem(HEROIC_MARK_ITEM_ID, pid)).toBe(3);
-    expect(
-      ((boss.loot?.items ?? []) as any[]).some((s) => s.itemId === HEROIC_MARK_ITEM_ID),
-    ).toBe(false);
+    expect(((boss.loot?.items ?? []) as any[]).some((s) => s.itemId === HEROIC_MARK_ITEM_ID)).toBe(
+      false,
+    );
   });
 });
 

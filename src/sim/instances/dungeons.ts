@@ -406,82 +406,33 @@ function lockToHeroicClaim(
   meta.raidLockouts.set(lockId, lockedUntil);
 }
 
-// Heroic KILL lockout, the sibling of awardHeroicMarks on the death path.
-// combat/damage.ts calls it for EVERY mob death (credit or no credit): when the
-// dead mob is the final boss of a heroic claim, the whole owning group (plus
-// anyone inside) is locked to that heroic dungeon until the daily reset (the
-// same realm-local boundary the Nythraxis raid uses), scoped to the :heroic
-// key so the normal difficulty is never consumed. Marks stay participation-
-// gated below; the lockout deliberately is not. Death-time reward recipients
-// (a departed tap holder) are the third arm of the union, stamped in
-// awardHeroicMarks where that snapshot exists.
-export function grantHeroicKillLockout(ctx: SimContext, mob: Entity): void {
-  const inst = ctx.instances.find((i) => i.partyKey !== null && i.mobIds.includes(mob.id));
-  if (!inst || inst.difficulty !== 'heroic') return;
-  const tuning = HEROIC_DUNGEON_TUNING[inst.dungeonId];
-  if (!tuning || mob.templateId !== tuning.finalBossId) return;
-  const lockedUntil = ctx.raidResetMs(ctx.lockoutNowMs());
-  for (const meta of instanceLockoutMetas(ctx, inst)) {
-    lockToHeroicClaim(ctx, inst, meta, lockedUntil);
-  }
-}
-
-// Heroic participation reward: the final boss of a heroic instance drops
-// Heroic Marks for every eligible participant (marksPerParticipant on the
-// tuning record: 1 for the five-mans, 3 for the Nythraxis raid). `recipients`
-// is the same downed-members-included snapshot handleDeath uses for XP and
-// loot rights. Each mark is its own personalFor slot (the loot pickup arm
-// grants one item per personal slot, so a single loot click takes them all)
-// and nobody can take another player's. Draws no rng, so the corpse loot
-// draw order is untouched. The daily LOCKOUT is not granted here: it covers
-// the whole owning group, credit or no credit (grantHeroicKillLockout above).
-//
-// Daily income gate: each dungeon pays a given character at most once per host
-// UTC day (delveDaily pattern), so the instance-reset farm cannot print marks.
-// The stamp lands when the personal slots are CREATED (not when looted): an
-// unlooted corpse still consumed that day's slot, like the delve first-clear
-// XP set.
+// Settle a heroic final-boss kill in one synchronous mutation. The whole group
+// owning the claim (plus anyone still inside) receives the realm-reset lockout,
+// while the death-time participation snapshot receives the configured marks.
+// A recipient already locked for this reset is not paid again. This makes the
+// authoritative lockout boundary the only income gate and removes the former
+// UTC-day mismatch. Marks go straight into inventory, so corpse cleanup, a UI
+// failure, or logout cannot persist an entitlement without its reward.
 export function awardHeroicMarks(ctx: SimContext, mob: Entity, recipients: PlayerMeta[]): void {
-  if (recipients.length === 0) return;
   const inst = ctx.instances.find((i) => i.partyKey !== null && i.mobIds.includes(mob.id));
   if (!inst || inst.difficulty !== 'heroic') return;
   const tuning = HEROIC_DUNGEON_TUNING[inst.dungeonId];
   if (!tuning || mob.templateId !== tuning.finalBossId) return;
-  const loot = mob.loot ?? { copper: 0, items: [] };
-  // Death-time reward recipients are the third arm of the kill-lockout union
-  // (grantHeroicKillLockout covers the owning group and the occupants): a tap
-  // holder who left the party and the instance before the kill still walks
-  // away with the mark slot and the corpse loot rights, so they must carry the
-  // daily lockout too. Stamped before the marks daily gate below, like the
-  // pre-split code, so an already-marked recipient is still locked.
   const lockedUntil = ctx.raidResetMs(ctx.lockoutNowMs());
-  const earners: number[] = [];
-  for (const meta of recipients) {
-    lockToHeroicClaim(ctx, inst, meta, lockedUntil);
-    // `utcDay` comes from the host, never the wall clock (determinism). Both
-    // hosts stamp it (server/game.ts, main.ts); with an empty day the set
-    // simply never resets, the same semantics as delveDaily.
-    const today = ctx.utcDay;
-    if (today && meta.heroicDaily.date !== today) {
-      meta.heroicDaily = { date: today, marked: new Set() };
+  const rewardIds = new Set(recipients.map((meta) => meta.entityId));
+  const lockoutRecipients = new Map<number, PlayerMeta>();
+  for (const meta of instanceLockoutMetas(ctx, inst)) lockoutRecipients.set(meta.entityId, meta);
+  // A tap holder who left both party and instance before the kill remains in
+  // the death snapshot and must receive the same lockout as their reward.
+  for (const meta of recipients) lockoutRecipients.set(meta.entityId, meta);
+
+  for (const meta of lockoutRecipients.values()) {
+    const alreadyLocked = isRaidLocked(ctx, meta, heroicLockoutId(inst.dungeonId));
+    if (!alreadyLocked && rewardIds.has(meta.entityId)) {
+      ctx.addItem(HEROIC_MARK_ITEM_ID, tuning.marksPerParticipant, meta.entityId);
     }
-    if (meta.heroicDaily.marked.has(inst.dungeonId)) continue;
-    meta.heroicDaily.marked.add(inst.dungeonId);
-    earners.push(meta.entityId);
+    lockToHeroicClaim(ctx, inst, meta, lockedUntil);
   }
-  if (earners.length === 0) return;
-  // One shared-personal slot for the whole party: whoever loots the corpse hands
-  // every earner their marks at once, so no one has to reach the body and click
-  // their own copy. `count` is the per-participant payout (1 for a five-man, 3
-  // for the raid); the loot handler grants that many to each id in `personalFor`.
-  loot.items.push({
-    itemId: HEROIC_MARK_ITEM_ID,
-    count: tuning.marksPerParticipant,
-    personalFor: earners,
-    sharedPersonal: true,
-  });
-  mob.loot = loot;
-  mob.lootable = true;
 }
 
 export function updateInstances(ctx: SimContext): void {

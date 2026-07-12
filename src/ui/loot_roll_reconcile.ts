@@ -17,14 +17,17 @@ export interface LootRollReconcileState {
   open: number[];
   // rollIds currently displayed locally.
   shown: number[];
-  // rollIds answered or expired locally; suppressed so reconcile cannot re-show them.
+  // rollIds answered or expired locally. Retained until the server drops them,
+  // but never allowed to override an authoritative still-open mirror entry.
   dismissed: number[];
   // shown rollIds already observed in a prior mirror (so their later absence is real).
   confirmed: number[];
 }
 
 export interface LootRollReconcileDecision {
-  // open rolls not yet shown and not dismissed: show them now.
+  // open rolls not yet shown: show them now, even if a local tap previously
+  // dismissed them. The server mirror is authoritative and a dropped command
+  // must restore retryable buttons.
   toShow: number[];
   // mirror-confirmed shown rolls the server has since dropped: retire them.
   toRetire: number[];
@@ -38,10 +41,9 @@ export interface LootRollReconcileDecision {
 export function reconcileLootRolls(state: LootRollReconcileState): LootRollReconcileDecision {
   const openSet = new Set(state.open);
   const shownSet = new Set(state.shown);
-  const dismissedSet = new Set(state.dismissed);
   const confirmedSet = new Set(state.confirmed);
 
-  const toShow = state.open.filter((id) => !shownSet.has(id) && !dismissedSet.has(id));
+  const toShow = state.open.filter((id) => !shownSet.has(id));
   // Only retire rolls we have positively seen in the mirror before: this is the
   // guard against the event-before-mirror race described above.
   const toRetire = state.shown.filter((id) => confirmedSet.has(id) && !openSet.has(id));

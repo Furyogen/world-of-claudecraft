@@ -2096,9 +2096,7 @@ describe('client HTML shell', () => {
     expect(hudMobileCss).toContain('z-index: 95 !important;');
   });
   it('keeps managed windows above the pointer-active loot-roll rail', () => {
-    const railZ = Number(
-      componentsCss.match(/#loot-rolls \{[\s\S]*?z-index:\s*(\d+);/)?.[1],
-    );
+    const railZ = Number(componentsCss.match(/#loot-rolls \{[\s\S]*?z-index:\s*(\d+);/)?.[1]);
     const managedFloors = [
       ...hudTs.matchAll(/(?:private windowZ =|this\.windowZ =)\s*(\d+);/g),
     ].map((match) => Number(match[1]));

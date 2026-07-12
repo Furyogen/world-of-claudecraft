@@ -67,12 +67,7 @@ describe('computeLootRollStatusRows', () => {
   });
 
   it('keeps only actionable prompt rows when the mobile monitor disables watch rows', () => {
-    const rows = computeLootRollStatusRows(
-      [status(), status({ rollId: 8 })],
-      [8],
-      2,
-      false,
-    );
+    const rows = computeLootRollStatusRows([status(), status({ rollId: 8 })], [8], 2, false);
     expect(rows.map((row) => [row.rollId, row.hasPrompt])).toEqual([[8, true]]);
   });
 });

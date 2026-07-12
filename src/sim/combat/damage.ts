@@ -621,11 +621,6 @@ export function handleDeath(ctx: SimContext, e: Entity, killer: Entity | null): 
         mobId: 'reliquary_bonewalker',
       });
     }
-    if (e.templateId === NYTHRAXIS_BOSS_ID) ctx.grantNythraxisLockout(e);
-    // Heroic daily lockout lands HERE, on the kill itself (credit or no credit),
-    // for the whole group that owns the claim: the marks award further down is
-    // credit- and participation-gated, so it must not carry the lockout.
-    ctx.grantHeroicKillLockout(e);
     e.aiState = 'dead';
     e.corpseTimer = CORPSE_DURATION;
     e.respawnTimer =
@@ -668,6 +663,7 @@ export function handleDeath(ctx: SimContext, e: Entity, killer: Entity | null): 
     const creditId = e.tappedById ?? (killer?.kind === 'player' ? killer.id : null);
     const meta = creditId !== null ? ctx.players.get(creditId) : null;
     const creditEntity = creditId !== null ? ctx.entities.get(creditId) : null;
+    let heroicRewardRecipients: PlayerMeta[] = [];
     if (meta && creditEntity) {
       const tmpl = MOBS[e.templateId];
       // xpMult 0 marks a puzzle-object mob (the 1 HP spider egg-sac): killable
@@ -684,10 +680,17 @@ export function handleDeath(ctx: SimContext, e: Entity, killer: Entity | null): 
         for (const mPid of party.members) {
           const mMeta = ctx.players.get(mPid);
           const mE = ctx.entities.get(mPid);
-          if (mMeta && mE && dist2d(mE.pos, e.pos) <= PARTY_XP_RANGE) eligible.push(mMeta);
+          // A released player entity stands at the graveyard, but their body is
+          // still where they fell. Use that corpse position for the kill-time
+          // participation snapshot so releasing during the final seconds does
+          // not erase XP, loot-roll, or Heroic Mark rights.
+          const participationPos = mE?.ghost && mE.corpsePos ? mE.corpsePos : mE?.pos;
+          if (mMeta && participationPos && dist2d(participationPos, e.pos) <= PARTY_XP_RANGE)
+            eligible.push(mMeta);
         }
       }
       if (eligible.length === 0) eligible.push(meta);
+      heroicRewardRecipients = eligible;
       e.lootRecipientIds = eligible.map((member) => member.entityId);
       const bonus = GROUP_XP_BONUS[Math.min(eligible.length, GROUP_XP_BONUS.length) - 1];
 
@@ -710,10 +713,15 @@ export function handleDeath(ctx: SimContext, e: Entity, killer: Entity | null): 
       // World bosses use PERSONAL loot for every contributor (rolled below from the
       // hate-table snapshot), not the tapper/party shared-corpse roll.
       if (!template?.worldBoss) ctx.rollLoot(e, meta, eligible);
-      // A heroic final boss additionally carries one personal Heroic Mark per
-      // eligible participant (no-op outside a heroic instance; draws no rng).
-      ctx.awardHeroicMarks(e, eligible);
     }
+    // Settle the heroic reward and its realm-reset lockout together. This runs
+    // even without player credit so the owning group cannot dodge the lockout;
+    // only the participation snapshot above receives marks.
+    ctx.awardHeroicMarks(e, heroicRewardRecipients);
+    // Nythraxis normal and heroic raid lockouts use a wider room sweep than
+    // generic dungeon claims. Run it after heroic settlement so its lock stamp
+    // cannot make first-clear participants look previously rewarded.
+    if (e.templateId === NYTHRAXIS_BOSS_ID) ctx.grantNythraxisLockout(e);
     // Personal loot is independent of tap/party kill credit: it goes to everyone who
     // damaged the boss, so it rolls outside the credited-player block above.
     if (worldBossContribs) ctx.rollWorldBossLoot(e, worldBossContribs);

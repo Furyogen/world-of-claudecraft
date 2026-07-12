@@ -169,6 +169,7 @@ import {
   lootRollGroupStatus as lootRollGroupStatusImpl,
   type PendingLootRoll,
   partyLootCandidatesForMob as partyLootCandidatesForMobImpl,
+  removePlayerFromLootRolls,
   resolveLootRoll as resolveLootRollImpl,
   rollLoot as rollLootImpl,
   setPartyLootMaster as setPartyLootMasterImpl,
@@ -299,7 +300,6 @@ import {
   awardHeroicMarks as awardHeroicMarksImpl,
   enterCrypt as enterCryptImpl,
   enterDungeon as enterDungeonImpl,
-  grantHeroicKillLockout as grantHeroicKillLockoutImpl,
   instanceInfoAt as instanceInfoAtImpl,
   instanceKeyFor as instanceKeyForImpl,
   instanceOriginOf as instanceOriginOfImpl,
@@ -980,9 +980,9 @@ export interface PlayerMeta {
   // Set only while standing in a town hub; adds a bonus to that component's
   // #1142 harvest yield, on top of the universal baseline, never below it.
   townFocus: Record<string, number>;
-  // Heroic-mark daily income gate (persisted): dungeon ids whose heroic final
-  // boss already paid this player a Heroic Mark on `date` (host UTC day).
-  // See awardHeroicMarks in instances/dungeons.ts; at most 4 marks per day.
+  // Legacy Heroic Mark daily gate payload. Kept in persistence so saves written
+  // before the realm-reset settlement fix round-trip without schema loss; new
+  // rewards are gated by raidLockouts and do not read or write this field.
   heroicDaily: { date: string; marked: Set<string> };
   // World-boss loot lockouts live in `raidLockouts` (keyed worldboss:<mobId>), so the
   // eligibility gate and the rendered raid-lockout countdown are one value. See
@@ -2042,6 +2042,10 @@ export class Sim {
     const leavingRun = this.delveRunForPlayer(pid);
     if (leavingRun?.lockpick && leavingRun.lockpick.ownerId === pid)
       this.ctx.abandonLockpick(leavingRun);
+    // Explicit logout forfeits unresolved loot rolls. Do this while the player,
+    // party, and corpse are all still live so remaining candidates can resolve
+    // immediately or the item can return safely to its corpse.
+    removePlayerFromLootRolls(this.ctx, pid);
     // leave social systems cleanly. removeFromParty lives on the PartyMachine now
     // (A1); reach it through the seam, keeping this call in its load-bearing
     // teardown position (must run while the leaver is still in players/entities).
@@ -2898,9 +2902,6 @@ export class Sim {
       dungeonDifficulty: sim.dungeonDifficulty.bind(sim),
       setDungeonDifficulty: sim.setDungeonDifficulty.bind(sim),
       awardHeroicMarks: sim.awardHeroicMarks.bind(sim),
-      // Kill-site heroic daily lockout (instances/dungeons): C1's death hub calls it
-      // for every mob death, credit or no credit; late-bound arrow, no Sim facade.
-      grantHeroicKillLockout: (mob) => grantHeroicKillLockoutImpl(sim.ctx, mob),
       addEntity: sim.addEntity.bind(sim),
       dropEntity: sim.dropEntity.bind(sim),
       rebucket: sim.rebucket.bind(sim),
@@ -6731,8 +6732,8 @@ export class Sim {
     );
   }
 
-  // Owned by instances/dungeons (heroic final-boss participation marks); the
-  // C1 death hub reaches it through the seam, this delegate keeps the facade.
+  // Owned by instances/dungeons (heroic final-boss reward + lockout settlement);
+  // the C1 death hub reaches it through the seam, this delegate keeps the facade.
   awardHeroicMarks(mob: Entity, recipients: PlayerMeta[]): void {
     awardHeroicMarksImpl(this.ctx, mob, recipients);
   }

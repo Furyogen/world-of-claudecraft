@@ -472,6 +472,39 @@ export function submitLootRoll(
   if (roll.choices.size >= roll.candidates.length) resolveLootRoll(ctx, roll);
 }
 
+// Explicit logout removes the character from the live Sim, unlike the server's
+// linkdead grace reconnect path. Reconcile that departure before the entity is
+// deleted so a stale winning pid can never consume a roll into a no-op addItem.
+// The leaver forfeits the unresolved roll; every item remains with a live winner
+// or returns to its corpse.
+export function removePlayerFromLootRolls(ctx: SimContext, pid: number): void {
+  for (const roll of [...ctx.pendingLootRolls.values()]) {
+    const wasCandidate = roll.candidates.includes(pid);
+    const wasMasterLooter = roll.masterLooter === pid;
+    if (!wasCandidate && !wasMasterLooter && !roll.partyMembers.includes(pid)) continue;
+
+    roll.partyMembers = roll.partyMembers.filter((member) => member !== pid);
+    if (wasCandidate) {
+      roll.candidates = roll.candidates.filter((candidate) => candidate !== pid);
+      roll.choices.delete(pid);
+    }
+
+    if (roll.candidates.length === 0) {
+      if (ctx.pendingLootRolls.delete(roll.id)) returnLootRollItemToCorpse(ctx, roll);
+      continue;
+    }
+
+    if (wasMasterLooter) {
+      convertMasterRollToNeedGreed(ctx, roll, [...roll.candidates]);
+      continue;
+    }
+
+    if (roll.masterLooter === undefined && roll.choices.size >= roll.candidates.length) {
+      resolveLootRoll(ctx, roll);
+    }
+  }
+}
+
 // The master looter's curate-then-roll choice. `targetPids` is the set of
 // eligible players the looter checked: exactly one grants the item directly (the
 // classic assign), two or more open a need/greed roll for just that subset. Only

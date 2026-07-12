@@ -626,10 +626,6 @@ export interface LootSlot extends InvSlot {
   personalFor?: number[];
   // Need/greed loot that everyone passed on becomes free-for-all corpse loot.
   openToAll?: boolean;
-  // Shared personal (participation tokens, e.g. Heroic Marks): a single loot
-  // action by ANY listed player grants `count` copies to EVERY player in
-  // `personalFor`, then consumes the slot. No one has to loot their own copy.
-  sharedPersonal?: boolean;
 }
 
 export interface CorpseLoot {

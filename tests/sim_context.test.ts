@@ -144,7 +144,6 @@ const CALLBACK_KEYS = [
   'dungeonDifficulty',
   'setDungeonDifficulty',
   'awardHeroicMarks',
-  'grantHeroicKillLockout',
   // M3 mob-swing affix cascade surface.
   'effectiveArmor',
   'recalcPlayer',
@@ -354,7 +353,6 @@ function makeFakeHost() {
     dungeonDifficulty: vi.fn(() => 'normal' as const),
     setDungeonDifficulty: vi.fn(),
     awardHeroicMarks: vi.fn(),
-    grantHeroicKillLockout: vi.fn(),
     addEntity: vi.fn(),
     dropEntity: vi.fn(),
     rebucket: vi.fn(),
