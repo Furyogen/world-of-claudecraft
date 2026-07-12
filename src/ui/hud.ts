@@ -8023,6 +8023,15 @@ export class Hud {
       );
       return;
     }
+    if (mode === 'infernalAbyss') {
+      this.minimapPainter.paintInfernalAbyss(
+        ctx,
+        this.sim,
+        $('#zone-label'),
+        dungeonDisplayName('infernal_abyss'),
+      );
+      return;
+    }
     // The overworld minimap: a pure marker core (minimap_markers) + the thin canvas
     // painter. It owns the cached terrain blit + the marker draws and writes
     // '#zone-label' through the write-elision facet.

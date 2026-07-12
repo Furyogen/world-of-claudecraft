@@ -27,6 +27,7 @@
 import { WORLD_MAX_X, WORLD_MAX_Z, WORLD_MIN_X, yumiMazeOriginAt } from '../sim/data';
 import { yumiMazeLayout } from '../sim/yumi_maze_layout';
 import type { IWorld } from '../world_api';
+import { type InfernalAbyssMapModel, infernalAbyssMapModel } from './infernal_abyss_map';
 import { createMinimapMarkers, type MinimapMarker } from './minimap_markers';
 import type { PainterHostWriters } from './painter_host';
 
@@ -91,6 +92,17 @@ const MAZE_BG_PX_PER_YARD = 3;
 const MAZE_BG_MARGIN_YD = 24;
 const MAZE_BG_WALL_ALPHA = 0.75;
 
+// Infernal Abyss full-layout schematic. The complete authored room graph is
+// fitted inside the fixed circular surface, then cached as a static raster.
+const INFERNAL_MAP_PAD = 8;
+const INFERNAL_ROOM_STROKE_WIDTH = 1;
+const INFERNAL_BOSS_STROKE_WIDTH = 2;
+const INFERNAL_DOOR_MIN_SIZE = 2;
+const INFERNAL_LAVA_POOL_RADIUS = 2.4;
+const INFERNAL_LAVA_FISSURE_HALF_LENGTH = 4;
+const INFERNAL_LAVA_FISSURE_WIDTH = 2;
+const INFERNAL_LORE_HALF_SIZE = 2.2;
+
 // Draw the corpse skull centered at (x, y): `fill` paints the bone, `socket` the
 // dark eye/nose hollows so the shape reads even over light terrain.
 function drawCorpseSkull(
@@ -133,6 +145,10 @@ const MINIMAP_COLOR_TOKENS = {
   outline: '--color-minimap-outline',
   gatherReady: '--color-minimap-gather-ready',
   gatherCooldown: '--color-minimap-gather-cooldown',
+  infernalRoom: '--color-delve-room',
+  infernalLava: '--color-minimap-mob-aggro',
+  infernalBoss: '--color-minimap-portal',
+  infernalLore: '--color-minimap-object-loot',
 } as const;
 
 /** The resolved minimap marker colors for one redraw. */
@@ -155,6 +171,9 @@ export class MinimapPainter {
   // The Protect Yumi maze wall cache (built on first in-maze redraw; the fixed
   // competitive layout never changes, so one raster serves the session).
   private mazeBg: HTMLCanvasElement | null = null;
+  // Full Infernal Abyss room graph, including lava and lore markers. The layout
+  // is immutable data-as-code, so the raster is valid for the whole session.
+  private infernalBg: HTMLCanvasElement | null = null;
 
   constructor(
     private readonly writers: PainterHostWriters,
@@ -256,6 +275,101 @@ export class MinimapPainter {
     ctx.drawImage(bg, sx, sy, sw, sw, 0, 0, S, S);
     this.drawMarkers(ctx, model.markers, colors);
     ctx.restore();
+  }
+
+  /** Infernal Abyss render: a complete, north-up dungeon schematic rather than
+   * the player-centered terrain view. Only the facing arrow changes per frame. */
+  paintInfernalAbyss(
+    ctx: CanvasRenderingContext2D,
+    world: IWorld,
+    zoneLabelEl: HTMLElement,
+    label: string,
+  ): void {
+    const S = MINIMAP_SIZE;
+    const model = infernalAbyssMapModel(world, S, INFERNAL_MAP_PAD);
+    this.writers.setText(zoneLabelEl, label);
+    const colors = this.resolveColors();
+    const bg = this.ensureInfernalBg(model, colors);
+
+    ctx.clearRect(0, 0, S, S);
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(S / 2, S / 2, S / 2 - CLIP_INSET, 0, FULL_CIRCLE);
+    ctx.clip();
+    ctx.drawImage(bg, 0, 0);
+    this.drawMarkers(
+      ctx,
+      [
+        {
+          kind: 'player',
+          mx: model.player.cx,
+          my: model.player.cy,
+          angle: model.player.angle,
+        },
+      ],
+      colors,
+    );
+    ctx.restore();
+  }
+
+  private ensureInfernalBg(model: InfernalAbyssMapModel, colors: MinimapColors): HTMLCanvasElement {
+    if (this.infernalBg) return this.infernalBg;
+    const canvas = document.createElement('canvas');
+    canvas.width = MINIMAP_SIZE;
+    canvas.height = MINIMAP_SIZE;
+    const bctx = canvas.getContext('2d');
+    if (!bctx) return canvas;
+
+    for (const room of model.rooms) {
+      bctx.fillStyle = colors.infernalRoom;
+      bctx.fillRect(room.x, room.y, room.w, room.h);
+      bctx.strokeStyle = room.boss ? colors.infernalBoss : colors.outline;
+      bctx.lineWidth = room.boss ? INFERNAL_BOSS_STROKE_WIDTH : INFERNAL_ROOM_STROKE_WIDTH;
+      bctx.strokeRect(room.x, room.y, room.w, room.h);
+    }
+    // Door openings paint over the room outlines, making the main descent and
+    // both optional branches legible at minimap scale.
+    bctx.fillStyle = colors.infernalRoom;
+    for (const door of model.doors) {
+      const w = Math.max(INFERNAL_DOOR_MIN_SIZE, door.w);
+      const h = Math.max(INFERNAL_DOOR_MIN_SIZE, door.h);
+      bctx.fillRect(door.x - (w - door.w) / 2, door.y - (h - door.h) / 2, w, h);
+    }
+    bctx.fillStyle = colors.infernalLava;
+    for (const hazard of model.lava) {
+      bctx.save();
+      bctx.translate(hazard.cx, hazard.cy);
+      bctx.rotate(hazard.angle);
+      if (hazard.kind === 'pool') {
+        bctx.beginPath();
+        bctx.arc(0, 0, INFERNAL_LAVA_POOL_RADIUS * hazard.scale, 0, FULL_CIRCLE);
+        bctx.fill();
+      } else {
+        bctx.fillRect(
+          -INFERNAL_LAVA_FISSURE_WIDTH / 2,
+          -INFERNAL_LAVA_FISSURE_HALF_LENGTH * hazard.scale,
+          INFERNAL_LAVA_FISSURE_WIDTH,
+          INFERNAL_LAVA_FISSURE_HALF_LENGTH * 2 * hazard.scale,
+        );
+      }
+      bctx.restore();
+    }
+    // Lore interactables are compact gold diamonds, no text or localization.
+    bctx.fillStyle = colors.infernalLore;
+    for (const lore of model.lore) {
+      bctx.save();
+      bctx.translate(lore.cx, lore.cy);
+      bctx.rotate(Math.PI / 4);
+      bctx.fillRect(
+        -INFERNAL_LORE_HALF_SIZE,
+        -INFERNAL_LORE_HALF_SIZE,
+        INFERNAL_LORE_HALF_SIZE * 2,
+        INFERNAL_LORE_HALF_SIZE * 2,
+      );
+      bctx.restore();
+    }
+    this.infernalBg = canvas;
+    return canvas;
   }
 
   // Rasterize the fixed maze layout once: every wall stub + shell slab as a

@@ -5,6 +5,13 @@
 // the old hand-mirroring between renderer geometry and collider literals.
 // Sim layer: no three.js imports.
 import type { Collider } from './colliders';
+import {
+  type AuthoredDecor,
+  type AuthoredDoor,
+  type AuthoredRoom,
+  authoredDecorColliders,
+  authoredWallSegments,
+} from './dungeon_rooms';
 
 // Shared structural constants (instance-local coordinates, y up, z into the
 // dungeon). Values are frozen gameplay contracts: mob spawns and pathing
@@ -61,6 +68,12 @@ export interface DungeonLayout {
   shellPolygon?: Array<{ x: number; z: number }>;
   /** Star-shaping pole paired with `shellPolygon` (see geometry2d.polygonIsStarShaped). */
   shellPole?: { x: number; z: number };
+  /** Authored axis-aligned room graph used by bespoke dungeon interiors. */
+  rooms?: AuthoredRoom[];
+  /** Traversable openings cut from the authored room walls. */
+  doors?: AuthoredDoor[];
+  /** Shared visual placement data with optional movement collision radii. */
+  decor?: AuthoredDecor[];
 }
 
 function grid(zFrom: number, zTo: number, zStep: number, xs: readonly number[]): GridPoint[] {
@@ -164,6 +177,71 @@ export const TEMPLE_LAYOUT: DungeonLayout = (() => {
   };
 })();
 
+// Infernal Abyss: a branching endgame descent through a lava maze and forge,
+// across the Maw bridge, into the Heart Cairn. Side rooms remain optional for
+// progression while their doors and collisions use the same authored source.
+export const INFERNAL_ABYSS_LAYOUT: DungeonLayout = {
+  zMin: -25,
+  zMax: 219,
+  sideWallZ: 97,
+  sideWallHd: 123,
+  wallX: 70,
+  endWallHw: 70,
+  floorHalfX: 70,
+  pillars: [],
+  tombs: [],
+  stubs: [],
+  dais: { x: 0, z: 200, r: 18 },
+  rooms: [
+    { id: 'ashen_descent_entrance', x0: -18, x1: 18, z0: -25, z1: 9 },
+    { id: 'chainscar_descent', x0: -8, x1: 8, z0: 9, z1: 27 },
+    { id: 'lava_maze', x0: -34, x1: 34, z0: 27, z1: 67 },
+    { id: 'lost_armory', x0: -62, x1: -34, z0: 35, z1: 59 },
+    { id: 'infernal_forge', x0: -24, x1: 24, z0: 67, z1: 97 },
+    { id: 'gladiator_pit', x0: 24, x1: 66, z0: 67, z1: 97 },
+    { id: 'maw_approach', x0: -10, x1: 10, z0: 97, z1: 113 },
+    { id: 'maw_bridge', x0: -10, x1: 10, z0: 113, z1: 155 },
+    { id: 'heart_cairn_vestibule', x0: -12, x1: 12, z0: 155, z1: 173 },
+    { id: 'heart_cairn_boss_arena', x0: -34, x1: 34, z0: 173, z1: 219 },
+  ],
+  doors: [
+    { x: 0, z: -25, hw: 4, hd: 1 },
+    { x: 0, z: 9, hw: 4, hd: 1 },
+    { x: 0, z: 27, hw: 4, hd: 1 },
+    { x: -34, z: 47, hw: 1, hd: 4 },
+    { x: 0, z: 67, hw: 10, hd: 1 },
+    { x: 24, z: 82, hw: 1, hd: 5 },
+    { x: 0, z: 97, hw: 4, hd: 1 },
+    { x: 0, z: 113, hw: 3.5, hd: 1 },
+    { x: 0, z: 155, hw: 3.5, hd: 1 },
+    { x: 0, z: 173, hw: 5, hd: 1 },
+  ],
+  decor: [
+    { key: 'lava_brazier', x: -12, z: -13, yaw: 0, r: 0.9 },
+    { key: 'lava_brazier', x: 12, z: -13, yaw: Math.PI, r: 0.9 },
+    { key: 'chained_demon_obelisk', x: -25, z: 37, yaw: 0.2, r: 1.4 },
+    { key: 'chained_demon_obelisk', x: 25, z: 57, yaw: -0.2, r: 1.4 },
+    { key: 'lava_pool', x: -15, z: 50, yaw: 0.1, scale: 1.5 },
+    { key: 'lava_pool', x: 16, z: 42, yaw: -0.2, scale: 1.35 },
+    { key: 'lava_fissure', x: 0, z: 58, yaw: Math.PI / 2, scale: 1.7 },
+    { key: 'lost_armory_weapon_rack', x: -54, z: 42, yaw: Math.PI / 2, r: 1.2 },
+    { key: 'lost_armory_weapon_rack', x: -54, z: 52, yaw: Math.PI / 2, r: 1.2 },
+    { key: 'infernal_forge_anvil', x: -11, z: 82, yaw: 0.15, r: 2.2 },
+    { key: 'lava_brazier', x: 11, z: 76, yaw: 0, r: 0.9 },
+    { key: 'lava_brazier', x: 11, z: 90, yaw: Math.PI, r: 0.9 },
+    { key: 'chained_demon_obelisk', x: 37, z: 73, yaw: 0, r: 1.4 },
+    { key: 'chained_demon_obelisk', x: 58, z: 91, yaw: Math.PI, r: 1.4 },
+    { key: 'lava_fissure', x: 0, z: 134, yaw: 0, scale: 2.2 },
+    { key: 'lava_brazier', x: -5, z: 161, yaw: Math.PI / 2, r: 0.9 },
+    { key: 'lava_brazier', x: 5, z: 161, yaw: -Math.PI / 2, r: 0.9 },
+    { key: 'chained_demon_obelisk', x: -24, z: 184, yaw: 0.25, r: 1.4 },
+    { key: 'chained_demon_obelisk', x: 24, z: 184, yaw: -0.25, r: 1.4 },
+    { key: 'chained_demon_obelisk', x: -24, z: 210, yaw: Math.PI - 0.25, r: 1.4 },
+    { key: 'chained_demon_obelisk', x: 24, z: 210, yaw: Math.PI + 0.25, r: 1.4 },
+    { key: 'abyssal_heart_altar', x: 0, z: 210, yaw: Math.PI, r: 3.4 },
+  ],
+};
+
 // The Ashen Coliseum (interior 'arena'): a compact, fully-enclosed square pit
 // — no door, no aisle (combatants are teleported in by matchmaking). Side
 // walls at |x|=23 like the crypt so the KayKit wall modules fit unchanged;
@@ -216,6 +294,13 @@ export const ARENA_SPAWNS_B_2v2 = [
 /** Interior collision set for a layout, in instance-local coordinates. */
 export function layoutColliders(layout: DungeonLayout): Collider[] {
   const out: Collider[] = [];
+  if (layout.rooms) {
+    for (const wall of authoredWallSegments(layout.rooms, layout.doors ?? [], DUNGEON_WALL_HW)) {
+      out.push({ type: 'obb', ...wall, rot: 0 });
+    }
+    out.push(...authoredDecorColliders(layout.decor ?? []));
+    return out;
+  }
   const wallX = layout.wallX ?? DUNGEON_WALL_X;
   const endWallHw = layout.endWallHw ?? DUNGEON_END_WALL_HW;
   // side walls

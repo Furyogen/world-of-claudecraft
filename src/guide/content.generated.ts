@@ -1322,6 +1322,14 @@ export const GUIDE_DUNGEONS: GuideDungeon[] = [
     "name": "Gravewyrm Sanctum"
   },
   {
+    "id": "infernal_abyss",
+    "isRaid": false,
+    "suggestedPlayers": 5,
+    "min": 20,
+    "max": 20,
+    "name": "Molten Abyss"
+  },
+  {
     "id": "raid",
     "isRaid": true,
     "suggestedPlayers": 10,

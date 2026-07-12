@@ -34,6 +34,7 @@ import {
   mobLevelForDungeonDifficulty,
   mobTemplateForDungeonDifficulty,
 } from './difficulty';
+import { tickInfernalAbyssLava } from './infernal_abyss_hazards';
 
 const DOOR_TRIGGER_RADIUS = 2.0; // walking this close to a dungeon door teleports you
 const RAID_ALLOWED_DUNGEON_IDS = new Set(['nythraxis_crypt', 'nythraxis_boss_arena']);
@@ -489,6 +490,7 @@ export function updateInstances(ctx: SimContext): void {
   for (const inst of ctx.instances) {
     if (inst.partyKey === null) continue;
     const origin = instanceOriginOf(inst);
+    if (inst.dungeonId === 'infernal_abyss') tickInfernalAbyssLava(ctx, origin);
     let occupied = false;
     for (const meta of ctx.players.values()) {
       const e = ctx.entities.get(meta.entityId);

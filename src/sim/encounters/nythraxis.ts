@@ -30,6 +30,7 @@ import { ITEMS, MOBS, NPCS, QUESTS } from '../data';
 import { createMob, createNpc } from '../entity';
 import { applyHeroicMobTuning, mobTemplateForDungeonDifficulty } from '../instances/difficulty';
 import { heroicLockoutId, instanceLockoutMetas } from '../instances/dungeons';
+import { infernalAbyssLoreLines } from '../quests/infernal_abyss_lore';
 import type { PlayerMeta } from '../sim';
 import type { SimContext } from '../sim_context';
 import { clearThreat, threatEntries } from '../threat';
@@ -1183,7 +1184,8 @@ export function emitQuestObjectVision(
   entityId?: number | null,
 ): void {
   const lines =
-    itemId === 'grave_sir_aldren'
+    infernalAbyssLoreLines(itemId) ??
+    (itemId === 'grave_sir_aldren'
       ? ['My king was a good man.', 'I swore my blade to him.', 'I would do so again.']
       : itemId === 'grave_high_priest_malric'
         ? ['There had to be another way.', 'I could not let him die.', 'I only wanted to save him.']
@@ -1196,7 +1198,7 @@ export function emitQuestObjectVision(
             ]
           : itemId === 'crypt_ritual_circle'
             ? ['The Crypt Keystone turns cold as the seal breaks.']
-            : null;
+            : null);
   if (!lines) return;
   for (let i = 0; i < lines.length; i++) {
     for (const pid of pids) {
