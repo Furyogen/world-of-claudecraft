@@ -11,6 +11,7 @@ import { spawnNythraxisAdds } from '../src/sim/encounters/nythraxis';
 import {
   enterDungeon,
   instanceKeyFor,
+  instanceLockoutMetas,
   instanceOriginOf,
   leaveDungeon,
   updateDoorTriggers,
@@ -776,6 +777,7 @@ describe('dungeons: heroic daily lockouts', () => {
     sim.releaseSpirit(member);
     expect(me.ghost).toBe(true);
     expect(sim.instanceSlotAt(me.pos)).toBeNull();
+    expect(me.corpseInstanceId).toBe(inst.exitId);
 
     (sim as any).dealDamage(le, morthen, morthen.hp + 10, false, 'physical', null, 'hit');
 
@@ -850,6 +852,42 @@ describe('dungeons: heroic daily lockouts', () => {
 
     expect(sim.players.get(quitter)!.raidLockouts.has('hollow_crypt:heroic')).toBe(true);
     expect(sim.countItem(HEROIC_MARK_ITEM_ID, quitter)).toBe(0);
+  });
+
+  it('ignores a released corpse bound to an older instance claim', () => {
+    const sim = makeSim(5);
+    const leader = sim.addPlayer('warrior', 'Lead');
+    const buddy = sim.addPlayer('priest', 'Buddy');
+    const stale = sim.addPlayer('mage', 'Stale');
+    sim.partyInvite(buddy, leader);
+    sim.partyAccept(buddy);
+    sim.partyInvite(stale, leader);
+    sim.partyAccept(stale);
+    sim.setDungeonDifficulty('heroic', leader);
+    enterDungeon(sim.ctx, 'hollow_crypt', leader);
+    enterDungeon(sim.ctx, 'hollow_crypt', buddy);
+    enterDungeon(sim.ctx, 'hollow_crypt', stale);
+    const inst = claimedDungeon(sim, 'hollow_crypt', 'heroic');
+    const morthen = mobInInstance(sim, inst, 'morthen');
+    const le = sim.entities.get(leader) as AnyEntity;
+    const se = sim.entities.get(stale) as AnyEntity;
+    teleport(sim, le, morthen.pos.x + 1, morthen.pos.z);
+    teleport(sim, sim.entities.get(buddy) as AnyEntity, morthen.pos.x - 1, morthen.pos.z);
+    teleport(sim, se, morthen.pos.x, morthen.pos.z + 2);
+
+    se.dead = true;
+    se.hp = 0;
+    sim.releaseSpirit(stale);
+    expect(se.corpseInstanceId).toBe(inst.exitId);
+    // A freed and reused slot gets a different exit entity. Model that new
+    // claim identity while leaving the old corpse at identical coordinates.
+    se.corpseInstanceId = (inst.exitId ?? 0) + 1;
+    sim.partyLeave(stale);
+
+    expect(instanceLockoutMetas(sim.ctx, inst).map((meta) => meta.entityId)).not.toContain(stale);
+    (sim as any).dealDamage(le, morthen, morthen.hp + 10, false, 'physical', null, 'hit');
+    expect(sim.players.get(stale)!.raidLockouts.has('hollow_crypt:heroic')).toBe(false);
+    expect(sim.countItem(HEROIC_MARK_ITEM_ID, stale)).toBe(0);
   });
 
   it('an uncredited final-boss death still locks the owning party (no marks, no credit)', () => {
