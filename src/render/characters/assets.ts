@@ -36,7 +36,7 @@ type HandGrip = {
 // KayKit adventurer standalone weapon glbs ship a left-hand mesh offset on a
 // lone child node. handslot.r/l children in the character glbs carry the
 // authored grip — copy those (or this fallback table) after flattening.
-const KAYKIT_WEAPON_ACCESSORY: Record<string, string> = {
+export const KAYKIT_WEAPON_ACCESSORY: Record<string, string> = {
   axe_1handed: '1H_Axe',
   axe_2handed: '2H_Axe',
   crossbow_1handed: '1H_Crossbow',
@@ -93,9 +93,12 @@ const KAYKIT_WEAPON_ACCESSORY: Record<string, string> = {
   wand_a: 'VAR_WAND',
   wand_b: 'VAR_WAND',
   adv_wand: 'VAR_WAND',
-  shield_round: 'Shield',
-  shield_square: 'Shield',
-  shield_badge: 'Shield',
+  // Shields use KayKit's authored accessory node names (the v1 characters
+  // shipped these as built-in meshes on handslot.l), so the grips below carry
+  // the pack's real seat per variant instead of one shared guess.
+  shield_round: 'Round_Shield',
+  shield_square: 'Rectangle_Shield',
+  shield_badge: 'Badge_Shield',
 };
 
 // Per-family grip for the variant pack. The model origin IS the grip, so we attach
@@ -115,7 +118,7 @@ const VARIANT_GRIPS: Record<string, VariantGrip> = {
   VAR_WAND: { lift: 0.04, maxHeight: 1.2 },
 };
 
-const KAYKIT_HAND_GRIPS: Record<string, { r: HandGrip; l?: HandGrip }> = {
+export const KAYKIT_HAND_GRIPS: Record<string, { r: HandGrip; l?: HandGrip }> = {
   '1H_Axe': {
     r: { position: [0.231697, 0.382471, 0], quaternion: [0, 1, 0, 0], scale: 0.622211 },
     l: { position: [-0.231697, 0.382471, 0], quaternion: [0, 0, 0, 1], scale: 0.622211 },
@@ -150,9 +153,21 @@ const KAYKIT_HAND_GRIPS: Record<string, { r: HandGrip; l?: HandGrip }> = {
   '1H_Wand': {
     r: { position: [0, 0.2174, 0], quaternion: [0, 1, 0, 0], scale: 0.4831 },
   },
-  Shield: {
-    r: { position: [0, 0.38, 0], quaternion: [0, 1, 0, 0], scale: 0.8 },
-    l: { position: [0, 0.38, 0], quaternion: [0, 0, 0, 1], scale: 0.8 },
+  // Shield seats extracted from the v1 knight.glb authored handslot.l children
+  // (same provenance as the weapon rows above): flat against the forearm with a
+  // small outward z offset, at the pack's native scale. The r rows mirror l by
+  // the table's convention; nothing attaches a right-hand shield today.
+  Round_Shield: {
+    r: { position: [0, 0.017, 0.1771], quaternion: [0, 1, 0, 0], scale: 0.4413 },
+    l: { position: [0, 0.017, 0.1771], quaternion: [0, 0, 0, 1], scale: 0.4413 },
+  },
+  Rectangle_Shield: {
+    r: { position: [0, 0.017, 0.1617], quaternion: [0, 1, 0, 0], scale: 0.5964 },
+    l: { position: [0, 0.017, 0.1617], quaternion: [0, 0, 0, 1], scale: 0.5964 },
+  },
+  Badge_Shield: {
+    r: { position: [0, -0.0123, 0.1341], quaternion: [0, 1, 0, 0], scale: 0.5108 },
+    l: { position: [0, -0.0123, 0.1341], quaternion: [0, 0, 0, 1], scale: 0.5108 },
   },
 };
 
