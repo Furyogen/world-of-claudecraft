@@ -712,13 +712,15 @@ export class CharacterVisual {
     if (this.hoverPayload) {
       // Procedural wing flap: both halves hinge about the central mount. The
       // beat keeps a gentle idle rhythm and doubles while actively hovering.
+      // Axis 'y' folds the wings open/closed (a resting butterfly); axis 'z'
+      // beats the tips up and down (feathered / membrane wings in flight).
       const def = this.hoverId ? HOVER_COSMETICS[this.hoverId] : null;
       const flap = def ? HOVER_FLAP[def.model] : undefined;
       if (flap && (this.hoverWings.l || this.hoverWings.r)) {
         this.hoverFlapPhase += dt * flap.speed * (this.hoverActive ? 1 : 0.45);
         const a = Math.sin(this.hoverFlapPhase) * flap.amp;
-        if (this.hoverWings.l) this.hoverWings.l.rotation.y = a;
-        if (this.hoverWings.r) this.hoverWings.r.rotation.y = -a;
+        if (this.hoverWings.l) this.hoverWings.l.rotation[flap.axis] = a;
+        if (this.hoverWings.r) this.hoverWings.r.rotation[flap.axis] = -a;
       }
       this.hoverVfx?.update(dt);
     }

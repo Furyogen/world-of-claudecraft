@@ -22,8 +22,8 @@ function glbNodeNames(path: string): string[] {
 }
 
 describe('hover cosmetic catalog', () => {
-  it('ships three cosmetics with ids as record keys', () => {
-    expect(HOVER_COSMETIC_LIST.length).toBe(3);
+  it('ships four cosmetics with ids as record keys', () => {
+    expect(HOVER_COSMETIC_LIST.length).toBe(4);
     for (const [key, def] of Object.entries(HOVER_COSMETICS)) {
       expect(def.id).toBe(key);
     }

@@ -10,7 +10,7 @@
 // so the renderer can flap them procedurally) into
 // public/models/cosmetics/<model>.glb.
 
-export type HoverVfxKind = 'sparkle' | 'feather' | 'flame';
+export type HoverVfxKind = 'sparkle' | 'feather' | 'flame' | 'dragonfire';
 
 export interface HoverCosmeticDef {
   /** Stable id: the wire value, the apply-command argument, and a future SKU. */
@@ -45,6 +45,13 @@ export const HOVER_COSMETICS: Record<string, HoverCosmeticDef> = {
     model: 'hover_jetpack',
     vfx: 'flame',
     flaps: false,
+  },
+  dreadwyrm_wings: {
+    id: 'dreadwyrm_wings',
+    name: 'Dreadwyrm Wings',
+    model: 'hover_dragon_wings',
+    vfx: 'dragonfire',
+    flaps: true,
   },
 };
 
