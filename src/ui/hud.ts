@@ -157,16 +157,6 @@ import {
 } from './character_appearance';
 import { ChatAnnouncer } from './chat_announcer';
 import {
-  CHAT_CATEGORIES,
-  type ChatCategory,
-  categoryForLine,
-  isChatCategoryVisible,
-  parseHiddenChatCategories,
-  type SystemChatCategory,
-  serializeHiddenChatCategories,
-  toggleChatCategory,
-} from './chat_categories';
-import {
   CHANNEL_LABEL_KEYS,
   CHAT_TAB_CHANNELS,
   type ChatOpenTab,
@@ -711,9 +701,6 @@ const IGNORED_CHAT_NAMES_KEY = 'woc_ignored_chat_names';
 // implicit and never stored.
 const CHAT_TABS_KEY = 'woc_chat_tabs';
 const CHAT_ACTIVE_TAB_KEY = 'woc_chat_active_tab';
-// The categories the player has hidden from the combined All view (issue #1670);
-// see chat_categories.ts. Defaults to empty (everything visible).
-const CHAT_HIDDEN_CATEGORIES_KEY = 'woc_chat_hidden_categories';
 // Persisted chat-window geometry (drag position + resize size). Desktop only —
 // the mobile layout owns its own placement and ignores this.
 const CHAT_GEOMETRY_KEY = 'woc_chat_geometry';
@@ -738,19 +725,6 @@ const CHAT_TEMPLATE_KEYS = {
   roll: 'hud.chat.templates.roll',
   say: 'hud.chat.templates.say',
 } satisfies Record<string, TranslationKey>;
-// Short caption for each All-view filter-strip button (issue #1670).
-const CHAT_CATEGORY_LABEL_KEYS = {
-  game: 'hudChrome.chat.categories.game',
-  loot: 'hudChrome.chat.categories.loot',
-  xp: 'hudChrome.chat.categories.xp',
-  quest: 'hudChrome.chat.categories.quest',
-  event: 'hudChrome.chat.categories.event',
-  public: 'hudChrome.chat.categories.public',
-  party: 'hudChrome.chat.categories.party',
-  guild: 'hudChrome.chat.categories.guild',
-  channels: 'hudChrome.chat.categories.channels',
-  whispers: 'hudChrome.chat.categories.whispers',
-} satisfies Record<ChatCategory, TranslationKey>;
 type HotbarForm = 'normal' | 'bear' | 'cat' | 'cat_stealth' | 'stealth' | 'sport';
 
 const DELVE_AFFIX_COLORS: Record<string, string> = {
@@ -943,16 +917,9 @@ export class Hud {
   // shown, and drives both the log filter and the send channel.
   private chatTabs: ChatOpenTab[] = [];
   private activeChatTab: ChatTabId = 'all';
-  // Categories hidden from the combined All view (issue #1670): a channel tab
-  // still shows exactly its own channel, unaffected by this filter.
-  private hiddenChatCategories: ChatCategory[] = [];
   // Bind the tab-strip wheel-to-horizontal-scroll listener exactly once (renderChatTabs
   // rebuilds the strip's children but the bar element itself persists).
   private chatTabsWheelBound = false;
-  // Bind the category-strip wheel-to-horizontal-scroll listener exactly once,
-  // mirroring chatTabsWheelBound above (renderChatCategoryStrip rebuilds the
-  // strip's children but the strip element itself persists).
-  private chatCategoryStripWheelBound = false;
   // The control that opened the shared #ctx-menu (the chat "+" button), so the
   // outside-click closer can defer to that opener's own toggle click. Cleared on
   // every close path (closeContextMenu + item activation).
@@ -2254,16 +2221,13 @@ export class Hud {
   private initChatTabs(): void {
     let savedTabs: string | null = null;
     let savedActive: string | null = null;
-    let savedHiddenCategories: string | null = null;
     try {
       savedTabs = localStorage.getItem(CHAT_TABS_KEY);
       savedActive = localStorage.getItem(CHAT_ACTIVE_TAB_KEY);
-      savedHiddenCategories = localStorage.getItem(CHAT_HIDDEN_CATEGORIES_KEY);
     } catch {
       /* storage unavailable */
     }
     this.chatTabs = parseChatTabs(savedTabs);
-    this.hiddenChatCategories = parseHiddenChatCategories(savedHiddenCategories);
     this.activeChatTab =
       savedActive === 'all' ||
       savedActive === 'combat' ||
@@ -2275,7 +2239,6 @@ export class Hud {
     for (const ch of this.chatTabs)
       if (isChatTabChannel(ch) && channelNeedsJoin(ch)) this.sim.chat(`/join ${ch}`);
     this.renderChatTabs();
-    this.renderChatCategoryStrip();
     this.selectChatTab(this.activeChatTab, false);
   }
 
@@ -2286,60 +2249,6 @@ export class Hud {
     } catch {
       /* storage unavailable */
     }
-  }
-
-  private persistHiddenChatCategories(): void {
-    try {
-      localStorage.setItem(
-        CHAT_HIDDEN_CATEGORIES_KEY,
-        serializeHiddenChatCategories(this.hiddenChatCategories),
-      );
-    } catch {
-      /* storage unavailable */
-    }
-  }
-
-  // The compact category filter strip (issue #1670): one small labeled toggle
-  // button per category, shaping the combined All view without giving up
-  // channel tabs. Only meaningful on the All tab (a channel tab already shows
-  // exactly one channel), so it is hidden on every other tab.
-  private renderChatCategoryStrip(): void {
-    const strip = document.getElementById('chat-category-strip');
-    if (!strip) return;
-    if (!this.chatCategoryStripWheelBound) {
-      this.chatCategoryStripWheelBound = true;
-      strip.addEventListener(
-        'wheel',
-        (ev) => {
-          if (ev.deltaY === 0 || strip.scrollWidth <= strip.clientWidth) return;
-          ev.preventDefault();
-          strip.scrollLeft += ev.deltaY;
-        },
-        { passive: false },
-      );
-    }
-    strip.innerHTML = '';
-    for (const cat of CHAT_CATEGORIES) {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'chat-category-toggle';
-      btn.dataset.cat = cat;
-      btn.textContent = t(CHAT_CATEGORY_LABEL_KEYS[cat]);
-      const visible = isChatCategoryVisible(this.hiddenChatCategories, cat);
-      btn.setAttribute('aria-pressed', visible ? 'true' : 'false');
-      btn.classList.toggle('off', !visible);
-      btn.title = t(visible ? 'hudChrome.chat.categories.hide' : 'hudChrome.chat.categories.show', {
-        category: btn.textContent,
-      });
-      btn.addEventListener('click', () => {
-        this.hiddenChatCategories = toggleChatCategory(this.hiddenChatCategories, cat);
-        this.persistHiddenChatCategories();
-        this.renderChatCategoryStrip();
-        this.applyChatFilter();
-      });
-      strip.append(btn);
-    }
-    strip.classList.toggle('active', this.activeChatTab === 'all');
   }
 
   // -------------------------------------------------------------------------
@@ -2810,7 +2719,6 @@ export class Hud {
     this.combatLogEl.classList.toggle('active', showCombat);
     if (!showCombat) this.applyChatFilter();
     this.updateActiveTabStyles();
-    document.getElementById('chat-category-strip')?.classList.toggle('active', tab === 'all');
     if (persist) this.persistChatTabs();
     this.syncChatPlaceholder();
   }
@@ -2905,28 +2813,18 @@ export class Hud {
     return tab !== null && isChatTabChannel(tab) ? tab : null;
   }
 
-  // A line is hidden when either an active CHANNEL tab excludes it (exact
-  // chan match, unchanged), or, only on the combined All view, its
-  // CATEGORY is toggled off in the filter strip. A channel tab always shows
-  // exactly its own channel regardless of the category strip (issue #1670).
-  private isChatLineFiltered(chan: string, cat: ChatCategory): boolean {
-    const filter = this.chatFilterTab();
-    if (filter !== null) return chan !== filter;
-    return !isChatCategoryVisible(this.hiddenChatCategories, cat);
-  }
-
   private applyChatFilter(): void {
+    const filter = this.chatFilterTab();
     for (const child of Array.from(this.chatLogEl.children)) {
-      const el = child as HTMLElement;
-      const chan = el.dataset.chan ?? 'system';
-      const cat = (el.dataset.cat as ChatCategory | undefined) ?? categoryForLine(chan);
-      el.classList.toggle('chat-hidden', this.isChatLineFiltered(chan, cat));
+      const chan = (child as HTMLElement).dataset.chan;
+      (child as HTMLElement).classList.toggle('chat-hidden', filter !== null && chan !== filter);
     }
     this.chatLogEl.scrollTop = this.chatLogEl.scrollHeight;
   }
 
-  private hideIfFiltered(div: HTMLElement, chan: string, cat: ChatCategory): void {
-    if (this.isChatLineFiltered(chan, cat)) div.classList.add('chat-hidden');
+  private hideIfFiltered(div: HTMLElement, chan: string): void {
+    const filter = this.chatFilterTab();
+    if (filter !== null && chan !== filter) div.classList.add('chat-hidden');
   }
 
   private syncChatPlaceholder(): void {
@@ -8707,16 +8605,15 @@ export class Hud {
             this.log(
               t('hud.core.xpGainRested', { amount: ev.amount, rested: ev.rested }),
               '#a980d8',
-              'xp',
             );
           } else {
-            this.log(t('hud.core.xpGain', { amount: ev.amount }), '#a980d8', 'xp');
+            this.log(t('hud.core.xpGain', { amount: ev.amount }), '#a980d8');
           }
           break;
         }
         case 'levelup': {
           this.showBanner(t('hud.core.levelBanner', { level: ev.level }));
-          this.log(t('hud.core.levelLog', { level: ev.level }), '#ffd100', 'xp');
+          this.log(t('hud.core.levelLog', { level: ev.level }), '#ffd100');
           audio.levelUp();
           if (ev.level === 5) {
             const characterId = (this.sim as unknown as { characterId?: number }).characterId;
@@ -8729,7 +8626,7 @@ export class Hud {
           // First talent point (and spec) unlock — nudge the player to the panel.
           if (ev.level === FIRST_TALENT_LEVEL && talentsFor(this.sim.cfg.playerClass)) {
             this.showBanner(t('game.talents.unlockBanner'));
-            this.log(t('game.talents.unlockHint'), '#ffd100', 'xp');
+            this.log(t('game.talents.unlockHint'), '#ffd100');
           }
           break;
         }
@@ -8741,7 +8638,6 @@ export class Hud {
           this.log(
             `${t('game.progression.virtualLevelUp')} ${formatNumber(ev.level, { maximumFractionDigits: 0 })}!`,
             '#ffd100',
-            'xp',
           );
           audio.levelUp();
           break;
@@ -8749,7 +8645,7 @@ export class Hud {
         case 'milestoneUnlocked': {
           const name = this.milestoneName(ev.milestoneId);
           this.showBanner(`${t('game.milestone.unlocked')}: ${name}`);
-          this.log(`${t('game.milestone.unlocked')}: ${name}`, '#ffd100', 'xp');
+          this.log(`${t('game.milestone.unlocked')}: ${name}`, '#ffd100');
           audio.levelUp();
           break;
         }
@@ -8758,7 +8654,7 @@ export class Hud {
         case 'comboPoint':
           break;
         case 'loot': {
-          this.log(this.localizeLootText(ev.text), '#7fdc4f', 'loot');
+          this.log(this.localizeLootText(ev.text), '#7fdc4f');
           if (
             / wins .+ \(\d+\)$/.test(ev.text) ||
             /^Everyone passed on .+\.$/.test(ev.text) ||
@@ -8867,7 +8763,7 @@ export class Hud {
         }
         case 'calendarResult': {
           if (ev.code === 'created' || ev.code === 'removed') {
-            this.log(t(CALENDAR_RESULT_KEYS[ev.code]), '#c8f7c5', 'event');
+            this.log(t(CALENDAR_RESULT_KEYS[ev.code]), '#c8f7c5');
           } else {
             this.showError(t(CALENDAR_RESULT_KEYS[ev.code]));
           }
@@ -8883,7 +8779,7 @@ export class Hud {
           break;
         case 'questProgress': {
           const progressText = this.localizeQuestProgressText(ev.questId, ev.text);
-          this.log(progressText, '#dcd29f', 'quest');
+          this.log(progressText, '#dcd29f');
           // The classic yellow top-center flash ("Forest Wolf slain: 3/8"); the
           // log line above stays the durable, announced copy.
           this.questBanner.show(progressText);
@@ -9174,11 +9070,10 @@ export class Hud {
               position: formatNumber(ev.position, { maximumFractionDigits: 0 }),
             }),
             '#ffa040',
-            'event',
           );
           break;
         case 'arenaUnqueued':
-          this.log(t('hud.system.arenaUnqueued'), '#ffa040', 'event');
+          this.log(t('hud.system.arenaUnqueued'), '#ffa040');
           break;
         case 'arenaFound': {
           const name =
@@ -9192,7 +9087,6 @@ export class Hud {
               className: cls,
             }),
             '#ffa040',
-            'event',
           );
           audio.duelChallenge();
           break;
@@ -9339,21 +9233,19 @@ export class Hud {
               position: formatNumber(ev.position, { maximumFractionDigits: 0 }),
             }),
             '#ffa040',
-            'event',
           );
           break;
         case 'vcupUnqueued':
-          this.log(t('hudChrome.vcup.logUnqueued'), '#ffa040', 'event');
+          this.log(t('hudChrome.vcup.logUnqueued'), '#ffa040');
           break;
         case 'vcupFound': {
           const nationA = vcupNationName(ev.nationA);
           const nationB = vcupNationName(ev.nationB);
           this.showBanner(t('hudChrome.vcup.bannerFound', { nationA, nationB }));
-          this.log(t('hudChrome.vcup.logFound', { nationA, nationB }), '#ffa040', 'event');
+          this.log(t('hudChrome.vcup.logFound', { nationA, nationB }), '#ffa040');
           const allies = [t('hud.core.you'), ...ev.allies.map((c) => c.name)].join(', ');
           const enemies = ev.enemies.map((c) => c.name).join(', ');
-          if (enemies)
-            this.log(t('hudChrome.vcup.logRoster', { allies, enemies }), '#ffa040', 'event');
+          if (enemies) this.log(t('hudChrome.vcup.logRoster', { allies, enemies }), '#ffa040');
           audio.duelChallenge();
           break;
         }
@@ -9475,16 +9367,16 @@ export class Hud {
             this.renderer.fiestaAugmentBurst(this.sim.playerId);
             audio.fiestaAugment();
             this.showBanner(t('fiesta.banner.augmentGained', { name }));
-            this.log(t('fiesta.log.augmentGained', { name }), '#ff3df0', 'event');
+            this.log(t('fiesta.log.augmentGained', { name }), '#ff3df0');
           } else {
-            this.log(t('fiesta.log.allyAugment', { player: ev.byName, name }), '#c98bff', 'event');
+            this.log(t('fiesta.log.allyAugment', { player: ev.byName, name }), '#c98bff');
           }
           break;
         }
         case 'fiestaPowerup': {
           const name = tOptional(`fiesta.powerup.${ev.defId}.name`) ?? ev.defId;
           const who = sim.entities.get(ev.entityId)?.name ?? '?';
-          this.log(t('fiesta.log.powerup', { player: who, name }), '#ffd24a', 'event');
+          this.log(t('fiesta.log.powerup', { player: who, name }), '#ffd24a');
           if (ev.entityId === sim.playerId) {
             audio.fiestaAugment();
             this.showBanner(t('fiesta.banner.powerup', { name }));
@@ -9669,8 +9561,8 @@ export class Hud {
     }
   }
 
-  log(text: string, color = '#ccc', category: SystemChatCategory = 'game'): void {
-    this.appendLog(this.chatLogEl, text, color, true, 'system', category);
+  log(text: string, color = '#ccc'): void {
+    this.appendLog(this.chatLogEl, text, color, true, 'system');
   }
 
   // Prepend a dim bracketed wall-clock prefix to a chat line when the "Show
@@ -9702,9 +9594,7 @@ export class Hud {
     const div = document.createElement('div');
     div.style.color = color;
     div.dataset.chan = chan;
-    const cat = categoryForLine(chan);
-    div.dataset.cat = cat;
-    this.hideIfFiltered(div, chan, cat);
+    this.hideIfFiltered(div, chan);
     this.prependTimestamp(div);
     const sender = document.createElement('span');
     sender.className = 'chat-player-name';
@@ -10247,7 +10137,6 @@ export class Hud {
     color: string,
     timestamp = false,
     chan = 'system',
-    category: SystemChatCategory = 'game',
   ): void {
     const wasNearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 24;
     const div = document.createElement('div');
@@ -10256,9 +10145,7 @@ export class Hud {
     // tag + filter only the chat pane; the combat pane is a separate view
     if (el === this.chatLogEl) {
       div.dataset.chan = chan;
-      const cat = categoryForLine(chan, category);
-      div.dataset.cat = cat;
-      this.hideIfFiltered(div, chan, cat);
+      this.hideIfFiltered(div, chan);
     }
     // Loot lines carry name-free item tokens ([[i:id]]); render those as clickable
     // links via the shared chat item-link renderer. Plain system/combat lines keep

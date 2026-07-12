@@ -285,22 +285,6 @@ export const en: EnTranslations = {
       "resetAction": "Reset",
       "note": "Drag the chat tab strip to move the window, or the corner grip to resize it. Reset returns it to the default position and size."
     },
-    "chat": {
-      "categories": {
-        "hide": "Hide {category} lines in the All view",
-        "show": "Show {category} lines in the All view",
-        "game": "Game",
-        "loot": "Loot",
-        "xp": "XP",
-        "quest": "Quests",
-        "event": "Events",
-        "public": "Public",
-        "party": "Party",
-        "guild": "Guild",
-        "channels": "Channels",
-        "whispers": "Whispers"
-      }
-    },
     "swing": {
       "ready": "Swing",
       "seconds": "{seconds}s"
