@@ -195,6 +195,7 @@ const CALLBACK_KEYS = [
   'setPlayerLevel',
   'notice',
   'spawnDevBot',
+  'startDevSandbox',
   // L2 inventory/vendor (W2): the four still-on-Sim helpers the moved useItem dispatches to.
   'startFishing',
   'unlockMechChromaFromItem',
@@ -457,6 +458,7 @@ function makeFakeHost() {
     setPlayerLevel: vi.fn(),
     notice: vi.fn(),
     spawnDevBot: vi.fn(),
+    startDevSandbox: vi.fn(),
     // L2 inventory/vendor (W2): the four still-on-Sim helpers the moved useItem dispatches to.
     startFishing: vi.fn(),
     unlockMechChromaFromItem: vi.fn(),

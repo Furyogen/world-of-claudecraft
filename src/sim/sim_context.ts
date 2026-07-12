@@ -615,6 +615,10 @@ export interface SimContextCallbacks {
   // devCommands). Adds a stationary whisperable player near the primary; returns the
   // new pid, or -1 if the name is blank or already taken. Stays on Sim.
   spawnDevBot(name: string): number;
+  // /dev sandbox: spawn a controlled practice scenario (a non-offensive training
+  // dummy plus a raid of reduced-health, regen-frozen friendly bots). Returns the
+  // number of allies spawned, for the chat handler's confirmation. Stays on Sim.
+  startDevSandbox(pid?: number): number;
 
   // L2 inventory/vendor (src/sim/items.ts): the four helpers the moved useItem
   // dispatches to that STAY on Sim (their owning facets are decided later). W2 owns
@@ -1037,6 +1041,7 @@ export function createSimContext(host: SimContextHost): SimContext {
     setPlayerLevel: host.setPlayerLevel,
     notice: host.notice,
     spawnDevBot: host.spawnDevBot,
+    startDevSandbox: host.startDevSandbox,
     // L2 inventory/vendor (W2): the four still-on-Sim helpers the moved useItem dispatches to.
     startFishing: host.startFishing,
     unlockMechChromaFromItem: host.unlockMechChromaFromItem,

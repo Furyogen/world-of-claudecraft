@@ -1298,6 +1298,9 @@ export class Sim {
   bankerIds: number[] = [];
   /** When true, /dev level|tp|give chat commands are accepted (local dev only). */
   readonly devCommands: boolean;
+  // Entities spawned by the last /dev sandbox (dummy + practice bots), so re-running
+  // the command clears the previous scenario instead of piling more on. Dev only.
+  private devSandboxIds: number[] = [];
   private pendingMobRespawns: PendingMobRespawn[] = [];
   private groundAoEs: GroundAoE[] = [];
   // World-boss scheduler, one slot per WORLD_BOSSES entry. `nextAt` is the next
@@ -2036,6 +2039,107 @@ export class Sim {
       this.rebucket(e);
     }
     return pid;
+  }
+
+  // A friendly practice bot for /dev sandbox: a LEVEL-20 stationary ally dropped at an
+  // exact spot (a level-1 bot has so little health that a single heal refills it). No
+  // name-uniqueness gate, so /dev sandbox can be re-run. Dev only.
+  private spawnSandboxBot(name: string, x: number, z: number): number {
+    const id = this.addPlayer('mage', name);
+    const meta = this.players.get(id);
+    if (meta) meta.isDevBot = true;
+    this.setPlayerLevel(20, id); // a full pool, so healing reads as it climbs
+    const e = this.entities.get(id);
+    if (e) {
+      e.pos = this.groundPos(x, z);
+      e.prevPos = { ...e.pos };
+      this.rebucket(e);
+    }
+    return id;
+  }
+
+  // /dev sandbox: a controlled practice scenario for testing abilities (dev-command
+  // realms only). Spawns a NON-offensive training dummy in front (aggroRadius 0 /
+  // moveSpeed 0, so nothing chases you) plus a raid of friendly LEVEL-20 allies at
+  // reduced health with out-of-combat regen FROZEN, so only your own healing (or
+  // damage) moves their bars. Attack the dummy to build resources, then practice heals
+  // or AoE on the allies with a clean, threat-free readout of what your abilities do.
+  startDevSandbox(pid?: number): number {
+    const casterId = pid ?? this.primaryId;
+    const me = this.entities.get(casterId);
+    if (!me) return 0;
+    // Clear the PREVIOUS sandbox so re-running RESETS it (and refills the "hurt" allies)
+    // instead of piling on more bodies. Only entities THIS command spawned are removed,
+    // so the world's own training dummy is never touched.
+    for (const id of this.devSandboxIds) {
+      if (this.players.has(id)) this.removePlayer(id);
+      else this.dropEntity(id);
+    }
+    this.devSandboxIds = [];
+    // A roomy 10k pool started low: you can heal for a good while AND watch the bar
+    // climb (a near-infinite pool would barely move).
+    const cfg = {
+      dummyOffset: { x: -3, z: 4 },
+      bots: 5,
+      botZ: 2,
+      botX0: 2,
+      botGap: 1.5,
+      maxHp: 10_000,
+      hp: 0.15,
+    };
+    const dummy = createMob(
+      this.nextId++,
+      MOBS.training_dummy,
+      20,
+      this.groundPos(me.pos.x + cfg.dummyOffset.x, me.pos.z + cfg.dummyOffset.z),
+    );
+    dummy.hostile = true;
+    this.addEntity(dummy);
+    // A tight front-right cluster, close enough that the cast line of sight stays clear.
+    const botIds: number[] = [];
+    for (let i = 0; i < cfg.bots; i++) {
+      botIds.push(
+        this.spawnSandboxBot(
+          `Practice${i + 1}`,
+          me.pos.x + cfg.botX0 + i * cfg.botGap,
+          me.pos.z + cfg.botZ,
+        ),
+      );
+    }
+    // Raid so party/raid-only support abilities can reach every bot (a 5-cap party
+    // would drop the last body): fill a full party, convert, then add the rest.
+    for (const id of botIds.slice(0, 4)) {
+      this.partyInvite(id, casterId);
+      this.partyAccept(id);
+    }
+    if (botIds.length >= 5) this.party.convertPartyToRaid(casterId);
+    for (const id of botIds.slice(4)) {
+      this.partyInvite(id, casterId);
+      this.partyAccept(id);
+    }
+    for (const id of botIds) {
+      const e = this.entities.get(id);
+      if (!e) continue;
+      // A roomy 10k pool started low, so a healer can top them off for a good while
+      // and the bar visibly climbs.
+      e.maxHp = cfg.maxHp;
+      e.hp = Math.max(1, Math.round(cfg.maxHp * cfg.hp));
+      // Freeze out-of-combat regen with a zero-value "food": trips the `!p.eating`
+      // guard in updateRegen, heals nothing, and an idle unsitting bot next to the
+      // non-damaging dummy never clears it. So only YOUR abilities move the bar.
+      e.eating = {
+        itemId: 'dev_sandbox_freeze',
+        kind: 'food',
+        hpPer2s: 0,
+        manaPer2s: 0,
+        remaining: 1_000_000,
+      };
+    }
+    // Remember what we spawned so the NEXT /dev sandbox can clear it (reset).
+    this.devSandboxIds = [dummy.id, ...botIds];
+    // The dev-channel confirmation is emitted by the /dev sandbox chat handler (like
+    // /dev bot), keeping this dev diagnostic out of the S3 sim.ts emit scanner.
+    return botIds.length;
   }
 
   removePlayer(pid: number): void {
@@ -3087,6 +3191,7 @@ export class Sim {
       notice: sim.notice.bind(sim),
       // Dev-only test-dummy spawner backing "/dev bot <name>" in social/chat.ts.
       spawnDevBot: sim.spawnDevBot.bind(sim),
+      startDevSandbox: sim.startDevSandbox.bind(sim),
       // L2 inventory/vendor (W2): the four still-on-Sim helpers the moved items.useItem
       // dispatches to. Late-bound arrows (looked up at call time, not `.bind`d at ctor)
       // so they preserve the pre-move `this.X` dynamic-dispatch semantics, including tests
