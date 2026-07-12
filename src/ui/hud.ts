@@ -257,6 +257,7 @@ import {
   tPlural,
 } from './i18n';
 import { iconDataUrl, QUALITY_COLOR, raidMarkerDataUrl } from './icons';
+import { InfernalAbyssWorldMapPainter } from './infernal_abyss_world_map_painter';
 import { itemArmorTypeLabelKey } from './item_armor_type';
 import { itemStatDeltas } from './item_compare';
 import { itemSetMemberCounts, itemSetTooltipModel } from './item_set_tooltip_view';
@@ -3370,6 +3371,7 @@ export class Hud {
   // Overworld world-map painter (the delve branch stays with delvePainter). Owns
   // the cached whole-world decorations; redraws from the mediumHud band while open.
   private readonly mapPainter = new MapWindowPainter();
+  private readonly infernalWorldMapPainter = new InfernalAbyssWorldMapPainter();
   // The aura strips are the keyed-pool aura painter, two instances of the
   // auras_view core + AurasPainter: the player buff bar (#buff-bar, mode
   // 'all') and the target strip (#tf-debuffs, mode 'all' too: a target's buffs AND
@@ -8161,7 +8163,26 @@ export class Hud {
     const p = this.sim.player;
     const summaryEl = $('#map-summary');
 
-    if (mapWindowMode(this.sim) === 'delve') {
+    const mode = mapWindowMode(this.sim);
+    if (mode === 'infernalAbyss') {
+      this.mapQuestAreas = [];
+      this.mapNpcMarkers = [];
+      this.infernalWorldMapPainter.paint(
+        ctx,
+        this.sim,
+        S,
+        dungeonDisplayName('infernal_abyss'),
+        classCss,
+      );
+      if (!this.mapDrag) canvas.style.cursor = 'default';
+      this.setText(
+        summaryEl,
+        t('hud.core.mapSummary', { zone: dungeonDisplayName('infernal_abyss') }),
+      );
+      return;
+    }
+
+    if (mode === 'delve') {
       // The delve painter owns the full world-map schematic render (the area
       // title is drawn on-canvas, since the world map has no DOM zone label).
       this.mapQuestAreas = [];

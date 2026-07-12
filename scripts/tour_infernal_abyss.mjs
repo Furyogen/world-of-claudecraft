@@ -1,5 +1,5 @@
 // Screenshot tour of the Molten Abyss (id infernal_abyss): boots offline,
-// levels to 20, walks the Stormcrag door, then tours all ten authored rooms
+// levels to 20, walks the Stormcrag door, then tours the complete authored route
 // including both branches, the minibosses, the lava (with a live damage-pulse
 // check), a wall-collision probe, the lore objects, Azazel's arena, and the
 // authored minimap. Saves tmp/abyss_*.png. Needs `npm run dev` running and a
@@ -84,22 +84,6 @@ await page.evaluate(() => {
   p.hp = 999999;
 });
 
-// Teleport helper in OVERWORLD coords.
-const tp = (x, z, yaw = 0) =>
-  page.evaluate(
-    (x, z, yaw) => {
-      const g = window.__game;
-      const pos = g.sim.groundPos(x, z);
-      g.sim.player.pos = pos;
-      g.sim.player.prevPos = { ...pos };
-      g.sim.player.facing = yaw;
-      g.input.camYaw = yaw;
-    },
-    x,
-    z,
-    yaw,
-  );
-
 // 1) the Stormcrag door site
 const door = await page.evaluate(() => {
   const g = window.__game;
@@ -115,14 +99,17 @@ if (door) {
       const g = window.__game;
       // Offset diagonally so the archway is not hidden dead-center behind
       // the player model from the chase camera.
-      const pos = g.sim.groundPos(dx - 4.5, dz + 4.5);
+      const pos = g.sim.groundPos(dx - 7, dz + 7);
       g.sim.player.pos = pos;
       g.sim.player.prevPos = { ...pos };
       // Engine facing: PI faces +z, 0 faces -z, so aim the OPPOSITE of the
       // player-to-door vector to look at the door.
       const yaw = Math.atan2(pos.x - dx, pos.z - dz);
-      g.sim.player.facing = yaw;
-      g.input.camYaw = yaw;
+      // Orbit a quarter turn so the gate and character share the frame instead
+      // of the chase camera sitting inside the gate's deep horn silhouette.
+      const framedYaw = yaw - Math.PI / 2;
+      g.sim.player.facing = framedYaw;
+      g.input.camYaw = framedYaw;
       g.input.camPitch = 0.1;
       g.input.camDist = 8;
     },
@@ -130,6 +117,15 @@ if (door) {
     door.z,
   );
   await sleep(6000);
+  await page.evaluate(
+    (yaw) => {
+      const g = window.__game;
+      g.sim.player.facing = yaw;
+      g.input.camYaw = yaw;
+    },
+    Math.atan2(-7, 7) - Math.PI / 2,
+  );
+  await sleep(600);
   await shot('01_stormcrag_door');
 }
 
@@ -156,6 +152,8 @@ const tpLocal = async (x, z, yaw = 0, settle = 1100) => {
       p.prevPos = { ...gp };
       p.facing = yaw;
       g.input.camYaw = yaw;
+      g.input.camPitch = 0.32;
+      g.input.camDist = 10;
     },
     origin.x + x,
     origin.z + z,
@@ -168,10 +166,10 @@ await tpLocal(0, -8, 0);
 await shot('02_ashen_descent');
 await tpLocal(0, 18, 0);
 await shot('03_chainscar_descent');
-await tpLocal(0, 40, 0.3);
+await tpLocal(-20, 50, -0.7);
 await shot('04_lava_maze');
 
-// lava damage probe: normal hp, stand in the pool at local (-15, 50)
+// Lava damage probe: normal hp, stand in a central maze fissure.
 const lava = await page.evaluate(
   (x, z) => {
     const g = window.__game;
@@ -182,11 +180,11 @@ const lava = await page.evaluate(
     p.prevPos = { ...p.pos };
     return new Promise((resolve) => {
       const h0 = p.hp;
-      setTimeout(() => resolve({ before: h0, after: p.hp, max: p.maxHp }), 2400);
+      setTimeout(() => resolve({ before: h0, after: p.hp, max: p.maxHp }), 3600);
     });
   },
-  origin.x - 15,
-  origin.z + 50,
+  origin.x - 47,
+  origin.z + 61,
 );
 check(
   'lava pool pulses real damage',
@@ -195,11 +193,8 @@ check(
 );
 await shot('05_lava_pool_damage');
 
-// wall-collision probe: try to cross the Lava Maze west wall (local x0=-62..
-// the room wall at the branch seam). Walk into it and confirm we stay inside.
-// hold W while facing due west so the real input path drives the player into
-// the Lava Maze's west wall (local x0 = -34); the resolver must keep us inside.
-await tpLocal(-30, 55, -Math.PI / 2, 400);
+// Wall-collision probe: drive the real input path into the maze shell.
+await tpLocal(-50, 45, -Math.PI / 2, 400);
 const startX = await page.evaluate(() => window.__game.sim.player.pos.x);
 await page.keyboard.down('w');
 await sleep(1500);
@@ -207,15 +202,15 @@ await page.keyboard.up('w');
 const endX = await page.evaluate(() => window.__game.sim.player.pos.x);
 check(
   'west wall blocks movement out of the maze',
-  endX >= origin.x - 34.5 && endX < startX,
-  `x ${startX.toFixed(1)} -> ${endX.toFixed(1)} (wall at ${(origin.x - 34).toFixed(1)})`,
+  endX >= origin.x - 54.5 && endX < startX,
+  `x ${startX.toFixed(1)} -> ${endX.toFixed(1)} (wall at ${(origin.x - 54).toFixed(1)})`,
 );
 
 // 3) Lost Armory (west branch) + its lore object and weapon racks
-await tpLocal(-48, 47, -1.4);
+await tpLocal(-66, 59, -1.4);
 await shot('06_lost_armory');
 // 4) Infernal Forge + Forgekeeper + anvil + tablet objects
-await tpLocal(0, 76, 0.2);
+await tpLocal(0, 108, 0.2);
 await shot('07_forge');
 const forgekeeper = await page.evaluate(() => {
   const g = window.__game;
@@ -224,23 +219,54 @@ const forgekeeper = await page.evaluate(() => {
 });
 check('Forgekeeper is up in the forge', !!forgekeeper, JSON.stringify(forgekeeper));
 // 5) Gladiator Pit (east branch) + Pyre Golem
-await tpLocal(40, 82, 1.4);
+await tpLocal(40, 116, Math.PI / 2);
+await page.evaluate(() => {
+  window.__game.input.camDist = 7;
+  window.__game.input.camPitch = 0.35;
+});
+await sleep(500);
 await shot('08_gladiator_pit');
-const golem = await page.evaluate(() => {
+const golem = await page.evaluate((origin) => {
   const g = window.__game;
   const m = [...g.sim.entities.values()].find((e) => e.templateId === 'pyre_golem' && !e.dead);
-  return m ? { name: m.name, level: m.level, hp: m.maxHp } : null;
-});
-check('Pyre Golem is up in the pit', !!golem, JSON.stringify(golem));
+  return m
+    ? { name: m.name, level: m.level, hp: m.maxHp, x: m.pos.x - origin.x, z: m.pos.z - origin.z }
+    : null;
+}, origin);
+check(
+  'Pyre Golem is up in the maze crucible',
+  !!golem && golem.x < -45 && golem.z >= 70 && golem.z <= 95,
+  JSON.stringify(golem),
+);
 // 6) Maw Approach and Bridge
-await tpLocal(0, 105, 0);
+await tpLocal(0, 143, 0);
+await page.evaluate(() => {
+  window.__game.input.camDist = 7;
+  window.__game.input.camPitch = 0.28;
+});
+await sleep(400);
 await shot('09_maw_approach');
-await tpLocal(0, 134, 0);
+await tpLocal(0, 149, 0);
+await page.evaluate(() => {
+  window.__game.input.camDist = 10;
+  window.__game.input.camPitch = 0.42;
+});
+await sleep(400);
 await shot('10_maw_bridge');
 // 7) Vestibule then the Heart Cairn arena
-await tpLocal(0, 164, 0);
+await tpLocal(0, 184, Math.PI / 2);
+await page.evaluate(() => {
+  window.__game.input.camDist = 6;
+  window.__game.input.camPitch = 0.3;
+});
+await sleep(400);
 await shot('11_vestibule');
-await tpLocal(0, 185, 0);
+await tpLocal(0, 199, 0);
+await page.evaluate(() => {
+  window.__game.input.camDist = 8;
+  window.__game.input.camPitch = 0.36;
+});
+await sleep(400);
 await shot('12_heart_cairn_azazel');
 const azazel = await page.evaluate(() => {
   const g = window.__game;
@@ -275,7 +301,7 @@ await shot('14_world_map');
 await page.keyboard.press('Escape');
 
 // 9) a real Azazel pull for the encounter view
-await tpLocal(0, 188, 0);
+await tpLocal(0, 204, 0);
 await page.evaluate(() => {
   const g = window.__game;
   const m = [...g.sim.entities.values()].find(

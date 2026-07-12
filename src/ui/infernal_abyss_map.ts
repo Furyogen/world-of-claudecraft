@@ -25,8 +25,12 @@ export interface InfernalMapPoint {
 }
 
 export interface InfernalMapHazard extends InfernalMapPoint {
-  kind: 'pool' | 'fissure';
+  kind: 'pool' | 'fissure' | 'chasm' | 'moat';
   angle: number;
+  halfWidth: number;
+  halfLength: number;
+  innerHalfWidth?: number;
+  innerHalfLength?: number;
 }
 
 export interface InfernalMapPlayer {
@@ -53,6 +57,7 @@ export interface InfernalMapPartyMember {
 export interface InfernalAbyssMapModel {
   rooms: InfernalMapRoom[];
   doors: InfernalMapRect[];
+  barriers: InfernalMapRect[];
   lava: InfernalMapHazard[];
   lore: InfernalMapPoint[];
   mobs: InfernalMapMob[];
@@ -79,15 +84,24 @@ function layoutBounds(): InfernalBounds {
       maxZ: INFERNAL_ABYSS_LAYOUT.zMax,
     };
   }
+  const barriers = infernalBarriers();
   return {
-    minX: Math.min(...rooms.map((room) => room.x0)),
-    maxX: Math.max(...rooms.map((room) => room.x1)),
-    minZ: Math.min(...rooms.map((room) => room.z0)),
-    maxZ: Math.max(...rooms.map((room) => room.z1)),
+    minX: Math.min(...rooms.map((room) => room.x0), ...barriers.map((wall) => wall.x - wall.hw)),
+    maxX: Math.max(...rooms.map((room) => room.x1), ...barriers.map((wall) => wall.x + wall.hw)),
+    minZ: Math.min(...rooms.map((room) => room.z0), ...barriers.map((wall) => wall.z - wall.hd)),
+    maxZ: Math.max(...rooms.map((room) => room.z1), ...barriers.map((wall) => wall.z + wall.hd)),
   };
 }
 
+function infernalBarriers() {
+  return INFERNAL_ABYSS_LAYOUT.barriers ?? [];
+}
+
 const BOUNDS = layoutBounds();
+const LAVA_POOL_RADIUS = 5;
+const LAVA_FISSURE_HALF_WIDTH = 1.1;
+const LAVA_FISSURE_HALF_LENGTH = 5;
+const LAVA_CHASM_DEFAULT_SIZE = 12;
 // Live markers just outside the authored footprint (a mob leashing through a
 // doorway, a member on a room seam) still belong to this instance's schematic.
 const FOOTPRINT_SLACK = 6;
@@ -100,12 +114,20 @@ export function infernalAbyssLocalToCanvas(
   canvasSize: number,
   pad: number,
 ): { cx: number; cy: number } {
-  const sx = (canvasSize - pad * 2) / (BOUNDS.maxX - BOUNDS.minX);
-  const sz = (canvasSize - pad * 2) / (BOUNDS.maxZ - BOUNDS.minZ);
+  const scale = infernalAbyssMapScale(canvasSize, pad);
+  const centerX = (BOUNDS.minX + BOUNDS.maxX) / 2;
+  const centerZ = (BOUNDS.minZ + BOUNDS.maxZ) / 2;
   return {
-    cx: pad + (BOUNDS.maxX - localX) * sx,
-    cy: pad + (localZ - BOUNDS.minZ) * sz,
+    cx: canvasSize / 2 + (centerX - localX) * scale,
+    cy: canvasSize / 2 + (localZ - centerZ) * scale,
   };
+}
+
+/** Uniform yards-to-pixels scale shared by all static and live primitives. */
+export function infernalAbyssMapScale(canvasSize: number, pad: number): number {
+  const spanX = BOUNDS.maxX - BOUNDS.minX;
+  const spanZ = BOUNDS.maxZ - BOUNDS.minZ;
+  return (canvasSize - pad * 2) / Math.max(spanX, spanZ);
 }
 
 function projectedRect(
@@ -155,6 +177,7 @@ export function infernalAbyssMapModel(
   canvasSize: number,
   pad: number,
 ): InfernalAbyssMapModel {
+  const mapScale = infernalAbyssMapScale(canvasSize, pad);
   const rooms = (INFERNAL_ABYSS_LAYOUT.rooms ?? []).map((room) => ({
     id: room.id,
     boss: room.id.includes('boss_arena'),
@@ -170,14 +193,59 @@ export function infernalAbyssMapModel(
       pad,
     ),
   );
+  const barriers = infernalBarriers().map((wall) =>
+    projectedRect(
+      wall.x - wall.hw,
+      wall.x + wall.hw,
+      wall.z - wall.hd,
+      wall.z + wall.hd,
+      canvasSize,
+      pad,
+    ),
+  );
   const lava = (INFERNAL_ABYSS_LAYOUT.decor ?? [])
-    .filter((decor) => decor.key === 'lava_pool' || decor.key === 'lava_fissure')
-    .map((decor) => ({
-      ...infernalAbyssLocalToCanvas(decor.x, decor.z, canvasSize, pad),
-      scale: decor.scale ?? 1,
-      kind: decor.key === 'lava_pool' ? ('pool' as const) : ('fissure' as const),
-      angle: -decor.yaw,
-    }));
+    .filter(
+      (decor) =>
+        decor.key === 'lava_pool' ||
+        decor.key === 'lava_fissure' ||
+        decor.key === 'lava_chasm' ||
+        decor.key === 'lava_moat',
+    )
+    .map((decor) => {
+      const scale = decor.scale ?? 1;
+      const kind =
+        decor.key === 'lava_pool'
+          ? ('pool' as const)
+          : decor.key === 'lava_chasm'
+            ? ('chasm' as const)
+            : decor.key === 'lava_moat'
+              ? ('moat' as const)
+              : ('fissure' as const);
+      const halfWidth =
+        kind === 'chasm' || kind === 'moat'
+          ? (decor.scaleX ?? LAVA_CHASM_DEFAULT_SIZE) / 2
+          : kind === 'pool'
+            ? LAVA_POOL_RADIUS * (decor.scaleX ?? scale)
+            : LAVA_FISSURE_HALF_WIDTH * (decor.scaleX ?? scale);
+      const halfLength =
+        kind === 'chasm' || kind === 'moat'
+          ? (decor.scaleZ ?? LAVA_CHASM_DEFAULT_SIZE) / 2
+          : kind === 'pool'
+            ? LAVA_POOL_RADIUS * (decor.scaleZ ?? scale)
+            : LAVA_FISSURE_HALF_LENGTH * (decor.scaleZ ?? scale);
+      return {
+        ...infernalAbyssLocalToCanvas(decor.x, decor.z, canvasSize, pad),
+        scale,
+        kind,
+        angle: -decor.yaw,
+        halfWidth: halfWidth * mapScale,
+        halfLength: halfLength * mapScale,
+        innerHalfWidth:
+          kind === 'moat' ? halfWidth * (decor.innerScale ?? 0.68) * mapScale : undefined,
+        innerHalfLength:
+          kind === 'moat' ? halfLength * (decor.innerScale ?? 0.68) * mapScale : undefined,
+      };
+    });
   const lore = (DUNGEONS.infernal_abyss.objects ?? []).map((object) => ({
     ...infernalAbyssLocalToCanvas(object.x, object.z, canvasSize, pad),
     scale: 1,
@@ -232,6 +300,7 @@ export function infernalAbyssMapModel(
   return {
     rooms,
     doors,
+    barriers,
     lava,
     lore,
     mobs,

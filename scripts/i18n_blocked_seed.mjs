@@ -334,4 +334,6 @@ export const V07_SLASH = [
   '[dev] Level set to 5.',
   '[dev] Teleported to Aki, Aki.',
   "[dev] Unknown item 'Aki'.",
+  '[dev] God mode ON.',
+  '[dev] God mode OFF.',
 ];

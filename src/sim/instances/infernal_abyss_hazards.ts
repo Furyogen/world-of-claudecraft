@@ -11,6 +11,22 @@ export function infernalLavaAt(x: number, z: number): boolean {
     const scale = decor.scale ?? 1;
     const dx = x - decor.x;
     const dz = z - decor.z;
+    if (decor.key === 'lava_moat') {
+      const c = Math.cos(decor.yaw);
+      const s = Math.sin(decor.yaw);
+      const localX = dx * c - dz * s;
+      const localZ = dx * s + dz * c;
+      const rx = (decor.scaleX ?? 12) / 2;
+      const rz = (decor.scaleZ ?? 12) / 2;
+      const outer = (localX * localX) / (rx * rx) + (localZ * localZ) / (rz * rz);
+      const innerScale = decor.innerScale ?? 0.68;
+      const innerRx = rx * innerScale;
+      const innerRz = rz * innerScale;
+      const inner =
+        (localX * localX) / (innerRx * innerRx) + (localZ * localZ) / (innerRz * innerRz);
+      if (outer <= 1 && inner >= 1) return true;
+      continue;
+    }
     if (decor.key === 'lava_pool') {
       const radius = LAVA_POOL_RADIUS * scale;
       if (dx * dx + dz * dz <= radius * radius) return true;
@@ -22,8 +38,8 @@ export function infernalLavaAt(x: number, z: number): boolean {
     const localX = dx * c - dz * s;
     const localZ = dx * s + dz * c;
     if (
-      Math.abs(localX) <= LAVA_FISSURE_HALF_WIDTH * scale &&
-      Math.abs(localZ) <= LAVA_FISSURE_HALF_LENGTH * scale
+      Math.abs(localX) <= LAVA_FISSURE_HALF_WIDTH * (decor.scaleX ?? scale) &&
+      Math.abs(localZ) <= LAVA_FISSURE_HALF_LENGTH * (decor.scaleZ ?? scale)
     ) {
       return true;
     }

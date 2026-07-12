@@ -34,7 +34,8 @@ describe('Infernal Abyss content', () => {
     expect(zPositions.some((z) => z >= 85 && z <= 105)).toBe(true);
     expect(dungeon.spawns.some((spawn) => spawn.x >= 20 && spawn.z >= 67)).toBe(true);
     expect(zPositions.some((z) => z >= 145 && z <= 170)).toBe(true);
-    expect(dungeon.spawns).toContainEqual({ mobId: 'azazel_infernal_lord', x: 0, z: 195 });
+    expect(dungeon.spawns).toContainEqual({ mobId: 'pyre_golem', x: -64, z: 84 });
+    expect(dungeon.spawns).toContainEqual({ mobId: 'azazel_infernal_lord', x: 0, z: 224 });
 
     for (const spawn of dungeon.spawns) {
       const distance = Math.hypot(spawn.x - dungeon.entry.x, spawn.z - dungeon.entry.z);

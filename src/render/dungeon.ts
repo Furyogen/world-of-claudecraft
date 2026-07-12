@@ -47,7 +47,13 @@ import {
   placeMarshWallDressing,
 } from './delve_marsh_dressing';
 import { sharedUniforms } from './gfx';
-import { ensureInfernalAbyssAssets, placeInfernalAbyssDressing } from './infernal_abyss_dressing';
+import { placeInfernalAbyssAtmosphere } from './infernal_abyss_atmosphere';
+import {
+  ensureInfernalAbyssAssets,
+  type InfernalPortcullis,
+  placeInfernalAbyssDressing,
+} from './infernal_abyss_dressing';
+import { placeInfernalAbyssFloorAccents } from './infernal_abyss_floor_accents';
 import { radialGlowTexture } from './textures';
 
 const FLAME_EMISSIVE_HIGH = 2.2;
@@ -616,6 +622,9 @@ export class DungeonInteriors {
   private infernalFloorMats = new Map<Pack, THREE.Material>();
   private waterMat: THREE.ShaderMaterial | null = null;
   private arenaHideables: ArenaHideable[] = [];
+  private infernalPortcullises: Array<
+    InfernalPortcullis & { worldX: number; worldZ: number }
+  > = [];
 
   constructor(
     private scene: THREE.Scene,
@@ -716,10 +725,28 @@ export class DungeonInteriors {
     this.placePillarsAndTorches(group, p, layout, variant);
     this.placeTombs(p, layout, variant);
     this.placeStubs(p, layout.stubs, variant);
-    this.placeDais(group, p, layout, variant);
-    this.placeAisleClutter(p, layout, variant);
+    if (variant !== 'infernal_abyss') {
+      this.placeDais(group, p, layout, variant);
+      this.placeAisleClutter(p, layout, variant);
+    }
     if (variant !== 'infernal_abyss') this.placeWallDressing(p, layout, variant, arenaWalls);
-    else placeInfernalAbyssDressing(group, layout, this.lowGfx, this.fireLights);
+    else {
+      const portcullises = placeInfernalAbyssDressing(
+        group,
+        layout,
+        this.lowGfx,
+        this.fireLights,
+      );
+      for (const portcullis of portcullises) {
+        this.infernalPortcullises.push({
+          ...portcullis,
+          worldX: ox + portcullis.x,
+          worldZ: oz + portcullis.z,
+        });
+      }
+      placeInfernalAbyssFloorAccents(group, layout, this.lowGfx);
+      placeInfernalAbyssAtmosphere(group, layout, this.lowGfx);
+    }
     if (variant === 'temple') {
       this.placeFloodwater(group, layout);
       this.placeAquaticDressing(group, layout);
@@ -750,7 +777,28 @@ export class DungeonInteriors {
     this.scene.add(group);
   }
 
-  update(camX: number, camY: number, camZ: number, eyeX: number, eyeY: number, eyeZ: number): void {
+  update(
+    camX: number,
+    camY: number,
+    camZ: number,
+    eyeX: number,
+    eyeY: number,
+    eyeZ: number,
+    playerX: number,
+    playerZ: number,
+    dt: number,
+  ): void {
+    for (const portcullis of this.infernalPortcullises) {
+      const dx = playerX - portcullis.worldX;
+      const dz = playerZ - portcullis.worldZ;
+      const distanceSq = dx * dx + dz * dz;
+      if (portcullis.open ? distanceSq > 14 * 14 : distanceSq < 11 * 11) {
+        portcullis.open = !portcullis.open;
+      }
+      const targetY = portcullis.open ? portcullis.raisedY : portcullis.closedY;
+      const travel = Math.min(Math.abs(targetY - portcullis.model.position.y), dt * 11);
+      portcullis.model.position.y += Math.sign(targetY - portcullis.model.position.y) * travel;
+    }
     for (const h of this.arenaHideables) {
       const hide = arenaWallSegmentHits(h.footprint, eyeX, eyeY, eyeZ, camX, camY, camZ);
       if (hide === h.hidden) continue;
@@ -978,7 +1026,7 @@ export class DungeonInteriors {
     const base = this.material(pack).clone() as
       | THREE.MeshLambertMaterial
       | THREE.MeshStandardMaterial;
-    base.color.multiply(new THREE.Color(surface === 'wall' ? 0x5a2a22 : 0x321715));
+    base.color.multiply(new THREE.Color(surface === 'wall' ? 0x8a6659 : 0x69534c));
     if (base instanceof THREE.MeshStandardMaterial) {
       base.roughness = 0.9;
       base.metalness = surface === 'wall' ? 0.12 : 0.04;
@@ -1485,7 +1533,10 @@ export class DungeonInteriors {
 
   private placeAuthoredWalls(p: Placements, layout: DungeonLayout, variant: Variant): void {
     const rooms = layout.rooms ?? [];
-    const segments = authoredWallSegments(rooms, layout.doors ?? []);
+    const segments = authoredWallSegments(rooms, [
+      ...(layout.doors ?? []),
+      ...(layout.visualOpenings ?? []),
+    ]);
     let placed = 0;
     for (const segment of segments) {
       const horizontal = segment.hw >= segment.hd;

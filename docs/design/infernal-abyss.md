@@ -23,17 +23,18 @@ Visible walls, doorway gaps, prop footprints and minimap rooms all derive from
 |---|---|---|
 | 1 | Ashen Descent | Safe entrance, first view of the chained forge |
 | 1 | Chainscar Descent | Compression corridor into the hostile complex |
-| 2 | Lava Maze | First trash gauntlet, lava pools and a lore tablet |
-| 2 | Lost Armory | Optional west branch with weapon racks and gear |
-| 3 | Infernal Forge | Forgekeeper miniboss and the Brands of the First Flame |
-| 3 | Gladiator Pit | Optional east branch with elite gladiators and the Forgekeeper's Ledger |
+| 2 | Lava Maze | Physical switchback maze with nine shared render and collision barriers |
+| 2 | Lost Armory | Optional west branch packed with racks, wall displays, crates and chained trophies |
+| 2 | Pyre Crucible | Lava-ringed western chamber with a shrine, crucibles and magma crystals for the Pyre Golem |
+| 3 | Infernal Forge | Monumental furnace, cranes, reliefs, bellows, molten ingots and lava channels |
+| 3 | Gladiator Pit | Optional east branch with five barrier segments, raised galleries, carnage and a chained gantry |
 | 3 | Maw Approach | Narrow regroup threshold after both branches |
-| 3 | Maw Bridge | Lava-fissure crossing and final trash pack |
-| 3 | Heart Cairn Vestibule | Pyre Golem miniboss and the broken covenant |
-| 3 | Heart Cairn | Azazel's altar and final encounter |
+| 3 | Maw Bridge | Narrow broken bridge over a deep lava river, cliff faces and volcanic crags |
+| 3 | Heart Cairn Vestibule | Final trash and the broken covenant |
+| 1 | Heart Cairn | Stepped arena, continuous lava moat, cracked ritual island, skull throne wall and Azazel |
 
-The primary route remains obvious while the two side rooms preserve the exploratory
-shape of the concept map. Lava pools and fissures deal a deterministic eight percent
+The primary route remains readable while the west branches, east pit and S-shaped
+progression reproduce the hierarchy of the concept map. Lava pools and fissures deal a deterministic eight percent
 of maximum health each second, matching the exact visual footprints on every graphics
 tier.
 
@@ -66,18 +67,29 @@ Azazel combines the existing deterministic encounter vocabulary into one fight:
 - `Gaze of the Abyss`, a periodic fear that disrupts positioning.
 - A 20 percent enrage with a 60 percent damage increase and attack-speed increase.
 
-The arena leaves a clean central fighting floor around the altar and places four
-chained obelisks on its perimeter. The result is readable from the default camera and
-leaves enough space for a five-player party to spread.
+The arena leaves a clean central fighting island around the altar. A broad elliptical
+lava moat separates it from the outer floor while authored magma veins, guardian
+statues, ossuaries, hanging cages, lavafalls and a giant skull gate frame Azazel and the
+horned throne. The stepped four-room shell reads as a circular cairn on both maps while
+preserving the existing flat-floor movement contract.
 
 ## Generated asset set
 
-Seven Tripo v3 assets were generated specifically for this dungeon:
+Thirty-five Tripo v3 assets were generated specifically for this dungeon:
 
 - Rigged Azazel and Pyre Golem models, each with Idle, Walk, Run, Attack, Hit, Death,
   Cast and Jump clips.
 - Abyssal heart altar, infernal forge anvil, chained demon obelisk, lost armory weapon
   rack and lava brazier props.
+- Monumental furnace, horned basalt throne, modular maze wall, gladiator chain gantry,
+  broken bridge span, magma spires, horned portcullis and forge chain crane.
+- Giant skull gate, lavafall shrine, cracked floor plate, battlefield debris, crucibles,
+  forge tools, bellows, armory crates, weapon displays, spectator stands, hanging cages
+  and horned guardian statues.
+- Basalt buttresses, furnace reliefs, chained war banners, ossuary piles, molten ingot
+  molds, arena carnage, horned wall sconces and magma crystal clusters.
 
 All models use 512 px embedded WebP textures and remain within the repository triangle
-and file-size budgets. The creature clips pass the in-place movement validation.
+and per-file limits. The creature clips pass the in-place movement validation. Repeated
+cavern, ember and floor-fracture families are consolidated into fixed draw-call meshes,
+with reduced populations on the low graphics tier.

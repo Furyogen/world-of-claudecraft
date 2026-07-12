@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { buildInfernalDoorBody } from './infernal_door_portal';
 import { markSharedGeometry, markSharedMaterial } from './shared_resource';
 
 // The dungeon door / exit-portal visual system, lifted out of renderer.ts so the
@@ -120,7 +121,7 @@ export function buildDoorBody(
   entering: boolean,
   dungeonId: string | null | undefined,
   lowGfx: boolean,
-): { body: THREE.Group; portal?: THREE.Mesh } {
+): { body: THREE.Group; portal?: THREE.Mesh; height?: number } {
   const body = new THREE.Group();
   if (entering && dungeonId === 'nythraxis_crypt') {
     const clickBox = new THREE.Mesh(doorNythraxisClickGeometry(), doorNythraxisClickMaterial());
@@ -128,6 +129,7 @@ export function buildDoorBody(
     body.add(clickBox);
     return { body };
   }
+  if (entering && dungeonId === 'infernal_abyss') return buildInfernalDoorBody(lowGfx);
 
   const stone = doorStoneMaterial();
   const arch = new THREE.Mesh(doorArchGeometry(), stone);

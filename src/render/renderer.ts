@@ -3310,7 +3310,7 @@ export class Renderer {
       const built = buildDoorBody(entering, e.dungeonId, this.lowGfx);
       body = built.body;
       portal = built.portal;
-      height = 4.6;
+      height = built.height ?? 4.6;
       objectMesh = body!;
     } else if (e.kind === 'object' && e.templateId === 'mailbox') {
       // Ravenpost pillar: bespoke procedural prop (no sparkle; the unread-mail
@@ -4871,6 +4871,9 @@ export class Renderer {
       this.cameraLookAt.x,
       this.cameraLookAt.y,
       this.cameraLookAt.z,
+      selfPos.x,
+      selfPos.z,
+      dt,
     );
     worldStart = markWorldPhase('props', worldStart);
     this.foliage.update(

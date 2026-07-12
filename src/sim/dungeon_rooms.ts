@@ -19,11 +19,20 @@ export interface AuthoredDoor {
 export interface AuthoredDecor {
   key: string;
   x: number;
+  /** Optional render-only vertical offset. */
+  y?: number;
   z: number;
   yaw: number;
   scale?: number;
+  scaleX?: number;
+  scaleZ?: number;
+  /** Inner-to-outer radius ratio for ring-shaped dressing. */
+  innerScale?: number;
   /** Optional movement collision radius. Omit for walkable or hazard dressing. */
   r?: number;
+  /** Optional axis-aligned movement footprint for structural dressing. */
+  hw?: number;
+  hd?: number;
 }
 
 export interface AuthoredWallSegment {
@@ -147,7 +156,20 @@ export function inAnyRoom(
 }
 
 export function authoredDecorColliders(decor: readonly AuthoredDecor[]): Collider[] {
-  return decor
-    .filter((item): item is AuthoredDecor & { r: number } => item.r !== undefined && item.r > 0)
-    .map((item) => ({ type: 'circle', x: item.x, z: item.z, r: item.r }));
+  const colliders: Collider[] = [];
+  for (const item of decor) {
+    if (item.hw !== undefined && item.hd !== undefined && item.hw > 0 && item.hd > 0) {
+      colliders.push({
+        type: 'obb',
+        x: item.x,
+        z: item.z,
+        hw: item.hw,
+        hd: item.hd,
+        rot: item.yaw,
+      });
+    } else if (item.r !== undefined && item.r > 0) {
+      colliders.push({ type: 'circle', x: item.x, z: item.z, r: item.r });
+    }
+  }
+  return colliders;
 }

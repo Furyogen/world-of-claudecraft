@@ -97,10 +97,13 @@ const MAZE_BG_WALL_ALPHA = 0.75;
 const INFERNAL_MAP_PAD = 8;
 const INFERNAL_ROOM_STROKE_WIDTH = 1;
 const INFERNAL_BOSS_STROKE_WIDTH = 2;
+const INFERNAL_ROOM_FILL_ALPHA = 0.78;
+const INFERNAL_BOSS_FILL_ALPHA = 0.92;
 const INFERNAL_DOOR_MIN_SIZE = 2;
-const INFERNAL_LAVA_POOL_RADIUS = 2.4;
-const INFERNAL_LAVA_FISSURE_HALF_LENGTH = 4;
-const INFERNAL_LAVA_FISSURE_WIDTH = 2;
+const INFERNAL_BARRIER_MIN_SIZE = 1.25;
+const INFERNAL_BARRIER_ALPHA = 0.88;
+const INFERNAL_CHASM_ALPHA = 0.62;
+const INFERNAL_LAVA_ALPHA = 0.9;
 const INFERNAL_LORE_HALF_SIZE = 2.2;
 // Fixed party-disc size on the schematic: the map is zoomed out and north-up,
 // so the overworld's proximity scaling does not apply.
@@ -337,9 +340,29 @@ export class MinimapPainter {
     const bctx = canvas.getContext('2d');
     if (!bctx) return canvas;
 
+    // Chasms sit below the walkable room graph. Painting them first lets a
+    // narrow bridge remain legible while the lava drop shows around it.
+    bctx.fillStyle = colors.infernalLava;
+    bctx.globalAlpha = INFERNAL_CHASM_ALPHA;
+    for (const hazard of model.lava) {
+      if (hazard.kind !== 'chasm') continue;
+      bctx.save();
+      bctx.translate(hazard.cx, hazard.cy);
+      bctx.rotate(hazard.angle);
+      bctx.fillRect(
+        -hazard.halfWidth,
+        -hazard.halfLength,
+        hazard.halfWidth * 2,
+        hazard.halfLength * 2,
+      );
+      bctx.restore();
+    }
+
     for (const room of model.rooms) {
       bctx.fillStyle = colors.infernalRoom;
+      bctx.globalAlpha = room.boss ? INFERNAL_BOSS_FILL_ALPHA : INFERNAL_ROOM_FILL_ALPHA;
       bctx.fillRect(room.x, room.y, room.w, room.h);
+      bctx.globalAlpha = 1;
       bctx.strokeStyle = room.boss ? colors.infernalBoss : colors.outline;
       bctx.lineWidth = room.boss ? INFERNAL_BOSS_STROKE_WIDTH : INFERNAL_ROOM_STROKE_WIDTH;
       bctx.strokeRect(room.x, room.y, room.w, room.h);
@@ -352,25 +375,52 @@ export class MinimapPainter {
       const h = Math.max(INFERNAL_DOOR_MIN_SIZE, door.h);
       bctx.fillRect(door.x - (w - door.w) / 2, door.y - (h - door.h) / 2, w, h);
     }
+
+    // Layout-authored barriers are the real maze and room-divider walls, not
+    // illustrative coordinates. Keep very thin walls readable at 162 px while
+    // preserving their projected center and length.
+    bctx.fillStyle = colors.outline;
+    bctx.globalAlpha = INFERNAL_BARRIER_ALPHA;
+    for (const barrier of model.barriers) {
+      const w = Math.max(INFERNAL_BARRIER_MIN_SIZE, barrier.w);
+      const h = Math.max(INFERNAL_BARRIER_MIN_SIZE, barrier.h);
+      bctx.fillRect(barrier.x - (w - barrier.w) / 2, barrier.y - (h - barrier.h) / 2, w, h);
+    }
+    bctx.globalAlpha = INFERNAL_LAVA_ALPHA;
     bctx.fillStyle = colors.infernalLava;
     for (const hazard of model.lava) {
+      if (hazard.kind === 'chasm') continue;
       bctx.save();
       bctx.translate(hazard.cx, hazard.cy);
       bctx.rotate(hazard.angle);
-      if (hazard.kind === 'pool') {
+      if (hazard.kind === 'moat') {
         bctx.beginPath();
-        bctx.arc(0, 0, INFERNAL_LAVA_POOL_RADIUS * hazard.scale, 0, FULL_CIRCLE);
+        bctx.ellipse(0, 0, hazard.halfWidth, hazard.halfLength, 0, 0, FULL_CIRCLE);
+        bctx.ellipse(
+          0,
+          0,
+          hazard.innerHalfWidth ?? hazard.halfWidth * 0.68,
+          hazard.innerHalfLength ?? hazard.halfLength * 0.68,
+          0,
+          0,
+          FULL_CIRCLE,
+        );
+        bctx.fill('evenodd');
+      } else if (hazard.kind === 'pool') {
+        bctx.beginPath();
+        bctx.ellipse(0, 0, hazard.halfWidth, hazard.halfLength, 0, 0, FULL_CIRCLE);
         bctx.fill();
       } else {
         bctx.fillRect(
-          -INFERNAL_LAVA_FISSURE_WIDTH / 2,
-          -INFERNAL_LAVA_FISSURE_HALF_LENGTH * hazard.scale,
-          INFERNAL_LAVA_FISSURE_WIDTH,
-          INFERNAL_LAVA_FISSURE_HALF_LENGTH * 2 * hazard.scale,
+          -hazard.halfWidth,
+          -hazard.halfLength,
+          hazard.halfWidth * 2,
+          hazard.halfLength * 2,
         );
       }
       bctx.restore();
     }
+    bctx.globalAlpha = 1;
     // Lore interactables are compact gold diamonds, no text or localization.
     bctx.fillStyle = colors.infernalLore;
     for (const lore of model.lore) {

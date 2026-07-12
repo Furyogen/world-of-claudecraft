@@ -754,7 +754,10 @@ export const VISUALS: Record<string, VisualDef> = {
   },
   infernal_abyss_azazel: {
     url: `${CREATURES}/infernal_abyss_azazel.glb`,
-    height: 2.35,
+    // Four times the authored presentation size. The entity template scale stays
+    // unchanged, so combat reach and navigation remain stable while Azazel reads
+    // as the colossal endgame encounter the Heart Cairn was built around.
+    height: 9.4,
     clips: PIPELINE_BIPED,
   },
   infernal_abyss_pyre_golem: {

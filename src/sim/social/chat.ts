@@ -980,6 +980,20 @@ export function handleDevChat(
     else ctx.emit({ type: 'log', text: okText, pid });
     return null;
   }
+  if (/^\/(?:dev\s+god|devgod)\s*$/i.test(raw)) {
+    // Toggle the existing GM damage-immunity flag and the dev-gated outgoing
+    // damage boost. Topping off both pools makes enabling it a clean test reset.
+    const e = ctx.entities.get(pid);
+    if (e) {
+      e.gm = !e.gm;
+      if (e.gm) {
+        e.hp = e.maxHp;
+        e.resource = e.maxResource;
+      }
+      ctx.emit({ type: 'log', text: `[dev] God mode ${e.gm ? 'ON' : 'OFF'}.`, pid });
+    }
+    return null;
+  }
   if (/^\/(?:dev\s+(?:kill|die|suicide)|devkill)\s*$/i.test(raw)) {
     // [dev] Instant self-kill for testing the death/ghost loop: routes through the real
     // death teardown (handleDeath), so the death overlay, corpse, and The Keeper's Toll
@@ -991,7 +1005,7 @@ export function handleDevChat(
   if (/^\/dev(?:\s|$)/i.test(raw)) {
     ctx.error(
       pid,
-      'Dev commands: /dev level N, /dev tp X Z, /dev give itemId [count], /dev gold N, /dev quest questId, /dev quests, /dev gather professionId [amount], /dev bot name, /dev kill',
+      'Dev commands: /dev level N, /dev tp X Z, /dev give itemId [count], /dev gold N, /dev quest questId, /dev quests, /dev gather professionId [amount], /dev bot name, /dev god, /dev kill',
     );
     return null;
   }

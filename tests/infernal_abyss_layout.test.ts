@@ -54,18 +54,25 @@ describe('Infernal Abyss authored layout', () => {
     expect(rooms.map((room) => room.id)).toEqual([
       'ashen_descent_entrance',
       'chainscar_descent',
+      'lower_forge_junction',
+      'lava_maze_approach',
       'lava_maze',
       'lost_armory',
+      'pyre_golem_crucible',
       'infernal_forge',
       'gladiator_pit',
       'maw_approach',
       'maw_bridge',
       'heart_cairn_vestibule',
+      'heart_cairn_gate',
+      'heart_cairn_lower',
       'heart_cairn_boss_arena',
+      'heart_cairn_crown',
     ]);
-    expect(Math.min(...rooms.map((room) => room.x0))).toBeGreaterThanOrEqual(-70);
-    expect(Math.max(...rooms.map((room) => room.x1))).toBeLessThanOrEqual(70);
-    expect(INFERNAL_ABYSS_LAYOUT.dais).toEqual({ x: 0, z: 200, r: 18 });
+    expect(Math.min(...rooms.map((room) => room.x0))).toBeGreaterThanOrEqual(-82);
+    expect(Math.max(...rooms.map((room) => room.x1))).toBeLessThanOrEqual(72);
+    expect(INFERNAL_ABYSS_LAYOUT.dais).toEqual({ x: 0, z: 222, r: 18 });
+    expect(INFERNAL_ABYSS_LAYOUT.barriers).toHaveLength(14);
   });
 
   it('aligns each door to a room boundary and cuts a matching wall opening', () => {
@@ -91,11 +98,12 @@ describe('Infernal Abyss authored layout', () => {
 
   it('keeps the main route, armory branch, and gladiator branch traversable', () => {
     const targets = [
-      [-48, 47],
-      [0, 82],
-      [45, 82],
-      [0, 134],
-      [0, 196],
+      [-66, 59],
+      [-64, 84],
+      [0, 121],
+      [48, 110],
+      [0, 162],
+      [0, 224],
     ] as const;
     expect(reachableGridTargets(targets)).toEqual(new Set(targets.map((_, index) => index)));
   });
@@ -115,7 +123,8 @@ describe('Infernal Abyss authored layout', () => {
       ).toBe(true);
     }
     for (const item of decor.filter(
-      (entry) => entry.key === 'lava_pool' || entry.key === 'lava_fissure',
+      (entry) =>
+        entry.key === 'lava_pool' || entry.key === 'lava_fissure' || entry.key === 'lava_moat',
     )) {
       expect(item.r).toBeUndefined();
       expect(

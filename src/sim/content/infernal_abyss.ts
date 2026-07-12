@@ -562,28 +562,28 @@ export const INFERNAL_ABYSS_QUEST_ORDER = [
 ];
 
 const INFERNAL_ABYSS_SPAWNS: DungeonSpawn[] = [
-  // Entry descent and lava maze, z 30 to 75.
-  { mobId: 'abyssal_legionnaire', x: -5, z: 30 },
-  { mobId: 'cinder_magus', x: 4, z: 32 },
-  { mobId: 'molten_hellhound', x: -4, z: 40 },
-  { mobId: 'molten_hellhound', x: -4, z: 50 },
-  { mobId: 'abyssal_legionnaire', x: 7, z: 61 },
-  { mobId: 'cinder_magus', x: 2, z: 64 },
+  // Lower junction and the maze switchbacks.
+  { mobId: 'abyssal_legionnaire', x: -6, z: 27 },
+  { mobId: 'cinder_magus', x: 7, z: 30 },
+  { mobId: 'molten_hellhound', x: -17, z: 49 },
+  { mobId: 'molten_hellhound', x: -36, z: 61 },
+  { mobId: 'abyssal_legionnaire', x: -35, z: 80 },
+  { mobId: 'cinder_magus', x: -18, z: 88 },
+  { mobId: 'pyre_golem', x: -64, z: 84 },
   // The great forge.
-  { mobId: 'flamebound_smith', x: -7, z: 75 },
-  { mobId: 'flamebound_smith', x: 7, z: 76 },
-  { mobId: 'forgekeeper', x: 0, z: 90 },
+  { mobId: 'flamebound_smith', x: -14, z: 100 },
+  { mobId: 'flamebound_smith', x: 14, z: 102 },
+  { mobId: 'forgekeeper', x: 0, z: 121 },
   // Optional gladiator side room.
-  { mobId: 'abyssal_gladiator', x: 38, z: 78 },
-  { mobId: 'abyssal_gladiator', x: 52, z: 88 },
+  { mobId: 'abyssal_gladiator', x: 48, z: 110 },
+  { mobId: 'abyssal_gladiator', x: 56, z: 123 },
   // The Maw.
-  { mobId: 'molten_hellhound', x: -4, z: 145 },
-  { mobId: 'cinder_magus', x: 4, z: 148 },
-  { mobId: 'pyre_golem', x: 0, z: 164 },
-  { mobId: 'abyssal_legionnaire', x: -6, z: 181 },
-  { mobId: 'cinder_magus', x: 6, z: 183 },
+  { mobId: 'molten_hellhound', x: -2, z: 153 },
+  { mobId: 'cinder_magus', x: 2, z: 170 },
+  { mobId: 'abyssal_legionnaire', x: -7, z: 184 },
+  { mobId: 'cinder_magus', x: 7, z: 184 },
   // Throne of the first flame.
-  { mobId: 'azazel_infernal_lord', x: 0, z: 195 },
+  { mobId: 'azazel_infernal_lord', x: 0, z: 224 },
 ];
 
 export const INFERNAL_ABYSS_DUNGEON_DEFS: Record<string, DungeonDef> = {
@@ -598,14 +598,14 @@ export const INFERNAL_ABYSS_DUNGEON_DEFS: Record<string, DungeonDef> = {
     exitOffset: { x: 0, z: -14 },
     spawns: INFERNAL_ABYSS_SPAWNS,
     objects: [
-      { itemId: 'charred_legion_tablet', name: 'Charred Legion Tablet', x: -8, z: 43 },
-      { itemId: 'brands_of_the_first_flame', name: 'Brands of the First Flame', x: 8, z: 72 },
-      { itemId: 'forgekeepers_ledger', name: "Forgekeeper's Ledger", x: 45, z: 84 },
+      { itemId: 'charred_legion_tablet', name: 'Charred Legion Tablet', x: -48, z: 48 },
+      { itemId: 'brands_of_the_first_flame', name: 'Brands of the First Flame', x: -57, z: 88 },
+      { itemId: 'forgekeepers_ledger', name: "Forgekeeper's Ledger", x: 61, z: 116 },
       {
         itemId: 'azazels_broken_covenant',
         name: "Azazel's Broken Covenant",
         x: -8,
-        z: 171,
+        z: 184,
       },
     ],
     interior: 'infernal_abyss',
