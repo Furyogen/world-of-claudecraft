@@ -28,6 +28,15 @@ export interface ChatBubbleStyle {
   border?: string;
 }
 
+export function chatBubbleAnchorId(
+  channel: string,
+  entityId: number | undefined,
+  fromPid: number | undefined,
+): number | undefined {
+  if (entityId !== undefined) return entityId;
+  return channel === 'party' ? fromPid : undefined;
+}
+
 // The party bubble border mirrors the chat-log party colour in hud.ts (#7fd4ff)
 // so the log line and the bubble match. This is the documented "renderer hex
 // literals verbatim" exception (src/styles/CLAUDE.md): a bubble tint is

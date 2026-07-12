@@ -156,7 +156,7 @@ import {
   characterAppearanceOptions,
 } from './character_appearance';
 import { ChatAnnouncer } from './chat_announcer';
-import { chatBubbleStyle } from './chat_bubble_style';
+import { chatBubbleAnchorId, chatBubbleStyle } from './chat_bubble_style';
 import {
   CHANNEL_LABEL_KEYS,
   CHAT_TAB_CHANNELS,
@@ -8929,14 +8929,17 @@ export class Hud {
               break;
           }
           // Overhead speech bubbles. say/yell/emote carry the speaker's entity
-          // id; party also anchors on the speaker because its emit sets
-          // fromPid = the speaker entity (#1659), so it bubbles with no sim
+          // id; party falls back to fromPid because its emit sets that to the
+          // speaker entity (#1659), so it bubbles with no sim
           // change. chatBubbleStyle returns null for every channel that does not
           // bubble: general/world/lfg/whisper/roll (too noisy or private) and
           // guild/officer (server social broadcasts that carry no speaker id, so
           // the client has no entity to anchor to; a server/wire follow-up).
           const bubbleStyle = ev.channel === undefined ? null : chatBubbleStyle(ev.channel);
-          const bubbleSpeakerId = ev.entityId ?? ev.fromPid;
+          const bubbleSpeakerId =
+            ev.channel === undefined
+              ? undefined
+              : chatBubbleAnchorId(ev.channel, ev.entityId, ev.fromPid);
           if (bubbleStyle && typeof bubbleSpeakerId === 'number') {
             const masked = this.maskChat(this.chatLinkPlainText(ev.text));
             const bubble = ev.channel === 'emote' ? `${ev.from} ${masked}` : masked;

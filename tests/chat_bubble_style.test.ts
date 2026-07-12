@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { Sim } from '../src/sim/sim';
 import type { SimEvent } from '../src/sim/types';
 import { groundHeight } from '../src/sim/world';
-import { chatBubbleStyle } from '../src/ui/chat_bubble_style';
+import { chatBubbleAnchorId, chatBubbleStyle } from '../src/ui/chat_bubble_style';
 
 const repoRoot = join(__dirname, '..');
 
@@ -54,12 +54,27 @@ describe('chatBubbleStyle: which channels bubble and how', () => {
   });
 });
 
+describe('chatBubbleAnchorId: which field anchors the bubble', () => {
+  it('uses the explicit entityId for proximity chat channels', () => {
+    expect(chatBubbleAnchorId('say', 101, 202)).toBe(101);
+    expect(chatBubbleAnchorId('yell', 101, 202)).toBe(101);
+    expect(chatBubbleAnchorId('emote', 101, 202)).toBe(101);
+  });
+
+  it('falls back to fromPid only for party', () => {
+    expect(chatBubbleAnchorId('party', undefined, 202)).toBe(202);
+    expect(chatBubbleAnchorId('say', undefined, 202)).toBeUndefined();
+    expect(chatBubbleAnchorId('yell', undefined, 202)).toBeUndefined();
+    expect(chatBubbleAnchorId('emote', undefined, 202)).toBeUndefined();
+  });
+});
+
 describe('party chat carries a client-usable bubble anchor without a sim change', () => {
   it('emits fromPid equal to the speaker entity id (the client bubble anchor)', () => {
     // party chat events do NOT carry entityId, but their fromPid IS the speaker's
-    // entity id (its emit sets fromPid = the player entity). The HUD gate anchors
-    // the party bubble on `entityId ?? fromPid`, so party bubbles with no sim or
-    // wire change. This pins that the anchor field is actually populated.
+    // entity id (its emit sets fromPid = the player entity). The HUD gate uses
+    // fromPid as the party-only fallback, so party bubbles with no sim or wire
+    // change. This pins that the anchor field is actually populated.
     const sim = new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
     const a = sim.addPlayer('warrior', 'Aleph');
     const b = sim.addPlayer('mage', 'Bet');
@@ -84,9 +99,9 @@ describe('the HUD bubble gate wires the pure style module', () => {
   const hudSrc = readFileSync(join(repoRoot, 'src/ui/hud.ts'), 'utf8');
   const rendererSrc = readFileSync(join(repoRoot, 'src/render/renderer.ts'), 'utf8');
 
-  it('routes the bubble decision through chatBubbleStyle and the entityId/fromPid anchor', () => {
+  it('routes the bubble decision through the pure style and anchor helpers', () => {
     expect(hudSrc).toContain('chatBubbleStyle(ev.channel)');
-    expect(hudSrc).toContain('ev.entityId ?? ev.fromPid');
+    expect(hudSrc).toContain('chatBubbleAnchorId(ev.channel, ev.entityId, ev.fromPid)');
     // The old say/yell/emote-only literal gate is gone, so party/guild/officer
     // now flow through the shared decision.
     expect(hudSrc).not.toContain(
