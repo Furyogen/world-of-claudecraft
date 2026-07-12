@@ -2334,6 +2334,11 @@ export class GameServer {
     // benched slot and the counted loss are in the state serializeCharacter
     // persists (idempotent: removePlayer runs it again harmlessly below).
     this.sim.vcupResolveDesertion(session.pid);
+    // Freeze reward eligibility and reconcile pending loot before the leave
+    // snapshot. saveCharacterOnLeave awaits the database; without this
+    // synchronous prefix, a roll or boss death can mutate the character after
+    // serialization and removePlayer then discards that unsaved reward.
+    this.sim.preparePlayerLeave(session.pid);
     await this.saveCharacterOnLeave(session);
     this.sessionsByCharacterId.delete(session.characterId);
     // Release the per-character load lease so a fresh login (here or on another

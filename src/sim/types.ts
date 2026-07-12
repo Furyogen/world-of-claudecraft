@@ -1936,6 +1936,10 @@ export interface Entity {
   // every non-player entity. Owned by src/sim/spirit.ts.
   ghost: boolean;
   corpsePos: Vec3 | null;
+  // Unique exit entity of the live instance claim where corpsePos was captured.
+  // Null for world corpses and saved ghosts. Instance exits are recreated on
+  // every claim, so stale corpse coordinates cannot match a recycled slot.
+  corpseInstanceId: number | null;
   scale: number;
   color: number;
   skinCatalog: SkinCatalog; // player appearance catalog: class texture set or cosmetic body.
@@ -2611,6 +2615,7 @@ export const PARTY_XP_RANGE = 80; // yards: members this close share kill xp/cre
 // boss death) and the still-on-Sim encounter logic; N1 may re-home it when it owns
 // the encounter. Kept here as the neutral shared seam in the meantime.
 export const NYTHRAXIS_BOSS_ID = 'nythraxis_scourge_of_thornpeak';
+export const NYTHRAXIS_ROOM_RADIUS = 260;
 // The Drowned Litany finale boss. Used by the drowned_litany_boss driver.
 export const SISTER_NHALIA_BOSS_ID = 'sister_nhalia_drowned_canticle';
 // The Tolling Bells projectile mob (Drowned Litany finale): moved exclusively by

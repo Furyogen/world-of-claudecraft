@@ -88,7 +88,7 @@ export function partyLootCandidatesForMob(ctx: SimContext, mob: Entity): PlayerM
   if (mob.lootRecipientIds && mob.lootRecipientIds.length > 0) {
     return mob.lootRecipientIds.flatMap((pid) => {
       const candidate = ctx.players.get(pid);
-      return candidate ? [candidate] : [];
+      return candidate && !candidate.leaving ? [candidate] : [];
     });
   }
   if (mob.tappedById === null) return [];
@@ -101,7 +101,8 @@ export function partyLootCandidatesForMob(ctx: SimContext, mob: Entity): PlayerM
     // Before a corpse has a death-time snapshot, fall back to current range.
     // Do not filter on `e.dead`: a downed member whose corpse is still in
     // range keeps loot rights.
-    if (candidate && e && dist2d(e.pos, mob.pos) <= PARTY_XP_RANGE) candidates.push(candidate);
+    if (candidate && !candidate.leaving && e && dist2d(e.pos, mob.pos) <= PARTY_XP_RANGE)
+      candidates.push(candidate);
   }
   return candidates;
 }
@@ -329,7 +330,7 @@ function startMasterLootRoll(ctx: SimContext, itemId: string, mob: Entity): bool
   const party = mob.tappedById !== null ? ctx.partyOf(mob.tappedById) : null;
   if (!party) return false;
   const looterPid = effectiveMasterLooter(strategies.master, party.leader, party.members);
-  if (looterPid === null) return false;
+  if (looterPid === null || ctx.players.get(looterPid)?.leaving) return false;
   const itemName = def?.name ?? itemId;
   const roll: PendingLootRoll = {
     id: ctx.nextLootRollId++,

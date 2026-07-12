@@ -2368,7 +2368,10 @@
     max-width: none;
     box-sizing: border-box;
     overflow: hidden;
-    z-index: 95;
+    /* Managed windows receive an inline desktop z-index. Bags is a modal sheet
+       here, so this scoped override must beat that inline value while leaving
+       desktop Need/Greed above its compact Bags window. */
+    z-index: 95 !important;
   }
   body.mobile-touch #bags .bag-grid {
     min-height: 150px;

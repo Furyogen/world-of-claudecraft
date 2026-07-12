@@ -374,8 +374,9 @@ export function dealDamage(
     target.tappedById === null &&
     amount > 0
   ) {
-    if (source.kind === 'player') target.tappedById = source.id;
-    else if (source.ownerId !== null) target.tappedById = source.ownerId;
+    const sourcePid = source.kind === 'player' ? source.id : source.ownerId;
+    const sourceMeta = sourcePid !== null ? ctx.players.get(sourcePid) : null;
+    if (sourceMeta && !sourceMeta.leaving) target.tappedById = sourcePid;
   }
 
   // World-boss loot roster: every player (or pet owner) who lands a hit on a world
@@ -659,12 +660,26 @@ export function handleDeath(ctx: SimContext, e: Entity, killer: Entity | null): 
     ctx.frenzyPackmates(e); // wild packmates fly into a frenzy when one falls
     ctx.armDeathThroes(e); // volatile corpses begin to destabilize, then burst
 
-    // credit goes to the tapping player (fall back to the killer)
-    const creditId = e.tappedById ?? (killer?.kind === 'player' ? killer.id : null);
+    // Credit goes to the tapping player, unless authoritative leave teardown
+    // already froze that character before its persistence await. Immediate
+    // removal would clear the tap, so mirror that result and fall back to the
+    // live killing player instead of dropping the whole party's reward.
+    const tapperMeta = e.tappedById !== null ? ctx.players.get(e.tappedById) : null;
+    const killerPid = killer?.kind === 'player' ? killer.id : (killer?.ownerId ?? null);
+    const killerMeta = killerPid !== null ? ctx.players.get(killerPid) : null;
+    const creditId =
+      e.tappedById !== null && tapperMeta && !tapperMeta.leaving
+        ? e.tappedById
+        : killerPid !== null && killerMeta && !killerMeta.leaving
+          ? killerPid
+          : null;
     const meta = creditId !== null ? ctx.players.get(creditId) : null;
     const creditEntity = creditId !== null ? ctx.entities.get(creditId) : null;
+    const rewardInstance = ctx.instances.find(
+      (inst) => inst.partyKey !== null && inst.mobIds.includes(e.id),
+    );
     let heroicRewardRecipients: PlayerMeta[] = [];
-    if (meta && creditEntity) {
+    if (meta && creditEntity && !meta.leaving) {
       const tmpl = MOBS[e.templateId];
       // xpMult 0 marks a puzzle-object mob (the 1 HP spider egg-sac): killable
       // in one hit by design, so it must not pay full kill XP.
@@ -684,8 +699,19 @@ export function handleDeath(ctx: SimContext, e: Entity, killer: Entity | null): 
           // still where they fell. Use that corpse position for the kill-time
           // participation snapshot so releasing during the final seconds does
           // not erase XP, loot-roll, or Heroic Mark rights.
-          const participationPos = mE?.ghost && mE.corpsePos ? mE.corpsePos : mE?.pos;
-          if (mMeta && participationPos && dist2d(participationPos, e.pos) <= PARTY_XP_RANGE)
+          const matchingInstanceCorpse =
+            mE?.ghost &&
+            mE.corpsePos &&
+            (!rewardInstance || mE.corpseInstanceId === rewardInstance.exitId)
+              ? mE.corpsePos
+              : null;
+          const participationPos = matchingInstanceCorpse ?? mE?.pos;
+          if (
+            mMeta &&
+            !mMeta.leaving &&
+            participationPos &&
+            dist2d(participationPos, e.pos) <= PARTY_XP_RANGE
+          )
             eligible.push(mMeta);
         }
       }

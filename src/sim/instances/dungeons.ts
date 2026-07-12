@@ -26,6 +26,7 @@ import {
   type Entity,
   INSTANCE_EMPTY_TIMEOUT,
   NYTHRAXIS_BOSS_ID,
+  NYTHRAXIS_ROOM_RADIUS,
   type Vec3,
 } from '../types';
 import {
@@ -48,10 +49,30 @@ export function instanceOriginOf(inst: InstanceSlot): { x: number; z: number } {
   return instanceOrigin(DUNGEONS[inst.dungeonId].index, inst.slot);
 }
 
+// Unique live-claim identity at a position. The exit entity is recreated on
+// every claim, unlike the reusable dungeon/slot coordinates, so released
+// corpses can be bound without trusting a stale body in a recycled slot.
+export function instanceClaimIdAt(ctx: SimContext, pos: Vec3): number | null {
+  for (const inst of ctx.instances) {
+    if (inst.partyKey === null || inst.exitId === null) continue;
+    if (instanceClaimContains(ctx, inst, pos)) return inst.exitId;
+  }
+  return null;
+}
+
 // The one instance-footprint envelope (shared by occupancy, position lookup,
 // and the kill-lockout sweep): is `pos` inside the slot anchored at `origin`?
 function instanceContains(origin: { x: number; z: number }, pos: Vec3): boolean {
   return Math.abs(pos.x - origin.x) < 120 && Math.abs(pos.z - origin.z) < 250;
+}
+
+function instanceClaimContains(ctx: SimContext, inst: InstanceSlot, pos: Vec3): boolean {
+  if (instanceContains(instanceOriginOf(inst), pos)) return true;
+  if (inst.dungeonId !== 'nythraxis_boss_arena') return false;
+  const boss = inst.mobIds
+    .map((id) => ctx.entities.get(id))
+    .find((entity) => entity?.templateId === NYTHRAXIS_BOSS_ID);
+  return !!boss && dist2d(pos, boss.spawnPos) <= NYTHRAXIS_ROOM_RADIUS;
 }
 
 // Difficulty-scoped lockout key: heroic clears lock beside the normal key, so
@@ -376,15 +397,18 @@ function freeInstance(ctx: SimContext, inst: InstanceSlot): void {
 // was the old rule, and it let a door-camper or an early-released ghost escape
 // the daily lockout and later claim a fresh run for the whole locked party.
 export function instanceLockoutMetas(ctx: SimContext, inst: InstanceSlot): PlayerMeta[] {
-  const origin = instanceOriginOf(inst);
   const out: PlayerMeta[] = [];
   for (const meta of ctx.players.values()) {
+    if (meta.leaving) continue;
     if (instanceKeyFor(ctx, meta.entityId) === inst.partyKey) {
       out.push(meta);
       continue;
     }
     const e = ctx.entities.get(meta.entityId);
-    if (e && instanceContains(origin, e.pos)) out.push(meta);
+    const matchingInstanceCorpse =
+      e?.ghost && e.corpsePos && e.corpseInstanceId === inst.exitId ? e.corpsePos : null;
+    const lockoutPos = matchingInstanceCorpse ?? e?.pos;
+    if (lockoutPos && instanceClaimContains(ctx, inst, lockoutPos)) out.push(meta);
   }
   return out;
 }

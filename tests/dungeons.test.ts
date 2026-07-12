@@ -1168,6 +1168,29 @@ describe('dungeons: heroic Nythraxis raid arena', () => {
       false,
     );
   });
+
+  it('binds a released side-wing corpse to the wide Nythraxis claim', () => {
+    const { sim, tank, raiders, inst } = raidSetup('heroic');
+    const boss = mobInInstance(sim, inst, NYTHRAXIS_BOSS_ID);
+    const fallen = raiders[1];
+    const tankEntity = sim.entities.get(tank) as AnyEntity;
+    const fallenEntity = sim.entities.get(fallen) as AnyEntity;
+    const origin = instanceOriginOf(inst);
+    teleport(sim, tankEntity, boss.pos.x + 1, boss.pos.z);
+    teleport(sim, fallenEntity, boss.spawnPos.x + 180, boss.spawnPos.z);
+    expect(Math.abs(fallenEntity.pos.x - origin.x)).toBeGreaterThan(120);
+
+    fallenEntity.dead = true;
+    fallenEntity.hp = 0;
+    sim.releaseSpirit(fallen);
+    expect(fallenEntity.corpseInstanceId).toBe(inst.exitId);
+    sim.partyLeave(fallen);
+
+    (sim as any).dealDamage(tankEntity, boss, boss.hp + 100, false, 'physical', null, 'hit');
+
+    expect(sim.players.get(fallen)!.raidLockouts.has('nythraxis_boss_arena:heroic')).toBe(true);
+    expect(sim.countItem(HEROIC_MARK_ITEM_ID, fallen)).toBe(0);
+  });
 });
 
 describe('dungeons: ghost corpse-run re-entry', () => {

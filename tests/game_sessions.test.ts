@@ -320,20 +320,37 @@ describe('GameServer sessions', () => {
     const server = new GameServer();
     const leaver = expectJoined(server.join(fakeWs(), 11, 101, 'Leaver', 'warrior', null));
     const stayer = expectJoined(server.join(fakeWs(), 12, 102, 'Stayer', 'mage', null));
+    const third = expectJoined(server.join(fakeWs(), 13, 103, 'Third', 'rogue', null));
     server.sim.partyInvite(stayer.pid, leaver.pid);
     server.sim.partyAccept(stayer.pid);
+    server.sim.partyInvite(third.pid, leaver.pid);
+    server.sim.partyAccept(third.pid);
 
     const mob = createMob(server.sim.nextId++, MOBS.forest_wolf, 2, { x: 0, y: 0, z: 0 });
     mob.dead = true;
     mob.lootable = true;
     mob.tappedById = leaver.pid;
-    mob.lootRecipientIds = [leaver.pid, stayer.pid];
+    mob.lootRecipientIds = [leaver.pid, stayer.pid, third.pid];
     mob.loot = { copper: 0, items: [{ itemId: 'greyjaw_hide_boots', count: 1 }] };
     server.sim.entities.set(mob.id, mob);
+    const lateMob = createMob(server.sim.nextId++, MOBS.forest_wolf, 2, {
+      x: 0,
+      y: 0,
+      z: 0,
+    });
+    lateMob.dead = true;
+    lateMob.lootable = true;
+    lateMob.tappedById = leaver.pid;
+    lateMob.lootRecipientIds = [leaver.pid, stayer.pid, third.pid];
+    lateMob.loot = { copper: 0, items: [{ itemId: 'greyjaw_hide_boots', count: 1 }] };
+    server.sim.entities.set(lateMob.id, lateMob);
     server.sim.lootCorpse(mob.id, leaver.pid);
     const roll = server.sim.drainEvents().find((event) => event.type === 'lootRoll');
     if (!roll || roll.type !== 'lootRoll') throw new Error('expected pending loot roll');
     server.sim.submitLootRoll(roll.rollId, 'need', leaver.pid);
+    // Existing roll stays need/greed, but any later corpse will use the
+    // departing leader as its explicitly pinned master looter.
+    server.sim.setPartyLootMaster(true, leaver.pid, 'uncommon', leaver.pid);
 
     let resolveSave!: () => void;
     const slowSave = new Promise<void>((resolve) => {
@@ -351,11 +368,24 @@ describe('GameServer sessions', () => {
     // The departing need choice must already be gone, otherwise this awards an
     // item after the leave snapshot and removePlayer later destroys it.
     server.sim.submitLootRoll(roll.rollId, 'pass', stayer.pid);
+    server.sim.submitLootRoll(roll.rollId, 'pass', third.pid);
     expect(server.sim.countItem('greyjaw_hide_boots', leaver.pid)).toBe(0);
     expect(mob.loot?.items.find((slot) => slot.itemId === 'greyjaw_hide_boots')).toMatchObject({
       count: 1,
       openToAll: true,
     });
+
+    // A corpse looted only after leave begins must not rehydrate the departing
+    // pid from its death-time recipient snapshot or strand a brand-new master
+    // roll on that departing leader. The two live candidates get Need/Greed.
+    server.sim.lootCorpse(lateMob.id, stayer.pid);
+    expect(server.sim.activeLootRolls(leaver.pid)).toHaveLength(0);
+    expect(server.sim.activeLootRolls(stayer.pid)).toHaveLength(1);
+    expect(server.sim.activeLootRolls(third.pid)).toHaveLength(1);
+    const lateRoll = server.sim.activeLootRolls(stayer.pid)[0];
+    server.sim.submitLootRoll(lateRoll.rollId, 'need', stayer.pid);
+    server.sim.submitLootRoll(lateRoll.rollId, 'pass', third.pid);
+    expect(server.sim.countItem('greyjaw_hide_boots', stayer.pid)).toBe(1);
 
     resolveSave();
     await leaving;
@@ -386,6 +416,16 @@ describe('GameServer sessions', () => {
     leaverEntity.prevPos = { ...leaverEntity.pos };
     stayerEntity.pos = { x: boss.pos.x + 1, y: boss.pos.y, z: boss.pos.z };
     stayerEntity.prevPos = { ...stayerEntity.pos };
+    (server.sim as any).dealDamage(leaverEntity, boss, 10, false, 'physical', null, 'hit');
+    expect(boss.tappedById).toBe(leaver.pid);
+    const stayerPet = createMob(server.sim.nextId++, MOBS.forest_wolf, 2, {
+      x: boss.pos.x + 2,
+      y: boss.pos.y,
+      z: boss.pos.z,
+    });
+    stayerPet.ownerId = stayer.pid;
+    stayerPet.hostile = false;
+    server.sim.entities.set(stayerPet.id, stayerPet);
 
     let resolveSave!: () => void;
     const slowSave = new Promise<void>((resolve) => {
@@ -399,17 +439,14 @@ describe('GameServer sessions', () => {
       expect(saveCharacterAndMarketState).toHaveBeenCalledTimes(savesBefore + 1);
     });
 
+    // A queued DoT tick from the departing player must not reacquire the tap
+    // after preparePlayerLeave cleared it.
+    (server.sim as any).dealDamage(leaverEntity, boss, 1, false, 'physical', null, 'hit');
+    expect(boss.tappedById).toBeNull();
+
     // Kill the final boss while leave() is parked after serializing the leaver.
     // No reward or lockout may mutate that stale, soon-to-be-discarded state.
-    (server.sim as any).dealDamage(
-      stayerEntity,
-      boss,
-      boss.hp + 10,
-      false,
-      'physical',
-      null,
-      'hit',
-    );
+    (server.sim as any).dealDamage(stayerPet, boss, boss.hp + 10, false, 'physical', null, 'hit');
     expect(boss.dead).toBe(true);
     expect({
       stayerMarks: server.sim.countItem(HEROIC_MARK_ITEM_ID, stayer.pid),

@@ -1,6 +1,6 @@
 // The Heroic Quartermaster: the item-level/budget pins for the jewelry stock,
 // the server-authoritative buy path (marks debit from bags, range, stock,
-// space refusals), the pure shop view, and the daily income gate on
+// space refusals), the pure shop view, and the realm-reset income gate on
 // awardHeroicMarks. The equip mechanics of the jewelry itself live in
 // tests/equip_jewelry.test.ts.
 

@@ -148,6 +148,7 @@ function baseEntity(id: number, pos: Vec3): Entity {
     dead: false,
     ghost: false,
     corpsePos: null,
+    corpseInstanceId: null,
     scale: 1,
     color: 0xffffff,
     skinCatalog: 'class',

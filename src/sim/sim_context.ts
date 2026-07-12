@@ -212,6 +212,7 @@ export interface SimContextCallbacks {
   raidResetMs(nowMs: number): number;
   instanceKeyFor(pid: number): string;
   instanceOriginOf(inst: InstanceSlot): { x: number; z: number };
+  instanceClaimIdAt(pos: Vec3): number | null;
   enterDungeon(dungeonId: string, pid?: number): void;
   leaveDungeon(pid?: number): void;
   dungeonDifficulty(pid?: number): DungeonDifficulty;
@@ -856,6 +857,7 @@ export function createSimContext(host: SimContextHost): SimContext {
     raidResetMs: host.raidResetMs,
     instanceKeyFor: host.instanceKeyFor,
     instanceOriginOf: host.instanceOriginOf,
+    instanceClaimIdAt: host.instanceClaimIdAt,
     enterDungeon: host.enterDungeon,
     leaveDungeon: host.leaveDungeon,
     dungeonDifficulty: host.dungeonDifficulty,

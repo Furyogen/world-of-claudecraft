@@ -300,6 +300,7 @@ import {
   awardHeroicMarks as awardHeroicMarksImpl,
   enterCrypt as enterCryptImpl,
   enterDungeon as enterDungeonImpl,
+  instanceClaimIdAt as instanceClaimIdAtImpl,
   instanceInfoAt as instanceInfoAtImpl,
   instanceKeyFor as instanceKeyForImpl,
   instanceOriginOf as instanceOriginOfImpl,
@@ -984,6 +985,10 @@ export interface PlayerMeta {
   // before the realm-reset settlement fix round-trip without schema loss; new
   // rewards are gated by raidLockouts and do not read or write this field.
   heroicDaily: { date: string; marked: Set<string> };
+  // Set synchronously when authoritative leave teardown begins, before its
+  // first persistence await. Session-only: reward and lockout snapshots ignore
+  // the departing player so no post-save mutation is discarded on removal.
+  leaving?: boolean;
   // World-boss loot lockouts live in `raidLockouts` (keyed worldboss:<mobId>), so the
   // eligibility gate and the rendered raid-lockout countdown are one value. See
   // world_boss.ts (markWorldBossLooted / isWorldBossLootEligible).
@@ -2042,10 +2047,7 @@ export class Sim {
     const leavingRun = this.delveRunForPlayer(pid);
     if (leavingRun?.lockpick && leavingRun.lockpick.ownerId === pid)
       this.ctx.abandonLockpick(leavingRun);
-    // Explicit logout forfeits unresolved loot rolls. Do this while the player,
-    // party, and corpse are all still live so remaining candidates can resolve
-    // immediately or the item can return safely to its corpse.
-    removePlayerFromLootRolls(this.ctx, pid);
+    this.preparePlayerLeave(pid);
     // leave social systems cleanly. removeFromParty lives on the PartyMachine now
     // (A1); reach it through the seam, keeping this call in its load-bearing
     // teardown position (must run while the leaver is still in players/entities).
@@ -2102,6 +2104,25 @@ export class Sim {
     this.delvePetStash.delete(pid);
     if (this.primaryId === pid)
       this.primaryId = this.players.size > 0 ? [...this.players.keys()][0] : -1;
+  }
+
+  // The online server calls this before serializing a leave. Keep it idempotent
+  // because removePlayer calls it again as an offline/headless safety net.
+  preparePlayerLeave(pid: number): void {
+    const meta = this.players.get(pid);
+    if (!meta) return;
+    meta.leaving = true;
+    // Forfeit unresolved rolls while the player, party, and source corpse are
+    // still live, so every item goes to a remaining candidate or back to loot.
+    removePlayerFromLootRolls(this.ctx, pid);
+    // Mirror removePlayer's tap cleanup before persistence yields. A remaining
+    // player or pet can then establish fresh credit on its killing hit instead
+    // of inheriting a departing tap whose rewards cannot be saved.
+    for (const entity of this.entities.values()) {
+      if (entity.kind === 'mob' && !entity.dead && entity.tappedById === pid) {
+        entity.tappedById = null;
+      }
+    }
   }
 
   serializeCharacter(pid: number): CharacterState | null {
@@ -2897,6 +2918,7 @@ export class Sim {
       raidResetMs: sim.raidResetMs.bind(sim),
       instanceKeyFor: sim.instanceKeyFor.bind(sim),
       instanceOriginOf: sim.instanceOriginOf.bind(sim),
+      instanceClaimIdAt: sim.instanceClaimIdAt.bind(sim),
       enterDungeon: sim.enterDungeon.bind(sim),
       leaveDungeon: sim.leaveDungeon.bind(sim),
       dungeonDifficulty: sim.dungeonDifficulty.bind(sim),
@@ -6842,6 +6864,10 @@ export class Sim {
 
   instanceSlotAt(pos: Vec3): number | null {
     return instanceSlotAtImpl(this.ctx, pos);
+  }
+
+  instanceClaimIdAt(pos: Vec3): number | null {
+    return instanceClaimIdAtImpl(this.ctx, pos);
   }
 
   instanceInfoAt(pos: Vec3): { slot: number; dungeonId: string } | null {

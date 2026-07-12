@@ -1272,10 +1272,7 @@ export class Hud {
   private targetFrameMover: MovableFrame | null = null;
   private playerFrameMover: MovableFrame | null = null;
   private windowObserver: MutationObserver | null = null;
-  // Managed windows must start above the pointer-active loot-roll rail (z=65).
-  // bringWindowToFront writes this value inline, so a lower floor would override
-  // mobile #bags' stylesheet z-index and let roll panels intercept the bag sheet.
-  private windowZ = 65;
+  private windowZ = 50;
   private ignoredChatNames = new Set<string>();
   private lastHudFastAt = 0;
   private lastHudMediumAt = 0;
@@ -2019,7 +2016,7 @@ export class Hud {
     const open = [...document.querySelectorAll<HTMLElement>('.window.panel')]
       .filter((el) => this.isWindowVisible(el))
       .sort((a, b) => this.windowZValue(a) - this.windowZValue(b));
-    this.windowZ = 65;
+    this.windowZ = 50;
     for (const el of open) el.style.zIndex = String(++this.windowZ);
   }
 

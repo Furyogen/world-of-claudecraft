@@ -44,6 +44,7 @@ import {
   INTERACT_RANGE,
   NYTHRAXIS_ADD_ID,
   NYTHRAXIS_BOSS_ID,
+  NYTHRAXIS_ROOM_RADIUS,
   normAngle,
   OBJECT_RESPAWN,
   type SimEvent,
@@ -109,7 +110,6 @@ const NYTHRAXIS_PHASE_TWO_SETTLE_DELAY = 5;
 const NYTHRAXIS_TRANSITION_DURATION = 21;
 const NYTHRAXIS_TRANSITION_STUN = 21.5;
 const NYTHRAXIS_FINAL_STAND_HP = 0.05;
-const NYTHRAXIS_ROOM_RADIUS = 260;
 // Brother Aldric enters on the door side of the arena (the raid's side, lower z
 // than the boss spawn) and walks toward the boss. Distances are yards in front
 // of the boss spawn: appears 50yd out, walks up to 30yd out (between door + boss).
@@ -489,6 +489,7 @@ export function nythraxisTransitionStunTargets(ctx: SimContext, boss: Entity): E
 export function nythraxisRoomMetas(ctx: SimContext, boss: Entity): PlayerMeta[] {
   const out: PlayerMeta[] = [];
   for (const meta of ctx.players.values()) {
+    if (meta.leaving) continue;
     const p = ctx.entities.get(meta.entityId);
     if (p && dist2d(p.pos, boss.spawnPos) <= NYTHRAXIS_ROOM_RADIUS) out.push(meta);
   }
