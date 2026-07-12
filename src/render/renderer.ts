@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { coerceFxTier, nameplateIntervalSec } from '../game/ui_tier_knobs';
 import { cameraOcclusion } from '../sim/colliders';
+import { AUTO_SHOT_LABEL } from '../sim/combat/auto_attack';
 import {
   ABILITIES,
   ARENA_SLOT_COUNT,
@@ -2921,10 +2922,11 @@ export class Renderer {
     switch (ev.type) {
       case 'spellfx':
         if (ev.fx === 'windup') {
-          // A petSpell windup telegraph: start the throw animation NOW; the
-          // projectile for this throw follows petSpell.windup later, timed to
-          // the clip's release pose (the acolyte def's attackTimeScale is
-          // tuned so both meet).
+          // A windup telegraph (petSpell throw, or a hunter Auto Shot's draw):
+          // start the attack animation NOW; the projectile follows later
+          // (petSpell.windup / AUTO_SHOT_DRAW_S), timed to the clip's release
+          // pose, so the bolt leaves the hand exactly when the animation lets
+          // go.
           this.triggerAttack(ev.sourceId);
           break;
         }
@@ -2963,8 +2965,12 @@ export class Renderer {
         break;
       }
       case 'damage':
-        // every melee/ranged swing animates the attacker for all to see
-        if (ev.school === 'physical' && ev.sourceId !== -1) this.triggerAttack(ev.sourceId);
+        // every melee swing animates the attacker for all to see; the ranged
+        // Auto Shot already played its draw at the windup telegraph, and its
+        // damage lands on ARRIVAL, so re-triggering here would restart the
+        // clip mid-follow-through
+        if (ev.school === 'physical' && ev.sourceId !== -1 && ev.ability !== AUTO_SHOT_LABEL)
+          this.triggerAttack(ev.sourceId);
         if (ev.kind === 'hit' && ev.amount > 0) {
           // landed blows flinch the victim (rate-limited inside the visual)
           this.triggerHit(ev.targetId);
