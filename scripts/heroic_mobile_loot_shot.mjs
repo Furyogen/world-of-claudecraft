@@ -101,7 +101,7 @@ await page.waitForFunction(
   () =>
     getComputedStyle(document.getElementById('bags')).display !== 'none' &&
     document.querySelector('#loot-rolls .loot-roll') &&
-    document.querySelector('#bags .item-cell:not(.is-empty)'),
+    document.querySelector('#bags .item-cell:not(.is-empty), #bags .bag-item:not(.empty)'),
   { timeout: 30_000 },
 );
 await page.evaluate(() => document.fonts?.ready);
