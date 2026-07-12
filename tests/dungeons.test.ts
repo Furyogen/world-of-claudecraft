@@ -817,6 +817,41 @@ describe('dungeons: heroic daily lockouts', () => {
     }
   });
 
+  it("locks a released member who leaves the party using their corpse's instance position", () => {
+    const sim = makeSim(5);
+    const leader = sim.addPlayer('warrior', 'Lead');
+    const buddy = sim.addPlayer('priest', 'Buddy');
+    const quitter = sim.addPlayer('mage', 'Quit');
+    sim.partyInvite(buddy, leader);
+    sim.partyAccept(buddy);
+    sim.partyInvite(quitter, leader);
+    sim.partyAccept(quitter);
+    sim.setDungeonDifficulty('heroic', leader);
+    enterDungeon(sim.ctx, 'hollow_crypt', leader);
+    enterDungeon(sim.ctx, 'hollow_crypt', buddy);
+    enterDungeon(sim.ctx, 'hollow_crypt', quitter);
+    const inst = claimedDungeon(sim, 'hollow_crypt', 'heroic');
+    const morthen = mobInInstance(sim, inst, 'morthen');
+    const le = sim.entities.get(leader) as AnyEntity;
+    const qe = sim.entities.get(quitter) as AnyEntity;
+    teleport(sim, le, morthen.pos.x + 1, morthen.pos.z);
+    teleport(sim, sim.entities.get(buddy) as AnyEntity, morthen.pos.x - 1, morthen.pos.z);
+    teleport(sim, qe, morthen.pos.x, morthen.pos.z + 2);
+
+    qe.dead = true;
+    qe.hp = 0;
+    sim.releaseSpirit(quitter);
+    expect(qe.ghost).toBe(true);
+    expect(sim.instanceSlotAt(qe.pos)).toBeNull();
+    expect(sim.instanceSlotAt(qe.corpsePos!)).toBe(inst.slot);
+    sim.partyLeave(quitter);
+
+    (sim as any).dealDamage(le, morthen, morthen.hp + 10, false, 'physical', null, 'hit');
+
+    expect(sim.players.get(quitter)!.raidLockouts.has('hollow_crypt:heroic')).toBe(true);
+    expect(sim.countItem(HEROIC_MARK_ITEM_ID, quitter)).toBe(0);
+  });
+
   it('an uncredited final-boss death still locks the owning party (no marks, no credit)', () => {
     const sim = makeSim(5);
     const leader = sim.addPlayer('warrior', 'Lead');
