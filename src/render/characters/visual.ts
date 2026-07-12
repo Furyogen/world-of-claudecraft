@@ -63,11 +63,12 @@ const BOW_AIM_QUAT = new THREE.Quaternion().setFromEuler(
   new THREE.Euler(0, -Math.PI / 2, 0, 'XYZ'),
 );
 // Root-relative carry for a bow-slot gun outside the shot: muzzle (authored
-// along +Y) pitched forward to the horizon, so the idle/run hang of the arm
-// never points it at the ground. The shot itself keeps the hand-tuned grip.
-const GUN_CARRY_QUAT = new THREE.Quaternion().setFromEuler(
-  new THREE.Euler(Math.PI / 2, 0, 0, 'XYZ'),
-);
+// along +Y) pitched forward to the horizon, then rolled a quarter turn about
+// the barrel so the handle lies parallel to the hunter's body instead of
+// jutting out sideways. The shot itself keeps the hand-tuned grip.
+const GUN_CARRY_QUAT = new THREE.Quaternion()
+  .setFromEuler(new THREE.Euler(Math.PI / 2, 0, 0, 'XYZ'))
+  .multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 2));
 const BOW_PIN_BLEND_S = 0.12; // engage/disengage fade for the orientation pins
 
 const FADE = 0.22;
