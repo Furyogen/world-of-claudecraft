@@ -152,6 +152,52 @@ describe('stealth action-bar persistence', () => {
     expect(hud.hotbarActions).toEqual(customStealth);
   });
 
+  it('preserves distinct raw storage that only normalizes to the parent layout', () => {
+    const normal = bar('sinister_strike', 'stealth');
+    const legacyEncoded = normal.map((action) => (action?.type === 'ability' ? action.id : action));
+    const hud = makeHarness('rogue', ['sinister_strike', 'stealth'], normal);
+    localStorage.setItem('woc_hotbar_rogue_ActionbarTester', JSON.stringify(normal));
+    localStorage.setItem('woc_hotbar_rogue_ActionbarTester_stealth', JSON.stringify(legacyEncoded));
+
+    hud.sim.player.auras = [{ kind: 'stealth' }];
+    hud.syncActiveHotbarForm();
+
+    expect(hud.hotbarActions).toEqual(normal);
+  });
+
+  it('retries clone migration when persisting the blank page fails', () => {
+    const normal = bar('sinister_strike', 'stealth');
+    const normalKey = 'woc_hotbar_rogue_ActionbarTester';
+    const stealthKey = `${normalKey}_stealth`;
+    const markerKey = `${stealthKey}_blank_v1`;
+    const storage = storageStub();
+    storage.setItem(normalKey, JSON.stringify(normal));
+    storage.setItem(stealthKey, JSON.stringify(normal));
+    const write = storage.setItem.bind(storage);
+    const blankJson = JSON.stringify(bar());
+    let failBlankWrite = true;
+    storage.setItem = (key, value) => {
+      if (failBlankWrite && key === stealthKey && value === blankJson) {
+        throw new Error('quota exceeded');
+      }
+      write(key, value);
+    };
+    vi.stubGlobal('localStorage', storage);
+
+    const firstHud = makeHarness('rogue', ['sinister_strike', 'stealth'], normal);
+    firstHud.sim.player.auras = [{ kind: 'stealth' }];
+    firstHud.syncActiveHotbarForm();
+    expect(firstHud.hotbarActions).toEqual(bar());
+    expect(storage.getItem(markerKey)).toBeNull();
+
+    failBlankWrite = false;
+    const retryHud = makeHarness('rogue', ['sinister_strike', 'stealth'], normal);
+    retryHud.sim.player.auras = [{ kind: 'stealth' }];
+    retryHud.syncActiveHotbarForm();
+    expect(retryHud.hotbarActions).toEqual(bar());
+    expect(storage.getItem(markerKey)).toBe('1');
+  });
+
   it('preserves an intentionally empty Rogue stealth page', () => {
     const normal = bar('sinister_strike', 'stealth');
     const hud = makeHarness('rogue', ['sinister_strike', 'stealth'], normal);
