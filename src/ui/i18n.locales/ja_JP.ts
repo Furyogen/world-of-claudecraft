@@ -102,6 +102,10 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     'このウォレットではSolana取引の署名と送信ができません。',
   'hudChrome.claudium.checkoutNotSettled':
     '取引は送信されましたが、Claudiumはまだ反映されていません。しばらくしてからお試しください。',
+  'hudChrome.itemHeroicTag': '[ヒロイック]',
+  'hudChrome.readyCheck.notInPartyError':
+    '準備確認を開始するにはパーティーに参加している必要があります。',
+  'hudChrome.readyCheck.inProgressError': '準備確認はすでに進行中です。',
   'hudChrome.auth.appleLoginCta': 'Appleで続ける',
   'hudChrome.auth.appleError': 'Appleでサインインできませんでした。もう一度お試しください。',
   'hudChrome.auth.appleChoiceIntro':
@@ -198,6 +202,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     'ウォレットが最低額の $20 USD 相当のWOCを下回っています。',
   'hudChrome.dailyRewards.reason.price_unavailable':
     'WOCの価格を取得できないため、報酬は一時的にロックされています。',
+  'hudChrome.dailyRewards.reason.banned': 'デイリー報酬への参加が禁止されています。理由: {reason}',
   'hudChrome.keybinds.discord': 'Discord',
   'hudChrome.spectate.banner': '{name}を観戦中',
   'hudChrome.readyCheck.prompt': '{name} が準備確認を開始しました。準備はいいですか？',
@@ -6588,4 +6593,19 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     '友達を招待しましょう：友達がレベル10に達すると、お互いに2スロット獲得できます。友達は最大5人までです。',
   'hudChrome.bank.bonusSectionAria': 'ボーナス銀行スロットと獲得方法',
   'entities.mobs.yumi_cat.name': 'ユミ',
+  'loading.tips.classes':
+    'ヒント：9つのクラスはそれぞれ遊び方が異なります。決める前にいくつか試してみましょう。',
+  'loading.tips.talents':
+    'ヒント：非戦闘中ならいつでも特性をリセットできるので、最初の選択が失敗になることはありません。',
+  'loading.tips.dungeons':
+    'ヒント：通常難易度の装備が整ったら、より歯応えのあるヒロイック難易度のダンジョンに挑戦してみましょう。',
+  'loading.tips.market': 'ヒント：ワールドマーケットではサーバー中のプレイヤーと売買ができます。',
+  'loading.tips.guilds':
+    'ヒント：ギルドに加入すると専用のチャットチャンネルとギルドメンバーの名簿が使えるようになります。',
+  'loading.tips.professions':
+    'ヒント：採集や製作の生産系スキルは、戦闘クラスと並行して育てられます。',
+  'loading.tips.loadouts':
+    'ヒント：複数の特性ロードアウトを保存しておけば、ポイントを使い直さずにビルドを切り替えられます。',
+  'loading.tips.pvp':
+    'ヒント：他のプレイヤーに友好的な決闘を申し込むか、灰塵のコロシアムに参加してビルドを試してみましょう。',
 };

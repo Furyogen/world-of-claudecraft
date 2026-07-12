@@ -99,6 +99,9 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
     '使用加密貨幣購買 Claudium 前，請先連接 Solana 錢包。',
   'hudChrome.claudium.checkoutWalletUnsupported': '此錢包無法簽署及傳送 Solana 交易。',
   'hudChrome.claudium.checkoutNotSettled': '交易已傳送，但 Claudium 尚未入帳，請稍後再試。',
+  'hudChrome.itemHeroicTag': '[英雄]',
+  'hudChrome.readyCheck.notInPartyError': '你必須加入隊伍才能發起就緒確認。',
+  'hudChrome.readyCheck.inProgressError': '就緒確認已在進行中。',
   'hudChrome.auth.appleLoginCta': '透過 Apple 繼續',
   'hudChrome.auth.appleError': '無法透過 Apple 登入。請再試一次。',
   'hudChrome.auth.appleChoiceIntro': '建立新帳戶，或將 Apple 連結到現有帳戶。',
@@ -185,6 +188,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.dailyRewards.reason.no_wallet': '請連接持有至少 $20 USD WOC 的錢包。',
   'hudChrome.dailyRewards.reason.under_minimum': '錢包低於 $20 USD 的 WOC 最低要求。',
   'hudChrome.dailyRewards.reason.price_unavailable': '無法取得 WOC 價格，獎勵暫時鎖定。',
+  'hudChrome.dailyRewards.reason.banned': '您已被禁止參加每日獎勵。原因：{reason}',
   'hudChrome.keybinds.discord': 'Discord',
   'hudChrome.spectate.banner': '正在觀察 {name}',
   'hudChrome.readyCheck.prompt': '{name} 發起了準備確認。你準備好了嗎？',
@@ -2675,7 +2679,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_prof_intro.text':
     '伊斯特布魯克的每個人都有除了劍術之外的手藝，{playerName}。鎮子周圍散落著礦脈，去揮鎬採上5塊礦石帶給我。要親自採，別耍花招，我看得出來。',
   'entities.quests.q_prof_intro.completion':
-    '看到了吧？礦石進了包裡，手上也磨出了繭子。繼續在路上採礦、伐木、採藥，回到鎮上時，留意市場旁的城鎮專注面板和附近的製作台。只要你願意，這裡面都有正經買賣等著你。',
+    '看到了吧？礦石進了包裡，手上也磨出了繭子。繼續在路上採礦、伐木、採藥，回到鎮上時，留意市場旁的城鎮專注面板和附近的製作台。只要你願意，靠這些都能正經謀生。',
   'entities.quests.q_prof_intro.objectives.0.label': '礦石塊',
   'entities.quests.q_wolves.title': '門前群狼',
   'entities.quests.q_wolves.text':
@@ -6248,4 +6252,13 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
     '邀請好友：當好友升到 10 級，你們各獲得 2 個格子，最多 5 位好友。',
   'hudChrome.bank.bonusSectionAria': '獎勵銀行格子及獲取方式',
   'entities.mobs.yumi_cat.name': '由美',
+  'loading.tips.classes': '提示：9 個職業玩法各不相同，投入之前不妨都試一試。',
+  'loading.tips.talents': '提示：只要不在戰鬥中，隨時都能重置天賦，因此早期的選擇不會成為陷阱。',
+  'loading.tips.dungeons':
+    '提示：裝備超出普通難度要求後，試試地下城的英雄難度，享受更艱難也更有成就感的戰鬥。',
+  'loading.tips.market': '提示：世界市場可以讓你與全服玩家進行買賣交易。',
+  'loading.tips.guilds': '提示：加入公會可獲得專屬聊天頻道與公會成員名單。',
+  'loading.tips.professions': '提示：採集與製造類生活技能可以與你的戰鬥職業同時培養。',
+  'loading.tips.loadouts': '提示：保存多套天賦配置，即可在不同組合間切換而無需重新分配天賦點。',
+  'loading.tips.pvp': '提示：向其他玩家發起友誼決鬥，或報名灰燼競技場，來檢驗你的組合。',
 };

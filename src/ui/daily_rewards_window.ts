@@ -15,8 +15,8 @@ import {
   type WocStoreItemInput,
 } from './woc_store_view';
 
-function reasonText(reason: DailyRewardStatus['eligibility']['reason']): string {
-  switch (reason) {
+function reasonText(eligibility: DailyRewardStatus['eligibility']): string {
+  switch (eligibility.reason) {
     case 'eligible':
       return t('hudChrome.dailyRewards.reason.eligible');
     case 'no_wallet':
@@ -25,6 +25,10 @@ function reasonText(reason: DailyRewardStatus['eligibility']['reason']): string 
       return t('hudChrome.dailyRewards.reason.under_minimum');
     case 'price_unavailable':
       return t('hudChrome.dailyRewards.reason.price_unavailable');
+    case 'banned':
+      return t('hudChrome.dailyRewards.reason.banned', {
+        reason: eligibility.banReason ?? t('hudChrome.dailyRewards.unknown'),
+      });
   }
 }
 
@@ -480,7 +484,7 @@ export class DailyRewardsWindow {
         : t('hudChrome.dailyRewards.usd', {
             amount: `$${formatNumber(s.eligibility.usdValue, { maximumFractionDigits: 2 })}`,
           });
-    const reason = reasonText(view.lockReason);
+    const reason = reasonText(s.eligibility);
     return (
       `<p class="dr-intro">${esc(t('hudChrome.dailyRewards.intro'))}</p>` +
       `<p class="dr-disclaimer">${esc(t('hudChrome.dailyRewards.disclaimer'))}</p>` +
@@ -538,6 +542,7 @@ export class DailyRewardsWindow {
   private walletHtml(view: Extract<DailyRewardsView, { kind: 'ready' }>): string {
     if (!view.locked) return '';
     const reason = view.lockReason;
+    if (reason === 'banned') return '';
     const title =
       reason === 'no_wallet'
         ? t('hudChrome.dailyRewards.walletConnectTitle')

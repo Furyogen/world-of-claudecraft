@@ -102,6 +102,10 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
     'Этот кошелёк не может подписывать и отправлять транзакции Solana.',
   'hudChrome.claudium.checkoutNotSettled':
     'Транзакция отправлена, но Claudium ещё не зачислен. Повторите попытку позже.',
+  'hudChrome.itemHeroicTag': '[ГЕРОИЧЕСКИЙ]',
+  'hudChrome.readyCheck.notInPartyError':
+    'Чтобы начать проверку готовности, вы должны состоять в группе.',
+  'hudChrome.readyCheck.inProgressError': 'Проверка готовности уже идёт.',
   'hudChrome.auth.appleLoginCta': 'Продолжить с Apple',
   'hudChrome.auth.appleError': 'Не удалось войти через Apple. Попробуйте ещё раз.',
   'hudChrome.auth.appleChoiceIntro':
@@ -194,6 +198,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.dailyRewards.reason.under_minimum': 'Кошелек ниже минимума в $20 USD WOC.',
   'hudChrome.dailyRewards.reason.price_unavailable':
     'Цена WOC недоступна, награды временно заблокированы.',
+  'hudChrome.dailyRewards.reason.banned':
+    'Вам запрещено участвовать в ежедневных наградах. Причина: {reason}',
   'hudChrome.keybinds.discord': 'Discord',
   'hudChrome.spectate.banner': 'Наблюдение за {name}',
   'hudChrome.readyCheck.prompt': '{name} начал проверку готовности. Вы готовы?',
@@ -6714,4 +6720,20 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
     'Пригласите друга: когда он достигнет 10 уровня, вы оба получите по 2 ячейки, до 5 друзей.',
   'hudChrome.bank.bonusSectionAria': 'Бонусные ячейки банка и способы их получить',
   'entities.mobs.yumi_cat.name': 'Юми',
+  'loading.tips.classes':
+    'Совет: все 9 классов играются по-разному. Попробуйте несколько, прежде чем выбрать один.',
+  'loading.tips.talents':
+    'Совет: вы можете сбросить таланты в любое время вне боя, так что ранний выбор никогда не станет ловушкой.',
+  'loading.tips.dungeons':
+    'Совет: попробуйте героическую сложность подземелья, когда переросли обычную, ради более сложного и выгодного боя.',
+  'loading.tips.market':
+    'Совет: на Мировом рынке можно покупать и продавать вещи игрокам всего мира.',
+  'loading.tips.guilds':
+    'Совет: вступление в гильдию даёт личный чат-канал и общий список соратников по гильдии.',
+  'loading.tips.professions':
+    'Совет: сбор и крафтовые профессии можно развивать параллельно с боевым классом.',
+  'loading.tips.loadouts':
+    'Совет: сохраните несколько наборов талантов, чтобы менять билды, не тратя очки заново.',
+  'loading.tips.pvp':
+    'Совет: вызовите другого игрока на дружескую дуэль или встаньте в очередь на арену Пепельного Колизея, чтобы испытать свой билд.',
 };

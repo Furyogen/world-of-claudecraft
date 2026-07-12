@@ -155,10 +155,12 @@ export const id_ID: EnTranslations = {
       "banner": "Menonton {name}"
     },
     "readyCheck": {
-      "prompt": "{name} has started a ready check. Are you ready?",
-      "ready": "Ready",
-      "notReady": "Not Ready",
-      "result": "Ready check: {ready} ready, {notReady} not ready, {noResponse} no response."
+      "prompt": "{name} memulai pemeriksaan kesiapan. Apakah kamu siap?",
+      "ready": "Siap",
+      "notReady": "Belum Siap",
+      "result": "Pemeriksaan kesiapan: {ready} siap, {notReady} belum siap, {noResponse} tidak merespons.",
+      "notInPartyError": "Kamu harus berada dalam grup untuk memulai pemeriksaan kesiapan.",
+      "inProgressError": "Pemeriksaan kesiapan sedang berlangsung."
     },
     "death": {
       "resurrectAtCorpse": "Bangkit di Jasad",
@@ -238,7 +240,8 @@ export const id_ID: EnTranslations = {
         "eligible": "Hadiah terbuka.",
         "no_wallet": "Hubungkan dompet dengan setidaknya $20 USD dalam WOC.",
         "under_minimum": "Dompet di bawah batas minimum $20 USD WOC.",
-        "price_unavailable": "Harga WOC tidak tersedia, hadiah terkunci sementara."
+        "price_unavailable": "Harga WOC tidak tersedia, hadiah terkunci sementara.",
+        "banned": "Kamu dilarang mengikuti Hadiah Harian. Alasan: {reason}"
       }
     },
     "wocStore": {
@@ -506,12 +509,12 @@ export const id_ID: EnTranslations = {
       "targetFriendlyNext": "Putar Bidikan Sekutu",
       "discord": "Discord",
       "valecup": "Piala Lembah",
-      "categoryPet": "Pet",
-      "petAttack": "Pet: Attack",
-      "petStop": "Pet: Stop",
-      "petTaunt": "Pet: Taunt",
-      "petDefensive": "Pet: Defensive",
-      "petAggressive": "Pet: Aggressive"
+      "categoryPet": "Peliharaan",
+      "petAttack": "Peliharaan: Serang",
+      "petStop": "Peliharaan: Berhenti",
+      "petTaunt": "Peliharaan: Ejek",
+      "petDefensive": "Peliharaan: Defensif",
+      "petAggressive": "Peliharaan: Agresif"
     },
     "vcup": {
       "title": "Piala Lembah",
@@ -836,8 +839,8 @@ export const id_ID: EnTranslations = {
     "tips": {
       "joinChannels": "Tips: ketik /join world atau /join lfg untuk mengobrol dengan pemain di seluruh dunia."
     },
-    "itemHeroicTag": "[HEROIC]",
-    "itemSoulbound": "Soulbound",
+    "itemHeroicTag": "[HEROIK]",
+    "itemSoulbound": "Terikat Jiwa",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1184,10 +1187,10 @@ export const id_ID: EnTranslations = {
       "spawn": "{name} bangkit di atas Dataran Tinggi Thornpeak!"
     },
     "auth": {
-      "appleLoginCta": "Continue with Apple",
-      "appleError": "Could not sign in with Apple. Please try again.",
-      "appleChoiceIntro": "Create a new account, or link Apple to one you already have.",
-      "appleChoiceExpired": "That Apple sign-in expired. Please sign in with Apple again.",
+      "appleLoginCta": "Lanjutkan dengan Apple",
+      "appleError": "Tidak dapat masuk dengan Apple. Silakan coba lagi.",
+      "appleChoiceIntro": "Buat akun baru, atau tautkan Apple ke akun yang sudah kamu miliki.",
+      "appleChoiceExpired": "Sesi masuk dengan Apple itu telah kedaluwarsa. Silakan masuk lagi dengan Apple.",
       "forgotPrompt": "Lupa kata sandi?",
       "forgotTitle": "Atur ulang kata sandimu",
       "forgotHint": "Masukkan nama penggunamu dan kami akan mengirim tautan pengaturan ulang ke alamat email yang terdaftar.",
@@ -1432,8 +1435,8 @@ export const id_ID: EnTranslations = {
       "parcelsLabel": "Bingkisan",
       "parcelsHint": "Klik barang di tasmu untuk melampirkannya.",
       "removeParcelAria": "Keluarkan {item} dari surat",
-      "parcelQtyDecreaseAria": "Send one fewer {item}",
-      "parcelQtyIncreaseAria": "Send one more {item}",
+      "parcelQtyDecreaseAria": "Kirim satu {item} lebih sedikit",
+      "parcelQtyIncreaseAria": "Kirim satu {item} lebih banyak",
       "sendButton": "Kirim surat",
       "postageNote": "Perangko: {amount}. Gagak terbang selama sekitar {seconds} detik.",
       "arrivedBanner": "Gagak telah mendarat: surat dari {name}.",
@@ -4038,7 +4041,17 @@ export const id_ID: EnTranslations = {
     "enterTimeout": "Tidak bisa masuk dunia. Koneksi kehabisan waktu. Apakah server gim berjalan?",
     "connectionLost": "Koneksi ke server terputus.",
     "reconnecting": "Koneksi terputus. Menyambungkan kembali...",
-    "connectionRejected": "Server menutup koneksi."
+    "connectionRejected": "Server menutup koneksi.",
+    "tips": {
+      "classes": "Kiat: masing-masing dari 9 kelas memiliki gaya bermain berbeda. Cobalah beberapa sebelum menetapkan pilihan.",
+      "talents": "Kiat: kamu dapat mengatur ulang talenta kapan saja saat tidak bertarung, jadi pilihan awal tidak akan menjadi jebakan.",
+      "dungeons": "Kiat: cobalah ruang bawah tanah pada tingkat kesulitan heroik setelah perlengkapanmu melampaui tingkat normal, untuk pertarungan yang lebih sulit dan lebih menguntungkan.",
+      "market": "Kiat: Pasar Dunia memungkinkanmu membeli dan menjual dengan pemain di seluruh dunia.",
+      "guilds": "Kiat: bergabung dengan guild memberimu saluran obrolan pribadi dan daftar bersama anggota guildmu.",
+      "professions": "Kiat: profesi pengumpulan dan kerajinan dapat dilatih bersamaan dengan kelas tempurmu.",
+      "loadouts": "Kiat: simpan lebih dari satu set talenta agar dapat bertukar build tanpa menggunakan poin dua kali.",
+      "pvp": "Kiat: tantang pemain lain untuk berduel persahabatan, atau masuk antrean arena Koloseum Abu, untuk menguji build-mu."
+    }
   },
   "errors": {
     "nothingInteract": "Tidak ada yang bisa diinteraksikan.",
@@ -5957,7 +5970,7 @@ export const id_ID: EnTranslations = {
         "name": "Taring Greyjaw Tua"
       },
       "chunk_of_ore": {
-        "name": "Chunk of Ore"
+        "name": "Bongkahan Bijih"
       },
       "weathered_ledger_page": {
         "name": "Halaman Buku Besar Lapuk"
@@ -7640,12 +7653,12 @@ export const id_ID: EnTranslations = {
     },
     "quests": {
       "q_prof_intro": {
-        "title": "A Trade for Every Hand",
-        "text": "Every soul in Eastbrook works a trade besides the sword, {playerName}. There's ore veins scattered round town, so go swing a pick and bring me 5 chunks. Mine them yourself, mind; I'll know the difference.",
-        "completion": "See? Ore in your pack and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
+        "title": "Pekerjaan untuk Setiap Tangan",
+        "text": "Setiap orang di Eastbrook menekuni pekerjaan selain mengayunkan pedang, {playerName}. Urat bijih tersebar di sekitar kota, jadi ayunkan beliung dan bawakan aku 5 bongkahan. Tambang sendiri, ingat, aku tahu bedanya.",
+        "completion": "Lihat? Bijih di tasmu dan kapalan di tanganmu. Teruslah menambang, menebang, dan memetik herba selama menjelajahi jalanan. Saat kembali ke kota, perhatikan papan Fokus Kota di dekat pasar dan bangku kerajinan di sebelahnya. Semua itu bisa menjadi mata pencaharian yang layak, jika kamu menginginkannya.",
         "objectives": {
           "0": {
-            "label": "Chunk of Ore"
+            "label": "Bongkahan Bijih"
           }
         }
       },

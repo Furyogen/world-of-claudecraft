@@ -155,10 +155,12 @@ export const tr_TR: EnTranslations = {
       "banner": "{name} izleniyor"
     },
     "readyCheck": {
-      "prompt": "{name} has started a ready check. Are you ready?",
-      "ready": "Ready",
-      "notReady": "Not Ready",
-      "result": "Ready check: {ready} ready, {notReady} not ready, {noResponse} no response."
+      "prompt": "{name} bir hazır kontrolü başlattı. Hazır mısın?",
+      "ready": "Hazır",
+      "notReady": "Hazır Değil",
+      "result": "Hazır kontrolü: {ready} hazır, {notReady} hazır değil, {noResponse} yanıt vermedi.",
+      "notInPartyError": "Hazır kontrolü başlatmak için bir grupta olmalısın.",
+      "inProgressError": "Bir hazır kontrolü zaten sürüyor."
     },
     "death": {
       "resurrectAtCorpse": "Cesedinin Başında Diril",
@@ -238,7 +240,8 @@ export const tr_TR: EnTranslations = {
         "eligible": "Ödüllerin kilidi açıldı.",
         "no_wallet": "En az 20 USD değerinde WOC bulunan bir cüzdan bağla.",
         "under_minimum": "Cüzdan, 20 USD değerindeki WOC alt sınırının altında.",
-        "price_unavailable": "WOC fiyatı alınamıyor, ödüller geçici olarak kilitli."
+        "price_unavailable": "WOC fiyatı alınamıyor, ödüller geçici olarak kilitli.",
+        "banned": "Günlük Ödüllerden yasaklandın. Gerekçe: {reason}"
       }
     },
     "wocStore": {
@@ -506,12 +509,12 @@ export const tr_TR: EnTranslations = {
       "targetFriendlyNext": "Dost Hedefler Arasında Geç",
       "discord": "Discord",
       "valecup": "Vadi Kupası",
-      "categoryPet": "Pet",
-      "petAttack": "Pet: Attack",
-      "petStop": "Pet: Stop",
-      "petTaunt": "Pet: Taunt",
-      "petDefensive": "Pet: Defensive",
-      "petAggressive": "Pet: Aggressive"
+      "categoryPet": "Yoldaş",
+      "petAttack": "Yoldaş: Saldır",
+      "petStop": "Yoldaş: Dur",
+      "petTaunt": "Yoldaş: Kışkırt",
+      "petDefensive": "Yoldaş: Savunmacı",
+      "petAggressive": "Yoldaş: Saldırgan"
     },
     "vcup": {
       "title": "Vadi Kupası",
@@ -836,8 +839,8 @@ export const tr_TR: EnTranslations = {
     "tips": {
       "joinChannels": "İpucu: Dünya genelindeki oyuncularla sohbet etmek için /join world ya da /join lfg yaz."
     },
-    "itemHeroicTag": "[HEROIC]",
-    "itemSoulbound": "Soulbound",
+    "itemHeroicTag": "[KAHRAMANCA]",
+    "itemSoulbound": "Ruha Bağlı",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1184,10 +1187,10 @@ export const tr_TR: EnTranslations = {
       "spawn": "{name}, Dikenzirve Tepeleri'nin üzerinde yükseliyor!"
     },
     "auth": {
-      "appleLoginCta": "Continue with Apple",
-      "appleError": "Could not sign in with Apple. Please try again.",
-      "appleChoiceIntro": "Create a new account, or link Apple to one you already have.",
-      "appleChoiceExpired": "That Apple sign-in expired. Please sign in with Apple again.",
+      "appleLoginCta": "Apple ile Devam Et",
+      "appleError": "Apple ile oturum açılamadı. Lütfen tekrar dene.",
+      "appleChoiceIntro": "Yeni bir hesap oluştur veya Apple hesabını mevcut hesabına bağla.",
+      "appleChoiceExpired": "Bu Apple oturum açma işleminin süresi doldu. Lütfen Apple ile yeniden oturum aç.",
       "forgotPrompt": "Şifreni mi unuttun?",
       "forgotTitle": "Şifreni sıfırla",
       "forgotHint": "Kullanıcı adını gir, kayıtlı e-posta adresine bir sıfırlama bağlantısı gönderelim.",
@@ -1432,8 +1435,8 @@ export const tr_TR: EnTranslations = {
       "parcelsLabel": "Paketler",
       "parcelsHint": "Eklemek için çantandaki bir eşyaya tıkla.",
       "removeParcelAria": "{item} paketini mektuptan çıkar",
-      "parcelQtyDecreaseAria": "Send one fewer {item}",
-      "parcelQtyIncreaseAria": "Send one more {item}",
+      "parcelQtyDecreaseAria": "Bir adet daha az {item} gönder",
+      "parcelQtyIncreaseAria": "Bir adet daha fazla {item} gönder",
       "sendButton": "Mektubu Gönder",
       "postageNote": "Posta ücreti: {amount}. Kuzgun yaklaşık {seconds} saniye uçar.",
       "arrivedBanner": "Kuzgun kondu: {name} sana posta gönderdi.",
@@ -4038,7 +4041,17 @@ export const tr_TR: EnTranslations = {
     "enterTimeout": "Dünyaya girilemedi. Bağlantı zaman aşımına uğradı. Oyun sunucusu çalışıyor mu?",
     "connectionLost": "Sunucuyla bağlantı koptu.",
     "reconnecting": "Bağlantı kesildi. Yeniden bağlanılıyor...",
-    "connectionRejected": "Sunucu bağlantıyı kapattı."
+    "connectionRejected": "Sunucu bağlantıyı kapattı.",
+    "tips": {
+      "classes": "İpucu: 9 sınıfın her biri farklı oynanır. Birine bağlanmadan önce birkaçını dene.",
+      "talents": "İpucu: savaş dışında olduğun sürece yeteneklerini istediğin zaman sıfırlayabilirsin, bu yüzden erken bir seçim asla tuzak değildir.",
+      "dungeons": "İpucu: normal zorluk için fazla güçlü hale geldiğinde, daha çetin ve daha ödüllendirici bir mücadele için zindanı kahramanca zorlukta dene.",
+      "market": "İpucu: Dünya Pazarı, dünya genelindeki oyuncularla alım satım yapmanı sağlar.",
+      "guilds": "İpucu: bir loncaya katılmak sana özel bir sohbet kanalı ve lonca arkadaşlarınla ortak bir üye listesi verir.",
+      "professions": "İpucu: toplama ve üretim mesleklerini savaş sınıfının yanında geliştirebilirsin.",
+      "loadouts": "İpucu: puanları iki kez harcamadan farklı dizilimler arasında geçmek için birden fazla yetenek düzeni kaydet.",
+      "pvp": "İpucu: dizilimini sınamak için başka bir oyuncuya dostça düello teklif et veya Kül Koliseumu arenası sırasına gir."
+    }
   },
   "errors": {
     "nothingInteract": "Etkileşime girilecek bir şey yok.",
@@ -5957,7 +5970,7 @@ export const tr_TR: EnTranslations = {
         "name": "Yaşlı Greyjaw'un Dişi"
       },
       "chunk_of_ore": {
-        "name": "Chunk of Ore"
+        "name": "Maden Parçası"
       },
       "weathered_ledger_page": {
         "name": "Yıpranmış Defter Sayfası"
@@ -7640,12 +7653,12 @@ export const tr_TR: EnTranslations = {
     },
     "quests": {
       "q_prof_intro": {
-        "title": "A Trade for Every Hand",
-        "text": "Every soul in Eastbrook works a trade besides the sword, {playerName}. There's ore veins scattered round town, so go swing a pick and bring me 5 chunks. Mine them yourself, mind; I'll know the difference.",
-        "completion": "See? Ore in your pack and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
+        "title": "Her Ele Bir Zanaat",
+        "text": "Doğudere'de herkes kılıcın yanında bir zanaatla uğraşır, {playerName}. Kasabanın etrafına dağılmış maden damarları var; git kazmanı salla ve bana 5 parça getir. Kendin çıkar, unutma; farkı anlarım.",
+        "completion": "Gördün mü? Çantanda maden, ellerinde nasır. Yollarda gezerken madenciliğe, odunculuğa ve ot toplamaya devam et. Kasabaya döndüğünde pazarın yanındaki Kasaba Odağı panosuna ve yakındaki üretim tezgahına göz at. İstersen bunların hepsinde iyi bir geçim var.",
         "objectives": {
           "0": {
-            "label": "Chunk of Ore"
+            "label": "Maden Parçası"
           }
         }
       },

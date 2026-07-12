@@ -155,10 +155,12 @@ export const fr_CA: EnTranslations = {
       "banner": "Vous observez {name}"
     },
     "readyCheck": {
-      "prompt": "{name} has started a ready check. Are you ready?",
-      "ready": "Ready",
-      "notReady": "Not Ready",
-      "result": "Ready check: {ready} ready, {notReady} not ready, {noResponse} no response."
+      "prompt": "{name} a lancé une vérification de disponibilité. Êtes-vous prêt ?",
+      "ready": "Prêt",
+      "notReady": "Pas prêt",
+      "result": "Vérification de disponibilité : {ready} prêts, {notReady} pas prêts, {noResponse} sans réponse.",
+      "notInPartyError": "Vous devez être dans un groupe pour lancer une vérification de disponibilité.",
+      "inProgressError": "Une vérification de disponibilité est déjà en cours."
     },
     "death": {
       "resurrectAtCorpse": "Ressusciter près du cadavre",
@@ -238,7 +240,8 @@ export const fr_CA: EnTranslations = {
         "eligible": "Récompenses débloquées.",
         "no_wallet": "Connectez un portefeuille contenant au moins 20 USD en WOC.",
         "under_minimum": "Le portefeuille est en dessous du minimum de 20 USD en WOC.",
-        "price_unavailable": "Le cours du WOC est indisponible, les récompenses sont temporairement verrouillées."
+        "price_unavailable": "Le cours du WOC est indisponible, les récompenses sont temporairement verrouillées.",
+        "banned": "Vous êtes exclu des Récompenses quotidiennes. Motif : {reason}"
       }
     },
     "wocStore": {
@@ -506,12 +509,12 @@ export const fr_CA: EnTranslations = {
       "targetFriendlyNext": "Changer de cible alliée",
       "discord": "Discord",
       "valecup": "Coupe du Val",
-      "categoryPet": "Pet",
-      "petAttack": "Pet: Attack",
-      "petStop": "Pet: Stop",
-      "petTaunt": "Pet: Taunt",
-      "petDefensive": "Pet: Defensive",
-      "petAggressive": "Pet: Aggressive"
+      "categoryPet": "Familier",
+      "petAttack": "Familier : attaquer",
+      "petStop": "Familier : arrêter",
+      "petTaunt": "Familier : provoquer",
+      "petDefensive": "Familier : défensif",
+      "petAggressive": "Familier : agressif"
     },
     "vcup": {
       "title": "La Coupe du Val",
@@ -836,8 +839,8 @@ export const fr_CA: EnTranslations = {
     "tips": {
       "joinChannels": "Conseil : tapez /join world ou /join lfg pour discuter avec les joueurs du monde entier."
     },
-    "itemHeroicTag": "[HEROIC]",
-    "itemSoulbound": "Soulbound",
+    "itemHeroicTag": "[HÉROÏQUE]",
+    "itemSoulbound": "Lié à l’âme",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1184,10 +1187,10 @@ export const fr_CA: EnTranslations = {
       "spawn": "{name} se dresse sur les Hauteurs de Thornpeak !"
     },
     "auth": {
-      "appleLoginCta": "Continue with Apple",
-      "appleError": "Could not sign in with Apple. Please try again.",
-      "appleChoiceIntro": "Create a new account, or link Apple to one you already have.",
-      "appleChoiceExpired": "That Apple sign-in expired. Please sign in with Apple again.",
+      "appleLoginCta": "Continuer avec Apple",
+      "appleError": "Impossible de se connecter avec Apple. Veuillez réessayer.",
+      "appleChoiceIntro": "Créez un nouveau compte ou associez Apple à un compte existant.",
+      "appleChoiceExpired": "Cette connexion avec Apple a expiré. Veuillez vous reconnecter avec Apple.",
       "forgotPrompt": "Mot de passe oublié ?",
       "forgotTitle": "Réinitialiser votre mot de passe",
       "forgotHint": "Saisissez votre nom d’utilisateur et nous enverrons un lien de réinitialisation à l’adresse e-mail enregistrée.",
@@ -1432,8 +1435,8 @@ export const fr_CA: EnTranslations = {
       "parcelsLabel": "Colis",
       "parcelsHint": "Cliquez sur un objet dans vos sacs pour le joindre.",
       "removeParcelAria": "Retirer {item} de la lettre",
-      "parcelQtyDecreaseAria": "Send one fewer {item}",
-      "parcelQtyIncreaseAria": "Send one more {item}",
+      "parcelQtyDecreaseAria": "Envoyer un {item} de moins",
+      "parcelQtyIncreaseAria": "Envoyer un {item} de plus",
       "sendButton": "Envoyer la lettre",
       "postageNote": "Affranchissement : {amount}. Le corbeau vole environ {seconds}s.",
       "arrivedBanner": "Le corbeau s'est posé : du courrier de {name}.",
@@ -4038,7 +4041,17 @@ export const fr_CA: EnTranslations = {
     "enterTimeout": "Impossible d'entrer dans le monde. La connexion a expiré. Le serveur de jeu fonctionne-t-il ?",
     "connectionLost": "La connexion au serveur a été perdue.",
     "reconnecting": "Connexion perdue. Reconnexion...",
-    "connectionRejected": "Le serveur a fermé la connexion."
+    "connectionRejected": "Le serveur a fermé la connexion.",
+    "tips": {
+      "classes": "Conseil : chacune des 9 classes se joue différemment. Essayez-en plusieurs avant de faire votre choix.",
+      "talents": "Conseil : vous pouvez réinitialiser vos talents dès que vous êtes hors combat, un premier choix ne vous enferme donc jamais.",
+      "dungeons": "Conseil : tentez un donjon en difficulté héroïque lorsque votre équipement dépasse la difficulté normale afin de livrer un combat plus exigeant et plus gratifiant.",
+      "market": "Conseil : le Marché mondial vous permet d’acheter et de vendre auprès des joueurs de tout le royaume.",
+      "guilds": "Conseil : rejoindre une guilde vous donne accès à un canal de discussion privé et à une liste commune de ses membres.",
+      "professions": "Conseil : vous pouvez apprendre des métiers de récolte et d’artisanat en parallèle de votre classe de combat.",
+      "loadouts": "Conseil : enregistrez plusieurs configurations de talents pour changer de spécialisation sans dépenser vos points deux fois.",
+      "pvp": "Conseil : défiez un autre joueur en duel amical ou rejoignez la file de l’arène du Colisée cendré pour mettre votre configuration à l’épreuve."
+    }
   },
   "errors": {
     "nothingInteract": "Rien avec quoi interagir.",
@@ -5957,7 +5970,7 @@ export const fr_CA: EnTranslations = {
         "name": "Croc du vieux Greyjaw"
       },
       "chunk_of_ore": {
-        "name": "Chunk of Ore"
+        "name": "Morceau de minerai"
       },
       "weathered_ledger_page": {
         "name": "Page de registre usée"
@@ -5990,13 +6003,13 @@ export const fr_CA: EnTranslations = {
         "name": "Chute de lin"
       },
       "arcane_dust": {
-        "name": "Arcane Dust"
+        "name": "Poussière arcanique"
       },
       "arcane_essence": {
-        "name": "Arcane Essence"
+        "name": "Essence arcanique"
       },
       "arcane_shard": {
-        "name": "Arcane Shard"
+        "name": "Éclat arcanique"
       },
       "fen_muster_order": {
         "name": "Ordre de rassemblement de Fenbridge"
@@ -7640,12 +7653,12 @@ export const fr_CA: EnTranslations = {
     },
     "quests": {
       "q_prof_intro": {
-        "title": "A Trade for Every Hand",
-        "text": "Every soul in Eastbrook works a trade besides the sword, {playerName}. There's ore veins scattered round town, so go swing a pick and bring me 5 chunks. Mine them yourself, mind; I'll know the difference.",
-        "completion": "See? Ore in your pack and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
+        "title": "Un métier pour chaque main",
+        "text": "À Eastbrook, tout le monde exerce un métier en plus de manier l’épée, {playerName}. Des filons de minerai sont dispersés autour de la ville, alors prenez une pioche et rapportez-moi 5 morceaux. Extrayez-les vous-même, attention, je saurai faire la différence.",
+        "completion": "Vous voyez ? Du minerai dans votre sac et des cals aux mains. Continuez à miner, à couper du bois et à cueillir des plantes sur les routes. De retour en ville, pensez au tableau des Priorités de la ville près du marché et à l’établi d’artisanat juste à côté. Tout cela peut vous offrir un gagne-pain honorable, si le cœur vous en dit.",
         "objectives": {
           "0": {
-            "label": "Chunk of Ore"
+            "label": "Morceau de minerai"
           }
         }
       },

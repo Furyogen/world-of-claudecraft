@@ -155,10 +155,12 @@ export const vi_VN: EnTranslations = {
       "banner": "Đang xem {name}"
     },
     "readyCheck": {
-      "prompt": "{name} has started a ready check. Are you ready?",
-      "ready": "Ready",
-      "notReady": "Not Ready",
-      "result": "Ready check: {ready} ready, {notReady} not ready, {noResponse} no response."
+      "prompt": "{name} đã bắt đầu kiểm tra sẵn sàng. Bạn đã sẵn sàng chưa?",
+      "ready": "Sẵn Sàng",
+      "notReady": "Chưa Sẵn Sàng",
+      "result": "Kiểm tra sẵn sàng: {ready} sẵn sàng, {notReady} chưa sẵn sàng, {noResponse} không phản hồi.",
+      "notInPartyError": "Bạn phải ở trong tổ đội để bắt đầu kiểm tra sẵn sàng.",
+      "inProgressError": "Một lượt kiểm tra sẵn sàng đang diễn ra."
     },
     "death": {
       "resurrectAtCorpse": "Hồi Sinh Tại Xác Chết",
@@ -238,7 +240,8 @@ export const vi_VN: EnTranslations = {
         "eligible": "Đã mở khóa phần thưởng.",
         "no_wallet": "Kết nối một ví có ít nhất 20 USD WOC.",
         "under_minimum": "Ví thấp hơn mức tối thiểu 20 USD WOC.",
-        "price_unavailable": "Giá WOC hiện không có sẵn, phần thưởng tạm thời bị khóa."
+        "price_unavailable": "Giá WOC hiện không có sẵn, phần thưởng tạm thời bị khóa.",
+        "banned": "Bạn đã bị cấm tham gia Phần Thưởng Hằng Ngày. Lý do: {reason}"
       }
     },
     "wocStore": {
@@ -506,12 +509,12 @@ export const vi_VN: EnTranslations = {
       "targetFriendlyNext": "Luân Phiên Mục Tiêu Đồng Minh",
       "discord": "Discord",
       "valecup": "Cúp Thung Lũng",
-      "categoryPet": "Pet",
-      "petAttack": "Pet: Attack",
-      "petStop": "Pet: Stop",
-      "petTaunt": "Pet: Taunt",
-      "petDefensive": "Pet: Defensive",
-      "petAggressive": "Pet: Aggressive"
+      "categoryPet": "Thú Cưng",
+      "petAttack": "Thú Cưng: Tấn Công",
+      "petStop": "Thú Cưng: Dừng",
+      "petTaunt": "Thú Cưng: Khiêu Khích",
+      "petDefensive": "Thú Cưng: Phòng Thủ",
+      "petAggressive": "Thú Cưng: Hung Hăng"
     },
     "vcup": {
       "title": "Cúp Thung Lũng",
@@ -836,8 +839,8 @@ export const vi_VN: EnTranslations = {
     "tips": {
       "joinChannels": "Mẹo: gõ /join world hoặc /join lfg để trò chuyện với người chơi khắp thế giới."
     },
-    "itemHeroicTag": "[HEROIC]",
-    "itemSoulbound": "Soulbound",
+    "itemHeroicTag": "[ANH HÙNG]",
+    "itemSoulbound": "Ràng Buộc Linh Hồn",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1184,10 +1187,10 @@ export const vi_VN: EnTranslations = {
       "spawn": "{name} trỗi dậy trên Cao Nguyên Đỉnh Gai!"
     },
     "auth": {
-      "appleLoginCta": "Continue with Apple",
-      "appleError": "Could not sign in with Apple. Please try again.",
-      "appleChoiceIntro": "Create a new account, or link Apple to one you already have.",
-      "appleChoiceExpired": "That Apple sign-in expired. Please sign in with Apple again.",
+      "appleLoginCta": "Tiếp Tục với Apple",
+      "appleError": "Không thể đăng nhập bằng Apple. Vui lòng thử lại.",
+      "appleChoiceIntro": "Tạo tài khoản mới, hoặc liên kết Apple với tài khoản bạn đã có.",
+      "appleChoiceExpired": "Lần đăng nhập bằng Apple đó đã hết hạn. Vui lòng đăng nhập lại bằng Apple.",
       "forgotPrompt": "Quên mật khẩu?",
       "forgotTitle": "Đặt lại mật khẩu",
       "forgotHint": "Nhập tên người dùng của bạn và chúng tôi sẽ gửi liên kết đặt lại tới địa chỉ email đã đăng ký.",
@@ -1432,8 +1435,8 @@ export const vi_VN: EnTranslations = {
       "parcelsLabel": "Bưu Kiện",
       "parcelsHint": "Nhấp một vật phẩm trong túi để đính kèm.",
       "removeParcelAria": "Gỡ {item} khỏi lá thư",
-      "parcelQtyDecreaseAria": "Send one fewer {item}",
-      "parcelQtyIncreaseAria": "Send one more {item}",
+      "parcelQtyDecreaseAria": "Gửi bớt một {item}",
+      "parcelQtyIncreaseAria": "Gửi thêm một {item}",
       "sendButton": "Gửi thư",
       "postageNote": "Bưu phí: {amount}. Quạ thư bay mất khoảng {seconds} giây.",
       "arrivedBanner": "Quạ thư đã đáp xuống: thư từ {name}.",
@@ -4038,7 +4041,17 @@ export const vi_VN: EnTranslations = {
     "enterTimeout": "Không thể vào thế giới. Kết nối đã quá thời gian. Máy chủ trò chơi có đang chạy không?",
     "connectionLost": "Đã mất kết nối tới máy chủ.",
     "reconnecting": "Mất kết nối. Đang kết nối lại...",
-    "connectionRejected": "Máy chủ đã đóng kết nối."
+    "connectionRejected": "Máy chủ đã đóng kết nối.",
+    "tips": {
+      "classes": "Mẹo: mỗi lớp trong 9 lớp nhân vật có lối chơi khác nhau. Hãy thử vài lớp trước khi quyết định gắn bó.",
+      "talents": "Mẹo: bạn có thể đặt lại tài năng bất cứ lúc nào ngoài chiến đấu, nên lựa chọn ban đầu không bao giờ là cái bẫy.",
+      "dungeons": "Mẹo: khi trang bị đã vượt mức thường, hãy thử hầm ngục ở độ khó anh hùng để có trận chiến khó hơn và phần thưởng hậu hĩnh hơn.",
+      "market": "Mẹo: Chợ Thế Giới cho phép bạn mua bán với người chơi trên toàn thế giới.",
+      "guilds": "Mẹo: gia nhập bang hội cho bạn một kênh trò chuyện riêng và danh sách chung các thành viên trong bang.",
+      "professions": "Mẹo: có thể rèn luyện nghề thu thập và chế tác song song với lớp chiến đấu của bạn.",
+      "loadouts": "Mẹo: lưu nhiều hơn một bộ tài năng để chuyển đổi giữa các lối xây dựng mà không phải dùng điểm hai lần.",
+      "pvp": "Mẹo: thách đấu người chơi khác trong một trận giao hữu, hoặc xếp hàng vào Đấu Trường Tro Tàn, để thử sức lối xây dựng của bạn."
+    }
   },
   "errors": {
     "nothingInteract": "Không có gì để tương tác.",
@@ -5957,7 +5970,7 @@ export const vi_VN: EnTranslations = {
         "name": "Nanh Của Greyjaw Già"
       },
       "chunk_of_ore": {
-        "name": "Chunk of Ore"
+        "name": "Khối Quặng"
       },
       "weathered_ledger_page": {
         "name": "Trang Sổ Cái Phong Sương"
@@ -7640,12 +7653,12 @@ export const vi_VN: EnTranslations = {
     },
     "quests": {
       "q_prof_intro": {
-        "title": "A Trade for Every Hand",
-        "text": "Every soul in Eastbrook works a trade besides the sword, {playerName}. There's ore veins scattered round town, so go swing a pick and bring me 5 chunks. Mine them yourself, mind; I'll know the difference.",
-        "completion": "See? Ore in your pack and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
+        "title": "Nghề Cho Mọi Đôi Tay",
+        "text": "Mọi người ở Đông Khê đều làm một nghề bên cạnh việc cầm kiếm, {playerName}. Các mạch quặng nằm rải rác quanh thị trấn, nên hãy vung cuốc và mang về cho ta 5 khối. Tự tay khai thác nhé, ta sẽ biết nếu không phải vậy.",
+        "completion": "Thấy chưa? Quặng trong túi, chai sạn trên tay. Cứ tiếp tục khai khoáng, đốn gỗ và hái thảo dược dọc đường. Khi về thị trấn, nhớ ghé bảng Trọng Tâm Thị Trấn cạnh chợ và bàn chế tác gần đó. Nếu muốn, mọi việc ấy đều có thể thành một nghề kiếm sống đàng hoàng.",
         "objectives": {
           "0": {
-            "label": "Chunk of Ore"
+            "label": "Khối Quặng"
           }
         }
       },

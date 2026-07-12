@@ -155,10 +155,12 @@ export const sv_SE: EnTranslations = {
       "banner": "Åskådar {name}"
     },
     "readyCheck": {
-      "prompt": "{name} has started a ready check. Are you ready?",
-      "ready": "Ready",
-      "notReady": "Not Ready",
-      "result": "Ready check: {ready} ready, {notReady} not ready, {noResponse} no response."
+      "prompt": "{name} har startat en beredskapskontroll. Är du redo?",
+      "ready": "Redo",
+      "notReady": "Inte redo",
+      "result": "Beredskapskontroll: {ready} redo, {notReady} inte redo, {noResponse} inget svar.",
+      "notInPartyError": "Du måste vara med i en grupp för att starta en beredskapskontroll.",
+      "inProgressError": "En beredskapskontroll pågår redan."
     },
     "death": {
       "resurrectAtCorpse": "Återuppstå vid liket",
@@ -238,7 +240,8 @@ export const sv_SE: EnTranslations = {
         "eligible": "Belöningar upplåsta.",
         "no_wallet": "Anslut en plånbok med minst 20 USD i WOC.",
         "under_minimum": "Plånboken är under WOC-miniminivån på 20 USD.",
-        "price_unavailable": "WOC-priset är otillgängligt, belöningar är tillfälligt låsta."
+        "price_unavailable": "WOC-priset är otillgängligt, belöningar är tillfälligt låsta.",
+        "banned": "Du är avstängd från dagliga belöningar. Orsak: {reason}"
       }
     },
     "wocStore": {
@@ -506,12 +509,12 @@ export const sv_SE: EnTranslations = {
       "targetFriendlyNext": "Växla vänligt mål",
       "discord": "Discord",
       "valecup": "Dalcupen",
-      "categoryPet": "Pet",
-      "petAttack": "Pet: Attack",
-      "petStop": "Pet: Stop",
-      "petTaunt": "Pet: Taunt",
-      "petDefensive": "Pet: Defensive",
-      "petAggressive": "Pet: Aggressive"
+      "categoryPet": "Djur",
+      "petAttack": "Djur: Anfall",
+      "petStop": "Djur: Stanna",
+      "petTaunt": "Djur: Provocera",
+      "petDefensive": "Djur: Defensivt",
+      "petAggressive": "Djur: Aggressivt"
     },
     "vcup": {
       "title": "Dalcupen",
@@ -836,8 +839,8 @@ export const sv_SE: EnTranslations = {
     "tips": {
       "joinChannels": "Tips: skriv /join world eller /join lfg för att chatta med spelare över hela världen."
     },
-    "itemHeroicTag": "[HEROIC]",
-    "itemSoulbound": "Soulbound",
+    "itemHeroicTag": "[HEROISK]",
+    "itemSoulbound": "Själabunden",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1184,10 +1187,10 @@ export const sv_SE: EnTranslations = {
       "spawn": "{name} reser sig över Törntoppshöjderna!"
     },
     "auth": {
-      "appleLoginCta": "Continue with Apple",
-      "appleError": "Could not sign in with Apple. Please try again.",
-      "appleChoiceIntro": "Create a new account, or link Apple to one you already have.",
-      "appleChoiceExpired": "That Apple sign-in expired. Please sign in with Apple again.",
+      "appleLoginCta": "Fortsätt med Apple",
+      "appleError": "Det gick inte att logga in med Apple. Försök igen.",
+      "appleChoiceIntro": "Skapa ett nytt konto eller länka Apple till ett konto du redan har.",
+      "appleChoiceExpired": "Den här Apple-inloggningen har gått ut. Logga in med Apple igen.",
       "forgotPrompt": "Glömt lösenordet?",
       "forgotTitle": "Återställ ditt lösenord",
       "forgotHint": "Ange ditt användarnamn så skickar vi en återställningslänk till den registrerade e-postadressen.",
@@ -1432,8 +1435,8 @@ export const sv_SE: EnTranslations = {
       "parcelsLabel": "Paket",
       "parcelsHint": "Klicka på ett föremål i dina väskor för att bifoga det.",
       "removeParcelAria": "Ta bort {item} från brevet",
-      "parcelQtyDecreaseAria": "Send one fewer {item}",
-      "parcelQtyIncreaseAria": "Send one more {item}",
+      "parcelQtyDecreaseAria": "Skicka en {item} mindre",
+      "parcelQtyIncreaseAria": "Skicka en till {item}",
       "sendButton": "Skicka brev",
       "postageNote": "Porto: {amount}. Korpen flyger i ungefär {seconds}s.",
       "arrivedBanner": "Korpen har landat: post från {name}.",
@@ -4038,7 +4041,17 @@ export const sv_SE: EnTranslations = {
     "enterTimeout": "Kunde inte gå in i världen. Anslutningen tog för lång tid. Körs spelservern?",
     "connectionLost": "Anslutningen till servern bröts.",
     "reconnecting": "Anslutning förlorad. Återansluter...",
-    "connectionRejected": "Servern stängde anslutningen."
+    "connectionRejected": "Servern stängde anslutningen.",
+    "tips": {
+      "classes": "Tips: var och en av de 9 klasserna spelas på sitt eget sätt. Prova några innan du bestämmer dig för en.",
+      "talents": "Tips: du kan återställa dina talanger när du inte strider, så ett tidigt val blir aldrig en fälla.",
+      "dungeons": "Tips: prova en grotta på heroisk svårighetsgrad när din utrustning blivit för bra för normal, för en tuffare och mer givande strid.",
+      "market": "Tips: på Världsmarknaden kan du köpa och sälja med spelare från hela riket.",
+      "guilds": "Tips: när du går med i ett gille får du en privat chattkanal och en gemensam lista över dina gilleskamrater.",
+      "professions": "Tips: samlar- och hantverksyrken kan tränas parallellt med din stridsklass.",
+      "loadouts": "Tips: spara mer än en talanguppsättning för att växla mellan byggen utan att spendera poäng två gånger.",
+      "pvp": "Tips: utmana en annan spelare på en vänskaplig duell, eller ställ dig i kö till arenan i Det askgråa colosseumet för att testa ditt bygge."
+    }
   },
   "errors": {
     "nothingInteract": "Inget att interagera med.",
@@ -5957,7 +5970,7 @@ export const sv_SE: EnTranslations = {
         "name": "Gamle Gråkäftens huggtand"
       },
       "chunk_of_ore": {
-        "name": "Chunk of Ore"
+        "name": "Malmklump"
       },
       "weathered_ledger_page": {
         "name": "Väderbiten liggarsida"
@@ -7640,12 +7653,12 @@ export const sv_SE: EnTranslations = {
     },
     "quests": {
       "q_prof_intro": {
-        "title": "A Trade for Every Hand",
-        "text": "Every soul in Eastbrook works a trade besides the sword, {playerName}. There's ore veins scattered round town, so go swing a pick and bring me 5 chunks. Mine them yourself, mind; I'll know the difference.",
-        "completion": "See? Ore in your pack and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
+        "title": "Ett yrke för varje hand",
+        "text": "Alla i Östbäck har ett yrke vid sidan om svärdet, {playerName}. Det finns malmådror utspridda runt staden, så svinga en hacka och ge mig 5 klumpar. Bryt dem själv, märk väl; jag ser skillnaden.",
+        "completion": "Ser du? Malm i packningen och valkar på händerna. Fortsätt med gruvdrift, skogsavverkning och örtplockning medan du färdas längs vägarna. När du är tillbaka i staden, kom ihåg Stadsfokus-tavlan vid marknaden och arbetsbänken i närheten. Det går att försörja sig hederligt på alltihop, om du vill.",
         "objectives": {
           "0": {
-            "label": "Chunk of Ore"
+            "label": "Malmklump"
           }
         }
       },

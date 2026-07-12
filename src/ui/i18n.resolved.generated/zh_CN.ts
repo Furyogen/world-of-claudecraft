@@ -158,7 +158,9 @@ export const zh_CN: EnTranslations = {
       "prompt": "{name} 发起了准备确认。你准备好了吗？",
       "ready": "准备就绪",
       "notReady": "未准备",
-      "result": "准备确认：{ready} 人就绪，{notReady} 人未准备，{noResponse} 人未响应。"
+      "result": "准备确认：{ready} 人就绪，{notReady} 人未准备，{noResponse} 人未响应。",
+      "notInPartyError": "你必须加入队伍才能发起就绪确认。",
+      "inProgressError": "就绪确认已在进行中。"
     },
     "death": {
       "resurrectAtCorpse": "在尸体旁复活",
@@ -238,7 +240,8 @@ export const zh_CN: EnTranslations = {
         "eligible": "奖励已解锁。",
         "no_wallet": "请连接一个持有至少价值 $20 USD 的 WOC 的钱包。",
         "under_minimum": "钱包低于 $20 USD WOC 的最低要求。",
-        "price_unavailable": "WOC 价格不可用，奖励暂时锁定。"
+        "price_unavailable": "WOC 价格不可用，奖励暂时锁定。",
+        "banned": "您已被禁止参加每日奖励。原因：{reason}"
       }
     },
     "wocStore": {
@@ -836,7 +839,7 @@ export const zh_CN: EnTranslations = {
     "tips": {
       "joinChannels": "提示：输入 /join world 或 /join lfg，与全服玩家聊天。"
     },
-    "itemHeroicTag": "[HEROIC]",
+    "itemHeroicTag": "[英雄]",
     "itemSoulbound": "灵魂绑定",
     "itemSet": {
       "header": "{name} ({have}/{total})",
@@ -4038,7 +4041,17 @@ export const zh_CN: EnTranslations = {
     "enterTimeout": "无法进入世界。连接已超时。游戏服务器是否正在运行？",
     "connectionLost": "与服务器的连接已断开。",
     "reconnecting": "连接已断开。正在重新连接...",
-    "connectionRejected": "服务器关闭了连接。"
+    "connectionRejected": "服务器关闭了连接。",
+    "tips": {
+      "classes": "提示：9 个职业玩法各不相同，投入之前不妨都试一试。",
+      "talents": "提示：你可以在任意脱离战斗的时候重置天赋，因此早期的选择永远不会成为陷阱。",
+      "dungeons": "提示：装备超出普通难度要求后，试试地下城的英雄难度，享受更艰难也更有回报的战斗。",
+      "market": "提示：世界市场可以让你与全服玩家进行买卖交易。",
+      "guilds": "提示：加入公会可获得专属聊天频道和公会成员名单。",
+      "professions": "提示：采集与制造类生活技能可以与你的战斗职业同时培养。",
+      "loadouts": "提示：保存多套天赋配置，即可在不同 build 间切换而无需重新分配天赋点。",
+      "pvp": "提示：向其他玩家发起友谊决斗，或报名灰烬竞技场，来检验你的 build。"
+    }
   },
   "errors": {
     "nothingInteract": "附近没有可互动目标。",
@@ -7642,7 +7655,7 @@ export const zh_CN: EnTranslations = {
       "q_prof_intro": {
         "title": "人人都有一技之长",
         "text": "伊斯特布鲁克的每个人都有除了剑术之外的手艺，{playerName}。镇子周围散落着矿脉，去挥镐采上5块矿石带给我。要亲自采，别耍花招，我看得出来。",
-        "completion": "看到了吧？矿石进了包里，手上也磨出了茧子。继续在路上采矿、伐木、采药，回到镇上时，留意市场旁的城镇专注面板和附近的制作台。只要你愿意，这里面都有正经买卖等着你。",
+        "completion": "看到了吧？矿石进了包里，手上也磨出了茧子。继续在路上采矿、伐木、采药，回到镇上时，留意市场旁的城镇专注面板和附近的制作台。只要你愿意，靠这些都能正经谋生。",
         "objectives": {
           "0": {
             "label": "矿石块"

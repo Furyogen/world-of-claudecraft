@@ -155,10 +155,12 @@ export const it_IT: EnTranslations = {
       "banner": "Stai osservando {name}"
     },
     "readyCheck": {
-      "prompt": "{name} has started a ready check. Are you ready?",
-      "ready": "Ready",
-      "notReady": "Not Ready",
-      "result": "Ready check: {ready} ready, {notReady} not ready, {noResponse} no response."
+      "prompt": "{name} ha avviato un controllo di prontezza. Sei pronto?",
+      "ready": "Pronto",
+      "notReady": "Non pronto",
+      "result": "Controllo di prontezza: {ready} pronti, {notReady} non pronti, {noResponse} senza risposta.",
+      "notInPartyError": "Devi essere in un gruppo per avviare un controllo di prontezza.",
+      "inProgressError": "È già in corso un controllo di prontezza."
     },
     "death": {
       "resurrectAtCorpse": "Risorgi al cadavere",
@@ -238,7 +240,8 @@ export const it_IT: EnTranslations = {
         "eligible": "Ricompense sbloccate.",
         "no_wallet": "Collega un portafoglio con almeno 20 USD in WOC.",
         "under_minimum": "Il portafoglio è sotto il minimo di 20 USD in WOC.",
-        "price_unavailable": "Il prezzo di WOC non è disponibile, le ricompense sono temporaneamente bloccate."
+        "price_unavailable": "Il prezzo di WOC non è disponibile, le ricompense sono temporaneamente bloccate.",
+        "banned": "Sei escluso dalle Ricompense giornaliere. Motivo: {reason}"
       }
     },
     "wocStore": {
@@ -506,12 +509,12 @@ export const it_IT: EnTranslations = {
       "targetFriendlyNext": "Scorri i bersagli amici",
       "discord": "Discord",
       "valecup": "Coppa della Valle",
-      "categoryPet": "Pet",
-      "petAttack": "Pet: Attack",
-      "petStop": "Pet: Stop",
-      "petTaunt": "Pet: Taunt",
-      "petDefensive": "Pet: Defensive",
-      "petAggressive": "Pet: Aggressive"
+      "categoryPet": "Famiglio",
+      "petAttack": "Famiglio: attacca",
+      "petStop": "Famiglio: fermo",
+      "petTaunt": "Famiglio: provoca",
+      "petDefensive": "Famiglio: difensivo",
+      "petAggressive": "Famiglio: aggressivo"
     },
     "vcup": {
       "title": "La Coppa della Valle",
@@ -836,8 +839,8 @@ export const it_IT: EnTranslations = {
     "tips": {
       "joinChannels": "Suggerimento: digita /join world o /join lfg per chattare con i giocatori di tutto il mondo."
     },
-    "itemHeroicTag": "[HEROIC]",
-    "itemSoulbound": "Soulbound",
+    "itemHeroicTag": "[EROICO]",
+    "itemSoulbound": "Vincolato all’anima",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1184,10 +1187,10 @@ export const it_IT: EnTranslations = {
       "spawn": "{name} si erge sulle Alture di Thornpeak!"
     },
     "auth": {
-      "appleLoginCta": "Continue with Apple",
-      "appleError": "Could not sign in with Apple. Please try again.",
-      "appleChoiceIntro": "Create a new account, or link Apple to one you already have.",
-      "appleChoiceExpired": "That Apple sign-in expired. Please sign in with Apple again.",
+      "appleLoginCta": "Continua con Apple",
+      "appleError": "Impossibile accedere con Apple. Riprova.",
+      "appleChoiceIntro": "Crea un nuovo account oppure collega Apple a un account esistente.",
+      "appleChoiceExpired": "Questo accesso con Apple è scaduto. Accedi di nuovo con Apple.",
       "forgotPrompt": "Password dimenticata?",
       "forgotTitle": "Reimposta la password",
       "forgotHint": "Inserisci il tuo nome utente e invieremo un link di reimpostazione all’indirizzo e-mail registrato.",
@@ -1432,8 +1435,8 @@ export const it_IT: EnTranslations = {
       "parcelsLabel": "Pacchi",
       "parcelsHint": "Clicca un oggetto nelle tue borse per allegarlo.",
       "removeParcelAria": "Rimuovi {item} dalla lettera",
-      "parcelQtyDecreaseAria": "Send one fewer {item}",
-      "parcelQtyIncreaseAria": "Send one more {item}",
+      "parcelQtyDecreaseAria": "Invia un {item} in meno",
+      "parcelQtyIncreaseAria": "Invia un {item} in più",
       "sendButton": "Invia lettera",
       "postageNote": "Affrancatura: {amount}. Il corvo vola per circa {seconds}s.",
       "arrivedBanner": "Il corvo è atterrato: posta da {name}.",
@@ -4038,7 +4041,17 @@ export const it_IT: EnTranslations = {
     "enterTimeout": "Impossibile entrare nel mondo. La connessione è scaduta. Il server di gioco è in esecuzione?",
     "connectionLost": "Connessione al server persa.",
     "reconnecting": "Connessione persa. Riconnessione...",
-    "connectionRejected": "Il server ha chiuso la connessione."
+    "connectionRejected": "Il server ha chiuso la connessione.",
+    "tips": {
+      "classes": "Suggerimento: ciascuna delle 9 classi si gioca in modo diverso. Provane alcune prima di sceglierne una.",
+      "talents": "Suggerimento: puoi azzerare i talenti ogni volta che sei fuori combattimento, quindi una scelta iniziale non è mai definitiva.",
+      "dungeons": "Suggerimento: prova un sotterraneo in difficoltà eroica quando la modalità normale non rappresenta più una sfida per il tuo equipaggiamento, per uno scontro più duro e gratificante.",
+      "market": "Suggerimento: il Mercato Mondiale ti permette di comprare e vendere con giocatori di tutto il reame.",
+      "guilds": "Suggerimento: unirti a una gilda ti offre un canale di chat privato e un elenco condiviso dei compagni di gilda.",
+      "professions": "Suggerimento: puoi apprendere le professioni di raccolta e creazione insieme alla tua classe di combattimento.",
+      "loadouts": "Suggerimento: salva più configurazioni dei talenti per passare da una build all’altra senza spendere i punti due volte.",
+      "pvp": "Suggerimento: sfida un altro giocatore a un duello amichevole oppure mettiti in coda per l’arena del Colosseo Cinereo per mettere alla prova la tua build."
+    }
   },
   "errors": {
     "nothingInteract": "Non c'è nulla con cui interagire.",
@@ -5957,7 +5970,7 @@ export const it_IT: EnTranslations = {
         "name": "Zanna del vecchio Greyjaw"
       },
       "chunk_of_ore": {
-        "name": "Chunk of Ore"
+        "name": "Pezzo di Minerale"
       },
       "weathered_ledger_page": {
         "name": "Pagina di registro logora"
@@ -5990,13 +6003,13 @@ export const it_IT: EnTranslations = {
         "name": "Ritaglio di lino"
       },
       "arcane_dust": {
-        "name": "Arcane Dust"
+        "name": "Polvere Arcana"
       },
       "arcane_essence": {
-        "name": "Arcane Essence"
+        "name": "Essenza Arcana"
       },
       "arcane_shard": {
-        "name": "Arcane Shard"
+        "name": "Frammento Arcano"
       },
       "fen_muster_order": {
         "name": "Ordine di raduno di Fenbridge"
@@ -7640,12 +7653,12 @@ export const it_IT: EnTranslations = {
     },
     "quests": {
       "q_prof_intro": {
-        "title": "A Trade for Every Hand",
-        "text": "Every soul in Eastbrook works a trade besides the sword, {playerName}. There's ore veins scattered round town, so go swing a pick and bring me 5 chunks. Mine them yourself, mind; I'll know the difference.",
-        "completion": "See? Ore in your pack and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
+        "title": "Un mestiere per ogni mano",
+        "text": "A Eastbrook ogni anima pratica un mestiere oltre all’arte della spada, {playerName}. Ci sono vene di minerale sparse intorno alla città, quindi impugna un piccone e portami 5 pezzi. Estraili tu, bada bene, saprò riconoscere la differenza.",
+        "completion": "Vedi? Minerale nello zaino e calli sulle mani. Continua a estrarre minerali, tagliare legna e raccogliere erbe mentre percorri le strade. Quando torni in città, tieni d’occhio il tabellone delle Priorità della città vicino al mercato e il banco da lavoro lì accanto. C’è un mestiere onesto in tutto questo, se ti interessa.",
         "objectives": {
           "0": {
-            "label": "Chunk of Ore"
+            "label": "Pezzo di Minerale"
           }
         }
       },

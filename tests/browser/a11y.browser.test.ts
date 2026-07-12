@@ -488,6 +488,7 @@ describe('axe: character window', () => {
             cfg: { playerClass: 'warrior' },
             player: { name: 'Aurelia', level: 60, skin: 0 },
             equipment: {},
+            professionsState: { skills: [] },
           }) as never,
         statCellHtml: () => '',
         statTooltipHtml: () => '',

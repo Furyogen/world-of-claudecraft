@@ -212,6 +212,12 @@ import { fctSpawnShape } from './fct_event';
 import { FctPainter } from './fct_painter';
 import { FocusManager, type FocusTrapHandle } from './focus_manager';
 import {
+  PLAYER_FRAME_POS_KEY,
+  resetFramePositionsOnce,
+  TARGET_FRAME_POS_KEY,
+} from './frame_pos_reset';
+import { gossipMenuIsEmpty } from './gossip_menu';
+import {
   type AimPoint,
   abilityAoeRadius,
   cancelGroundAim,
@@ -400,6 +406,8 @@ import { installWindowResize, markResizableWindow } from './window_resize';
 import { formatXp, xpBarView } from './xp_bar';
 import { XpBarPainter } from './xp_bar_painter';
 import { YumiMatchPainter } from './yumi_match_painter';
+
+let lpAdvancedLast = -1;
 
 // hooks main wires after Input exists (the options menu drives input, audio,
 // graphics, and logout, all of which live outside the HUD). PerfOverlayHooks
@@ -713,9 +721,9 @@ const CHAT_GEOMETRY_KEY = 'woc_chat_geometry';
 // bottom resize handle. CSS clamps it to a valid range for the live viewport, so a value
 // saved in one orientation stays safe in another (never an off-screen / tiny panel).
 const MOBILE_CHAT_BOTTOM_KEY = 'woc_mobile_chat_bottom';
-// Persisted top-left for each movable unit frame (MovableFrame in movable_frame.ts).
-const TARGET_FRAME_POS_KEY = 'woc_target_frame_pos';
-const PLAYER_FRAME_POS_KEY = 'woc_player_frame_pos';
+// The persisted top-left keys for the movable unit frames live in
+// frame_pos_reset.ts (imported above) so the one-time reset clears the same
+// keys the MovableFrames read.
 const CHAT_TEMPLATE_KEYS = {
   party: 'hud.chat.templates.party',
   yell: 'hud.chat.templates.yell',
@@ -784,6 +792,15 @@ function mobVoiceFamily(templateId: string): string | null {
   if (templateId === 'wild_boar' || templateId === 'elder_bristleback') return 'boar';
   const fam = MOBS[templateId]?.family;
   return fam && SFX_MOB_FAMILIES.has(fam) ? fam : null;
+}
+
+/** Most-specific SFX key for a mob action. Prefers the subfamily key
+ *  (mob_beast_wolf_attack) when that clip is loaded; falls back to the
+ *  family key (mob_beast_attack) otherwise. Resolved at runtime so new
+ *  creature-specific files just need a manifest rebuild, no code change. */
+function mobSfxKey(fam: string, templateId: string, action: string): string {
+  const subKey = `mob_${fam}_${templateId}_${action}`;
+  return sfx.hasVariants(subKey) ? subKey : `mob_${fam}_${action}`;
 }
 
 /** Sustained cast-loop clip for an ability's school, or null (physical/unknown). */
@@ -2598,6 +2615,10 @@ export class Hud {
   // -------------------------------------------------------------------------
 
   private initFrameMovers(): void {
+    // One-time v0.24.1 cleanup: drop frame drags saved against the reverted
+    // PR #1736 overhaul layout BEFORE the movers read them back (a saved
+    // position applies, and detaches the player frame, at construction).
+    resetFramePositionsOnce(localStorage);
     const isMobileLayout = () => this.isMobileLayout();
     // A live desktop-to-mobile viewport flip must re-home the anchored aura
     // bars (mobile owns its own aura placement), and the flip back re-anchors.
@@ -8419,7 +8440,10 @@ export class Hud {
         } else if (ev.crit && tgt.kind === 'mob' && shouldPlayCritSfxForTarget(tgt)) {
           const fam = mobVoiceFamily(tgt.templateId);
           if (fam && shouldPlayMobVoiceSfxForEntity(tgt))
-            this.combat(`mob_${fam}_attack`, tp.x, tp.y, tp.z, 0.6, { rate: 1.25, cooldown: 0.1 });
+            this.combat(mobSfxKey(fam, tgt.templateId, 'attack'), tp.x, tp.y, tp.z, 0.6, {
+              rate: 1.25,
+              cooldown: 0.1,
+            });
         }
         return;
       }
@@ -8471,7 +8495,7 @@ export class Hud {
           this.mobAggroed.delete(ev.entityId);
           const fam = mobVoiceFamily(ent.templateId);
           if (fam && shouldPlayMobVoiceSfxForEntity(ent))
-            this.combat(`mob_${fam}_death`, p.x, p.y, p.z, 0.8);
+            this.combat(mobSfxKey(fam, ent.templateId, 'death'), p.x, p.y, p.z, 0.8);
         } else if (ent.kind === 'player' && ev.entityId !== sim.playerId) {
           this.combat('player_death', p.x, p.y, p.z, 0.7);
         }
@@ -8488,7 +8512,7 @@ export class Hud {
     this.mobAggroed.add(mob.id);
     const fam = mobVoiceFamily(mob.templateId);
     if (fam && shouldPlayMobVoiceSfxForEntity(mob))
-      this.combat(`mob_${fam}_aggro`, mob.pos.x, mob.pos.y, mob.pos.z, 0.7);
+      this.combat(mobSfxKey(fam, mob.templateId, 'aggro'), mob.pos.x, mob.pos.y, mob.pos.z, 0.7);
     return true;
   }
 
@@ -8499,7 +8523,14 @@ export class Hud {
       if (this.ensureMobEngaged(src)) return; // just fired the aggro alert
       const fam = mobVoiceFamily(src.templateId);
       if (fam && shouldPlayMobVoiceSfxForEntity(src))
-        this.combat(`mob_${fam}_attack`, src.pos.x, src.pos.y, src.pos.z, 0.55, { cooldown: 0.25 });
+        this.combat(
+          mobSfxKey(fam, src.templateId, 'attack'),
+          src.pos.x,
+          src.pos.y,
+          src.pos.z,
+          0.55,
+          { cooldown: 0.25 },
+        );
     } else if (src.kind === 'player') {
       this.combat(weaponSwingKey(src.templateId), src.pos.x, src.pos.y, src.pos.z, 0.5, {
         cooldown: 0.08,
@@ -9502,12 +9533,45 @@ export class Hud {
           break;
         case 'lockpickSession':
           this.openLockpickBoard();
+          sfx.playUi('lockpick_begin');
           break;
-        case 'lockpickStep':
+        case 'lockpickStep': {
           this.lockpickWindow.onStep(ev.result);
+          switch (ev.result) {
+            case 'advanced': {
+              let pick = Math.floor(Math.random() * 4);
+              if (pick === lpAdvancedLast) pick = (pick + 1) % 4;
+              lpAdvancedLast = pick;
+              sfx.playUi(`lockpick_advanced_${pick + 1}`);
+              break;
+            }
+            case 'slip':
+              sfx.playUi('lockpick_slip');
+              break;
+            case 'bind':
+              sfx.playUi('lockpick_bind');
+              break;
+            case 'trap':
+              sfx.playUi('lockpick_trap');
+              break;
+            case 'pageCleared':
+              sfx.playUi('lockpick_page_cleared');
+              break;
+            case 'retry':
+              sfx.playUi('lockpick_retry');
+              break;
+            case 'success':
+              sfx.playUi('lockpick_success');
+              break;
+            case 'fail':
+              sfx.playUi('lockpick_fail');
+              break;
+          }
           break;
+        }
         case 'lockpickEnd':
           this.endLockpick(ev.outcome, ev.lootTier);
+          if (ev.outcome === 'success') sfx.playUi('lockpick_end');
           break;
         case 'lockpickBonus': {
           const tier =
@@ -9517,6 +9581,7 @@ export class Hud {
                 ? t('sim.lockpick.tierMedium')
                 : t('sim.lockpick.tierLow');
           this.combatLog(t('sim.lockpick.lockYields', { tier }), '#ffdd88');
+          sfx.playUi('lockpick_bonus');
           break;
         }
         case 'delveRiteChoosePrompt':
@@ -9865,6 +9930,8 @@ export class Hud {
       'No one has whispered you recently.': 'hud.errors.noRecentWhisper',
       'You mutter to yourself. Nobody hears it.': 'hud.errors.whisperSelf',
       'You are not in a party.': 'hud.errors.notInParty',
+      'You must be in a party to start a ready check.': 'hudChrome.readyCheck.notInPartyError',
+      'A ready check is already in progress.': 'hudChrome.readyCheck.inProgressError',
       'Only the party leader can change the loot method.': 'hudChrome.masterLoot.leaderOnly',
       'Only the party leader may invite.': 'hud.errors.partyLeaderInvite',
       'Your party is full.': 'hud.errors.partyFull',
@@ -10612,10 +10679,13 @@ export class Hud {
     this.renderGossip(npc);
   }
 
-  private renderGossip(npc: Entity): void {
-    this.openGossipNpcId = npc.id;
-    this.openQuestDetailId = null;
-    const el = $('#quest-dialog');
+  // closeIfEmpty is set only when re-rendering after an accept/turn-in click:
+  // a fresh NPC visit (or navigating Back) always shows the greeting even with
+  // an empty menu, but once the player has just resolved the one thing the NPC
+  // had to offer (the common case for a tutorial giver with a single starter
+  // quest), an empty menu means there is nothing left to do here and the
+  // window should close itself instead of hanging open with just the greeting.
+  private renderGossip(npc: Entity, closeIfEmpty = false): void {
     const def = NPCS[npc.templateId];
     // accepted-but-unfinished quests are tracked in the quest log; the NPC
     // only offers new quests (at the giver) and turn-ins (at the turn-in NPC)
@@ -10637,6 +10707,29 @@ export class Hud {
         ),
       )
       .map((qp) => qp.questId);
+    const hasVendor = npc.vendorItems.length > 0;
+    const hasMarket = !!def?.market;
+    const hasHeroicVendor = !!def?.heroicVendor;
+    const hasDelveBoard = Object.values(DELVES).some((d) => d.boardNpcId === npc.templateId);
+    const hasVcup = npc.templateId === 'groundskeeper_bram';
+    if (
+      closeIfEmpty &&
+      gossipMenuIsEmpty({
+        questCount: interesting.length,
+        discussionCount: discussionQuests.length,
+        hasVendor,
+        hasMarket,
+        hasHeroicVendor,
+        hasDelveBoard,
+        hasVcup,
+      })
+    ) {
+      this.closeQuestDialog();
+      return;
+    }
+    this.openGossipNpcId = npc.id;
+    this.openQuestDetailId = null;
+    const el = $('#quest-dialog');
     markDialogRoot(el, { labelledBy: 'quest-dialog-title' });
     const npcName = def ? npcDisplayName(npc.templateId) : mobDisplayName(npc.templateId);
     const npcTitle = def ? npcDisplayTitle(def.id) : '';
@@ -10661,16 +10754,16 @@ export class Hud {
         html += `<button type="button" class="qd-list-item" data-discuss="${esc(qid)}" aria-label="${esc(t('questUi.dialog.discussQuestAria', { name: title }))}"><span class="gold">?</span> ${esc(t('questUi.dialog.discussQuest', { name: title }))}</button>`;
       }
     }
-    if (npc.vendorItems.length > 0) {
+    if (hasVendor) {
       html += `<button type="button" class="qd-list-item" data-vendor="1" aria-label="${esc(t('questUi.dialog.browseGoodsAria', { name: npcName }))}"><span class="quest-complete">$</span> ${esc(t('questUi.dialog.browseGoods'))}</button>`;
     }
-    if (def?.market) {
+    if (hasMarket) {
       html += `<button type="button" class="qd-list-item" data-market="1" aria-label="${esc(t('questUi.dialog.worldMarketAria'))}"><span class="gold">${svgIcon('market')}</span> ${esc(t('questUi.dialog.worldMarket'))}</button>`;
     }
-    if (def?.heroicVendor) {
+    if (hasHeroicVendor) {
       html += `<button type="button" class="qd-list-item" data-heroic-shop="1" aria-label="${esc(t('questUi.dialog.browseGoodsAria', { name: npcName }))}"><span class="quest-complete">$</span> ${esc(t('questUi.dialog.browseGoods'))}</button>`;
     }
-    if (Object.values(DELVES).some((d) => d.boardNpcId === npc.templateId)) {
+    if (hasDelveBoard) {
       const delveForNpc = Object.values(DELVES).find((d) => d.boardNpcId === npc.templateId);
       const openLabel = delveForNpc
         ? delveDisplayName(delveForNpc.id)
@@ -10679,7 +10772,7 @@ export class Hud {
     }
     // Groundskeeper Bram keeps the book of fixtures at the Sowfield gate: his
     // gossip menu opens the Vale Cup window (the delve-board button precedent).
-    if (npc.templateId === 'groundskeeper_bram') {
+    if (hasVcup) {
       html += `<button type="button" class="qd-list-item" data-vcup="1" aria-label="${esc(t('hudChrome.vcup.gossipOpenAria'))}"><span class="gold">${svgIcon('ball')}</span> ${esc(t('hudChrome.vcup.gossipOpen'))}</button>`;
     }
     el.innerHTML = html;
@@ -10770,7 +10863,7 @@ export class Hud {
         this.sim.reportTelemetry('quest_accept', {
           timeMs: performance.now() - this.questDialogOpenedAtMs,
         });
-        this.renderGossip(npc);
+        this.renderGossip(npc, true);
       });
       el.appendChild(btn);
     } else if (state === 'ready') {
@@ -10783,7 +10876,7 @@ export class Hud {
         this.sim.reportTelemetry('quest_turnin', {
           timeMs: performance.now() - this.questDialogOpenedAtMs,
         });
-        this.renderGossip(npc);
+        this.renderGossip(npc, true);
       });
       el.appendChild(btn);
     }

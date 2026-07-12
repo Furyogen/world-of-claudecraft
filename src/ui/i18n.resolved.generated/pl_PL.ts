@@ -155,10 +155,12 @@ export const pl_PL: EnTranslations = {
       "banner": "Obserwujesz {name}"
     },
     "readyCheck": {
-      "prompt": "{name} has started a ready check. Are you ready?",
-      "ready": "Ready",
-      "notReady": "Not Ready",
-      "result": "Ready check: {ready} ready, {notReady} not ready, {noResponse} no response."
+      "prompt": "{name} rozpoczyna sprawdzenie gotowości. Czy wszystko gotowe?",
+      "ready": "Gotowość",
+      "notReady": "Brak gotowości",
+      "result": "Sprawdzenie gotowości: {ready} gotowych, {notReady} niegotowych, {noResponse} bez odpowiedzi.",
+      "notInPartyError": "Aby rozpocząć sprawdzenie gotowości, musisz należeć do grupy.",
+      "inProgressError": "Sprawdzenie gotowości już trwa."
     },
     "death": {
       "resurrectAtCorpse": "Odrodź się przy zwłokach",
@@ -238,7 +240,8 @@ export const pl_PL: EnTranslations = {
         "eligible": "Nagrody odblokowane.",
         "no_wallet": "Podłącz portfel z co najmniej 20 USD w WOC.",
         "under_minimum": "Portfel jest poniżej minimum 20 USD w WOC.",
-        "price_unavailable": "Cena WOC jest niedostępna, nagrody są tymczasowo zablokowane."
+        "price_unavailable": "Cena WOC jest niedostępna, nagrody są tymczasowo zablokowane.",
+        "banned": "Masz zakaz udziału w codziennych nagrodach. Powód: {reason}"
       }
     },
     "wocStore": {
@@ -506,12 +509,12 @@ export const pl_PL: EnTranslations = {
       "targetFriendlyNext": "Przełączaj przyjazny cel",
       "discord": "Discord",
       "valecup": "Puchar Doliny",
-      "categoryPet": "Pet",
-      "petAttack": "Pet: Attack",
-      "petStop": "Pet: Stop",
-      "petTaunt": "Pet: Taunt",
-      "petDefensive": "Pet: Defensive",
-      "petAggressive": "Pet: Aggressive"
+      "categoryPet": "Zwierzę",
+      "petAttack": "Zwierzę: Atak",
+      "petStop": "Zwierzę: Zatrzymaj",
+      "petTaunt": "Zwierzę: Prowokacja",
+      "petDefensive": "Zwierzę: Obronne",
+      "petAggressive": "Zwierzę: Agresywne"
     },
     "vcup": {
       "title": "Puchar Doliny",
@@ -836,8 +839,8 @@ export const pl_PL: EnTranslations = {
     "tips": {
       "joinChannels": "Wskazówka: wpisz /join world lub /join lfg, aby rozmawiać z graczami z całego świata."
     },
-    "itemHeroicTag": "[HEROIC]",
-    "itemSoulbound": "Soulbound",
+    "itemHeroicTag": "[HEROICZNY]",
+    "itemSoulbound": "Związany z duszą",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1184,10 +1187,10 @@ export const pl_PL: EnTranslations = {
       "spawn": "{name} powstaje nad Wyżynami Ciernistego Szczytu!"
     },
     "auth": {
-      "appleLoginCta": "Continue with Apple",
-      "appleError": "Could not sign in with Apple. Please try again.",
-      "appleChoiceIntro": "Create a new account, or link Apple to one you already have.",
-      "appleChoiceExpired": "That Apple sign-in expired. Please sign in with Apple again.",
+      "appleLoginCta": "Kontynuuj przez Apple",
+      "appleError": "Nie udało się zalogować przez Apple. Spróbuj ponownie.",
+      "appleChoiceIntro": "Utwórz nowe konto albo połącz Apple z istniejącym kontem.",
+      "appleChoiceExpired": "To logowanie przez Apple wygasło. Zaloguj się ponownie przez Apple.",
       "forgotPrompt": "Nie pamiętasz hasła?",
       "forgotTitle": "Zresetuj hasło",
       "forgotHint": "Podaj nazwę użytkownika, a wyślemy link do resetowania na zapisany adres e-mail.",
@@ -1432,8 +1435,8 @@ export const pl_PL: EnTranslations = {
       "parcelsLabel": "Paczki",
       "parcelsHint": "Kliknij przedmiot w torbach, aby go załączyć.",
       "removeParcelAria": "Usuń {item} z listu",
-      "parcelQtyDecreaseAria": "Send one fewer {item}",
-      "parcelQtyIncreaseAria": "Send one more {item}",
+      "parcelQtyDecreaseAria": "Wyślij o jedną sztukę {item} mniej",
+      "parcelQtyIncreaseAria": "Wyślij o jedną sztukę {item} więcej",
       "sendButton": "Wyślij list",
       "postageNote": "Opłata pocztowa: {amount}. Kruk leci około {seconds} s.",
       "arrivedBanner": "Kruk wylądował: poczta od {name}.",
@@ -4038,7 +4041,17 @@ export const pl_PL: EnTranslations = {
     "enterTimeout": "Nie udało się wejść do świata. Upłynął limit czasu połączenia. Czy serwer gry jest uruchomiony?",
     "connectionLost": "Połączenie z serwerem zostało utracone.",
     "reconnecting": "Połączenie utracone. Ponowne łączenie...",
-    "connectionRejected": "Serwer zamknął połączenie."
+    "connectionRejected": "Serwer zamknął połączenie.",
+    "tips": {
+      "classes": "Wskazówka: każdą z 9 klas gra się inaczej. Wypróbuj kilka, zanim zdecydujesz się na jedną.",
+      "talents": "Wskazówka: poza walką możesz w każdej chwili wyzerować talenty, więc wczesny wybór nigdy nie jest pułapką.",
+      "dungeons": "Wskazówka: gdy twój ekwipunek stanie się zbyt dobry na zwykły poziom lochu, spróbuj poziomu heroicznego, aby stoczyć trudniejszą i bardziej opłacalną walkę.",
+      "market": "Wskazówka: na Rynku Świata możesz kupować i sprzedawać z graczami z całego królestwa.",
+      "guilds": "Wskazówka: dołączenie do gildii daje ci prywatny kanał czatu i wspólną listę członków gildii.",
+      "professions": "Wskazówka: profesje zbierackie i rzemieślnicze można szkolić równolegle z klasą bojową.",
+      "loadouts": "Wskazówka: zapisz więcej niż jeden zestaw talentów, aby przełączać się między konfiguracjami bez ponownego wydawania punktów.",
+      "pvp": "Wskazówka: wyzwij innego gracza na przyjazny pojedynek lub dołącz do kolejki na arenę Popielnego Koloseum, aby przetestować swoją konfigurację."
+    }
   },
   "errors": {
     "nothingInteract": "Brak obiektu do interakcji.",
@@ -5957,7 +5970,7 @@ export const pl_PL: EnTranslations = {
         "name": "Kieł Starego Szaroszczękiego"
       },
       "chunk_of_ore": {
-        "name": "Chunk of Ore"
+        "name": "Kawałek rudy"
       },
       "weathered_ledger_page": {
         "name": "Zniszczona strona księgi"
@@ -7640,12 +7653,12 @@ export const pl_PL: EnTranslations = {
     },
     "quests": {
       "q_prof_intro": {
-        "title": "A Trade for Every Hand",
-        "text": "Every soul in Eastbrook works a trade besides the sword, {playerName}. There's ore veins scattered round town, so go swing a pick and bring me 5 chunks. Mine them yourself, mind; I'll know the difference.",
-        "completion": "See? Ore in your pack and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
+        "title": "Fach dla każdej dłoni",
+        "text": "Każdy w Eastbrook para się jakimś fachem oprócz władania mieczem, {playerName}. Wokół miasta pełno żył rudy, więc chwyć za kilof i przynieś mi 5 kawałków. Wydobądź je własnoręcznie; poznam różnicę.",
+        "completion": "Widzisz? Ruda w torbie i odciski na dłoniach. Dalej zajmuj się górnictwem, wyrębem i zielarstwem podczas wędrówek, a gdy wrócisz do miasta, pamiętaj o tablicy Priorytetów miasta przy targu i pobliskim stole rzemieślniczym. Na tym wszystkim można uczciwie zarobić, jeśli zechcesz.",
         "objectives": {
           "0": {
-            "label": "Chunk of Ore"
+            "label": "Kawałek rudy"
           }
         }
       },
