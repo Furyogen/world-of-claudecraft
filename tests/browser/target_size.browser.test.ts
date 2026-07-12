@@ -220,8 +220,7 @@ describe('mobile target-size: bag/bank slot cells stay comfortable in every dock
     const icon = el('img', { class: 'item-icon', alt: '' });
     cell.appendChild(icon);
     grid.appendChild(cell);
-    for (let i = 0; i < 7; i++)
-      grid.appendChild(el('button', { class: 'bag-item q-common' }));
+    for (let i = 0; i < 7; i++) grid.appendChild(el('button', { class: 'bag-item q-common' }));
     for (let i = 0; i < 4; i++)
       grid.appendChild(el('div', { class: 'bag-item empty', 'aria-hidden': 'true' }));
     body.append(bar, filterBar, grid);
@@ -242,8 +241,7 @@ describe('mobile target-size: bag/bank slot cells stay comfortable in every dock
     const grid = el('div', { class: 'bank-grid' });
     const cell = el('button', { class: 'bank-item q-common' });
     grid.appendChild(cell);
-    for (let i = 0; i < 7; i++)
-      grid.appendChild(el('button', { class: 'bank-item q-common' }));
+    for (let i = 0; i < 7; i++) grid.appendChild(el('button', { class: 'bank-item q-common' }));
     scroll.appendChild(grid);
     body.appendChild(scroll);
     frame.appendChild(body);
@@ -326,9 +324,7 @@ describe('mobile target-size: bag/bank slot cells stay comfortable in every dock
     expect(narrowSize.w, 'desktop .bag-item width at 412px').toBe(CELL_FLOOR);
     expect(narrowSize.h, 'desktop .bag-item height at 412px').toBe(CELL_FLOOR);
     expect(wideSize.w, 'desktop .bag-item width must not grow with the window').toBe(narrowSize.w);
-    expect(wideSize.h, 'desktop .bag-item height must not grow with the window').toBe(
-      narrowSize.h,
-    );
+    expect(wideSize.h, 'desktop .bag-item height must not grow with the window').toBe(narrowSize.h);
   });
 
   it('desktop bag-grid rows never overlap once cells wrap past one row', () => {

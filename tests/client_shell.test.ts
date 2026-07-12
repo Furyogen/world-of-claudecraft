@@ -39,6 +39,10 @@ const componentsCss = readFileSync(
   new URL('../src/styles/components.css', import.meta.url),
   'utf8',
 ).replace(/\r\n/g, '\n');
+const tokensCss = readFileSync(
+  new URL('../src/styles/tokens.css', import.meta.url),
+  'utf8',
+).replace(/\r\n/g, '\n');
 const shellCss = readFileSync(new URL('../src/styles/shell.css', import.meta.url), 'utf8').replace(
   /\r\n/g,
   '\n',
