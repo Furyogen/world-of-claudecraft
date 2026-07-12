@@ -285,6 +285,22 @@ export const fr_FR: EnTranslations = {
       "resetAction": "Réinitialiser",
       "note": "Faites glisser la barre d'onglets de la discussion pour déplacer la fenêtre, ou la poignée d'angle pour la redimensionner. Réinitialiser la rétablit à sa position et sa taille par défaut."
     },
+    "chat": {
+      "categories": {
+        "hide": "Hide {category} lines in the All view",
+        "show": "Show {category} lines in the All view",
+        "game": "Game",
+        "loot": "Loot",
+        "xp": "XP",
+        "quest": "Quests",
+        "event": "Events",
+        "public": "Public",
+        "party": "Party",
+        "guild": "Guild",
+        "channels": "Channels",
+        "whispers": "Whispers"
+      }
+    },
     "swing": {
       "ready": "Coup",
       "seconds": "{seconds} s"

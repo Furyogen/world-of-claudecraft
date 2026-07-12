@@ -285,6 +285,22 @@ export const de_DE: EnTranslations = {
       "resetAction": "Zurücksetzen",
       "note": "Ziehe die Chat-Reiterleiste, um das Fenster zu verschieben, oder den Eckgriff, um die Größe zu ändern. Zurücksetzen stellt die Standardposition und -größe wieder her."
     },
+    "chat": {
+      "categories": {
+        "hide": "Hide {category} lines in the All view",
+        "show": "Show {category} lines in the All view",
+        "game": "Game",
+        "loot": "Loot",
+        "xp": "XP",
+        "quest": "Quests",
+        "event": "Events",
+        "public": "Public",
+        "party": "Party",
+        "guild": "Guild",
+        "channels": "Channels",
+        "whispers": "Whispers"
+      }
+    },
     "swing": {
       "ready": "Schwung",
       "seconds": "{seconds}s"

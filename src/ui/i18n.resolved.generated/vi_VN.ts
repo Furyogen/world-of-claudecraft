@@ -285,6 +285,22 @@ export const vi_VN: EnTranslations = {
       "resetAction": "Đặt Lại",
       "note": "Kéo dải thẻ trò chuyện để di chuyển cửa sổ, hoặc kéo góc để thay đổi kích thước. Đặt Lại sẽ đưa cửa sổ về vị trí và kích thước mặc định."
     },
+    "chat": {
+      "categories": {
+        "hide": "Hide {category} lines in the All view",
+        "show": "Show {category} lines in the All view",
+        "game": "Game",
+        "loot": "Loot",
+        "xp": "XP",
+        "quest": "Quests",
+        "event": "Events",
+        "public": "Public",
+        "party": "Party",
+        "guild": "Guild",
+        "channels": "Channels",
+        "whispers": "Whispers"
+      }
+    },
     "swing": {
       "ready": "Vung Đòn",
       "seconds": "{seconds}s"

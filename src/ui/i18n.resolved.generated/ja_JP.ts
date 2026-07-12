@@ -285,6 +285,22 @@ export const ja_JP: EnTranslations = {
       "resetAction": "リセット",
       "note": "チャットのタブ列をドラッグするとウィンドウを移動でき、右下のグリップをドラッグするとサイズを変更できます。リセットすると既定の位置とサイズに戻ります。"
     },
+    "chat": {
+      "categories": {
+        "hide": "「全体」表示で{category}の行を非表示にする",
+        "show": "「全体」表示で{category}の行を表示する",
+        "game": "ゲーム",
+        "loot": "戦利品",
+        "xp": "経験値",
+        "quest": "クエスト",
+        "event": "イベント",
+        "public": "公開",
+        "party": "パーティー",
+        "guild": "ギルド",
+        "channels": "チャンネル",
+        "whispers": "ささやき"
+      }
+    },
     "swing": {
       "ready": "攻撃",
       "seconds": "{seconds}秒"

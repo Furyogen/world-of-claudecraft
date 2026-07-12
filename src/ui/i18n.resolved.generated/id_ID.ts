@@ -285,6 +285,22 @@ export const id_ID: EnTranslations = {
       "resetAction": "Atur Ulang",
       "note": "Seret bilah tab obrolan untuk memindahkan jendela, atau pegangan sudut untuk mengubah ukurannya. Atur Ulang mengembalikannya ke posisi dan ukuran bawaan."
     },
+    "chat": {
+      "categories": {
+        "hide": "Hide {category} lines in the All view",
+        "show": "Show {category} lines in the All view",
+        "game": "Game",
+        "loot": "Loot",
+        "xp": "XP",
+        "quest": "Quests",
+        "event": "Events",
+        "public": "Public",
+        "party": "Party",
+        "guild": "Guild",
+        "channels": "Channels",
+        "whispers": "Whispers"
+      }
+    },
     "swing": {
       "ready": "Ayun",
       "seconds": "{seconds}d"

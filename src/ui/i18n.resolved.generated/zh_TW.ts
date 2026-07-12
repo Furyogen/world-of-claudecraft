@@ -285,6 +285,22 @@ export const zh_TW: EnTranslations = {
       "resetAction": "重設",
       "note": "拖曳聊天標籤列可移動視窗，拖曳右下角控點可調整大小。重設可回復到預設位置與大小。"
     },
+    "chat": {
+      "categories": {
+        "hide": "在「全部」檢視中隱藏{category}訊息",
+        "show": "在「全部」檢視中顯示{category}訊息",
+        "game": "遊戲",
+        "loot": "拾取",
+        "xp": "經驗",
+        "quest": "任務",
+        "event": "活動",
+        "public": "公共",
+        "party": "隊伍",
+        "guild": "公會",
+        "channels": "頻道",
+        "whispers": "密語"
+      }
+    },
     "swing": {
       "ready": "揮砍",
       "seconds": "{seconds}秒"

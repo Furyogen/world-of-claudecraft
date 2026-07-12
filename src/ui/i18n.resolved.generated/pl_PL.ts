@@ -285,6 +285,22 @@ export const pl_PL: EnTranslations = {
       "resetAction": "Resetuj",
       "note": "Przeciągnij pasek zakładek czatu, aby przesunąć okno, lub uchwyt w rogu, aby zmienić jego rozmiar. Reset przywraca domyślną pozycję i rozmiar."
     },
+    "chat": {
+      "categories": {
+        "hide": "Hide {category} lines in the All view",
+        "show": "Show {category} lines in the All view",
+        "game": "Game",
+        "loot": "Loot",
+        "xp": "XP",
+        "quest": "Quests",
+        "event": "Events",
+        "public": "Public",
+        "party": "Party",
+        "guild": "Guild",
+        "channels": "Channels",
+        "whispers": "Whispers"
+      }
+    },
     "swing": {
       "ready": "Zamach",
       "seconds": "{seconds}s"

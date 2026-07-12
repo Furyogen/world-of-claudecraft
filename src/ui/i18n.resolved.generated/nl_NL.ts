@@ -285,6 +285,22 @@ export const nl_NL: EnTranslations = {
       "resetAction": "Resetten",
       "note": "Sleep de chattabbladstrook om het venster te verplaatsen, of de hoekgreep om het te vergroten of verkleinen. Resetten zet het terug naar de standaardpositie en -grootte."
     },
+    "chat": {
+      "categories": {
+        "hide": "Hide {category} lines in the All view",
+        "show": "Show {category} lines in the All view",
+        "game": "Game",
+        "loot": "Loot",
+        "xp": "XP",
+        "quest": "Quests",
+        "event": "Events",
+        "public": "Public",
+        "party": "Party",
+        "guild": "Guild",
+        "channels": "Channels",
+        "whispers": "Whispers"
+      }
+    },
     "swing": {
       "ready": "Slag",
       "seconds": "{seconds}s"

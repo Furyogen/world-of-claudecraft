@@ -285,6 +285,22 @@ export const pt_BR: EnTranslations = {
       "resetAction": "Redefinir",
       "note": "Arraste a faixa de abas do chat para mover a janela, ou a alça do canto para redimensioná-la. Redefinir devolve a janela à posição e ao tamanho padrão."
     },
+    "chat": {
+      "categories": {
+        "hide": "Hide {category} lines in the All view",
+        "show": "Show {category} lines in the All view",
+        "game": "Game",
+        "loot": "Loot",
+        "xp": "XP",
+        "quest": "Quests",
+        "event": "Events",
+        "public": "Public",
+        "party": "Party",
+        "guild": "Guild",
+        "channels": "Channels",
+        "whispers": "Whispers"
+      }
+    },
     "swing": {
       "ready": "Golpe",
       "seconds": "{seconds}s"

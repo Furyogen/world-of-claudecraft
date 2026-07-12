@@ -285,6 +285,22 @@ export const cs_CZ: EnTranslations = {
       "resetAction": "Reset",
       "note": "Tažením lišty karet chatu přesuneš okno, rohovým úchytem změníš velikost. Reset ho vrátí na výchozí pozici a velikost."
     },
+    "chat": {
+      "categories": {
+        "hide": "Hide {category} lines in the All view",
+        "show": "Show {category} lines in the All view",
+        "game": "Game",
+        "loot": "Loot",
+        "xp": "XP",
+        "quest": "Quests",
+        "event": "Events",
+        "public": "Public",
+        "party": "Party",
+        "guild": "Guild",
+        "channels": "Channels",
+        "whispers": "Whispers"
+      }
+    },
     "swing": {
       "ready": "Úder",
       "seconds": "{seconds} s"

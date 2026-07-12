@@ -285,6 +285,22 @@ export const zh_CN: EnTranslations = {
       "resetAction": "重置",
       "note": "拖动聊天标签栏可移动窗口，拖动右下角手柄可调整大小。重置可恢复到默认位置和大小。"
     },
+    "chat": {
+      "categories": {
+        "hide": "在\"全部\"视图中隐藏{category}消息",
+        "show": "在\"全部\"视图中显示{category}消息",
+        "game": "游戏",
+        "loot": "拾取",
+        "xp": "经验",
+        "quest": "任务",
+        "event": "活动",
+        "public": "公共",
+        "party": "队伍",
+        "guild": "公会",
+        "channels": "频道",
+        "whispers": "密语"
+      }
+    },
     "swing": {
       "ready": "挥击",
       "seconds": "{seconds}秒"

@@ -285,6 +285,22 @@ export const sv_SE: EnTranslations = {
       "resetAction": "Återställ",
       "note": "Dra chattflikraden för att flytta fönstret, eller hörnhandtaget för att ändra storlek. Återställ sätter det till standardläge och -storlek."
     },
+    "chat": {
+      "categories": {
+        "hide": "Hide {category} lines in the All view",
+        "show": "Show {category} lines in the All view",
+        "game": "Game",
+        "loot": "Loot",
+        "xp": "XP",
+        "quest": "Quests",
+        "event": "Events",
+        "public": "Public",
+        "party": "Party",
+        "guild": "Guild",
+        "channels": "Channels",
+        "whispers": "Whispers"
+      }
+    },
     "swing": {
       "ready": "Sving",
       "seconds": "{seconds}s"

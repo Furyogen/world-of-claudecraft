@@ -53,3 +53,27 @@ describe('chat tab strip layout (issue #1365)', () => {
     expect(block(mobile, 'body.mobile-touch .chat-tab')).toMatch(/min-height:\s*40px/);
   });
 });
+
+describe('chat category filter strip layout (issue #1670)', () => {
+  it('stays a single nowrap row that scrolls horizontally, same as #chatlog-tabs', () => {
+    const b = block(hud, '.chat-category-strip');
+    expect(b).toMatch(/flex-wrap:\s*nowrap/);
+    expect(b).toMatch(/overflow-x:\s*auto/);
+  });
+
+  it('mobile category toggles meet the 40px touch floor', () => {
+    expect(block(mobile, 'body.mobile-touch .chat-category-toggle')).toMatch(/min-height:\s*40px/);
+  });
+
+  // Regression: the strip shipped in index.html but not play.html, so
+  // renderChatCategoryStrip's early return silently dropped the whole
+  // feature on the canonical /play entry. Both entries hand-carry the same
+  // chat DOM (see tests/entry_window_parity.test.ts for the equivalent
+  // .window panel guard), so pin this id in both too.
+  it('index.html and play.html both carry #chat-category-strip', () => {
+    const index = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+    const play = readFileSync(new URL('../play.html', import.meta.url), 'utf8');
+    expect(index).toContain('id="chat-category-strip"');
+    expect(play).toContain('id="chat-category-strip"');
+  });
+});

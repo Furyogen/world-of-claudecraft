@@ -285,6 +285,22 @@ export const tr_TR: EnTranslations = {
       "resetAction": "Sıfırla",
       "note": "Pencereyi taşımak için sohbet sekme şeridini, yeniden boyutlandırmak için köşe tutamacını sürükleyin. Sıfırla, onu varsayılan konum ve boyutuna döndürür."
     },
+    "chat": {
+      "categories": {
+        "hide": "Hide {category} lines in the All view",
+        "show": "Show {category} lines in the All view",
+        "game": "Game",
+        "loot": "Loot",
+        "xp": "XP",
+        "quest": "Quests",
+        "event": "Events",
+        "public": "Public",
+        "party": "Party",
+        "guild": "Guild",
+        "channels": "Channels",
+        "whispers": "Whispers"
+      }
+    },
     "swing": {
       "ready": "Vuruş",
       "seconds": "{seconds}sn"

@@ -285,6 +285,22 @@ export const da_DK: EnTranslations = {
       "resetAction": "Nulstil",
       "note": "Træk chatfanestriben for at flytte vinduet, eller hjørnegrebet for at ændre størrelse. Nulstil sætter det tilbage til standardposition og -størrelse."
     },
+    "chat": {
+      "categories": {
+        "hide": "Hide {category} lines in the All view",
+        "show": "Show {category} lines in the All view",
+        "game": "Game",
+        "loot": "Loot",
+        "xp": "XP",
+        "quest": "Quests",
+        "event": "Events",
+        "public": "Public",
+        "party": "Party",
+        "guild": "Guild",
+        "channels": "Channels",
+        "whispers": "Whispers"
+      }
+    },
     "swing": {
       "ready": "Slag",
       "seconds": "{seconds}s"

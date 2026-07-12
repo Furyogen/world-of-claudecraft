@@ -285,6 +285,22 @@ export const it_IT: EnTranslations = {
       "resetAction": "Ripristina",
       "note": "Trascina la barra delle schede della chat per spostare la finestra, oppure l'angolo per ridimensionarla. Ripristina la riporta a posizione e dimensioni predefinite."
     },
+    "chat": {
+      "categories": {
+        "hide": "Hide {category} lines in the All view",
+        "show": "Show {category} lines in the All view",
+        "game": "Game",
+        "loot": "Loot",
+        "xp": "XP",
+        "quest": "Quests",
+        "event": "Events",
+        "public": "Public",
+        "party": "Party",
+        "guild": "Guild",
+        "channels": "Channels",
+        "whispers": "Whispers"
+      }
+    },
     "swing": {
       "ready": "Attacco",
       "seconds": "{seconds}s"

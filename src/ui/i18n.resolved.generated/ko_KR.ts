@@ -285,6 +285,22 @@ export const ko_KR: EnTranslations = {
       "resetAction": "초기화",
       "note": "채팅 탭 줄을 드래그하면 창을 이동하고, 모서리 손잡이를 드래그하면 크기를 조절할 수 있습니다. 초기화하면 기본 위치와 크기로 돌아갑니다."
     },
+    "chat": {
+      "categories": {
+        "hide": "전체 보기에서 {category} 메시지 숨기기",
+        "show": "전체 보기에서 {category} 메시지 표시",
+        "game": "게임",
+        "loot": "전리품",
+        "xp": "경험치",
+        "quest": "퀘스트",
+        "event": "이벤트",
+        "public": "공개",
+        "party": "파티",
+        "guild": "길드",
+        "channels": "채널",
+        "whispers": "귓속말"
+      }
+    },
     "swing": {
       "ready": "공격",
       "seconds": "{seconds}초"
