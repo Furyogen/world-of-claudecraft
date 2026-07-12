@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { nearestVoicePeers, VOICE_PEER_CAP } from '../../server/voice_signaling';
+import { nearestVoicePeers, VOICE_PEER_CAP, voicePeerLists } from '../../server/voice_signaling';
 
 describe('nearestVoicePeers', () => {
   it('excludes self and sorts closest first', () => {
@@ -47,5 +47,41 @@ describe('nearestVoicePeers', () => {
       { pid: 2, name: 'B', x: 3, z: 4 },
     ];
     expect(nearestVoicePeers(self, others).map((p) => p.pid)).toEqual([2, 5]);
+  });
+});
+
+describe('voicePeerLists', () => {
+  it('emits only mutual peer relationships in crowded groups', () => {
+    const candidates = [
+      { pid: 1, name: 'One', x: 0, z: 0 },
+      { pid: 2, name: 'Two', x: 1, z: 0 },
+      { pid: 3, name: 'Three', x: 2, z: 0 },
+      { pid: 4, name: 'Four', x: 3, z: 0 },
+    ];
+    const lists = voicePeerLists(candidates, 1);
+
+    for (const [pid, peers] of lists) {
+      for (const peer of peers) {
+        expect(lists.get(peer.pid)?.some((other) => other.pid === pid)).toBe(true);
+      }
+    }
+    expect(lists.get(1)).toEqual([{ pid: 2, name: 'Two' }]);
+    expect(lists.get(2)).toEqual([{ pid: 1, name: 'One' }]);
+    expect(lists.get(3)).toEqual([{ pid: 4, name: 'Four' }]);
+    expect(lists.get(4)).toEqual([{ pid: 3, name: 'Three' }]);
+  });
+
+  it('never exceeds the per-player cap', () => {
+    const candidates = Array.from({ length: 12 }, (_, i) => ({
+      pid: i + 1,
+      name: `P${i + 1}`,
+      x: i,
+      z: 0,
+    }));
+    const lists = voicePeerLists(candidates, 3);
+
+    for (const peers of lists.values()) {
+      expect(peers.length).toBeLessThanOrEqual(3);
+    }
   });
 });

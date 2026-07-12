@@ -1505,6 +1505,7 @@ export class ClientWorld implements IWorld {
         this.onReconnected?.();
       }
       this.connected = true;
+      if (this.voice.isEnabled()) this.sendVoiceOptIn(true);
       return;
     }
     if (msg.t === 'spectate') {

@@ -121,7 +121,7 @@ import { SocialService } from './social';
 import { PgSocialDb } from './social_db';
 import { TickProfiler } from './tick_profiler';
 import { hrtimeToMs, TickRateMeter } from './tick_rate_meter';
-import { nearestVoicePeers, type VoiceCandidate } from './voice_signaling';
+import { type VoiceCandidate, voicePeerLists } from './voice_signaling';
 import { holderInfoForPubkey } from './woc_balance';
 import { isBackpressureExceeded } from './ws_backpressure';
 
@@ -1436,12 +1436,12 @@ export class GameServer {
     }
   }
 
-  // Recompute each voice-opted-in player's nearest VOICE_PEER_CAP voice-opted-in
-  // neighbors and push the resulting list. The server is the single source of
-  // truth for pairing (both sides of a pair see it land in the same tick), which
-  // is what lets the client use a simple "lower pid offers" rule to avoid glare
-  // without a separate negotiation. voicePeerIds is also the signaling-relay
-  // allowlist: dropped here, offer/answer/ice to that pid stop relaying.
+  // Recompute each voice-opted-in player's capped voice mesh and push the
+  // resulting list. The server is the single source of truth for pairing: every
+  // emitted pair is mutual, which lets the client use a simple "lower pid
+  // offers" rule to avoid glare without a separate negotiation. voicePeerIds is
+  // also the signaling-relay allowlist: dropped here, offer/answer/ice to that
+  // pid stop relaying.
   private broadcastVoicePeers(): void {
     const candidates: VoiceCandidate[] = [];
     const sessions: ClientSession[] = [];
@@ -1452,10 +1452,9 @@ export class GameServer {
       candidates.push({ pid: session.pid, name: session.name, x: e.pos.x, z: e.pos.z });
       sessions.push(session);
     }
+    const peerLists = voicePeerLists(candidates);
     for (const session of sessions) {
-      const self = candidates.find((c) => c.pid === session.pid);
-      if (!self) continue;
-      const peers = nearestVoicePeers(self, candidates);
+      const peers = peerLists.get(session.pid) ?? [];
       session.voicePeerIds = new Set(peers.map((p) => p.pid));
       this.send(session, { t: 'voicepeers', list: peers });
     }
