@@ -180,6 +180,48 @@ describe('skin apply rule', () => {
   });
 });
 
+describe('bow skin attack animation (hunter draw instead of crossbow aim)', () => {
+  it('bow skins substitute the draw clip; every other type keeps the authored attack', async () => {
+    const { weaponSkinAttackClips, SKIN_ATTACK_CLIP_NAMES } = await import(
+      '../src/render/characters/skin_attack'
+    );
+    for (const skin of WEAPON_SKIN_LIST) {
+      const sub = weaponSkinAttackClips(skin.id);
+      if (skin.weaponType === 'bow') {
+        expect(sub?.clips, skin.id).toContain('2H_Ranged_Reload');
+        // Every substitute clip must be one the constructor binds.
+        for (const clip of sub?.clips ?? []) expect(SKIN_ATTACK_CLIP_NAMES).toContain(clip);
+      } else {
+        expect(sub, `${skin.id} (${skin.weaponType}) must keep the authored attack`).toBeNull();
+      }
+    }
+    expect(weaponSkinAttackClips(null)).toBeNull();
+    expect(weaponSkinAttackClips('not_a_skin')).toBeNull();
+  });
+
+  it('the hunter ships the bow clips via animUrls and the GLB carries them', () => {
+    // Source scan, not an import: pulling the manifest into Node would kick
+    // the module-import GLB preloads (assets.ts loading contract).
+    const manifestSrc = readFileSync(join(ROOT, 'src/render/characters/manifest.ts'), 'utf8');
+    const hunterBlock = manifestSrc.slice(
+      manifestSrc.indexOf('player_hunter: {'),
+      manifestSrc.indexOf('player_rogue: {'),
+    );
+    expect(hunterBlock).toContain('bow_anims.glb');
+    // Parse the shipped GLB's JSON chunk and assert the clips are inside
+    // (scripts/build_bow_anims.mjs output; regenerate from the CC0 pack).
+    const glb = readFileSync(join(ROOT, 'public/models/chars/players/bow_anims.glb'));
+    const jsonLen = glb.readUInt32LE(12);
+    const doc = JSON.parse(glb.subarray(20, 20 + jsonLen).toString('utf8'));
+    const clips = (doc.animations ?? []).map((a: { name?: string }) => a.name);
+    for (const name of ['2H_Ranged_Aiming', '2H_Ranged_Reload', '2H_Ranged_Shooting']) {
+      expect(clips, name).toContain(name);
+    }
+    // Mesh-free clip donor: nothing to render, just bones + tracks.
+    expect(doc.meshes ?? []).toEqual([]);
+  });
+});
+
 describe('grip override wiring (editor saves reach the game)', () => {
   it('the render attach path consumes WEAPON_GRIP_OVERRIDES via variantGripTransform', () => {
     // Round-1 port regression guard: weapon_grip.ts (the registry the

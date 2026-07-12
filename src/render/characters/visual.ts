@@ -27,6 +27,7 @@ import {
   tintedFarMaterials,
 } from './assets';
 import type { EmoteClipSpec, VisualDef, WeaponLayoutOverride } from './manifest';
+import { SKIN_ATTACK_CLIP_NAMES, weaponSkinAttackClips } from './skin_attack';
 
 export type { AnimState, BaseState } from './anim_state';
 
@@ -54,6 +55,7 @@ const WORLD_FOV_SPRITE_SCALE = weaponVfxSpriteScaleForFov(60);
 const FADE = 0.22;
 const ONESHOT_FADE = 0.1;
 const HIT_REACT_COOLDOWN = 0.9;
+
 // Lie_Idle already lays the rig flat — a touch of extra pitch reads as a
 // surface glide; clip-less rigs (creatures) get the full procedural prone
 const SWIM_PITCH_CLIP = 0.35;
@@ -219,7 +221,7 @@ export class CharacterVisual {
     this.root.add(this.clickProxy);
 
     this.mixer = new THREE.AnimationMixer(this.model);
-    for (const name of clipNamesOf(prep.def)) {
+    for (const name of [...clipNamesOf(prep.def), ...SKIN_ATTACK_CLIP_NAMES]) {
       const clip = prep.clips.get(name);
       if (clip) this.actions.set(name, this.mixer.clipAction(clip));
     }
@@ -311,10 +313,11 @@ export class CharacterVisual {
 
   playAttack(): void {
     if (this.deadLock) return;
-    const clips = this.def.clips.attack;
+    const skinAttack = weaponSkinAttackClips(this.weaponSkinId);
+    const clips = skinAttack?.clips ?? this.def.clips.attack;
     if (clips.length === 0) return;
     const name = clips[this.attackIdx++ % clips.length];
-    this.playOneShot(name, this.def.attackTimeScale ?? 1.3);
+    this.playOneShot(name, skinAttack?.timeScale ?? this.def.attackTimeScale ?? 1.3);
   }
 
   playHit(): void {
