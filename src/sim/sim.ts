@@ -734,7 +734,7 @@ export interface InstanceSlot {
   dungeonId: string;
   difficulty: DungeonDifficulty;
   slot: number;
-  partyKey: string | null; // party id or 'solo:<pid>'
+  partyKey: string | null; // 'party:<id>', 'solo:char:<characterId>', or the 'solo:<pid>' entity-id fallback
   mobIds: number[];
   objectIds: number[];
   exitId: number | null;
