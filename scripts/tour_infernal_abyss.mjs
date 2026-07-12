@@ -113,10 +113,14 @@ if (door) {
   await page.evaluate(
     (dx, dz) => {
       const g = window.__game;
-      const pos = g.sim.groundPos(dx, dz + 12);
+      // Offset diagonally so the archway is not hidden dead-center behind
+      // the player model from the chase camera.
+      const pos = g.sim.groundPos(dx - 4.5, dz + 4.5);
       g.sim.player.pos = pos;
       g.sim.player.prevPos = { ...pos };
-      const yaw = Math.atan2(dx - pos.x, dz - pos.z);
+      // Engine facing: PI faces +z, 0 faces -z, so aim the OPPOSITE of the
+      // player-to-door vector to look at the door.
+      const yaw = Math.atan2(pos.x - dx, pos.z - dz);
       g.sim.player.facing = yaw;
       g.input.camYaw = yaw;
       g.input.camPitch = 0.1;

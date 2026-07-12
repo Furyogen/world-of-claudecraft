@@ -591,7 +591,9 @@ export const INFERNAL_ABYSS_DUNGEON_DEFS: Record<string, DungeonDef> = {
     id: 'infernal_abyss',
     name: 'Molten Abyss',
     index: 6,
-    doorPos: { x: 155, z: 760 },
+    // At the FOOT of the Stormcrag cliff on gentle ground (h ~9.8): x >= 152
+    // is already the steep rock face and buries the door in the mountainside.
+    doorPos: { x: 148, z: 756 },
     entry: { x: 0, z: -10 },
     exitOffset: { x: 0, z: -14 },
     spawns: INFERNAL_ABYSS_SPAWNS,

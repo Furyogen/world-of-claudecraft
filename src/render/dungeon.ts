@@ -719,7 +719,7 @@ export class DungeonInteriors {
     this.placeDais(group, p, layout, variant);
     this.placeAisleClutter(p, layout, variant);
     if (variant !== 'infernal_abyss') this.placeWallDressing(p, layout, variant, arenaWalls);
-    else placeInfernalAbyssDressing(group, layout, this.lowGfx);
+    else placeInfernalAbyssDressing(group, layout, this.lowGfx, this.fireLights);
     if (variant === 'temple') {
       this.placeFloodwater(group, layout);
       this.placeAquaticDressing(group, layout);

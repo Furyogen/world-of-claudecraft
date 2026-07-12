@@ -80,7 +80,28 @@ function lavaMaterial(): THREE.ShaderMaterial {
   return lavaMat;
 }
 
-function placeLava(group: THREE.Group, decor: AuthoredDecor, lowGfx: boolean): void {
+// Brazier light on the pillar-torch contract (see dungeon.ts addPillarTorch):
+// initial intensity 10, budget-managed via userData.baseIntensity on high tier,
+// short throw on low. The braziers are the interior's primary light source; the
+// lava lights below are the bonus ember wash.
+const BRAZIER_LIGHT_COLOR = 0xff7a2a;
+const BRAZIER_LIGHT_Y = 2.8;
+const BRAZIER_LIGHT_DISTANCE = 34;
+const BRAZIER_LIGHT_DISTANCE_LOW = 22;
+const BRAZIER_LIGHT_INTENSITY_HIGH = 46;
+// A dim warm ember ambient so no room reads pure black away from a light
+// source (the global underground hemi is a cold 0.22). High tier only: low
+// gfx never applies the underground dimming, so it is already readable.
+const EMBER_HEMI_SKY = 0x8a3a1e;
+const EMBER_HEMI_GROUND = 0x140505;
+const EMBER_HEMI_INTENSITY = 0.5;
+
+function placeLava(
+  group: THREE.Group,
+  decor: AuthoredDecor,
+  lowGfx: boolean,
+  fireLights: THREE.PointLight[],
+): void {
   const scale = decor.scale ?? 1;
   let geometry: THREE.BufferGeometry;
   if (decor.key === 'lava_pool') {
@@ -101,10 +122,18 @@ function placeLava(group: THREE.Group, decor: AuthoredDecor, lowGfx: boolean): v
     light.position.set(decor.x, 1.1, decor.z);
     light.userData.baseIntensity = light.intensity;
     group.add(light);
+    // Join the renderer's ranked point-light budget: an unbudgeted light
+    // inflates numPointLights and recompiles every lit material as it streams.
+    fireLights.push(light);
   }
 }
 
-function placeProp(group: THREE.Group, decor: AuthoredDecor, lowGfx: boolean): void {
+function placeProp(
+  group: THREE.Group,
+  decor: AuthoredDecor,
+  lowGfx: boolean,
+  fireLights: THREE.PointLight[],
+): void {
   const source = sources.get(decor.key);
   if (!source) return;
   const model = source.clone(true);
@@ -117,18 +146,39 @@ function placeProp(group: THREE.Group, decor: AuthoredDecor, lowGfx: boolean): v
     node.receiveShadow = true;
   });
   group.add(model);
+  if (decor.key === 'lava_brazier') {
+    const light = new THREE.PointLight(
+      BRAZIER_LIGHT_COLOR,
+      10,
+      lowGfx ? BRAZIER_LIGHT_DISTANCE_LOW : BRAZIER_LIGHT_DISTANCE,
+      2,
+    );
+    if (!lowGfx) light.userData.baseIntensity = BRAZIER_LIGHT_INTENSITY_HIGH;
+    light.position.set(decor.x, BRAZIER_LIGHT_Y, decor.z);
+    group.add(light);
+    fireLights.push(light);
+  }
 }
 
 export function placeInfernalAbyssDressing(
   group: THREE.Group,
   layout: DungeonLayout,
   lowGfx: boolean,
+  fireLights: THREE.PointLight[],
 ): void {
   for (const decor of layout.decor ?? []) {
     if (decor.key === 'lava_pool' || decor.key === 'lava_fissure') {
-      placeLava(group, decor, lowGfx);
+      placeLava(group, decor, lowGfx, fireLights);
     } else {
-      placeProp(group, decor, lowGfx);
+      placeProp(group, decor, lowGfx, fireLights);
     }
+  }
+  if (!lowGfx) {
+    const ember = new THREE.HemisphereLight(
+      EMBER_HEMI_SKY,
+      EMBER_HEMI_GROUND,
+      EMBER_HEMI_INTENSITY,
+    );
+    group.add(ember);
   }
 }
