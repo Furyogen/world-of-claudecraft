@@ -1624,6 +1624,8 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'abilityUi.forms.cat': '늑대',
   'abilityUi.cast.fishing': '낚시',
   'abilityUi.cast.thunzharrStormcall': '폭풍의 부름',
+  'abilityUi.cast.forgekeepersWrath': '용광로지기의 분노',
+  'abilityUi.cast.azazelApocalypseFlame': '종말의 불꽃',
   'abilityUi.cast.demonHeal': '악마 치유',
   'questUi.tracker.title': '퀘스트',
   'questUi.tracker.complete': '완료',

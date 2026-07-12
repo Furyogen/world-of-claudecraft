@@ -4847,7 +4847,9 @@ export const ru_RU: EnTranslations = {
     "cast": {
       "fishing": "Рыбная ловля",
       "demonHeal": "Исцеление демона",
-      "thunzharrStormcall": "Зов бури"
+      "thunzharrStormcall": "Зов бури",
+      "forgekeepersWrath": "Гнев Хранителя горна",
+      "azazelApocalypseFlame": "Пламя апокалипсиса"
     }
   },
   "questUi": {

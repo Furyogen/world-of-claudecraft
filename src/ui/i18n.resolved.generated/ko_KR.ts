@@ -4847,7 +4847,9 @@ export const ko_KR: EnTranslations = {
     "cast": {
       "fishing": "낚시",
       "demonHeal": "악마 치유",
-      "thunzharrStormcall": "폭풍의 부름"
+      "thunzharrStormcall": "폭풍의 부름",
+      "forgekeepersWrath": "용광로지기의 분노",
+      "azazelApocalypseFlame": "종말의 불꽃"
     }
   },
   "questUi": {

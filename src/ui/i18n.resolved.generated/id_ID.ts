@@ -4847,7 +4847,9 @@ export const id_ID: EnTranslations = {
     "cast": {
       "fishing": "Memancing",
       "demonHeal": "Penyembuhan Iblis",
-      "thunzharrStormcall": "Panggilan Badai"
+      "thunzharrStormcall": "Panggilan Badai",
+      "forgekeepersWrath": "Forgekeeper's Wrath",
+      "azazelApocalypseFlame": "Apocalypse Flame"
     }
   },
   "questUi": {

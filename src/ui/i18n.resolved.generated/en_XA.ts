@@ -4847,7 +4847,9 @@ export const en_XA: EnTranslations = {
     "cast": {
       "fishing": "[Ƒíšĥíñĝ]",
       "demonHeal": "[Ðéɱóñ Ĥéáļ]",
-      "thunzharrStormcall": "[Šţóŕɱçáļļ]"
+      "thunzharrStormcall": "[Šţóŕɱçáļļ]",
+      "forgekeepersWrath": "[Ƒóŕĝéķééþéŕ'š Ŵŕáţĥ]",
+      "azazelApocalypseFlame": "[Áþóçáļýþšé Ƒļáɱé]"
     }
   },
   "questUi": {

@@ -565,7 +565,7 @@ const INFERNAL_ABYSS_SPAWNS: DungeonSpawn[] = [
   // Entry descent and lava maze, z 30 to 75.
   { mobId: 'abyssal_legionnaire', x: -5, z: 30 },
   { mobId: 'cinder_magus', x: 4, z: 32 },
-  { mobId: 'molten_hellhound', x: -9, z: 48 },
+  { mobId: 'molten_hellhound', x: -4, z: 40 },
   { mobId: 'molten_hellhound', x: -4, z: 50 },
   { mobId: 'abyssal_legionnaire', x: 7, z: 61 },
   { mobId: 'cinder_magus', x: 2, z: 64 },

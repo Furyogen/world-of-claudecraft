@@ -35,11 +35,30 @@ export interface InfernalMapPlayer {
   angle: number;
 }
 
+/** A live hostile mob dot (aggro = it is targeting the player). */
+export interface InfernalMapMob {
+  cx: number;
+  cy: number;
+  aggro: boolean;
+}
+
+/** A party member disc: class-colored by the painter, dimmed when dead. */
+export interface InfernalMapPartyMember {
+  cx: number;
+  cy: number;
+  cls: string;
+  dead: boolean;
+}
+
 export interface InfernalAbyssMapModel {
   rooms: InfernalMapRoom[];
   doors: InfernalMapRect[];
   lava: InfernalMapHazard[];
   lore: InfernalMapPoint[];
+  mobs: InfernalMapMob[];
+  party: InfernalMapPartyMember[];
+  /** The local player's own body while a ghost (the corpse-run target). */
+  corpse: { cx: number; cy: number } | null;
   player: InfernalMapPlayer;
 }
 
@@ -69,6 +88,9 @@ function layoutBounds(): InfernalBounds {
 }
 
 const BOUNDS = layoutBounds();
+// Live markers just outside the authored footprint (a mob leashing through a
+// doorway, a member on a room seam) still belong to this instance's schematic.
+const FOOTPRINT_SLACK = 6;
 
 /** Project instance-local coordinates into the complete dungeon schematic.
  * X is mirrored to preserve the established minimap convention. */
@@ -160,15 +182,64 @@ export function infernalAbyssMapModel(
     ...infernalAbyssLocalToCanvas(object.x, object.z, canvasSize, pad),
     scale: 1,
   }));
-  const local = infernalAbyssPlayerLocal(world.player.pos.x, world.player.pos.z);
+  const p = world.player;
+  const local = infernalAbyssPlayerLocal(p.pos.x, p.pos.z);
+  const originX = p.pos.x - local.localX;
+  const originZ = p.pos.z - local.localZ;
+  const inFootprint = (localX: number, localZ: number): boolean =>
+    localX >= BOUNDS.minX - FOOTPRINT_SLACK &&
+    localX <= BOUNDS.maxX + FOOTPRINT_SLACK &&
+    localZ >= BOUNDS.minZ - FOOTPRINT_SLACK &&
+    localZ <= BOUNDS.maxZ + FOOTPRINT_SLACK;
+
+  // Live hostile mobs, matching the delve-schematic precedent: the full
+  // authored map shows every live pull with its aggro state.
+  const mobs: InfernalMapMob[] = [];
+  for (const e of world.entities.values()) {
+    if (e.kind !== 'mob' || e.dead) continue;
+    const mobX = e.pos.x - originX;
+    const mobZ = e.pos.z - originZ;
+    if (!inFootprint(mobX, mobZ)) continue;
+    mobs.push({
+      ...infernalAbyssLocalToCanvas(mobX, mobZ, canvasSize, pad),
+      aggro: e.aggroTargetId === p.id,
+    });
+  }
+
+  // Party members inside this instance, class-colored like the delve map.
+  const party: InfernalMapPartyMember[] = [];
+  for (const m of world.partyInfo?.members ?? []) {
+    if (m.pid === p.id) continue;
+    const memberX = m.x - originX;
+    const memberZ = m.z - originZ;
+    if (!inFootprint(memberX, memberZ)) continue;
+    party.push({
+      ...infernalAbyssLocalToCanvas(memberX, memberZ, canvasSize, pad),
+      cls: m.cls,
+      dead: m.dead !== 0,
+    });
+  }
+
+  let corpse: { cx: number; cy: number } | null = null;
+  if (p.ghost && p.corpsePos) {
+    const corpseX = p.corpsePos.x - originX;
+    const corpseZ = p.corpsePos.z - originZ;
+    if (inFootprint(corpseX, corpseZ)) {
+      corpse = infernalAbyssLocalToCanvas(corpseX, corpseZ, canvasSize, pad);
+    }
+  }
+
   return {
     rooms,
     doors,
     lava,
     lore,
+    mobs,
+    party,
+    corpse,
     player: {
       ...infernalAbyssLocalToCanvas(local.localX, local.localZ, canvasSize, pad),
-      angle: -world.player.facing,
+      angle: -p.facing,
     },
   };
 }

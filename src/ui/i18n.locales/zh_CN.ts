@@ -1562,6 +1562,8 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'abilityUi.forms.cat': '狼',
   'abilityUi.cast.fishing': '钓鱼',
   'abilityUi.cast.thunzharrStormcall': '风暴召唤',
+  'abilityUi.cast.forgekeepersWrath': '铸炉守卫之怒',
+  'abilityUi.cast.azazelApocalypseFlame': '天启之焰',
   'abilityUi.cast.demonHeal': '恶魔治疗',
   'questUi.tracker.title': '任务',
   'questUi.tracker.complete': '完成',

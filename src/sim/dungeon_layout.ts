@@ -205,7 +205,6 @@ export const INFERNAL_ABYSS_LAYOUT: DungeonLayout = {
     { id: 'heart_cairn_boss_arena', x0: -34, x1: 34, z0: 173, z1: 219 },
   ],
   doors: [
-    { x: 0, z: -25, hw: 4, hd: 1 },
     { x: 0, z: 9, hw: 4, hd: 1 },
     { x: 0, z: 27, hw: 4, hd: 1 },
     { x: -34, z: 47, hw: 1, hd: 4 },

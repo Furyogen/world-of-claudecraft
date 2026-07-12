@@ -4847,7 +4847,9 @@ export const zh_TW: EnTranslations = {
     "cast": {
       "fishing": "釣魚",
       "demonHeal": "惡魔治療",
-      "thunzharrStormcall": "風暴召喚"
+      "thunzharrStormcall": "風暴召喚",
+      "forgekeepersWrath": "鑄爐守衛之怒",
+      "azazelApocalypseFlame": "天啟之焰"
     }
   },
   "questUi": {

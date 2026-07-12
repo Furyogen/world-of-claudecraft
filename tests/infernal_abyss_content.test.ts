@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { HEROIC_DUNGEON_TUNING } from '../src/sim/content/dungeon_difficulty';
 import { DUNGEON_LIST, DUNGEONS, ITEMS, MOBS, NPCS, QUESTS } from '../src/sim/data';
+import { weaponDpsBudget } from '../src/sim/item_budget';
+import { itemLevel } from '../src/sim/item_level';
 import { MAX_AGGRO_RADIUS } from '../src/sim/mob/locomotion';
 
 const DUNGEON_ID = 'infernal_abyss';
@@ -101,6 +103,42 @@ describe('Infernal Abyss content', () => {
     expect(QUESTS[QUEST_IDS[2]].objectives).toContainEqual(
       expect.objectContaining({ type: 'kill', targetMobId: 'azazel_infernal_lord', count: 1 }),
     );
+  });
+
+  it('pins the de-IP display names to literals (the ip_scrub renames)', () => {
+    // These are the strings the G0 Infernal rename produced; world_entity_i18n
+    // derives its English from these same records, so only an inline literal
+    // catches a rename regression.
+    expect(MOBS.azazel_infernal_lord.name).toBe('Azazel the Abyssal Lord');
+    expect(MOBS.infernal_cinderling.name).toBe('Abyssal Cinderling');
+    expect(ITEMS.infernal_slag.name).toBe('Abyssal Slag');
+    expect(QUESTS.q_infernal_abyss_azazel.name).toBe('Lord of the Molten Abyss');
+  });
+
+  it('keeps every dungeon weapon on the weaponDpsBudget curve', () => {
+    const weaponIds = [
+      'forgekeepers_warhammer',
+      'forgekeepers_runestaff',
+      'forgekeepers_fang',
+      'azazels_ruinblade',
+      'azazels_soulstaff',
+      'azazels_emberfang',
+    ];
+    for (const id of weaponIds) {
+      const item = ITEMS[id];
+      const weapon = item.weapon;
+      expect(weapon, `${id} is a weapon`).toBeDefined();
+      if (!weapon) continue;
+      const level = itemLevel(item);
+      expect(level, `${id} has an item level`).toBeDefined();
+      if (level === undefined) continue;
+      const dps = (weapon.min + weapon.max) / 2 / weapon.speed;
+      // Rounding min/max to integers can land ~0.5 dps off the exact curve.
+      expect(
+        Math.abs(dps - weaponDpsBudget(level)),
+        `${id} dps ${dps.toFixed(2)} vs budget ${weaponDpsBudget(level).toFixed(2)}`,
+      ).toBeLessThan(0.6);
+    }
   });
 
   it('carries a heroic tuning entry on the equalized five-man ladder', () => {

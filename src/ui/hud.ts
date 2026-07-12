@@ -570,6 +570,8 @@ const castDisplayName = (id: string): string => {
   if (id === FISHING_CAST_ID) return t('abilityUi.cast.fishing');
   if (id === 'demon_heal') return t('abilityUi.cast.demonHeal');
   if (id === 'thunzharr_stormcall') return t('abilityUi.cast.thunzharrStormcall');
+  if (id === 'forgekeepers_wrath') return t('abilityUi.cast.forgekeepersWrath');
+  if (id === 'azazel_apocalypse_flame') return t('abilityUi.cast.azazelApocalypseFlame');
   const ability = ABILITIES[id];
   return ability ? abilityDisplayName(ability) : id;
 };

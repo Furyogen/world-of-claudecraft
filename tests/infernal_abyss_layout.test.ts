@@ -3,6 +3,7 @@ import { type Collider, resolvePosition } from '../src/sim/colliders';
 import { DUNGEONS, instanceOrigin } from '../src/sim/data';
 import { DUNGEON_WALL_HW, INFERNAL_ABYSS_LAYOUT, layoutColliders } from '../src/sim/dungeon_layout';
 import { authoredWallSegments, inAnyRoom } from '../src/sim/dungeon_rooms';
+import { infernalLavaAt } from '../src/sim/instances/infernal_abyss_hazards';
 
 const rooms = INFERNAL_ABYSS_LAYOUT.rooms ?? [];
 const doors = INFERNAL_ABYSS_LAYOUT.doors ?? [];
@@ -135,8 +136,11 @@ describe('Infernal Abyss authored layout', () => {
     const wallPoint = { x: origin.x - 18, z: origin.z - 10 };
     expect(resolvePosition(42, wallPoint.x, wallPoint.z, 0.5)).not.toEqual(wallPoint);
 
-    const entranceDoor = { x: origin.x, z: origin.z - 25 };
-    expect(resolvePosition(42, entranceDoor.x, entranceDoor.z, 0.5)).toEqual(entranceDoor);
+    // The outermost shell is solid on purpose: the exit PORTAL at (0,-14) is
+    // the one way out (its 2.0 trigger radius could never cover a walkable
+    // opening, which would let players slip past it into the void).
+    const sealedShell = { x: origin.x, z: origin.z - 25 };
+    expect(resolvePosition(42, sealedShell.x, sealedShell.z, 0.5)).not.toEqual(sealedShell);
   });
 
   it('keeps every authored spawn and quest object inside unblocked floor space', () => {
@@ -147,6 +151,19 @@ describe('Infernal Abyss authored layout', () => {
       expect(
         colliders.some((collider) => blocks(collider, point.x, point.z, 0.5)),
         `${point.x},${point.z} is blocked`,
+      ).toBe(false);
+    }
+  });
+
+  it('keeps every authored spawn and quest object out of the lava hazards', () => {
+    // Lava has no collider, so the floor-space check above cannot catch a mob
+    // idling inside a pool (a melee player engaging it would eat 8 percent
+    // max hp per second at the pull position).
+    const dungeon = DUNGEONS.infernal_abyss;
+    for (const point of [...dungeon.spawns, ...(dungeon.objects ?? [])]) {
+      expect(
+        infernalLavaAt(point.x, point.z),
+        `spawn/object at ${point.x},${point.z} is in lava`,
       ).toBe(false);
     }
   });

@@ -1,8 +1,10 @@
-# Infernal Abyss
+# Molten Abyss (id `infernal_abyss`)
 
 ## Intent
 
-Infernal Abyss is a level 20, five-player lore dungeon beneath Stormcrag. It is a
+Molten Abyss is a level 20, five-player lore dungeon beneath Stormcrag. (The
+internal id keeps the original `infernal_abyss` slug; the display name avoids
+the de-IP denylisted word.) It is a
 separate story and space from every existing infernal rift. The visual target is a
 black-obsidian forge complex split by living lava, with readable red-orange lighting,
 large silhouettes and side chambers that reward exploration.
@@ -22,9 +24,9 @@ Visible walls, doorway gaps, prop footprints and minimap rooms all derive from
 | 1 | Ashen Descent | Safe entrance, first view of the chained forge |
 | 1 | Chainscar Descent | Compression corridor into the hostile complex |
 | 2 | Lava Maze | First trash gauntlet, lava pools and a lore tablet |
-| 2 | Lost Armory | Optional west branch with weapon racks and covenant evidence |
-| 3 | Infernal Forge | Forgekeeper miniboss and the smith's ledger |
-| 3 | Gladiator Pit | Optional east branch with elite gladiators and loot |
+| 2 | Lost Armory | Optional west branch with weapon racks and gear |
+| 3 | Infernal Forge | Forgekeeper miniboss and the Brands of the First Flame |
+| 3 | Gladiator Pit | Optional east branch with elite gladiators and the Forgekeeper's Ledger |
 | 3 | Maw Approach | Narrow regroup threshold after both branches |
 | 3 | Maw Bridge | Lava-fissure crossing and final trash pack |
 | 3 | Heart Cairn Vestibule | Pyre Golem miniboss and the broken covenant |
@@ -43,7 +45,7 @@ Loremaster Caddis offers three linked quests:
    the Brands of the First Flame.
 2. `The Broken Covenant` follows the Forgekeeper's Ledger and Azazel's Broken
    Covenant, revealing that the first flame was a seal, not an object of worship.
-3. `Lord of the Infernal Abyss` asks a full party to kill Azazel before the last clause
+3. `Lord of the Molten Abyss` asks a full party to kill Azazel before the last clause
    of the covenant burns away.
 
 Every lore object emits a short two-part vision. The prose is localized in the five

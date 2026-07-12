@@ -4847,7 +4847,9 @@ export const tr_TR: EnTranslations = {
     "cast": {
       "fishing": "Balık Tutma",
       "demonHeal": "Şeytan İyileştirmesi",
-      "thunzharrStormcall": "Fırtına Çağrısı"
+      "thunzharrStormcall": "Fırtına Çağrısı",
+      "forgekeepersWrath": "Forgekeeper's Wrath",
+      "azazelApocalypseFlame": "Apocalypse Flame"
     }
   },
   "questUi": {

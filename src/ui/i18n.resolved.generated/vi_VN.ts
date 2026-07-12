@@ -4847,7 +4847,9 @@ export const vi_VN: EnTranslations = {
     "cast": {
       "fishing": "Câu Cá",
       "demonHeal": "Quỷ Trị Liệu",
-      "thunzharrStormcall": "Tiếng Gọi Bão"
+      "thunzharrStormcall": "Tiếng Gọi Bão",
+      "forgekeepersWrath": "Forgekeeper's Wrath",
+      "azazelApocalypseFlame": "Apocalypse Flame"
     }
   },
   "questUi": {

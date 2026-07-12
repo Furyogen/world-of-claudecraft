@@ -4847,7 +4847,9 @@ export const nl_NL: EnTranslations = {
     "cast": {
       "fishing": "Vissen",
       "demonHeal": "Demonengenezing",
-      "thunzharrStormcall": "Stormroep"
+      "thunzharrStormcall": "Stormroep",
+      "forgekeepersWrath": "Forgekeeper's Wrath",
+      "azazelApocalypseFlame": "Apocalypse Flame"
     }
   },
   "questUi": {

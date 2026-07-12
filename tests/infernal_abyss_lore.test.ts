@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { infernalAbyssLoreLines } from '../src/sim/quests/infernal_abyss_lore';
+import { Sim } from '../src/sim/sim';
 import { setLanguage } from '../src/ui/i18n';
 import { localizeSimText } from '../src/ui/sim_i18n';
 
@@ -19,6 +20,47 @@ describe('Infernal Abyss lore visions', () => {
 
   it('does not invent dialogue for ordinary interactables', () => {
     expect(infernalAbyssLoreLines('not_infernal_lore')).toBeNull();
+  });
+
+  it('shares lore credit and the vision with nearby party members, like the graves', () => {
+    const sim = new Sim({ seed: 77, playerClass: 'warrior', playerName: 'Lead' });
+    sim.setPlayerLevel(20);
+    const allyPid = sim.addPlayer('mage', 'Ally');
+    sim.partyInvite(allyPid);
+    sim.partyAccept(allyPid);
+    sim.enterDungeon('infernal_abyss');
+
+    const tablet = [...sim.entities.values()].find(
+      (e) => e.kind === 'object' && e.objectItemId === 'charred_legion_tablet',
+    );
+    expect(tablet, 'the tablet spawns with the claimed instance').toBeTruthy();
+    if (!tablet) return;
+    sim.player.pos = { ...tablet.pos };
+    sim.player.prevPos = { ...tablet.pos };
+    const ally = sim.entities.get(allyPid);
+    if (ally) {
+      ally.pos = { x: tablet.pos.x + 5, y: tablet.pos.y, z: tablet.pos.z };
+      ally.prevPos = { ...ally.pos };
+    }
+    for (const pid of [sim.playerId, allyPid]) {
+      sim.meta(pid)?.questLog.set('q_infernal_abyss_echoes', {
+        questId: 'q_infernal_abyss_echoes',
+        counts: [0, 0],
+        state: 'active',
+      });
+    }
+
+    sim.pickUpObject(tablet.id);
+
+    expect(sim.questLog.get('q_infernal_abyss_echoes')?.counts[0]).toBe(1);
+    expect(sim.meta(allyPid)?.questLog.get('q_infernal_abyss_echoes')?.counts[0]).toBe(1);
+    const firstLine = infernalAbyssLoreLines('charred_legion_tablet')?.[0];
+    expect(sim.events).toContainEqual(
+      expect.objectContaining({ type: 'log', pid: sim.playerId, text: firstLine }),
+    );
+    expect(sim.events).toContainEqual(
+      expect.objectContaining({ type: 'log', pid: allyPid, text: firstLine }),
+    );
   });
 
   it('localizes every lore line in the five non-Latin M16 locales', () => {

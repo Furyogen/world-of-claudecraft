@@ -4847,7 +4847,9 @@ export const ja_JP: EnTranslations = {
     "cast": {
       "fishing": "釣り",
       "demonHeal": "悪魔の治癒",
-      "thunzharrStormcall": "嵐の呼び声"
+      "thunzharrStormcall": "嵐の呼び声",
+      "forgekeepersWrath": "炉の番人の怒り",
+      "azazelApocalypseFlame": "黙示の炎"
     }
   },
   "questUi": {

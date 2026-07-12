@@ -1663,6 +1663,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'abilityUi.forms.cat': 'волка',
   'abilityUi.cast.fishing': 'Рыбная ловля',
   'abilityUi.cast.thunzharrStormcall': 'Зов бури',
+  'abilityUi.cast.forgekeepersWrath': 'Гнев Хранителя горна',
+  'abilityUi.cast.azazelApocalypseFlame': 'Пламя апокалипсиса',
   'abilityUi.cast.demonHeal': 'Исцеление демона',
   'questUi.tracker.title': 'Задания',
   'questUi.tracker.complete': 'Готово',

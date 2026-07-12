@@ -10,6 +10,8 @@
 
 export const pending: Record<string, readonly string[]> = {
   "es": [
+    "abilityUi.cast.azazelApocalypseFlame",
+    "abilityUi.cast.forgekeepersWrath",
     "entities.dungeons.infernal_abyss.enterText",
     "entities.dungeons.infernal_abyss.leaveText",
     "entities.dungeons.infernal_abyss.name",
@@ -56,6 +58,8 @@ export const pending: Record<string, readonly string[]> = {
     "guide.dungeonsPage.abyssBody"
   ],
   "es_ES": [
+    "abilityUi.cast.azazelApocalypseFlame",
+    "abilityUi.cast.forgekeepersWrath",
     "entities.dungeons.infernal_abyss.enterText",
     "entities.dungeons.infernal_abyss.leaveText",
     "entities.dungeons.infernal_abyss.name",
@@ -102,6 +106,8 @@ export const pending: Record<string, readonly string[]> = {
     "guide.dungeonsPage.abyssBody"
   ],
   "fr_FR": [
+    "abilityUi.cast.azazelApocalypseFlame",
+    "abilityUi.cast.forgekeepersWrath",
     "entities.dungeons.infernal_abyss.enterText",
     "entities.dungeons.infernal_abyss.leaveText",
     "entities.dungeons.infernal_abyss.name",
@@ -148,6 +154,8 @@ export const pending: Record<string, readonly string[]> = {
     "guide.dungeonsPage.abyssBody"
   ],
   "fr_CA": [
+    "abilityUi.cast.azazelApocalypseFlame",
+    "abilityUi.cast.forgekeepersWrath",
     "entities.dungeons.infernal_abyss.enterText",
     "entities.dungeons.infernal_abyss.leaveText",
     "entities.dungeons.infernal_abyss.name",
@@ -195,6 +203,8 @@ export const pending: Record<string, readonly string[]> = {
   ],
   "en_CA": [],
   "it_IT": [
+    "abilityUi.cast.azazelApocalypseFlame",
+    "abilityUi.cast.forgekeepersWrath",
     "entities.dungeons.infernal_abyss.enterText",
     "entities.dungeons.infernal_abyss.leaveText",
     "entities.dungeons.infernal_abyss.name",
@@ -241,6 +251,8 @@ export const pending: Record<string, readonly string[]> = {
     "guide.dungeonsPage.abyssBody"
   ],
   "de_DE": [
+    "abilityUi.cast.azazelApocalypseFlame",
+    "abilityUi.cast.forgekeepersWrath",
     "entities.dungeons.infernal_abyss.enterText",
     "entities.dungeons.infernal_abyss.leaveText",
     "entities.dungeons.infernal_abyss.name",
@@ -291,6 +303,8 @@ export const pending: Record<string, readonly string[]> = {
   "ko_KR": [],
   "ja_JP": [],
   "pt_BR": [
+    "abilityUi.cast.azazelApocalypseFlame",
+    "abilityUi.cast.forgekeepersWrath",
     "entities.dungeons.infernal_abyss.enterText",
     "entities.dungeons.infernal_abyss.leaveText",
     "entities.dungeons.infernal_abyss.name",
@@ -338,6 +352,8 @@ export const pending: Record<string, readonly string[]> = {
   ],
   "ru_RU": [],
   "cs_CZ": [
+    "abilityUi.cast.azazelApocalypseFlame",
+    "abilityUi.cast.forgekeepersWrath",
     "entities.dungeons.infernal_abyss.enterText",
     "entities.dungeons.infernal_abyss.leaveText",
     "entities.dungeons.infernal_abyss.name",
@@ -384,6 +400,8 @@ export const pending: Record<string, readonly string[]> = {
     "guide.dungeonsPage.abyssBody"
   ],
   "nl_NL": [
+    "abilityUi.cast.azazelApocalypseFlame",
+    "abilityUi.cast.forgekeepersWrath",
     "entities.dungeons.infernal_abyss.enterText",
     "entities.dungeons.infernal_abyss.leaveText",
     "entities.dungeons.infernal_abyss.name",
@@ -430,6 +448,8 @@ export const pending: Record<string, readonly string[]> = {
     "guide.dungeonsPage.abyssBody"
   ],
   "pl_PL": [
+    "abilityUi.cast.azazelApocalypseFlame",
+    "abilityUi.cast.forgekeepersWrath",
     "entities.dungeons.infernal_abyss.enterText",
     "entities.dungeons.infernal_abyss.leaveText",
     "entities.dungeons.infernal_abyss.name",
@@ -476,6 +496,8 @@ export const pending: Record<string, readonly string[]> = {
     "guide.dungeonsPage.abyssBody"
   ],
   "id_ID": [
+    "abilityUi.cast.azazelApocalypseFlame",
+    "abilityUi.cast.forgekeepersWrath",
     "entities.dungeons.infernal_abyss.enterText",
     "entities.dungeons.infernal_abyss.leaveText",
     "entities.dungeons.infernal_abyss.name",
@@ -522,6 +544,8 @@ export const pending: Record<string, readonly string[]> = {
     "guide.dungeonsPage.abyssBody"
   ],
   "tr_TR": [
+    "abilityUi.cast.azazelApocalypseFlame",
+    "abilityUi.cast.forgekeepersWrath",
     "entities.dungeons.infernal_abyss.enterText",
     "entities.dungeons.infernal_abyss.leaveText",
     "entities.dungeons.infernal_abyss.name",
@@ -568,6 +592,8 @@ export const pending: Record<string, readonly string[]> = {
     "guide.dungeonsPage.abyssBody"
   ],
   "sv_SE": [
+    "abilityUi.cast.azazelApocalypseFlame",
+    "abilityUi.cast.forgekeepersWrath",
     "entities.dungeons.infernal_abyss.enterText",
     "entities.dungeons.infernal_abyss.leaveText",
     "entities.dungeons.infernal_abyss.name",
@@ -614,6 +640,8 @@ export const pending: Record<string, readonly string[]> = {
     "guide.dungeonsPage.abyssBody"
   ],
   "vi_VN": [
+    "abilityUi.cast.azazelApocalypseFlame",
+    "abilityUi.cast.forgekeepersWrath",
     "entities.dungeons.infernal_abyss.enterText",
     "entities.dungeons.infernal_abyss.leaveText",
     "entities.dungeons.infernal_abyss.name",
@@ -660,6 +688,8 @@ export const pending: Record<string, readonly string[]> = {
     "guide.dungeonsPage.abyssBody"
   ],
   "da_DK": [
+    "abilityUi.cast.azazelApocalypseFlame",
+    "abilityUi.cast.forgekeepersWrath",
     "entities.dungeons.infernal_abyss.enterText",
     "entities.dungeons.infernal_abyss.leaveText",
     "entities.dungeons.infernal_abyss.name",

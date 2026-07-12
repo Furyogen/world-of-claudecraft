@@ -102,6 +102,9 @@ const INFERNAL_LAVA_POOL_RADIUS = 2.4;
 const INFERNAL_LAVA_FISSURE_HALF_LENGTH = 4;
 const INFERNAL_LAVA_FISSURE_WIDTH = 2;
 const INFERNAL_LORE_HALF_SIZE = 2.2;
+// Fixed party-disc size on the schematic: the map is zoomed out and north-up,
+// so the overworld's proximity scaling does not apply.
+const INFERNAL_PARTY_DISC_RADIUS = 4;
 
 // Draw the corpse skull centered at (x, y): `fill` paints the bone, `socket` the
 // dark eye/nose hollows so the shape reads even over light terrain.
@@ -297,18 +300,32 @@ export class MinimapPainter {
     ctx.arc(S / 2, S / 2, S / 2 - CLIP_INSET, 0, FULL_CIRCLE);
     ctx.clip();
     ctx.drawImage(bg, 0, 0);
-    this.drawMarkers(
-      ctx,
-      [
-        {
-          kind: 'player',
-          mx: model.player.cx,
-          my: model.player.cy,
-          angle: model.player.angle,
-        },
-      ],
-      colors,
-    );
+    // Live markers over the cached schematic, delve-map style: every pull with
+    // its aggro state, the corpse-run skull, class-colored party discs, then
+    // the local player's facing arrow on top.
+    const markers: MinimapMarker[] = [];
+    for (const mob of model.mobs) {
+      markers.push({ kind: 'mob', mx: mob.cx, my: mob.cy, aggro: mob.aggro });
+    }
+    if (model.corpse) markers.push({ kind: 'corpse', mx: model.corpse.cx, my: model.corpse.cy });
+    for (const member of model.party) {
+      markers.push({
+        kind: 'party-disc',
+        mx: member.cx,
+        my: member.cy,
+        radius: INFERNAL_PARTY_DISC_RADIUS,
+        cls: member.cls,
+        dead: member.dead,
+        pip: !member.dead,
+      });
+    }
+    markers.push({
+      kind: 'player',
+      mx: model.player.cx,
+      my: model.player.cy,
+      angle: model.player.angle,
+    });
+    this.drawMarkers(ctx, markers, colors);
     ctx.restore();
   }
 

@@ -4847,7 +4847,9 @@ export const pl_PL: EnTranslations = {
     "cast": {
       "fishing": "Wędkarstwo",
       "demonHeal": "Demoniczne leczenie",
-      "thunzharrStormcall": "Zew burzy"
+      "thunzharrStormcall": "Zew burzy",
+      "forgekeepersWrath": "Forgekeeper's Wrath",
+      "azazelApocalypseFlame": "Apocalypse Flame"
     }
   },
   "questUi": {

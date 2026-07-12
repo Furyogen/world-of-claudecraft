@@ -1156,7 +1156,9 @@ export function sharedNythraxisObjectParticipants(
     obj.objectItemId !== 'grave_sir_aldren' &&
     obj.objectItemId !== 'grave_high_priest_malric' &&
     obj.objectItemId !== 'grave_captain_voss' &&
-    obj.objectItemId !== 'crypt_ritual_circle'
+    obj.objectItemId !== 'crypt_ritual_circle' &&
+    // The Molten Abyss lore objects share credit party-wide like the graves.
+    infernalAbyssLoreLines(obj.objectItemId ?? '') === null
   ) {
     return [actor];
   }
