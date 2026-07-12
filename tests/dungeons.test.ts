@@ -1571,7 +1571,12 @@ describe('dungeons: pure helpers', () => {
     const inst1 = claimedDungeon(sim, 'gravewyrm_sanctum');
     expect(inst1, 'gravewyrm_sanctum did not claim a solo instance').toBeTruthy();
     const slot1 = inst1.slot;
-    const bossId1 = mobInInstance(sim, inst1, 'korzul_the_gravewyrm').id;
+    const boss1 = mobInInstance(sim, inst1, 'korzul_the_gravewyrm');
+    const bossId1 = boss1.id;
+    const p1 = sim.entities.get(pid1) as AnyEntity;
+    teleport(sim, p1, boss1.pos.x + 1, boss1.pos.z);
+    (sim as any).dealDamage(p1, boss1, boss1.hp + 10, false, 'physical', null, 'hit');
+    expect(boss1.dead).toBe(true);
 
     // Simulate the Take-Over relog exploit: drop the player (the instance
     // lingers, its 300s empty reset not yet elapsed) and re-add the SAME
@@ -1588,7 +1593,9 @@ describe('dungeons: pure helpers', () => {
     );
     expect(claimed.length).toBe(1);
     expect(claimed[0].slot).toBe(slot1);
-    expect(mobInInstance(sim, claimed[0], 'korzul_the_gravewyrm').id).toBe(bossId1);
+    const boss2 = mobInInstance(sim, claimed[0], 'korzul_the_gravewyrm');
+    expect(boss2.id).toBe(bossId1);
+    expect(boss2.dead).toBe(true);
   });
 
   it('instanceOriginOf matches the data instanceOrigin for the slot', () => {
