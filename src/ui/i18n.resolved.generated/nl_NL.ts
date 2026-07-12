@@ -338,12 +338,12 @@ export const nl_NL: EnTranslations = {
       "talkBodyTouch": "Ga dicht bij Marshal Redbrook staan en tik op de Gebruik-knop om te spreken, neem dan zijn taak aan.",
       "returnBodyTouch": "Je taak is volbracht. Keer terug naar Marshal Redbrook en tik op de Gebruik-knop om hem in te leveren.",
       "doneBodyTouch": "Je kent de basis, {name}. Het Dal ligt voor je om te verkennen. Tik op Meer, dan op Queesten, om je queestelogboek op elk moment na te kijken. Goede jacht.",
-      "slayTargetHint": "New to combat? Press {targetKey} or click a wolf to target it, then use an action bar ability to attack it.",
-      "slayTargetHintTouch": "New to combat? Tap a wolf to target it, then tap an action bar ability to attack it.",
-      "nextTipsTitle": "Where to next",
-      "nextTipQuestLog": "Open your Quest Log ({key}) to find your next task nearby.",
-      "nextTipMap": "Check the World Map ({key}) to see where quests are waiting.",
-      "nextTipSocial": "Open Social ({key}) to find a group for tougher fights."
+      "slayTargetHint": "Nieuw in gevechten? Druk op {targetKey} of klik op een wolf om hem als doelwit te kiezen, en gebruik daarna een vaardigheid op de actiebalk om hem aan te vallen.",
+      "slayTargetHintTouch": "Nieuw in gevechten? Tik op een wolf om hem als doelwit te kiezen, en tik daarna op een vaardigheid op de actiebalk om hem aan te vallen.",
+      "nextTipsTitle": "Waarheen nu",
+      "nextTipQuestLog": "Open je questlogboek ({key}) om je volgende taak in de buurt te vinden.",
+      "nextTipMap": "Bekijk de wereldkaart ({key}) om te zien waar quests wachten.",
+      "nextTipSocial": "Open Sociaal ({key}) om een groep te vinden voor zwaardere gevechten."
     },
     "widgets": {
       "clockTitle": "Lokale tijd - klik om te wisselen tussen 12/24-uurs",
@@ -412,7 +412,7 @@ export const nl_NL: EnTranslations = {
       "targetFriendlyNext": "Door Bondgenoten Bladeren",
       "discord": "Discord",
       "valecup": "Dalbeker",
-      "sheathe": "Sheathe/Unsheathe Weapon",
+      "sheathe": "Wapen opbergen/trekken",
       "categoryPet": "Huisdier",
       "petAttack": "Huisdier: Aanvallen",
       "petStop": "Huisdier: Stoppen",
@@ -931,7 +931,7 @@ export const nl_NL: EnTranslations = {
     "corpseHarvest": {
       "title": "Oogsten",
       "harvestButton": "Oogsten",
-      "harvestButtonTooltip": "Harvest: gather crafting materials from this corpse (hide, fang, silk, and similar components), separate from any loot. Anyone can harvest; only one player may harvest a given corpse.",
+      "harvestButtonTooltip": "Oogst: verzamel ambachtsmaterialen uit dit lijk, zoals huid, tand, zijde en vergelijkbare onderdelen, los van alle buit. Iedereen kan oogsten; een bepaald lijk kan maar door een speler worden geoogst.",
       "concentrateHint": "Hoe minder delen je kiest, hoe hoger de kwaliteit van elk deel.",
       "alreadyHarvested": "Dit kadaver is al geoogst.",
       "componentAria": "Oogst {component}",
@@ -1113,7 +1113,7 @@ export const nl_NL: EnTranslations = {
     },
     "loot": {
       "chestTitle": "Kist",
-      "takeAllTooltip": "Take All: collect every coin and item in this loot window."
+      "takeAllTooltip": "Alles nemen: verzamel alle munten en voorwerpen in dit buitvenster."
     },
     "spellbook": {
       "addToBarAria": "{name} toevoegen aan actiebalk",

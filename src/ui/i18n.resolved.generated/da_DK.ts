@@ -338,12 +338,12 @@ export const da_DK: EnTranslations = {
       "talkBodyTouch": "Stil dig tæt på Marskal Redbrook og tryk på Brug-knappen for at tale, og accepter derefter hans opgave.",
       "returnBodyTouch": "Din opgave er fuldført. Vend tilbage til Marskal Redbrook og tryk på Brug-knappen for at aflevere den.",
       "doneBodyTouch": "Du har styr på det grundlæggende, {name}. Dalen er din at udforske. Tryk på Mere, derefter Opgaver, for at gennemse din opgavelog når som helst. God jagt.",
-      "slayTargetHint": "New to combat? Press {targetKey} or click a wolf to target it, then use an action bar ability to attack it.",
-      "slayTargetHintTouch": "New to combat? Tap a wolf to target it, then tap an action bar ability to attack it.",
-      "nextTipsTitle": "Where to next",
-      "nextTipQuestLog": "Open your Quest Log ({key}) to find your next task nearby.",
-      "nextTipMap": "Check the World Map ({key}) to see where quests are waiting.",
-      "nextTipSocial": "Open Social ({key}) to find a group for tougher fights."
+      "slayTargetHint": "Ny i kamp? Tryk pa {targetKey} eller klik pa en ulv for at vaelge den som mal, og brug derefter en evne pa handlingsbjælken til at angribe den.",
+      "slayTargetHintTouch": "Ny i kamp? Tryk pa en ulv for at vaelge den som mal, og tryk derefter pa en evne pa handlingsbjælken til at angribe den.",
+      "nextTipsTitle": "Hvor skal du hen nu",
+      "nextTipQuestLog": "Abn din opgavelog ({key}) for at finde din naeste opgave i naerheden.",
+      "nextTipMap": "Tjek verdenskortet ({key}) for at se, hvor opgaver venter.",
+      "nextTipSocial": "Abn Social ({key}) for at finde en gruppe til hardere kampe."
     },
     "widgets": {
       "clockTitle": "Lokal tid - klik for at skifte mellem 12/24-timers",
@@ -412,7 +412,7 @@ export const da_DK: EnTranslations = {
       "targetFriendlyNext": "Skift allieret mål",
       "discord": "Discord",
       "valecup": "Dalpokalen",
-      "sheathe": "Sheathe/Unsheathe Weapon",
+      "sheathe": "Pak/traek vaben",
       "categoryPet": "Kæledyr",
       "petAttack": "Kæledyr: Angrib",
       "petStop": "Kæledyr: Stop",
@@ -931,7 +931,7 @@ export const da_DK: EnTranslations = {
     "corpseHarvest": {
       "title": "Høst",
       "harvestButton": "Høst",
-      "harvestButtonTooltip": "Harvest: gather crafting materials from this corpse (hide, fang, silk, and similar components), separate from any loot. Anyone can harvest; only one player may harvest a given corpse.",
+      "harvestButtonTooltip": "Host: saml handvaerksmaterialer fra dette kadaver, som skind, hugtand, silke og lignende komponenter, adskilt fra alt bytte. Alle kan hoste; kun en spiller kan hoste et bestemt kadaver.",
       "concentrateHint": "Jo færre dele du vælger, desto højere kvalitetsgrad får hver enkelt.",
       "alreadyHarvested": "Dette kadaver er allerede blevet høstet.",
       "componentAria": "Høst {component}",
@@ -1113,7 +1113,7 @@ export const da_DK: EnTranslations = {
     },
     "loot": {
       "chestTitle": "Kiste",
-      "takeAllTooltip": "Take All: collect every coin and item in this loot window."
+      "takeAllTooltip": "Tag alt: saml alle monter og genstande i dette byttevindue."
     },
     "spellbook": {
       "addToBarAria": "Tilføj {name} til handlingslinjen",

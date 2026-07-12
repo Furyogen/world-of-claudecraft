@@ -6538,4 +6538,16 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
     'Tip: vyzvi jiného hráče na přátelský souboj, nebo se zařaď do fronty arény Popelavého kolosea a vyzkoušej svou sestavu.',
   'loading.tips.talents':
     'Tip: kdykoli nejsi v boji, můžeš resetovat své talenty, takže časná volba nikdy není past.',
+  'hudChrome.corpseHarvest.harvestButtonTooltip':
+    'Sklidit: ziskej z teto mrtvoly remeslne materialy, jako kuzi, tesak, hedvabi a podobne soucasti, oddelene od bezne koristi. Sklizet muze kazdy; konkretni mrtvolu muze sklidit jen jeden hrac.',
+  'hudChrome.keybinds.sheathe': 'Schovat/vytasit zbran',
+  'hudChrome.loot.takeAllTooltip': 'Vzit vse: seber vsechny mince a predmety v tomto okne koristi.',
+  'hudChrome.tutorial.nextTipMap': 'Podivej se na mapu sveta ({key}), kde cekaji ukoly.',
+  'hudChrome.tutorial.nextTipQuestLog': 'Otevri denik ukolu ({key}) a najdi dalsi ukol pobliz.',
+  'hudChrome.tutorial.nextTipSocial': 'Otevri Social ({key}) a najdi skupinu pro tezsi boje.',
+  'hudChrome.tutorial.nextTipsTitle': 'Kam dal',
+  'hudChrome.tutorial.slayTargetHint':
+    'Jsi v boji novy? Stiskni {targetKey} nebo klikni na vlka, abys ho zameril, a potom ho napadni schopnosti z akcni listy.',
+  'hudChrome.tutorial.slayTargetHintTouch':
+    'Jsi v boji novy? Klepni na vlka, abys ho zameril, a potom ho napadni schopnosti z akcni listy.',
 };

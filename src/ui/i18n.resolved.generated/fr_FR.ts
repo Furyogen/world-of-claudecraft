@@ -338,12 +338,12 @@ export const fr_FR: EnTranslations = {
       "talkBodyTouch": "Tiens-toi près du maréchal Redbrook et touche le bouton Utiliser pour lui parler, puis accepte sa mission.",
       "returnBodyTouch": "Ta mission est accomplie. Retourne voir le maréchal Redbrook et touche le bouton Utiliser pour la rendre.",
       "doneBodyTouch": "Tu maîtrises les bases, {name}. Le Val est à toi : touche Plus, puis Journal de quêtes, pour consulter ton journal de quêtes à tout moment. Bonne chasse !",
-      "slayTargetHint": "New to combat? Press {targetKey} or click a wolf to target it, then use an action bar ability to attack it.",
-      "slayTargetHintTouch": "New to combat? Tap a wolf to target it, then tap an action bar ability to attack it.",
-      "nextTipsTitle": "Where to next",
-      "nextTipQuestLog": "Open your Quest Log ({key}) to find your next task nearby.",
-      "nextTipMap": "Check the World Map ({key}) to see where quests are waiting.",
-      "nextTipSocial": "Open Social ({key}) to find a group for tougher fights."
+      "slayTargetHint": "Debut en combat? Appuyez sur {targetKey} ou cliquez sur un loup pour le cibler, puis utilisez une technique de la barre d action pour l attaquer.",
+      "slayTargetHintTouch": "Debut en combat? Touchez un loup pour le cibler, puis touchez une technique de la barre d action pour l attaquer.",
+      "nextTipsTitle": "Ou aller ensuite",
+      "nextTipQuestLog": "Ouvrez votre journal de quetes ({key}) pour trouver votre prochaine tache proche.",
+      "nextTipMap": "Consultez la carte du monde ({key}) pour voir ou des quetes vous attendent.",
+      "nextTipSocial": "Ouvrez Social ({key}) pour trouver un groupe pour les combats plus difficiles."
     },
     "widgets": {
       "clockTitle": "Heure locale - cliquez pour basculer 12/24 heures",
@@ -412,7 +412,7 @@ export const fr_FR: EnTranslations = {
       "targetFriendlyNext": "Changer de cible alliée",
       "discord": "Discord",
       "valecup": "Coupe du Val",
-      "sheathe": "Sheathe/Unsheathe Weapon",
+      "sheathe": "Ranger/sortir l arme",
       "categoryPet": "Familier",
       "petAttack": "Familier : attaquer",
       "petStop": "Familier : arrêter",
@@ -931,7 +931,7 @@ export const fr_FR: EnTranslations = {
     "corpseHarvest": {
       "title": "Dépeçage",
       "harvestButton": "Dépecer",
-      "harvestButtonTooltip": "Harvest: gather crafting materials from this corpse (hide, fang, silk, and similar components), separate from any loot. Anyone can harvest; only one player may harvest a given corpse.",
+      "harvestButtonTooltip": "Depecer: recuperez des materiaux d artisanat sur ce cadavre, comme peau, croc, soie et composants similaires, separement de tout butin. Tout le monde peut depecer; un seul joueur peut depecer un cadavre donne.",
       "concentrateHint": "Moins vous choisissez de composants, plus la qualité de chacun est élevée.",
       "alreadyHarvested": "Ce cadavre a déjà été dépecé.",
       "componentAria": "Prélever {component}",
@@ -1113,7 +1113,7 @@ export const fr_FR: EnTranslations = {
     },
     "loot": {
       "chestTitle": "Coffre",
-      "takeAllTooltip": "Take All: collect every coin and item in this loot window."
+      "takeAllTooltip": "Tout prendre: recuperez toutes les pieces et tous les objets de cette fenetre de butin."
     },
     "spellbook": {
       "addToBarAria": "Ajouter {name} à la barre d'action",

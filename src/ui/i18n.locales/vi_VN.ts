@@ -6635,4 +6635,19 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'Mật khẩu không khớp.',
   'hudChrome.auth.resetErrInvalid':
     'Liên kết đặt lại này không hợp lệ hoặc đã hết hạn. Hãy yêu cầu liên kết mới.',
+  'hudChrome.corpseHarvest.harvestButtonTooltip':
+    'Thu hoach: thu nhat vat lieu che tac tu xac nay, nhu da, nanh, to lua va cac thanh phan tuong tu, rieng voi chien loi pham. Bat ky ai cung co the thu hoach; moi xac chi mot nguoi choi duoc thu hoach.',
+  'hudChrome.keybinds.sheathe': 'Cat/rut vu khi',
+  'hudChrome.loot.takeAllTooltip':
+    'Lay tat ca: thu nhat moi dong xu va vat pham trong cua so chien loi pham nay.',
+  'hudChrome.tutorial.nextTipMap':
+    'Kiem tra ban do the gioi ({key}) de xem noi cac nhiem vu dang cho.',
+  'hudChrome.tutorial.nextTipQuestLog':
+    'Mo nhat ky nhiem vu ({key}) de tim viec tiep theo o gan day.',
+  'hudChrome.tutorial.nextTipSocial': 'Mo Xa hoi ({key}) de tim nhom cho cac tran chien kho hon.',
+  'hudChrome.tutorial.nextTipsTitle': 'Di dau tiep',
+  'hudChrome.tutorial.slayTargetHint':
+    'Moi chien dau? Nhan {targetKey} hoac bam vao mot con soi de chon muc tieu, roi dung ky nang tren thanh hanh dong de tan cong no.',
+  'hudChrome.tutorial.slayTargetHintTouch':
+    'Moi chien dau? Cham vao mot con soi de chon muc tieu, roi cham ky nang tren thanh hanh dong de tan cong no.',
 };

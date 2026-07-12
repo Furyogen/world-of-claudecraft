@@ -6699,4 +6699,19 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
     'Tip: daag een andere speler uit voor een vriendschappelijk duel, of sluit je aan bij de wachtrij voor de arena van het Asgrauwe Colosseum om je build te testen.',
   'loading.tips.talents':
     'Tip: je kunt je talenten buiten gevechten altijd herstellen, dus een vroege keuze is nooit een valstrik.',
+  'hudChrome.corpseHarvest.harvestButtonTooltip':
+    'Oogst: verzamel ambachtsmaterialen uit dit lijk, zoals huid, tand, zijde en vergelijkbare onderdelen, los van alle buit. Iedereen kan oogsten; een bepaald lijk kan maar door een speler worden geoogst.',
+  'hudChrome.keybinds.sheathe': 'Wapen opbergen/trekken',
+  'hudChrome.loot.takeAllTooltip':
+    'Alles nemen: verzamel alle munten en voorwerpen in dit buitvenster.',
+  'hudChrome.tutorial.nextTipMap': 'Bekijk de wereldkaart ({key}) om te zien waar quests wachten.',
+  'hudChrome.tutorial.nextTipQuestLog':
+    'Open je questlogboek ({key}) om je volgende taak in de buurt te vinden.',
+  'hudChrome.tutorial.nextTipSocial':
+    'Open Sociaal ({key}) om een groep te vinden voor zwaardere gevechten.',
+  'hudChrome.tutorial.nextTipsTitle': 'Waarheen nu',
+  'hudChrome.tutorial.slayTargetHint':
+    'Nieuw in gevechten? Druk op {targetKey} of klik op een wolf om hem als doelwit te kiezen, en gebruik daarna een vaardigheid op de actiebalk om hem aan te vallen.',
+  'hudChrome.tutorial.slayTargetHintTouch':
+    'Nieuw in gevechten? Tik op een wolf om hem als doelwit te kiezen, en tik daarna op een vaardigheid op de actiebalk om hem aan te vallen.',
 };

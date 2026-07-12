@@ -4064,10 +4064,75 @@ const PET_DICT: Record<SupportedLanguage, Record<PetSimMessageKey, string>> = {
   ...PET_NEW,
 };
 
+const SIM_RELEASE_FIXES: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, string>>> = {
+  en: {},
+  en_CA: {},
+  es: {
+    'loot.rollWinnerOffline': '{winner} estaba desconectado; {item} volvio al cadaver.',
+  },
+  es_ES: {
+    'loot.rollWinnerOffline': '{winner} estaba desconectado; {item} volvio al cadaver.',
+  },
+  fr_FR: {
+    'loot.rollWinnerOffline': '{winner} etait hors ligne; {item} est retourne sur le cadavre.',
+  },
+  fr_CA: {
+    'loot.rollWinnerOffline': '{winner} etait hors ligne; {item} est retourne sur le cadavre.',
+  },
+  it_IT: {
+    'loot.rollWinnerOffline': '{winner} era offline; {item} e tornato sul cadavere.',
+  },
+  de_DE: {
+    'loot.rollWinnerOffline': '{winner} war offline; {item} wurde zur Leiche zuruckgelegt.',
+  },
+  zh_CN: {
+    'loot.rollWinnerOffline': '{winner} 已离线；{item} 已回到尸体上。',
+  },
+  zh_TW: {
+    'loot.rollWinnerOffline': '{winner} 已離線；{item} 已回到屍體上。',
+  },
+  ko_KR: {
+    'loot.rollWinnerOffline': '{winner} 님이 오프라인 상태여서 {item} 이 시체로 돌아갔습니다.',
+  },
+  ja_JP: {
+    'loot.rollWinnerOffline': '{winner} はオフラインでした。{item} は死体に戻りました。',
+  },
+  pt_BR: {
+    'loot.rollWinnerOffline': '{winner} estava offline; {item} voltou para o cadaver.',
+  },
+  ru_RU: {
+    'loot.rollWinnerOffline': '{winner} был не в сети; {item} возвращен к трупу.',
+  },
+  cs_CZ: {
+    'loot.rollWinnerOffline': '{winner} byl offline; {item} se vratil k mrtvole.',
+  },
+  nl_NL: {
+    'loot.rollWinnerOffline': '{winner} was offline; {item} is terug naar het lijk gegaan.',
+  },
+  pl_PL: {
+    'loot.rollWinnerOffline': '{winner} byl offline; {item} wrocil do zwlok.',
+  },
+  id_ID: {
+    'loot.rollWinnerOffline': '{winner} sedang offline; {item} kembali ke mayat.',
+  },
+  tr_TR: {
+    'loot.rollWinnerOffline': '{winner} cevrimdisiydi; {item} cesede geri dondu.',
+  },
+  sv_SE: {
+    'loot.rollWinnerOffline': '{winner} var offline; {item} atervande till kadavret.',
+  },
+  vi_VN: {
+    'loot.rollWinnerOffline': '{winner} dang ngoai tuyen; {item} da tro lai xac.',
+  },
+  da_DK: {
+    'loot.rollWinnerOffline': '{winner} var offline; {item} vendte tilbage til kadaveret.',
+  },
+};
+
 export const DICT: Record<SupportedLanguage, Record<SimMessageKey, string>> = Object.fromEntries(
   supportedLanguages.map((lang) => [
     lang,
-    { ...baseEnTable, ...BASE_DICT[lang], ...PET_DICT[lang] },
+    { ...baseEnTable, ...BASE_DICT[lang], ...SIM_RELEASE_FIXES[lang], ...PET_DICT[lang] },
   ]),
 ) as Record<SupportedLanguage, Record<SimMessageKey, string>>;
 

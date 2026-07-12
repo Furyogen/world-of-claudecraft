@@ -338,12 +338,12 @@ export const de_DE: EnTranslations = {
       "talkBodyTouch": "Stell dich nah an Marschall Redbrook und tippe auf die Schaltfläche Benutzen, um mit ihm zu sprechen, und nimm dann seine Aufgabe an.",
       "returnBodyTouch": "Deine Aufgabe ist erledigt. Kehre zu Marschall Redbrook zurück und tippe auf die Schaltfläche Benutzen, um sie abzugeben.",
       "doneBodyTouch": "Du beherrschst die Grundlagen, {name}. Das Eastbrook-Tal liegt bereit, von dir erkundet zu werden. Tippe auf Mehr und dann auf Questlog, um jederzeit dein Questlog einzusehen. Gute Jagd.",
-      "slayTargetHint": "New to combat? Press {targetKey} or click a wolf to target it, then use an action bar ability to attack it.",
-      "slayTargetHintTouch": "New to combat? Tap a wolf to target it, then tap an action bar ability to attack it.",
-      "nextTipsTitle": "Where to next",
-      "nextTipQuestLog": "Open your Quest Log ({key}) to find your next task nearby.",
-      "nextTipMap": "Check the World Map ({key}) to see where quests are waiting.",
-      "nextTipSocial": "Open Social ({key}) to find a group for tougher fights."
+      "slayTargetHint": "Neu im Kampf? Drucke {targetKey} oder klicke einen Wolf an, um ihn anzuvisieren, und nutze dann eine Fahigkeit der Aktionsleiste, um ihn anzugreifen.",
+      "slayTargetHintTouch": "Neu im Kampf? Tippe einen Wolf an, um ihn anzuvisieren, und tippe dann eine Fahigkeit der Aktionsleiste an, um ihn anzugreifen.",
+      "nextTipsTitle": "Wohin als Nachstes",
+      "nextTipQuestLog": "Offne dein Questlog ({key}), um deine nachste Aufgabe in der Nahe zu finden.",
+      "nextTipMap": "Sieh auf der Weltkarte ({key}) nach, wo Quests auf dich warten.",
+      "nextTipSocial": "Offne Sozial ({key}), um eine Gruppe fur schwerere Kampfe zu finden."
     },
     "widgets": {
       "clockTitle": "Ortszeit - klicken, um zwischen 12-/24-Stunden zu wechseln",
@@ -412,7 +412,7 @@ export const de_DE: EnTranslations = {
       "targetFriendlyNext": "Freundliches Ziel wechseln",
       "discord": "Discord",
       "valecup": "Talpokal",
-      "sheathe": "Sheathe/Unsheathe Weapon",
+      "sheathe": "Waffe wegstecken/ziehen",
       "categoryPet": "Begleiter",
       "petAttack": "Begleiter: Angreifen",
       "petStop": "Begleiter: Stopp",
@@ -931,7 +931,7 @@ export const de_DE: EnTranslations = {
     "corpseHarvest": {
       "title": "Verwerten",
       "harvestButton": "Verwerten",
-      "harvestButtonTooltip": "Harvest: gather crafting materials from this corpse (hide, fang, silk, and similar components), separate from any loot. Anyone can harvest; only one player may harvest a given corpse.",
+      "harvestButtonTooltip": "Verwerten: Sammle Handwerksmaterialien von diesem Kadaver, etwa Haut, Fangzahn, Seide und ahnliche Komponenten, getrennt von jeder Beute. Jeder kann verwerten; ein bestimmter Kadaver kann nur von einem Spieler verwertet werden.",
       "concentrateHint": "Je weniger Teile du wählst, desto höher ist die Qualitätsstufe jedes einzelnen Teils.",
       "alreadyHarvested": "Dieser Kadaver wurde bereits verwertet.",
       "componentAria": "{component} verwerten",
@@ -1113,7 +1113,7 @@ export const de_DE: EnTranslations = {
     },
     "loot": {
       "chestTitle": "Truhe",
-      "takeAllTooltip": "Take All: collect every coin and item in this loot window."
+      "takeAllTooltip": "Alles nehmen: Sammle alle Munzen und Gegenstande in diesem Beutefenster ein."
     },
     "spellbook": {
       "addToBarAria": "{name} zur Aktionsleiste hinzufügen",

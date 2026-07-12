@@ -6727,4 +6727,20 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.readyCheck.notInPartyError':
     'Devi essere in un gruppo per avviare un controllo di prontezza.',
   'hudChrome.readyCheck.inProgressError': 'È già in corso un controllo di prontezza.',
+  'hudChrome.corpseHarvest.harvestButtonTooltip':
+    'Raccogli: ottieni materiali da creazione da questo cadavere, come pelle, zanna, seta e componenti simili, separati dal bottino. Chiunque puo raccogliere; un dato cadavere puo essere raccolto da un solo giocatore.',
+  'hudChrome.keybinds.sheathe': 'Riponi/estrai arma',
+  'hudChrome.loot.takeAllTooltip':
+    'Prendi tutto: raccogli tutte le monete e gli oggetti in questa finestra del bottino.',
+  'hudChrome.tutorial.nextTipMap':
+    'Controlla la mappa del mondo ({key}) per vedere dove ti aspettano le missioni.',
+  'hudChrome.tutorial.nextTipQuestLog':
+    'Apri il registro missioni ({key}) per trovare il prossimo incarico nelle vicinanze.',
+  'hudChrome.tutorial.nextTipSocial':
+    'Apri Social ({key}) per trovare un gruppo per gli scontri piu difficili.',
+  'hudChrome.tutorial.nextTipsTitle': 'Dove andare ora',
+  'hudChrome.tutorial.slayTargetHint':
+    'Nuovo al combattimento? Premi {targetKey} o fai clic su un lupo per prenderlo di mira, poi usa una abilita della barra azioni per attaccarlo.',
+  'hudChrome.tutorial.slayTargetHintTouch':
+    'Nuovo al combattimento? Tocca un lupo per prenderlo di mira, poi tocca una abilita della barra azioni per attaccarlo.',
 };

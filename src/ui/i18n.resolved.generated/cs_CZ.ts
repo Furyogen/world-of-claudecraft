@@ -338,12 +338,12 @@ export const cs_CZ: EnTranslations = {
       "talkBodyTouch": "Postav se blízko maršála Redbrooka, klepni na Použít, promluv s ním a přijmi jeho úkol.",
       "returnBodyTouch": "Tvůj úkol je hotový. Vrať se k maršálu Redbrookovi a klepni na Použít pro odevzdání.",
       "doneBodyTouch": "Základy už znáš, {name}. Údolí je tvoje k prozkoumání. Klepni na Více a potom Úkoly, kdykoli chceš zkontrolovat deník úkolů. Dobrý lov.",
-      "slayTargetHint": "New to combat? Press {targetKey} or click a wolf to target it, then use an action bar ability to attack it.",
-      "slayTargetHintTouch": "New to combat? Tap a wolf to target it, then tap an action bar ability to attack it.",
-      "nextTipsTitle": "Where to next",
-      "nextTipQuestLog": "Open your Quest Log ({key}) to find your next task nearby.",
-      "nextTipMap": "Check the World Map ({key}) to see where quests are waiting.",
-      "nextTipSocial": "Open Social ({key}) to find a group for tougher fights."
+      "slayTargetHint": "Jsi v boji novy? Stiskni {targetKey} nebo klikni na vlka, abys ho zameril, a potom ho napadni schopnosti z akcni listy.",
+      "slayTargetHintTouch": "Jsi v boji novy? Klepni na vlka, abys ho zameril, a potom ho napadni schopnosti z akcni listy.",
+      "nextTipsTitle": "Kam dal",
+      "nextTipQuestLog": "Otevri denik ukolu ({key}) a najdi dalsi ukol pobliz.",
+      "nextTipMap": "Podivej se na mapu sveta ({key}), kde cekaji ukoly.",
+      "nextTipSocial": "Otevri Social ({key}) a najdi skupinu pro tezsi boje."
     },
     "widgets": {
       "clockTitle": "Místní čas - kliknutím přepneš 12/24 h",
@@ -412,7 +412,7 @@ export const cs_CZ: EnTranslations = {
       "targetFriendlyNext": "Procházet spojenecké cíle",
       "discord": "Discord",
       "valecup": "Pohár údolí",
-      "sheathe": "Sheathe/Unsheathe Weapon",
+      "sheathe": "Schovat/vytasit zbran",
       "categoryPet": "Mazlíček",
       "petAttack": "Mazlíček: Útok",
       "petStop": "Mazlíček: Zastavit",
@@ -931,7 +931,7 @@ export const cs_CZ: EnTranslations = {
     "corpseHarvest": {
       "title": "Sklizeň",
       "harvestButton": "Sklidit",
-      "harvestButtonTooltip": "Harvest: gather crafting materials from this corpse (hide, fang, silk, and similar components), separate from any loot. Anyone can harvest; only one player may harvest a given corpse.",
+      "harvestButtonTooltip": "Sklidit: ziskej z teto mrtvoly remeslne materialy, jako kuzi, tesak, hedvabi a podobne soucasti, oddelene od bezne koristi. Sklizet muze kazdy; konkretni mrtvolu muze sklidit jen jeden hrac.",
       "concentrateHint": "Méně vybraných komponent dá každé vyšší stupeň.",
       "alreadyHarvested": "Tato mrtvola už byla sklizena.",
       "componentAria": "Sklidit {component}",
@@ -1113,7 +1113,7 @@ export const cs_CZ: EnTranslations = {
     },
     "loot": {
       "chestTitle": "Truhla",
-      "takeAllTooltip": "Take All: collect every coin and item in this loot window."
+      "takeAllTooltip": "Vzit vse: seber vsechny mince a predmety v tomto okne koristi."
     },
     "spellbook": {
       "addToBarAria": "Přidat {name} na akční lištu",

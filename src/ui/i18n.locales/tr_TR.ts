@@ -6611,4 +6611,20 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'Şifreler eşleşmiyor.',
   'hudChrome.auth.resetErrInvalid':
     'Bu sıfırlama bağlantısı geçersiz veya süresi dolmuş. Yeni bir tane iste.',
+  'hudChrome.corpseHarvest.harvestButtonTooltip':
+    'Topla: bu cesetten deri, dis, ipek ve benzeri bilesenler gibi zanaat malzemeleri topla; bunlar ganimetten ayridir. Herkes toplayabilir; belirli bir cesedi yalnizca bir oyuncu toplayabilir.',
+  'hudChrome.keybinds.sheathe': 'Silahi kilifla/cek',
+  'hudChrome.loot.takeAllTooltip':
+    'Hepsini al: bu ganimet penceresindeki tum para ve esyalari topla.',
+  'hudChrome.tutorial.nextTipMap':
+    'Gorevlerin nerede bekledigini gormek icin dunya haritasina ({key}) bak.',
+  'hudChrome.tutorial.nextTipQuestLog':
+    'Yakindaki siradaki gorevini bulmak icin gorev gunlugunu ({key}) ac.',
+  'hudChrome.tutorial.nextTipSocial':
+    'Daha zorlu savaslar icin grup bulmak uzere Sosyal ({key}) ac.',
+  'hudChrome.tutorial.nextTipsTitle': 'Sırada nereye',
+  'hudChrome.tutorial.slayTargetHint':
+    'Savasta yeni misin? Bir kurdu hedeflemek icin {targetKey} tusuna bas veya ona tikla, sonra saldirmak icin eylem cubugundan bir yetenek kullan.',
+  'hudChrome.tutorial.slayTargetHintTouch':
+    'Savasta yeni misin? Bir kurdu hedeflemek icin ona dokun, sonra saldirmak icin eylem cubugundan bir yetenege dokun.',
 };

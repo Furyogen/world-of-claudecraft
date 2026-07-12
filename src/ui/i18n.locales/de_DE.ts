@@ -6764,4 +6764,20 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
     'Tipp: Fordere einen anderen Spieler zu einem freundschaftlichen Duell heraus oder reihe dich für die Arena des Aschenen Kolosseums ein, um deinen Build zu testen.',
   'loading.tips.talents':
     'Tipp: Du kannst deine Talente jederzeit außerhalb des Kampfes zurücksetzen, eine frühe Wahl ist also nie eine Falle.',
+  'hudChrome.corpseHarvest.harvestButtonTooltip':
+    'Verwerten: Sammle Handwerksmaterialien von diesem Kadaver, etwa Haut, Fangzahn, Seide und ahnliche Komponenten, getrennt von jeder Beute. Jeder kann verwerten; ein bestimmter Kadaver kann nur von einem Spieler verwertet werden.',
+  'hudChrome.keybinds.sheathe': 'Waffe wegstecken/ziehen',
+  'hudChrome.loot.takeAllTooltip':
+    'Alles nehmen: Sammle alle Munzen und Gegenstande in diesem Beutefenster ein.',
+  'hudChrome.tutorial.nextTipMap':
+    'Sieh auf der Weltkarte ({key}) nach, wo Quests auf dich warten.',
+  'hudChrome.tutorial.nextTipQuestLog':
+    'Offne dein Questlog ({key}), um deine nachste Aufgabe in der Nahe zu finden.',
+  'hudChrome.tutorial.nextTipSocial':
+    'Offne Sozial ({key}), um eine Gruppe fur schwerere Kampfe zu finden.',
+  'hudChrome.tutorial.nextTipsTitle': 'Wohin als Nachstes',
+  'hudChrome.tutorial.slayTargetHint':
+    'Neu im Kampf? Drucke {targetKey} oder klicke einen Wolf an, um ihn anzuvisieren, und nutze dann eine Fahigkeit der Aktionsleiste, um ihn anzugreifen.',
+  'hudChrome.tutorial.slayTargetHintTouch':
+    'Neu im Kampf? Tippe einen Wolf an, um ihn anzuvisieren, und tippe dann eine Fahigkeit der Aktionsleiste an, um ihn anzugreifen.',
 };

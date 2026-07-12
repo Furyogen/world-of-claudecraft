@@ -6700,4 +6700,20 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.readyCheck.notInPartyError':
     'Você precisa estar em um grupo para iniciar uma verificação de prontidão.',
   'hudChrome.readyCheck.inProgressError': 'Já há uma verificação de prontidão em andamento.',
+  'hudChrome.corpseHarvest.harvestButtonTooltip':
+    'Coletar: obtenha materiais de artesanato deste cadaver, como couro, presa, seda e componentes semelhantes, separados de qualquer saque. Qualquer um pode coletar; apenas um jogador pode coletar um cadaver especifico.',
+  'hudChrome.keybinds.sheathe': 'Guardar/sacar arma',
+  'hudChrome.loot.takeAllTooltip':
+    'Pegar tudo: colete todas as moedas e itens desta janela de saque.',
+  'hudChrome.tutorial.nextTipMap':
+    'Confira o mapa do mundo ({key}) para ver onde ha missoes esperando.',
+  'hudChrome.tutorial.nextTipQuestLog':
+    'Abra seu registro de missoes ({key}) para encontrar a proxima tarefa por perto.',
+  'hudChrome.tutorial.nextTipSocial':
+    'Abra Social ({key}) para encontrar um grupo para lutas mais dificeis.',
+  'hudChrome.tutorial.nextTipsTitle': 'Para onde ir agora',
+  'hudChrome.tutorial.slayTargetHint':
+    'Novo no combate? Pressione {targetKey} ou clique em um lobo para mirar nele, depois use uma habilidade da barra de acao para ataca-lo.',
+  'hudChrome.tutorial.slayTargetHintTouch':
+    'Novo no combate? Toque em um lobo para mirar nele, depois toque em uma habilidade da barra de acao para ataca-lo.',
 };

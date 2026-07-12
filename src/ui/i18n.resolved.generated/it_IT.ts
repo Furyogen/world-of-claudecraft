@@ -338,12 +338,12 @@ export const it_IT: EnTranslations = {
       "talkBodyTouch": "Avvicinati al maresciallo Redbrook e tocca il pulsante Usa per parlargli, poi accetta il suo incarico.",
       "returnBodyTouch": "Il tuo incarico è compiuto. Torna dal maresciallo Redbrook e tocca il pulsante Usa per consegnarlo.",
       "doneBodyTouch": "Hai imparato le basi, {name}. La Valle è tutta da esplorare: tocca Altro, poi Registro missioni, per rivedere il tuo registro missioni in qualsiasi momento. Buona caccia!",
-      "slayTargetHint": "New to combat? Press {targetKey} or click a wolf to target it, then use an action bar ability to attack it.",
-      "slayTargetHintTouch": "New to combat? Tap a wolf to target it, then tap an action bar ability to attack it.",
-      "nextTipsTitle": "Where to next",
-      "nextTipQuestLog": "Open your Quest Log ({key}) to find your next task nearby.",
-      "nextTipMap": "Check the World Map ({key}) to see where quests are waiting.",
-      "nextTipSocial": "Open Social ({key}) to find a group for tougher fights."
+      "slayTargetHint": "Nuovo al combattimento? Premi {targetKey} o fai clic su un lupo per prenderlo di mira, poi usa una abilita della barra azioni per attaccarlo.",
+      "slayTargetHintTouch": "Nuovo al combattimento? Tocca un lupo per prenderlo di mira, poi tocca una abilita della barra azioni per attaccarlo.",
+      "nextTipsTitle": "Dove andare ora",
+      "nextTipQuestLog": "Apri il registro missioni ({key}) per trovare il prossimo incarico nelle vicinanze.",
+      "nextTipMap": "Controlla la mappa del mondo ({key}) per vedere dove ti aspettano le missioni.",
+      "nextTipSocial": "Apri Social ({key}) per trovare un gruppo per gli scontri piu difficili."
     },
     "widgets": {
       "clockTitle": "Ora locale - clicca per alternare 12/24 ore",
@@ -412,7 +412,7 @@ export const it_IT: EnTranslations = {
       "targetFriendlyNext": "Scorri i bersagli amici",
       "discord": "Discord",
       "valecup": "Coppa della Valle",
-      "sheathe": "Sheathe/Unsheathe Weapon",
+      "sheathe": "Riponi/estrai arma",
       "categoryPet": "Famiglio",
       "petAttack": "Famiglio: attacca",
       "petStop": "Famiglio: fermo",
@@ -931,7 +931,7 @@ export const it_IT: EnTranslations = {
     "corpseHarvest": {
       "title": "Raccolta",
       "harvestButton": "Raccogli",
-      "harvestButtonTooltip": "Harvest: gather crafting materials from this corpse (hide, fang, silk, and similar components), separate from any loot. Anyone can harvest; only one player may harvest a given corpse.",
+      "harvestButtonTooltip": "Raccogli: ottieni materiali da creazione da questo cadavere, come pelle, zanna, seta e componenti simili, separati dal bottino. Chiunque puo raccogliere; un dato cadavere puo essere raccolto da un solo giocatore.",
       "concentrateHint": "Meno componenti scegli, più alta sarà la qualità di ciascuno.",
       "alreadyHarvested": "Questo cadavere è già stato raccolto.",
       "componentAria": "Raccogli {component}",
@@ -1113,7 +1113,7 @@ export const it_IT: EnTranslations = {
     },
     "loot": {
       "chestTitle": "Scrigno",
-      "takeAllTooltip": "Take All: collect every coin and item in this loot window."
+      "takeAllTooltip": "Prendi tutto: raccogli tutte le monete e gli oggetti in questa finestra del bottino."
     },
     "spellbook": {
       "addToBarAria": "Aggiungi {name} alla barra azioni",

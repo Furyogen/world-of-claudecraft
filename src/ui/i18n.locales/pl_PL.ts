@@ -6650,4 +6650,20 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
     'Wskazówka: wyzwij innego gracza na przyjazny pojedynek lub dołącz do kolejki na arenę Popielnego Koloseum, aby przetestować swoją konfigurację.',
   'loading.tips.talents':
     'Wskazówka: poza walką możesz w każdej chwili wyzerować talenty, więc wczesny wybór nigdy nie jest pułapką.',
+  'hudChrome.corpseHarvest.harvestButtonTooltip':
+    'Zbierz: pozyskaj z tych zwlok materialy rzemieslnicze, takie jak skora, kiel, jedwab i podobne skladniki, oddzielnie od lupow. Zbierac moze kazdy; dane zwloki moze zebrac tylko jeden gracz.',
+  'hudChrome.keybinds.sheathe': 'Schowaj/dobadz bron',
+  'hudChrome.loot.takeAllTooltip':
+    'Wez wszystko: zbierz wszystkie monety i przedmioty z tego okna lupow.',
+  'hudChrome.tutorial.nextTipMap':
+    'Sprawdz mape swiata ({key}), aby zobaczyc, gdzie czekaja zadania.',
+  'hudChrome.tutorial.nextTipQuestLog':
+    'Otworz dziennik zadan ({key}), aby znalezc najblizsze nastepne zadanie.',
+  'hudChrome.tutorial.nextTipSocial':
+    'Otworz panel spolecznosciowy ({key}), aby znalezc grupe na trudniejsze walki.',
+  'hudChrome.tutorial.nextTipsTitle': 'Dokad teraz',
+  'hudChrome.tutorial.slayTargetHint':
+    'Dopiero zaczynasz walke? Nacisnij {targetKey} albo kliknij wilka, aby go namierzyc, a potem uzyj umiejetnosci z paska akcji, aby go zaatakowac.',
+  'hudChrome.tutorial.slayTargetHintTouch':
+    'Dopiero zaczynasz walke? Stuknij wilka, aby go namierzyc, a potem stuknij umiejetnosc z paska akcji, aby go zaatakowac.',
 };

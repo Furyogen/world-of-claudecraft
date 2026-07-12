@@ -338,12 +338,12 @@ export const id_ID: EnTranslations = {
       "talkBodyTouch": "Berdirilah dekat Marshal Redbrook dan ketuk tombol Use untuk berbicara, lalu terima tugasnya.",
       "returnBodyTouch": "Tugas Anda selesai. Kembalilah ke Marshal Redbrook dan ketuk tombol Use untuk menyerahkannya.",
       "doneBodyTouch": "Anda sudah menguasai dasarnya, {name}. Lembah ini milik Anda untuk dijelajahi. Ketuk More, lalu Quests, untuk meninjau catatan misi Anda kapan saja. Selamat berburu.",
-      "slayTargetHint": "New to combat? Press {targetKey} or click a wolf to target it, then use an action bar ability to attack it.",
-      "slayTargetHintTouch": "New to combat? Tap a wolf to target it, then tap an action bar ability to attack it.",
-      "nextTipsTitle": "Where to next",
-      "nextTipQuestLog": "Open your Quest Log ({key}) to find your next task nearby.",
-      "nextTipMap": "Check the World Map ({key}) to see where quests are waiting.",
-      "nextTipSocial": "Open Social ({key}) to find a group for tougher fights."
+      "slayTargetHint": "Baru dalam pertempuran? Tekan {targetKey} atau klik serigala untuk menargetkannya, lalu gunakan kemampuan di bilah aksi untuk menyerangnya.",
+      "slayTargetHintTouch": "Baru dalam pertempuran? Ketuk serigala untuk menargetkannya, lalu ketuk kemampuan di bilah aksi untuk menyerangnya.",
+      "nextTipsTitle": "Ke mana berikutnya",
+      "nextTipQuestLog": "Buka catatan misi ({key}) untuk menemukan tugas berikutnya di dekatmu.",
+      "nextTipMap": "Periksa peta dunia ({key}) untuk melihat tempat misi menunggu.",
+      "nextTipSocial": "Buka Sosial ({key}) untuk mencari grup bagi pertarungan yang lebih berat."
     },
     "widgets": {
       "clockTitle": "Waktu lokal - klik untuk beralih 12/24 jam",
@@ -412,7 +412,7 @@ export const id_ID: EnTranslations = {
       "targetFriendlyNext": "Putar Bidikan Sekutu",
       "discord": "Discord",
       "valecup": "Piala Lembah",
-      "sheathe": "Sheathe/Unsheathe Weapon",
+      "sheathe": "Sarungkan/cabut senjata",
       "categoryPet": "Peliharaan",
       "petAttack": "Peliharaan: Serang",
       "petStop": "Peliharaan: Berhenti",
@@ -931,7 +931,7 @@ export const id_ID: EnTranslations = {
     "corpseHarvest": {
       "title": "Panen",
       "harvestButton": "Panen",
-      "harvestButtonTooltip": "Harvest: gather crafting materials from this corpse (hide, fang, silk, and similar components), separate from any loot. Anyone can harvest; only one player may harvest a given corpse.",
+      "harvestButtonTooltip": "Panen: kumpulkan bahan kerajinan dari mayat ini, seperti kulit, taring, sutra, dan komponen serupa, terpisah dari jarahan apa pun. Siapa pun bisa memanen; hanya satu pemain yang dapat memanen satu mayat tertentu.",
       "concentrateHint": "Semakin sedikit bagian yang dipilih, semakin tinggi tingkat mutu tiap bagian.",
       "alreadyHarvested": "Bangkai ini sudah dipanen.",
       "componentAria": "Panen {component}",
@@ -1113,7 +1113,7 @@ export const id_ID: EnTranslations = {
     },
     "loot": {
       "chestTitle": "Peti",
-      "takeAllTooltip": "Take All: collect every coin and item in this loot window."
+      "takeAllTooltip": "Ambil semua: kumpulkan semua koin dan item di jendela jarahan ini."
     },
     "spellbook": {
       "addToBarAria": "Tambahkan {name} ke bilah aksi",

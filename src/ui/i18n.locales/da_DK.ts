@@ -6594,4 +6594,18 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
     'Tip: Udfordr en anden spiller til en venskabelig duel, eller stil dig i kø til arenaen i Det Askegrå Colosseum for at afprøve din opbygning.',
   'loading.tips.talents':
     'Tip: Du kan nulstille dine talenter, når du er ude af kamp, så et tidligt valg er aldrig en fælde.',
+  'hudChrome.corpseHarvest.harvestButtonTooltip':
+    'Host: saml handvaerksmaterialer fra dette kadaver, som skind, hugtand, silke og lignende komponenter, adskilt fra alt bytte. Alle kan hoste; kun en spiller kan hoste et bestemt kadaver.',
+  'hudChrome.keybinds.sheathe': 'Pak/traek vaben',
+  'hudChrome.loot.takeAllTooltip': 'Tag alt: saml alle monter og genstande i dette byttevindue.',
+  'hudChrome.tutorial.nextTipMap': 'Tjek verdenskortet ({key}) for at se, hvor opgaver venter.',
+  'hudChrome.tutorial.nextTipQuestLog':
+    'Abn din opgavelog ({key}) for at finde din naeste opgave i naerheden.',
+  'hudChrome.tutorial.nextTipSocial':
+    'Abn Social ({key}) for at finde en gruppe til hardere kampe.',
+  'hudChrome.tutorial.nextTipsTitle': 'Hvor skal du hen nu',
+  'hudChrome.tutorial.slayTargetHint':
+    'Ny i kamp? Tryk pa {targetKey} eller klik pa en ulv for at vaelge den som mal, og brug derefter en evne pa handlingsbjælken til at angribe den.',
+  'hudChrome.tutorial.slayTargetHintTouch':
+    'Ny i kamp? Tryk pa en ulv for at vaelge den som mal, og tryk derefter pa en evne pa handlingsbjælken til at angribe den.',
 };

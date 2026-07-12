@@ -6742,4 +6742,20 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.readyCheck.notInPartyError':
     'Debes estar en un grupo para iniciar una comprobación de disponibilidad.',
   'hudChrome.readyCheck.inProgressError': 'Ya hay una comprobación de disponibilidad en curso.',
+  'hudChrome.corpseHarvest.harvestButtonTooltip':
+    'Recolectar: recoge materiales de artesania de este cadaver, como piel, colmillo, seda y componentes similares, aparte de cualquier botin. Cualquiera puede recolectar; solo un jugador puede recolectar un cadaver dado.',
+  'hudChrome.keybinds.sheathe': 'Envainar/desenvainar arma',
+  'hudChrome.loot.takeAllTooltip':
+    'Tomar todo: recoge todas las monedas y objetos de esta ventana de botin.',
+  'hudChrome.tutorial.nextTipMap':
+    'Consulta el mapa del mundo ({key}) para ver donde esperan las misiones.',
+  'hudChrome.tutorial.nextTipQuestLog':
+    'Abre tu registro de misiones ({key}) para encontrar tu siguiente tarea cercana.',
+  'hudChrome.tutorial.nextTipSocial':
+    'Abre Social ({key}) para encontrar un grupo para combates mas duros.',
+  'hudChrome.tutorial.nextTipsTitle': 'A donde ir ahora',
+  'hudChrome.tutorial.slayTargetHint':
+    'Nuevo en combate? Pulsa {targetKey} o haz clic en un lobo para seleccionarlo, luego usa una habilidad de la barra de accion para atacarlo.',
+  'hudChrome.tutorial.slayTargetHintTouch':
+    'Nuevo en combate? Toca un lobo para seleccionarlo, luego toca una habilidad de la barra de accion para atacarlo.',
 };

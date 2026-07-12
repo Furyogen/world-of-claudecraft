@@ -338,12 +338,12 @@ export const sv_SE: EnTranslations = {
       "talkBodyTouch": "Ställ dig nära marskalk Redbrook och tryck på Använd-knappen för att tala, anta sedan hans uppgift.",
       "returnBodyTouch": "Din uppgift är klar. Återvänd till marskalk Redbrook och tryck på Använd-knappen för att lämna in den.",
       "doneBodyTouch": "Du behärskar grunderna, {name}. Dalen är din att utforska. Tryck på Mer och sedan Uppdrag för att granska din uppdragslogg när som helst. Lycka till på jakten.",
-      "slayTargetHint": "New to combat? Press {targetKey} or click a wolf to target it, then use an action bar ability to attack it.",
-      "slayTargetHintTouch": "New to combat? Tap a wolf to target it, then tap an action bar ability to attack it.",
-      "nextTipsTitle": "Where to next",
-      "nextTipQuestLog": "Open your Quest Log ({key}) to find your next task nearby.",
-      "nextTipMap": "Check the World Map ({key}) to see where quests are waiting.",
-      "nextTipSocial": "Open Social ({key}) to find a group for tougher fights."
+      "slayTargetHint": "Ny i strid? Tryck pa {targetKey} eller klicka pa en varg for att valja den som mal, och anvand sedan en formaga pa actionbaren for att anfalla den.",
+      "slayTargetHintTouch": "Ny i strid? Tryck pa en varg for att valja den som mal, och tryck sedan pa en formaga pa actionbaren for att anfalla den.",
+      "nextTipsTitle": "Vart har nast",
+      "nextTipQuestLog": "Oppna din uppdragslogg ({key}) for att hitta nasta uppgift i narheten.",
+      "nextTipMap": "Kontrollera varldskartan ({key}) for att se var uppdrag vantar.",
+      "nextTipSocial": "Oppna Socialt ({key}) for att hitta en grupp for svarare strider."
     },
     "widgets": {
       "clockTitle": "Lokal tid - klicka för att växla mellan 12/24-timmar",
@@ -412,7 +412,7 @@ export const sv_SE: EnTranslations = {
       "targetFriendlyNext": "Växla vänligt mål",
       "discord": "Discord",
       "valecup": "Dalcupen",
-      "sheathe": "Sheathe/Unsheathe Weapon",
+      "sheathe": "Stoppa undan/dra vapen",
       "categoryPet": "Djur",
       "petAttack": "Djur: Anfall",
       "petStop": "Djur: Stanna",
@@ -931,7 +931,7 @@ export const sv_SE: EnTranslations = {
     "corpseHarvest": {
       "title": "Skörda",
       "harvestButton": "Skörda",
-      "harvestButtonTooltip": "Harvest: gather crafting materials from this corpse (hide, fang, silk, and similar components), separate from any loot. Anyone can harvest; only one player may harvest a given corpse.",
+      "harvestButtonTooltip": "Skorda: samla hantverksmaterial fran detta kadaver, som hud, huggtand, silke och liknande komponenter, separat fran all loot. Vem som helst kan skorda; bara en spelare kan skorda ett visst kadaver.",
       "concentrateHint": "Ju färre delar du väljer, desto högre kvalitetsnivå får var och en.",
       "alreadyHarvested": "Det här kadavret har redan skördats.",
       "componentAria": "Skörda {component}",
@@ -1113,7 +1113,7 @@ export const sv_SE: EnTranslations = {
     },
     "loot": {
       "chestTitle": "Kista",
-      "takeAllTooltip": "Take All: collect every coin and item in this loot window."
+      "takeAllTooltip": "Ta allt: samla alla mynt och foremal i detta lootfonster."
     },
     "spellbook": {
       "addToBarAria": "Lägg till {name} i handlingsfältet",

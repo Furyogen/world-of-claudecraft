@@ -6612,4 +6612,19 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
     'Tips: utmana en annan spelare på en vänskaplig duell, eller ställ dig i kö till arenan i Det askgråa colosseumet för att testa ditt bygge.',
   'loading.tips.talents':
     'Tips: du kan återställa dina talanger när du inte strider, så ett tidigt val blir aldrig en fälla.',
+  'hudChrome.corpseHarvest.harvestButtonTooltip':
+    'Skorda: samla hantverksmaterial fran detta kadaver, som hud, huggtand, silke och liknande komponenter, separat fran all loot. Vem som helst kan skorda; bara en spelare kan skorda ett visst kadaver.',
+  'hudChrome.keybinds.sheathe': 'Stoppa undan/dra vapen',
+  'hudChrome.loot.takeAllTooltip': 'Ta allt: samla alla mynt och foremal i detta lootfonster.',
+  'hudChrome.tutorial.nextTipMap':
+    'Kontrollera varldskartan ({key}) for att se var uppdrag vantar.',
+  'hudChrome.tutorial.nextTipQuestLog':
+    'Oppna din uppdragslogg ({key}) for att hitta nasta uppgift i narheten.',
+  'hudChrome.tutorial.nextTipSocial':
+    'Oppna Socialt ({key}) for att hitta en grupp for svarare strider.',
+  'hudChrome.tutorial.nextTipsTitle': 'Vart har nast',
+  'hudChrome.tutorial.slayTargetHint':
+    'Ny i strid? Tryck pa {targetKey} eller klicka pa en varg for att valja den som mal, och anvand sedan en formaga pa actionbaren for att anfalla den.',
+  'hudChrome.tutorial.slayTargetHintTouch':
+    'Ny i strid? Tryck pa en varg for att valja den som mal, och tryck sedan pa en formaga pa actionbaren for att anfalla den.',
 };

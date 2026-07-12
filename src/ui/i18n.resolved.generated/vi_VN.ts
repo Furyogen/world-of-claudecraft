@@ -338,12 +338,12 @@ export const vi_VN: EnTranslations = {
       "talkBodyTouch": "Đứng gần Thống Soái Redbrook và chạm nút Dùng để nói chuyện, rồi nhận nhiệm vụ của ông.",
       "returnBodyTouch": "Nhiệm vụ của bạn đã xong. Trở về chỗ Thống Soái Redbrook và chạm nút Dùng để nộp.",
       "doneBodyTouch": "Bạn đã nắm cơ bản rồi, {name}. Thung Lũng giờ là của bạn để khám phá. Chạm Thêm, rồi Nhiệm Vụ, để xem lại nhật ký nhiệm vụ bất cứ lúc nào. Săn lùng vui vẻ.",
-      "slayTargetHint": "New to combat? Press {targetKey} or click a wolf to target it, then use an action bar ability to attack it.",
-      "slayTargetHintTouch": "New to combat? Tap a wolf to target it, then tap an action bar ability to attack it.",
-      "nextTipsTitle": "Where to next",
-      "nextTipQuestLog": "Open your Quest Log ({key}) to find your next task nearby.",
-      "nextTipMap": "Check the World Map ({key}) to see where quests are waiting.",
-      "nextTipSocial": "Open Social ({key}) to find a group for tougher fights."
+      "slayTargetHint": "Moi chien dau? Nhan {targetKey} hoac bam vao mot con soi de chon muc tieu, roi dung ky nang tren thanh hanh dong de tan cong no.",
+      "slayTargetHintTouch": "Moi chien dau? Cham vao mot con soi de chon muc tieu, roi cham ky nang tren thanh hanh dong de tan cong no.",
+      "nextTipsTitle": "Di dau tiep",
+      "nextTipQuestLog": "Mo nhat ky nhiem vu ({key}) de tim viec tiep theo o gan day.",
+      "nextTipMap": "Kiem tra ban do the gioi ({key}) de xem noi cac nhiem vu dang cho.",
+      "nextTipSocial": "Mo Xa hoi ({key}) de tim nhom cho cac tran chien kho hon."
     },
     "widgets": {
       "clockTitle": "Giờ địa phương - nhấp để chuyển 12/24 giờ",
@@ -412,7 +412,7 @@ export const vi_VN: EnTranslations = {
       "targetFriendlyNext": "Luân Phiên Mục Tiêu Đồng Minh",
       "discord": "Discord",
       "valecup": "Cúp Thung Lũng",
-      "sheathe": "Sheathe/Unsheathe Weapon",
+      "sheathe": "Cat/rut vu khi",
       "categoryPet": "Thú Cưng",
       "petAttack": "Thú Cưng: Tấn Công",
       "petStop": "Thú Cưng: Dừng",
@@ -931,7 +931,7 @@ export const vi_VN: EnTranslations = {
     "corpseHarvest": {
       "title": "Thu Hoạch",
       "harvestButton": "Thu Hoạch",
-      "harvestButtonTooltip": "Harvest: gather crafting materials from this corpse (hide, fang, silk, and similar components), separate from any loot. Anyone can harvest; only one player may harvest a given corpse.",
+      "harvestButtonTooltip": "Thu hoach: thu nhat vat lieu che tac tu xac nay, nhu da, nanh, to lua va cac thanh phan tuong tu, rieng voi chien loi pham. Bat ky ai cung co the thu hoach; moi xac chi mot nguoi choi duoc thu hoach.",
       "concentrateHint": "Chọn càng ít bộ phận, mỗi bộ phận thu được sẽ có bậc chất lượng càng cao.",
       "alreadyHarvested": "Xác này đã bị thu hoạch rồi.",
       "componentAria": "Thu hoạch {component}",
@@ -1113,7 +1113,7 @@ export const vi_VN: EnTranslations = {
     },
     "loot": {
       "chestTitle": "Rương",
-      "takeAllTooltip": "Take All: collect every coin and item in this loot window."
+      "takeAllTooltip": "Lay tat ca: thu nhat moi dong xu va vat pham trong cua so chien loi pham nay."
     },
     "spellbook": {
       "addToBarAria": "Thêm {name} vào thanh kỹ năng",

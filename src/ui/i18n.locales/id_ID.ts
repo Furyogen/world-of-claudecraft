@@ -6696,4 +6696,19 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'Kata sandi tidak cocok.',
   'hudChrome.auth.resetErrInvalid':
     'Tautan pengaturan ulang ini tidak valid atau sudah kedaluwarsa. Minta yang baru.',
+  'hudChrome.corpseHarvest.harvestButtonTooltip':
+    'Panen: kumpulkan bahan kerajinan dari mayat ini, seperti kulit, taring, sutra, dan komponen serupa, terpisah dari jarahan apa pun. Siapa pun bisa memanen; hanya satu pemain yang dapat memanen satu mayat tertentu.',
+  'hudChrome.keybinds.sheathe': 'Sarungkan/cabut senjata',
+  'hudChrome.loot.takeAllTooltip':
+    'Ambil semua: kumpulkan semua koin dan item di jendela jarahan ini.',
+  'hudChrome.tutorial.nextTipMap': 'Periksa peta dunia ({key}) untuk melihat tempat misi menunggu.',
+  'hudChrome.tutorial.nextTipQuestLog':
+    'Buka catatan misi ({key}) untuk menemukan tugas berikutnya di dekatmu.',
+  'hudChrome.tutorial.nextTipSocial':
+    'Buka Sosial ({key}) untuk mencari grup bagi pertarungan yang lebih berat.',
+  'hudChrome.tutorial.nextTipsTitle': 'Ke mana berikutnya',
+  'hudChrome.tutorial.slayTargetHint':
+    'Baru dalam pertempuran? Tekan {targetKey} atau klik serigala untuk menargetkannya, lalu gunakan kemampuan di bilah aksi untuk menyerangnya.',
+  'hudChrome.tutorial.slayTargetHintTouch':
+    'Baru dalam pertempuran? Ketuk serigala untuk menargetkannya, lalu ketuk kemampuan di bilah aksi untuk menyerangnya.',
 };

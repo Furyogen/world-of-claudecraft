@@ -338,12 +338,12 @@ export const pt_BR: EnTranslations = {
       "talkBodyTouch": "Aproxime-se do marechal Redbrook e toque no botão Usar para falar, então aceite a tarefa dele.",
       "returnBodyTouch": "Sua tarefa está concluída. Volte ao marechal Redbrook e toque no botão Usar para entregá-la.",
       "doneBodyTouch": "Você já domina o básico, {name}. O Vale é seu para explorar. Toque em Mais e depois em Registro de missões para ver seu registro de missões a qualquer momento. Boa caçada!",
-      "slayTargetHint": "New to combat? Press {targetKey} or click a wolf to target it, then use an action bar ability to attack it.",
-      "slayTargetHintTouch": "New to combat? Tap a wolf to target it, then tap an action bar ability to attack it.",
-      "nextTipsTitle": "Where to next",
-      "nextTipQuestLog": "Open your Quest Log ({key}) to find your next task nearby.",
-      "nextTipMap": "Check the World Map ({key}) to see where quests are waiting.",
-      "nextTipSocial": "Open Social ({key}) to find a group for tougher fights."
+      "slayTargetHint": "Novo no combate? Pressione {targetKey} ou clique em um lobo para mirar nele, depois use uma habilidade da barra de acao para ataca-lo.",
+      "slayTargetHintTouch": "Novo no combate? Toque em um lobo para mirar nele, depois toque em uma habilidade da barra de acao para ataca-lo.",
+      "nextTipsTitle": "Para onde ir agora",
+      "nextTipQuestLog": "Abra seu registro de missoes ({key}) para encontrar a proxima tarefa por perto.",
+      "nextTipMap": "Confira o mapa do mundo ({key}) para ver onde ha missoes esperando.",
+      "nextTipSocial": "Abra Social ({key}) para encontrar um grupo para lutas mais dificeis."
     },
     "widgets": {
       "clockTitle": "Horário local - clique para alternar entre 12/24 horas",
@@ -412,7 +412,7 @@ export const pt_BR: EnTranslations = {
       "targetFriendlyNext": "Alternar alvo aliado",
       "discord": "Discord",
       "valecup": "Copa do Vale",
-      "sheathe": "Sheathe/Unsheathe Weapon",
+      "sheathe": "Guardar/sacar arma",
       "categoryPet": "Mascote",
       "petAttack": "Mascote: atacar",
       "petStop": "Mascote: parar",
@@ -931,7 +931,7 @@ export const pt_BR: EnTranslations = {
     "corpseHarvest": {
       "title": "Coleta",
       "harvestButton": "Coletar",
-      "harvestButtonTooltip": "Harvest: gather crafting materials from this corpse (hide, fang, silk, and similar components), separate from any loot. Anyone can harvest; only one player may harvest a given corpse.",
+      "harvestButtonTooltip": "Coletar: obtenha materiais de artesanato deste cadaver, como couro, presa, seda e componentes semelhantes, separados de qualquer saque. Qualquer um pode coletar; apenas um jogador pode coletar um cadaver especifico.",
       "concentrateHint": "Quanto menos componentes você escolher, maior a qualidade de cada um.",
       "alreadyHarvested": "Este cadáver já foi coletado.",
       "componentAria": "Coletar {component}",
@@ -1113,7 +1113,7 @@ export const pt_BR: EnTranslations = {
     },
     "loot": {
       "chestTitle": "Baú",
-      "takeAllTooltip": "Take All: collect every coin and item in this loot window."
+      "takeAllTooltip": "Pegar tudo: colete todas as moedas e itens desta janela de saque."
     },
     "spellbook": {
       "addToBarAria": "Adicionar {name} à barra de ação",

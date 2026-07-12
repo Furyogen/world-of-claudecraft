@@ -338,12 +338,12 @@ export const pl_PL: EnTranslations = {
       "talkBodyTouch": "Stań blisko marszałka Redbrooka i dotknij przycisku Użyj, aby z nim porozmawiać, a następnie przyjmij jego zadanie.",
       "returnBodyTouch": "Twoje zadanie jest wykonane. Wróć do marszałka Redbrooka i dotknij przycisku Użyj, aby je oddać.",
       "doneBodyTouch": "Masz już podstawy, {name}. Dolina stoi przed tobą otworem. Dotknij Więcej, a potem Zadania, aby w każdej chwili przejrzeć swój dziennik. Dobrych łowów.",
-      "slayTargetHint": "New to combat? Press {targetKey} or click a wolf to target it, then use an action bar ability to attack it.",
-      "slayTargetHintTouch": "New to combat? Tap a wolf to target it, then tap an action bar ability to attack it.",
-      "nextTipsTitle": "Where to next",
-      "nextTipQuestLog": "Open your Quest Log ({key}) to find your next task nearby.",
-      "nextTipMap": "Check the World Map ({key}) to see where quests are waiting.",
-      "nextTipSocial": "Open Social ({key}) to find a group for tougher fights."
+      "slayTargetHint": "Dopiero zaczynasz walke? Nacisnij {targetKey} albo kliknij wilka, aby go namierzyc, a potem uzyj umiejetnosci z paska akcji, aby go zaatakowac.",
+      "slayTargetHintTouch": "Dopiero zaczynasz walke? Stuknij wilka, aby go namierzyc, a potem stuknij umiejetnosc z paska akcji, aby go zaatakowac.",
+      "nextTipsTitle": "Dokad teraz",
+      "nextTipQuestLog": "Otworz dziennik zadan ({key}), aby znalezc najblizsze nastepne zadanie.",
+      "nextTipMap": "Sprawdz mape swiata ({key}), aby zobaczyc, gdzie czekaja zadania.",
+      "nextTipSocial": "Otworz panel spolecznosciowy ({key}), aby znalezc grupe na trudniejsze walki."
     },
     "widgets": {
       "clockTitle": "Czas lokalny - kliknij, aby przełączyć format 12/24-godzinny",
@@ -412,7 +412,7 @@ export const pl_PL: EnTranslations = {
       "targetFriendlyNext": "Przełączaj przyjazny cel",
       "discord": "Discord",
       "valecup": "Puchar Doliny",
-      "sheathe": "Sheathe/Unsheathe Weapon",
+      "sheathe": "Schowaj/dobadz bron",
       "categoryPet": "Zwierzę",
       "petAttack": "Zwierzę: Atak",
       "petStop": "Zwierzę: Zatrzymaj",
@@ -931,7 +931,7 @@ export const pl_PL: EnTranslations = {
     "corpseHarvest": {
       "title": "Zbieranie",
       "harvestButton": "Zbierz",
-      "harvestButtonTooltip": "Harvest: gather crafting materials from this corpse (hide, fang, silk, and similar components), separate from any loot. Anyone can harvest; only one player may harvest a given corpse.",
+      "harvestButtonTooltip": "Zbierz: pozyskaj z tych zwlok materialy rzemieslnicze, takie jak skora, kiel, jedwab i podobne skladniki, oddzielnie od lupow. Zbierac moze kazdy; dane zwloki moze zebrac tylko jeden gracz.",
       "concentrateHint": "Im mniej części wybierzesz, tym wyższa jakość każdej z nich.",
       "alreadyHarvested": "Z tego truchła już wszystko zebrano.",
       "componentAria": "Zbierz: {component}",
@@ -1113,7 +1113,7 @@ export const pl_PL: EnTranslations = {
     },
     "loot": {
       "chestTitle": "Skrzynia",
-      "takeAllTooltip": "Take All: collect every coin and item in this loot window."
+      "takeAllTooltip": "Wez wszystko: zbierz wszystkie monety i przedmioty z tego okna lupow."
     },
     "spellbook": {
       "addToBarAria": "Dodaj {name} do paska akcji",

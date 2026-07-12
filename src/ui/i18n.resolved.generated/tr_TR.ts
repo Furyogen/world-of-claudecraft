@@ -338,12 +338,12 @@ export const tr_TR: EnTranslations = {
       "talkBodyTouch": "Mareşal Redbrook'a yaklaş ve konuşmak için Kullan düğmesine dokun, ardından görevini kabul et.",
       "returnBodyTouch": "Görevin tamamlandı. Mareşal Redbrook'a dön ve teslim etmek için Kullan düğmesine dokun.",
       "doneBodyTouch": "Temelleri öğrendin, {name}. Vadi keşfetmen için senindir. Görev günlüğünü dilediğin an gözden geçirmek için Daha Fazla'ya, ardından Görevler'e dokun. İyi avlar.",
-      "slayTargetHint": "New to combat? Press {targetKey} or click a wolf to target it, then use an action bar ability to attack it.",
-      "slayTargetHintTouch": "New to combat? Tap a wolf to target it, then tap an action bar ability to attack it.",
-      "nextTipsTitle": "Where to next",
-      "nextTipQuestLog": "Open your Quest Log ({key}) to find your next task nearby.",
-      "nextTipMap": "Check the World Map ({key}) to see where quests are waiting.",
-      "nextTipSocial": "Open Social ({key}) to find a group for tougher fights."
+      "slayTargetHint": "Savasta yeni misin? Bir kurdu hedeflemek icin {targetKey} tusuna bas veya ona tikla, sonra saldirmak icin eylem cubugundan bir yetenek kullan.",
+      "slayTargetHintTouch": "Savasta yeni misin? Bir kurdu hedeflemek icin ona dokun, sonra saldirmak icin eylem cubugundan bir yetenege dokun.",
+      "nextTipsTitle": "Sırada nereye",
+      "nextTipQuestLog": "Yakindaki siradaki gorevini bulmak icin gorev gunlugunu ({key}) ac.",
+      "nextTipMap": "Gorevlerin nerede bekledigini gormek icin dunya haritasina ({key}) bak.",
+      "nextTipSocial": "Daha zorlu savaslar icin grup bulmak uzere Sosyal ({key}) ac."
     },
     "widgets": {
       "clockTitle": "Yerel saat - 12/24 saat biçimi arasında geçiş için tıkla",
@@ -412,7 +412,7 @@ export const tr_TR: EnTranslations = {
       "targetFriendlyNext": "Dost Hedefler Arasında Geç",
       "discord": "Discord",
       "valecup": "Vadi Kupası",
-      "sheathe": "Sheathe/Unsheathe Weapon",
+      "sheathe": "Silahi kilifla/cek",
       "categoryPet": "Yoldaş",
       "petAttack": "Yoldaş: Saldır",
       "petStop": "Yoldaş: Dur",
@@ -931,7 +931,7 @@ export const tr_TR: EnTranslations = {
     "corpseHarvest": {
       "title": "Toplama",
       "harvestButton": "Topla",
-      "harvestButtonTooltip": "Harvest: gather crafting materials from this corpse (hide, fang, silk, and similar components), separate from any loot. Anyone can harvest; only one player may harvest a given corpse.",
+      "harvestButtonTooltip": "Topla: bu cesetten deri, dis, ipek ve benzeri bilesenler gibi zanaat malzemeleri topla; bunlar ganimetten ayridir. Herkes toplayabilir; belirli bir cesedi yalnizca bir oyuncu toplayabilir.",
       "concentrateHint": "Ne kadar az parça seçersen, her biri o kadar yüksek kademede olur.",
       "alreadyHarvested": "Bu leş zaten toplandı.",
       "componentAria": "{component} topla",
@@ -1113,7 +1113,7 @@ export const tr_TR: EnTranslations = {
     },
     "loot": {
       "chestTitle": "Sandık",
-      "takeAllTooltip": "Take All: collect every coin and item in this loot window."
+      "takeAllTooltip": "Hepsini al: bu ganimet penceresindeki tum para ve esyalari topla."
     },
     "spellbook": {
       "addToBarAria": "{name} yeteneğini eylem çubuğuna ekle",

@@ -4,7 +4,15 @@
 // enter the Studio render graph or alter a published audio file.
 
 import { randomBytes } from 'node:crypto';
-import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  chmodSync,
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  renameSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { SFX } from './sfx_prompts.mjs';
@@ -219,6 +227,7 @@ function atomicJson(repoRoot, relativePath, value) {
       mode: 0o644,
     });
     renameSync(temporary, path);
+    chmodSync(path, 0o644);
   } finally {
     rmSync(temporary, { force: true });
   }
