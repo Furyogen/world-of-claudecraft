@@ -532,7 +532,7 @@ export interface EntityView {
   travelVisual: CharacterVisual | null; // druid travel form (chicken-cow), built lazily
   skin: number; // last-rendered appearance skin — diffed each frame for live swaps
   mainhandItemId: string | null; // last-rendered equipped weapon — diffed for live held-weapon swaps
-  weaponSkinId: string | null; // last-rendered weapon-skin cosmetic — diffed for live skin swaps
+  weaponSkinId: string | null; // last-rendered weapon-skin cosmetic, diffed for live skin swaps
   /** unscaled height — nameplate/vfx anchor reads height * e.scale */
   height: number;
   /** last-applied entity scale (group.scale); diffed each frame for live size buffs */
@@ -4455,7 +4455,7 @@ export class Renderer {
         v.visual.setWeapon(e.mainhandItemId);
       }
 
-      // live weapon-skin swap — a Season 1 Armory cosmetic applied/detached (self
+      // live weapon-skin swap: a Season 1 Armory cosmetic applied/detached (self
       // or a peer, via the identity wire); replaces the held model + rarity VFX
       if (e.weaponSkinId !== v.weaponSkinId) {
         v.weaponSkinId = e.weaponSkinId;
