@@ -8,6 +8,7 @@ import {
 } from '../runtime';
 import { bagCapacity } from '../sim/bags';
 import { signChallenge } from '../sim/client_challenge';
+import { isHoverCosmeticId } from '../sim/content/hover_cosmetics';
 import { mechChromaItemId, mechChromaSkinIndex } from '../sim/content/skins';
 import {
   cloneAllocation,
@@ -2318,8 +2319,11 @@ export class ClientWorld implements IWorld {
   }
 
   changeHoverCosmetic(id: string | null): void {
+    if (id !== null && !isHoverCosmeticId(id)) return;
     const e = this.entities.get(this.playerId);
     if (e) e.hoverCosmeticId = id; // optimistic; the identity wire confirms
+    this.accountCosmetics = { ...this.accountCosmetics, hoverId: id };
+    this.cosmeticsChanged = true;
     this.cmd({ cmd: 'change_hover', id });
   }
   chat(text: string): void {

@@ -26,6 +26,7 @@ import {
   reclaimDeactivatedName,
   renameCharacter,
   revokeAccountMechChroma,
+  setAccountHoverCosmetic,
   setAccountWeaponSkinLoadout,
   touchLogin,
 } from '../server/db';
@@ -472,6 +473,64 @@ describe('account weapon skin cosmetics', () => {
 
     dbMock.query.mockResolvedValueOnce({ rows: [] } as any);
     await expect(grantAccountWeaponSkins(7, ['ice_fang_sword'])).resolves.toEqual(defaults);
+  });
+
+  // The hover writer follows the same single-key atomic contract; null must
+  // arrive as JSONB null (the 4-char 'null' string), never SQL NULL, or
+  // jsonb_set would nuke the whole cosmetics column.
+  it('sets the hover cosmetic in one atomic jsonb_set UPDATE', async () => {
+    dbMock.query.mockResolvedValueOnce({
+      rows: [
+        {
+          cosmetics: {
+            completedQuestIds: [],
+            mechChromaIds: [],
+            weaponSkinIds: [],
+            weaponSkinLoadout: {},
+            hoverId: 'butterfly_drift',
+          },
+        },
+      ],
+    } as any);
+
+    await expect(setAccountHoverCosmetic(7, 'butterfly_drift')).resolves.toEqual({
+      completedQuestIds: [],
+      mechChromaIds: [],
+      weaponSkinIds: [],
+      weaponSkinLoadout: {},
+      hoverId: 'butterfly_drift',
+    });
+
+    expect(dbMock.query).toHaveBeenCalledTimes(1);
+    const [sql, params] = dbMock.query.mock.calls[0];
+    expect(sql).toMatch(/UPDATE accounts/);
+    expect(sql).toMatch(/jsonb_set/);
+    expect(sql).toMatch(/hoverId/);
+    expect(sql).toMatch(/RETURNING cosmetics/);
+    expect(params).toEqual([7, JSON.stringify('butterfly_drift')]);
+  });
+
+  it('clears the hover cosmetic with JSONB null and normalizes it back to null', async () => {
+    dbMock.query.mockResolvedValueOnce({
+      rows: [
+        {
+          cosmetics: {
+            completedQuestIds: [],
+            mechChromaIds: [],
+            weaponSkinIds: [],
+            weaponSkinLoadout: {},
+            hoverId: null,
+          },
+        },
+      ],
+    } as any);
+
+    const cleared = await setAccountHoverCosmetic(7, null);
+    expect(cleared.hoverId).toBeNull();
+
+    const [, params] = dbMock.query.mock.calls[0];
+    // JSON.stringify(null) is the string 'null': JSONB null, not SQL NULL.
+    expect(params).toEqual([7, 'null']);
   });
 });
 

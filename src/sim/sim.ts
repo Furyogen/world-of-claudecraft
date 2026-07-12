@@ -2332,6 +2332,11 @@ export class Sim {
     if (!e || e.kind !== 'player') return false;
     if (id !== null && !isHoverCosmeticId(id)) return false;
     e.hoverCosmeticId = id;
+    // Mirror the local player's accountCosmetics view (the weapon-skin loadout
+    // precedent) so a store's applied badge reads the same on both hosts.
+    if (pid === this.primaryId) {
+      this.accountCosmetics = { ...this.accountCosmetics, hoverId: id };
+    }
     return true;
   }
 

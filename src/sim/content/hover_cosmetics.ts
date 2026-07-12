@@ -51,5 +51,7 @@ export const HOVER_COSMETICS: Record<string, HoverCosmeticDef> = {
 export const HOVER_COSMETIC_LIST: readonly HoverCosmeticDef[] = Object.values(HOVER_COSMETICS);
 
 export function isHoverCosmeticId(value: unknown): value is string {
-  return typeof value === 'string' && value in HOVER_COSMETICS;
+  // Object.hasOwn, never `in`: this is the change_hover command's only gate,
+  // and `in` walks the prototype chain (accepting '__proto__', 'constructor').
+  return typeof value === 'string' && Object.hasOwn(HOVER_COSMETICS, value);
 }

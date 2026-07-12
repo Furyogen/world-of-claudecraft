@@ -31,6 +31,10 @@ describe('hover cosmetic catalog', () => {
     expect(isHoverCosmeticId('tinkers_jetpack')).toBe(true);
     expect(isHoverCosmeticId('not_a_thing')).toBe(false);
     expect(isHoverCosmeticId(null)).toBe(false);
+    // Prototype-chain keys must not pass the gate (Object.hasOwn, never `in`).
+    expect(isHoverCosmeticId('__proto__')).toBe(false);
+    expect(isHoverCosmeticId('constructor')).toBe(false);
+    expect(isHoverCosmeticId('toString')).toBe(false);
   });
 
   it('every cosmetic ships its back-attachment GLB; wings carry the flap halves', () => {
@@ -54,10 +58,14 @@ describe('sim hover apply (offline free-apply, like change_skin)', () => {
     expect(p?.hoverCosmeticId).toBeNull();
     sim.changeHoverCosmetic('butterfly_drift');
     expect(p?.hoverCosmeticId).toBe('butterfly_drift');
+    // The accountCosmetics view mirrors the applied cosmetic (store badge parity).
+    expect(sim.accountCosmetics.hoverId).toBe('butterfly_drift');
     sim.changeHoverCosmetic('nonsense_id');
     expect(p?.hoverCosmeticId).toBe('butterfly_drift'); // junk rejected, state kept
+    expect(sim.accountCosmetics.hoverId).toBe('butterfly_drift');
     sim.changeHoverCosmetic(null);
     expect(p?.hoverCosmeticId).toBeNull();
+    expect(sim.accountCosmetics.hoverId).toBeNull();
   });
 
   it('setHoverCosmetic rejects non-player targets', () => {

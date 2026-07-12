@@ -20,6 +20,13 @@ vi.mock('../server/db', () => ({
     weaponSkinLoadout: {},
     hoverId: null,
   })),
+  setAccountHoverCosmetic: vi.fn(async () => ({
+    completedQuestIds: [],
+    mechChromaIds: [],
+    weaponSkinIds: [],
+    weaponSkinLoadout: {},
+    hoverId: null,
+  })),
 }));
 
 import { saveCharacterState } from '../server/db';
@@ -1868,6 +1875,100 @@ describe('weapon skin wire (weaponSkinId)', () => {
     // the detach re-sends identity too, now without the wsk key
     expect(detached?.k).toBe('player');
     expect(detached?.wsk).toBeUndefined();
+  });
+});
+
+// The hover cosmetic rides the identity wire exactly like wsk: `hov` only
+// while one is applied, restored from full records, preserved by lite ones.
+describe('hover cosmetic wire (hov)', () => {
+  it('carries the applied cosmetic through wireEntity only while one is applied', () => {
+    const sim = new Sim({ seed: 1, playerClass: 'warrior', noPlayer: true });
+    const pid = sim.addPlayer('warrior', 'Aloft');
+    const e = sim.entities.get(pid)!;
+    expect(wireEntity(e).hov).toBeUndefined();
+
+    expect(sim.setHoverCosmetic(pid, 'butterfly_drift')).toBe(true);
+    expect(wireEntity(e).hov).toBe('butterfly_drift');
+
+    sim.setHoverCosmetic(pid, null);
+    expect(wireEntity(e).hov).toBeUndefined();
+  });
+
+  it('restores entity.hoverCosmeticId from a full record; a lite record preserves it', () => {
+    const client = bareClient(99);
+    const base = {
+      id: 7,
+      k: 'player',
+      tid: 'warrior',
+      nm: 'Brae',
+      lv: 5,
+      x: 0,
+      y: 0,
+      z: 0,
+      f: 0,
+      hp: 100,
+      mhp: 100,
+    };
+
+    (client as any).applySnapshot({ t: 'snap', ents: [{ ...base, hov: 'tinkers_jetpack' }] });
+    expect(client.entities.get(7)?.hoverCosmeticId).toBe('tinkers_jetpack');
+
+    // a lite record (no identity fields) leaves the applied cosmetic in place
+    (client as any).applySnapshot({
+      t: 'snap',
+      ents: [{ id: 7, x: 1, y: 0, z: 1, f: 0, hp: 100, mhp: 100 }],
+    });
+    expect(client.entities.get(7)?.hoverCosmeticId).toBe('tinkers_jetpack');
+
+    // a later full record without `hov` means "no cosmetic" -> reset to null
+    (client as any).applySnapshot({ t: 'snap', ents: [base] });
+    expect(client.entities.get(7)?.hoverCosmeticId).toBeNull();
+  });
+
+  it('broadcasts hov to nearby sessions as a full record on apply and drops it on clear', () => {
+    const server = new GameServer();
+    const fcA = fakeWs();
+    const joined = server.join(fcA.ws, 1, 1, 'Aloft', 'warrior', null, false, {
+      accountCosmetics: {
+        completedQuestIds: [],
+        mechChromaIds: [],
+        weaponSkinIds: [],
+        weaponSkinLoadout: {},
+        hoverId: null,
+      },
+    });
+    if ('error' in joined) throw new Error(joined.error);
+    const a = joined;
+    a.blockListLoaded = true;
+    const fcB = fakeWs();
+    joinServer(server, fcB, 2, 'Watcher');
+
+    // Before the apply, B's first-sight full record of A carries no hov.
+    broadcast(server);
+    const before = lastSnap(fcB.sent)?.ents.find((r: any) => r.id === a.pid);
+    expect(before?.k).toBe('player');
+    expect(before?.hov).toBeUndefined();
+
+    server.handleMessage(
+      a,
+      JSON.stringify({ t: 'cmd', cmd: 'change_hover', id: 'butterfly_drift' }),
+    );
+    fcB.sent.length = 0;
+    server.sim.tick(); // the wire cache re-serializes identity once per sim tick
+    broadcast(server);
+    const applied = lastSnap(fcB.sent)?.ents.find((r: any) => r.id === a.pid);
+    // identity changed, so B receives a FULL record (k present) with the hover
+    expect(applied?.k).toBe('player');
+    expect(applied?.hov).toBe('butterfly_drift');
+
+    server.handleMessage(a, JSON.stringify({ t: 'cmd', cmd: 'change_hover', id: null }));
+    fcB.sent.length = 0;
+    server.sim.tick();
+    broadcast(server);
+    const cleared = lastSnap(fcB.sent)?.ents.find((r: any) => r.id === a.pid);
+    // the clear re-sends identity too, now without the hov key
+    expect(cleared?.k).toBe('player');
+    expect(cleared?.hov).toBeUndefined();
   });
 });
 
