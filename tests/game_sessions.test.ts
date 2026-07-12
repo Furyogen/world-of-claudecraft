@@ -1,5 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { MECH_CHROMAS } from '../src/sim/content/skins';
+import { MOBS } from '../src/sim/data';
+import { createMob } from '../src/sim/entity';
 
 const openPlaySession = vi.fn(async () => 1);
 const closePlaySession = vi.fn(async () => {});
@@ -311,6 +313,51 @@ describe('GameServer sessions', () => {
     expect((server as any).sessionByCharacterId(101)).toBeNull();
     const rejoined = expectJoined(server.join(fakeWs(), 13, 101, 'Indexa', 'warrior', null));
     expect((server as any).sessionByCharacterId(101)).toBe(rejoined);
+  });
+
+  it('forfeits pending loot rolls before the disconnect save can yield', async () => {
+    const server = new GameServer();
+    const leaver = expectJoined(server.join(fakeWs(), 11, 101, 'Leaver', 'warrior', null));
+    const stayer = expectJoined(server.join(fakeWs(), 12, 102, 'Stayer', 'mage', null));
+    server.sim.partyInvite(stayer.pid, leaver.pid);
+    server.sim.partyAccept(stayer.pid);
+
+    const mob = createMob(server.sim.nextId++, MOBS.forest_wolf, 2, { x: 0, y: 0, z: 0 });
+    mob.dead = true;
+    mob.lootable = true;
+    mob.tappedById = leaver.pid;
+    mob.lootRecipientIds = [leaver.pid, stayer.pid];
+    mob.loot = { copper: 0, items: [{ itemId: 'greyjaw_hide_boots', count: 1 }] };
+    server.sim.entities.set(mob.id, mob);
+    server.sim.lootCorpse(mob.id, leaver.pid);
+    const roll = server.sim.drainEvents().find((event) => event.type === 'lootRoll');
+    if (!roll || roll.type !== 'lootRoll') throw new Error('expected pending loot roll');
+    server.sim.submitLootRoll(roll.rollId, 'need', leaver.pid);
+
+    let resolveSave!: () => void;
+    const slowSave = new Promise<void>((resolve) => {
+      resolveSave = resolve;
+    });
+    const savesBefore = vi.mocked(saveCharacterAndMarketState).mock.calls.length;
+    vi.mocked(saveCharacterAndMarketState).mockImplementationOnce(() => slowSave);
+
+    const leaving = server.leave(leaver, 'test');
+    await vi.waitFor(() => {
+      expect(saveCharacterAndMarketState).toHaveBeenCalledTimes(savesBefore + 1);
+    });
+
+    // Resolve the roll while leave() is parked on its first persistence await.
+    // The departing need choice must already be gone, otherwise this awards an
+    // item after the leave snapshot and removePlayer later destroys it.
+    server.sim.submitLootRoll(roll.rollId, 'pass', stayer.pid);
+    expect(server.sim.countItem('greyjaw_hide_boots', leaver.pid)).toBe(0);
+    expect(mob.loot?.items.find((slot) => slot.itemId === 'greyjaw_hide_boots')).toMatchObject({
+      count: 1,
+      openToAll: true,
+    });
+
+    resolveSave();
+    await leaving;
   });
 
   it('retries failed disconnect saves before releasing the character for rejoin', async () => {
