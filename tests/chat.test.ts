@@ -1134,6 +1134,10 @@ describe('chat module (direct, no Sim)', () => {
         calls.push(['bot', name]);
         return 7;
       },
+      startDevSandbox: (pid?: number) => {
+        calls.push(['sandbox', pid]);
+        return 5;
+      },
       emit: () => {},
       error: () => {},
       entities: new Map(),
@@ -1155,6 +1159,8 @@ describe('chat module (direct, no Sim)', () => {
     expect(calls).toContainEqual(['quests', 1]);
     expect(chatMod.handleDevChat(ctx, '/dev bot ASASAS', 1)).toBe(null);
     expect(calls).toContainEqual(['bot', 'ASASAS']);
+    expect(chatMod.handleDevChat(ctx, '/dev sandbox', 1)).toBe(null);
+    expect(calls).toContainEqual(['sandbox', 1]);
     expect(chatMod.handleDevChat(ctx, 'hello world', 1)).toBe(undefined);
   });
 
@@ -1186,7 +1192,7 @@ describe('chat module (direct, no Sim)', () => {
     expect(chatMod.handleDevChat(ctx, '/dev', 1)).toBe(null);
     // Every subcommand the parser accepts must be listed, so the help can never
     // silently drift behind the commands again (the "/dev bot" omission this pins).
-    for (const cmd of ['level', 'tp', 'give', 'gold', 'quest', 'quests', 'bot'])
+    for (const cmd of ['level', 'tp', 'give', 'gold', 'quest', 'quests', 'bot', 'sandbox'])
       expect(help, `help omits /dev ${cmd}`).toContain(`/dev ${cmd}`);
   });
 });
