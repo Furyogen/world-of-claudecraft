@@ -181,25 +181,30 @@ describe('skin apply rule', () => {
 });
 
 describe('bow skin attack animation (hunter draw instead of crossbow aim)', () => {
-  it('bow skins substitute the draw clip; every other type keeps the authored attack', async () => {
-    const { weaponSkinAttackClips, SKIN_ATTACK_CLIP_NAMES } = await import(
+  it('bow skins substitute the authored draw clip; every other type keeps its attack', async () => {
+    const { weaponSkinAttackClips, SKIN_ATTACK_CLIP_NAMES, BOW_RELEASE_AT } = await import(
       '../src/render/characters/skin_attack'
     );
+    const { AUTO_SHOT_DRAW_S } = await import('../src/sim/projectile_travel');
     for (const skin of WEAPON_SKIN_LIST) {
       const sub = weaponSkinAttackClips(skin.id);
       if (skin.weaponType === 'bow') {
-        expect(sub?.clips, skin.id).toContain('2H_Ranged_Reload');
+        expect(sub?.clips, skin.id).toContain('Bow_Draw_Shot');
+        // The clip's release keyframe and the sim's arrow release are the
+        // same instant by construction.
+        expect(sub?.releaseAt).toBe(AUTO_SHOT_DRAW_S);
         // Every substitute clip must be one the constructor binds.
         for (const clip of sub?.clips ?? []) expect(SKIN_ATTACK_CLIP_NAMES).toContain(clip);
       } else {
         expect(sub, `${skin.id} (${skin.weaponType}) must keep the authored attack`).toBeNull();
       }
     }
+    expect(BOW_RELEASE_AT).toBe(AUTO_SHOT_DRAW_S);
     expect(weaponSkinAttackClips(null)).toBeNull();
     expect(weaponSkinAttackClips('not_a_skin')).toBeNull();
   });
 
-  it('the hunter ships the bow clips via animUrls and the GLB carries them', () => {
+  it('the hunter ships the bow clip via animUrls and the GLB carries it', async () => {
     // Source scan, not an import: pulling the manifest into Node would kick
     // the module-import GLB preloads (assets.ts loading contract).
     const manifestSrc = readFileSync(join(ROOT, 'src/render/characters/manifest.ts'), 'utf8');
@@ -214,11 +219,16 @@ describe('bow skin attack animation (hunter draw instead of crossbow aim)', () =
     const jsonLen = glb.readUInt32LE(12);
     const doc = JSON.parse(glb.subarray(20, 20 + jsonLen).toString('utf8'));
     const clips = (doc.animations ?? []).map((a: { name?: string }) => a.name);
-    for (const name of ['2H_Ranged_Aiming', '2H_Ranged_Reload', '2H_Ranged_Shooting']) {
-      expect(clips, name).toContain(name);
-    }
+    expect(clips).toContain('Bow_Draw_Shot');
     // Mesh-free clip donor: nothing to render, just bones + tracks.
     expect(doc.meshes ?? []).toEqual([]);
+    // The authoring script's release keyframe must sit exactly at the sim's
+    // Auto Shot release (the arrow leaves when the string snaps).
+    const { AUTO_SHOT_DRAW_S } = await import('../src/sim/projectile_travel');
+    const script = readFileSync(join(ROOT, 'scripts/build_bow_anims.mjs'), 'utf8');
+    const m = script.match(/BOW_RELEASE_AT = ([0-9.]+)/);
+    expect(m, 'build_bow_anims.mjs must declare BOW_RELEASE_AT').toBeTruthy();
+    expect(Number(m?.[1])).toBe(AUTO_SHOT_DRAW_S);
   });
 });
 
