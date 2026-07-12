@@ -5,10 +5,10 @@ import { buildDailyRewardsView, type DailyRewardsView } from './daily_rewards_vi
 import { tEntity } from './entity_i18n';
 import { esc } from './esc';
 import { formatDateTime, formatNumber, t } from './i18n';
-import { ensureWindowFrame } from './window_frame_mount';
-import type { WindowFrameDescriptor } from './window_frame_view';
 import { portraitChipHtml } from './portrait_chip';
 import { svgIcon } from './ui_icons';
+import { ensureWindowFrame } from './window_frame_mount';
+import type { WindowFrameDescriptor } from './window_frame_view';
 import {
   type ArmorySection,
   type ArmorySkinRow,

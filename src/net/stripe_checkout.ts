@@ -39,10 +39,14 @@ function loadStripeScript(): Promise<void> {
   if (window.Stripe) return Promise.resolve();
   if (stripeScriptPromise) return stripeScriptPromise;
   stripeScriptPromise = new Promise((resolve, reject) => {
-    const existing = document.querySelector<HTMLScriptElement>('script[src="https://js.stripe.com/v3/"]');
+    const existing = document.querySelector<HTMLScriptElement>(
+      'script[src="https://js.stripe.com/v3/"]',
+    );
     if (existing) {
       existing.addEventListener('load', () => resolve(), { once: true });
-      existing.addEventListener('error', () => reject(new Error('stripe_load_failed')), { once: true });
+      existing.addEventListener('error', () => reject(new Error('stripe_load_failed')), {
+        once: true,
+      });
       return;
     }
     const script = document.createElement('script');
@@ -96,7 +100,9 @@ export async function openStripeCheckout(
     close();
     options.onComplete?.();
   };
-  overlay.querySelector<HTMLButtonElement>('.stripe-checkout-close')?.addEventListener('click', close);
+  overlay
+    .querySelector<HTMLButtonElement>('.stripe-checkout-close')
+    ?.addEventListener('click', close);
   try {
     await loadStripeScript();
     const stripe = window.Stripe?.(intent.publishableKey);
@@ -106,12 +112,18 @@ export async function openStripeCheckout(
           fetchClientSecret: async () => intent.clientSecret,
           onComplete: complete,
         })
-      : await stripe.initEmbeddedCheckout({ clientSecret: intent.clientSecret, onComplete: complete });
+      : await stripe.initEmbeddedCheckout({
+          clientSecret: intent.clientSecret,
+          onComplete: complete,
+        });
     const mount = overlay.querySelector<HTMLElement>('#stripe-checkout-mount');
     if (mount) mount.textContent = '';
     checkout.mount('#stripe-checkout-mount');
   } catch (err) {
-    console.warn('[claudium] Stripe checkout failed', err instanceof Error ? err.message : String(err));
+    console.warn(
+      '[claudium] Stripe checkout failed',
+      err instanceof Error ? err.message : String(err),
+    );
     const mount = overlay.querySelector<HTMLElement>('#stripe-checkout-mount');
     if (mount) mount.textContent = labels.failed;
     throw err;

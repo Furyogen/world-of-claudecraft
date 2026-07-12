@@ -2577,6 +2577,7 @@
      rule outranked them, so the fix must live in this layer too. */
   body.mobile-touch .window:has(> .window-frame) {
     padding: 0;
+  }
   body.mobile-touch #claudium-window .cl-body {
     max-height: calc(var(--app-vh) / var(--ui-scale, 1) - 78px);
     padding: 10px;
