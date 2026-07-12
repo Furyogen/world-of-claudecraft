@@ -415,7 +415,8 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.browserEffectsNote':
     '自動はブラウザとデバイスに応じて、負荷の高い CSS エフェクト（ぼかし・グロー・背景アニメーション）を抑えます。動作が重い場合は手動で下げてください。',
   'hudChrome.options.voiceChatEnabled': 'ボイスチャット（近接）',
-  'hudChrome.options.voiceChatMicDenied': 'マイクへのアクセスが拒否されました。ボイスチャットにはマイクが必要です。',
+  'hudChrome.options.voiceChatMicDenied':
+    'マイクへのアクセスが拒否されました。ボイスチャットにはマイクが必要です。',
   'hudChrome.options.footstepSounds': '足音',
   'hudChrome.options.clickFeedback': 'クリックマーカー',
   'hudChrome.options.startAttackOnAbility': 'アビリティ使用時に自動攻撃',

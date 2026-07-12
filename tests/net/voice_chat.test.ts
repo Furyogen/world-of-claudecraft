@@ -3,10 +3,7 @@ import { diffVoicePeers } from '../../src/net/voice_chat';
 
 describe('diffVoicePeers', () => {
   it('reports newly added peers', () => {
-    const { added, removed } = diffVoicePeers(new Set(), [
-      { pid: 1 },
-      { pid: 2 },
-    ]);
+    const { added, removed } = diffVoicePeers(new Set(), [{ pid: 1 }, { pid: 2 }]);
     expect(added.sort()).toEqual([1, 2]);
     expect(removed).toEqual([]);
   });

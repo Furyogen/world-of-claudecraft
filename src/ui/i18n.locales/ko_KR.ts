@@ -413,7 +413,8 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.browserEffectsNote':
     '자동은 브라우저와 기기에 맞춰 무거운 CSS 효과(흐림, 글로우, 배경 모션)를 낮춥니다. 인터페이스가 느리게 느껴지면 수동으로 낮추세요.',
   'hudChrome.options.voiceChatEnabled': '음성 채팅 (근접)',
-  'hudChrome.options.voiceChatMicDenied': '마이크 접근이 거부되었습니다. 음성 채팅에는 마이크가 필요합니다.',
+  'hudChrome.options.voiceChatMicDenied':
+    '마이크 접근이 거부되었습니다. 음성 채팅에는 마이크가 필요합니다.',
   'hudChrome.options.footstepSounds': '발소리',
   'hudChrome.options.clickFeedback': '클릭 표시',
   'hudChrome.options.startAttackOnAbility': '스킬 사용 시 자동 공격',
