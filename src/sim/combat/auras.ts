@@ -166,8 +166,15 @@ export function updateAuras(ctx: SimContext, e: Entity): void {
             fx: 'tick',
           });
           // Dynamic per-tick amount off the caster's CURRENT stats, then one crit roll.
+          // Only a PLAYER source's dot can crit: mob dot affixes (venom, soulrot, bleed,
+          // frostbite, smolder, cinder, arcaneRot, stackPoison) stay non-critting so this
+          // remains a talent-balance change, not a PvE difficulty bump. The roll is still
+          // drawn unconditionally (chance(0) consumes one rng value), so the draw order is
+          // identical whatever the source; a mob roll simply never lands.
           const amount = periodicTickAmount(a, src);
-          const crit = ctx.rng.chance(periodicCritChance(a, src, ctx.spellCrit));
+          const crit = ctx.rng.chance(
+            src?.kind === 'player' ? periodicCritChance(a, src, ctx.spellCrit) : 0,
+          );
           ctx.dealDamage(
             src,
             e,
@@ -186,9 +193,12 @@ export function updateAuras(ctx: SimContext, e: Entity): void {
         } else if (a.kind === 'hot') {
           // Dynamic HoT: live per-tick amount + a crit roll (heals crit at 1.5x). The
           // roll is drawn whenever the tick fires (even at full hp) to keep the shared
-          // rng stream deterministic regardless of the target's health.
+          // rng stream deterministic regardless of the target's health. HoTs always crit
+          // off SPELL crit (never physical), so this inlines spellCrit on purpose rather
+          // than periodicCritChance; do not "fix" it to the dot helper. Gated to a living
+          // PLAYER source, matching the dot path (mob-cast hots stay non-critting).
           const amount = periodicTickAmount(a, src);
-          const crit = ctx.rng.chance(src ? ctx.spellCrit(src) : 0);
+          const crit = ctx.rng.chance(src?.kind === 'player' && !src.dead ? ctx.spellCrit(src) : 0);
           const raw = crit ? Math.round(amount * 1.5) : amount;
           const healed = Math.min(Math.round(raw * ctx.healingTakenMult(e)), e.maxHp - e.hp);
           if (healed > 0) {

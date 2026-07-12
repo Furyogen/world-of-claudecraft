@@ -66,8 +66,23 @@ describe('periodicTickAmount (dynamic recompute)', () => {
   });
 
   it('never scales below 1 and ignores power when the caster has left the world', () => {
-    expect(periodicTickAmount(dot(), null)).toBe(40); // no caster: static base only
-    expect(periodicTickAmount(dot({ tickBase: 0, tickPowerCoeff: 0 }), caster())).toBe(1);
+    expect(periodicTickAmount(dot(), null)).toBe(40); // no caster: frozen at the snapshot value
+    expect(periodicTickAmount(dot({ value: 0, tickBase: 0, tickPowerCoeff: 0 }), caster())).toBe(1);
+  });
+
+  it('freezes to the cast-time snapshot value (not the riderless tickBase) with no live caster', () => {
+    // value 100 is the full cast-time snapshot (it baked in the caster's SP rider); tickBase
+    // 40 is the riderless static amount. A gone or dead caster must keep paying the snapshot.
+    const a = dot({ value: 100, tickBase: 40, tickPowerCoeff: 0.2 });
+    expect(periodicTickAmount(a, null)).toBe(100); // caster gone -> full snapshot
+  });
+
+  it('freezes a dead-but-not-yet-removed caster to the snapshot instead of tracking its corpse', () => {
+    const a = dot({ value: 100, tickBase: 40, tickPowerCoeff: 0.2 });
+    const alive = caster({ spellPower: 500 });
+    const dead = caster({ spellPower: 500, dead: true } as Partial<Entity>);
+    expect(periodicTickAmount(a, alive)).toBe(140); // live: 40 + round(500 * 0.2)
+    expect(periodicTickAmount(a, dead)).toBe(100); // dead: frozen at the snapshot
   });
 });
 
@@ -89,6 +104,14 @@ describe('periodicTickInterval (haste raises the tick rate)', () => {
     // A mob bleed carries no tickPowerStat, so its cadence is exactly the base.
     expect(periodicTickInterval(dot({ tickPowerStat: undefined }), src)).toBe(3);
   });
+
+  it('freezes to the base cadence for a gone or dead-but-not-yet-removed caster', () => {
+    const hasted = caster({ spellHaste: 0.5 });
+    const dead = caster({ spellHaste: 0.5, dead: true } as Partial<Entity>);
+    expect(periodicTickInterval(dot({ tickInterval: 3 }), hasted)).toBe(2); // live hasted
+    expect(periodicTickInterval(dot({ tickInterval: 3 }), dead)).toBe(3); // dead: base cadence
+    expect(periodicTickInterval(dot({ tickInterval: 3 }), null)).toBe(3); // gone: base cadence
+  });
 });
 
 describe('periodicCritChance / periodicCritMult', () => {
@@ -104,5 +127,11 @@ describe('periodicCritChance / periodicCritMult', () => {
 
   it('is 0 with no caster in the world', () => {
     expect(periodicCritChance(dot(), null, () => 1)).toBe(0);
+  });
+
+  it('is 0 for a dead-but-not-yet-removed caster (a frozen dot does not crit off a corpse)', () => {
+    const dead = caster({ critChance: 0.3, dead: true } as Partial<Entity>);
+    expect(periodicCritChance(dot({ school: 'physical' }), dead, () => 0.5)).toBe(0);
+    expect(periodicCritChance(dot({ school: 'shadow' }), dead, () => 0.5)).toBe(0);
   });
 });

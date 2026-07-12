@@ -25,37 +25,41 @@ function hasteFor(stat: TickPowerStat, src: Entity): number {
 }
 
 // Live per-tick BASE amount (pre-crit, pre-mitigation) for a dot/hot: the static
-// tickBase plus the caster's CURRENT power rider, recomputed this tick. Auras with no
-// dynamic descriptor (mob bleeds, older auras) fall back to the snapshot `value`, so
-// their behavior is unchanged. Floored at 1 like the cast-time snapshot.
+// tickBase plus the caster's CURRENT power rider, recomputed this tick. When there is
+// no dynamic descriptor (mob bleeds, older auras) OR no LIVE caster to read (the caster
+// logged out, or is dead but not yet removed), the tick FREEZES at the cast-time
+// snapshot `value`. `value` already baked in the caster's power at cast (including the
+// dotSp rider), so a frozen dot keeps paying its snapshot rather than dropping to the
+// riderless tickBase. Floored at 1 like the cast-time snapshot.
 export function periodicTickAmount(a: Aura, src: Entity | null): number {
-  const base = a.tickBase ?? a.value;
   const coeff = a.tickPowerCoeff ?? 0;
-  if (coeff <= 0 || !src || !a.tickPowerStat) return Math.max(1, Math.round(base));
+  if (coeff <= 0 || !src || src.dead || !a.tickPowerStat) return Math.max(1, Math.round(a.value));
   const rider = Math.round(powerFor(a.tickPowerStat, src) * coeff);
-  return Math.max(1, base + rider);
+  return Math.max(1, (a.tickBase ?? a.value) + rider);
 }
 
 // Haste-scaled tick interval: haste raises the tick RATE (interval / (1 + haste)) while
 // the aura's remaining duration is untouched, so a hasted dot fires more full-damage
 // ticks over the same window. A haste-less caster (and every mob source) keeps the base
-// cadence exactly, so only hasted casters move off the byte-identical tick timeline.
+// cadence exactly, so only hasted casters move off the byte-identical tick timeline. A
+// gone or dead-but-not-yet-removed caster also freezes to the base cadence.
 export function periodicTickInterval(a: Aura, src: Entity | null): number {
   const base = a.tickInterval ?? 0;
-  if (base <= 0 || !src || !a.tickPowerStat) return base;
+  if (base <= 0 || !src || src.dead || !a.tickPowerStat) return base;
   const haste = hasteFor(a.tickPowerStat, src);
   return haste > 0 ? base / (1 + haste) : base;
 }
 
 // Per-tick crit chance for a dot/hot: physical bleeds crit off the caster's melee crit,
-// magic dots and all hots off spell crit (passed in, since it lives on the Sim). No
-// caster in the world means no crit. The caller rolls this against the shared Rng.
+// magic dots and all hots off spell crit (passed in, since it lives on the Sim). No live
+// caster (gone, or dead but not yet removed) means no crit, so a frozen dot stops
+// tracking a corpse's stat block. The caller rolls this against the shared Rng.
 export function periodicCritChance(
   a: Aura,
   src: Entity | null,
   spellCrit: (e: Entity) => number,
 ): number {
-  if (!src) return 0;
+  if (!src || src.dead) return 0;
   return a.school === 'physical' ? src.critChance : spellCrit(src);
 }
 

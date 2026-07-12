@@ -15,8 +15,8 @@
     "cancelCast fishing arm via dealDamage (FISHING_CAST_ID, not pushback)",
     "multi-class casters: mage/priest/warlock"
   ],
-  "draws": 1093,
-  "drawDigest": "8990e75f",
+  "draws": 1105,
+  "drawDigest": "371c82ad",
   "frames": [
     {
       "tick": 0,
@@ -583,7 +583,7 @@
       "tick": 85,
       "time": 4.25,
       "nextId": 409,
-      "state": "bf0ccb98",
+      "state": "2b8e7cca",
       "events": "1f242d33",
       "rng": {
         "draws": 202,
@@ -594,7 +594,7 @@
       "tick": 90,
       "time": 4.5,
       "nextId": 409,
-      "state": "7ad6a7a4",
+      "state": "4881fc06",
       "events": "741638a5",
       "rng": {
         "draws": 227,
@@ -605,7 +605,7 @@
       "tick": 95,
       "time": 4.75,
       "nextId": 409,
-      "state": "c497acbe",
+      "state": "cf99ba76",
       "events": "741638a5",
       "rng": {
         "draws": 266,
@@ -616,7 +616,7 @@
       "tick": 100,
       "time": 5,
       "nextId": 409,
-      "state": "6ef09f87",
+      "state": "931bec99",
       "events": "741638a5",
       "rng": {
         "draws": 288,
@@ -627,7 +627,7 @@
       "tick": 105,
       "time": 5.25,
       "nextId": 409,
-      "state": "9a128006",
+      "state": "787c4062",
       "events": "741638a5",
       "rng": {
         "draws": 302,
@@ -638,7 +638,7 @@
       "tick": 110,
       "time": 5.5,
       "nextId": 409,
-      "state": "d734906c",
+      "state": "0aedb394",
       "events": "741638a5",
       "rng": {
         "draws": 323,
@@ -649,7 +649,7 @@
       "tick": 115,
       "time": 5.75,
       "nextId": 409,
-      "state": "92da4474",
+      "state": "44d39256",
       "events": "741638a5",
       "rng": {
         "draws": 363,
@@ -660,7 +660,7 @@
       "tick": 120,
       "time": 6,
       "nextId": 409,
-      "state": "cfe76961",
+      "state": "5aa1e6bd",
       "events": "741638a5",
       "rng": {
         "draws": 384,
@@ -671,29 +671,29 @@
       "tick": 125,
       "time": 6.25,
       "nextId": 409,
-      "state": "0bd0578b",
+      "state": "f97c130f",
       "events": "7e7ce1de",
       "rng": {
-        "draws": 429,
-        "digest": "2fe488d5"
+        "draws": 430,
+        "digest": "9b62a8fa"
       }
     },
     {
       "tick": 130,
       "time": 6.5,
       "nextId": 409,
-      "state": "cdc5c453",
+      "state": "7d06410f",
       "events": "741638a5",
       "rng": {
-        "draws": 461,
-        "digest": "6ef7e3bf"
+        "draws": 462,
+        "digest": "8f9db72c"
       }
     },
     {
       "tick": 135,
       "time": 6.75,
       "nextId": 409,
-      "state": "16c9b904",
+      "state": "2eec8e1c",
       "events": "741638a5",
       "rng": {
         "draws": 499,
@@ -704,7 +704,7 @@
       "tick": 140,
       "time": 7,
       "nextId": 409,
-      "state": "47f0be39",
+      "state": "faea90bb",
       "events": "741638a5",
       "rng": {
         "draws": 523,
@@ -715,7 +715,7 @@
       "tick": 145,
       "time": 7.25,
       "nextId": 409,
-      "state": "f2863163",
+      "state": "463854a1",
       "events": "741638a5",
       "rng": {
         "draws": 552,
@@ -726,7 +726,7 @@
       "tick": 150,
       "time": 7.5,
       "nextId": 409,
-      "state": "cf3e909b",
+      "state": "9da5e809",
       "events": "741638a5",
       "rng": {
         "draws": 585,
@@ -737,77 +737,77 @@
       "tick": 155,
       "time": 7.75,
       "nextId": 409,
-      "state": "616bbb57",
+      "state": "a2c45c6f",
       "events": "741638a5",
       "rng": {
-        "draws": 618,
-        "digest": "d38908e7"
+        "draws": 617,
+        "digest": "eb2f5f38"
       }
     },
     {
       "tick": 160,
       "time": 8,
       "nextId": 409,
-      "state": "7afa762c",
+      "state": "269d72d2",
       "events": "741638a5",
       "rng": {
-        "draws": 634,
-        "digest": "e512e742"
+        "draws": 631,
+        "digest": "04a5c63f"
       }
     },
     {
       "tick": 165,
       "time": 8.25,
       "nextId": 409,
-      "state": "c11dbd62",
-      "events": "9d3263fd",
+      "state": "047b6dda",
+      "events": "5e80f614",
       "rng": {
-        "draws": 667,
-        "digest": "49c21e71"
+        "draws": 665,
+        "digest": "41ff3c3a"
       }
     },
     {
       "tick": 170,
       "time": 8.5,
       "nextId": 409,
-      "state": "8443d11c",
+      "state": "d0f5652c",
       "events": "741638a5",
       "rng": {
-        "draws": 697,
-        "digest": "448f738c"
+        "draws": 695,
+        "digest": "800b827d"
       }
     },
     {
       "tick": 175,
       "time": 8.75,
       "nextId": 409,
-      "state": "a8eff8d4",
+      "state": "45f87a76",
       "events": "741638a5",
       "rng": {
-        "draws": 734,
-        "digest": "166ac8d2"
+        "draws": 736,
+        "digest": "91dfc695"
       }
     },
     {
       "tick": 180,
       "time": 9,
       "nextId": 409,
-      "state": "3cd4d1f7",
+      "state": "7c8601cf",
       "events": "741638a5",
       "rng": {
-        "draws": 767,
-        "digest": "38d4d011"
+        "draws": 771,
+        "digest": "a7aedbb5"
       }
     },
     {
       "tick": 184,
       "time": 9.2,
       "nextId": 409,
-      "state": "82fb5f37",
+      "state": "a3327863",
       "events": "741638a5",
       "rng": {
-        "draws": 783,
-        "digest": "4e690b34"
+        "draws": 788,
+        "digest": "1372051e"
       },
       "label": "mage-queued",
       "players": [
@@ -827,7 +827,7 @@
           "companionUpgrades": {},
           "counters": {
             "damageDealt": 67,
-            "damageTaken": 106
+            "damageTaken": 109
           },
           "craftSkills": {},
           "craftThrottle": {},
@@ -969,7 +969,7 @@
           "facing": 0.563278,
           "fallStartY": -0.371544,
           "fiveSecondRule": 5.25,
-          "hp": 19894,
+          "hp": 19891,
           "id": 405,
           "inCombat": true,
           "kind": "player",
@@ -1123,7 +1123,9 @@
               "remaining": 0.9,
               "school": "fire",
               "sourceId": 405,
+              "tickBase": 2,
               "tickInterval": 2,
+              "tickPowerStat": "spell",
               "tickTimer": 0.9,
               "value": 2
             }
@@ -1193,66 +1195,66 @@
       "tick": 185,
       "time": 9.25,
       "nextId": 409,
-      "state": "37550c5c",
+      "state": "45f2dcc8",
       "events": "741638a5",
       "rng": {
-        "draws": 792,
-        "digest": "1a4e9dde"
+        "draws": 795,
+        "digest": "5c94a3a1"
       }
     },
     {
       "tick": 190,
       "time": 9.5,
       "nextId": 409,
-      "state": "655414f4",
+      "state": "31900da8",
       "events": "741638a5",
       "rng": {
-        "draws": 829,
-        "digest": "1808e301"
+        "draws": 839,
+        "digest": "5d4b7d6e"
       }
     },
     {
       "tick": 195,
       "time": 9.75,
       "nextId": 409,
-      "state": "fe63fe5e",
-      "events": "225e5dbc",
+      "state": "da6a77f4",
+      "events": "30e4f4f0",
       "rng": {
-        "draws": 865,
-        "digest": "2d92a8a3"
+        "draws": 872,
+        "digest": "7d505c78"
       }
     },
     {
       "tick": 200,
       "time": 10,
       "nextId": 409,
-      "state": "de4742d2",
+      "state": "021b80e4",
       "events": "741638a5",
       "rng": {
-        "draws": 900,
-        "digest": "6ec8ad80"
+        "draws": 902,
+        "digest": "bdae38bc"
       }
     },
     {
       "tick": 205,
       "time": 10.25,
       "nextId": 409,
-      "state": "a042f029",
-      "events": "b219d68c",
+      "state": "a6d104c9",
+      "events": "fae888dd",
       "rng": {
-        "draws": 922,
-        "digest": "b9f4bdf5"
+        "draws": 923,
+        "digest": "9829313d"
       }
     },
     {
       "tick": 206,
       "time": 10.3,
       "nextId": 409,
-      "state": "440eb3ef",
+      "state": "17d5e62d",
       "events": "28d4b790",
       "rng": {
-        "draws": 934,
-        "digest": "d7c0ee21"
+        "draws": 932,
+        "digest": "3df24049"
       },
       "label": "priest-silence-cancel",
       "players": [
@@ -1271,8 +1273,8 @@
           "cls": "mage",
           "companionUpgrades": {},
           "counters": {
-            "damageDealt": 136,
-            "damageTaken": 121
+            "damageDealt": 125,
+            "damageTaken": 123
           },
           "craftSkills": {},
           "craftThrottle": {},
@@ -1415,7 +1417,7 @@
           "fallStartY": -0.371544,
           "fiveSecondRule": 0.8,
           "gcdRemaining": 0.7,
-          "hp": 19879,
+          "hp": 19877,
           "id": 405,
           "inCombat": true,
           "kind": "player",
@@ -1581,7 +1583,9 @@
               "remaining": 5.35,
               "school": "fire",
               "sourceId": 405,
+              "tickBase": 2,
               "tickInterval": 2,
+              "tickPowerStat": "spell",
               "tickTimer": 1.35,
               "value": 2
             }
@@ -1595,7 +1599,7 @@
           "fallStartY": -0.371544,
           "fiveSecondRule": 99,
           "hostile": true,
-          "hp": 199864,
+          "hp": 199875,
           "id": 408,
           "inCombat": true,
           "kind": "mob",
@@ -1630,7 +1634,7 @@
           "threat": [
             [
               405,
-              137
+              126
             ]
           ],
           "wanderTarget": {
@@ -1651,55 +1655,55 @@
       "tick": 210,
       "time": 10.5,
       "nextId": 409,
-      "state": "8fd93aa7",
+      "state": "c9253e71",
       "events": "da7b67ec",
       "rng": {
-        "draws": 957,
-        "digest": "7abd165d"
+        "draws": 952,
+        "digest": "6281ab9e"
       }
     },
     {
       "tick": 215,
       "time": 10.75,
       "nextId": 409,
-      "state": "a039e592",
+      "state": "7fffa6c8",
       "events": "741638a5",
       "rng": {
-        "draws": 982,
-        "digest": "ecc4539d"
+        "draws": 980,
+        "digest": "30e3edaa"
       }
     },
     {
       "tick": 220,
       "time": 11,
       "nextId": 409,
-      "state": "c4dfb42d",
+      "state": "9d9357a3",
       "events": "741638a5",
       "rng": {
-        "draws": 1002,
-        "digest": "07c60c83"
+        "draws": 1000,
+        "digest": "71624a62"
       }
     },
     {
       "tick": 225,
       "time": 11.25,
       "nextId": 409,
-      "state": "00f12a8f",
+      "state": "2eddc21d",
       "events": "741638a5",
       "rng": {
-        "draws": 1023,
-        "digest": "59472c19"
+        "draws": 1022,
+        "digest": "0ae0a333"
       }
     },
     {
       "tick": 228,
       "time": 11.4,
       "nextId": 409,
-      "state": "7278efda",
+      "state": "d4cc18d4",
       "events": "bcece559",
       "rng": {
-        "draws": 1037,
-        "digest": "424650f4"
+        "draws": 1042,
+        "digest": "3babe11f"
       },
       "label": "warlock-channel-pushback",
       "players": [
@@ -1718,8 +1722,8 @@
           "cls": "mage",
           "companionUpgrades": {},
           "counters": {
-            "damageDealt": 136,
-            "damageTaken": 121
+            "damageDealt": 125,
+            "damageTaken": 123
           },
           "craftSkills": {},
           "craftThrottle": {},
@@ -1863,7 +1867,7 @@
           "facing": 0.563278,
           "fallStartY": -0.371544,
           "fiveSecondRule": 1.9,
-          "hp": 19879,
+          "hp": 19877,
           "id": 405,
           "inCombat": true,
           "kind": "player",
@@ -2039,7 +2043,9 @@
               "remaining": 4.25,
               "school": "fire",
               "sourceId": 405,
+              "tickBase": 2,
               "tickInterval": 2,
+              "tickPowerStat": "spell",
               "tickTimer": 0.25,
               "value": 2
             }
@@ -2052,7 +2058,7 @@
           "fallStartY": -0.371544,
           "fiveSecondRule": 99,
           "hostile": true,
-          "hp": 199864,
+          "hp": 199875,
           "id": 408,
           "inCombat": true,
           "kind": "mob",
@@ -2087,7 +2093,7 @@
           "threat": [
             [
               405,
-              137
+              126
             ]
           ],
           "wanderTarget": {
@@ -2108,33 +2114,33 @@
       "tick": 230,
       "time": 11.5,
       "nextId": 409,
-      "state": "daed8d84",
+      "state": "383a7898",
       "events": "81b41966",
       "rng": {
-        "draws": 1047,
-        "digest": "81c990f7"
+        "draws": 1053,
+        "digest": "16f07c8b"
       }
     },
     {
       "tick": 235,
       "time": 11.75,
       "nextId": 409,
-      "state": "abf19969",
+      "state": "653d0a14",
       "events": "fff751bd",
       "rng": {
-        "draws": 1069,
-        "digest": "0bf340d7"
+        "draws": 1080,
+        "digest": "ed727a45"
       }
     },
     {
       "tick": 236,
       "time": 11.8,
       "nextId": 409,
-      "state": "73c1d093",
+      "state": "74f7ce22",
       "events": "03e7272b",
       "rng": {
-        "draws": 1074,
-        "digest": "df3913f0"
+        "draws": 1087,
+        "digest": "c739df4d"
       },
       "label": "warlock-fishing-cancel",
       "players": [
@@ -2153,8 +2159,8 @@
           "cls": "mage",
           "companionUpgrades": {},
           "counters": {
-            "damageDealt": 138,
-            "damageTaken": 121
+            "damageDealt": 127,
+            "damageTaken": 123
           },
           "craftSkills": {},
           "craftThrottle": {},
@@ -2299,7 +2305,7 @@
           "facing": 0.563278,
           "fallStartY": -0.371544,
           "fiveSecondRule": 2.3,
-          "hp": 19879,
+          "hp": 19877,
           "id": 405,
           "inCombat": true,
           "kind": "player",
@@ -2469,7 +2475,9 @@
               "remaining": 3.85,
               "school": "fire",
               "sourceId": 405,
+              "tickBase": 2,
               "tickInterval": 2,
+              "tickPowerStat": "spell",
               "tickTimer": 1.85,
               "value": 2
             }
@@ -2482,7 +2490,7 @@
           "fallStartY": -0.371544,
           "fiveSecondRule": 99,
           "hostile": true,
-          "hp": 199849,
+          "hp": 199860,
           "id": 408,
           "inCombat": true,
           "kind": "mob",
@@ -2517,7 +2525,7 @@
           "threat": [
             [
               405,
-              139
+              128
             ],
             [
               407,
@@ -2542,22 +2550,22 @@
       "tick": 240,
       "time": 12,
       "nextId": 409,
-      "state": "3e2f8f04",
+      "state": "305368a5",
       "events": "741638a5",
       "rng": {
-        "draws": 1085,
-        "digest": "ed70cd48"
+        "draws": 1102,
+        "digest": "04fea6d7"
       }
     },
     {
       "tick": 241,
       "time": 12.05,
       "nextId": 409,
-      "state": "aa448170",
+      "state": "cd20aa3b",
       "events": "741638a5",
       "rng": {
-        "draws": 1093,
-        "digest": "8990e75f"
+        "draws": 1105,
+        "digest": "371c82ad"
       },
       "label": "final",
       "players": [
@@ -2576,8 +2584,8 @@
           "cls": "mage",
           "companionUpgrades": {},
           "counters": {
-            "damageDealt": 138,
-            "damageTaken": 121
+            "damageDealt": 127,
+            "damageTaken": 123
           },
           "craftSkills": {},
           "craftThrottle": {},
@@ -2722,7 +2730,7 @@
           "facing": 0.563278,
           "fallStartY": -0.371544,
           "fiveSecondRule": 2.55,
-          "hp": 19879,
+          "hp": 19877,
           "id": 405,
           "inCombat": true,
           "kind": "player",
@@ -2893,7 +2901,9 @@
               "remaining": 3.6,
               "school": "fire",
               "sourceId": 405,
+              "tickBase": 2,
               "tickInterval": 2,
+              "tickPowerStat": "spell",
               "tickTimer": 1.6,
               "value": 2
             }
@@ -2907,7 +2917,7 @@
           "fallStartY": -0.371544,
           "fiveSecondRule": 99,
           "hostile": true,
-          "hp": 199849,
+          "hp": 199860,
           "id": 408,
           "inCombat": true,
           "kind": "mob",
@@ -2942,7 +2952,7 @@
           "threat": [
             [
               405,
-              139
+              128
             ],
             [
               407,
