@@ -4801,8 +4801,8 @@ export class Hud {
     let stored = false;
     try {
       const raw = localStorage.getItem(this.slotMapKey());
-      stored = raw !== null;
       arr = JSON.parse(raw ?? 'null');
+      stored = Array.isArray(arr);
     } catch {
       /* corrupt */
     }
@@ -4843,7 +4843,7 @@ export class Hud {
       return;
     }
     const emptyFormMap =
-      this.activeHotbarForm !== 'normal' && parsed.every((action) => action === null);
+      !stored && this.activeHotbarForm !== 'normal' && parsed.every((action) => action === null);
     if (emptyFormMap) {
       // A new stealth page starts from the layout immediately beneath it, then
       // persists independently as soon as the player edits or leaves the page.
@@ -4937,7 +4937,7 @@ export class Hud {
     this.saveSlotMap();
     this.activeHotbarForm = next;
     this.dragAction = null;
-    this.clearActionDropTargets();
+    this.clearMobileHotbarDrag();
     this.loadSlotMap();
     this.mobileActionPage = clampMobilePage(this.mobileActionPage);
   }

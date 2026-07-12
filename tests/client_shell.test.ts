@@ -2096,7 +2096,7 @@ describe('client HTML shell', () => {
       /buildDefaultFormBar\(\s*this\.formKitAbilityIds\(this\.activeHotbarForm\),\s*Hud\.BAR_ABILITY_SLOTS,\s*\)/,
     );
     expect(hudTs).toMatch(
-      /const emptyFormMap =\s*this\.activeHotbarForm !== 'normal' && parsed\.every\(\(action\) => action === null\);/,
+      /const emptyFormMap =\s*!stored &&\s*this\.activeHotbarForm !== 'normal' &&\s*parsed\.every\(\(action\) => action === null\);/,
     );
     expect(hudTs).toContain(
       "const fallbackForm = this.activeHotbarForm === 'cat_stealth' ? 'cat' : 'normal';",
