@@ -412,6 +412,7 @@ export const id_ID: EnTranslations = {
       "targetFriendlyNext": "Putar Bidikan Sekutu",
       "discord": "Discord",
       "valecup": "Piala Lembah",
+      "sheathe": "Sheathe/Unsheathe Weapon",
       "categoryPet": "Peliharaan",
       "petAttack": "Peliharaan: Serang",
       "petStop": "Peliharaan: Berhenti",

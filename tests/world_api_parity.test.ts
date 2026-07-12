@@ -142,6 +142,7 @@ export const IWORLD_MEMBERS = [
   { name: 'changeSkin', kind: 'method' },
   { name: 'claimEventSkin', kind: 'method' },
   { name: 'unequipMechChroma', kind: 'method' },
+  { name: 'toggleWeaponStow', kind: 'method' },
   { name: 'releaseSpirit', kind: 'method' },
   { name: 'resurrectAtCorpse', kind: 'method' },
   { name: 'resurrectAtSpiritHealer', kind: 'method' },
@@ -397,9 +398,9 @@ beforeAll(() => {
 
 describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => {
   it('pins total / data / method counts', () => {
-    expect(IWORLD_MEMBERS.length).toBe(205);
+    expect(IWORLD_MEMBERS.length).toBe(206);
     expect(DATA_MEMBERS.length).toBe(54);
-    expect(METHOD_MEMBERS.length).toBe(151);
+    expect(METHOD_MEMBERS.length).toBe(152);
   });
   it('has no duplicate member names', () => {
     const names = IWORLD_MEMBERS.map((m) => m.name);
@@ -594,6 +595,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'talents',
       'targetEntity',
       'targetNearestFriendly',
+      'toggleWeaponStow',
       'townFocus',
       'tradeAccept',
       'tradeCancel',
@@ -814,6 +816,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'talentPoints',
       'targetEntity',
       'targetNearestFriendly',
+      'toggleWeaponStow',
       'tradeAccept',
       'tradeCancel',
       'tradeConfirm',
@@ -970,6 +973,7 @@ const FACET_COSMETICS = [
   'changeSkin',
   'claimEventSkin',
   'unequipMechChroma',
+  'toggleWeaponStow',
 ] as const satisfies readonly (keyof IWorldCosmetics)[];
 type _ExhaustCosmetics = AssertNever<
   Exclude<keyof IWorldCosmetics, (typeof FACET_COSMETICS)[number]>
@@ -1266,10 +1270,10 @@ describe('W1: aggregate IWorld member set equals the disjoint union of the 25 fa
     expect(overlaps, `members filed in more than one facet:\n${overlaps.join('\n')}`).toEqual([]);
   });
 
-  it('the union of the 25 facets equals the pinned 205-member IWORLD_MEMBERS set', () => {
+  it('the union of the 25 facets equals the pinned 206-member IWORLD_MEMBERS set', () => {
     const union = Object.values(FACET_MEMBER_ARRAYS).flatMap((arr) => [...arr]);
-    expect(union.length, 'union size before dedup (catches a duplicated member)').toBe(205);
-    expect(new Set(union).size, 'union size after dedup (catches a duplicated member)').toBe(205);
+    expect(union.length, 'union size before dedup (catches a duplicated member)').toBe(206);
+    expect(new Set(union).size, 'union size after dedup (catches a duplicated member)').toBe(206);
     const sortedUnion = [...union].sort();
     const pinned = IWORLD_MEMBERS.map((m) => m.name).sort();
     expect(sortedUnion).toEqual(pinned);

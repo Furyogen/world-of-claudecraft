@@ -412,6 +412,7 @@ export const en_XA: EnTranslations = {
       "targetFriendlyNext": "[Çýçļé Ƒŕíéñðļý Ţáŕĝéţ]",
       "discord": "[Ðíšçóŕð]",
       "valecup": "[Ʋáļé Çúþ]",
+      "sheathe": "[Šĥéáţĥé/Úñšĥéáţĥé Ŵéáþóñ]",
       "categoryPet": "[Þéţ]",
       "petAttack": "[Þéţ: Áţţáçķ]",
       "petStop": "[Þéţ: Šţóþ]",

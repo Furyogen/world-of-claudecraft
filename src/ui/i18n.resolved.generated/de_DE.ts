@@ -412,6 +412,7 @@ export const de_DE: EnTranslations = {
       "targetFriendlyNext": "Freundliches Ziel wechseln",
       "discord": "Discord",
       "valecup": "Talpokal",
+      "sheathe": "Sheathe/Unsheathe Weapon",
       "categoryPet": "Begleiter",
       "petAttack": "Begleiter: Angreifen",
       "petStop": "Begleiter: Stopp",

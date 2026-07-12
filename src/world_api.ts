@@ -342,6 +342,7 @@ export const COMMAND_NAMES = [
   'vcup_ready',
   'vcup_bet',
   'vcup_practice',
+  'stow_weapon',
 ] as const;
 
 // The union both the send path (`online.ts`) and the dispatch switch
@@ -446,6 +447,7 @@ export const COMMAND_FACETS = {
   change_skin: 'IWorldCosmetics',
   claim_event_skin: 'IWorldCosmetics',
   unequip_mech_chroma: 'IWorldCosmetics',
+  stow_weapon: 'IWorldCosmetics',
   // IWorldPet: hunter-pet commands (snake_case wire strings, by design; pet state
   // mirrors on the owned-mob entity wire, not a self-snapshot field).
   pet_abandon: 'IWorldPet',

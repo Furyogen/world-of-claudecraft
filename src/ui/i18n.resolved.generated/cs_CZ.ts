@@ -412,6 +412,7 @@ export const cs_CZ: EnTranslations = {
       "targetFriendlyNext": "Procházet spojenecké cíle",
       "discord": "Discord",
       "valecup": "Pohár údolí",
+      "sheathe": "Sheathe/Unsheathe Weapon",
       "categoryPet": "Mazlíček",
       "petAttack": "Mazlíček: Útok",
       "petStop": "Mazlíček: Zastavit",
