@@ -252,4 +252,6 @@ export const fr_CA: Partial<Record<TranslationKey, string>> = {
     'Premier combat? Appuyez sur {targetKey} ou cliquez sur un loup pour le cibler, puis utilisez une technique de la barre d action pour l attaquer.',
   'hudChrome.tutorial.slayTargetHintTouch':
     'Premier combat? Touchez un loup pour le cibler, puis touchez une technique de la barre d action pour l attaquer.',
+  'guide.deedsPage.cat.delve': 'Excavations',
+  'hudChrome.deeds.catDelve': 'Excavations',
 };

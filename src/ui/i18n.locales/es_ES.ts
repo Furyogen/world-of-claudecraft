@@ -308,4 +308,9 @@ export const es_ES: Partial<Record<TranslationKey, string>> = {
     'Primera pelea? Pulsa {targetKey} o haz clic en un lobo para seleccionarlo, luego usa una habilidad de la barra de accion para atacarlo.',
   'hudChrome.tutorial.slayTargetHintTouch':
     'Primera pelea? Toca un lobo para seleccionarlo, luego toca una habilidad de la barra de accion para atacarlo.',
+  'hudChrome.deeds.collapseHint': 'Contraer el seguimiento de gestas',
+  'hudChrome.deeds.expandHint': 'Expandir el seguimiento de gestas',
+  'hudChrome.deeds.watchAria': 'Seguir {name} en el seguimiento en pantalla',
+  'guide.deedsPage.cat.delve': 'Profundidades',
+  'hudChrome.deeds.catDelve': 'Profundidades',
 };
