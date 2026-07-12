@@ -58,6 +58,23 @@ export function weaponSkinAttackClips(weaponSkinId: string | null): SkinAttackCl
   return skin && weaponSkinHandling(skin) === 'bow' ? BOW_ATTACK : null;
 }
 
+export type SkinOrientPinMode = 'aimDuringShot' | 'carryOutsideShot';
+
+/** The orientation pin a displayed skin takes (CharacterVisual
+ *  applySkinOrientation): bows pin to the upright aim WHILE the shot one-shot
+ *  plays (the string hand would roll them sideways mid-draw); bow-slot guns
+ *  (crossbow handling) pin to a forward carry OUTSIDE the shot (the hanging
+ *  idle arm points them at the ground) and follow the hand-tuned grip during
+ *  the shouldered aim. True crossbow-slot skins take no pin. */
+export function weaponSkinOrientPin(weaponSkinId: string | null): SkinOrientPinMode | null {
+  const skin = weaponSkinId ? WEAPON_SKINS[weaponSkinId] : null;
+  if (!skin) return null;
+  const handling = weaponSkinHandling(skin);
+  if (handling === 'bow') return 'aimDuringShot';
+  if (skin.weaponType === 'bow' && handling === 'crossbow') return 'carryOutsideShot';
+  return null;
+}
+
 /** The handslot a ranged skin occupies, by HANDLING. Bows sit in the LEFT
  *  hand: in the ranged animation set the left arm is the FRONT arm (it
  *  extends toward the target) and the right hand stays back at the shoulder

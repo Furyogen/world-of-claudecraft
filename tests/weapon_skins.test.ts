@@ -225,6 +225,16 @@ describe('bow skin attack animation (hunter draw instead of crossbow aim)', () =
     );
   });
 
+  it('orientation pins: bows aim during the shot, bow-slot guns carry outside it', async () => {
+    const { weaponSkinOrientPin } = await import('../src/render/characters/skin_attack');
+    expect(weaponSkinOrientPin('winterbite')).toBe('aimDuringShot');
+    expect(weaponSkinOrientPin('fletcher_s_guild_bow')).toBe('aimDuringShot');
+    expect(weaponSkinOrientPin('encore_bow')).toBe('carryOutsideShot');
+    expect(weaponSkinOrientPin('meteorlatch_crossbow')).toBeNull();
+    expect(weaponSkinOrientPin('solheim_sword')).toBeNull();
+    expect(weaponSkinOrientPin(null)).toBeNull();
+  });
+
   it('the hunter ships the bow clip via animUrls and the GLB carries it', async () => {
     // Source scan, not an import: pulling the manifest into Node would kick
     // the module-import GLB preloads (assets.ts loading contract).
