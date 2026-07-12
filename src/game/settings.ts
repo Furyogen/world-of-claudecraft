@@ -249,6 +249,10 @@ export const BOOL_SETTINGS = {
   // on by default: keep the Daily Rewards chest launcher visible on the HUD. Hiding
   // it only removes the shortcut; rewards, eligibility, and the panel remain available.
   showDailyRewardsChest: { def: true },
+  // off by default (privacy/opt-in): proximity voice chat with the ~8 nearest
+  // other opted-in players. main.ts requests the mic (getUserMedia) only when
+  // this flips on, never at boot. See src/net/voice_chat.ts + server/voice_signaling.ts.
+  voiceChatEnabled: { def: false },
   // internal, never shown in the options UI: set true once main.ts has persisted a
   // device-appropriate graphicsPreset on a player's first run (a CONCLUSIVE detection).
   // It gates firstRunGraphicsPreset so a recognized device is classified at most once and

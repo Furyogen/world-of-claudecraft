@@ -564,6 +564,8 @@ export const ko_KR: EnTranslations = {
       "interfaceModeDesktop": "데스크톱",
       "interfaceModeTouch": "터치",
       "interfaceModeNote": "자동은 기기에 따라 데스크톱 또는 터치 조작을 선택합니다. 데스크톱을 선택하면 키보드와 마우스로 고정되며(키보드가 있는 태블릿 등에 유용), 터치를 선택하면 화면 조작이 됩니다.",
+      "voiceChatEnabled": "음성 채팅 (근접)",
+      "voiceChatMicDenied": "마이크 접근이 거부되었습니다. 음성 채팅에는 마이크가 필요합니다.",
       "footstepSounds": "발소리",
       "clickFeedback": "클릭 표시",
       "lockCursorOnRotate": "회전 중 커서 고정",

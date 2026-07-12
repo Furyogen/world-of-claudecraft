@@ -88,6 +88,7 @@ import {
   type TradeInfo,
 } from '../world_api';
 import { isTransientReconnectRejection } from './reconnect_policy';
+import { VoiceChatClient, type VoiceSignalKind } from './voice_chat';
 
 // ---------------------------------------------------------------------------
 // REST
@@ -1065,6 +1066,15 @@ export class ClientWorld implements IWorld {
   // --- IWorldSocialGraph: persistent friends/blocks/guild, set ONLY by the
   // `social`/`socialpos` frames (there is no `s.social` snapshot field). ---
   socialInfo: SocialInfo | null = null;
+  // NON-IWorld mirror (like sportRole above): proximity voice chat is not
+  // gameplay state the offline Sim/RL env models, so it never reaches IWorld.
+  // main.ts (the one module that knows the concrete ClientWorld) wires this
+  // to the Settings toggle and reads it directly, never through IWorld.
+  readonly voice = new VoiceChatClient(
+    () => this.ownPlayerId,
+    (kind, toPid, payload) => this.sendVoiceSignal(kind, toPid, payload),
+    (on) => this.sendVoiceOptIn(on),
+  );
   // --- IWorldMarket: World Market view, mirrored from the snapshot self
   // (`s.market`, delta-omitted). ---
   marketInfo: MarketInfo | null = null;
@@ -1278,6 +1288,7 @@ export class ClientWorld implements IWorld {
 
   close(): void {
     this.endSession();
+    this.voice.dispose();
     this.ws.onclose = null;
     this.ws.close();
   }
@@ -1398,6 +1409,20 @@ export class ClientWorld implements IWorld {
     this.ws.send(JSON.stringify({ t: 'cmd', ...payload }));
   }
 
+  // Voice signaling rides its own `t` values (not `cmd`), mirroring
+  // socialpos/censor: it's session-level, not an IWorld action. See
+  // server/game.ts dispatchMessage's 'voiceoptin'/'voiceoffer'/'voiceanswer'/
+  // 'voiceice' branches.
+  private sendVoiceOptIn(on: boolean): void {
+    if (!this.canSendCommand()) return;
+    this.ws.send(JSON.stringify({ t: 'voiceoptin', on }));
+  }
+
+  private sendVoiceSignal(kind: VoiceSignalKind, toPid: number, payload: unknown): void {
+    if (!this.canSendCommand()) return;
+    this.ws.send(JSON.stringify({ t: kind, toPid, payload }));
+  }
+
   // Typed IWorld command send (W0b): `cmd` must be a ClientCommand, i.e. a token
   // from the shared COMMAND_NAMES table that is NOT dispatch-only. This is what
   // makes "every ClientWorld send is in the server's dispatch-set" a compile-time
@@ -1504,6 +1529,22 @@ export class ClientWorld implements IWorld {
         this.applyCraftResultEvent(ev as SimEvent);
         this.eventQueue.push(ev as SimEvent);
       }
+      return;
+    }
+    if (msg.t === 'voicepeers') {
+      if (Array.isArray(msg.list)) this.voice.onPeerList(msg.list);
+      return;
+    }
+    if (msg.t === 'voiceoffer') {
+      void this.voice.onOffer(msg.fromPid, '', msg.payload);
+      return;
+    }
+    if (msg.t === 'voiceanswer') {
+      void this.voice.onAnswer(msg.fromPid, msg.payload);
+      return;
+    }
+    if (msg.t === 'voiceice') {
+      void this.voice.onIce(msg.fromPid, msg.payload);
       return;
     }
     if (msg.t === 'social') {

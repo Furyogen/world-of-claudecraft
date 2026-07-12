@@ -564,6 +564,8 @@ export const vi_VN: EnTranslations = {
       "interfaceModeDesktop": "Máy Tính",
       "interfaceModeTouch": "Cảm Ứng",
       "interfaceModeNote": "Tự Động chọn điều khiển máy tính hoặc cảm ứng theo thiết bị của bạn. Chọn Máy Tính để buộc dùng bàn phím và chuột (hữu ích trên máy tính bảng có bàn phím), hoặc Cảm Ứng để dùng các điều khiển trên màn hình.",
+      "voiceChatEnabled": "Voice Chat (Proximity)",
+      "voiceChatMicDenied": "Microphone access was denied. Voice chat needs it to work.",
       "footstepSounds": "Âm Thanh Bước Chân",
       "clickFeedback": "Dấu Nhấp Chuột",
       "lockCursorOnRotate": "Khóa Con Trỏ Khi Xoay",

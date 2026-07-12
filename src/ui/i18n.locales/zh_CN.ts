@@ -393,6 +393,8 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.browserEffectsMinimal': '最低',
   'hudChrome.options.browserEffectsNote':
     '自动模式会根据你的浏览器和设备调低高开销的 CSS 特效（模糊、光晕、背景动画）。如果界面感觉卡顿，可手动降低。',
+  'hudChrome.options.voiceChatEnabled': '语音聊天（附近）',
+  'hudChrome.options.voiceChatMicDenied': '麦克风权限被拒绝。语音聊天需要它才能工作。',
   'hudChrome.options.footstepSounds': '脚步声',
   'hudChrome.options.clickFeedback': '点击标记',
   'hudChrome.options.startAttackOnAbility': '使用技能时自动攻击',

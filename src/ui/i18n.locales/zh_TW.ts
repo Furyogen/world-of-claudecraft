@@ -394,6 +394,8 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.browserEffectsMinimal': '最低',
   'hudChrome.options.browserEffectsNote':
     '自動模式會根據你的瀏覽器與裝置調低高負擔的 CSS 特效（模糊、光暈、背景動畫）。若介面感覺卡頓，可手動降低。',
+  'hudChrome.options.voiceChatEnabled': '語音聊天（附近）',
+  'hudChrome.options.voiceChatMicDenied': '麥克風權限被拒絕。語音聊天需要它才能運作。',
   'hudChrome.options.footstepSounds': '腳步聲',
   'hudChrome.options.clickFeedback': '點擊標記',
   'hudChrome.options.startAttackOnAbility': '使用技能時自動攻擊',

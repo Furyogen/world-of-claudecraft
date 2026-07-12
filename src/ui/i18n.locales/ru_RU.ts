@@ -425,6 +425,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.browserEffectsMinimal': 'Минимальные',
   'hudChrome.options.browserEffectsNote':
     'Авто снижает тяжёлые CSS-эффекты (размытие, свечение, движение фона) в зависимости от браузера и устройства. Если интерфейс тормозит, понизьте вручную.',
+  'hudChrome.options.voiceChatEnabled': 'Голосовой чат (рядом)',
+  'hudChrome.options.voiceChatMicDenied': 'Доступ к микрофону запрещен. Голосовому чату нужен микрофон для работы.',
   'hudChrome.options.footstepSounds': 'Звуки шагов',
   'hudChrome.options.clickFeedback': 'Метка клика',
   'hudChrome.options.startAttackOnAbility': 'Автоатака при использовании способности',

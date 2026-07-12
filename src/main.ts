@@ -895,6 +895,16 @@ async function startGame(
 
   const keybinds = new Keybinds(keybindScope);
   const settings = new Settings();
+  // Resume proximity voice chat from a prior session's choice (online only;
+  // offline play has no one to talk to). Same getUserMedia gate as the
+  // Settings toggle: only reached because the player already opted in once.
+  if (online && settings.get('voiceChatEnabled')) {
+    void online.voice.setEnabled(true).then(() => {
+      if (!online.voice.isEnabled() && online.voice.didDenyPermission()) {
+        settings.set('voiceChatEnabled', false);
+      }
+    });
+  }
   // First-run graphics default: until a device default has been applied (the dedicated
   // graphicsDefaultApplied marker, NOT the graphicsPreset key, which save() def-fills the moment
   // any unrelated setting is stored), probe the device (GPU name, memory, cores, touch) and
@@ -1464,6 +1474,22 @@ async function startGame(
     }
     if (key === 'filterProfanity') {
       settings.set('filterProfanity', !!value);
+      return;
+    }
+    if (key === 'voiceChatEnabled') {
+      const on = !!value;
+      settings.set('voiceChatEnabled', on);
+      // Proximity voice chat is online-only (there is no one to talk to
+      // offline); the toggle still persists so it applies on the next online
+      // session. getUserMedia is requested here, and only here: never at boot.
+      if (online) {
+        void online.voice.setEnabled(on).then(() => {
+          if (on && !online.voice.isEnabled() && online.voice.didDenyPermission()) {
+            settings.set('voiceChatEnabled', false);
+            hud.showError(t('hudChrome.options.voiceChatMicDenied'));
+          }
+        });
+      }
       return;
     }
     if (key === 'startAttackOnAbilityUse') {
@@ -5904,7 +5930,7 @@ async function refreshGithubLinkStatus(): Promise<void> {
   } catch (err) {
     console.error('[github] could not load status', err);
   }
-  if (!status || status.enabled !== true) {
+  if (status?.enabled !== true) {
     group.hidden = true;
     return;
   }

@@ -9,25 +9,70 @@
 // Reproducibility is checked by tests/i18n_resolved_equivalence.test.ts.
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [],
-  "es_ES": [],
-  "fr_FR": [],
-  "fr_CA": [],
+  "es": [
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
+  ],
+  "es_ES": [
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
+  ],
+  "fr_FR": [
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
+  ],
+  "fr_CA": [
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
+  ],
   "en_CA": [],
-  "it_IT": [],
-  "de_DE": [],
+  "it_IT": [
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
+  ],
+  "de_DE": [
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
+  ],
   "zh_CN": [],
   "zh_TW": [],
   "ko_KR": [],
   "ja_JP": [],
-  "pt_BR": [],
+  "pt_BR": [
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
+  ],
   "ru_RU": [],
-  "cs_CZ": [],
-  "nl_NL": [],
-  "pl_PL": [],
-  "id_ID": [],
-  "tr_TR": [],
-  "sv_SE": [],
-  "vi_VN": [],
-  "da_DK": []
+  "cs_CZ": [
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
+  ],
+  "nl_NL": [
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
+  ],
+  "pl_PL": [
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
+  ],
+  "id_ID": [
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
+  ],
+  "tr_TR": [
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
+  ],
+  "sv_SE": [
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
+  ],
+  "vi_VN": [
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
+  ],
+  "da_DK": [
+    "hudChrome.options.voiceChatEnabled",
+    "hudChrome.options.voiceChatMicDenied"
+  ]
 };

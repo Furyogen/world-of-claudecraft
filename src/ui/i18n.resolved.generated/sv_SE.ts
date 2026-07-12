@@ -564,6 +564,8 @@ export const sv_SE: EnTranslations = {
       "interfaceModeDesktop": "Skrivbord",
       "interfaceModeTouch": "Pek",
       "interfaceModeNote": "Auto väljer skrivbords- eller pekkontroller utifrån din enhet. Välj Skrivbord för att tvinga fram tangentbord och mus (användbart på en surfplatta med tangentbord), eller Pek för skärmkontrollerna.",
+      "voiceChatEnabled": "Voice Chat (Proximity)",
+      "voiceChatMicDenied": "Microphone access was denied. Voice chat needs it to work.",
       "footstepSounds": "Fotstegsljud",
       "clickFeedback": "Klickmarkör",
       "lockCursorOnRotate": "Lås pekare under rotation",

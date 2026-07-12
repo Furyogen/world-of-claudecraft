@@ -564,6 +564,8 @@ export const da_DK: EnTranslations = {
       "interfaceModeDesktop": "Skrivebord",
       "interfaceModeTouch": "Touch",
       "interfaceModeNote": "Auto vælger skrivebords- eller touchstyring ud fra din enhed. Vælg Skrivebord for at tvinge tastatur og mus (nyttigt på en tablet med tastatur), eller Touch for skærmstyringen.",
+      "voiceChatEnabled": "Voice Chat (Proximity)",
+      "voiceChatMicDenied": "Microphone access was denied. Voice chat needs it to work.",
       "footstepSounds": "Fodtrinslyde",
       "clickFeedback": "Klikmarkør",
       "lockCursorOnRotate": "Lås markør under drejning",

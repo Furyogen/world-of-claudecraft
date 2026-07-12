@@ -564,6 +564,8 @@ export const pt_BR: EnTranslations = {
       "interfaceModeDesktop": "Desktop",
       "interfaceModeTouch": "Touch",
       "interfaceModeNote": "Auto escolhe os controles Desktop ou Touch conforme o seu dispositivo. Escolha Desktop para forçar teclado e mouse (útil em um tablet com teclado), ou Touch para os controles na tela.",
+      "voiceChatEnabled": "Voice Chat (Proximity)",
+      "voiceChatMicDenied": "Microphone access was denied. Voice chat needs it to work.",
       "footstepSounds": "Sons de passos",
       "clickFeedback": "Marcador de clique",
       "lockCursorOnRotate": "Bloquear cursor ao girar",

@@ -564,6 +564,8 @@ export const en_XA: EnTranslations = {
       "interfaceModeDesktop": "[Ðéšķţóþ]",
       "interfaceModeTouch": "[Ţóúçĥ]",
       "interfaceModeNote": "[Áúţó þíçķš ðéšķţóþ óŕ ţóúçĥ çóñţŕóļš ƒŕóɱ ýóúŕ ðéʋíçé. Çĥóóšé Ðéšķţóþ ţó ƒóŕçé ķéýƀóáŕð áñð ɱóúšé (úšéƒúļ óñ á ţáƀļéţ ŵíţĥ á ķéýƀóáŕð), óŕ Ţóúçĥ ƒóŕ ţĥé óñ-šçŕééñ çóñţŕóļš.]",
+      "voiceChatEnabled": "[Ʋóíçé Çĥáţ (Þŕóẋíɱíţý)]",
+      "voiceChatMicDenied": "[Ɱíçŕóþĥóñé áççéšš ŵáš ðéñíéð. Ʋóíçé çĥáţ ñééðš íţ ţó ŵóŕķ.]",
       "footstepSounds": "[Ƒóóţšţéþ Šóúñðš]",
       "clickFeedback": "[Çļíçķ Ɱáŕķéŕ]",
       "lockCursorOnRotate": "[Ļóçķ Çúŕšóŕ Ŵĥíļé Ŕóţáţíñĝ]",
