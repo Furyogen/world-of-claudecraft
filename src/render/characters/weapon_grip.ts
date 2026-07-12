@@ -81,7 +81,7 @@ export const WEAPON_GRIP_OVERRIDES: Record<string, WeaponGripOverride> = {
   ice_fang: { scale: 1.25 },
   glaciersplit: { pos: [0.0713, 0.0779, -0.0096], rot: [180, -7.6717, -165.7991], scale: 1.35 },
   rimecrusher: { rot: [-50.9571, -60.9258, -57.8216], scale: 1.8 },
-  frostbite: { pos: [0, -0.3643, 0], scale: 1.55 },
+  frostbite: { pos: [-0.0279, 0.0048, 0.0849], scale: 1.55 },
   // Full Set drop (July 2026). The two bows also ship an ATTACK grip in their
   // handoff position files (gripOverride + gripAttackOverride, blended during
   // the draw animation); only the idle grip is registered until the engine
@@ -113,6 +113,7 @@ export const WEAPON_GRIP_OVERRIDES: Record<string, WeaponGripOverride> = {
   },
   lacquered_rod: { pos: [0.0606, 0.1259, -0.0094], rot: [0, 0, -46.2693] },
   fletcher_s_guild_bow: { pos: [-0.2237, 0, 0.0851] },
+  shard_of_everwinter: { pos: [0, 0.0687, 0.1538], rot: [35.7041, 0, 0] },
 };
 
 export interface GripTransform {
