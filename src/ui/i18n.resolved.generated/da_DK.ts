@@ -1037,8 +1037,6 @@ export const da_DK: EnTranslations = {
     },
     "playerMenu": {
       "info": "Spilleroplysninger",
-      "mute": "Slå fra",
-      "unmute": "Slå til",
       "block": "Blokér",
       "unblock": "Fjern blokering",
       "openFor": "Åbn spillermenuen for {name}",
@@ -1555,9 +1553,11 @@ export const da_DK: EnTranslations = {
     "social": {
       "lastSeen": "Sidst set: {when}",
       "lastSeenNever": "aldrig",
-      "mutedSection": "Slået fra",
+      "blockedTab": "Blokerede",
+      "ignoredSection": "Ignorerede",
       "blockedSection": "Blokerede",
-      "stopMutingTitle": "Slå {name} til igen"
+      "blockedEmpty": "Du har ikke ignoreret eller blokeret nogen.",
+      "stopBlockingTitle": "Fjern blokering af {name}"
     },
     "gathering": {
       "title": "Indsamling",

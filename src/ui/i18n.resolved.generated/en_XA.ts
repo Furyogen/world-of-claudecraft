@@ -1037,8 +1037,6 @@ export const en_XA: EnTranslations = {
     },
     "playerMenu": {
       "info": "[Þļáýéŕ Íñƒó]",
-      "mute": "[Ɱúţé]",
-      "unmute": "[Úñɱúţé]",
       "block": "[Ɓļóçķ]",
       "unblock": "[Úñƀļóçķ]",
       "openFor": "[Óþéñ þļáýéŕ ɱéñú ƒóŕ {name}]",
@@ -1555,9 +1553,11 @@ export const en_XA: EnTranslations = {
     "social": {
       "lastSeen": "[Ļášţ šééñ: {when}]",
       "lastSeenNever": "[ñéʋéŕ]",
-      "mutedSection": "[Ɱúţéð]",
+      "blockedTab": "[Ɓļóçķéð]",
+      "ignoredSection": "[Íĝñóŕéð]",
       "blockedSection": "[Ɓļóçķéð]",
-      "stopMutingTitle": "[Šţóþ ɱúţíñĝ {name}]"
+      "blockedEmpty": "[Ýóú ĥáʋé ñóţ íĝñóŕéð óŕ ƀļóçķéð áñýóñé.]",
+      "stopBlockingTitle": "[Šţóþ ƀļóçķíñĝ {name}]"
     },
     "gathering": {
       "title": "[Ĝáţĥéŕíñĝ]",

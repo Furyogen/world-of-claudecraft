@@ -1037,8 +1037,6 @@ export const sv_SE: EnTranslations = {
     },
     "playerMenu": {
       "info": "Spelarinfo",
-      "mute": "Tysta",
-      "unmute": "Sluta tysta",
       "block": "Blockera",
       "unblock": "Avblockera",
       "openFor": "Öppna spelarmenyn för {name}",
@@ -1555,9 +1553,11 @@ export const sv_SE: EnTranslations = {
     "social": {
       "lastSeen": "Senast sedd: {when}",
       "lastSeenNever": "aldrig",
-      "mutedSection": "Tystade",
+      "blockedTab": "Blockerade",
+      "ignoredSection": "Ignorerade",
       "blockedSection": "Blockerade",
-      "stopMutingTitle": "Sluta tysta {name}"
+      "blockedEmpty": "Du har inte ignorerat eller blockerat någon.",
+      "stopBlockingTitle": "Avblockera {name}"
     },
     "gathering": {
       "title": "Insamling",

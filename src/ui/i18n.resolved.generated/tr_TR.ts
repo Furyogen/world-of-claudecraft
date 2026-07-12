@@ -1037,8 +1037,6 @@ export const tr_TR: EnTranslations = {
     },
     "playerMenu": {
       "info": "Oyuncu bilgisi",
-      "mute": "Sustur",
-      "unmute": "Susturmayı kaldır",
       "block": "Engelle",
       "unblock": "Engeli kaldır",
       "openFor": "{name} için oyuncu menüsünü aç",
@@ -1555,9 +1553,11 @@ export const tr_TR: EnTranslations = {
     "social": {
       "lastSeen": "Son görülme: {when}",
       "lastSeenNever": "hiç",
-      "mutedSection": "Susturulanlar",
+      "blockedTab": "Engellenenler",
+      "ignoredSection": "Yok sayılanlar",
       "blockedSection": "Engellenenler",
-      "stopMutingTitle": "{name} susturmasını kaldır"
+      "blockedEmpty": "Kimseyi yok saymadın veya engellemedin.",
+      "stopBlockingTitle": "{name} engelini kaldır"
     },
     "gathering": {
       "title": "Toplama",

@@ -1037,8 +1037,6 @@ export const vi_VN: EnTranslations = {
     },
     "playerMenu": {
       "info": "Thông tin người chơi",
-      "mute": "Tắt tiếng",
-      "unmute": "Bật tiếng",
       "block": "Chặn",
       "unblock": "Bỏ chặn",
       "openFor": "Mở menu người chơi {name}",
@@ -1555,9 +1553,11 @@ export const vi_VN: EnTranslations = {
     "social": {
       "lastSeen": "Lần cuối trực tuyến: {when}",
       "lastSeenNever": "chưa bao giờ",
-      "mutedSection": "Đã tắt tiếng",
+      "blockedTab": "Đã chặn",
+      "ignoredSection": "Đã bỏ qua",
       "blockedSection": "Đã chặn",
-      "stopMutingTitle": "Bỏ tắt tiếng {name}"
+      "blockedEmpty": "Bạn chưa bỏ qua hoặc chặn ai.",
+      "stopBlockingTitle": "Bỏ chặn {name}"
     },
     "gathering": {
       "title": "Thu thập",

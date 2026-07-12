@@ -1037,8 +1037,6 @@ export const zh_TW: EnTranslations = {
     },
     "playerMenu": {
       "info": "玩家資訊",
-      "mute": "靜音",
-      "unmute": "取消靜音",
       "block": "封鎖",
       "unblock": "取消封鎖",
       "openFor": "開啟 {name} 的玩家選單",
@@ -1555,9 +1553,11 @@ export const zh_TW: EnTranslations = {
     "social": {
       "lastSeen": "最後上線: {when}",
       "lastSeenNever": "從未",
-      "mutedSection": "已靜音",
-      "blockedSection": "已封鎖",
-      "stopMutingTitle": "取消對 {name} 的靜音"
+      "blockedTab": "封鎖",
+      "ignoredSection": "已忽略",
+      "blockedSection": "封鎖",
+      "blockedEmpty": "你還沒有忽略或封鎖任何人。",
+      "stopBlockingTitle": "取消對 {name} 的封鎖"
     },
     "gathering": {
       "title": "採集",

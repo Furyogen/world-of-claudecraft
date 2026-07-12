@@ -1037,8 +1037,6 @@ export const en_CA: EnTranslations = {
     },
     "playerMenu": {
       "info": "Player Info",
-      "mute": "Mute",
-      "unmute": "Unmute",
       "block": "Block",
       "unblock": "Unblock",
       "openFor": "Open player menu for {name}",
@@ -1555,9 +1553,11 @@ export const en_CA: EnTranslations = {
     "social": {
       "lastSeen": "Last seen: {when}",
       "lastSeenNever": "never",
-      "mutedSection": "Muted",
+      "blockedTab": "Blocked",
+      "ignoredSection": "Ignored",
       "blockedSection": "Blocked",
-      "stopMutingTitle": "Stop muting {name}"
+      "blockedEmpty": "You have not ignored or blocked anyone.",
+      "stopBlockingTitle": "Stop blocking {name}"
     },
     "gathering": {
       "title": "Gathering",

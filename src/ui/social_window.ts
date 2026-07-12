@@ -34,10 +34,10 @@ import { formatDateTime, formatNumber, t, tPlural } from './i18n';
 import { rovingTarget } from './roving_index';
 import { localizeZone } from './server_i18n';
 import {
+  blockRows,
   friendRows,
   guildView,
   ignoreRows,
-  muteRows,
   raidView,
   type SocialTab,
   socialStructSig,
@@ -63,7 +63,7 @@ const SOCIAL_FRAME: WindowFrameDescriptor = {
   tabs: [
     { id: 'friends', labelKey: 'hud.social.friendsTab' },
     { id: 'guild', labelKey: 'hud.social.guildTab' },
-    { id: 'ignore', labelKey: 'hud.social.ignoreTab' },
+    { id: 'ignore', labelKey: 'hudChrome.social.blockedTab' },
     { id: 'raid', labelKey: 'hud.social.raidTab' },
   ],
 };
@@ -362,7 +362,7 @@ export class SocialWindow {
     const name = node.dataset.name ?? '';
     if (act === 'unfriend') w.friendRemove(name);
     else if (act === 'unblock') w.blockRemove(name);
-    else if (act === 'unmute') w.muteRemove(name);
+    else if (act === 'unignore') w.ignoreRemove(name);
     else if (act === 'gkick') w.guildKick(name);
     else if (act === 'promote') w.guildPromote(name);
     else if (act === 'demote') w.guildDemote(name);
@@ -418,20 +418,21 @@ export class SocialWindow {
       .join('');
   }
 
-  // Two tiers share this tab: MUTED (chat-only) and BLOCKED (also kills invites,
-  // whispers, mail and /who). They are separate lists on the server and are shown
-  // as separate sections so a player can tell at a glance which one they applied.
+  // Two PLAYER tiers share this tab: IGNORED (chat-only) and BLOCKED (also kills
+  // invites, whispers, mail and /who). They are separate lists on the server and
+  // are shown as separate sections so a player can tell at a glance which one
+  // they applied. (Neither is the admin "mute".)
   private ignoreHtml(): string {
     const social = this.deps.world().socialInfo;
-    const muted = muteRows(social);
-    const blocked = ignoreRows(social);
-    if (muted.length === 0 && blocked.length === 0)
-      return `<div class="soc-empty">${esc(t('hud.social.ignoreEmpty'))}</div>`;
+    const ignored = ignoreRows(social);
+    const blocked = blockRows(social);
+    if (ignored.length === 0 && blocked.length === 0)
+      return `<div class="soc-empty">${esc(t('hudChrome.social.blockedEmpty'))}</div>`;
 
     const section = (
       heading: string,
       rows: { name: string }[],
-      act: 'unmute' | 'unblock',
+      act: 'unignore' | 'unblock',
       title: (name: string) => string,
     ): string =>
       rows.length === 0
@@ -448,11 +449,11 @@ export class SocialWindow {
             .join('');
 
     return (
-      section(t('hudChrome.social.mutedSection'), muted, 'unmute', (name) =>
-        t('hudChrome.social.stopMutingTitle', { name }),
+      section(t('hudChrome.social.ignoredSection'), ignored, 'unignore', (name) =>
+        t('hud.social.stopIgnoringTitle', { name }),
       ) +
       section(t('hudChrome.social.blockedSection'), blocked, 'unblock', (name) =>
-        t('hud.social.stopIgnoringTitle', { name }),
+        t('hudChrome.social.stopBlockingTitle', { name }),
       )
     );
   }

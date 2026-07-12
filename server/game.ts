@@ -65,6 +65,11 @@ import {
   type DetectionCalibrationSnapshot,
 } from './calibration_snapshot';
 import { ChatFilter } from './chat_filter';
+import {
+  isChatFilterWrite,
+  isIgnorableChannel,
+  parseChatFilterCommand,
+} from './chat_filter_commands';
 import { applyChatStrike, loadChatFilterState, recordChatViolation } from './chat_filter_db';
 import { ChatLogger } from './chat_log';
 import { dailyRewardService } from './daily_rewards';
@@ -113,7 +118,6 @@ import {
   ModerationService,
 } from './moderation_service';
 import { consumeMsgToken, createMsgRateBucket, type MsgRateBucketState } from './msg_rate_limit';
-import { isMutableChannel, isMuteWriteCommand, parseMuteChatCommand } from './mute_commands';
 import { nextRaidResetMs } from './raid_reset';
 import { REALM, REALM_PUBLIC_ORIGIN, REALM_RESET_TIME_ZONE } from './realm';
 import { createSerialWriter } from './serial_writer';
@@ -164,10 +168,11 @@ const LOCKPICK_ACTIONS = new Set<PickAction>(['hardSet', 'set', 'steady', 'ease'
 const LEAVE_SAVE_MAX_ATTEMPTS = 5;
 const LEAVE_SAVE_RETRY_BASE_MS = 250;
 const LEAVE_SAVE_RETRY_MAX_MS = 4000;
-// Usage notices for the two chat-suppression tiers. Kept as constants because the
-// S3 localization guard scans sendChatNotice literals, and src/ui/server_i18n.ts
-// carries the matching rules.
-const MUTE_USAGE = 'Usage: /mute <name>, /unmute <name>, /mutelist.';
+// Usage notices for the two PLAYER chat-suppression tiers. Kept as constants
+// because the S3 localization guard scans sendChatNotice literals, and
+// src/ui/server_i18n.ts carries the matching rules. (A "mute" is the ADMIN
+// account silence and lives in moderation_commands.ts, not here.)
+const IGNORE_USAGE = 'Usage: /ignore <name>, /unignore <name>, /ignorelist.';
 const BLOCK_USAGE = 'Usage: /block <name>, /unblock <name>, /blocklist.';
 
 const CHAT_RATE_BURST = 5;
@@ -506,11 +511,12 @@ export interface ClientSession {
   // delivery. Loaded from the DB on join, kept in sync by social commands.
   blockedIds: Set<number>;
   blockListLoaded: boolean;
-  // character ids this player has muted. Muting is the chat-only sibling of a
-  // block: their PUBLIC chat is dropped before delivery, but their whispers,
+  // character ids this player has IGNORED. An ignore is the chat-only sibling of
+  // a block: their PUBLIC chat is dropped before delivery, but their whispers,
   // rolls, invites and mail still arrive. Loaded on join, kept in sync by the
-  // mute commands.
-  mutedIds: Set<number>;
+  // ignore commands. Distinct from `chatMutedUntil`, which is the ADMIN silence
+  // applied TO this player by staff.
+  ignoredIds: Set<number>;
   // name of the last player to whisper this session, for the /r reply
   lastWhisperFrom: string | null;
   // last explicit channel this player sent to; plain text follows it.
@@ -1389,17 +1395,17 @@ export class GameServer {
         const s = this.sessionByCharacterId(id);
         if (s) s.blockedIds = new Set(ids);
       },
-      isIgnoring: (recipientId, senderCharacterId) => {
+      isBlocking: (recipientId, senderCharacterId) => {
         const s = this.sessionByCharacterId(recipientId);
         return s ? s.blockedIds.has(senderCharacterId) : false;
       },
-      onMutesChanged: (id, ids) => {
+      onIgnoresChanged: (id, ids) => {
         const s = this.sessionByCharacterId(id);
-        if (s) s.mutedIds = new Set(ids);
+        if (s) s.ignoredIds = new Set(ids);
       },
-      isMutingChat: (recipientId, senderCharacterId) => {
+      isIgnoringChat: (recipientId, senderCharacterId) => {
         const s = this.sessionByCharacterId(recipientId);
-        return s ? s.mutedIds.has(senderCharacterId) : false;
+        return s ? s.ignoredIds.has(senderCharacterId) : false;
       },
     };
   }
@@ -2100,7 +2106,7 @@ export class GameServer {
       chatStrikes: meta.chatStrikes ?? 0,
       blockedIds: new Set(),
       blockListLoaded: false,
-      mutedIds: new Set(),
+      ignoredIds: new Set(),
       lastWhisperFrom: null,
       rememberedChat: { channel: 'say' },
       lastInputSeq: 0,
@@ -2304,9 +2310,9 @@ export class GameServer {
       console.error('failed to load block list:', err);
     }
     try {
-      session.mutedIds = new Set(await this.socialDb.mutedIds(session.characterId));
+      session.ignoredIds = new Set(await this.socialDb.ignoredIds(session.characterId));
     } catch (err) {
-      console.error('failed to load mute list:', err);
+      console.error('failed to load ignore list:', err);
     }
     await this.sendSocialSnapshot(session.characterId);
     await this.social
@@ -3347,13 +3353,13 @@ export class GameServer {
           this.moderation.handleChatCommand(session, text)
         )
           break;
-        // Personal mute commands. Deliberately BEFORE isChatMuted and the rate
-        // limiter: a GM-silenced player must still be able to manage their own
-        // mute list, and /mutelist must not burn a chat token toward the
-        // rate-limit cooldown. Deliberately AFTER the moderation router, which
-        // is what keeps a staff member's "/mute" the GM account silence: they
-        // never reach here, and use "/ignore" for a personal mute.
-        if (this.handleMuteChatCommand(session, text)) break;
+        // The player's own ignore/block commands. Deliberately BEFORE isChatMuted
+        // and the rate limiter: a GM-silenced player must still be able to manage
+        // their own lists, and a list readout must not burn a chat token toward
+        // the rate-limit cooldown. Deliberately AFTER the moderation router, so
+        // the ADMIN "/mute" is always claimed as the account silence and can
+        // never be shadowed by a player command.
+        if (this.handleChatFilterCommand(session, text)) break;
         if (this.isChatMuted(session)) break;
         if (!this.consumeChatToken(session)) break;
         const whoMatch = /^\/who(?:\s+([\s\S]+))?$/i.exec(text);
@@ -3564,13 +3570,13 @@ export class GameServer {
         if (typeof msg.name === 'string')
           void this.social.blockRemove(this.actorFor(session), msg.name).catch(logSocialErr);
         break;
-      case 'mute_add':
+      case 'ignore_add':
         if (typeof msg.name === 'string')
-          void this.social.muteAdd(this.actorFor(session), msg.name).catch(logSocialErr);
+          void this.social.ignoreAdd(this.actorFor(session), msg.name).catch(logSocialErr);
         break;
-      case 'mute_remove':
+      case 'ignore_remove':
         if (typeof msg.name === 'string')
-          void this.social.muteRemove(this.actorFor(session), msg.name).catch(logSocialErr);
+          void this.social.ignoreRemove(this.actorFor(session), msg.name).catch(logSocialErr);
         break;
       case 'social_refresh':
         void this.sendSocialSnapshot(session.characterId);
@@ -4751,14 +4757,14 @@ export class GameServer {
             this.isBlockedSender(session, ev.fromPid)
           )
             continue;
-          // mute list: drop PUBLIC chat from a muted character. Unlike a block
-          // this is chat-only, so their whispers and rolls still come through.
+          // ignore list: drop PUBLIC chat from an ignored character. Unlike a
+          // block this is chat-only, so their whispers and rolls still come through.
           if (
             !session.spectating &&
             ev.type === 'chat' &&
-            session.mutedIds.size > 0 &&
-            isMutableChannel(ev.channel) &&
-            this.isMutedSender(session, ev.fromPid)
+            session.ignoredIds.size > 0 &&
+            isIgnorableChannel(ev.channel) &&
+            this.isIgnoredSender(session, ev.fromPid)
           )
             continue;
           if (ev.pid !== undefined) {
@@ -4829,19 +4835,20 @@ export class GameServer {
     return sender ? recipient.blockedIds.has(sender.characterId) : false;
   }
 
-  // Same pid-to-character-id hop as isBlockedSender, against the mute set.
-  private isMutedSender(recipient: ClientSession, fromPid: number): boolean {
+  // Same pid-to-character-id hop as isBlockedSender, against the ignore set.
+  private isIgnoredSender(recipient: ClientSession, fromPid: number): boolean {
     if (fromPid === recipient.pid) return false;
     const sender = this.clients.get(fromPid);
-    return sender ? recipient.mutedIds.has(sender.characterId) : false;
+    return sender ? recipient.ignoredIds.has(sender.characterId) : false;
   }
 
-  // The mute (/mute, /unmute, /mutelist) and block (/block, /unblock, /blocklist,
-  // and the /ignore aliases) commands. Returns true when the text was one of them
-  // and has been handled, so the caller stops before the chat pipeline treats it
-  // as something to broadcast.
-  private handleMuteChatCommand(session: ClientSession, text: string): boolean {
-    const parsed = parseMuteChatCommand(text);
+  // The player's two chat-filter tiers: ignore (/ignore, /unignore, /ignorelist)
+  // and block (/block, /unblock, /blocklist). Returns true when the text was one
+  // of them and has been handled, so the caller stops before the chat pipeline
+  // treats it as something to broadcast. The ADMIN /mute is a different command
+  // entirely and is claimed earlier, by the moderation router.
+  private handleChatFilterCommand(session: ClientSession, text: string): boolean {
+    const parsed = parseChatFilterCommand(text);
     if (!parsed) return false;
     const actor = this.actorFor(session);
 
@@ -4851,24 +4858,24 @@ export class GameServer {
     // they INSERT/DELETE and then push a full social snapshot, so they are the
     // most expensive thing on the chat path and must not be the one thing on it
     // that is unmetered.
-    if (isMuteWriteCommand(parsed) && !this.consumeChatToken(session)) return true;
+    if (isChatFilterWrite(parsed) && !this.consumeChatToken(session)) return true;
 
     // An if-chain, NOT a switch: tests/command_schema.test.ts scrapes `case '<x>':`
     // labels out of this region of game.ts to derive the dispatched wire
-    // vocabulary, so switching on these kinds would register 'mute'/'block'/... as
-    // phantom wire commands and fail the gate.
-    const logErr = (err: unknown) => console.error('mute/block command failed:', err);
+    // vocabulary, so switching on these kinds would register 'ignore'/'block'/...
+    // as phantom wire commands and fail the gate.
+    const logErr = (err: unknown) => console.error('ignore/block command failed:', err);
     const kind = parsed.kind;
-    if (kind === 'muteList') {
-      void this.social.muteList(actor).catch(logErr);
+    if (kind === 'ignoreList') {
+      void this.social.ignoreList(actor).catch(logErr);
     } else if (kind === 'blockList') {
       void this.social.blockList(actor).catch(logErr);
-    } else if (kind === 'mute') {
-      if (!parsed.name) this.sendChatNotice(session, MUTE_USAGE);
-      else void this.social.muteAdd(actor, parsed.name).catch(logErr);
-    } else if (kind === 'unmute') {
-      if (!parsed.name) this.sendChatNotice(session, MUTE_USAGE);
-      else void this.social.muteRemove(actor, parsed.name).catch(logErr);
+    } else if (kind === 'ignore') {
+      if (!parsed.name) this.sendChatNotice(session, IGNORE_USAGE);
+      else void this.social.ignoreAdd(actor, parsed.name).catch(logErr);
+    } else if (kind === 'unignore') {
+      if (!parsed.name) this.sendChatNotice(session, IGNORE_USAGE);
+      else void this.social.ignoreRemove(actor, parsed.name).catch(logErr);
     } else if (kind === 'block') {
       if (!parsed.name) this.sendChatNotice(session, BLOCK_USAGE);
       else void this.social.blockAdd(actor, parsed.name).catch(logErr);
@@ -5182,7 +5189,7 @@ export class GameServer {
       this.send(session, {
         t: 'events',
         list: [
-          { type: 'error', text: 'Your ignore list is still loading. Try /who again in a moment.' },
+          { type: 'error', text: 'Your block list is still loading. Try /who again in a moment.' },
         ],
       });
       return;

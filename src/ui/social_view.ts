@@ -73,16 +73,16 @@ export interface IgnoreRow {
   name: string;
 }
 
-/** Ignore-tab rows in source order: the BLOCKED list (the heavy tier). */
-export function ignoreRows(social: SocialInfo | null): IgnoreRow[] {
+/** Blocked-tab rows in source order: the BLOCKED list (the heavy tier). */
+export function blockRows(social: SocialInfo | null): IgnoreRow[] {
   const blocks = social?.blocks ?? [];
   return blocks.map((b) => ({ name: b.name }));
 }
 
-/** Ignore-tab rows in source order: the MUTED list (chat-only, the light tier). */
-export function muteRows(social: SocialInfo | null): IgnoreRow[] {
-  const mutes = social?.mutes ?? [];
-  return mutes.map((m) => ({ name: m.name }));
+/** Blocked-tab rows in source order: the IGNORED list (chat-only, the light tier). */
+export function ignoreRows(social: SocialInfo | null): IgnoreRow[] {
+  const ignores = social?.ignores ?? [];
+  return ignores.map((i) => ({ name: i.name }));
 }
 
 export interface GuildRow {

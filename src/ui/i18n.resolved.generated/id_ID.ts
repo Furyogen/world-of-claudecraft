@@ -1037,8 +1037,6 @@ export const id_ID: EnTranslations = {
     },
     "playerMenu": {
       "info": "Info pemain",
-      "mute": "Bisukan",
-      "unmute": "Batalkan bisu",
       "block": "Blokir",
       "unblock": "Buka blokir",
       "openFor": "Buka menu pemain {name}",
@@ -1555,9 +1553,11 @@ export const id_ID: EnTranslations = {
     "social": {
       "lastSeen": "Terakhir terlihat: {when}",
       "lastSeenNever": "tidak pernah",
-      "mutedSection": "Dibisukan",
+      "blockedTab": "Diblokir",
+      "ignoredSection": "Diabaikan",
       "blockedSection": "Diblokir",
-      "stopMutingTitle": "Batalkan bisu {name}"
+      "blockedEmpty": "Kamu belum mengabaikan atau memblokir siapa pun.",
+      "stopBlockingTitle": "Buka blokir {name}"
     },
     "gathering": {
       "title": "Pengumpulan",

@@ -1511,7 +1511,7 @@ export class ClientWorld implements IWorld {
       this.socialInfo = {
         friends: msg.friends ?? [],
         blocks: msg.blocks ?? [],
-        mutes: msg.mutes ?? [],
+        ignores: msg.ignores ?? [],
         guild: msg.guild ?? null,
       };
       this.socialDirty = true;
@@ -2448,11 +2448,11 @@ export class ClientWorld implements IWorld {
   blockRemove(name: string): void {
     this.cmd({ cmd: 'block_remove', name });
   }
-  muteAdd(name: string): void {
-    this.cmd({ cmd: 'mute_add', name });
+  ignoreAdd(name: string): void {
+    this.cmd({ cmd: 'ignore_add', name });
   }
-  muteRemove(name: string): void {
-    this.cmd({ cmd: 'mute_remove', name });
+  ignoreRemove(name: string): void {
+    this.cmd({ cmd: 'ignore_remove', name });
   }
   guildCreate(name: string): void {
     this.cmd({ cmd: 'guild_create', name });

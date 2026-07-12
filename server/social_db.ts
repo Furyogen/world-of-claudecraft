@@ -85,16 +85,18 @@ CREATE TABLE IF NOT EXISTS blocks (
   CHECK (character_id <> blocked_id)
 );
 
--- Personal chat mutes: a lighter, chat-only sibling of blocks. Muting hides the
--- muted character's public chat (and their overhead bubble) from you; it does
--- NOT touch whispers, invites, mail, or /who visibility, which is what a block
--- is for. One-directional, and unlike a block it may coexist with a friendship.
-CREATE TABLE IF NOT EXISTS mutes (
+-- Personal chat IGNORES: a lighter, chat-only sibling of blocks. Ignoring hides
+-- the ignored character's public chat (and their overhead bubble) from you; it
+-- does NOT touch whispers, invites, mail, or /who visibility, which is what a
+-- block is for. One-directional, and unlike a block it may coexist with a
+-- friendship. Deliberately NOT called a "mute": a mute in this game is the
+-- ADMIN account silence (accounts.chat_muted_until), a different thing entirely.
+CREATE TABLE IF NOT EXISTS ignores (
   character_id INT NOT NULL REFERENCES characters(id) ON DELETE CASCADE,
-  muted_id INT NOT NULL REFERENCES characters(id) ON DELETE CASCADE,
+  ignored_id INT NOT NULL REFERENCES characters(id) ON DELETE CASCADE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  PRIMARY KEY (character_id, muted_id),
-  CHECK (character_id <> muted_id)
+  PRIMARY KEY (character_id, ignored_id),
+  CHECK (character_id <> ignored_id)
 );
 
 CREATE TABLE IF NOT EXISTS guilds (
@@ -221,34 +223,34 @@ export class PgSocialDb implements SocialDb {
     return res.rows.map((r) => r.blocked_id);
   }
 
-  async addMute(charId: number, mutedId: number): Promise<void> {
+  async addIgnore(charId: number, ignoredId: number): Promise<void> {
     await this.pool.query(
-      'INSERT INTO mutes (character_id, muted_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
-      [charId, mutedId],
+      'INSERT INTO ignores (character_id, ignored_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
+      [charId, ignoredId],
     );
   }
 
-  async removeMute(charId: number, mutedId: number): Promise<void> {
-    await this.pool.query('DELETE FROM mutes WHERE character_id = $1 AND muted_id = $2', [
+  async removeIgnore(charId: number, ignoredId: number): Promise<void> {
+    await this.pool.query('DELETE FROM ignores WHERE character_id = $1 AND ignored_id = $2', [
       charId,
-      mutedId,
+      ignoredId,
     ]);
   }
 
-  async listMutes(charId: number): Promise<CharRef[]> {
+  async listIgnores(charId: number): Promise<CharRef[]> {
     const res = await this.pool.query(
-      `SELECT c.id, c.name FROM mutes m JOIN characters c ON c.id = m.muted_id
-       WHERE m.character_id = $1 ORDER BY c.name`,
+      `SELECT c.id, c.name FROM ignores i JOIN characters c ON c.id = i.ignored_id
+       WHERE i.character_id = $1 ORDER BY c.name`,
       [charId],
     );
     return res.rows;
   }
 
-  async mutedIds(charId: number): Promise<number[]> {
-    const res = await this.pool.query('SELECT muted_id FROM mutes WHERE character_id = $1', [
+  async ignoredIds(charId: number): Promise<number[]> {
+    const res = await this.pool.query('SELECT ignored_id FROM ignores WHERE character_id = $1', [
       charId,
     ]);
-    return res.rows.map((r) => r.muted_id);
+    return res.rows.map((r) => r.ignored_id);
   }
 
   async createGuildWithLeader(

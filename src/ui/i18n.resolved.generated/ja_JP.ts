@@ -1037,8 +1037,6 @@ export const ja_JP: EnTranslations = {
     },
     "playerMenu": {
       "info": "プレイヤー情報",
-      "mute": "ミュート",
-      "unmute": "ミュート解除",
       "block": "ブロック",
       "unblock": "ブロック解除",
       "openFor": "{name} のプレイヤーメニューを開く",
@@ -1555,9 +1553,11 @@ export const ja_JP: EnTranslations = {
     "social": {
       "lastSeen": "最終ログイン: {when}",
       "lastSeenNever": "なし",
-      "mutedSection": "ミュート中",
-      "blockedSection": "ブロック中",
-      "stopMutingTitle": "{name} のミュートを解除"
+      "blockedTab": "ブロック",
+      "ignoredSection": "無視中",
+      "blockedSection": "ブロック",
+      "blockedEmpty": "無視またはブロックした相手はいません。",
+      "stopBlockingTitle": "{name} のブロックを解除"
     },
     "gathering": {
       "title": "採集",

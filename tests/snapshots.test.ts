@@ -1253,7 +1253,7 @@ describe('/who command', () => {
     expect(text).not.toContain('Gimel');
   });
 
-  it('waits for the requester ignore list before showing online players', () => {
+  it('waits for the requester block list before showing online players', () => {
     const server = new GameServer();
     const fc = fakeWs();
     const self = joinServer(server, fc, 1, 'Aleph');
@@ -1264,11 +1264,11 @@ describe('/who command', () => {
     server.handleMessage(self, JSON.stringify({ t: 'cmd', cmd: 'chat', text: '/who' }));
 
     expect(eventTexts(fc.sent)).toContain(
-      'Your ignore list is still loading. Try /who again in a moment.',
+      'Your block list is still loading. Try /who again in a moment.',
     );
   });
 
-  it('omits players whose own ignore list is still loading', () => {
+  it('omits players whose own block list is still loading', () => {
     const server = new GameServer();
     const fc = fakeWs();
     const self = joinServer(server, fc, 1, 'Aleph');

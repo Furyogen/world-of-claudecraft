@@ -7,7 +7,7 @@ export type PlayerContextActionId =
   | 'friend'
   | 'unfriend'
   | 'ginvite'
-  | 'mute'
+  | 'ignore'
   | 'block'
   | 'report'
   | 'close';
@@ -22,8 +22,8 @@ export interface ChatPlayerContextState {
   selfName: string;
   online: boolean;
   isFriend: boolean;
-  /** chat-only: hides their public chat from you. Toggles the Mute/Unmute label. */
-  muted: boolean;
+  /** chat-only: hides their public chat from you. Toggles the Ignore/Unignore label. */
+  ignored: boolean;
   /** the heavy tool: also kills invites, whispers, mail and /who. Online only. */
   blocked: boolean;
   canGuildInvite: boolean;
@@ -55,9 +55,11 @@ export function chatPlayerContextActions(state: ChatPlayerContextState): PlayerC
     if (state.canGuildInvite && !state.alreadyGuilded) {
       actions.push({ id: 'ginvite', label: t('hud.chat.context.inviteGuild') });
     }
+    // Ignore is the chat-only tier. It is NOT a "mute": a mute is the admin
+    // account silence and is not something a player applies to anyone.
     actions.push({
-      id: 'mute',
-      label: state.muted ? t('hudChrome.playerMenu.unmute') : t('hudChrome.playerMenu.mute'),
+      id: 'ignore',
+      label: state.ignored ? t('hud.chat.context.unignore') : t('hud.chat.context.ignore'),
     });
     // Blocking is a server-side social action, so it only exists online.
     if (state.online) {

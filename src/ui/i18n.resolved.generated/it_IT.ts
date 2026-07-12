@@ -1037,8 +1037,6 @@ export const it_IT: EnTranslations = {
     },
     "playerMenu": {
       "info": "Info giocatore",
-      "mute": "Silenzia",
-      "unmute": "Non silenziare",
       "block": "Blocca",
       "unblock": "Sblocca",
       "openFor": "Apri il menu giocatore di {name}",
@@ -1555,9 +1553,11 @@ export const it_IT: EnTranslations = {
     "social": {
       "lastSeen": "Ultimo accesso: {when}",
       "lastSeenNever": "mai",
-      "mutedSection": "Silenziati",
+      "blockedTab": "Bloccati",
+      "ignoredSection": "Ignorati",
       "blockedSection": "Bloccati",
-      "stopMutingTitle": "Non silenziare più {name}"
+      "blockedEmpty": "Non hai ignorato o bloccato nessuno.",
+      "stopBlockingTitle": "Sblocca {name}"
     },
     "gathering": {
       "title": "Raccolta",

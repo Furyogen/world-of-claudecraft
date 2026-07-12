@@ -6024,8 +6024,8 @@ export class Sim {
   friendRemove(_name: string): void {}
   blockAdd(_name: string): void {}
   blockRemove(_name: string): void {}
-  muteAdd(_name: string): void {}
-  muteRemove(_name: string): void {}
+  ignoreAdd(_name: string): void {}
+  ignoreRemove(_name: string): void {}
   guildCreate(_name: string): void {}
   guildInvite(_name: string): void {}
   guildAccept(): void {}

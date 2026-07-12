@@ -1037,8 +1037,6 @@ export const cs_CZ: EnTranslations = {
     },
     "playerMenu": {
       "info": "Informace o hráči",
-      "mute": "Ztlumit",
-      "unmute": "Zrušit ztlumení",
       "block": "Zablokovat",
       "unblock": "Odblokovat",
       "openFor": "Otevřít nabídku hráče {name}",
@@ -1555,9 +1553,11 @@ export const cs_CZ: EnTranslations = {
     "social": {
       "lastSeen": "Naposledy viděn(a): {when}",
       "lastSeenNever": "nikdy",
-      "mutedSection": "Ztlumení",
+      "blockedTab": "Zablokovaní",
+      "ignoredSection": "Ignorovaní",
       "blockedSection": "Zablokovaní",
-      "stopMutingTitle": "Zrušit ztlumení hráče {name}"
+      "blockedEmpty": "Nikoho jsi neignoroval ani nezablokoval.",
+      "stopBlockingTitle": "Odblokovat hráče {name}"
     },
     "gathering": {
       "title": "Sběr",

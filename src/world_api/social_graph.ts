@@ -47,9 +47,10 @@ export interface GuildInfo {
 export interface SocialInfo {
   friends: FriendInfo[];
   blocks: { id: number; name: string }[];
-  // personal chat mutes: hides their public chat from you and nothing else.
+  // personal chat ignores: hides their public chat from you and nothing else.
   // A block is the heavy tool (invites, whispers, mail, /who all die with it).
-  mutes: { id: number; name: string }[];
+  // Neither is the ADMIN "mute", which is a staff silence applied to a player.
+  ignores: { id: number; name: string }[];
   guild: GuildInfo | null;
 }
 
@@ -83,9 +84,9 @@ export interface IWorldSocialGraph {
   friendRemove(name: string): void;
   blockAdd(name: string): void;
   blockRemove(name: string): void;
-  // personal chat mute: chat-only, and unlike a block it may coexist with a friendship
-  muteAdd(name: string): void;
-  muteRemove(name: string): void;
+  // personal chat ignore: chat-only, and unlike a block it may coexist with a friendship
+  ignoreAdd(name: string): void;
+  ignoreRemove(name: string): void;
   guildCreate(name: string): void;
   guildInvite(name: string): void;
   guildAccept(): void;

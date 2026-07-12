@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import type { PlayerClass } from '../src/sim/types';
 import {
+  blockRows,
   friendRows,
   guildView,
   ignoreRows,
-  muteRows,
   raidView,
   type SocialTab,
   socialDot,
@@ -67,7 +67,7 @@ const SOCIAL: SocialInfo = {
     friend({ name: 'Borin', online: false }),
   ],
   blocks: [{ id: 9, name: 'Spammer' }],
-  mutes: [{ id: 11, name: 'Chatterbox' }],
+  ignores: [{ id: 11, name: 'Chatterbox' }],
   guild: {
     id: 7,
     name: 'Wolves',
@@ -134,13 +134,13 @@ describe('per-tab row models', () => {
     expect(rows[1].dot).toBe('off');
   });
 
-  it('derives ignore rows', () => {
-    expect(ignoreRows(SOCIAL).map((r) => r.name)).toEqual(['Spammer']);
+  it('derives the two player tiers from their OWN lists, never from each other', () => {
+    // The Blocked tab renders both tiers as separate sections. A cross-wire that
+    // fed blocks into the Ignored section (or vice versa) trips on either row set.
+    expect(blockRows(SOCIAL).map((r) => r.name)).toEqual(['Spammer']);
+    expect(blockRows(null)).toEqual([]);
+    expect(ignoreRows(SOCIAL).map((r) => r.name)).toEqual(['Chatterbox']);
     expect(ignoreRows(null)).toEqual([]);
-    // the Ignore tab renders BOTH tiers, from their own lists: a cross-wire that
-    // fed blocks into the Muted section (or vice versa) trips on either row set
-    expect(muteRows(SOCIAL).map((r) => r.name)).toEqual(['Chatterbox']);
-    expect(muteRows(null)).toEqual([]);
   });
 
   it('resolves guild action permissions against the viewer rank', () => {

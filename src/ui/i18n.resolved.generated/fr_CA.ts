@@ -1037,8 +1037,6 @@ export const fr_CA: EnTranslations = {
     },
     "playerMenu": {
       "info": "Infos joueur",
-      "mute": "Sourdine",
-      "unmute": "Retirer la sourdine",
       "block": "Bloquer",
       "unblock": "Débloquer",
       "openFor": "Ouvrir le menu du joueur {name}",
@@ -1555,9 +1553,11 @@ export const fr_CA: EnTranslations = {
     "social": {
       "lastSeen": "Vu pour la dernière fois : {when}",
       "lastSeenNever": "jamais",
-      "mutedSection": "En sourdine",
+      "blockedTab": "Bloqués",
+      "ignoredSection": "Ignorés",
       "blockedSection": "Bloqués",
-      "stopMutingTitle": "Retirer {name} de la sourdine"
+      "blockedEmpty": "Vous n'avez ignoré ni bloqué personne.",
+      "stopBlockingTitle": "Débloquer {name}"
     },
     "gathering": {
       "title": "Récolte",

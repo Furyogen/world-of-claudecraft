@@ -1037,8 +1037,6 @@ export const nl_NL: EnTranslations = {
     },
     "playerMenu": {
       "info": "Spelerinfo",
-      "mute": "Dempen",
-      "unmute": "Dempen opheffen",
       "block": "Blokkeren",
       "unblock": "Deblokkeren",
       "openFor": "Spelersmenu voor {name} openen",
@@ -1555,9 +1553,11 @@ export const nl_NL: EnTranslations = {
     "social": {
       "lastSeen": "Laatst gezien: {when}",
       "lastSeenNever": "nooit",
-      "mutedSection": "Gedempt",
+      "blockedTab": "Geblokkeerd",
+      "ignoredSection": "Genegeerd",
       "blockedSection": "Geblokkeerd",
-      "stopMutingTitle": "{name} niet langer dempen"
+      "blockedEmpty": "Je hebt niemand genegeerd of geblokkeerd.",
+      "stopBlockingTitle": "{name} deblokkeren"
     },
     "gathering": {
       "title": "Verzamelen",

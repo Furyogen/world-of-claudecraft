@@ -1263,12 +1263,12 @@ export const hudChromeStrings = {
     inviteUsage: 'Invite whom? Usage: /invite <name>.',
   },
   // The player context menu (click a name in chat, or right-click a unit frame).
-  // Mute is the chat-only tier: it hides their public chat from you. Block is the
+  // Ignore is the chat-only tier: it hides their public chat from you (its
+  // Ignore/Unignore labels are the existing hud.chat.context.* keys). Block is the
   // heavy tier: it also drops invites, whispers, mail and /who visibility.
+  // Neither is the ADMIN "mute", which is a staff silence, not a player action.
   playerMenu: {
     info: 'Player Info',
-    mute: 'Mute',
-    unmute: 'Unmute',
     block: 'Block',
     unblock: 'Unblock',
     // Accessible name on a clickable chat sender name.
@@ -1880,10 +1880,12 @@ export const hudChromeStrings = {
   social: {
     lastSeen: 'Last seen: {when}',
     lastSeenNever: 'never',
-    // The Ignore tab lists both tiers, in two sections.
-    mutedSection: 'Muted',
+    // The Blocked tab lists both player tiers, in two sections.
+    blockedTab: 'Blocked',
+    ignoredSection: 'Ignored',
     blockedSection: 'Blocked',
-    stopMutingTitle: 'Stop muting {name}',
+    blockedEmpty: 'You have not ignored or blocked anyone.',
+    stopBlockingTitle: 'Stop blocking {name}',
   },
   // Gathering proficiency section on the character sheet (#1124). Profession
   // display names mirror src/sim/content/professions.ts (GatheringProfessionId).

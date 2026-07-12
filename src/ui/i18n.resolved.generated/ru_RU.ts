@@ -1037,8 +1037,6 @@ export const ru_RU: EnTranslations = {
     },
     "playerMenu": {
       "info": "Об игроке",
-      "mute": "Заглушить",
-      "unmute": "Не заглушать",
       "block": "Заблокировать",
       "unblock": "Разблокировать",
       "openFor": "Открыть меню игрока {name}",
@@ -1555,9 +1553,11 @@ export const ru_RU: EnTranslations = {
     "social": {
       "lastSeen": "Последний вход: {when}",
       "lastSeenNever": "никогда",
-      "mutedSection": "Заглушённые",
+      "blockedTab": "Заблокированные",
+      "ignoredSection": "Игнорируемые",
       "blockedSection": "Заблокированные",
-      "stopMutingTitle": "Не заглушать {name}"
+      "blockedEmpty": "Вы никого не игнорируете и не блокируете.",
+      "stopBlockingTitle": "Разблокировать {name}"
     },
     "gathering": {
       "title": "Собирательство",

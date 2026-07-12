@@ -175,14 +175,14 @@ import {
   WHISPER_TAB,
   WHISPER_TAB_LABEL_KEY,
 } from './chat_channels';
-import { ChatMobileOverlay } from './chat_mobile_overlay';
 import {
-  muteKey,
+  ignoreKey,
   type PlayerSocialFlags,
-  parseMuteList,
+  parseIgnoreList,
   resolvePlayerSocialFlags,
-  serializeMuteList,
-} from './chat_mute_core';
+  serializeIgnoreList,
+} from './chat_ignore_core';
+import { ChatMobileOverlay } from './chat_mobile_overlay';
 import { type ChatClock, clampChatClock, formatChatTimestamp } from './chat_timestamp';
 import { type ChatBoxGeometry, clampChatBox, parseChatBox, serializeChatBox } from './chat_window';
 import { formatClockTime } from './clock';
@@ -704,11 +704,11 @@ const DEFAULT_EMOTE_WHEEL: OverheadEmoteId[] = [
 
 // yards past a zone boundary before the crossing banner/welcome commits
 const ZONE_BANNER_DEADBAND = 5;
-// The OFFLINE mute store. Online, the mute list is server-persisted and arrives
-// on the `social` frame, so this set is not consulted at all (see the chat event
-// filter): keeping a second, name-keyed local list live online is exactly how you
-// get "I unmuted them and still cannot see them". The storage key is historical.
-const LOCAL_MUTES_KEY = 'woc_ignored_chat_names';
+// The OFFLINE ignore store. Online, the ignore list is server-persisted and
+// arrives on the `social` frame, so this set is not consulted at all (see the
+// chat event filter): keeping a second, name-keyed local list live online is
+// exactly how you get "I unignored them and still cannot see them".
+const LOCAL_IGNORES_KEY = 'woc_ignored_chat_names';
 // Classic-style chat tabs: the ordered channel tabs the player has opened, and the
 // tab that was active last session. The built-in `all`/`combat` views are
 // implicit and never stored.
@@ -1296,7 +1296,7 @@ export class Hud {
   private playerFrameMover: MovableFrame | null = null;
   private windowObserver: MutationObserver | null = null;
   private windowZ = 50;
-  private localMutedNames = new Set<string>();
+  private localIgnoredNames = new Set<string>();
   private lastHudFastAt = 0;
   private lastHudMediumAt = 0;
   private lastHudSlowAt = 0;
@@ -1362,7 +1362,7 @@ export class Hud {
     private renderer: Renderer,
     private keybinds: Keybinds,
   ) {
-    this.localMutedNames = this.loadLocalMutedNames();
+    this.localIgnoredNames = this.loadLocalIgnoredNames();
     this.meters = new Meters(sim);
     this.initChatTabs();
     this.initChatBoxGeometry();
@@ -8823,11 +8823,11 @@ export class Hud {
           this.refreshGossip();
           break;
         case 'chat': {
-          // OFFLINE ONLY. Online, the server drops a muted player's public chat
+          // OFFLINE ONLY. Online, the server drops an ignored player's public chat
           // before it reaches us (and honours the whisper/roll carve-outs), so
-          // consulting the local list here as well would resurrect stale mutes
+          // consulting the local list here as well would resurrect stale ignores
           // the player has since cleared from their account.
-          if (this.sim.socialInfo === null && this.localMutedNames.has(muteKey(ev.from))) break;
+          if (this.sim.socialInfo === null && this.localIgnoredNames.has(ignoreKey(ev.from))) break;
           switch (ev.channel) {
             case 'party':
               this.chatLogFrom(
@@ -9634,11 +9634,12 @@ export class Hud {
       const rect = sender.getBoundingClientRect();
       this.openChatPlayerContextMenu(name, rect.left, rect.bottom, sender);
     };
-    sender.addEventListener('click', openUnderName);
-    // Touch needs its own binding: the browser only synthesizes `click` for the
-    // PRIMARY pointer, so a chat name bound with click alone goes dead while the
-    // other thumb is steering. bindTouchTap also carries the slop guard that
-    // distinguishes a tap from a scroll of the chat log.
+    // bindTouchTap covers BOTH paths: any touch pointer (the browser only
+    // synthesizes `click` for the PRIMARY one, so a bare click binding goes dead
+    // while the other thumb is steering) AND the ordinary mouse/keyboard click.
+    // Do NOT also addEventListener('click', ...) here: bindTouchTap binds click
+    // itself, so the handler would fire twice per click and the second call would
+    // hit the toggle branch below and slam the menu shut the instant it opened.
     bindTouchTap(sender, openUnderName);
     sender.addEventListener('contextmenu', (ev) => {
       ev.preventDefault();
@@ -13391,7 +13392,7 @@ export class Hud {
     // Same flag resolution the chat-name menu uses, so the two menus can never
     // disagree about whether this player is muted, blocked, friended or guilded.
     const flags = this.playerSocialFlags(name);
-    const { online, isFriend, muted, blocked } = flags;
+    const { online, isFriend, ignored, blocked } = flags;
     const inGuildWithInvite = flags.canGuildInvite;
     const alreadyGuilded = flags.alreadyGuilded;
     const ent = this.sim.entities.get(pid);
@@ -13408,7 +13409,7 @@ export class Hud {
       html += `<div class="ctx-item" data-act="${isFriend ? 'unfriend' : 'friend'}">${esc(t(isFriend ? 'hud.chat.context.removeFriend' : 'hud.chat.context.addFriend'))}</div>`;
     if (inGuildWithInvite && !alreadyGuilded)
       html += `<div class="ctx-item" data-act="ginvite">${esc(t('hud.chat.context.inviteGuild'))}</div>`;
-    html += `<div class="ctx-item" data-act="mute">${esc(t(muted ? 'hudChrome.playerMenu.unmute' : 'hudChrome.playerMenu.mute'))}</div>`;
+    html += `<div class="ctx-item" data-act="ignore">${esc(t(ignored ? 'hud.chat.context.unignore' : 'hud.chat.context.ignore'))}</div>`;
     if (online)
       html += `<div class="ctx-item" data-act="block">${esc(t(blocked ? 'hudChrome.playerMenu.unblock' : 'hudChrome.playerMenu.block'))}</div>`;
     if (this.reportHooks && pid !== this.sim.playerId)
@@ -13441,7 +13442,7 @@ export class Hud {
       else if (act === 'friend') this.sim.friendAdd(name);
       else if (act === 'unfriend') this.sim.friendRemove(name);
       else if (act === 'ginvite') this.sim.guildInvite(name);
-      else if (act === 'mute') this.togglePlayerMute(name, muted);
+      else if (act === 'ignore') this.togglePlayerIgnore(name, ignored);
       else if (act === 'block') this.togglePlayerBlock(name, blocked);
       else if (act === 'report') this.openReportWindow({ pid, name });
       else if (act === 'promote') this.sim.partyPromote(pid);
@@ -13840,7 +13841,7 @@ export class Hud {
       selfName: this.sim.player.name,
       online: flags.online,
       isFriend: flags.isFriend,
-      muted: flags.muted,
+      ignored: flags.ignored,
       blocked: flags.blocked,
       canGuildInvite: flags.canGuildInvite,
       alreadyGuilded: flags.alreadyGuilded,
@@ -13877,7 +13878,7 @@ export class Hud {
       } else if (act === 'friend') this.sim.friendAdd(name);
       else if (act === 'unfriend') this.sim.friendRemove(name);
       else if (act === 'ginvite') this.sim.guildInvite(name);
-      else if (act === 'mute') this.togglePlayerMute(name, flags.muted);
+      else if (act === 'ignore') this.togglePlayerIgnore(name, flags.ignored);
       else if (act === 'block') this.togglePlayerBlock(name, flags.blocked);
       else if (act === 'report') this.openReportWindow({ name });
     });
@@ -14018,45 +14019,45 @@ export class Hud {
 
   /** The per-player flags both context menus render from. */
   private playerSocialFlags(name: string): PlayerSocialFlags {
-    return resolvePlayerSocialFlags(name, this.sim.socialInfo, this.localMutedNames);
+    return resolvePlayerSocialFlags(name, this.sim.socialInfo, this.localIgnoredNames);
   }
 
-  private loadLocalMutedNames(): Set<string> {
+  private loadLocalIgnoredNames(): Set<string> {
     try {
-      return parseMuteList(localStorage.getItem(LOCAL_MUTES_KEY));
+      return parseIgnoreList(localStorage.getItem(LOCAL_IGNORES_KEY));
     } catch {
       return new Set();
     }
   }
 
-  private saveLocalMutedNames(): void {
+  private saveLocalIgnoredNames(): void {
     try {
-      localStorage.setItem(LOCAL_MUTES_KEY, serializeMuteList(this.localMutedNames));
+      localStorage.setItem(LOCAL_IGNORES_KEY, serializeIgnoreList(this.localIgnoredNames));
     } catch {
       // a full or blocked localStorage must never break chat
     }
   }
 
   /**
-   * Toggle a mute. Online the server owns the list (it is what filters the chat
-   * before it ever reaches us, and it follows the account to another browser);
-   * offline there is no server, so the local set is the whole store.
+   * Toggle an ignore. Online the server owns the list (it is what filters the
+   * chat before it ever reaches us, and it follows the account to another
+   * browser); offline there is no server, so the local set is the whole store.
    */
-  private togglePlayerMute(name: string, muted: boolean): void {
+  private togglePlayerIgnore(name: string, ignored: boolean): void {
     if (this.sim.socialInfo !== null) {
-      muted ? this.sim.muteRemove(name) : this.sim.muteAdd(name);
+      ignored ? this.sim.ignoreRemove(name) : this.sim.ignoreAdd(name);
       return;
     }
-    const key = muteKey(name);
+    const key = ignoreKey(name);
     if (!key) return;
-    if (this.localMutedNames.has(key)) {
-      this.localMutedNames.delete(key);
+    if (this.localIgnoredNames.has(key)) {
+      this.localIgnoredNames.delete(key);
       this.log(t('hud.system.noLongerIgnoring', { name }), '#aaf');
     } else {
-      this.localMutedNames.add(key);
+      this.localIgnoredNames.add(key);
       this.log(t('hud.system.ignoringChat', { name }), '#aaf');
     }
-    this.saveLocalMutedNames();
+    this.saveLocalIgnoredNames();
   }
 
   /** Blocking is a server-side social action, so it only exists online. */

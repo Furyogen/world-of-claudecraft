@@ -1037,8 +1037,6 @@ export const ko_KR: EnTranslations = {
     },
     "playerMenu": {
       "info": "플레이어 정보",
-      "mute": "음소거",
-      "unmute": "음소거 해제",
       "block": "차단",
       "unblock": "차단 해제",
       "openFor": "{name} 님의 플레이어 메뉴 열기",
@@ -1555,9 +1553,11 @@ export const ko_KR: EnTranslations = {
     "social": {
       "lastSeen": "마지막 접속: {when}",
       "lastSeenNever": "없음",
-      "mutedSection": "음소거됨",
-      "blockedSection": "차단됨",
-      "stopMutingTitle": "{name} 님 음소거 해제"
+      "blockedTab": "차단",
+      "ignoredSection": "무시됨",
+      "blockedSection": "차단",
+      "blockedEmpty": "무시하거나 차단한 사람이 없습니다.",
+      "stopBlockingTitle": "{name} 님 차단 해제"
     },
     "gathering": {
       "title": "채집",
