@@ -90,9 +90,11 @@ describe('reconcileLootRolls (HUD decision)', () => {
     expect(d.confirmed).toEqual([1]);
   });
 
-  it('does not re-show a roll that is already shown or dismissed', () => {
+  it('keeps shown rolls stable and restores a locally dismissed roll the server still offers', () => {
     const d = reconcileLootRolls({ open: [1, 2], shown: [1], dismissed: [2], confirmed: [1] });
-    expect(d.toShow).toEqual([]);
+    // A tap is only a local intent. If the socket dropped it or the server rejected
+    // it, the authoritative self mirror still lists roll 2 and the buttons must retry.
+    expect(d.toShow).toEqual([2]);
     expect(d.toRetire).toEqual([]);
   });
 

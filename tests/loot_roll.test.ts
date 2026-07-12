@@ -202,6 +202,28 @@ describe('loot_roll: need-greed resolution (module entry)', () => {
     // The roll is closed and no longer offered to anyone.
     expect(activeLootRolls(sim.ctx, a)).toHaveLength(0);
   });
+
+  it('removes a logged-out candidate before resolving so their winning item is conserved', () => {
+    const { sim, a, b, c } = partyOfThree();
+    const mob = deadCorpse(sim, a, [a, b, c], {
+      copper: 0,
+      items: [{ itemId: 'greyjaw_hide_boots', count: 1 }],
+    });
+    awardSharedLootItem(sim.ctx, 'greyjaw_hide_boots', mob, playerMeta(sim, a));
+    // Starting a roll removes the source item from ordinary corpse loot. Keep
+    // only a returned slot as the conservation signal.
+    mob.loot = { copper: 0, items: [] };
+    const rollId = lootRollEvent(sim).rollId;
+
+    submitLootRoll(sim.ctx, rollId, 'need', a);
+    sim.removePlayer(a); // explicit logout forfeits the unresolved roll
+    submitLootRoll(sim.ctx, rollId, 'pass', b);
+    submitLootRoll(sim.ctx, rollId, 'pass', c);
+
+    expect((sim as any).pendingLootRolls.has(rollId)).toBe(false);
+    const returned = mob.loot?.items.find((s) => s.itemId === 'greyjaw_hide_boots');
+    expect(returned).toMatchObject({ count: 1, openToAll: true });
+  });
 });
 
 describe('loot_roll: group roll status + resolution broadcast (module entry)', () => {

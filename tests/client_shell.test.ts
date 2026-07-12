@@ -2095,4 +2095,21 @@ describe('client HTML shell', () => {
     expect(hudMobileCss).toContain('transform: translate(-50%, -50%);');
     expect(hudMobileCss).toContain('z-index: 95 !important;');
   });
+  it('keeps managed windows above the pointer-active loot-roll rail', () => {
+    const railZ = Number(
+      componentsCss.match(/#loot-rolls \{[\s\S]*?z-index:\s*(\d+);/)?.[1],
+    );
+    const managedFloors = [
+      ...hudTs.matchAll(/(?:private windowZ =|this\.windowZ =)\s*(\d+);/g),
+    ].map((match) => Number(match[1]));
+    expect(Number.isFinite(railZ)).toBe(true);
+    expect(managedFloors).toHaveLength(2); // initial value + normalization reset
+    for (const floor of managedFloors) {
+      // bringWindowToFront writes ++windowZ inline, overriding the mobile
+      // stylesheet's #bags z-index. Its floor must therefore start at the rail.
+      expect(floor, `managed floor ${floor} is below loot rail ${railZ}`).toBeGreaterThanOrEqual(
+        railZ,
+      );
+    }
+  });
 });

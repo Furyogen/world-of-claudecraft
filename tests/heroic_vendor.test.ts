@@ -8,7 +8,7 @@ import { describe, expect, it } from 'vitest';
 import { HEROIC_MARK_ITEM_ID } from '../src/sim/content/dungeon_difficulty';
 import { HEROIC_VENDOR_ITEMS, HEROIC_VENDOR_STOCK } from '../src/sim/content/heroic_vendor';
 import { ITEMS, NPCS } from '../src/sim/data';
-import { awardHeroicMarks, enterDungeon } from '../src/sim/instances/dungeons';
+import { enterDungeon } from '../src/sim/instances/dungeons';
 import { expectedStatBudget, itemLevel, primaryStatSum } from '../src/sim/item_level';
 import { Sim } from '../src/sim/sim';
 import type { Entity } from '../src/sim/types';
@@ -148,7 +148,7 @@ describe('heroic vendor shop view (pure)', () => {
   });
 });
 
-describe('heroic marks daily income gate', () => {
+describe('heroic mark reward persistence', () => {
   function killHeroicMorthen(sim: AnySim, pid: number): AnyEntity {
     sim.setDungeonDifficulty('heroic', pid);
     enterDungeon(sim.ctx, 'hollow_crypt', pid);
@@ -165,68 +165,38 @@ describe('heroic marks daily income gate', () => {
     return morthen;
   }
 
-  function markSlots(mob: AnyEntity): any[] {
-    return ((mob.loot?.items ?? []) as any[]).filter((s) => s.itemId === HEROIC_MARK_ITEM_ID);
-  }
-
-  it('pays once per dungeon per UTC day and resets on the next day', () => {
+  it('persists a kill-time mark without depending on corpse or daily-stamp state', () => {
     const sim = makeSim(21);
     sim.utcDay = '2026-07-07';
     const pid = sim.addPlayer('warrior', 'Daily');
-    const meta = sim.players.get(pid) as any;
-
     const morthen = killHeroicMorthen(sim, pid);
-    expect(markSlots(morthen)).toHaveLength(1);
-    expect(meta.heroicDaily.date).toBe('2026-07-07');
-    expect([...meta.heroicDaily.marked]).toEqual(['hollow_crypt']);
-
-    // A second same-day kill of the same boss pays nothing (simulated by
-    // re-running the award hub against the same corpse).
-    awardHeroicMarks(sim.ctx, morthen, [meta]);
-    expect(markSlots(morthen)).toHaveLength(1);
-
-    // The next UTC day resets the gate.
-    sim.utcDay = '2026-07-08';
-    awardHeroicMarks(sim.ctx, morthen, [meta]);
-    expect(markSlots(morthen)).toHaveLength(2);
-    expect(meta.heroicDaily.date).toBe('2026-07-08');
-  });
-
-  it('gates per dungeon: another heroic dungeon still pays the same day', () => {
-    const sim = makeSim(22);
-    sim.utcDay = '2026-07-07';
-    const pid = sim.addPlayer('warrior', 'Tourist');
-    const meta = sim.players.get(pid) as any;
-    killHeroicMorthen(sim, pid);
-
-    // Same day, different dungeon: the award hub still pays.
-    sim.setDungeonDifficulty('heroic', pid);
-    enterDungeon(sim.ctx, 'sunken_bastion', pid);
-    const inst = (sim.instances as any[]).find(
-      (i) => i.dungeonId === 'sunken_bastion' && i.partyKey !== null,
-    );
-    const vael = inst.mobIds
-      .map((id: number) => sim.entities.get(id))
-      .find((e: AnyEntity | undefined) => e?.templateId === 'vael_the_mistcaller') as AnyEntity;
-    awardHeroicMarks(sim.ctx, vael, [meta]);
-    expect(markSlots(vael)).toHaveLength(1);
-    expect([...meta.heroicDaily.marked].sort()).toEqual(['hollow_crypt', 'sunken_bastion']);
-  });
-
-  it('round-trips heroicDaily through character save/load', () => {
-    const sim = makeSim(23);
-    sim.utcDay = '2026-07-07';
-    const pid = sim.addPlayer('warrior', 'Saver');
-    killHeroicMorthen(sim, pid);
+    expect(sim.countItem(HEROIC_MARK_ITEM_ID, pid)).toBe(1);
+    expect(
+      ((morthen.loot?.items ?? []) as any[]).some((s) => s.itemId === HEROIC_MARK_ITEM_ID),
+    ).toBe(false);
 
     const state = sim.serializeCharacter(pid);
-    expect(state?.heroicDaily).toEqual({ date: '2026-07-07', marked: ['hollow_crypt'] });
+    expect(state?.inventory).toEqual(
+      expect.arrayContaining([expect.objectContaining({ itemId: HEROIC_MARK_ITEM_ID, count: 1 })]),
+    );
+    // Retained only for save compatibility. It no longer gates mark income.
+    expect(state?.heroicDaily).toEqual({ date: '', marked: [] });
+  });
+
+  it('continues to load and preserve a pre-hotfix heroicDaily payload', () => {
+    const sim = makeSim(23);
+    const pid = sim.addPlayer('warrior', 'Saver');
+    const state = sim.serializeCharacter(pid)!;
+    state.heroicDaily = { date: '2026-07-07', marked: ['hollow_crypt'] };
 
     const sim2 = makeSim(24);
-    sim2.utcDay = '2026-07-07';
-    const pid2 = sim2.addPlayer('warrior', 'Saver', { state: state! });
+    const pid2 = sim2.addPlayer('warrior', 'Saver', { state });
     const meta2 = sim2.players.get(pid2) as any;
     expect(meta2.heroicDaily.date).toBe('2026-07-07');
     expect(meta2.heroicDaily.marked.has('hollow_crypt')).toBe(true);
+    expect(sim2.serializeCharacter(pid2)?.heroicDaily).toEqual({
+      date: '2026-07-07',
+      marked: ['hollow_crypt'],
+    });
   });
 });
