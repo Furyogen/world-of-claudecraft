@@ -30,6 +30,7 @@ export const arena: GuidePage = {
           `<p>${esc(t('guide.arenaPage.wavesBody'))}</p><div class="guide-beat-grid">${waves}</div>`,
         )}
         ${section('guide.arenaPage.powerupsTitle', `<p>${esc(t('guide.arenaPage.powerupsBody'))}</p>`)}
+        ${section('guide.arenaPage.yumiHeading', `<p>${esc(t('guide.arenaPage.yumiBody'))}</p>`)}
         ${section('guide.arenaPage.ladderHeading', `<p>${esc(t('guide.arenaPage.ladderBody'))}</p>`)}
         ${related([
           { href: hrefFor('dungeons'), key: 'guide.nav.dungeons' },

@@ -4,6 +4,7 @@ import {
   applyBagFilter,
   BAG_CATEGORIES,
   type BagFilterState,
+  bagFilterIsDefault,
   DEFAULT_BAG_FILTER,
   parseBagFilter,
   serializeBagFilter,
@@ -175,5 +176,20 @@ describe('BAG_CATEGORIES', () => {
   it('lists every category exactly once, starting with all', () => {
     expect(BAG_CATEGORIES[0]).toBe('all');
     expect(new Set(BAG_CATEGORIES).size).toBe(BAG_CATEGORIES.length);
+  });
+});
+
+describe('bagFilterIsDefault (shared by the bags grid and the bank window)', () => {
+  const state = (over: Partial<BagFilterState> = {}): BagFilterState => ({
+    ...DEFAULT_BAG_FILTER,
+    ...over,
+  });
+
+  it('is true only with the all category and an empty search (any sort)', () => {
+    expect(bagFilterIsDefault(state())).toBe(true);
+    expect(bagFilterIsDefault(state({ sort: 'quality' }))).toBe(true);
+    expect(bagFilterIsDefault(state({ category: 'weapon' }))).toBe(false);
+    expect(bagFilterIsDefault(state({ search: 'x' }))).toBe(false);
+    expect(bagFilterIsDefault(state({ search: '   ' }))).toBe(true);
   });
 });

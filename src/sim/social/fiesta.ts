@@ -38,6 +38,7 @@ import {
   talentPointsAtLevel,
 } from '../content/talents';
 import { abilitiesKnownAt, arenaOrigin } from '../data';
+import * as deedsMod from '../deeds';
 import { ARENA_SPAWNS_A_2v2, ARENA_SPAWNS_B_2v2 } from '../dungeon_layout';
 import { recalcPlayerStats } from '../entity';
 import { Rng } from '../rng';
@@ -189,7 +190,7 @@ export function fiestaApplyAugments(meta: PlayerMeta, e: Entity): void {
   meta.fiestaSpecial = sp;
   meta.known = abilitiesKnownAt(meta.cls, e.level, meta.fiestaMods);
   const frac = e.maxHp > 0 ? e.hp / e.maxHp : 1;
-  recalcPlayerStats(e, meta.cls, meta.equipment, meta.fiestaMods);
+  recalcPlayerStats(e, meta.cls, meta.equipment, meta.fiestaMods, meta.equipmentInstance);
   e.hp = e.dead ? 0 : Math.max(1, Math.round(e.maxHp * frac));
 }
 
@@ -207,7 +208,7 @@ export function clearFiestaAugments(meta: PlayerMeta, e: Entity): void {
   meta.fiestaMods = null;
   meta.fiestaSpecial = {};
   meta.known = abilitiesKnownAt(meta.cls, e.level, meta.talentMods);
-  recalcPlayerStats(e, meta.cls, meta.equipment, meta.talentMods);
+  recalcPlayerStats(e, meta.cls, meta.equipment, meta.talentMods, meta.equipmentInstance);
 }
 
 // Standardize a fighter to a balanced level-20 build for the bout. The
@@ -221,7 +222,7 @@ export function fiestaStandardize(ctx: SimContext, meta: PlayerMeta, e: Entity):
   meta.talentMods = computeTalentModifiers(meta.cls, meta.talents);
   meta.known = abilitiesKnownAt(meta.cls, e.level, ctx.playerMods(meta));
   meta.wireRev++; // talents/loadouts swapped for the bout, refresh the wire promptly
-  recalcPlayerStats(e, meta.cls, meta.equipment, ctx.playerMods(meta));
+  recalcPlayerStats(e, meta.cls, meta.equipment, ctx.playerMods(meta), meta.equipmentInstance);
 }
 
 // Undo fiestaStandardize: restore the player's real level/xp/talents.
@@ -235,7 +236,7 @@ export function fiestaRestoreChar(meta: PlayerMeta, e: Entity): void {
   meta.fiestaRestore = null;
   meta.known = abilitiesKnownAt(meta.cls, e.level, meta.talentMods);
   meta.wireRev++; // real talents restored, refresh the wire promptly
-  recalcPlayerStats(e, meta.cls, meta.equipment, meta.talentMods);
+  recalcPlayerStats(e, meta.cls, meta.equipment, meta.talentMods, meta.equipmentInstance);
 }
 
 // Player command: lock in one of the augments currently on offer.
@@ -295,6 +296,8 @@ export function fiestaDownEntity(ctx: SimContext, e: Entity, killer: Entity | nu
   e.autoAttack = false;
   e.queuedOnSwing = null;
   delete e.queuedOnSwingFree;
+  e.queuedCastAbility = null;
+  e.queuedCastAim = null;
   e.comboPoints = 0;
   e.comboUntil = -1;
   e.eating = null;
@@ -355,6 +358,13 @@ export function fiestaTakedown(
   f.lastKill.set(killerPid, now);
   const ks = (f.streak.get(killerPid) ?? 0) + 1;
   f.streak.set(killerPid, ks);
+  // Deed moments read the sim-side tallies, independent of the word-cue
+  // else-if chain below (which reports only the loudest cue).
+  deedsMod.onFiestaTakedownForDeeds(ctx, match, killerPid, {
+    rapid,
+    victimStreak,
+    killerKills: f.kills.get(killerPid) ?? 0,
+  });
   if (!f.firstBlood) {
     f.firstBlood = true;
     ctx.emit({ type: 'fiestaWord', flavor: 'firstblood', pid: killerPid });
@@ -571,7 +581,7 @@ export function fiestaSpawnPowerup(match: ArenaMatch): void {
 
 export function fiestaGrabPowerup(
   ctx: SimContext,
-  _match: ArenaMatch,
+  match: ArenaMatch,
   e: Entity,
   p: FiestaPowerup,
 ): void {
@@ -600,4 +610,5 @@ export function fiestaGrabPowerup(
     glow: def.glow,
     duration: def.duration,
   });
+  deedsMod.onFiestaPowerupForDeeds(ctx, match, e.id, def.id);
 }

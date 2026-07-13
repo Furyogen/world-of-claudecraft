@@ -9,13 +9,13 @@
     "augment wave: fiestaPickOffers + arenaAugmentPick (fiestaAugments on meta + augmentOffer/Chosen events)",
     "multi-player meta"
   ],
-  "draws": 608,
-  "drawDigest": "656f3686",
+  "draws": 1079,
+  "drawDigest": "c34648a5",
   "frames": [
     {
       "tick": 0,
       "time": 0,
-      "nextId": 400,
+      "nextId": 661,
       "state": "5bc471b0",
       "events": "741638a5",
       "rng": {
@@ -29,9 +29,9 @@
     {
       "tick": 25,
       "time": 1.25,
-      "nextId": 404,
-      "state": "43f78479",
-      "events": "d1d54493",
+      "nextId": 665,
+      "state": "6f68b128",
+      "events": "2ead55df",
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -40,72 +40,73 @@
     {
       "tick": 50,
       "time": 2.5,
-      "nextId": 404,
-      "state": "f66a177b",
-      "events": "6e60008d",
+      "nextId": 665,
+      "state": "372d76d2",
+      "events": "362e9d99",
       "rng": {
-        "draws": 36,
-        "digest": "dbad5b7f"
+        "draws": 54,
+        "digest": "b008e7a9"
       }
     },
     {
       "tick": 75,
       "time": 3.75,
-      "nextId": 404,
-      "state": "325cfdf9",
-      "events": "9b3dbf7d",
+      "nextId": 665,
+      "state": "ff44e380",
+      "events": "4278cca1",
       "rng": {
-        "draws": 120,
-        "digest": "3ac728b9"
+        "draws": 222,
+        "digest": "3776c549"
       }
     },
     {
       "tick": 100,
       "time": 5,
-      "nextId": 404,
-      "state": "f7f25b53",
-      "events": "e324e10d",
+      "nextId": 665,
+      "state": "b4adfb9e",
+      "events": "1cd362c1",
       "rng": {
-        "draws": 230,
-        "digest": "25e8f179"
+        "draws": 435,
+        "digest": "e099221c"
       }
     },
     {
       "tick": 125,
       "time": 6.25,
-      "nextId": 404,
-      "state": "6f5d6691",
-      "events": "5461e684",
+      "nextId": 665,
+      "state": "2ddae761",
+      "events": "d7bea819",
       "rng": {
-        "draws": 384,
-        "digest": "2255bc0e"
+        "draws": 682,
+        "digest": "b6cb862f"
       }
     },
     {
       "tick": 150,
       "time": 7.5,
-      "nextId": 404,
-      "state": "a9c16789",
+      "nextId": 665,
+      "state": "2ff6dec1",
       "events": "741638a5",
       "rng": {
-        "draws": 543,
-        "digest": "63905003"
+        "draws": 955,
+        "digest": "d05a1ce2"
       }
     },
     {
       "tick": 163,
       "time": 8.15,
-      "nextId": 404,
-      "state": "6225a4ce",
-      "events": "e6734fa8",
+      "nextId": 665,
+      "state": "4eab9410",
+      "events": "1763e98c",
       "rng": {
-        "draws": 608,
-        "digest": "656f3686"
+        "draws": 1079,
+        "digest": "c34648a5"
       },
       "label": "final",
       "players": [
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -114,19 +115,33 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
             "kills": 1
           },
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "damageDealt": 510
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 400,
+          "entityId": 661,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "fiestaRestore": {
             "level": 1,
             "talents": {
@@ -135,6 +150,7 @@
             }
           },
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -153,10 +169,12 @@
               "war_toughness": 3
             },
             "spec": "arms"
-          }
+          },
+          "townFocus": {}
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -165,17 +183,30 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "mage",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 401,
+          "entityId": 662,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "fiestaRestore": {
             "level": 1,
             "talents": {
@@ -184,6 +215,7 @@
             }
           },
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -206,10 +238,12 @@
               "mag_wand_specialization": 2
             },
             "spec": "arcane"
-          }
+          },
+          "townFocus": {}
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -218,19 +252,31 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "rogue",
           "companionUpgrades": {},
           "counters": {
             "deaths": 1
           },
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_dagger"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 402,
+          "entityId": 663,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
           },
+          "equipmentInstance": {},
           "fiestaAugments": [
             "aug_fleetfoot"
           ],
@@ -242,6 +288,7 @@
             }
           },
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -260,10 +307,12 @@
               "rog_malice": 3
             },
             "spec": "assassination"
-          }
+          },
+          "townFocus": {}
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -272,17 +321,30 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "hunter",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "footpad_jerkin",
+              "rusty_hatchet",
+              "spring_water"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 403,
+          "entityId": 664,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "fiestaRestore": {
             "level": 1,
             "talents": {
@@ -291,6 +353,7 @@
             }
           },
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -313,7 +376,8 @@
               "hun_lethal_shots": 3
             },
             "spec": "beast_mastery"
-          }
+          },
+          "townFocus": {}
         }
       ],
       "entities": [
@@ -327,7 +391,7 @@
           "dodgeChance": 0.0795,
           "fiveSecondRule": 107.15,
           "hp": 812,
-          "id": 400,
+          "id": 661,
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -338,7 +402,7 @@
           "overpowerUntil": -1,
           "petMode": "defensive",
           "pos": {
-            "x": 4193,
+            "x": 103593,
             "z": -1264
           },
           "potionCooldownUntil": -1,
@@ -374,7 +438,7 @@
           "dodgeChance": 0.056,
           "fiveSecondRule": 107.15,
           "hp": 418,
-          "id": 401,
+          "id": 662,
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -385,7 +449,7 @@
           "overpowerUntil": -1,
           "petMode": "defensive",
           "pos": {
-            "x": 4207,
+            "x": 103607,
             "z": -1264
           },
           "potionCooldownUntil": -1,
@@ -423,7 +487,7 @@
           "facing": 3.141593,
           "fiveSecondRule": 107.15,
           "hp": 510,
-          "id": 402,
+          "id": 663,
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -434,7 +498,7 @@
           "overpowerUntil": -1,
           "petMode": "defensive",
           "pos": {
-            "x": 4193,
+            "x": 103593,
             "z": -1232
           },
           "potionCooldownUntil": -1,
@@ -473,7 +537,7 @@
           "facing": 3.141593,
           "fiveSecondRule": 107.15,
           "hp": 848,
-          "id": 403,
+          "id": 664,
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -484,7 +548,7 @@
           "overpowerUntil": -1,
           "petMode": "defensive",
           "pos": {
-            "x": 4207,
+            "x": 103607,
             "z": -1232
           },
           "potionCooldownUntil": -1,

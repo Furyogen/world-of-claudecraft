@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { Readable } from 'node:stream';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -24,11 +25,13 @@ import {
   handleDiscordStart,
   handleDiscordStatus,
   handleDiscordUnlink,
+  handleNativeDiscordExchange,
   handleSwagClaim,
 } from '../server/discord';
+import { resetNativeDiscordHandoffsForTest } from '../server/native_discord_handoff';
 import { resetAuthFailures, resetDiscordRateLimits } from '../server/ratelimit';
 
-function makeReq(opts: { url?: string; body?: unknown } = {}): any {
+function makeReq(opts: { url?: string; body?: unknown; origin?: string } = {}): any {
   const req: any =
     opts.body !== undefined
       ? Readable.from([Buffer.from(JSON.stringify(opts.body))])
@@ -38,7 +41,7 @@ function makeReq(opts: { url?: string; body?: unknown } = {}): any {
           },
         });
   req.url = opts.url ?? '/';
-  req.headers = { host: 'worldofclaudecraft.com' };
+  req.headers = { host: 'worldofclaudecraft.com', ...(opts.origin ? { origin: opts.origin } : {}) };
   req.socket = { remoteAddress: '127.0.0.1' };
   return req;
 }
@@ -100,6 +103,13 @@ function defaultRouter(sql: string) {
     return { rows: [{ points: '250', lifetime_points: '250' }], rowCount: 1 };
   if (s.includes('SELECT swag_id FROM swag_claims'))
     return { rows: swagClaimRows, rowCount: swagClaimRows.length };
+  // claimSwag's transactional claim path (the success tests): the claim row inserts
+  // (not already claimed) and the priced spend succeeds with the balance RETURNING.
+  if (s.includes('INSERT INTO swag_claims')) return { rows: [{ id: 1 }], rowCount: 1 };
+  if (s.includes('UPDATE reward_points SET points = points -'))
+    return { rows: [{ points: '4000' }], rowCount: 1 };
+  if (s.includes('SELECT points FROM reward_points'))
+    return { rows: [{ points: rewardRows[0]?.points ?? '0' }], rowCount: 1 };
   return { rows: [], rowCount: 0 };
 }
 
@@ -119,6 +129,7 @@ beforeEach(() => {
   findAccountRows = [];
   accountInsertRow = [{ id: 5, username: 'Maxp', password_hash: 'h' }];
   resetDiscordRateLimits();
+  resetNativeDiscordHandoffsForTest();
   resetAuthFailures();
   dbMock.query.mockReset();
   dbMock.query.mockImplementation((sql: string) => Promise.resolve(defaultRouter(sql)));
@@ -128,6 +139,9 @@ afterEach(() => {
 });
 
 const noopGrant = () => {};
+const NATIVE_VERIFIER = 'A'.repeat(43);
+const NATIVE_CHALLENGE = createHash('sha256').update(NATIVE_VERIFIER).digest('base64url');
+const NATIVE_STATE_REDIRECT = `worldofclaudecraft://discord-auth?challenge=${NATIVE_CHALLENGE}`;
 function parse(res: any) {
   return { status: res.statusCode, data: res.body ? JSON.parse(res.body) : {} };
 }
@@ -196,6 +210,20 @@ describe('POST /api/auth/discord/start', () => {
     expect(url.searchParams.get('code_challenge')).not.toBeNull();
   });
 
+  it('marks native starts with the allowlisted app return URL', async () => {
+    const res = makeRes();
+    await handleDiscordStart(makeReq({ origin: 'capacitor://localhost' }), res, {
+      mode: 'login',
+      accountId: null,
+      native: true,
+      nativeChallenge: NATIVE_CHALLENGE,
+    });
+    const insert = dbMock.query.mock.calls.find((c) =>
+      String(c[0]).includes('INSERT INTO discord_oauth_states'),
+    );
+    expect(insert?.[1]?.[4]).toBe(NATIVE_STATE_REDIRECT);
+  });
+
   it('503s when Discord is not configured', async () => {
     delete process.env.DISCORD_CLIENT_ID;
     const res = makeRes();
@@ -262,9 +290,13 @@ describe('DELETE /api/discord (unlink)', () => {
     const res = makeRes();
     await handleDiscordUnlink(makeReq(), res, 1);
     expect(parse(res)).toEqual({ status: 200, data: { unlinked: true } });
-    expect(
-      dbMock.query.mock.calls.some((c) => String(c[0]).includes('DELETE FROM discord_links')),
-    ).toBe(true);
+    const unlinkCall = dbMock.query.mock.calls.find((c) =>
+      String(c[0]).includes('DELETE FROM discord_links'),
+    );
+    expect(unlinkCall).toBeDefined();
+    // The delete is bound to the CALLER's account id (the guard-resolved parameter),
+    // so a cross-account unlink is impossible by construction.
+    expect(unlinkCall?.[1]).toEqual([1]);
     // A real-password account is never asked to set one, and nothing is reset.
     expect(
       dbMock.query.mock.calls.some((c) =>
@@ -279,7 +311,7 @@ describe('DELETE /api/discord (unlink)', () => {
     await handleDiscordUnlink(makeReq(), res, 1); // no password in the body
     const { status, data } = parse(res);
     expect(status).toBe(400);
-    expect(data.error).toBe('password_required');
+    expect(data).toEqual({ error: 'password_required', code: 'discord.password_required' });
     // The link must NOT be removed when the account would be stranded.
     expect(
       dbMock.query.mock.calls.some((c) => String(c[0]).includes('DELETE FROM discord_links')),
@@ -309,20 +341,36 @@ describe('DELETE /api/discord (unlink)', () => {
       dbMock.query.mock.calls.some((c) => String(c[0]).includes('DELETE FROM discord_links')),
     ).toBe(false);
   });
+
+  it('404s with the account.not_found code when the account row is gone', async () => {
+    accountByIdRows = []; // the account vanished mid-session
+    const res = makeRes();
+    await handleDiscordUnlink(makeReq(), res, 1);
+    expect(parse(res)).toEqual({
+      status: 404,
+      data: { error: 'account not found', code: 'account.not_found' },
+    });
+  });
 });
 
 describe('POST /api/discord/swag/claim', () => {
   it('400s on an unknown swag id', async () => {
     const res = makeRes();
     await handleSwagClaim(makeReq({ body: { swagId: 'nope' } }), res, 1, noopGrant);
-    expect(parse(res).status).toBe(400);
+    expect(parse(res)).toEqual({
+      status: 400,
+      data: { error: 'unknown swag item', code: 'discord.unknown_swag' },
+    });
   });
 
   it('403s when the account has no linked Discord', async () => {
     linkRow = []; // not linked
     const res = makeRes();
     await handleSwagClaim(makeReq({ body: { swagId: 'title_discordian' } }), res, 1, noopGrant);
-    expect(parse(res).status).toBe(403);
+    expect(parse(res)).toEqual({
+      status: 403,
+      data: { error: 'link your Discord account first', code: 'discord.link_required' },
+    });
   });
 
   it('409s a tier-gated claim before spending anything', async () => {
@@ -342,11 +390,110 @@ describe('POST /api/discord/swag/claim', () => {
     await handleSwagClaim(makeReq({ body: { swagId: 'chroma_blurple' } }), res, 1, noopGrant);
     const { status, data } = parse(res);
     expect(status).toBe(409);
-    expect(data.error).toBe('tier');
+    expect(data).toEqual({ error: 'tier', code: 'discord.swag_tier' });
     // No claim insert attempted on a gated request.
     expect(
       dbMock.query.mock.calls.some((c) => String(c[0]).includes('INSERT INTO swag_claims')),
     ).toBe(false);
+  });
+
+  it('409s a points-gated claim with the swag_points code', async () => {
+    linkRow = [
+      {
+        account_id: 1,
+        discord_user_id: '8',
+        discord_username: 'm',
+        discord_avatar: null,
+        guild_member: false,
+        linked_at: 'now',
+      },
+    ];
+    // Tier 5 via lifetime points, but the spendable balance is below the chroma cost.
+    rewardRows = [{ points: '100', lifetime_points: '5000' }];
+    swagClaimRows = [];
+    const res = makeRes();
+    await handleSwagClaim(makeReq({ body: { swagId: 'chroma_blurple' } }), res, 1, noopGrant);
+    expect(parse(res)).toEqual({
+      status: 409,
+      data: { error: 'points', code: 'discord.swag_points' },
+    });
+  });
+
+  it('409s an already-claimed swag with the swag_claimed code', async () => {
+    linkRow = [
+      {
+        account_id: 1,
+        discord_user_id: '8',
+        discord_username: 'm',
+        discord_avatar: null,
+        guild_member: false,
+        linked_at: 'now',
+      },
+    ];
+    rewardRows = [{ points: '5000', lifetime_points: '5000' }];
+    swagClaimRows = [{ swag_id: 'chroma_blurple' }]; // already claimed
+    const res = makeRes();
+    await handleSwagClaim(makeReq({ body: { swagId: 'chroma_blurple' } }), res, 1, noopGrant);
+    expect(parse(res)).toEqual({
+      status: 409,
+      data: { error: 'claimed', code: 'discord.swag_claimed' },
+    });
+  });
+
+  it('claims a cosmetic and invokes the grant callback with the swag grantId (the live-chroma hook)', async () => {
+    // The success path the Phase 16 route glue rides: a linked, tier-qualified,
+    // point-rich account claims the chroma; the durable claim commits and the
+    // grantCosmetic hook (game.grantMechChromaToAccount on the wired server) receives
+    // the CATALOG grantId, never a client-supplied value.
+    linkRow = [
+      {
+        account_id: 1,
+        discord_user_id: '8',
+        discord_username: 'm',
+        discord_avatar: null,
+        guild_member: false,
+        linked_at: 'now',
+      },
+    ];
+    rewardRows = [{ points: '5000', lifetime_points: '5000' }]; // tier 5, >= chroma minTier 3
+    swagClaimRows = [];
+    const grant = vi.fn();
+    const res = makeRes();
+    await handleSwagClaim(makeReq({ body: { swagId: 'chroma_blurple' } }), res, 1, grant);
+    const { status, data } = parse(res);
+    expect(status).toBe(200);
+    expect(grant).toHaveBeenCalledTimes(1);
+    expect(grant).toHaveBeenCalledWith('vanguard_azure');
+    expect(data.swagId).toBe('chroma_blurple');
+    expect(data.kind).toBe('cosmetic');
+    expect(data.claimed).toContain('chroma_blurple');
+    // The spend is the parameterized cost against the caller's account row.
+    const spend = dbMock.query.mock.calls.find((c) =>
+      String(c[0]).includes('UPDATE reward_points SET points = points -'),
+    );
+    expect(spend?.[1]).toEqual([1, 1000]);
+  });
+
+  it('claims a title WITHOUT invoking the grant callback (only cosmetic-kind swag grants live)', async () => {
+    linkRow = [
+      {
+        account_id: 1,
+        discord_user_id: '8',
+        discord_username: 'm',
+        discord_avatar: null,
+        guild_member: false,
+        linked_at: 'now',
+      },
+    ];
+    rewardRows = [{ points: '0', lifetime_points: '0' }]; // tier 1 covers title_discordian (cost 0)
+    swagClaimRows = [];
+    const grant = vi.fn();
+    const res = makeRes();
+    await handleSwagClaim(makeReq({ body: { swagId: 'title_discordian' } }), res, 1, grant);
+    const { status, data } = parse(res);
+    expect(status).toBe(200);
+    expect(data.kind).toBe('title');
+    expect(grant).not.toHaveBeenCalled();
   });
 });
 
@@ -458,6 +605,158 @@ describe('GET /api/auth/discord/callback', () => {
     // A session token is minted in the payload; the chooser is not offered.
     expect(res.body).toContain('"token"');
     expect(res.body).not.toContain('"choose":true');
+  });
+
+  it('returns a native returning user through a one-time handoff code', async () => {
+    stateRows = [
+      {
+        state: 's',
+        code_verifier: 'v',
+        mode: 'login',
+        account_id: null,
+        redirect_to: NATIVE_STATE_REDIRECT,
+      },
+    ];
+    ownerRows = [{ account_id: 1 }];
+    accountByIdRows = [{ id: 1, username: 'maxp', password_set: true }];
+    mockDiscordFetch();
+    const res = makeRes();
+    await handleDiscordCallback(
+      makeReq({ url: '/api/auth/discord/callback?code=abc&state=s' }),
+      res,
+    );
+    expect(res.statusCode).toBe(302);
+    const location = new URL(String(res.headers.Location));
+    expect(location.protocol).toBe('worldofclaudecraft:');
+    expect(location.hostname).toBe('discord-auth');
+    expect(location.searchParams.get('mode')).toBe('login');
+    const handoffCode = location.searchParams.get('code') ?? '';
+    expect(handoffCode).toMatch(/^[A-Za-z0-9_-]{20,80}$/);
+    expect(location.searchParams.has('token')).toBe(false);
+    expect(location.searchParams.has('linkToken')).toBe(false);
+
+    const exchange = makeRes();
+    await handleNativeDiscordExchange(
+      makeReq({ body: { code: handoffCode, verifier: NATIVE_VERIFIER } }),
+      exchange,
+    );
+    expect(parse(exchange).status).toBe(200);
+    expect(parse(exchange).data.token).toMatch(/^[a-f0-9]{64}$/);
+    expect(parse(exchange).data.username).toBe('maxp');
+  });
+
+  it('keeps a first-time native chooser secret behind the app-held verifier', async () => {
+    stateRows = [
+      {
+        state: 's',
+        code_verifier: 'v',
+        mode: 'login',
+        account_id: null,
+        redirect_to: NATIVE_STATE_REDIRECT,
+      },
+    ];
+    ownerRows = [];
+    mockDiscordFetch();
+    const callback = makeRes();
+    await handleDiscordCallback(
+      makeReq({ url: '/api/auth/discord/callback?code=abc&state=s' }),
+      callback,
+    );
+    const location = new URL(String(callback.headers.Location));
+    const handoffCode = location.searchParams.get('code') ?? '';
+    expect(callback.statusCode).toBe(302);
+    expect(location.searchParams.has('linkToken')).toBe(false);
+    expect(location.searchParams.has('choose')).toBe(false);
+
+    const intercepted = makeRes();
+    await handleNativeDiscordExchange(
+      makeReq({ body: { code: handoffCode, verifier: 'B'.repeat(43) } }),
+      intercepted,
+    );
+    expect(parse(intercepted).status).toBe(401);
+
+    const exchange = makeRes();
+    await handleNativeDiscordExchange(
+      makeReq({ body: { code: handoffCode, verifier: NATIVE_VERIFIER } }),
+      exchange,
+    );
+    expect(parse(exchange).status).toBe(200);
+    expect(parse(exchange).data.choose).toBe(true);
+    expect(parse(exchange).data.linkToken).toMatch(/^[a-f0-9]{64}$/);
+    expect(parse(exchange).data.token).toBeUndefined();
+  });
+
+  it('returns a native cancellation to the app after consuming its state', async () => {
+    stateRows = [
+      {
+        state: 's',
+        code_verifier: 'v',
+        mode: 'login',
+        account_id: null,
+        redirect_to: NATIVE_STATE_REDIRECT,
+      },
+    ];
+    const fetchSpy = vi.spyOn(globalThis, 'fetch' as any);
+    const res = makeRes();
+    await handleDiscordCallback(
+      makeReq({ url: '/api/auth/discord/callback?error=access_denied&state=s' }),
+      res,
+    );
+    expect(res.statusCode).toBe(302);
+    const location = new URL(String(res.headers.Location));
+    expect(location.protocol).toBe('worldofclaudecraft:');
+    expect(location.searchParams.get('ok')).toBe('0');
+    expect(location.searchParams.get('error')).toBe('cancelled');
+    expect(fetchSpy).not.toHaveBeenCalled();
+  });
+
+  it('returns a blocked native callback to the app without revealing the block', async () => {
+    stateRows = [
+      {
+        state: 's',
+        code_verifier: 'v',
+        mode: 'login',
+        account_id: null,
+        redirect_to: NATIVE_STATE_REDIRECT,
+      },
+    ];
+    const fetchSpy = vi.spyOn(globalThis, 'fetch' as any);
+    const res = makeRes();
+    await handleDiscordCallback(
+      makeReq({ url: '/api/auth/discord/callback?code=abc&state=s' }),
+      res,
+      () => true,
+    );
+    expect(res.statusCode).toBe(302);
+    const location = new URL(String(res.headers.Location));
+    expect(location.searchParams.get('ok')).toBe('0');
+    expect(location.searchParams.get('error')).toBe('server_error');
+    expect(fetchSpy).not.toHaveBeenCalled();
+  });
+
+  it('returns a successful native link to the app', async () => {
+    stateRows = [
+      {
+        state: 's',
+        code_verifier: 'v',
+        mode: 'link',
+        account_id: 1,
+        redirect_to: NATIVE_STATE_REDIRECT,
+      },
+    ];
+    ownerRows = [];
+    mockDiscordFetch();
+    const res = makeRes();
+    await handleDiscordCallback(
+      makeReq({ url: '/api/auth/discord/callback?code=abc&state=s' }),
+      res,
+    );
+    expect(res.statusCode).toBe(302);
+    const location = new URL(String(res.headers.Location));
+    expect(location.protocol).toBe('worldofclaudecraft:');
+    expect(location.searchParams.get('ok')).toBe('1');
+    expect(location.searchParams.get('mode')).toBe('link');
+    expect(location.searchParams.get('username')).toBe('Maxp');
   });
 });
 
@@ -728,7 +1027,39 @@ describe('POST /api/auth/discord/login/new', () => {
     pendingRows = []; // consume returns nothing
     const res = makeRes();
     await loginNew(makeReq({ body: { linkToken: 'gone' } }), res);
-    expect(parse(res).status).toBe(400);
+    expect(parse(res)).toEqual({
+      status: 400,
+      data: { error: 'expired', code: 'discord.expired' },
+    });
+  });
+
+  it('409s with the already_linked code when the link insert loses the race and no owner is found', async () => {
+    pendingRows = [
+      {
+        token: 't',
+        discord_user_id: '999999999999999999',
+        discord_username: 'Maxp',
+        discord_avatar: null,
+        guild_member: false,
+      },
+    ];
+    ownerRows = []; // no owner before OR after the failed insert (the racing link vanished)
+    findAccountRows = []; // username 'Maxp' is free, so a fresh account is provisioned
+    dbMock.query.mockImplementation((sql: string) => {
+      // The link upsert loses the discord_user_id TOCTOU race: linkDiscordToAccount
+      // maps the 23505 unique violation to false (discord_db.ts), and with no owner
+      // row to fall back to, loginNew answers the coded already_linked 409.
+      if (String(sql).includes('INSERT INTO discord_links')) {
+        return Promise.reject(Object.assign(new Error('duplicate key'), { code: '23505' }));
+      }
+      return Promise.resolve(defaultRouter(sql));
+    });
+    const res = makeRes();
+    await loginNew(makeReq({ body: { linkToken: 't' } }), res);
+    expect(parse(res)).toEqual({
+      status: 409,
+      data: { error: 'already_linked', code: 'discord.already_linked' },
+    });
   });
 
   it('provisions a password-less account, links it, and returns a session', async () => {
@@ -795,7 +1126,10 @@ describe('POST /api/auth/discord/login/link', () => {
       makeReq({ body: { linkToken: 'gone', username: 'maxp', password: 'whatever' } }),
       res,
     );
-    expect(parse(res).status).toBe(400);
+    expect(parse(res)).toEqual({
+      status: 400,
+      data: { error: 'expired', code: 'discord.expired' },
+    });
   });
 
   it('401s on a wrong password and does NOT consume the token', async () => {
@@ -808,7 +1142,10 @@ describe('POST /api/auth/discord/login/link', () => {
       makeReq({ body: { linkToken: 't', username: 'maxp', password: 'wrongpassword' } }),
       res,
     );
-    expect(parse(res).status).toBe(401);
+    expect(parse(res)).toEqual({
+      status: 401,
+      data: { error: 'invalid username or password', code: 'auth.invalid_credentials' },
+    });
     expect(
       dbMock.query.mock.calls.some((c) =>
         String(c[0]).includes('DELETE FROM discord_pending_logins'),

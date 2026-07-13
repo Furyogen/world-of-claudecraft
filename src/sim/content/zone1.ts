@@ -29,18 +29,20 @@ export const ZONE1_ZONE: ZoneDef = {
   graveyard: GRAVEYARD_POS,
   lakes: [LAKE],
   pois: [
-    { x: 0, z: -3, label: 'Eastbrook' },
-    { x: -2, z: 70, label: 'Wolf Run' },
-    { x: 65, z: 0, label: 'Boar Meadow' },
-    { x: -88, z: 82, label: 'Mirror Lake' },
-    { x: -60, z: 4, label: 'Sableweb' },
-    { x: -84, z: -64, label: 'Copper Dig' },
-    { x: 76, z: -76, label: 'Bandit Camp' },
-    { x: 80, z: 80, label: 'Fallen Chapel' },
-    { x: -5, z: -52, label: 'Reliquary Hill' },
-    { x: 40, z: 140, label: 'Brightwood Glade' },
+    { x: 0, z: -3, label: 'Eastbrook', id: 'eastbrook' },
+    { x: -2, z: 70, label: 'Wolf Run', id: 'wolf_run' },
+    { x: 65, z: 0, label: 'Boar Meadow', id: 'boar_meadow' },
+    { x: -88, z: 82, label: 'Mirror Lake', id: 'mirror_lake' },
+    { x: -60, z: 4, label: 'Sableweb', id: 'sableweb' },
+    { x: -84, z: -64, label: 'Copper Dig', id: 'copper_dig' },
+    { x: 76, z: -76, label: 'Bandit Camp', id: 'bandit_camp' },
+    { x: 80, z: 80, label: 'Fallen Chapel', id: 'fallen_chapel' },
+    { x: -5, z: -52, label: 'Reliquary Hill', id: 'reliquary_hill' },
+    { x: 40, z: 140, label: 'Brightwood Glade', id: 'brightwood_glade' },
+    { x: -11, z: -112, label: 'The Sowfield', id: 'the_sowfield' },
+    { x: 150, z: -46, label: 'The Farshore Causeway', id: 'the_farshore_causeway' },
   ],
-  welcome: 'Find Marshal Redbrook in town — he has work for you.',
+  welcome: 'Find Marshal Redbrook in town - he has work for you.',
   welcomeQuestId: 'q_wolves',
 };
 
@@ -526,7 +528,15 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     pos: { x: 4, z: 6 },
     facing: Math.PI,
     color: 0xb7950b,
-    questIds: ['q_wolves', 'q_greyjaw', 'q_bandits', 'q_ringleader', 'q_mogger'],
+    questIds: [
+      'q_wolves',
+      'q_greyjaw',
+      'q_bandits',
+      'q_ringleader',
+      'q_mogger',
+      'q_archetype_acceptance',
+      'q_prof_make_amends',
+    ],
     greeting: 'Keep your blade close, $C. The Vale is not what it was.',
   },
   trader_wilkes: {
@@ -632,8 +642,51 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     pos: { x: -4, z: -14 },
     facing: -2.14,
     color: 0xa04000,
-    questIds: ['q_mine'],
+    questIds: ['q_prof_intro', 'q_mine'],
     greeting: "Whole dig's crawling with those dirt-caked vermin!",
+  },
+  bursar_fernando: {
+    id: 'bursar_fernando',
+    name: 'Bursar Fernando',
+    title: 'The Gilded Strongbox',
+    // east side of the square, facing the approach toward the well and Merchant
+    pos: { x: 13, z: 8 },
+    facing: -Math.PI / 2,
+    color: 0xc9a227,
+    questIds: [],
+    banker: true,
+    greeting: 'Welcome to the Gilded Strongbox. Your goods rest safe behind our locks.',
+  },
+  groundskeeper_bram: {
+    id: 'groundskeeper_bram',
+    name: 'Groundskeeper Bram',
+    title: 'Keeper of the Sowfield',
+    // At the Sowfield's north gate with the book of fixtures (vale_cup_layout
+    // BRAM_POS). dynamic: the generic surface-placement loop skips him; the
+    // Vale Cup module spawns him at world init under a RESERVED entity id so
+    // adding him never shifts the ctor id sequence (parity goldens pin nextId).
+    pos: { x: -6, z: -82 },
+    facing: Math.PI,
+    color: 0x3f7d34,
+    questIds: [],
+    dynamic: true,
+    greeting:
+      'The truce holds at the Sowfield, $C: boots and shoulders only. Care to play for the Copper Pail?',
+  },
+  chronicler_saul: {
+    id: 'chronicler_saul',
+    name: 'Saul the Chronicler',
+    title: 'The Vale Chronicle',
+    // Southeast corner of the square, on the quiet side away from the well
+    // cluster and the player start, looking back northwest across the square
+    // (nearest authored neighbor ~13 units; he had been shoulder to shoulder
+    // with the well crowd).
+    pos: { x: 15, z: -16 },
+    facing: 2.4,
+    color: 0xd08a2e, // warm amber: the chronicler tint is his identity (shared mage visual)
+    questIds: [],
+    greeting:
+      'Every deed worth doing is worth writing down twice, $N: once for the ledger and once for the fireside.',
   },
 };
 
@@ -642,6 +695,37 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
 // ---------------------------------------------------------------------------
 
 export const ZONE1_QUESTS: Record<string, QuestDef> = {
+  // Professions onboarding (issue #1701 follow-up): the very first quest a
+  // new adventurer can take, no prerequisite and no minLevel gate (defaults
+  // to available at level 1, same as q_wolves). Gathering/crafting/town focus
+  // are otherwise entirely undiscoverable: nothing in the starting flow ever
+  // points a new player at them (see the professions.ts GATHERING_PROFESSIONS
+  // comment: no level/quest/tool gate exists at the mechanic level either, so
+  // there was no natural "unlock" moment to hang a quest off before this).
+  // A `collect` objective on the dedicated chunk_of_ore quest item (kind
+  // 'quest', src/sim/content/items.ts), not the mining node's shared
+  // bone_fragments yield: that material also drops from mobs, salvage, and
+  // the market (see #1708 review), so a collect objective targeting it could
+  // be completed without ever mining. chunk_of_ore is only ever granted by an
+  // ore-node harvest while this quest is active (the NODE_QUEST_GRANT gate in
+  // professions/gathering.ts, mirroring the mob-loot questId gate other
+  // collect quests use), and being kind 'quest' it can't be sold or lost to
+  // the vendor's Sell Junk button either. foreman_odell is the existing
+  // mine-themed NPC (already gives q_mine) so this reuses him rather than
+  // inventing a new trainer NPC.
+  q_prof_intro: {
+    id: 'q_prof_intro',
+    name: 'A Trade for Every Hand',
+    giverNpcId: 'foreman_odell',
+    turnInNpcId: 'foreman_odell',
+    text: "Every soul in Eastbrook works a trade besides the sword, $N. There's ore veins in the rocks around the Copper Dig, southwest of town, so go swing a pick and bring me 5 chunks. Mine them yourself, mind; I'll know the difference.",
+    completionText:
+      "See? Ore in your pack and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
+    objectives: [{ type: 'collect', itemId: 'chunk_of_ore', count: 5, label: 'Chunk of Ore' }],
+    xpReward: 150,
+    copperReward: 50,
+    itemRewards: {},
+  },
   q_wolves: {
     id: 'q_wolves',
     name: 'Wolves at the Door',
@@ -948,9 +1032,55 @@ export const ZONE1_QUESTS: Record<string, QuestDef> = {
     minLevel: 6,
     suggestedPlayers: 3,
   },
+  // STUB, professions active-archetype (issue #1129, superseded scope): a
+  // placeholder zone-1 acceptance lore quest, and a placeholder repeatable
+  // "make amends" quest. Both stand in for real quest giver/turn-in NPC
+  // placement and dialogue authoring (out of scope for this change, see
+  // src/sim/professions/archetype.ts): they reuse marshal_redbrook as giver/
+  // turn-in and a trivial existing-mob objective purely so the QuestDef is
+  // valid content, NOT because that mob/NPC has any lore tie to professions.
+  // The actual archetype-switching STATE MACHINE (acceptArchetypeQuest /
+  // advanceAmendsProgress / switchArchetype) is fully implemented in
+  // archetype.ts and does not depend on these quests actually being
+  // completable in play; a follow-up wires real content + the turn-in hook.
+  q_archetype_acceptance: {
+    id: 'q_archetype_acceptance',
+    name: 'A Craft to Call Your Own',
+    giverNpcId: 'marshal_redbrook',
+    turnInNpcId: 'marshal_redbrook',
+    text: 'Every artisan of Eastbrook eventually settles on one craft to call their own. Prove yourself with a single deed, $N, and declare your path.',
+    completionText: 'Your path is chosen; walk it well.',
+    objectives: [
+      { type: 'kill', targetMobId: 'forest_wolf', count: 1, label: 'Forest Wolf slain' },
+    ],
+    xpReward: 100,
+    copperReward: 0,
+    itemRewards: {},
+    // Not wired to acceptArchetypeQuest yet: retired keeps it out of the live
+    // accept flow (computeQuestState -> 'unavailable') until that hook lands.
+    retired: true,
+  },
+  q_prof_make_amends: {
+    id: 'q_prof_make_amends',
+    name: 'Making Amends',
+    giverNpcId: 'marshal_redbrook',
+    turnInNpcId: 'marshal_redbrook',
+    text: 'To set aside one craft for another, an artisan must first make amends for the path not walked, $N.',
+    completionText: 'Amends made; a new path is open to you.',
+    objectives: [
+      { type: 'kill', targetMobId: 'forest_wolf', count: 2, label: 'Forest Wolf slain' },
+    ],
+    xpReward: 50,
+    copperReward: 0,
+    itemRewards: {},
+    // Not wired to switchArchetype yet: retired keeps it out of the live
+    // accept flow (computeQuestState -> 'unavailable') until that hook lands.
+    retired: true,
+  },
 };
 
 export const ZONE1_QUEST_ORDER = [
+  'q_prof_intro',
   'q_wolves',
   'q_boars',
   'q_spiders',
@@ -969,6 +1099,8 @@ export const ZONE1_QUEST_ORDER = [
   'q_hollow',
   'q_gravecallers_trail',
   'q_mogger',
+  'q_archetype_acceptance',
+  'q_prof_make_amends',
 ];
 
 // ---------------------------------------------------------------------------
@@ -1103,7 +1235,7 @@ export const ZONE1_PROPS: ZonePropsDef = {
   wells: [{ x: 0, z: 2, r: 1.5 }],
   stalls: [
     { x: -8.5, z: 3, rot: Math.PI / 2, r: 1.7 },
-    { x: 9.5, z: 17.5, rot: -2.7, r: 1.7 }, // Smith Haldren's smithy stall
+    { x: 9.5, z: 17.5, rot: -2.7, r: 1.7, smithy: true }, // Smith Haldren's stall
     { x: 0, z: 11.5, rot: Math.PI, r: 1.8 }, // The Merchant's World Market stall
   ],
   mines: [{ x: -88, z: -68, rot: 0.8 }],

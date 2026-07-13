@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   angleDelta,
   CLICK_MOVE_FORWARD_CONE,
+  clickMoveBrokenByTeleport,
   clickMoveShouldWalk,
   clickMoveStep,
   facingToward,
@@ -171,5 +172,12 @@ describe('click-to-move math (#95)', () => {
     expect(stepAngleToward(0, -Math.PI / 2, 0.25)).toBeCloseTo(-0.25);
     expect(stepAngleToward(0, 0.1, 0.25)).toBeCloseTo(0.1);
     expect(angleDelta(Math.PI - 0.1, -Math.PI + 0.1)).toBeCloseTo(0.2);
+  });
+
+  it('flags a teleport-sized jump so a pending run is cancelled, not chased', () => {
+    // running covers < 2 yards per frame; the Duskfall portal jumps ~110
+    expect(clickMoveBrokenByTeleport({ x: -140, z: 845 }, { x: -140, z: 955 })).toBe(true);
+    expect(clickMoveBrokenByTeleport({ x: 0, z: 0 }, { x: 1.5, z: 1.2 })).toBe(false);
+    expect(clickMoveBrokenByTeleport(null, { x: 0, z: 0 })).toBe(false);
   });
 });

@@ -19,10 +19,22 @@ import {
   validateAllocation,
   validateTalentTree,
 } from '../src/sim/content/talents';
+import { BUILTIN_WORLD } from '../src/sim/data';
 import { Sim } from '../src/sim/sim';
-import { ALL_CLASSES, dist2d, MAX_LEVEL } from '../src/sim/types';
+import { ALL_CLASSES, dist2d, MAX_LEVEL, type WorldContent } from '../src/sim/types';
 import { terrainHeight } from '../src/sim/world';
 import { talentChoiceIconRef, talentNodeIconRef } from '../src/ui/talent_icons';
+
+// Talent, loadout, and persistence assertions only ever read the player (and a
+// reloaded player), never ambient world content, so strip camps/npcs/ground
+// objects (the dot_final_tick subsystem-world pattern). The one exception, the
+// Vengeance threat test, needs a real camp mob and keeps the full world.
+const TALENT_TEST_WORLD: WorldContent = {
+  ...BUILTIN_WORLD,
+  camps: [],
+  npcs: {},
+  groundObjects: [],
+};
 
 const alloc = (over: Partial<TalentAllocation> = {}): TalentAllocation => ({
   ...emptyAllocation(),
@@ -30,7 +42,7 @@ const alloc = (over: Partial<TalentAllocation> = {}): TalentAllocation => ({
 });
 
 function warriorAtCap(seed = 7): Sim {
-  const sim = new Sim({ seed, playerClass: 'warrior' });
+  const sim = new Sim({ seed, playerClass: 'warrior', world: TALENT_TEST_WORLD });
   sim.setPlayerLevel(MAX_LEVEL);
   return sim;
 }
@@ -332,7 +344,7 @@ describe('precomputed modifiers', () => {
       20,
       computeTalentModifiers('priest', alloc({ ranks: { pri_imp_fortitude: 2 } })),
     ).find((k) => k.def.id === 'power_word_fortitude')!;
-    expect(effOf(fort).value).toBe(17); // 12 stamina * 1.40
+    expect(effOf(fort).value).toBe(7); // 5% stamina * 1.40 (percent-points survive the round)
 
     const demonSkin = abilitiesKnownAt(
       'warlock',
@@ -405,7 +417,7 @@ describe('Sim integration — passive talents', () => {
   });
 
   it('rejects an over-budget allocation server-side', () => {
-    const sim = new Sim({ seed: 7, playerClass: 'warrior' });
+    const sim = new Sim({ seed: 7, playerClass: 'warrior', world: TALENT_TEST_WORLD });
     sim.setPlayerLevel(10); // exactly 1 point
     expect(sim.talentPoints().total).toBe(1);
     expect(sim.applyTalents(alloc({ ranks: { war_cruelty: 3 } }))).toBe(false);
@@ -427,7 +439,12 @@ describe('Sim integration — passive talents', () => {
     const state = sim.serializeCharacter(sim.playerId)!;
     expect(state.talents).toBeTruthy();
 
-    const sim2 = new Sim({ seed: 9, playerClass: 'warrior', noPlayer: true });
+    const sim2 = new Sim({
+      seed: 9,
+      playerClass: 'warrior',
+      noPlayer: true,
+      world: TALENT_TEST_WORLD,
+    });
     const pid = sim2.addPlayer('warrior', 'Reloaded', { state });
     const meta = sim2.meta(pid)!;
     expect(meta.talents.spec).toBe('arms');
@@ -465,7 +482,7 @@ describe('Sim integration — active talents & ability modifiers', () => {
   });
 
   it('gates specialization choice to the first talent level', () => {
-    const sim = new Sim({ seed: 7, playerClass: 'warrior' });
+    const sim = new Sim({ seed: 7, playerClass: 'warrior', world: TALENT_TEST_WORLD });
     sim.setPlayerLevel(5);
     expect(sim.setSpec('arms')).toBe(false);
     expect(sim.known.some((k) => k.def.id === 'mortal_strike')).toBe(false);
@@ -655,7 +672,7 @@ describe('Sim integration — loadouts & build strings', () => {
     expect(target.talents.ranks.prot_toughness).toBe(3);
 
     // the SAME build is rejected for a character without the points (server-side)
-    const lowbie = new Sim({ seed: 5, playerClass: 'warrior' });
+    const lowbie = new Sim({ seed: 5, playerClass: 'warrior', world: TALENT_TEST_WORLD });
     lowbie.setPlayerLevel(10); // only 1 point
     expect(lowbie.applyTalents(imported.ok ? imported.alloc : alloc())).toBe(false);
   });
@@ -849,7 +866,12 @@ describe('persisted talents are revalidated on load (FR security)', () => {
     // Tamper: a level-5 character (0 talent points) carrying a max-level build.
     state.level = 5;
 
-    const sim2 = new Sim({ seed: 9, playerClass: 'warrior', noPlayer: true });
+    const sim2 = new Sim({
+      seed: 9,
+      playerClass: 'warrior',
+      noPlayer: true,
+      world: TALENT_TEST_WORLD,
+    });
     const pid = sim2.addPlayer('warrior', 'Tampered', { state });
     const meta = sim2.meta(pid)!;
     // 0 points available at level 5 -> nothing survives.
@@ -893,7 +915,12 @@ describe('persisted talents are revalidated on load (FR security)', () => {
     const sim = warriorAtCap();
     sim.applyTalents(alloc({ spec: 'arms', ranks: { war_cruelty: 2, arms_imp_overpower: 2 } }));
     const state = sim.serializeCharacter(sim.playerId)!;
-    const sim2 = new Sim({ seed: 9, playerClass: 'warrior', noPlayer: true });
+    const sim2 = new Sim({
+      seed: 9,
+      playerClass: 'warrior',
+      noPlayer: true,
+      world: TALENT_TEST_WORLD,
+    });
     const pid = sim2.addPlayer('warrior', 'Honest', { state });
     const meta = sim2.meta(pid)!;
     expect(meta.talents.ranks.war_cruelty).toBe(2);

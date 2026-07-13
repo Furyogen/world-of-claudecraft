@@ -6,15 +6,27 @@
 import { describe, expect, it } from 'vitest';
 import { QUEST_LETTERS, WELCOME_LETTER } from '../src/sim/content/letters';
 import { MAILBOXES } from '../src/sim/content/mailboxes';
+import { BUILTIN_WORLD } from '../src/sim/data';
 import {
   MAIL_DELIVERY_SECONDS,
   MAIL_MAX_ATTACHMENTS,
   MAIL_POSTAGE,
 } from '../src/sim/mail/post_office';
 import { Sim } from '../src/sim/sim';
-import type { SimEvent } from '../src/sim/types';
+import type { SimEvent, WorldContent } from '../src/sim/types';
 
-const makeWorld = () => new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
+// Mailboxes are system-owned and still spawn with this fixture. Ambient camps,
+// NPCs and quest objects are irrelevant to delivery/index invariants and would
+// turn every simulated minute into a continent-wide AI benchmark.
+const MAIL_TEST_WORLD: WorldContent = {
+  ...BUILTIN_WORLD,
+  camps: [],
+  npcs: {},
+  groundObjects: [],
+};
+
+const makeWorld = () =>
+  new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true, world: MAIL_TEST_WORLD });
 
 function moveToMailbox(sim: Sim, pid: number): void {
   const box = sim.entities.get(sim.postOffice.mailboxIds[0]);
@@ -449,7 +461,14 @@ describe('unread index equivalence (finding 4)', () => {
 
 describe('quest thank-you letters', () => {
   it('the giver writes after an authored quest turn-in', () => {
-    const sim = new Sim({ seed: 42, playerClass: 'warrior', devCommands: true });
+    // QUESTS is a static data table (src/sim/data), not world content, so the
+    // dev turn-in and its thank-you letter work in the mailbox-only world too.
+    const sim = new Sim({
+      seed: 42,
+      playerClass: 'warrior',
+      devCommands: true,
+      world: MAIL_TEST_WORLD,
+    });
     const pid = sim.primaryId;
     expect(QUEST_LETTERS.q_wolves).toBeDefined();
     expect(sim.completeQuestForDev('q_wolves', pid)).toBe(true);

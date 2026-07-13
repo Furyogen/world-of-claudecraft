@@ -127,7 +127,7 @@ describe('POST /api/wallet/link/challenge', () => {
 
   it('rate-limits before reading the body or writing challenge rows', async () => {
     for (let i = 0; i < WALLET_LINK_MAX_PER_MINUTE; i++) {
-      expect(walletLinkRateLimited(makeReq({}), 1)).toBe(false);
+      expect(walletLinkRateLimited(makeReq({}), 1).allowed).toBe(true);
     }
     dbMock.query.mockClear();
     const { req, wasRead } = makeUnreadableReq();
@@ -304,7 +304,7 @@ describe('POST /api/wallet/link', () => {
 
   it('rate-limits before reading the body or consuming challenge rows', async () => {
     for (let i = 0; i < WALLET_LINK_MAX_PER_MINUTE; i++) {
-      expect(walletLinkRateLimited(makeReq({}), 1)).toBe(false);
+      expect(walletLinkRateLimited(makeReq({}), 1).allowed).toBe(true);
     }
     dbMock.query.mockClear();
     const { req, wasRead } = makeUnreadableReq();

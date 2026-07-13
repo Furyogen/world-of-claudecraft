@@ -214,12 +214,32 @@ const HOT_PAINTERS: ReadonlyArray<{
   { file: 'cast_bar_painter.ts', allow: {}, reflowAllow: {} },
   { file: 'unit_frame_painter.ts', allow: {}, reflowAllow: {} },
   { file: 'action_bar_painter.ts', allow: {}, reflowAllow: {} },
+  { file: 'mobile_action_ring_painter.ts', allow: {}, reflowAllow: {} },
   { file: 'party_frames_painter.ts', allow: {}, reflowAllow: {} },
+  // yumi builds its whole strip + respawn overlay once in ensureEls (14 class
+  // assignments + the two role attributes + the toggle's type); every
+  // per-frame write is facet-routed.
+  {
+    file: 'yumi_match_painter.ts',
+    allow: { '.className': 14, '.setAttribute': 3 },
+    reflowAllow: {},
+  },
   { file: 'auras_painter.ts', allow: { '.className': 3 }, reflowAllow: {} },
   {
     file: 'fct_painter.ts',
     allow: { '.className': 1, '.setAttribute': 1 },
     reflowAllow: { '.offsetWidth': 1 },
+  },
+  // deed_tracker builds its whole static skeleton (header + pooled lines) in
+  // ONE constructor innerHTML write; every refresh write is facet-routed. The
+  // three setAttribute/removeAttribute pairs run ONLY on a chip-mode
+  // transition (compact-touch tier flip, guarded by lastChip): the elided
+  // setAttr facet caches per (element, attr) and would go stale across a raw
+  // removeAttribute, so the transition swap must be direct. Never per-frame.
+  {
+    file: 'deed_tracker_painter.ts',
+    allow: { '.innerHTML': 1, '.setAttribute': 3, '.removeAttribute': 3 },
+    reflowAllow: {},
   },
 ];
 
@@ -552,6 +572,7 @@ function aurasDeps(): AurasDeps {
     iconId: (a) => a.id,
     auraName: (a) => a.name,
     formatStacks: (n) => String(n),
+    isOwn: () => false,
     durationUnits: () => ({ s: 's', m: 'm', h: 'h', d: 'd' }),
     auraEffectHtml: () => '',
   };

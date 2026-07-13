@@ -4,7 +4,8 @@ import { createMob } from '../src/sim/entity';
 import { Sim } from '../src/sim/sim';
 
 const SEED = 31337;
-const makeSim = (cls: 'warrior' | 'mage' = 'warrior') => new Sim({ seed: SEED, playerClass: cls });
+const makeSim = (cls: 'warrior' | 'mage' = 'warrior', seed = SEED) =>
+  new Sim({ seed, playerClass: cls });
 
 // Spawn Deacon Voss adjacent to the player and hand it back.
 function spawnDeacon(sim: Sim, id = 980001, level = 12) {
@@ -92,7 +93,8 @@ describe('mob arcane rot (on-hit arcane DoT)', () => {
   });
 
   it('refreshes (does not infinitely stack) on repeated brands from the same deacon', () => {
-    const sim = makeSim();
+    // seed re-pinned after a content append shifted the world-gen rng stream
+    const sim = makeSim('warrior', 31338);
     const player = sim.entities.get(sim.playerId)!;
     player.maxHp = 5000;
     player.hp = 5000;

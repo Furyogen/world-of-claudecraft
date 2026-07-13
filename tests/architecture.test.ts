@@ -1,5 +1,5 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
-import { join, relative, sep } from 'node:path';
+import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
@@ -124,6 +124,7 @@ const UI_PURE_CORES = [
   'src/ui/xp_bar.ts',
   'src/ui/absorb_bar.ts',
   'src/ui/party_frames.ts',
+  'src/ui/party_collapse.ts',
   'src/ui/rest_indicator.ts',
   'src/ui/low_health.ts',
   'src/ui/low_resource.ts',
@@ -138,10 +139,15 @@ const UI_PURE_CORES = [
   'src/ui/talents_view.ts',
   'src/ui/social_view.ts',
   'src/ui/bags_view.ts',
+  'src/ui/bank_view.ts',
   'src/ui/item_set_tooltip_view.ts',
+  'src/ui/weapon_proc_view.ts',
   'src/ui/options_view.ts',
   'src/ui/vendor_view.ts',
+  'src/ui/heroic_vendor_view.ts',
+  'src/ui/loot_roll_status_view.ts',
   'src/ui/loot_settings_view.ts',
+  'src/ui/crafting_view.ts',
   'src/ui/market_view.ts',
   'src/ui/mailbox_view.ts',
   'src/ui/calendar_view.ts',
@@ -149,15 +155,27 @@ const UI_PURE_CORES = [
   'src/ui/map_window_view.ts',
   'src/ui/map_quest_list_view.ts',
   'src/ui/arena_window_view.ts',
+  'src/ui/yumi_match_view.ts',
+  'src/ui/vale_cup_window_view.ts',
+  'src/ui/vale_cup_indicator_view.ts',
+  'src/ui/vale_cup_hud_view.ts',
+  'src/ui/vale_cup_briefing_view.ts',
+  'src/ui/vale_cup_betting_view.ts',
+  'src/ui/vale_cup_charge_view.ts',
   'src/ui/leaderboard_view.ts',
   'src/ui/guild_leaderboard_view.ts',
   'src/ui/dev_leaderboard_view.ts',
+  'src/ui/deeds_leaderboard_view.ts',
   'src/ui/daily_rewards_view.ts',
+  'src/ui/deeds_view.ts',
   'src/ui/spellbook_view.ts',
   'src/ui/questlog_view.ts',
   'src/ui/swing_timer.ts',
   'src/ui/unit_frame.ts',
   'src/ui/action_bar_view.ts',
+  'src/ui/mobile_action_page_view.ts',
+  'src/ui/consumable_bar_view.ts',
+  'src/ui/mobile_hud_layout.ts',
   'src/ui/auras_view.ts',
   'src/ui/minimap_markers.ts',
   'src/ui/gathering_view.ts',
@@ -169,6 +187,8 @@ const UI_PURE_CORES = [
   'src/ui/live_region_politeness.ts',
   'src/ui/discord_widget_view.ts',
   'src/ui/desktop_update_view.ts',
+  'src/ui/corpse_harvest_view.ts',
+  'src/ui/town_focus_view.ts',
   'src/game/ui_effects_profile.ts',
   'src/game/ui_tier_knobs.ts',
 ].map((rel) => join(repoRoot, rel));
@@ -181,11 +201,19 @@ const UI_PURE_CORES = [
 // terrain_region_core (editor partial-rebuild chunk/texel selection math) and
 // water_core (the shore-depth sample shared by build + editor setLevel) follow
 // the same contract for the map editor's realtime terrain/water edits.
+// day_night_core is the clock-to-grade math of the world day/night cycle
+// (Date.now stays in the renderer that calls it), so a Vitest can drive any
+// moment of the cycle.
 const RENDER_PURE_CORES = [
   'src/render/cast_bar.ts',
   'src/render/nameplate_view.ts',
+  'src/render/net_interp_core.ts',
   'src/render/terrain_region_core.ts',
   'src/render/water_core.ts',
+  'src/render/day_night_core.ts',
+  'src/render/authored_walls_core.ts',
+  'src/render/foliage_lod.ts',
+  'src/render/prewarm_pass.ts',
 ].map((rel) => join(repoRoot, rel));
 
 // Bare-named pure cores: registered cores (from UI_PURE_CORES + RENDER_PURE_CORES)
@@ -197,10 +225,13 @@ const RENDER_PURE_CORES = [
 // updating this list) fails the cross-check instead of silently escaping the
 // reverse-completeness guard.
 const BARE_NAMED = [
+  'src/render/foliage_lod.ts',
+  'src/render/prewarm_pass.ts',
   'src/ui/unit_portrait.ts',
   'src/ui/xp_bar.ts',
   'src/ui/absorb_bar.ts',
   'src/ui/party_frames.ts',
+  'src/ui/party_collapse.ts',
   'src/ui/rest_indicator.ts',
   'src/ui/low_health.ts',
   'src/ui/low_resource.ts',
@@ -216,6 +247,7 @@ const BARE_NAMED = [
   'src/ui/focus_order.ts',
   'src/ui/roving_index.ts',
   'src/ui/live_region_politeness.ts',
+  'src/ui/mobile_hud_layout.ts',
   'src/game/ui_effects_profile.ts',
   'src/game/ui_tier_knobs.ts',
   'src/render/cast_bar.ts',

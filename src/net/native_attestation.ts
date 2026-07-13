@@ -4,6 +4,7 @@ export interface NativeAttestationProof {
   platform: 'android' | 'ios';
   challengeId: string;
   token: string;
+  nonce: string;
 }
 
 interface ChallengeResponse {
@@ -47,5 +48,6 @@ export async function createNativeAttestationProof(
     platform: token.platform,
     challengeId: challenge.challengeId,
     token: token.token,
+    nonce: challenge.nonce,
   };
 }

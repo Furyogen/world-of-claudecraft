@@ -321,7 +321,11 @@ function formatValue(v: PerfValue): string {
         }),
       });
     case 'hz':
-      return t('hudChrome.perf.units.hz', { value: formatNumber(Math.round(v.v)) });
+      return t('hudChrome.perf.units.hz', {
+        value: v.digits
+          ? formatNumber(v.v, { minimumFractionDigits: v.digits, maximumFractionDigits: v.digits })
+          : formatNumber(Math.round(v.v)),
+      });
     case 'memPair':
       return v.limitMb != null
         ? t('hudChrome.perf.units.memPair', {

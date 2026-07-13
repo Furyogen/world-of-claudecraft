@@ -10,14 +10,14 @@
     "max-level overflow -> lifetimeXp / virtualLevelUp (accrueLifetimeXp, C1)",
     "cosmetic prestige accept + below-threshold reject (prestige, G1b)"
   ],
-  "draws": 75,
-  "drawDigest": "cc652885",
+  "draws": 137,
+  "drawDigest": "68676b41",
   "frames": [
     {
       "tick": 0,
       "time": 0,
-      "nextId": 401,
-      "state": "74bced36",
+      "nextId": 662,
+      "state": "ff346603",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -27,6 +27,7 @@
       "players": [
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
@@ -36,18 +37,31 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 400,
+          "entityId": 661,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -59,7 +73,8 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         }
       ],
       "entities": [
@@ -74,7 +89,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 90,
-          "id": 400,
+          "id": 661,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -117,9 +132,9 @@
     {
       "tick": 20,
       "time": 1,
-      "nextId": 401,
-      "state": "7e456858",
-      "events": "b93c7dc5",
+      "nextId": 662,
+      "state": "da12f1f5",
+      "events": "fe5fbeb5",
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -128,8 +143,8 @@
     {
       "tick": 40,
       "time": 2,
-      "nextId": 401,
-      "state": "d15c99d0",
+      "nextId": 662,
+      "state": "e0bf6e89",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -139,28 +154,29 @@
     {
       "tick": 60,
       "time": 3,
-      "nextId": 401,
-      "state": "bf44f064",
+      "nextId": 662,
+      "state": "32a3ab33",
       "events": "741638a5",
       "rng": {
-        "draws": 75,
-        "digest": "cc652885"
+        "draws": 137,
+        "digest": "68676b41"
       }
     },
     {
       "tick": 60,
       "time": 3,
-      "nextId": 401,
-      "state": "bf44f064",
+      "nextId": 662,
+      "state": "32a3ab33",
       "events": "741638a5",
       "rng": {
-        "draws": 75,
-        "digest": "cc652885"
+        "draws": 137,
+        "digest": "68676b41"
       },
       "label": "rested-accrued",
       "players": [
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
@@ -170,18 +186,40 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ],
+            "visited": [
+              "poi:eastbrook_vale:eastbrook"
+            ]
+          },
+          "deedsEarned": [
+            [
+              "prog_well_rested",
+              ""
+            ]
+          ],
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 400,
+          "entityId": 661,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -190,11 +228,13 @@
           ],
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "renown": 5,
           "restedXp": 0.125,
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         }
       ],
       "entities": [
@@ -209,7 +249,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 102,
           "hp": 90,
-          "id": 400,
+          "id": 661,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -252,17 +292,18 @@
     {
       "tick": 60,
       "time": 3,
-      "nextId": 401,
-      "state": "327e45bb",
-      "events": "1cded724",
+      "nextId": 662,
+      "state": "03bc01ee",
+      "events": "179cdb93",
       "rng": {
-        "draws": 75,
-        "digest": "cc652885"
+        "draws": 137,
+        "digest": "68676b41"
       },
       "label": "rested-consumed",
       "players": [
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
@@ -272,20 +313,42 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
             "xpGained": 160
           },
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ],
+            "visited": [
+              "poi:eastbrook_vale:eastbrook"
+            ]
+          },
+          "deedsEarned": [
+            [
+              "prog_well_rested",
+              ""
+            ]
+          ],
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 400,
+          "entityId": 661,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -295,11 +358,13 @@
           "lifetimeXp": 160,
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "renown": 5,
           "restedXp": 920,
           "talents": {
             "choices": {},
             "ranks": {}
           },
+          "townFocus": {},
           "xp": 160
         }
       ],
@@ -315,7 +380,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 102,
           "hp": 90,
-          "id": 400,
+          "id": 661,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -358,17 +423,18 @@
     {
       "tick": 60,
       "time": 3,
-      "nextId": 401,
-      "state": "1ddaf368",
-      "events": "c434cdff",
+      "nextId": 662,
+      "state": "d6cf6a4b",
+      "events": "010797a7",
       "rng": {
-        "draws": 75,
-        "digest": "cc652885"
+        "draws": 137,
+        "digest": "68676b41"
       },
       "label": "ding",
       "players": [
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
@@ -378,6 +444,7 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
@@ -385,14 +452,35 @@
             "xpGained": 610
           },
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ],
+            "visited": [
+              "poi:eastbrook_vale:eastbrook"
+            ]
+          },
+          "deedsEarned": [
+            [
+              "prog_well_rested",
+              ""
+            ]
+          ],
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 400,
+          "entityId": 661,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -402,11 +490,13 @@
           "lifetimeXp": 610,
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "renown": 5,
           "restedXp": 920,
           "talents": {
             "choices": {},
             "ranks": {}
           },
+          "townFocus": {},
           "xp": 210
         }
       ],
@@ -422,7 +512,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 102,
           "hp": 128,
-          "id": 400,
+          "id": 661,
           "kind": "player",
           "level": 2,
           "lootFfaTimer": "Infinity",
@@ -465,17 +555,18 @@
     {
       "tick": 60,
       "time": 3,
-      "nextId": 401,
-      "state": "217cd3ba",
-      "events": "5079bfdf",
+      "nextId": 662,
+      "state": "5e5cace5",
+      "events": "82f91cc1",
       "rng": {
-        "draws": 75,
-        "digest": "cc652885"
+        "draws": 137,
+        "digest": "68676b41"
       },
       "label": "overflow",
       "players": [
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
@@ -485,6 +576,7 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
@@ -492,14 +584,35 @@
             "xpGained": 23810
           },
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ],
+            "visited": [
+              "poi:eastbrook_vale:eastbrook"
+            ]
+          },
+          "deedsEarned": [
+            [
+              "prog_well_rested",
+              ""
+            ]
+          ],
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 400,
+          "entityId": 661,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -509,11 +622,13 @@
           "lifetimeXp": 190400,
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "renown": 5,
           "restedXp": 920,
           "talents": {
             "choices": {},
             "ranks": {}
           },
+          "townFocus": {},
           "xp": 210
         }
       ],
@@ -529,7 +644,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 102,
           "hp": 812,
-          "id": 400,
+          "id": 661,
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -572,17 +687,18 @@
     {
       "tick": 60,
       "time": 3,
-      "nextId": 401,
-      "state": "f982e391",
-      "events": "dee49cdf",
+      "nextId": 662,
+      "state": "55758bf2",
+      "events": "cee25c9e",
       "rng": {
-        "draws": 75,
-        "digest": "cc652885"
+        "draws": 137,
+        "digest": "68676b41"
       },
       "label": "prestige-accept",
       "players": [
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
@@ -592,6 +708,7 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
@@ -599,14 +716,35 @@
             "xpGained": 23810
           },
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ],
+            "visited": [
+              "poi:eastbrook_vale:eastbrook"
+            ]
+          },
+          "deedsEarned": [
+            [
+              "prog_well_rested",
+              ""
+            ]
+          ],
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 400,
+          "entityId": 661,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -617,11 +755,13 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "prestigeRank": 1,
+          "renown": 5,
           "restedXp": 920,
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         }
       ],
       "entities": [
@@ -636,7 +776,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 102,
           "hp": 812,
-          "id": 400,
+          "id": 661,
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -679,17 +819,18 @@
     {
       "tick": 60,
       "time": 3,
-      "nextId": 401,
-      "state": "f982e391",
+      "nextId": 662,
+      "state": "55758bf2",
       "events": "741638a5",
       "rng": {
-        "draws": 75,
-        "digest": "cc652885"
+        "draws": 137,
+        "digest": "68676b41"
       },
       "label": "prestige-reject",
       "players": [
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
@@ -699,6 +840,7 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
@@ -706,14 +848,35 @@
             "xpGained": 23810
           },
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ],
+            "visited": [
+              "poi:eastbrook_vale:eastbrook"
+            ]
+          },
+          "deedsEarned": [
+            [
+              "prog_well_rested",
+              ""
+            ]
+          ],
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 400,
+          "entityId": 661,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -724,11 +887,13 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "prestigeRank": 1,
+          "renown": 5,
           "restedXp": 920,
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         }
       ],
       "entities": [
@@ -743,7 +908,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 102,
           "hp": 812,
-          "id": 400,
+          "id": 661,
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -786,17 +951,18 @@
     {
       "tick": 60,
       "time": 3,
-      "nextId": 401,
-      "state": "f982e391",
+      "nextId": 662,
+      "state": "55758bf2",
       "events": "741638a5",
       "rng": {
-        "draws": 75,
-        "digest": "cc652885"
+        "draws": 137,
+        "digest": "68676b41"
       },
       "label": "final",
       "players": [
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
@@ -806,6 +972,7 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
@@ -813,14 +980,35 @@
             "xpGained": 23810
           },
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ],
+            "visited": [
+              "poi:eastbrook_vale:eastbrook"
+            ]
+          },
+          "deedsEarned": [
+            [
+              "prog_well_rested",
+              ""
+            ]
+          ],
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 400,
+          "entityId": 661,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -831,11 +1019,13 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "prestigeRank": 1,
+          "renown": 5,
           "restedXp": 920,
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         }
       ],
       "entities": [
@@ -850,7 +1040,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 102,
           "hp": 812,
-          "id": 400,
+          "id": 661,
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",

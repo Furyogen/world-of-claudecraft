@@ -27,7 +27,10 @@
 
 import { isStunned } from '../combat/cc';
 import { ITEMS, MOBS, NPCS, QUESTS } from '../data';
+import * as deedsMod from '../deeds';
 import { createMob, createNpc } from '../entity';
+import { applyHeroicMobTuning, mobTemplateForDungeonDifficulty } from '../instances/difficulty';
+import { heroicLockoutId, instanceLockoutMetas } from '../instances/dungeons';
 import type { PlayerMeta } from '../sim';
 import type { SimContext } from '../sim_context';
 import { clearThreat, threatEntries } from '../threat';
@@ -42,6 +45,7 @@ import {
   INTERACT_RANGE,
   NYTHRAXIS_ADD_ID,
   NYTHRAXIS_BOSS_ID,
+  NYTHRAXIS_ROOM_RADIUS,
   normAngle,
   OBJECT_RESPAWN,
   type SimEvent,
@@ -55,8 +59,9 @@ const NYTHRAXIS_RELIC_SUMMONS: Record<string, string> = {
   royal_seal: 'deathstalker_voss',
 };
 const _NYTHRAXIS_CRYPT_QUESTS = new Set(['q_nythraxis_sealed_crypt', 'q_nythraxis_bound_guardian']);
-// NYTHRAXIS_BOSS_ID / NYTHRAXIS_ADD_ID live in types.ts (shared with mob/locomotion.ts;
-// the dungeon raid-door seal in instances/dungeons.ts also reads NYTHRAXIS_BOSS_ID).
+// NYTHRAXIS_BOSS_ID / NYTHRAXIS_ADD_ID / NYTHRAXIS_ROOM_RADIUS live in types.ts
+// (shared with mob/locomotion.ts and deeds.ts; the dungeon raid-door seal in
+// instances/dungeons.ts also reads NYTHRAXIS_BOSS_ID).
 const NYTHRAXIS_ALDRIC_ID = 'brother_aldric_raid';
 const _NYTHRAXIS_FINAL_QUEST_ID = 'q_nythraxis_scourges_end';
 const NYTHRAXIS_WARDSTONE_ITEM_ID = 'bastion_ward_stone';
@@ -69,11 +74,35 @@ const NYTHRAXIS_GRAVEBREAKER_RANGE = 11;
 const NYTHRAXIS_GRAVEBREAKER_HALF_ARC = Math.PI / 3;
 const NYTHRAXIS_OPENER_SECOND_YELL_DELAY = 4;
 const NYTHRAXIS_DIALOGUE_LINE_SECONDS = 2.6;
-const NYTHRAXIS_RAISE_FALLEN_EVERY = 45;
+// Raise Fallen add-wave cadence, both difficulties (heroic scales the ADDS,
+// not the cadence). Was 45s; tightened to 30s so the waves stay pressure the
+// raid must answer all fight.
+const NYTHRAXIS_RAISE_FALLEN_EVERY = 30;
 const NYTHRAXIS_PHASE_TWO_HP = 0.7;
 const NYTHRAXIS_SOUL_REND_EVERY = 30;
 const NYTHRAXIS_SOUL_REND_DURATION = 8;
 const NYTHRAXIS_SOUL_REND_STACK_RANGE = 5;
+// Soul Rend mark counts. Heroic doubles the marked players (6 of the raid must
+// collapse onto the stack point inside 8s); the extra rng picks draw ONLY on a
+// heroic claim, so the normal trace and the parity golden are unchanged.
+const NYTHRAXIS_SOUL_REND_MARKS = 3;
+const NYTHRAXIS_SOUL_REND_MARKS_HEROIC = 6;
+// Heroic non-compliance punishers. Soul Rend deals maxHp x mult / stacked, so
+// on heroic an unstacked mark takes 150% of max hp (a guaranteed kill through
+// any topped-off health bar) and even a pair splitting takes 75% each.
+// Deathless Rage on a FAILED wardstone channel hits for 115% of max hp on
+// heroic (a raid wipe) versus 82% on normal. Both are percentage math with no
+// rng, so the normal trace and parity golden are unchanged.
+const NYTHRAXIS_SOUL_REND_HEROIC_MULT = 1.5;
+const NYTHRAXIS_DEATHLESS_PCT = 0.82;
+const NYTHRAXIS_DEATHLESS_PCT_HEROIC = 1.15;
+
+// Whether this boss's claimed instance is heroic (the arena instance is found
+// the same way the add spawns find it: by mobIds membership).
+function isHeroicNythraxis(ctx: SimContext, boss: Entity): boolean {
+  const inst = ctx.instances.find((i) => i.partyKey !== null && i.mobIds.includes(boss.id));
+  return inst?.difficulty === 'heroic';
+}
 const NYTHRAXIS_DEATHLESS_EVERY = 45;
 const NYTHRAXIS_DEATHLESS_CAST = 10;
 const NYTHRAXIS_DEATHLESS_CHANNEL = 5;
@@ -83,7 +112,6 @@ const NYTHRAXIS_PHASE_TWO_SETTLE_DELAY = 5;
 const NYTHRAXIS_TRANSITION_DURATION = 21;
 const NYTHRAXIS_TRANSITION_STUN = 21.5;
 const NYTHRAXIS_FINAL_STAND_HP = 0.05;
-const NYTHRAXIS_ROOM_RADIUS = 260;
 // Brother Aldric enters on the door side of the arena (the raid's side, lower z
 // than the boss spawn) and walks toward the boss. Distances are yards in front
 // of the boss spawn: appears 50yd out, walks up to 30yd out (between door + boss).
@@ -461,10 +489,20 @@ export function nythraxisTransitionStunTargets(ctx: SimContext, boss: Entity): E
 }
 
 export function nythraxisRoomMetas(ctx: SimContext, boss: Entity): PlayerMeta[] {
+  // Membership (the lockout roster), so the circle is clipped to the boss
+  // slot's own z band, the same clip the deed task window applies: arena
+  // slots sit 500 apart in z with the spawn skewed high, so the raw circle
+  // reaches into the next slot's band. The in-room combat queries above keep
+  // the raw circle (their cross-slot reach is behind arena walls the movement
+  // resolver enforces, and they never confer credit or a lockout).
+  const inst = ctx.instances.find((i) => i.partyKey !== null && i.mobIds.includes(boss.id));
+  const origin = inst ? ctx.instanceOriginOf(inst) : null;
   const out: PlayerMeta[] = [];
   for (const meta of ctx.players.values()) {
     const p = ctx.entities.get(meta.entityId);
-    if (p && dist2d(p.pos, boss.spawnPos) <= NYTHRAXIS_ROOM_RADIUS) out.push(meta);
+    if (!p || dist2d(p.pos, boss.spawnPos) > NYTHRAXIS_ROOM_RADIUS) continue;
+    if (origin !== null && Math.abs(p.pos.z - origin.z) >= 250) continue;
+    out.push(meta);
   }
   out.sort((a, b) => a.entityId - b.entityId);
   return out;
@@ -475,9 +513,32 @@ export function grantNythraxisLockout(ctx: SimContext, boss: Entity): void {
   // lockout seam (the authoritative server uses its realm-local 3 AM daily reset, so a
   // realm's raids share one boundary; offline/headless fall back to a flat 24h day).
   const until = ctx.raidResetMs(ctx.lockoutNowMs());
-  for (const meta of nythraxisRoomMetas(ctx, boss)) {
-    meta.raidLockouts.set('nythraxis_boss_arena', until);
+  // Difficulty-scoped: a heroic kill locks the :heroic key only, so the raid
+  // can still run the normal difficulty the same day (and vice versa).
+  const lockId = isHeroicNythraxis(ctx, boss)
+    ? heroicLockoutId('nythraxis_boss_arena')
+    : 'nythraxis_boss_arena';
+  // The kill locks the UNION of the room and the claim sweep. The claim sweep
+  // (instanceLockoutMetas) covers the whole owning raid group plus anyone
+  // inside the generic instance footprint: a raider who released, camped the
+  // entrance, or never zoned in must not stay unlocked, or one unlocked member
+  // re-claims the arena for the locked raid. The room metas stay in the union
+  // because the arena interior is WIDER than the generic 120-yd footprint
+  // (walls at roughly +/-230 local x): a raider who left the raid while parked
+  // in a side wing sits outside both claim arms yet can still hold the tap and
+  // its rewards, so the 260-yd boss room must keep locking them.
+  const roomMetas = nythraxisRoomMetas(ctx, boss);
+  const lockoutMetas = new Map<number, PlayerMeta>();
+  for (const meta of roomMetas) lockoutMetas.set(meta.entityId, meta);
+  const inst = ctx.instances.find((i) => i.partyKey !== null && i.mobIds.includes(boss.id));
+  if (inst) {
+    for (const meta of instanceLockoutMetas(ctx, inst)) lockoutMetas.set(meta.entityId, meta);
   }
+  for (const meta of lockoutMetas.values()) {
+    meta.raidLockouts.set(lockId, until);
+  }
+  // Raid deed credit stays scoped to the boss room roster.
+  deedsMod.onNythraxisKillForDeeds(ctx, boss, roomMetas);
 }
 
 // ----- phase-one mechanics --------------------------------------------------------
@@ -510,10 +571,13 @@ export function updateNythraxisGravebreaker(
     if (d > NYTHRAXIS_GRAVEBREAKER_RANGE) continue;
     const delta = Math.abs(normAngle(angleTo(boss.pos, p.pos) - boss.facing));
     if (delta > NYTHRAXIS_GRAVEBREAKER_HALF_ARC) continue;
-    const mult = p.id === boss.aggroTargetId ? 1 : 1.5;
+    const offTarget = p.id !== boss.aggroTargetId;
+    const mult = offTarget ? 1.5 : 1;
     const mitigated = rawDmg * mult * (1 - armorReduction(ctx.effectiveArmor(p), boss.level));
     const dmg = Math.max(1, Math.round(mitigated));
     ctx.dealDamage(boss, p, dmg, false, 'physical', 'Gravebreaker', 'hit', true);
+    // An arc hit on anyone but the current target taints the positioning task.
+    if (offTarget) deedsMod.onBossSplashHitForDeeds(ctx, boss);
   }
 }
 
@@ -547,10 +611,20 @@ export function spawnNythraxisAdds(ctx: SimContext, boss: Entity): void {
     ctx.groundPos(boss.spawnPos.x + 12, back),
   ];
   const inst = ctx.instances.find((i) => i.partyKey !== null && i.mobIds.includes(boss.id));
+  // Add waves inherit the claimed instance's difficulty exactly like
+  // claimInstance spawns (the heroic transform is a no-op for normal; no rng
+  // is drawn here, so the parity full-pull golden is unaffected).
+  const difficulty = inst?.difficulty ?? 'normal';
+  const spawnTemplate = mobTemplateForDungeonDifficulty(
+    template,
+    inst?.dungeonId ?? '',
+    difficulty,
+  );
   const victimId = boss.aggroTargetId ?? threatEntries(boss, 1)[0]?.[0] ?? null;
   const victim = victimId !== null ? ctx.entities.get(victimId) : null;
   for (const pos of spawnPoints) {
-    const add = createMob(ctx.nextId++, template, template.maxLevel, pos);
+    const add = createMob(ctx.nextId++, spawnTemplate, spawnTemplate.maxLevel, pos);
+    applyHeroicMobTuning(add, inst?.dungeonId ?? '', difficulty);
     add.spawnPos = { ...boss.spawnPos };
     add.tappedById = boss.tappedById;
     ctx.addEntity(add);
@@ -712,8 +786,11 @@ export function castNythraxisSoulRend(
     st.soulRendTimer = 3;
     return;
   }
+  const inst = ctx.instances.find((i) => i.partyKey !== null && i.mobIds.includes(boss.id));
+  const markCount =
+    inst?.difficulty === 'heroic' ? NYTHRAXIS_SOUL_REND_MARKS_HEROIC : NYTHRAXIS_SOUL_REND_MARKS;
   const picked: Entity[] = [];
-  while (picked.length < 3 && candidates.length > 0) {
+  while (picked.length < markCount && candidates.length > 0) {
     const idx = ctx.rng.int(0, candidates.length - 1);
     picked.push(candidates.splice(idx, 1)[0]);
   }
@@ -755,12 +832,22 @@ export function updateNythraxisSoulRend(
   const marked = st.soulRendMarks
     .map((m) => ctx.entities.get(m.playerId))
     .filter((e): e is Entity => !!e && e.kind === 'player' && !e.dead);
+  const rendMult = isHeroicNythraxis(ctx, boss) ? NYTHRAXIS_SOUL_REND_HEROIC_MULT : 1;
   for (const p of marked) {
     const stacked = marked.filter(
       (other) => dist2d(other.pos, p.pos) <= NYTHRAXIS_SOUL_REND_STACK_RANGE,
     ).length;
     const share = Math.max(1, stacked);
-    ctx.dealDamage(boss, p, Math.ceil(p.maxHp / share), false, 'shadow', 'Soul Rend', 'hit', true);
+    ctx.dealDamage(
+      boss,
+      p,
+      Math.ceil((p.maxHp * rendMult) / share),
+      false,
+      'shadow',
+      'Soul Rend',
+      'hit',
+      true,
+    );
     p.auras = p.auras.filter((a) => a.id !== 'nythraxis_soul_rend');
     ctx.emit({
       type: 'spellfx',
@@ -854,11 +941,16 @@ export function updateNythraxisDeathlessRage(
     school: 'shadow',
     fx: 'nova',
   });
+  const ragePct = isHeroicNythraxis(ctx, boss)
+    ? NYTHRAXIS_DEATHLESS_PCT_HEROIC
+    : NYTHRAXIS_DEATHLESS_PCT;
+  // The cast resolved uninterrupted: the wardens task fails for this attempt.
+  deedsMod.onDeathlessRageResolvedForDeeds(ctx, boss);
   for (const p of playersInNythraxisRoom(ctx, boss)) {
     ctx.dealDamage(
       boss,
       p,
-      Math.ceil(p.maxHp * 0.82),
+      Math.ceil(p.maxHp * ragePct),
       false,
       'shadow',
       'Deathless Rage',
@@ -926,6 +1018,10 @@ export function clearNythraxisWardChannelCast(p: Entity): void {
   p.castRemaining = 0;
   p.castTotal = 0;
   p.castTargetId = null;
+  // this force-clear never reaches updateCasting's completion path, so a cast
+  // queued in the ward-channel's tail (#1360) must not survive to misfire later
+  p.queuedCastAbility = null;
+  p.queuedCastAim = null;
 }
 
 export function nythraxisWardstones(ctx: SimContext, boss: Entity): Entity[] {

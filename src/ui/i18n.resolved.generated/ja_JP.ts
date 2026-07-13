@@ -154,6 +154,14 @@ export const ja_JP: EnTranslations = {
     "spectate": {
       "banner": "{name}を観戦中"
     },
+    "readyCheck": {
+      "prompt": "{name} が準備確認を開始しました。準備はいいですか？",
+      "ready": "準備完了",
+      "notReady": "準備未完了",
+      "result": "準備確認：{ready} 人準備完了、{notReady} 人準備未完了、{noResponse} 人未回答。",
+      "notInPartyError": "準備確認を開始するにはパーティーに参加している必要があります。",
+      "inProgressError": "準備確認はすでに進行中です。"
+    },
     "death": {
       "resurrectAtCorpse": "亡骸で復活",
       "resurrectAtHealer": "霊魂の癒し手（復活の後遺症）",
@@ -232,7 +240,8 @@ export const ja_JP: EnTranslations = {
         "eligible": "報酬が解放されました。",
         "no_wallet": "$20 USD 相当以上のWOCを保有するウォレットを接続してください。",
         "under_minimum": "ウォレットが最低額の $20 USD 相当のWOCを下回っています。",
-        "price_unavailable": "WOCの価格を取得できないため、報酬は一時的にロックされています。"
+        "price_unavailable": "WOCの価格を取得できないため、報酬は一時的にロックされています。",
+        "banned": "デイリー報酬への参加が禁止されています。理由: {reason}"
       }
     },
     "theme": {
@@ -291,6 +300,7 @@ export const ja_JP: EnTranslations = {
       "targetLabel": "あなたのターゲット",
       "targetAnnounce": "ターゲット：{name}",
       "partyLabel": "あなたのパーティ",
+      "partyChip": "パーティ",
       "partyGroup": "グループ {n}",
       "durationUnitSeconds": "秒",
       "durationUnitMinutes": "分",
@@ -305,19 +315,36 @@ export const ja_JP: EnTranslations = {
       "chat": "チャットへスキップ"
     },
     "mobile": {
-      "autorun": "オートラン",
       "jump": "ジャンプ",
       "leaderboard": "ランキング",
+      "dailyRewards": "報酬",
+      "deeds": "功績",
       "nameplates": "ネームプレート",
       "haptics": "振動",
       "hapticsOff": "振動オフ",
-      "toggleHaptics": "振動を切り替え"
+      "toggleHaptics": "振動を切り替え",
+      "hotbarPage": "スキル",
+      "hotbarPageAria": "次のスキルセットを表示",
+      "actionRing": "戦闘アクション",
+      "actionPageToggle": "行動ページ切替",
+      "actionPageIndicator": "{page}ページ",
+      "targetCycle": "ターゲット切替",
+      "targetCycleShort": "標的",
+      "spellbookPageLabel": "ページ{page}",
+      "hideKeyboard": "キーボードを隠す",
+      "chatPlaceholder": "発言する..."
     },
     "tutorial": {
       "moveBodyTouch": "移動スティックで移動し、画面をドラッグして周囲を見回します。数歩進んで始めましょう。",
       "talkBodyTouch": "レッドブルック元帥に近づき、「使用」ボタンをタップして話しかけ、依頼を受けましょう。",
       "returnBodyTouch": "依頼は完了しました。レッドブルック元帥のもとへ戻り、「使用」ボタンをタップして納品しましょう。",
-      "doneBodyTouch": "基本は覚えましたね、{name}。イーストブルック渓谷はあなたのもの、自由に探索しましょう。いつでも「その他」から「クエストログ」をタップしてクエストログを確認できます。よい狩りを！"
+      "doneBodyTouch": "基本は覚えましたね、{name}。イーストブルック渓谷はあなたのもの、自由に探索しましょう。いつでも「その他」から「クエストログ」をタップしてクエストログを確認できます。よい狩りを！",
+      "slayTargetHint": "戦闘は初めてですか？{targetKey} を押すか狼をクリックしてターゲットし、アクションバーのスキルで攻撃しましょう。",
+      "slayTargetHintTouch": "戦闘は初めてですか？狼をタップしてターゲットし、アクションバーのスキルをタップして攻撃しましょう。",
+      "nextTipsTitle": "次にすべきこと",
+      "nextTipQuestLog": "クエストログ（{key}）を開いて近くの次のクエストを確認しましょう。",
+      "nextTipMap": "ワールドマップ（{key}）でクエストの場所を確認しましょう。",
+      "nextTipSocial": "ソーシャル（{key}）を開いて、手強い戦いに備えるパーティーを探しましょう。"
     },
     "widgets": {
       "clockTitle": "現地時刻 - クリックで12/24時間表記を切り替え",
@@ -360,7 +387,9 @@ export const ja_JP: EnTranslations = {
       "hoursMinutes": "{h}時間{m}分",
       "minutes": "{m}分",
       "lessThanMinute": "1分未満",
-      "lockedToast": "{raid}にロックされています。解除まで{time}。"
+      "lockedToast": "{raid}にロックされています。解除まで{time}。",
+      "heroicName": "ヒロイック:{name}",
+      "heroicLocked": "ヒロイックの{name}にロックされています。"
     },
     "compass": {
       "N": "北",
@@ -382,11 +411,155 @@ export const ja_JP: EnTranslations = {
       "emoteWheel": "エモートホイール",
       "targetFriendly": "最も近い味方をターゲット",
       "targetFriendlyNext": "味方ターゲットを順に切り替え",
-      "discord": "Discord"
+      "discord": "Discord",
+      "valecup": "ヴェイルカップ",
+      "categoryPet": "ペット",
+      "petAttack": "ペット：攻撃",
+      "petStop": "ペット：停止",
+      "petTaunt": "ペット：挑発",
+      "petDefensive": "ペット：防御",
+      "petAggressive": "ペット：攻撃的"
+    },
+    "vcup": {
+      "title": "ヴェイルカップ",
+      "shootPower": "パワー",
+      "close": "ヴェイルカップウィンドウを閉じる",
+      "offlineNote": "対戦簿は閉じられている。ヴェイルカップは現在利用できない。",
+      "recordLine": "戦績:{wins} 勝 {losses} 敗 {draws} 分。",
+      "bracketsAria": "試合の階級",
+      "bracketLabel": "{n}対{n}",
+      "waitingCount": "{count} 人待機中",
+      "nationsHeading": "旗の国",
+      "nation": {
+        "vale": "イーストブルック渓谷",
+        "mirefen": "マイアフェン",
+        "thornpeak": "ソーンピーク",
+        "coliseum": "灰の闘技場",
+        "choir": "青ざめた聖歌隊",
+        "ogre": "オーガの氏族",
+        "moon": "蒼白の月",
+        "copperdig": "銅鉱山"
+      },
+      "awayNote": "両チームが同じ旗を選んだ場合、アウェー側は反転配色でプレイする。",
+      "rolesHeading": "ポジション",
+      "role": {
+        "allrounder": {
+          "name": "オールラウンダー",
+          "desc": "何でもこなす:キック、ロングキック、正々堂々の肩当たり。"
+        },
+        "striker": {
+          "name": "ストライカー",
+          "desc": "ロングキックと素早いサイドステップに生きる。"
+        },
+        "sweeper": {
+          "name": "スイーパー",
+          "desc": "ボール保持者を弾き飛ばし、遠くへクリアする。"
+        },
+        "keeper": {
+          "name": "キーパー",
+          "desc": "キャッチ、ダイブ、パントでゴールエリアを守る。"
+        }
+      },
+      "queue": "キューに参加",
+      "leaveQueue": "キューを離れる",
+      "queueNote": "どこからでも並べる。笛が鳴ればソウフィールドへ呼ばれる。",
+      "queuedStatus": "{bracket} で待機中:{count} 人中 {position} 番目。",
+      "blockNation": "まずは旗の国を選ぼう。",
+      "blockPartySize": "その階級にはもっと小さなパーティーが必要だ。",
+      "blockNotLeader": "チームを並べられるのはパーティーリーダーだけだ。",
+      "inMatchNote": "あなたのチームはピッチにいる。プレイを続けよう!",
+      "deserterNote": "整備人は覚えている。再び並べるまであと {seconds} 秒。",
+      "liveHeading": "ソウフィールドの現在",
+      "liveAria": "ヴェイルカップ:{nationA} {scoreA}、{nationB} {scoreB}",
+      "walkUp": "ソウフィールドまで歩いて、スタンドから観戦しよう。",
+      "noLive": "ピッチは静かだ。試合は行われていない。",
+      "boardHeading": "勝者の掲示板",
+      "boardEmpty": "まだ勝者の記録はない。銅のミルク桶が待っている。",
+      "boardWins": "{count} 勝",
+      "enterAsGuild": "{guild} の旗の下で参加",
+      "guildRecordLine": "ギルド成績：{wins} 勝 {losses} 敗。",
+      "guildBoardHeading": "ギルド旗",
+      "guildBoardEmpty": "まだ参加したギルドはない。旗を掲げよう！",
+      "guildBoardWl": "{wins} 勝 {losses} 敗",
+      "practice": "ボット練習試合",
+      "practiceNote": "ソウフィールドでボットとのフル試合をすぐに始める。",
+      "practicingNow": "練習中（{count}）：",
+      "clock": "{minutes}:{seconds}",
+      "indicatorQueued": "ヴェイルカップ待機中:{bracket}、{count} 人中 {position} 番目",
+      "indicatorLive": "ヴェイルカップ",
+      "indicatorOpen": "ヴェイルカップウィンドウを開く",
+      "phaseCountdown": "キックオフまで {seconds}",
+      "phaseGoal": "ゴール!",
+      "phaseGolden": "ゴールデンゴール",
+      "phaseOver": "試合終了",
+      "bannerFound": "ヴェイルカップの呼び声:{nationA} 対 {nationB}!",
+      "bannerCountdown": "キックオフまで {seconds} 秒...",
+      "bannerKickoff": "キックオフ!",
+      "bannerGoal": "ゴール!{nation} が決めた!",
+      "bannerSave": "{name} のセーブ!",
+      "bannerGolden": "ゴールデンゴール:次の得点で決着!",
+      "bannerEnd": "試合終了:{nationA} {scoreA}、{nationB} {scoreB}",
+      "bannerWin": "ソウフィールドでの勝利!",
+      "bannerDraw": "ソウフィールドの一戦は引き分け。",
+      "bannerLoss": "ソウフィールドでの敗北。",
+      "logQueued": "{bracket} のヴェイルカップキューに参加した({position} 番目)。",
+      "logUnqueued": "ヴェイルカップのキューを離れた。",
+      "logFound": "ヴェイルカップの試合が整った:{nationA} 対 {nationB}。",
+      "logRoster": "味方:{allies}。相手:{enemies}。",
+      "logGoal": "{name} が {nation} のために決めた!{nationA} {scoreA}、{nationB} {scoreB}。",
+      "logSave": "{name} がセーブした!",
+      "logWin": "ソウフィールドの一戦に勝利した。",
+      "logDraw": "ソウフィールドの一戦は引き分けに終わった。",
+      "logLoss": "ソウフィールドの一戦に敗れた。",
+      "gossipOpen": "対戦簿",
+      "gossipOpenAria": "ヴェイルカップウィンドウを開く",
+      "mobileLabel": "カップ",
+      "briefing": {
+        "subtitle": "試合前ブリーフィング",
+        "vs": "対",
+        "rulesHeading": "遊び方",
+        "rule1": "ボールを相手ゴールへ蹴るかパスして得点しよう。",
+        "rule2": "先に5点取れば勝ち、フルタイム時に得点が多い方が勝ち。",
+        "rule3": "同点でフルタイムならゴールデンゴール、次の得点で勝ち。",
+        "rule4": "タックルは転ぶだけ。収穫祭の休戦で誰も怪我はしない。",
+        "rule5": "誰でも近づいて、スタンドから声援を送れる。",
+        "kitHeading": "あなたの技",
+        "kitNote": "試合中はこれらの技がクラスのアビリティと入れ替わる。",
+        "rosterHeading": "メンバー表",
+        "you": "あなた",
+        "bot": "ボット",
+        "ready": "準備完了",
+        "readyDone": "準備OK",
+        "readyAria": "キックオフの準備をする",
+        "waiting": "相手側の準備を待っています…",
+        "whistle": "{seconds}秒後にホイッスルが鳴る。",
+        "readyCount": "準備完了 {ready}/{total}"
+      },
+      "bet": {
+        "title": "試合ベット",
+        "aria": "ヴェイルカップの試合ベット",
+        "closesIn": "締切まで{seconds}秒",
+        "closed": "ベット締切",
+        "prize": "プール {amount}",
+        "splitAria": "両チームのベット配分",
+        "expand": "ベットを見て賭ける",
+        "collapse": "ベットを隠す",
+        "oddsLabel": "配当",
+        "back": "{team}に賭ける",
+        "form": "{wins}勝{losses}敗",
+        "mine": "あなたのベット：{amount}を{team}に",
+        "none": "まだこの試合に賭けていません。",
+        "record": "ベット成績：{wins}勝{losses}敗、{sign}{net}",
+        "wonBanner": "ベット的中！",
+        "wonLog": "ヴェイルカップのベット的中：{amount}を獲得。",
+        "lostLog": "ヴェイルカップのベットは外れ：{amount}。",
+        "refundLog": "ベット無効、賭け金{amount}を返却しました。"
+      }
     },
     "options": {
       "clickMoveLeft": "左クリック",
       "clickMoveRight": "右クリック",
+      "version": "v{version} ({build})",
       "browserEffects": "ブラウザエフェクト",
       "browserEffectsAuto": "自動",
       "browserEffectsFull": "フル",
@@ -418,7 +591,9 @@ export const ja_JP: EnTranslations = {
       "itemLevelLine": "アイテムレベル {level}",
       "itemScoreLine": "スコア {score}",
       "showSecondaryActionBar": "セカンダリアクションバーを表示",
-      "showDailyRewardsChest": "デイリー報酬の宝箱を表示"
+      "showDailyRewardsChest": "デイリー報酬の宝箱を表示",
+      "mobileCameraJoystick": "カメラスティック",
+      "mobileLeftHanded": "左利き用レイアウト"
     },
     "controller": {
       "title": "コントローラー",
@@ -469,7 +644,9 @@ export const ja_JP: EnTranslations = {
         "fps01Low": "下位0.1%",
         "ping": "Ping",
         "jitter": "ジッター",
+        "predLead": "予測リード",
         "snapshot": "スナップショットレート",
+        "serverTick": "サーバーティックレート",
         "connection": "接続",
         "drawCalls": "ドローコール",
         "triangles": "三角形",
@@ -512,7 +689,9 @@ export const ja_JP: EnTranslations = {
     "statInfo": {
       "fromYour": "あなたの{stat}{value}による効果:",
       "names": {
-        "spellPower": "呪文威力"
+        "spellPower": "呪文威力",
+        "critRating": "クリティカルレーティング",
+        "hasteRating": "ヘイストレーティング"
       },
       "desc": {
         "str": "攻撃力を上昇させ、武器による攻撃の威力を高めます。",
@@ -525,7 +704,9 @@ export const ja_JP: EnTranslations = {
         "spellPower": "呪文のダメージと回復の効果を高めます。知力1ポイントごとに、装備やバフによる分に加えて、わずかな呪文威力を得られます。",
         "dps": "武器のダメージと速度に攻撃力を組み合わせて算出した、推定の秒間ダメージです。",
         "critChance": "攻撃がクリティカルとなり、ダメージが2倍になる確率です。",
-        "dodge": "迫り来る近接攻撃を完全に回避し、ダメージを受けない確率です。"
+        "dodge": "迫り来る近接攻撃を完全に回避し、ダメージを受けない確率です。",
+        "critRating": "装備とセットボーナスによるクリティカルレーティング。クリティカル率が上昇します。約10レーティングで1%クリティカル。",
+        "hasteRating": "装備とセットボーナスによるヘイストレーティング。攻撃と詠唱の速度が上昇します。約10レーティングで1%ヘイスト。"
       },
       "effects": {
         "attackPower": "攻撃力 +{value}",
@@ -562,9 +743,20 @@ export const ja_JP: EnTranslations = {
     "tips": {
       "joinChannels": "ヒント：/join world または /join lfg と入力すると、ワールド全体のプレイヤーとチャットできます。"
     },
+    "itemHeroicTag": "[ヒロイック]",
+    "itemSoulbound": "魂縛",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
+    },
+    "itemProc": {
+      "onMeleeHit": "命中時に確率（{chance}%）：{effect}",
+      "onSpellDamage": "ダメージ呪文で確率（{chance}%）：{effect}",
+      "onHeal": "回復時に確率（{chance}%）：{effect}",
+      "chainArc": "{school}の{name}（{damage}）で対象を撃ち、近くの敵{jumps}体に減衰しながら連鎖する",
+      "attackSlow": "対象の攻撃速度を{pct}%低下させる（{duration}秒）",
+      "dot": "{name}を植え付け、{school}の継続ダメージで{duration}秒かけて{total}を与える",
+      "hot": "{name}を咲かせ、継続回復で{duration}秒かけて{total}を回復する"
     },
     "questShare": {
       "notShareable": "このクエストは共有できません。",
@@ -736,6 +928,33 @@ export const ja_JP: EnTranslations = {
       "summaryMaster": "分配設定：マスタールート、分配担当{name}、品質しきい値{threshold}。",
       "summaryGroup": "分配設定：グループルート。"
     },
+    "corpseHarvest": {
+      "title": "採取",
+      "harvestButton": "採取",
+      "harvestButtonTooltip": "採取：この死体から製作素材（毛皮、牙、絹糸など）を戦利品とは別に集めます。誰でも採取できますが、1体の死体を採取できるのは1人だけです。",
+      "concentrateHint": "選ぶ部位が少ないほど、各部位の品質が高くなります。",
+      "alreadyHarvested": "この死体はすでに採取されています。",
+      "componentAria": "{component}を採取",
+      "components": {
+        "hide": "毛皮",
+        "fang": "牙",
+        "silk": "絹糸",
+        "venomSac": "毒袋",
+        "gills": "えら",
+        "claw": "爪",
+        "horn": "角",
+        "tusk": "牙"
+      }
+    },
+    "townFocus": {
+      "title": "町のフォーカス",
+      "hint": "フォーカスポイントは各素材の基本産出量にボーナスを加算します。フォーカスしていない素材は基本産出量のままです。",
+      "budgetLabel": "残りポイント：{remaining} / {budget}",
+      "saveButton": "フォーカスを保存",
+      "notInTownHint": "フォーカスを設定するには町にいる必要があります。",
+      "increaseAria": "{component}へのフォーカスを増やす",
+      "decreaseAria": "{component}へのフォーカスを減らす"
+    },
     "party": {
       "promoteLeader": "パーティリーダーに指定",
       "inviteUsage": "誰を招待しますか？使用法：/invite <名前>。"
@@ -751,7 +970,13 @@ export const ja_JP: EnTranslations = {
       "leaderOption": "分配担当：パーティリーダー（あなた）",
       "masterOption": "分配担当：{name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "ダンジョン難易度をヒロイックに設定",
+      "setNormal": "ダンジョン難易度をノーマルに設定"
+    },
     "bags": {
+      "cannotDestroy": "このアイテムは破壊できません。",
+      "rightClickDestroy": "右クリックで破壊",
       "filterGroupAria": "バッグをカテゴリーで絞り込む",
       "filterAll": "すべて",
       "filterWeapon": "武器",
@@ -815,10 +1040,19 @@ export const ja_JP: EnTranslations = {
         "allStats": "すべての能力値を{value}低下させる"
       },
       "allStatsPctReduce": "すべての能力値を{pct}%低下させる",
+      "increasePct": {
+        "ap": "攻撃力を{pct}%上昇させる",
+        "armor": "防御力を{pct}%上昇させる",
+        "int": "知力を{pct}%上昇させる",
+        "sta": "耐久力を{pct}%上昇させる",
+        "allStats": "すべての能力値を{pct}%上昇させる"
+      },
       "dodge": "回避率を{pct}%上昇させる",
       "dodgeReduce": "回避率を{pct}%低下させる",
       "armorFlat": "防御力を{value}低下させる",
       "armorFlatStacks": "防御力を{value}低下させる({stacks}スタック)",
+      "armorPct": "防御力を{pct}%低下させる",
+      "armorPctStacks": "防御力を{pct}%低下させる({stacks}スタック)",
       "mortalWound": "受ける回復量を{pct}%低下させる",
       "vulnerability": "受けるダメージを{pct}%増加させる",
       "physVuln": "受ける物理ダメージを{pct}%増加させる",
@@ -857,8 +1091,29 @@ export const ja_JP: EnTranslations = {
     "worldBoss": {
       "spawn": "{name}がソーンピーク高地に立ち上がった！"
     },
+    "auth": {
+      "appleLoginCta": "Appleで続ける",
+      "appleError": "Appleでサインインできませんでした。もう一度お試しください。",
+      "appleChoiceIntro": "新しいアカウントを作成するか、Appleを既存のアカウントに連携します。",
+      "appleChoiceExpired": "Appleでのサインインの有効期限が切れました。もう一度お試しください。",
+      "forgotPrompt": "パスワードをお忘れですか？",
+      "forgotTitle": "パスワードをリセット",
+      "forgotHint": "ユーザー名を入力してください。登録されているメールアドレスにリセットリンクをお送りします。",
+      "forgotUsername": "ユーザー名",
+      "forgotSubmit": "リセットリンクを送信",
+      "forgotSent": "そのユーザー名のアカウントにメールアドレスが登録されている場合、リセットリンクを送信しました。受信トレイをご確認ください。",
+      "forgotBack": "ログインに戻る",
+      "resetTitle": "新しいパスワードを設定",
+      "resetNewPassword": "新しいパスワード",
+      "resetConfirm": "新しいパスワード（確認）",
+      "resetSubmit": "パスワードを更新",
+      "resetDone": "パスワードを更新しました。ログインできます。",
+      "resetMismatch": "パスワードが一致しません。",
+      "resetErrInvalid": "このリセットリンクは無効か、有効期限が切れています。新しいリンクをリクエストしてください。"
+    },
     "loot": {
-      "chestTitle": "宝箱"
+      "chestTitle": "宝箱",
+      "takeAllTooltip": "すべて取る：この戦利品ウィンドウ内のすべてのお金とアイテムを回収します。"
     },
     "spellbook": {
       "addToBarAria": "{name}をアクションバーに追加",
@@ -886,7 +1141,10 @@ export const ja_JP: EnTranslations = {
       "label": "フレーム位置をリセット"
     },
     "itemTooltip": {
-      "requiresLevel": "必要レベル {level}"
+      "requiresLevel": "必要レベル {level}",
+      "riftTier": "{tier}ランク・リフト装備",
+      "riftUpgrade": "リフト強化 {level}/{max}",
+      "riftSockets": "リフト宝石 {used}/{total}"
     },
     "discord": {
       "title": "Discord",
@@ -967,6 +1225,7 @@ export const ja_JP: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "管理者",
+        "coredevs": "コア開発者",
         "devs": "開発者",
         "mods": "モデレーター",
         "artists": "アーティスト"
@@ -1060,6 +1319,14 @@ export const ja_JP: EnTranslations = {
       "linkedAs": "{login} として連携済み",
       "unlink": "GitHub の連携を解除"
     },
+    "steam": {
+      "title": "Steam",
+      "link": "Steamと連携",
+      "unlink": "Steam連携を解除",
+      "linked": "Steamアカウント {id} と連携済み",
+      "benefits": "デスクトップアプリからSteamアカウントを連携すると、獲得した功績がSteam実績に反映されます。",
+      "noTicket": "Steamから連携チケットを取得できませんでした。Steamを起動してからもう一度お試しください。"
+    },
     "mailbox": {
       "title": "メールボックス",
       "subtitle": "レイヴンポスト",
@@ -1085,6 +1352,8 @@ export const ja_JP: EnTranslations = {
       "parcelsLabel": "小包",
       "parcelsHint": "バッグ内のアイテムをクリックして添付します。",
       "removeParcelAria": "手紙から{item}を取り除く",
+      "parcelQtyDecreaseAria": "{item}を1つ減らして送る",
+      "parcelQtyIncreaseAria": "{item}を1つ増やして送る",
       "sendButton": "手紙を送る",
       "postageNote": "郵送料：{amount}。ワタリガラスの飛行時間は約{seconds}秒です。",
       "arrivedBanner": "ワタリガラスが到着：{name}からの手紙。",
@@ -1107,6 +1376,50 @@ export const ja_JP: EnTranslations = {
         "letterGone": "その手紙はもうメールボックスにありません。",
         "takeParcelsFirst": "手紙を捨てる前に小包を取り出してください。"
       }
+    },
+    "bank": {
+      "title": "銀行",
+      "subtitle": "金張りの金庫",
+      "close": "銀行を閉じる",
+      "capacity": "{used}/{total}",
+      "capacityAria": "使用中の銀行スロット: {total}個中{used}個",
+      "empty": "銀行は空です。",
+      "tooFar": "銀行を利用するには銀行員のそばにいる必要があります。",
+      "buySlots": "スロットを{count}個購入",
+      "buySlotsMaxed": "完全に拡張済み",
+      "buyConfirm": "{price}で銀行スロットを追加で{count}個購入しますか？",
+      "buyConfirmAccept": "購入",
+      "withdrawHint": "クリックで引き出す",
+      "withdrawPartialHint": "Shift+クリックで一部だけ引き出す",
+      "depositHint": "クリックで預ける",
+      "depositPartialHint": "Shift+クリックで一部だけ預ける",
+      "cannotDeposit": "銀行に預けられません",
+      "depositQuantityTitle": "{item}を預ける",
+      "depositQuantityInput": "預ける数量",
+      "depositQuantityConfirm": "預ける",
+      "withdrawQuantityTitle": "{item}を引き出す",
+      "withdrawQuantityInput": "引き出す数量",
+      "withdrawQuantityConfirm": "引き出す",
+      "filterGroupAria": "銀行をカテゴリーで絞り込む",
+      "sortAria": "銀行のアイテムを並べ替える",
+      "searchAria": "名前で銀行のアイテムを検索",
+      "depositAll": "すべての素材を預ける",
+      "depositAllDone": "素材を預けました：{count}。",
+      "depositAllFull": "素材を預けました：{count}。銀行がいっぱいになりました。",
+      "depositAllNone": "銀行がいっぱいです：何も預けられませんでした。",
+      "bonusTitle": "ボーナススロット",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "メール認証済み",
+      "bonusSourceDiscord": "Discord連携済み",
+      "bonusSourceWallet": "ウォレット連携済み",
+      "bonusSourceReferral": "招待した友達",
+      "bonusAdvertEmail": "メールを認証すると2スロット獲得できます。",
+      "bonusAdvertDiscord": "Discordを連携すると2スロット獲得できます。",
+      "bonusAdvertWallet": "ウォレットを連携すると2スロット獲得できます。",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "友達を招待しましょう：友達がレベル10に達すると、お互いに2スロット獲得できます。友達は最大5人までです。",
+      "bonusSectionAria": "ボーナス銀行スロットと獲得方法"
     },
     "calendar": {
       "title": "イベントカレンダー",
@@ -1175,6 +1488,201 @@ export const ja_JP: EnTranslations = {
       "mining": "採掘",
       "logging": "伐採",
       "herbalism": "薬草学"
+    },
+    "archetypeTitle": {
+      "label": "称号",
+      "none": "なし",
+      "hobbyLabel": "趣味",
+      "armorcrafting": "防具鍛冶師",
+      "weaponcrafting": "武器鍛冶師",
+      "jewelcrafting": "宝石職人",
+      "alchemy": "錬金術師",
+      "engineering": "工作師",
+      "cooking": "料理人",
+      "inscription": "銘文師",
+      "enchanting": "エンチャンター",
+      "tailoring": "仕立て屋",
+      "leatherworking": "皮革職人"
+    },
+    "crafting": {
+      "title": "製作",
+      "close": "製作を閉じる",
+      "craft": "製作",
+      "reagentsNeeded": "必要素材:",
+      "reagentLine": "{name}: {have}/{required}",
+      "empty": "既知のレシピはありません。",
+      "resultAria": "{name}を製作",
+      "craftedToast": "製作しました:{name}",
+      "insufficientMaterials": "材料が不足しています。",
+      "unknownRecipe": "そのレシピは存在しません。",
+      "comboRequirementUnmet": "その組み合わせレシピに必要な両方の生産スキルの熟練度に達していません。",
+      "notAtHub": "それを製作するには、必要なレベルで製作拠点にいる必要があります。",
+      "throttled": "製作が速すぎます。少し待ってからもう一度お試しください。",
+      "recipeNotLearned": "そのレシピはまだ習得していません。"
+    },
+    "deeds": {
+      "title": "功績の書",
+      "close": "功績の書を閉じる",
+      "searchPlaceholder": "功績を検索",
+      "searchAria": "名前で功績を検索",
+      "renownLabel": "名声",
+      "countLabel": "功績 {earned}/{total}",
+      "completionAria": "獲得済みの功績: {earned}/{total}",
+      "recentLabel": "最近:",
+      "nearestLabel": "あと少し:",
+      "filterGroupAria": "功績を絞り込む",
+      "filterAll": "すべて",
+      "filterEarned": "獲得済み",
+      "filterUnearned": "未獲得",
+      "filterNearly": "あと少し",
+      "categoriesAria": "功績カテゴリ",
+      "catProgression": "成長",
+      "catCombat": "戦闘",
+      "catDungeon": "ダンジョン",
+      "catDelve": "デルヴ",
+      "catChronicle": "年代記",
+      "catCollection": "収集",
+      "catPvp": "PvPとスポーツ",
+      "catSocial": "交流",
+      "catExploration": "探検",
+      "catFeat": "偉業",
+      "categoryCountAria": "{category}: 功績 {earned}/{visible} 獲得",
+      "emptyCategory": "該当する功績はありません。",
+      "progressText": "{current}/{target}",
+      "progressAria": "進行度: {current}/{target}",
+      "renownChip": "名声 {renown}",
+      "earnedDate": "{date} に獲得",
+      "featRibbon": "偉業",
+      "hiddenBadge": "隠し",
+      "titleChip": "称号報酬",
+      "watch": "追跡",
+      "unwatch": "追跡解除",
+      "watchFull": "追跡リストが満杯です（最大 {cap} 件）",
+      "watchAria": "{name}をHUDトラッカーで追跡",
+      "unwatchAria": "{name}の追跡をやめる",
+      "titlesSection": "称号",
+      "titlesAria": "表示する称号を選択",
+      "titlesNone": "称号なし",
+      "titlesEmpty": "称号付きの功績を獲得するとこの棚が解放されます。",
+      "unlockedBanner": "功績達成: {name}",
+      "unlockedTitleHint": "新しい称号を獲得: {title}。功績の書で選択できます。",
+      "retroSummary": "年代記が追いつきました: {count} 件の功績を記録。",
+      "broadcastLine": "{name}が功績「{deed}」を達成しました",
+      "rarityLine": "冒険者の{percent}が達成",
+      "trackerLabel": "功績",
+      "collapseHint": "功績トラッカーを折りたたむ",
+      "expandHint": "功績トラッカーを展開",
+      "openBookHint": "功績の書を開く",
+      "charTitleLabel": "称号",
+      "charTitleNone": "称号未選択",
+      "charOpenBook": "功績の書",
+      "lbTab": "名声",
+      "lbDeedsCol": "功績",
+      "lbTitleCol": "称号",
+      "lbSelf": "あなたの順位：{rank} 位（上位 {percent}%）",
+      "lbEmpty": "ランク入りした年代記作家はまだいません。",
+      "broadcastsLabel": "功績の達成をギルドとフレンドに共有する",
+      "titledName": "{name}【{title}】"
+    }
+  },
+  "apiError": {
+    "validation": {
+      "failed": "一部の項目が無効です。入力内容を確認してもう一度お試しください。"
+    },
+    "json": {
+      "malformed": "リクエストを読み取れませんでした。もう一度お試しください。"
+    },
+    "body": {
+      "too_large": "リクエストが大きすぎます。データを減らしてもう一度お試しください。",
+      "unsupported_media_type": "サポートされていないリクエスト形式です。"
+    },
+    "db": {
+      "conflict": "その変更が別の更新と競合しました。もう一度お試しください。"
+    },
+    "rate_limit": {
+      "exceeded": "リクエストが多すぎます。{seconds} 後に再度お試しください。"
+    },
+    "internal": {
+      "error": "サーバー側で問題が発生しました。もう一度お試しください。"
+    },
+    "auth": {
+      "token_missing": "この操作を行うにはログインが必要です。",
+      "token_invalid": "セッションの有効期限が切れました。もう一度ログインしてください。",
+      "forbidden": "この操作を行う権限がありません。",
+      "invalid_credentials": "ユーザー名またはパスワードが正しくありません。",
+      "required": "認証されていません。",
+      "web_login_only": "ログインはゲームクライアントからのみ可能です。",
+      "too_many_attempts": "試行回数が多すぎます。1分待ってから再試行してください。",
+      "too_many_failed_attempts": "試行回数が多すぎます。数分待ってから再度お試しください。",
+      "current_password_incorrect": "現在のパスワードが正しくありません。",
+      "password_incorrect": "パスワードが正しくありません。",
+      "verification_failed": "確認に失敗しました。もう一度お試しください。"
+    },
+    "account": {
+      "username_invalid": "ユーザー名は3-24文字で、英字、数字、アンダースコアを使用してください。",
+      "username_not_allowed": "そのユーザー名は使用できません。",
+      "username_taken": "そのユーザー名は既に使われています。",
+      "username_mismatch": "そのユーザー名はアカウントと一致しません。",
+      "password_too_short": "パスワードは6文字以上である必要があります。",
+      "password_too_long": "新しいパスワードは128文字以内にしてください。",
+      "characters_online": "無効化する前にすべてのキャラクターからログアウトしてください。",
+      "deactivated": "このアカウントは無効化されています。復元するには管理者に連絡してください。",
+      "not_found": "アカウントが見つかりません。"
+    },
+    "character": {
+      "name_invalid": "キャラクター名が無効です。2-16文字の英字を使用してください。",
+      "name_not_allowed": "そのキャラクター名は使用できません。",
+      "invalid_class": "無効なクラスです。",
+      "limit_reached": "キャラクター数の上限に達しました。",
+      "name_taken": "その名前は既に使われています。",
+      "not_found": "キャラクターが見つかりません。",
+      "online": "キャラクターは現在オンラインです。",
+      "rename_not_permitted": "このキャラクターの名前変更は許可されていません。",
+      "delete_confirm": "削除を確認するにはキャラクター名を入力してください。",
+      "already_in_world": "キャラクターは既に世界にいます。",
+      "taken_over": "あなたのキャラクターは別のセッションに引き継がれました。",
+      "rename_required": "このキャラクターは世界に入る前に名前変更が必要です。"
+    },
+    "moderation": {
+      "suspended_until": "このアカウントは {date} まで停止されています。",
+      "suspended": "このアカウントは停止されています。",
+      "banned": "このアカウントは利用停止されています。",
+      "force_rename": "モデレーターがあなたのキャラクターのいずれかに改名を要求しています。"
+    },
+    "email": {
+      "invalid": "有効なメールアドレスを入力してください。",
+      "unchanged": "すでに現在のメールアドレスです。"
+    },
+    "two_factor": {
+      "code_invalid": "そのコードは無効です。もう一度お試しください。",
+      "setup_required": "まず二段階認証の設定を開始してください。",
+      "already_enabled": "二段階認証は既に有効です。",
+      "not_enabled": "二段階認証は有効になっていません。"
+    },
+    "origin": {
+      "cross_site": "セキュリティ上の理由によりリクエストがブロックされました。"
+    },
+    "discord": {
+      "not_configured": "Discord連携は現在利用できません。",
+      "expired": "このDiscordログインは期限切れです。もう一度Discordでログインしてください。",
+      "already_linked": "そのDiscordアカウントは既に別のアカウントに連携されています。",
+      "password_required": "Discordアカウントの連携を解除する前にパスワードを設定してください。",
+      "unknown_swag": "その報酬は利用できません。",
+      "link_required": "まずDiscordアカウントを連携してください。",
+      "swag_claimed": "この報酬は既に受け取っています。",
+      "swag_tier": "これを受け取るにはより高いランクが必要です。",
+      "swag_points": "ポイントが足りません。"
+    },
+    "deeds": {
+      "invalid_input": "入力が無効です。"
+    },
+    "steam": {
+      "disabled": "Steam連携は現在利用できません。",
+      "invalid_ticket": "Steamがこの連携リクエストを確認できませんでした。デスクトップアプリからもう一度お試しください。",
+      "banned": "そのSteamアカウントは連携できません。",
+      "already_linked": "このアカウントには既にSteamアカウントが連携されています。",
+      "account_taken": "そのSteamアカウントは既に別のアカウントに連携されています。",
+      "upstream": "Steamから応答がありません。しばらくしてからもう一度お試しください。"
     }
   },
   "guide": {
@@ -1192,6 +1700,7 @@ export const ja_JP: EnTranslations = {
       "bestiary": "モンスター図鑑",
       "models": "3Dモデル",
       "gear": "ギアとアイテム",
+      "professions": "生産職",
       "economy": "経済と取引",
       "social": "ソーシャルとグループ",
       "stats": "キャラクターとステータス",
@@ -1202,9 +1711,12 @@ export const ja_JP: EnTranslations = {
       "delves": "デルヴ",
       "reference": "リファレンス",
       "controls": "操作方法",
+      "settings": "設定とパフォーマンス",
       "combat": "戦闘",
       "talents": "タレント",
       "arena": "アリーナとPvP",
+      "valeCup": "ヴェイルカップ",
+      "deeds": "功績の書",
       "glossary": "用語集",
       "wishIKnew": "知っておきたかったこと",
       "faq": "FAQ",
@@ -1214,6 +1726,7 @@ export const ja_JP: EnTranslations = {
       "primary": "ガイドのセクション",
       "topics": "トピック",
       "onThisPage": "このページの内容",
+      "sidebarLabel": "ガイドの項目",
       "backToGame": "ゲームに戻る"
     },
     "groups": {
@@ -1239,7 +1752,8 @@ export const ja_JP: EnTranslations = {
       "github": "GitHubのソース",
       "discord": "Discordに参加",
       "communityWiki": "コミュニティWiki",
-      "rights": "World of ClaudeCraft"
+      "rights": "World of ClaudeCraft",
+      "linksLabel": "プレイとコミュニティのリンク"
     },
     "language": {
       "label": "言語",
@@ -1255,7 +1769,9 @@ export const ja_JP: EnTranslations = {
       "typeCreature": "クリーチャー",
       "typeDungeon": "ダンジョン",
       "typeDelve": "デルヴ",
-      "typeTerm": "用語"
+      "typeTerm": "用語",
+      "typeAbility": "アビリティ",
+      "typeDeed": "功績"
     },
     "home": {
       "eyebrow": "クラシックスタイルのブラウザMMO",
@@ -1287,7 +1803,17 @@ export const ja_JP: EnTranslations = {
         "marshName": "マイアフェン湿地",
         "marshBlurb": "沈んだ沼地と波に削られた遺跡。マッドフィンや、それ以上に厄介なものが棲む。",
         "peaksName": "ソーンピーク高地",
-        "peaksBlurb": "風に削られた尾根が、この世界で最も冷たい危険へと続いていく。"
+        "peaksBlurb": "風に削られた尾根が、この世界で最も冷たい危険へと続いていく。",
+        "duskName": "ヴェールの幽谷",
+        "duskBlurb": "山々の下に封じられた領域。入り口の噂がまことなら、だが。",
+        "emberName": "ドレイクランド",
+        "emberBlurb": "ペイル・コーズウェイを越えると緑は燃え殻に変わり、荒野には古きものが君臨する。",
+        "frostName": "フロストヴェイルの果て",
+        "frostBlurb": "どの地図にも載らない雪の高地。揺らめくオーロラの中にだけ垣間見える。",
+        "amberName": "アンバーフォール",
+        "amberBlurb": "西の断崖の向こうには終わらない秋があり、金色の湖にランタンが灯る。",
+        "fenName": "ウィローフェン",
+        "fenBlurb": "秋の冠を越えた先には、柳と静かな水の明るい湿原と、堀に守られた町がある。"
       },
       "group": {
         "heading": "難所は仲間と挑もう",
@@ -1305,7 +1831,7 @@ export const ja_JP: EnTranslations = {
         "q1": "無料で遊べますか?",
         "a1": "はい。ゲーム全体が最大レベルまで無料で、GitHubでオープンソースとして公開されています。",
         "q2": "暗号通貨ウォレットは必要ですか?",
-        "a2": "いいえ。ウォレットがなくても完全にプレイできます。任意のコミュニティトークンは見た目の装飾を解放するだけで、性能には一切影響しません。",
+        "a2": "いいえ。ウォレットがなくても完全にプレイできます。任意のコミュニティトークンは、見た目の装飾と、デイリー報酬の賞金プールの分け前を加えるだけで、性能には一切影響しません。",
         "q3": "オフラインで遊べますか?",
         "a3": "はい。ブラウザですぐに遊べるシングルプレイモードに加え、共有のオンラインワールドもあります。",
         "q4": "最大レベルまでどのくらいかかりますか?",
@@ -1325,7 +1851,7 @@ export const ja_JP: EnTranslations = {
       "step1Title": "キャラクターを作る",
       "step1Body": "クラスと見た目を選び、ヒーローに名前を付けてワールドへ。キャラクターは後からでも追加できます。",
       "step2Title": "最初のクエストを見つける",
-      "step2Body": "開始の街でレッドブルック隊長が待っています。話しかけて「門前の狼」を受注しましょう。",
+      "step2Body": "開始の街では、レッドブルック隊長が「門前の狼」を持って待っており、近くのオデル親方にも仕事があります。どちらかに話しかけて、最初のクエストを受注しましょう。",
       "step3Title": "移動して見回す",
       "step3Body": "W、A、S、Dで移動します。右マウスボタンを押したままドラッグすると見回せます。基本はこれだけです。",
       "step4Title": "戦ってみる",
@@ -1342,16 +1868,16 @@ export const ja_JP: EnTranslations = {
       "questsTitle": "クエスト",
       "questsBody": "頭上にマーカーが表示された人物からクエストを受け、目標を達成して報告すると、経験値、コイン、装備が手に入ります。画面上のトラッカーで目標を常に確認できます。",
       "deathTitle": "死は終わりではない",
-      "deathBody": "倒れたら魂を解放し、最寄りの墓地で全回復して復活し、元いた場所まで戻ります。経験値は失われません。",
+      "deathBody": "倒れると、亡骸はその場に残り、あなたは最寄りの墓地で亡霊として起き上がります。霊魂を亡骸まで走らせれば、ペナルティなしでその場で復活できます。あるいは墓地の霊魂の癒し手を頼れば、つかの間の衰弱と引き換えに、その場ですぐ蘇らせてもらえます。生まれたての英雄は衰弱を完全に免除され、あなたの持ち物も稼いだものも決して失われません。",
       "groupingTitle": "一緒に遊ぶ",
       "groupingBody": "他のプレイヤーをパーティに招待すれば、クエストの達成を共有したりダンジョンに挑んだりできます。ワールドの大半はソロで進められるので、グループ行動は義務ではなく選択です。",
       "onlineTitle": "オンラインかオフラインか",
       "onlineBody": "みんなと一緒に共有のオンラインワールドで遊ぶか、ブラウザですぐに始められるオフラインワールドで基本を覚えるか、選べます。",
-      "reassure": "タレントはレベル10で解放され、いつでもリセットできます。序盤の選択が永久に固定されることはないので、自由に試してみてください。",
+      "reassure": "タレントはレベル10で解放され、戦闘の外ならいつでもリセットできます。序盤の選択が永久に固定されることはないので、自由に試してみてください。",
       "controlsLink": "操作方法の完全なリファレンスを見る"
     },
     "controls": {
-      "intro": "PC用のデフォルトキーです。すべてのキー割り当てはゲームのオプションで変更できます。",
+      "intro": "PC用のデフォルトキーです。すべてのキー割り当てはゲームのオプションで変更できます。ただしEscだけは例外で、常にゲームメニューを開きます。また、Shift+Zのような修飾キーの組み合わせを割り当てることもできます。",
       "keyHeader": "キー",
       "actionHeader": "アクション",
       "groupMovement": "移動",
@@ -1361,14 +1887,91 @@ export const ja_JP: EnTranslations = {
       "talents": "タレント",
       "arena": "アリーナ",
       "leaderboard": "リーダーボード",
+      "deeds": "功績の書",
+      "crafting": "製作",
+      "valeCup": "ヴェイルカップ",
+      "calendar": "イベントカレンダー",
+      "discord": "Discord",
       "abilities": "アクションバーのアビリティを使用（数字キーの列。二つ目のバーはテンキーにあります）",
       "targetFriendly": "最も近い友好的な対象をターゲット",
       "cycleFriendly": "友好的なターゲットを順に切り替え",
       "gameMenu": "ゲームメニューとオプションを開く",
+      "bothMouse": "マウスの左右ボタン同時押し",
+      "runForward": "前進",
+      "arrowKeys": "矢印キー",
+      "groupPet": "ペットコマンド",
+      "petBar": "ペットバー：攻撃、停止、挑発、防御、攻撃的（ハンターまたはウォーロックのペットを出しているとき）",
+      "attackMoveNote": "もう一つ、初期設定ではオフのものがあります。オプションでアタックムーブを有効にするとキーがひとつ確保され（オンの間はA）、押せばカーソルの方へ歩き出し、カーソルの下にいる敵、あるいは道中で最初に出会った敵に攻撃を仕掛けます。",
       "mobileHeading": "モバイルでは",
-      "mobileBody": "スマートフォンやタブレットでは、タッチ操作が自動で表示されます。左側に移動用スティック、右側はどこでもドラッグして視点操作、そしてアビリティやメニュー用の画面上ボタンが現れます。",
+      "mobileBody": "スマートフォンやタブレットでは、タッチ操作が自動で表示されます。左側に移動用スティック、それ以外の場所はどこでもドラッグして視点操作、二本指でつまむとカメラをズームでき、そしてアビリティやメニュー用の画面上ボタンが現れます。左上隅の小さな矢印でメニューボタンの表示と非表示を切り替えられ、そこにある「その他」ボタンに残りのウィンドウがまとめられています。",
       "controllerHeading": "コントローラーでは",
-      "controllerBody": "ゲームパッドにも対応しており、コントローラーのサポートは初期設定で有効になっています。左スティックで移動し、右スティックでカメラを操作します。フェイスボタンとショルダーボタンで、アビリティ、ジャンプ、対話を行います。いずれかのウィンドウを開くと、メニュー操作用のオンスクリーンポインターが表示されます。ボタンの割り当て変更や、スティックのデッドゾーン、カメラ速度、振動、視点反転の調整は、オプションのコントローラー設定から行えます。"
+      "controllerBody": "ゲームパッドにも対応しており、コントローラーのサポートは初期設定で有効になっています。左スティックで移動し、右スティックでカメラを操作し、フェイスボタンとショルダーボタンでアビリティ、ジャンプ、対話を行います。バッグのようなウィンドウを開くと画面上のポインターが表示され、ゲームメニューは十字キーとフェイスボタンで直接操作できます。ボタンの割り当て変更や、スティックのデッドゾーン、カメラ速度、振動、視点反転の調整は、オプションのコントローラー設定から行えます。"
+    },
+    "settingsPage": {
+      "heading": "設定とパフォーマンス",
+      "intro": "見た目を最高にするのも、動作を最速にするのも自由自在。すぐに使える3つの構成と、各グラフィックオプションの本当の働きを紹介します。",
+      "wherePath": "このページの内容はすべてゲーム内にあります。Escキーを押すとオプションが開きます。メニューは、ピン留めされた要点をまとめた「概要」から開き、その脇のレールにカテゴリが並びます。以下で触れる設定は、「表示」グループの「グラフィック」「インターフェース」「アクセシビリティ」の下にあり、「パフォーマンスオーバーレイ」は「システム」の下にあります。さらに手早く行うなら、上部の検索ボックスに名前を打ち込んで直接そこへ飛べます。",
+      "fairnessTitle": "公平さは設計から",
+      "fairnessBody": "ここにあるオプションは、見た目と引き換えに強さを得るものではありません。設定を下げて削られるのは装飾的な美しさだけで、戦いに使う情報は決して失われません。デバフ、詠唱バー、パーティの体力、ダメージ数値は「低」から「ウルトラ」まで完全に同一です。控えめなマシンでのプレイが不利になることはありません。",
+      "loadoutsHeading": "すぐに使える3つの構成",
+      "loadoutsIntro": "お使いのマシンに近そうな構成から始めて、しっくりくるまでオプションを1つずつ調整していきましょう。",
+      "recommended": "おすすめ",
+      "whyLabel": "なぜ効くのか：",
+      "tagReload": "再読み込み後",
+      "fpsTitle": "FPS優先",
+      "fpsTagline": "古めのノートPC、内蔵グラフィック、バッテリー駆動でのプレイに。",
+      "fpsWhy": "グラフィック品質が全体を束ねるマスタースイッチで、描画品質は最も効き目の大きいスライダーです。70%にするとワールドの描画ピクセル数はおよそ半分になりますが、インターフェースは完全にくっきりしたままです。",
+      "balancedTitle": "バランス",
+      "balancedTagline": "ほとんどの環境にちょうどいい、まずおすすめしたい構成です。",
+      "balancedWhy": "「中」では本格的な影とフルマテリアルが有効になり、「高」ではアンビエントオクルージョンとブルームが加わります。ウルトラ未満のティアでは内蔵のセーフティネットが激しい戦闘での急な負荷を吸収してくれるため、バランス構成は手をかけなくても滑らかに動き続けます。",
+      "visualsTitle": "最高画質",
+      "visualsTagline": "強力なデスクトップマシンのためのスクリーンショットモード。",
+      "visualsWhy": "ウルトラは、ディスプレイが対応する最高解像度と最も豊かな照明で描画します。セーフティネットもオフになり、デスクトップ専用です。スマートフォンとアプリ版では上限が「高」になります。",
+      "value50to70": "50%から70%",
+      "value90to100": "90%から100%",
+      "value100": "100%",
+      "valueHighOrMedium": "ゲーミングPCなら「高」、ノートPCなら「中」",
+      "valueOnOptional": "オン（お好みで）",
+      "howHeading": "オプションの仕組み",
+      "factDetectTitle": "まずはゲームが自動調整",
+      "factDetectBody": "初回起動時にゲームがお使いの端末を読み取り、控えめなスマートフォンなら「低」、強力なデスクトップなら「ウルトラ」まで、無理のないティアを自動で選びます。自分で選んだ設定は常にそれより優先されます。",
+      "factReloadTitle": "オプションは2種類",
+      "factReloadBody": "グラフィック品質と「詳細」の各設定は再読み込み後に反映され、必要なときはパネルに「今すぐ再読み込み」ボタンが表示されます。それ以外のオプションは、変更した瞬間に適用されます。",
+      "factGovernorTitle": "内蔵のセーフティネット",
+      "factGovernorBody": "ウルトラ未満のすべてのティアでは、大規模な戦闘で負荷が跳ね上がった瞬間、ゲームが草やエフェクト、照明をさりげなく一時的に間引き、収まればすぐ元に戻します。ウルトラを選ぶことは、細部をひとつも削らないでほしいという意思表示になります。",
+      "factSearchTitle": "検索が真っ先に見つける",
+      "factSearchBody": "どこに設定があるかわからないときは、メニュー上部の検索ボックスに入力しましょう。よくある言い回しも理解するので、「fps」と打てばFPS表示が見つかります。結果を選ぶとその設定へ直接飛び、ハイライトされたまま残ります。",
+      "advancedHeading": "「詳細」プリセット：自分だけの組み合わせ",
+      "advancedBody": "「詳細」プリセットは「高」ティアを出発点に、地形の詳細、草木の密度、エフェクトと照明、影の品質という4つの追加設定を開放します。本当に違いを実感できるところへフレームを振り分けられるようになります。グラフィック品質と同じく、変更は再読み込み後に適用されます。",
+      "advancedMixes": "おすすめの組み合わせを2つ。影の品質を「高」に保ちつつエフェクトと照明を「低」にすると、光の演出を抑えたくっきり軽快な画面になります。逆にすれば、ブルームの輝きを残したまま影を柔らかくできます。",
+      "tableHeading": "グラフィックの全オプション解説",
+      "colSetting": "設定項目",
+      "colDoes": "効果",
+      "colImpact": "FPSへの影響",
+      "impactNone": "なし",
+      "impactLight": "小",
+      "impactModerate": "中",
+      "impactHeavy": "大",
+      "rowGraphicsQuality": "全体を束ねるマスタースイッチです。段階を変えるたびに、解像度、影、マテリアル、草木、照明エフェクトがまとめて切り替わります。単独では最も大きな違いを生む項目です。",
+      "rowRenderQuality": "3Dワールドを低めの内部解像度で描画してから拡大します。インターフェースはくっきりしたままです。非力なマシンや高解像度の画面では、即座に効く最強のスライダーです。",
+      "rowFieldOfView": "画面に収まる世界の広さを、ズームの効いた55度から見渡すような100度まで調整できます。快適さで選ぶ項目ですが、視野を広げるほど描画量はわずかに増えます。",
+      "rowBrightness": "画面全体の露出を暗くも明るくも調整できます。純粋に好みの問題です。",
+      "rowWeather": "環境演出としての雨と雪です。雰囲気づくりだけの要素なので、オフにすると嵐の間の負荷が少し軽くなります。",
+      "rowBrowserEffects": "インターフェース自体の演出の豪華さを決めます。ガラスのぼかし、発光、メニューのアニメーションなどです。「自動」ならお使いのブラウザに合わせて調整され、どちらにしても3Dワールドには影響しません。",
+      "rowTerrainDetail": "豊かにブレンドされた地面のテクスチャにするか、シンプルで軽快な地形表示にするかを選びます。",
+      "rowFoliageDensity": "キャラクターの周囲に生える草の範囲と密度を調整します。",
+      "rowEffectsQuality": "ブルーム、アンビエントオクルージョン、そして実際に光を放つ松明や呪文の数を制御します。「詳細」の設定の中では、単独で最も大きく負荷を減らせる項目です。",
+      "rowShadowQuality": "影のくっきり具合を調整します。「低」でも影は残り、輪郭が柔らかくなるだけです。",
+      "rowFrostedPanels": "ウィンドウの背後にすりガラスのぼかしをかけます。美しい反面、非力なブラウザにはまさに応える種類のエフェクトです。昔ながらのくっきりした表示が好みなら、オフのままにしておきましょう。",
+      "rowReduceMotion": "インターフェースのアニメーションをなくし、ウィンドウを即座に表示します。第一にはアクセシビリティのためのオプションですが、パフォーマンスもわずかに向上します。",
+      "rowPerfOverlay": "FPSやフレームタイムなどを画面上に表示します。このページの設定を調整する間だけオンにして、終わったらまた非表示に戻しましょう。",
+      "tableFoot": "描画距離のスライダーやFPS上限をお探しですか。探す必要はありません。視界距離は各品質ティアに組み込まれており、フレームペーシングはお使いのディスプレイに従います。",
+      "mobileTitle": "スマートフォンとタブレットでは",
+      "mobileBody": "モバイルではゲームがより多くを自動で管理します。ティアの選択はゲーム側が行い、バッテリーの消耗と発熱を抑えるために解像度をわずかに低めに保ち、最上位ティアはデスクトップ専用のままにします。上記の構成はそのまま役立ちますが、スマートフォンでは上限が「高」になります。",
+      "touchBody": "タッチスクリーンでは、オプションに専用の快適設定がひとまとまり加わります。ジョイスティックの大きさと感度、画面上ボタンの大きさと不透明度、左右を反転した左利きレイアウト、任意のカメラスティック、そしてタッチ視点の反転です。あなたの手を画面に合わせるのではなく、画面があなたの手に合うようになります。",
+      "audioTitle": "サウンドと言語",
+      "audioBody": "オプションウィンドウにあるのは映像の設定だけではありません。オーディオタブには効果音、音楽、ボイスそれぞれの音量調整があり、インターフェースの項目には言語の選択が用意されていて、再読み込みなしにその場でインターフェース全体を選んだ言語へ切り替えられます。",
+      "autolootBody": "一つ一つの亡骸をクリックするのが面倒ですか。初期設定ではオフのインターフェース設定を使えば、自分が倒した相手の戦利品を、そばを通り過ぎるだけで自動で拾えます。"
     },
     "combat": {
       "intro": "戦闘はおなじみのクラシックMMOのルールに沿っています。うまく遊ぶために細かく学ぶ必要はまったくありません。これは戦いの仕組みの概要にすぎません。",
@@ -1379,12 +1982,15 @@ export const ja_JP: EnTranslations = {
       "resourcesTitle": "クラスごとに独自のリズムがある",
       "resourcesBody": "ウォリアーは激しい戦いの中でレイジを溜め、ローグは着実に回復するエナジーを消費し、キャスターはマナのプールを管理します。自分のリソースを理解することが、クラスをうまく使いこなす半分です。",
       "growTitle": "レベルごとに強くなる",
-      "growBody": "レベルが上がるたびに頑丈になり、新たなアビリティを習得します。これはレベル上限{cap}まで続きます。最速で成長するのはクエスト。ダンジョンと探索がそれを補います。",
+      "growBody": "レベルが上がるたびに頑丈になり、新たなアビリティを習得します。これはレベル上限{cap}まで続きます。最速で成長するのはクエストで、狩り、ダンジョン攻略、デルヴがそれを補います。",
       "effectsTitle": "バフ、デバフ、群衆制御",
-      "effectsBody": "多くのアビリティは、しばらく残る効果を付与します。有益なもの（バフ）はステータスを上げ、盾を張り、少しずつ回復させてくれます。有害なもの（デバフ）は継続ダメージで体力を削り、あるいはあなたを弱体化させます。アクションバーの近くにある小さなアイコンを見れば、何が付いていて、あとどれくらい続くのかがわかります。",
-      "ccBody": "群衆制御は、対象の行動を制限する特殊なデバフです。スタン、根縛りや減速、呪文詠唱を止めるサイレンス、武装解除、フィアー、そして一瞬だけ敵を無害にする変身系など。根縛り、フィアー、変身系のように、あまりに早く再付与すると効果が解けるものもあるため、永遠に連鎖させることはできません。",
+      "effectsBody": "多くのアビリティは、しばらく残る効果を付与します。有益なもの（バフ）はステータスを上げ、盾を張り、少しずつ回復させてくれます。有害なもの（デバフ）は継続ダメージで体力を削り、あるいはあなたを弱体化させます。画面の上隅、ミニマップの脇にある小さなアイコンを見れば、何が付いていて、あとどれくらい続くのかがわかります。",
+      "ccBody": "群衆制御は、対象にできることを制限する特殊なデバフです。スタン、根縛りや減速、呪文詠唱を止めるサイレンス、武装解除、フィアー、そして一瞬だけ敵を無害にする変身系があります。相手が他のプレイヤーの場合、制御は繰り返すほど利きが薄れます。同じ種類をあまりに早く再付与すると弱まり、やがて完全に効かなくなり、またステルスから仕掛けるスタンはその後に続くスタンとは別に数えられるので、誰も永遠に無力なまま連鎖され続けることはありません。世界のクリーチャーたちはそのような恨みを抱かず、彼らには繰り返しても制御が弱まることはありません。ただし最強の敵たちの多く、名前を持つエリートやその中でも最強のボスたちは、そもそも制御がまったく効きません。",
+      "metersBody": "戦いの首尾が気になりますか。Zキーを押すとパーティメーターが開き、グループのダメージ、回復、脅威を戦闘ごとに集計してくれます。",
+      "queueTitle": "次の一手はもう装填済み",
+      "queueBody": "ボタンを押す瞬間をフレーム単位で合わせる必要はありません。今のアビリティを詠唱している間に次のアビリティを押せば先行入力として蓄えられ、詠唱が完了した瞬間に発動します。だから練達のプレイは途切れなく流れていきます。一部の近接攻撃も同じ仕組みで、次の武器の一振りに乗って繰り出されます。",
       "deathTitle": "倒れたとき",
-      "deathBody": "体力がゼロになると倒れます。魂を解放すれば最寄りの墓地で全回復して復活し、そこから元いた場所へ戻ります。だから死は進行ではなく、少しの時間を失うだけです。戦いの合間には座って食べ、飲んで、次の戦いを万全の状態で始めましょう。"
+      "deathBody": "体力がゼロになると、その場に倒れ、亡骸はそこに残ります。霊魂を解放すると、最寄りの墓地で亡霊として起き上がります。生者より足は速く、敵の手も届きませんが、戦うことも、ルートすることも、墓石の上に浮かぶ霊魂の癒し手以外の誰かと話すこともできません。そこからは選択です。亡霊を亡骸まで走らせれば、体力とマナの一部が戻った状態で、いっさいのペナルティなしにその場で復活します。あるいは霊魂の癒し手に頼み、立っているその場ですぐ蘇らせてもらうこともできます。代償は「復活の後遺症」。あなたのすべてが一時的に弱まる効果で、熟練しているほど長く続き、生まれたてのキャラクターは完全に免除されます。ダンジョンの中で倒れた場合、霊魂は外の墓地で待ちます。亡霊のまま扉まで歩いて戻れば、入口で復活します。デルヴは例外で、そこで倒れてもデルヴの入口に立ち直らせてもらえるだけですが、二度目に倒れると挑戦は終了します。どちらの道でも、経験値、装備、コインは失われません。戦いの合間には座って食べ、飲んで、次の戦いを万全の状態で始めましょう。"
     },
     "glossary": {
       "intro": "このガイドやチャットで使われる用語のクイックリファレンスです。",
@@ -1427,18 +2033,44 @@ export const ja_JP: EnTranslations = {
       "delveTerm": "デルヴ",
       "delveDef": "1人または2人で挑む、短く繰り返し遊べるインスタンス潜行。番人のボードから開始し、仲間がそばに付き添います。",
       "augmentTerm": "オーグメント",
-      "augmentDef": "2対2のフィエスタアリーナの試合中にドラフトする一時的な強化で、その試合の間だけあなたの構成を作り変えます。"
+      "augmentDef": "2対2のフィエスタアリーナの試合中にドラフトする一時的な強化で、その試合の間だけあなたの構成を作り変えます。",
+      "deedTerm": "功績",
+      "deedDef": "功績の書に記録される達成の記録。獲得すると名声が与えられ、中には装飾用の称号やネームプレートの枠飾りを授けるものもあります。",
+      "renownTerm": "名声",
+      "renownDef": "あなたの功績が積み上げていく生涯の点数。増えることしかなく、レルムはその順位表を功績の書の中に保っています。",
+      "heroicTerm": "ヒロイック",
+      "heroicDef": "ダンジョンまたはレイドのより手強いバージョンで、装備の整ったエンドゲームパーティ向けに調整されています。ヒロイックのボスは強化された戦利品を落とし、最後のボスは英雄の証を残します。",
+      "lockoutTerm": "ロックアウト",
+      "lockoutDef": "最も大きな繰り返し報酬に設けられた一日ごとの上限です。各ヒロイックダンジョンは一日に一回分の攻略報酬を出し、レイドはノーマルとヒロイックを別々に記録し、ワールドボスをルートするとあなたのロックアウトが始まります。攻略済みの5人用ダンジョンはそのパーティに対しては開いたままですが、ロックされたレイドの扉はリセットまで再び開きません。",
+      "restedTerm": "休息",
+      "restedDef": "戦闘の外で宿屋にて休んでいる間に、キャラクターが蓄えるボーナス経験値です。その蓄えが尽きるまで、次の討伐で追加の経験値を得られます。",
+      "petBarTerm": "ペットバー",
+      "petBarDef": "ハンターやウォーロックのペットが追加する操作の列です。攻撃、停止、挑発、防御、攻撃的の五つで、初期設定ではCtrl+1から5に割り当てられています。",
+      "metersTerm": "ダメージメーター",
+      "metersDef": "現在の戦いのパーティ用スコアボードのウィンドウです。与えたダメージ、行った回復、そして誰が最も脅威を抱えているかを、戦闘ごとに記録します。キー割り当て（初期設定はZ）で開けます。",
+      "targetMarkerTerm": "ターゲットマーカー",
+      "targetMarkerDef": "パーティやレイドのメンバーが誰でも対象の上に付けられる記号で、全員が同じ相手に集中したり、逆に避けたりできます。記号は八種類で、一つの記号につき一体の対象に付けられます。",
+      "loadoutTerm": "保存ビルド",
+      "loadoutDef": "保存しておけるタレント配分。いくつか持っておけば、ポイントを一つずつ振り直すことなくビルドを切り替えられます。",
+      "readyCheckTerm": "準備確認",
+      "readyCheckDef": "グループリーダーが /ready と入力してパーティやレイドに問う確認。全員が準備完了か準備未完了かを答え、グループにはその集計が表示されます。",
+      "soulboundTerm": "魂縛",
+      "soulboundDef": "入手したその瞬間からキャラクターに縛られたアイテム。取引にも郵送にも出せず、商人への売却も、マーケットへの出品もできません。",
+      "spiritHealerTerm": "霊魂の癒し手",
+      "spiritHealerDef": "どの墓地の上にも浮かんでいる番人。つかの間の衰弱を代償に、あなたの亡霊をその場で蘇らせてくれます。",
+      "worldBossTerm": "ワールドボス",
+      "worldBossDef": "一定の周期でオープンワールドに現れるレイド級のボス。決まったパーティではなく、呼びかけに集まった者たちが立ち向かいます。"
     },
     "faqPage": {
       "intro": "新規プレイヤーが最もよく尋ねる質問です。",
       "q1": "本当に無料ですか?",
       "a1": "はい。ゲーム全体が最大レベルまで無料でプレイでき、ソースコードはGitHubで公開されています。",
       "q2": "暗号通貨ウォレットやトークンは必要ですか?",
-      "a2": "いいえ。ウォレットがなくても完全にプレイできます。任意のコミュニティトークンは見た目の装飾を解放するだけで、性能や進行には一切影響しません。",
+      "a2": "いいえ。ウォレットがなくても完全にプレイできます。任意のコミュニティトークンは、見た目の装飾と、デイリー報酬の賞金プールの分け前を加えるだけで、性能や進行には一切影響しません。",
       "q3": "スマートフォンで遊べますか?",
       "a3": "はい。モバイルブラウザでタッチ操作によりプレイでき、デスクトップ用ランチャーもあります。",
       "q4": "オフラインやソロで遊べますか?",
-      "a4": "はい。すぐに遊べるシングルプレイのオフラインモードがあり、オンラインの世界もダンジョンとレイドを除けば完全にソロで進められます。",
+      "a4": "はい。すぐに遊べるシングルプレイのオフラインモードがあり、オンラインの世界もダンジョン、レイド、ワールドボスを除けば完全にソロで進められます。",
       "q5": "クラスはいくつありますか?",
       "a5": "九つで、クラシックなタンク、ヒーラー、ダメージのロールを網羅し、それぞれがリソースシステム（レイジ、マナ、またはエナジー）と独自の代表的なアビリティを持ちます。",
       "q6": "レベル上限はいくつですか?",
@@ -1450,7 +2082,7 @@ export const ja_JP: EnTranslations = {
       "q9": "PvPはありますか。",
       "a9": "あります。誰とでも気軽に決闘できますし、灰のコロシアムに足を踏み入れて他のプレイヤーと戦うこともできます。PvPは任意参加なので、強制されることはありません。",
       "q10": "最大レベルになったら何ができますか。",
-      "a10": "上限はレベル{cap}です。そこからは5人用ダンジョンや10人用レイドに挑み、より良い装備を求め、アリーナで腕を試します。",
+      "a10": "上限はレベル{cap}です。そこからは5人用ダンジョンと10人用レイドに挑み、ヒロイックモードで再び攻略して強化された戦利品を狙い、ワールドボスが現れれば立ち向かい、アリーナで腕を試し、仲間を連れてデルヴに潜り、功績の書で功績を追い求めてレルムの順位を駆け上がります。",
       "q11": "グループはどうやって見つけますか。",
       "a11": "出会った相手をパーティに誘ったり、チャットで呼びかけたり、ダンジョンで合流したりしましょう。ワールドのほとんどはソロで進められるので、グループを組むかどうかは必須ではなく選択です。"
     },
@@ -1477,7 +2109,7 @@ export const ja_JP: EnTranslations = {
       "abilitiesNote": "キットの一端です。レベルが上がるにつれてさらに習得し、タレントが立ち回りを大きく変えていきます。",
       "masteryLabel": "マスタリー",
       "fullKitHeading": "全アビリティ一覧",
-      "fullKitNote": "このクラスが習得できるすべてのアビリティを、使えるようになる順に並べています。どれがビルドの軸になるかはタレントが決めます。",
+      "fullKitNote": "このクラスがレベルアップに伴い習得していくアビリティを、使えるようになる順に並べています。タレントはさらにいくつかのアビリティを与え、そのどれがビルドの軸になるかを決めます。",
       "petsHeading": "デーモン",
       "petsNote": "ウォーロックはデーモンを召喚して共に戦わせます。それぞれ得意な役割が異なります。"
     },
@@ -1583,7 +2215,7 @@ export const ja_JP: EnTranslations = {
     },
     "bestiary": {
       "heading": "モンスター図鑑",
-      "intro": "世界に棲む生き物たちを、種族ごとにまとめて紹介します。ここに載っているのは、フィールドで出会う敵たちです。最も危険な存在は図鑑には載らず、ダンジョンの扉の奥で待ち構えています。",
+      "intro": "世界に棲む生き物たちを、種族ごとにまとめて紹介します。ここに載っているのは、フィールドで出会う日常の敵たちです。エリートの敵やその頭目たちはこのページには姿を見せず、最も危険な存在はすべてダンジョンの扉の奥で待ち構えています。",
       "rare": "レア",
       "levels": "レベル{min}から{max}",
       "levelsSame": "レベル{min}",
@@ -1592,6 +2224,7 @@ export const ja_JP: EnTranslations = {
         "old_greyjaw": "どんな罠にも捕らえられたことのない、傷だらけの老いた狼。猟犬三頭と厩番の少年の腕を奪った咎を負わされています。深い森を独りで狩り、戦いが長引くほどに獰猛になります。",
         "grubjaw": "あまりに強欲で、他のトロルが隣で掘ろうとしないほどの沼地のトロル。交易商の最後の駄馬二頭を、馬具ごと食ったと言われています。",
         "shardlord_kazzix": "肩を得た嵐のエレメンタル。ストームクラグの上方にそびえる遥かな岩場を歩き、稲妻を冒してでも手に入れたいハートシャードを抱えています。",
+        "sethrael_palecoil": "骨のように蒼白い蛇で、グリマーミアの深い棚を音もなく滑り、自らのものとした水域を守る無言の番人。この湖を分かち合った泳ぎ手が、水面に戻ることはまずない。",
         "mirejaw_frenzy": "戦いの最中に自らを暴れ狂う狂乱へと駆り立てる沼地のマッドフィン。騒がしく縄張り意識の強い群れの中で、最もやかましい一匹です。",
         "gravecaller_cultist": "死のカルトに仕えるローブ姿の僕たち。その業は渓谷から高地まで墓を汚し、彼らが集う場所では死者が安らぎません。"
       }
@@ -1636,6 +2269,18 @@ export const ja_JP: EnTranslations = {
       "dragonkin": {
         "name": "ドラゴンキン",
         "desc": "古き深淵に棲む、鱗に覆われた蛇のような存在。希少で誇り高く、見た目よりもはるかに強大です。"
+      },
+      "murloc": {
+        "name": "クロークフィン",
+        "desc": "湖岸や潮だまりに棲む、しわがれ声の魚人たち。近づきすぎた者には、すぐさま群れをなして襲いかかります。"
+      },
+      "kobold": {
+        "name": "いたずら小妖",
+        "desc": "林間や生け垣をちょろちょろと駆け回る、漁り屋の小妖たち。数が揃うまでは、脅威というより厄介者です。"
+      },
+      "demon": {
+        "name": "デーモン",
+        "desc": "裂け目の彼方から来た侵略者たち。その身は炎と悪意のかたまりです。一体がいるところ、次元の裂け目は決して遠くありません。"
       }
     },
     "worldPage": {
@@ -1649,38 +2294,80 @@ export const ja_JP: EnTranslations = {
       "valeBlurb": "緑あふれる始まりの谷。新たな英雄たちが、イーストブルックの町の周りでオオカミや盗賊を相手に腕を磨く場所です。",
       "marshBlurb": "霧と廃墟に沈んだ国。浅瀬にはマッドフィンが群れ、水の底ではより古き何かがうごめいています。橋の町フェンブリッジから見張られています。",
       "peaksBlurb": "風に削られた尾根と古い鉱山跡。この地で最も寒く、最も高所にある危険へと続いており、前哨地ハイウォッチが守っています。",
+      "duskBlurb": "エルダーグリームの大樹の下に広がる、永遠の黄昏に沈む谷。水晶の遺跡が輝き、大気は古の魔力に満ちて震えています。",
+      "emberBlurb": "嵐の光に照らされた灰と血硝子の荒れ地。カルデラの上空をドレイクが旋回し、砂丘のあいだにはトロルの篝火が燃えています。門の町ワームウォッチから見張られています。",
+      "frostBlurb": "オーロラの下、雪と暗い松の森が静まり返る地。寒さそのものが目覚めているかのようで、アイスマントルは絶やさず火を焚き続けています。",
+      "amberBlurb": "金と紅の葉が決して散らない、永遠の秋の国。ランタンの灯る町ランタンミアの周りに広がっています。",
+      "fenBlurb": "睡蓮とゆるやかな水をたたえた、明るく羽音に満ちた湿地。橋の町ブリッジミアから、古い板張りの道で渡っていきます。",
+      "nightBlurb": "星降る真夜中のレルム。花々が小道を照らし、ムーンレストは夢見る空の下で静かな見張りを続けています。",
+      "hauntBlurb": "巨大な樹冠に覆われた呪われた森。街道でまともな光といえば、ギャロウミアのランタンだけです。",
+      "galeBlurb": "風のやむことのない海崖と咆哮の丘陵。古き烽火台の火は決して消えず、ウィックハーバーは扉を固く閉ざしています。",
+      "jungleBlurb": "ヤシと白砂、騒がしい鳥たちの南国の密林。浜の町ドリフトヘイヴンが、渚に火を灯し続けています。",
+      "gardenBlurb": "誰も姿を見たことのない庭師によって、今も刈り込まれ続けている生け垣迷路の庭園のレルム。ヘッジウィックとその噴水の中庭を抜けて入ります。",
       "valeGreeting": "刃を手放すな。渓谷はかつての姿ではない。",
       "valeGreeter": "レッドブルック元帥、イーストブルック",
       "marshGreeting": "門で止まれ。あの葦の向こうでは、沼が我々の代わりに殺しをやってくれる。",
       "marshGreeter": "番人フェンウィック、フェンブリッジ",
       "peaksGreeting": "この壁は二百年立ち続けてきた。私が守る限り崩れはしないが、軋んでいる。",
       "peaksGreeter": "隊長テサリー、ハイウォッチ",
-      "valePlaceNotes": "イーストブルックは最初の本拠地です。ウルフランとボアメドウは穏やかな狩り場、鏡の湖は釣りのできる静かな水辺です。セイブルウェブとカッパーディグには蜘蛛と鉱石に貪欲な掘り手が隠れ、山賊の野営地と倒れた礼拝堂にはより手荒い仕事があります。レリカリーの丘はレルム初のデルヴ、崩落したレリカリーへと落ち込んでおり、ブライトウッドの木立は北にある静かな陽だまりの木立です。",
-      "marshPlaceNotes": "フェンブリッジは唯一の乾いた道を守っています。プラウラー葦原とディープフェン浅瀬は沼地の獣とマッドフィンでひしめき、ウィドウの茂みは蜘蛛の糸が厚く張られ、水没の礼拝堂とトロルの塚にはより古き危険が潜み、グレイブコーラーの野営地にはカルトが立てこもり、沈んだ砦は沼地のインスタンス化された中心地です。",
-      "peaksPlaceNotes": "ハイウォッチは壁を守っています。ストーカー尾根とディープロックの巣穴は尾根猫と穴掘りのもの、オーガの丘陵とドログマーの戦営は雇われの荒くれ者のもの。ストームクラグはエレメンタルで弾け、その下にはグリマーミアが輝きます。ワームカルトのテントとレヴェナントの野原がカルトの高所を囲み、その頂には墓守竜の聖域があります。",
+      "duskGreeting": "そなたの同族でこの枝の下に立った者は少ない。静かに歩み、歓迎を受けるがよい。",
+      "duskGreeter": "守り手セルウィン、エルダーグリーム",
+      "emberGreeting": "荒れ地から吹く熱風、ドレイクモウの上を舞う竜、砂丘に燃えるトロルの篝火。外へ出る前に、一杯やっていけ。",
+      "emberGreeter": "門衛、ワームウォッチ",
+      "frostGreeting": "壁の外では、雪があらゆる音を飲み込む。空の光が踊り始めたら、声を潜め、火を絶やすな。",
+      "frostGreeter": "炉の守り手、アイスマントル",
+      "amberGreeting": "ここの葉はどれも金と紅に燃えているのに、一枚として散ることがない。ランタンはお前さんのために灯してある。登り道ではゴールドメルトに気をつけな。",
+      "amberGreeter": "ランタン職人、ランタンミア",
+      "fenGreeting": "この湿原はトンボと蜂の羽音でいっぱいだ。橋を渡って、しばし足を休めていくといい。池のそばでは板の道を外れるなよ。",
+      "fenGreeter": "橋守、ブリッジミア",
+      "nightGreeting": "ナイトゲートの先では、大気そのものが夢を見ている。花明かりをたどり、空に浮かぶ眠れる世界に心せよ。",
+      "nightGreeter": "不寝番の守り手、ムーンレスト",
+      "hauntGreeting": "ランタンのそばを離れるな、旅人よ。それから、道の外から森がお前の名を呼んでも、決して答えるな。",
+      "hauntGreeter": "点灯夫、ギャロウミア",
+      "galeGreeting": "ここでは風は一度たりともやんだことがなく、古き烽火台の火は一度たりとも消えたことがない。宿の扉はしっかり閉めてくれ。",
+      "galeGreeter": "烽火の番人、ウィックハーバー",
+      "jungleGreeting": "温かい砂、騒がしい鳥、そして地平線を飲み込むジャングル。浜辺には火を灯してある。必ずそこへ帰ってくるんだよ。",
+      "jungleGreeter": "港の女主人、ドリフトヘイヴン",
+      "gardenGreeting": "百年ものあいだ庭師の姿を見た者はいないのに、誰かが今も生け垣を刈り込んでいる。迷路には気をつけろ。向こうもこちらに気を配っているのだからな。",
+      "gardenGreeter": "門番、ヘッジウィック",
+      "valePlaceNotes": "イーストブルックは最初の本拠地です。狼の道と猪の草地は穏やかな狩り場、鏡の湖は良い釣り場ですが、浅瀬にはマッドフィンが群れています。セイブルウェブと銅鉱山には蜘蛛と鉱石に貪欲な掘り手が隠れ、盗賊の野営地と倒れた礼拝堂にはより手荒い仕事があります。聖遺物庫の丘はレルム初のデルヴ、崩れた聖遺物庫へと落ち込み、ブライトウッドの林間は北にある静かな陽だまりの木立です。そしてソウフィールドはイーストブルックの壁に囲まれたボアボール場で、収穫休戦のもとヴェイルカップが行われます。",
+      "marshPlaceNotes": "フェンブリッジは唯一の乾いた道を守っています。徘徊者の葦原とディープフェンの浅瀬は沼地の獣とマッドフィンでひしめき、寡婦蜘蛛の茂みは蜘蛛の糸が厚く張られています。沈んだ礼拝堂とトロルの塚にはより古き危険が潜み、塚のすぐ北には沼地自身のデルヴ、溺れし連祷が口を開けています。グレイブコーラーの野営地にはカルトが立てこもり、沈んだ砦は沼地のインスタンス化された中心地です。",
+      "peaksPlaceNotes": "ハイウォッチは壁を守っています。ストーカー尾根とディープロックの巣穴は尾根猫と穴掘りのもの、オーガの丘陵とドログマーの戦営は雇われの荒くれ者のもの。ストームクラグはエレメンタルで弾け、その下にはグリマーミアが輝きます。その岸辺には、溺れし神殿へと下る蒼白い光の門があります。ワームカルトのテントとレヴェナントの野原がカルトの高所を囲み、その頂には墓ワームの聖所があります。",
+      "duskPlaceNotes": "エルダーグリームは大樹の下に集う。ダスクフォール洞窟とその見晴らし台が入り口であり、谷を初めて望む場所でもある。長老樹の森と星降りの盆地は静かな南を守り、沈んだ宮廷は東で草に覆われた遺跡を抱え、輝きの深みと水晶の浅瀬は北で淡く光る。",
+      "emberPlaceNotes": "ワームウォッチは門を守っています。ゲートウッドは荒れ地を前にした最後の緑地。燃えがらの砂丘には灰と、それより悪いものが吹き溜まります。トロルの集会場は砂丘のトロルたちが篝火を囲む場所、血硝子の野は剃刀のような破片できらめき、ドレイクモウ・カルデラはドレイクたちが旋回する、煙を上げる王冠です。",
+      "frostPlaceNotes": "アイスマントルは最後の温かな炉を守っています。雪線から先は吹き溜まりの領分。氷河の山湖は氷の下に黒く静まる水をたたえ、オーロラの階段は踊る光の下を登っていきます。シヴァーフェンは決して寝静まらない凍てついた泥沼で、咆哮の段丘は毎晩その名にふさわしい声を上げます。",
+      "amberPlaceNotes": "ランタンミアは実りの中心で輝いています。ゴールドメルトは琥珀に濡れた入り口の峠。金箔の果樹園と収穫の窪地には、いちばん甘い実りと、いちばん大胆な盗人たちがいます。グレートミアは燃える葉を映し、シンダーメイプルの丘は最も高く最も紅く立ち、傾いたモノリスは秋よりも古い何かを覚えています。",
+      "fenPlaceNotes": "ブリッジミアはゆるやかな水をまたいで座しています。アンバーフェンの階段は実りの国から下ってくる道。睡蓮の湿原と沼光の池はウィスプとトンボできらめき、ウィローウィープは湖面へと枝を垂らします。まどろみの平地は、この地でいちばん穏やかな場所です。",
+      "nightPlaceNotes": "ムーンレストは見張りを続けています。ナイトゲートは真夜中の国への入り口。月の泉にはそばに立てるほど近くに星明かりが湛えられ、宵闇の野は暗がりの中で花開きます。不動の見張りは微動だにせず見つめ続け、眠らずの塚はこの地でただ一つ、決して夢を見ない場所です。",
+      "hauntPlaceNotes": "ギャロウミアはランタンの内側に身を寄せ合っています。鴉の門は森の陰気な玄関口。寡婦蜘蛛の茂みは蜘蛛の糸が厚く張られています。首吊りの林間と嘆き石の礼拝堂は森の最も古い悲しみを抱え、狩人の空き地は、今もそこで狩りを続ける何者かのものです。",
+      "galePlaceNotes": "ウィックハーバーは風に身を傾けています。風の道は崖沿いの入り口の道。咆哮の丘陵は強風の下、木一本なくうねっています。古き烽火台は誰も知らぬ昔から燃え続け、断ち崖は水面まで垂直に落ち込み、難破船の野はこの海岸の油断ならなさを物語ります。そして鏡の山湖は、このレルムでただ一つ静止しているものです。",
+      "junglePlaceNotes": "ドリフトヘイヴンは浜辺の火を守っています。タングルマウスは川が緑の壁とぶつかる場所。パームストランドは白く温かな砂浜となって波打ち際に続きます。エメラルドの密林とヴァインフォールは内陸を飲み込み、サファイアの礁湖は澄んで深く輝き、沈んだ偶像は水の底からこちらを見つめています。",
+      "gardenPlaceNotes": "ヘッジウィックは庭園の門で待っています。彫像の小径には物言わぬ立ち姿が並び、野薔薇の原はとうの昔に花壇を飛び出しました。花びらの池は一年中桃色に漂い、大迷路は客が来るたびに作法を並べ替え、噴水の中庭は庭園の中心で今も澄んだ水を流し続けています。",
       "gladeTitle": "静かな一角：ブライトウッド・グレード",
-      "gladeBody": "Valeの物語がすべて死者について語るわけではありません。北にはBrightwood Gladeと呼ばれる陽だまりの木立があり、静かな小道と枝々の下に揺れる木漏れ日とともに、穏やかな独自の調子を保っています。あなたが追う足跡への柔らかな対照であり、道に寄り道の余裕があるなら見る価値があります。"
+      "gladeBody": "Valeの物語がすべて死者について語るわけではありません。北にはBrightwood Gladeと呼ばれる陽だまりの木立があり、静かな小道と枝々の下に揺れる木漏れ日とともに、穏やかな独自の調子を保っています。あなたが追う足跡への柔らかな対照であり、道に寄り道の余裕があるなら見る価値があります。",
+      "worldBossTitle": "峰が目覚めるとき：ワールドボス",
+      "worldBossBody": "ソーンピークの高み、ストームクラッグの上空の嵐は、ときおり一つの形を結びます。サンザール、目覚めし峰が、一定の周期でそこに立ち上がるのです。オープンワールドで呼びかけに応えた者たちが挑むレイド級のエレメンタルで、立ち向かう挑戦者が増えるほど、さらに強大になります。戦いに加わった全員がそれぞれ自分の分の戦利品ロールを得られ、その権利はレイドロックアウトの決まりに従って扱われます。そして彼が倒れたあとも、その姿は、倒れた者が走って戻り自分の取り分を受け取れるだけの間、残り続けます。必要だと思うより多くの剣を集めましょう。"
     },
     "questsPage": {
       "heading": "クエスト",
       "intro": "クエストはこの世界の中心であり、最も早くレベルを上げる手段です。その仕組みを紹介します。",
       "acceptTitle": "探し方と受注",
-      "acceptBody": "頭の上にマークが付いた人物が、あなたに依頼を持っています。話しかけてクエストを受注しましょう。最初のクエストは、イーストブルックのレッドブルック隊長から受ける「扉のオオカミ」です。",
+      "acceptBody": "頭の上にマークが付いた人物が、あなたに依頼を持っています。話しかけてクエストを受注しましょう。イーストブルックでは、受注できる最初のクエストの一つ「門前の狼」を持って、レッドブルック隊長が待っています。",
       "objectivesTitle": "目標",
       "objectivesBody": "特定の敵を倒したり、アイテムを集めたり、世界の何かと対話したり。画面上のトラッカーが、進行に合わせて進捗を数えてくれます。気が変わったら、クエストログからクエストを破棄し、後でその発注者から再び受けることができます。",
       "turninTitle": "報告",
       "turninBody": "完了したクエストは、その提出マーカーまで持っていきましょう。場所はマップが教えてくれます。経験値やお金、そして多くの場合あなたのクラスに合わせて選ばれた装備が手に入ります。提出先はたいてい発注者本人ですが、別の誰かのもとへ向かわせるクエストもあります。",
       "partyTitle": "グループでのクエスト",
-      "partyBody": "近くにいるパーティメンバーは、討伐や目標の達成判定を共有します。だから一緒にクエストを進めれば、遅くなることはなく、むしろ速くなります。クエストをグループと共有することもできます。/share コマンドでクリックできるリンクとしてチャットに投稿すれば、条件を満たす近くのメンバーは誰でも、ワンクリックで同じクエストを受けられます。",
+      "partyBody": "近くにいるパーティメンバーは、討伐や目標の達成判定を共有します。だから一緒にクエストを進めれば、遅くなることはなく、むしろ速くなります。クエストをグループと共有することもできます。/share コマンドでクリックできるリンクとしてチャットに投稿すれば、条件を満たすメンバーは誰でも、ワンクリックで同じクエストを受けられます。",
       "storyTitle": "すべてを貫く一本の糸",
       "storyBody": "イーストブルックでの最初のおつかいの頃から、死者に異変が起きています。あるカルトが暗躍しており、その足取りは北へ、すべてのゾーンを貫いて続いています。それを追えば、背後に誰がいるのかがわかるでしょう。",
       "soloNote": "メインストーリーは各章のフィナーレまで完全にソロで進められます。そのフィナーレは五人用のダンジョンです。",
       "typesTitle": "目にすることになるクエストの種類",
       "typesBody": "ほとんどのクエストは、おなじみのいくつかの型のどれかです。画面上のトラッカーが、それぞれ何を求めているかを正確に示してくれるので、迷うことはありません。",
       "typeSlayTitle": "討伐",
-      "typeSlayBody": "獣の群れを間引いたり、指定された数の標的の敵を倒してカルトの支配を打ち砕いたりします。ゲーム最初のクエスト、イーストブルックの道から狼を排除するものも、その一つです。",
+      "typeSlayBody": "獣の群れを間引いたり、指定された数の標的の敵を倒してカルトの支配を打ち砕いたりします。最初のクエストの一つ、イーストブルックの道から狼を排除するものも、その一つです。",
       "typeGatherTitle": "収集",
-      "typeGatherBody": "世界から、あるいは敵が落とすものからアイテムを集めます。薬草、鉱石、失われた手紙、カルトの不吉な試薬など。特定の敵からしか落ちないものもあるので、狩りと収集は表裏一体です。",
+      "typeGatherBody": "世界から、あるいは敵が落とすものからアイテムを集めます。薬草、鉱石、カルトの不吉な試薬など。特定の敵からしか落ちないものもあるので、狩りと収集は表裏一体です。",
       "typeInteractTitle": "対話",
       "typeInteractBody": "世界に固定された何かを使う、浄化する、あるいは読み取ります。汚された墓、岸の岩に刻まれた警告、封じられた地下墓所の扉など。目印に歩み寄り、それに働きかけましょう。",
       "typeMusterTitle": "守りを結集する",
@@ -1716,21 +2403,27 @@ export const ja_JP: EnTranslations = {
       "intro": "オープンワールドだけでは物足りなくなったら、パーティを組んでインスタンスへ踏み込みましょう。インスタンスとは、あなたのグループだけのために用意されたダンジョンの専用コピーです。",
       "party": "ダンジョンは5人パーティ向けに作られています。エンドコンテンツのレイドは10人用です。",
       "soloLead": "どのダンジョンも、ソロで進められる導入クエストから始まります。だから、なぜそこへ向かうのかが常にわかります。",
-      "levelAround": "レベル{n}前後",
       "levelExact": "レベル{n}",
       "levelBand": "レベル{min}から{max}",
       "partySize": "{n}人",
+      "levelAround": "レベル{n}前後",
       "raidSize": "10人、レベル{n}",
       "hollowName": "うつろの墓所",
-      "hollowBody": "墓荒らしに遭った礼拝堂の地下墓所。死んだばかりの者たちが安らぎを拒んでいます。新たなパーティにとって、最初の本当の試練です。",
       "bastionName": "沈みし要塞",
-      "bastionBody": "沼地に呑まれて失われた水没の要塞。溺れた守備兵と、満ちゆく潮そのものに守られています。",
       "templeName": "水没の神殿",
-      "templeBody": "沼地の道から外れた場所に沈む祠。好奇心旺盛で、しっかり備えた者のための寄り道です。",
       "sanctumName": "墓守竜の聖域",
+      "hollowBody": "墓荒らしに遭った礼拝堂の地下墓所。死んだばかりの者たちが安らぎを拒んでいます。新たなパーティにとって、最初の本当の試練です。",
+      "bastionBody": "沼地に呑まれて失われた水没の要塞。溺れた守備兵と、満ちゆく潮そのものに守られています。",
+      "templeBody": "沼地の道から外れた場所に沈む祠。好奇心旺盛で、しっかり備えた者のための寄り道です。",
       "sanctumBody": "ソーンピークの暗き中心。カルトの長きにわたる企てが、おぞましい頂点に達する場所です。",
       "raidName": "エンドコンテンツのレイド",
-      "raidBody": "封じられた王家の扉の奥で、10人用の試練が待ち受けます。複数フェーズの戦いと、レイド全員で力を合わせて止めねばならない不死の力です。挑む資格を勝ち取り、9人の仲間を連れて挑みましょう。",
+      "raidBody": "封じられた王家の扉の奥で、10人用の試練が待ち受けます。複数段階の戦いと、レイド全員で力を合わせて封じねばならない不死の力です。挑む資格を勝ち取り、9人の仲間を連れて挑みましょう。",
+      "heroicTitle": "ヒロイックモード",
+      "heroicBody": "すべての5人用ダンジョンと、レイドそのものにも、レベル上限の先にヒロイック版が待っています。同じ回廊が、装備の整ったエンドゲームパーティのために作り直されています。あらゆる攻撃はより重く、徒歩で振り切れるものは何もなく、ボスはスタンや減速を完全に払いのけます。まずはノーマル版を卒業しましょう。ヒロイックは、それを前提に組まれています。",
+      "heroicHowBody": "難易度は、グループがインスタンスを確保する前に選びます。/dungeon heroic と入力するか、パーティメニューのダンジョン難易度の切り替えを使いましょう。選択はパーティ全体で共有され、扉のところで固定されるので、ランは確保されたときの難易度のまま最後まで進みます。",
+      "heroicRewardsTitle": "英雄の証と強化された戦利品",
+      "heroicRewardsBody": "ヒロイックのボスは、おなじみの戦利品を強化し、ツールチップにヒロイックの表記を添えて落とします。さらに各ランの最後のボスは、ほかでは見つからないエピックを加えてくれます。その最後の討伐は、参加者全員に英雄の証も残します。ハイウォッチの補給係ヴェックスのもとで使う通貨で、彼の扱う指輪と首飾りは、このレルムで手に入る唯一の装身具です。",
+      "heroicLockoutBody": "ノーマルのダンジョンは一日中回れます。ヒロイックは辛抱を求めます。各ダンジョンが報酬を出すヒロイッククリアは一日に一度で、レイドは難易度ごとに一日のロックアウトを保ちます。クリア済みのランはそのパーティに常に開かれたままなので、勝ち取った戦利品から締め出される者はいません。",
       "templeLoreTitle": "水没の神殿、もう少し深く",
       "templeLoreBody": "神殿には、あなたが他所で追うカルトよりも古い、それ自身の伝説があります。月明かりを飲み込み、溺れた者を返すという山上の湖グリマーミアの岸辺で、一人の見張り役が淡い光の門を守っています。水面の下には、そこへ続く冷たい石の階段が伸びています。そこに沈んだ者たちは不運で溺れたのではありません。彼らは礼拝のうちに沈み、決して歌うのをやめなかった蒼白の聖歌隊でした。古き守り人たちは水に呑まれる前に、岩へただ一つの警告を刻みました。彼らが溺れし月と呼ぶものへの祈りです。そしてその下に、より落ち着いた手が二つの言葉を書き添えていました。それはただ眠っているだけだ、と。",
       "cryptLeadTitle": "死者が閉ざしておくべきだった扉",
@@ -1758,11 +2451,11 @@ export const ja_JP: EnTranslations = {
       "tiersHeading": "難易度",
       "tiersBody": "デルヴには複数の難易度が用意されています。高い難易度では敵が強くなり、ランの修飾効果が加わる代わりに、報酬も多くなります。また、入場するにはある程度レベルを上げておく必要があります。",
       "affixesHeading": "ランの修飾効果",
-      "affixesBody": "より高難易度のランでは、潜行の流れを変える修飾効果が抽選されます。安らげぬ死者から淀んだ空気、崩れかけた天井まで、その内容はさまざまです。修飾効果は危険と報酬をともに高めます。納骨堂をテーマにしたデルヴでは、次のいずれかが抽選されることがあります:",
+      "affixesBody": "より高難易度のランでは、潜行の流れを変える修飾効果が抽選されます。安らげぬ死者から淀んだ空気、崩れかけた天井まで、その内容はさまざまです。修飾効果は危険と報酬をともに高めます。各デルヴは、そのテーマに合った修飾効果の中から抽選します。レルム全体で見ると、その顔ぶれは次の通りです:",
       "marksHeading": "デルヴの刻印",
       "marksBody": "デルヴを攻略するとデルヴの刻印が手に入ります。これは所持金とは別に管理される通貨です。番人のもとで使えば、仲間を強化したり、ほかでは手に入らない装備を入手したりできます。",
       "whereHeading": "どこにあるか",
-      "whereBody": "最初のデルヴ「崩れた聖遺物庫」は、イーストブルックの谷の出発地点にある聖遺物庫の丘で開放されます。ボードを管理しているのはハルヴェン修道士で、準備が整えばあなたを下へ送り出してくれます。"
+      "whereBody": "最初のデルヴ「崩れた聖遺物庫」は、始まりの谷イーストブルック渓谷の聖遺物庫の丘で開かれます。ボードを管理しているのはハルヴェン修道士で、準備が整えばあなたを下へ送り出してくれます。彼の受け持ちはそこで終わりません。マイアフェン湿地の北の端、トロルの塚を越えた先では、同じ番人が、足場を固めた潜行者のために溺れし連祷を開いています。"
     },
     "talentsPage": {
       "heading": "タレントとスペシャライゼーション",
@@ -1770,12 +2463,13 @@ export const ja_JP: EnTranslations = {
       "whatHeading": "タレントの役割",
       "whatBody": "レベルが上がると、アビリティやステータスへの小さく永続的な強化に振るタレントポイントを獲得します。これがクラスの感触を形作り、より高いダメージ、より硬い防御、より強い回復へと傾けていきます。",
       "howHeading": "仕組み",
-      "howBody": "タレントはレベル10で解放され、上限まで上がる間ポイントを稼ぎ続けます。ポイントはクラスのタレントパネルで振り、複数の配分を保存してビルドを切り替えられます。",
+      "howBody": "タレントはレベル10で解放され、上限まで上がる間ポイントを稼ぎ続けます。ポイントはクラスのタレントパネルで振り、投資とレベルアップに応じてより深い段が開いていきます。複数の配分を保存して、ビルドを切り替えることもできます。",
       "shareNote": "完成したビルドは短い共有コードにコピーして、フレンドに渡せます。受け取った相手は、自分のタレントパネルにそのまま貼り付けるだけで読み込めます。",
+      "choiceNote": "どのツリーにもいくつか、単なる取得ではなく分かれ道となるポイントがあります。そのノードは2つか3つの選択肢を差し出し、あなたはその一つに身を委ねます。ツリーの他のすべてと同じように、次のリセットでその選択もまた開き直されます。",
       "resetTitle": "決定的なものは何もない",
-      "resetNote": "タレントは戦闘の外であればいつでもリセットできるので、序盤の選択が落とし穴になることはありません。いろいろ試し、好みを見つけ、自由に考えを変えましょう。",
+      "resetNote": "タレントは、戦闘の外でアリーナの試合中でなければ、いつでもリセットできるので、序盤の選択が落とし穴になることはありません。いろいろ試し、好みを見つけ、自由に考えを変えましょう。",
       "specsHeading": "クラス別のスペシャライゼーション",
-      "specsBody": "どのクラスにもいくつかのスペシャライゼーションがあり、それぞれに固有のロールと特徴的な軸があります。ここではそのすべての概要を示します。全アビリティはクラスを開いて確認してください。"
+      "specsBody": "どのクラスにもいくつかのスペシャライゼーションがあり、それぞれに固有のロールと特徴的な軸があります。タレントパネルで一つを選ぶと、象徴的なアビリティと、それ自身の恒久的なマスタリーが与えられます。ここではそのすべての概要を示します。全アビリティはクラスを開いて確認してください。"
     },
     "arenaPage": {
       "heading": "アリーナとPvP",
@@ -1783,22 +2477,88 @@ export const ja_JP: EnTranslations = {
       "duelsHeading": "決闘",
       "duelsBody": "出会った相手なら誰でも友好的な決闘に挑めます。賭けるのはプライドだけなので、相性を学んだり仲間内の言い争いに決着をつけたりするのに一番手軽な方法です。",
       "coliseumHeading": "灰のコロシアム",
-      "coliseumBody": "Coliseumはレルムのアリーナで、ランクマッチで他のプレイヤーと対戦します。一対一、あるいは二対二です。各ブラケットはそれぞれ独自の順位を保つので、勝てばそのラダーを駆け上がり、レルム全体に見てもらえます。",
+      "coliseumBody": "灰の闘技場はレルムのアリーナで、ランクマッチで他のプレイヤーと対戦します。一対一、あるいは二対二です。各ブラケットはそれぞれ独自の順位を保つので、勝てばそのラダーを駆け上がり、レルム全体に見てもらえます。アリーナのウィンドウを開き、一人で、あるいはパートナーとブラケットに登録しましょう。",
       "fiestaHeading": "2対2のフィエスタ",
-      "fiestaBody": "フィエスタは短いラウンドで行う、テンポの速い2対2のモードです。ラウンドの合間にオーグメント、つまりその場で構成を組み替える手早い強化をドラフトするので、同じマッチは二つとありません。",
+      "fiestaBody": "フィエスタは、一つの途切れない試合として行うテンポの速い2対2の乱戦で、すべての戦士が対等な条件で戦います。試合が進むにつれてオーグメント、つまりその場で構成を組み替える手早い強化をドラフトするので、同じマッチは二つとありません。",
       "augmentsNote": "オーグメントやパワーアップはそのマッチの間だけ続きます。持続的な強さではなく、その場で組む遊び心のあるビルドが目的なので、課金で勝ちを買えるわけではありません。",
       "wavesTitle": "オーグメントはウェーブで訪れる",
-      "wavesBody": "Fiestaの各ラウンドでは新たな一手が手に入り、試合が進むにつれてその一手は大胆になっていきます。一つのウェーブから次へとビルドを築き上げ、毎回いくつかの候補から一つを選び、残りの試合の間はそれを持ち続けます。",
+      "wavesBody": "フィエスタの試合では、進行に応じて新たな一手が手に入り、試合が長引くほどその一手は大胆になっていきます。一つのウェーブから次へとビルドを築き上げ、毎回いくつかの候補から一つを選び、残りの試合の間はそれを持ち続けます。",
       "waveSilverTitle": "シルバー",
       "waveSilverBody": "最初のウェーブ。単一ステータスを伸ばすシンプルな強化で、クラスの基本を研ぎ澄まします。",
       "waveGoldTitle": "ゴールド",
       "waveGoldBody": "中盤のウェーブ。両刃の組み合わせが並び、あなたのビルドが形を成して輝き始めます。",
       "wavePrismaticTitle": "プリズマティック",
       "wavePrismaticBody": "最後のウェーブ。ビルドを決定づける、画面を溶かすほどのスパイク。最高の意味でばかげていると感じられるよう作られています。",
+      "yumiHeading": "Yumiを守れ",
+      "yumiBody": "Protect Yumiは迷路で行うチーム目標モード。各チームは自分の猫の使い魔を守りながら、敵の使い魔を狙います。二匹の猫は時折迷路の別の場所へ転移するため、防衛、追撃、捜索の間で戦況が揺れ動きます。3対3か5対5でキューに参加でき、倒れても少しの間ベンチに下がるだけです。",
       "powerupsTitle": "リングのパワーアップ",
       "powerupsBody": "戦いの最中、光り輝くオーブがアリーナに落ちてきます。先に取った者の自由になり、しかも狙い通りに度を越していて、効果はほんの一瞬だけ。スピードデーモンは目もくらむ速さへ、コロッサスはのっそりと歩く巨人へ、ムーンブーツは低重力で跳ね回るジャンプへ、バーサーカーは突如あふれる怒りへとあなたを変えます。",
       "ladderHeading": "ラダーを駆け上がる",
       "ladderBody": "ランクプレイでは時間をかけて順位を記録します。リーダーボードを確認すれば、自分の位置やレルムの頂点に立つのが誰かが分かります。"
+    },
+    "valeCupPage": {
+      "heading": "ヴェイルカップ",
+      "intro": "ソウフィールドのボアボール:旗を選び、ポジションを選び、藁を詰めた猪皮のボールをキーパーの脇へ蹴り込んで銅のミルク桶を目指せ。血は流れず、戦利品もなく、あるのはスタンドの歓声だけ。",
+      "loreHeading": "ボアボールと収穫休戦",
+      "loreOldSow": "死者が目覚めるずっと前、イーストブルックの農夫たちは刈り入れ後の切り株畑でボアボールに興じていた。二つの群れ、藁を詰めた一枚の猪皮、緑地の両端まで引きずられた二枚の荷馬車の門。最初のボール「オールドソウ」は、銅をまとって酒場の炉の上に飾られている。",
+      "loreTruce": "灰の闘技場が戦争競技を公認し始めたとき、レッドブルック元帥はもっと穏やかなもので応えた。古い緑地に恒久の収穫休戦を布いたのだ。荷馬車の門はゴールポストになり、緑地には壁とスタンドと「ソウフィールド」という名が与えられた。賞品はいつも同じ、勝者たちが回し飲みするへこんだミルク桶:銅のミルク桶だ。",
+      "howHeading": "遊び方",
+      "howQueue": "ヴェイルカップウィンドウからどこでも並べるほか、ソウフィールドの門にいる整備人ブラムに話しかけてもよい。1対1から5対5までの階級、旗の国、ポジションを選ぶ。ソロでもパーティーでも参加できる。",
+      "howMatch": "キックオフと同時にクラスのスキルはスポーツキットに置き換わり、試合後に元通り復元される。キックは地面のレティクルで狙い、ボールはボードで跳ね返り、ドリブルはボールと一緒に走るだけ。試合終了までに相手より多く得点すること。引き分けはゴールデンゴールへ。",
+      "howTruce": "ソウフィールドで血は流れない。タックルは転がすだけで、何も傷つけず、ペットは試合の間お休みだ。",
+      "spectateBody": "スタジアムで行われる試合は同時に一つだけ。誰でも歩いて行ってスタンドから観戦できる。",
+      "bettingHeading": "柵際のひと賭け",
+      "bettingBody": "ソウフィールドの観客は、試合が組まれている間にどちらかの側を後押しできる。賭け金はひとつのプールにまとめられ、終了の笛が鳴れば、勝った側が自分の賭けた額に応じて負けた側のプールを分け合う。引き分けの試合や、誰も賭けなかった側の番狂わせでは、コインはすべて払い戻される。試合に出る本人はその試合には賭けられず、柵際にはあなたの生涯のベット成績、勝ち、負け、そして純収支が刻まれていく。",
+      "practiceHeading": "練習試合と、静かなピッチ",
+      "practiceBody": "ヴェイルカップウィンドウでは練習もできる。ボットが両チームを埋める専用コピーのピッチで、何ひとつ戦績には数えられない。本番に一人か二人足りないときも、少し待てばボットが人数を埋めてくれるし、ボットがピッチにいる試合はすべて親善試合で、決してレート戦にはならない。そしてソウフィールドが空いている間は、ボットたちがエキシビションを繰り広げる。スタンドから観戦もでき、賭けることもできる。本物のプレイヤーが準備を整えた瞬間、エキシビションはピッチを譲り、賭け金はすべて返される。",
+      "nationsHeading": "八つの旗の国",
+      "nationsBody": "どのチームも旗の下で戦う。キャプテンが国を選び、両者が同じ旗を掲げたときはアウェー側が反転配色でプレイする。",
+      "nationVale": "緑と金、麦束の旗:地元チーム、骨の髄まで農夫たち。",
+      "nationMirefen": "青緑と灰、鷺の旗の下:辛抱強く、足が長く、決して急がない。",
+      "nationThornpeak": "氷青と白、山嶺の旗の下:足取り確かで頑固者。",
+      "nationColiseum": "赤と黒、交差する剣:まだ戦争のつもりでプレイする連中。",
+      "nationChoir": "淡青と銀、鐘の旗の下:不気味で、精密で、とても静か。",
+      "nationOgre": "橙と焦茶、拳を掲げて:肩から突っ込み、それを誇る。",
+      "nationMoon": "紫と銀、三日月の旗の下:夜のプレイヤーたち、足取り軽やか。",
+      "nationCopperdig": "銅と茶、鶴嘴を携えて:走り止まない坑夫たち。",
+      "rolesHeading": "ポジション",
+      "rolesBody": "あなたのポジションが、ピッチに持ち込むキットを決めます。誰もが蹴れます。あとは気性次第です。一対一と二対二のブラケットでは全員がオールラウンダーのキットで戦うため、ポジション選びが本領を発揮するのは三対三以上からです。",
+      "rewardsHeading": "休戦の掟",
+      "rewardsBody": "休戦の掟のもとでは経験値も戦利品もありません。決着のついた試合は戦績と勝者の掲示板に刻まれ、勝利はその日の報酬課題にも加算されます。試合を放棄すれば席はベンチ送りとなり、整備人はそれを覚えています。"
+    },
+    "deedsPage": {
+      "intro": "功績の書は、始まりの谷を出る最初の一歩から、この王国が用意する最も過酷な戦いまで、あなたが成し遂げたすべてを世界が記録する場所です。遊びながら功績を獲得し、授かった称号を身にまとい、名声が高まっていくのを見届けましょう。",
+      "howHeading": "功績の仕組み",
+      "howBody": "功績は一人のキャラクターごとに獲得し、そのまま保たれます。ですから、あなたが遊ぶどの英雄も、それぞれ自分だけの功績の書を築いていきます。あなたのすべてのキャラクターにまたがって名声をまとめるのはレルムのリーダーボードだけで、そこでは各功績が一度だけ数えられます。それぞれの功績が何を求めているかは、ゲーム内の功績の書にはっきりと記されているので、次に何を追うべきかはいつでも分かります。狙っている功績には追跡を設定して、遊んでいる間もずっと視界に入れておけます。ごく一部の功績は秘密のままで、獲得して初めて姿を現します。功績の書はまた、自らに正直であり続けます。あなたの過去の記録で証明できるものはその場で認められるので、歴戦の者が開いたページが白紙ということはありません。数を刻む功績だけが、その集計を新たに始めます。",
+      "renownHeading": "名声",
+      "renownBody": "名声は功績の書を支える点数です。獲得した功績はそれぞれ定められた点数を持ち、合計は増える一方なので、静かな一週間があっても築いたものが減ることはありません。一部の功績は技量ではなく運によるもので、偉業はそれ自体が誉れであるため、そのどちらも名声を一切もたらしません。",
+      "rewardsHeading": "称号と枠飾り",
+      "rewardsBody": "報酬はすべて見せびらかすためのもので、それこそが狙いです。一部の功績は、身につけられる称号や、名前を彩る枠飾りを授けますが、英雄を強くするものは決して与えません。功績の書で好きな称号を選べば、それはネームプレート、チャット、そして順位表にも添えられ、誰の目にも映ります。",
+      "chroniclesHeading": "年代記",
+      "chroniclesBody": "各地方はそれぞれの年代記を保っています。これは、通り過ぎるすべての旅人を記録しようと自ら買って出た土地の記録者が集めた功績の一群です。イーストブルック渓谷のSaulがその最初の一人です。年代記はいくつかの章に分かれており、どの順で進めても構いません。",
+      "featsHeading": "偉業",
+      "featsBody": "偉業は別格の棚です。それは伝承と世界初の記録であり、過ぎ去った時代に結びついた功績や、二度と起こらない一瞬の功績です。名声はなく、達成率にも数えられず、成し遂げられたことの記憶として永遠に残されます。",
+      "catalogHeading": "功績の全目録",
+      "catalogBody": "ここには、功績の書が収められるすべての功績を、カテゴリーごとにまとめてあります。秘密の功績はわざと省いてあり、あなた自身が見つけ出すのを待っています。それぞれが何を求めているかは、ゲーム内で功績の書を開いて確かめてください。",
+      "standingsNote": "各レルムは、すべてのアカウントにわたる名声の累計を記録しています。誰がどこに位置しているかを見るには、ゲーム内でリーダーボードを開き、その名声タブに切り替えてください。順位はそこにあり、ウィキにはありません。",
+      "catHeading": "{label}（{count}）",
+      "colName": "功績",
+      "colRenown": "名声",
+      "colReward": "報酬",
+      "featTag": "偉業",
+      "rewardBorder": "枠飾り",
+      "cat": {
+        "progression": "成長",
+        "combat": "戦闘",
+        "dungeon": "ダンジョン",
+        "delve": "デルヴ",
+        "chronicle": "年代記",
+        "collection": "収集",
+        "pvp": "PvPとスポーツ",
+        "social": "交流",
+        "exploration": "探索",
+        "feat": "偉業"
+      }
     },
     "wishPage": {
       "heading": "知っておきたかったこと",
@@ -1806,9 +2566,9 @@ export const ja_JP: EnTranslations = {
       "i1Title": "間違ったクラスを選ぶことはない",
       "i1Body": "どのクラスも十分に通用し、上限まで到達できます。誰かが最強と呼ぶものではなく、自分が好きなファンタジーを選びましょう。",
       "i2Title": "死んでもほとんど痛手はない",
-      "i2Body": "倒れると魂を解放し、最寄りの墓地で復活し、元いた場所まで戻ります。経験値は失われないので、安心してリスクを取り、学べます。",
+      "i2Body": "倒れると、最寄りの墓地で亡霊として起き上がります。亡骸まで走って戻れば無償で復活でき、霊魂の癒し手のその場での蘇生を選べば、その手軽さと引き換えに短い衰弱を背負います。経験値、装備、コインは決して失われないので、安心してリスクを取り、学べます。",
       "i3Title": "タレントは落とし穴ではない",
-      "i3Body": "タレントはレベル10で解放され、いつでもリセットできるので、序盤の選択が永続することはありません。",
+      "i3Body": "タレントはレベル10で解放され、戦闘の外なら好きなときにリセットできるので、序盤の選択が永続することはありません。",
       "i4Title": "クエストの道筋をたどる",
       "i4Body": "クエストは最も速いレベリング手段で、ワールド中へとあなたを導きます。どこへ行けばよいか分からないときは、次のマーカーを探しましょう。",
       "i5Title": "装備を最新に保つ",
@@ -1834,6 +2594,10 @@ export const ja_JP: EnTranslations = {
       "lead": "世界の英雄、モンスター、デーモンを間近で観察しましょう。モデルを選び、ドラッグして回してください。",
       "intro": "ここに並ぶどの姿も、ゲーム内で出会うのと同じモデルで、ブラウザ上にライブで描画されています。一つ選んで読み込みましょう。",
       "groupClasses": "クラス",
+      "groupForms": "ドルイドの変身形態",
+      "formBear": "ブルーインフォーム",
+      "formCat": "ウルフフォーム",
+      "formTravel": "フリートフォーム",
       "groupCreatures": "クリーチャー",
       "groupPets": "ウォーロックのデーモン",
       "pickerLabel": "表示するモデルを選択",
@@ -1843,15 +2607,19 @@ export const ja_JP: EnTranslations = {
     "gear": {
       "intro": "ギアとは、あなたのキャラクターが身につける装備や持ち歩くアイテムのことです。より良いギアこそが強くなる最も着実な道であり、そのほとんどは遊んでいるだけで手に入ります。",
       "slotsTitle": "装備できるもの",
-      "slotsBody": "武器スロットが一つと、防具スロットが七つあります。各クラスは特定の武器しか扱えず、自分の重さまでの防具、クロス、レザー、またはメイルを着用します。だからあなたに合うアップグレードは、あなたのクラスのために作られたものです。その範囲内で、見つけた最良の品ですべてのスロットを埋めましょう。",
+      "slotsBody": "武器スロットが一つ、防具スロットが七つ、そして装身具スロットが三つ、首が一つと指が二つあります。各クラスは特定の武器しか扱えず、自分の重さまでの防具、クロス、レザー、またはメイルを着用します。だからあなたに合うアップグレードは、あなたのクラスのために作られたものです。装身具には重さの区別がまったくなく、どのクラスも手に入れたものを自由に身につけられます。その範囲内で、見つけた最良の品ですべてのスロットを埋めましょう。",
       "slotMainhand": "武器",
       "slotHelmet": "頭",
+      "slotNeck": "首",
       "slotShoulder": "肩",
       "slotChest": "胴",
       "slotWaist": "腰",
       "slotLegs": "脚",
       "slotGloves": "手",
       "slotFeet": "足",
+      "slotFinger": "指",
+      "bagsTitle": "バッグと収納容量",
+      "bagsBody": "拾ったものはすべて一つの共有バッグに入り、バッグを装備することで容量を増やせます。バッグウィンドウには四つのバッグスロットがあり、共有バッグの中のバッグをクリックすると空いているスロットに装着でき、身に着けたバッグの分だけ収納が増えます。簡素なバッグは商人で安く買え、より大きなものは獣から手に入り、最も上等なものはダンジョンのボスから得られます。こうして装備の充実とともに、持ち運べる容量も広がっていきます。",
       "qualityTitle": "品質をひと目で",
       "qualityBody": "どのアイテムにも品質があり、その名前は品質に合わせて色付けされているので、ひと目で価値が読み取れます。最もありふれたものから最も値打ちのあるものまで、順に並べると次の通りです。",
       "qualityPoor": "ジャンク",
@@ -1863,11 +2631,13 @@ export const ja_JP: EnTranslations = {
       "qualityNote": "品質が高いほど、たいていステータスも良くなりますが、品質は目安であって決まりではありません。クラスとレベルにうまく合った一品は、より派手なものを上回ることもあります。",
       "upgradeTitle": "ギアは常に最新に",
       "upgradeBody": "古い一品を新たなアップグレードに替えるほうが、もう手に余る装備で完璧に立ち回るより効果があります。より良いものがドロップしたり、クエストで提示されたりしたら、受け取りましょう。良いアイテムを後のために取っておいてはいけません。",
-      "itemLevelBody": "2つの装備を手早く比べたいときは、オプションで「アイテムレベルを表示」をオンにしましょう。すると各武器や防具にアイテムレベルが表示されます。これは入手元をもとに、その装備のおおよその強さを一つの数値で示したものです。スロットが違っていても、どちらの方が大きく性能を底上げするか、ひと目で見分けられます。",
+      "itemLevelBody": "2つの装備を手早く比べたいときは、オプションで「アイテムレベルを表示」をオンにしましょう。敵やクエストなど、世界で勝ち取った装備にはアイテムレベルが表示されます。これは入手元をもとに、その装備のおおよその強さを一つの数値で示したものです。スロットが違っていても、どちらの方が大きく性能を底上げするか、ひと目で見分けられます。商人で売っている素の基本装備や初期装備のように、そうした入手元を持たない品にはアイテムレベルが表示されません。数値がないのは異常ではなく、正常なことです。",
       "sourcesTitle": "ギアの入手先",
-      "sourcesBody": "序盤のアップグレードのほとんどはクエスト報酬なので、稼ぎ作業よりクエストを終わらせるほうが得です。敵を倒すと装備を落とし、町の商人は手堅い基本装備を売り、プレイヤーマーケットでは他の冒険者から買えます。",
+      "sourcesBody": "序盤のアップグレードのほとんどはクエスト報酬なので、稼ぎ作業よりクエストを終わらせるほうが得です。敵は倒されると装備を落とし、町の商人は手堅い基本装備を売り、職人は採集した素材を身につけられる品へと変え、プレイヤーマーケットでは他の冒険者から買えます。そして頂の上では、二つの刻印通貨が、ほかでは見つからない装備を買わせてくれます。デルヴの番人のもとではデルヴの刻印、英雄補給係のもとでは英雄の証です。",
+      "soulboundTitle": "魂縛：あなただけのもの",
+      "soulboundBody": "価値ある品の多くは魂縛、つまり入手した瞬間からあなたのキャラクターに縛られています。魂縛のアイテムは取引にも郵送にも出せず、商人に売ることも、マーケットに出品することもできません。それはもうあなたの物語の一部であり、ほかの誰かが代わりに持ち運ぶことはできないのです。",
       "setsTitle": "セットとセットボーナス",
-      "setsBody": "最も希少な防具は、見た目も性能もひと揃いになるよう作られた、おそろいのシリーズで手に入ります。同じシリーズを一定数まとめて装備するとセットが発動し、各部位そのもののステータスに加えてボーナスが得られます。装備する部位が多いほど効果は強まります。これらはレベル上限近くの最も手強いグループコンテンツから入手でき、フルセットを目指すことは古典的なエンドゲームの目標になっています。",
+      "setsBody": "一部の防具は、見た目も戦いぶりもひと揃いになるよう仕立てられた、おそろいのシリーズで手に入ります。同じシリーズを一定数まとめて装備するとセットが目を覚まし、各部位そのもののステータスに加えてボーナスを与え、装備する部位が多いほど効果は強まります。そうしたシリーズのいくつかは、レベリング中の貴重なドロップとしても現れます。最も偉大なものはレベル上限近くの最も手強いグループコンテンツから手に入るので、フルセットを追い求めることは古典的なエンドゲームの目標になっています。",
       "consumablesTitle": "消耗品",
       "consumablesIntro": "一度きりで手早く効くアイテムもあります。安価な保険なので、いくつか手元に持っておきましょう。",
       "consumablesPotions": "ポーションは使った瞬間に、戦闘中でさえ体力やマナを回復してくれるので、プルがしくじったときの土壇場での救いになります。短いクールダウンを共有するため、ここぞという好機を一度見極めて使いましょう。",
@@ -1884,22 +2654,66 @@ export const ja_JP: EnTranslations = {
       "cosmeticsCache": "その一部は謎めいた装飾キャッシュから手に入ります。封じられた賞品で、開けると三段階の品質のいずれかが抽選され、それに見合った外見が与えられます。純粋に見た目のためのもので、中身であなたが強くなることはなく、ただ見栄えが良くなるだけです。",
       "cosmeticsApply": "キャラクター画面の外見の項目から、いま使う見た目を設定できます。アンロック済みのものなら、いつでも自由に切り替えられます。"
     },
+    "professions": {
+      "intro": "戦闘やクエストだけでなく、この世界は大地を耕し鍛冶場に立つあなたにも報いてくれます。原材料を採集し、十の製作職を通じてそれを装備や品物へと変え、それらの職が体現する十のアーキタイプのひとつとして自らのアイデンティティを築いていきます。",
+      "gatherTitle": "採集：採掘、伐採、薬草学",
+      "gatherIntro": "三つの採集職があり、世界から直接原材料を得られます。採掘は鉱脈から鉱石と石を掘り出し、伐採は木立から木材を切り出し、薬草学は野生に育つ薬草や植物を集めます。それぞれ別々に進行が管理されるため、ひとつに取り組んでも他の進行が遅れることはありません。何もかも初めてですか。イーストブルックのオデル親方が「万人のための生業」という短い用事を用意しており、最初の採集まで手ほどきしてくれます。",
+      "gatherWhatTitle": "資源ノード",
+      "gatherWhatBody": "鉱脈、木立、薬草の茂みは、渓谷と湿地に目に見える所有者のない設備として配置されています。近づいて操作すれば、そこにあるものを採集できます。一度採集したノードは、あなた自身が再び採集できるようになるまで回復に時間がかかりますが、他のプレイヤーを妨げることは決してありません。その間に別のプレイヤーが同じノードを採集することもできます。",
+      "gatherProficiencyTitle": "熟練度",
+      "gatherProficiencyBody": "採集に成功するたびに、その採集職の熟練度が上がり、キャラクターシートは各職を個別に記録します。練習を重ねることは決して進行の妨げにならず、常にそれを積み増すだけです。",
+      "gatherToolsTitle": "職の道具",
+      "gatherToolsBody": "各採集職の基本的な道具は商人から購入でき、より優れた道具は製作できます。今のところ、ノードで作業するのに道具は必要ありません。道具は、これから登場するより豊かなノードへの布石であり、そこでは上位ティアのつるはし、斧、鎌が入口となります。",
+      "harvestTitle": "狩りそのものを採取する",
+      "harvestBody": "採集はノードで終わらない。倒した獣の中には、通常の戦利品と並んで、死体から直接素材を採取できるものがいる：毛皮、牙、絹糸、さらに奇妙なものまで。一体の獲物につき採り手は一人：最初に採取した者がすべてを手にする。そして選択は毎回あなたのものだ：死体が差し出すすべてを剥ぎ取るか、ひとつの素材に集中してより上のグレードを受け取るか。採取はどのキャラクターにもでき、職も訓練も要らない。とりわけ見事な素材には、採取した者の名まで刻まれる。",
+      "focusTitle": "町のフォーカス",
+      "focusBody": "どの拠点の町にも、訪れる採り手のための「町のフォーカス」パネルがある。町の中に立ってミニマップの脇から開き、わずかなフォーカスポイントの持ち分を、気にかける素材の種類へ振り分けよう。フォーカスした素材は、以後どの死体からもワングレード上質に、そして少し多めに採れる。割り振りはどこを歩いてもキャラクターに付いてまわり、後で町を訪れれば、無料で何度でも組み直せる。",
+      "craftTitle": "十の製作職",
+      "craftIntro": "十の製作職は、採集した素材を完成した装備や品へと変える：防具製作、武器製作、宝石細工は原材料を装備品へと形作り、錬金術と工学は試行錯誤に基づき、料理、書記、エンチャントはそれぞれ他の職の産物に手を加え、裁縫と革細工は正確な型紙に沿って作業する。これらは合わせてひとつの輪を形成し、各職は二つの隣人と隣り合い、もう一つの職と向かい合う。",
+      "craftRingTitle": "専門職の輪",
+      "craftRingBody": "十の職は固定された輪の上に配置され、その輪上での位置が重要な意味を持つ：輪の上で隣り合う職同士は、対角にある職同士よりも多くの共通点を持つ。ひとつの職に打ち込むことは、孤立した技能を選ぶのではなく、関連する職の一族に加わるような感覚であるべきだ。",
+      "craftRecipesTitle": "レシピと材料",
+      "craftRecipesBody": "どのレシピにも、採集または購入して手に入れる特定の材料が必要です。最も単純なレシピは一般的な材料だけで作れ、最初から製作できるので、その職を手に入れた瞬間から作業を始められます。レシピ一覧はまだ充実の途中です。いくつかの職は最初のレシピを待っている状態で、職が育つにつれてさらに増えていきます。",
+      "craftHowTitle": "製作ウィンドウ",
+      "craftHowBody": "製作ウィンドウ（初期設定はTキー）を開くと、あなたが知っているすべてのレシピ、それぞれに必要なもの、そして手持ちの材料が確認できます。材料がそろっていれば、クリック一つで作業が完了します。一般的なレシピは世界のどこでも製作できます。一部の高度な道具レシピだけは、ハイウォッチの製作拠点に立って作る必要があります。",
+      "craftMasteryTitle": "技能と熟達",
+      "craftMasteryBody": "製作に成功するとその職の技能が上がりますが、技能がレシピを閉ざしてしまうことはありません。レシピを知っていて材料を持っていれば、いつでも挑戦できます。技能が高まって得られるのは品質です。熟練した手ほど、より上等な品を作り上げます。唯一の例外は組み合わせレシピで、これは解放される前に、その両方の職で腕前を証明しておくことを求めます。",
+      "craftComboTitle": "組み合わせレシピ",
+      "craftComboBody": "単独の職自身のレシピ一覧に加えて、この輪は隣り合う二つの職を同時に呼び出す組み合わせレシピにも対応しており、孤立した一職だけでなく、輪の上で隣接する職に投資したキャラクターに報います。製作者はその二つの職を自分自身で修めていなければならず、いずれの側も取引相手の技能で代わりを務めることはできません。",
+      "archetypeTitle": "十の生き方",
+      "archetypeIntro": "十の職はそれぞれ生き方も体現しており、その職に単に従事すること以上の、より広いアイデンティティを取り入れることができる。あなたの現在の生き方は一度にひとつだけであり、チェックリストではない：あなたは一つを担い、望むならば後で変更することもできる。",
+      "archetypeChooseTitle": "生き方を選ぶ",
+      "archetypeChooseBody": "生き方の宣言は、物語の一幕になる予定だ：そのアイデンティティへとあなたを正式に迎え入れるクエストである。その道はまだ建設中なので、今のところすべてのキャラクターは選択を前に残したまま世界を歩いており、その間、すべての製作はレアの品質ティアまで進められる。",
+      "archetypeSwitchTitle": "心変わり",
+      "archetypeSwitchBody": "宣言が終身刑になるわけでもない。予定されているのは、新しい職を取り上げる前に古い職へ「償い」をする繰り返し可能な行いで、切り替えるたびに償いは少しずつ重くなる。そのため選択は代償のないものにはならず、意味を持ち続ける。宣言そのものと同じく、これもまだ道の途上にある。",
+      "archetypeIdentityTitle": "あなたの生き方が意味するもの",
+      "archetypeIdentityBody": "あなたの現在の生き方は、あなたのキャラクターがこの世界で何者であるかについての表明であり、他者や世界があなたをどう呼ぶかに反映される。それに伴う具体的な報酬や認知はまだ調整中だ。システムが充実していくのを見守ってほしい。"
+    },
     "economy": {
       "intro": "コインは世界全体の潤滑油です。装備や物資、旅の道具を買い、プレイヤー間でやり取りされます。これらはすべて遊んでいるだけで身につくので、このページはお金がどこから来てどこへ行くのかを示す地図だと思ってください。",
       "coinTitle": "ゴールド、シルバー、カッパー",
       "coinBody": "お金は三種類のコインで成り立っています。100カッパーで1シルバー、100シルバーで1ゴールドになり、財布は一番小さなコインから満たされていきます。クエスト報酬、倒した敵からの戦利品、そして不要になったものを売ることで手に入ります。",
       "vendorsTitle": "ベンダーと取り扱い品",
       "vendorsBody": "町や前哨地には商人が点在し、それぞれ専門の商いを持っています。糧食商は食べ物と飲み物を、武器鍛冶や防具師は装備を、需品係は実用的な旅の道具を取り揃えています。歩み寄れば、その品揃えを見られます。",
-      "marksTitle": "もう一つの通貨: デルヴの刻印",
-      "marksBody": "貯められるのは所持金だけではありません。デルヴではデルヴの刻印が手に入ります。これはデルヴの番人のもとでのみ使える別建ての通貨で、仲間の強化や、ほかでは手に入らない装備に充てられます。所持金と混ざることはありません。",
+      "marksTitle": "刻印と証: コインの先にある通貨",
+      "marksBody": "貯められるのは所持金だけではありません。デルヴではデルヴの刻印が支払われます。デルヴの番人のもとでのみ使える通貨で、仲間の強化や、ほかでは見つからない装備に充てられます。ヒロイックダンジョンのランでは、最後のボスが英雄の証を残します。こちらはハイウォッチの英雄補給係のもとで、レルムのほかのどこにも売っていない装身具に使えます。どちらも所持金と混ざることはありません。",
+      "bankTitle": "銀行",
+      "bankBody": "各拠点の町には、この地の銀行商会である金張りの金庫の支店があります。そこの出納官に話しかけると自分の金庫が開きます。バッグとは別の私的な収納で、キャラクターが生涯持ち続けるものです。預けた品は、次にどの支店を訪れてもそのまま安全に待っています。",
+      "bankHow": "金庫を開いた状態でバッグの品をクリックすると預けられ、金庫の品をクリックすると引き出せます。金庫に入るのは品物だけで、コインは預けられず、クエストアイテムも手元に残ります。旅の途中でバッグがいっぱいになったら、製作素材をまとめて預けるボタンもあります。",
+      "bankSlots": "作りたての金庫は小さめですが、あなたとともに広がっていきます。出納官は追加の枠をコインで販売しており、値段は段階ごとに上がります。さらにオンラインでのプレイなら、メール認証やアカウント連携、友人の紹介などでボーナスの空きも手に入ります。",
       "buyingTitle": "売買",
-      "buyingBody": "商人のそばに立つと、その取引窓が開きます。お金が足りれば品揃えのどれでも買え、バッグの中のほとんどのものをコインに換えて売れます。間違って何かを売ってしまっても、商人は最近の売却品を取り置いてくれるので、買い戻すことができます。",
+      "buyingBody": "商人に話しかけて品物を見せてもらうことを選ぶと、その店が「閲覧」「売却」「買い戻し」の三つのタブで開きます。「閲覧」には店の在庫がすべて並び、お金が足りればどれでも買えます。「売却」にはバッグの中で商人が買い取ってくれるものが並び、独自の品質がロールされた品を売るときは先に確認を求められるので、値打ちのある一点が誤って手放されることはありません。手放して後悔したものがあっても、「買い戻し」タブには最近の売却品が取り置かれており、売ったときと同じコインで買い戻せます。",
       "junkTitle": "がらくたの整理",
-      "junkBody": "使い道のないドロップ品も、どの商人にでも売れます。バッグがいっぱいになる前に、町を通るたびに空にしましょう。本当に価値のないがらくたは、場所を空けるためにそのまま捨てることもできます。",
+      "junkBody": "使い道のないドロップ品も、どの商人にでも売れます。バッグがいっぱいになる前に、町を通るたびに空にしましょう。商人の「売却」タブには、粗悪品の半端物をまとめて一括で売れるワンクリックのボタンまで用意されています。本当に価値のないがらくたは、場所を空けるためにそのまま捨てることもできます。",
       "tradeTitle": "他のプレイヤーとの取引",
       "tradeBody": "近くに立っている相手とは、対面で直接取引できます。互いが共有の窓にアイテムとコインを入れ、双方が確認して初めて交換が成立するので、どちらも損をする心配はありません。友達にドロップ品を手渡したり、約束を取り決めたりする手軽な方法です。",
+      "mailTitle": "レイヴンポスト",
+      "mailBody": "どの拠点の町にも、ワタリガラスを彫った柱が立っています。レルムの手紙配達、レイヴンポストのメールボックスです。その前に立てば、オンラインの友人にも長くオフラインの相手にも、名前を指定してどのキャラクターへも手紙を書け、わずかな郵送料でコインや品物を手紙に添えられます。ワタリガラスが飛ぶには少し時間がかかります。届くと、封筒の印が受取人に何かが待っていると知らせてくれます。",
+      "mailHow": "受け取りも同じで、向きが逆になるだけです。どの柱の前でも手紙を読み、添えられたものを財布とバッグに納められます。手紙は永遠には待ってくれないので、ワタリガラスに見放される前に受け取りましょう。ポストがきっぱり断るものが二つあります。魂縛のアイテムとクエスト品は、あなた自身が運ぶか、まったく運ばれないかのどちらかです。そして、良い報告を終えたあとは柱に目を配りましょう。手紙をよこす発注者もいるのです。",
+      "dailyTitle": "デイリー報酬",
+      "dailyBody": "画面上の宝箱ボタンを押すと、デイリー報酬のウィンドウが開きます。毎日いくつかの課題が用意され、クエストを達成したり、灰の闘技場で戦ったり、ヴェイルカップの試合に勝ったりでき、さらに賞品ホイールを一日一回無料で回せます。これらはすべてその日の順位に向けたポイントになり、上位の獲得者たちは、任意のコミュニティトークンの保有者向けの賞金プールを分け合います。いずれもゲーム内で力を授けることはありません。ウィンドウにはその日のルールと参加資格が示され、リーダーボードが表示され、あなたの履歴も残されます。",
       "marketTitle": "ワールドマーケット",
-      "marketBody": "商人はワールドマーケットを運営しています。これは会うことのないかもしれない相手とも売買できる、プレイヤー主導の取引所です。商人に話しかけて開きましょう。商人は自らの品も常に在庫として出品しているので、他のプレイヤーが何も出していないときでも、いつでも買えるものがあります。",
+      "marketBody": "商人はワールドマーケットを運営しています。これは会うことのないかもしれない相手とも売買できる、プレイヤー主導の取引所です。イーストブルックの商人、あるいはハイウォッチの競売人ヴォスに話しかけると開けます。どちらの管理人も同じ一つの共有マーケットを扱っています。商人は自らの品も常に在庫として出品しているので、他のプレイヤーが何も出していないときでも、いつでも買えるものがあります。",
       "marketBrowse": "閲覧：出品を一覧でスクロールするか、名前で検索して売り物を探します。各出品には品物、出品者、そしてスタック全体の希望価格が表示されます。",
       "marketPost": "出品：バッグからスタックを選び、価格を決めて出品します。品物は誰かが買うまで商人が預かります。売れ残った出品はしばらくすると手元に戻り、気が変われば早めに引き取ることもできます。",
       "marketCollect": "受け取り：品物が売れると、その代金は商人のもとで待っています。戻ってコインを受け取りましょう。売れ残って戻ってきたものも一緒です。商人は成立した売却ごとにわずかな手数料を取ります。",
@@ -1924,7 +2738,7 @@ export const ja_JP: EnTranslations = {
       "chanLfg": "パーティ募集。",
       "chanLfgBody": "ダンジョンを回る仲間を探すための、任意参加のレルム全体チャンネル。タブを開いて参加しましょう。",
       "chanGuild": "ギルドとオフィサー。",
-      "chanGuildBody": "ギルド用のチャンネル。ギルドチャットは全メンバーに届き、オフィサーチャンネルはオフィサー専用です。",
+      "chanGuildBody": "ギルド用のチャンネル。ギルドチャットは全メンバーに届き、オフィサーチャンネルはオフィサーとギルドリーダー用です。",
       "partyHeading": "パーティを組む",
       "partyBody": "相手の名前を右クリックして招待を選ぶことで、他のプレイヤーを招待します。パーティは最大五人まで入れ、そのうち一人がリーダーです。",
       "partyCredit": "互いに近くにいるグループメンバーは討伐とクエストの達成判定を共有するので、一緒にクエストを進めれば速くなることはあっても遅くなることはありません。パーティはまた、チームとしてダンジョンへ踏み込む手段でもあります。",
@@ -1934,7 +2748,7 @@ export const ja_JP: EnTranslations = {
       "lootCoinTitle": "コイン。",
       "lootCoinBody": "討伐で得たお金は、それをルートした人のものになるか、パーティ全員に均等に分けられます。",
       "lootCommonTitle": "アイテム。",
-      "lootCommonBody": "ありふれたドロップ品はルートした人のものに、より良いドロップ品はロールにかけられて、全員に公平な機会が与えられます。",
+      "lootCommonBody": "ありふれたドロップ品は、パーティ内で順番に回ることも、ルートした人のものになることもあります。一方、より良いドロップ品はロールにかけられ、全員に公平な機会が与えられます。",
       "lootRollTitle": "ニード、グリード、パス。",
       "lootRollBody": "アイテムがロールにかけられると、対象となる各メンバーは、欲しければニード、余りなら受け取る程度ならグリード、辞退するならパスを選びます。最も高い出目が勝ちます。",
       "lootMasterTitle": "マスタールーター。",
@@ -1945,8 +2759,19 @@ export const ja_JP: EnTranslations = {
       "guildHeading": "ギルド",
       "guildBody": "ギルドは、セッションをまたいで所属できる、長く続くプレイヤーの集まりです。自分で作るか、招待を受けて参加でき、同時に所属できるギルドは一つです。メンバーはランクを持ちます。リーダー、オフィサー、そしてメンバーです。",
       "guildChatBody": "ギルドに所属すると、専用のギルドチャットチャンネルが使え、共有の名簿にギルドメイトが表示されるので、オンラインにはいつも見知った顔があります。",
+      "communityHeading": "コミュニティ全体への呼びかけ",
+      "communityBody": "チャット行を感嘆符で始めると、コミュニティコールを発信できます。!lfg でグループ募集、!wts と !wtb で売買、!recruit でギルド勧誘、!event でレイドや集会の告知、!help で助けを求められます。感嘆符を打った瞬間に、コールの一覧メニューが現れます。各コールは世界に発信されると同時にコミュニティのDiscordにも転送されるので、ログインしていないプレイヤーにも届きます。コミュニティコールはオンラインプレイの一部です。",
+      "slashHeading": "便利なスラッシュコマンド",
+      "slashBody": "日々使う便利なコマンドをいくつか覚えておくとよいでしょう。/w 名前 でウィスパーを送り、/r で最後に受け取ったウィスパーに返信します。/invite で誰かをパーティに誘い、/follow で仲間の後ろについて歩き、/roll でグループの全員に見えるサイコロを振り、/who でオンラインの相手を確認し、/afk で離席中を示します。全一覧はゲーム内で /help と打てば見られます。",
+      "emotesBody": "キャラクターは言葉を使わずに気持ちを伝えることもできます。/wave、/dance、/cheer、/bow といったエモートを打ち込みましょう。先に相手をターゲットしておけば、その相手に向けて行えます。あるいはXキーを長押しするとエモートホイールが開き、頭上に手早く感情を表せます。",
+      "calendarHeading": "イベントカレンダー",
+      "calendarBody": "Iキーを押すとイベントカレンダーが開きます。週次のレイド招集からフィエスタの夜まで、計画を立てる価値のあるレルムの予定が記されており、ギルドが日程を管理する場所でもあります。ギルドリーダーとオフィサーはここにイベントを登録でき、すべてのメンバーが同じページでそれを確認できます。",
+      "readyHeading": "準備確認",
+      "readyBody": "大きなプルの前に、グループリーダーは /ready と入力してみんなに問いかけられます。他の全員に準備完了か準備未完了かを尋ねる確認が表示され、全員が答えるか30秒が経つと、グループ全体にその集計だけがひとつ表示されます。誰かが名指しされることはありません。大事なのは数であって、犯人捜しではないのです。",
+      "markersHeading": "ターゲットマーカー",
+      "markersBody": "パーティ中は、敵対的なクリーチャーを右クリックすると、8種類のレイドシンボルのひとつをその頭上に冠せられます。マークは誰でも付けられ、各シンボルが付くのは一度にひとつのターゲットだけで、同じターゲットに同じシンボルを付け直すと外れます。討伐順も、群衆制御の割り当ても、ただの「まずこいつ」も、文章よりシンボルの方が速く伝わります。",
       "etiquetteHeading": "グループの礼儀",
-      "etiquetteBody": "グループを組むのは選択であって、義務ではありません。参加したら挨拶し、ニードを選ぶのは実際に使う装備だけにし、抜ける前にはグループに一言。ちょっとした礼儀が大きな違いを生み、たいていのプレイヤーは仲間がいることを喜びます。"
+      "etiquetteBody": "グループを組むのは選択であって、義務ではありません。参加したら挨拶し、ニードを選ぶのは実際に使う装備だけにし、抜ける前にはグループに一言添えましょう。ちょっとした礼儀が大きな違いを生み、たいていのプレイヤーは仲間がいることを喜びます。モデレーターが秩序を保っており、他の人がゲームを楽しむのを妨げ続けるプレイヤーは、モデレーターが出してくれるまで牢に入れられることがあります。"
     },
     "stats": {
       "intro": "あなたのキャラクターは、ひと握りの能力値で表されます。うまく遊ぶためにそれらを覚える必要は決してありませんが、それぞれがおおよそ何をするか知っておくと、キャラクターシートを読み、適切なアップグレードを選ぶのに役立ちます。",
@@ -1961,17 +2786,19 @@ export const ja_JP: EnTranslations = {
       "intTitle": "知力",
       "intBody": "知力はスペルキャスターのマナのプールを増やし、スペルパワーを高めて呪文の威力を上げ、呪文のクリティカル率を高めます。マナで詠唱するクラスには重要ですが、レイジやエナジーのクラスにはほとんど効きません。",
       "spiTitle": "精神力",
-      "spiBody": "精神力は、戦闘外でキャスターのマナがどれだけ速く戻るかを左右します。知力と同じく、マナのクラスに役立ち、他のクラスにはほとんど意味がありません。",
+      "spiBody": "精神力は、キャスターが詠唱を止めているあいだ、つまり戦闘の合間のほとんどの時間に、マナがどれだけ速く戻るかを左右します。知力と同じく、マナのクラスに役立ち、他のクラスにはほとんど意味がありません。",
       "armorTitle": "アーマー",
       "armorBody": "アーマーは受ける物理ダメージを軽減します。その多くは身につけているものから得られ、重装のクラスほどはるかに多くを備えます。自分のレベルに近い相手に対してアーマーが多いほど、その一撃一撃が柔らかく当たります。",
       "apTitle": "アタックパワー",
-      "apBody": "アタックパワーは、武器がどれだけ強く打つかを表します。あなたの主要能力値がこれを養い、より強い武器やギアがさらに引き上げるので、アップグレードがダメージの本当の跳ね上がりになるのです。",
+      "apBody": "アタックパワーは、武器がどれだけ強く打つかを表します。あなたの主要能力値がこれを養い、それらの能力値を備えたギアがさらに引き上げます。一方でより強い武器は直接ダメージを高めるので、アップグレードがダメージの本当の跳ね上がりになるのです。",
       "spTitle": "スペルパワー",
       "spBody": "スペルパワーは、術者にとってのアタックパワーにあたるステータスで、呪文で与えるダメージを高めます。知力によって伸び、術者向けの装備やバフでさらに上乗せされます。近接戦士がアタックパワーを気にかけるように、術者はスペルパワーに目を配ります。",
       "critTitle": "クリティカル",
-      "critBody": "クリティカル率は、攻撃が追加ダメージで当たる頻度です。誰もがわずかな基礎確率から始まり、敏捷性（さらに一部のタレントやギア）がそれを積み上げます。",
+      "critBody": "クリティカル率は、攻撃が追加ダメージ付きで当たる頻度です。誰もがわずかな基礎確率から始まり、敏捷性（さらに一部のタレントやギア）がそれを積み上げます。キャラクターシートには、確率そのものと、ギアがそこへ寄与するクリティカルレーティングの両方が表示されます。",
       "dodgeTitle": "回避",
       "dodgeBody": "回避は、向かってくる近接攻撃を丸ごとかわす確率です。わずかな基礎確率から始まり、敏捷性がそれを上げるので、すばしこいクラスほど多くの一撃をかわします。",
+      "hasteTitle": "ヘイスト",
+      "hasteBody": "ヘイストは、あなたのすることすべてを速める一つのステータスです。近接の振り、遠隔の射撃、呪文の詠唱がまとめて速くなります。主にギア、とりわけ防具のセットボーナスから得られ、一部のアビリティも一時的なヘイストの高まりを与えます。キャラクターシートにはヘイストレーティングとして表示されます。",
       "dpsTitle": "1秒あたりのダメージ",
       "dpsBody": "キャラクターシートには、1秒あたりのダメージの目安も表示されます。これは武器、その振りの速さ、そしてアタックパワーを合わせて、時間あたりにどれだけのダメージになるかをおおまかに示したものです。2つの武器をひと目で比べるのに手軽な指標です。",
       "sheetHeading": "キャラクターシートの読み方",
@@ -1982,16 +2809,16 @@ export const ja_JP: EnTranslations = {
     "progression": {
       "intro": "あらゆる戦い、クエスト、北へ進む一歩が、あなたの英雄を強くします。ここでは、レベリングの仕組みと、頂点に達した後も成長を続けさせるものを紹介します。",
       "xpTitle": "経験値の稼ぎ方",
-      "xpBody": "経験値はクエストの達成と敵の討伐で得られます。クエストが断然多くを与えてくれるので、クエストの道筋をたどるのが最も早く登る方法です。道すがら何かを倒すことが、残りを埋めてくれます。",
+      "xpBody": "経験値は、クエストの達成、敵の討伐、そしてデルヴの攻略で得られます。クエストが断然多くを与えてくれるので、クエストの道筋をたどるのが最も早く登る方法です。道すがらの討伐やデルヴの攻略が、残りを埋めてくれます。",
       "capBody": "レベルが上がるたびに頑丈になり、新たなアビリティが手に入ります。それはレベル上限{cap}まで続きます。",
       "journeyTitle": "北への旅路",
       "journeyBody": "世界は一続きの大地で、南から北へと三つのゾーンが並び、それぞれがレベルの一段上にあたります。緑の谷から始まり、湿地を突き進み、寒く高い峰々で終わります。クエストの道筋をたどれば、大地があなたを次から次へと運んでくれます。",
       "bandLabel": "レベル{min}から{max}",
       "restedTitle": "休息経験値",
-      "restedBody": "宿屋のような安全な場所で、戦闘の外で休めば、座っている間にキャラクターは休息経験値を蓄えます。次に外へ出て戦うとき、その蓄えが尽きるまで討伐に追加のボーナスがかかります。宿屋での一休みは決して無駄な時間ではなく、次のレベリングの区間を早めてくれます。",
+      "restedBody": "宿屋に入り、戦闘の外にいれば、待っている間にキャラクターは休息経験値を蓄えます。どの町にも宿屋があります。次に外へ出て戦うとき、その蓄えが尽きるまで討伐に追加のボーナスがかかります。宿屋での一休みは決して無駄な時間ではなく、次のレベリングの区間を早めてくれます。",
       "capTitle": "レベル{cap}に到達する",
-      "capJourneyBody": "レベル{cap}が上限、レベリングの終わりですが、成長の終わりではありません。そこからはダンジョンやレイドに挑み、より良いギアを追い、アリーナで己を試します。",
-      "prestigeBody": "経験値は上限に達した後も加算され続けます。それは見た目だけの仮想レベルを養うので、経験値バーは上がり続け、そして長期的なプレステージランクは栄誉のために得ることができます。生涯経験値の大きな節目を越えると、キャラクターシートに表示される装飾用の称号やネームプレートの縁取りも解放されます。そのすべては完全に任意のもので、力を授けることは決してなく、ただあなたが歩んできた道のりの証です。",
+      "capJourneyBody": "レベル{cap}が上限、レベリングの終わりですが、成長の終わりではありません。そこからはダンジョンとレイドにノーマルとヒロイックで挑み、ワールドボスが現れれば立ち向かい、より良いギアを追い、アリーナで己を試します。",
+      "prestigeBody": "経験値は上限に達した後も加算され続けます。それは見た目だけの仮想レベルを養うので、経験値バーは上がり続けます。さらに、そこに到達すればキャラクターシートから受け取れる長期的なプレステージランクにもつながります。生涯経験値の大きな節目を越えると、功績の書に功績が刻まれ、キャラクターシートに表示される装飾用の称号やネームプレートの縁取りも得られます。そのすべては完全に任意のもので、力を授けることは決してなく、ただあなたが歩んできた道のりの証です。",
       "noRush": "急ぐ必要はありません。世界は自分のペースで楽しむためにあります。気の向くままに歩き、目に留まったクエストを受け、その道すがら英雄を育てていきましょう。"
     },
     "placeholder": {
@@ -3000,6 +3827,8 @@ export const ja_JP: EnTranslations = {
     "title": "デスクトップランチャーのダウンロード",
     "desc": "最適化されたパフォーマンスと全画面表示でのプレイのために、スタンドアロン版ランチャーを入手してください。",
     "macCta": "macOS版をダウンロード",
+    "linuxCta": "Linux版をダウンロード",
+    "linuxHint": "AppImage形式です。実行権限を付けてそのまま起動でき、インストールは不要です。",
     "windowsPending": "Windows版は準備中です。"
   },
   "comingSoon": {
@@ -3299,6 +4128,35 @@ export const ja_JP: EnTranslations = {
     "chat": "チャットを開く"
   },
   "sim": {
+    "rift": {
+      "allUnstable": "すべての裂け目が今は不安定だ。しばらくしてからもう一度試そう。",
+      "enterFloor": "裂け目をくぐり、{name}へ足を踏み入れた。",
+      "descendFloor": "{name}のさらに深くへ降りていく。",
+      "stepBack": "裂け目を通って元の場所へ戻った。",
+      "pylonLit": "ルーンの尖塔が光を放った（{lit}/{total}）。",
+      "wayDownOpens": "下層への道が裂け開いた。",
+      "exitOpens": "裂け目が震える。倒れた敵の後ろに帰り道が裂け開いた。",
+      "portalOpens": "{zone}に{tier}ランクの裂け目が裂け開いた！",
+      "portalSealed": "{zone}の{tier}ランクの裂け目が封印された。",
+      "portalCollapses": "{zone}の{tier}ランクの裂け目が崩れ落ちた。",
+      "levelGate": "この裂け目に入れるのはレベル{level}以上の冒険者だけだ。",
+      "iceGoalLit": "霜の紋章が燃え上がる。道が動き出す。",
+      "socketsShut": "台座が音を立てて閉じる。道が動き出す。",
+      "seqProgress": "ルーンが順に応える（{step}/{total}）。",
+      "seqReset": "ルーンがすべて暗くなる。最初からやり直せ。",
+      "gateOpen": "門が音を立てて開いた。",
+      "orbSealed": "宝珠は下層の儀式によって封じられている。",
+      "orbWakes": "五芒星の炎が消えた。祭壇で何かが目覚める。",
+      "orbOpensGate": "血の宝珠が輝く。神殿の門が音を立てて開いた。",
+      "alreadyCleared": "このリフトはすでに {names} が攻略しました。",
+      "raceLost": "このリフトはすでに {names} が攻略しました。挑戦は終了します。",
+      "raceWorldWin": "{names} が {seconds}秒で{tier}ランク・リフトレースに勝利！",
+      "raceWinBanner": "リフトレース勝利 — {seconds}秒",
+      "raceLostBanner": "リフト攻略済み",
+      "forgeUpgraded": "{name} のリフト強化が完了しました。",
+      "forgeEnchanted": "{name} のリフト付与が完了しました。",
+      "forgeSocketed": "{name} にリフトの宝石をはめ込みました。"
+    },
     "delve": {
       "cannotEnterNow": "今はデルヴに入れない。",
       "leaveDungeonFirst": "まずダンジョンから出よ。",
@@ -3447,6 +4305,10 @@ export const ja_JP: EnTranslations = {
       "hard": "極上の戦利品"
     },
     "closeAria": "閉じる"
+  },
+  "heroicShop": {
+    "balance": "英雄の証: {count}",
+    "buyAria": "英雄の証{marks}個で{item}を購入"
   },
   "delveUi": {
     "board": {
@@ -3642,6 +4504,45 @@ export const ja_JP: EnTranslations = {
     },
     "chest": {
       "flavor": "死者たちが、譲れるものを差し出した。"
+    }
+  },
+  "yumi": {
+    "bracket3": "Yumi 3v3",
+    "bracket5": "Yumi 5v5",
+    "enterQueue": "Protect Yumiに参加！",
+    "queue": {
+      "join": "Protect Yumiのキューに参加しました。使い魔を守りましょう…",
+      "leave": "Protect Yumiのキューを離れました。",
+      "teamLeave": "チームがProtect Yumiのキューを離れました。"
+    },
+    "error": {
+      "partyTooBig3": "Protect Yumi 3v3のパーティは最大3人までです。",
+      "partyTooBig5": "Protect Yumi 5v5のパーティは最大5人までです。"
+    },
+    "log": {
+      "start": "Protect Yumi！自分の使い魔を守り、敵の使い魔を狙え。"
+    },
+    "hud": {
+      "title": "PROTECT YUMI",
+      "getReady": "準備して…",
+      "teleportIn": "Yumiの転移まで{s}秒",
+      "suddenDeath": "サドンデス",
+      "yourYumi": "自軍のYumi",
+      "enemyYumi": "敵軍のYumi",
+      "aria": "自軍のYumiは体力{mine}/{max}、敵軍のYumiは{theirs}。",
+      "collapse": "Protect Yumiのバーを折りたたむ",
+      "expand": "Protect Yumiのバーを展開する"
+    },
+    "respawn": {
+      "title": "ダウン！"
+    },
+    "banner": {
+      "sudden": "サドンデス！Yumiはもう転移しない！",
+      "teleport": "Yumiが転移した！"
+    },
+    "end": {
+      "win": "勝利！Yumiは無事だ！",
+      "loss": "敗北！Yumiが倒れてしまった。"
     }
   },
   "fiesta": {
@@ -3840,7 +4741,18 @@ export const ja_JP: EnTranslations = {
     "rendererFailed": "レンダラーを開始できません。再読み込みしてください。{error}",
     "enterTimeout": "世界に入れませんでした。接続がタイムアウトしました。ゲームサーバーは動作していますか？",
     "connectionLost": "サーバーとの接続が切断されました。",
-    "connectionRejected": "サーバーが接続を閉じました。"
+    "reconnecting": "サーバーとの接続が切断されました。再接続しています...",
+    "connectionRejected": "サーバーが接続を閉じました。",
+    "tips": {
+      "classes": "ヒント：9つのクラスはそれぞれ遊び方が異なります。決める前にいくつか試してみましょう。",
+      "talents": "ヒント：非戦闘中ならいつでも特性をリセットできるので、最初の選択が失敗になることはありません。",
+      "dungeons": "ヒント：通常難易度の装備が整ったら、より歯応えのあるヒロイック難易度のダンジョンに挑戦してみましょう。",
+      "market": "ヒント：ワールドマーケットではサーバー中のプレイヤーと売買ができます。",
+      "guilds": "ヒント：ギルドに加入すると専用のチャットチャンネルとギルドメンバーの名簿が使えるようになります。",
+      "professions": "ヒント：採集や製作の生産系スキルは、戦闘クラスと並行して育てられます。",
+      "loadouts": "ヒント：複数の特性ロードアウトを保存しておけば、ポイントを使い直さずにビルドを切り替えられます。",
+      "pvp": "ヒント：他のプレイヤーに友好的な決闘を申し込むか、灰塵のコロシアムに参加してビルドを試してみましょう。"
+    }
   },
   "errors": {
     "nothingInteract": "操作できるものがありません。",
@@ -3872,9 +4784,12 @@ export const ja_JP: EnTranslations = {
       "webLoginOnly": "ログインはゲームクライアントからのみ可能です。",
       "accountSuspended": "このアカウントは {date} まで停止されています。",
       "alreadyInWorld": "キャラクターは既に世界にいます。",
+      "accountSessionLimit": "このアカウントでは既に多くのキャラクターが世界にいます。",
       "takenOver": "あなたのキャラクターは別のセッションに引き継がれました。",
       "renameBeforeEntering": "このキャラクターは世界に入る前に名前変更が必要です。",
-      "renameNotPermitted": "このキャラクターの名前変更は許可されていません。"
+      "renameNotPermitted": "このキャラクターの名前変更は許可されていません。",
+      "unsupportedMediaType": "サポートされていないリクエスト形式です。",
+      "crossSiteOrigin": "セキュリティ上の理由によりリクエストがブロックされました。"
     }
   },
   "desktop": {
@@ -4047,6 +4962,8 @@ export const ja_JP: EnTranslations = {
       "secondsRemaining": "残り {seconds} 秒",
       "enteringZone": "{zone}に入りました。",
       "welcomeZone": "{zone}へようこそ！",
+      "riftLabel": "{name}",
+      "riftLabelRanked": "{name} ({rank})",
       "levelBanner": "レベル {level}！",
       "levelLog": "レベル {level}になりました！",
       "xpGain": "{amount}の経験値を獲得しました。",
@@ -4086,6 +5003,7 @@ export const ja_JP: EnTranslations = {
       "mobileSocial": "ソーシャル",
       "mobileArena": "アリーナ",
       "mobileMenu": "メニュー",
+      "mobileSettings": "設定",
       "mobileUse": "使用",
       "mobileMeters": "メーター",
       "mobileMap": "マップ",
@@ -4634,6 +5552,7 @@ export const ja_JP: EnTranslations = {
       "offGlobalCooldown": "グローバルクールダウン外",
       "friendlyTarget": "味方対象",
       "enemyTarget": "敵対象",
+      "selfOnly": "自分のみ",
       "damageRange": "{min}から{max}",
       "finisherDamage": "{base}にコンボポイントごと{perCombo}"
     },
@@ -4736,12 +5655,14 @@ export const ja_JP: EnTranslations = {
     "slots": {
       "mainhand": "メインハンド",
       "helmet": "頭",
+      "neck": "首",
       "shoulder": "肩",
       "chest": "胸",
       "waist": "腰",
       "legs": "脚",
       "gloves": "手",
-      "feet": "足"
+      "feet": "足",
+      "ring": "指"
     },
     "quality": {
       "poor": "粗悪",
@@ -4940,30 +5861,71 @@ export const ja_JP: EnTranslations = {
       "needAria": "{item}を必要",
       "greedAria": "{item}を強欲",
       "passAria": "{item}をパス",
-      "everyonePassed": "全員が{item}をパスしました。"
+      "everyonePassed": "全員が{item}をパスしました。",
+      "rolled": "{answered}/{total} がロール済み"
     }
   },
   "entities": {
     "abilities": {
+      "sport_kick": {
+        "name": "キック",
+        "description": "狙った地点へボールをグラウンダーで蹴り出す。"
+      },
+      "sport_shoot": {
+        "name": "シュート",
+        "description": "押し続けて力をため、離してシュート。力を入れすぎると枠を越える。"
+      },
+      "sport_pass": {
+        "name": "パス",
+        "description": "狙った味方へ強めのパスを転がし、走り込みに合わせて送る。"
+      },
+      "sport_boot": {
+        "name": "ビッグブート",
+        "description": "狙った地点への高く長いキック。観客が沸き立つ。"
+      },
+      "sport_hoof": {
+        "name": "クリアリング",
+        "description": "ボールを低く強くフィールドの先へ叩き込む。"
+      },
+      "sport_punt": {
+        "name": "ロングパント",
+        "description": "キーパーのパントキック。高く、遠くへ。"
+      },
+      "sport_feint": {
+        "name": "フェイント",
+        "description": "狙った地点への素早いサイドステップ。"
+      },
+      "sport_dive": {
+        "name": "ダイブ",
+        "description": "狙った地点へ身を投げ出す。横切るボールは体に吸い付く。"
+      },
+      "sport_shoulder": {
+        "name": "ショルダータックル",
+        "description": "収穫休戦の掟にかなった正々堂々の肩当たり。相手をボールから弾き飛ばす。"
+      },
+      "sport_second_wind": {
+        "name": "フレッシュレッグス",
+        "description": "脚を取り戻す:4秒間、移動速度が50%上昇する。"
+      },
       "flamestrike": {
         "name": "フレイムストライク",
         "description": "対象地点に炎の爆発を呼び出し、爆発に巻き込まれた敵に{damage}の火炎ダメージを与えます。"
       },
       "rain_of_fire": {
         "name": "火炎の雨",
-        "description": "対象地点に火の雨を降らせ、敵に{damage}の火炎ダメージを与えます。"
+        "description": "対象地点に4秒間、火の雨を降らせ、敵を焼いて毎秒{damage}の火炎ダメージを与えます。"
       },
       "volley": {
         "name": "乱射",
-        "description": "対象地点に矢を降らせ、範囲内の敵に{damage}のダメージを与えます。"
+        "description": "対象地点に3秒間、矢を降らせ、範囲内の敵に0.5秒ごとに{damage}のダメージを与えます。"
       },
       "hurricane": {
         "name": "ハリケーン",
-        "description": "対象地点にハリケーンを呼び起こし、敵に{damage}の自然ダメージを与えます。"
+        "description": "対象地点に6秒間、ハリケーンを呼び起こし、敵を打ちのめして毎秒{damage}の自然ダメージを与えます。"
       },
       "earthquake": {
         "name": "地震",
-        "description": "対象地点を揺るがし、敵に{damage}の自然ダメージを与えます。"
+        "description": "対象地点を6秒間揺るがし、敵を打ちのめして1.5秒ごとに{damage}の自然ダメージを与えます。"
       },
       "heroic_strike": {
         "name": "略奪者の一撃",
@@ -4971,15 +5933,15 @@ export const ja_JP: EnTranslations = {
       },
       "battle_shout": {
         "name": "鉄の咆哮",
-        "description": "2分間、攻撃力が20増加します。"
+        "description": "2分間、攻撃力が{buff}増加します。"
       },
       "commanding_shout": {
         "name": "鼓舞の号令",
-        "description": "2分間、スタミナが6増加します。"
+        "description": "2分間、スタミナが{buff}増加します。"
       },
       "demoralizing_shout": {
         "name": "戦慄の遠吠え",
-        "description": "恐ろしい雄叫びを上げ、30秒間、周囲の敵すべての攻撃力を30低下させます。"
+        "description": "恐ろしい雄叫びを上げ、30秒間、周囲の敵すべての攻撃力を{buff}低下させます。"
       },
       "charge": {
         "name": "突撃",
@@ -4987,7 +5949,7 @@ export const ja_JP: EnTranslations = {
       },
       "rend": {
         "name": "深き裂傷",
-        "description": "対象を負傷させ、9秒間で {damage} の出血ダメージを与えます。"
+        "description": "対象を負傷させ、{duration}秒かけて{damage}の出血ダメージを与えます。"
       },
       "thunder_clap": {
         "name": "震撼の一撃",
@@ -4995,7 +5957,7 @@ export const ja_JP: EnTranslations = {
       },
       "hamstring": {
         "name": "足萎えの斬撃",
-        "description": "敵を痛めつけて5ダメージを与え、15秒間、移動速度を50%低下させます。"
+        "description": "敵を痛めつけて{damage}ダメージを与え、15秒間、移動速度を50%低下させます。"
       },
       "bloodrage": {
         "name": "血の代償",
@@ -5003,7 +5965,7 @@ export const ja_JP: EnTranslations = {
       },
       "overpower": {
         "name": "血染めの手",
-        "description": "武器ダメージ +5 の即時攻撃です。対象が回避した後にのみ使用できます。回避されません。"
+        "description": "武器ダメージに{damage}を加えた即時攻撃です。対象が回避した後にのみ使用できます。回避されません。"
       },
       "execute": {
         "name": "早すぎる墓",
@@ -5023,7 +5985,7 @@ export const ja_JP: EnTranslations = {
       },
       "sunder_armor": {
         "name": "装甲切断",
-        "description": "対象のアーマーを破壊し、1回ごとに {damage} 低下させます。最大5回まで重なります。大量の脅威を生成します。"
+        "description": "対象のアーマーを破壊し、1回ごとに{damage}%低下させます。最大5回まで重なります。大量の脅威を生成します。"
       },
       "taunt": {
         "name": "挑発",
@@ -5035,11 +5997,11 @@ export const ja_JP: EnTranslations = {
       },
       "frost_armor": {
         "name": "白霜の外套",
-        "description": "霜で身を包み、30分間アーマーを30増加させます。"
+        "description": "霜で身を包み、30分間アーマーを{buff}増加させます。"
       },
       "arcane_intellect": {
         "name": "エーテルの叡智",
-        "description": "30分間、知力が2増加します。"
+        "description": "30分間、知力が{buff}増加します。"
       },
       "frostbolt": {
         "name": "霧氷の槍",
@@ -5063,7 +6025,7 @@ export const ja_JP: EnTranslations = {
       },
       "polymorph": {
         "name": "呪化",
-        "description": "敵を最大15秒間ヒキガエルに変えます。ヒキガエルは歩き回り、急速に回復します。ダメージを受けると効果が切れます。獣と人型のみ。"
+        "description": "敵を最大{duration}秒間ヒキガエルに変えます。ヒキガエルは歩き回り、急速に回復します。ダメージを受けると効果が切れます。獣と人型のみ。"
       },
       "frost_nova": {
         "name": "氷縛",
@@ -5083,7 +6045,7 @@ export const ja_JP: EnTranslations = {
       },
       "ice_barrier": {
         "name": "氷の帳",
-        "description": "氷で身を守り、60秒間130ダメージを吸収します。"
+        "description": "氷で身を守り、60秒間{damage}ダメージを吸収します。"
       },
       "sinister_strike": {
         "name": "邪悪な斬撃",
@@ -5091,7 +6053,7 @@ export const ja_JP: EnTranslations = {
       },
       "eviscerate": {
         "name": "永の眠り",
-        "description": "コンボポイントに応じてダメージを与えるフィニッシュムーブです。"
+        "description": "{damage}を与えるフィニッシュムーブです。"
       },
       "backstab": {
         "name": "卑劣な突き",
@@ -5099,7 +6061,7 @@ export const ja_JP: EnTranslations = {
       },
       "gouge": {
         "name": "目潰し",
-        "description": "対象を打って4秒間行動不能にします。ダメージを受けると効果が切れます。コンボポイントを1獲得します。"
+        "description": "対象を打って{damage}ダメージを与え、4秒間行動不能にします。ダメージを受けると効果が切れます。コンボポイントを1獲得します。"
       },
       "evasion": {
         "name": "幻足",
@@ -5131,11 +6093,11 @@ export const ja_JP: EnTranslations = {
       },
       "garrote": {
         "name": "喉絞めの弦",
-        "description": "敵を絞め、即座にダメージを与えるとともに、18秒かけて{damage}の出血ダメージを与えます。ステルス状態でなければなりません。コンボポイントを1獲得します。"
+        "description": "敵を絞め、即座に{damage}ダメージを与えるとともに、18秒かけて{overTime}の出血ダメージを与えます。ステルス状態でなければなりません。コンボポイントを1獲得します。"
       },
       "cheap_shot": {
         "name": "みぞおち強打",
-        "description": "対象を打って4秒間スタンさせます。ステルス状態でなければなりません。コンボポイントを2獲得します。"
+        "description": "対象を打って{damage}ダメージを与え、4秒間スタンさせます。ステルス状態でなければなりません。コンボポイントを2獲得します。"
       },
       "sap": {
         "name": "サップ",
@@ -5143,11 +6105,11 @@ export const ja_JP: EnTranslations = {
       },
       "crippling_poison": {
         "name": "鉛の毒",
-        "description": "対象を鉛の毒で攻撃し、{damage}の自然ダメージを与えるとともに、移動速度を12秒間50%低下させます。"
+        "description": "対象を鉛の毒で攻撃し、{damage}の自然ダメージを与えるとともに、12秒間、移動速度を50%低下させます。"
       },
       "expose_armor": {
         "name": "装甲破り",
-        "description": "対象の防御を崩し、アーマーを低下させるフィニッシュムーブです。消費したコンボポイントが多いほど、より深く切り込みます。"
+        "description": "対象の防御を崩し、30秒間アーマーを{damage}低下させるフィニッシュムーブです。"
       },
       "rupture": {
         "name": "止まらぬ出血",
@@ -5171,7 +6133,7 @@ export const ja_JP: EnTranslations = {
       },
       "seal_of_righteousness": {
         "name": "誓いの烙印",
-        "description": "30秒間、聖なる力で満たされ、近接攻撃ごとに4の追加神聖ダメージを与えます。ヴァーディクトで解放します。"
+        "description": "30秒間、聖なる力で満たされ、近接攻撃ごとに{damage}の追加神聖ダメージを与えます。ヴァーディクトで解放します。"
       },
       "holy_light": {
         "name": "癒しの光",
@@ -5179,7 +6141,7 @@ export const ja_JP: EnTranslations = {
       },
       "devotion_aura": {
         "name": "不動のオーラ",
-        "description": "30分間、アーマーが40増加します。"
+        "description": "30分間、アーマーが{buff}増加します。"
       },
       "judgement": {
         "name": "ヴァーディクト",
@@ -5187,19 +6149,19 @@ export const ja_JP: EnTranslations = {
       },
       "blessing_of_might": {
         "name": "鉄の誓い",
-        "description": "味方対象に祝福を与え、5分間、攻撃力を15増加させます。"
+        "description": "味方対象に祝福を与え、5分間、攻撃力を{buff}増加させます。"
       },
       "divine_protection": {
         "name": "信仰の守り",
-        "description": "守りの結界が10秒間50ダメージを吸収します。"
+        "description": "守りの結界が10秒間{damage}ダメージを吸収します。"
       },
       "hammer_of_justice": {
         "name": "断裂の裁き槌",
-        "description": "対象を3秒間スタンさせます。"
+        "description": "対象を{duration}秒間スタンさせます。"
       },
       "lay_on_hands": {
         "name": "最後の秘跡",
-        "description": "大きな癒やしの波で体力を250回復します。クールダウン10分。"
+        "description": "大きな癒やしの波で体力を{damage}回復します。クールダウン10分。"
       },
       "flash_of_light": {
         "name": "光の癒し",
@@ -5211,7 +6173,7 @@ export const ja_JP: EnTranslations = {
       },
       "consecration": {
         "name": "聖なる大地",
-        "description": "足元の地面を聖別し、周囲の敵を焼いて {damage} の神聖ダメージを与えます。"
+        "description": "足元の地面を聖別し、10秒間、周囲の敵を焼いて2秒ごとに{damage}の神聖ダメージを与えます。"
       },
       "righteous_fury": {
         "name": "バーニングオース",
@@ -5231,11 +6193,11 @@ export const ja_JP: EnTranslations = {
       },
       "raptor_strike": {
         "name": "腹裂きの一撃",
-        "description": "強力な近接攻撃でダメージを5増加させます。次のスイングで発動します。"
+        "description": "強力な近接攻撃でダメージを{damage}増加させます。次のスイングで発動します。"
       },
       "aspect_of_the_hawk": {
         "name": "猛禽の相",
-        "description": "猛禽の相をまとい、30分間、攻撃力を20増加させます。"
+        "description": "猛禽の相をまとい、30分間、攻撃力を{buff}増加させます。"
       },
       "serpent_sting": {
         "name": "毒の棘",
@@ -5247,15 +6209,15 @@ export const ja_JP: EnTranslations = {
       },
       "concussive_shot": {
         "name": "動揺の射撃",
-        "description": "対象を朦朧とさせ、4秒間、移動速度を50%低下させます。"
+        "description": "対象を朦朧とさせて{damage}ダメージを与え、4秒間、移動速度を50%低下させます。"
       },
       "mongoose_bite": {
         "name": "反撃の牙",
-        "description": "対象が回避した後に反撃し、武器ダメージに12を加えたダメージを与えます。回避されません。"
+        "description": "対象が回避した後に反撃し、武器ダメージに{damage}を加えたダメージを与えます。回避されません。"
       },
       "wing_clip": {
         "name": "足枷斬り",
-        "description": "傷を負わせ、10秒間、敵の移動速度を40%低下させます。"
+        "description": "傷を負わせて{damage}ダメージを与え、10秒間、敵の移動速度を40%低下させます。"
       },
       "aspect_of_the_monkey": {
         "name": "テンの相",
@@ -5283,7 +6245,7 @@ export const ja_JP: EnTranslations = {
       },
       "power_word_fortitude": {
         "name": "決意の連祷",
-        "description": "30分間、対象のスタミナを3増加させます。"
+        "description": "30分間、対象のスタミナを{buff}増加させます。"
       },
       "shadow_word_pain": {
         "name": "腐朽の葬送歌",
@@ -5291,7 +6253,7 @@ export const ja_JP: EnTranslations = {
       },
       "power_word_shield": {
         "name": "守りの聖歌",
-        "description": "対象を守り、30秒間48ダメージを吸収します。"
+        "description": "対象を守り、30秒間{damage}ダメージを吸収します。"
       },
       "renew": {
         "name": "留まる恩寵",
@@ -5319,7 +6281,7 @@ export const ja_JP: EnTranslations = {
       },
       "rockbiter_weapon": {
         "name": "石縛の武器",
-        "description": "石の怒りを武器に込めます。5分間、各スイングが5の追加ダメージを与えます。"
+        "description": "石の怒りを武器に込めます。5分間、各スイングが{damage}の追加ダメージを与えます。"
       },
       "healing_wave": {
         "name": "癒しの水流",
@@ -5331,15 +6293,15 @@ export const ja_JP: EnTranslations = {
       },
       "lightning_shield": {
         "name": "雷の守り",
-        "description": "弾ける稲妻で身を包みます。近接攻撃者は13の自然ダメージを受けます。"
+        "description": "弾ける稲妻で身を包みます。近接攻撃者は{buff}の自然ダメージを受けます。最大3チャージで、発動は5秒に1回までです。"
       },
       "flame_shock": {
         "name": "灰燼の衝撃",
-        "description": "対象を炎で焼き、25ダメージに加えて12秒間で {damage} のダメージを与えます。"
+        "description": "対象を炎で焼き、{damage}ダメージに加えて12秒間で{overTime}のダメージを与えます。"
       },
       "flametongue_weapon": {
         "name": "火焔烙印の武器",
-        "description": "元素の炎を武器に込めます。5分間、各スイングが8の追加火炎ダメージを与えます。"
+        "description": "元素の炎を武器に込めます。5分間、各スイングが{damage}の追加火炎ダメージを与えます。"
       },
       "frost_shock": {
         "name": "霧氷の衝撃",
@@ -5347,7 +6309,7 @@ export const ja_JP: EnTranslations = {
       },
       "frostbrand_weapon": {
         "name": "霧氷縛の武器",
-        "description": "刺すような冷気を武器に込めます。5分間、各スイングが8の追加ダメージを与えます。"
+        "description": "刺すような冷気を武器に込めます。5分間、各スイングが{damage}の追加ダメージを与えます。"
       },
       "ghost_wolf": {
         "name": "シェイドウルフ",
@@ -5363,11 +6325,11 @@ export const ja_JP: EnTranslations = {
       },
       "demon_skin": {
         "name": "魔物の肌",
-        "description": "悪魔の皮膚により、30分間アーマーが30増加します。"
+        "description": "悪魔の皮膚により、30分間アーマーが{buff}増加します。"
       },
       "immolate": {
         "name": "灼熱の契約",
-        "description": "敵を燃やして11の火炎ダメージを与え、15秒間で追加の {damage} を与えます。"
+        "description": "敵を燃やして{damage}の火炎ダメージを与え、15秒間で追加の{overTime}を与えます。"
       },
       "corruption": {
         "name": "黒腐れ",
@@ -5375,7 +6337,7 @@ export const ja_JP: EnTranslations = {
       },
       "life_tap": {
         "name": "過酷な取引",
-        "description": "体力30をマナ30に変換します。"
+        "description": "体力{damage}をマナ{damage}に変換します。"
       },
       "curse_of_agony": {
         "name": "苦悶の呪い",
@@ -5407,7 +6369,7 @@ export const ja_JP: EnTranslations = {
       },
       "mark_of_the_wild": {
         "name": "ワイルドワード",
-        "description": "味方対象にワイルドワードを付与し、30分間アーマーを25増加させます。"
+        "description": "味方対象にワイルドワードを付与し、30分間アーマーを{buff}増加させます。"
       },
       "moonfire": {
         "name": "月の嵐",
@@ -5419,7 +6381,7 @@ export const ja_JP: EnTranslations = {
       },
       "thorns": {
         "name": "茨の守り",
-        "description": "対象から棘が生えます。近接攻撃者は3の自然ダメージを受けます。"
+        "description": "対象から棘が生えます。近接攻撃者は{buff}の自然ダメージを受けます。"
       },
       "entangling_roots": {
         "name": "締めつける根",
@@ -5427,7 +6389,7 @@ export const ja_JP: EnTranslations = {
       },
       "bear_form": {
         "name": "ブルーインフォーム",
-        "description": "熊に変身します。アーマー +65%、攻撃力 +15、攻撃が怒りを生成し、脅威生成が30%増加します。再度使用すると術者形態に戻ります。"
+        "description": "熊に変身します。アーマー +90%、攻撃力が大きく増加し、攻撃が怒りを生成し、脅威生成が30%増加します。再度使用すると術者形態に戻ります。"
       },
       "maul": {
         "name": "骨砕き",
@@ -5447,7 +6409,7 @@ export const ja_JP: EnTranslations = {
       },
       "ferocious_bite": {
         "name": "血噛み",
-        "description": "コンボポイントに応じてダメージを与えるフィニッシュムーブです。ウルフフォーム専用。"
+        "description": "{damage}を与えるフィニッシュムーブです。ウルフフォーム専用。"
       },
       "swipe": {
         "name": "薙ぎ払う爪",
@@ -5479,7 +6441,7 @@ export const ja_JP: EnTranslations = {
       },
       "faerie_fire": {
         "name": "魔女火",
-        "description": "対象の防御力を40秒間35低下させます。"
+        "description": "対象のアーマーを40秒間{damage}%低下させます。装甲切断とは重複しません。"
       },
       "hibernate": {
         "name": "微睡み",
@@ -5503,7 +6465,7 @@ export const ja_JP: EnTranslations = {
       },
       "rip": {
         "name": "リップ",
-        "description": "12秒かけて出血ダメージを与えるフィニッシュムーブです。コンボポイントを消費します。ウルフフォーム専用。"
+        "description": "12秒かけて{damage}の出血ダメージを与えるフィニッシュムーブです。コンボポイントを消費します。ウルフフォーム専用。"
       },
       "mortal_strike": {
         "name": "重傷の一撃",
@@ -5511,11 +6473,11 @@ export const ja_JP: EnTranslations = {
       },
       "bloodthirst": {
         "name": "瀉血",
-        "description": "血の狂乱に身を任せて即座に攻撃し、{damage} のダメージを与えます。（狂怒シグネチャー）"
+        "description": "血の狂乱に身を任せて即座に攻撃し、武器ダメージの60%に{damage}を加えたダメージを与えます。（狂怒シグネチャー）"
       },
       "shield_slam": {
         "name": "盾砕き",
-        "description": "盾で対象を叩きつけ、{damage} のダメージと大量の脅威を与えます。（防御シグネチャー）"
+        "description": "盾で対象を叩きつけ、武器ダメージの50%に{damage}を加えたダメージと大量の脅威を与えます。（防御シグネチャー）"
       },
       "whirlwind": {
         "name": "刃の旋風",
@@ -5710,6 +6672,9 @@ export const ja_JP: EnTranslations = {
       "greyjaw_fang": {
         "name": "老グレイジョーの牙"
       },
+      "chunk_of_ore": {
+        "name": "鉱石のかけら"
+      },
       "weathered_ledger_page": {
         "name": "風化した帳簿のページ"
       },
@@ -5739,6 +6704,15 @@ export const ja_JP: EnTranslations = {
       },
       "linen_scrap": {
         "name": "リネンの切れ端"
+      },
+      "arcane_dust": {
+        "name": "秘術の粉塵"
+      },
+      "arcane_essence": {
+        "name": "秘術の精髄"
+      },
+      "arcane_shard": {
+        "name": "秘術のかけら"
       },
       "fen_muster_order": {
         "name": "フェンブリッジ召集令"
@@ -6166,131 +7140,104 @@ export const ja_JP: EnTranslations = {
       "sunpetal_sickle": {
         "name": "陽花弁の鎌"
       },
-      "ashen_psalter": {
-        "name": "灰の詩篇集"
+      "duskwisp_essence": {
+        "name": "ダスクウィスプの精髄"
       },
-      "brimming_waterskin": {
-        "name": "なみなみの水袋"
+      "spore_heart": {
+        "name": "胞子の心臓"
       },
-      "cactus_pressed_water": {
-        "name": "サボテンの搾り水"
+      "gleaming_antler": {
+        "name": "輝く鹿角"
       },
-      "caravan_guard_mail": {
-        "name": "キャラバン衛兵のメイル"
+      "wisp_mote": {
+        "name": "星明かりの粒"
       },
-      "caravan_manifest": {
-        "name": "水染みの積荷目録"
+      "starfall_shard": {
+        "name": "星降りの欠片"
       },
-      "cinder_soaked_veil": {
-        "name": "燃えさし浸みのヴェール"
+      "elder_bark": {
+        "name": "長老の樹皮"
       },
-      "crown_brazier": {
-        "name": "王冠の火鉢"
+      "hollow_sealstone": {
+        "name": "幽谷の封印石"
       },
-      "crown_guard_seal": {
-        "name": "王冠衛兵の印章"
+      "monument_overlook": {
+        "name": "風化した石碑"
       },
-      "duneblade_token": {
-        "name": "デューンブレイドの割符"
+      "monument_court": {
+        "name": "沈んだ石碑"
       },
-      "duneforged_warblade": {
-        "name": "砂丘鍛えの戦刃"
+      "monument_north": {
+        "name": "忘れられた石碑"
       },
-      "dunewatch_sash": {
-        "name": "砂丘見張りの飾り帯"
+      "guardian_core": {
+        "name": "守護者の核"
       },
-      "duskmane_pelt": {
-        "name": "たそがれ鬣の毛皮"
+      "wardens_seal": {
+        "name": "監視者の印章"
       },
-      "emberbound_leggings": {
-        "name": "燃えさし縛りのレギンス"
+      "gleamstag_charm": {
+        "name": "グリームスタッグの護符"
       },
-      "emberglass_scepter": {
-        "name": "燠硝子の王笏"
+      "veilsteel_blade": {
+        "name": "ヴェール鋼の剣"
       },
-      "emberveil_writ": {
-        "name": "エンバーヴェイルの命令書"
+      "duskfang_dirk": {
+        "name": "黄昏の牙の短剣"
       },
-      "glasscarab_shell": {
-        "name": "硝子甲虫の甲殻"
+      "gleamwood_stave": {
+        "name": "輝き木の杖"
       },
-      "glasscut_dirk": {
-        "name": "硝子裂きの短剣"
+      "wardens_oathband": {
+        "name": "監視者の誓いの篭手"
       },
-      "heart_of_the_first_ember": {
-        "name": "始まりの燠の心臓"
+      "wardplate_cuirass": {
+        "name": "守りの板金胸甲"
       },
-      "heartspring_offering": {
-        "name": "心泉の供物鉢"
+      "nightweave_tunic": {
+        "name": "夜織りのチュニック"
       },
-      "kareshs_last_skin": {
-        "name": "カレシュ最後の水袋"
+      "veilcloth_robe": {
+        "name": "ヴェール布のローブ"
       },
-      "lastwell_datewine": {
-        "name": "最後の井戸のナツメヤシ酒"
+      "thorium_ore": {
+        "name": "トリウム鉱石"
       },
-      "living_cinder": {
-        "name": "生ける燠火"
+      "arcanite_bar": {
+        "name": "アーケナイトの延べ棒"
       },
-      "moltenheart_girdle": {
-        "name": "熔心の腰帯"
+      "ashwood_log": {
+        "name": "アッシュウッドの丸太"
       },
-      "moltenheart_slagcore": {
-        "name": "熔心の鉱滓核"
+      "elderwood_log": {
+        "name": "エルダーウッドの丸太"
       },
-      "mural_rubbing": {
-        "name": "壁画の拓本"
+      "goldleaf_herb": {
+        "name": "ゴールドリーフ草"
       },
-      "parched_kings_goblet": {
-        "name": "渇きの王の酒杯"
+      "sunpetal_herb": {
+        "name": "サンペタル草"
       },
-      "prowler_fang": {
-        "name": "徘徊獣の牙"
+      "rift_essence": {
+        "name": "リフトエッセンス"
       },
-      "sentinel_core_stone": {
-        "name": "番人の核石"
+      "rift_gem_crimson": {
+        "name": "深紅のリフト宝石"
       },
-      "springheart_blessing": {
-        "name": "心泉の祝福"
+      "rift_gem_azure": {
+        "name": "紺碧のリフト宝石"
       },
-      "stolen_waterskin": {
-        "name": "盗まれた水袋"
+      "rift_gem_verdant": {
+        "name": "翠緑のリフト宝石"
       },
-      "sunbaked_flatbread": {
-        "name": "天日焼きの平パン"
+      "riftbound_band_of_might": {
+        "name": "剛力のリフトバウンドリング"
       },
-      "sunbleached_bone": {
-        "name": "日晒しの骨"
+      "riftbound_band_of_insight": {
+        "name": "叡智のリフトバウンドリング"
       },
-      "sunbleached_staff": {
-        "name": "日晒しの杖"
-      },
-      "sunglass_shard": {
-        "name": "陽硝子のかけら"
-      },
-      "sunspeakers_ash_crown": {
-        "name": "太陽の代弁者の灰冠"
-      },
-      "vestment_of_the_sunken_crown": {
-        "name": "沈んだ王冠の祭服"
-      },
-      "vigil_obelisk_dawn": {
-        "name": "暁火の印"
-      },
-      "vigil_obelisk_dusk": {
-        "name": "宵火の印"
-      },
-      "vigil_obelisk_noon": {
-        "name": "真昼火の印"
-      },
-      "wastes_relic_cache": {
-        "name": "太陽宮廷の遺物箱"
-      },
-      "wastewalker_jerkin": {
-        "name": "荒野歩きの革衣"
-      },
-      "wastewalker_treads": {
-        "name": "荒野歩きの靴"
+      "riftbound_band_of_guile": {
+        "name": "機略のリフトバウンドリング"
       },
       "bristleback_maul": {
         "name": "ギャロウグラスの大槌"
@@ -6757,6 +7704,132 @@ export const ja_JP: EnTranslations = {
       "event_skin_token": {
         "name": "謎めいた装いの宝箱"
       },
+      "heroic_mark": {
+        "name": "英雄の証"
+      },
+      "morthens_cryptforged_hauberk": {
+        "name": "モルセンの墓鋳ホーバーク"
+      },
+      "shadowpulse_handwraps": {
+        "name": "シャドウパルスの手巻き"
+      },
+      "bonechill_striders": {
+        "name": "ボーンチルのストライダー"
+      },
+      "mistcallers_fang": {
+        "name": "ミストコーラーの牙"
+      },
+      "tidebound_spaulders": {
+        "name": "タイドバウンドの肩当て"
+      },
+      "sash_of_the_sunken_court": {
+        "name": "沈んだ宮廷のサッシュ"
+      },
+      "lunar_tide_greatstaff": {
+        "name": "ルナタイドの大杖"
+      },
+      "tidewoven_trousers": {
+        "name": "タイドウーヴンのズボン"
+      },
+      "choirmothers_casque": {
+        "name": "クワイアマザーのキャスク"
+      },
+      "gravewyrm_cleaver": {
+        "name": "グレイヴワームのクリーバー"
+      },
+      "shroud_of_the_gravewyrm": {
+        "name": "グレイヴワームの帳"
+      },
+      "sanctum_prowlers_grips": {
+        "name": "サンクタムプラウラーのグリップ"
+      },
+      "scepter_of_the_deathless_court": {
+        "name": "不死の宮廷の笏"
+      },
+      "deathless_warguard_legmail": {
+        "name": "不死の戦衛レッグメイル"
+      },
+      "soulrend_diadem": {
+        "name": "ソウルレンドの宝冠"
+      },
+      "scourgehide_carapace": {
+        "name": "スカージハイドの甲殻"
+      },
+      "cryptplate_helm": {
+        "name": "クリプトプレートヘルム"
+      },
+      "shadowpulse_slippers": {
+        "name": "シャドウパルスのスリッパ"
+      },
+      "bonechill_cord": {
+        "name": "ボーンチルの帯"
+      },
+      "mistforged_pauldrons": {
+        "name": "ミストフォージの肩当て"
+      },
+      "tideguard_faceguard": {
+        "name": "タイドガードのフェイスガード"
+      },
+      "sunken_court_mantle": {
+        "name": "沈んだ宮廷のマント"
+      },
+      "lunar_choir_leggings": {
+        "name": "ルナクワイアのレギンス"
+      },
+      "choir_blessed_spaulders": {
+        "name": "聖歌祝福の肩当て"
+      },
+      "tideworn_warboots": {
+        "name": "潮蝕のウォーブーツ"
+      },
+      "gravewyrm_claws": {
+        "name": "グレイヴワームの爪"
+      },
+      "gravescale_girdle": {
+        "name": "グレイヴスケイルの帯"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "ワームクワイアの手巻き"
+      },
+      "deathless_greatblade": {
+        "name": "不死の大剣"
+      },
+      "soulforged_warplate": {
+        "name": "魂鍛の戦甲"
+      },
+      "stormcallers_focus": {
+        "name": "ストームコーラーの焦点"
+      },
+      "seal_of_the_nine_oaths": {
+        "name": "九誓の印章"
+      },
+      "nielas_coldlight_band": {
+        "name": "ニエラの冷光の指輪"
+      },
+      "sutils_gambit": {
+        "name": "スティルの賭け"
+      },
+      "oath_of_the_round_table": {
+        "name": "円卓の誓い"
+      },
+      "zyzzs_deathless_signet": {
+        "name": "ジズの不滅の印章"
+      },
+      "architects_cornerstone": {
+        "name": "アーキテクトの礎石"
+      },
+      "swiftfang_talisman": {
+        "name": "迅牙のタリスマン"
+      },
+      "yumis_keepsake_locket": {
+        "name": "ユミの形見のロケット"
+      },
+      "zense_meridian": {
+        "name": "ゼンセの子午線"
+      },
+      "medallion_of_endless_profit": {
+        "name": "無限の利益のメダリオン"
+      },
       "deathless_heartwood": {
         "name": "不死王冠の心材"
       },
@@ -6861,9 +7934,138 @@ export const ja_JP: EnTranslations = {
       },
       "stormcallers_waistguard": {
         "name": "嵐呼びの腰当て"
+      },
+      "ashen_psalter": {
+        "name": "灰の詩篇集"
+      },
+      "brimming_waterskin": {
+        "name": "なみなみの水袋"
+      },
+      "cactus_pressed_water": {
+        "name": "サボテンの搾り水"
+      },
+      "caravan_guard_mail": {
+        "name": "キャラバン衛兵のメイル"
+      },
+      "caravan_manifest": {
+        "name": "水染みの積荷目録"
+      },
+      "cinder_soaked_veil": {
+        "name": "燃えさし浸みのヴェール"
+      },
+      "crown_brazier": {
+        "name": "王冠の火鉢"
+      },
+      "crown_guard_seal": {
+        "name": "王冠衛兵の印章"
+      },
+      "duneblade_token": {
+        "name": "デューンブレイドの割符"
+      },
+      "duneforged_warblade": {
+        "name": "砂丘鍛えの戦刃"
+      },
+      "dunewatch_sash": {
+        "name": "砂丘見張りの飾り帯"
+      },
+      "duskmane_pelt": {
+        "name": "たそがれ鬣の毛皮"
+      },
+      "emberbound_leggings": {
+        "name": "燃えさし縛りのレギンス"
+      },
+      "emberglass_scepter": {
+        "name": "燠硝子の王笏"
+      },
+      "emberveil_writ": {
+        "name": "エンバーヴェイルの命令書"
+      },
+      "glasscarab_shell": {
+        "name": "硝子甲虫の甲殻"
+      },
+      "glasscut_dirk": {
+        "name": "硝子裂きの短剣"
+      },
+      "heart_of_the_first_ember": {
+        "name": "始まりの燠の心臓"
+      },
+      "heartspring_offering": {
+        "name": "心泉の供物鉢"
+      },
+      "kareshs_last_skin": {
+        "name": "カレシュ最後の水袋"
+      },
+      "lastwell_datewine": {
+        "name": "最後の井戸のナツメヤシ酒"
+      },
+      "living_cinder": {
+        "name": "生ける燠火"
+      },
+      "moltenheart_girdle": {
+        "name": "熔心の腰帯"
+      },
+      "moltenheart_slagcore": {
+        "name": "熔心の鉱滓核"
+      },
+      "mural_rubbing": {
+        "name": "壁画の拓本"
+      },
+      "parched_kings_goblet": {
+        "name": "渇きの王の酒杯"
+      },
+      "prowler_fang": {
+        "name": "徘徊獣の牙"
+      },
+      "sentinel_core_stone": {
+        "name": "番人の核石"
+      },
+      "springheart_blessing": {
+        "name": "心泉の祝福"
+      },
+      "stolen_waterskin": {
+        "name": "盗まれた水袋"
+      },
+      "sunbaked_flatbread": {
+        "name": "天日焼きの平パン"
+      },
+      "sunbleached_bone": {
+        "name": "日晒しの骨"
+      },
+      "sunbleached_staff": {
+        "name": "日晒しの杖"
+      },
+      "sunglass_shard": {
+        "name": "陽硝子のかけら"
+      },
+      "sunspeakers_ash_crown": {
+        "name": "太陽の代弁者の灰冠"
+      },
+      "vestment_of_the_sunken_crown": {
+        "name": "沈んだ王冠の祭服"
+      },
+      "vigil_obelisk_dawn": {
+        "name": "暁火の印"
+      },
+      "vigil_obelisk_dusk": {
+        "name": "宵火の印"
+      },
+      "vigil_obelisk_noon": {
+        "name": "真昼火の印"
+      },
+      "wastes_relic_cache": {
+        "name": "太陽宮廷の遺物箱"
+      },
+      "wastewalker_jerkin": {
+        "name": "荒野歩きの革衣"
+      },
+      "wastewalker_treads": {
+        "name": "荒野歩きの靴"
       }
     },
     "mobs": {
+      "yumi_cat": {
+        "name": "ユミ"
+      },
       "forest_wolf": {
         "name": "森の狼"
       },
@@ -6923,6 +8125,9 @@ export const ja_JP: EnTranslations = {
       },
       "deacon_voss": {
         "name": "助祭ヴォス"
+      },
+      "training_dummy": {
+        "name": "訓練用ダミー"
       },
       "ridge_stalker": {
         "name": "尾根の追跡者"
@@ -7086,53 +8291,263 @@ export const ja_JP: EnTranslations = {
       "tolling_bell": {
         "name": "鳴り響く鐘"
       },
+      "vale_cup_ball": {
+        "name": "ボアボール"
+      },
       "thunzharr_waking_peak": {
         "name": "サンザール、目覚めし峰"
       },
       "thunzharr_stormling": {
         "name": "目覚めた嵐の精"
       },
-      "duskmane_prowler": {
-        "name": "たそがれ鬣の徘徊獣"
+      "rift_spawnling": {
+        "name": "リフトの落とし子"
       },
-      "glasscarab": {
-        "name": "硝子甲虫"
+      "rift_bonewalker": {
+        "name": "蘇りし骨歩き"
       },
-      "duneblade_marauder": {
-        "name": "デューンブレイドの略奪者"
+      "rift_frost_revenant": {
+        "name": "氷縛の亡霊"
       },
-      "karesh_the_parched": {
-        "name": "渇きのカレシュ"
+      "rift_rime_elemental": {
+        "name": "樹氷のエレメンタル"
       },
-      "vigil_sentinel": {
-        "name": "ヴィジルの番人"
+      "rift_ember_fiend": {
+        "name": "燃え殻の魔物"
       },
-      "sunbaked_revenant": {
-        "name": "陽灼けの亡霊"
+      "rift_magma_brute": {
+        "name": "マグマの猛獣"
       },
-      "ashen_courtier": {
-        "name": "灰の廷臣"
+      "rift_venom_weaver": {
+        "name": "毒織り"
       },
-      "sunspeaker_atharis": {
-        "name": "太陽の代弁者アサリス"
+      "rift_thornback": {
+        "name": "茨背の追跡者"
       },
-      "emberveil_zealot": {
-        "name": "エンバーヴェイルの狂信者"
+      "rift_boneclad": {
+        "name": "骨鎧の戦士"
       },
-      "emberveil_pyromancer": {
-        "name": "エンバーヴェイルの炎術師"
+      "rift_marrow_troll": {
+        "name": "髄のトロル"
       },
-      "cinder_elemental": {
-        "name": "燠火の精霊"
+      "rift_void_acolyte": {
+        "name": "虚空傷の侍祭"
       },
-      "moltenheart_colossus": {
-        "name": "熔心の巨像"
+      "rift_dread_stalker": {
+        "name": "恐怖の追跡者"
       },
-      "cinder_wisp": {
-        "name": "燠火のウィスプ"
+      "rift_storm_caller": {
+        "name": "嵐呼び"
       },
-      "ember_of_korzul": {
-        "name": "始まりの燠"
+      "rift_stormscale": {
+        "name": "嵐鱗のドレイク"
+      },
+      "rift_tide_thrall": {
+        "name": "潮の下僕"
+      },
+      "rift_deep_lurker": {
+        "name": "深淵の潜伏者"
+      },
+      "rift_stone_ogre": {
+        "name": "石のオーガ"
+      },
+      "rift_boss_frost": {
+        "name": "樹氷の守護者"
+      },
+      "rift_boss_ember": {
+        "name": "燃え殻鍛冶の暴君"
+      },
+      "rift_boss_venom": {
+        "name": "母胎ヴィスカ"
+      },
+      "rift_boss_necro": {
+        "name": "骨王ザレス"
+      },
+      "rift_boss_brute": {
+        "name": "軍将グラスク"
+      },
+      "rift_boss_arcane": {
+        "name": "アルコン・ニクサリス"
+      },
+      "rift_boss_storm": {
+        "name": "嵐のヴァロク"
+      },
+      "rift_boss_tide": {
+        "name": "深淵の顎"
+      },
+      "glimmerwisp": {
+        "name": "グリマーウィスプ"
+      },
+      "duskwisp": {
+        "name": "ダスクウィスプ"
+      },
+      "hollow_spirit": {
+        "name": "幽谷の精霊"
+      },
+      "veiled_stag": {
+        "name": "ヴェールの牡鹿"
+      },
+      "gleamstag": {
+        "name": "グリームスタッグ"
+      },
+      "sporeling_gatherer": {
+        "name": "スポアリングの採集者"
+      },
+      "corrupted_sporeling": {
+        "name": "堕落したスポアリング"
+      },
+      "treant_elder": {
+        "name": "トレントの長老"
+      },
+      "ancient_guardian": {
+        "name": "古代の守護者"
+      },
+      "waking_warden": {
+        "name": "目覚めし監視者"
+      },
+      "old_marrowshell": {
+        "name": "オールド・マロウシェル"
+      },
+      "aurelhorn": {
+        "name": "アウレルホーン、群れの長"
+      },
+      "snowdrift_wolf": {
+        "name": "スノードリフトウルフ"
+      },
+      "ice_wisp": {
+        "name": "アイスウィスプ"
+      },
+      "rime_elemental": {
+        "name": "霧氷の精霊"
+      },
+      "fen_sprite": {
+        "name": "フェンスプライト"
+      },
+      "frostmane_yeti": {
+        "name": "フロストメイン・イエティ"
+      },
+      "emberwing_drake": {
+        "name": "エンバーウィング・ドレイク"
+      },
+      "ashbone_raider": {
+        "name": "アッシュボーンの略奪者"
+      },
+      "ashbone_warcaller": {
+        "name": "アッシュボーンの戦呼び"
+      },
+      "dune_troll": {
+        "name": "デューントロール"
+      },
+      "gilded_stag": {
+        "name": "黄金の牡鹿"
+      },
+      "gloam_fox": {
+        "name": "グロームフォックス"
+      },
+      "orchard_treant": {
+        "name": "果樹園のトレント"
+      },
+      "harvest_sprite": {
+        "name": "ハーベストスプライト"
+      },
+      "mere_lurker": {
+        "name": "湖の潜み手"
+      },
+      "bogtoad": {
+        "name": "ボグトード"
+      },
+      "drowsy_croaker": {
+        "name": "まどろみのクローカー"
+      },
+      "lily_wisp": {
+        "name": "リリーウィスプ"
+      },
+      "willow_sprite": {
+        "name": "ウィロースプライト"
+      },
+      "moonfleece_grazer": {
+        "name": "ムーンフリース"
+      },
+      "gloam_strider": {
+        "name": "グロームストライダー"
+      },
+      "nightkin_stargazer": {
+        "name": "ナイトキンの星読み"
+      },
+      "barrow_king": {
+        "name": "塚の王"
+      },
+      "widowsilk_spinner": {
+        "name": "ウィドウシルク・スピナー"
+      },
+      "wood_wraith": {
+        "name": "ウッドレイス"
+      },
+      "gravenbark_shambler": {
+        "name": "グレイヴンバーク"
+      },
+      "pale_huntsman": {
+        "name": "蒼白の狩人"
+      },
+      "tide_scuttler": {
+        "name": "タイドスカトラー"
+      },
+      "thicket_boar": {
+        "name": "茂みの猪"
+      },
+      "canopy_weaver": {
+        "name": "キャノピーウィーバー"
+      },
+      "idol_guardian": {
+        "name": "神像の守護者"
+      },
+      "topiary_stag": {
+        "name": "トピアリーの雄鹿"
+      },
+      "topiary_wolf": {
+        "name": "トピアリーの狼"
+      },
+      "hedge_gnome": {
+        "name": "生け垣ノーム"
+      },
+      "the_topiary_bull": {
+        "name": "トピアリーの雄牛"
+      },
+      "moor_ram": {
+        "name": "ムーアラム"
+      },
+      "gale_wisp": {
+        "name": "ゲイルウィスプ"
+      },
+      "shoal_scuttler": {
+        "name": "ショールスカトラー"
+      },
+      "the_wreck_warden": {
+        "name": "レックウォーデン"
+      },
+      "riftspawn": {
+        "name": "裂け目の落とし子"
+      },
+      "breach_wretch": {
+        "name": "破れの成れの果て"
+      },
+      "void_stalker": {
+        "name": "虚無の忍び寄り"
+      },
+      "sundered_horror": {
+        "name": "引き裂かれし恐怖"
+      },
+      "rift_hellguard": {
+        "name": "ヘルガード"
+      },
+      "rift_pact_acolyte": {
+        "name": "契約の侍祭"
+      },
+      "rift_boss_ritualist": {
+        "name": "契約に縛られし魔導士ヴェルコル"
+      },
+      "rift_boss_pitlord": {
+        "name": "奈落の王アズゴラス"
       },
       "ironvein_foreman": {
         "name": "鉄脈の現場監督"
@@ -7241,6 +8656,48 @@ export const ja_JP: EnTranslations = {
       },
       "ysolei": {
         "name": "イソレイ、溺月の化身"
+      },
+      "duskmane_prowler": {
+        "name": "たそがれ鬣の徘徊獣"
+      },
+      "glasscarab": {
+        "name": "硝子甲虫"
+      },
+      "duneblade_marauder": {
+        "name": "デューンブレイドの略奪者"
+      },
+      "karesh_the_parched": {
+        "name": "渇きのカレシュ"
+      },
+      "vigil_sentinel": {
+        "name": "ヴィジルの番人"
+      },
+      "sunbaked_revenant": {
+        "name": "陽灼けの亡霊"
+      },
+      "ashen_courtier": {
+        "name": "灰の廷臣"
+      },
+      "sunspeaker_atharis": {
+        "name": "太陽の代弁者アサリス"
+      },
+      "emberveil_zealot": {
+        "name": "エンバーヴェイルの狂信者"
+      },
+      "emberveil_pyromancer": {
+        "name": "エンバーヴェイルの炎術師"
+      },
+      "cinder_elemental": {
+        "name": "燠火の精霊"
+      },
+      "moltenheart_colossus": {
+        "name": "熔心の巨像"
+      },
+      "cinder_wisp": {
+        "name": "燠火のウィスプ"
+      },
+      "ember_of_korzul": {
+        "name": "始まりの燠"
       }
     },
     "npcs": {
@@ -7334,6 +8791,11 @@ export const ja_JP: EnTranslations = {
         "title": "熟練防具師",
         "greeting": "炉は熱く、砥石は回っています。切れるものなら売ります。"
       },
+      "heroic_quartermaster": {
+        "name": "補給係ヴェックス",
+        "title": "英雄補給係",
+        "greeting": "英雄の深部の証があれば、ハイウォッチ一の指輪とペンダントが手に入る。あなたの証を見せてくれ。"
+      },
       "loremaster_caddis": {
         "name": "博識者キャディス",
         "title": "博識者",
@@ -7343,6 +8805,21 @@ export const ja_JP: EnTranslations = {
         "name": "競売人ヴォス",
         "title": "世界市場の守り手",
         "greeting": "世界市場はここでも利用できます、{className}。王国中の冒険者から買うことも、自分の品を売ることもできます。"
+      },
+      "bursar_fernando": {
+        "name": "出納官フェルナンド",
+        "title": "金張りの金庫",
+        "greeting": "金張りの金庫へようこそ。あなたの品々は我々の錠の内で安全に保管されます。"
+      },
+      "bursar_petra_vell": {
+        "name": "出納官ペトラ・ヴェル",
+        "title": "金張りの金庫",
+        "greeting": "金張りの金庫は帳簿も金庫室も清く保っています。何をお預かりしましょうか？"
+      },
+      "bursar_aldous_crane": {
+        "name": "出納官アルダス・クレイン",
+        "title": "金張りの金庫",
+        "greeting": "どんな木箱も、金櫃も、装身具も、金張りの金庫にお預けいただければ安全です。"
       },
       "brother_aldric_raid": {
         "name": "アルドリック修道士",
@@ -7363,6 +8840,86 @@ export const ja_JP: EnTranslations = {
         "name": "霊魂の癒し手",
         "title": "死者の番人",
         "greeting": "安らかに、魂よ。亡骸に戻すことはできるが、戻る道のりで弱ってしまうだろう。"
+      },
+      "groundskeeper_bram": {
+        "name": "整備人ブラム",
+        "title": "ソウフィールドの番人",
+        "greeting": "ソウフィールドでは休戦が守られている、{className}よ。使っていいのは足と肩だけだ。銅のミルク桶を懸けて一戦どうだ?"
+      },
+      "chronicler_saul": {
+        "name": "年代記官ソール",
+        "title": "イーストブルック渓谷の年代記",
+        "greeting": "為すに値する行いは、二度書き記すに値する、{playerName}よ。一度は台帳に、もう一度は炉辺の語り草に。"
+      },
+      "chronicler_osric_fenn": {
+        "name": "年代記官オズリック・フェン",
+        "title": "マイアフェン湿地の年代記",
+        "greeting": "ページの湿気に気をつけることだ、{playerName}よ。沼は読者よりずっと多くの本を呑み込むのだ。"
+      },
+      "chronicler_edda_hartwell": {
+        "name": "年代記官ゼンジー",
+        "title": "ソーンピーク高地の年代記",
+        "greeting": "山は何ひとつ忘れない、{playerName}よ。私もだ。あなたの成したことを見せてもらおう。"
+      },
+      "keeper_saelwyn": {
+        "name": "守り手セルウィン",
+        "title": "幽谷の守り手",
+        "greeting": "そなたの同族でこの枝の下に立った者は少ない、{className}よ。静かに歩み、歓迎を受けるがよい。"
+      },
+      "loremother_bryn": {
+        "name": "ロアマザー・ブリン",
+        "title": "聖堂の声",
+        "greeting": "この谷の光はどれも何かを覚えている、{playerName}。共に耳を澄ませておくれ。"
+      },
+      "provisioner_fenna": {
+        "name": "補給係フェンナ",
+        "title": "エルダーグリームの補給係",
+        "greeting": "パンはまだ温かく、水はまだ甘い。幽谷は与えてくれる。わたしもね。"
+      },
+      "wardsmith_orun": {
+        "name": "ワードスミス・オルン",
+        "title": "古き炉の番人",
+        "greeting": "この炉が冷えたのは何世紀も前だ、{className}。だが打たれた刃は今も切れる。"
+      },
+      "archivist_tullo": {
+        "name": "アーキビスト・トゥッロ",
+        "title": "石を読む者",
+        "greeting": "外の石碑はもう長いこと誰にも語りかけていない。新しい耳を待っていたのかもしれん。"
+      },
+      "warden_coalfast": {
+        "name": "守将コールファスト",
+        "title": "要塞司令官",
+        "greeting": "裂け目は、カモメ港が小さいことなど気にもかけぬ、{className}。この岸を守り抜くか、さもなくば守るべき岸そのものが失われるかだ。我らと共に立て、そうすれば私はその恩を忘れはせぬ。"
+      },
+      "riftwatch_ollun": {
+        "name": "裂け目監視のオルン",
+        "title": "破れの学者",
+        "greeting": "裂け目はどれも、開く前に歌うのだ――耳を傾ける術さえあればな。いま島では三つが蠢いているのが聞こえる。そのうち一つは、すぐ近くだ。"
+      },
+      "quartermaster_edda": {
+        "name": "補給将校エッダ",
+        "title": "要塞武具方",
+        "greeting": "鋼と塩、それが手渡せる残り物のすべてさ、{className}。持って行きな。私の手が届くところで開いたことを、裂け目に後悔させてやれ。"
+      },
+      "mender_saul": {
+        "name": "癒し手サウル",
+        "title": "従軍外科医",
+        "greeting": "漁の転落を手当てした十年よりも、この一月のほうが多くの骨を接いだ。裂け目は、奪ったものをろくに残しはせぬ。できることなら、五体満足で戻ってきてくれ。"
+      },
+      "bellkeeper_tam": {
+        "name": "鐘守タム",
+        "title": "警鐘守り",
+        "greeting": "裂け目が我らに寄越す唯一の報せ、それがこの鐘だ、{className}。一打ちなら畑、二打ちなら崖、三打ちともなれば、もう逃げても間に合わぬほど近いということ。耳を離すな。さすれば鐘が、お前を五体満足のままにしてくれよう。"
+      },
+      "fisher_nell": {
+        "name": "怯えるネル",
+        "title": "カモメ港の漁師",
+        "greeting": "網を干す、まさにあの場所で開いたんだ。あそこだよ、私が生まれてからずっと毎朝立っていた場所さ。もう岸へは下りない。もう、どこへもろくに行かなくなっちまった。"
+      },
+      "tidewatcher_ondrel": {
+        "name": "オンドレル・ヴェイン",
+        "title": "潮見の番人",
+        "greeting": "この沼は月光を飲み干し、{className}よ、溺れし者を吐き返すのだ。私はあの門を三十夜も見張ってきた——そして今宵、門は開いている。"
       },
       "caravan_master_saffa": {
         "name": "キャラバン長サッファ",
@@ -7423,14 +8980,19 @@ export const ja_JP: EnTranslations = {
         "name": "水占師エムリス",
         "title": "水脈探し",
         "greeting": "占い棒は滝のところでだけ折れんばかりにしなる。他は四十マイル歩いてもぴくりともしない。この土地は、泉ひとつ涸れれば墓場だ。"
-      },
-      "tidewatcher_ondrel": {
-        "name": "オンドレル・ヴェイン",
-        "title": "潮見の番人",
-        "greeting": "この沼は月光を飲み干し、{className}よ、溺れし者を吐き返すのだ。私はあの門を三十夜も見張ってきた——そして今宵、門は開いている。"
       }
     },
     "quests": {
+      "q_prof_intro": {
+        "title": "剣以外にも稼ぎはある",
+        "text": "イーストブルックの誰もが剣以外の生業を持っているものだ、{playerName}。町の周りに鉱脈が散らばっている。つるはしを振るって鉱石を5個持ってきてくれ。自分で採掘するんだぞ、見ればわかる。",
+        "completion": "どうだ？鞄には鉱石、手にはマメだ。旅の道中も採掘、伐採、薬草採取を続けるといい。町に戻ったら、市場そばのタウンフォーカス掲示板と近くの製作台も気にかけてくれ。その気があれば、どれも実入りのいい仕事になる。",
+        "objectives": {
+          "0": {
+            "label": "鉱石のかけら"
+          }
+        }
+      },
       "q_wolves": {
         "title": "戸口の狼",
         "text": "森の狼が北の道で旅人に牙をむけています、{playerName}。8頭を討ち、イーストブルックに息をつかせてください。",
@@ -8213,6 +9775,235 @@ export const ja_JP: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "己が選ぶべき技",
+        "text": "イーストブルックの職人は皆いずれ、己が選ぶべき一つの技に落ち着く。{playerName}よ、一つの行いで己を証明し、進むべき道を宣言せよ。",
+        "completion": "あなたの道は定まった。その道をしかと歩むがいい。",
+        "objectives": {
+          "0": {
+            "label": "フォレストウルフを討伐"
+          }
+        }
+      },
+      "q_prof_make_amends": {
+        "title": "償い",
+        "text": "一つの技を捨て、別の技へと移るには、職人はまず歩まなかった道への償いを果たさねばならぬ、{playerName}よ。",
+        "completion": "償いは果たされた。新たな道があなたに開かれている。",
+        "objectives": {
+          "0": {
+            "label": "フォレストウルフを討伐"
+          }
+        }
+      },
+      "q_veil_thinned": {
+        "title": "薄れゆく帳",
+        "text": "洞窟がそなたに開いたか。ならば封印は思ったより弱っている、{playerName}。帳が裂ける場所で、ウィスプは冷たく暗く変わる。ダスクウィスプの精髄を八つ持ってきておくれ。傷の深さを読み取ろう。",
+        "completion": "どれも冷え切っている。裂け目が亀裂になるまで、幽谷に残された時はひと季節ほどだろう。そなたとわたしの仕事が始まる。",
+        "objectives": {
+          "0": {
+            "label": "ダスクウィスプの精髄"
+          }
+        }
+      },
+      "q_gleaming_antlers": {
+        "title": "輝く鹿角",
+        "text": "ヴェールの牡鹿は草を食む場所に光を落とし、抜け落ちた角は何年もその光を保つ。星降りの盆地の群れから五本。それでわたしのランタンは油なしで冬を越せる。牡鹿を傷つける必要はないが、簡単には譲ってくれないよ。",
+        "completion": "見ておくれ、光をこんなに抱えて！炎も煙もなく、ただ光だけ。幽谷は与えてくれる。",
+        "objectives": {
+          "0": {
+            "label": "輝く鹿角"
+          }
+        }
+      },
+      "q_wisp_lights": {
+        "title": "浅瀬の灯",
+        "text": "グリマーウィスプは、幽谷が封じられた時に降った古い星明かりの粒を運んでいる。六粒あれば聖堂の灯は一年もつ。消えかけたものからだけ取りなさい。幽谷は貪らずとも足りるだけ与えてくれる。",
+        "completion": "最初の星々のように柔らかい。祭壇のそばに置いておくれ。あとは聖堂がやってくれる。",
+        "objectives": {
+          "0": {
+            "label": "星明かりの粒"
+          }
+        }
+      },
+      "q_calming_the_deep": {
+        "title": "深みを鎮めて",
+        "text": "輝きの深みのスポアリングは、裂け目が輪に触れるまでは穏やかな民だった。穢れが奪ったものは還らない。堕ちた者たちに安らぎを、{playerName}。深みの北で、十体。",
+        "completion": "わたしにはできなかったことをしてくれた。南の輪では採集者たちがまだ歌っている。そなたのおかげで、歌い続けられる。",
+        "objectives": {
+          "0": {
+            "label": "堕落したスポアリングを鎮めた"
+          }
+        }
+      },
+      "q_spore_hearts": {
+        "title": "輪の心臓",
+        "text": "闇に堕ちたスポアリングの心臓は、借り物の影で脈打ち続ける。その心臓を四つ、聖堂で清めれば、穢れの広がり方が分かるはずだ。むごい仕事だが、{playerName}、これは癒やしの仕事でもある。",
+        "completion": "これで清められ、静かになった。どの心臓にも同じ印がある。影は沈んだ宮廷から流れている。セルウィンに伝えておくれ。",
+        "objectives": {
+          "0": {
+            "label": "胞子の心臓"
+          }
+        }
+      },
+      "q_monument_tour": {
+        "title": "石が覚えていること",
+        "text": "封印より前の石碑が三つ残っている。ひとつはダスクフォールの見晴らし台、ひとつは沈んだ宮廷、もうひとつは誰も歩かぬ北東の果てだ。読んできておくれ、{playerName}。わたしの膝は二世紀前に階段を諦めた。",
+        "completion": "見晴らし台、宮廷、忘れられた片隅……封印の歌の三つの節が、歌われた日以来はじめて揃った。老いた読み手を心から喜ばせてくれたね。",
+        "objectives": {
+          "0": {
+            "label": "見晴らし台の石碑を読んだ"
+          },
+          "1": {
+            "label": "宮廷の石碑を読んだ"
+          },
+          "2": {
+            "label": "忘れられた石碑を読んだ"
+          }
+        }
+      },
+      "q_grove_menace": {
+        "title": "木立の脅威",
+        "text": "日が落ちるとダスクウィスプが屋台の間に漂い込んでくるんだ、{playerName}。あの冷気は触れたものを片端から駄目にする。間引いておくれ。帳の裂けた場所で、十体。",
+        "completion": "これで夜市を開けられる。生涯のお得意さんができたよ。少なくとも割引はしよう。",
+        "objectives": {
+          "0": {
+            "label": "ダスクウィスプを散らした"
+          }
+        }
+      },
+      "q_shards_of_starfall": {
+        "title": "星降りの欠片",
+        "text": "ダスクウィスプが水晶の野を渡ると、古い星明かりの欠片が棘のように張り付く。欠片が六つあれば、{playerName}、封印が歌われた季節まで特定できる。",
+        "completion": "この縞模様を見よ！秋だ。幽谷は秋に封じられたのだ。二百年の論争が、六つの小石で決着した。",
+        "objectives": {
+          "0": {
+            "label": "星降りの欠片"
+          }
+        }
+      },
+      "q_treant_accord": {
+        "title": "トレントとの約定",
+        "text": "木立の長老たちは、根を穢れに齧られて外皮を落としている。樹皮が四片あれば、木立全体の軟膏を煎じられる。剥がす間は感謝されないだろうが、{playerName}、そのぶん彼らは百年長く立っていられる。",
+        "completion": "四片とも厚く、健やかだ。軟膏は煎じるのに一週間、効き終わるのに百年かかる。木々は優しさの尺度が違うのだよ。",
+        "objectives": {
+          "0": {
+            "label": "長老の樹皮"
+          }
+        }
+      },
+      "q_spore_tide": {
+        "title": "胞子の潮に抗して",
+        "text": "軟膏は木立を守っているが、穢れは夕暮れごとに深みへ強く押し寄せる。採集者たちが北の輪を取り戻すには、あと十二の堕ちた者に安らぎを、{playerName}。",
+        "completion": "今夜、北の輪がまた歌っている。小さく、けれど確かに。",
+        "objectives": {
+          "0": {
+            "label": "堕落したスポアリングを鎮めた"
+          }
+        }
+      },
+      "q_sunken_court": {
+        "title": "沈んだ宮廷",
+        "text": "ブリンの読みは正しかった。裂け目は東の古い宮廷を貫き、その守護者たちは狂って目覚めた。封印を守るために造られたものが、今は近づく者を砕こうとする。廃墟から八体を除いておくれ。",
+        "completion": "八体の守護者が、静まった。あれらが建てられた時をわたしは覚えているよ、{playerName}。驚くことはない。幽谷は守り手を長く生かすのだ。",
+        "objectives": {
+          "0": {
+            "label": "古代の守護者を静めた"
+          }
+        }
+      },
+      "q_wardens_echoes": {
+        "title": "監視者の残響",
+        "text": "主が黙しても、宮廷の守護者たちは最後の命令を、消えない残響のように繰り返している。封印が戻るまで、彼らは目覚め続ける、{playerName}。石工たちが封印石に届くよう、さらに十体を静めておくれ。",
+        "completion": "残響は繰り返すたびに薄れていく。じきに宮廷には風と蔦だけが残る。廃墟とはそうあるべきものだ。",
+        "objectives": {
+          "0": {
+            "label": "古代の守護者を静めた"
+          }
+        }
+      },
+      "q_waking_warden": {
+        "title": "目覚めし監視者",
+        "text": "宮廷は静かになったが、その主は違う。封印を守る監視者が歪んで目覚めた。あれが立っている限り、封印は繕えない。容易には倒れぬぞ。友を一人見つけられるなら連れて行け、{playerName}。二人見つかるなら二人だ。",
+        "completion": "あの鐘のような声が沈黙した。ここからでも感じたよ。谷全体から重石が取り除かれたようだった。",
+        "objectives": {
+          "0": {
+            "label": "目覚めし監視者を打ち倒した"
+          }
+        }
+      },
+      "q_seal_restored": {
+        "title": "封印の修復",
+        "text": "監視者の印章を宮廷の中心の封印石へ運び、打ち落とされた場所へ戻しておくれ。そうすれば幽谷は癒え始める。そしてそなたは、{playerName}、そなたの同族の誰も成しえなかったことを成すのだ。",
+        "completion": "ここから閉じるのを感じたよ。黄昏のように穏やかに。幽谷は友を忘れない、{playerName}。どれほど遠くへ旅しても、大樹の下にはいつでもそなたの灯りがある。",
+        "objectives": {
+          "0": {
+            "label": "封印を封印石に戻した"
+          }
+        }
+      },
+      "q_drowned_choir": {
+        "title": "溺れし聖歌隊",
+        "text": "渡り手どもは独りで動いているのではない。その中に溺れし信徒たちが歩いている——神殿とともに沈んだ教団だ。腐った祭服をまとったまま、岸の岩場から祈りを歌い続けている。八体を沈黙させ、奴らが携える供物を六つ持ち帰れ。奴らが女神に何を捧げようとしているのか、私は知りたいのだ。",
+        "completion": "真珠、指の骨、子供が彫った魚……これは墓への供物だ、{playerName}。奴らは死者を蘇らせているのではない。死者を着飾らせているのだ——埋葬のために亡骸を整えるようにな。あの神殿は、閉じることを拒む墓場なのだ。",
+        "objectives": {
+          "0": {
+            "label": "溺れし信徒を沈黙させた"
+          },
+          "1": {
+            "label": "溺れし供物"
+          }
+        }
+      },
+      "q_drowned_moon": {
+        "title": "溺れし月",
+        "text": "最後の拓本を読み終えた、{playerName}。教団が自ら溺れ死んでまで眠らせ続けようとしたものが、今や私には分かる。イソレイ——肉を得た溺れし月——が神殿の中心の祭壇でとぐろを巻いている。そしてこの沼が奪った命の温もりことごとくが、彼女の目覚めへと注ぎ込まれているのだ。満月が天に立つとき彼女は起き上がり、水もまた彼女とともに満ちる——湖も、防壁も、その下の山すべてもだ。集められるかぎりの強者を集め、彼女を再び眠りにつかせよ。今度こそ、永遠にな。",
+        "completion": "祭壇は暗く、水は静まり、湖に映る月はただの月だ。お前は今宵、女神を溺れさせたのだ、{playerName}——そして山は、どれほど破滅に近づいていたかを決して知ることはない。岸の岩場を守る番人たちも、ようやく安らかに眠れるだろう。",
+        "objectives": {
+          "0": {
+            "label": "溺月の化身イソレイを討伐した"
+          }
+        }
+      },
+      "q_glimmermere_light": {
+        "title": "水面の光",
+        "text": "あそこを見ろ、{playerName}——水面の下に、蒼白の石でできた階段が闇へと続き、その頂には冷たい光の門がある。古の番人たちは、水に呑まれる前に岸の岩場へ警告を刻みつけた。そのひとつの拓本を取ってきてくれ。これ以上近づく前に、奴らが何を恐れたのかを読んでおきたいのだ。",
+        "completion": "目覚めの祈り……奴らが溺れし月と呼んだ何かへの祈りだ。そしてその下に、より落ち着いた筆跡でこう記されている。「それはただ眠っているだけだ」。この水は長いあいだ、耳を澄ませてきたのだ、{playerName}。",
+        "objectives": {
+          "0": {
+            "label": "守護の拓本を取得した"
+          }
+        }
+      },
+      "q_palecoil": {
+        "title": "蒼渦のセスラエル",
+        "text": "沼の中の、ある影は溺れた人間ではない。骨の色をした大蛇が、階段の始まる深き棚を滑り泳いでいる——拓本が語るところのセスラエル、蒼渦、月そのものの番獣だ。あれがあの水を守るかぎり、誰も生きて門にはたどり着けぬ。棚へ降りて、それを殺せ、{playerName}。事を成した証として、その心鱗を持ち帰れ。",
+        "completion": "この世の底のように冷たく、それでもなお身をよじらせている。棚は片付いた、{playerName}——門へと続く階段が開け放たれた。いっそ開いていなければと、私は願ってしまうほどだ。",
+        "objectives": {
+          "0": {
+            "label": "セスラエルの心鱗"
+          }
+        }
+      },
+      "q_silence_the_choir": {
+        "title": "聖歌隊を沈黙させよ",
+        "text": "歌声は今や門の下から響いてくる。そしてそれを率いる一つの声がある——聖歌母セルセ、教団に死なずして溺れる術を初めて教えた者だ。彼女が祈りを保ちつづけるかぎり、神殿は決して眠らず——沼もまた、その死者を吐き返すのをやめはしない。仲間を連れて門をくぐり、彼女を終わらせよ。これは一振りの剣だけで成せる用ではない、{playerName}。",
+        "completion": "祈りが揺らぐ……そして三十夜ぶりに、沼は静まった。だが静けさは終わりと同じではない。セルセは聖歌隊にすぎなかった。その下の何かが、いまも耳を澄ませている。",
+        "objectives": {
+          "0": {
+            "label": "聖歌母セルセを討伐した"
+          }
+        }
+      },
+      "q_tarn_waders": {
+        "title": "沼が吐き返すもの",
+        "text": "門が開いてからというもの、黄昏どきになると沼から這い出てくるものがいる——膨れ上がり、蒼白く、手のあるべきところに鰭を持つ者どもだ。煌めき沼の渡り手と、古の拓本はそれらを名づけている。奴らは生きとし生けるものを何でも水底へ引きずり込む。私の見張りが皆無にされる前に、十体を駆除せよ。",
+        "completion": "十体が水に還った。奴らは寒さも恐れも感じぬのだ、{playerName}——ただあの門の引き寄せだけを感じている。奴らに何が歌いかけているにせよ、その歌は大きく響いているのだ。",
+        "objectives": {
+          "0": {
+            "label": "煌めき沼の渡り手を討伐した"
+          }
+        }
+      },
       "q_sw_arrival": {
         "title": "最後の井戸",
         "text": "地図の果てへようこそ、{playerName}。ハイウォッチはこの遠征を「南方派遣」と呼びますが、私に言わせれば四十の命と泉ひとつです。何よりもまず——水を。野営地の北にある心泉の水場から水袋を四つ汲んできてください。滝までの道が安全に歩けると、この目で確かめたいのです。",
@@ -8445,69 +10236,6 @@ export const ja_JP: EnTranslations = {
             "label": "アルドリック修道士と話す"
           }
         }
-      },
-      "q_drowned_choir": {
-        "title": "溺れし聖歌隊",
-        "text": "渡り手どもは独りで動いているのではない。その中に溺れし信徒たちが歩いている——神殿とともに沈んだ教団だ。腐った祭服をまとったまま、岸の岩場から祈りを歌い続けている。八体を沈黙させ、奴らが携える供物を六つ持ち帰れ。奴らが女神に何を捧げようとしているのか、私は知りたいのだ。",
-        "completion": "真珠、指の骨、子供が彫った魚……これは墓への供物だ、{playerName}。奴らは死者を蘇らせているのではない。死者を着飾らせているのだ——埋葬のために亡骸を整えるようにな。あの神殿は、閉じることを拒む墓場なのだ。",
-        "objectives": {
-          "0": {
-            "label": "溺れし信徒を沈黙させた"
-          },
-          "1": {
-            "label": "溺れし供物"
-          }
-        }
-      },
-      "q_drowned_moon": {
-        "title": "溺れし月",
-        "text": "最後の拓本を読み終えた、{playerName}。教団が自ら溺れ死んでまで眠らせ続けようとしたものが、今や私には分かる。イソレイ——肉を得た溺れし月——が神殿の中心の祭壇でとぐろを巻いている。そしてこの沼が奪った命の温もりことごとくが、彼女の目覚めへと注ぎ込まれているのだ。満月が天に立つとき彼女は起き上がり、水もまた彼女とともに満ちる——湖も、防壁も、その下の山すべてもだ。集められるかぎりの強者を集め、彼女を再び眠りにつかせよ。今度こそ、永遠にな。",
-        "completion": "祭壇は暗く、水は静まり、湖に映る月はただの月だ。お前は今宵、女神を溺れさせたのだ、{playerName}——そして山は、どれほど破滅に近づいていたかを決して知ることはない。岸の岩場を守る番人たちも、ようやく安らかに眠れるだろう。",
-        "objectives": {
-          "0": {
-            "label": "溺月の化身イソレイを討伐した"
-          }
-        }
-      },
-      "q_glimmermere_light": {
-        "title": "水面の光",
-        "text": "あそこを見ろ、{playerName}——水面の下に、蒼白の石でできた階段が闇へと続き、その頂には冷たい光の門がある。古の番人たちは、水に呑まれる前に岸の岩場へ警告を刻みつけた。そのひとつの拓本を取ってきてくれ。これ以上近づく前に、奴らが何を恐れたのかを読んでおきたいのだ。",
-        "completion": "目覚めの祈り……奴らが溺れし月と呼んだ何かへの祈りだ。そしてその下に、より落ち着いた筆跡でこう記されている。「それはただ眠っているだけだ」。この水は長いあいだ、耳を澄ませてきたのだ、{playerName}。",
-        "objectives": {
-          "0": {
-            "label": "守護の拓本を取得した"
-          }
-        }
-      },
-      "q_palecoil": {
-        "title": "蒼渦のセスラエル",
-        "text": "沼の中の、ある影は溺れた人間ではない。骨の色をした大蛇が、階段の始まる深き棚を滑り泳いでいる——拓本が語るところのセスラエル、蒼渦、月そのものの番獣だ。あれがあの水を守るかぎり、誰も生きて門にはたどり着けぬ。棚へ降りて、それを殺せ、{playerName}。事を成した証として、その心鱗を持ち帰れ。",
-        "completion": "この世の底のように冷たく、それでもなお身をよじらせている。棚は片付いた、{playerName}——門へと続く階段が開け放たれた。いっそ開いていなければと、私は願ってしまうほどだ。",
-        "objectives": {
-          "0": {
-            "label": "セスラエルの心鱗"
-          }
-        }
-      },
-      "q_silence_the_choir": {
-        "title": "聖歌隊を沈黙させよ",
-        "text": "歌声は今や門の下から響いてくる。そしてそれを率いる一つの声がある——聖歌母セルセ、教団に死なずして溺れる術を初めて教えた者だ。彼女が祈りを保ちつづけるかぎり、神殿は決して眠らず——沼もまた、その死者を吐き返すのをやめはしない。仲間を連れて門をくぐり、彼女を終わらせよ。これは一振りの剣だけで成せる用ではない、{playerName}。",
-        "completion": "祈りが揺らぐ……そして三十夜ぶりに、沼は静まった。だが静けさは終わりと同じではない。セルセは聖歌隊にすぎなかった。その下の何かが、いまも耳を澄ませている。",
-        "objectives": {
-          "0": {
-            "label": "聖歌母セルセを討伐した"
-          }
-        }
-      },
-      "q_tarn_waders": {
-        "title": "沼が吐き返すもの",
-        "text": "門が開いてからというもの、黄昏どきになると沼から這い出てくるものがいる——膨れ上がり、蒼白く、手のあるべきところに鰭を持つ者どもだ。煌めき沼の渡り手と、古の拓本はそれらを名づけている。奴らは生きとし生けるものを何でも水底へ引きずり込む。私の見張りが皆無にされる前に、十体を駆除せよ。",
-        "completion": "十体が水に還った。奴らは寒さも恐れも感じぬのだ、{playerName}——ただあの門の引き寄せだけを感じている。奴らに何が歌いかけているにせよ、その歌は大きく響いているのだ。",
-        "objectives": {
-          "0": {
-            "label": "煌めき沼の渡り手を討伐した"
-          }
-        }
       }
     },
     "zones": {
@@ -8544,6 +10272,12 @@ export const ja_JP: EnTranslations = {
           },
           "9": {
             "label": "ブライトウッドの林間"
+          },
+          "10": {
+            "label": "ソウフィールド"
+          },
+          "11": {
+            "label": "遠つ岸の砂州道"
           }
         }
       },
@@ -8610,6 +10344,285 @@ export const ja_JP: EnTranslations = {
           },
           "9": {
             "label": "墓ワームの聖所"
+          }
+        }
+      },
+      "veiled_hollow": {
+        "name": "ヴェールの幽谷",
+        "welcome": "大気は古の魔力に満ちて震えている。エルダーグリームの大樹の下で、守り手セルウィンを訪ねよ。",
+        "pois": {
+          "0": {
+            "label": "エルダーグリーム"
+          },
+          "1": {
+            "label": "ダスクフォール洞窟"
+          },
+          "2": {
+            "label": "ダスクフォールの見晴らし台"
+          },
+          "3": {
+            "label": "長老樹の森"
+          },
+          "4": {
+            "label": "星降りの盆地"
+          },
+          "5": {
+            "label": "沈んだ宮廷"
+          },
+          "6": {
+            "label": "水晶の浅瀬"
+          },
+          "7": {
+            "label": "輝きの深み"
+          }
+        }
+      },
+      "drakelands": {
+        "name": "ドレイクランド",
+        "welcome": "熱風が荒野から吹きつける。ドラゴンはドレイクモウの上空を旋回し、砂丘にはトロールの焚き火が燃えている。",
+        "pois": {
+          "0": {
+            "label": "ワームウォッチ"
+          },
+          "1": {
+            "label": "ゲートウッドの森"
+          },
+          "2": {
+            "label": "シンダー砂丘"
+          },
+          "3": {
+            "label": "トロールムート"
+          },
+          "4": {
+            "label": "ブラッドグラスの平原"
+          },
+          "5": {
+            "label": "ドレイクモウ火口"
+          }
+        }
+      },
+      "frostveil": {
+        "name": "フロストヴェイルの果て",
+        "welcome": "雪がすべての音を呑み込む。揺らめくオーロラの下で、寒さそのものが目覚めているかのようだ。",
+        "pois": {
+          "0": {
+            "label": "アイスマントル"
+          },
+          "1": {
+            "label": "スノーライン峠"
+          },
+          "2": {
+            "label": "氷河の湖"
+          },
+          "3": {
+            "label": "オーロラの階段"
+          },
+          "4": {
+            "label": "シヴァーフェン湿地"
+          },
+          "5": {
+            "label": "咆哮のテラス"
+          }
+        }
+      },
+      "amberfall": {
+        "name": "アンバーフォール",
+        "welcome": "ここではどの葉も金と紅に燃え、決して散らない。ランタンミアの灯りが君を迎えている。",
+        "pois": {
+          "0": {
+            "label": "ランタンミア"
+          },
+          "1": {
+            "label": "ゴールドメルト峠"
+          },
+          "2": {
+            "label": "黄金の果樹園"
+          },
+          "3": {
+            "label": "ハーベスト谷"
+          },
+          "4": {
+            "label": "大いなる湖"
+          },
+          "5": {
+            "label": "シンダーメイプルの丘"
+          },
+          "6": {
+            "label": "傾いた石碑"
+          }
+        }
+      },
+      "willowfen": {
+        "name": "ウィローフェン",
+        "welcome": "湿原にはトンボと蜂の羽音が満ちている。橋を渡ってブリッジミアに入り、しばし足を休めるといい。",
+        "pois": {
+          "0": {
+            "label": "ブリッジミア"
+          },
+          "1": {
+            "label": "アンバーフェンの石段"
+          },
+          "2": {
+            "label": "リリームーア"
+          },
+          "3": {
+            "label": "ボグシャインの池"
+          },
+          "4": {
+            "label": "ウィローウィープ"
+          },
+          "5": {
+            "label": "まどろみの浅瀬"
+          }
+        }
+      },
+      "nightbloom": {
+        "name": "ナイトブルーム",
+        "welcome": "夜門の先では、大気までもが夢を見ている。花明かりをたどってムーンレストへ。空に浮かぶ眠れる世界もお見逃しなく。",
+        "pois": {
+          "0": {
+            "label": "ムーンレスト"
+          },
+          "1": {
+            "label": "夜の門"
+          },
+          "2": {
+            "label": "月の井戸"
+          },
+          "3": {
+            "label": "宵闇の花野"
+          },
+          "4": {
+            "label": "見張りの石環"
+          },
+          "5": {
+            "label": "不眠の塚"
+          }
+        }
+      },
+      "wraithwood": {
+        "name": "レイスウッド",
+        "welcome": "梢が棺の蓋のように道の上で閉じていく。ガロウミアの灯りから離れるな。森が名前を呼んでも、決して答えるな。",
+        "pois": {
+          "0": {
+            "label": "ガロウミア"
+          },
+          "1": {
+            "label": "鴉の門"
+          },
+          "2": {
+            "label": "寡婦の茨"
+          },
+          "3": {
+            "label": "吊るしの林間地"
+          },
+          "4": {
+            "label": "哀石の礼拝堂"
+          },
+          "5": {
+            "label": "狩人の広場"
+          }
+        }
+      },
+      "palmreach": {
+        "name": "パームリーチ",
+        "welcome": "暖かい砂浜、騒がしい鳥の声、そして地平線を呑み込むジャングル。ドリフトヘイヴンは浜辺に火を焚いて待っている。",
+        "pois": {
+          "0": {
+            "label": "ドリフトヘイヴン"
+          },
+          "1": {
+            "label": "絡み口"
+          },
+          "2": {
+            "label": "パームストランド"
+          },
+          "3": {
+            "label": "エメラルドの密林"
+          },
+          "4": {
+            "label": "蔓垂の森"
+          },
+          "5": {
+            "label": "サファイアの潟"
+          },
+          "6": {
+            "label": "沈んだ神像"
+          }
+        }
+      },
+      "evergarden": {
+        "name": "エバーガーデン",
+        "welcome": "生け垣は今も刈り込まれているのに、庭師の姿は百年も見られていない。迷路には気をつけろ。迷路もお前を見ている。",
+        "pois": {
+          "0": {
+            "label": "ヘッジウィック"
+          },
+          "1": {
+            "label": "ガーデンゲート"
+          },
+          "2": {
+            "label": "彫像の並木道"
+          },
+          "3": {
+            "label": "野バラの茂み"
+          },
+          "4": {
+            "label": "花びらの池"
+          },
+          "5": {
+            "label": "大迷路"
+          },
+          "6": {
+            "label": "噴水の中庭"
+          }
+        }
+      },
+      "galecrest": {
+        "name": "ゲイルクレスト",
+        "welcome": "ここでは風が一度も止んだことがなく、オールドビーコンの火も一度も消えたことがない。ウィックハーバーの願いはただひとつ、宿の扉をきちんと閉めてくれることだ。",
+        "pois": {
+          "0": {
+            "label": "ウィックハーバー"
+          },
+          "1": {
+            "label": "ウィンドウェイ"
+          },
+          "2": {
+            "label": "ハウリングダウンズ"
+          },
+          "3": {
+            "label": "オールドビーコン"
+          },
+          "4": {
+            "label": "ザ・シアー"
+          },
+          "5": {
+            "label": "レックフィールズ"
+          },
+          "6": {
+            "label": "ミラーターン"
+          }
+        }
+      },
+      "farshore_isle": {
+        "name": "遠つ岸",
+        "welcome": "砂州を渡れば、町に着くより先にカモメ港の鐘があなたを見つけるだろう。裂け目は前触れもなく口を開き、この砦は流れ出るものすべてから己の岸を守り続けている。あなたのような者を、ここでは長らく待ちわびていたのだ。",
+        "pois": {
+          "0": {
+            "label": "カモメ港"
+          },
+          "1": {
+            "label": "船着き場"
+          },
+          "2": {
+            "label": "見張りの草原"
+          },
+          "3": {
+            "label": "引き裂かれた断崖"
+          },
+          "4": {
+            "label": "裂け目野"
           }
         }
       }
@@ -8688,12 +10701,14 @@ export const ja_JP: EnTranslations = {
       "crownforged": {
         "name": "ボーンロートの戦装束",
         "bonus2": "攻撃力が40上昇します。",
-        "bonus3": "筋力が15、スタミナが15上昇し、攻撃速度と詠唱速度が15%上昇します。"
+        "bonus3": "筋力が15、スタミナが15上昇し、攻撃速度と詠唱速度が15%上昇します。",
+        "bonus4": "武器のクリティカルヒットで対象に「ボーンスプリンター」を刻み、2秒ごとに8ダメージの出血を12秒間与えます。最大3回まで累積します。"
       },
       "deathlord": {
         "name": "バロウロードの戦装束",
         "bonus2": "攻撃力が40上昇します。",
-        "bonus3": "筋力が15、スタミナが15上昇します。"
+        "bonus3": "筋力が15、スタミナが15上昇します。",
+        "bonus4": "武器のクリティカルヒット時に50%の確率で「グレイブマイト」が発動し、攻撃力が10秒間60上昇します。"
       },
       "greyjaw_stalker": {
         "name": "グレイジョーの追跡者の装備",
@@ -8702,22 +10717,26 @@ export const ja_JP: EnTranslations = {
       "necromancers": {
         "name": "モーンウィーヴの法衣",
         "bonus2": "ノックバックされなくなります（ノックバック耐性100%）。",
-        "bonus3": "知力が10、スタミナが10上昇します。"
+        "bonus3": "知力が10、スタミナが10上昇します。",
+        "bonus4": "呪文に10%の確率で「クリアキャスティング」が発動し、次の呪文が無償になります。"
       },
       "nighttalon": {
         "name": "ダイアファングの革装束",
         "bonus2": "攻撃力が40上昇します。",
-        "bonus3": "敏捷性が15、クリティカル率が2%上昇し、攻撃速度と詠唱速度が15%上昇します。"
+        "bonus3": "敏捷性が15、クリティカル率が2%上昇し、攻撃速度と詠唱速度が15%上昇します。",
+        "bonus4": "武器のクリティカルヒットで「裂けた傷」を与え、対象に2秒ごとに6ダメージの出血を12秒間与えます。最大3回まで累積します。"
       },
       "soulflame": {
         "name": "レイスファイアの法衣",
         "bonus2": "ノックバックされなくなります（ノックバック耐性100%）。",
-        "bonus3": "知力が15、精神力が15上昇し、攻撃速度と詠唱速度が15%上昇します。"
+        "bonus3": "知力が15、精神力が15上昇し、攻撃速度と詠唱速度が15%上昇します。",
+        "bonus4": "呪文に10%の確率で「ソウルブレイズ」が発動し、呪文の威力が10秒間40上昇します。"
       },
       "stormcallers": {
         "name": "ゲイルコールの法衣",
         "bonus2": "ノックバックされなくなります（ノックバック耐性100%）。",
-        "bonus3": "知力が15、精神力が15上昇し、攻撃速度と詠唱速度が15%上昇します。"
+        "bonus3": "知力が15、精神力が15上昇し、攻撃速度と詠唱速度が15%上昇します。",
+        "bonus4": "呪文に10%の確率で「ソウルブレイズ」が発動し、呪文の威力が10秒間40上昇します。"
       },
       "vale_arcanist": {
         "name": "谷の秘術師の装束",
@@ -8726,7 +10745,8 @@ export const ja_JP: EnTranslations = {
       "wyrmshadow": {
         "name": "ナイトファングの装束",
         "bonus2": "攻撃力が40上昇します。",
-        "bonus3": "敏捷性が15、クリティカル率が2%上昇します。"
+        "bonus3": "敏捷性が15、クリティカル率が2%上昇します。",
+        "bonus4": "武器のクリティカルヒット時に50%の確率で「ファングラッシュ」が発動し、攻撃速度が8秒間25%上昇します。"
       }
     }
   },

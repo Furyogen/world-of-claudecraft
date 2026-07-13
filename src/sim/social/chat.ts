@@ -15,9 +15,13 @@
 
 import { type AssistCandidate, resolveAssist } from '../assist';
 import { GATHERING_PROFESSIONS } from '../content/professions';
+import { YUMI_TEMPLATE_ID } from '../content/yumi';
 import { CLASSES, ITEMS, zoneAt } from '../data';
+import * as deedsMod from '../deeds';
+import { createGroundObject } from '../entity';
 import { graveyardReadout } from '../entity_roster';
 import { isGatheringProfessionId, queueGatheringGrant } from '../professions/gathering';
+import { generateRiftPlan, isSetPieceSeed } from '../rift/rift_gen';
 import {
   type AwayStatus,
   JOINABLE_CHANNELS,
@@ -28,12 +32,28 @@ import {
   type SentChat,
 } from '../sim';
 import type { SimContext } from '../sim_context';
-import { dist2d, type Entity, MAX_LEVEL, type OverheadEmoteId, YELL_RANGE } from '../types';
+import {
+  dist2d,
+  type Entity,
+  MAX_LEVEL,
+  type OverheadEmoteId,
+  type RiftTier,
+  YELL_RANGE,
+} from '../types';
 import * as readouts from './chat_readouts';
 
 const CHAT_BURST = 8; // messages a player may send back-to-back...
 const CHAT_REFILL = 2; // ...then this many more per second (caps spam amplifiers)
 const OVERHEAD_EMOTE_DURATION = 3.2;
+
+// The speaker's selected Book of Deeds title, spread into every PLAYER-sourced
+// chat emit as the optional `fromTitle` field: a deed id the client localizes
+// through deed_i18n, never display text. Untitled players omit the key
+// entirely (the event stays byte-identical to the pre-title shape), and the
+// mob/boss yell emitters (mob/yells.ts, encounters/*) never call this.
+function speakerTitle(meta: PlayerMeta): { fromTitle?: string } {
+  return meta.activeTitle ? { fromTitle: meta.activeTitle } : {};
+}
 
 // Predefined social emotes. Each entry maps a command (and its aliases) to the
 // third-person action text shown to everyone in /say range. `solo` is used with
@@ -89,7 +109,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
     return null;
   }
 
-  // "/afk [message]" / "/dnd [message]" — set a presence status. Repeating
+  // "/afk [message]" / "/dnd [message]": set a presence status. Repeating
   // the same command with no message toggles it off. While away, anyone who
   // whispers you gets an auto-reply; /dnd also withholds the whisper itself.
   const awaym = /^\/(afk|dnd)(?:\s+([\s\S]+))?$/i.exec(raw);
@@ -123,7 +143,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
     return null;
   }
 
-  // Any other chat means you're back — clear a lingering away status.
+  // Any other chat means you're back: clear a lingering away status.
   if (r.meta.away) {
     r.meta.away = null;
     ctx.emit({
@@ -153,7 +173,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
     return null;
   }
 
-  // "/talents" (aliases "/talent", "/spec") — self-only readout of the
+  // "/talents" (aliases "/talent", "/spec"): self-only readout of the
   // player's specialization and how their talent points are spent. Returns
   // null (unlogged); no server interceptor, so it works online for free.
   if (/^\/(?:talents|talent|spec)(?:\s|$)/i.test(raw)) {
@@ -169,7 +189,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
     return null;
   }
 
-  // "/roll", "/roll N", "/roll M-N" — a classic random roll for loot disputes
+  // "/roll", "/roll N", "/roll M-N": a classic random roll for loot disputes
   // and social play. Rolled through the deterministic sim RNG so it is
   // server-authoritative (clients can't fake a result) and identical offline.
   const rollm = /^\/roll(?:\s+(\d+)(?:\s*-\s*(\d+))?)?\s*$/i.exec(raw);
@@ -194,6 +214,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
       return null;
     }
     const result = ctx.rng.int(lo, hi);
+    deedsMod.onChatRollForDeeds(ctx, r.meta.entityId, lo, hi, result);
     const text = `${result} (${lo}-${hi})`;
     const party = ctx.partyOf(r.meta.entityId);
     if (party) {
@@ -202,6 +223,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
           type: 'chat',
           fromPid: r.meta.entityId,
           from: r.meta.name,
+          ...speakerTitle(r.meta),
           text,
           channel: 'roll',
           pid: mPid,
@@ -215,6 +237,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
           type: 'chat',
           fromPid: r.meta.entityId,
           from: r.meta.name,
+          ...speakerTitle(r.meta),
           text,
           channel: 'roll',
           pid: meta.entityId,
@@ -224,7 +247,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
     return null;
   }
 
-  // "/r message" — reply to the last player who whispered us. Rewrite it to
+  // "/r message": reply to the last player who whispered us. Rewrite it to
   // the "/w <name> message" form so delivery, the echo, and case-matching
   // all stay in the single whisper handler below.
   const rm = /^\/r(?:eply)?\s+([\s\S]+)$/i.exec(raw);
@@ -238,7 +261,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
     line = `/w ${replyTo} ${rm[1]}`;
   }
 
-  // "/inspect name" — self-only readout of another online player's level,
+  // "/inspect name": self-only readout of another online player's level,
   // class, and health. The first cross-player readout; a classic-style Inspect.
   const im = /^\/(?:inspect|ins|examine)(?:\s+([\s\S]+))?$/i.exec(raw);
   if (im) {
@@ -277,10 +300,10 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
     return null;
   }
 
-  // "/invite name" — invite a player to your party by name, regardless of
+  // "/invite name": invite a player to your party by name, regardless of
   // distance (party invites have no proximity check, unlike trade/duel). Name
   // resolution mirrors /inspect (exact, then unambiguous case-insensitive); all
-  // party validation is delegated to partyInvite. (No "/inv" alias — that is
+  // party validation is delegated to partyInvite. (No "/inv" alias: that is
   // /inventory.)
   const invm = /^\/invite(?:\s+([\s\S]+))?$/i.exec(raw);
   if (invm) {
@@ -314,6 +337,14 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
       return null;
     }
     ctx.partyInvite(target.entityId, r.meta.entityId);
+    return null;
+  }
+
+  // "/ready" (alias "/readycheck"): the party/raid leader starts a ready check. Every
+  // other member's client plays a sound and shows a yes/no prompt; validation (in a
+  // party, leader-only, none already running) is delegated to readyCheckStart.
+  if (/^\/ready(?:check)?\s*$/i.test(raw)) {
+    ctx.readyCheckStart(r.meta.entityId);
     return null;
   }
 
@@ -408,7 +439,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
     return null;
   }
 
-  // "/played" — report how long this character has been in the world this
+  // "/played": report how long this character has been in the world this
   // session. Self-only informational line, like /who's reply.
   if (/^\/played(?:\s|$)/i.test(raw)) {
     const secs = Math.max(0, Math.floor(ctx.time - r.meta.joinedAt));
@@ -423,9 +454,29 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
     return null;
   }
 
+  // "/playtime": report this character's LIFETIME played time, accumulated
+  // across every session and persisted server-side (see PlayerMeta.
+  // totalPlayedSeconds + serializeCharacter). Unlike /played (session-only,
+  // resets on relog), this figure only ever grows while the character is
+  // actually in the world.
+  if (/^\/playtime(?:\s|$)/i.test(raw)) {
+    const secs = Math.max(0, Math.floor(r.meta.totalPlayedSeconds + (ctx.time - r.meta.joinedAt)));
+    const d = Math.floor(secs / 86400);
+    const h = Math.floor((secs % 86400) / 3600);
+    const m = Math.floor((secs % 3600) / 60);
+    const s = secs % 60;
+    const parts: string[] = [];
+    if (d) parts.push(`${d}d`);
+    if (d || h) parts.push(`${h}h`);
+    if (d || h || m) parts.push(`${m}m`);
+    parts.push(`${s}s`);
+    ctx.error(r.meta.entityId, `Total time played: ${parts.join(' ')}.`);
+    return null;
+  }
+
   // Self-only readouts: emit a private system line and never become chat.
   if (/^\/(?:where|loc|zone)(?:\s|$)/i.test(raw)) {
-    const zone = zoneAt(r.e.pos.z);
+    const zone = zoneAt(r.e.pos.x, r.e.pos.z);
     const [lo, hi] = zone.levelRange;
     ctx.error(
       r.meta.entityId,
@@ -489,7 +540,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
     return null;
   }
   if (/^\/(?:zones|zonelist|worldmap)(?:\s|$)/i.test(raw)) {
-    ctx.error(r.meta.entityId, readouts.zonesReadout(r.e.pos.z));
+    ctx.error(r.meta.entityId, readouts.zonesReadout(r.e.pos.x, r.e.pos.z));
     return null;
   }
   if (/^\/(?:nearby|near|around)(?:\s|$)/i.test(raw)) {
@@ -520,8 +571,22 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
     ctx.error(r.meta.entityId, graveyardReadout(r.e));
     return null;
   }
+  const dungeonDifficulty = /^\/(?:dungeons|dungeon|instances)\s+(normal|heroic)$/i.exec(raw);
+  if (dungeonDifficulty) {
+    ctx.setDungeonDifficulty(
+      dungeonDifficulty[1].toLowerCase() as 'normal' | 'heroic',
+      r.meta.entityId,
+    );
+    return null;
+  }
   if (/^\/(?:dungeons|dungeon|instances)(?:\s|$)/i.test(raw)) {
     ctx.error(r.meta.entityId, readouts.dungeonsReadout());
+    ctx.error(
+      r.meta.entityId,
+      ctx.dungeonDifficulty(r.meta.entityId) === 'heroic'
+        ? 'Dungeon difficulty: Heroic. Use /dungeon normal to change it.'
+        : 'Dungeon difficulty: Normal. Use /dungeon heroic to change it.',
+    );
     return null;
   }
   if (/^\/(?:consider|con|difficulty)(?:\s|$)/i.test(raw)) {
@@ -593,7 +658,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
     return null;
   }
 
-  // "/w name message" — private whisper to an online player. Match against
+  // "/w name message": private whisper to an online player. Match against
   // `line` so a "/r" reply (rewritten to the /w form above) flows through the
   // same longest-online-name resolver.
   const wm = /^\/(?:w|whisper|t|tell)\s+([\s\S]+)$/i.exec(line);
@@ -624,6 +689,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
           type: 'chat',
           fromPid: r.meta.entityId,
           from: r.meta.name,
+          ...speakerTitle(r.meta),
           to: target.name,
           text: msg,
           channel: 'whisper',
@@ -644,6 +710,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
         type: 'chat',
         fromPid: r.meta.entityId,
         from: r.meta.name,
+        ...speakerTitle(r.meta),
         text: msg,
         channel: 'whisper',
         pid: target.entityId,
@@ -652,6 +719,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
       type: 'chat',
       fromPid: r.meta.entityId,
       from: r.meta.name,
+      ...speakerTitle(r.meta),
       to: target.name,
       text: msg,
       channel: 'whisper',
@@ -668,6 +736,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
         type: 'chat',
         fromPid: target.entityId,
         from: target.name,
+        ...speakerTitle(target),
         text: reply,
         channel: 'whisper',
         pid: r.meta.entityId,
@@ -690,6 +759,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
         type: 'chat',
         fromPid: r.meta.entityId,
         from: r.meta.name,
+        ...speakerTitle(r.meta),
         text: clean,
         channel: 'party',
         pid: mPid,
@@ -698,7 +768,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
     return { channel: 'party', message: clean };
   }
 
-  // "/g message" — world-wide general channel (no pid = broadcast to all)
+  // "/g message": world-wide general channel (no pid = broadcast to all)
   if (/^\/g(eneral)?\s/i.test(raw)) {
     const clean = raw.replace(/^\/g(eneral)?\s+/i, '').trim();
     if (!clean) return null;
@@ -706,13 +776,14 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
       type: 'chat',
       fromPid: r.meta.entityId,
       from: r.meta.name,
+      ...speakerTitle(r.meta),
       text: clean,
       channel: 'general',
     });
     return { channel: 'general', message: clean };
   }
 
-  // "/join <channel>" / "/leave <channel>" — opt-in global channels
+  // "/join <channel>" / "/leave <channel>": opt-in global channels
   const jm = /^\/(join|leave)\b\s*(\S*)\s*$/i.exec(raw);
   if (jm) {
     handleChannelMembership(
@@ -724,7 +795,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
     return null;
   }
 
-  // "/world message" / "/lfg message" — talk in an opt-in channel; only
+  // "/world message" / "/lfg message": talk in an opt-in channel; only
   // players who have /join-ed it hear the message (the sender included)
   const cm = /^\/(world|lfg)\s+([\s\S]+)$/i.exec(raw);
   if (cm) {
@@ -745,6 +816,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
           type: 'chat',
           fromPid: r.meta.entityId,
           from: r.meta.name,
+          ...speakerTitle(r.meta),
           text: clean,
           channel,
           pid: subPid,
@@ -754,7 +826,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
     return { channel, message: clean };
   }
 
-  // "/me <action>" — freeform third-person action text, e.g.
+  // "/me <action>": freeform third-person action text, e.g.
   // "/me ponders the void" → "Aleph ponders the void". Emotes never become
   // the player's sticky chat channel, so this returns null on success.
   const meMatch = /^\/(?:me|emote|e)\s+([\s\S]+)$/i.exec(raw);
@@ -764,7 +836,22 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
     return null;
   }
 
-  // "/wave", "/dance [name]" — predefined social emotes. An optional name
+  // "/sit", "/stand": a real seated POSE (rest on a bench, or up in the Vale
+  // Cup grandstands, which are walkable tiers). Sitting clears the moment you
+  // move, cast, or take a hit (those paths call standUp), so /stand is only for
+  // standing back up in place. Rides the existing `sitting` wire bit, so it works
+  // the same online and offline; no chat text, so nothing to localize.
+  const poseMatch = /^\/(sit|stand)\s*$/i.exec(raw);
+  if (poseMatch) {
+    if (poseMatch[1].toLowerCase() === 'sit') {
+      if (!r.e.dead) r.e.sitting = true;
+    } else {
+      ctx.standUp(r.e);
+    }
+    return null;
+  }
+
+  // "/wave", "/dance [name]": predefined social emotes. An optional name
   // targets an online player (in range or not); unknown names fall back to
   // the untargeted form, matching the classic-MMO convention.
   const emMatch = /^\/([a-z]+)(?:\s+(\S+))?\s*$/i.exec(raw);
@@ -779,11 +866,13 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
         if (t) text = def.target.replace('%t', t.name === r.meta.name ? 'themselves' : t.name);
       }
       broadcastEmote(ctx, r.meta, r.e, text);
+      // A cheer with a live Yumi in earshot counts; range matches the /say emote.
+      if (key === 'cheer') deedsMod.onCheerForDeeds(ctx, r.meta, r.e, YUMI_TEMPLATE_ID, SAY_RANGE);
       return null;
     }
   }
 
-  // bare text and "/s" are local say; "/y" carries further — both are
+  // bare text and "/s" are local say; "/y" carries further: both are
   // delivered per-player by range and carry the speaker for chat bubbles
   let channel: 'say' | 'yell' = 'say';
   let clean = raw;
@@ -805,6 +894,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
       type: 'chat',
       fromPid: r.meta.entityId,
       from: r.meta.name,
+      ...speakerTitle(r.meta),
       text: clean,
       channel,
       entityId: r.e.id,
@@ -829,7 +919,7 @@ export function chatAllowed(ctx: SimContext, pid: number): boolean {
   return true;
 }
 
-// Dev chat cheats — only when Sim.devCommands is enabled (offline local play
+// Dev chat cheats: only when Sim.devCommands is enabled (offline local play
 // or online server with ALLOW_DEV_COMMANDS=1). Returns null when handled
 // (no channel message), or undefined when not a dev command.
 export function handleDevChat(
@@ -923,6 +1013,104 @@ export function handleDevChat(
     else ctx.emit({ type: 'log', text: okText, pid });
     return null;
   }
+  // [dev] Spawn a procedural rift portal in front of the player. Each invocation
+  // rolls a fresh seed (so every portal opens a different, infinite dungeon) unless
+  // one is supplied for reproducibility. An optional rank letter forces the tier
+  // (colour + badge); omitted, a random rank is rolled so the portal always shows
+  // a coloured shimmer and its floating letter. A trailing kind token forces the
+  // DUNGEON TYPE: /dev portal [seed] [level] [C|B|A|S] [infernal|random].
+  //
+  // The kind is not a wire field: it SEARCHES for a seed of the requested kind
+  // (isSetPieceSeed is a pure function of the seed), so the descriptor stays
+  // {seed, baseLevel, floorIndex, origin} and every client regenerates the same
+  // dungeon from it. A supplied seed of the wrong kind is advanced, with a notice.
+  const portalM =
+    /^\/(?:dev\s+portal|devportal)(?:\s+(\d+))?(?:\s+(\d+))?(?:\s+([CBAScbas]))?(?:\s+(infernal|citadel|random|procedural))?\s*$/i.exec(
+      raw,
+    );
+  if (portalM) {
+    const e = ctx.entities.get(pid);
+    if (!e) return null;
+    let seed = (portalM[1] ? Number(portalM[1]) : ctx.rng.int(1, 1_000_000_000)) >>> 0;
+    const kind = portalM[4]?.toLowerCase();
+    if (kind) {
+      const wantSetPiece = kind === 'infernal' || kind === 'citadel';
+      const start = seed;
+      for (let i = 0; i < 10_000 && isSetPieceSeed(seed) !== wantSetPiece; i++) {
+        seed = (seed + 1) >>> 0;
+      }
+      if (isSetPieceSeed(seed) !== wantSetPiece) {
+        ctx.error(pid, '[dev] Found no seed of that kind. Try again.');
+        return null;
+      }
+      if (seed !== start) {
+        ctx.emit({
+          type: 'log',
+          text: `[dev] Seed ${start} is not ${wantSetPiece ? 'infernal' : 'procedural'}; using ${seed}.`,
+          color: '#b9f',
+          pid,
+        });
+      }
+    }
+    const baseLevel = Math.max(1, Math.min(60, portalM[2] ? Number(portalM[2]) : e.level));
+    const TIERS: RiftTier[] = ['C', 'B', 'A', 'S'];
+    const tier: RiftTier = portalM[3]
+      ? (portalM[3].toUpperCase() as RiftTier)
+      : TIERS[ctx.rng.int(0, 3)];
+    const d = 5;
+    const px = e.pos.x + Math.sin(e.facing) * d;
+    const pz = e.pos.z + Math.cos(e.facing) * d;
+    const plan = generateRiftPlan(seed, baseLevel);
+    const portal = createGroundObject(ctx.nextId++, '', plan.name, ctx.groundPos(px, pz));
+    portal.templateId = 'rift_portal';
+    portal.objectItemId = null;
+    portal.lootable = true;
+    portal.riftSeed = seed;
+    portal.riftBaseLevel = baseLevel;
+    portal.riftTier = tier;
+    portal.facing = e.facing + Math.PI; // face back toward the player
+    portal.prevFacing = portal.facing;
+    ctx.addEntity(portal);
+    ctx.emit({
+      type: 'log',
+      text: `[dev] Opened a ${tier}-rank portal to ${plan.name} (${plan.floorCount} floors, L${baseLevel}). Walk through it.`,
+      color: '#b9f',
+      pid,
+    });
+    return null;
+  }
+  // [dev] Toggle invulnerability (rides the existing GM damage-immunity funnel in
+  // dealDamage). Handy for touring the group-tuned rifts solo. Tops off HP when
+  // enabling so a mid-fight toggle is a clean reset.
+  if (/^\/(?:dev\s+god|devgod)\s*$/i.test(raw)) {
+    const e = ctx.entities.get(pid);
+    if (e) {
+      e.gm = !e.gm;
+      if (e.gm) e.hp = e.maxHp;
+      ctx.emit({
+        type: 'log',
+        text: e.gm ? '[dev] God mode ON (invulnerable).' : '[dev] God mode OFF.',
+        color: '#b9f',
+        pid,
+      });
+    }
+    return null;
+  }
+  // [dev] Toggle one-shot ("smite") mode: this player's every hit deletes any mob
+  // it lands on (see dealDamage). Handy for blasting through the giga-boss rifts.
+  if (/^\/(?:dev\s+(?:smite|oneshot|nuke)|devsmite)\s*$/i.test(raw)) {
+    const e = ctx.entities.get(pid);
+    if (e) {
+      e.oneShot = !e.oneShot;
+      ctx.emit({
+        type: 'log',
+        text: e.oneShot ? '[dev] Smite mode ON (one-shot everything).' : '[dev] Smite mode OFF.',
+        color: '#b9f',
+        pid,
+      });
+    }
+    return null;
+  }
   if (/^\/(?:dev\s+(?:kill|die|suicide)|devkill)\s*$/i.test(raw)) {
     // [dev] Instant self-kill for testing the death/ghost loop: routes through the real
     // death teardown (handleDeath), so the death overlay, corpse, and The Keeper's Toll
@@ -934,7 +1122,7 @@ export function handleDevChat(
   if (/^\/dev(?:\s|$)/i.test(raw)) {
     ctx.error(
       pid,
-      'Dev commands: /dev level N, /dev tp X Z, /dev give itemId [count], /dev gold N, /dev quest questId, /dev quests, /dev gather professionId [amount], /dev bot name, /dev kill',
+      'Dev commands: /dev level N, /dev tp X Z, /dev give itemId [count], /dev gold N, /dev quest questId, /dev quests, /dev gather professionId [amount], /dev bot name, /dev portal [seed] [level], /dev god, /dev smite, /dev kill',
     );
     return null;
   }
@@ -1014,6 +1202,7 @@ export function broadcastEmote(
       type: 'chat',
       fromPid: actor.entityId,
       from: actor.name,
+      ...speakerTitle(actor),
       text: body,
       channel: 'emote',
       entityId: actorEntity.id,
@@ -1036,8 +1225,8 @@ export function helpLines(): string[] {
   return [
     'Chat channels: /s say, /y yell, /general, /p party, /world, /lfg.',
     'Whisper a player with /w <name> <message>, reply with /r.',
-    'Other commands: /join <world|lfg>, /roll, /invite <name>, /inspect <name>, /follow <name>, /unfollow, /assist <name>, /afk, /dnd, /who.',
-    'Character readouts: /played, /xp, /gold, /stats, /bags, /gear, /abilities, /buffs, /cooldowns, /quest, /completed.',
+    'Other commands: /join <world|lfg>, /roll, /invite <name>, /inspect <name>, /follow <name>, /unfollow, /assist <name>, /ready, /afk, /dnd, /who.',
+    'Character readouts: /played, /playtime, /xp, /gold, /stats, /bags, /gear, /abilities, /buffs, /cooldowns, /quest, /completed.',
     'World readouts: /where, /zones, /nearby, /pois, /graveyard, /dungeons, /arena, /session, /listings, /buyback.',
     'Combat readouts: /target, /targetbuffs, /range, /attack, /casting, /combat, /threat, /consider, /combo, /overpower.',
     'State readouts: /pet, /pettaunt, /speed, /consumable, /potion, /form, /manaregen, /falling, /queued, /savedmana.',
@@ -1048,7 +1237,7 @@ export function helpLines(): string[] {
 export function inspectReadout(target: PlayerMeta, e: Entity): string {
   const cls = CLASSES[target.cls]?.name ?? target.cls;
   const hp = e.hp <= 0 ? 'dead' : `${Math.round(Math.max(0, Math.min(1, e.hp / e.maxHp)) * 100)}%`;
-  return `${target.name}: Level ${e.level} ${cls} — HP ${hp}.`;
+  return `${target.name}: Level ${e.level} ${cls}: HP ${hp}.`;
 }
 
 // Handles /join and /leave for the opt-in global channels.

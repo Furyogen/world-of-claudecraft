@@ -81,42 +81,22 @@ export const GROUND_PICKUP_LINES: Record<string, GroundPickupLines> = {
     deny: 'The ritual circle lies cold and dormant.',
     enough: 'The circle has nothing more to give you.',
   },
-  // --- Scorching Wastes ---
-  brimming_waterskin: {
-    deny: 'The caravan draws water by ration. Saffa decides whose skins get filled.',
-    enough: 'Your skins are full to bursting already.',
+  // the Veiled Hollow
+  hollow_sealstone: {
+    deny: 'The sealstone waits, its socket empty. You have nothing that fits it.',
+    enough: 'The seal is set. The sealstone asks nothing more of you.',
   },
-  caravan_manifest: {
-    deny: 'Picking through the wreck without cause would be grave-robbing, not salvage.',
-    enough: 'You have searched every wagon worth searching.',
+  monument_overlook: {
+    deny: 'The verse is worn shallow. Without a reason to read, it stays silent.',
+    enough: 'You have already read what the Overlook monument remembers.',
   },
-  mural_rubbing: {
-    deny: "Without Caddis's wax paper, the mural is just a wall.",
-    enough: 'You already carry all three rubbings.',
+  monument_court: {
+    deny: 'Ivy blankets the verse. Without a reason to read, it stays silent.',
+    enough: 'You have already read what the Court monument remembers.',
   },
-  vigil_obelisk_dawn: {
-    deny: 'The obelisk is cold. The mural spoke of an order: dawn wakes first.',
-    enough: 'The Obelisk of Dawn already burns.',
-  },
-  vigil_obelisk_noon: {
-    deny: 'The obelisk is cold. Dawn must burn before noon may stand.',
-    enough: 'The Obelisk of Noon already burns.',
-  },
-  vigil_obelisk_dusk: {
-    deny: 'The obelisk is cold. Dusk is always the last to the vigil.',
-    enough: 'The Obelisk of Dusk already burns — and the Vigil has noticed.',
-  },
-  crown_brazier: {
-    deny: 'The brazier will not take flame for a stranger. The psalter names the rite.',
-    enough: 'This brazier already carries the crown-flame.',
-  },
-  heartspring_offering: {
-    deny: 'The spring keeps its blessing for those Haruk has named.',
-    enough: 'The spring has already spoken to you.',
-  },
-  wastes_relic_cache: {
-    deny: 'The cache is fused shut by two ages of sun and sand.',
-    enough: 'You have already emptied this cache.',
+  monument_north: {
+    deny: 'The forgotten verse waits for a reader with a reason.',
+    enough: 'You have already read what the forgotten monument remembers.',
   },
 };
 

@@ -14,9 +14,9 @@
 // Sim (foreign quest/delve callers). The heal is a DIRECT hp mutation + heal/spellfx
 // emit (no aura). `src/sim`-pure: no DOM/Three/Math.random.
 
+import * as deedsMod from '../deeds';
 import type { SimContext } from '../sim_context';
 import {
-  angleTo,
   DELVE_COMPANION_HEAL_INTERVAL,
   DELVE_COMPANION_MAX_RANK,
   DT,
@@ -24,6 +24,7 @@ import {
   type Entity,
   MELEE_RANGE,
   PET_TELEPORT_DISTANCE,
+  steadyAngleTo,
 } from '../types';
 
 const DELVE_COMPANION_HEAL_RANGE = 22;
@@ -80,10 +81,12 @@ export function updateDelveCompanion(ctx: SimContext, companion: Entity): void {
         fx: 'tick',
       });
       ctx.maybeCompanionBark(run, owner.id, 'ally_revive');
+      // The rank 3 boon actually saved someone.
+      deedsMod.onCompanionReviveForDeeds(ctx, owner.id);
     }
   }
   if (owner.dead) {
-    ctx.dropEntity(companion.id);
+    ctx.despawnDelveCompanion(run);
     return;
   }
   if (owner.inCombat) ctx.maybeCompanionBark(run, owner.id, 'combat_start');
@@ -126,7 +129,7 @@ export function updateDelveCompanion(ctx: SimContext, companion: Entity): void {
         );
       }
     } else {
-      companion.facing = angleTo(companion.pos, combatTarget.pos);
+      companion.facing = steadyAngleTo(companion.pos, combatTarget.pos, companion.facing);
       companion.swingTimer = (companion.swingTimer ?? 0) - DT;
       if (companion.swingTimer <= 0) {
         ctx.mobSwing(companion, combatTarget);

@@ -41,6 +41,27 @@ describe('context_release', () => {
     expect(a.dispose).not.toHaveBeenCalled();
   });
 
+  it('normalizes nullable WebGL info logs for Three r165', () => {
+    releaseTrackedWebGLContexts();
+    const rawProgramLog = vi.fn((): string | null => null);
+    const rawShaderLog = vi.fn((): string | null => null);
+    const context = {
+      getProgramInfoLog: rawProgramLog,
+      getShaderInfoLog: rawShaderLog,
+    } as unknown as WebGLRenderingContext;
+    const holder = {
+      ...fakeHolder(),
+      getContext: () => context,
+    };
+
+    trackWebGLContext(holder);
+
+    expect(context.getProgramInfoLog({} as WebGLProgram)).toBe('');
+    expect(context.getShaderInfoLog({} as WebGLShader)).toBe('');
+    expect(rawProgramLog).toHaveBeenCalledTimes(1);
+    expect(rawShaderLog).toHaveBeenCalledTimes(1);
+  });
+
   it('swallows a failing holder so one bad context cannot block the rest', () => {
     releaseTrackedWebGLContexts();
     const bad = {

@@ -1,5 +1,6 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { sfx } from '../src/game/sfx';
+import { SFX_CLIPS, type SfxEntry } from '../src/game/sfx_manifest.generated';
 
 // The footstep "jingling" bug: foot clips are ~0.48s but steps fire every ~0.22s
 // at a run, so flat retriggers overlap two pitch-jittered copies of one sample and
@@ -20,6 +21,13 @@ interface FakeSource {
 
 const sources: FakeSource[] = [];
 let nowT = 0;
+const WOOD_BUFFER = { duration: 0.37 };
+
+function lastSource(): FakeSource {
+  const source = sources.at(-1);
+  if (!source) throw new Error('expected an audio source');
+  return source;
+}
 
 function installAudioStub(): void {
   sources.length = 0;
@@ -86,10 +94,14 @@ function installAudioStub(): void {
   (globalThis as never as { AudioContext: unknown }).AudioContext = FakeCtx;
 }
 
+afterEach(() => {
+  vi.restoreAllMocks();
+});
+
 beforeEach(() => {
   installAudioStub();
   // Neutralize the ±jitter so alternation is the only pitch variable under test.
-  Math.random = () => 0.5;
+  vi.spyOn(Math, 'random').mockReturnValue(0.5);
   sfx.init();
   // Footsteps are off by default (the footstepSfx setting); enable them so the
   // play-path behaviours below are exercised. The gate itself is tested separately.
@@ -97,26 +109,85 @@ beforeEach(() => {
   // Inject decoded buffers directly (skip async fetch/decode in preload).
   const buffers = (sfx as unknown as { buffers: Map<string, { duration: number }> }).buffers;
   buffers.set('foot_grass', { duration: 0.48 });
+  buffers.set('foot_wood', WOOD_BUFFER);
 });
 
 describe('footstep audio', () => {
   it('shapes each footfall into a transient stopped before the next step', () => {
     sfx.footstep(0, 0, 0, 'grass', true, true);
-    const src = sources.at(-1)!;
+    const src = lastSource();
     expect(src.started).toBe(true);
     // running release 0.17s + tail margin → stopped well under the ~0.22s gap,
     // and far under the raw 0.48s clip that caused the overlap ring.
     expect(src.stopAt).not.toBeNull();
-    expect(src.stopAt! - nowT).toBeLessThan(0.22);
+    if (src.stopAt === null) throw new Error('expected the footstep to schedule a stop');
+    expect(src.stopAt - nowT).toBeLessThan(0.22);
   });
 
   it('alternates pitch between consecutive steps (left/right foot)', () => {
     sfx.footstep(0, 0, 0, 'grass', false, true);
-    const a = sources.at(-1)!.playbackRate.value;
+    const a = lastSource().playbackRate.value;
     nowT += 0.5; // clear the per-key cooldown so the next step actually plays
     sfx.footstep(0, 0, 0, 'grass', false, true);
-    const b = sources.at(-1)!.playbackRate.value;
+    const b = lastSource().playbackRate.value;
     expect(Math.abs(a - b)).toBeGreaterThan(0.05);
+  });
+
+  it('layers the authored playback rate underneath foot alternation', () => {
+    const entry = SFX_CLIPS.foot_grass;
+    const original = entry.playbackRate;
+    entry.playbackRate = 1.2;
+    try {
+      sfx.footstep(0, 0, 0, 'grass', false, true);
+      const first = lastSource().playbackRate.value;
+      nowT += 0.5;
+      sfx.footstep(0, 0, 0, 'grass', false, true);
+      const second = lastSource().playbackRate.value;
+      expect([first, second].sort()).toEqual([1.2 * 0.97, 1.2 * 1.04].sort());
+    } finally {
+      entry.playbackRate = original;
+    }
+  });
+
+  it('selects the sampled wood clip for wooden surfaces', () => {
+    sfx.footstep(0, 0, 0, 'wood', false, true);
+    expect(sources.at(-1)?.buffer).toBe(WOOD_BUFFER);
+  });
+});
+
+// hasVariants() is the predicate that drives mobSfxKey() in hud.ts:
+// mob_${fam}_${templateId}_${action} is preferred when hasVariants() returns
+// true, otherwise the family-level key mob_${fam}_${action} is used.
+describe('hasVariants', () => {
+  it('returns false for an unloaded key', () => {
+    expect(sfx.hasVariants('mob_beast_wolf_attack')).toBe(false);
+  });
+
+  it('recognizes a release-discovered subfamily entry before its lazy audio loads', () => {
+    const key = 'mob_beast_bear_attack';
+    const state = sfx as unknown as {
+      clips: Record<string, SfxEntry>;
+      failedLoads: Set<string>;
+    };
+    state.clips = {
+      ...state.clips,
+      [key]: {
+        ...SFX_CLIPS.mob_beast_attack,
+        variants: [SFX_CLIPS.mob_beast_attack.variants[0]],
+      },
+    };
+
+    expect(sfx.hasVariants(key)).toBe(true);
+    state.failedLoads.add(key);
+    expect(sfx.hasVariants(key)).toBe(false);
+  });
+
+  it('recognizes an injected procedural buffer and safely ignores unknown string keys', () => {
+    const buffers = (sfx as unknown as { buffers: Map<string, { duration: number }> }).buffers;
+    buffers.set('procedural_test', { duration: 0.8 });
+
+    expect(sfx.hasVariants('procedural_test')).toBe(true);
+    expect(() => sfx.playAt('not_in_manifest', 0, 0, 0)).not.toThrow();
   });
 });
 
@@ -140,6 +211,6 @@ describe('footstep toggle', () => {
     nowT += 0.5; // clear the per-key cooldown
     sfx.footstep(0, 0, 0, 'grass', true, true);
     expect(sources.length).toBe(muted + 1);
-    expect(sources.at(-1)!.started).toBe(true);
+    expect(lastSource().started).toBe(true);
   });
 });

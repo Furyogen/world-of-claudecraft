@@ -19,13 +19,25 @@ import { saveCharacterState } from '../server/db';
 import { type ClientSession, GameServer, wireEntity } from '../server/game';
 import { ClientWorld } from '../src/net/online';
 import { mechHeldWeaponOverride, visualKeyFor } from '../src/render/characters/manifest';
-import { DELVES } from '../src/sim/data';
+import { BUILTIN_WORLD, DELVES } from '../src/sim/data';
 import { Sim } from '../src/sim/sim';
-import { type Aura, DT, type PlayerClass } from '../src/sim/types';
+import { type Aura, DT, type PlayerClass, type WorldContent } from '../src/sim/types';
 import { terrainHeight } from '../src/sim/world';
 import { absorbTotal } from '../src/ui/absorb_bar';
 import { auraEffectDescriptor } from '../src/ui/aura_effect';
 import { isAuraDebuff } from '../src/ui/auras_view';
+
+// Wire round-trip fixtures only read the player entity they build, never ambient
+// world content, so strip camps/npcs/ground objects to keep each direct Sim cheap
+// (dot_final_tick pattern). The aura-decode suites near the end of this file grab
+// a real camp mob and the GameServer harness ships its own full world; both keep
+// the builtin content.
+const WIRE_TEST_WORLD: WorldContent = {
+  ...BUILTIN_WORLD,
+  camps: [],
+  npcs: {},
+  groundObjects: [],
+};
 
 const DELTA_KEYS = [
   'inv',
@@ -93,6 +105,8 @@ function bareClient(pid: number): ClientWorld {
   c.ownPlayerId = pid;
   c.ownPlayerClass = 'warrior';
   c.spectating = null;
+  c.cupInfo = null;
+  c.sportRole = null;
   c.moveInput = {};
   c.inventory = [];
   c.vendorBuyback = [];
@@ -105,10 +119,12 @@ function bareClient(pid: number): ClientWorld {
   c.questsDone = new Set();
   c.pendingQuestCommands = new Map();
   c.partyInfo = null;
+  c.selectedDungeonDifficulty = 'normal';
   c.tradeInfo = null;
   c.duelInfo = null;
   c.lastSnapAt = 0;
   c.snapInterval = 50;
+  c.serverTickHz = null;
   c.missingSince = new Map();
   c.pendingFacingDelta = 0;
   c.connected = true;
@@ -124,6 +140,38 @@ function bareClient(pid: number): ClientWorld {
   c.pendingSpectateFacing = null;
   return c;
 }
+
+describe('self stat wire round-trip', () => {
+  it('mirrors crit/haste rating from the self snapshot onto the paper-doll entity', () => {
+    const client = bareClient(1);
+    const internals = client as unknown as { applySnapshot(snapshot: unknown): void };
+    internals.applySnapshot({
+      t: 'snap',
+      ents: [],
+      self: {
+        id: 1,
+        k: 'player',
+        tid: 'mage',
+        nm: 'Caster',
+        lv: 20,
+        x: 0,
+        y: 0,
+        z: 0,
+        f: 0,
+        hp: 100,
+        mhp: 100,
+        res: 0,
+        mres: 100,
+        rtype: 'mana',
+        crat: 20,
+        hrat: 150,
+      },
+    });
+    // Without the wire fields these read the blankEntity default 0 (the bug this guards).
+    expect(client.player.critRating).toBe(20);
+    expect(client.player.hasteRating).toBe(150);
+  });
+});
 
 describe('spectate client POV', () => {
   it('follows observed self, aligns on entry and respawn, then restores identity', () => {
@@ -277,7 +325,7 @@ describe('raid lockouts over the wire', () => {
 // mech weapon (and rogue dual-wield) is proven to work online, not just offline.
 describe('Combat Mech held weapon over the wire', () => {
   it('mirrors class + mech skin + equipped weapon so a rogue mech dual-wields client-side', () => {
-    const sim = new Sim({ seed: 7, playerClass: 'rogue', autoEquip: true });
+    const sim = new Sim({ seed: 7, playerClass: 'rogue', autoEquip: true, world: WIRE_TEST_WORLD });
     const pid = sim.playerId;
     sim.setPlayerSkin(pid, 0, 'mech');
     sim.addItem('keen_dirk', 1, pid);
@@ -306,7 +354,12 @@ describe('Combat Mech held weapon over the wire', () => {
   });
 
   it('keeps a non-dual class (warrior) mech to a single mainhand over the wire', () => {
-    const sim = new Sim({ seed: 7, playerClass: 'warrior', autoEquip: true });
+    const sim = new Sim({
+      seed: 7,
+      playerClass: 'warrior',
+      autoEquip: true,
+      world: WIRE_TEST_WORLD,
+    });
     const pid = sim.playerId;
     sim.setPlayerSkin(pid, 0, 'mech');
     sim.addItem('worn_sword', 1, pid);
@@ -325,7 +378,12 @@ describe('Combat Mech held weapon over the wire', () => {
 
 describe('combat ratings over the wire', () => {
   it('mirrors Ranged Attack Power so online hunter attack-spell tooltips can scale', () => {
-    const sim = new Sim({ seed: 7, playerClass: 'hunter', autoEquip: true });
+    const sim = new Sim({
+      seed: 7,
+      playerClass: 'hunter',
+      autoEquip: true,
+      world: WIRE_TEST_WORLD,
+    });
     sim.setPlayerLevel(20);
     sim.tick();
     const e = sim.player;
@@ -357,7 +415,7 @@ describe('delta snapshots', () => {
     const snap = lastSnap(fc.sent);
     expect(snap).not.toBeNull();
     // a fresh session has an empty lastSent, so EVERY maybe() delta key rides the
-    // first snapshot (even the null-valued ones like party/trade); widened to all 26
+    // first snapshot (even the null-valued ones like party/trade/bank); all 40 of them
     for (const key of ALL_DELTA_KEYS) {
       expect(snap.self, `self.${key} missing from first snapshot`).toHaveProperty(key);
     }
@@ -420,7 +478,7 @@ describe('delta snapshots', () => {
     const snap = lastSnap(fc.sent);
     // This single-tick test stays on the decay-safe subset: cds and the timer-backed
     // keys (delve/arena timers, delveDaily) can re-emit after a real sim.tick(), so the
-    // widened all-26 omission is proven by the no-op re-broadcast test instead.
+    // widened all-27 omission is proven by the no-op re-broadcast test instead.
     for (const key of DELTA_KEYS) {
       expect(snap.self, `self.${key} resent although unchanged`).not.toHaveProperty(key);
     }
@@ -774,7 +832,7 @@ describe('delta snapshots', () => {
     joinServer(server, fc2, 2, 'Testb');
     broadcast(server);
     const snapNew = lastSnap(fc2.sent);
-    // a fresh session always receives the full self state: all 26 delta keys
+    // a fresh session always receives the full self state: every registered delta key
     for (const key of ALL_DELTA_KEYS) {
       expect(snapNew.self, `self.${key} missing for fresh session`).toHaveProperty(key);
     }
@@ -832,6 +890,65 @@ describe('raid party wire', () => {
     expect(client.partyInfo).not.toBeNull();
     expect(client.partyInfo?.raid).toBe(true);
     expect(client.partyInfo?.members.find((m) => m.pid === member.pid)?.group).toBe(2);
+  });
+});
+
+describe('dungeon difficulty wire', () => {
+  it('ships the selected dungeon difficulty and ClientWorld mirrors it', () => {
+    const server = new GameServer();
+    const fc = fakeWs();
+    const session = joinServer(server, fc, 1, 'Hero');
+    server.sim.setDungeonDifficulty('heroic', session.pid);
+
+    broadcast(server);
+
+    const snap = lastSnap(fc.sent);
+    expect(snap.self.ddiff).toBe('heroic');
+    const client = bareClient(session.pid);
+    (client as any).applySnapshot(snap);
+    expect(client.dungeonDifficulty()).toBe('heroic');
+  });
+
+  it('dispatches set_dungeon_difficulty through the wire and rejects invalid values', () => {
+    const server = new GameServer();
+    const fc = fakeWs();
+    const session = joinServer(server, fc, 1, 'Hero');
+
+    const send = (difficulty: unknown) =>
+      server.handleMessage(
+        session,
+        JSON.stringify({ t: 'cmd', cmd: 'set_dungeon_difficulty', difficulty }),
+      );
+
+    send('heroic');
+    expect(server.sim.dungeonDifficulty(session.pid)).toBe('heroic');
+
+    // isDungeonDifficulty guards the dispatch arm: junk values change nothing.
+    send('mythic');
+    expect(server.sim.dungeonDifficulty(session.pid)).toBe('heroic');
+    send(7);
+    expect(server.sim.dungeonDifficulty(session.pid)).toBe('heroic');
+    send(undefined);
+    expect(server.sim.dungeonDifficulty(session.pid)).toBe('heroic');
+
+    send('normal');
+    expect(server.sim.dungeonDifficulty(session.pid)).toBe('normal');
+  });
+
+  it('dispatches heroic_buy through the wire and validates the itemId', () => {
+    const server = new GameServer();
+    const fc = fakeWs();
+    const session = joinServer(server, fc, 1, 'Hero');
+    const send = (itemId: unknown) =>
+      server.handleMessage(session, JSON.stringify({ t: 'cmd', cmd: 'heroic_buy', itemId }));
+
+    // Junk payloads never reach the sim handler (typeof string guard).
+    send(7);
+    send(undefined);
+    // A valid string flows through; far from the quartermaster the sim refuses
+    // with an error event rather than granting anything.
+    send('seal_of_the_nine_oaths');
+    expect(server.sim.countItem('seal_of_the_nine_oaths', session.pid)).toBe(0);
   });
 });
 
@@ -1326,6 +1443,60 @@ describe('client-side delta merge', () => {
     expect(aura?.charges, 'client should mirror the wire charge count').toBe(2);
   });
 
+  it('round-trips the aura caster id (src) so own-aura prominence works online', () => {
+    // Drives the REAL server emit (wireEntity) into the REAL client mirror: a
+    // regression that drops either the `src` emission or the online.ts decode
+    // would silently decode every online aura to sourceId 0, degrading the
+    // target strip's ownFirst dot/hot prominence online while offline keeps it
+    // (the stacks/charges sibling pins above follow the same pattern).
+    const sim = new Sim({
+      seed: 7,
+      playerClass: 'warrior',
+      autoEquip: true,
+      world: WIRE_TEST_WORLD,
+    });
+    const e = sim.entities.get(sim.playerId)!;
+    e.auras.push(
+      {
+        id: 'rend',
+        name: 'Rend',
+        kind: 'dot',
+        remaining: 9,
+        duration: 9,
+        value: 5,
+        sourceId: 42,
+        school: 'physical',
+      },
+      {
+        id: 'battle_shout',
+        name: 'Battle Shout',
+        kind: 'buff_ap',
+        remaining: 120,
+        duration: 120,
+        value: 20,
+        sourceId: 0,
+        school: 'physical',
+      },
+    );
+    const w = wireEntity(e) as { auras: { id: string; src?: number }[] };
+    expect(w.auras.find((a) => a.id === 'rend')?.src, 'server ships the caster id').toBe(42);
+    expect(
+      'src' in (w.auras.find((a) => a.id === 'battle_shout') ?? {}),
+      'a sourceless aura omits src to stay lean',
+    ).toBe(false);
+
+    const client = bareClient(e.id + 1000);
+    (client as any).applySnapshot({ t: 'snap', ents: [w] });
+    const mirrored = client.entities.get(e.id)?.auras;
+    expect(mirrored?.find((a) => a.id === 'rend')?.sourceId, 'client mirrors the caster id').toBe(
+      42,
+    );
+    expect(
+      mirrored?.find((a) => a.id === 'battle_shout')?.sourceId,
+      'an omitted src decodes to 0',
+    ).toBe(0);
+  });
+
   it('snaps the interpolation anchor on a teleport but tweens normal moves', () => {
     const client = bareClient(1);
     const ent = (x: number, z: number) => ({
@@ -1529,7 +1700,12 @@ describe('despawn grace (anti-flicker)', () => {
 // offline/headless never call it, so the field stays ''.
 describe('guild nameplate wire', () => {
   it('carries the guild name through wireEntity only when set', () => {
-    const sim = new Sim({ seed: 1, playerClass: 'warrior', noPlayer: true });
+    const sim = new Sim({
+      seed: 1,
+      playerClass: 'warrior',
+      noPlayer: true,
+      world: WIRE_TEST_WORLD,
+    });
     const pid = sim.addPlayer('warrior', 'Thaldrin');
 
     expect(wireEntity(sim.entities.get(pid)!).gd).toBeUndefined();
@@ -1567,12 +1743,237 @@ describe('guild nameplate wire', () => {
   });
 });
 
+// The Book of Deeds active title rides the identity wire (key `title`, a deed
+// id, never display text) so other players' titles reach nameplates/inspect.
+// Emitted only when non-null (mobs and untitled players pay zero bytes); the
+// sim validator (src/sim/deeds.ts setActiveTitle) is the only writer.
+describe('active title wire (Book of Deeds)', () => {
+  it('carries the title deed id through wireEntity only when set', () => {
+    const sim = new Sim({ seed: 1, playerClass: 'warrior', noPlayer: true });
+    const pid = sim.addPlayer('warrior', 'Thaldrin');
+    const e = sim.entities.get(pid)!;
+    const meta = sim.players.get(pid)!;
+    expect(wireEntity(e).title).toBeUndefined();
+
+    // earn a title-reward deed, then select it through the sim setter
+    meta.deedsEarned.set('prog_veteran', '2026-07-08');
+    sim.setActiveTitle('prog_veteran', pid);
+    expect(wireEntity(e).title).toBe('prog_veteran');
+
+    // clearing the title drops the key, so the line disappears for viewers
+    sim.setActiveTitle(null, pid);
+    expect(wireEntity(e).title).toBeUndefined();
+  });
+
+  it('restores entity.title on the client from a full record', () => {
+    const client = bareClient(99);
+    const base = {
+      id: 7,
+      k: 'player',
+      tid: 'warrior',
+      nm: 'Brae',
+      lv: 5,
+      x: 0,
+      y: 0,
+      z: 0,
+      f: 0,
+      hp: 100,
+      mhp: 100,
+    };
+
+    (client as any).applySnapshot({ t: 'snap', ents: [{ ...base, title: 'prog_veteran' }] });
+    expect(client.entities.get(7)?.title).toBe('prog_veteran');
+
+    // a later full record without `title` means "untitled" -> reset to null
+    (client as any).applySnapshot({ t: 'snap', ents: [base] });
+    expect(client.entities.get(7)?.title).toBeNull();
+  });
+
+  it('server dispatch shape-checks the payload and routes through the sim validator', () => {
+    const server = new GameServer();
+    const fc = fakeWs();
+    const session = joinServer(server, fc, 1, 'Titled');
+    const sim = server.sim;
+    const meta = sim.players.get(session.pid)!;
+    const e = sim.entities.get(session.pid)!;
+    meta.deedsEarned.set('prog_veteran', '2026-07-08');
+
+    // a non-string, non-null payload never reaches the sim (silent no-op)
+    server.handleMessage(session, JSON.stringify({ t: 'cmd', cmd: 'deed_set_title', deedId: 42 }));
+    expect(meta.activeTitle).toBeNull();
+    expect(e.title).toBeNull();
+
+    // a raw frame naming an UNEARNED deed is refused by the sim validator
+    server.handleMessage(
+      session,
+      JSON.stringify({ t: 'cmd', cmd: 'deed_set_title', deedId: 'prog_champion' }),
+    );
+    expect(meta.activeTitle).toBeNull();
+    expect(e.title).toBeNull();
+
+    // the earned title-reward deed is accepted and echoes on the snapshot
+    server.handleMessage(
+      session,
+      JSON.stringify({ t: 'cmd', cmd: 'deed_set_title', deedId: 'prog_veteran' }),
+    );
+    expect(meta.activeTitle).toBe('prog_veteran');
+    expect(e.title).toBe('prog_veteran');
+    broadcast(server);
+    expect(lastSnap(fc.sent).self.atitle).toBe('prog_veteran');
+  });
+
+  it('the ClientWorld send frame round-trips through the server dispatch (key lockstep)', () => {
+    // Drive the REAL ClientWorld send path (cmd -> rawCmd -> ws.send) and feed
+    // the produced frame verbatim into server.handleMessage, so a key rename
+    // on EITHER side (deedId vs anything else) reddens here instead of
+    // silently no-oping in production.
+    const outbox: string[] = [];
+    const client = bareClient(1);
+    (client as any).connected = true;
+    (client as any).ws = { readyState: 1, send: (p: string) => outbox.push(p) };
+    client.setActiveTitle('prog_veteran');
+    client.setActiveTitle(null);
+    expect(outbox.map((p) => JSON.parse(p))).toEqual([
+      { t: 'cmd', cmd: 'deed_set_title', deedId: 'prog_veteran' },
+      { t: 'cmd', cmd: 'deed_set_title', deedId: null },
+    ]);
+
+    const server = new GameServer();
+    const fc = fakeWs();
+    const session = joinServer(server, fc, 1, 'Lockstep');
+    const meta = server.sim.players.get(session.pid)!;
+    const e = server.sim.entities.get(session.pid)!;
+    meta.deedsEarned.set('prog_veteran', '2026-07-08');
+    server.handleMessage(session, outbox[0]); // the client-built select frame
+    expect(meta.activeTitle).toBe('prog_veteran');
+    expect(e.title).toBe('prog_veteran');
+    server.handleMessage(session, outbox[1]); // the client-built clear frame
+    expect(meta.activeTitle).toBeNull();
+    expect(e.title).toBeNull();
+  });
+
+  it('a null payload through the server dispatch clears the title and echoes null', () => {
+    const server = new GameServer();
+    const fc = fakeWs();
+    const session = joinServer(server, fc, 1, 'Cleared');
+    const sim = server.sim;
+    const meta = sim.players.get(session.pid)!;
+    const e = sim.entities.get(session.pid)!;
+    meta.deedsEarned.set('prog_veteran', '2026-07-08');
+    server.handleMessage(
+      session,
+      JSON.stringify({ t: 'cmd', cmd: 'deed_set_title', deedId: 'prog_veteran' }),
+    );
+    expect(meta.activeTitle).toBe('prog_veteran');
+
+    server.handleMessage(
+      session,
+      JSON.stringify({ t: 'cmd', cmd: 'deed_set_title', deedId: null }),
+    );
+    expect(meta.activeTitle).toBeNull();
+    expect(e.title).toBeNull();
+    broadcast(server);
+    expect(lastSnap(fc.sent).self.atitle).toBeNull();
+  });
+
+  it('a mid-session unlock re-emits deeds and dstats on the next snapshot', () => {
+    const server = new GameServer();
+    const fc = fakeWs();
+    const session = joinServer(server, fc, 1, 'Unlocks');
+    const sim = server.sim;
+    const meta = sim.players.get(session.pid)!;
+
+    broadcast(server); // first snapshot: full self state
+    sim.tick(); // a quiet tick: nothing deed-related changed
+    fc.sent.length = 0;
+    broadcast(server);
+    const quiet = lastSnap(fc.sent);
+    expect(quiet.self).not.toHaveProperty('deeds');
+    expect(quiet.self).not.toHaveProperty('dstats');
+
+    // a real evaluator grant mid-session (duelsWon 0 -> 1 crosses the
+    // pvp_duel_first_win threshold) must reach the client on the NEXT
+    // snapshot, not the ~2s staggered backstop
+    sim.ctx.bumpDeedStat(meta, 'duelsWon', 1);
+    sim.tick();
+    expect(meta.deedsEarned.has('pvp_duel_first_win')).toBe(true);
+    fc.sent.length = 0;
+    broadcast(server);
+    const after = lastSnap(fc.sent);
+    expect(after.self.deeds).toHaveProperty('pvp_duel_first_win');
+    expect(after.self.dstats.counters.duelsWon).toBe(1);
+    expect(after.self.renown).toBe(5); // exactly pvp_duel_first_win's renown, from a base of 0
+  });
+
+  it('a second client sees the first client entity title after the re-wire', () => {
+    const server = new GameServer();
+    const fcA = fakeWs();
+    const a = joinServer(server, fcA, 1, 'Wearer');
+    const fcB = fakeWs();
+    const b = joinServer(server, fcB, 2, 'Viewer');
+    const sim = server.sim;
+    sim.players.get(a.pid)!.deedsEarned.set('prog_veteran', '2026-07-08');
+
+    // before the title: B's view of A carries no `title` key
+    broadcast(server);
+    const viewerB = bareClient(b.pid);
+    (viewerB as any).applySnapshot(lastSnap(fcB.sent));
+    expect(viewerB.entities.get(a.pid)?.title ?? null).toBeNull();
+
+    // A selects the title; the identity change re-wires A as a full record on
+    // the next tick (the per-entity wire cache re-serializes at most once per
+    // sim tick, so the tick between command and broadcast mirrors production)
+    server.handleMessage(
+      a,
+      JSON.stringify({ t: 'cmd', cmd: 'deed_set_title', deedId: 'prog_veteran' }),
+    );
+    sim.tick();
+    fcB.sent.length = 0;
+    broadcast(server);
+    (viewerB as any).applySnapshot(lastSnap(fcB.sent));
+    expect(viewerB.entities.get(a.pid)?.title).toBe('prog_veteran');
+
+    // A clears; the identity JSON loses the key, so A re-wires as a full
+    // record WITHOUT `title` and B's mirror must return to null (the ?? null
+    // default in the apply, not a stale carry-over)
+    server.handleMessage(a, JSON.stringify({ t: 'cmd', cmd: 'deed_set_title', deedId: null }));
+    sim.tick();
+    fcB.sent.length = 0;
+    broadcast(server);
+    (viewerB as any).applySnapshot(lastSnap(fcB.sent));
+    expect(viewerB.entities.get(a.pid)?.title).toBeNull();
+  });
+
+  it('a fresh player wires an empty earned map and null title that decode faithfully', () => {
+    const server = new GameServer();
+    const fc = fakeWs();
+    const session = joinServer(server, fc, 1, 'Fresh');
+    broadcast(server);
+    const snap = lastSnap(fc.sent);
+    // empty-value fidelity on the wire (the 40-key presence test above only
+    // proves the keys ride the first snapshot)
+    expect(snap.self.deeds).toEqual({});
+    expect(snap.self.atitle).toBeNull();
+    expect(snap.self.renown).toBe(0);
+    const client = bareClient(session.pid);
+    (client as any).applySnapshot(snap);
+    expect(client.deedsEarned.size).toBe(0);
+    expect(client.activeTitle).toBeNull();
+    expect(client.renown).toBe(0);
+  });
+});
+
 // Equipped mainhand item id rides the identity wire (terse key `mh`) so the
 // renderer can show each player's held weapon model. Recomputed in
 // recalcPlayerStats; the renderer maps it to a GLB (ITEM_WEAPON_VARIANTS).
 describe('held weapon wire (mainhandItemId)', () => {
   it('carries the equipped mainhand item through wireEntity', () => {
-    const sim = new Sim({ seed: 1, playerClass: 'warrior', noPlayer: true });
+    const sim = new Sim({
+      seed: 1,
+      playerClass: 'warrior',
+      noPlayer: true,
+      world: WIRE_TEST_WORLD,
+    });
     const pid = sim.addPlayer('warrior', 'Thaldrin');
     const e = sim.entities.get(pid)!;
     // a fresh warrior starts holding its class startWeapon
@@ -1821,23 +2222,25 @@ describe('lockpick view rebuilds from events on the online client', () => {
 // ---------------------------------------------------------------------------
 // W0a: full self-snapshot delta round-trip gate.
 //
-// `selfWireJson` (server/game.ts) emits 26 heavy "delta" fields through a
+// `selfWireJson` (server/game.ts) emits its heavy "delta" fields through a
 // `maybe(key, value)` closure that ships a key only when its serialized form
 // changed since this session last received it; `applySnapshot` (src/net/
 // online.ts) mirrors each with `if (s.X !== undefined)` (or the inline
 // `s.X ?? e.X` form for `stats`/`weapon`). This is the single most fragile codec
-// in the workstream, so we pin: (a) the exact 26-key set against drift, (b) the
+// in the workstream, so we pin: (a) the exact registered key set against drift, (b) the
 // terse-key -> IWorld-name rename map, (c) that every dirtied value round-trips
-// onto the correct decode target, and (d) that a no-op re-broadcast omits all 28
+// onto the correct decode target, and (d) that a no-op re-broadcast omits all registered keys
 // while the prior decoded value is preserved.
 // ---------------------------------------------------------------------------
 
-// The pinned set of the 28 `maybe(...)` delta keys, sorted. Cross-checked below
+// The pinned set of the 41 `maybe(...)` delta keys, sorted. Cross-checked below
 // against the live `maybe(...)` calls scraped from server/game.ts source, so a
-// 29th unregistered delta key reddens this gate.
+// 42nd unregistered delta key reddens this gate.
 const ALL_DELTA_KEYS = [
   'arena',
+  'atitle',
   'bags',
+  'bank',
   'buyback',
   'cds',
   'corpse',
@@ -1845,14 +2248,19 @@ const ALL_DELTA_KEYS = [
   'dclears',
   'dcomp',
   'dcompanion',
+  'deeds',
   'delveDaily',
   'dmarks',
   'drun',
+  'dstats',
   'duel',
+  'einst',
   'equip',
+  'gprof',
   'inv',
   'lockouts',
   'lroll',
+  'lrollg',
   'mail',
   'mailU',
   'market',
@@ -1862,9 +2270,13 @@ const ALL_DELTA_KEYS = [
   'prof',
   'qdone',
   'qlog',
+  'renown',
+  'sport',
   'stats',
   'tal',
+  'tfocus',
   'trade',
+  'vcup',
   'weapon',
 ] as const;
 
@@ -1877,20 +2289,27 @@ const ALL_DELTA_KEYS = [
 // keep their name; tal fans out to several members and is asserted directly).
 const TERSE_TO_IWORLD: Record<string, string> = {
   arena: 'arenaInfo',
+  atitle: 'activeTitle',
   bags: 'bags',
+  bank: 'bankInfo',
   buyback: 'vendorBuyback',
   cds: 'cooldowns',
   cosmetics: 'accountCosmetics',
   dclears: 'delveClears',
   dcomp: 'companionUpgrades',
   dcompanion: 'companionState',
+  deeds: 'deedsEarned',
   dmarks: 'delveMarks',
   drun: 'delveRun',
+  dstats: 'deedStats',
   duel: 'duelInfo',
+  einst: 'equipmentInstances',
   equip: 'equipment',
+  gprof: 'gatheringProficiency',
   inv: 'inventory',
   lockouts: 'selfLockouts',
   lroll: 'lootRollPrompts',
+  lrollg: 'lootRollGroup',
   lxp: 'lifetimeXp',
   mail: 'mailInfo',
   mailU: 'mailUnread',
@@ -1906,15 +2325,18 @@ const TERSE_TO_IWORLD: Record<string, string> = {
   res: 'resource',
   rtype: 'resourceType',
   rxp: 'restedXp',
+  sport: 'sportRole',
+  tfocus: 'townFocus',
+  vcup: 'cupInfo',
 };
 
 // Year ~2223 in epoch ms. Beats selfWireJson's `until > Date.now()` lockout
 // filter without a wall-clock read in test scaffolding.
 const FAR_FUTURE_MS = 8_000_000_000_000;
 
-// Dirty every one of the 25 `maybe()` delta fields with a distinguishable,
+// Dirty every one of the registered `maybe()` delta fields with a distinguishable,
 // non-default value so the round-trip + no-op-omission assertions are meaningful
-// (a fresh session carries all 25 on snapshot #1 regardless, since lastSent is
+// (a fresh session carries all of them on snapshot #1 regardless, since lastSent is
 // empty). Most fields are set on their real PlayerMeta/Entity/session source;
 // for the few whose authentic setup is mutually exclusive in one player state we
 // poke the exact source field the encoder reads, per the brief (the gate asserts
@@ -1966,11 +2388,19 @@ function dirtyEveryDeltaField(): {
   // Ravenpost welcome letter (delay 0) at join.
   const mailbox = sim.entities.get(sim.postOffice.mailboxIds[0]);
   if (mailbox) mailbox.pos = { ...p.pos };
+  // `bank`: bankInfoFor is null unless near a banker, so relocate a bursar onto the
+  // player; a stocked bank slot makes the mirrored contents distinguishable.
+  const banker = sim.entities.get(sim.bankerIds[0]);
+  if (banker) banker.pos = { ...p.pos };
+  meta.bank.inventory = [{ itemId: 'wolf_fang', count: 2 }];
 
   // Direct PlayerMeta fields.
   meta.inventory = [{ itemId: 'baked_bread', count: 3 }];
   meta.vendorBuyback = [{ itemId: 'apprentice_staff', count: 1 }];
   meta.equipment = { ...meta.equipment, mainhand: 'zealotsbane_blade' };
+  meta.equipmentInstance = {
+    ring1: { rolled: { quality: 'epic', stats: { str: 2 } }, boundTo: lp },
+  };
   meta.questLog.set('q_widows', { questId: 'q_widows', counts: [10, 0], state: 'active' });
   meta.questsDone.add('q_wolves');
   meta.raidLockouts.set('nythraxis_boss_arena', FAR_FUTURE_MS);
@@ -1984,6 +2414,20 @@ function dirtyEveryDeltaField(): {
   meta.gatheringProficiency = { mining: 6, logging: 0, herbalism: 0 };
   meta.delveDaily = { date: '2099-01-01', firstClearXp: new Set(['x']), markClears: 4 };
   meta.talents = { spec: 'arms', ranks: {}, choices: {} };
+  // Book of Deeds: two earned deeds with DISTINCT utcDay stamps (an empty map
+  // would be a vacuous pin), a non-zero stat block covering the counter, both
+  // sets, and a clear record, a renown total, and an active title
+  // (prog_veteran carries a title reward, so the sim setter would accept it).
+  meta.deedsEarned.set('prog_first_steps', '2026-07-01');
+  meta.deedsEarned.set('prog_veteran', '2026-07-08');
+  meta.deedStats.counters.kills = 7;
+  meta.deedStats.itemsDiscovered.add('wolf_fang');
+  meta.deedStats.visited.add('npc:chronicler_saul');
+  meta.deedStats.dungeonClears.hollow_crypt = 2;
+  meta.renown = 15;
+  meta.activeTitle = 'prog_veteran';
+  // the Vale Cup sport kit swap ('sport' heavy key) and queue readout ('vcup')
+  meta.sportRole = 'keeper';
   meta.talentMods.spec = 'arms';
   meta.loadouts = [{ name: 'PvP', alloc: { spec: 'arms', ranks: {}, choices: {} }, bar: [] }];
   meta.activeLoadout = 0;
@@ -2021,6 +2465,7 @@ function dirtyEveryDeltaField(): {
     quality: 'common',
     expiresAt: 9999,
     candidates: [lp],
+    partyMembers: [lp, mp],
     choices: new Map(),
   });
 
@@ -2028,7 +2473,7 @@ function dirtyEveryDeltaField(): {
 }
 
 describe('full self-state snapshot delta fixture', () => {
-  it('carries every one of the 25 dirtied delta keys on the first snapshot', () => {
+  it('carries every one of the dirtied delta keys on the first snapshot', () => {
     const { server, fc } = dirtyEveryDeltaField();
     broadcast(server);
     const snap = lastSnap(fc.sent);
@@ -2063,6 +2508,7 @@ describe('full self-state snapshot delta fixture', () => {
     expect(client.inventory).toEqual([{ itemId: 'baked_bread', count: 3 }]); // inv -> inventory
     expect(client.vendorBuyback).toEqual([{ itemId: 'apprentice_staff', count: 1 }]); // buyback -> vendorBuyback
     expect(client.equipment).toMatchObject({ mainhand: 'zealotsbane_blade' }); // equip -> equipment
+    expect(client.equipmentInstances.ring1?.rolled?.stats).toEqual({ str: 2 });
     // cosmetics -> accountCosmetics, asserted against the normalized shape (the input
     // is already the normal {completedQuestIds, mechChromaIds} form, see :192-202)
     expect(client.accountCosmetics).toEqual({
@@ -2083,11 +2529,25 @@ describe('full self-state snapshot delta fixture', () => {
     expect((client.duelInfo as any)?.state).toBe('countdown'); // duel -> duelInfo
     expect(client.arenaInfo).not.toBeNull(); // arena -> arenaInfo
     expect(client.marketInfo).not.toBeNull(); // market -> marketInfo
+    expect(client.bankInfo).not.toBeNull(); // bank -> bankInfo
+    expect(client.bankInfo?.slots).toEqual([{ itemId: 'wolf_fang', count: 2 }]); // bank contents mirror
     expect(client.activeLootRolls().map((r) => r.rollId)).toEqual([1]); // lroll -> lootRollPrompts
+    // lrollg -> lootRollGroup, via the lootRollGroupStatus() accessor
+    expect(client.lootRollGroupStatus()).toEqual([
+      {
+        rollId: 1,
+        itemId: 'baked_bread',
+        itemName: 'Baked Bread',
+        quality: 'common',
+        expiresAt: 9999,
+        entries: [{ pid: leader.pid, name: 'Alld', choice: null }],
+      },
+    ]);
     expect(client.delveRun).not.toBeNull(); // drun -> delveRun
     expect(client.companionState?.companionId).toBe('companion_tessa'); // dcompanion -> companionState
     expect(client.delveMarks).toBe(7); // dmarks -> delveMarks
     expect(client.companionUpgrades).toEqual({ companion_tessa: 2 }); // dcomp -> companionUpgrades
+    expect(client.gatheringProficiency).toEqual({ mining: 6, logging: 0, herbalism: 0 }); // gprof -> gatheringProficiency
     expect(client.professionsState).toEqual({
       skills: [
         { professionId: 'mining', skill: 6, maxSkill: 300 },
@@ -2097,6 +2557,19 @@ describe('full self-state snapshot delta fixture', () => {
     }); // prof -> professionsState
     expect(client.delveClears).toEqual({ 'collapsed_reliquary:heroic': 1 }); // dclears -> delveClears
     expect(client.delveDaily).toMatchObject({ markClears: 4 }); // delveDaily
+    // deeds -> deedsEarned: the Map rebuilds from the plain wire object with
+    // both utcDay stamps intact (a Map does not survive JSON.stringify)
+    expect([...client.deedsEarned.entries()]).toEqual([
+      ['prog_first_steps', '2026-07-01'],
+      ['prog_veteran', '2026-07-08'],
+    ]);
+    // dstats -> deedStats: counters survive and BOTH Sets rebuild from arrays
+    expect(client.deedStats.counters.kills).toBe(7);
+    expect(client.deedStats.itemsDiscovered.has('wolf_fang')).toBe(true);
+    expect(client.deedStats.visited.has('npc:chronicler_saul')).toBe(true);
+    expect(client.deedStats.dungeonClears).toEqual({ hollow_crypt: 2 });
+    expect(client.renown).toBe(15); // renown (same name both sides, no rename)
+    expect(client.activeTitle).toBe('prog_veteran'); // atitle -> activeTitle
     // tal -> talents / talentSpec / loadouts / activeLoadout
     expect(client.talents).toEqual({ spec: 'arms', ranks: {}, choices: {} });
     expect(client.talentSpec).toBe('arms');
@@ -2106,7 +2579,7 @@ describe('full self-state snapshot delta fixture', () => {
     expect(client.activeLoadout).toBe(0);
   });
 
-  it('omits all 25 delta keys on a no-op re-broadcast and preserves the prior mirror', () => {
+  it('omits all delta keys on a no-op re-broadcast and preserves the prior mirror', () => {
     const { server, fc, leader, memberPid } = dirtyEveryDeltaField();
     broadcast(server);
     const client = bareClient(leader.pid);
@@ -2121,7 +2594,7 @@ describe('full self-state snapshot delta fixture', () => {
     const delveRunRef = client.delveRun;
 
     // a second broadcast with NO intervening sim.tick() and no state mutation: the
-    // maybe() closure sees byte-identical JSON for all 25 and omits every one
+    // maybe() closure sees byte-identical JSON for every registered key and omits every one
     fc.sent.length = 0;
     broadcast(server);
     const snap2 = lastSnap(fc.sent);
@@ -2145,26 +2618,26 @@ describe('full self-state snapshot delta fixture', () => {
 });
 
 describe('delta-key contract pins (anti-drift)', () => {
-  it('ALL_DELTA_KEYS contains exactly 30 unique keys in sorted order', () => {
-    expect(ALL_DELTA_KEYS).toHaveLength(30);
-    expect(new Set(ALL_DELTA_KEYS).size).toBe(30);
+  it('ALL_DELTA_KEYS contains exactly 41 unique keys in sorted order', () => {
+    expect(ALL_DELTA_KEYS).toHaveLength(41);
+    expect(new Set(ALL_DELTA_KEYS).size).toBe(41);
     expect([...ALL_DELTA_KEYS]).toEqual([...ALL_DELTA_KEYS].sort());
   });
 
   it('ALL_DELTA_KEYS equals the maybe(...) keys scraped from server/game.ts (multi-line lockouts incl.)', () => {
     const src = readFileSync(resolve(process.cwd(), 'server/game.ts'), 'utf8');
     // tolerate whitespace/newline between `(` and the quote so the multi-line
-    // maybe('lockouts', ...) call (game.ts ~2166-2169) is captured, not undercounted to 24
+    // maybe('lockouts', ...) call (game.ts ~2166-2169) is captured, not undercounted
     const re = /\bmaybe\(\s*['"](\w+)['"]/g;
     const scraped = new Set<string>();
     for (let m = re.exec(src); m !== null; m = re.exec(src)) scraped.add(m[1]);
     expect(scraped.has('lockouts')).toBe(true); // the multi-line call IS captured
-    expect(scraped.size).toBe(30);
+    expect(scraped.size).toBe(41);
     expect([...scraped].sort()).toEqual([...ALL_DELTA_KEYS].sort());
   });
 
   it('TERSE_TO_IWORLD pins the terse-key to IWorld-name renames in sorted membership', () => {
-    // the 11 non-obvious renames the brief calls out as where drift hides
+    // the non-obvious renames the brief calls out as where drift hides
     const required: Record<string, string> = {
       res: 'resource',
       mres: 'maxResource',
@@ -2177,10 +2650,16 @@ describe('delta-key contract pins (anti-drift)', () => {
       dmarks: 'delveMarks',
       dcomp: 'companionUpgrades',
       dclears: 'delveClears',
+      atitle: 'activeTitle',
+      deeds: 'deedsEarned',
+      dstats: 'deedStats',
     };
     for (const [terse, iworld] of Object.entries(required)) {
       expect(TERSE_TO_IWORLD[terse], `rename ${terse} -> ${iworld} drifted`).toBe(iworld);
     }
+    // renown keeps the same name on both sides, so it must NEVER grow a rename
+    // entry (one would imply a wire key the decoder does not read)
+    expect('renown' in TERSE_TO_IWORLD).toBe(false);
     // sorted-membership pin: adding or renaming an entry must be a deliberate,
     // reviewable change landing in alphabetical order
     expect(Object.keys(TERSE_TO_IWORLD)).toEqual([...Object.keys(TERSE_TO_IWORLD)].sort());
@@ -2206,7 +2685,12 @@ describe('delta-key contract pins (anti-drift)', () => {
 // (ClientWorld.applySnapshot).
 describe('aura magnitude over the wire (buff/debuff tooltip parity)', () => {
   function roundTrip(aura: Aura): { wire: Record<string, unknown>; mirror: Aura } {
-    const sim = new Sim({ seed: 1, playerClass: 'warrior', noPlayer: true });
+    const sim = new Sim({
+      seed: 1,
+      playerClass: 'warrior',
+      noPlayer: true,
+      world: WIRE_TEST_WORLD,
+    });
     const pid = sim.addPlayer('warrior', 'Sapped');
     const e = sim.entities.get(pid)!;
     e.auras.push(aura);
@@ -2579,5 +3063,79 @@ describe('entity-anchored world event scoping', () => {
         .filter((ev: { type: string }) => ev.type === 'delveRitePulse');
     expect(pulses(near)).toHaveLength(1);
     expect(pulses(far)).toHaveLength(0);
+  });
+});
+
+describe('server tick rate on the snap head', () => {
+  it('omits tickHz while the meter warms up, then reports the measured rate', () => {
+    const server = new GameServer();
+    const fc = fakeWs();
+    joinServer(server, fc, 1, 'Ticky');
+    broadcast(server);
+    // fresh server: nothing measured yet, so the head omits the field entirely
+    // and the ops profile reports null rather than a fake number
+    expect(lastSnap(fc.sent).tickHz).toBeUndefined();
+    expect(server.perfProfile().tickHz).toBeNull();
+    // Drive the meter the way start() does (one record per callback against
+    // wall ms); the loop timer itself cannot run under vitest without flaking.
+    const internals = server as any;
+    internals.tickRateMeter.record(0, 1);
+    for (let t = 50; t <= 3000; t += 50) internals.tickRateMeter.record(t, 1);
+    internals.tickHz = internals.tickRateMeter.rate(3000);
+    fc.sent.length = 0;
+    broadcast(server);
+    const snap = lastSnap(fc.sent);
+    // parsed by JSON.parse in fakeWs, so this also proves the head stays valid JSON
+    expect(snap.tickHz).toBeCloseTo(20, 1);
+    expect(snap.tick).toBeTypeOf('number');
+    // the same reading rides the ops /api/perf payload (both dispatch arms
+    // share perfProfile), rounded for the wire
+    expect(server.perfProfile().tickHz).toBeCloseTo(20, 1);
+  });
+
+  it('throttles tickHz on the head, re-emitting once the interval elapses', () => {
+    const server = new GameServer();
+    const fc = fakeWs();
+    joinServer(server, fc, 1, 'Ticky');
+    const internals = server as any;
+    internals.tickRateMeter.record(0, 1);
+    for (let t = 50; t <= 3000; t += 50) internals.tickRateMeter.record(t, 1);
+    internals.tickHz = internals.tickRateMeter.rate(3000);
+    // first head after warm-up carries the value
+    broadcast(server);
+    expect(lastSnap(fc.sent).tickHz).toBeCloseTo(20, 1);
+    // a second head within the throttle window (no sim.time advance) omits it,
+    // so the slow-moving scalar does not ride every 20 Hz snapshot. The client
+    // holds its last reading across that gap (see the mirror test below).
+    fc.sent.length = 0;
+    broadcast(server);
+    expect(lastSnap(fc.sent).tickHz).toBeUndefined();
+    // once sim.time advances past the interval, the next head carries it again
+    for (let i = 0; i < 20; i++) server.sim.tick(); // ~1s of sim time
+    fc.sent.length = 0;
+    broadcast(server);
+    expect(lastSnap(fc.sent).tickHz).toBeCloseTo(20, 1);
+  });
+});
+
+describe('client mirror of the server tick rate', () => {
+  it('mirrors tickHz from the snap head and keeps the last value when omitted', () => {
+    const client = bareClient(1);
+    expect(client.serverTickHz).toBeNull();
+    (client as any).applySnapshot({ t: 'snap', tickHz: 19.6, ents: [] });
+    expect(client.serverTickHz).toBe(19.6);
+    // a warm-up-era head omits the field: the mirror holds the last reading
+    (client as any).applySnapshot({ t: 'snap', ents: [] });
+    expect(client.serverTickHz).toBe(19.6);
+  });
+
+  it('rejects junk tickHz values instead of poisoning the mirror', () => {
+    const client = bareClient(1);
+    (client as any).applySnapshot({ t: 'snap', tickHz: 20, ents: [] });
+    // Infinity is the one value only Number.isFinite rejects (typeof passes, > 0 passes)
+    for (const junk of ['20', Number.NaN, Number.POSITIVE_INFINITY, -1, 0, null]) {
+      (client as any).applySnapshot({ t: 'snap', tickHz: junk, ents: [] });
+    }
+    expect(client.serverTickHz).toBe(20);
   });
 });

@@ -55,20 +55,20 @@ describe('map terrain painter', () => {
 
   it('produces different terrain for different zones', () => {
     const a = renderFull(W, zoneRegion(ZONES[0].id), SEED);
-    const b = renderFull(W, zoneRegion(ZONES[ZONES.length - 1].id), SEED);
+    const b = renderFull(W, zoneRegion(ZONES[1].id), SEED);
     expect(a).not.toEqual(b);
   });
 
   // The painter swapped the inline `zoneAt(z).biome` for `zoneBiomeAt(z)`; pin
   // them as equivalent across the world's z-range so the swap can't silently
   // drift the map colours.
-  it('zoneBiomeAt(z) matches zoneAt(z).biome across the world', () => {
+  it('zoneBiomeAt matches zoneAt(...).biome across the world', () => {
     const minZ = ZONES[0].zMin;
     const maxZ = ZONES[ZONES.length - 1].zMax;
     for (let z = minZ; z < maxZ; z += 0.5) {
-      expect(zoneBiomeAt(z)).toBe(zoneAt(z).biome);
+      expect(zoneBiomeAt(0, z)).toBe(zoneAt(0, z).biome);
     }
     // and just past the far edge, where both clamp to the last zone
-    expect(zoneBiomeAt(maxZ + 50)).toBe(zoneAt(maxZ + 50).biome);
+    expect(zoneBiomeAt(0, maxZ + 50)).toBe(zoneAt(0, maxZ + 50).biome);
   });
 });

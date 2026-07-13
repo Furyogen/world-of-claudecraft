@@ -57,7 +57,10 @@ function makeInput() {
     onTab: vi.fn(),
     onTargetFriendly: vi.fn(),
     onCycleFriendly: vi.fn(),
+    onPet: vi.fn(),
     onAbility: vi.fn(),
+    onAbilityDown: vi.fn(),
+    onAbilityUp: vi.fn(),
     onUiKey: vi.fn(),
     onEmoteWheel: vi.fn(),
     onClickPick: vi.fn(),
@@ -85,6 +88,29 @@ beforeEach(() => {
   vi.restoreAllMocks();
 });
 
+describe('Input camera zoom', () => {
+  it('zooms the camera with the mouse wheel on desktop', () => {
+    const { canvasListeners, input } = makeInput();
+    const preventDefault = vi.fn();
+
+    canvasListeners.get('wheel')?.({ deltaY: 100, preventDefault });
+
+    expect(preventDefault).toHaveBeenCalled();
+    expect(input.camDist).toBeCloseTo(13.4);
+  });
+
+  it('ignores canvas wheel zoom while the mobile touch HUD is active', () => {
+    const { canvasListeners, input, setMobileTouch } = makeInput();
+    const preventDefault = vi.fn();
+    setMobileTouch(true);
+
+    canvasListeners.get('wheel')?.({ deltaY: 100, preventDefault });
+
+    expect(preventDefault).toHaveBeenCalled();
+    expect(input.camDist).toBe(12);
+  });
+});
+
 describe('Input autorun', () => {
   it('toggleAutorun flips state and feeds forward into readMoveInput', () => {
     const { input } = makeInput();
@@ -93,6 +119,14 @@ describe('Input autorun', () => {
     expect(input.autorun).toBe(true);
     expect(input.readMoveInput().forward).toBe(true);
     expect(input.toggleAutorun()).toBe(false);
+    expect(input.readMoveInput().forward).toBe(false);
+  });
+
+  it('setAutorun idempotently syncs external analog latches', () => {
+    const { input } = makeInput();
+    expect(input.setAutorun(true)).toBe(true);
+    expect(input.readMoveInput().forward).toBe(true);
+    expect(input.setAutorun(false)).toBe(false);
     expect(input.readMoveInput().forward).toBe(false);
   });
 
@@ -172,6 +206,35 @@ describe('Input autorun', () => {
     expect(input.autorun).toBe(true);
     expect(input.readMoveInput().forward).toBe(true);
     expect(input.debugState().keys).toEqual([]);
+  });
+});
+
+describe('Input pet bar chords', () => {
+  it('dispatches onPet for the default Ctrl+Digit pet chords and cancels the browser default', () => {
+    const { input, windowListeners, cb } = makeInput();
+    void input;
+    const cases: Array<[string, string]> = [
+      ['Digit1', 'attack'],
+      ['Digit2', 'stop'],
+      ['Digit3', 'taunt'],
+      ['Digit4', 'defensive'],
+      ['Digit5', 'aggressive'],
+    ];
+    for (const [code, action] of cases) {
+      const preventDefault = vi.fn();
+      windowListeners.get('keydown')!({ code, ctrlKey: true, repeat: false, preventDefault });
+      expect(cb.onPet).toHaveBeenCalledWith(action);
+      // The chord carries Ctrl, so the browser accelerator default is cancelled.
+      expect(preventDefault).toHaveBeenCalled();
+    }
+  });
+
+  it('does not fire a pet action for a bare digit (that stays an action-bar slot)', () => {
+    const { input, windowListeners, cb } = makeInput();
+    void input;
+    windowListeners.get('keydown')!({ code: 'Digit1', repeat: false, preventDefault: vi.fn() });
+    expect(cb.onPet).not.toHaveBeenCalled();
+    expect(cb.onAbilityDown).toHaveBeenCalledWith(0); // Digit1 -> action bar slot 0
   });
 });
 
@@ -311,7 +374,7 @@ describe('Input pointer lock', () => {
     expect(canvas.requestPointerLock).not.toHaveBeenCalled();
   });
 
-  it('uses normal mouse dragging instead of pointer lock while browser fullscreen is active', () => {
+  it('requests pointer lock while browser fullscreen is active', () => {
     const { canvas, canvasListeners, windowListeners } = makeInput();
     (globalThis as any).document.fullscreenElement =
       (globalThis as any).document.documentElement ?? canvas;
@@ -320,7 +383,7 @@ describe('Input pointer lock', () => {
     windowListeners.get('mousemove')!({ movementX: 19, movementY: 0 });
     windowListeners.get('mousemove')!({ movementX: 1, movementY: 0 });
 
-    expect(canvas.requestPointerLock).not.toHaveBeenCalled();
+    expect(canvas.requestPointerLock).toHaveBeenCalledTimes(1);
   });
 
   it('does not rotate the camera before the drag threshold, so short sloppy clicks stay stable', () => {
@@ -600,6 +663,70 @@ describe('Input Discord keybind', () => {
   });
 });
 
+describe('Input Book of Deeds keybind', () => {
+  it("dispatches onUiKey('deeds') for the default Shift+Z chord", () => {
+    const { cb, windowListeners } = makeInput();
+
+    windowListeners.get('keydown')!({ code: 'KeyZ', repeat: false, shiftKey: true });
+
+    expect(cb.onUiKey).toHaveBeenCalledWith('deeds');
+  });
+
+  it('bare KeyZ no longer reaches deeds (Damage Meters owns the letter now)', () => {
+    const { cb, windowListeners } = makeInput();
+
+    windowListeners.get('keydown')!({ code: 'KeyZ', repeat: false });
+
+    expect(cb.onUiKey).not.toHaveBeenCalledWith('deeds');
+  });
+
+  it('is a normal interface key: suppressed while a modal blocks game keys', () => {
+    const { cb, windowListeners } = makeInput();
+    (cb as any).canUseGameKeys = vi.fn(() => false);
+
+    windowListeners.get('keydown')!({ code: 'KeyZ', repeat: false, shiftKey: true });
+
+    expect(cb.onUiKey).not.toHaveBeenCalled();
+  });
+});
+
+describe('Input chat keybind', () => {
+  it("dispatches onUiKey('chat') for the default Enter key", () => {
+    const { cb, windowListeners } = makeInput();
+
+    windowListeners.get('keydown')!({ code: 'Enter', repeat: false, preventDefault: vi.fn() });
+
+    expect(cb.onUiKey).toHaveBeenCalledWith('chat');
+  });
+
+  it('cancels the default action so the newly-focused composer does not also see this keydown as a newline', () => {
+    // Regression: opening chat focuses the composer textarea as a side effect
+    // of this very keydown. Left un-prevented, the browser still delivers the
+    // follow-up keypress/input (and its default newline insertion) to
+    // whichever element is now focused, so Enter both opened chat AND typed a
+    // newline into it before the placeholder was ever visible.
+    const { windowListeners } = makeInput();
+    const preventDefault = vi.fn();
+
+    windowListeners.get('keydown')!({ code: 'Enter', repeat: false, preventDefault });
+
+    expect(preventDefault).toHaveBeenCalled();
+  });
+
+  it('does not cancel a focused button own Enter activation when it also opens chat', () => {
+    // A focused button (e.g. a HUD button reached via Tab) still activates on
+    // Enter today; only the composer-newline case needs its default cancelled.
+    const { cb, windowListeners } = makeInput();
+    (globalThis as any).document.activeElement = { tagName: 'BUTTON' };
+    const preventDefault = vi.fn();
+
+    windowListeners.get('keydown')!({ code: 'Enter', repeat: false, preventDefault });
+
+    expect(cb.onUiKey).toHaveBeenCalledWith('chat');
+    expect(preventDefault).not.toHaveBeenCalled();
+  });
+});
+
 describe('Input Space handling', () => {
   it('prevents native Space button activation while preserving jump input', () => {
     const { input, windowListeners } = makeInput();
@@ -788,11 +915,11 @@ describe('Input modifier combos', () => {
   it('fires the bare action-bar slot, but not when a modifier is held', () => {
     const { windowListeners, cb } = makeInput();
     windowListeners.get('keydown')!({ code: 'Digit1', repeat: false }); // slot0 = Attack
-    expect(cb.onAbility).toHaveBeenLastCalledWith(0);
-    cb.onAbility.mockClear();
-    // Shift+1 is a distinct, unbound chord — it must NOT fire bare slot 0.
+    expect(cb.onAbilityDown).toHaveBeenLastCalledWith(0);
+    cb.onAbilityDown.mockClear();
+    // Shift+1 is a distinct, unbound chord: it must NOT fire bare slot 0.
     windowListeners.get('keydown')!({ code: 'Digit1', repeat: false, shiftKey: true });
-    expect(cb.onAbility).not.toHaveBeenCalled();
+    expect(cb.onAbilityDown).not.toHaveBeenCalled();
   });
 
   it('dispatches a slot bound to Shift+1 only on the Shift chord', () => {
@@ -801,11 +928,11 @@ describe('Input modifier combos', () => {
     expect(kb.bind('slot5', 0, 'Shift+Digit1')).toBe(true);
     const { windowListeners, cb } = makeInput();
     windowListeners.get('keydown')!({ code: 'Digit1', repeat: false, shiftKey: true });
-    expect(cb.onAbility).toHaveBeenLastCalledWith(5);
-    cb.onAbility.mockClear();
+    expect(cb.onAbilityDown).toHaveBeenLastCalledWith(5);
+    cb.onAbilityDown.mockClear();
     // bare 1 still drives its own slot, unaffected by the modified binding
     windowListeners.get('keydown')!({ code: 'Digit1', repeat: false });
-    expect(cb.onAbility).toHaveBeenLastCalledWith(0);
+    expect(cb.onAbilityDown).toHaveBeenLastCalledWith(0);
   });
 
   it('keeps movement working while a modifier is held (Shift+W still walks)', () => {
@@ -817,7 +944,7 @@ describe('Input modifier combos', () => {
   it('ignores a lone modifier keypress', () => {
     const { input, cb, windowListeners } = makeInput();
     windowListeners.get('keydown')!({ code: 'ShiftLeft', repeat: false });
-    expect(cb.onAbility).not.toHaveBeenCalled();
+    expect(cb.onAbilityDown).not.toHaveBeenCalled();
     expect(cb.onUiKey).not.toHaveBeenCalled();
     expect(input.readMoveInput().forward).toBe(false);
   });
@@ -846,7 +973,7 @@ describe('Input modifier combos', () => {
       preventDefault: vi.fn(),
     });
     expect(cb.onEmoteWheel).toHaveBeenLastCalledWith(true); // held fired
-    expect(cb.onAbility).toHaveBeenLastCalledWith(3); // edge chord fired
+    expect(cb.onAbilityDown).toHaveBeenLastCalledWith(3); // edge chord fired
   });
 
   it('folds Cmd/Meta into the chord, so Cmd+1 does not fire bare slot 0', () => {
@@ -856,11 +983,11 @@ describe('Input modifier combos', () => {
     expect(kb.bind('slot7', 0, 'Meta+Digit1')).toBe(true);
     const { windowListeners, cb } = makeInput();
     windowListeners.get('keydown')!({ code: 'Digit1', repeat: false, metaKey: true });
-    expect(cb.onAbility).toHaveBeenLastCalledWith(7);
-    cb.onAbility.mockClear();
+    expect(cb.onAbilityDown).toHaveBeenLastCalledWith(7);
+    cb.onAbilityDown.mockClear();
     // bare 1 still drives slot 0, unaffected by the Cmd binding
     windowListeners.get('keydown')!({ code: 'Digit1', repeat: false });
-    expect(cb.onAbility).toHaveBeenLastCalledWith(0);
+    expect(cb.onAbilityDown).toHaveBeenLastCalledWith(0);
   });
 });
 
@@ -889,12 +1016,22 @@ describe('Input touch invert-look', () => {
   it('also inverts the swipe-look delta path', () => {
     const { input } = makeInput();
     const base = input.camPitch;
-    input.applyTouchLookDelta(0, 100);
+    input.applyTouchLookDelta(0, 20);
     const normal = input.camPitch - base;
 
     input.setTouchInvertLook(true);
     input.camPitch = base;
-    input.applyTouchLookDelta(0, 100);
+    input.applyTouchLookDelta(0, 20);
     expect(input.camPitch - base).toBeCloseTo(-normal);
+  });
+
+  it('scales the swipe-drag yaw noticeably above raw look sensitivity', () => {
+    const { input } = makeInput();
+    const baseYaw = input.camYaw;
+    input.applyTouchLookDelta(100, 0);
+    const dragYawDelta = Math.abs(input.camYaw - baseYaw);
+    const rawYawDelta = 100 * 0.0045; // BASE_LOOK_SENS, mirrored here since it is not exported
+
+    expect(dragYawDelta).toBeGreaterThan(rawYawDelta * 1.5);
   });
 });

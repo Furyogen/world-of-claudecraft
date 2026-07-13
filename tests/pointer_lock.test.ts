@@ -23,10 +23,10 @@ describe('shouldEngagePointerLock', () => {
     ).toBe(false);
   });
 
-  it('does not engage in fullscreen (Chrome shows its own unavoidable prompt)', () => {
+  it('engages in fullscreen so mouselook still gets relative mouse deltas', () => {
     expect(
       shouldEngagePointerLock({ lockOnRotate: true, isFullscreen: true, alreadyLocked: false }),
-    ).toBe(false);
+    ).toBe(true);
   });
 
   it('does not re-engage when already locked (avoids re-showing the browser banner mid-drag)', () => {

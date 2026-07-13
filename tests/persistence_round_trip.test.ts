@@ -41,17 +41,34 @@ describe('serializeCharacter <-> addPlayer round-trip (G2 persistence)', () => {
     meta.companionUpgrades = { tessa: 2 };
     meta.delveLoreUnlocked = new Set(['lore_1']);
     meta.delveDaily = { date: '2026-06-26', firstClearXp: new Set(['crypt']), markClears: 2 };
+    meta.bank.inventory = [
+      { itemId: 'linen_scrap', count: 9 },
+      { itemId: 'worn_sword', count: 1, instance: { signer: 'Ana' } },
+    ];
+    meta.bank.purchasedSlots = 6;
+    meta.bank.bonusSlots = 2;
 
     const s1 = sim.serializeCharacter(pid)!;
     const sim2 = makeWorld();
     const pid2 = sim2.addPlayer('warrior', 'Saver', { state: s1 });
     const s2 = sim2.serializeCharacter(pid2)!;
-    expect(s2).toEqual(s1);
+    // The Book of Deeds legitimately enriches a save across a load: joining
+    // seeds the discovery ledger from held items (the hand-stuffed bank rows
+    // above bypassed the addItem hub) and the retro pass back-credits state
+    // predicates at join, while sim1 never ticked to evaluate. Everything
+    // else must round-trip byte-equal; the deed round-trip itself is pinned
+    // in tests/deeds.test.ts.
+    const { deeds: _d1, deedStats: _ds1, renown: _r1, ...rest1 } = s1;
+    const { deeds: _d2, deedStats: _ds2, renown: _r2, ...rest2 } = s2;
+    expect(rest2).toEqual(rest1);
     // spot-check that the rich fields actually survived (not all defaulted to empty).
     expect(s2.arena2v2Rating).toBe(1880);
     expect(s2.delveMarks).toBe(17);
     expect(s2.loadouts?.length).toBe(1);
     expect(s2.skinCatalog).toBe('mech');
+    expect(s2.bank?.purchasedSlots).toBe(6);
+    expect(s2.bank?.bonusSlots).toBe(2);
+    expect(s2.bank?.inventory).toHaveLength(2);
   });
 
   it('a legacy state missing the post-launch fields loads with sane defaults', () => {
@@ -86,6 +103,7 @@ describe('serializeCharacter <-> addPlayer round-trip (G2 persistence)', () => {
       'unlockedMilestones',
       'lifetimeXp',
       'restedXp',
+      'bank',
     ]) {
       delete legacy[key];
     }
@@ -105,6 +123,7 @@ describe('serializeCharacter <-> addPlayer round-trip (G2 persistence)', () => {
     expect(m.loadouts).toEqual([]);
     expect(m.prestigeRank).toBe(0);
     expect(m.restedXp).toBe(0);
+    expect(m.bank).toEqual({ inventory: [], purchasedSlots: 0, bonusSlots: 0 });
     // re-serializing a defaulted character does not throw and fills the new fields.
     expect(() => sim2.serializeCharacter(pid)).not.toThrow();
     expect(sim2.serializeCharacter(pid)!.delveMarks).toBe(0);

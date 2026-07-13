@@ -27,11 +27,21 @@ export interface BagFilterState {
 
 export const DEFAULT_BAG_FILTER: BagFilterState = { category: 'all', sort: 'recent', search: '' };
 
+// True when the filter is showing everything (no category, no search), the only
+// view where free-slot squares are meaningful (a narrowed view shows matches only;
+// sort never affects it, a re-ordered full view still shows everything). Shared by
+// the bags grid (bags_view) and the bank window, like matchesCategory/qualityRank.
+export function bagFilterIsDefault(filter: BagFilterState): boolean {
+  return filter.category === 'all' && filter.search.trim() === '';
+}
+
 // Look up an item definition by id. Injected so the pure core never imports the
 // live ITEMS table (and tests can supply a synthetic one).
 export type ItemLookup = (itemId: string) => ItemDef | undefined;
 
-function matchesCategory(item: ItemDef, category: BagCategory): boolean {
+// Shared with the bank filter (bank_filter.ts): the bank reuses the same category
+// predicate so a "material"/"weapon"/... chip means the same thing in both windows.
+export function matchesCategory(item: ItemDef, category: BagCategory): boolean {
   switch (category) {
     case 'all':
       return true;
@@ -64,7 +74,8 @@ const QUALITY_RANK: Record<string, number> = {
   poor: 5,
 };
 
-function qualityRank(item: ItemDef): number {
+// Shared with the bank filter (bank_filter.ts) so both windows sort quality identically.
+export function qualityRank(item: ItemDef): number {
   return QUALITY_RANK[item.quality ?? 'common'] ?? QUALITY_RANK.common;
 }
 

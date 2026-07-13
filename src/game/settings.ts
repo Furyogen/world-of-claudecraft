@@ -135,6 +135,11 @@ export const BOOL_SETTINGS = {
   // the right and the camera joystick on the left, for left-thumb-dominant
   // players. CSS-only swap gated on body.mobile-left-handed; ignored on desktop.
   leftHandedTouch: { def: false },
+  // off by default: shows the fixed camera joystick on touch (hidden otherwise,
+  // reserving no layout space and consuming no touches). Swipe-look on open
+  // gameplay space is the primary camera path; this is an opt-in alternative for
+  // players who prefer a dedicated stick. Gated on body.mobile-camera-joystick-on.
+  mobileCameraJoystick: { def: false },
   // on by default: mask configured swear words in chat with ****. Purely a
   // local display choice; the server sends raw text and each client decides.
   // (Slurs are blocked server-side regardless and never reach here.)
@@ -232,6 +237,10 @@ export const BOOL_SETTINGS = {
   // to just its "Quests (N)" header. Toggled by clicking the tracker header; kept
   // here so the choice persists across sessions like the other HUD preferences.
   questTrackerCollapsed: { def: false },
+  // off by default (expanded): when on, the on-screen Book of Deeds watchlist
+  // tracker is collapsed to just its header. Toggled by clicking the tracker
+  // header (the quest-tracker convention); kept here so the choice persists.
+  deedTrackerCollapsed: { def: false },
   // off by default: append an "Item Level N" (plus power score) line to every item
   // tooltip. Purely a display preference read live by the HUD; off keeps the
   // classic stat-only tooltip. See src/sim/item_level.ts for the derivation.

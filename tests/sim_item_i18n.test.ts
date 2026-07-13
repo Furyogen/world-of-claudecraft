@@ -5,12 +5,40 @@
 // comma — so a `?? 'literal'` fallback slips past it. The /gear readout slot labels also
 // regressed (the over-broad Equipped rule mangled the worn case). This file pins all of
 // them: every string must localize (non-null) in every locale and not stay English.
-import { describe, expect, it } from 'vitest';
-import { tEntity } from '../src/ui/entity_i18n';
-import { setLanguage, supportedLanguages, t } from '../src/ui/i18n';
+import { afterEach, describe, expect, it } from 'vitest';
+import { heroicVariantId } from '../src/sim/content/heroic_variants';
+import { ITEMS } from '../src/sim/data';
+import {
+  entityTranslationFallbackLog,
+  resetEntityTranslationFallbackLog,
+  tEntity,
+} from '../src/ui/entity_i18n';
+import { ensureLocaleLoaded, setLanguage, supportedLanguages, t } from '../src/ui/i18n';
 import { localizeSimText } from '../src/ui/sim_i18n';
 
 const translatedLocales = supportedLanguages.filter((l) => l !== 'en' && l !== 'en_CA');
+
+afterEach(() => {
+  setLanguage('en');
+  resetEntityTranslationFallbackLog();
+});
+
+describe('sim item messages canonicalize same-name heroic variants', () => {
+  it('localizes German Moonwrack Robe equip messages through the base item without a fallback', async () => {
+    await ensureLocaleLoaded('de_DE');
+    const base = ITEMS.moonshroud_robe;
+    const heroic = ITEMS[heroicVariantId(base.id)];
+
+    expect(heroic.heroicOf).toBe(base.id);
+    expect(heroic.name).toBe(base.name);
+
+    resetEntityTranslationFallbackLog();
+    setLanguage('de_DE');
+    expect.soft(localizeSimText(`Equipped ${heroic.name}.`)).toBe('Moonwrack-Robe ausgerüstet.');
+    expect.soft(localizeSimText(`Unequipped ${heroic.name}.`)).toBe('Moonwrack-Robe abgelegt.');
+    expect.soft(entityTranslationFallbackLog()).toEqual([]);
+  });
+});
 
 describe('sim /gear readout is fully localized in every locale', () => {
   // Mirrors gearReadout() in src/sim/sim.ts: one filled slot + empty slots, fixed order.

@@ -1,9 +1,20 @@
 import { describe, expect, it } from 'vitest';
 import { ABILITIES } from '../src/sim/content/classes';
+import { BUILTIN_WORLD } from '../src/sim/data';
 import { Sim } from '../src/sim/sim';
-import type { AbilityDef, AbilityEffect, Aura, Entity } from '../src/sim/types';
+import type { AbilityDef, AbilityEffect, Aura, Entity, WorldContent } from '../src/sim/types';
 
 const TICKS_PER_SECOND = 20;
+
+// Every test builds its own source/target players and never touches ambient
+// world content, so strip camps/npcs/ground objects to keep sim.tick() cheap
+// (same subsystem-world pattern as tests/fiesta.test.ts).
+const DOT_TEST_WORLD: WorldContent = {
+  ...BUILTIN_WORLD,
+  camps: [],
+  npcs: {},
+  groundObjects: [],
+};
 
 type DotCase = {
   ability: AbilityDef;
@@ -62,7 +73,12 @@ describe('damage-over-time final ticks', () => {
         ] as const,
     ),
   )('%s ticks for every interval implied by its duration', (_name, entry) => {
-    const sim = new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
+    const sim = new Sim({
+      seed: 42,
+      playerClass: 'warrior',
+      noPlayer: true,
+      world: DOT_TEST_WORLD,
+    });
     const sourceId = sim.addPlayer(entry.ability.class, 'Dotter');
     const targetId = sim.addPlayer('warrior', 'Target');
     const source = sim.entities.get(sourceId)!;

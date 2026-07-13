@@ -116,7 +116,11 @@ describe('mob hex ("Weakening Hex")', () => {
   it('reduces the healing a hexed source does', () => {
     const sim = makeSim('priest');
     const p = sim.player;
-    (sim as any).spellCrit = () => 0; // remove crit RNG so the ratio is exact
+    // remove crit RNG so the ratio is exact: the heal module rolls
+    // ctx.rng.chance(ctx.spellCrit(...)), and ctx binds spellCrit by
+    // reference at construction, so stubbing the facade method does nothing;
+    // stubbing the chance draw itself is what actually pins the roll
+    (sim as any).rng.chance = () => false;
     p.maxHp = 100000;
     p.hp = 1; // huge deficit so nothing is capped by overheal
     (sim as any).applyHeal(p, p, 1000, 'Test Heal');

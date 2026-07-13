@@ -1,12 +1,11 @@
 import * as THREE from 'three';
-import { getActiveWorldContent, WORLD_MAX_Z, WORLD_MIN_Z, WORLD_SIZE, ZONES } from '../sim/data';
-import { MIN_WATER_LEVEL } from '../sim/map_doc';
-import { waterLevel } from '../sim/world';
+import { WORLD_MAX_Z, WORLD_MIN_Z, WORLD_SIZE } from '../sim/data';
+import type { ZoneDef } from '../sim/types';
+import { terrainHeight, WATER_LEVEL } from '../sim/world';
 import { loadTexture } from './assets/loader';
 import { registerPreload } from './assets/preload';
 import { GFX, SUN_DIR, sharedUniforms } from './gfx';
 import { waterNormalish, waterNormalMaps } from './textures';
-import { shoreDepthAt } from './water_core';
 
 // Water for the whole zone strip.
 //
@@ -19,7 +18,7 @@ import { shoreDepthAt } from './water_core';
 // Low tier keeps the legacy scrolling Phong plane, upgraded with the real
 // swell normal map for textured speculars.
 
-const SEGMENTS_PER_ZONE = 180; // ~2u vertex spacing — enough for the foam band
+const SEGMENTS_PER_ZONE = 180; // ~2u vertex spacing, enough for the foam band
 
 // Real water normal maps, fetched at module import and gated by the boot
 // preload only for the shader tier. Low/mobile uses generated canvas water
@@ -74,11 +73,14 @@ const SKY_TINT = new THREE.Color(0x7fb2e0); // matches the sky horizon band
 const SUN_COLOR = new THREE.Color(0xfff0d4);
 
 export interface WaterView {
+  group: THREE.Group;
   meshes: THREE.Mesh[];
+  ensureZone(zone: ZoneDef): Promise<THREE.Mesh[]>;
+  isZoneLoaded(zoneId: string): boolean;
   /** advances the legacy texture scroll (low tier); high tier uses uTime */
   update(time: number): void;
   /**
-   * Editor-only: re-seat the surface at the ACTIVE waterLevel() and recompute
+   * Editor-only: re-seat the surface at the ACTIVE WATER_LEVEL and recompute
    * the per-vertex shore depth from the CURRENT terrainHeight (after a
    * water-level change or a sculpt near the shoreline). Updates the existing
    * geometry in place (no geometry is replaced, so nothing leaks); the low
@@ -125,7 +127,7 @@ const WATER_FRAG = /* glsl */ `
     vec3 n1 = texture2D(uNorm1, vWPos.xz * 0.055 + uTime * vec2(0.013, 0.019)).xyz * 2.0 - 1.0;
     vec3 n2 = texture2D(uNorm2, vWPos.xz * 0.115 - uTime * vec2(0.021, 0.011)).xyz * 2.0 - 1.0;
     // broad slow ocean swell that survives at range, where the detail maps
-    // average out to a mirror — keeps big water surfaces alive from above
+    // average out to a mirror, keeps big water surfaces alive from above
     vec3 n3 = texture2D(uNorm3, vWPos.xz * 0.016 + uTime * vec2(0.005, -0.004)).xyz * 2.0 - 1.0;
     float farW = smoothstep(24.0, 140.0, camDist);
     // rippled up close -> glassy at distance: detail fades out, swell stays
@@ -135,7 +137,7 @@ const WATER_FRAG = /* glsl */ `
     float fresnel = 0.05 + 0.95 * pow(1.0 - max(dot(N, V), 0.0), 4.0);
     float depth = clamp(vShoreDepth / 6.0, 0.0, 1.0);
     vec3 col = mix(uShallow, uDeep, depth);
-    // dappled shimmer — fades with distance so it never reads as speckle
+    // dappled shimmer that fades with distance so it never reads as speckle
     float shimmer = max(n1.x * 0.7 + n2.y * 0.55, 0.0) * exp(-camDist * 0.022);
     col *= 0.92 + 0.4 * shimmer;
     // reflection tracks the live fog/horizon color so each biome's water
@@ -185,76 +187,102 @@ function buildShaderWater(seed: number): WaterView {
     fog: true,
   });
 
-  // (Re)fill the per-vertex shore depth from the CURRENT terrain + water level,
-  // writing into the existing attribute in place (build and setLevel share it).
-  const fillShoreDepth = (geo: THREE.BufferGeometry): void => {
-    const pos = geo.attributes.position as THREE.BufferAttribute;
-    let attr = geo.attributes.aShoreDepth as THREE.BufferAttribute | undefined;
-    if (!attr) {
-      attr = new THREE.BufferAttribute(new Float32Array(pos.count), 1);
-      geo.setAttribute('aShoreDepth', attr);
-    }
-    const depths = attr.array as Float32Array;
-    for (let i = 0; i < pos.count; i++) {
-      depths[i] = shoreDepthAt(pos.getX(i), pos.getZ(i), seed);
-    }
-    attr.needsUpdate = true;
-  };
-
   const meshes: THREE.Mesh[] = [];
-  // Active-content extents: a sized custom map's water covers exactly its own
-  // rect (the built-in world's zones/width match the constants, so its build
-  // is unchanged).
-  const content = getActiveWorldContent();
-  const width = (content.worldHalfX ?? WORLD_SIZE / 2) * 2;
-  const zones = content.zones.length > 0 ? content.zones : ZONES;
-  for (const zone of zones) {
+  const group = new THREE.Group();
+  group.name = 'water';
+  const loadedZones = new Set<string>();
+  const pendingZones = new Map<string, Promise<THREE.Mesh[]>>();
+  // Per-mesh in-place refit closures: re-seat y and recompute the shore-depth
+  // attribute from the CURRENT terrain (build and setLevel share them). The
+  // vertices never move (only the attribute + the mesh transform change), so
+  // the baked bounding volumes stay valid.
+  const refits: (() => void)[] = [];
+  // The apron: one huge deep-sea sheet running far past every map edge, so
+  // looking off the world's side reads as open ocean to the fog line, never
+  // a water plane ending in mid-air. It sits a hair below the zone planes
+  // (no z-fight) and carries a constant deep shore attribute.
+  {
+    const span = WORLD_MAX_Z - WORLD_MIN_Z + 2400;
+    const geo = new THREE.PlaneGeometry(3000, span, 1, 1).rotateX(-Math.PI / 2);
+    geo.translate(0, 0, (WORLD_MIN_Z + WORLD_MAX_Z) / 2);
+    const pos = geo.attributes.position as THREE.BufferAttribute;
+    const deep = new Float32Array(pos.count).fill(8);
+    geo.setAttribute('aShoreDepth', new THREE.BufferAttribute(deep, 1));
+    geo.computeBoundingSphere();
+    const apron = new THREE.Mesh(geo, material);
+    apron.position.y = WATER_LEVEL - 0.06;
+    meshes.push(apron);
+    group.add(apron);
+    refits.push(() => {
+      (geo.attributes.aShoreDepth as THREE.BufferAttribute).needsUpdate = true;
+      apron.position.y = WATER_LEVEL - 0.06;
+    });
+  }
+  const buildZone = (zone: ZoneDef): THREE.Mesh => {
     const depth = zone.zMax - zone.zMin;
-    const geo = new THREE.PlaneGeometry(width, depth, SEGMENTS_PER_ZONE, SEGMENTS_PER_ZONE).rotateX(
-      -Math.PI / 2,
-    );
-    geo.translate(0, 0, (zone.zMin + zone.zMax) / 2);
-    fillShoreDepth(geo);
+    // each plane covers its zone's own rect: the side columns live at
+    // x beyond the strip, and a strip-centered plane would leave their
+    // shores (and the border meres straddling the column line) on the
+    // featureless apron with no foam or shallow grading
+    const x0 = zone.xMin ?? -WORLD_SIZE / 2;
+    const x1 = zone.xMax ?? WORLD_SIZE / 2;
+    const geo = new THREE.PlaneGeometry(
+      x1 - x0,
+      depth,
+      SEGMENTS_PER_ZONE,
+      SEGMENTS_PER_ZONE,
+    ).rotateX(-Math.PI / 2);
+    geo.translate((x0 + x1) / 2, 0, (zone.zMin + zone.zMax) / 2);
+    const pos = geo.attributes.position as THREE.BufferAttribute;
+    const shoreDepth = new Float32Array(pos.count);
+    const fill = (): void => {
+      for (let i = 0; i < pos.count; i++) {
+        shoreDepth[i] = WATER_LEVEL - terrainHeight(pos.getX(i), pos.getZ(i), seed);
+      }
+    };
+    fill();
+    geo.setAttribute('aShoreDepth', new THREE.BufferAttribute(shoreDepth, 1));
     geo.computeBoundingBox();
     geo.computeBoundingSphere();
     const mesh = new THREE.Mesh(geo, material);
-    mesh.position.y = waterLevel();
-    mesh.visible = waterVisible();
+    mesh.position.y = WATER_LEVEL;
     meshes.push(mesh);
-  }
+    group.add(mesh);
+    refits.push(() => {
+      fill();
+      (geo.attributes.aShoreDepth as THREE.BufferAttribute).needsUpdate = true;
+      mesh.position.y = WATER_LEVEL;
+    });
+    return mesh;
+  };
   return {
+    group,
     meshes,
+    ensureZone(zone: ZoneDef): Promise<THREE.Mesh[]> {
+      if (loadedZones.has(zone.id)) return Promise.resolve([]);
+      const pending = pendingZones.get(zone.id);
+      if (pending) return pending;
+      const task = new Promise<void>((resolve) => setTimeout(resolve, 0))
+        .then(() => {
+          const mesh = buildZone(zone);
+          loadedZones.add(zone.id);
+          return [mesh];
+        })
+        .finally(() => pendingZones.delete(zone.id));
+      pendingZones.set(zone.id, task);
+      return task;
+    },
+    isZoneLoaded: (zoneId: string) => loadedZones.has(zoneId),
     update: () => {},
     setLevel(): void {
-      const y = waterLevel();
-      const visible = waterVisible();
-      // The editor's water panel also retints through this refresh path.
-      const tint = tintedWaterColors();
-      (material.uniforms.uDeep.value as THREE.Color).copy(tint.deep);
-      (material.uniforms.uShallow.value as THREE.Color).copy(tint.shallow);
-      for (const mesh of meshes) {
-        mesh.position.y = y;
-        mesh.visible = visible;
-        // vertices never move (only the attribute + the mesh transform change),
-        // so the baked bounding volumes stay valid.
-        fillShoreDepth(mesh.geometry);
-      }
+      for (const refit of refits) refit();
     },
   };
 }
 
 function buildPhongWater(): WaterView {
   const tex = waterNormalish();
-  tex.repeat.set(30, 30);
   const [norm] = waterNormalMaps();
-  norm.repeat.set(26, 78);
-  const phongBase = new THREE.Color(0x2a6a96);
-  const phongTint = (): THREE.Color => {
-    const t = tintedWaterColors();
-    // Blend deep/shallow into the single Phong base so the legacy tier tracks
-    // the same sliders (approximate is fine at this tier).
-    return t.deep.clone().lerp(t.shallow, 0.5).lerp(phongBase, 0.25);
-  };
   const mat = new THREE.MeshPhongMaterial({
     color: 0x2a6a96,
     transparent: true,
@@ -265,19 +293,22 @@ function buildPhongWater(): WaterView {
     normalMap: norm,
     normalScale: new THREE.Vector2(0.8, 0.8),
   });
-  const content = getActiveWorldContent();
-  const width = (content.worldHalfX ?? WORLD_SIZE / 2) * 2;
-  const zMin = content.zones[0]?.zMin ?? WORLD_MIN_Z;
-  const zMax = content.zones[content.zones.length - 1]?.zMax ?? WORLD_MAX_Z;
-  const mesh = new THREE.Mesh(
-    new THREE.PlaneGeometry(width, zMax - zMin).rotateX(-Math.PI / 2),
-    mat,
-  );
-  mesh.position.set(0, waterLevel(), (zMin + zMax) / 2);
-  mesh.visible = waterVisible();
-  mat.color.copy(phongTint());
+  // low tier gets the same to-the-horizon apron by simply oversizing the
+  // one plane (the tiled texture keeps its density via the repeat bump)
+  const worldDepth = WORLD_MAX_Z - WORLD_MIN_Z + 2400;
+  tex.repeat.set(240, 240);
+  norm.repeat.set(210, 620);
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(3000, worldDepth).rotateX(-Math.PI / 2), mat);
+  mesh.position.set(0, WATER_LEVEL, (WORLD_MIN_Z + WORLD_MAX_Z) / 2);
+  const meshes = [mesh];
+  const group = new THREE.Group();
+  group.name = 'water';
+  group.add(mesh);
   return {
-    meshes: [mesh],
+    group,
+    meshes,
+    ensureZone: async () => [],
+    isZoneLoaded: () => true,
     update(time: number): void {
       tex.offset.x = time * 0.008;
       tex.offset.y = time * 0.011;
@@ -285,9 +316,7 @@ function buildPhongWater(): WaterView {
       norm.offset.y = time * 0.009;
     },
     setLevel(): void {
-      mesh.position.y = waterLevel();
-      mesh.visible = waterVisible();
-      mat.color.copy(phongTint());
+      for (const m of meshes) m.position.y = WATER_LEVEL;
     },
   };
 }

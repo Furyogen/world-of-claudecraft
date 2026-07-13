@@ -719,6 +719,20 @@ export function groundSplatMaps(): GroundSplat {
         ctx.stroke();
       });
     }
+    // finer secondary fracture pass: smaller, higher-contrast cracks layered
+    // on top so the rock reads as striated stone rather than one flat tone.
+    for (let i = 0; i < 140; i++) {
+      const x = rnd() * s,
+        y = rnd() * s,
+        r = 3 + rnd() * 8;
+      const v = 90 + rnd() * 70;
+      drawWrapped(ctx, s, (ox, oy) => {
+        ctx.fillStyle = `rgba(${v},${v},${v - 8},0.4)`;
+        ctx.beginPath();
+        ctx.arc(x + ox, y + oy, r, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
   });
   const rockHeight = makeRawCanvas(256, (ctx, s) => {
     ctx.fillStyle = '#505050';
@@ -918,7 +932,7 @@ export function foliageCardTexture(): THREE.CanvasTexture {
   for (let i = 0; i < 240; i++) {
     // leaves cluster densely at the centre, thin toward the rim
     const a = rnd() * Math.PI * 2;
-    const d = rnd() ** 0.6 * 56;
+    const d = Math.pow(rnd(), 0.6) * 56;
     const x = cx + Math.cos(a) * d,
       y = cy + Math.sin(a) * d;
     const fade = 1 - d / 64;

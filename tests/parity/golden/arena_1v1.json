@@ -8,13 +8,13 @@
     "multi-player PlayerMeta sampling",
     "classes:warrior,mage"
   ],
-  "draws": 482,
-  "drawDigest": "b4688c48",
+  "draws": 884,
+  "drawDigest": "12ad85d5",
   "frames": [
     {
       "tick": 0,
       "time": 0,
-      "nextId": 400,
+      "nextId": 661,
       "state": "5bc471b0",
       "events": "741638a5",
       "rng": {
@@ -28,9 +28,9 @@
     {
       "tick": 25,
       "time": 1.25,
-      "nextId": 402,
-      "state": "c484fac6",
-      "events": "f97d10ae",
+      "nextId": 663,
+      "state": "a3c9d893",
+      "events": "df2c897a",
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -39,61 +39,62 @@
     {
       "tick": 50,
       "time": 2.5,
-      "nextId": 402,
-      "state": "0182e6b2",
-      "events": "485835de",
+      "nextId": 663,
+      "state": "fe5434df",
+      "events": "434af9e4",
       "rng": {
-        "draws": 34,
-        "digest": "a750ddeb"
+        "draws": 64,
+        "digest": "86a90ea7"
       }
     },
     {
       "tick": 75,
       "time": 3.75,
-      "nextId": 402,
-      "state": "33cc7bca",
-      "events": "154b31fe",
+      "nextId": 663,
+      "state": "c1fbbca3",
+      "events": "1ef10a18",
       "rng": {
-        "draws": 134,
-        "digest": "e12cceee"
+        "draws": 259,
+        "digest": "c538e323"
       }
     },
     {
       "tick": 100,
       "time": 5,
-      "nextId": 402,
-      "state": "24be7a46",
-      "events": "cedd0946",
+      "nextId": 663,
+      "state": "49e3dc1b",
+      "events": "689997dc",
       "rng": {
-        "draws": 254,
-        "digest": "07655741"
+        "draws": 473,
+        "digest": "035028d2"
       }
     },
     {
       "tick": 125,
       "time": 6.25,
-      "nextId": 402,
-      "state": "15e896ed",
-      "events": "9b404428",
+      "nextId": 663,
+      "state": "9f923770",
+      "events": "061ed5c2",
       "rng": {
-        "draws": 384,
-        "digest": "9a9a7293"
+        "draws": 709,
+        "digest": "d8b9e5a2"
       }
     },
     {
       "tick": 142,
       "time": 7.1,
-      "nextId": 402,
-      "state": "41b904b5",
+      "nextId": 663,
+      "state": "8805a1dc",
       "events": "741638a5",
       "rng": {
-        "draws": 482,
-        "digest": "b4688c48"
+        "draws": 884,
+        "digest": "12ad85d5"
       },
       "label": "final",
       "players": [
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1516,
           "arenaWins": 1,
@@ -103,18 +104,43 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "damageDealt": 54
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
+          "deedsEarned": [
+            [
+              "pvp_arena_first_match",
+              ""
+            ],
+            [
+              "pvp_arena_first_win",
+              ""
+            ]
+          ],
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 400,
+          "entityId": 661,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -123,13 +149,16 @@
           ],
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "renown": 15,
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaLosses": 1,
           "arenaRating": 1484,
@@ -139,20 +168,46 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "mage",
           "companionUpgrades": {},
           "counters": {
             "deaths": 1
           },
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "deaths": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ]
+          },
+          "deedsEarned": [
+            [
+              "cmb_first_fall",
+              ""
+            ],
+            [
+              "pvp_arena_first_match",
+              ""
+            ]
+          ],
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 401,
+          "entityId": 662,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -165,10 +220,12 @@
           ],
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "renown": 10,
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         }
       ],
       "entities": [
@@ -182,7 +239,7 @@
           "dodgeChance": 0.06,
           "fiveSecondRule": 106.1,
           "hp": 90,
-          "id": 400,
+          "id": 661,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -193,7 +250,7 @@
           "overpowerUntil": -1,
           "petMode": "defensive",
           "pos": {
-            "x": 4200,
+            "x": 103600,
             "z": -1264
           },
           "potionCooldownUntil": -1,
@@ -230,7 +287,7 @@
           "dodgeChance": 0.056,
           "facing": 3.141593,
           "fiveSecondRule": 106.1,
-          "id": 401,
+          "id": 662,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -241,7 +298,7 @@
           "overpowerUntil": -1,
           "petMode": "defensive",
           "pos": {
-            "x": 4200,
+            "x": 103600,
             "z": -1232
           },
           "potionCooldownUntil": -1,

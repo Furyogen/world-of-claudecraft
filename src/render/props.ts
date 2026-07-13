@@ -841,7 +841,7 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
       scale: [3.1 / stand.size.x, 2.6 / stand.size.y, 2.5 / stand.size.z],
       rot: (keyRand(key, 1) - 0.5) * 0.1,
     });
-    if (!lowProps && (i === 1 || i === 4)) {
+    if (!lowProps && s.smithy) {
       // Smith Haldren (z1) / Armorer Hode (z3): forge-front dressing
       addParts(g, 'anvil', { x: 1.35, z: 1.15, rot: 0.9, scale: 1.35 });
       addParts(g, 'weaponStand', { x: -1.45, z: 0.6, rot: 0.5 + Math.PI, scale: 1.25 });
@@ -1204,12 +1204,22 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
         scale: [0.78, 0.52, 0.85],
       });
     }
-    const hut = propAsset('house3');
-    addParts(g, 'house3', {
-      x: d.hutLocal.x,
-      z: d.hutLocal.z,
-      scale: [(d.hutLocal.hw * 2) / hut.size.x, 2.6 / hut.size.y, (d.hutLocal.hd * 2) / hut.size.z],
-    });
+    // hw/hd 0 means this dock carries no stone hut (e.g. the Farshore Landing).
+    // Skip it entirely: a zero-scale mesh has a degenerate (non-invertible)
+    // transform, which reads as NaN normals and flickers as a black square.
+    const hasHut = d.hutLocal.hw > 0 && d.hutLocal.hd > 0;
+    if (hasHut) {
+      const hut = propAsset('house3');
+      addParts(g, 'house3', {
+        x: d.hutLocal.x,
+        z: d.hutLocal.z,
+        scale: [
+          (d.hutLocal.hw * 2) / hut.size.x,
+          2.6 / hut.size.y,
+          (d.hutLocal.hd * 2) / hut.size.z,
+        ],
+      });
+    }
     if (!lowProps) {
       addParts(g, 'barrel', {
         x: 0.55,
@@ -1244,14 +1254,16 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
     g.rotation.y = d.rot;
     group.add(shadowed(g));
     // stone hut OBB — same offset/extents/rotation as the collider
-    const hc = Math.cos(d.rot),
-      hs = Math.sin(d.rot);
-    const hx = d.x + d.hutLocal.x * hc + d.hutLocal.z * hs;
-    const hz = d.z - d.hutLocal.x * hs + d.hutLocal.z * hc;
-    registerHideable(
-      g,
-      obbFootprint(hx, hz, d.hutLocal.hw, d.hutLocal.hd, d.rot, ground(hx, hz) + 2.9),
-    );
+    if (hasHut) {
+      const hc = Math.cos(d.rot),
+        hs = Math.sin(d.rot);
+      const hx = d.x + d.hutLocal.x * hc + d.hutLocal.z * hs;
+      const hz = d.z - d.hutLocal.x * hs + d.hutLocal.z * hc;
+      registerHideable(
+        g,
+        obbFootprint(hx, hz, d.hutLocal.hw, d.hutLocal.hd, d.rot, ground(hx, hz) + 2.9),
+      );
+    }
   }
 
   // ---- delve entrance: Meshy portal-door + animated void + carved name lintel -

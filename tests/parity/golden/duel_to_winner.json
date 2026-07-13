@@ -8,13 +8,13 @@
     "updateDuels countdown -> active + duelStart",
     "endDuel on a PvP finishing blow (winner/loser + this.duels cleared)"
   ],
-  "draws": 263,
-  "drawDigest": "7cc78626",
+  "draws": 480,
+  "drawDigest": "39c1ccbc",
   "frames": [
     {
       "tick": 0,
       "time": 0,
-      "nextId": 400,
+      "nextId": 661,
       "state": "5bc471b0",
       "events": "741638a5",
       "rng": {
@@ -28,9 +28,9 @@
     {
       "tick": 20,
       "time": 1,
-      "nextId": 402,
-      "state": "ee95f387",
-      "events": "085aa36a",
+      "nextId": 663,
+      "state": "20f48ae4",
+      "events": "4e0f74d1",
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -39,9 +39,9 @@
     {
       "tick": 40,
       "time": 2,
-      "nextId": 402,
-      "state": "99628433",
-      "events": "00c5747e",
+      "nextId": 663,
+      "state": "9891d63c",
+      "events": "b47ae902",
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -50,28 +50,29 @@
     {
       "tick": 60,
       "time": 3,
-      "nextId": 402,
-      "state": "34a5d4db",
-      "events": "b2d6a10c",
+      "nextId": 663,
+      "state": "bba0816c",
+      "events": "172f8cd0",
       "rng": {
-        "draws": 71,
-        "digest": "6619b0ad"
+        "draws": 125,
+        "digest": "bc431319"
       }
     },
     {
       "tick": 61,
       "time": 3.05,
-      "nextId": 402,
-      "state": "548eadad",
-      "events": "e8722199",
+      "nextId": 663,
+      "state": "71622f4e",
+      "events": "8ac11df5",
       "rng": {
-        "draws": 78,
-        "digest": "d52f266d"
+        "draws": 140,
+        "digest": "35dc179a"
       },
       "label": "duel-active",
       "players": [
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
@@ -81,18 +82,34 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ],
+            "visited": [
+              "poi:eastbrook_vale:reliquary_hill"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 400,
+          "entityId": 661,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -104,10 +121,12 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
@@ -117,18 +136,35 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "mage",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ],
+            "visited": [
+              "poi:eastbrook_vale:reliquary_hill"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 401,
+          "entityId": 662,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -144,7 +180,8 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         }
       ],
       "entities": [
@@ -159,7 +196,7 @@
           "fallStartY": 2.242568,
           "fiveSecondRule": 102.05,
           "hp": 90,
-          "id": 400,
+          "id": 661,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -207,7 +244,7 @@
           "fallStartY": 2.139867,
           "fiveSecondRule": 102.05,
           "hp": 54,
-          "id": 401,
+          "id": 662,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -251,17 +288,18 @@
     {
       "tick": 61,
       "time": 3.05,
-      "nextId": 402,
-      "state": "7aaf527d",
-      "events": "8d231b78",
+      "nextId": 663,
+      "state": "ccc86f77",
+      "events": "16eba5f4",
       "rng": {
-        "draws": 78,
-        "digest": "d52f266d"
+        "draws": 140,
+        "digest": "35dc179a"
       },
       "label": "duel-ended",
       "players": [
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
@@ -271,18 +309,37 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "damageDealt": 53,
+              "duelsWon": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ],
+            "visited": [
+              "poi:eastbrook_vale:reliquary_hill"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 400,
+          "entityId": 661,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -294,10 +351,12 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
@@ -307,18 +366,37 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "mage",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "duelsLost": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ],
+            "visited": [
+              "poi:eastbrook_vale:reliquary_hill"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 401,
+          "entityId": 662,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -334,7 +412,8 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         }
       ],
       "entities": [
@@ -349,7 +428,7 @@
           "fallStartY": 2.242568,
           "fiveSecondRule": 102.05,
           "hp": 90,
-          "id": 400,
+          "id": 661,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -397,7 +476,7 @@
           "fallStartY": 2.139867,
           "fiveSecondRule": 102.05,
           "hp": 1,
-          "id": 401,
+          "id": 662,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -441,39 +520,40 @@
     {
       "tick": 80,
       "time": 4,
-      "nextId": 402,
-      "state": "e4e13109",
-      "events": "741638a5",
+      "nextId": 663,
+      "state": "7f2d90e4",
+      "events": "c63ea5b9",
       "rng": {
-        "draws": 150,
-        "digest": "b4023222"
+        "draws": 275,
+        "digest": "ddf59d10"
       }
     },
     {
       "tick": 100,
       "time": 5,
-      "nextId": 402,
-      "state": "5a5d6fb1",
+      "nextId": 663,
+      "state": "abe7979c",
       "events": "741638a5",
       "rng": {
-        "draws": 262,
-        "digest": "74c08c29"
+        "draws": 475,
+        "digest": "47d03623"
       }
     },
     {
       "tick": 101,
       "time": 5.05,
-      "nextId": 402,
-      "state": "b2c84d4f",
+      "nextId": 663,
+      "state": "b0621372",
       "events": "741638a5",
       "rng": {
-        "draws": 263,
-        "digest": "7cc78626"
+        "draws": 480,
+        "digest": "39c1ccbc"
       },
       "label": "final",
       "players": [
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
@@ -483,18 +563,43 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "damageDealt": 53,
+              "duelsWon": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "recruit_tunic",
+              "worn_sword"
+            ],
+            "visited": [
+              "poi:eastbrook_vale:reliquary_hill"
+            ]
+          },
+          "deedsEarned": [
+            [
+              "pvp_duel_first_win",
+              ""
+            ]
+          ],
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 400,
+          "entityId": 661,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -503,13 +608,16 @@
           ],
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "renown": 5,
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
@@ -519,18 +627,43 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "mage",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
+          "deedStats": {
+            "counters": {
+              "duelsLost": 1
+            },
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "apprentice_robe",
+              "baked_bread",
+              "gnarled_staff",
+              "spring_water"
+            ],
+            "visited": [
+              "poi:eastbrook_vale:reliquary_hill"
+            ]
+          },
+          "deedsEarned": [
+            [
+              "pvp_duel_grace",
+              ""
+            ]
+          ],
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 401,
+          "entityId": 662,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -543,10 +676,12 @@
           ],
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "renown": 5,
           "talents": {
             "choices": {},
             "ranks": {}
-          }
+          },
+          "townFocus": {}
         }
       ],
       "entities": [
@@ -561,7 +696,7 @@
           "fallStartY": 2.242568,
           "fiveSecondRule": 104.05,
           "hp": 90,
-          "id": 400,
+          "id": 661,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -609,7 +744,7 @@
           "fallStartY": 2.139867,
           "fiveSecondRule": 104.05,
           "hp": 7,
-          "id": 401,
+          "id": 662,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",

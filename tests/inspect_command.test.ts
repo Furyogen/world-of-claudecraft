@@ -23,7 +23,7 @@ describe('/inspect command', () => {
     const e = sim.entities.get(b)!;
     e.level = 8;
 
-    expect(inspectReply(sim, a, '/inspect Bet')).toBe('Bet: Level 8 Mage — HP 100%.');
+    expect(inspectReply(sim, a, '/inspect Bet')).toBe('Bet: Level 8 Mage: HP 100%.');
   });
 
   it('shows a partial-health percentage and "dead" for a corpse', () => {
@@ -32,10 +32,10 @@ describe('/inspect command', () => {
     const b = sim.addPlayer('rogue', 'Gimel');
     const e = sim.entities.get(b)!;
     e.hp = Math.round(e.maxHp * 0.4);
-    expect(inspectReply(sim, a, '/inspect Gimel')).toBe(`Gimel: Level ${e.level} Rogue — HP 40%.`);
+    expect(inspectReply(sim, a, '/inspect Gimel')).toBe(`Gimel: Level ${e.level} Rogue: HP 40%.`);
 
     e.hp = 0;
-    expect(inspectReply(sim, a, '/inspect Gimel')).toBe(`Gimel: Level ${e.level} Rogue — HP dead.`);
+    expect(inspectReply(sim, a, '/inspect Gimel')).toBe(`Gimel: Level ${e.level} Rogue: HP dead.`);
   });
 
   it('matches names case-insensitively when unambiguous', () => {

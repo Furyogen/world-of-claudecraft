@@ -14,12 +14,46 @@ import {
   GATHERING_PROFESSION_IDS,
   GATHERING_PROFESSIONS,
   type GatheringProfessionId,
+  HARVEST_COMPONENT_ITEMS,
 } from '../content/professions';
+import { QUESTS } from '../data';
 import type { Rng } from '../rng';
 import type { PlayerMeta } from '../sim';
 import type { SimContext } from '../sim_context';
 import { type GatherNodeDef, type GatherNodeType, INTERACT_RANGE, type ItemDef } from '../types';
+import { gatherActionXp } from './profession_xp';
 import type { PlayerProfessionSkill } from './types';
+
+// Quest-gated bonus grant (#1701 follow-up review): while the paired quest is
+// active and short of its collect objective, a harvest of this node type also
+// grants the quest's own dedicated item, never NODE_HARVEST_TABLE's shared
+// junk/reagent material. That material (e.g. bone_fragments) drops from mobs,
+// salvage, and the market, so a collect objective targeting it is satisfied by
+// anything but mining; the dedicated item can only ever come from here. Mirrors
+// the mob-loot questId gate (loot_roll.ts needsQuestDrop) but unconditional: a
+// gathering action has no miss chance, so a harvest that clears the node's own
+// respawn gate always also clears the quest need.
+const NODE_QUEST_GRANT: Partial<Record<GatherNodeType, { questId: string; itemId: string }>> = {
+  ore: { questId: 'q_prof_intro', itemId: 'chunk_of_ore' },
+};
+
+function neededNodeQuestItem(
+  ctx: SimContext,
+  meta: PlayerMeta,
+  node: GatherNodeDef,
+): string | undefined {
+  const grant = NODE_QUEST_GRANT[node.type];
+  if (!grant) return undefined;
+  if (meta.questLog.get(grant.questId)?.state !== 'active') return undefined;
+  const quest = QUESTS[grant.questId];
+  const objIdx = quest.objectives.findIndex(
+    (o) => o.type === 'collect' && o.itemId === grant.itemId,
+  );
+  if (objIdx < 0) return undefined;
+  return ctx.countItem(grant.itemId, meta.entityId) < quest.objectives[objIdx].count
+    ? grant.itemId
+    : undefined;
+}
 
 export type GatheringProficiency = Record<GatheringProfessionId, number>;
 
@@ -188,6 +222,7 @@ export function harvestNode(ctx: SimContext, nodeId: string, pid?: number): void
     ctx.error(meta.entityId, 'Your bags are full.');
     return;
   }
+  const questItemId = neededNodeQuestItem(ctx, meta, node);
   const result = resolveHarvest(meta, node, ctx.time, ctx.rng);
   if (!result.granted) {
     // Unreachable in practice (the readiness check above already gates this),
@@ -197,6 +232,18 @@ export function harvestNode(ctx: SimContext, nodeId: string, pid?: number): void
     return;
   }
   ctx.addItem(result.itemId!, 1, meta.entityId);
+  // Resolved against the timer/bags gates above, before the timer-consuming
+  // resolveHarvest call, so a full-bags quest item never eats the node's
+  // per-player respawn timer on its own.
+  if (questItemId && ctx.canAddItem(questItemId, 1, meta.entityId)) {
+    ctx.addItem(questItemId, 1, meta.entityId);
+  }
+  // Zone gather mark: one entry per zone and node type ever harvested.
+  ctx.markVisited(meta, `gather:${node.zoneId}:${node.type}`);
+  // Character XP for the harvest (profession_xp.ts), tier-scaled and
+  // level-gated the same way kill XP is: a max-level player farming a
+  // trivial (gray) node gets zero.
+  ctx.grantXp(gatherActionXp(node.level, p.level), meta);
 }
 
 export interface PendingGatherGrant {
@@ -278,8 +325,10 @@ export function gatheringSkillsView(proficiency: GatheringProficiency): PlayerPr
 // harvest it claims the yield, and every later attempt (same tick or any later tick)
 // against that same corpse is denied.
 //
-// Pure leaf: no Sim/Entity import, no rng, no clock, mirroring the loot/loot_ffa.ts
-// pattern (reference: format_money.ts, threat.ts, loot/loot_ffa.ts). The owning
+// Pure leaf: no Sim/Entity import, no clock, mirroring the loot/loot_ffa.ts
+// pattern (reference: format_money.ts, threat.ts, loot/loot_ffa.ts). The single-use
+// claim below draws no rng; the #1142 focus-harvest tier roll further down takes an
+// explicit `Rng` argument, same pattern as loot/loot_roll.ts. The owning
 // caller (src/sim/interaction.ts) holds the corpse's `harvestClaimedBy` state on the
 // Entity and passes it in; resolveCorpseHarvest performs the whole check-and-set in
 // one synchronous call, so there is nothing left to race.
@@ -293,17 +342,16 @@ export function gatheringSkillsView(proficiency: GatheringProficiency): PlayerPr
 // (deterministic command-batch order) sees `currentClaimedBy === null` and wins;
 // the second sees the just-written claim and is denied. No lock is needed because
 // there is no interleaving to guard against.
+//
+// #1142 adds a per-corpse FOCUS PICKER on top of the single-use claim above:
+// which of the corpse's tagged component(s) the claiming player extracts, and
+// the concentrate-vs-spread tier tradeoff for that choice (see
+// resolveCorpseFocusHarvest below). Draws rng, unlike the rest of this file.
 
-// Component tag -> the existing item this harvest yields. Only tags with a concrete
-// profession-material item wired up so far are listed here; a mob whose
-// `componentTags` don't map to any of these still becomes single-use claimed, it
-// just yields no item yet (future profession-harvest issues wire up the rest).
-export const HARVEST_COMPONENT_ITEMS: Readonly<Record<string, string>> = {
-  hide: 'boar_hide',
-  fang: 'wolf_fang',
-  silk: 'webwood_silk',
-  venomSac: 'widow_venom_sac',
-};
+// The tag-to-item yield map is game data, so it lives in src/sim/content/professions.ts
+// (this directory holds shapes and logic, no game data; see the local CLAUDE.md).
+// Re-exported here so existing importers keep resolving.
+export { HARVEST_COMPONENT_ITEMS };
 
 export interface HarvestClaim {
   readonly success: boolean;
@@ -325,12 +373,149 @@ export function resolveCorpseHarvest(currentClaimedBy: number | null, pid: numbe
   return { success: true, claimedBy: pid };
 }
 
-/** The item id this harvest yields, or null if no component tag maps to one yet. */
-export function harvestItemFor(componentTags: readonly string[] | undefined): string | null {
-  if (!componentTags) return null;
-  for (const tag of componentTags) {
-    const itemId = HARVEST_COMPONENT_ITEMS[tag];
-    if (itemId) return itemId;
+// Per-corpse focus picker (#1142): concentrate vs spread tradeoff.
+//
+// At a harvestable corpse the player chooses which tagged component(s) to
+// extract. Choosing FEWER components concentrates the effort and yields a
+// measurably higher tier per component than spreading across every tagged
+// type on the same corpse.
+
+/** Component yield tiers, worst to best. Independent of `ItemDef['quality']`
+ * (a harvest yield is a raw material, not necessarily an equippable item),
+ * but reuses the same classic six-tier naming so it reads consistently. */
+export type HarvestTier = 'poor' | 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
+
+// Exported so professions/focus.ts (#1143) can shift a rolled tier upward by a
+// persistent town-focus bonus without redefining the tier order.
+export const HARVEST_TIERS: readonly HarvestTier[] = [
+  'poor',
+  'common',
+  'uncommon',
+  'rare',
+  'epic',
+  'legendary',
+];
+
+// Base per-tier roll weights (poor..legendary), used unshifted when the player
+// spreads across every tagged component on the corpse (zero concentration).
+// Tune here, not inline in the roll.
+const BASE_TIER_WEIGHTS: readonly number[] = [40, 30, 15, 10, 4, 1];
+
+export interface FocusHarvestYield {
+  readonly component: string;
+  readonly tier: HarvestTier;
+}
+
+/**
+ * The component set a focus pick actually extracts: an empty `chosen` or one
+ * covering every tagged component both spread across all of `taggedComponents`
+ * (the #1141 behavior); a strict subset concentrates on its valid members.
+ * Shared by resolveCorpseFocusHarvest and the command boundary's pre-claim
+ * capacity gate (src/sim/interaction.ts), which must see exactly the set the
+ * roll will yield WITHOUT drawing rng (a refused command must not shift the
+ * world's draw order).
+ */
+export function effectiveFocusComponents(
+  taggedComponents: readonly string[],
+  chosen: readonly string[],
+): readonly string[] {
+  return chosen.length === 0 || chosen.length >= taggedComponents.length
+    ? taggedComponents
+    : chosen.filter((c) => taggedComponents.includes(c));
+}
+
+/**
+ * Resolve a per-corpse focus harvest: one independent tier roll per chosen
+ * component, each roll's weight table shifted upward by a concentration bonus.
+ *
+ * Formula (monotonic, documented, no invented balance numbers beyond the base
+ * weight table above): `bonus = taggedComponents.length - effectiveChosen.length`,
+ * clamped to `[0, HARVEST_TIERS.length - 1]`. Each component's tier index is
+ * `min(rolledIndex + bonus, HARVEST_TIERS.length - 1)`. Choosing every tagged
+ * component gives `bonus = 0` (an unshifted roll, the pre-#1142 "spread"
+ * behavior); choosing strictly fewer components out of the same tagged set
+ * can only raise the shift, never lower it, so concentrating on fewer
+ * components always yields an equal-or-higher expected tier per component
+ * than spreading wider on the same corpse.
+ *
+ * Backward compatibility: an empty `chosen` (no selection made) or a `chosen`
+ * that covers every tagged component both default to spreading across all of
+ * `taggedComponents`, matching the single-harvest behavior from #1141.
+ *
+ * Pure: draws only from the passed-in `Rng`, one draw per yielded component,
+ * in `effectiveChosen` order.
+ */
+export function resolveCorpseFocusHarvest(
+  taggedComponents: readonly string[],
+  chosen: readonly string[],
+  rng: Rng,
+): FocusHarvestYield[] {
+  const effectiveChosen = effectiveFocusComponents(taggedComponents, chosen);
+  const bonus = Math.max(
+    0,
+    Math.min(HARVEST_TIERS.length - 1, taggedComponents.length - effectiveChosen.length),
+  );
+  return effectiveChosen.map((component) => ({ component, tier: rollFocusTier(rng, bonus) }));
+}
+
+/** How many of the mapped item a yielded tier grants: 1 (poor) through 6 (legendary). */
+export function harvestTierQuantity(tier: HarvestTier): number {
+  return HARVEST_TIERS.indexOf(tier) + 1;
+}
+
+function rollFocusTier(rng: Rng, bonus: number): HarvestTier {
+  const totalWeight = BASE_TIER_WEIGHTS.reduce((sum, w) => sum + w, 0);
+  let roll = rng.next() * totalWeight;
+  let index = 0;
+  for (; index < BASE_TIER_WEIGHTS.length - 1; index++) {
+    roll -= BASE_TIER_WEIGHTS[index];
+    if (roll < 0) break;
   }
-  return null;
+  const shifted = Math.min(HARVEST_TIERS.length - 1, index + bonus);
+  return HARVEST_TIERS[shifted];
+}
+
+// Signed materials (#1145): a corpse-harvested monster material rolls the same
+// MaterialRarity ladder a gathering node does (rollMaterialRarity, above), but a
+// corpse yield has no per-player proficiency counter to scale off (there is no
+// "skinning" gathering profession yet, unlike mining/logging/herbalism): it uses
+// a fixed baseline "power" input instead, tuned so a corpse harvest has a real
+// but modest chance (about 16%) of coming back rare-or-better. One rng.next()
+// draw per harvest that actually yields an item, same one-draw convention as
+// rollMaterialRarity itself.
+export const CORPSE_HARVEST_RARITY_BASELINE = 40;
+
+export function rollCorpseMaterialRarity(rng: Rng): MaterialRarity {
+  return rollMaterialRarity(CORPSE_HARVEST_RARITY_BASELINE, rng);
+}
+
+// The rarity floor at which a monster material is stamped with its gatherer's
+// name (#1145 acceptance criteria: "rare-or-better"). Below this tier the yield
+// stays a plain fungible stack, same as before this issue.
+export function isSignableMaterialRarity(rarity: MaterialRarity): boolean {
+  return rarity === 'rare' || rarity === 'epic' || rarity === 'legendary';
+}
+
+// Fixed rarity ladder, low to high, matching the tier-index scale professions/
+// archetype.ts's empowerment ceiling already uses (common=0, uncommon=1,
+// rare=2, epic=3, legendary=4).
+const MATERIAL_RARITY_ORDER: readonly MaterialRarity[] = [
+  'common',
+  'uncommon',
+  'rare',
+  'epic',
+  'legendary',
+];
+
+/** Clamp a rolled rarity down to at most `maxTier` (a tier index on the same
+ *  ladder, e.g. from archetype.ts `archetypeCeilingFor`; `Infinity` is a no-op).
+ *  Used to cap crafted-output quality at the #1129 empowerment ceiling: a
+ *  dormant or hobby craft can still ROLL a high rarity off raw skill, but the
+ *  actual result granted never exceeds what that craft is empowered to
+ *  produce. Never raises a roll, only lowers it. */
+export function clampMaterialRarity(rarity: MaterialRarity, maxTier: number): MaterialRarity {
+  if (!Number.isFinite(maxTier)) return rarity;
+  const cap = Math.max(0, Math.min(MATERIAL_RARITY_ORDER.length - 1, Math.floor(maxTier)));
+  const rolled = MATERIAL_RARITY_ORDER.indexOf(rarity);
+  return MATERIAL_RARITY_ORDER[Math.min(rolled, cap)];
 }

@@ -1,7 +1,7 @@
-// Default (Mouse Camera off): classic-MMO-style — WASD + A/D keyboard turn, Q/E strafe,
-// left-drag orbits, right-drag mouselooks, both buttons run forward.
-// Optional Mouse Camera (on): OSRS-style — WASD is camera-relative, A/D strafe,
-// mouse drag rotates the orbit (no pointer lock), no keyboard turn.
+// Default (Mouse Camera off): classic-MMO-style (WASD + A/D keyboard turn, Q/E strafe,
+// left-drag orbits, right-drag mouselooks, both buttons run forward).
+// Optional Mouse Camera (on): OSRS-style (WASD is camera-relative, A/D strafe,
+// mouse drag rotates the orbit (no pointer lock), no keyboard turn).
 // Shared: space jump, wheel zoom, Tab target, rebindable action bar, R autorun.
 
 import { sanitizeMoveFacing, sanitizeMoveInput } from '../sim/move_input';
@@ -14,6 +14,11 @@ import { clickPickFromMouseGesture, DEFAULT_CLICK_PICK_MAX_MS } from './pointer_
 const BASE_LOOK_SENS = 0.0045;
 const TOUCH_LOOK_YAW_RATE = 3.2;
 const TOUCH_LOOK_PITCH_RATE = 2.2;
+// One-finger swipe-drag on the open canvas (mobile_controls.ts onSwipeLookMove)
+// felt sluggish next to the joystick look path: a full-screen-width swipe barely
+// turned the camera. This multiplier only scales that drag path, not mouselook
+// or the camera joystick, so desktop and the joystick are unaffected.
+const TOUCH_DRAG_SENS_MULT = 2.2;
 const TOUCH_JUMP_LATCH_MS = 220;
 // A keyboard jump press is latched the same way a touch tap is: a fast spacebar
 // tap can be pressed and released entirely between two 20Hz input samples (or
@@ -38,7 +43,14 @@ export interface InputCallbacks {
   onTab(): void;
   onTargetFriendly(): void;
   onCycleFriendly(): void;
+  // Pet-bar command (bound to Ctrl+1..5 by default): attack the current target,
+  // stop (passive stance), taunt, or set the defensive/aggressive stance.
+  onPet(action: 'attack' | 'stop' | 'taunt' | 'defensive' | 'aggressive'): void;
   onAbility(slot: number): void;
+  // Action-bar slot key DOWN / UP, so a slot can HOLD to charge (the Vale Cup
+  // shoot) and release to fire. A tap is a down immediately followed by an up.
+  onAbilityDown(slot: number): void;
+  onAbilityUp(slot: number): void;
   onUiKey(
     key:
       | 'interact'
@@ -54,9 +66,12 @@ export interface InputCallbacks {
       | 'meters'
       | 'social'
       | 'arena'
+      | 'valecup'
       | 'leaderboard'
       | 'calendar'
-      | 'discord',
+      | 'discord'
+      | 'deeds'
+      | 'crafting',
   ): void;
   onEmoteWheel(open: boolean): void;
   onClickPick(x: number, y: number, button: number): void;
@@ -153,6 +168,9 @@ export class Input {
   private controllerMoveInput: MoveInput | null = null;
   private controllerFacing: number | null = null;
   private emoteWheelHeldCodes = new Set<string>();
+  // Physical key code -> action-bar slot currently held down, so key UP (or a
+  // blur) releases the matching slot (drives the hold-to-charge shoot).
+  private heldSlotCodes = new Map<string, number>();
   // mouse-look sensitivity, in radians per pixel of drag; the old fixed value
   // was BASE_LOOK_SENS — setCameraSpeed scales it from the settings menu
   private lookSensitivity = BASE_LOOK_SENS;
@@ -205,6 +223,7 @@ export class Input {
       'wheel',
       (e) => {
         e.preventDefault();
+        if (document.body.classList.contains('mobile-touch')) return;
         this.zoomBy(Math.sign(e.deltaY) * 1.4);
         this.noteIntent('zoom');
       },
@@ -263,7 +282,7 @@ export class Input {
     return target && typeof target === 'object' ? (target as ContextMenuTarget) : null;
   }
 
-  /** Move the camera in/out, clamped to the zoom limits. Shared by wheel + touch pinch. */
+  /** Move the camera in/out, clamped to the zoom limits. */
   zoomBy(delta: number): void {
     this.camDist = Math.min(22, Math.max(3, this.camDist + delta));
   }
@@ -372,6 +391,8 @@ export class Input {
     const hadHeldInput = this.keys.size > 0 || this.keyJumpUntil > 0;
     this.keys.clear();
     this.keyJumpUntil = 0;
+    // Suspending input drops any charging Vale Cup sport move (held Shoot etc.).
+    this.releaseHeldSlots();
     if (hadHeldInput) this.noteIntent('move');
   }
 
@@ -428,6 +449,13 @@ export class Input {
     return this.autorun;
   }
 
+  // Idempotent autorun latch for analog inputs that have a one-way "engage"
+  // gesture, such as the mobile move joystick's top band.
+  setAutorun(on: boolean): boolean {
+    this.autorun = on;
+    return this.autorun;
+  }
+
   setTouchLook(active: boolean): void {
     if (active !== this.touchLookActive) this.noteIntent('look');
     this.touchLookActive = active;
@@ -445,10 +473,11 @@ export class Input {
   }
 
   applyTouchLookDelta(dx: number, dy: number): void {
-    this.camYaw -= dx * this.lookSensitivity;
+    const dragSens = this.lookSensitivity * TOUCH_DRAG_SENS_MULT;
+    this.camYaw -= dx * dragSens;
     this.camPitch = Math.min(
       1.35,
-      Math.max(-0.4, this.camPitch + this.touchPitchSign * dy * this.lookSensitivity),
+      Math.max(-0.4, this.camPitch + this.touchPitchSign * dy * dragSens),
     );
     if (dx !== 0 || dy !== 0) this.noteIntent('look');
   }
@@ -617,6 +646,7 @@ export class Input {
       this.emoteWheelHeldCodes.clear();
       this.cb.onEmoteWheel(false);
     }
+    if (reason !== 'pointerlock') this.releaseHeldSlots();
     this.updateCursor();
     if (hadInput) this.noteIntent('move');
   }
@@ -701,7 +731,33 @@ export class Input {
       this.noteIntent('move');
     }
     const edge = combo ? this.keybinds.edgeActionForCombo(combo) : null;
-    if (edge !== null) this.dispatchEdge(edge);
+    if (edge !== null) {
+      // A matched chord that carries a modifier (Ctrl/Alt/Cmd) shadows a browser
+      // accelerator, e.g. Ctrl+number tab switching. Cancel the default so the
+      // game keeps the keypress. Some accelerators are not cancelable (Chrome and
+      // Edge reserve Ctrl+1..8 outright), but this reclaims the ones that are
+      // (Firefox) and is a no-op where there is nothing to cancel.
+      if (e.ctrlKey || e.altKey || e.metaKey) e.preventDefault?.();
+      // 'chat' focuses the composer textarea as a side effect of this very
+      // keydown. Left un-prevented, the browser still delivers the follow-up
+      // keypress (and its default newline insertion) to whichever element is
+      // focused AT THAT POINT, i.e. the composer we just focused, so Enter
+      // both opens chat and types a newline into it before the placeholder is
+      // ever seen. Cancel the default so the composer opens empty, but only
+      // when the key was not itself focused on a button: a button's own Enter
+      // activation is a real default action too, and it should still fire
+      // alongside chat opening, same as before this fix.
+      if (edge === 'chat' && tag !== 'button') e.preventDefault?.();
+      if (edge.startsWith('slot')) {
+        // Slot keys use DOWN/UP so a slot can hold to charge; the HUD decides
+        // whether a slot charges (shoot) or fires immediately (tap = down+up).
+        const slot = Number(edge.slice(4));
+        this.heldSlotCodes.set(e.code, slot);
+        this.cb.onAbilityDown(slot);
+      } else {
+        this.dispatchEdge(edge);
+      }
+    }
   }
 
   private onKeyUp(e: KeyboardEvent): void {
@@ -710,6 +766,20 @@ export class Input {
       this.cb.onEmoteWheel(false);
       e.preventDefault();
     }
+    const slot = this.heldSlotCodes.get(e.code);
+    if (slot !== undefined) {
+      this.heldSlotCodes.delete(e.code);
+      this.cb.onAbilityUp(slot);
+    }
+  }
+
+  // Release every held slot (fire onAbilityUp), e.g. on blur/menu, so a charge in
+  // progress cannot stick.
+  private releaseHeldSlots(): void {
+    if (this.heldSlotCodes.size === 0) return;
+    const slots = [...this.heldSlotCodes.values()];
+    this.heldSlotCodes.clear();
+    for (const slot of slots) this.cb.onAbilityUp(slot);
   }
 
   private dispatchEdge(action: string): void {
@@ -731,11 +801,29 @@ export class Input {
       case 'targetFriendlyNext':
         this.cb.onCycleFriendly();
         return;
+      case 'petAttack':
+        this.cb.onPet('attack');
+        return;
+      case 'petStop':
+        this.cb.onPet('stop');
+        return;
+      case 'petTaunt':
+        this.cb.onPet('taunt');
+        return;
+      case 'petDefensive':
+        this.cb.onPet('defensive');
+        return;
+      case 'petAggressive':
+        this.cb.onPet('aggressive');
+        return;
       case 'interact':
         this.cb.onUiKey('interact');
         return;
       case 'bags':
         this.cb.onUiKey('bags');
+        return;
+      case 'crafting':
+        this.cb.onUiKey('crafting');
         return;
       case 'char':
         this.cb.onUiKey('char');
@@ -764,6 +852,9 @@ export class Input {
       case 'arena':
         this.cb.onUiKey('arena');
         return;
+      case 'valecup':
+        this.cb.onUiKey('valecup');
+        return;
       case 'leaderboard':
         this.cb.onUiKey('leaderboard');
         return;
@@ -772,6 +863,9 @@ export class Input {
         return;
       case 'discord':
         this.cb.onUiKey('discord');
+        return;
+      case 'deeds':
+        this.cb.onUiKey('deeds');
         return;
       case 'chat':
         this.cb.onUiKey('chat');
@@ -853,8 +947,8 @@ export class Input {
       // BOTH camera modes, so rotation never begins with a free cursor that can
       // reach the screen edge (movementX clamps to 0 and the camera freezes) or
       // slip onto a second monitor. One lock per drag, none for a plain click
-      // (#116); fullscreen stays a plain drag because Chrome forces its own
-      // "press and hold Esc" prompt there.
+      // (#116). Fullscreen uses the same lock path so right-drag mouselook
+      // behaves identically there.
       if (
         !this.pointerLockRequestedForDrag &&
         shouldEngagePointerLock({

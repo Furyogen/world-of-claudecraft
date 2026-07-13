@@ -39,6 +39,7 @@ import {
   SETTING_RANGES,
 } from '../game/settings';
 import type { IWorld } from '../world_api';
+import { appVersionInfo } from './app_version';
 import type { ChatClock } from './chat_timestamp';
 import { markDialogRoot } from './dialog_root';
 import { esc } from './esc';
@@ -110,6 +111,7 @@ const LANGUAGE_ENDONYMS: Record<SupportedLanguage, string> = {
   ja_JP: '日本語',
   pt_BR: 'Português (Brasil)',
   ru_RU: 'Русский',
+  cs_CZ: 'Čeština',
   nl_NL: 'Nederlands',
   pl_PL: 'Polski',
   id_ID: 'Bahasa Indonesia',
@@ -125,6 +127,7 @@ const BIND_CATEGORY_LABEL_KEYS: Partial<Record<string, TranslationKey>> = {
   Targeting: 'hud.keybinds.categories.targeting',
   Interface: 'hud.keybinds.categories.interface',
   'Action Bar': 'hud.keybinds.categories.actionBar',
+  Pet: 'hudChrome.keybinds.categoryPet',
 };
 const BIND_ACTION_LABEL_KEYS: Partial<Record<string, TranslationKey>> = {
   forward: 'hud.keybinds.actions.forward',
@@ -154,12 +157,20 @@ const BIND_ACTION_LABEL_KEYS: Partial<Record<string, TranslationKey>> = {
   targetFriendly: 'hudChrome.keybinds.targetFriendly',
   targetFriendlyNext: 'hudChrome.keybinds.targetFriendlyNext',
   discord: 'hudChrome.keybinds.discord',
+  valecup: 'hudChrome.keybinds.valecup',
+  petAttack: 'hudChrome.keybinds.petAttack',
+  petStop: 'hudChrome.keybinds.petStop',
+  petTaunt: 'hudChrome.keybinds.petTaunt',
+  petDefensive: 'hudChrome.keybinds.petDefensive',
+  petAggressive: 'hudChrome.keybinds.petAggressive',
   // Reuse the existing window/feature names so these labels localize everywhere
   // without duplicating strings (these two ids were previously absent from the
   // map and fell back to the raw English BIND_ACTIONS labels).
   talents: 'game.talents.title',
   leaderboard: 'game.leaderboard.title',
   calendar: 'hudChrome.calendar.keybindLabel',
+  crafting: 'hudChrome.crafting.title',
+  deeds: 'hudChrome.deeds.title',
 };
 
 /**
@@ -213,6 +224,77 @@ export interface OptionsWindowDeps {
   setChatTimestamps(on: boolean): void;
   getChatClock(): ChatClock;
   setChatClock(clock: ChatClock): void;
+}
+
+/** The online account seam behind the deed-broadcast row (OptionsHooks.deedBroadcasts). */
+export interface DeedBroadcastSeam {
+  get(): Promise<boolean>;
+  set(enabled: boolean): Promise<boolean>;
+}
+
+/**
+ * The account deed-broadcast opt-out row (accounts.deed_broadcasts): an ASYNC
+ * account setting, not a local Settings key, so it lives outside the settings
+ * row family and renders in the classic set-row grammar beside the chat rows.
+ * Painted only when main.ts wired the online seam (an offline character has
+ * no account). The toggle disables (aria-busy) until the persisted state
+ * loads; a click flips optimistically, the server echo wins, and a failed
+ * write reverts to the last known state. Exported standalone so the
+ * round-trip is jsdom-driven directly (tests/deed_broadcast_row.test.ts).
+ */
+export function buildDeedBroadcastRow(parent: HTMLElement, seam: DeedBroadcastSeam): void {
+  const row = document.createElement('div');
+  row.className = 'set-row';
+  const name = document.createElement('span');
+  name.className = 'set-name';
+  name.textContent = t('hudChrome.deeds.broadcastsLabel');
+  const toggle = document.createElement('button');
+  toggle.className = 'btn set-toggle';
+  toggle.disabled = true;
+  toggle.setAttribute('aria-label', t('hudChrome.deeds.broadcastsLabel'));
+  toggle.setAttribute('aria-busy', 'true');
+  let on = true;
+  const sync = () => {
+    toggle.textContent = on ? t('hud.options.on') : t('hud.options.off');
+    toggle.classList.toggle('off', !on);
+    toggle.setAttribute('aria-pressed', String(on));
+  };
+  sync();
+  void seam
+    .get()
+    // Unreadable state renders the column default (TRUE); the first write
+    // still round-trips the truth.
+    .catch(() => true)
+    .then((enabled) => {
+      on = enabled;
+      toggle.disabled = false;
+      toggle.removeAttribute('aria-busy');
+      sync();
+    });
+  toggle.addEventListener('click', () => {
+    audio.click();
+    const requested = !on;
+    on = requested;
+    sync();
+    toggle.disabled = true;
+    toggle.setAttribute('aria-busy', 'true');
+    void seam
+      .set(requested)
+      .then((echoed) => {
+        on = echoed;
+      })
+      .catch(() => {
+        // Failed write: revert; the next panel open re-reads the truth.
+        on = !requested;
+      })
+      .then(() => {
+        toggle.disabled = false;
+        toggle.removeAttribute('aria-busy');
+        sync();
+      });
+  });
+  row.append(name, toggle);
+  parent.appendChild(row);
 }
 
 export class OptionsWindow {
@@ -310,32 +392,58 @@ export class OptionsWindow {
     switch (this.view) {
       case 'keybinds':
         this.renderKeybinds();
-        return;
+        break;
       case 'graphics':
         this.renderGraphics();
-        return;
+        break;
       case 'audio':
         this.renderAudio();
-        return;
+        break;
       case 'interface':
         this.renderInterface();
-        return;
+        break;
       case 'controller':
         this.renderController();
-        return;
+        break;
       case 'performance':
         this.renderPerformance();
-        return;
+        break;
       case 'bugreport':
         this.renderBugReport();
-        return;
+        break;
       default:
         this.renderMain();
     }
+    // Every panelTitle() sub-view carries a [data-back] control in its title
+    // bar; wire it once here so a new sub-view cannot forget it. The main menu
+    // renders none (this no-ops) and Performance wires its own back listener in
+    // buildTitle (it rerender()s internally, which would drop a listener added
+    // here).
+    el.querySelector('[data-back]')?.addEventListener('click', () => this.goBack());
+  }
+
+  // Return to the Game Menu root without closing the window. The title-bar back
+  // control and every footer Back button route here: on mobile especially,
+  // close-then-reopen (More, Menu, sub-panel again) was three taps for what this
+  // does in one. Focus moves to the menu's first entry because the control that
+  // had focus is destroyed by the re-render.
+  private goBack(): void {
+    audio.click();
+    this.view = 'main';
+    this.capturingKey = null;
+    this.keybindNote = '';
+    this.render();
+    this.deps.focusFirstInteractive(this.deps.root());
   }
 
   private panelTitle(title: string): string {
-    return `<div class="panel-title"><span id="options-title">${esc(title)}</span><button type="button" class="x-btn" data-close aria-label="${esc(t('hud.options.returnToGame'))}">${svgIcon('close')}</button></div>`;
+    // Sub-views get a back control at the inline start of the title bar; the
+    // main menu is the root, so it renders only the close button.
+    const back =
+      this.view === 'main'
+        ? ''
+        : `<button type="button" class="x-btn back-btn" data-back aria-label="${esc(t('hud.options.back'))}" title="${esc(t('hud.options.back'))}">${svgIcon('prev')}</button>`;
+    return `<div class="panel-title">${back}<span id="options-title">${esc(title)}</span><button type="button" class="x-btn" data-close aria-label="${esc(t('hud.options.returnToGame'))}">${svgIcon('close')}</button></div>`;
   }
 
   private renderMain(): void {
@@ -363,6 +471,13 @@ export class OptionsWindow {
       list.appendChild(b);
     }
     el.appendChild(list);
+    // Running build, as small secondary text at the foot of the menu, so players can
+    // confirm their version without leaving the settings window (issue 1541).
+    const { version, build } = appVersionInfo();
+    const ver = document.createElement('div');
+    ver.className = 'opt-version';
+    ver.textContent = t('hudChrome.options.version', { version, build });
+    el.appendChild(ver);
     el.querySelector('[data-close]')?.addEventListener('click', () => this.close());
   }
 
@@ -439,11 +554,14 @@ export class OptionsWindow {
     // screen reader announces the human-meaningful value (50%, 90 degrees) instead
     // of the raw stored number. The native range already exposes role=slider plus
     // aria-valuenow/min/max from value/min/max, so only valuetext needs setting.
-    const syncReadout = () => {
-      const text = fmt(hooks.settings.get(key));
+    const applyReadout = (text: string) => {
       val.textContent = text;
       slider.setAttribute('aria-valuetext', text);
     };
+    const syncReadout = () => applyReadout(fmt(hooks.settings.get(key)));
+    // The raw slider position, for the live readout while dragging a commit-on-change
+    // slider (the store is not written until release, so syncReadout would be stale).
+    const readoutFromSlider = () => applyReadout(fmt(Number(slider.value)));
     syncReadout();
     // Paint a gold fill up to the current value on every engine (CSS alone can't
     // read the value; --range-fill drives the webkit track gradient and Firefox's
@@ -459,11 +577,26 @@ export class OptionsWindow {
       );
     };
     paintFill();
-    slider.addEventListener('input', () => {
+    // Commit the setting (from the raw slider value), then sync the readout + fill.
+    const commit = () => {
       hooks.onSettingChange(key, sliderDispatchValue(slider.value));
       syncReadout();
       paintFill();
-    });
+    };
+    if (c.commitOnChange) {
+      // Apply on release. 'input' (drag / each keyboard step) only previews the
+      // readout + fill, so the setting (and any live UI rescale it drives) does not
+      // fire until 'change' (pointer release / touchend, and per keyboard step,
+      // which emits both events). This keeps the uiScale slider from rescaling the
+      // window under the cursor mid-drag (issue 1558).
+      slider.addEventListener('input', () => {
+        readoutFromSlider();
+        paintFill();
+      });
+      slider.addEventListener('change', commit);
+    } else {
+      slider.addEventListener('input', commit);
+    }
     row.append(name, slider, val);
     parent.appendChild(row);
   }
@@ -633,11 +766,7 @@ export class OptionsWindow {
     const back = document.createElement('button');
     back.className = 'btn';
     back.textContent = t('hud.options.back');
-    back.addEventListener('click', () => {
-      audio.click();
-      this.view = 'main';
-      this.render();
-    });
+    back.addEventListener('click', () => this.goBack());
     el.append(reset, back);
     el.querySelector('[data-close]')?.addEventListener('click', () => this.close());
   }
@@ -943,6 +1072,13 @@ export class OptionsWindow {
     framesRow.append(framesName, framesBtn);
     body.append(framesRow);
 
+    // Deed broadcasts (share deed unlocks with guild and friends): an ASYNC
+    // account setting (accounts.deed_broadcasts), not a settings.ts key, so it
+    // is a bespoke row like the chat pair above; the seam is the final truth
+    // (main.ts wires it only when an authenticated account exists, so an
+    // offline character never sees the row).
+    if (hooks?.deedBroadcasts) buildDeedBroadcastRow(body, hooks.deedBroadcasts);
+
     const el = this.deps.root();
     const note = document.createElement('div');
     note.className = 'set-note';
@@ -957,11 +1093,7 @@ export class OptionsWindow {
     const back = document.createElement('button');
     back.className = 'btn';
     back.textContent = t('hud.options.back');
-    back.addEventListener('click', () => {
-      audio.click();
-      this.view = 'main';
-      this.render();
-    });
+    back.addEventListener('click', () => this.goBack());
     el.appendChild(back);
     el.querySelector('[data-close]')?.addEventListener('click', () => this.close());
   }
@@ -984,11 +1116,9 @@ export class OptionsWindow {
       setShowFps: (on) => hooks.onSettingChange('showFps', on),
       click: () => audio.click(),
       onClose: () => this.close(),
-      onBack: () => {
-        this.view = 'main';
-        this.render();
-      },
+      onBack: () => this.goBack(),
       closeIconHtml: svgIcon('close'),
+      backIconHtml: svgIcon('prev'),
     };
   }
 
@@ -1089,11 +1219,7 @@ export class OptionsWindow {
     back.className = 'btn';
     back.type = 'button';
     back.textContent = t('hud.options.back');
-    back.addEventListener('click', () => {
-      audio.click();
-      this.view = 'main';
-      this.render();
-    });
+    back.addEventListener('click', () => this.goBack());
     actions.append(submit, back);
     body.appendChild(actions);
 
@@ -1416,12 +1542,7 @@ export class OptionsWindow {
     const back = document.createElement('button');
     back.className = 'btn';
     back.textContent = t('hud.options.back');
-    back.addEventListener('click', () => {
-      audio.click();
-      this.view = 'main';
-      this.capturingKey = null;
-      this.render();
-    });
+    back.addEventListener('click', () => this.goBack());
     el.append(reset, back);
     el.querySelector('[data-close]')?.addEventListener('click', () => this.close());
   }

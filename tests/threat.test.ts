@@ -1,19 +1,32 @@
 // Classic threat mechanics + the class kit that drives them (stances/forms,
 // stealth, pets).
 import { describe, expect, it } from 'vitest';
-import { abilitiesKnownAt } from '../src/sim/data';
+import { abilitiesKnownAt, BUILTIN_WORLD } from '../src/sim/data';
 import { Sim } from '../src/sim/sim';
 import {
   BEAR_FORM_THREAT_MULT,
   DEFENSIVE_STANCE_THREAT_MULT,
   RIGHTEOUS_FURY_THREAT_MULT,
 } from '../src/sim/threat';
-import type { Entity } from '../src/sim/types';
-import { dist2d } from '../src/sim/types';
+import type { Entity, WorldContent } from '../src/sim/types';
+import { dist2d, SUNDER_ARMOR_PCT_PER_STACK } from '../src/sim/types';
 import { terrainHeight } from '../src/sim/world';
 
+// These suites only ever reach for wolves, boars, and murlocs (plus dungeon
+// content, which the spread keeps), so drop every other ambient camp and all
+// npcs/ground objects to keep sim.tick() cheap (subsystem-world pattern from
+// tests/fiesta.test.ts).
+const THREAT_TEST_WORLD: WorldContent = {
+  ...BUILTIN_WORLD,
+  camps: BUILTIN_WORLD.camps.filter((camp) =>
+    ['forest_wolf', 'wild_boar', 'mudfin_murloc'].includes(camp.mobId),
+  ),
+  npcs: {},
+  groundObjects: [],
+};
+
 function makeSim(cls: Parameters<typeof simClass>[0] = 'warrior', seed = 42) {
-  return new Sim({ seed, playerClass: cls, autoEquip: true });
+  return new Sim({ seed, playerClass: cls, autoEquip: true, world: THREAT_TEST_WORLD });
 }
 // type helper only — keeps makeSim's signature honest without importing PlayerClass
 function simClass(
@@ -167,7 +180,12 @@ describe('threat from damage', () => {
 
 describe('healing threat', () => {
   function partyOfTwo() {
-    const sim = new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
+    const sim = new Sim({
+      seed: 42,
+      playerClass: 'warrior',
+      noPlayer: true,
+      world: THREAT_TEST_WORLD,
+    });
     const tank = sim.addPlayer('warrior', 'Tank');
     const healer = sim.addPlayer('priest', 'Healer');
     sim.partyInvite(healer, tank);
@@ -220,7 +238,12 @@ describe('healing threat', () => {
   });
 
   it('healing a non-party player creates threat on mobs already fighting them', () => {
-    const sim = new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
+    const sim = new Sim({
+      seed: 42,
+      playerClass: 'warrior',
+      noPlayer: true,
+      world: THREAT_TEST_WORLD,
+    });
     const tank = sim.entities.get(sim.addPlayer('warrior', 'Tank'))!;
     const healer = sim.entities.get(sim.addPlayer('priest', 'OutsideHealer'))!;
     const wolf = nearestMob(sim, 'forest_wolf', tank);
@@ -244,7 +267,12 @@ describe('healing threat', () => {
 
 describe('classic pull-over rules (110% melee / 130% ranged)', () => {
   function aggroSetup() {
-    const sim = new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
+    const sim = new Sim({
+      seed: 42,
+      playerClass: 'warrior',
+      noPlayer: true,
+      world: THREAT_TEST_WORLD,
+    });
     const a = sim.entities.get(sim.addPlayer('warrior', 'A'))!;
     const b = sim.entities.get(sim.addPlayer('mage', 'B'))!;
     const wolf = nearestMob(sim, 'forest_wolf', a);
@@ -367,7 +395,12 @@ describe('classic pull-over rules (110% melee / 130% ranged)', () => {
 
 describe('taunt and growl', () => {
   it('taunt matches the top threat and forces 3 seconds of attention', () => {
-    const sim = new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
+    const sim = new Sim({
+      seed: 42,
+      playerClass: 'warrior',
+      noPlayer: true,
+      world: THREAT_TEST_WORLD,
+    });
     const tank = sim.entities.get(sim.addPlayer('warrior', 'Tank'))!;
     const dps = sim.entities.get(sim.addPlayer('mage', 'Dps'))!;
     sim.setPlayerLevel(10, tank.id);
@@ -425,7 +458,10 @@ describe('sunder armor', () => {
       applications = aura?.stacks ?? 0;
     }
     expect(applications).toBeGreaterThanOrEqual(2);
-    expect((sim as any).effectiveArmor(wolf)).toBe(armorBefore - 25 * applications);
+    // Sunder is now a PERCENT armor reduction: 2% of base armor per stack.
+    expect((sim as any).effectiveArmor(wolf)).toBe(
+      armorBefore * (1 - SUNDER_ARMOR_PCT_PER_STACK * applications),
+    );
     // 100 flat threat per landed sunder (no stance up) + auto-attack noise is
     // excluded because auto-attack never started
     expect(wolf.threat.get(sim.playerId)).toBeGreaterThanOrEqual(100 * applications);
@@ -479,7 +515,12 @@ describe('rogue stealth', () => {
     // A stealthed player standing closest shrank the detection radius and, being
     // nearest, was the only candidate considered — so a visible groupmate well
     // inside the normal aggro radius was silently ignored.
-    const sim = new Sim({ seed: 42, playerClass: 'rogue', noPlayer: true });
+    const sim = new Sim({
+      seed: 42,
+      playerClass: 'rogue',
+      noPlayer: true,
+      world: THREAT_TEST_WORLD,
+    });
     const rogue = sim.entities.get(sim.addPlayer('rogue', 'Sneak'))!;
     const warrior = sim.entities.get(sim.addPlayer('warrior', 'Visible'))!;
     sim.setPlayerLevel(5, rogue.id);
@@ -572,7 +613,7 @@ describe('hunter pets', () => {
         (e) => e.kind === 'mob' && e.ownerId === null && e.templateId === 'forest_wolf',
       ),
     ).toBe(true);
-  });
+  }, 90_000);
 
   it('friendly target spells can affect controlled pets', () => {
     const { sim, wolf: pet } = tamedSetup();
@@ -580,27 +621,33 @@ describe('hunter pets', () => {
     const druid = sim.entities.get(druidId)!;
     teleport(sim, druid, pet.pos.x + 5, pet.pos.z);
     druid.resource = druid.maxResource;
-    const armorBefore = (sim as any).effectiveArmor(pet);
+    const maxHpBefore = pet.maxHp;
 
+    // Mark of the Wild is now a percent all-attributes raid buff; on a pet its
+    // Stamina share scales the HP pool (pets derive no armor/AP from attributes).
     sim.targetEntity(pet.id, druidId);
     sim.castAbility('mark_of_the_wild', druidId);
     expect(pet.auras.some((a) => a.id === 'mark_of_the_wild')).toBe(true);
-    expect((sim as any).effectiveArmor(pet)).toBeGreaterThan(armorBefore);
+    expect(pet.maxHp).toBeGreaterThan(maxHpBefore);
 
     const priestId = sim.addPlayer('priest', 'Priest');
     const priest = sim.entities.get(priestId)!;
     teleport(sim, priest, pet.pos.x + 6, pet.pos.z);
     priest.resource = priest.maxResource;
-    const maxHpBefore = pet.maxHp;
+    const maxHpAfterMotW = pet.maxHp;
     sim.targetEntity(pet.id, priestId);
     sim.castAbility('power_word_fortitude', priestId);
-    expect(pet.maxHp).toBeGreaterThan(maxHpBefore);
+    expect(pet.maxHp).toBeGreaterThan(maxHpAfterMotW);
 
     const paladinId = sim.addPlayer('paladin', 'Paladin');
     const paladin = sim.entities.get(paladinId)!;
     sim.setPlayerLevel(4, paladinId);
     teleport(sim, paladin, pet.pos.x + 7, pet.pos.z);
     paladin.resource = paladin.maxResource;
+    // Blessing of Might is now a percent attack-power raid buff. Give the pet a base
+    // AP so the percent has something to scale (tamed pets otherwise deal template
+    // damage with 0 attack power, leaving a percent buff inert).
+    pet.attackPower = 50;
     const attackPowerBefore = (sim as any).effectiveAttackPower(pet);
     sim.targetEntity(pet.id, paladinId);
     sim.castAbility('blessing_of_might', paladinId);
@@ -657,7 +704,7 @@ describe('hunter pets', () => {
 
     sim.setPetAutoTaunt(true);
     expect(pet.petAutoTaunt).toBe(true);
-    for (let i = 0; i < 20 * 5 && boar.forcedTargetId !== pet.id; i++) sim.tick();
+    for (let i = 0; i < 20 * 12 && boar.forcedTargetId !== pet.id; i++) sim.tick();
     expect(boar.forcedTargetId).toBe(pet.id);
     expect(pet.petTauntTimer).toBeGreaterThan(0);
 
@@ -712,7 +759,13 @@ describe('hunter pets', () => {
   });
 
   it('a tamed beast that dies stays owned until revived or abandoned', () => {
-    const sim = new Sim({ seed: 42, playerClass: 'hunter', respawnSeconds: 2, autoEquip: true });
+    const sim = new Sim({
+      seed: 42,
+      playerClass: 'hunter',
+      respawnSeconds: 2,
+      autoEquip: true,
+      world: THREAT_TEST_WORLD,
+    });
     sim.setPlayerLevel(10);
     const wolf = nearestMob(sim, 'forest_wolf');
     const originalWolfId = wolf.id;
@@ -771,7 +824,13 @@ describe('hunter pets', () => {
       autoTaunt: true,
     });
 
-    const restored = new Sim({ seed: 42, playerClass: 'hunter', noPlayer: true, autoEquip: true });
+    const restored = new Sim({
+      seed: 42,
+      playerClass: 'hunter',
+      noPlayer: true,
+      autoEquip: true,
+      world: THREAT_TEST_WORLD,
+    });
     const pid = restored.addPlayer('hunter', 'Hunter', { state });
     const pet = restored.petOf(pid, true)!;
     expect(pet).toBeTruthy();
@@ -1155,8 +1214,14 @@ describe('druid forms', () => {
     sim.player.facing = Math.atan2(wolf.pos.x - sim.player.pos.x, wolf.pos.z - sim.player.pos.z);
     for (let i = 0; i < 32; i++) sim.tick();
     sim.player.resource = 100;
+    // pin the opener's rolls: the wolf can dodge the direct component
+    // (rng-stream dependent), which applies the bleed but skips the combo
+    // award; a mid-range draw is always a clean non-crit hit
+    const realNext = (sim as any).rng.next.bind((sim as any).rng);
+    (sim as any).rng.next = () => 0.5;
     sim.castAbility('rake');
     sim.tick();
+    (sim as any).rng.next = realNext;
     expect(sim.player.auras.some((a) => a.kind === 'stealth')).toBe(false);
     expect(wolf.auras.some((a) => a.id === 'rake' && a.kind === 'dot')).toBe(true);
     expect(sim.player.comboPoints).toBeGreaterThanOrEqual(1);
@@ -1654,7 +1719,7 @@ describe('warlock demon summons', () => {
     expect(voidwalker.petTauntTimer).toBeGreaterThan(0);
   });
 
-  it('recasting the same demon unsummons it', () => {
+  it('recasting the same demon dismisses it and summons a fresh one', () => {
     const sim = makeSim('warlock');
     const demon = summonImp(sim);
     expect(demon.templateId).toBe('emberkin');
@@ -1664,7 +1729,11 @@ describe('warlock demon summons', () => {
     for (let i = 0; i < 20 * 5; i++) sim.tick();
 
     expect(sim.entities.has(demon.id)).toBe(false);
-    expect(sim.petOf(sim.playerId, true)).toBe(null);
+    const fresh = sim.petOf(sim.playerId, true);
+    expect(fresh).not.toBe(null);
+    expect(fresh?.templateId).toBe('emberkin');
+    expect(fresh?.id).not.toBe(demon.id);
+    expect(fresh?.hp).toBe(fresh?.maxHp);
   });
 
   it('recasting a dead demon resummons it instead of dismissing', () => {

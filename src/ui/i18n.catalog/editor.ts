@@ -393,7 +393,7 @@ export const editorStrings = {
   water: {
     title: 'Water Level',
     level: 'Water level',
-    hint: 'Sets the map-wide water surface height, from {min} to {max} yards.',
+    hint: "Sets each declared lake's water surface height, from {min} to {max} yards.",
     reset: 'Reset to the built-in level',
     tintTitle: 'Water tint',
     hue: 'Hue',
@@ -945,7 +945,7 @@ export const editorStrings = {
       flatten:
         'Level the ground to the drag-start height, or smooth bumps (checkbox picks the mode).',
       paint: 'Paint biome ground cover over the zone default.',
-      water: 'Set the map-wide water level.',
+      water: "Set a declared lake's water level.",
       place: 'Place catalog or uploaded assets on the ground.',
       foliage: 'Brush-paint grass, bushes, trees, and rocks with size variation.',
       blocker: 'Drag invisible walls that block movement in playtest.',

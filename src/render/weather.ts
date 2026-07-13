@@ -56,8 +56,6 @@ const STYLES: Record<Precip, PrecipStyle> = {
     sway: 1.6,
     target: 0.95,
     texture: 'flake',
-    blending: THREE.NormalBlending,
-    twinkle: 0,
   },
   // fast, near-vertical streaks with a faint cool tint; a touch taller than a
   // flake so the streak still reads, but nowhere near the old yard-long drops.
@@ -69,22 +67,6 @@ const STYLES: Record<Precip, PrecipStyle> = {
     sway: 0.5,
     target: 0.7,
     texture: 'streak',
-    blending: THREE.NormalBlending,
-    twinkle: 0,
-  },
-  // golden sparkles: slow-sinking motes of light, additive so they read as
-  // glow (and cross the bloom threshold on composer tiers), with a gentle
-  // global twinkle.
-  sparkle: {
-    color: 0xffd876,
-    size: 0.38,
-    fall: 1.7,
-    fallVar: 1.1,
-    sway: 1.1,
-    target: 0.85,
-    texture: 'spark',
-    blending: THREE.AdditiveBlending,
-    twinkle: 0.35,
   },
 };
 
@@ -261,19 +243,15 @@ export class Weather {
    *              (indoors / underwater / suppressed)
    */
   update(cam: THREE.Vector3, dt: number, biome: BiomeId | null): void {
-    // The map override wins; otherwise peaks -> snow, marsh -> rain, clear else.
-    // Indoors/underwater (biome null) always clears, override or not.
-    let want: Precip | null;
-    let strength = 1;
-    if (!this.enabled || biome === null) {
-      want = null;
-    } else if (this.override) {
-      want = this.override.mode === 'clear' ? null : (this.override.mode as Precip);
-      strength = Math.max(0, Math.min(1, this.override.intensity));
-      if (strength <= 0.01) want = null;
-    } else {
-      want = biome === 'peaks' ? 'snow' : biome === 'marsh' ? 'rain' : null;
-    }
+    // peaks -> snow, marsh -> rain, everything else clears
+    const want: Precip | null =
+      !this.enabled || biome === null
+        ? null
+        : biome === 'peaks' || biome === 'frost'
+          ? 'snow'
+          : biome === 'marsh'
+            ? 'rain'
+            : null;
 
     // While the visible type still differs from what we want, drive opacity to
     // zero first; once faded out, swap the material and let it climb again.

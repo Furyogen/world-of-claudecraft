@@ -30,7 +30,7 @@
 // Markers carry the identity (the party class id) the painter resolves
 // to a color, never the resolved color.
 
-import { GATHER_NODES, isDelvePos, QUESTS, zoneAt } from '../sim/data';
+import { GATHER_NODES, isDelvePos, isYumiMazePos, QUESTS, zoneAt } from '../sim/data';
 import { isQuestTurnInNpc } from '../sim/types';
 import type { IWorld } from '../world_api';
 
@@ -43,8 +43,10 @@ const PARTY_DISC_MAX_RADIUS = 6;
 const PARTY_DISC_RADIUS_RANGE = 3;
 
 /** Which minimap surface a world renders: the delve schematic (owned by
- *  delve_map_painter) or the overworld minimap (this core). */
-export type MinimapMode = 'delve' | 'overworld';
+ *  delve_map_painter), the Protect Yumi maze (the overworld marker set over a
+ *  cached maze-wall background, minimap_painter.paintYumiMaze), or the
+ *  overworld minimap (this core). */
+export type MinimapMode = 'delve' | 'yumiMaze' | 'overworld';
 
 /** The NPC quest glyph: turn-in ready ('?') wins over available ('!'), else neutral. */
 export type NpcGlyph = '?' | '!' | '•';
@@ -93,6 +95,9 @@ export type MinimapMarker =
 export interface MinimapModel {
   markers: MinimapMarker[];
   zoneId: string;
+  /** When the player is inside a rift, its floor name + C/B/A/S rank (rank null for
+   *  dev-portal runs). The painter shows this instead of the overworld zone name. */
+  rift: { name: string; rank: string | null } | null;
 }
 
 export interface MinimapMarkers {
@@ -106,6 +111,7 @@ export interface MinimapMarkers {
  *  band and a run is active (matches the inline guard); overworld otherwise. The delve
  *  branch is delve_map_painter's; the overworld branch is this core's. */
 export function minimapMode(world: IWorld): MinimapMode {
+  if (isYumiMazePos(world.player.pos.x)) return 'yumiMaze';
   return isDelvePos(world.player.pos.x) && world.delveRun ? 'delve' : 'overworld';
 }
 
@@ -118,7 +124,7 @@ export function minimapMode(world: IWorld): MinimapMode {
  */
 export function createMinimapMarkers(): MinimapMarkers {
   const markers: MinimapMarker[] = [];
-  const model: MinimapModel = { markers, zoneId: '' };
+  const model: MinimapModel = { markers, zoneId: '', rift: null };
 
   return {
     build(world: IWorld, S: number, pxPerYard: number): MinimapModel {
@@ -127,7 +133,11 @@ export function createMinimapMarkers(): MinimapMarkers {
       const rim = half - RIM_INSET;
       const rim2 = rim * rim;
       markers.length = 0;
-      model.zoneId = zoneAt(p.pos.z).id;
+      model.zoneId = zoneAt(p.pos.x, p.pos.z).id;
+      // Inside a rift the overworld zone (zoneAt reads x/z; rifts displace on x well
+      // past any land) is the wrong label; surface the generated rift floor name + rank.
+      const rf = world.riftFloor;
+      model.rift = rf ? { name: rf.name, rank: rf.tier } : null;
 
       // friend/guild lookup for colouring nearby allies; party members are drawn by the
       // party loop below, so the entity loop skips them (avoiding double dots). Built

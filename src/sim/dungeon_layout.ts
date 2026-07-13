@@ -5,6 +5,14 @@
 // the old hand-mirroring between renderer geometry and collider literals.
 // Sim layer: no three.js imports.
 import type { Collider } from './colliders';
+import {
+  type AuthoredDecor,
+  type AuthoredDoor,
+  type AuthoredRoom,
+  authoredColliders,
+} from './rift/authored';
+
+export type { AuthoredDecor, AuthoredDoor, AuthoredRoom };
 
 // Shared structural constants (instance-local coordinates, y up, z into the
 // dungeon). Values are frozen gameplay contracts: mob spawns and pathing
@@ -55,12 +63,51 @@ export interface DungeonLayout {
   doorZ?: number;
   /** floor scatter positions, renderer places props here AND collision circles back them */
   clutter?: GridPoint[];
+  /** Illusion (fake) walls: rendered as solid wall panels but NOT backed by a
+   * collider (deliberately excluded from layoutColliders), so the player walks
+   * THROUGH them into a hidden pocket. Used by rifts to conceal off-path treasure. */
+  illusionWalls?: WallStub[];
   /** Room shell outline (CCW, simple, star-shaped from `shellPole`), instance-local.
    * When present, render/collision derive the room's walls and floor mask from this
    * polygon instead of the rectangular wallX/zMin/zMax shell. */
   shellPolygon?: Array<{ x: number; z: number }>;
   /** Star-shaping pole paired with `shellPolygon` (see geometry2d.polygonIsStarShaped). */
   shellPole?: { x: number; z: number };
+  /** AUTHORED room-graph floors (the hand-built set-piece rifts): a set of
+   * axis-aligned rooms joined by `doors`, with `decor` props placed by hand. When
+   * present it REPLACES the rectangular/polygon shell entirely: walls, collision,
+   * and the rendered modules all derive from these three fields (see rift/authored.ts). */
+  rooms?: AuthoredRoom[];
+  doors?: AuthoredDoor[];
+  decor?: AuthoredDecor[];
+}
+
+// The four hand-authored KayKit interior "kits" a procedural rift can build on.
+// A rift floor picks one kit for its module geometry (wall/floor/prop mesh mix)
+// and then RE-GRADES it with generated torch colour, fog, and material tints, so
+// the same kit reads as a different environment each run. This mirrors how the
+// Drowned Litany delve already re-tints the crypt kit into a marsh (marshMaterial
+// in render/dungeon.ts); InteriorStyle just makes that tinting data-driven.
+export type InteriorKit = 'crypt' | 'bastion' | 'sanctum' | 'temple';
+
+/** A generated re-grade of one of the four KayKit interior kits. Sim-layer data
+ * (no Three imports); the renderer reads it in DungeonInteriors.build and the fog
+ * pass, and the colliders never look at it (geometry comes from the DungeonLayout).
+ * All colour fields are 0xRRGGBB. When a field is omitted the renderer falls back
+ * to the kit's hand-authored default, so an empty style renders as the base kit. */
+export interface InteriorStyle {
+  /** Which hand-authored kit supplies the wall/floor/prop mesh mix. */
+  kit: InteriorKit;
+  /** Torch flame / emissive / point-light colours (replaces TORCH_COLORS[kit]). */
+  torch: { flame: number; emissive: number; light: number };
+  /** Scene fog while inside this floor (replaces the renderer's fogState switch). */
+  fog: { color: number; near: number; far: number };
+  /** Multiplicative material tints, exactly like MARSH_WALL_TINT/MARSH_FLOOR_TINT.
+   * Omit for the kit's untinted stone. */
+  wallTint?: number;
+  floorTint?: number;
+  /** Whether the boss dais is a raised platform (as sanctum/temple) or flush. */
+  daisRaised?: boolean;
 }
 
 function grid(zFrom: number, zTo: number, zStep: number, xs: readonly number[]): GridPoint[] {
@@ -213,25 +260,73 @@ export const ARENA_SPAWNS_B_2v2 = [
   { x: 7, z: 18, facing: Math.PI },
 ];
 
+// Longest wall-shell OBB segment along a polygon edge before it is split, so a
+// long straight run still reads as a wall of DUNGEON_WALL_HW thickness (mirrors
+// the delve litany's polygonShellColliders).
+const SHELL_SEGMENT_MAX = 8;
+
+/** Chain of rotated OBB wall segments tracing a simple polygon boundary. Each
+ * edge is split into equal segments; the OBB's long (hw) axis is rotated along
+ * the edge. Used for non-rectangular (`shellPolygon`) rooms so collision matches
+ * the rendered walls exactly. */
+export function polygonWallColliders(points: readonly { x: number; z: number }[]): Collider[] {
+  const out: Collider[] = [];
+  const n = points.length;
+  for (let i = 0; i < n; i++) {
+    const a = points[i];
+    const b = points[(i + 1) % n];
+    const dx = b.x - a.x;
+    const dz = b.z - a.z;
+    const len = Math.hypot(dx, dz);
+    if (len < 1e-6) continue;
+    const segCount = Math.max(1, Math.ceil(len / SHELL_SEGMENT_MAX));
+    const segLen = len / segCount;
+    const rot = Math.atan2(-dz, dx);
+    for (let s = 0; s < segCount; s++) {
+      const midT = (s + 0.5) / segCount;
+      out.push({
+        type: 'obb',
+        x: a.x + dx * midT,
+        z: a.z + dz * midT,
+        hw: segLen / 2,
+        hd: DUNGEON_WALL_HW,
+        rot,
+      });
+    }
+  }
+  return out;
+}
+
 /** Interior collision set for a layout, in instance-local coordinates. */
 export function layoutColliders(layout: DungeonLayout): Collider[] {
   const out: Collider[] = [];
   const wallX = layout.wallX ?? DUNGEON_WALL_X;
   const endWallHw = layout.endWallHw ?? DUNGEON_END_WALL_HW;
-  // side walls
-  for (const sx of [-wallX, wallX]) {
-    out.push({
-      type: 'obb',
-      x: sx,
-      z: layout.sideWallZ,
-      hw: DUNGEON_WALL_HW,
-      hd: layout.sideWallHd,
-      rot: 0,
-    });
+  if (layout.rooms) {
+    // Authored room-graph floor: its rooms + doors ARE the shell, and its decor
+    // carries the measured prop radii. Nothing else on the layout applies.
+    return authoredColliders(layout.rooms, layout.doors ?? [], layout.decor ?? [], DUNGEON_WALL_HW);
   }
-  // back wall, then front wall (entrance porch: chase cam fits inside)
-  out.push({ type: 'obb', x: 0, z: layout.zMax, hw: endWallHw, hd: DUNGEON_WALL_HW, rot: 0 });
-  out.push({ type: 'obb', x: 0, z: layout.zMin, hw: endWallHw, hd: DUNGEON_WALL_HW, rot: 0 });
+  if (layout.shellPolygon) {
+    // Non-rectangular room: the polygon's own edges ARE the walls (front, back,
+    // and both curved sides), so skip the rectangular shell.
+    out.push(...polygonWallColliders(layout.shellPolygon));
+  } else {
+    // side walls
+    for (const sx of [-wallX, wallX]) {
+      out.push({
+        type: 'obb',
+        x: sx,
+        z: layout.sideWallZ,
+        hw: DUNGEON_WALL_HW,
+        hd: layout.sideWallHd,
+        rot: 0,
+      });
+    }
+    // back wall, then front wall (entrance porch: chase cam fits inside)
+    out.push({ type: 'obb', x: 0, z: layout.zMax, hw: endWallHw, hd: DUNGEON_WALL_HW, rot: 0 });
+    out.push({ type: 'obb', x: 0, z: layout.zMin, hw: endWallHw, hd: DUNGEON_WALL_HW, rot: 0 });
+  }
   // chamber waists
   for (const s of layout.stubs)
     out.push({ type: 'obb', x: s.x, z: s.z, hw: s.hw, hd: s.hd, rot: 0 });

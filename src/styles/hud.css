@@ -49,6 +49,15 @@
     letter-spacing: 0.2px;
     margin-top: -1px;
   }
+  /* Book of Deeds title: a subtitle line under a player's name */
+  .np-title {
+    font-size: 10px;
+    font-style: italic;
+    color: #ffe9a0;
+    font-family: var(--title-font);
+    letter-spacing: 0.2px;
+    margin-top: -1px;
+  }
   /* $WOC holder-tier flair badge, inline to the left of a player's name */
   .np-tier {
     display: inline-block;
@@ -67,14 +76,31 @@
     margin-right: 3px;
     filter: drop-shadow(0 1px 1px #000);
   }
-  /* significant-contributor name outline: a steady glow layered over whatever
+  /* significant-contributor name outline: a steady halo layered over whatever
      name color applies (Discord staff or default). The colour is supplied by the
      painter via --dev-outline (per-tier), so no hardcoded hue lives here. No
-     animation, so it is reduced-motion safe. */
+     animation, so it is reduced-motion safe.
+     A crisp 1px ring (eight zero-blur offsets, listed first so they paint nearest
+     the glyph) keeps the letterform edges sharp, with a single small faint blur
+     BEHIND it for the halo flair. The old all-blurred stack (0 0 4px / 0 0 2px,
+     a third of the 12px cap height) smeared the strokes and read as out-of-focus
+     text rather than a halo (issue 1639). */
   .np-name.np-sig-dev {
+    /* The ring is drawn in a SOFTENED tier color: color-mix keeps the per-tier
+       --dev-outline hue but lowers the alpha, so the outline reads as a subtle badge
+       rather than a heavy bold stroke (review of issue 1639). Still a zero-blur ring,
+       so the glyph edges stay sharp; no hardcoded hue (the mix reads --dev-outline). */
+    --dev-ring: color-mix(in srgb, var(--dev-outline) 60%, transparent);
     text-shadow:
-      0 0 4px var(--dev-outline),
-      0 0 2px var(--dev-outline),
+      1px 0 0 var(--dev-ring),
+      -1px 0 0 var(--dev-ring),
+      0 1px 0 var(--dev-ring),
+      0 -1px 0 var(--dev-ring),
+      1px 1px 0 var(--dev-ring),
+      -1px 1px 0 var(--dev-ring),
+      1px -1px 0 var(--dev-ring),
+      -1px -1px 0 var(--dev-ring),
+      0 0 3px var(--dev-ring),
       0 1px 1px #000;
   }
   .np-hpbar {
@@ -330,6 +356,25 @@
     font-size: 13px;
     font-weight: 600;
     color: var(--gold-dim);
+  }
+  .tut-next-tips {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #b8ad8e;
+  }
+  .tut-next-tips-title {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid #ffffff14;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 3px;
   }
   .tut-skip {
     margin-top: 11px;
@@ -722,6 +767,15 @@
     text-overflow: ellipsis;
     text-shadow: 1px 1px 2px #000;
   }
+  /* Book of Deeds title decoration inside the name line: muted gold, INLINE in
+     the same nowrap ellipsized line (the frame keeps its single-line height;
+     a long name-plus-title combo ellipsizes, the classic-frame behavior). The
+     class declaration wins over the hostile/friendly color the target name
+     inherits from its parent's inline style. */
+  .uf-name .uf-title {
+    color: var(--gold-dim);
+    font-weight: normal;
+  }
   .bar {
     position: relative;
     height: 15px;
@@ -970,6 +1024,19 @@
   }
   .buff.debuff[data-school="holy"] {
     border-color: var(--color-debuff-holy);
+  }
+  /* The LOCAL player's own auras on the target strip (auras_view ownFirst):
+     larger and gold-glowed so the dots/hots YOU are maintaining read at a
+     glance among other casters'. A debuff keeps its school border tint (the
+     size and glow carry the prominence). Extra information only, never less,
+     so no graphics tier sheds it (gameplay-neutral-graphics invariant). */
+  .buff.own {
+    width: 34px;
+    height: 34px;
+    box-shadow: 0 0 5px var(--color-primary-dim);
+  }
+  .buff.own:not(.debuff) {
+    border-color: var(--color-primary);
   }
   /* The player's own cancelable buffs: right-click to drop, with a hover cue. */
   .buff.cancelable {
@@ -1916,6 +1983,9 @@
     font-size: 11px;
     font-family: var(--ui-font);
     vertical-align: text-bottom;
+    /* dark digit on a gold fill: the tracker's inherited black text-shadow
+       only blurs it, so drop it inside the badge */
+    text-shadow: none;
   }
   #quest-tracker .qt-obj {
     color: var(--color-text-overlay);
@@ -1926,6 +1996,91 @@
   .qd-obj.done,
   .quest-complete {
     color: var(--color-text-success);
+  }
+
+  /* ---------- deed tracker ---------- */
+  /* Book of Deeds watchlist: a glanceable strip under the quest tracker.
+     The header mirrors the quest tracker's collapsible button chrome and is
+     a real tab stop (gold focus ring below, the qt-header shape); the lines
+     are the painter's fixed pool, shown/hidden through the elided writers. */
+  #deed-tracker {
+    width: 100%;
+    font-size: 12px;
+    color: var(--color-text-overlay);
+    text-shadow: 1px 1px 2px #000;
+    pointer-events: none;
+  }
+  #deed-tracker .dt-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    font-family: var(--title-font);
+    font-size: 14px;
+    color: var(--color-text-overlay);
+    text-align: left;
+    background: none;
+    border: 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--gold) 27%, transparent);
+    margin: 0 0 4px;
+    padding: 0 0 2px;
+    cursor: pointer;
+    pointer-events: auto;
+    text-shadow: 1px 1px 2px #000;
+  }
+  #deed-tracker .dt-header:hover {
+    color: #fff;
+  }
+  #deed-tracker .dt-header:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+  #deed-tracker .dt-chevron {
+    font-size: 10px;
+    line-height: 1;
+  }
+  #deed-tracker .dt-tally {
+    color: var(--color-text-overlay);
+    font-weight: 400;
+    opacity: 0.85;
+  }
+  @media (pointer: coarse) {
+    #deed-tracker .dt-header {
+      min-height: 40px;
+    }
+  }
+  #deed-tracker .dt-line {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+  }
+  #deed-tracker .dt-name {
+    font-weight: bold;
+    font-family: var(--title-font);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+  #deed-tracker .dt-bar {
+    flex: 0 0 56px;
+    height: 6px;
+    border: 1px solid #3a3325;
+    border-radius: 3px;
+    background: #14110b;
+    overflow: hidden;
+  }
+  #deed-tracker .dt-bar-fill {
+    display: block;
+    height: 100%;
+    background: linear-gradient(#e6c76a, #a8842f);
+  }
+  #deed-tracker .dt-count {
+    font-size: 11px;
+    opacity: 0.85;
   }
 
   /* ---------- delve tracker ---------- */
@@ -2120,6 +2275,24 @@
   #minimap-clock:hover {
     color: #fff;
     border-color: #c9a86a;
+  }
+  /* day/night dial: a small satellite disc on the top-right rim of the minimap
+     (mirrors the #raid-lockout button placement), showing the 12h world cycle.
+     Purely informational, so it ignores pointer input. */
+  #minimap-daynight {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    z-index: 3;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: #14141d;
+    box-shadow:
+      0 1px 3px #000a,
+      inset 0 0 6px #0007;
+    pointer-events: none;
   }
   #minimap-coords {
     margin-top: 4px;
@@ -2496,6 +2669,7 @@
   body.native-app .donate-cta,
   body.native-app .community-link.donate,
   body.native-app .social-link.donate,
+  body.native-app #mobile-donate,
   body.native-app #token-ca,
   body.native-app #nav-btn-download,
   body.native-app .cs-wallet,
@@ -2721,8 +2895,8 @@
   /* FCT crit: at the low effect tier the floating combat text keeps the damage
      number, colour and bigger size but sheds the scale/pop (the heaviest FCT
      effect) by swapping the crit keyframes for the plain rise. The number is never
-     refused. This is the CSS floor; the per-element JS gate (fctDropNonCrit in
-     src/game/ui_tier_knobs.ts, consumed by the FCT painter). Inert above
+     refused (the painter spawns every floater on every tier; low sheds cost only via
+     the tighter live cap + shorter TTL in src/game/ui_tier_knobs.ts). Inert above
      the low tier. */
   :root[data-fx-level="low"] .fct.crit {
     animation-name: fct-rise;
@@ -3752,6 +3926,13 @@
     white-space: pre-wrap;
     word-break: break-word;
   }
+  /* The mobile keyboard-dismiss chevron is hidden by default (desktop AND mobile-when-
+     chat-closed); only body.mobile-touch.mobile-chat-open reveals it (hud.mobile.css,
+     a later @layer, so it wins there). Without this base hide the button would render
+     as a stray control on desktop, which has no mobile-touch-scoped rule to hide it. */
+  #chat-dismiss {
+    display: none;
+  }
 
   /* ---------- party frames ---------- */
   #party-frames {
@@ -3762,6 +3943,15 @@
     flex-direction: column;
     gap: 6px;
     z-index: 5;
+  }
+  /* The painter nests the member rows one level down in a .party-rows wrapper (so the
+     mobile collapse chip can sit alone on its own line). On desktop the wrapper is
+     transparent (display: contents), so the rows lay out as direct flex items of
+     #party-frames exactly as before the wrapper existed: the flex column gap and every
+     .party-frame rule apply unchanged. Mobile re-declares the wrapper as its own
+     2-column grid (hud.mobile.css). */
+  #party-frames .party-rows {
+    display: contents;
   }
   #party-frames.below-target {
     top: 96px;
@@ -4173,6 +4363,9 @@
     border: 1px solid #cc9a3c88;
     border-radius: 12px;
     color: var(--gold);
+    appearance: none;
+    cursor: pointer;
+    font: inherit;
     pointer-events: auto;
   }
   #mail-indicator[hidden] {
@@ -4185,5 +4378,25 @@
   .mail-indicator-count {
     font: 700 11px var(--title-font);
     letter-spacing: 0.4px;
+  }
+  /* ---------- intro logo overlay ---------- */
+  /* Wordmark shown fading in/hold/out over the opening of the first-spawn intro
+     cinematic (spawn_cinematic.ts): intro_logo_overlay.ts drives opacity/display
+     from the pure logo_fade.ts curve each frame, so this rule only sets the
+     static look and the base hidden state. Centered over the canvas, above the
+     HUD (which the intro hides) but never intercepting input. */
+  #intro-logo {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(46vw, 420px);
+    max-width: 90vw;
+    height: auto;
+    z-index: 40;
+    display: none;
+    opacity: 0;
+    pointer-events: none;
+    filter: drop-shadow(0 2px 14px #000a);
   }
 }

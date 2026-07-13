@@ -14,6 +14,376 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const fr_FR: Partial<Record<TranslationKey, string>> = {
+  'entities.abilities.sport_boot.description':
+    'Une longue balle bottée en cloche vers le point visé. La foule adore.',
+  'entities.abilities.sport_boot.name': 'Grosse botte',
+  'entities.abilities.sport_dive.description':
+    'Jetez-vous vers le point visé. Un ballon qui croise votre course vous colle aux mains.',
+  'entities.abilities.sport_dive.name': 'Plongeon',
+  'entities.abilities.sport_feint.description':
+    'Une brève accélération de côté vers le point visé.',
+  'entities.abilities.sport_feint.name': 'Feinte',
+  'entities.abilities.sport_hoof.description':
+    "Frappez le ballon fort et à ras de terre vers l'avant du terrain.",
+  'entities.abilities.sport_hoof.name': 'Coup de sabot',
+  'entities.abilities.sport_kick.description': 'Poussez le ballon au sol vers le point visé.',
+  'entities.abilities.sport_kick.name': 'Coup de pied',
+  'entities.abilities.sport_pass.description':
+    'Adressez une passe appuyée à votre coéquipier ciblé, dans sa course.',
+  'entities.abilities.sport_pass.name': 'Passe',
+  'entities.abilities.sport_punt.description': 'Un dégagement de gardien, haut et loin.',
+  'entities.abilities.sport_punt.name': 'Long dégagement',
+  'entities.abilities.sport_second_wind.description':
+    'Retrouvez vos jambes : déplacement 50 % plus rapide pendant 4 sec.',
+  'entities.abilities.sport_second_wind.name': 'Jambes fraîches',
+  'entities.abilities.sport_shoot.description':
+    'Maintenez pour charger la puissance, relâchez pour tirer au but. Trop de puissance et le ballon file au-dessus.',
+  'entities.abilities.sport_shoot.name': 'Tir',
+  'entities.abilities.sport_shoulder.description':
+    "Un coup d'épaule loyal, dans l'esprit de la trêve des moissons. Envoie l'adversaire culbuter loin du ballon.",
+  'entities.abilities.sport_shoulder.name': "Coup d'épaule",
+  'entities.npcs.groundskeeper_bram.greeting':
+    'La trêve tient au Pré de la Truie, {className} : des bottes et des épaules, rien de plus. Envie de jouer pour le Seau de cuivre ?',
+  'entities.npcs.groundskeeper_bram.name': 'Intendant Bram',
+  'entities.npcs.groundskeeper_bram.title': 'Gardien du Pré de la Truie',
+  'entities.zones.eastbrook_vale.pois.10.label': 'Le Pré de la Truie',
+  'guide.nav.professions': 'Métiers',
+  'guide.nav.valeCup': 'Coupe du Val',
+  'guide.professions.archetypeChooseBody':
+    "Déclarer un archétype sera un moment d'histoire : une quête qui vous accueille officiellement dans cette identité. Cette voie est encore en construction, si bien que pour l'instant chaque personnage parcourt le monde avec ce choix devant lui, et chaque métier progresse jusqu'à la qualité rare en attendant.",
+  'guide.professions.archetypeChooseTitle': 'Choisir son archétype',
+  'guide.professions.archetypeIdentityBody':
+    "Votre archétype actif dit qui est votre personnage dans le monde, et se reflète dans la façon dont les autres et le monde s'adressent à vous. Les récompenses et marques de reconnaissance exactes qui l'accompagnent sont encore en cours de finalisation ; revenez voir à mesure que le système se met en place.",
+  'guide.professions.archetypeIdentityTitle': 'Ce que votre archétype signifie',
+  'guide.professions.archetypeIntro':
+    "Chacun des dix métiers d'artisanat incarne aussi un archétype, une identité plus large que vous pouvez adopter au-delà du simple exercice du métier. Votre archétype actif est un choix unique, pas une liste à cocher : vous n'en portez qu'un à la fois, et vous pourrez en changer plus tard si vous le souhaitez.",
+  'guide.professions.archetypeSwitchBody':
+    "Une déclaration ne sera pas non plus une condamnation à perpétuité. Le principe prévu est un acte répétable où vous faites amende honorable envers votre ancien métier avant d'en embrasser un nouveau, l'amende devenant plus lourde à chaque changement, pour que le choix garde du sens au lieu d'être gratuit. Comme la déclaration elle-même, cela reste à venir.",
+  'guide.professions.archetypeSwitchTitle': "Changer d'avis",
+  'guide.professions.archetypeTitle': 'Les dix archétypes',
+  'guide.professions.craftComboBody':
+    "Au-delà de la liste de recettes propre à chaque métier, la roue permet aussi des recettes combinées qui font appel à deux métiers voisins à la fois, récompensant un personnage qui a investi dans des métiers adjacents sur l'anneau plutôt que dans un seul, isolé. L'artisan doit posséder lui-même les deux métiers ; la compétence d'un partenaire ne peut se substituer à aucune des deux moitiés.",
+  'guide.professions.craftComboTitle': 'Recettes combinées',
+  'guide.professions.craftIntro':
+    "Dix métiers d'artisanat transforment les matériaux récoltés en équipement et en marchandises : la fabrication d'armures, la forge d'armes et la joaillerie façonnent la matière brute en équipement portable ; l'alchimie et l'ingénierie avancent par essais et erreurs ; la cuisine, la calligraphie et l'enchantement touchent chacun au produit des autres métiers ; la couture et le travail du cuir suivent des patrons précis. Ensemble, ils forment une roue où chaque métier siège entre deux voisins, à l'opposé d'un autre.",
+  'guide.professions.craftMasteryBody':
+    "Réussir une fabrication fait progresser votre compétence dans ce métier, et la compétence ne verrouille jamais les recettes d'un métier : si vous connaissez une recette et en détenez les matériaux, vous pouvez la tenter. Ce que la compétence vous apporte, c'est la qualité, une main exercée produit un ouvrage plus fin. La seule exception, ce sont les recettes combinées, qui exigent que vous ayez fait vos preuves dans leurs deux métiers avant de s'ouvrir.",
+  'guide.professions.craftMasteryTitle': 'Compétence et maîtrise',
+  'guide.professions.craftRecipesBody':
+    "Chaque recette réclame des composants précis que vous récoltez ou achetez. Les recettes les plus simples ne demandent que des matériaux communs et se fabriquent dès le tout début, si bien que vous pouvez exercer un métier dès l'instant où vous l'adoptez. Les listes de recettes se remplissent encore : quelques métiers attendent leurs premières recettes, et d'autres arrivent à mesure que les métiers s'étoffent.",
+  'guide.professions.craftRecipesTitle': 'Recettes et composants',
+  'guide.professions.craftRingBody':
+    "Les dix métiers sont disposés en un anneau fixe, et la place d'un métier sur cet anneau compte : les métiers voisins sur la roue ont plus en commun entre eux que ceux qui se font face. S'engager dans un métier doit donner le sentiment de rejoindre une famille de métiers apparentés, pas de choisir une compétence isolée.",
+  'guide.professions.craftRingTitle': 'Une roue de spécialités',
+  'guide.professions.craftTitle': "Les dix métiers d'artisanat",
+  'guide.professions.gatherIntro':
+    "Trois métiers de récolte vous permettent de tirer des matières premières directement du monde : le Minage extrait minerai et pierre des filons, le Bûcheronnage abat le bois des bosquets, et l'Herboristerie cueille herbes et plantes sauvages. Chacun est suivi séparément : en pratiquer un ne ralentit jamais vos progrès dans un autre. Novice en la matière ? Le contremaître Odell à Eastbrook garde une courte course, Un métier pour chaque main, qui vous guide dans votre première récolte.",
+  'guide.professions.gatherProficiencyBody':
+    'Chaque récolte réussie augmente votre aptitude dans ce métier de récolte, et votre feuille de personnage suit chaque métier séparément. Plus de pratique ne nuit jamais à vos progrès, elle ne fait que les accroître.',
+  'guide.professions.gatherProficiencyTitle': 'Aptitude',
+  'guide.professions.gatherTitle': 'Récolte : Minage, Bûcheronnage et Herboristerie',
+  'guide.professions.gatherToolsBody':
+    "Les marchands vendent des outils de base pour chaque métier de récolte, et de meilleurs peuvent être fabriqués. Aucun outil n'est requis pour exploiter un gisement aujourd'hui : les outils posent les bases des gisements plus riches à venir, où pioches, haches et faucilles de niveau supérieur seront la voie d'accès.",
+  'guide.professions.gatherToolsTitle': 'Les outils du métier',
+  'guide.professions.gatherWhatBody':
+    "Filons de minerai, bosquets de bois et carrés d'herbes sont disséminés dans le Val et le marais comme des éléments visibles, sans propriétaire. Approchez-vous et interagissez pour récolter ce qu'ils contiennent. Une fois un gisement récolté, il lui faut du temps pour se régénérer avant que vous puissiez, vous, le récolter à nouveau, mais il ne bloque jamais personne d'autre : un autre joueur peut récolter le même gisement entre-temps.",
+  'guide.professions.gatherWhatTitle': 'Les gisements de ressources',
+  'guide.professions.intro':
+    "Au-delà des combats et des quêtes, le monde vous récompense de travailler la terre et la forge : récolter des matières premières, les transformer en équipement et en biens à travers dix métiers d'artisanat, et vous installer dans une identité, celle de l'un des dix archétypes que ces métiers incarnent.",
+  'guide.valeCupPage.heading': 'La Coupe du Val',
+  'guide.valeCupPage.howHeading': 'Comment jouer',
+  'guide.valeCupPage.howMatch':
+    "Au coup d'envoi, votre panoplie de classe est remplacée par une panoplie sportive, puis restaurée à l'identique après le match. Les frappes visent le réticule au sol, le ballon rebondit sur les bandes, et dribbler consiste simplement à courir avec le ballon. Marquez plus de buts que l'autre camp avant la fin du temps réglementaire ; en cas d'égalité, on joue le but en or.",
+  'guide.valeCupPage.howQueue':
+    "Mettez-vous en file depuis n'importe où via la fenêtre de la Coupe du Val, ou parlez à l'intendant Bram à la porte du Pré de la Truie. Choisissez un format, du un contre un au cinq contre cinq, une nation de bannière et un rôle sportif ; entrez en file en solo ou avec votre groupe.",
+  'guide.valeCupPage.howTruce':
+    'Personne ne saigne au Pré de la Truie : les tacles font culbuter, rien ne blesse, et les familiers regardent le match depuis le banc.',
+  'guide.valeCupPage.intro':
+    'La balle au sanglier au Pré de la Truie : choisissez une bannière, choisissez un rôle, et envoyez une peau de sanglier empaillée derrière un gardien pour remporter le Seau de cuivre. Pas de sang, pas de butin, juste la clameur des tribunes.',
+  'guide.valeCupPage.loreHeading': 'La balle au sanglier et la trêve des moissons',
+  'guide.valeCupPage.loreOldSow':
+    "Bien avant que les morts ne s'éveillent, les valets de ferme d'Eastbrook jouaient à la balle au sanglier sur les chaumes après la moisson : deux bandes de joueurs, une peau de sanglier bourrée de paille, et deux portails de chariot traînés aux deux bouts du pré. Le premier ballon, la Vieille Truie, pend, bronzé, au-dessus de l'âtre de la taverne.",
+  'guide.valeCupPage.loreTruce':
+    'Quand le Colisée cendré se mit à organiser des jeux de guerre, le maréchal Redbrook répondit par quelque chose de plus doux : une trêve des moissons permanente sur le vieux pré. Les portails de chariot devinrent des poteaux de but, le pré gagna des murs, des tribunes et un nom, le Pré de la Truie, et le prix fut toujours le même seau à lait cabossé dans lequel buvaient les vainqueurs : le Seau de cuivre.',
+  'guide.valeCupPage.nationChoir':
+    'Bleu pâle et argent sous la cloche : inquiétants, précis et très silencieux.',
+  'guide.valeCupPage.nationColiseum':
+    "Rouge et noir aux épées croisées : ils jouent comme si c'était encore un jeu de guerre.",
+  'guide.valeCupPage.nationCopperdig':
+    "Cuivre et brun sous la pioche : des piocheurs qui ne s'arrêtent jamais de courir.",
+  'guide.valeCupPage.nationMirefen':
+    'Sarcelle et gris sous le héron : patients, hauts sur pattes, jamais pressés.',
+  'guide.valeCupPage.nationMoon':
+    'Violet et argent sous le croissant : des joueurs de nuit, légers sur leurs appuis.',
+  'guide.valeCupPage.nationOgre':
+    "Orange et terre d'ombre derrière le poing : l'épaule d'abord, et fiers de l'être.",
+  'guide.valeCupPage.nationThornpeak':
+    'Bleu glacier et blanc sous le pic : le pied sûr et la tête dure.',
+  'guide.valeCupPage.nationVale':
+    "Vert et or, sous la gerbe de blé : l'équipe locale, valets de ferme jusqu'à la moelle.",
+  'guide.valeCupPage.nationsBody':
+    "Chaque équipe joue sous une bannière. Le capitaine choisit la nation, et si les deux camps arborent la même, l'équipe visiteuse joue avec la palette inversée.",
+  'guide.valeCupPage.nationsHeading': 'Les huit nations de bannière',
+  'guide.valeCupPage.rewardsBody':
+    "Règles de trêve obligent : ni expérience ni butin. Un match décidé compte pour votre palmarès et le tableau des vainqueurs, et une victoire compte aussi pour les tâches de récompense du jour. Déserter un match vous met sur le banc, et le gardien du terrain s'en souvient.",
+  'guide.valeCupPage.rewardsHeading': 'Règles de trêve',
+  'guide.valeCupPage.rolesBody':
+    'Votre rôle décide de la panoplie que vous emportez sur le terrain. Tout le monde frappe le ballon ; le reste est affaire de tempérament. Dans les catégories à un et à deux joueurs par camp, chacun joue la panoplie polyvalente, si bien que le choix du rôle prend tout son sens à partir de trois joueurs par camp.',
+  'guide.valeCupPage.rolesHeading': 'Rôles sportifs',
+  'guide.valeCupPage.spectateBody':
+    "Un seul match se joue à la fois au stade, et chacun peut s'approcher et regarder depuis les tribunes.",
+  'hudChrome.keybinds.valecup': 'Coupe du Val',
+  'hudChrome.mobile.dailyRewards': 'Récompenses',
+  'hudChrome.perf.labels.predLead': 'Avance de prédiction',
+  'hudChrome.townFocus.budgetLabel': 'Points restants : {remaining} / {budget}',
+  'hudChrome.townFocus.decreaseAria': 'Réduire la priorité de {component}',
+  'hudChrome.townFocus.hint':
+    'Les points de priorité ajoutent un bonus au rendement de base de chaque composante. Les composantes sans priorité restent au rendement de base.',
+  'hudChrome.townFocus.increaseAria': 'Augmenter la priorité de {component}',
+  'hudChrome.townFocus.notInTownHint': 'Vous devez être en ville pour définir vos priorités.',
+  'hudChrome.townFocus.saveButton': 'Enregistrer les priorités',
+  'hudChrome.townFocus.title': 'Priorités de la ville',
+  'hudChrome.vcup.awayNote':
+    "Si les deux camps arborent la même bannière, l'équipe visiteuse joue avec la palette inversée.",
+  'hudChrome.vcup.bannerCountdown': "Coup d'envoi dans {seconds}...",
+  'hudChrome.vcup.bannerDraw': 'Match nul au Pré de la Truie.',
+  'hudChrome.vcup.bannerEnd': 'Fin du match : {nationA} {scoreA}, {nationB} {scoreB}',
+  'hudChrome.vcup.bannerFound': 'La Coupe du Val appelle : {nationA} contre {nationB} !',
+  'hudChrome.vcup.bannerGoal': 'BUT ! {nation} marque !',
+  'hudChrome.vcup.bannerGolden': 'BUT EN OR : le prochain but gagne !',
+  'hudChrome.vcup.bannerKickoff': "COUP D'ENVOI !",
+  'hudChrome.vcup.bannerLoss': 'Défaite au Pré de la Truie.',
+  'hudChrome.vcup.bannerSave': 'ARRÊT DE {name} !',
+  'hudChrome.vcup.bannerWin': 'Victoire au Pré de la Truie !',
+  'hudChrome.vcup.bet.aria': 'Paris sur le match de la Coupe du Val',
+  'hudChrome.vcup.bet.back': 'Miser sur {team}',
+  'hudChrome.vcup.bet.closed': 'Paris clos',
+  'hudChrome.vcup.bet.closesIn': 'Les paris ferment dans {seconds}s',
+  'hudChrome.vcup.bet.collapse': 'Masquer les paris',
+  'hudChrome.vcup.bet.expand': 'Voir les paris et miser',
+  'hudChrome.vcup.bet.form': '{wins}V-{losses}D',
+  'hudChrome.vcup.bet.lostLog': 'Votre pari de la Coupe du Val est perdu : {amount}.',
+  'hudChrome.vcup.bet.mine': 'Votre pari : {amount} sur {team}',
+  'hudChrome.vcup.bet.none': "Vous n'avez pas encore de pari sur ce match.",
+  'hudChrome.vcup.bet.oddsLabel': 'Rapporte',
+  'hudChrome.vcup.bet.prize': 'Cagnotte {amount}',
+  'hudChrome.vcup.bet.record': 'Bilan de paris : {wins}V-{losses}D, {sign}{net}',
+  'hudChrome.vcup.bet.refundLog': 'Paris annulés, votre mise de {amount} vous a été rendue.',
+  'hudChrome.vcup.bet.splitAria': 'Part de la cagnotte misée sur chaque équipe',
+  'hudChrome.vcup.bet.title': 'Paris du match',
+  'hudChrome.vcup.bet.wonBanner': 'Votre pari est gagné !',
+  'hudChrome.vcup.bet.wonLog': 'Votre pari de la Coupe du Val est gagné : {amount} récupérés.',
+  'hudChrome.vcup.blockNation': "Choisissez d'abord une nation de bannière.",
+  'hudChrome.vcup.blockNotLeader': "Seul le chef du groupe peut inscrire l'équipe en file.",
+  'hudChrome.vcup.blockPartySize': 'Ce format demande un groupe plus petit.',
+  'hudChrome.vcup.boardEmpty':
+    "Aucun vainqueur enregistré pour l'instant. Le Seau de cuivre attend.",
+  'hudChrome.vcup.boardHeading': 'Tableau des vainqueurs',
+  'hudChrome.vcup.boardWins': '{count} victoires',
+  'hudChrome.vcup.bracketLabel': '{n}c{n}',
+  'hudChrome.vcup.bracketsAria': 'Format du match',
+  'hudChrome.vcup.briefing.bot': 'Bot',
+  'hudChrome.vcup.briefing.kitHeading': 'Votre panoplie',
+  'hudChrome.vcup.briefing.kitNote':
+    'Ces techniques remplacent vos capacités de classe le temps du match.',
+  'hudChrome.vcup.briefing.ready': 'Je suis prêt',
+  'hudChrome.vcup.briefing.readyAria': "Se déclarer prêt pour le coup d'envoi",
+  'hudChrome.vcup.briefing.readyCount': '{ready} sur {total} prêts',
+  'hudChrome.vcup.briefing.readyDone': 'Prêt',
+  'hudChrome.vcup.briefing.rosterHeading': 'La feuille de match',
+  'hudChrome.vcup.briefing.rule1':
+    "Envoyez le ballon dans le but adverse, d'une frappe ou d'une passe, pour marquer.",
+  'hudChrome.vcup.briefing.rule2':
+    'Le premier à 5 buts gagne, ou celui qui en a le plus au coup de sifflet final.',
+  'hudChrome.vcup.briefing.rule3':
+    'Un match à égalité à la fin du temps réglementaire se joue au but en or : le prochain but gagne.',
+  'hudChrome.vcup.briefing.rule4':
+    "Les tacles ne font que vous faire culbuter. Personne n'est blessé sous la trêve des moissons.",
+  'hudChrome.vcup.briefing.rule5':
+    "Chacun peut s'approcher et vous encourager depuis les tribunes.",
+  'hudChrome.vcup.briefing.rulesHeading': 'Comment jouer',
+  'hudChrome.vcup.briefing.subtitle': "Briefing d'avant-match",
+  'hudChrome.vcup.briefing.vs': 'contre',
+  'hudChrome.vcup.briefing.waiting': "En attente que l'autre camp se déclare prêt...",
+  'hudChrome.vcup.briefing.whistle': 'Le coup de sifflet retentit dans {seconds}s.',
+  'hudChrome.vcup.briefing.you': 'Vous',
+  'hudChrome.vcup.clock': '{minutes}:{seconds}',
+  'hudChrome.vcup.close': 'Fermer la fenêtre de la Coupe du Val',
+  'hudChrome.vcup.deserterNote':
+    "L'intendant s'en souvient. Vous pourrez reprendre la file dans {seconds} sec.",
+  'hudChrome.vcup.enterAsGuild': 'Entrer sous la bannière de {guild}',
+  'hudChrome.vcup.gossipOpen': 'Le livre des rencontres',
+  'hudChrome.vcup.gossipOpenAria': 'Ouvrir la fenêtre de la Coupe du Val',
+  'hudChrome.vcup.guildBoardEmpty':
+    "Aucune guilde n'est encore entrée sur le terrain. Hissez votre bannière !",
+  'hudChrome.vcup.guildBoardHeading': 'Bannières de guilde',
+  'hudChrome.vcup.guildBoardWl': '{wins} V, {losses} D',
+  'hudChrome.vcup.guildRecordLine':
+    'Palmarès de votre guilde : {wins} victoires, {losses} défaites.',
+  'hudChrome.vcup.inMatchNote': 'Votre équipe est sur le terrain. Jouez !',
+  'hudChrome.vcup.indicatorLive': 'Coupe du Val',
+  'hudChrome.vcup.indicatorOpen': 'Ouvrir la fenêtre de la Coupe du Val',
+  'hudChrome.vcup.indicatorQueued':
+    'File de la Coupe du Val : {bracket}, position {position} sur {count}',
+  'hudChrome.vcup.leaveQueue': 'Quitter la file',
+  'hudChrome.vcup.liveAria': 'Coupe du Val : {nationA} {scoreA}, {nationB} {scoreB}',
+  'hudChrome.vcup.liveHeading': 'En ce moment au Pré de la Truie',
+  'hudChrome.vcup.logDraw': 'La rencontre au Pré de la Truie se termine sur un match nul.',
+  'hudChrome.vcup.logFound':
+    'Votre match de la Coupe du Val est prêt : {nationA} contre {nationB}.',
+  'hudChrome.vcup.logGoal': '{name} marque pour {nation} ! {nationA} {scoreA}, {nationB} {scoreB}.',
+  'hudChrome.vcup.logLoss': 'Vous perdez la rencontre au Pré de la Truie.',
+  'hudChrome.vcup.logQueued':
+    'Vous rejoignez la file de la Coupe du Val en {bracket} (position {position}).',
+  'hudChrome.vcup.logRoster': 'Votre camp : {allies}. Leur camp : {enemies}.',
+  'hudChrome.vcup.logSave': "{name} fait l'arrêt !",
+  'hudChrome.vcup.logUnqueued': 'Vous quittez la file de la Coupe du Val.',
+  'hudChrome.vcup.logWin': 'Vous gagnez la rencontre au Pré de la Truie.',
+  'hudChrome.vcup.mobileLabel': 'Coupe',
+  'hudChrome.vcup.nation.choir': 'Le Chœur pâle',
+  'hudChrome.vcup.nation.coliseum': 'Le Colisée cendré',
+  'hudChrome.vcup.nation.copperdig': 'La Fouille du cuivre',
+  'hudChrome.vcup.nation.mirefen': 'Le Mirefen',
+  'hudChrome.vcup.nation.moon': 'La Lune pâle',
+  'hudChrome.vcup.nation.ogre': 'Les Clans ogres',
+  'hudChrome.vcup.nation.thornpeak': 'Thornpeak',
+  'hudChrome.vcup.nation.vale': "Val d'Eastbrook",
+  'hudChrome.vcup.nationsHeading': 'Nation de bannière',
+  'hudChrome.vcup.noLive': 'Le terrain est calme. Aucun match en cours.',
+  'hudChrome.vcup.offlineNote':
+    "Le livre des rencontres est fermé. La Coupe du Val n'est pas disponible pour le moment.",
+  'hudChrome.vcup.phaseCountdown': "Coup d'envoi dans {seconds}",
+  'hudChrome.vcup.phaseGoal': 'BUT !',
+  'hudChrome.vcup.phaseGolden': 'BUT EN OR',
+  'hudChrome.vcup.phaseOver': 'FIN DU MATCH',
+  'hudChrome.vcup.practice': 'Entraînement contre des bots',
+  'hudChrome.vcup.practiceNote':
+    "Lance aussitôt un match privé contre des bots sur votre propre terrain d'entraînement.",
+  'hudChrome.vcup.practicingNow': "À l'entraînement ({count}) :",
+  'hudChrome.vcup.queue': 'Rejoindre la file',
+  'hudChrome.vcup.queueNote':
+    "Entrez en file depuis n'importe où ; le coup de sifflet vous appellera au Pré de la Truie.",
+  'hudChrome.vcup.queuedStatus': 'En file pour {bracket} : position {position} sur {count}.',
+  'hudChrome.vcup.recordLine':
+    'Votre palmarès : {wins} victoires, {losses} défaites, {draws} nuls.',
+  'hudChrome.vcup.role.allrounder.desc':
+    "Un peu de tout : frappe, botte et un coup d'épaule loyal.",
+  'hudChrome.vcup.role.allrounder.name': 'Polyvalent',
+  'hudChrome.vcup.role.keeper.desc':
+    'Garde la surface de but à coups de prises, de plongeons et de dégagements.',
+  'hudChrome.vcup.role.keeper.name': 'Gardien',
+  'hudChrome.vcup.role.striker.desc': 'Vit pour la longue botte et le crochet éclair.',
+  'hudChrome.vcup.role.striker.name': 'Attaquant',
+  'hudChrome.vcup.role.sweeper.desc': 'Bouscule les porteurs loin du ballon et dégage au loin.',
+  'hudChrome.vcup.role.sweeper.name': 'Libéro',
+  'hudChrome.vcup.rolesHeading': 'Rôle sportif',
+  'hudChrome.vcup.shootPower': 'PUISSANCE',
+  'hudChrome.vcup.title': 'La Coupe du Val',
+  'hudChrome.vcup.waitingCount': '{count} en attente',
+  'hudChrome.vcup.walkUp': 'Approchez-vous du Pré de la Truie pour regarder depuis les tribunes.',
+  'hudChrome.archetypeTitle.label': 'Titre',
+  'hudChrome.archetypeTitle.none': 'Aucun',
+  'hudChrome.archetypeTitle.armorcrafting': 'Armurier',
+  'hudChrome.archetypeTitle.weaponcrafting': "Forgeron d'armes",
+  'hudChrome.archetypeTitle.jewelcrafting': 'Joaillier',
+  'hudChrome.archetypeTitle.alchemy': 'Alchimiste',
+  'hudChrome.archetypeTitle.engineering': 'Ingénieur',
+  'hudChrome.archetypeTitle.cooking': 'Cuisinier',
+  'hudChrome.archetypeTitle.inscription': 'Scribe',
+  'hudChrome.archetypeTitle.enchanting': 'Enchanteur',
+  'hudChrome.archetypeTitle.tailoring': 'Tailleur',
+  'hudChrome.archetypeTitle.leatherworking': 'Tanneur',
+  'entities.itemSets.crownforged.bonus4':
+    "Vos coups critiques d'arme lacèrent la cible avec Éclat d'os, lui infligeant 8 points de dégâts de saignement toutes les 2 s pendant 12 s. Se cumule jusqu'à 3 fois.",
+  'entities.itemSets.deathlord.bonus4':
+    "Vos coups critiques d'arme ont 50% de chances de conférer Puissance sépulcrale, augmentant la puissance d'attaque de 60 pendant 10 s.",
+  'entities.itemSets.necromancers.bonus4':
+    'Vos sorts ont 10% de chances de conférer Incantation limpide, rendant votre prochain sort gratuit.',
+  'entities.itemSets.nighttalon.bonus4':
+    "Vos coups critiques d'arme ouvrent une Entaille déchiquetée, infligeant à la cible 6 points de dégâts de saignement toutes les 2 s pendant 12 s. Se cumule jusqu'à 3 fois.",
+  'entities.itemSets.soulflame.bonus4':
+    "Vos sorts ont 10% de chances de conférer Embrasement d'âme, augmentant la puissance des sorts de 40 pendant 10 s.",
+  'entities.itemSets.stormcallers.bonus4':
+    "Vos sorts ont 10% de chances de conférer Embrasement d'âme, augmentant la puissance des sorts de 40 pendant 10 s.",
+  'entities.itemSets.wyrmshadow.bonus4':
+    "Vos coups critiques d'arme ont 50% de chances de conférer Ruée des crocs, augmentant la vitesse d'attaque de 25% pendant 8 s.",
+  'entities.items.architects_cornerstone.name': "La Pierre angulaire de l'Architecte",
+  'entities.items.bonechill_cord.name': 'Cordon de gel des os',
+  'entities.items.bonechill_striders.name': 'Arpenteurs de gel des os',
+  'entities.items.choir_blessed_spaulders.name': 'Spallières bénies par le Choeur',
+  'entities.items.choirmothers_casque.name': 'Casque de la Mère du Choeur',
+  'entities.items.cryptplate_helm.name': 'Heaume de plaques sépulcrales',
+  'entities.items.deathless_greatblade.name': 'Grande lame immortelle',
+  'entities.items.deathless_warguard_legmail.name': 'Cotte de jambes de la garde immortelle',
+  'entities.items.gravescale_girdle.name': "Ceinturon d'écailles sépulcrales",
+  'entities.items.gravewyrm_claws.name': 'Griffes du Gravewyrm',
+  'entities.items.gravewyrm_cleaver.name': 'Fendoir du Gravewyrm',
+  'entities.items.heroic_mark.name': 'Marque héroïque',
+  'entities.items.lunar_choir_leggings.name': 'Jambières du Choeur lunaire',
+  'entities.items.lunar_tide_greatstaff.name': 'Grand bâton de la Marée lunaire',
+  'entities.items.medallion_of_endless_profit.name': 'Médaillon du Profit sans fin',
+  'entities.items.mistcallers_fang.name': "Croc de l'Appelant des brumes",
+  'entities.items.mistforged_pauldrons.name': 'Spallières forgées dans la brume',
+  'entities.items.morthens_cryptforged_hauberk.name': 'Haubert Cryptforged de Morthen',
+  'entities.items.nielas_coldlight_band.name': 'Anneau de Lumière froide de Niela',
+  'entities.items.oath_of_the_round_table.name': 'Serment de la Table ronde',
+  'entities.items.sanctum_prowlers_grips.name': 'Poignes du Rôdeur du Sanctuaire',
+  'entities.items.sash_of_the_sunken_court.name': 'Écharpe de la Cour engloutie',
+  'entities.items.scepter_of_the_deathless_court.name': 'Sceptre de la Cour immortelle',
+  'entities.items.scourgehide_carapace.name': 'Carapace en peau de Fléau',
+  'entities.items.seal_of_the_nine_oaths.name': 'Sceau des Neuf Serments',
+  'entities.items.shadowpulse_handwraps.name': "Bandes de mains d'Ombre pulsante",
+  'entities.items.shadowpulse_slippers.name': "Chaussons d'Ombre pulsante",
+  'entities.items.shroud_of_the_gravewyrm.name': 'Suaire du Gravewyrm',
+  'entities.items.soulforged_warplate.name': 'Harnois de guerre forgé dans les âmes',
+  'entities.items.soulrend_diadem.name': 'Diadème Déchire-âme',
+  'entities.items.stormcallers_focus.name': "Focalisateur de l'Invocateur de tempêtes",
+  'entities.items.sunken_court_mantle.name': 'Mantelet de la Cour engloutie',
+  'entities.items.sutils_gambit.name': 'Gambit de Sutil',
+  'entities.items.swiftfang_talisman.name': 'Talisman Croc-agile',
+  'entities.items.tidebound_spaulders.name': 'Spallières liées aux marées',
+  'entities.items.tideguard_faceguard.name': 'Garde-visage du Gardien des marées',
+  'entities.items.tideworn_warboots.name': 'Bottes de guerre usées par les marées',
+  'entities.items.tidewoven_trousers.name': 'Pantalon tissé de marées',
+  'entities.items.wyrmchoir_handwraps.name': 'Bandes de mains du Choeur du Wyrm',
+  'entities.items.yumis_keepsake_locket.name': 'Médaillon souvenir de Yumi',
+  'entities.items.zense_meridian.name': 'Méridien de Zense',
+  'entities.items.zyzzs_deathless_signet.name': 'Chevalière immortelle de Zyzz',
+  'entities.npcs.heroic_quartermaster.greeting':
+    'La preuve des profondeurs héroïques achète les plus belles bagues et les plus beaux pendentifs de Highwatch. Montre-moi tes marques.',
+  'entities.npcs.heroic_quartermaster.name': 'Intendant Vex',
+  'entities.npcs.heroic_quartermaster.title': 'Intendant héroïque',
+  'heroicShop.balance': 'Marques héroïques : {count}',
+  'heroicShop.buyAria': 'Acheter {item} pour {marks} marques héroïques',
+  'hudChrome.bags.cannotDestroy': 'Cet objet ne peut pas être détruit.',
+  'hudChrome.bags.rightClickDestroy': 'Clic droit pour détruire',
+  'hudChrome.crafting.comboRequirementUnmet':
+    'Vous ne possédez pas les deux métiers requis au palier nécessaire pour cette recette.',
+  'hudChrome.discord.roleTag.coredevs': 'Développeur principal',
+  'hudChrome.dungeonDifficulty.setHeroic': 'Définir la difficulté du donjon : Héroïque',
+  'hudChrome.dungeonDifficulty.setNormal': 'Définir la difficulté du donjon : Normal',
+  'hudChrome.itemProc.attackSlow':
+    "et ralentit la vitesse d'attaque de la cible de {pct}% pendant {duration} s",
+  'hudChrome.itemProc.chainArc':
+    'frappe la cible avec un {name} {school} ({damage}) qui bondit sur {jumps} ennemis proches pour des dégâts décroissants',
+  'hudChrome.itemProc.dot':
+    'provoque {name}, des dégâts de {school} sur la durée infligeant {total} sur {duration} s',
+  'hudChrome.itemProc.hot':
+    'fait éclore {name}, un soin sur la durée restaurant {total} sur {duration} s',
+  'hudChrome.itemProc.onHeal': 'Chance sur vos soins ({chance}%) : {effect}',
+  'hudChrome.itemProc.onMeleeHit': "Chance à l'impact ({chance}%) : {effect}",
+  'hudChrome.itemProc.onSpellDamage': 'Chance sur vos sorts offensifs ({chance}%) : {effect}',
+  'hudChrome.options.version': 'v{version} ({build})',
+  'hudChrome.raidLockout.heroicLocked': 'Vous êtes verrouillé sur {name} héroïque.',
+  'hudChrome.raidLockout.heroicName': '{name} héroïque',
+  'hudChrome.statInfo.desc.critRating':
+    'Score de critique de votre équipement et de vos bonus de panoplie, augmentant vos chances de coup critique. Environ 10 points de score confèrent 1% de critique.',
+  'hudChrome.statInfo.desc.hasteRating':
+    'Score de hâte de votre équipement et de vos bonus de panoplie, accélérant vos attaques et vos incantations. Environ 10 points de score confèrent 1% de hâte.',
+  'hudChrome.statInfo.names.critRating': 'Score de critique',
+  'hudChrome.statInfo.names.hasteRating': 'Score de hâte',
+  'itemUi.slots.neck': 'Cou',
+  'itemUi.slots.ring': 'Doigt',
   'auth.email': 'E-mail',
   'auth.emailError': 'Veuillez saisir une adresse e-mail valide.',
   'auth.emailPlaceholder': 'vous@exemple.com',
@@ -550,6 +920,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.spider_egg_sac.name': "Sac d'œufs d'araignée",
   'entities.mobs.sump_troll_devourer.name': 'Dévoreur troll du cloaque',
   'entities.mobs.tolling_bell.name': 'Cloche du glas',
+  'entities.mobs.vale_cup_ball.name': 'Ballon de sanglier',
   'entities.npcs.brother_halven_marsh.greeting':
     "La piste menait au nord. Un autre reliquaire, un autre rite. Choisis ton palier, et je tiendrai la corde jusqu'à ton retour.",
   'entities.npcs.brother_halven_marsh.name': 'Frère Halven',
@@ -932,7 +1303,6 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hud.tutorial.returnTitle': 'Réclame ta récompense',
   'hud.tutorial.returnBody':
     'Ta mission est accomplie. Retourne voir le maréchal Redbrook et appuie sur {interactKey} pour la rendre.',
-  // Character-sheet stat tooltips (hudChrome.statInfo.*).
   'hudChrome.statInfo.fromYour': 'Grâce à vos {value} en {stat} :',
   'hudChrome.statInfo.desc.str':
     "Augmente votre puissance d'attaque, vos coups d'arme frappent donc plus fort.",
@@ -1009,6 +1379,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.perf.labels.ping': 'Ping',
   'hudChrome.perf.labels.jitter': 'Gigue',
   'hudChrome.perf.labels.snapshot': "Fréquence d'instantanés",
+  'hudChrome.perf.labels.serverTick': 'Fréquence de tick serveur',
   'hudChrome.perf.labels.connection': 'Connexion',
   'hudChrome.perf.labels.drawCalls': 'Appels de rendu',
   'hudChrome.perf.labels.triangles': 'Triangles',
@@ -1665,6 +2036,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hud.core.mobileSocial': 'Relations',
   'hud.core.mobileArena': 'Arène',
   'hud.core.mobileMenu': 'Menu',
+  'hud.core.mobileSettings': 'Paramètres',
   'hud.core.mobileUse': 'Utiliser',
   'hud.core.mobileMeters': 'Compteurs',
   'hud.core.mobileMap': 'Carte',
@@ -2155,9 +2527,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'abilityUi.cast.demonHeal': 'Soin démoniaque',
   'questUi.tracker.title': 'Quêtes',
   'questUi.tracker.complete': 'Terminée',
-
   'questUi.tracker.showOnMap': 'Afficher {name} sur la carte',
-
   'questUi.tracker.hideFromMap': 'Masquer {name} sur la carte',
   'questUi.log.title': 'Journal de quêtes',
   'questUi.log.close': 'Fermer le journal de quêtes',
@@ -2418,29 +2788,30 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     "Une attaque puissante qui augmente les dégâts de mêlée de {damage}. S'active lors de votre prochaine frappe.",
   'entities.abilities.battle_shout.name': 'Beuglement de fer',
   'entities.abilities.battle_shout.description':
-    "Augmente votre puissance d'attaque de 20 pendant 2 min.",
+    "Augmente votre puissance d'attaque de {buff} pendant 2 min.",
   'entities.abilities.commanding_shout.name': 'Cri fortifiant',
-  'entities.abilities.commanding_shout.description': 'Augmente votre Endurance de 6 pendant 2 min.',
+  'entities.abilities.commanding_shout.description':
+    'Augmente votre Endurance de {buff} pendant 2 min.',
   'entities.abilities.demoralizing_shout.name': 'Direhowl',
   'entities.abilities.demoralizing_shout.description':
-    "Pousse un cri terrifiant qui réduit la puissance d'attaque de tous les ennemis proches de 30 pendant 30 s.",
+    "Pousse un cri terrifiant qui réduit la puissance d'attaque de tous les ennemis proches de {buff} pendant 30 s.",
   'entities.abilities.charge.name': 'Ruée',
   'entities.abilities.charge.description':
     "Charge un ennemi, génère 9 rage et l'étourdit pendant 1 s. Portée de 8-25 m.",
   'entities.abilities.rend.name': 'Entaille profonde',
   'entities.abilities.rend.description':
-    'Blesse la cible et la fait saigner pour {damage} points de dégâts en 9 s.',
+    'Blesse la cible et la fait saigner pour {damage} points de dégâts en {duration} s.',
   'entities.abilities.thunder_clap.name': 'Coup sismique',
   'entities.abilities.thunder_clap.description':
     'Frappe les ennemis proches pour {damage} points de dégâts et ralentit leurs attaques de 10% pendant 10 s.',
   'entities.abilities.hamstring.name': 'Entaille estropiante',
   'entities.abilities.hamstring.description':
-    "Mutile l'ennemi pour 5 points de dégâts et réduit sa vitesse de déplacement de 50% pendant 15 s.",
+    "Mutile l'ennemi pour {damage} points de dégâts et réduit sa vitesse de déplacement de 50% pendant 15 s.",
   'entities.abilities.bloodrage.name': 'Tribut de sang',
   'entities.abilities.bloodrage.description': 'Génère 10 rage au prix de vos points de vie.',
   'entities.abilities.overpower.name': 'Redhand',
   'entities.abilities.overpower.description':
-    "Attaque instantanée infligeant les dégâts de l'arme +5. Utilisable seulement après une esquive de la cible. Ne peut pas être esquivée.",
+    "Attaque instantanée infligeant les dégâts de l'arme plus {damage}. Utilisable seulement après une esquive de la cible. Ne peut pas être esquivée.",
   'entities.abilities.execute.name': 'Tombe précoce',
   'entities.abilities.execute.description':
     "Tente d'achever un ennemi blessé et inflige {damage} points de dégâts. Utilisable seulement sur les ennemis sous 20% de points de vie.",
@@ -2454,24 +2825,22 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.defensive_stance.description':
     'Posture de combat défensive: vous générez 30% de menace en plus, mais infligez et subissez 10% de dégâts en moins. Relancez pour quitter la posture.',
   'entities.abilities.sunder_armor.name': "Cisaillement d'armure",
-  'entities.abilities.sunder_armor.description':
-    "Fracasse l'armure de la cible et la réduit de {damage} par application. Cumulable jusqu'à 5 fois. Génère beaucoup de menace.",
   'entities.abilities.taunt.name': 'Aiguillon',
   'entities.abilities.taunt.description':
     'Provoque la cible: votre menace rejoint celle de son ennemi le plus haï et elle est forcée de vous attaquer pendant 3 s.',
   'entities.abilities.fireball.name': 'Cinderbolt',
   'entities.abilities.rain_of_fire.name': 'Pluie de feu',
   'entities.abilities.rain_of_fire.description':
-    'Fait pleuvoir du feu sur la zone visée, brûlant les ennemis pour {damage} points de dégâts de Feu.',
+    'Fait pleuvoir du feu sur la zone visée pendant 4 s, brûlant les ennemis pour {damage} points de dégâts de Feu chaque seconde.',
   'entities.abilities.volley.name': 'Volée de flèches',
   'entities.abilities.volley.description':
-    'Fait pleuvoir des flèches sur la zone visée, infligeant {damage} points de dégâts aux ennemis présents.',
+    'Fait pleuvoir des flèches sur la zone visée pendant 3 s, infligeant {damage} points de dégâts toutes les 0.5 s aux ennemis présents.',
   'entities.abilities.hurricane.name': 'Ouragan',
   'entities.abilities.hurricane.description':
-    'Déchaîne un ouragan sur la zone visée, frappant les ennemis pour {damage} points de dégâts de Nature.',
+    'Déchaîne un ouragan sur la zone visée pendant 6 s, frappant les ennemis pour {damage} points de dégâts de Nature chaque seconde.',
   'entities.abilities.earthquake.name': 'Tremblement de terre',
   'entities.abilities.earthquake.description':
-    'Fait trembler la zone visée, frappant les ennemis pour {damage} points de dégâts de Nature.',
+    'Fait trembler la zone visée pendant 6 s, frappant les ennemis pour {damage} points de dégâts de Nature toutes les 1.5 s.',
   'entities.abilities.flamestrike.name': 'Frappe enflammée',
   'entities.abilities.flamestrike.description':
     "Fait s'abattre une explosion de flammes sur la zone visée, infligeant {damage} points de dégâts de Feu aux ennemis pris dans la déflagration.",
@@ -2479,9 +2848,10 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     'Lance une boule enflammée qui inflige {damage} points de dégâts de Feu plus des dégâts supplémentaires sur la durée.',
   'entities.abilities.frost_armor.name': 'Manteau de givre',
   'entities.abilities.frost_armor.description':
-    "Vous enveloppe de givre et augmente l'armure de 30 pendant 30 min.",
+    "Vous enveloppe de givre et augmente l'armure de {buff} pendant 30 min.",
   'entities.abilities.arcane_intellect.name': "Intelligence de l'Aether",
-  'entities.abilities.arcane_intellect.description': "Augmente l'Intelligence de 2 pendant 30 min.",
+  'entities.abilities.arcane_intellect.description':
+    "Augmente l'Intelligence de {buff} pendant 30 min.",
   'entities.abilities.frostbolt.name': 'Rimelance',
   'entities.abilities.frostbolt.description':
     'Lance un éclair de givre, inflige {damage} points de dégâts de Givre et ralentit le déplacement de 40%.',
@@ -2499,7 +2869,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     "Lance des Traits d'Aether sur l'ennemi et inflige {damage} points de dégâts des Arcanes chaque seconde pendant 3 s.",
   'entities.abilities.polymorph.name': 'Ensorcellement',
   'entities.abilities.polymorph.description':
-    "Transforme l'ennemi en crapaud pendant un maximum de 15 s. Le crapaud erre et récupère rapidement. Tout dégât interrompt l'effet. Bêtes et humanoïdes uniquement.",
+    "Transforme l'ennemi en crapaud pendant un maximum de {duration} s. Le crapaud erre et récupère rapidement. Tout dégât interrompt l'effet. Bêtes et humanoïdes uniquement.",
   'entities.abilities.frost_nova.name': 'Icebind',
   'entities.abilities.frost_nova.description':
     'Gèle tous les ennemis proches sur place pendant un maximum de 8 s et inflige {damage} points de dégâts de Givre.',
@@ -2514,19 +2884,18 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     'Projette un immense rocher enflammé qui inflige {damage} points de dégâts de Feu plus des dégâts supplémentaires sur la durée.',
   'entities.abilities.ice_barrier.name': 'Voile de givre',
   'entities.abilities.ice_barrier.description':
-    'Vous protège dans la glace et absorbe 130 points de dégâts pendant 60 s.',
+    'Vous protège dans la glace et absorbe {damage} points de dégâts pendant 60 s.',
   'entities.abilities.sinister_strike.name': 'Taillade perfide',
   'entities.abilities.sinister_strike.description':
     "Frappe instantanée infligeant les dégâts de l'arme plus {damage}. Confère 1 point de combo.",
   'entities.abilities.eviscerate.name': 'Sommeil éternel',
-  'entities.abilities.eviscerate.description':
-    'Coup de grâce qui inflige des dégâts par point de combo.',
+  'entities.abilities.eviscerate.description': 'Coup de grâce qui inflige {damage}.',
   'entities.abilities.backstab.name': 'Estoc lâche',
   'entities.abilities.backstab.description':
     "Poignarde la cible pour 150% des dégâts de l'arme plus {damage}. Vous devez être derrière la cible. Requiert une dague. Confère 1 point de combo.",
   'entities.abilities.gouge.name': "Coup à l'œil",
   'entities.abilities.gouge.description':
-    "Frappe la cible et l'incapacite pendant 4 s. Tout dégât interrompt l'effet. Confère 1 point de combo.",
+    "Frappe la cible pour {damage} points de dégâts et l'incapacite pendant 4 s. Tout dégât interrompt l'effet. Confère 1 point de combo.",
   'entities.abilities.evasion.name': 'Ghostfoot',
   'entities.abilities.evasion.description': "Augmente vos chances d'esquiver de 50% pendant 15 s.",
   'entities.abilities.slice_and_dice.name': 'Tempo du coupe-gorge',
@@ -2549,10 +2918,10 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     "Votre sang s'embrase et restaure instantanément 60 énergie.",
   'entities.abilities.garrote.name': 'Fil étrangleur',
   'entities.abilities.garrote.description':
-    "Garrotte l'ennemi, infligeant des dégâts immédiats et le faisant saigner de {damage} pendant 18 s. Vous devez être camouflé. Confère 1 point de combo.",
+    "Garrotte l'ennemi, lui infligeant {damage} points de dégâts immédiats et le faisant saigner de {overTime} pendant 18 s. Vous devez être camouflé. Confère 1 point de combo.",
   'entities.abilities.cheap_shot.name': 'Coup au ventre',
   'entities.abilities.cheap_shot.description':
-    "Frappe la cible, l'étourdissant pendant 4 s. Vous devez être camouflé. Confère 2 points de combo.",
+    "Frappe la cible pour {damage} points de dégâts et l'étourdit pendant 4 s. Vous devez être camouflé. Confère 2 points de combo.",
   'entities.abilities.sap.name': 'Assommer',
   'entities.abilities.sap.description':
     "Neutralise la cible pendant 8 s. Vous devez être camouflé et hors combat. Le moindre dégât rompt l'effet.",
@@ -2561,7 +2930,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     'Frappe la cible avec un venin de plomb, infligeant {damage} dégâts de Nature et réduisant sa vitesse de déplacement de 50% pendant 12 s.',
   'entities.abilities.expose_armor.name': "Brèche d'armure",
   'entities.abilities.expose_armor.description':
-    "Coup de grâce qui expose la cible, réduisant son armure. Plus vous dépensez de points de combo, plus l'entaille est profonde.",
+    'Coup de grâce qui expose la cible, réduisant son armure de {damage} pendant 30 s.',
   'entities.abilities.rupture.name': 'Hémorragie',
   'entities.abilities.rupture.description':
     'Coup de grâce qui blesse la cible, la faisant saigner de {damage} pendant 16 s.',
@@ -2579,25 +2948,25 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     "Aveugle la cible, la faisant errer désorientée pendant 8 s. Le moindre dégât rompt l'effet.",
   'entities.abilities.seal_of_righteousness.name': 'Oathbrand',
   'entities.abilities.seal_of_righteousness.description':
-    'Vous remplit de puissance Sacrée pendant 30 s, faisant infliger 4 points de dégâts Sacrés supplémentaires à chacune de vos frappes de mêlée. Libérez-le avec Verdict.',
+    'Vous remplit de puissance Sacrée pendant 30 s, faisant infliger {damage} points de dégâts Sacrés supplémentaires à chacune de vos frappes de mêlée. Libérez-le avec Verdict.',
   'entities.abilities.holy_light.name': 'Lumière guérisseuse',
   'entities.abilities.holy_light.description': 'Rend {damage} points de vie à une cible alliée.',
   'entities.abilities.devotion_aura.name': 'Aura inébranlable',
-  'entities.abilities.devotion_aura.description': 'Augmente votre armure de 40 pendant 30 min.',
+  'entities.abilities.devotion_aura.description': 'Augmente votre armure de {buff} pendant 30 min.',
   'entities.abilities.judgement.name': 'Verdict',
   'entities.abilities.judgement.description':
     "Libère votre Sceau actif sur l'ennemi, le consomme et inflige ses dégâts Sacrés accumulés.",
   'entities.abilities.blessing_of_might.name': 'Serment de fer',
   'entities.abilities.blessing_of_might.description':
-    "Place une Bénédiction sur une cible alliée et augmente sa puissance d'attaque de 15 pendant 5 min.",
+    "Place une Bénédiction sur une cible alliée et augmente sa puissance d'attaque de {buff} pendant 5 min.",
   'entities.abilities.divine_protection.name': 'Garde de la foi',
   'entities.abilities.divine_protection.description':
-    'Une garde protectrice absorbe 50 points de dégâts pendant 10 s.',
+    'Une garde protectrice absorbe {damage} points de dégâts pendant 10 s.',
   'entities.abilities.hammer_of_justice.name': 'Maillet fracassant',
-  'entities.abilities.hammer_of_justice.description': 'Étourdit la cible pendant 3 s.',
+  'entities.abilities.hammer_of_justice.description': 'Étourdit la cible pendant {duration} s.',
   'entities.abilities.lay_on_hands.name': 'Dernier sacrement',
   'entities.abilities.lay_on_hands.description':
-    'Une vague de soins massive: rend 250 points de vie. Temps de recharge de 10 min.',
+    'Une vague de soins massive: rend {damage} points de vie. Temps de recharge de 10 min.',
   'entities.abilities.flash_of_light.name': 'Lightmend',
   'entities.abilities.flash_of_light.description':
     'Un éclat de Lumière rapide et efficace qui rend {damage} points de vie à une cible alliée.',
@@ -2606,7 +2975,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     'Bannit les impies par une colère Sacrée et inflige {damage} points de dégâts Sacrés.',
   'entities.abilities.consecration.name': 'Terre consacrée',
   'entities.abilities.consecration.description':
-    'Consacre le sol sous vos pieds et brûle les ennemis proches pour {damage} points de dégâts Sacrés.',
+    'Consacre le sol sous vos pieds et brûle les ennemis proches pour {damage} points de dégâts Sacrés toutes les 2 s pendant 10 s.',
   'entities.abilities.righteous_fury.name': 'Serment ardent',
   'entities.abilities.righteous_fury.description':
     'Augmente de 60% la menace générée par vos dégâts Sacrés pendant 30 min. La pierre angulaire du paladin tank.',
@@ -2620,10 +2989,10 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.dismiss_pet.description': 'Rend votre familier à la nature.',
   'entities.abilities.raptor_strike.name': 'Frappe éventrante',
   'entities.abilities.raptor_strike.description':
-    "Une puissante attaque de mêlée qui augmente les dégâts de 5. S'active lors de votre prochaine frappe.",
+    "Une puissante attaque de mêlée qui augmente les dégâts de {damage}. S'active lors de votre prochaine frappe.",
   'entities.abilities.aspect_of_the_hawk.name': 'Aspect du busard',
   'entities.abilities.aspect_of_the_hawk.description':
-    "Adopte l'aspect du busard et augmente la puissance d'attaque de 20 pendant 30 min.",
+    "Adopte l'aspect du busard et augmente la puissance d'attaque de {buff} pendant 30 min.",
   'entities.abilities.serpent_sting.name': 'Dard venimeux',
   'entities.abilities.serpent_sting.description':
     'Pique la cible et inflige {damage} points de dégâts de Nature en 15 s.',
@@ -2632,13 +3001,13 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     'Tir instantané qui inflige {damage} points de dégâts des Arcanes.',
   'entities.abilities.concussive_shot.name': 'Tir déstabilisant',
   'entities.abilities.concussive_shot.description':
-    'Hébète la cible et ralentit son déplacement de 50% pendant 4 s.',
+    'Hébète la cible pour {damage} points de dégâts et ralentit son déplacement de 50% pendant 4 s.',
   'entities.abilities.mongoose_bite.name': 'Counterfang',
   'entities.abilities.mongoose_bite.description':
-    "Contre-attaque après une esquive de la cible, infligeant les dégâts de l'arme plus 12. Ne peut pas être esquivée.",
+    "Contre-attaque après une esquive de la cible, infligeant les dégâts de l'arme plus {damage}. Ne peut pas être esquivée.",
   'entities.abilities.wing_clip.name': 'Taillade entravante',
   'entities.abilities.wing_clip.description':
-    "Inflige une blessure qui ralentit l'ennemi de 40% pendant 10 s.",
+    "Inflige une blessure pour {damage} points de dégâts et ralentit l'ennemi de 40% pendant 10 s.",
   'entities.abilities.aspect_of_the_monkey.name': 'Aspect de la martre',
   'entities.abilities.aspect_of_the_monkey.description':
     "Adopte l'aspect de la martre et augmente vos chances d'esquive de 8% pendant 30 min.",
@@ -2657,13 +3026,13 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.lesser_heal.description': 'Rend {damage} points de vie à une cible alliée.',
   'entities.abilities.power_word_fortitude.name': 'Litanie de résolution',
   'entities.abilities.power_word_fortitude.description':
-    "Augmente l'Endurance de la cible de 3 pendant 30 min.",
+    "Augmente l'Endurance de la cible de {buff} pendant 30 min.",
   'entities.abilities.shadow_word_pain.name': 'Chant funèbre de pourriture',
   'entities.abilities.shadow_word_pain.description':
     "Un mot de ténèbres inflige {damage} points de dégâts d'Ombre en 18 s.",
   'entities.abilities.power_word_shield.name': 'Psaume de protection',
   'entities.abilities.power_word_shield.description':
-    'Protège la cible et absorbe 48 points de dégâts pendant 30 s.',
+    'Protège la cible et absorbe {damage} points de dégâts pendant 30 s.',
   'entities.abilities.renew.name': 'Grâce persistante',
   'entities.abilities.renew.description': 'Rend {damage} points de vie à la cible en 15 s.',
   'entities.abilities.mind_blast.name': 'Mindfracture',
@@ -2683,7 +3052,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     'Lance un éclair qui inflige {damage} points de dégâts de Nature.',
   'entities.abilities.rockbiter_weapon.name': 'Arme Stonebound',
   'entities.abilities.rockbiter_weapon.description':
-    'Imprègne votre arme de la fureur de la pierre: chaque frappe inflige 5 points de dégâts supplémentaires pendant 5 min.',
+    'Imprègne votre arme de la fureur de la pierre: chaque frappe inflige {damage} points de dégâts supplémentaires pendant 5 min.',
   'entities.abilities.healing_wave.name': 'Eaux guérisseuses',
   'entities.abilities.healing_wave.description': 'Rend {damage} points de vie à une cible alliée.',
   'entities.abilities.earth_shock.name': 'Secousse tellurique',
@@ -2691,19 +3060,19 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     'Secoue instantanément la cible avec une force brutale pour {damage} points de dégâts de Nature.',
   'entities.abilities.lightning_shield.name': 'Garde de tonnerre',
   'entities.abilities.lightning_shield.description':
-    "Vous entoure d'éclairs crépitants: les assaillants en mêlée subissent 13 points de dégâts de Nature.",
+    "Vous entoure d'éclairs crépitants: les assaillants en mêlée subissent {buff} points de dégâts de Nature, jusqu'à 3 charges et au plus une fois toutes les 5 s.",
   'entities.abilities.flame_shock.name': 'Secousse de braises',
   'entities.abilities.flame_shock.description':
-    'Brûle la cible par le feu pour 25 points de dégâts plus {damage} en 12 s.',
+    'Brûle la cible par le feu pour {damage} points de dégâts plus {overTime} en 12 s.',
   'entities.abilities.flametongue_weapon.name': 'Arme Pyrebrand',
   'entities.abilities.flametongue_weapon.description':
-    'Imprègne votre arme de feu élémentaire: chaque frappe inflige 8 points de dégâts de Feu supplémentaires pendant 5 min.',
+    'Imprègne votre arme de feu élémentaire: chaque frappe inflige {damage} points de dégâts de Feu supplémentaires pendant 5 min.',
   'entities.abilities.frost_shock.name': 'Secousse de givre',
   'entities.abilities.frost_shock.description':
     'Frappe instantanément la cible par le givre pour {damage} points de dégâts de Givre et ralentit son déplacement de 50% pendant 8 s.',
   'entities.abilities.frostbrand_weapon.name': 'Arme Rimebound',
   'entities.abilities.frostbrand_weapon.description':
-    "Imprègne votre arme d'un givre mordant: chaque frappe inflige 8 points de dégâts supplémentaires pendant 5 min.",
+    "Imprègne votre arme d'un givre mordant: chaque frappe inflige {damage} points de dégâts supplémentaires pendant 5 min.",
   'entities.abilities.ghost_wolf.name': 'Shadewolf',
   'entities.abilities.ghost_wolf.description':
     'Vous transforme en Shadewolf et augmente votre vitesse de déplacement de 40% pendant 10 min.',
@@ -2715,15 +3084,15 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     "Envoie un trait ténébreux sur l'ennemi pour {damage} points de dégâts d'Ombre.",
   'entities.abilities.demon_skin.name': 'Fiendhide',
   'entities.abilities.demon_skin.description':
-    'Une peau démoniaque augmente votre armure de 30 pendant 30 min.',
+    'Une peau démoniaque augmente votre armure de {buff} pendant 30 min.',
   'entities.abilities.immolate.name': 'Pacte brûlant',
   'entities.abilities.immolate.description':
-    "Brûle l'ennemi pour 11 points de dégâts de Feu et {damage} points supplémentaires en 15 s.",
+    "Brûle l'ennemi pour {damage} points de dégâts de Feu et {overTime} points supplémentaires en 15 s.",
   'entities.abilities.corruption.name': 'Blackrot',
   'entities.abilities.corruption.description':
     "Corrompt la cible et inflige {damage} points de dégâts d'Ombre en 18 s.",
   'entities.abilities.life_tap.name': 'Marché brutal',
-  'entities.abilities.life_tap.description': 'Convertit 30 points de vie en 30 mana.',
+  'entities.abilities.life_tap.description': 'Convertit {damage} points de vie en {damage} mana.',
   'entities.abilities.curse_of_agony.name': "Maléfice d'angoisse",
   'entities.abilities.curse_of_agony.description':
     "Maudit la cible d'agonie: {damage} points de dégâts d'Ombre en 24 s.",
@@ -2746,7 +3115,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.healing_touch.description': 'Rend {damage} points de vie à une cible alliée.',
   'entities.abilities.mark_of_the_wild.name': 'Wildward',
   'entities.abilities.mark_of_the_wild.description':
-    'Place le Wildward sur une cible alliée et augmente son armure de 25 pendant 30 min.',
+    'Place le Wildward sur une cible alliée et augmente son armure de {buff} pendant 30 min.',
   'entities.abilities.moonfire.name': 'Tempête lunaire',
   'entities.abilities.moonfire.description':
     "Brûle l'ennemi par un feu lunaire pour {damage} points de dégâts des Arcanes plus des dégâts sur la durée.",
@@ -2754,13 +3123,13 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.rejuvenation.description': 'Rend {damage} points de vie à la cible en 12 s.',
   'entities.abilities.thorns.name': 'Briarguard',
   'entities.abilities.thorns.description':
-    'Des épines jaillissent de la cible: les assaillants en mêlée subissent 3 points de dégâts de Nature.',
+    'Des épines jaillissent de la cible: les assaillants en mêlée subissent {buff} points de dégâts de Nature.',
   'entities.abilities.entangling_roots.name': 'Racines agrippantes',
   'entities.abilities.entangling_roots.description':
     'Enracine la cible sur place pendant un maximum de 12 s.',
   'entities.abilities.bear_form.name': 'Forme de Bruin',
   'entities.abilities.bear_form.description':
-    "Vous change en ours: armure +65%, puissance d'attaque +15, vos attaques génèrent de la rage et 30% de menace en plus. Relancez pour reprendre votre forme de lanceur.",
+    "Vous change en ours: armure +90%, puissance d'attaque fortement augmentée, vos attaques génèrent de la rage et 30% de menace en plus. Relancez pour reprendre votre forme de lanceur.",
   'entities.abilities.maul.name': 'Bonecrush',
   'entities.abilities.maul.description':
     "Attaque dévastatrice qui augmente les dégâts de mêlée de {damage} et génère beaucoup de menace. S'active lors de votre prochaine frappe. Forme de Bruin uniquement.",
@@ -2775,7 +3144,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     "Griffe l'ennemi pour les dégâts de l'arme plus {damage}. Confère 1 point de combo. Forme de loup uniquement.",
   'entities.abilities.ferocious_bite.name': 'Gorebite',
   'entities.abilities.ferocious_bite.description':
-    'Coup de grâce qui inflige des dégâts par point de combo. Forme de loup uniquement.',
+    'Coup de grâce qui inflige {damage}. Forme de loup uniquement.',
   'entities.abilities.swipe.name': 'Griffes balayantes',
   'entities.abilities.swipe.description':
     'Balaye les ennemis proches pour {damage} points de dégâts. Génère de la menace supplémentaire. Forme de Bruin uniquement.',
@@ -2798,7 +3167,8 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.bash.description':
     'Étourdit la cible pendant 2 s. Forme de Bruin uniquement.',
   'entities.abilities.faerie_fire.name': 'Witchlight',
-  'entities.abilities.faerie_fire.description': "Diminue l'armure de la cible de 35 pendant 40 s.",
+  'entities.abilities.faerie_fire.description':
+    "Diminue l'armure de la cible de {damage}% pendant 40 s. Ne se cumule pas avec Cisaillement d'armure.",
   'entities.abilities.hibernate.name': 'Sommeil',
   'entities.abilities.hibernate.description':
     'Plonge la cible dans un sommeil profond pendant 8 s maximum. Tout dégât la réveille.',
@@ -2816,16 +3186,16 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     "Augmente la puissance d'attaque de 40 pendant 6 s. Forme de loup uniquement.",
   'entities.abilities.rip.name': 'Lacération',
   'entities.abilities.rip.description':
-    'Coup de grâce qui inflige des dégâts de saignement sur 12 s. Consomme les points de combo. Forme de loup uniquement.',
+    'Coup de grâce qui inflige {damage} points de dégâts de saignement sur 12 s. Consomme les points de combo. Forme de loup uniquement.',
   'entities.abilities.mortal_strike.name': 'Frappe mutilante',
   'entities.abilities.mortal_strike.description':
     "Frappe vicieuse infligeant les dégâts de l'arme plus {damage}. (signature Armes)",
   'entities.abilities.bloodthirst.name': 'Saignée',
   'entities.abilities.bloodthirst.description':
-    'Attaque instantanément dans une frénésie sanguinaire pour {damage}. (signature Fureur)',
+    "Attaque instantanément dans une frénésie sanguinaire pour 60% des dégâts de l'arme plus {damage}. (signature Fureur)",
   'entities.abilities.shield_slam.name': 'Shieldcrack',
   'entities.abilities.shield_slam.description':
-    'Heurte la cible avec votre bouclier pour {damage} et génère une menace énorme. (signature Protection)',
+    "Heurte la cible avec votre bouclier pour 50% des dégâts de l'arme plus {damage} et génère une menace énorme. (signature Protection)",
   'entities.abilities.whirlwind.name': 'Tournoiement de lames',
   'entities.abilities.whirlwind.description':
     'Tournoie dans un arc mortel et frappe tous les ennemis proches pour {damage}. (talent Fureur)',
@@ -3879,7 +4249,6 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'news.prerelease': 'Préversion',
   'news.viewOnGithub': 'Voir sur GitHub',
   'wiki.cta': 'Parcourir le Wiki',
-  // --- qol-changes: character profile, attack-move, login/create labels ---
   'character.portraitAlt': 'Portrait de {name}',
   'character.viewProfile': 'Voir le profil',
   'character.profile': 'Profil',
@@ -3894,7 +4263,6 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'auth.chromaOption': 'Chroma {n}',
   'auth.noAccountPrompt': 'Nouveau dans le monde ?',
   'auth.haveAccountPrompt': 'Vous avez déjà un compte ?',
-
   'entities.items.conjured_bread.name': "Galette d'avoine invoquée",
   'entities.items.conjured_bread2.name': 'Pain noir invoqué',
   'entities.items.conjured_bread3.name': 'Gâteau au miel invoqué',
@@ -3955,7 +4323,12 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.items.elderwood_axe.name': 'Hache en Bois Ancien',
   'entities.items.goldleaf_sickle.name': "Faucille Feuille d'Or",
   'entities.items.sunpetal_sickle.name': 'Faucille Pétale de Soleil',
-  // v0.10.0 release fill (Fiesta / skin-select / NPC voices / chat channels / Brightwood Glade)
+  'entities.items.thorium_ore.name': 'Minerai de Thorium',
+  'entities.items.arcanite_bar.name': "Barre d'Arcanite",
+  'entities.items.ashwood_log.name': 'Bûche de Frêne Gris',
+  'entities.items.elderwood_log.name': 'Bûche de Sureau Ancien',
+  'entities.items.goldleaf_herb.name': "Herbe Feuille d'Or",
+  'entities.items.sunpetal_herb.name': 'Herbe Pétale de Soleil',
   'hud.core.chatChannels.add': 'Ajouter un canal de discussion',
   'hud.core.chatChannels.addTitle': 'Ajouter un canal',
   'hud.core.chatChannels.close': "Fermer l'onglet {channel}",
@@ -4128,6 +4501,20 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.compass.SE': 'SE',
   'hudChrome.compass.SW': 'SO',
   'hudChrome.compass.W': 'O',
+  'hudChrome.corpseHarvest.alreadyHarvested': 'Ce cadavre a déjà été dépecé.',
+  'hudChrome.corpseHarvest.componentAria': 'Prélever {component}',
+  'hudChrome.corpseHarvest.components.claw': 'Griffe',
+  'hudChrome.corpseHarvest.components.fang': 'Croc',
+  'hudChrome.corpseHarvest.components.gills': 'Branchies',
+  'hudChrome.corpseHarvest.components.hide': 'Peau',
+  'hudChrome.corpseHarvest.components.horn': 'Corne',
+  'hudChrome.corpseHarvest.components.silk': 'Soie',
+  'hudChrome.corpseHarvest.components.tusk': 'Défense',
+  'hudChrome.corpseHarvest.components.venomSac': 'Sac à venin',
+  'hudChrome.corpseHarvest.concentrateHint':
+    'Moins vous choisissez de composants, plus la qualité de chacun est élevée.',
+  'hudChrome.corpseHarvest.harvestButton': 'Dépecer',
+  'hudChrome.corpseHarvest.title': 'Dépeçage',
   'hudChrome.emoteEditor.done': 'Terminé',
   'hudChrome.emoteEditor.title': 'Emotes',
   'hudChrome.emotes.bow': "S'incliner",
@@ -4149,9 +4536,10 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.meters.perSecond': '{value}/s',
   'hudChrome.meters.perSecondRow': '{total} ({rate})',
   'hudChrome.meters.seconds': '{s} s',
-  'hudChrome.mobile.autorun': 'Course automatique',
   'hudChrome.mobile.haptics': 'Vibrations',
   'hudChrome.mobile.hapticsOff': 'Vibrations désactivées',
+  'hudChrome.mobile.hotbarPage': 'Techniques',
+  'hudChrome.mobile.hotbarPageAria': 'Afficher la série de techniques suivante',
   'hudChrome.mobile.jump': 'Sauter',
   'hudChrome.mobile.leaderboard': 'Classement',
   'hudChrome.mobile.nameplates': 'Noms',
@@ -4288,11 +4676,9 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.account.title': 'Compte',
   'hudChrome.account.walletSummary':
     "Vérifiez un portefeuille Solana pour afficher l'apparat de détenteur sur votre carte de joueur.",
-  // On-screen quest tracker (hudChrome.questTracker.*): collapsed count badge + header toggle hover hint.
   'hudChrome.questTracker.count': '({count})',
   'hudChrome.questTracker.collapseHint': 'Réduire le suivi des quêtes',
   'hudChrome.questTracker.expandHint': 'Développer le suivi des quêtes',
-  // Modular bag filtering controls (hudChrome.bags.*).
   'hudChrome.bags.filterGroupAria': 'Filtrer les sacs par catégorie',
   'hudChrome.bags.filterAll': 'Tous',
   'hudChrome.bags.filterWeapon': 'Armes',
@@ -4307,7 +4693,6 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.bags.searchPlaceholder': 'Rechercher des objets',
   'hudChrome.bags.searchAria': 'Rechercher les objets du sac par nom',
   'hudChrome.bags.noMatch': 'Aucun objet ne correspond à vos filtres.',
-  // v0.13.0 release i18n fill: bug report, chat window, character takeover, admin bug reports
   'character.inWorldHint': 'Déjà en jeu. Déconnectez-vous ailleurs, ou prenez le contrôle.',
   'character.takeOver': 'Prendre le contrôle',
   'character.takeOverConfirm':
@@ -4342,7 +4727,6 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.chatWindow.resetAction': 'Réinitialiser',
   'hudChrome.chatWindow.resize': 'Faites glisser pour redimensionner la fenêtre de discussion',
   'hudChrome.options.clickFeedback': 'Repère de clic',
-  // v0.13.0 adaptive browser-effects perf tier (PR #759)
   'hudChrome.options.browserEffects': 'Effets du navigateur',
   'hudChrome.options.browserEffectsAuto': 'Auto',
   'hudChrome.options.browserEffectsFull': 'Complets',
@@ -4350,10 +4734,9 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.browserEffectsMinimal': 'Minimaux',
   'hudChrome.options.browserEffectsNote':
     "Le mode automatique atténue les effets CSS lourds (flou, lueur, animation d'arrière-plan) selon votre navigateur et votre appareil. Réduisez-le manuellement si l'interface semble lente.",
-  // Guide (/guide) localization.
   'guide.bestiary.heading': 'Bestiaire',
   'guide.bestiary.intro':
-    'Les créatures du monde, regroupées par famille. Voici les adversaires que vous rencontrez à ciel ouvert. Les plus redoutables attendent, sans figurer ici, derrière les portes des donjons.',
+    "Les créatures du monde, regroupées par famille. Voici les adversaires ordinaires que vous croisez à ciel ouvert. Les ennemis d'élite et leurs seigneurs de guerre se tiennent à l'écart de ces pages, et les plus redoutables de tous attendent derrière les portes des donjons.",
   'guide.bestiary.levels': 'Niveaux {min} à {max}',
   'guide.bestiary.levelsSame': 'Niveau {min}',
   'guide.bestiary.rare': 'Rare',
@@ -4388,7 +4771,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.classPage.roleLabel': 'Se joue en',
   'guide.classPage.specsHeading': 'Spécialisations',
   'guide.combat.growBody':
-    "Chaque niveau vous rend plus robuste et débloque de nouvelles capacités, jusqu'au plafond de niveau {cap}. Les quêtes sont le moyen le plus rapide de progresser ; les donjons et l'exploration complètent le tableau.",
+    "Chaque niveau vous rend plus robuste et débloque de nouvelles capacités, jusqu'au plafond de niveau {cap}. Les quêtes sont le moyen le plus rapide de progresser ; la chasse, les donjons et les gouffres complètent le tableau.",
   'guide.combat.growTitle': 'Vous gagnez en puissance à chaque niveau',
   'guide.combat.hitBody':
     "Les attaques peuvent rater ou être esquivées, et celles de l'ennemi aussi, tandis que les sorts peuvent être purement et simplement résistés. C'est en combattant près de votre propre niveau que vos coups continuent de porter ; plus l'écart de niveau est grand, plus vous frappez dans le vide.",
@@ -4406,7 +4789,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.controls.actionHeader': 'Action',
   'guide.controls.arena': 'Arène',
   'guide.controls.controllerBody':
-    "Les manettes fonctionnent aussi, et leur prise en charge est activée par défaut. Le stick gauche déplace, le stick droit oriente la caméra, et les boutons de façade et de tranche couvrent vos capacités, le saut et les interactions. Ouvrez n'importe quelle fenêtre pour faire apparaître un pointeur à l'écran et naviguer dans les menus. Vous pouvez réassigner les boutons et régler la zone morte des sticks, la vitesse de la caméra, les vibrations et la visée inversée depuis les réglages de manette dans les options.",
+    "Les manettes fonctionnent aussi, et leur prise en charge est activée par défaut. Le stick gauche déplace, le stick droit oriente la caméra, et les boutons de façade et de tranche couvrent vos capacités, le saut et les interactions. Ouvrez une fenêtre comme vos sacs pour faire apparaître un pointeur à l'écran, et le menu du jeu se parcourt directement à la croix directionnelle et aux boutons de façade. Vous pouvez réassigner les boutons et régler la zone morte des sticks, la vitesse de la caméra, les vibrations et la visée inversée depuis les réglages de manette dans les options.",
   'guide.controls.controllerHeading': 'À la manette',
   'guide.controls.cycleFriendly': "Cibler l'allié suivant",
   'guide.controls.gameMenu': 'Ouvrir le menu et les options',
@@ -4415,16 +4798,16 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.controls.groupInterface': 'Interface',
   'guide.controls.groupMovement': 'Déplacement',
   'guide.controls.intro':
-    'Touches par défaut sur ordinateur. Chaque raccourci peut être modifié dans les options du jeu.',
+    'Touches par défaut sur ordinateur. Chaque raccourci peut être modifié dans les options du jeu, sauf Échap, qui ouvre toujours le menu du jeu, et un raccourci peut être une combinaison avec modificateur comme Maj+Z.',
   'guide.controls.keyHeader': 'Touche',
   'guide.controls.leaderboard': 'Classement',
   'guide.controls.mobileBody':
-    "Les commandes tactiles apparaissent automatiquement sur téléphones et tablettes : un joystick de déplacement à gauche, un glissement n'importe où à droite pour regarder, et des boutons à l'écran pour vos capacités et vos menus.",
+    "Les commandes tactiles apparaissent automatiquement sur téléphones et tablettes : un joystick de déplacement à gauche, un glissement n'importe où ailleurs pour regarder, un pincement à deux doigts pour zoomer la caméra, et des boutons à l'écran pour vos capacités et vos menus. Une petite flèche dans le coin supérieur gauche affiche ou masque les boutons de menu, et le bouton Plus qui s'y trouve renferme le reste de vos fenêtres.",
   'guide.controls.mobileHeading': 'Sur mobile',
   'guide.controls.talents': 'Talents',
   'guide.controls.targetFriendly': "Cibler l'allié le plus proche",
   'guide.delvesPage.affixesBody':
-    "Les plongées plus ardues tirent un modificateur qui change la façon dont se déroule la descente, des morts agités à l'air vicié en passant par une charpente qui menace de céder. Ils augmentent ensemble le danger et la récompense. Une plongée sur le thème de la crypte peut en tirer l'un de ceux-ci :",
+    "Les plongées plus ardues tirent un modificateur qui change la façon dont se déroule la descente, des morts agités à l'air vicié en passant par une charpente qui menace de céder. Ils augmentent ensemble le danger et la récompense. Chaque plongée puise dans les modificateurs qui conviennent à son thème ; à l'échelle du royaume, l'éventail ressemble à ceci :",
   'guide.delvesPage.affixesHeading': 'Modificateurs de plongée',
   'guide.delvesPage.affixesLabel': 'Modificateurs possibles',
   'guide.delvesPage.companionBody':
@@ -4456,7 +4839,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     "Une plongée est un petit donjon instancié conçu rien que pour vous et un allié au plus, une copie privée où nul ne peut vous déranger. Vous la lancez depuis un tableau tenu par un gardien de plongée dans le monde ouvert, vous y entrez, vous descendez en combattant à travers une poignée de salles et vous terminez sur un unique gardien. Les plongées sont rapides et faites pour être répétées, si bien qu'une plongée est une part de progression fiable chaque fois que le monde ouvert se tarit.",
   'guide.delvesPage.whatHeading': "Ce qu'est une plongée",
   'guide.delvesPage.whereBody':
-    "La première plongée, le Reliquaire effondré, s'ouvre à la colline du Reliquaire, dans la vallée de départ du Val d'Eastbrook. Frère Halven y tient le tableau, et il vous enverra en bas dès que vous serez prêt.",
+    "La première plongée, le Reliquaire effondré, s'ouvre à la colline du Reliquaire, dans la vallée de départ du Val d'Eastbrook. Frère Halven y tient le tableau, et il vous enverra en bas dès que vous serez prêt. Sa tournée ne s'arrête pas là : au-delà des Tertres des trolls, à la lisière nord du marais de Mirefen, le même gardien ouvre La Litanie noyée aux plongeurs qui ont trouvé leurs marques.",
   'guide.delvesPage.whereHeading': 'Où en trouver une',
   'guide.docTitle': '{page} - {brand}',
   'guide.dungeonsPage.bastionBody':
@@ -4516,11 +4899,11 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.faqPage.a1':
     "Oui. Tout le jeu est gratuit jusqu'au niveau maximum, et le code source est ouvert sur GitHub.",
   'guide.faqPage.a2':
-    "Non. Le jeu est entièrement jouable sans cela. Le jeton communautaire optionnel ne débloque que des fioritures cosmétiques et n'affecte jamais la puissance ni la progression.",
+    "Non. Le jeu est entièrement jouable sans cela. Le jeton communautaire optionnel n'ajoute que des fioritures cosmétiques et une part de la cagnotte des récompenses quotidiennes, et il n'affecte jamais la puissance ni la progression.",
   'guide.faqPage.a3':
     'Oui. Le jeu tourne dans un navigateur mobile avec des commandes tactiles, et il existe également un lanceur pour ordinateur.',
   'guide.faqPage.a4':
-    'Oui. Il existe un mode solo hors ligne instantané, et le monde en ligne est entièrement réalisable en solo, hormis les donjons et le raid.',
+    'Oui. Il existe un mode solo hors ligne instantané, et le monde en ligne est entièrement réalisable en solo, hormis les donjons, le raid et le boss de monde.',
   'guide.faqPage.a5':
     'Neuf, couvrant les rôles classiques de tank, de soigneur et de dégâts, chacune avec son système de ressource (rage, mana ou énergie) et ses capacités emblématiques.',
   'guide.faqPage.a6':
@@ -4596,7 +4979,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.home.faq.a1':
     "Oui. Tout le jeu est gratuit jusqu'au niveau maximum, et il est open source sur GitHub.",
   'guide.home.faq.a2':
-    "Non. Le jeu est entièrement jouable sans cela. Le jeton communautaire optionnel ne débloque que des fioritures cosmétiques et n'affecte jamais la puissance.",
+    "Non. Le jeu est entièrement jouable sans cela. Le jeton communautaire optionnel n'ajoute que des fioritures cosmétiques et une part de la cagnotte des récompenses quotidiennes, et il n'affecte jamais la puissance.",
   'guide.home.faq.a3':
     'Oui. Il existe un mode solo instantané dans votre navigateur, en plus du monde en ligne partagé.',
   'guide.home.faq.a4':
@@ -4648,7 +5031,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.howToPlay.basicsHeading': 'Les bases',
   'guide.howToPlay.controlsLink': 'Voir la référence complète des commandes',
   'guide.howToPlay.deathBody':
-    "Si vous tombez, vous libérez votre esprit et ressuscitez au cimetière le plus proche, à pleins points de vie, puis regagnez l'endroit où vous étiez. Aucune expérience n'est perdue.",
+    "Si vous tombez, votre corps reste là où il est tombé et vous vous relevez sous forme d'esprit au cimetière le plus proche. Regagnez votre corps avec votre esprit pour ressusciter sur place, sans pénalité, ou acceptez le Veilleur pâle au cimetière pour un relèvement immédiat au prix d'une faiblesse passagère. Les tout nouveaux héros échappent entièrement à cette faiblesse, et rien de ce que vous possédez ou avez gagné n'est jamais perdu.",
   'guide.howToPlay.deathTitle': "La mort n'est pas la fin",
   'guide.howToPlay.firstHeading': 'Vos quinze premières minutes',
   'guide.howToPlay.groupingBody':
@@ -4663,7 +5046,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     "Acceptez les quêtes des personnages arborant un marqueur au-dessus de la tête, accomplissez l'objectif et rendez-les pour gagner expérience, pièces et équipement. Le suivi à l'écran garde vos objectifs en vue.",
   'guide.howToPlay.questsTitle': 'Quêtes',
   'guide.howToPlay.reassure':
-    'Les talents se débloquent au niveau 10 et peuvent être réinitialisés à tout moment, donc vos premiers choix ne sont jamais définitifs. Expérimentez librement.',
+    'Les talents se débloquent au niveau 10 et peuvent être réinitialisés à tout moment hors combat, donc vos premiers choix ne sont jamais définitifs. Expérimentez librement.',
   'guide.howToPlay.resourcesBody':
     "Les sorts et capacités coûtent une ressource. Les guerriers accumulent de la Rage en combattant, les voleurs dépensent de l'Énergie qui se régénère d'elle-même, et tous les autres lancent leurs sorts depuis une réserve de Mana.",
   'guide.howToPlay.resourcesTitle': 'Ressources',
@@ -4671,7 +5054,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     "Choisissez une classe et une apparence, donnez un nom à votre héros, et entrez dans le monde. Vous pourrez créer d'autres personnages plus tard.",
   'guide.howToPlay.step1Title': 'Créez un personnage',
   'guide.howToPlay.step2Body':
-    'Le maréchal Redbrook vous attend dans la ville de départ. Parlez-lui et acceptez Les loups à nos portes.',
+    "Le maréchal Redbrook vous attend dans la ville de départ avec Les loups à nos portes, et le contremaître Odell, tout près, a lui aussi du travail. Parlez à l'un ou à l'autre pour accepter votre première quête.",
   'guide.howToPlay.step2Title': 'Trouvez votre première quête',
   'guide.howToPlay.step3Body':
     "Déplacez-vous avec Z, Q, S, D. Maintenez le bouton droit de la souris et faites glisser pour regarder autour de vous. C'est presque tout.",
@@ -4716,7 +5099,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.notFound.title': 'Page introuvable',
   'guide.placeholder.note': 'Cette partie du guide arrive bientôt.',
   'guide.questsPage.acceptBody':
-    'Les personnages arborant un marqueur au-dessus de la tête ont du travail pour vous. Parlez-leur pour accepter une quête. Votre toute première est Les loups à nos portes, donnée par le maréchal Redbrook à Eastbrook.',
+    "Les personnages arborant un marqueur au-dessus de la tête ont du travail pour vous. Parlez-leur pour accepter une quête. À Eastbrook, le maréchal Redbrook vous attend avec Les loups à nos portes, l'une des premières quêtes que vous puissiez accepter.",
   'guide.questsPage.acceptTitle': 'Trouver et accepter',
   'guide.questsPage.heading': 'Quêtes',
   'guide.questsPage.intro':
@@ -4725,7 +5108,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     "Abattez certains ennemis, récoltez des objets ou interagissez avec quelque chose dans le monde. Le suivi à l'écran compte votre progression au fur et à mesure. Si vous changez d'avis, vous pouvez abandonner une quête depuis votre journal de quêtes et la reprendre plus tard auprès de son donneur.",
   'guide.questsPage.objectivesTitle': 'Objectifs',
   'guide.questsPage.partyBody':
-    'Les membres du groupe à proximité partagent le crédit des éliminations et des objectifs, donc partir en quête ensemble est plus rapide, jamais plus lent. Vous pouvez aussi partager une quête avec votre groupe : publiez-la dans le chat sous forme de lien cliquable avec la commande /share, et tout membre à proximité qui y est éligible peut accepter la même quête en un clic.',
+    'Les membres du groupe à proximité partagent le crédit des éliminations et des objectifs, donc partir en quête ensemble est plus rapide, jamais plus lent. Vous pouvez aussi partager une quête avec votre groupe : publiez-la dans le chat sous forme de lien cliquable avec la commande /share, et tout membre qui y est éligible peut accepter la même quête en un clic.',
   'guide.questsPage.partyTitle': 'Partir en quête en groupe',
   'guide.questsPage.soloNote':
     "L'histoire principale se joue en solo jusqu'au final de chaque chapitre, qui est un donjon à cinq joueurs.",
@@ -4863,13 +5246,13 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.arenaPage.augmentsNote':
     "Les augmentations et bonus ne durent que le temps de la partie. Ils servent à des compositions ludiques et improvisées, pas à une puissance durable, pour que personne n'achète sa victoire.",
   'guide.arenaPage.coliseumBody':
-    "Le Colisée est l'arène du royaume, où vous affrontez d'autres joueurs en matchs classés, en un contre un ou en deux contre deux. Chaque catégorie conserve son propre classement, si bien qu'une victoire vous fait grimper dans cette échelle, à la vue de tout le royaume.",
+    "Le Colisée est l'arène du royaume, où vous affrontez d'autres joueurs en matchs classés, en un contre un ou en deux contre deux. Chaque catégorie conserve son propre classement, si bien qu'une victoire vous fait grimper dans cette échelle, à la vue de tout le royaume. Ouvrez la fenêtre d'Arène pour vous inscrire à une catégorie, seul ou avec votre partenaire.",
   'guide.arenaPage.coliseumHeading': 'Le Colisée de cendres',
   'guide.arenaPage.duelsBody':
     "Défiez en duel amical n'importe quel joueur que vous croisez. Rien n'est en jeu, sinon la fierté: c'est donc le moyen le plus simple d'apprendre un affrontement ou de régler un différend bon enfant.",
   'guide.arenaPage.duelsHeading': 'Duels',
   'guide.arenaPage.fiestaBody':
-    "Fiesta est un mode rapide à deux contre deux qui se joue en manches courtes. Entre les manches, vous draftez des augmentations, des bonus instantanés qui remodèlent votre panoplie à la volée, si bien qu'aucune partie ne se ressemble vraiment.",
+    "Fiesta est une bagarre rapide à deux contre deux qui se joue en un seul match continu, où chaque combattant est mis sur un pied d'égalité. À mesure que le combat avance, vous draftez des augmentations, des bonus instantanés qui remodèlent votre panoplie à la volée, si bien qu'aucune partie ne se ressemble vraiment.",
   'guide.arenaPage.fiestaHeading': 'Fiesta deux contre deux',
   'guide.arenaPage.heading': 'Arène et JcJ',
   'guide.arenaPage.intro':
@@ -4893,7 +5276,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.chooser.style': 'Style',
   'guide.classPage.fullKitHeading': 'La panoplie complète',
   'guide.classPage.fullKitNote':
-    "Toutes les capacités que cette classe peut apprendre, dans l'ordre où elles se débloquent. Ce sont les talents qui décident lesquelles portent votre build.",
+    "La panoplie que cette classe apprend en montant en niveau, dans l'ordre où elle se débloque. Les talents accordent quelques capacités de plus et décident lesquelles portent votre build.",
   'guide.classPage.masteryLabel': 'Maîtrise',
   'guide.classPage.petsHeading': 'Démons',
   'guide.classPage.petsNote':
@@ -4901,7 +5284,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.dungeonsPage.levelBand': 'Niveaux {min} à {max}',
   'guide.dungeonsPage.partySize': '{n} joueurs',
   'guide.faqPage.a10':
-    "Le plafond est le niveau {cap}. Ensuite, vous parcourez les donjons à cinq joueurs et le raid à dix joueurs, courez après un meilleur équipement et vous mesurez aux autres dans l'arène.",
+    "Le plafond est le niveau {cap}. Ensuite, vous parcourez les donjons à cinq joueurs et le raid à dix joueurs, les affrontez de nouveau en mode héroïque pour un meilleur butin, faites face au boss de monde quand il se dresse, vous mesurez aux autres dans l'arène, plongez dans les gouffres avec un compagnon à vos côtés, et poursuivez les hauts faits du Livre des hauts faits pour grimper au classement du royaume.",
   'guide.faqPage.a11':
     "Invitez dans votre groupe n'importe qui que vous croisez, demandez dans le canal de discussion, ou faites équipe à l'entrée d'un donjon. La majeure partie du monde se joue en solo: se grouper est un choix, pas une obligation.",
   'guide.faqPage.a9':
@@ -4981,17 +5364,17 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.tag.solo': 'Adaptée au solo',
   'guide.talentsPage.heading': 'Talents et spécialisations',
   'guide.talentsPage.howBody':
-    "Les talents se débloquent au niveau 10, et vous continuez de gagner des points en grimpant jusqu'au plafond. Vous les dépensez dans le panneau de talents de votre classe, et vous pouvez enregistrer plusieurs configurations pour passer de l'une à l'autre.",
+    "Les talents se débloquent au niveau 10, et vous continuez de gagner des points en grimpant jusqu'au plafond. Vous les dépensez dans le panneau de talents de votre classe, où des rangées plus profondes s'ouvrent à mesure que vous investissez et montez en niveau, et vous pouvez enregistrer plusieurs configurations pour passer d'un build à l'autre.",
   'guide.talentsPage.howHeading': 'Comment ils fonctionnent',
   'guide.talentsPage.intro':
     'Les talents sont ce qui vous permet de vous approprier une classe. Ils sont facultatifs, indulgents et faciles à modifier, pour que vous puissiez expérimenter sans crainte.',
   'guide.talentsPage.resetNote':
-    "Vous pouvez réinitialiser vos talents à tout moment hors combat : un choix précoce n'est donc jamais un piège. Essayez des choses, voyez ce qui vous plaît, et changez d'avis librement.",
+    "Vous pouvez réinitialiser vos talents à tout moment hors combat et hors match d'arène : un choix précoce n'est donc jamais un piège. Essayez des choses, voyez ce qui vous plaît, et changez d'avis librement.",
   'guide.talentsPage.resetTitle': "Rien n'est définitif",
   'guide.talentsPage.shareNote':
     'Une configuration terminée peut être copiée en un court code partageable et transmise à un ami, qui le colle directement dans son propre panneau de talents pour la charger.',
   'guide.talentsPage.specsBody':
-    'Chaque classe possède une poignée de spécialisations, chacune avec son propre rôle et une orientation emblématique. Voici à quoi elles ressemblent toutes. Ouvrez une classe pour voir sa panoplie complète.',
+    'Chaque classe possède une poignée de spécialisations, chacune avec son propre rôle et une orientation emblématique. En choisir une dans le panneau de talents accorde une capacité emblématique et une maîtrise durable qui lui est propre. Voici à quoi elles ressemblent toutes. Ouvrez une classe pour voir sa panoplie complète.',
   'guide.talentsPage.specsHeading': 'Spécialisations par classe',
   'guide.talentsPage.whatBody':
     "En gagnant des niveaux, vous obtenez des points de talent à dépenser pour de petites améliorations permanentes de vos capacités et de vos caractéristiques. Ils façonnent le ressenti d'une classe, l'orientant vers plus de dégâts, une défense plus solide ou des soins plus puissants.",
@@ -5002,10 +5385,10 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     "Toutes les classes peuvent tenir leur rang et atteindre le plafond. Choisissez l'archétype qui vous plaît, pas celui qu'un autre déclare le meilleur.",
   'guide.wishPage.i1Title': 'Vous ne pouvez pas vous tromper de classe',
   'guide.wishPage.i2Body':
-    "Quand vous tombez, vous libérez votre esprit et ressuscitez au cimetière le plus proche, puis revenez sur les lieux. Aucune expérience n'est perdue : vous pouvez donc prendre des risques et apprendre sans crainte.",
+    "Quand vous tombez, vous vous relevez sous forme d'esprit au cimetière le plus proche. Regagnez votre corps pour ressusciter sans frais, ou acceptez le relèvement immédiat du Veilleur pâle et portez une faiblesse éphémère en échange de la commodité. Ni expérience, ni équipement, ni or ne sont jamais perdus : vous pouvez donc prendre des risques et apprendre sans crainte.",
   'guide.wishPage.i2Title': 'Mourir ne coûte presque rien',
   'guide.wishPage.i3Body':
-    'Ils se débloquent au niveau 10 et se réinitialisent quand vous voulez: vos premiers choix ne sont donc jamais définitifs.',
+    'Ils se débloquent au niveau 10 et se réinitialisent quand vous voulez, hors combat, si bien que vos premiers choix ne sont jamais définitifs.',
   'guide.wishPage.i3Title': 'Les talents ne sont pas un piège',
   'guide.wishPage.i4Body':
     'Les quêtes sont le moyen le plus rapide de progresser et elles vous mènent à travers le monde. Quand vous ne savez pas où aller, cherchez le prochain marqueur.',
@@ -5029,7 +5412,6 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     "Trois zones, du sud au nord, chacune un cran plus haut en niveau. Suivez le fil des quêtes et la contrée vous porte de la vallée jusqu'aux sommets.",
   'guide.worldPage.places': 'Lieux notables',
   'guide.worldPage.residents': 'Qui vous croiserez',
-  // guide.* enrichment fill (lore, gear, social, stats, economy, progression)
   'guide.arenaPage.powerupsBody':
     "Des orbes lumineux tombent aussi dans l'arène en pleine bataille, libres pour celui qui les atteint en premier. Ils sont volontairement démesurés et ne durent qu'un court instant : Démon de vitesse pour un éclair de cadence aveuglante, Colosse pour enfler en géant pataud, Bottes lunaires pour un bond rebondissant en gravité réduite, et Berserker pour un soudain accès de furie.",
   'guide.arenaPage.powerupsTitle': "Les bonus de l'arène",
@@ -5043,7 +5425,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     "La manche d'ouverture : des bonus simples sur une seule caractéristique qui affinent les bases de votre classe.",
   'guide.arenaPage.waveSilverTitle': 'Argent',
   'guide.arenaPage.wavesBody':
-    "Chaque manche d'une Fiesta vous offre un nouveau choix, et les choix se font plus audacieux au fil du match. Vous construisez d'une manche à l'autre, en retenant à chaque fois l'une des quelques options proposées et en la gardant pour le reste de la partie.",
+    "Un match de Fiesta vous distribue de nouveaux choix au fil du jeu, et les choix se font plus audacieux à mesure que le combat se prolonge. Vous construisez d'une vague à l'autre, en retenant à chaque fois l'une des quelques options proposées et en la gardant pour le reste du match.",
   'guide.arenaPage.wavesTitle': 'Les augmentations arrivent par vagues',
   'guide.bestiary.flavor.gravecaller_cultist':
     "Des serviteurs en robe du culte de la mort dont l'œuvre souille les tombes, du Val jusqu'aux sommets. Là où ils se réunissent, les morts ne reposent pas.",
@@ -5057,12 +5439,12 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     "Un élémentaire de tempête doté d'épaules, qui arpente les crêtes lointaines au-dessus de Stormcrag, porteur d'un éclat de cœur qui vaut bien d'affronter la foudre.",
   'guide.bestiary.notedLabel': 'À noter',
   'guide.combat.ccBody':
-    "Le contrôle de foule est un type particulier d'affaiblissement qui limite ce qu'une cible peut faire : étourdissements, immobilisations et ralentissements, silences qui empêchent de lancer des sorts, désarmements, peurs, et transformations qui rendent un adversaire inoffensif un instant. Certaines, comme les immobilisations, les peurs et les transformations, perdent leur emprise quand on les réapplique trop vite, et ne peuvent donc être enchaînées indéfiniment.",
+    "Le contrôle de foule est un type particulier d'affaiblissement qui limite ce qu'une cible peut faire : étourdissements, immobilisations et ralentissements, silences qui empêchent de lancer des sorts, désarmements, peurs, et transformations qui rendent un adversaire inoffensif un instant. Contre d'autres joueurs, le contrôle s'émousse à la répétition : un même type réappliqué trop vite s'affaiblit puis échoue complètement, et un étourdissement qui ouvre depuis la dissimulation est compté à part des étourdissements qui suivent, si bien que nul ne peut être enchaîné sans défense éternellement. Les créatures du monde n'ont pas cette rancune : le contrôle ne faiblit jamais à force de répétition contre elles, même si nombre des adversaires les plus puissants, les élites nommées et les boss les plus coriaces parmi eux, ne peuvent pas être contrôlés du tout.",
   'guide.combat.deathBody':
-    "Si vos points de vie tombent à zéro, vous êtes mis à terre. Libérez votre esprit pour ressusciter au cimetière le plus proche, à pleins points de vie, puis revenez sur les lieux : une mort vous coûte un peu de temps, pas votre progression. Entre deux combats, asseyez-vous pour manger et boire afin d'attaquer le suivant à pleine puissance.",
+    "Si vos points de vie tombent à zéro, vous êtes mis à terre là où vous vous tenez, et votre corps y reste. Libérez votre esprit et vous vous relevez sous forme d'esprit au cimetière le plus proche : plus vif sur ses pieds que les vivants, hors de portée de vos ennemis, mais incapable de combattre, de piller ou de parler à quiconque, hormis le Veilleur pâle qui plane au-dessus des pierres. De là, vous choisissez. Regagnez votre corps avec votre esprit et vous ressuscitez sur place, une partie de vos points de vie et de votre mana rendue, sans la moindre pénalité. Ou acceptez du Veilleur pâle un relèvement immédiat là où vous vous tenez, au prix du Glas du Veilleur : un affaiblissement temporaire de tout ce que vous êtes, qui dure d'autant plus longtemps que vous êtes aguerri, et qui épargne entièrement les personnages tout neufs. Tombez dans un donjon et votre esprit attend au cimetière à l'extérieur ; ramenez votre esprit par la porte et vous ressuscitez à l'entrée. Les gouffres font exception : si vous y tombez, vous êtes simplement remis sur pied à l'entrée du gouffre, même si une seconde chute met fin à l'expédition. Quelle que soit la voie, vous ne perdez ni expérience, ni équipement, ni or. Entre deux combats, asseyez-vous pour manger et boire afin d'attaquer le suivant à pleine puissance.",
   'guide.combat.deathTitle': 'Quand vous tombez',
   'guide.combat.effectsBody':
-    "Beaucoup de capacités appliquent un effet qui persiste. Les bons (les améliorations) augmentent vos caractéristiques, vous protègent ou vous soignent un peu à la fois ; les néfastes (les affaiblissements) entament vos points de vie par des dégâts dans la durée ou vous affaiblissent. Surveillez les petites icônes près de votre barre d'action pour voir ce qui agit sur vous et combien de temps cela dure.",
+    "Beaucoup de capacités appliquent un effet qui persiste. Les bons (les améliorations) augmentent vos caractéristiques, vous protègent ou vous soignent un peu à la fois ; les néfastes (les affaiblissements) entament vos points de vie par des dégâts dans la durée ou vous affaiblissent. Surveillez les petites icônes dans le coin supérieur de l'écran, à côté de la minicarte, pour voir ce qui agit sur vous et combien de temps cela dure.",
   'guide.combat.effectsTitle': 'Améliorations, affaiblissements et contrôle de foule',
   'guide.dungeonsPage.cryptLeadBody':
     "Tout en haut des sommets, à l'écart du combat principal, dort un mystère plus froid. De vieilles tombes portent une couronne qu'aucune chronique ne se rappelle, et les morts qui les gardent servaient jadis un roi oublié. Lisez leurs stèles, rassemblez les clés de voûte qu'ils ont conservées, et vous pourrez desceller un tombeau que trois âmes fidèles sont mortes pour tenir clos : l'épreuve optionnelle qui ouvre au royaume son raid à dix joueurs, pour qui suit les indices jusqu'au bout.",
@@ -5071,7 +5453,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     "Le temple a sa propre légende, plus ancienne que le culte que vous traquez ailleurs. Sur la rive du Glimmermere, un lac de montagne qui boit le clair de lune et rend les noyés, un veilleur solitaire garde une porte de lumière pâle. Sous la surface, un escalier de pierre froide y descend. Les gens qui ont sombré là ne se sont pas noyés par accident : c'était le Chœur pâle, qui s'est enfoncé en pleine adoration sans jamais cesser de chanter. Les anciens gardiens ont gravé un seul avertissement dans les rochers avant que l'eau ne les emporte, une prière à ce qu'ils appelaient la Lune noyée, qu'une main plus ferme a complété de deux mots en dessous : elle ne fait que dormir.",
   'guide.dungeonsPage.templeLoreTitle': 'Le Temple noyé, un peu plus profond',
   'guide.economy.buyingBody':
-    "Tenez-vous près d'un marchand pour ouvrir sa fenêtre. Vous pouvez acheter tout ce qu'il vend si vous en avez les moyens, et revendre contre des pièces la plupart du contenu de vos sacs. Si vous vendez quelque chose par erreur, le marchand garde vos ventes récentes pour que vous puissiez les racheter.",
+    "Adressez-vous à un marchand et choisissez de parcourir ses marchandises : sa boutique s'ouvre sur trois onglets, Acheter, Vendre et Rachat. Acheter contient tout ce qu'il tient en stock, à vous si vous en avez les moyens. Vendre liste ce que vos sacs contiennent et qu'il vous paiera, et vendre une pièce qui porte sa propre qualité tirée au sort vous demande d'abord confirmation, pour qu'un exemplaire précieux ne vous échappe jamais par mégarde. Si vous vous séparez d'un objet à regret, l'onglet Rachat conserve vos ventes récentes pour que vous puissiez les racheter au prix qu'on vous en a donné.",
   'guide.economy.buyingTitle': 'Acheter et vendre',
   'guide.economy.coinBody':
     "L'argent se présente en trois pièces. Cent pièces de cuivre font une pièce d'argent, et cent pièces d'argent font une pièce d'or, si bien que votre bourse se remplit d'abord avec la plus petite pièce. Vous en gagnez grâce aux récompenses de quête, au butin des ennemis vaincus, et en vendant ce dont vous n'avez plus besoin.",
@@ -5079,10 +5461,10 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.economy.intro':
     "L'argent fait tourner le monde entier : il achète votre équipement, vos provisions et votre matériel de voyage, et passe de main en main entre joueurs. Vous ramassez tout cela rien qu'en jouant, alors voyez cette page comme une carte d'où vient votre argent et où il va.",
   'guide.economy.junkBody':
-    "Les butins dont vous n'avez aucun usage se vendent quand même à n'importe quel marchand, alors videz vos sacs chaque fois que vous passez en ville plutôt que de les laisser se remplir. Les bricoles vraiment sans valeur peuvent aussi être jetées d'un coup pour faire de la place.",
+    "Les butins dont vous n'avez aucun usage se vendent quand même à n'importe quel marchand, alors videz vos sacs chaque fois que vous passez en ville plutôt que de les laisser se remplir. L'onglet Vendre du marchand comporte même un bouton qui écoule d'un seul clic toutes les babioles de qualité Médiocre. Les bricoles vraiment sans valeur peuvent aussi être jetées purement et simplement pour faire de la place.",
   'guide.economy.junkTitle': 'Faire le tri du superflu',
   'guide.economy.marketBody':
-    "Le Marchand tient le Marché mondial, une bourse animée par les joueurs où vous achetez et vendez avec des gens que vous ne rencontrerez peut-être jamais. Parlez au Marchand pour l'ouvrir. Le Marchand y tient aussi en permanence un stock de ses propres marchandises, si bien qu'il y a toujours quelque chose à acheter, même quand aucun autre joueur n'a rien mis en vente.",
+    "Le Marchand tient le Marché mondial, une bourse animée par les joueurs où vous achetez et vendez avec des gens que vous ne rencontrerez peut-être jamais. Parlez au Marchand à Eastbrook, ou au commissaire-priseur Voss là-haut à Highwatch, pour l'ouvrir : les deux gardiens desservent le même marché commun. Le Marchand y tient aussi en permanence un stock de ses propres marchandises, si bien qu'il y a toujours quelque chose à acheter, même quand aucun autre joueur n'a rien mis en vente.",
   'guide.economy.marketBrowse':
     'Parcourir : faites défiler les annonces ou cherchez par nom pour trouver ce qui est à vendre. Chaque annonce indique la marchandise, le vendeur et le prix demandé pour la pile entière.',
   'guide.economy.marketCollect':
@@ -5093,8 +5475,8 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     "Le prix ne dépend que de vous. Annoncer un peu en dessous des autres tend à vendre plus vite, tandis qu'un prix trop élevé peut rester sans preneur. Parcourez d'abord le marché pour voir le cours du moment avant de publier.",
   'guide.economy.marketTitle': 'Le Marché mondial',
   'guide.economy.marksBody':
-    "L'or n'est pas la seule chose que vous mettez de côté. Les plongées versent des Marques de plongée, une monnaie distincte que vous ne dépensez qu'auprès du gardien de plongée, pour les améliorations de votre compagne et un équipement introuvable ailleurs. Elles ne se mêlent jamais à votre or.",
-  'guide.economy.marksTitle': 'Une seconde monnaie : les Marques de plongée',
+    "L'or n'est pas la seule chose que vous mettez en banque. Les plongées rapportent des Marques de plongée, dépensées uniquement auprès du gardien de plongée pour renforcer votre compagne et obtenir un équipement introuvable ailleurs. Les donjons héroïques laissent des Marques héroïques sur le boss final, dépensées auprès de l'intendant héroïque à Highwatch pour des bijoux que nul autre coin du royaume ne vend. Ni les unes ni les autres ne se mêlent jamais à votre or.",
+  'guide.economy.marksTitle': "Les Marques : les monnaies au-delà de l'or",
   'guide.economy.tradeBody':
     "Vous pouvez échanger en face à face avec n'importe qui se tenant près de vous. Chacun place objets et pièces dans une fenêtre partagée, et l'échange ne se fait qu'une fois que vous l'avez tous deux confirmé, de sorte que personne ne peut se faire avoir. C'est la manière simple de remettre un butin à un ami ou de conclure un marché.",
   'guide.economy.tradeTitle': 'Échanger avec les autres joueurs',
@@ -5122,7 +5504,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     "Il y a deux collections cosmétiques à réunir. La plupart des classes disposent de plusieurs apparences alternatives, une nouvelle lecture de l'allure de la classe qui n'appartient qu'à vous. À leurs côtés se trouvent les chromas : des palettes bicolores nommées qui repeignent entièrement une apparence, des métaux sobres aux vives couleurs impériales.",
   'guide.gear.cosmeticsTitle': 'Allure et cosmétiques',
   'guide.gear.fishingBody':
-    "La pêche est une parenthèse paisible. Équipez une canne, lancez votre ligne en eau libre et remontez ce qui mord. Vous attrapez surtout des poissons qui sont de la nourriture prête à manger, parfois un déchet à revendre pour quelques pièces, et de temps à autre une prise rare convoitée. Ce que vous trouvez dépend de l'eau où vous pêchez.",
+    "La pêche est une parenthèse paisible. Munissez-vous d'une canne à pêche, utilisez-la au bord d'une eau libre et remontez ce qui mord. Vous attrapez surtout des poissons qui sont de la nourriture prête à manger, parfois un déchet à revendre pour quelques pièces, et de temps à autre une prise rare convoitée. Ce que vous trouvez dépend de l'eau où vous pêchez.",
   'guide.gear.fishingFood':
     'Les poissons que vous remontez sont de la nourriture : mangez-en un pendant que vous êtes assis à vous reposer et il rend des points de vie, les meilleurs poissons venant des eaux plus froides et plus profondes du nord. Une ligne dans le lac est une façon tranquille de garder votre sac garni entre deux combats.',
   'guide.gear.fishingRare':
@@ -5131,7 +5513,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.gear.intro':
     "L'équipement, ce sont les pièces que porte votre personnage et les objets que vous transportez. Un meilleur équipement est la voie la plus sûre vers la puissance, et vous en ramassez l'essentiel rien qu'en jouant.",
   'guide.gear.itemLevelBody':
-    "Si vous voulez un moyen rapide de comparer deux pièces, activez Afficher le niveau d'objet dans les options. Chaque arme et chaque pièce d'armure affiche alors un niveau d'objet, un chiffre unique indiquant grossièrement sa puissance selon sa provenance, pour que vous voyiez d'un coup d'œil quelle amélioration pèse le plus, même d'un emplacement à l'autre.",
+    "Si vous voulez un moyen rapide de comparer deux pièces, activez Afficher le niveau d'objet dans les options. L'équipement gagné dans le monde, auprès des ennemis et des quêtes, affiche alors un niveau d'objet, un chiffre unique indiquant grossièrement sa puissance selon sa provenance, pour que vous voyiez d'un coup d'œil quelle amélioration pèse le plus, même d'un emplacement à l'autre. Les pièces sans une telle origine, comme les articles de base des marchands et l'équipement de départ, n'affichent aucun niveau d'objet : un chiffre absent est donc normal, pas un défaut.",
   'guide.gear.qualityBody':
     "Chaque objet a une qualité, et son nom est coloré en conséquence pour que vous lisiez sa valeur d'un coup d'œil. Du plus commun au plus convoité :",
   'guide.gear.qualityCommon': 'Commun',
@@ -5144,7 +5526,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.gear.qualityTitle': "La qualité, d'un coup d'œil",
   'guide.gear.qualityUncommon': 'Inhabituel',
   'guide.gear.setsBody':
-    "L'armure la plus rare se présente en familles assorties, plusieurs pièces taillées pour s'accorder et combattre comme un tout. Portez-en assez d'une même famille à la fois et la tenue s'éveille, accordant des bonus qui s'ajoutent aux caractéristiques propres de chaque pièce, et plus vous en portez, plus elle se renforce. Elles tombent dans le contenu de groupe le plus exigeant près du niveau maximum, alors courir après une tenue complète est un objectif de fin de jeu classique.",
+    "Certaines armures se présentent en familles assorties, plusieurs pièces taillées pour s'accorder et combattre comme un tout. Portez-en assez d'une même famille à la fois et la tenue s'éveille, accordant des bonus qui s'ajoutent aux caractéristiques propres de chaque pièce, et plus vous en portez, plus elle se renforce. Quelques-unes de ces familles apparaissent comme des butins convoités au fil de votre montée en niveau ; les plus belles proviennent du contenu de groupe le plus exigeant près du niveau maximum, si bien que courir après une tenue complète est un objectif de fin de jeu classique.",
   'guide.gear.setsTitle': 'Tenues et bonus de tenue',
   'guide.gear.slotChest': 'Torse',
   'guide.gear.slotFeet': 'Pieds',
@@ -5155,10 +5537,10 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.gear.slotShoulder': 'Épaules',
   'guide.gear.slotWaist': 'Taille',
   'guide.gear.slotsBody':
-    "Vous disposez d'un emplacement d'arme et de sept emplacements d'armure. Chaque classe ne peut manier que certaines armes et ne porte de l'armure que jusqu'à son propre poids, tissu, cuir ou mailles, si bien que les améliorations qui vous conviennent sont celles faites pour votre classe. Dans ces limites, garnissez chaque emplacement de la meilleure pièce que vous trouvez.",
+    "Vous disposez d'un emplacement d'arme, de sept emplacements d'armure et de trois emplacements de bijoux : un cou et deux doigts. Chaque classe ne peut manier que certaines armes et ne porte de l'armure que jusqu'à son propre poids, tissu, cuir ou mailles, si bien que les améliorations qui vous conviennent sont celles faites pour votre classe. Les bijoux ne pèsent rien du tout : n'importe quelle classe porte ce qu'elle gagne. Dans ces limites, garnissez chaque emplacement de la meilleure pièce que vous trouvez.",
   'guide.gear.slotsTitle': 'Ce que vous pouvez équiper',
   'guide.gear.sourcesBody':
-    "La plupart de vos premières améliorations sont des récompenses de quête, alors mieux vaut terminer les quêtes que de farmer. Les ennemis lâchent de l'équipement quand vous les vainquez, les marchands en ville vendent de bonnes bases, et le marché des joueurs vous permet d'acheter auprès d'autres aventuriers.",
+    "La plupart de vos premières améliorations sont des récompenses de quête, alors mieux vaut terminer les quêtes que de farmer. Les ennemis lâchent de l'équipement quand vous les vainquez, les marchands en ville vendent de bonnes bases, les artisans transforment les matériaux récoltés en pièces à porter, et le marché des joueurs vous permet d'acheter auprès d'autres aventuriers. Au sommet de la progression, deux monnaies de marques achètent un équipement introuvable ailleurs : les Marques de plongée auprès du gardien de plongée, et les Marques héroïques auprès de l'intendant héroïque.",
   'guide.gear.sourcesTitle': "D'où vient l'équipement",
   'guide.gear.upgradeBody':
     "Remplacer une vieille pièce par une amélioration toute fraîche vous sert davantage que de jouer à la perfection dans un équipement que vous avez dépassé. Quand quelque chose de meilleur tombe ou qu'une quête vous le propose, prenez-le. Ne gardez pas vos bons objets pour plus tard.",
@@ -5194,7 +5576,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.progression.capBody':
     "Chaque niveau vous rend plus robuste et vous apporte de nouvelles capacités, jusqu'au plafond du niveau {cap}.",
   'guide.progression.capJourneyBody':
-    "Le niveau {cap} est le plafond, la fin des niveaux mais pas de la progression. À partir de là, vous courez les donjons et le raid, chassez un meilleur équipement et vous mesurez dans l'arène.",
+    "Le niveau {cap} est le plafond, la fin des niveaux mais pas de la progression. À partir de là, vous parcourez les donjons et le raid en normal et en héroïque, faites face au boss de monde quand il se dresse, courez après un meilleur équipement et vous mesurez dans l'arène.",
   'guide.progression.capTitle': 'Atteindre le niveau {cap}',
   'guide.progression.intro':
     'Chaque combat, chaque quête et chaque pas vers le nord rend votre héros plus fort. Voici comment fonctionnent les niveaux et ce qui vous fait continuer de progresser une fois arrivé au sommet.',
@@ -5204,12 +5586,12 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.progression.noRush':
     'Rien ne presse. Le monde est là pour être savouré à votre rythme, alors flânez, prenez les quêtes qui attirent votre œil, et laissez votre héros grandir chemin faisant.',
   'guide.progression.prestigeBody':
-    "L'expérience continue de compter même après le plafond. Elle alimente un niveau virtuel cosmétique, si bien que votre barre d'expérience continue de monter, ainsi qu'un rang de prestige à long terme que vous pouvez mériter pour la reconnaissance. Franchir de grands paliers d'expérience cumulée débloque aussi des titres cosmétiques et des bordures de plaque d'identification qui s'affichent sur votre feuille de personnage. Tout cela est purement optionnel et n'accorde jamais de puissance, juste une marque de la route que vous avez parcourue.",
+    "L'expérience continue de compter même après le plafond. Elle alimente un niveau virtuel cosmétique, si bien que votre barre d'expérience continue de monter, ainsi qu'un rang de prestige à long terme que vous pouvez réclamer sur votre feuille de personnage une fois que vous y êtes. Franchir de grands paliers d'expérience cumulée débloque aussi des hauts faits dans votre Livre des hauts faits, avec des titres cosmétiques et des bordures de plaque d'identification qui s'affichent sur votre feuille de personnage. Tout cela est purement optionnel et n'accorde jamais de puissance, juste une marque de la route que vous avez parcourue.",
   'guide.progression.restedBody':
-    "Reposez-vous dans un lieu sûr comme une auberge, hors combat, et votre personnage accumule de l'expérience reposée pendant que vous y restez assis. La prochaine fois que vous repartez vous battre, cette réserve donne un surplus à vos éliminations jusqu'à épuisement. Une pause à l'auberge n'est jamais du temps perdu : elle accélère votre prochaine série de niveaux.",
+    "Entrez dans une auberge et restez hors combat : votre personnage accumule de l'expérience reposée pendant que vous patientez. Chaque ville en possède une. La prochaine fois que vous repartez vous battre, cette réserve donne un surplus à vos éliminations jusqu'à épuisement. Une pause à l'auberge n'est jamais du temps perdu : elle accélère votre prochaine série de niveaux.",
   'guide.progression.restedTitle': 'Expérience reposée',
   'guide.progression.xpBody':
-    "Vous gagnez de l'expérience en accomplissant des quêtes et en vainquant des ennemis. Les quêtes en donnent de loin le plus, alors suivre le fil des quêtes est le moyen le plus rapide de grimper. Tuer ce qui se présente en chemin comble le reste.",
+    "Vous gagnez de l'expérience en accomplissant des quêtes, en vainquant des ennemis et en nettoyant des gouffres. Les quêtes en donnent de loin le plus, alors suivre le fil des quêtes est le moyen le plus rapide de grimper. Les éliminations et les incursions en gouffre croisées en chemin comblent le reste.",
   'guide.progression.xpTitle': "Comment vous gagnez de l'expérience",
   'guide.questsPage.sagaBody':
     "L'histoire principale est une longue traque. Un culte de la mort est à l'œuvre sur les tombes du royaume, et chaque chapitre que vous bouclez vous mène une zone plus haut sur la route. Vous n'affrontez jamais toute la conspiration d'un coup ; vous tirez un fil, et il conduit à la main suivante qui le tient.",
@@ -5234,7 +5616,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     "En parallèle de l'histoire, les prévôts et les gardiens du Val et de la fagne distribuent une échelle de primes permanente. Gravissez-la, ennemi après ennemi, comme tous les chasseurs de primes avant vous ont gagné leur place. C'est une montée en niveaux honnête et une tournée des pires fauteurs de troubles de chaque zone.",
   'guide.questsPage.sideWardenTitle': 'Vous faire un nom',
   'guide.questsPage.typeGatherBody':
-    "Récoltez des objets dans le monde ou sur ce que lâchent les ennemis : herbes, minerai, lettres perdues, sinistres réactifs d'un culte. Certaines pièces ne tombent que d'un adversaire précis, si bien que la chasse et la récolte vont de pair.",
+    "Récoltez des objets dans le monde ou sur ce que lâchent les ennemis : herbes, minerai, sinistres réactifs d'un culte. Certaines pièces ne tombent que d'un adversaire précis, si bien que la chasse et la récolte vont de pair.",
   'guide.questsPage.typeGatherTitle': 'Récolter',
   'guide.questsPage.typeGroupBody':
     "Chaque chapitre de l'histoire principale s'achève à la porte d'un donjon. L'introduction se fait en solo, mais le coup de grâce contre le scélérat du chapitre est prévu pour un groupe de cinq.",
@@ -5246,7 +5628,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     "Certaines quêtes vous demandent de rallier une ville avant une poussée vers le nord : réduisez la menace aux portes et rassemblez ce dont les défenseurs ont besoin. Ce sont des objectifs d'abattage et de récolte au service des gens dont vous vivez l'histoire, et elles vous gardent en mouvement avec eux.",
   'guide.questsPage.typeMusterTitle': 'Rassembler la défense',
   'guide.questsPage.typeSlayBody':
-    "Éclaircissez une meute de bêtes ou brisez l'emprise d'un culte en vainquant un nombre donné d'un ennemi désigné. La toute première quête du jeu, débarrasser la route d'Eastbrook de ses loups, est de celles-là.",
+    "Éclaircissez une meute de bêtes ou brisez l'emprise d'un culte en vainquant un nombre donné d'un ennemi désigné. L'une de vos premières quêtes, débarrasser la route d'Eastbrook de ses loups, est de celles-là.",
   'guide.questsPage.typeSlayTitle': 'Tuer',
   'guide.questsPage.typesBody':
     "La plupart des quêtes prennent l'une des quelques formes familières. Le suivi à l'écran détaille exactement ce que chacune demande, vous n'êtes donc jamais laissé dans le doute.",
@@ -5256,7 +5638,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     "Un canal de royaume toujours actif qui atteint tous les joueurs en ligne, parfait pour poser une question ou bavarder. Contrairement aux canaux Monde et Recherche de groupe, vous n'avez jamais à vous y inscrire.",
   'guide.social.chanGuild': 'Guilde et officiers.',
   'guide.social.chanGuildBody':
-    'Les canaux de votre guilde. Le canal de guilde atteint chaque membre ; le canal des officiers est réservé aux officiers.',
+    'Les canaux de votre guilde. Le canal de guilde atteint chaque membre ; le canal des officiers est réservé aux officiers et au chef de guilde.',
   'guide.social.chanLfg': 'Recherche de groupe.',
   'guide.social.chanLfgBody':
     "Un canal facultatif à l'échelle du royaume pour trouver des gens avec qui faire un donjon. Ouvrez son onglet pour le rejoindre.",
@@ -5279,7 +5661,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     "Le chat est divisé en canaux, chacun affiché sur son propre onglet. Tapez un message pour l'envoyer sur le canal actif, ou utilisez une commande slash pour diriger une seule ligne ailleurs. Voici les canaux sur lesquels vous pouvez parler :",
   'guide.social.chatHeading': 'Canaux de discussion',
   'guide.social.etiquetteBody':
-    "Faire groupe est un choix, pas une corvée. Dites bonjour en arrivant, ne lancez Besoin que sur l'équipement que vous utiliserez vraiment, et prévenez le groupe avant de partir. Un peu de courtoisie change tout, et la plupart des joueurs sont contents de la compagnie.",
+    "Faire groupe est un choix, pas une corvée. Dites bonjour en arrivant, ne lancez Besoin que sur l'équipement que vous utiliserez vraiment, et prévenez le groupe avant de partir. Un peu de courtoisie change tout, et la plupart des joueurs sont contents de la compagnie. Les modérateurs veillent au calme, et un joueur qui empêche les autres de profiter du jeu peut être placé en cellule jusqu'à ce qu'un modérateur l'en fasse sortir.",
   'guide.social.etiquetteHeading': "L'étiquette du groupe",
   'guide.social.friendsBody':
     "Ajoutez des joueurs à votre liste d'amis pour voir quand ils sont en ligne et où ils se trouvent, afin de faire groupe dès qu'ils se connectent.",
@@ -5299,7 +5681,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     "L'argent d'une élimination peut revenir à qui le ramasse, ou être réparti à parts égales dans le groupe.",
   'guide.social.lootCoinTitle': 'Pièces.',
   'guide.social.lootCommonBody':
-    'Les butins ordinaires peuvent revenir à qui les ramasse, tandis que les meilleurs sont mis en jeu pour un tirage, pour que chacun ait une chance équitable.',
+    'Les butins ordinaires peuvent circuler à tour de rôle dans le groupe ou revenir à qui les ramasse, tandis que les meilleurs sont mis en jeu pour un tirage, pour que chacun ait une chance équitable.',
   'guide.social.lootCommonTitle': 'Objets.',
   'guide.social.lootHeading': 'Butin de groupe',
   'guide.social.lootMasterBody':
@@ -5319,13 +5701,13 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     "L'Agilité vous affûte de plusieurs façons : elle augmente votre chance de porter un coup critique et votre chance d'esquiver, et elle ajoute un peu d'armure. Pour les voleurs et les chasseurs, elle alimente aussi la puissance d'attaque, et elle nourrit les tirs à distance du chasseur.",
   'guide.stats.agiTitle': 'Agilité',
   'guide.stats.apBody':
-    "La puissance d'attaque mesure la force de frappe de votre arme. Vos caractéristiques principales l'alimentent, et des armes et un équipement plus solides l'augmentent encore, c'est pourquoi une amélioration peut représenter un vrai bond de dégâts.",
+    "La puissance d'attaque mesure la force de frappe de votre arme. Vos caractéristiques principales l'alimentent, et l'équipement qui porte ces caractéristiques l'augmente encore, tandis qu'une arme plus puissante augmente directement vos dégâts, c'est pourquoi une amélioration peut représenter un vrai bond de dégâts.",
   'guide.stats.apTitle': "Puissance d'attaque",
   'guide.stats.armorBody':
     "L'armure réduit les dégâts physiques que vous subissez. Elle vient surtout de ce que vous portez, et les classes en armure lourde en arborent bien davantage. Plus d'armure face à un adversaire proche de votre niveau, et chacun de ses coups frappe plus doucement.",
   'guide.stats.armorTitle': 'Armure',
   'guide.stats.critBody':
-    "Votre chance de coup critique, c'est la fréquence à laquelle une attaque frappe pour des dégâts supplémentaires. Tout le monde part avec une petite chance de base, et l'Agilité (plus quelques talents et l'équipement) vient s'y ajouter.",
+    "Votre chance de coup critique, c'est la fréquence à laquelle une attaque frappe pour des dégâts supplémentaires. Tout le monde part avec une petite chance de base, et l'Agilité (plus quelques talents et l'équipement) vient s'y ajouter. Votre feuille de personnage affiche à la fois la chance elle-même et le score de coup critique que votre équipement y apporte.",
   'guide.stats.critTitle': 'Coup critique',
   'guide.stats.dodgeBody':
     "L'esquive est votre chance d'éviter entièrement une attaque de mêlée entrante. Vous débutez avec une petite chance de base, et l'Agilité l'augmente, si bien que les classes agiles esquivent plus de coups.",
@@ -5351,7 +5733,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     "La puissance des sorts est, pour un lanceur de sorts, l'équivalent de la puissance d'attaque : elle augmente les dégâts de vos sorts. L'Intelligence l'alimente, et l'équipement et les bonus de lanceur en ajoutent par-dessus, si bien qu'un lanceur de sorts surveille la puissance des sorts comme un combattant de mêlée surveille la puissance d'attaque.",
   'guide.stats.spTitle': 'Puissance des sorts',
   'guide.stats.spiBody':
-    "L'Esprit régit la vitesse à laquelle le mana d'un lanceur de sorts se régénère hors combat. Comme l'Intelligence, il sert les classes à mana et ne signifie pas grand-chose pour les autres.",
+    "L'Esprit régit la vitesse à laquelle le mana d'un lanceur de sorts se régénère chaque fois qu'il cesse d'incanter, c'est-à-dire le plus clair du temps entre les combats. Comme l'Intelligence, il sert les classes à mana et ne signifie pas grand-chose pour les autres.",
   'guide.stats.spiTitle': 'Esprit',
   'guide.stats.staBody':
     "L'Endurance est votre capacité à tenir. Plus d'Endurance, c'est une plus grande réserve de points de vie, et cela accélère les points de vie que vous récupérez en vous reposant hors combat. Toutes les classes en veulent un peu.",
@@ -5372,22 +5754,20 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.worldPage.marshGreeting':
     'Restez à la porte. Au-delà de ces roseaux, la fagne tue à notre place.',
   'guide.worldPage.marshPlaceNotes':
-    "Fenbridge garde la seule route sèche. Les Roseaux du Rôdeur et les Hauts-fonds de Deepfen grouillent de bêtes des marais et de Mudfins ; le Fourré de la Veuve est tissé d'une épaisse toile ; la Chapelle noyée et les Tertres des trolls gardent des dangers plus anciens ; le Campement de Gravecaller est le culte retranché, et le Bastion englouti est le cœur en instance du marais.",
+    "Fenbridge garde la seule route sèche. Les Roseaux du Rôdeur et les Hauts-fonds de Deepfen grouillent de bêtes des marais et de Mudfins ; le Fourré de la Veuve est tissé d'une épaisse toile ; la Chapelle noyée et les Tertres des trolls gardent des dangers plus anciens, avec La Litanie noyée, le gouffre propre au marais, qui s'ouvre juste au nord des tertres ; le Campement de Gravecaller est le culte retranché, et le Bastion englouti est le cœur en instance du marais.",
   'guide.worldPage.peaksGreeter': 'Capitaine Thessaly, Highwatch',
   'guide.worldPage.peaksGreeting':
     'Deux cents ans que ce mur tient. Il ne cédera pas sous ma garde, mais il gémit.',
   'guide.worldPage.peaksPlaceNotes':
-    "Highwatch tient le rempart. La Crête du Traqueur et les Terriers de Deeprock appartiennent aux félins des crêtes et aux fouisseurs ; les Contreforts des ogres et le Camp de guerre de Drogmar à des brutes à gages ; Stormcrag crépite d'élémentaires et le Glimmermere luit en contrebas ; les Tentes du culte du Ver et les Champs des revenants ceignent les hauteurs du culte, avec le Sanctuaire du Gravewyrm à son sommet.",
+    "Highwatch tient le rempart. La Crête du Traqueur et les Terriers de Deeprock appartiennent aux félins des crêtes et aux fouisseurs ; les Contreforts des ogres et le Camp de guerre de Drogmar à des brutes à gages ; Stormcrag crépite d'élémentaires, et en contrebas luit le Glimmermere, le lac de montagne dont la rive garde la porte de lumière pâle menant au Temple noyé ; les Tentes du culte du Ver et les Champs des revenants ceignent les hauteurs du culte, avec le Sanctuaire du Gravewyrm à son sommet.",
   'guide.worldPage.valeGreeter': 'Maréchal Redbrook, Eastbrook',
   'guide.worldPage.valeGreeting': "Gardez votre lame à portée. Le Val n'est plus ce qu'il était.",
   'guide.worldPage.valePlaceNotes':
-    'Eastbrook est votre premier camp de base. La Course du Loup et le Pré du Sanglier sont des terrains de chasse cléments ; le lac Miroir est une eau calme où pêcher ; le Sableweb et la Mine de cuivre cachent araignées et fouisseurs avides de minerai ; un Camp de bandits et la Chapelle déchue gardent des besognes plus rudes ; la colline du Reliquaire descend dans le Reliquaire effondré, le premier gouffre du royaume ; et Brightwood Glade est un paisible bosquet ensoleillé au nord.',
+    "Eastbrook est votre premier camp de base. La Course du Loup et le Pré du Sanglier sont des terrains de chasse cléments ; le lac Miroir est une bonne eau de pêche, même si les mudfins grouillent dans ses bas-fonds ; le Sableweb et la Mine de cuivre cachent araignées et fouisseurs avides de minerai ; un Camp de bandits et la Chapelle déchue gardent des besognes plus rudes ; la colline du Reliquaire descend dans le Reliquaire effondré, le premier gouffre du royaume ; Brightwood Glade est un paisible bosquet ensoleillé au nord ; et le Pré de la Truie est le terrain clos de balle au sanglier d'Eastbrook, où se joue la Coupe du Val sous une trêve des moissons.",
   'guide.worldPage.gladeTitle': 'Un coin paisible : la clairière de Brightwood',
   'guide.worldPage.gladeBody':
     "Toutes les histoires du Val ne parlent pas des morts. Au nord, un bosquet ensoleillé appelé Brightwood Glade garde son propre rythme plus doux, tout en sentiers calmes et en lumière mouchetée sous les frondaisons. C'est un contrepoint apaisé à la piste que vous suivez, et il mérite le détour quand la route vous laisse le temps de flâner.",
-  // APM telemetry label from release/v0.14.0
   'hudChrome.perf.labels.apm': 'APM',
-  // Account-security portal (2FA, verified email change, GDPR export) from PR #833.
   'auth.twoFactorLabel': "Code d'authentification",
   'auth.twoFactorPlaceholder': 'Code à 6 chiffres ou code de récupération',
   'auth.twoFactorHint':
@@ -5447,49 +5827,26 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.items.reliquary_gloves_rog.name': 'Gantelets du gardien des os',
   'entities.items.deacon_reliquary_helm.name': 'Heaume du reliquaire du diacre',
   'entities.items.varric_shadow_cowl.name': "Cagoule d'ombre de Varric",
-  // --- Scorching Wastes items ---
-  'entities.items.ashen_psalter.name': 'Psautier cendreux',
-  'entities.items.brimming_waterskin.name': 'Outre débordante',
-  'entities.items.cactus_pressed_water.name': 'Eau de cactus pressé',
-  'entities.items.caravan_guard_mail.name': 'Cotte de garde de caravane',
-  'entities.items.caravan_manifest.name': "Manifeste taché d'eau",
-  'entities.items.cinder_soaked_veil.name': 'Voile imprégné de cendres',
-  'entities.items.crown_brazier.name': 'Brasero de la Couronne',
-  'entities.items.crown_guard_seal.name': 'Sceau de la Garde de la Couronne',
-  'entities.items.duneblade_token.name': 'Jeton des Lames des Dunes',
-  'entities.items.duneforged_warblade.name': 'Lame de guerre forgée aux dunes',
-  'entities.items.dunewatch_sash.name': 'Écharpe du Guet des Dunes',
-  'entities.items.duskmane_pelt.name': 'Peau de crinière-du-crépuscule',
-  'entities.items.emberbound_leggings.name': 'Jambières liées aux braises',
-  'entities.items.emberglass_scepter.name': 'Sceptre de verre de braise',
-  'entities.items.emberveil_writ.name': 'Édit du Voile de Braise',
-  'entities.items.glasscarab_shell.name': 'Carapace de scarabée de verre',
-  'entities.items.glasscut_dirk.name': 'Dague de la Saignée de Verre',
-  'entities.items.heart_of_the_first_ember.name': 'Cœur de la Première Braise',
-  'entities.items.heartspring_offering.name': "Bol d'offrande de la Source-Cœur",
-  'entities.items.kareshs_last_skin.name': 'Dernière outre de Karesh',
-  'entities.items.lastwell_datewine.name': 'Vin de dattes du Dernier Puits',
-  'entities.items.living_cinder.name': 'Braise vivante',
-  'entities.items.moltenheart_girdle.name': 'Ceinturon de Cœur-de-Magma',
-  'entities.items.moltenheart_slagcore.name': 'Cœur de scories de Cœur-de-Magma',
-  'entities.items.mural_rubbing.name': 'Estampage de fresque',
-  'entities.items.parched_kings_goblet.name': 'Coupe du Roi Assoiffé',
-  'entities.items.prowler_fang.name': 'Croc de rôdeur',
-  'entities.items.sentinel_core_stone.name': 'Pierre-cœur de sentinelle',
-  'entities.items.springheart_blessing.name': 'Bénédiction de la Source-Cœur',
-  'entities.items.stolen_waterskin.name': 'Outre volée',
-  'entities.items.sunbaked_flatbread.name': 'Galette cuite au soleil',
-  'entities.items.sunbleached_bone.name': 'Os blanchi par le soleil',
-  'entities.items.sunbleached_staff.name': 'Bâton blanchi par le soleil',
-  'entities.items.sunglass_shard.name': 'Éclat de verre solaire',
-  'entities.items.sunspeakers_ash_crown.name': 'Couronne de cendres du Héraut-Soleil',
-  'entities.items.vestment_of_the_sunken_crown.name': 'Vêture de la Couronne Engloutie',
-  'entities.items.vigil_obelisk_dawn.name': "Sceau de feu de l'aube",
-  'entities.items.vigil_obelisk_dusk.name': 'Sceau de feu du crépuscule',
-  'entities.items.vigil_obelisk_noon.name': 'Sceau de feu de midi',
-  'entities.items.wastes_relic_cache.name': 'Cache de reliques de la Cour du Soleil',
-  'entities.items.wastewalker_jerkin.name': "Justaucorps de l'arpenteur des landes",
-  'entities.items.wastewalker_treads.name': "Bottes de l'arpenteur des landes",
+  'entities.items.duskwisp_essence.name': 'Essence de feu follet du crépuscule',
+  'entities.items.spore_heart.name': 'Coeur de spore',
+  'entities.items.gleaming_antler.name': 'Bois de cerf luisant',
+  'entities.items.wisp_mote.name': 'Poussière de feu follet',
+  'entities.items.starfall_shard.name': "Éclat d'étoile tombée",
+  'entities.items.elder_bark.name': "Écorce d'ancien",
+  'entities.items.hollow_sealstone.name': 'La Pierre du Sceau de la Combe',
+  'entities.items.monument_overlook.name': 'Monument usé',
+  'entities.items.monument_court.name': 'Monument englouti',
+  'entities.items.monument_north.name': 'Monument oublié',
+  'entities.items.guardian_core.name': 'Coeur de gardien',
+  'entities.items.wardens_seal.name': 'Le Sceau du Veilleur',
+  'entities.items.gleamstag_charm.name': 'Charme du Cerf-Luisant',
+  'entities.items.veilsteel_blade.name': "Lame d'acier voilé",
+  'entities.items.duskfang_dirk.name': 'Dague croc-du-crépuscule',
+  'entities.items.gleamwood_stave.name': 'Bâton de bois luisant',
+  'entities.items.wardens_oathband.name': 'Anneau de serment du Veilleur',
+  'entities.items.wardplate_cuirass.name': 'Cuirasse de plaques de garde',
+  'entities.items.nightweave_tunic.name': 'Tunique de tisse-nuit',
+  'entities.items.veilcloth_robe.name': 'Robe de toile voilée',
   'entities.mobs.acolyte_tessa.name': 'Acolyte Tessa',
   'entities.mobs.deacon_varric.name': 'Diacre Varric',
   'entities.mobs.reliquary_bonewalker.name': 'Marche-os relevé',
@@ -5686,7 +6043,6 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'sim.lockpick.tierMedium': 'Moyen',
   'sim.lockpick.tierPremium': 'Supérieur',
   'sim.lockpick.toolSlips': 'Cet outil glisse sur cette serrure.',
-  // Guide (/guide) localization.,
   'lockpickUi.pickTitle': 'Crocheter la serrure',
   'lockpickUi.cofferTitle': 'Coffre opulent',
   'lockpickUi.cache': 'Cachette {tier}',
@@ -5735,8 +6091,6 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'worldContent.delveSurfaceExitInteract': 'Appuyez sur F pour remonter',
   'sim.delve.objectiveClearRoom': 'Nettoyez la salle.',
   'sim.delve.objectiveDefeatBoss': 'Vainquez le boss.',
-  // Account-security portal (2FA, verified email change, GDPR export) from PR #833.,
-  // Aura effect tooltip summaries.
   'hudChrome.auraEffect.dot':
     'Inflige {value} points de dégâts de {school} toutes les {interval} s',
   'hudChrome.auraEffect.hot': 'Rend {value} points de vie toutes les {interval} s',
@@ -6059,7 +6413,6 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.nativeUpdate.notNow': 'Pas maintenant',
   'hudChrome.nativeUpdate.title': 'Mise à jour disponible',
   'hudChrome.nativeUpdate.update': 'Mettre à jour',
-  // Ravenpost authored letters
   'entities.letters.ravenpost_welcome.sender': 'La Poste aux Corbeaux',
   'entities.letters.ravenpost_welcome.subject': 'Les corbeaux volent désormais pour vous',
   'entities.letters.ravenpost_welcome.body':
@@ -6080,4 +6433,660 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gathering.logging': 'Bûcheronnage',
   'hudChrome.gathering.mining': 'Minage',
   'hudChrome.gathering.title': 'Récolte',
+  'errors.api.accountSessionLimit': 'Trop de personnages de ce compte sont déjà dans le monde.',
+  'errors.api.crossSiteOrigin': 'Requête bloquée pour des raisons de sécurité.',
+  'errors.api.unsupportedMediaType': 'Format de requête non pris en charge.',
+  'apiError.account.characters_online':
+    'Déconnectez tous vos personnages avant de désactiver le compte.',
+  'apiError.account.deactivated':
+    'Ce compte a été désactivé. Contactez un administrateur pour le rétablir.',
+  'apiError.account.not_found': 'Compte introuvable.',
+  'apiError.account.password_too_long':
+    'Le nouveau mot de passe doit contenir au plus 128 caractères.',
+  'apiError.account.password_too_short': 'Le mot de passe doit contenir au moins 6 caractères.',
+  'apiError.account.username_invalid':
+    "Le nom d'utilisateur doit faire 3 à 24 caractères et utiliser lettres, chiffres ou tiret bas.",
+  'apiError.account.username_mismatch': "Ce nom d'utilisateur ne correspond pas à votre compte.",
+  'apiError.account.username_not_allowed': "Ce nom d'utilisateur n'est pas autorisé.",
+  'apiError.account.username_taken': "Ce nom d'utilisateur est déjà pris.",
+  'apiError.auth.current_password_incorrect': 'Votre mot de passe actuel est incorrect.',
+  'apiError.auth.forbidden': "Vous n'avez pas la permission de faire cela.",
+  'apiError.auth.invalid_credentials': "Nom d'utilisateur ou mot de passe incorrect.",
+  'apiError.auth.password_incorrect': 'Votre mot de passe est incorrect.',
+  'apiError.auth.required': 'Non authentifié.',
+  'apiError.auth.token_invalid': 'Votre session a expiré. Veuillez vous reconnecter.',
+  'apiError.auth.token_missing': 'Vous devez être connecté pour faire cela.',
+  'apiError.auth.too_many_attempts': 'Trop de tentatives. Attendez une minute puis réessayez.',
+  'apiError.auth.too_many_failed_attempts':
+    'Trop de tentatives échouées. Attendez quelques minutes puis réessayez.',
+  'apiError.auth.verification_failed': 'Échec de la vérification. Veuillez réessayer.',
+  'apiError.auth.web_login_only': 'Les connexions ne sont autorisées que depuis le client du jeu.',
+  'apiError.body.too_large': 'Cette requête est trop volumineuse. Réessayez avec moins de données.',
+  'apiError.body.unsupported_media_type': 'Format de requête non pris en charge.',
+  'apiError.character.already_in_world': 'Le personnage est déjà dans le monde.',
+  'apiError.character.delete_confirm':
+    'Saisissez le nom du personnage pour confirmer la suppression.',
+  'apiError.character.invalid_class': 'Classe invalide.',
+  'apiError.character.limit_reached': 'Limite de personnages atteinte.',
+  'apiError.character.name_invalid': 'Nom de personnage invalide. Utilisez 2 à 16 lettres.',
+  'apiError.character.name_not_allowed': "Ce nom de personnage n'est pas autorisé.",
+  'apiError.character.name_taken': 'Ce nom est déjà pris.',
+  'apiError.character.not_found': 'Personnage introuvable.',
+  'apiError.character.online': 'Le personnage est actuellement en ligne.',
+  'apiError.character.rename_not_permitted':
+    "Le changement de nom de ce personnage n'est pas autorisé.",
+  'apiError.character.rename_required':
+    "Ce personnage doit être renommé avant d'entrer dans le monde.",
+  'apiError.character.taken_over': 'Votre personnage a été pris en main par une autre session.',
+  'apiError.db.conflict':
+    'Cette modification est entrée en conflit avec une autre mise à jour. Veuillez réessayer.',
+  'apiError.discord.already_linked': 'Ce compte Discord est déjà lié à un autre compte.',
+  'apiError.discord.expired':
+    'Cette connexion Discord a expiré. Veuillez vous reconnecter avec Discord.',
+  'apiError.discord.link_required': "Liez d'abord votre compte Discord.",
+  'apiError.discord.not_configured': "L'intégration Discord n'est pas disponible pour le moment.",
+  'apiError.discord.password_required':
+    'Définissez un mot de passe avant de dissocier votre compte Discord.',
+  'apiError.discord.swag_claimed': 'Vous avez déjà réclamé cette récompense.',
+  'apiError.discord.swag_points': 'Points insuffisants.',
+  'apiError.discord.swag_tier': 'Atteignez un rang supérieur pour la réclamer.',
+  'apiError.discord.unknown_swag': "Cette récompense n'est pas disponible.",
+  'apiError.email.invalid': 'Saisissez une adresse e-mail valide.',
+  'apiError.email.unchanged': "C'est déjà votre adresse e-mail.",
+  'apiError.internal.error': 'Une erreur est survenue de notre côté. Veuillez réessayer.',
+  'apiError.json.malformed': "Cette requête n'a pas pu être lue. Veuillez réessayer.",
+  'apiError.moderation.banned': 'Ce compte a été banni.',
+  'apiError.moderation.force_rename':
+    "Un modérateur exige que l'un de vos personnages soit renommé.",
+  'apiError.moderation.suspended': 'Ce compte est suspendu.',
+  'apiError.moderation.suspended_until': "Ce compte est suspendu jusqu'au {date}.",
+  'apiError.origin.cross_site': 'Requête bloquée pour des raisons de sécurité.',
+  'apiError.rate_limit.exceeded': 'Trop de requêtes. Réessayez dans {seconds}.',
+  'apiError.two_factor.already_enabled': "L'authentification à deux facteurs est déjà activée.",
+  'apiError.two_factor.code_invalid': "Ce code n'est pas valide, réessayez.",
+  'apiError.two_factor.not_enabled': "L'authentification à deux facteurs n'est pas activée.",
+  'apiError.two_factor.setup_required':
+    "Commencez d'abord la configuration de l'authentification à deux facteurs.",
+  'apiError.validation.failed':
+    'Certains champs sont invalides. Vérifiez le formulaire puis réessayez.',
+  'download.linuxCta': 'Télécharger pour Linux',
+  'download.linuxHint':
+    'AppImage$1 rendez-le exécutable, puis exécutez-le. Aucune installation nécessaire.',
+  'loading.reconnecting': 'Connexion perdue. Reconnexion...',
+  'guide.nav.settings': 'Paramètres et performances',
+  'guide.settingsPage.advancedBody':
+    'Advanced commence à partir du niveau High et débloque quatre sélecteurs supplémentaires, afin que vous puissiez passer vos images là où vous les remarquez réellement$1 détails du terrain, densité du feuillage, effets et éclairage et qualité des ombres. Comme la qualité graphique, ils s’appliquent après un rechargement.',
+  'guide.settingsPage.advancedHeading': 'Le préréglage Advanced$1 mixez le vôtre',
+  'guide.settingsPage.advancedMixes':
+    "Deux mélanges préférés$1 gardez la qualité des ombres sur High et réglez Effets et éclairage sur Low pour un look net et sans lueur qui laisse passer la lumière, ou faites l'inverse pour conserver la floraison et adoucir les ombres.",
+  'guide.settingsPage.balancedTagline':
+    'Le point idéal pour la plupart des machines et nos conseils par défaut.',
+  'guide.settingsPage.balancedTitle': 'Équilibré',
+  'guide.settingsPage.balancedWhy':
+    'Medium apporte de vraies ombres et des matières pleines$1 High ajoute une occlusion et une floraison ambiantes. En dessous de Ultra, un filet de sécurité intégré absorbe les baisses soudaines lors des combats chargés, de sorte que Balanced reste fluide sans baby-sitting.',
+  'guide.settingsPage.colDoes': 'Ce que ça fait',
+  'guide.settingsPage.colImpact': 'Impact de FPS',
+  'guide.settingsPage.colSetting': 'Paramètre',
+  'guide.settingsPage.factDetectBody':
+    'Lors de votre premier lancement, le jeu lit votre appareil et choisit un niveau raisonnable, de Low sur un téléphone modeste à Ultra sur un ordinateur de bureau puissant. Tout choix que vous faites vous-même est toujours gagnant.',
+  'guide.settingsPage.factDetectTitle': "Le jeu s'ajuste d'abord",
+  'guide.settingsPage.factGovernorBody':
+    "À chaque niveau inférieur à Ultra, le jeu éclaircit tranquillement l'herbe, les effets et l'éclairage pendant un moment lorsqu'un grand combat éclate, puis les restaure. Choisir Ultra indique que vous préférez conserver chaque détail.",
+  'guide.settingsPage.factGovernorTitle': 'Un filet de sécurité intégré',
+  'guide.settingsPage.factReloadBody':
+    'La qualité graphique et les sélecteurs avancés prennent effet après un rechargement, et le panneau propose un bouton Recharger maintenant en cas de besoin. Toutes les autres options s’appliquent au moment où vous la modifiez.',
+  'guide.settingsPage.factReloadTitle': "Deux types d'options",
+  'guide.settingsPage.fairnessBody':
+    "Aucune option ici n’échange la beauté contre le pouvoir. Les paramètres de Lower ne donnent que du vernis cosmétique, jamais les informations avec lesquelles vous vous battez$1 vos débuffs, vos barres d'incantation, votre santé de groupe et vos nombres de dégâts sont identiques de Low à Ultra. Jouer sur une machine modeste n'est jamais un handicap.",
+  'guide.settingsPage.fairnessTitle': 'Juste par conception',
+  'guide.settingsPage.fpsTagline':
+    'Pour les ordinateurs portables plus anciens, les graphiques intégrés et le jeu sur batterie.',
+  'guide.settingsPage.fpsTitle': 'Meilleur FPS',
+  'guide.settingsPage.fpsWhy':
+    "La qualité graphique est l'interrupteur principal et la qualité du rendu est le curseur le plus puissant$1 à 70 %, le monde dessine environ la moitié des pixels tandis que l'interface reste parfaitement nette.",
+  'guide.settingsPage.heading': 'Paramètres et performances',
+  'guide.settingsPage.howHeading': 'Comment se comportent les options',
+  'guide.settingsPage.impactHeavy': 'Lourd',
+  'guide.settingsPage.impactLight': 'Lumière',
+  'guide.settingsPage.impactModerate': 'Modéré',
+  'guide.settingsPage.impactNone': 'Aucun',
+  'guide.settingsPage.intro':
+    "Donnez au jeu son meilleur aspect ou exécutez-le le plus rapidement possible. Trois chargements prêts à l'emploi, plus ce que chaque option graphique fait réellement.",
+  'guide.settingsPage.loadoutsHeading': "Trois chargements prêts à l'emploi",
+  'guide.settingsPage.loadoutsIntro':
+    "Commencez par le chargement qui ressemble à votre machine, puis ajustez une option à la fois jusqu'à ce que vous vous sentiez bien.",
+  'guide.settingsPage.mobileBody':
+    "Mobile gère davantage pour vous$1 le jeu choisit le niveau, maintient la résolution un peu plus basse pour protéger la batterie et la chaleur, et conserve les niveaux les plus élevés uniquement sur ordinateur. Les chargements ci-dessus s'appliquent toujours$1 les téléphones atteignent tout simplement High.",
+  'guide.settingsPage.mobileTitle': 'Sur téléphones et tablettes',
+  'guide.settingsPage.recommended': 'Recommandé',
+  'guide.settingsPage.rowBrightness':
+    'Exposition de la scène, plus sombre ou plus claire. Pure préférence.',
+  'guide.settingsPage.rowBrowserEffects':
+    "À quel point l'interface elle-même peut être sophistiquée$1 flou de verre, lueur, menus animés. Correspond automatiquement à votre navigateur$1 le monde 3D est intact de toute façon.",
+  'guide.settingsPage.rowEffectsQuality':
+    'Bloom, occlusion ambiante et combien de torches et de sorts projettent une vraie lumière. La plus grosse économie parmi les préparateurs avancés.',
+  'guide.settingsPage.rowFieldOfView':
+    "Quelle partie du monde tient à l'écran, d'un zoom de 55 degrés à un balayage de 100 degrés. Un choix de confort$1 les vues plus larges attirent un peu plus.",
+  'guide.settingsPage.rowFoliageDensity':
+    "Jusqu'où et quelle épaisseur l'herbe pousse autour de votre personnage.",
+  'guide.settingsPage.rowFrostedPanels':
+    'Un flou de verre dépoli derrière les fenêtres. Joli, et exactement le genre d’effet ressenti par un navigateur plus faible$1 laissez-le de côté pour un look classique et net.',
+  'guide.settingsPage.rowGraphicsQuality':
+    "L'interrupteur principal. Chaque étape modifie ensemble la résolution, les ombres, les matériaux, le feuillage et les effets d'éclairage. La plus grande différence que vous puissiez faire.",
+  'guide.settingsPage.rowPerfOverlay':
+    "Une lecture à l'écran de FPS, du temps d'image, et plus encore. Activez-le pendant que vous réglez cette page, puis masquez-le à nouveau.",
+  'guide.settingsPage.rowReduceMotion':
+    "Supprime les animations de l'interface pour que les fenêtres apparaissent instantanément. Une option d’accessibilité d’abord, avec un petit bonus de performances.",
+  'guide.settingsPage.rowRenderQuality':
+    "Dessine le monde 3D avec une résolution interne inférieure et le met à l'échelle$1 l'interface reste nette. Le curseur instantané le plus puissant sur les machines les plus faibles et les écrans haute résolution.",
+  'guide.settingsPage.rowShadowQuality':
+    'La netteté des ombres. Low conserve les ombres mais adoucit leurs bords.',
+  'guide.settingsPage.rowTerrainDetail':
+    'Textures de sol riches et mélangées par rapport à un aspect de terrain plus simple et plus rapide.',
+  'guide.settingsPage.rowWeather':
+    "Pluie et neige ambiantes. Ambiance uniquement, et l'éteindre permet d'économiser un peu lors des orages.",
+  'guide.settingsPage.tableFoot':
+    "Vous recherchez un curseur de distance de tirage ou un capuchon FPS$1 Il n'y a rien à rechercher$1 la distance de vue fait partie de chaque niveau de qualité et la cadence des images suit votre affichage.",
+  'guide.settingsPage.tableHeading': 'Chaque option graphique, expliquée',
+  'guide.settingsPage.tagReload': 'après rechargement',
+  'guide.settingsPage.value100': '100%',
+  'guide.settingsPage.value50to70': '50 à 70%',
+  'guide.settingsPage.value90to100': '90 à 100%',
+  'guide.settingsPage.valueHighOrMedium':
+    'High sur un PC de jeu, Medium sur un ordinateur portable',
+  'guide.settingsPage.valueOnOptional': 'Activé (facultatif)',
+  'guide.settingsPage.visualsTagline':
+    "Mode capture d'écran pour les machines de bureau puissantes.",
+  'guide.settingsPage.visualsTitle': 'Meilleurs visuels',
+  'guide.settingsPage.visualsWhy':
+    "Ultra restitue à la résolution la plus élevée offerte par votre écran avec l'éclairage le plus riche. Il désactive également le filet de sécurité et est réservé aux ordinateurs de bureau$1 les téléphones et l'application atteignent leur limite de High.",
+  'guide.settingsPage.wherePath':
+    "Tout ce qui figure sur cette page vit dans le jeu : appuyez sur Échap pour ouvrir les options. Le menu s'ouvre sur un Aperçu des essentiels épinglés, les catégories rangées sur un rail à côté : les réglages ci-dessous se trouvent sous Graphiques, Interface et Accessibilité dans le groupe Affichage, et la Superposition de performances sous Système. Plus rapide encore, tapez un nom dans la barre de recherche en haut pour y accéder directement.",
+  'guide.settingsPage.whyLabel': 'Pourquoi ça marche$1',
+  'hudChrome.crafting.close': 'Fermer la fabrication',
+  'hudChrome.crafting.craft': 'Artisanat',
+  'hudChrome.crafting.craftedToast': 'Fabriqué$1 {name}',
+  'hudChrome.crafting.empty': "Aucune recette connue pour l'instant.",
+  'hudChrome.crafting.insufficientMaterials': "Vous n'avez pas le matériel pour cela.",
+  'hudChrome.crafting.reagentLine': '{name}: {have}/{required}',
+  'hudChrome.crafting.reagentsNeeded': 'Nécessite$1',
+  'hudChrome.crafting.resultAria': 'Artisanat {name}',
+  'hudChrome.crafting.title': 'Artisanat',
+  'hudChrome.crafting.unknownRecipe': "Cette recette n'existe pas.",
+  'hudChrome.mobile.actionPageIndicator': 'Page {page}',
+  'hudChrome.mobile.actionPageToggle': "Changer de page d'action",
+  'hudChrome.mobile.actionRing': 'Actions de combat',
+  'hudChrome.mobile.spellbookPageLabel': 'Page {page}',
+  'hudChrome.mobile.targetCycle': 'Échanger la cible',
+  'hudChrome.mobile.targetCycleShort': 'Cible',
+  'hudChrome.options.mobileCameraJoystick': 'Manette de caméra',
+  'hudChrome.options.mobileLeftHanded': 'Disposition pour gaucher',
+  'entities.quests.q_archetype_acceptance.title': 'Un métier qui vous appartient',
+  'entities.quests.q_archetype_acceptance.text':
+    "Chaque artisan d'Eastbrook finit par choisir un métier qui lui est propre. Prouvez-vous avec un seul acte, {playerName}, et déclarez votre chemin.",
+  'entities.quests.q_archetype_acceptance.completion': 'Votre chemin est choisi ; marchez bien.',
+  'entities.quests.q_archetype_acceptance.objectives.0.label': 'Loup des forêts tué',
+  'entities.quests.q_prof_make_amends.title': 'Faire amende honorable',
+  'entities.quests.q_prof_make_amends.text':
+    "Pour réserver un métier à un autre, un artisan doit d'abord réparer le chemin non parcouru, {playerName}.",
+  'entities.quests.q_prof_make_amends.completion':
+    "Modifications apportées ; un nouveau chemin s'ouvre à vous.",
+  'entities.quests.q_prof_make_amends.objectives.0.label': 'Loup des forêts tué',
+  'entities.npcs.bursar_aldous_crane.greeting':
+    'Chaque caisse, chaque coffret et chaque babiole est en sécurité au Coffre doré.',
+  'entities.npcs.bursar_aldous_crane.name': 'Trésorier Aldous Crane',
+  'entities.npcs.bursar_aldous_crane.title': 'Le Coffre doré',
+  'entities.npcs.bursar_fernando.greeting':
+    "Bienvenue au Coffre doré. Vos biens reposent à l'abri derrière nos serrures.",
+  'entities.npcs.bursar_fernando.name': 'Trésorier Fernando',
+  'entities.npcs.bursar_fernando.title': 'Le Coffre doré',
+  'entities.npcs.bursar_petra_vell.greeting':
+    'Le Coffre doré tient des registres propres et des chambres fortes plus propres encore. Que pouvons-nous ranger pour vous ?',
+  'entities.npcs.bursar_petra_vell.name': 'Trésorière Petra Vell',
+  'entities.npcs.bursar_petra_vell.title': 'Le Coffre doré',
+  'guide.economy.bankBody':
+    'Chaque ville principale abrite une succursale du Coffre doré, la maison de banque du royaume. Adressez-vous au trésorier sur place pour ouvrir votre chambre forte, une réserve privée au-delà de vos sacs que votre personnage conserve à vie. Tout ce que vous leur confiez attend en lieu sûr, quelle que soit la succursale où vous passerez ensuite.',
+  'guide.economy.bankHow':
+    "Une fois la chambre forte ouverte, cliquez sur un objet dans vos sacs pour le déposer, et cliquez dessus dans la chambre forte pour le reprendre. La chambre forte n'accueille que des biens, jamais de pièces, et les objets de quête restent sur vous. Quand vos sacs débordent en pleine route, un seul bouton y range d'un coup tous vos matériaux d'artisanat.",
+  'guide.economy.bankSlots':
+    'Une chambre forte neuve commence petite et grandit avec vous. Le trésorier vend des emplacements supplémentaires contre pièces, à des prix toujours plus élevés, et jouer en ligne rapporte de la place bonus en plus, par exemple pour une adresse e-mail vérifiée, des comptes liés ou des amis que vous amenez dans le jeu.',
+  'guide.economy.bankTitle': 'La banque',
+  'hudChrome.bank.bonusAdvertDiscord': 'Liez votre Discord pour gagner 2 emplacements.',
+  'hudChrome.bank.bonusAdvertEmail': 'Vérifiez votre adresse e-mail pour gagner 2 emplacements.',
+  'hudChrome.bank.bonusAdvertWallet': 'Liez un portefeuille pour gagner 2 emplacements.',
+  'hudChrome.bank.bonusEarned': '+{count}',
+  'hudChrome.bank.bonusReferralExplainer':
+    "Invitez un ami : quand il atteint le niveau 10, vous gagnez chacun 2 emplacements, jusqu'à 5 amis.",
+  'hudChrome.bank.bonusReferralProgress': '{count}/{cap}',
+  'hudChrome.bank.bonusSectionAria': "Emplacements de banque bonus et comment en gagner d'autres",
+  'hudChrome.bank.bonusSourceDiscord': 'Discord lié',
+  'hudChrome.bank.bonusSourceEmail': 'Adresse e-mail vérifiée',
+  'hudChrome.bank.bonusSourceReferral': 'Amis parrainés',
+  'hudChrome.bank.bonusSourceWallet': 'Portefeuille lié',
+  'hudChrome.bank.bonusStatusEarned': '+{count}',
+  'hudChrome.bank.bonusTitle': 'Emplacements bonus',
+  'hudChrome.bank.buyConfirm':
+    'Acheter {count} emplacements de banque supplémentaires pour {price} ?',
+  'hudChrome.bank.buyConfirmAccept': 'Acheter',
+  'hudChrome.bank.buySlots': 'Acheter {count} emplacements',
+  'hudChrome.bank.buySlotsMaxed': 'Capacité maximale',
+  'hudChrome.bank.cannotDeposit': 'Impossible à mettre en banque',
+  'hudChrome.bank.capacity': '{used}/{total}',
+  'hudChrome.bank.capacityAria': 'Emplacements de banque utilisés : {used} sur {total}',
+  'hudChrome.bank.close': 'Fermer la banque',
+  'hudChrome.bank.depositAll': 'Déposer tous les matériaux',
+  'hudChrome.bank.depositAllDone': 'Matériaux déposés : {count}.',
+  'hudChrome.bank.depositAllFull': 'Matériaux déposés : {count}. La banque est maintenant pleine.',
+  'hudChrome.bank.depositAllNone': "Banque pleine : rien n'a été déposé.",
+  'hudChrome.bank.depositHint': 'Cliquez pour déposer',
+  'hudChrome.bank.depositPartialHint': 'Maj-clic pour déposer une quantité partielle',
+  'hudChrome.bank.depositQuantityConfirm': 'Déposer',
+  'hudChrome.bank.depositQuantityInput': 'Quantité à déposer',
+  'hudChrome.bank.depositQuantityTitle': 'Déposer {item}',
+  'hudChrome.bank.empty': 'Votre banque est vide.',
+  'hudChrome.bank.filterGroupAria': 'Filtrer la banque par catégorie',
+  'hudChrome.bank.searchAria': 'Rechercher un objet de la banque par son nom',
+  'hudChrome.bank.sortAria': 'Trier les objets de la banque',
+  'hudChrome.bank.subtitle': 'Le Coffre doré',
+  'hudChrome.bank.title': 'Banque',
+  'hudChrome.bank.tooFar': "Vous devez être auprès d'un banquier pour consulter votre banque.",
+  'hudChrome.bank.withdrawHint': 'Cliquez pour retirer',
+  'hudChrome.bank.withdrawPartialHint': 'Maj-clic pour retirer une quantité partielle',
+  'hudChrome.bank.withdrawQuantityConfirm': 'Retirer',
+  'hudChrome.bank.withdrawQuantityInput': 'Quantité à retirer',
+  'hudChrome.bank.withdrawQuantityTitle': 'Retirer {item}',
+  'abilityUi.tooltip.selfOnly': 'Sur soi uniquement',
+  'itemUi.lootRoll.rolled': '{answered}/{total} ont lancé',
+  'entities.abilities.sunder_armor.description':
+    "Cisaille l'armure de la cible, la réduisant de {damage}% par application. Cumulable jusqu'à 5 fois. Génère beaucoup de menace.",
+  'entities.mobs.training_dummy.name': "Mannequin d'entraînement",
+  'entities.mobs.yumi_cat.name': 'Yumi',
+  'guide.arenaPage.yumiBody':
+    "Protégez Yumi est un mode d'objectif en équipe qui se joue dans un labyrinthe : chaque camp garde son propre familier félin tout en traquant celui de l'adversaire. De temps à autre, les deux chats se téléportent vers de nouveaux recoins du labyrinthe, si bien que le combat oscille entre défense, chasse et course pour les retrouver. Mettez-vous en file en trois contre trois ou cinq contre cinq ; tomber au combat ne vous met sur la touche qu'un instant.",
+  'guide.arenaPage.yumiHeading': 'Protégez Yumi',
+  'hudChrome.archetypeTitle.hobbyLabel': 'Loisir',
+  'hudChrome.auraEffect.armorPct': "Réduit l'armure de {pct}%",
+  'hudChrome.auraEffect.armorPctStacks': "Réduit l'armure de {pct}% ({stacks} charges)",
+  'hudChrome.auraEffect.increasePct.allStats': 'Augmente tous les attributs de {pct}%',
+  'hudChrome.auraEffect.increasePct.ap': "Augmente la puissance d'attaque de {pct}%",
+  'hudChrome.auraEffect.increasePct.armor': "Augmente l'armure de {pct}%",
+  'hudChrome.auraEffect.increasePct.int': "Augmente l'intelligence de {pct}%",
+  'hudChrome.auraEffect.increasePct.sta': "Augmente l'endurance de {pct}%",
+  'hudChrome.crafting.notAtHub':
+    "Vous devez être à l'atelier d'artisanat, au niveau requis, pour fabriquer cela.",
+  'hudChrome.crafting.recipeNotLearned': "Vous n'avez pas encore appris cette recette.",
+  'hudChrome.crafting.throttled': 'Vous fabriquez trop vite. Patientez un instant et réessayez.',
+  'hudChrome.mobile.chatPlaceholder': 'Dites quelque chose…',
+  'hudChrome.mobile.hideKeyboard': 'Masquer le clavier',
+  'hudChrome.unitFrame.partyChip': 'Groupe',
+  'yumi.banner.sudden': 'MORT SUBITE ! Les Yumi tiennent bon !',
+  'yumi.banner.teleport': 'Les Yumi se téléportent !',
+  'yumi.bracket3': 'Yumi 3c3',
+  'yumi.bracket5': 'Yumi 5c5',
+  'yumi.end.loss': 'DÉFAITE ! Votre Yumi est tombé.',
+  'yumi.end.win': 'VICTOIRE ! Yumi est sain et sauf !',
+  'yumi.enterQueue': 'Rejoignez Protégez Yumi !',
+  'yumi.error.partyTooBig3': 'Protégez Yumi 3c3 autorise un groupe de trois joueurs maximum.',
+  'yumi.error.partyTooBig5': 'Protégez Yumi 5c5 autorise un groupe de cinq joueurs maximum.',
+  'yumi.hud.aria': 'Votre Yumi à {mine} points de vie sur {max}, Yumi ennemi à {theirs}.',
+  'yumi.hud.collapse': 'Réduire les barres de Protégez Yumi',
+  'yumi.hud.enemyYumi': 'Yumi ennemi',
+  'yumi.hud.expand': 'Développer les barres de Protégez Yumi',
+  'yumi.hud.getReady': 'Préparez-vous…',
+  'yumi.hud.suddenDeath': 'MORT SUBITE',
+  'yumi.hud.teleportIn': 'Les Yumi se déplacent dans {s}',
+  'yumi.hud.title': 'PROTÉGEZ YUMI',
+  'yumi.hud.yourYumi': 'Votre Yumi',
+  'yumi.log.start': 'Protégez Yumi ! Défendez votre familier et traquez le leur.',
+  'yumi.queue.join': 'Vous rejoignez la file de Protégez Yumi. Gardez votre familier…',
+  'yumi.queue.leave': 'Vous quittez la file de Protégez Yumi.',
+  'yumi.queue.teamLeave': 'Votre équipe quitte la file de Protégez Yumi.',
+  'yumi.respawn.title': 'À TERRE !',
+  'hudChrome.auth.forgotPrompt': 'Mot de passe oublié ?',
+  'hudChrome.auth.forgotTitle': 'Réinitialiser votre mot de passe',
+  'hudChrome.auth.forgotHint':
+    'Saisissez votre nom d’utilisateur et nous enverrons un lien de réinitialisation à l’adresse e-mail enregistrée.',
+  'hudChrome.auth.forgotUsername': 'Nom d’utilisateur',
+  'hudChrome.auth.forgotSubmit': 'Envoyer le lien de réinitialisation',
+  'hudChrome.auth.forgotSent':
+    'Si un compte avec ce nom d’utilisateur possède une adresse e-mail enregistrée, nous avons envoyé un lien de réinitialisation. Consultez votre boîte de réception.',
+  'hudChrome.auth.forgotBack': 'Retour à la connexion',
+  'hudChrome.auth.resetTitle': 'Choisissez un nouveau mot de passe',
+  'hudChrome.auth.resetNewPassword': 'Nouveau mot de passe',
+  'hudChrome.auth.resetConfirm': 'Confirmez le nouveau mot de passe',
+  'hudChrome.auth.resetSubmit': 'Mettre à jour le mot de passe',
+  'hudChrome.auth.resetDone':
+    'Votre mot de passe a été mis à jour. Vous pouvez maintenant vous connecter.',
+  'hudChrome.auth.resetMismatch': 'Les mots de passe ne correspondent pas.',
+  'hudChrome.auth.resetErrInvalid':
+    'Ce lien de réinitialisation est invalide ou a expiré. Demandez-en un nouveau.',
+  'apiError.deeds.invalid_input': 'Saisie invalide.',
+  'apiError.steam.account_taken': 'Ce compte Steam est déjà lié à un autre compte.',
+  'apiError.steam.already_linked': 'Votre compte est déjà lié à un compte Steam.',
+  'apiError.steam.banned': 'Ce compte Steam ne peut pas être lié.',
+  'apiError.steam.disabled': "La liaison Steam n'est pas disponible pour le moment.",
+  'apiError.steam.invalid_ticket':
+    "Steam n'a pas pu vérifier cette demande de liaison. Réessayez depuis l'application de bureau.",
+  'apiError.steam.upstream': "Steam n'a pas répondu. Réessayez dans un instant.",
+  'entities.npcs.chronicler_edda_hartwell.greeting':
+    "La montagne n'oublie rien, {playerName}, et moi non plus. Voyons ce que vous avez accompli.",
+  'entities.npcs.chronicler_edda_hartwell.name': 'Chroniqueuse Zenzie',
+  'entities.npcs.chronicler_edda_hartwell.title': 'La Chronique des Hauteurs',
+  'entities.npcs.chronicler_osric_fenn.greeting':
+    "Gare à l'humidité sur les pages, {playerName}. Le marais dévore plus de livres que les lecteurs n'en liront jamais.",
+  'entities.npcs.chronicler_osric_fenn.name': 'Chroniqueur Osric Fenn',
+  'entities.npcs.chronicler_osric_fenn.title': 'La Chronique du Marais',
+  'entities.npcs.chronicler_saul.greeting':
+    "Tout haut fait qui mérite d'être accompli mérite d'être écrit deux fois, {playerName}: une fois pour le registre, une fois pour la veillée.",
+  'entities.npcs.chronicler_saul.name': 'Saul le Chroniqueur',
+  'entities.npcs.chronicler_saul.title': 'La Chronique du Val',
+  'guide.controls.deeds': 'Livre des hauts faits',
+  'guide.deedsPage.cat.chronicle': 'Chroniques',
+  'guide.deedsPage.cat.collection': 'Collection',
+  'guide.deedsPage.cat.combat': 'Combat',
+  'guide.deedsPage.cat.delve': 'Plongées',
+  'guide.deedsPage.cat.dungeon': 'Donjons',
+  'guide.deedsPage.cat.exploration': 'Exploration',
+  'guide.deedsPage.cat.feat': 'Prouesses',
+  'guide.deedsPage.cat.progression': 'Progression',
+  'guide.deedsPage.cat.pvp': 'JcJ et sport',
+  'guide.deedsPage.cat.social': 'Social',
+  'guide.deedsPage.catHeading': '{label} ({count})',
+  'guide.deedsPage.catalogBody':
+    'Voici tous les hauts faits que le Livre peut contenir, regroupés par catégorie. Les hauts faits secrets en sont volontairement absents, attendant que vous les découvriez. Ouvrez le Livre des hauts faits en jeu pour voir exactement ce que chacun demande.',
+  'guide.deedsPage.catalogHeading': 'Le registre complet des hauts faits',
+  'guide.deedsPage.chroniclesBody':
+    "Chaque zone tient sa propre Chronique, un ensemble de hauts faits rassemblés par un Chroniqueur local qui s'est donné pour mission de consigner chaque voyageur de passage. Saul, du Val d'Eastbrook, est le premier d'entre eux. Une Chronique se découpe en chapitres, que vous êtes libre de parcourir dans l'ordre qui vous convient.",
+  'guide.deedsPage.chroniclesHeading': 'Chroniques',
+  'guide.deedsPage.colName': 'Haut fait',
+  'guide.deedsPage.colRenown': 'Renommée',
+  'guide.deedsPage.colReward': 'Récompense',
+  'guide.deedsPage.featTag': 'Prouesse',
+  'guide.deedsPage.featsBody':
+    "Les Prouesses forment une étagère à part: les annales de l'héritage et des premières mondiales, ces hauts faits liés à une époque révolue ou à un instant qui ne se produira qu'une seule fois. Elles ne rapportent aucune Renommée et restent hors du compte d'achèvement, conservées à jamais en mémoire de ce qui fut accompli.",
+  'guide.deedsPage.featsHeading': 'Prouesses',
+  'guide.deedsPage.howBody':
+    "Les hauts faits s'obtiennent et se conservent personnage par personnage, si bien que chaque héros que vous jouez se bâtit son propre Livre ; seul le Classement du royaume rassemble votre Renommée sur l'ensemble des personnages que vous jouez, en ne comptant chaque haut fait qu'une seule fois. Chaque haut fait énonce clairement ce qu'il attend de vous, directement dans le Livre des hauts faits en jeu, si bien que vous savez toujours quoi viser, et vous pouvez suivre ceux que vous convoitez pour les garder sous les yeux en jouant. Une petite poignée restent secrets et ne se dévoilent qu'une fois obtenus. Le Livre se tient aussi honnête : tout ce que votre passé peut prouver, il vous le crédite sur-le-champ, si bien qu'un vétéran ne l'ouvre jamais sur une page vide ; seuls les hauts faits à décompte commencent leur comptage de zéro.",
+  'guide.deedsPage.howHeading': 'Comment fonctionnent les hauts faits',
+  'guide.deedsPage.intro':
+    "Le Livre des hauts faits est l'endroit où le monde tient le compte de tout ce que vous avez accompli, de vos premiers pas hors de la vallée de départ aux combats les plus rudes que le royaume puisse offrir. Obtenez des hauts faits au fil du jeu, portez les titres qu'ils confèrent et regardez votre Renommée grimper.",
+  'guide.deedsPage.renownBody':
+    "La Renommée est le score qui se cache derrière le Livre. Chaque haut fait obtenu vaut un montant fixe, et votre total ne fait que grimper: une semaine calme ne vous fait jamais perdre de terrain. Une poignée de hauts faits tiennent à la chance plutôt qu'au talent, et les Prouesses sont un honneur à part; ni les uns ni les autres ne rapportent la moindre Renommée.",
+  'guide.deedsPage.renownHeading': 'Renommée',
+  'guide.deedsPage.rewardBorder': 'Bordure',
+  'guide.deedsPage.rewardsBody':
+    "Les récompenses sont purement d'apparat, et c'est bien le but. Certains hauts faits confèrent un titre à porter ou une bordure pour encadrer votre nom, jamais rien qui rende votre héros plus fort. Choisissez le titre qui vous plaît dans le Livre des hauts faits: il vous accompagne sur votre plaque de nom, dans le chat et sur les classements, à la vue de tous.",
+  'guide.deedsPage.rewardsHeading': 'Titres et bordures',
+  'guide.deedsPage.standingsNote':
+    "Les royaumes tiennent un décompte continu de la Renommée sur l'ensemble des comptes. Pour savoir qui se place où, ouvrez le Classement en jeu et rendez-vous sur son onglet Renommée ; le classement se trouve là, pas sur le wiki.",
+  'guide.nav.deeds': 'Livre des hauts faits',
+  'hudChrome.deeds.broadcastLine': '{name} a accompli un haut fait: {deed}',
+  'hudChrome.deeds.broadcastsLabel':
+    'Partager les hauts faits accomplis avec la guilde et les amis',
+  'hudChrome.deeds.catChronicle': 'Chroniques',
+  'hudChrome.deeds.catCollection': 'Collection',
+  'hudChrome.deeds.catCombat': 'Combat',
+  'hudChrome.deeds.catDelve': 'Plongées',
+  'hudChrome.deeds.catDungeon': 'Donjons',
+  'hudChrome.deeds.catExploration': 'Exploration',
+  'hudChrome.deeds.catFeat': 'Prouesses',
+  'hudChrome.deeds.catProgression': 'Progression',
+  'hudChrome.deeds.catPvp': 'JcJ et sport',
+  'hudChrome.deeds.catSocial': 'Social',
+  'hudChrome.deeds.categoriesAria': 'Catégories de hauts faits',
+  'hudChrome.deeds.categoryCountAria': '{category}: {earned} hauts faits obtenus sur {visible}',
+  'hudChrome.deeds.charOpenBook': 'Livre des hauts faits',
+  'hudChrome.deeds.charTitleLabel': 'Titre',
+  'hudChrome.deeds.charTitleNone': 'Aucun titre choisi',
+  'hudChrome.deeds.close': 'Fermer le Livre des hauts faits',
+  'hudChrome.deeds.collapseHint': 'Réduire le suivi des hauts faits',
+  'hudChrome.deeds.completionAria': 'Hauts faits obtenus: {earned} sur {total}',
+  'hudChrome.deeds.countLabel': '{earned}/{total} hauts faits',
+  'hudChrome.deeds.earnedDate': 'Obtenu le {date}',
+  'hudChrome.deeds.emptyCategory': 'Aucun haut fait ne correspond ici.',
+  'hudChrome.deeds.expandHint': 'Déployer le suivi des hauts faits',
+  'hudChrome.deeds.featRibbon': 'Prouesse',
+  'hudChrome.deeds.filterAll': 'Tous',
+  'hudChrome.deeds.filterEarned': 'Obtenus',
+  'hudChrome.deeds.filterGroupAria': 'Filtrer les hauts faits',
+  'hudChrome.deeds.filterNearly': 'Presque finis',
+  'hudChrome.deeds.filterUnearned': 'À obtenir',
+  'hudChrome.deeds.hiddenBadge': 'Secret',
+  'hudChrome.deeds.lbDeedsCol': 'Hauts faits',
+  'hudChrome.deeds.lbEmpty': 'Aucun chroniqueur classé pour le moment.',
+  'hudChrome.deeds.lbSelf': 'Votre position: rang {rank}, dans le top {percent} %',
+  'hudChrome.deeds.lbTab': 'Renommée',
+  'hudChrome.deeds.lbTitleCol': 'Titre',
+  'hudChrome.deeds.nearestLabel': 'Presque au but:',
+  'hudChrome.deeds.progressAria': 'Progression: {current} sur {target}',
+  'hudChrome.deeds.progressText': '{current}/{target}',
+  'hudChrome.deeds.rarityLine': 'Obtenu par {percent} des aventuriers',
+  'hudChrome.deeds.recentLabel': 'Récents:',
+  'hudChrome.deeds.renownChip': '{renown} de Renommée',
+  'hudChrome.deeds.renownLabel': 'Renommée',
+  'hudChrome.deeds.retroSummary':
+    'Votre chronique rattrape son retard: {count} hauts faits consignés.',
+  'hudChrome.deeds.searchAria': 'Rechercher des hauts faits par nom',
+  'hudChrome.deeds.searchPlaceholder': 'Rechercher un haut fait',
+  'hudChrome.deeds.title': 'Livre des hauts faits',
+  'hudChrome.deeds.titleChip': 'Titre à la clé',
+  'hudChrome.deeds.titledName': '{name} « {title} »',
+  'hudChrome.deeds.titlesAria': 'Choisissez le titre à afficher',
+  'hudChrome.deeds.titlesEmpty':
+    'Obtenez un haut fait qui confère un titre pour débloquer cette étagère.',
+  'hudChrome.deeds.titlesNone': 'Aucun titre',
+  'hudChrome.deeds.titlesSection': 'Titres',
+  'hudChrome.deeds.trackerLabel': 'Hauts faits',
+  'hudChrome.deeds.unlockedBanner': 'Haut fait accompli: {name}',
+  'hudChrome.deeds.unlockedTitleHint':
+    'Nouveau titre obtenu: {title}. Choisissez-le dans le Livre des hauts faits.',
+  'hudChrome.deeds.unwatch': 'Ne plus suivre',
+  'hudChrome.deeds.unwatchAria': 'Ne plus suivre {name}',
+  'hudChrome.deeds.watch': 'Suivre',
+  'hudChrome.deeds.watchAria': "Ajouter {name} au suivi à l'écran",
+  'hudChrome.deeds.watchFull': 'Liste de suivi pleine ({cap} max)',
+  'hudChrome.mobile.deeds': 'Hauts faits',
+  'hudChrome.steam.benefits':
+    "Liez votre compte Steam depuis l'application de bureau pour que les hauts faits que vous obtenez se reflètent dans vos succès Steam.",
+  'hudChrome.steam.link': 'Lier Steam',
+  'hudChrome.steam.linked': 'Lié au compte Steam {id}',
+  'hudChrome.steam.noTicket':
+    "Steam n'a pas fourni de ticket de liaison. Lancez Steam, puis réessayez.",
+  'hudChrome.steam.title': 'Steam',
+  'hudChrome.steam.unlink': 'Délier Steam',
+  'loading.tips.classes':
+    'Conseil : chacune des 9 classes se joue différemment. Essayez-en plusieurs avant de faire votre choix.',
+  'loading.tips.dungeons':
+    'Conseil : tentez un donjon en difficulté héroïque lorsque votre équipement dépasse la difficulté normale afin de livrer un combat plus exigeant et plus gratifiant.',
+  'loading.tips.guilds':
+    'Conseil : rejoindre une guilde vous donne accès à un canal de discussion privé et à une liste commune de ses membres.',
+  'loading.tips.loadouts':
+    'Conseil : enregistrez plusieurs configurations de talents pour changer de spécialisation sans dépenser vos points deux fois.',
+  'loading.tips.market':
+    'Conseil : le Marché mondial vous permet d’acheter et de vendre auprès des joueurs de tout le royaume.',
+  'loading.tips.professions':
+    'Conseil : vous pouvez apprendre des métiers de récolte et d’artisanat en parallèle de votre classe de combat.',
+  'loading.tips.pvp':
+    'Conseil : défiez un autre joueur en duel amical ou rejoignez la file de l’arène du Colisée cendré pour mettre votre configuration à l’épreuve.',
+  'loading.tips.talents':
+    'Conseil : vous pouvez réinitialiser vos talents dès que vous êtes hors combat, un premier choix ne vous enferme donc jamais.',
+  'entities.items.arcane_dust.name': 'Poussière arcanique',
+  'entities.items.arcane_essence.name': 'Essence arcanique',
+  'entities.items.arcane_shard.name': 'Éclat arcanique',
+  'entities.items.chunk_of_ore.name': 'Morceau de minerai',
+  'entities.quests.q_prof_intro.completion':
+    'Vous voyez ? Du minerai dans votre sac et des cals aux mains. Continuez à miner, à couper du bois et à cueillir des plantes sur les routes. De retour en ville, pensez au tableau des Priorités de la ville près du marché et à l’établi d’artisanat juste à côté. Tout cela peut vous offrir un gagne-pain honorable, si le cœur vous en dit.',
+  'entities.quests.q_prof_intro.objectives.0.label': 'Morceau de minerai',
+  'entities.quests.q_prof_intro.text':
+    'À Eastbrook, tout le monde exerce un métier en plus de manier l’épée, {playerName}. Des filons de minerai sont dispersés autour de la ville, alors prenez une pioche et rapportez-moi 5 morceaux. Extrayez-les vous-même, attention, je saurai faire la différence.',
+  'entities.quests.q_prof_intro.title': 'Un métier pour chaque main',
+  'hudChrome.auth.appleChoiceExpired':
+    'Cette connexion avec Apple a expiré. Veuillez vous reconnecter avec Apple.',
+  'hudChrome.auth.appleChoiceIntro':
+    'Créez un nouveau compte ou associez Apple à un compte existant.',
+  'hudChrome.auth.appleError': 'Impossible de se connecter avec Apple. Veuillez réessayer.',
+  'hudChrome.auth.appleLoginCta': 'Continuer avec Apple',
+  'hudChrome.dailyRewards.reason.banned':
+    'Vous êtes exclu des Récompenses quotidiennes. Motif : {reason}',
+  'hudChrome.itemHeroicTag': '[HÉROÏQUE]',
+  'hudChrome.itemSoulbound': 'Lié à l’âme',
+  'hudChrome.keybinds.categoryPet': 'Familier',
+  'hudChrome.keybinds.petAggressive': 'Familier : agressif',
+  'hudChrome.keybinds.petAttack': 'Familier : attaquer',
+  'hudChrome.keybinds.petDefensive': 'Familier : défensif',
+  'hudChrome.keybinds.petStop': 'Familier : arrêter',
+  'hudChrome.keybinds.petTaunt': 'Familier : provoquer',
+  'hudChrome.mailbox.parcelQtyDecreaseAria': 'Envoyer un {item} de moins',
+  'hudChrome.mailbox.parcelQtyIncreaseAria': 'Envoyer un {item} de plus',
+  'hudChrome.readyCheck.notReady': 'Pas prêt',
+  'hudChrome.readyCheck.prompt':
+    '{name} a lancé une vérification de disponibilité. Êtes-vous prêt ?',
+  'hudChrome.readyCheck.ready': 'Prêt',
+  'hudChrome.readyCheck.result':
+    'Vérification de disponibilité : {ready} prêts, {notReady} pas prêts, {noResponse} sans réponse.',
+  'hudChrome.readyCheck.notInPartyError':
+    'Vous devez être dans un groupe pour lancer une vérification de disponibilité.',
+  'hudChrome.readyCheck.inProgressError': 'Une vérification de disponibilité est déjà en cours.',
+  'guide.bestiary.flavor.sethrael_palecoil':
+    "Un serpent d'une pâleur d'os qui glisse dans les profondeurs du Glimmermere, gardien silencieux de l'eau qu'il a faite sienne. Les nageurs qui partagent le lac avec lui refont rarement surface.",
+  'guide.combat.metersBody':
+    "Envie de savoir comment un combat s'est déroulé ? Appuyez sur Z pour ouvrir les compteurs de groupe, qui totalisent les dégâts, les soins et la menace de votre groupe, rencontre par rencontre.",
+  'guide.combat.queueBody':
+    "Nul besoin de caler vos pressions à la frame près. Appuyez sur votre prochaine capacité dans les derniers instants de l'incantation en cours et elle se met en file d'attente, se déclenchant à la seconde où l'incantation s'achève, si bien qu'un jeu rodé s'enchaîne sans temps mort. Une pression trop hâtive est simplement refusée, donc rien n'est gâché. Certaines attaques de mêlée fonctionnent de la même manière, en s'exécutant sur votre prochain coup d'arme.",
+  'guide.combat.queueTitle': 'Votre prochain geste est déjà armé',
+  'guide.controls.arrowKeys': 'Touches fléchées',
+  'guide.controls.attackMoveNote':
+    "Une de plus, désactivée par défaut : activez le Déplacement d'attaque dans les options pour réserver une touche (A, tant que l'option est active) qui vous fait marcher vers votre curseur et ouvre le feu sur l'ennemi qui s'y trouve, ou sur le premier rencontré en chemin.",
+  'guide.controls.bothMouse': 'Les deux boutons de la souris',
+  'guide.controls.calendar': 'Calendrier des événements',
+  'guide.controls.crafting': 'Artisanat',
+  'guide.controls.discord': 'Discord',
+  'guide.controls.groupPet': 'Commandes du familier',
+  'guide.controls.petBar':
+    'Barre du familier : Attaquer, Arrêter, Provoquer, Défensif, Agressif (avec un familier de chasseur ou de démoniste sorti)',
+  'guide.controls.runForward': 'Avancer',
+  'guide.controls.valeCup': 'Coupe du Val',
+  'guide.dungeonsPage.heroicBody':
+    "Chaque donjon à cinq joueurs, et le raid lui-même, possède une version héroïque qui vous attend au-delà du plafond de niveau. Les mêmes salles, refaçonnées pour un groupe de fin de partie bien équipé : tout frappe plus fort, plus rien ne se distance à la course, et les boss ignorent complètement étourdissements et entraves. Dépassez d'abord les versions normales ; l'héroïque suppose que c'est fait.",
+  'guide.dungeonsPage.heroicHowBody':
+    "Choisissez la difficulté avant que votre groupe ne réserve l'instance : tapez /dungeon heroic, ou basculez l'option Difficulté du donjon dans le menu de groupe. Le choix est partagé par tout le groupe et se verrouille à la porte, si bien qu'une expédition reste ce pour quoi elle a été lancée.",
+  'guide.dungeonsPage.heroicLockoutBody':
+    "Les donjons normaux se parcourent à volonté. L'héroïque demande de la patience : la mort du boss final verrouille chaque membre de l'expédition à un seul nettoyage héroïque de ce donjon par jour, et le raid tient un verrou quotidien pour chaque difficulté. Une expédition à cinq joueurs déjà nettoyée reste ouverte à son propre groupe pour les retours au corps et le butin, si bien que personne n'est privé de ce qu'il y a gagné. Le raid est plus strict : une fois que sa mort vous verrouille, la porte reste close jusqu'à la réinitialisation quotidienne, alors récupérez votre butin avant de quitter l'arène.",
+  'guide.dungeonsPage.heroicRewardsBody':
+    "Les boss héroïques lâchent le butin que vous connaissez, amélioré et estampillé Héroïque dans l'infobulle, et le boss final de chaque expédition ajoute des objets épiques introuvables ailleurs. Cette dernière mort laisse aussi des Marques héroïques à chaque participant : une monnaie que l'on dépense auprès de l'Intendant Vex à Highwatch, dont le stock d'anneaux et de colliers constitue les seuls bijoux du royaume.",
+  'guide.dungeonsPage.heroicRewardsTitle': 'Marques héroïques et butin amélioré',
+  'guide.dungeonsPage.heroicTitle': 'Mode héroïque',
+  'guide.economy.dailyBody':
+    "Un bouton en forme de coffre au trésor sur votre écran ouvre la fenêtre des récompenses quotidiennes. Chaque jour propose une poignée de tâches, accomplir des quêtes, combattre dans le Colisée cendré, remporter un match de la Coupe du Val, et offre un tour gratuit de la roue des prix, le tout valant des points au classement du jour, et les meilleurs de la journée se partagent une cagnotte réservée aux détenteurs du jeton communautaire optionnel. Rien de tout cela ne confère de puissance dans le jeu. La fenêtre détaille elle-même les règles du jour et les conditions d'éligibilité, affiche le classement et conserve votre historique.",
+  'guide.economy.dailyTitle': 'Récompenses quotidiennes',
+  'guide.economy.mailBody':
+    "Chaque ville principale possède un pilier de corbeau sculpté : une boîte aux lettres de la Poste aux Corbeaux, le service postal du royaume. Tenez-vous près de l'un d'eux pour écrire à n'importe quel personnage par son nom, un ami en ligne ou hors ligne depuis longtemps, et joignez pièces ou marchandises à la lettre moyennant un modeste affranchissement. Le corbeau met un petit moment à voler ; quand il se pose, une icône d'enveloppe avertit le destinataire qu'un envoi l'attend.",
+  'guide.economy.mailHow':
+    "La collecte fonctionne de la même façon en sens inverse : tenez-vous près de n'importe quel pilier pour lire vos lettres et verser ce qu'elles contiennent dans votre bourse et vos sacs. Une simple lettre s'efface au bout d'un moment, mais celle qui porte encore des pièces ou des marchandises vous attend, quel que soit le temps que vous prenez. Certaines choses, la poste les refuse tout net : les objets liés à l'âme, les biens de quête et les jetons cosmétiques uniques voyagent avec vous ou pas du tout. Et gardez un œil sur le pilier après une belle remise de quête ; certains donneurs de quête écrivent.",
+  'guide.economy.mailTitle': 'La Poste aux Corbeaux',
+  'guide.footer.linksLabel': 'Liens de jeu et de communauté',
+  'guide.gear.bagsBody':
+    'Tout ce que vous ramassez tient dans un sac commun, que vous agrandissez en équipant des sacs. Votre fenêtre de sacs comporte quatre emplacements de sac : cliquez sur un sac dans votre besace pour le glisser dans un emplacement libre, et chaque sac porté ajoute sa propre place. Les sacs simples sont des articles bon marché de marchand, les plus spacieux tombent des bêtes, et les plus beaux proviennent des boss de donjon, si bien que votre capacité de transport grandit au rythme de votre équipement.',
+  'guide.gear.bagsTitle': 'Sacs et capacité de transport',
+  'guide.gear.slotFinger': 'Doigt',
+  'guide.gear.slotNeck': 'Cou',
+  'guide.gear.soulboundBody':
+    "Quelques récompenses spéciales sont liées à l'âme, attachées à votre personnage dès l'instant où vous les obtenez. Un objet lié à l'âme ne peut être échangé, envoyé par courrier, vendu à un marchand ni mis en vente sur le marché ; il est à vous et à vous seul. Aujourd'hui, cette protection couvre les jetons de récompense comme les Marques héroïques, tandis que l'équipement que vous remportez est à vous, libre à vous de l'échanger, de le vendre ou de le partager.",
+  'guide.gear.soulboundTitle': "Lié à l'âme : à vous et à vous seul",
+  'guide.glossary.deedDef':
+    "Un haut fait consigné dans le Livre des hauts faits. En obtenir un accorde de la Renommée, et certains octroient un titre cosmétique ou une bordure de plaque d'identification.",
+  'guide.glossary.deedTerm': 'Haut fait',
+  'guide.glossary.heroicDef':
+    "La version plus difficile d'un donjon ou du raid, calibrée pour les groupes de fin de partie bien équipés. Les boss héroïques lâchent un butin amélioré, et le boss final paie en Marques héroïques.",
+  'guide.glossary.heroicTerm': 'Héroïque',
+  'guide.glossary.loadoutDef':
+    "Une configuration de talents enregistrée. Gardez-en plusieurs et passez d'un build à l'autre sans redépenser vos points un par un.",
+  'guide.glossary.loadoutTerm': 'Configuration',
+  'guide.glossary.lockoutDef':
+    "Un plafond quotidien sur les plus grosses récompenses répétables. Chaque donjon héroïque n'accorde qu'un nettoyage par jour, le raid suit le normal et l'héroïque séparément, et piller un boss de monde déclenche le vôtre. Une expédition à cinq joueurs déjà nettoyée reste ouverte à son propre groupe ; la porte verrouillée du raid ne se rouvre qu'à la réinitialisation.",
+  'guide.glossary.lockoutTerm': 'Verrouillage',
+  'guide.glossary.metersDef':
+    'La fenêtre de tableau de bord du groupe pour le combat en cours : dégâts infligés, soins prodigués et qui détient le plus de menace, conservés par rencontre. Ouvrez-la avec son raccourci (Z par défaut).',
+  'guide.glossary.metersTerm': 'Compteurs de dégâts',
+  'guide.glossary.petBarDef':
+    "La rangée de commandes qu'ajoute un familier de chasseur ou de démoniste : Attaquer, Arrêter, Provoquer, Défensif et Agressif, assignés par défaut à Ctrl plus 1 à 5.",
+  'guide.glossary.petBarTerm': 'Barre du familier',
+  'guide.glossary.readyCheckDef':
+    'Un chef de groupe qui tape /ready pour sonder le groupe ou le raid : chacun confirme Prêt ou Pas prêt, et le groupe voit le décompte.',
+  'guide.glossary.readyCheckTerm': 'Vérification de préparation',
+  'guide.glossary.renownDef':
+    'Le score cumulé que totalisent vos hauts faits. Il ne fait que grimper, et le royaume en conserve les rangs sur le Classement.',
+  'guide.glossary.renownTerm': 'Renommée',
+  'guide.glossary.restedDef':
+    "L'expérience bonus que votre personnage met en réserve en se reposant à l'auberge, hors combat. Vos prochaines éliminations rapportent un surplus d'expérience jusqu'à épuisement de la réserve.",
+  'guide.glossary.restedTerm': 'Reposé',
+  'guide.glossary.soulboundDef':
+    "Un objet lié à votre personnage dès l'instant où vous l'acquérez. Il ne peut être échangé, envoyé par courrier, vendu à un marchand ni mis en vente sur le marché.",
+  'guide.glossary.soulboundTerm': "Lié à l'âme",
+  'guide.glossary.spiritHealerDef':
+    "Le guérisseur d'esprit du royaume, planant au-dessus de chaque cimetière : il peut relever votre esprit sur place au prix d'une faiblesse passagère.",
+  'guide.glossary.spiritHealerTerm': 'Le Veilleur pâle',
+  'guide.glossary.targetMarkerDef':
+    'Un symbole que tout membre du groupe ou du raid peut apposer sur une cible pour que tous concentrent, ou évitent, la même. Huit symboles, une cible par symbole.',
+  'guide.glossary.targetMarkerTerm': 'Marqueur de cible',
+  'guide.glossary.worldBossDef':
+    "Un boss de la puissance d'un raid qui surgit dans le monde ouvert à un rythme régulier, affronté par quiconque se rassemble pour répondre à l'appel plutôt que par un groupe fixe.",
+  'guide.glossary.worldBossTerm': 'Boss de monde',
+  'guide.models.formBear': 'Forme de Bruin',
+  'guide.models.formCat': 'Forme de loup',
+  'guide.models.formTravel': 'Forme de Fleet',
+  'guide.models.groupForms': 'Formes de druide',
+  'guide.nav.sidebarLabel': 'Rubriques du guide',
+  'guide.professions.craftHowBody':
+    "Ouvrez la fenêtre d'Artisanat (touche T par défaut) pour voir toutes les recettes que vous connaissez, ce que chacune réclame et ce que vous avez sous la main ; quand les matériaux sont là, un clic suffit. Les recettes courantes se fabriquent partout dans le monde. Une poignée de recettes d'outils avancées vous demandent en revanche de vous tenir à l'atelier d'artisanat de Highwatch.",
+  'guide.professions.craftHowTitle': "La fenêtre d'artisanat",
+  'guide.professions.focusBody':
+    "Chaque ville principale tient un panneau de Priorités de la ville pour les récolteurs de passage : tenez-vous en ville, ouvrez-le à côté de la minicarte, et affectez un petit budget de points de priorité aux types de composants qui vous importent. Plus vous accordez de priorité à un composant, plus il ressort fin et riche de chaque cadavre ultérieur ; votre répartition suit votre personnage où qu'il aille, et vous pouvez la remanier, gratuitement, à chaque passage ultérieur en ville.",
+  'guide.professions.focusTitle': 'Priorités de la ville',
+  'guide.professions.harvestBody':
+    "La récolte ne s'arrête pas aux gisements. Certaines bêtes abattues peuvent être dépecées pour des composants, cuirs, crocs, soie et choses plus étranges encore, directement sur le cadavre en plus de son butin ordinaire. Un seul récolteur par proie : le premier à dépecer rafle tout. Le choix vous appartient à chaque fois : prélevez tout ce que le cadavre offre, ou concentrez-vous sur un seul composant pour en tirer une qualité plus fine. N'importe quel personnage peut récolter, sans métier ni apprentissage requis, et un composant particulièrement fin porte même le nom de celui qui l'a récolté.",
+  'guide.professions.harvestTitle': 'Dépecer la chasse elle-même',
+  'guide.search.typeAbility': 'Capacité',
+  'guide.search.typeDeed': 'Haut fait',
+  'guide.settingsPage.audioBody':
+    "La fenêtre d'options n'est pas faite que de pixels. Une catégorie Audio réunit des réglages de volume distincts pour les effets, la musique et les voix, et la catégorie Interface propose un sélecteur de langue qui relocalise toute l'interface sur-le-champ, sans rechargement, ainsi qu'un sélecteur de thème pour l'habillage des fenêtres. La langue est aussi épinglée en tête de l'Aperçu, à un pas de l'ouverture du menu.",
+  'guide.settingsPage.audioTitle': 'Son et langue',
+  'guide.settingsPage.autolootBody':
+    "Vous préférez ne pas cliquer sur chaque cadavre ? Une option d'interface, désactivée par défaut, ramasse le butin de vos propres éliminations lorsque vous passez à côté.",
+  'guide.settingsPage.factSearchBody':
+    "Vous ne savez pas où se trouve une option ? Tapez dans la barre de recherche en haut du menu. Elle comprend aussi les tournures courantes, si bien que fps trouve l'affichage des FPS, et choisir un résultat vous amène droit au réglage en le laissant en surbrillance.",
+  'guide.settingsPage.factSearchTitle': "La recherche le trouve d'abord",
+  'guide.settingsPage.touchBody':
+    "Sur écran tactile, les options se dotent en plus de tout un groupe de confort : taille et sensibilité du joystick, taille et opacité des boutons à l'écran, une disposition inversée pour gauchers, un stick de caméra optionnel et une visée tactile inversée, pour que l'écran s'adapte à vos mains plutôt que l'inverse.",
+  'guide.social.calendarBody':
+    "Appuyez sur I pour ouvrir le calendrier des événements. Il marque les journées du royaume qui méritent qu'on s'organise autour, de l'appel au raid hebdomadaire à la soirée fiesta, et c'est là que les guildes tiennent leur planning : le chef de guilde et les officiers peuvent y programmer des événements, et chaque membre les voit sur la même page.",
+  'guide.social.calendarHeading': 'Le calendrier des événements',
+  'guide.social.communityBody':
+    "Commencez une ligne de chat par un point d'exclamation pour lancer un appel communautaire : !lfg pour chercher un groupe, !wts et !wtb pour commercer, !recruit pour votre guilde, !event pour annoncer un raid ou un rassemblement, et !help pour demander un coup de main. Un menu des appels surgit dès que vous tapez le signe. Chaque appel est diffusé dans le monde et répercuté sur le Discord de la communauté, si bien qu'il atteint des joueurs qui ne sont même pas connectés. Les appels communautaires font partie du jeu en ligne.",
+  'guide.social.communityHeading': 'Interpeller toute la communauté',
+  'guide.social.emotesBody':
+    "Votre personnage peut aussi s'exprimer sans mots : tapez une emote comme /wave, /dance, /cheer ou /bow, ciblez d'abord un ami pour la lui adresser, ou maintenez X pour ouvrir la roue des emotes et afficher une expression rapide au-dessus de votre tête.",
+  'guide.social.markersBody':
+    "En groupe, ciblez une créature hostile et faites un clic droit sur son portrait dans le cadre de cible (appui long sur tactile) pour la coiffer de l'un des huit symboles de raid. Tout membre peut marquer, chaque symbole ne vit que sur une cible à la fois, et réappliquer un symbole à sa propre cible l'efface. L'ordre des éliminations, la répartition du contrôle de foule ou un simple « celui-là d'abord » voyagent tous plus vite en symbole qu'en phrase.",
+  'guide.social.markersHeading': 'Marqueurs de cible',
+  'guide.social.readyBody':
+    "Avant un gros pull, le chef de groupe peut taper /ready pour sonder l'assemblée : chacun reçoit une invite Prêt ou Pas prêt, et une fois que tous ont répondu, ou au bout de 30 secondes, le groupe entier voit un unique résumé du décompte. Personne n'est pointé du doigt ; ce qui compte, c'est le décompte, pas le coupable.",
+  'guide.social.readyHeading': 'Vérifications de préparation',
+  'guide.social.slashBody':
+    "Quelques commandes du quotidien méritent d'être mémorisées : /w Nom envoie un murmure et /r répond au dernier reçu, /invite convie quelqu'un dans votre groupe, /follow vous fait emboîter le pas d'un ami, /roll lance les dés à la vue du groupe, /who montre qui est en ligne, et /afk vous signale absent. Tapez /help en jeu pour la liste complète.",
+  'guide.social.slashHeading': 'Commandes slash pratiques',
+  'guide.stats.hasteBody':
+    "La Hâte est une caractéristique qui accélère tout ce que vous faites : coups de mêlée, tirs à distance et incantations gagnent tous en vitesse de concert. Elle provient de l'équipement, notamment des bonus de set d'armure, tandis que quelques capacités accordent une brève bouffée de coups plus rapides. Votre feuille l'affiche sous le nom de Score de hâte.",
+  'guide.stats.hasteTitle': 'Hâte',
+  'guide.talentsPage.choiceNote':
+    "Quelques points de chaque arbre sont un carrefour plutôt qu'un achat : le nœud propose deux ou trois options et vous vous engagez sur l'une d'elles. Votre prochaine réinitialisation rouvre le choix, comme tout le reste de l'arbre.",
+  'guide.valeCupPage.bettingBody':
+    "Les spectateurs au Pré de la Truie peuvent miser sur un camp pendant qu'un match se forme : les mises sont mises en commun, et au coup de sifflet final les gagnants se partagent la cagnotte des perdants au prorata de ce qu'ils ont misé. Un match nul, ou une surprise que personne n'avait soutenue, rembourse chaque pièce. Les joueurs alignés dans le match ne peuvent pas parier dessus, et la rambarde conserve votre bilan à vie de victoires, de défaites et de gains nets.",
+  'guide.valeCupPage.bettingHeading': 'Un petit pari à la rambarde',
+  'guide.valeCupPage.practiceBody':
+    "La fenêtre de la Coupe du Val propose aussi l'entraînement : une copie privée du terrain où des bots remplissent les deux camps et où rien ne compte pour votre palmarès. Il vous manque un joueur ou deux pour la vraie chose ? Après une courte attente, des bots complètent les équipes, et tout match avec des bots sur le terrain est amical, jamais classé. Et quand le Pré de la Truie reste inoccupé, les bots donnent une exhibition que vous pouvez regarder, et sur laquelle parier, depuis les gradins ; dès que de vrais joueurs se déclarent prêts, l'exhibition libère le terrain et chaque mise est rendue.",
+  'guide.valeCupPage.practiceHeading': "Matchs d'entraînement et terrain au repos",
+  'guide.worldPage.worldBossBody':
+    "Tout là-haut sur Thornpeak, la tempête au-dessus de Stormcrag prend parfois forme. Thunzharr, le Pic éveillé s'y dresse à un rythme régulier, un élémentaire de la puissance d'un raid affronté en monde ouvert par quiconque répond à l'appel, et il devient d'autant plus redoutable que les prétendants se dressent nombreux contre lui. Chacun de ceux qui rejoignent le combat gagne son propre tirage de son butin, honoré selon les règles de verrouillage de raid, et sa chute s'attarde assez longtemps pour que les tombés reviennent en courant réclamer leur dû. Rassemblez plus d'épées que vous ne le pensez nécessaire.",
+  'guide.worldPage.worldBossTitle': "Quand le pic s'éveille : le boss de monde",
 };

@@ -7,6 +7,14 @@ import type { BiomeId, MapPointSound } from '../sim/types';
 
 export type Surface = 'grass' | 'dirt' | 'stone' | 'wood' | 'snow' | 'water';
 
+export interface AmbientPointSource {
+  readonly id: string;
+  readonly kind: 'campfire' | 'forge';
+  readonly x: number;
+  readonly y: number;
+  readonly z: number;
+}
+
 export interface SpatialAudioSink {
   /** Listener pose each frame: position + forward unit vector (camera). */
   setListener(x: number, y: number, z: number, fx: number, fy: number, fz: number): void;
@@ -27,12 +35,18 @@ export interface SpatialAudioSink {
     z: number,
     self: boolean,
   ): void;
-  /** Per-frame ambience state around the player; the engine cross-fades loops. */
+  /** Per-frame ambience state around the player; the engine cross-fades loops.
+   *  `biome` is the full `BiomeId` union (covers both the grid-world biomes and
+   *  the beach/desert/volcano/cave set). `crowd` is the Sowfield crowd-murmur
+   *  level (0 away from the stadium, about 0.4 on the grounds, 1 while a Vale
+   *  Cup match is live). */
   ambience(
     biome: BiomeId,
     inDungeon: boolean,
     precip: 'snow' | 'rain' | null,
     nearWater: boolean,
+    crowd: number,
+    points?: readonly AmbientPointSource[],
   ): void;
   /** Per-frame update of the map's authored positional point sounds (looping
    *  SFX emitters): the engine loops each within its radius (panned + distance-

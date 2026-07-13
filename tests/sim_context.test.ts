@@ -7,9 +7,11 @@
 //      same name, and the seam leaves same-seed-same-world determinism intact.
 
 import { describe, expect, it, vi } from 'vitest';
+import { createDeedRuntime } from '../src/sim/deeds';
 import { Rng } from '../src/sim/rng';
 import { Sim } from '../src/sim/sim';
 import { createSimContext, type SimContextHost } from '../src/sim/sim_context';
+import { createVcState } from '../src/sim/social/vale_cup';
 import { SpatialGrid } from '../src/sim/spatial';
 import type { Entity, SimEvent } from '../src/sim/types';
 
@@ -112,16 +114,12 @@ const CALLBACK_KEYS = [
   'mobSwing',
   'updateRangedPetAttack',
   'fleeMoveSpeed',
-  'usesProfiledMobCombat',
-  'updateProfiledMobCombat',
-  'tryMobMeleeSwingInRange',
   'maybeFlee',
   'aggroMob',
   'isStunned',
   'isRooted',
   'moveSpeedMult',
   'swingIntervalMult',
-  'mobEffectiveMeleeRange',
   'mobCanSwim',
   'resolveMovePoint',
   'updatePet',
@@ -144,6 +142,10 @@ const CALLBACK_KEYS = [
   'instanceOriginOf',
   'enterDungeon',
   'leaveDungeon',
+  'dungeonDifficulty',
+  'setDungeonDifficulty',
+  'awardHeroicMarks',
+  'grantHeroicKillLockout',
   // M3 mob-swing affix cascade surface.
   'effectiveArmor',
   'recalcPlayer',
@@ -152,6 +154,7 @@ const CALLBACK_KEYS = [
   // delveDetectMult already listed above (C1/M2/C3) - deduped, not re-added.
   'partyMembersForKey',
   'addItem',
+  'addItemInstance',
   // 'removeItem' listed above (P1b inventory-hub helper) - deduped.
   'spawnBossAdds',
   'tradeFor',
@@ -207,6 +210,14 @@ const CALLBACK_KEYS = [
   'marketListingBelongsTo',
   // Ravenpost mail: the quest turn-in letter hook.
   'queueQuestLetter',
+  // Set proc firing.
+  'applySetProcs',
+  // The Vale Cup sport-move arms (social/vale_cup.ts).
+  'vcupBallKick',
+  'vcupBallPass',
+  'vcupShoot',
+  'vcupSportDash',
+  'vcupSportShove',
 ] as const;
 
 // A fully-spied fake host. `clock` is mutable so a test can prove the context reads
@@ -216,6 +227,12 @@ function makeFakeHost() {
   const entities = new Map<number, Entity>();
   const clock = { time: 0, tick: 0 };
   const host: SimContextHost = {
+    riftCollisionToken: 1,
+    naturalRiftPortals: [],
+    riftEvents: [],
+    nextRiftInstanceId: 1,
+    riftPortalNextAt: 120,
+    riftPortalSpawnCount: 0,
     get rng() {
       return rng;
     },
@@ -240,6 +257,8 @@ function makeFakeHost() {
     groundAoEs: [],
     dungeonDoorIds: null,
     instances: [],
+    riftInstances: [],
+    riftPortalIds: null,
     arenaMatches: new Map(),
     duels: new Map(),
     cfg: { seed: 1 } as unknown as SimContextHost['cfg'],
@@ -248,18 +267,40 @@ function makeFakeHost() {
     arenaQueue2v2: [],
     arenaQueueFiesta: [],
     arenaBusySlots: new Set(),
+    arenaQueueYumi3: [],
+    arenaQueueYumi5: [],
+    yumiBusySlots: new Set(),
+    yumiCatMatches: new Map(),
+    matchmakeYumi: vi.fn(),
+    updateYumiActive: vi.fn(),
+    yumiPlayerDown: vi.fn(),
+    yumiCatDamaged: vi.fn(),
+    cleanupYumiMatch: vi.fn(),
     nextArenaMatchId: 1,
     delveRuns: [],
     delvePetStash: new Map(),
     utcDay: '',
     pendingMobRespawns: [],
     partyInvites: new Map(),
+    readyChecks: new Map(),
     chatTokens: new Map(),
     channelSubs: new Map(),
     pendingLootRolls: new Map(),
     nextLootRollId: 1,
     devCommands: false,
     marketListings: [],
+    bankerIds: [],
+    vcup: createVcState(),
+    deedDirtyPids: new Set<number>(),
+    deedDirtyKeys: new Map<number, Set<string>>(),
+    worldBossEntityIds: [],
+    deedRuntime: createDeedRuntime(),
+    fiestaBotPids: [],
+    bumpDeedStat: vi.fn(),
+    markItemDiscovered: vi.fn(),
+    markVisited: vi.fn(),
+    markDeedsDirty: vi.fn(),
+    grantDeed: vi.fn(() => true),
     emit: vi.fn(),
     error: vi.fn(),
     dealDamage: vi.fn(),
@@ -319,6 +360,8 @@ function makeFakeHost() {
     checkQuestReady: vi.fn(),
     countItem: vi.fn(() => 0),
     countFungibleItem: vi.fn(() => 0),
+    countEnchantableItem: vi.fn(() => 0),
+    removeEnchantableItem: vi.fn(),
     completeQuestForDev: vi.fn(() => false),
     completeCurrentQuestsForDev: vi.fn(() => 0),
     lockoutNowMs: vi.fn(() => 0),
@@ -327,6 +370,13 @@ function makeFakeHost() {
     instanceOriginOf: vi.fn(() => ({ x: 0, z: 0 })),
     enterDungeon: vi.fn(),
     leaveDungeon: vi.fn(),
+    enterRift: vi.fn(),
+    leaveRift: vi.fn(),
+    riftOpenTreasure: vi.fn(),
+    dungeonDifficulty: vi.fn(() => 'normal' as const),
+    setDungeonDifficulty: vi.fn(),
+    awardHeroicMarks: vi.fn(),
+    grantHeroicKillLockout: vi.fn(),
     addEntity: vi.fn(),
     dropEntity: vi.fn(),
     rebucket: vi.fn(),
@@ -358,16 +408,12 @@ function makeFakeHost() {
     mobSwing: vi.fn(),
     updateRangedPetAttack: vi.fn(),
     fleeMoveSpeed: vi.fn(() => 0),
-    usesProfiledMobCombat: vi.fn(() => false),
-    updateProfiledMobCombat: vi.fn(),
-    tryMobMeleeSwingInRange: vi.fn(() => false),
     maybeFlee: vi.fn(() => false),
     aggroMob: vi.fn(),
     isStunned: vi.fn(() => false),
     isRooted: vi.fn(() => false),
     moveSpeedMult: vi.fn(() => 1),
     swingIntervalMult: vi.fn(() => 1),
-    mobEffectiveMeleeRange: vi.fn(() => 0),
     mobCanSwim: vi.fn(() => false),
     resolveMovePoint: vi.fn(() => ({ x: 0, z: 0 })),
     updatePet: vi.fn(),
@@ -390,6 +436,7 @@ function makeFakeHost() {
     // delveDetectMult stubbed above (C1/M2/C3) - deduped here.
     partyMembersForKey: vi.fn(() => []),
     addItem: vi.fn(),
+    addItemInstance: vi.fn(),
     // removeItem stubbed above (P1b inventory-hub helper) - deduped.
     spawnBossAdds: vi.fn(),
     tradeFor: vi.fn(() => null),
@@ -411,6 +458,7 @@ function makeFakeHost() {
     lineOfSightBlocked: vi.fn(() => false),
     stopFollow: vi.fn(),
     partyInvite: vi.fn(),
+    readyCheckStart: vi.fn(),
     tameError: vi.fn(() => null),
     standUp: vi.fn(),
     breakGhostWolf: vi.fn(),
@@ -445,6 +493,13 @@ function makeFakeHost() {
     marketListingBelongsTo: vi.fn(() => false),
     // Ravenpost mail: the quest turn-in letter hook.
     queueQuestLetter: vi.fn(),
+    applySetProcs: vi.fn(),
+    // The Vale Cup sport-move arms.
+    vcupBallKick: vi.fn(),
+    vcupBallPass: vi.fn(),
+    vcupShoot: vi.fn(),
+    vcupSportDash: vi.fn(),
+    vcupSportShove: vi.fn(),
   };
   return { host, rng, entities, clock };
 }
@@ -466,6 +521,14 @@ describe('createSimContext (isolated, fake host)', () => {
     clock.tick = 7;
     expect(ctx.time).toBe(12.5);
     expect(ctx.tickCount).toBe(7);
+  });
+
+  it('exposes bankerIds as a live shared view (the marketListings idiom)', () => {
+    const { host } = makeFakeHost();
+    const ctx = createSimContext(host);
+    expect(ctx.bankerIds).toBe(host.bankerIds);
+    host.bankerIds.push(4242); // the Sim ctor pushes ids after the ctx is built
+    expect(ctx.bankerIds).toEqual([4242]);
   });
 
   it('passes every callback through to the host by identity (no rewrapping)', () => {

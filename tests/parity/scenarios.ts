@@ -19,13 +19,22 @@
 // mobSwing, spawnDelveModule), never reaching into not-yet-extracted internals
 // in a way the sim itself does not already expose.
 
-import { arenaOrigin, DELVES, instanceOrigin, MOBS, PROPS, QUESTS } from '../../src/sim/data';
+import {
+  arenaOrigin,
+  DELVES,
+  DUNGEON_X_THRESHOLD,
+  instanceOrigin,
+  MOBS,
+  PROPS,
+  QUESTS,
+} from '../../src/sim/data';
 import { createMob } from '../../src/sim/entity';
 import { solveLockActions } from '../../src/sim/lockpick';
 import { Sim } from '../../src/sim/sim';
 import { addThreat } from '../../src/sim/threat';
 import {
   type Aura,
+  CAST_QUEUE_WINDOW_SEC,
   DT,
   dist2d,
   type Entity,
@@ -558,10 +567,12 @@ function petAi(): Scenario {
 // on the pet so despawnPersistentPet's threat-scrub + retargetMob draws; then re-tames,
 // revives a dead pet, and a stow/restore round-trip (serializePet -> despawnPersistentPet
 // -> restorePet). A warlock summons a demon, channels Demon Heal (applyDemonHealTick:
-// heal2 + healingThreat), swaps demons (despawnPersistentPet + the "answers your summons"
-// vs "fades back into the void" branches), then stows a demon so despawnPet runs its
-// player-target + threat scrub (retargetMob draw). The despawn scrubs are the slice's
-// only rng draws, so the draw-order log pins them; the snapshots pin every state change.
+// heal2 + healingThreat), swaps demons (despawnPersistentPet + "answers your summons"),
+// then re-summons the SAME demon while it is alive (despawnPersistentPet + a fresh
+// full-health demon answers, rather than toggling off), then stows a demon so despawnPet
+// runs its player-target + threat scrub (retargetMob draw). The despawn scrubs are the
+// slice's only rng draws, so the draw-order log pins them; the snapshots pin every state
+// change.
 function petCommands(): Scenario {
   return {
     name: 'pet_commands',
@@ -665,8 +676,11 @@ function petCommands(): Scenario {
       const vw = sim.petOf(wpid) as AnyEntity;
       rec.notes.voidId = vw.id;
       rec.track(vw.id);
-      (sim as any).summonPet(warlock, 'gloomshade'); // same template, alive: "fades back into the void" (no new pet)
-      rec.snapshot('demon-faded');
+      (sim as any).summonPet(warlock, 'gloomshade'); // same template, alive: dismissed + a fresh full-health demon answers
+      const vw2 = sim.petOf(wpid) as AnyEntity;
+      rec.notes.void2Id = vw2.id;
+      rec.track(vw2.id);
+      rec.snapshot('demon-resummoned');
 
       // despawnPet (demon hard despawn): re-summon, point a player target + mob threat at it, stow the demon.
       (sim as any).summonPet(warlock, 'emberkin');
@@ -2997,6 +3011,7 @@ function c4aCastingLifecycle(): Scenario {
     coverage: [
       'castAbility timed-cast START (mage fireball) + Math.max gcd arm',
       'updateCasting progress + finish -> applyAbility spell-hit roll (rng) -> runEffects',
+      'single-slot spell queue (#1360): tail-window press queues, fires on completion',
       'pushbackCast timed branch (+CAST_PUSHBACK_SEC) via dealDamage mid-cast',
       'updateCasting silence branch -> cancelCast (priest lesser_heal, holy)',
       'castAbility channel START (warlock drain_life): spend+arm at START',
@@ -3015,7 +3030,7 @@ function c4aCastingLifecycle(): Scenario {
       const eMage = sim.entities.get(mage) as AnyEntity;
       const ePriest = sim.entities.get(priest) as AnyEntity;
       const eWarlock = sim.entities.get(warlock) as AnyEntity;
-      // Level 12: fireball rank 3 (2.5s), lesser_heal rank 3 (2.0s, holy),
+      // Level 12: fireball rank 3 (3.0s), lesser_heal rank 3 (2.0s, holy),
       // drain_life rank 1 (5s channel / 5 ticks = 1s per tick). drain_life needs >=10.
       for (const pid of [mage, priest, warlock]) sim.setPlayerLevel(12, pid);
       teleport(sim, eMage, -3, -45);
@@ -3044,6 +3059,26 @@ function c4aCastingLifecycle(): Scenario {
       sim.dealDamage(mob, eMage, 40, false, 'physical', null, 'hit'); // pushbackCast timed branch
       rec.snapshot('mage-pushback');
       rec.tick(120); // let the 2.5s cast (+ pushback) finish -> applyAbility -> runEffects
+
+      // --- mage: spell queue (#1360): a press in the cast tail queues, fires on completion ---
+      eMage.resource = eMage.maxResource;
+      face(eMage, mob);
+      sim.castAbility('fireball', mage); // second timed-cast START (fresh cast, no pushback)
+      // drain to inside the queue window: tick one at a time (cast time varies by rank/level,
+      // so a hardcoded tick count would silently drift outside the window) until castRemaining
+      // is within CAST_QUEUE_WINDOW_SEC but the cast has not yet completed.
+      while (eMage.castRemaining > CAST_QUEUE_WINDOW_SEC) rec.tick(1);
+      if (!(eMage.castingAbility && eMage.castRemaining > 0)) {
+        throw new Error(
+          'c4a_casting_lifecycle: fireball cast completed before entering the queue window',
+        );
+      }
+      sim.castAbility('fireball', mage); // queues instead of erroring "You are busy."
+      if (eMage.queuedCastAbility !== 'fireball') {
+        throw new Error('c4a_casting_lifecycle: press inside the queue window did not queue');
+      }
+      rec.snapshot('mage-queued');
+      rec.tick(20); // finishes the in-flight cast (fires the queued one) and lets it progress
 
       // --- priest: timed self-heal start -> silence lands -> updateCasting cancel ---
       ePriest.hp = Math.max(1, ePriest.maxHp - 1000);
@@ -3187,17 +3222,20 @@ function mobLifecycle(): Scenario {
       rec.notes.addDespawned = !sim.entities.has(add.id);
       rec.snapshot('respawn');
 
-      // 5) Dungeon mob stays dead: spawnPos past DUNGEON_X_THRESHOLD (600) -> the
-      // corpse-tick respawn gate is skipped, the mob never respawns into the wild.
+      // 5) Dungeon mob stays dead: spawnPos past DUNGEON_X_THRESHOLD -> the
+      // corpse-tick respawn gate is skipped, the mob never respawns into the
+      // wild. (The threshold moved east with the instance plane in the world
+      // grid stage 2; place relative to it, not at a literal x.)
+      const dungeonX = DUNGEON_X_THRESHOLD + 100;
       const dungeonMob = spawnMob(
         sim,
         'forest_wolf',
         5,
-        700,
-        terrainHeight(700, 300, sim.cfg.seed),
+        dungeonX,
+        terrainHeight(dungeonX, 300, sim.cfg.seed),
         300,
       );
-      dungeonMob.spawnPos = { x: 700, y: dungeonMob.pos.y, z: 300 };
+      dungeonMob.spawnPos = { x: dungeonX, y: dungeonMob.pos.y, z: 300 };
       rec.track(dungeonMob.id);
       lethal(sim, player, dungeonMob);
       dungeonMob.corpseTimer = 0;
@@ -3739,6 +3777,66 @@ function inventoryVendor(): Scenario {
   };
 }
 
+// Personal bank: the per-character deposit box. A player stands at a
+// bursar and moves a stack in and out through the pooled deposit/withdraw commands,
+// then buys a slot expansion. Exercises every state transition the bank owns:
+//  - bankDeposit partial (a fraction of a fungible stack leaves the bags);
+//  - bankDeposit whole (the rest of the stack, merging into the bank slot);
+//  - bankWithdraw partial then whole (the mirror, gated by bag capacity);
+//  - bankBuySlots (copper - table price, purchasedSlots + 6).
+// The bank draws NO rng (it is pure pooled-list math), so the draw-order digest must
+// stay byte-identical; its behavior is pinned entirely through PlayerMeta (copper +
+// inventory + bank) and the emitted event stream. Modeled on market_round_trip.
+function bankRoundTrip(): Scenario {
+  return {
+    name: 'bank_round_trip',
+    coverage: [
+      'bankDeposit partial: a fraction of a fungible stack moves bags -> bank',
+      'bankDeposit whole: the remaining stack merges into the bank slot',
+      'bankWithdraw partial then whole: bank -> bags, gated by bag capacity',
+      'bankBuySlots: meta.copper - BANK_EXPANSION_PRICES[0] + purchasedSlots + 6',
+      'banker-proximity gate (nearBanker) satisfied by standing at a bursar',
+    ],
+    build: () => new Sim({ seed: 1024, playerClass: 'warrior', noPlayer: true }),
+    drive(rec: Recorder) {
+      const sim = rec.sim as AnySim;
+      const pid = sim.addPlayer('warrior', 'Vaultkeeper');
+      const meta = sim.players.get(pid) as any;
+      // Stand at a bursar so the nearBanker gate passes (dist2d check, matching x/z
+      // is enough). bankerIds is the Sim anchor list seeded by the ctor.
+      const banker = sim.entities.get(sim.bankerIds[0]) as AnyEntity;
+      teleport(sim, sim.entities.get(pid) as AnyEntity, banker.pos.x, banker.pos.z);
+      sim.addItem('wolf_fang', 5, pid);
+      meta.copper = 1000;
+      rec.notes.pid = pid;
+      rec.snapshot('bank-setup');
+
+      // 1) deposit a partial count: 2 of the 5-stack leaves the bags for the bank.
+      const depIdx = meta.inventory.findIndex((s: any) => s.itemId === 'wolf_fang');
+      sim.bankDeposit(depIdx, 2, pid);
+      rec.snapshot('deposited-partial');
+
+      // 2) deposit the whole remaining stack (3): merges into the bank's wolf_fang slot.
+      const depIdx2 = meta.inventory.findIndex((s: any) => s.itemId === 'wolf_fang');
+      sim.bankDeposit(depIdx2, undefined, pid);
+      rec.snapshot('deposited-whole');
+
+      // 3) withdraw a partial count (1) back into the bags.
+      sim.bankWithdraw(0, 1, pid);
+      rec.snapshot('withdrew-partial');
+
+      // 4) withdraw the whole remaining bank stack (4) back into the bags.
+      sim.bankWithdraw(0, undefined, pid);
+      rec.snapshot('withdrew-whole');
+
+      // 5) buy the first slot expansion: copper - 500, purchasedSlots 0 -> 6.
+      sim.bankBuySlots(pid);
+      rec.snapshot('bought-slots');
+      rec.tick(2);
+    },
+  };
+}
+
 // XP / prestige (G1b): the residual XP-shaping surface C1 left on Sim. Parks a
 // warrior inside an inn footprint to accrue rested XP (updateRested + isResting),
 // spends it on a kill-flagged award (the grantXp rested double-up), dings the
@@ -3966,6 +4064,7 @@ export const SCENARIOS: Scenario[] = [
   c5AutoAttack(),
   marketRoundTrip(),
   inventoryVendor(),
+  bankRoundTrip(),
   g1bXpPrestige(),
   playerTrade(),
   chatSocial(),

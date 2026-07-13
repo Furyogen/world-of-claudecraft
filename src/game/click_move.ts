@@ -140,3 +140,14 @@ export function resolveClickMoveAction(
   if (state.movementSuspended) return 'pause';
   return 'continue';
 }
+
+// A teleport (a dungeon door, the Veiled Hollow portal, a spirit release)
+// moves the player much farther in one frame than running ever could. Any
+// pending click-to-move destination now lies across the transition, so
+// chasing it walks the player straight back into the trigger (an enter/exit
+// ping-pong). Callers cancel the run when this trips.
+export const CLICK_MOVE_TELEPORT_BREAK = 30; // yards per frame; running covers < 2
+
+export function clickMoveBrokenByTeleport(prev: Point2 | null, current: Point2): boolean {
+  return prev !== null && distance2d(prev, current) > CLICK_MOVE_TELEPORT_BREAK;
+}

@@ -8,6 +8,7 @@ import {
   parseHotbarActions,
   placeAbilityOnSlot,
   placeItemOnSlot,
+  resolveMobileHotbarDrop,
   shouldSeedFormBar,
   syncHotbarActions,
 } from '../src/ui/hotbar';
@@ -374,5 +375,19 @@ describe('hotbar slot sync', () => {
       null,
       { type: 'ability', id: 'blink' },
     ]);
+  });
+});
+
+describe('mobile touch drag drop resolution', () => {
+  it('resolves the target slot when it differs from the source', () => {
+    expect(resolveMobileHotbarDrop(2, 5)).toBe(5);
+  });
+
+  it('cancels when the pointer released outside any slot', () => {
+    expect(resolveMobileHotbarDrop(2, null)).toBeNull();
+  });
+
+  it('cancels when the pointer released back on the source slot', () => {
+    expect(resolveMobileHotbarDrop(2, 2)).toBeNull();
   });
 });

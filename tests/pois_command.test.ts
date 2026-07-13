@@ -26,7 +26,7 @@ function lastError(events: SimEvent[]): string | undefined {
 
 function expected(sim: Sim, pid: number): string {
   const pos = sim.entities.get(pid)!.pos;
-  const zone = zoneAt(pos.z);
+  const zone = zoneAt(pos.x, pos.z);
   const parts = zone.pois
     .map((p) => ({ label: p.label, d: dist2d(pos, { x: p.x, y: 0, z: p.z }) }))
     .sort((a, b) => a.d - b.d)

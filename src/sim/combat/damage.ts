@@ -3,8 +3,9 @@
 // This module owns the post-mitigation damage pipeline: dealDamage's amp/absorb/
 // duel/fiesta/arena routing + death handoff, the two reactive hooks it drives
 // (maybeFrenzyOnHit, reflectSpellWard), the death teardown (handleDeath), and the
-// XP-grant chain (grantXp -> accrueLifetimeXp -> checkMilestones). It is the widest-
-// coupled slice in the refactor, so it consumes a large slice of the SimContext seam.
+// XP-grant chain (grantXp -> accrueLifetimeXp, whose tail marks the player dirty
+// for the Book of Deeds tick-tail evaluator). It is the widest-coupled slice in
+// the refactor, so it consumes a large slice of the SimContext seam.
 //
 // PRIME DIRECTIVE: this is a MOVE, not a rewrite. Every function below is the former
 // `Sim` method verbatim, with `this.X` rewritten to `ctx.X` (the SimContext seam) or
@@ -23,11 +24,13 @@
 // (enforced by tests/architecture.test.ts).
 
 import { DELVES, GROUP_XP_BONUS, MOBS } from '../data';
+import * as deedsMod from '../deeds';
 import { recalcPlayerStats } from '../entity';
 import { DAMAGE_IDLE_DESPAWN_MOB_IDS, DAMAGE_IDLE_DESPAWN_SECONDS } from '../entity_roster';
 import { aurasSurvivingDeath } from '../resurrection';
 import type { PlayerMeta } from '../sim';
 import type { SimContext } from '../sim_context';
+import { vcupBothSeated } from '../social/vale_cup';
 import { addThreat, clearThreat } from '../threat';
 import type { Entity } from '../types';
 import {
@@ -35,7 +38,6 @@ import {
   FISHING_CAST_ID,
   isConsuming,
   MAX_LEVEL,
-  MILESTONES,
   mobXpValue,
   NYTHRAXIS_BOSS_ID,
   PARTY_XP_RANGE,
@@ -44,7 +46,7 @@ import {
   virtualLevel,
   xpForLevel,
 } from '../types';
-import { WORLD_BOSS_CORPSE_SECONDS, worldBossContributors } from '../world_boss';
+import { WORLD_BOSS_CORPSE_SECONDS, worldBossLootContributors } from '../world_boss';
 
 // How long a slain mob's corpse persists (seconds) before it is cleared. Sole user
 // is handleDeath, so the constant lives here with the death-domain code.
@@ -84,6 +86,12 @@ export function dealDamage(
   // wild-mob leash recovery, and must not inherit this immunity from stale state.
   if (target.kind === 'mob' && target.aiState === 'evade' && target.ownerId === null) return;
   amount = Math.max(0, amount);
+  // Dev "smite" mode: a flagged player's hit one-shots any mob (overrides the
+  // rolled amount before mitigation, so armor/absorb can't save the target). Only
+  // the player's own damage, only vs mobs; never touches players/NPCs/PvP.
+  if (source?.oneShot && source.kind === 'player' && target.kind === 'mob') {
+    amount = target.maxHp * 1000 + 1_000_000;
+  }
 
   // Defensive Stance, classic: deal 10% less, take 10% less (and +30% threat below)
   if (
@@ -146,6 +154,17 @@ export function dealDamage(
     if (bonus > 0) amount = Math.round(amount * (1 + bonus));
   }
 
+  const sourcePlayer = ctx.pvpController(source);
+
+  // The Vale Cup: nobody bleeds at the Sowfield. Any damage between two seated
+  // cup fighters is floored to 0 BEFORE absorb shields soak it, belt and
+  // braces: the sport kit has no damage abilities, but a stray consumable,
+  // proc, or reflect must neither hurt a fighter nor eat their shield.
+  if (amount > 0 && sourcePlayer && target.kind === 'player') {
+    const cupMatch = ctx.vcup.match;
+    if (cupMatch && vcupBothSeated(cupMatch, sourcePlayer.id, target.id)) amount = 0;
+  }
+
   // absorb shields soak damage first
   if (amount > 0) {
     for (let i = target.auras.length - 1; i >= 0 && amount > 0; i--) {
@@ -160,8 +179,6 @@ export function dealDamage(
       }
     }
   }
-
-  const sourcePlayer = ctx.pvpController(source);
 
   // duels end at 1 hp — nobody dies
   const duel = target.kind === 'player' ? ctx.duels.get(target.id) : undefined;
@@ -184,6 +201,9 @@ export function dealDamage(
         ability,
         kind,
       });
+      // Book of Deeds: the clamped terminal hit counts (zero rng; the early
+      // return skips the shared deed site and the session RewardCounters).
+      if (source) deedsMod.onDamageDealtForDeeds(ctx, source, target, amount, crit, kind);
       ctx.endDuel(duel, sourcePlayer.id);
       return;
     }
@@ -226,7 +246,37 @@ export function dealDamage(
         ability,
         kind,
       });
+      // Book of Deeds: the clamped terminal hit counts (zero rng).
+      if (source) deedsMod.onDamageDealtForDeeds(ctx, source, target, amount, crit, kind);
       ctx.fiestaTakedown(match, sourcePlayer.id, target);
+      return;
+    }
+  }
+
+  // Protect Yumi downs bench the victim on a flat respawn timer, like Fiesta:
+  // never the permanent ranked elimination below. MUST stay above that arm.
+  if (
+    match?.yumi &&
+    match.state === 'active' &&
+    sourcePlayer &&
+    ctx.isArenaCrossTeam(match, sourcePlayer.id, target.id)
+  ) {
+    if (target.hp - amount <= 0) {
+      amount = Math.max(0, target.hp);
+      target.hp = 0;
+      ctx.emit({
+        type: 'damage',
+        sourceId: source?.id ?? -1,
+        targetId: target.id,
+        amount,
+        crit,
+        school,
+        ability,
+        kind,
+      });
+      // Book of Deeds: the clamped terminal hit counts (zero rng).
+      if (source) deedsMod.onDamageDealtForDeeds(ctx, source, target, amount, crit, kind);
+      ctx.yumiPlayerDown(match, target, sourcePlayer.id);
       return;
     }
   }
@@ -236,6 +286,7 @@ export function dealDamage(
   if (
     match &&
     !match.fiesta &&
+    !match.yumi &&
     match.state === 'active' &&
     sourcePlayer &&
     ctx.isArenaCrossTeam(match, sourcePlayer.id, target.id)
@@ -255,11 +306,24 @@ export function dealDamage(
         ability,
         kind,
       });
+      // Book of Deeds: the clamped terminal hit counts (zero rng).
+      if (source) deedsMod.onDamageDealtForDeeds(ctx, source, target, amount, crit, kind);
       handleDeath(ctx, target, source);
       const loserTeam = ctx.arenaTeamOf(match, target.id);
       if (loserTeam && ctx.isArenaTeamWiped(match, loserTeam)) {
         ctx.endArenaMatch(match, loserTeam === 'A' ? 'B' : 'A', 'defeat');
       }
+      return;
+    }
+  }
+
+  // A Protect Yumi cat: the yumi module owns the clamp, the sudden-death
+  // taken-multiplier, tiebreak bookkeeping, and win detection. Amps and
+  // absorb shields already resolved above, so a shielded cat soaks first.
+  if (target.kind === 'mob') {
+    const ymatch = ctx.yumiCatMatches.get(target.id);
+    if (ymatch) {
+      ctx.yumiCatDamaged(ymatch, source, target, amount, crit, school, ability, kind);
       return;
     }
   }
@@ -330,6 +394,21 @@ export function dealDamage(
     else if (source.ownerId !== null) target.tappedById = source.ownerId;
   }
 
+  // World-boss loot roster: every player (or pet owner) who lands a hit on a world
+  // boss becomes a permanent loot contributor. Unlike the hate table above, this set
+  // is NEVER pruned when they die, release their spirit, or drop off threat, so a
+  // raider who died to the boss still gets their personal drop. Read at death by
+  // worldBossLootContributors. Only world-boss templates ever populate it.
+  if (source && amount > 0 && MOBS[target.templateId]?.worldBoss) {
+    const contributorId = source.kind === 'player' ? source.id : source.ownerId;
+    if (contributorId !== null) target.bossDamagers.add(contributorId);
+  }
+
+  // Book of Deeds bookkeeping (pure state transitions, zero rng): the
+  // persisted lifetime damage counters beside the session RewardCounters
+  // below, plus encounter participant tracking for the roster tasks.
+  if (source) deedsMod.onDamageDealtForDeeds(ctx, source, target, amount, crit, kind);
+
   if (source && source.kind === 'player' && source.id !== target.id) {
     const meta = ctx.players.get(source.id);
     if (meta) meta.counters.damageDealt += amount;
@@ -383,6 +462,10 @@ export function dealDamage(
     const fmatch = target.kind === 'player' ? ctx.arenaMatches.get(target.id) : undefined;
     if (fmatch?.fiesta && fmatch.state === 'active' && !ctx.arenaIsDown(fmatch, target.id)) {
       ctx.fiestaDown(fmatch, target, null);
+    } else if (fmatch?.yumi && fmatch.state === 'active' && !ctx.arenaIsDown(fmatch, target.id)) {
+      // Same non-takedown bottom-out safety for Protect Yumi: bench, never
+      // the permanent death + graveyard flow.
+      ctx.yumiPlayerDown(fmatch, target, null);
     } else {
       handleDeath(ctx, target, source);
     }
@@ -490,6 +573,14 @@ export function handleDeath(ctx: SimContext, e: Entity, killer: Entity | null): 
   // so a stale mark would otherwise reappear on the respawn
   if (e.kind === 'mob') ctx.clearEntityMarker(e.id);
 
+  // Book of Deeds death bookkeeping runs BEFORE the hate tables are cleared just
+  // below, so its world-boss survival taint and the engaged-room folds observe
+  // the dying player's own pre-death threat: a heal-only contributor leaves no
+  // damage trace, so their live threat entry is the only proof they were engaged,
+  // and the clear loop would erase it out from under the hook. (The player-block
+  // counters and side effects stay below; only this pure read-of-threat moves up.)
+  if (e.kind === 'player') deedsMod.onPlayerDeathForDeeds(ctx, e);
+
   // the dead drop off every hate table (and any taunt lock on them)
   for (const m of ctx.entities.values()) {
     if (m.kind !== 'mob' || m.id === e.id) continue;
@@ -503,9 +594,14 @@ export function handleDeath(ctx: SimContext, e: Entity, killer: Entity | null): 
   if (e.kind === 'player') {
     const meta = ctx.players.get(e.id);
     if (meta) meta.counters.deaths++;
+    // The Book of Deeds death hook (lifetime deaths counter, the Keeper's Toll
+    // delight, perfection-window taints, the world-boss survival record) already
+    // ran above, before the hate tables were cleared.
     e.autoAttack = false;
     e.queuedOnSwing = null;
     delete e.queuedOnSwingFree;
+    e.queuedCastAbility = null;
+    e.queuedCastAim = null;
     e.comboPoints = 0;
     e.eating = null;
     e.drinking = null;
@@ -558,9 +654,20 @@ export function handleDeath(ctx: SimContext, e: Entity, killer: Entity | null): 
       });
     }
     if (e.templateId === NYTHRAXIS_BOSS_ID) ctx.grantNythraxisLockout(e);
+    // Heroic daily lockout lands HERE, on the kill itself (credit or no credit),
+    // for the whole group that owns the claim: the marks award further down is
+    // credit- and participation-gated, so it must not carry the lockout.
+    ctx.grantHeroicKillLockout(e);
     e.aiState = 'dead';
     e.corpseTimer = CORPSE_DURATION;
-    e.respawnTimer = ctx.cfg.respawnSeconds * (template?.respawnMult ?? (template?.rare ? 4 : 1));
+    e.respawnTimer =
+      template?.respawnSeconds ??
+      ctx.cfg.respawnSeconds * (template?.respawnMult ?? (template?.rare ? 4 : 1));
+    // A fixed respawn also caps corpse decay so the mob returns on schedule whether
+    // or not its loot was looted (training dummy: 10s).
+    if (template?.respawnSeconds !== undefined) {
+      e.corpseTimer = Math.min(e.corpseTimer, template.respawnSeconds);
+    }
     // World bosses: snapshot the contributor set from the hate table BEFORE it is
     // cleared below, keep a long lootable-corpse window so every contributor can
     // loot, and never auto-respawn in place: the world-boss scheduler is the sole
@@ -568,7 +675,7 @@ export function handleDeath(ctx: SimContext, e: Entity, killer: Entity | null): 
     // collapse with the boss: leaving them alive would harass looters for the
     // whole window, and a slain add's in-place respawn timer would revive it
     // mid-window (only fires for worldBoss templates, so no parity rng change).
-    const worldBossContribs = template?.worldBoss ? worldBossContributors(ctx, e) : null;
+    const worldBossContribs = template?.worldBoss ? worldBossLootContributors(ctx, e) : null;
     if (template?.worldBoss) {
       e.corpseTimer = WORLD_BOSS_CORPSE_SECONDS;
       e.respawnTimer = Infinity;
@@ -635,10 +742,20 @@ export function handleDeath(ctx: SimContext, e: Entity, killer: Entity | null): 
       // World bosses use PERSONAL loot for every contributor (rolled below from the
       // hate-table snapshot), not the tapper/party shared-corpse roll.
       if (!template?.worldBoss) ctx.rollLoot(e, meta, eligible);
+      // A heroic final boss additionally carries one personal Heroic Mark per
+      // eligible participant (no-op outside a heroic instance; draws no rng).
+      ctx.awardHeroicMarks(e, eligible);
+      // Book of Deeds kill credit: lifetime counters, slain marks, dungeon
+      // clears, and the encounter skill tasks that resolve at this death.
+      deedsMod.onMobKillCreditForDeeds(ctx, e, killer, meta, eligible);
     }
     // Personal loot is independent of tap/party kill credit: it goes to everyone who
     // damaged the boss, so it rolls outside the credited-player block above.
-    if (worldBossContribs) ctx.rollWorldBossLoot(e, worldBossContribs);
+    if (worldBossContribs) {
+      ctx.rollWorldBossLoot(e, worldBossContribs);
+      // World-boss deeds ride the same never-pruned contributor roster.
+      deedsMod.onWorldBossKilledForDeeds(ctx, e, worldBossContribs);
+    }
   }
 }
 
@@ -680,7 +797,7 @@ export function grantXp(
     meta.xp -= xpForLevel(p.level);
     p.level++;
     meta.counters.levelUps++;
-    recalcPlayerStats(p, meta.cls, meta.equipment, ctx.playerMods(meta));
+    recalcPlayerStats(p, meta.cls, meta.equipment, ctx.playerMods(meta), meta.equipmentInstance);
     p.hp = p.maxHp;
     if (p.resourceType === 'mana') p.resource = p.maxResource;
     ctx.emit({ type: 'levelup', level: p.level, pid: p.id });
@@ -693,8 +810,11 @@ export function grantXp(
 }
 
 // Add to the monotonic lifetime counter, emitting cosmetic virtual-level-up
-// events past the cap and unlocking any newly crossed milestones. Cheap: one
-// add plus an O(log n) table lookup, never touched on the per-tick hot path.
+// events past the cap. Cheap: one add plus an O(log n) table lookup, never
+// touched on the per-tick hot path. The legacy milestone check unified into
+// the Book of Deeds: the dirty mark at the tail hands the lifetime-XP (and
+// level) predicates to the tick-tail evaluator, whose grant path dual-writes
+// unlockedMilestones and emits deedUnlocked as the single grant event.
 function accrueLifetimeXp(ctx: SimContext, amount: number, meta: PlayerMeta, p: Entity): void {
   const atCap = p.level >= MAX_LEVEL;
   const beforeVL = atCap ? virtualLevel(meta.lifetimeXp) : 0;
@@ -711,15 +831,5 @@ function accrueLifetimeXp(ctx: SimContext, amount: number, meta: PlayerMeta, p: 
       ctx.emit({ type: 'virtualLevelUp', level: v, pid: p.id });
     }
   }
-  checkMilestones(ctx, meta, p);
-}
-
-// Unlock any cosmetic milestone whose lifetime-XP threshold was just crossed.
-function checkMilestones(ctx: SimContext, meta: PlayerMeta, p: Entity): void {
-  for (const m of MILESTONES) {
-    if (meta.lifetimeXp >= m.lifetimeXp && !meta.unlockedMilestones.has(m.id)) {
-      meta.unlockedMilestones.add(m.id);
-      ctx.emit({ type: 'milestoneUnlocked', milestoneId: m.id, pid: p.id });
-    }
-  }
+  ctx.markDeedsDirty(meta.entityId);
 }
