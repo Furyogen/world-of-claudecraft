@@ -52,6 +52,7 @@ import {
   emptyMoveInput,
   isDungeonDifficulty,
   MAX_LEVEL,
+  type MobFamily,
   PARTY_MEMBER_AURA_CAP,
   RUN_SPEED,
   type SimEvent,
@@ -244,9 +245,12 @@ const PERF_CAPTURE_MAX_MS = 30_000;
 const PERF_CAPTURE_DEFAULT_MS = 10_000;
 // The mob.update sim lap is additionally bucketed by mob family so a hot family
 // (a spider swarm, a pack of humanoids) shows up in the profile instead of hiding
-// inside one aggregate number. The 11 MobFamily values (src/sim/types.ts) plus an
-// 'other' catch-all for any templateId whose family does not resolve. Exported so
-// the registry pin can assert the derived bucket names as literals.
+// inside one aggregate number. Every MobFamily value (src/sim/types.ts) plus an
+// 'other' catch-all for any templateId whose family does not resolve. A family
+// missing from this list would derive a bucket name TickProfiler never registered
+// and silently drop its timing: the satisfies clause rejects a non-family typo, and
+// the registry pin test type-checks union coverage and asserts the derived names as
+// literals. Exported for those pins.
 export const MOB_UPDATE_BUCKETS = [
   'beast',
   'humanoid',
@@ -260,7 +264,7 @@ export const MOB_UPDATE_BUCKETS = [
   'dragonkin',
   'demon',
   'other',
-] as const;
+] as const satisfies readonly (MobFamily | 'other')[];
 // sim.tick() internal phase names (already `sim.`-prefixed): must match the
 // lap?.(...) call sites in src/sim/sim.ts tick(). Fed by the injected cfg.perfLap
 // probe while a detailed capture is active (an admin capture or PERF_TICK_LOG=1).
