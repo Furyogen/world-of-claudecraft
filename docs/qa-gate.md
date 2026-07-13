@@ -64,7 +64,7 @@ before reporting readiness.
 | Simulation architecture | `architecture-reviewer` | `woc_sim_architecture` |
 | Cross-host parity | `cross-platform-sync` | `woc_cross_platform` |
 | Persistence and migrations | `migration-safety` | `woc_persistence` |
-| Database performance | No separate role | `woc_database_performance` |
+| Database performance | `database-performance-reviewer` | `woc_database_performance` |
 | Privacy and security | `privacy-security-review` | `woc_security` |
 | Decisive tests | `test-coverage-auditor` | `woc_test_coverage` |
 | Frontend and graphics | `frontend-seam-reviewer` | `woc_frontend` |

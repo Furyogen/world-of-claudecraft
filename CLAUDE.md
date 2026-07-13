@@ -263,7 +263,8 @@ correct.
   pass. The repo ships purpose-built reviewers in `.claude/agents/` (dispatch via `/qa`):
   `qa-checklist` (the end-of-contribution gate), `architecture-reviewer` (determinism + the
   `SimContext` seam for `src/sim/`), `frontend-seam-reviewer` (ui/styles/render seams),
-  `cross-platform-sync`, `migration-safety`, `privacy-security-review`,
+  `cross-platform-sync`, `migration-safety`, `database-performance-reviewer` (query
+  cost/cadence, indexes, pool/lock/deadline scaling), `privacy-security-review`,
   `test-coverage-auditor` (assertion decisiveness + pin quality), and the
   `release-malware-audit` release gate; plus the `feature-plan`, `extract-and-test`,
   `release-merge-audit` (after any release merge into a feature branch), `i18n-locale-fill`
