@@ -89,9 +89,27 @@ describe('balance sim statistics', () => {
     expect(ranking[2]).toMatchObject({ key: 'weak', brokenScore: -2, verdict: 'underpowered' });
   });
 
-  it('rankBrokenness handles a spec missing one dimension', () => {
-    const ranking = rankBrokenness([{ key: 'pvp_only', zScore: 1 }], []);
-    expect(ranking[0].brokenScore).toBe(1);
-    expect(ranking[0].pveZ).toBeNull();
+  it('rankBrokenness handles a spec missing one dimension, in both directions', () => {
+    const pvpOnly = rankBrokenness([{ key: 'pvp_only', zScore: 1 }], []);
+    expect(pvpOnly[0].brokenScore).toBe(1);
+    expect(pvpOnly[0].pveZ).toBeNull();
+    const pveOnly = rankBrokenness([], [{ key: 'pve_only', zScore: -1 }]);
+    expect(pveOnly[0].brokenScore).toBe(1);
+    expect(pveOnly[0].pvpZ).toBeNull();
+  });
+
+  it('rankBrokenness marks the intermediate strong and weak bands', () => {
+    const ranking = rankBrokenness(
+      [
+        { key: 'strongish', zScore: 1 },
+        { key: 'weakish', zScore: -1 },
+      ],
+      [
+        { key: 'strongish', zScore: -1 },
+        { key: 'weakish', zScore: 1 },
+      ],
+    );
+    expect(ranking.find((r) => r.key === 'strongish')?.verdict).toBe('strong');
+    expect(ranking.find((r) => r.key === 'weakish')?.verdict).toBe('weak');
   });
 });

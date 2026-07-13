@@ -40,13 +40,31 @@ describe('duel bouts', () => {
     expect(getActiveWorldContent()).toBe(BUILTIN_WORLD);
   }, 30000);
 
-  it('healer mirrors reach the stalemate guard instead of the full cap', () => {
+  it('a passive healer mirror trips the stalemate guard well before the cap', () => {
+    const r = runDuelBout({ spec: spec('holy_priest') }, { spec: spec('holy_priest') }, 1, 600);
+    expect(r.winner).toBe('draw');
+    expect(r.endReason).toBe('stalemate');
+    expect(r.seconds).toBeCloseTo(30, 1);
+  }, 60000);
+
+  it('a contested healer mirror resolves with healing on both sides', () => {
     const r = runDuelBout({ spec: spec('holy_priest') }, { spec: spec('holy_priest') }, 9, 600);
-    if (r.winner === 'draw') {
-      expect(r.endReason).toBe('stalemate');
-      expect(r.seconds).toBeLessThan(600);
-    }
-    expect(r.a.healingDone + r.b.healingDone).toBeGreaterThan(0);
+    expect(r.winner).toBe('a');
+    expect(r.endReason).toBe('duelEnd');
+    expect(r.a.healingDone).toBeGreaterThan(0);
+    expect(r.b.healingDone).toBeGreaterThan(0);
+  }, 60000);
+
+  it('counts a real death behind the duel 1 hp guard in the bout metrics', () => {
+    // Seed observed in a full experiment run: the in-flight-shot hole lands a
+    // killing blow on the same tick the duel ends.
+    const r = runDuelBout(
+      { spec: spec('arms_warrior') },
+      { spec: spec('protection_paladin') },
+      1465967083,
+    );
+    expect(r.winner).toBe('b');
+    expect(r.a.diedForReal || r.b.diedForReal).toBe(true);
   }, 60000);
 });
 
@@ -76,7 +94,8 @@ describe('pve bouts', () => {
       31,
     );
     expect(standard.killed).toBe(true);
-    if (elite.killed) expect(elite.seconds).toBeGreaterThan(standard.seconds);
+    expect(elite.killed).toBe(true);
+    expect(elite.seconds).toBeGreaterThan(standard.seconds);
   }, 60000);
 
   it('rejects an unknown mob template', () => {

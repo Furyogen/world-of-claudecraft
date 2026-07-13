@@ -2,7 +2,7 @@
 // live content tables, so class/talent/item drift breaks CI here instead of
 // silently skewing balance runs.
 import { describe, expect, it } from 'vitest';
-import { bestGearFor, knockoutBuilds, specBuild } from '../scripts/balance_sim/builds';
+import { bestGearFor, gearScore, knockoutBuilds, specBuild } from '../scripts/balance_sim/builds';
 import { SPEC_CATALOG } from '../scripts/balance_sim/spec_catalog';
 import { abilitiesKnownAt } from '../src/sim/content/classes';
 import {
@@ -117,5 +117,15 @@ describe('generated gear', () => {
     const mageChest = ITEMS[bestGearFor(mage, MAX_LEVEL).chest!];
     expect(furyWeapon.kind).toBe('weapon');
     expect((mageChest.stats?.int ?? 0) > 0).toBe(true);
+  });
+
+  it('weights stamina and armor for tanks and spirit for healers', () => {
+    const prot = SPEC_CATALOG.find((s) => s.key === 'protection_warrior')!;
+    const holy = SPEC_CATALOG.find((s) => s.key === 'holy_priest')!;
+    const tanky = { id: 'x', kind: 'armor', slot: 'chest', stats: { sta: 10, armor: 100 } };
+    const spry = { id: 'y', kind: 'armor', slot: 'chest', stats: { agi: 10 } };
+    const spirity = { id: 'z', kind: 'armor', slot: 'chest', stats: { spi: 10 } };
+    expect(gearScore(tanky as never, prot)).toBeGreaterThan(gearScore(spry as never, prot));
+    expect(gearScore(spirity as never, holy)).toBeGreaterThan(gearScore(spry as never, holy));
   });
 });

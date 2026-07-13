@@ -52,6 +52,7 @@ describe('runExperiment', () => {
       expect(row.killRate).toBeGreaterThan(0);
     }
     expect(result.ranking).toHaveLength(2);
+    expect(result.realDeathCount).toBe(result.duels.filter((d) => d.realDeath).length);
     expect(labels.some((l) => l.startsWith('pvp'))).toBe(true);
     expect(labels.some((l) => l.startsWith('pve'))).toBe(true);
   }, 120000);
