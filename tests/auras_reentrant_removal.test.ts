@@ -71,4 +71,46 @@ describe('updateAuras under reentrant aura removal', () => {
     expect(eb.auras.some((x: Aura) => x.sourceId === a)).toBe(false);
     expect(events.some((e) => (e as { type: string }).type === 'duelEnd')).toBe(true);
   });
+
+  it('does not splice a bystander aura when the expiring aura was already removed', () => {
+    const sim = new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
+    const a = sim.addPlayer('warrior', 'Aleph', { autoEquip: true });
+    const b = sim.addPlayer('mage', 'Bet', { autoEquip: true });
+    teleport(sim, a, 0, -40);
+    teleport(sim, b, 4, -40);
+    sim.duelRequest(b, a);
+    sim.duelAccept(b);
+    for (let i = 0; i < 20 * 4; i++) {
+      sim.tick();
+      if ((sim as any).duels.get(a)?.state === 'active') break;
+    }
+    expect((sim as any).duels.get(a)?.state).toBe('active');
+
+    const eb = sim.entities.get(b)!;
+    // The DoT both TICKS (firing the 1 hp guard, whose endDuel clear removes
+    // it reentrantly) and EXPIRES on the same tick; a bystander self aura sits
+    // after it in the array. An index-based expiry splice would then remove
+    // the bystander instead of the already-gone DoT.
+    const dot = opponentDot(a, 'test_dot_expiring');
+    dot.remaining = 0.04;
+    (sim as any).applyAura(eb, dot);
+    (sim as any).applyAura(eb, {
+      id: 'test_bystander',
+      name: 'test_bystander',
+      kind: 'hot',
+      remaining: 10,
+      duration: 10,
+      value: 0,
+      sourceId: b,
+      school: 'holy',
+    } as Aura);
+    eb.hp = 5;
+
+    expect(() => sim.tick()).not.toThrow();
+
+    expect((sim as any).duels.has(a)).toBe(false);
+    expect(eb.dead).toBe(false);
+    expect(eb.auras.some((x: Aura) => x.id === 'test_dot_expiring')).toBe(false);
+    expect(eb.auras.some((x: Aura) => x.id === 'test_bystander')).toBe(true);
+  });
 });

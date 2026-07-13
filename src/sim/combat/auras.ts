@@ -146,7 +146,10 @@ export function updateAuras(ctx: SimContext, e: Entity): void {
     const a = e.auras[i];
     // A tick side effect below (a DoT tick's dealDamage firing the duel 1 hp
     // guard, whose endDuel bulk-clears the opponent's auras) can shrink this
-    // array mid-iteration, leaving the walked index past the end.
+    // array mid-iteration, leaving the walked index past the end. A bystander
+    // aura shifted below the cursor by such a bulk removal can be visited a
+    // second time that tick (one extra DT of decay): accepted, deterministic
+    // and host-consistent, to keep this hot loop allocation-free.
     if (!a) continue;
     a.remaining -= DT;
     // charge-limited thorns (Lightning Shield): age its internal cooldown so the
