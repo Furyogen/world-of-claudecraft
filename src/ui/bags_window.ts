@@ -34,7 +34,6 @@ import {
 } from './bag_filter';
 import {
   type BagAction,
-  type BagItemInfo,
   type BagMode,
   bagDestroyAction,
   bagItemAction,
@@ -465,7 +464,7 @@ export class BagsWindow {
           this.deps.insertItemChatLink(s.itemId);
           return;
         }
-        this.runBagItemAction(s, item, bagItemAction(item, this.bagMode()), ev);
+        this.runBagItemAction(s, bagItemAction(item, this.bagMode()), ev);
       });
       row.addEventListener('contextmenu', (ev) => {
         // A touch long-press belongs to the tooltip peek (the TouchPeekGuard
@@ -498,7 +497,7 @@ export class BagsWindow {
         // than silently opening a delete prompt (issue 1852).
         if (!ev.shiftKey) {
           ev.preventDefault();
-          this.runBagItemAction(s, item, bagItemAction(item, this.bagMode()), ev);
+          this.runBagItemAction(s, bagItemAction(item, this.bagMode()), ev);
           return;
         }
         const destroy = bagDestroyAction(item, this.bagMode());
@@ -575,7 +574,7 @@ export class BagsWindow {
   // right-click on a bag item performs the same primary action a left-click would
   // (equip/use/etc) rather than the surprise destroy-item shortcut it used to be
   // (issue 1852).
-  private runBagItemAction(s: InvSlot, item: BagItemInfo, action: BagAction, ev: MouseEvent): void {
+  private runBagItemAction(s: InvSlot, action: BagAction, ev: MouseEvent): void {
     switch (action) {
       case 'transferBlockedSoulbound':
         this.deps.showError(t('hudChrome.itemSoulbound'));
