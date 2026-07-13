@@ -249,8 +249,13 @@ export function updateMob(ctx: SimContext, mob: Entity): void {
         // chain and this callback is a per-visit hot path.
         const counters = ctx.mobScanCounters;
         // Query only to MAX_AGGRO_RADIUS: both idle scans clamp the effective detection
-        // radius to it (every further delve/stealth modifier only shrinks it) and detect
-        // strictly (d < radius), so a wider query only visits never-detectable players.
+        // radius to it (the general branch's delve/stealth modifiers only shrink it
+        // further) and detect strictly (d < radius), so a wider query only visits
+        // never-detectable players. One caveat: the grid buckets by end-of-tick
+        // position with a 1 yd pad (spatial.ts), so a mid-tick displacement past the
+        // pad (a knockback) defers that player's detection to the next tick's
+        // rebucket; the former 25 yd query had the same miss class above a 6 yd
+        // displacement.
         ctx.playerGrid.forEachInRadius(mob.pos.x, mob.pos.z, MAX_AGGRO_RADIUS, (e, d2) => {
           counters.aggroScanPlayerVisits++;
           if (e.dead) return;

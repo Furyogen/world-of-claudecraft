@@ -16,7 +16,8 @@
 //
 // The three scenarios (SCENARIO env):
 //   idle-crowd  a crowd of trivial-con bots parked ON a low-level camp. Every idle
-//               owner-less mob runs a radius-25 player-grid scan EVERY tick and the
+//               owner-less mob runs a player-grid scan at MAX_AGGRO_RADIUS (20 yd,
+//               src/sim/mob/locomotion.ts; 25 before the narrowing) EVERY tick and the
 //               scan counter increments for every visited player BEFORE the trivial
 //               check, so the crowd pays the full aggro-scan cost while the mobs stay
 //               idle. Signature: aggroVisits grows with N, threatVisits stays ~0.
