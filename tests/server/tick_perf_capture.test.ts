@@ -14,11 +14,51 @@ vi.mock('../../server/db', () => ({
   grantAccountMechChroma: vi.fn(async () => ({ completedQuestIds: [], mechChromaIds: [] })),
 }));
 
-import { GameServer, MOB_UPDATE_BUCKETS, SIM_LAP_PHASES } from '../../server/game';
+import {
+  GameServer,
+  MOB_UPDATE_BUCKETS,
+  type PerfCaptureResult as ServerPerfCaptureResult,
+  SIM_LAP_PHASES,
+} from '../../server/game';
+import type { PerfCaptureResult as AdminPerfCaptureResult } from '../../src/admin/types';
 import { MOBS } from '../../src/sim/data';
 import { createMob } from '../../src/sim/entity';
 import { Sim } from '../../src/sim/sim';
-import type { Entity } from '../../src/sim/types';
+import type { Entity, MobFamily } from '../../src/sim/types';
+import { terrainHeight } from '../../src/sim/world';
+
+// Compile-time assertion that T is exactly `never` (same idiom as the IWorld facet
+// pins in tests/world_api_parity.test.ts). A MobFamily value with no matching
+// MOB_UPDATE_BUCKETS entry would derive a bucket name TickProfiler never registered
+// and silently drop its timing, so force union coverage here: adding a family to the
+// union without a bucket makes Exclude<> non-never and tsc fails.
+type AssertNever<T extends never> = T;
+type _ExhaustMobFamilyBuckets = AssertNever<
+  Exclude<MobFamily | 'other', (typeof MOB_UPDATE_BUCKETS)[number]>
+>;
+
+// The admin dashboard's PerfCaptureResult is a hand-maintained structural mirror of
+// the server's; pin the four mob-scan capture fields in both directions so a rename
+// or type drift on either side reddens tsc instead of silently desyncing the SPA.
+type AssertTrue<T extends true> = T;
+type MobScanCaptureFields =
+  | 'aggroVisitsTotal'
+  | 'aggroVisitsMaxPerTick'
+  | 'threatVisitsTotal'
+  | 'threatVisitsMaxPerTick';
+type _AdminMirrorCarriesMobScanFields = AssertTrue<
+  Pick<ServerPerfCaptureResult, MobScanCaptureFields> extends Pick<
+    AdminPerfCaptureResult,
+    MobScanCaptureFields
+  >
+    ? Pick<AdminPerfCaptureResult, MobScanCaptureFields> extends Pick<
+        ServerPerfCaptureResult,
+        MobScanCaptureFields
+      >
+      ? true
+      : false
+    : false
+>;
 
 // Drive 60 nominal samples into the capture, then move its wall deadline to now and
 // finalize. Production closes on wall time; this helper keeps the percentile sample
@@ -84,7 +124,8 @@ describe('tick perf capture lifecycle', () => {
     expect(status.last!.online).toBe(0);
     // The four mob-scan capture fields are present as numbers. This harness drives
     // sim.tick() directly rather than the GameServer loop that accumulates them, so
-    // they stay at their zeroed start value; a follow-up test covers non-zero sums.
+    // they stay at their zeroed start value; the real-loop test at the bottom of
+    // this file drives the non-zero sums.
     expect(status.last!.aggroVisitsTotal).toBe(0);
     expect(status.last!.aggroVisitsMaxPerTick).toBe(0);
     expect(status.last!.threatVisitsTotal).toBe(0);
@@ -292,6 +333,15 @@ describe('tick perf capture lifecycle', () => {
       'demon',
       'other',
     ]);
+    // Exhaustiveness against the live content set (the runtime cousin of the
+    // type-level _ExhaustMobFamilyBuckets pin at the top of this file): a family
+    // used by MOBS but missing from MOB_UPDATE_BUCKETS would derive an unregistered
+    // bucket name and its mob.update timing would be silently dropped.
+    const familiesInContent = new Set(Object.values(MOBS).map((m) => m.family));
+    expect(familiesInContent.size).toBeGreaterThan(0);
+    for (const family of familiesInContent) {
+      expect(MOB_UPDATE_BUCKETS, `family '${family}' has no registered bucket`).toContain(family);
+    }
   });
 
   it('buckets a placed mob into its family lap end to end through the real probe', () => {
@@ -374,5 +424,117 @@ describe('tick perf capture lifecycle', () => {
     const last = server.perfCaptureStatus().last;
     expect(last).not.toBeNull();
     expect(Object.keys(last!.profile.phases)).toContain('sim.mob.update|other');
+  });
+
+  // Real timers and a real interval loop, so give the test room beyond the 5s
+  // default when the host is under load; the happy path completes in well under a
+  // second.
+  it('fills the capture accumulators through the real loop and re-zeroes on a fresh capture', {
+    timeout: 20_000,
+  }, async () => {
+    // Unlike runCaptureWindow (which drives sim.tick() directly), this drives the
+    // REAL GameServer interval loop, pinning the wire the other tests bypass: after
+    // each committed tick the loop must read sim.mobScanCounters and fold it into
+    // the capture accumulators while a capture is in flight. Deleting that fold
+    // call, swapping its aggro/threat arguments, or inverting its capturing gate
+    // reddens this test.
+    const server = new GameServer();
+    const sim = (server as unknown as { sim: Sim }).sim;
+    const seed = (sim as unknown as { cfg: { seed: number } }).cfg.seed;
+    // One DEAD player 10 units from an idle wolf, far outside the world's camps
+    // (the FAR-clear pin in tests/mob_scan_counters.test.ts covers this spot). A
+    // dead player still counts as a grid visit (the increment precedes the dead
+    // check) but can never be aggroed, so every committed tick adds exactly one
+    // aggro visit while the threat accumulators stay at zero; a swapped fold
+    // argument order would move the count across and redden both halves.
+    const pid = sim.addPlayer('warrior', 'LoopScanTarget');
+    const player = (sim as unknown as { entities: Map<number, Entity> }).entities.get(pid)!;
+    player.pos.x = 510;
+    player.pos.z = 500;
+    player.pos.y = terrainHeight(510, 500, seed);
+    player.prevPos = { ...player.pos };
+    player.dead = true;
+    const wolf = createMob(900403, MOBS.forest_wolf, 5, {
+      x: 500,
+      y: terrainHeight(500, 500, seed),
+      z: 500,
+    });
+    wolf.aiState = 'idle';
+    (sim as unknown as { addEntity: (e: Entity) => void }).addEntity(wolf);
+
+    // Max window so the capture cannot wall-close mid-test; production closes on
+    // the wall deadline, which the finalize below forces instead.
+    server.startPerfCapture(30_000);
+    server.start();
+    try {
+      // Poll the accumulator itself rather than tick counts: the first committed
+      // tick scans a player grid not yet refreshed with the teleported player, so
+      // visit totals lag tick counts by one. A broken fold wire never reaches 3 and
+      // times this wait out.
+      await vi.waitFor(
+        () => {
+          const stats = (server as unknown as { mobScanTickStats: { aggroVisitsTotal: number } })
+            .mobScanTickStats;
+          expect(stats.aggroVisitsTotal).toBeGreaterThanOrEqual(3);
+        },
+        { timeout: 10_000, interval: 25 },
+      );
+    } finally {
+      server.stop();
+    }
+    (server as unknown as { perfCaptureDeadlineNs: bigint }).perfCaptureDeadlineNs = 0n;
+    (server as unknown as { finalizePerfCaptureIfDue: () => void }).finalizePerfCaptureIfDue();
+
+    const first = server.perfCaptureStatus().last;
+    expect(first).not.toBeNull();
+    // The frozen result carries at least the visits the wait observed, peaking at
+    // one visit per tick.
+    expect(first!.aggroVisitsTotal).toBeGreaterThanOrEqual(3);
+    expect(first!.aggroVisitsMaxPerTick).toBeGreaterThanOrEqual(1);
+    expect(first!.aggroVisitsTotal).toBeGreaterThanOrEqual(first!.aggroVisitsMaxPerTick);
+    // Nothing entered combat, so the threat side stays exactly zero.
+    expect(first!.threatVisitsTotal).toBe(0);
+    expect(first!.threatVisitsMaxPerTick).toBe(0);
+
+    // A fresh capture must start from zeroed accumulators (startPerfCapture calls
+    // resetMobScanCaptureAccumulators): finalize it with the loop stopped and the
+    // first window's totals must not leak through.
+    server.startPerfCapture(30_000);
+    (server as unknown as { perfCaptureDeadlineNs: bigint }).perfCaptureDeadlineNs = 0n;
+    (server as unknown as { finalizePerfCaptureIfDue: () => void }).finalizePerfCaptureIfDue();
+    const second = server.perfCaptureStatus().last;
+    expect(second).not.toBeNull();
+    expect(second!.aggroVisitsTotal).toBe(0);
+    expect(second!.aggroVisitsMaxPerTick).toBe(0);
+    expect(second!.threatVisitsTotal).toBe(0);
+    expect(second!.threatVisitsMaxPerTick).toBe(0);
+  });
+
+  it('prints the two visit tokens on the [perf] heartbeat line', () => {
+    // The heartbeat is a dev-channel console line with no in-repo scraper, but the
+    // two tokens are the cheap always-on view of the scan counters; pin their
+    // presence and shape so an accidental format change is a deliberate one.
+    vi.stubEnv('PERF_TICK_LOG', '1');
+    const log = vi.spyOn(console, 'log').mockImplementation(() => {});
+    try {
+      const server = new GameServer();
+      const stats = (
+        server as unknown as {
+          mobScanTickStats: { lastAggroScanVisits: number; lastThreatEntryVisits: number };
+        }
+      ).mobScanTickStats;
+      stats.lastAggroScanVisits = 12;
+      stats.lastThreatEntryVisits = 7;
+      // Force the heartbeat branch (tickCount 0 minus -100 clears the 100-tick gap).
+      (server as unknown as { lastPerfLogTick: number }).lastPerfLogTick = -100;
+      (server as unknown as { maybeLogTickPerf: (ms: number) => void }).maybeLogTickPerf(5);
+      const perfLine = log.mock.calls.map((c) => String(c[0])).find((l) => l.startsWith('[perf] '));
+      expect(perfLine).toBeDefined();
+      expect(perfLine).toContain('aggroVisits=12');
+      expect(perfLine).toContain('threatVisits=7');
+    } finally {
+      log.mockRestore();
+      vi.unstubAllEnvs();
+    }
   });
 });

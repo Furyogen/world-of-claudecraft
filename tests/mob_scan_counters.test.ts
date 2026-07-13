@@ -328,12 +328,23 @@ describe('mob scan counters: reading them is a pure observer', () => {
       time: number;
       tickCount: number;
       nextId: number;
+      rng: { s: number };
     };
     const entities = [...s.entities.values()]
       .sort((a, b) => a.id - b.id)
       .map((e) => sampleEntity(e));
     const players = [...s.players.values()].map((m) => samplePlayerMeta(m as never));
-    return canonical({ time: s.time, tickCount: s.tickCount, nextId: s.nextId, entities, players });
+    // The rng's internal mulberry32 state is the tightest net: an extra draw caused
+    // by the observer would fork it even if the sampled world state happened to
+    // coincide.
+    return canonical({
+      time: s.time,
+      tickCount: s.tickCount,
+      nextId: s.nextId,
+      rngState: s.rng.s,
+      entities,
+      players,
+    });
   };
 
   it('two identical runs agree bit for bit whether or not the counters are read', () => {
