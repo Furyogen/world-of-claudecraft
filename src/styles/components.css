@@ -1942,6 +1942,9 @@
     overflow-y: auto;
     border-left: 1px solid var(--rarity);
   }
+  .armory-inspect-details {
+    display: contents;
+  }
   .armory-inspect-head {
     display: flex;
     flex-wrap: wrap;

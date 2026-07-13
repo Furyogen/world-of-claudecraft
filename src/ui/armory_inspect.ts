@@ -105,6 +105,7 @@ export class ArmoryInspect {
       ).join('') +
       `</div></div></div>` +
       `<div class="armory-inspect-panel">` +
+      `<div class="armory-inspect-details">` +
       `<div class="armory-inspect-head">` +
       `<span class="armory-collection">${esc(t('hudChrome.wocStore.collectionLine', { collection: copy.collection }))}</span>` +
       `<span class="armory-rarity-pill">${esc(rarityLabel(row.skin.rarity))}</span>` +
@@ -116,6 +117,7 @@ export class ArmoryInspect {
       `<p class="armory-type-line">${esc(weaponTypeLabel(row.skin.weaponType))} · ${esc(t('hudChrome.wocStore.seasonOne'))}</p>` +
       `<p class="armory-look">${esc(copy.look)}</p>` +
       `<div class="armory-lore"><h3>${esc(t('hudChrome.wocStore.lore'))}</h3><p>${esc(copy.lore)}</p></div>` +
+      `</div>` +
       `<div class="armory-inspect-actions" data-armory-actions></div>` +
       `</div></div>`;
     document.body.appendChild(overlay);

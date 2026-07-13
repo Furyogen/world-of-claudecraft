@@ -70,6 +70,17 @@ describe('WOC Store window contract', () => {
     expect(inspect).toContain("button.setAttribute('aria-pressed'");
   });
 
+  it('keeps scrollable inspect details separate from the fixed action row', () => {
+    const panelMarkup = inspect.slice(
+      inspect.indexOf('`<div class="armory-inspect-panel">`'),
+      inspect.indexOf('document.body.appendChild(overlay)'),
+    );
+    expect(panelMarkup).toContain('`<div class="armory-inspect-details">`');
+    expect(panelMarkup).toMatch(
+      /armory-lore[^`]*<\/div>` \+\s*`<\/div>` \+\s*`<div class="armory-inspect-actions"/,
+    );
+  });
+
   it('keeps the Claudium window focused on currency purchases', () => {
     expect(claudiumWindow).not.toContain('private storeHtml(');
     expect(claudiumWindow).not.toContain('data-item=');
