@@ -1,6 +1,6 @@
 // Self-contained V8 CPU-profile collector for the production game container.
-// prod_cpu_monitor.mjs pipes this source into a second Node 22 process inside
-// the container after safely starting the game process inspector on loopback.
+// The production image installs this root-owned helper under /app/ops. The
+// monitor invokes that immutable copy after starting the inspector on loopback.
 
 const profileMs = Number(process.env.WOC_PROFILE_MS ?? 30_000);
 if (!Number.isFinite(profileMs) || profileMs < 0 || profileMs > 300_000) {

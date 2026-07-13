@@ -297,8 +297,13 @@ service-owned directory on first use. The remote SSH principal needs narrowly
 controlled access to the Docker operations used by the script and to `flock` for
 capture serialization. General `sudo docker` access is effectively root access.
 Use a dedicated principal plus a root-owned forced-command or validation wrapper
-that admits only the expected container and monitor operations; do not grant a
-wildcard Docker sudo rule to an ordinary account.
+that admits only the exact expected commands for the named container; do not grant
+a wildcard Docker sudo rule to an ordinary account. The PID and profiler clients
+are immutable, root-owned helpers copied into `/app/ops` by the production image,
+and their `docker exec` calls do not consume client-supplied stdin. The wrapper must
+validate the complete `SSH_ORIGINAL_COMMAND`, reject unexpected stdin, and allow
+only those fixed helper paths. Checking only a `docker exec` command prefix still
+permits arbitrary code execution in the production container and is not sufficient.
 
 The monitor verifies private file ownership and permissions, uses local and remote
 exclusive locks, and retains at most 24 validated captures or 30 days of captures.

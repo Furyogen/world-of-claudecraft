@@ -25,10 +25,11 @@ import {
 import {
   adminRequestCommand,
   bundleHashCommand,
+  containerIdentityCommand,
+  containerIdentityMatchesOwner,
   cpuSampleCommand,
-  dockerExecShellCommand,
   duringStatsCommand,
-  gameNodePidScript,
+  gameProcessCommand,
   hostContextCommand,
   inspectorProbeCommand,
   logsCommand,
@@ -105,14 +106,29 @@ async function collectRemoteArtifact(
 }
 
 async function resolveGamePid(options, signal, expectedPid = null) {
-  const result = await runSsh(options, dockerExecShellCommand(options), {
-    input: gameNodePidScript({ signal, expectedPid }),
+  const result = await runSsh(options, gameProcessCommand(options, signal, expectedPid), {
     timeoutMs: 30_000,
   });
   const pid = Number(result.stdout.trim());
   if (!Number.isInteger(pid) || pid <= 0)
     throw new Error('game PID resolver returned invalid output');
   return pid;
+}
+
+async function readContainerIdentity(options) {
+  const result = await runSsh(options, containerIdentityCommand(options), { timeoutMs: 30_000 });
+  const identity = JSON.parse(result.stdout);
+  if (
+    !/^[a-f0-9]{64}$/.test(identity?.containerId) ||
+    typeof identity?.containerStartedAt !== 'string' ||
+    identity.containerStartedAt.length === 0
+  ) {
+    throw new Error('container identity returned invalid output');
+  }
+  return {
+    containerId: identity.containerId,
+    containerStartedAt: identity.containerStartedAt,
+  };
 }
 
 export function inspectorCleanupOptions(options) {
@@ -146,21 +162,21 @@ async function cleanupOwnedInspectorUnlocked(options) {
     if (error?.code === 'ENOENT') return;
     throw error;
   }
-  const gamePid = await resolveGamePid(options, false);
   if (owner.targetHost !== options.targetHost || owner.container !== options.container) {
     throw new Error('invalid inspector ownership marker');
   }
+  const identity = await readContainerIdentity(options);
+  if (!containerIdentityMatchesOwner(owner, identity)) {
+    await unlink(ownerPath);
+    return;
+  }
+  const gamePid = await resolveGamePid(options, false);
   if (owner.gamePid !== gamePid) {
     await unlink(ownerPath);
     return;
   }
   if (await inspectorIsOpen(options)) {
-    const profileSource = await readFile(
-      new URL('./prod_cpu_profile_client.mjs', import.meta.url),
-      'utf8',
-    );
     await runSsh(options, profileCommand({ ...options, profileMs: 0 }, gamePid), {
-      input: profileSource,
       timeoutMs: 45_000,
     });
   }
@@ -322,10 +338,6 @@ async function createIncidentCaptureLocked(options, trigger, { sleep }) {
     `${trigger.samples.join('%\n')}%\n`,
   );
 
-  const profileSource = await readFile(
-    new URL('./prod_cpu_profile_client.mjs', import.meta.url),
-    'utf8',
-  );
   let releaseSecondaryEvidence;
   let secondaryReleased = false;
   const secondaryReady = new Promise((resolve) => {
@@ -347,7 +359,12 @@ async function createIncidentCaptureLocked(options, trigger, { sleep }) {
       let profileFinishedAt = null;
       let profileErrors = [];
       try {
+        const containerIdentity = await readContainerIdentity(options);
         gamePid = await resolveGamePid(options, false);
+        const confirmedContainerIdentity = await readContainerIdentity(options);
+        if (!containerIdentityMatchesOwner(containerIdentity, confirmedContainerIdentity)) {
+          throw new Error('container restarted while preparing CPU profile');
+        }
         inspectorInitiallyOpen = await inspectorIsOpen(options);
         if (inspectorInitiallyOpen) {
           throw new Error('inspector was already open; refusing to disrupt another operator');
@@ -357,6 +374,7 @@ async function createIncidentCaptureLocked(options, trigger, { sleep }) {
           `${JSON.stringify({
             targetHost: options.targetHost,
             container: options.container,
+            ...containerIdentity,
             gamePid,
             createdAt: new Date().toISOString(),
           })}\n`,
@@ -373,7 +391,6 @@ async function createIncidentCaptureLocked(options, trigger, { sleep }) {
         }, 30_000);
         startupGateTimeout.unref();
         const profileProcess = runSsh(options, profileCommand(options, gamePid), {
-          input: profileSource,
           stdoutFile: path.join(captureDir, 'cpu.cpuprofile'),
           timeoutMs: options.profileMs + 45_000,
           maxStdoutBytes: 128 * 1024 * 1024,
@@ -428,20 +445,7 @@ async function createIncidentCaptureLocked(options, trigger, { sleep }) {
       if (inspectorOwned) {
         const cleanupOptions = inspectorCleanupOptions(options);
         try {
-          const cleanup = async (ownedOptions) => {
-            if (await inspectorIsOpen(ownedOptions)) {
-              await runSsh(
-                ownedOptions,
-                profileCommand({ ...ownedOptions, profileMs: 0 }, gamePid),
-                {
-                  input: profileSource,
-                  timeoutMs: 45_000,
-                },
-              );
-            }
-            await ensureInspectorClosed(ownedOptions);
-            await unlink(path.join(options.outDir, INSPECTOR_OWNER_FILE));
-          };
+          const cleanup = cleanupOwnedInspectorUnlocked;
           if (options.captureSignal?.aborted) {
             const cleanupLock = await acquireRemoteCaptureLock(cleanupOptions);
             const cleanupAbortController = new AbortController();

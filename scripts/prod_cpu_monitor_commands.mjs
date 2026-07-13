@@ -52,43 +52,26 @@ export function logsCommand(options) {
   return `sudo -n docker logs --timestamps --since ${shellQuote(options.logSince)} --tail 20000 ${shellQuote(options.container)} 2>&1`;
 }
 
-export function gameNodePidScript({ signal, expectedPid = null }) {
-  if (expectedPid !== null && (!Number.isInteger(expectedPid) || expectedPid <= 0)) {
+export function gameProcessCommand(options, signal, expectedPid = null) {
+  if (signal && (!Number.isInteger(expectedPid) || expectedPid <= 0)) {
     throw new Error('expected game PID must be a positive integer');
   }
-  const expectedPidGuard =
-    expectedPid === null
-      ? ''
-      : `[ "$pid" = "${expectedPid}" ] || {
-  echo "game Node PID changed before inspector signal" >&2
-  exit 1
-}`;
-  return `set -eu
-count=0
-pid=''
-for proc in /proc/[0-9]*; do
-  [ "\${proc##*/}" = "$$" ] && continue
-  [ -r "$proc/cmdline" ] || continue
-  exe=$(readlink "$proc/exe" 2>/dev/null || true)
-  [ "\${exe##*/}" = "node" ] || continue
-  arg0=$(tr '\\000' '\\n' < "$proc/cmdline" | sed -n '1p')
-  arg1=$(tr '\\000' '\\n' < "$proc/cmdline" | sed -n '2p')
-  [ "\${arg0##*/}" = "node" ] || continue
-  [ "$arg1" = "dist-server/server.cjs" ] || continue
-  count=$((count + 1))
-  pid=\${proc##*/}
-done
-if [ "$count" -ne 1 ]; then
-  echo "expected one game Node process, found $count" >&2
-  exit 1
-fi
-${expectedPidGuard}
-${signal ? 'kill -USR1 "$pid"' : ':'}
-printf '%s\n' "$pid"`;
+  const action = signal ? `signal ${expectedPid}` : 'pid';
+  return `sudo -n docker exec ${shellQuote(options.container)} env -i PATH=/usr/local/bin:/usr/bin:/bin node /app/ops/prod_cpu_game_helper.mjs ${action}`;
 }
 
-export function dockerExecShellCommand(options) {
-  return `sudo -n docker exec -i ${shellQuote(options.container)} sh`;
+export function containerIdentityCommand(options) {
+  const format = '{"containerId":{{json .Id}},"containerStartedAt":{{json .State.StartedAt}}}';
+  return `sudo -n docker inspect --format ${shellQuote(format)} ${shellQuote(options.container)}`;
+}
+
+export function containerIdentityMatchesOwner(owner, identity) {
+  return (
+    typeof owner?.containerId === 'string' &&
+    owner.containerId === identity?.containerId &&
+    typeof owner?.containerStartedAt === 'string' &&
+    owner.containerStartedAt === identity?.containerStartedAt
+  );
 }
 
 export function inspectorProbeCommand(options) {
@@ -110,7 +93,7 @@ done`;
 }
 
 export function profileCommand(options, gamePid) {
-  return `sudo -n docker exec -i ${shellQuote(options.container)} env -i PATH=/usr/local/bin:/usr/bin:/bin WOC_PROFILE_MS=${options.profileMs} WOC_PROFILE_SAMPLE_INTERVAL_US=${options.profileSampleIntervalUs} WOC_EXPECTED_PID=${gamePid} WOC_CLOSE_INSPECTOR=1 node --input-type=module -`;
+  return `sudo -n docker exec ${shellQuote(options.container)} env -i PATH=/usr/local/bin:/usr/bin:/bin WOC_PROFILE_MS=${options.profileMs} WOC_PROFILE_SAMPLE_INTERVAL_US=${options.profileSampleIntervalUs} WOC_EXPECTED_PID=${gamePid} WOC_CLOSE_INSPECTOR=1 node /app/ops/prod_cpu_profile_client.mjs`;
 }
 
 export function adminRequestCommand(method, endpoint, body = null) {

@@ -260,7 +260,7 @@ export async function pollOnce({ readCpu, capture, state, options, now = Date.no
     log(`Capture failed and will be retried: ${errorMessage(error)}`);
     return {
       status: 'capture-failed',
-      nextState: { ...transition.nextState, lastAttemptFailed: true },
+      nextState: { ...transition.nextState, lastAttemptAt: now(), lastAttemptFailed: true },
       error,
     };
   }
