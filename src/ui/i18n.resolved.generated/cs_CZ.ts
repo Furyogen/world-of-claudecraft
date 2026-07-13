@@ -245,261 +245,261 @@ export const cs_CZ: EnTranslations = {
       }
     },
     "wocStore": {
-      "title": "WOC Store",
-      "close": "Close WOC Store",
-      "tabsLabel": "WOC Store sections",
-      "storeTab": "Store",
-      "rewardsTab": "Daily Rewards",
-      "loading": "Loading WOC Store...",
-      "error": "The WOC Store is unavailable right now. Please try again shortly.",
-      "balance": "Claudium Balance",
-      "buyClaudium": "Purchase Claudium",
-      "owned": "Owned",
-      "needMoreTitle": "More Claudium Required",
-      "needMoreBody": "You need {shortfall} more Claudium to purchase {item}.",
-      "cancel": "Cancel",
-      "confirmTitle": "Confirm Cosmetic Purchase",
-      "confirmBody": "Purchase {item} for {cost} Claudium?",
-      "confirmPurchase": "Purchase",
-      "priceChanged": "The price changed before the purchase completed. Review the refreshed price and confirm again.",
-      "armoryEyebrow": "Season 1",
-      "armoryTitle": "The Armory",
-      "armoryBody": "Limited weapon skins from the Season 1 Armory. Account-wide, purely cosmetic, and shown to everyone around you.",
-      "collectionLine": "{collection} Collection",
+      "title": "Obchod WOC",
+      "close": "Zavřít obchod WOC",
+      "tabsLabel": "Sekce obchodu WOC",
+      "storeTab": "Obchod",
+      "rewardsTab": "Denní odměny",
+      "loading": "Načítání obchodu WOC…",
+      "error": "Obchod WOC nyní není dostupný. Zkus to za chvíli znovu.",
+      "balance": "Zůstatek Claudium",
+      "buyClaudium": "Koupit Claudium",
+      "owned": "Vlastníš",
+      "needMoreTitle": "Je potřeba více Claudium",
+      "needMoreBody": "K nákupu předmětu {item} potřebuješ ještě {shortfall} Claudium.",
+      "cancel": "Zrušit",
+      "confirmTitle": "Potvrdit nákup kosmetiky",
+      "confirmBody": "Koupit {item} za {cost} Claudium?",
+      "confirmPurchase": "Koupit",
+      "priceChanged": "Cena se před dokončením nákupu změnila. Zkontroluj novou cenu a nákup znovu potvrď.",
+      "armoryEyebrow": "1. sezóna",
+      "armoryTitle": "Zbrojnice",
+      "armoryBody": "Omezené vzhledy zbraní ze Zbrojnice 1. sezóny. Platí pro celý účet, jsou čistě kosmetické a uvidí je všichni kolem tebe.",
+      "collectionLine": "Kolekce {collection}",
       "collections": {
-        "guildmark": "Guildmark",
-        "emberwrought": "Emberwrought",
-        "hoarfrost": "Hoarfrost",
-        "fallen_star": "Fallen Star"
+        "guildmark": "Cechovní značka",
+        "emberwrought": "Žárem kované",
+        "hoarfrost": "Jinovatka",
+        "fallen_star": "Padlá hvězda"
       },
       "skins": {
         "guildmark_arming_sword": {
-          "name": "Guildmark Arming Sword",
-          "look": "Blued steel blade, bronze fishtail crossguard, teal-dyed leather grip, small stamped guild sigil.",
-          "lore": "Where the wrought blade is anonymous, this one is signed. An armorer earns the right to sink his mark into the ricasso only once the World Market's Merchant will vouch for his steel, and Smith Haldren's mark is vouched for. Blued against the Vale's damp, balanced to a hair. You pay for the stamp as much as the sword, and it is worth it."
+          "name": "Poboční meč s cechovní značkou",
+          "look": "Modřená ocelová čepel, bronzová záštita ve tvaru rybího ocasu, rukojeť z modrozelené kůže a drobná vyražená cechovní značka.",
+          "lore": "Zatímco běžná kovaná čepel zůstává bezejmenná, tato je podepsaná. Zbrojíř získá právo vyrazit svou značku k záštitě teprve tehdy, když se za jeho ocel zaručí obchodník Světového trhu, a za značku kováře Haldrena se zaručil. Modřená proti vlhku údolí a vyvážená na vlásek. Za značku platíš stejně jako za meč a stojí to za to."
         },
         "brasscap_axe": {
-          "name": "Brasscap Hatchet",
-          "look": "Polished steel bit, brass cap and langets on a lacquered ash haft, tidy wrap, a maker's stamp.",
-          "lore": "A stamped axe is a boast you can hold. The brass cap and langets are half armour, half signature: they keep the haft from splitting and they catch the tavern light so everyone knows you bought Armorer Hode's work, not a militia hand-me-down. 'If it cuts, I sell it,' the Highwatch smith says. This one cuts."
+          "name": "Sekyrka s mosaznou hlavicí",
+          "look": "Leštěné ocelové ostří, mosazná hlavice a výztuhy na lakovaném jasanovém topůrku, úhledné ovinutí a značka výrobce.",
+          "lore": "Sekera se značkou je chlouba, kterou můžeš držet v ruce. Mosazná hlavice a výztuhy jsou napůl zbrojí a napůl podpisem: chrání topůrko před rozštípnutím a zachytávají světlo hospody, aby každý viděl, že sis koupil práci zbrojíře Hodea, ne odloženou výzbroj milice. „Když to seká, prodávám to,“ říká kovář z Highwatche. Tahle seká."
         },
         "tempered_flanged_mace": {
-          "name": "Tempered Flanged Mace",
-          "look": "Six-flanged tempered blue-steel head, brass collar and pommel, wine-red leather grip.",
-          "lore": "Six flanges of blued, tempered steel, each ground to open a helm, capped in brass and wound in wine-red leather. The realm's armorers don't make ugly weapons even when the work is brutal. This one was commissioned through the World Market, not pulled off a rack; somewhere there's a ledger with a proud buyer's name and the sum he paid Hode for it."
+          "name": "Kalený křidélkový palcát",
+          "look": "Hlava z kalené modřené oceli se šesti lamelami, mosazná objímka a hlavice, rukojeť z vínově rudé kůže.",
+          "lore": "Šest lamel z modřené kalené oceli, každá nabroušená k otevření helmy, zakončená mosazí a ovinutá vínově rudou kůží. Zbrojíři říše nevyrábějí ošklivé zbraně, ani když je jejich práce brutální. Tento kus byl objednán přes Světový trh, ne sejmut z police. Někde leží účetní kniha se jménem hrdého kupce a částkou, kterou zaplatil Hodeovi."
         },
         "guildmark_dirk": {
-          "name": "Guildmark Dirk",
-          "look": "Slim tempered-steel dirk, bronze guard and pommel nut, dark-green cord grip, stamped sigil.",
-          "lore": "What a made man wears when the sword stays home: slim, tempered, stamped with the same mark that certifies a full blade, worn on the belt like a signet with an edge. Understated to everyone but those who can read an armorer's proof. Quartermaster Bree keeps a drawer of them at Highwatch for officers who've earned the wall's respect."
+          "name": "Dýka s cechovní značkou",
+          "look": "Štíhlá dýka z kalené oceli, bronzová záštita a matice hlavice, rukojeť ovinutá tmavozelenou šňůrou a vyražená značka.",
+          "lore": "Tohle nosí vážený muž, když meč zůstane doma. Štíhlá kalená čepel se stejnou značkou, která potvrzuje kvalitu celého meče, zavěšená u pasu jako pečetní prsten s ostřím. Nenápadná pro každého kromě těch, kdo umějí číst zbrojířův důkaz. Intendantka Bree jich na Highwatchi schovává zásuvku pro důstojníky, kteří si vysloužili úctu zdi."
         },
         "brasscrown_staff": {
-          "name": "Brasscrown Walking Staff",
-          "look": "Hardwood staff topped with a turned brass crown finial, brass ferrule, dyed leather band.",
-          "lore": "Turned from seasoned hardwood and crowned with a brass finial the Eastbrook smiths cast by the hundred but perfect by the one. It belongs to the sort of traveller who wants to be taken seriously at Fenbridge's gate and Highwatch's wall alike. A walking stick that has never truly needed to walk; the dyed band matches a coat you can guess the price of."
+          "name": "Vycházková hůl s mosaznou korunou",
+          "look": "Hůl z tvrdého dřeva zakončená soustruženou mosaznou korunou, mosaznou botkou a páskem barvené kůže.",
+          "lore": "Je vysoustružená z vyzrálého tvrdého dřeva a korunovaná mosaznou hlavicí, jakých eastbrookští kováři odlévají stovky, ale každou dovedou k dokonalosti. Patří cestovateli, který chce budit respekt u brány Fenbridge stejně jako u zdi Highwatche. Vycházková hůl, která nikdy doopravdy chodit nemusela. Barvený kožený pásek ladí s kabátem, jehož cenu si snadno domyslíš."
         },
         "lacquered_wand": {
-          "name": "Lacquered Rod",
-          "look": "Slender deep-red lacquered wand, two polished brass bands, small rounded brass tip.",
-          "lore": "Deep-red lacquer in seven patient coats, banded twice in polished brass: the kind of wand a hedge-mage buys off the World Market once they've started charging real coin and want to look it. It channels the Light no better than a birch stick. But it gleams magnificently across the Merchant's counter, and half of minor magic has always been being believed."
+          "name": "Lakovaná hůlka",
+          "look": "Štíhlá hůlka s hluboce červeným lakem, dvěma pásky leštěné mosazi a drobnou zaoblenou mosaznou špičkou.",
+          "lore": "Sedm trpělivých vrstev hluboce červeného laku, dvakrát obepnutých leštěnou mosazí. Takovou hůlku si potulný mág koupí na Světovém trhu, jakmile začne za kouzla účtovat skutečné mince a chce podle toho vypadat. Světlo vede stejně dobře jako březový proutek. Na obchodníkově pultu se však nádherně leskne a polovina drobné magie vždy spočívala v tom, že jí ostatní uvěří."
         },
         "fletcher_s_guild_bow": {
-          "name": "Fletcher's Guild Bow",
-          "look": "Lacquered walnut recurve bow, brass limb tips, waxed linen string, a guild stamp on the riser.",
-          "lore": "The closest thing the realm has to a guild is a fletcher's stamp on the riser, a promise about what's inside, the way a vintner seals a cask. Lacquered walnut, brass at the limb tips, a waxed linen string that won't fray through a Mirefen rain. Every joint argues for the price. Draw it once past the Widow Thicket and the argument wins."
+          "name": "Luk cechu šípařů",
+          "look": "Lakovaný ořechový reflexní luk, mosazné konce ramen, tětiva z voskovaného lnu a cechovní značka na středu.",
+          "lore": "Nejblíž skutečnému cechu má v říši značka šípaře na středu luku. Je to slib o tom, co se skrývá uvnitř, podobně jako vinařova pečeť na sudu. Lakovaný ořech, mosaz na koncích ramen a tětiva z voskovaného lnu, která se neroztřepí ani v mirefenském dešti. Každý spoj obhajuje svou cenu. Jednou jej napni za Vdoviným houštím a spor je rozhodnut."
         },
         "cinderbrand_sword": {
-          "name": "Cinderbrand",
-          "look": "Dark forged-steel blade, fuller filled with glowing ember-orange runes, heat-cracks, a smouldering gem in the guard.",
-          "lore": "The first blade quenched not in water but in Blessed Embers raked from Stormcrag, the coals the Highwatch smiths swear 'burn blue and clean, because the mountain remembers its old oath.' Banked into the fuller, that fire smoulders ember-orange and will not die; the runes stay warm to a bare hand on the coldest night of the wall. Cinderbrand never needs lighting. It simply refuses to go out."
+          "name": "Žhavá značka",
+          "look": "Tmavá čepel z kované oceli, žlábek vyplněný žhavě oranžovými runami, praskliny od žáru a v záštitě doutnající drahokam.",
+          "lore": "První čepel zakalená nikoli ve vodě, ale v Požehnaných uhlících vyhrabaných na Bouřném štítu. Kováři z Highwatche přísahají, že ty uhlíky „hoří modře a čistě, protože hora pamatuje svou dávnou přísahu“. Oheň uložený do žlábku doutná oranžově a neumírá. Runy hřejí do holé dlaně i za nejchladnější noci na zdi. Žhavou značku není třeba zapalovat. Ona zkrátka odmítá zhasnout."
         },
         "emberbite_axe": {
-          "name": "Emberbite",
-          "look": "Blackened-iron axe with ember-orange cracks glowing through the bit, a banked-coal gem, wisps of heat.",
-          "lore": "Armorer Hode worked a live coal of mountain-fire into the heart of the bit, so the edge never truly cools between blows. The cracks breathe orange on the downswing, as if the strike wakes something the first forging left sleeping in the iron. They say a Stormcrag elemental gave up the ember for it; they say a great many things at Highwatch when the wind is up."
+          "name": "Uhlíkový skus",
+          "look": "Sekera z černěného železa s žhavě oranžovými prasklinami v ostří, drahokamem připomínajícím doutnající uhlík a chvějícím se horkým vzduchem.",
+          "lore": "Zbrojíř Hode zasadil do srdce ostří živý uhlík horského ohně, takže čepel mezi údery nikdy zcela nevychladne. Praskliny při švihu vydechnou oranžovou záři, jako by rána budila něco, co první kování zanechalo spát v železe. Říká se, že uhlík odevzdal elementál z Bouřného štítu. Když se na Highwatchi zvedne vítr, říká se mnoho věcí."
         },
         "smoulderfall_mace": {
-          "name": "Smoulderfall",
-          "look": "Dark iron flanges glowing ember-orange along their inner cracks, a molten-cored gem in the head.",
-          "lore": "A mace that carries its own hearth: a molten-cored stone chipped from the Sanctum seal that was 'wrought with mountain-fire,' set glowing in the head. The flanges stay warm to the touch and warmer where they land; a Highwatch sergeant swears a blow from it leaves a bruise that glows faintly till morning. The mountain's fire, at last made for breaking rather than sealing."
+          "name": "Doutnající pád",
+          "look": "Tmavé železné lamely žhnou uvnitř prasklin oranžově a v hlavě spočívá drahokam s roztaveným jádrem.",
+          "lore": "Palcát s vlastním ohništěm. Kámen s roztaveným jádrem, odštípnutý z pečeti Svatyně, která byla „ukována horským ohněm“, září zasazený v hlavě. Lamely jsou teplé na dotek a ještě teplejší v místě dopadu. Seržant z Highwatche přísahá, že rána zanechá modřinu, která slabě svítí až do rána. Horský oheň byl konečně určen k rozbíjení místo pečetění."
         },
         "ashspark_dagger": {
-          "name": "Ashspark Shiv",
-          "look": "Short blackened blade veined with glowing ember-orange, a tiny smouldering gem in the pommel, ash and spark.",
-          "lore": "A back-alley blade with the mountain's fire smuggled into its pommel-stone, an armorer's quiet joke: even a cutpurse might carry an ember of the first forging. Blackened, veined with orange, always a shade too warm in the sheath. Draw it in the dark under Highwatch and the glow lights your hand just enough to find the gap in a man's guard."
+          "name": "Popelojiskrná kudla",
+          "look": "Krátká černěná čepel protkaná žhavě oranžovými žilkami, v hlavici drobný doutnající drahokam, popel a jiskry.",
+          "lore": "Čepel ze zadní uličky, v jejímž kameni hlavice je propašovaný horský oheň. Tichý žert zbrojíře: i kapsář může nosit uhlík prvního kování. Je černěná, protkaná oranžovými žilkami a v pochvě vždy o něco teplejší, než by měla být. Tas ji za tmy pod Highwatchem a záře ti osvítí ruku právě natolik, abys našel mezeru v soupeřově krytu."
         },
         "forgeheart_staff": {
-          "name": "Forgeheart Stave",
-          "look": "Iron-shod staff crowned with a caged glowing ember core, ember runes up the shaft, rising heat-shimmer.",
-          "lore": "A living coal of mountain-fire caged in iron at its crown. Loremaster Caddis calls it proof that the fire of the first forging can be bound to serve, not only to seal. Heat-shimmer rises from it in a thin, endless ribbon; a mage who carries one never wants for a forge or a watch-fire. The ember, they whisper, was drawn from Voskar the Emberwing's own breath, and it has not cooled since."
+          "name": "Hůl srdce výhně",
+          "look": "Železem okovaná hůl korunovaná klecí se zářícím žhavým jádrem, po dříku stoupají ohnivé runy a nad ním se chvěje horký vzduch.",
+          "lore": "Živý uhlík horského ohně uvězněný v železe na vrcholu hole. Kronikář Caddis jej považuje za důkaz, že oheň prvního kování lze spoutat ke službě, nejen k pečetění. V tenké, nekonečné stuze z něj stoupá chvění horkého vzduchu. Mág, který jej nese, nepotřebuje výheň ani strážní oheň. Šeptá se, že uhlík pochází z vlastního dechu Voskara Žhavokřídlého a od té doby nevychladl."
         },
         "emberwrought_wand": {
-          "name": "Emberwrought Wand",
-          "look": "Blackened-metal wand tipped with a glowing ember coal in iron claws, hairline heat-cracks, warm inner light.",
-          "lore": "The wand that named the grade. When a Highwatch armorer first set a coal of mountain-fire in iron claws and made it answer a mortal hand, even the Priests of the Light stopped calling it heresy and started calling it useful. Warm, patient and quietly dangerous: the ember at its tip has burned, unbroken, since before its owner drew breath."
+          "name": "Žárem kovaná hůlka",
+          "look": "Hůlka z černěného kovu zakončená žhavým uhlíkem sevřeným železnými drápy, jemné praskliny od žáru a teplé vnitřní světlo.",
+          "lore": "Hůlka, která dala jméno celé třídě. Když zbrojíř z Highwatche poprvé sevřel uhlík horského ohně do železných drápů a přiměl jej poslouchat smrtelnou ruku, dokonce i kněží Světla tomu přestali říkat kacířství a začali tomu říkat užitečný nástroj. Je teplá, trpělivá a tiše nebezpečná. Uhlík na jejím konci hoří bez přestání od doby před prvním nádechem jejího majitele."
         },
         "cinderlatch_crossbow": {
-          "name": "Cinderlatch",
-          "look": "Blackened-steel crossbow, ember-orange glow seeping from cracks in the prod, a smouldering coal in the tiller.",
-          "lore": "The strangest of the ember-forged: the mountain's fire poured into a machine. Orange seeps from cracks in the prod, and a smouldering coal in the tiller keeps the string from ever stiffening in Thornpeak's cold or Mirefen's damp. Its bolts leave the groove already warm and land warmer. A hunter's answer to a wall where the enemy does not feel the cold either."
+          "name": "Žhavý zámek",
+          "look": "Kuše z černěné oceli, z prasklin lučiště prosakuje žhavě oranžové světlo a v pažbě doutná uhlík.",
+          "lore": "Nejpodivnější ze žárem kovaných zbraní: horský oheň nalitý do stroje. Z prasklin lučiště prosakuje oranžová záře a doutnající uhlík v pažbě brání tětivě ztuhnout v chladu Thornpeaku i vlhku Mirefenu. Šipky opouštějí drážku už teplé a dopadají ještě teplejší. Odpověď lovce na zeď, u níž ani nepřítel necítí chlad."
         },
         "ice_fang_sword": {
-          "name": "Ice Fang",
-          "look": "Curved blade of pale glacial ice, jagged rime crystals along the spine, a glowing cyan frozen core in the fuller, icicle crossguard.",
-          "lore": "The flagship of the frozen grade, and the piece every collector reaches for first. Ice Fang was carved, not forged, from a fang of the glacier that caps Thornpeak above Highwatch, its cyan core burning cold as the light off the Glimmermere. It rimes the very air it cuts. The wall-guard swear one soldier carried it the night the high snows held the Wyrmcult back, and 'bought the wall a winter.'"
+          "name": "Ledový tesák",
+          "look": "Zakřivená čepel z bledého ledovcového ledu, podél hřbetu zubaté krystaly jinovatky, ve žlábku zářící azurové zmrzlé jádro a záštita z rampouchů.",
+          "lore": "Vlajková zbraň zmrzlé kolekce a kus, po kterém každý sběratel sáhne jako první. Ledový tesák nebyl vykován, ale vyřezán z výběžku ledovce, který korunuje Thornpeak nad Highwatchem. Jeho azurové jádro plane chladem jako světlo Třpytivého plesa. Jinovatkou pokrývá i vzduch, který rozsekne. Strážci zdi přísahají, že jej jeden voják nesl v noci, kdy vysoký sníh zadržel kult draka, a „koupil zdi jednu zimu“."
         },
         "glaciersplit_axe": {
-          "name": "Glaciersplit",
-          "look": "Head of translucent blue glacier-ice, cracked interior glowing cyan, frost crystals bristling, a haft trailing cold vapor.",
-          "lore": "Hewn from the blue heart of the Thornpeak glacier, where two centuries of ice have pressed the cold until it glows on its own. It trails vapour even at rest, and the crack of it landing is a crevasse opening under Stalker Ridge. Highwatch gives its fallen to the ice up there; so this is a weapon meant to keep the thaw, and whatever the thaw would wake, at bay."
+          "name": "Štěpič ledovců",
+          "look": "Hlava z průsvitného modrého ledovcového ledu, popraskané nitro září azurově, kolem trčí krystaly mrazu a za topůrkem se táhne studená pára.",
+          "lore": "Vytesaná z modrého srdce thornpeakského ledovce, kde dvě století ledu stlačovala chlad, až začal sám zářit. I v klidu za ní táhne pára a praskot jejího dopadu zní jako rozsedlina otevírající se pod Stopařovým hřebenem. Highwatch své padlé odevzdává ledu tam nahoře. Tato zbraň má udržet oblevu a vše, co by obleva mohla probudit, v bezpečné vzdálenosti."
         },
         "rimecrusher_mace": {
-          "name": "Rimecrusher",
-          "look": "Cluster of jagged ice crystals around a glowing cyan core, hoarfrost creeping down a silvered haft.",
-          "lore": "Not carved but grown: Thornpeak ice coaxed around a cold cyan core until it set as hard as Hode's best steel. Hoarfrost creeps down the silvered haft toward the hand and never quite arrives. Where it strikes, water freezes; where it rests, the ground whitens. The grave-cold of the peaks, made small enough to swing at the things that climb the wall."
+          "name": "Drtič jinovatky",
+          "look": "Shluk zubatých ledových krystalů kolem zářícího azurového jádra, jinovatka se plíží po postříbřeném toporu.",
+          "lore": "Nebyl vytesán, ale vypěstován. Thornpeakský led rostl kolem studeného azurového jádra, dokud neztvrdl jako nejlepší Hodeova ocel. Jinovatka se plíží po postříbřeném toporu k ruce a nikdy k ní docela nedorazí. Kam udeří, tam voda zamrzne. Kde spočine, tam zem zbělá. Hrobový chlad vrcholků, zmenšený natolik, aby se jím dalo udeřit vše, co šplhá na zeď."
         },
         "frostbite_dagger": {
-          "name": "Rime Needle",
-          "look": "Wickedly thin dagger of clear blue ice, a glowing cyan vein down the center, needle frost crystals, hoarfrost hilt.",
-          "lore": "Thin as a held breath and twice as cold: a splinter of Thornpeak glacier honed to a single glowing vein, so keen the wound is frozen shut before the blood remembers to run. Its name is borrowed from the grave-chill the dead carry down off the peaks. It never needs sharpening; ice does not dull, Loremaster Caddis notes drily, it only waits."
+          "name": "Jehla jinovatky",
+          "look": "Zlověstně tenká dýka z čirého modrého ledu, středem vede zářící azurová žíla, ostří lemují jehličky mrazu a jílec pokrývá jinovatka.",
+          "lore": "Tenká jako zadržený dech a dvakrát chladnější. Střep thornpeakského ledovce vybroušený do jediné zářící žíly, tak ostrý, že rána zamrzne dřív, než si krev vzpomene téct. Jméno si vypůjčila od hrobového chladu, který mrtví snášejí z vrcholků. Nikdy nepotřebuje brousit. Led se netupí, podotýká suše kronikář Caddis, jen čeká."
         },
         "hoarfrost_vigil_staff": {
-          "name": "Hoarfrost Vigil",
-          "look": "Silvered staff crowned with a floating, slowly rotating shard of glowing cyan ice, radiating crystals and cold vapor.",
-          "lore": "The staff of the watch that never sleeps on Highwatch's wall. Its crown is a shard of cyan tarn-ice that floats free of the silver and turns, slowly, of its own accord: always, the guard swear, toward the cold that gathers beneath the peaks. To carry the Vigil is to stand two hundred years of watch in a single night, and promise not to look away."
+          "name": "Jinovatková stráž",
+          "look": "Postříbřená hůl korunovaná volně plovoucím, pomalu se otáčejícím střepem zářícího azurového ledu, z něhož vyrůstají krystaly a proudí chladná pára.",
+          "lore": "Hůl hlídky, která na zdi Highwatche nikdy nespí. Její korunou je střep azurového ledu z plesa, který se vznáší bez dotyku se stříbrem a pomalu se otáčí vlastní silou. Stráž přísahá, že vždy míří k chladu shromažďujícímu se pod vrcholky. Nést Stráž znamená odsloužit dvě stě let hlídky za jedinou noc a slíbit, že neodvrátíš zrak."
         },
         "everwinter_wand": {
-          "name": "Shard of Everwinter",
-          "look": "A single spike of glowing cyan glacier-ice, hoarfrost blooming from a silver collar, faint cold mist.",
-          "lore": "A spike of glowing glacier-ice, said to be broken from the deep tarn below the Sanctum, where the mountain's cold has teeth. Hoarfrost blooms endlessly from its silver collar and never melts, not by fire nor by summer. Mages keep it close for the cold it lends their work, and keep it far on the nights it seems to lean toward Nythraxis's crypt, and listen."
+          "name": "Střep věčné zimy",
+          "look": "Jediný hrot zářícího azurového ledovcového ledu, ze stříbrné objímky kvete jinovatka a kolem se drží slabá chladná mlha.",
+          "lore": "Hrot zářícího ledovcového ledu, údajně odlomený z hlubokého plesa pod Svatyní, kde má horský chlad zuby. Ze stříbrné objímky bez ustání kvete jinovatka a nikdy netaje, ani v ohni, ani v létě. Mágové jej drží blízko kvůli chladu, který propůjčuje jejich kouzlům. Za nocí, kdy se zdá, že se naklání k Nythraxisově kryptě a naslouchá, jej raději drží dál od sebe."
         },
         "winterbite": {
-          "name": "Winterbite",
-          "look": "Silvered steel and blue-ice bow, a glowing cyan frozen core in the riser, a nocked arrow of solid ice, cold vapor.",
-          "lore": "A bow of silvered steel and Thornpeak ice, its riser lit by a cold cyan core that freezes the arrow to the string. It nocks a shaft of solid glacier-ice that reforms each draw; the archer carries no quiver on the wall, only the cold. Highwatch held Stalker Ridge through a siege with one like it: a single bowman, they say, and a winter's worth of arrows that were always already there."
+          "name": "Zimní skus",
+          "look": "Luk z postříbřené oceli a modrého ledu, ve středu září azurové zmrzlé jádro, na tětivě čeká šíp z pevného ledu a kolem proudí studená pára.",
+          "lore": "Luk z postříbřené oceli a thornpeakského ledu, jehož střed osvětluje studené azurové jádro, které přimrazí šíp k tětivě. S každým natažením se znovu vytvoří šíp z pevného ledovcového ledu. Lučištník na zdi nenosí toulec, jen chlad. Highwatch s podobným lukem udržel Stopařův hřeben během obléhání. Jediný lučištník, říká se, a zásoba šípů na celou zimu, které byly vždy připravené."
         },
         "solheim_sword": {
-          "name": "Solheim, Last Light of the Dawn",
-          "look": "Greatsword forged from a fallen star, molten-gold core splitting the blade, cosmos-black steel edged in starlight, golden shards orbiting the guard, aurora ribbon.",
-          "lore": "When the star fell out of the western sky and 'burst like a forge' beyond the Widow Thicket, Brother Aldric pulled its still-smouldering heart from the Mirefen crater and begged the realm's smiths to work 'a thing that does not belong to this world.' They made one greatsword of it: Solheim. Its molten-gold core splits the cosmos-black blade like dawn cracking a night sky, and shards of star-metal orbit the guard on paths no hand set. Only one was ever forged. There will not be another."
+          "name": "Solheim, poslední světlo úsvitu",
+          "look": "Velký meč vykovaný z padlé hvězdy, roztaveně zlaté jádro dělí čepel, kosmicky černou ocel lemuje světlo hvězd, kolem záštity obíhají zlaté střepy a za zbraní vlaje stuha polární záře.",
+          "lore": "Když hvězda spadla ze západní oblohy a za Vdoviným houštím „praskla jako výheň“, bratr Aldric vytáhl její stále doutnající srdce z mirefenského kráteru a prosil kováře říše, aby zpracovali „věc, která nepatří do tohoto světa“. Vytvořili z ní jediný velký meč: Solheim. Roztaveně zlaté jádro půlí kosmicky černou čepel jako úsvit praskající noční oblohou a střepy hvězdného kovu obíhají záštitu po drahách, které neurčila žádná ruka. Byl vykován jediný. Další nebude."
         },
         "skyrender_axe": {
-          "name": "Skyrender, the Firmament's Wound",
-          "look": "Head like a torn piece of night sky, molten-gold cracks and constellation etchings, starlight shards hovering, an aurora shimmer trailing the edge.",
-          "lore": "Beaten from the crater's rim, where the fallen star tore the sky's own reflection out of Mirefen and left a wound that still steams. The head looks like a piece of torn night: molten-gold cracks, constellations no scholar at Highwatch can name, an aurora bleeding off the edge with every swing. Brother Aldric blessed it and would not touch it. To lift it is to hold the hole the heavens left."
+          "name": "Trhač nebes, rána oblohy",
+          "look": "Hlava jako utržený kus noční oblohy, roztaveně zlaté praskliny a rytiny souhvězdí, vznášející se střepy hvězdného světla a stopa polární záře za ostřím.",
+          "lore": "Vykovaná z okraje kráteru, kde padlá hvězda vyrvala z Mirefenu odraz samotné oblohy a zanechala ránu, která se dodnes kouří. Hlava připomíná kus utržené noci: roztaveně zlaté praskliny, souhvězdí, jež žádný učenec z Highwatche neumí pojmenovat, a polární záře krvácející z ostří při každém švihu. Bratr Aldric jí požehnal, ale odmítl se jí dotknout. Zvednout ji znamená držet otvor, který po sobě zanechala nebesa."
         },
         "starfall_mace": {
-          "name": "Starfall, Judgment of the Heavens",
-          "look": "Captive molten-gold star-core ringed by orbiting fragments, cosmos-black flanges veined with starlight, aurora spilling from the seams.",
-          "lore": "A star-core caught the instant before it died, ringed with the debris that fell with it, frozen an inch from oblivion. Its cosmos-black flanges run with trapped starlight, and aurora spills from the seams when it is raised. The old Priests of the Light called a falling star a judgment, a verdict handed down from above that no shield was meant to stop, and named this after the one that came down on Mirefen."
+          "name": "Pád hvězdy, soud nebes",
+          "look": "Zajaté roztaveně zlaté hvězdné jádro obklopené obíhajícími úlomky, kosmicky černé lamely protkané světlem hvězd a polární záře vytékající ze spojů.",
+          "lore": "Hvězdné jádro zachycené v okamžiku před smrtí, obklopené troskami, které s ním padaly, a zmrazené na dosah od zapomnění. Kosmicky černými lamelami proudí uvězněné světlo hvězd a při pozvednutí ze spojů vytéká polární záře. Staří kněží Světla nazývali padající hvězdu soudem, rozsudkem seslaným shůry, který neměl zastavit žádný štít. Tento palcát pojmenovali po hvězdě, která dopadla na Mirefen."
         },
         "astravyr_dagger": {
-          "name": "Astravyr, Fang of the Fallen Star",
-          "look": "A sliver of a fallen star, molten-gold glowing edge on cosmos-black metal, a bright star-mote orbiting the pommel, a thin aurora trail.",
-          "lore": "The smallest piece of the star Aldric hauled from the crater, and by some reckonings the most dangerous. A single sliver of that other-worldly heart, its molten-gold edge riding cosmos-black metal, a lone star-mote circling the pommel like a moon that lost its world. It weighs almost nothing and parts almost anything. Small enough to hide, bright enough to find in the dark by its own light."
+          "name": "Astravyr, tesák padlé hvězdy",
+          "look": "Úlomek padlé hvězdy s roztaveně zlatým ostřím na kosmicky černém kovu, kolem hlavice obíhá jasná hvězdná jiskra a za čepelí zůstává tenká stopa polární záře.",
+          "lore": "Nejmenší kus hvězdy, který Aldric vytáhl z kráteru, a podle některých také nejnebezpečnější. Jediný střípek onoho nadpozemského srdce, roztaveně zlaté ostří na kosmicky černém kovu a osamělá hvězdná jiskra kroužící kolem hlavice jako měsíc, který ztratil svůj svět. Téměř nic neváží a téměř vše rozřízne. Je dost malý, aby se ukryl, a dost jasný, aby se ve tmě našel podle vlastního světla."
         },
         "cosmarch_staff": {
-          "name": "Cosmarch, Spire of the Endless Void",
-          "look": "Orbiting cluster of golden star-shards around a molten-gold core, constellation-etched cosmos-black shaft, aurora ribbons winding upward.",
-          "lore": "A shaft of star-metal crowned with a molten-gold core and a ring of golden shards that march around it in slow, endless orbit: a little cosmos, etched with constellations that match no sky over Thornpeak. Aurora winds up its length like smoke that forgot to rise. Those who bore it claimed they could feel the void turning through it, the way Ysolei's mere 'drinks the moonlight': patient, and cold, and looking back."
+          "name": "Kosmopochod, věž nekonečné prázdnoty",
+          "look": "Kolem roztaveně zlatého jádra obíhá shluk zlatých hvězdných střepů, kosmicky černý dřík je leptaný souhvězdími a vzhůru se vinou stuhy polární záře.",
+          "lore": "Dřík z hvězdného kovu korunovaný roztaveně zlatým jádrem a prstencem zlatých střepů, které kolem něj kráčejí po pomalé, nekonečné oběžné dráze. Malý vesmír, vyrytý souhvězdími, jež neodpovídají žádné obloze nad Thornpeakem. Polární záře stoupá po celé délce jako kouř, který zapomněl stoupat. Ti, kdo hůl nesli, tvrdili, že v ní cítili otáčení prázdnoty, stejně jako Ysoleino pleso „pije měsíční světlo“: trpělivě, chladně a s pohledem upřeným zpět."
         },
         "emberwish_wand": {
-          "name": "Emberwish, Mote of the Dying Sun",
-          "look": "Captive molten-gold dying-star mote wreathed in orbiting sparks, cosmos-black shaft etched with glowing constellations.",
-          "lore": "Not the fallen star itself but the last mote of a dying one: a single molten-gold ember of a sun already gone out, wreathed in the sparks that were its final light. Its cosmos-black shaft is etched with the constellations that watched it die. The Mirefen crofters say it grants one wish to whoever holds it at true dusk; they also say every soul who held it wished for more time, and that the Drowned Moon granted none of them any."
+          "name": "Žhavé přání, jiskra umírajícího slunce",
+          "look": "Zajatá roztaveně zlatá jiskra umírající hvězdy zahalená obíhajícími jiskrami, kosmicky černý dřík je leptaný zářícími souhvězdími.",
+          "lore": "Ne samotná padlá hvězda, ale poslední jiskra umírající: jediný roztaveně zlatý uhlík slunce, které už vyhaslo, obklopený jiskrami jeho posledního světla. Kosmicky černý dřík nese souhvězdí, která sledovala jeho smrt. Sedláci z Mirefenu tvrdí, že za pravého soumraku splní svému držiteli jedno přání. Také tvrdí, že každá duše, která jej držela, si přála více času a Utopený měsíc žádné z nich nevyhověl."
         },
         "encore_bow": {
-          "name": "Encore, the Second Falling Star",
-          "look": "Comically oversized star-cannon: a cosmos-black barrel etched with glowing golden constellations, a flared bell muzzle with a molten-gold comet shell seated inside, brass fittings, a wooden shoulder stock.",
-          "lore": "The smiths who worked the fallen star made six relics of it and still had a barrel's worth of star-metal left over, and by then the apprentices had opinions. What came off the anvil is either the realm's first gun or its smallest siege engine: a shoulder cannon that does not so much loose a shot as request a second star, aimed. Brother Aldric declined to bless it, reasoning that anything that loud has already been noticed by heaven. Hunters adore it. Nothing downrange ever has."
+          "name": "Přídavek, druhá padající hvězda",
+          "look": "Komicky přerostlé hvězdné dělo: kosmicky černá hlaveň leptaná zlatými souhvězdími, rozšířené ústí se vsazeným roztaveně zlatým kometovým nábojem, mosazné kování a dřevěná ramenní pažba.",
+          "lore": "Kováři, kteří opracovali padlou hvězdu, z ní vytvořili šest relikvií a stále jim zbývalo hvězdného kovu na celou hlaveň. Učni už tou dobou měli vlastní nápady. Z kovadliny vzešla buď první palná zbraň říše, nebo její nejmenší obléhací stroj: ramenní dělo, které ani tak nevystřeluje, jako spíš žádá o druhou hvězdu, tentokrát zamířenou. Bratr Aldric je odmítl požehnat s tím, že něčeho tak hlasitého si nebesa jistě všimla sama. Lovci je zbožňují. Nikdo, kdo mu stál v cestě, ještě ne."
         },
         "meteorlatch_crossbow": {
-          "name": "Meteorlatch, the Sky's Last Judgment",
-          "look": "Meteoric star-metal, molten-gold core along the tiller, cosmos-black limbs etched with constellations, a nocked bolt of pure starfire.",
-          "lore": "Forged of raw meteoric star-metal while the Mirefen crater still glowed, debris 'too hot to handle,' hammered into limbs of cosmos-black etched with constellations, a molten-gold core banked along the tiller. It nocks no bolt but conjures one: a shaft of starfire, loosed like a verdict and landing like the end of one. When Highwatch feared even the deathless crown of Nythraxis might not be the worst thing beneath the peaks, this is the weapon they wanted on the wall. Aim it well."
+          "name": "Hvězdný zámek, poslední soud oblohy",
+          "look": "Meteorický hvězdný kov, roztaveně zlaté jádro podél pažby, kosmicky černá ramena leptaná souhvězdími a natažená šipka čistého hvězdného ohně.",
+          "lore": "Byla vykována ze surového meteorického kovu, dokud mirefenský kráter ještě zářil. Trosky „příliš žhavé na dotek“ byly roztepány do kosmicky černých ramen leptaných souhvězdími a podél pažby spočinulo roztaveně zlaté jádro. Nevkládá se do ní šipka, sama ji vyvolá: dřík hvězdného ohně vypuštěný jako rozsudek a dopadající jako jeho vykonání. Když se Highwatch obával, že ani nesmrtelná koruna Nythraxise nemusí být tím nejhorším pod vrcholky, chtěl mít na zdi právě tuto zbraň. Miř dobře."
         }
       },
-      "seasonOne": "Season 1",
+      "seasonOne": "1. sezóna",
       "rarity": {
-        "uncommon": "Uncommon",
-        "rare": "Rare",
-        "epic": "Epic",
-        "legendary": "Legendary"
+        "uncommon": "Neobvyklý",
+        "rare": "Vzácný",
+        "epic": "Epický",
+        "legendary": "Legendární"
       },
       "wtype": {
-        "sword": "Sword",
-        "axe": "Axe",
-        "mace": "Mace",
-        "dagger": "Dagger",
-        "staff": "Staff",
-        "wand": "Wand",
-        "bow": "Bow",
-        "crossbow": "Crossbow"
+        "sword": "Meč",
+        "axe": "Sekera",
+        "mace": "Palcát",
+        "dagger": "Dýka",
+        "staff": "Hůl",
+        "wand": "Hůlka",
+        "bow": "Luk",
+        "crossbow": "Kuše"
       },
       "badge": {
-        "flagship": "Flagship",
-        "hero": "Hero"
+        "flagship": "Vlajkový",
+        "hero": "Hrdinský"
       },
-      "inspectAria": "Inspect {item}",
-      "viewModeLabel": "Preview mode",
-      "tryOn": "Try it on",
-      "weaponOnly": "Weapon only",
-      "sceneLabel": "Scene lighting",
+      "inspectAria": "Prohlédnout {item}",
+      "viewModeLabel": "Režim náhledu",
+      "tryOn": "Vyzkoušet",
+      "weaponOnly": "Jen zbraň",
+      "sceneLabel": "Osvětlení scény",
       "scene": {
-        "day": "Day",
-        "dusk": "Dusk",
-        "night": "Night"
+        "day": "Den",
+        "dusk": "Soumrak",
+        "night": "Noc"
       },
-      "lore": "Lore",
-      "buySkin": "Purchase Skin",
-      "unavailable": "Unavailable",
-      "applied": "Applied",
-      "apply": "Apply Skin",
-      "detach": "Detach Skin",
-      "equipHint": "Equip a {type} to apply this skin."
+      "lore": "Příběh",
+      "buySkin": "Koupit vzhled",
+      "unavailable": "Nedostupné",
+      "applied": "Použito",
+      "apply": "Použít vzhled",
+      "detach": "Odebrat vzhled",
+      "equipHint": "Tento vzhled lze použít po nasazení předmětu typu {type}."
     },
     "claudium": {
       "title": "Claudium",
-      "open": "Open Claudium",
-      "close": "Close Claudium",
-      "loading": "Loading Claudium...",
-      "balanceLabel": "Balance",
+      "open": "Otevřít Claudium",
+      "close": "Zavřít Claudium",
+      "loading": "Načítání Claudium…",
+      "balanceLabel": "Zůstatek",
       "balanceUnit": "{amount} Claudium",
       "solBalance": "SOL: {amount}",
       "wocBalance": "WOC: {amount}",
-      "unavailable": "The Claudium store is unavailable right now. Your balance and purchases are unaffected; please check back shortly.",
-      "disclosure": "Claudium is a one-way soft currency: buy it with money and spend it on cosmetics. It cannot be redeemed, transferred, or cashed out.",
-      "buyTitle": "Buy Claudium",
-      "railLabel": "Payment method",
-      "railStripe": "Card",
+      "unavailable": "Obchod Claudium nyní není dostupný. Tvůj zůstatek ani nákupy to neovlivní, zkus to za chvíli znovu.",
+      "disclosure": "Claudium je jednosměrná herní měna: kupuje se za peníze a utrácí za kosmetické předměty. Nelze ji směnit zpět, převést ani vyplatit v hotovosti.",
+      "buyTitle": "Koupit Claudium",
+      "railLabel": "Způsob platby",
+      "railStripe": "Karta",
       "railSol": "SOL",
       "railWoc": "WOC",
-      "railWocDiscount": "20% off",
-      "railWocUnavailable": "WOC pricing is unavailable right now.",
-      "railNativeUnavailable": "SOL/WOC off.",
-      "amountLabel": "Amount",
-      "showAmounts": "Show all Claudium amounts",
-      "hideAmounts": "Hide extra Claudium amounts",
-      "skuRow": "{usd} for {claudium} Claudium",
-      "buyButton": "Buy",
-      "buyUnavailable": "Purchasing is unavailable right now.",
-      "storeTitle": "Cosmetic Store",
-      "storeEmpty": "No cosmetics are available right now.",
+      "railWocDiscount": "Sleva 20 %",
+      "railWocUnavailable": "Cena ve WOC nyní není dostupná.",
+      "railNativeUnavailable": "SOL/WOC nedostupné",
+      "amountLabel": "Množství",
+      "showAmounts": "Zobrazit všechny nabídky Claudium",
+      "hideAmounts": "Skrýt další nabídky Claudium",
+      "skuRow": "{claudium} Claudium za {usd}",
+      "buyButton": "Koupit",
+      "buyUnavailable": "Nákup nyní není dostupný.",
+      "storeTitle": "Obchod s kosmetikou",
+      "storeEmpty": "Žádná kosmetika nyní není dostupná.",
       "storeCost": "{amount} Claudium",
-      "spendButton": "Redeem",
-      "kindCosmetic": "Cosmetic",
-      "kindSkin": "Skin",
-      "kindItem": "Item",
-      "checkoutTitle": "Complete purchase",
-      "checkoutClose": "Close checkout",
-      "checkoutLoading": "Loading checkout...",
-      "checkoutPending": "Transaction in progress. Confirm in your wallet and keep this panel open.",
-      "checkoutPendingButton": "Processing",
-      "checkoutFailed": "Checkout could not be loaded. Please try again.",
-      "checkoutUnavailable": "That Claudium purchase is not available right now.",
-      "checkoutWalletRequired": "Connect a Solana wallet before buying Claudium with crypto.",
-      "checkoutWalletUnsupported": "This wallet cannot sign and send Solana transactions.",
-      "checkoutNotSettled": "The transaction was sent but Claudium was not credited yet. Please try again shortly."
+      "spendButton": "Uplatnit",
+      "kindCosmetic": "Kosmetika",
+      "kindSkin": "Vzhled",
+      "kindItem": "Předmět",
+      "checkoutTitle": "Dokončit nákup",
+      "checkoutClose": "Zavřít platbu",
+      "checkoutLoading": "Načítání platby…",
+      "checkoutPending": "Transakce probíhá. Potvrď ji v peněžence a nech tento panel otevřený.",
+      "checkoutPendingButton": "Zpracovává se",
+      "checkoutFailed": "Platbu se nepodařilo načíst. Zkus to znovu.",
+      "checkoutUnavailable": "Tento nákup Claudium nyní není dostupný.",
+      "checkoutWalletRequired": "Před nákupem Claudium za kryptoměnu připoj peněženku Solana.",
+      "checkoutWalletUnsupported": "Tato peněženka neumí podepisovat a odesílat transakce Solana.",
+      "checkoutNotSettled": "Transakce byla odeslána, ale Claudium zatím nebylo připsáno. Zkus to za chvíli znovu."
     },
     "theme": {
       "preset": "Motiv UI",
@@ -596,12 +596,12 @@ export const cs_CZ: EnTranslations = {
       "talkBodyTouch": "Postav se blízko maršála Redbrooka, klepni na Použít, promluv s ním a přijmi jeho úkol.",
       "returnBodyTouch": "Tvůj úkol je hotový. Vrať se k maršálu Redbrookovi a klepni na Použít pro odevzdání.",
       "doneBodyTouch": "Základy už znáš, {name}. Údolí je tvoje k prozkoumání. Klepni na Více a potom Úkoly, kdykoli chceš zkontrolovat deník úkolů. Dobrý lov.",
-      "slayTargetHint": "New to combat? Press {targetKey} or click a wolf to target it, then use an action bar ability to attack it.",
-      "slayTargetHintTouch": "New to combat? Tap a wolf to target it, then tap an action bar ability to attack it.",
-      "nextTipsTitle": "Where to next",
-      "nextTipQuestLog": "Open your Quest Log ({key}) to find your next task nearby.",
-      "nextTipMap": "Check the World Map ({key}) to see where quests are waiting.",
-      "nextTipSocial": "Open Social ({key}) to find a group for tougher fights."
+      "slayTargetHint": "Bojuješ poprvé? Stiskni {targetKey} nebo klikni na vlka, abys ho zaměřil, a pak na něj zaútoč schopností z lišty akcí.",
+      "slayTargetHintTouch": "Bojuješ poprvé? Klepnutím zaměř vlka a pak na něj zaútoč schopností z lišty akcí.",
+      "nextTipsTitle": "Kam dál",
+      "nextTipQuestLog": "Otevři deník úkolů ({key}) a najdi další úkol v okolí.",
+      "nextTipMap": "Podívej se na mapu světa ({key}) a zjisti, kde čekají úkoly.",
+      "nextTipSocial": "Otevři okno Společnost ({key}) a najdi skupinu pro těžší boje."
     },
     "widgets": {
       "clockTitle": "Místní čas - kliknutím přepneš 12/24 h",
@@ -944,17 +944,17 @@ export const cs_CZ: EnTranslations = {
       "highContrastAria": "Přepnout vysoce kontrastní pozadí: vypne pohyblivý trailer, aby text úvodní obrazovky zůstal čitelný"
     },
     "warfare": {
-      "honorAmount": "{amount} Honor",
+      "honorAmount": "{amount} cti",
       "dualPrice": "{money} + {honor}",
-      "balance": "Honor: {amount}",
-      "honorFloat": "+{amount} Honor",
-      "honorGain": "You gain {amount} Honor ({reason}).",
-      "notEnoughHonor": "Not enough Honor.",
+      "balance": "Čest: {amount}",
+      "honorFloat": "+{amount} cti",
+      "honorGain": "Získáváš {amount} cti ({reason}).",
+      "notEnoughHonor": "Nemáš dost cti.",
       "reasons": {
-        "arenaWin": "Arena victory",
-        "fiestaKill": "Fiesta takedown",
-        "fiestaComplete": "Fiesta completed",
-        "fiestaWin": "Fiesta victory"
+        "arenaWin": "Vítězství v aréně",
+        "fiestaKill": "Vyřazení ve Fiestě",
+        "fiestaComplete": "Dokončení Fiesty",
+        "fiestaWin": "Vítězství ve Fiestě"
       }
     },
     "statInfo": {
@@ -963,9 +963,9 @@ export const cs_CZ: EnTranslations = {
         "spellPower": "Síla kouzel",
         "critRating": "Hodnocení kritického zásahu",
         "hasteRating": "Hodnocení rychlosti",
-        "warfare": "Warfare"
+        "warfare": "Válečnictví"
       },
-      "warfareValue": "+{increase}% dealt / -{reduction}% taken",
+      "warfareValue": "+{increase} % způsobeno / -{reduction} % utrpěno",
       "desc": {
         "str": "Zvyšuje tvoji sílu útoku, takže údery zbraní dopadají tvrději.",
         "agi": "Zostřuje tvoje reflexy a míření a zlepšuje několik bojových statistik.",
@@ -980,7 +980,7 @@ export const cs_CZ: EnTranslations = {
         "dodge": "Tvoje šance úplně se vyhnout příchozímu útoku na blízko a neutrpět poškození.",
         "critRating": "Hodnocení kritického zásahu z tvé výbavy a bonusů sad, které zvyšuje tvoji šanci na kritický zásah. Přibližně 10 hodnocení dá 1 % kritického zásahu.",
         "hasteRating": "Hodnocení rychlosti z tvé výbavy a bonusů sad, které zrychluje tvé útoky a sesílání kouzel. Přibližně 10 hodnocení dá 1 % rychlosti.",
-        "warfare": "Increases damage dealt to players by {increase}% and reduces damage taken from players by {reduction}%."
+        "warfare": "Zvýší poškození způsobené hráčům o {increase} % a sníží poškození utrpěné od hráčů o {reduction} %."
       },
       "effects": {
         "attackPower": "+{value} síla útoku",
@@ -1205,7 +1205,7 @@ export const cs_CZ: EnTranslations = {
     "corpseHarvest": {
       "title": "Sklizeň",
       "harvestButton": "Sklidit",
-      "harvestButtonTooltip": "Harvest: gather crafting materials from this corpse (hide, fang, silk, and similar components), separate from any loot. Anyone can harvest; only one player may harvest a given corpse.",
+      "harvestButtonTooltip": "Sklidit: získá z tohoto těla výrobní materiály (kůži, tesák, hedvábí a podobné součásti), odděleně od kořisti. Sklízet může každý, ale dané tělo smí sklidit jen jeden hráč.",
       "concentrateHint": "Méně vybraných komponent dá každé vyšší stupeň.",
       "alreadyHarvested": "Tato mrtvola už byla sklizena.",
       "componentAria": "Sklidit {component}",
@@ -1400,7 +1400,7 @@ export const cs_CZ: EnTranslations = {
     },
     "loot": {
       "chestTitle": "Truhla",
-      "takeAllTooltip": "Take All: collect every coin and item in this loot window."
+      "takeAllTooltip": "Vzít vše: sebere všechny mince a předměty v tomto okně kořisti."
     },
     "spellbook": {
       "addToBarAria": "Přidat {name} na akční lištu",
@@ -1864,7 +1864,7 @@ export const cs_CZ: EnTranslations = {
       "trackerLabel": "Skutky",
       "collapseHint": "Sbalit panel skutků",
       "expandHint": "Rozbalit panel skutků",
-      "openBookHint": "Open the Book of Deeds",
+      "openBookHint": "Otevřít Knihu skutků",
       "charTitleLabel": "Titul",
       "charTitleNone": "Žádný titul nezvolen",
       "charOpenBook": "Kniha skutků",
@@ -5878,8 +5878,8 @@ export const cs_CZ: EnTranslations = {
         "description": "Mohutná vlna léčení: obnoví {damage} zdraví. Cooldown 10 min."
       },
       "holy_taunt": {
-        "name": "Sacred Goad",
-        "description": "Taunts the target: your threat rises to match its most hated enemy and it is compelled to attack you for 3 sec."
+        "name": "Posvátná výzva",
+        "description": "Vyzve cíl: tvoje hrozba se zvýší na úroveň jeho nejnenáviděnějšího nepřítele a cíl je donucen tě 3 s útočit."
       },
       "flash_of_light": {
         "name": "Zhojení světlem",
@@ -6206,96 +6206,96 @@ export const cs_CZ: EnTranslations = {
         "description": "Vstoupíš do vroucí zuřivosti a získáš 20 vzteku. (Talent válečníka)"
       },
       "crusader_strike": {
-        "name": "Crusader Strike",
-        "description": "Strikes the target for weapon damage plus {damage} Holy damage. (Paladin talent)"
+        "name": "Křižácký úder",
+        "description": "Zasáhne cíl za poškození zbraně plus {damage} svatého poškození. (talent paladina)"
       },
       "chain_heal": {
-        "name": "Chain Heal",
-        "description": "Heals a friendly target for a large amount, then jumps to up to 2 additional nearby allies, healing for 50% less with each jump. (Restoration signature)"
+        "name": "Řetězové léčení",
+        "description": "Vyléčí spojenecký cíl za velké množství zdraví, poté přeskočí až na 2 další blízké spojence. Každý další skok léčí o 50 % méně. (klíčová schopnost Obnovy)"
       },
       "metamorphosis": {
-        "name": "Dread Aspect",
-        "description": "Transform into a monstrous demon for 20 sec, increasing your spell damage by 20% and casting speed by 20%. Your demon gains 50% damage and 20% casting speed. (Demonology signature)"
+        "name": "Děsivý zjev",
+        "description": "Na 20 s se proměníš v děsivého démona, zvýšíš svoje poškození kouzly o 20 % a rychlost sesílání o 20 %. Tvůj démon způsobuje o 50 % více poškození a sesílá o 20 % rychleji. (klíčová schopnost Démonologie)"
       },
       "holy_shock": {
-        "name": "Holy Shock",
-        "description": "Shocks a friendly target with Holy energy to heal them, or an enemy for {damage} Holy damage. (Holy signature)"
+        "name": "Svatý otřes",
+        "description": "Zasáhne spojenecký cíl svatou energií a vyléčí ho, nebo způsobí nepříteli {damage} svatého poškození. (klíčová schopnost Svaté magie)"
       },
       "holy_shield": {
-        "name": "Hallowed Wall",
-        "description": "Hurls a radiant aegis at an enemy, dealing Holy damage and bouncing to 2 nearby enemies. (Protection signature)"
+        "name": "Posvěcená hradba",
+        "description": "Vrhne na nepřítele zářivou záštitu, způsobí mu svaté poškození a odrazí se ke 2 blízkým nepřátelům. (klíčová schopnost Ochrany)"
       },
       "bestial_wrath": {
-        "name": "Howling Rage",
-        "description": "Sends you into a bestial rage, increasing your attack power by 20% and your pet damage by 100% for 15 sec. (Beast Mastery signature)"
+        "name": "Vyjící běs",
+        "description": "Uvrhne tě do zvířecího běsnění, zvýší tvoji sílu útoku o 20 % a poškození způsobené tvým společníkem o 100 % na 15 s. (klíčová schopnost Mistrovství šelem)"
       },
       "trueshot_aura": {
-        "name": "Sureflight Aura",
-        "description": "Inspires nearby allies, increasing attack power by 10% for 30 min. (Marksmanship signature)"
+        "name": "Aura jistého letu",
+        "description": "Povzbudí blízké spojence a zvýší jejich sílu útoku o 10 % na 30 min. (klíčová schopnost Střelby)"
       },
       "wyvern_sting": {
-        "name": "Wyvern Sting",
-        "description": "Stings the enemy from range, incapacitating it for up to 4 sec. Any damage breaks the effect. (Survival signature)"
+        "name": "Žihadlo wyverny",
+        "description": "Bodne nepřítele na dálku a vyřadí ho až na 4 s. Jakékoli poškození efekt přeruší. (klíčová schopnost Přežití)"
       },
       "arcane_power": {
-        "name": "Aether Surge",
-        "description": "Increases spell damage by 20% and spell haste by 10% for 10 sec. (Arcane signature)"
+        "name": "Příval éteru",
+        "description": "Zvýší tvoje poškození kouzly o 20 % a rychlost sesílání o 10 % na 10 s. (klíčová schopnost Tajemné magie)"
       },
       "combustion": {
-        "name": "Flashfire",
-        "description": "Increases spell critical chance by 50% for 15 sec. (Fire signature)"
+        "name": "Bleskový žár",
+        "description": "Zvýší šanci na kritický zásah kouzlem o 50 % na 15 s. (klíčová schopnost Ohně)"
       },
       "icy_veins": {
-        "name": "Icy Veins",
-        "description": "Increases spell haste by 30% and prevents cast interruption and pushback for 10 sec. (Frost signature)"
+        "name": "Ledové žíly",
+        "description": "Zvýší rychlost sesílání o 30 % a na 10 s zabrání přerušení i zpomalení sesílání. (klíčová schopnost Mrazu)"
       },
       "cold_blood": {
-        "name": "Killer's Calm",
-        "description": "Focuses your killing intent so your next attack is a critical strike. (Assassination signature)"
+        "name": "Klid zabijáka",
+        "description": "Soustředí tvůj vražedný záměr, takže tvůj příští útok bude kritickým zásahem. (klíčová schopnost Vraždění)"
       },
       "blade_flurry": {
-        "name": "Mirrored Blades",
-        "description": "Unleashes a flurry of blades, increasing attack speed by 20% for 12 sec. (Combat signature)"
+        "name": "Zrcadlové čepele",
+        "description": "Rozpoutá smršť čepelí a zvýší tvoji rychlost útoku o 20 % na 12 s. (klíčová schopnost Boje)"
       },
       "hemorrhage": {
-        "name": "Red Ribbon",
-        "description": "Strikes the enemy for weapon damage plus {damage}, causes bleeding damage over 12 sec, and increases bleed damage taken by 40%. Awards 1 combo point. (Subtlety signature)"
+        "name": "Rudá stuha",
+        "description": "Zasáhne nepřítele za poškození zbraně plus {damage}, způsobí mu krvácení na 12 s a zvýší utrpěné poškození krvácením o 40 %. Udělí 1 combo bod. (klíčová schopnost Lstivosti)"
       },
       "power_infusion": {
-        "name": "Anointing",
-        "description": "Infuses a friendly target with power, increasing spell haste by 20% for 15 sec. (Discipline signature)"
+        "name": "Pomazání",
+        "description": "Naplní spojenecký cíl mocí a zvýší jeho rychlost sesílání o 20 % na 15 s. (klíčová schopnost Kázně)"
       },
       "holy_nova": {
-        "name": "Holy Nova",
-        "description": "Causes an explosion of holy radiance, healing nearby allies for {damage} and damaging nearby enemies. (Holy signature)"
+        "name": "Svatá nova",
+        "description": "Vyvolá výbuch svaté záře, který vyléčí blízké spojence za {damage} a poškodí blízké nepřátele. (klíčová schopnost Svaté magie)"
       },
       "shadowform": {
-        "name": "Gloamveil Form",
-        "description": "Assume a Shadowform, increasing your Shadow damage by 15 and empowering shadow magic until you shift back. Cast again to return to normal form. (Shadow signature)"
+        "name": "Podoba šerého závoje",
+        "description": "Přijmeš podobu stínu, zvýšíš svoje stínové poškození o 15 a posílíš stínovou magii, dokud podobu neopustíš. Dalším sesláním se vrátíš do normální podoby. (klíčová schopnost Stínu)"
       },
       "elemental_mastery": {
-        "name": "Primal Mastery",
-        "description": "Calls on the storm, making your next spell instant. (Elemental signature)"
+        "name": "Prvotní mistrovství",
+        "description": "Povolá bouři a tvé příští kouzlo sešle okamžitě. (klíčová schopnost Živlů)"
       },
       "siphon_life": {
-        "name": "Veinleech",
-        "description": "Siphons life from the enemy, causing {damage} Shadow damage over 30 sec and healing you for the damage done. (Affliction signature)"
+        "name": "Žilopijec",
+        "description": "Vysává život nepřítele, způsobí mu {damage} stínového poškození během 30 s a vyléčí tě za způsobené poškození. (klíčová schopnost Utrpení)"
       },
       "conflagrate": {
-        "name": "Conflagrate",
-        "description": "Consumes your Immolate on the enemy to ignite them for {damage} Fire damage. (Destruction signature)"
+        "name": "Vzplanutí",
+        "description": "Spotřebuje Hořící pakt na nepříteli a zapálí ho za {damage} ohnivého poškození. (klíčová schopnost Ničení)"
       },
       "moonkin_form": {
-        "name": "Moonwing Form",
-        "description": "Shapeshift into a fearsome Moonkin, increasing your spell damage by 20% and your armor by 50%. Lasts until you shift out. Cast again to return to caster form. (Balance signature)"
+        "name": "Podoba měsíčního křídla",
+        "description": "Promění tě v děsivého měsíčníka, zvýší tvoje poškození kouzly o 20 % a zbroj o 50 %. Trvá, dokud podobu neopustíš. Dalším sesláním se vrátíš do normální podoby. (klíčová schopnost Rovnováhy)"
       },
       "feral_charge": {
-        "name": "Primal Surge",
-        "description": "Unleash a primal surge. In Wolf Form, Energy regeneration is increased by 100% for 10 sec. In Bruin Form, instantly generates 50 Rage. (Feral signature)"
+        "name": "Prvotní nápor",
+        "description": "Uvolní prvotní nápor. Ve vlčí podobě zvýší obnovu energie o 100 % na 10 s. V medvědí podobě okamžitě vygeneruje 50 vzteku. (klíčová schopnost Divokosti)"
       },
       "swiftmend": {
-        "name": "Swiftmend",
-        "description": "Consumes a heal-over-time effect on a friendly target to heal them for {damage}. (Restoration signature)"
+        "name": "Rychlé zhojení",
+        "description": "Spotřebuje průběžné léčení na spojeneckém cíli a vyléčí ho za {damage}. (klíčová schopnost Obnovy)"
       },
       "summon_imp": {
         "name": "Vyvolat Žhavorozeného",
@@ -6326,32 +6326,32 @@ export const cs_CZ: EnTranslations = {
         "description": "Spoutá Zrozence přízraků do tvé vůle, elitního démona, který z dálky sesílá těžké stínové poškození. Jeho ničivou sílu omezuje dlouhý cooldown. Vyvolání nového démona propustí toho současného. Můžeš mít vždy jen jednoho démona."
       },
       "pummel": {
-        "name": "Jawcrack",
-        "description": "Interrupts the target's spellcast and prevents casting from that school for 4 sec."
+        "name": "Drtič čelistí",
+        "description": "Přeruší sesílání kouzla cíle a na 4 s mu znemožní kouzla stejné školy."
       },
       "kick": {
-        "name": "Boot",
-        "description": "Interrupts the target's spellcast and prevents casting from that school for 4 sec."
+        "name": "Kopanec",
+        "description": "Přeruší sesílání kouzla cíle a na 4 s mu znemožní kouzla stejné školy."
       },
       "counterspell": {
-        "name": "Spellbreak",
-        "description": "Counters the target's spellcast and prevents casting from that school for 6 sec."
+        "name": "Zlomení kouzla",
+        "description": "Přeruší sesílání kouzla cíle a na 6 s mu znemožní kouzla stejné školy."
       },
       "counter_shot": {
-        "name": "Hushing Shot",
-        "description": "A snap shot that interrupts the target's spellcast and locks that school for 4 sec."
+        "name": "Umlčující výstřel",
+        "description": "Rychlý výstřel, který přeruší sesílání kouzla cíle a na 4 s mu znemožní kouzla stejné školy."
       },
       "rebuke": {
-        "name": "Reproach",
-        "description": "Interrupts the target's spellcast and prevents casting from that school for 4 sec."
+        "name": "Pokárání",
+        "description": "Přeruší sesílání kouzla cíle a na 4 s mu znemožní kouzla stejné školy."
       },
       "skull_bash": {
-        "name": "Headbutt",
-        "description": "A lunging headbutt that interrupts the target's spellcast and locks that school for 4 sec."
+        "name": "Úder hlavou",
+        "description": "Výpad hlavou, který přeruší sesílání kouzla cíle a na 4 s mu znemožní kouzla stejné školy."
       },
       "spell_lock": {
-        "name": "Gag Order",
-        "description": "Silences the target mid-cast and prevents casting from that school for 5 sec."
+        "name": "Příkaz mlčet",
+        "description": "Umlčí cíl během sesílání a na 5 s mu znemožní kouzla stejné školy."
       },
       "bear_charge": {
         "name": "Medvědí výpad",
@@ -6997,124 +6997,124 @@ export const cs_CZ: EnTranslations = {
         "name": "Sluncokvět"
       },
       "furyforged_warhelm": {
-        "name": "Furyforged Warhelm"
+        "name": "Vztekem kovaná válečná helma"
       },
       "furyforged_warspaulders": {
-        "name": "Furyforged Warspaulders"
+        "name": "Vztekem kované nárameníky"
       },
       "furyforged_warplate": {
-        "name": "Furyforged Warplate"
+        "name": "Vztekem kovaný kyrys"
       },
       "furyforged_girdle": {
-        "name": "Furyforged Girdle"
+        "name": "Vztekem kovaný pás"
       },
       "furyforged_legguards": {
-        "name": "Furyforged Legguards"
+        "name": "Vztekem kované chrániče nohou"
       },
       "furyforged_gauntlets": {
-        "name": "Furyforged Gauntlets"
+        "name": "Vztekem kované rukavice"
       },
       "furyforged_sabatons": {
-        "name": "Furyforged Sabatons"
+        "name": "Vztekem kované sabatony"
       },
       "stormbound_crown": {
-        "name": "Stormbound Crown"
+        "name": "Bouří spoutaná koruna"
       },
       "stormbound_spaulders": {
-        "name": "Stormbound Spaulders"
+        "name": "Bouří spoutané nárameníky"
       },
       "stormbound_hauberk": {
-        "name": "Stormbound Hauberk"
+        "name": "Bouří spoutaný hauberk"
       },
       "stormbound_waistguard": {
-        "name": "Stormbound Waistguard"
+        "name": "Bouří spoutaný pás"
       },
       "stormbound_legmail": {
-        "name": "Stormbound Legmail"
+        "name": "Bouří spoutané kroužkové nohavice"
       },
       "stormbound_handguards": {
-        "name": "Stormbound Handguards"
+        "name": "Bouří spoutané rukavice"
       },
       "stormbound_greaves": {
-        "name": "Stormbound Greaves"
+        "name": "Bouří spoutané holenice"
       },
       "ashstalker_cowl": {
-        "name": "Ashstalker Cowl"
+        "name": "Kápě Popelavého stopaře"
       },
       "ashstalker_shoulderguards": {
-        "name": "Ashstalker Shoulderguards"
+        "name": "Nárameníky Popelavého stopaře"
       },
       "ashstalker_harness": {
-        "name": "Ashstalker Harness"
+        "name": "Kyrys Popelavého stopaře"
       },
       "ashstalker_waistband": {
-        "name": "Ashstalker Waistband"
+        "name": "Pás Popelavého stopaře"
       },
       "ashstalker_legguards": {
-        "name": "Ashstalker Legguards"
+        "name": "Chrániče nohou Popelavého stopaře"
       },
       "ashstalker_grips": {
-        "name": "Ashstalker Grips"
+        "name": "Rukavice Popelavého stopaře"
       },
       "ashstalker_treads": {
-        "name": "Ashstalker Treads"
+        "name": "Střevíce Popelavého stopaře"
       },
       "cinderweave_cowl": {
-        "name": "Cinderweave Cowl"
+        "name": "Kápě žárové tkaniny"
       },
       "cinderweave_mantle": {
-        "name": "Cinderweave Mantle"
+        "name": "Plášť žárové tkaniny"
       },
       "cinderweave_raiment": {
-        "name": "Cinderweave Raiment"
+        "name": "Roucho žárové tkaniny"
       },
       "cinderweave_cord": {
-        "name": "Cinderweave Cord"
+        "name": "Šňůra žárové tkaniny"
       },
       "cinderweave_legwraps": {
-        "name": "Cinderweave Legwraps"
+        "name": "Nohavice žárové tkaniny"
       },
       "cinderweave_handwraps": {
-        "name": "Cinderweave Handwraps"
+        "name": "Omotávky žárové tkaniny"
       },
       "cinderweave_slippers": {
-        "name": "Cinderweave Slippers"
+        "name": "Střevíce žárové tkaniny"
       },
       "final_oath_medallion": {
-        "name": "Medallion of the Final Oath"
+        "name": "Medailon poslední přísahy"
       },
       "razorwind_torque": {
-        "name": "Razorwind Torque"
+        "name": "Nákrčník břitkého větru"
       },
       "cinder_sigil_pendant": {
-        "name": "Cinder-Sigil Pendant"
+        "name": "Přívěsek žhavého znamení"
       },
       "iron_vow_band": {
-        "name": "Iron Vow Band"
+        "name": "Prsten železné přísahy"
       },
       "unbroken_circle": {
-        "name": "The Unbroken Circle"
+        "name": "Neporušený kruh"
       },
       "fleetblood_band": {
-        "name": "Fleetblood Band"
+        "name": "Prsten hbité krve"
       },
       "last_step_signet": {
-        "name": "Last-Step Signet"
+        "name": "Pečetní prsten posledního kroku"
       },
       "ashen_focus_ring": {
-        "name": "Ashen Focus Ring"
+        "name": "Prsten popelavého soustředění"
       },
       "spellbreakers_seal": {
-        "name": "Spellbreaker's Seal"
+        "name": "Pečeť lámače kouzel"
       },
       "final_argument_greatblade": {
-        "name": "Final Argument Greatblade"
+        "name": "Velká čepel posledního argumentu"
       },
       "first_blood_razor": {
-        "name": "First-Blood Razor"
+        "name": "Břitva první krve"
       },
       "emberglass_warstaff": {
-        "name": "Emberglass Warstaff"
+        "name": "Bojová hůl z uhlíkového skla"
       },
       "bristleback_maul": {
         "name": "Gallowglassské kladivo"
@@ -8254,9 +8254,9 @@ export const cs_CZ: EnTranslations = {
         "greeting": "Za důkaz z hrdinských hlubin koupíš ty nejlepší prsteny a přívěsky v Highwatchi. Ukaž mi své značky."
       },
       "fury": {
-        "name": "FURY",
-        "title": "Honor Quartermaster",
-        "greeting": "The sands remember every victory. Spend your honor well."
+        "name": "FÚRIE",
+        "title": "Intendant cti",
+        "greeting": "Písky si pamatují každé vítězství. Utrácej svou čest moudře."
       },
       "loremaster_caddis": {
         "name": "Kronikář Caddis",

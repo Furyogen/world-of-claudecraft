@@ -245,261 +245,261 @@ export const sv_SE: EnTranslations = {
       }
     },
     "wocStore": {
-      "title": "WOC Store",
-      "close": "Close WOC Store",
-      "tabsLabel": "WOC Store sections",
-      "storeTab": "Store",
-      "rewardsTab": "Daily Rewards",
-      "loading": "Loading WOC Store...",
-      "error": "The WOC Store is unavailable right now. Please try again shortly.",
-      "balance": "Claudium Balance",
-      "buyClaudium": "Purchase Claudium",
-      "owned": "Owned",
-      "needMoreTitle": "More Claudium Required",
-      "needMoreBody": "You need {shortfall} more Claudium to purchase {item}.",
-      "cancel": "Cancel",
-      "confirmTitle": "Confirm Cosmetic Purchase",
-      "confirmBody": "Purchase {item} for {cost} Claudium?",
-      "confirmPurchase": "Purchase",
-      "priceChanged": "The price changed before the purchase completed. Review the refreshed price and confirm again.",
-      "armoryEyebrow": "Season 1",
-      "armoryTitle": "The Armory",
-      "armoryBody": "Limited weapon skins from the Season 1 Armory. Account-wide, purely cosmetic, and shown to everyone around you.",
-      "collectionLine": "{collection} Collection",
+      "title": "WOC-butik",
+      "close": "Stäng WOC-butiken",
+      "tabsLabel": "Delar av WOC-butiken",
+      "storeTab": "Butik",
+      "rewardsTab": "Dagliga belöningar",
+      "loading": "Laddar WOC-butiken...",
+      "error": "WOC-butiken är inte tillgänglig just nu. Försök igen om en stund.",
+      "balance": "Claudium-saldo",
+      "buyClaudium": "Köp Claudium",
+      "owned": "I din ägo",
+      "needMoreTitle": "Mer Claudium krävs",
+      "needMoreBody": "Du behöver {shortfall} mer Claudium för att köpa {item}.",
+      "cancel": "Avbryt",
+      "confirmTitle": "Bekräfta köp av kosmetika",
+      "confirmBody": "Köpa {item} för {cost} Claudium?",
+      "confirmPurchase": "Köp",
+      "priceChanged": "Priset ändrades innan köpet slutfördes. Granska det uppdaterade priset och bekräfta igen.",
+      "armoryEyebrow": "Säsong 1",
+      "armoryTitle": "Vapenhuset",
+      "armoryBody": "Begränsade vapenskins från säsong 1-vapenhuset. De gäller för hela kontot, är helt kosmetiska och visas för alla i din omgivning.",
+      "collectionLine": "{collection}-samlingen",
       "collections": {
-        "guildmark": "Guildmark",
-        "emberwrought": "Emberwrought",
-        "hoarfrost": "Hoarfrost",
-        "fallen_star": "Fallen Star"
+        "guildmark": "Gillesmärke",
+        "emberwrought": "Glödsmidd",
+        "hoarfrost": "Rimfrost",
+        "fallen_star": "Fallen stjärna"
       },
       "skins": {
         "guildmark_arming_sword": {
-          "name": "Guildmark Arming Sword",
-          "look": "Blued steel blade, bronze fishtail crossguard, teal-dyed leather grip, small stamped guild sigil.",
-          "lore": "Where the wrought blade is anonymous, this one is signed. An armorer earns the right to sink his mark into the ricasso only once the World Market's Merchant will vouch for his steel, and Smith Haldren's mark is vouched for. Blued against the Vale's damp, balanced to a hair. You pay for the stamp as much as the sword, and it is worth it."
+          "name": "Gillesmärkt Väpnarsvärd",
+          "look": "Blånat stålblad, korsskydd för fisksvans i brons, krickfärgat lädergrepp, liten stämplad guild sigil.",
+          "lore": "Där smidesbladet är anonymt är detta signerat. En rustningsman förtjänar rätten att sänka sitt märke i ricasson först när världsmarknadens handlare går i god för sitt stål och Smith Haldrens märke går i god för. Blånad mot Vales fuktiga, balanserad till ett hårstrå. Du betalar för stämpeln lika mycket som svärdet, och det är värt det."
         },
         "brasscap_axe": {
-          "name": "Brasscap Hatchet",
-          "look": "Polished steel bit, brass cap and langets on a lacquered ash haft, tidy wrap, a maker's stamp.",
-          "lore": "A stamped axe is a boast you can hold. The brass cap and langets are half armour, half signature: they keep the haft from splitting and they catch the tavern light so everyone knows you bought Armorer Hode's work, not a militia hand-me-down. 'If it cuts, I sell it,' the Highwatch smith says. This one cuts."
+          "name": "Mässingshätteyxa",
+          "look": "Bits av polerat stål, mässingslock och långets på lackat askskaft, snyggt omslag, tillverkarstämpel.",
+          "lore": "En stämplad yxa är ett skryt du kan hålla. Mässingsmössan och langets är halvt rustning, hälften signatur: de hindrar skaftet från att splittras och de fångar krogljuset så att alla vet att du köpte Armorer Hodes verk, inte en milis-hand-me-down. \"Om det skär, säljer jag det\", säger Highwatch-smeden. Den här skär."
         },
         "tempered_flanged_mace": {
-          "name": "Tempered Flanged Mace",
-          "look": "Six-flanged tempered blue-steel head, brass collar and pommel, wine-red leather grip.",
-          "lore": "Six flanges of blued, tempered steel, each ground to open a helm, capped in brass and wound in wine-red leather. The realm's armorers don't make ugly weapons even when the work is brutal. This one was commissioned through the World Market, not pulled off a rack; somewhere there's a ledger with a proud buyer's name and the sum he paid Hode for it."
+          "name": "Härdad Flänsklubba",
+          "look": "Sexflänsad härdat blå stålhuvud, mässingskrage och axel, vinrött lädergrepp.",
+          "lore": "Sex flänsar av blånat, härdat stål, var och en slipad för att öppna ett rodret, täckta i mässing och lindade i vinrött läder. Rikets pansarmän tillverkar inte fula vapen även när arbetet är brutalt. Den här beställdes genom världsmarknaden, inte drogs från ett ställ; någonstans finns det en reskontra med en stolt köpares namn och summan han betalade Hode för det."
         },
         "guildmark_dirk": {
-          "name": "Guildmark Dirk",
-          "look": "Slim tempered-steel dirk, bronze guard and pommel nut, dark-green cord grip, stamped sigil.",
-          "lore": "What a made man wears when the sword stays home: slim, tempered, stamped with the same mark that certifies a full blade, worn on the belt like a signet with an edge. Understated to everyone but those who can read an armorer's proof. Quartermaster Bree keeps a drawer of them at Highwatch for officers who've earned the wall's respect."
+          "name": "Gillesmärkt Dirk",
+          "look": "Smal dirk i härdat stål, bronsskydd och mutter, mörkgrönt snörgrepp, stämplad sigil.",
+          "lore": "Vilken gjord man bär när svärdet stannar hemma: smal, tempererad, stämplad med samma märke som intygar ett helt blad, bärs på bältet som en signet med kant. Underskattat för alla utom de som kan läsa en rustningsmans bevis. Quartermaster Bree har en låda med dem på Highwatch för officerare som har förtjänat murens respekt."
         },
         "brasscrown_staff": {
-          "name": "Brasscrown Walking Staff",
-          "look": "Hardwood staff topped with a turned brass crown finial, brass ferrule, dyed leather band.",
-          "lore": "Turned from seasoned hardwood and crowned with a brass finial the Eastbrook smiths cast by the hundred but perfect by the one. It belongs to the sort of traveller who wants to be taken seriously at Fenbridge's gate and Highwatch's wall alike. A walking stick that has never truly needed to walk; the dyed band matches a coat you can guess the price of."
+          "name": "Mässingskronans Vandringsstav",
+          "look": "Lövträstav toppad med en svarvad mässingskrona, mässingshylsa, färgat läderband.",
+          "lore": "Svängd av kryddat lövträ och krönt med en mässingsfinal som Eastbrook-smederna gjutna i hundra men perfekt av en. Det tillhör den sortens resenär som vill bli tagen på allvar vid både Fenbridges gate och Highwatchs mur. En käpp som aldrig riktigt har behövt gå; det färgade bandet matchar en kappa du kan gissa priset på."
         },
         "lacquered_wand": {
-          "name": "Lacquered Rod",
-          "look": "Slender deep-red lacquered wand, two polished brass bands, small rounded brass tip.",
-          "lore": "Deep-red lacquer in seven patient coats, banded twice in polished brass: the kind of wand a hedge-mage buys off the World Market once they've started charging real coin and want to look it. It channels the Light no better than a birch stick. But it gleams magnificently across the Merchant's counter, and half of minor magic has always been being believed."
+          "name": "Lackerad Stav",
+          "look": "Smal djupröd lackerad stav, två polerade mässingsband, liten rundad mässingsspets.",
+          "lore": "Djupröd lack i sju tålmodiga rockar, bandade två gånger i polerad mässing: den typ av trollstav som en häckmagare köper från världsmarknaden när de väl har börjat ladda äkta mynt och vill titta på det. Den kanaliserar ljuset inte bättre än en björkpinne. Men det lyser magnifikt över köpmannens disk, och hälften av mindre magi har alltid trotts."
         },
         "fletcher_s_guild_bow": {
-          "name": "Fletcher's Guild Bow",
-          "look": "Lacquered walnut recurve bow, brass limb tips, waxed linen string, a guild stamp on the riser.",
-          "lore": "The closest thing the realm has to a guild is a fletcher's stamp on the riser, a promise about what's inside, the way a vintner seals a cask. Lacquered walnut, brass at the limb tips, a waxed linen string that won't fray through a Mirefen rain. Every joint argues for the price. Draw it once past the Widow Thicket and the argument wins."
+          "name": "Pilmakarskråets Båge",
+          "look": "Lackad valnötsbåge, lemspetsar i mässing, vaxat linnesnöre, en guildstämpel på stigaren.",
+          "lore": "Det närmaste riket har ett skrå är en fletchers stämpel på risern, ett löfte om vad som finns inuti, hur en vinodlare förseglar ett fat. Lackerad valnöt, mässing vid benspetsarna, ett vaxat linnesnöre som inte fransar sig genom ett Mirefen-regn. Varje led argumenterar för priset. Dra den en gång förbi änkesnåret och argumentet vinner."
         },
         "cinderbrand_sword": {
-          "name": "Cinderbrand",
-          "look": "Dark forged-steel blade, fuller filled with glowing ember-orange runes, heat-cracks, a smouldering gem in the guard.",
-          "lore": "The first blade quenched not in water but in Blessed Embers raked from Stormcrag, the coals the Highwatch smiths swear 'burn blue and clean, because the mountain remembers its old oath.' Banked into the fuller, that fire smoulders ember-orange and will not die; the runes stay warm to a bare hand on the coldest night of the wall. Cinderbrand never needs lighting. It simply refuses to go out."
+          "name": "Glödbrand",
+          "look": "Blad av mörkt smidd stål, fylligare fylld med glödande glödorange runor, värmesprickor, en pyrande pärla i skyddet.",
+          "lore": "Det första bladet släckte inte i vatten utan i Blessed Embers krattade från Stormcrag, kolen som Highwatch-smederna svär \"bränna blått och rent, eftersom berget minns sin gamla ed.\" Banken in i den fylligare, den glöder glödorange och kommer inte att dö; runorna håller sig varma till bar hand på väggens kallaste natt. Cinderbrand behöver aldrig belysning. Den vägrar helt enkelt gå ut."
         },
         "emberbite_axe": {
-          "name": "Emberbite",
-          "look": "Blackened-iron axe with ember-orange cracks glowing through the bit, a banked-coal gem, wisps of heat.",
-          "lore": "Armorer Hode worked a live coal of mountain-fire into the heart of the bit, so the edge never truly cools between blows. The cracks breathe orange on the downswing, as if the strike wakes something the first forging left sleeping in the iron. They say a Stormcrag elemental gave up the ember for it; they say a great many things at Highwatch when the wind is up."
+          "name": "Glödbett",
+          "look": "Yxa av svärtat järn med glödorange sprickor som glöder genom bettet, en kolpärla, värmebitar.",
+          "lore": "Armorer Hode arbetade med ett levande kol av bergseld i hjärtat av biten, så kanten svalnar aldrig riktigt mellan slagen. Sprickorna andas orange på nedgången, som om strejken väcker något som det första smidet lämnade och sov i järnet. De säger att en Stormcrag-elemental gav upp glöden för det; de säger väldigt många saker på Highwatch när det blåser."
         },
         "smoulderfall_mace": {
-          "name": "Smoulderfall",
-          "look": "Dark iron flanges glowing ember-orange along their inner cracks, a molten-cored gem in the head.",
-          "lore": "A mace that carries its own hearth: a molten-cored stone chipped from the Sanctum seal that was 'wrought with mountain-fire,' set glowing in the head. The flanges stay warm to the touch and warmer where they land; a Highwatch sergeant swears a blow from it leaves a bruise that glows faintly till morning. The mountain's fire, at last made for breaking rather than sealing."
+          "name": "Glödfall",
+          "look": "Mörka järnflänsar som lyser glödorange längs sina inre sprickor, en pärla med smält kärna i huvudet.",
+          "lore": "En mace som bär sin egen härd: en sten med smält kärna avhuggen från Sanctum-sälen som var 'smidd med bergseld', som glödde i huvudet. Flänsarna förblir varma vid beröring och varmare där de landar; en Highwatch-sergeant svär att ett slag från den lämnar ett blåmärke som lyser svagt till morgonen. Bergets eld gjorde äntligen till att bryta i stället för att täta."
         },
         "ashspark_dagger": {
-          "name": "Ashspark Shiv",
-          "look": "Short blackened blade veined with glowing ember-orange, a tiny smouldering gem in the pommel, ash and spark.",
-          "lore": "A back-alley blade with the mountain's fire smuggled into its pommel-stone, an armorer's quiet joke: even a cutpurse might carry an ember of the first forging. Blackened, veined with orange, always a shade too warm in the sheath. Draw it in the dark under Highwatch and the glow lights your hand just enough to find the gap in a man's guard."
+          "name": "Askgnistkniv",
+          "look": "Kort svärtat blad ådrat med glödande glöd-orange, en liten pyrande pärla i stift, aska och gnista.",
+          "lore": "En bakvägsklinga med bergets eld insmugglad in i sin klacksten, en rustningsmans tysta skämt: till och med en pungväska kan bära en glöd av det första smidet. Svärtad, ådrad med orange, alltid en nyans för varm i slidan. Rita den i mörkret under Highwatch och glöden tänder din hand precis tillräckligt för att hitta luckan i en mans vakt."
         },
         "forgeheart_staff": {
-          "name": "Forgeheart Stave",
-          "look": "Iron-shod staff crowned with a caged glowing ember core, ember runes up the shaft, rising heat-shimmer.",
-          "lore": "A living coal of mountain-fire caged in iron at its crown. Loremaster Caddis calls it proof that the fire of the first forging can be bound to serve, not only to seal. Heat-shimmer rises from it in a thin, endless ribbon; a mage who carries one never wants for a forge or a watch-fire. The ember, they whisper, was drawn from Voskar the Emberwing's own breath, and it has not cooled since."
+          "name": "Smedjehjärtats Stav",
+          "look": "Järnskodd stav krönt med en burad glödande glödkärna, glödrunor uppför skaftet, stigande värmeskimmer.",
+          "lore": "Ett levande kol av bergseld i bur i järn vid sin krona. Loremaster Caddis kallar det bevis på att elden från det första smidet kan bindas till att tjäna, inte bara för att försegla. Värmeskimmer stiger ur den i ett tunt, ändlöst band; en magiker som bär en vill aldrig ha en smedja eller en vakteld. Glöden, viskar de, drogs från glödvingen Voskars egna andetag, och den har inte svalnat sedan dess."
         },
         "emberwrought_wand": {
-          "name": "Emberwrought Wand",
-          "look": "Blackened-metal wand tipped with a glowing ember coal in iron claws, hairline heat-cracks, warm inner light.",
-          "lore": "The wand that named the grade. When a Highwatch armorer first set a coal of mountain-fire in iron claws and made it answer a mortal hand, even the Priests of the Light stopped calling it heresy and started calling it useful. Warm, patient and quietly dangerous: the ember at its tip has burned, unbroken, since before its owner drew breath."
+          "name": "Glödsmidd Trollstav",
+          "look": "Svartmetalltrollstav spetsad med glödande glödkol i järnklor, hårfäste värmesprickor, varmt inre ljus.",
+          "lore": "Trollstaven som döpte betyget. När en Highwatch pansarmakare först satte ett kol av bergseld i järnklor och fick det att svara på en dödlig hand, slutade till och med Prästs of the Light att kalla det kätteri och började kalla det användbart. Varm, tålmodig och tyst farlig: glöden i spetsen har bränt, obruten, sedan innan dess ägare drog andan."
         },
         "cinderlatch_crossbow": {
-          "name": "Cinderlatch",
-          "look": "Blackened-steel crossbow, ember-orange glow seeping from cracks in the prod, a smouldering coal in the tiller.",
-          "lore": "The strangest of the ember-forged: the mountain's fire poured into a machine. Orange seeps from cracks in the prod, and a smouldering coal in the tiller keeps the string from ever stiffening in Thornpeak's cold or Mirefen's damp. Its bolts leave the groove already warm and land warmer. A hunter's answer to a wall where the enemy does not feel the cold either."
+          "name": "Glödlås",
+          "look": "Armborst i svärtat stål, glödorange glöd som sipprar från sprickor i stöttan, ett pyrande kol i rorkulten.",
+          "lore": "Det märkligaste av det glödsmidda: bergets eld strömmade in i en maskin. Apelsin sipprar från sprickor i rodret, och ett rykande kol i rorkulten hindrar snöret från att någonsin stelna i Thornpeaks kyla eller Mirefens fukt. Dess bultar lämnar spåret redan varmt och landar varmare. En jägares svar på en mur där fienden inte heller känner kylan."
         },
         "ice_fang_sword": {
-          "name": "Ice Fang",
-          "look": "Curved blade of pale glacial ice, jagged rime crystals along the spine, a glowing cyan frozen core in the fuller, icicle crossguard.",
-          "lore": "The flagship of the frozen grade, and the piece every collector reaches for first. Ice Fang was carved, not forged, from a fang of the glacier that caps Thornpeak above Highwatch, its cyan core burning cold as the light off the Glimmermere. It rimes the very air it cuts. The wall-guard swear one soldier carried it the night the high snows held the Wyrmcult back, and 'bought the wall a winter.'"
+          "name": "Ishuggtand",
+          "look": "Böjt blad av blek glaciäris, taggiga rimkristaller längs ryggraden, en glödande cyan frusen kärna i den fylligare, istappars tvärskyddet.",
+          "lore": "Flaggskeppet för den frysta sorten, och den bit som varje samlare når först. Ice Fang ristades, inte smidd, från en huggtand på glaciären som täcker Thornpeak ovanför Highwatch, dess cyankärna brinner kallt som ljuset från Glimmermere. Den rimmar själva luften den skär. Väggvakten svär att en soldat bar den natten när de höga snön höll Wyrmcult tillbaka och \"köpte muren en vinter.\""
         },
         "glaciersplit_axe": {
-          "name": "Glaciersplit",
-          "look": "Head of translucent blue glacier-ice, cracked interior glowing cyan, frost crystals bristling, a haft trailing cold vapor.",
-          "lore": "Hewn from the blue heart of the Thornpeak glacier, where two centuries of ice have pressed the cold until it glows on its own. It trails vapour even at rest, and the crack of it landing is a crevasse opening under Stalker Ridge. Highwatch gives its fallen to the ice up there; so this is a weapon meant to keep the thaw, and whatever the thaw would wake, at bay."
+          "name": "Glaciärklyvare",
+          "look": "Huvud av genomskinlig blå glaciär-is, sprucken inre glödande cyan, frostkristaller som strular, en skaft släpande kall ånga.",
+          "lore": "Huggen från Thornpeak-glaciärens blåa hjärta, där två århundraden av is har pressat kylan tills den lyser av sig själv. Den släpar efter ånga även i vila, och sprickan när den landar är en spricka som öppnar sig under Smygjagaer Ridge. Highwatch ger sina fall till isen där uppe; så det här är ett vapen som är tänkt att hålla tjällossningen, och vad töningen än skulle väcka, på avstånd."
         },
         "rimecrusher_mace": {
-          "name": "Rimecrusher",
-          "look": "Cluster of jagged ice crystals around a glowing cyan core, hoarfrost creeping down a silvered haft.",
-          "lore": "Not carved but grown: Thornpeak ice coaxed around a cold cyan core until it set as hard as Hode's best steel. Hoarfrost creeps down the silvered haft toward the hand and never quite arrives. Where it strikes, water freezes; where it rests, the ground whitens. The grave-cold of the peaks, made small enough to swing at the things that climb the wall."
+          "name": "Rimkross",
+          "look": "En klunga av taggiga iskristaller runt en glödande cyankärna, rimfrost kryper nerför en försilvrad skaft.",
+          "lore": "Inte huggen men odlad: Thornpeak-isen slingrade sig runt en kall cyankärna tills den stelnade lika hårt som Hodes bästa stål. Rimfrosten kryper nerför den silverfärgade skaftet mot handen och kommer aldrig riktigt fram. Där det slår till fryser vattnet; där den vilar bleker marken. Topparnas gravkyla, gjorda tillräckligt små för att svänga mot sakerna som klättrar på väggen."
         },
         "frostbite_dagger": {
-          "name": "Rime Needle",
-          "look": "Wickedly thin dagger of clear blue ice, a glowing cyan vein down the center, needle frost crystals, hoarfrost hilt.",
-          "lore": "Thin as a held breath and twice as cold: a splinter of Thornpeak glacier honed to a single glowing vein, so keen the wound is frozen shut before the blood remembers to run. Its name is borrowed from the grave-chill the dead carry down off the peaks. It never needs sharpening; ice does not dull, Loremaster Caddis notes drily, it only waits."
+          "name": "Rimnål",
+          "look": "Oväldigt tunn dolk av klarblå is, en glödande cyan ven i mitten, nålfrostkristaller, rimfrostfäste.",
+          "lore": "Tunn som ett uppehållet andetag och dubbelt så kall: en splinta av Thornpeak-glaciären finslipad till en enda glödande ven, så angelägen att såret fryses till innan blodet kommer ihåg att rinna. Dess namn är lånat från den gravkyla som de döda bär ner från topparna. Den behöver aldrig skärpas; isen mattas inte, konstaterar Loremaster Caddis torrt, den bara väntar."
         },
         "hoarfrost_vigil_staff": {
-          "name": "Hoarfrost Vigil",
-          "look": "Silvered staff crowned with a floating, slowly rotating shard of glowing cyan ice, radiating crystals and cold vapor.",
-          "lore": "The staff of the watch that never sleeps on Highwatch's wall. Its crown is a shard of cyan tarn-ice that floats free of the silver and turns, slowly, of its own accord: always, the guard swear, toward the cold that gathers beneath the peaks. To carry the Vigil is to stand two hundred years of watch in a single night, and promise not to look away."
+          "name": "Rimfrostvaka",
+          "look": "Försilvrad stav krönt med en flytande, långsamt roterande skärva av glödande cyan is, utstrålande kristaller och kall ånga.",
+          "lore": "Personalen på klockan som aldrig sover på Highwatchs vägg. Dess krona är en skärva av cyan tjärris som flyter fri från silvret och vänder sig, sakta, av sig själv: alltid, svär vakten, mot kylan som samlas under topparna. Att bära Vigil är att stå tvåhundra års vakt på en enda natt, och lova att inte titta bort."
         },
         "everwinter_wand": {
-          "name": "Shard of Everwinter",
-          "look": "A single spike of glowing cyan glacier-ice, hoarfrost blooming from a silver collar, faint cold mist.",
-          "lore": "A spike of glowing glacier-ice, said to be broken from the deep tarn below the Sanctum, where the mountain's cold has teeth. Hoarfrost blooms endlessly from its silver collar and never melts, not by fire nor by summer. Mages keep it close for the cold it lends their work, and keep it far on the nights it seems to lean toward Nythraxis's crypt, and listen."
+          "name": "Evigvinterns Skärva",
+          "look": "En enda spik av glödande cyan glaciäris, rimfrost som blommar från en silverkrage, svag kall dimma.",
+          "lore": "En spik av glödande glaciäris, som sägs vara bruten från den djupa tjärnen nedanför Sanctum, där bergets kyla har tänder. Rimfrost blommar oändligt från sin silverkrage och smälter aldrig, varken av eld eller vid sommar. Magikers håller det nära för kylan det lånar deras arbete, och håller det långt på nätterna som det verkar luta sig mot Nythraxis krypta, och lyssna."
         },
         "winterbite": {
-          "name": "Winterbite",
-          "look": "Silvered steel and blue-ice bow, a glowing cyan frozen core in the riser, a nocked arrow of solid ice, cold vapor.",
-          "lore": "A bow of silvered steel and Thornpeak ice, its riser lit by a cold cyan core that freezes the arrow to the string. It nocks a shaft of solid glacier-ice that reforms each draw; the archer carries no quiver on the wall, only the cold. Highwatch held Stalker Ridge through a siege with one like it: a single bowman, they say, and a winter's worth of arrows that were always already there."
+          "name": "Vinterbett",
+          "look": "Försilvrat stål och blå-is båge, en glödande cyan frusen kärna i stigaren, en nockad pil av solid is, kall ånga.",
+          "lore": "En båge av försilvrat stål och Thornpeak-is, dess stigare upplyst av en kall cyan kärna som fryser pilen till snöret. Det knackar ett schakt av fast glaciär-is som reformerar varje dragning; bågskytten bär inget koger på väggen, bara kylan. Highwatch höll Smygjagaer Ridge genom en belägring med en liknande: en enda bågeskytt, säger de, och en vinter med pilar som alltid redan fanns där."
         },
         "solheim_sword": {
-          "name": "Solheim, Last Light of the Dawn",
-          "look": "Greatsword forged from a fallen star, molten-gold core splitting the blade, cosmos-black steel edged in starlight, golden shards orbiting the guard, aurora ribbon.",
-          "lore": "When the star fell out of the western sky and 'burst like a forge' beyond the Widow Thicket, Brother Aldric pulled its still-smouldering heart from the Mirefen crater and begged the realm's smiths to work 'a thing that does not belong to this world.' They made one greatsword of it: Solheim. Its molten-gold core splits the cosmos-black blade like dawn cracking a night sky, and shards of star-metal orbit the guard on paths no hand set. Only one was ever forged. There will not be another."
+          "name": "Solheim, gryningens sista ljus",
+          "look": "Storsvärd smidd av en fallen stjärna, kärna av smält guld som delar bladet, kosmossvart stål kantat i stjärnljus, gyllene skärvor som kretsar kring skyddet, norrskensband.",
+          "lore": "När stjärnan föll från den västra himlen och 'brast som en smedja' bortom Änkesnåret, drog broder Aldric sitt fortfarande glödande hjärta från Mirefen-kratern och bad rikets smeder att arbeta 'en sak som inte tillhör denna värld'. De gjorde ett stort svärd av det: Solheim. Dess smälta guldkärna delar det kosmossvarta bladet som en gryning som spricker en natthimmel, och skärvor av stjärnmetall kretsar runt vakten på vägar utan handfast. Endast en har någonsin förfalskats. Det blir ingen annan."
         },
         "skyrender_axe": {
-          "name": "Skyrender, the Firmament's Wound",
-          "look": "Head like a torn piece of night sky, molten-gold cracks and constellation etchings, starlight shards hovering, an aurora shimmer trailing the edge.",
-          "lore": "Beaten from the crater's rim, where the fallen star tore the sky's own reflection out of Mirefen and left a wound that still steams. The head looks like a piece of torn night: molten-gold cracks, constellations no scholar at Highwatch can name, an aurora bleeding off the edge with every swing. Brother Aldric blessed it and would not touch it. To lift it is to hold the hole the heavens left."
+          "name": "Himmelsrivare, Firmamentets Sår",
+          "look": "Huvudet som ett sönderrivet stycke natthimmel, sprickor i smält guld och etsningar av stjärnbild, skärvor av stjärnljus som svävar, ett norrskensskimmer som svävar längs kanten.",
+          "lore": "Slås från kraterns kant, där den fallna stjärnan slet ut himlens egen reflektion ur Mirefen och lämnade ett sår som fortfarande ångar. Huvudet ser ut som en bit sönderriven natt: sprickor i smält guld, konstellationer som ingen forskare på Highwatch kan nämna, ett norrsken som blöder från kanten med varje sväng. Broder Aldric välsignade den och ville inte röra den. Att lyfta det är att hålla hålet himlen kvar."
         },
         "starfall_mace": {
-          "name": "Starfall, Judgment of the Heavens",
-          "look": "Captive molten-gold star-core ringed by orbiting fragments, cosmos-black flanges veined with starlight, aurora spilling from the seams.",
-          "lore": "A star-core caught the instant before it died, ringed with the debris that fell with it, frozen an inch from oblivion. Its cosmos-black flanges run with trapped starlight, and aurora spills from the seams when it is raised. The old Priests of the Light called a falling star a judgment, a verdict handed down from above that no shield was meant to stop, and named this after the one that came down on Mirefen."
+          "name": "Stjärnfall, himlens dom",
+          "look": "Infångad stjärnkärna av smält guld omgiven av kretsande fragment, kosmossvarta flänsar med stjärnljus, norrsken som rinner ut från sömmarna.",
+          "lore": "En stjärnkärna fångade ögonblicket innan den dog, omringad av skräpet som föll med den, frusna en tum från glömskan. Dess kosmossvarta flänsar löper med instängt stjärnljus, och norrsken rinner ut från sömmarna när den höjs. Ljusets gamla Präst kallade en fallande stjärna för en dom, en dom avkunnad från ovan att ingen sköld var menad att stoppa, och döpte detta efter den som kom ner på Mirefen."
         },
         "astravyr_dagger": {
-          "name": "Astravyr, Fang of the Fallen Star",
-          "look": "A sliver of a fallen star, molten-gold glowing edge on cosmos-black metal, a bright star-mote orbiting the pommel, a thin aurora trail.",
-          "lore": "The smallest piece of the star Aldric hauled from the crater, and by some reckonings the most dangerous. A single sliver of that other-worldly heart, its molten-gold edge riding cosmos-black metal, a lone star-mote circling the pommel like a moon that lost its world. It weighs almost nothing and parts almost anything. Small enough to hide, bright enough to find in the dark by its own light."
+          "name": "Astravyr, Den Fallna Stjärnans Huggtand",
+          "look": "En flisa av en fallen stjärna, glödande kant av smält guld på kosmossvart metall, ett ljust stjärnskott som kretsar kring kulan, ett tunt norrskensspår.",
+          "lore": "Den minsta biten av stjärnan Aldric hämtades från kratern, och enligt vissa beräkningar den farligaste. En enda flisa av det där andra världsliga hjärtat, dess smälta guldkant som rider på kosmossvart metall, en ensam stjärna som cirkulerar runt klotet som en måne som förlorade sin värld. Den väger nästan ingenting och delar nästan vad som helst. Liten nog att gömma sig, tillräckligt ljus för att hitta i mörkret av sitt eget ljus."
         },
         "cosmarch_staff": {
-          "name": "Cosmarch, Spire of the Endless Void",
-          "look": "Orbiting cluster of golden star-shards around a molten-gold core, constellation-etched cosmos-black shaft, aurora ribbons winding upward.",
-          "lore": "A shaft of star-metal crowned with a molten-gold core and a ring of golden shards that march around it in slow, endless orbit: a little cosmos, etched with constellations that match no sky over Thornpeak. Aurora winds up its length like smoke that forgot to rise. Those who bore it claimed they could feel the void turning through it, the way Ysolei's mere 'drinks the moonlight': patient, and cold, and looking back."
+          "name": "Cosmarch, Den Oändliga Tomhetens Spira",
+          "look": "En kretsande klunga av gyllene stjärnskärvor runt en kärna av smält guld, konstellationsetsad kosmossvart skaft, norrskensband som slingrar sig uppåt.",
+          "lore": "Ett skaft av stjärnmetall krönt med en kärna av smält guld och en ring av gyllene skärvor som marscherar runt den i långsam, oändlig omloppsbana: ett litet kosmos, etsat med konstellationer som inte matchar någon himmel över Thornpeak. Aurora slingrar sig upp på längden som rök som glömt att stiga. De som bar det hävdade att de kunde känna tomrummet som vänder sig genom det, på det sätt som Ysoleis bara \"dricker månskenet\": tålmodig och kall, och ser tillbaka."
         },
         "emberwish_wand": {
-          "name": "Emberwish, Mote of the Dying Sun",
-          "look": "Captive molten-gold dying-star mote wreathed in orbiting sparks, cosmos-black shaft etched with glowing constellations.",
-          "lore": "Not the fallen star itself but the last mote of a dying one: a single molten-gold ember of a sun already gone out, wreathed in the sparks that were its final light. Its cosmos-black shaft is etched with the constellations that watched it die. The Mirefen crofters say it grants one wish to whoever holds it at true dusk; they also say every soul who held it wished for more time, and that the Drowned Moon granted none of them any."
+          "name": "Glödönskan, Den Döende Solens Gnista",
+          "look": "Infångad smält-guld döende stjärna inklädd i kretsande gnistor, kosmossvart skaft etsat med glödande konstellationer.",
+          "lore": "Inte den fallna stjärnan i sig utan den sista fläcken av en döende: en enda glöd av en sol i smält guld som redan slocknat, insvept i gnistor som var dess slutliga ljus. Dess kosmossvarta skaft är etsat med konstellationerna som såg den dö. Mirefen-torparna säger att den ger en önskan till den som håller den i sann skymning; de säger också att varje själ som höll den önskade sig mer tid och att den drunknade månen inte gav någon av dem någon."
         },
         "encore_bow": {
-          "name": "Encore, the Second Falling Star",
-          "look": "Comically oversized star-cannon: a cosmos-black barrel etched with glowing golden constellations, a flared bell muzzle with a molten-gold comet shell seated inside, brass fittings, a wooden shoulder stock.",
-          "lore": "The smiths who worked the fallen star made six relics of it and still had a barrel's worth of star-metal left over, and by then the apprentices had opinions. What came off the anvil is either the realm's first gun or its smallest siege engine: a shoulder cannon that does not so much loose a shot as request a second star, aimed. Brother Aldric declined to bless it, reasoning that anything that loud has already been noticed by heaven. Hunters adore it. Nothing downrange ever has."
+          "name": "Encore, Den Andra Fallande Stjärnan",
+          "look": "Komiskt överdimensionerad stjärnkanon: en kosmossvart pipa etsat med glödande gyllene konstellationer, en utsvängd klockmunkorg med ett kometskal av smält guld som sitter inuti, mässingsbeslag, en axelstock av trä.",
+          "lore": "Smederna som bearbetade den fallna stjärnan gjorde sex reliker av den och hade fortfarande en tunnas stjärnmetall över, och då hade lärlingarna åsikter. Det som kom från städet är antingen rikets första pistol eller dess minsta belägringsmotor: en axelkanon som inte så mycket tappar ett skott som begär en andra stjärna, riktad. Broder Aldric vägrade att välsigna den och resonerade att allt så högt redan har märkts av himlen. Jägares älskar det. Inget downrange någonsin har."
         },
         "meteorlatch_crossbow": {
-          "name": "Meteorlatch, the Sky's Last Judgment",
-          "look": "Meteoric star-metal, molten-gold core along the tiller, cosmos-black limbs etched with constellations, a nocked bolt of pure starfire.",
-          "lore": "Forged of raw meteoric star-metal while the Mirefen crater still glowed, debris 'too hot to handle,' hammered into limbs of cosmos-black etched with constellations, a molten-gold core banked along the tiller. It nocks no bolt but conjures one: a shaft of starfire, loosed like a verdict and landing like the end of one. When Highwatch feared even the deathless crown of Nythraxis might not be the worst thing beneath the peaks, this is the weapon they wanted on the wall. Aim it well."
+          "name": "Meteorlås, Himlens Sista Dom",
+          "look": "Meteorisk stjärnmetall, smält guldkärna längs med rorkulten, kosmossvarta lemmar etsade med konstellationer, en knackad bult av ren sjöstjärna.",
+          "lore": "Smidd av rå, meteorisk stjärnmetall medan Mirefen-kratern fortfarande glödde, skräp \"för varmt att hantera\", hamrade in i lemmar av kosmossvart etsade med konstellationer, en kärna av smält guld låg längs med rorkulten. Den knackar ingen bult utan frammanar en: ett skaft av sjöstjärna, löst som en dom och landar som slutet på en. När Highwatch fruktade att ens Nythraxis dödlösa krona kanske inte var det värsta under topparna, var det här vapnet de ville ha på väggen. Sikta det väl."
         }
       },
-      "seasonOne": "Season 1",
+      "seasonOne": "Säsong 1",
       "rarity": {
-        "uncommon": "Uncommon",
-        "rare": "Rare",
-        "epic": "Epic",
-        "legendary": "Legendary"
+        "uncommon": "Ovanlig",
+        "rare": "Sällsynt",
+        "epic": "Episk",
+        "legendary": "Legendarisk"
       },
       "wtype": {
-        "sword": "Sword",
-        "axe": "Axe",
-        "mace": "Mace",
-        "dagger": "Dagger",
-        "staff": "Staff",
-        "wand": "Wand",
-        "bow": "Bow",
-        "crossbow": "Crossbow"
+        "sword": "Svärd",
+        "axe": "Yxa",
+        "mace": "Stridsklubba",
+        "dagger": "Dolk",
+        "staff": "Stav",
+        "wand": "Trollstav",
+        "bow": "Båge",
+        "crossbow": "Armborst"
       },
       "badge": {
-        "flagship": "Flagship",
-        "hero": "Hero"
+        "flagship": "Flaggskepp",
+        "hero": "Hjälte"
       },
-      "inspectAria": "Inspect {item}",
-      "viewModeLabel": "Preview mode",
-      "tryOn": "Try it on",
-      "weaponOnly": "Weapon only",
-      "sceneLabel": "Scene lighting",
+      "inspectAria": "Inspektera {item}",
+      "viewModeLabel": "Förhandsgranskningsläge",
+      "tryOn": "Prova",
+      "weaponOnly": "Endast vapen",
+      "sceneLabel": "Förhandsvisningens ljus",
       "scene": {
-        "day": "Day",
-        "dusk": "Dusk",
-        "night": "Night"
+        "day": "Dag",
+        "dusk": "Skymning",
+        "night": "Natt"
       },
-      "lore": "Lore",
-      "buySkin": "Purchase Skin",
-      "unavailable": "Unavailable",
-      "applied": "Applied",
-      "apply": "Apply Skin",
-      "detach": "Detach Skin",
-      "equipHint": "Equip a {type} to apply this skin."
+      "lore": "Bakgrundshistoria",
+      "buySkin": "Köp skin",
+      "unavailable": "Inte tillgänglig",
+      "applied": "Aktivt",
+      "apply": "Använd skin",
+      "detach": "Ta bort skin",
+      "equipHint": "Utrusta ett vapen av typen {type} för att använda detta skin."
     },
     "claudium": {
       "title": "Claudium",
-      "open": "Open Claudium",
-      "close": "Close Claudium",
-      "loading": "Loading Claudium...",
-      "balanceLabel": "Balance",
+      "open": "Öppna Claudium",
+      "close": "Stäng Claudium",
+      "loading": "Laddar Claudium...",
+      "balanceLabel": "Saldo",
       "balanceUnit": "{amount} Claudium",
       "solBalance": "SOL: {amount}",
       "wocBalance": "WOC: {amount}",
-      "unavailable": "The Claudium store is unavailable right now. Your balance and purchases are unaffected; please check back shortly.",
-      "disclosure": "Claudium is a one-way soft currency: buy it with money and spend it on cosmetics. It cannot be redeemed, transferred, or cashed out.",
-      "buyTitle": "Buy Claudium",
-      "railLabel": "Payment method",
-      "railStripe": "Card",
+      "unavailable": "Claudium-butiken är inte tillgänglig just nu. Ditt saldo och dina köp påverkas inte. Försök igen om en stund.",
+      "disclosure": "Claudium är en virtuell valuta som bara går åt ett håll: köp den för pengar och använd den till kosmetika. Den kan inte växlas in, överföras eller betalas ut.",
+      "buyTitle": "Köp Claudium",
+      "railLabel": "Betalningsmetod",
+      "railStripe": "Kort",
       "railSol": "SOL",
       "railWoc": "WOC",
-      "railWocDiscount": "20% off",
-      "railWocUnavailable": "WOC pricing is unavailable right now.",
-      "railNativeUnavailable": "SOL/WOC off.",
-      "amountLabel": "Amount",
-      "showAmounts": "Show all Claudium amounts",
-      "hideAmounts": "Hide extra Claudium amounts",
-      "skuRow": "{usd} for {claudium} Claudium",
-      "buyButton": "Buy",
-      "buyUnavailable": "Purchasing is unavailable right now.",
-      "storeTitle": "Cosmetic Store",
-      "storeEmpty": "No cosmetics are available right now.",
+      "railWocDiscount": "20% rabatt",
+      "railWocUnavailable": "WOC-priser är inte tillgängliga just nu.",
+      "railNativeUnavailable": "SOL/WOC är avstängt.",
+      "amountLabel": "Belopp",
+      "showAmounts": "Visa alla Claudium-belopp",
+      "hideAmounts": "Dölj extra Claudium-belopp",
+      "skuRow": "{usd} för {claudium} Claudium",
+      "buyButton": "Köp",
+      "buyUnavailable": "Det går inte att genomföra köp just nu.",
+      "storeTitle": "Kosmetisk butik",
+      "storeEmpty": "Inga kosmetika är tillgängliga just nu.",
       "storeCost": "{amount} Claudium",
-      "spendButton": "Redeem",
-      "kindCosmetic": "Cosmetic",
+      "spendButton": "Lös in",
+      "kindCosmetic": "Kosmetisk",
       "kindSkin": "Skin",
-      "kindItem": "Item",
-      "checkoutTitle": "Complete purchase",
-      "checkoutClose": "Close checkout",
-      "checkoutLoading": "Loading checkout...",
-      "checkoutPending": "Transaction in progress. Confirm in your wallet and keep this panel open.",
-      "checkoutPendingButton": "Processing",
-      "checkoutFailed": "Checkout could not be loaded. Please try again.",
-      "checkoutUnavailable": "That Claudium purchase is not available right now.",
-      "checkoutWalletRequired": "Connect a Solana wallet before buying Claudium with crypto.",
-      "checkoutWalletUnsupported": "This wallet cannot sign and send Solana transactions.",
-      "checkoutNotSettled": "The transaction was sent but Claudium was not credited yet. Please try again shortly."
+      "kindItem": "Föremål",
+      "checkoutTitle": "Slutför köp",
+      "checkoutClose": "Stäng betalningsfönstret",
+      "checkoutLoading": "Laddar kassan...",
+      "checkoutPending": "Transaktion pågår. Bekräfta i din plånbok och håll denna panel öppen.",
+      "checkoutPendingButton": "Bearbetar",
+      "checkoutFailed": "Det gick inte att ladda kassan. Försök igen.",
+      "checkoutUnavailable": "Det Claudium-köpet är inte tillgängligt just nu.",
+      "checkoutWalletRequired": "Anslut en Solana-plånbok innan du köper Claudium med krypto.",
+      "checkoutWalletUnsupported": "Denna plånbok kan inte signera och skicka Solana-transaktioner.",
+      "checkoutNotSettled": "Transaktionen skickades men Claudium har inte krediterats ännu. Försök snart igen."
     },
     "theme": {
       "preset": "Gränssnittstema",
@@ -596,12 +596,12 @@ export const sv_SE: EnTranslations = {
       "talkBodyTouch": "Ställ dig nära marskalk Redbrook och tryck på Använd-knappen för att tala, anta sedan hans uppgift.",
       "returnBodyTouch": "Din uppgift är klar. Återvänd till marskalk Redbrook och tryck på Använd-knappen för att lämna in den.",
       "doneBodyTouch": "Du behärskar grunderna, {name}. Dalen är din att utforska. Tryck på Mer och sedan Uppdrag för att granska din uppdragslogg när som helst. Lycka till på jakten.",
-      "slayTargetHint": "New to combat? Press {targetKey} or click a wolf to target it, then use an action bar ability to attack it.",
-      "slayTargetHintTouch": "New to combat? Tap a wolf to target it, then tap an action bar ability to attack it.",
-      "nextTipsTitle": "Where to next",
-      "nextTipQuestLog": "Open your Quest Log ({key}) to find your next task nearby.",
-      "nextTipMap": "Check the World Map ({key}) to see where quests are waiting.",
-      "nextTipSocial": "Open Social ({key}) to find a group for tougher fights."
+      "slayTargetHint": "Ny i strid? Tryck på {targetKey} eller klicka på en varg för att välja den som mål. Använd sedan en förmåga på handlingsraden för att attackera den.",
+      "slayTargetHintTouch": "Ny i strid? Tryck på en varg för att välja den som mål och tryck sedan på en förmåga på handlingsraden för att attackera den.",
+      "nextTipsTitle": "Vart härnäst?",
+      "nextTipQuestLog": "Öppna din uppdragslogg ({key}) för att hitta nästa uppgift i närheten.",
+      "nextTipMap": "Kolla världskartan ({key}) för att se var uppdragen väntar.",
+      "nextTipSocial": "Öppna Socialt ({key}) för att hitta en grupp för tuffare slagsmål."
     },
     "widgets": {
       "clockTitle": "Lokal tid - klicka för att växla mellan 12/24-timmar",
@@ -944,17 +944,17 @@ export const sv_SE: EnTranslations = {
       "highContrastAria": "Växla bakgrund med hög kontrast: inaktiverar den rörliga trailern så att texten på startskärmen förblir läsbar"
     },
     "warfare": {
-      "honorAmount": "{amount} Honor",
+      "honorAmount": "{amount} Heder",
       "dualPrice": "{money} + {honor}",
-      "balance": "Honor: {amount}",
-      "honorFloat": "+{amount} Honor",
-      "honorGain": "You gain {amount} Honor ({reason}).",
-      "notEnoughHonor": "Not enough Honor.",
+      "balance": "Heder: {amount}",
+      "honorFloat": "+{amount} Heder",
+      "honorGain": "Du får {amount} Heder ({reason}).",
+      "notEnoughHonor": "Inte tillräckligt med heder.",
       "reasons": {
-        "arenaWin": "Arena victory",
-        "fiestaKill": "Fiesta takedown",
-        "fiestaComplete": "Fiesta completed",
-        "fiestaWin": "Fiesta victory"
+        "arenaWin": "Arenaseger",
+        "fiestaKill": "Fiesta-nedtagning",
+        "fiestaComplete": "Fiesta avklarad",
+        "fiestaWin": "Fiesta-seger"
       }
     },
     "statInfo": {
@@ -963,9 +963,9 @@ export const sv_SE: EnTranslations = {
         "spellPower": "Besvärjelsekraft",
         "critRating": "Kritvärde",
         "hasteRating": "Snabbhetsvärde",
-        "warfare": "Warfare"
+        "warfare": "Krigföring"
       },
-      "warfareValue": "+{increase}% dealt / -{reduction}% taken",
+      "warfareValue": "+{increase}% tillfogad / -{reduction}% mottagen",
       "desc": {
         "str": "Ökar din attackstyrka, så att dina vapenslag landar hårdare.",
         "agi": "Skärper dina reflexer och din sikte, vilket förbättrar flera av dina stridsattribut.",
@@ -980,7 +980,7 @@ export const sv_SE: EnTranslations = {
         "dodge": "Din chans att helt undvika en inkommande närstridsattack utan att ta skada.",
         "critRating": "Kritvärde från din utrustning och setbonusar, som höjer din chans till kritisk träff. Ungefär 10 i värde ger 1% krit.",
         "hasteRating": "Snabbhetsvärde från din utrustning och setbonusar, som snabbar upp dina attacker och besvärjelser. Ungefär 10 i värde ger 1% snabbhet.",
-        "warfare": "Increases damage dealt to players by {increase}% and reduces damage taken from players by {reduction}%."
+        "warfare": "Ökar skadan mot spelare med {increase}% och minskar skadan från spelare med {reduction}%."
       },
       "effects": {
         "attackPower": "+{value} Attackstyrka",
@@ -1205,7 +1205,7 @@ export const sv_SE: EnTranslations = {
     "corpseHarvest": {
       "title": "Skörda",
       "harvestButton": "Skörda",
-      "harvestButtonTooltip": "Harvest: gather crafting materials from this corpse (hide, fang, silk, and similar components), separate from any loot. Anyone can harvest; only one player may harvest a given corpse.",
+      "harvestButtonTooltip": "Skörda: samla hantverksmaterial från liket (skinn, huggtand, silke och liknande delar), separat från dess byte. Vem som helst kan skörda, men varje lik kan bara skördas av en spelare.",
       "concentrateHint": "Ju färre delar du väljer, desto högre kvalitetsnivå får var och en.",
       "alreadyHarvested": "Det här kadavret har redan skördats.",
       "componentAria": "Skörda {component}",
@@ -1400,7 +1400,7 @@ export const sv_SE: EnTranslations = {
     },
     "loot": {
       "chestTitle": "Kista",
-      "takeAllTooltip": "Take All: collect every coin and item in this loot window."
+      "takeAllTooltip": "Ta allt: samla alla mynt och föremål i bytesfönstret."
     },
     "spellbook": {
       "addToBarAria": "Lägg till {name} i handlingsfältet",
@@ -1864,7 +1864,7 @@ export const sv_SE: EnTranslations = {
       "trackerLabel": "Bedrifter",
       "collapseHint": "Fäll ihop bedriftsspåraren",
       "expandHint": "Fäll ut bedriftsspåraren",
-      "openBookHint": "Open the Book of Deeds",
+      "openBookHint": "Öppna Bedrifternas bok",
       "charTitleLabel": "Titel",
       "charTitleNone": "Ingen titel vald",
       "charOpenBook": "Bedrifternas bok",
@@ -5878,8 +5878,8 @@ export const sv_SE: EnTranslations = {
         "description": "En massiv våg av läkning: återställer {damage} hälsa. 10 min nedkylning."
       },
       "holy_taunt": {
-        "name": "Sacred Goad",
-        "description": "Taunts the target: your threat rises to match its most hated enemy and it is compelled to attack you for 3 sec."
+        "name": "Helig Sporre",
+        "description": "Hånar målet: ditt hot stiger till samma nivå som dess mest hatade fiendes, och målet tvingas attackera dig i 3 sek."
       },
       "flash_of_light": {
         "name": "Ljuslagning",
@@ -6210,8 +6210,8 @@ export const sv_SE: EnTranslations = {
         "description": "Träffar målet med vapenskada plus {damage} Helig skada. (paladintalang)"
       },
       "chain_heal": {
-        "name": "Chain Heal",
-        "description": "Heals a friendly target for a large amount, then jumps to up to 2 additional nearby allies, healing for 50% less with each jump. (Restoration signature)"
+        "name": "Kedjeläkning",
+        "description": "Läker ett vänligt mål för en stor mängd och hoppar sedan till upp till 2 ytterligare allierade i närheten. Varje hopp läker för 50% mindre. (Återställningssignatur)"
       },
       "metamorphosis": {
         "name": "Metamorfos",
@@ -6326,32 +6326,32 @@ export const sv_SE: EnTranslations = {
         "description": "Binder en Wraithborn till din vilja, en elitdemon som öser tung skuggskada från avstånd. En lång nedkylning hindrar dess förödande kraft. Att frammana en ny demon avfärdar din nuvarande. Du kan ha en demon åt gången."
       },
       "pummel": {
-        "name": "Jawcrack",
-        "description": "Interrupts the target's spellcast and prevents casting from that school for 4 sec."
+        "name": "Käkkross",
+        "description": "Avbryter målets besvärjelse och hindrar det från att kasta besvärjelser från den magiskolan i 4 sek."
       },
       "kick": {
-        "name": "Boot",
-        "description": "Interrupts the target's spellcast and prevents casting from that school for 4 sec."
+        "name": "Spark",
+        "description": "Avbryter målets besvärjelse och hindrar det från att kasta besvärjelser från den magiskolan i 4 sek."
       },
       "counterspell": {
-        "name": "Spellbreak",
-        "description": "Counters the target's spellcast and prevents casting from that school for 6 sec."
+        "name": "Besvärjelsebrott",
+        "description": "Avbryter målets besvärjelse och hindrar det från att kasta besvärjelser från den magiskolan i 6 sek."
       },
       "counter_shot": {
-        "name": "Hushing Shot",
-        "description": "A snap shot that interrupts the target's spellcast and locks that school for 4 sec."
+        "name": "Dämpande Skott",
+        "description": "Ett snabbt skott som avbryter målets besvärjelse och låser den magiskolan i 4 sek."
       },
       "rebuke": {
-        "name": "Reproach",
-        "description": "Interrupts the target's spellcast and prevents casting from that school for 4 sec."
+        "name": "Förebråelse",
+        "description": "Avbryter målets besvärjelse och hindrar det från att kasta besvärjelser från den magiskolan i 4 sek."
       },
       "skull_bash": {
-        "name": "Headbutt",
-        "description": "A lunging headbutt that interrupts the target's spellcast and locks that school for 4 sec."
+        "name": "Skallning",
+        "description": "En framåtstötande skallning som avbryter målets besvärjelse och låser den magiskolan i 4 sek."
       },
       "spell_lock": {
-        "name": "Gag Order",
-        "description": "Silences the target mid-cast and prevents casting from that school for 5 sec."
+        "name": "Munkavle",
+        "description": "Tystar målet mitt i en besvärjelse och hindrar det från att kasta besvärjelser från den magiskolan i 5 sek."
       },
       "bear_charge": {
         "name": "Bruinrusning",
@@ -6997,124 +6997,124 @@ export const sv_SE: EnTranslations = {
         "name": "Solkronbladsört"
       },
       "furyforged_warhelm": {
-        "name": "Furyforged Warhelm"
+        "name": "Raserismidd Krigshjälm"
       },
       "furyforged_warspaulders": {
-        "name": "Furyforged Warspaulders"
+        "name": "Raserismidda Krigsaxlar"
       },
       "furyforged_warplate": {
-        "name": "Furyforged Warplate"
+        "name": "Raserismidd Krigsplåt"
       },
       "furyforged_girdle": {
-        "name": "Furyforged Girdle"
+        "name": "Raserismidd Gördel"
       },
       "furyforged_legguards": {
-        "name": "Furyforged Legguards"
+        "name": "Raserismidda Benskydd"
       },
       "furyforged_gauntlets": {
-        "name": "Furyforged Gauntlets"
+        "name": "Raserismidda Stridshandskar"
       },
       "furyforged_sabatons": {
-        "name": "Furyforged Sabatons"
+        "name": "Raserismidda Plåtstövlar"
       },
       "stormbound_crown": {
-        "name": "Stormbound Crown"
+        "name": "Stormbunden Krona"
       },
       "stormbound_spaulders": {
-        "name": "Stormbound Spaulders"
+        "name": "Stormbundna Axelplåtar"
       },
       "stormbound_hauberk": {
-        "name": "Stormbound Hauberk"
+        "name": "Stormbunden Ringbrynja"
       },
       "stormbound_waistguard": {
-        "name": "Stormbound Waistguard"
+        "name": "Stormbundet Midjeskydd"
       },
       "stormbound_legmail": {
-        "name": "Stormbound Legmail"
+        "name": "Stormbundna Benbrynjor"
       },
       "stormbound_handguards": {
-        "name": "Stormbound Handguards"
+        "name": "Stormbundna Handskydd"
       },
       "stormbound_greaves": {
-        "name": "Stormbound Greaves"
+        "name": "Stormbundna Benskenor"
       },
       "ashstalker_cowl": {
-        "name": "Ashstalker Cowl"
+        "name": "Asksmygarens Huva"
       },
       "ashstalker_shoulderguards": {
-        "name": "Ashstalker Shoulderguards"
+        "name": "Asksmygarens Axelskydd"
       },
       "ashstalker_harness": {
-        "name": "Ashstalker Harness"
+        "name": "Asksmygarens Sele"
       },
       "ashstalker_waistband": {
-        "name": "Ashstalker Waistband"
+        "name": "Asksmygarens Midjebälte"
       },
       "ashstalker_legguards": {
-        "name": "Ashstalker Legguards"
+        "name": "Asksmygarens Benskydd"
       },
       "ashstalker_grips": {
-        "name": "Ashstalker Grips"
+        "name": "Asksmygarens Grepp"
       },
       "ashstalker_treads": {
-        "name": "Ashstalker Treads"
+        "name": "Asksmygarens Stövlar"
       },
       "cinderweave_cowl": {
-        "name": "Cinderweave Cowl"
+        "name": "Glödvävd Huva"
       },
       "cinderweave_mantle": {
-        "name": "Cinderweave Mantle"
+        "name": "Glödvävd Axelmantel"
       },
       "cinderweave_raiment": {
-        "name": "Cinderweave Raiment"
+        "name": "Glödvävd Skrud"
       },
       "cinderweave_cord": {
-        "name": "Cinderweave Cord"
+        "name": "Glödvävt Snöre"
       },
       "cinderweave_legwraps": {
-        "name": "Cinderweave Legwraps"
+        "name": "Glödvävda Benlindor"
       },
       "cinderweave_handwraps": {
-        "name": "Cinderweave Handwraps"
+        "name": "Glödvävda Handlindor"
       },
       "cinderweave_slippers": {
-        "name": "Cinderweave Slippers"
+        "name": "Glödvävda Skor"
       },
       "final_oath_medallion": {
-        "name": "Medallion of the Final Oath"
+        "name": "Den Sista Edens Medaljong"
       },
       "razorwind_torque": {
-        "name": "Razorwind Torque"
+        "name": "Eggvindens Halsring"
       },
       "cinder_sigil_pendant": {
-        "name": "Cinder-Sigil Pendant"
+        "name": "Glödsigillets Hängsmycke"
       },
       "iron_vow_band": {
-        "name": "Iron Vow Band"
+        "name": "Järnedens Ring"
       },
       "unbroken_circle": {
-        "name": "The Unbroken Circle"
+        "name": "Den Obrutna Cirkeln"
       },
       "fleetblood_band": {
-        "name": "Fleetblood Band"
+        "name": "Snabbblodsring"
       },
       "last_step_signet": {
-        "name": "Last-Step Signet"
+        "name": "Sista Stegets Signetring"
       },
       "ashen_focus_ring": {
-        "name": "Ashen Focus Ring"
+        "name": "Askgrå Fokusring"
       },
       "spellbreakers_seal": {
-        "name": "Spellbreaker's Seal"
+        "name": "Besvärjelsebrytarens Sigill"
       },
       "final_argument_greatblade": {
-        "name": "Final Argument Greatblade"
+        "name": "Slutargumentets Storklinga"
       },
       "first_blood_razor": {
-        "name": "First-Blood Razor"
+        "name": "Förstablodskniv"
       },
       "emberglass_warstaff": {
-        "name": "Emberglass Warstaff"
+        "name": "Glödglas-Krigsstav"
       },
       "bristleback_maul": {
         "name": "Gallowglass-hammare"
@@ -8254,9 +8254,9 @@ export const sv_SE: EnTranslations = {
         "greeting": "Bevis från de heroiska djupen köper de finaste ringar och hängen i Högvakt. Visa mig dina märken."
       },
       "fury": {
-        "name": "FURY",
-        "title": "Honor Quartermaster",
-        "greeting": "The sands remember every victory. Spend your honor well."
+        "name": "RASERI",
+        "title": "Hederskvartermästare",
+        "greeting": "Sanden minns varje seger. Spendera din ära väl."
       },
       "loremaster_caddis": {
         "name": "Läromästare Caddis",

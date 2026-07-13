@@ -245,261 +245,261 @@ export const fr_CA: EnTranslations = {
       }
     },
     "wocStore": {
-      "title": "WOC Store",
-      "close": "Close WOC Store",
-      "tabsLabel": "WOC Store sections",
-      "storeTab": "Store",
-      "rewardsTab": "Daily Rewards",
-      "loading": "Loading WOC Store...",
-      "error": "The WOC Store is unavailable right now. Please try again shortly.",
-      "balance": "Claudium Balance",
-      "buyClaudium": "Purchase Claudium",
-      "owned": "Owned",
-      "needMoreTitle": "More Claudium Required",
-      "needMoreBody": "You need {shortfall} more Claudium to purchase {item}.",
-      "cancel": "Cancel",
-      "confirmTitle": "Confirm Cosmetic Purchase",
-      "confirmBody": "Purchase {item} for {cost} Claudium?",
-      "confirmPurchase": "Purchase",
-      "priceChanged": "The price changed before the purchase completed. Review the refreshed price and confirm again.",
-      "armoryEyebrow": "Season 1",
-      "armoryTitle": "The Armory",
-      "armoryBody": "Limited weapon skins from the Season 1 Armory. Account-wide, purely cosmetic, and shown to everyone around you.",
-      "collectionLine": "{collection} Collection",
+      "title": "Boutique WOC",
+      "close": "Fermer la boutique WOC",
+      "tabsLabel": "Sections de la boutique WOC",
+      "storeTab": "Boutique",
+      "rewardsTab": "Récompenses quotidiennes",
+      "loading": "Chargement de la boutique WOC...",
+      "error": "La boutique WOC est indisponible pour le moment. Veuillez réessayer dans quelques instants.",
+      "balance": "Solde de Claudium",
+      "buyClaudium": "Acheter du Claudium",
+      "owned": "Possédée",
+      "needMoreTitle": "Claudium supplémentaire requis",
+      "needMoreBody": "Il vous faut encore {shortfall} Claudium pour acheter {item}.",
+      "cancel": "Annuler",
+      "confirmTitle": "Confirmer l’achat de l’objet cosmétique",
+      "confirmBody": "Acheter {item} pour {cost} Claudium ?",
+      "confirmPurchase": "Acheter",
+      "priceChanged": "Le prix a changé avant la fin de l’achat. Vérifiez le nouveau prix, puis confirmez à nouveau.",
+      "armoryEyebrow": "Saison 1",
+      "armoryTitle": "L’Armurerie",
+      "armoryBody": "Des apparences d’armes à durée limitée provenant de l’Armurerie de la saison 1. Elles sont valables pour tout le compte, purement cosmétiques et visibles par tous les joueurs autour de vous.",
+      "collectionLine": "Collection {collection}",
       "collections": {
-        "guildmark": "Guildmark",
-        "emberwrought": "Emberwrought",
-        "hoarfrost": "Hoarfrost",
-        "fallen_star": "Fallen Star"
+        "guildmark": "Marque de guilde",
+        "emberwrought": "Forgé dans la braise",
+        "hoarfrost": "Givre blanc",
+        "fallen_star": "Étoile déchue"
       },
       "skins": {
         "guildmark_arming_sword": {
-          "name": "Guildmark Arming Sword",
-          "look": "Blued steel blade, bronze fishtail crossguard, teal-dyed leather grip, small stamped guild sigil.",
-          "lore": "Where the wrought blade is anonymous, this one is signed. An armorer earns the right to sink his mark into the ricasso only once the World Market's Merchant will vouch for his steel, and Smith Haldren's mark is vouched for. Blued against the Vale's damp, balanced to a hair. You pay for the stamp as much as the sword, and it is worth it."
+          "name": "Épée d’armes à la marque de guilde",
+          "look": "Lame en acier bleui, garde en queue de poisson en bronze, poignée de cuir teint en sarcelle et petit sceau de guilde poinçonné.",
+          "lore": "Là où une lame commune reste anonyme, celle-ci est signée. Un armurier ne gagne le droit d’enfoncer sa marque dans le ricasso qu’une fois que le Marchand du Marché mondial se porte garant de son acier, et la marque du Forgeron Haldren a reçu cette garantie. Bleuie contre l’humidité du Val, équilibrée au cheveu près. Vous payez autant pour le poinçon que pour l’épée, et il en vaut le prix."
         },
         "brasscap_axe": {
-          "name": "Brasscap Hatchet",
-          "look": "Polished steel bit, brass cap and langets on a lacquered ash haft, tidy wrap, a maker's stamp.",
-          "lore": "A stamped axe is a boast you can hold. The brass cap and langets are half armour, half signature: they keep the haft from splitting and they catch the tavern light so everyone knows you bought Armorer Hode's work, not a militia hand-me-down. 'If it cuts, I sell it,' the Highwatch smith says. This one cuts."
+          "name": "Hachette à coiffe de laiton",
+          "look": "Tranchant d’acier poli, coiffe et attelles de laiton sur un manche en frêne laqué, ligature soignée et poinçon d’artisan.",
+          "lore": "Une hache poinçonnée est une vantardise que l’on peut tenir en main. La coiffe et les attelles de laiton sont à moitié une armure, à moitié une signature : elles empêchent le manche de se fendre et accrochent la lumière de la taverne afin que chacun sache que vous avez acheté le travail de l’Armurier Hode, et non une arme de milice de seconde main. « Si ça coupe, je le vends », dit le forgeron de Highwatch. Celle-ci coupe."
         },
         "tempered_flanged_mace": {
-          "name": "Tempered Flanged Mace",
-          "look": "Six-flanged tempered blue-steel head, brass collar and pommel, wine-red leather grip.",
-          "lore": "Six flanges of blued, tempered steel, each ground to open a helm, capped in brass and wound in wine-red leather. The realm's armorers don't make ugly weapons even when the work is brutal. This one was commissioned through the World Market, not pulled off a rack; somewhere there's a ledger with a proud buyer's name and the sum he paid Hode for it."
+          "name": "Masse à ailettes trempée",
+          "look": "Tête à six ailettes en acier bleu trempé, collet et pommeau en laiton, poignée en cuir rouge vin.",
+          "lore": "Six ailettes d’acier bleui et trempé, chacune affûtée pour ouvrir un heaume, coiffées de laiton et enveloppées de cuir rouge vin. Les armuriers du royaume ne fabriquent pas d’armes laides, même lorsque leur fonction est brutale. Celle-ci a été commandée par l’intermédiaire du Marché mondial et non retirée d’un râtelier. Quelque part, un registre porte le nom d’un fier acheteur et la somme qu’il a versée à Hode."
         },
         "guildmark_dirk": {
-          "name": "Guildmark Dirk",
-          "look": "Slim tempered-steel dirk, bronze guard and pommel nut, dark-green cord grip, stamped sigil.",
-          "lore": "What a made man wears when the sword stays home: slim, tempered, stamped with the same mark that certifies a full blade, worn on the belt like a signet with an edge. Understated to everyone but those who can read an armorer's proof. Quartermaster Bree keeps a drawer of them at Highwatch for officers who've earned the wall's respect."
+          "name": "Dague à la marque de guilde",
+          "look": "Dague fine en acier trempé, garde et écrou de pommeau en bronze, poignée en corde vert sombre et sceau poinçonné.",
+          "lore": "Ce que porte un homme établi lorsque l’épée reste chez lui : fine, trempée, marquée du même poinçon qui certifie une lame entière, portée à la ceinture comme une chevalière dotée d’un tranchant. Discrète pour tous, sauf pour ceux qui savent lire la preuve d’un armurier. Le Quartier-maître Bree en garde un tiroir à Highwatch pour les officiers qui ont gagné le respect du rempart."
         },
         "brasscrown_staff": {
-          "name": "Brasscrown Walking Staff",
-          "look": "Hardwood staff topped with a turned brass crown finial, brass ferrule, dyed leather band.",
-          "lore": "Turned from seasoned hardwood and crowned with a brass finial the Eastbrook smiths cast by the hundred but perfect by the one. It belongs to the sort of traveller who wants to be taken seriously at Fenbridge's gate and Highwatch's wall alike. A walking stick that has never truly needed to walk; the dyed band matches a coat you can guess the price of."
+          "name": "Bâton de marche à couronne de laiton",
+          "look": "Bâton en bois dur surmonté d’un fleuron tourné en couronne de laiton, avec virole de laiton et bande de cuir teint.",
+          "lore": "Tourné dans du bois dur séché et couronné d’un fleuron de laiton que les forgerons d’Eastbrook coulent par centaines, mais perfectionnent un à un. Il appartient au genre de voyageur qui veut être pris au sérieux aussi bien à la porte de Fenbridge que sur le rempart de Highwatch. Un bâton de marche qui n’a jamais vraiment eu besoin de marcher, dont la bande teinte s’accorde avec un manteau dont on devine le prix."
         },
         "lacquered_wand": {
-          "name": "Lacquered Rod",
-          "look": "Slender deep-red lacquered wand, two polished brass bands, small rounded brass tip.",
-          "lore": "Deep-red lacquer in seven patient coats, banded twice in polished brass: the kind of wand a hedge-mage buys off the World Market once they've started charging real coin and want to look it. It channels the Light no better than a birch stick. But it gleams magnificently across the Merchant's counter, and half of minor magic has always been being believed."
+          "name": "Baguette laquée",
+          "look": "Fine baguette laquée d’un rouge profond, ornée de deux bagues de laiton poli et d’un petit embout arrondi en laiton.",
+          "lore": "Un rouge profond appliqué en sept patientes couches de laque et cerclé deux fois de laiton poli : le genre de baguette qu’un mage de village achète au Marché mondial lorsqu’il commence à demander de vraies pièces et veut en avoir l’air. Elle ne canalise pas mieux la Lumière qu’une branche de bouleau. Mais elle brille magnifiquement sur le comptoir du Marchand, et la moitié de la petite magie a toujours consisté à convaincre les autres d’y croire."
         },
         "fletcher_s_guild_bow": {
-          "name": "Fletcher's Guild Bow",
-          "look": "Lacquered walnut recurve bow, brass limb tips, waxed linen string, a guild stamp on the riser.",
-          "lore": "The closest thing the realm has to a guild is a fletcher's stamp on the riser, a promise about what's inside, the way a vintner seals a cask. Lacquered walnut, brass at the limb tips, a waxed linen string that won't fray through a Mirefen rain. Every joint argues for the price. Draw it once past the Widow Thicket and the argument wins."
+          "name": "Arc de la guilde des empeneurs",
+          "look": "Arc recourbé en noyer laqué, embouts de branches en laiton, corde de lin ciré et poinçon de guilde sur la poignée.",
+          "lore": "Ce qui ressemble le plus à une guilde dans le royaume, c’est le poinçon d’un empeneur sur une poignée, promesse de ce qu’elle renferme, comme le sceau qu’un vigneron appose sur un tonneau. Noyer laqué, laiton aux extrémités des branches, corde de lin ciré qui ne s’effilochera pas sous la pluie de Mirefen. Chaque assemblage plaide en faveur de son prix. Tirez une seule fois au-delà du Fourré de la Veuve et l’argument l’emporte."
         },
         "cinderbrand_sword": {
-          "name": "Cinderbrand",
-          "look": "Dark forged-steel blade, fuller filled with glowing ember-orange runes, heat-cracks, a smouldering gem in the guard.",
-          "lore": "The first blade quenched not in water but in Blessed Embers raked from Stormcrag, the coals the Highwatch smiths swear 'burn blue and clean, because the mountain remembers its old oath.' Banked into the fuller, that fire smoulders ember-orange and will not die; the runes stay warm to a bare hand on the coldest night of the wall. Cinderbrand never needs lighting. It simply refuses to go out."
+          "name": "Brandecendre",
+          "look": "Lame sombre en acier forgé, gouttière remplie de runes orange braise, fissures de chaleur et gemme fumante dans la garde.",
+          "lore": "La première lame trempée non pas dans l’eau, mais dans les Braises bénies ratissées à Stormcrag, ces charbons qui, jurent les forgerons de Highwatch, « brûlent d’un bleu pur, car la montagne se souvient de son ancien serment ». Logé dans la gouttière, ce feu couve d’un orange de braise et refuse de mourir. Les runes restent chaudes sous une main nue, même durant la nuit la plus froide sur le rempart. Brandecendre n’a jamais besoin d’être allumée. Elle refuse simplement de s’éteindre."
         },
         "emberbite_axe": {
-          "name": "Emberbite",
-          "look": "Blackened-iron axe with ember-orange cracks glowing through the bit, a banked-coal gem, wisps of heat.",
-          "lore": "Armorer Hode worked a live coal of mountain-fire into the heart of the bit, so the edge never truly cools between blows. The cracks breathe orange on the downswing, as if the strike wakes something the first forging left sleeping in the iron. They say a Stormcrag elemental gave up the ember for it; they say a great many things at Highwatch when the wind is up."
+          "name": "Morsure de braise",
+          "look": "Hache en fer noirci dont le tranchant laisse luire des fissures orange braise, avec une gemme de charbon couvant et des volutes de chaleur.",
+          "lore": "L’Armurier Hode a enchâssé un charbon ardent du feu de la montagne au cœur du tranchant, afin que celui-ci ne refroidisse jamais vraiment entre deux coups. Les fissures respirent une lueur orange dans la descente, comme si chaque frappe réveillait ce que la première forge avait laissé dormir dans le fer. On raconte qu’un élémentaire de Stormcrag a cédé cette braise pour la fabriquer. On raconte beaucoup de choses à Highwatch quand le vent se lève."
         },
         "smoulderfall_mace": {
-          "name": "Smoulderfall",
-          "look": "Dark iron flanges glowing ember-orange along their inner cracks, a molten-cored gem in the head.",
-          "lore": "A mace that carries its own hearth: a molten-cored stone chipped from the Sanctum seal that was 'wrought with mountain-fire,' set glowing in the head. The flanges stay warm to the touch and warmer where they land; a Highwatch sergeant swears a blow from it leaves a bruise that glows faintly till morning. The mountain's fire, at last made for breaking rather than sealing."
+          "name": "Chute-de-braise",
+          "look": "Ailettes de fer sombre dont les fissures intérieures brillent d’un orange de braise, avec une gemme au cœur en fusion enchâssée dans la tête.",
+          "lore": "Une masse qui porte son propre foyer : une pierre au cœur en fusion détachée du sceau du Sanctuaire, « forgé au feu de la montagne », et enchâssée, lumineuse, dans sa tête. Les ailettes restent chaudes au toucher et plus chaudes encore là où elles frappent. Un sergent de Highwatch jure qu’un coup de cette masse laisse une ecchymose qui luit faiblement jusqu’au matin. Le feu de la montagne, enfin destiné à briser plutôt qu’à sceller."
         },
         "ashspark_dagger": {
-          "name": "Ashspark Shiv",
-          "look": "Short blackened blade veined with glowing ember-orange, a tiny smouldering gem in the pommel, ash and spark.",
-          "lore": "A back-alley blade with the mountain's fire smuggled into its pommel-stone, an armorer's quiet joke: even a cutpurse might carry an ember of the first forging. Blackened, veined with orange, always a shade too warm in the sheath. Draw it in the dark under Highwatch and the glow lights your hand just enough to find the gap in a man's guard."
+          "name": "Surin Cendre-étincelle",
+          "look": "Lame courte noircie, veinée d’une lueur orange de braise, avec une minuscule gemme fumante au pommeau, cendre et étincelle.",
+          "lore": "Une lame de ruelle dont la pierre du pommeau abrite le feu de la montagne, introduit en contrebande, plaisanterie discrète d’un armurier : même un coupe-bourse peut porter une braise de la première forge. Noircie, veinée d’orange, elle reste toujours un peu trop chaude dans son fourreau. Tirez-la dans l’obscurité sous Highwatch : sa lueur éclaire juste assez votre main pour trouver la faille dans la garde d’un homme."
         },
         "forgeheart_staff": {
-          "name": "Forgeheart Stave",
-          "look": "Iron-shod staff crowned with a caged glowing ember core, ember runes up the shaft, rising heat-shimmer.",
-          "lore": "A living coal of mountain-fire caged in iron at its crown. Loremaster Caddis calls it proof that the fire of the first forging can be bound to serve, not only to seal. Heat-shimmer rises from it in a thin, endless ribbon; a mage who carries one never wants for a forge or a watch-fire. The ember, they whisper, was drawn from Voskar the Emberwing's own breath, and it has not cooled since."
+          "name": "Bâton Cœur-de-forge",
+          "look": "Bâton ferré couronné d’un cœur de braise lumineux enfermé dans une cage, avec des runes de braise le long de la hampe et un miroitement de chaleur ascendant.",
+          "lore": "Un charbon vivant du feu de la montagne, emprisonné dans le fer à son sommet. Le Maître du savoir Caddis y voit la preuve que le feu de la première forge peut être lié pour servir, et non seulement pour sceller. Un miroitement de chaleur s’en élève en un mince ruban sans fin. Le mage qui en porte un ne manque jamais d’une forge ni d’un feu de garde. Cette braise, murmure-t-on, fut tirée du souffle même de Voskar Aile-de-braise et n’a pas refroidi depuis."
         },
         "emberwrought_wand": {
-          "name": "Emberwrought Wand",
-          "look": "Blackened-metal wand tipped with a glowing ember coal in iron claws, hairline heat-cracks, warm inner light.",
-          "lore": "The wand that named the grade. When a Highwatch armorer first set a coal of mountain-fire in iron claws and made it answer a mortal hand, even the Priests of the Light stopped calling it heresy and started calling it useful. Warm, patient and quietly dangerous: the ember at its tip has burned, unbroken, since before its owner drew breath."
+          "name": "Baguette forgée dans la braise",
+          "look": "Baguette en métal noirci, terminée par un charbon ardent maintenu dans des griffes de fer, avec de fines fissures de chaleur et une chaude lueur intérieure.",
+          "lore": "La baguette qui a donné son nom à toute la collection. Lorsqu’un armurier de Highwatch enchâssa pour la première fois un charbon du feu de la montagne dans des griffes de fer et lui fit obéir à une main mortelle, même les Prêtres de la Lumière cessèrent de parler d’hérésie pour reconnaître son utilité. Chaude, patiente et discrètement dangereuse : la braise à son extrémité brûle sans interruption depuis avant la naissance de son propriétaire."
         },
         "cinderlatch_crossbow": {
-          "name": "Cinderlatch",
-          "look": "Blackened-steel crossbow, ember-orange glow seeping from cracks in the prod, a smouldering coal in the tiller.",
-          "lore": "The strangest of the ember-forged: the mountain's fire poured into a machine. Orange seeps from cracks in the prod, and a smouldering coal in the tiller keeps the string from ever stiffening in Thornpeak's cold or Mirefen's damp. Its bolts leave the groove already warm and land warmer. A hunter's answer to a wall where the enemy does not feel the cold either."
+          "name": "Cran-de-braise",
+          "look": "Arbalète en acier noirci, lueur orange de braise suintant des fissures de ses branches et charbon fumant dans l’arbrier.",
+          "lore": "La plus étrange des armes forgées dans la braise : le feu de la montagne versé dans une machine. Une lueur orange suinte des fissures de ses branches, tandis qu’un charbon fumant dans l’arbrier empêche sa corde de jamais raidir dans le froid de Thornpeak ou l’humidité de Mirefen. Ses carreaux quittent déjà chauds leur rainure et frappent plus chauds encore. La réponse d’un chasseur pour un rempart dont l’ennemi ne ressent pas davantage le froid."
         },
         "ice_fang_sword": {
-          "name": "Ice Fang",
-          "look": "Curved blade of pale glacial ice, jagged rime crystals along the spine, a glowing cyan frozen core in the fuller, icicle crossguard.",
-          "lore": "The flagship of the frozen grade, and the piece every collector reaches for first. Ice Fang was carved, not forged, from a fang of the glacier that caps Thornpeak above Highwatch, its cyan core burning cold as the light off the Glimmermere. It rimes the very air it cuts. The wall-guard swear one soldier carried it the night the high snows held the Wyrmcult back, and 'bought the wall a winter.'"
+          "name": "Croc de glace",
+          "look": "Lame incurvée en glace pâle de glacier, cristaux de givre dentelés sur le dos, cœur gelé cyan lumineux dans la gouttière et garde en stalactites.",
+          "lore": "Le fleuron de la collection gelée et la pièce que tout collectionneur convoite en premier. Croc de glace n’a pas été forgé, mais sculpté dans un croc du glacier qui coiffe Thornpeak au-dessus de Highwatch. Son cœur cyan brûle d’un froid aussi vif que la lumière sur le Glimmermere. Il couvre de givre l’air même qu’il fend. Les gardes du rempart jurent qu’un soldat le portait la nuit où les hautes neiges retinrent le Culte du Ver et qu’il « offrit un hiver au rempart »."
         },
         "glaciersplit_axe": {
-          "name": "Glaciersplit",
-          "look": "Head of translucent blue glacier-ice, cracked interior glowing cyan, frost crystals bristling, a haft trailing cold vapor.",
-          "lore": "Hewn from the blue heart of the Thornpeak glacier, where two centuries of ice have pressed the cold until it glows on its own. It trails vapour even at rest, and the crack of it landing is a crevasse opening under Stalker Ridge. Highwatch gives its fallen to the ice up there; so this is a weapon meant to keep the thaw, and whatever the thaw would wake, at bay."
+          "name": "Fend-glacier",
+          "look": "Tête en glace de glacier bleue translucide, intérieur fissuré luisant en cyan, hérissée de cristaux de givre, sur un manche traînant une vapeur froide.",
+          "lore": "Taillée dans le cœur bleu du glacier de Thornpeak, là où deux siècles de glace ont comprimé le froid au point qu’il brille de lui-même. Elle traîne une vapeur même au repos, et le fracas de sa chute rappelle une crevasse qui s’ouvre sous la Crête du Traqueur. Highwatch confie ses morts à la glace là-haut. Cette arme est donc destinée à tenir le dégel, et tout ce qu’il réveillerait, à distance."
         },
         "rimecrusher_mace": {
-          "name": "Rimecrusher",
-          "look": "Cluster of jagged ice crystals around a glowing cyan core, hoarfrost creeping down a silvered haft.",
-          "lore": "Not carved but grown: Thornpeak ice coaxed around a cold cyan core until it set as hard as Hode's best steel. Hoarfrost creeps down the silvered haft toward the hand and never quite arrives. Where it strikes, water freezes; where it rests, the ground whitens. The grave-cold of the peaks, made small enough to swing at the things that climb the wall."
+          "name": "Brise-givre",
+          "look": "Grappe de cristaux de glace dentelés autour d’un cœur cyan lumineux, avec du givre blanc rampant le long d’un manche argenté.",
+          "lore": "Non pas sculptée, mais cultivée : de la glace de Thornpeak amenée à croître autour d’un cœur cyan glacé jusqu’à devenir aussi dure que le meilleur acier de Hode. Le givre blanc descend le long du manche argenté vers la main sans jamais tout à fait l’atteindre. Là où elle frappe, l’eau gèle. Là où elle repose, le sol blanchit. Le froid sépulcral des sommets, réduit à une taille qui permet de le brandir contre les créatures escaladant le rempart."
         },
         "frostbite_dagger": {
-          "name": "Rime Needle",
-          "look": "Wickedly thin dagger of clear blue ice, a glowing cyan vein down the center, needle frost crystals, hoarfrost hilt.",
-          "lore": "Thin as a held breath and twice as cold: a splinter of Thornpeak glacier honed to a single glowing vein, so keen the wound is frozen shut before the blood remembers to run. Its name is borrowed from the grave-chill the dead carry down off the peaks. It never needs sharpening; ice does not dull, Loremaster Caddis notes drily, it only waits."
+          "name": "Aiguille de givre",
+          "look": "Dague d’une finesse cruelle en glace bleue transparente, traversée d’une veine cyan lumineuse, avec cristaux de givre en aiguilles et garde couverte de givre blanc.",
+          "lore": "Mince comme un souffle retenu et deux fois plus froide : une esquille du glacier de Thornpeak, aiguisée jusqu’à ne laisser qu’une unique veine lumineuse, si acérée que la plaie gèle avant que le sang se souvienne de couler. Son nom vient du froid sépulcral que les morts descendent des sommets. Elle n’a jamais besoin d’être affûtée. La glace ne s’émousse pas, observe sèchement le Maître du savoir Caddis, elle attend."
         },
         "hoarfrost_vigil_staff": {
-          "name": "Hoarfrost Vigil",
-          "look": "Silvered staff crowned with a floating, slowly rotating shard of glowing cyan ice, radiating crystals and cold vapor.",
-          "lore": "The staff of the watch that never sleeps on Highwatch's wall. Its crown is a shard of cyan tarn-ice that floats free of the silver and turns, slowly, of its own accord: always, the guard swear, toward the cold that gathers beneath the peaks. To carry the Vigil is to stand two hundred years of watch in a single night, and promise not to look away."
+          "name": "Veille du givre blanc",
+          "look": "Bâton argenté couronné d’un éclat de glace cyan lumineux qui flotte et tourne lentement, entouré de cristaux rayonnants et de vapeur froide.",
+          "lore": "Le bâton de la garde qui ne dort jamais sur le rempart de Highwatch. Sa couronne est un éclat de glace cyan du lac, qui flotte librement au-dessus de l’argent et tourne lentement de son propre chef, toujours, jurent les gardes, vers le froid qui s’amasse sous les sommets. Porter la Veille, c’est monter deux siècles de garde en une seule nuit et promettre de ne jamais détourner les yeux."
         },
         "everwinter_wand": {
-          "name": "Shard of Everwinter",
-          "look": "A single spike of glowing cyan glacier-ice, hoarfrost blooming from a silver collar, faint cold mist.",
-          "lore": "A spike of glowing glacier-ice, said to be broken from the deep tarn below the Sanctum, where the mountain's cold has teeth. Hoarfrost blooms endlessly from its silver collar and never melts, not by fire nor by summer. Mages keep it close for the cold it lends their work, and keep it far on the nights it seems to lean toward Nythraxis's crypt, and listen."
+          "name": "Éclat de l’Hiver éternel",
+          "look": "Une unique pointe de glace de glacier cyan lumineuse, couverte de givre blanc jaillissant d’une bague d’argent et entourée d’une légère brume froide.",
+          "lore": "Une pointe de glace de glacier lumineuse, que l’on dit brisée dans le lac profond sous le Sanctuaire, là où le froid de la montagne a des crocs. Le givre blanc fleurit sans fin sur sa bague d’argent et ne fond jamais, ni devant le feu ni en été. Les mages la gardent près d’eux pour le froid qu’elle prête à leur art, mais la tiennent à distance les nuits où elle semble se pencher vers la crypte de Nythraxis pour écouter."
         },
         "winterbite": {
-          "name": "Winterbite",
-          "look": "Silvered steel and blue-ice bow, a glowing cyan frozen core in the riser, a nocked arrow of solid ice, cold vapor.",
-          "lore": "A bow of silvered steel and Thornpeak ice, its riser lit by a cold cyan core that freezes the arrow to the string. It nocks a shaft of solid glacier-ice that reforms each draw; the archer carries no quiver on the wall, only the cold. Highwatch held Stalker Ridge through a siege with one like it: a single bowman, they say, and a winter's worth of arrows that were always already there."
+          "name": "Morsure de l’hiver",
+          "look": "Arc d’acier argenté et de glace bleue, cœur gelé cyan lumineux dans la poignée, flèche de glace massive encochée et vapeur froide.",
+          "lore": "Un arc d’acier argenté et de glace de Thornpeak, dont la poignée est éclairée par un cœur cyan glacé qui fige la flèche sur la corde. Il encoche un trait de glace de glacier massive qui se reforme à chaque tension. Sur le rempart, l’archer ne porte aucun carquois, seulement le froid. Highwatch a tenu la Crête du Traqueur durant un siège avec un arc semblable : un unique archer, dit-on, et tout un hiver de flèches qui se trouvaient toujours déjà là."
         },
         "solheim_sword": {
-          "name": "Solheim, Last Light of the Dawn",
-          "look": "Greatsword forged from a fallen star, molten-gold core splitting the blade, cosmos-black steel edged in starlight, golden shards orbiting the guard, aurora ribbon.",
-          "lore": "When the star fell out of the western sky and 'burst like a forge' beyond the Widow Thicket, Brother Aldric pulled its still-smouldering heart from the Mirefen crater and begged the realm's smiths to work 'a thing that does not belong to this world.' They made one greatsword of it: Solheim. Its molten-gold core splits the cosmos-black blade like dawn cracking a night sky, and shards of star-metal orbit the guard on paths no hand set. Only one was ever forged. There will not be another."
+          "name": "Solheim, Dernière Lueur de l’aube",
+          "look": "Espadon forgé dans une étoile déchue, cœur d’or en fusion fendant la lame, acier noir comme le cosmos bordé de lumière stellaire, éclats dorés en orbite autour de la garde et ruban d’aurore.",
+          "lore": "Lorsque l’étoile tomba du ciel occidental et « éclata comme une forge » au-delà du Fourré de la Veuve, Frère Aldric tira son cœur encore fumant du cratère de Mirefen et supplia les forgerons du royaume de travailler « une chose qui n’appartient pas à ce monde ». Ils en tirèrent un unique espadon : Solheim. Son cœur d’or en fusion fend la lame noire comme le cosmos telle l’aube déchirant le ciel nocturne, tandis que des éclats de métal stellaire suivent autour de la garde des orbites qu’aucune main n’a tracées. Un seul exemplaire fut forgé. Il n’y en aura jamais d’autre."
         },
         "skyrender_axe": {
-          "name": "Skyrender, the Firmament's Wound",
-          "look": "Head like a torn piece of night sky, molten-gold cracks and constellation etchings, starlight shards hovering, an aurora shimmer trailing the edge.",
-          "lore": "Beaten from the crater's rim, where the fallen star tore the sky's own reflection out of Mirefen and left a wound that still steams. The head looks like a piece of torn night: molten-gold cracks, constellations no scholar at Highwatch can name, an aurora bleeding off the edge with every swing. Brother Aldric blessed it and would not touch it. To lift it is to hold the hole the heavens left."
+          "name": "Déchire-ciel, Blessure du Firmament",
+          "look": "Tête semblable à un morceau arraché au ciel nocturne, avec fissures d’or en fusion, constellations gravées, éclats de lumière stellaire en suspension et miroitement d’aurore dans le sillage du tranchant.",
+          "lore": "Martelée sur le rebord du cratère, là où l’étoile déchue arracha à Mirefen le propre reflet du ciel et laissa une blessure qui fume encore. Sa tête ressemble à un morceau de nuit déchirée : fissures d’or en fusion, constellations qu’aucun érudit de Highwatch ne sait nommer, aurore s’écoulant du tranchant à chaque mouvement. Frère Aldric l’a bénie sans accepter de la toucher. La soulever, c’est tenir dans ses mains le vide laissé par les Cieux."
         },
         "starfall_mace": {
-          "name": "Starfall, Judgment of the Heavens",
-          "look": "Captive molten-gold star-core ringed by orbiting fragments, cosmos-black flanges veined with starlight, aurora spilling from the seams.",
-          "lore": "A star-core caught the instant before it died, ringed with the debris that fell with it, frozen an inch from oblivion. Its cosmos-black flanges run with trapped starlight, and aurora spills from the seams when it is raised. The old Priests of the Light called a falling star a judgment, a verdict handed down from above that no shield was meant to stop, and named this after the one that came down on Mirefen."
+          "name": "Chute d’étoile, Jugement des Cieux",
+          "look": "Cœur d’étoile captif en or fondu, ceint de fragments en orbite, ailettes noires comme le cosmos veinées de lumière stellaire et aurore s’écoulant des jointures.",
+          "lore": "Un cœur d’étoile capturé à l’instant précédant sa mort, ceint des débris tombés avec lui et figé à un pouce du néant. Ses ailettes noires comme le cosmos sont parcourues de lumière stellaire captive, et une aurore s’écoule de leurs jointures quand on le soulève. Les anciens Prêtres de la Lumière voyaient dans une étoile filante un jugement, un verdict rendu d’en haut qu’aucun bouclier n’était censé arrêter. Ils donnèrent à cette arme le nom de celle qui s’abattit sur Mirefen."
         },
         "astravyr_dagger": {
-          "name": "Astravyr, Fang of the Fallen Star",
-          "look": "A sliver of a fallen star, molten-gold glowing edge on cosmos-black metal, a bright star-mote orbiting the pommel, a thin aurora trail.",
-          "lore": "The smallest piece of the star Aldric hauled from the crater, and by some reckonings the most dangerous. A single sliver of that other-worldly heart, its molten-gold edge riding cosmos-black metal, a lone star-mote circling the pommel like a moon that lost its world. It weighs almost nothing and parts almost anything. Small enough to hide, bright enough to find in the dark by its own light."
+          "name": "Astravyr, Croc de l’Étoile déchue",
+          "look": "Un éclat d’étoile déchue, au tranchant d’or en fusion luisant sur du métal noir comme le cosmos, avec une brillante poussière d’étoile en orbite autour du pommeau et une fine traînée d’aurore.",
+          "lore": "Le plus petit morceau de l’étoile qu’Aldric a tirée du cratère et, selon certains, le plus dangereux. Un unique éclat de ce cœur venu d’un autre monde, dont le tranchant d’or en fusion court sur un métal noir comme le cosmos, tandis qu’une poussière d’étoile solitaire tourne autour du pommeau telle une lune qui aurait perdu son monde. Il ne pèse presque rien et tranche presque tout. Assez petit pour être dissimulé, assez brillant pour être retrouvé dans le noir à sa propre lumière."
         },
         "cosmarch_staff": {
-          "name": "Cosmarch, Spire of the Endless Void",
-          "look": "Orbiting cluster of golden star-shards around a molten-gold core, constellation-etched cosmos-black shaft, aurora ribbons winding upward.",
-          "lore": "A shaft of star-metal crowned with a molten-gold core and a ring of golden shards that march around it in slow, endless orbit: a little cosmos, etched with constellations that match no sky over Thornpeak. Aurora winds up its length like smoke that forgot to rise. Those who bore it claimed they could feel the void turning through it, the way Ysolei's mere 'drinks the moonlight': patient, and cold, and looking back."
+          "name": "Cosmarch, Flèche du Vide infini",
+          "look": "Grappe orbitale d’éclats d’étoile dorés autour d’un cœur d’or en fusion, hampe noire comme le cosmos gravée de constellations et rubans d’aurore s’enroulant vers le sommet.",
+          "lore": "Une hampe de métal stellaire couronnée d’un cœur d’or en fusion et d’un anneau d’éclats dorés qui gravitent lentement et sans fin autour de lui : un petit cosmos, gravé de constellations qui ne correspondent à aucun ciel au-dessus de Thornpeak. Une aurore remonte le long du bâton comme une fumée qui aurait oublié de s’élever. Ceux qui l’ont porté affirmaient sentir le vide tourner en lui, comme le lac d’Ysolei « boit le clair de lune » : patient, froid et observant en retour."
         },
         "emberwish_wand": {
-          "name": "Emberwish, Mote of the Dying Sun",
-          "look": "Captive molten-gold dying-star mote wreathed in orbiting sparks, cosmos-black shaft etched with glowing constellations.",
-          "lore": "Not the fallen star itself but the last mote of a dying one: a single molten-gold ember of a sun already gone out, wreathed in the sparks that were its final light. Its cosmos-black shaft is etched with the constellations that watched it die. The Mirefen crofters say it grants one wish to whoever holds it at true dusk; they also say every soul who held it wished for more time, and that the Drowned Moon granted none of them any."
+          "name": "Vœu-de-braise, Étincelle du Soleil mourant",
+          "look": "Étincelle captive d’une étoile mourante, faite d’or en fusion et couronnée d’étincelles en orbite, sur une hampe noire comme le cosmos gravée de constellations lumineuses.",
+          "lore": "Non pas l’étoile déchue elle-même, mais la dernière étincelle d’une étoile mourante : une unique braise d’or en fusion provenant d’un soleil déjà éteint, couronnée des étincelles qui furent sa dernière lumière. Sa hampe noire comme le cosmos porte les constellations qui assistèrent à sa mort. Les métayers de Mirefen prétendent qu’elle exauce le vœu de celui qui la tient au véritable crépuscule. Ils racontent aussi que chaque âme qui l’a tenue a souhaité avoir davantage de temps et que la Lune noyée n’en a accordé à aucune."
         },
         "encore_bow": {
-          "name": "Encore, the Second Falling Star",
-          "look": "Comically oversized star-cannon: a cosmos-black barrel etched with glowing golden constellations, a flared bell muzzle with a molten-gold comet shell seated inside, brass fittings, a wooden shoulder stock.",
-          "lore": "The smiths who worked the fallen star made six relics of it and still had a barrel's worth of star-metal left over, and by then the apprentices had opinions. What came off the anvil is either the realm's first gun or its smallest siege engine: a shoulder cannon that does not so much loose a shot as request a second star, aimed. Brother Aldric declined to bless it, reasoning that anything that loud has already been noticed by heaven. Hunters adore it. Nothing downrange ever has."
+          "name": "Encore, la Seconde Étoile filante",
+          "look": "Canon stellaire démesuré jusqu’au comique : fût noir comme le cosmos gravé de constellations dorées lumineuses, gueule évasée en pavillon contenant un obus cométaire d’or en fusion, garnitures de laiton et crosse d’épaule en bois.",
+          "lore": "Les forgerons qui travaillèrent l’étoile déchue en tirèrent six reliques et disposaient encore d’un plein fût de métal stellaire. À ce stade, les apprentis avaient leur mot à dire. Ce qui sortit de l’enclume est soit la première arme à feu du royaume, soit son plus petit engin de siège : un canon d’épaule qui ne décoche pas tant un tir qu’il ne réclame une deuxième étoile, en précisant où elle doit tomber. Frère Aldric refusa de le bénir, estimant qu’une chose aussi bruyante avait déjà attiré l’attention des Cieux. Les chasseurs l’adorent. Rien de ce qu’ils ont visé ne l’a jamais adoré."
         },
         "meteorlatch_crossbow": {
-          "name": "Meteorlatch, the Sky's Last Judgment",
-          "look": "Meteoric star-metal, molten-gold core along the tiller, cosmos-black limbs etched with constellations, a nocked bolt of pure starfire.",
-          "lore": "Forged of raw meteoric star-metal while the Mirefen crater still glowed, debris 'too hot to handle,' hammered into limbs of cosmos-black etched with constellations, a molten-gold core banked along the tiller. It nocks no bolt but conjures one: a shaft of starfire, loosed like a verdict and landing like the end of one. When Highwatch feared even the deathless crown of Nythraxis might not be the worst thing beneath the peaks, this is the weapon they wanted on the wall. Aim it well."
+          "name": "Cran-de-météore, Dernier Jugement du ciel",
+          "look": "Métal stellaire météoritique, cœur d’or en fusion le long de l’arbrier, branches noires comme le cosmos gravées de constellations et carreau encoché de pur feu stellaire.",
+          "lore": "Forgée dans du métal stellaire météoritique brut tandis que le cratère de Mirefen brillait encore, avec des débris « trop chauds pour être manipulés » martelés en branches noires comme le cosmos et gravées de constellations, et un cœur d’or en fusion contenu le long de l’arbrier. Elle n’encoche aucun carreau, elle en conjure un : un trait de feu stellaire, décoché comme un verdict et frappant comme son exécution. Lorsque Highwatch craignit que même la couronne immortelle de Nythraxis ne soit pas la pire chose sous les sommets, c’est l’arme que ses gardes voulurent sur le rempart. Visez juste."
         }
       },
-      "seasonOne": "Season 1",
+      "seasonOne": "Saison 1",
       "rarity": {
-        "uncommon": "Uncommon",
+        "uncommon": "Inhabituel",
         "rare": "Rare",
-        "epic": "Epic",
-        "legendary": "Legendary"
+        "epic": "Épique",
+        "legendary": "Légendaire"
       },
       "wtype": {
-        "sword": "Sword",
-        "axe": "Axe",
-        "mace": "Mace",
-        "dagger": "Dagger",
-        "staff": "Staff",
-        "wand": "Wand",
-        "bow": "Bow",
-        "crossbow": "Crossbow"
+        "sword": "Épée",
+        "axe": "Hache",
+        "mace": "Masse",
+        "dagger": "Dague",
+        "staff": "Bâton",
+        "wand": "Baguette",
+        "bow": "Arc",
+        "crossbow": "Arbalète"
       },
       "badge": {
-        "flagship": "Flagship",
-        "hero": "Hero"
+        "flagship": "Produit phare",
+        "hero": "Héroïque"
       },
-      "inspectAria": "Inspect {item}",
-      "viewModeLabel": "Preview mode",
-      "tryOn": "Try it on",
-      "weaponOnly": "Weapon only",
-      "sceneLabel": "Scene lighting",
+      "inspectAria": "Examiner {item}",
+      "viewModeLabel": "Mode d’aperçu",
+      "tryOn": "Essayer",
+      "weaponOnly": "Arme uniquement",
+      "sceneLabel": "Éclairage de la scène",
       "scene": {
-        "day": "Day",
-        "dusk": "Dusk",
-        "night": "Night"
+        "day": "Jour",
+        "dusk": "Crépuscule",
+        "night": "Nuit"
       },
-      "lore": "Lore",
-      "buySkin": "Purchase Skin",
-      "unavailable": "Unavailable",
-      "applied": "Applied",
-      "apply": "Apply Skin",
-      "detach": "Detach Skin",
-      "equipHint": "Equip a {type} to apply this skin."
+      "lore": "Histoire",
+      "buySkin": "Acheter l’apparence",
+      "unavailable": "Indisponible",
+      "applied": "Appliquée",
+      "apply": "Appliquer l’apparence",
+      "detach": "Retirer l’apparence",
+      "equipHint": "Équipez-vous d’un objet de type {type} pour appliquer cette apparence."
     },
     "claudium": {
       "title": "Claudium",
-      "open": "Open Claudium",
-      "close": "Close Claudium",
-      "loading": "Loading Claudium...",
-      "balanceLabel": "Balance",
+      "open": "Ouvrir le Claudium",
+      "close": "Fermer le Claudium",
+      "loading": "Chargement du Claudium...",
+      "balanceLabel": "Solde",
       "balanceUnit": "{amount} Claudium",
-      "solBalance": "SOL: {amount}",
-      "wocBalance": "WOC: {amount}",
-      "unavailable": "The Claudium store is unavailable right now. Your balance and purchases are unaffected; please check back shortly.",
-      "disclosure": "Claudium is a one-way soft currency: buy it with money and spend it on cosmetics. It cannot be redeemed, transferred, or cashed out.",
-      "buyTitle": "Buy Claudium",
-      "railLabel": "Payment method",
-      "railStripe": "Card",
+      "solBalance": "SOL : {amount}",
+      "wocBalance": "WOC : {amount}",
+      "unavailable": "La boutique de Claudium est indisponible pour le moment. Votre solde et vos achats ne sont pas affectés. Veuillez revenir dans quelques instants.",
+      "disclosure": "Le Claudium est une monnaie virtuelle à sens unique : achetez-en avec de l’argent et dépensez-le en objets cosmétiques. Il ne peut être ni remboursé, ni transféré, ni converti en argent.",
+      "buyTitle": "Acheter du Claudium",
+      "railLabel": "Mode de paiement",
+      "railStripe": "Carte",
       "railSol": "SOL",
       "railWoc": "WOC",
-      "railWocDiscount": "20% off",
-      "railWocUnavailable": "WOC pricing is unavailable right now.",
-      "railNativeUnavailable": "SOL/WOC off.",
-      "amountLabel": "Amount",
-      "showAmounts": "Show all Claudium amounts",
-      "hideAmounts": "Hide extra Claudium amounts",
-      "skuRow": "{usd} for {claudium} Claudium",
-      "buyButton": "Buy",
-      "buyUnavailable": "Purchasing is unavailable right now.",
-      "storeTitle": "Cosmetic Store",
-      "storeEmpty": "No cosmetics are available right now.",
+      "railWocDiscount": "20 % de réduction",
+      "railWocUnavailable": "Les prix en WOC sont indisponibles pour le moment.",
+      "railNativeUnavailable": "SOL/WOC désactivé.",
+      "amountLabel": "Montant",
+      "showAmounts": "Afficher tous les montants de Claudium",
+      "hideAmounts": "Masquer les montants de Claudium supplémentaires",
+      "skuRow": "{claudium} Claudium pour {usd}",
+      "buyButton": "Acheter",
+      "buyUnavailable": "Les achats sont indisponibles pour le moment.",
+      "storeTitle": "Boutique d’objets cosmétiques",
+      "storeEmpty": "Aucun objet cosmétique n’est disponible pour le moment.",
       "storeCost": "{amount} Claudium",
-      "spendButton": "Redeem",
-      "kindCosmetic": "Cosmetic",
-      "kindSkin": "Skin",
-      "kindItem": "Item",
-      "checkoutTitle": "Complete purchase",
-      "checkoutClose": "Close checkout",
-      "checkoutLoading": "Loading checkout...",
-      "checkoutPending": "Transaction in progress. Confirm in your wallet and keep this panel open.",
-      "checkoutPendingButton": "Processing",
-      "checkoutFailed": "Checkout could not be loaded. Please try again.",
-      "checkoutUnavailable": "That Claudium purchase is not available right now.",
-      "checkoutWalletRequired": "Connect a Solana wallet before buying Claudium with crypto.",
-      "checkoutWalletUnsupported": "This wallet cannot sign and send Solana transactions.",
-      "checkoutNotSettled": "The transaction was sent but Claudium was not credited yet. Please try again shortly."
+      "spendButton": "Échanger",
+      "kindCosmetic": "Objet cosmétique",
+      "kindSkin": "Apparence",
+      "kindItem": "Objet",
+      "checkoutTitle": "Finaliser l’achat",
+      "checkoutClose": "Fermer le paiement",
+      "checkoutLoading": "Chargement du paiement...",
+      "checkoutPending": "Transaction en cours. Confirmez-la dans votre portefeuille et gardez ce panneau ouvert.",
+      "checkoutPendingButton": "Traitement en cours",
+      "checkoutFailed": "Impossible de charger le paiement. Veuillez réessayer.",
+      "checkoutUnavailable": "Cet achat de Claudium est indisponible pour le moment.",
+      "checkoutWalletRequired": "Connectez un portefeuille Solana avant d’acheter du Claudium avec des cryptomonnaies.",
+      "checkoutWalletUnsupported": "Ce portefeuille ne peut ni signer ni envoyer de transactions Solana.",
+      "checkoutNotSettled": "La transaction a été envoyée, mais le Claudium n’a pas encore été crédité. Veuillez réessayer dans quelques instants."
     },
     "theme": {
       "preset": "Thème de l'interface",
@@ -596,12 +596,12 @@ export const fr_CA: EnTranslations = {
       "talkBodyTouch": "Tiens-toi près du maréchal Redbrook et touche le bouton Utiliser pour lui parler, puis accepte sa mission.",
       "returnBodyTouch": "Ta mission est accomplie. Retourne voir le maréchal Redbrook et touche le bouton Utiliser pour la rendre.",
       "doneBodyTouch": "Tu maîtrises les bases, {name}. Le Val est à toi : touche Plus, puis Journal de quêtes, pour consulter ton journal de quêtes à tout moment. Bonne chasse !",
-      "slayTargetHint": "New to combat? Press {targetKey} or click a wolf to target it, then use an action bar ability to attack it.",
-      "slayTargetHintTouch": "New to combat? Tap a wolf to target it, then tap an action bar ability to attack it.",
-      "nextTipsTitle": "Where to next",
-      "nextTipQuestLog": "Open your Quest Log ({key}) to find your next task nearby.",
-      "nextTipMap": "Check the World Map ({key}) to see where quests are waiting.",
-      "nextTipSocial": "Open Social ({key}) to find a group for tougher fights."
+      "slayTargetHint": "Vous découvrez le combat ? Appuyez sur {targetKey} ou cliquez sur un loup pour le cibler, puis utilisez une technique de la barre d’action pour l’attaquer.",
+      "slayTargetHintTouch": "Vous découvrez le combat ? Touchez un loup pour le cibler, puis touchez une technique de la barre d’action pour l’attaquer.",
+      "nextTipsTitle": "Et maintenant ?",
+      "nextTipQuestLog": "Ouvrez votre journal de quêtes ({key}) pour trouver votre prochaine tâche dans les environs.",
+      "nextTipMap": "Consultez la carte du monde ({key}) pour voir où des quêtes vous attendent.",
+      "nextTipSocial": "Ouvrez la fenêtre Social ({key}) pour trouver un groupe en vue de combats plus difficiles."
     },
     "widgets": {
       "clockTitle": "Heure locale - cliquez pour basculer 12/24 heures",
@@ -944,17 +944,17 @@ export const fr_CA: EnTranslations = {
       "highContrastAria": "Basculer l’arrière-plan à contraste élevé : désactive la bande-annonce animée pour que le texte de l’écran de démarrage reste lisible"
     },
     "warfare": {
-      "honorAmount": "{amount} Honor",
+      "honorAmount": "{amount} points d’honneur",
       "dualPrice": "{money} + {honor}",
-      "balance": "Honor: {amount}",
-      "honorFloat": "+{amount} Honor",
-      "honorGain": "You gain {amount} Honor ({reason}).",
-      "notEnoughHonor": "Not enough Honor.",
+      "balance": "Honneur : {amount}",
+      "honorFloat": "+{amount} points d’honneur",
+      "honorGain": "Vous gagnez {amount} points d’honneur ({reason}).",
+      "notEnoughHonor": "Vous n’avez pas assez d’honneur.",
       "reasons": {
-        "arenaWin": "Arena victory",
-        "fiestaKill": "Fiesta takedown",
-        "fiestaComplete": "Fiesta completed",
-        "fiestaWin": "Fiesta victory"
+        "arenaWin": "Victoire en arène",
+        "fiestaKill": "Élimination en Fiesta",
+        "fiestaComplete": "Fiesta terminée",
+        "fiestaWin": "Victoire en Fiesta"
       }
     },
     "statInfo": {
@@ -963,9 +963,9 @@ export const fr_CA: EnTranslations = {
         "spellPower": "Puissance des sorts",
         "critRating": "Score de critique",
         "hasteRating": "Score de hâte",
-        "warfare": "Warfare"
+        "warfare": "Art de la guerre"
       },
-      "warfareValue": "+{increase}% dealt / -{reduction}% taken",
+      "warfareValue": "+{increase} % infligés / -{reduction} % subis",
       "desc": {
         "str": "Augmente votre puissance d'attaque, vos coups d'arme frappent donc plus fort.",
         "agi": "Aiguise vos réflexes et votre précision, ce qui améliore plusieurs de vos statistiques de combat.",
@@ -980,7 +980,7 @@ export const fr_CA: EnTranslations = {
         "dodge": "Vos chances d'éviter complètement une attaque de mêlée, sans subir aucun dégât.",
         "critRating": "Score de critique de votre équipement et de vos bonus de panoplie, augmentant vos chances de coup critique. Environ 10 points de score confèrent 1% de critique.",
         "hasteRating": "Score de hâte de votre équipement et de vos bonus de panoplie, accélérant vos attaques et vos incantations. Environ 10 points de score confèrent 1% de hâte.",
-        "warfare": "Increases damage dealt to players by {increase}% and reduces damage taken from players by {reduction}%."
+        "warfare": "Augmente de {increase} % les dégâts infligés aux joueurs et réduit de {reduction} % les dégâts que les joueurs vous infligent."
       },
       "effects": {
         "attackPower": "+{value} Puissance d'attaque",
@@ -1205,7 +1205,7 @@ export const fr_CA: EnTranslations = {
     "corpseHarvest": {
       "title": "Dépeçage",
       "harvestButton": "Dépecer",
-      "harvestButtonTooltip": "Harvest: gather crafting materials from this corpse (hide, fang, silk, and similar components), separate from any loot. Anyone can harvest; only one player may harvest a given corpse.",
+      "harvestButtonTooltip": "Dépecer : prélevez sur ce cadavre des matériaux d’artisanat (peau, croc, soie et composants similaires), séparément de son butin. Tout le monde peut le dépecer, mais un cadavre donné ne peut l’être que par un seul joueur.",
       "concentrateHint": "Moins vous choisissez de composants, plus la qualité de chacun est élevée.",
       "alreadyHarvested": "Ce cadavre a déjà été dépecé.",
       "componentAria": "Prélever {component}",
@@ -1400,7 +1400,7 @@ export const fr_CA: EnTranslations = {
     },
     "loot": {
       "chestTitle": "Coffre",
-      "takeAllTooltip": "Take All: collect every coin and item in this loot window."
+      "takeAllTooltip": "Tout prendre : récupérez chaque pièce et chaque objet de cette fenêtre de butin."
     },
     "spellbook": {
       "addToBarAria": "Ajouter {name} à la barre d'action",
@@ -1864,7 +1864,7 @@ export const fr_CA: EnTranslations = {
       "trackerLabel": "Hauts faits",
       "collapseHint": "Réduire le suivi des hauts faits",
       "expandHint": "Déployer le suivi des hauts faits",
-      "openBookHint": "Open the Book of Deeds",
+      "openBookHint": "Ouvrir le Livre des hauts faits",
       "charTitleLabel": "Titre",
       "charTitleNone": "Aucun titre choisi",
       "charOpenBook": "Livre des hauts faits",
@@ -5878,8 +5878,8 @@ export const fr_CA: EnTranslations = {
         "description": "Une vague de soins massive: rend {damage} points de vie. Temps de recharge de 10 min."
       },
       "holy_taunt": {
-        "name": "Sacred Goad",
-        "description": "Taunts the target: your threat rises to match its most hated enemy and it is compelled to attack you for 3 sec."
+        "name": "Provocation sacrée",
+        "description": "Provoque la cible : votre menace rejoint celle de l’ennemi qu’elle déteste le plus et elle est contrainte de vous attaquer pendant 3 s."
       },
       "flash_of_light": {
         "name": "Lightmend",
@@ -6210,8 +6210,8 @@ export const fr_CA: EnTranslations = {
         "description": "Frappe la cible et inflige les dégâts de l’arme plus {damage} points de dégâts du Sacré. (talent de paladin)"
       },
       "chain_heal": {
-        "name": "Chain Heal",
-        "description": "Heals a friendly target for a large amount, then jumps to up to 2 additional nearby allies, healing for 50% less with each jump. (Restoration signature)"
+        "name": "Salve de guérison",
+        "description": "Rend une grande quantité de points de vie à une cible alliée, puis rebondit sur un maximum de 2 autres alliés proches, avec des soins réduits de 50 % à chaque rebond. (signature Restauration)"
       },
       "metamorphosis": {
         "name": "Métamorphose",
@@ -6326,32 +6326,32 @@ export const fr_CA: EnTranslations = {
         "description": "Soumet un Wraithborn à votre volonté, un démon d'élite qui déverse de lourds dégâts d'Ombre à distance. Un long temps de recharge bride sa puissance dévastatrice. Invoquer un nouveau démon renvoie celui que vous avez. Vous ne pouvez avoir qu'un démon à la fois."
       },
       "pummel": {
-        "name": "Jawcrack",
-        "description": "Interrupts the target's spellcast and prevents casting from that school for 4 sec."
+        "name": "Casse-mâchoire",
+        "description": "Interrompt l’incantation de la cible et l’empêche de lancer des sorts de cette école de magie pendant 4 s."
       },
       "kick": {
-        "name": "Boot",
-        "description": "Interrupts the target's spellcast and prevents casting from that school for 4 sec."
+        "name": "Coup de pied",
+        "description": "Interrompt l’incantation de la cible et l’empêche de lancer des sorts de cette école de magie pendant 4 s."
       },
       "counterspell": {
-        "name": "Spellbreak",
-        "description": "Counters the target's spellcast and prevents casting from that school for 6 sec."
+        "name": "Brise-sort",
+        "description": "Contre l’incantation de la cible et l’empêche de lancer des sorts de cette école de magie pendant 6 s."
       },
       "counter_shot": {
-        "name": "Hushing Shot",
-        "description": "A snap shot that interrupts the target's spellcast and locks that school for 4 sec."
+        "name": "Tir muselant",
+        "description": "Un tir vif qui interrompt l’incantation de la cible et bloque cette école de magie pendant 4 s."
       },
       "rebuke": {
-        "name": "Reproach",
-        "description": "Interrupts the target's spellcast and prevents casting from that school for 4 sec."
+        "name": "Réprimande",
+        "description": "Interrompt l’incantation de la cible et l’empêche de lancer des sorts de cette école de magie pendant 4 s."
       },
       "skull_bash": {
-        "name": "Headbutt",
-        "description": "A lunging headbutt that interrupts the target's spellcast and locks that school for 4 sec."
+        "name": "Coup de tête",
+        "description": "Un coup de tête porté en bondissant qui interrompt l’incantation de la cible et bloque cette école de magie pendant 4 s."
       },
       "spell_lock": {
-        "name": "Gag Order",
-        "description": "Silences the target mid-cast and prevents casting from that school for 5 sec."
+        "name": "Ordre de silence",
+        "description": "Réduit la cible au silence en pleine incantation et l’empêche de lancer des sorts de cette école de magie pendant 5 s."
       },
       "bear_charge": {
         "name": "Ruée de Bruin",
@@ -6997,124 +6997,124 @@ export const fr_CA: EnTranslations = {
         "name": "Herbe Pétale de Soleil"
       },
       "furyforged_warhelm": {
-        "name": "Furyforged Warhelm"
+        "name": "Heaume de guerre forgé par la fureur"
       },
       "furyforged_warspaulders": {
-        "name": "Furyforged Warspaulders"
+        "name": "Spallières de guerre forgées par la fureur"
       },
       "furyforged_warplate": {
-        "name": "Furyforged Warplate"
+        "name": "Cuirasse de guerre forgée par la fureur"
       },
       "furyforged_girdle": {
-        "name": "Furyforged Girdle"
+        "name": "Ceinturon forgé par la fureur"
       },
       "furyforged_legguards": {
-        "name": "Furyforged Legguards"
+        "name": "Garde-jambes forgés par la fureur"
       },
       "furyforged_gauntlets": {
-        "name": "Furyforged Gauntlets"
+        "name": "Gantelets forgés par la fureur"
       },
       "furyforged_sabatons": {
-        "name": "Furyforged Sabatons"
+        "name": "Solerets forgés par la fureur"
       },
       "stormbound_crown": {
-        "name": "Stormbound Crown"
+        "name": "Couronne liée à l’orage"
       },
       "stormbound_spaulders": {
-        "name": "Stormbound Spaulders"
+        "name": "Spallières liées à l’orage"
       },
       "stormbound_hauberk": {
-        "name": "Stormbound Hauberk"
+        "name": "Haubert lié à l’orage"
       },
       "stormbound_waistguard": {
-        "name": "Stormbound Waistguard"
+        "name": "Garde-taille lié à l’orage"
       },
       "stormbound_legmail": {
-        "name": "Stormbound Legmail"
+        "name": "Jambières de mailles liées à l’orage"
       },
       "stormbound_handguards": {
-        "name": "Stormbound Handguards"
+        "name": "Garde-mains liés à l’orage"
       },
       "stormbound_greaves": {
-        "name": "Stormbound Greaves"
+        "name": "Grèves liées à l’orage"
       },
       "ashstalker_cowl": {
-        "name": "Ashstalker Cowl"
+        "name": "Capuche du traque-cendres"
       },
       "ashstalker_shoulderguards": {
-        "name": "Ashstalker Shoulderguards"
+        "name": "Garde-épaules du traque-cendres"
       },
       "ashstalker_harness": {
-        "name": "Ashstalker Harness"
+        "name": "Harnais du traque-cendres"
       },
       "ashstalker_waistband": {
-        "name": "Ashstalker Waistband"
+        "name": "Ceinture du traque-cendres"
       },
       "ashstalker_legguards": {
-        "name": "Ashstalker Legguards"
+        "name": "Garde-jambes du traque-cendres"
       },
       "ashstalker_grips": {
-        "name": "Ashstalker Grips"
+        "name": "Gants du traque-cendres"
       },
       "ashstalker_treads": {
-        "name": "Ashstalker Treads"
+        "name": "Bottines du traque-cendres"
       },
       "cinderweave_cowl": {
-        "name": "Cinderweave Cowl"
+        "name": "Capuche tissebraise"
       },
       "cinderweave_mantle": {
-        "name": "Cinderweave Mantle"
+        "name": "Mantelet tissebraise"
       },
       "cinderweave_raiment": {
-        "name": "Cinderweave Raiment"
+        "name": "Atours tissebraise"
       },
       "cinderweave_cord": {
-        "name": "Cinderweave Cord"
+        "name": "Cordon tissebraise"
       },
       "cinderweave_legwraps": {
-        "name": "Cinderweave Legwraps"
+        "name": "Bandelettes tissebraise"
       },
       "cinderweave_handwraps": {
-        "name": "Cinderweave Handwraps"
+        "name": "Protège-mains tissebraise"
       },
       "cinderweave_slippers": {
-        "name": "Cinderweave Slippers"
+        "name": "Pantoufles tissebraise"
       },
       "final_oath_medallion": {
-        "name": "Medallion of the Final Oath"
+        "name": "Médaillon du dernier carré"
       },
       "razorwind_torque": {
-        "name": "Razorwind Torque"
+        "name": "Torque du vent-rasoir"
       },
       "cinder_sigil_pendant": {
-        "name": "Cinder-Sigil Pendant"
+        "name": "Pendentif au sceau de braise"
       },
       "iron_vow_band": {
-        "name": "Iron Vow Band"
+        "name": "Anneau du serment de fer"
       },
       "unbroken_circle": {
-        "name": "The Unbroken Circle"
+        "name": "Le cercle invaincu"
       },
       "fleetblood_band": {
-        "name": "Fleetblood Band"
+        "name": "Anneau sang-vif"
       },
       "last_step_signet": {
-        "name": "Last-Step Signet"
+        "name": "Chevalière du dernier pas"
       },
       "ashen_focus_ring": {
-        "name": "Ashen Focus Ring"
+        "name": "Anneau de concentration cendrée"
       },
       "spellbreakers_seal": {
-        "name": "Spellbreaker's Seal"
+        "name": "Sceau du Brise-sort"
       },
       "final_argument_greatblade": {
-        "name": "Final Argument Greatblade"
+        "name": "Grande lame de l’ultime argument"
       },
       "first_blood_razor": {
-        "name": "First-Blood Razor"
+        "name": "Rasoir du premier sang"
       },
       "emberglass_warstaff": {
-        "name": "Emberglass Warstaff"
+        "name": "Bâton de guerre de verre ardent"
       },
       "bristleback_maul": {
         "name": "Marteau Gallowglass"
@@ -8254,9 +8254,9 @@ export const fr_CA: EnTranslations = {
         "greeting": "La preuve des profondeurs héroïques achète les plus belles bagues et les plus beaux pendentifs de Highwatch. Montre-moi tes marques."
       },
       "fury": {
-        "name": "FURY",
-        "title": "Honor Quartermaster",
-        "greeting": "The sands remember every victory. Spend your honor well."
+        "name": "FURIE",
+        "title": "Intendant de l’honneur",
+        "greeting": "Les sables se souviennent de chaque victoire. Dépensez votre honneur à bon escient."
       },
       "loremaster_caddis": {
         "name": "Maître du savoir Caddis",

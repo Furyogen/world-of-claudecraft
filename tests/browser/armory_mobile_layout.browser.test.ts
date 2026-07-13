@@ -41,7 +41,8 @@ describe('mobile Armory landscape layout', () => {
     const store = host('daily-rewards-window');
     store.classList.add('store-active');
     store.innerHTML =
-      '<div class="panel-title"><span>WOC Store</span><button class="x-btn">Close</button></div>' +
+      '<div class="panel-title"><span>WOC Store</span>' +
+      `<button type="button" class="x-btn" data-close aria-label="Close WOC Store">${svgIcon('close')}</button></div>` +
       '<div class="woc-store-tabs"><button>Store</button><button>Daily Rewards</button></div>' +
       '<div class="dr-body woc-store-body">' +
       '<section class="armory-section rarity-rare"><header><div><span>Rare</span>' +
@@ -82,7 +83,7 @@ describe('mobile Armory landscape layout', () => {
     overlay.className = 'armory-inspect-overlay open';
     overlay.innerHTML =
       '<div class="armory-inspect rarity-rare" role="dialog">' +
-      `<button type="button" class="x-btn armory-inspect-close" data-armory-close aria-label="Close">${svgIcon('close')}</button>` +
+      `<button type="button" class="x-btn armory-inspect-close" data-armory-close aria-label="Close WOC Store">${svgIcon('close')}</button>` +
       '<div class="armory-inspect-stage"><canvas></canvas><div class="armory-inspect-controls">' +
       '<div class="armory-mode-toggle"><button>Try On</button><button>Weapon</button></div>' +
       '<div class="armory-scene-toggle"><button>Day</button><button>Dusk</button><button>Night</button></div>' +
