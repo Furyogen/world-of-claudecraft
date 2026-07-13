@@ -1047,8 +1047,8 @@
       "tick": 101,
       "time": 5.05,
       "nextId": 412,
-      "state": "42ab5a11",
-      "events": "85d9b432",
+      "state": "47d8b050",
+      "events": "d0d9c966",
       "rng": {
         "draws": 300,
         "digest": "bf906891"
@@ -1103,12 +1103,14 @@
           },
           "gatheringProficiency": {},
           "heroicDaily": {},
+          "honor": 20,
           "inventory": [
             {
               "count": 5,
               "itemId": "baked_bread"
             }
           ],
+          "lifetimeHonor": 20,
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
@@ -1534,7 +1536,7 @@
       "tick": 125,
       "time": 6.25,
       "nextId": 412,
-      "state": "308dbd19",
+      "state": "67a5a0f8",
       "events": "741638a5",
       "rng": {
         "draws": 429,
@@ -1545,7 +1547,7 @@
       "tick": 142,
       "time": 7.1,
       "nextId": 412,
-      "state": "35fa1f01",
+      "state": "985e3ca0",
       "events": "741638a5",
       "rng": {
         "draws": 524,
@@ -1601,12 +1603,14 @@
           },
           "gatheringProficiency": {},
           "heroicDaily": {},
+          "honor": 20,
           "inventory": [
             {
               "count": 5,
               "itemId": "baked_bread"
             }
           ],
+          "lifetimeHonor": 20,
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
