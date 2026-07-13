@@ -1,5 +1,5 @@
 import { spawn } from 'node:child_process';
-import { access, chmod, mkdir, mkdtemp, rm, symlink, writeFile } from 'node:fs/promises';
+import { access, chmod, mkdir, mkdtemp, readFile, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
@@ -9,7 +9,12 @@ import {
   prepareOutputDirectory,
   pruneCaptures,
 } from '../scripts/prod_cpu_monitor_artifacts.mjs';
-import { gameNodePidScript, profileCommand } from '../scripts/prod_cpu_monitor_commands.mjs';
+import {
+  containerIdentityCommand,
+  containerIdentityMatchesOwner,
+  gameProcessCommand,
+  profileCommand,
+} from '../scripts/prod_cpu_monitor_commands.mjs';
 import { remoteLockCommand, runProcess } from '../scripts/prod_cpu_monitor_process.mjs';
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -103,19 +108,19 @@ describe('production CPU monitor configuration', () => {
     });
   });
 
-  it('builds a PID guard that cannot signal an ambiguous or current helper process', () => {
-    const inspectOnly = gameNodePidScript({ signal: false });
-    const signaling = gameNodePidScript({ signal: true, expectedPid: 42 });
-    expect(inspectOnly).toContain('[ "$' + '{proc##*/}" = "$$" ] && continue');
-    expect(inspectOnly).toContain('exe=$(readlink "$proc/exe"');
-    expect(inspectOnly).toContain('[ "$arg1" = "dist-server/server.cjs" ]');
-    expect(inspectOnly).toContain('[ "$count" -ne 1 ]');
-    expect(inspectOnly).not.toContain('kill -USR1');
-    expect(signaling).toContain('[ "$pid" = "42" ]');
-    expect(signaling.indexOf('[ "$pid" = "42" ]')).toBeLessThan(
-      signaling.indexOf('kill -USR1 "$pid"'),
-    );
-    expect(signaling).toContain('kill -USR1 "$pid"');
+  it('uses immutable in-image helpers instead of executing monitor-supplied stdin', async () => {
+    const inspectOnly = gameProcessCommand(DEFAULT_MONITOR_OPTIONS, false);
+    const signaling = gameProcessCommand(DEFAULT_MONITOR_OPTIONS, true, 42);
+    const profile = profileCommand(DEFAULT_MONITOR_OPTIONS, 42);
+    expect(inspectOnly).toContain('/app/ops/prod_cpu_game_helper.mjs pid');
+    expect(signaling).toContain('/app/ops/prod_cpu_game_helper.mjs signal 42');
+    expect(profile).toContain('/app/ops/prod_cpu_profile_client.mjs');
+    expect(`${inspectOnly}\n${signaling}\n${profile}`).not.toContain(' --input-type=module -');
+    expect(`${inspectOnly}\n${signaling}\n${profile}`).not.toContain(' docker exec -i ');
+
+    const dockerfile = await readFile(new URL('../Dockerfile', import.meta.url), 'utf8');
+    expect(dockerfile).toContain('/app/scripts/prod_cpu_game_helper.mjs /app/ops/');
+    expect(dockerfile).toContain('/app/scripts/prod_cpu_profile_client.mjs /app/ops/');
   });
 
   it('pins the inspector client to the discovered game PID and requests shutdown', () => {
@@ -123,6 +128,29 @@ describe('production CPU monitor configuration', () => {
     expect(command).toContain('WOC_EXPECTED_PID=42');
     expect(command).toContain('WOC_PROFILE_SAMPLE_INTERVAL_US=4000');
     expect(command).toContain('WOC_CLOSE_INSPECTOR=1');
+  });
+
+  it('binds inspector ownership to the exact container start identity', () => {
+    const identity = {
+      containerId: 'a'.repeat(64),
+      containerStartedAt: '2026-07-13T00:00:00.000000000Z',
+    };
+    const command = containerIdentityCommand(DEFAULT_MONITOR_OPTIONS);
+    expect(command).toContain('.Id');
+    expect(command).toContain('.State.StartedAt');
+    expect(containerIdentityMatchesOwner(identity, identity)).toBe(true);
+    expect(
+      containerIdentityMatchesOwner(identity, {
+        ...identity,
+        containerId: 'b'.repeat(64),
+      }),
+    ).toBe(false);
+    expect(
+      containerIdentityMatchesOwner(identity, {
+        ...identity,
+        containerStartedAt: '2026-07-13T00:01:00.000000000Z',
+      }),
+    ).toBe(false);
   });
 
   it('uses a fresh option set for inspector cleanup after capture cancellation', () => {
@@ -471,9 +499,11 @@ describe('production CPU polling orchestration', () => {
   });
 
   it('records a failed attempt so an overloaded server is not profiled again immediately', async () => {
+    let current = 5_000;
     const result = await pollOnce({
       readCpu: async () => '99%\n99%\n99%',
       capture: async () => {
+        current = 190_000;
         throw new Error('profile unavailable');
       },
       state: {
@@ -483,12 +513,12 @@ describe('production CPU polling orchestration', () => {
         lastCaptureAt: null,
       },
       options: DEFAULT_MONITOR_OPTIONS,
-      now: () => 5_000,
+      now: () => current,
       log: vi.fn(),
     });
     expect(result.status).toBe('capture-failed');
     expect(result.nextState.incidentActive).toBe(true);
-    expect(result.nextState.lastAttemptAt).toBe(5_000);
+    expect(result.nextState.lastAttemptAt).toBe(190_000);
     expect(result.nextState.lastCaptureAt).toBeNull();
   });
 
