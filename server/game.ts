@@ -22,6 +22,7 @@ import {
   delveAt,
   dungeonAt,
   isDelvePos,
+  MOBS,
   zoneAt,
 } from '../src/sim/data';
 import { devTierIndexForMergedPrs } from '../src/sim/dev_tier';
@@ -128,6 +129,11 @@ import { loadActiveBlockedIps } from './ip_block_db';
 import { LINKDEAD_GRACE_MS, planJoin } from './linkdead';
 import { type LiveSharedIp, sharedIpsFromLiveSessions } from './live_shared_ips';
 import { trackReachedLevel5 } from './meta_capi';
+import {
+  applyMobScanTick,
+  createMobScanTickStats,
+  resetMobScanCaptureAccumulators,
+} from './mob_scan_tick_stats';
 import {
   forceCharacterRename,
   moderateAccount,
@@ -236,6 +242,25 @@ const TICK_EMA_ALPHA = 0.05;
 const PERF_CAPTURE_MIN_MS = 3_000;
 const PERF_CAPTURE_MAX_MS = 30_000;
 const PERF_CAPTURE_DEFAULT_MS = 10_000;
+// The mob.update sim lap is additionally bucketed by mob family so a hot family
+// (a spider swarm, a pack of humanoids) shows up in the profile instead of hiding
+// inside one aggregate number. The 11 MobFamily values (src/sim/types.ts) plus an
+// 'other' catch-all for any templateId whose family does not resolve. Exported so
+// the registry pin can assert the derived bucket names as literals.
+export const MOB_UPDATE_BUCKETS = [
+  'beast',
+  'humanoid',
+  'mudfin',
+  'spider',
+  'burrower',
+  'undead',
+  'troll',
+  'ogre',
+  'elemental',
+  'dragonkin',
+  'demon',
+  'other',
+] as const;
 // sim.tick() internal phase names (already `sim.`-prefixed): must match the
 // lap?.(...) call sites in src/sim/sim.ts tick(). Fed by the injected cfg.perfLap
 // probe while a detailed capture is active (an admin capture or PERF_TICK_LOG=1).
@@ -270,6 +295,10 @@ export const SIM_LAP_PHASES = [
   'delayedEv',
   'deeds',
   'gridRefresh',
+  // Per-family mob.update buckets, appended after the base lap names so those
+  // stay byte-identical and first. The `sim.${n}` map turns each into the registered
+  // `sim.mob.update|<family>` the perfLap probe adds to.
+  ...MOB_UPDATE_BUCKETS.map((b) => `mob.update|${b}`),
 ].map((n) => `sim.${n}`);
 const ARENA_WIRE_HZ = 0.1;
 const ARENA_WIRE_INTERVAL_TICKS = Math.max(1, Math.round(1 / (DT * ARENA_WIRE_HZ)));
@@ -998,6 +1027,10 @@ export interface PerfCaptureResult {
   maxTicksPerCallback: number;
   online: number; // live sessions at capture close
   simEntities: number; // sim entity count at capture close
+  aggroVisitsTotal: number; // aggro-scan player visits summed across the window
+  aggroVisitsMaxPerTick: number; // peak aggro-scan player visits in any one tick
+  threatVisitsTotal: number; // threat-table entry visits summed across the window
+  threatVisitsMaxPerTick: number; // peak threat-table entry visits in any one tick
   profile: ReturnType<TickProfiler['profile']>;
 }
 
@@ -1089,6 +1122,10 @@ export class GameServer {
   // The host-side mark the injected sim perfLap probe diffs against; refreshed just
   // before each sim.tick() call while a detailed capture is active.
   private simLapMark = 0n;
+  // templateId -> its registered `sim.mob.update|<family>` bucket name, so the perfLap
+  // probe pays one Map.get (plus one ring add) per mob per tick in steady state.
+  // Unbounded is fine: templateIds are a finite content set (MOBS).
+  private readonly mobUpdateBucketNames = new Map<string, string>();
   // On-demand capture state (admin-triggered). The deadline is wall-clock based:
   // a saturated sim may commit far fewer or many more ticks than nominal, but a
   // requested 30-second incident capture must still finish after about 30 seconds.
@@ -1110,6 +1147,10 @@ export class GameServer {
   private bcSerializeNs = 0n;
   private bcVisits = 0;
   private bcSerializes = 0;
+  // Mob-scan observability folded out of the loop body (server/mob_scan_tick_stats.ts):
+  // the latest tick's aggro/threat visit counts surfaced on the [perf] heartbeat, plus
+  // the four capture-window accumulators frozen into a PerfCaptureResult.
+  private readonly mobScanTickStats = createMobScanTickStats();
   // Ops kill-switch: SELF_SNAPSHOT_FULL=1 re-diffs every heavy self field every
   // tick (pre-optimization behavior), for A/B benchmarking or rollback.
   private readonly heavySelfGate = process.env.SELF_SNAPSHOT_FULL !== '1';
@@ -1134,10 +1175,16 @@ export class GameServer {
       // `simLapMark` is refreshed right before each sim.tick() call in the loop. The
       // probe is always passed but early-returns unless a detailed capture is active,
       // so the steady-state loop pays only a branch per phase.
-      perfLap: (phase) => {
+      perfLap: (phase: string, subkey?: string) => {
         if (!this.perfDetailActive) return;
         const t = process.hrtime.bigint();
-        this.tickProfiler.add(`sim.${phase}`, Number(t - this.simLapMark) / 1e6);
+        const ms = Number(t - this.simLapMark) / 1e6;
+        this.tickProfiler.add(`sim.${phase}`, ms);
+        // mob.update carries the mob's templateId as the subkey; attribute the same
+        // ms to that mob's family bucket so a hot family is visible in the profile.
+        if (phase === 'mob.update' && typeof subkey === 'string') {
+          this.tickProfiler.add(this.mobUpdateBucketName(subkey), ms);
+        }
         this.simLapMark = t;
       },
       valeCupShowcase: true, // idle Sowfield auto-runs a bot exhibition to watch/bet on
@@ -1604,6 +1651,16 @@ export class GameServer {
             if (this.perfDetailActive) this.simLapMark = process.hrtime.bigint();
             const events = this.sim.tick();
             lap('tick');
+            // Fold this tick's mob-scan counts before the next tick resets them: the
+            // latest-tick values feed the heartbeat, and an in-flight capture sums and
+            // peaks them across its window.
+            const scan = this.sim.mobScanCounters;
+            applyMobScanTick(
+              this.mobScanTickStats,
+              scan.aggroScanPlayerVisits,
+              scan.threatEntryVisits,
+              this.perfCaptureDeadlineNs !== null,
+            );
             this.enforceJailStates();
             this.routeEvents(events);
             this.detectActivity(events);
@@ -2978,6 +3035,7 @@ export class GameServer {
     this.perfCaptureSimTicks = 0;
     this.perfCaptureCatchUpCallbacks = 0;
     this.perfCaptureMaxTicksPerCallback = 0;
+    resetMobScanCaptureAccumulators(this.mobScanTickStats);
     this.perfCaptureEndsAtMs = Date.now() + clamped;
     this.perfCaptureDeadlineNs = process.hrtime.bigint() + BigInt(clamped) * 1_000_000n;
     return this.perfCaptureStatus();
@@ -3003,6 +3061,19 @@ export class GameServer {
     this.perfCaptureMaxTicksPerCallback = Math.max(this.perfCaptureMaxTicksPerCallback, ticksRun);
   }
 
+  // Resolve (and memoize) the registered profiler bucket for a mob template. A
+  // templateId whose family does not resolve falls into 'other'; every result is a
+  // name registered via MOB_UPDATE_BUCKETS, so TickProfiler.add never drops it.
+  private mobUpdateBucketName(templateId: string): string {
+    let name = this.mobUpdateBucketNames.get(templateId);
+    if (name === undefined) {
+      const family = MOBS[templateId]?.family ?? 'other';
+      name = `sim.mob.update|${family}`;
+      this.mobUpdateBucketNames.set(templateId, name);
+    }
+    return name;
+  }
+
   // Close an in-flight capture once its monotonic deadline passes: freeze the profile
   // and revert the detailed-timing switch to its baseline (env, so PERF_TICK_LOG keeps
   // working). Called once per loop body, right after commit.
@@ -3020,6 +3091,10 @@ export class GameServer {
       maxTicksPerCallback: this.perfCaptureMaxTicksPerCallback,
       online: this.clients.size,
       simEntities: this.sim.entities.size,
+      aggroVisitsTotal: this.mobScanTickStats.aggroVisitsTotal,
+      aggroVisitsMaxPerTick: this.mobScanTickStats.aggroVisitsMaxPerTick,
+      threatVisitsTotal: this.mobScanTickStats.threatVisitsTotal,
+      threatVisitsMaxPerTick: this.mobScanTickStats.threatVisitsMaxPerTick,
       profile: this.tickProfiler.profile(),
     };
     this.perfCaptureDeadlineNs = null;
@@ -3042,7 +3117,7 @@ export class GameServer {
     console.log(
       `[perf] online=${this.clients.size} ents=${this.sim.entities.size} tickHz=${this.tickHz == null ? 'n/a' : round2(this.tickHz)} tickMs=${round2(tickMs)}${overBudget ? ' OVER' : ''}` +
         ` | p95/max ${['total', 'tick', 'broadcast', 'bcastSelf', 'bcastGrid', 'events', 'social'].map(fmt).join(' ')}` +
-        ` | visits=${this.bcVisits} serializes=${this.bcSerializes} serializeMs=${round2(Number(this.bcSerializeNs) / 1e6)}`,
+        ` | visits=${this.bcVisits} serializes=${this.bcSerializes} serializeMs=${round2(Number(this.bcSerializeNs) / 1e6)} aggroVisits=${this.mobScanTickStats.lastAggroScanVisits} threatVisits=${this.mobScanTickStats.lastThreatEntryVisits}`,
     );
     // The sim.tick() internal breakdown, mean-sorted so the phase that actually eats
     // the average (not just a spike) leads. Populated only while detailed timing is on.
