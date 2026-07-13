@@ -1859,6 +1859,10 @@ export interface Entity {
   // Z-key cosmetic toggle: held weapons render sheathed on the back. Cleared by
   // any deliberate combat action (auto-attack engage, ability cast), WoW-style.
   weaponStowed: boolean;
+  // Dev-only (/dev sandbox, dev-command realms): suppress out-of-combat HP regen
+  // for this entity so only a tester's own healing moves its bar. Unlike a fake
+  // `eating` payload, combat damage never clears it. Runtime-only, never serialized.
+  devFreezeRegen?: boolean;
   // mob AI
   aiState: AiState;
   tappedById: number | null; // first player to damage this mob owns loot/xp/quest credit

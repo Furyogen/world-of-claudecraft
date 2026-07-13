@@ -386,6 +386,11 @@ export interface SimContextCallbacks {
   // Invite a player to the actor's party by pid (delegates to the PartyMachine);
   // used by the chat "/invite <name>" command in social/chat.ts.
   partyInvite(targetPid: number, pid?: number): void;
+  // Accept a pending party invite, and promote a full party to a raid. Both
+  // delegate to the PartyMachine; used by dev_sandbox.ts to form the practice
+  // group. (Chat's /accept and /convert also delegate through Sim.)
+  partyAccept(pid?: number): void;
+  convertPartyToRaid(pid?: number): void;
   // Start a party/raid ready check as the actor (leader-gated); used by the chat
   // "/ready" command in social/chat.ts. Delegates to social/ready_check.ts.
   readyCheckStart(pid?: number): void;
@@ -423,6 +428,9 @@ export interface SimContextCallbacks {
   addEntity(e: Entity): void;
   dropEntity(id: number): void;
   rebucket(e: Entity): void;
+  // Fully remove a player (leaves social systems, drops the entity). Used by
+  // dev_sandbox.ts to despawn practice bots on reset/leave. Stays on Sim.
+  removePlayer(pid: number): void;
 
   // E1 forward references the moved code consumes; all still on Sim. `resolve`,
   // `groundPos`, `playerMods` are core; `delveRunForPlayer`/`delveModuleEntry`/
@@ -985,6 +993,8 @@ export function createSimContext(host: SimContextHost): SimContext {
     clearEntityMarker: host.clearEntityMarker,
     partyOf: host.partyOf,
     partyInvite: host.partyInvite,
+    partyAccept: host.partyAccept,
+    convertPartyToRaid: host.convertPartyToRaid,
     readyCheckStart: host.readyCheckStart,
     removeFromParty: host.removeFromParty,
     dropPartyMarkers: host.dropPartyMarkers,
@@ -998,6 +1008,7 @@ export function createSimContext(host: SimContextHost): SimContext {
     addEntity: host.addEntity,
     dropEntity: host.dropEntity,
     rebucket: host.rebucket,
+    removePlayer: host.removePlayer,
     resolve: host.resolve,
     groundPos: host.groundPos,
     playerMods: host.playerMods,

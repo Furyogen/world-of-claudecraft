@@ -18,6 +18,7 @@ import { GATHERING_PROFESSIONS } from '../content/professions';
 import { YUMI_TEMPLATE_ID } from '../content/yumi';
 import { CLASSES, ITEMS, zoneAt } from '../data';
 import * as deedsMod from '../deeds';
+import { DEV_SANDBOX_ALREADY_GROUPED } from '../dev_sandbox';
 import { graveyardReadout } from '../entity_roster';
 import { isGatheringProfessionId, queueGatheringGrant } from '../professions/gathering';
 import {
@@ -1007,9 +1008,13 @@ export function handleDevChat(
   if (/^\/(?:dev\s+sandbox|devsandbox)\s*$/i.test(raw)) {
     // [dev] A controlled practice scenario: a non-offensive training dummy plus a raid
     // of reduced-health, regen-frozen friendly bots, for testing abilities threat-free.
-    // Dev-only English diagnostics, routed as a var (dev-channel text, like /dev bot).
+    // These are dev-channel diagnostics (dev-command realms only), which are English-only
+    // by i18n scope, the same as /dev bot's confirmation and console/assert text.
     const allies = ctx.startDevSandbox(pid);
-    const okText = `[dev] Sandbox ready: a training dummy plus ${allies} raid allies at reduced HP with regen frozen. Attack the dummy, then practice heals or AoE on the allies threat-free.`;
+    const okText =
+      allies === DEV_SANDBOX_ALREADY_GROUPED
+        ? '[dev] Sandbox needs you ungrouped: leave your party or raid first, then run /dev sandbox again.'
+        : `[dev] Sandbox ready: a training dummy plus ${allies} raid allies at reduced HP with regen frozen. Attack the dummy, then practice heals or AoE on the allies threat-free.`;
     ctx.emit({ type: 'log', text: okText, pid });
     return null;
   }

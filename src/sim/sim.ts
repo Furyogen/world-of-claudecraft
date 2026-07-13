@@ -127,6 +127,7 @@ import {
 import * as companionMod from './delves/companion';
 import * as lockpickMod from './delves/lockpick_controller';
 import * as runsMod from './delves/runs';
+import { cleanupDevSandbox, startDevSandbox as startDevSandboxImpl } from './dev_sandbox';
 import { projectOutsideDungeonDoors } from './dungeon_door_clearance';
 import * as nythraxis from './encounters/nythraxis';
 // A3: ARENA_SPAWNS_A_2v2/B_2v2 (read only by the moved fiestaRevive) now live with
@@ -808,6 +809,10 @@ export interface PlayerMeta {
   // devCommands): a stationary player you can target and whisper to exercise social
   // features offline; a whisper to it auto-replies. Runtime-only, never serialized.
   isDevBot?: boolean;
+  // Dev-only (/dev sandbox, dev-command realms): the entity ids of the practice
+  // dummy and allies THIS player spawned. Keyed per caster so re-running resets
+  // only their scenario and Sim.removePlayer despawns it with them. Runtime-only.
+  devSandboxIds?: number[];
   skin: number; // appearance index into the render SKINS[player_<cls>]; persisted, synced
   skinCatalog: SkinCatalog;
   // Cosmetic skin-select event: the rank rolled when the event token was used,
@@ -1333,9 +1338,6 @@ export class Sim {
   bankerIds: number[] = [];
   /** When true, /dev level|tp|give chat commands are accepted (local dev only). */
   readonly devCommands: boolean;
-  // Entities spawned by the last /dev sandbox (dummy + practice bots), so re-running
-  // the command clears the previous scenario instead of piling more on. Dev only.
-  private devSandboxIds: number[] = [];
   private pendingMobRespawns: PendingMobRespawn[] = [];
   private groundAoEs: GroundAoE[] = [];
   // Book of Deeds: players whose deed-relevant state changed this tick (the
@@ -2126,110 +2128,20 @@ export class Sim {
     return pid;
   }
 
-  // A friendly practice bot for /dev sandbox: a LEVEL-20 stationary ally dropped at an
-  // exact spot (a level-1 bot has so little health that a single heal refills it). No
-  // name-uniqueness gate, so /dev sandbox can be re-run. Dev only.
-  private spawnSandboxBot(name: string, x: number, z: number): number {
-    const id = this.addPlayer('mage', name);
-    const meta = this.players.get(id);
-    if (meta) meta.isDevBot = true;
-    this.setPlayerLevel(20, id); // a full pool, so healing reads as it climbs
-    const e = this.entities.get(id);
-    if (e) {
-      e.pos = this.groundPos(x, z);
-      e.prevPos = { ...e.pos };
-      this.rebucket(e);
-    }
-    return id;
-  }
-
   // /dev sandbox: a controlled practice scenario for testing abilities (dev-command
-  // realms only). Spawns a NON-offensive training dummy in front (aggroRadius 0 /
-  // moveSpeed 0, so nothing chases you) plus a raid of friendly LEVEL-20 allies at
-  // reduced health with out-of-combat regen FROZEN, so only your own healing (or
-  // damage) moves their bars. Attack the dummy to build resources, then practice heals
-  // or AoE on the allies with a clean, threat-free readout of what your abilities do.
+  // realms only). Thin delegator: the scenario is a self-contained dev system in
+  // src/sim/dev_sandbox.ts, behind the SimContext seam. The dev-channel confirmation
+  // is emitted by the /dev sandbox chat handler (like /dev bot).
   startDevSandbox(pid?: number): number {
-    const casterId = pid ?? this.primaryId;
-    const me = this.entities.get(casterId);
-    if (!me) return 0;
-    // Clear the PREVIOUS sandbox so re-running RESETS it (and refills the "hurt" allies)
-    // instead of piling on more bodies. Only entities THIS command spawned are removed,
-    // so the world's own training dummy is never touched.
-    for (const id of this.devSandboxIds) {
-      if (this.players.has(id)) this.removePlayer(id);
-      else this.dropEntity(id);
-    }
-    this.devSandboxIds = [];
-    // A roomy 10k pool started low: you can heal for a good while AND watch the bar
-    // climb (a near-infinite pool would barely move).
-    const cfg = {
-      dummyOffset: { x: -3, z: 4 },
-      bots: 5,
-      botZ: 2,
-      botX0: 2,
-      botGap: 1.5,
-      maxHp: 10_000,
-      hp: 0.15,
-    };
-    const dummy = createMob(
-      this.nextId++,
-      MOBS.training_dummy,
-      20,
-      this.groundPos(me.pos.x + cfg.dummyOffset.x, me.pos.z + cfg.dummyOffset.z),
-    );
-    dummy.hostile = true;
-    this.addEntity(dummy);
-    // A tight front-right cluster, close enough that the cast line of sight stays clear.
-    const botIds: number[] = [];
-    for (let i = 0; i < cfg.bots; i++) {
-      botIds.push(
-        this.spawnSandboxBot(
-          `Practice${i + 1}`,
-          me.pos.x + cfg.botX0 + i * cfg.botGap,
-          me.pos.z + cfg.botZ,
-        ),
-      );
-    }
-    // Raid so party/raid-only support abilities can reach every bot (a 5-cap party
-    // would drop the last body): fill a full party, convert, then add the rest.
-    for (const id of botIds.slice(0, 4)) {
-      this.partyInvite(id, casterId);
-      this.partyAccept(id);
-    }
-    if (botIds.length >= 5) this.party.convertPartyToRaid(casterId);
-    for (const id of botIds.slice(4)) {
-      this.partyInvite(id, casterId);
-      this.partyAccept(id);
-    }
-    for (const id of botIds) {
-      const e = this.entities.get(id);
-      if (!e) continue;
-      // A roomy 10k pool started low, so a healer can top them off for a good while
-      // and the bar visibly climbs.
-      e.maxHp = cfg.maxHp;
-      e.hp = Math.max(1, Math.round(cfg.maxHp * cfg.hp));
-      // Freeze out-of-combat regen with a zero-value "food": trips the `!p.eating`
-      // guard in updateRegen, heals nothing, and an idle unsitting bot next to the
-      // non-damaging dummy never clears it. So only YOUR abilities move the bar.
-      e.eating = {
-        itemId: 'dev_sandbox_freeze',
-        kind: 'food',
-        hpPer2s: 0,
-        manaPer2s: 0,
-        remaining: 1_000_000,
-      };
-    }
-    // Remember what we spawned so the NEXT /dev sandbox can clear it (reset).
-    this.devSandboxIds = [dummy.id, ...botIds];
-    // The dev-channel confirmation is emitted by the /dev sandbox chat handler (like
-    // /dev bot), keeping this dev diagnostic out of the S3 sim.ts emit scanner.
-    return botIds.length;
+    return startDevSandboxImpl(this.ctx, pid);
   }
 
   removePlayer(pid: number): void {
     const meta = this.players.get(pid);
     if (!meta) return;
+    // Despawn any /dev sandbox this player owns before the rest of the teardown, so
+    // their practice bots and dummy leave with them (never orphaned in the world).
+    cleanupDevSandbox(this.ctx, pid);
     // If the leaver owns a live lockpick session, abandon it (preserves
     // attemptAvailable so a remaining party member can still pick the chest).
     // Must run before party removal / dropEntity, since delveRunForPlayer
@@ -3164,6 +3076,8 @@ export class Sim {
       removeEnchantableItem: sim.removeEnchantableItem.bind(sim),
       partyOf: sim.partyOf.bind(sim),
       partyInvite: (targetPid: number, pid?: number) => sim.party.partyInvite(targetPid, pid),
+      partyAccept: (pid?: number) => sim.party.partyAccept(pid),
+      convertPartyToRaid: (pid?: number) => sim.party.convertPartyToRaid(pid),
       readyCheckStart: (pid?: number) => sim.readyCheckStart(pid),
       removeFromParty: (pid: number, verb: string) => sim.party.removeFromParty(pid, verb),
       // dropPartyMarkers flips to the T1 marker store (targeting); lazy arrow since
@@ -3200,6 +3114,7 @@ export class Sim {
       addEntity: sim.addEntity.bind(sim),
       dropEntity: sim.dropEntity.bind(sim),
       rebucket: sim.rebucket.bind(sim),
+      removePlayer: sim.removePlayer.bind(sim),
       resolve: sim.resolve.bind(sim),
       groundPos: sim.groundPos.bind(sim),
       playerMods: sim.playerMods.bind(sim),
