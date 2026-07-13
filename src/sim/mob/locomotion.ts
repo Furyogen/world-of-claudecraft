@@ -246,6 +246,7 @@ export function updateMob(ctx: SimContext, mob: Entity): void {
         let detected: Entity | null = null;
         let detectedD = Infinity;
         ctx.playerGrid.forEachInRadius(mob.pos.x, mob.pos.z, 25, (e, d2) => {
+          ctx.mobScanCounters.aggroScanPlayerVisits++;
           if (e.dead) return;
           const radius = Math.max(
             4,
@@ -264,6 +265,7 @@ export function updateMob(ctx: SimContext, mob: Entity): void {
       let detected: Entity | null = null;
       let detectedD = Infinity;
       ctx.playerGrid.forEachInRadius(mob.pos.x, mob.pos.z, 25, (e, d2) => {
+        ctx.mobScanCounters.aggroScanPlayerVisits++;
         if (e.dead) return;
         if (isTrivialTo(mob, e)) return;
         let radius = Math.max(

@@ -68,6 +68,7 @@ export function highestThreatTarget(ctx: SimContext, mob: Entity): Entity | null
   let best: Entity | null = null;
   let bestT = -1;
   for (const [id, t] of mob.threat) {
+    ctx.mobScanCounters.threatEntryVisits++;
     const e = ctx.entities.get(id);
     if (!e || e.dead) {
       mob.threat.delete(id);
@@ -122,6 +123,7 @@ export function updateMobTarget(ctx: SimContext, mob: Entity): void {
     combatProfileForMob(mob.templateId, mob.scale).meleeRange,
   );
   for (const [id, t] of mob.threat) {
+    ctx.mobScanCounters.threatEntryVisits++;
     if (id === cur.id || t <= bestT) continue;
     const e = ctx.entities.get(id);
     if (!e || e.dead) {

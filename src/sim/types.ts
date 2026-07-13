@@ -2747,7 +2747,7 @@ export interface SimConfig {
   // `phase` (keeps wall-clock reads out of the sim, per the determinism guard). The
   // server injects it to feed its tick profiler during an on-demand capture; undefined
   // offline/headless, so the sim draws no wall clock in a deterministic scenario.
-  perfLap?: (phase: string) => void;
+  perfLap?: (phase: string, subkey?: string) => void;
   // When true, the Sowfield auto-runs a bot-vs-bot showcase match after a stretch
   // of no queue activity, so a walk-up spectator always has a game to watch (and
   // bet on). Server + offline game enable it; tests/goldens leave it off so the
