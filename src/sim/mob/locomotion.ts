@@ -245,8 +245,11 @@ export function updateMob(ctx: SimContext, mob: Entity): void {
         const template = MOBS[mob.templateId];
         let detected: Entity | null = null;
         let detectedD = Infinity;
+        // Resolved once per scan, not per candidate: the ctx member is a live getter
+        // chain and this callback is a per-visit hot path.
+        const counters = ctx.mobScanCounters;
         ctx.playerGrid.forEachInRadius(mob.pos.x, mob.pos.z, 25, (e, d2) => {
-          ctx.mobScanCounters.aggroScanPlayerVisits++;
+          counters.aggroScanPlayerVisits++;
           if (e.dead) return;
           const radius = Math.max(
             4,
@@ -264,8 +267,10 @@ export function updateMob(ctx: SimContext, mob: Entity): void {
       const template = MOBS[mob.templateId];
       let detected: Entity | null = null;
       let detectedD = Infinity;
+      // Resolved once per scan, not per candidate (same reason as the boss branch).
+      const counters = ctx.mobScanCounters;
       ctx.playerGrid.forEachInRadius(mob.pos.x, mob.pos.z, 25, (e, d2) => {
-        ctx.mobScanCounters.aggroScanPlayerVisits++;
+        counters.aggroScanPlayerVisits++;
         if (e.dead) return;
         if (isTrivialTo(mob, e)) return;
         let radius = Math.max(
