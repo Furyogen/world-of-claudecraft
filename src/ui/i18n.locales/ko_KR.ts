@@ -3643,6 +3643,200 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_nythraxis_scourges_end.completion':
     '마침내 왕관이 침묵했습니다. 손피크는 여전히 죽은 이들을 품겠지만, 산 아래의 어떤 왕도 다시 그들을 전쟁으로 부르지 못할 것입니다. 당신은 알드렌과 말릭, 보스가 겨우 억눌렀던 일을 끝냈습니다.',
   'entities.quests.q_nythraxis_scourges_end.objectives.0.label': '니트락시스 처치',
+  // --- Scorching Wastes world content ---
+  'entities.mobs.duskmane_prowler.name': '황혼갈기 배회자',
+  'entities.mobs.glasscarab.name': '유리풍뎅이',
+  'entities.mobs.duneblade_marauder.name': '사구검단 약탈자',
+  'entities.mobs.karesh_the_parched.name': '메마른 카레쉬',
+  'entities.mobs.vigil_sentinel.name': '철야의 파수병',
+  'entities.mobs.sunbaked_revenant.name': '햇볕에 그을린 망령',
+  'entities.mobs.ashen_courtier.name': '잿빛 궁정인',
+  'entities.mobs.sunspeaker_atharis.name': '태양대변자 아타리스',
+  'entities.mobs.emberveil_zealot.name': '불씨 장막 광신도',
+  'entities.mobs.emberveil_pyromancer.name': '불씨 장막 화염술사',
+  'entities.mobs.cinder_elemental.name': '불씨 정령',
+  'entities.mobs.moltenheart_colossus.name': '용융심장 거상',
+  'entities.mobs.cinder_wisp.name': '불씨 도깨비불',
+  'entities.mobs.ember_of_korzul.name': '최초의 불씨',
+  'entities.npcs.caravan_master_saffa.name': '대상 행수 사파',
+  'entities.npcs.caravan_master_saffa.title': '마지막 우물의 지킴이',
+  'entities.npcs.caravan_master_saffa.greeting':
+    '이곳에서는 물이 유일한 화폐입니다, 친구여. 하이워치는 그 화폐를 잘 쓰라고 우리를 보냈는데 — 이 황무지는 우리를 파산시킬 작정이지요.',
+  'entities.npcs.scout_maren_wastes.name': '정찰병 마렌',
+  'entities.npcs.scout_maren_wastes.title': '원수의 정찰병',
+  'entities.npcs.scout_maren_wastes.greeting':
+    '마이어펜에서는 진흙을, 쏜피크에서는 눈을 헤치며 흔적을 쫓았습니다. 모래는 더 고약합니다. 모래는 당신이 내디딘 걸음을 하나도 잊지 않으니까요.',
+  'entities.npcs.loremaster_caddis_wastes.name': '현자 캐디스',
+  'entities.npcs.loremaster_caddis_wastes.title': '가라앉은 왕관의 학자',
+  'entities.npcs.loremaster_caddis_wastes.greeting':
+    '자르케스는 단 하룻밤에 무너졌네, {playerName} — 한 왕국 전체가 문장을 맺다 말고 유리로 굳어 버렸지. 나는 그 문장의 나머지를 듣기 위해 평생을 기다려 왔다네.',
+  'entities.npcs.brother_aldric_wastes.name': '알드릭 수사',
+  'entities.npcs.brother_aldric_wastes.title': '계곡의 사제',
+  'entities.npcs.brother_aldric_wastes.greeting':
+    '고룡의 열기가 이곳까지 스며 나옵니다, {playerName} — 장화 밑창을 타고 오르는 것이 느껴집니다. 교단이 저 유리 속에서 무엇을 파내려 하든, 그것을 제 집으로 가져가게 두어서는 안 됩니다.',
+  'entities.npcs.old_haruk.name': '늙은 하루크',
+  'entities.npcs.old_haruk.title': '심장샘의 감시관',
+  'entities.npcs.old_haruk.greeting':
+    '우리 집안은 이 샘이 지킬 필요도 없던 시절부터 이 샘을 돌봐 왔다네. 아홉 왕이 이 물을 마셨지. 열 번째는 이 물을 전부 마시려 들었고.',
+  'entities.npcs.provisioner_ashka.name': '보급관 아슈카',
+  'entities.npcs.provisioner_ashka.title': '대상 보급상',
+  'entities.npcs.provisioner_ashka.greeting':
+    '납작빵, 대추야자주, 그리고 시체가 들어 있지 않은 물. 이 황무지 최고의 물건들입니다.',
+  'entities.npcs.forgemaster_derin.name': '단조장인 데린',
+  'entities.npcs.forgemaster_derin.title': '대상 대장장이',
+  'entities.npcs.forgemaster_derin.greeting':
+    '화로에도 모래, 담금질 물에도 모래, 이 사이에도 모래. 그 원한 덕에 칼날은 더 날카롭게 나옵니다.',
+  'entities.npcs.auctioneer_zeph.name': '경매인 제프',
+  'entities.npcs.auctioneer_zeph.title': '세계 시장 관리자',
+  'entities.npcs.auctioneer_zeph.greeting':
+    '세계 시장은 마지막 우물까지도 닿습니다, 친구여. 금화의 무게는 어느 사막에서나 같지요.',
+  'entities.npcs.wellwatch_hana.name': '우물지기 하나',
+  'entities.npcs.wellwatch_hana.title': '대상 경비병',
+  'entities.npcs.wellwatch_hana.greeting':
+    '물을 지고 들어와서, 물을 지고 나가십시오. 그 사이의 모든 일은 내 몫입니다.',
+  'entities.npcs.wellwatch_toma.name': '우물지기 토마',
+  'entities.npcs.wellwatch_toma.title': '대상 경비병',
+  'entities.npcs.wellwatch_toma.greeting':
+    "조용한 당번입니다. 이곳에서 '조용하다'는 건 모래가 천천히 씹고 있다는 뜻일 뿐이지만.",
+  'entities.npcs.drover_pell.name': '몰이꾼 펠',
+  'entities.npcs.drover_pell.title': '노새 몰이꾼',
+  'entities.npcs.drover_pell.greeting':
+    '노새가 먼저 마십니다. 대상의 법이지요. 노새를 상대로 법을 따지고 싶다면야, 말리지 않겠습니다.',
+  'entities.npcs.dowser_emrys.name': '수맥술사 엠리스',
+  'entities.npcs.dowser_emrys.title': '물길잡이',
+  'entities.npcs.dowser_emrys.greeting':
+    '내 막대는 폭포에서만 반으로 꺾이고, 사방 사십 리 안 어디에서도 움직이지 않습니다. 이 땅은 샘 하나만 마르면 그대로 무덤이 됩니다.',
+  'entities.quests.q_sw_arrival.title': '마지막 우물',
+  'entities.quests.q_sw_arrival.text':
+    '지도의 끝에 오신 것을 환영합니다, {playerName}. 하이워치는 이 일을 "남부 원정"이라 부르지만, 나는 마흔 명의 목숨과 샘 하나라고 부릅니다. 무엇보다 먼저 — 물입니다. 야영지 북쪽 심장샘 웅덩이에서 물주머니 넷을 가득 채워 오십시오. 폭포까지 이어지는 길이 걸어도 안전한지 알아야겠습니다.',
+  'entities.quests.q_sw_arrival.completion':
+    '차갑고, 맑고, 몸에 화살도 박히지 않았군요 — 이번 철 들어 마지막 우물에 닿은 소식 중 최고입니다.',
+  'entities.quests.q_sw_arrival.objectives.0.label': '넘칠 듯한 물주머니',
+  'entities.quests.q_sw_prowlers.title': '황혼의 이빨',
+  'entities.quests.q_sw_prowlers.text':
+    '황혼갈기들이 우리 물수레 소리를 익혔습니다, {playerName}. 해 질 녘마다 한 발짝씩 다가오더니, 어젯밤에는 마구를 채운 채로 노새 한 마리를 끌고 갔습니다. 야영지 남쪽 뼈바람 평원에서 무리를 솎아 내고, 교훈이 박혔다는 증거로 가죽 여덟 장을 가져오십시오.',
+  'entities.quests.q_sw_prowlers.completion':
+    '가죽 여덟 장, 말뚝 울타리에 어른대는 그림자도 여덟 줄었습니다. 노새들은 이제야 잠들 수 있겠군요 — 나보다는 형편이 낫습니다.',
+  'entities.quests.q_sw_prowlers.objectives.0.label': '황혼갈기 배회자 처치',
+  'entities.quests.q_sw_prowlers.objectives.1.label': '황혼갈기 가죽',
+  'entities.quests.q_sw_carrion_glass.title': '주검 유리',
+  'entities.quests.q_sw_carrion_glass.text':
+    '몰이꾼들은 유리풍뎅이라 부릅니다 — 사냥개만 한 덩치에 녹아 붙은 유리 껍데기를 두른 딱정벌레들이, 동쪽 불탄 자리에서 끓어오르듯 쏟아져 나옵니다. 데린은 그 껍데기면 어떤 숫돌보다 고운 날을 세울 수 있다고 장담하지요. 여덟 마리를 부수고 온전한 껍데기 여섯 장을 가져오십시오. 광택이 돌면 조심하십시오 — 껍데기가 굳어지고 있다는 뜻이니.',
+  'entities.quests.q_sw_carrion_glass.completion':
+    '저 날에 도는 빛 좀 보십시오! 데린은 내게 평생 공짜 연마를 빚졌고, 동쪽 길은 당신에게 한결 조용한 길목을 빚졌습니다.',
+  'entities.quests.q_sw_carrion_glass.objectives.0.label': '유리풍뎅이 처치',
+  'entities.quests.q_sw_carrion_glass.objectives.1.label': '유리풍뎅이 껍데기',
+  'entities.quests.q_sw_lost_caravan.title': '사구가 삼킨 것',
+  'entities.quests.q_sw_lost_caravan.text':
+    '수레 세 대가 우물에 닿지 못했습니다, {playerName} — 곡식과 연장, 그리고 선두 수레를 몰던 내 여동생의 남편까지. 폭풍이 그들을 남서쪽 사구 곳곳에 흩어 놓았습니다. 잔해를 찾아 뒤져 주십시오. 무엇을 잃었는지 알려면 적하 목록이 필요합니다... 그리고 누군가 걸어서 빠져나갔는지도 알아야겠습니다.',
+  'entities.quests.q_sw_lost_caravan.completion':
+    '잔해에서 멀어지는 발자국 — 그 뒤로는 약탈자의 흔적뿐입니다. 몰이꾼들을 산 채로 데려간 겁니다. 자비 아니면 셈속인데, 이 땅에서는 어느 쪽에 걸어야 할지 뻔하지요.',
+  'entities.quests.q_sw_lost_caravan.objectives.0.label': '부서진 수레 수색함',
+  'entities.quests.q_sw_marauders.title': '물의 세금',
+  'entities.quests.q_sw_marauders.text':
+    '사구검단은 그것을 세금이라 부릅니다. 물 아니면 피, 눈에 띄는 즉시 징수지요. 그들은 사구 남서쪽 우묵땅에 야영지를 틀고, 우리에게서 훔친 모닥불 곁에서 우리에게서 훔친 물주머니를 비우고 있습니다. 그들을 부수십시오, {playerName}. 약탈자 열을 쓰러뜨리고 물주머니 다섯을 되찾아 오십시오 — 그 가죽 부대 하나하나가 우리 사람들의 목숨입니다.',
+  'entities.quests.q_sw_marauders.completion':
+    '당신이 지고 온 물주머니 하나하나가, 이 우물의 누군가가 죽지 않아도 되는 하루입니다. 사구검단은 우리에게 세금을 물린 대가를 기억하게 될 겁니다.',
+  'entities.quests.q_sw_marauders.objectives.0.label': '사구검단 약탈자 처치',
+  'entities.quests.q_sw_marauders.objectives.1.label': '도둑맞은 물주머니',
+  'entities.quests.q_sw_karesh.title': '메마른 왕',
+  'entities.quests.q_sw_karesh.text':
+    '그들의 우두머리는 스스로를 메마른 카레쉬라 칭합니다 — 제 물통을 바닥까지 마셔 버리고, 경쟁자가 뒤따르지 못하도록 찌꺼기에 소금을 뿌린 자입니다. 제 우물에 그런 짓을 하는 자라면 우리 우물에는 더한 짓도 하겠지요. 놈은 서쪽 능선 아래 카레쉬 골짜기에서 군림하고 있습니다. 그의 치세를 끝내십시오, {playerName}. 그리고 놈이 끌어안고 있는 마지막 물주머니를 가져오십시오.',
+  'entities.quests.q_sw_karesh.completion':
+    '이것이 메마른 왕의 마지막 물주머니로군요. 사파가 우물에 도로 부을 겁니다 — 한 방울도 남김없이, 원칙의 문제니까요.',
+  'entities.quests.q_sw_karesh.objectives.0.label': '메마른 카레쉬 처치',
+  'entities.quests.q_sw_karesh.objectives.1.label': '카레쉬의 마지막 물주머니',
+  'entities.quests.q_sw_survey.title': '끊긴 문장',
+  'entities.quests.q_sw_survey.text':
+    '이제 우물이 자네를 놓아줄 만하니 — 나와 함께 역사를 걸어 보세, {playerName}. 태양 궁정은 벽화를 남겼네. 하나는 수도교 등뼈 아래에, 하나는 바위산 기슭에, 하나는 오아시스 폐허의 쌍둥이 탑 곁에. 세 곳 모두에서 탁본을 떠 오게. 자르케스는 문장을 맺다 말고 죽었고, 나는 그 나머지를 기어이 읽을 참이니.',
+  'entities.quests.q_sw_survey.completion':
+    '됐네 — 문장이 완성되었어. "왕관이 너무 뜨거워 쓸 수 없게 되었을 때, 왕들은 바위산에 올라 그 불을 되돌려 주었다." 오벨리스크에 새긴 내려놓음의 의식일세 — 새벽, 그다음 정오, 그다음 황혼. 그 순서가 중요하네, {playerName}. 의식이란 언제나 제 순서를 따지는 법이지.',
+  'entities.quests.q_sw_survey.objectives.0.label': '벽화 탁본 채취함',
+  'entities.quests.q_sw_vigil_dawn.title': '철야: 새벽',
+  'entities.quests.q_sw_vigil_dawn.text':
+    '야영지 서쪽의 바위산이 바로 철야일세 — 왕들이 걸었던 내려놓음의 길 말이네. 첫 단구에 새벽의 오벨리스크가 서 있네. 해가 가장 먼저 닿는 자리지. 갈지자 길을 올라 그 돌에 손을 얹게. 새벽이 가장 먼저 깨어난다네 — 벽화가 어지간히 고집하는 대목이야.',
+  'entities.quests.q_sw_vigil_dawn.completion':
+    '웅웅대는 걸 느꼈다고? 놀랍군. 두 시대가 지나도록 의식이 아직 힘을 품고 있어. 새벽에 불이 들어왔네 — 위에서 정오가 기다리고 있고.',
+  'entities.quests.q_sw_vigil_dawn.objectives.0.label': '오벨리스크에서 새벽불 인장 얻음',
+  'entities.quests.q_sw_vigil_noon.title': '철야: 정오',
+  'entities.quests.q_sw_vigil_noon.text':
+    '정오는 산정에 왕관처럼 얹혀 있네 — 두 번째 오벨리스크는 바위산 꼭대기, 해가 하늘 전부를 다스리는 자리에 서 있지. 오르막 그 자체가 의식의 일부일세, {playerName}. 왕들은 그 한 걸음 한 걸음을 왕관을 인 채로 올랐다네. 정오의 오벨리스크를 깨우게.',
+  'entities.quests.q_sw_vigil_noon.completion':
+    '새벽, 그리고 정오. 의식에 남은 시각은 하나 — 그리고 철야가 우리를 알아차리기 시작했네.',
+  'entities.quests.q_sw_vigil_noon.objectives.0.label': '오벨리스크에서 정오불 인장 얻음',
+  'entities.quests.q_sw_vigil_dusk.title': '철야: 황혼',
+  'entities.quests.q_sw_vigil_dusk.text':
+    '황혼은 언제나 철야에 마지막으로 도착하지 — 그 오벨리스크는 협곡 위 서쪽 돌출부에 서 있네. 다만 이 의식이 무엇인지 알아 두게, {playerName}. 내려놓음이란 반드시 증인이 지켜보아야 하는 법. 궁정은 살아 있는 바위산의 돌로 파수병을 세워 증인으로 삼았고, 황혼에 불이 들어오는 순간 그것이 깨어나 자네가 내려놓으러 왔는지, 그저 빼앗으러 왔는지를 판가름할 걸세. 납득시키게. 아주 철저하게.',
+  'entities.quests.q_sw_vigil_dusk.completion':
+    '파수병이 자네를 합당하다 판정했군 — 아니면 죽일 수 없는 자라 판정했거나. 돌에게는 그 둘이 같은 결론이지. 철야가 완성되었고, 자르케스의 모든 문이 이제 물어볼 가치가 있는 질문이 되었네.',
+  'entities.quests.q_sw_vigil_dusk.objectives.0.label': '황혼의 오벨리스크 일깨움',
+  'entities.quests.q_sw_vigil_dusk.objectives.1.label': '철야의 파수병 처치',
+  'entities.quests.q_sw_revenants.title': '죽은 자들의 초소',
+  'entities.quests.q_sw_revenants.text':
+    '자르케스의 병사들은 전쟁에 졌다는 것을 끝내 배우지 못했네 — 그 전쟁이 하룻밤 만에 끝났다는 것도. 그들은 갑옷이 뼈에 녹아 붙은 채 폭포 북쪽 바깥 폐허를 순찰하며, 살아 있는 어떤 혀도 기억하지 못하는 암구호를 나그네들에게 따져 묻지. 열둘을 잠재우게, {playerName}. 그리고 수비대의 인장을 거두어 오게. 그 인장이면 도시 더 깊은 곳까지 통과할 수 있을 걸세.',
+  'entities.quests.q_sw_revenants.completion':
+    '인장이 하나같이 아직 따뜻하군 — 마지막까지 충성했고, 그 마지막을 지나서도 충성했어. 그들의 경계를 붙들고 있는 무언가가 더 안쪽에 앉아 있네. 그리고 이제는 우리가 그보다 계급이 높지.',
+  'entities.quests.q_sw_revenants.objectives.0.label': '햇볕에 그을린 망령 처치',
+  'entities.quests.q_sw_revenants.objectives.1.label': '왕관 수비대의 인장',
+  'entities.quests.q_sw_courtiers.title': '잿빛 궁정',
+  'entities.quests.q_sw_courtiers.text':
+    '더 안쪽에는 궁정이 아직도 앉아 있네 — 시종장과 낭독관들이 죽은 왕의 법도를 지키며, 광재 덩어리 옥좌에 대고 시편을 읽고 있지. 그들의 시편집에는 지성소의 전례가 담겨 있고, 그 전례에는 왕관의 화로에 불을 밝히는 의식이 담겨 있네. 그 어전 회의를 흩어 버리게, {playerName}. 그리고 책장이 온전한 시편집 한 권을 가져오게.',
+  'entities.quests.q_sw_courtiers.completion':
+    '오, 이것 참 훌륭한 물건이군 — 화로 의식 전체가 죽은 선창자의 필체로 적혀 있어. 그들은 빈 옥좌를 향해 이백 년 동안 이 노래를 불렀네. 하마터면 가엾다 할 뻔했군. 하마터면 말일세.',
+  'entities.quests.q_sw_courtiers.objectives.0.label': '잿빛 궁정인 처치',
+  'entities.quests.q_sw_courtiers.objectives.1.label': '잿빛 시편집',
+  'entities.quests.q_sw_braziers.title': '불 밝힌 왕관',
+  'entities.quests.q_sw_braziers.text':
+    '시편집은 탑들 사이 왕관의 화로 셋을 이름하고 있네 — 셋 모두에 불을 붙이면 대관식 때 그랬듯 안쪽 지성소가 스스로 열리지. 자네 건틀릿에 의식을 분필로 적어 두었네, {playerName}. 부디 땀은 흘리지 말게. 미리 일러두네만, 불 밝힌 왕관은 눈에 띄는 왕관일세. 세 번째 불꽃이 붙는 순간, 그 도시의 모든 것이 알아차릴 거야.',
+  'entities.quests.q_sw_braziers.completion':
+    '우물에서 우리는 탑들이 하나씩 불을 머금는 것을 지켜보았네 — 사파는 울었고, 고백하자면 나는 아무에게도 잔소리하지 않았지. 지성소가 열렸네. 그리고 그 안의 무언가가 노래로 화답하고 있어.',
+  'entities.quests.q_sw_braziers.objectives.0.label': '왕관의 화로 점화함',
+  'entities.quests.q_sw_sunspeaker.title': '열 번째 대관식',
+  'entities.quests.q_sw_sunspeaker.text':
+    '지성소의 목소리는 태양대변자 아타리스일세 — 자르케스의 아홉 왕 모두에게 왕관을 씌운 자지. 시편은 그를 궁정의 살아 있는 기억이라 부르는데, 그자는 두 시대에 걸쳐 열 번째 대관식을 준비해 왔네. 불 그 자체를 위한 대관식을 말이야. 그는 쌍둥이 탑 사이 태양 옥좌에 서 있네. 그를 폐위시키게, {playerName}. 사막 전체가 후회할 의식을 그가 끝마치기 전에.',
+  'entities.quests.q_sw_sunspeaker.completion':
+    '아홉 이마에 아홉 왕관을 얹은 자였고, 열 번째 왕관은 세상을 태워서라도 머리에 맞추려 했겠지. 역사는 자네가 자르케스의 궁정을 폐회시켰다고 기록할 걸세. 역사가 정확히 그렇게 쓰도록 내가 단단히 챙기겠네.',
+  'entities.quests.q_sw_sunspeaker.objectives.0.label': '태양대변자 아타리스 폐위시킴',
+  'entities.quests.q_sw_emberveil.title': '불씨 장막',
+  'entities.quests.q_sw_emberveil.text':
+    '동쪽 벼랑을 따라 늘어선 장막 두른 야영지들을 보셨겠지요, {playerName}. 그들은 고룡교단입니다 — 불씨 장막이라는 갈라져 나온 분파로, 하이워치가 성소의 문을 지켜보는 사이 고개를 넘어왔습니다. 모교단이 고룡을 깨우려 노래한다면, 이들은 고룡을 무장시키려 땅을 팝니다. 광신도와 화염술사들이 유리 벌판을 샅샅이 훑으며 무언가를 찾고 있습니다. 그들이 찾아내기 전에 수를 줄이십시오.',
+  'entities.quests.q_sw_emberveil.completion':
+    '저 유리를 파헤치는 삽이 열여섯 자루 줄었습니다. 하지만 파는 일은 밤낮없이 이어지고 있습니다 — 그들은 더 이상 찾고 있는 게 아닙니다, {playerName}. 발굴하고 있는 겁니다.',
+  'entities.quests.q_sw_emberveil.objectives.0.label': '불씨 장막 광신도 처치',
+  'entities.quests.q_sw_emberveil.objectives.1.label': '불씨 장막 화염술사 처치',
+  'entities.quests.q_sw_writs.title': '장막의 칙령',
+  'entities.quests.q_sw_writs.text':
+    '그들의 우두머리들은 칙령을 지니고 다닙니다 — 모교단의 암호로 쓰인 명령서지요. 나는 하이워치에서 그 암호를 풀었고, 여기서도 다시 풀 겁니다. 불씨 장막에게서 칙령 다섯 장을 가져오십시오, {playerName}. 그들이 무엇을 가지러 보내졌는지 한 자도 빠짐없이 읽어 봅시다.',
+  'entities.quests.q_sw_writs.completion':
+    '두려워하던 대로입니다. "최초의 불씨를 회수하라 — 태양왕들이 훔쳐 결박한 주인님의 불꽃 조각이다. 그것을 성소의 문으로 옮겨라. 봉인은 제 불꽃을 견디지 못하리라." 고룡에게서 훔친 불로 고룡의 문을 태워 열겠다는 겁니다, {playerName}.',
+  'entities.quests.q_sw_writs.objectives.0.label': '불씨 장막의 칙령',
+  'entities.quests.q_sw_glasscut.title': '하늘이 불탄 자리',
+  'entities.quests.q_sw_glasscut.text':
+    '유리 균열은 최초의 불씨가 자르케스를 지워 버린 그 밤에 떨어진 자리입니다 — 땅은 아직도 뜨겁게 흐르고, 불씨 정령들이 끝내 땅에 닿지 못한 불똥처럼 그 위를 걸어 다닙니다. 불씨가 깨어나고 있습니다, {playerName}. 교단의 삽이 가까워질수록 불똥들은 더 대담해집니다. 여덟을 흩어 버리고 살아있는 불씨 다섯을 가져오십시오. 우리가 마주할 불의 크기를 재어 보아야겠습니다.',
+  'entities.quests.q_sw_glasscut.completion':
+    '축복받은 소금 속에서도 꿈틀거리는군요... 용의 불입니다. 이제는 의심할 여지가 없습니다. 그 불씨는 유물이 아닙니다, {playerName}. 잔재입니다 — 코르줄의 분노에서 떨어져 나온 살아 있는 조각이며, 왕관으로 쓰였던 날들을 기억하고 있습니다.',
+  'entities.quests.q_sw_glasscut.objectives.0.label': '불씨 정령 처치',
+  'entities.quests.q_sw_glasscut.objectives.1.label': '살아있는 불씨',
+  'entities.quests.q_sw_offering.title': '샘은 기억한다',
+  'entities.quests.q_sw_offering.text':
+    '그 사제 양반은 불과 맞설 작정이고, 자네도 함께 가겠지. 그렇다면 우물지기의 지혜를 하나 듣고 가게, {playerName}. 심장샘은 고룡의 감옥 바로 밑에서 솟아오르고, 무언가의 밑을 지나는 것은 그 무언가를 알게 되는 법이라네. 내 공양 그릇을 폭포 꼭대기 웅덩이로 가져가서, 붓고, 귀를 기울이게. 이 샘은 그 불을 한 번 익사시킨 적이 있어. 불에 타게 해 달라고 청하러 가기 전에, 샘의 축복부터 받고 가게.',
+  'entities.quests.q_sw_offering.completion':
+    '자네도 들었군 — 세상 밑을 흐르는 깊은 물소리 말일세. 그 소리를 갑옷처럼 두르게, {playerName}. 불은 시끄럽지만, 샘이 먼저 있었고, 샘은 그 뒤에도 남을 테니.',
+  'entities.quests.q_sw_offering.objectives.0.label': '심장샘에 공양을 올림',
+  'entities.quests.q_sw_first_ember.title': '최초의 불씨',
+  'entities.quests.q_sw_first_ember.text':
+    '드러났습니다, {playerName}. 새벽에 교단의 구덩이가 뚫리며 유리 균열이 안쪽에서부터 빛났습니다 — 최초의 불씨가 두 시대 전 제 손으로 만든 분화구 안에 서서 왕의 예복처럼 불을 두르고 있고, 불씨 장막이 줄지어 그 앞에 무릎 꿇고 있습니다. 그것이 성소의 문에 닿으면 하이워치가 피 흘려 지킨 모든 것이 재가 됩니다. 당신은 샘의 축복과 철야의 증언을 지니고 있습니다. 유리 속으로 내려가, 자르케스가 시작한 문장을 끝맺으십시오. 불은 되돌아간다 — 그렇게.',
+  'entities.quests.q_sw_first_ember.completion':
+    '그것이 스러지는 순간 폭포가 빠르고 환하게 흘렀습니다 — 샘이 오랜 원수를 물밑으로 데려간 것입니다. 당신은 아홉 왕이 하지 못한 일을 해냈습니다, {playerName}. 불을 되돌려 준 것입니다. 앉으십시오. 마시십시오. 오늘 밤의 물이 가장 답니다.',
+  'entities.quests.q_sw_first_ember.objectives.0.label': '최초의 불씨 소멸시킴',
+  'entities.quests.q_sw_afterglow.title': '산 자들을 위한 물',
+  'entities.quests.q_sw_afterglow.text':
+    '하루크 말로는 샘의 노랫가락이 이제 한 음 낮아졌답니다. 빚을 다 갚은 소리라나요. 불씨 장막은 재가 되었거나 달아났고, 궁정은 폐회했으며, 내 장부에는 마침내 근심보다 물이 많아졌습니다. 마지막으로 한 가지만 부탁하지요, {playerName} — 야영지를 한 바퀴 돌며 마렌과 캐디스, 알드릭 수사가 제대로 감사할 기회를 주십시오. 그들도, 당신도 그럴 자격을 얻었으니.',
+  'entities.quests.q_sw_afterglow.completion':
+    '그럼 다 끝난 셈이고, 마지막 우물은 이제 그저... 우물입니다. 이 늙은 대상꾼의 뜻대로 된다면, 살아 있는 길을 따라 늘어설 많은 우물 가운데 첫 번째가 되겠지요. 작열의 황무지는 당신의 이름을 기억할 겁니다, {playerName} — 물은 모든 것을 기억하니까요.',
+  'entities.quests.q_sw_afterglow.objectives.0.label': '정찰병 마렌과 대화함',
+  'entities.quests.q_sw_afterglow.objectives.1.label': '현자 캐디스와 대화함',
+  'entities.quests.q_sw_afterglow.objectives.2.label': '알드릭 수사와 대화함',
   'hud.errors.silenced': '침묵 상태입니다!',
   'hud.pet.noPetFood': '소환수에게 먹일 음식이 없습니다.',
   'hud.pet.petEatsFoodOnly': '소환수는 음식만 먹을 수 있습니다.',
@@ -6492,6 +6686,49 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.items.litany_helm.name': '성물사냥꾼의 익사 두건',
   'entities.items.sister_nhalia_choir_plate.name': '나할리아 수녀의 성가 단조 판금',
   'entities.items.drowned_choir_fang.name': '익사한 성가대의 송곳니',
+  // --- Scorching Wastes items ---
+  'entities.items.ashen_psalter.name': '잿빛 시편집',
+  'entities.items.brimming_waterskin.name': '넘칠 듯한 물주머니',
+  'entities.items.cactus_pressed_water.name': '선인장 압착수',
+  'entities.items.caravan_guard_mail.name': '대상 경비병의 사슬 갑옷',
+  'entities.items.caravan_manifest.name': '물에 얼룩진 적하 목록',
+  'entities.items.cinder_soaked_veil.name': '불씨에 젖은 베일',
+  'entities.items.crown_brazier.name': '왕관의 화로',
+  'entities.items.crown_guard_seal.name': '왕관 수비대의 인장',
+  'entities.items.duneblade_token.name': '사구검단의 징표',
+  'entities.items.duneforged_warblade.name': '사구에서 벼려낸 전투검',
+  'entities.items.dunewatch_sash.name': '사구 감시자의 장식띠',
+  'entities.items.duskmane_pelt.name': '황혼갈기 가죽',
+  'entities.items.emberbound_leggings.name': '불씨에 묶인 다리보호구',
+  'entities.items.emberglass_scepter.name': '불씨유리 홀',
+  'entities.items.emberveil_writ.name': '불씨 장막의 칙령',
+  'entities.items.glasscarab_shell.name': '유리풍뎅이 껍데기',
+  'entities.items.glasscut_dirk.name': '유리 균열 단검',
+  'entities.items.heart_of_the_first_ember.name': '최초의 불씨의 심장',
+  'entities.items.heartspring_offering.name': '심장샘 공양 그릇',
+  'entities.items.kareshs_last_skin.name': '카레쉬의 마지막 물주머니',
+  'entities.items.lastwell_datewine.name': '마지막 우물의 대추야자주',
+  'entities.items.living_cinder.name': '살아있는 불씨',
+  'entities.items.moltenheart_girdle.name': '용융심장 허리띠',
+  'entities.items.moltenheart_slagcore.name': '용융심장 광재 핵',
+  'entities.items.mural_rubbing.name': '벽화 탁본',
+  'entities.items.parched_kings_goblet.name': '메마른 왕의 술잔',
+  'entities.items.prowler_fang.name': '배회자의 송곳니',
+  'entities.items.sentinel_core_stone.name': '파수병의 핵석',
+  'entities.items.springheart_blessing.name': '심장샘의 축복',
+  'entities.items.stolen_waterskin.name': '도둑맞은 물주머니',
+  'entities.items.sunbaked_flatbread.name': '햇볕에 구운 납작빵',
+  'entities.items.sunbleached_bone.name': '햇볕에 바랜 뼈',
+  'entities.items.sunbleached_staff.name': '햇볕에 바랜 지팡이',
+  'entities.items.sunglass_shard.name': '태양유리 조각',
+  'entities.items.sunspeakers_ash_crown.name': '태양대변자의 잿빛 왕관',
+  'entities.items.vestment_of_the_sunken_crown.name': '가라앉은 왕관의 예복',
+  'entities.items.vigil_obelisk_dawn.name': '새벽불 인장',
+  'entities.items.vigil_obelisk_dusk.name': '황혼불 인장',
+  'entities.items.vigil_obelisk_noon.name': '정오불 인장',
+  'entities.items.wastes_relic_cache.name': '태양 궁정의 유물 상자',
+  'entities.items.wastewalker_jerkin.name': '황무지 방랑자의 가죽옷',
+  'entities.items.wastewalker_treads.name': '황무지 방랑자의 장화',
   'entities.mobs.drowned_cantor.name': '익사한 영창자',
   'entities.mobs.reedbound_acolyte.name': '갈대에 묶인 신도',
   'entities.mobs.deepfen_spearjaw.name': '깊은늪 창턱',

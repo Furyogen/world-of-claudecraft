@@ -1,20 +1,21 @@
 import { describe, expect, it } from 'vitest';
-import { Sim } from '../src/sim/sim';
 import { MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
+import { Sim } from '../src/sim/sim';
 import type { Entity } from '../src/sim/types';
 
 const SEED = 41099;
 
 // Mogger is the seeded carrier of the wardAllies support mechanic — a rare ogre
 // boss that shields his crew (mogger_lackeys) with a Bracing Order absorb.
-const inner = (sim: Sim) => sim as unknown as {
-  addEntity(e: Entity): void;
-  updateBossMechanics(m: Entity): void;
-  resetEvadingMob(m: Entity): void;
-};
+const inner = (sim: Sim) =>
+  sim as unknown as {
+    addEntity(e: Entity): void;
+    updateBossMechanics(m: Entity): void;
+    resetEvadingMob(m: Entity): void;
+  };
 
-function spawn(sim: Sim, id: number, tmpl: typeof MOBS[string], hpFrac = 1) {
+function spawn(sim: Sim, id: number, tmpl: (typeof MOBS)[string], hpFrac = 1) {
   const mob = createMob(id, tmpl, 6, { x: 0, y: 0, z: 0 });
   mob.hp = Math.round(mob.maxHp * hpFrac);
   mob.inCombat = true;
@@ -27,7 +28,12 @@ const ward = (e: Entity) => e.auras.find((a) => a.id === 'ward_mogger' && a.kind
 describe('mob support shield (wardAllies)', () => {
   it('seeds the mechanic on Mogger', () => {
     expect(MOBS.mogger.wardAllies).toEqual({
-      radius: 12, every: 12, amount: 70, duration: 8, name: 'Bracing Order', school: 'physical',
+      radius: 12,
+      every: 12,
+      amount: 70,
+      duration: 8,
+      name: 'Bracing Order',
+      school: 'physical',
     });
   });
 
@@ -69,8 +75,19 @@ describe('mob support shield (wardAllies)', () => {
     for (let i = 0; i < 20 * 12 + 1; i++) inner(sim).updateBossMechanics(mogger);
     const hpBefore = ally.hp;
     // 50 damage < 70 shield → fully soaked, no HP loss, shield drops to 20.
-    (sim as unknown as { dealDamage(s: Entity | null, t: Entity, amt: number, crit: boolean, school: string, ability: string | null, kind: string): void })
-      .dealDamage(null, ally, 50, false, 'physical', null, 'hit');
+    (
+      sim as unknown as {
+        dealDamage(
+          s: Entity | null,
+          t: Entity,
+          amt: number,
+          crit: boolean,
+          school: string,
+          ability: string | null,
+          kind: string,
+        ): void;
+      }
+    ).dealDamage(null, ally, 50, false, 'physical', null, 'hit');
     expect(ally.hp).toBe(hpBefore);
     expect(ward(ally)?.value).toBe(20);
   });

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { IpBlockList, cleanIp, parseBlockExpiry, isConnectionRefused } from '../server/ip_block';
+import { cleanIp, IpBlockList, isConnectionRefused, parseBlockExpiry } from '../server/ip_block';
 import { normalizeIp } from '../server/ratelimit';
 
 const NOW = 1_000_000;
@@ -38,7 +38,10 @@ describe('IpBlockList', () => {
 
   it('ignores empty IPs', () => {
     const list = new IpBlockList();
-    list.setEntries([{ ip: '', expiresAtMs: null }, { ip: '9.9.9.9', expiresAtMs: null }]);
+    list.setEntries([
+      { ip: '', expiresAtMs: null },
+      { ip: '9.9.9.9', expiresAtMs: null },
+    ]);
     expect(list.isBlocked('', NOW)).toBe(false);
     expect(list.size).toBe(1);
   });
@@ -104,17 +107,27 @@ describe('parseBlockExpiry', () => {
 
 describe('isConnectionRefused', () => {
   it('refuses a blocked non-admin', () => {
-    expect(isConnectionRefused({ blocked: true, isAdmin: false, ipSessions: 0, hardLimit: 20 })).toBe(true);
+    expect(
+      isConnectionRefused({ blocked: true, isAdmin: false, ipSessions: 0, hardLimit: 20 }),
+    ).toBe(true);
   });
 
   it('lets a blocked admin through (full bypass)', () => {
-    expect(isConnectionRefused({ blocked: true, isAdmin: true, ipSessions: 0, hardLimit: 20 })).toBe(false);
-    expect(isConnectionRefused({ blocked: true, isAdmin: true, ipSessions: 999, hardLimit: 20 })).toBe(false);
+    expect(
+      isConnectionRefused({ blocked: true, isAdmin: true, ipSessions: 0, hardLimit: 20 }),
+    ).toBe(false);
+    expect(
+      isConnectionRefused({ blocked: true, isAdmin: true, ipSessions: 999, hardLimit: 20 }),
+    ).toBe(false);
   });
 
   it('enforces the hard per-IP cap on non-admins', () => {
-    expect(isConnectionRefused({ blocked: false, isAdmin: false, ipSessions: 20, hardLimit: 20 })).toBe(true);
-    expect(isConnectionRefused({ blocked: false, isAdmin: false, ipSessions: 19, hardLimit: 20 })).toBe(false);
+    expect(
+      isConnectionRefused({ blocked: false, isAdmin: false, ipSessions: 20, hardLimit: 20 }),
+    ).toBe(true);
+    expect(
+      isConnectionRefused({ blocked: false, isAdmin: false, ipSessions: 19, hardLimit: 20 }),
+    ).toBe(false);
   });
 });
 

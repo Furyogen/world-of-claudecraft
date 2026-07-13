@@ -9,7 +9,9 @@ export function registerPreload(task: Promise<unknown>): void {
   tasks.push(task);
 }
 
-export async function assetsReady(onProgress?: (done: number, total: number) => void): Promise<void> {
+export async function assetsReady(
+  onProgress?: (done: number, total: number) => void,
+): Promise<void> {
   const startedAt = assetLoadStarted();
   // Settled sequentially is fine: fetches already run concurrently. Collect
   // every failure so one bad file reports clearly instead of dying first.
@@ -22,6 +24,8 @@ export async function assetsReady(onProgress?: (done: number, total: number) => 
   const failed = results.filter((r): r is PromiseRejectedResult => r.status === 'rejected');
   recordPreloadWait(tasks.length, startedAt, failed.length === 0);
   if (failed.length) {
-    throw new Error(`asset preload failed (${failed.length}): ${failed.map((f) => String(f.reason)).join('; ')}`);
+    throw new Error(
+      `asset preload failed (${failed.length}): ${failed.map((f) => String(f.reason)).join('; ')}`,
+    );
   }
 }

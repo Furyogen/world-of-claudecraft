@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { archiveFallbackName, ARCHIVE_SCAN_LIMIT, base26Suffix, chooseArchiveName, freedArchiveCandidate, MAX_NAME_LEN } from '../server/reclaim_name';
+import {
+  ARCHIVE_SCAN_LIMIT,
+  archiveFallbackName,
+  base26Suffix,
+  chooseArchiveName,
+  freedArchiveCandidate,
+  MAX_NAME_LEN,
+} from '../server/reclaim_name';
 
 // When a character name is released from a deactivated ("invalid") account, the
 // orphaned character keeps a placeholder name so its row stays valid (and the

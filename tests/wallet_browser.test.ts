@@ -1,19 +1,19 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
-import { getWallets } from '@wallet-standard/app';
-import type { Wallet, WalletAccount, WalletIcon } from '@wallet-standard/base';
-import {
-  StandardConnect,
-  StandardDisconnect,
-  StandardEvents,
-  type StandardConnectInput,
-  type StandardEventsChangeProperties,
-} from '@wallet-standard/features';
+import { SOLANA_MAINNET_CHAIN } from '@solana/wallet-standard-chains';
 import {
   SolanaSignMessage,
   type SolanaSignMessageInput,
   type SolanaSignMessageOutput,
 } from '@solana/wallet-standard-features';
-import { SOLANA_MAINNET_CHAIN } from '@solana/wallet-standard-chains';
+import { getWallets } from '@wallet-standard/app';
+import type { Wallet, WalletAccount, WalletIcon } from '@wallet-standard/base';
+import {
+  StandardConnect,
+  type StandardConnectInput,
+  StandardDisconnect,
+  StandardEvents,
+  type StandardEventsChangeProperties,
+} from '@wallet-standard/features';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 const ICON = 'data:image/svg+xml;base64,PHN2Zy8+' as WalletIcon;
 
@@ -37,13 +37,15 @@ function account(address: string): WalletAccount {
   };
 }
 
-function makeWallet(opts: {
-  name?: string;
-  address?: string;
-  authorized?: boolean;
-  delayConnect?: () => Promise<void>;
-  modifySignedMessage?: boolean;
-} = {}) {
+function makeWallet(
+  opts: {
+    name?: string;
+    address?: string;
+    authorized?: boolean;
+    delayConnect?: () => Promise<void>;
+    modifySignedMessage?: boolean;
+  } = {},
+) {
   const walletAccount = account(opts.address ?? '8zcEHjvY46ETifvoNbnQ6FbsWc9XyF2KxRTkwHqPfank');
   let accounts: readonly WalletAccount[] = opts.authorized ? [walletAccount] : [];
   const listeners = new Set<(props: StandardEventsChangeProperties) => void>();
@@ -61,12 +63,16 @@ function makeWallet(opts: {
     accounts = [];
     emitAccounts();
   });
-  const signMessage = vi.fn(async (...inputs: readonly SolanaSignMessageInput[]): Promise<readonly SolanaSignMessageOutput[]> => {
-    return inputs.map((input) => ({
-      signedMessage: opts.modifySignedMessage ? new Uint8Array([9, 9, 9]) : input.message,
-      signature: new Uint8Array([1, 2, 3, 4]),
-    }));
-  });
+  const signMessage = vi.fn(
+    async (
+      ...inputs: readonly SolanaSignMessageInput[]
+    ): Promise<readonly SolanaSignMessageOutput[]> => {
+      return inputs.map((input) => ({
+        signedMessage: opts.modifySignedMessage ? new Uint8Array([9, 9, 9]) : input.message,
+        signature: new Uint8Array([1, 2, 3, 4]),
+      }));
+    },
+  );
   const wallet: Wallet = {
     version: '1.0.0',
     name: opts.name ?? 'Mock Wallet',

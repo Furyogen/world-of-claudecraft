@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { TouchPeekGuard, TOOLTIP_PEEK_MS } from '../src/ui/touch_peek';
+import { describe, expect, it } from 'vitest';
+import { TOOLTIP_PEEK_MS, TouchPeekGuard } from '../src/ui/touch_peek';
 
 describe('TouchPeekGuard', () => {
   it('a quick tap (no peek) activates the control', () => {

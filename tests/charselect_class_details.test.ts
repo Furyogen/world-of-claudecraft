@@ -1,7 +1,7 @@
-import { describe, it, expect } from 'vitest';
-import { CLASS_DETAILS, SIGNATURE_ABILITIES } from '../src/ui/class_details_data';
-import { CLASSES, ABILITIES } from '../src/sim/content/classes';
+import { describe, expect, it } from 'vitest';
+import { ABILITIES, CLASSES } from '../src/sim/content/classes';
 import type { PlayerClass } from '../src/sim/types';
+import { CLASS_DETAILS, SIGNATURE_ABILITIES } from '../src/ui/class_details_data';
 
 // Guards the hand-maintained character-select showcase data against drift from
 // the sim's source of truth. If a class's ability kit or roster changes, these

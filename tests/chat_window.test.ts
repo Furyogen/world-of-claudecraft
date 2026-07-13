@@ -1,10 +1,10 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import {
-  clampChatBox,
-  serializeChatBox,
-  parseChatBox,
   CHAT_BOX_LIMITS,
   type ChatBoxGeometry,
+  clampChatBox,
+  parseChatBox,
+  serializeChatBox,
 } from '../src/ui/chat_window';
 
 const VP = { w: 1280, h: 720 };

@@ -4,15 +4,27 @@ import { absorbBarView, absorbTotal } from '../src/ui/absorb_bar';
 
 function shield(value: number): Aura {
   return {
-    id: 'power_word_shield', name: 'Power Word: Shield', kind: 'absorb',
-    remaining: 30, duration: 30, value, sourceId: 1, school: 'holy',
+    id: 'power_word_shield',
+    name: 'Power Word: Shield',
+    kind: 'absorb',
+    remaining: 30,
+    duration: 30,
+    value,
+    sourceId: 1,
+    school: 'holy',
   };
 }
 
 function dot(value: number): Aura {
   return {
-    id: 'shadow_word_pain', name: 'Shadow Word: Pain', kind: 'dot',
-    remaining: 18, duration: 18, value, sourceId: 1, school: 'shadow',
+    id: 'shadow_word_pain',
+    name: 'Shadow Word: Pain',
+    kind: 'dot',
+    remaining: 18,
+    duration: 18,
+    value,
+    sourceId: 1,
+    school: 'shadow',
   };
 }
 

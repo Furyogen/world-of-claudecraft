@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { lowHealthVignette, LOW_HEALTH_THRESHOLD } from '../src/ui/low_health';
+import { LOW_HEALTH_THRESHOLD, lowHealthVignette } from '../src/ui/low_health';
 
 describe('low-health vignette', () => {
   it('is hidden at full / comfortable HP', () => {

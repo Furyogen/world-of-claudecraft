@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { frameGraphCanvasMetrics, frameGraphGeometry, MAX_VISIBLE_MS } from '../src/ui/perf_graph_painter';
+import {
+  frameGraphCanvasMetrics,
+  frameGraphGeometry,
+  MAX_VISIBLE_MS,
+} from '../src/ui/perf_graph_painter';
 
 const TARGET = 1000 / 60; // ~16.67ms
 

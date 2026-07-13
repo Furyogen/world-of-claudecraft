@@ -3509,6 +3509,198 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_nythraxis_scourges_end.completion':
     '王冠終於沉默了。索恩峰仍會背負它的亡者，但山下再沒有國王能召他們重返戰爭。你完成了奧德倫、馬爾里克和沃斯只能暫時封住的事。',
   'entities.quests.q_nythraxis_scourges_end.objectives.0.label': '擊敗尼思拉克西斯',
+  // --- Scorching Wastes world content ---
+  'entities.mobs.duskmane_prowler.name': '暮鬃潛行獸',
+  'entities.mobs.glasscarab.name': '玻璃甲蟲',
+  'entities.mobs.duneblade_marauder.name': '沙丘之刃掠奪者',
+  'entities.mobs.karesh_the_parched.name': '焦渴者卡雷什',
+  'entities.mobs.vigil_sentinel.name': '守夜哨衛',
+  'entities.mobs.sunbaked_revenant.name': '日炙亡魂',
+  'entities.mobs.ashen_courtier.name': '灰燼朝臣',
+  'entities.mobs.sunspeaker_atharis.name': '太陽代言人亞薩里斯',
+  'entities.mobs.emberveil_zealot.name': '燼紗狂熱者',
+  'entities.mobs.emberveil_pyromancer.name': '燼紗炎術師',
+  'entities.mobs.cinder_elemental.name': '燼火元素',
+  'entities.mobs.moltenheart_colossus.name': '熔心巨像',
+  'entities.mobs.cinder_wisp.name': '燼火精魂',
+  'entities.mobs.ember_of_korzul.name': '初燼',
+  'entities.npcs.caravan_master_saffa.name': '商隊長莎法',
+  'entities.npcs.caravan_master_saffa.title': '最後之井守護者',
+  'entities.npcs.caravan_master_saffa.greeting':
+    '朋友，在這裡，水是唯一的錢幣。高望派我們來，是要把它花在刀口上——而這片荒原，一心想讓我們破產。',
+  'entities.npcs.scout_maren_wastes.name': '瑪倫斥候',
+  'entities.npcs.scout_maren_wastes.title': '元帥的斥候',
+  'entities.npcs.scout_maren_wastes.greeting':
+    '我在泥沼追過爛泥，在荊峰踏過積雪。沙子更難纏——你走過的每一步，沙都記得。',
+  'entities.npcs.loremaster_caddis_wastes.name': '凱迪斯博學者',
+  'entities.npcs.loremaster_caddis_wastes.title': '沉沒王冠學者',
+  'entities.npcs.loremaster_caddis_wastes.greeting':
+    '札爾凱斯在一夜之間傾覆，{playerName}——整個王國話說到一半，就被熔成了玻璃。我等了一輩子，就想聽聽那句話的下文。',
+  'entities.npcs.brother_aldric_wastes.name': '奧德里克修士',
+  'entities.npcs.brother_aldric_wastes.title': '山谷牧師',
+  'entities.npcs.brother_aldric_wastes.greeting':
+    '墓龍的熱氣連這裡都滲得到，{playerName}——隔著靴底我都能感覺到。不管邪教在那片玻璃裡挖什麼，都絕不能讓他們帶回家。',
+  'entities.npcs.old_haruk.name': '老哈魯克',
+  'entities.npcs.old_haruk.title': '心泉守望者',
+  'entities.npcs.old_haruk.greeting':
+    '早在這道泉需要人看守之前，我家就世世代代照料著它。九位國王飲過它的水。第十位，想把它「整個」喝乾。',
+  'entities.npcs.provisioner_ashka.name': '補給官艾什卡',
+  'entities.npcs.provisioner_ashka.title': '商隊補給官',
+  'entities.npcs.provisioner_ashka.greeting':
+    '薄餅、椰棗酒，還有沒泡過屍體的清水。全荒原最上等的貨。',
+  'entities.npcs.forgemaster_derin.name': '鍛造大師德林',
+  'entities.npcs.forgemaster_derin.title': '商隊鐵匠',
+  'entities.npcs.forgemaster_derin.greeting':
+    '爐子裡是沙，淬火桶裡是沙，牙縫裡也是沙。憋著這股怨氣，打出來的刀反而更利。',
+  'entities.npcs.auctioneer_zeph.name': '拍賣師澤夫',
+  'entities.npcs.auctioneer_zeph.title': '世界市場守護者',
+  'entities.npcs.auctioneer_zeph.greeting':
+    '朋友，世界市場連最後之井都到得了。金幣不管在哪片沙漠，秤起來都一樣重。',
+  'entities.npcs.wellwatch_hana.name': '井衛哈娜',
+  'entities.npcs.wellwatch_hana.title': '商隊護衛',
+  'entities.npcs.wellwatch_hana.greeting': '帶著水進來，帶著水出去。這中間的一切，都歸我管。',
+  'entities.npcs.wellwatch_toma.name': '井衛托馬',
+  'entities.npcs.wellwatch_toma.title': '商隊護衛',
+  'entities.npcs.wellwatch_toma.greeting':
+    '今天值班很平靜。不過在這裡，「平靜」只代表沙子嚼得比較慢。',
+  'entities.npcs.drover_pell.name': '趕騾人佩爾',
+  'entities.npcs.drover_pell.title': '趕騾人',
+  'entities.npcs.drover_pell.greeting': '騾子先喝水，這是商隊的規矩。你要是想跟騾子講道理，請便。',
+  'entities.npcs.dowser_emrys.name': '尋水師艾姆里斯',
+  'entities.npcs.dowser_emrys.title': '尋水人',
+  'entities.npcs.dowser_emrys.greeting':
+    '我的探水杖只在瀑布那裡彎成兩折，方圓四十哩再無別處。這片土地與墳場之間，只隔著一道泉水。',
+  'entities.quests.q_sw_arrival.title': '最後之井',
+  'entities.quests.q_sw_arrival.text':
+    '歡迎來到地圖的盡頭，{playerName}。高望把這趟遠行稱作「南方遠征」；在我看來，不過是四十條人命和一道泉水。所以其他事都往後排——先顧水。到營地北邊的心泉水潭打滿四袋水回來，讓我知道通往瀑布的那條線走得安穩。',
+  'entities.quests.q_sw_arrival.completion':
+    '水又冰又清，你身上也沒插著箭——這是最後之井這一季聽過最好的消息。',
+  'entities.quests.q_sw_arrival.objectives.0.label': '滿溢水囊',
+  'entities.quests.q_sw_prowlers.title': '暮色之牙',
+  'entities.quests.q_sw_prowlers.text':
+    '暮鬃獸已經聽熟了我們水車的聲響，{playerName}。每到黃昏牠們就逼近一步，昨晚更有一頭連著挽具把一匹騾子拖走了。去營地南邊的骨風平原削減獸群，帶八張獸皮回來，證明這一課牠們記住了。',
+  'entities.quests.q_sw_prowlers.completion':
+    '八張獸皮，圍欄邊就少了八道影子。騾子總算能睡了——比我睡得還多。',
+  'entities.quests.q_sw_prowlers.objectives.0.label': '擊敗暮鬃潛行獸',
+  'entities.quests.q_sw_prowlers.objectives.1.label': '暮鬃獸皮',
+  'entities.quests.q_sw_carrion_glass.title': '食腐的玻璃',
+  'entities.quests.q_sw_carrion_glass.text':
+    '趕騾人管牠們叫玻璃甲蟲——獵犬那麼大的甲蟲，殼是熔成的玻璃，正從東邊的焦地裡成群湧出。德林賭咒說，用那種殼開出來的刃口比任何磨刀石都利。敲碎八隻甲蟲，帶六枚完整的殼回來；當心殼上的亮光，那表示牠們正在硬化。',
+  'entities.quests.q_sw_carrion_glass.completion':
+    '你看這刃口的光！德林這輩子都欠我一次磨刀，而東邊的路，也欠你一趟安靜的通行。',
+  'entities.quests.q_sw_carrion_glass.objectives.0.label': '擊敗玻璃甲蟲',
+  'entities.quests.q_sw_carrion_glass.objectives.1.label': '玻璃甲蟲殼',
+  'entities.quests.q_sw_lost_caravan.title': '沙丘留下的東西',
+  'entities.quests.q_sw_lost_caravan.text':
+    '有三輛貨車始終沒抵達井邊，{playerName}——糧食、工具，領頭那輛還是我妹夫在趕。風暴把它們吹散在西南邊的沙丘裡。找到殘骸，仔細搜一搜。我需要貨單，才知道我們損失了什麼……我也需要知道，有沒有人活著走了出去。',
+  'entities.quests.q_sw_lost_caravan.completion':
+    '靴印是「離開」殘骸的——然後就只剩掠奪者的足跡了。他們把車夫活捉了。那要嘛是慈悲，要嘛是算計，而在這裡，我很清楚該賭哪一個。',
+  'entities.quests.q_sw_lost_caravan.objectives.0.label': '搜查損毀的貨車',
+  'entities.quests.q_sw_marauders.title': '水稅',
+  'entities.quests.q_sw_marauders.text':
+    '沙丘之刃管這叫「收稅」：見面就收，要水或要血。他們在沙丘西南的窪地紮了營，圍著搶來的火堆，喝著搶來的水囊。去擊潰他們，{playerName}。放倒十名掠奪者，再帶五個水囊回來——那些皮囊裡裝的，是我們族人的性命。',
+  'entities.quests.q_sw_marauders.completion':
+    '你帶回的每一個水囊，都代表這口井邊有人能多活一天。沙丘之刃會記住向我們收稅的代價。',
+  'entities.quests.q_sw_marauders.objectives.0.label': '擊敗沙丘之刃掠奪者',
+  'entities.quests.q_sw_marauders.objectives.1.label': '失竊水囊',
+  'entities.quests.q_sw_karesh.title': '焦渴之王',
+  'entities.quests.q_sw_karesh.text':
+    '他們的頭目自稱「焦渴者卡雷什」——他喝乾了自己的蓄水池，還在殘渣裡撒鹽，免得對手跟著沾光。一個對自家水井都下得了這種手的人，對我們的井只會更狠。他在西邊山脊下的卡雷什窪地稱王。終結他的統治，{playerName}，再把他囤著的最後一個水囊帶回來。',
+  'entities.quests.q_sw_karesh.completion':
+    '原來這就是焦渴之王的最後一囊水。莎法會把它倒回井裡——一滴不留，這是原則。',
+  'entities.quests.q_sw_karesh.objectives.0.label': '擊敗焦渴者卡雷什',
+  'entities.quests.q_sw_karesh.objectives.1.label': '卡雷什的最後水囊',
+  'entities.quests.q_sw_survey.title': '中斷的句子',
+  'entities.quests.q_sw_survey.text':
+    '既然井邊暫時用不著你——就陪我走一趟歷史吧，{playerName}。太陽王庭留下了壁畫：一幅在水道脊下方，一幅在平頂山山腳，一幅在綠洲廢墟的雙塔旁。三幅都拓下來。札爾凱斯死在句子的中途，而我打算把剩下的半句讀完。',
+  'entities.quests.q_sw_survey.completion':
+    '就是這裡——句子接上了：「當王冠燙得再也戴不住，諸王便登上平頂山，把火焰『歸還』。」那是一場棄絕之禮，藉方尖碑行之——先晨、後午、再暮。順序很重要，{playerName}。儀式向來講究順序。',
+  'entities.quests.q_sw_survey.objectives.0.label': '拓下壁畫',
+  'entities.quests.q_sw_vigil_dawn.title': '守夜臺：黎明',
+  'entities.quests.q_sw_vigil_dawn.text':
+    '營地西邊那座平頂山，正是守夜臺本身——諸王行棄絕之禮的路。黎明方尖碑立在第一層臺地上，是日光最先照到的地方。沿著之字坡爬上去，把手放在碑上。黎明最先甦醒；壁畫對這一點相當堅持。',
+  'entities.quests.q_sw_vigil_dawn.completion':
+    '你也感覺到它的嗡鳴了？妙極了。兩個紀元過去，這場儀式竟還蓄著力。黎明已燃——正午在上頭等著。',
+  'entities.quests.q_sw_vigil_dawn.objectives.0.label': '自方尖碑取得晨火印記',
+  'entities.quests.q_sw_vigil_noon.title': '守夜臺：正午',
+  'entities.quests.q_sw_vigil_noon.text':
+    '正午加冕於峰頂——第二座方尖碑立在平頂山的最高處，在那裡，太陽獨佔整片天空。攀登本身就是重點，{playerName}：當年諸王是頂著王冠一步一步走上去的。去喚醒正午方尖碑。',
+  'entities.quests.q_sw_vigil_noon.completion':
+    '先是黎明，再是正午。儀式只剩最後一個時辰——而守夜臺，已經開始注意到我們了。',
+  'entities.quests.q_sw_vigil_noon.objectives.0.label': '自方尖碑取得午火印記',
+  'entities.quests.q_sw_vigil_dusk.title': '守夜臺：黃昏',
+  'entities.quests.q_sw_vigil_dusk.text':
+    '黃昏總是最後赴約——它的方尖碑立在西側的山嘴上，俯瞰峽谷。但你得明白這場儀式的本質，{playerName}：棄絕，必須有人「見證」。王庭以活生生的山石立了一尊哨衛作見證者；黃昏一旦點燃，它便會甦醒，審視你究竟是棄絕，還是純粹奪取。去說服它。徹底地說服。',
+  'entities.quests.q_sw_vigil_dusk.completion':
+    '哨衛判定你配得上——或者判定你殺不死，對一塊石頭來說，這兩者是同一個結論。守夜之禮已成，札爾凱斯的每一扇門，如今都成了值得一問的問題。',
+  'entities.quests.q_sw_vigil_dusk.objectives.0.label': '喚醒黃昏方尖碑',
+  'entities.quests.q_sw_vigil_dusk.objectives.1.label': '擊敗守夜哨衛',
+  'entities.quests.q_sw_revenants.title': '亡者的崗哨',
+  'entities.quests.q_sw_revenants.text':
+    '札爾凱斯的士兵從沒得知戰爭已敗——更沒得知它敗得有多「快」。他們在瀑布北邊的外城廢墟裡巡邏，盔甲熔進了骨頭，攔住旅人索問早已無人記得的口令。送十二個去安息吧，{playerName}，並收集他們的衛隊印記；有了印記，我們才能通行到城市更深處。',
+  'entities.quests.q_sw_revenants.completion':
+    '每一枚印記都還帶著餘溫——忠誠到最後一刻，甚至更久。維繫他們崗哨的東西還在更裡面，而現在，我們的官階比它大了。',
+  'entities.quests.q_sw_revenants.objectives.0.label': '擊敗日炙亡魂',
+  'entities.quests.q_sw_revenants.objectives.1.label': '王冠衛隊之印',
+  'entities.quests.q_sw_courtiers.title': '灰燼王庭',
+  'entities.quests.q_sw_courtiers.text':
+    '再往深處走，王庭本身仍在開議——內侍與誦經士守著一位死去國王的禮制，對著一座熔渣王座誦讀詩篇。他們的詩篇集裡記著聖所的禮拜儀文，而儀文裡藏著點燃王冠火盆的儀式。去打散這場朝會，{playerName}，帶一本書頁完整的詩篇集回來。',
+  'entities.quests.q_sw_courtiers.completion':
+    '噢，這可是精妙的手筆——整套火盆儀式，以一位已故領唱人的筆跡記譜。他們對著一座空王座整整唱了兩百年。我幾乎要憐憫他們了。幾乎。',
+  'entities.quests.q_sw_courtiers.objectives.0.label': '擊敗灰燼朝臣',
+  'entities.quests.q_sw_courtiers.objectives.1.label': '灰燼詩篇',
+  'entities.quests.q_sw_braziers.title': '王冠燃起',
+  'entities.quests.q_sw_braziers.text':
+    '詩篇集點名了塔樓之間的三座王冠火盆——三座齊燃，內聖所便會自行開啟，一如歷代加冕之時。我把儀文用粉筆抄在你的護手上了，{playerName}，盡量別流汗。先說清楚：點亮的王冠，就是看得見的王冠。第三簇火焰燃起的那一刻，城裡的一切都會知道。',
+  'entities.quests.q_sw_braziers.completion':
+    '我們在井邊看著塔樓一座接一座亮起——莎法哭了，而我承認，這回我沒對任何人說教。聖所已敞開。而裡面有什麼，正在應和著歌唱。',
+  'entities.quests.q_sw_braziers.objectives.0.label': '點燃王冠火盆',
+  'entities.quests.q_sw_sunspeaker.title': '第十次加冕',
+  'entities.quests.q_sw_sunspeaker.text':
+    '聖所裡的那個聲音，是太陽代言人亞薩里斯——札爾凱斯九位國王皆由他加冕。詩篇稱他為王庭活著的記憶，而他花了兩個紀元籌備第十次加冕：為火焰本身加冕。他就站在雙塔之間的太陽王座前。廢黜他，{playerName}，趕在他完成一場全沙漠都會後悔的儀式之前。',
+  'entities.quests.q_sw_sunspeaker.completion':
+    '九頂王冠，他親手戴上九道眉間；而第十頂，得燒掉整個世界才戴得下。史書將記載：是你宣布札爾凱斯的王庭休會。我會親自確保史書一字不差地這麼寫。',
+  'entities.quests.q_sw_sunspeaker.objectives.0.label': '廢黜太陽代言人亞薩里斯',
+  'entities.quests.q_sw_emberveil.title': '燼紗教',
+  'entities.quests.q_sw_emberveil.text':
+    '你也看到東側山緣那些蒙紗的營地了，{playerName}。他們是龍教——一支分裂出來的教派，名為燼紗教，趁高望緊盯聖所大門時翻過了山口。母教高歌喚醒墓龍，這一支卻在挖掘，要「武裝」牠。他們的狂熱者和炎術師正把整片玻璃地翻過來找什麼東西。趕在他們找到之前，削減他們的人手。',
+  'entities.quests.q_sw_emberveil.completion':
+    '那片玻璃地裡少了十六把鏟子。但挖掘聲日夜不歇——他們已經不是在找了，{playerName}。他們是在往外挖。',
+  'entities.quests.q_sw_emberveil.objectives.0.label': '擊敗燼紗狂熱者',
+  'entities.quests.q_sw_emberveil.objectives.1.label': '擊敗燼紗炎術師',
+  'entities.quests.q_sw_writs.title': '面紗下的教令',
+  'entities.quests.q_sw_writs.text':
+    '他們的頭目身上帶著教令——以母教密文寫成的命令。我在高望破譯過那套密文，在這裡我也能再破一次。給我帶五份燼紗教令回來，{playerName}，我們就能一字不差地讀出他們被派來取什麼。',
+  'entities.quests.q_sw_writs.completion':
+    '果然不出我所懼。「尋回『初燼』——太陽諸王自吾主之火竊走並鎖縛的那塊碎片。將它送往聖所之門；封印無法抵禦它自身的火焰。」他們打算用墓龍自己被竊的火，把墓龍的門燒開，{playerName}。',
+  'entities.quests.q_sw_writs.objectives.0.label': '燼紗教令',
+  'entities.quests.q_sw_glasscut.title': '天空燃燒之地',
+  'entities.quests.q_sw_glasscut.text':
+    '玻璃裂谷正是初燼墜落之處——就在它毀滅札爾凱斯的那一夜。那裡的地面至今灼熱，燼火元素在其上遊走，像一簇簇始終沒有落地的火星。初燼正在甦醒，{playerName}；邪教越挖越近，它的火星就越發張狂。驅散八隻元素，帶五枚活燼回來。我必須掂量掂量，我們面對的是怎樣一團火。',
+  'entities.quests.q_sw_glasscut.completion':
+    '泡在受祝福的鹽裡，它們竟還在扭動……這是龍焰，如今再無可疑。初燼不是遺物，{playerName}。它是「殘軀」——科祖爾脾性中活生生的一塊，而且它還記得自己曾被當作王冠佩戴。',
+  'entities.quests.q_sw_glasscut.objectives.0.label': '擊敗燼火元素',
+  'entities.quests.q_sw_glasscut.objectives.1.label': '活燼',
+  'entities.quests.q_sw_offering.title': '泉水記得',
+  'entities.quests.q_sw_offering.text':
+    '牧師要去直面那團火，你也要同去。那就先聽一句守井人的智慧吧，{playerName}：心泉自墓龍囚牢的正下方湧起，而從一件東西底下流過的水，最了解那件東西。帶著我的供碗到瀑布頂端的水潭，倒下清水，然後傾聽。這道泉曾經淹熄過這團火一次。出發去求火燒身之前，先讓泉水祝福你。',
+  'entities.quests.q_sw_offering.completion':
+    '你也聽見了——深處的水，在世界底下流動。把那個聲音當鎧甲穿上吧，{playerName}。火焰喧囂，但泉水先於它存在，也將在它之後長流。',
+  'entities.quests.q_sw_offering.objectives.0.label': '在心泉獻上供品',
+  'entities.quests.q_sw_first_ember.title': '初燼',
+  'entities.quests.q_sw_first_ember.text':
+    '它出土了，{playerName}。邪教的坑洞在黎明時分塌開，玻璃裂谷從內裡亮了起來——初燼就站在它兩個紀元前砸出的坑中，披著火焰如同君王的冠服，燼紗教徒一排排向它下跪。一旦它抵達聖所之門，高望流過的每一滴血都將化為灰燼。你身上帶著泉水的祝福與守夜臺的見證。下到玻璃裡去，替札爾凱斯把那句話說完：火焰，「歸還」。',
+  'entities.quests.q_sw_first_ember.completion':
+    '它熄滅的那一刻，瀑布的水又急又亮——那是泉水，把宿敵收回了水底。你做到了九位國王做不到的事，{playerName}：你把火還了回去。坐吧，喝口水。今晚的水最甜。',
+  'entities.quests.q_sw_first_ember.objectives.0.label': '熄滅初燼',
+  'entities.quests.q_sw_afterglow.title': '活人的水',
+  'entities.quests.q_sw_afterglow.text':
+    '哈魯克說，泉水如今唱的調子低了一度，像一筆還清的債。燼紗教非灰即逃，王庭已然休會，我的帳本上終於是水多過憂。最後一件事，{playerName}——在營地裡走一圈，讓瑪倫、凱迪斯和奧德里克修士好好向你道個謝。這是他們掙來的機會，也是你掙來的。',
+  'entities.quests.q_sw_afterglow.completion':
+    '那麼一切都結束了，最後之井也終於只是……一口井。若我這個老商隊頭子說了算，它會是一條活路上眾多水井中的第一口。灼熱荒原會記住你的名字，{playerName}——水記得一切。',
+  'entities.quests.q_sw_afterglow.objectives.0.label': '與瑪倫斥候交談',
+  'entities.quests.q_sw_afterglow.objectives.1.label': '與凱迪斯博學者交談',
+  'entities.quests.q_sw_afterglow.objectives.2.label': '與奧德里克修士交談',
   'hud.errors.silenced': '你已被沉默！',
   'hud.pet.noPetFood': '你沒有可餵食寵物的食物。',
   'hud.pet.petEatsFoodOnly': '你的寵物只能吃食物。',
@@ -6181,6 +6373,49 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'entities.items.litany_helm.name': '聖物獵人的溺兜',
   'entities.items.sister_nhalia_choir_plate.name': '娜哈莉亞修女的唱詩鍛甲',
   'entities.items.drowned_choir_fang.name': '溺水唱詩獠牙',
+  // --- Scorching Wastes items ---
+  'entities.items.ashen_psalter.name': '灰燼詩篇',
+  'entities.items.brimming_waterskin.name': '滿溢水囊',
+  'entities.items.cactus_pressed_water.name': '仙人掌榨水',
+  'entities.items.caravan_guard_mail.name': '商隊衛士鎖甲',
+  'entities.items.caravan_manifest.name': '水漬貨單',
+  'entities.items.cinder_soaked_veil.name': '浸燼面紗',
+  'entities.items.crown_brazier.name': '王冠火盆',
+  'entities.items.crown_guard_seal.name': '王冠衛隊之印',
+  'entities.items.duneblade_token.name': '沙丘之刃令牌',
+  'entities.items.duneforged_warblade.name': '沙丘鍛造戰刃',
+  'entities.items.dunewatch_sash.name': '沙丘守望腰帶',
+  'entities.items.duskmane_pelt.name': '暮鬃獸皮',
+  'entities.items.emberbound_leggings.name': '縛燼護腿',
+  'entities.items.emberglass_scepter.name': '燼玻權杖',
+  'entities.items.emberveil_writ.name': '燼紗教令',
+  'entities.items.glasscarab_shell.name': '玻璃甲蟲殼',
+  'entities.items.glasscut_dirk.name': '玻璃裂谷匕首',
+  'entities.items.heart_of_the_first_ember.name': '初燼之心',
+  'entities.items.heartspring_offering.name': '心泉供碗',
+  'entities.items.kareshs_last_skin.name': '卡雷什的最後水囊',
+  'entities.items.lastwell_datewine.name': '最後之井椰棗酒',
+  'entities.items.living_cinder.name': '活燼',
+  'entities.items.moltenheart_girdle.name': '熔心束帶',
+  'entities.items.moltenheart_slagcore.name': '熔心渣核',
+  'entities.items.mural_rubbing.name': '壁畫拓片',
+  'entities.items.parched_kings_goblet.name': '焦渴之王的酒杯',
+  'entities.items.prowler_fang.name': '潛行獸獠牙',
+  'entities.items.sentinel_core_stone.name': '哨衛核心石',
+  'entities.items.springheart_blessing.name': '心泉祝福',
+  'entities.items.stolen_waterskin.name': '失竊水囊',
+  'entities.items.sunbaked_flatbread.name': '日烤薄餅',
+  'entities.items.sunbleached_bone.name': '日曬白骨',
+  'entities.items.sunbleached_staff.name': '日曬法杖',
+  'entities.items.sunglass_shard.name': '陽玻碎片',
+  'entities.items.sunspeakers_ash_crown.name': '太陽代言人的灰燼之冠',
+  'entities.items.vestment_of_the_sunken_crown.name': '沉沒王冠法衣',
+  'entities.items.vigil_obelisk_dawn.name': '晨火印記',
+  'entities.items.vigil_obelisk_dusk.name': '暮火印記',
+  'entities.items.vigil_obelisk_noon.name': '午火印記',
+  'entities.items.wastes_relic_cache.name': '太陽王庭遺物箱',
+  'entities.items.wastewalker_jerkin.name': '荒原行者皮甲',
+  'entities.items.wastewalker_treads.name': '荒原行者之靴',
   'entities.mobs.drowned_cantor.name': '溺亡誦經者',
   'entities.mobs.reedbound_acolyte.name': '蘆葦縛信徒',
   'entities.mobs.deepfen_spearjaw.name': '深沼槍顎獸',

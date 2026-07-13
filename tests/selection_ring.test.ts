@@ -1,13 +1,17 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { drapeRingLocalY } from '../src/render/selection_ring';
 
 // A small square ring footprint (unit radius) sampled at the four cardinal
 // points, expressed as the flat [x0,z0, x1,z1, ...] layout the renderer caches.
 const RING_XZ = new Float32Array([
-  1, 0,   // +X
-  -1, 0,  // -X
-  0, 1,   // +Z
-  0, -1,  // -Z
+  1,
+  0, // +X
+  -1,
+  0, // -X
+  0,
+  1, // +Z
+  0,
+  -1, // -Z
 ]);
 
 describe('drapeRingLocalY', () => {
@@ -34,7 +38,8 @@ describe('drapeRingLocalY', () => {
 
   it('every vertex ends up on or above the terrain (never buried)', () => {
     const sample = (x: number, z: number) => Math.sin(x) + Math.cos(z) * 0.5;
-    const cx = 3.2, cz = -1.7;
+    const cx = 3.2,
+      cz = -1.7;
     const baseY = sample(cx, cz);
     const out = new Float32Array(4);
     const lift = 0.08;
@@ -50,7 +55,11 @@ describe('drapeRingLocalY', () => {
 
   it('accounts for mesh scale when sampling and when emitting local Y', () => {
     const sample = (x: number) => x; // slope of 1 in X
-    const cx = 0, cz = 0, baseY = 0, scale = 2, lift = 0;
+    const cx = 0,
+      cz = 0,
+      baseY = 0,
+      scale = 2,
+      lift = 0;
     const out = new Float32Array(4);
     drapeRingLocalY(RING_XZ, cx, cz, baseY, scale, lift, sample, out);
     // +X vertex lands at world x = cx + scale*1 = 2 -> ground 2.

@@ -5,11 +5,16 @@
 // Renders an HTML string (both call sites build their UI via innerHTML), then
 // hydrates: while the character GLBs are still preloading the chip shows the
 // class crest as a placeholder and upgrades to the real portrait once ready.
-import { t } from './i18n';
+
+import {
+  onPortraitsReady,
+  playerPortraitDataUrl,
+  portraitsReady,
+} from '../render/characters/portrait';
+import type { PlayerClass } from '../sim/types';
 import { esc } from './esc';
+import { t } from './i18n';
 import { iconDataUrl } from './icons';
-import { PlayerClass } from '../sim/types';
-import { playerPortraitDataUrl, onPortraitsReady, portraitsReady } from '../render/characters/portrait';
 
 export type PortraitVariant = 'sm' | 'md' | 'lg';
 

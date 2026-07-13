@@ -149,6 +149,9 @@ interface Critter {
 export function buildCritters(seed: number): CritterField {
   const group = new THREE.Group();
   group.name = 'critters';
+  if (getActiveWorldContent().presentationMode === 'blank') {
+    return { group, update(): void {} };
+  }
   const rng = mulberry32(seed ^ 0x6c12a7);
   const count = GFX.standardMaterials ? 16 : 7;
 

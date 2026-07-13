@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import {
-  PERCENTILE_TIERS, PERCENTILE_TIER_MAX, percentileTierForPercent,
-  percentileTierBadgeDataUrl, percentileRarityStyle,
+  PERCENTILE_TIER_MAX,
+  PERCENTILE_TIERS,
+  percentileRarityStyle,
+  percentileTierBadgeDataUrl,
+  percentileTierForPercent,
 } from '../src/ui/percentile_tier';
 
 describe('percentile-tier ladder', () => {
@@ -114,9 +117,10 @@ describe('percentileTierBadgeDataUrl', () => {
   });
 
   it('embeds a static halo + apex sunburst for legendary, halo-only for epic, plain for common', () => {
-    const svgFor = (p: number) => decodeURIComponent(
-      percentileTierBadgeDataUrl(PERCENTILE_TIERS.find((t) => t.percent === p)!),
-    );
+    const svgFor = (p: number) =>
+      decodeURIComponent(
+        percentileTierBadgeDataUrl(PERCENTILE_TIERS.find((t) => t.percent === p)!),
+      );
     const legendary = svgFor(1);
     expect(legendary).toContain('id="htop1"'); // halo gradient present
     expect((legendary.match(/<rect/g) ?? []).length).toBeGreaterThanOrEqual(12); // sunburst rays

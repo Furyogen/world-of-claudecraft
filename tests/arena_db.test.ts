@@ -43,7 +43,9 @@ describe('arena leaderboard', () => {
 
   it('coerces numeric rating/record fields from JSONB strings', async () => {
     dbMock.query.mockResolvedValueOnce({
-      rows: [{ name: 'Thrall', class: 'shaman', level: 60, rating: '1832', wins: '12', losses: '3' }],
+      rows: [
+        { name: 'Thrall', class: 'shaman', level: 60, rating: '1832', wins: '12', losses: '3' },
+      ],
     });
 
     await expect(topArenaRatings(5)).resolves.toEqual([

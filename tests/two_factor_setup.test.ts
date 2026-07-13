@@ -1,10 +1,10 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import {
-  formatSecretGroups,
-  normalizeAuthCodeInput,
-  isCompleteTotpCode,
   classifyAuthCode,
   formatRecoveryCodesFile,
+  formatSecretGroups,
+  isCompleteTotpCode,
+  normalizeAuthCodeInput,
 } from '../src/ui/two_factor_setup';
 
 describe('formatSecretGroups', () => {

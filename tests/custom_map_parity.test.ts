@@ -3,7 +3,14 @@ import { isBlocked } from '../src/sim/colliders';
 import { BUILTIN_WORLD, getActiveWorldContent, setActiveWorldContent } from '../src/sim/data';
 import { sanitizeMapDoc } from '../src/sim/map_doc';
 import type { WorldContent } from '../src/sim/types';
-import { biomeAt, terrainHeight, WATER_LEVEL, waterLevel, zoneBiomeAt } from '../src/sim/world';
+import {
+  biomeAt,
+  generateDecorations,
+  terrainHeight,
+  WATER_LEVEL,
+  waterLevel,
+  zoneBiomeAt,
+} from '../src/sim/world';
 
 // The custom-map seam (Phase 0): the terrain function reads the active world
 // content registry, defaulting to the built-in world. These tests prove (a) the
@@ -96,7 +103,10 @@ describe('custom-map terrain seam', () => {
       },
     });
     expect(biomeAt(40, 60)).toBe('peaks');
-    expect(terrainHeight(40, 60, SEED)).not.toBeCloseTo(baseH, 3); // shape changed
+    // Painting is texture/color only: the heightfield is byte-identical (it
+    // used to hard-override the biome shape per cell, which deformed sculpted
+    // ground and read as terraced blocks).
+    expect(terrainHeight(40, 60, SEED)).toBeCloseTo(baseH, 9);
     // A point outside the painted cell is unchanged.
     expect(biomeAt(200, 200)).toBe(zoneBiomeAt(200, 200));
     expect(baseBiome).toBe('vale');
@@ -122,6 +132,12 @@ describe('custom-map terrain seam', () => {
       ],
     });
     expect(terrainHeight(0, 0, SEED)).toBeCloseTo(9, 6);
+  });
+
+  it('custom worlds can opt out of procedural trees and rocks', () => {
+    expect(generateDecorations(SEED).length).toBeGreaterThan(0);
+    setActiveWorldContent({ ...BUILTIN_WORLD, decorationsMode: 'empty' });
+    expect(generateDecorations(SEED)).toEqual([]);
   });
 
   it('custom water level flows through waterLevel() and terrain shaping', () => {

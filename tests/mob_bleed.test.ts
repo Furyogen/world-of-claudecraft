@@ -3,9 +3,9 @@
 // the on-hit DoT seam with venom, but is physical-school (not nature/poison), so
 // it bypasses poison cleanses and ignores nature resistance.
 import { describe, expect, it } from 'vitest';
-import { Sim } from '../src/sim/sim';
 import { MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
+import { Sim } from '../src/sim/sim';
 
 const SEED = 31337;
 const makeSim = (cls: 'warrior' | 'mage' = 'warrior') => new Sim({ seed: SEED, playerClass: cls });
@@ -84,7 +84,11 @@ describe('mob bleed (on-hit physical DoT)', () => {
     const player = sim.entities.get(sim.playerId)!;
     player.maxHp = 5000;
     player.hp = 5000;
-    const wolf = createMob(980050, MOBS.forest_wolf, 4, { x: player.pos.x, y: player.pos.y, z: player.pos.z });
+    const wolf = createMob(980050, MOBS.forest_wolf, 4, {
+      x: player.pos.x,
+      y: player.pos.y,
+      z: player.pos.z,
+    });
     sim.entities.set(wolf.id, wolf);
     for (let i = 0; i < 40; i++) (sim as any).mobSwing(wolf, player);
     expect(player.auras.some((a) => a.id === 'bleed_ridge_stalker')).toBe(false);

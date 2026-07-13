@@ -4,9 +4,9 @@
 // Strike — where Mortal Strike scales every heal down for its whole duration,
 // Grave Blight eats a FIXED pool of healing once, then fades.
 import { describe, expect, it } from 'vitest';
-import { Sim } from '../src/sim/sim';
 import { MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
+import { Sim } from '../src/sim/sim';
 import type { Entity } from '../src/sim/types';
 
 function makeSim(playerClass: 'warrior' | 'mage' = 'warrior') {
@@ -16,7 +16,11 @@ function makeSim(playerClass: 'warrior' | 'mage' = 'warrior') {
 // Spawn a Gravecaller Summoner adjacent to the player, engaged and ready to swing.
 function spawnSummoner(sim: Sim, target: Entity): Entity {
   const template = MOBS['gravecaller_summoner'];
-  const mob = createMob((sim as any).nextId++, template, 12, { x: target.pos.x, y: target.pos.y, z: target.pos.z });
+  const mob = createMob((sim as any).nextId++, template, 12, {
+    x: target.pos.x,
+    y: target.pos.y,
+    z: target.pos.z,
+  });
   mob.hostile = true;
   (sim as any).addEntity(mob);
   return mob;
@@ -29,7 +33,13 @@ function swing(sim: Sim, mob: Entity, target: Entity) {
   const rng = (sim as any).rng;
   const realNext = rng.next.bind(rng);
   let firstRoll = true;
-  rng.next = () => { if (firstRoll) { firstRoll = false; return 0.999; } return realNext(); };
+  rng.next = () => {
+    if (firstRoll) {
+      firstRoll = false;
+      return 0.999;
+    }
+    return realNext();
+  };
   try {
     (sim as any).mobSwing(mob, target);
   } finally {
@@ -40,14 +50,19 @@ function swing(sim: Sim, mob: Entity, target: Entity) {
 describe('mob heal-absorb ("Grave Blight")', () => {
   it('seeds the heal-absorb mechanic on the Gravecaller Summoner', () => {
     expect(MOBS['gravecaller_summoner'].healAbsorb).toEqual({
-      chance: 0.25, amount: 120, duration: 10, name: 'Grave Blight', school: 'shadow',
+      chance: 0.25,
+      amount: 120,
+      duration: 10,
+      name: 'Grave Blight',
+      school: 'shadow',
     });
   });
 
   it('applies a heal_absorb aura on a landed hit when it rolls', () => {
     const sim = makeSim();
     const p = sim.player;
-    p.maxHp = 100000; p.hp = 100000;
+    p.maxHp = 100000;
+    p.hp = 100000;
     const mob = spawnSummoner(sim, p);
     MOBS['gravecaller_summoner'].healAbsorb!.chance = 1; // deterministic for the test
     swing(sim, mob, p);
@@ -63,8 +78,14 @@ describe('mob heal-absorb ("Grave Blight")', () => {
     const sim = makeSim();
     const p = sim.player;
     p.auras.push({
-      id: 'heal_absorb_test', name: 'Grave Blight', kind: 'heal_absorb',
-      remaining: 10, duration: 10, value: 120, sourceId: 999, school: 'shadow',
+      id: 'heal_absorb_test',
+      name: 'Grave Blight',
+      kind: 'heal_absorb',
+      remaining: 10,
+      duration: 10,
+      value: 120,
+      sourceId: 999,
+      school: 'shadow',
     });
     // A 50-point heal is fully eaten; the shield drains to 70 and remains.
     expect((sim as any).consumeHealAbsorb(p, 50)).toBe(0);
@@ -77,11 +98,18 @@ describe('mob heal-absorb ("Grave Blight")', () => {
   it('blocks real healing while a shield is active, then heals normally after it lapses', () => {
     const sim = makeSim();
     const p = sim.player;
-    p.maxHp = 1000; p.hp = 500;
+    p.maxHp = 1000;
+    p.hp = 500;
     // A shield larger than any heal (crit included) absorbs the whole heal.
     p.auras.push({
-      id: 'heal_absorb_test', name: 'Grave Blight', kind: 'heal_absorb',
-      remaining: 10, duration: 10, value: 100000, sourceId: 999, school: 'shadow',
+      id: 'heal_absorb_test',
+      name: 'Grave Blight',
+      kind: 'heal_absorb',
+      remaining: 10,
+      duration: 10,
+      value: 100000,
+      sourceId: 999,
+      school: 'shadow',
     });
     (sim as any).applyHeal(p, p, 200, 'Test Heal');
     expect(p.hp).toBe(500); // fully absorbed

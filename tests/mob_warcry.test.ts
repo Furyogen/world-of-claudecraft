@@ -1,19 +1,20 @@
 import { describe, expect, it } from 'vitest';
-import { Sim } from '../src/sim/sim';
 import { MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
+import { Sim } from '../src/sim/sim';
 import type { Entity } from '../src/sim/types';
 
 const SEED = 41099;
 
 // Deepfen Snapper is the seeded carrier of the warcry (ally-haste) mechanic.
-const inner = (sim: Sim) => sim as unknown as {
-  addEntity(e: Entity): void;
-  updateBossMechanics(m: Entity): void;
-  resetEvadingMob(m: Entity): void;
-};
+const inner = (sim: Sim) =>
+  sim as unknown as {
+    addEntity(e: Entity): void;
+    updateBossMechanics(m: Entity): void;
+    resetEvadingMob(m: Entity): void;
+  };
 
-function spawn(sim: Sim, id: number, tmpl: typeof MOBS[string]) {
+function spawn(sim: Sim, id: number, tmpl: (typeof MOBS)[string]) {
   const mob = createMob(id, tmpl, 9, { x: 0, y: 0, z: 0 });
   mob.inCombat = true;
   inner(sim).addEntity(mob);
@@ -25,7 +26,12 @@ const HASTE = (e: Entity) => e.auras.find((a) => a.id === 'warcry_deepfen_murloc
 describe('mob ally-haste (warcry)', () => {
   it('seeds the mechanic on the Deepfen Snapper', () => {
     expect(MOBS.deepfen_murloc.warcry).toEqual({
-      radius: 12, every: 10, hasteMult: 1.25, duration: 6, name: 'Tide Cadence', school: 'frost',
+      radius: 12,
+      every: 10,
+      hasteMult: 1.25,
+      duration: 6,
+      name: 'Tide Cadence',
+      school: 'frost',
     });
   });
 

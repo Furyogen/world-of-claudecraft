@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { Sim } from '../src/sim/sim';
 import { MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
+import { Sim } from '../src/sim/sim';
 import type { PlayerClass } from '../src/sim/types';
 
 const SEED = 42;
@@ -67,9 +67,14 @@ describe('mob withering curse (Withering Rot)', () => {
     const wither = MOBS.fen_troll.wither!;
     expect(agiBefore).toBeGreaterThan(wither.agi); // precondition: no floor
     (sim as any).applyAura(player, {
-      id: `wither_${mob.templateId}`, name: wither.name, kind: 'buff_agi',
-      remaining: wither.duration, duration: wither.duration,
-      value: -wither.agi, sourceId: mob.id, school: 'nature',
+      id: `wither_${mob.templateId}`,
+      name: wither.name,
+      kind: 'buff_agi',
+      remaining: wither.duration,
+      duration: wither.duration,
+      value: -wither.agi,
+      sourceId: mob.id,
+      school: 'nature',
     });
     expect(player.stats.agi).toBe(agiBefore - wither.agi);
     // Agility feeds armor at 2 per point, so the drain shaves it too.
@@ -100,7 +105,10 @@ describe('mob withering curse (Withering Rot)', () => {
     const old = wither.chance;
     wither.chance = 1;
     try {
-      for (let i = 0; i < 80; i++) { player.hp = player.maxHp; (sim as any).mobSwing(mob, player); }
+      for (let i = 0; i < 80; i++) {
+        player.hp = player.maxHp;
+        (sim as any).mobSwing(mob, player);
+      }
     } finally {
       wither.chance = old;
     }

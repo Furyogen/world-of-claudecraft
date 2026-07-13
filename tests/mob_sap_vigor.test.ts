@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { Sim } from '../src/sim/sim';
 import { MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
+import { Sim } from '../src/sim/sim';
 import type { PlayerClass } from '../src/sim/types';
 
 const SEED = 42;
@@ -74,7 +74,11 @@ describe('mob sap vigor (Sapping Bite)', () => {
     sap.chance = 1;
     player.resource = player.maxResource;
     try {
-      for (let i = 0; i < 50; i++) { player.maxHp = KEEP_ALIVE; player.hp = KEEP_ALIVE; (sim as any).mobSwing(mob, player); }
+      for (let i = 0; i < 50; i++) {
+        player.maxHp = KEEP_ALIVE;
+        player.hp = KEEP_ALIVE;
+        (sim as any).mobSwing(mob, player);
+      }
     } finally {
       sap.chance = old;
     }
@@ -90,7 +94,11 @@ describe('mob sap vigor (Sapping Bite)', () => {
     const old = sap.chance;
     sap.chance = 1;
     try {
-      for (let i = 0; i < 50; i++) { player.maxHp = KEEP_ALIVE; player.hp = KEEP_ALIVE; (sim as any).mobSwing(mob, player); }
+      for (let i = 0; i < 50; i++) {
+        player.maxHp = KEEP_ALIVE;
+        player.hp = KEEP_ALIVE;
+        (sim as any).mobSwing(mob, player);
+      }
     } finally {
       sap.chance = old;
     }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { Sim } from '../src/sim/sim';
 import { ABILITIES, abilitiesKnownAt } from '../src/sim/content/classes';
+import { Sim } from '../src/sim/sim';
 
 function shaman(level: number) {
   const sim = new Sim({ seed: 42, playerClass: 'shaman', noPlayer: true });
@@ -26,7 +26,9 @@ describe('Frostbrand Weapon (shaman frost imbue)', () => {
   });
 
   it('is gated by learn level and ranks up at 20', () => {
-    expect(abilitiesKnownAt('shaman', 11).some((k) => k.def.id === 'frostbrand_weapon')).toBe(false);
+    expect(abilitiesKnownAt('shaman', 11).some((k) => k.def.id === 'frostbrand_weapon')).toBe(
+      false,
+    );
     const at12 = abilitiesKnownAt('shaman', 12).find((k) => k.def.id === 'frostbrand_weapon');
     expect(at12?.rank).toBe(1);
     const at20 = abilitiesKnownAt('shaman', 20).find((k) => k.def.id === 'frostbrand_weapon');

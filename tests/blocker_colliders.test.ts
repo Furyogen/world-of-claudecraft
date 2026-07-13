@@ -78,7 +78,18 @@ describe('blocker wall colliders', () => {
 
 describe('placement collideRadius override', () => {
   function placement(collideRadius: number): PlacedAsset {
-    return { path: '/models/props/well.glb', x: 0, z: 60, rotY: 0, scale: 1, collideRadius };
+    // collideCustom: an AUTHORED radius keeps the legacy footprint (the
+    // projection sets this whenever the maker overrode radius/shape); without
+    // it the sim would block with the asset's baked collision boxes instead.
+    return {
+      path: '/models/props/well.glb',
+      x: 0,
+      z: 60,
+      rotY: 0,
+      scale: 1,
+      collideRadius,
+      collideCustom: true,
+    };
   }
 
   it('blocks at the overridden radius, not the scale-derived one', () => {
@@ -92,5 +103,45 @@ describe('placement collideRadius override', () => {
     const res = resolvePosition(SEED, 3, 60, 0.5);
     const d = Math.hypot(res.x, res.z - 60);
     expect(d).toBeGreaterThanOrEqual(5.5 - 1e-6); // pushed to override + body radius
+  });
+
+  it("a 'square' footprint blocks at its corners where the circle would not", () => {
+    // A square of half-extent 4 reaches 4*sqrt(2) (~5.66) along its diagonal;
+    // the circle of radius 4 ends at 4. Probe the diagonal at ~5.2yd.
+    const diag = 5.2 / Math.SQRT2;
+    const square: PlacedAsset = {
+      path: '/models/props/well.glb',
+      x: 0,
+      z: 60,
+      rotY: 0,
+      scale: 1,
+      collideRadius: 4,
+      collideShape: 'square',
+      collideCustom: true,
+    };
+    setActiveWorldContent(world({ placements: [{ ...square, collideShape: undefined }] }));
+    expect(isBlocked(SEED, diag, 60 + diag, 0.3)).toBe(false);
+
+    setActiveWorldContent(world({ placements: [square] }));
+    expect(isBlocked(SEED, diag, 60 + diag, 0.3)).toBe(true);
+  });
+
+  it('the square footprint follows the placement yaw', () => {
+    // Yawed 45 degrees, the corners swing onto the axes: +x now hits a corner
+    // (reach ~5.66) while the old diagonal direction hits a face (reach 4).
+    const square: PlacedAsset = {
+      path: '/models/props/well.glb',
+      x: 0,
+      z: 60,
+      rotY: Math.PI / 4,
+      scale: 1,
+      collideRadius: 4,
+      collideShape: 'square',
+      collideCustom: true,
+    };
+    setActiveWorldContent(world({ placements: [square] }));
+    expect(isBlocked(SEED, 5.2, 60, 0.3)).toBe(true);
+    const diag = 5.2 / Math.SQRT2;
+    expect(isBlocked(SEED, diag, 60 + diag, 0.3)).toBe(false);
   });
 });

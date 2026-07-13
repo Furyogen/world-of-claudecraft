@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import { CAMPS, ITEMS, MOBS } from '../src/sim/data';
 import { Sim } from '../src/sim/sim';
-import { MOBS, ITEMS, CAMPS } from '../src/sim/data';
 
 // Brutok Skullsmasher — the ogre family's rare elite in Thornpeak Heights,
 // filling the ogre rare gap (ogres previously had only the Crusher elite and
@@ -47,7 +47,8 @@ describe('rare spawn: Brutok Skullsmasher', () => {
     const chaseIds = new Set(['brutoks_maul', 'crag_warden_cudgel', 'skullsplitter_dirk']);
 
     for (let i = 0; i < 300; i++) {
-      mob.loot = null; mob.lootable = false;
+      mob.loot = null;
+      mob.lootable = false;
       (sim as any).rollLoot(mob, meta);
       const items: string[] = (mob.loot?.items ?? []).map((s: any) => s.itemId);
       // guaranteed entries (chance 1) are always present

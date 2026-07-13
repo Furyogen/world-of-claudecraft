@@ -119,13 +119,17 @@ describe('escalate', () => {
 
   it('mutes immediately when warningsBeforeMute is 0', () => {
     expect(escalate(0, { warningsBeforeMute: 0, muteLadderSeconds: [600] })).toEqual({
-      kind: 'mute', muteSeconds: 600, strikes: 1,
+      kind: 'mute',
+      muteSeconds: 600,
+      strikes: 1,
     });
   });
 
   it('never mutes when the ladder is empty', () => {
     expect(escalate(5, { warningsBeforeMute: 1, muteLadderSeconds: [] })).toEqual({
-      kind: 'warning', muteSeconds: 0, strikes: 6,
+      kind: 'warning',
+      muteSeconds: 0,
+      strikes: 6,
     });
   });
 });
@@ -133,11 +137,15 @@ describe('escalate', () => {
 describe('cleanEscalationConfig', () => {
   it('falls back to defaults on garbage input', () => {
     expect(cleanEscalationConfig({})).toEqual(DEFAULT_ESCALATION);
-    expect(cleanEscalationConfig({ warningsBeforeMute: -3, muteLadderSeconds: 'nope' })).toEqual(DEFAULT_ESCALATION);
+    expect(cleanEscalationConfig({ warningsBeforeMute: -3, muteLadderSeconds: 'nope' })).toEqual(
+      DEFAULT_ESCALATION,
+    );
   });
 
   it('keeps valid values and drops non-positive ladder entries', () => {
-    expect(cleanEscalationConfig({ warningsBeforeMute: 2, muteLadderSeconds: [60, -1, 0, 120] })).toEqual({
+    expect(
+      cleanEscalationConfig({ warningsBeforeMute: 2, muteLadderSeconds: [60, -1, 0, 120] }),
+    ).toEqual({
       warningsBeforeMute: 2,
       muteLadderSeconds: [60, 120],
     });

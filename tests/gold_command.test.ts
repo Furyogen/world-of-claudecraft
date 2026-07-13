@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { Sim, formatMoney } from '../src/sim/sim';
-import { SimEvent } from '../src/sim/types';
+import { formatMoney, Sim } from '../src/sim/sim';
+import type { SimEvent } from '../src/sim/types';
 
 function makeSim() {
   return new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });

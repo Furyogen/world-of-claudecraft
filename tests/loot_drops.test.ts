@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { Sim } from '../src/sim/sim';
 import { MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
+import { Sim } from '../src/sim/sim';
 
 // Drives the authoritative loot roller (Sim.rollLoot) directly against the
 // dungeon mob templates, the same way combat death does, to verify the
@@ -49,8 +49,9 @@ describe('Inventory 2.0 dungeon drops', () => {
   }
 
   it('is deterministic — identical seed reproduces the exact empirical rate', () => {
-    expect(dropRate('bastion_revenant', 'mistveil_cord', 7, 5000))
-      .toBe(dropRate('bastion_revenant', 'mistveil_cord', 7, 5000));
+    expect(dropRate('bastion_revenant', 'mistveil_cord', 7, 5000)).toBe(
+      dropRate('bastion_revenant', 'mistveil_cord', 7, 5000),
+    );
   });
 
   it('does not leak items across dungeons (mistveil is drowned-only)', () => {

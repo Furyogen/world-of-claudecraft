@@ -319,6 +319,11 @@ export default defineConfig({
   },
   server: {
     port: 5173,
+    // Pin the dev port. localStorage (where the editor saves maps/drafts) is
+    // scoped per origin *including port*, so a drifting port silently hides
+    // previously-saved maps. strictPort makes Vite fail loudly instead of
+    // picking a new port, keeping the origin — and your saves — stable.
+    strictPort: true,
     proxy: {
       '/api': { target: apiProxyTarget, changeOrigin: true },
       '/admin/api': { target: apiProxyTarget, changeOrigin: true },

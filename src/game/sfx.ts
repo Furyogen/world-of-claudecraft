@@ -20,6 +20,9 @@ import {
 import { loadRuntimeSfxPack } from './sfx_runtime_pack';
 
 const SAMPLE_GAIN = 0.85; // base level for sampled clips; sfxVolume multiplies this
+// Keep a point sound's looping source alive a little past its radius so a player
+// grazing the edge does not restart it every step (it is already silent there).
+const POINT_SOUND_CULL = 6;
 const MAX_VOICES = 24; // concurrent one-shot sources (frame-budget guard)
 const REF_DISTANCE = 5; // world units at which a sound is at full volume
 const MAX_DISTANCE = 46; // hard cutoff: beyond this, sources are silent/skipped
@@ -598,6 +601,85 @@ class Sfx {
 
   hasLoop(id: string): boolean {
     return this.loops.has(id);
+  }
+
+  // --- Authored point sounds (looping positional emitters) -----------------
+  // Driven per frame by the renderer from WorldContent.pointSounds. Each node
+  // gets its own looping source + panner whose maxDistance IS the node's radius,
+  // so the WebAudio distance model does the spherical falloff at the authored
+  // radius (max gain = the node's volume). Nodes out of range are stopped.
+
+  private stopPointSlot(index: number): void {
+    const slot = this.pointSlots.get(index);
+    if (!slot) return;
+    this.pointSlots.delete(index);
+    try {
+      slot.src.stop();
+    } catch {
+      /* already stopped */
+    }
+    slot.src.disconnect();
+    slot.gain.disconnect();
+    slot.panner?.disconnect();
+  }
+
+  /** Per-frame update of the authored point sounds. Idempotent + allocation-free
+   *  on the hot path: an already-playing node just repositions its panner and
+   *  re-arms its gain ramp only when the volume changed. */
+  pointSounds(nodes: readonly MapPointSound[], lx: number, _ly: number, lz: number): void {
+    const ctx = this.ctx;
+    const master = this.master;
+    if (!ctx || !master) return;
+    for (let i = 0; i < nodes.length; i++) {
+      const n = nodes[i];
+      const buf = this.buffers.get(n.sound);
+      let slot = this.pointSlots.get(i);
+      const dx = lx - n.x;
+      const dz = lz - n.z;
+      const cull = n.radius + POINT_SOUND_CULL;
+      const audible = !!buf && dx * dx + dz * dz <= cull * cull;
+      if (!audible || (slot && slot.key !== n.sound)) {
+        if (slot) this.stopPointSlot(i);
+        slot = undefined;
+        if (!audible) continue;
+      }
+      const ref = Math.max(0.5, n.radius * 0.12);
+      const max = Math.max(1, n.radius);
+      if (!slot) {
+        const src = ctx.createBufferSource();
+        src.buffer = buf!;
+        src.loop = true;
+        const gain = ctx.createGain();
+        gain.gain.value = 0;
+        const panner = ctx.createPanner();
+        panner.panningModel = 'equalpower';
+        panner.distanceModel = 'linear';
+        panner.rolloffFactor = 1;
+        panner.refDistance = ref;
+        panner.maxDistance = max;
+        this.setPannerPos(panner, n.x, n.y, n.z);
+        src.connect(gain).connect(panner).connect(master);
+        src.start();
+        slot = { key: n.sound, src, gain, panner, target: -1 };
+        this.pointSlots.set(i, slot);
+      } else if (slot.panner) {
+        // Live edits (radius / position) re-apply cheaply.
+        slot.panner.refDistance = ref;
+        slot.panner.maxDistance = max;
+        this.setPannerPos(slot.panner, n.x, n.y, n.z);
+      }
+      const target = Math.min(1, Math.max(0, n.volume));
+      if (slot.target !== target) {
+        slot.target = target;
+        slot.gain.gain.setTargetAtTime(target, ctx.currentTime, 0.2);
+      }
+    }
+    // Stop slots whose node index no longer exists (the list shrank).
+    if (this.pointSlots.size > nodes.length) {
+      for (const i of [...this.pointSlots.keys()]) {
+        if (i >= nodes.length) this.stopPointSlot(i);
+      }
+    }
   }
 
   // --- SpatialAudioSink surface (driven by the renderer) -------------------

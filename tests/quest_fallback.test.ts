@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { questFallbackGrants } from '../src/sim/quest_fallback';
 import { QUESTS } from '../src/sim/data';
+import { questFallbackGrants } from '../src/sim/quest_fallback';
 import { Sim } from '../src/sim/sim';
-import { groundHeight } from '../src/sim/world';
 import type { Entity, QuestDef } from '../src/sim/types';
+import { groundHeight } from '../src/sim/world';
 
 const BOUND_GUARDIAN = 'q_nythraxis_bound_guardian';
 const KEYSTONE = 'crypt_keystone';
@@ -11,9 +11,17 @@ const HIGHWATCH_ALDRIC = 'brother_aldric_highwatch';
 
 function quest(extra: Partial<QuestDef>): QuestDef {
   return {
-    id: 'q_test', name: 'Test', giverNpcId: 'g', turnInNpcId: 'g',
-    text: '', completionText: '', objectives: [], xpReward: 0, copperReward: 0,
-    itemRewards: {}, ...extra,
+    id: 'q_test',
+    name: 'Test',
+    giverNpcId: 'g',
+    turnInNpcId: 'g',
+    text: '',
+    completionText: '',
+    objectives: [],
+    xpReward: 0,
+    copperReward: 0,
+    itemRewards: {},
+    ...extra,
   };
 }
 
@@ -33,9 +41,8 @@ describe('questFallbackGrants (pure)', () => {
 
   it('grants only the missing subset and de-duplicates', () => {
     const have = new Set(['b']);
-    const out = questFallbackGrants(
-      quest({ requiredItems: ['a', 'b', 'c', 'a'] }),
-      (id) => have.has(id),
+    const out = questFallbackGrants(quest({ requiredItems: ['a', 'b', 'c', 'a'] }), (id) =>
+      have.has(id),
     );
     expect(out).toEqual(['a', 'c']);
   });

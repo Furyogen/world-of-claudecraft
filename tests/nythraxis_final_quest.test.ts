@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { DUNGEONS, QUESTS, instanceOrigin } from '../src/sim/data';
 import { ZONE3_QUEST_ORDER } from '../src/sim/content/zone3';
+import { DUNGEONS, instanceOrigin, QUESTS } from '../src/sim/data';
 import { Sim } from '../src/sim/sim';
 import { dist2d, type Entity, type QuestDef } from '../src/sim/types';
 import { groundHeight } from '../src/sim/world';
@@ -15,7 +15,7 @@ type MultiTurnInQuest = QuestDef & { turnInNpcIds?: string[] };
 
 function finalQuest(): MultiTurnInQuest {
   const quest = QUESTS[FINAL_QUEST_ID] as MultiTurnInQuest | undefined;
-  expect(quest, 'Scourge\'s End should be registered in QUESTS').toBeTruthy();
+  expect(quest, "Scourge's End should be registered in QUESTS").toBeTruthy();
   return quest!;
 }
 
@@ -44,20 +44,27 @@ function teleport(sim: Sim, e: Entity, x: number, z: number) {
 }
 
 function npc(sim: Sim, templateId: string): Entity {
-  const found = [...sim.entities.values()].find((e) => e.kind === 'npc' && e.templateId === templateId && !e.dead);
+  const found = [...sim.entities.values()].find(
+    (e) => e.kind === 'npc' && e.templateId === templateId && !e.dead,
+  );
   expect(found, `expected ${templateId} NPC`).toBeTruthy();
   return found!;
 }
 
 function mob(sim: Sim, templateId: string): Entity {
-  const found = [...sim.entities.values()].find((e) => e.kind === 'mob' && e.templateId === templateId && !e.dead);
+  const found = [...sim.entities.values()].find(
+    (e) => e.kind === 'mob' && e.templateId === templateId && !e.dead,
+  );
   expect(found, `expected ${templateId} mob`).toBeTruthy();
   return found!;
 }
 
 function raidAldric(sim: Sim): Entity {
   const found = [...sim.entities.values()].find((e) => e.templateId === RAID_ALDRIC_ID && !e.dead);
-  expect(found, 'Brother Aldric should be present inside the Nythraxis arena for final quest turn-in').toBeTruthy();
+  expect(
+    found,
+    'Brother Aldric should be present inside the Nythraxis arena for final quest turn-in',
+  ).toBeTruthy();
   return found!;
 }
 
@@ -111,16 +118,30 @@ function engageNythraxis(sim: Sim, boss: Entity, tank: Entity) {
 }
 
 function dealDamage(sim: Sim, source: Entity, target: Entity, amount: number) {
-  (sim as unknown as {
-    dealDamage(source: Entity, target: Entity, amount: number, crit: boolean, school: string, ability: string | null, kind: 'hit', noRage?: boolean): void;
-  }).dealDamage(source, target, amount, false, 'physical', null, 'hit', true);
+  (
+    sim as unknown as {
+      dealDamage(
+        source: Entity,
+        target: Entity,
+        amount: number,
+        crit: boolean,
+        school: string,
+        ability: string | null,
+        kind: 'hit',
+        noRage?: boolean,
+      ): void;
+    }
+  ).dealDamage(source, target, amount, false, 'physical', null, 'hit', true);
 }
 
 function advanceSeconds(sim: Sim, seconds: number) {
   for (let i = 0; i < seconds * 20; i++) sim.tick();
 }
 
-function progressFinalQuestThroughNythraxisKill(sim: Sim, pid: number): { boss: Entity; aldric: Entity } {
+function progressFinalQuestThroughNythraxisKill(
+  sim: Sim,
+  pid: number,
+): { boss: Entity; aldric: Entity } {
   enterNythraxisRaid(sim, pid);
   const p = entity(sim, pid);
   const boss = mob(sim, NYTHRAXIS_ID);
@@ -138,11 +159,11 @@ function progressFinalQuestThroughNythraxisKill(sim: Sim, pid: number): { boss: 
 }
 
 describe('Nythraxis final quest', () => {
-  it('defines Scourge\'s End as the gold-only capstone after the Nythraxis attunement', () => {
+  it("defines Scourge's End as the gold-only capstone after the Nythraxis attunement", () => {
     const quest = finalQuest();
 
     expect(quest.id).toBe(FINAL_QUEST_ID);
-    expect(quest.name).toBe('Scourge\'s End');
+    expect(quest.name).toBe("Scourge's End");
     expect(quest.giverNpcId).toBe(HIGHWATCH_ALDRIC_ID);
     expect(quest.turnInNpcId).toBe(HIGHWATCH_ALDRIC_ID);
     expect(quest.turnInNpcIds).toEqual([HIGHWATCH_ALDRIC_ID, RAID_ALDRIC_ID]);
@@ -181,7 +202,7 @@ describe('Nythraxis final quest', () => {
     });
   });
 
-  it('credits the Nythraxis kill and makes Scourge\'s End ready to complete', () => {
+  it("credits the Nythraxis kill and makes Scourge's End ready to complete", () => {
     finalQuest();
     const sim = makeWorld();
     const pid = sim.addPlayer('warrior', 'NythraxisSlayer');

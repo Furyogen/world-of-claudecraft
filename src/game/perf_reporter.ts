@@ -76,7 +76,11 @@ function makeStatus(enabled: boolean, devTrace: boolean, sessionId: string): Per
   };
 }
 
-function exposeDebug(status: PerfReporterStatus, sendNow: () => void, stop: () => void): () => void {
+function exposeDebug(
+  status: PerfReporterStatus,
+  sendNow: () => void,
+  stop: () => void,
+): () => void {
   if (!status.devTrace || typeof window === 'undefined') return () => {};
   const debug: PerfReporterDebug = { status, sendNow, stop };
   window.__wocPerfReporter = debug;
@@ -103,9 +107,10 @@ function storedSessionId(): string {
   try {
     const existing = sessionStorage.getItem(SESSION_KEY);
     if (existing) return existing;
-    const id = typeof crypto !== 'undefined' && 'randomUUID' in crypto
-      ? crypto.randomUUID()
-      : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
+    const id =
+      typeof crypto !== 'undefined' && 'randomUUID' in crypto
+        ? crypto.randomUUID()
+        : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
     sessionStorage.setItem(SESSION_KEY, id);
     return id;
   } catch {
@@ -147,7 +152,12 @@ function gpuBucket(renderer: string): string {
   }
   if (/nvidia|geforce|rtx|gtx/.test(r)) return 'nvidia';
   if (/amd|radeon/.test(r)) return 'amd';
-  return renderer.slice(0, 48).replace(/[^\w.-]+/g, '-').toLowerCase() || 'other';
+  return (
+    renderer
+      .slice(0, 48)
+      .replace(/[^\w.-]+/g, '-')
+      .toLowerCase() || 'other'
+  );
 }
 
 function viewportBucket(width: number, height: number): string {
@@ -161,14 +171,18 @@ function viewportBucket(width: number, height: number): string {
 
 function scenarioFromUrl(): { source: 'gameplay' | 'benchmark'; zoneOrScenario: string } {
   const params = new URLSearchParams(location.search);
-  const scenario = (params.get('perfScenario') ?? params.get('perf_scenario') ?? '').trim().slice(0, 80);
+  const scenario = (params.get('perfScenario') ?? params.get('perf_scenario') ?? '')
+    .trim()
+    .slice(0, 80);
   if (scenario) return { source: 'benchmark', zoneOrScenario: scenario };
   return { source: 'gameplay', zoneOrScenario: 'gameplay' };
 }
 
 type RendererPrewarmSnapshot = NonNullable<NonNullable<PerfSnapshot['renderer']>['prewarm']>;
 
-function rendererPrewarmSummary(prewarm: RendererPrewarmSnapshot | null): Record<string, unknown> | null {
+function rendererPrewarmSummary(
+  prewarm: RendererPrewarmSnapshot | null,
+): Record<string, unknown> | null {
   if (!prewarm) return null;
   return {
     elapsedMs: prewarm.elapsedMs,
@@ -287,7 +301,11 @@ export function startPerfReporter(options: PerfReporterOptions): () => void {
   const devTrace = localDevPerfTraceEnabled();
   if (params.get('perfReport') === '0' || params.get('perf_report') === '0') {
     const status = makeStatus(false, devTrace, '');
-    const cleanupDebug = exposeDebug(status, () => {}, () => {});
+    const cleanupDebug = exposeDebug(
+      status,
+      () => {},
+      () => {},
+    );
     devTraceLog(status, 'debug', 'disabled by URL parameter');
     return cleanupDebug;
   }
@@ -327,7 +345,12 @@ export function startPerfReporter(options: PerfReporterOptions): () => void {
       skip('not-ready', sendOptions.final ? null : 15_000);
       return;
     }
-    const body = payloadFromSnapshot(snapshot, options.settings, sessionId, options.characterIdProvider());
+    const body = payloadFromSnapshot(
+      snapshot,
+      options.settings,
+      sessionId,
+      options.characterIdProvider(),
+    );
     if (!body) {
       skip('no-renderer', sendOptions.final ? null : REPEAT_REPORT_MS);
       return;
@@ -340,9 +363,15 @@ export function startPerfReporter(options: PerfReporterOptions): () => void {
     status.lastHttpStatus = null;
     status.lastBodyBytes = textBytes(bodyText);
     status.sendCount++;
-    const useKeepalive = Boolean(sendOptions.final && status.lastBodyBytes <= FETCH_KEEPALIVE_MAX_BYTES);
+    const useKeepalive = Boolean(
+      sendOptions.final && status.lastBodyBytes <= FETCH_KEEPALIVE_MAX_BYTES,
+    );
     if (sendOptions.final && !useKeepalive) {
-      devTraceLog(status, 'debug', `final post too large for keepalive: ${status.lastBodyBytes} bytes`);
+      devTraceLog(
+        status,
+        'debug',
+        `final post too large for keepalive: ${status.lastBodyBytes} bytes`,
+      );
     }
     void fetch('/api/perf-report', {
       method: 'POST',
@@ -352,24 +381,28 @@ export function startPerfReporter(options: PerfReporterOptions): () => void {
       },
       body: bodyText,
       keepalive: useKeepalive,
-    }).then(async (res) => {
-      status.lastHttpStatus = res.status;
-      if (!res.ok) {
-        const responseText = (await res.text().catch(() => '')).slice(0, 160);
+    })
+      .then(async (res) => {
+        status.lastHttpStatus = res.status;
+        if (!res.ok) {
+          const responseText = (await res.text().catch(() => '')).slice(0, 160);
+          status.failCount++;
+          status.lastError = responseText
+            ? `HTTP ${res.status}: ${responseText}`
+            : `HTTP ${res.status}`;
+          devTraceLog(status, 'warn', `post failed: ${status.lastError}`);
+          return;
+        }
+        status.successCount++;
+        status.lastSuccessAt = Date.now();
+        status.lastError = null;
+        devTraceLog(status, 'debug', `posted ${status.lastBodyBytes} bytes`);
+      })
+      .catch((err: unknown) => {
         status.failCount++;
-        status.lastError = responseText ? `HTTP ${res.status}: ${responseText}` : `HTTP ${res.status}`;
+        status.lastError = errorText(err);
         devTraceLog(status, 'warn', `post failed: ${status.lastError}`);
-        return;
-      }
-      status.successCount++;
-      status.lastSuccessAt = Date.now();
-      status.lastError = null;
-      devTraceLog(status, 'debug', `posted ${status.lastBodyBytes} bytes`);
-    }).catch((err: unknown) => {
-      status.failCount++;
-      status.lastError = errorText(err);
-      devTraceLog(status, 'warn', `post failed: ${status.lastError}`);
-    });
+      });
     if (!sendOptions.final) schedule(devTrace ? DEV_TRACE_REPEAT_REPORT_MS : REPEAT_REPORT_MS);
   }
 

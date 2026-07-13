@@ -1,10 +1,10 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import {
+  CLICK_MARKER_COLOR_HOSTILE,
+  CLICK_MARKER_COLOR_NEUTRAL,
+  CLICK_MARKER_LIFETIME,
   clickMarkerAnim,
   clickMarkerColor,
-  CLICK_MARKER_LIFETIME,
-  CLICK_MARKER_COLOR_NEUTRAL,
-  CLICK_MARKER_COLOR_HOSTILE,
 } from '../src/render/click_marker';
 
 describe('clickMarkerColor', () => {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Sim } from '../src/sim/sim';
-import { SimEvent } from '../src/sim/types';
+import type { SimEvent } from '../src/sim/types';
 
 function makeWorld() {
   return new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
@@ -35,7 +35,9 @@ describe('/arena command', () => {
     sim.tick();
 
     sim.chat('/arena', a);
-    expect(errorText(sim.tick(), a)).toBe('Arena: 1v1 Rating 1500 - no matches played yet. 2v2 Rating 1500 - no matches played yet.');
+    expect(errorText(sim.tick(), a)).toBe(
+      'Arena: 1v1 Rating 1500 - no matches played yet. 2v2 Rating 1500 - no matches played yet.',
+    );
   });
 
   it('does not divide by zero when all games were draws (no wins or losses)', () => {
@@ -48,7 +50,9 @@ describe('/arena command', () => {
     sim.tick();
 
     sim.chat('/arena', a);
-    expect(errorText(sim.tick(), a)).toBe('Arena: 1v1 Rating 1490 - no matches played yet. 2v2 Rating 1500 - no matches played yet.');
+    expect(errorText(sim.tick(), a)).toBe(
+      'Arena: 1v1 Rating 1490 - no matches played yet. 2v2 Rating 1500 - no matches played yet.',
+    );
   });
 
   it('rounds the win rate and works through the /pvp and /rating aliases', () => {
