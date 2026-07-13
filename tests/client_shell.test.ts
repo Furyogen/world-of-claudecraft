@@ -1015,6 +1015,14 @@ describe('client HTML shell', () => {
     }
   });
 
+  it('carries the same community-tray links in BOTH entries, with no duplicate Discord entry', () => {
+    for (const entry of [html, playHtml]) {
+      expect(entry).toContain('<a class="community-link github"');
+      expect(entry).toContain('<a class="community-link donate"');
+      expect(entry).not.toContain('<a class="community-link discord"');
+    }
+  });
+
   it('keeps the game menu free of duplicate and dev-only entries', () => {
     const interfaceEntries = optionsViewTs.match(/labelKey: 'hud\.options\.interface'/g) ?? [];
     expect(interfaceEntries).toHaveLength(1);

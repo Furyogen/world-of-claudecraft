@@ -132,7 +132,19 @@ export class TalentsWindow {
   // The element to refocus when the window closes (WCAG 2.2 AA focus return).
   private returnFocus: HTMLElement | null = null;
 
-  constructor(private readonly deps: TalentsWindowDeps) {}
+  constructor(private readonly deps: TalentsWindowDeps) {
+    // fitBodyToWindow only recomputes the #tal-body cap at paint time (open / tab
+    // switch); nothing else re-renders this window on a bare viewport resize, so
+    // resizing while it is open could leave a stale cap and re-clip the foot panel
+    // until the next repaint. Re-run it against the live rects whenever the
+    // viewport resizes while the window is open.
+    window.addEventListener('resize', () => {
+      const el = this.deps.root();
+      if (el.style.display === 'none') return;
+      const body = el.querySelector<HTMLElement>('#tal-body');
+      if (body) this.fitBodyToWindow(el, body);
+    });
+  }
 
   /** Open the window: seed a fresh staged buffer from the live build, paint, show. */
   open(): void {
