@@ -135,6 +135,11 @@ const TORCH_COLORS: Record<Variant, TorchColors> = {
   delve_marsh_apse: { flame: 0x7fe6c0, emissive: 0x2f8f6f, light: 0x6affb0 },
 };
 
+/** Editor imports use the same per-variant torch color as the live interior. */
+export function dungeonTorchLightColor(variant: DungeonInteriorVariant): number {
+  return TORCH_COLORS[variant].light;
+}
+
 // The Drowned Litany reuses the same KayKit crypt-stone wall/floor/pillar kit as
 // every other interior, so without a tint it would just read as a recolored
 // crypt. These multiply the shared pack material toward wet mossy stone (walls,
@@ -386,8 +391,18 @@ function pickKind(kinds: WeightedKinds, t: number): string {
 }
 
 /** Accumulates instance transforms per module kind, then emits InstancedMeshes. */
+export interface DungeonPlacementRecord {
+  kind: string;
+  x: number;
+  y: number;
+  z: number;
+  rotY: number;
+  scale: number | [number, number, number];
+}
+
 class Placements {
   readonly byKind = new Map<string, THREE.Matrix4[]>();
+  readonly records: DungeonPlacementRecord[] = [];
   private readonly pos = new THREE.Vector3();
   private readonly quat = new THREE.Quaternion();
   private readonly scl = new THREE.Vector3();
@@ -401,6 +416,14 @@ class Placements {
     rotY = 0,
     scale: number | [number, number, number] = 1,
   ): void {
+    this.records.push({
+      kind,
+      x,
+      y,
+      z,
+      rotY,
+      scale: Array.isArray(scale) ? [scale[0], scale[1], scale[2]] : scale,
+    });
     const m = new THREE.Matrix4();
     this.pos.set(x, y, z);
     this.quat.setFromEuler(this.euler.set(0, rotY, 0));
@@ -698,9 +721,12 @@ export class DungeonInteriors {
       // base kits. `style.kit` picks the wall/floor/prop mesh mix; `style.torch`
       // overrides the torch/light colours. Undefined for authored dungeons/delves.
       style?: InteriorStyle;
+      /** Editor importer only: calculate the exact placement plan without
+       * loading assets, emitting meshes, or attaching the group to the scene. */
+      captureOnly?: boolean;
     },
   ): Promise<THREE.Group> {
-    await ensureDungeonAssets();
+    if (!opts?.captureOnly) await ensureDungeonAssets();
     // Delve modules pass an explicit per-module layout so render geometry matches
     // the SAME layout sim/colliders.ts derives collision from (what you see is
     // what you collide with). Without it, every module fell back to CRYPT_LAYOUT
@@ -727,7 +753,7 @@ export class DungeonInteriors {
     // replace the single-room shell entirely. Walls come from the SAME segment
     // helper the sim derives collision from, so they cannot drift apart.
     if (layout.rooms) {
-      await ensureInfernalDecorAssets();
+      if (!opts?.captureOnly) await ensureInfernalDecorAssets();
       this.placeAuthoredFloor(p, layout, variant);
       this.placeAuthoredWalls(p, layout, variant);
       this.placeAuthoredRelief(group, layout);
@@ -750,6 +776,10 @@ export class DungeonInteriors {
       // The authored floor honours its InteriorStyle's stone grade (the base kit
       // reads as grey crypt otherwise). Scoped to this path: the procedural rift
       // floors keep the look they shipped with.
+      if (opts?.captureOnly) {
+        group.userData.dungeonPlacementRecords = p.records;
+        return group;
+      }
       this.emit(group, p, variant, {
         wall: opts?.style?.wallTint,
         floor: opts?.style?.floorTint,
@@ -792,6 +822,13 @@ export class DungeonInteriors {
       }
     }
 
+    if (opts?.captureOnly) {
+      group.userData.dungeonPlacementRecords = [
+        ...p.records,
+        ...(arenaWalls?.all.flatMap((wall) => wall.placements.records) ?? []),
+      ];
+      return group;
+    }
     this.emit(group, p, variant);
     if (arenaWalls) {
       for (const wall of arenaWalls.all) this.emitArenaHideable(group, wall);
@@ -2333,4 +2370,18 @@ export class DungeonInteriors {
     p.add('gravestone', -3.4, 0.6, layout.dais.z + 4, Math.PI, 1.8);
     p.add('gravestone', 3.4, 0.6, layout.dais.z + 4, Math.PI, 1.8);
   }
+}
+
+/** Calculate the same deterministic kit placement plan used by the live
+ * renderer, without asset I/O or scene mutation. */
+export async function captureDungeonPlacementRecords(
+  interior: string,
+  opts: Parameters<DungeonInteriors['buildInterior']>[3],
+): Promise<DungeonPlacementRecord[]> {
+  const dungeons = new DungeonInteriors(new THREE.Scene(), true, [], []);
+  const group = await dungeons.buildInterior(interior, 0, 0, {
+    ...opts,
+    captureOnly: true,
+  });
+  return (group.userData.dungeonPlacementRecords ?? []) as DungeonPlacementRecord[];
 }

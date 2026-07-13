@@ -1,3 +1,4 @@
+import { type CaveSample, caveFloorAt, caveSampleAt, HOLE_WALL_RISE, inTerrainHole } from './caves';
 import {
   CAMPS,
   COLUMN_ZONES,
@@ -16,6 +17,8 @@ import {
   worldXBoundsAt,
   ZONES,
 } from './data';
+import { isAuthoredMapPresentation } from './map_presentation';
+import { placementRampFloorAt } from './placement_ramps';
 import { fbm2, hash2, noise2 } from './rng';
 import type { BiomeId, HeightStamp, ZoneDef } from './types';
 import { isInSowfieldShell, SOWFIELD_FLAT, sowfieldStandLift } from './vale_cup_layout';
@@ -2210,10 +2213,146 @@ export function groundHeight(x: number, z: number, seed: number): number {
   // ramp just raises where the player stands. Zero outside the stand footprints,
   // so the pitch stays flat. (The custom-map edit layer is applied inside
   // terrainHeight, so it never touches the flat instance/rift floor above.)
-  return terrainHeight(x, z, seed) + sowfieldStandLift(x, z);
+  let h = terrainHeight(x, z, seed) + sowfieldStandLift(x, z);
+  const content = getActiveWorldContent();
+  const rampFloor = placementRampFloorAt(content, seed, x, z);
+  if (rampFloor > h) h = rampFloor;
+  for (const v of content.colliderVolumes ?? []) {
+    if (v.kind !== 'plane') continue;
+    const dx = x - v.x;
+    const dz = z - v.z;
+    if (!v.rotX && !v.rotZ) {
+      const c = Math.cos(v.rotY);
+      const s = Math.sin(v.rotY);
+      const lx = dx * c - dz * s;
+      const lz = dx * s + dz * c;
+      if (Math.abs(lx) > v.sizeX / 2 || Math.abs(lz) > v.sizeZ / 2) continue;
+      const floor = terrainHeight(v.x, v.z, seed) + v.sizeY;
+      if (floor > h) h = floor;
+      continue;
+    }
+    const ca = Math.cos(v.rotX ?? 0);
+    const sa = Math.sin(v.rotX ?? 0);
+    const cb = Math.cos(v.rotY);
+    const sb = Math.sin(v.rotY);
+    const cg = Math.cos(v.rotZ ?? 0);
+    const sg = Math.sin(v.rotZ ?? 0);
+    const ux = cb * cg;
+    const uy = ca * sg + sa * sb * cg;
+    const uz = sa * sg - ca * sb * cg;
+    const wx = sb;
+    const wy = -sa * cb;
+    const wz = ca * cb;
+    const det = ux * wz - wx * uz;
+    if (Math.abs(det) < 1e-6) continue;
+    const lx = (dx * wz - wx * dz) / det;
+    const lz = (ux * dz - dx * uz) / det;
+    if (Math.abs(lx) > v.sizeX / 2 || Math.abs(lz) > v.sizeZ / 2) continue;
+    const floor = terrainHeight(v.x, v.z, seed) + v.sizeY + lx * uy + lz * wy;
+    if (floor > h) h = floor;
+  }
+  return h;
 }
 
+/** The cave floor sheet at a point, or null when no authored cave crosses it. */
+export function caveSheetAt(x: number, z: number): CaveSample | null {
+  const caves = getActiveWorldContent().caves;
+  if (!caves || caves.length === 0 || x > DUNGEON_X_THRESHOLD) return null;
+  return caveFloorAt(caves, x, z);
+}
+
+/** Whether editor-authored terrain holes remove the surface sheet at a point. */
+export function terrainCutAt(x: number, z: number, seed: number): boolean {
+  const content = getActiveWorldContent();
+  const holes = content.holes;
+  if (!holes || holes.length === 0) return false;
+  return inTerrainHole(holes, x, z, terrainHeight(x, z, seed), content.holePatches);
+}
+
+/** Resolve the walkable sheet closest to the mover's previous height. */
+export function groundHeightNear(x: number, z: number, seed: number, prevY: number): number {
+  const h = groundHeight(x, z, seed);
+  const sheet = caveSheetAt(x, z);
+  const content = getActiveWorldContent();
+  if (content.holes && content.holes.length > 0) {
+    const terrain = terrainHeight(x, z, seed);
+    if (inTerrainHole(content.holes, x, z, terrain, content.holePatches)) {
+      const surfaceFloor = h > terrain + 0.01 ? h : null;
+      if (sheet && surfaceFloor === null) return sheet.floor;
+      if (sheet && surfaceFloor !== null) {
+        return Math.abs(prevY - sheet.floor) <= Math.abs(prevY - surfaceFloor)
+          ? sheet.floor
+          : surfaceFloor;
+      }
+      if (surfaceFloor !== null) return surfaceFloor;
+      return terrain + HOLE_WALL_RISE;
+    }
+  }
+  if (!sheet) return h;
+  return Math.abs(prevY - sheet.floor) <= Math.abs(prevY - h) ? sheet.floor : h;
+}
+
+export function onCaveSheet(x: number, z: number, seed: number, prevY: number): boolean {
+  const sheet = caveSheetAt(x, z);
+  if (!sheet) return false;
+  if (terrainCutAt(x, z, seed)) return true;
+  return Math.abs(prevY - sheet.floor) <= Math.abs(prevY - groundHeight(x, z, seed));
+}
+
+const CAVE_WALK_HEADROOM = 1.8;
+
+function caveWallAt(x: number, z: number, seed: number, prevY: number): boolean {
+  const caves = getActiveWorldContent().caves;
+  if (!caves || caves.length === 0 || x > DUNGEON_X_THRESHOLD) return false;
+  const sample = caveSampleAt(caves, x, z);
+  if (!sample || sample.mouth) return false;
+  const needed = Math.min(CAVE_WALK_HEADROOM, sample.clearance * 0.55);
+  if (sample.ceiling - sample.floor >= needed) return false;
+  if (terrainCutAt(x, z, seed)) return true;
+  return Math.abs(prevY - sample.floor) <= Math.abs(prevY - groundHeight(x, z, seed));
+}
+
+/** Prevent a movement segment from crossing an authored cave wall. */
+export function caveWallBlocksStep(
+  seed: number,
+  fromX: number,
+  fromZ: number,
+  prevY: number,
+  toX: number,
+  toZ: number,
+): boolean {
+  if (caveWallAt(fromX, fromZ, seed, prevY)) return false;
+  return (
+    caveWallAt(toX, toZ, seed, prevY) ||
+    caveWallAt((fromX + toX) / 2, (fromZ + toZ) / 2, seed, prevY)
+  );
+}
+
+const CAVE_MOUTH_STEP_UP = 1.1;
+
+/** Allow a small upward step only when moving between surface and cave sheets. */
+export function caveMouthStepOk(
+  seed: number,
+  fromX: number,
+  fromZ: number,
+  prevY: number,
+  toX: number,
+  toZ: number,
+  h0: number,
+  h1: number,
+): boolean {
+  const rise = h1 - h0;
+  if (rise <= 0 || rise > CAVE_MOUTH_STEP_UP) return false;
+  return onCaveSheet(fromX, fromZ, seed, prevY) !== onCaveSheet(toX, toZ, seed, prevY);
+}
+
+// Caves no longer deform the heightfield: a cave is a standalone tube volume
+// (sim/caves.ts) and surface openings are TerrainHole cutouts (terrainCutAt),
+// so terrainHeight is the pure surface pipeline.
 export function terrainHeight(x: number, z: number, seed: number): number {
+  if (isAuthoredMapPresentation(getActiveWorldContent().presentationMode)) {
+    return applyEditLayer(x, z, 0);
+  }
   let h = baseHeight(x, z, seed);
 
   // Flatten each camp a little so mobs don't stand on cliffs. The squared
@@ -2791,15 +2930,23 @@ export const BIOME_BY_ID: BiomeId[] = [
   'cave',
 ];
 
-// The painted biome at (x,z), or null if unpainted / no paint layer. Cheap grid
-// lookup; absent for the built-in world (getActiveWorldContent has no biomePaint).
-function paintedBiomeAt(x: number, z: number): BiomeId | null {
+// The persisted paint id at (x,z), including custom swatches. Renderers that
+// support custom textures need the raw id rather than the built-in biome below.
+export function paintedCellIdAt(x: number, z: number): number | null {
   const bp = getActiveWorldContent().biomePaint;
   if (!bp) return null;
   const c = Math.floor((x - bp.originX) / bp.cell);
   const r = Math.floor((z - bp.originZ) / bp.cell);
   if (c < 0 || c >= bp.cols || r < 0 || r >= bp.rows) return null;
   const id = bp.ids[r * bp.cols + c];
+  return id === 255 ? null : id;
+}
+
+// The painted biome at (x,z), or null if unpainted / no paint layer. Cheap grid
+// lookup; absent for the built-in world (getActiveWorldContent has no biomePaint).
+function paintedBiomeAt(x: number, z: number): BiomeId | null {
+  const id = paintedCellIdAt(x, z);
+  if (id === null) return null;
   return id >= 0 && id < BIOME_BY_ID.length ? BIOME_BY_ID[id] : null;
 }
 
@@ -3005,6 +3152,7 @@ export function generateDecorationsInBounds(
 }
 
 export function generateDecorations(seed: number): Decoration[] {
+  if (getActiveWorldContent().decorationsMode === 'empty') return [];
   const out: Decoration[] = [];
   appendDecorationRange(
     out,

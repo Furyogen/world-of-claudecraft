@@ -22,7 +22,12 @@ import { PLAYER_BODY_RADIUS, PLAYER_MAX_CLIMB_SLOPE, PLAYER_SWIM_DEPTH } from '.
 import { GHOST_RUN_MULT } from './spirit';
 import { DT, type Entity, type MoveInput, normAngle, RUN_SPEED, TURN_SPEED } from './types';
 import {
+  caveMouthStepOk,
+  caveSheetAt,
+  caveWallBlocksStep,
   groundHeight,
+  groundHeightNear,
+  onCaveSheet,
   terrainDownhill,
   terrainSteepnessAt,
   terrainWallStandoff,
@@ -139,7 +144,10 @@ export function stepPlayerMotion(deps: PlayerMotionDeps, p: Entity, inp: MoveInp
   const swimming = isSwimming(p, deps.seed);
   // Standing on unwalkably steep ground: no control, no jump, slide downhill.
   const steepGround =
-    p.onGround && !swimming && terrainSteepnessAt(p.pos.x, p.pos.z, deps.seed) > MAX_CLIMB_SLOPE;
+    p.onGround &&
+    !swimming &&
+    !onCaveSheet(p.pos.x, p.pos.z, deps.seed, p.pos.y) &&
+    terrainSteepnessAt(p.pos.x, p.pos.z, deps.seed) > MAX_CLIMB_SLOPE;
   const moving = hasMoveInput && !isRooted(p) && !steepGround;
   let wishX = 0,
     wishZ = 0,
@@ -181,14 +189,17 @@ export function stepPlayerMotion(deps: PlayerMotionDeps, p: Entity, inp: MoveInp
     // lands on ground whose true gradient is unwalkable (so approaching at an
     // angle cannot cheat the limit)
     if (p.onGround && !swimming) {
-      const h0 = groundHeight(p.pos.x, p.pos.z, deps.seed);
-      const h1 = groundHeight(nx, nz, deps.seed);
+      const h0 = groundHeightNear(p.pos.x, p.pos.z, deps.seed, p.pos.y);
+      const h1 = groundHeightNear(nx, nz, deps.seed, p.pos.y);
       const run = Math.hypot(nx - p.pos.x, nz - p.pos.z);
       if (
-        h1 > h0 &&
-        run > 1e-5 &&
-        ((h1 - h0) / run > MAX_CLIMB_SLOPE ||
-          terrainSteepnessAt(nx, nz, deps.seed) > MAX_CLIMB_SLOPE)
+        (h1 > h0 &&
+          run > 1e-5 &&
+          ((h1 - h0) / run > MAX_CLIMB_SLOPE ||
+            (!onCaveSheet(nx, nz, deps.seed, p.pos.y) &&
+              terrainSteepnessAt(nx, nz, deps.seed) > MAX_CLIMB_SLOPE)) &&
+          !caveMouthStepOk(deps.seed, p.pos.x, p.pos.z, p.pos.y, nx, nz, h0, h1)) ||
+        caveWallBlocksStep(deps.seed, p.pos.x, p.pos.z, p.pos.y, nx, nz)
       ) {
         nx = p.pos.x;
         nz = p.pos.z;
@@ -197,21 +208,28 @@ export function stepPlayerMotion(deps: PlayerMotionDeps, p: Entity, inp: MoveInp
       // Airborne, the same wall rule applies: terrain rising above the body
       // that could not be walked up cannot be jumped into either. The player
       // drops at the base of the face instead of beaching partway up it.
-      const h1 = groundHeight(nx, nz, deps.seed);
+      const h1 = groundHeightNear(nx, nz, deps.seed, p.pos.y);
       if (h1 > p.pos.y) {
-        const h0 = groundHeight(p.pos.x, p.pos.z, deps.seed);
+        const h0 = groundHeightNear(p.pos.x, p.pos.z, deps.seed, p.pos.y);
         const run = Math.hypot(nx - p.pos.x, nz - p.pos.z);
         if (
           h1 > h0 &&
           run > 1e-5 &&
           ((h1 - h0) / run > MAX_CLIMB_SLOPE ||
-            terrainSteepnessAt(nx, nz, deps.seed) > MAX_CLIMB_SLOPE)
+            (!onCaveSheet(nx, nz, deps.seed, p.pos.y) &&
+              terrainSteepnessAt(nx, nz, deps.seed) > MAX_CLIMB_SLOPE))
         ) {
           nx = p.pos.x;
           nz = p.pos.z;
           p.vx = 0;
           p.vz = 0;
         }
+      }
+      if (caveWallBlocksStep(deps.seed, p.pos.x, p.pos.z, p.pos.y, nx, nz)) {
+        nx = p.pos.x;
+        nz = p.pos.z;
+        p.vx = 0;
+        p.vz = 0;
       }
     }
     // Slide along buildings, trees, crypt walls; but while airborne from a
@@ -229,7 +247,17 @@ export function stepPlayerMotion(deps: PlayerMotionDeps, p: Entity, inp: MoveInp
   }
 
   // Vertical: jumping, gravity, swimming, fall damage
-  const ground = groundHeight(p.pos.x, p.pos.z, deps.seed);
+  const ground = groundHeightNear(p.pos.x, p.pos.z, deps.seed, p.pos.y);
+  const caveRoof = caveSheetAt(p.pos.x, p.pos.z);
+  if (
+    caveRoof &&
+    !p.onGround &&
+    Math.abs(ground - caveRoof.floor) < 0.01 &&
+    p.pos.y + 1.8 > caveRoof.ceiling
+  ) {
+    p.pos.y = Math.max(ground, caveRoof.ceiling - 1.8);
+    if (p.vy > 0) p.vy = 0;
+  }
   const deepWater = ground < waterLevelAt(p.pos.x, p.pos.z) - SWIM_DEPTH;
   if (deepWater && p.pos.y <= swimSurfaceY(p.pos.x, p.pos.z) + 0.05) {
     // treading water at the surface
@@ -356,7 +384,7 @@ export function stepPlayerMotion(deps: PlayerMotionDeps, p: Entity, inp: MoveInp
       if (terrainSteepnessAt(standX, standZ, deps.seed) <= MAX_CLIMB_SLOPE) {
         p.pos.x = standX;
         p.pos.z = standZ;
-        p.pos.y = groundHeight(standX, standZ, deps.seed);
+        p.pos.y = groundHeightNear(standX, standZ, deps.seed, p.pos.y);
       }
     }
   }

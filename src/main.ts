@@ -29,7 +29,11 @@ import { shouldClearAutorunOnDeath } from './game/death_input_reset';
 import { initDesktopDownload } from './game/desktop_download';
 import { initDesktopShellIntegration } from './game/desktop_shell_integration';
 import { installDevTeleports } from './game/dev_shortcuts';
-import { takeEditorPlaytestRequest } from './game/editor_playtest';
+import {
+  mountPlaytestReturnButton,
+  resolveLocalPlaytestAssets,
+  takeEditorPlaytestRequest,
+} from './game/editor_playtest';
 import { GamepadManager } from './game/gamepad';
 import { GamepadBindings } from './game/gamepad_bindings';
 import { Input } from './game/input';
@@ -8490,12 +8494,15 @@ function fadeOutHomepageMusic(durationMs = 1600): void {
 const editorPlaytest = takeEditorPlaytestRequest();
 if (editorPlaytest) {
   startSitePresence('home');
-  void startOffline(
-    editorPlaytest.playerClass,
-    editorPlaytest.playerName,
-    0,
-    editorPlaytest.content,
-    editorPlaytest.seed,
+  mountPlaytestReturnButton();
+  void resolveLocalPlaytestAssets(editorPlaytest.content).then(() =>
+    startOffline(
+      editorPlaytest.playerClass,
+      editorPlaytest.playerName,
+      0,
+      editorPlaytest.content,
+      editorPlaytest.seed,
+    ),
   );
 } else {
   startSitePresence('home');

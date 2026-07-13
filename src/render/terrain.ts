@@ -1,7 +1,9 @@
 import * as THREE from 'three';
+import { MAX_HOLE_PATCHES, MAX_TERRAIN_HOLES } from '../sim/caves';
 import {
   COLUMN_ZONES,
   columnBlendAt,
+  getActiveWorldContent,
   STRIP_MAX_X,
   STRIP_MIN_X,
   STRIP_ZONES,
@@ -10,9 +12,21 @@ import {
   WORLD_MIN_Z,
   ZONES,
 } from '../sim/data';
+import { isAuthoredMapPresentation, usesPlainTerrainMaterial } from '../sim/map_presentation';
 import { fbm2 } from '../sim/rng';
-import type { BiomeId, ZoneDef } from '../sim/types';
-import { inGardenMaze, roadDistance, terrainHeight, WATER_LEVEL, zoneBiomeAt } from '../sim/world';
+import type { BiomeId, BiomePaint, CustomPaintSwatch, ZoneDef } from '../sim/types';
+import {
+  BIOME_BY_ID,
+  biomeAt,
+  inGardenMaze,
+  paintedCellIdAt,
+  roadDistance,
+  terrainHeight,
+  WATER_LEVEL,
+  waterLevel,
+  zoneBiomeAt,
+} from '../sim/world';
+import { groundImageFor } from './assets/ground_textures';
 import { loadTexture } from './assets/loader';
 import { registerPreload } from './assets/preload';
 import { GFX } from './gfx';
@@ -44,6 +58,7 @@ import { groundDetailTexture, groundSplatMaps, macroNoiseTexture } from './textu
 const CHUNK_SIZE = 60;
 const SKIRT_DROP = 0.3;
 const SLOPE_EPS = 1.5; // matches the legacy color pass so tints don't shift
+const SKIRT_RELIEF_FACTOR = 1.25;
 // An 'idle'-paced zone build waits for a browser idle slot between batches;
 // this timeout forces one batch through anyway under sustained frame load.
 const IDLE_BUILD_TIMEOUT_MS = 200;
@@ -338,6 +353,9 @@ const duskStrataC = new THREE.Color(0x8d7d76); // pale strata bands in the face
 const snowCapC = new THREE.Color(0xedf3fa);
 const lowSunC = new THREE.Color(0xe7d9a5);
 const lowShadeC = new THREE.Color(0x60745b);
+const blankGroundC = new THREE.Color(0x6f805d);
+const interiorGroundC = new THREE.Color(0x171b14);
+const paintMixC = new THREE.Color();
 const zonePalettes = ZONES.map((zn) => {
   const p = BIOME_PALETTE[zn.biome];
   return {
@@ -348,6 +366,751 @@ const zonePalettes = ZONES.map((zn) => {
     sand: new THREE.Color(p.sand),
   };
 });
+const biomePalettes = Object.fromEntries(
+  Object.keys(BIOME_PALETTE).map((id) => {
+    const p = BIOME_PALETTE[id as BiomeId];
+    return [
+      id,
+      {
+        grass: new THREE.Color(p.grass),
+        grassDark: new THREE.Color(p.grassDark),
+        grassYellow: new THREE.Color(p.grassYellow),
+        dirt: new THREE.Color(p.dirt),
+        sand: new THREE.Color(p.sand),
+      },
+    ];
+  }),
+) as Record<BiomeId, (typeof zonePalettes)[number]>;
+
+function isBlankSlateWorld(): boolean {
+  return isAuthoredMapPresentation(getActiveWorldContent().presentationMode);
+}
+
+// The world rect the terrain mesh covers, derived from the ACTIVE content
+// (custom maps carry their own zone bands and optional worldHalfX), so a sized
+// blank map renders exactly its own ground and nothing beyond. For the
+// built-in world these equal the WORLD_* constants (byte-identical build).
+interface RenderBounds {
+  minX: number;
+  maxX: number;
+  minZ: number;
+  maxZ: number;
+  width: number;
+  depth: number;
+}
+let renderBoundsCache: { content: unknown; b: RenderBounds } | null = null;
+function renderBounds(): RenderBounds {
+  const content = getActiveWorldContent();
+  if (!renderBoundsCache || renderBoundsCache.content !== content) {
+    const halfX = content.worldHalfX ?? WORLD_MAX_X;
+    const zones = content.zones;
+    const minZ = zones.length > 0 ? zones[0].zMin : WORLD_MIN_Z;
+    const maxZ = zones.length > 0 ? zones[zones.length - 1].zMax : WORLD_MAX_Z;
+    renderBoundsCache = {
+      content,
+      b: { minX: -halfX, maxX: halfX, minZ, maxZ, width: halfX * 2, depth: maxZ - minZ },
+    };
+  }
+  return renderBoundsCache.b;
+}
+
+// Custom paint swatches (maker-defined palette colors): a flat palette derived
+// from the one authored color, cached per color so the per-vertex loop stays
+// allocation-free. Custom cells are color-only (shape and sim biome stay the
+// zone band's; see sim/world.ts paintedBiomeAt).
+const customPalettes = new Map<number, (typeof zonePalettes)[number]>();
+function customPaletteFor(color: number): (typeof zonePalettes)[number] {
+  let p = customPalettes.get(color);
+  if (!p) {
+    const base = new THREE.Color(color);
+    p = {
+      grass: base.clone(),
+      grassDark: base.clone().multiplyScalar(0.72),
+      grassYellow: base.clone().lerp(new THREE.Color(0xfff2c0), 0.25),
+      dirt: base.clone().multiplyScalar(0.82),
+      sand: base.clone().lerp(new THREE.Color(0xffffff), 0.3),
+    };
+    customPalettes.set(color, p);
+  }
+  return p;
+}
+
+// ---- imported ground textures (custom swatch splatting) ---------------------
+//
+// Up to EIGHT custom swatches with a textureSha get a REAL tiling texture in
+// the splat material: the paint field bakes each one's coverage into its slot
+// of the custom-weight layers (slot = the swatch's order among textured
+// swatches), and the fragment shader mixes `texture2D(uCustomN, worldXZ /
+// tileSize)` in by that weight. Slots resolve from the ACTIVE content, so the
+// editor and a playtest of the same map agree. Uniforms are module-shared: the material
+// installs them once and refreshCustomGroundTextures() swaps values in place
+// (no recompile) whenever a texture loads or the tiling changes.
+
+export const MAX_CUSTOM_GROUND_TEXTURES = 8;
+// Default texture tiling in yards per repeat (used when a swatch carries no
+// tileSize of its own — new swatches are minted at this too).
+export const DEFAULT_TEXTURE_TILE_YD = 28;
+
+// One 4x2 ATLAS holds all eight custom textures (the splat shader already sits
+// near MAX_TEXTURE_IMAGE_UNITS, so per-slot samplers do not fit): each slot
+// owns a cell, the shader wraps its tiling uv with fract() inside it.
+// Mipmaps are disabled so cells never bleed into each other.
+const ATLAS_CELL = 512;
+const ATLAS_COLS = 4;
+const ATLAS_ROWS = 2;
+let atlasCanvas: HTMLCanvasElement | null = null;
+let atlasTexture: THREE.CanvasTexture | null = null;
+const customAtlasUniform = { value: null as THREE.Texture | null };
+const TILE0 = 1 / DEFAULT_TEXTURE_TILE_YD;
+const customTileUniform = { value: new THREE.Vector4(TILE0, TILE0, TILE0, TILE0) };
+const customTileUniformB = { value: new THREE.Vector4(TILE0, TILE0, TILE0, TILE0) };
+let atlasRefreshGen = 0;
+
+function ensureAtlas(): { canvas: HTMLCanvasElement; texture: THREE.CanvasTexture } {
+  if (!atlasCanvas || !atlasTexture) {
+    atlasCanvas = document.createElement('canvas');
+    atlasCanvas.width = ATLAS_CELL * ATLAS_COLS;
+    atlasCanvas.height = ATLAS_CELL * ATLAS_ROWS;
+    atlasTexture = new THREE.CanvasTexture(atlasCanvas);
+    atlasTexture.colorSpace = THREE.SRGBColorSpace;
+    atlasTexture.flipY = false; // uv y == canvas y, so cell math is direct
+    atlasTexture.generateMipmaps = false;
+    atlasTexture.minFilter = THREE.LinearFilter;
+    atlasTexture.magFilter = THREE.LinearFilter;
+    customAtlasUniform.value = atlasTexture;
+  }
+  return { canvas: atlasCanvas, texture: atlasTexture };
+}
+
+/** The textured custom swatches of the active content, in slot order. */
+function texturedSwatches(): CustomPaintSwatch[] {
+  const custom = getActiveWorldContent().biomePaint?.custom;
+  if (!custom) return [];
+  const out: CustomPaintSwatch[] = [];
+  for (const sw of custom) {
+    if (sw.textureSha) {
+      out.push(sw);
+      if (out.length >= MAX_CUSTOM_GROUND_TEXTURES) break;
+    }
+  }
+  return out;
+}
+
+/** The custom-texture slot for a swatch id, or -1 (untextured / overflow). */
+function customTextureSlotFor(id: number): number {
+  const slots = texturedSwatches();
+  for (let i = 0; i < slots.length; i++) if (slots[i].id === id) return i;
+  return -1;
+}
+
+/**
+ * Redraw the custom-texture atlas from the active content's textured swatches:
+ * each slot's cell gets the flat fallback color immediately and the real
+ * image (IndexedDB or bundled builtin) when it resolves. Called at terrain
+ * build and by the editor after importing a texture or changing tile size.
+ */
+export function refreshCustomGroundTextures(): void {
+  const slots = texturedSwatches();
+  if (slots.length === 0) return; // nothing painted with textures yet
+  const { canvas, texture } = ensureAtlas();
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+  const gen = ++atlasRefreshGen;
+  const quad = (i: number): { x: number; y: number } => ({
+    x: (i % ATLAS_COLS) * ATLAS_CELL,
+    y: Math.floor(i / ATLAS_COLS) * ATLAS_CELL,
+  });
+  for (let i = 0; i < MAX_CUSTOM_GROUND_TEXTURES; i++) {
+    const sw = slots[i];
+    const q = quad(i);
+    const size = sw?.tileSize && sw.tileSize > 0 ? sw.tileSize : DEFAULT_TEXTURE_TILE_YD;
+    const tile = i < 4 ? customTileUniform.value : customTileUniformB.value;
+    const c = i % 4;
+    if (c === 0) tile.x = 1 / size;
+    else if (c === 1) tile.y = 1 / size;
+    else if (c === 2) tile.z = 1 / size;
+    else tile.w = 1 / size;
+    ctx.fillStyle = sw ? `#${sw.color.toString(16).padStart(6, '0')}` : '#000000';
+    ctx.fillRect(q.x, q.y, ATLAS_CELL, ATLAS_CELL);
+    if (sw?.textureSha) {
+      const sha = sw.textureSha;
+      const slot = i;
+      void groundImageFor(sha).then((img) => {
+        // Stale if another refresh ran (slots may have reshuffled).
+        if (!img || gen !== atlasRefreshGen || !atlasCanvas || !atlasTexture) return;
+        const c2 = atlasCanvas.getContext('2d');
+        if (!c2) return;
+        const p2 = quad(slot);
+        c2.drawImage(img, p2.x, p2.y, ATLAS_CELL, ATLAS_CELL);
+        atlasTexture.needsUpdate = true;
+      });
+    }
+  }
+  texture.needsUpdate = true;
+}
+
+/** The custom swatch for a painted id, or null. */
+function customSwatchFor(id: number): CustomPaintSwatch | null {
+  const custom = getActiveWorldContent().biomePaint?.custom;
+  if (!custom) return null;
+  for (const s of custom) if (s.id === id) return s;
+  return null;
+}
+
+// ---------------------------------------------------------------------------
+// Per-fragment paint field
+//
+// The biome-paint grid baked into DataTextures the splat material samples per
+// FRAGMENT, so painted edges resolve at paint-CELL resolution (0.5-1yd) with
+// the GPU's bilinear feather — independent of the terrain mesh's vertex
+// spacing (1.2-3.5yd), which used to quantize every brush edge into visible
+// stair-steps across whole triangles. The vertex path keeps the paint only to
+// SUPPRESS auto features under strokes (roads, shore sand, slope rock) and for
+// the Lambert/blank low tier, which has no fragment field and renders the
+// legacy per-vertex bake.
+//
+// ONE DataArrayTexture (a sampler2DArray costs a single texture unit — the
+// splat material already sits at MAX_TEXTURE_IMAGE_UNITS, so three separate
+// samplers do not link) with an RGBA8 layer per concern, one texel per cell:
+// - layer 0: painted ground tint (LINEAR bytes, PREMULTIPLIED by coverage) +
+//            coverage in alpha. Per-texel coverage is binary (a cell is
+//            painted or not), so the shader's un-premultiply divide is exact
+//            and bilinear never bleeds black halos in from unpainted cells.
+// - layer 1: dirt/rock/sand splat re-base weights in rgb (pre-scaled by the
+//            biome's strength) + the color-only-swatch hue-tint weight in a.
+// - layer 2: the four imported-ground-texture slot weights (atlas quadrants).
+// - layer 3: swatch hue/light adjust. Signed values ride two premultiplied
+//            channels each (r/g = hue +/-, b/a = light +/-) so the Gaussian
+//            blur stays a plain linear average; all-zero bytes make the
+//            shader's adjust a bit-exact no-op.
+// ---------------------------------------------------------------------------
+
+// Splat re-base strength per painted biome family — shared by the fragment
+// bake and the Lambert tier's vertex bake so the two tiers agree.
+const PAINT_REBASE_DIRT = 0.8;
+const PAINT_REBASE_ROCK = 0.75;
+const PAINT_REBASE_SAND = 0.9;
+
+// WebGL guarantees 4096 on every device this ships to; a grid axis past it
+// (extreme skinny maps) bakes nearest-sampled into the clamped texture.
+const PAINT_TEX_MAX = 4096;
+
+// Layer indices into the field array texture (tint is layer 0).
+const PAINT_LAYER_REBASE = 1;
+const PAINT_LAYER_CUSTOM = 2;
+const PAINT_LAYER_ADJUST = 3;
+// Custom-texture slots 4-7 (the atlas' second row) ride their own layer.
+const PAINT_LAYER_CUSTOM2 = 4;
+const PAINT_LAYERS = 5;
+
+interface PaintField {
+  texW: number;
+  texH: number;
+  // Grid identity the last bake ran against; any change forces a full rebake
+  // (a resample/new-map swaps the whole grid object, never mutates in place).
+  cols: number;
+  rows: number;
+  cell: number;
+  originX: number;
+  originZ: number;
+  tex: THREE.DataArrayTexture;
+}
+
+function makePaintTexture(w: number, h: number): THREE.DataArrayTexture {
+  const tex = new THREE.DataArrayTexture(
+    new Uint8Array(w * h * 4 * PAINT_LAYERS),
+    w,
+    h,
+    PAINT_LAYERS,
+  );
+  tex.format = THREE.RGBAFormat;
+  tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping;
+  tex.magFilter = THREE.LinearFilter;
+  tex.minFilter = THREE.LinearFilter;
+  tex.needsUpdate = true;
+  return tex;
+}
+
+// 1x1 all-zero stand-in for maps with no paint layer (coverage 0 everywhere).
+// Recreated per terrain build like the real field (see refreshPaintField).
+let paintEmptyField = makePaintTexture(1, 1);
+
+// Module-shared uniforms (same pattern as the custom atlas): the material
+// installs them once, refreshPaintField swaps .value in place — no recompile.
+const paintFieldUniform = { value: paintEmptyField as THREE.Texture };
+// xy: grid world origin; zw: 1 / grid world size (zw = 0 disables the field).
+const paintRectUniform = { value: new THREE.Vector4(0, 0, 0, 0) };
+
+let paintField: PaintField | null = null;
+
+const paintTintC = new THREE.Color();
+
+// The painted-edge feather width in YARDS, matched to the road falloff (the
+// smoothest transition the shipped map has). The bake blurs the binary cell
+// grid with a separable Gaussian this wide, so the shader samples a genuinely
+// SMOOTH coverage field: no cell structure survives — a hard-edged stroke gets
+// a road-quality gradient and a dithered soft rim melts into it — instead of
+// the raw grid's one-cell bilinear ramp reading as pixelated dots up close.
+const PAINT_FEATHER_YD = 1.6;
+
+// Float channels carried through the blur, per texel:
+// 0 coverage; 1-3 tint rgb (premultiplied by coverage); 4-6 dirt/rock/sand
+// re-base; 7 flat (color-swatch hue-tint); 8-11 custom-texture slots 0-3;
+// 12-15 swatch hue/light adjust (hue +/-, light +/-); 16-19 custom slots 4-7.
+const PAINT_CH = 20;
+
+// Gaussian sized so the 10%..90% coverage ramp spans ~PAINT_FEATHER_YD.
+function paintBlurSigma(cell: number): number {
+  return Math.max(0.4, PAINT_FEATHER_YD / cell / 2.56);
+}
+/** Kernel radius in texels — also how far one edited cell's influence reaches. */
+function paintBlurRadius(cell: number): number {
+  return Math.min(4, Math.max(1, Math.ceil(paintBlurSigma(cell) * 2.5)));
+}
+
+// Blur scratch, grown on demand and reused across strokes (a full bake on a
+// 0.5yd-cell map peaks around 16MB; drag rebakes touch a few hundred texels).
+let paintBlurScratch = new Float32Array(0);
+let paintAttrScratch = new Float32Array(0);
+
+/** The un-blurred field channels of ONE texel (nearest grid cell). */
+function paintCellAttr(
+  bp: BiomePaint,
+  f: PaintField,
+  i: number,
+  j: number,
+  out: Float32Array,
+  o: number,
+): void {
+  for (let ch = 0; ch < PAINT_CH; ch++) out[o + ch] = 0;
+  // Clamp reads into the grid so strokes painted flush against the map border
+  // keep full coverage there instead of fading into the void.
+  const ti = Math.max(0, Math.min(f.texW - 1, i));
+  const tj = Math.max(0, Math.min(f.texH - 1, j));
+  const c =
+    f.texW === bp.cols ? ti : Math.min(bp.cols - 1, Math.floor(((ti + 0.5) * bp.cols) / f.texW));
+  const r =
+    f.texH === bp.rows ? tj : Math.min(bp.rows - 1, Math.floor(((tj + 0.5) * bp.rows) / f.texH));
+  const id = bp.ids[r * bp.cols + c];
+  if (id === 255) return;
+  if (id < BIOME_BY_ID.length) {
+    const biome = BIOME_BY_ID[id];
+    const p = biomePalettes[biome];
+    // Same patchy palette noise as the vertex bake, at the cell center, so
+    // painted interiors keep their exact shipped look. Palette colors are
+    // LINEAR (like the vertex colors were) and the bytes stay linear.
+    const x = bp.originX + (c + 0.5) * bp.cell;
+    const z = bp.originZ + (r + 0.5) * bp.cell;
+    const v = (Math.sin(x * 0.21) * Math.cos(z * 0.17) + 1) / 2;
+    const v2 = (Math.sin(x * 0.043 + 5) * Math.cos(z * 0.05 + 2) + 1) / 2;
+    paintTintC
+      .copy(p.grass)
+      .lerp(p.grassDark, v)
+      .lerp(p.grassYellow, v2 * 0.35);
+    out[o] = 1;
+    out[o + 1] = paintTintC.r;
+    out[o + 2] = paintTintC.g;
+    out[o + 3] = paintTintC.b;
+    if (biome === 'marsh' || biome === 'cave') out[o + 4] = PAINT_REBASE_DIRT;
+    else if (biome === 'peaks' || biome === 'volcano') out[o + 5] = PAINT_REBASE_ROCK;
+    else if (biome === 'beach' || biome === 'desert') out[o + 6] = PAINT_REBASE_SAND;
+  } else {
+    const sw = customSwatchFor(id);
+    if (!sw) return; // stale swatch id: renders unpainted
+    // A biome VARIANT swatch (hue/light tweak of a built-in) bakes the base
+    // biome's own palette and splat re-base, so at zero adjust it looks
+    // exactly like the stock biome.
+    const baseBiome =
+      sw.baseBiome !== undefined && sw.baseBiome < BIOME_BY_ID.length
+        ? BIOME_BY_ID[sw.baseBiome]
+        : null;
+    // The DERIVED palette with the same patchy noise as painted biomes — NOT
+    // the raw hex. The raw hex of a dark saturated swatch makes a wildly
+    // saturated hue direction for the flat recolor path (near-black red
+    // rendered as neon salmon); the palette mix (grassDark/grassYellow
+    // lerps) is what the legacy vertex bake tinted with, so interiors keep
+    // their shipped look.
+    const p = baseBiome ? biomePalettes[baseBiome] : customPaletteFor(sw.color);
+    const x = bp.originX + (c + 0.5) * bp.cell;
+    const z = bp.originZ + (r + 0.5) * bp.cell;
+    const v = (Math.sin(x * 0.21) * Math.cos(z * 0.17) + 1) / 2;
+    const v2 = (Math.sin(x * 0.043 + 5) * Math.cos(z * 0.05 + 2) + 1) / 2;
+    paintTintC
+      .copy(p.grass)
+      .lerp(p.grassDark, v)
+      .lerp(p.grassYellow, v2 * 0.35);
+    out[o] = 1;
+    out[o + 1] = paintTintC.r;
+    out[o + 2] = paintTintC.g;
+    out[o + 3] = paintTintC.b;
+    if (baseBiome) {
+      if (baseBiome === 'marsh' || baseBiome === 'cave') out[o + 4] = PAINT_REBASE_DIRT;
+      else if (baseBiome === 'peaks' || baseBiome === 'volcano') out[o + 5] = PAINT_REBASE_ROCK;
+      else if (baseBiome === 'beach' || baseBiome === 'desert') out[o + 6] = PAINT_REBASE_SAND;
+    } else {
+      const slot = customTextureSlotFor(id);
+      if (slot >= 0 && slot < 4) out[o + 8 + slot] = 1;
+      else if (slot >= 4) out[o + 16 + (slot - 4)] = 1;
+      else out[o + 7] = 1; // color-only swatch: hue-tint (flat) weight
+    }
+    // Hue/light adjust: signed values split into +/- channel pairs so the
+    // blur (a plain linear average) never has to mix around a bias point.
+    const hs = sw.hueShift ?? 0;
+    const lt = sw.light ?? 0;
+    if (hs > 0) out[o + 12] = Math.min(1, hs / 180);
+    else if (hs < 0) out[o + 13] = Math.min(1, -hs / 180);
+    if (lt > 0) out[o + 14] = Math.min(1, lt);
+    else if (lt < 0) out[o + 15] = Math.min(1, -lt);
+  }
+}
+
+/**
+ * Bake the texel window [i0..i1] x [j0..j1] (inclusive) from the grid, blurred
+ * by the separable Gaussian feather. A pure function of the grid ids (and the
+ * swatch list), so a partial rebake is byte-identical to the full bake over
+ * the same texels.
+ */
+function bakePaintTexels(
+  bp: BiomePaint,
+  f: PaintField,
+  i0: number,
+  i1: number,
+  j0: number,
+  j1: number,
+): void {
+  const sigma = paintBlurSigma(bp.cell);
+  const R = paintBlurRadius(bp.cell);
+  const K = 2 * R + 1;
+  const kw = new Float32Array(K);
+  let kSum = 0;
+  for (let k = 0; k < K; k++) {
+    kw[k] = Math.exp(-0.5 * ((k - R) / sigma) ** 2);
+    kSum += kw[k];
+  }
+  for (let k = 0; k < K; k++) kw[k] /= kSum;
+
+  // Horizontal pass over the padded window (R extra texels each side feed the
+  // vertical pass), reading cell attributes straight from the grid.
+  const pi0 = i0 - R;
+  const pi1 = i1 + R;
+  const pj0 = j0 - R;
+  const pj1 = j1 + R;
+  const pw = pi1 - pi0 + 1;
+  const ph = pj1 - pj0 + 1;
+  if (paintBlurScratch.length < pw * ph * PAINT_CH) {
+    paintBlurScratch = new Float32Array(pw * ph * PAINT_CH);
+  }
+  const aw = pw + 2 * R;
+  if (paintAttrScratch.length < aw * PAINT_CH) paintAttrScratch = new Float32Array(aw * PAINT_CH);
+  const hBlur = paintBlurScratch;
+  const attrRow = paintAttrScratch;
+  for (let j = pj0; j <= pj1; j++) {
+    for (let i = 0; i < aw; i++) paintCellAttr(bp, f, pi0 - R + i, j, attrRow, i * PAINT_CH);
+    const rowBase = (j - pj0) * pw * PAINT_CH;
+    for (let i = 0; i < pw; i++) {
+      const oOut = rowBase + i * PAINT_CH;
+      for (let ch = 0; ch < PAINT_CH; ch++) {
+        let acc = 0;
+        for (let k = 0; k < K; k++) acc += kw[k] * attrRow[(i + k) * PAINT_CH + ch];
+        hBlur[oOut + ch] = acc;
+      }
+    }
+  }
+
+  // Vertical pass straight into the texture bytes.
+  const data = f.tex.image.data as Uint8Array;
+  const layerStride = f.texW * f.texH * 4;
+  const oRebase = PAINT_LAYER_REBASE * layerStride;
+  const oCustom = PAINT_LAYER_CUSTOM * layerStride;
+  const oAdjust = PAINT_LAYER_ADJUST * layerStride;
+  const oCustom2 = PAINT_LAYER_CUSTOM2 * layerStride;
+  const px = new Float32Array(PAINT_CH);
+  for (let j = j0; j <= j1; j++) {
+    for (let i = i0; i <= i1; i++) {
+      px.fill(0);
+      for (let k = 0; k < K; k++) {
+        const src = ((j - pj0 + k - R) * pw + (i - pi0)) * PAINT_CH;
+        const w = kw[k];
+        for (let ch = 0; ch < PAINT_CH; ch++) px[ch] += w * hBlur[src + ch];
+      }
+      const o = (j * f.texW + i) * 4;
+      data[o] = Math.round(px[1] * 255);
+      data[o + 1] = Math.round(px[2] * 255);
+      data[o + 2] = Math.round(px[3] * 255);
+      data[o + 3] = Math.round(px[0] * 255);
+      data[oRebase + o] = Math.round(px[4] * 255);
+      data[oRebase + o + 1] = Math.round(px[5] * 255);
+      data[oRebase + o + 2] = Math.round(px[6] * 255);
+      data[oRebase + o + 3] = Math.round(px[7] * 255);
+      data[oCustom + o] = Math.round(px[8] * 255);
+      data[oCustom + o + 1] = Math.round(px[9] * 255);
+      data[oCustom + o + 2] = Math.round(px[10] * 255);
+      data[oCustom + o + 3] = Math.round(px[11] * 255);
+      data[oAdjust + o] = Math.round(px[12] * 255);
+      data[oAdjust + o + 1] = Math.round(px[13] * 255);
+      data[oAdjust + o + 2] = Math.round(px[14] * 255);
+      data[oAdjust + o + 3] = Math.round(px[15] * 255);
+      data[oCustom2 + o] = Math.round(px[16] * 255);
+      data[oCustom2 + o + 1] = Math.round(px[17] * 255);
+      data[oCustom2 + o + 2] = Math.round(px[18] * 255);
+      data[oCustom2 + o + 3] = Math.round(px[19] * 255);
+    }
+  }
+  f.tex.needsUpdate = true;
+}
+
+/**
+ * Full rebake (or clear) of the paint field from the ACTIVE content. Called at
+ * every terrain build.
+ *
+ * The GL texture object is NEVER reused across builds: the editor's viewport
+ * reload (map load/import) force-loses the old WebGL context and boots a fresh
+ * renderer, and a DataArrayTexture that was already uploaded under the dead
+ * context renders stale, unfiltered-looking data in the new one (three does
+ * not re-upload it — observed on map import: every painted edge went back to
+ * blocky). buildTerrain runs exactly once per renderer, so allocating fresh
+ * here guarantees every context uploads its own copy; the per-drag region
+ * rebakes still update the current build's texture in place.
+ */
+function refreshPaintField(): void {
+  const bp = getActiveWorldContent().biomePaint;
+  if (paintField) {
+    paintField.tex.dispose();
+    paintField = null;
+  }
+  if (!bp) {
+    // Fresh 1x1 stand-in per build, for the same cross-context reason.
+    paintEmptyField.dispose();
+    paintEmptyField = makePaintTexture(1, 1);
+    paintFieldUniform.value = paintEmptyField;
+    paintRectUniform.value.set(0, 0, 0, 0);
+    return;
+  }
+  const texW = Math.min(bp.cols, PAINT_TEX_MAX);
+  const texH = Math.min(bp.rows, PAINT_TEX_MAX);
+  paintField = {
+    texW,
+    texH,
+    cols: bp.cols,
+    rows: bp.rows,
+    cell: bp.cell,
+    originX: bp.originX,
+    originZ: bp.originZ,
+    tex: makePaintTexture(texW, texH),
+  };
+  bakePaintTexels(bp, paintField, 0, texW - 1, 0, texH - 1);
+  paintFieldUniform.value = paintField.tex;
+  // Texel centers sit exactly on cell centers: cell c spans
+  // origin + [c, c+1) * cell, so the grid rect is cell * cols wide.
+  paintRectUniform.value.set(
+    bp.originX,
+    bp.originZ,
+    1 / (bp.cell * bp.cols),
+    1 / (bp.cell * bp.rows),
+  );
+}
+
+/**
+ * Rebake only the texels under a world-space region (a brush footprint) and
+ * flag the textures for re-upload. Falls back to the full refresh whenever the
+ * grid identity changed since the last bake (created, removed, resampled).
+ */
+function rebakePaintFieldRegion(minX: number, minZ: number, maxX: number, maxZ: number): void {
+  const bp = getActiveWorldContent().biomePaint;
+  const f = paintField;
+  if (
+    !bp ||
+    !f ||
+    f.cols !== bp.cols ||
+    f.rows !== bp.rows ||
+    f.cell !== bp.cell ||
+    f.originX !== bp.originX ||
+    f.originZ !== bp.originZ
+  ) {
+    if (bp || f) refreshPaintField();
+    return;
+  }
+  // World rect -> texel window. Margin: the blur radius (an edited cell moves
+  // texels up to R away) plus one texel for downsample rounding.
+  const m = paintBlurRadius(bp.cell) + 1;
+  const sx = f.texW / (bp.cell * bp.cols);
+  const sz = f.texH / (bp.cell * bp.rows);
+  const i0 = Math.max(0, Math.floor((minX - bp.originX) * sx) - m);
+  const i1 = Math.min(f.texW - 1, Math.ceil((maxX - bp.originX) * sx) + m);
+  const j0 = Math.max(0, Math.floor((minZ - bp.originZ) * sz) - m);
+  const j1 = Math.min(f.texH - 1, Math.ceil((maxZ - bp.originZ) * sz) + m);
+  if (i0 > i1 || j0 > j1) return;
+  bakePaintTexels(bp, f, i0, i1, j0, j1);
+}
+
+/**
+ * Editor-only: rebake the whole paint field in place after a swatch's LOOK
+ * changed (hue/light slider edits recolor already-painted cells without any
+ * grid change). No-op on the low tier and before the first terrain build.
+ */
+export function rebakePaintFieldSwatches(): void {
+  const bp = getActiveWorldContent().biomePaint;
+  if (!bp || !paintField) return;
+  rebakePaintFieldRegion(
+    bp.originX,
+    bp.originZ,
+    bp.originX + bp.cell * bp.cols,
+    bp.originZ + bp.cell * bp.rows,
+  );
+}
+
+// Smooth paint sample at (x,z): bilinear over the four nearest paint cells
+// (by cell center), yielding the DOMINANT painted id and its blended weight.
+// This is what turns the 8yd cell grid into a soft brush: colors and splat
+// textures feather across one cell instead of cutting hard block edges.
+// Allocation-free (module scratch); weight 0 = unpainted.
+const paintSample = { id: null as number | null, weight: 0 };
+// Radius (in cells) of the soft-edge kernel: the painted/unpainted coverage is
+// averaged over a disc this wide with smooth weights, so a brush stroke fades
+// out over ~2 cells (Photoshop soft edge) instead of stair-stepping one cell
+// at the terrain vertices. The dominant painted id is still the nearest cell,
+// so painted biomes keep crisp boundaries between each other.
+const PAINT_SMOOTH_RADIUS = 2;
+function paintSmoothAt(x: number, z: number): { id: number | null; weight: number } {
+  paintSample.id = null;
+  paintSample.weight = 0;
+  const bp = getActiveWorldContent().biomePaint;
+  if (!bp) return paintSample;
+  // Cell-center-relative fractional coordinates (cell centers at integers).
+  const gx = (x - bp.originX) / bp.cell - 0.5;
+  const gz = (z - bp.originZ) / bp.cell - 0.5;
+  const cc = Math.round(gx);
+  const cr = Math.round(gz);
+  // Fast path: if the nearest cell and its 8 neighbors agree (all the same
+  // painted id, or all unpainted), the kernel result is that value with no
+  // feather to compute. This is the overwhelming majority of vertices.
+  const nearId =
+    cc >= 0 && cc < bp.cols && cr >= 0 && cr < bp.rows ? bp.ids[cr * bp.cols + cc] : 255;
+  let uniform = true;
+  for (let dr = -1; dr <= 1 && uniform; dr++) {
+    for (let dc = -1; dc <= 1; dc++) {
+      const c = cc + dc;
+      const r = cr + dr;
+      const id = c >= 0 && c < bp.cols && r >= 0 && r < bp.rows ? bp.ids[r * bp.cols + c] : 255;
+      if (id !== nearId) {
+        uniform = false;
+        break;
+      }
+    }
+  }
+  if (uniform) {
+    if (nearId === 255) return paintSample;
+    paintSample.id = nearId;
+    paintSample.weight = 1;
+    return paintSample;
+  }
+  // Boundary vertex: smooth-weighted coverage over the disc, with the dominant
+  // painted id taken from the nearest painted cell.
+  const R = PAINT_SMOOTH_RADIUS;
+  let wSum = 0;
+  let wPainted = 0;
+  let domId: number | null = null;
+  let domD2 = Infinity;
+  for (let dr = -R; dr <= R; dr++) {
+    for (let dc = -R; dc <= R; dc++) {
+      const c = cc + dc;
+      const r = cr + dr;
+      const ddx = c - gx;
+      const ddz = r - gz;
+      const d2 = ddx * ddx + ddz * ddz;
+      // Smooth radial falloff (quadratic), zero past the kernel radius + 0.5.
+      const rr = R + 0.5;
+      if (d2 >= rr * rr) continue;
+      const wght = 1 - d2 / (rr * rr);
+      wSum += wght;
+      if (c < 0 || c >= bp.cols || r < 0 || r >= bp.rows) continue;
+      const id = bp.ids[r * bp.cols + c];
+      if (id === 255) continue;
+      wPainted += wght;
+      if (d2 < domD2) {
+        domD2 = d2;
+        domId = id;
+      }
+    }
+  }
+  paintSample.id = domId;
+  // The uniform fast path returns exactly 0 / 1, but the raw kernel ratio
+  // asymptotes to ~1/6 (fully-unpainted seam) / ~5/6 (fully-painted seam), so a
+  // straight edge would show a hard ~0.33 step where the two meet. Remap the
+  // ratio through a smoothstep anchored on those seam bounds: it hits 0 and 1
+  // exactly at the seam (matching the fast path, C1-smooth), and keeps a soft
+  // interior fade.
+  const ratio = wSum > 0 ? wPainted / wSum : 0;
+  const SEAM_LO = 1 / 6;
+  const SEAM_HI = 5 / 6;
+  const tt = clamp01((ratio - SEAM_LO) / (SEAM_HI - SEAM_LO));
+  paintSample.weight = tt * tt * (3 - 2 * tt);
+  return paintSample;
+}
+
+// Wider paint-coverage kernel for AUTO-FEATURE suppression on the splat tier:
+// snow caps / slope rock / shore sand / road dirt must be fully gone before
+// the fragment paint has thinned to nothing, or they resurface as a bright
+// halo hugging every stroke on high or shore ground (the auto rock/snow is
+// often at FULL strength right at a stroke's edge — think a painted plateau
+// whose rim sits above the snow line). ~4yd of reach with a saturating remap:
+// 1 well past the paint's visual edge, easing back to 0 beyond the fragment
+// feather, so the natural feature fades back in gradually instead of ringing
+// the stroke. The radius is in CELLS, so it scales with the grid's cell size
+// (capped: at 0.25yd cells an 8-cell kernel already covers the feather).
+const PAINT_SUPPRESS_REACH_YD = 4;
+function paintSuppressRadius(cell: number): number {
+  return Math.min(8, Math.max(2, Math.round(PAINT_SUPPRESS_REACH_YD / cell)));
+}
+function paintSuppressAt(x: number, z: number): number {
+  const bp = getActiveWorldContent().biomePaint;
+  if (!bp) return 0;
+  const gx = (x - bp.originX) / bp.cell - 0.5;
+  const gz = (z - bp.originZ) / bp.cell - 0.5;
+  const cc = Math.round(gx);
+  const cr = Math.round(gz);
+  // Fast path: a fully-painted 3x3 short-circuits to full suppression. Exact
+  // for radius <= 4 (the 3x3's weight share alone exceeds 1/3); for the finer
+  // grids' wider kernels it slightly over-suppresses only on sub-2yd painted
+  // islands, where the paint itself covers the ground anyway.
+  let uniformPainted = true;
+  for (let dr = -1; dr <= 1 && uniformPainted; dr++) {
+    for (let dc = -1; dc <= 1; dc++) {
+      const c = cc + dc;
+      const r = cr + dr;
+      const id = c >= 0 && c < bp.cols && r >= 0 && r < bp.rows ? bp.ids[r * bp.cols + c] : 255;
+      if (id === 255) {
+        uniformPainted = false;
+        break;
+      }
+    }
+  }
+  if (uniformPainted) return 1;
+  const R = paintSuppressRadius(bp.cell);
+  const rr = R + 0.5;
+  let wSum = 0;
+  let wPainted = 0;
+  for (let dr = -R; dr <= R; dr++) {
+    for (let dc = -R; dc <= R; dc++) {
+      const c = cc + dc;
+      const r = cr + dr;
+      const ddx = c - gx;
+      const ddz = r - gz;
+      const d2 = ddx * ddx + ddz * ddz;
+      if (d2 >= rr * rr) continue;
+      const wght = 1 - d2 / (rr * rr);
+      wSum += wght;
+      if (c < 0 || c >= bp.cols || r < 0 || r >= bp.rows) continue;
+      if (bp.ids[r * bp.cols + c] !== 255) wPainted += wght;
+    }
+  }
+  const ratio = wSum > 0 ? wPainted / wSum : 0;
+  return clamp01(ratio * 3);
+}
+
+// Palette at a point. A painted cell (biome differs from its zone band) uses that
+// biome's flat palette; otherwise the smooth zone-band blend. With no paint layer
+// `biome === zoneBiomeAt(z)` always, so this is the original z-blend exactly.
 
 function paletteAt(x: number, z: number): void {
   const stripPalette = (zn: (typeof ZONES)[number]) =>
@@ -411,22 +1174,103 @@ function lerpSplat(w: [number, number, number, number], layer: 0 | 1 | 2 | 3, t:
 
 // One terrain sample: height, analytic normal, legacy tint color and splat
 // weights. Both tiers use the color; only the splat tier consumes weights.
-function sampleVertex(x: number, z: number, seed: number): VertexSample {
+// With `paintInFrag` (the splat tier) the painted tint/re-base/custom weights
+// are NOT applied here — the fragment paint field carries them at paint-cell
+// resolution — and the vertex keeps the paint weight only to suppress auto
+// features (roads, shore sand, slope rock, snow) under strokes.
+function sampleVertex(
+  x: number,
+  z: number,
+  seed: number,
+  paintInFrag: boolean,
+  normalEps: number = SLOPE_EPS,
+): VertexSample {
   const h = terrainHeight(x, z, seed);
   const hx = terrainHeight(x + SLOPE_EPS, z, seed) - terrainHeight(x - SLOPE_EPS, z, seed);
   const hz = terrainHeight(x, z + SLOPE_EPS, seed) - terrainHeight(x, z - SLOPE_EPS, seed);
   const slope = Math.sqrt(hx * hx + hz * hz) / (2 * SLOPE_EPS);
-  const invLen = 1 / Math.hypot(hx / (2 * SLOPE_EPS), 1, hz / (2 * SLOPE_EPS));
+  // Lighting normal: sample at the mesh's own grid scale, not the fixed tint
+  // epsilon. On steep sculpted cliffs a sub-grid epsilon makes adjacent vertex
+  // normals step wildly, which Gouraud interpolation shows as dark banding.
+  const ne = Math.max(SLOPE_EPS, normalEps);
+  const nhx =
+    ne === SLOPE_EPS ? hx : terrainHeight(x + ne, z, seed) - terrainHeight(x - ne, z, seed);
+  const nhz =
+    ne === SLOPE_EPS ? hz : terrainHeight(x, z + ne, seed) - terrainHeight(x, z - ne, seed);
+  const invLen = 1 / Math.hypot(nhx / (2 * ne), 1, nhz / (2 * ne));
   const normal: [number, number, number] = [
-    -(hx / (2 * SLOPE_EPS)) * invLen,
+    -(nhx / (2 * ne)) * invLen,
     invLen,
-    -(hz / (2 * SLOPE_EPS)) * invLen,
+    -(nhz / (2 * ne)) * invLen,
   ];
 
+  const paint = paintSmoothAt(x, z);
+  const blank = isBlankSlateWorld();
+  if (blank && paint.weight <= 0) {
+    cTmp.copy(
+      getActiveWorldContent().presentationMode === 'blank' ? blankGroundC : interiorGroundC,
+    );
+    return {
+      height: h,
+      slope,
+      normal,
+      color: [cTmp.r, cTmp.g, cTmp.b],
+      splat: [1, 0, 0, 0],
+      extra: [0, 0, 0, 0],
+    };
+  }
+
+  const zoneBiome = zoneBiomeAt(x, z);
+  let paintedBiome: BiomeId | null = null;
+  let customPaint: number | null = null;
+  if (paint.id !== null) {
+    if (paint.id < BIOME_BY_ID.length) {
+      paintedBiome = BIOME_BY_ID[paint.id];
+    } else {
+      const sw = customSwatchFor(paint.id);
+      if (sw && sw.baseBiome !== undefined && sw.baseBiome < BIOME_BY_ID.length) {
+        paintedBiome = BIOME_BY_ID[sw.baseBiome];
+      } else {
+        customPaint = sw ? sw.color : null;
+      }
+    }
+  }
+  const pw = paintedBiome !== null || customPaint !== null ? paint.weight : 0;
+  const pwVert = paintInFrag ? 0 : pw;
+  const sup = paintInFrag ? paintSuppressAt(x, z) : pw;
+  const biome = pw > 0.5 && paintedBiome ? paintedBiome : zoneBiome;
+  const style = getActiveWorldContent().terrainStyle;
+  const slopeRockOn = style?.slopeRock !== false;
+  const shoreSandOn = style?.shoreSand !== false;
+  const autoW = 1 - sup;
+
   paletteAt(x, z);
-  const biome = zoneBiomeAt(x, z);
+  if (paintedBiome !== null && pwVert > 0) {
+    const p = biomePalettes[paintedBiome];
+    grassC.lerp(p.grass, pwVert);
+    grassDarkC.lerp(p.grassDark, pwVert);
+    grassYellowC.lerp(p.grassYellow, pwVert);
+    dirtC.lerp(p.dirt, pwVert);
+    sandC.lerp(p.sand, pwVert);
+  } else if (customPaint !== null && pwVert > 0) {
+    const p = customPaletteFor(customPaint);
+    grassC.lerp(p.grass, pwVert);
+    grassDarkC.lerp(p.grassDark, pwVert);
+    grassYellowC.lerp(p.grassYellow, pwVert);
+    dirtC.lerp(p.dirt, pwVert);
+    sandC.lerp(p.sand, pwVert);
+  }
   const w: [number, number, number, number] = [1, 0, 0, 0];
-  const impact = impactCraterTerrainBlend(x, z);
+  if (paintedBiome !== null && pwVert > 0) {
+    if (paintedBiome === 'marsh' || paintedBiome === 'cave') {
+      lerpSplat(w, 1, PAINT_REBASE_DIRT * pwVert);
+    } else if (paintedBiome === 'peaks' || paintedBiome === 'volcano') {
+      lerpSplat(w, 2, PAINT_REBASE_ROCK * pwVert);
+    } else if (paintedBiome === 'beach' || paintedBiome === 'desert') {
+      lerpSplat(w, 3, PAINT_REBASE_SAND * pwVert);
+    }
+  }
+  const impact = blank ? { ash: 0, scorch: 0, dirt: 0, rock: 0 } : impactCraterTerrainBlend(x, z);
 
   // base grass with patchy variation: a coarse fbm layer for dry/lush
   // patches plus a fine one for grain, replacing the old pure-sine tint
@@ -463,17 +1307,19 @@ function sampleVertex(x: number, z: number, seed: number): VertexSample {
   // instead), rocky/ashen biomes get a darker wet-rock tint, everywhere else
   // keeps the classic sandy bank. Color and splat weight share one feathered
   // falloff so the shore blends out instead of cutting a razor-hard edge.
-  const wl = WATER_LEVEL;
-  const shore = clamp01((wl + 1.6 - h) / 1.6);
-  if (biome === 'marsh') {
-    cTmp.lerp(dirtDarkC, shore);
-    lerpSplat(w, 1, shore);
-  } else if (biome === 'peaks' || biome === 'volcano' || biome === 'cave') {
-    cTmp.lerp(wetRockC, shore);
-    lerpSplat(w, 2, shore);
-  } else {
-    cTmp.lerp(sandC, shore);
-    lerpSplat(w, 3, shore);
+  const wl = waterLevel();
+  const shore = clamp01((wl + 1.6 - h) / 1.6) * autoW;
+  if (shoreSandOn) {
+    if (biome === 'marsh') {
+      cTmp.lerp(dirtDarkC, shore);
+      lerpSplat(w, 1, shore);
+    } else if (biome === 'peaks' || biome === 'volcano' || biome === 'cave') {
+      cTmp.lerp(wetRockC, shore);
+      lerpSplat(w, 2, shore);
+    } else {
+      cTmp.lerp(sandC, shore);
+      lerpSplat(w, 3, shore);
+    }
   }
   // packed dirt at each hub settlement (same feather as the splat weight —
   // a constant lerp stamped a clean-edged brown disc on the grass)
@@ -519,8 +1365,8 @@ function sampleVertex(x: number, z: number, seed: number): VertexSample {
   const rockStreak = fbm2(x * 0.09, z * 0.09, seed + 41, 3);
   const snowPatch = fbm2(x * 0.06, z * 0.06, seed + 47, 3);
   const rockStart = ROCK_SLOPE_START[biome];
-  if (slope > rockStart) {
-    const t = Math.min(1, (slope - rockStart) * 2);
+  if (slopeRockOn && slope > rockStart && autoW > 0) {
+    const t = Math.min(1, (slope - rockStart) * 2) * autoW;
     cTmp.lerp(rockC, t);
     cTmp.lerp(dirtDarkC, t * (rockStreak - 0.5) * 0.35);
     lerpSplat(w, 2, t);
@@ -573,7 +1419,7 @@ function sampleVertex(x: number, z: number, seed: number): VertexSample {
     cTmp.lerp(biome === 'ember' ? emberBasaltC : rockC, rockT);
     snow = biome === 'ember' ? 0 : clamp01((h - 34 + (snowPatch - 0.5) * 14) / 26) * 0.85;
     cTmp.lerp(snowCapC, snow);
-    lerpSplat(w, 2, clamp01((h - 22) / 10) * 0.8);
+    lerpSplat(w, 2, clamp01((h - 22) / 10) * 0.8 * autoW);
   }
   if (impact.scorch > 0) {
     cTmp.lerp(impactScorchC, 0.88 * impact.scorch);
@@ -629,16 +1475,19 @@ function sampleVertex(x: number, z: number, seed: number): VertexSample {
 function buildChunkGeometry(
   x0: number,
   z0: number,
-  size: number,
+  sizeX: number,
+  sizeZ: number,
   spacing: number,
   seed: number,
   withSplat: boolean,
   skirtSpan: number,
 ): THREE.BufferGeometry {
-  const nx = Math.max(4, Math.round(size / spacing));
-  const nz = nx;
-  const stepX = size / nx;
-  const stepZ = size / nz;
+  // Sizes differ on the map's last row/column: chunks clamp to renderBounds
+  // instead of overshooting up to a chunk beyond the map edge.
+  const nx = Math.max(4, Math.round(sizeX / spacing));
+  const nz = Math.max(4, Math.round(sizeZ / spacing));
+  const stepX = sizeX / nx;
+  const stepZ = sizeZ / nz;
   const gw = nx + 3; // grid width including the skirt ring
   const gh = nz + 3;
   const count = gw * gh;
@@ -650,7 +1499,7 @@ function buildChunkGeometry(
   const splats = withSplat ? new Float32Array(count * 4) : null;
   const extras = withSplat ? new Float32Array(count * 4) : null;
 
-  const worldDepth = WORLD_MAX_Z - WORLD_MIN_Z;
+  const rb = renderBounds();
   const sampleCache = new Map<number, VertexSample>();
   for (let gj = 0; gj < gh; gj++) {
     for (let gi = 0; gi < gw; gi++) {
@@ -665,10 +1514,17 @@ function buildChunkGeometry(
       const cacheKey = cj * gw + ci;
       let s = sampleCache.get(cacheKey);
       if (!s) {
-        s = sampleVertex(x, z, seed);
+        // The splat tier renders paint per fragment (withSplat doubles as the
+        // paint-in-fragment flag); the Lambert tier keeps the vertex bake.
+        s = sampleVertex(x, z, seed, withSplat, Math.max(stepX, stepZ));
         sampleCache.set(cacheKey, s);
       }
       const vi = gj * gw + gi;
+      // Skirt depth scales with the local relief so steep sculpted cliffs
+      // (tens of units between grid rows) can't open see-through seams.
+      const skirtDrop = isSkirt
+        ? Math.max(SKIRT_DROP, s.slope * Math.max(stepX, stepZ) * SKIRT_RELIEF_FACTOR)
+        : 0;
       positions[vi * 3] = x;
       // Slope-aware drop: a T-junction hole under a coarse neighbor's chord is
       // bounded by the local gradient times that neighbor's vertex spacing, so
@@ -682,8 +1538,8 @@ function buildChunkGeometry(
       colors[vi * 3] = s.color[0];
       colors[vi * 3 + 1] = s.color[1];
       colors[vi * 3 + 2] = s.color[2];
-      uvs[vi * 2] = (x + WORLD_MAX_X) / (WORLD_MAX_X * 2);
-      uvs[vi * 2 + 1] = (z - WORLD_MIN_Z) / worldDepth;
+      uvs[vi * 2] = (x - rb.minX) / rb.width;
+      uvs[vi * 2 + 1] = (z - rb.minZ) / rb.depth;
       if (splats) {
         splats[vi * 4] = s.splat[0];
         splats[vi * 4 + 1] = s.splat[1];
@@ -769,10 +1625,9 @@ function bakeNormalRegion(
 ): void {
   const w = NORMAL_TEX_W,
     h = NORMAL_TEX_H;
-  const worldW = WORLD_MAX_X * 2;
-  const worldD = WORLD_MAX_Z - WORLD_MIN_Z;
-  const stepX = worldW / w;
-  const stepZ = worldD / h;
+  const rb = renderBounds();
+  const stepX = rb.width / w;
+  const stepZ = rb.depth / h;
   // height window: the baked rect plus the 1-texel derivative stencil
   const hi0 = Math.max(0, i0 - 1),
     hi1 = Math.min(w - 1, i1 + 1);
@@ -781,13 +1636,9 @@ function bakeNormalRegion(
   const hw = hi1 - hi0 + 1;
   const heights = new Float32Array(hw * (hj1 - hj0 + 1));
   for (let j = hj0; j <= hj1; j++) {
-    const z = WORLD_MIN_Z + (j + 0.5) * stepZ;
+    const z = rb.minZ + (j + 0.5) * stepZ;
     for (let i = hi0; i <= hi1; i++) {
-      heights[(j - hj0) * hw + (i - hi0)] = terrainHeight(
-        -WORLD_MAX_X + (i + 0.5) * stepX,
-        z,
-        seed,
-      );
+      heights[(j - hj0) * hw + (i - hi0)] = terrainHeight(rb.minX + (i + 0.5) * stepX, z, seed);
     }
   }
   const hAt = (i: number, j: number): number => heights[(j - hj0) * hw + (i - hi0)];
@@ -799,8 +1650,13 @@ function bakeNormalRegion(
         js = Math.min(h - 1, j + 1);
       const dhdx = (hAt(ie, j) - hAt(iw, j)) / ((ie - iw) * stepX);
       const dhdz = (hAt(i, js) - hAt(i, jn)) / ((js - jn) * stepZ);
-      const nx = -dhdx * NORMAL_TEX_STRENGTH;
-      const nz = -dhdz * NORMAL_TEX_STRENGTH;
+      // Fade the macro relief on steep sculpted faces: near-vertical cliffs
+      // squash many world units into one strip-planar texel, and full-strength
+      // 8-bit normals there quantize into hard light/dark banding stripes.
+      const g = Math.hypot(dhdx, dhdz);
+      const att = 1 / (1 + g * g * 0.15);
+      const nx = -dhdx * NORMAL_TEX_STRENGTH * att;
+      const nz = -dhdz * NORMAL_TEX_STRENGTH * att;
       const inv = 1 / Math.hypot(nx, 1, nz);
       const o = (j * w + i) * 4;
       data[o] = (nx * inv * 0.5 + 0.5) * 255;
@@ -878,6 +1734,98 @@ vec3 wocBrushRing(vec2 p) {
 }
 `;
 
+// ---------------------------------------------------------------------------
+// Terrain holes (the editor's Hole tool): sphere cutouts through the ground
+// sheet, discarded per FRAGMENT so the rim is a clean round curve on any
+// slope at any chunk resolution. One shared uniform-value set feeds every
+// terrain material tier (splat/Lambert/blank); hole edits only write .value.
+// The sim shares the identical sphere test (sim/caves.ts inTerrainHole), so
+// where the ground disappears is exactly where movers stop standing on it.
+// ---------------------------------------------------------------------------
+
+// xyz = sphere center, w = radius^2 (squared on upload; the shader compares
+// squared distances only).
+const holesUniform = { value: new Float32Array(MAX_TERRAIN_HOLES * 4) };
+const holeCountUniform = { value: 0 };
+// Patch spheres (Patch hole mode): ground inside a patch is NOT discarded,
+// no matter how many holes overlap it.
+const holePatchesUniform = { value: new Float32Array(MAX_HOLE_PATCHES * 4) };
+const holePatchCountUniform = { value: 0 };
+
+/** Re-upload the active world's terrain holes + patches to every terrain
+ *  material. Call after any hole/patch edit (and on map load/terrain build). */
+export function refreshTerrainHoles(): void {
+  const content = getActiveWorldContent();
+  const holes = content.holes ?? [];
+  const arr = holesUniform.value;
+  const n = Math.min(holes.length, MAX_TERRAIN_HOLES);
+  for (let i = 0; i < n; i++) {
+    const h = holes[i];
+    arr[i * 4] = h.x;
+    arr[i * 4 + 1] = h.y;
+    arr[i * 4 + 2] = h.z;
+    arr[i * 4 + 3] = h.radius * h.radius;
+  }
+  holeCountUniform.value = n;
+  const patches = content.holePatches ?? [];
+  const parr = holePatchesUniform.value;
+  const pn = Math.min(patches.length, MAX_HOLE_PATCHES);
+  for (let i = 0; i < pn; i++) {
+    const p = patches[i];
+    parr[i * 4] = p.x;
+    parr[i * 4 + 1] = p.y;
+    parr[i * 4 + 2] = p.z;
+    parr[i * 4 + 3] = p.radius * p.radius;
+  }
+  holePatchCountUniform.value = pn;
+}
+
+const HOLES_GLSL = /* glsl */ `
+uniform vec4 uWocHoles[${MAX_TERRAIN_HOLES}];
+uniform int uWocHoleCount;
+uniform vec4 uWocHolePatches[${MAX_HOLE_PATCHES}];
+uniform int uWocHolePatchCount;
+bool wocInHole(vec3 p) {
+  bool cut = false;
+  for (int i = 0; i < ${MAX_TERRAIN_HOLES}; i++) {
+    if (i >= uWocHoleCount) break;
+    vec3 d = p - uWocHoles[i].xyz;
+    if (dot(d, d) < uWocHoles[i].w) { cut = true; break; }
+  }
+  if (!cut) return false;
+  for (int i = 0; i < ${MAX_HOLE_PATCHES}; i++) {
+    if (i >= uWocHolePatchCount) break;
+    vec3 d = p - uWocHolePatches[i].xyz;
+    if (dot(d, d) < uWocHolePatches[i].w) return false;
+  }
+  return true;
+}
+`;
+
+/** Patch a compiled terrain shader with the hole discard. `worldPosExpr` is
+ *  the material's world-position varying (each tier already carries one for
+ *  the brush ring). Runs before lighting via the clipping-planes anchor. */
+function injectHoleDiscard(
+  sh: { uniforms: Record<string, unknown>; fragmentShader: string },
+  worldPosExpr: string,
+): void {
+  sh.uniforms.uWocHoles = holesUniform;
+  sh.uniforms.uWocHoleCount = holeCountUniform;
+  sh.uniforms.uWocHolePatches = holePatchesUniform;
+  sh.uniforms.uWocHolePatchCount = holePatchCountUniform;
+  sh.fragmentShader = sh.fragmentShader
+    .replace(
+      '#include <clipping_planes_pars_fragment>',
+      `#include <clipping_planes_pars_fragment>
+      ${HOLES_GLSL}`,
+    )
+    .replace(
+      '#include <clipping_planes_fragment>',
+      `#include <clipping_planes_fragment>
+      if (uWocHoleCount > 0 && wocInHole(${worldPosExpr})) discard;`,
+    );
+}
+
 function buildSplatMaterial(
   normalTex: THREE.DataTexture,
   brush: BrushUniforms,
@@ -894,10 +1842,20 @@ function buildSplatMaterial(
     metalness: 0,
     normalMap: normalTex,
     normalScale: new THREE.Vector2(0.85, 0.85),
+    // Near-vertical sculpted cliffs stretch quads until some face away from
+    // the camera; culled backfaces read as transparent holes in the ground.
+    side: THREE.DoubleSide,
   });
   mat.onBeforeCompile = (sh) => {
     Object.assign(sh.uniforms, brush);
+    injectHoleDiscard(sh, 'vWPos');
+    ensureAtlas();
     Object.assign(sh.uniforms, {
+      uCustomAtlas: customAtlasUniform,
+      uCustomTile: customTileUniform,
+      uCustomTileB: customTileUniformB,
+      uPaintField: paintFieldUniform,
+      uPaintRect: paintRectUniform,
       uGrass: { value: t.grassC },
       uGrassN: { value: t.grassN },
       uDirt: { value: t.dirtC },
@@ -938,6 +1896,28 @@ function buildSplatMaterial(
         varying vec3 vWPos;
         varying vec3 vWNorm;
         uniform sampler2D uGrass, uGrassN, uDirt, uDirtN, uRock, uRockN, uSand, uSandN, uMud, uSnow, uMacro;
+        uniform sampler2D uCustomAtlas;
+        uniform vec4 uCustomTile;
+        uniform vec4 uCustomTileB;
+        // One array texture (a single texture unit; this material sits at
+        // MAX_TEXTURE_IMAGE_UNITS): layer 0 = premultiplied tint + coverage,
+        // layer 1 = splat re-base + flat weight, layer 2 = custom slots 0-3,
+        // layer 3 = swatch hue/light adjust, layer 4 = custom slots 4-7.
+        uniform highp sampler2DArray uPaintField;
+        uniform vec4 uPaintRect; // xy: paint-grid world origin, zw: 1/world size (0 = no paint)
+        vec3 wocCustomTex(vec2 tiledUv, vec2 cell) {
+          // fract() keeps the sample inside the slot's 4x2 atlas cell; a small
+          // inset avoids linear-filter bleed across the cell seam.
+          return texture2D(uCustomAtlas, (fract(tiledUv) * 0.996 + 0.002) * vec2(0.25, 0.5) + cell).rgb;
+        }
+        // Swatch hue adjust: rotate the albedo around the grey axis. Exact
+        // identity at angle 0 (cos 0 == 1, sin 0 == 0), so unadjusted paint
+        // stays bit-identical to today.
+        vec3 wocHueRotate(vec3 c, float a) {
+          vec3 k = vec3(0.5773502691896258);
+          float ca = cos(a);
+          return c * ca + cross(k, c) * sin(a) + k * dot(k, c) * (1.0 - ca);
+        }
         ${BRUSH_RING_GLSL}`,
       )
       .replace(
@@ -948,6 +1928,50 @@ function buildSplatMaterial(
       .replace(
         '#include <map_fragment>',
         `
+        // Per-fragment paint field: painted tint / splat re-base / custom
+        // texture weights resolve at paint-CELL resolution (GPU bilinear over
+        // the baked grid + smoothstep shaping), so brush edges feather over
+        // ~one paint cell instead of stair-stepping across mesh triangles.
+        vec2 paintUv = (vWPos.xz - uPaintRect.xy) * uPaintRect.zw;
+        vec4 pTint = texture(uPaintField, vec3(paintUv, 0.0));
+        vec4 pData = texture(uPaintField, vec3(paintUv, 1.0));
+        vec4 pCustomW = texture(uPaintField, vec3(paintUv, 2.0));
+        vec4 pAdjust = texture(uPaintField, vec3(paintUv, 3.0));
+        vec4 pCustomW2 = texture(uPaintField, vec3(paintUv, 4.0));
+        // Coverage: the bake pre-blurs the grid into a smooth field, so shape
+        // it and warp the midtones with world-space noise — the edge LINE
+        // wanders organically (like the hand-authored roads) instead of
+        // reading as a mathematically even airbrush ring. Extremes are gated,
+        // so painted interiors stay full and unpainted ground stays clean.
+        float pnoise = texture2D(uMacro, vWPos.xz * 0.045).r - 0.5;
+        float pcov = clamp(pTint.a + pnoise * 0.5 * (1.0 - abs(2.0 * pTint.a - 1.0)), 0.0, 1.0);
+        float pw = pcov * pcov * (3.0 - 2.0 * pcov);
+        // Tint is premultiplied by coverage in the bake, so the divide never
+        // bleeds dark halos in from unpainted neighbors.
+        vec3 paintTint = pTint.rgb / max(pTint.a, 1e-3);
+        // Re-base/custom/flat weights ride the SAME shaped+warped coverage
+        // (they were blurred with it, so rescale by the shared ratio): the
+        // splat texture, tint, and swatch edges all move as one line.
+        float pmod = pw / max(pTint.a, 1e-3);
+        pData *= pmod;
+        pCustomW *= pmod;
+        pCustomW2 *= pmod;
+        pAdjust *= pmod;
+        float pFlat = pData.a;
+        // Auto features (slope rock, shore sand, road/hub dirt, snow) are
+        // baked UNSUPPRESSED into the vertex attributes; fade them here by the
+        // SAME pw the paint arrives with, so the crossfade is exact at every
+        // fragment. (Suppressing at vertex resolution against fragment-res
+        // paint left a halo of resurfacing snow/sand around every stroke.)
+        vec4 wAuto = mix(vSplat, vec4(1.0, 0.0, 0.0, 0.0), pw);
+        // Re-base toward the painted biome's texture layer (dirt/rock/sand in
+        // pData.rgb, pre-scaled by the biome's strength).
+        float rebaseSum = min(1.0, pData.r + pData.g + pData.b);
+        vec4 wSplat = vec4(
+          wAuto.x * (1.0 - rebaseSum),
+          wAuto.y * (1.0 - rebaseSum) + pData.r,
+          wAuto.z * (1.0 - rebaseSum) + pData.g,
+          wAuto.w * (1.0 - rebaseSum) + pData.b);
         vec2 tuv = vWPos.xz * 0.22;
         // grass blends two scales so the 1K photo source never reads as tile
         vec3 grassAlb = mix(texture2D(uGrass, tuv).rgb, texture2D(uGrass, tuv * 0.31).rgb, 0.42);
@@ -964,12 +1988,13 @@ function buildSplatMaterial(
           texture2D(uRock, vWPos.zy * 0.132).rgb,
           axisW);
         vec3 rockAlb = mix(rockFlat, rockWall, wallW);
-        vec3 alb = grassAlb * vSplat.x
-                 + dirtAlb * vSplat.y
-                 + rockAlb * vSplat.z
-                 + texture2D(uSand, tuv).rgb * vSplat.w;
-        // snow cover on the peaks/rim, by baked per-vertex weight
-        alb = mix(alb, texture2D(uSnow, tuv * 0.7).rgb, vExtra.y);
+        vec3 alb = grassAlb * wSplat.x
+                 + dirtAlb * wSplat.y
+                 + rockAlb * wSplat.z
+                 + texture2D(uSand, tuv).rgb * wSplat.w;
+        // snow cover on the peaks/rim, by baked per-vertex weight — faded by
+        // the fragment paint coverage like every other auto feature
+        alb = mix(alb, texture2D(uSnow, tuv * 0.7).rgb, vExtra.y * (1.0 - pw));
         // gentle macro brightness swing breaks distant tiling
         float macro = mix(0.92, 1.08, texture2D(uMacro, vWPos.xz * 0.012).r);
         // Meteor impact terrain is authored by the same crater profile as the
@@ -980,13 +2005,59 @@ function buildSplatMaterial(
         // very-low-frequency hue drift (~100u wavelength) keeps distant
         // hills from flattening into one uniform lawn green
         float macro2 = texture2D(uMacro, vWPos.xz * 0.0045 + 0.37).r;
-        alb = mix(alb, alb * vec3(1.07, 1.03, 0.86), (macro2 - 0.5) * 0.5 * vSplat.x);
-        // real albedo carries the hue now; vertex color only modulates gently
-        // so the biome painting (roads, hub discs, snowline) still reads.
-        // (vColor was authored as a full sRGB ground color, so re-centre it
-        // around 1.0 before using it as a multiplier.)
-        vec3 vtint = clamp(vColor.rgb * 2.0, 0.0, 2.0);
-        diffuseColor.rgb *= alb * mix(vec3(1.0), vtint, 0.35) * macro;`,
+        alb = mix(alb, alb * vec3(1.07, 1.03, 0.86), (macro2 - 0.5) * 0.5 * wSplat.x);
+        // imported ground textures: painted swatch weights tile the maker's
+        // own images over everything above (soft edges from the paint field).
+        // Sampled unconditionally: texture2D inside a non-uniform branch has
+        // undefined derivatives; weight 0 makes the mix identity.
+        alb = mix(alb, wocCustomTex(vWPos.xz * uCustomTile.x, vec2(0.0, 0.0)), pCustomW.x);
+        alb = mix(alb, wocCustomTex(vWPos.xz * uCustomTile.y, vec2(0.25, 0.0)), pCustomW.y);
+        alb = mix(alb, wocCustomTex(vWPos.xz * uCustomTile.z, vec2(0.5, 0.0)), pCustomW.z);
+        alb = mix(alb, wocCustomTex(vWPos.xz * uCustomTile.w, vec2(0.75, 0.0)), pCustomW.w);
+        alb = mix(alb, wocCustomTex(vWPos.xz * uCustomTileB.x, vec2(0.0, 0.5)), pCustomW2.x);
+        alb = mix(alb, wocCustomTex(vWPos.xz * uCustomTileB.y, vec2(0.25, 0.5)), pCustomW2.y);
+        alb = mix(alb, wocCustomTex(vWPos.xz * uCustomTileB.z, vec2(0.5, 0.5)), pCustomW2.z);
+        alb = mix(alb, wocCustomTex(vWPos.xz * uCustomTileB.w, vec2(0.75, 0.5)), pCustomW2.w);
+        // color swatches HUE-TINT the ground: recolor the underlying texture
+        // toward the painted hue while KEEPING its own light/dark detail AND its
+        // overall brightness, so the texture reads exactly as it did below, only
+        // color-shifted. (The old vColor*lum*2.2 overdrive multiplied the
+        // texture's brightness back in, blowing bright detail past 1.0 to WHITE
+        // and discarding the texture's real color, so it never truly kept it.)
+        vec3 wocLumW = vec3(0.299, 0.587, 0.114);
+        float wocTexLum = dot(alb, wocLumW);
+        float wocPaintLum = max(dot(paintTint, wocLumW), 1e-4);
+        vec3 wocHue = paintTint / wocPaintLum;                // hue direction (avg ~1)
+        vec3 wocRecolor = alb * mix(vec3(1.0), wocHue, 0.85); // recolor around the texel
+        // Snap the result back to the texture's OWN luminance so nothing bright-
+        // ens or darkens overall -- only the hue moves.
+        wocRecolor *= wocTexLum / max(dot(wocRecolor, wocLumW), 1e-4);
+        // If a saturated hue drives a channel past 1.0, desaturate that texel
+        // toward its own grey (never a hard white clamp), so bright areas keep
+        // detail instead of blowing out.
+        float wocPeak = max(max(wocRecolor.r, wocRecolor.g), wocRecolor.b);
+        float wocFit = clamp((wocPeak - 1.0) / max(wocPeak - wocTexLum, 1e-4), 0.0, 1.0);
+        wocRecolor = mix(wocRecolor, vec3(wocTexLum), wocFit);
+        alb = mix(alb, wocRecolor, pFlat);
+        // Swatch hue/light adjust (paint-field layer 3): signed values ride
+        // two premultiplied channels each, so they blur linearly and fade to
+        // zero (a bit-exact no-op) with the stroke's own coverage. Applied to
+        // the FINAL albedo, so it recolors built-in biome textures, imported
+        // textures, and flat swatches alike.
+        float wocHueA = (pAdjust.x - pAdjust.y) * PI;
+        alb = wocHueRotate(alb, wocHueA);
+        float wocLightA = pAdjust.z - pAdjust.w;
+        alb = mix(alb, vec3(1.0), max(wocLightA, 0.0) * 0.75);
+        alb *= 1.0 + min(wocLightA, 0.0) * 0.75;
+        // real albedo carries the hue now; the ground tint only modulates
+        // gently so the biome painting (roads, hub discs, snowline) still
+        // reads. The tint itself blends from the AUTO vertex color to the
+        // painted tint by the fragment-resolution paint coverage, so painted
+        // color arrives at paint-cell resolution too. (Both were authored as
+        // full sRGB ground colors, so re-centre around 1.0 before multiplying.)
+        vec3 groundTint = mix(vColor.rgb, paintTint, pw);
+        vec3 vtint = clamp(groundTint * 2.0, 0.0, 2.0);
+        diffuseColor.rgb *= alb * mix(vec3(1.0), vtint, 0.35 * (1.0 - pFlat)) * macro;`,
       )
       .replace(
         '#include <color_fragment>',
@@ -998,8 +2069,8 @@ function buildSplatMaterial(
         '#include <roughnessmap_fragment>',
         `
         float roughnessFactor = roughness * mix(
-          dot(vSplat, vec4(${ROUGH_GRASS}, mix(${ROUGH_DIRT}, ${ROUGH_MUD}, vExtra.x), ${ROUGH_ROCK}, ${ROUGH_SAND})),
-          ${ROUGH_SNOW}, vExtra.y);`,
+          dot(wSplat, vec4(${ROUGH_GRASS}, mix(${ROUGH_DIRT}, ${ROUGH_MUD}, vExtra.x), ${ROUGH_ROCK}, ${ROUGH_SAND})),
+          ${ROUGH_SNOW}, vExtra.y * (1.0 - pw));`,
       )
       .replace(
         '#include <normal_fragment_maps>',
@@ -1009,20 +2080,20 @@ function buildSplatMaterial(
         vec3 dN = texture2D(uDirtN, tuv * 0.8).xyz * 2.0 - 1.0;
         vec3 rN = texture2D(uRockN, tuv * 0.6).xyz * 2.0 - 1.0;
         vec3 sN = texture2D(uSandN, tuv).xyz * 2.0 - 1.0;
-        vec2 detN = gN.xy * vSplat.x * 0.65
-                  + dN.xy * vSplat.y * 0.8
-                  + rN.xy * vSplat.z * 0.9 * (1.0 - wallW)
-                  + sN.xy * vSplat.w * 0.55;
-        detN *= 1.0 - vExtra.y * 0.7; // snow softens the relief beneath it
+        vec2 detN = gN.xy * wSplat.x * 0.65
+                  + dN.xy * wSplat.y * 0.8
+                  + rN.xy * wSplat.z * 0.9 * (1.0 - wallW)
+                  + sN.xy * wSplat.w * 0.55;
+        detN *= 1.0 - vExtra.y * (1.0 - pw) * 0.7; // snow softens the relief beneath it
         normal = normalize(normal + tbn * vec3(detN, 0.0));
         // cliffs: wall-projected rock normal so steep faces get real relief
         // (approximate world-space tangent frames per projection plane; the
         // handedness flip on back faces is invisible on noisy rock)
-        if (vSplat.z * wallW > 0.01) {
+        if (wSplat.z * wallW > 0.01) {
           vec3 rNx = texture2D(uRockN, vWPos.zy * 0.132).xyz * 2.0 - 1.0; // +-x faces
           vec3 rNz = texture2D(uRockN, vWPos.xy * 0.132).xyz * 2.0 - 1.0; // +-z faces
           vec3 wallPerturb = mix(vec3(rNz.x, rNz.y, 0.0), vec3(0.0, rNx.y, rNx.x), axisW);
-          normal = normalize(normal + mat3(viewMatrix) * wallPerturb * (vSplat.z * wallW * 0.8));
+          normal = normalize(normal + mat3(viewMatrix) * wallPerturb * (wSplat.z * wallW * 0.8));
         }`,
       );
   };
@@ -1038,6 +2109,7 @@ function buildLambertMaterial(brush: BrushUniforms): THREE.MeshLambertMaterial {
     map: detail,
     emissive: GFX.lowPlus ? 0x182014 : 0x000000,
     emissiveIntensity: GFX.lowPlus ? 0.08 : 1,
+    side: THREE.DoubleSide,
   });
   // The Lambert tier has no world-position varying of its own, so the brush
   // patch carries one (r165 chunk names; same idiom as the splat patch above).
@@ -1066,6 +2138,44 @@ function buildLambertMaterial(brush: BrushUniforms): THREE.MeshLambertMaterial {
         `#include <emissivemap_fragment>
         totalEmissiveRadiance += wocBrushRing(vWocWPos.xz);`,
       );
+    injectHoleDiscard(sh, 'vWocWPos');
+  };
+  return mat;
+}
+
+function buildBlankMaterial(brush: BrushUniforms): THREE.MeshLambertMaterial {
+  const mat = new THREE.MeshLambertMaterial({
+    vertexColors: true,
+    emissive: GFX.lowPlus ? 0x11160f : 0x000000,
+    emissiveIntensity: GFX.lowPlus ? 0.05 : 1,
+    side: THREE.DoubleSide,
+  });
+  mat.onBeforeCompile = (sh) => {
+    Object.assign(sh.uniforms, brush);
+    sh.vertexShader = sh.vertexShader
+      .replace(
+        '#include <common>',
+        `#include <common>
+        varying vec3 vWocWPos;`,
+      )
+      .replace(
+        '#include <begin_vertex>',
+        `#include <begin_vertex>
+        vWocWPos = (modelMatrix * vec4(transformed, 1.0)).xyz;`,
+      );
+    sh.fragmentShader = sh.fragmentShader
+      .replace(
+        '#include <common>',
+        `#include <common>
+        varying vec3 vWocWPos;
+        ${BRUSH_RING_GLSL}`,
+      )
+      .replace(
+        '#include <emissivemap_fragment>',
+        `#include <emissivemap_fragment>
+        totalEmissiveRadiance += wocBrushRing(vWocWPos.xz);`,
+      );
+    injectHoleDiscard(sh, 'vWocWPos');
   };
   return mat;
 }
@@ -1130,15 +2240,28 @@ export interface TerrainView {
 
 export function buildTerrain(seed: number, priorityPoint?: { x: number; z: number }): TerrainView {
   const lowGfx = !GFX.terrainSplat || !hasTerrainSplatAssets();
+  const plainMaterial = usesPlainTerrainMaterial(getActiveWorldContent().presentationMode);
+  refreshCustomGroundTextures();
+  // Hole cutouts ride shared uniforms: seed them from the active world before
+  // the material build so a loaded map's holes show from the first frame.
+  refreshTerrainHoles();
+  // Full paint-field bake AFTER the custom-texture refresh (the bake reads the
+  // textured-swatch slot order) and BEFORE the material build (the uniforms
+  // are module-shared, so the swap lands in every past and future material).
+  if (!lowGfx && !plainMaterial) refreshPaintField();
   const brush = makeBrushUniforms();
-  const normalTex = lowGfx ? null : terrainNormalTexture();
-  const mat = normalTex ? buildSplatMaterial(normalTex, brush) : buildLambertMaterial(brush);
+  const normalTex = lowGfx || plainMaterial ? null : terrainNormalTexture();
+  const mat = plainMaterial
+    ? buildBlankMaterial(brush)
+    : normalTex
+      ? buildSplatMaterial(normalTex, brush)
+      : buildLambertMaterial(brush);
   const bands = lowGfx ? LOD_BANDS.low : LOD_BANDS.high;
   const group = new THREE.Group();
   group.name = 'terrain';
-  const worldDepth = WORLD_MAX_Z - WORLD_MIN_Z;
-  const chunksX = Math.ceil((WORLD_MAX_X * 2) / CHUNK_SIZE);
-  const chunksZ = Math.ceil(worldDepth / CHUNK_SIZE);
+  const rb = renderBounds();
+  const chunksX = Math.ceil(rb.width / CHUNK_SIZE);
+  const chunksZ = Math.ceil(rb.depth / CHUNK_SIZE);
   // x/z/half feed the per-frame fog cull; x0/z0/size/spacing are the exact
   // buildChunkGeometry inputs, kept so an editor rebuild re-runs the same build.
   const chunks: {
@@ -1148,7 +2271,8 @@ export function buildTerrain(seed: number, priorityPoint?: { x: number; z: numbe
     half: number;
     x0: number;
     z0: number;
-    size: number;
+    sizeX: number;
+    sizeZ: number;
     spacing: number;
   }[] = [];
 
@@ -1157,10 +2281,10 @@ export function buildTerrain(seed: number, priorityPoint?: { x: number; z: numbe
   // densest band; the walls sit far from every hub, so hub-distance LOD alone
   // hands the steepest, most looked-at cliffs the coarsest grid.
   const wallChunkAt = (x0: number, z0: number, size: number): boolean => {
-    if (x0 < -WORLD_MAX_X + WALL_LOD_RIM_MARGIN || x0 + size > WORLD_MAX_X - WALL_LOD_RIM_MARGIN) {
+    if (x0 < rb.minX + WALL_LOD_RIM_MARGIN || x0 + size > rb.maxX - WALL_LOD_RIM_MARGIN) {
       return true;
     }
-    if (z0 < WORLD_MIN_Z + WALL_LOD_RIM_MARGIN || z0 + size > WORLD_MAX_Z - WALL_LOD_RIM_MARGIN) {
+    if (z0 < rb.minZ + WALL_LOD_RIM_MARGIN || z0 + size > rb.maxZ - WALL_LOD_RIM_MARGIN) {
       return true;
     }
     for (let i = 0; i + 1 < ZONES.length; i++) {
@@ -1173,8 +2297,8 @@ export function buildTerrain(seed: number, priorityPoint?: { x: number; z: numbe
   };
 
   const bandIndexAt = (cx: number, cz: number): number => {
-    const x0 = -WORLD_MAX_X + cx * CHUNK_SIZE;
-    const z0 = WORLD_MIN_Z + cz * CHUNK_SIZE;
+    const x0 = rb.minX + cx * CHUNK_SIZE;
+    const z0 = rb.minZ + cz * CHUNK_SIZE;
     if (wallChunkAt(x0, z0, CHUNK_SIZE)) return 0;
     const centerX = x0 + CHUNK_SIZE / 2;
     const centerZ = z0 + CHUNK_SIZE / 2;
@@ -1192,7 +2316,10 @@ export function buildTerrain(seed: number, priorityPoint?: { x: number; z: numbe
   const skirtSpan = bands[bands.length - 1].spacing;
 
   const addChunk = (x0: number, z0: number, size: number, spacing: number): void => {
-    const geo = buildChunkGeometry(x0, z0, size, spacing, seed, !lowGfx, skirtSpan);
+    const sizeX = Math.min(size, rb.maxX - x0);
+    const sizeZ = Math.min(size, rb.maxZ - z0);
+    if (sizeX <= 0 || sizeZ <= 0) return;
+    const geo = buildChunkGeometry(x0, z0, sizeX, sizeZ, spacing, seed, !lowGfx, skirtSpan);
     const mesh = new THREE.Mesh(geo, mat);
     mesh.receiveShadow = true;
     group.add(mesh);
@@ -1207,12 +2334,13 @@ export function buildTerrain(seed: number, priorityPoint?: { x: number; z: numbe
     mesh.matrixAutoUpdate = false;
     chunks.push({
       mesh,
-      x: x0 + size / 2,
-      z: z0 + size / 2,
-      half: size / 2,
+      x: x0 + sizeX / 2,
+      z: z0 + sizeZ / 2,
+      half: Math.max(sizeX, sizeZ) / 2,
       x0,
       z0,
-      size,
+      sizeX,
+      sizeZ,
       spacing,
     });
   };
@@ -1229,8 +2357,8 @@ export function buildTerrain(seed: number, priorityPoint?: { x: number; z: numbe
   // setTimeout chain for the rest of the session.
   let cancelled = false;
   const cellOwnerId = (cx: number, cz: number): string | null => {
-    const x = -WORLD_MAX_X + (cx + 0.5) * CHUNK_SIZE;
-    const z = WORLD_MIN_Z + (cz + 0.5) * CHUNK_SIZE;
+    const x = rb.minX + (cx + 0.5) * CHUNK_SIZE;
+    const z = rb.minZ + (cz + 0.5) * CHUNK_SIZE;
     // zoneAt deliberately clamps gaps/out-of-bounds positions to the nearest
     // playable zone. Terrain ownership must not: otherwise asking for one
     // column can accidentally materialize chunks in an empty neighbouring
@@ -1265,10 +2393,10 @@ export function buildTerrain(seed: number, priorityPoint?: { x: number; z: numbe
       zone.zMin,
       zone.xMax ?? STRIP_MAX_X,
       zone.zMax,
-      -WORLD_MAX_X,
-      WORLD_MIN_Z,
-      WORLD_MAX_X * 2,
-      WORLD_MAX_Z - WORLD_MIN_Z,
+      rb.minX,
+      rb.minZ,
+      rb.width,
+      rb.depth,
       NORMAL_TEX_W,
       NORMAL_TEX_H,
       1,
@@ -1305,8 +2433,8 @@ export function buildTerrain(seed: number, priorityPoint?: { x: number; z: numbe
       if (entryPoint) {
         const cellDist = ([cx, cz]: [number, number]): number =>
           Math.hypot(
-            -WORLD_MAX_X + (cx + 0.5) * CHUNK_SIZE - entryPoint.x,
-            WORLD_MIN_Z + (cz + 0.5) * CHUNK_SIZE - entryPoint.z,
+            rb.minX + (cx + 0.5) * CHUNK_SIZE - entryPoint.x,
+            rb.minZ + (cz + 0.5) * CHUNK_SIZE - entryPoint.z,
           );
         const nearby = cells.filter((cell) => cellDist(cell) <= CHUNK_SIZE * 3);
         if (nearby.length > 0) {
@@ -1353,8 +2481,8 @@ export function buildTerrain(seed: number, priorityPoint?: { x: number; z: numbe
         if (idlePace && bandIdx < farBand && !built.has(cell)) {
           built.add(cell);
           const half = CHUNK_SIZE / 2;
-          const x0 = -WORLD_MAX_X + cx * CHUNK_SIZE;
-          const z0 = WORLD_MIN_Z + cz * CHUNK_SIZE;
+          const x0 = rb.minX + cx * CHUNK_SIZE;
+          const z0 = rb.minZ + cz * CHUNK_SIZE;
           for (const [qx, qz] of [
             [0, 0],
             [1, 0],
@@ -1389,16 +2517,16 @@ export function buildTerrain(seed: number, priorityPoint?: { x: number; z: numbe
           if (superOk) {
             for (const [sx, sz] of superCells) built.add(sz * chunksX + sx);
             addChunk(
-              -WORLD_MAX_X + cx * CHUNK_SIZE,
-              WORLD_MIN_Z + cz * CHUNK_SIZE,
+              rb.minX + cx * CHUNK_SIZE,
+              rb.minZ + cz * CHUNK_SIZE,
               CHUNK_SIZE * 2,
               bands[farBand].spacing,
             );
           } else {
             built.add(cell);
             addChunk(
-              -WORLD_MAX_X + cx * CHUNK_SIZE,
-              WORLD_MIN_Z + cz * CHUNK_SIZE,
+              rb.minX + cx * CHUNK_SIZE,
+              rb.minZ + cz * CHUNK_SIZE,
               CHUNK_SIZE,
               bands[bandIndexAt(cx, cz)].spacing,
             );
@@ -1429,16 +2557,22 @@ export function buildTerrain(seed: number, priorityPoint?: { x: number; z: numbe
       }
     },
     rebuildRegion(minX: number, minZ: number, maxX: number, maxZ: number): void {
+      // Paint edits land here per drag sample: rebake the region's paint-field
+      // texels first (that is what the splat fragment path actually renders;
+      // idempotent and cheap when the region only sculpted heights).
+      if (!lowGfx) rebakePaintFieldRegion(minX, minZ, maxX, maxZ);
       // No allocation beyond the replacement geometries: the chunk list is
       // scanned in place and only intersecting chunks re-mesh.
       for (const chunk of chunks) {
-        if (!chunkIntersectsRegion(chunk.x0, chunk.z0, chunk.size, minX, minZ, maxX, maxZ)) {
+        const maxSize = Math.max(chunk.sizeX, chunk.sizeZ);
+        if (!chunkIntersectsRegion(chunk.x0, chunk.z0, maxSize, minX, minZ, maxX, maxZ)) {
           continue;
         }
         const geo = buildChunkGeometry(
           chunk.x0,
           chunk.z0,
-          chunk.size,
+          chunk.sizeX,
+          chunk.sizeZ,
           chunk.spacing,
           seed,
           !lowGfx,
@@ -1457,10 +2591,10 @@ export function buildTerrain(seed: number, priorityPoint?: { x: number; z: numbe
         minZ,
         maxX,
         maxZ,
-        -WORLD_MAX_X,
-        WORLD_MIN_Z,
-        WORLD_MAX_X * 2,
-        WORLD_MAX_Z - WORLD_MIN_Z,
+        rb.minX,
+        rb.minZ,
+        rb.width,
+        rb.depth,
         NORMAL_TEX_W,
         NORMAL_TEX_H,
         1,

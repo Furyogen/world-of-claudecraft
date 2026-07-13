@@ -199,6 +199,23 @@ export class MapIO {
     }
   }
 
+  /** A specific map's autosave draft, used when returning from playtest. */
+  draftLoadById(mapId: string): CustomMap | null {
+    if (!this.storage) return null;
+    this.migrateLegacyDraft();
+    try {
+      const raw = this.storage.getItem(DRAFT_KEY_PREFIX + mapId);
+      if (raw) return parseMap(raw);
+      // Legacy slot fallback (migration blocked by quota).
+      const legacy = this.storage.getItem(LEGACY_DRAFT_KEY);
+      if (!legacy) return null;
+      const map = parseMap(legacy);
+      return map?.meta.id === mapId ? map : null;
+    } catch {
+      return null;
+    }
+  }
+
   /** Clear ONLY this map's draft slot; other maps keep their autosaves. */
   draftClear(mapId: string): void {
     if (!this.storage) return;

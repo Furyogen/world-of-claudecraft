@@ -366,6 +366,9 @@ export const NPCS: Record<string, NpcDef> = {
   ...ZONE2_NPCS,
   ...ZONE3_NPCS,
   ...TEMPLE_NPCS,
+  // Scorching Wastes expedition roster (dynamic: true ? the custom desert map
+  // spawns live copies from its own content.npcs; the base world never places
+  // them). Registered here so quest giver/turn-in ids resolve globally.
   brother_halven: BROTHER_HALVEN,
   brother_halven_marsh: BROTHER_HALVEN_MARSH,
   ...REALM_NPCS,

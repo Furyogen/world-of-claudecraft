@@ -80,6 +80,8 @@ export interface ValeCupStadiumView {
   /** Brazier lights, owned by the renderer's constant point-light budget
    *  (never inside the cull-toggled group, the impact-site light rule). */
   lights: THREE.PointLight[];
+  /** Rebase the shipped world-space stadium onto an authored map centered at zero. */
+  setAuthoredMapMode(on: boolean): void;
   update(px: number, pz: number, dt: number, cup: CupInfo | null): void;
 }
 
@@ -1206,11 +1208,27 @@ export function buildValeCupStadium(seed: number): ValeCupStadiumView {
 
   // ---- live-match flag swap + distance cull ---------------------------------
   let matchFlagKey = 'idle';
+  const lightHome = lights.map((light) => light.position.clone());
   return {
     group,
     practiceGroup,
     flames,
     lights,
+    setAuthoredMapMode(on: boolean): void {
+      group.position.set(
+        on ? -SOWFIELD_CENTER.x : 0,
+        on ? -SOWFIELD_FLAT.height : 0,
+        on ? -SOWFIELD_CENTER.z : 0,
+      );
+      for (let i = 0; i < lights.length; i++) {
+        const home = lightHome[i];
+        lights[i].position.set(
+          home.x + group.position.x,
+          home.y + group.position.y,
+          home.z + group.position.z,
+        );
+      }
+    },
     update(px2: number, pz2: number, _dt: number, cup: CupInfo | null): void {
       // In a private practice instance: show the shifted copy at the practice
       // pitch, hide the real one. `origin` is {0,0} for the real Sowfield match.
