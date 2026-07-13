@@ -123,11 +123,13 @@ describe('mob scan counters: aggro-scan player visits (updateMob idle branch)', 
   it('counts one visit per in-radius player and excludes players beyond the grid radius', () => {
     const sim = noPlayerSim();
     // Two players within the radius-20 grid query (distances 10 and exactly 20: the query
-    // keeps d2 <= r2, so the 20-unit player on the boundary IS visited), one just beyond
-    // it (22, inside the former 25-yd window but now excluded), and two farther out
-    // (30, 45) that must not be counted.
+    // keeps d2 <= r2, so the 20-unit player on the boundary IS visited), one just past the
+    // boundary (21: with On20 this closes the query radius to exactly 20, so a drifted
+    // constant would red here), one in the former 25-yd window (22, now excluded), and
+    // two farther out (30, 45) that must not be counted.
     addPlayerAt(sim, 'In10', 10, 0);
     addPlayerAt(sim, 'On20', 0, 20);
+    addPlayerAt(sim, 'Out21', 21, 0);
     addPlayerAt(sim, 'Out22', 0, 22);
     addPlayerAt(sim, 'Out30', 30, 0);
     addPlayerAt(sim, 'Out45', 0, 45);
@@ -139,6 +141,25 @@ describe('mob scan counters: aggro-scan player visits (updateMob idle branch)', 
     updateMob(ctxOf(sim), mob);
 
     expect(sim.mobScanCounters.aggroScanPlayerVisits).toBe(2);
+  });
+
+  it('detects strictly (d < radius): a live player at exactly the effective radius stays safe', () => {
+    const sim = noPlayerSim();
+    // A level-5 forest wolf vs a level-1 player has effective aggro radius
+    // max(4, min(20, 10 + (5 - 1) * 1.5)) = 16 exactly (aggroRadius 10 in
+    // src/sim/content/zone1.ts). A live, non-trivial player at exactly 16 is inside the
+    // grid query (visited) but the detection check is strict, so the wolf must stay
+    // idle: this pins the strict inequality on the general branch (the Nythraxis case
+    // below pins it on the boss branch).
+    addPlayerAt(sim, 'On16', 16, 0);
+    const mob = idleForestWolf(sim, 900103);
+    refreshPlayerGrid(sim);
+
+    updateMob(ctxOf(sim), mob);
+
+    expect(sim.mobScanCounters.aggroScanPlayerVisits).toBe(1);
+    expect(mob.aiState).toBe('idle');
+    expect(mob.aggroTargetId).toBe(null);
   });
 
   it('counts a dead player in radius because the increment precedes the dead check', () => {
@@ -196,6 +217,7 @@ describe('mob scan counters: aggro-scan player visits (updateMob idle branch)', 
     const cases: [string, number, number, boolean, number][] = [
       ['On20', 20, 0, false, 1],
       ['DeadIn15', 0, 15, true, 1],
+      ['Out21', 21, 0, false, 0],
       ['Out22', 0, 22, false, 0],
       ['Out40', 40, 0, false, 0],
     ];
