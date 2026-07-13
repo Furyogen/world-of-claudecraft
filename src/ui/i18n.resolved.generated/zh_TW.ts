@@ -5901,8 +5901,8 @@ export const zh_TW: EnTranslations = {
         "description": "化為惡魔之力，使護甲和攻擊強度提高 20 秒。（術士天賦）"
       },
       "aura_surge": {
-        "name": "光輝湧動",
-        "description": "過載你的光環，使你在10秒內獲得160點護甲。（聖騎士天賦）"
+        "name": "曙光彈射",
+        "description": "擲出曙光鑄造的聖盾，造成{damage}點神聖傷害並使主要目標沉默2秒，隨後彈射至{radius}碼內最多{jumps}個額外敵人，每次彈射造成{falloff}點傷害。（聖騎士天賦）"
       },
       "holy_shield": {
         "name": "神聖之牆",
@@ -6075,6 +6075,10 @@ export const zh_TW: EnTranslations = {
       "razor_howl": {
         "name": "銳刃怒吼",
         "description": "使 15 碼內的敵人減速 50%，持續 8 秒。（戰士天賦）"
+      },
+      "lingering_dread": {
+        "name": "餘懼",
+        "description": "發出戰吼，使10碼內的敵人恐懼4秒。每個目標受到相當於其最大生命值20%的傷害前，恐懼不會中斷。（戰士天賦）"
       },
       "stormthrow": {
         "name": "風暴投擲",
@@ -6271,6 +6275,34 @@ export const zh_TW: EnTranslations = {
       "tranquility": {
         "name": "林地之歌",
         "description": "引導恢復之力，每秒治療附近的盟友。（德魯伊天賦）"
+      },
+      "cleansing_verdict": {
+        "name": "淨化裁決",
+        "description": "淨化一個友方目標身上的有害魔法效果，並為其恢復{damage}點生命值。"
+      },
+      "voidfeast": {
+        "name": "虛空盛宴",
+        "description": "吞噬一個魔法效果（敵人的增益或盟友的減益），並恢復你最大生命值的6%。"
+      },
+      "spellsteal": {
+        "name": "奪法",
+        "description": "從敵人身上竊取一個有益魔法效果並轉移到自己身上。"
+      },
+      "startle_shot": {
+        "name": "驚擾射擊",
+        "description": "狂野射擊使目標迷惑{duration}秒。受到任何傷害都會打破此效果。"
+      },
+      "spell_reflect": {
+        "name": "法術反射",
+        "description": "舉起盾牌，將下一個敵對法術反彈回施法者。"
+      },
+      "smoke_screen": {
+        "name": "煙幕",
+        "description": "遁入煙霧之中，在一段時間內提高你的閃躲幾率。"
+      },
+      "typhoon": {
+        "name": "颱風",
+        "description": "一陣狂風將附近所有敵人擊退並使其昏亂，降低其移動速度。"
       },
       "bear_charge": {
         "name": "巨熊衝鋒",

@@ -750,6 +750,7 @@ export interface ResolvedAbility {
   threatFlat: number; // classic bonus threat on a successful use
   threatMult: number; // classic multiplier on this ability's damage-threat
   castWhileMoving?: boolean; // talent-granted mobility (def.castWhileMoving covers baseline)
+  damagePushbackImmune?: boolean; // talent-granted immunity to cast/channel damage pushback
   charges?: number; // stored uses (def maxCharges and/or Double Charge talent); undefined = 1
   bonusCharges?: number;
 }
@@ -3962,6 +3963,8 @@ export class Sim {
   }
 
   private pushbackCast(p: Entity): void {
+    const active = p.castingAbility ? this.resolvedAbility(p.castingAbility, p.id) : undefined;
+    if (active?.damagePushbackImmune) return;
     pushbackCastImpl(p);
   }
 
@@ -4035,8 +4038,14 @@ export class Sim {
     return critVulnBonusImpl(this.ctx, target);
   }
 
-  private applyHeal(source: Entity, target: Entity, amount: number, ability: string): void {
-    applyHealImpl(this.ctx, source, target, amount, ability);
+  private applyHeal(
+    source: Entity,
+    target: Entity,
+    amount: number,
+    ability: string,
+    abilityId: string | null = null,
+  ): void {
+    applyHealImpl(this.ctx, source, target, amount, ability, abilityId);
   }
 
   private healingThreat(source: Entity, target: Entity, healed: number): void {
@@ -4458,6 +4467,7 @@ export class Sim {
     noRage = false,
     threatOpts?: { flat?: number; mult?: number },
     direct = true,
+    abilityId: string | null = null,
   ): void {
     dealDamageImpl(
       this.ctx,
@@ -4471,6 +4481,7 @@ export class Sim {
       noRage,
       threatOpts,
       direct,
+      abilityId,
     );
   }
 

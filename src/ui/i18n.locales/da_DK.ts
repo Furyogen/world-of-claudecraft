@@ -1969,9 +1969,9 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.wing_clip.name': 'Lænkende Snit',
   'entities.abilities.wrath.description': 'Slynger et lyn af naturenergi for {damage} Natur skade.',
   'entities.abilities.wrath.name': 'Vildlyn',
-  'entities.abilities.aura_surge.name': 'Strålende Svulmen',
+  'entities.abilities.aura_surge.name': 'Daggryets rikochet',
   'entities.abilities.aura_surge.description':
-    'Overbelaster din aura og hærder dig med 160 rustning i 10 sek. (Paladintalent)',
+    'Kaster et daggrysmedet skjold for {damage} Hellig skade, bringer det primære mål til tavshed i 2 sek. og hopper derefter til op til {jumps} yderligere fjender inden for {radius} meter for {falloff} skade pr. hop. (Paladintalent)',
   'entities.abilities.holy_shock.name': 'Hellig chok',
   'entities.abilities.holy_shock.description':
     'Chokerer et venligt mål med hellig energi og helbreder det for {damage}. (Hellig signatur)',

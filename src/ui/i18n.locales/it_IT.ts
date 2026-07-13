@@ -1007,7 +1007,8 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_stalkers_return.title': 'I braccatori ritornano',
   'hudChrome.auraEffect.allStatsPctReduce': 'Riduce tutti gli attributi del {pct}%',
   'hudChrome.auraEffect.avatar': 'Colosso: danni inflitti aumentati del {pct}%',
-  'hudChrome.auraEffect.battleStance': 'Posizione di Battaglia: 10% di generazione di rabbia in più',
+  'hudChrome.auraEffect.battleStance':
+    'Posizione di Battaglia: 10% di generazione di rabbia in più',
   'hudChrome.auraEffect.battleTrance':
     'Il tuo prossimo Colpo del Predone o Colpo Mutilante non costa rabbia',
   'hudChrome.auraEffect.berserkerStance':
@@ -3298,9 +3299,9 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.revive_pet.name': 'Rianima Famiglio',
   'entities.abilities.revive_pet.description':
     'Rianima il tuo famiglio morto e lo richiama al tuo fianco.',
-  'entities.abilities.aura_surge.name': 'Ondata Radiosa',
+  'entities.abilities.aura_surge.name': "Rimbalzo dell'Alba",
   'entities.abilities.aura_surge.description':
-    'Sovraccarica la tua aura, indurendoti con 160 armatura per 10 sec. (talento del Paladino)',
+    "Scaglia uno scudo forgiato all'alba che infligge {damage} danni Sacri, silenzia il bersaglio principale per 2 sec. e rimbalza su un massimo di {jumps} nemici aggiuntivi entro {radius} metri, infliggendo {falloff} danni per rimbalzo. (talento del Paladino)",
   'entities.abilities.holy_shock.name': 'Shock Sacro',
   'entities.abilities.holy_shock.description':
     'Colpisce un bersaglio alleato con energia Sacra, curandolo di {damage}. (firma Sacro)',

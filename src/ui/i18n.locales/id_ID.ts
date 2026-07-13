@@ -2037,9 +2037,9 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.wrath.description':
     'Melontarkan panah energi alam sebesar {damage} kerusakan Alam.',
   'entities.abilities.wrath.name': 'Wildbolt',
-  'entities.abilities.aura_surge.name': 'Gelombang Cemerlang',
+  'entities.abilities.aura_surge.name': 'Pantulan Fajar',
   'entities.abilities.aura_surge.description':
-    'Mengisi berlebih aura Anda, memperkuat dengan 160 zirah selama 10 detik. (talenta Paladin)',
+    'Melempar perisai tempa fajar yang menghasilkan {damage} kerusakan Suci, membungkam target utama selama 2 detik, lalu memantul ke hingga {jumps} musuh lain dalam jarak {radius} yard dengan {falloff} kerusakan tiap pantulan. (talenta Paladin)',
   'entities.abilities.holy_shock.name': 'Kejutan Suci',
   'entities.abilities.holy_shock.description':
     'Mengejutkan target kawan dengan energi Suci dan memulihkannya sebesar {damage}. (ciri khas Suci)',

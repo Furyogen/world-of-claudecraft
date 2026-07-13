@@ -5901,8 +5901,8 @@ export const nl_NL: EnTranslations = {
         "description": "Neemt demonische kracht aan en verhoogt pantser en aanvalskracht 20 sec. lang. (heksenmeestertalent)"
       },
       "aura_surge": {
-        "name": "Stralende Golf",
-        "description": "Overlaadt je aura en verhardt je met 160 bepantsering gedurende 10 sec. (Paladijntalent)"
+        "name": "Dageraadskets",
+        "description": "Slingert een bij dageraad gesmeed schild voor {damage} Heilige schade, legt het hoofddoel 2 sec. het zwijgen op en stuitert daarna naar maximaal {jumps} extra vijanden binnen {radius} meter voor {falloff} schade per stuiter. (Paladijntalent)"
       },
       "holy_shield": {
         "name": "Heilig schild",
@@ -6075,6 +6075,10 @@ export const nl_NL: EnTranslations = {
       "razor_howl": {
         "name": "Messcherpe huil",
         "description": "Een kreet die vijanden binnen 15 m gedurende 8 sec. met 50% vertraagt. (Krijgertalent)"
+      },
+      "lingering_dread": {
+        "name": "Lingering Dread",
+        "description": "Unleash a battle cry that fears enemies within 10 yards for 4 sec. The fear endures up to 20% of each target's maximum health in damage. (Warrior talent)"
       },
       "stormthrow": {
         "name": "Stormworp",
@@ -6271,6 +6275,34 @@ export const nl_NL: EnTranslations = {
       "tranquility": {
         "name": "Woudlied",
         "description": "Canaliza energía restauradora y sana a nabije bondgenoten cada segundo. (druïdetalent)"
+      },
+      "cleansing_verdict": {
+        "name": "Cleansing Verdict",
+        "description": "Purges a harmful magic effect from a friendly target and heals them for {damage} Holy."
+      },
+      "voidfeast": {
+        "name": "Voidfeast",
+        "description": "Devours a magic effect (a beneficial one from an enemy, or a harmful one from an ally) and heals you for 6% of your maximum health."
+      },
+      "spellsteal": {
+        "name": "Spellsteal",
+        "description": "Steals a beneficial magic effect from an enemy, transferring it to yourself."
+      },
+      "startle_shot": {
+        "name": "Startle Shot",
+        "description": "A wild shot that disorients the target for {duration} sec. Any damage breaks the effect."
+      },
+      "spell_reflect": {
+        "name": "Spell Reflect",
+        "description": "Raises your shield, reflecting the next hostile spell back at its caster."
+      },
+      "smoke_screen": {
+        "name": "Smoke Screen",
+        "description": "Vanish into a cloud of smoke, increasing your chance to dodge for a time."
+      },
+      "typhoon": {
+        "name": "Typhoon",
+        "description": "A blast of wind knocks back all nearby enemies and dazes them, slowing their movement."
       },
       "bear_charge": {
         "name": "Bruin-stormloop",

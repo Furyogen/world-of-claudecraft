@@ -2206,9 +2206,23 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
     '一记潜行起手技，以武器伤害外加{damage}撕抓敌人，并造成持续9秒的流血伤害。获得1点连击点数。仅限狼形态使用。',
   'entities.abilities.revive_pet.name': '复活宠物',
   'entities.abilities.revive_pet.description': '复活你死去的宠物，并将其召回身边。',
-  'entities.abilities.aura_surge.name': '光辉涌动',
+  'entities.abilities.aura_surge.name': '曙光弹射',
   'entities.abilities.aura_surge.description':
-    '过载你的光环，使你在10秒内获得160点护甲。（圣骑士天赋）',
+    '掷出曙光铸造的圣盾，造成{damage}点神圣伤害并使首要目标沉默2秒，随后弹射至{radius}码内最多{jumps}个额外敌人，每次弹射造成{falloff}点伤害。（圣骑士天赋）',
+  'entities.abilities.lingering_dread.name': '余惧',
+  'entities.abilities.lingering_dread.description':
+    '发出战吼，使10码内的敌人恐惧4秒。每个目标受到相当于其最大生命值20%的伤害前，恐惧不会中断。（战士天赋）',
+  'entities.abilities.cleansing_verdict.name': '净化裁决',
+  'entities.abilities.cleansing_verdict.description':
+    '净化一个友方目标身上的有害魔法效果，并为其恢复{damage}点生命值。',
+  'entities.abilities.voidfeast.name': '虚空盛宴',
+  'entities.abilities.voidfeast.description':
+    '吞噬一个魔法效果（敌人的增益或盟友的减益），并恢复你最大生命值的6%。',
+  'entities.abilities.spellsteal.name': '夺法',
+  'entities.abilities.spellsteal.description': '从敌人身上窃取一个有益魔法效果并转移到自己身上。',
+  'entities.abilities.startle_shot.name': '惊扰射击',
+  'entities.abilities.startle_shot.description':
+    '狂野射击使目标迷惑{duration}秒。受到任何伤害都会打破该效果。',
   'entities.abilities.icy_veins.name': '冰冷血脉',
   'entities.abilities.icy_veins.description':
     '法术急速提高30%，并防止施法被打断或受到退条，持续10秒。（冰霜专精招牌）',
@@ -6600,4 +6614,10 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.rallying_cry.name': '集结呐喊',
   'entities.abilities.rallying_cry.description':
     '发出一声集结呐喊，使你和 40 码内的队伍成员获得 20% 的额外最大生命值，持续 10 秒。',
+  'entities.abilities.spell_reflect.name': '法术反射',
+  'entities.abilities.spell_reflect.description': '举起盾牌，将下一个敌对法术反弹回施法者。',
+  'entities.abilities.smoke_screen.name': '烟幕',
+  'entities.abilities.smoke_screen.description': '遁入烟雾之中，在一段时间内提高你的躲闪几率。',
+  'entities.abilities.typhoon.name': '台风',
+  'entities.abilities.typhoon.description': '一阵狂风将附近所有敌人击退并使其昏乱，降低其移动速度。',
 };

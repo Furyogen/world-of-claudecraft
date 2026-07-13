@@ -3430,9 +3430,9 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.revive_pet.name': 'Ranimer le familier',
   'entities.abilities.revive_pet.description':
     'Ranime votre familier mort et le ramène à vos côtés.',
-  'entities.abilities.aura_surge.name': 'Houle radieuse',
+  'entities.abilities.aura_surge.name': "Ricochet de l'aube",
   'entities.abilities.aura_surge.description':
-    "Surcharge votre aura et vous renforce de 160 points d'armure pendant 10 s. (talent de Paladin)",
+    "Projette un bouclier forgé à l'aube qui inflige {damage} dégâts sacrés, réduit la cible principale au silence pendant 2 s, puis rebondit sur jusqu'à {jumps} ennemis supplémentaires à moins de {radius} m, infligeant {falloff} dégâts par rebond. (talent de Paladin)",
   'entities.abilities.holy_shock.name': 'Horion sacré',
   'entities.abilities.holy_shock.description':
     'Frappe une cible alliée avec de l’énergie sacrée et lui rend {damage} points de vie. (signature Sacré)',

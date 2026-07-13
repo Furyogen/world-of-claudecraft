@@ -15,11 +15,13 @@
 // `src/sim`-pure: no DOM/Three, no Math.random/Date.now; all randomness is the
 // shared `ctx.rng` stream, drawn in the exact pre-move order.
 
+import { isDebuffAura } from '../aura_classify';
 import { ABILITIES, isDelvePos } from '../data';
 import { recalcPlayerStats } from '../entity';
 import type { GroundAoE } from '../entity_roster';
 import { SCRIPTED_INTERRUPTIBLE_CHANNELS } from '../mob/healer_channel';
 import { PLAYER_BODY_RADIUS, PLAYER_MAX_CLIMB_SLOPE, PLAYER_SWIM_DEPTH } from '../pathfind';
+import { scheduleProjectile } from '../projectile_travel';
 import type { PlayerMeta, ResolvedAbility } from '../sim';
 import type { SimContext } from '../sim_context';
 import {
@@ -229,6 +231,9 @@ export function runEffects(
   // spends a charge.
   const sureCrit = hasSureCritAura(p);
   let sureCritRolled = false;
+  // Dynamic DoT riders such as Viperfletch snapshot a fraction of the preceding
+  // resolved direct hit, including scaling and critical damage.
+  let lastDirectDamage = 0;
   // acting breaks stealth (the opener itself still lands first inside the swing).
   // Stealth toggles and Rogue Sprint are allowed while remaining hidden.
   if (!preservesStealth(ability)) ctx.breakStealth(p);
@@ -392,9 +397,20 @@ export function runEffects(
         if (eff.vsRootedMult !== undefined && rooted) dmg *= eff.vsRootedMult;
         // Conditional talent damage vs a target carrying the CASTER'S DoT
         // (Twisted Faith style). Deterministic aura scan, no rng.
-        const vsDotted = mods.abilities[ability.id]?.dmgPctVsDotted ?? 0;
-        if (vsDotted > 0 && target.auras.some((a) => a.kind === 'dot' && a.sourceId === p.id))
+        const abilityMod = mods.abilities[ability.id];
+        const vsDotted = abilityMod?.dmgPctVsDotted ?? 0;
+        const requiredDot = abilityMod?.dmgPctVsDottedAbility;
+        if (
+          vsDotted > 0 &&
+          target.auras.some(
+            (a) =>
+              a.kind === 'dot' &&
+              a.sourceId === p.id &&
+              (requiredDot === undefined || a.id === requiredDot),
+          )
+        ) {
           dmg *= 1 + vsDotted;
+        }
         // Emboldened: the roll is still drawn; only the outcome is overridden.
         const crit = ctx.rng.chance(consumeNextAttackCrit(ctx, p) ? 1 : critChance) || sureCrit;
         if (sureCrit) sureCritRolled = true;
@@ -402,6 +418,7 @@ export function runEffects(
         if (isSpell) dmg *= spellDamageMultFromAuras(p);
         if (!isSpell) dmg *= 1 - armorReduction(ctx.effectiveArmor(target), p.level);
         const finalDamage = Math.round(dmg);
+        lastDirectDamage = finalDamage;
         ctx.dealDamage(
           p,
           target,
@@ -412,6 +429,8 @@ export function runEffects(
           'hit',
           false,
           threatOpts,
+          true,
+          ability.id,
         );
         // Bladed Echo: replay the SAME resolved amount (already rolled, post
         // crit/armor; no new rng draw) onto enemies near the primary target.
@@ -441,6 +460,80 @@ export function runEffects(
         // routed through this same case does not. No-op (no rng draw) unless the
         // caster wields a proc weapon with a spellDamage proc.
         if (isSpell) runWeaponProcs(ctx, p, target, 'spellDamage');
+        break;
+      }
+      case 'chainDamage': {
+        if (!target || !ctx.isHostileTo(p, target)) break;
+        const baseDamage =
+          ctx.rng.range(eff.min, eff.max) +
+          directHitBonus(abilityScalingPower(p, ability), ability, res.castTime);
+        const hitIds = new Set<number>();
+
+        const hitAndBounce = (victim: Entity, hop: number): void => {
+          if (victim.dead || !ctx.isHostileTo(p, victim) || hitIds.has(victim.id)) return;
+          hitIds.add(victim.id);
+
+          const critChance = isSpell ? ctx.spellCrit(p) : p.critChance;
+          const rolledCrit = ctx.rng.chance(consumeNextAttackCrit(ctx, p) ? 1 : critChance);
+          const crit = hop === 0 && sureCrit ? true : rolledCrit;
+          if (hop === 0 && sureCrit) sureCritRolled = true;
+          let dmg = baseDamage * eff.falloff ** hop;
+          if (crit) dmg *= (isSpell ? 1.5 : 2) + p.critDmgBonus;
+          if (isSpell) dmg *= spellDamageMultFromAuras(p);
+          if (!isSpell) dmg *= 1 - armorReduction(ctx.effectiveArmor(victim), p.level);
+          ctx.dealDamage(
+            p,
+            victim,
+            Math.round(dmg),
+            crit,
+            ability.school,
+            ability.name,
+            'hit',
+            false,
+            threatOpts,
+            true,
+            ability.id,
+          );
+          if (isSpell) noteSpellHit(ctx, p, crit);
+          // A chain is one damaging spell cast. Roll equipment procs once on the
+          // primary impact, never once per bounce.
+          if (isSpell && hop === 0) runWeaponProcs(ctx, p, victim, 'spellDamage');
+          if (hop >= eff.jumps || p.dead) return;
+
+          const radiusSq = eff.radius * eff.radius;
+          let next: Entity | null = null;
+          let nextDistanceSq = Infinity;
+          for (const candidate of ctx.entities.values()) {
+            if (candidate.dead || hitIds.has(candidate.id) || !ctx.isHostileTo(p, candidate)) {
+              continue;
+            }
+            const dx = candidate.pos.x - victim.pos.x;
+            const dz = candidate.pos.z - victim.pos.z;
+            const distanceSq = dx * dx + dz * dz;
+            if (distanceSq > radiusSq || !ctx.hasLineOfSight(victim, candidate)) continue;
+            if (
+              next === null ||
+              distanceSq < nextDistanceSq ||
+              (distanceSq === nextDistanceSq && candidate.id < next.id)
+            ) {
+              next = candidate;
+              nextDistanceSq = distanceSq;
+            }
+          }
+          if (next === null) return;
+          ctx.emit({
+            type: 'spellfx',
+            sourceId: victim.id,
+            targetId: next.id,
+            school: ability.school,
+            fx: 'projectile',
+          });
+          scheduleProjectile(ctx, p, next, (_source, landed) => hitAndBounce(landed, hop + 1), {
+            ...victim.pos,
+          });
+        };
+
+        hitAndBounce(target, 0);
         break;
       }
       case 'finisherDamage': {
@@ -533,7 +626,7 @@ export function runEffects(
         // healing mirror of the direct-nuke rider (applyHeal fires the crit).
         const healAmount =
           ctx.rng.range(eff.min, eff.max) + directHealBonus(p.spellPower, res.castTime);
-        ctx.applyHeal(p, healTarget, healAmount, ability.name);
+        ctx.applyHeal(p, healTarget, healAmount, ability.name, ability.id);
         break;
       }
       case 'chainHeal': {
@@ -595,7 +688,7 @@ export function runEffects(
             fx: 'chainHeal',
           });
           const hopAmount = Math.max(1, Math.round(baseAmount * eff.falloff ** i));
-          ctx.applyHeal(p, chain[i], hopAmount, ability.name);
+          ctx.applyHeal(p, chain[i], hopAmount, ability.name, ability.id);
         }
         break;
       }
@@ -700,7 +793,19 @@ export function runEffects(
           ctx.rng.chance(consumeNextAttackCrit(ctx, p) ? 1 : ctx.spellCrit(p)) || sureCrit;
         if (sureCrit) sureCritRolled = true;
         if (crit) dmg *= 1.5 + p.critDmgBonus;
-        ctx.dealDamage(p, target, Math.round(dmg), crit, 'holy', ability.name, 'hit');
+        ctx.dealDamage(
+          p,
+          target,
+          Math.round(dmg),
+          crit,
+          'holy',
+          ability.name,
+          'hit',
+          false,
+          undefined,
+          true,
+          ability.id,
+        );
         noteSpellHit(ctx, p, crit);
         break;
       }
@@ -731,7 +836,11 @@ export function runEffects(
         if (di < 0) break;
         const dot = target.auras[di];
         const interval = dot.tickInterval ?? 1;
-        const ticksLeft = Math.max(0, Math.floor(dot.remaining / interval));
+        const untilNextTick = dot.tickTimer ?? interval;
+        const ticksLeft =
+          untilNextTick <= dot.remaining
+            ? 1 + Math.max(0, Math.floor((dot.remaining - untilNextTick) / interval))
+            : 0;
         const remainingDmg = Math.round(dot.value * ticksLeft);
         target.auras.splice(di, 1);
         ctx.emit({ type: 'aura', targetId: target.id, name: dot.name, gained: false });
@@ -805,6 +914,41 @@ export function runEffects(
           sourceId: p.id,
           school,
         });
+        break;
+      }
+      case 'dispel': {
+        if (!target || target.dead) break;
+        // Direction follows the target relation: strip harmful MAGIC debuffs off an ally
+        // or yourself, or beneficial MAGIC buffs off a hostile target. Physical auras
+        // (bleeds, sunders) are never dispellable. Iterate back-to-front so splices are safe.
+        const offensive = ctx.isHostileTo(p, target);
+        let dispelled = 0;
+        for (let i = target.auras.length - 1; i >= 0 && dispelled < eff.count; i--) {
+          const a = target.auras[i];
+          if (a.school === 'physical') continue;
+          const harmful = isDebuffAura(a.kind, a.value);
+          if (offensive ? harmful : !harmful) continue;
+          target.auras.splice(i, 1);
+          ctx.emit({ type: 'aura', targetId: target.id, name: a.name, gained: false });
+          // Spellsteal: a beneficial buff taken off an enemy is re-applied to the caster,
+          // its remaining duration carried over (re-homed to the caster as the source).
+          if (eff.steal && offensive) {
+            ctx.applyAura(p, { ...a, sourceId: p.id });
+          }
+          dispelled++;
+        }
+        // A stripped stat aura (a buff/debuff carrying stat mods) must re-derive stats.
+        if (dispelled > 0 && target.kind === 'player') {
+          const tmeta = ctx.players.get(target.id);
+          if (tmeta)
+            recalcPlayerStats(
+              target,
+              tmeta.cls,
+              tmeta.equipment,
+              ctx.playerMods(tmeta),
+              tmeta.equipmentInstance,
+            );
+        }
         break;
       }
       case 'silence': {
@@ -1041,9 +1185,16 @@ export function runEffects(
         // scaling the rider too would double-dip and over-reward hybrids. Only pure
         // DoTs (Corruption, SW:P, Serpent Sting) scale through this path.
         const hybrid = res.effects.some(
-          (e) => e.type === 'directDamage' || e.type === 'aoeDamage' || e.type === 'aoeRoot',
+          (e) =>
+            e.type === 'directDamage' ||
+            e.type === 'chainDamage' ||
+            e.type === 'aoeDamage' ||
+            e.type === 'aoeRoot',
         );
-        const dotBase = Math.max(1, Math.round(eff.total / (eff.duration / eff.interval)));
+        if (eff.directPct !== undefined && lastDirectDamage <= 0) break;
+        const dotTotal =
+          eff.directPct === undefined ? eff.total : Math.round(lastDirectDamage * eff.directPct);
+        const dotBase = Math.max(1, Math.round(dotTotal / (eff.duration / eff.interval)));
         // Physical bleeds (Rend, Rupture, Garrote, Rip) scale off melee Attack
         // Power here just like a spell DoT scales off Spell Power; `hybrid` still
         // suppresses the rider on a DoT that trails its own direct nuke.
@@ -1061,7 +1212,7 @@ export function runEffects(
           tickInterval: eff.interval,
           tickTimer: eff.interval,
           sourceId: p.id,
-          school: ability.school,
+          school: eff.school ?? ability.school,
           leechPct: eff.leechPct,
         });
         ctx.enterCombat(p, target);
@@ -1284,7 +1435,7 @@ export function runEffects(
         for (const m of ctx.friendliesInRadius(p, p.pos, eff.radius)) {
           if (!ctx.hasLineOfSight(p, m)) continue;
           const healAmount = ctx.rng.range(eff.min, eff.max) + aoeHealBonus;
-          ctx.applyHeal(p, m, healAmount, ability.name);
+          ctx.applyHeal(p, m, healAmount, ability.name, ability.id);
         }
         break;
       }
@@ -1603,7 +1754,7 @@ export function runEffects(
         }
         break;
       }
-      case 'aoeRoot': {
+      case 'aoeKnockback': {
         ctx.emit({
           type: 'spellfx',
           sourceId: p.id,
@@ -1611,25 +1762,85 @@ export function runEffects(
           school: ability.school,
           fx: 'nova',
         });
+        // Snapshot the set first: applyKnockback moves entities, and iterating a live
+        // radius query while displacing its members would be order-dependent.
+        for (const m of [...ctx.hostilesInRadius(p, p.pos, eff.radius)]) {
+          if (!ctx.hasLineOfSight(p, m)) continue;
+          ctx.applyKnockback(p, m, eff.distance);
+          ctx.applyAura(m, {
+            id: `${ability.id}_daze`,
+            name: ability.name,
+            kind: 'slow',
+            remaining: eff.dazeDuration,
+            duration: eff.dazeDuration,
+            value: eff.dazeMult,
+            sourceId: p.id,
+            school: ability.school,
+          });
+          ctx.enterCombat(p, m);
+        }
+        break;
+      }
+      case 'aoeRoot': {
+        const center = p.castAim ?? p.pos;
+        if (p.castAim) {
+          ctx.emit({
+            type: 'spellfxAt',
+            x: center.x,
+            z: center.z,
+            school: ability.school,
+            fx: 'nova',
+            radius: eff.radius,
+          });
+        } else {
+          ctx.emit({
+            type: 'spellfx',
+            sourceId: p.id,
+            targetId: p.id,
+            school: ability.school,
+            fx: 'nova',
+          });
+        }
         const aoeRootSp = directHitBonus(
           abilityScalingPower(p, ability),
           ability,
           res.castTime,
           true,
         );
-        for (const m of ctx.hostilesInRadius(p, p.pos, eff.radius)) {
+        for (const m of ctx.hostilesInRadius(p, center, eff.radius)) {
           if (!ctx.hasLineOfSight(p, m)) continue;
           const dmg = ctx.rng.range(eff.min, eff.max) + aoeRootSp;
           ctx.dealDamage(p, m, Math.round(dmg), false, ability.school, ability.name, 'hit');
           if (!m.dead && ctx.isHostileTo(p, m)) {
-            ctx.applyRootAura(
-              p,
-              m,
-              ability.name,
-              `${ability.id}_root`,
-              eff.duration,
-              ability.school,
-            );
+            if (eff.stun) {
+              const remaining = ctx.diminishedCrowdControlDuration(
+                p,
+                m,
+                'controlledStun',
+                eff.duration,
+              );
+              if (remaining !== null) {
+                ctx.applyAura(m, {
+                  id: `${ability.id}_freeze`,
+                  name: ability.name,
+                  kind: 'stun',
+                  remaining,
+                  duration: remaining,
+                  value: 0,
+                  sourceId: p.id,
+                  school: ability.school,
+                });
+              }
+            } else {
+              ctx.applyRootAura(
+                p,
+                m,
+                ability.name,
+                `${ability.id}_root`,
+                eff.duration,
+                ability.school,
+              );
+            }
           }
         }
         break;
@@ -1669,12 +1880,14 @@ export function runEffects(
             'hit',
             false,
             threatOpts,
+            true,
+            ability.id,
           );
         }
         if (eff.heal) {
           const healAmount =
             ctx.rng.range(eff.heal.min, eff.heal.max) + directHealBonus(p.spellPower, res.castTime);
-          ctx.applyHeal(p, target, healAmount, ability.name);
+          ctx.applyHeal(p, target, healAmount, ability.name, ability.id);
         }
         break;
       }

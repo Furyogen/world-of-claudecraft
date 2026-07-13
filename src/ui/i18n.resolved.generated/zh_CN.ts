@@ -5901,8 +5901,8 @@ export const zh_CN: EnTranslations = {
         "description": "化为恶魔之力，使护甲和攻击强度提高 20 秒。（术士天赋）"
       },
       "aura_surge": {
-        "name": "光辉涌动",
-        "description": "过载你的光环，使你在10秒内获得160点护甲。（圣骑士天赋）"
+        "name": "曙光弹射",
+        "description": "掷出曙光铸造的圣盾，造成{damage}点神圣伤害并使首要目标沉默2秒，随后弹射至{radius}码内最多{jumps}个额外敌人，每次弹射造成{falloff}点伤害。（圣骑士天赋）"
       },
       "holy_shield": {
         "name": "圣墙",
@@ -6075,6 +6075,10 @@ export const zh_CN: EnTranslations = {
       "razor_howl": {
         "name": "锐刃怒吼",
         "description": "使 15 码内的敌人减速 50%，持续 8 秒。（战士天赋）"
+      },
+      "lingering_dread": {
+        "name": "余惧",
+        "description": "发出战吼，使10码内的敌人恐惧4秒。每个目标受到相当于其最大生命值20%的伤害前，恐惧不会中断。（战士天赋）"
       },
       "stormthrow": {
         "name": "风暴投掷",
@@ -6271,6 +6275,34 @@ export const zh_CN: EnTranslations = {
       "tranquility": {
         "name": "林地之歌",
         "description": "引导恢复之力，每秒治疗附近的盟友。（德鲁伊天赋）"
+      },
+      "cleansing_verdict": {
+        "name": "净化裁决",
+        "description": "净化一个友方目标身上的有害魔法效果，并为其恢复{damage}点生命值。"
+      },
+      "voidfeast": {
+        "name": "虚空盛宴",
+        "description": "吞噬一个魔法效果（敌人的增益或盟友的减益），并恢复你最大生命值的6%。"
+      },
+      "spellsteal": {
+        "name": "夺法",
+        "description": "从敌人身上窃取一个有益魔法效果并转移到自己身上。"
+      },
+      "startle_shot": {
+        "name": "惊扰射击",
+        "description": "狂野射击使目标迷惑{duration}秒。受到任何伤害都会打破该效果。"
+      },
+      "spell_reflect": {
+        "name": "法术反射",
+        "description": "举起盾牌，将下一个敌对法术反弹回施法者。"
+      },
+      "smoke_screen": {
+        "name": "烟幕",
+        "description": "遁入烟雾之中，在一段时间内提高你的躲闪几率。"
+      },
+      "typhoon": {
+        "name": "台风",
+        "description": "一阵狂风将附近所有敌人击退并使其昏乱，降低其移动速度。"
       },
       "bear_charge": {
         "name": "巨熊冲锋",

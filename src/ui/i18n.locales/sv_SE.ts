@@ -2096,9 +2096,9 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.wing_clip.name': 'Fjättrande hugg',
   'entities.abilities.wrath.description': 'Slungar en pil av naturenergi för {damage} naturskada.',
   'entities.abilities.wrath.name': 'Vildbult',
-  'entities.abilities.aura_surge.name': 'Strålande Svall',
+  'entities.abilities.aura_surge.name': 'Gryningsrikoschett',
   'entities.abilities.aura_surge.description':
-    'Överladdar din aura och härdar dig med 160 rustning i 10 sek. (Paladintalang)',
+    'Slungar en gryningssmidd sköld för {damage} Helig skada, tystar huvudmålet i 2 sek. och studsar sedan till upp till {jumps} ytterligare fiender inom {radius} meter för {falloff} skada per studs. (Paladintalang)',
   'entities.abilities.holy_shock.name': 'Helig chock',
   'entities.abilities.holy_shock.description':
     'Chockar ett vänligt mål med helig energi och läker det för {damage}. (Helig signatur)',
@@ -3721,8 +3721,7 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'guide.abilityHook.cw_heroic_strike':
     'Köar ett tyngre svingslag som förbrukar raseri på ditt nästa slag.',
   'guide.abilityHook.cw_rend': 'Öppnar en blödning som sliter ner målet över tid.',
-  'guide.abilityHook.cw_thunder_clap':
-    'Slår allt runt omkring dig och saktar ner deras attacker.',
+  'guide.abilityHook.cw_thunder_clap': 'Slår allt runt omkring dig och saktar ner deras attacker.',
   'guide.abilityHook.demon_skin':
     'En varaktig självförstärkning som härdar din hud och ger rustning.',
   'guide.abilityHook.devotion_aura':
@@ -7055,7 +7054,6 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.appleLoginCta': 'Fortsätt med Apple',
   'hudChrome.auth.appleChoiceIntro':
     'Skapa ett nytt konto, eller koppla Apple till ett du redan har.',
-  'hudChrome.auth.appleChoiceExpired':
-    'Apple-inloggningen har gått ut. Logga in med Apple igen.',
+  'hudChrome.auth.appleChoiceExpired': 'Apple-inloggningen har gått ut. Logga in med Apple igen.',
   'hudChrome.auth.appleError': 'Det gick inte att logga in med Apple. Försök igen.',
 };

@@ -5901,8 +5901,8 @@ export const it_IT: EnTranslations = {
         "description": "Assumi potere demoniaco, aumentando armatura e potenza d’attacco per 20 s. (talento da stregone)"
       },
       "aura_surge": {
-        "name": "Ondata Radiosa",
-        "description": "Sovraccarica la tua aura, indurendoti con 160 armatura per 10 sec. (talento del Paladino)"
+        "name": "Rimbalzo dell'Alba",
+        "description": "Scaglia uno scudo forgiato all'alba che infligge {damage} danni Sacri, silenzia il bersaglio principale per 2 sec. e rimbalza su un massimo di {jumps} nemici aggiuntivi entro {radius} metri, infliggendo {falloff} danni per rimbalzo. (talento del Paladino)"
       },
       "holy_shield": {
         "name": "Scudo Sacro",
@@ -6075,6 +6075,10 @@ export const it_IT: EnTranslations = {
       "razor_howl": {
         "name": "Ululato tagliente",
         "description": "Un grido che rallenta del 50% i nemici entro 15 m per 8 s. (Talento del guerriero)"
+      },
+      "lingering_dread": {
+        "name": "Lingering Dread",
+        "description": "Unleash a battle cry that fears enemies within 10 yards for 4 sec. The fear endures up to 20% of each target's maximum health in damage. (Warrior talent)"
       },
       "stormthrow": {
         "name": "Lancio tempestoso",
@@ -6271,6 +6275,34 @@ export const it_IT: EnTranslations = {
       "tranquility": {
         "name": "Canto della Radura",
         "description": "Canaliza energía restauradora y sana a vicini alleati cada segundo. (talento da druido)"
+      },
+      "cleansing_verdict": {
+        "name": "Cleansing Verdict",
+        "description": "Purges a harmful magic effect from a friendly target and heals them for {damage} Holy."
+      },
+      "voidfeast": {
+        "name": "Voidfeast",
+        "description": "Devours a magic effect (a beneficial one from an enemy, or a harmful one from an ally) and heals you for 6% of your maximum health."
+      },
+      "spellsteal": {
+        "name": "Spellsteal",
+        "description": "Steals a beneficial magic effect from an enemy, transferring it to yourself."
+      },
+      "startle_shot": {
+        "name": "Startle Shot",
+        "description": "A wild shot that disorients the target for {duration} sec. Any damage breaks the effect."
+      },
+      "spell_reflect": {
+        "name": "Spell Reflect",
+        "description": "Raises your shield, reflecting the next hostile spell back at its caster."
+      },
+      "smoke_screen": {
+        "name": "Smoke Screen",
+        "description": "Vanish into a cloud of smoke, increasing your chance to dodge for a time."
+      },
+      "typhoon": {
+        "name": "Typhoon",
+        "description": "A blast of wind knocks back all nearby enemies and dazes them, slowing their movement."
       },
       "bear_charge": {
         "name": "Carica di Bruin",

@@ -22,11 +22,30 @@ export function consumeAuraKind(
 }
 
 export function hasNextCastFree(e: Entity, abilityId?: string): boolean {
-  return e.auras.some((a) => a.kind === 'next_cast_free' && matches(a, abilityId));
+  return e.auras.some(
+    (a) => (a.kind === 'next_cast_free' || a.kind === 'next_execute_free') && matches(a, abilityId),
+  );
+}
+
+export function hasNextExecuteFree(e: Entity, abilityId: string): boolean {
+  return e.auras.some(
+    (a) =>
+      (a.kind === 'next_execute_free' && matches(a, abilityId)) ||
+      (abilityId === 'execute' && a.kind === 'sudden_death'),
+  );
+}
+
+/** Returns a matching cheap-cast multiplier without consuming its aura. */
+export function nextCastCheapMultiplier(e: Entity, abilityId?: string): number | null {
+  const aura = e.auras.find((a) => a.kind === 'next_cast_cheap' && matches(a, abilityId));
+  return aura?.value ?? null;
 }
 
 export function consumeNextCastFree(ctx: SimContext, e: Entity, abilityId?: string): boolean {
-  return consumeAuraKind(ctx, e, 'next_cast_free', abilityId) !== null;
+  return (
+    consumeAuraKind(ctx, e, 'next_cast_free', abilityId) !== null ||
+    consumeAuraKind(ctx, e, 'next_execute_free', abilityId) !== null
+  );
 }
 
 // Battle Trance (warrior baseline, excluding Fury): the ability-SCOPED sibling
@@ -51,9 +70,16 @@ export const REVENGE_FREE_ABILITIES: ReadonlySet<string> = new Set(['revenge']);
 
 /** Pure aura-list predicate: is `abilityId`'s cost covered by a free-cost
  *  proc? Structural input so the UI drives it with a mirrored aura list. */
-export function freeCostAuraActive(auras: readonly { kind: string }[], abilityId: string): boolean {
+export function freeCostAuraActive(
+  auras: readonly { kind: string; empowerAbilities?: readonly string[] }[],
+  abilityId: string,
+): boolean {
   for (const a of auras) {
-    if (a.kind === 'next_cast_free') return true;
+    if (
+      (a.kind === 'next_cast_free' || a.kind === 'next_execute_free') &&
+      (a.empowerAbilities === undefined || a.empowerAbilities.includes(abilityId))
+    )
+      return true;
     if (a.kind === 'battle_trance' && BATTLE_TRANCE_ABILITIES.has(abilityId)) return true;
     if (a.kind === 'revenge_free' && REVENGE_FREE_ABILITIES.has(abilityId)) return true;
     // Sudden Death (Arms): a free Early Grave (execute); the HP gate is bypassed
@@ -82,6 +108,17 @@ export function consumeFreeCostFor(ctx: SimContext, e: Entity, abilityId: string
 
 export function consumeNextCastInstant(ctx: SimContext, e: Entity, abilityId?: string): boolean {
   return consumeAuraKind(ctx, e, 'next_cast_instant', abilityId) !== null;
+}
+
+// Unscoped instant-cast effects remain spell-only, but a talent proc that names a
+// specific physical cast-time ability (Long Draw) is allowed to empower it.
+export function hasScopedNextCastInstant(e: Entity, abilityId: string): boolean {
+  return e.auras.some(
+    (a) =>
+      a.kind === 'next_cast_instant' &&
+      a.empowerAbilities !== undefined &&
+      a.empowerAbilities.includes(abilityId),
+  );
 }
 
 /** Returns the cost multiplier (e.g. 0.5) or null when no cheap charge matches. */

@@ -1990,9 +1990,9 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.wrath.description':
     'Ciska pocisk energii natury, zadając {damage} obrażeń od Natury.',
   'entities.abilities.wrath.name': 'Dziki pocisk',
-  'entities.abilities.aura_surge.name': 'Promienna Fala',
+  'entities.abilities.aura_surge.name': 'Rykoszet świtu',
   'entities.abilities.aura_surge.description':
-    'Przeciąża twoją aurę, wzmacniając cię 160 pkt. pancerza na 10 sek. (talent Paladyna)',
+    'Rzuca wykutą o świcie tarczę, zadając {damage} obrażeń od Świętości i uciszając główny cel na 2 sek., po czym odbija się do maksymalnie {jumps} kolejnych wrogów w promieniu {radius} metrów, zadając {falloff} obrażeń przy każdym odbiciu. (talent Paladyna)',
   'entities.abilities.holy_shock.name': 'Święty wstrząs',
   'entities.abilities.holy_shock.description':
     'Razisz przyjazny cel Świętą energią, lecząc go za {damage}. (specjalizacja Świętość)',
@@ -7039,8 +7039,7 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'guide.abilityHook.cw_heroic_strike':
     'Kolejkuje cięższy zamach, który zużywa wściekłość przy następnym ciosie.',
   'guide.abilityHook.cw_rend': 'Otwiera krwawienie, które z czasem wyczerpuje cel.',
-  'guide.abilityHook.cw_thunder_clap':
-    'Uderza we wszystko wokół ciebie i spowalnia ataki wrogów.',
+  'guide.abilityHook.cw_thunder_clap': 'Uderza we wszystko wokół ciebie i spowalnia ataki wrogów.',
   'guide.abilityHook.hamstring': 'Tnie nogi celu, spowalniając go, by nie mógł cię dogonić.',
   'guide.abilityHook.revenge':
     'Zamaszysty kontratak, który trafia wszystko przed tobą, a tuż po odbiciu ciosu kosztuje mniej.',
@@ -7071,8 +7070,7 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraEffect.victoryRush': 'Zryw zwycięstwa jest gotowy',
   'hudChrome.auth.appleChoiceExpired':
     'To logowanie przez Apple wygasło. Zaloguj się przez Apple jeszcze raz.',
-  'hudChrome.auth.appleChoiceIntro':
-    'Utwórz nowe konto lub połącz Apple z kontem, które już masz.',
+  'hudChrome.auth.appleChoiceIntro': 'Utwórz nowe konto lub połącz Apple z kontem, które już masz.',
   'hudChrome.auth.appleError': 'Nie udało się zalogować przez Apple. Spróbuj ponownie.',
   'hudChrome.auth.appleLoginCta': 'Kontynuuj z Apple',
   'hudChrome.options.mouseoverCast': 'Rzucanie po najechaniu na ramki drużyny',

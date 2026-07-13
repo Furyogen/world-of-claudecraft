@@ -2020,9 +2020,9 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.wrath.description':
     'Phóng một tia năng lượng tự nhiên gây {damage} sát thương Tự Nhiên.',
   'entities.abilities.wrath.name': 'Tia Hoang Dã',
-  'entities.abilities.aura_surge.name': 'Sóng Hào Quang',
+  'entities.abilities.aura_surge.name': 'Khiên Dội Bình Minh',
   'entities.abilities.aura_surge.description':
-    'Quá tải hào quang của bạn, gia cố 160 giáp trong 10 giây. (thiên phú Paladin)',
+    'Ném một tấm khiên rèn từ bình minh gây {damage} sát thương Thánh, khiến mục tiêu chính câm lặng trong 2 giây, rồi dội sang tối đa {jumps} kẻ địch khác trong phạm vi {radius} mét, gây {falloff} sát thương mỗi lần dội. (thiên phú Paladin)',
   'entities.abilities.holy_shock.name': 'Sốc Thánh',
   'entities.abilities.holy_shock.description':
     'Gây sốc một mục tiêu đồng minh bằng năng lượng Thánh, hồi cho họ {damage}. (dấu ấn Thánh)',
@@ -3736,14 +3736,14 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'guide.abilityHook.corruption':
     'Làm mục rữa mục tiêu bằng bóng tối, gây sát thương theo thời gian trong khi bạn làm việc khác.',
   'guide.abilityHook.cw_battle_shout': 'Một tiếng hô cổ vũ giúp tăng sức tấn công cho cả tổ đội.',
-  'guide.abilityHook.cw_charge':
-    'Lao tới kẻ địch ở xa để mở màn trận đấu bằng một cú choáng ngắn.',
+  'guide.abilityHook.cw_charge': 'Lao tới kẻ địch ở xa để mở màn trận đấu bằng một cú choáng ngắn.',
   'guide.abilityHook.cw_commanding_shout':
     'Tăng cường thể lực để mọi người trụ vững lâu hơn trong trận.',
   'guide.abilityHook.cw_heroic_strike':
     'Đặt sẵn một cú vung nặng tay tiêu nộ khí vào đòn đánh kế tiếp của bạn.',
   'guide.abilityHook.cw_rend': 'Mở một vết chảy máu bào mòn mục tiêu dần theo thời gian.',
-  'guide.abilityHook.cw_thunder_clap': 'Đánh trúng mọi thứ quanh bạn và làm chậm đòn tấn công của chúng.',
+  'guide.abilityHook.cw_thunder_clap':
+    'Đánh trúng mọi thứ quanh bạn và làm chậm đòn tấn công của chúng.',
   'guide.abilityHook.demon_skin':
     'Một buff bản thân lâu dài giúp da bạn cứng cáp hơn và tăng giáp.',
   'guide.abilityHook.devotion_aura':

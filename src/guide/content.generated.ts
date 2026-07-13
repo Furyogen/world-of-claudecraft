@@ -627,7 +627,7 @@ export const GUIDE_CLASSES: GuideClassInfo[] = [
       },
       {
         "id": "revive_pet",
-        "name": "Revive Pet"
+        "name": "Patch Up"
       },
       {
         "id": "aspect_of_the_monkey",
@@ -647,7 +647,7 @@ export const GUIDE_CLASSES: GuideClassInfo[] = [
       },
       {
         "id": "volley",
-        "name": "Volley"
+        "name": "Arrowfall"
       }
     ],
     "model": "player_hunter",
@@ -826,7 +826,7 @@ export const GUIDE_CLASSES: GuideClassInfo[] = [
     "signatureAbilities": [
       {
         "id": "smite",
-        "name": "Smite"
+        "name": "Scouring Hymn"
       },
       {
         "id": "lesser_heal",
@@ -852,7 +852,7 @@ export const GUIDE_CLASSES: GuideClassInfo[] = [
     "abilities": [
       {
         "id": "smite",
-        "name": "Smite"
+        "name": "Scouring Hymn"
       },
       {
         "id": "lesser_heal",
@@ -1365,7 +1365,7 @@ export const GUIDE_CLASSES: GuideClassInfo[] = [
       },
       {
         "id": "claw",
-        "name": "Claw"
+        "name": "Rendclaw"
       },
       {
         "id": "regrowth",
@@ -1425,11 +1425,11 @@ export const GUIDE_CLASSES: GuideClassInfo[] = [
       },
       {
         "id": "rip",
-        "name": "Rip"
+        "name": "Bloodrift"
       },
       {
         "id": "hurricane",
-        "name": "Hurricane"
+        "name": "Galeheart"
       }
     ],
     "model": "player_druid",

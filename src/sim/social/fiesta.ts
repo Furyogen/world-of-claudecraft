@@ -157,6 +157,7 @@ export function mergeAugmentMods(base: TalentModifiers, augIds: string[]): Talen
           castPct: 0,
           buffPct: 0,
           castWhileMoving: false,
+          damagePushbackImmune: false,
           bonusCharges: 0,
           addEffects: [],
         };
@@ -303,6 +304,7 @@ export function fiestaDownEntity(ctx: SimContext, e: Entity, killer: Entity | nu
   e.autoAttack = false;
   e.queuedOnSwing = null;
   delete e.queuedOnSwingFree;
+  delete e.queuedOnSwingCostMultiplier;
   e.queuedCastAbility = null;
   e.queuedCastAim = null;
   e.comboPoints = 0;

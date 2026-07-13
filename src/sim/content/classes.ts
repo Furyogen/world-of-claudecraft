@@ -1563,7 +1563,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
   },
   volley: {
     id: 'volley',
-    name: 'Volley',
+    name: 'Arrowfall',
     class: 'hunter',
     learnLevel: 11,
     cost: 60,
@@ -1577,11 +1577,11 @@ export const ABILITIES: Record<string, AbilityDef> = {
     channel: { duration: 3, ticks: 6 },
     effects: [{ type: 'aoeDamage', min: 12, max: 16, radius: 8 }],
     description:
-      'Rains arrows on the target area for 3 sec, dealing $d damage every 0.5 sec to enemies caught in it.',
+      'Channels a rain of arrows at the target area for 3 sec, dealing $d Physical damage every 0.5 sec to enemies within 8 yd.',
   },
   hurricane: {
     id: 'hurricane',
-    name: 'Hurricane',
+    name: 'Galeheart',
     class: 'druid',
     learnLevel: 18,
     cost: 90,
@@ -1594,7 +1594,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     channel: { duration: 6, ticks: 6 },
     effects: [{ type: 'aoeDamage', min: 12, max: 16, radius: 8 }],
     description:
-      'Calls a hurricane onto the target area for 6 sec, battering enemies for $d Nature damage each second.',
+      'Channels a violent gale at the target area for 6 sec, dealing $d Nature damage each second to enemies within 8 yd.',
   },
   earthquake: {
     id: 'earthquake',
@@ -2313,7 +2313,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
   },
   revive_pet: {
     id: 'revive_pet',
-    name: 'Revive Pet',
+    name: 'Patch Up',
     class: 'hunter',
     learnLevel: 10,
     cost: 45,
@@ -2322,8 +2322,9 @@ export const ABILITIES: Record<string, AbilityDef> = {
     range: 0,
     school: 'nature',
     requiresTarget: false,
-    effects: [],
-    description: 'Revives your dead pet and returns it to your side.',
+    effects: [{ type: 'hot', total: 240, duration: 12, interval: 3 }],
+    description:
+      'Patch up your companion, restoring 240 health over 12 sec if it is alive. If it is dead, revive it at 35% health.',
   },
   raptor_strike: {
     id: 'raptor_strike',
@@ -2554,7 +2555,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
   // ====================== PRIEST ======================
   smite: {
     id: 'smite',
-    name: 'Smite',
+    name: 'Scouring Hymn',
     class: 'priest',
     learnLevel: 1,
     cost: 20,
@@ -2581,7 +2582,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
         effects: [{ type: 'directDamage', min: 64, max: 78 }],
       },
     ],
-    description: 'Smites the enemy for $d Holy damage.',
+    description: 'Scours the enemy for $d Holy damage.',
   },
   lesser_heal: {
     id: 'lesser_heal',
@@ -3765,7 +3766,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
   },
   claw: {
     id: 'claw',
-    name: 'Claw',
+    name: 'Rendclaw',
     class: 'druid',
     learnLevel: 5,
     cost: 45,
@@ -3778,7 +3779,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     requiresForm: 'cat',
     effects: [{ type: 'weaponStrike', bonus: 12 }],
     ranks: [{ rank: 2, level: 18, cost: 45, effects: [{ type: 'weaponStrike', bonus: 20 }] }],
-    description: 'Claw the enemy for weapon damage plus $d. Awards 1 combo point. Wolf Form only.',
+    description: 'Rend the enemy for weapon damage plus $d. Awards 1 combo point. Wolf Form only.',
   },
   ferocious_bite: {
     id: 'ferocious_bite',
@@ -3998,7 +3999,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
   },
   rip: {
     id: 'rip',
-    name: 'Rip',
+    name: 'Bloodrift',
     class: 'druid',
     learnLevel: 14,
     cost: 30,
@@ -4336,7 +4337,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
   },
   avatar: {
     id: 'avatar',
-    name: 'Colossus',
+    name: 'Siegeborn',
     class: 'warrior',
     learnLevel: 17,
     cost: 0,
@@ -4440,12 +4441,9 @@ export const ABILITIES: Record<string, AbilityDef> = {
     range: 30,
     school: 'holy',
     requiresTarget: true,
-    effects: [
-      { type: 'directDamage', min: 90, max: 110 },
-      { type: 'aoeDamage', min: 60, max: 75, radius: 10 },
-    ],
+    effects: [{ type: 'chainDamage', min: 90, max: 110, jumps: 2, falloff: 0.7, radius: 10 }],
     description:
-      'Hurls a radiant aegis at an enemy, dealing Holy damage and bouncing to 2 nearby enemies. (Protection signature)',
+      'Hurls a radiant aegis for 90 to 110 Holy damage, then bounces to up to 2 additional enemies within 10 yd for 70% damage per bounce. (Protection signature)',
   },
   repentance: {
     id: 'repentance',
@@ -4497,7 +4495,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
   },
   wyvern_sting: {
     id: 'wyvern_sting',
-    name: 'Wyvern Sting',
+    name: 'Dreamthorn',
     class: 'hunter',
     learnLevel: 10,
     cost: 35,
@@ -4508,9 +4506,13 @@ export const ABILITIES: Record<string, AbilityDef> = {
     school: 'nature',
     scalesWith: 'ranged',
     requiresTarget: true,
-    effects: [{ type: 'incapacitate', duration: 4 }],
+    effects: [
+      { type: 'incapacitate', duration: 4 },
+      { type: 'selfBuff', kind: 'buff_dmg_done', value: 0.15, duration: 15 },
+      { type: 'selfBuff', kind: 'buff_haste', value: 1.15, duration: 15 },
+    ],
     description:
-      'Stings the enemy from range, incapacitating it for up to 4 sec. Any damage breaks the effect. (Survival signature)',
+      'Stings the enemy from range, incapacitating it for up to 4 sec. Any damage breaks the effect. You gain 15% damage and attack speed for 15 sec. (Fieldcraft signature)',
   },
   arcane_power: {
     id: 'arcane_power',
@@ -4644,7 +4646,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
   },
   holy_nova: {
     id: 'holy_nova',
-    name: 'Holy Nova',
+    name: 'Sunburst Canticle',
     class: 'priest',
     learnLevel: 10,
     cost: 70,
@@ -4658,7 +4660,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
       { type: 'aoeDamage', min: 24, max: 30, radius: 10 },
     ],
     description:
-      'Causes an explosion of Mending Light, healing nearby allies for $d and damaging nearby enemies. (Holy signature)',
+      'Bursts around you, healing nearby allies for $d and dealing 24 to 30 Holy damage to nearby enemies. (Holy signature)',
   },
   shadowform: {
     id: 'shadowform',
@@ -4673,7 +4675,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     requiresTarget: false,
     effects: [{ type: 'selfBuff', kind: 'form_shadow', value: 15, duration: 3600 }],
     description:
-      'Assume a Gloamveil, empowering shadow magic until you shift back. Cast again to return to normal form. (Shadow signature)',
+      'Assume Gloamveil Form, increasing your Shadow damage by 15 until you shift back. Cast again to return to normal form. Casting a healing spell cancels Gloamveil Form. (Shadow signature)',
   },
   elemental_mastery: {
     id: 'elemental_mastery',
@@ -4811,7 +4813,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
   },
   aspect_of_the_wild: {
     id: 'aspect_of_the_wild',
-    name: 'Wildfang Guise',
+    name: 'Wildfang Rally',
     class: 'hunter',
     learnLevel: 10,
     cost: 50,
@@ -4820,9 +4822,12 @@ export const ABILITIES: Record<string, AbilityDef> = {
     range: 0,
     school: 'nature',
     requiresTarget: false,
-    effects: [{ type: 'aoeAllyAttackPower', amount: 45, duration: 300, radius: 30 }],
+    effects: [
+      { type: 'aoeAllyAttackPower', amount: 45, duration: 300, radius: 30 },
+      { type: 'aoeAllyHaste', mult: 1.05, duration: 300, radius: 30 },
+    ],
     description:
-      'Inspires nearby allies with wild strength, increasing attack power for 5 min. (Hunter talent)',
+      'Inspires allies within 30 yd with wild strength, increasing attack power by 45 and attack speed by 5% for 5 min. (Hunter talent)',
   },
   avenging_wrath: {
     id: 'avenging_wrath',
@@ -4840,7 +4845,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
       { type: 'selfBuff', kind: 'buff_spellpower', value: 30, duration: 20 },
     ],
     description:
-      'Calls down avenging power, increasing attack power and spell power for 20 sec. (Paladin talent)',
+      'Calls down avenging power, increasing attack power by 60 and spell power by 30 for 20 sec. (Paladin talent)',
   },
   berserk: {
     id: 'berserk',
@@ -4853,8 +4858,9 @@ export const ABILITIES: Record<string, AbilityDef> = {
     range: 0,
     school: 'physical',
     requiresTarget: false,
+    usableInForm: true,
     effects: [{ type: 'selfBuff', kind: 'buff_ap', value: 70, duration: 15 }],
-    description: 'Increases attack power for 15 sec. (Druid talent)',
+    description: 'Increases attack power by 70 for 15 sec. (Druid talent)',
   },
   razor_howl: {
     id: 'razor_howl',
@@ -4884,6 +4890,21 @@ export const ABILITIES: Record<string, AbilityDef> = {
     projectile: true,
     effects: [{ type: 'stun', duration: 3 }],
     description: 'Hurl your weapon to stun a target for 3 sec. (Warrior talent)',
+  },
+  lingering_dread: {
+    id: 'lingering_dread',
+    name: 'Lingering Dread',
+    class: 'warrior',
+    learnLevel: 11,
+    cost: 15,
+    castTime: 0,
+    cooldown: 45,
+    range: 0,
+    school: 'physical',
+    requiresTarget: false,
+    effects: [{ type: 'aoeFear', duration: 4, radius: 10 }],
+    description:
+      "Unleash a battle cry that fears enemies within 10 yd for 4 sec. The fear endures up to 20% of each target's maximum health in damage. (Warrior talent)",
   },
   reckless_vow: {
     id: 'reckless_vow',
@@ -4937,7 +4958,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
   },
   bloodlust: {
     id: 'bloodlust',
-    name: 'War Drums',
+    name: 'Storm Chorus',
     class: 'shaman',
     learnLevel: 10,
     cost: 85,
@@ -4948,11 +4969,11 @@ export const ABILITIES: Record<string, AbilityDef> = {
     requiresTarget: false,
     effects: [{ type: 'aoeAllyHaste', mult: 1.3, duration: 15, radius: 30 }],
     description:
-      'Whips nearby allies into a frenzy, increasing attack speed for 15 sec. (Shaman talent)',
+      'Whips allies within 30 yd into a frenzy, increasing attack speed by 30% for 15 sec. (Shaman talent)',
   },
   chain_lightning: {
     id: 'chain_lightning',
-    name: 'Forked Lightning',
+    name: 'Skybranch',
     class: 'shaman',
     learnLevel: 10,
     cost: 80,
@@ -4993,7 +5014,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     requiresTarget: false,
     offGcd: true,
     effects: [{ type: 'absorb', amount: 420, duration: 5 }],
-    description: 'Wraps you in shadows, absorbing damage for 5 sec. (Rogue talent)',
+    description: 'Wraps you in shadows, absorbing 420 damage for 5 sec. (Rogue talent)',
   },
   counter_shot: {
     id: 'counter_shot',
@@ -5043,7 +5064,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
   },
   death_coil: {
     id: 'death_coil',
-    name: 'Grave Coil',
+    name: 'Morrowlash',
     class: 'warlock',
     learnLevel: 10,
     cost: 70,
@@ -5058,7 +5079,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
       { type: 'incapacitate', duration: 3 },
     ],
     description:
-      'Blasts the enemy for $d Shadow damage, then horrifies them for 3 sec. This version does not heal the caster. (Warlock talent)',
+      'Strikes the enemy for $d Shadow damage, then horrifies them for 3 sec. (Warlock talent)',
   },
   deep_freeze: {
     id: 'deep_freeze',
@@ -5105,21 +5126,25 @@ export const ABILITIES: Record<string, AbilityDef> = {
     requiresTarget: false,
     offGcd: true,
     effects: [{ type: 'selfBuff', kind: 'buff_dodge', value: 0.5, duration: 10 }],
-    description: 'Increases your dodge chance by 50% for 10 sec. (Hunter talent)',
+    description: 'Increases your dodge chance by 50 percentage points for 10 sec. (Hunter talent)',
   },
   aura_surge: {
     id: 'aura_surge',
-    name: 'Radiant Swell',
+    name: 'Dawnward Ricochet',
     class: 'paladin',
     learnLevel: 20,
-    cost: 40,
+    cost: 55,
     castTime: 0,
-    cooldown: 120,
-    range: 0,
+    cooldown: 20,
+    range: 30,
     school: 'holy',
-    requiresTarget: false,
-    effects: [{ type: 'selfBuff', kind: 'buff_armor', value: 160, duration: 10 }],
-    description: 'Overcharges your aura, hardening you with 160 armor for 10 sec. (Paladin talent)',
+    requiresTarget: true,
+    effects: [
+      { type: 'chainDamage', min: 100, max: 120, jumps: 2, falloff: 0.75, radius: 10 },
+      { type: 'silence', duration: 2 },
+    ],
+    description:
+      'Hurl a holy shield for $d Holy damage and silence the primary target for 2 sec. It bounces to up to 2 additional enemies within 10 yd for 75% damage per bounce. (Paladin talent)',
   },
   divine_shield: {
     id: 'divine_shield',
@@ -5133,8 +5158,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     school: 'holy',
     requiresTarget: false,
     effects: [{ type: 'absorb', amount: 900, duration: 8 }],
-    description:
-      'Shields you with holy power, absorbing a massive amount of damage for 8 sec. (Paladin talent)',
+    description: 'Shields you with holy power, absorbing 900 damage for 8 sec. (Paladin talent)',
   },
   earthbind: {
     id: 'earthbind',
@@ -5162,7 +5186,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     school: 'arcane',
     requiresTarget: false,
     effects: [{ type: 'gainResource', amount: 220 }],
-    description: 'Rapidly restores mana. (Mage talent)',
+    description: 'Instantly restores 220 mana. (Mage talent)',
   },
   frenzied_regeneration: {
     id: 'frenzied_regeneration',
@@ -5171,13 +5195,13 @@ export const ABILITIES: Record<string, AbilityDef> = {
     learnLevel: 10,
     cost: 10,
     castTime: 0,
-    cooldown: 180,
+    cooldown: 60,
     range: 0,
     school: 'nature',
     requiresTarget: false,
     requiresForm: 'bear',
     effects: [{ type: 'hot', total: 180, duration: 10, interval: 2 }],
-    description: 'Regenerates health over 10 sec. Bruin Form only. (Druid talent)',
+    description: 'Restores 180 health over 10 sec. Bruin Form only. (Druid talent)',
   },
   frost_trap: {
     id: 'frost_trap',
@@ -5191,8 +5215,9 @@ export const ABILITIES: Record<string, AbilityDef> = {
     school: 'frost',
     requiresTarget: false,
     targetMode: 'position',
-    effects: [{ type: 'aoeRoot', duration: 3, radius: 8, min: 0, max: 0 }],
-    description: 'Freezes enemies at the target area in place for 3 sec. (Hunter talent)',
+    effects: [{ type: 'aoeRoot', duration: 3, radius: 8, min: 0, max: 0, stun: true }],
+    description:
+      'Freezes enemies at the target area for 3 sec, preventing movement and actions. (Hunter talent)',
   },
   ghostly_strike: {
     id: 'ghostly_strike',
@@ -5242,7 +5267,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     requiresTarget: true,
     targetType: 'friendly',
     effects: [{ type: 'hot', total: 120, duration: 12, interval: 3 }],
-    description: 'Restores a friendly target over 12 sec. (Shaman talent)',
+    description: 'Restores 120 health to a friendly target over 12 sec. (Shaman talent)',
   },
   holy_wrath: {
     id: 'holy_wrath',
@@ -5260,7 +5285,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
   },
   howl_of_terror: {
     id: 'howl_of_terror',
-    name: 'Dread Howl',
+    name: 'Dread Chorus',
     class: 'warlock',
     learnLevel: 10,
     cost: 55,
@@ -5383,7 +5408,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
       { type: 'groundAoE', min: 12, max: 18, radius: 8, duration: 6, interval: 2 },
     ],
     description:
-      'Calls down a meteor at the target area, dealing $d Fire damage and burning the ground. (Mage talent)',
+      'Calls down a meteor at the target area, dealing $d Fire damage, then burning enemies there for 12 to 18 Fire damage every 2 sec for 6 sec. (Mage talent)',
   },
   mind_sear: {
     id: 'mind_sear',
@@ -5398,7 +5423,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     school: 'shadow',
     requiresTarget: false,
     targetMode: 'position',
-    effects: [{ type: 'aoeDamage', min: 34, max: 42, radius: 8 }],
+    effects: [{ type: 'aoeDamage', min: 24, max: 28, radius: 8 }],
     description:
       'Channels shadow energy at the target area, damaging nearby enemies each second for $d. (Priest talent)',
   },
@@ -5409,14 +5434,16 @@ export const ABILITIES: Record<string, AbilityDef> = {
     learnLevel: 10,
     cost: 55,
     castTime: 0,
-    cooldown: 10,
+    cooldown: 8,
     range: 35,
     minRange: 8,
     school: 'physical',
     scalesWith: 'ranged',
     requiresTarget: false,
-    effects: [{ type: 'aoeDamage', min: 42, max: 54, radius: 8 }],
-    description: 'Fires several missiles, striking nearby enemies for $d. (Hunter talent)',
+    targetMode: 'position',
+    effects: [{ type: 'aoeDamage', min: 62, max: 74, radius: 8 }],
+    description:
+      'Loose a spread at the target area, dealing $d Physical damage to enemies within 8 yd. (Hunter talent)',
   },
   prayer_of_healing: {
     id: 'prayer_of_healing',
@@ -5463,7 +5490,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
   },
   psychic_scream: {
     id: 'psychic_scream',
-    name: 'Terror Shriek',
+    name: 'Terror Canticle',
     class: 'priest',
     learnLevel: 10,
     cost: 45,
@@ -5522,7 +5549,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
   },
   silence: {
     id: 'silence',
-    name: 'Silent Treatment',
+    name: 'Hushword',
     class: 'priest',
     learnLevel: 10,
     cost: 55,
@@ -5545,13 +5572,14 @@ export const ABILITIES: Record<string, AbilityDef> = {
     range: 8,
     school: 'physical',
     requiresTarget: true,
+    usableInForm: true,
     effects: [{ type: 'interrupt', lockout: 4 }],
     description:
       'Interrupts spellcasting and prevents any spell in that school from being cast for 4 sec. (Druid talent)',
   },
   spell_lock: {
     id: 'spell_lock',
-    name: 'Gag Order',
+    name: 'Tonguebind',
     class: 'warlock',
     learnLevel: 10,
     cost: 35,
@@ -5577,8 +5605,129 @@ export const ABILITIES: Record<string, AbilityDef> = {
     school: 'nature',
     requiresTarget: false,
     effects: [{ type: 'aoeHeal', min: 42, max: 52, radius: 30 }],
-    description: 'Channels restorative energy, healing nearby allies each second. (Druid talent)',
+    description:
+      'Channels restorative energy for 4 sec, healing allies within 30 yd for 42 to 52 each second. (Druid talent)',
   },
+
+  // Choice-row dispel spells (Talents 2.0 counterplay rows): granted by a row pick, not
+  // baseline. Each strips magic auras, direction chosen by target relation.
+  cleansing_verdict: {
+    id: 'cleansing_verdict',
+    name: 'Cleansing Verdict',
+    class: 'paladin',
+    learnLevel: 8,
+    cost: 25,
+    castTime: 0,
+    cooldown: 8,
+    range: 30,
+    school: 'holy',
+    requiresTarget: true,
+    targetType: 'friendly',
+    effects: [
+      { type: 'dispel', count: 1 },
+      { type: 'heal', min: 40, max: 50 },
+    ],
+    description: 'Purges a harmful magic effect from a friendly target and heals them for $d Holy.',
+  },
+  spellsteal: {
+    id: 'spellsteal',
+    name: 'Spellsteal',
+    class: 'mage',
+    learnLevel: 8,
+    cost: 40,
+    castTime: 0,
+    cooldown: 12,
+    range: 30,
+    school: 'arcane',
+    requiresTarget: true,
+    targetType: 'any',
+    effects: [{ type: 'dispel', count: 1, steal: true }],
+    description: 'Steals a beneficial magic effect from an enemy, transferring it to yourself.',
+  },
+  voidfeast: {
+    id: 'voidfeast',
+    name: 'Voidfeast',
+    class: 'warlock',
+    learnLevel: 8,
+    cost: 35,
+    castTime: 0,
+    cooldown: 15,
+    range: 30,
+    school: 'shadow',
+    requiresTarget: true,
+    targetType: 'any',
+    effects: [
+      { type: 'dispel', count: 1 },
+      { type: 'selfHealPctMax', pct: 0.06 },
+    ],
+    description:
+      'Devours a magic effect (a beneficial one from an enemy, or a harmful one from an ally) and heals you for 6% of your maximum health.',
+  },
+
+  // Choice-row control spell (Talents 2.0 counterplay row): a ranged disorient that
+  // replaces the now-baseline interrupt option. Breaks on any damage, like Gouge.
+  startle_shot: {
+    id: 'startle_shot',
+    name: 'Startle Shot',
+    class: 'hunter',
+    learnLevel: 8,
+    cost: 25,
+    castTime: 0,
+    cooldown: 20,
+    range: 35,
+    minRange: 8,
+    school: 'physical',
+    scalesWith: 'ranged',
+    requiresTarget: true,
+    targetType: 'enemy',
+    effects: [{ type: 'incapacitate', duration: 4 }],
+    description: 'A wild shot that disorients the target for $t sec. Any damage breaks the effect.',
+  },
+  spell_reflect: {
+    id: 'spell_reflect',
+    name: 'Spell Reflect',
+    class: 'warrior',
+    learnLevel: 8,
+    cost: 15,
+    castTime: 0,
+    cooldown: 25,
+    range: 0,
+    requiresTarget: false,
+    school: 'physical',
+    effects: [{ type: 'selfBuff', kind: 'spell_reflect', value: 1, duration: 5 }],
+    description:
+      'Raises your shield for 5 sec, reflecting the next hostile spell back at its caster.',
+  },
+  smoke_screen: {
+    id: 'smoke_screen',
+    name: 'Smoke Screen',
+    class: 'rogue',
+    learnLevel: 8,
+    cost: 25,
+    castTime: 0,
+    cooldown: 30,
+    range: 0,
+    requiresTarget: false,
+    school: 'physical',
+    effects: [{ type: 'selfBuff', kind: 'buff_dodge', value: 0.3, duration: 8 }],
+    description: 'Vanish into a cloud of smoke, increasing your chance to dodge by 30% for 8 sec.',
+  },
+  typhoon: {
+    id: 'typhoon',
+    name: 'Typhoon',
+    class: 'druid',
+    learnLevel: 8,
+    cost: 30,
+    castTime: 0,
+    cooldown: 20,
+    range: 0,
+    requiresTarget: false,
+    school: 'nature',
+    effects: [{ type: 'aoeKnockback', radius: 8, distance: 6, dazeMult: 0.5, dazeDuration: 4 }],
+    description:
+      'A blast of wind knocks back all enemies within 8 yd and dazes them, slowing their movement by 50% for 4 sec.',
+  },
+
   // The Vale Cup sport kit (class-agnostic; docs/prd/vale-cup.md). Merged here
   // so every ABILITIES consumer (casting, icons, hotbar validation, tooltips)
   // resolves sport ids; no class lists them, so abilitiesKnownAt never grants
@@ -5601,6 +5750,7 @@ export interface KnownAbility {
   threatFlat: number;
   threatMult: number;
   castWhileMoving?: boolean; // talent-granted mobility (def.castWhileMoving covers baseline)
+  damagePushbackImmune?: boolean;
   charges?: number; // stored uses (def maxCharges and/or Double Charge talent); undefined = 1
   bonusCharges?: number; // +N stored uses resolved from def/talents; drives the abilityCharges recharge model
 }
@@ -5641,21 +5791,32 @@ function scaleEffect(
     case 'weaponDamage':
       return { ...eff, bonus: Math.round(eff.bonus * dmgMult + flat) };
     case 'weaponStrike':
-      return { ...eff, bonus: Math.round(eff.bonus * dmgMult + flat) };
+      return {
+        ...eff,
+        bonus: Math.round(eff.bonus * dmgMult + flat),
+        weaponMult: (eff.weaponMult ?? 1) * dmgMult,
+      };
     case 'directDamage':
       return {
         ...eff,
         min: Math.round(eff.min * dmgMult + flat),
         max: Math.round(eff.max * dmgMult + flat),
       };
-    case 'dot':
-      return { ...eff, total: Math.round(eff.total * dmgMult * dotMult + flat) };
-    case 'aoeDamage':
-    case 'aoeHeal':
+    case 'chainDamage':
       return {
         ...eff,
-        min: Math.round(eff.min * (eff.type === 'aoeHeal' ? healMult : dmgMult) + flat),
-        max: Math.round(eff.max * (eff.type === 'aoeHeal' ? healMult : dmgMult) + flat),
+        min: Math.round(eff.min * dmgMult + flat),
+        max: Math.round(eff.max * dmgMult + flat),
+      };
+    case 'dot':
+      return eff.directPct
+        ? { ...eff }
+        : { ...eff, total: Math.round(eff.total * dmgMult * dotMult + flat) };
+    case 'aoeDamage':
+      return {
+        ...eff,
+        min: Math.round(eff.min * dmgMult + flat),
+        max: Math.round(eff.max * dmgMult + flat),
       };
     case 'aoeRoot':
       return { ...eff, min: Math.round(eff.min * dmgMult), max: Math.round(eff.max * dmgMult) };
@@ -5683,6 +5844,13 @@ function scaleEffect(
         flat: (eff.flat ?? 0) + flat,
       };
     case 'heal':
+      return {
+        ...eff,
+        min: Math.round(eff.min * healMult + flat),
+        max: Math.round(eff.max * healMult + flat),
+      };
+    case 'aoeHeal':
+    case 'chainHeal':
       return {
         ...eff,
         min: Math.round(eff.min * healMult + flat),
@@ -5776,15 +5944,14 @@ function applyTalentMods(entry: KnownAbility, mods: TalentModifiers): void {
     if (am.castPct) entry.castTime = Math.max(0, entry.castTime * (1 + am.castPct));
     if (am.cooldownPct) entry.cooldown = Math.max(0, entry.cooldown * (1 + am.cooldownPct));
     if (am.castWhileMoving) entry.castWhileMoving = true;
-    // Stored uses (Double Charge): base 1 unless the def itself is
-    // charge-limited (maxCharges, already resolved onto entry.charges); the
-    // combat gate + recharge live in casting_lifecycle / updateTimers, keyed
-    // off this resolved max.
-    if (am.bonusCharges) entry.charges = (entry.charges ?? 1) + am.bonusCharges;
-    // buffPct strengthens the value of a (self/target) buff, e.g. Improved Devotion Aura
-    // giving more armor. Only the buff effects scale; damage on the same ability does not.
-    // Multiplier-shaped values (buff_haste/scale/jump/mortal_wound) are exempt like in
-    // scaleEffect.
+    if (am.damagePushbackImmune) entry.damagePushbackImmune = true;
+    if (am.bonusCharges) {
+      entry.bonusCharges = (entry.bonusCharges ?? 0) + am.bonusCharges;
+      // Keep the PTR stored-use view in sync with the generic recharge model.
+      entry.charges = (entry.charges ?? 1) + am.bonusCharges;
+    }
+    // buffPct strengthens a buff-like effect. Count-like aura values round to whole
+    // points; rate and multiplier values keep their fractions.
     if (am.buffPct) {
       const mul = 1 + am.buffPct;
       entry.effects = entry.effects.map((e) =>

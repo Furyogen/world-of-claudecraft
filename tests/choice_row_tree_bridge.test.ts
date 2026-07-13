@@ -104,7 +104,7 @@ describe('choice-row tree bridge', () => {
 
 describe('double-apply guard (old alloc.rows vs new rowPicks)', () => {
   const cls: PlayerClass = 'mage';
-  // mag_r5_impulse: fire_blast cooldownPct -0.5. A double-fold would read -1.0.
+  // mag_r5_impulse: Fire Blast gains one bonus charge. A double-fold would grant two.
   const impulse = 'mag_r5_impulse';
   const firestarter = 'mag_r5_firestarter';
 
@@ -113,7 +113,7 @@ describe('double-apply guard (old alloc.rows vs new rowPicks)', () => {
     const both = computeModifiersWithRows(cls, { spec: null, rows: { 5: impulse } }, picks, 20);
     const pickOnly = computeModifiersWithRows(cls, { spec: null, rows: {} }, picks, 20);
     expect(both).toEqual(pickOnly);
-    expect(both.abilities.fire_blast?.cooldownPct).toBe(-0.5);
+    expect(both.abilities.fire_blast?.bonusCharges).toBe(1);
   });
 
   it('a proc option in BOTH models registers one proc, not two', () => {
@@ -125,7 +125,7 @@ describe('double-apply guard (old alloc.rows vs new rowPicks)', () => {
   it('a new pick supersedes a DIFFERENT old option in the same row (one option per row)', () => {
     const picks = [impulse, null, null, null, null, null];
     const mods = computeModifiersWithRows(cls, { spec: null, rows: { 5: firestarter } }, picks, 20);
-    expect(mods.abilities.fire_blast?.cooldownPct).toBe(-0.5);
+    expect(mods.abilities.fire_blast?.bonusCharges).toBe(1);
     expect(mods.procs.some((p) => p.id === 'mag_firestarter')).toBe(false);
   });
 
@@ -136,7 +136,7 @@ describe('double-apply guard (old alloc.rows vs new rowPicks)', () => {
       emptyRowPicks(),
       20,
     );
-    expect(oldOnly.abilities.fire_blast?.cooldownPct).toBe(-0.5);
+    expect(oldOnly.abilities.fire_blast?.bonusCharges).toBe(1);
     // And rows the new model does not cover are untouched by a pick elsewhere.
     const mixed = computeModifiersWithRows(
       cls,
@@ -144,7 +144,7 @@ describe('double-apply guard (old alloc.rows vs new rowPicks)', () => {
       [null, 'mag_r8_quick_wits', null, null, null, null],
       20,
     );
-    expect(mixed.abilities.fire_blast?.cooldownPct).toBe(-0.5);
+    expect(mixed.abilities.fire_blast?.bonusCharges).toBe(1);
   });
 
   it('applies the effect once end to end on a live Sim with both models populated', () => {
@@ -153,6 +153,6 @@ describe('double-apply guard (old alloc.rows vs new rowPicks)', () => {
     expect(sim.applyTalents({ spec: null, rows: { 5: impulse } })).toBe(true);
     expect(sim.pickRowTalent(0, impulse)).toBe(true);
     const meta = sim.meta(sim.playerId);
-    expect(meta?.talentMods.abilities.fire_blast?.cooldownPct).toBe(-0.5);
+    expect(meta?.talentMods.abilities.fire_blast?.bonusCharges).toBe(1);
   });
 });

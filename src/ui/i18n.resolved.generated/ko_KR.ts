@@ -5901,8 +5901,8 @@ export const ko_KR: EnTranslations = {
         "description": "악마의 힘을 받아 20초 동안 방어도와 전투력을 높입니다. (흑마법사 특성)"
       },
       "aura_surge": {
-        "name": "광휘의 파동",
-        "description": "오라를 과충전하여 10초 동안 방어도 160으로 몸을 단단히 합니다. (성기사 특성)"
+        "name": "여명의 도탄",
+        "description": "여명으로 벼린 방패를 던져 {damage}의 신성 피해를 입히고 주 대상을 2초 동안 침묵시킨 뒤, {radius}미터 안의 추가 적 최대 {jumps}명에게 튕기며 도탄마다 {falloff}의 피해를 입힙니다. (성기사 특성)"
       },
       "holy_shield": {
         "name": "신성한 벽",
@@ -6075,6 +6075,10 @@ export const ko_KR: EnTranslations = {
       "razor_howl": {
         "name": "칼날 포효",
         "description": "15미터 안의 적을 8초 동안 50% 느려지게 합니다. (전사 특성)"
+      },
+      "lingering_dread": {
+        "name": "남은 공포",
+        "description": "전투의 함성을 내질러 10미터 안의 적을 4초 동안 공포에 빠뜨립니다. 각 대상은 최대 생명력의 20%에 해당하는 피해를 받기 전까지 공포가 깨지지 않습니다. (전사 특성)"
       },
       "stormthrow": {
         "name": "폭풍 투척",
@@ -6271,6 +6275,34 @@ export const ko_KR: EnTranslations = {
       "tranquility": {
         "name": "숲노래",
         "description": "회복의 기운을 쏟아 매초 주위 아군을 치유합니다. (드루이드 특성)"
+      },
+      "cleansing_verdict": {
+        "name": "정화의 심판",
+        "description": "아군 대상의 해로운 마법 효과 하나를 정화하고 생명력을 {damage}만큼 회복합니다."
+      },
+      "voidfeast": {
+        "name": "공허의 포식",
+        "description": "마법 효과 하나(적의 이로운 효과 또는 아군의 해로운 효과)를 삼키고 최대 생명력의 6%를 회복합니다."
+      },
+      "spellsteal": {
+        "name": "마법 훔치기",
+        "description": "적의 이로운 마법 효과 하나를 훔쳐 자신에게 옮깁니다."
+      },
+      "startle_shot": {
+        "name": "기습 사격",
+        "description": "거친 사격으로 대상을 {duration}초 동안 혼란시킵니다. 피해를 받으면 효과가 깨집니다."
+      },
+      "spell_reflect": {
+        "name": "주문 반사",
+        "description": "방패를 들어 다음에 받는 적대적 주문을 시전자에게 되돌립니다."
+      },
+      "smoke_screen": {
+        "name": "연막",
+        "description": "연기 속으로 몸을 숨겨 일정 시간 동안 회피율을 높입니다."
+      },
+      "typhoon": {
+        "name": "태풍",
+        "description": "돌풍이 주변의 모든 적을 밀쳐내고 무력화시켜 이동 속도를 늦춥니다."
       },
       "bear_charge": {
         "name": "큰곰 돌진",

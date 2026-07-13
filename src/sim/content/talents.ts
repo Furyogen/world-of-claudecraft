@@ -78,7 +78,11 @@ export interface AbilityModEffect {
   // effect is ticking on the target (priest Twisted Faith). Applied in
   // effect_dispatch at hit time, never baked into the resolved min/max.
   dmgPctVsDotted?: number;
+  // When present, the conditional bonus above requires this exact caster-owned
+  // DoT rather than any DoT from the caster.
+  dmgPctVsDottedAbility?: string;
   castWhileMoving?: boolean; // the cast/channel survives the caster's own movement (Firestarter)
+  damagePushbackImmune?: boolean; // damage cannot delay a cast or shorten a channel
   bonusCharges?: number; // +N stored uses (Double Charge); base is 1 (1 = two total charges)
   addEffects?: AbilityEffect[];
 }
@@ -209,12 +213,14 @@ export const SAVED_LOADOUT_BAR_SLOTS = 22;
 export interface ResolvedAbilityMod {
   dmgPct: number;
   dmgPctVsDotted: number;
+  dmgPctVsDottedAbility?: string;
   flatDmg: number;
   costPct: number;
   cooldownPct: number;
   castPct: number;
   buffPct: number;
   castWhileMoving: boolean;
+  damagePushbackImmune?: boolean;
   bonusCharges: number;
   addEffects: AbilityEffect[];
 }
@@ -440,6 +446,7 @@ function zeroAbilityMod(): ResolvedAbilityMod {
     castPct: 0,
     buffPct: 0,
     castWhileMoving: false,
+    damagePushbackImmune: false,
     bonusCharges: 0,
     addEffects: [],
   };
@@ -536,6 +543,7 @@ export function accumulate(
     }
     cur.dmgPct += (am.dmgPct ?? 0) * mult;
     cur.dmgPctVsDotted += (am.dmgPctVsDotted ?? 0) * mult;
+    if (am.dmgPctVsDottedAbility) cur.dmgPctVsDottedAbility = am.dmgPctVsDottedAbility;
     cur.flatDmg += (am.flatDmg ?? 0) * mult;
     cur.costPct += (am.costPct ?? 0) * mult;
     cur.cooldownPct += (am.cooldownPct ?? 0) * mult;
@@ -543,6 +551,7 @@ export function accumulate(
     cur.buffPct += (am.buffPct ?? 0) * mult;
     cur.bonusCharges += (am.bonusCharges ?? 0) * mult;
     if (am.castWhileMoving) cur.castWhileMoving = true;
+    if (am.damagePushbackImmune) cur.damagePushbackImmune = true;
     // Added effects are rank-1 semantics, not multiplied by talent rank.
     if (am.addEffects) cur.addEffects.push(...am.addEffects);
   }

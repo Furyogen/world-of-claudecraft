@@ -5901,8 +5901,8 @@ export const cs_CZ: EnTranslations = {
         "description": "Promění tě na 20 sek. v obludného démona, zvýší poškození kouzel o 20 % a rychlost sesílání o 20 %. Tvůj démon získá 50 % k poškození a 20 % k rychlosti sesílání. (Charakteristická schopnost démonologie)"
       },
       "aura_surge": {
-        "name": "Zářivý příboj",
-        "description": "Přetíží tvou auru a zpevní tě 160 body brnění na 10 sek. (Paladinský talent)"
+        "name": "Úsvitový odraz",
+        "description": "Vrhne úsvitem kovaný štít za {damage} bodů Svatého poškození, umlčí hlavní cíl na 2 sek. a poté se odrazí až k {jumps} dalším nepřátelům do {radius} yardů; každý odraz způsobí {falloff} poškození. (Paladinský talent)"
       },
       "holy_shield": {
         "name": "Posvátná hradba",
@@ -6075,6 +6075,10 @@ export const cs_CZ: EnTranslations = {
       "razor_howl": {
         "name": "Břitký řev",
         "description": "Výkřik, který na 8 sek. zpomalí nepřátele do 15 m o 50 %. (Válečnický talent)"
+      },
+      "lingering_dread": {
+        "name": "Lingering Dread",
+        "description": "Unleash a battle cry that fears enemies within 10 yards for 4 sec. The fear endures up to 20% of each target's maximum health in damage. (Warrior talent)"
       },
       "stormthrow": {
         "name": "Bouřný hod",
@@ -6271,6 +6275,34 @@ export const cs_CZ: EnTranslations = {
       "tranquility": {
         "name": "Píseň háje",
         "description": "Canaliza energía restauradora y sana a blízké spojence cada segundo. (druidský talent)"
+      },
+      "cleansing_verdict": {
+        "name": "Cleansing Verdict",
+        "description": "Purges a harmful magic effect from a friendly target and heals them for {damage} Holy."
+      },
+      "voidfeast": {
+        "name": "Voidfeast",
+        "description": "Devours a magic effect (a beneficial one from an enemy, or a harmful one from an ally) and heals you for 6% of your maximum health."
+      },
+      "spellsteal": {
+        "name": "Spellsteal",
+        "description": "Steals a beneficial magic effect from an enemy, transferring it to yourself."
+      },
+      "startle_shot": {
+        "name": "Startle Shot",
+        "description": "A wild shot that disorients the target for {duration} sec. Any damage breaks the effect."
+      },
+      "spell_reflect": {
+        "name": "Spell Reflect",
+        "description": "Raises your shield, reflecting the next hostile spell back at its caster."
+      },
+      "smoke_screen": {
+        "name": "Smoke Screen",
+        "description": "Vanish into a cloud of smoke, increasing your chance to dodge for a time."
+      },
+      "typhoon": {
+        "name": "Typhoon",
+        "description": "A blast of wind knocks back all nearby enemies and dazes them, slowing their movement."
       },
       "bear_charge": {
         "name": "Medvědí výpad",

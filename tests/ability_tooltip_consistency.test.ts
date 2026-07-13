@@ -60,6 +60,10 @@ const NUMBER_ALLOWLIST: Record<string, number[]> = {
   // "Conjures 2 ...": the stack size hardcoded in casting_lifecycle.ts.
   conjure_water: [2],
   conjure_food: [2],
+  // Patch Up's heal and dead-pet revive percentage are implemented by its
+  // dedicated branch in casting_lifecycle.ts. The HUD replaces 240 with the
+  // resolved HoT total after Improved Patch Up is applied.
+  revive_pet: [240, 35],
   // Classic Warrior clones (classes_warrior_classic.ts): same dispatch-code
   // constants as their base ids above (charge rage/stun, the defensive-stance
   // threat multiplier, the taunt compel window).

@@ -5901,8 +5901,8 @@ export const ja_JP: EnTranslations = {
         "description": "悪魔の力をまとい、20 秒間防御力と攻撃力を高めます。（ウォーロックのタレント）"
       },
       "aura_surge": {
-        "name": "光輝の高まり",
-        "description": "オーラを過負荷させ、10秒間160の防御力で身を固める。(パラディンの才能)"
+        "name": "曙光の跳弾",
+        "description": "曙光で鍛えた盾を投げて{damage}の聖属性ダメージを与え、最初の対象を2秒間沈黙させる。その後、{radius}ヤード以内の追加の敵最大{jumps}体へ跳ね返り、1回ごとに{falloff}のダメージを与える。（パラディンのタレント）"
       },
       "holy_shield": {
         "name": "聖なる壁",
@@ -6075,6 +6075,10 @@ export const ja_JP: EnTranslations = {
       "razor_howl": {
         "name": "刃の咆哮",
         "description": "15メートル以内の敵を8秒間50%遅くします。（ウォリアータレント）"
+      },
+      "lingering_dread": {
+        "name": "残る恐怖",
+        "description": "戦いの雄叫びを放ち、10ヤード以内の敵を4秒間恐怖状態にする。各対象は最大体力の20%に相当するダメージを受けるまで恐怖が解除されない。（ウォリアーのタレント）"
       },
       "stormthrow": {
         "name": "嵐投げ",
@@ -6271,6 +6275,34 @@ export const ja_JP: EnTranslations = {
       "tranquility": {
         "name": "木立の歌",
         "description": "回復の力を注ぎ、毎秒周囲の味方を回復する。（ドルイドタレント）"
+      },
+      "cleansing_verdict": {
+        "name": "浄化の裁定",
+        "description": "味方1体の有害な魔法効果を解除し、{damage}の体力を回復する。"
+      },
+      "voidfeast": {
+        "name": "虚無の饗宴",
+        "description": "魔法効果（敵の有益効果または味方の有害効果）を貪り、自分の最大体力の6%を回復する。"
+      },
+      "spellsteal": {
+        "name": "魔法奪取",
+        "description": "敵の有益な魔法効果を1つ奪い、自分へ移す。"
+      },
+      "startle_shot": {
+        "name": "驚愕射撃",
+        "description": "荒々しい一射で対象を{duration}秒間混乱させる。ダメージを受けると解除される。"
+      },
+      "spell_reflect": {
+        "name": "魔法反射",
+        "description": "盾を構え、次に受ける敵の呪文を術者へ跳ね返す。"
+      },
+      "smoke_screen": {
+        "name": "スモークスクリーン",
+        "description": "煙幕に紛れ、一定時間、回避率を上昇させる。"
+      },
+      "typhoon": {
+        "name": "タイフーン",
+        "description": "突風で周囲の敵をすべて吹き飛ばし、よろめかせて移動速度を下げる。"
       },
       "bear_charge": {
         "name": "ブルーインラッシュ",

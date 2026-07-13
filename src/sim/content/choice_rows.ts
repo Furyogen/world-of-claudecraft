@@ -27,6 +27,7 @@ export interface ChoiceRowOption {
 export interface ChoiceRow {
   level: ChoiceRowLevel;
   theme: string;
+  decision: string;
   options: [ChoiceRowOption, ChoiceRowOption, ChoiceRowOption];
 }
 

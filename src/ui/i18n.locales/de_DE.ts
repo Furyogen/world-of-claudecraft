@@ -3399,9 +3399,9 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.revive_pet.name': 'Begleiter wiederbeleben',
   'entities.abilities.revive_pet.description':
     'Belebt deinen toten Begleiter wieder und ruft ihn an deine Seite zurück.',
-  'entities.abilities.aura_surge.name': 'Strahlende Woge',
+  'entities.abilities.aura_surge.name': 'Dämmerprall',
   'entities.abilities.aura_surge.description':
-    'Überlädt Eure Aura und härtet Euch mit 160 Rüstung für 10 Sek. (Paladintalent)',
+    'Schleudert einen dämmergeschmiedeten Schild für {damage} Heiligschaden, bringt das Primärziel 2 Sek. zum Schweigen und springt dann auf bis zu {jumps} weitere Gegner innerhalb von {radius} Metern über, wobei jeder Sprung {falloff} Schaden verursacht. (Paladintalent)',
   'entities.abilities.holy_shock.name': 'Heiliger Schock',
   'entities.abilities.holy_shock.description':
     'Schockt ein freundliches Ziel mit Heiliger Energie und heilt es um {damage}. (Heilig-Signatur)',
@@ -5577,8 +5577,7 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'guide.abilityHook.cw_heroic_strike':
     'Reiht einen schwereren Schwung ein, der bei deinem nächsten Treffer Wut verbraucht.',
   'guide.abilityHook.cw_rend': 'Eröffnet eine Blutung, die das Ziel über Zeit zermürbt.',
-  'guide.abilityHook.cw_thunder_clap':
-    'Trifft alles um dich herum und verlangsamt deren Angriffe.',
+  'guide.abilityHook.cw_thunder_clap': 'Trifft alles um dich herum und verlangsamt deren Angriffe.',
   'guide.abilityHook.demon_skin':
     'Eine anhaltende Selbststärkung, die deine Haut abhärtet und Rüstung verleiht.',
   'guide.abilityHook.devotion_aura':

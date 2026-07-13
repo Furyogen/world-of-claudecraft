@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { rangedSwing } from '../src/sim/combat/auto_attack';
 import { onCastCompleted, onHotExpired } from '../src/sim/combat/talent_procs';
 import { MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
@@ -88,6 +89,12 @@ describe('mage wave 2 choice rows', () => {
     expect(p.auras.find((a) => a.id === 'mag_slow_burn')?.kind).toBe('next_cast_instant');
   });
 
+  it('Mana Attunement counts successful Waterbind casts', () => {
+    const { sim, p } = rig('mage', 20, { 5: 'mag_r5_mana_attunement' });
+    for (let i = 0; i < 3; i++) castAndSettle(sim, 'conjure_water');
+    expect(p.auras.some((a) => a.id === 'mag_mana_attunement')).toBe(true);
+  });
+
   it('Deep Rime and Battlemage Armor apply shields from their triggers', () => {
     const { sim, p } = rig('mage', 20, {
       11: 'mag_r11_permafrost',
@@ -102,36 +109,162 @@ describe('mage wave 2 choice rows', () => {
 });
 
 describe('hunter wave 2 choice rows', () => {
-  it('shot rhythm procs grant free or instant followups', () => {
-    const { sim, p } = rig('hunter', 20, {
-      5: 'hun_r5_improved_serpent_sting',
-      11: 'hun_r11_efficiency',
-      14: 'hun_r14_sniper_training',
-    });
-    p.resource = p.maxResource - 30;
-    for (let i = 0; i < 3; i++) completeCast(sim, 'serpent_sting');
-    expect(p.auras.some((a) => a.id === 'hun_improved_venom_barb')).toBe(true);
-    expect(p.auras.some((a) => a.id === 'hun_lean_quiver')).toBe(true);
-    expect(p.resource).toBe(p.maxResource - 10);
-    completeCast(sim, 'concussive_shot');
-    expect(p.auras.some((a) => a.id === 'hun_sniper_training')).toBe(true);
+  it('Guisecraft responds to Harrier, Marten, and Courser guises', () => {
+    for (const aspect of ['aspect_of_the_hawk', 'aspect_of_the_monkey', 'aspect_of_the_cheetah']) {
+      const { sim, p } = rig('hunter', 20, { 5: 'hun_r5_aspect_mastery' });
+      completeCast(sim, aspect);
+      expect(p.auras.find((a) => a.id === 'hun_aspect_mastery')?.kind, aspect).toBe(
+        'next_cast_cheap',
+      );
+    }
   });
 
-  it('Master Tamer, Deathless Will, and Volley use HoT, big-hit, and channel hooks', () => {
+  it('Venom Barb arms a free Fell Shot and Rattling Shot arms an immediate follow-up', () => {
+    const resetRig = rig('hunter', 20, { 5: 'hun_r5_improved_serpent_sting' });
+    addTargetMob(resetRig.sim, 100000, 10);
+    completeCast(resetRig.sim, 'serpent_sting');
+    expect(resetRig.p.auras.find((a) => a.id === 'hun_venom_relay')?.kind).toBe('next_cast_free');
+
+    const burst = rig('hunter', 20, { 14: 'hun_r14_sniper_training' });
+    addTargetMob(burst.sim, 100000, 10);
+    burst.p.cooldowns.set('arcane_shot', 5);
+    completeCast(burst.sim, 'concussive_shot');
+    expect(burst.p.cooldowns.has('arcane_shot')).toBe(false);
+    expect(burst.p.auras.find((a) => a.id === 'hun_full_draw_rhythm')?.kind).toBe('next_cast_free');
+  });
+
+  it('Lean Quiver counts Auto Shot, restores mana, and refreshes its pending Long Draw', () => {
+    const { sim, p } = rig('hunter', 20, { 11: 'hun_r11_efficiency' });
+    const target = addTargetMob(sim, 100000, 10);
+    p.resource = p.maxResource - 80;
+    for (let i = 0; i < 3; i++) {
+      rangedSwing(sim.ctx, p, target, { min: 10, max: 14, speed: 2.4 });
+    }
+    expect(p.auras.some((a) => a.id === 'hun_lean_quiver')).toBe(true);
+    expect(p.resource).toBe(p.maxResource - 60);
+    const first = p.auras.find((a) => a.id === 'hun_lean_quiver');
+    if (!first) throw new Error('missing Lean Quiver empowerment');
+    first.remaining = 2;
+    for (let i = 0; i < 3; i++) {
+      rangedSwing(sim.ctx, p, target, { min: 10, max: 14, speed: 2.4 });
+    }
+    expect(first.remaining).toBe(8);
+    expect(p.resource).toBe(p.maxResource - 40);
+    p.resource = p.maxResource;
+    sim.castAbility('aimed_shot');
+    expect(p.castingAbility).toBeNull();
+    expect(p.auras.some((a) => a.id === 'hun_lean_quiver')).toBe(false);
+  });
+
+  it('Patch Up is baseline pet-only care that heals a living pet or revives a dead one', () => {
+    const { sim, p } = rig('hunter', 20, {});
+    const pet = createMob(9301, MOBS.forest_wolf, 20, {
+      x: p.pos.x + 2,
+      y: p.pos.y,
+      z: p.pos.z,
+    });
+    pet.hostile = false;
+    pet.ownerId = p.id;
+    pet.maxHp = 1000;
+    pet.hp = 500;
+    (sim as unknown as { addEntity(e: Entity): void }).addEntity(pet);
+
+    expect(sim.resolvedAbility('revive_pet')?.def.name).toBe('Patch Up');
+    sim.castAbility('revive_pet');
+    for (let i = 0; i < 61; i++) sim.tick();
+    expect(pet.auras.some((a) => a.kind === 'hot')).toBe(true);
+    expect(p.auras.some((a) => a.kind === 'hot')).toBe(false);
+
+    pet.dead = true;
+    pet.hp = 0;
+    p.gcdRemaining = 0;
+    p.resource = p.maxResource;
+    sim.castAbility('revive_pet');
+    for (let i = 0; i < 61; i++) sim.tick();
+    expect(pet.dead).toBe(false);
+    expect(pet.hp).toBeGreaterThan(0);
+
+    const improved = rig('hunter', 20, { 11: 'hun_r11_mend_pet' });
+    expect(improved.sim.resolvedAbility('revive_pet')?.effects[0]).toMatchObject({
+      type: 'hot',
+      total: 360,
+    });
+  });
+
+  it('Bristleguard is exactly 50 percentage points of dodge for 10 sec', () => {
+    const { sim } = rig('hunter', 20, { 17: 'hun_r17_deterrence' });
+    const resolved = sim.resolvedAbility('deterrence');
+    expect(resolved?.effects).toEqual([
+      { type: 'selfBuff', kind: 'buff_dodge', value: 0.5, duration: 10 },
+    ]);
+    expect(resolved?.def.description).toContain('50 percentage points');
+  });
+
+  it('Dreamthorn gives Fieldcraft a real burst window even when its control breaks', () => {
+    const { sim, p } = rig('hunter', 20, {}, 'survival');
+    const target = addTargetMob(sim, 100000, 10);
+    sim.castAbility('wyvern_sting');
+    for (let i = 0; i < 20 && !target.auras.some((a) => a.kind === 'incapacitate'); i++) sim.tick();
+    expect(target.auras.some((a) => a.kind === 'incapacitate')).toBe(true);
+    dealDamage(sim, target, 1);
+    expect(target.auras.some((a) => a.kind === 'incapacitate')).toBe(false);
+    expect(p.auras.some((a) => a.kind === 'buff_dmg_done' && a.value === 0.15)).toBe(true);
+    expect(p.auras.some((a) => a.kind === 'buff_haste' && a.value === 1.15)).toBe(true);
+  });
+
+  it('Wildfang Rally grants both attack power and 5% attack speed', () => {
+    const { sim, p } = rig('hunter', 20, { 20: 'hun_r20_aspect_of_the_wild' });
+    sim.castAbility('aspect_of_the_wild');
+    expect(p.auras.some((a) => a.kind === 'buff_ap' && a.value === 45)).toBe(true);
+    expect(p.auras.some((a) => a.kind === 'buff_haste' && a.value === 1.05)).toBe(true);
+  });
+
+  it('Calloused Hide makes the scoped physical Long Draw cast instant', () => {
+    const { sim, p } = rig('hunter', 20, { 17: 'hun_r17_thick_hide' });
+    addTargetMob(sim, 100000, 10);
+    dealDamage(sim, p, Math.ceil(p.maxHp * 0.2));
+    expect(p.auras.some((a) => a.id === 'hun_calloused_hide')).toBe(true);
+    p.resource = p.maxResource;
+    sim.castAbility('aimed_shot');
+    expect(p.castingAbility).toBeNull();
+    expect(p.auras.some((a) => a.id === 'hun_calloused_hide')).toBe(false);
+  });
+
+  it('Bloodbond, Deathless Will, and Arrowfall use pet-share, big-hit, and channel hooks', () => {
     const { sim, p } = rig('hunter', 20, {
       11: 'hun_r11_mend_pet',
       17: 'hun_r17_master_tamer',
       20: 'hun_r20_improved_volley',
     });
-    p.hp = Math.round(p.maxHp * 0.6);
-    expireHot(sim, 'mend_pet', p);
-    expect(p.auras.some((a) => a.id === 'hun_master_tamer')).toBe(true);
-    completeCast(sim, 'volley');
-    expect(p.auras.some((a) => a.id === 'hun_improved_volley')).toBe(true);
+    const pet = createMob(9300, MOBS.forest_wolf, 20, {
+      x: p.pos.x + 2,
+      y: p.pos.y,
+      z: p.pos.z,
+    });
+    pet.hostile = false;
+    pet.ownerId = p.id;
+    pet.maxHp = pet.hp = 1000;
+    (sim as unknown as { addEntity(e: Entity): void }).addEntity(pet);
+    p.hp = p.maxHp;
+    const playerBefore = p.hp;
+    const petBefore = pet.hp;
+    dealDamage(sim, p, 100);
+    expect(playerBefore - p.hp).toBe(80);
+    expect(petBefore - pet.hp).toBe(20);
+    p.resource = p.maxResource;
+    sim.castAbility('volley', p.id, { x: p.pos.x, z: p.pos.z + 10 });
+    const channelRemaining = p.castRemaining;
+    (sim as unknown as { pushbackCast(target: Entity): void }).pushbackCast(p);
+    expect(p.castRemaining).toBe(channelRemaining);
+    expect(sim.resolvedAbility('volley')?.effects[0]).toMatchObject({
+      type: 'aoeDamage',
+      min: 18,
+      max: 24,
+    });
 
     const guarded = rig('hunter', 20, { 11: 'hun_r11_survival_instincts' });
     dealDamage(guarded.sim, guarded.p, Math.ceil(guarded.p.maxHp * 0.35));
-    expect(guarded.p.auras.some((a) => a.id === 'hun_deathless_will')).toBe(true);
+    expect(guarded.p.auras.find((a) => a.id === 'hun_deathless_will')?.value).toBe(200);
   });
 });
 
@@ -169,11 +302,12 @@ describe('druid wave 2 choice rows', () => {
     castAndSettle(sim, 'cat_form', 1);
     expect(p.auras.some((a) => a.id === 'dru_redmaw')).toBe(true);
 
-    const healer = rig('druid', 20, { 5: 'dru_r5_natures_bounty' }, 'restoration');
-    healer.p.cooldowns.set('swiftmend', 30);
+    // Nature's Bounty is self-contained at unlock: a full Wildbloom empowers
+    // baseline Wildmend rather than waiting for a later spell.
+    const healer = rig('druid', 20, { 5: 'dru_r5_natures_bounty' });
     healer.p.hp = Math.round(healer.p.maxHp * 0.5);
     expireHot(healer.sim, 'rejuvenation', healer.p);
-    expect(healer.p.cooldowns.has('swiftmend')).toBe(false);
+    expect(healer.p.auras.some((a) => a.kind === 'next_cast_instant')).toBe(true);
   });
 
   it('Empowered Touch echo and Survival of the Fittest big-hit loop resolve', () => {
@@ -190,11 +324,14 @@ describe('druid wave 2 choice rows', () => {
       17: 'dru_r17_survival_of_the_fittest',
       20: 'dru_r20_improved_hurricane',
     });
+    // Survival of the Fittest is now self-contained: a big hit restores rage
+    // and grants a shield, instead of refunding the same-row Savage Mending.
+    castAndSettle(bear.sim, 'bear_form', 1);
+    expect(bear.p.resourceType).toBe('rage');
     bear.p.resource = 0;
-    bear.p.cooldowns.set('frenzied_regeneration', 100);
     dealDamage(bear.sim, bear.p, Math.ceil(bear.p.maxHp * 0.25));
     expect(bear.p.resource).toBe(20);
-    expect(bear.p.cooldowns.get('frenzied_regeneration')).toBe(70);
+    expect(bear.p.auras.some((a) => a.id === 'dru_survival_of_the_fittest')).toBe(true);
     bear.p.cooldowns.set('hurricane', 10);
     completeCast(bear.sim, 'hurricane');
     expect(bear.p.cooldowns.get('hurricane')).toBe(6);

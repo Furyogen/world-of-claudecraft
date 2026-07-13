@@ -215,6 +215,10 @@ export type AuraKind =
   // src/sim/spirit.ts and recalcPlayerStats.
   | 'buff_allstats_pct'
   | 'thorns'
+  // Warrior Spell Reflect (Talents 2.0 counterplay row): a single-charge self-aura that
+  // bounces the NEXT incoming direct spell hit back at its caster and is consumed. Purely a
+  // combat-hook marker (no stat contribution); intercepted in dealDamage.
+  | 'spell_reflect'
   | 'form_bear'
   | 'form_cat'
   | 'form_travel'
@@ -275,6 +279,10 @@ export type AuraKind =
   | 'critvuln'
   | 'next_cast_instant'
   | 'next_cast_free'
+  // Grave Omen: one ability-scoped Early Grave is both free and exempt from
+  // its normal wounded-target gate. Kept distinct so no other free-cast proc
+  // accidentally bypasses an execute restriction.
+  | 'next_execute_free'
   | 'next_cast_cheap'
   // Lifesap (druid): flat resource restored on each classic 2-sec regen tick,
   // any resource type, combat or not, carried across form shifts.
@@ -1539,6 +1547,23 @@ export type AbilityEffect =
   // rageOnInterrupt: rage minted when a cast is ACTUALLY cut (Pummel's
   // incentive design), scaled like ability-granted rage; never on a whiff.
   | { type: 'interrupt'; lockout: number; rageOnInterrupt?: number }
+  // Chain damage: strike the primary hostile, then bounce to the nearest
+  // not-yet-hit hostile within `radius` of the previous target. `jumps` counts
+  // additional targets and each hop deals `falloff` times the previous hit.
+  | {
+      type: 'chainDamage';
+      min: number;
+      max: number;
+      jumps: number;
+      falloff: number;
+      radius: number;
+    }
+  // Dispel: strip up to `count` MAGIC (non-physical) auras, direction chosen by the
+  // target relation: harmful debuffs off a friendly target/self, or beneficial buffs off
+  // a hostile target. With `steal`, a beneficial buff stripped off an enemy is re-applied
+  // to the caster (Spellsteal). Used by Cleansing Verdict (paladin), Voidfeast (warlock),
+  // and Spellsteal (mage).
+  | { type: 'dispel'; count: number; steal?: boolean }
   // Channel-tick rider: each application extends the caster's named DoT on the
   // target by `seconds`, up to `maxBonus` total added per DoT application.
   | { type: 'extendDot'; dot: string; seconds: number; maxBonus: number }
@@ -1614,6 +1639,10 @@ export type AbilityEffect =
       duration: number;
       interval: number;
       leechPct?: number;
+      school?: Aura['school'];
+      // A direct-hit rider whose total snapshots this fraction of the preceding
+      // directDamage result, including scaling and critical damage.
+      directPct?: number;
       auraId?: string;
     }
   | { type: 'slow'; mult: number; duration: number }
@@ -1668,7 +1697,25 @@ export type AbilityEffect =
   | { type: 'aoeAllyDamage'; pct: number; duration: number; radius: number }
   | { type: 'aoeAllySureCrit'; charges: number; duration: number; radius: number }
   | { type: 'aoeSlow'; mult: number; duration: number; radius: number }
-  | { type: 'aoeRoot'; duration: number; radius: number; min: number; max: number }
+  | {
+      type: 'aoeRoot';
+      duration: number;
+      radius: number;
+      min: number;
+      max: number;
+      // A true freeze prevents actions as well as movement.
+      stun?: boolean;
+    }
+  // Druid Typhoon (Talents 2.0 counterplay row): shove every hostile in radius away from the
+  // caster by `distance` yd (via the shared knockback step-walker, so terrain/collision/
+  // knockback-resistance all apply) and daze them (a slow) for `dazeDuration`.
+  | {
+      type: 'aoeKnockback';
+      radius: number;
+      distance: number;
+      dazeMult: number;
+      dazeDuration: number;
+    }
   // The Vale Cup boarball moves (docs/prd/vale-cup.md). ballKick launches the
   // match ball toward the caster's castAim (power = ground speed yd/s, loft =
   // initial vertical speed); sportDash is a targetless directional lunge along
@@ -2230,6 +2277,7 @@ export interface Entity {
   charges?: Map<string, { spent: number; cdMax: number }>;
   queuedOnSwing: string | null; // heroic strike
   queuedOnSwingFree?: boolean; // next_cast_free consumed at queue time
+  queuedOnSwingCostMultiplier?: number; // next_cast_cheap consumed at queue time
   // single-slot spell queue: a press during the tail of the current cast (see
   // CAST_QUEUE_WINDOW_SEC), fired by updateCasting on cast completion. Distinct
   // from queuedOnSwing (a melee on-next-swing queue, not a cast queue).

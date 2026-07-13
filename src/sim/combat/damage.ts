@@ -99,6 +99,9 @@ export function dealDamage(
   // ticks). Only direct damage may walk a mob's leash anchor; passive damage must
   // let the mob leash (evade home) so it can't be kited an unlimited distance.
   direct = true,
+  // Stable content id for talent-proc filters. `ability` above remains the
+  // player-facing combat-log label and must never be used as an id.
+  abilityId: string | null = null,
 ): void {
   if (target.dead) return;
   if (target.gm || target.devGod) return; // GMs and /dev god are invulnerable (every damage path funnels here)
@@ -129,6 +132,22 @@ export function dealDamage(
     const mh = srcMeta?.equipment.mainhand ? ITEMS[srcMeta.equipment.mainhand] : undefined;
     if (twoHandPct > 0 && mh?.kind === 'weapon' && weaponHand(mh) === 'twohand') {
       amount = Math.round(amount * (1 + twoHandPct));
+    }
+  }
+
+  // Warrior Spell Reflect (Talents 2.0 counterplay row): a single-charge self-aura bounces
+  // the next incoming DIRECT spell hit back at its caster and is consumed. Only direct,
+  // non-physical (spell) damage reflects; DoT ticks and other incidental damage (direct=false)
+  // pass through untouched. The reflected hit is itself incidental (direct=false, noRage) so
+  // it can never be re-reflected and never walks the caster's leash anchor.
+  if (source && source.id !== target.id && direct && school !== 'physical' && amount > 0) {
+    const ri = target.auras.findIndex((a) => a.kind === 'spell_reflect');
+    if (ri >= 0) {
+      const reflectName = target.auras[ri].name;
+      target.auras.splice(ri, 1);
+      ctx.emit({ type: 'aura', targetId: target.id, name: reflectName, gained: false });
+      ctx.dealDamage(target, source, amount, crit, school, ability, 'hit', true, undefined, false);
+      return;
     }
   }
 
@@ -507,7 +526,7 @@ export function dealDamage(
         ctx.emit({
           type: 'log',
           pid: target.id,
-          text: 'Cheat Death saves you!',
+          text: 'A deathward saves you!',
           color: '#ffd100',
         });
       }
@@ -634,7 +653,7 @@ export function dealDamage(
     const meta = ctx.players.get(source.id);
     if (meta) meta.counters.damageDealt += amount;
     // Talent procs listening for spell crits (deterministic, no rng draw).
-    if (crit && school !== 'physical' && ability) onSpellCrit(ctx, source, ability, target);
+    if (crit && school !== 'physical' && ability) onSpellCrit(ctx, source, abilityId, target);
     if (source.resourceType === 'rage' && !noRage && school === 'physical' && !ability) {
       // Auto-attack rage, scaled by the choice-row talent multiplier (Anger
       // Management's autoRagePct) and the aura-driven bonus (Recklessness).
@@ -842,6 +861,7 @@ export function handleDeath(ctx: SimContext, e: Entity, killer: Entity | null): 
     e.autoAttack = false;
     e.queuedOnSwing = null;
     delete e.queuedOnSwingFree;
+    delete e.queuedOnSwingCostMultiplier;
     e.queuedCastAbility = null;
     e.queuedCastAim = null;
     e.comboPoints = 0;

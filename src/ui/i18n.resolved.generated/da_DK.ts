@@ -5901,8 +5901,8 @@ export const da_DK: EnTranslations = {
         "description": "Antag dæmonisk kraft og øg rustning og angrebskraft i 20 sek. (Warlock-talent)"
       },
       "aura_surge": {
-        "name": "Strålende Svulmen",
-        "description": "Overbelaster din aura og hærder dig med 160 rustning i 10 sek. (Paladintalent)"
+        "name": "Daggryets rikochet",
+        "description": "Kaster et daggrysmedet skjold for {damage} Hellig skade, bringer det primære mål til tavshed i 2 sek. og hopper derefter til op til {jumps} yderligere fjender inden for {radius} meter for {falloff} skade pr. hop. (Paladintalent)"
       },
       "holy_shield": {
         "name": "Hellig skjold",
@@ -6075,6 +6075,10 @@ export const da_DK: EnTranslations = {
       "razor_howl": {
         "name": "Skarpt hyl",
         "description": "Et råb, der sænker fjender inden for 15 m med 50% i 8 sek. (Kriger-talent)"
+      },
+      "lingering_dread": {
+        "name": "Lingering Dread",
+        "description": "Unleash a battle cry that fears enemies within 10 yards for 4 sec. The fear endures up to 20% of each target's maximum health in damage. (Warrior talent)"
       },
       "stormthrow": {
         "name": "Stormkast",
@@ -6271,6 +6275,34 @@ export const da_DK: EnTranslations = {
       "tranquility": {
         "name": "Lundens sang",
         "description": "Canaliza energía restauradora y sana a nærliggende allierede cada segundo. (druidentalent)"
+      },
+      "cleansing_verdict": {
+        "name": "Cleansing Verdict",
+        "description": "Purges a harmful magic effect from a friendly target and heals them for {damage} Holy."
+      },
+      "voidfeast": {
+        "name": "Voidfeast",
+        "description": "Devours a magic effect (a beneficial one from an enemy, or a harmful one from an ally) and heals you for 6% of your maximum health."
+      },
+      "spellsteal": {
+        "name": "Spellsteal",
+        "description": "Steals a beneficial magic effect from an enemy, transferring it to yourself."
+      },
+      "startle_shot": {
+        "name": "Startle Shot",
+        "description": "A wild shot that disorients the target for {duration} sec. Any damage breaks the effect."
+      },
+      "spell_reflect": {
+        "name": "Spell Reflect",
+        "description": "Raises your shield, reflecting the next hostile spell back at its caster."
+      },
+      "smoke_screen": {
+        "name": "Smoke Screen",
+        "description": "Vanish into a cloud of smoke, increasing your chance to dodge for a time."
+      },
+      "typhoon": {
+        "name": "Typhoon",
+        "description": "A blast of wind knocks back all nearby enemies and dazes them, slowing their movement."
       },
       "bear_charge": {
         "name": "Bruin-storm",

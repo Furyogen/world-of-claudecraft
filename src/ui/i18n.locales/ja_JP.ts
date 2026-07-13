@@ -2317,9 +2317,23 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     'ステルス状態からの先制攻撃で、武器ダメージに加えて{damage}のダメージを与え、9秒かけて出血ダメージを与える。コンボポイントを1獲得する。ウルフフォーム時のみ使用可能。',
   'entities.abilities.revive_pet.name': 'ペット蘇生',
   'entities.abilities.revive_pet.description': '死んだペットを蘇生させ、自分のそばに呼び戻す。',
-  'entities.abilities.aura_surge.name': '光輝の高まり',
+  'entities.abilities.aura_surge.name': '曙光の跳弾',
   'entities.abilities.aura_surge.description':
-    'オーラを過負荷させ、10秒間160の防御力で身を固める。(パラディンの才能)',
+    '曙光で鍛えた盾を投げて{damage}の聖属性ダメージを与え、最初の対象を2秒間沈黙させる。その後、{radius}ヤード以内の追加の敵最大{jumps}体へ跳ね返り、1回ごとに{falloff}のダメージを与える。（パラディンのタレント）',
+  'entities.abilities.lingering_dread.name': '残る恐怖',
+  'entities.abilities.lingering_dread.description':
+    '戦いの雄叫びを放ち、10ヤード以内の敵を4秒間恐怖状態にする。各対象は最大体力の20%に相当するダメージを受けるまで恐怖が解除されない。（ウォリアーのタレント）',
+  'entities.abilities.cleansing_verdict.name': '浄化の裁定',
+  'entities.abilities.cleansing_verdict.description':
+    '味方1体の有害な魔法効果を解除し、{damage}の体力を回復する。',
+  'entities.abilities.voidfeast.name': '虚無の饗宴',
+  'entities.abilities.voidfeast.description':
+    '魔法効果（敵の有益効果または味方の有害効果）を貪り、自分の最大体力の6%を回復する。',
+  'entities.abilities.spellsteal.name': '魔法奪取',
+  'entities.abilities.spellsteal.description': '敵の有益な魔法効果を1つ奪い、自分へ移す。',
+  'entities.abilities.startle_shot.name': '驚愕射撃',
+  'entities.abilities.startle_shot.description':
+    '荒々しい一射で対象を{duration}秒間混乱させる。ダメージを受けると解除される。',
   'entities.abilities.icy_veins.name': 'アイシーヴェインズ',
   'entities.abilities.icy_veins.description':
     '10秒間、呪文ヘイストが30%上がり、詠唱の中断と遅延を防ぎます。（フロスト特性のシグネチャ）',
@@ -6957,4 +6971,10 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.rallying_cry.name': '結束の雄叫び',
   'entities.abilities.rallying_cry.description':
     '結束の雄叫びを上げ、40yd以内の自分とパーティメンバーの最大体力を10秒間、20%増加させます。',
+  'entities.abilities.spell_reflect.name': '魔法反射',
+  'entities.abilities.spell_reflect.description': '盾を構え、次に受ける敵の呪文を術者へ跳ね返す。',
+  'entities.abilities.smoke_screen.name': 'スモークスクリーン',
+  'entities.abilities.smoke_screen.description': '煙幕に紛れ、一定時間、回避率を上昇させる。',
+  'entities.abilities.typhoon.name': 'タイフーン',
+  'entities.abilities.typhoon.description': '突風で周囲の敵をすべて吹き飛ばし、よろめかせて移動速度を下げる。',
 };

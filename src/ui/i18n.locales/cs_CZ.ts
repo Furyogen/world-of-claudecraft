@@ -6708,9 +6708,9 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.metamorphosis.name': 'Děsivá podoba',
   'entities.abilities.metamorphosis.description':
     'Promění tě na 20 sek. v obludného démona, zvýší poškození kouzel o 20 % a rychlost sesílání o 20 %. Tvůj démon získá 50 % k poškození a 20 % k rychlosti sesílání. (Charakteristická schopnost démonologie)',
-  'entities.abilities.aura_surge.name': 'Zářivý příboj',
+  'entities.abilities.aura_surge.name': 'Úsvitový odraz',
   'entities.abilities.aura_surge.description':
-    'Přetíží tvou auru a zpevní tě 160 body brnění na 10 sek. (Paladinský talent)',
+    'Vrhne úsvitem kovaný štít za {damage} bodů Svatého poškození, umlčí hlavní cíl na 2 sek. a poté se odrazí až k {jumps} dalším nepřátelům do {radius} yardů; každý odraz způsobí {falloff} poškození. (Paladinský talent)',
   'entities.abilities.holy_shock.name': 'Svatý šok',
   'entities.abilities.holy_shock.description':
     'Šokuje spřátelený cíl Svatou energií a vyléčí ho, nebo nepříteli způsobí {damage} bodů Svatého poškození. (Charakteristická schopnost svatosti)',

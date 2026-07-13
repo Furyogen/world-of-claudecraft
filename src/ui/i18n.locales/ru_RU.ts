@@ -2343,9 +2343,24 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.revive_pet.name': 'Оживление питомца',
   'entities.abilities.revive_pet.description':
     'Оживляет вашего павшего питомца и возвращает его к вам.',
-  'entities.abilities.aura_surge.name': 'Лучезарная волна',
+  'entities.abilities.aura_surge.name': 'Рикошет рассвета',
   'entities.abilities.aura_surge.description':
-    'Перегружает вашу ауру, укрепляя вас 160 ед. брони на 10 сек. (талант паладина)',
+    'Бросает выкованный на рассвете щит, наносящий {damage} ед. урона от Света и лишающий основную цель возможности произносить заклинания на 2 сек. Затем щит отскакивает не более чем к {jumps} другим противникам в радиусе {radius} м, нанося {falloff} ед. урона за отскок. (талант паладина)',
+  'entities.abilities.lingering_dread.name': 'Тянущийся ужас',
+  'entities.abilities.lingering_dread.description':
+    'Издаёт боевой клич, обращая врагов в радиусе 10 м в бегство на 4 сек. Страх не рассеивается, пока каждая цель не получит урон в размере 20% от максимального запаса здоровья. (талант воина)',
+  'entities.abilities.cleansing_verdict.name': 'Очищающий приговор',
+  'entities.abilities.cleansing_verdict.description':
+    'Рассеивает вредоносный магический эффект с союзника и восстанавливает ему {damage} ед. здоровья.',
+  'entities.abilities.voidfeast.name': 'Пир Бездны',
+  'entities.abilities.voidfeast.description':
+    'Поглощает один магический эффект — положительный с врага или отрицательный с союзника — и восстанавливает 6% от максимального запаса здоровья.',
+  'entities.abilities.spellsteal.name': 'Похищение чар',
+  'entities.abilities.spellsteal.description':
+    'Похищает один положительный магический эффект у противника и переносит его на вас.',
+  'entities.abilities.startle_shot.name': 'Ошеломляющий выстрел',
+  'entities.abilities.startle_shot.description':
+    'Дикий выстрел дезориентирует цель на {duration} сек. Любой полученный урон прерывает эффект.',
   'entities.abilities.icy_veins.name': 'Ледяные жилы',
   'entities.abilities.icy_veins.description':
     'Повышает скорость заклинаний на 30% и предотвращает прерывание и задержку произнесения на 10 сек. (знаковое умение Льда)',
@@ -7088,4 +7103,10 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.rallying_cry.name': 'Сплачивающий клич',
   'entities.abilities.rallying_cry.description':
     'Издает сплачивающий клич, даруя вам и членам группы в пределах 40 м 20% дополнительного максимального здоровья в течение 10 сек.',
+  'entities.abilities.spell_reflect.name': 'Отражение заклинаний',
+  'entities.abilities.spell_reflect.description': 'Поднимает щит, отражая следующее вражеское заклинание обратно в чародея.',
+  'entities.abilities.smoke_screen.name': 'Дымовая завеса',
+  'entities.abilities.smoke_screen.description': 'Скрывает вас в облаке дыма, повышая шанс уклонения на время.',
+  'entities.abilities.typhoon.name': 'Тайфун',
+  'entities.abilities.typhoon.description': 'Порыв ветра отбрасывает всех врагов поблизости и оглушает их, замедляя передвижение.',
 };

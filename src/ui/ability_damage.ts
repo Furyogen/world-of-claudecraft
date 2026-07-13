@@ -49,6 +49,7 @@ export function abilityDamageBonus(
   const power = abilityScalingPower(scaling, def);
   switch (eff.type) {
     case 'directDamage':
+    case 'chainDamage':
       // A channelled directDamage (Arcane Missiles) is a per-tick hit: it uses the
       // channel coefficient in combat, not the single-cast one.
       return def.channel
@@ -67,7 +68,13 @@ export function abilityDamageBonus(
       // directHitBonus(..., aoe) into the zone's spBonus at cast time.
       return directHitBonus(power, def, res.castTime, true);
     case 'aoeHeal':
-      // AoE heals take the same per-target coefficient penalty as aoeDamage.
+      // A channelled AoE heal pulses through casting_lifecycle and uses the
+      // channel coefficient on every tick. Instant AoE heals use the direct
+      // heal coefficient in effect_dispatch.
+      return def.channel
+        ? channelTickBonus(scaling.spellPower, def)
+        : directHealBonus(scaling.spellPower, res.castTime, true);
+    case 'chainHeal':
       return directHealBonus(scaling.spellPower, res.castTime);
     case 'consumeAura':
       if (eff.deal) return directHitBonus(power, def, res.castTime, false);
@@ -87,13 +94,6 @@ export function abilityDamageBonus(
       const ticks = eff.interval > 0 ? Math.max(1, eff.duration / eff.interval) : 1;
       return hotTickBonus(scaling.spellPower, eff.duration, eff.interval) * ticks;
     }
-    case 'aoeHeal':
-      // AoE heals take the same per-target coefficient penalty as aoeDamage.
-      return directHealBonus(scaling.spellPower, res.castTime, true);
-    case 'consumeAura':
-      if (eff.deal) return directHitBonus(power, def, res.castTime, false);
-      if (eff.heal) return directHealBonus(scaling.spellPower, res.castTime);
-      return 0;
     case 'drainTick':
       return channelTickBonus(power, def);
     case 'dot': {
@@ -101,7 +101,11 @@ export function abilityDamageBonus(
       // sim (the direct part already took the coefficient), so the tooltip must not
       // show one either. Match combat's `hybrid` test in effect_dispatch.ts.
       const hybrid = res.effects.some(
-        (e) => e.type === 'directDamage' || e.type === 'aoeDamage' || e.type === 'aoeRoot',
+        (e) =>
+          e.type === 'directDamage' ||
+          e.type === 'chainDamage' ||
+          e.type === 'aoeDamage' ||
+          e.type === 'aoeRoot',
       );
       if (hybrid) return 0;
       // The tooltip shows the DoT's TOTAL; the sim adds the per-tick bonus to each
@@ -126,11 +130,13 @@ export function abilityPrimaryEffect(res: ResolvedAbility): AbilityEffect | unde
   return res.effects.find(
     (eff) =>
       eff.type === 'directDamage' ||
+      eff.type === 'chainDamage' ||
       eff.type === 'heal' ||
       eff.type === 'chainHeal' ||
       eff.type === 'weaponDamage' ||
       eff.type === 'weaponStrike' ||
       eff.type === 'aoeDamage' ||
+      eff.type === 'aoeHeal' ||
       eff.type === 'aoeRoot' ||
       eff.type === 'groundAoE' ||
       // Heroic Leap: the landing blast is nested in repositionToAim.landingAoe
@@ -155,9 +161,11 @@ export function abilitySecondaryEffect(res: ResolvedAbility): AbilityEffect | un
 /** The effect `$o` displays: the over-time rider (dot/hot) of a hybrid ability. */
 export function abilityOverTimeEffect(
   res: ResolvedAbility,
-): Extract<AbilityEffect, { type: 'dot' | 'hot' }> | undefined {
-  const eff = res.effects.find((e) => e.type === 'dot' || e.type === 'hot');
-  return eff as Extract<AbilityEffect, { type: 'dot' | 'hot' }> | undefined;
+): Extract<AbilityEffect, { type: 'dot' | 'hot' | 'groundAoE' }> | undefined {
+  const eff = res.effects.find(
+    (e) => e.type === 'dot' || e.type === 'hot' || e.type === 'groundAoE',
+  );
+  return eff as Extract<AbilityEffect, { type: 'dot' | 'hot' | 'groundAoE' }> | undefined;
 }
 
 /** The value `$b` displays: the first self/target buff's (or AoE debuff shout's)
@@ -171,6 +179,7 @@ export function abilityBuffValue(res: ResolvedAbility): number | null {
     // percent (Direhowl's 0.2 -> 20 for the "{buff}%" tooltip).
     if (eff.type === 'aoeAttackPower')
       return eff.amount ?? (eff.pct != null ? eff.pct * 100 : null);
+    if (eff.type === 'aoeAllyAttackPower') return eff.amount ?? (eff.apPct ?? 0) * 100;
   }
   return null;
 }
@@ -182,5 +191,5 @@ export function abilityDurationValue(res: ResolvedAbility): number | null {
   for (const eff of res.effects) {
     if ('duration' in eff && typeof eff.duration === 'number') return eff.duration;
   }
-  return null;
+  return res.def.channel?.duration ?? null;
 }
