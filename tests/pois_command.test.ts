@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { Sim } from '../src/sim/sim';
-import { SimEvent, dist2d } from '../src/sim/types';
 import { zoneAt } from '../src/sim/data';
+import { Sim } from '../src/sim/sim';
+import { dist2d, type SimEvent } from '../src/sim/types';
 import { groundHeight } from '../src/sim/world';
 
 function makeWorld() {
@@ -10,7 +10,8 @@ function makeWorld() {
 
 function teleport(sim: Sim, pid: number, x: number, z: number) {
   const e = sim.entities.get(pid)!;
-  e.pos.x = x; e.pos.z = z;
+  e.pos.x = x;
+  e.pos.z = z;
   e.pos.y = groundHeight(x, z, sim.cfg.seed);
   e.prevPos = { ...e.pos };
 }

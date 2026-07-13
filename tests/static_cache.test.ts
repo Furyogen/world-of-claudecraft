@@ -7,12 +7,18 @@ const stats = (size: number, mtimeMs: number) =>
 describe('cacheControlFor', () => {
   it('marks vite content-hashed bundles as immutable for a year', () => {
     expect(cacheControlFor('/assets/main-FDVzfzpz.js')).toBe('public, max-age=31536000, immutable');
-    expect(cacheControlFor('/assets/admin-BH042pF_.js')).toBe('public, max-age=31536000, immutable');
+    expect(cacheControlFor('/assets/admin-BH042pF_.js')).toBe(
+      'public, max-age=31536000, immutable',
+    );
   });
 
   it('marks generated content-hashed media as immutable for a year', () => {
-    expect(cacheControlFor('/media/models/chars/knight.8f31c2aa91bd.glb')).toBe('public, max-age=31536000, immutable');
-    expect(cacheControlFor('/media/env/vale_day_1k.3bd7220a9f01.hdr')).toBe('public, max-age=31536000, immutable');
+    expect(cacheControlFor('/media/models/chars/knight.8f31c2aa91bd.glb')).toBe(
+      'public, max-age=31536000, immutable',
+    );
+    expect(cacheControlFor('/media/env/vale_day_1k.3bd7220a9f01.hdr')).toBe(
+      'public, max-age=31536000, immutable',
+    );
   });
 
   it('requires revalidation for unhashed assets and html shells', () => {
@@ -60,7 +66,9 @@ describe('isNotModified', () => {
 
   it('prefers if-none-match over if-modified-since', () => {
     const future = new Date(st.mtime.getTime() + 60_000).toUTCString();
-    expect(isNotModified({ 'if-none-match': 'W/"stale"', 'if-modified-since': future }, etag, st.mtime)).toBe(false);
+    expect(
+      isNotModified({ 'if-none-match': 'W/"stale"', 'if-modified-since': future }, etag, st.mtime),
+    ).toBe(false);
   });
 
   it('falls back to if-modified-since with whole-second resolution', () => {

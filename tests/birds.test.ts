@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
+import { describe, expect, it } from 'vitest';
 import { buildBirds } from '../src/render/birds';
 
 // DUNGEON_X_THRESHOLD = 600 (src/sim/data.ts): x beyond this is inside an

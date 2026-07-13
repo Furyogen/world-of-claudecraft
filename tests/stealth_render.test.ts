@@ -21,6 +21,8 @@ describe('stealth rendering policy', () => {
 
   it('does not ghost unstealthed players or creatures', () => {
     expect(shouldRenderStealthGhost(7, entity({ id: 8 }))).toBe(false);
-    expect(shouldRenderStealthGhost(7, entity({ id: 8, kind: 'mob', auras: [{ kind: 'stealth' }] }))).toBe(false);
+    expect(
+      shouldRenderStealthGhost(7, entity({ id: 8, kind: 'mob', auras: [{ kind: 'stealth' }] })),
+    ).toBe(false);
   });
 });

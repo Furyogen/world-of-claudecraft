@@ -5,7 +5,7 @@
 // (e.g. a priest, a mage-archetype class, seeing an empty reward preview yet
 // receiving the staff at turn-in).
 import { describe, expect, it } from 'vitest';
-import { QUESTS, REWARD_ARCHETYPE, questRewardItem } from '../src/sim/data';
+import { QUESTS, questRewardItem, REWARD_ARCHETYPE } from '../src/sim/data';
 import { ALL_CLASSES } from '../src/sim/types';
 
 describe('quest reward resolution', () => {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Sim } from '../src/sim/sim';
-import { SimEvent } from '../src/sim/types';
+import type { SimEvent } from '../src/sim/types';
 
 function makeWorld() {
   return new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
@@ -24,7 +24,9 @@ describe('/stats command', () => {
 
     const events = sim.tick();
     const text = errorText(events, a)!;
-    expect(text).toMatch(/^Level \d+ Warrior — HP \d+\/\d+, Rage \d+\/\d+\. AP \d+, Crit \d+\.\d%, Armor \d+\.$/);
+    expect(text).toMatch(
+      /^Level \d+ Warrior — HP \d+\/\d+, Rage \d+\/\d+\. AP \d+, Crit \d+\.\d%, Armor \d+\.$/,
+    );
     // self-only: no other player receives the readout
     expect(events.some((e) => e.type === 'error' && e.pid !== a)).toBe(false);
   });

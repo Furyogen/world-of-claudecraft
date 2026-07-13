@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { downscaleDims } from '../src/render/screenshot';
 import { assembleBugReportMeta } from '../src/ui/bug_report';
 

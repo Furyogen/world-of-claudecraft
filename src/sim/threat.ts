@@ -41,11 +41,16 @@ export function threatModifier(source: Entity, school: string): number {
 }
 
 export function stealthDetectionMultiplier(observerLevel: number, stealthedLevel: number): number {
-  const raw = STEALTH_DETECTION_MULT + (observerLevel - stealthedLevel) * STEALTH_DETECTION_PER_LEVEL;
+  const raw =
+    STEALTH_DETECTION_MULT + (observerLevel - stealthedLevel) * STEALTH_DETECTION_PER_LEVEL;
   return Math.max(STEALTH_DETECTION_MIN_MULT, Math.min(STEALTH_DETECTION_MAX_MULT, raw));
 }
 
-export function stealthDetectionRadius(observer: Entity, stealthed: Entity, baseRadius: number): number {
+export function stealthDetectionRadius(
+  observer: Entity,
+  stealthed: Entity,
+  baseRadius: number,
+): number {
   return baseRadius * stealthDetectionMultiplier(observer.level, stealthed.level);
 }
 

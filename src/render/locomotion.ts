@@ -38,7 +38,11 @@ export function newLocoTrack(): LocoTrack {
  * @param dt     frame delta in seconds
  */
 export function updateLocomotion(
-  t: LocoTrack, vx: number, vz: number, facing: number, dt: number,
+  t: LocoTrack,
+  vx: number,
+  vz: number,
+  facing: number,
+  dt: number,
 ): LocoState {
   const dist = Math.hypot(vx, vz);
   let speed = dist / Math.max(dt, 1e-4);

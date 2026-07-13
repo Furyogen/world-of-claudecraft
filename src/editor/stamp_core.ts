@@ -13,6 +13,16 @@ import type { AssetPlacement } from './custom_map';
 export type HeightSampler = (x: number, z: number) => number;
 
 /**
+ * Global gentleness scale for the Smooth and Flatten LEVEL brushes: every stamp
+ * moves the ground only this fraction of the way it otherwise would, so fine
+ * sculpting no longer overshoots. 1/5 = "5x gentler" while the brush-strength
+ * slider keeps the exact same steps (a fifth the power per stamp, same range).
+ * Smooth scales its blend factor by it; Flatten scales its pull toward the
+ * captured target height. Raise/Lower (the `add` brushes) are unaffected.
+ */
+export const SCULPT_POWER_SCALE = 1 / 5;
+
+/**
  * The five sample points the Smooth tool averages: the cursor plus four points
  * at half the brush radius on the +x/-x/+z/-z axes.
  */
@@ -34,7 +44,8 @@ export function smoothSamplePoints(
 /**
  * Smooth: a level-mode stamp whose target height is the local average, blended
  * toward that average by a modest strength factor so repeated strokes converge
- * instead of snapping. `strength` is the editor's 1..30 brush strength.
+ * instead of snapping. `strength` is the editor's EFFECTIVE brush strength
+ * (the 1..50 slider divided by 5, i.e. 0.2..10; slider 5 == the legacy 1).
  */
 export function smoothStamp(
   x: number,
@@ -48,8 +59,11 @@ export function smoothStamp(
   for (const p of pts) sum += sample(p.x, p.z);
   const avg = sum / pts.length;
   const here = sample(x, z);
-  // Modest strength scaling: 1 -> barely nudges, 30 -> pulls most of the way.
-  const k = Math.min(0.65, Math.max(0.08, strength / 40));
+  // Modest strength scaling: the floor sits at a fifth of the legacy floor so
+  // slider 1 really is 5x gentler; 10 (slider 50) pulls most of the way. The
+  // whole curve is then scaled by SCULPT_POWER_SCALE so the brush is a further
+  // 5x gentler across every slider step (its twin is flattenStamp below).
+  const k = Math.min(0.65, Math.max(0.016, strength / 40)) * SCULPT_POWER_SCALE;
   return {
     x,
     z,
@@ -61,9 +75,16 @@ export function smoothStamp(
 }
 
 /**
- * Flatten: a level-mode stamp that sets the ground to the height captured at
- * the drag START point. `hardEdge` selects the 'flat' falloff (a sheer plateau
- * edge) over the default eased taper.
+ * Flatten: a level-mode stamp that pulls the ground toward the height captured
+ * at the drag START point. `hardEdge` selects the 'flat' falloff (a sheer
+ * plateau edge) over the default eased taper.
+ *
+ * `strength` eases the pull: the stamp targets only `strength` of the way from
+ * the CURRENT surface height (`currentHeight`) toward `targetHeight`, so a value
+ * below 1 converges over more strokes instead of snapping in one. Both default
+ * to a full hard snap (`currentHeight = targetHeight`, `strength = 1`) so older
+ * callers and tests are unchanged; the editor passes SCULPT_POWER_SCALE for the
+ * 5x-gentler brush.
  */
 export function flattenStamp(
   x: number,
@@ -71,12 +92,14 @@ export function flattenStamp(
   radius: number,
   targetHeight: number,
   hardEdge: boolean,
+  currentHeight = targetHeight,
+  strength = 1,
 ): HeightStamp {
   return {
     x,
     z,
     radius,
-    delta: targetHeight,
+    delta: currentHeight + (targetHeight - currentHeight) * strength,
     falloff: hardEdge ? 'flat' : 'smooth',
     mode: 'level',
   };

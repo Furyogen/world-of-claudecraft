@@ -9,16 +9,35 @@
 // collide + collideRadius, blockers, propsMode, decorationsMode), so every v1
 // document parses unchanged.
 
+import {
+  CAVE_MAX_MULT,
+  CAVE_MAX_RADIUS,
+  CAVE_MIN_MULT,
+  CAVE_MIN_RADIUS,
+  CAVE_SPIKE_SIZE_MAX,
+  CAVE_SPIKE_SIZE_MIN,
+  MAX_CAVE_NODES,
+  MAX_CAVES,
+  MAX_HOLE_PATCHES,
+  MAX_TERRAIN_HOLES,
+  sanitizeCaveNode,
+  sanitizeTerrainHole,
+} from './caves';
 import type {
   BiomePaint,
   BlockerDef,
   CampDef,
+  CaveDef,
+  CaveNode,
+  CavePatch,
   CustomPaintSwatch,
   GroundObjectDef,
   HeightStamp,
   MapMusic,
+  MapPointSound,
   MapWeather,
   NpcDef,
+  TerrainHole,
   TerrainStyle,
   ZoneDef,
 } from './types';
@@ -76,6 +95,8 @@ export const MAX_BLOCKERS = 128;
 export const MAX_LOCATIONS = 64;
 export const MAX_MARKERS = 128;
 export const MAX_LIGHTS = 24;
+export const MAX_POINT_SOUNDS = 32;
+export const MAX_SOUND_ID_LENGTH = 40;
 export const MAX_LOCATION_NAME = 40;
 // Ambience animation speed (map "world speed"): render-cosmetic motion only.
 export const MIN_TIME_SCALE = 0.25;
@@ -109,6 +130,34 @@ export const MAX_AXIS_SCALE = 50;
 export const MAX_PLACEMENT_Y_OFFSET = 200;
 // Max length of a placement's editor display name (Scene Collection rename).
 export const MAX_PLACEMENT_NAME_LENGTH = 40;
+
+// The collision types a placement can use (the Selection panel's dropdown).
+export type CollisionMode = 'baked' | 'basic' | 'mesh' | 'none';
+
+/** One editable hitbox: an AssetCollisionBox with an optional per-box yaw
+ *  (radians, on top of the placement's rotY). Normalized model space. */
+export interface MapHitbox {
+  x: number;
+  y: number;
+  z: number;
+  hx: number;
+  hy: number;
+  hz: number;
+  ry?: number;
+}
+
+export const MAX_PLACEMENT_HITBOXES = 64;
+
+/** The collision type a placement effectively uses: the authored mode, else
+ *  the legacy derive (pre-dropdown documents keep their exact behavior). */
+export function effectiveCollisionMode(
+  p: Pick<MapPlacement, 'collide' | 'collisionMode' | 'collideRadius' | 'collideShape'>,
+): CollisionMode {
+  if (p.collisionMode) return p.collisionMode;
+  if (!p.collide) return 'none';
+  if (p.collideRadius !== undefined || p.collideShape === 'square') return 'basic';
+  return 'baked';
+}
 
 // A free-form GLB placement from the asset catalogue. `collide` opts the
 // placement into a sim circle collider at playtest (see collideRadiusFor).
@@ -158,6 +207,23 @@ export interface MapPlacement {
   // Collection eyeball). The object still exists in the map and renders in
   // playtest/export; this flag only skips it in the editor's 3D + 2D overlays.
   hidden?: boolean;
+  // v3 optional: the placement's collision type. Absent = legacy derive:
+  // 'none' when collide is false, 'basic' when a hand-authored radius/square
+  // exists, else 'baked' (per-asset baked boxes with circle fallback).
+  // 'mesh' = "true collision": a fine re-bake of the actual model geometry
+  // (MapDoc.assetCollisionMesh), the expensive edge-case option.
+  collisionMode?: CollisionMode;
+  // v3 optional: hand-edited hitboxes overriding the baked box set (normalized
+  // model space like AssetCollisionBox, plus an optional per-box yaw). Only
+  // read in 'baked' mode; absent = the asset's baked/imported boxes.
+  hitboxes?: MapHitbox[];
+  // v3 optional: fluid-volume fields for 'fluid/<kind>' placements (see
+  // sim/fluid_volumes.ts). fluidDps = damage per second while submerged
+  // (0..50; absent = the kind's preset); fluidFx = effect toggle bits
+  // (1 bubbles, 2 smoke, 4 haze, 8 light; absent = the preset's set).
+  // Ignored for ordinary model placements.
+  fluidDps?: number;
+  fluidFx?: number;
   // v2 optional: grass hue override in degrees [0, 360] for 'grass/patch'
   // placements (the foliage brush's animated grass). Absent = the game's
   // default grass tint. Ignored for ordinary model placements.
@@ -178,6 +244,26 @@ export interface MapPlacement {
   // v2 optional: animated fire effect at the model's top (render-only; a
   // campfire-style light joins the playtest boot set). Absent = none.
   fire?: boolean;
+  // Generated rock (ROCK_ASSET_ID) shape parameters: deterministic seed plus
+  // the generator sliders. Absent on ordinary placements.
+  rockSeed?: number;
+  rockNoise?: number;
+  rockDetail?: number;
+  rockSharp?: number;
+  rockTex?: number;
+  // v3 rock params: vertical stretch (0.3..3, 1 = round boulder), ground embed
+  // (0..1 of the rock's height sunk below the seat line), extra high-frequency
+  // ridged displacement (0..1 "jaggedness"), and a built-in terrain texture
+  // set key overriding the numeric rockTex look (render/terrain_texture_sets).
+  rockHeight?: number;
+  rockDepth?: number;
+  rockJag?: number;
+  rockTexId?: string;
+  rockTexTile?: number;
+  // Merged rock ridge (ROCK_RIDGE_ASSET_ID): the chain's control nodes as
+  // anchor-relative offsets, each with its girth radius (yards) and a height
+  // multiplier, polygonized into ONE solid body by the renderer.
+  rockNodes?: { dx: number; dz: number; dy: number; r: number; h: number }[];
 }
 
 // Reserved placement id for the foliage brush's animated grass: no GLB behind
@@ -193,6 +279,24 @@ export const GRASS_PATCH_PATH = 'procedural://grass-patch';
 // like the grass patch (no GLB), purely cosmetic, never collides.
 export const WATERFALL_ASSET_ID = 'water/waterfall';
 export const WATERFALL_PATH = 'procedural://waterfall';
+
+// Reserved placement id for the Rock tool's generated boulders: procedural
+// like the grass patch (no GLB). Shape lives in the rock* fields below, so a
+// saved map regenerates the exact same mesh; collision is the ordinary
+// placement collide circle (plus plane colliders for walkable tops).
+export const ROCK_ASSET_ID = 'rock/generated';
+export const ROCK_PATH = 'procedural://rock';
+
+// Reserved placement id for a MERGED rock chain (the Rock tool's ridge mode):
+// one placement whose rockNodes describe the whole connected body, rendered
+// as a single blended solid (no more overlapping-boulder piles).
+export const ROCK_RIDGE_ASSET_ID = 'rock/ridge';
+export const ROCK_RIDGE_PATH = 'procedural://rock-ridge';
+// Blue waypoint markers the Rock tool lays before Generate (grouped by the
+// shared chain id in placement.name, like the cave rig points): ordinary
+// placements so they undo/save/move with the standard gizmos.
+export const ROCK_POINT_ASSET_ID = 'rock/point';
+export const MAX_ROCK_NODES = 64;
 
 export interface MapDocMeta {
   id: string;
@@ -222,10 +326,35 @@ export interface MapDoc {
   terrainEdits: HeightStamp[];
   placements: MapPlacement[];
   biomePaint?: BiomePaint;
+  // v2 optional: caves/tunnels (the Caves tool). Each is a capsule-chain
+  // centerline; sim + render share src/sim/caves.ts to derive the standalone
+  // tube volume, the second ground sheet, and the mesh. Absent = none.
+  caves?: CaveDef[];
+  // v2 optional, LEGACY: patch discs from the retired terrain-carving cave
+  // system. Parsed so old documents round-trip; ignored at runtime.
+  cavePatches?: CavePatch[];
+  // Imported-model collision bakes (Import Model / Upload Asset), keyed by the
+  // 'local/<sha>' / 'user/<sha>' asset id: normalized model-space boxes the
+  // sim blocks with in playtest (catalogue assets use the generated table
+  // instead; see sim/asset_collision.ts). Absent = none.
+  assetCollision?: Record<string, AssetCollisionBox[]>;
+  // v3 optional: "true collision" fine bakes (collisionMode 'mesh'), keyed by
+  // asset id (catalogue OR imported). Many small boxes hugging the real mesh;
+  // baked in-browser on demand, kept on the doc so playtest/export keep them.
+  assetCollisionMesh?: Record<string, AssetCollisionBox[]>;
+  // v3 optional: spherical terrain-sheet cutouts (the Hole tool). Absent = none.
+  holes?: TerrainHole[];
+  // v3 optional: patch spheres restoring ground inside cutouts (Patch hole
+  // mode); a patch beats every hole it overlaps. Absent = none.
+  holePatches?: TerrainHole[];
   // v2: invisible blocker walls (collision-only segments); absent = none.
   blockers?: BlockerDef[];
   // v2: map-wide water surface height; absent = the built-in WATER_LEVEL.
   waterLevel?: number;
+  // v3 optional: map-wide water TINT (the Water tab's hue/lightness sliders,
+  // the same authoring model as grass hue/lum). Absent = the shipped blues.
+  waterHue?: number; // degrees [0, 360]
+  waterLum?: number; // lightness [0, 1]
   // v2 optional: half the world's x extent in yards (the world spans
   // [-worldHalfX, worldHalfX]); absent = the built-in WORLD_MAX_X. The z extent
   // is already per-map via the zone bands' zMin/zMax.
@@ -252,6 +381,8 @@ export interface MapDoc {
   markers?: MapMarker[];
   // v2 optional: authored point lights (rendered in editor AND playtest).
   lights?: MapLight[];
+  // v2 optional: authored positional point sounds (looping SFX emitters).
+  pointSounds?: MapPointSound[];
   // v2 optional: auto-texturing rule toggles (slope rock, snow caps, rim
   // mountains, shore sand). Absent = every rule on (the shipped look).
   terrainStyle?: TerrainStyle;
@@ -301,15 +432,19 @@ export interface MapLight {
 // assetId prefix; unknown ids keep the generic factor. Pure data in the
 // document pipeline: the sim never opens the GLB.
 const COLLIDE_FACTOR_DEFAULT = 0.8;
+// Factors track the render normalization heights (placed_assets.ts
+// targetHeightFor): trees normalize to 7.5yd (was 2.2), bushes 3.2, ferns
+// 1.6, rocks 2.4, so each footprint scales with its family's visual size.
 const COLLIDE_FACTORS: readonly { prefix: string; factor: number }[] = [
-  { prefix: 'foliage/oak', factor: 0.22 },
-  { prefix: 'foliage/pine', factor: 0.22 },
-  { prefix: 'foliage/dead', factor: 0.18 },
-  { prefix: 'foliage/twisted', factor: 0.22 },
-  { prefix: 'foliage/bush', factor: 0.5 },
-  { prefix: 'foliage/fern', factor: 0.35 },
-  { prefix: 'foliage/mushroom', factor: 0.35 },
-  { prefix: 'foliage/rock', factor: 0.7 },
+  { prefix: 'biome/beach_palm', factor: 0.35 },
+  { prefix: 'foliage/oak', factor: 0.75 },
+  { prefix: 'foliage/pine', factor: 0.75 },
+  { prefix: 'foliage/dead', factor: 0.6 },
+  { prefix: 'foliage/twisted', factor: 0.75 },
+  { prefix: 'foliage/bush', factor: 0.73 },
+  { prefix: 'foliage/fern', factor: 0.25 },
+  { prefix: 'foliage/mushroom', factor: 0.25 },
+  { prefix: 'foliage/rock', factor: 0.75 },
   { prefix: 'grass/', factor: 0.3 },
 ];
 
@@ -380,12 +515,111 @@ function sanitizeStamp(v: unknown): HeightStamp | null {
   const stamp: HeightStamp = {
     x: s.x,
     z: s.z,
-    radius: clamp(radius, 0.1, 200),
+    // Radius cap tracks the editor's widest brush (300yd, inspector brush
+    // slider); the fine end goes down to sub-yard detail work.
+    radius: clamp(radius, 0.1, 300),
     delta: clamp(num(s.delta, 0), -200, 200),
     falloff: s.falloff === 'flat' ? 'flat' : 'smooth',
   };
   if (s.mode === 'level') stamp.mode = 'level';
   return stamp;
+}
+
+function sanitizeCave(v: unknown): CaveDef | null {
+  if (!v || typeof v !== 'object') return null;
+  const c = v as Record<string, unknown>;
+  const id = idStr(c.id);
+  if (!id) return null;
+  const nodes = arr(c.nodes)
+    .slice(0, MAX_CAVE_NODES)
+    .map(sanitizeCaveNode)
+    .filter((n): n is CaveNode => n !== null)
+    .map((n) => ({ ...n, x: coord(n.x), z: coord(n.z), y: clamp(n.y, -500, 500) }));
+  if (nodes.length === 0) return null;
+  const cave: CaveDef = { id, nodes };
+  if (finiteNum(c.radius)) cave.radius = clamp(c.radius, CAVE_MIN_RADIUS, CAVE_MAX_RADIUS);
+  if (finiteNum(c.width)) cave.width = clamp(c.width, CAVE_MIN_MULT, CAVE_MAX_MULT);
+  if (finiteNum(c.height)) cave.height = clamp(c.height, CAVE_MIN_MULT, CAVE_MAX_MULT);
+  if (finiteNum(c.variance)) cave.variance = clamp(c.variance, 0, 1);
+  if (finiteNum(c.floorVariance)) cave.floorVariance = clamp(c.floorVariance, 0, 1);
+  if (finiteNum(c.stalactites)) cave.stalactites = clamp(c.stalactites, 0, 1);
+  if (finiteNum(c.stalagmites)) cave.stalagmites = clamp(c.stalagmites, 0, 1);
+  if (finiteNum(c.spikeSize)) {
+    cave.spikeSize = clamp(c.spikeSize, CAVE_SPIKE_SIZE_MIN, CAVE_SPIKE_SIZE_MAX);
+  }
+  // Mouth toggles: only an explicit false seals an end (absent = open).
+  if (c.startOpen === false) cave.startOpen = false;
+  if (c.endOpen === false) cave.endOpen = false;
+  // Interior base-texture set key (format-only: sim stays render-free; an
+  // unknown key falls back to the default granite detail map).
+  if (typeof c.tex === 'string' && /^[A-Za-z0-9]{1,32}$/.test(c.tex)) cave.tex = c.tex;
+  if (finiteNum(c.texTile)) cave.texTile = clamp(c.texTile, 1, 64);
+  return cave;
+}
+
+// Legacy Patch-tool disc bounds: kept ONLY so old documents round-trip; the
+// runtime never reads patches anymore.
+const LEGACY_CAVE_PATCH_MIN_RADIUS = 0.5;
+const LEGACY_CAVE_PATCH_MAX_RADIUS = 30;
+const LEGACY_MAX_CAVE_PATCHES = 200;
+
+/** One baked collision box for an IMPORTED model (normalized model space:
+ *  scale 1, base at y=0; a placement's rotY/scale transform it at runtime). */
+export interface AssetCollisionBox {
+  x: number;
+  y: number;
+  z: number;
+  hx: number;
+  hy: number;
+  hz: number;
+}
+
+export const MAX_ASSET_COLLISION_ENTRIES = 128;
+export const MAX_ASSET_COLLISION_BOXES = 12;
+// Fine "true collision" bakes trade box count for fidelity.
+export const MAX_ASSET_COLLISION_MESH_BOXES = 96;
+
+function sanitizeAssetCollisionBox(v: unknown): AssetCollisionBox | null {
+  if (!v || typeof v !== 'object') return null;
+  const b = v as Record<string, unknown>;
+  if (
+    !finiteNum(b.x) ||
+    !finiteNum(b.y) ||
+    !finiteNum(b.z) ||
+    !finiteNum(b.hx) ||
+    !finiteNum(b.hy) ||
+    !finiteNum(b.hz)
+  ) {
+    return null;
+  }
+  return {
+    x: clamp(b.x, -100, 100),
+    y: clamp(b.y, -100, 100),
+    z: clamp(b.z, -100, 100),
+    hx: clamp(b.hx, 0.01, 60),
+    hy: clamp(b.hy, 0.01, 60),
+    hz: clamp(b.hz, 0.01, 60),
+  };
+}
+
+function sanitizeMapHitbox(v: unknown): MapHitbox | null {
+  const box = sanitizeAssetCollisionBox(v);
+  if (!box) return null;
+  const out: MapHitbox = box;
+  const ry = (v as Record<string, unknown>).ry;
+  if (finiteNum(ry) && ry !== 0) out.ry = clamp(ry, -Math.PI * 2, Math.PI * 2);
+  return out;
+}
+
+function sanitizeCavePatch(v: unknown): CavePatch | null {
+  if (!v || typeof v !== 'object') return null;
+  const c = v as Record<string, unknown>;
+  if (!finiteNum(c.x) || !finiteNum(c.z) || !finiteNum(c.radius)) return null;
+  return {
+    x: coord(c.x),
+    z: coord(c.z),
+    radius: clamp(c.radius, LEGACY_CAVE_PATCH_MIN_RADIUS, LEGACY_CAVE_PATCH_MAX_RADIUS),
+  };
 }
 
 function sanitizePlacement(v: unknown): MapPlacement | null {
@@ -408,6 +642,21 @@ function sanitizePlacement(v: unknown): MapPlacement | null {
     out.collideRadius = clamp(p.collideRadius, MIN_COLLIDE_RADIUS, MAX_COLLIDE_RADIUS);
   }
   if (p.collideShape === 'square') out.collideShape = 'square';
+  if (
+    p.collisionMode === 'baked' ||
+    p.collisionMode === 'basic' ||
+    p.collisionMode === 'mesh' ||
+    p.collisionMode === 'none'
+  ) {
+    out.collisionMode = p.collisionMode;
+  }
+  if (Array.isArray(p.hitboxes)) {
+    const boxes = p.hitboxes
+      .slice(0, MAX_PLACEMENT_HITBOXES)
+      .map(sanitizeMapHitbox)
+      .filter((b): b is MapHitbox => b !== null);
+    if (boxes.length > 0) out.hitboxes = boxes;
+  }
   // Optional collider-volume dimensions: same accept-only-finite, always-clamp
   // contract. Harmless on ordinary placements (nothing reads them there).
   if (finiteNum(p.sizeX)) out.sizeX = clamp(p.sizeX, MIN_COLLIDER_SIZE, MAX_COLLIDER_SIZE);
@@ -438,12 +687,47 @@ function sanitizePlacement(v: unknown): MapPlacement | null {
   if (finiteNum(p.hue)) out.hue = clamp(p.hue, 0, 360);
   if (finiteNum(p.lum)) out.lum = clamp(p.lum, 0, 1);
   if (finiteNum(p.clump)) out.clump = Math.round(clamp(p.clump, 1, 60));
+  // Generated-rock shape params (harmless on ordinary placements).
+  if (finiteNum(p.rockSeed)) out.rockSeed = Math.round(clamp(p.rockSeed, 0, 1e9));
+  if (finiteNum(p.rockNoise)) out.rockNoise = clamp(p.rockNoise, 0, 1);
+  if (finiteNum(p.rockDetail)) out.rockDetail = clamp(p.rockDetail, 0, 1);
+  if (finiteNum(p.rockSharp)) out.rockSharp = clamp(p.rockSharp, 0, 1);
+  if (finiteNum(p.rockTex)) out.rockTex = Math.round(clamp(p.rockTex, 0, 2));
+  if (finiteNum(p.rockHeight)) out.rockHeight = clamp(p.rockHeight, 0.3, 3);
+  if (finiteNum(p.rockDepth)) out.rockDepth = clamp(p.rockDepth, 0, 1);
+  if (finiteNum(p.rockJag)) out.rockJag = clamp(p.rockJag, 0, 1);
+  // Built-in texture set key (format-only check: sim stays render-free; an
+  // unknown key falls back to the numeric rockTex look at render time).
+  if (typeof p.rockTexId === 'string' && /^[A-Za-z0-9]{1,32}$/.test(p.rockTexId)) {
+    out.rockTexId = p.rockTexId;
+  }
+  if (finiteNum(p.rockTexTile)) out.rockTexTile = clamp(p.rockTexTile, 1, 64);
+  // Merged-ridge node chain: capped, every field clamped finite.
+  if (Array.isArray(p.rockNodes)) {
+    const nodes: { dx: number; dz: number; dy: number; r: number; h: number }[] = [];
+    for (const raw of p.rockNodes.slice(0, MAX_ROCK_NODES)) {
+      if (!raw || typeof raw !== 'object') continue;
+      const n = raw as Record<string, unknown>;
+      if (!finiteNum(n.dx) || !finiteNum(n.dz)) continue;
+      nodes.push({
+        dx: clamp(n.dx, -2000, 2000),
+        dz: clamp(n.dz, -2000, 2000),
+        dy: finiteNum(n.dy) ? clamp(n.dy, -500, 500) : 0,
+        r: finiteNum(n.r) ? clamp(n.r, 0.5, 40) : 3,
+        h: finiteNum(n.h) ? clamp(n.h, 0.3, 3) : 1,
+      });
+    }
+    if (nodes.length >= 2) out.rockNodes = nodes;
+  }
   // Material overrides (shader tweaks): accepted finite, clamped.
   if (finiteNum(p.tint)) out.tint = Math.round(clamp(p.tint, 0, 0xffffff));
   if (finiteNum(p.opacity)) out.opacity = clamp(p.opacity, 0.05, 1);
   if (finiteNum(p.glow)) out.glow = Math.round(clamp(p.glow, 0, 0xffffff));
   if (finiteNum(p.glowStrength)) out.glowStrength = clamp(p.glowStrength, 0, 8);
   if (p.fire === true) out.fire = true;
+  // Fluid-volume fields ('fluid/<kind>' placements); harmless elsewhere.
+  if (finiteNum(p.fluidDps)) out.fluidDps = clamp(p.fluidDps, 0, 50);
+  if (finiteNum(p.fluidFx)) out.fluidFx = Math.round(clamp(p.fluidFx, 0, 15));
   return out;
 }
 
@@ -502,11 +786,79 @@ function sanitizeCustomSwatches(v: unknown): CustomPaintSwatch[] {
     if (typeof s.label === 'string' && s.label.length > 0) {
       swatch.label = s.label.slice(0, MAX_SWATCH_LABEL_LENGTH);
     }
-    if (typeof s.textureSha === 'string' && /^[a-f0-9]{64}$/.test(s.textureSha)) {
+    // Either a real content hash (imported image, IndexedDB) or a built-in
+    // library reference `builtin:<SetKey>` served from the app bundle (see
+    // render/terrain_texture_sets.ts; format-only check keeps sim render-free
+    // and an unknown key falls back to the swatch color).
+    if (
+      typeof s.textureSha === 'string' &&
+      (/^[a-f0-9]{64}$/.test(s.textureSha) || /^builtin:[A-Za-z0-9]{1,32}$/.test(s.textureSha))
+    ) {
       swatch.textureSha = s.textureSha;
     }
     if (finiteNum(s.tileSize)) swatch.tileSize = clamp(s.tileSize, 1, 64);
+    // Hue/light adjust and biome-variant base: zero adjust is dropped (absent
+    // means "paints exactly the base"), the base must be a real built-in id.
+    if (finiteNum(s.hueShift) && s.hueShift !== 0) swatch.hueShift = clamp(s.hueShift, -180, 180);
+    if (finiteNum(s.light) && s.light !== 0) swatch.light = clamp(s.light, -1, 1);
+    if (
+      finiteNum(s.baseBiome) &&
+      Number.isInteger(s.baseBiome) &&
+      s.baseBiome >= 0 &&
+      s.baseBiome < BIOME_BY_ID.length
+    ) {
+      swatch.baseBiome = s.baseBiome;
+    }
+    if (s.saved === true) swatch.saved = true;
     out.push(swatch);
+  }
+  return out;
+}
+
+// The biome-paint grid's hard cell cap: fits a full-size world at the editor's
+// finest 0.5yd brush tier (and mid maps at 0.25yd) while rejecting absurd
+// grids. Kept in sync with the editor's finestPaintCell budget.
+export const MAX_BIOME_PAINT_CELLS = 4_200_000;
+
+// ---- biome-paint ids RLE (TRANSPORT layers only) ----------------------------
+//
+// A fine grid's plain ids array is several MB of JSON — past browser storage
+// quotas. Transport seams (the editor's localStorage store, the playtest
+// sessionStorage handoff) swap `ids` for this run-length string and expand it
+// back before anything else sees the document; the document FORMAT itself
+// (file export, bundles, the server) always carries the plain array. Lives in
+// sim so the game-side playtest reader can decode without importing editor
+// code into the shipped bundle.
+
+/** "count:value" pairs, e.g. "120:255,4:3,76:255". */
+export function encodeBiomePaintIdsRle(ids: readonly number[]): string {
+  const parts: string[] = [];
+  let run = 0;
+  let cur = -1;
+  for (const id of ids) {
+    if (id === cur) {
+      run++;
+      continue;
+    }
+    if (run > 0) parts.push(`${run}:${cur}`);
+    cur = id;
+    run = 1;
+  }
+  if (run > 0) parts.push(`${run}:${cur}`);
+  return parts.join(',');
+}
+
+/** Expand an RLE ids string, or null on malformed input / expansion bombs. */
+export function decodeBiomePaintIdsRle(rle: string): number[] | null {
+  const out: number[] = [];
+  for (const part of rle.split(',')) {
+    const sep = part.indexOf(':');
+    if (sep <= 0) return null;
+    const run = Number(part.slice(0, sep));
+    const value = Number(part.slice(sep + 1));
+    if (!Number.isInteger(run) || run <= 0 || !Number.isFinite(value)) return null;
+    if (out.length + run > MAX_BIOME_PAINT_CELLS) return null;
+    for (let i = 0; i < run; i++) out.push(value);
   }
   return out;
 }
@@ -522,7 +874,7 @@ function sanitizeBiomePaint(v: unknown): BiomePaint | undefined {
   const rows = num(b.rows, 0);
   const cell = num(b.cell, 0);
   if (cols <= 0 || rows <= 0 || cell <= 0) return undefined;
-  if (cols * rows > 1_000_000) return undefined;
+  if (cols * rows > MAX_BIOME_PAINT_CELLS) return undefined;
   if (!Array.isArray(b.ids) || b.ids.length !== cols * rows) return undefined;
   const custom = sanitizeCustomSwatches(b.custom);
   const customIds = new Set(custom.map((s) => s.id));
@@ -776,9 +1128,63 @@ export function sanitizeMapDoc(raw: unknown): MapDoc | null {
     .map(sanitizeBlocker)
     .filter((b): b is BlockerDef => b !== null);
   if (blockers.length > 0) doc.blockers = blockers;
+  const caves = arr(o.caves)
+    .slice(0, MAX_CAVES)
+    .map(sanitizeCave)
+    .filter((c): c is CaveDef => c !== null);
+  if (caves.length > 0) doc.caves = caves;
+  const cavePatches = arr(o.cavePatches)
+    .slice(0, LEGACY_MAX_CAVE_PATCHES)
+    .map(sanitizeCavePatch)
+    .filter((c): c is CavePatch => c !== null);
+  if (cavePatches.length > 0) doc.cavePatches = cavePatches;
+  if (o.assetCollision && typeof o.assetCollision === 'object') {
+    const bakes: Record<string, AssetCollisionBox[]> = {};
+    for (const [id, raw] of Object.entries(o.assetCollision as Record<string, unknown>).slice(
+      0,
+      MAX_ASSET_COLLISION_ENTRIES,
+    )) {
+      if (!/^(local|user)\//.test(id)) continue;
+      const boxes = arr(raw)
+        .slice(0, MAX_ASSET_COLLISION_BOXES)
+        .map(sanitizeAssetCollisionBox)
+        .filter((b): b is AssetCollisionBox => b !== null);
+      if (boxes.length > 0) bakes[id] = boxes;
+    }
+    if (Object.keys(bakes).length > 0) doc.assetCollision = bakes;
+  }
+  if (o.assetCollisionMesh && typeof o.assetCollisionMesh === 'object') {
+    const bakes: Record<string, AssetCollisionBox[]> = {};
+    for (const [id, raw] of Object.entries(o.assetCollisionMesh as Record<string, unknown>).slice(
+      0,
+      MAX_ASSET_COLLISION_ENTRIES,
+    )) {
+      if (typeof id !== 'string' || id.length > 128) continue;
+      const boxes = arr(raw)
+        .slice(0, MAX_ASSET_COLLISION_MESH_BOXES)
+        .map(sanitizeAssetCollisionBox)
+        .filter((b): b is AssetCollisionBox => b !== null);
+      if (boxes.length > 0) bakes[id] = boxes;
+    }
+    if (Object.keys(bakes).length > 0) doc.assetCollisionMesh = bakes;
+  }
+  const holes = arr(o.holes)
+    .slice(0, MAX_TERRAIN_HOLES)
+    .map(sanitizeTerrainHole)
+    .filter((h): h is TerrainHole => h !== null)
+    .map((h) => ({ ...h, x: coord(h.x), z: coord(h.z) }));
+  if (holes.length > 0) doc.holes = holes;
+  const holePatches = arr(o.holePatches)
+    .slice(0, MAX_HOLE_PATCHES)
+    .map(sanitizeTerrainHole)
+    .filter((h): h is TerrainHole => h !== null)
+    .map((h) => ({ ...h, x: coord(h.x), z: coord(h.z) }));
+  if (holePatches.length > 0) doc.holePatches = holePatches;
   if (finiteNum(o.waterLevel)) {
     doc.waterLevel = clamp(o.waterLevel, MIN_WATER_LEVEL, MAX_WATER_LEVEL);
   }
+  if (finiteNum(o.waterHue)) doc.waterHue = clamp(o.waterHue, 0, 360);
+  if (finiteNum(o.waterLum)) doc.waterLum = clamp(o.waterLum, 0, 1);
   if (finiteNum(o.worldHalfX)) {
     doc.worldHalfX = clamp(o.worldHalfX, 20, MAX_WORLD_COORD);
   }
@@ -861,6 +1267,24 @@ export function sanitizeMapDoc(raw: unknown): MapDoc | null {
   if (weather) doc.weather = weather;
   const music = sanitizeMusic(o.music);
   if (music) doc.music = music;
+  const pointSounds = arr(o.pointSounds)
+    .slice(0, MAX_POINT_SOUNDS)
+    .map((v): MapPointSound | null => {
+      const s = v as Record<string, unknown>;
+      if (!s || typeof s !== 'object') return null;
+      if (!finiteNum(s.x) || !finiteNum(s.z)) return null;
+      if (typeof s.sound !== 'string' || s.sound.length === 0) return null;
+      return {
+        x: s.x,
+        z: s.z,
+        y: finiteNum(s.y) ? clamp(s.y, 0, 60) : 2,
+        sound: s.sound.slice(0, MAX_SOUND_ID_LENGTH),
+        volume: finiteNum(s.volume) ? clamp(s.volume, 0, 1) : 0.6,
+        radius: finiteNum(s.radius) ? clamp(s.radius, 2, 200) : 24,
+      };
+    })
+    .filter((s): s is MapPointSound => s !== null);
+  if (pointSounds.length > 0) doc.pointSounds = pointSounds;
   return doc;
 }
 

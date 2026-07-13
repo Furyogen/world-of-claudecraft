@@ -3,10 +3,20 @@
 // the document language/direction and title, then mounts the editor over the
 // built-in world content as a starting point.
 
+import { installWebGLContextRelease } from '../render/context_release';
 import { CAMPS, GROUND_OBJECTS, NPCS, ROADS, ZONES } from '../sim/data';
 import './styles.css';
 import { ensureLocaleLoaded, getLanguage, languageTag, t } from '../ui/i18n';
 import { EditorApp } from './app';
+
+// The editor's 3D viewport holds a full game WebGLRenderer (its GL context is
+// tracked via trackWebGLContext). Playtest launches via full-page navigation and
+// the game returns the same way, so without wiring context release on teardown
+// the editor's WebGL context was never force-lost — every Playtest round-trip
+// leaked one, exhausting the ~16-context GPU pool until the browser was
+// restarted. Release on real teardown (bfcache-frozen editors are preserved so a
+// Back restore keeps the live, unsaved document intact).
+installWebGLContextRelease();
 
 // Deep clone so editing never mutates the imported module globals (BUILTIN_WORLD
 // shares those arrays); the editor works on its own document.

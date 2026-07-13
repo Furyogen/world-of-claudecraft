@@ -58,7 +58,9 @@ export interface SamplerDeps {
 
 function defaultReadMemory(): { usedMb: number; limitMb: number | null } | null {
   if (typeof performance === 'undefined') return null;
-  const mem = (performance as unknown as { memory?: { usedJSHeapSize: number; jsHeapSizeLimit: number } }).memory;
+  const mem = (
+    performance as unknown as { memory?: { usedJSHeapSize: number; jsHeapSizeLimit: number } }
+  ).memory;
   if (!mem) return null;
   return { usedMb: mem.usedJSHeapSize / 1048576, limitMb: mem.jsHeapSizeLimit / 1048576 };
 }

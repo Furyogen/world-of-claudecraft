@@ -45,6 +45,14 @@ import {
 } from './content/graveyards';
 import { GROUND_PICKUP_LINES } from './content/ground_pickup_lines';
 import {
+  SCORCHING_ITEMS,
+  SCORCHING_MOBS,
+  SCORCHING_NPCS,
+  SCORCHING_OBJECTS,
+  SCORCHING_QUEST_ORDER,
+  SCORCHING_QUESTS,
+} from './content/scorching_wastes';
+import {
   TEMPLE_CAMPS,
   TEMPLE_DUNGEON_DEFS,
   TEMPLE_DUNGEON_MOBS,
@@ -152,6 +160,7 @@ export const ITEMS: Record<string, ItemDef> = mergeItems(
   ZONE3_ITEMS,
   TEMPLE_ITEMS,
   DELVE_ITEMS,
+  SCORCHING_ITEMS,
 );
 
 export type { AggregatedSetEffect } from './content/item_sets';
@@ -166,6 +175,7 @@ export const MOBS: Record<string, MobTemplate> = {
   ...TEMPLE_MOBS,
   ...TEMPLE_DUNGEON_MOBS,
   ...DELVE_MOBS,
+  ...SCORCHING_MOBS,
 };
 
 export const NPCS: Record<string, NpcDef> = {
@@ -173,6 +183,10 @@ export const NPCS: Record<string, NpcDef> = {
   ...ZONE2_NPCS,
   ...ZONE3_NPCS,
   ...TEMPLE_NPCS,
+  // Scorching Wastes expedition roster (dynamic: true — the custom desert map
+  // spawns live copies from its own content.npcs; the base world never places
+  // them). Registered here so quest giver/turn-in ids resolve globally.
+  ...SCORCHING_NPCS,
   brother_halven: BROTHER_HALVEN,
   brother_halven_marsh: BROTHER_HALVEN_MARSH,
   // The Spirit Healer template (dynamic: true, so the ctor's surface-placement
@@ -190,6 +204,7 @@ export const QUESTS: Record<string, QuestDef> = {
   ...ZONE2_QUESTS,
   ...ZONE3_QUESTS,
   ...TEMPLE_QUESTS,
+  ...SCORCHING_QUESTS,
 };
 
 export const QUEST_ORDER: string[] = [
@@ -197,6 +212,7 @@ export const QUEST_ORDER: string[] = [
   ...ZONE2_QUEST_ORDER,
   ...ZONE3_QUEST_ORDER,
   ...TEMPLE_QUEST_ORDER,
+  ...SCORCHING_QUEST_ORDER,
 ];
 
 // Camps spawn in array order, each drawing world-gen RNG, so an entry inserted
@@ -217,6 +233,10 @@ export const GROUND_OBJECTS: GroundObjectDef[] = [
   ...ZONE2_OBJECTS,
   ...ZONE3_OBJECTS,
   ...TEMPLE_OBJECTS,
+  // Scorching Wastes objects register with empty position lists (the custom
+  // map's content.objects carries the live sparkles), so collect/interact
+  // quest objectives resolve without adding anything to the base world.
+  ...SCORCHING_OBJECTS,
 ];
 
 export const GATHER_NODES: GatherNodeDef[] = [...GATHER_NODES_CONTENT];

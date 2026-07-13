@@ -1,4 +1,6 @@
+import { type CaveSample, caveFloorAt, caveSampleAt, HOLE_WALL_RISE, inTerrainHole } from './caves';
 import { DUNGEON_FLOOR_Y, DUNGEON_X_THRESHOLD, getActiveWorldContent, WORLD_MAX_X } from './data';
+import { placementRampFloorAt } from './placement_ramps';
 import { fbm2, hash2 } from './rng';
 import type { BiomeId, HeightStamp, WorldContent } from './types';
 
@@ -336,6 +338,10 @@ function baseHeight(x: number, z: number, seed: number): number {
 export function groundHeight(x: number, z: number, seed: number): number {
   if (x > DUNGEON_X_THRESHOLD) return DUNGEON_FLOOR_Y;
   let h = terrainHeight(x, z, seed);
+  // Baked stairs/ramp placements contribute a walkable deck (cached list;
+  // -Infinity when none) - the player walks UP stairs instead of hitting them.
+  const rampFloor = placementRampFloorAt(world().content, seed, x, z);
+  if (rampFloor > h) h = rampFloor;
   const vols = world().content.colliderVolumes;
   if (vols) {
     for (const v of vols) {
@@ -383,6 +389,9 @@ export function groundHeight(x: number, z: number, seed: number): number {
   return h;
 }
 
+// Caves no longer deform the heightfield: a cave is a standalone tube volume
+// (sim/caves.ts) and surface openings are TerrainHole cutouts (terrainCutAt),
+// so terrainHeight is the pure surface pipeline.
 export function terrainHeight(x: number, z: number, seed: number): number {
   const w = world();
   let h = baseHeight(x, z, seed);
@@ -418,14 +427,164 @@ export function terrainHeight(x: number, z: number, seed: number): number {
   // the Mirefen impact site leans on that wall base) but peaks before the
   // boundary so the whole climb happens in-world. Bounds read from the live
   // world (w.halfX/minZ/maxZ) so custom-sized editor maps get the same rim.
-  const rimX = smoothstep(w.halfX - 30, w.halfX - 6, Math.abs(x));
-  const rimS = smoothstep(w.minZ + 30, w.minZ + 6, z);
-  const rimN = smoothstep(w.maxZ - 30, w.maxZ - 6, z);
-  const rim = Math.max(rimX, rimS, rimN);
-  h += rim * 55;
-  h += mirefenImpactCraterOffset(x, z);
-  h = applyEditLayer(x, z, h);
-  return h;
+  // Blank-slate maps skip the rim: they contain playtest with hard boundary
+  // blockers instead, and the ungated wall would ring the flat map with a
+  // steep self-shadowed ridge (a black band at the perimeter).
+  if (w.content.presentationMode !== 'blank') {
+    const rimX = smoothstep(w.halfX - 30, w.halfX - 6, Math.abs(x));
+    const rimS = smoothstep(w.minZ + 30, w.minZ + 6, z);
+    const rimN = smoothstep(w.maxZ - 30, w.maxZ - 6, z);
+    const rim = Math.max(rimX, rimS, rimN);
+    h += rim * 55;
+  }
+  // The Mirefen fallen-star crater is built-in story terrain; a blank editor
+  // map has none, so its bowl+rim must not dent the otherwise-flat ground.
+  if (w.content.presentationMode !== 'blank') h += mirefenImpactCraterOffset(x, z);
+  return applyEditLayer(x, z, h);
+}
+
+/** The cave-tube ground sheet at (x,z), or null when no bore runs through
+ *  this point. Reads the live world's caves; cheap when the map has none. */
+export function caveSheetAt(x: number, z: number): CaveSample | null {
+  const caves = world().content.caves;
+  if (!caves || caves.length === 0) return null;
+  if (x > DUNGEON_X_THRESHOLD) return null;
+  return caveFloorAt(caves, x, z);
+}
+
+/** True when the terrain sheet is cut away at (x,z) by a Hole-tool sphere
+ *  (and not restored by a Patch sphere): there is no surface to stand on
+ *  there (a tube below may catch the mover; see groundHeightNear). Evaluated
+ *  against the TERRAIN surface, so floors raised by plane colliders are
+ *  unaffected. */
+export function terrainCutAt(x: number, z: number, seed: number): boolean {
+  const content = world().content;
+  const holes = content.holes;
+  if (!holes || holes.length === 0) return false;
+  return inTerrainHole(holes, x, z, terrainHeight(x, z, seed), content.holePatches);
+}
+
+/**
+ * Sheet-aware ground for MOVERS: where a cave tube runs at (x,z) there are
+ * two walkable sheets (the surface and the tube floor); the one continuous
+ * with the mover's previous height wins, so a step through a cave mouth
+ * transfers layers with no teleport and no per-mover state. Terrain holes
+ * remove the surface sheet: over a tube the mover drops onto the cave floor,
+ * and over nothing the ground reads as a wall (HOLE_WALL_RISE) so the
+ * movement gates refuse the step. With no caves and no holes this is exactly
+ * groundHeight.
+ */
+export function groundHeightNear(x: number, z: number, seed: number, prevY: number): number {
+  const h = groundHeight(x, z, seed);
+  const s = caveSheetAt(x, z);
+  const content = world().content;
+  if (content.holes && content.holes.length > 0) {
+    const hTerr = terrainHeight(x, z, seed);
+    if (inTerrainHole(content.holes, x, z, hTerr, content.holePatches)) {
+      // The terrain sheet is gone. A raised plane-collider floor (h above the
+      // terrain) still stands; otherwise only the tube below can catch.
+      const surfaceFloor = h > hTerr + 0.01 ? h : null;
+      if (s && surfaceFloor === null) return s.floor;
+      if (s && surfaceFloor !== null) {
+        return Math.abs(prevY - s.floor) <= Math.abs(prevY - surfaceFloor) ? s.floor : surfaceFloor;
+      }
+      if (surfaceFloor !== null) return surfaceFloor;
+      return hTerr + HOLE_WALL_RISE;
+    }
+  }
+  if (!s) return h;
+  return Math.abs(prevY - s.floor) <= Math.abs(prevY - h) ? s.floor : h;
+}
+
+/** True when the cave sheet (not the surface) is the continuous ground for a
+ *  mover at prevY. Movement uses this to skip the SURFACE steepness gate
+ *  inside tunnels (the surface's gradient is meaningless underground). */
+export function onCaveSheet(x: number, z: number, seed: number, prevY: number): boolean {
+  const s = caveSheetAt(x, z);
+  if (!s) return false;
+  if (terrainCutAt(x, z, seed)) return true;
+  return Math.abs(prevY - s.floor) <= Math.abs(prevY - groundHeight(x, z, seed));
+}
+
+// Standing headroom a step destination must keep under the horseshoe arch.
+// Matches the jump head-bonk clamp (sim caps heads 1.8yd under the ceiling):
+// where the arch leaves less than a body's height, the wall is rock. Squashed
+// caves (height multiplier < 1) scale the requirement down so a deliberately
+// low tube stays enterable — the wall band still hugs the same fraction of
+// the width.
+const CAVE_WALK_HEADROOM = 1.8;
+
+/** True when (x, z) is inside a bore footprint whose arch is too low for a
+ *  standing mover WHOSE continuous sheet is the tube floor. Walking the
+ *  surface over a buried bore never feels these walls (its sheet is the
+ *  terrain above). Samples the FULL footprint (including the edge sliver
+ *  caveFloorAt trims), so the whole wall band is solid. */
+function caveWallAt(x: number, z: number, seed: number, prevY: number): boolean {
+  const caves = world().content.caves;
+  if (!caves || caves.length === 0) return false;
+  if (x > DUNGEON_X_THRESHOLD) return false;
+  const s = caveSampleAt(caves, x, z);
+  if (!s) return false;
+  // The apron beyond an OPEN end node is the mouth opening, not rock: its
+  // headroom pinches to zero at the rim by construction, and walling it
+  // would demand a jump to cross every mouth. Sealed ends keep the wall.
+  if (s.mouth) return false;
+  const need = Math.min(CAVE_WALK_HEADROOM, s.clearance * 0.55);
+  if (s.ceiling - s.floor >= need) return false;
+  if (terrainCutAt(x, z, seed)) return true;
+  return Math.abs(prevY - s.floor) <= Math.abs(prevY - groundHeight(x, z, seed));
+}
+
+/**
+ * Cave SIDE-WALL collision for movers: true when the step from -> to runs
+ * into the horseshoe wall band (headroom below a standing body). This is what
+ * makes tube walls and exterior rock shells solid even where the terrain
+ * beyond the footprint sits level with (or below) the floor — the climb gate
+ * only stops rises. Open mouths stay walkable: headroom is full along the
+ * centerline. The midpoint sample keeps a fast mover (charge, knockback) from
+ * hopping the ~0.6yd band in one step; a mover already standing INSIDE the
+ * band (dropped there by a fall) is never trapped.
+ */
+export function caveWallBlocksStep(
+  seed: number,
+  fromX: number,
+  fromZ: number,
+  prevY: number,
+  toX: number,
+  toZ: number,
+): boolean {
+  if (caveWallAt(fromX, fromZ, seed, prevY)) return false;
+  return (
+    caveWallAt(toX, toZ, seed, prevY) ||
+    caveWallAt((fromX + toX) / 2, (fromZ + toZ) / 2, seed, prevY)
+  );
+}
+
+// A knee-high ledge is walkable when TRANSFERRING between the surface sheet
+// and a cave sheet: authored mouths rarely sit exactly flush with the ground,
+// and the per-tick climb gate reads any discrete lip as a near-vertical cliff
+// (rise / one tick's run). Kept small — bigger misalignments still demand a
+// jump, and plain terrain cliffs (no sheet transfer) are untouched.
+export const CAVE_MOUTH_STEP_UP = 1.1;
+
+/** True when the rise from h0 to h1 is a small mouth step BETWEEN sheets
+ *  (surface <-> cave floor) that walking should simply climb. The movement
+ *  gates use this to exempt the climb-slope check; the side-wall check
+ *  (caveWallBlocksStep) still applies independently, so this never opens the
+ *  bore wall. */
+export function caveMouthStepOk(
+  seed: number,
+  fromX: number,
+  fromZ: number,
+  prevY: number,
+  toX: number,
+  toZ: number,
+  h0: number,
+  h1: number,
+): boolean {
+  const rise = h1 - h0;
+  if (rise <= 0 || rise > CAVE_MOUTH_STEP_UP) return false;
+  return onCaveSheet(fromX, fromZ, seed, prevY) !== onCaveSheet(toX, toZ, seed, prevY);
 }
 
 // Steepest local rise/run of the walkable heightfield at (x, z), independent of

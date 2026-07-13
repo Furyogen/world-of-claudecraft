@@ -2050,6 +2050,8 @@ export const ru_RU: EnTranslations = {
       "view3dTitle": "Редактировать в отрисованном мире",
       "view2d": "2D",
       "view2dTitle": "Редактировать на схематичной карте сверху",
+      "preview": "Preview",
+      "previewTitle": "See the map as it looks in-game: hides editor-only overlays (collider boxes, music areas, markers, rings, gizmos)",
       "undoCount": "Отмена: {count}",
       "undoCountTitle": "Можно отменить {count} шагов (Ctrl+Z отмена, Ctrl+Y повтор)",
       "autosave": "Автосохранение",
@@ -2085,6 +2087,87 @@ export const ru_RU: EnTranslations = {
       "music": "Play music",
       "close": "Close"
     },
+    "fluid": {
+      "title": "Fluid Pool",
+      "hint": "Pick a fluid and click the ground to place a pool. Use the transform tools to move it, stretch its footprint, and slide the surface down into a dip.",
+      "selHint": "The gizmo scales the pool footprint (X/Z) and the Y arrow slides the surface height. Damage ticks once per second on anyone in the fluid.",
+      "kind": {
+        "lava": "Lava",
+        "acid": "Acid",
+        "spectral": "Spectral Fluid",
+        "water": "Still Water"
+      },
+      "hue": "Hue",
+      "light": "Lightness",
+      "dps": "Damage per second",
+      "surfaceOffset": "Surface height",
+      "fxBubbles": "Bubbles",
+      "fxSmoke": "Smoke",
+      "fxHaze": "Haze",
+      "fxLight": "Glow light",
+      "resetPreset": "Reset to preset"
+    },
+    "tunnel": {
+      "needExit": "Entrance placed. Keep clicking to lay the path (the last point is the exit), then hit Generate.",
+      "generate": "Generate cave ({count} ready)",
+      "tooShort": "The rig points are too close together - spread them at least a few yards apart.",
+      "modeDig": "Dig cave",
+      "modeHole": "Cut hole",
+      "modePatch": "Patch hole",
+      "holeHint": "Click the ground to punch a round hole straight through the terrain mesh (brush radius wide). The ground simply stops existing there - line a cave mouth up underneath and you can walk or drop in. Resize or delete any hole below; undo removes the last one.",
+      "holeList": "Holes",
+      "holeLabel": "Hole {n}",
+      "holeRadius": "Radius",
+      "holeDelete": "Delete hole",
+      "patchHint": "Click the ground to lay a patch (brush radius wide) that FILLS the ground back in wherever hole cuts overlap it - use it to trim the blank parts around each cut. A patch always beats the holes it touches. Resize or delete any patch below; undo removes the last one.",
+      "patchList": "Patches",
+      "patchLabel": "Patch {n}",
+      "patchDelete": "Delete patch",
+      "listTitle": "Caves",
+      "caveLabel": "Cave {n} ({nodes} points)",
+      "width": "Width",
+      "height": "Interior height",
+      "variance": "Variance",
+      "floorVariance": "Floor bumps",
+      "stalactites": "Stalactites",
+      "stalagmites": "Stalagmites",
+      "spikeSize": "Formation size",
+      "startOpen": "Entrance open",
+      "endOpen": "Exit open",
+      "selectCave": "Select whole cave",
+      "noRig": "This cave has no rig nodes to grab - lay a new cave instead.",
+      "reverse": "Swap entrance/exit",
+      "delete": "Delete cave",
+      "texture": "Interior texture",
+      "texDefault": "Granite (default)",
+      "guideHint": "Blue nodes joined by a dotted line are your cave model (visible in every tool). Move a node with the Move tool, raise or sink it with the Y arrow, and scale it to widen the cave there - the tube re-generates live and ALWAYS keeps exactly the size you set. Green ball = entrance, red arrow = exit.",
+      "hint": "Click the ground to drop the ENTRANCE node, keep clicking to lay blue waypoints (the last one is the exit), then press Generate. The cave is a standalone tube built only from your nodes - the surrounding terrain never squishes or reshapes it. Use Cut hole mode to open the ground, then Select whole cave + the Move tool to slide the tube into place so its mouth lines up with the hole."
+    },
+    "rock": {
+      "title": "Rock Generator",
+      "hint": "Click the ground to grow a procedural boulder there. The sliders below shape the NEXT rock; select a placed rock with the Select tool to reshape it live. Use the gizmo to stretch rocks into slabs and cliff plates.",
+      "chainMode": "Bridge / ridge mode",
+      "chainHint": "Click to lay blue points; Generate lofts ONE merged solid body through them (spanning dips in a straight line) plus walkable tops, so the chain works as a bridge or ridge. The points stay after Generate: move or scale one with the gizmos and the body follows.",
+      "chainCount": "{count} points laid",
+      "generateChain": "Generate rock ridge",
+      "clearChain": "Clear points",
+      "chainTooShort": "Lay at least two points first.",
+      "size": "Size",
+      "noise": "Noise amount",
+      "detail": "Feature detail",
+      "sharp": "Sharpness",
+      "height": "Height",
+      "depth": "Embed depth",
+      "jag": "Jaggedness",
+      "texture": "Texture",
+      "baseTex": "Base texture",
+      "texStone": "Stone",
+      "texSandstone": "Sandstone",
+      "texBare": "Bare (tintable)",
+      "reroll": "Re-roll shape",
+      "selTitle": "Generated Rock",
+      "walkable": "Walkable top"
+    },
     "tool": {
       "listLabel": "Инструменты редактора",
       "keyHint": "{name} ({key})",
@@ -2096,6 +2179,9 @@ export const ru_RU: EnTranslations = {
       "lower": "Опустить",
       "smooth": "Сгладить",
       "flatten": "Выровнять",
+      "tunnel": "Caves",
+      "rock": "Rock Gen",
+      "fluid": "Fluid Pool",
       "paint": "Красить биом",
       "water": "Вода",
       "place": "Разместить модель",
@@ -2107,6 +2193,7 @@ export const ru_RU: EnTranslations = {
       "zone": "Zone",
       "light": "Point Light",
       "music": "Music",
+      "sound": "Point Sound",
       "region": "Область",
       "erase": "Стереть"
     },
@@ -2147,13 +2234,17 @@ export const ru_RU: EnTranslations = {
       "cave": "Пещера",
       "erase": "Стереть покраску",
       "hint": "Закрашенные клетки заменяют биом зоны, меняя форму и цвет рельефа.",
-      "addSwatch": "Add",
-      "swatchColor": "New swatch color",
-      "swatchNamePlaceholder": "Swatch name (optional)",
+      "hue": "Hue",
+      "light": "Light/Dark",
+      "saveSwatch": "Save tint as swatch",
+      "saveSwatchTitle": "Keep this hue/light version as its own swatch, so the tint can be reused after the sliders move on",
+      "swatchSaved": "Saved swatch \"{name}\".",
       "customHint": "Custom swatches color the ground only (terrain shape keeps the zone biome) and save with the map.",
       "customFull": "Swatch limit reached ({max}).",
       "importTexture": "Import texture swatch",
       "importTextureTitle": "Pick an image file: painting with the new swatch tiles it over the ground (stored in this browser; other machines see its average color)",
+      "builtinGroup": "Texture library",
+      "builtinTitle": "Built-in ground textures that ship with the editor: picking one adds it to this map as a swatch (available on every machine)",
       "tileSize": "Texture tile size (yd)",
       "importTextureFailed": "Could not read that image.",
       "clear": "Очистить всю покраску биомов",
@@ -2182,7 +2273,8 @@ export const ru_RU: EnTranslations = {
       "hint": "Drag a box on the ground, then name it: standing inside shows that name as the location in playtest.",
       "namePrompt": "Location name",
       "none": "No named locations yet.",
-      "deleteTitle": "Remove this location"
+      "deleteTitle": "Remove this location",
+      "hideBoxes": "Hide area boxes"
     },
     "lightTool": {
       "title": "Point Lights",
@@ -2196,6 +2288,19 @@ export const ru_RU: EnTranslations = {
       "capReached": "Light limit reached ({max}).",
       "lightN": "Light {num}",
       "selectTitle": "Select this light in the world (bulb badge enlarges; Delete removes it)"
+    },
+    "soundTool": {
+      "title": "Point Sounds",
+      "hint": "Click the ground to drop a looping sound emitter, then pick a clip and set its max volume and radius. The falloff sphere shows how far it carries; it plays spatially in playtest.",
+      "none": "No point sounds yet.",
+      "clip": "Sound effect",
+      "volume": "Max volume",
+      "radius": "Radius (yd)",
+      "height": "Height (yd)",
+      "deleteTitle": "Remove this sound",
+      "capReached": "Point sound limit reached ({max}).",
+      "soundN": "Sound {num}",
+      "selectTitle": "Select this sound in the world (badge enlarges; Delete removes it)"
     },
     "markerTool": {
       "title": "AI Markers",
@@ -2222,6 +2327,8 @@ export const ru_RU: EnTranslations = {
     "sculpt": {
       "hint": "Drag to raise the ground; tick the box to carve downward instead.",
       "lower": "Lower instead of raise",
+      "grab": "Grab / pull (snake hook)",
+      "grabHint": "Press to grab the ground under the brush, then drag and the terrain follows your cursor in any direction - up lifts it, down shoves it in, sideways slides it across the map, like pulling clay. One grab is one undo step. Brush size sets how wide a chunk you pull.",
       "shiftHint": "Hold Shift while dragging to do the opposite (raise becomes lower, and back).",
       "autoTex": "Auto texture by angle",
       "autoTexHint": "Each stroke repaints the sculpted area by ground angle: one texture below the threshold, another above it (instant cliffs).",
@@ -2241,6 +2348,10 @@ export const ru_RU: EnTranslations = {
       "level": "Уровень воды",
       "hint": "Задает высоту поверхности воды для всей карты, от {min} до {max} ярдов.",
       "reset": "Сбросить к встроенному уровню",
+      "tintTitle": "Water tint",
+      "hue": "Hue",
+      "light": "Lightness",
+      "tintReset": "Reset tint",
       "waterfallTitle": "Waterfalls",
       "placeWaterfall": "Place waterfall",
       "placeWaterfallTitle": "Arm the Place tool with an animated waterfall (click a cliff to drop it)",
@@ -2354,7 +2465,49 @@ export const ru_RU: EnTranslations = {
       "radiusAuto": "Авто",
       "radiusAutoTitle": "Сбросить радиус столкновения, чтобы он следовал масштабу модели",
       "radiusHint": "\"Авто\" выводит радиус столкновения из масштаба модели; перетащите ползунок, чтобы задать свой.",
+      "collisionBaked": "Blocking with the baked model shape ({count} boxes hugging the mesh). Drag the radius slider to override with a simple circle; Auto restores the baked shape.",
+      "collisionCustom": "Custom footprint (circle/square) - overrides the baked model shape. Press Auto to restore it.",
       "footprints": "Показать зоны столкновений",
+      "collisionTitle": "Collision",
+      "collisionType": "Collision type",
+      "collisionTypeBaked": "Baked hitboxes",
+      "collisionTypeBasic": "Basic (radius)",
+      "collisionTypeMesh": "True collision (heavy)",
+      "collisionTypeNone": "No collision",
+      "collisionEdited": "Custom hitboxes ({count} boxes). The sim blocks with exactly these.",
+      "hitboxEdit": "Edit hitboxes",
+      "hitboxDone": "Done editing",
+      "hitboxAdd": "Add hitbox",
+      "hitboxDelete": "Delete selected",
+      "hitboxReset": "Reset to baked",
+      "hitboxSelected": "{count} hitboxes selected",
+      "hitboxHint": "Click a hitbox to select it; Ctrl/Shift+click selects several. Use the Move, Rotate, and Scale tools (or the gizmo) to shape them like any other object. Delete removes the selected boxes; Esc leaves edit mode.",
+      "hitboxCap": "Hitbox limit reached ({max} per asset).",
+      "hitboxSavePreset": "Save as preset",
+      "hitboxClearPreset": "Clear saved preset",
+      "hitboxPresetSaved": "Hitbox preset saved for {name}. New placements copy these boxes.",
+      "hitboxPresetCleared": "Hitbox preset cleared.",
+      "hitboxPresetHint": "Presets live on this device: every future placement of this asset spawns with the saved hitboxes.",
+      "meshBaking": "Baking true collision from the model mesh...",
+      "meshBakeDone": "True collision ready ({count} boxes).",
+      "meshBakeFailed": "Could not bake true collision for this asset.",
+      "meshReady": "True collision active: a dense box set hugging the real model mesh.",
+      "meshHint": "True collision rebuilds the hitboxes from the actual model mesh (many small boxes). Expensive - keep it for edge cases; it bakes once per asset when selected.",
+      "collisionCopyAll": "Copy collision to all {name} ({count})",
+      "collisionCopyAllHint": "Gives every other {name} on the map the same collision type and shape, sized to each copy so a small one never gets a giant footprint.",
+      "collisionCopyConfirmTitle": "Copy collision to all {name}?",
+      "collisionCopyConfirmBody": "All {count} other {name} on the map take this collision type and shape, each sized to its own scale (a small copy gets a small footprint, never this one), replacing their own. Ctrl+Z reverts the whole copy.",
+      "collisionCopyConfirm": "Copy to all",
+      "collisionCopied": "Copied collision to {count} {name}.",
+      "scaleAllTitle": "Scale all copies",
+      "scaleMin": "Scale min",
+      "scaleMax": "Scale max",
+      "scaleAllButton": "Scale all {name} ({count})",
+      "scaleAllHint": "Rolls a random scale between min and max onto every copy of this asset (set min and max equal for a uniform scale).",
+      "scaleAllConfirmTitle": "Scale all {name}?",
+      "scaleAllConfirmBody": "Every one of the {count} {name} on the map (this one included) gets a random scale between {min} and {max}, replacing its current scale. Ctrl+Z reverts it.",
+      "scaleAllConfirm": "Scale all",
+      "scaleAllDone": "Scaled {count} {name}.",
       "duplicate": "Дублировать",
       "delete": "Удалить",
       "deleteHint": "Удаление убирает выделенное; Ctrl+Z вернет его.",
@@ -2495,6 +2648,8 @@ export const ru_RU: EnTranslations = {
       "draftRestored": "Автосохраненный черновик восстановлен.",
       "autosaveFailed": "Автосохранение не удалось (хранилище браузера заполнено или заблокировано). Экспортируйте карту, чтобы сохранить резервную копию.",
       "terrainCapReached": "Достигнут лимит правок рельефа ({max}). Лишние штампы не были добавлены.",
+      "caveCapReached": "Cave limit reached ({max}). Delete or undo a cave first.",
+      "holeCapReached": "Hole limit reached ({max}). Delete or undo a hole first.",
       "placementCapReached": "Достигнут лимит размещений ({max}). Лишние объекты не были добавлены.",
       "blockerCapReached": "Достигнут предел невидимых стен ({max}). Новая стена не добавлена.",
       "autosaveOff": "Автосохранение отключено: {reason} Сохраните вручную, затем включите снова."
@@ -6011,6 +6166,132 @@ export const ru_RU: EnTranslations = {
       "sunpetal_sickle": {
         "name": "Солнцелепестковый серп"
       },
+      "ashen_psalter": {
+        "name": "Пепельный псалтырь"
+      },
+      "brimming_waterskin": {
+        "name": "Полный бурдюк"
+      },
+      "cactus_pressed_water": {
+        "name": "Кактусовая вода"
+      },
+      "caravan_guard_mail": {
+        "name": "Кольчуга караванного стража"
+      },
+      "caravan_manifest": {
+        "name": "Подмоченная накладная"
+      },
+      "cinder_soaked_veil": {
+        "name": "Пропитанная пеплом вуаль"
+      },
+      "crown_brazier": {
+        "name": "Жаровня Короны"
+      },
+      "crown_guard_seal": {
+        "name": "Печать Стражи Короны"
+      },
+      "duneblade_token": {
+        "name": "Жетон Дюнных Клинков"
+      },
+      "duneforged_warblade": {
+        "name": "Дюннокованый боевой клинок"
+      },
+      "dunewatch_sash": {
+        "name": "Кушак Дюнного дозора"
+      },
+      "duskmane_pelt": {
+        "name": "Шкура сумеречногривого"
+      },
+      "emberbound_leggings": {
+        "name": "Поножи, скованные углями"
+      },
+      "emberglass_scepter": {
+        "name": "Скипетр из углистого стекла"
+      },
+      "emberveil_writ": {
+        "name": "Приказ Пепельной Вуали"
+      },
+      "glasscarab_shell": {
+        "name": "Панцирь стеклянного скарабея"
+      },
+      "glasscut_dirk": {
+        "name": "Кинжал Стеклянного разлома"
+      },
+      "heart_of_the_first_ember": {
+        "name": "Сердце Первого Угля"
+      },
+      "heartspring_offering": {
+        "name": "Жертвенная чаша Родника"
+      },
+      "kareshs_last_skin": {
+        "name": "Последний бурдюк Кареша"
+      },
+      "lastwell_datewine": {
+        "name": "Финиковое вино Последнего колодца"
+      },
+      "living_cinder": {
+        "name": "Живой уголёк"
+      },
+      "moltenheart_girdle": {
+        "name": "Пояс Расплавленного сердца"
+      },
+      "moltenheart_slagcore": {
+        "name": "Шлаковое ядро Расплавленного сердца"
+      },
+      "mural_rubbing": {
+        "name": "Оттиск фрески"
+      },
+      "parched_kings_goblet": {
+        "name": "Кубок Иссохшего короля"
+      },
+      "prowler_fang": {
+        "name": "Клык хищника"
+      },
+      "sentinel_core_stone": {
+        "name": "Сердечный камень стража"
+      },
+      "springheart_blessing": {
+        "name": "Благословение Родника"
+      },
+      "stolen_waterskin": {
+        "name": "Украденный бурдюк"
+      },
+      "sunbaked_flatbread": {
+        "name": "Лепёшка, печённая на солнце"
+      },
+      "sunbleached_bone": {
+        "name": "Выбеленная солнцем кость"
+      },
+      "sunbleached_staff": {
+        "name": "Выбеленный солнцем посох"
+      },
+      "sunglass_shard": {
+        "name": "Осколок солнечного стекла"
+      },
+      "sunspeakers_ash_crown": {
+        "name": "Пепельная корона Гласа Солнца"
+      },
+      "vestment_of_the_sunken_crown": {
+        "name": "Облачение Затонувшей короны"
+      },
+      "vigil_obelisk_dawn": {
+        "name": "Печать огня рассвета"
+      },
+      "vigil_obelisk_dusk": {
+        "name": "Печать огня заката"
+      },
+      "vigil_obelisk_noon": {
+        "name": "Печать полуденного огня"
+      },
+      "wastes_relic_cache": {
+        "name": "Тайник с реликвиями Солнечного двора"
+      },
+      "wastewalker_jerkin": {
+        "name": "Куртка скитальца пустошей"
+      },
+      "wastewalker_treads": {
+        "name": "Сапоги скитальца пустошей"
+      },
       "bristleback_maul": {
         "name": "Молот Гэллоугласа"
       },
@@ -6811,6 +7092,48 @@ export const ru_RU: EnTranslations = {
       "thunzharr_stormling": {
         "name": "Пробуждённый элементаль бури"
       },
+      "duskmane_prowler": {
+        "name": "Сумеречногривый хищник"
+      },
+      "glasscarab": {
+        "name": "Стеклянный скарабей"
+      },
+      "duneblade_marauder": {
+        "name": "Мародёр Дюнных Клинков"
+      },
+      "karesh_the_parched": {
+        "name": "Кареш Иссохший"
+      },
+      "vigil_sentinel": {
+        "name": "Страж Бдения"
+      },
+      "sunbaked_revenant": {
+        "name": "Обожжённый солнцем ревенант"
+      },
+      "ashen_courtier": {
+        "name": "Пепельный придворный"
+      },
+      "sunspeaker_atharis": {
+        "name": "Атарис, Глас Солнца"
+      },
+      "emberveil_zealot": {
+        "name": "Фанатик Пепельной Вуали"
+      },
+      "emberveil_pyromancer": {
+        "name": "Пиромант Пепельной Вуали"
+      },
+      "cinder_elemental": {
+        "name": "Тлеющий элементаль"
+      },
+      "moltenheart_colossus": {
+        "name": "Колосс Расплавленного сердца"
+      },
+      "cinder_wisp": {
+        "name": "Тлеющий уголёк"
+      },
+      "ember_of_korzul": {
+        "name": "Первый Уголь"
+      },
       "ironvein_foreman": {
         "name": "Прораб Железной жилы"
       },
@@ -7040,6 +7363,66 @@ export const ru_RU: EnTranslations = {
         "name": "Целитель душ",
         "title": "Хранитель мёртвых",
         "greeting": "Покойся, дух. Я могу вернуть тебя в тело, но обратный путь оставит тебя ослабленным."
+      },
+      "caravan_master_saffa": {
+        "name": "Хозяйка каравана Саффа",
+        "title": "Хранительница Последнего колодца",
+        "greeting": "Вода — единственная монета в этих краях, друг. Хайвотч послал нас тратить её с умом, а Пустоши намерены пустить нас по миру."
+      },
+      "scout_maren_wastes": {
+        "name": "Разведчица Марен",
+        "title": "Разведчица маршала",
+        "greeting": "Я читала следы в грязи Мирефена и в снегах Торнпика. Песок хуже. Песок помнит каждый ваш шаг."
+      },
+      "loremaster_caddis_wastes": {
+        "name": "Хранитель знаний Каддис",
+        "title": "Исследователь Затонувшей короны",
+        "greeting": "Зар'Кет пал за одну ночь, {playerName}: целое королевство сплавилось в стекло на полуслове. Я всю жизнь ждал, чтобы услышать конец этой фразы."
+      },
+      "brother_aldric_wastes": {
+        "name": "Брат Алдрик",
+        "title": "Жрец долины",
+        "greeting": "Жар Вирма сочится даже сюда, {playerName}, — я чувствую его сквозь подошвы сапог. Что бы культ ни выкапывал в этом стекле, они не должны унести это домой."
+      },
+      "old_haruk": {
+        "name": "Старый Харук",
+        "title": "Хранитель Родника",
+        "greeting": "Моя семья хранила этот родник ещё до того, как его понадобилось хранить. Девять королей пили из него. Десятый попытался выпить его ЦЕЛИКОМ."
+      },
+      "provisioner_ashka": {
+        "name": "Снабженец Ашка",
+        "title": "Караванный снабженец",
+        "greeting": "Лепёшки, финиковое вино и вода, в которой никто не плавал. Лучший товар во всех Пустошах."
+      },
+      "forgemaster_derin": {
+        "name": "Мастер-кузнец Дерин",
+        "title": "Караванный кузнец",
+        "greeting": "Песок в горне, песок в закалочной бочке, песок на зубах. Клинки выходят острее — назло ему."
+      },
+      "auctioneer_zeph": {
+        "name": "Аукционист Зеф",
+        "title": "Хранитель мирового рынка",
+        "greeting": "Мировой рынок дотягивается даже до Последнего колодца, друг. Золото весит одинаково в любой пустыне."
+      },
+      "wellwatch_hana": {
+        "name": "Дозорная Хана",
+        "title": "Караванный страж",
+        "greeting": "Входите с водой, выходите с водой. Всё, что между, — моя забота."
+      },
+      "wellwatch_toma": {
+        "name": "Дозорный Тома",
+        "title": "Караванный страж",
+        "greeting": "Тихая смена. Здесь «тихо» значит лишь то, что песок жуёт медленнее."
+      },
+      "drover_pell": {
+        "name": "Погонщик Пелл",
+        "title": "Погонщик мулов",
+        "greeting": "Мулы пьют первыми. Караванный закон. Хотите оспорить закон у мула — милости прошу."
+      },
+      "dowser_emrys": {
+        "name": "Лозоходец Эмрис",
+        "title": "Искатель воды",
+        "greeting": "У водопада моя лоза гнётся вдвое — и больше нигде на сорок миль вокруг. Отнимите у этой земли один родник, и она станет кладбищем."
       },
       "tidewatcher_ondrel": {
         "name": "Ондрел Вейн",
@@ -7827,6 +8210,239 @@ export const ru_RU: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Моггер убит"
+          }
+        }
+      },
+      "q_sw_arrival": {
+        "title": "Последний колодец",
+        "text": "Добро пожаловать на край карты, {playerName}. Хайвотч зовёт эту затею «южной экспедицией»; я зову её сорока душами при одном роднике. Прежде всего остального — вода. Наберите четыре бурдюка в заводях Родника к северу от лагеря, чтобы я знала: тропой к водопаду можно ходить безопасно.",
+        "completion": "Холодная, чистая — и ни одной стрелы в вас. Лучшей новости у Последнего колодца не было за весь сезон.",
+        "objectives": {
+          "0": {
+            "label": "Полный бурдюк"
+          }
+        }
+      },
+      "q_sw_prowlers": {
+        "title": "Зубы сумерек",
+        "text": "Сумеречногривые выучили скрип наших водовозных телег, {playerName}. С каждыми сумерками они кружат всё ближе, а прошлой ночью утащили мула прямо в упряжи. Проредите стаи на равнине Костяного Ветра к югу от лагеря и принесите восемь шкур — как доказательство, что урок усвоен.",
+        "completion": "Восемь шкур — на восемь теней меньше у коновязи. Мулы, может, наконец выспятся; мне такое не светит.",
+        "objectives": {
+          "0": {
+            "label": "Сумеречногривый хищник: убито"
+          },
+          "1": {
+            "label": "Шкура сумеречногривого"
+          }
+        }
+      },
+      "q_sw_carrion_glass": {
+        "title": "Стекло и падаль",
+        "text": "Стеклянные скарабеи, как зовут их погонщики, — жуки размером с гончую, с панцирями из сплавленного стекла; они кишат на выжженной земле к востоку. Дерин клянётся, что их панцирь правит клинок лучше любого точила. Расколите восемь скарабеев и принесите шесть целых панцирей — и остерегайтесь блеска: он значит, что панцирь твердеет.",
+        "completion": "Вы только гляньте, как светится кромка! Дерин теперь должен мне заточку до конца дней, а восточная дорога должна вам тихую переправу.",
+        "objectives": {
+          "0": {
+            "label": "Стеклянный скарабей: убито"
+          },
+          "1": {
+            "label": "Панцирь стеклянного скарабея"
+          }
+        }
+      },
+      "q_sw_lost_caravan": {
+        "title": "Что забрали дюны",
+        "text": "Три повозки так и не дошли до колодца, {playerName}: зерно, инструменты — и муж моей сестры на козлах головной телеги. Буря разметала их по юго-западным дюнам. Найдите обломки и обыщите их. Мне нужны накладные, чтобы знать, что мы потеряли... и мне нужно знать, ушёл ли оттуда хоть кто-то живым.",
+        "completion": "Следы сапог ведут ПРОЧЬ от обломков — а дальше только следы мародёров. Возчиков взяли живыми. Это либо милосердие, либо арифметика, и я знаю, на что здесь принято ставить.",
+        "objectives": {
+          "0": {
+            "label": "Разбитая повозка обыскана"
+          }
+        }
+      },
+      "q_sw_marauders": {
+        "title": "Налог на воду",
+        "text": "Дюнные Клинки зовут это податью: вода или кровь, к оплате по первому взгляду. Их лагерь — в лощине к юго-западу от дюн; они пьют нашу украденную воду у наших украденных костров. Сломайте их, {playerName}. Десять мародёров — и принесите назад пять бурдюков: это жизни наших людей, зашитые в кожу.",
+        "completion": "Каждый бурдюк, что вы принесли, — это день, который кто-то у этого колодца не умрёт. Дюнные Клинки запомнят, во что обходится брать с нас подать.",
+        "objectives": {
+          "0": {
+            "label": "Мародёр Дюнных Клинков: убито"
+          },
+          "1": {
+            "label": "Украденный бурдюк"
+          }
+        }
+      },
+      "q_sw_karesh": {
+        "title": "Иссохший король",
+        "text": "Их вожак величает себя Карешем Иссохшим: он выпил досуха собственную цистерну и засолил остатки, чтобы никто из соперников не пошёл за ним. Человек, сотворивший такое со своим колодцем, с нашим сотворит худшее. Он держит двор в Лощине Кареша под западным гребнем. Оборвите его царствование, {playerName}, и принесите последний бурдюк, что он прячет.",
+        "completion": "Так вот он, последний бурдюк Иссохшего короля. Саффа выльет его обратно в колодец — до последней капли, из принципа.",
+        "objectives": {
+          "0": {
+            "label": "Кареш Иссохший: убит"
+          },
+          "1": {
+            "label": "Последний бурдюк Кареша"
+          }
+        }
+      },
+      "q_sw_survey": {
+        "title": "Прерванная фраза",
+        "text": "Теперь, когда колодец может вас отпустить, — пройдёмся по истории вместе, {playerName}. Солнечный двор оставил фрески: одну под Хребтом акведука, одну у подножия столовой горы, одну у башен-близнецов в руинах оазиса. Снимите оттиски со всех трёх. Зар'Кет умер на полуслове, и я намерен дочитать эту фразу до конца.",
+        "completion": "Вот оно — фраза завершается: «Когда корона стала слишком горяча, чтобы её носить, короли поднялись на гору и отдали огонь НАЗАД». Обряд отречения, сотворённый на обелисках: рассвет, затем полдень, затем закат. Порядок важен, {playerName}. Обряды всегда блюдут свой порядок.",
+        "objectives": {
+          "0": {
+            "label": "Оттиск фрески снят"
+          }
+        }
+      },
+      "q_sw_vigil_dawn": {
+        "title": "Бдение: рассвет",
+        "text": "Столовая гора к западу от лагеря и есть само Бдение — путь отречения королей. Обелиск Рассвета стоит на первой террасе, куда солнце бьёт первым. Поднимитесь по серпантину и возложите на него руку. Рассвет просыпается первым; фреска на этом весьма настаивает.",
+        "completion": "Вы почувствовали гул? Восхитительно. Обряд держит заряд даже спустя две эпохи. Рассвет зажжён — полдень ждёт выше.",
+        "objectives": {
+          "0": {
+            "label": "Печать огня рассвета получена у обелиска"
+          }
+        }
+      },
+      "q_sw_vigil_noon": {
+        "title": "Бдение: полдень",
+        "text": "Полдень венчает вершину: второй обелиск стоит на самом верху горы, где солнцу принадлежит всё небо. Подъём и есть суть, {playerName}: короли несли свои короны вверх каждый шаг этого пути. Пробудите Обелиск Полудня.",
+        "completion": "Рассвет, затем полдень. Остался один час обряда — и Бдение начинает нас замечать.",
+        "objectives": {
+          "0": {
+            "label": "Печать полуденного огня получена у обелиска"
+          }
+        }
+      },
+      "q_sw_vigil_dusk": {
+        "title": "Бдение: закат",
+        "text": "Закат всегда приходит на бдение последним: его обелиск стоит на западном отроге, над каньоном. Но поймите, что такое этот обряд, {playerName}: отречение должно быть ЗАСВИДЕТЕЛЬСТВОВАНО. Двор поставил свидетелем стража из живого камня горы, и когда закат зажжётся, тот проснётся судить: отрекаетесь вы — или просто берёте. Убедите его. Основательно.",
+        "completion": "Страж счёл вас достойным — или счёл неубиваемым, что для камня одно и то же заключение. Бдение завершено, и каждая дверь Зар'Кета только что стала вопросом, который стоит задать.",
+        "objectives": {
+          "0": {
+            "label": "Обелиск Заката пробуждён"
+          },
+          "1": {
+            "label": "Страж Бдения повержен"
+          }
+        }
+      },
+      "q_sw_revenants": {
+        "title": "Посты мёртвых",
+        "text": "Воинство Зар'Кета так и не узнало, что война проиграна, — не узнало даже, что она была КОРОТКОЙ. Они бродят по внешним руинам к северу от водопада, с доспехами, сплавленными с костями, и требуют у путников пароли, которых не помнит ни один живой язык. Упокойте двенадцать из них, {playerName}, и соберите их гарнизонные печати: печати проведут нас глубже в город.",
+        "completion": "Каждая печать ещё тёплая... верны до последнего — и дольше. То, что держит их стражу, сидит дальше, в глубине, — и теперь мы старше его по званию.",
+        "objectives": {
+          "0": {
+            "label": "Обожжённый солнцем ревенант: убито"
+          },
+          "1": {
+            "label": "Печать Стражи Короны"
+          }
+        }
+      },
+      "q_sw_courtiers": {
+        "title": "Пепельный двор",
+        "text": "Глубже в руинах всё ещё заседает сам двор: камергеры и чтецы блюдут протокол мёртвого короля, читая псалмы шлаковому трону. В их псалтырях — литургия святилища, а в литургии — обряд, зажигающий жаровни Короны. Разгоните заседание, {playerName}, и принесите мне псалтырь с целыми страницами.",
+        "completion": "О, это прекрасная работа: весь обряд жаровен, записанный рукой мёртвого кантора. Двести лет они пели его пустому трону. Мне их почти жаль. Почти.",
+        "objectives": {
+          "0": {
+            "label": "Пепельный придворный: убито"
+          },
+          "1": {
+            "label": "Пепельный псалтырь"
+          }
+        }
+      },
+      "q_sw_braziers": {
+        "title": "Корона в огнях",
+        "text": "Псалтырь называет три Жаровни Короны среди башен: зажгите все три, и внутреннее святилище откроется само, как открывалось для коронаций. Я расписал обряд мелом прямо на вашей рукавице, {playerName}; постарайтесь не вспотеть. И честное предупреждение: зажжённая корона — корона видимая. Всё в этом городе узнает о нас в тот миг, когда займётся третье пламя.",
+        "completion": "От колодца мы смотрели, как башни загораются одна за другой. Саффа плакала, и, признаюсь, я никому не читал об этом лекций. Святилище открыто. И что-то внутри поёт в ответ.",
+        "objectives": {
+          "0": {
+            "label": "Жаровня Короны зажжена"
+          }
+        }
+      },
+      "q_sw_sunspeaker": {
+        "title": "Десятая коронация",
+        "text": "Голос в святилище — это Атарис, Глас Солнца, венчавший всех девятерых королей Зар'Кета. Псалмы называют его живой памятью двора, и две эпохи он готовил десятую коронацию — для самого огня. Он стоит у Солнечного трона между башнями-близнецами. Низложите его, {playerName}, прежде чем он довершит обряд, о котором пожалеет вся пустыня.",
+        "completion": "Девять корон он возложил на девять чел, а десятая сожгла бы мир, чтобы прийтись впору. История запишет, что вы распустили двор Зар'Кета. Я лично прослежу, чтобы история выразилась именно так.",
+        "objectives": {
+          "0": {
+            "label": "Атарис, Глас Солнца: низложен"
+          }
+        }
+      },
+      "q_sw_emberveil": {
+        "title": "Пепельная Вуаль",
+        "text": "Вы видели лагеря под вуалями вдоль восточной кромки, {playerName}. Это Культ Вирма — отколовшаяся секта, Пепельная Вуаль, перешедшая перевал, пока Хайвотч стерёг врата святилища. Там, где материнский культ поёт, чтобы разбудить Вирма, эти копают, чтобы его ВООРУЖИТЬ. Их фанатики и пироманты прочёсывают стекло в поисках чего-то. Проредите их, пока они этого не нашли.",
+        "completion": "На шестнадцать лопат в этом стекле меньше. Но копают они день и ночь — они уже не ищут, {playerName}. Они ведут раскоп.",
+        "objectives": {
+          "0": {
+            "label": "Фанатик Пепельной Вуали: убито"
+          },
+          "1": {
+            "label": "Пиромант Пепельной Вуали: убито"
+          }
+        }
+      },
+      "q_sw_writs": {
+        "title": "Приказы Вуали",
+        "text": "Их вожаки носят приказы — распоряжения, писанные шифром материнского культа. Я взломал этот шифр в Хайвотче и взломаю его снова здесь. Принесите мне пять приказов Пепельной Вуали, {playerName}, и мы прочтём, за чем именно их послали.",
+        "completion": "Как я и боялся. «Добыть ПЕРВЫЙ УГОЛЬ — осколок пламени Владыки, что украли и заковали солнечные короли. Доставить его к вратам Святилища; печать не устоит перед собственным огнём». Они хотят выжечь дверь Вирма украденным огнём самого Вирма, {playerName}.",
+        "objectives": {
+          "0": {
+            "label": "Приказ Пепельной Вуали"
+          }
+        }
+      },
+      "q_sw_glasscut": {
+        "title": "Там, где горело небо",
+        "text": "Стеклянный разлом — это место, куда пал Первый Уголь в ту ночь, когда он уничтожил Зар'Кет. Земля там до сих пор пышет жаром, и по ней бродят тлеющие элементали — искры, что так и не догорели. Уголь просыпается, {playerName}: его искры смелеют по мере того, как культ докапывается всё ближе. Развейте восьмерых и принесите мне пять живых угольков. Я должен снять мерку с огня, что нам предстоит.",
+        "completion": "Они извиваются даже в освящённой соли... это драконье пламя, теперь сомнений нет. Уголь — не реликвия, {playerName}. Это ОСТАТОК: живой кусок гнева Корзула, и он помнит, как его носили короной.",
+        "objectives": {
+          "0": {
+            "label": "Тлеющий элементаль: убито"
+          },
+          "1": {
+            "label": "Живой уголёк"
+          }
+        }
+      },
+      "q_sw_offering": {
+        "title": "Родник помнит",
+        "text": "Жрец собрался выйти против огня — и вы вместе с ним. Тогда выслушайте мудрость хранителя колодца, {playerName}: Родник поднимается из-под самой темницы Вирма, а то, что течёт под вещью, знает эту вещь. Отнесите мою жертвенную чашу к заводи над водопадом, совершите возлияние и слушайте. Родник уже топил этот огонь однажды. Пусть благословит вас, прежде чем вы пойдёте проситься в пекло.",
+        "completion": "Вы тоже это слышали — глубокую воду, идущую под миром. Носите этот звук как броню, {playerName}. Огонь громок, но родник был здесь раньше — и останется после.",
+        "objectives": {
+          "0": {
+            "label": "Подношение совершено у Родника"
+          }
+        }
+      },
+      "q_sw_first_ember": {
+        "title": "Первый Уголь",
+        "text": "Он откопан, {playerName}. На рассвете яма культа провалилась, и Стеклянный разлом осветился изнутри: Первый Уголь стоит в кратере, который сам выжег две эпохи назад, нося пламя, как королевские регалии, и Пепельная Вуаль преклоняет перед ним колени рядами. Если он дойдёт до врат Святилища, всё, за что истекал кровью Хайвотч, обратится в пепел. На вас благословение Родника и свидетельство Бдения. Спуститесь в стекло и допишите фразу, начатую Зар'Кетом: огонь идёт НАЗАД.",
+        "completion": "Водопад побежал быстро и светло в тот самый миг, когда он погас: это родник принимает под воду старого врага. Вы сделали то, чего не смогли девять королей, {playerName}: вы отдали огонь назад. Садитесь. Пейте. Сегодня вода слаще всего.",
+        "objectives": {
+          "0": {
+            "label": "Первый Уголь погашен"
+          }
+        }
+      },
+      "q_sw_afterglow": {
+        "title": "Вода для живых",
+        "text": "Харук говорит, родник поёт теперь на ноту ниже — как выплаченный долг. Пепельная Вуаль — пепел или бегство, двор распущен, и в моём гроссбухе наконец больше воды, чем тревог. Последнее дело, {playerName}: пройдите по лагерю и дайте Марен, Каддису и брату Алдрику поблагодарить вас как подобает. Они это заслужили — и вы тоже.",
+        "completion": "Вот и всё — и Последний колодец теперь просто... колодец. Первый из многих на живой дороге, если старая караванщица хоть что-то здесь решает. Палящие Пустоши запомнят ваше имя, {playerName}, — вода помнит всё.",
+        "objectives": {
+          "0": {
+            "label": "Разговор с разведчицей Марен"
+          },
+          "1": {
+            "label": "Разговор с хранителем знаний Каддисом"
+          },
+          "2": {
+            "label": "Разговор с братом Алдриком"
           }
         }
       },

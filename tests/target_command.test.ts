@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Sim } from '../src/sim/sim';
-import { Entity, SimEvent } from '../src/sim/types';
+import type { Entity, SimEvent } from '../src/sim/types';
 
 function makeWorld() {
   return new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
@@ -15,7 +15,9 @@ function liveMob(sim: Sim): Entity {
 }
 
 function errors(events: SimEvent[]): string[] {
-  return events.filter((e): e is Extract<SimEvent, { type: 'error' }> => e.type === 'error').map((e) => e.text);
+  return events
+    .filter((e): e is Extract<SimEvent, { type: 'error' }> => e.type === 'error')
+    .map((e) => e.text);
 }
 
 describe('/target readout command', () => {

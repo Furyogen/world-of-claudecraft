@@ -225,6 +225,7 @@ import {
   resurrectAtCorpse,
   resurrectAtSpiritHealer,
   spawnOverworldSpiritHealers,
+  spawnSpiritHealerAt,
 } from './spirit';
 import {
   rollWorldBossLoot as rollWorldBossLootImpl,
@@ -272,6 +273,7 @@ import * as duelMod from './social/duel';
 // public path `import { Sim, eloDelta } from './sim'` (tests/arena.test.ts) holds.
 export { eloDelta } from './social/arena';
 
+import { damagingFluidAt } from './fluid_volumes';
 import * as fiestaMod from './social/fiesta';
 // A3: Fiesta tuning consts moved to social/fiesta.ts; these five are read back here
 // by the fiestaMatchInfo presentation accessor (which STAYS on Sim).
@@ -355,9 +357,15 @@ import {
   xpToReachLevel,
 } from './types';
 import {
+  caveMouthStepOk,
+  caveSheetAt,
+  caveWallBlocksStep,
   groundHeight,
+  groundHeightNear,
   nearSteepWalls,
+  onCaveSheet,
   terrainDownhill,
+  terrainHeight,
   terrainSteepnessAt,
   waterLevel,
 } from './world';
@@ -1154,7 +1162,9 @@ export class Sim {
 
     // Ravenpost mailboxes: one interactable raven pillar per town (draws no
     // rng; findSafePos is deterministic, so the camp draws above are unmoved).
-    for (const boxDef of MAILBOXES) {
+    // Blank-slate maps carry none of the shipped town fixtures.
+    const blankSlate = this.cfg.world?.presentationMode === 'blank';
+    for (const boxDef of blankSlate ? [] : MAILBOXES) {
       const safe = this.findSafePos(boxDef.x, boxDef.z, waterLevel() + 0.6);
       const box = createGroundObject(this.nextId++, '', 'Mailbox', this.groundPos(safe.x, safe.z));
       box.templateId = 'mailbox';
@@ -1165,7 +1175,6 @@ export class Sim {
     }
 
     // Dungeon entrances + their private instance slots
-    const blankSlate = this.cfg.world?.presentationMode === 'blank';
     for (const dungeon of DUNGEON_LIST) {
       if (dungeon.overworldDoor === false) {
         for (let i = 0; i < INSTANCE_SLOT_COUNT; i++) {
@@ -1210,10 +1219,19 @@ export class Sim {
 
     // Spirit Healers (the angels): one hovering at every overworld graveyard.
     // Per-instance dungeon/raid healers spawn on claim (instances/dungeons.ts).
-    // createNpc draws no rng, so world-gen determinism is preserved.
-    spawnOverworldSpiritHealers(this.ctx);
+    // createNpc draws no rng, so world-gen determinism is preserved. A blank
+    // map has no graveyards, so it gets a single Pale Keeper at its starting
+    // spawn point (where released spirits also return, see spirit.ts).
+    if (!blankSlate) {
+      spawnOverworldSpiritHealers(this.ctx);
+    } else if (this.cfg.world) {
+      const ps = this.cfg.world.playerStart;
+      spawnSpiritHealerAt(this.ctx, ps.x, ps.z);
+    }
 
-    for (const delve of DELVE_LIST) {
+    // Blank-slate maps carry no delve content (matching the door gate above),
+    // so no delve run can ever start or prebuild interiors there.
+    for (const delve of blankSlate ? [] : DELVE_LIST) {
       for (let i = 0; i < DELVE_SLOT_COUNT; i++) {
         const origin = delveOrigin(delve.index, i);
         this.delveRuns.push({
@@ -1308,6 +1326,8 @@ export class Sim {
   // a spawn actually fires (which never happens inside the short parity scenarios),
   // so existing determinism traces are unaffected.
   private updateWorldBosses(): void {
+    // Blank-slate maps have no built-in world content, bosses included.
+    if (this.cfg.world?.presentationMode === 'blank') return;
     for (let i = 0; i < WORLD_BOSSES.length; i++) {
       const def = WORLD_BOSSES[i];
       const liveId = this.worldBossEntityIds[i];
@@ -2820,6 +2840,7 @@ export class Sim {
         this.updatePlayerMovement(p, meta);
         this.updateDoorTriggers(p);
       }
+      this.updateFluidDamage(p);
       updateTimers(p);
       updateComboExpiry(this.ctx, p);
       updateAuras(this.ctx, p);
@@ -3093,20 +3114,23 @@ export class Sim {
     const nx = p.pos.x + Math.sin(p.facing) * step;
     const nz = p.pos.z + Math.cos(p.facing) * step;
     // deep water and cliffs end the charge early rather than dragging the player in
-    const h0 = groundHeight(p.pos.x, p.pos.z, this.cfg.seed);
-    const h1 = groundHeight(nx, nz, this.cfg.seed);
+    const h0 = groundHeightNear(p.pos.x, p.pos.z, this.cfg.seed, p.pos.y);
+    const h1 = groundHeightNear(nx, nz, this.cfg.seed, p.pos.y);
     if (h1 < waterLevel() - SWIM_DEPTH) return done(false);
     if (
-      h1 > h0 &&
-      ((h1 - h0) / step > MAX_CLIMB_SLOPE ||
-        terrainSteepnessAt(nx, nz, this.cfg.seed) > MAX_CLIMB_SLOPE)
+      (h1 > h0 &&
+        ((h1 - h0) / step > MAX_CLIMB_SLOPE ||
+          (!onCaveSheet(nx, nz, this.cfg.seed, p.pos.y) &&
+            terrainSteepnessAt(nx, nz, this.cfg.seed) > MAX_CLIMB_SLOPE)) &&
+        !caveMouthStepOk(this.cfg.seed, p.pos.x, p.pos.z, p.pos.y, nx, nz, h0, h1)) ||
+      caveWallBlocksStep(this.cfg.seed, p.pos.x, p.pos.z, p.pos.y, nx, nz)
     ) {
       return done(false);
     }
     const resolved = this.resolveMove(p.pos.x, p.pos.z, nx, nz, BODY_RADIUS, p);
     p.pos.x = resolved.x;
     p.pos.z = resolved.z;
-    p.pos.y = groundHeight(resolved.x, resolved.z, this.cfg.seed);
+    p.pos.y = groundHeightNear(resolved.x, resolved.z, this.cfg.seed, p.pos.y);
     p.vy = 0;
     p.onGround = true;
     p.fallStartY = p.pos.y;
@@ -3161,21 +3185,24 @@ export class Sim {
     const step = Math.min(speed * DT, d - FOLLOW_STOP_DIST);
     const nx = p.pos.x + Math.sin(p.facing) * step;
     const nz = p.pos.z + Math.cos(p.facing) * step;
-    const h0 = groundHeight(p.pos.x, p.pos.z, this.cfg.seed);
-    const h1 = groundHeight(nx, nz, this.cfg.seed);
+    const h0 = groundHeightNear(p.pos.x, p.pos.z, this.cfg.seed, p.pos.y);
+    const h1 = groundHeightNear(nx, nz, this.cfg.seed, p.pos.y);
     if (h1 < waterLevel() - SWIM_DEPTH) return true; // don't trail into deep water
     if (
-      h1 > h0 &&
-      step > 1e-5 &&
-      ((h1 - h0) / step > MAX_CLIMB_SLOPE ||
-        terrainSteepnessAt(nx, nz, this.cfg.seed) > MAX_CLIMB_SLOPE)
+      (h1 > h0 &&
+        step > 1e-5 &&
+        ((h1 - h0) / step > MAX_CLIMB_SLOPE ||
+          (!onCaveSheet(nx, nz, this.cfg.seed, p.pos.y) &&
+            terrainSteepnessAt(nx, nz, this.cfg.seed) > MAX_CLIMB_SLOPE)) &&
+        !caveMouthStepOk(this.cfg.seed, p.pos.x, p.pos.z, p.pos.y, nx, nz, h0, h1)) ||
+      caveWallBlocksStep(this.cfg.seed, p.pos.x, p.pos.z, p.pos.y, nx, nz)
     ) {
       return true; // wall/cliff
     }
     const resolved = this.resolveMove(p.pos.x, p.pos.z, nx, nz, BODY_RADIUS, p);
     p.pos.x = resolved.x;
     p.pos.z = resolved.z;
-    p.pos.y = groundHeight(resolved.x, resolved.z, this.cfg.seed);
+    p.pos.y = groundHeightNear(resolved.x, resolved.z, this.cfg.seed, p.pos.y);
     p.vy = 0;
     p.onGround = true;
     p.fallStartY = p.pos.y;
@@ -3221,9 +3248,13 @@ export class Sim {
     const hasMoveInput = mx !== 0 || mz !== 0;
     const swimming = this.isSwimming(p);
     // Standing on unwalkably steep ground: no control, no jump, slide downhill.
+    // Gated to the SURFACE sheet: on the cave sheet the overhead terrain's
+    // gradient is meaningless (a flat tunnel floor under a hillside must not
+    // freeze the mover or slide them back out of the bore).
     const steepGround =
       p.onGround &&
       !swimming &&
+      !onCaveSheet(p.pos.x, p.pos.z, this.cfg.seed, p.pos.y) &&
       terrainSteepnessAt(p.pos.x, p.pos.z, this.cfg.seed) > MAX_CLIMB_SLOPE;
     const moving = hasMoveInput && !isRooted(p) && !steepGround;
     let wishX = 0,
@@ -3266,14 +3297,22 @@ export class Sim {
       // lands on ground whose true gradient is unwalkable (so approaching at an
       // angle cannot cheat the limit)
       if (p.onGround && !swimming) {
-        const h0 = groundHeight(p.pos.x, p.pos.z, this.cfg.seed);
-        const h1 = groundHeight(nx, nz, this.cfg.seed);
+        // Sheet-aware ground: inside an enclosed cave the mover's sheet is the
+        // cave floor, and stepping into the bore wall means the only sheet at
+        // the target is the surface ROOF far above — the slope gate blocks it
+        // like any cliff. The surface steepness gate is skipped on the cave
+        // sheet (the roof's gradient is meaningless underground).
+        const h0 = groundHeightNear(p.pos.x, p.pos.z, this.cfg.seed, p.pos.y);
+        const h1 = groundHeightNear(nx, nz, this.cfg.seed, p.pos.y);
         const run = Math.hypot(nx - p.pos.x, nz - p.pos.z);
         if (
-          h1 > h0 &&
-          run > 1e-5 &&
-          ((h1 - h0) / run > MAX_CLIMB_SLOPE ||
-            terrainSteepnessAt(nx, nz, this.cfg.seed) > MAX_CLIMB_SLOPE)
+          (h1 > h0 &&
+            run > 1e-5 &&
+            ((h1 - h0) / run > MAX_CLIMB_SLOPE ||
+              (!onCaveSheet(nx, nz, this.cfg.seed, p.pos.y) &&
+                terrainSteepnessAt(nx, nz, this.cfg.seed) > MAX_CLIMB_SLOPE)) &&
+            !caveMouthStepOk(this.cfg.seed, p.pos.x, p.pos.z, p.pos.y, nx, nz, h0, h1)) ||
+          caveWallBlocksStep(this.cfg.seed, p.pos.x, p.pos.z, p.pos.y, nx, nz)
         ) {
           nx = p.pos.x;
           nz = p.pos.z;
@@ -3282,21 +3321,29 @@ export class Sim {
         // Airborne, the same wall rule applies: terrain rising above the body
         // that could not be walked up cannot be jumped into either. The player
         // drops at the base of the face instead of beaching partway up it.
-        const h1 = groundHeight(nx, nz, this.cfg.seed);
+        const h1 = groundHeightNear(nx, nz, this.cfg.seed, p.pos.y);
         if (h1 > p.pos.y) {
-          const h0 = groundHeight(p.pos.x, p.pos.z, this.cfg.seed);
+          const h0 = groundHeightNear(p.pos.x, p.pos.z, this.cfg.seed, p.pos.y);
           const run = Math.hypot(nx - p.pos.x, nz - p.pos.z);
           if (
             h1 > h0 &&
             run > 1e-5 &&
             ((h1 - h0) / run > MAX_CLIMB_SLOPE ||
-              terrainSteepnessAt(nx, nz, this.cfg.seed) > MAX_CLIMB_SLOPE)
+              (!onCaveSheet(nx, nz, this.cfg.seed, p.pos.y) &&
+                terrainSteepnessAt(nx, nz, this.cfg.seed) > MAX_CLIMB_SLOPE))
           ) {
             nx = p.pos.x;
             nz = p.pos.z;
             p.vx = 0;
             p.vz = 0;
           }
+        }
+        // A jump arc cannot pass through the cave's rock side wall either.
+        if (caveWallBlocksStep(this.cfg.seed, p.pos.x, p.pos.z, p.pos.y, nx, nz)) {
+          nx = p.pos.x;
+          nz = p.pos.z;
+          p.vx = 0;
+          p.vz = 0;
         }
       }
       // Slide along buildings, trees, crypt walls — but while airborne from a
@@ -3314,7 +3361,19 @@ export class Sim {
     }
 
     // Vertical: jumping, gravity, swimming, fall damage
-    const ground = groundHeight(p.pos.x, p.pos.z, this.cfg.seed);
+    const ground = groundHeightNear(p.pos.x, p.pos.z, this.cfg.seed, p.pos.y);
+    // Under an enclosed cave roof a jump caps at the ceiling: heads bonk
+    // instead of phasing up through rock onto the surface sheet.
+    const caveRoof = caveSheetAt(p.pos.x, p.pos.z);
+    if (
+      caveRoof &&
+      !p.onGround &&
+      Math.abs(ground - caveRoof.floor) < 0.01 &&
+      p.pos.y + 1.8 > caveRoof.ceiling
+    ) {
+      p.pos.y = Math.max(ground, caveRoof.ceiling - 1.8);
+      if (p.vy > 0) p.vy = 0;
+    }
     const deepWater = ground < waterLevel() - SWIM_DEPTH;
     if (deepWater && p.pos.y <= swimSurfaceY() + 0.05) {
       // treading water at the surface
@@ -3394,6 +3453,28 @@ export class Sim {
         p.fallStartY = ground;
       }
     }
+  }
+
+  // Environmental fluid damage: standing/swimming in a damaging fluid pool
+  // (lava, acid, ... — editor 'fluid/<kind>' placements) ticks its DPS once
+  // per second, DoT-style (no rage, indirect). Fluid pools are fully
+  // independent of the map-wide water level. Cheap on fluid-free maps.
+  private updateFluidDamage(p: Entity): void {
+    const fluids = getActiveWorldContent().fluids;
+    if (!fluids || fluids.length === 0 || p.dead) return;
+    // One shared cadence for everyone: tick on whole seconds of sim time.
+    if (this.tickCount % 20 !== 0) return;
+    const v = damagingFluidAt(
+      fluids,
+      p.pos.x,
+      p.pos.z,
+      p.pos.y,
+      (f) => terrainHeight(f.x, f.z, this.cfg.seed) + f.offsetY,
+    );
+    if (!v) return;
+    const dmg = Math.max(1, Math.round(v.dps));
+    const name = v.kind === 'lava' ? 'Lava' : v.kind === 'acid' ? 'Acid' : 'Noxious Fluid';
+    this.dealDamage(null, p, dmg, false, v.school, name, 'hit', true, undefined, false);
   }
 
   private standUp(p: Entity): void {
@@ -3661,15 +3742,17 @@ export class Sim {
       const adv = Math.min(STEP, distance - moved);
       const nx = cx + ux * adv,
         nz = cz + uz * adv;
-      const h0 = groundHeight(cx, cz, this.cfg.seed);
-      const h1 = groundHeight(nx, nz, this.cfg.seed);
+      const h0 = groundHeightNear(cx, cz, this.cfg.seed, target.pos.y);
+      const h1 = groundHeightNear(nx, nz, this.cfg.seed, target.pos.y);
       if (h1 < waterLevel() - SWIM_DEPTH) break; // would land in deep water
       if (
-        h1 > h0 &&
-        ((h1 - h0) / adv > MAX_CLIMB_SLOPE ||
-          terrainSteepnessAt(nx, nz, this.cfg.seed) > MAX_CLIMB_SLOPE)
+        (h1 > h0 &&
+          ((h1 - h0) / adv > MAX_CLIMB_SLOPE ||
+            (!onCaveSheet(nx, nz, this.cfg.seed, target.pos.y) &&
+              terrainSteepnessAt(nx, nz, this.cfg.seed) > MAX_CLIMB_SLOPE))) ||
+        caveWallBlocksStep(this.cfg.seed, cx, cz, target.pos.y, nx, nz)
       ) {
-        break; // would slam into a cliff
+        break; // would slam into a cliff (or the cave's rock wall)
       }
       // resolveMove sweeps cx,cz -> nx,nz against static colliders (walls,
       // pillars, delve module bounds/doors) in small sub-steps, so a thin wall
@@ -3685,7 +3768,7 @@ export class Sim {
     if (moved <= 0) return 0;
     target.pos.x = cx;
     target.pos.z = cz;
-    target.pos.y = groundHeight(cx, cz, this.cfg.seed);
+    target.pos.y = groundHeightNear(cx, cz, this.cfg.seed, target.pos.y);
     target.vy = 0;
     target.onGround = true;
     target.fallStartY = target.pos.y;
@@ -4435,10 +4518,26 @@ export class Sim {
       // screens next, and only actual wall cells pay for exact heights. This
       // is a NEW gate for these movers, so the finer per-step cliff check
       // players get is not replicated here.
-      if (nearSteepWalls(nx, nz) && terrainSteepnessAt(nx, nz, this.cfg.seed) > MAX_CLIMB_SLOPE) {
+      if (
+        !onCaveSheet(nx, nz, this.cfg.seed, e.pos.y) &&
+        nearSteepWalls(nx, nz) &&
+        terrainSteepnessAt(nx, nz, this.cfg.seed) > MAX_CLIMB_SLOPE
+      ) {
         if (Number.isNaN(h0)) h0 = ride(groundHeight(e.pos.x, e.pos.z, this.cfg.seed));
         if (ride(groundHeight(nx, nz, this.cfg.seed)) > h0) continue;
       }
+      // Cave sheets: inside a bore footprint a mover may not step between the
+      // cave floor and the surface roof mid-bore (the bore wall); only mouths,
+      // where the sheets meet, allow the transfer. Cheap: both samples are
+      // null on cave-free maps and outside footprints.
+      if (
+        (caveSheetAt(nx, nz) || caveSheetAt(e.pos.x, e.pos.z)) &&
+        Math.abs(groundHeightNear(nx, nz, this.cfg.seed, e.pos.y) - e.pos.y) > 1.6
+      ) {
+        continue;
+      }
+      // The horseshoe side wall is rock for mobs and pets too.
+      if (caveWallBlocksStep(this.cfg.seed, e.pos.x, e.pos.z, e.pos.y, nx, nz)) continue;
       const r = this.resolveMovePoint(nx, nz, BODY_RADIUS, e);
       const progress = d - Math.hypot(r.x - dest.x, r.z - dest.z);
       if (progress > bestProgress) {
@@ -4450,7 +4549,7 @@ export class Sim {
     }
     e.pos.x = bestX;
     e.pos.z = bestZ;
-    const g = groundHeight(bestX, bestZ, this.cfg.seed);
+    const g = groundHeightNear(bestX, bestZ, this.cfg.seed, e.pos.y);
     e.pos.y = canSwim && g < waterLevel() - SWIM_DEPTH ? swimSurfaceY() : g;
     return dist2d(e.pos, dest) < 0.3;
   }
@@ -6166,7 +6265,19 @@ export class Sim {
     ignoreFences = false,
   ): { x: number; z: number } {
     const run = isDelvePos(nx) || isDelvePos(e.pos.x) ? this.delveRunForEntity(e) : undefined;
-    const res = resolveMovement(this.cfg.seed, fromX, fromZ, nx, nz, r, ignoreFences, run?.modules);
+    // The mover's height rides along so a mover inside a cave tube passes
+    // UNDER surface props/trees/fences instead of hitting their 2D footprints.
+    const res = resolveMovement(
+      this.cfg.seed,
+      fromX,
+      fromZ,
+      nx,
+      nz,
+      r,
+      ignoreFences,
+      run?.modules,
+      e.pos.y,
+    );
     if (!run) return res;
     const clamped = this.clampDelveModuleBounds(run, res.x, res.z, r);
     return this.clampDelveDoors(run, clamped.x, clamped.z, r);
@@ -6175,7 +6286,7 @@ export class Sim {
   // Point resolution for mob wander / blocked checks, with the same delve layering.
   private resolveMovePoint(nx: number, nz: number, r: number, e: Entity): { x: number; z: number } {
     const run = isDelvePos(nx) || isDelvePos(e.pos.x) ? this.delveRunForEntity(e) : undefined;
-    const res = resolvePosition(this.cfg.seed, nx, nz, r, false, run?.modules);
+    const res = resolvePosition(this.cfg.seed, nx, nz, r, false, run?.modules, e.pos.y);
     if (!run) return res;
     const clamped = this.clampDelveModuleBounds(run, res.x, res.z, r);
     return this.clampDelveDoors(run, clamped.x, clamped.z, r);

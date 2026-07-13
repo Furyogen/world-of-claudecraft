@@ -3,7 +3,7 @@
 // only on this interface; main.ts injects the real `sfx` singleton. This keeps
 // src/render/ free of any src/game/ import (see src/CLAUDE.md dependency rules).
 
-import type { BiomeId } from '../sim/types';
+import type { BiomeId, MapPointSound } from '../sim/types';
 
 export type Surface = 'grass' | 'dirt' | 'stone' | 'wood' | 'snow' | 'water';
 
@@ -34,4 +34,9 @@ export interface SpatialAudioSink {
     precip: 'snow' | 'rain' | null,
     nearWater: boolean,
   ): void;
+  /** Per-frame update of the map's authored positional point sounds (looping
+   *  SFX emitters): the engine loops each within its radius (panned + distance-
+   *  attenuated to that radius) and stops the ones out of range. `l*` is the
+   *  listener position, for cheap distance culling. */
+  pointSounds(nodes: readonly MapPointSound[], lx: number, ly: number, lz: number): void;
 }

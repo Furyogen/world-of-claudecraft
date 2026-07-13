@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { Sim } from '../src/sim/sim';
 import { MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
+import { Sim } from '../src/sim/sim';
 
 const SEED = 42;
 const makeSim = () => new Sim({ seed: SEED, playerClass: 'warrior', autoEquip: true });
@@ -19,9 +19,11 @@ const setup = () => {
 const swingUntilHit = (sim: Sim, mob: any, target: any, max = 200) => {
   for (let i = 0; i < max; i++) {
     target.hp = target.maxHp; // top up so a bite never kills (death would clear auras)
-    const before = target.auras.length + (target.auras.find((a: any) => a.kind === 'sunder')?.stacks ?? 0);
+    const before =
+      target.auras.length + (target.auras.find((a: any) => a.kind === 'sunder')?.stacks ?? 0);
     (sim as any).mobSwing(mob, target);
-    const after = target.auras.length + (target.auras.find((a: any) => a.kind === 'sunder')?.stacks ?? 0);
+    const after =
+      target.auras.length + (target.auras.find((a: any) => a.kind === 'sunder')?.stacks ?? 0);
     if (after > before) return true;
   }
   return false;
@@ -87,7 +89,10 @@ describe('mob corrosive armor shred (Acid Spit)', () => {
     const old = corrode.chance;
     corrode.chance = 1;
     try {
-      for (let i = 0; i < 50; i++) { player.hp = player.maxHp; (sim as any).mobSwing(mob, player); }
+      for (let i = 0; i < 50; i++) {
+        player.hp = player.maxHp;
+        (sim as any).mobSwing(mob, player);
+      }
     } finally {
       corrode.chance = old;
     }

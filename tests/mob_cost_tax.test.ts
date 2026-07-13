@@ -4,9 +4,9 @@
 // resolved resource cost — resolved at the single resolvedAbility() choke point,
 // so the affordability check and the actual spend always agree.
 import { describe, expect, it } from 'vitest';
-import { Sim } from '../src/sim/sim';
 import { MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
+import { Sim } from '../src/sim/sim';
 import type { Entity } from '../src/sim/types';
 
 function makeSim(playerClass: 'warrior' | 'mage' = 'mage') {
@@ -16,7 +16,11 @@ function makeSim(playerClass: 'warrior' | 'mage' = 'mage') {
 // Spawn a Gravecaller Mender adjacent to the player, engaged and ready to swing.
 function spawnMender(sim: Sim, target: Entity): Entity {
   const template = MOBS['gravecaller_mender'];
-  const mob = createMob((sim as any).nextId++, template, 12, { x: target.pos.x, y: target.pos.y, z: target.pos.z });
+  const mob = createMob((sim as any).nextId++, template, 12, {
+    x: target.pos.x,
+    y: target.pos.y,
+    z: target.pos.z,
+  });
   mob.hostile = true;
   (sim as any).addEntity(mob);
   return mob;
@@ -30,7 +34,13 @@ function swing(sim: Sim, mob: Entity, target: Entity) {
   const rng = (sim as any).rng;
   const realNext = rng.next.bind(rng);
   let firstRoll = true;
-  rng.next = () => { if (firstRoll) { firstRoll = false; return 0.999; } return realNext(); };
+  rng.next = () => {
+    if (firstRoll) {
+      firstRoll = false;
+      return 0.999;
+    }
+    return realNext();
+  };
   try {
     (sim as any).mobSwing(mob, target);
   } finally {
@@ -39,21 +49,32 @@ function swing(sim: Sim, mob: Entity, target: Entity) {
 }
 
 const taxAura = (sourceId: number, pct = 0.4) => ({
-  id: 'cost_tax_gravecaller_mender', name: 'Draining Litany', kind: 'cost_tax' as const,
-  remaining: 8, duration: 8, value: pct, sourceId, school: 'shadow' as const,
+  id: 'cost_tax_gravecaller_mender',
+  name: 'Draining Litany',
+  kind: 'cost_tax' as const,
+  remaining: 8,
+  duration: 8,
+  value: pct,
+  sourceId,
+  school: 'shadow' as const,
 });
 
 describe('mob cost-tax ("Draining Litany")', () => {
   it('seeds the cost-tax mechanic on the Gravecaller Mender', () => {
     expect(MOBS['gravecaller_mender'].costTax).toEqual({
-      chance: 0.3, pct: 0.4, duration: 8, name: 'Draining Litany', school: 'shadow',
+      chance: 0.3,
+      pct: 0.4,
+      duration: 8,
+      name: 'Draining Litany',
+      school: 'shadow',
     });
   });
 
   it('applies a cost_tax aura on a landed hit when it rolls', () => {
     const sim = makeSim();
     const p = sim.player;
-    p.maxHp = 100000; p.hp = 100000;
+    p.maxHp = 100000;
+    p.hp = 100000;
     const mob = spawnMender(sim, p);
     MOBS['gravecaller_mender'].costTax!.chance = 1; // deterministic for the test
     swing(sim, mob, p);
@@ -87,7 +108,8 @@ describe('mob cost-tax ("Draining Litany")', () => {
   it('a friendly pet swing never taxes its target', () => {
     const sim = makeSim('mage');
     const p = sim.player;
-    p.maxHp = 100000; p.hp = 100000;
+    p.maxHp = 100000;
+    p.hp = 100000;
     const pet = spawnMender(sim, p);
     pet.hostile = false; // a tamed/friendly mender shape
     pet.ownerId = p.id;

@@ -16,6 +16,7 @@ import {
   biomeAt,
   generateDecorations,
   roadDistance,
+  terrainCutAt,
   terrainHeight,
   waterLevel,
   zoneBiomeAt,
@@ -1176,6 +1177,7 @@ function generateDressing(seed: number): DressingSpot[] {
       if (roadDistance(x, z) < 4) continue;
       if (terrainHeight(x, z, seed) < waterLevel() + 1.2) continue;
       if (tooSteep(x, z, seed)) continue;
+      if (terrainCutAt(x, z, seed)) continue; // no shrubs floating over hole cutouts
       const kind = dressKindFor(biome, hashAt(gx, gz, 44));
       const [sMin, sRange] = DRESS_SCALE[kind];
       out.push({ x, z, kind, scale: (sMin + hashAt(gx, gz, 45) * sRange) * scaleBoost });
@@ -1501,6 +1503,8 @@ function buildGrassRing(parent: THREE.Group, seed: number): GrassRing {
         if (h < waterLevel() + 1.6) continue;
         // no blades pasted onto cliff faces
         if (tooSteep(x, z, seed)) continue;
+        // no blades floating over hole cutouts
+        if (terrainCutAt(x, z, seed)) continue;
         let nearHub = false;
         for (const zn of ZONES) {
           if (Math.hypot(x - zn.hub.x, z - zn.hub.z) < 15) {

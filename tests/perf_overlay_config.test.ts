@@ -1,14 +1,22 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import {
-  defaultPerfOverlayConfig, FONT_SCALE_MAX, FONT_SCALE_MIN, PerfOverlayConfigStore, sanitizePerfOverlayConfig,
+  defaultPerfOverlayConfig,
+  FONT_SCALE_MAX,
+  FONT_SCALE_MIN,
+  PerfOverlayConfigStore,
+  sanitizePerfOverlayConfig,
 } from '../src/ui/perf_overlay_config';
 
 function installStorage(): void {
   const map = new Map<string, string>();
   (globalThis as any).localStorage = {
     getItem: (k: string) => (map.has(k) ? map.get(k)! : null),
-    setItem: (k: string, v: string) => { map.set(k, v); },
-    removeItem: (k: string) => { map.delete(k); },
+    setItem: (k: string, v: string) => {
+      map.set(k, v);
+    },
+    removeItem: (k: string) => {
+      map.delete(k);
+    },
     clear: () => map.clear(),
   };
 }
@@ -44,11 +52,15 @@ describe('sanitizePerfOverlayConfig', () => {
   it('rejects malformed colors but keeps valid hex (lowercased)', () => {
     expect(sanitizePerfOverlayConfig({ textColor: 'red' }).textColor).toBe('#ffd76a');
     expect(sanitizePerfOverlayConfig({ textColor: '#ABCDEF' }).textColor).toBe('#abcdef');
-    expect(sanitizePerfOverlayConfig({ bgColor: '#zzzzzz' }).bgColor).toBe(defaultPerfOverlayConfig().bgColor);
+    expect(sanitizePerfOverlayConfig({ bgColor: '#zzzzzz' }).bgColor).toBe(
+      defaultPerfOverlayConfig().bgColor,
+    );
   });
 
   it('merges only known metric keys with boolean values', () => {
-    const c = sanitizePerfOverlayConfig({ metrics: { fps: false, bogus: true, triangles: 'yes' } as any });
+    const c = sanitizePerfOverlayConfig({
+      metrics: { fps: false, bogus: true, triangles: 'yes' } as any,
+    });
     expect(c.metrics.fps).toBe(false);
     expect((c.metrics as any).bogus).toBeUndefined();
     expect(c.metrics.triangles).toBe(false); // non-boolean ignored, keeps default

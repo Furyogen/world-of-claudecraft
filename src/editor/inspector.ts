@@ -8,19 +8,30 @@ import { MUSIC_ZONES } from '../game/music';
 import { assetUrl } from '../render/assets/media';
 import { BUILTIN_SKYBOXES } from '../render/assets/skyboxes';
 import type { EditorLightingProfile } from '../render/editor_lighting';
-import { COLLIDER_DEFAULT_SIZE, type ColliderVolumeKind } from '../sim/collider_volumes';
+import { DEFAULT_TEXTURE_TILE_YD } from '../render/terrain';
 import {
+  builtinShaFor,
+  paintDefaultSets,
+  TERRAIN_TEXTURE_SETS,
+} from '../render/terrain_texture_sets';
+import { COLLIDER_DEFAULT_SIZE, type ColliderVolumeKind } from '../sim/collider_volumes';
+import { FLUID_PRESETS, type FluidKind } from '../sim/fluid_volumes';
+import {
+  type CollisionMode,
   collideRadiusFor,
   MAX_COLLIDE_RADIUS,
   MAX_WATER_LEVEL,
   MIN_COLLIDE_RADIUS,
   MIN_WATER_LEVEL,
+  ROCK_ASSET_ID,
 } from '../sim/map_doc';
 import type { CustomPaintSwatch } from '../sim/types';
 import { formatNumber, t } from '../ui/i18n';
 import { brushAlphaThumb, listBrushAlphas, removeBrushAlpha } from './brush_alphas';
-import { button, checkbox, el, iconButton, slider } from './dom';
+import { button, checkbox, el, iconButton, selectRow, slider } from './dom';
 import { PLACEMENT_SCALE_MAX, PLACEMENT_SCALE_MIN } from './placement_transform_core';
+import { POINT_SOUND_CLIPS, pointSoundLabel } from './point_sounds';
+import { adjustedSwatchColor } from './swatch_color';
 import type { EditorTool } from './toolbar';
 
 // Scene Collection row glyphs (24x24 stroke paths, Feather-style) painted via
@@ -54,6 +65,19 @@ export interface PlacementSelection {
   collideRadius: number | null;
   /** Footprint shape: null = circle (default), 'square' = yaw-following box. */
   collideShape: 'square' | null;
+  /** The effective collision type (the dropdown's value). */
+  collisionMode: CollisionMode;
+  /** Boxes the baked mode would block with (edited count when edited). */
+  hitboxCount: number;
+  /** The placement carries hand-edited hitboxes. */
+  hasHitboxEdits: boolean;
+  /** A hitbox preset for this asset exists on this device. */
+  hasHitboxPreset: boolean;
+  /** How many OTHER placements on the map share this asset id (0 = unique). */
+  sameAssetCount: number;
+  /** "True collision" fine-bake state for this asset. */
+  meshBakeReady: boolean;
+  meshBakePending: boolean;
   /** Non-null when the selection is a collider volume placement. */
   colliderKind: ColliderVolumeKind | null;
   /** Shader tweaks (null = not overridden). */
@@ -67,6 +91,24 @@ export interface PlacementSelection {
   sizeX: number | null;
   sizeY: number | null;
   sizeZ: number | null;
+  /** Non-null when the selection is a fluid pool placement. */
+  fluidKind: FluidKind | null;
+  /** Fluid tint overrides (null = the kind preset). */
+  hue: number | null;
+  lum: number | null;
+  fluidDps: number | null;
+  fluidFx: number | null;
+  /** Generated-rock shape params (null = defaults / not a generated rock). */
+  rockSeed: number | null;
+  rockNoise: number | null;
+  rockDetail: number | null;
+  rockSharp: number | null;
+  rockTex: number | null;
+  rockHeight: number | null;
+  rockDepth: number | null;
+  rockJag: number | null;
+  rockTexId: string | null;
+  rockTexTile: number | null;
 }
 
 export interface MarkerSelection {
@@ -131,6 +173,22 @@ export interface InspectorDeps {
     change: Partial<{ y: number; color: number; intensity: number; range: number }>,
   ): void;
   deleteMapLight(index: number): void;
+  getMapSounds(): readonly {
+    x: number;
+    z: number;
+    y: number;
+    sound: string;
+    volume: number;
+    radius: number;
+  }[];
+  /** Selected map point sound (viewport badge click or panel row click), null. */
+  getSelectedSound(): number | null;
+  setSelectedSound(index: number | null): void;
+  updateMapSound(
+    index: number,
+    change: Partial<{ y: number; sound: string; volume: number; radius: number }>,
+  ): void;
+  deleteMapSound(index: number): void;
   getMarkers(): readonly { name: string; kind: 'npc' | 'object'; x: number; z: number }[];
   getMarkerMode(): { placing: boolean; kind: 'npc' | 'object' };
   setMarkerMode(change: Partial<{ placing: boolean; kind: 'npc' | 'object' }>): void;
@@ -152,8 +210,13 @@ export interface InspectorDeps {
       shoreSand: boolean;
     }>,
   ): void;
-  addCustomSwatch(color: number, label: string): void;
+  /** Hue/light adjust of the active paint texture (built-in biomes get or
+   *  reuse a custom variant swatch; custom swatches edit their own fields). */
+  setPaintAdjust(change: { hueShift?: number; light?: number }): void;
+  saveAdjustedSwatch(): void;
   importTextureSwatch(): void;
+  /** Pick a built-in library texture set (materializes a swatch on first use). */
+  pickBuiltinTexture(key: string): void;
   /** Object URL of an imported ground texture (for swatch thumbnails), or
    *  null while it has not resolved from IndexedDB yet. */
   swatchTextureUrl(sha: string): string | null;
@@ -198,6 +261,10 @@ export interface InspectorDeps {
 
   getSculptLower(): boolean;
   setSculptLower(on: boolean): void;
+  /** Grab (snake hook) mode for the Sculpt tool: press grabs the ground and
+   *  the drag pulls it up/down with the cursor. */
+  getSculptGrab(): boolean;
+  setSculptGrab(on: boolean): void;
   /** Slope-based auto texture for the sculpt tools: band ids are paint ids
    *  (biome / custom swatch), -1 = leave that band's paint untouched. */
   getAutoTexture(): { enabled: boolean; angle: number; flatId: number; steepId: number };
@@ -213,6 +280,89 @@ export interface InspectorDeps {
   previewWaterLevel(v: number): void;
   commitWaterLevel(v: number): void;
   resetWaterLevel(): void;
+  getWaterTint(): { hue: number | null; lum: number | null };
+  previewWaterTint(hue: number | null, lum: number | null): void;
+  commitWaterTint(hue: number | null, lum: number | null): void;
+  resetWaterTint(): void;
+  getFluidKind(): FluidKind;
+  setFluidKind(kind: FluidKind): void;
+  getRockParams(): {
+    size: number;
+    noise: number;
+    detail: number;
+    sharp: number;
+    tex: number;
+    walkable: boolean;
+    height: number;
+    depth: number;
+    jag: number;
+    texId: string;
+    texTile: number;
+  };
+  setRockParams(change: {
+    size?: number;
+    noise?: number;
+    detail?: number;
+    sharp?: number;
+    tex?: number;
+    walkable?: boolean;
+    height?: number;
+    depth?: number;
+    jag?: number;
+    texId?: string;
+    texTile?: number;
+  }): void;
+  getRockChainState(): { mode: boolean; count: number };
+  setRockChainMode(on: boolean): void;
+  generateRockChain(): void;
+  clearRockChain(): void;
+  getTunnelMode(): 'dig' | 'hole' | 'patch';
+  setTunnelMode(mode: 'dig' | 'hole' | 'patch'): void;
+  getCaves(): {
+    index: number;
+    nodes: number;
+    width: number;
+    height: number;
+    variance: number;
+    floorVariance: number;
+    stalactites: number;
+    stalagmites: number;
+    spikeSize: number;
+    startOpen: boolean;
+    endOpen: boolean;
+    tex: string | null;
+    texTile: number | null;
+  }[];
+  getHoles(): { index: number; radius: number }[];
+  getHolePatches(): { index: number; radius: number }[];
+  getCavePairState(): { pendingExit: boolean; readyToGenerate: number };
+  generateCaves(): void;
+  updateCave(
+    index: number,
+    change: {
+      width?: number;
+      height?: number;
+      variance?: number;
+      floorVariance?: number;
+      stalactites?: number;
+      stalagmites?: number;
+      spikeSize?: number;
+      startOpen?: boolean;
+      endOpen?: boolean;
+      tex?: string | null;
+      texTile?: number | null;
+    },
+    commit: boolean,
+  ): void;
+  reverseCave(index: number): void;
+  deleteCave(index: number): void;
+  /** Multi-select every rig node of a cave and arm the Move tool, so the
+   *  group gizmo translates the whole tube rigidly into place. */
+  selectWholeCave(index: number): void;
+  updateHole(index: number, change: { radius?: number }, commit: boolean): void;
+  deleteHole(index: number): void;
+  updateHolePatch(index: number, change: { radius?: number }, commit: boolean): void;
+  deleteHolePatch(index: number): void;
   /** Arm the Place tool with the procedural waterfall asset. */
   placeWaterfall(): void;
 
@@ -253,6 +403,7 @@ export interface InspectorDeps {
       collide?: boolean;
       collideRadius?: number | null;
       collideShape?: 'square' | null;
+      collisionMode?: CollisionMode;
       sizeX?: number;
       sizeY?: number;
       sizeZ?: number;
@@ -261,6 +412,20 @@ export interface InspectorDeps {
       glow?: number | null;
       glowStrength?: number | null;
       fire?: boolean | null;
+      hue?: number | null;
+      lum?: number | null;
+      fluidDps?: number | null;
+      fluidFx?: number | null;
+      rockSeed?: number;
+      rockNoise?: number;
+      rockDetail?: number;
+      rockSharp?: number;
+      rockTex?: number;
+      rockHeight?: number;
+      rockDepth?: number;
+      rockJag?: number;
+      rockTexId?: string | null;
+      rockTexTile?: number;
     },
     commit: boolean,
   ): void;
@@ -268,8 +433,29 @@ export interface InspectorDeps {
   deleteSelection(): void;
   /** Multi-selection size (1 = just the active placement). */
   getSelectionCount(): number;
+  /** Baked collision box count for an asset id (0 = legacy circle only). */
+  getBakedCollisionCount(assetId: string): number;
   getFootprints(): boolean;
   setFootprints(on: boolean): void;
+  /** Hitbox edit mode (baked boxes as movable objects): null = not editing. */
+  getHitboxEdit(): { count: number; selectedCount: number } | null;
+  enterHitboxEdit(): void;
+  exitHitboxEdit(): void;
+  addHitbox(): void;
+  deleteSelectedHitboxes(): void;
+  resetHitboxes(): void;
+  /** Per-asset hitbox presets (this device): copy on future placements. */
+  saveHitboxPreset(): void;
+  clearHitboxPreset(): void;
+  /** Copy the active placement's whole collision setup (type, radius, shape,
+   *  hitbox edits) onto every other placement of the same asset on the map,
+   *  after an in-app confirm. */
+  copyCollisionToSameAsset(): void;
+  /** "Scale all copies" range: roll a random scale in [min, max] onto every
+   *  placement of the selected asset (after an in-app confirm). */
+  getCloneScaleRange(): { min: number; max: number };
+  setCloneScaleRange(change: { min?: number; max?: number }): void;
+  scaleAllSameAsset(): void;
 
   getFreeFly(): boolean;
   setFreeFly(on: boolean): void;
@@ -290,6 +476,9 @@ export interface InspectorDeps {
   toggleSceneObjectHidden(index: number): void;
   getCollidersHidden(): boolean;
   setCollidersHidden(on: boolean): void;
+  /** Hide the blue named-location area boxes (Zone tool toggle). */
+  getLocationsHidden(): boolean;
+  setLocationsHidden(on: boolean): void;
   /** Editor camera speed multipliers (Camera tab sliders); 1 = shipped feel. */
   getCameraSpeeds(): { move: number; look: number; pan: number };
   setCameraSpeeds(change: Partial<{ move: number; look: number; pan: number }>): void;
@@ -453,9 +642,10 @@ export class Inspector {
 
     switch (tool) {
       case 'select':
-        // A bulb-badge click selects a map light: edit it right here without
-        // hopping to the Light tool.
+        // A bulb-badge click selects a map light (or a sound badge a point
+        // sound): edit it right here without hopping to that tool.
         if (d.getSelectedLight() !== null) this.lightPanel();
+        else if (d.getSelectedSound() !== null) this.soundPanel();
         else this.selectPanel();
         break;
       case 'move':
@@ -476,12 +666,22 @@ export class Inspector {
         this.brushPanel(this.deps.getFlattenSmooth());
         this.flattenPanel();
         break;
+      case 'tunnel':
+        this.brushPanel(false);
+        this.tunnelPanel();
+        break;
+      case 'rock':
+        this.rockPanel();
+        break;
       case 'paint':
         this.brushPanel(false);
         this.biomePanel();
         break;
       case 'water':
         this.waterPanel();
+        break;
+      case 'fluid':
+        this.fluidToolPanel();
         break;
       case 'place':
         this.placePanel();
@@ -513,6 +713,9 @@ export class Inspector {
         break;
       case 'music':
         this.musicPanel();
+        break;
+      case 'sound':
+        this.soundPanel();
         break;
       case 'region':
         this.regionPanel();
@@ -561,21 +764,33 @@ export class Inspector {
   private brushPanel(withStrength: boolean): void {
     const d = this.deps;
     const s = section(t('editor.brush.title'));
+    // Brush size on a LOG scale: fine sub-yard steps at the small end
+    // (0.4yd, 10x smaller than the old minimum) through region-sized 300yd
+    // sweeps at the top, all on one comfortable track.
+    const SIZE_MIN = 0.4;
+    const SIZE_MAX = 300;
+    const SIZE_LOG_SPAN = Math.log(SIZE_MAX / SIZE_MIN);
+    const sizeFromT = (tv: number): number =>
+      Math.round(SIZE_MIN * Math.exp((tv / 100) * SIZE_LOG_SPAN) * 10) / 10;
+    const tFromSize = (r: number): number =>
+      (Math.log(Math.min(SIZE_MAX, Math.max(SIZE_MIN, r)) / SIZE_MIN) / SIZE_LOG_SPAN) * 100;
     s.appendChild(
       slider(t('editor.brush.size'), {
-        min: 4,
-        max: 60,
-        step: 1,
-        value: d.getBrushRadius(),
-        onInput: (v) => d.setBrushRadius(v),
-        format: num1,
+        min: 0,
+        max: 100,
+        step: 0.5,
+        value: tFromSize(d.getBrushRadius()),
+        onInput: (v) => d.setBrushRadius(sizeFromT(v)),
+        format: (v) => num1(sizeFromT(v)),
       }).root,
     );
     if (withStrength) {
       s.appendChild(
         slider(t('editor.brush.strength'), {
+          // 1..50 on a 5x finer scale than the legacy 1..30 (5 == legacy 1):
+          // gentle grading at the low end, same ceiling (50 == legacy 10).
           min: 1,
-          max: 30,
+          max: 50,
           step: 1,
           value: d.getBrushStrength(),
           onInput: (v) => d.setBrushStrength(v),
@@ -610,6 +825,11 @@ export class Inspector {
     const d = this.deps;
     const s = section(t('editor.zoneTool.title'));
     s.appendChild(hint(t('editor.zoneTool.hint')));
+    s.appendChild(
+      checkbox(t('editor.zoneTool.hideBoxes'), d.getLocationsHidden(), (on) =>
+        d.setLocationsHidden(on),
+      ).root,
+    );
     const locs = d.getLocations();
     if (locs.length === 0) s.appendChild(el('p', 'ed-muted', t('editor.zoneTool.none')));
     locs.forEach((loc, i) => {
@@ -696,6 +916,93 @@ export class Inspector {
           step: 0.5,
           value: l.y,
           onInput: (v) => d.updateMapLight(i, { y: v }),
+          format: num1,
+        }).root,
+      );
+      s.appendChild(card);
+    });
+    this.root.appendChild(s);
+  }
+
+  /** A dropdown of the loopable SFX clips a point sound can play on repeat. */
+  private soundClipSelect(value: string, onChange: (id: string) => void): HTMLSelectElement {
+    const sel = document.createElement('select');
+    sel.setAttribute('aria-label', t('editor.soundTool.clip'));
+    for (const id of POINT_SOUND_CLIPS) {
+      const opt = document.createElement('option');
+      opt.value = id;
+      opt.textContent = pointSoundLabel(id);
+      opt.selected = value === id;
+      sel.appendChild(opt);
+    }
+    sel.addEventListener('change', () => onChange(sel.value));
+    return sel;
+  }
+
+  private soundPanel(): void {
+    const d = this.deps;
+    const s = section(t('editor.soundTool.title'));
+    s.appendChild(hint(t('editor.soundTool.hint')));
+    const sounds = d.getMapSounds();
+    const selected = d.getSelectedSound();
+    if (sounds.length === 0) s.appendChild(el('p', 'ed-muted', t('editor.soundTool.none')));
+    sounds.forEach((snd, i) => {
+      const card = el('div', 'ed-light-card');
+      card.classList.toggle('active', i === selected);
+      const row = el('div', 'ed-row');
+      const name = button(
+        t('editor.soundTool.soundN', { num: formatNumber(i + 1, { useGrouping: false }) }),
+        () => d.setSelectedSound(i === selected ? null : i),
+        'small',
+        t('editor.soundTool.selectTitle'),
+      );
+      name.classList.toggle('active', i === selected);
+      row.appendChild(name);
+      row.appendChild(
+        button(
+          'x',
+          () => {
+            d.deleteMapSound(i);
+            this.refresh();
+          },
+          'danger small',
+          t('editor.soundTool.deleteTitle'),
+        ),
+      );
+      card.appendChild(row);
+      const clipRow = el('label', 'ed-field');
+      clipRow.appendChild(el('span', undefined, t('editor.soundTool.clip')));
+      clipRow.appendChild(
+        this.soundClipSelect(snd.sound, (id) => d.updateMapSound(i, { sound: id })),
+      );
+      card.appendChild(clipRow);
+      card.appendChild(
+        slider(t('editor.soundTool.volume'), {
+          min: 0,
+          max: 1,
+          step: 0.05,
+          value: snd.volume,
+          onInput: (v) => d.updateMapSound(i, { volume: v }),
+          format: num1,
+        }).root,
+      );
+      card.appendChild(
+        slider(t('editor.soundTool.radius'), {
+          min: 2,
+          max: 200,
+          step: 1,
+          value: snd.radius,
+          onInput: (v) => d.updateMapSound(i, { radius: v }),
+          format: num1,
+        }).root,
+      );
+      card.appendChild(
+        slider(t('editor.soundTool.height'), {
+          min: 0,
+          max: 40,
+          step: 0.5,
+          value: snd.y,
+          onInput: (v) => d.updateMapSound(i, { y: v }),
           format: num1,
         }).root,
       );
@@ -844,6 +1151,537 @@ export class Inspector {
     this.root.appendChild(s);
   }
 
+  /** Tunnel tool: dig/patch mode, authoring hint, and the cave list with
+   *  per-cave width/height sliders, reverse (swap A<->B) and delete. */
+  private rockPanel(): void {
+    const d = this.deps;
+    const s = section(t('editor.rock.title'));
+    const params = d.getRockParams();
+    const chain = d.getRockChainState();
+    s.appendChild(
+      checkbox(t('editor.rock.chainMode'), chain.mode, (on) => {
+        d.setRockChainMode(on);
+        this.refresh();
+      }).root,
+    );
+    s.appendChild(hint(chain.mode ? t('editor.rock.chainHint') : t('editor.rock.hint')));
+    if (chain.mode) {
+      if (chain.count > 0) {
+        s.appendChild(
+          el(
+            'p',
+            'ed-chosen',
+            t('editor.rock.chainCount', {
+              count: formatNumber(chain.count, { useGrouping: false }),
+            }),
+          ),
+        );
+      }
+      const row = el('div', 'ed-row');
+      row.appendChild(
+        button(t('editor.rock.generateChain'), () => d.generateRockChain(), 'primary'),
+      );
+      if (chain.count > 0) {
+        row.appendChild(button(t('editor.rock.clearChain'), () => d.clearRockChain(), 'small'));
+      }
+      s.appendChild(row);
+      s.appendChild(
+        checkbox(t('editor.rock.walkable'), params.walkable, (on) =>
+          d.setRockParams({ walkable: on }),
+        ).root,
+      );
+    }
+    s.appendChild(
+      slider(t('editor.rock.size'), {
+        min: 0.5,
+        max: 20,
+        step: 0.5,
+        value: params.size,
+        onInput: (v) => d.setRockParams({ size: v }),
+        onChange: (v) => d.setRockParams({ size: v }),
+        format: num1,
+      }).root,
+    );
+    s.appendChild(
+      slider(t('editor.rock.noise'), {
+        min: 0,
+        max: 1,
+        step: 0.05,
+        value: params.noise,
+        onInput: (v) => d.setRockParams({ noise: v }),
+        onChange: (v) => d.setRockParams({ noise: v }),
+        format: num1,
+      }).root,
+    );
+    s.appendChild(
+      slider(t('editor.rock.detail'), {
+        min: 0,
+        max: 1,
+        step: 0.05,
+        value: params.detail,
+        onInput: (v) => d.setRockParams({ detail: v }),
+        onChange: (v) => d.setRockParams({ detail: v }),
+        format: num1,
+      }).root,
+    );
+    s.appendChild(
+      slider(t('editor.rock.sharp'), {
+        min: 0,
+        max: 1,
+        step: 0.05,
+        value: params.sharp,
+        onInput: (v) => d.setRockParams({ sharp: v }),
+        onChange: (v) => d.setRockParams({ sharp: v }),
+        format: num1,
+      }).root,
+    );
+    s.appendChild(
+      slider(t('editor.rock.jag'), {
+        min: 0,
+        max: 1,
+        step: 0.05,
+        value: params.jag,
+        onInput: (v) => d.setRockParams({ jag: v }),
+        onChange: (v) => d.setRockParams({ jag: v }),
+        format: num1,
+      }).root,
+    );
+    s.appendChild(
+      slider(t('editor.rock.height'), {
+        min: 0.3,
+        max: 3,
+        step: 0.1,
+        value: params.height,
+        onInput: (v) => d.setRockParams({ height: v }),
+        onChange: (v) => d.setRockParams({ height: v }),
+        format: num1,
+      }).root,
+    );
+    s.appendChild(
+      slider(t('editor.rock.depth'), {
+        min: 0,
+        max: 1,
+        step: 0.05,
+        value: params.depth,
+        onInput: (v) => d.setRockParams({ depth: v }),
+        onChange: (v) => d.setRockParams({ depth: v }),
+        format: num1,
+      }).root,
+    );
+    this.texSetPicker(
+      s,
+      t('editor.rock.baseTex'),
+      this.rockTexOptions(),
+      params.texId || `legacy:${params.tex}`,
+      (v) => {
+        if (v.startsWith('legacy:')) d.setRockParams({ tex: Number(v.slice(7)), texId: '' });
+        else d.setRockParams({ texId: v });
+      },
+    );
+    if (params.texId) {
+      s.appendChild(
+        slider(t('editor.biome.tileSize'), {
+          min: 1,
+          max: 64,
+          step: 1,
+          value: params.texTile,
+          onInput: (v) => d.setRockParams({ texTile: v }),
+          onChange: (v) => d.setRockParams({ texTile: v }),
+          format: num1,
+        }).root,
+      );
+    }
+    this.root.appendChild(s);
+  }
+
+  /** Selected generated rock: reshape it live through updateSelection. */
+  private rockControls(s: HTMLElement, sel: PlacementSelection): void {
+    const d = this.deps;
+    s.appendChild(el('h4', 'ed-sub-title', t('editor.rock.selTitle')));
+    s.appendChild(
+      slider(t('editor.rock.noise'), {
+        min: 0,
+        max: 1,
+        step: 0.05,
+        value: sel.rockNoise ?? 0.5,
+        onInput: (v) => d.updateSelection({ rockNoise: v }, false),
+        onChange: (v) => d.updateSelection({ rockNoise: v }, true),
+        format: num1,
+      }).root,
+    );
+    s.appendChild(
+      slider(t('editor.rock.detail'), {
+        min: 0,
+        max: 1,
+        step: 0.05,
+        value: sel.rockDetail ?? 0.5,
+        onInput: (v) => d.updateSelection({ rockDetail: v }, false),
+        onChange: (v) => d.updateSelection({ rockDetail: v }, true),
+        format: num1,
+      }).root,
+    );
+    s.appendChild(
+      slider(t('editor.rock.sharp'), {
+        min: 0,
+        max: 1,
+        step: 0.05,
+        value: sel.rockSharp ?? 0.3,
+        onInput: (v) => d.updateSelection({ rockSharp: v }, false),
+        onChange: (v) => d.updateSelection({ rockSharp: v }, true),
+        format: num1,
+      }).root,
+    );
+    s.appendChild(
+      slider(t('editor.rock.jag'), {
+        min: 0,
+        max: 1,
+        step: 0.05,
+        value: sel.rockJag ?? 0,
+        onInput: (v) => d.updateSelection({ rockJag: v }, false),
+        onChange: (v) => d.updateSelection({ rockJag: v }, true),
+        format: num1,
+      }).root,
+    );
+    s.appendChild(
+      slider(t('editor.rock.height'), {
+        min: 0.3,
+        max: 3,
+        step: 0.1,
+        value: sel.rockHeight ?? 1,
+        onInput: (v) => d.updateSelection({ rockHeight: v }, false),
+        onChange: (v) => d.updateSelection({ rockHeight: v }, true),
+        format: num1,
+      }).root,
+    );
+    s.appendChild(
+      slider(t('editor.rock.depth'), {
+        min: 0,
+        max: 1,
+        step: 0.05,
+        value: sel.rockDepth ?? 0,
+        onInput: (v) => d.updateSelection({ rockDepth: v }, false),
+        onChange: (v) => d.updateSelection({ rockDepth: v }, true),
+        format: num1,
+      }).root,
+    );
+    this.texSetPicker(
+      s,
+      t('editor.rock.baseTex'),
+      this.rockTexOptions(),
+      sel.rockTexId || `legacy:${sel.rockTex ?? 0}`,
+      (v) => {
+        if (v.startsWith('legacy:')) d.updateSelection({ rockTex: Number(v.slice(7)) }, true);
+        else d.updateSelection({ rockTexId: v }, true);
+      },
+    );
+    if (sel.rockTexId) {
+      s.appendChild(
+        slider(t('editor.biome.tileSize'), {
+          min: 1,
+          max: 64,
+          step: 1,
+          value: sel.rockTexTile ?? DEFAULT_TEXTURE_TILE_YD,
+          onInput: (v) => d.updateSelection({ rockTexTile: v }, false),
+          onChange: (v) => d.updateSelection({ rockTexTile: v }, true),
+          format: num1,
+        }).root,
+      );
+    }
+    s.appendChild(
+      button(
+        t('editor.rock.reroll'),
+        () => {
+          d.updateSelection({ rockSeed: ((sel.rockSeed ?? 0) + 7919) % 1_000_000_000 }, true);
+          this.refresh();
+        },
+        'small',
+      ),
+    );
+  }
+
+  private tunnelPanel(): void {
+    const d = this.deps;
+    const mode = d.getTunnelMode();
+    const s = section(t('editor.tool.tunnel'));
+    // Mode switch: model a cave, or cut holes in the ground to connect it to.
+    const modeRow = el('div', 'ed-row');
+    modeRow.appendChild(
+      button(
+        t('editor.tunnel.modeDig'),
+        () => {
+          d.setTunnelMode('dig');
+          this.refresh();
+        },
+        mode === 'dig' ? 'primary small' : 'small',
+      ),
+    );
+    modeRow.appendChild(
+      button(
+        t('editor.tunnel.modeHole'),
+        () => {
+          d.setTunnelMode('hole');
+          this.refresh();
+        },
+        mode === 'hole' ? 'primary small' : 'small',
+      ),
+    );
+    modeRow.appendChild(
+      button(
+        t('editor.tunnel.modePatch'),
+        () => {
+          d.setTunnelMode('patch');
+          this.refresh();
+        },
+        mode === 'patch' ? 'primary small' : 'small',
+      ),
+    );
+    s.appendChild(modeRow);
+    s.appendChild(
+      hint(
+        mode === 'hole'
+          ? t('editor.tunnel.holeHint')
+          : mode === 'patch'
+            ? t('editor.tunnel.patchHint')
+            : t('editor.tunnel.hint'),
+      ),
+    );
+    if (mode === 'hole') {
+      const holes = d.getHoles();
+      if (holes.length > 0) s.appendChild(el('h3', 'ed-subtitle', t('editor.tunnel.holeList')));
+      for (const hole of holes) {
+        const card = el('div', 'ed-cave-card');
+        card.appendChild(
+          el(
+            'p',
+            'ed-chosen',
+            t('editor.tunnel.holeLabel', {
+              n: formatNumber(hole.index + 1, { useGrouping: false }),
+            }),
+          ),
+        );
+        card.appendChild(
+          slider(t('editor.tunnel.holeRadius'), {
+            min: 1,
+            max: 40,
+            step: 0.5,
+            value: hole.radius,
+            onInput: (v) => d.updateHole(hole.index, { radius: v }, false),
+            onChange: (v) => d.updateHole(hole.index, { radius: v }, true),
+            format: num1,
+          }).root,
+        );
+        card.appendChild(
+          button(t('editor.tunnel.holeDelete'), () => d.deleteHole(hole.index), 'danger small'),
+        );
+        s.appendChild(card);
+      }
+      this.root.appendChild(s);
+      return;
+    }
+    if (mode === 'patch') {
+      const patches = d.getHolePatches();
+      if (patches.length > 0) {
+        s.appendChild(el('h3', 'ed-subtitle', t('editor.tunnel.patchList')));
+      }
+      for (const patch of patches) {
+        const card = el('div', 'ed-cave-card');
+        card.appendChild(
+          el(
+            'p',
+            'ed-chosen',
+            t('editor.tunnel.patchLabel', {
+              n: formatNumber(patch.index + 1, { useGrouping: false }),
+            }),
+          ),
+        );
+        card.appendChild(
+          slider(t('editor.tunnel.holeRadius'), {
+            min: 1,
+            max: 40,
+            step: 0.5,
+            value: patch.radius,
+            onInput: (v) => d.updateHolePatch(patch.index, { radius: v }, false),
+            onChange: (v) => d.updateHolePatch(patch.index, { radius: v }, true),
+            format: num1,
+          }).root,
+        );
+        card.appendChild(
+          button(
+            t('editor.tunnel.patchDelete'),
+            () => d.deleteHolePatch(patch.index),
+            'danger small',
+          ),
+        );
+        s.appendChild(card);
+      }
+      this.root.appendChild(s);
+      return;
+    }
+    const pairState = d.getCavePairState();
+    if (pairState.pendingExit) {
+      s.appendChild(hint(t('editor.tunnel.needExit')));
+    }
+    if (pairState.readyToGenerate > 0) {
+      s.appendChild(
+        button(
+          t('editor.tunnel.generate', {
+            count: formatNumber(pairState.readyToGenerate, { useGrouping: false }),
+          }),
+          () => d.generateCaves(),
+          'primary',
+        ),
+      );
+    }
+    const caves = d.getCaves();
+    if (caves.length > 0) s.appendChild(el('h3', 'ed-subtitle', t('editor.tunnel.listTitle')));
+    for (const cave of caves) {
+      const card = el('div', 'ed-cave-card');
+      card.appendChild(
+        el(
+          'p',
+          'ed-chosen',
+          t('editor.tunnel.caveLabel', {
+            n: formatNumber(cave.index + 1, { useGrouping: false }),
+            nodes: formatNumber(cave.nodes, { useGrouping: false }),
+          }),
+        ),
+      );
+      // Whole-cave move: group-select the rig and hand off to the Move gizmo.
+      card.appendChild(
+        button(t('editor.tunnel.selectCave'), () => d.selectWholeCave(cave.index), 'primary small'),
+      );
+      // Mouth toggles: each end is an open ring at exactly its authored size,
+      // or a sealed rock cap.
+      card.appendChild(
+        checkbox(t('editor.tunnel.startOpen'), cave.startOpen, (on) => {
+          d.updateCave(cave.index, { startOpen: on }, true);
+        }).root,
+      );
+      card.appendChild(
+        checkbox(t('editor.tunnel.endOpen'), cave.endOpen, (on) => {
+          d.updateCave(cave.index, { endOpen: on }, true);
+        }).root,
+      );
+      card.appendChild(
+        slider(t('editor.tunnel.width'), {
+          min: 0.5,
+          max: 3,
+          step: 0.1,
+          value: cave.width,
+          onInput: (v) => d.updateCave(cave.index, { width: v }, false),
+          onChange: (v) => d.updateCave(cave.index, { width: v }, true),
+          format: num1,
+        }).root,
+      );
+      card.appendChild(
+        slider(t('editor.tunnel.height'), {
+          min: 0.5,
+          max: 3,
+          step: 0.1,
+          value: cave.height,
+          onInput: (v) => d.updateCave(cave.index, { height: v }, false),
+          onChange: (v) => d.updateCave(cave.index, { height: v }, true),
+          format: num1,
+        }).root,
+      );
+      card.appendChild(
+        slider(t('editor.tunnel.variance'), {
+          min: 0,
+          max: 1,
+          step: 0.05,
+          value: cave.variance,
+          onInput: (v) => d.updateCave(cave.index, { variance: v }, false),
+          onChange: (v) => d.updateCave(cave.index, { variance: v }, true),
+          format: num1,
+        }).root,
+      );
+      card.appendChild(
+        slider(t('editor.tunnel.floorVariance'), {
+          min: 0,
+          max: 1,
+          step: 0.05,
+          value: cave.floorVariance,
+          onInput: (v) => d.updateCave(cave.index, { floorVariance: v }, false),
+          onChange: (v) => d.updateCave(cave.index, { floorVariance: v }, true),
+          format: num1,
+        }).root,
+      );
+      card.appendChild(
+        slider(t('editor.tunnel.stalactites'), {
+          min: 0,
+          max: 1,
+          step: 0.05,
+          value: cave.stalactites,
+          onInput: (v) => d.updateCave(cave.index, { stalactites: v }, false),
+          onChange: (v) => d.updateCave(cave.index, { stalactites: v }, true),
+          format: num1,
+        }).root,
+      );
+      card.appendChild(
+        slider(t('editor.tunnel.stalagmites'), {
+          min: 0,
+          max: 1,
+          step: 0.05,
+          value: cave.stalagmites,
+          onInput: (v) => d.updateCave(cave.index, { stalagmites: v }, false),
+          onChange: (v) => d.updateCave(cave.index, { stalagmites: v }, true),
+          format: num1,
+        }).root,
+      );
+      if (cave.stalactites > 0 || cave.stalagmites > 0) {
+        card.appendChild(
+          slider(t('editor.tunnel.spikeSize'), {
+            min: 0.3,
+            max: 3,
+            step: 0.1,
+            value: cave.spikeSize,
+            onInput: (v) => d.updateCave(cave.index, { spikeSize: v }, false),
+            onChange: (v) => d.updateCave(cave.index, { spikeSize: v }, true),
+            format: num1,
+          }).root,
+        );
+      }
+      // Interior base texture: tiled over walls/floor; the Paint tool's vertex
+      // tint still layers on top, so a re-textured cave stays fully paintable.
+      this.texSetPicker(
+        card,
+        t('editor.tunnel.texture'),
+        [
+          { value: '', label: t('editor.tunnel.texDefault'), file: 'Rock051_Color.jpg' },
+          ...TERRAIN_TEXTURE_SETS.map((set) => ({
+            value: set.key,
+            label: set.name,
+            file: `${set.key}_Color.jpg`,
+          })),
+        ],
+        cave.tex ?? '',
+        (v) => d.updateCave(cave.index, { tex: v || null }, true),
+      );
+      if (cave.tex) {
+        card.appendChild(
+          slider(t('editor.biome.tileSize'), {
+            min: 1,
+            max: 64,
+            step: 1,
+            value: cave.texTile ?? DEFAULT_TEXTURE_TILE_YD,
+            onInput: (v) => d.updateCave(cave.index, { texTile: v }, false),
+            onChange: (v) => d.updateCave(cave.index, { texTile: v }, true),
+            format: num1,
+          }).root,
+        );
+      }
+      const row = el('div', 'ed-row');
+      row.appendChild(button(t('editor.tunnel.reverse'), () => d.reverseCave(cave.index), 'small'));
+      row.appendChild(
+        button(t('editor.tunnel.delete'), () => d.deleteCave(cave.index), 'danger small'),
+      );
+      card.appendChild(row);
+      s.appendChild(card);
+    }
+    s.appendChild(hint(t('editor.tunnel.guideHint')));
+    this.root.appendChild(s);
+  }
+
   /** The merged Sculpt tool's direction toggle (raise by default). */
   private sculptPanel(): void {
     const d = this.deps;
@@ -852,6 +1690,13 @@ export class Inspector {
     s.appendChild(
       checkbox(t('editor.sculpt.lower'), d.getSculptLower(), (on) => d.setSculptLower(on)).root,
     );
+    s.appendChild(
+      checkbox(t('editor.sculpt.grab'), d.getSculptGrab(), (on) => {
+        d.setSculptGrab(on);
+        this.refresh();
+      }).root,
+    );
+    if (d.getSculptGrab()) s.appendChild(hint(t('editor.sculpt.grabHint')));
     s.appendChild(hint(t('editor.sculpt.shiftHint')));
     this.autoTextureControls(s);
     this.root.appendChild(s);
@@ -971,36 +1816,60 @@ export class Inspector {
           min: 1,
           max: 64,
           step: 1,
-          value: active.tileSize ?? 8,
+          value: active.tileSize ?? DEFAULT_TEXTURE_TILE_YD,
           onInput: (v) => d.setSwatchTileSize(active.id, v),
           format: num1,
         }).root,
       );
     }
-    // Add-a-swatch row: color + optional name, stored with the map document.
-    const add = el('div', 'ed-row');
-    const color = document.createElement('input');
-    color.type = 'color';
-    color.value = '#c05aa8';
-    color.setAttribute('aria-label', t('editor.biome.swatchColor'));
-    const name = document.createElement('input');
-    name.type = 'text';
-    name.placeholder = t('editor.biome.swatchNamePlaceholder');
-    name.maxLength = 24;
-    name.addEventListener('keydown', (ev) => ev.stopPropagation());
-    add.append(
-      color,
-      name,
-      button(
-        t('editor.biome.addSwatch'),
-        () => {
-          const v = Number.parseInt(color.value.slice(1), 16);
-          if (Number.isFinite(v)) d.addCustomSwatch(v, name.value);
-        },
+    // Hue / light adjust of the selected texture. Centered = the texture
+    // paints exactly as stock; moving a slider on a BUILT-IN biome creates
+    // (or reuses) a custom variant swatch carrying the adjust, so the values
+    // save with the map. Color-only swatches keep just their authored color.
+    const isBuiltIn = BIOME_OPTIONS.some((o) => o.id === d.getPaintBiome() && o.id !== 255);
+    if (isBuiltIn || active?.textureSha || active?.baseBiome !== undefined) {
+      // A non-centered tint can be kept as its own reusable swatch. The button
+      // lives in the panel permanently (panels don't re-render per slider
+      // tick) and the slider handlers keep its enabled state current.
+      const saveBtn = button(
+        t('editor.biome.saveSwatch'),
+        () => d.saveAdjustedSwatch(),
         'small',
-      ),
-    );
-    s.appendChild(add);
+        t('editor.biome.saveSwatchTitle'),
+      );
+      const syncSave = (): void => {
+        const sw = d.getCustomSwatches().find((c) => c.id === d.getPaintBiome());
+        saveBtn.disabled = !sw || ((sw.hueShift ?? 0) === 0 && (sw.light ?? 0) === 0);
+      };
+      s.appendChild(
+        slider(t('editor.biome.hue'), {
+          min: -180,
+          max: 180,
+          step: 1,
+          value: active?.hueShift ?? 0,
+          onInput: (v) => {
+            d.setPaintAdjust({ hueShift: v });
+            syncSave();
+          },
+          format: num1,
+        }).root,
+      );
+      s.appendChild(
+        slider(t('editor.biome.light'), {
+          min: -100,
+          max: 100,
+          step: 1,
+          value: Math.round((active?.light ?? 0) * 100),
+          onInput: (v) => {
+            d.setPaintAdjust({ light: v / 100 });
+            syncSave();
+          },
+          format: num1,
+        }).root,
+      );
+      syncSave();
+      s.appendChild(saveBtn);
+    }
     s.appendChild(
       button(
         t('editor.biome.importTexture'),
@@ -1078,17 +1947,21 @@ export class Inspector {
     );
   }
 
-  /** Every paintable texture as one option row (thumbnail + name). */
+  /** Every paintable texture as one option row (thumbnail + name). Built-in
+   *  library sets not yet materialized as map swatches ride along with a
+   *  `builtinKey` instead of a paint id (picking one materializes it). */
   private textureOptions(): {
     id: number;
     label: string;
     thumb: { file?: string; url?: string; tint?: string; erase?: boolean };
+    builtinKey?: string;
   }[] {
     const d = this.deps;
     const out: {
       id: number;
       label: string;
       thumb: { file?: string; url?: string; tint?: string; erase?: boolean };
+      builtinKey?: string;
     }[] = [];
     for (const opt of BIOME_OPTIONS) {
       if (opt.id === 255) continue;
@@ -1098,21 +1971,111 @@ export class Inspector {
         thumb: { ...BIOME_THUMBS[opt.id] },
       });
     }
-    for (const sw of d.getCustomSwatches()) {
-      const css = `#${sw.color.toString(16).padStart(6, '0')}`;
+    const swatches = d.getCustomSwatches();
+    for (const sw of swatches) {
+      const css = `#${adjustedSwatchColor(sw).toString(16).padStart(6, '0')}`;
       const texUrl = sw.textureSha ? d.swatchTextureUrl(sw.textureSha) : null;
+      // A biome-variant swatch previews over its base biome's real texture.
+      const baseThumb = sw.baseBiome !== undefined ? BIOME_THUMBS[sw.baseBiome] : BIOME_THUMBS[0];
       out.push({
         id: sw.id,
         label: sw.label ?? css,
         // A color swatch hue-tints the base grass texture, so its thumbnail
         // previews exactly that; an imported texture shows its own image.
-        thumb: texUrl
-          ? { url: texUrl }
-          : { file: BIOME_THUMBS[0]?.file, tint: hexWithAlpha(css, 0.55) },
+        thumb: texUrl ? { url: texUrl } : { file: baseThumb?.file, tint: hexWithAlpha(css, 0.55) },
+      });
+    }
+    // The built-in texture library: always-available default sets that ship
+    // with the editor. One already materialized as a swatch is skipped (its
+    // swatch row above covers it).
+    for (const set of paintDefaultSets()) {
+      const sha = builtinShaFor(set.key);
+      if (swatches.some((sw) => sw.textureSha === sha)) continue;
+      out.push({
+        id: -1,
+        label: set.name,
+        thumb: { file: `${set.key}_Color.jpg` },
+        builtinKey: set.key,
       });
     }
     out.push({ id: 255, label: t('editor.biome.erase'), thumb: { erase: true } });
     return out;
+  }
+
+  /** Small texture-set dropdown (the texturePicker look) for tools that pick a
+   *  base texture: generated rocks and cave interiors. */
+  private texSetPicker(
+    parent: HTMLElement,
+    label: string,
+    options: { value: string; label: string; file?: string }[],
+    activeValue: string,
+    onPick: (value: string) => void,
+  ): void {
+    const wrap = el('div', 'ed-texpick-wrap');
+    wrap.appendChild(el('span', 'ed-label', label));
+    const active = options.find((o) => o.value === activeValue) ?? options[0];
+    const trigger = document.createElement('button');
+    trigger.type = 'button';
+    trigger.className = 'ed-texpick';
+    trigger.setAttribute('aria-haspopup', 'listbox');
+    trigger.setAttribute('aria-expanded', 'false');
+    trigger.append(
+      this.textureThumb({ file: active.file }),
+      el('span', 'ed-texpick-label', active.label),
+      el('span', 'ed-texpick-caret', 'v'),
+    );
+    const menu = el('div', 'ed-texpick-menu');
+    menu.setAttribute('role', 'listbox');
+    menu.style.display = 'none';
+    const closeOnOutside = (ev: PointerEvent): void => {
+      if (!wrap.contains(ev.target as Node)) close();
+    };
+    const close = (): void => {
+      menu.style.display = 'none';
+      trigger.setAttribute('aria-expanded', 'false');
+      document.removeEventListener('pointerdown', closeOnOutside, true);
+    };
+    trigger.addEventListener('click', () => {
+      if (menu.style.display !== 'none') {
+        close();
+        return;
+      }
+      menu.style.display = '';
+      trigger.setAttribute('aria-expanded', 'true');
+      document.addEventListener('pointerdown', closeOnOutside, true);
+    });
+    for (const opt of options) {
+      const item = document.createElement('button');
+      item.type = 'button';
+      item.className = 'ed-texpick-item';
+      item.setAttribute('role', 'option');
+      item.setAttribute('aria-selected', opt.value === active.value ? 'true' : 'false');
+      item.classList.toggle('active', opt.value === active.value);
+      item.append(this.textureThumb({ file: opt.file }), el('span', 'ed-texpick-label', opt.label));
+      item.addEventListener('click', () => {
+        close();
+        onPick(opt.value);
+        this.refresh();
+      });
+      menu.appendChild(item);
+    }
+    wrap.append(trigger, menu);
+    parent.appendChild(wrap);
+  }
+
+  /** The Rock tool's base-texture options: legacy procedural looks plus every
+   *  built-in terrain texture set. */
+  private rockTexOptions(): { value: string; label: string; file?: string }[] {
+    return [
+      { value: 'legacy:0', label: t('editor.rock.texStone') },
+      { value: 'legacy:1', label: t('editor.rock.texSandstone') },
+      { value: 'legacy:2', label: t('editor.rock.texBare') },
+      ...TERRAIN_TEXTURE_SETS.map((s) => ({
+        value: s.key,
+        label: s.name,
+        file: `${s.key}_Color.jpg`,
+      })),
+    ];
   }
 
   private textureThumb(opt: {
@@ -1184,7 +2147,9 @@ export class Inspector {
       item.append(this.textureThumb(opt.thumb), el('span', 'ed-texpick-label', opt.label));
       item.addEventListener('click', () => {
         close();
-        d.setPaintBiome(opt.id);
+        // Library entries materialize (or reuse) their swatch on pick.
+        if (opt.builtinKey) d.pickBuiltinTexture(opt.builtinKey);
+        else d.setPaintBiome(opt.id);
         this.refresh();
       });
       menu.appendChild(item);
@@ -1253,6 +2218,45 @@ export class Inspector {
         'small',
       ),
     );
+    {
+      // Map-wide water tint: hue + lightness, the grass-slider authoring model.
+      const tint = d.getWaterTint();
+      const hue = tint.hue ?? 205;
+      const lumPct = Math.round((tint.lum ?? 0.45) * 100);
+      s.appendChild(el('h3', 'ed-subtitle', t('editor.water.tintTitle')));
+      s.appendChild(
+        slider(t('editor.water.hue'), {
+          min: 0,
+          max: 360,
+          step: 1,
+          value: hue,
+          onInput: (v) => d.previewWaterTint(v, d.getWaterTint().lum),
+          onChange: (v) => d.commitWaterTint(v, d.getWaterTint().lum),
+          format: num1,
+        }).root,
+      );
+      s.appendChild(
+        slider(t('editor.water.light'), {
+          min: 5,
+          max: 90,
+          step: 1,
+          value: lumPct,
+          onInput: (v) => d.previewWaterTint(d.getWaterTint().hue, v / 100),
+          onChange: (v) => d.commitWaterTint(d.getWaterTint().hue, v / 100),
+          format: num1,
+        }).root,
+      );
+      s.appendChild(
+        button(
+          t('editor.water.tintReset'),
+          () => {
+            d.resetWaterTint();
+            this.refresh();
+          },
+          'small',
+        ),
+      );
+    }
     s.appendChild(el('h3', 'ed-subtitle', t('editor.water.waterfallTitle')));
     s.appendChild(
       button(
@@ -1600,6 +2604,119 @@ export class Inspector {
   }
 
   /** Per-axis dimension sliders for a selected collider volume. */
+  /** Fluid tool: pick the pool preset to stamp; click ground to place. */
+  private fluidToolPanel(): void {
+    const d = this.deps;
+    const s = section(t('editor.fluid.title'));
+    s.appendChild(hint(t('editor.fluid.hint')));
+    const kinds: FluidKind[] = ['lava', 'acid', 'spectral', 'water'];
+    for (const kind of kinds) {
+      const preset = FLUID_PRESETS[kind];
+      const row = checkbox(
+        t(`editor.fluid.kind.${kind}` as Parameters<typeof t>[0]),
+        d.getFluidKind() === kind,
+        () => {
+          d.setFluidKind(kind);
+          this.refresh();
+        },
+      );
+      const sw = el('span', 'ed-swatch');
+      sw.style.background = `hsl(${preset.hue}, 70%, ${Math.round(preset.lum * 100)}%)`;
+      row.root.appendChild(sw);
+      s.appendChild(row.root);
+    }
+    this.root.appendChild(s);
+  }
+
+  /** Selected fluid pool: tint, surface offset, damage, effect toggles. */
+  private fluidControls(s: HTMLElement, sel: PlacementSelection): void {
+    const d = this.deps;
+    const kind = sel.fluidKind as FluidKind;
+    const preset = FLUID_PRESETS[kind];
+    const hue = sel.hue ?? preset.hue;
+    const lumPct = Math.round((sel.lum ?? preset.lum) * 100);
+    const swatch = el('span', 'ed-swatch');
+    const paint = (h: number, lp: number): void => {
+      swatch.style.background = `hsl(${Math.round(h)}, 70%, ${Math.round(lp)}%)`;
+    };
+    paint(hue, lumPct);
+    s.appendChild(swatch);
+    s.appendChild(
+      slider(t('editor.fluid.hue'), {
+        min: 0,
+        max: 360,
+        step: 1,
+        value: hue,
+        onInput: (v) => {
+          d.updateSelection({ hue: v }, false);
+          paint(v, lumPct);
+        },
+        onChange: (v) => d.updateSelection({ hue: v }, true),
+        format: num1,
+      }).root,
+    );
+    s.appendChild(
+      slider(t('editor.fluid.light'), {
+        min: 8,
+        max: 90,
+        step: 1,
+        value: lumPct,
+        onInput: (v) => {
+          d.updateSelection({ lum: v / 100 }, false);
+          paint(sel.hue ?? preset.hue, v);
+        },
+        onChange: (v) => d.updateSelection({ lum: v / 100 }, true),
+        format: num1,
+      }).root,
+    );
+    s.appendChild(
+      slider(t('editor.fluid.dps'), {
+        min: 0,
+        max: 50,
+        step: 0.5,
+        value: sel.fluidDps ?? preset.dps,
+        onInput: (v) => d.updateSelection({ fluidDps: v }, false),
+        onChange: (v) => d.updateSelection({ fluidDps: v }, true),
+        format: num1,
+      }).root,
+    );
+    s.appendChild(
+      slider(t('editor.fluid.surfaceOffset'), {
+        min: -20,
+        max: 20,
+        step: 0.1,
+        value: sel.sizeY ?? 0.3,
+        onInput: (v) => d.updateSelection({ sizeY: v }, false),
+        onChange: (v) => d.updateSelection({ sizeY: v }, true),
+        format: num1,
+      }).root,
+    );
+    const fx = sel.fluidFx ?? preset.fx;
+    const fxToggle = (labelKey: string, bit: number): void => {
+      s.appendChild(
+        checkbox(t(labelKey as Parameters<typeof t>[0]), (fx & bit) !== 0, (on) => {
+          d.updateSelection({ fluidFx: on ? fx | bit : fx & ~bit }, true);
+          this.refresh();
+        }).root,
+      );
+    };
+    fxToggle('editor.fluid.fxBubbles', 1);
+    fxToggle('editor.fluid.fxSmoke', 2);
+    fxToggle('editor.fluid.fxHaze', 4);
+    fxToggle('editor.fluid.fxLight', 8);
+    s.appendChild(
+      button(
+        t('editor.fluid.resetPreset'),
+        () => {
+          d.updateSelection({ hue: null, lum: null, fluidDps: null, fluidFx: null }, true);
+          this.refresh();
+        },
+        'small',
+      ),
+    );
+    s.appendChild(hint(t('editor.fluid.selHint')));
+  }
+
   private colliderSizeControls(s: HTMLElement, sel: PlacementSelection): void {
     const d = this.deps;
     const kind = sel.colliderKind;
@@ -1714,47 +2831,55 @@ export class Inspector {
           format: num1,
         }).root,
       );
-      if (sel.colliderKind) {
+      // "Scale all copies": roll a random scale in [min, max] onto every
+      // placement of this asset (min==max = uniform). Only when copies exist.
+      if (sel.sameAssetCount > 0) {
+        const range = d.getCloneScaleRange();
+        s.appendChild(el('h4', 'ed-sub-title', t('editor.selection.scaleAllTitle')));
+        s.appendChild(
+          slider(t('editor.selection.scaleMin'), {
+            min: PLACEMENT_SCALE_MIN,
+            max: PLACEMENT_SCALE_MAX,
+            step: 0.1,
+            value: range.min,
+            onInput: (v) => d.setCloneScaleRange({ min: v }),
+            onChange: (v) => d.setCloneScaleRange({ min: v }),
+            format: num1,
+          }).root,
+        );
+        s.appendChild(
+          slider(t('editor.selection.scaleMax'), {
+            min: PLACEMENT_SCALE_MIN,
+            max: PLACEMENT_SCALE_MAX,
+            step: 0.1,
+            value: range.max,
+            onInput: (v) => d.setCloneScaleRange({ max: v }),
+            onChange: (v) => d.setCloneScaleRange({ max: v }),
+            format: num1,
+          }).root,
+        );
+        s.appendChild(
+          button(
+            t('editor.selection.scaleAllButton', {
+              name: sel.assetLabel,
+              count: formatNumber(sel.sameAssetCount + 1, { useGrouping: false }),
+            }),
+            () => d.scaleAllSameAsset(),
+          ),
+        );
+        s.appendChild(hint(t('editor.selection.scaleAllHint', { name: sel.assetLabel })));
+      }
+      if (sel.fluidKind) {
+        // Fluid pools: footprint + surface offset + tint/damage/effects.
+        this.fluidControls(s, sel);
+      } else if (sel.assetId === ROCK_ASSET_ID) {
+        this.rockControls(s, sel);
+      } else if (sel.colliderKind) {
         // Collider volumes: per-axis dimensions instead of the circle-footprint
         // controls (their collision IS the volume; collide stays on).
         this.colliderSizeControls(s, sel);
       } else {
-        s.appendChild(
-          checkbox(t('editor.selection.collide'), sel.collide, (on) => {
-            d.updateSelection({ collide: on }, true);
-            this.refresh(); // the radius controls appear/disappear with collide
-          }).root,
-        );
-        if (sel.collide) {
-          s.appendChild(
-            slider(t('editor.selection.radius'), {
-              min: MIN_COLLIDE_RADIUS,
-              max: MAX_COLLIDE_RADIUS,
-              step: 0.1,
-              value: sel.collideRadius ?? collideRadiusFor(sel.scale, sel.assetId),
-              onInput: (v) => d.updateSelection({ collideRadius: v }, false),
-              onChange: (v) => d.updateSelection({ collideRadius: v }, true),
-              format: num1,
-            }).root,
-          );
-          s.appendChild(
-            checkbox(t('editor.selection.squareCollision'), sel.collideShape === 'square', (on) =>
-              d.updateSelection({ collideShape: on ? 'square' : null }, true),
-            ).root,
-          );
-          s.appendChild(
-            button(
-              t('editor.selection.radiusAuto'),
-              () => {
-                d.updateSelection({ collideRadius: null }, true);
-                this.refresh();
-              },
-              'small',
-              t('editor.selection.radiusAutoTitle'),
-            ),
-          );
-          s.appendChild(hint(t('editor.selection.radiusHint')));
-        }
+        this.collisionControls(s, sel);
       }
       // Appearance (shader tweaks): tint / opacity / glow, saved on the map.
       if (!sel.colliderKind) {
@@ -1850,6 +2975,164 @@ export class Inspector {
         .root,
     );
     this.root.appendChild(s);
+  }
+
+  /** Collision block for ordinary model placements: the type dropdown plus
+   *  the picked mode's controls (baked hitbox editing / basic radius / true
+   *  mesh status). */
+  private collisionControls(s: HTMLElement, sel: PlacementSelection): void {
+    const d = this.deps;
+    s.appendChild(el('h4', 'ed-sub-title', t('editor.selection.collisionTitle')));
+    s.appendChild(
+      selectRow(
+        t('editor.selection.collisionType'),
+        [
+          { value: 'baked', label: t('editor.selection.collisionTypeBaked') },
+          { value: 'basic', label: t('editor.selection.collisionTypeBasic') },
+          { value: 'mesh', label: t('editor.selection.collisionTypeMesh') },
+          { value: 'none', label: t('editor.selection.collisionTypeNone') },
+        ],
+        sel.collisionMode,
+        (v) => {
+          d.updateSelection({ collisionMode: v as CollisionMode }, true);
+          this.refresh();
+        },
+      ).root,
+    );
+    if (sel.collisionMode === 'basic') {
+      s.appendChild(
+        slider(t('editor.selection.radius'), {
+          min: MIN_COLLIDE_RADIUS,
+          max: MAX_COLLIDE_RADIUS,
+          step: 0.1,
+          value: sel.collideRadius ?? collideRadiusFor(sel.scale, sel.assetId),
+          onInput: (v) => d.updateSelection({ collideRadius: v }, false),
+          onChange: (v) => d.updateSelection({ collideRadius: v }, true),
+          format: num1,
+        }).root,
+      );
+      s.appendChild(
+        checkbox(t('editor.selection.squareCollision'), sel.collideShape === 'square', (on) =>
+          d.updateSelection({ collideShape: on ? 'square' : null }, true),
+        ).root,
+      );
+      s.appendChild(
+        button(
+          t('editor.selection.radiusAuto'),
+          () => {
+            d.updateSelection({ collideRadius: null }, true);
+            this.refresh();
+          },
+          'small',
+          t('editor.selection.radiusAutoTitle'),
+        ),
+      );
+      s.appendChild(hint(t('editor.selection.radiusHint')));
+    } else if (sel.collisionMode === 'baked') {
+      const he = d.getHitboxEdit();
+      s.appendChild(
+        hint(
+          sel.hasHitboxEdits
+            ? t('editor.selection.collisionEdited', {
+                count: formatNumber(sel.hitboxCount, { useGrouping: false }),
+              })
+            : t('editor.selection.collisionBaked', {
+                count: formatNumber(sel.hitboxCount, { useGrouping: false }),
+              }),
+        ),
+      );
+      if (!he) {
+        s.appendChild(
+          button(t('editor.selection.hitboxEdit'), () => {
+            d.enterHitboxEdit();
+            this.refresh();
+          }),
+        );
+      } else {
+        s.appendChild(
+          hint(
+            t('editor.selection.hitboxSelected', {
+              count: formatNumber(he.selectedCount, { useGrouping: false }),
+            }),
+          ),
+        );
+        const row = el('div', 'ed-row');
+        row.append(
+          button(t('editor.selection.hitboxAdd'), () => {
+            d.addHitbox();
+            this.refresh();
+          }),
+          button(
+            t('editor.selection.hitboxDelete'),
+            () => {
+              d.deleteSelectedHitboxes();
+              this.refresh();
+            },
+            'danger',
+          ),
+        );
+        s.appendChild(row);
+        s.appendChild(
+          button(t('editor.selection.hitboxDone'), () => {
+            d.exitHitboxEdit();
+            this.refresh();
+          }),
+        );
+        s.appendChild(hint(t('editor.selection.hitboxHint')));
+      }
+      if (sel.hasHitboxEdits) {
+        const row = el('div', 'ed-row');
+        row.append(
+          button(t('editor.selection.hitboxReset'), () => {
+            d.resetHitboxes();
+            this.refresh();
+          }),
+          button(
+            t('editor.selection.hitboxSavePreset'),
+            () => {
+              d.saveHitboxPreset();
+              this.refresh();
+            },
+            undefined,
+            t('editor.selection.hitboxPresetHint'),
+          ),
+        );
+        s.appendChild(row);
+      }
+      if (sel.hasHitboxPreset) {
+        s.appendChild(
+          button(t('editor.selection.hitboxClearPreset'), () => {
+            d.clearHitboxPreset();
+            this.refresh();
+          }),
+        );
+        s.appendChild(hint(t('editor.selection.hitboxPresetHint')));
+      }
+    } else if (sel.collisionMode === 'mesh') {
+      s.appendChild(
+        hint(
+          sel.meshBakePending
+            ? t('editor.selection.meshBaking')
+            : sel.meshBakeReady
+              ? t('editor.selection.meshReady')
+              : t('editor.selection.meshHint'),
+        ),
+      );
+    }
+    // Bottom of the menu: copy this placement's whole collision setup onto every
+    // other placement of the same asset on the map (confirmed in the app layer).
+    if (sel.sameAssetCount > 0) {
+      s.appendChild(
+        button(
+          t('editor.selection.collisionCopyAll', {
+            name: sel.assetLabel,
+            count: formatNumber(sel.sameAssetCount, { useGrouping: false }),
+          }),
+          () => d.copyCollisionToSameAsset(),
+        ),
+      );
+      s.appendChild(hint(t('editor.selection.collisionCopyAllHint', { name: sel.assetLabel })));
+    }
   }
 
   private layersPanel(): void {
@@ -2232,6 +3515,11 @@ export class Inspector {
     );
     s.appendChild(
       checkbox(t('editor.camera.wireframe'), d.getWireframe(), (on) => d.setWireframe(on)).root,
+    );
+    // Collision hitbox overlay (ON by default; persisted per maker).
+    s.appendChild(
+      checkbox(t('editor.selection.footprints'), d.getFootprints(), (on) => d.setFootprints(on))
+        .root,
     );
 
     // ---- movement speeds ----------------------------------------------------

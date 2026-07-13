@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { Sim } from '../src/sim/sim';
-import { MOBS, CAMPS, ITEMS } from '../src/sim/data';
+import { CAMPS, ITEMS, MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
+import { Sim } from '../src/sim/sim';
 
 const SEED = 1942;
 const makeSim = () => new Sim({ seed: SEED, playerClass: 'warrior' });
@@ -21,7 +21,11 @@ describe('Voskar the Emberwing (rare elite dragonkin)', () => {
   it('carries a fire Ember Breath pulse, a Searing Maw bite, and an enrage', () => {
     const v = MOBS.voskar_emberwing;
     expect(v.aoePulse).toMatchObject({ name: 'Ember Breath', school: 'fire' });
-    expect(v.mortalStrike).toMatchObject({ name: 'Searing Maw', school: 'fire', healReduction: 0.5 });
+    expect(v.mortalStrike).toMatchObject({
+      name: 'Searing Maw',
+      school: 'fire',
+      healReduction: 0.5,
+    });
     expect(v.mortalStrike!.chance).toBeGreaterThan(0);
     expect(v.mortalStrike!.chance).toBeLessThanOrEqual(1);
     expect(v.enrage!.belowHpPct).toBeGreaterThan(0);
@@ -42,7 +46,9 @@ describe('Voskar the Emberwing (rare elite dragonkin)', () => {
       if (entry.itemId) expect(ITEMS[entry.itemId], entry.itemId).toBeDefined();
     }
     // the two chase blues share one mutually-exclusive roll group
-    const chase = MOBS.voskar_emberwing.loot.filter((l) => l.rollGroup === 'voskar_emberwing_chase');
+    const chase = MOBS.voskar_emberwing.loot.filter(
+      (l) => l.rollGroup === 'voskar_emberwing_chase',
+    );
     expect(chase).toHaveLength(2);
   });
 

@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import type { GatherNodeType } from '../sim/data';
-import { GATHER_NODES } from '../sim/data';
+import { GATHER_NODES, getActiveWorldContent } from '../sim/data';
 import { terrainHeight } from '../sim/world';
 import { NODE_COLOR, NODE_Y_OFFSET } from './gather_nodes_lookup';
 import { surfaceMat } from './gfx';
@@ -27,6 +27,9 @@ export interface GatherNodesView {
 export function buildGatherNodes(seed: number): GatherNodesView {
   const group = new THREE.Group();
   group.name = 'gatherNodes';
+  // Blank-slate maps carry no built-in world content; the shipped node
+  // placements would render as floating primitives mid-map.
+  if (getActiveWorldContent().presentationMode === 'blank') return { group };
   for (const node of GATHER_NODES) {
     const geo = NODE_GEOMETRY[node.type]();
     const mat = surfaceMat({ color: NODE_COLOR[node.type] });

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Sim } from '../src/sim/sim';
-import { SimEvent } from '../src/sim/types';
+import type { SimEvent } from '../src/sim/types';
 import { groundHeight } from '../src/sim/world';
 
 function makeWorld() {

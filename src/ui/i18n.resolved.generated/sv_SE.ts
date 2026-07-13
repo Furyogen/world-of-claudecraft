@@ -2050,6 +2050,8 @@ export const sv_SE: EnTranslations = {
       "view3dTitle": "Redigera i den renderade världen",
       "view2d": "2D",
       "view2dTitle": "Redigera på den symboliska översiktskartan",
+      "preview": "Preview",
+      "previewTitle": "See the map as it looks in-game: hides editor-only overlays (collider boxes, music areas, markers, rings, gizmos)",
       "undoCount": "Ångra: {count}",
       "undoCountTitle": "{count} steg kan ångras (Ctrl+Z för att ångra, Ctrl+Y för att göra om)",
       "autosave": "Autospar",
@@ -2085,6 +2087,87 @@ export const sv_SE: EnTranslations = {
       "music": "Play music",
       "close": "Close"
     },
+    "fluid": {
+      "title": "Fluid Pool",
+      "hint": "Pick a fluid and click the ground to place a pool. Use the transform tools to move it, stretch its footprint, and slide the surface down into a dip.",
+      "selHint": "The gizmo scales the pool footprint (X/Z) and the Y arrow slides the surface height. Damage ticks once per second on anyone in the fluid.",
+      "kind": {
+        "lava": "Lava",
+        "acid": "Acid",
+        "spectral": "Spectral Fluid",
+        "water": "Still Water"
+      },
+      "hue": "Hue",
+      "light": "Lightness",
+      "dps": "Damage per second",
+      "surfaceOffset": "Surface height",
+      "fxBubbles": "Bubbles",
+      "fxSmoke": "Smoke",
+      "fxHaze": "Haze",
+      "fxLight": "Glow light",
+      "resetPreset": "Reset to preset"
+    },
+    "tunnel": {
+      "needExit": "Entrance placed. Keep clicking to lay the path (the last point is the exit), then hit Generate.",
+      "generate": "Generate cave ({count} ready)",
+      "tooShort": "The rig points are too close together - spread them at least a few yards apart.",
+      "modeDig": "Dig cave",
+      "modeHole": "Cut hole",
+      "modePatch": "Patch hole",
+      "holeHint": "Click the ground to punch a round hole straight through the terrain mesh (brush radius wide). The ground simply stops existing there - line a cave mouth up underneath and you can walk or drop in. Resize or delete any hole below; undo removes the last one.",
+      "holeList": "Holes",
+      "holeLabel": "Hole {n}",
+      "holeRadius": "Radius",
+      "holeDelete": "Delete hole",
+      "patchHint": "Click the ground to lay a patch (brush radius wide) that FILLS the ground back in wherever hole cuts overlap it - use it to trim the blank parts around each cut. A patch always beats the holes it touches. Resize or delete any patch below; undo removes the last one.",
+      "patchList": "Patches",
+      "patchLabel": "Patch {n}",
+      "patchDelete": "Delete patch",
+      "listTitle": "Caves",
+      "caveLabel": "Cave {n} ({nodes} points)",
+      "width": "Width",
+      "height": "Interior height",
+      "variance": "Variance",
+      "floorVariance": "Floor bumps",
+      "stalactites": "Stalactites",
+      "stalagmites": "Stalagmites",
+      "spikeSize": "Formation size",
+      "startOpen": "Entrance open",
+      "endOpen": "Exit open",
+      "selectCave": "Select whole cave",
+      "noRig": "This cave has no rig nodes to grab - lay a new cave instead.",
+      "reverse": "Swap entrance/exit",
+      "delete": "Delete cave",
+      "texture": "Interior texture",
+      "texDefault": "Granite (default)",
+      "guideHint": "Blue nodes joined by a dotted line are your cave model (visible in every tool). Move a node with the Move tool, raise or sink it with the Y arrow, and scale it to widen the cave there - the tube re-generates live and ALWAYS keeps exactly the size you set. Green ball = entrance, red arrow = exit.",
+      "hint": "Click the ground to drop the ENTRANCE node, keep clicking to lay blue waypoints (the last one is the exit), then press Generate. The cave is a standalone tube built only from your nodes - the surrounding terrain never squishes or reshapes it. Use Cut hole mode to open the ground, then Select whole cave + the Move tool to slide the tube into place so its mouth lines up with the hole."
+    },
+    "rock": {
+      "title": "Rock Generator",
+      "hint": "Click the ground to grow a procedural boulder there. The sliders below shape the NEXT rock; select a placed rock with the Select tool to reshape it live. Use the gizmo to stretch rocks into slabs and cliff plates.",
+      "chainMode": "Bridge / ridge mode",
+      "chainHint": "Click to lay blue points; Generate lofts ONE merged solid body through them (spanning dips in a straight line) plus walkable tops, so the chain works as a bridge or ridge. The points stay after Generate: move or scale one with the gizmos and the body follows.",
+      "chainCount": "{count} points laid",
+      "generateChain": "Generate rock ridge",
+      "clearChain": "Clear points",
+      "chainTooShort": "Lay at least two points first.",
+      "size": "Size",
+      "noise": "Noise amount",
+      "detail": "Feature detail",
+      "sharp": "Sharpness",
+      "height": "Height",
+      "depth": "Embed depth",
+      "jag": "Jaggedness",
+      "texture": "Texture",
+      "baseTex": "Base texture",
+      "texStone": "Stone",
+      "texSandstone": "Sandstone",
+      "texBare": "Bare (tintable)",
+      "reroll": "Re-roll shape",
+      "selTitle": "Generated Rock",
+      "walkable": "Walkable top"
+    },
     "tool": {
       "listLabel": "Redigerarverktyg",
       "keyHint": "{name} ({key})",
@@ -2096,6 +2179,9 @@ export const sv_SE: EnTranslations = {
       "lower": "Sänk",
       "smooth": "Jämna ut",
       "flatten": "Platta till",
+      "tunnel": "Caves",
+      "rock": "Rock Gen",
+      "fluid": "Fluid Pool",
       "paint": "Måla biom",
       "water": "Vatten",
       "place": "Placera resurs",
@@ -2107,6 +2193,7 @@ export const sv_SE: EnTranslations = {
       "zone": "Zone",
       "light": "Point Light",
       "music": "Music",
+      "sound": "Point Sound",
       "region": "Region",
       "erase": "Radera"
     },
@@ -2147,13 +2234,17 @@ export const sv_SE: EnTranslations = {
       "cave": "Grotta",
       "erase": "Radera målning",
       "hint": "Målade celler åsidosätter zonens biom för terrängens form och färg.",
-      "addSwatch": "Add",
-      "swatchColor": "New swatch color",
-      "swatchNamePlaceholder": "Swatch name (optional)",
+      "hue": "Hue",
+      "light": "Light/Dark",
+      "saveSwatch": "Save tint as swatch",
+      "saveSwatchTitle": "Keep this hue/light version as its own swatch, so the tint can be reused after the sliders move on",
+      "swatchSaved": "Saved swatch \"{name}\".",
       "customHint": "Custom swatches color the ground only (terrain shape keeps the zone biome) and save with the map.",
       "customFull": "Swatch limit reached ({max}).",
       "importTexture": "Import texture swatch",
       "importTextureTitle": "Pick an image file: painting with the new swatch tiles it over the ground (stored in this browser; other machines see its average color)",
+      "builtinGroup": "Texture library",
+      "builtinTitle": "Built-in ground textures that ship with the editor: picking one adds it to this map as a swatch (available on every machine)",
       "tileSize": "Texture tile size (yd)",
       "importTextureFailed": "Could not read that image.",
       "clear": "Rensa all biommålning",
@@ -2182,7 +2273,8 @@ export const sv_SE: EnTranslations = {
       "hint": "Drag a box on the ground, then name it: standing inside shows that name as the location in playtest.",
       "namePrompt": "Location name",
       "none": "No named locations yet.",
-      "deleteTitle": "Remove this location"
+      "deleteTitle": "Remove this location",
+      "hideBoxes": "Hide area boxes"
     },
     "lightTool": {
       "title": "Point Lights",
@@ -2196,6 +2288,19 @@ export const sv_SE: EnTranslations = {
       "capReached": "Light limit reached ({max}).",
       "lightN": "Light {num}",
       "selectTitle": "Select this light in the world (bulb badge enlarges; Delete removes it)"
+    },
+    "soundTool": {
+      "title": "Point Sounds",
+      "hint": "Click the ground to drop a looping sound emitter, then pick a clip and set its max volume and radius. The falloff sphere shows how far it carries; it plays spatially in playtest.",
+      "none": "No point sounds yet.",
+      "clip": "Sound effect",
+      "volume": "Max volume",
+      "radius": "Radius (yd)",
+      "height": "Height (yd)",
+      "deleteTitle": "Remove this sound",
+      "capReached": "Point sound limit reached ({max}).",
+      "soundN": "Sound {num}",
+      "selectTitle": "Select this sound in the world (badge enlarges; Delete removes it)"
     },
     "markerTool": {
       "title": "AI Markers",
@@ -2222,6 +2327,8 @@ export const sv_SE: EnTranslations = {
     "sculpt": {
       "hint": "Drag to raise the ground; tick the box to carve downward instead.",
       "lower": "Lower instead of raise",
+      "grab": "Grab / pull (snake hook)",
+      "grabHint": "Press to grab the ground under the brush, then drag and the terrain follows your cursor in any direction - up lifts it, down shoves it in, sideways slides it across the map, like pulling clay. One grab is one undo step. Brush size sets how wide a chunk you pull.",
       "shiftHint": "Hold Shift while dragging to do the opposite (raise becomes lower, and back).",
       "autoTex": "Auto texture by angle",
       "autoTexHint": "Each stroke repaints the sculpted area by ground angle: one texture below the threshold, another above it (instant cliffs).",
@@ -2241,6 +2348,10 @@ export const sv_SE: EnTranslations = {
       "level": "Vattennivå",
       "hint": "Anger vattenytans höjd för hela kartan, från {min} till {max} yard.",
       "reset": "Återställ till den inbyggda nivån",
+      "tintTitle": "Water tint",
+      "hue": "Hue",
+      "light": "Lightness",
+      "tintReset": "Reset tint",
       "waterfallTitle": "Waterfalls",
       "placeWaterfall": "Place waterfall",
       "placeWaterfallTitle": "Arm the Place tool with an animated waterfall (click a cliff to drop it)",
@@ -2354,7 +2465,49 @@ export const sv_SE: EnTranslations = {
       "radiusAuto": "Auto",
       "radiusAutoTitle": "Återställ kollisionsradien så att den följer resursens skala",
       "radiusHint": "Auto härleder kollisionsradien från resursens skala; dra i reglaget för att åsidosätta den.",
+      "collisionBaked": "Blocking with the baked model shape ({count} boxes hugging the mesh). Drag the radius slider to override with a simple circle; Auto restores the baked shape.",
+      "collisionCustom": "Custom footprint (circle/square) - overrides the baked model shape. Press Auto to restore it.",
       "footprints": "Visa kollisionsavtryck",
+      "collisionTitle": "Collision",
+      "collisionType": "Collision type",
+      "collisionTypeBaked": "Baked hitboxes",
+      "collisionTypeBasic": "Basic (radius)",
+      "collisionTypeMesh": "True collision (heavy)",
+      "collisionTypeNone": "No collision",
+      "collisionEdited": "Custom hitboxes ({count} boxes). The sim blocks with exactly these.",
+      "hitboxEdit": "Edit hitboxes",
+      "hitboxDone": "Done editing",
+      "hitboxAdd": "Add hitbox",
+      "hitboxDelete": "Delete selected",
+      "hitboxReset": "Reset to baked",
+      "hitboxSelected": "{count} hitboxes selected",
+      "hitboxHint": "Click a hitbox to select it; Ctrl/Shift+click selects several. Use the Move, Rotate, and Scale tools (or the gizmo) to shape them like any other object. Delete removes the selected boxes; Esc leaves edit mode.",
+      "hitboxCap": "Hitbox limit reached ({max} per asset).",
+      "hitboxSavePreset": "Save as preset",
+      "hitboxClearPreset": "Clear saved preset",
+      "hitboxPresetSaved": "Hitbox preset saved for {name}. New placements copy these boxes.",
+      "hitboxPresetCleared": "Hitbox preset cleared.",
+      "hitboxPresetHint": "Presets live on this device: every future placement of this asset spawns with the saved hitboxes.",
+      "meshBaking": "Baking true collision from the model mesh...",
+      "meshBakeDone": "True collision ready ({count} boxes).",
+      "meshBakeFailed": "Could not bake true collision for this asset.",
+      "meshReady": "True collision active: a dense box set hugging the real model mesh.",
+      "meshHint": "True collision rebuilds the hitboxes from the actual model mesh (many small boxes). Expensive - keep it for edge cases; it bakes once per asset when selected.",
+      "collisionCopyAll": "Copy collision to all {name} ({count})",
+      "collisionCopyAllHint": "Gives every other {name} on the map the same collision type and shape, sized to each copy so a small one never gets a giant footprint.",
+      "collisionCopyConfirmTitle": "Copy collision to all {name}?",
+      "collisionCopyConfirmBody": "All {count} other {name} on the map take this collision type and shape, each sized to its own scale (a small copy gets a small footprint, never this one), replacing their own. Ctrl+Z reverts the whole copy.",
+      "collisionCopyConfirm": "Copy to all",
+      "collisionCopied": "Copied collision to {count} {name}.",
+      "scaleAllTitle": "Scale all copies",
+      "scaleMin": "Scale min",
+      "scaleMax": "Scale max",
+      "scaleAllButton": "Scale all {name} ({count})",
+      "scaleAllHint": "Rolls a random scale between min and max onto every copy of this asset (set min and max equal for a uniform scale).",
+      "scaleAllConfirmTitle": "Scale all {name}?",
+      "scaleAllConfirmBody": "Every one of the {count} {name} on the map (this one included) gets a random scale between {min} and {max}, replacing its current scale. Ctrl+Z reverts it.",
+      "scaleAllConfirm": "Scale all",
+      "scaleAllDone": "Scaled {count} {name}.",
       "duplicate": "Duplicera",
       "delete": "Radera",
       "deleteHint": "Delete tar bort markeringen; Ctrl+Z återställer den.",
@@ -2495,6 +2648,8 @@ export const sv_SE: EnTranslations = {
       "draftRestored": "Återställde det autosparade utkastet.",
       "autosaveFailed": "Autospar misslyckades (webbläsarens lagring är full eller blockerad). Exportera kartan för att behålla en säkerhetskopia.",
       "terrainCapReached": "Gränsen för terrängändringar nådd ({max}). Extra skulpteringsstämplar lades inte till.",
+      "caveCapReached": "Cave limit reached ({max}). Delete or undo a cave first.",
+      "holeCapReached": "Hole limit reached ({max}). Delete or undo a hole first.",
       "placementCapReached": "Placeringsgränsen nådd ({max}). Extra resurser lades inte till.",
       "blockerCapReached": "Gränsen för spärrväggar nådd ({max}). Den nya väggen lades inte till.",
       "autosaveOff": "Autospar avstängt: {reason} Spara manuellt och slå sedan på det igen."
@@ -6011,6 +6166,132 @@ export const sv_SE: EnTranslations = {
       "sunpetal_sickle": {
         "name": "Solkronbladsskära"
       },
+      "ashen_psalter": {
+        "name": "Askpsalter"
+      },
+      "brimming_waterskin": {
+        "name": "Bräddfull vattensäck"
+      },
+      "cactus_pressed_water": {
+        "name": "Pressat kaktusvatten"
+      },
+      "caravan_guard_mail": {
+        "name": "Karavanvaktens brynja"
+      },
+      "caravan_manifest": {
+        "name": "Vattenfläckat fraktbrev"
+      },
+      "cinder_soaked_veil": {
+        "name": "Glöddränkt slöja"
+      },
+      "crown_brazier": {
+        "name": "Kronfyrfat"
+      },
+      "crown_guard_seal": {
+        "name": "Kronvaktens sigill"
+      },
+      "duneblade_token": {
+        "name": "Dynklinge-pollett"
+      },
+      "duneforged_warblade": {
+        "name": "Dynsmidd krigsklinga"
+      },
+      "dunewatch_sash": {
+        "name": "Dynvaktens skärp"
+      },
+      "duskmane_pelt": {
+        "name": "Skymningsmanpäls"
+      },
+      "emberbound_leggings": {
+        "name": "Glödbundna benskenor"
+      },
+      "emberglass_scepter": {
+        "name": "Glödglasspira"
+      },
+      "emberveil_writ": {
+        "name": "Glödslöjans påbud"
+      },
+      "glasscarab_shell": {
+        "name": "Glasskarabéskal"
+      },
+      "glasscut_dirk": {
+        "name": "Glasskåredolk"
+      },
+      "heart_of_the_first_ember": {
+        "name": "Den Första Glödens hjärta"
+      },
+      "heartspring_offering": {
+        "name": "Hjärtkällans offerskål"
+      },
+      "kareshs_last_skin": {
+        "name": "Kareshs sista vattensäck"
+      },
+      "lastwell_datewine": {
+        "name": "Dadelvin från Sista Brunnen"
+      },
+      "living_cinder": {
+        "name": "Levande glöd"
+      },
+      "moltenheart_girdle": {
+        "name": "Smälthjärtebälte"
+      },
+      "moltenheart_slagcore": {
+        "name": "Smälthjärtats slaggkärna"
+      },
+      "mural_rubbing": {
+        "name": "Muralavgnidning"
+      },
+      "parched_kings_goblet": {
+        "name": "Den Förtorkade Kungens bägare"
+      },
+      "prowler_fang": {
+        "name": "Smygarhuggtand"
+      },
+      "sentinel_core_stone": {
+        "name": "Väktarens kärnsten"
+      },
+      "springheart_blessing": {
+        "name": "Hjärtkällans välsignelse"
+      },
+      "stolen_waterskin": {
+        "name": "Stulen vattensäck"
+      },
+      "sunbaked_flatbread": {
+        "name": "Solbakat tunnbröd"
+      },
+      "sunbleached_bone": {
+        "name": "Solblekt ben"
+      },
+      "sunbleached_staff": {
+        "name": "Solblekt stav"
+      },
+      "sunglass_shard": {
+        "name": "Solglasskärva"
+      },
+      "sunspeakers_ash_crown": {
+        "name": "Soltalarens askkrona"
+      },
+      "vestment_of_the_sunken_crown": {
+        "name": "Den Sjunkna Kronans skrud"
+      },
+      "vigil_obelisk_dawn": {
+        "name": "Gryningseldens sigill"
+      },
+      "vigil_obelisk_dusk": {
+        "name": "Skymningseldens sigill"
+      },
+      "vigil_obelisk_noon": {
+        "name": "Middagseldens sigill"
+      },
+      "wastes_relic_cache": {
+        "name": "Solhovets relikgömma"
+      },
+      "wastewalker_jerkin": {
+        "name": "Ödevandrarens jacka"
+      },
+      "wastewalker_treads": {
+        "name": "Ödevandrarens kängor"
+      },
       "bristleback_maul": {
         "name": "Gallowglass-hammare"
       },
@@ -6811,6 +7092,48 @@ export const sv_SE: EnTranslations = {
       "thunzharr_stormling": {
         "name": "Väckt stormyngel"
       },
+      "duskmane_prowler": {
+        "name": "Duskmane Prowler"
+      },
+      "glasscarab": {
+        "name": "Glasscarab"
+      },
+      "duneblade_marauder": {
+        "name": "Duneblade Marauder"
+      },
+      "karesh_the_parched": {
+        "name": "Karesh the Parched"
+      },
+      "vigil_sentinel": {
+        "name": "Vigil Sentinel"
+      },
+      "sunbaked_revenant": {
+        "name": "Sunbaked Revenant"
+      },
+      "ashen_courtier": {
+        "name": "Ashen Courtier"
+      },
+      "sunspeaker_atharis": {
+        "name": "Sunspeaker Atharis"
+      },
+      "emberveil_zealot": {
+        "name": "Emberveil Zealot"
+      },
+      "emberveil_pyromancer": {
+        "name": "Emberveil Pyromancer"
+      },
+      "cinder_elemental": {
+        "name": "Cinder Elemental"
+      },
+      "moltenheart_colossus": {
+        "name": "Moltenheart Colossus"
+      },
+      "cinder_wisp": {
+        "name": "Cinder Wisp"
+      },
+      "ember_of_korzul": {
+        "name": "The First Ember"
+      },
       "ironvein_foreman": {
         "name": "Järnådersförman"
       },
@@ -7040,6 +7363,66 @@ export const sv_SE: EnTranslations = {
         "name": "Den bleka väktaren",
         "title": "De dödas väktare",
         "greeting": "Vila nu, ande. Jag kan återbörda dig till din kropp, men överfarten tillbaka lämnar dig svag."
+      },
+      "caravan_master_saffa": {
+        "name": "Caravan-Master Saffa",
+        "title": "Keeper of the Last Well",
+        "greeting": "Water is the only coin out here, friend. Highwatch sent us to spend it well - and the Wastes mean to bankrupt us."
+      },
+      "scout_maren_wastes": {
+        "name": "Scout Maren",
+        "title": "Marshal's Scout",
+        "greeting": "I tracked mud through Mirefen and snow over Thornpeak. Sand is worse. Sand remembers every step you take."
+      },
+      "loremaster_caddis_wastes": {
+        "name": "Loremaster Caddis",
+        "title": "Scholar of the Sunken Crown",
+        "greeting": "Zar'Keth fell in one night, {playerName} - a whole kingdom, fused to glass mid-sentence. I have waited my entire life to hear the rest of that sentence."
+      },
+      "brother_aldric_wastes": {
+        "name": "Brother Aldric",
+        "title": "Priest of the Vale",
+        "greeting": "The Wyrm's heat bleeds even here, {playerName} - I feel it through my boot-soles. Whatever the cult digs for in that glass, they must not carry it home."
+      },
+      "old_haruk": {
+        "name": "Old Haruk",
+        "title": "Warden of the Heartspring",
+        "greeting": "My family has watered this spring since before it needed watching. Nine kings drank from it. The tenth tried to drink it ALL."
+      },
+      "provisioner_ashka": {
+        "name": "Provisioner Ashka",
+        "title": "Caravan Provisioner",
+        "greeting": "Flatbread, datewine, and water with no bodies in it. Finest stock in the Wastes."
+      },
+      "forgemaster_derin": {
+        "name": "Forgemaster Derin",
+        "title": "Caravan Smith",
+        "greeting": "Sand in the forge, sand in the quench, sand in my teeth. The blades come out sharper for the grudge."
+      },
+      "auctioneer_zeph": {
+        "name": "Auctioneer Zeph",
+        "title": "Keeper of the World Market",
+        "greeting": "The Market reaches even the Last Well, friend. Gold weighs the same in any desert."
+      },
+      "wellwatch_hana": {
+        "name": "Wellwatch Hana",
+        "title": "Caravan Guard",
+        "greeting": "Walk in with water, walk out with water. Everything between is my problem."
+      },
+      "wellwatch_toma": {
+        "name": "Wellwatch Toma",
+        "title": "Caravan Guard",
+        "greeting": "Quiet shift. Out here 'quiet' just means the sand is chewing slower."
+      },
+      "drover_pell": {
+        "name": "Drover Pell",
+        "title": "Mule-Drover",
+        "greeting": "The mules drink first. Caravan law. You want to argue law with a mule, be my guest."
+      },
+      "dowser_emrys": {
+        "name": "Dowser Emrys",
+        "title": "Water-Finder",
+        "greeting": "My rod bends double at the falls and nowhere else for forty miles. This land is one spring away from being a graveyard."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
@@ -7827,6 +8210,239 @@ export const sv_SE: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Mogger dräpt"
+          }
+        }
+      },
+      "q_sw_arrival": {
+        "title": "The Last Well",
+        "text": "Welcome to the end of the map, {playerName}. Highwatch calls this venture \"the southern expedition\"; I call it forty souls and one spring. Before anything else - water. Draw four skins from the Heartspring pools north of camp so I know the line to the falls is safe to walk.",
+        "completion": "Cold, clear, and no arrows in you - that is the best news the Last Well has had all season.",
+        "objectives": {
+          "0": {
+            "label": "Brimming Waterskin"
+          }
+        }
+      },
+      "q_sw_prowlers": {
+        "title": "Teeth of the Dusk",
+        "text": "The duskmanes have learned the sound of our water-carts, {playerName}. Every dusk they pace closer, and last night one dragged off a mule with the harness still on it. Thin the packs on the Bonewind Flats south of camp and bring me eight pelts as proof the lesson took.",
+        "completion": "Eight pelts, eight fewer shadows at the picket line. The mules may finally sleep - which is more than I do.",
+        "objectives": {
+          "0": {
+            "label": "Duskmane Prowler slain"
+          },
+          "1": {
+            "label": "Duskmane Pelt"
+          }
+        }
+      },
+      "q_sw_carrion_glass": {
+        "title": "Carrion Glass",
+        "text": "Glasscarabs, the drovers call them - beetles the size of hounds with shells of fused glass, boiling out of the burn to the east. Derin swears the shells will edge a blade finer than any whetstone. Crack eight carabs and bring six unbroken shells; mind the shine, it means they are hardening.",
+        "completion": "Look at that edge-light! Derin owes me a sharpening for life, and the east road owes you a quieter crossing.",
+        "objectives": {
+          "0": {
+            "label": "Glasscarab slain"
+          },
+          "1": {
+            "label": "Glasscarab Shell"
+          }
+        }
+      },
+      "q_sw_lost_caravan": {
+        "title": "What the Dunes Kept",
+        "text": "Three wagons never made the well, {playerName} - grain, tools, and my sister's husband driving the lead cart. The storm scattered them across the southwest dunes. Find the wrecks and search them. I need the manifests to know what we lost... and I need to know if anyone walked away.",
+        "completion": "Boot prints leading AWAY from the wrecks - then nothing but marauder tracks. They took the drivers alive. That is either mercy or arithmetic, and out here I know which one to bet on.",
+        "objectives": {
+          "0": {
+            "label": "Wrecked wagon searched"
+          }
+        }
+      },
+      "q_sw_marauders": {
+        "title": "The Water Tax",
+        "text": "The Duneblades call it a tax: your water or your blood, payable on sight. They hold a camp in the hollow southwest of the dunes, drinking our stolen skins around our stolen fires. Break them, {playerName}. Ten marauders down, and bring back five skins - those are our people's lives in leather.",
+        "completion": "Every skin you carry is a day someone at this well does not die. The Duneblades will remember the price of taxing us.",
+        "objectives": {
+          "0": {
+            "label": "Duneblade Marauder slain"
+          },
+          "1": {
+            "label": "Stolen Waterskin"
+          }
+        }
+      },
+      "q_sw_karesh": {
+        "title": "The Parched King",
+        "text": "Their chief styles himself Karesh the Parched - he drank his own cistern dry and salted the dregs so no rival could follow him. A man who will do that to his own well will do worse to ours. He holds court in Karesh's Hollow under the western ridge. End his reign, {playerName}, and bring me the last skin he is hoarding.",
+        "completion": "So that is the last skin of the Parched King. Saffa will pour it back into the well - every drop, on principle.",
+        "objectives": {
+          "0": {
+            "label": "Karesh the Parched slain"
+          },
+          "1": {
+            "label": "Karesh's Last Skin"
+          }
+        }
+      },
+      "q_sw_survey": {
+        "title": "The Sentence Interrupted",
+        "text": "Now that the well can spare you - walk history with me, {playerName}. The Sun-Court left murals: one under the Aqueduct Spine, one at the mesa's foot, one by the twin towers at the oasis ruin. Take rubbings of all three. Zar'Keth died mid-sentence, and I mean to read the rest of it.",
+        "completion": "There - the sentence completes: \"When the crown grew too hot to wear, the kings climbed the mesa and gave the fire BACK.\" A rite of renunciation, worked on obelisks - dawn, then noon, then dusk. That order matters, {playerName}. Rites always mind their order.",
+        "objectives": {
+          "0": {
+            "label": "Mural rubbing taken"
+          }
+        }
+      },
+      "q_sw_vigil_dawn": {
+        "title": "The Vigil: Dawn",
+        "text": "The mesa west of camp is the Vigil itself - the kings' renunciation path. The Obelisk of Dawn stands on the first terrace, where the sun strikes first. Climb the switchbacks and lay your hand on it. Dawn wakes first; the mural is quite insistent.",
+        "completion": "You felt it hum? Marvelous. The rite still holds its charge after two ages. Dawn is lit - noon waits above.",
+        "objectives": {
+          "0": {
+            "label": "Dawnfire Sigil drawn from the obelisk"
+          }
+        }
+      },
+      "q_sw_vigil_noon": {
+        "title": "The Vigil: Noon",
+        "text": "Noon crowns the summit - the second obelisk stands at the mesa's very top, where the sun owns the whole sky. The climb is the point, {playerName}: the kings carried their crowns up every step of it. Wake the Obelisk of Noon.",
+        "completion": "Dawn, then noon. One hour of the rite remains - and the Vigil is beginning to notice us.",
+        "objectives": {
+          "0": {
+            "label": "Noonfire Sigil drawn from the obelisk"
+          }
+        }
+      },
+      "q_sw_vigil_dusk": {
+        "title": "The Vigil: Dusk",
+        "text": "Dusk is always last to the vigil - its obelisk stands on the western spur, over the canyon. But understand what the rite is, {playerName}: a renunciation must be WITNESSED. The court set a sentinel of living mesa-stone to stand witness, and when dusk lights, it will wake to judge whether you renounce or merely take. Convince it. Thoroughly.",
+        "completion": "The Sentinel judged you worthy - or judged you unkillable, which to a stone is the same finding. The Vigil is complete, and every door in Zar'Keth just became a question worth asking.",
+        "objectives": {
+          "0": {
+            "label": "Obelisk of Dusk awakened"
+          },
+          "1": {
+            "label": "Vigil Sentinel defeated"
+          }
+        }
+      },
+      "q_sw_revenants": {
+        "title": "Posts of the Dead",
+        "text": "Zar'Keth's soldiery never learned the war was lost - never learned it was BRIEF. They walk the outer ruin north of the falls with their armor fused to their bones, challenging travelers for passwords no living tongue remembers. Put twelve of them to rest, {playerName}, and gather their guard-seals; the seals will pass us deeper into the city.",
+        "completion": "Each seal still warm - loyal to the last, and past it. Whatever holds their watch together sits further in, and now we outrank it.",
+        "objectives": {
+          "0": {
+            "label": "Sunbaked Revenant slain"
+          },
+          "1": {
+            "label": "Crown Guard Seal"
+          }
+        }
+      },
+      "q_sw_courtiers": {
+        "title": "The Court of Ash",
+        "text": "Deeper in, the court itself still sits - chamberlains and lectors keeping a dead king's protocol, reading psalms to a throne of slag. Their psalters hold the sanctum liturgy, and the liturgy holds the rite that lights the Crown's braziers. Break up the session, {playerName}, and bring me a psalter with its pages intact.",
+        "completion": "Oh, this is beautiful work - the whole brazier rite, notated in a dead cantor's hand. They kept singing it for two hundred years to an empty throne. I almost pity them. Almost.",
+        "objectives": {
+          "0": {
+            "label": "Ashen Courtier slain"
+          },
+          "1": {
+            "label": "Ashen Psalter"
+          }
+        }
+      },
+      "q_sw_braziers": {
+        "title": "The Crown Alight",
+        "text": "The psalter names three Crown Braziers among the towers - light all three and the inner sanctum opens itself, as it did for coronations. I have chalked the rite onto your gauntlet, {playerName}; try not to sweat. Fair warning: a lit crown is a visible crown. Everything in that city will know the moment the third flame takes.",
+        "completion": "From the well we watched the towers catch light one by one - Saffa wept, and I confess I lectured no one about it. The sanctum stands open. And something inside is singing back.",
+        "objectives": {
+          "0": {
+            "label": "Crown Brazier lit"
+          }
+        }
+      },
+      "q_sw_sunspeaker": {
+        "title": "The Tenth Coronation",
+        "text": "The voice in the sanctum is Sunspeaker Atharis - crowner of all nine kings of Zar'Keth. The psalms name him the court's living memory, and he has spent two ages preparing a tenth coronation: for the fire itself. He stands at the Sun-Throne between the twin towers. Depose him, {playerName}, before he finishes a rite the whole desert will regret.",
+        "completion": "Nine crowns he set on nine brows, and the tenth would have burned the world to fit it. History will record that you adjourned the court of Zar'Keth. I will make certain history phrases it exactly that way.",
+        "objectives": {
+          "0": {
+            "label": "Sunspeaker Atharis deposed"
+          }
+        }
+      },
+      "q_sw_emberveil": {
+        "title": "The Emberveil",
+        "text": "You have seen the veiled camps along the eastern rim, {playerName}. They are Wyrmcult - a splinter sect, the Emberveil, come over the pass while Highwatch watched the Sanctum gates. Where the mother cult sings to wake the Wyrm, these dig to ARM it. Their zealots and pyromancers are sweeping the glass for something. Thin them before they find it.",
+        "completion": "Sixteen fewer shovels in that glass. But the digging goes on day and night - they are not searching anymore, {playerName}. They are excavating.",
+        "objectives": {
+          "0": {
+            "label": "Emberveil Zealot slain"
+          },
+          "1": {
+            "label": "Emberveil Pyromancer slain"
+          }
+        }
+      },
+      "q_sw_writs": {
+        "title": "Writs of the Veil",
+        "text": "Their leaders carry writs - orders in the mother cult's cipher. I broke that cipher at Highwatch and I will break it again here. Bring me five writs from the Emberveil, {playerName}, and we will read exactly what they were sent to fetch.",
+        "completion": "As I feared. \"Recover the FIRST EMBER - the shard of the Master's fire the sun-kings stole and chained. Carry it to the Sanctum gate; the seal will not suffer its own flame.\" They mean to burn the Wyrm's door open with the Wyrm's own stolen fire, {playerName}.",
+        "objectives": {
+          "0": {
+            "label": "Emberveil Writ"
+          }
+        }
+      },
+      "q_sw_glasscut": {
+        "title": "Where the Sky Burned",
+        "text": "The Glasscut is where the First Ember fell the night it unmade Zar'Keth - the ground still runs hot, and cinder elementals walk it like sparks that never landed. The Ember is waking, {playerName}; its sparks grow bolder as the cult digs closer. Scatter eight of them and bring me five living cinders. I must take the measure of the fire we face.",
+        "completion": "They squirm even in blessed salt... this is dragonfire, no mistaking it now. The Ember is not a relic, {playerName}. It is a REMNANT - a living piece of Korzul's temper, and it remembers being worn as a crown.",
+        "objectives": {
+          "0": {
+            "label": "Cinder Elemental slain"
+          },
+          "1": {
+            "label": "Living Cinder"
+          }
+        }
+      },
+      "q_sw_offering": {
+        "title": "The Spring Remembers",
+        "text": "The priest means to face the fire, and you with him. Then hear a well-keeper's wisdom, {playerName}: the Heartspring rises from beneath the Wyrm's own prison, and what passes under a thing knows that thing. Take my offering bowl to the pool atop the falls, pour, and listen. The spring has drowned this fire once before. Let it bless you before you go asking to be burned.",
+        "completion": "You heard it too - the deep water, moving under the world. Wear that sound like armor, {playerName}. Fire is loud, but the spring was here first, and it will be here after.",
+        "objectives": {
+          "0": {
+            "label": "Offering poured at the Heartspring"
+          }
+        }
+      },
+      "q_sw_first_ember": {
+        "title": "The First Ember",
+        "text": "It is uncovered, {playerName}. The cult's pit broke open at dawn and the Glasscut lit from within - the First Ember stands in the crater it made two ages ago, wearing fire like a king's regalia, and the Emberveil kneel to it in rows. If it reaches the Sanctum gate, everything Highwatch bled for is ash. You carry the spring's blessing and the Vigil's witness. Go down into the glass and finish the sentence Zar'Keth began: the fire goes BACK.",
+        "completion": "The falls ran quick and bright the moment it died - the spring, taking its old enemy under. You have done what nine kings could not, {playerName}: you gave the fire back. Sit. Drink. The water is sweetest tonight.",
+        "objectives": {
+          "0": {
+            "label": "The First Ember extinguished"
+          }
+        }
+      },
+      "q_sw_afterglow": {
+        "title": "Water for the Living",
+        "text": "Haruk says the spring sings a note lower now, like a debt paid off. The Emberveil are ash or fled, the court is adjourned, and my ledger finally shows more water than worry. One last task, {playerName} - walk the camp and let Maren, Caddis, and Brother Aldric each thank you properly. They have earned the chance, and so have you.",
+        "completion": "Then it is done, and the Last Well is just... a well. First of many along a living road, if this old caravaneer has any say. The Scorching Wastes will remember your name, {playerName} - the water remembers everything.",
+        "objectives": {
+          "0": {
+            "label": "Spoke with Scout Maren"
+          },
+          "1": {
+            "label": "Spoke with Loremaster Caddis"
+          },
+          "2": {
+            "label": "Spoke with Brother Aldric"
           }
         }
       },

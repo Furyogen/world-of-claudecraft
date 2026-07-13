@@ -78,7 +78,18 @@ describe('blocker wall colliders', () => {
 
 describe('placement collideRadius override', () => {
   function placement(collideRadius: number): PlacedAsset {
-    return { path: '/models/props/well.glb', x: 0, z: 60, rotY: 0, scale: 1, collideRadius };
+    // collideCustom: an AUTHORED radius keeps the legacy footprint (the
+    // projection sets this whenever the maker overrode radius/shape); without
+    // it the sim would block with the asset's baked collision boxes instead.
+    return {
+      path: '/models/props/well.glb',
+      x: 0,
+      z: 60,
+      rotY: 0,
+      scale: 1,
+      collideRadius,
+      collideCustom: true,
+    };
   }
 
   it('blocks at the overridden radius, not the scale-derived one', () => {
@@ -106,6 +117,7 @@ describe('placement collideRadius override', () => {
       scale: 1,
       collideRadius: 4,
       collideShape: 'square',
+      collideCustom: true,
     };
     setActiveWorldContent(world({ placements: [{ ...square, collideShape: undefined }] }));
     expect(isBlocked(SEED, diag, 60 + diag, 0.3)).toBe(false);
@@ -125,6 +137,7 @@ describe('placement collideRadius override', () => {
       scale: 1,
       collideRadius: 4,
       collideShape: 'square',
+      collideCustom: true,
     };
     setActiveWorldContent(world({ placements: [square] }));
     expect(isBlocked(SEED, 5.2, 60, 0.3)).toBe(true);

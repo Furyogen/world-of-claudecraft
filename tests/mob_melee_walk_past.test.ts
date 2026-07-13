@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { Sim } from '../src/sim/sim';
-import { createMob } from '../src/sim/entity';
 import { MOBS } from '../src/sim/data';
+import { createMob } from '../src/sim/entity';
+import { Sim } from '../src/sim/sim';
 import { MELEE_RANGE } from '../src/sim/types';
 
 // Regression for "excessive melee range on monsters": a STATIONARY mob used to gain a

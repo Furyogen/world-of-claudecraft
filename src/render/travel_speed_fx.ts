@@ -93,9 +93,15 @@ export function speedStreaks(intensity: number, phase: number, count = 28): Spee
  * inputs; the renderer drives this with a persistent buffer.
  */
 export function speedStreaksInto(
-  out: SpeedStreak[], intensity: number, phase: number, count = 28,
+  out: SpeedStreak[],
+  intensity: number,
+  phase: number,
+  count = 28,
 ): SpeedStreak[] {
-  if (intensity <= 0) { out.length = 0; return out; }
+  if (intensity <= 0) {
+    out.length = 0;
+    return out;
+  }
   const reach = 0.18 + 0.32 * intensity; // longer streaks the faster you go
   for (let n = 0; n < count; n++) {
     // even spread plus a tiny deterministic jitter so streaks don't look combed.
@@ -107,8 +113,12 @@ export function speedStreaksInto(
     const outer = Math.min(1, inner + reach * (0.7 + 0.3 * shimmer));
     const alpha = intensity * (0.45 + 0.55 * shimmer);
     const s = out[n];
-    if (s) { s.angle = angle; s.inner = inner; s.outer = outer; s.alpha = alpha; }
-    else out[n] = { angle, inner, outer, alpha };
+    if (s) {
+      s.angle = angle;
+      s.inner = inner;
+      s.outer = outer;
+      s.alpha = alpha;
+    } else out[n] = { angle, inner, outer, alpha };
   }
   out.length = count;
   return out;

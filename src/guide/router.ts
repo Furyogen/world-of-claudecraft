@@ -37,7 +37,14 @@ export class GuideRouter {
 
   private handleClick = (ev: MouseEvent): void => {
     // Respect modified clicks (new tab/window) and non-primary buttons.
-    if (ev.defaultPrevented || ev.button !== 0 || ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) {
+    if (
+      ev.defaultPrevented ||
+      ev.button !== 0 ||
+      ev.metaKey ||
+      ev.ctrlKey ||
+      ev.shiftKey ||
+      ev.altKey
+    ) {
       return;
     }
     const anchor = (ev.target as Element | null)?.closest('a');
@@ -47,7 +54,8 @@ export class GuideRouter {
     // Same-page in-page anchors (the skip link, any table-of-contents jump) must be
     // left to the browser so it scrolls and focuses the target natively. Intercepting
     // them would route to a #hash path and render notFound.
-    if (href.startsWith('#') || (anchor.hash && anchor.pathname === window.location.pathname)) return;
+    if (href.startsWith('#') || (anchor.hash && anchor.pathname === window.location.pathname))
+      return;
     // Only intercept same-origin links that live under the Guide base. Everything
     // else (the game, the community wiki, external links, downloads) navigates normally.
     if (anchor.target === '_blank' || anchor.hasAttribute('download')) return;

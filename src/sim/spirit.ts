@@ -79,7 +79,13 @@ export function nearestOverworldGraveyard(x: number, z: number): { x: number; z:
 // ghost runs its spirit back to the door and re-enters to resurrect at the entrance, so
 // no Spirit Healer stands inside an instance. Outdoors it is the nearest overworld
 // graveyard to where the body fell.
-function ghostGraveyard(p: Entity): { x: number; z: number } {
+function ghostGraveyard(ctx: SimContext, p: Entity): { x: number; z: number } {
+  // A blank editor map has no graveyards: released spirits rise at the map's
+  // starting spawn point, where the single Pale Keeper stands (see Sim ctor).
+  const world = ctx.cfg.world;
+  if (world?.presentationMode === 'blank') {
+    return { x: world.playerStart.x, z: world.playerStart.z };
+  }
   const dungeon = dungeonAt(p.pos.x);
   if (dungeon) return nearestOverworldGraveyard(dungeon.doorPos.x, dungeon.doorPos.z);
   return nearestOverworldGraveyard(p.pos.x, p.pos.z);
@@ -103,7 +109,7 @@ export function releasePlayerSpirit(ctx: SimContext, pid?: number): void {
   // Mark where the body lies, then send the spirit to the graveyard.
   p.corpsePos = { x: p.pos.x, y: p.pos.y, z: p.pos.z };
   p.ghost = true; // p.dead stays true
-  const gy = ghostGraveyard(p);
+  const gy = ghostGraveyard(ctx, p);
   p.pos = ctx.groundPos(gy.x, gy.z);
   p.prevPos = { ...p.pos };
   ctx.rebucket(p);

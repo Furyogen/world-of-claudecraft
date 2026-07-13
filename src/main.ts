@@ -93,7 +93,7 @@ import { assetsReady } from './render/assets/preload';
 import { CharacterPreview } from './render/characters';
 import { skinCount } from './render/characters/manifest';
 import { playerPortraitDataUrl } from './render/characters/portrait';
-import { installWebGLContextRelease } from './render/context_release';
+import { installWebGLContextRelease, registerPageTeardown } from './render/context_release';
 import { firstRunGraphicsPreset, GFX, graphicsPresetLabel } from './render/gfx';
 import { Renderer } from './render/renderer';
 import { navigatorSaveData } from './render/sky';
@@ -233,8 +233,10 @@ if (NATIVE_APP) document.body.classList.add('mobile-touch');
 // main process and render the auto-update toast (no-op without the bridge).
 if (DESKTOP_APP) initDesktopShellIntegration();
 // Free every WebGL context (game renderer, character preview, portrait rig) when
-// the page is torn down, so logout/login reload cycles don't exhaust the GPU
-// context pool and break the next renderer with "Error creating WebGL context".
+// the page is torn down, so logout/login reload cycles — and the editor Playtest
+// hand-off (index.html ↔ editor.html) — don't exhaust the GPU context pool and
+// break the next renderer with "Error creating WebGL context". The playtest boot
+// additionally closes its AudioContexts on teardown (registerPageTeardown below).
 installWebGLContextRelease();
 let pendingDeleteCharacter: CharacterSummary | null = null;
 let homepageMusic: HTMLAudioElement | null = null;
@@ -7691,6 +7693,29 @@ function fadeOutHomepageMusic(durationMs = 1600): void {
   }
 })();
 
+// Initialize the three audio engines on the first user gesture of a playtest
+// session. AudioContexts created without a user activation start suspended, so
+// (like enterWorld / handleOfflineStart) the inits must run inside a gesture.
+// One-shot: the first pointer/key/touch wins and all listeners are removed.
+// init() is idempotent, so a redundant fire is harmless.
+//
+// CAPTURE phase (the `true` flag): the spawn-intro cinematic also listens on
+// window in the capture phase and calls stopPropagation() on every pointerdown/
+// keydown to swallow the intro-skip gesture. A bubble-phase listener here would
+// never see that gesture, so audio would stay dead through the whole intro.
+// stopPropagation() does not stop other capture-phase listeners on the same
+// target, so running in capture keeps us immune to it.
+function initPlaytestAudioOnFirstGesture(): void {
+  const events = ['pointerdown', 'keydown', 'touchstart'] as const;
+  const start = () => {
+    for (const ev of events) window.removeEventListener(ev, start, true);
+    audio.init();
+    music.init();
+    sfx.init();
+  };
+  for (const ev of events) window.addEventListener(ev, start, true);
+}
+
 // Editor play-test handoff: if the map editor stored a custom world and sent us
 // here, boot straight into that offline world and skip the start screen. Any
 // malformed/absent request falls through to the normal home flow.
@@ -7698,6 +7723,22 @@ const editorPlaytest = takeEditorPlaytestRequest();
 if (editorPlaytest) {
   startSitePresence('home');
   mountPlaytestReturnButton();
+  // Close the playtest AudioContexts when this page is really torn down (e.g.
+  // "Back to Editor"), so the editor↔playtest hand-off does not leave audio
+  // threads behind. Runs from installWebGLContextRelease's pagehide teardown.
+  registerPageTeardown(() => {
+    audio.close();
+    sfx.close();
+    music.close();
+  });
+  // Playtest boots straight into the world, skipping the start-screen click that
+  // normally initializes audio (enterWorld / handleOfflineStart call audio/music/
+  // sfx.init() inside that gesture). We arrived via a cross-document navigation,
+  // so there is no user activation yet — creating the AudioContexts now would
+  // leave them suspended and silent. Init all three on the first gesture instead,
+  // exactly like the normal offline path, so playtest has sound (and the quest-
+  // accept cue actually plays).
+  initPlaytestAudioOnFirstGesture();
   // Imported-model placements arrive as 'local/<sha>' ids: resolve them to
   // fresh object URLs from IndexedDB before the world (and renderer) boots.
   void resolveLocalPlaytestAssets(editorPlaytest.content).then(() =>

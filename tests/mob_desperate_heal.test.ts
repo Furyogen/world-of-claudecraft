@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { Sim } from '../src/sim/sim';
 import { MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
+import { Sim } from '../src/sim/sim';
 
 const SEED = 20061;
 

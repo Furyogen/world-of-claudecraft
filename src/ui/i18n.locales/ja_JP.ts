@@ -3184,6 +3184,200 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_nythraxis_scourges_end.completion':
     'これで王冠はついに沈黙しました。ソーンピークはなお死者を抱えるでしょうが、山の下の王が彼らを再び戦へ呼ぶことはありません。あなたは、アルドレン、マルリック、そしてヴォスが封じることしかできなかったものを終わらせました。',
   'entities.quests.q_nythraxis_scourges_end.objectives.0.label': 'ニスラクシスを撃破',
+  // --- Scorching Wastes world content ---
+  'entities.mobs.duskmane_prowler.name': 'たそがれ鬣の徘徊獣',
+  'entities.mobs.glasscarab.name': '硝子甲虫',
+  'entities.mobs.duneblade_marauder.name': 'デューンブレイドの略奪者',
+  'entities.mobs.karesh_the_parched.name': '渇きのカレシュ',
+  'entities.mobs.vigil_sentinel.name': 'ヴィジルの番人',
+  'entities.mobs.sunbaked_revenant.name': '陽灼けの亡霊',
+  'entities.mobs.ashen_courtier.name': '灰の廷臣',
+  'entities.mobs.sunspeaker_atharis.name': '太陽の代弁者アサリス',
+  'entities.mobs.emberveil_zealot.name': 'エンバーヴェイルの狂信者',
+  'entities.mobs.emberveil_pyromancer.name': 'エンバーヴェイルの炎術師',
+  'entities.mobs.cinder_elemental.name': '燠火の精霊',
+  'entities.mobs.moltenheart_colossus.name': '熔心の巨像',
+  'entities.mobs.cinder_wisp.name': '燠火のウィスプ',
+  'entities.mobs.ember_of_korzul.name': '始まりの燠',
+  'entities.npcs.caravan_master_saffa.name': 'キャラバン長サッファ',
+  'entities.npcs.caravan_master_saffa.title': '最後の井戸の守り手',
+  'entities.npcs.caravan_master_saffa.greeting':
+    'この地で通用する通貨は水だけです、友よ。ハイウォッチは我々に、それを賢く使えと送り出しました——ですがこの荒野ときたら、我々を破産させる気なのです。',
+  'entities.npcs.scout_maren_wastes.name': '斥候マレン',
+  'entities.npcs.scout_maren_wastes.title': '元帥の斥候',
+  'entities.npcs.scout_maren_wastes.greeting':
+    'マイアフェンでは泥を追い、ソーンピークでは雪を追いました。砂は最悪です。砂は、こちらの一歩一歩をすべて覚えています。',
+  'entities.npcs.loremaster_caddis_wastes.name': '博識者キャディス',
+  'entities.npcs.loremaster_caddis_wastes.title': '沈んだ王冠の学者',
+  'entities.npcs.loremaster_caddis_wastes.greeting':
+    'ザル・ケスは一夜で滅びました、{playerName}——王国まるごと、言葉の途中で硝子に固まったのです。私はその続きを聞くために、生涯を待ち続けてきました。',
+  'entities.npcs.brother_aldric_wastes.name': 'アルドリック修道士',
+  'entities.npcs.brother_aldric_wastes.title': '谷の司祭',
+  'entities.npcs.brother_aldric_wastes.greeting':
+    'ワームの熱はここまで滲んでいます、{playerName}——靴底越しに感じるのです。教団があの硝子の下から何を掘り出そうと、決して持ち帰らせてはなりません。',
+  'entities.npcs.old_haruk.name': '老ハルーク',
+  'entities.npcs.old_haruk.title': '心泉の番人',
+  'entities.npcs.old_haruk.greeting':
+    'わしの一族は、見張りが要るようになるずっと前からこの泉を守ってきた。九人の王がこの水を飲んだ。十人目は、すべてを飲み干そうとしたのだ。',
+  'entities.npcs.provisioner_ashka.name': '補給係アシュカ',
+  'entities.npcs.provisioner_ashka.title': 'キャラバンの補給商',
+  'entities.npcs.provisioner_ashka.greeting':
+    '平パンにナツメヤシ酒、それに死体の浮いていない水。荒野一の品揃えですよ。',
+  'entities.npcs.forgemaster_derin.name': '鍛冶長デリン',
+  'entities.npcs.forgemaster_derin.title': 'キャラバンの鍛冶師',
+  'entities.npcs.forgemaster_derin.greeting':
+    '炉にも砂、焼き入れの水にも砂、歯の間にも砂だ。おかげで刃は、恨みの分だけ鋭く仕上がる。',
+  'entities.npcs.auctioneer_zeph.name': '競売人ゼフ',
+  'entities.npcs.auctioneer_zeph.title': '世界市場の守り手',
+  'entities.npcs.auctioneer_zeph.greeting':
+    '世界市場は最後の井戸にも届いていますよ、友よ。金貨の重さは、どの砂漠でも変わりません。',
+  'entities.npcs.wellwatch_hana.name': '井戸番ハナ',
+  'entities.npcs.wellwatch_hana.title': 'キャラバン護衛',
+  'entities.npcs.wellwatch_hana.greeting':
+    '水を持って入り、水を持って出る。その間に起きることは、すべて私の仕事です。',
+  'entities.npcs.wellwatch_toma.name': '井戸番トマ',
+  'entities.npcs.wellwatch_toma.title': 'キャラバン護衛',
+  'entities.npcs.wellwatch_toma.greeting':
+    '静かな当番ですよ。もっともこの地の「静か」とは、砂が噛み砕くのを少し緩めている、という意味でしかありませんが。',
+  'entities.npcs.drover_pell.name': 'ラバ曳きペル',
+  'entities.npcs.drover_pell.title': 'ラバ曳き',
+  'entities.npcs.drover_pell.greeting':
+    'ラバが先に飲む。キャラバンの掟だ。掟についてラバと議論したいなら、どうぞご自由に。',
+  'entities.npcs.dowser_emrys.name': '水占師エムリス',
+  'entities.npcs.dowser_emrys.title': '水脈探し',
+  'entities.npcs.dowser_emrys.greeting':
+    '占い棒は滝のところでだけ折れんばかりにしなる。他は四十マイル歩いてもぴくりともしない。この土地は、泉ひとつ涸れれば墓場だ。',
+  'entities.quests.q_sw_arrival.title': '最後の井戸',
+  'entities.quests.q_sw_arrival.text':
+    '地図の果てへようこそ、{playerName}。ハイウォッチはこの遠征を「南方派遣」と呼びますが、私に言わせれば四十の命と泉ひとつです。何よりもまず——水を。野営地の北にある心泉の水場から水袋を四つ汲んできてください。滝までの道が安全に歩けると、この目で確かめたいのです。',
+  'entities.quests.q_sw_arrival.completion':
+    '冷たく澄んでいて、あなたに矢も刺さっていない——今季の最後の井戸にとって、これ以上の吉報はありません。',
+  'entities.quests.q_sw_arrival.objectives.0.label': 'なみなみの水袋',
+  'entities.quests.q_sw_prowlers.title': 'たそがれの牙',
+  'entities.quests.q_sw_prowlers.text':
+    'たそがれ鬣どもは、水運びの荷車の音を覚えてしまいました、{playerName}。日暮れのたびに輪を狭め、昨夜はついに、引き具をつけたままのラバを一頭引きずっていったのです。野営地の南、骨風の平原で群れを間引き、教えが身に染みた証として毛皮を八枚持ってきてください。',
+  'entities.quests.q_sw_prowlers.completion':
+    '毛皮が八枚——杭柵に忍び寄る影が八つ減ったということです。これでラバもようやく眠れるでしょう。私よりは、よほど。',
+  'entities.quests.q_sw_prowlers.objectives.0.label': 'たそがれ鬣の徘徊獣を討伐',
+  'entities.quests.q_sw_prowlers.objectives.1.label': 'たそがれ鬣の毛皮',
+  'entities.quests.q_sw_carrion_glass.title': '屍肉の硝子',
+  'entities.quests.q_sw_carrion_glass.text':
+    '荷曳きたちは硝子甲虫と呼んでいます——犬ほどもある甲虫で、焼け固まった硝子の甲殻をまとい、東の焼け跡から湧き出してくるのです。デリンに言わせれば、あの甲殻はどんな砥石よりも刃を鋭くするとか。八匹叩き割り、無傷の甲殻を六枚持ってきてください。輝きにはご用心を——光るのは、甲殻が硬くなりかけている印です。',
+  'entities.quests.q_sw_carrion_glass.completion':
+    'この刃の光を見てください！デリンは私に一生分の研ぎを借り、東の街道はあなたに、静かになった道行きを借りたわけです。',
+  'entities.quests.q_sw_carrion_glass.objectives.0.label': '硝子甲虫を討伐',
+  'entities.quests.q_sw_carrion_glass.objectives.1.label': '硝子甲虫の甲殻',
+  'entities.quests.q_sw_lost_caravan.title': '砂丘が呑んだもの',
+  'entities.quests.q_sw_lost_caravan.text':
+    '荷馬車が三台、井戸に着かなかったのです、{playerName}——穀物と道具、それに先頭の車を御していた妹の夫も。嵐が南西の砂丘に散り散りにしてしまいました。残骸を見つけて調べてください。何を失ったのか、積荷目録で確かめなければ……そして、誰かが歩いて逃げのびたのかどうかも。',
+  'entities.quests.q_sw_lost_caravan.completion':
+    '残骸から「離れていく」長靴の足跡——その先は略奪者の足跡ばかり。御者たちは生きたまま連れ去られたのです。慈悲か、それとも勘定か。この荒野でどちらに賭けるべきかは、分かっているつもりです。',
+  'entities.quests.q_sw_lost_caravan.objectives.0.label': '大破した荷馬車を調べる',
+  'entities.quests.q_sw_marauders.title': '水の税',
+  'entities.quests.q_sw_marauders.text':
+    'デューンブレイドどもはそれを税と呼びます——水か血か、出会い頭に取り立てるのだと。奴らは砂丘の南西の窪地に野営を構え、盗んだ我々の焚き火を囲み、盗んだ我々の水袋を呷っています。打ち砕いてください、{playerName}。略奪者を十人討ち、水袋を五つ取り返すのです——あれは革袋に詰まった、我らが仲間の命なのですから。',
+  'entities.quests.q_sw_marauders.completion':
+    'あなたが提げて帰る水袋のひとつひとつが、この井戸の誰かが死なずに済む一日です。デューンブレイドも、我々に税をかける代償を忘れないでしょう。',
+  'entities.quests.q_sw_marauders.objectives.0.label': 'デューンブレイドの略奪者を討伐',
+  'entities.quests.q_sw_marauders.objectives.1.label': '盗まれた水袋',
+  'entities.quests.q_sw_karesh.title': '渇きの王',
+  'entities.quests.q_sw_karesh.text':
+    '奴らの頭目は自ら「渇きのカレシュ」と名乗っています——己の貯水槽を飲み干した挙げ句、競う者が続けぬよう残り滓に塩を撒いた男です。自分の井戸にそこまでする男なら、我々の井戸にはもっとひどいことをするでしょう。奴は西の尾根の下、カレシュの窪地に君臨しています。その治世を終わらせてください、{playerName}。そして奴が抱え込んでいる最後の水袋を持ち帰るのです。',
+  'entities.quests.q_sw_karesh.completion':
+    'これが渇きの王の最後の水袋ですか。サッファはこれを井戸へ注ぎ戻すでしょう——一滴残らず、筋を通すために。',
+  'entities.quests.q_sw_karesh.objectives.0.label': '渇きのカレシュを撃破',
+  'entities.quests.q_sw_karesh.objectives.1.label': 'カレシュ最後の水袋',
+  'entities.quests.q_sw_survey.title': '途切れた一文',
+  'entities.quests.q_sw_survey.text':
+    '井戸があなたの手を借りずに済むようになった今こそ——私と歴史を歩きましょう、{playerName}。太陽宮廷は壁画を残しています。ひとつは水道橋の背の下に、ひとつはメサの麓に、ひとつはオアシスの廃墟の双塔のそばに。三つすべての拓本を取ってきてください。ザル・ケスは言葉の途中で死んだのです。私はその続きを読むつもりです。',
+  'entities.quests.q_sw_survey.completion':
+    'ほら——文がつながりました。「王冠が被れぬほど熱くなったとき、王たちはメサを登り、火を『返した』」。オベリスクに刻まれた放棄の儀式です——暁、次に真昼、そして宵。この順序が肝心ですよ、{playerName}。儀式というものは、必ず順序にこだわるのです。',
+  'entities.quests.q_sw_survey.objectives.0.label': '壁画の拓本を採取',
+  'entities.quests.q_sw_vigil_dawn.title': 'ヴィジル：暁',
+  'entities.quests.q_sw_vigil_dawn.text':
+    '野営地の西のメサこそがヴィジル——王たちの放棄の道そのものです。最初の段丘には暁のオベリスクが立っています。朝日が最初に射す場所です。九十九折りを登り、その石に手を置いてください。目覚めるのは暁が最初——壁画は、その点になかなかうるさいのです。',
+  'entities.quests.q_sw_vigil_dawn.completion':
+    '唸りを感じたのですか？素晴らしい。ふたつの時代を経てなお、儀式は力を保っているのです。暁は灯りました——真昼は、さらに上で待っています。',
+  'entities.quests.q_sw_vigil_dawn.objectives.0.label': 'オベリスクから暁火の印を授かる',
+  'entities.quests.q_sw_vigil_noon.title': 'ヴィジル：真昼',
+  'entities.quests.q_sw_vigil_noon.text':
+    '真昼は頂に冠されます——第二のオベリスクはメサの天辺、太陽が空をまるごと支配する場所に立っています。この登りこそが儀式なのです、{playerName}。王たちは一段一段、王冠を担いで登ったのですから。真昼のオベリスクを目覚めさせてください。',
+  'entities.quests.q_sw_vigil_noon.completion':
+    '暁、そして真昼。儀式に残る刻はあとひとつ——そしてヴィジルが、我々に気づき始めています。',
+  'entities.quests.q_sw_vigil_noon.objectives.0.label': 'オベリスクから真昼火の印を授かる',
+  'entities.quests.q_sw_vigil_dusk.title': 'ヴィジル：宵',
+  'entities.quests.q_sw_vigil_dusk.text':
+    '宵はいつも、祈りに最後にやって来ます——そのオベリスクは峡谷を見下ろす西の支尾根に立っています。ですが儀式の本質を心に留めてください、{playerName}。放棄には「立会人」が要るのです。宮廷は生きたメサ石の番人を立会いに据えました。宵が灯れば番人は目覚め、あなたが火を手放す者か、ただ奪う者かを裁くでしょう。納得させてください。徹底的に。',
+  'entities.quests.q_sw_vigil_dusk.completion':
+    '番人はあなたを相応しいと裁いた——あるいは殺し得ぬと裁いたのでしょうが、石にとってはどちらも同じ結論です。ヴィジルは成りました。これでザル・ケスのすべての扉が、問う価値のある問いに変わったのです。',
+  'entities.quests.q_sw_vigil_dusk.objectives.0.label': '宵のオベリスクを目覚めさせる',
+  'entities.quests.q_sw_vigil_dusk.objectives.1.label': 'ヴィジルの番人を撃破',
+  'entities.quests.q_sw_revenants.title': '死者の持ち場',
+  'entities.quests.q_sw_revenants.text':
+    'ザル・ケスの兵たちは、戦に敗れたことをついに知りません——それが「一夜」で終わったことさえも。彼らは骨に鎧を癒着させたまま滝の北の外郭廃墟を巡回し、生者の誰も覚えていない合言葉を旅人に誰何するのです。十二体を眠らせてやってください、{playerName}。そして衛兵の印章を集めるのです。印章があれば、都のより深くへ通されます。',
+  'entities.quests.q_sw_revenants.completion':
+    'どの印章もまだ温かい……最後まで忠実に、いえ、最後を過ぎてもなお。彼らの見張りを束ねる何かはもっと奥に座しています。そして今や、位が上なのはこちらです。',
+  'entities.quests.q_sw_revenants.objectives.0.label': '陽灼けの亡霊を討伐',
+  'entities.quests.q_sw_revenants.objectives.1.label': '王冠衛兵の印章',
+  'entities.quests.q_sw_courtiers.title': '灰の宮廷',
+  'entities.quests.q_sw_courtiers.text':
+    'さらに奥では、宮廷そのものが今も開かれています——侍従と朗誦官が死んだ王の典礼を守り、鉱滓の玉座に詩篇を読み上げているのです。彼らの詩篇集には聖域の典礼が、その典礼には王冠の火鉢を灯す儀式が記されています。その御前会議を散会させてください、{playerName}。そして頁の無事な詩篇集をひとつ、持ってきてください。',
+  'entities.quests.q_sw_courtiers.completion':
+    'ああ、これは見事な仕事です——火鉢の儀式の一部始終が、死んだ聖歌長の手で記譜されている。彼らは二百年ものあいだ、誰もいない玉座へ向かってこれを歌い続けたのです。哀れに思いそうになりますよ。思いそうに、ですが。',
+  'entities.quests.q_sw_courtiers.objectives.0.label': '灰の廷臣を討伐',
+  'entities.quests.q_sw_courtiers.objectives.1.label': '灰の詩篇集',
+  'entities.quests.q_sw_braziers.title': '灯る王冠',
+  'entities.quests.q_sw_braziers.text':
+    '詩篇集は塔々の間にある三つの王冠の火鉢を挙げています——三つすべてを灯せば、戴冠式の日と同じように、奥の聖域はおのずから開くのです。儀式の文句はあなたの籠手にチョークで書いておきました、{playerName}。汗をかかないように。それと忠告をひとつ——灯った王冠は、見える王冠です。三つ目の炎が点いた瞬間、あの都のすべてが気づくでしょう。',
+  'entities.quests.q_sw_braziers.completion':
+    '井戸から、塔がひとつまたひとつと灯っていくのが見えました——サッファは泣いていましたし、白状すると、私は誰にも講釈を垂れませんでした。聖域は開いています。そして中の何かが、歌い返しているのです。',
+  'entities.quests.q_sw_braziers.objectives.0.label': '王冠の火鉢に火を灯す',
+  'entities.quests.q_sw_sunspeaker.title': '十度目の戴冠',
+  'entities.quests.q_sw_sunspeaker.text':
+    '聖域の声の主は太陽の代弁者アサリス——ザル・ケスの九人の王すべてに冠を授けた者です。詩篇は彼を宮廷の生ける記憶と呼びます。そして彼はふたつの時代を費やし、十度目の戴冠を準備してきました。戴くのは、火そのもの。彼は双塔の間の太陽の玉座に立っています。退位させてください、{playerName}。砂漠じゅうが悔いることになる儀式を、彼が終える前に。',
+  'entities.quests.q_sw_sunspeaker.completion':
+    '彼は九つの額に九つの冠を戴せ、十個目の冠は、世界を焼いて頭の形に合わせるところでした。歴史には、あなたがザル・ケスの宮廷を閉廷させたと記されるでしょう。そう書かせることは、この私が請け合います。',
+  'entities.quests.q_sw_sunspeaker.objectives.0.label': '太陽の代弁者アサリスを退位させる',
+  'entities.quests.q_sw_emberveil.title': 'エンバーヴェイル',
+  'entities.quests.q_sw_emberveil.text':
+    '東の縁に並ぶ、ヴェールに覆われた野営を見たでしょう、{playerName}。あれはワーム教団です——エンバーヴェイルという分派で、ハイウォッチが聖所の門を見張っている隙に峠を越えてきました。母体の教団がワームを目覚めさせようと歌うのに対し、あの者たちはワームに「武器を持たせよう」と掘るのです。狂信者と炎術師が、何かを探して硝子原を浚っています。見つけられる前に、数を減らしてください。',
+  'entities.quests.q_sw_emberveil.completion':
+    'あの硝子原の鋤が十六本減りました。ですが掘削は昼も夜も続いています——奴らはもう探してはいません、{playerName}。掘り出しにかかっているのです。',
+  'entities.quests.q_sw_emberveil.objectives.0.label': 'エンバーヴェイルの狂信者を討伐',
+  'entities.quests.q_sw_emberveil.objectives.1.label': 'エンバーヴェイルの炎術師を討伐',
+  'entities.quests.q_sw_writs.title': 'ヴェールの命令書',
+  'entities.quests.q_sw_writs.text':
+    '奴らの指揮官は命令書を携えています——母体の教団の暗号で書かれた指令です。私はあの暗号をハイウォッチで破りました。ここでもう一度破ってみせましょう。エンバーヴェイルから命令書を五通奪ってきてください、{playerName}。奴らが何を取りに寄越されたのか、一字一句まで読んでやりましょう。',
+  'entities.quests.q_sw_writs.completion':
+    '恐れていたとおりです。「『始まりの燠』を回収せよ——太陽の王どもが盗み、鎖につないだ御方の火の欠片である。聖所の門まで運べ。封印は、おのれ自身の炎には抗えぬ」。奴らはワームの扉を、ワーム自身から盗まれた火で焼き開けるつもりです、{playerName}。',
+  'entities.quests.q_sw_writs.objectives.0.label': 'エンバーヴェイルの命令書',
+  'entities.quests.q_sw_glasscut.title': '空が燃えた場所',
+  'entities.quests.q_sw_glasscut.text':
+    '硝子裂きは、ザル・ケスを滅ぼしたあの夜、始まりの燠が落ちた場所です——地面は今も熱を帯び、燠火の精霊たちが、着地しそこねた火の粉のようにそこを歩いています。燠は目覚めつつあります、{playerName}。教団の掘削が近づくほど、火の粉は大胆になっていく。八体を散らし、生ける燠火を五つ持ってきてください。我々が向き合う火の力量を、測っておかねばなりません。',
+  'entities.quests.q_sw_glasscut.completion':
+    '聖別した塩の中でもまだ身をよじっている……これは竜の火です。もう見間違えようがない。あの燠は遺物ではありません、{playerName}。「残り火」なのです——コルズルの怒りの生きた欠片であり、王冠として被られていたことを、いまだに覚えているのです。',
+  'entities.quests.q_sw_glasscut.objectives.0.label': '燠火の精霊を討伐',
+  'entities.quests.q_sw_glasscut.objectives.1.label': '生ける燠火',
+  'entities.quests.q_sw_offering.title': '泉は覚えている',
+  'entities.quests.q_sw_offering.text':
+    '司祭どのはあの火に立ち向かう腹づもりだ。お前さんも一緒にな。ならば井戸守りの知恵を聞いていくがいい、{playerName}。心泉はワームの牢獄そのものの下から湧いておる。物の下をくぐる水は、その物を知っておるのだ。わしの供物鉢を滝の上の水場へ持っていき、注いで、耳を澄ませなさい。あの泉は、かの火を一度沈めたことがある。焼かれに行く前に、泉の祝福を受けていくことだ。',
+  'entities.quests.q_sw_offering.completion':
+    'お前さんにも聞こえたのだな——世界の下を流れる、深い水の音が。その音を鎧のように身にまとうがいい、{playerName}。火は騒がしい。だが泉は火より先にここにあり、火が消えた後にも残るのだ。',
+  'entities.quests.q_sw_offering.objectives.0.label': '心泉に供物を注ぐ',
+  'entities.quests.q_sw_first_ember.title': '始まりの燠',
+  'entities.quests.q_sw_first_ember.text':
+    'ついに掘り出されました、{playerName}。夜明けに教団の坑が崩れ開き、硝子裂きが内側から灯ったのです——始まりの燠は、ふたつの時代前に自ら穿った火口に立ち、王の礼装のように火をまとい、エンバーヴェイルは列をなしてひざまずいています。あれが聖所の門に届けば、ハイウォッチが血を流して守ってきたすべてが灰になる。あなたには泉の祝福と、ヴィジルの立会いがあります。硝子の底へ降り、ザル・ケスが言いかけた一文を終わらせてください——火は、「還る」のです。',
+  'entities.quests.q_sw_first_ember.completion':
+    'あれが消えた瞬間、滝は速く、明るく流れました——泉が、旧敵を水底へ引き込んだのです。あなたは九人の王にできなかったことを成し遂げました、{playerName}。火を、返したのです。座って。飲んでください。今夜の水は、いちばん甘い。',
+  'entities.quests.q_sw_first_ember.objectives.0.label': '始まりの燠を消し止める',
+  'entities.quests.q_sw_afterglow.title': '生者のための水',
+  'entities.quests.q_sw_afterglow.text':
+    'ハルークが言うには、泉の歌が一段低くなったそうです。まるで借金を払い終えたかのように。エンバーヴェイルは灰になるか逃げ去り、宮廷は閉廷し、私の帳簿もようやく、心配事より水のほうが多くなりました。最後の仕事です、{playerName}——野営地を回って、マレンとキャディスとアルドリック修道士に、きちんと礼を言わせてやってください。三人にはその資格がありますし、あなたにも受け取る資格があります。',
+  'entities.quests.q_sw_afterglow.completion':
+    'これで終わりです。最後の井戸は、ただの……井戸になりました。この老いたキャラバン乗りに言わせれば、生きた街道に連なる数多の井戸の、最初のひとつです。灼熱の荒野はあなたの名を忘れないでしょう、{playerName}——水は、すべてを覚えているのですから。',
+  'entities.quests.q_sw_afterglow.objectives.0.label': '斥候マレンと話す',
+  'entities.quests.q_sw_afterglow.objectives.1.label': '博識者キャディスと話す',
+  'entities.quests.q_sw_afterglow.objectives.2.label': 'アルドリック修道士と話す',
   'hud.errors.silenced': '沈黙状態です！',
   'hud.pet.noPetFood': 'ペットに与える食べ物がありません。',
   'hud.pet.petEatsFoodOnly': 'ペットは食べ物しか食べられません。',
@@ -5672,6 +5866,49 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.items.litany_helm.name': '聖遺物狩人の溺れずきん',
   'entities.items.sister_nhalia_choir_plate.name': 'ナリア修道女の聖歌鍛造鎧',
   'entities.items.drowned_choir_fang.name': '溺れた聖歌の牙',
+  // --- Scorching Wastes items ---
+  'entities.items.ashen_psalter.name': '灰の詩篇集',
+  'entities.items.brimming_waterskin.name': 'なみなみの水袋',
+  'entities.items.cactus_pressed_water.name': 'サボテンの搾り水',
+  'entities.items.caravan_guard_mail.name': 'キャラバン衛兵のメイル',
+  'entities.items.caravan_manifest.name': '水染みの積荷目録',
+  'entities.items.cinder_soaked_veil.name': '燃えさし浸みのヴェール',
+  'entities.items.crown_brazier.name': '王冠の火鉢',
+  'entities.items.crown_guard_seal.name': '王冠衛兵の印章',
+  'entities.items.duneblade_token.name': 'デューンブレイドの割符',
+  'entities.items.duneforged_warblade.name': '砂丘鍛えの戦刃',
+  'entities.items.dunewatch_sash.name': '砂丘見張りの飾り帯',
+  'entities.items.duskmane_pelt.name': 'たそがれ鬣の毛皮',
+  'entities.items.emberbound_leggings.name': '燃えさし縛りのレギンス',
+  'entities.items.emberglass_scepter.name': '燠硝子の王笏',
+  'entities.items.emberveil_writ.name': 'エンバーヴェイルの命令書',
+  'entities.items.glasscarab_shell.name': '硝子甲虫の甲殻',
+  'entities.items.glasscut_dirk.name': '硝子裂きの短剣',
+  'entities.items.heart_of_the_first_ember.name': '始まりの燠の心臓',
+  'entities.items.heartspring_offering.name': '心泉の供物鉢',
+  'entities.items.kareshs_last_skin.name': 'カレシュ最後の水袋',
+  'entities.items.lastwell_datewine.name': '最後の井戸のナツメヤシ酒',
+  'entities.items.living_cinder.name': '生ける燠火',
+  'entities.items.moltenheart_girdle.name': '熔心の腰帯',
+  'entities.items.moltenheart_slagcore.name': '熔心の鉱滓核',
+  'entities.items.mural_rubbing.name': '壁画の拓本',
+  'entities.items.parched_kings_goblet.name': '渇きの王の酒杯',
+  'entities.items.prowler_fang.name': '徘徊獣の牙',
+  'entities.items.sentinel_core_stone.name': '番人の核石',
+  'entities.items.springheart_blessing.name': '心泉の祝福',
+  'entities.items.stolen_waterskin.name': '盗まれた水袋',
+  'entities.items.sunbaked_flatbread.name': '天日焼きの平パン',
+  'entities.items.sunbleached_bone.name': '日晒しの骨',
+  'entities.items.sunbleached_staff.name': '日晒しの杖',
+  'entities.items.sunglass_shard.name': '陽硝子のかけら',
+  'entities.items.sunspeakers_ash_crown.name': '太陽の代弁者の灰冠',
+  'entities.items.vestment_of_the_sunken_crown.name': '沈んだ王冠の祭服',
+  'entities.items.vigil_obelisk_dawn.name': '暁火の印',
+  'entities.items.vigil_obelisk_dusk.name': '宵火の印',
+  'entities.items.vigil_obelisk_noon.name': '真昼火の印',
+  'entities.items.wastes_relic_cache.name': '太陽宮廷の遺物箱',
+  'entities.items.wastewalker_jerkin.name': '荒野歩きの革衣',
+  'entities.items.wastewalker_treads.name': '荒野歩きの靴',
   'entities.mobs.drowned_cantor.name': '溺れた聖歌者',
   'entities.mobs.reedbound_acolyte.name': '葦縛りの信徒',
   'entities.mobs.deepfen_spearjaw.name': '深淵沼の槍顎',

@@ -16,14 +16,18 @@ interface NativeAttestationPlugin {
 }
 
 function nativePlugin(): NativeAttestationPlugin | null {
-  const cap = (window as unknown as { Capacitor?: { Plugins?: Record<string, unknown> } }).Capacitor;
+  const cap = (window as unknown as { Capacitor?: { Plugins?: Record<string, unknown> } })
+    .Capacitor;
   const plugin = cap?.Plugins?.NativeAttestation;
   if (!plugin || typeof plugin !== 'object') return null;
   const candidate = plugin as Partial<NativeAttestationPlugin>;
-  return typeof candidate.getToken === 'function' ? candidate as NativeAttestationPlugin : null;
+  return typeof candidate.getToken === 'function' ? (candidate as NativeAttestationPlugin) : null;
 }
 
-export async function createNativeAttestationProof(base: string, action: string): Promise<NativeAttestationProof | null> {
+export async function createNativeAttestationProof(
+  base: string,
+  action: string,
+): Promise<NativeAttestationProof | null> {
   if (!NATIVE_APP) return null;
   const plugin = nativePlugin();
   if (!plugin) return null;
@@ -33,10 +37,12 @@ export async function createNativeAttestationProof(base: string, action: string)
     body: JSON.stringify({ action }),
   });
   if (!challengeRes.ok) return null;
-  const challenge = await challengeRes.json().catch(() => null) as ChallengeResponse | null;
-  if (typeof challenge?.challengeId !== 'string' || typeof challenge.nonce !== 'string') return null;
+  const challenge = (await challengeRes.json().catch(() => null)) as ChallengeResponse | null;
+  if (typeof challenge?.challengeId !== 'string' || typeof challenge.nonce !== 'string')
+    return null;
   const token = await plugin.getToken({ nonce: challenge.nonce });
-  if ((token.platform !== 'android' && token.platform !== 'ios') || typeof token.token !== 'string') return null;
+  if ((token.platform !== 'android' && token.platform !== 'ios') || typeof token.token !== 'string')
+    return null;
   return {
     platform: token.platform,
     challengeId: challenge.challengeId,

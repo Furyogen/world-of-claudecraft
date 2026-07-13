@@ -1,11 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import {
-  HOLDER_TIER_DEFS, holderTierByIndex as sharedHolderTierByIndex,
+  HOLDER_TIER_DEFS,
   holderTierIndexForBalance,
+  holderTierByIndex as sharedHolderTierByIndex,
 } from '../src/sim/holder_tier';
 import {
-  HOLDER_TIERS, WOC_MAX_SUPPLY, holderTierForBalance, holderTierByIndex,
-  tierSupplyShare, holderTierBadgeDataUrl,
+  HOLDER_TIERS,
+  holderTierBadgeDataUrl,
+  holderTierByIndex,
+  holderTierForBalance,
+  tierSupplyShare,
+  WOC_MAX_SUPPLY,
 } from '../src/ui/holder_tier';
 
 describe('holder-tier ladder', () => {
@@ -33,7 +38,9 @@ describe('holder-tier ladder', () => {
   });
 
   it('keeps UI presentation rungs aligned with the shared pure tier definitions', () => {
-    expect(HOLDER_TIERS.map(({ index, key, threshold }) => ({ index, key, threshold }))).toEqual(HOLDER_TIER_DEFS);
+    expect(HOLDER_TIERS.map(({ index, key, threshold }) => ({ index, key, threshold }))).toEqual(
+      HOLDER_TIER_DEFS,
+    );
   });
 
   it('returns null with no wallet or a sub-threshold balance', () => {

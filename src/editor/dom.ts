@@ -118,6 +118,34 @@ export function slider(label: string, opts: SliderOptions): SliderHandle {
   };
 }
 
+export interface SelectOption {
+  value: string;
+  label: string;
+}
+
+/** A labelled dropdown (native select). */
+export function selectRow(
+  label: string,
+  options: SelectOption[],
+  value: string,
+  onChange: (v: string) => void,
+): { root: HTMLElement; input: HTMLSelectElement } {
+  const wrap = el('label', 'ed-field');
+  wrap.appendChild(el('span', undefined, label));
+  const input = document.createElement('select');
+  input.setAttribute('aria-label', label);
+  for (const o of options) {
+    const opt = document.createElement('option');
+    opt.value = o.value;
+    opt.textContent = o.label;
+    input.appendChild(opt);
+  }
+  input.value = value;
+  input.addEventListener('change', () => onChange(input.value));
+  wrap.appendChild(input);
+  return { root: wrap, input };
+}
+
 export function checkbox(
   label: string,
   checked: boolean,

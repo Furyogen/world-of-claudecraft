@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Sim } from '../src/sim/sim';
-import { Aura, SimEvent } from '../src/sim/types';
+import type { Aura, SimEvent } from '../src/sim/types';
 
 function makeWorld() {
   return new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
@@ -12,8 +12,15 @@ function errors(events: SimEvent[]): Extract<SimEvent, { type: 'error' }>[] {
 
 function timedAura(over: Partial<Aura>): Aura {
   return {
-    id: 'x', name: 'Effect', kind: 'dot', remaining: 10, duration: 10,
-    value: 0, sourceId: 0, school: 'physical', ...over,
+    id: 'x',
+    name: 'Effect',
+    kind: 'dot',
+    remaining: 10,
+    duration: 10,
+    value: 0,
+    sourceId: 0,
+    school: 'physical',
+    ...over,
   };
 }
 
@@ -35,7 +42,9 @@ describe('/buffs command', () => {
     const a = sim.addPlayer('warrior', 'Aleph');
     sim.tick();
     const e = sim.entities.get(a)!;
-    e.auras.push(timedAura({ id: 'battle_shout', name: 'Battle Shout', kind: 'buff_ap', remaining: 118 }));
+    e.auras.push(
+      timedAura({ id: 'battle_shout', name: 'Battle Shout', kind: 'buff_ap', remaining: 118 }),
+    );
     e.auras.push(timedAura({ id: 'rend', name: 'Rend', kind: 'dot', remaining: 3.2 }));
 
     sim.chat('/buffs', a);

@@ -18,13 +18,22 @@ function grid(cell: number, cols: number, rows: number, fill = 255): BiomePaint 
 }
 
 describe('finestPaintCell', () => {
-  it('gives small maps 1yd cells', () => {
-    expect(finestPaintCell(400, 400)).toBe(1);
+  it('gives small maps (interiors, arenas, squares to ~500yd) 0.25yd cells', () => {
+    expect(finestPaintCell(60, 60)).toBe(0.25);
+    expect(finestPaintCell(100, 100)).toBe(0.25);
+    expect(finestPaintCell(400, 400)).toBe(0.25);
   });
 
-  it('gives the full-size world 2yd cells', () => {
-    // Built-in world extent: 900 wide, ~1920 deep. 1yd would be ~1.7M cells.
-    expect(finestPaintCell(900, 1920)).toBe(2);
+  it('gives large maps 0.5yd cells', () => {
+    // A full-size custom world (the editor's Open World preset area).
+    expect(finestPaintCell(360, 1080)).toBe(0.5);
+    // The big-square case the budget is sized for.
+    expect(finestPaintCell(1000, 1000)).toBe(0.5);
+  });
+
+  it('gives the biggest worlds 1yd cells', () => {
+    // 900 wide, ~1920 deep: 0.5yd would be ~6.9M cells, over the budget.
+    expect(finestPaintCell(900, 1920)).toBe(1);
   });
 
   it('never exceeds the cell budget', () => {

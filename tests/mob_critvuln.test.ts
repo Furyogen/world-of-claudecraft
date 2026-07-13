@@ -1,16 +1,22 @@
 import { describe, expect, it } from 'vitest';
-import { Sim } from '../src/sim/sim';
-import { Aura } from '../src/sim/types';
 import { MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
+import { Sim } from '../src/sim/sim';
+import type { Aura } from '../src/sim/types';
 
 const SEED = 5150;
 const makeSim = () => new Sim({ seed: SEED, playerClass: 'warrior' });
 
 function critVulnAura(value: number, remaining = 8): Aura {
   return {
-    id: 'critvuln_test', name: 'Exposed Wound', kind: 'critvuln',
-    remaining, duration: 8, value, sourceId: -1, school: 'physical',
+    id: 'critvuln_test',
+    name: 'Exposed Wound',
+    kind: 'critvuln',
+    remaining,
+    duration: 8,
+    value,
+    sourceId: -1,
+    school: 'physical',
   };
 }
 
@@ -27,7 +33,8 @@ describe('Find Weakness crit-vulnerability debuff', () => {
   it('amplifies CRITICAL hits by the debuff fraction but leaves normal hits alone', () => {
     const sim = makeSim();
     const p = sim.entities.get(sim.playerId)!;
-    p.maxHp = 100000; p.hp = 100000;
+    p.maxHp = 100000;
+    p.hp = 100000;
     const mob = createMob(910000, MOBS.mire_widow, 10, { x: 0, y: 0, z: 0 });
 
     // normal hit — no amplification even with the debuff up
@@ -54,7 +61,8 @@ describe('Find Weakness crit-vulnerability debuff', () => {
   it('amplifies crits of any school (not just physical)', () => {
     const sim = makeSim();
     const p = sim.entities.get(sim.playerId)!;
-    p.maxHp = 100000; p.hp = 100000;
+    p.maxHp = 100000;
+    p.hp = 100000;
     const mob = createMob(910001, MOBS.mire_widow, 10, { x: 0, y: 0, z: 0 });
     p.auras.push(critVulnAura(0.5));
     (sim as any).dealDamage(mob, p, 100, true, 'shadow', null, 'hit');
@@ -64,7 +72,8 @@ describe('Find Weakness crit-vulnerability debuff', () => {
   it('a self-inflicted crit is never amplified', () => {
     const sim = makeSim();
     const p = sim.entities.get(sim.playerId)!;
-    p.maxHp = 100000; p.hp = 100000;
+    p.maxHp = 100000;
+    p.hp = 100000;
     p.auras.push(critVulnAura(0.5));
     (sim as any).dealDamage(p, p, 100, true, 'physical', null, 'hit');
     expect(100000 - p.hp).toBe(100);
@@ -73,7 +82,8 @@ describe('Find Weakness crit-vulnerability debuff', () => {
   it('a landed Mirefen Widow swing can inflict the Exposed Wound', () => {
     const sim = makeSim();
     const p = sim.entities.get(sim.playerId)!;
-    p.maxHp = 100000; p.hp = 100000; // survive every swing so we observe the debuff
+    p.maxHp = 100000;
+    p.hp = 100000; // survive every swing so we observe the debuff
     const tmpl = MOBS.mire_widow;
     const saved = tmpl.critVuln!.chance;
     tmpl.critVuln!.chance = 1; // force the proc; misses/dodges still possible
@@ -96,7 +106,8 @@ describe('Find Weakness crit-vulnerability debuff', () => {
   it('a friendly pet swing (hostile=false) never inflicts the debuff', () => {
     const sim = makeSim();
     const p = sim.entities.get(sim.playerId)!;
-    p.maxHp = 100000; p.hp = 100000;
+    p.maxHp = 100000;
+    p.hp = 100000;
     const tmpl = MOBS.mire_widow;
     const saved = tmpl.critVuln!.chance;
     tmpl.critVuln!.chance = 1;
@@ -113,7 +124,8 @@ describe('Find Weakness crit-vulnerability debuff', () => {
   it('a mob without critVuln applies no debuff', () => {
     const sim = makeSim();
     const p = sim.entities.get(sim.playerId)!;
-    p.maxHp = 100000; p.hp = 100000;
+    p.maxHp = 100000;
+    p.hp = 100000;
     const mob = createMob(910004, MOBS.forest_wolf, 5, { x: 0, y: 0, z: 0 });
     for (let i = 0; i < 40; i++) (sim as any).mobSwing(mob, p);
     expect(p.auras.some((a) => a.kind === 'critvuln')).toBe(false);

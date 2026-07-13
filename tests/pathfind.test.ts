@@ -1,9 +1,19 @@
 import { describe, expect, it } from 'vitest';
-import { isBlocked, pathCrossesFence, resolveMovement, resolvePosition } from '../src/sim/colliders';
-import { Sim } from '../src/sim/sim';
-import { findPath, findPlayerPath, PLAYER_SWIM_DEPTH, resolvePlayerDestination } from '../src/sim/pathfind';
-import { groundHeight, WATER_LEVEL } from '../src/sim/world';
+import {
+  isBlocked,
+  pathCrossesFence,
+  resolveMovement,
+  resolvePosition,
+} from '../src/sim/colliders';
 import { PROPS } from '../src/sim/data';
+import {
+  findPath,
+  findPlayerPath,
+  PLAYER_SWIM_DEPTH,
+  resolvePlayerDestination,
+} from '../src/sim/pathfind';
+import { Sim } from '../src/sim/sim';
+import { groundHeight, WATER_LEVEL } from '../src/sim/world';
 
 describe('player pathfinding', () => {
   it('smooths open-grid A* stair steps into one direct movement leg', () => {

@@ -22,7 +22,12 @@ describe('The Sunken Bastion ward stone', () => {
     expect(ITEMS[WARD_ITEM_ID]?.questId).toBe(QUEST_ID);
     expect(GROUND_OBJECTS.find((o) => o.itemId === WARD_ITEM_ID)).toBeTruthy();
 
-    const sim = new Sim({ seed: 20061, playerClass: 'warrior', playerName: 'Reuben', autoEquip: false });
+    const sim = new Sim({
+      seed: 20061,
+      playerClass: 'warrior',
+      playerName: 'Reuben',
+      autoEquip: false,
+    });
     sim.player.level = 15;
     sim.questLog.set(QUEST_ID, { questId: QUEST_ID, counts: [0], state: 'active' });
     expect(sim.questState(QUEST_ID)).toBe('active');
@@ -31,8 +36,9 @@ describe('The Sunken Bastion ward stone', () => {
     // wardstones. Before the fix, tryStartNythraxisWardChannel claimed the
     // interaction for ANY ward stone, even with no boss nearby, so the quest
     // pickup never ran and the objective could never be completed.
-    const wardStone = [...sim.entities.values()]
-      .find((e): e is Entity => e.kind === 'object' && e.objectItemId === WARD_ITEM_ID);
+    const wardStone = [...sim.entities.values()].find(
+      (e): e is Entity => e.kind === 'object' && e.objectItemId === WARD_ITEM_ID,
+    );
     expect(wardStone).toBeTruthy();
     teleportTo(sim, wardStone!.pos.x + 1, wardStone!.pos.z);
 

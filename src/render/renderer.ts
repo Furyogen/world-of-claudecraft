@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { coerceFxTier, nameplateIntervalSec } from '../game/ui_tier_knobs';
+import { caveCameraMaxDist } from '../sim/caves';
 import { cameraOcclusion } from '../sim/colliders';
 import {
   ABILITIES,
@@ -30,9 +31,16 @@ import {
 } from '../sim/data';
 import type { DelveModuleId } from '../sim/delve_layout';
 import { DEFAULT_ASSET_VIEW_DISTANCE } from '../sim/map_doc';
-import type { BiomeId, MapWeather } from '../sim/types';
+import type { BiomeId, MapPointSound, MapWeather } from '../sim/types';
 import { ALL_CLASSES, type Entity, type SimEvent } from '../sim/types';
-import { groundHeight, waterLevel, zoneBiomeAt } from '../sim/world';
+import {
+  caveSheetAt,
+  groundHeight,
+  groundHeightNear,
+  terrainHeight,
+  waterLevel,
+  zoneBiomeAt,
+} from '../sim/world';
 import { attachAvatarFallback } from '../ui/avatar_fallback';
 import { tEntity } from '../ui/entity_i18n';
 import type { IWorld } from '../world_api';
@@ -42,6 +50,7 @@ import { resolveSkyboxUrl } from './assets/skyboxes';
 import type { SpatialAudioSink, Surface } from './audio_sink';
 import { type BirdsView, buildBirds } from './birds';
 import { type CameraOcclusionState, stepCameraOcclusion } from './camera_collision';
+import { buildCaveMeshes, refreshCaveMeshes } from './cave_mesh';
 import { characterSoulRendActive } from './character_effects';
 import { type AnimState, type CharacterVisual, createCharacterVisual } from './characters';
 import { mechAssetsReady, preloadMechAssets } from './characters/assets';
@@ -57,6 +66,7 @@ import type { EditorLightingProfile } from './editor_lighting';
 import { objectDisplayName } from './entity_labels';
 import { releaseSelfFacing, stepSelfFacing } from './facing_smooth';
 import { buildFish, type FishView } from './fish';
+import { FluidSurfaces } from './fluid_surfaces';
 import {
   buildFoliage,
   buildFoliageMaterialPrewarmGroup,
@@ -110,6 +120,9 @@ import { Weather } from './weather';
 
 // Entities further than this from the player are hidden entirely: their rigs
 // are several draw calls each and read as sub-pixel specks long before this.
+// Shared empty list so the per-frame point-sound update never allocates on the
+// common (no authored point sounds) path.
+const NO_POINT_SOUNDS: readonly MapPointSound[] = [];
 const ENTITY_DRAW_RANGE = 80;
 const ENTITY_VIEW_CREATE_RANGE_SQ = ENTITY_DRAW_RANGE * ENTITY_DRAW_RANGE;
 const ENTITY_VIEW_DESTROY_RANGE_SQ = 96 * 96;
@@ -862,6 +875,8 @@ export class Renderer {
   private clouds: THREE.Sprite[] = [];
   private waterView: WaterView;
   private terrainView: TerrainView;
+  private caveGroup: THREE.Group | null = null;
+  private fluidSurfaces: FluidSurfaces | null = null;
   // Map-editor placed GLB assets; null when the world has none and the editor
   // never asked for the view (the shipped game with the built-in world).
   private placedAssetsView: PlacedAssetsView | null = null;
@@ -1266,12 +1281,20 @@ export class Renderer {
     // Terrain chunks never move after build (the LOD update only toggles
     // visibility): stop their per-frame matrix recompose (static_matrix.ts).
     freezeStaticMatrices(this.terrainView.group);
+    this.caveGroup = buildCaveMeshes();
+    setRenderCategory(this.caveGroup, 'terrain');
+    this.scene.add(this.caveGroup);
     this.waterView = buildWater(this.sim.cfg.seed);
     for (const mesh of this.waterView.meshes) {
       setRenderCategory(mesh, 'water');
       this.scene.add(mesh);
       freezeStaticMatrices(mesh); // water animates via uniforms, never transforms
     }
+    // Fluid pools (lava/acid/...): surfaces + pool lights (ranked into the
+    // shared fire-light budget below).
+    this.fluidSurfaces = new FluidSurfaces(this.sim.cfg.seed);
+    setRenderCategory(this.fluidSurfaces.group, 'water');
+    this.scene.add(this.fluidSurfaces.group);
 
     this.foliage = buildFoliage(this.sim.cfg.seed);
     setRenderCategory(this.foliage.group, 'foliage');
@@ -1295,6 +1318,7 @@ export class Renderer {
     this.scene.add(props.group);
     this.flames = props.flames;
     this.fireLights = props.fireLights;
+    if (this.fluidSurfaces) this.fireLights.push(...this.fluidSurfaces.lights);
     // Props are baked into world space at build and their update() only toggles
     // visibility, so the whole tree is matrix-static, EXCEPT the campfire
     // flames, whose flicker rescales them every frame: re-enable those.
@@ -1661,7 +1685,9 @@ export class Renderer {
 
   // Surface under (x,z) for footstep timbre. Sampled only at a footfall (cheap).
   private surfaceAt(x: number, z: number, y: number): Surface {
-    if (x > DUNGEON_X_THRESHOLD) return 'stone'; // dungeon interiors are stone halls
+    // dungeon interiors are stone halls (blank maps have none, so no band)
+    if (getActiveWorldContent().presentationMode !== 'blank' && x > DUNGEON_X_THRESHOLD)
+      return 'stone';
     const wl = waterLevel();
     if (groundHeight(x, z, this.sim.cfg.seed) < wl && y <= wl + 0.3) return 'water';
     const biome = zoneBiomeAt(z);
@@ -2194,6 +2220,12 @@ export class Renderer {
     this.updateAmbience(p.pos.x, this.camera.position.y, dt);
     this.budgetFireLights(p.pos.x, p.pos.z);
     this.waterView.update(this.ambienceTime);
+    this.fluidSurfaces?.update(
+      dt * this.ambienceScale,
+      this.camera.position.x,
+      this.camera.position.z,
+      this.vfx,
+    );
     const fogFar = (this.scene.fog as THREE.Fog).far;
     this.terrainView.update(this.camera.position.x, this.camera.position.z, fogFar);
     this.propsView.update(
@@ -3842,6 +3874,7 @@ export class Renderer {
 
   /** Prebuild the full module stack when a delve run starts (offline + online). */
   private prebuildDelveInteriors(delveId: string): void {
+    if (getActiveWorldContent().presentationMode === 'blank') return;
     const run = this.sim.delveRun;
     if (!run || run.delveId !== delveId || !run.modules.length) return;
     this.buildAllDelveModules(delveId, run.slot, run.origin, run.modules as DelveModuleId[]);
@@ -3865,9 +3898,14 @@ export class Renderer {
   }
 
   private updateAmbience(px: number, camY: number, dt: number): void {
-    const inside = px > DUNGEON_X_THRESHOLD;
+    // Blank-slate maps have no dungeons/delves/arena: the instance bands live
+    // at fixed world x (beyond DUNGEON_X_THRESHOLD), so without this gate
+    // their interior rooms build floating past the map perimeter and the
+    // position-based fog/daylight kill blacks out the camera near them.
+    const blank = getActiveWorldContent().presentationMode === 'blank';
+    const inside = !blank && px > DUNGEON_X_THRESHOLD;
     const pz = this.sim.player.pos.z;
-    if (isDelvePos(px)) {
+    if (!blank && isDelvePos(px)) {
       this.ensureDelveInteriorsNear(px, pz);
     } else if (inside && isArenaPos(px)) {
       void ensureDungeonAssets().catch(() => undefined);
@@ -3898,7 +3936,7 @@ export class Renderer {
     }
     // the Drowned Temple reads as submerged: a teal murk instead of the
     // crypt's near-black, so its flooded halls feel underwater, not just dark
-    const inDelve = inside && isDelvePos(px);
+    const inDelve = inside && isDelvePos(px); // both false on blank maps
     const interior = inside && !inDelve && !isArenaPos(px) ? dungeonAt(px)?.interior : null;
     const inTemple = interior === 'temple';
     const inNythraxis = interior === 'nythraxis';
@@ -4471,14 +4509,17 @@ export class Renderer {
       const visuallyDead = isVisuallyDead(e) && !e.ghost;
       // `onGround` is authoritative offline but is never sent in online snapshots
       // (ClientWorld defaults it to true), so for players fall back to deriving the
-      // airborne state from foot height vs terrain — keeps the jump pose working in
+      // airborne state from foot height vs ground — keeps the jump pose working in
       // both worlds without a wire change. Gated to players (only they jump) to keep
-      // the extra groundHeight sample off the hot path for mobs/NPCs.
+      // the extra ground sample off the hot path for mobs/NPCs. Sheet-aware
+      // (groundHeightNear seeded with the feet height): standing on a cave floor
+      // must never read as airborne just because the surface sheet is elsewhere.
       const airborne =
         !visuallyDead &&
         !swimming &&
         (!e.onGround ||
-          (e.kind === 'player' && ay - groundHeight(ax, az, this.sim.cfg.seed) > AIRBORNE_EPS));
+          (e.kind === 'player' &&
+            ay - groundHeightNear(ax, az, this.sim.cfg.seed, ay) > AIRBORNE_EPS));
       const st = this.animScratch;
       st.speed = loco.speed;
       st.moving = moving;
@@ -4750,6 +4791,12 @@ export class Renderer {
     // water shimmer (low-tier texture scroll; shader water rides uTime) and
     // waterfalls ride the ambience clock so a map's world speed scales them.
     this.waterView.update(this.ambienceTime);
+    this.fluidSurfaces?.update(
+      dt * this.ambienceScale,
+      this.camera.position.x,
+      this.camera.position.z,
+      this.vfx,
+    );
     advanceWaterfallTime(this.ambienceTime);
     worldStart = markWorldPhase('water', worldStart);
     this.vfx.update(dt);
@@ -5031,7 +5078,16 @@ export class Renderer {
     // governor (effectivePointLights) only changes how many SHINE, not the count.
     const visibleCount = GFX.maxPointLights;
     const liveBudget = this.effectivePointLights || GFX.maxPointLights;
-    if (ranked.length > visibleCount) ranked.sort((a, b) => a.d2 - b.d2);
+    // Steady authored lights (map lamps) outrank ambient flicker sources when
+    // the budget is contended: a maker's placed lamp must not go dark because
+    // three campfires happen to sit closer. Steady entries rank as if 2x
+    // nearer; pure distance still breaks ties within each class.
+    if (ranked.length > visibleCount) {
+      ranked.sort(
+        (a, b) =>
+          a.d2 * (a.light.userData.steady ? 0.25 : 1) - b.d2 * (b.light.userData.steady ? 0.25 : 1),
+      );
+    }
     for (let i = 0; i < ranked.length; i++) {
       const entry = ranked[i];
       const counted = i < visibleCount;
@@ -5141,6 +5197,7 @@ export class Renderer {
   rebuildTerrain(region?: { minX: number; minZ: number; maxX: number; maxZ: number }): void {
     if (region) {
       this.terrainView.rebuildRegion(region.minX, region.minZ, region.maxX, region.maxZ);
+      if (this.caveGroup) refreshCaveMeshes(this.caveGroup, region);
       return;
     }
     const old = this.terrainView.group;
@@ -5161,6 +5218,22 @@ export class Renderer {
     this.terrainView = buildTerrain(this.sim.cfg.seed);
     setRenderCategory(this.terrainView.group, 'terrain');
     this.scene.add(this.terrainView.group);
+    this.rebuildCaves();
+  }
+
+  /** Rebuild every cave interior mesh from the active world's caves (cave
+   *  edits, paint strokes over cave footprints, map load). Editor-only. */
+  rebuildCaves(): void {
+    if (this.caveGroup) {
+      this.scene.remove(this.caveGroup);
+      this.caveGroup.traverse((o) => {
+        const m = o as THREE.Mesh;
+        if (m.isMesh) m.geometry.dispose();
+      });
+    }
+    this.caveGroup = buildCaveMeshes();
+    setRenderCategory(this.caveGroup, 'terrain');
+    this.scene.add(this.caveGroup);
   }
 
   /**
@@ -5180,6 +5253,20 @@ export class Renderer {
    */
   rebuildWater(): void {
     this.waterView.setLevel();
+  }
+
+  /** Rebuild the fluid-pool surfaces + lights (editor-only; playtest builds
+   *  once at boot). Pass `volumes` to render a live editor set; omit to read
+   *  the active world's fluids. */
+  rebuildFluids(volumes?: import('../sim/types').FluidVolume[]): void {
+    if (!this.fluidSurfaces) return;
+    // Pool lights live in the shared ranked budget: drop the stale ones first.
+    for (const l of this.fluidSurfaces.lights) {
+      const i = this.fireLights.indexOf(l);
+      if (i >= 0) this.fireLights.splice(i, 1);
+    }
+    this.fluidSurfaces.rebuild(volumes);
+    this.fireLights.push(...this.fluidSurfaces.lights);
   }
 
   /**
@@ -5326,6 +5413,31 @@ export class Renderer {
       // delve's actual (possibly Heroic/varied) layout, not just the default.
       const delveMods = this.sim.delveRun?.modules;
       let hardT = cameraOcclusion(seed, px, eyeY, pz, cx, cy, cz, CAMERA_COLLIDER_PAD, delveMods);
+      // Inside a BURIED cave tube the chase camera may not leave the bore
+      // (through the roof or a wall into solid earth). Open spans — mouths,
+      // tubes standing above the ground — never confine it. Clamp the
+      // eye->camera segment before the usual collider occlusion easing.
+      const caves = getActiveWorldContent().caves;
+      if (caves && caves.length > 0) {
+        const caveMax = caveCameraMaxDist(
+          caves,
+          (sx, sz) => terrainHeight(sx, sz, seed),
+          px,
+          eyeY,
+          pz,
+          cx,
+          cy,
+          cz,
+          0.35,
+        );
+        if (Number.isFinite(caveMax)) {
+          const segLenCave = Math.hypot(cx - px, cy - eyeY, cz - pz);
+          if (segLenCave > 1e-3) {
+            const caveT = Math.min(1, caveMax / segLenCave);
+            hardT = Math.min(hardT, caveT);
+          }
+        }
+      }
       let softT = cameraOcclusion(
         seed,
         px,
@@ -5337,6 +5449,7 @@ export class Renderer {
         CAMERA_SOFT_COLLIDER_PAD,
         delveMods,
       );
+      softT = Math.min(softT, hardT);
       const segLen = Math.hypot(cx - px, cy - eyeY, cz - pz);
       if (segLen > 1e-3) {
         const minT = CAMERA_MIN_DIST / segLen;
@@ -5359,8 +5472,19 @@ export class Renderer {
     cx = px + (cx - px) * ct;
     cy = eyeY + (cy - eyeY) * ct;
     cz = pz + (cz - pz) * ct;
-    const groundY = groundHeight(cx, cz, seed) + 0.6;
-    this.camera.position.set(cx, Math.max(cy, groundY), cz);
+    // Sheet-aware floor clamp: under an enclosed cave roof the camera rides
+    // the CAVE floor, not the surface far above; and it never pokes through
+    // the bore's ceiling. An empty-hole column reports the wall sentinel
+    // (HOLE_WALL_RISE, far above the eye): no floor there — never launch the
+    // camera onto the sentinel.
+    const rawGround = groundHeightNear(cx, cz, seed, eyeY);
+    const groundY = rawGround - eyeY > 500 ? Number.NEGATIVE_INFINITY : rawGround + 0.6;
+    let camY = Math.max(cy, groundY);
+    const camCave = getActiveWorldContent().caves?.length ? caveSheetAt(cx, cz) : null;
+    if (camCave && Math.abs(groundY - 0.6 - camCave.floor) < 0.01) {
+      camY = Math.min(camY, Math.max(camCave.floor + 0.5, camCave.ceiling - 0.3));
+    }
+    this.camera.position.set(cx, camY, cz);
     if (Math.abs(this.camera.fov - this.camOcclusion.fov) > 0.01) {
       this.camera.fov = this.camOcclusion.fov;
       this.camera.updateProjectionMatrix();
@@ -5380,7 +5504,8 @@ export class Renderer {
         fz = pz - cpz;
       const fl = Math.hypot(fx, fy, fz) || 1;
       sink.setListener(cpx, cpy, cpz, fx / fl, fy / fl, fz / fl);
-      const inDungeon = px > DUNGEON_X_THRESHOLD;
+      const inDungeon =
+        getActiveWorldContent().presentationMode !== 'blank' && px > DUNGEON_X_THRESHOLD;
       const biome = zoneBiomeAt(pz);
       const precip =
         !this.weatherOn || inDungeon
@@ -5394,6 +5519,9 @@ export class Renderer {
       // threshold made the loop bleed across the low marsh from far off.
       const nearWater = !inDungeon && groundHeight(px, pz, seed) < waterLevel() + 0.4;
       sink.ambience(biome, inDungeon, precip, nearWater);
+      // Authored positional point sounds, attenuated relative to the listener
+      // (the camera, same as footsteps/ambience above).
+      sink.pointSounds(getActiveWorldContent().pointSounds ?? NO_POINT_SOUNDS, cpx, cpy, cpz);
     }
   }
 

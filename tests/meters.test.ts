@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import type { SimEvent } from '../src/sim/types';
 import { MeterData } from '../src/ui/meters';
 import type { IWorld } from '../src/world_api';
-import type { SimEvent } from '../src/sim/types';
 
 // minimal IWorld stand-in: entity map + player + party
 function fakeWorld(): IWorld {
@@ -9,16 +9,36 @@ function fakeWorld(): IWorld {
   entities.set(1, { id: 1, kind: 'player', name: 'Hero', templateId: 'warrior' });
   entities.set(2, { id: 2, kind: 'player', name: 'Pal', templateId: 'priest' });
   entities.set(50, { id: 50, kind: 'mob', name: 'Wolf', maxHp: 60, dead: false, aggroTargetId: 1 });
-  entities.set(51, { id: 51, kind: 'mob', name: 'Gorrak', maxHp: 400, dead: false, aggroTargetId: 1 });
+  entities.set(51, {
+    id: 51,
+    kind: 'mob',
+    name: 'Gorrak',
+    maxHp: 400,
+    dead: false,
+    aggroTargetId: 1,
+  });
   return {
     entities,
     player: entities.get(1),
-    partyInfo: { leader: 1, raid: false, members: [{ pid: 2, name: 'Pal', cls: 'priest', group: 1 }] },
+    partyInfo: {
+      leader: 1,
+      raid: false,
+      members: [{ pid: 2, name: 'Pal', cls: 'priest', group: 1 }],
+    },
   } as unknown as IWorld;
 }
 
 const dmg = (sourceId: number, targetId: number, amount: number): SimEvent =>
-  ({ type: 'damage', sourceId, targetId, amount, crit: false, school: 'physical', ability: null, kind: 'hit' }) as SimEvent;
+  ({
+    type: 'damage',
+    sourceId,
+    targetId,
+    amount,
+    crit: false,
+    school: 'physical',
+    ability: null,
+    kind: 'hit',
+  }) as SimEvent;
 const heal = (sourceId: number, targetId: number, amount: number): SimEvent =>
   ({ type: 'heal2', sourceId, targetId, amount, crit: false, ability: 'Heal' }) as SimEvent;
 
@@ -74,7 +94,13 @@ describe('combat meters', () => {
   it('can tally controlled pet damage when the HUD includes the pet in the party set', () => {
     const w = fakeWorld();
     const party = new Set([1, 2, 3]);
-    (w.entities as Map<number, any>).set(3, { id: 3, kind: 'mob', name: 'Wolf Pet', templateId: 'forest_wolf', ownerId: 1 });
+    (w.entities as Map<number, any>).set(3, {
+      id: 3,
+      kind: 'mob',
+      name: 'Wolf Pet',
+      templateId: 'forest_wolf',
+      ownerId: 1,
+    });
     const m = new MeterData(0);
     m.onEvent(dmg(3, 50, 18), w, party, 1000);
     expect(m.current).not.toBeNull();

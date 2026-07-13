@@ -22,6 +22,7 @@ export interface TopbarDeps {
   onSettings(): void;
   onPlaytest(): void;
   onViewMode(mode: '3d' | '2d'): void;
+  onPreviewToggle(): void;
   onUndo(): void;
   onRedo(): void;
   onHelp(): void;
@@ -41,6 +42,7 @@ export class Topbar {
   private readonly undoBtn: HTMLButtonElement;
   private readonly redoBtn: HTMLButtonElement;
   private readonly viewButtons = new Map<'3d' | '2d', HTMLButtonElement>();
+  private readonly previewBtn: HTMLButtonElement;
   private moreBtn!: HTMLButtonElement;
   private moreMenu!: HTMLElement;
 
@@ -246,6 +248,17 @@ export class Topbar {
     }
     this.root.appendChild(viewWrap);
 
+    // Preview mode: in-game look, editor overlays hidden. A toggle, so the
+    // app pushes its state back via setPreview.
+    this.previewBtn = button(
+      t('editor.topbar.preview'),
+      deps.onPreviewToggle,
+      'ed-preview',
+      t('editor.topbar.previewTitle'),
+    );
+    this.previewBtn.setAttribute('aria-pressed', 'false');
+    this.root.appendChild(this.previewBtn);
+
     const play = button(
       t('editor.topbar.playtest'),
       deps.onPlaytest,
@@ -307,6 +320,11 @@ export class Topbar {
 
   setViewMode(mode: '3d' | '2d'): void {
     for (const [m, b] of this.viewButtons) b.classList.toggle('active', m === mode);
+  }
+
+  setPreview(on: boolean): void {
+    this.previewBtn.classList.toggle('active', on);
+    this.previewBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
   }
 
   setOffline(offline: boolean): void {

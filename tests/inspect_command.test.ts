@@ -9,13 +9,14 @@ function makeWorld() {
 function inspectReply(sim: Sim, pid: number, text: string): string | undefined {
   sim.chat(text, pid);
   const errs = sim.events.filter(
-    (e): e is Extract<typeof e, { type: 'error' }> => e.type === 'error' && (e as { pid: number }).pid === pid,
+    (e): e is Extract<typeof e, { type: 'error' }> =>
+      e.type === 'error' && (e as { pid: number }).pid === pid,
   );
   return errs.length ? errs[errs.length - 1].text : undefined;
 }
 
 describe('/inspect command', () => {
-  it('reports another player\'s level, class, and health', () => {
+  it("reports another player's level, class, and health", () => {
     const sim = makeWorld();
     const a = sim.addPlayer('warrior', 'Aleph');
     const b = sim.addPlayer('mage', 'Bet');
@@ -49,13 +50,17 @@ describe('/inspect command', () => {
     const a = sim.addPlayer('warrior', 'Aleph');
     sim.addPlayer('mage', 'Bet');
     sim.addPlayer('rogue', 'bet');
-    expect(inspectReply(sim, a, '/inspect BET')).toBe("Several players match 'BET'. Use exact capitalization.");
+    expect(inspectReply(sim, a, '/inspect BET')).toBe(
+      "Several players match 'BET'. Use exact capitalization.",
+    );
   });
 
   it('errors when the named player is not online', () => {
     const sim = makeWorld();
     const a = sim.addPlayer('warrior', 'Aleph');
-    expect(inspectReply(sim, a, '/inspect Nobody')).toBe("There is no player named 'Nobody' online.");
+    expect(inspectReply(sim, a, '/inspect Nobody')).toBe(
+      "There is no player named 'Nobody' online.",
+    );
   });
 
   it('asks whom to inspect when no name is given', () => {

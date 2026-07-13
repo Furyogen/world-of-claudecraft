@@ -2807,6 +2807,46 @@ export class MusicDirector {
     this.applyBossPlayback();
   }
 
+  /**
+   * Tear down the music engine on page teardown: stop the scheduler interval and
+   * the boss track, then close the AudioContext. Without this the editor↔playtest
+   * navigation ping-pong leaks an audio thread, a 110ms interval, and the layer
+   * graph per hop. Nulls the context so a later init() rebuilds it (the
+   * `if (this.ctx)` guard clears) and re-arms the scheduler.
+   */
+  close(): void {
+    if (this.timer !== undefined) {
+      clearInterval(this.timer);
+      this.timer = undefined;
+    }
+    try {
+      this.bossSource?.stop();
+    } catch {
+      /* already stopped */
+    }
+    this.bossSource = null;
+    if (this.bossElement) {
+      try {
+        this.bossElement.pause();
+        this.bossElement.src = '';
+      } catch {
+        /* best-effort */
+      }
+      this.bossElement = null;
+    }
+    const ctx = this.ctx;
+    this.ctx = null;
+    this.synth = null;
+    this.master = null;
+    this.reverb = null;
+    this.reverbSend = null;
+    this.bossGain = null;
+    this.layers = {};
+    this.zone = null;
+    this.combat = false;
+    if (ctx) void ctx.close().catch(() => {});
+  }
+
   /** Fade out while the game menu is open; does not change the music toggle. */
   pauseForMenu(): void {
     if (this._menuPaused) return;

@@ -4,7 +4,10 @@
 // arrive, then stop. Movement stays fully server-authoritative — this only
 // decides facing + a forward flag.
 
-export interface Point2 { x: number; z: number }
+export interface Point2 {
+  x: number;
+  z: number;
+}
 
 export interface ClickMoveStep {
   facing: number; // yaw to face the destination (same convention as Entity.facing)
@@ -56,10 +59,17 @@ export function latencyAdjustedStopDistance(
   speedYardsPerSecond: number,
   maxExtraDistance: number,
 ): number {
-  if (!Number.isFinite(latencyMs) || !Number.isFinite(speedYardsPerSecond) || !Number.isFinite(maxExtraDistance)) {
+  if (
+    !Number.isFinite(latencyMs) ||
+    !Number.isFinite(speedYardsPerSecond) ||
+    !Number.isFinite(maxExtraDistance)
+  ) {
     return stopDistance;
   }
-  const extra = Math.min(Math.max(0, maxExtraDistance), Math.max(0, speedYardsPerSecond) * Math.max(0, latencyMs) / 1000);
+  const extra = Math.min(
+    Math.max(0, maxExtraDistance),
+    (Math.max(0, speedYardsPerSecond) * Math.max(0, latencyMs)) / 1000,
+  );
   return stopDistance + extra;
 }
 
@@ -72,7 +82,11 @@ export function latencyAdjustedStopDistance(
 // cone we hold position and turn in place first, which collapses the orbit.
 export const CLICK_MOVE_FORWARD_CONE = Math.PI / 3; // 60° either side of the bearing
 
-export function clickMoveShouldWalk(facing: number, bearing: number, cone = CLICK_MOVE_FORWARD_CONE): boolean {
+export function clickMoveShouldWalk(
+  facing: number,
+  bearing: number,
+  cone = CLICK_MOVE_FORWARD_CONE,
+): boolean {
   return Math.abs(angleDelta(facing, bearing)) <= cone;
 }
 
@@ -81,8 +95,13 @@ export function clickMoveShouldWalk(facing: number, bearing: number, cone = CLIC
 // is not a change of heading, so you keep travelling to the destination through
 // the hop instead of stopping dead.
 export function manualMovementOverrides(mi: {
-  forward: boolean; back: boolean; turnLeft: boolean; turnRight: boolean;
-  strafeLeft: boolean; strafeRight: boolean; jump: boolean;
+  forward: boolean;
+  back: boolean;
+  turnLeft: boolean;
+  turnRight: boolean;
+  strafeLeft: boolean;
+  strafeRight: boolean;
+  jump: boolean;
 }): boolean {
   return mi.forward || mi.back || mi.turnLeft || mi.turnRight || mi.strafeLeft || mi.strafeRight;
 }
@@ -98,15 +117,23 @@ export function manualMovementOverrides(mi: {
 // Cancel wins over pause: a genuine interrupt during a menu still ends the run.
 export type ClickMoveAction = 'cancel' | 'pause' | 'continue';
 
-export function resolveClickMoveAction(mi: {
-  forward: boolean; back: boolean; turnLeft: boolean; turnRight: boolean;
-  strafeLeft: boolean; strafeRight: boolean; jump: boolean;
-}, state: {
-  mouselook: boolean;
-  movementSuspended: boolean;
-  playerDead: boolean;
-  enabled: boolean;
-}): ClickMoveAction {
+export function resolveClickMoveAction(
+  mi: {
+    forward: boolean;
+    back: boolean;
+    turnLeft: boolean;
+    turnRight: boolean;
+    strafeLeft: boolean;
+    strafeRight: boolean;
+    jump: boolean;
+  },
+  state: {
+    mouselook: boolean;
+    movementSuspended: boolean;
+    playerDead: boolean;
+    enabled: boolean;
+  },
+): ClickMoveAction {
   if (state.mouselook || state.playerDead || !state.enabled || manualMovementOverrides(mi)) {
     return 'cancel';
   }

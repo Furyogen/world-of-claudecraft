@@ -97,6 +97,21 @@ const MOB_IDS = [
   // Thornpeak Heights world boss + its summoned adds
   'thunzharr_waking_peak',
   'thunzharr_stormling',
+  // --- Scorching Wastes ---
+  'duskmane_prowler',
+  'glasscarab',
+  'duneblade_marauder',
+  'karesh_the_parched',
+  'vigil_sentinel',
+  'sunbaked_revenant',
+  'ashen_courtier',
+  'sunspeaker_atharis',
+  'emberveil_zealot',
+  'emberveil_pyromancer',
+  'cinder_elemental',
+  'moltenheart_colossus',
+  'cinder_wisp',
+  'ember_of_korzul',
 ] as const;
 
 const NPC_IDS = [
@@ -124,6 +139,19 @@ const NPC_IDS = [
   'brother_halven', // Collapsed Reliquary delve board NPC
   'brother_halven_marsh', // Drowned Litany delve board NPC (same character, marsh camp)
   'spirit_healer', // the graveyard angel (spawned at every graveyard + dungeon entry)
+  // --- Scorching Wastes ---
+  'caravan_master_saffa',
+  'scout_maren_wastes',
+  'loremaster_caddis_wastes',
+  'brother_aldric_wastes',
+  'old_haruk',
+  'provisioner_ashka',
+  'forgemaster_derin',
+  'auctioneer_zeph',
+  'wellwatch_hana',
+  'wellwatch_toma',
+  'drover_pell',
+  'dowser_emrys',
 ] as const;
 
 const QUEST_IDS = [
@@ -201,6 +229,27 @@ const QUEST_IDS = [
   'q_nythraxis_bound_guardian',
   'q_nythraxis_scourges_end',
   'q_mogger',
+  // --- Scorching Wastes ---
+  'q_sw_arrival',
+  'q_sw_prowlers',
+  'q_sw_carrion_glass',
+  'q_sw_lost_caravan',
+  'q_sw_marauders',
+  'q_sw_karesh',
+  'q_sw_survey',
+  'q_sw_vigil_dawn',
+  'q_sw_vigil_noon',
+  'q_sw_vigil_dusk',
+  'q_sw_revenants',
+  'q_sw_courtiers',
+  'q_sw_braziers',
+  'q_sw_sunspeaker',
+  'q_sw_emberveil',
+  'q_sw_writs',
+  'q_sw_glasscut',
+  'q_sw_offering',
+  'q_sw_first_ember',
+  'q_sw_afterglow',
 ] as const;
 
 const ZONE_IDS = ['eastbrook_vale', 'mirefen_marsh', 'thornpeak_heights'] as const;

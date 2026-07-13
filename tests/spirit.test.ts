@@ -3,12 +3,14 @@
 // penalty-free, or accept a Spirit Healer's resurrection (with Resurrection
 // Sickness). Exercised against a real Sim so resolve/recalc/groundPos are real.
 
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import {
+  BUILTIN_WORLD,
   DELVES,
   DUNGEON_X_THRESHOLD,
   OVERWORLD_GRAVEYARDS,
   SPIRIT_HEALER_NPC_ID,
+  setActiveWorldContent,
 } from '../src/sim/data';
 import { Sim } from '../src/sim/sim';
 import {
@@ -19,7 +21,7 @@ import {
   RESURRECTION_SICKNESS_ID,
   SPIRIT_HEALER_RANGE,
 } from '../src/sim/spirit';
-import { dist2d, type Entity } from '../src/sim/types';
+import { dist2d, type Entity, type WorldContent } from '../src/sim/types';
 import { terrainHeight } from '../src/sim/world';
 
 type AnyEntity = Entity & Record<string, any>;
@@ -55,6 +57,53 @@ describe('spirit: world spawn', () => {
     for (const g of OVERWORLD_GRAVEYARDS) {
       expect(healerInRange(sim, g, 2)).toBe(true);
     }
+  });
+});
+
+// A blank editor map has no graveyards: the death loop is anchored at the map's
+// starting spawn point, where a single Pale Keeper stands.
+describe('spirit: blank-map respawn at the spawn point', () => {
+  afterEach(() => setActiveWorldContent(null));
+
+  const blankSim = (start: { x: number; z: number }): AnySim => {
+    const content: WorldContent = {
+      ...BUILTIN_WORLD,
+      presentationMode: 'blank',
+      playerStart: start,
+    };
+    setActiveWorldContent(content);
+    return new Sim({ seed: 42, playerClass: 'warrior', autoEquip: true, world: content }) as AnySim;
+  };
+
+  it('spawns exactly one Pale Keeper, standing at the spawn point', () => {
+    const start = { x: 18, z: -24 };
+    const sim = blankSim(start);
+    const healers = [...sim.entities.values()].filter(
+      (e: AnyEntity) => e.kind === 'npc' && e.templateId === SPIRIT_HEALER_NPC_ID,
+    );
+    expect(healers.length).toBe(1);
+    expect(healerInRange(sim, start, 2)).toBe(true);
+  });
+
+  it('releases the spirit to the spawn point (not an off-map graveyard) and rezzes there', () => {
+    const start = { x: 18, z: -24 };
+    const sim = blankSim(start);
+    sim.setPlayerLevel(10);
+    const p = sim.player as AnyEntity;
+    // die far from the spawn point so the ghost-landing point is unambiguous
+    p.pos = { x: 120, y: p.pos.y, z: 140 };
+    p.prevPos = { ...p.pos };
+    p.dead = true;
+    sim.releaseSpirit();
+    expect(p.ghost).toBe(true);
+    // the ghost rose at the spawn point, within the Pale Keeper's reach
+    expect(Math.hypot(p.pos.x - start.x, p.pos.z - start.z)).toBeLessThan(SPIRIT_HEALER_RANGE);
+    // and that Keeper can resurrect the ghost (with Resurrection Sickness)
+    expect(healerInRange(sim, p.pos)).toBe(true);
+    sim.resurrectAtSpiritHealer();
+    expect(p.dead).toBe(false);
+    expect(p.ghost).toBe(false);
+    expect(p.auras.some((a: any) => a.id === RESURRECTION_SICKNESS_ID)).toBe(true);
   });
 });
 

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { Sim } from '../src/sim/sim';
 import { MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
+import { Sim } from '../src/sim/sim';
 
 const SEED = 5150;
 const makeSim = () => new Sim({ seed: SEED, playerClass: 'warrior' });
@@ -11,7 +11,8 @@ const makeSim = () => new Sim({ seed: SEED, playerClass: 'warrior' });
 // kills before the disease is observed.
 function forcePlague(sim: Sim, p: any, mob: any): any {
   for (let i = 0; i < 80; i++) {
-    p.maxHp = 100000; p.hp = 100000;
+    p.maxHp = 100000;
+    p.hp = 100000;
     (sim as any).mobSwing(mob, p);
     const a = p.auras.find((x: any) => x.id === 'plague_drowned_dead');
     if (a) return a;
@@ -74,7 +75,11 @@ describe('Plague Stamina-drain affix (Bog Rot)', () => {
     try {
       const pet = createMob(910702, tmpl, 10, { x: 0, y: 0, z: 0 });
       pet.hostile = false; // pets call mobSwing too
-      for (let i = 0; i < 80; i++) { p.maxHp = 100000; p.hp = 100000; (sim as any).mobSwing(pet, p); }
+      for (let i = 0; i < 80; i++) {
+        p.maxHp = 100000;
+        p.hp = 100000;
+        (sim as any).mobSwing(pet, p);
+      }
       expect(p.auras.some((a) => a.id === 'plague_drowned_dead')).toBe(false);
     } finally {
       tmpl.plague!.chance = saved;
@@ -85,7 +90,11 @@ describe('Plague Stamina-drain affix (Bog Rot)', () => {
     const sim = makeSim();
     const p = sim.entities.get(sim.playerId)!;
     const mob = createMob(910703, MOBS.forest_wolf, 5, { x: 0, y: 0, z: 0 });
-    for (let i = 0; i < 60; i++) { p.maxHp = 100000; p.hp = 100000; (sim as any).mobSwing(mob, p); }
+    for (let i = 0; i < 60; i++) {
+      p.maxHp = 100000;
+      p.hp = 100000;
+      (sim as any).mobSwing(mob, p);
+    }
     expect(p.auras.some((a) => a.kind === 'buff_sta' && a.value < 0)).toBe(false);
   });
 });

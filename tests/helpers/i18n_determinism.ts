@@ -20,17 +20,10 @@
 //
 // Dependency-free on purpose: node:child_process / node:fs / node:os / node:path only.
 
-import { execFileSync } from "node:child_process";
-import {
-  existsSync,
-  mkdtempSync,
-  readFileSync,
-  readdirSync,
-  rmSync,
-  statSync,
-} from "node:fs";
-import { tmpdir } from "node:os";
-import path from "node:path";
+import { execFileSync } from 'node:child_process';
+import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 
 export interface DeterminismCheck {
   /** Absolute path to the generator script (an .mjs that honors I18N_OUT_DIR). */
@@ -50,8 +43,8 @@ export interface DeterminismCheck {
 // The two perturbed environments. Distinct timezone, locale, and temp-dir prefix so
 // a hidden dependency on any of them produces a diff instead of a false pass.
 const PERTURBATIONS = [
-  { TZ: "UTC", LC_ALL: "C", LANG: "C", prefix: "i18n-det-a-" },
-  { TZ: "Asia/Kolkata", LC_ALL: "en_US.UTF-8", LANG: "en_US.UTF-8", prefix: "zzz-i18n-det-b-" },
+  { TZ: 'UTC', LC_ALL: 'C', LANG: 'C', prefix: 'i18n-det-a-' },
+  { TZ: 'Asia/Kolkata', LC_ALL: 'en_US.UTF-8', LANG: 'en_US.UTF-8', prefix: 'zzz-i18n-det-b-' },
 ] as const;
 
 // Every file under `dir`, as paths relative to `dir`, sorted for a stable order.
@@ -64,14 +57,18 @@ function listFilesRecursive(dir: string): string[] {
       else out.push(childRel);
     }
   };
-  walk("");
+  walk('');
   return out.sort();
 }
 
-function generateInto(check: DeterminismCheck, dir: string, perturb: (typeof PERTURBATIONS)[number]): void {
+function generateInto(
+  check: DeterminismCheck,
+  dir: string,
+  perturb: (typeof PERTURBATIONS)[number],
+): void {
   execFileSync(process.execPath, [check.script], {
     cwd: check.cwd ?? process.cwd(),
-    encoding: "utf8",
+    encoding: 'utf8',
     env: {
       ...process.env,
       ...check.env,
@@ -124,12 +121,12 @@ export function assertDeterministic(check: DeterminismCheck): void {
   // When comparing the whole emitted tree, the file SET must match too (a dropped or
   // extra file between runs is itself a determinism bug).
   if (!check.outFiles) {
-    const setA = a.files.join("\n");
-    const setB = b.files.join("\n");
+    const setA = a.files.join('\n');
+    const setB = b.files.join('\n');
     if (setA !== setB) {
       throw new Error(
         `assertDeterministic: ${check.script} emitted a different file set across two ` +
-          `perturbed-env runs.\n  run A: ${a.files.join(", ")}\n  run B: ${b.files.join(", ")}`,
+          `perturbed-env runs.\n  run A: ${a.files.join(', ')}\n  run B: ${b.files.join(', ')}`,
       );
     }
   }

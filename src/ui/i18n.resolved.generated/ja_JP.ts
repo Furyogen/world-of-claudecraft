@@ -2050,6 +2050,8 @@ export const ja_JP: EnTranslations = {
       "view3dTitle": "レンダリングされたワールドで編集",
       "view2d": "2D",
       "view2dTitle": "俯瞰の記号マップで編集",
+      "preview": "Preview",
+      "previewTitle": "See the map as it looks in-game: hides editor-only overlays (collider boxes, music areas, markers, rings, gizmos)",
       "undoCount": "元に戻す：{count}",
       "undoCountTitle": "{count} 手戻せます（Ctrl+Z で元に戻す、Ctrl+Y でやり直し）",
       "autosave": "自動保存",
@@ -2085,6 +2087,87 @@ export const ja_JP: EnTranslations = {
       "music": "Play music",
       "close": "Close"
     },
+    "fluid": {
+      "title": "Fluid Pool",
+      "hint": "Pick a fluid and click the ground to place a pool. Use the transform tools to move it, stretch its footprint, and slide the surface down into a dip.",
+      "selHint": "The gizmo scales the pool footprint (X/Z) and the Y arrow slides the surface height. Damage ticks once per second on anyone in the fluid.",
+      "kind": {
+        "lava": "Lava",
+        "acid": "Acid",
+        "spectral": "Spectral Fluid",
+        "water": "Still Water"
+      },
+      "hue": "Hue",
+      "light": "Lightness",
+      "dps": "Damage per second",
+      "surfaceOffset": "Surface height",
+      "fxBubbles": "Bubbles",
+      "fxSmoke": "Smoke",
+      "fxHaze": "Haze",
+      "fxLight": "Glow light",
+      "resetPreset": "Reset to preset"
+    },
+    "tunnel": {
+      "needExit": "Entrance placed. Keep clicking to lay the path (the last point is the exit), then hit Generate.",
+      "generate": "Generate cave ({count} ready)",
+      "tooShort": "The rig points are too close together - spread them at least a few yards apart.",
+      "modeDig": "Dig cave",
+      "modeHole": "Cut hole",
+      "modePatch": "Patch hole",
+      "holeHint": "Click the ground to punch a round hole straight through the terrain mesh (brush radius wide). The ground simply stops existing there - line a cave mouth up underneath and you can walk or drop in. Resize or delete any hole below; undo removes the last one.",
+      "holeList": "Holes",
+      "holeLabel": "Hole {n}",
+      "holeRadius": "Radius",
+      "holeDelete": "Delete hole",
+      "patchHint": "Click the ground to lay a patch (brush radius wide) that FILLS the ground back in wherever hole cuts overlap it - use it to trim the blank parts around each cut. A patch always beats the holes it touches. Resize or delete any patch below; undo removes the last one.",
+      "patchList": "Patches",
+      "patchLabel": "Patch {n}",
+      "patchDelete": "Delete patch",
+      "listTitle": "Caves",
+      "caveLabel": "Cave {n} ({nodes} points)",
+      "width": "Width",
+      "height": "Interior height",
+      "variance": "Variance",
+      "floorVariance": "Floor bumps",
+      "stalactites": "Stalactites",
+      "stalagmites": "Stalagmites",
+      "spikeSize": "Formation size",
+      "startOpen": "Entrance open",
+      "endOpen": "Exit open",
+      "selectCave": "Select whole cave",
+      "noRig": "This cave has no rig nodes to grab - lay a new cave instead.",
+      "reverse": "Swap entrance/exit",
+      "delete": "Delete cave",
+      "texture": "Interior texture",
+      "texDefault": "Granite (default)",
+      "guideHint": "Blue nodes joined by a dotted line are your cave model (visible in every tool). Move a node with the Move tool, raise or sink it with the Y arrow, and scale it to widen the cave there - the tube re-generates live and ALWAYS keeps exactly the size you set. Green ball = entrance, red arrow = exit.",
+      "hint": "Click the ground to drop the ENTRANCE node, keep clicking to lay blue waypoints (the last one is the exit), then press Generate. The cave is a standalone tube built only from your nodes - the surrounding terrain never squishes or reshapes it. Use Cut hole mode to open the ground, then Select whole cave + the Move tool to slide the tube into place so its mouth lines up with the hole."
+    },
+    "rock": {
+      "title": "Rock Generator",
+      "hint": "Click the ground to grow a procedural boulder there. The sliders below shape the NEXT rock; select a placed rock with the Select tool to reshape it live. Use the gizmo to stretch rocks into slabs and cliff plates.",
+      "chainMode": "Bridge / ridge mode",
+      "chainHint": "Click to lay blue points; Generate lofts ONE merged solid body through them (spanning dips in a straight line) plus walkable tops, so the chain works as a bridge or ridge. The points stay after Generate: move or scale one with the gizmos and the body follows.",
+      "chainCount": "{count} points laid",
+      "generateChain": "Generate rock ridge",
+      "clearChain": "Clear points",
+      "chainTooShort": "Lay at least two points first.",
+      "size": "Size",
+      "noise": "Noise amount",
+      "detail": "Feature detail",
+      "sharp": "Sharpness",
+      "height": "Height",
+      "depth": "Embed depth",
+      "jag": "Jaggedness",
+      "texture": "Texture",
+      "baseTex": "Base texture",
+      "texStone": "Stone",
+      "texSandstone": "Sandstone",
+      "texBare": "Bare (tintable)",
+      "reroll": "Re-roll shape",
+      "selTitle": "Generated Rock",
+      "walkable": "Walkable top"
+    },
     "tool": {
       "listLabel": "エディターツール",
       "keyHint": "{name}（{key}）",
@@ -2096,6 +2179,9 @@ export const ja_JP: EnTranslations = {
       "lower": "沈降",
       "smooth": "なめらか",
       "flatten": "平坦化",
+      "tunnel": "Caves",
+      "rock": "Rock Gen",
+      "fluid": "Fluid Pool",
       "paint": "バイオーム塗り",
       "water": "水面",
       "place": "アセット配置",
@@ -2107,6 +2193,7 @@ export const ja_JP: EnTranslations = {
       "zone": "Zone",
       "light": "Point Light",
       "music": "Music",
+      "sound": "Point Sound",
       "region": "範囲",
       "erase": "消去"
     },
@@ -2147,13 +2234,17 @@ export const ja_JP: EnTranslations = {
       "cave": "洞窟",
       "erase": "塗りを消す",
       "hint": "塗ったマスはゾーンのバイオームを上書きし、地形の形状と色を変えます。",
-      "addSwatch": "Add",
-      "swatchColor": "New swatch color",
-      "swatchNamePlaceholder": "Swatch name (optional)",
+      "hue": "Hue",
+      "light": "Light/Dark",
+      "saveSwatch": "Save tint as swatch",
+      "saveSwatchTitle": "Keep this hue/light version as its own swatch, so the tint can be reused after the sliders move on",
+      "swatchSaved": "Saved swatch \"{name}\".",
       "customHint": "Custom swatches color the ground only (terrain shape keeps the zone biome) and save with the map.",
       "customFull": "Swatch limit reached ({max}).",
       "importTexture": "Import texture swatch",
       "importTextureTitle": "Pick an image file: painting with the new swatch tiles it over the ground (stored in this browser; other machines see its average color)",
+      "builtinGroup": "Texture library",
+      "builtinTitle": "Built-in ground textures that ship with the editor: picking one adds it to this map as a swatch (available on every machine)",
       "tileSize": "Texture tile size (yd)",
       "importTextureFailed": "Could not read that image.",
       "clear": "バイオーム塗りをすべて消去",
@@ -2182,7 +2273,8 @@ export const ja_JP: EnTranslations = {
       "hint": "Drag a box on the ground, then name it: standing inside shows that name as the location in playtest.",
       "namePrompt": "Location name",
       "none": "No named locations yet.",
-      "deleteTitle": "Remove this location"
+      "deleteTitle": "Remove this location",
+      "hideBoxes": "Hide area boxes"
     },
     "lightTool": {
       "title": "Point Lights",
@@ -2196,6 +2288,19 @@ export const ja_JP: EnTranslations = {
       "capReached": "Light limit reached ({max}).",
       "lightN": "Light {num}",
       "selectTitle": "Select this light in the world (bulb badge enlarges; Delete removes it)"
+    },
+    "soundTool": {
+      "title": "Point Sounds",
+      "hint": "Click the ground to drop a looping sound emitter, then pick a clip and set its max volume and radius. The falloff sphere shows how far it carries; it plays spatially in playtest.",
+      "none": "No point sounds yet.",
+      "clip": "Sound effect",
+      "volume": "Max volume",
+      "radius": "Radius (yd)",
+      "height": "Height (yd)",
+      "deleteTitle": "Remove this sound",
+      "capReached": "Point sound limit reached ({max}).",
+      "soundN": "Sound {num}",
+      "selectTitle": "Select this sound in the world (badge enlarges; Delete removes it)"
     },
     "markerTool": {
       "title": "AI Markers",
@@ -2222,6 +2327,8 @@ export const ja_JP: EnTranslations = {
     "sculpt": {
       "hint": "Drag to raise the ground; tick the box to carve downward instead.",
       "lower": "Lower instead of raise",
+      "grab": "Grab / pull (snake hook)",
+      "grabHint": "Press to grab the ground under the brush, then drag and the terrain follows your cursor in any direction - up lifts it, down shoves it in, sideways slides it across the map, like pulling clay. One grab is one undo step. Brush size sets how wide a chunk you pull.",
       "shiftHint": "Hold Shift while dragging to do the opposite (raise becomes lower, and back).",
       "autoTex": "Auto texture by angle",
       "autoTexHint": "Each stroke repaints the sculpted area by ground angle: one texture below the threshold, another above it (instant cliffs).",
@@ -2241,6 +2348,10 @@ export const ja_JP: EnTranslations = {
       "level": "水面の高さ",
       "hint": "マップ全体の水面の高さを設定します（{min} から {max} ヤード）。",
       "reset": "既定の高さに戻す",
+      "tintTitle": "Water tint",
+      "hue": "Hue",
+      "light": "Lightness",
+      "tintReset": "Reset tint",
       "waterfallTitle": "Waterfalls",
       "placeWaterfall": "Place waterfall",
       "placeWaterfallTitle": "Arm the Place tool with an animated waterfall (click a cliff to drop it)",
@@ -2354,7 +2465,49 @@ export const ja_JP: EnTranslations = {
       "radiusAuto": "自動",
       "radiusAutoTitle": "衝突半径をアセットのスケールに追従するようリセット",
       "radiusHint": "「自動」はアセットのスケールから衝突半径を導きます。スライダーをドラッグすると上書きできます。",
+      "collisionBaked": "Blocking with the baked model shape ({count} boxes hugging the mesh). Drag the radius slider to override with a simple circle; Auto restores the baked shape.",
+      "collisionCustom": "Custom footprint (circle/square) - overrides the baked model shape. Press Auto to restore it.",
       "footprints": "当たり判定の範囲を表示",
+      "collisionTitle": "Collision",
+      "collisionType": "Collision type",
+      "collisionTypeBaked": "Baked hitboxes",
+      "collisionTypeBasic": "Basic (radius)",
+      "collisionTypeMesh": "True collision (heavy)",
+      "collisionTypeNone": "No collision",
+      "collisionEdited": "Custom hitboxes ({count} boxes). The sim blocks with exactly these.",
+      "hitboxEdit": "Edit hitboxes",
+      "hitboxDone": "Done editing",
+      "hitboxAdd": "Add hitbox",
+      "hitboxDelete": "Delete selected",
+      "hitboxReset": "Reset to baked",
+      "hitboxSelected": "{count} hitboxes selected",
+      "hitboxHint": "Click a hitbox to select it; Ctrl/Shift+click selects several. Use the Move, Rotate, and Scale tools (or the gizmo) to shape them like any other object. Delete removes the selected boxes; Esc leaves edit mode.",
+      "hitboxCap": "Hitbox limit reached ({max} per asset).",
+      "hitboxSavePreset": "Save as preset",
+      "hitboxClearPreset": "Clear saved preset",
+      "hitboxPresetSaved": "Hitbox preset saved for {name}. New placements copy these boxes.",
+      "hitboxPresetCleared": "Hitbox preset cleared.",
+      "hitboxPresetHint": "Presets live on this device: every future placement of this asset spawns with the saved hitboxes.",
+      "meshBaking": "Baking true collision from the model mesh...",
+      "meshBakeDone": "True collision ready ({count} boxes).",
+      "meshBakeFailed": "Could not bake true collision for this asset.",
+      "meshReady": "True collision active: a dense box set hugging the real model mesh.",
+      "meshHint": "True collision rebuilds the hitboxes from the actual model mesh (many small boxes). Expensive - keep it for edge cases; it bakes once per asset when selected.",
+      "collisionCopyAll": "Copy collision to all {name} ({count})",
+      "collisionCopyAllHint": "Gives every other {name} on the map the same collision type and shape, sized to each copy so a small one never gets a giant footprint.",
+      "collisionCopyConfirmTitle": "Copy collision to all {name}?",
+      "collisionCopyConfirmBody": "All {count} other {name} on the map take this collision type and shape, each sized to its own scale (a small copy gets a small footprint, never this one), replacing their own. Ctrl+Z reverts the whole copy.",
+      "collisionCopyConfirm": "Copy to all",
+      "collisionCopied": "Copied collision to {count} {name}.",
+      "scaleAllTitle": "Scale all copies",
+      "scaleMin": "Scale min",
+      "scaleMax": "Scale max",
+      "scaleAllButton": "Scale all {name} ({count})",
+      "scaleAllHint": "Rolls a random scale between min and max onto every copy of this asset (set min and max equal for a uniform scale).",
+      "scaleAllConfirmTitle": "Scale all {name}?",
+      "scaleAllConfirmBody": "Every one of the {count} {name} on the map (this one included) gets a random scale between {min} and {max}, replacing its current scale. Ctrl+Z reverts it.",
+      "scaleAllConfirm": "Scale all",
+      "scaleAllDone": "Scaled {count} {name}.",
       "duplicate": "複製",
       "delete": "削除",
       "deleteHint": "削除は選択を取り除きます。Ctrl+Z で元に戻せます。",
@@ -2495,6 +2648,8 @@ export const ja_JP: EnTranslations = {
       "draftRestored": "自動保存の下書きを復元しました。",
       "autosaveFailed": "自動保存に失敗しました（ブラウザのストレージが満杯かブロックされています）。バックアップとしてマップをエクスポートしてください。",
       "terrainCapReached": "地形編集の上限に達しました（{max}）。超過分のスカルプトは追加されませんでした。",
+      "caveCapReached": "Cave limit reached ({max}). Delete or undo a cave first.",
+      "holeCapReached": "Hole limit reached ({max}). Delete or undo a hole first.",
       "placementCapReached": "配置数の上限に達しました（{max}）。超過分のアセットは追加されませんでした。",
       "blockerCapReached": "ブロッカー壁の上限（{max}）に達しました。新しい壁は追加されませんでした。",
       "autosaveOff": "自動保存をオフにしました：{reason} 手動で保存してから、再度オンにしてください。"
@@ -6011,6 +6166,132 @@ export const ja_JP: EnTranslations = {
       "sunpetal_sickle": {
         "name": "陽花弁の鎌"
       },
+      "ashen_psalter": {
+        "name": "灰の詩篇集"
+      },
+      "brimming_waterskin": {
+        "name": "なみなみの水袋"
+      },
+      "cactus_pressed_water": {
+        "name": "サボテンの搾り水"
+      },
+      "caravan_guard_mail": {
+        "name": "キャラバン衛兵のメイル"
+      },
+      "caravan_manifest": {
+        "name": "水染みの積荷目録"
+      },
+      "cinder_soaked_veil": {
+        "name": "燃えさし浸みのヴェール"
+      },
+      "crown_brazier": {
+        "name": "王冠の火鉢"
+      },
+      "crown_guard_seal": {
+        "name": "王冠衛兵の印章"
+      },
+      "duneblade_token": {
+        "name": "デューンブレイドの割符"
+      },
+      "duneforged_warblade": {
+        "name": "砂丘鍛えの戦刃"
+      },
+      "dunewatch_sash": {
+        "name": "砂丘見張りの飾り帯"
+      },
+      "duskmane_pelt": {
+        "name": "たそがれ鬣の毛皮"
+      },
+      "emberbound_leggings": {
+        "name": "燃えさし縛りのレギンス"
+      },
+      "emberglass_scepter": {
+        "name": "燠硝子の王笏"
+      },
+      "emberveil_writ": {
+        "name": "エンバーヴェイルの命令書"
+      },
+      "glasscarab_shell": {
+        "name": "硝子甲虫の甲殻"
+      },
+      "glasscut_dirk": {
+        "name": "硝子裂きの短剣"
+      },
+      "heart_of_the_first_ember": {
+        "name": "始まりの燠の心臓"
+      },
+      "heartspring_offering": {
+        "name": "心泉の供物鉢"
+      },
+      "kareshs_last_skin": {
+        "name": "カレシュ最後の水袋"
+      },
+      "lastwell_datewine": {
+        "name": "最後の井戸のナツメヤシ酒"
+      },
+      "living_cinder": {
+        "name": "生ける燠火"
+      },
+      "moltenheart_girdle": {
+        "name": "熔心の腰帯"
+      },
+      "moltenheart_slagcore": {
+        "name": "熔心の鉱滓核"
+      },
+      "mural_rubbing": {
+        "name": "壁画の拓本"
+      },
+      "parched_kings_goblet": {
+        "name": "渇きの王の酒杯"
+      },
+      "prowler_fang": {
+        "name": "徘徊獣の牙"
+      },
+      "sentinel_core_stone": {
+        "name": "番人の核石"
+      },
+      "springheart_blessing": {
+        "name": "心泉の祝福"
+      },
+      "stolen_waterskin": {
+        "name": "盗まれた水袋"
+      },
+      "sunbaked_flatbread": {
+        "name": "天日焼きの平パン"
+      },
+      "sunbleached_bone": {
+        "name": "日晒しの骨"
+      },
+      "sunbleached_staff": {
+        "name": "日晒しの杖"
+      },
+      "sunglass_shard": {
+        "name": "陽硝子のかけら"
+      },
+      "sunspeakers_ash_crown": {
+        "name": "太陽の代弁者の灰冠"
+      },
+      "vestment_of_the_sunken_crown": {
+        "name": "沈んだ王冠の祭服"
+      },
+      "vigil_obelisk_dawn": {
+        "name": "暁火の印"
+      },
+      "vigil_obelisk_dusk": {
+        "name": "宵火の印"
+      },
+      "vigil_obelisk_noon": {
+        "name": "真昼火の印"
+      },
+      "wastes_relic_cache": {
+        "name": "太陽宮廷の遺物箱"
+      },
+      "wastewalker_jerkin": {
+        "name": "荒野歩きの革衣"
+      },
+      "wastewalker_treads": {
+        "name": "荒野歩きの靴"
+      },
       "bristleback_maul": {
         "name": "ギャロウグラスの大槌"
       },
@@ -6811,6 +7092,48 @@ export const ja_JP: EnTranslations = {
       "thunzharr_stormling": {
         "name": "目覚めた嵐の精"
       },
+      "duskmane_prowler": {
+        "name": "たそがれ鬣の徘徊獣"
+      },
+      "glasscarab": {
+        "name": "硝子甲虫"
+      },
+      "duneblade_marauder": {
+        "name": "デューンブレイドの略奪者"
+      },
+      "karesh_the_parched": {
+        "name": "渇きのカレシュ"
+      },
+      "vigil_sentinel": {
+        "name": "ヴィジルの番人"
+      },
+      "sunbaked_revenant": {
+        "name": "陽灼けの亡霊"
+      },
+      "ashen_courtier": {
+        "name": "灰の廷臣"
+      },
+      "sunspeaker_atharis": {
+        "name": "太陽の代弁者アサリス"
+      },
+      "emberveil_zealot": {
+        "name": "エンバーヴェイルの狂信者"
+      },
+      "emberveil_pyromancer": {
+        "name": "エンバーヴェイルの炎術師"
+      },
+      "cinder_elemental": {
+        "name": "燠火の精霊"
+      },
+      "moltenheart_colossus": {
+        "name": "熔心の巨像"
+      },
+      "cinder_wisp": {
+        "name": "燠火のウィスプ"
+      },
+      "ember_of_korzul": {
+        "name": "始まりの燠"
+      },
       "ironvein_foreman": {
         "name": "鉄脈の現場監督"
       },
@@ -7040,6 +7363,66 @@ export const ja_JP: EnTranslations = {
         "name": "霊魂の癒し手",
         "title": "死者の番人",
         "greeting": "安らかに、魂よ。亡骸に戻すことはできるが、戻る道のりで弱ってしまうだろう。"
+      },
+      "caravan_master_saffa": {
+        "name": "キャラバン長サッファ",
+        "title": "最後の井戸の守り手",
+        "greeting": "この地で通用する通貨は水だけです、友よ。ハイウォッチは我々に、それを賢く使えと送り出しました——ですがこの荒野ときたら、我々を破産させる気なのです。"
+      },
+      "scout_maren_wastes": {
+        "name": "斥候マレン",
+        "title": "元帥の斥候",
+        "greeting": "マイアフェンでは泥を追い、ソーンピークでは雪を追いました。砂は最悪です。砂は、こちらの一歩一歩をすべて覚えています。"
+      },
+      "loremaster_caddis_wastes": {
+        "name": "博識者キャディス",
+        "title": "沈んだ王冠の学者",
+        "greeting": "ザル・ケスは一夜で滅びました、{playerName}——王国まるごと、言葉の途中で硝子に固まったのです。私はその続きを聞くために、生涯を待ち続けてきました。"
+      },
+      "brother_aldric_wastes": {
+        "name": "アルドリック修道士",
+        "title": "谷の司祭",
+        "greeting": "ワームの熱はここまで滲んでいます、{playerName}——靴底越しに感じるのです。教団があの硝子の下から何を掘り出そうと、決して持ち帰らせてはなりません。"
+      },
+      "old_haruk": {
+        "name": "老ハルーク",
+        "title": "心泉の番人",
+        "greeting": "わしの一族は、見張りが要るようになるずっと前からこの泉を守ってきた。九人の王がこの水を飲んだ。十人目は、すべてを飲み干そうとしたのだ。"
+      },
+      "provisioner_ashka": {
+        "name": "補給係アシュカ",
+        "title": "キャラバンの補給商",
+        "greeting": "平パンにナツメヤシ酒、それに死体の浮いていない水。荒野一の品揃えですよ。"
+      },
+      "forgemaster_derin": {
+        "name": "鍛冶長デリン",
+        "title": "キャラバンの鍛冶師",
+        "greeting": "炉にも砂、焼き入れの水にも砂、歯の間にも砂だ。おかげで刃は、恨みの分だけ鋭く仕上がる。"
+      },
+      "auctioneer_zeph": {
+        "name": "競売人ゼフ",
+        "title": "世界市場の守り手",
+        "greeting": "世界市場は最後の井戸にも届いていますよ、友よ。金貨の重さは、どの砂漠でも変わりません。"
+      },
+      "wellwatch_hana": {
+        "name": "井戸番ハナ",
+        "title": "キャラバン護衛",
+        "greeting": "水を持って入り、水を持って出る。その間に起きることは、すべて私の仕事です。"
+      },
+      "wellwatch_toma": {
+        "name": "井戸番トマ",
+        "title": "キャラバン護衛",
+        "greeting": "静かな当番ですよ。もっともこの地の「静か」とは、砂が噛み砕くのを少し緩めている、という意味でしかありませんが。"
+      },
+      "drover_pell": {
+        "name": "ラバ曳きペル",
+        "title": "ラバ曳き",
+        "greeting": "ラバが先に飲む。キャラバンの掟だ。掟についてラバと議論したいなら、どうぞご自由に。"
+      },
+      "dowser_emrys": {
+        "name": "水占師エムリス",
+        "title": "水脈探し",
+        "greeting": "占い棒は滝のところでだけ折れんばかりにしなる。他は四十マイル歩いてもぴくりともしない。この土地は、泉ひとつ涸れれば墓場だ。"
       },
       "tidewatcher_ondrel": {
         "name": "オンドレル・ヴェイン",
@@ -7827,6 +8210,239 @@ export const ja_JP: EnTranslations = {
         "objectives": {
           "0": {
             "label": "モガーを討伐"
+          }
+        }
+      },
+      "q_sw_arrival": {
+        "title": "最後の井戸",
+        "text": "地図の果てへようこそ、{playerName}。ハイウォッチはこの遠征を「南方派遣」と呼びますが、私に言わせれば四十の命と泉ひとつです。何よりもまず——水を。野営地の北にある心泉の水場から水袋を四つ汲んできてください。滝までの道が安全に歩けると、この目で確かめたいのです。",
+        "completion": "冷たく澄んでいて、あなたに矢も刺さっていない——今季の最後の井戸にとって、これ以上の吉報はありません。",
+        "objectives": {
+          "0": {
+            "label": "なみなみの水袋"
+          }
+        }
+      },
+      "q_sw_prowlers": {
+        "title": "たそがれの牙",
+        "text": "たそがれ鬣どもは、水運びの荷車の音を覚えてしまいました、{playerName}。日暮れのたびに輪を狭め、昨夜はついに、引き具をつけたままのラバを一頭引きずっていったのです。野営地の南、骨風の平原で群れを間引き、教えが身に染みた証として毛皮を八枚持ってきてください。",
+        "completion": "毛皮が八枚——杭柵に忍び寄る影が八つ減ったということです。これでラバもようやく眠れるでしょう。私よりは、よほど。",
+        "objectives": {
+          "0": {
+            "label": "たそがれ鬣の徘徊獣を討伐"
+          },
+          "1": {
+            "label": "たそがれ鬣の毛皮"
+          }
+        }
+      },
+      "q_sw_carrion_glass": {
+        "title": "屍肉の硝子",
+        "text": "荷曳きたちは硝子甲虫と呼んでいます——犬ほどもある甲虫で、焼け固まった硝子の甲殻をまとい、東の焼け跡から湧き出してくるのです。デリンに言わせれば、あの甲殻はどんな砥石よりも刃を鋭くするとか。八匹叩き割り、無傷の甲殻を六枚持ってきてください。輝きにはご用心を——光るのは、甲殻が硬くなりかけている印です。",
+        "completion": "この刃の光を見てください！デリンは私に一生分の研ぎを借り、東の街道はあなたに、静かになった道行きを借りたわけです。",
+        "objectives": {
+          "0": {
+            "label": "硝子甲虫を討伐"
+          },
+          "1": {
+            "label": "硝子甲虫の甲殻"
+          }
+        }
+      },
+      "q_sw_lost_caravan": {
+        "title": "砂丘が呑んだもの",
+        "text": "荷馬車が三台、井戸に着かなかったのです、{playerName}——穀物と道具、それに先頭の車を御していた妹の夫も。嵐が南西の砂丘に散り散りにしてしまいました。残骸を見つけて調べてください。何を失ったのか、積荷目録で確かめなければ……そして、誰かが歩いて逃げのびたのかどうかも。",
+        "completion": "残骸から「離れていく」長靴の足跡——その先は略奪者の足跡ばかり。御者たちは生きたまま連れ去られたのです。慈悲か、それとも勘定か。この荒野でどちらに賭けるべきかは、分かっているつもりです。",
+        "objectives": {
+          "0": {
+            "label": "大破した荷馬車を調べる"
+          }
+        }
+      },
+      "q_sw_marauders": {
+        "title": "水の税",
+        "text": "デューンブレイドどもはそれを税と呼びます——水か血か、出会い頭に取り立てるのだと。奴らは砂丘の南西の窪地に野営を構え、盗んだ我々の焚き火を囲み、盗んだ我々の水袋を呷っています。打ち砕いてください、{playerName}。略奪者を十人討ち、水袋を五つ取り返すのです——あれは革袋に詰まった、我らが仲間の命なのですから。",
+        "completion": "あなたが提げて帰る水袋のひとつひとつが、この井戸の誰かが死なずに済む一日です。デューンブレイドも、我々に税をかける代償を忘れないでしょう。",
+        "objectives": {
+          "0": {
+            "label": "デューンブレイドの略奪者を討伐"
+          },
+          "1": {
+            "label": "盗まれた水袋"
+          }
+        }
+      },
+      "q_sw_karesh": {
+        "title": "渇きの王",
+        "text": "奴らの頭目は自ら「渇きのカレシュ」と名乗っています——己の貯水槽を飲み干した挙げ句、競う者が続けぬよう残り滓に塩を撒いた男です。自分の井戸にそこまでする男なら、我々の井戸にはもっとひどいことをするでしょう。奴は西の尾根の下、カレシュの窪地に君臨しています。その治世を終わらせてください、{playerName}。そして奴が抱え込んでいる最後の水袋を持ち帰るのです。",
+        "completion": "これが渇きの王の最後の水袋ですか。サッファはこれを井戸へ注ぎ戻すでしょう——一滴残らず、筋を通すために。",
+        "objectives": {
+          "0": {
+            "label": "渇きのカレシュを撃破"
+          },
+          "1": {
+            "label": "カレシュ最後の水袋"
+          }
+        }
+      },
+      "q_sw_survey": {
+        "title": "途切れた一文",
+        "text": "井戸があなたの手を借りずに済むようになった今こそ——私と歴史を歩きましょう、{playerName}。太陽宮廷は壁画を残しています。ひとつは水道橋の背の下に、ひとつはメサの麓に、ひとつはオアシスの廃墟の双塔のそばに。三つすべての拓本を取ってきてください。ザル・ケスは言葉の途中で死んだのです。私はその続きを読むつもりです。",
+        "completion": "ほら——文がつながりました。「王冠が被れぬほど熱くなったとき、王たちはメサを登り、火を『返した』」。オベリスクに刻まれた放棄の儀式です——暁、次に真昼、そして宵。この順序が肝心ですよ、{playerName}。儀式というものは、必ず順序にこだわるのです。",
+        "objectives": {
+          "0": {
+            "label": "壁画の拓本を採取"
+          }
+        }
+      },
+      "q_sw_vigil_dawn": {
+        "title": "ヴィジル：暁",
+        "text": "野営地の西のメサこそがヴィジル——王たちの放棄の道そのものです。最初の段丘には暁のオベリスクが立っています。朝日が最初に射す場所です。九十九折りを登り、その石に手を置いてください。目覚めるのは暁が最初——壁画は、その点になかなかうるさいのです。",
+        "completion": "唸りを感じたのですか？素晴らしい。ふたつの時代を経てなお、儀式は力を保っているのです。暁は灯りました——真昼は、さらに上で待っています。",
+        "objectives": {
+          "0": {
+            "label": "オベリスクから暁火の印を授かる"
+          }
+        }
+      },
+      "q_sw_vigil_noon": {
+        "title": "ヴィジル：真昼",
+        "text": "真昼は頂に冠されます——第二のオベリスクはメサの天辺、太陽が空をまるごと支配する場所に立っています。この登りこそが儀式なのです、{playerName}。王たちは一段一段、王冠を担いで登ったのですから。真昼のオベリスクを目覚めさせてください。",
+        "completion": "暁、そして真昼。儀式に残る刻はあとひとつ——そしてヴィジルが、我々に気づき始めています。",
+        "objectives": {
+          "0": {
+            "label": "オベリスクから真昼火の印を授かる"
+          }
+        }
+      },
+      "q_sw_vigil_dusk": {
+        "title": "ヴィジル：宵",
+        "text": "宵はいつも、祈りに最後にやって来ます——そのオベリスクは峡谷を見下ろす西の支尾根に立っています。ですが儀式の本質を心に留めてください、{playerName}。放棄には「立会人」が要るのです。宮廷は生きたメサ石の番人を立会いに据えました。宵が灯れば番人は目覚め、あなたが火を手放す者か、ただ奪う者かを裁くでしょう。納得させてください。徹底的に。",
+        "completion": "番人はあなたを相応しいと裁いた——あるいは殺し得ぬと裁いたのでしょうが、石にとってはどちらも同じ結論です。ヴィジルは成りました。これでザル・ケスのすべての扉が、問う価値のある問いに変わったのです。",
+        "objectives": {
+          "0": {
+            "label": "宵のオベリスクを目覚めさせる"
+          },
+          "1": {
+            "label": "ヴィジルの番人を撃破"
+          }
+        }
+      },
+      "q_sw_revenants": {
+        "title": "死者の持ち場",
+        "text": "ザル・ケスの兵たちは、戦に敗れたことをついに知りません——それが「一夜」で終わったことさえも。彼らは骨に鎧を癒着させたまま滝の北の外郭廃墟を巡回し、生者の誰も覚えていない合言葉を旅人に誰何するのです。十二体を眠らせてやってください、{playerName}。そして衛兵の印章を集めるのです。印章があれば、都のより深くへ通されます。",
+        "completion": "どの印章もまだ温かい……最後まで忠実に、いえ、最後を過ぎてもなお。彼らの見張りを束ねる何かはもっと奥に座しています。そして今や、位が上なのはこちらです。",
+        "objectives": {
+          "0": {
+            "label": "陽灼けの亡霊を討伐"
+          },
+          "1": {
+            "label": "王冠衛兵の印章"
+          }
+        }
+      },
+      "q_sw_courtiers": {
+        "title": "灰の宮廷",
+        "text": "さらに奥では、宮廷そのものが今も開かれています——侍従と朗誦官が死んだ王の典礼を守り、鉱滓の玉座に詩篇を読み上げているのです。彼らの詩篇集には聖域の典礼が、その典礼には王冠の火鉢を灯す儀式が記されています。その御前会議を散会させてください、{playerName}。そして頁の無事な詩篇集をひとつ、持ってきてください。",
+        "completion": "ああ、これは見事な仕事です——火鉢の儀式の一部始終が、死んだ聖歌長の手で記譜されている。彼らは二百年ものあいだ、誰もいない玉座へ向かってこれを歌い続けたのです。哀れに思いそうになりますよ。思いそうに、ですが。",
+        "objectives": {
+          "0": {
+            "label": "灰の廷臣を討伐"
+          },
+          "1": {
+            "label": "灰の詩篇集"
+          }
+        }
+      },
+      "q_sw_braziers": {
+        "title": "灯る王冠",
+        "text": "詩篇集は塔々の間にある三つの王冠の火鉢を挙げています——三つすべてを灯せば、戴冠式の日と同じように、奥の聖域はおのずから開くのです。儀式の文句はあなたの籠手にチョークで書いておきました、{playerName}。汗をかかないように。それと忠告をひとつ——灯った王冠は、見える王冠です。三つ目の炎が点いた瞬間、あの都のすべてが気づくでしょう。",
+        "completion": "井戸から、塔がひとつまたひとつと灯っていくのが見えました——サッファは泣いていましたし、白状すると、私は誰にも講釈を垂れませんでした。聖域は開いています。そして中の何かが、歌い返しているのです。",
+        "objectives": {
+          "0": {
+            "label": "王冠の火鉢に火を灯す"
+          }
+        }
+      },
+      "q_sw_sunspeaker": {
+        "title": "十度目の戴冠",
+        "text": "聖域の声の主は太陽の代弁者アサリス——ザル・ケスの九人の王すべてに冠を授けた者です。詩篇は彼を宮廷の生ける記憶と呼びます。そして彼はふたつの時代を費やし、十度目の戴冠を準備してきました。戴くのは、火そのもの。彼は双塔の間の太陽の玉座に立っています。退位させてください、{playerName}。砂漠じゅうが悔いることになる儀式を、彼が終える前に。",
+        "completion": "彼は九つの額に九つの冠を戴せ、十個目の冠は、世界を焼いて頭の形に合わせるところでした。歴史には、あなたがザル・ケスの宮廷を閉廷させたと記されるでしょう。そう書かせることは、この私が請け合います。",
+        "objectives": {
+          "0": {
+            "label": "太陽の代弁者アサリスを退位させる"
+          }
+        }
+      },
+      "q_sw_emberveil": {
+        "title": "エンバーヴェイル",
+        "text": "東の縁に並ぶ、ヴェールに覆われた野営を見たでしょう、{playerName}。あれはワーム教団です——エンバーヴェイルという分派で、ハイウォッチが聖所の門を見張っている隙に峠を越えてきました。母体の教団がワームを目覚めさせようと歌うのに対し、あの者たちはワームに「武器を持たせよう」と掘るのです。狂信者と炎術師が、何かを探して硝子原を浚っています。見つけられる前に、数を減らしてください。",
+        "completion": "あの硝子原の鋤が十六本減りました。ですが掘削は昼も夜も続いています——奴らはもう探してはいません、{playerName}。掘り出しにかかっているのです。",
+        "objectives": {
+          "0": {
+            "label": "エンバーヴェイルの狂信者を討伐"
+          },
+          "1": {
+            "label": "エンバーヴェイルの炎術師を討伐"
+          }
+        }
+      },
+      "q_sw_writs": {
+        "title": "ヴェールの命令書",
+        "text": "奴らの指揮官は命令書を携えています——母体の教団の暗号で書かれた指令です。私はあの暗号をハイウォッチで破りました。ここでもう一度破ってみせましょう。エンバーヴェイルから命令書を五通奪ってきてください、{playerName}。奴らが何を取りに寄越されたのか、一字一句まで読んでやりましょう。",
+        "completion": "恐れていたとおりです。「『始まりの燠』を回収せよ——太陽の王どもが盗み、鎖につないだ御方の火の欠片である。聖所の門まで運べ。封印は、おのれ自身の炎には抗えぬ」。奴らはワームの扉を、ワーム自身から盗まれた火で焼き開けるつもりです、{playerName}。",
+        "objectives": {
+          "0": {
+            "label": "エンバーヴェイルの命令書"
+          }
+        }
+      },
+      "q_sw_glasscut": {
+        "title": "空が燃えた場所",
+        "text": "硝子裂きは、ザル・ケスを滅ぼしたあの夜、始まりの燠が落ちた場所です——地面は今も熱を帯び、燠火の精霊たちが、着地しそこねた火の粉のようにそこを歩いています。燠は目覚めつつあります、{playerName}。教団の掘削が近づくほど、火の粉は大胆になっていく。八体を散らし、生ける燠火を五つ持ってきてください。我々が向き合う火の力量を、測っておかねばなりません。",
+        "completion": "聖別した塩の中でもまだ身をよじっている……これは竜の火です。もう見間違えようがない。あの燠は遺物ではありません、{playerName}。「残り火」なのです——コルズルの怒りの生きた欠片であり、王冠として被られていたことを、いまだに覚えているのです。",
+        "objectives": {
+          "0": {
+            "label": "燠火の精霊を討伐"
+          },
+          "1": {
+            "label": "生ける燠火"
+          }
+        }
+      },
+      "q_sw_offering": {
+        "title": "泉は覚えている",
+        "text": "司祭どのはあの火に立ち向かう腹づもりだ。お前さんも一緒にな。ならば井戸守りの知恵を聞いていくがいい、{playerName}。心泉はワームの牢獄そのものの下から湧いておる。物の下をくぐる水は、その物を知っておるのだ。わしの供物鉢を滝の上の水場へ持っていき、注いで、耳を澄ませなさい。あの泉は、かの火を一度沈めたことがある。焼かれに行く前に、泉の祝福を受けていくことだ。",
+        "completion": "お前さんにも聞こえたのだな——世界の下を流れる、深い水の音が。その音を鎧のように身にまとうがいい、{playerName}。火は騒がしい。だが泉は火より先にここにあり、火が消えた後にも残るのだ。",
+        "objectives": {
+          "0": {
+            "label": "心泉に供物を注ぐ"
+          }
+        }
+      },
+      "q_sw_first_ember": {
+        "title": "始まりの燠",
+        "text": "ついに掘り出されました、{playerName}。夜明けに教団の坑が崩れ開き、硝子裂きが内側から灯ったのです——始まりの燠は、ふたつの時代前に自ら穿った火口に立ち、王の礼装のように火をまとい、エンバーヴェイルは列をなしてひざまずいています。あれが聖所の門に届けば、ハイウォッチが血を流して守ってきたすべてが灰になる。あなたには泉の祝福と、ヴィジルの立会いがあります。硝子の底へ降り、ザル・ケスが言いかけた一文を終わらせてください——火は、「還る」のです。",
+        "completion": "あれが消えた瞬間、滝は速く、明るく流れました——泉が、旧敵を水底へ引き込んだのです。あなたは九人の王にできなかったことを成し遂げました、{playerName}。火を、返したのです。座って。飲んでください。今夜の水は、いちばん甘い。",
+        "objectives": {
+          "0": {
+            "label": "始まりの燠を消し止める"
+          }
+        }
+      },
+      "q_sw_afterglow": {
+        "title": "生者のための水",
+        "text": "ハルークが言うには、泉の歌が一段低くなったそうです。まるで借金を払い終えたかのように。エンバーヴェイルは灰になるか逃げ去り、宮廷は閉廷し、私の帳簿もようやく、心配事より水のほうが多くなりました。最後の仕事です、{playerName}——野営地を回って、マレンとキャディスとアルドリック修道士に、きちんと礼を言わせてやってください。三人にはその資格がありますし、あなたにも受け取る資格があります。",
+        "completion": "これで終わりです。最後の井戸は、ただの……井戸になりました。この老いたキャラバン乗りに言わせれば、生きた街道に連なる数多の井戸の、最初のひとつです。灼熱の荒野はあなたの名を忘れないでしょう、{playerName}——水は、すべてを覚えているのですから。",
+        "objectives": {
+          "0": {
+            "label": "斥候マレンと話す"
+          },
+          "1": {
+            "label": "博識者キャディスと話す"
+          },
+          "2": {
+            "label": "アルドリック修道士と話す"
           }
         }
       },

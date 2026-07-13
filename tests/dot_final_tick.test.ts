@@ -14,10 +14,13 @@ type DotCase = {
 function dotCases(): DotCase[] {
   const cases: DotCase[] = [];
   for (const ability of Object.values(ABILITIES)) {
-    const ranks = [{ rankLabel: 'rank 1', effects: ability.effects }, ...((ability.ranks ?? []).map((rank, index) => ({
-      rankLabel: `rank ${index + 2}`,
-      effects: rank.effects ?? ability.effects,
-    })))];
+    const ranks = [
+      { rankLabel: 'rank 1', effects: ability.effects },
+      ...(ability.ranks ?? []).map((rank, index) => ({
+        rankLabel: `rank ${index + 2}`,
+        effects: rank.effects ?? ability.effects,
+      })),
+    ];
     for (const rank of ranks) {
       for (const effect of rank.effects) {
         if (effect.type === 'dot') cases.push({ ability, rankLabel: rank.rankLabel, effect });
@@ -27,7 +30,12 @@ function dotCases(): DotCase[] {
   return cases;
 }
 
-function addDot(target: Entity, source: Entity, ability: AbilityDef, effect: Extract<AbilityEffect, { type: 'dot' }>): Aura {
+function addDot(
+  target: Entity,
+  source: Entity,
+  ability: AbilityDef,
+  effect: Extract<AbilityEffect, { type: 'dot' }>,
+): Aura {
   const aura: Aura = {
     id: `${ability.id}_${effect.duration}_${effect.interval}`,
     name: ability.name,
@@ -45,10 +53,15 @@ function addDot(target: Entity, source: Entity, ability: AbilityDef, effect: Ext
 }
 
 describe('damage-over-time final ticks', () => {
-  it.each(dotCases().map((entry) => [
-    `${entry.ability.class}.${entry.ability.id} ${entry.rankLabel} (${entry.effect.duration}s/${entry.effect.interval}s)`,
-    entry,
-  ] as const))('%s ticks for every interval implied by its duration', (_name, entry) => {
+  it.each(
+    dotCases().map(
+      (entry) =>
+        [
+          `${entry.ability.class}.${entry.ability.id} ${entry.rankLabel} (${entry.effect.duration}s/${entry.effect.interval}s)`,
+          entry,
+        ] as const,
+    ),
+  )('%s ticks for every interval implied by its duration', (_name, entry) => {
     const sim = new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
     const sourceId = sim.addPlayer(entry.ability.class, 'Dotter');
     const targetId = sim.addPlayer('warrior', 'Target');
@@ -61,12 +74,15 @@ describe('damage-over-time final ticks', () => {
 
     let damageTicks = 0;
     for (let i = 0; i < entry.effect.duration * TICKS_PER_SECOND; i++) {
-      damageTicks += sim.tick().filter((event) =>
-        event.type === 'damage'
-        && event.sourceId === source.id
-        && event.targetId === target.id
-        && event.ability === entry.ability.name
-      ).length;
+      damageTicks += sim
+        .tick()
+        .filter(
+          (event) =>
+            event.type === 'damage' &&
+            event.sourceId === source.id &&
+            event.targetId === target.id &&
+            event.ability === entry.ability.name,
+        ).length;
     }
 
     expect(damageTicks).toBe(entry.effect.duration / entry.effect.interval);

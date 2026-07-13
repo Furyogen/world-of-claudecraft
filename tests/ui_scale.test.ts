@@ -1,5 +1,11 @@
-import { describe, it, expect } from 'vitest';
-import { clampUiScale, resolveUiScale, UI_SCALE_MIN, UI_SCALE_MAX, UI_SCALE_DEFAULT } from '../src/ui/ui_scale';
+import { describe, expect, it } from 'vitest';
+import {
+  clampUiScale,
+  resolveUiScale,
+  UI_SCALE_DEFAULT,
+  UI_SCALE_MAX,
+  UI_SCALE_MIN,
+} from '../src/ui/ui_scale';
 
 describe('clampUiScale', () => {
   it('passes through an in-range value', () => {

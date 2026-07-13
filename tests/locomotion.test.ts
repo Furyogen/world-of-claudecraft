@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import {
-  MOVE_HOLD_TIME, newLocoTrack, updateLocomotion,
-} from '../src/render/locomotion';
-import { desiredBaseState, locomotionTimeScale, type AnimState } from '../src/render/characters/anim_state';
+  type AnimState,
+  desiredBaseState,
+  locomotionTimeScale,
+} from '../src/render/characters/anim_state';
+import { MOVE_HOLD_TIME, newLocoTrack, updateLocomotion } from '../src/render/locomotion';
 
 const FPS = 1 / 60;
 const BASE_ANIM_STATE: AnimState = {
@@ -98,7 +100,13 @@ describe('locomotion animation state', () => {
   });
 
   it('reverses forward locomotion for Ghost Wolf-style backpedal', () => {
-    const state = { ...BASE_ANIM_STATE, moving: true, backwards: true, reverseBackpedal: true, speed: 7 };
+    const state = {
+      ...BASE_ANIM_STATE,
+      moving: true,
+      backwards: true,
+      reverseBackpedal: true,
+      speed: 7,
+    };
     expect(desiredBaseState(state, true)).toBe('run');
     expect(locomotionTimeScale('run', state)).toBeLessThan(0);
   });

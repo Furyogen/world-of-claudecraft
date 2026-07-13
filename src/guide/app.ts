@@ -3,15 +3,20 @@
 // and focus in sync on every navigation and language switch.
 
 import {
-  ensureLocaleLoaded, getLanguage, setLanguage, languageTag, t,
-  type SupportedLanguage, type TranslationKey,
+  ensureLocaleLoaded,
+  getLanguage,
+  languageTag,
+  type SupportedLanguage,
+  setLanguage,
+  type TranslationKey,
+  t,
 } from '../ui/i18n';
 import { buildChrome, type GuideChrome } from './chrome';
-import { GuideRouter } from './router';
-import { matchRoute, type GuideRoute } from './routes';
-import { pageFor, placeholderHtml, notFoundHtml, type PageContext } from './pages';
-import { breadcrumbHtml, sequenceHtml, mountToc } from './nav_aids';
 import { applyRouteHead } from './head';
+import { breadcrumbHtml, mountToc, sequenceHtml } from './nav_aids';
+import { notFoundHtml, type PageContext, pageFor, placeholderHtml } from './pages';
+import { GuideRouter } from './router';
+import { type GuideRoute, matchRoute } from './routes';
 
 const RTL_LANGS = new Set(['ar', 'he', 'fa', 'ur']);
 function isRtl(tag: string): boolean {
@@ -93,7 +98,8 @@ export class GuideApp {
       } else {
         const isDetail = params.length > 0;
         const leaf = dynamicTitle ?? t(route.navKey);
-        this.chrome.mainEl.innerHTML = breadcrumbHtml(route, isDetail, leaf) + pageHtml + sequenceHtml(route);
+        this.chrome.mainEl.innerHTML =
+          breadcrumbHtml(route, isDetail, leaf) + pageHtml + sequenceHtml(route);
       }
       if (page?.mount) this.addCleanup(page.mount(this.chrome.mainEl, ctx));
       if (!isHome) this.addCleanup(mountToc(this.chrome.mainEl));

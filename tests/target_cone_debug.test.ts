@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { buildFlaredConeFan, buildRingXZ, drapeConeWorld } from '../src/render/target_cone_debug';
 
 // A flared half-angle: 45 degrees at the apex widening to 60 degrees by 30 yd.

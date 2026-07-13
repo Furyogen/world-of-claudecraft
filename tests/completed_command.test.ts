@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { Sim } from '../src/sim/sim';
-import { SimEvent } from '../src/sim/types';
 import { QUESTS } from '../src/sim/data';
+import { Sim } from '../src/sim/sim';
+import type { SimEvent } from '../src/sim/types';
 
 function makeWorld() {
   return new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });

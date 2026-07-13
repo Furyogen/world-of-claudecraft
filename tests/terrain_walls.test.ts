@@ -1,7 +1,17 @@
-import { describe, expect, it } from 'vitest';
-import { CAMPS, NPCS, ROADS, WORLD_MAX_X, WORLD_MAX_Z, WORLD_MIN_Z, ZONES } from '../src/sim/data';
+import { afterEach, describe, expect, it } from 'vitest';
+import {
+  BUILTIN_WORLD,
+  CAMPS,
+  NPCS,
+  ROADS,
+  setActiveWorldContent,
+  WORLD_MAX_X,
+  WORLD_MAX_Z,
+  WORLD_MIN_Z,
+  ZONES,
+} from '../src/sim/data';
 import { PLAYER_MAX_CLIMB_SLOPE } from '../src/sim/pathfind';
-import { terrainSteepness } from '../src/sim/world';
+import { MIREFEN_IMPACT_CRATER, terrainHeight, terrainSteepness } from '../src/sim/world';
 
 // The mountain walls of the world (the inter-zone ridges and the outer rim) are
 // meant to be impassable: every crossing outside the road pass must somewhere be
@@ -134,5 +144,23 @@ describe('impassable terrain walls', () => {
         ).toBeLessThanOrEqual(CLIMB_LIMIT);
       }
     }
+  });
+});
+
+// A blank editor map (presentationMode 'blank') is flat ground: the built-in
+// Mirefen fallen-star crater must not dent it (its scorch tint is likewise
+// gated in the renderer). Sibling of the blank-map rim gate above.
+describe('blank maps have no built-in Mirefen crater', () => {
+  afterEach(() => setActiveWorldContent(null));
+
+  it('gates the crater bowl out of blank-map terrain height', () => {
+    const c = MIREFEN_IMPACT_CRATER;
+    setActiveWorldContent(BUILTIN_WORLD);
+    const builtin = terrainHeight(c.x, c.z, WORLD_SEED);
+    setActiveWorldContent({ ...BUILTIN_WORLD, presentationMode: 'blank' });
+    const blank = terrainHeight(c.x, c.z, WORLD_SEED);
+    // The built-in world sinks the crater center by ~depth; the blank map does
+    // not, so its ground there sits at least half a crater-depth higher.
+    expect(builtin).toBeLessThan(blank - c.depth * 0.5);
   });
 });

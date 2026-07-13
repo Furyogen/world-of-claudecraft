@@ -1,6 +1,10 @@
-import { afterEach, describe, expect, it } from 'vitest';
 import type { IncomingMessage } from 'node:http';
-import { createNativeAttestationChallenge, nativeAttestationRequired, verifyNativeAttestation } from '../server/native_attestation';
+import { afterEach, describe, expect, it } from 'vitest';
+import {
+  createNativeAttestationChallenge,
+  nativeAttestationRequired,
+  verifyNativeAttestation,
+} from '../server/native_attestation';
 
 const originalEnv = { ...process.env };
 
@@ -30,13 +34,19 @@ describe('native attestation', () => {
 
   it('allows recognised native origins while enforcement is disabled', async () => {
     process.env.NATIVE_ATTESTATION_REQUIRED = '0';
-    await expect(verifyNativeAttestation(req({ origin: 'capacitor://localhost' }), undefined)).resolves.toBe(true);
-    await expect(verifyNativeAttestation(req({ origin: 'http://localhost' }), undefined)).resolves.toBe(true);
+    await expect(
+      verifyNativeAttestation(req({ origin: 'capacitor://localhost' }), undefined),
+    ).resolves.toBe(true);
+    await expect(
+      verifyNativeAttestation(req({ origin: 'http://localhost' }), undefined),
+    ).resolves.toBe(true);
   });
 
   it('does not allow non-native origins through the native path', async () => {
     process.env.NATIVE_ATTESTATION_REQUIRED = '0';
-    await expect(verifyNativeAttestation(req({ origin: 'https://worldofclaudecraft.com' }), undefined)).resolves.toBe(false);
+    await expect(
+      verifyNativeAttestation(req({ origin: 'https://worldofclaudecraft.com' }), undefined),
+    ).resolves.toBe(false);
   });
 
   it('rejects missing or invalid proofs when enforcement is enabled', async () => {
@@ -44,10 +54,12 @@ describe('native attestation', () => {
     const request = req({ origin: 'capacitor://localhost' });
     await expect(verifyNativeAttestation(request, undefined)).resolves.toBe(false);
     const challenge = createNativeAttestationChallenge(request, 'login');
-    await expect(verifyNativeAttestation(request, {
-      platform: 'unknown',
-      challengeId: challenge.challengeId,
-      token: 'token',
-    })).resolves.toBe(false);
+    await expect(
+      verifyNativeAttestation(request, {
+        platform: 'unknown',
+        challengeId: challenge.challengeId,
+        token: 'token',
+      }),
+    ).resolves.toBe(false);
   });
 });

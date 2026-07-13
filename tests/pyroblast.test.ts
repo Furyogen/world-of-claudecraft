@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { Sim } from '../src/sim/sim';
 import { ABILITIES, abilitiesKnownAt } from '../src/sim/content/classes';
+import { Sim } from '../src/sim/sim';
 import { terrainHeight } from '../src/sim/world';
 
 function makeSim(seed = 42) {
@@ -9,21 +9,30 @@ function makeSim(seed = 42) {
 
 function nearestMob(sim: Sim) {
   const p = sim.player;
-  let best: any = null, bestD = Infinity;
+  let best: any = null,
+    bestD = Infinity;
   for (const e of sim.entities.values()) {
     if (e.kind !== 'mob' || e.dead) continue;
     const d = Math.hypot(p.pos.x - e.pos.x, p.pos.z - e.pos.z);
-    if (d < bestD) { bestD = d; best = e; }
+    if (d < bestD) {
+      bestD = d;
+      best = e;
+    }
   }
   return best;
 }
 
 function teleportTo(sim: Sim, x: number, z: number) {
   const p = sim.player;
-  p.pos.x = x; p.pos.z = z;
+  p.pos.x = x;
+  p.pos.z = z;
   p.pos.y = terrainHeight(x, z, sim.cfg.seed);
   p.prevPos = { ...p.pos };
-  p.vx = 0; p.vz = 0; p.vy = 0; p.onGround = true; p.fallStartY = p.pos.y;
+  p.vx = 0;
+  p.vz = 0;
+  p.vy = 0;
+  p.onGround = true;
+  p.fallStartY = p.pos.y;
 }
 
 describe('Pyroblast (mage)', () => {

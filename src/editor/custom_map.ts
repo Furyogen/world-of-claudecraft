@@ -6,8 +6,11 @@
 
 import { colliderVolumesFromPlacements } from '../sim/collider_volumes';
 import { BUILTIN_WORLD, PLAYER_START, WORLD_MAX_X, WORLD_MAX_Z, WORLD_MIN_Z } from '../sim/data';
+import { fluidVolumesFromPlacements } from '../sim/fluid_volumes';
 import {
+  type AssetCollisionBox,
   collideRadiusFor,
+  effectiveCollisionMode,
   GRASS_PATCH_ASSET_ID,
   GRASS_PATCH_PATH,
   MAP_DOC_VERSION,
@@ -16,6 +19,10 @@ import {
   type MapDoc,
   type MapDocMeta,
   type MapPlacement,
+  ROCK_ASSET_ID,
+  ROCK_PATH,
+  ROCK_RIDGE_ASSET_ID,
+  ROCK_RIDGE_PATH,
   WATERFALL_ASSET_ID,
   WATERFALL_PATH,
 } from '../sim/map_doc';
@@ -281,6 +288,7 @@ export function customMapFromContent(
     terrainEdits?: CustomMap['terrainEdits'];
     placements?: AssetPlacement[];
     blockers?: CustomMap['blockers'];
+    caves?: CustomMap['caves'];
     meta: CustomMapMeta;
     waterLevel?: number;
     playerStart?: { x: number; z: number };
@@ -300,6 +308,7 @@ export function customMapFromContent(
     placements: deepClone(layers.placements ?? []),
   };
   if (layers.blockers && layers.blockers.length > 0) map.blockers = deepClone(layers.blockers);
+  if (layers.caves && layers.caves.length > 0) map.caves = deepClone(layers.caves);
   if (layers.waterLevel !== undefined && layers.waterLevel !== WATER_LEVEL) {
     map.waterLevel = layers.waterLevel;
   }
@@ -322,10 +331,20 @@ export function customMapToWorldContent(map: CustomMap): WorldContent {
     props: map.propsMode === 'empty' ? emptyZoneProps() : deepClone(BUILTIN_WORLD.props),
     playerStart: { x: start.x, z: start.z },
     terrainEdits: deepClone(map.terrainEdits),
-    placements: placementsToPlayAssets(map.placements),
+    placements: placementsToPlayAssets(map.placements, map.assetCollisionMesh),
     biomePaint: map.biomePaint ? deepClone(map.biomePaint) : undefined,
   };
   if (map.blockers && map.blockers.length > 0) world.blockers = deepClone(map.blockers);
+  // Imported-model collision bakes ride into the play world so the sim's
+  // placement colliders resolve 'local/<sha>' / 'user/<sha>' paths.
+  if (map.assetCollision && Object.keys(map.assetCollision).length > 0) {
+    world.assetCollision = deepClone(map.assetCollision);
+  }
+  if (map.caves && map.caves.length > 0) world.caves = deepClone(map.caves);
+  if (map.holes && map.holes.length > 0) world.holes = deepClone(map.holes);
+  if (map.holePatches && map.holePatches.length > 0) {
+    world.holePatches = deepClone(map.holePatches);
+  }
   // The map limits are ALWAYS a hard boundary in playtest: wall off any edge
   // of the world rect the document does not already cover. Projection-only:
   // these never enter the stored document.
@@ -335,6 +354,13 @@ export function customMapToWorldContent(map: CustomMap): WorldContent {
   // (invisible in playtest) but DO block: project them into sim volumes here.
   const colliderVolumes = colliderVolumesFromPlacements(map.placements);
   if (colliderVolumes.length > 0) world.colliderVolumes = colliderVolumes;
+  // Fluid pools project the same way: invisible in the placements pipeline
+  // (no GLB), but the sim damage tick and the renderer's fluid surfaces both
+  // read the resolved volumes.
+  const fluids = fluidVolumesFromPlacements(map.placements);
+  if (fluids.length > 0) world.fluids = fluids;
+  if (map.waterHue !== undefined) world.waterHue = map.waterHue;
+  if (map.waterLum !== undefined) world.waterLum = map.waterLum;
   if (map.waterLevel !== undefined) world.waterLevel = map.waterLevel;
   if (map.worldHalfX !== undefined) world.worldHalfX = map.worldHalfX;
   if (map.decorationsMode === 'empty') world.decorationsMode = 'empty';
@@ -347,6 +373,9 @@ export function customMapToWorldContent(map: CustomMap): WorldContent {
   if (map.music) world.music = deepClone(map.music);
   if (map.locations && map.locations.length > 0) world.locations = deepClone(map.locations);
   if (map.lights && map.lights.length > 0) world.lights = deepClone(map.lights);
+  if (map.pointSounds && map.pointSounds.length > 0) {
+    world.pointSounds = deepClone(map.pointSounds);
+  }
   // map.markers are deliberately NOT projected: they are editor/AI notes only.
   return world;
 }
@@ -369,7 +398,12 @@ export function effectiveCollideRadius(
 // scale-proportional default (see effectiveCollideRadius above).
 export function placementsToRenderAssets(
   placements: readonly AssetPlacement[],
-  opts?: { keepLocalIds?: boolean; hideHidden?: boolean },
+  opts?: {
+    keepLocalIds?: boolean;
+    hideHidden?: boolean;
+    /** Fine "true collision" bakes by asset id (MapDoc.assetCollisionMesh). */
+    meshCollision?: Readonly<Record<string, readonly AssetCollisionBox[]>>;
+  },
 ): (PlacedAsset | null)[] {
   return placements.map((p) => {
     // Editor-only Scene Collection hide: a null slot renders nothing but keeps
@@ -385,22 +419,55 @@ export function placementsToRenderAssets(
         ? GRASS_PATCH_PATH
         : p.assetId === WATERFALL_ASSET_ID
           ? WATERFALL_PATH
-          : opts?.keepLocalIds && isLocalAssetId(p.assetId)
-            ? p.assetId
-            : (localAssetUrl(p.assetId) ?? userAssetPath(p.assetId) ?? assetById(p.assetId)?.path);
+          : p.assetId === ROCK_ASSET_ID
+            ? ROCK_PATH
+            : p.assetId === ROCK_RIDGE_ASSET_ID
+              ? ROCK_RIDGE_PATH
+              : opts?.keepLocalIds && isLocalAssetId(p.assetId)
+                ? p.assetId
+                : (localAssetUrl(p.assetId) ??
+                  userAssetPath(p.assetId) ??
+                  assetById(p.assetId)?.path);
     if (!path) return null;
     const placed: PlacedAsset = { path, x: p.x, z: p.z, rotY: p.rotY, scale: p.scale };
     if (p.hue !== undefined) placed.hue = p.hue;
     if (p.lum !== undefined) placed.lum = p.lum;
     if (p.clump !== undefined) placed.clump = p.clump;
+    if (p.rockSeed !== undefined) placed.rockSeed = p.rockSeed;
+    if (p.rockNoise !== undefined) placed.rockNoise = p.rockNoise;
+    if (p.rockDetail !== undefined) placed.rockDetail = p.rockDetail;
+    if (p.rockSharp !== undefined) placed.rockSharp = p.rockSharp;
+    if (p.rockTex !== undefined) placed.rockTex = p.rockTex;
+    if (p.rockHeight !== undefined) placed.rockHeight = p.rockHeight;
+    if (p.rockDepth !== undefined) placed.rockDepth = p.rockDepth;
+    if (p.rockJag !== undefined) placed.rockJag = p.rockJag;
+    if (p.rockTexId !== undefined) placed.rockTexId = p.rockTexId;
+    if (p.rockTexTile !== undefined) placed.rockTexTile = p.rockTexTile;
+    if (p.rockNodes !== undefined) placed.rockNodes = p.rockNodes.map((n) => ({ ...n }));
     if (p.tint !== undefined) placed.tint = p.tint;
     if (p.opacity !== undefined) placed.opacity = p.opacity;
     if (p.glow !== undefined) placed.glow = p.glow;
     if (p.glowStrength !== undefined) placed.glowStrength = p.glowStrength;
     if (p.fire === true) placed.fire = true;
-    if (p.collide) {
+    // Collision projection by effective mode (legacy documents derive theirs
+    // from collide/collideRadius/collideShape; see effectiveCollisionMode).
+    const mode = effectiveCollisionMode(p);
+    if (mode !== 'none') {
       placed.collideRadius = effectiveCollideRadius(p);
-      if (p.collideShape === 'square') placed.collideShape = 'square';
+      if (mode === 'basic') {
+        // The maker's hand-picked footprint: circle or square, never upgraded
+        // to the baked boxes.
+        if (p.collideShape === 'square') placed.collideShape = 'square';
+        placed.collideCustom = true;
+      } else if (mode === 'mesh') {
+        // "True collision": the fine re-bake of the real geometry when it has
+        // resolved; until then the normal baked set covers the placement.
+        const fine = opts?.meshCollision?.[p.assetId];
+        if (fine && fine.length > 0) placed.hitboxes = fine.map((b) => ({ ...b }));
+      } else if (p.hitboxes && p.hitboxes.length > 0) {
+        // Baked mode with hand-edited boxes: the edits ARE the collision.
+        placed.hitboxes = p.hitboxes.map((b) => ({ ...b }));
+      }
     }
     // Gizmo transform axes (visual): carried through so tilts, per-axis scale,
     // and the vertical offset render identically in the editor and playtest.
@@ -421,8 +488,11 @@ export function placementsToRenderAssets(
 // The compact (hole-free) resolution, for consumers that do not key by document
 // index: the play-test WorldContent (sim colliders + the game renderer's
 // constructor build) only needs the resolvable placements.
-export function placementsToPlayAssets(placements: readonly AssetPlacement[]): PlacedAsset[] {
-  return placementsToRenderAssets(placements, { keepLocalIds: true }).filter(
+export function placementsToPlayAssets(
+  placements: readonly AssetPlacement[],
+  meshCollision?: Readonly<Record<string, readonly AssetCollisionBox[]>>,
+): PlacedAsset[] {
+  return placementsToRenderAssets(placements, { keepLocalIds: true, meshCollision }).filter(
     (a): a is PlacedAsset => a !== null,
   );
 }

@@ -46,6 +46,30 @@ export function hasWaterShaderAssets(): boolean {
 
 const DEEP_COLOR = new THREE.Color(0x0d3a52);
 const SHALLOW_COLOR = new THREE.Color(0x2d8077);
+
+// The map's authored water tint (Water tab hue/lightness sliders): hue swaps
+// the base colors' hue outright, lightness scales their L channel around the
+// authored midpoint (0.45 = shipped look), keeping the shipped deep/shallow
+// contrast. Fresh Color instances: never mutate the shipped constants.
+function tintedWaterColors(): { deep: THREE.Color; shallow: THREE.Color } {
+  const content = getActiveWorldContent();
+  const hue = content.waterHue;
+  const lum = content.waterLum;
+  const deep = DEEP_COLOR.clone();
+  const shallow = SHALLOW_COLOR.clone();
+  if (hue === undefined && lum === undefined) return { deep, shallow };
+  const lumScale = (lum ?? 0.45) / 0.45;
+  const hsl = { h: 0, s: 0, l: 0 };
+  for (const c of [deep, shallow]) {
+    c.getHSL(hsl);
+    c.setHSL(
+      hue !== undefined ? (((hue % 360) + 360) % 360) / 360 : hsl.h,
+      hsl.s,
+      Math.min(0.92, Math.max(0.03, hsl.l * lumScale)),
+    );
+  }
+  return { deep, shallow };
+}
 const SKY_TINT = new THREE.Color(0x7fb2e0); // matches the sky horizon band
 const SUN_COLOR = new THREE.Color(0xfff0d4);
 
@@ -150,8 +174,8 @@ function buildShaderWater(seed: number): WaterView {
       uSunDir: { value: SUN_DIR.clone() }, // the one shared sun (gfx.ts)
       uSunColor: { value: SUN_COLOR },
       uSkyColor: { value: SKY_TINT },
-      uDeep: { value: DEEP_COLOR },
-      uShallow: { value: SHALLOW_COLOR },
+      uDeep: { value: tintedWaterColors().deep },
+      uShallow: { value: tintedWaterColors().shallow },
       uTime: sharedUniforms.uTime,
     },
     vertexShader: WATER_VERT,
@@ -204,6 +228,10 @@ function buildShaderWater(seed: number): WaterView {
     setLevel(): void {
       const y = waterLevel();
       const visible = waterVisible();
+      // The editor's water panel also retints through this refresh path.
+      const tint = tintedWaterColors();
+      (material.uniforms.uDeep.value as THREE.Color).copy(tint.deep);
+      (material.uniforms.uShallow.value as THREE.Color).copy(tint.shallow);
       for (const mesh of meshes) {
         mesh.position.y = y;
         mesh.visible = visible;
@@ -220,6 +248,13 @@ function buildPhongWater(): WaterView {
   tex.repeat.set(30, 30);
   const [norm] = waterNormalMaps();
   norm.repeat.set(26, 78);
+  const phongBase = new THREE.Color(0x2a6a96);
+  const phongTint = (): THREE.Color => {
+    const t = tintedWaterColors();
+    // Blend deep/shallow into the single Phong base so the legacy tier tracks
+    // the same sliders (approximate is fine at this tier).
+    return t.deep.clone().lerp(t.shallow, 0.5).lerp(phongBase, 0.25);
+  };
   const mat = new THREE.MeshPhongMaterial({
     color: 0x2a6a96,
     transparent: true,
@@ -240,6 +275,7 @@ function buildPhongWater(): WaterView {
   );
   mesh.position.set(0, waterLevel(), (zMin + zMax) / 2);
   mesh.visible = waterVisible();
+  mat.color.copy(phongTint());
   return {
     meshes: [mesh],
     update(time: number): void {
@@ -251,6 +287,7 @@ function buildPhongWater(): WaterView {
     setLevel(): void {
       mesh.position.y = waterLevel();
       mesh.visible = waterVisible();
+      mat.color.copy(phongTint());
     },
   };
 }

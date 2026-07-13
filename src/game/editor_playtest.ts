@@ -10,6 +10,7 @@
 // bundle. Defensive: any malformed blob yields null and the normal start screen
 // runs instead.
 
+import { decodeBiomePaintIdsRle } from '../sim/map_doc';
 import type { PlayerClass, WorldContent } from '../sim/types';
 import { t } from '../ui/i18n';
 
@@ -71,6 +72,23 @@ export function takeEditorPlaytestRequest(): EditorPlaytestRequest | null {
   try {
     const obj = JSON.parse(raw) as Record<string, unknown>;
     if (!obj || typeof obj !== 'object') return null;
+    // The editor ships large biome-paint grids run-length encoded (several MB
+    // as a plain array — past the sessionStorage quota). Expand before the
+    // shape check; a malformed blob just drops the paint layer.
+    const content = obj.content as Record<string, unknown> | null;
+    const bp =
+      content && typeof content === 'object'
+        ? (content.biomePaint as Record<string, unknown> | undefined)
+        : undefined;
+    if (bp && typeof bp === 'object' && typeof bp.idsRle === 'string' && !Array.isArray(bp.ids)) {
+      const ids = decodeBiomePaintIdsRle(bp.idsRle);
+      if (ids) {
+        bp.ids = ids;
+        delete bp.idsRle;
+      } else if (content) {
+        delete content.biomePaint;
+      }
+    }
     if (!looksLikeWorldContent(obj.content)) return null;
     const seed = typeof obj.seed === 'number' && Number.isFinite(obj.seed) ? obj.seed : 20061;
     const pc =

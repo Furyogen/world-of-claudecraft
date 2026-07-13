@@ -11,7 +11,12 @@
 // the tiny index instead of sanitizing every stored map. The legacy single-blob
 // key (woc_editor_maps) migrates lazily on first access.
 
-import { sanitizeMapDoc, serializeMapDoc } from '../sim/map_doc';
+import {
+  decodeBiomePaintIdsRle,
+  encodeBiomePaintIdsRle,
+  sanitizeMapDoc,
+  serializeMapDoc,
+} from '../sim/map_doc';
 import type { CustomMap, CustomMapMeta } from './custom_map';
 
 /** Pretty-printed serialization, for the human-readable file export ONLY. */
@@ -19,18 +24,59 @@ export function serializeMap(map: CustomMap): string {
   return serializeMapDoc(map as unknown as Parameters<typeof serializeMapDoc>[0]);
 }
 
+// ---- biome-paint ids RLE (localStorage layer ONLY) --------------------------
+//
+// A fine paint grid holds up to ~4.2M cells; as a plain JSON array that is
+// many MB — past the localStorage quota. The grids are extremely run-heavy
+// (mostly 255 with painted runs), so the STORE swaps `ids` for a run-length
+// string (shared codec in sim/map_doc, also used by the playtest handoff).
+// This never leaks into the document format: file export, bundles and the
+// server all see the plain array; only serializeMapCompact/parseMap (the
+// store + autosave seam) speak RLE, and parseMap expands it before the shared
+// sanitizer runs.
+
+const IDS_RLE_MIN = 4096; // below this a plain array is small enough
+
 /**
  * Compact serialization for localStorage (store + autosave draft): the pretty
- * form is 3-5x larger and the multi-MB stringify/parse is synchronous.
+ * form is 3-5x larger and the multi-MB stringify/parse is synchronous. Large
+ * biome-paint grids store their ids run-length-encoded (see above).
  */
 export function serializeMapCompact(map: CustomMap): string {
+  const bp = (map as { biomePaint?: { ids?: number[] } }).biomePaint;
+  if (bp && Array.isArray(bp.ids) && bp.ids.length >= IDS_RLE_MIN) {
+    const { ids, ...rest } = bp;
+    return JSON.stringify({
+      ...map,
+      biomePaint: { ...rest, idsRle: encodeBiomePaintIdsRle(ids) },
+    });
+  }
   return JSON.stringify(map);
 }
 
 // Parse anything into a CustomMap, or null if it cannot be salvaged (no usable
-// zones). Accepts a JSON string or an already-parsed object.
+// zones). Accepts a JSON string or an already-parsed object; expands the
+// store's RLE ids (if present) before the shared sanitizer runs.
 export function parseMap(raw: unknown): CustomMap | null {
-  return sanitizeMapDoc(raw) as CustomMap | null;
+  let doc = raw;
+  if (typeof doc === 'string') {
+    try {
+      doc = JSON.parse(doc);
+    } catch {
+      return null;
+    }
+  }
+  if (doc && typeof doc === 'object') {
+    const bp = (doc as { biomePaint?: { ids?: unknown; idsRle?: unknown } }).biomePaint;
+    if (bp && typeof bp === 'object' && typeof bp.idsRle === 'string' && !Array.isArray(bp.ids)) {
+      const ids = decodeBiomePaintIdsRle(bp.idsRle);
+      if (ids) {
+        const { idsRle, ...rest } = bp as Record<string, unknown>;
+        doc = { ...doc, biomePaint: { ...rest, ids } };
+      }
+    }
+  }
+  return sanitizeMapDoc(doc) as CustomMap | null;
 }
 
 // ---- localStorage store ----------------------------------------------------

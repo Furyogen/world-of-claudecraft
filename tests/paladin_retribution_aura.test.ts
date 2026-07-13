@@ -2,9 +2,9 @@
 // is up, any enemy that lands a melee swing on the paladin takes flat Holy damage
 // back — the player-side analogue of innate mob "spiked hide" (see mob_thorns).
 import { describe, expect, it } from 'vitest';
-import { Sim } from '../src/sim/sim';
-import { createMob } from '../src/sim/entity';
 import { ABILITIES, CLASSES, MOBS } from '../src/sim/data';
+import { createMob } from '../src/sim/entity';
+import { Sim } from '../src/sim/sim';
 import type { Entity } from '../src/sim/types';
 
 function makePaladin() {

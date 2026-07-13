@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { orderTabTargets, TabCandidate } from '../src/sim/tab_target';
+import { describe, expect, it } from 'vitest';
+import { orderTabTargets, type TabCandidate } from '../src/sim/tab_target';
 
 // Player faces +Z (facing 0): forward is (sin 0, cos 0) = (0, 1).
 const FACING_NORTH = 0;

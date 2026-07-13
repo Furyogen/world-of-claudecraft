@@ -1,19 +1,20 @@
 import { describe, expect, it } from 'vitest';
-import { Sim } from '../src/sim/sim';
 import { MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
+import { Sim } from '../src/sim/sim';
 import type { Entity } from '../src/sim/types';
 
 const SEED = 41099;
 
 // Gravecaller Mender is the seeded carrier of the mendAlly support mechanic.
-const inner = (sim: Sim) => sim as unknown as {
-  addEntity(e: Entity): void;
-  updateBossMechanics(m: Entity): void;
-  resetEvadingMob(m: Entity): void;
-};
+const inner = (sim: Sim) =>
+  sim as unknown as {
+    addEntity(e: Entity): void;
+    updateBossMechanics(m: Entity): void;
+    resetEvadingMob(m: Entity): void;
+  };
 
-function spawn(sim: Sim, id: number, tmpl: typeof MOBS[string], hpFrac = 1) {
+function spawn(sim: Sim, id: number, tmpl: (typeof MOBS)[string], hpFrac = 1) {
   const mob = createMob(id, tmpl, 12, { x: 0, y: 0, z: 0 });
   mob.hp = Math.round(mob.maxHp * hpFrac);
   mob.inCombat = true;
@@ -24,7 +25,12 @@ function spawn(sim: Sim, id: number, tmpl: typeof MOBS[string], hpFrac = 1) {
 describe('mob support heal (mendAlly)', () => {
   it('seeds the mechanic on the Gravecaller Mender', () => {
     expect(MOBS.gravecaller_mender.mendAlly).toEqual({
-      healMin: 26, healMax: 38, radius: 14, every: 6, name: 'Grave Mending', school: 'shadow',
+      healMin: 26,
+      healMax: 38,
+      radius: 14,
+      every: 6,
+      name: 'Grave Mending',
+      school: 'shadow',
     });
   });
 
@@ -55,7 +61,9 @@ describe('mob support heal (mendAlly)', () => {
     const mender = spawn(sim, 9021, MOBS.gravecaller_mender, 0.5);
     const a = spawn(sim, 9022, MOBS.gravecaller_cultist, 0.4);
     const b = spawn(sim, 9023, MOBS.gravecaller_summoner, 0.4);
-    const beforeA = a.hp, beforeB = b.hp, beforeSelf = mender.hp;
+    const beforeA = a.hp,
+      beforeB = b.hp,
+      beforeSelf = mender.hp;
     for (let i = 0; i < 20 * 6 + 1; i++) inner(sim).updateBossMechanics(mender);
     expect(a.hp).toBeGreaterThan(beforeA);
     expect(b.hp).toBeGreaterThan(beforeB);

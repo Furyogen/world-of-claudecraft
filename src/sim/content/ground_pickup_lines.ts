@@ -81,6 +81,43 @@ export const GROUND_PICKUP_LINES: Record<string, GroundPickupLines> = {
     deny: 'The ritual circle lies cold and dormant.',
     enough: 'The circle has nothing more to give you.',
   },
+  // --- Scorching Wastes ---
+  brimming_waterskin: {
+    deny: 'The caravan draws water by ration. Saffa decides whose skins get filled.',
+    enough: 'Your skins are full to bursting already.',
+  },
+  caravan_manifest: {
+    deny: 'Picking through the wreck without cause would be grave-robbing, not salvage.',
+    enough: 'You have searched every wagon worth searching.',
+  },
+  mural_rubbing: {
+    deny: "Without Caddis's wax paper, the mural is just a wall.",
+    enough: 'You already carry all three rubbings.',
+  },
+  vigil_obelisk_dawn: {
+    deny: 'The obelisk is cold. The mural spoke of an order: dawn wakes first.',
+    enough: 'The Obelisk of Dawn already burns.',
+  },
+  vigil_obelisk_noon: {
+    deny: 'The obelisk is cold. Dawn must burn before noon may stand.',
+    enough: 'The Obelisk of Noon already burns.',
+  },
+  vigil_obelisk_dusk: {
+    deny: 'The obelisk is cold. Dusk is always the last to the vigil.',
+    enough: 'The Obelisk of Dusk already burns — and the Vigil has noticed.',
+  },
+  crown_brazier: {
+    deny: 'The brazier will not take flame for a stranger. The psalter names the rite.',
+    enough: 'This brazier already carries the crown-flame.',
+  },
+  heartspring_offering: {
+    deny: 'The spring keeps its blessing for those Haruk has named.',
+    enough: 'The spring has already spoken to you.',
+  },
+  wastes_relic_cache: {
+    deny: 'The cache is fused shut by two ages of sun and sand.',
+    enough: 'You have already emptied this cache.',
+  },
 };
 
 export function groundPickupDeny(itemId: string, itemName: string): string {

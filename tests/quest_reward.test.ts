@@ -8,7 +8,17 @@ import { QUESTS, questRewardItemId, REWARD_ARCHETYPE } from '../src/sim/data';
 import { Sim } from '../src/sim/sim';
 import type { PlayerClass } from '../src/sim/types';
 
-const ALL_CLASSES: PlayerClass[] = ['warrior', 'paladin', 'shaman', 'rogue', 'hunter', 'mage', 'priest', 'warlock', 'druid'];
+const ALL_CLASSES: PlayerClass[] = [
+  'warrior',
+  'paladin',
+  'shaman',
+  'rogue',
+  'hunter',
+  'mage',
+  'priest',
+  'warlock',
+  'druid',
+];
 
 describe('quest reward preview matches turn-in (#98)', () => {
   it('resolves the archetype fallback for classes without an explicit reward', () => {
@@ -29,7 +39,9 @@ describe('quest reward preview matches turn-in (#98)', () => {
       const meta = (sim as any).primary;
       meta.questLog.set('q_greyjaw', { questId: 'q_greyjaw', state: 'ready', counts: [1] });
       sim.addItem('greyjaw_fang', 1);
-      const npc = [...sim.entities.values()].find((e) => e.kind === 'npc' && e.templateId === QUESTS['q_greyjaw'].turnInNpcId)!;
+      const npc = [...sim.entities.values()].find(
+        (e) => e.kind === 'npc' && e.templateId === QUESTS['q_greyjaw'].turnInNpcId,
+      )!;
       sim.player.pos = { ...npc.pos };
       const before = sim.countItem(preview ?? '__none__');
       sim.turnInQuest('q_greyjaw');

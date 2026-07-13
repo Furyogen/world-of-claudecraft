@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { Sim } from '../src/sim/sim';
 import { MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
+import { Sim } from '../src/sim/sim';
 
 const SEED = 31337;
 const makeSim = () => new Sim({ seed: SEED, playerClass: 'warrior' });
@@ -13,7 +13,11 @@ const AURA_ID = 'stackpoison_mirefen_broodmother';
 function spawnBroodmother(sim: Sim, id = 980001) {
   const p = sim.entities.get(sim.playerId)!;
   p.gm = true;
-  const mob = createMob(id, MOBS.mirefen_broodmother, p.level, { x: p.pos.x, y: p.pos.y, z: p.pos.z });
+  const mob = createMob(id, MOBS.mirefen_broodmother, p.level, {
+    x: p.pos.x,
+    y: p.pos.y,
+    z: p.pos.z,
+  });
   sim.entities.set(mob.id, mob);
   return mob;
 }
@@ -109,7 +113,11 @@ describe('mob stacking poison (ramping on-hit DoT)', () => {
     const sim = makeSim();
     const player = sim.entities.get(sim.playerId)!;
     player.gm = true;
-    const wolf = createMob(980050, MOBS.forest_wolf, player.level, { x: player.pos.x, y: player.pos.y, z: player.pos.z });
+    const wolf = createMob(980050, MOBS.forest_wolf, player.level, {
+      x: player.pos.x,
+      y: player.pos.y,
+      z: player.pos.z,
+    });
     sim.entities.set(wolf.id, wolf);
     for (let i = 0; i < 40; i++) (sim as any).mobSwing(wolf, player);
     expect(player.auras.some((a) => a.id === AURA_ID)).toBe(false);

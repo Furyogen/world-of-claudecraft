@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import { ABILITIES, abilitiesKnownAt, CLASSES } from '../src/sim/content/classes';
 import { Sim } from '../src/sim/sim';
-import { ABILITIES, CLASSES, abilitiesKnownAt } from '../src/sim/content/classes';
 
 function shaman(level: number) {
   const sim = new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
@@ -25,7 +25,9 @@ describe('Flametongue Weapon (shaman fire imbue)', () => {
   });
 
   it('is not known before level 10 but is at level 10 (rank 1) and 18 (rank 2)', () => {
-    expect(abilitiesKnownAt('shaman', 9).some((k) => k.def.id === 'flametongue_weapon')).toBe(false);
+    expect(abilitiesKnownAt('shaman', 9).some((k) => k.def.id === 'flametongue_weapon')).toBe(
+      false,
+    );
     const at10 = abilitiesKnownAt('shaman', 10).find((k) => k.def.id === 'flametongue_weapon');
     expect(at10?.rank).toBe(1);
     const at18 = abilitiesKnownAt('shaman', 18).find((k) => k.def.id === 'flametongue_weapon');
@@ -49,7 +51,9 @@ describe('Flametongue Weapon (shaman fire imbue)', () => {
     const { sim, pid } = shaman(18);
     sim.castAbility('flametongue_weapon', pid);
     sim.tick();
-    const imbue = sim.entities.get(pid)!.auras.find((a) => a.kind === 'imbue' && a.id === 'flametongue_weapon');
+    const imbue = sim.entities
+      .get(pid)!
+      .auras.find((a) => a.kind === 'imbue' && a.id === 'flametongue_weapon');
     expect(imbue!.value).toBe(13);
   });
 });

@@ -1,7 +1,25 @@
 import { describe, expect, it } from 'vitest';
-import { CLICK_MOVE_FORWARD_CONE, angleDelta, clickMoveShouldWalk, clickMoveStep, facingToward, latencyAdjustedStopDistance, manualMovementOverrides, resolveClickMoveAction, stepAngleToward } from '../src/game/click_move';
+import {
+  angleDelta,
+  CLICK_MOVE_FORWARD_CONE,
+  clickMoveShouldWalk,
+  clickMoveStep,
+  facingToward,
+  latencyAdjustedStopDistance,
+  manualMovementOverrides,
+  resolveClickMoveAction,
+  stepAngleToward,
+} from '../src/game/click_move';
 
-const NO_INPUT = { forward: false, back: false, turnLeft: false, turnRight: false, strafeLeft: false, strafeRight: false, jump: false };
+const NO_INPUT = {
+  forward: false,
+  back: false,
+  turnLeft: false,
+  turnRight: false,
+  strafeLeft: false,
+  strafeRight: false,
+  jump: false,
+};
 
 describe('click-to-move math (#95)', () => {
   it('walks forward and faces the destination while far away', () => {
@@ -37,56 +55,74 @@ describe('click-to-move math (#95)', () => {
 
   it('jump does not cancel click-to-move, you keep travelling through the hop', () => {
     expect(manualMovementOverrides({ ...NO_INPUT, jump: true })).toBe(false);
-    expect(resolveClickMoveAction({ ...NO_INPUT, jump: true }, {
-      mouselook: false,
-      movementSuspended: false,
-      playerDead: false,
-      enabled: true,
-    })).toBe('continue');
+    expect(
+      resolveClickMoveAction(
+        { ...NO_INPUT, jump: true },
+        {
+          mouselook: false,
+          movementSuspended: false,
+          playerDead: false,
+          enabled: true,
+        },
+      ),
+    ).toBe('continue');
   });
 
   it('cancels click-to-move when the player dies', () => {
-    expect(resolveClickMoveAction(NO_INPUT, {
-      mouselook: false,
-      movementSuspended: false,
-      playerDead: true,
-      enabled: true,
-    })).toBe('cancel');
+    expect(
+      resolveClickMoveAction(NO_INPUT, {
+        mouselook: false,
+        movementSuspended: false,
+        playerDead: true,
+        enabled: true,
+      }),
+    ).toBe('cancel');
   });
 
   it('keeps click-to-move active while enabled and uninterrupted', () => {
-    expect(resolveClickMoveAction(NO_INPUT, {
-      mouselook: false,
-      movementSuspended: false,
-      playerDead: false,
-      enabled: true,
-    })).toBe('continue');
+    expect(
+      resolveClickMoveAction(NO_INPUT, {
+        mouselook: false,
+        movementSuspended: false,
+        playerDead: false,
+        enabled: true,
+      }),
+    ).toBe('continue');
   });
 
   // Opening the Esc/game menu suspends movement. That must PAUSE the run (keep the
   // destination so it resumes when the menu closes), not silently cancel it.
   it('pauses (does not cancel) click-to-move while movement is suspended by a menu', () => {
-    expect(resolveClickMoveAction(NO_INPUT, {
-      mouselook: false,
-      movementSuspended: true,
-      playerDead: false,
-      enabled: true,
-    })).toBe('pause');
+    expect(
+      resolveClickMoveAction(NO_INPUT, {
+        mouselook: false,
+        movementSuspended: true,
+        playerDead: false,
+        enabled: true,
+      }),
+    ).toBe('pause');
   });
 
   it('a real interrupt still cancels even while suspended (cancel wins over pause)', () => {
-    expect(resolveClickMoveAction({ ...NO_INPUT, forward: true }, {
-      mouselook: false,
-      movementSuspended: true,
-      playerDead: false,
-      enabled: true,
-    })).toBe('cancel');
-    expect(resolveClickMoveAction(NO_INPUT, {
-      mouselook: false,
-      movementSuspended: true,
-      playerDead: true,
-      enabled: true,
-    })).toBe('cancel');
+    expect(
+      resolveClickMoveAction(
+        { ...NO_INPUT, forward: true },
+        {
+          mouselook: false,
+          movementSuspended: true,
+          playerDead: false,
+          enabled: true,
+        },
+      ),
+    ).toBe('cancel');
+    expect(
+      resolveClickMoveAction(NO_INPUT, {
+        mouselook: false,
+        movementSuspended: true,
+        playerDead: true,
+        enabled: true,
+      }),
+    ).toBe('cancel');
   });
 
   it('only walks forward when aimed within the cone, else turns in place', () => {
@@ -115,10 +151,16 @@ describe('click-to-move math (#95)', () => {
     let arrived = false;
     for (let i = 0; i < 20 * 10 && !arrived; i++) {
       const step = clickMoveStep(pos, target, STOP);
-      if (step.arrived) { arrived = true; break; }
+      if (step.arrived) {
+        arrived = true;
+        break;
+      }
       facing = stepAngleToward(facing, step.facing, TURN_RATE * DT);
       if (clickMoveShouldWalk(facing, step.facing)) {
-        pos = { x: pos.x + Math.sin(facing) * SPEED * DT, z: pos.z + Math.cos(facing) * SPEED * DT };
+        pos = {
+          x: pos.x + Math.sin(facing) * SPEED * DT,
+          z: pos.z + Math.cos(facing) * SPEED * DT,
+        };
       }
     }
     expect(arrived).toBe(true);

@@ -24,16 +24,23 @@ import {
 } from '../../sim/collider_volumes';
 import { FENCE_HALF_DEPTH } from '../../sim/colliders';
 import {
+  fluidVolumeFromPlacement,
+  fluidVolumesFromPlacements,
+  isFluidAssetId,
+} from '../../sim/fluid_volumes';
+import {
   DEFAULT_ASSET_VIEW_DISTANCE,
   MAX_AXIS_SCALE,
   MAX_COLLIDER_SIZE,
   MAX_COLLIDER_SIZE_Y,
   MAX_PLACEMENT_Y_OFFSET,
+  type MapHitbox,
   MIN_AXIS_SCALE,
   MIN_COLLIDER_SIZE,
   MIN_COLLIDER_SIZE_Y,
 } from '../../sim/map_doc';
 import { Sim } from '../../sim/sim';
+import type { CaveDef, PlacedAsset, TerrainHole } from '../../sim/types';
 import { type BlockerDef, type ColliderVolume, DT, type MapWeather } from '../../sim/types';
 import { terrainHeight } from '../../sim/world';
 import { t } from '../../ui/i18n';
@@ -105,6 +112,20 @@ export interface Editor3DHooks {
   gizmoMode(): GizmoMode | null;
   onGizmoChange(change: GizmoPlacementChange): void;
   onGizmoEnd(): void;
+  // Hitbox edit mode: live gizmo deltas over the SELECTED hitboxes (world
+  // space, from gesture start); the shared onGizmoEnd commits the gesture.
+  onHitboxGizmoChange(change: GizmoHitboxChange): void;
+}
+
+/** A live hitbox edit produced by a gizmo handle drag: world-space deltas
+ *  relative to the gesture start (the app converts to model space). */
+export interface GizmoHitboxChange {
+  dx?: number;
+  dy?: number;
+  dz?: number;
+  dRotY?: number;
+  ratio?: number;
+  axis?: 'x' | 'y' | 'z' | 'uniform';
 }
 
 /** A live placement edit produced by a gizmo handle drag. */
@@ -123,6 +144,72 @@ export interface GizmoPlacementChange {
   sizeY?: number;
   sizeZ?: number;
 }
+
+// Tunnel-tool cave guides (A -> B flow): shared materials/geometry, never
+// disposed (module lifetime, a handful of tiny objects).
+// Hitbox edit overlay: shared unit geometry (meshes scale it per box).
+const hitboxUnitGeo = new THREE.BoxGeometry(1, 1, 1);
+const hitboxUnitEdges = new THREE.EdgesGeometry(hitboxUnitGeo);
+const hitboxEdgeMat = new THREE.LineBasicMaterial({
+  color: 0x9fe8ff,
+  transparent: true,
+  opacity: 0.9,
+});
+const hitboxEdgeSelMat = new THREE.LineBasicMaterial({ color: 0xffe08a });
+
+const caveGuideLineMat = new THREE.LineBasicMaterial({
+  color: 0xffd35a,
+  transparent: true,
+  opacity: 0.9,
+  depthTest: false,
+});
+const caveGuideEntranceMat = new THREE.MeshBasicMaterial({
+  color: 0x3ade6e,
+  transparent: true,
+  opacity: 0.95,
+  depthTest: false,
+});
+const caveGuideExitMat = new THREE.MeshBasicMaterial({
+  color: 0xff5a4a,
+  transparent: true,
+  opacity: 0.95,
+  depthTest: false,
+});
+const caveGuideSphereGeo = new THREE.SphereGeometry(0.75, 14, 10);
+const caveGuideConeGeo = new THREE.ConeGeometry(0.7, 1.8, 12);
+// Rig control points (the movable cave waypoints): bright blue spheres joined
+// by a dotted line, so the planned path reads before the cave is generated.
+const caveRigPointMat = new THREE.MeshBasicMaterial({
+  color: 0x3a8fff,
+  transparent: true,
+  opacity: 0.95,
+  depthTest: false,
+});
+const caveRigPointGeo = new THREE.SphereGeometry(0.9, 14, 10);
+const caveRigLineMat = new THREE.LineDashedMaterial({
+  color: 0x9fc8ff,
+  transparent: true,
+  opacity: 0.9,
+  depthTest: false,
+  dashSize: 1.1,
+  gapSize: 0.7,
+});
+// Hole-tool cutout rings: a cyan circle traced around each terrain hole so
+// the punched openings stay findable/editable while the Caves tool is up.
+const holeGuideMat = new THREE.LineBasicMaterial({
+  color: 0x49e4ff,
+  transparent: true,
+  opacity: 0.9,
+  depthTest: false,
+});
+// Patch spheres (Patch hole mode) trace GREEN so restored ground reads apart
+// from cuts at a glance.
+const holePatchGuideMat = new THREE.LineBasicMaterial({
+  color: 0x54e07a,
+  transparent: true,
+  opacity: 0.9,
+  depthTest: false,
+});
 
 const SPAWN_RING_COLOR = 0x3fd0ff;
 const SPAWN_RING_SEGMENTS = 40;
@@ -146,9 +233,14 @@ const WIREFRAME_MAP_CATEGORIES = new Set(['terrain', 'water', 'foliage', 'fish',
 const TAP_SLOP_PX = 5;
 // Repeated-click cycling through overlapping placements (DCC style): a second tap
 // near the SAME screen point within the window advances to the next candidate
-// under the cursor instead of re-picking the nearest one.
-const CYCLE_WINDOW_MS = 600;
-const CYCLE_SLOP_PX = 6;
+// under the cursor instead of re-picking the nearest one, wrapping back to the
+// closest after CYCLE_MAX_DEPTH. A 2s window so unhurried clicks still cycle.
+const CYCLE_WINDOW_MS = 2000;
+const CYCLE_SLOP_PX = 12;
+const CYCLE_MAX_DEPTH = 10;
+// Map-light bulb badges pick by projected screen distance (see pickMapLight);
+// a click lands if it is within this many pixels of the badge center.
+const LIGHT_PICK_PX = 28;
 // Hover-cursor pick throttle (Select mode only): the placement raycast is the
 // same cost as a tap pick, so cap it well below the pointer-move rate.
 const HOVER_PICK_MS = 90;
@@ -223,6 +315,9 @@ export class Editor3DViewport {
   // User "hide collision volumes" toggle (Collider tab): keeps the group built
   // (and pickable through the same meshes) but drops it from the scene render.
   private collidersUserHidden = false;
+  // User "hide area boxes" toggle (Zone tool): drops the blue named-location
+  // rects from the render, same pattern as collidersUserHidden above.
+  private locationsUserHidden = false;
   private readonly colliderMat = new THREE.MeshBasicMaterial({
     color: COLLIDER_COLOR,
     transparent: true,
@@ -250,7 +345,31 @@ export class Editor3DViewport {
     origin: THREE.Vector3;
     plane: THREE.Plane;
     startHit: THREE.Vector3;
+    // True when the drag edits the SELECTED HITBOXES instead of the placement.
+    hitbox?: boolean;
   } | null = null;
+  // Hitbox edit mode overlay (app-fed): the edited placement's boxes as
+  // pickable translucent volumes; `selected` highlights + anchors the gizmo.
+  private hitboxEditState: {
+    index: number;
+    boxes: readonly MapHitbox[];
+    selected: number[];
+  } | null = null;
+  private hitboxGroup: THREE.Group | null = null;
+  private readonly hitboxMat = new THREE.MeshBasicMaterial({
+    color: 0x3fd0ff,
+    transparent: true,
+    opacity: 0.18,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+  });
+  private readonly hitboxSelMat = new THREE.MeshBasicMaterial({
+    color: 0xffc933,
+    transparent: true,
+    opacity: 0.38,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+  });
   private readonly gizmoOriginV = new THREE.Vector3();
   private readonly planeHitV = new THREE.Vector3();
 
@@ -306,7 +425,9 @@ export class Editor3DViewport {
   // turned off so shared/cached materials return to solid.
   private wireframe = false;
   private wireframeWasOn = false;
-  private lightPreviewOn = false;
+  // Preview mode (topbar): in-game look, every editor overlay hidden. Re-
+  // enforced per frame (loop) since overlay rebuilds recreate groups visible.
+  private previewMode = false;
   // Authored-overlay groups: named location rects, AI markers, point lights
   // (live editor preview; playtest builds its own from the projection).
   private locationsGroup: THREE.Group | null = null;
@@ -314,7 +435,34 @@ export class Editor3DViewport {
   private lightsGroup: THREE.Group | null = null;
   private selectedLightIndex: number | null = null;
   private bulbTexture: THREE.CanvasTexture | null = null;
+  // Point-sound emitter overlays: a clickable speaker badge per node + a
+  // wireframe falloff sphere (the selected node bright; all faint under preview).
+  private soundsGroup: THREE.Group | null = null;
+  private selectedSoundIndex: number | null = null;
+  private soundPreviewOn = false;
+  private soundTexture: THREE.CanvasTexture | null = null;
+  // Falloff volume drawn as a wireframe BOX, not a sphere: a cube is ~18 line
+  // segments vs a sphere's hundreds, so showing every emitter's range under
+  // preview stays cheap. (The audio falloff itself is still spherical.)
+  private readonly soundBoxMat = new THREE.MeshBasicMaterial({
+    color: 0x6ad0ff,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.12,
+    depthWrite: false,
+  });
+  private readonly soundBoxSelMat = new THREE.MeshBasicMaterial({
+    color: 0x8fe0ff,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.32,
+    depthWrite: false,
+  });
   private zonePreviewMesh: THREE.Mesh | null = null;
+  private caveGuidesGroup: THREE.Group | null = null;
+  private holeGuidesGroup: THREE.Group | null = null;
+  // Rock-tool bridge/ridge chain preview (blue points + dotted connector).
+  private rockChainGroup: THREE.Group | null = null;
   private readonly locationMat = new THREE.MeshBasicMaterial({
     color: 0x46b1ff,
     transparent: true,
@@ -408,8 +556,13 @@ export class Editor3DViewport {
       world: { ...world, placements: undefined },
     });
     this.renderer = new Renderer(this.sim, this.canvas, this.nameplates);
+    // Imported-model collision bakes feed the footprint view (baked boxes).
+    this.renderer.placedAssets.setAssetCollision(this.map.assetCollision ?? null);
     this.renderer.placedAssets.rebuildAll(
-      placementsToRenderAssets(this.map.placements, { hideHidden: true }),
+      placementsToRenderAssets(this.map.placements, {
+        hideHidden: true,
+        meshCollision: this.map.assetCollisionMesh,
+      }),
       true,
     );
     // A fresh build reflects the whole document: drop any hidden-time debts
@@ -733,9 +886,13 @@ export class Editor3DViewport {
       this.hiddenPlacements = true;
       return;
     }
-    const asset = placementsToRenderAssets([this.map.placements[index]], { hideHidden: true })[0];
+    const asset = placementsToRenderAssets([this.map.placements[index]], {
+      hideHidden: true,
+      meshCollision: this.map.assetCollisionMesh,
+    })[0];
     if (asset) this.renderer?.placedAssets.addPlacement(index, asset);
     this.updateColliderVolume(index);
+    this.refreshFluidsIfNeeded(index);
   }
 
   placementUpdated(
@@ -760,6 +917,8 @@ export class Editor3DViewport {
       glow?: number | null;
       glowStrength?: number | null;
       fire?: boolean | null;
+      collideCustom?: boolean;
+      hitboxes?: PlacedAsset['hitboxes'] | null;
     },
   ): void {
     if (!this.visible) {
@@ -768,6 +927,7 @@ export class Editor3DViewport {
     }
     this.renderer?.placedAssets.updatePlacement(index, change);
     this.updateColliderVolume(index);
+    this.refreshFluidsIfNeeded(index);
   }
 
   /** Surgical single removal at a DOCUMENT index: the view drops that slot and
@@ -791,7 +951,10 @@ export class Editor3DViewport {
       return;
     }
     this.renderer?.placedAssets.rebuildAll(
-      placementsToRenderAssets(this.map.placements, { hideHidden: true }),
+      placementsToRenderAssets(this.map.placements, {
+        hideHidden: true,
+        meshCollision: this.map.assetCollisionMesh,
+      }),
     );
     this.refreshColliderVolumes();
   }
@@ -812,6 +975,12 @@ export class Editor3DViewport {
     // the flush reapplies this selection after its rebuildAll.
     if (!this.visible && this.hiddenPlacements) return;
     this.renderer?.placedAssets.setSelected(index);
+  }
+
+  /** Imported-model bake map changed (an import finished baking): refresh the
+   *  footprint view's baked-box source. */
+  setAssetCollisionOverrides(): void {
+    this.renderer?.placedAssets.setAssetCollision(this.map.assetCollision ?? null);
   }
 
   showFootprints(on: boolean): void {
@@ -942,7 +1111,9 @@ export class Editor3DViewport {
    * so stacked objects become reachable. Returns the chosen document index or null.
    */
   pickPlacementCycling(clientX: number, clientY: number): number | null {
-    const candidates = this.pickPlacementCandidates(clientX, clientY);
+    // Cap the rotation at the CYCLE_MAX_DEPTH closest: past that the cursor
+    // wraps back to the front-most instead of digging into far scenery.
+    const candidates = this.pickPlacementCandidates(clientX, clientY).slice(0, CYCLE_MAX_DEPTH);
     if (candidates.length === 0) {
       this.tapCycle = null;
       return null;
@@ -1062,6 +1233,15 @@ export class Editor3DViewport {
       });
       this.lightsGroup = null;
     }
+    if (this.soundsGroup) {
+      scene.remove(this.soundsGroup);
+      this.soundsGroup.traverse((o) => {
+        const m = o as THREE.Mesh;
+        if (m.isMesh) m.geometry.dispose(); // sphere geo; the sphere material is shared
+        if ((o as THREE.Sprite).isSprite) (o as THREE.Sprite).material.dispose();
+      });
+      this.soundsGroup = null;
+    }
     const locs = this.map.locations ?? [];
     if (locs.length > 0) {
       const g = new THREE.Group();
@@ -1076,6 +1256,7 @@ export class Editor3DViewport {
         mesh.renderOrder = 2;
         g.add(mesh);
       }
+      g.visible = !this.locationsUserHidden && !this.previewMode;
       this.locationsGroup = g;
       scene.add(g);
     }
@@ -1121,15 +1302,13 @@ export class Editor3DViewport {
       for (let i = 0; i < lights.length; i++) {
         const l = lights[i];
         const y = terrainHeight(l.x, l.z, this.seed) + l.y;
-        // The LIVE lights only shine while the Light tool is active: every
-        // change to the scene's point-light count recompiles all lit shaders
-        // and raises the per-fragment cost, so normal editing stays light-free
-        // (playtest renders them for real via the renderer's fixed boot set).
-        if (this.lightPreviewOn) {
-          const pl = new THREE.PointLight(l.color, l.intensity, l.range, 1.8);
-          pl.position.set(l.x, y, l.z);
-          g.add(pl);
-        }
+        // The LIVE lights always shine so authored lighting is visible while
+        // editing with any tool (and in Preview mode), exactly like in-game.
+        // Slider edits keep the light COUNT stable, so lit shaders recompile
+        // only when a light is added or removed - a one-off editor hitch.
+        const pl = new THREE.PointLight(l.color, l.intensity, l.range, 1.8);
+        pl.position.set(l.x, y, l.z);
+        g.add(pl);
         // Always-visible bulb badge: a camera-facing sprite so map lights are
         // findable (and clickable) from any angle and any tool.
         const sprite = new THREE.Sprite(
@@ -1157,6 +1336,47 @@ export class Editor3DViewport {
         }
       }
       this.lightsGroup = g;
+      scene.add(g);
+    }
+    const sounds = this.map.pointSounds ?? [];
+    if (sounds.length > 0) {
+      const g = new THREE.Group();
+      g.name = 'editor-point-sounds';
+      for (let i = 0; i < sounds.length; i++) {
+        const snd = sounds[i];
+        const y = terrainHeight(snd.x, snd.z, this.seed) + snd.y;
+        // Always-visible speaker badge: a camera-facing sprite so emitters are
+        // findable (and clickable) from any angle and any tool.
+        const sprite = new THREE.Sprite(
+          new THREE.SpriteMaterial({
+            map: this.soundSpriteTexture(),
+            color: 0x6ad0ff,
+            transparent: true,
+            depthWrite: false,
+          }),
+        );
+        sprite.position.set(snd.x, y, snd.z);
+        const selected = i === this.selectedSoundIndex;
+        sprite.scale.setScalar(selected ? 1.7 : 1.2);
+        sprite.renderOrder = 3;
+        sprite.userData.soundIndex = i;
+        g.add(sprite);
+        // The falloff box: the selected node always, and every node faintly
+        // while the Sound tool is active, so radius edits read spatially. A cube
+        // spanning +/- radius (a cheap stand-in for the spherical audio falloff).
+        if (selected || this.soundPreviewOn) {
+          const side = Math.max(1, snd.radius) * 2;
+          const box = new THREE.Mesh(
+            new THREE.BoxGeometry(side, side, side),
+            selected ? this.soundBoxSelMat : this.soundBoxMat,
+          );
+          box.position.set(snd.x, y, snd.z);
+          box.renderOrder = 1;
+          g.add(box);
+        }
+      }
+      g.visible = !this.previewMode;
+      this.soundsGroup = g;
       scene.add(g);
     }
   }
@@ -1203,21 +1423,37 @@ export class Editor3DViewport {
     return this.bulbTexture;
   }
 
-  /** The map-light index under a click (bulb sprites), or null. */
+  /**
+   * The map-light index under a click, or null. Picked by SCREEN distance to
+   * the projected bulb badge, not a sprite raycast: the sprite's hit quad is
+   * ~1yd in world units, which collapses to a few pixels once the camera zooms
+   * out while the drawn halo stays large - clicks on the visible bulb missed.
+   * Nearest badge within LIGHT_PICK_PX always wins instead.
+   */
   pickMapLight(clientX: number, clientY: number): number | null {
-    if (!this.renderer || !this.lightsGroup) return null;
+    if (!this.renderer) return null;
+    const lights = this.map.lights ?? [];
+    if (lights.length === 0) return null;
     const rect = this.canvas.getBoundingClientRect();
-    this.pickNdc.set(
-      ((clientX - rect.left) / Math.max(1, rect.width)) * 2 - 1,
-      -((clientY - rect.top) / Math.max(1, rect.height)) * 2 + 1,
-    );
-    this.picker.setFromCamera(this.pickNdc, this.renderer.camera);
-    const hits = this.picker.intersectObjects(this.lightsGroup.children, false);
-    for (const h of hits) {
-      const idx = h.object.userData.lightIndex;
-      if (typeof idx === 'number') return idx;
+    const v = new THREE.Vector3();
+    let best: number | null = null;
+    let bestD2 = LIGHT_PICK_PX * LIGHT_PICK_PX;
+    for (let i = 0; i < lights.length; i++) {
+      const l = lights[i];
+      v.set(l.x, terrainHeight(l.x, l.z, this.seed) + l.y, l.z);
+      v.project(this.renderer.camera);
+      if (v.z > 1 || v.z < -1) continue; // behind the camera / past far plane
+      const sx = rect.left + ((v.x + 1) / 2) * rect.width;
+      const sy = rect.top + ((-v.y + 1) / 2) * rect.height;
+      const dx = sx - clientX;
+      const dy = sy - clientY;
+      const d2 = dx * dx + dy * dy;
+      if (d2 < bestD2) {
+        bestD2 = d2;
+        best = i;
+      }
     }
-    return null;
+    return best;
   }
 
   /** Editor selection of a map light (bulb enlarges + range ring shows). */
@@ -1227,17 +1463,93 @@ export class Editor3DViewport {
     this.refreshAuthoredOverlays();
   }
 
-  /** Light-tool preview: shine the authored lights while editing them. */
-  setLightPreview(on: boolean): void {
-    if (this.lightPreviewOn === on) return;
-    this.lightPreviewOn = on;
-    this.refreshAuthoredOverlays();
-  }
-
   /** Music-tool preview: the area rects draw only while the tool is active. */
   setMusicPreview(on: boolean): void {
     if (this.musicPreviewOn === on) return;
     this.musicPreviewOn = on;
+    this.refreshAuthoredOverlays();
+  }
+
+  /** Shared speaker-badge sprite texture for point sounds (tinted via material). */
+  private soundSpriteTexture(): THREE.CanvasTexture {
+    if (this.soundTexture) return this.soundTexture;
+    const c = document.createElement('canvas');
+    c.width = 64;
+    c.height = 64;
+    const ctx = c.getContext('2d');
+    if (ctx) {
+      ctx.clearRect(0, 0, 64, 64);
+      const halo = ctx.createRadialGradient(32, 32, 4, 32, 32, 28);
+      halo.addColorStop(0, 'rgba(255,255,255,0.6)');
+      halo.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = halo;
+      ctx.fillRect(0, 0, 64, 64);
+      // Speaker cone (box + trapezoid).
+      ctx.fillStyle = 'rgba(255,255,255,0.95)';
+      ctx.beginPath();
+      ctx.moveTo(16, 26);
+      ctx.lineTo(26, 26);
+      ctx.lineTo(36, 16);
+      ctx.lineTo(36, 48);
+      ctx.lineTo(26, 38);
+      ctx.lineTo(16, 38);
+      ctx.closePath();
+      ctx.fill();
+      // Two sound-wave arcs.
+      ctx.strokeStyle = 'rgba(255,255,255,0.95)';
+      ctx.lineWidth = 3;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.arc(38, 32, 8, -Math.PI / 3, Math.PI / 3);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(38, 32, 15, -Math.PI / 3, Math.PI / 3);
+      ctx.stroke();
+    }
+    this.soundTexture = new THREE.CanvasTexture(c);
+    this.soundTexture.colorSpace = THREE.SRGBColorSpace;
+    return this.soundTexture;
+  }
+
+  /** The map point-sound index under a click, or null: nearest projected badge
+   *  within LIGHT_PICK_PX, mirroring pickMapLight. */
+  pickMapSound(clientX: number, clientY: number): number | null {
+    if (!this.renderer) return null;
+    const sounds = this.map.pointSounds ?? [];
+    if (sounds.length === 0) return null;
+    const rect = this.canvas.getBoundingClientRect();
+    const v = new THREE.Vector3();
+    let best: number | null = null;
+    let bestD2 = LIGHT_PICK_PX * LIGHT_PICK_PX;
+    for (let i = 0; i < sounds.length; i++) {
+      const s = sounds[i];
+      v.set(s.x, terrainHeight(s.x, s.z, this.seed) + s.y, s.z);
+      v.project(this.renderer.camera);
+      if (v.z > 1 || v.z < -1) continue;
+      const sx = rect.left + ((v.x + 1) / 2) * rect.width;
+      const sy = rect.top + ((-v.y + 1) / 2) * rect.height;
+      const dx = sx - clientX;
+      const dy = sy - clientY;
+      const d2 = dx * dx + dy * dy;
+      if (d2 < bestD2) {
+        bestD2 = d2;
+        best = i;
+      }
+    }
+    return best;
+  }
+
+  /** Editor selection of a point sound (badge enlarges + falloff sphere shows). */
+  setSelectedSound(index: number | null): void {
+    if (this.selectedSoundIndex === index) return;
+    this.selectedSoundIndex = index;
+    this.refreshAuthoredOverlays();
+  }
+
+  /** Sound-tool preview: every falloff sphere draws faintly while active. */
+  setSoundPreview(on: boolean): void {
+    if (this.soundPreviewOn === on) return;
+    this.soundPreviewOn = on;
     this.refreshAuthoredOverlays();
   }
 
@@ -1266,6 +1578,178 @@ export class Editor3DViewport {
     mesh.renderOrder = 2;
     this.renderer.scene.add(mesh);
     this.zonePreviewMesh = mesh;
+  }
+
+  /**
+   * A -> B flow guides for every cave while the Caves tool is active: a
+   * line along the tube's floor, a GREEN sphere at the entrance (the first
+   * node you laid) and a RED arrow cone at the exit. Pass null to hide.
+   */
+  setCaveGuides(
+    caves: readonly CaveDef[] | null,
+    rigs?: readonly { points: readonly { x: number; y: number; z: number }[] }[],
+  ): void {
+    if (this.caveGuidesGroup) {
+      this.renderer?.scene.remove(this.caveGuidesGroup);
+      this.caveGuidesGroup.traverse((o) => {
+        const m = o as THREE.Mesh;
+        if (m.isMesh || (o as THREE.Line).isLine) m.geometry?.dispose();
+      });
+      this.caveGuidesGroup = null;
+    }
+    if ((!caves || caves.length === 0) && (!rigs || rigs.length === 0)) return;
+    if (!this.renderer) return;
+    const g = new THREE.Group();
+    g.name = 'editor-cave-guides';
+    // The rig itself: a BLUE sphere per control point and a dotted connector,
+    // so the planned path is visible and movable before Generate. Point ys
+    // arrive ABSOLUTE (the markers are anchored; terrain plays no part).
+    for (const rig of rigs ?? []) {
+      if (rig.points.length === 0) continue;
+      const lift = 1.2;
+      const pts = rig.points.map((p) => new THREE.Vector3(p.x, p.y + lift, p.z));
+      for (const v of pts) {
+        const dot = new THREE.Mesh(caveRigPointGeo, caveRigPointMat);
+        dot.position.copy(v);
+        dot.renderOrder = 3;
+        g.add(dot);
+      }
+      if (pts.length >= 2) {
+        const line = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), caveRigLineMat);
+        // Dashed materials render SOLID until line distances exist.
+        line.computeLineDistances();
+        line.renderOrder = 3;
+        g.add(line);
+      }
+    }
+    for (const cave of caves ?? []) {
+      if (cave.nodes.length < 2) continue;
+      const lift = 1.4;
+      const pts = cave.nodes.map((n) => new THREE.Vector3(n.x, n.y + lift, n.z));
+      const line = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), caveGuideLineMat);
+      g.add(line);
+      const a = cave.nodes[0];
+      const entrance = new THREE.Mesh(caveGuideSphereGeo, caveGuideEntranceMat);
+      entrance.position.set(a.x, a.y + lift, a.z);
+      g.add(entrance);
+      const b = cave.nodes[cave.nodes.length - 1];
+      const prev = cave.nodes[cave.nodes.length - 2];
+      const exit = new THREE.Mesh(caveGuideConeGeo, caveGuideExitMat);
+      exit.position.set(b.x, b.y + lift, b.z);
+      const dir = new THREE.Vector3(b.x - prev.x, 0, b.z - prev.z);
+      if (dir.lengthSq() > 1e-6) {
+        exit.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.normalize());
+      }
+      g.add(exit);
+    }
+    this.renderer.scene.add(g);
+    this.caveGuidesGroup = g;
+  }
+
+  /** Hole-tool guides: a cyan ring traced around every terrain-hole cutout
+   *  and a green ring around every patch sphere (visible while the Caves
+   *  tool is up). Pass null to hide. */
+  setHoleGuides(
+    holes: readonly TerrainHole[] | null,
+    patches?: readonly TerrainHole[] | null,
+  ): void {
+    if (this.holeGuidesGroup) {
+      this.renderer?.scene.remove(this.holeGuidesGroup);
+      this.holeGuidesGroup.traverse((o) => {
+        if ((o as THREE.Line).isLine) (o as THREE.Line).geometry?.dispose();
+      });
+      this.holeGuidesGroup = null;
+    }
+    const holeCount = holes?.length ?? 0;
+    const patchCount = patches?.length ?? 0;
+    if ((holeCount === 0 && patchCount === 0) || !this.renderer) return;
+    const g = new THREE.Group();
+    g.name = 'editor-hole-guides';
+    const SEGS = 40;
+    const addRing = (h: TerrainHole, mat: THREE.LineBasicMaterial): void => {
+      // Trace the sphere's intersection with the terrain: sample the surface
+      // around the rim so the ring hugs slopes instead of floating.
+      const pts: THREE.Vector3[] = [];
+      for (let i = 0; i <= SEGS; i++) {
+        const a = (i / SEGS) * Math.PI * 2;
+        const x = h.x + Math.cos(a) * h.radius;
+        const z = h.z + Math.sin(a) * h.radius;
+        pts.push(new THREE.Vector3(x, terrainHeight(x, z, this.seed) + 0.25, z));
+      }
+      const ring = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), mat);
+      ring.renderOrder = 3;
+      g.add(ring);
+    };
+    for (const h of holes ?? []) addRing(h, holeGuideMat);
+    for (const p of patches ?? []) addRing(p, holePatchGuideMat);
+    this.renderer.scene.add(g);
+    this.holeGuidesGroup = g;
+  }
+
+  /** World yards per screen pixel at a ground point (perspective scale): the
+   *  Grab sculpt brush converts vertical cursor drags into height deltas. */
+  worldPerPixel(x: number, z: number): number {
+    if (!this.renderer) return 0.1;
+    const cam = this.renderer.camera;
+    const h = Math.max(1, this.canvas.clientHeight);
+    const dist = cam.position.distanceTo(this.wppV.set(x, terrainHeight(x, z, this.seed), z));
+    return (2 * Math.tan(THREE.MathUtils.degToRad(cam.fov / 2)) * dist) / h;
+  }
+
+  private wppV = new THREE.Vector3();
+
+  /** The camera's view-plane basis in world space (unit right/up): the Grab
+   *  sculpt maps cursor drags onto this plane so the pulled ground follows
+   *  the drag direction in 3D — sideways slides the grabbed bump across the
+   *  map, up/down on screen pulls it out of / into the ground. */
+  viewPlaneAxes(): {
+    right: { x: number; y: number; z: number };
+    up: { x: number; y: number; z: number };
+  } | null {
+    if (!this.renderer) return null;
+    const e = this.renderer.camera.matrixWorld.elements;
+    return {
+      right: { x: e[0], y: e[1], z: e[2] },
+      up: { x: e[4], y: e[5], z: e[6] },
+    };
+  }
+
+  /** Rock-tool chain guides: blue spheres + dotted connector along every
+   *  rig's laid points (the cave rig look). Pass null to hide. */
+  setRockChainGuide(
+    rigs: readonly { points: readonly { x: number; z: number; dy?: number }[] }[] | null,
+  ): void {
+    if (this.rockChainGroup) {
+      this.renderer?.scene.remove(this.rockChainGroup);
+      this.rockChainGroup.traverse((o) => {
+        if ((o as THREE.Line).isLine) (o as THREE.Line).geometry?.dispose();
+      });
+      this.rockChainGroup = null;
+    }
+    if (!rigs || rigs.length === 0 || !this.renderer) return;
+    const g = new THREE.Group();
+    g.name = 'editor-rock-chain';
+    const lift = 1.2;
+    for (const rig of rigs) {
+      if (rig.points.length === 0) continue;
+      const pts = rig.points.map(
+        (p) => new THREE.Vector3(p.x, terrainHeight(p.x, p.z, this.seed) + (p.dy ?? 0) + lift, p.z),
+      );
+      for (const v of pts) {
+        const dot = new THREE.Mesh(caveRigPointGeo, caveRigPointMat);
+        dot.position.copy(v);
+        dot.renderOrder = 3;
+        g.add(dot);
+      }
+      if (pts.length >= 2) {
+        const line = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), caveRigLineMat);
+        line.computeLineDistances();
+        line.renderOrder = 3;
+        g.add(line);
+      }
+    }
+    this.renderer.scene.add(g);
+    this.rockChainGroup = g;
   }
 
   setShowBoundaryWalls(on: boolean): void {
@@ -1362,6 +1846,113 @@ export class Editor3DViewport {
     }
   }
 
+  // ---- hitbox edit overlay -----------------------------------------------------
+
+  /** Feed (or clear) the hitbox-edit overlay: the edited placement's boxes as
+   *  pickable translucent volumes, selected ones highlighted. */
+  setHitboxEdit(
+    state: { index: number; boxes: readonly MapHitbox[]; selected: number[] } | null,
+  ): void {
+    this.hitboxEditState = state;
+    this.rebuildHitboxOverlay();
+  }
+
+  private rebuildHitboxOverlay(): void {
+    if (this.hitboxGroup) {
+      this.renderer?.scene.remove(this.hitboxGroup);
+      this.hitboxGroup = null;
+    }
+    const st = this.hitboxEditState;
+    if (!st || !this.renderer) return;
+    const p = this.map.placements[st.index];
+    if (!p) return;
+    const group = new THREE.Group();
+    group.name = 'editor-hitbox-edit';
+    const ground = p.detached ? (p.groundY ?? 0) : terrainHeight(p.x, p.z, this.seed);
+    group.position.set(p.x, ground + (p.y ?? 0), p.z);
+    group.rotation.y = p.rotY;
+    const s = p.scale > 0 ? p.scale : 1;
+    const sx = s * (p.scaleX ?? 1);
+    const sy = s * (p.scaleY ?? 1);
+    const sz = s * (p.scaleZ ?? 1);
+    const selected = new Set(st.selected);
+    for (let i = 0; i < st.boxes.length; i++) {
+      const b = st.boxes[i];
+      const sel = selected.has(i);
+      const mesh = new THREE.Mesh(hitboxUnitGeo, sel ? this.hitboxSelMat : this.hitboxMat);
+      mesh.position.set(b.x * sx, b.y * sy, b.z * sz);
+      mesh.scale.set(
+        Math.max(0.02, b.hx * 2 * sx),
+        Math.max(0.02, b.hy * 2 * sy),
+        Math.max(0.02, b.hz * 2 * sz),
+      );
+      if (b.ry) mesh.rotation.y = b.ry;
+      mesh.renderOrder = 4;
+      mesh.userData.hitboxIndex = i;
+      const edges = new THREE.LineSegments(hitboxUnitEdges, sel ? hitboxEdgeSelMat : hitboxEdgeMat);
+      edges.renderOrder = 5;
+      mesh.add(edges);
+      group.add(mesh);
+    }
+    group.visible = !this.previewMode;
+    this.hitboxGroup = group;
+    this.renderer.scene.add(group);
+    // Picking can run before the next render frame: bake the matrices now.
+    group.updateMatrixWorld(true);
+  }
+
+  /** The hitbox index under a pointer position (edit mode), or null. */
+  pickHitbox(clientX: number, clientY: number): number | null {
+    if (!this.hitboxGroup || !this.renderer) return null;
+    const rect = this.canvas.getBoundingClientRect();
+    this.pickNdc.set(
+      ((clientX - rect.left) / Math.max(1, rect.width)) * 2 - 1,
+      -((clientY - rect.top) / Math.max(1, rect.height)) * 2 + 1,
+    );
+    this.picker.setFromCamera(this.pickNdc, this.renderer.camera);
+    const hits = this.picker.intersectObjects(this.hitboxGroup.children, false);
+    for (const h of hits) {
+      const idx = h.object.userData?.hitboxIndex;
+      if (typeof idx === 'number') return idx;
+    }
+    return null;
+  }
+
+  /** World-space centroid of the SELECTED hitboxes (the gizmo anchor). */
+  private hitboxSelectionOrigin(
+    p: AssetPlacement,
+    st: { boxes: readonly MapHitbox[]; selected: number[] },
+  ): THREE.Vector3 {
+    const s = p.scale > 0 ? p.scale : 1;
+    const sx = s * (p.scaleX ?? 1);
+    const sy = s * (p.scaleY ?? 1);
+    const sz = s * (p.scaleZ ?? 1);
+    let mx = 0;
+    let my = 0;
+    let mz = 0;
+    let n = 0;
+    for (const i of st.selected) {
+      const b = st.boxes[i];
+      if (!b) continue;
+      mx += b.x * sx;
+      my += b.y * sy;
+      mz += b.z * sz;
+      n++;
+    }
+    if (n > 0) {
+      mx /= n;
+      my /= n;
+      mz /= n;
+    }
+    // Model -> world (three.js Y-rotation convention).
+    const cos = Math.cos(p.rotY);
+    const sin = Math.sin(p.rotY);
+    const wx = mx * cos + mz * sin;
+    const wz = -mx * sin + mz * cos;
+    const ground = p.detached ? (p.groundY ?? 0) : terrainHeight(p.x, p.z, this.seed);
+    return this.gizmoOriginV.set(p.x + wx, ground + (p.y ?? 0) + my, p.z + wz);
+  }
+
   // ---- transform gizmo ---------------------------------------------------------
 
   /** Per-frame gizmo pose: at the selection's anchor, camera-distance sized,
@@ -1376,7 +1967,25 @@ export class Editor3DViewport {
       g.hide();
       return;
     }
-    const kind = colliderKindFor(p.assetId);
+    // Hitbox edit mode: the gizmo anchors the SELECTED hitboxes instead of the
+    // placement (yaw-only rotation; per-axis + uniform scale).
+    const hb = this.hitboxEditState;
+    if (hb && hb.index === idx && hb.selected.length > 0) {
+      const origin = this.hitboxSelectionOrigin(p, hb);
+      const dist = this.renderer.camera.position.distanceTo(origin);
+      g.show(
+        { mode, moveY: true, rotateXZ: false, scaleAxes: ['x', 'y', 'z'] },
+        origin,
+        Math.min(40, Math.max(1.2, dist * 0.14)),
+      );
+      return;
+    }
+    if (hb && hb.index === idx) {
+      // Edit mode with nothing selected: no gizmo (clicking picks boxes).
+      g.hide();
+      return;
+    }
+    const kind = this.overlayKindFor(p.assetId);
     const config: GizmoConfig = {
       mode,
       // The Y move arrow lifts ANY placement off its seat: ordinary assets and
@@ -1398,8 +2007,10 @@ export class Editor3DViewport {
     const ground = p.detached ? (p.groundY ?? 0) : terrainHeight(p.x, p.z, this.seed);
     // A plane's Y handle rides its floor offset (sizeY); every other kind (assets
     // + box/sphere/wall) rides the shared vertical offset, so the gizmo tracks the
-    // lifted object instead of staying pinned to the ground.
-    const y = kind === 'plane' ? ground + (p.sizeY ?? 0) : ground + (p.y ?? 0);
+    // lifted object instead of staying pinned to the ground. Cave rig nodes are
+    // plane-kind pads whose Y IS the vertical offset — track the node.
+    const caveNode = (p.assetId ?? '').startsWith('cave/');
+    const y = kind === 'plane' && !caveNode ? ground + (p.sizeY ?? 0) : ground + (p.y ?? 0);
     return this.gizmoOriginV.set(p.x, y + 0.05, p.z);
   }
 
@@ -1486,8 +2097,12 @@ export class Editor3DViewport {
     const idx = this.selectedIndex;
     const p = idx !== null ? this.map.placements[idx] : undefined;
     if (!mode || !p || !this.renderer) return false;
-    const kind = colliderKindFor(p.assetId);
-    const origin = this.gizmoOriginFor(p, kind).clone();
+    const hb = this.hitboxEditState;
+    const hitbox = !!hb && hb.index === idx && hb.selected.length > 0;
+    const kind = hitbox ? null : this.overlayKindFor(p.assetId);
+    const origin = (
+      hitbox && hb ? this.hitboxSelectionOrigin(p, hb) : this.gizmoOriginFor(p, kind)
+    ).clone();
     let plane: THREE.Plane;
     if (mode === 'rotate') {
       // Rotation reads the cursor's angle in the ring's own plane.
@@ -1508,7 +2123,16 @@ export class Editor3DViewport {
     }
     const hit = this.planeHit(clientX, clientY, plane);
     if (!hit) return false;
-    this.gizmoDrag = { axis, mode, kind, start: { ...p }, origin, plane, startHit: hit.clone() };
+    this.gizmoDrag = {
+      axis,
+      mode,
+      kind,
+      start: { ...p },
+      origin,
+      plane,
+      startHit: hit.clone(),
+      hitbox,
+    };
     this.dragMode = 'gizmo';
     return true;
   }
@@ -1522,12 +2146,50 @@ export class Editor3DViewport {
     if (!hit) return;
     const clamp = (v: number, lo: number, hi: number): number => Math.max(lo, Math.min(hi, v));
     const round2 = (v: number): number => Math.round(v * 100) / 100;
+    // Hitbox edit drags stream raw world-space deltas from gesture start; the
+    // app owns the model-space math and the commit.
+    if (d.hitbox) {
+      let hbChange: GizmoHitboxChange | null = null;
+      if (d.mode === 'move') {
+        if (d.axis === 'y') {
+          hbChange = { dy: hit.y - d.startHit.y };
+        } else {
+          const dx = hit.x - d.startHit.x;
+          const dz = hit.z - d.startHit.z;
+          if (d.axis === 'x') hbChange = { dx };
+          else if (d.axis === 'z') hbChange = { dz };
+          else hbChange = { dx, dz };
+        }
+      } else if (d.mode === 'rotate') {
+        const v0 = d.startHit.clone().sub(d.origin);
+        const v1 = hit.clone().sub(d.origin);
+        if (v1.lengthSq() < 1e-4) return;
+        hbChange = { dRotY: Math.atan2(v1.x, v1.z) - Math.atan2(v0.x, v0.z) };
+      } else if (d.axis === 'uniform') {
+        const r0 = Math.max(0.2, d.startHit.distanceTo(d.origin));
+        hbChange = { ratio: clamp(hit.distanceTo(d.origin) / r0, 0.02, 50), axis: 'uniform' };
+      } else {
+        const dir = gizmoAxisDir(d.axis as 'x' | 'y' | 'z');
+        const along0 = Math.abs(d.startHit.clone().sub(d.origin).dot(dir));
+        const along1 = Math.abs(hit.clone().sub(d.origin).dot(dir));
+        hbChange = {
+          ratio: clamp(along1 / Math.max(0.05, along0), 0.02, 50),
+          axis: d.axis as 'x' | 'y' | 'z',
+        };
+      }
+      if (hbChange) this.hooks.onHitboxGizmoChange(hbChange);
+      return;
+    }
     let change: GizmoPlacementChange | null = null;
     if (d.mode === 'move') {
       if (d.axis === 'y') {
         const dy = hit.y - d.startHit.y;
+        // Cave rig nodes ride the plane-kind pick pad for XZ grabbing, but
+        // their Y arrow must move the NODE itself (placement.y drives the
+        // cave floor height there) — never the pad's sizeY.
+        const caveNode = (d.start.assetId ?? '').startsWith('cave/');
         change =
-          d.kind === 'plane'
+          d.kind === 'plane' && !caveNode
             ? {
                 sizeY: round2(
                   clamp((d.start.sizeY ?? 0) + dy, MIN_COLLIDER_SIZE_Y, MAX_COLLIDER_SIZE_Y),
@@ -1619,7 +2281,47 @@ export class Editor3DViewport {
   private colliderVolumeAt(index: number): ColliderVolume | null {
     const p = this.map.placements[index];
     if (!p || p.hidden) return null;
+    // Fluid pools ride the collider-overlay machinery as plane-like pads so
+    // they pick and gizmo exactly like floor planes (footprint sizeX/sizeZ,
+    // surface offset sizeY); their real look is the renderer's fluid surface.
+    const fluid = fluidVolumeFromPlacement(p);
+    if (fluid) {
+      return {
+        kind: 'plane',
+        x: fluid.x,
+        z: fluid.z,
+        rotY: fluid.rotY,
+        sizeX: fluid.halfX * 2,
+        sizeY: fluid.offsetY,
+        sizeZ: fluid.halfZ * 2,
+      };
+    }
+    // Cave/rock rig markers: a small pick pad so the Move/Scale gizmos can
+    // grab EVERY node (entrance, exit, and the blue waypoints), not just the
+    // mouths — moving or scaling one live-regenerates its bore/ridge.
+    if (
+      p.assetId === 'cave/entrance' ||
+      p.assetId === 'cave/exit' ||
+      p.assetId === 'cave/point' ||
+      p.assetId === 'rock/point'
+    ) {
+      return { kind: 'plane', x: p.x, z: p.z, rotY: 0, sizeX: 3.5, sizeY: 0.2, sizeZ: 3.5 };
+    }
     return colliderVolumeFromPlacement({ ...p, collide: true });
+  }
+
+  /** The gizmo-behavior kind for a placement: collider kinds as themselves,
+   *  fluid pools as planes, ordinary assets as null. */
+  private overlayKindFor(assetId: string): ColliderVolumeKind | null {
+    if (
+      assetId === 'cave/entrance' ||
+      assetId === 'cave/exit' ||
+      assetId === 'cave/point' ||
+      assetId === 'rock/point'
+    ) {
+      return 'plane';
+    }
+    return colliderKindFor(assetId) ?? (isFluidAssetId(assetId) ? 'plane' : null);
   }
 
   /** Full overlay rebuild from this.map.placements (add/remove/undo/load). */
@@ -1642,13 +2344,94 @@ export class Editor3DViewport {
     group.visible = !this.collidersUserHidden;
     this.collidersGroup = group;
     this.renderer.scene.add(group);
+    this.refreshFluidsIfNeeded();
+  }
+
+  /**
+   * Preview mode (topbar toggle): the map as it looks in-game. Hides every
+   * editor-only overlay — collider boxes, blockers, music areas, location
+   * rects, markers, spawn ring, cave guides, light bulbs, selection rings,
+   * the gizmo. Point lights keep SHINING (they exist in-game); only their
+   * bulb badges hide. Enforced per frame in loop() because refresh* rebuilds
+   * recreate several of these groups visible.
+   */
+  setPreviewMode(on: boolean): void {
+    if (this.previewMode === on) return;
+    this.previewMode = on;
+    if (on) {
+      this.applyPreviewHide();
+      this.renderer?.placedAssets.setSelected(null);
+      this.renderer?.placedAssets.showFootprints(false);
+    } else {
+      // Restore: state-driven visibility comes back; rebuilt groups are
+      // visible by default, the rest re-derive from their own flags.
+      for (const g of this.previewHiddenTargets()) if (g) g.visible = true;
+      if (this.lightsGroup) for (const c of this.lightsGroup.children) c.visible = true;
+      if (this.collidersGroup) this.collidersGroup.visible = !this.collidersUserHidden;
+      if (this.locationsGroup) this.locationsGroup.visible = !this.locationsUserHidden;
+      this.renderer?.placedAssets.setSelected(this.selectedIndex);
+      this.refreshMultiSelection();
+    }
+  }
+
+  getPreviewMode(): boolean {
+    return this.previewMode;
+  }
+
+  /** Every whole-group overlay preview mode hides (light bulbs are per-child). */
+  private previewHiddenTargets(): (THREE.Object3D | null)[] {
+    return [
+      this.spawnRing,
+      this.blockersGroup,
+      this.blockerPreviewMesh,
+      this.collidersGroup,
+      this.locationsGroup,
+      this.markersGroup,
+      this.musicGroup,
+      this.soundsGroup,
+      this.caveGuidesGroup,
+      this.holeGuidesGroup,
+      this.zonePreviewMesh,
+      this.multiSelGroup,
+      this.rockChainGroup,
+      this.hitboxGroup,
+      this.gizmo?.group ?? null,
+    ];
+  }
+
+  private applyPreviewHide(): void {
+    for (const g of this.previewHiddenTargets()) if (g) g.visible = false;
+    // Bulb badges and range rings hide; the THREE.PointLight children keep
+    // illuminating exactly like the in-game build of this map.
+    if (this.lightsGroup) {
+      for (const c of this.lightsGroup.children) {
+        c.visible = (c as THREE.Light).isLight === true;
+      }
+    }
   }
 
   /** Show/hide the green collider overlays without rebuilding them (Collider
    *  tab toggle). Playtest collision is unaffected; this is editor chrome. */
   setCollidersHidden(hidden: boolean): void {
     this.collidersUserHidden = hidden;
-    if (this.collidersGroup) this.collidersGroup.visible = !hidden;
+    if (this.collidersGroup) this.collidersGroup.visible = !hidden && !this.previewMode;
+  }
+
+  /** Show/hide the blue named-location area boxes without rebuilding them (Zone
+   *  tool toggle). Editor chrome only; the locations themselves are unchanged. */
+  setLocationsHidden(hidden: boolean): void {
+    this.locationsUserHidden = hidden;
+    if (this.locationsGroup) this.locationsGroup.visible = !hidden && !this.previewMode;
+  }
+
+  /** Live-refresh the fluid pool surfaces when a fluid placement changed. */
+  private refreshFluidsIfNeeded(index?: number): void {
+    if (!this.renderer) return;
+    if (index !== undefined) {
+      const p = this.map.placements[index];
+      if (!p || !isFluidAssetId(p.assetId)) return;
+    }
+    this.renderer.rebuildFluids(fluidVolumesFromPlacements(this.map.placements));
   }
 
   /** Refresh ONE overlay mesh after a live transform/size edit at `index`. */
@@ -1770,7 +2553,10 @@ export class Editor3DViewport {
     if (this.hiddenPlacements) {
       this.hiddenPlacements = false;
       this.renderer.placedAssets.rebuildAll(
-        placementsToRenderAssets(this.map.placements, { hideHidden: true }),
+        placementsToRenderAssets(this.map.placements, {
+          hideHidden: true,
+          meshCollision: this.map.assetCollisionMesh,
+        }),
       );
       this.renderer.placedAssets.setSelected(this.selectedIndex);
       this.hiddenColliders = true;
@@ -1833,6 +2619,8 @@ export class Editor3DViewport {
     this.collidersGroup = null;
     this.colliderMeshes.clear();
     this.multiSelGroup = null;
+    this.hitboxGroup = null;
+    this.hitboxEditState = null;
     this.gizmo?.dispose();
     this.gizmo = null;
     this.gizmoDrag = null;
@@ -1865,6 +2653,9 @@ export class Editor3DViewport {
     }
     this.renderer.editorCam = this.cam.pose();
     this.syncGizmo();
+    // Preview mode re-hides overlays each frame: refreshAuthoredOverlays and
+    // friends rebuild their groups visible, so a one-shot hide would leak.
+    if (this.previewMode) this.applyPreviewHide();
     // Wireframe applies to freshly added/rebuilt meshes too, so re-run each frame
     // while on, plus once more after it turns off to reset shared materials.
     if (this.wireframe || this.wireframeWasOn) {
@@ -2037,6 +2828,11 @@ export class Editor3DViewport {
       // AFTER the physical button release: without this gate the brush "fires
       // again" at the release point. buttons === 0 means the press is over.
       if (ev.buttons === 0) return;
+      // The stroke spacing gate is in WORLD yards, so zoomed out the couple of
+      // pixels of jitter inside a plain click can clear it and double-stamp
+      // the press point at release. A move only strokes once it is a real
+      // drag; the press already stamped via onEditStart.
+      if (this.dragDist <= TAP_SLOP_PX) return;
       const w = this.surfaceAt(ev.clientX, ev.clientY);
       if (w) this.hooks.onEditMove(w, ev);
     } else if (this.dragMode === 'gizmo') {
@@ -2095,9 +2891,18 @@ export class Editor3DViewport {
 
   private onPointerUp = (ev: PointerEvent): void => {
     if (this.dragMode === 'marquee') {
-      this.hooks.onBoxSelect(this.placementsInMarquee());
+      // A Ctrl+click that never became a real drag is an ADDITIVE tap
+      // (Ctrl/Shift+click toggle alike), not an empty marquee clearing the
+      // selection.
+      const tap = this.dragDist <= TAP_SLOP_PX;
+      const indices = tap ? null : this.placementsInMarquee();
       this.marquee = null;
       this.updateMarqueeEl();
+      if (indices === null) {
+        this.hooks.onTap(ev.clientX, ev.clientY, this.surfaceAt(ev.clientX, ev.clientY), true);
+      } else {
+        this.hooks.onBoxSelect(indices);
+      }
     } else if (this.dragMode === 'gizmo') {
       this.gizmoDrag = null;
       this.hooks.onGizmoEnd();

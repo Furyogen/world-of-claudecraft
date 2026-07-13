@@ -1,6 +1,6 @@
-import { ABILITIES } from '../sim/data';
 import type { TalentChoiceOption, TalentEffect, TalentNode } from '../sim/content/talents';
-import { iconDataUrl, type IconKind } from './icons';
+import { ABILITIES } from '../sim/data';
+import { type IconKind, iconDataUrl } from './icons';
 
 export interface TalentIconRef {
   kind: Extract<IconKind, 'ability' | 'crest'>;
@@ -24,14 +24,18 @@ const TALENT_STAT_CREST: Record<string, string> = {
   haste: 'talent_haste',
 };
 
-export function talentEffectIconRef(effect: TalentEffect | undefined, kind: TalentNode['kind'] | 'choice'): TalentIconRef {
+export function talentEffectIconRef(
+  effect: TalentEffect | undefined,
+  kind: TalentNode['kind'] | 'choice',
+): TalentIconRef {
   const abilityId = effect?.grant?.ability ?? effect?.ability?.[0]?.ability;
   if (abilityId && ABILITIES[abilityId]) return { kind: 'ability', id: abilityId };
 
   const stat = effect?.stats ? Object.keys(effect.stats)[0] : undefined;
   if (stat) return { kind: 'crest', id: TALENT_STAT_CREST[stat] ?? 'talent_generic' };
 
-  if (effect?.global) return { kind: 'crest', id: effect.global.threatPct ? 'talent_armor' : 'talent_crit' };
+  if (effect?.global)
+    return { kind: 'crest', id: effect.global.threatPct ? 'talent_armor' : 'talent_crit' };
   return { kind: 'crest', id: kind === 'choice' ? 'talent_choice' : 'talent_generic' };
 }
 

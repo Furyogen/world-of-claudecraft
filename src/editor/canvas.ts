@@ -2,9 +2,10 @@
 // roads and draws them; it owns no editing state. All hit-testing and math live in
 // view.ts, so this stays a pure render pass over the current model.
 
-import type { BiomePaint, BlockerDef, HeightStamp } from '../sim/types';
+import type { BiomePaint, BlockerDef, CaveDef, HeightStamp, TerrainHole } from '../sim/types';
 import type { AssetPlacement } from './custom_map';
 import type { EditorEntity, EntityKind } from './model';
+import { adjustedSwatchColor } from './swatch_color';
 import type { Camera, Vec2, Viewport } from './view';
 
 // 2D overlay colours per biome id, matching world.ts BIOME_BY_ID order
@@ -44,6 +45,9 @@ export interface DrawState {
   selectedKey: string | null;
   hoverKey: string | null;
   terrainEdits: readonly HeightStamp[];
+  caves: readonly CaveDef[];
+  holes: readonly TerrainHole[];
+  holePatches: readonly TerrainHole[];
   placements: readonly AssetPlacement[];
   biomePaint: BiomePaint | null;
   blockers: readonly BlockerDef[];
@@ -67,6 +71,9 @@ export function draw(
   drawGrid(ctx, cam, vp);
   if (state.biomePaint) drawBiomePaint(ctx, cam, vp, state.biomePaint);
   drawTerrainEdits(ctx, cam, vp, state.terrainEdits);
+  if (state.caves.length > 0) drawCaves(ctx, cam, vp, state.caves);
+  if (state.holes.length > 0) drawHoles(ctx, cam, vp, state.holes);
+  if (state.holePatches.length > 0) drawHolePatches(ctx, cam, vp, state.holePatches);
   drawRoads(ctx, cam, vp, state.roads);
 
   // Filled areas (lakes, hub) first so point markers sit on top of them.
@@ -124,10 +131,11 @@ function drawBiomePaint(
 ): void {
   const sizePx = bp.cell * cam.pxPerYard;
   if (sizePx < 0.5) return;
-  // Custom swatch colors (maker palette additions) by painted id.
+  // Custom swatch colors (maker palette additions) by painted id, with any
+  // hue/light adjust applied so the overlay tracks the adjusted texture.
   const customFill = new Map<number, string>();
   for (const sw of bp.custom ?? []) {
-    const c = sw.color;
+    const c = adjustedSwatchColor(sw);
     customFill.set(sw.id, `rgba(${(c >> 16) & 0xff},${(c >> 8) & 0xff},${c & 0xff},0.4)`);
   }
   ctx.save();
@@ -256,6 +264,80 @@ function drawTerrainEdits(
     const sprite = e.delta >= 0 ? editSprites.raise : editSprites.lower;
     const rr = Math.max(1, r);
     ctx.drawImage(sprite, c.sx - rr, c.sy - rr, rr * 2, rr * 2);
+  }
+  ctx.restore();
+}
+
+function drawCaves(
+  ctx: CanvasRenderingContext2D,
+  cam: Camera,
+  vp: Viewport,
+  caves: readonly CaveDef[],
+): void {
+  ctx.save();
+  for (const cave of caves) {
+    if (cave.nodes.length === 0) continue;
+    // Bore footprint: a wide translucent stroke along the centerline.
+    ctx.beginPath();
+    for (let i = 0; i < cave.nodes.length; i++) {
+      const c = cam.worldToScreen(cave.nodes[i], vp);
+      if (i === 0) ctx.moveTo(c.sx, c.sy);
+      else ctx.lineTo(c.sx, c.sy);
+    }
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = 'rgba(150,110,70,0.35)';
+    ctx.lineWidth = Math.max(2, cave.nodes[0].radius * 2 * cam.pxPerYard);
+    ctx.stroke();
+    // Centerline on top so a thin zoomed-out cave still reads.
+    ctx.strokeStyle = 'rgba(230,190,130,0.8)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function drawHoles(
+  ctx: CanvasRenderingContext2D,
+  cam: Camera,
+  vp: Viewport,
+  holes: readonly TerrainHole[],
+): void {
+  ctx.save();
+  for (const h of holes) {
+    const c = cam.worldToScreen(h, vp);
+    const r = h.radius * cam.pxPerYard;
+    if (c.sx + r < 0 || c.sx - r > vp.width || c.sy + r < 0 || c.sy - r > vp.height) continue;
+    // Cutout: a dark disc (the missing ground) with a cyan rim.
+    ctx.beginPath();
+    ctx.arc(c.sx, c.sy, r, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(5,8,12,0.72)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(73,228,255,0.85)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function drawHolePatches(
+  ctx: CanvasRenderingContext2D,
+  cam: Camera,
+  vp: Viewport,
+  patches: readonly TerrainHole[],
+): void {
+  ctx.save();
+  ctx.setLineDash([4, 3]);
+  for (const p of patches) {
+    const c = cam.worldToScreen(p, vp);
+    const r = p.radius * cam.pxPerYard;
+    if (c.sx + r < 0 || c.sx - r > vp.width || c.sy + r < 0 || c.sy - r > vp.height) continue;
+    // Restored ground: a green dashed ring over whatever the holes cut.
+    ctx.beginPath();
+    ctx.arc(c.sx, c.sy, r, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(84,224,122,0.85)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
   }
   ctx.restore();
 }

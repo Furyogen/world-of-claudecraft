@@ -24,29 +24,64 @@ let nowT = 0;
 function installAudioStub(): void {
   sources.length = 0;
   nowT += 1000; // monotonic across tests so the singleton's cooldown map never blocks
-  const param = () => ({ value: 0, setValueAtTime() {}, linearRampToValueAtTime() {}, setTargetAtTime() {} });
+  const param = () => ({
+    value: 0,
+    setValueAtTime() {},
+    linearRampToValueAtTime() {},
+    setTargetAtTime() {},
+  });
   class FakeCtx {
-    get currentTime() { return nowT; }
+    get currentTime() {
+      return nowT;
+    }
     destination = {};
     listener = {} as Record<string, unknown>;
-    createGain() { return { gain: param(), connect(n: unknown) { return n; }, disconnect() {} }; }
+    createGain() {
+      return {
+        gain: param(),
+        connect(n: unknown) {
+          return n;
+        },
+        disconnect() {},
+      };
+    }
     createPanner() {
       return {
-        panningModel: '', distanceModel: '', refDistance: 0, maxDistance: 0, rolloffFactor: 0,
-        setPosition() {}, connect(n: unknown) { return n; }, disconnect() {},
+        panningModel: '',
+        distanceModel: '',
+        refDistance: 0,
+        maxDistance: 0,
+        rolloffFactor: 0,
+        setPosition() {},
+        connect(n: unknown) {
+          return n;
+        },
+        disconnect() {},
       };
     }
     createBufferSource(): FakeSource {
       const s: FakeSource = {
-        buffer: null, playbackRate: { value: 1 }, onended: null, started: false, stopAt: null,
-        connect(n: unknown) { return n; },
-        start() { this.started = true; },
-        stop(t?: number) { this.stopAt = t ?? 0; },
+        buffer: null,
+        playbackRate: { value: 1 },
+        onended: null,
+        started: false,
+        stopAt: null,
+        connect(n: unknown) {
+          return n;
+        },
+        start() {
+          this.started = true;
+        },
+        stop(t?: number) {
+          this.stopAt = t ?? 0;
+        },
       };
       sources.push(s);
       return s;
     }
-    resume() { return Promise.resolve(); }
+    resume() {
+      return Promise.resolve();
+    }
   }
   (globalThis as never as { AudioContext: unknown }).AudioContext = FakeCtx;
 }
@@ -92,7 +127,7 @@ describe('footstep toggle', () => {
   it('is a no-op when footsteps are disabled', () => {
     sfx.setFootstepsEnabled(false);
     const before = sources.length;
-    sfx.footstep(0, 0, 0, 'grass', true, true);  // self
+    sfx.footstep(0, 0, 0, 'grass', true, true); // self
     sfx.footstep(5, 0, 5, 'grass', false, false); // another entity
     expect(sources.length).toBe(before);
   });

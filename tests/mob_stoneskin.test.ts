@@ -4,9 +4,9 @@
 // interval after the fight begins — resets on evade/respawn, and reuses the
 // existing `absorb` aura, which dealDamage already soaks before any HP is lost.
 import { describe, expect, it } from 'vitest';
-import { Sim } from '../src/sim/sim';
 import { MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
+import { Sim } from '../src/sim/sim';
 import type { Entity } from '../src/sim/types';
 
 function makeSim() {

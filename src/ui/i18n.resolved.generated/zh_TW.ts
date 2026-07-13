@@ -2050,6 +2050,8 @@ export const zh_TW: EnTranslations = {
       "view3dTitle": "在渲染後的世界中編輯",
       "view2d": "2D",
       "view2dTitle": "在俯視示意圖上編輯",
+      "preview": "Preview",
+      "previewTitle": "See the map as it looks in-game: hides editor-only overlays (collider boxes, music areas, markers, rings, gizmos)",
       "undoCount": "復原：{count}",
       "undoCountTitle": "可復原 {count} 步（Ctrl+Z 復原，Ctrl+Y 重做）",
       "autosave": "自動儲存",
@@ -2085,6 +2087,87 @@ export const zh_TW: EnTranslations = {
       "music": "Play music",
       "close": "Close"
     },
+    "fluid": {
+      "title": "Fluid Pool",
+      "hint": "Pick a fluid and click the ground to place a pool. Use the transform tools to move it, stretch its footprint, and slide the surface down into a dip.",
+      "selHint": "The gizmo scales the pool footprint (X/Z) and the Y arrow slides the surface height. Damage ticks once per second on anyone in the fluid.",
+      "kind": {
+        "lava": "Lava",
+        "acid": "Acid",
+        "spectral": "Spectral Fluid",
+        "water": "Still Water"
+      },
+      "hue": "Hue",
+      "light": "Lightness",
+      "dps": "Damage per second",
+      "surfaceOffset": "Surface height",
+      "fxBubbles": "Bubbles",
+      "fxSmoke": "Smoke",
+      "fxHaze": "Haze",
+      "fxLight": "Glow light",
+      "resetPreset": "Reset to preset"
+    },
+    "tunnel": {
+      "needExit": "Entrance placed. Keep clicking to lay the path (the last point is the exit), then hit Generate.",
+      "generate": "Generate cave ({count} ready)",
+      "tooShort": "The rig points are too close together - spread them at least a few yards apart.",
+      "modeDig": "Dig cave",
+      "modeHole": "Cut hole",
+      "modePatch": "Patch hole",
+      "holeHint": "Click the ground to punch a round hole straight through the terrain mesh (brush radius wide). The ground simply stops existing there - line a cave mouth up underneath and you can walk or drop in. Resize or delete any hole below; undo removes the last one.",
+      "holeList": "Holes",
+      "holeLabel": "Hole {n}",
+      "holeRadius": "Radius",
+      "holeDelete": "Delete hole",
+      "patchHint": "Click the ground to lay a patch (brush radius wide) that FILLS the ground back in wherever hole cuts overlap it - use it to trim the blank parts around each cut. A patch always beats the holes it touches. Resize or delete any patch below; undo removes the last one.",
+      "patchList": "Patches",
+      "patchLabel": "Patch {n}",
+      "patchDelete": "Delete patch",
+      "listTitle": "Caves",
+      "caveLabel": "Cave {n} ({nodes} points)",
+      "width": "Width",
+      "height": "Interior height",
+      "variance": "Variance",
+      "floorVariance": "Floor bumps",
+      "stalactites": "Stalactites",
+      "stalagmites": "Stalagmites",
+      "spikeSize": "Formation size",
+      "startOpen": "Entrance open",
+      "endOpen": "Exit open",
+      "selectCave": "Select whole cave",
+      "noRig": "This cave has no rig nodes to grab - lay a new cave instead.",
+      "reverse": "Swap entrance/exit",
+      "delete": "Delete cave",
+      "texture": "Interior texture",
+      "texDefault": "Granite (default)",
+      "guideHint": "Blue nodes joined by a dotted line are your cave model (visible in every tool). Move a node with the Move tool, raise or sink it with the Y arrow, and scale it to widen the cave there - the tube re-generates live and ALWAYS keeps exactly the size you set. Green ball = entrance, red arrow = exit.",
+      "hint": "Click the ground to drop the ENTRANCE node, keep clicking to lay blue waypoints (the last one is the exit), then press Generate. The cave is a standalone tube built only from your nodes - the surrounding terrain never squishes or reshapes it. Use Cut hole mode to open the ground, then Select whole cave + the Move tool to slide the tube into place so its mouth lines up with the hole."
+    },
+    "rock": {
+      "title": "Rock Generator",
+      "hint": "Click the ground to grow a procedural boulder there. The sliders below shape the NEXT rock; select a placed rock with the Select tool to reshape it live. Use the gizmo to stretch rocks into slabs and cliff plates.",
+      "chainMode": "Bridge / ridge mode",
+      "chainHint": "Click to lay blue points; Generate lofts ONE merged solid body through them (spanning dips in a straight line) plus walkable tops, so the chain works as a bridge or ridge. The points stay after Generate: move or scale one with the gizmos and the body follows.",
+      "chainCount": "{count} points laid",
+      "generateChain": "Generate rock ridge",
+      "clearChain": "Clear points",
+      "chainTooShort": "Lay at least two points first.",
+      "size": "Size",
+      "noise": "Noise amount",
+      "detail": "Feature detail",
+      "sharp": "Sharpness",
+      "height": "Height",
+      "depth": "Embed depth",
+      "jag": "Jaggedness",
+      "texture": "Texture",
+      "baseTex": "Base texture",
+      "texStone": "Stone",
+      "texSandstone": "Sandstone",
+      "texBare": "Bare (tintable)",
+      "reroll": "Re-roll shape",
+      "selTitle": "Generated Rock",
+      "walkable": "Walkable top"
+    },
     "tool": {
       "listLabel": "編輯器工具",
       "keyHint": "{name}（{key}）",
@@ -2096,6 +2179,9 @@ export const zh_TW: EnTranslations = {
       "lower": "下壓",
       "smooth": "平滑",
       "flatten": "壓平",
+      "tunnel": "Caves",
+      "rock": "Rock Gen",
+      "fluid": "Fluid Pool",
       "paint": "繪製生態",
       "water": "水面",
       "place": "放置資源",
@@ -2107,6 +2193,7 @@ export const zh_TW: EnTranslations = {
       "zone": "Zone",
       "light": "Point Light",
       "music": "Music",
+      "sound": "Point Sound",
       "region": "區域",
       "erase": "擦除"
     },
@@ -2147,13 +2234,17 @@ export const zh_TW: EnTranslations = {
       "cave": "洞穴",
       "erase": "擦除繪製",
       "hint": "繪製的格子會覆蓋區域生態，改變地形形狀與顏色。",
-      "addSwatch": "Add",
-      "swatchColor": "New swatch color",
-      "swatchNamePlaceholder": "Swatch name (optional)",
+      "hue": "Hue",
+      "light": "Light/Dark",
+      "saveSwatch": "Save tint as swatch",
+      "saveSwatchTitle": "Keep this hue/light version as its own swatch, so the tint can be reused after the sliders move on",
+      "swatchSaved": "Saved swatch \"{name}\".",
       "customHint": "Custom swatches color the ground only (terrain shape keeps the zone biome) and save with the map.",
       "customFull": "Swatch limit reached ({max}).",
       "importTexture": "Import texture swatch",
       "importTextureTitle": "Pick an image file: painting with the new swatch tiles it over the ground (stored in this browser; other machines see its average color)",
+      "builtinGroup": "Texture library",
+      "builtinTitle": "Built-in ground textures that ship with the editor: picking one adds it to this map as a swatch (available on every machine)",
       "tileSize": "Texture tile size (yd)",
       "importTextureFailed": "Could not read that image.",
       "clear": "清除全部生態繪製",
@@ -2182,7 +2273,8 @@ export const zh_TW: EnTranslations = {
       "hint": "Drag a box on the ground, then name it: standing inside shows that name as the location in playtest.",
       "namePrompt": "Location name",
       "none": "No named locations yet.",
-      "deleteTitle": "Remove this location"
+      "deleteTitle": "Remove this location",
+      "hideBoxes": "Hide area boxes"
     },
     "lightTool": {
       "title": "Point Lights",
@@ -2196,6 +2288,19 @@ export const zh_TW: EnTranslations = {
       "capReached": "Light limit reached ({max}).",
       "lightN": "Light {num}",
       "selectTitle": "Select this light in the world (bulb badge enlarges; Delete removes it)"
+    },
+    "soundTool": {
+      "title": "Point Sounds",
+      "hint": "Click the ground to drop a looping sound emitter, then pick a clip and set its max volume and radius. The falloff sphere shows how far it carries; it plays spatially in playtest.",
+      "none": "No point sounds yet.",
+      "clip": "Sound effect",
+      "volume": "Max volume",
+      "radius": "Radius (yd)",
+      "height": "Height (yd)",
+      "deleteTitle": "Remove this sound",
+      "capReached": "Point sound limit reached ({max}).",
+      "soundN": "Sound {num}",
+      "selectTitle": "Select this sound in the world (badge enlarges; Delete removes it)"
     },
     "markerTool": {
       "title": "AI Markers",
@@ -2222,6 +2327,8 @@ export const zh_TW: EnTranslations = {
     "sculpt": {
       "hint": "Drag to raise the ground; tick the box to carve downward instead.",
       "lower": "Lower instead of raise",
+      "grab": "Grab / pull (snake hook)",
+      "grabHint": "Press to grab the ground under the brush, then drag and the terrain follows your cursor in any direction - up lifts it, down shoves it in, sideways slides it across the map, like pulling clay. One grab is one undo step. Brush size sets how wide a chunk you pull.",
       "shiftHint": "Hold Shift while dragging to do the opposite (raise becomes lower, and back).",
       "autoTex": "Auto texture by angle",
       "autoTexHint": "Each stroke repaints the sculpted area by ground angle: one texture below the threshold, another above it (instant cliffs).",
@@ -2241,6 +2348,10 @@ export const zh_TW: EnTranslations = {
       "level": "水面高度",
       "hint": "設定全圖水面高度，範圍 {min} 到 {max} 碼。",
       "reset": "重設為內建高度",
+      "tintTitle": "Water tint",
+      "hue": "Hue",
+      "light": "Lightness",
+      "tintReset": "Reset tint",
       "waterfallTitle": "Waterfalls",
       "placeWaterfall": "Place waterfall",
       "placeWaterfallTitle": "Arm the Place tool with an animated waterfall (click a cliff to drop it)",
@@ -2354,7 +2465,49 @@ export const zh_TW: EnTranslations = {
       "radiusAuto": "自動",
       "radiusAutoTitle": "將碰撞半徑重設為跟隨資源縮放",
       "radiusHint": "「自動」依資源縮放推導碰撞半徑；拖曳滑桿可覆寫它。",
+      "collisionBaked": "Blocking with the baked model shape ({count} boxes hugging the mesh). Drag the radius slider to override with a simple circle; Auto restores the baked shape.",
+      "collisionCustom": "Custom footprint (circle/square) - overrides the baked model shape. Press Auto to restore it.",
       "footprints": "顯示碰撞範圍",
+      "collisionTitle": "Collision",
+      "collisionType": "Collision type",
+      "collisionTypeBaked": "Baked hitboxes",
+      "collisionTypeBasic": "Basic (radius)",
+      "collisionTypeMesh": "True collision (heavy)",
+      "collisionTypeNone": "No collision",
+      "collisionEdited": "Custom hitboxes ({count} boxes). The sim blocks with exactly these.",
+      "hitboxEdit": "Edit hitboxes",
+      "hitboxDone": "Done editing",
+      "hitboxAdd": "Add hitbox",
+      "hitboxDelete": "Delete selected",
+      "hitboxReset": "Reset to baked",
+      "hitboxSelected": "{count} hitboxes selected",
+      "hitboxHint": "Click a hitbox to select it; Ctrl/Shift+click selects several. Use the Move, Rotate, and Scale tools (or the gizmo) to shape them like any other object. Delete removes the selected boxes; Esc leaves edit mode.",
+      "hitboxCap": "Hitbox limit reached ({max} per asset).",
+      "hitboxSavePreset": "Save as preset",
+      "hitboxClearPreset": "Clear saved preset",
+      "hitboxPresetSaved": "Hitbox preset saved for {name}. New placements copy these boxes.",
+      "hitboxPresetCleared": "Hitbox preset cleared.",
+      "hitboxPresetHint": "Presets live on this device: every future placement of this asset spawns with the saved hitboxes.",
+      "meshBaking": "Baking true collision from the model mesh...",
+      "meshBakeDone": "True collision ready ({count} boxes).",
+      "meshBakeFailed": "Could not bake true collision for this asset.",
+      "meshReady": "True collision active: a dense box set hugging the real model mesh.",
+      "meshHint": "True collision rebuilds the hitboxes from the actual model mesh (many small boxes). Expensive - keep it for edge cases; it bakes once per asset when selected.",
+      "collisionCopyAll": "Copy collision to all {name} ({count})",
+      "collisionCopyAllHint": "Gives every other {name} on the map the same collision type and shape, sized to each copy so a small one never gets a giant footprint.",
+      "collisionCopyConfirmTitle": "Copy collision to all {name}?",
+      "collisionCopyConfirmBody": "All {count} other {name} on the map take this collision type and shape, each sized to its own scale (a small copy gets a small footprint, never this one), replacing their own. Ctrl+Z reverts the whole copy.",
+      "collisionCopyConfirm": "Copy to all",
+      "collisionCopied": "Copied collision to {count} {name}.",
+      "scaleAllTitle": "Scale all copies",
+      "scaleMin": "Scale min",
+      "scaleMax": "Scale max",
+      "scaleAllButton": "Scale all {name} ({count})",
+      "scaleAllHint": "Rolls a random scale between min and max onto every copy of this asset (set min and max equal for a uniform scale).",
+      "scaleAllConfirmTitle": "Scale all {name}?",
+      "scaleAllConfirmBody": "Every one of the {count} {name} on the map (this one included) gets a random scale between {min} and {max}, replacing its current scale. Ctrl+Z reverts it.",
+      "scaleAllConfirm": "Scale all",
+      "scaleAllDone": "Scaled {count} {name}.",
       "duplicate": "再複製一份",
       "delete": "刪除",
       "deleteHint": "刪除會移除選取項目；Ctrl+Z 可復原。",
@@ -2495,6 +2648,8 @@ export const zh_TW: EnTranslations = {
       "draftRestored": "已還原自動儲存的草稿。",
       "autosaveFailed": "自動儲存失敗（瀏覽器儲存空間已滿或被封鎖）。請匯出地圖以保留備份。",
       "terrainCapReached": "已達到地形編輯上限（{max}）。多餘的雕刻印記未被加入。",
+      "caveCapReached": "Cave limit reached ({max}). Delete or undo a cave first.",
+      "holeCapReached": "Hole limit reached ({max}). Delete or undo a hole first.",
       "placementCapReached": "已達到放置上限（{max}）。多餘的資源未被加入。",
       "blockerCapReached": "已達到空氣牆上限（{max}）。新牆未被加入。",
       "autosaveOff": "自動儲存已關閉：{reason} 請手動儲存後再重新開啟。"
@@ -6011,6 +6166,132 @@ export const zh_TW: EnTranslations = {
       "sunpetal_sickle": {
         "name": "陽瓣鐮刀"
       },
+      "ashen_psalter": {
+        "name": "灰燼詩篇"
+      },
+      "brimming_waterskin": {
+        "name": "滿溢水囊"
+      },
+      "cactus_pressed_water": {
+        "name": "仙人掌榨水"
+      },
+      "caravan_guard_mail": {
+        "name": "商隊衛士鎖甲"
+      },
+      "caravan_manifest": {
+        "name": "水漬貨單"
+      },
+      "cinder_soaked_veil": {
+        "name": "浸燼面紗"
+      },
+      "crown_brazier": {
+        "name": "王冠火盆"
+      },
+      "crown_guard_seal": {
+        "name": "王冠衛隊之印"
+      },
+      "duneblade_token": {
+        "name": "沙丘之刃令牌"
+      },
+      "duneforged_warblade": {
+        "name": "沙丘鍛造戰刃"
+      },
+      "dunewatch_sash": {
+        "name": "沙丘守望腰帶"
+      },
+      "duskmane_pelt": {
+        "name": "暮鬃獸皮"
+      },
+      "emberbound_leggings": {
+        "name": "縛燼護腿"
+      },
+      "emberglass_scepter": {
+        "name": "燼玻權杖"
+      },
+      "emberveil_writ": {
+        "name": "燼紗教令"
+      },
+      "glasscarab_shell": {
+        "name": "玻璃甲蟲殼"
+      },
+      "glasscut_dirk": {
+        "name": "玻璃裂谷匕首"
+      },
+      "heart_of_the_first_ember": {
+        "name": "初燼之心"
+      },
+      "heartspring_offering": {
+        "name": "心泉供碗"
+      },
+      "kareshs_last_skin": {
+        "name": "卡雷什的最後水囊"
+      },
+      "lastwell_datewine": {
+        "name": "最後之井椰棗酒"
+      },
+      "living_cinder": {
+        "name": "活燼"
+      },
+      "moltenheart_girdle": {
+        "name": "熔心束帶"
+      },
+      "moltenheart_slagcore": {
+        "name": "熔心渣核"
+      },
+      "mural_rubbing": {
+        "name": "壁畫拓片"
+      },
+      "parched_kings_goblet": {
+        "name": "焦渴之王的酒杯"
+      },
+      "prowler_fang": {
+        "name": "潛行獸獠牙"
+      },
+      "sentinel_core_stone": {
+        "name": "哨衛核心石"
+      },
+      "springheart_blessing": {
+        "name": "心泉祝福"
+      },
+      "stolen_waterskin": {
+        "name": "失竊水囊"
+      },
+      "sunbaked_flatbread": {
+        "name": "日烤薄餅"
+      },
+      "sunbleached_bone": {
+        "name": "日曬白骨"
+      },
+      "sunbleached_staff": {
+        "name": "日曬法杖"
+      },
+      "sunglass_shard": {
+        "name": "陽玻碎片"
+      },
+      "sunspeakers_ash_crown": {
+        "name": "太陽代言人的灰燼之冠"
+      },
+      "vestment_of_the_sunken_crown": {
+        "name": "沉沒王冠法衣"
+      },
+      "vigil_obelisk_dawn": {
+        "name": "晨火印記"
+      },
+      "vigil_obelisk_dusk": {
+        "name": "暮火印記"
+      },
+      "vigil_obelisk_noon": {
+        "name": "午火印記"
+      },
+      "wastes_relic_cache": {
+        "name": "太陽王庭遺物箱"
+      },
+      "wastewalker_jerkin": {
+        "name": "荒原行者皮甲"
+      },
+      "wastewalker_treads": {
+        "name": "荒原行者之靴"
+      },
       "bristleback_maul": {
         "name": "加洛格拉斯戰錘"
       },
@@ -6811,6 +7092,48 @@ export const zh_TW: EnTranslations = {
       "thunzharr_stormling": {
         "name": "被驚醒的風暴元素"
       },
+      "duskmane_prowler": {
+        "name": "暮鬃潛行獸"
+      },
+      "glasscarab": {
+        "name": "玻璃甲蟲"
+      },
+      "duneblade_marauder": {
+        "name": "沙丘之刃掠奪者"
+      },
+      "karesh_the_parched": {
+        "name": "焦渴者卡雷什"
+      },
+      "vigil_sentinel": {
+        "name": "守夜哨衛"
+      },
+      "sunbaked_revenant": {
+        "name": "日炙亡魂"
+      },
+      "ashen_courtier": {
+        "name": "灰燼朝臣"
+      },
+      "sunspeaker_atharis": {
+        "name": "太陽代言人亞薩里斯"
+      },
+      "emberveil_zealot": {
+        "name": "燼紗狂熱者"
+      },
+      "emberveil_pyromancer": {
+        "name": "燼紗炎術師"
+      },
+      "cinder_elemental": {
+        "name": "燼火元素"
+      },
+      "moltenheart_colossus": {
+        "name": "熔心巨像"
+      },
+      "cinder_wisp": {
+        "name": "燼火精魂"
+      },
+      "ember_of_korzul": {
+        "name": "初燼"
+      },
       "ironvein_foreman": {
         "name": "鐵脈工頭"
       },
@@ -7040,6 +7363,66 @@ export const zh_TW: EnTranslations = {
         "name": "靈魂醫者",
         "title": "亡者的守護者",
         "greeting": "安息吧，靈魂。我可以讓你重返軀體，但歸途會讓你變得虛弱。"
+      },
+      "caravan_master_saffa": {
+        "name": "商隊長莎法",
+        "title": "最後之井守護者",
+        "greeting": "朋友，在這裡，水是唯一的錢幣。高望派我們來，是要把它花在刀口上——而這片荒原，一心想讓我們破產。"
+      },
+      "scout_maren_wastes": {
+        "name": "瑪倫斥候",
+        "title": "元帥的斥候",
+        "greeting": "我在泥沼追過爛泥，在荊峰踏過積雪。沙子更難纏——你走過的每一步，沙都記得。"
+      },
+      "loremaster_caddis_wastes": {
+        "name": "凱迪斯博學者",
+        "title": "沉沒王冠學者",
+        "greeting": "札爾凱斯在一夜之間傾覆，{playerName}——整個王國話說到一半，就被熔成了玻璃。我等了一輩子，就想聽聽那句話的下文。"
+      },
+      "brother_aldric_wastes": {
+        "name": "奧德里克修士",
+        "title": "山谷牧師",
+        "greeting": "墓龍的熱氣連這裡都滲得到，{playerName}——隔著靴底我都能感覺到。不管邪教在那片玻璃裡挖什麼，都絕不能讓他們帶回家。"
+      },
+      "old_haruk": {
+        "name": "老哈魯克",
+        "title": "心泉守望者",
+        "greeting": "早在這道泉需要人看守之前，我家就世世代代照料著它。九位國王飲過它的水。第十位，想把它「整個」喝乾。"
+      },
+      "provisioner_ashka": {
+        "name": "補給官艾什卡",
+        "title": "商隊補給官",
+        "greeting": "薄餅、椰棗酒，還有沒泡過屍體的清水。全荒原最上等的貨。"
+      },
+      "forgemaster_derin": {
+        "name": "鍛造大師德林",
+        "title": "商隊鐵匠",
+        "greeting": "爐子裡是沙，淬火桶裡是沙，牙縫裡也是沙。憋著這股怨氣，打出來的刀反而更利。"
+      },
+      "auctioneer_zeph": {
+        "name": "拍賣師澤夫",
+        "title": "世界市場守護者",
+        "greeting": "朋友，世界市場連最後之井都到得了。金幣不管在哪片沙漠，秤起來都一樣重。"
+      },
+      "wellwatch_hana": {
+        "name": "井衛哈娜",
+        "title": "商隊護衛",
+        "greeting": "帶著水進來，帶著水出去。這中間的一切，都歸我管。"
+      },
+      "wellwatch_toma": {
+        "name": "井衛托馬",
+        "title": "商隊護衛",
+        "greeting": "今天值班很平靜。不過在這裡，「平靜」只代表沙子嚼得比較慢。"
+      },
+      "drover_pell": {
+        "name": "趕騾人佩爾",
+        "title": "趕騾人",
+        "greeting": "騾子先喝水，這是商隊的規矩。你要是想跟騾子講道理，請便。"
+      },
+      "dowser_emrys": {
+        "name": "尋水師艾姆里斯",
+        "title": "尋水人",
+        "greeting": "我的探水杖只在瀑布那裡彎成兩折，方圓四十哩再無別處。這片土地與墳場之間，只隔著一道泉水。"
       },
       "tidewatcher_ondrel": {
         "name": "翁德瑞爾·韋恩",
@@ -7827,6 +8210,239 @@ export const zh_TW: EnTranslations = {
         "objectives": {
           "0": {
             "label": "擊敗莫格"
+          }
+        }
+      },
+      "q_sw_arrival": {
+        "title": "最後之井",
+        "text": "歡迎來到地圖的盡頭，{playerName}。高望把這趟遠行稱作「南方遠征」；在我看來，不過是四十條人命和一道泉水。所以其他事都往後排——先顧水。到營地北邊的心泉水潭打滿四袋水回來，讓我知道通往瀑布的那條線走得安穩。",
+        "completion": "水又冰又清，你身上也沒插著箭——這是最後之井這一季聽過最好的消息。",
+        "objectives": {
+          "0": {
+            "label": "滿溢水囊"
+          }
+        }
+      },
+      "q_sw_prowlers": {
+        "title": "暮色之牙",
+        "text": "暮鬃獸已經聽熟了我們水車的聲響，{playerName}。每到黃昏牠們就逼近一步，昨晚更有一頭連著挽具把一匹騾子拖走了。去營地南邊的骨風平原削減獸群，帶八張獸皮回來，證明這一課牠們記住了。",
+        "completion": "八張獸皮，圍欄邊就少了八道影子。騾子總算能睡了——比我睡得還多。",
+        "objectives": {
+          "0": {
+            "label": "擊敗暮鬃潛行獸"
+          },
+          "1": {
+            "label": "暮鬃獸皮"
+          }
+        }
+      },
+      "q_sw_carrion_glass": {
+        "title": "食腐的玻璃",
+        "text": "趕騾人管牠們叫玻璃甲蟲——獵犬那麼大的甲蟲，殼是熔成的玻璃，正從東邊的焦地裡成群湧出。德林賭咒說，用那種殼開出來的刃口比任何磨刀石都利。敲碎八隻甲蟲，帶六枚完整的殼回來；當心殼上的亮光，那表示牠們正在硬化。",
+        "completion": "你看這刃口的光！德林這輩子都欠我一次磨刀，而東邊的路，也欠你一趟安靜的通行。",
+        "objectives": {
+          "0": {
+            "label": "擊敗玻璃甲蟲"
+          },
+          "1": {
+            "label": "玻璃甲蟲殼"
+          }
+        }
+      },
+      "q_sw_lost_caravan": {
+        "title": "沙丘留下的東西",
+        "text": "有三輛貨車始終沒抵達井邊，{playerName}——糧食、工具，領頭那輛還是我妹夫在趕。風暴把它們吹散在西南邊的沙丘裡。找到殘骸，仔細搜一搜。我需要貨單，才知道我們損失了什麼……我也需要知道，有沒有人活著走了出去。",
+        "completion": "靴印是「離開」殘骸的——然後就只剩掠奪者的足跡了。他們把車夫活捉了。那要嘛是慈悲，要嘛是算計，而在這裡，我很清楚該賭哪一個。",
+        "objectives": {
+          "0": {
+            "label": "搜查損毀的貨車"
+          }
+        }
+      },
+      "q_sw_marauders": {
+        "title": "水稅",
+        "text": "沙丘之刃管這叫「收稅」：見面就收，要水或要血。他們在沙丘西南的窪地紮了營，圍著搶來的火堆，喝著搶來的水囊。去擊潰他們，{playerName}。放倒十名掠奪者，再帶五個水囊回來——那些皮囊裡裝的，是我們族人的性命。",
+        "completion": "你帶回的每一個水囊，都代表這口井邊有人能多活一天。沙丘之刃會記住向我們收稅的代價。",
+        "objectives": {
+          "0": {
+            "label": "擊敗沙丘之刃掠奪者"
+          },
+          "1": {
+            "label": "失竊水囊"
+          }
+        }
+      },
+      "q_sw_karesh": {
+        "title": "焦渴之王",
+        "text": "他們的頭目自稱「焦渴者卡雷什」——他喝乾了自己的蓄水池，還在殘渣裡撒鹽，免得對手跟著沾光。一個對自家水井都下得了這種手的人，對我們的井只會更狠。他在西邊山脊下的卡雷什窪地稱王。終結他的統治，{playerName}，再把他囤著的最後一個水囊帶回來。",
+        "completion": "原來這就是焦渴之王的最後一囊水。莎法會把它倒回井裡——一滴不留，這是原則。",
+        "objectives": {
+          "0": {
+            "label": "擊敗焦渴者卡雷什"
+          },
+          "1": {
+            "label": "卡雷什的最後水囊"
+          }
+        }
+      },
+      "q_sw_survey": {
+        "title": "中斷的句子",
+        "text": "既然井邊暫時用不著你——就陪我走一趟歷史吧，{playerName}。太陽王庭留下了壁畫：一幅在水道脊下方，一幅在平頂山山腳，一幅在綠洲廢墟的雙塔旁。三幅都拓下來。札爾凱斯死在句子的中途，而我打算把剩下的半句讀完。",
+        "completion": "就是這裡——句子接上了：「當王冠燙得再也戴不住，諸王便登上平頂山，把火焰『歸還』。」那是一場棄絕之禮，藉方尖碑行之——先晨、後午、再暮。順序很重要，{playerName}。儀式向來講究順序。",
+        "objectives": {
+          "0": {
+            "label": "拓下壁畫"
+          }
+        }
+      },
+      "q_sw_vigil_dawn": {
+        "title": "守夜臺：黎明",
+        "text": "營地西邊那座平頂山，正是守夜臺本身——諸王行棄絕之禮的路。黎明方尖碑立在第一層臺地上，是日光最先照到的地方。沿著之字坡爬上去，把手放在碑上。黎明最先甦醒；壁畫對這一點相當堅持。",
+        "completion": "你也感覺到它的嗡鳴了？妙極了。兩個紀元過去，這場儀式竟還蓄著力。黎明已燃——正午在上頭等著。",
+        "objectives": {
+          "0": {
+            "label": "自方尖碑取得晨火印記"
+          }
+        }
+      },
+      "q_sw_vigil_noon": {
+        "title": "守夜臺：正午",
+        "text": "正午加冕於峰頂——第二座方尖碑立在平頂山的最高處，在那裡，太陽獨佔整片天空。攀登本身就是重點，{playerName}：當年諸王是頂著王冠一步一步走上去的。去喚醒正午方尖碑。",
+        "completion": "先是黎明，再是正午。儀式只剩最後一個時辰——而守夜臺，已經開始注意到我們了。",
+        "objectives": {
+          "0": {
+            "label": "自方尖碑取得午火印記"
+          }
+        }
+      },
+      "q_sw_vigil_dusk": {
+        "title": "守夜臺：黃昏",
+        "text": "黃昏總是最後赴約——它的方尖碑立在西側的山嘴上，俯瞰峽谷。但你得明白這場儀式的本質，{playerName}：棄絕，必須有人「見證」。王庭以活生生的山石立了一尊哨衛作見證者；黃昏一旦點燃，它便會甦醒，審視你究竟是棄絕，還是純粹奪取。去說服它。徹底地說服。",
+        "completion": "哨衛判定你配得上——或者判定你殺不死，對一塊石頭來說，這兩者是同一個結論。守夜之禮已成，札爾凱斯的每一扇門，如今都成了值得一問的問題。",
+        "objectives": {
+          "0": {
+            "label": "喚醒黃昏方尖碑"
+          },
+          "1": {
+            "label": "擊敗守夜哨衛"
+          }
+        }
+      },
+      "q_sw_revenants": {
+        "title": "亡者的崗哨",
+        "text": "札爾凱斯的士兵從沒得知戰爭已敗——更沒得知它敗得有多「快」。他們在瀑布北邊的外城廢墟裡巡邏，盔甲熔進了骨頭，攔住旅人索問早已無人記得的口令。送十二個去安息吧，{playerName}，並收集他們的衛隊印記；有了印記，我們才能通行到城市更深處。",
+        "completion": "每一枚印記都還帶著餘溫——忠誠到最後一刻，甚至更久。維繫他們崗哨的東西還在更裡面，而現在，我們的官階比它大了。",
+        "objectives": {
+          "0": {
+            "label": "擊敗日炙亡魂"
+          },
+          "1": {
+            "label": "王冠衛隊之印"
+          }
+        }
+      },
+      "q_sw_courtiers": {
+        "title": "灰燼王庭",
+        "text": "再往深處走，王庭本身仍在開議——內侍與誦經士守著一位死去國王的禮制，對著一座熔渣王座誦讀詩篇。他們的詩篇集裡記著聖所的禮拜儀文，而儀文裡藏著點燃王冠火盆的儀式。去打散這場朝會，{playerName}，帶一本書頁完整的詩篇集回來。",
+        "completion": "噢，這可是精妙的手筆——整套火盆儀式，以一位已故領唱人的筆跡記譜。他們對著一座空王座整整唱了兩百年。我幾乎要憐憫他們了。幾乎。",
+        "objectives": {
+          "0": {
+            "label": "擊敗灰燼朝臣"
+          },
+          "1": {
+            "label": "灰燼詩篇"
+          }
+        }
+      },
+      "q_sw_braziers": {
+        "title": "王冠燃起",
+        "text": "詩篇集點名了塔樓之間的三座王冠火盆——三座齊燃，內聖所便會自行開啟，一如歷代加冕之時。我把儀文用粉筆抄在你的護手上了，{playerName}，盡量別流汗。先說清楚：點亮的王冠，就是看得見的王冠。第三簇火焰燃起的那一刻，城裡的一切都會知道。",
+        "completion": "我們在井邊看著塔樓一座接一座亮起——莎法哭了，而我承認，這回我沒對任何人說教。聖所已敞開。而裡面有什麼，正在應和著歌唱。",
+        "objectives": {
+          "0": {
+            "label": "點燃王冠火盆"
+          }
+        }
+      },
+      "q_sw_sunspeaker": {
+        "title": "第十次加冕",
+        "text": "聖所裡的那個聲音，是太陽代言人亞薩里斯——札爾凱斯九位國王皆由他加冕。詩篇稱他為王庭活著的記憶，而他花了兩個紀元籌備第十次加冕：為火焰本身加冕。他就站在雙塔之間的太陽王座前。廢黜他，{playerName}，趕在他完成一場全沙漠都會後悔的儀式之前。",
+        "completion": "九頂王冠，他親手戴上九道眉間；而第十頂，得燒掉整個世界才戴得下。史書將記載：是你宣布札爾凱斯的王庭休會。我會親自確保史書一字不差地這麼寫。",
+        "objectives": {
+          "0": {
+            "label": "廢黜太陽代言人亞薩里斯"
+          }
+        }
+      },
+      "q_sw_emberveil": {
+        "title": "燼紗教",
+        "text": "你也看到東側山緣那些蒙紗的營地了，{playerName}。他們是龍教——一支分裂出來的教派，名為燼紗教，趁高望緊盯聖所大門時翻過了山口。母教高歌喚醒墓龍，這一支卻在挖掘，要「武裝」牠。他們的狂熱者和炎術師正把整片玻璃地翻過來找什麼東西。趕在他們找到之前，削減他們的人手。",
+        "completion": "那片玻璃地裡少了十六把鏟子。但挖掘聲日夜不歇——他們已經不是在找了，{playerName}。他們是在往外挖。",
+        "objectives": {
+          "0": {
+            "label": "擊敗燼紗狂熱者"
+          },
+          "1": {
+            "label": "擊敗燼紗炎術師"
+          }
+        }
+      },
+      "q_sw_writs": {
+        "title": "面紗下的教令",
+        "text": "他們的頭目身上帶著教令——以母教密文寫成的命令。我在高望破譯過那套密文，在這裡我也能再破一次。給我帶五份燼紗教令回來，{playerName}，我們就能一字不差地讀出他們被派來取什麼。",
+        "completion": "果然不出我所懼。「尋回『初燼』——太陽諸王自吾主之火竊走並鎖縛的那塊碎片。將它送往聖所之門；封印無法抵禦它自身的火焰。」他們打算用墓龍自己被竊的火，把墓龍的門燒開，{playerName}。",
+        "objectives": {
+          "0": {
+            "label": "燼紗教令"
+          }
+        }
+      },
+      "q_sw_glasscut": {
+        "title": "天空燃燒之地",
+        "text": "玻璃裂谷正是初燼墜落之處——就在它毀滅札爾凱斯的那一夜。那裡的地面至今灼熱，燼火元素在其上遊走，像一簇簇始終沒有落地的火星。初燼正在甦醒，{playerName}；邪教越挖越近，它的火星就越發張狂。驅散八隻元素，帶五枚活燼回來。我必須掂量掂量，我們面對的是怎樣一團火。",
+        "completion": "泡在受祝福的鹽裡，它們竟還在扭動……這是龍焰，如今再無可疑。初燼不是遺物，{playerName}。它是「殘軀」——科祖爾脾性中活生生的一塊，而且它還記得自己曾被當作王冠佩戴。",
+        "objectives": {
+          "0": {
+            "label": "擊敗燼火元素"
+          },
+          "1": {
+            "label": "活燼"
+          }
+        }
+      },
+      "q_sw_offering": {
+        "title": "泉水記得",
+        "text": "牧師要去直面那團火，你也要同去。那就先聽一句守井人的智慧吧，{playerName}：心泉自墓龍囚牢的正下方湧起，而從一件東西底下流過的水，最了解那件東西。帶著我的供碗到瀑布頂端的水潭，倒下清水，然後傾聽。這道泉曾經淹熄過這團火一次。出發去求火燒身之前，先讓泉水祝福你。",
+        "completion": "你也聽見了——深處的水，在世界底下流動。把那個聲音當鎧甲穿上吧，{playerName}。火焰喧囂，但泉水先於它存在，也將在它之後長流。",
+        "objectives": {
+          "0": {
+            "label": "在心泉獻上供品"
+          }
+        }
+      },
+      "q_sw_first_ember": {
+        "title": "初燼",
+        "text": "它出土了，{playerName}。邪教的坑洞在黎明時分塌開，玻璃裂谷從內裡亮了起來——初燼就站在它兩個紀元前砸出的坑中，披著火焰如同君王的冠服，燼紗教徒一排排向它下跪。一旦它抵達聖所之門，高望流過的每一滴血都將化為灰燼。你身上帶著泉水的祝福與守夜臺的見證。下到玻璃裡去，替札爾凱斯把那句話說完：火焰，「歸還」。",
+        "completion": "它熄滅的那一刻，瀑布的水又急又亮——那是泉水，把宿敵收回了水底。你做到了九位國王做不到的事，{playerName}：你把火還了回去。坐吧，喝口水。今晚的水最甜。",
+        "objectives": {
+          "0": {
+            "label": "熄滅初燼"
+          }
+        }
+      },
+      "q_sw_afterglow": {
+        "title": "活人的水",
+        "text": "哈魯克說，泉水如今唱的調子低了一度，像一筆還清的債。燼紗教非灰即逃，王庭已然休會，我的帳本上終於是水多過憂。最後一件事，{playerName}——在營地裡走一圈，讓瑪倫、凱迪斯和奧德里克修士好好向你道個謝。這是他們掙來的機會，也是你掙來的。",
+        "completion": "那麼一切都結束了，最後之井也終於只是……一口井。若我這個老商隊頭子說了算，它會是一條活路上眾多水井中的第一口。灼熱荒原會記住你的名字，{playerName}——水記得一切。",
+        "objectives": {
+          "0": {
+            "label": "與瑪倫斥候交談"
+          },
+          "1": {
+            "label": "與凱迪斯博學者交談"
+          },
+          "2": {
+            "label": "與奧德里克修士交談"
           }
         }
       },

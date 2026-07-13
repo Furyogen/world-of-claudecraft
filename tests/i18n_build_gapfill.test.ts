@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { en, es, es_ES, en_CA } from "../src/ui/i18n.resolved.generated";
+import { describe, expect, it } from 'vitest';
+import { en, en_CA, es, es_ES } from '../src/ui/i18n.resolved.generated';
 
 // Build gap-fill semantics, asserted on the GENERATED resolved table
 // (the per-locale slices under src/ui/i18n.resolved.generated/). scripts/i18n_build.mjs overlays each locale
@@ -12,16 +12,16 @@ import { en, es, es_ES, en_CA } from "../src/ui/i18n.resolved.generated";
 
 function get(obj: unknown, dotted: string): unknown {
   return dotted
-    .split(".")
+    .split('.')
     .reduce<unknown>(
-      (o, k) => (o && typeof o === "object" ? (o as Record<string, unknown>)[k] : undefined),
+      (o, k) => (o && typeof o === 'object' ? (o as Record<string, unknown>)[k] : undefined),
       obj,
     );
 }
 
 // Collect every leaf path (recurse objects AND arrays; a non-object value is a leaf).
-function leafPaths(obj: unknown, prefix = "", out: string[] = []): string[] {
-  if (obj && typeof obj === "object") {
+function leafPaths(obj: unknown, prefix = '', out: string[] = []): string[] {
+  if (obj && typeof obj === 'object') {
     for (const k of Object.keys(obj as Record<string, unknown>)) {
       leafPaths((obj as Record<string, unknown>)[k], prefix ? `${prefix}.${k}` : k, out);
     }
@@ -31,26 +31,26 @@ function leafPaths(obj: unknown, prefix = "", out: string[] = []): string[] {
   return out;
 }
 
-describe("i18n build gap-fill (fill-from-English / preserve-present)", () => {
-  it("fills a leaf omitted by a sparse overlay from the English value", () => {
+describe('i18n build gap-fill (fill-from-English / preserve-present)', () => {
+  it('fills a leaf omitted by a sparse overlay from the English value', () => {
     // en_CA is a 3-key divergence-only overlay; nav.home is omitted, so the build
     // fills it from en.
-    expect(get(en_CA, "nav.home")).toBe(get(en, "nav.home"));
-    expect(get(en_CA, "nav.home")).toBe("Home");
+    expect(get(en_CA, 'nav.home')).toBe(get(en, 'nav.home'));
+    expect(get(en_CA, 'nav.home')).toBe('Home');
   });
 
-  it("preserves a present translated leaf rather than overwriting it with English", () => {
+  it('preserves a present translated leaf rather than overwriting it with English', () => {
     // es is a dense locale; its real translation must survive the overlay-onto-en merge.
-    expect(get(es, "nav.home")).toBe("Inicio");
-    expect(get(es, "nav.home")).not.toBe(get(en, "nav.home"));
+    expect(get(es, 'nav.home')).toBe('Inicio');
+    expect(get(es, 'nav.home')).not.toBe(get(en, 'nav.home'));
   });
 
-  it("preserves a present divergent override over the English base value", () => {
-    expect(get(en_CA, "classDetails.labels.armor")).toBe("Armour");
-    expect(get(en, "classDetails.labels.armor")).toBe("Armor");
+  it('preserves a present divergent override over the English base value', () => {
+    expect(get(en_CA, 'classDetails.labels.armor')).toBe('Armour');
+    expect(get(en, 'classDetails.labels.armor')).toBe('Armor');
   });
 
-  it("emits a dense table: a sparse overlay resolves to the full English leaf set (no gaps)", () => {
+  it('emits a dense table: a sparse overlay resolves to the full English leaf set (no gaps)', () => {
     const enLeaves = leafPaths(en).sort();
     expect(enLeaves.length).toBeGreaterThan(1000);
     // en_CA (3-key overlay) and es_ES (divergence-only overlay) both fill out to the
