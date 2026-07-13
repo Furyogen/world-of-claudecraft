@@ -959,6 +959,19 @@ export const sv_SE: EnTranslations = {
       "promoteLeader": "Befordra till ledare",
       "inviteUsage": "Bjud in vem? Användning: /invite <namn>."
     },
+    "playerMenu": {
+      "info": "Spelarinfo",
+      "block": "Blockera",
+      "unblock": "Avblockera",
+      "openFor": "Öppna spelarmenyn för {name}",
+      "profileUnavailable": "Ingen profil hittades för {name}.",
+      "aiTag": "[AI]",
+      "aiTagTitle": "AI-styrt konto",
+      "watchTwitch": "Titta på Twitch",
+      "watchX": "Visa på X",
+      "watchKick": "Titta på Kick",
+      "watchYouTube": "Titta på YouTube"
+    },
     "lootSettings": {
       "title": "Byteinställningar",
       "close": "Stäng byteinställningar",
@@ -1478,7 +1491,15 @@ export const sv_SE: EnTranslations = {
     },
     "social": {
       "lastSeen": "Senast sedd: {when}",
-      "lastSeenNever": "aldrig"
+      "lastSeenNever": "aldrig",
+      "ignoredTab": "Ignorerade",
+      "blockedTab": "Blockerade",
+      "ignoredEmpty": "Du ignorerar ingen.",
+      "blockedEmpty": "Du har inte blockerat någon.",
+      "blockSearchPlaceholder": "Spelarnamn",
+      "blockAction": "Blockera",
+      "nowBlocking": "{name} blockerad.",
+      "stopBlockingTitle": "Avblockera {name}"
     },
     "gathering": {
       "title": "Insamling",
@@ -7084,15 +7105,6 @@ export const sv_SE: EnTranslations = {
       "scepter_of_the_deathless_court": {
         "name": "Odödliga hovets spira"
       },
-      "deathless_warguard_legmail": {
-        "name": "Odödlig krigsvakts benbrynja"
-      },
-      "soulrend_diadem": {
-        "name": "Själsrivardiadem"
-      },
-      "scourgehide_carapace": {
-        "name": "Gisselhudspansar"
-      },
       "cryptplate_helm": {
         "name": "Kryptplåtshjälm"
       },
@@ -7131,9 +7143,6 @@ export const sv_SE: EnTranslations = {
       },
       "deathless_greatblade": {
         "name": "Odödlig storklinga"
-      },
-      "soulforged_warplate": {
-        "name": "Själssmidd krigsplåt"
       },
       "stormcallers_focus": {
         "name": "Stormkallarens fokus"
@@ -7448,6 +7457,15 @@ export const sv_SE: EnTranslations = {
       },
       "nythraxis_scourge_of_thornpeak": {
         "name": "Nythraxis, Törntoppens gissel"
+      },
+      "nythraxis_heroic_warrior_add": {
+        "name": "Aldren, den odödlige krigsvakten"
+      },
+      "nythraxis_heroic_priest_add": {
+        "name": "Malric, den odödlige hierofanten"
+      },
+      "nythraxis_heroic_rogue_add": {
+        "name": "Voss, den odödliga kniven"
       },
       "reliquary_ledger_wraith": {
         "name": "Liggarvålnad"

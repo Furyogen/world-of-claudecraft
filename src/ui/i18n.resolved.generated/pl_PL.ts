@@ -959,6 +959,19 @@ export const pl_PL: EnTranslations = {
       "promoteLeader": "Mianuj przywódcą",
       "inviteUsage": "Kogo zaprosić? Użycie: /invite <imię>."
     },
+    "playerMenu": {
+      "info": "Informacje o graczu",
+      "block": "Zablokuj",
+      "unblock": "Odblokuj",
+      "openFor": "Otwórz menu gracza {name}",
+      "profileUnavailable": "Nie znaleziono profilu gracza {name}.",
+      "aiTag": "[AI]",
+      "aiTagTitle": "Konto prowadzone przez SI",
+      "watchTwitch": "Oglądaj na Twitchu",
+      "watchX": "Zobacz na X",
+      "watchKick": "Oglądaj na Kicku",
+      "watchYouTube": "Oglądaj na YouTube"
+    },
     "lootSettings": {
       "title": "Ustawienia łupów",
       "close": "Zamknij ustawienia łupów",
@@ -1478,7 +1491,15 @@ export const pl_PL: EnTranslations = {
     },
     "social": {
       "lastSeen": "Ostatnio widziano: {when}",
-      "lastSeenNever": "nigdy"
+      "lastSeenNever": "nigdy",
+      "ignoredTab": "Ignorowani",
+      "blockedTab": "Zablokowani",
+      "ignoredEmpty": "Nikogo nie ignorujesz.",
+      "blockedEmpty": "Nikogo nie zablokowałeś.",
+      "blockSearchPlaceholder": "Nazwa gracza",
+      "blockAction": "Zablokuj",
+      "nowBlocking": "{name} zablokowany.",
+      "stopBlockingTitle": "Odblokuj gracza {name}"
     },
     "gathering": {
       "title": "Zbieractwo",
@@ -7084,15 +7105,6 @@ export const pl_PL: EnTranslations = {
       "scepter_of_the_deathless_court": {
         "name": "Berło nieśmiertelnego dworu"
       },
-      "deathless_warguard_legmail": {
-        "name": "Nieśmiertelne nogawice wojennej straży"
-      },
-      "soulrend_diadem": {
-        "name": "Diadem rozdarcia dusz"
-      },
-      "scourgehide_carapace": {
-        "name": "Pancerz ze skóry plagi"
-      },
       "cryptplate_helm": {
         "name": "Hełm z kryptowej płyty"
       },
@@ -7131,9 +7143,6 @@ export const pl_PL: EnTranslations = {
       },
       "deathless_greatblade": {
         "name": "Nieśmiertelne wielkie ostrze"
-      },
-      "soulforged_warplate": {
-        "name": "Bojowa zbroja kuta z duszy"
       },
       "stormcallers_focus": {
         "name": "Ognisko przyzywacza burz"
@@ -7448,6 +7457,15 @@ export const pl_PL: EnTranslations = {
       },
       "nythraxis_scourge_of_thornpeak": {
         "name": "Nythraxis, Plaga Ciernistego Szczytu"
+      },
+      "nythraxis_heroic_warrior_add": {
+        "name": "Aldren, Nieśmiertelny Strażnik Wojenny"
+      },
+      "nythraxis_heroic_priest_add": {
+        "name": "Malric, Nieśmiertelny Hierofant"
+      },
+      "nythraxis_heroic_rogue_add": {
+        "name": "Voss, Nieśmiertelny Nóż"
       },
       "reliquary_ledger_wraith": {
         "name": "Widmo Ksiąg"

@@ -959,6 +959,19 @@ export const en_CA: EnTranslations = {
       "promoteLeader": "Promote to Leader",
       "inviteUsage": "Invite whom? Usage: /invite <name>."
     },
+    "playerMenu": {
+      "info": "Player Info",
+      "block": "Block",
+      "unblock": "Unblock",
+      "openFor": "Open player menu for {name}",
+      "profileUnavailable": "No profile found for {name}.",
+      "aiTag": "[AI]",
+      "aiTagTitle": "AI-operated account",
+      "watchTwitch": "Watch on Twitch",
+      "watchX": "View on X",
+      "watchKick": "Watch on Kick",
+      "watchYouTube": "Watch on YouTube"
+    },
     "lootSettings": {
       "title": "Loot Settings",
       "close": "Close loot settings",
@@ -1478,7 +1491,15 @@ export const en_CA: EnTranslations = {
     },
     "social": {
       "lastSeen": "Last seen: {when}",
-      "lastSeenNever": "never"
+      "lastSeenNever": "never",
+      "ignoredTab": "Ignored",
+      "blockedTab": "Blocked",
+      "ignoredEmpty": "You are not ignoring anyone.",
+      "blockedEmpty": "You have not blocked anyone.",
+      "blockSearchPlaceholder": "Player name",
+      "blockAction": "Block",
+      "nowBlocking": "Blocked {name}.",
+      "stopBlockingTitle": "Stop blocking {name}"
     },
     "gathering": {
       "title": "Gathering",
@@ -7084,15 +7105,6 @@ export const en_CA: EnTranslations = {
       "scepter_of_the_deathless_court": {
         "name": "Scepter of the Deathless Court"
       },
-      "deathless_warguard_legmail": {
-        "name": "Deathless Warguard Legmail"
-      },
-      "soulrend_diadem": {
-        "name": "Soulrend Diadem"
-      },
-      "scourgehide_carapace": {
-        "name": "Scourgehide Carapace"
-      },
       "cryptplate_helm": {
         "name": "Cryptplate Helm"
       },
@@ -7131,9 +7143,6 @@ export const en_CA: EnTranslations = {
       },
       "deathless_greatblade": {
         "name": "Deathless Greatblade"
-      },
-      "soulforged_warplate": {
-        "name": "Soulforged Warplate"
       },
       "stormcallers_focus": {
         "name": "Stormcaller's Focus"
@@ -7448,6 +7457,15 @@ export const en_CA: EnTranslations = {
       },
       "nythraxis_scourge_of_thornpeak": {
         "name": "Nythraxis, Scourge of Thornpeak"
+      },
+      "nythraxis_heroic_warrior_add": {
+        "name": "Spirit of Aldren"
+      },
+      "nythraxis_heroic_priest_add": {
+        "name": "Spirit of Malric"
+      },
+      "nythraxis_heroic_rogue_add": {
+        "name": "Spirit of Voss"
       },
       "reliquary_ledger_wraith": {
         "name": "Ledger Wraith"
