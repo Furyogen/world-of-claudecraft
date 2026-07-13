@@ -4280,6 +4280,11 @@
   /* The pre-trial tutorial banner: the upcoming trial's teaching line, big
      and centered above mid-screen while the staging/interlude countdown runs
      out (the painter shows it for the last TUTORIAL_LEAD_S seconds). */
+  /* The teaching banner. It WRAPS: the lines are real sentences, not chips, so the
+     box is capped at a readable measure (a long one used to run out to 86vw as a
+     single strip of text across the whole screen). 34ch is the classic prose
+     measure at this size; the vw cap keeps it inside a phone. `balance` evens the
+     ragged edge, which matters when the box is centred. */
   #gauntlet-tutorial {
     position: fixed;
     left: 50%;
@@ -4287,18 +4292,36 @@
     transform: translate(-50%, -50%);
     display: none;
     width: max-content;
-    max-width: 86%;
+    max-width: min(34ch, 86%);
     padding: 10px 24px;
     font: 700 20px / 28px var(--title-font);
     letter-spacing: 0.5px;
     color: var(--color-primary);
     text-align: center;
+    text-wrap: balance;
+    overflow-wrap: break-word;
     text-shadow: 1px 1px 3px #000;
     background: rgba(8, 8, 12, 0.78);
     border: 1px solid var(--border);
     border-radius: 12px;
     pointer-events: none;
     z-index: 6;
+  }
+  /* The in-trial arm of the same banner (Sugarglass Sigils keeps teaching at the
+     lectern until the etcher carves their first stroke). The sigils camera frames
+     the slab dead center, so the caption drops to the foot of the screen, out of
+     the shape it is describing, and shrinks to a caption weight: it is a reminder
+     of the action, not the big pre-trial teach. The action bars are hidden for the
+     whole trial (legs-only), so this band is clear on desktop. */
+  #gauntlet-tutorial.live {
+    top: auto;
+    bottom: 8%;
+    transform: translateX(-50%);
+    max-width: min(44ch, 86%);
+    padding: 8px 16px;
+    font: 600 14px / 20px var(--body-font);
+    letter-spacing: 0;
+    color: var(--color-text-light);
   }
 
   /* The Gauntlet standings board: a compact top-left list of every contestant's
@@ -4806,8 +4829,7 @@
     justify-content: center;
     flex-wrap: wrap;
   }
-  .go-leave,
-  .go-rejoin {
+  .go-leave {
     min-width: 120px;
     min-height: 40px;
   }

@@ -177,7 +177,6 @@ export const ja_JP: EnTranslations = {
         "span": "脆き橋",
         "court": "最終決戦の場"
       },
-      "rejoinQueue": "待機列に再参加",
       "lobbyJoined": "ロビーに {count} 人",
       "lobbyCountdown": "開始まで {seconds} 秒",
       "trialLabel": "試練 {n} / {total}",
@@ -213,7 +212,8 @@ export const ja_JP: EnTranslations = {
       "echoSeconds": "{seconds}s",
       "hint": {
         "sentinel": "青は走れ。赤は止まれ。",
-        "sigils": "マウスを押したまま、石板に刻まれた線をなぞろう。",
+        "sigils": "刻まれた図形をなぞろう。押したまま線に沿ってドラッグし、ぐるりと一周させる。線から外れると石板にひびが入る。",
+        "sigilsLive": "押したまま、刻まれた線に沿ってドラッグしよう。どこから始めてもよい。そのまま線を一周させる。",
         "pull": "円が内側のリングの大きさまで縮んだ瞬間にクリック。",
         "echoWatch": "石が光る順番をよく見よう。",
         "echoAnswer": "同じ順番で石をクリックしよう。",

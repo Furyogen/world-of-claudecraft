@@ -31,6 +31,31 @@ const NOOK_X = 8.5;
 const NOOK_Z = -1.5;
 const LONG_TABLE_Z = 11.5;
 
+// The two seats at a reading table, as offsets from the TABLE CENTRE, authored in
+// the east nook's frame (the west nook mirrors the x). Each sits about 1.5 out:
+// at the table's edge, clear of the top.
+const NOOK_SEATS: { ox: number; oz: number }[] = [
+  { ox: 1.4, oz: 0.6 },
+  { ox: -0.4, oz: -1.5 },
+];
+
+/** The yaw that turns a chair at seat offset (ox, oz) to FACE its table.
+ *
+ * The chair GLB's backrest is a slab on its local +x (measured off the mesh, not
+ * eyeballed), so the model's front looks down its local -x, and a three.js yaw `r`
+ * swings that front onto world (-cos r, sin r). The seat sits at (ox, oz) from the
+ * table centre, so the table lies at (-ox, -oz) from the chair, and the front lands
+ * on it at r = atan2(-oz, ox).
+ *
+ * Deriving the yaw is the whole point of this helper. The seats MIRROR between the
+ * two nooks, and a mirrored seat's facing is not a negated yaw: that identity holds
+ * only for a model whose front runs along +z, which this one does not. Authoring
+ * the mirror by hand is what left the west nook's chairs turned away from their
+ * table while the east nook's merely sat askew. */
+function chairFacingTable(ox: number, oz: number): number {
+  return Math.atan2(-oz, ox);
+}
+
 /** Every collidable set piece in the hub, instance-local. The renderer iterates
  * this list to place the meshes; minigameHubColliders() derives a collider from
  * each, so the placed prop and its collider can never drift apart. */
@@ -47,13 +72,22 @@ export function minigameHubFurniture(): HubFurniture[] {
       rot: a + Math.PI, // back to the wall, shelves toward the centre
     });
   }
-  // Two reading nooks: a round table flanked by two chairs, east and west.
+  // Two reading nooks: a round table flanked by two chairs, east and west. The
+  // seats mirror across the room; each chair's yaw is DERIVED from where it ended
+  // up, so both nooks are drawn in to their own table.
   for (const side of [-1, 1]) {
     const tx = side * NOOK_X;
     const tz = NOOK_Z;
     out.push({ kind: 'tableRound', x: tx, z: tz, rot: 0 });
-    out.push({ kind: 'chair', x: tx + side * 1.4, z: tz + 0.6, rot: -side * Math.PI * 0.4 });
-    out.push({ kind: 'chair', x: tx - side * 0.4, z: tz - 1.5, rot: side * Math.PI * 0.8 });
+    for (const seat of NOOK_SEATS) {
+      const ox = side * seat.ox;
+      out.push({
+        kind: 'chair',
+        x: tx + ox,
+        z: tz + seat.oz,
+        rot: chairFacingTable(ox, seat.oz),
+      });
+    }
   }
   // The long study table behind the heralds.
   out.push({ kind: 'tableLong', x: 0, z: LONG_TABLE_Z, rot: 0 });

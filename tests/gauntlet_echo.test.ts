@@ -105,6 +105,23 @@ describe("the Keeper's Echo: rounds and sequences", () => {
     }
   });
 
+  it('the sequences top out at SIX flashes: three, four, five, six, and no seventh round', () => {
+    const { sim, pid } = reachEcho(23);
+    const lengths: number[] = [];
+    for (let r = 0; r < GAUNTLET.echo.rounds; r++) {
+      lengths.push(echoTrial(sim).players.get(pid)!.seq.length);
+      answerRound(sim, pid);
+    }
+    // Each round grows the sequence by one, and the longest the Keeper ever
+    // deals is six: the ceiling this trial is tuned to (it used to run to seven).
+    expect(lengths).toEqual([3, 4, 5, 6]);
+    // Beating the last one ENDS the duel: no seventh round is ever dealt.
+    const ep = echoTrial(sim).players.get(pid)!;
+    expect(ep.done).toBe(true);
+    expect(ep.round).toBe(GAUNTLET.echo.rounds);
+    expect(ep.seq.length).toBe(6);
+  });
+
   it('taps during the watch phase are ignored', () => {
     const { sim, pid } = reachEcho(3);
     const ep = echoTrial(sim).players.get(pid)!;
@@ -199,7 +216,7 @@ describe("the Keeper's Echo: rounds and sequences", () => {
     const { sim, pid } = reachEcho(8);
     const run = sim.gauntletRuns[0]!;
     const c = run.contestants.find((k) => k.entityId === pid)!;
-    answerRound(sim, pid); // clear exactly one of the five rounds
+    answerRound(sim, pid); // clear exactly one of the rounds
     const start = c.vitality;
     // run out the clock; timeouts along the way cost missDamage each
     for (let i = 0; i < 20 * 150 && sim.gauntletRuns[0]?.phase === 'trial'; i++) sim.tick();

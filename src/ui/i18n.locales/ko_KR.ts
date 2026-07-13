@@ -6264,7 +6264,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gauntlet.trialNames.span': '부서지는 다리',
   'hudChrome.gauntlet.trialNames.court': '최후의 결투장',
   'hudChrome.gauntlet.practiceNote': '봇만 상대하는 즉시 솔로 도전.',
-  'hudChrome.gauntlet.rejoinQueue': '대기열 재참가',
   'hudChrome.gauntlet.lobbyJoined': '대기실에 {count}명',
   'hudChrome.gauntlet.lobbyCountdown': '{seconds}초 후 시작',
   'hudChrome.gauntlet.trialLabel': '시련 {n} / {total}',
@@ -6289,7 +6288,10 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gauntlet.sigilsShattered': '설탕유리가 깨졌다!',
   'hudChrome.gauntlet.echoRound': '라운드 {n} / {total}',
   'hudChrome.gauntlet.hint.sentinel': '초록불에는 달리고, 빨간불에는 멈추세요.',
-  'hudChrome.gauntlet.hint.sigils': '마우스를 누른 채 석판에 새겨진 선을 따라 그리세요.',
+  'hudChrome.gauntlet.hint.sigils':
+    '새겨진 도형을 따라 그리세요. 누른 채로 선을 따라 끌어 한 바퀴 도세요. 선을 벗어나면 석판이 갈라집니다.',
+  'hudChrome.gauntlet.hint.sigilsLive':
+    '누른 채로 새겨진 선을 따라 끌어 보세요. 아무 곳에서나 시작해 선을 따라 한 바퀴 도세요.',
   'hudChrome.gauntlet.hint.pull': '원이 안쪽 고리 크기로 줄어드는 순간 클릭하세요.',
   'hudChrome.gauntlet.hint.echoWatch': '돌이 빛나는 순서를 잘 보세요.',
   'hudChrome.gauntlet.hint.echoAnswer': '같은 순서로 돌을 클릭하세요.',

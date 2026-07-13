@@ -46,7 +46,6 @@ export const hudChromeStrings = {
       span: 'The Brittle Span',
       court: 'The Final Court',
     },
-    rejoinQueue: 'Rejoin the Queue',
     lobbyJoined: '{count} in the lobby',
     lobbyCountdown: 'The run begins in {seconds}s',
     trialLabel: 'Trial {n} of {total}',
@@ -88,12 +87,22 @@ export const hudChromeStrings = {
     sigilsShattered: 'The pane shattered!',
     echoRound: 'Round {n} of {total}',
     echoSeconds: '{seconds}s',
-    // The per-trial teaching line: one short sentence on how the live trial
-    // is played, shown under the meta row only while the viewer can act
-    // (hidden for spectators and finishers).
+    // The per-trial teaching line: how the trial is played, shown while the
+    // viewer can act (hidden for spectators and finishers). Most are the
+    // pre-trial banner only, taught while the countdown to the trial runs.
+    // `sigils` also names its failure rule, because straying off the etched
+    // line is what cracks the pane and nothing at the lectern says so, and
+    // `sigilsLive` repeats the action at the slab itself: it holds while the
+    // etcher is live and has carved nothing yet (see liveHintFor), so it is
+    // there for a first-timer staring at a bare shape and gone the moment they
+    // land a stroke. Phrased for BOTH interfaces ("hold and drag" reads on a
+    // mouse and under a thumb), so neither needs a touch variant.
     hint: {
       sentinel: 'Run on green. Freeze on red.',
-      sigils: 'Hold the mouse and trace the etched line on the slab.',
+      sigils:
+        'Trace the etched shape: hold and drag along the line, all the way around. Stray off the line and the pane cracks.',
+      sigilsLive:
+        'Hold and drag along the etched line. Start anywhere, then follow it all the way around.',
       pull: 'Click each circle just as it shrinks to the inner ring.',
       echoWatch: 'Watch the stones light up.',
       echoAnswer: 'Click the stones in the same order.',

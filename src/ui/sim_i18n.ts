@@ -99,7 +99,6 @@ const baseEnTable = {
   'error.gauntletStopSpectating': 'Stop spectating before you enter the Gauntlet.',
   'notice.gauntletQueueJoin': 'You join the Gauntlet queue.',
   'notice.gauntletQueueLeave': 'You leave the Gauntlet queue.',
-  'notice.gauntletRejoin': 'You rejoin the Gauntlet queue.',
   'notice.gauntletSpectateStart': 'You slip into the stands to watch the Gauntlet.',
   'notice.gauntletSpectateStop': 'You leave the stands.',
   'error.townFocusNotInTown': 'You must be in town to set your focus.',

@@ -26,6 +26,7 @@ import type { GauntletPhase, GauntletRunView, GauntletTrialKind } from '../sim/t
 export type GauntletHudHint =
   | 'sentinel'
   | 'sigils'
+  | 'sigilsLive'
   | 'pull'
   | 'echoWatch'
   | 'echoAnswer'
@@ -55,7 +56,7 @@ export interface GauntletHudModel {
   countdownFrac: number;
   countdownSeconds: number;
   /** False once the run is over (phase 'done') and on the podium, which has no
-   *  deadline (the ceremony holds until the viewer leaves or rejoins). */
+   *  deadline (the ceremony holds until the viewer leaves). */
   showCountdown: boolean;
   /** The Keeper's Echo strip during a live duel, else null. The duel itself
    *  plays on the table (the flashing rune stones); the strip carries only
@@ -78,6 +79,10 @@ export interface GauntletHudModel {
    *  for the WHOLE staging and every interlude (tied to the cooldown bar; the
    *  painter renders it big and centered), or null. Spectators see none. */
   tutorial: GauntletHudHint | null;
+  /** The IN-trial teaching line, shown at the apparatus while the trial is live
+   *  (the painter renders it as a compact caption clear of the play surface), or
+   *  null. Only Sugarglass Sigils has one; see liveHintFor. */
+  liveHint: GauntletHudHint | null;
 }
 
 /** The per-frame input: the viewer's run projection and the current sim time. */
@@ -104,6 +109,30 @@ function tutorialFor(run: GauntletRunView): GauntletHudHint | null {
   return kind ? hintForKind(kind) : null;
 }
 
+// The in-trial teaching line: Sugarglass Sigils is the one trial whose input is
+// not self-evident once you are standing at it (the slab takes a HELD DRAG along
+// the etched line, and nothing at the lectern says so; every other trial either
+// puts its prompt on screen, like the pull's circle, or is plain running and
+// clicking). So it keeps teaching at the apparatus, and only until the etcher has
+// actually carved something: the first covered vertex retires the caption, which
+// means a player who knows the game loses it on their opening stroke, while one
+// who does not (or who just shattered back to a bare pane, coverage reset to zero)
+// keeps the instructions in front of them exactly when they need them. Spectators
+// carry no sigils substate at all, so they get none.
+function liveHintFor(run: GauntletRunView): GauntletHudHint | null {
+  if (run.spectating || !run.sigils) return null;
+  return run.sigils.progress > 0 ? null : 'sigilsLive';
+}
+
+/** True while the run's current phase has NO deadline: The Great Pull, which the
+ * rope decides (the marker crossing its fraying threshold) rather than a clock.
+ * Its `run.endsAt` is therefore the sim time the phase OPENED, not a deadline, so
+ * a sim-time estimate must run FORWARD from it instead of counting down to it
+ * (gauntlet_clock.ts), and no countdown may show (showCountdown below). */
+export function gauntletPhaseIsClockless(run: GauntletRunView): boolean {
+  return run.phase === 'trial' && GAUNTLET.trials[run.trialIndex] === 'pull';
+}
+
 const HIDDEN: GauntletHudModel = {
   visible: false,
   phase: 'done',
@@ -120,6 +149,7 @@ const HIDDEN: GauntletHudModel = {
   finished: false,
   podium: null,
   tutorial: null,
+  liveHint: null,
 };
 
 const clamp01 = (n: number): number => (n < 0 ? 0 : n > 1 ? 1 : n);
@@ -204,5 +234,6 @@ export function gauntletHudModel(input: GauntletHudInput): GauntletHudModel {
     finished: run.finished,
     podium: run.podium,
     tutorial: tutorialFor(run),
+    liveHint: liveHintFor(run),
   };
 }

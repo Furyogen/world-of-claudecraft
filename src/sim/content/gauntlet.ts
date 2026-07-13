@@ -482,7 +482,7 @@ export const GAUNTLET: GauntletDef = {
   interludeS: 10,
   // Nominal ceremony pacing for presentation only (the HUD countdown window
   // denominator). The podium phase itself has NO deadline: it holds until each
-  // player leaves or rejoins, and an emptied run sweeps after emptyTimeoutS.
+  // player leaves, and an emptied run sweeps after emptyTimeoutS.
   podiumS: 20,
   // Prize pool is pure theater in v1 (no payout): the advertised baseline plus
   // growth per knockout, in copper, shown on the HUD counter.
@@ -636,24 +636,32 @@ export const GAUNTLET: GauntletDef = {
     // It ends when the marker crosses the fraying threshold, and nothing else.
     leadInS: 2,
     // A good player's cycle is spawn gap + the shrink down to the target
-    // (~0.6 of shrinkS); pullForceMax is sized so clean timing out-pulls the NPC
+    // (~0.55 of shrinkS); pullForceMax is sized so clean timing out-pulls the NPC
     // drift by a wide margin, and the ramp below is what shortens the cycle.
     circleSpawnMinS: 0.4,
     circleSpawnMaxS: 1.4,
-    circleShrinkMinS: 1.3,
-    circleShrinkMaxS: 2.8,
-    // Playtest verdict: the old deadline-relative linear ramp barely bit (still
-    // 0.85x twenty seconds in, and it only reached its 0.45 floor on a 75s clock
-    // that no longer exists). The pace now HALVES every 12s from the opening
-    // whistle and bottoms out at 0.32 (a 3.1x cadence) after ~20s, so the pull
-    // is visibly tightening within the first few circles and is frantic long
-    // before the fray starts. A clean puller crosses the threshold in ~9-15s.
-    rampHalfLifeS: 12,
-    circleRampMin: 0.32,
+    circleShrinkMinS: 1.7,
+    circleShrinkMaxS: 3.2,
+    // Playtest verdict (pass 2): the ramp bit far too hard. Halving every 12s to
+    // a 0.32 floor meant that inside 20s a circle was born and gone in under half
+    // a second, and the grade band that goes with it (see below) collapsed to
+    // roughly one tick: the trial stopped being timing and became a coin toss.
+    // The pace still HALVES, just over 20s, and bottoms out at 0.45 (a 2.2x
+    // cadence, and against the longer base shrink above that is a ~0.8s circle at
+    // full frenzy, not a 0.4s one). It is still visibly tightening from the first
+    // few circles; it just never outruns a human hand. A clean puller crosses the
+    // threshold in ~10-15s.
+    rampHalfLifeS: 20,
+    circleRampMin: 0.45,
     circleStartSize: 200,
-    circleTargetSize: 75,
-    pullForceMax: 2.2,
-    gradePower: 1.5,
+    // The grade band is +-circleTargetSize around the target, so the target size
+    // IS the forgiveness: a click is worth something anywhere under 2x it, and
+    // the falloff (gradePower) decides how much a near-miss keeps. A fatter
+    // target plus a gentler falloff is what makes an honest, slightly-late click
+    // still HEAVE instead of scoring nothing.
+    circleTargetSize: 90,
+    pullForceMax: 2.6,
+    gradePower: 1.2,
     npcHeavePeriodS: 1.1,
     npcForceMin: 0.7,
     npcForceMax: 1.05,
@@ -675,8 +683,12 @@ export const GAUNTLET: GauntletDef = {
   echo: {
     durationS: 100,
     stones: 4,
-    rounds: 5,
-    baseLen: 3, // sequences run 3..7 flashes across the five rounds
+    // The stones top out at a SIX-flash sequence: playtest verdict was that the
+    // seventh round (the trial's old ceiling) stopped being a memory test and
+    // became a chore. Round r flashes baseLen + r stones, so rounds x baseLen is
+    // what sets the ceiling: keep them in step if either moves.
+    rounds: 4,
+    baseLen: 3, // sequences run 3..6 flashes across the four rounds
     stepS: 0.7,
     inputS: 10,
     missDamage: 10,
@@ -687,7 +699,13 @@ export const GAUNTLET: GauntletDef = {
     clearHoldS: 2.5, // the victory beat, matching the sigils
   },
   span: {
-    durationS: 100,
+    // The crossing is 14 pairs over 56 yards, and the trial resolves the moment
+    // the last live crosser is over (updateSpan), so this is a CAP, not a pace:
+    // at 100s the cap never bit and the countdown just sat there. 60s still clears
+    // a field of NPC crossers (a hop plus a ponder per pair is roughly 35 to 45s)
+    // and leaves a player room to fall and climb back, while making the clock a
+    // real pressure on someone dithering at the lip.
+    durationS: 60,
     steps: 14,
     // Playtest: the 2.6yd panes read as stepping stones, not platforms. A
     // 4yd pane is a real floor tile you stand on and survey from; the venue

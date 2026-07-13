@@ -57,7 +57,6 @@ const VENUE_MODELS = {
   bannerPurple: 'models/dungeon/banner_patterna_blue.glb',
   bannerRed: 'models/dungeon/banner_patterna_red.glb',
   bannerWhite: 'models/dungeon/banner_patterna_white.glb',
-  bannerGreen: 'models/dungeon/banner_patterna_green.glb',
   bannerYellow: 'models/dungeon/banner_patterna_yellow.glb',
   // Festival dressing (crowd clutter, seating, the prize hoard, set pieces).
   barrelLarge: 'models/dungeon/barrel_large.glb',
@@ -703,14 +702,22 @@ function buildField(group: THREE.Group): WardenRig {
   // Arms reach down-forward to the planted sword and the beacon staff. Both
   // props stand at radial ~4.1 from the body axis, clear of the skirt's widest
   // flare (3.8), so nothing pierces the robe.
+  //
+  // The arm cylinders run along their local +y, and the warden's FRONT is its
+  // local +z (the whole group is yawed PI, so +z looks back down the field at the
+  // runners; the chest, sigil, sword and both hands all sit at +z). A rotation.x
+  // of +0.7 therefore swings the arm's lower end BACKWARD, to z ~0, while the
+  // hands it should be reaching are forward at z 2.8: the arms ran up out of the
+  // statue's chest with the elbows out behind it. Negated, each arm runs exactly
+  // from its pauldron (y 11.0, z 0) down to its hand (y 7.7, z 2.8).
   const armGeo = new THREE.CylinderGeometry(0.5, 0.62, 4.4, 8);
   const swordArm = wAdd(new THREE.Mesh(armGeo, stoneMat(STONE)));
   swordArm.position.set(-2.8, 9.35, 1.4);
-  swordArm.rotation.x = 0.7;
+  swordArm.rotation.x = -0.7;
   swordArm.rotation.z = -0.12;
   const staffArm = wAdd(new THREE.Mesh(armGeo, stoneMat(STONE)));
   staffArm.position.set(2.8, 9.4, 1.4);
-  staffArm.rotation.x = 0.7;
+  staffArm.rotation.x = -0.7;
   staffArm.rotation.z = 0.12;
   const handGeo = new THREE.SphereGeometry(0.62, 8, 6);
   const swordHand = wAdd(new THREE.Mesh(handGeo, stoneMat(STONE_DARK)));
@@ -1638,18 +1645,15 @@ function buildTrialArenas(
     box(group, size + 0.3, 0.18, 0.9, x, 1.69, z - size / 2, cap);
     box(group, size + 0.3, 0.18, 0.9, x, 1.69, z + size / 2, cap);
     box(group, 0.9, 0.18, size + 0.3, x - size / 2, 1.69, z, cap);
-    // Corner pillars anchor the yard; green event banners face both walls, and
-    // pennant strings cross the courtyard overhead.
+    // Corner pillars anchor the yard. NOTHING hangs over this courtyard: the
+    // trial's camera looks across the desks from a seated etcher's eye line, so
+    // the old pennant strings (y 6.4, crossing the yard at quarter depth) and the
+    // wall banners dangled straight through the view of the rune stones a player
+    // has to read. The pillars, lanterns and torches carry the dressing instead.
     placeProp(group, 'pillar', x - size / 2 + 0.9, 0, z - size / 2 + 0.9, 0.8, 5.2);
     placeProp(group, 'pillar', x - size / 2 + 0.9, 0, z + size / 2 - 0.9, -0.8, 5.2);
     placeProp(group, 'pillar', x + size / 2 - 0.9, 0, z - size / 2 + 0.9, 2.4, 5.2);
     placeProp(group, 'pillar', x + size / 2 - 0.9, 0, z + size / 2 - 0.9, -2.4, 5.2);
-    placeProp(group, 'bannerGreen', x, 3.2, z + size / 2 - 0.4, Math.PI, 2.2);
-    placeProp(group, 'bannerGreen', x, 3.2, z - size / 2 + 0.4, 0, 2.2);
-    buildPennants(group, [
-      { x0: x - size / 2, x1: x + size / 2, y: 6.4, z: z - size / 4 },
-      { x0: x - size / 2, x1: x + size / 2, y: 6.4, z: z + size / 4 },
-    ]);
     // Corner lanterns and a back-wall crate stack (kept in the corners, clear
     // of the desk grid and the contestants' mats along the west edge).
     placeProp(group, 'lantern', x - size / 2 + 1.9, 0, z - size / 2 + 1.4, 0.8, 1.6);
@@ -1816,7 +1820,9 @@ function buildTrialArenas(
       group.add(right);
       panels.push({ left, right });
     }
-    placeProp(group, 'bannerWhite', x, 3.4, z - fieldLen / 2 - 3, 0, 2.4);
+    // No banner over the crossing's mouth: it hung right in the eyeline of a
+    // player lining up the first pair of panes. The torches and the signpost mark
+    // the entrance instead.
     placeProp(group, 'torchLit', x - sideX - 2.4, 0, zStart - 1.5, Math.PI / 2, 2.2);
     placeProp(group, 'torchLit', x + sideX + 2.4, 0, zStart - 1.5, -Math.PI / 2, 2.2);
     // A signpost and stacked goods mark the crossing's near mouth, before the

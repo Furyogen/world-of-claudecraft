@@ -3,8 +3,11 @@
 //   - Queue: a fair, FIFO, rolling matchmaker. Players wait in gauntletQueue; the
 //     matchmaker forms the next game from the FRONT the moment no live queue game
 //     is running (sequential rolling, "when one ends the next starts"), and seats
-//     a late click straight into a still-filling lobby during its countdown. A
-//     rejoiner goes to the BACK so nobody jumps the wait.
+//     a late click straight into a still-filling lobby during its countdown.
+//     There is NO in-game requeue: the ONLY way into the queue is the walk-up
+//     gate below (canJoinGauntlet: standing with Maro at the Atheneum of Trials).
+//     A player who has just played leaves the podium, which returns them to where
+//     they joined from, and queues again from there like anyone else.
 //   - Practice: an instant private solo run against a full field of NPC bots,
 //     available even when the event window is closed. Never records ladder stats.
 //   - Spectate: a free-roaming observer who is in no run, sees the watched run's
@@ -26,7 +29,6 @@ import {
   gauntletSpectatorWatchedRun,
   gauntletLeave as leaveRun,
   openLobbyRun,
-  removePlayerFromRun,
   startRun,
 } from './runs';
 
@@ -112,20 +114,6 @@ export function updateGauntletQueue(ctx: SimContext): void {
   emitLobbyState(ctx, run);
   // Single-player worlds skip the fill window (nobody else can ever join).
   if (ctx.cfg.gauntletInstantLobby) startRun(ctx, run);
-}
-
-// Rejoin from the podium: detach from the finished game and re-queue at the BACK
-// (fairness). Bypasses the walk-up gate: a rejoiner has just played and is at the
-// venue, not standing next to the recruiter.
-export function gauntletRejoin(ctx: SimContext, pid?: number): void {
-  const r = ctx.resolve(pid);
-  if (!r) return;
-  const id = r.meta.entityId;
-  const run = gauntletRunForPlayer(ctx, id);
-  if (run) removePlayerFromRun(ctx, run, id, true);
-  if (ctx.gauntletQueue.some((u) => u.pid === id)) return;
-  ctx.gauntletQueue.push({ pid: id, joinedAtTick: ctx.tickCount });
-  ctx.notice(id, 'You rejoin the Gauntlet queue.');
 }
 
 // ---------------------------------------------------------------------------

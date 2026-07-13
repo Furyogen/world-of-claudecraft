@@ -15,6 +15,7 @@ import {
   MINIGAME_HUB_RADIUS,
 } from '../src/sim/data';
 import { HUB_EXIT_ID, HUB_PORTAL_ID } from '../src/sim/minigame_hub';
+import { minigameHubFurniture } from '../src/sim/minigame_hub_layout';
 import { Sim } from '../src/sim/sim';
 import type { SimEvent } from '../src/sim/types';
 import { groundHeight } from '../src/sim/world';
@@ -129,6 +130,40 @@ describe('the Proving Grounds hub', () => {
     expect(blocked(0, 0)).toBe(false);
     expect(blocked(MINIGAME_HUB_MARO.x, MINIGAME_HUB_MARO.z)).toBe(false);
     expect(blocked(MINIGAME_HUB_OSRIC.x, MINIGAME_HUB_OSRIC.z)).toBe(false);
+  });
+
+  // The chair GLB's backrest is a slab on its local +x, so the model's FRONT looks
+  // down its local -x; a three.js yaw of `rot` swings that front onto world
+  // (-cos rot, sin rot). Stated here independently of the layout so this asserts
+  // the real mesh, not the layout's own arithmetic reflected back at it.
+  const chairFront = (rot: number) => ({ x: -Math.cos(rot), z: Math.sin(rot) });
+
+  it('sits every reading chair facing its own table (BOTH nooks, not just one)', () => {
+    const furniture = minigameHubFurniture();
+    const tables = furniture.filter((f) => f.kind === 'tableRound');
+    const chairs = furniture.filter((f) => f.kind === 'chair');
+    expect(tables).toHaveLength(2);
+    expect(chairs.length).toBeGreaterThanOrEqual(4);
+    // Both nooks are actually in the sample (the west one is where the mirrored
+    // yaw used to turn the chairs away from the table).
+    expect(chairs.filter((c) => c.x > 0).length).toBeGreaterThanOrEqual(2);
+    expect(chairs.filter((c) => c.x < 0).length).toBeGreaterThanOrEqual(2);
+    for (const c of chairs) {
+      const table = tables.reduce((a, b) =>
+        Math.hypot(a.x - c.x, a.z - c.z) <= Math.hypot(b.x - c.x, b.z - c.z) ? a : b,
+      );
+      const dx = table.x - c.x;
+      const dz = table.z - c.z;
+      const dist = Math.hypot(dx, dz);
+      // Drawn up at the table's edge: clear of the 0.9-radius top, within reach.
+      expect(dist).toBeGreaterThan(1);
+      expect(dist).toBeLessThan(2);
+      // Its front points AT the table centre, dead on rather than merely "toward"
+      // (the old east nook sat ~45 degrees askew and still passed a loose check).
+      const front = chairFront(c.rot);
+      const cos = (front.x * dx + front.z * dz) / dist;
+      expect(cos).toBeGreaterThan(0.999);
+    }
   });
 
   it('logs a character saved inside the hub back in inside the hub, alive', () => {

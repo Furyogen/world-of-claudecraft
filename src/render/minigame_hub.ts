@@ -41,9 +41,6 @@ const HUB_MODELS = {
   bookGrey: 'models/dungeon/book_grey.glb',
   candle: 'models/dungeon/candle_thin_lit.glb',
   torch: 'models/dungeon/torch_lit.glb',
-  bannerRed: 'models/dungeon/banner_patterna_red.glb',
-  bannerBlue: 'models/dungeon/banner_patterna_blue.glb',
-  bannerGreen: 'models/dungeon/banner_patterna_green.glb',
 } as const;
 
 type HubModelKey = keyof typeof HUB_MODELS;
@@ -74,8 +71,7 @@ if (typeof window !== 'undefined') registerPreload(ensureMinigameHubAssets());
 // guessing). Marked sharedGeometry so dispose() leaves the source cache alone.
 // alignBase treats y as the height the prop's bounding BOTTOM rests on, for
 // kit pieces whose origin is not at their base (the books are centre-origin);
-// wall-mounted pieces (torch, banner) hang from their authored origin and must
-// stay on the default.
+// the torch hangs from its authored origin and stays on the default.
 function placeProp(
   group: THREE.Group,
   key: HubModelKey,
@@ -106,6 +102,15 @@ function placeProp(
 
 const WALL_HEIGHT = 8;
 const CEILING_Y = WALL_HEIGHT;
+// The coffered ceiling's radial beams, which hang UNDER the slab: they, not the
+// slab, are the real headroom for anything mounted high on the wall. (The wall
+// banners that used to hang here are GONE: at 3 yards tall there was no honest
+// band left between the bookcase tops and these beams, so they punched through
+// the roof. The torches and the chandelier carry the room's colour instead.)
+const BEAM_THICK = 0.5;
+const BEAM_Y = CEILING_Y - 0.35;
+// The bookcase ring's height.
+const BOOKCASE_H = 4.4;
 
 export async function buildMinigameHub(
   scene: THREE.Scene,
@@ -182,8 +187,11 @@ export async function buildMinigameHub(
   const beamMat = surfaceMat({ color: 0x4a3320, roughness: 0.8 });
   for (let i = 0; i < 8; i++) {
     const a = (i / 8) * Math.PI * 2;
-    const beam = new THREE.Mesh(track(new THREE.BoxGeometry(0.5, 0.5, outerR * 2)), beamMat);
-    beam.position.y = CEILING_Y - 0.35;
+    const beam = new THREE.Mesh(
+      track(new THREE.BoxGeometry(BEAM_THICK, BEAM_THICK, outerR * 2)),
+      beamMat,
+    );
+    beam.position.y = BEAM_Y;
     beam.rotation.y = a;
     roof.add(beam);
   }
@@ -195,10 +203,10 @@ export async function buildMinigameHub(
   for (const f of minigameHubFurniture()) {
     switch (f.kind) {
       case 'bookcaseA':
-        placeProp(group, 'bookcase', f.x, 0, f.z, f.rot, 4.4);
+        placeProp(group, 'bookcase', f.x, 0, f.z, f.rot, BOOKCASE_H);
         break;
       case 'bookcaseB':
-        placeProp(group, 'bookcaseB', f.x, 0, f.z, f.rot, 4.4);
+        placeProp(group, 'bookcaseB', f.x, 0, f.z, f.rot, BOOKCASE_H);
         break;
       case 'tableRound': {
         // a round reading table with scattered books + a candle, flanked by the
@@ -228,9 +236,9 @@ export async function buildMinigameHub(
     }
   }
 
-  // --- wall torches between the bookcases; every other one carries a warm
-  //     point light + a colored banner (the light count is kept modest for
-  //     low-end GPUs, the unlit torches read from their emissive flame + fill) ---
+  // --- wall torches between the bookcases; every other one carries a warm point
+  //     light (the light count is kept modest for low-end GPUs, the unlit torches
+  //     read from their emissive flame + fill) ---
   const torchR = R - 0.4;
   const torchLights: THREE.PointLight[] = [];
   const TORCHES = 6;
@@ -244,16 +252,6 @@ export async function buildMinigameHub(
       light.position.set(x * 0.92, 4.0, z * 0.92);
       group.add(light);
       torchLights.push(light);
-      const banner = (['bannerRed', 'bannerBlue', 'bannerGreen'] as const)[(i / 2) % 3];
-      placeProp(
-        group,
-        banner,
-        Math.sin(a) * (R - 0.2),
-        5.4,
-        Math.cos(a) * (R - 0.2),
-        a + Math.PI,
-        3,
-      );
     }
   }
 

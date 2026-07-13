@@ -12,7 +12,7 @@ import {
 } from '../src/sim/content/gauntlet';
 import { SKIN_COUNTS } from '../src/sim/content/skins';
 import { gauntletOrigin, isGauntletPos } from '../src/sim/data';
-import { seatPodium } from '../src/sim/gauntlet/podium';
+import { rankGauntletField, seatPodium } from '../src/sim/gauntlet/podium';
 import { sentinelReactionBudgetS, slideStopS } from '../src/sim/gauntlet/sentinel_reaction';
 import {
   nextGreenWindowS,
@@ -1321,4 +1321,113 @@ describe('venue physics: walk ON the platforms, never INSIDE the solids', () => 
       GAUNTLET.targetSurvivorsPerTrial.splice(0, GAUNTLET.targetSurvivorsPerTrial.length, 14);
     }
   });
+});
+
+describe('the podium ranking (who actually stands on the stand)', () => {
+  // The reported bug: a player who was the second-to-last contestant alive in the
+  // Final Court finished second and was NOT on the podium. The fallen were handed
+  // out in reverse ROSTER order (join order), and players are seated into the
+  // roster first, so every fallen NPC outranked every fallen player.
+  it('ranks the fallen last-out-first, so a player knocked out late takes their step', () => {
+    const sim = makeSim(77);
+    const pid = sim.addPlayer('warrior', 'RunnerUp');
+    openAndJoin(sim, pid);
+    advanceTo(sim, 'trial');
+    const run = sim.gauntletRuns[0]!;
+    const npcs = run.contestants.filter((c) => !c.player);
+    expect(npcs.length).toBeGreaterThan(3);
+
+    // The shape of a finished run: one NPC left standing (the champion), and the
+    // whole rest of the field knocked out over the course of it. The player is
+    // the LAST one out, so they are the runner-up.
+    const last = GAUNTLET.trials.length - 1;
+    for (let i = 1; i < npcs.length; i++) {
+      npcs[i].eliminatedAtTrial = last;
+      npcs[i].eliminatedAt = 100 + i; // the higher i, the later they fell
+    }
+    const pc = run.contestants.find((c) => c.entityId === pid)!;
+    pc.eliminatedAtTrial = last;
+    pc.eliminatedAt = 500; // after every NPC: the last body standing before the champion
+    run.playerStates.get(pid)!.spectating = true;
+
+    const ranked = rankGauntletField(run);
+    expect(ranked[0]).toBe(npcs[0]); // the survivor is champion
+    expect(ranked[1]).toBe(pc); // the last one out is second, and it is the player
+    expect(ranked[2]).toBe(npcs[npcs.length - 1]); // then the one who fell before them
+    // and the ordering is monotonic in knockout time all the way down the fallen.
+    const fallenTimes = ranked.slice(1).map((c) => c.eliminatedAt ?? 0);
+    for (let i = 1; i < fallenTimes.length; i++)
+      expect(fallenTimes[i]).toBeLessThanOrEqual(fallenTimes[i - 1]);
+  }, 40000);
+
+  it('a live finisher outranks every fallen contestant, and an earlier finish outranks a later one', () => {
+    const sim = makeSim(78);
+    const first = sim.addPlayer('warrior', 'Swift');
+    const second = sim.addPlayer('warrior', 'Slow');
+    openAndJoin(sim, first, second);
+    advanceTo(sim, 'trial');
+    const run = sim.gauntletRuns[0]!;
+    run.playerStates.get(first)!.finishedAt = 10;
+    run.playerStates.get(second)!.finishedAt = 12;
+    // Every NPC is knocked out, one of them at the very end of the run.
+    for (const c of run.contestants.filter((k) => !k.player)) {
+      c.eliminatedAtTrial = 0;
+      c.eliminatedAt = 999; // later than either finish: still below a live player
+    }
+    const ranked = rankGauntletField(run);
+    expect(ranked[0]!.entityId).toBe(first);
+    expect(ranked[1]!.entityId).toBe(second);
+    expect(ranked[2]!.player).toBe(false);
+  }, 40000);
+
+  it('the end-of-trial tie (a player tolled as the NPC field is culled) goes to the player', () => {
+    const sim = makeSim(79);
+    const pid = sim.addPlayer('warrior', 'Tolled');
+    openAndJoin(sim, pid);
+    advanceTo(sim, 'trial');
+    const run = sim.gauntletRuns[0]!;
+    const npcs = run.contestants.filter((c) => !c.player);
+    const pc = run.contestants.find((c) => c.entityId === pid)!;
+    // One survivor, and the player + the culled NPCs all knocked out on the same
+    // tick (exactly how a trial resolves: the toll lands, then the cull).
+    for (let i = 1; i < npcs.length; i++) {
+      npcs[i].eliminatedAtTrial = 2;
+      npcs[i].eliminatedAt = 42;
+    }
+    pc.eliminatedAtTrial = 2;
+    pc.eliminatedAt = 42;
+    run.playerStates.get(pid)!.spectating = true;
+
+    const ranked = rankGauntletField(run);
+    expect(ranked[1]).toBe(pc); // the player, not one of the NPCs culled with them
+  }, 40000);
+
+  it('the ceremony seats the ranked top three, so the runner-up is really on the stand', () => {
+    const sim = makeSim(80);
+    const pid = sim.addPlayer('warrior', 'Placed');
+    openAndJoin(sim, pid);
+    advanceTo(sim, 'trial');
+    const run = sim.gauntletRuns[0]!;
+    const npcs = run.contestants.filter((c) => !c.player);
+    const last = GAUNTLET.trials.length - 1;
+    for (let i = 1; i < npcs.length; i++) {
+      npcs[i].eliminatedAtTrial = last;
+      npcs[i].eliminatedAt = 100 + i;
+    }
+    const pc = run.contestants.find((c) => c.entityId === pid)!;
+    pc.eliminatedAtTrial = last;
+    pc.eliminatedAt = 500;
+    run.playerStates.get(pid)!.spectating = true;
+
+    const ranked = rankGauntletField(run);
+    seatPodium((sim as any).ctx, run, ranked);
+    // Three steps, filled in rank order, with the fallen player standing (solid,
+    // out of the gallery) on the silver one.
+    expect(run.podiumSeats!.length).toBe(GAUNTLET_LAYOUT.podium.steps.length);
+    expect(run.podiumSeats![1].entityId).toBe(pid);
+    expect(sim.entities.get(pid)!.spectator).toBe(false);
+    const e = sim.entities.get(pid)!;
+    expect(e.pos.x - run.origin.x).toBeCloseTo(GAUNTLET_LAYOUT.podium.steps[1].x, 5);
+    expect(e.pos.z - run.origin.z).toBeCloseTo(GAUNTLET_LAYOUT.podium.z, 5);
+  }, 40000);
 });

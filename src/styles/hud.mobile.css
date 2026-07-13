@@ -3717,6 +3717,16 @@
   body.mobile-touch #gauntlet-board .gb-bar {
     width: 44px;
   }
+  /* The in-trial sigils caption: a phone's bottom corners are the movement wheel
+     (left) and the action ring (right), so it takes the free center band between
+     them, narrowed so it reaches neither. Non-interactive either way (the banner
+     is pointer-transparent), and it retires on the etcher's first stroke. */
+  body.mobile-touch #gauntlet-tutorial.live {
+    bottom: calc(14px + env(safe-area-inset-bottom));
+    max-width: min(36ch, 42vw);
+    padding: 6px 12px;
+    font: 600 13px / 18px var(--body-font);
+  }
   body.mobile-touch #gauntlet-recruit {
     width: min(360px, 92vw);
   }
@@ -3743,7 +3753,6 @@
     justify-content: center;
   }
   body.mobile-touch .go-leave,
-  body.mobile-touch .go-rejoin,
   body.mobile-touch #gauntlet-recruit .gr-action,
   body.mobile-touch #gauntlet-recruit .gr-spectate,
   body.mobile-touch #gauntlet-recruit .gr-practice {

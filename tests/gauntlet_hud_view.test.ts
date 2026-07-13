@@ -2,7 +2,11 @@ import { describe, expect, it } from 'vitest';
 import { GAUNTLET } from '../src/sim/content/gauntlet';
 import type { GauntletPhase, GauntletRunView } from '../src/sim/types';
 import { GauntletClock } from '../src/ui/gauntlet_clock';
-import { type GauntletHudInput, gauntletHudModel } from '../src/ui/gauntlet_hud_view';
+import {
+  type GauntletHudInput,
+  gauntletHudModel,
+  gauntletPhaseIsClockless,
+} from '../src/ui/gauntlet_hud_view';
 
 // A fully-populated run view; individual tests override the fields they exercise.
 function run(over: Partial<GauntletRunView> = {}): GauntletRunView {
@@ -221,5 +225,87 @@ describe('GauntletClock calibration', () => {
     const staging = run({ phase: 'staging', endsAt: 200, sentinel: null });
     const t = clock.estimate(staging, 30_000);
     expect(staging.endsAt - t).toBeCloseTo(GAUNTLET.stagingS, 6);
+  });
+});
+
+// The Great Pull (GAUNTLET.trials[2]) is the one CLOCKLESS phase: the rope decides
+// it, so its endsAt is the sim time the trial OPENED and sim time must run FORWARD
+// from that anchor. Counting DOWN to it (the windowed arm, with a zero window)
+// freezes the estimate at the open for the whole trial, which is what stopped every
+// pull circle from ever rendering (their spawnAt is absolute).
+describe('GauntletClock on the clockless Great Pull', () => {
+  const pull = (over: Partial<GauntletRunView> = {}) =>
+    run({ phase: 'trial', trialIndex: 2, endsAt: 300, sentinel: null, ...over });
+
+  it('is the clockless phase, and shows no countdown', () => {
+    expect(gauntletPhaseIsClockless(pull())).toBe(true);
+    expect(gauntletPhaseIsClockless(run({ phase: 'trial', trialIndex: 1 }))).toBe(false); // sigils
+    expect(gauntletPhaseIsClockless(run({ phase: 'interlude', trialIndex: 2 }))).toBe(false);
+    expect(gauntletHudModel({ run: pull(), time: 340 }).showCountdown).toBe(false);
+  });
+
+  it('runs sim time forward from the open instead of freezing at it', () => {
+    const clock = new GauntletClock();
+    expect(clock.estimate(pull(), 10_000)).toBeCloseTo(300, 6); // the whistle
+    // Six wall seconds of pulling: the sim clock has advanced six seconds, so a
+    // circle dealt for t=305 is now on screen. The frozen arm never reached it.
+    expect(clock.estimate(pull(), 16_000)).toBeCloseTo(306, 6);
+    expect(clock.estimate(pull(), 40_000)).toBeCloseTo(330, 6);
+  });
+
+  it('anchors on the phase event, so the trial opening is the zero point', () => {
+    // The sim emits gauntletPhase as the pull opens, and its remainingS is 0 (the
+    // phase has no deadline to remain against): the sample must anchor the clock at
+    // the open, not knock it backwards.
+    const clock = new GauntletClock();
+    clock.calibrate(0, 12_000);
+    expect(clock.estimate(pull(), 12_000)).toBeCloseTo(300, 6);
+    expect(clock.estimate(pull(), 15_500)).toBeCloseTo(303.5, 6);
+  });
+});
+
+// The in-trial teaching caption: Sugarglass Sigils keeps teaching AT the slab,
+// because a held drag along the etched line is not a discoverable input, and it
+// retires itself the moment the etcher proves they know it (first carved vertex).
+describe('gauntletHudModel live hint', () => {
+  const sigils = (over: Partial<NonNullable<GauntletRunView['sigils']>> = {}) =>
+    run({
+      phase: 'trial',
+      trialIndex: 1,
+      sentinel: null,
+      sigils: {
+        shapeSeed: 7,
+        shapeId: 2,
+        crack: 0,
+        crackMax: 100,
+        progress: 0,
+        coveredMask: 0,
+        ...over,
+      },
+    });
+
+  it('holds at the slab while the etcher has carved nothing', () => {
+    expect(gauntletHudModel({ run: sigils(), time: 10 }).liveHint).toBe('sigilsLive');
+    // A shattered pane resets coverage to zero: the caption comes back exactly
+    // when the player is staring at a bare shape again.
+    expect(gauntletHudModel({ run: sigils({ crack: 0, progress: 0 }), time: 40 }).liveHint).toBe(
+      'sigilsLive',
+    );
+  });
+
+  it('retires on the first carved stroke, and never shows for a spectator', () => {
+    expect(gauntletHudModel({ run: sigils({ progress: 0.01 }), time: 12 }).liveHint).toBeNull();
+    expect(gauntletHudModel({ run: sigils({ progress: 0.98 }), time: 30 }).liveHint).toBeNull();
+    const watching = run({ ...sigils(), spectating: true });
+    expect(gauntletHudModel({ run: watching, time: 10 }).liveHint).toBeNull();
+  });
+
+  it('is only the sigils trial (every other trial teaches pre-trial only)', () => {
+    expect(gauntletHudModel({ run: run(), time: 10 }).liveHint).toBeNull(); // sentinel
+    expect(gauntletHudModel({ run: null, time: 10 }).liveHint).toBeNull();
+    // The pre-trial banner still wins its own phases: the two never collide.
+    const staging = run({ phase: 'staging', trialIndex: 1, sentinel: null });
+    expect(gauntletHudModel({ run: staging, time: 10 }).tutorial).toBe('sigils');
+    expect(gauntletHudModel({ run: staging, time: 10 }).liveHint).toBeNull();
   });
 });

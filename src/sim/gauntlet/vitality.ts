@@ -121,6 +121,12 @@ export function eliminateContestant(
 ): void {
   if (c.eliminatedAtTrial !== null) return;
   c.eliminatedAtTrial = run.trialIndex;
+  // The knockout instant, which is what the podium ranks the fallen on (the
+  // longer you lasted, the higher you place). Trial modules resolve their
+  // end-of-trial toll BEFORE culling the NPC field, so a player and the NPCs
+  // culled in the same instant share this time; computePodium breaks that tie
+  // for the player.
+  c.eliminatedAt = ctx.time;
   run.prizePool += GAUNTLET.prizePerElimination;
   const e = ctx.entities.get(c.entityId);
   const at = e ? { x: e.pos.x, z: e.pos.z } : { x: run.origin.x, z: run.origin.z };

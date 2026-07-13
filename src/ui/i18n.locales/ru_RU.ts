@@ -6396,7 +6396,6 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gauntlet.trialNames.span': 'Хрупкий мост',
   'hudChrome.gauntlet.trialNames.court': 'Последняя арена',
   'hudChrome.gauntlet.practiceNote': 'Мгновенный одиночный забег против ботов.',
-  'hudChrome.gauntlet.rejoinQueue': 'Вернуться в очередь',
   'hudChrome.gauntlet.lobbyJoined': 'В лобби: {count}',
   'hudChrome.gauntlet.lobbyCountdown': 'Забег начнётся через {seconds} с',
   'hudChrome.gauntlet.trialLabel': 'Испытание {n} из {total}',
@@ -6422,7 +6421,9 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gauntlet.echoRound': 'Раунд {n} из {total}',
   'hudChrome.gauntlet.hint.sentinel': 'Беги на зелёный. Замри на красный.',
   'hudChrome.gauntlet.hint.sigils':
-    'Зажмите кнопку мыши и обводите линию, выгравированную на плите.',
+    'Обведите высеченную фигуру: зажмите и ведите по линии, пока не пройдёте её целиком. Сойдёте с линии, и плита треснет.',
+  'hudChrome.gauntlet.hint.sigilsLive':
+    'Зажмите и ведите по высеченной линии. Начните где угодно и пройдите её целиком.',
   'hudChrome.gauntlet.hint.pull': 'Кликайте по кругу, когда он сожмётся до внутреннего кольца.',
   'hudChrome.gauntlet.hint.echoWatch': 'Смотрите, в каком порядке вспыхивают камни.',
   'hudChrome.gauntlet.hint.echoAnswer': 'Кликайте по камням в том же порядке.',

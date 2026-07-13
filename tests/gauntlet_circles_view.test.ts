@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { GAUNTLET_CIRCLE_NEAR_FRAC, gauntletCircleModel } from '../src/ui/gauntlet_circles_view';
+import { GauntletClock } from '../src/ui/gauntlet_clock';
 import type { GauntletRunView } from '../src/world_api';
 
 // A minimal live-pull run view; overrides splice per case. Same stub idiom as
@@ -102,5 +103,37 @@ describe('gauntletCircleModel', () => {
     const a = gauntletCircleModel({ run: run(), time: 101 });
     const b = gauntletCircleModel({ run: null, time: 0 });
     expect(b).toBe(a); // same object, mutated in place
+  });
+});
+
+// The wiring the two suites above cannot see on their own, and where the circles
+// really went: the HUD does not know sim time, it ESTIMATES it (GauntletClock) and
+// feeds that estimate to this core. The pull is the one CLOCKLESS phase, so its
+// run.endsAt is the sim time the trial OPENED, not a deadline. A clock that counts
+// down to that "deadline" therefore pins its estimate AT the open for the whole
+// trial, and every circle's absolute spawnAt stays forever in the future: the
+// overlay renders nothing, all trial long, with both units green.
+describe('gauntletCircleModel driven by the estimating HUD clock', () => {
+  // The trial opens at sim t=98 (endsAt IS the open here); the viewer's first
+  // circle is dealt for t=100, and shrinks 200 -> 0 over 2s.
+  const OPEN = 98;
+  const live = (): GauntletRunView => run({ endsAt: OPEN });
+
+  it('shows the circle once its spawn time arrives, and shrinks it from there', () => {
+    const clock = new GauntletClock();
+    const at = (wallMs: number) =>
+      gauntletCircleModel({ run: live(), time: clock.estimate(live(), wallMs) });
+    // The whistle: sim time is the open, so the circle is still in its spawn gap.
+    expect(at(5_000).visible).toBe(false);
+    // Two wall seconds on, the estimate has REACHED the spawn: full size on screen.
+    const spawned = at(7_000);
+    expect(spawned.visible).toBe(true);
+    expect(spawned.id).toBe(3);
+    expect(spawned.sizePx).toBe(200);
+    // One second into the 2s shrink, it is half gone (a frozen clock would have
+    // held it at 200 forever, if it had ever shown it at all).
+    expect(at(8_000).sizePx).toBeCloseTo(100, 6);
+    // And it expires on time rather than hanging on screen.
+    expect(at(9_100).visible).toBe(false);
   });
 });

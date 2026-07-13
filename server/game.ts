@@ -3733,7 +3733,8 @@ export class GameServer {
       // index, shape-checked at its case); the sim gates everything (event
       // window, recruiter radius, dead, run/queue/spectate membership) and
       // resolves every outcome. gauntlet_join is the instant walk-up path;
-      // queue/spectate/practice/rejoin are the three player modes.
+      // queue/spectate/practice are the three player modes (there is no requeue
+      // command: a finisher leaves and queues again at the recruiter).
       case 'gauntlet_join': {
         sim.gauntletJoin(pid);
         break;
@@ -3755,10 +3756,6 @@ export class GameServer {
           Number.isInteger(trial) && trial >= 0 && trial < 16 ? trial : undefined,
           pid,
         );
-        break;
-      }
-      case 'gauntlet_rejoin': {
-        sim.gauntletRejoin(pid);
         break;
       }
       case 'gauntlet_leave': {

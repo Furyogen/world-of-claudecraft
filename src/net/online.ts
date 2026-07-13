@@ -2618,9 +2618,6 @@ export class ClientWorld implements IWorld {
     // server passes it to the sim raw, which validates the index.
     this.cmd(trial == null ? { cmd: 'gauntlet_practice' } : { cmd: 'gauntlet_practice', trial });
   }
-  gauntletRejoin(): void {
-    this.cmd({ cmd: 'gauntlet_rejoin' });
-  }
   gauntletLeave(): void {
     this.cmd({ cmd: 'gauntlet_leave' });
   }

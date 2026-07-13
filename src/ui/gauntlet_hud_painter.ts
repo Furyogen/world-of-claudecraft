@@ -6,9 +6,15 @@
 //
 // It mirrors the overhead cast bar's visual family for the countdown bar (the
 // draining `.fill` + `.timer`), and drives the Keeper's Echo round strip and the
-// pre-trial tutorial banner from the same model. The Final Court has no HUD
-// controls (it is plain auto-attack: target a foe and the standings board +
-// health frame carry the fight), so there is no court block here.
+// teaching banner from the same model. The Final Court has no HUD controls (it is
+// plain auto-attack: target a foe and the standings board + health frame carry the
+// fight), so there is no court block here.
+//
+// ONE banner element carries both teaching arms, because they can never coexist:
+// the pre-trial line rides the staging/interlude countdown, and the in-trial line
+// only exists once a trial is live. The `live` class is what restyles it from the
+// big centered pre-trial banner into the compact in-trial caption (the geometry is
+// entirely CSS; no magic values here).
 
 import type { GauntletHudHint, GauntletHudModel } from './gauntlet_hud_view';
 import { formatNumber, type TranslationKey, t } from './i18n';
@@ -35,10 +41,15 @@ const K = {
   echoSeconds: 'hudChrome.gauntlet.echoSeconds',
 } satisfies Record<string, TranslationKey>;
 
+// The in-trial state class on the teaching banner (the compact-caption geometry
+// it selects lives in CSS).
+const LIVE_HINT_CLASS = 'live';
+
 // The per-trial teaching line, keyed by the model's hint discriminator.
 const HINT_KEYS = {
   sentinel: 'hudChrome.gauntlet.hint.sentinel',
   sigils: 'hudChrome.gauntlet.hint.sigils',
+  sigilsLive: 'hudChrome.gauntlet.hint.sigilsLive',
   pull: 'hudChrome.gauntlet.hint.pull',
   echoWatch: 'hudChrome.gauntlet.hint.echoWatch',
   echoAnswer: 'hudChrome.gauntlet.hint.echoAnswer',
@@ -58,8 +69,9 @@ export interface GauntletHudElements {
   countdownFill: HTMLElement;
   /** The countdown seconds-remaining text. */
   countdownTimer: HTMLElement;
-  /** The big centered pre-trial tutorial banner (the UPCOMING trial's
-   *  teaching line during the last seconds of staging/interlude). */
+  /** The teaching banner: the big centered pre-trial line (the UPCOMING trial,
+   *  while the staging/interlude countdown runs), and, under the `live` class,
+   *  the compact in-trial caption at the apparatus. */
   tutorial: HTMLElement;
   /** The Keeper's Echo strip (shown only during a live duel). */
   echoStrip: HTMLElement;
@@ -90,10 +102,15 @@ export class GauntletHudPainter {
       w.setText(this.el.countdownTimer, formatNumber(Math.ceil(model.countdownSeconds), INT));
     }
 
-    // The pre-trial tutorial banner reuses the same teaching lines, rendered
-    // big and centered while the countdown runs out.
-    w.setDisplay(this.el.tutorial, model.tutorial ? SHOWN_BLOCK : HIDDEN);
-    if (model.tutorial) w.setText(this.el.tutorial, t(HINT_KEYS[model.tutorial]));
+    // The teaching banner: the UPCOMING trial's line while the pre-trial
+    // countdown runs (big and centered), then the live trial's own line at the
+    // apparatus (compact, via the `live` class). The pre-trial arm wins if both
+    // ever resolve, so the banner can never contradict itself mid-transition.
+    const hint = model.tutorial ?? model.liveHint;
+    const live = model.tutorial === null && model.liveHint !== null;
+    w.setDisplay(this.el.tutorial, hint ? SHOWN_BLOCK : HIDDEN);
+    if (hint) w.setText(this.el.tutorial, t(HINT_KEYS[hint]));
+    w.toggleClass(this.el.tutorial, LIVE_HINT_CLASS, live);
 
     w.setDisplay(this.el.echoStrip, model.echo ? SHOWN : HIDDEN);
     if (model.echo) this.paintEcho(model.echo);

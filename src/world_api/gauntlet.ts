@@ -26,15 +26,16 @@ export interface IWorldGauntlet {
   gauntletJoin(): void;
   // The three rolling-event join modes (all server-gated to the recruiter's
   // presence and radius; Practice ignores the event window). Join the fair FIFO
-  // queue; drop into the stands as a free spectator; start an instant solo run vs
-  // NPC bots; or, from the podium, rejoin the queue at the BACK.
+  // queue; drop into the stands as a free spectator; or start an instant solo run
+  // vs NPC bots. There is NO requeue-from-the-podium action: a finisher leaves
+  // (which sends them back where they joined from) and queues again at the
+  // Atheneum of Trials, standing with the recruiter, like any other entrant.
   gauntletQueueJoin(): void;
   gauntletSpectate(): void;
   // Practice takes an optional single game to drill (an index into the trial
   // sequence, sim-validated): the run opens at that trial and podiums when it
   // resolves. Omitted means the full six-trial run.
   gauntletPractice(trial?: number): void;
-  gauntletRejoin(): void;
   // Leave whatever gauntlet state the player is in: dequeue, stop spectating,
   // withdraw from the lobby, forfeit a live run, or exit the podium.
   gauntletLeave(): void;

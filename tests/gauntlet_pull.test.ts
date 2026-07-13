@@ -3,6 +3,7 @@ import { GAUNTLET, GAUNTLET_VENUE } from '../src/sim/content/gauntlet';
 import type { GauntletPullState, GauntletRun } from '../src/sim/gauntlet/state';
 import { circleSizeAt, pullRampFactor } from '../src/sim/gauntlet/trial_pull';
 import { Sim } from '../src/sim/sim';
+import { DT } from '../src/sim/types';
 import { groundHeight } from '../src/sim/world';
 
 // --- local helpers (not shared; copied idioms from gauntlet.test.ts) ---
@@ -350,6 +351,28 @@ describe('gauntlet pull: pace ramp (pure)', () => {
     // shrink scales below the un-ramped MINIMUM, so late circles shrink faster
     // than any early one could.
     expect(min * GAUNTLET.pull.circleShrinkMaxS).toBeLessThan(GAUNTLET.pull.circleShrinkMinS);
+  });
+});
+
+describe('gauntlet pull: the difficulty floor (pure)', () => {
+  it('the ramp never outruns a human hand: even the tightest circle keeps a real grade window', () => {
+    const P = GAUNTLET.pull;
+    // The fastest circle the trial can EVER deal: the shortest rolled shrink,
+    // scaled by the ramp at its floor. It has to stay long enough to see, react
+    // to, and click, or the trial stops being timing and becomes a coin toss.
+    const tightest = P.circleRampMin * P.circleShrinkMinS;
+    expect(tightest).toBeGreaterThanOrEqual(0.7);
+
+    // The grade falls off at startSize / (targetSize * shrinkS) per second of
+    // timing error, so the half-width of the window that still pulls at HALF
+    // force, on that tightest circle, is:
+    const halfWindowS = (0.5 * P.circleTargetSize * tightest) / P.circleStartSize;
+    expect(halfWindowS).toBeGreaterThanOrEqual(3 * DT); // 3 ticks either side of perfect
+
+    // And a click that lands a whole human reaction late (~0.15s) still HEAVES:
+    // it is worth at least a third of a perfect one, never nothing.
+    const lateGrade = Math.max(0, 1 - (0.15 * P.circleStartSize) / (P.circleTargetSize * tightest));
+    expect(P.pullForceMax * lateGrade ** P.gradePower).toBeGreaterThan(P.pullForceMax / 3);
   });
 });
 

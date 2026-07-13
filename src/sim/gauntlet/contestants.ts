@@ -42,6 +42,7 @@ export function rollNpcContestant(run: GauntletRun): GauntletContestant {
     cls,
     skin: run.rng.int(0, SKIN_COUNTS[cls] - 1),
     eliminatedAtTrial: null,
+    eliminatedAt: null,
     script: idleScript(),
   };
 }

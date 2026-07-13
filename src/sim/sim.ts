@@ -7104,11 +7104,9 @@ export class Sim {
     gauntletModesMod.gauntletPractice(this.ctx, pid, trial);
   }
 
-  gauntletRejoin(pid?: number): void {
-    gauntletModesMod.gauntletRejoin(this.ctx, pid);
-  }
-
   // Leave dispatches across all states: dequeue, stop spectating, or leave a run.
+  // There is no in-game requeue: a finisher leaves (which returns them to where
+  // they joined from) and queues again with Maro at the Atheneum of Trials.
   gauntletLeave(pid?: number): void {
     gauntletModesMod.gauntletLeave(this.ctx, pid);
   }

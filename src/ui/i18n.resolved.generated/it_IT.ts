@@ -177,7 +177,6 @@ export const it_IT: EnTranslations = {
         "span": "The Brittle Span",
         "court": "The Final Court"
       },
-      "rejoinQueue": "Rejoin the Queue",
       "lobbyJoined": "{count} in the lobby",
       "lobbyCountdown": "The run begins in {seconds}s",
       "trialLabel": "Trial {n} of {total}",
@@ -213,7 +212,8 @@ export const it_IT: EnTranslations = {
       "echoSeconds": "{seconds}s",
       "hint": {
         "sentinel": "Run on green. Freeze on red.",
-        "sigils": "Hold the mouse and trace the etched line on the slab.",
+        "sigils": "Trace the etched shape: hold and drag along the line, all the way around. Stray off the line and the pane cracks.",
+        "sigilsLive": "Hold and drag along the etched line. Start anywhere, then follow it all the way around.",
         "pull": "Click each circle just as it shrinks to the inner ring.",
         "echoWatch": "Watch the stones light up.",
         "echoAnswer": "Click the stones in the same order.",

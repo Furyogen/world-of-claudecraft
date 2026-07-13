@@ -15,9 +15,16 @@
 // events carry a point-in-time `remainingS` sample, fed in via calibrate(), which
 // snaps the anchor onto the true remaining time. If IWorld ever exposes a real
 // sim clock, pass that straight into the model and drop this.
+//
+// A CLOCKLESS phase (The Great Pull) inverts the arithmetic. It has no deadline
+// and no window, so its `endsAt` is the sim time the phase OPENED and sim time
+// runs FORWARD from that anchor. Counting down to it instead (the windowed arm,
+// with a zero window) pins the estimate AT the open time for the whole trial: a
+// frozen clock, which is what left every pull circle unrendered (its absolute
+// spawnAt never arrives). The two arms are what make both honest.
 
 import type { GauntletRunView } from '../sim/types';
-import { gauntletPhaseWindowSeconds } from './gauntlet_hud_view';
+import { gauntletPhaseIsClockless, gauntletPhaseWindowSeconds } from './gauntlet_hud_view';
 
 export class GauntletClock {
   private key = '';
@@ -32,7 +39,9 @@ export class GauntletClock {
     this.calWallMs = wallNowMs;
   }
 
-  /** Estimated absolute sim time; (run.endsAt - result) is the seconds remaining. */
+  /** Estimated absolute sim time; on a windowed phase (run.endsAt - result) is the
+   * seconds remaining, and on a clockless one (result - run.endsAt) is the seconds
+   * the phase has been open. */
   estimate(run: GauntletRunView, wallNowMs: number): number {
     const key = `${run.phase}:${run.trialIndex}:${run.endsAt}`;
     if (key !== this.key) {
@@ -44,11 +53,16 @@ export class GauntletClock {
       // Re-place the anchor so (window - elapsed) equals the sampled remaining
       // as of the sample's wall time. Clamped into the window so a stale or
       // out-of-range sample can never push the countdown negative or past full.
+      // On a clockless phase the window is zero, so this collapses to anchoring
+      // at the sample's wall time, which is exactly right: the sim emits that
+      // phase event as the phase opens, and the open IS the anchor.
       const rem = Math.min(this.windowS, Math.max(0, this.calRemainingS));
       this.anchorWallMs = this.calWallMs - (this.windowS - rem) * 1000;
       this.calRemainingS = null;
     }
     const elapsed = (wallNowMs - this.anchorWallMs) / 1000;
+    // Clockless: endsAt is the phase's OPEN, so sim time runs forward off it.
+    if (gauntletPhaseIsClockless(run)) return run.endsAt + Math.max(0, elapsed);
     const remaining = Math.max(0, this.windowS - elapsed);
     return run.endsAt - remaining;
   }

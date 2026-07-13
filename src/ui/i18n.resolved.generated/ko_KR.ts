@@ -177,7 +177,6 @@ export const ko_KR: EnTranslations = {
         "span": "부서지는 다리",
         "court": "최후의 결투장"
       },
-      "rejoinQueue": "대기열 재참가",
       "lobbyJoined": "대기실에 {count}명",
       "lobbyCountdown": "{seconds}초 후 시작",
       "trialLabel": "시련 {n} / {total}",
@@ -213,7 +212,8 @@ export const ko_KR: EnTranslations = {
       "echoSeconds": "{seconds}s",
       "hint": {
         "sentinel": "초록불에는 달리고, 빨간불에는 멈추세요.",
-        "sigils": "마우스를 누른 채 석판에 새겨진 선을 따라 그리세요.",
+        "sigils": "새겨진 도형을 따라 그리세요. 누른 채로 선을 따라 끌어 한 바퀴 도세요. 선을 벗어나면 석판이 갈라집니다.",
+        "sigilsLive": "누른 채로 새겨진 선을 따라 끌어 보세요. 아무 곳에서나 시작해 선을 따라 한 바퀴 도세요.",
         "pull": "원이 안쪽 고리 크기로 줄어드는 순간 클릭하세요.",
         "echoWatch": "돌이 빛나는 순서를 잘 보세요.",
         "echoAnswer": "같은 순서로 돌을 클릭하세요.",

@@ -2216,6 +2216,7 @@ function dirtyEveryDeltaField(): {
         cls: 'warrior' as const,
         skin: 0,
         eliminatedAtTrial: null,
+        eliminatedAt: null,
         script: {
           speed: 0,
           fumbleOnFlip: null,

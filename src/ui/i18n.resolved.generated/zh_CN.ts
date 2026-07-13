@@ -177,7 +177,6 @@ export const zh_CN: EnTranslations = {
         "span": "脆桥",
         "court": "终局之场"
       },
-      "rejoinQueue": "重新加入队列",
       "lobbyJoined": "大厅中有 {count} 人",
       "lobbyCountdown": "距开始还有 {seconds} 秒",
       "trialLabel": "试炼 {n} / {total}",
@@ -213,7 +212,8 @@ export const zh_CN: EnTranslations = {
       "echoSeconds": "{seconds}s",
       "hint": {
         "sentinel": "绿灯快跑,红灯定住。",
-        "sigils": "按住鼠标,沿石板上蚀刻的线条描画。",
+        "sigils": "描摹蚀刻的图形:按住并沿着线条拖动,绕行一整圈。一旦偏离线条,石板就会开裂。",
+        "sigilsLive": "按住并沿着蚀刻的线条拖动。可从任意位置起笔,然后沿线绕行一整圈。",
         "pull": "在圆圈缩到内环大小的瞬间点击它。",
         "echoWatch": "看好石头亮起的顺序。",
         "echoAnswer": "按同样的顺序点击石头。",

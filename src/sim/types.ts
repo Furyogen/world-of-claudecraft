@@ -2709,8 +2709,8 @@ export interface GauntletRunView {
   vitality: number; // the viewer's own vitality
   vitalityMax: number;
   spectating: boolean;
-  // A solo Practice run (vs bots only): the podium hides the "rejoin queue" action
-  // and a practice run never records ladder stats. False for a live queue game.
+  // A solo Practice run (vs bots only): the matchmaker and free spectators skip
+  // it and it never records ladder stats. False for a live queue game.
   practice: boolean;
   finished: boolean; // the viewer resolved the current trial (crossed the line)
   originX: number; // instance origin, so presentation can derive field-local coords

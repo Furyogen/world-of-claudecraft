@@ -6281,7 +6281,6 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gauntlet.trialNames.span': '脆き橋',
   'hudChrome.gauntlet.trialNames.court': '最終決戦の場',
   'hudChrome.gauntlet.practiceNote': 'ボットのみを相手にする即時のソロ挑戦。',
-  'hudChrome.gauntlet.rejoinQueue': '待機列に再参加',
   'hudChrome.gauntlet.lobbyJoined': 'ロビーに {count} 人',
   'hudChrome.gauntlet.lobbyCountdown': '開始まで {seconds} 秒',
   'hudChrome.gauntlet.trialLabel': '試練 {n} / {total}',
@@ -6306,7 +6305,10 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gauntlet.sigilsShattered': '飴細工が砕けた!',
   'hudChrome.gauntlet.echoRound': 'ラウンド {n} / {total}',
   'hudChrome.gauntlet.hint.sentinel': '青は走れ。赤は止まれ。',
-  'hudChrome.gauntlet.hint.sigils': 'マウスを押したまま、石板に刻まれた線をなぞろう。',
+  'hudChrome.gauntlet.hint.sigils':
+    '刻まれた図形をなぞろう。押したまま線に沿ってドラッグし、ぐるりと一周させる。線から外れると石板にひびが入る。',
+  'hudChrome.gauntlet.hint.sigilsLive':
+    '押したまま、刻まれた線に沿ってドラッグしよう。どこから始めてもよい。そのまま線を一周させる。',
   'hudChrome.gauntlet.hint.pull': '円が内側のリングの大きさまで縮んだ瞬間にクリック。',
   'hudChrome.gauntlet.hint.echoWatch': '石が光る順番をよく見よう。',
   'hudChrome.gauntlet.hint.echoAnswer': '同じ順番で石をクリックしよう。',

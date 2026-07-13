@@ -5952,7 +5952,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gauntlet.trialNames.span': '脆桥',
   'hudChrome.gauntlet.trialNames.court': '终局之场',
   'hudChrome.gauntlet.practiceNote': '立即开始一场只对抗电脑对手的单人试炼。',
-  'hudChrome.gauntlet.rejoinQueue': '重新加入队列',
   'hudChrome.gauntlet.lobbyJoined': '大厅中有 {count} 人',
   'hudChrome.gauntlet.lobbyCountdown': '距开始还有 {seconds} 秒',
   'hudChrome.gauntlet.trialLabel': '试炼 {n} / {total}',
@@ -5977,7 +5976,10 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gauntlet.sigilsShattered': '糖玻璃碎了!',
   'hudChrome.gauntlet.echoRound': '第 {n} / {total} 轮',
   'hudChrome.gauntlet.hint.sentinel': '绿灯快跑,红灯定住。',
-  'hudChrome.gauntlet.hint.sigils': '按住鼠标,沿石板上蚀刻的线条描画。',
+  'hudChrome.gauntlet.hint.sigils':
+    '描摹蚀刻的图形:按住并沿着线条拖动,绕行一整圈。一旦偏离线条,石板就会开裂。',
+  'hudChrome.gauntlet.hint.sigilsLive':
+    '按住并沿着蚀刻的线条拖动。可从任意位置起笔,然后沿线绕行一整圈。',
   'hudChrome.gauntlet.hint.pull': '在圆圈缩到内环大小的瞬间点击它。',
   'hudChrome.gauntlet.hint.echoWatch': '看好石头亮起的顺序。',
   'hudChrome.gauntlet.hint.echoAnswer': '按同样的顺序点击石头。',

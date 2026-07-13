@@ -41,7 +41,8 @@ import {
   spawnNpcContestants,
   stagingSpot,
 } from './contestants';
-import { holdPodiumOccupants, releasePodiumSeat, seatPodium } from './podium';
+import { holdPodiumOccupants, rankGauntletField, releasePodiumSeat, seatPodium } from './podium';
+import { holdSpectatorsOutsideArenas } from './spectator_bounds';
 import type { GauntletRun } from './state';
 import { startCourt, updateCourt } from './trial_court';
 
@@ -188,6 +189,7 @@ export function addPlayerToLobby(ctx: SimContext, run: GauntletRun, pid: number)
     cls: 'warrior', // unused for players: they wear their own entity
     skin: 0,
     eliminatedAtTrial: null,
+    eliminatedAt: null,
     script: idleScript(),
   });
   run.playerStates.set(pid, {
@@ -634,23 +636,11 @@ export function gauntletEcho(ctx: SimContext, pid: number | undefined, stone: nu
   gauntletEchoTap(ctx, run, run.trial, r.meta.entityId, stone);
 }
 
-// Rank the field for the podium: live players by finish time then progress,
-// then surviving NPCs by skill, then the fallen in reverse elimination order.
+// Close the run on its ceremony: rank the field (gauntlet/podium.ts owns the
+// order), record the stats, pose the top three on the winners' stand, and gather
+// everyone else in front of it.
 function computePodium(ctx: SimContext, run: GauntletRun): void {
-  const alive = aliveContestants(run);
-  const players = alive
-    .filter((c) => c.player && !run.playerStates.get(c.entityId)?.spectating)
-    .sort((a, b) => {
-      const pa = run.playerStates.get(a.entityId);
-      const pb = run.playerStates.get(b.entityId);
-      const fa = pa?.finishedAt ?? Number.POSITIVE_INFINITY;
-      const fb = pb?.finishedAt ?? Number.POSITIVE_INFINITY;
-      if (fa !== fb) return fa - fb;
-      return (pb?.bestZ ?? 0) - (pa?.bestZ ?? 0);
-    });
-  const npcs = alive.filter((c) => !c.player).sort((a, b) => b.skill - a.skill);
-  const fallen = run.contestants.filter((c) => c.eliminatedAtTrial !== null).reverse();
-  const ranked = [...players, ...npcs, ...fallen];
+  const ranked = rankGauntletField(run);
   const names = [ranked[0]?.name ?? '', ranked[1]?.name ?? '', ranked[2]?.name ?? ''];
   run.podium = {
     first: names[0],
@@ -744,6 +734,11 @@ export function spawnGauntletRecruiter(ctx: SimContext): void {
 
 // The per-tick driver, called from the coordinator's end-of-tick system block.
 export function updateGauntletRuns(ctx: SimContext): void {
+  // Watchers watch from outside: any spectator (a knocked-out contestant or a
+  // free-roaming one) standing in an arena is pushed back to its edge. Runs
+  // before the phase machine so a spectator can never be inside a game the
+  // trial modules are about to read (gauntlet/spectator_bounds.ts).
+  holdSpectatorsOutsideArenas(ctx);
   for (const run of [...ctx.gauntletRuns]) {
     if (run.phase !== 'lobby') sweepStrandedPlayers(ctx, run);
     if (run.playerStates.size === 0 && run.phase !== 'lobby') {
@@ -794,9 +789,9 @@ export function updateGauntletRuns(ctx: SimContext): void {
           // the podium, never on to the next arena.
           if (run.trialIndex + 1 >= GAUNTLET.trials.length || run.practiceTrial !== null) {
             run.phase = 'podium';
-            // The ceremony has NO deadline: it holds until each player leaves
-            // or rejoins the queue on their own (the podium case below). A zero
-            // remaining window keeps the client countdown dark.
+            // The ceremony has NO deadline: it holds until each player leaves on
+            // their own (the podium case below). A zero remaining window keeps
+            // the client countdown dark.
             run.phaseEndsAt = ctx.time;
             computePodium(ctx, run);
             emitPhase(ctx, run);
@@ -821,7 +816,8 @@ export function updateGauntletRuns(ctx: SimContext): void {
         break;
       case 'podium':
         // The ceremony never times anyone out: the tableau (and its fireworks)
-        // holds until each player chooses Leave or Rejoin themselves. Once the
+        // holds until each player chooses Leave themselves (which returns them to
+        // where they joined from, the only route back into the queue). Once the
         // last player detaches, the emptyFor sweep at the top of this loop
         // disposes the run and frees the venue slot.
         holdPodiumOccupants(ctx, run); // keep the finishers posed on the stand

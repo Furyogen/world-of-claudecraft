@@ -3475,7 +3475,6 @@ export class Hud {
   // The knockout / spectator / podium overlay; builds its own DOM lazily on show.
   private readonly gauntletOverlay = new GauntletOverlay({
     onLeave: () => this.sim.gauntletLeave(),
-    onRejoin: () => this.sim.gauntletRejoin(),
   });
   // The recruiter dialog (opened from the gauntlet_recruiter interact path).
   private readonly gauntletRecruit = new GauntletRecruitWindow({
@@ -9540,21 +9539,26 @@ export class Hud {
         }
         case 'gauntletFinished': {
           // You cleared the trial's goal (crossed the sentinel finish line).
-          this.showBanner(t('hudChrome.gauntlet.passed'));
+          // ONE cue, the centered word: this used to ALSO fire showBanner with
+          // the same string, so "PASSED" landed twice at once, in two different
+          // styles, on top of each other. The word wins over the banner because
+          // the banner channel is the sentinel's red/green LIGHT channel, which
+          // is actionable, and a celebration must never stomp it.
           this.fiestaWordPop(t('hudChrome.gauntlet.passed'), '#7bd88f', 2);
           audio.gauntletFanfare();
           break;
         }
         case 'gauntletEliminated': {
+          // ONE cue, the knockout overlay (the full-screen splash that carries
+          // the survivor count and collapses to the spectator bar). It used to
+          // also fire a word pop with the same word over the top of it.
           this.gauntletOverlay.showEliminated(this.sim.gauntletRun?.survivors ?? 0);
-          this.fiestaWordPop(t('hudChrome.gauntlet.eliminated'), '#ff5a4a', 3);
           break;
         }
         case 'gauntletPodium': {
           this.gauntletOverlay.showPodium(
             { first: ev.first, second: ev.second, third: ev.third },
             ev.won,
-            this.sim.gauntletRun?.practice ?? false,
           );
           if (ev.won) audio.gauntletFanfare();
           break;
@@ -10460,12 +10464,11 @@ export class Hud {
     // see first/second/third for however long they stay. The one-shot
     // gauntletPodium event stays primary (it carries the authoritative `won`);
     // this covers a viewer who missed it. Free-roaming spectators are excluded
-    // (they are in no run; Rejoin/Leave on the podium panel is not theirs).
+    // (they are in no run; the podium panel's Leave is not theirs).
     if (run && run.phase === 'podium' && run.podium && !this.sim.gauntletSpectating) {
       this.gauntletOverlay.ensurePodium(
         run.podium,
         run.podium.first === (this.sim.player?.name ?? ''),
-        run.practice,
       );
     }
     if (run) this.gauntletOverlay.update(run.survivors);

@@ -25,6 +25,11 @@ export interface GauntletContestant {
   cls: PlayerClass;
   skin: number;
   eliminatedAtTrial: number | null;
+  // The sim time of the knockout (null while alive). eliminatedAtTrial alone
+  // cannot rank the fallen (a whole trial's worth of them share one index), and
+  // roster order is not a finishing order, so the podium ranks the fallen on
+  // THIS: the last contestant standing before the champion is the runner-up.
+  eliminatedAt: number | null;
   // Sentinel-trial NPC script. Planned when the trial opens: the green-light
   // pace (yards/s, skill-lerped between the npcSpeed bounds) and the red-flip
   // index this NPC fumbles on (it overruns the grace window and poofs), or
@@ -232,8 +237,10 @@ export interface GauntletPodiumSeat {
 }
 
 // One waiting entry in the fair, FIFO Gauntlet queue (gauntlet/modes.ts). The
-// matchmaker pulls from the FRONT; a player who rejoins after a game goes to the
-// BACK. `joinedAtTick` is only for stable diagnostics/ordering, never a draw.
+// matchmaker pulls from the FRONT, and the only way in is the walk-up gate at the
+// recruiter (there is no in-game requeue), so a player who wants another game
+// walks back and queues from the BACK like anyone else. `joinedAtTick` is only
+// for stable diagnostics/ordering, never a draw.
 export interface GauntletQueueUnit {
   pid: number;
   joinedAtTick: number;
@@ -250,8 +257,7 @@ export interface GauntletRun {
   id: number;
   slot: number;
   // A private Practice run (solo vs NPC bots): the matchmaker and spectators skip
-  // it, the podium hides "rejoin queue", and it records no ladder stats. A normal
-  // rolling-queue game is false.
+  // it, and it records no ladder stats. A normal rolling-queue game is false.
   practice: boolean;
   // Practice-a-single-game: the chosen trial index (into GAUNTLET.trials), or
   // null for the full six-trial run. When set, the run starts AT that trial
