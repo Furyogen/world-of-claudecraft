@@ -2689,6 +2689,11 @@ export class GameServer {
     // remaining player's win/honor durable if both combatants disconnect close
     // together; removePlayer repeats the idempotent cleanup after the save.
     this.sim.arenaResolveDesertion(session.pid);
+    // Freeze reward eligibility and reconcile pending loot before the leave
+    // snapshot. saveCharacterOnLeave awaits the database; without this
+    // synchronous prefix, a roll or boss death can mutate the character after
+    // serialization and removePlayer then discards that unsaved reward.
+    this.sim.preparePlayerLeave(session.pid);
     await this.saveCharacterOnLeave(session);
     this.sessionsByCharacterId.delete(session.characterId);
     // Release the per-character load lease so a fresh login (here or on another
@@ -3371,6 +3376,10 @@ export class GameServer {
   // -------------------------------------------------------------------------
 
   handleMessage(session: ClientSession, raw: string): void {
+    // A socket can deliver already-buffered frames after leave() removes its
+    // session and starts the awaited persistence flush. Never let that stale
+    // authority mutate live state after the character snapshot was captured.
+    if (session.left || this.clients.get(session.pid) !== session) return;
     gameMetricsCounters().wsMessage('in');
     const receivedAtMs = Date.now();
     const verdict = consumeMsgToken(session.msgRate, receivedAtMs / 1000);

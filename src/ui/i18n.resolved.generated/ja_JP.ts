@@ -574,7 +574,7 @@ export const ja_JP: EnTranslations = {
     "mobile": {
       "jump": "ジャンプ",
       "leaderboard": "ランキング",
-      "dailyRewards": "報酬",
+      "dailyRewards": "ストア",
       "deeds": "功績",
       "nameplates": "ネームプレート",
       "haptics": "振動",

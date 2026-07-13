@@ -167,7 +167,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'guide.valeCupPage.spectateBody':
     'Satu pertandingan berlangsung pada satu waktu di stadion, dan siapa pun bisa datang menonton dari tribun.',
   'hudChrome.keybinds.valecup': 'Piala Lembah',
-  'hudChrome.mobile.dailyRewards': 'Hadiah',
+  'hudChrome.mobile.dailyRewards': 'Toko',
   'hudChrome.perf.labels.predLead': 'Jarak Prediksi',
   'hudChrome.townFocus.budgetLabel': 'Sisa poin: {remaining} / {budget}',
   'hudChrome.townFocus.decreaseAria': 'Kurangi fokus pada {component}',

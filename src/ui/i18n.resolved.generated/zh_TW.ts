@@ -574,7 +574,7 @@ export const zh_TW: EnTranslations = {
     "mobile": {
       "jump": "跳躍",
       "leaderboard": "排行榜",
-      "dailyRewards": "獎勵",
+      "dailyRewards": "商店",
       "deeds": "功績",
       "nameplates": "名條",
       "haptics": "觸覺回饋",

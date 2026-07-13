@@ -117,7 +117,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'guide.valeCupPage.spectateBody':
     'Én kamp spilles ad gangen på stadion, og enhver kan gå hen og se med fra tribunerne.',
   'hudChrome.keybinds.valecup': 'Dalpokalen',
-  'hudChrome.mobile.dailyRewards': 'Belønninger',
+  'hudChrome.mobile.dailyRewards': 'Butik',
   'hudChrome.perf.labels.predLead': 'Forudsigelsesforspring',
   'hudChrome.townFocus.budgetLabel': 'Point tilbage: {remaining} / {budget}',
   'hudChrome.townFocus.decreaseAria': 'Sænk fokus på {component}',

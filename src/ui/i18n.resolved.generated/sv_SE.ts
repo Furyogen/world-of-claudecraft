@@ -574,7 +574,7 @@ export const sv_SE: EnTranslations = {
     "mobile": {
       "jump": "Hoppa",
       "leaderboard": "Ranking",
-      "dailyRewards": "Belöningar",
+      "dailyRewards": "Butik",
       "deeds": "Bedrifter",
       "nameplates": "Namn",
       "haptics": "Haptik",

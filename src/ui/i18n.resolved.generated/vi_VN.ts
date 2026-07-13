@@ -574,7 +574,7 @@ export const vi_VN: EnTranslations = {
     "mobile": {
       "jump": "Nhảy",
       "leaderboard": "Xếp Hạng",
-      "dailyRewards": "Thưởng",
+      "dailyRewards": "Cửa hàng",
       "deeds": "Kỳ Công",
       "nameplates": "Tên",
       "haptics": "Phản Hồi Rung",

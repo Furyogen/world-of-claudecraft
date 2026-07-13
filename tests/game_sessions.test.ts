@@ -1,5 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
+import { HEROIC_MARK_ITEM_ID } from '../src/sim/content/dungeon_difficulty';
 import { MECH_CHROMAS } from '../src/sim/content/skins';
+import { MOBS } from '../src/sim/data';
+import { createMob } from '../src/sim/entity';
 
 const openPlaySession = vi.fn(async () => 1);
 const closePlaySession = vi.fn(async () => {});
@@ -344,6 +347,318 @@ describe('GameServer sessions', () => {
     expect((server as any).sessionByCharacterId(101)).toBeNull();
     const rejoined = expectJoined(server.join(fakeWs(), 13, 101, 'Indexa', 'warrior', null));
     expect((server as any).sessionByCharacterId(101)).toBe(rejoined);
+  });
+
+  it('cancels an active trade before the disconnect snapshot can yield', async () => {
+    const server = new GameServer();
+    const leaver = expectJoined(server.join(fakeWs(), 11, 101, 'Leaver', 'warrior', null));
+    const stayer = expectJoined(server.join(fakeWs(), 12, 102, 'Stayer', 'mage', null));
+    server.sim.addItem('wolf_fang', 1, leaver.pid);
+    server.sim.tradeRequest(stayer.pid, leaver.pid);
+    server.sim.tradeAccept(stayer.pid);
+    server.sim.tradeSetOffer([{ itemId: 'wolf_fang', count: 1 }], 0, leaver.pid);
+    server.sim.tradeConfirm(leaver.pid);
+
+    let resolveSave!: () => void;
+    const slowSave = new Promise<void>((resolve) => {
+      resolveSave = resolve;
+    });
+    const savesBefore = vi.mocked(saveCharacterAndMarketState).mock.calls.length;
+    vi.mocked(saveCharacterAndMarketState).mockImplementationOnce(() => slowSave);
+
+    const leaving = server.leave(leaver, 'test');
+    await vi.waitFor(() => {
+      expect(saveCharacterAndMarketState).toHaveBeenCalledTimes(savesBefore + 1);
+    });
+
+    // The counterparty must not be able to complete a non-escrowed trade after
+    // the leaver's bags were serialized, otherwise both the save and recipient
+    // retain the same item.
+    server.handleMessage(stayer, JSON.stringify({ t: 'cmd', cmd: 'trade_confirm' }));
+    const stateDuringSave = {
+      tradeOpen: server.sim.tradeFor(stayer.pid) !== null,
+      stayerItems: server.sim.countItem('wolf_fang', stayer.pid),
+    };
+
+    resolveSave();
+    await leaving;
+
+    expect(stateDuringSave).toEqual({ tradeOpen: false, stayerItems: 0 });
+  });
+
+  it('ignores commands from a session after its disconnect teardown starts', async () => {
+    const server = new GameServer();
+    const leaver = expectJoined(server.join(fakeWs(), 11, 101, 'Leaver', 'warrior', null));
+    const stayer = expectJoined(server.join(fakeWs(), 12, 102, 'Stayer', 'mage', null));
+
+    let resolveSave!: () => void;
+    const slowSave = new Promise<void>((resolve) => {
+      resolveSave = resolve;
+    });
+    const savesBefore = vi.mocked(saveCharacterAndMarketState).mock.calls.length;
+    vi.mocked(saveCharacterAndMarketState).mockImplementationOnce(() => slowSave);
+
+    const leaving = server.leave(leaver, 'test');
+    await vi.waitFor(() => {
+      expect(saveCharacterAndMarketState).toHaveBeenCalledTimes(savesBefore + 1);
+    });
+
+    server.handleMessage(leaver, JSON.stringify({ t: 'cmd', cmd: 'trade_req', id: stayer.pid }));
+    server.sim.tradeAccept(stayer.pid);
+    const staleCommandOpenedTrade = server.sim.tradeFor(stayer.pid) !== null;
+
+    resolveSave();
+    await leaving;
+
+    expect(staleCommandOpenedTrade).toBe(false);
+  });
+
+  it('forfeits pending loot rolls before the disconnect save can yield', async () => {
+    const server = new GameServer();
+    const leaver = expectJoined(server.join(fakeWs(), 11, 101, 'Leaver', 'warrior', null));
+    const stayer = expectJoined(server.join(fakeWs(), 12, 102, 'Stayer', 'mage', null));
+    const third = expectJoined(server.join(fakeWs(), 13, 103, 'Third', 'rogue', null));
+    server.sim.partyInvite(stayer.pid, leaver.pid);
+    server.sim.partyAccept(stayer.pid);
+    server.sim.partyInvite(third.pid, leaver.pid);
+    server.sim.partyAccept(third.pid);
+
+    const mob = createMob(server.sim.nextId++, MOBS.forest_wolf, 2, { x: 0, y: 0, z: 0 });
+    mob.dead = true;
+    mob.lootable = true;
+    mob.tappedById = leaver.pid;
+    mob.lootRecipientIds = [leaver.pid, stayer.pid, third.pid];
+    mob.loot = { copper: 0, items: [{ itemId: 'greyjaw_hide_boots', count: 1 }] };
+    server.sim.entities.set(mob.id, mob);
+    const lateMob = createMob(server.sim.nextId++, MOBS.forest_wolf, 2, {
+      x: 0,
+      y: 0,
+      z: 0,
+    });
+    lateMob.dead = true;
+    lateMob.lootable = true;
+    lateMob.tappedById = leaver.pid;
+    lateMob.lootRecipientIds = [leaver.pid, stayer.pid, third.pid];
+    lateMob.loot = { copper: 0, items: [{ itemId: 'greyjaw_hide_boots', count: 1 }] };
+    server.sim.entities.set(lateMob.id, lateMob);
+    server.sim.lootCorpse(mob.id, leaver.pid);
+    const roll = server.sim.drainEvents().find((event) => event.type === 'lootRoll');
+    if (!roll || roll.type !== 'lootRoll') throw new Error('expected pending loot roll');
+    server.sim.submitLootRoll(roll.rollId, 'need', leaver.pid);
+    // Existing roll stays need/greed, but any later corpse will use the
+    // departing leader as its explicitly pinned master looter.
+    server.sim.setPartyLootMaster(true, leaver.pid, 'uncommon', leaver.pid);
+
+    let resolveSave!: () => void;
+    const slowSave = new Promise<void>((resolve) => {
+      resolveSave = resolve;
+    });
+    const savesBefore = vi.mocked(saveCharacterAndMarketState).mock.calls.length;
+    vi.mocked(saveCharacterAndMarketState).mockImplementationOnce(() => slowSave);
+
+    const leaving = server.leave(leaver, 'test');
+    await vi.waitFor(() => {
+      expect(saveCharacterAndMarketState).toHaveBeenCalledTimes(savesBefore + 1);
+    });
+
+    // Resolve the roll while leave() is parked on its first persistence await.
+    // The departing need choice must already be gone, otherwise this awards an
+    // item after the leave snapshot and removePlayer later destroys it.
+    server.sim.submitLootRoll(roll.rollId, 'pass', stayer.pid);
+    server.sim.submitLootRoll(roll.rollId, 'pass', third.pid);
+    expect(server.sim.countItem('greyjaw_hide_boots', leaver.pid)).toBe(0);
+    expect(mob.loot?.items.find((slot) => slot.itemId === 'greyjaw_hide_boots')).toMatchObject({
+      count: 1,
+      openToAll: true,
+    });
+
+    // A corpse looted only after leave begins must not rehydrate the departing
+    // pid from its death-time recipient snapshot or strand a brand-new master
+    // roll on that departing leader. The two live candidates get Need/Greed.
+    server.sim.lootCorpse(lateMob.id, stayer.pid);
+    expect(server.sim.activeLootRolls(leaver.pid)).toHaveLength(0);
+    expect(server.sim.activeLootRolls(stayer.pid)).toHaveLength(1);
+    expect(server.sim.activeLootRolls(third.pid)).toHaveLength(1);
+    const lateRoll = server.sim.activeLootRolls(stayer.pid)[0];
+    server.sim.submitLootRoll(lateRoll.rollId, 'need', stayer.pid);
+    server.sim.submitLootRoll(lateRoll.rollId, 'pass', third.pid);
+    expect(server.sim.countItem('greyjaw_hide_boots', stayer.pid)).toBe(1);
+
+    resolveSave();
+    await leaving;
+  });
+
+  it('preserves corpse loot rights and strategy after the original tapper leaves', async () => {
+    const server = new GameServer();
+    const leaver = expectJoined(server.join(fakeWs(), 11, 101, 'Leaver', 'warrior', null));
+    const stayer = expectJoined(server.join(fakeWs(), 12, 102, 'Stayer', 'mage', null));
+    const third = expectJoined(server.join(fakeWs(), 13, 103, 'Third', 'rogue', null));
+    server.sim.partyInvite(stayer.pid, leaver.pid);
+    server.sim.partyAccept(stayer.pid);
+    server.sim.partyInvite(third.pid, leaver.pid);
+    server.sim.partyAccept(third.pid);
+
+    const mob = createMob(server.sim.nextId++, MOBS.forest_wolf, 2, { x: 0, y: 0, z: 0 });
+    mob.dead = true;
+    mob.lootable = true;
+    mob.tappedById = leaver.pid;
+    mob.lootRecipientIds = [leaver.pid, stayer.pid, third.pid];
+    mob.loot = { copper: 0, items: [{ itemId: 'greyjaw_hide_boots', count: 1 }] };
+    server.sim.entities.set(mob.id, mob);
+
+    await server.leave(leaver, 'test');
+    server.sim.lootCorpse(mob.id, stayer.pid);
+
+    expect(server.sim.activeLootRolls(stayer.pid)).toHaveLength(1);
+    expect(server.sim.activeLootRolls(third.pid)).toHaveLength(1);
+    const roll = server.sim.activeLootRolls(stayer.pid)[0];
+    server.sim.submitLootRoll(roll.rollId, 'need', stayer.pid);
+    server.sim.submitLootRoll(roll.rollId, 'pass', third.pid);
+    expect(server.sim.countItem('greyjaw_hide_boots', stayer.pid)).toBe(1);
+  });
+
+  it('excludes a departing player from heroic rewards after the leave snapshot', async () => {
+    const server = new GameServer();
+    const leaver = expectJoined(server.join(fakeWs(), 11, 101, 'Leaver', 'warrior', null));
+    const stayer = expectJoined(server.join(fakeWs(), 12, 102, 'Stayer', 'mage', null));
+    server.sim.partyInvite(stayer.pid, leaver.pid);
+    server.sim.partyAccept(stayer.pid);
+    server.sim.setDungeonDifficulty('heroic', leaver.pid);
+    server.sim.enterDungeon('hollow_crypt', leaver.pid);
+    server.sim.enterDungeon('hollow_crypt', stayer.pid);
+
+    const inst = server.sim.ctx.instances.find(
+      (slot) => slot.partyKey !== null && slot.dungeonId === 'hollow_crypt',
+    );
+    if (!inst) throw new Error('expected claimed heroic instance');
+    expect(inst.difficulty).toBe('heroic');
+    const boss = inst.mobIds
+      .map((id) => server.sim.entities.get(id))
+      .find((entity) => entity?.templateId === 'morthen');
+    const leaverEntity = server.sim.entities.get(leaver.pid);
+    const stayerEntity = server.sim.entities.get(stayer.pid);
+    if (!boss || !leaverEntity || !stayerEntity) throw new Error('expected heroic actors');
+    leaverEntity.pos = { x: boss.pos.x - 1, y: boss.pos.y, z: boss.pos.z };
+    leaverEntity.prevPos = { ...leaverEntity.pos };
+    stayerEntity.pos = { x: boss.pos.x + 1, y: boss.pos.y, z: boss.pos.z };
+    stayerEntity.prevPos = { ...stayerEntity.pos };
+    (server.sim as any).dealDamage(leaverEntity, boss, 10, false, 'physical', null, 'hit');
+    expect(boss.tappedById).toBe(leaver.pid);
+    const stayerPet = createMob(server.sim.nextId++, MOBS.forest_wolf, 2, {
+      x: boss.pos.x + 2,
+      y: boss.pos.y,
+      z: boss.pos.z,
+    });
+    stayerPet.ownerId = stayer.pid;
+    stayerPet.hostile = false;
+    server.sim.entities.set(stayerPet.id, stayerPet);
+
+    let resolveSave!: () => void;
+    const slowSave = new Promise<void>((resolve) => {
+      resolveSave = resolve;
+    });
+    const savesBefore = vi.mocked(saveCharacterAndMarketState).mock.calls.length;
+    vi.mocked(saveCharacterAndMarketState).mockImplementationOnce(() => slowSave);
+
+    const leaving = server.leave(leaver, 'test');
+    await vi.waitFor(() => {
+      expect(saveCharacterAndMarketState).toHaveBeenCalledTimes(savesBefore + 1);
+    });
+
+    // A queued DoT tick from the departing player must not reacquire the tap
+    // after preparePlayerLeave transferred it to the eligible stayer.
+    (server.sim as any).dealDamage(leaverEntity, boss, 1, false, 'physical', null, 'hit');
+    expect(boss.tappedById).toBe(stayer.pid);
+
+    // Kill the final boss while leave() is parked after serializing the leaver.
+    // No reward or lockout may mutate that stale, soon-to-be-discarded state.
+    (server.sim as any).dealDamage(stayerPet, boss, boss.hp + 10, false, 'physical', null, 'hit');
+    expect(boss.dead).toBe(true);
+    expect({
+      stayerMarks: server.sim.countItem(HEROIC_MARK_ITEM_ID, stayer.pid),
+      leaverMarks: server.sim.countItem(HEROIC_MARK_ITEM_ID, leaver.pid),
+      stayerLocked: server.sim.meta(stayer.pid)?.raidLockouts.has('hollow_crypt:heroic'),
+      leaverLocked: server.sim.meta(leaver.pid)?.raidLockouts.has('hollow_crypt:heroic'),
+    }).toEqual({
+      stayerMarks: 1,
+      leaverMarks: 0,
+      stayerLocked: true,
+      leaverLocked: false,
+    });
+
+    resolveSave();
+    await leaving;
+  });
+
+  it("delegates a departing killer's fatal queued hit to the remaining heroic party", async () => {
+    const server = new GameServer();
+    const leaver = expectJoined(server.join(fakeWs(), 11, 101, 'Leaver', 'warrior', null));
+    const stayer = expectJoined(server.join(fakeWs(), 12, 102, 'Stayer', 'mage', null));
+    server.sim.partyInvite(stayer.pid, leaver.pid);
+    server.sim.partyAccept(stayer.pid);
+    server.sim.setDungeonDifficulty('heroic', leaver.pid);
+    server.sim.enterDungeon('hollow_crypt', leaver.pid);
+    server.sim.enterDungeon('hollow_crypt', stayer.pid);
+
+    const inst = server.sim.ctx.instances.find(
+      (slot) => slot.partyKey !== null && slot.dungeonId === 'hollow_crypt',
+    );
+    if (!inst) throw new Error('expected claimed heroic instance');
+    const boss = inst.mobIds
+      .map((id) => server.sim.entities.get(id))
+      .find((entity) => entity?.templateId === 'morthen');
+    const leaverEntity = server.sim.entities.get(leaver.pid);
+    const stayerEntity = server.sim.entities.get(stayer.pid);
+    if (!boss || !leaverEntity || !stayerEntity) throw new Error('expected heroic actors');
+    leaverEntity.pos = { x: boss.pos.x - 1, y: boss.pos.y, z: boss.pos.z };
+    leaverEntity.prevPos = { ...leaverEntity.pos };
+    stayerEntity.pos = { x: boss.pos.x + 1, y: boss.pos.y, z: boss.pos.z };
+    stayerEntity.prevPos = { ...stayerEntity.pos };
+    (server.sim as any).dealDamage(leaverEntity, boss, 10, false, 'shadow', 'Leaving DoT', 'hit');
+    expect(boss.tappedById).toBe(leaver.pid);
+
+    let resolveSave!: () => void;
+    const slowSave = new Promise<void>((resolve) => {
+      resolveSave = resolve;
+    });
+    const savesBefore = vi.mocked(saveCharacterAndMarketState).mock.calls.length;
+    vi.mocked(saveCharacterAndMarketState).mockImplementationOnce(() => slowSave);
+
+    const leaving = server.leave(leaver, 'test');
+    await vi.waitFor(() => {
+      expect(saveCharacterAndMarketState).toHaveBeenCalledTimes(savesBefore + 1);
+    });
+
+    (server.sim as any).dealDamage(
+      leaverEntity,
+      boss,
+      boss.hp + 10,
+      false,
+      'shadow',
+      'Leaving DoT',
+      'hit',
+      true,
+    );
+    const result = {
+      bossDead: boss.dead,
+      recipients: boss.lootRecipientIds,
+      stayerMarks: server.sim.countItem(HEROIC_MARK_ITEM_ID, stayer.pid),
+      leaverMarks: server.sim.countItem(HEROIC_MARK_ITEM_ID, leaver.pid),
+      stayerLocked: server.sim.meta(stayer.pid)?.raidLockouts.has('hollow_crypt:heroic'),
+      leaverLocked: server.sim.meta(leaver.pid)?.raidLockouts.has('hollow_crypt:heroic'),
+    };
+
+    resolveSave();
+    await leaving;
+
+    expect(result).toEqual({
+      bossDead: true,
+      recipients: [stayer.pid],
+      stayerMarks: 1,
+      leaverMarks: 0,
+      stayerLocked: true,
+      leaverLocked: false,
+    });
   });
 
   it('retries failed disconnect saves before releasing the character for rejoin', async () => {

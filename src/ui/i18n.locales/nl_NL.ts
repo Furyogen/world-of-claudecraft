@@ -118,7 +118,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'guide.valeCupPage.spectateBody':
     'Er wordt één wedstrijd tegelijk gespeeld in het stadion, en iedereen kan aan komen lopen en toekijken vanaf de tribunes.',
   'hudChrome.keybinds.valecup': 'Dalbeker',
-  'hudChrome.mobile.dailyRewards': 'Beloningen',
+  'hudChrome.mobile.dailyRewards': 'Winkel',
   'hudChrome.perf.labels.predLead': 'Predictievoorsprong',
   'hudChrome.townFocus.budgetLabel': 'Punten over: {remaining} / {budget}',
   'hudChrome.townFocus.decreaseAria': 'Verminder de focus op {component}',

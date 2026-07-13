@@ -133,7 +133,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.valeCupPage.spectateBody':
     "Un seul match se joue à la fois au stade, et chacun peut s'approcher et regarder depuis les tribunes.",
   'hudChrome.keybinds.valecup': 'Coupe du Val',
-  'hudChrome.mobile.dailyRewards': 'Récompenses',
+  'hudChrome.mobile.dailyRewards': 'Boutique',
   'hudChrome.perf.labels.predLead': 'Avance de prédiction',
   'hudChrome.townFocus.budgetLabel': 'Points restants : {remaining} / {budget}',
   'hudChrome.townFocus.decreaseAria': 'Réduire la priorité de {component}',

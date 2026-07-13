@@ -685,10 +685,6 @@ export interface LootSlot extends InvSlot {
   personalFor?: number[];
   // Need/greed loot that everyone passed on becomes free-for-all corpse loot.
   openToAll?: boolean;
-  // Shared personal (participation tokens, e.g. Heroic Marks): a single loot
-  // action by ANY listed player grants `count` copies to EVERY player in
-  // `personalFor`, then consumes the slot. No one has to loot their own copy.
-  sharedPersonal?: boolean;
 }
 
 export interface CorpseLoot {
@@ -2086,6 +2082,10 @@ export interface Entity {
   // every non-player entity. Owned by src/sim/spirit.ts.
   ghost: boolean;
   corpsePos: Vec3 | null;
+  // Unique exit entity of the live instance claim where corpsePos was captured.
+  // Null for world corpses and saved ghosts. Instance exits are recreated on
+  // every claim, so stale corpse coordinates cannot match a recycled slot.
+  corpseInstanceId: number | null;
   scale: number;
   color: number;
   skinCatalog: SkinCatalog; // player appearance catalog: class texture set or cosmetic body.

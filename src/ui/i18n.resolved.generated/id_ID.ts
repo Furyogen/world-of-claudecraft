@@ -574,7 +574,7 @@ export const id_ID: EnTranslations = {
     "mobile": {
       "jump": "Lompat",
       "leaderboard": "Peringkat",
-      "dailyRewards": "Hadiah",
+      "dailyRewards": "Toko",
       "deeds": "Jasa",
       "nameplates": "Nama",
       "haptics": "Haptik",

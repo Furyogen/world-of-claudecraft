@@ -574,7 +574,7 @@ export const ru_RU: EnTranslations = {
     "mobile": {
       "jump": "Прыжок",
       "leaderboard": "Рейтинг",
-      "dailyRewards": "Награды",
+      "dailyRewards": "Магазин",
       "deeds": "Деяния",
       "nameplates": "Имена",
       "haptics": "Вибрация",

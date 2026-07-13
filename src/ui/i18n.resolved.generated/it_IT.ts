@@ -574,7 +574,7 @@ export const it_IT: EnTranslations = {
     "mobile": {
       "jump": "Salta",
       "leaderboard": "Classifica",
-      "dailyRewards": "Ricompense",
+      "dailyRewards": "Negozio",
       "deeds": "Imprese",
       "nameplates": "Nomi",
       "haptics": "Vibrazione",

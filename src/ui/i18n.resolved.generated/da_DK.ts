@@ -574,7 +574,7 @@ export const da_DK: EnTranslations = {
     "mobile": {
       "jump": "Hop",
       "leaderboard": "Rangliste",
-      "dailyRewards": "Belønninger",
+      "dailyRewards": "Butik",
       "deeds": "Bedrifter",
       "nameplates": "Navne",
       "haptics": "Haptik",

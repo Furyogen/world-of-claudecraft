@@ -574,7 +574,7 @@ export const ko_KR: EnTranslations = {
     "mobile": {
       "jump": "점프",
       "leaderboard": "순위",
-      "dailyRewards": "보상",
+      "dailyRewards": "상점",
       "deeds": "업적",
       "nameplates": "이름표",
       "haptics": "진동",

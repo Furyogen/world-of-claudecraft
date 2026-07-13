@@ -574,7 +574,7 @@ export const tr_TR: EnTranslations = {
     "mobile": {
       "jump": "Zıpla",
       "leaderboard": "Sıralama",
-      "dailyRewards": "Ödüller",
+      "dailyRewards": "Mağaza",
       "deeds": "Yiğitlikler",
       "nameplates": "İsimler",
       "haptics": "Dokunsal Geri Bildirim",

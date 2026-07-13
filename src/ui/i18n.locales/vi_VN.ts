@@ -167,7 +167,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'guide.valeCupPage.spectateBody':
     'Mỗi lần chỉ có một trận diễn ra tại sân vận động, và bất kỳ ai cũng có thể tới xem từ khán đài.',
   'hudChrome.keybinds.valecup': 'Cúp Thung Lũng',
-  'hudChrome.mobile.dailyRewards': 'Thưởng',
+  'hudChrome.mobile.dailyRewards': 'Cửa hàng',
   'hudChrome.perf.labels.predLead': 'Độ Sớm Dự Đoán',
   'hudChrome.townFocus.budgetLabel': 'Điểm còn lại: {remaining} / {budget}',
   'hudChrome.townFocus.decreaseAria': 'Giảm trọng tâm cho {component}',

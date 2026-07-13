@@ -133,7 +133,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'guide.valeCupPage.spectateBody':
     'Allo stadio si gioca una partita alla volta, e chiunque può avvicinarsi e guardare dagli spalti.',
   'hudChrome.keybinds.valecup': 'Coppa della Valle',
-  'hudChrome.mobile.dailyRewards': 'Ricompense',
+  'hudChrome.mobile.dailyRewards': 'Negozio',
   'hudChrome.perf.labels.predLead': 'Anticipo di predizione',
   'hudChrome.townFocus.budgetLabel': 'Punti rimanenti: {remaining} / {budget}',
   'hudChrome.townFocus.decreaseAria': 'Riduci la priorità di {component}',

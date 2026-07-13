@@ -3835,7 +3835,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mobile.hotbarPageAria': '显示下一组技能',
   'hudChrome.mobile.jump': '跳跃',
   'hudChrome.mobile.leaderboard': '排行榜',
-  'hudChrome.mobile.dailyRewards': '奖励',
+  'hudChrome.mobile.dailyRewards': '商店',
   'hudChrome.mobile.deeds': '功绩',
   'hudChrome.mobile.nameplates': '姓名板',
   'hudChrome.mobile.targetCycle': '切换目标',

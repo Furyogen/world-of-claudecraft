@@ -574,7 +574,7 @@ export const es: EnTranslations = {
     "mobile": {
       "jump": "Saltar",
       "leaderboard": "Clasificación",
-      "dailyRewards": "Recompensas",
+      "dailyRewards": "Tienda",
       "deeds": "Gestas",
       "nameplates": "Nombres",
       "haptics": "Vibración",

@@ -1202,9 +1202,12 @@ export class Hud {
     number,
     { event: Extract<SimEvent, { type: 'lootRoll' }>; receivedAt: number; durationMs: number }
   >();
-  // rolls the player has answered or let expire locally; suppresses the
-  // snapshot reconcile from re-showing them until the server drops the roll
-  private dismissedLootRolls = new Set<number>();
+  // rolls the player has answered or let expire locally, mapped to the wall-clock
+  // time of that dismissal. The reconcile keeps them out of the DOM while the
+  // authoritative mirror still lists them open, re-showing only if one stays open
+  // past a short grace (a genuinely dropped submit) so a normal answer does not
+  // flash back; the entry is forgotten once the server drops the roll.
+  private dismissedLootRolls = new Map<number, number>();
   // shown rolls already observed in the open-roll mirror at least once, so their
   // later absence from the mirror means the server resolved them (retire), not
   // that the mirror simply has not caught up to a just-shown event yet.
@@ -11366,7 +11369,7 @@ export class Hud {
   private submitLootRoll(rollId: number, choice: LootRollChoice): void {
     this.sim.submitLootRoll(rollId, choice);
     this.activeLootRolls.delete(rollId);
-    this.dismissedLootRolls.add(rollId);
+    this.dismissedLootRolls.set(rollId, performance.now());
     this.renderLootRolls();
   }
 
@@ -11390,11 +11393,15 @@ export class Hud {
       return;
     }
     const promptById = new Map(open.map((p) => [p.rollId, p] as const));
+    const dismissedAt: Record<number, number> = {};
+    for (const [id, at] of this.dismissedLootRolls) dismissedAt[id] = at;
     const decision = computeLootRollReconcile({
       open: open.map((p) => p.rollId),
       shown: [...this.activeLootRolls.keys()],
-      dismissed: [...this.dismissedLootRolls],
+      dismissed: [...this.dismissedLootRolls.keys()],
       confirmed: [...this.confirmedLootRolls],
+      dismissedAt,
+      nowMs: performance.now(),
     });
     this.confirmedLootRolls = new Set(decision.confirmed);
     for (const id of decision.toPrune) this.dismissedLootRolls.delete(id); // server confirmed it is gone
@@ -11444,6 +11451,7 @@ export class Hud {
       statuses,
       [...this.activeLootRolls.keys()],
       this.sim.playerId,
+      !this.isMobileLayout(),
     );
     const fp = lootRollStatusFingerprint(rows);
     if (fp === this.lootRollStatusFp) return;
@@ -11468,7 +11476,9 @@ export class Hud {
     for (const [rollId, roll] of this.activeLootRolls) {
       if (now - roll.receivedAt >= roll.durationMs) {
         this.activeLootRolls.delete(rollId);
-        this.dismissedLootRolls.add(rollId); // expired locally; don't let reconcile re-show it
+        // Expired locally: stamp the dismissal so reconcile only re-shows it if
+        // the server still lists it open past the grace, not on the next frame.
+        this.dismissedLootRolls.set(rollId, now);
         changed = true;
       }
     }

@@ -574,7 +574,7 @@ export const cs_CZ: EnTranslations = {
     "mobile": {
       "jump": "Skok",
       "leaderboard": "Žebříčky",
-      "dailyRewards": "Odměny",
+      "dailyRewards": "Obchod",
       "deeds": "Skutky",
       "nameplates": "Jména",
       "haptics": "Haptika",

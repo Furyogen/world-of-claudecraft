@@ -166,7 +166,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'guide.valeCupPage.spectateBody':
     'Stadyumda aynı anda tek maç oynanır ve isteyen herkes gelip tribünlerden izleyebilir.',
   'hudChrome.keybinds.valecup': 'Vadi Kupası',
-  'hudChrome.mobile.dailyRewards': 'Ödüller',
+  'hudChrome.mobile.dailyRewards': 'Mağaza',
   'hudChrome.perf.labels.predLead': 'Tahmin Avansı',
   'hudChrome.townFocus.budgetLabel': 'Kalan puan: {remaining} / {budget}',
   'hudChrome.townFocus.decreaseAria': '{component} odağını azalt',

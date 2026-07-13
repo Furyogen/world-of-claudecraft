@@ -119,7 +119,7 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'guide.valeCupPage.spectateBody':
     'Na stadionie toczy się jeden mecz naraz i każdy może podejść i oglądać go z trybun.',
   'hudChrome.keybinds.valecup': 'Puchar Doliny',
-  'hudChrome.mobile.dailyRewards': 'Nagrody',
+  'hudChrome.mobile.dailyRewards': 'Sklep',
   'hudChrome.perf.labels.predLead': 'Wyprzedzenie predykcji',
   'hudChrome.townFocus.budgetLabel': 'Pozostałe punkty: {remaining} / {budget}',
   'hudChrome.townFocus.decreaseAria': 'Zmniejsz priorytet: {component}',

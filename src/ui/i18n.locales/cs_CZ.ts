@@ -119,7 +119,7 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'guide.valeCupPage.spectateBody':
     'Na stadionu se hraje vždy jen jeden zápas a kdokoli může přijít a sledovat ho z tribun.',
   'hudChrome.keybinds.valecup': 'Pohár údolí',
-  'hudChrome.mobile.dailyRewards': 'Odměny',
+  'hudChrome.mobile.dailyRewards': 'Obchod',
   'hudChrome.perf.labels.predLead': 'Náskok predikce',
   'hudChrome.perf.labels.serverTick': 'Frekvence tiků serveru',
   'hudChrome.townFocus.budgetLabel': 'Zbývající body: {remaining} / {budget}',

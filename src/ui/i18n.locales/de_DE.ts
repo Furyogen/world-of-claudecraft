@@ -133,7 +133,7 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'guide.valeCupPage.spectateBody':
     'Im Stadion läuft immer nur ein Spiel, und jeder kann einfach vorbeikommen und von den Rängen aus zusehen.',
   'hudChrome.keybinds.valecup': 'Talpokal',
-  'hudChrome.mobile.dailyRewards': 'Belohnungen',
+  'hudChrome.mobile.dailyRewards': 'Shop',
   'hudChrome.perf.labels.predLead': 'Prädiktionsvorlauf',
   'hudChrome.townFocus.budgetLabel': 'Verbleibende Punkte: {remaining} / {budget}',
   'hudChrome.townFocus.decreaseAria': 'Fokus auf {component} verringern',

@@ -1099,15 +1099,14 @@
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     /* No chrome-scale here: the More tray is a TRANSIENT modal, not persistent
-       chrome, so shrinking it frees no world view; and its pills already sit
-       under the 40px floor (36px), so scaling them 0.85x only worsened the tap
-       targets the chrome-scale token promises never to push below the floor. */
-    grid-auto-rows: 36px;
+       chrome, so shrinking it frees no world view. Keep its pills at the 40px
+       touch floor regardless of the persistent-HUD chrome scale. */
+    grid-auto-rows: 40px;
     gap: 6px;
   }
   body.mobile-touch #mobile-extra-controls .mobile-btn {
     width: 100%;
-    height: 36px;
+    height: 40px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -1120,7 +1119,7 @@
        (elliptical corner radii bigger than the box is tall). A pill needs the
        radius capped at half the height so the ends are true semicircles and
        the sides stay straight. */
-    border-radius: 18px;
+    border-radius: 20px;
   }
   body.mobile-touch #mobile-extra-controls .mobile-label {
     display: inline;
@@ -2619,7 +2618,10 @@
     max-width: none;
     box-sizing: border-box;
     overflow: hidden;
-    z-index: 95;
+    /* Managed windows receive an inline desktop z-index. Bags is a modal sheet
+       here, so this scoped override must beat that inline value while leaving
+       desktop Need/Greed above its compact Bags window. */
+    z-index: 95 !important;
   }
   body.mobile-touch #bags .bag-grid {
     min-height: 150px;
@@ -2665,6 +2667,13 @@
   body.mobile-touch #trade-window .btn {
     min-height: 40px;
     font-size: 16px;
+  }
+  /* Short landscape phones keep only actionable roll cards (hud.ts filters the
+     answered watch rows). The desktop vote monitor is useful context, but its
+     multi-row strip makes one mobile card taller than the rail's usable height
+     and pushes Need/Greed/Pass below the fold. Results still land in loot chat. */
+  body.mobile-touch .loot-roll-votes {
+    display: none;
   }
   body.mobile-touch .soc-add input,
   body.mobile-touch .trade-money input {
@@ -3919,9 +3928,9 @@
       /* 4 columns in landscape too (issue 1577 round 2 (4)), matching the base
          tier so each More-tray pill stays narrow on a wide landscape phone.
          No chrome-scale on the rows (see the base-tier rule): transient modal,
-         already under the 40px floor. */
+         always held at the 40px floor. */
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      grid-auto-rows: 34px;
+      grid-auto-rows: 40px;
       gap: 5px;
     }
     /* The base square map can dip into the fixed Jump/Interact/combat row on a
@@ -3972,10 +3981,10 @@
     }
     body.mobile-touch #mobile-extra-controls .mobile-btn {
       width: 100%;
-      height: 34px;
+      height: 40px;
       font-size: 13px;
       padding: 0 7px;
-      border-radius: 17px;
+      border-radius: 20px;
     }
     body.mobile-touch #mobile-extra-controls .mobile-label {
       font-size: 9px;
