@@ -4,6 +4,7 @@
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { page } from 'vitest/browser';
+import { svgIcon } from '../../src/ui/ui_icons';
 import { cleanup, host } from './_harness';
 
 const EPSILON = 1;
@@ -81,7 +82,7 @@ describe('mobile Armory landscape layout', () => {
     overlay.className = 'armory-inspect-overlay open';
     overlay.innerHTML =
       '<div class="armory-inspect rarity-rare" role="dialog">' +
-      '<button class="x-btn armory-inspect-close">Close</button>' +
+      `<button type="button" class="x-btn armory-inspect-close" data-armory-close aria-label="Close">${svgIcon('close')}</button>` +
       '<div class="armory-inspect-stage"><canvas></canvas><div class="armory-inspect-controls">' +
       '<div class="armory-mode-toggle"><button>Try On</button><button>Weapon</button></div>' +
       '<div class="armory-scene-toggle"><button>Day</button><button>Dusk</button><button>Night</button></div>' +
