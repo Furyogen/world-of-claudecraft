@@ -63,6 +63,7 @@ function view(): EntityView {
     height: 2,
     nameplate,
     nameEl: div('np-name'),
+    titleEl: div('np-title'),
     guildEl: div('np-guild'),
     hpBar: div('np-hpbar'),
     hpFill: div('np-hpfill'),

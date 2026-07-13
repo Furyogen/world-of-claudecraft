@@ -14,6 +14,7 @@ const friend = (name: string): FriendInfo => ({
   cls: 'mage',
   level: 10,
   realm: 'R1',
+  activeTitle: null,
   online: true,
 });
 
