@@ -4,10 +4,12 @@
 // after (right-click with no shift equips it, bag slot empties, char window
 // shows it equipped) plus the shift+right-click destroy confirmation prompt.
 // Needs `npm run dev`. Writes PNGs to tmp/.
-import puppeteer from 'puppeteer-core';
+
 import fs from 'node:fs';
+import puppeteer from 'puppeteer-core';
 
 import { BROWSER_PATH as EDGE } from './browser_path.mjs';
+
 const URL = process.env.GAME_URL ?? 'http://localhost:5173';
 fs.mkdirSync('tmp', { recursive: true });
 
@@ -73,7 +75,9 @@ if (!rightClicked) {
 } else {
   await wait(400);
   await page.screenshot({ path: 'tmp/bag_rightclick_after_equip.png' });
-  console.log('captured tmp/bag_rightclick_after_equip.png (right-click equipped, no destroy prompt)');
+  console.log(
+    'captured tmp/bag_rightclick_after_equip.png (right-click equipped, no destroy prompt)',
+  );
 }
 
 // Now prove shift+right-click still destroys: give another spare sword and
@@ -97,7 +101,9 @@ if (!shiftRightClicked) {
 } else {
   await wait(300);
   await page.screenshot({ path: 'tmp/bag_shiftrightclick_destroy_prompt.png' });
-  console.log('captured tmp/bag_shiftrightclick_destroy_prompt.png (shift+right-click still destroys)');
+  console.log(
+    'captured tmp/bag_shiftrightclick_destroy_prompt.png (shift+right-click still destroys)',
+  );
 }
 
 await browser.close();
