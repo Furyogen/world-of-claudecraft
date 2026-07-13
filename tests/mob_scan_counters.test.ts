@@ -120,14 +120,15 @@ describe('mob scan counters: (FAR) spot is clear of world spawns', () => {
 });
 
 describe('mob scan counters: aggro-scan player visits (updateMob idle branch)', () => {
-  it('counts one visit per in-radius player and excludes players beyond radius 25', () => {
+  it('counts one visit per in-radius player and excludes players beyond the grid radius', () => {
     const sim = noPlayerSim();
-    // Three players within the 25-unit grid query (distances 10, 20, and exactly 25:
-    // the query keeps d2 <= r2, so the 25-unit player on the boundary IS visited),
-    // and two beyond it (30, 45) that must not be counted.
+    // Two players within the radius-20 grid query (distances 10 and exactly 20: the query
+    // keeps d2 <= r2, so the 20-unit player on the boundary IS visited), one just beyond
+    // it (22, inside the former 25-yd window but now excluded), and two farther out
+    // (30, 45) that must not be counted.
     addPlayerAt(sim, 'In10', 10, 0);
-    addPlayerAt(sim, 'In20', 0, 20);
-    addPlayerAt(sim, 'On25', 0, 25);
+    addPlayerAt(sim, 'On20', 0, 20);
+    addPlayerAt(sim, 'Out22', 0, 22);
     addPlayerAt(sim, 'Out30', 30, 0);
     addPlayerAt(sim, 'Out45', 0, 45);
     const mob = idleForestWolf(sim, 900101);
@@ -137,12 +138,12 @@ describe('mob scan counters: aggro-scan player visits (updateMob idle branch)', 
     // Sim starts the counter at 0, so this reads exactly this scan's tally.
     updateMob(ctxOf(sim), mob);
 
-    expect(sim.mobScanCounters.aggroScanPlayerVisits).toBe(3);
+    expect(sim.mobScanCounters.aggroScanPlayerVisits).toBe(2);
   });
 
   it('counts a dead player in radius because the increment precedes the dead check', () => {
     const sim = noPlayerSim();
-    // One dead and one live player, both inside radius 25. The callback increments the
+    // One dead and one live player, both inside radius 20. The callback increments the
     // counter as its FIRST statement, before `if (e.dead) return`, so both count.
     addPlayerAt(sim, 'DeadIn', 12, 0, true);
     addPlayerAt(sim, 'LiveIn', 0, 18);
@@ -159,11 +160,17 @@ describe('mob scan counters: aggro-scan player visits (updateMob idle branch)', 
     // Nythraxis boss branch. Both increment aggroScanPlayerVisits, so cover both.
     const sim = noPlayerSim();
     // The Nythraxis idle branch recenters the boss on its spawnPos before scanning, and
-    // createMob seeds spawnPos from the passed position, so the boss scans from FAR.
-    // Two players inside grid radius 25 (distances 22 and 24, both beyond the boss's
-    // effective aggro radius of 20, so it stays idle) and one beyond it (40).
-    addPlayerAt(sim, 'In22', 22, 0);
-    addPlayerAt(sim, 'In24', 0, 24);
+    // createMob seeds spawnPos from the passed position, so the boss scans from FAR. The
+    // boss's effective aggro radius clamps to 20 and the detection check is strict
+    // (d < radius), so a live player at exactly 20 is visited but never detected. One
+    // live player on the radius-20 boundary (visited, not detected) and one dead player
+    // inside it (visited because the counter increments before the dead check, never
+    // detected): two visits, boss stays idle. One live player at 22 (inside the former
+    // 25-yd window but now beyond the grid radius) proves the narrowing by not being
+    // visited, and one at 40 is far outside and also not visited.
+    addPlayerAt(sim, 'On20', 20, 0);
+    addPlayerAt(sim, 'DeadIn15', 0, 15, true);
+    addPlayerAt(sim, 'Out22', 0, 22);
     addPlayerAt(sim, 'Out40', 40, 0);
     const boss = createMob(900501, MOBS[NYTHRAXIS_BOSS_ID], 20, {
       x: FAR.x,
@@ -179,7 +186,36 @@ describe('mob scan counters: aggro-scan player visits (updateMob idle branch)', 
     updateMob(ctxOf(sim), boss);
 
     expect(sim.mobScanCounters.aggroScanPlayerVisits).toBe(2);
-    expect(boss.aiState).toBe('idle'); // both in-radius players sit beyond aggro 20
+    expect(boss.aiState).toBe('idle'); // the visited players sit on the boundary or are dead
+  });
+
+  it('pins each Nythraxis-scan candidate in isolation, so a total cannot hide a swap', () => {
+    // The combined case above pins only the TOTAL (2), which two compensating boundary
+    // bugs could fake (say, dropping On20 while visiting Out22). A fresh sim with a solo
+    // player pins each candidate's individual contribution decisively.
+    const cases: [string, number, number, boolean, number][] = [
+      ['On20', 20, 0, false, 1],
+      ['DeadIn15', 0, 15, true, 1],
+      ['Out22', 0, 22, false, 0],
+      ['Out40', 40, 0, false, 0],
+    ];
+    for (const [name, dx, dz, dead, visits] of cases) {
+      const sim = noPlayerSim();
+      addPlayerAt(sim, name, dx, dz, dead);
+      const boss = createMob(900502, MOBS[NYTHRAXIS_BOSS_ID], 20, {
+        x: FAR.x,
+        y: terrainHeight(FAR.x, FAR.z, seedOf(sim)),
+        z: FAR.z,
+      }) as AnyEntity;
+      boss.aiState = 'idle';
+      (sim as unknown as { addEntity: (e: Entity) => void }).addEntity(boss);
+      refreshPlayerGrid(sim);
+
+      updateMob(ctxOf(sim), boss);
+
+      expect(sim.mobScanCounters.aggroScanPlayerVisits, name).toBe(visits);
+      expect(boss.aiState, name).toBe('idle');
+    }
   });
 });
 
@@ -277,9 +313,9 @@ describe('mob scan counters: threat-entry visits (targeting loops)', () => {
 describe('mob scan counters: per-tick reset', () => {
   it('zeroes at the top of each tick so a read sees only that tick tally', () => {
     const sim = noPlayerSim();
-    // One player at distance 20: inside the 25-unit scan (one visit) but outside the
-    // mob's effective aggro radius (16 for a level-5 wolf vs a level-1 player), so the
-    // mob stays idle and keeps scanning tick after tick.
+    // One player at distance 20: on the radius-20 grid boundary (one visit, the query
+    // keeps d2 <= r2) but outside the mob's effective aggro radius (16 for a level-5 wolf
+    // vs a level-1 player), so the mob stays idle and keeps scanning tick after tick.
     const player = addPlayerAt(sim, 'Solo', 0, 20);
     idleForestWolf(sim, 900201);
     refreshPlayerGrid(sim);

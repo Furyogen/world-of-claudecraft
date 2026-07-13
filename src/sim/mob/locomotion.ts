@@ -248,7 +248,10 @@ export function updateMob(ctx: SimContext, mob: Entity): void {
         // Resolved once per scan, not per candidate: the ctx member is a live getter
         // chain and this callback is a per-visit hot path.
         const counters = ctx.mobScanCounters;
-        ctx.playerGrid.forEachInRadius(mob.pos.x, mob.pos.z, 25, (e, d2) => {
+        // Query only to MAX_AGGRO_RADIUS: both idle scans clamp the effective detection
+        // radius to it (every further delve/stealth modifier only shrinks it) and detect
+        // strictly (d < radius), so a wider query only visits never-detectable players.
+        ctx.playerGrid.forEachInRadius(mob.pos.x, mob.pos.z, MAX_AGGRO_RADIUS, (e, d2) => {
           counters.aggroScanPlayerVisits++;
           if (e.dead) return;
           const radius = Math.max(
@@ -269,7 +272,7 @@ export function updateMob(ctx: SimContext, mob: Entity): void {
       let detectedD = Infinity;
       // Resolved once per scan, not per candidate (same reason as the boss branch).
       const counters = ctx.mobScanCounters;
-      ctx.playerGrid.forEachInRadius(mob.pos.x, mob.pos.z, 25, (e, d2) => {
+      ctx.playerGrid.forEachInRadius(mob.pos.x, mob.pos.z, MAX_AGGRO_RADIUS, (e, d2) => {
         counters.aggroScanPlayerVisits++;
         if (e.dead) return;
         if (isTrivialTo(mob, e)) return;
