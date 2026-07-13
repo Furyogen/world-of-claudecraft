@@ -202,6 +202,22 @@ function runScenario(annulusRadius: number): RunResult {
   };
 }
 
+describe('mob idle scan determinism: the FAR camp is clear of world spawns at this seed', () => {
+  it('has no world entity within 60 yd of the camp at seed 1337, so the visit literals are exact', () => {
+    // The crowd-cost suite guards this precondition at seed 42; this suite pins exact
+    // visit literals (15, and the wolf evolution) at its own seed, so it carries its
+    // own clearance guard rather than borrowing one proven for a different world.
+    const sim = new Sim({ seed: SEED, playerClass: 'warrior', noPlayer: true });
+    let near = 0;
+    for (const e of (sim as unknown as { entities: Map<number, Entity> }).entities.values()) {
+      const dx = e.pos.x - FAR.x;
+      const dz = e.pos.z - FAR.z;
+      if (dx * dx + dz * dz <= 60 * 60) near++;
+    }
+    expect(near).toBe(0);
+  });
+});
+
 describe('mob idle scan determinism: same seed, byte-identical run', () => {
   it('two fresh sims with the same seed agree on wolf state and the whole draw stream', () => {
     const a = runScenario(ANNULUS_OUT);

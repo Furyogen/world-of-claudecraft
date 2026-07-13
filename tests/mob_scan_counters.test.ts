@@ -16,6 +16,7 @@ import { createMobScanCounters } from '../src/sim/mob/scan_counters';
 import { highestThreatTarget, retargetMob, updateMobTarget } from '../src/sim/mob/targeting';
 import { Sim } from '../src/sim/sim';
 import type { SimContext } from '../src/sim/sim_context';
+import { STEALTH_DETECTION_MAX_MULT, stealthDetectionMultiplier } from '../src/sim/threat';
 import { type Entity, NYTHRAXIS_BOSS_ID } from '../src/sim/types';
 import { terrainHeight } from '../src/sim/world';
 import { canonical, sampleEntity, samplePlayerMeta } from './parity/trace';
@@ -147,10 +148,12 @@ describe('mob scan counters: aggro-scan player visits (updateMob idle branch)', 
     const sim = noPlayerSim();
     // A level-5 forest wolf vs a level-1 player has effective aggro radius
     // max(4, min(20, 10 + (5 - 1) * 1.5)) = 16 exactly (aggroRadius 10 in
-    // src/sim/content/zone1.ts). A live, non-trivial player at exactly 16 is inside the
+    // src/sim/content/zone1.ts; pinned below so the 16 derivation reddens if the
+    // content value drifts). A live, non-trivial player at exactly 16 is inside the
     // grid query (visited) but the detection check is strict, so the wolf must stay
     // idle: this pins the strict inequality on the general branch (the Nythraxis case
     // below pins it on the boss branch).
+    expect(MOBS.forest_wolf.aggroRadius).toBe(10);
     addPlayerAt(sim, 'On16', 16, 0);
     const mob = idleForestWolf(sim, 900103);
     refreshPlayerGrid(sim);
@@ -160,6 +163,31 @@ describe('mob scan counters: aggro-scan player visits (updateMob idle branch)', 
     expect(sim.mobScanCounters.aggroScanPlayerVisits).toBe(1);
     expect(mob.aiState).toBe('idle');
     expect(mob.aggroTargetId).toBe(null);
+  });
+
+  it('still detects in the outer band: a player between 16 and 20 aggros a level-advantaged wolf', () => {
+    const sim = noPlayerSim();
+    // Positive control for the narrowed query: every other aggro assertion in the
+    // three suites is negative (stays idle), so a regression that clamped detection
+    // BELOW 20 (say to 16) would pass them all. A level-8 wolf vs a level-1 player has
+    // effective radius max(4, min(20, 10 + (8 - 1) * 1.5)) = 20 exactly, so a player
+    // at 18 (inside the former dead band's inner edge, outside the wolf-vs-level-1
+    // radius of 16) must be visited AND detected: the wolf leaves idle and targets it.
+    const player = addPlayerAt(sim, 'In18', 18, 0);
+    const mob = createMob(900104, MOBS.forest_wolf, 8, {
+      x: FAR.x,
+      y: terrainHeight(FAR.x, FAR.z, seedOf(sim)),
+      z: FAR.z,
+    }) as AnyEntity;
+    mob.aiState = 'idle';
+    (sim as unknown as { addEntity: (e: Entity) => void }).addEntity(mob);
+    refreshPlayerGrid(sim);
+
+    updateMob(ctxOf(sim), mob);
+
+    expect(sim.mobScanCounters.aggroScanPlayerVisits).toBe(1);
+    expect(mob.aiState).toBe('chase');
+    expect(mob.aggroTargetId).toBe(player.id);
   });
 
   it('counts a dead player in radius because the increment precedes the dead check', () => {
@@ -216,6 +244,7 @@ describe('mob scan counters: aggro-scan player visits (updateMob idle branch)', 
     // player pins each candidate's individual contribution decisively.
     const cases: [string, number, number, boolean, number][] = [
       ['On20', 20, 0, false, 1],
+      ['DeadOn20', 0, 20, true, 1], // boundary AND dead: visited (increment precedes both checks)
       ['DeadIn15', 0, 15, true, 1],
       ['Out21', 21, 0, false, 0],
       ['Out22', 0, 22, false, 0],
@@ -355,6 +384,23 @@ describe('mob scan counters: per-tick reset', () => {
 
     sim.tick();
     expect(sim.mobScanCounters.aggroScanPlayerVisits).toBe(0);
+  });
+});
+
+describe('idle-scan narrowing premise: detection modifiers are shrink-only', () => {
+  // The narrowed grid query (MAX_AGGRO_RADIUS) is behavior-identical ONLY while every
+  // post-clamp detection modifier stays <= 1: the general idle branch clamps the base
+  // radius to 20 BEFORE applying delveDetectMult and stealthDetectionRadius, with no
+  // re-clamp after, so a future boosting modifier (mult > 1) would be silently capped
+  // by the query where the old 25-yd query would have honored it out to 25. These pins
+  // red the moment that premise breaks so the query bound gets revisited deliberately.
+  // (delveDetectMult's full current affix surface, 1 and candleblind 0.65, is pinned
+  // by literals in tests/delves.test.ts.)
+  it('the stealth detection multiplier is capped at exactly 1, even at extreme level advantage', () => {
+    expect(STEALTH_DETECTION_MAX_MULT).toBe(1);
+    // Clamp regime: raw = 0.25 + (30 - 1) * 0.08 = 2.57, clamped to the max mult.
+    expect(stealthDetectionMultiplier(30, 1)).toBe(1);
+    expect(stealthDetectionMultiplier(60, 1)).toBe(1);
   });
 });
 

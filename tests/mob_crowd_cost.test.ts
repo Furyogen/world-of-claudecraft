@@ -35,7 +35,8 @@ const seedOf = (sim: Sim): number => (sim as unknown as { cfg: { seed: number } 
 // WORLD_SIZE is 360 (x spans [-180, 180]); (500, 500) sits well outside the playable
 // world, so no world-spawned camp or mob is anywhere near it (asserted below as 0
 // entities within 60 yd). The whole camp lands within ~23 yd of FAR, so an ambient mob
-// beyond 60 yd of FAR is beyond 25 yd of every player here and never counts one.
+// beyond 60 yd of FAR is beyond even the former 25-yd query bound of every player here
+// (let alone today's 20) and never counts one.
 const FAR = { x: 500, z: 500 };
 
 // Camp sizes. WOLVES x NEAR is the pinned crowd cost (7 x 6 = 42). FORMER players ride
@@ -74,18 +75,23 @@ function pinnedIdleWolfAt(sim: Sim, id: number, dx: number, dz: number): AnyEnti
   return mob;
 }
 
-// Add a warrior, teleport it onto the camp ring, and raise it well above the wolves so
-// isTrivialTo skips it. It is still visited (the counter increments first) but never
-// aggroed, so the wolves keep scanning idle.
-function addTrivialPlayerAt(sim: Sim, name: string, dx: number, dz: number): Entity {
+// Add a warrior and teleport it to (FAR.x + dx, FAR.z + dz), returning its Entity.
+function addPlayerAt(sim: Sim, name: string, dx: number, dz: number): Entity {
   const pid = sim.addPlayer('warrior', name);
   const e = (sim as unknown as { entities: Map<number, Entity> }).entities.get(pid) as AnyEntity;
   e.pos.x = FAR.x + dx;
   e.pos.z = FAR.z + dz;
   e.pos.y = terrainHeight(e.pos.x, e.pos.z, seedOf(sim));
   e.prevPos = { ...e.pos };
-  sim.setPlayerLevel(TRIVIAL_LEVEL, pid);
   return e;
+}
+
+// Same, then raise the player well above the wolves so isTrivialTo skips it. It is
+// still visited (the counter increments first) but never aggroed, so the wolves keep
+// scanning idle.
+function addTrivialPlayerAt(sim: Sim, name: string, dx: number, dz: number): void {
+  const e = addPlayerAt(sim, name, dx, dz);
+  sim.setPlayerLevel(TRIVIAL_LEVEL, e.id);
 }
 
 function refreshPlayerGrid(sim: Sim): void {
@@ -175,5 +181,65 @@ describe('mob crowd cost: per-tick aggro-scan visits equal the grid product', ()
     }
 
     for (const w of wolves) expect(w.aiState).toBe('idle');
+  });
+
+  it('a mixed camp: engaged mobs stop paying scan cost, so the product covers idle mobs only', () => {
+    const sim = noPlayerSim();
+    // Camp A at FAR: 4 pinned idle wolves + 3 trivial players on the 12-yd ring, so the
+    // idle product is 4 x 3 = 12 visits/tick. Camp B, 60 yd east (still deep outside
+    // the world, guarded below): 3 pinned wolves + one level-1 player 10 yd from them,
+    // inside their effective radius of 16, so camp B ENGAGES on the first tick (the
+    // first wolf detects and its social pull, radius 5, drags the other two). The two
+    // camps are disjoint: A's players sit 48+ yd from every B wolf, B's player 68+ yd
+    // from every A wolf, and B's wolves close on their target far too slowly to reach
+    // melee (or camp A) within the window.
+    const CAMP_B = 60;
+    const wolvesA: AnyEntity[] = [];
+    for (let i = 0; i < 4; i++) {
+      const { dx, dz } = ringOffset(i, 4, WOLF_RING);
+      wolvesA.push(pinnedIdleWolfAt(sim, 951001 + i, dx, dz));
+    }
+    const wolvesB: AnyEntity[] = [];
+    for (let i = 0; i < 3; i++) {
+      const { dx, dz } = ringOffset(i, 3, WOLF_RING);
+      wolvesB.push(pinnedIdleWolfAt(sim, 952001 + i, CAMP_B + dx, dz));
+    }
+    for (let j = 0; j < 3; j++) {
+      const { dx, dz } = ringOffset(j, 3, NEAR_RING);
+      addTrivialPlayerAt(sim, `MixNear${j}`, dx, dz);
+    }
+    const bait = addPlayerAt(sim, 'MixBait', CAMP_B + 10, 0);
+    // Nothing else lives near either camp (the world sits 450+ yd away), so both
+    // products are exact.
+    let near = 0;
+    for (const e of (sim as unknown as { entities: Map<number, Entity> }).entities.values()) {
+      const dx = e.pos.x - FAR.x;
+      const dz = e.pos.z - FAR.z;
+      if (e.id < 951001 && e.kind !== 'player' && dx * dx + dz * dz <= 130 * 130) near++;
+    }
+    expect(near).toBe(0);
+    refreshPlayerGrid(sim);
+
+    // Tick 1: all 7 wolves still start idle. A wolves visit 4 x 3 = 12; the FIRST B
+    // wolf visits the bait (1), detects it (d = 10 < 16), and its social pull flips
+    // the other two B wolves to chase before their own updates run, so they never
+    // scan: 13 visits total, exactly once.
+    sim.tick();
+    expect(sim.mobScanCounters.aggroScanPlayerVisits).toBe(13);
+
+    // Steady state: only camp A still pays scan cost (4 x 3 = 12); the engaged camp
+    // B wolves pay threat-walk cost instead (3 wolves x 1 hate-table entry, the bait
+    // seeded by aggroMob, walked once per engaged tick).
+    for (let t = 0; t < 5; t++) {
+      sim.tick();
+      expect(sim.mobScanCounters.aggroScanPlayerVisits).toBe(12);
+      expect(sim.mobScanCounters.threatEntryVisits).toBe(3);
+    }
+
+    for (const w of wolvesA) expect(w.aiState).toBe('idle');
+    for (const w of wolvesB) {
+      expect(w.aiState).toBe('chase');
+      expect(w.aggroTargetId).toBe(bait.id);
+    }
   });
 });
