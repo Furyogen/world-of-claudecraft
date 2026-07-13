@@ -156,7 +156,10 @@ with `npm run gate` (above) before calling it done.
   text, or player-facing copy. Use commas, colons, parentheses, or "to" for ranges.
   (An emoji that stands in for a real label still needs its real `t()` text.)
 - **Commits:** Conventional Commits with a scope (`feat(talents): ...`, `fix(net): ...`,
-  `test(sim): ...`). Branches: `feature/<slug>`, `fix/<slug>`.
+  `test(sim): ...`), and every commit carries a BODY, never a title alone: after a
+  blank line, 1 to 4 plain sentences or short bullet lines saying what changed and
+  why (the intent or finding behind it, not a file list), wrapped near 72 columns.
+  Branches: `feature/<slug>`, `fix/<slug>`.
 - **Docs follow the anchor rule:** cite stable paths, exported symbols, and pinned tests;
   never literal counts or line numbers that rot (see `docs/qa-gate.md`).
 
