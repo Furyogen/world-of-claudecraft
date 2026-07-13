@@ -2149,6 +2149,9 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
     'Насыщает ваше оружие яростью камня: каждый удар наносит {damage} ед. дополнительного урона в течение 5 мин.',
   'entities.abilities.healing_wave.name': 'Целебные воды',
   'entities.abilities.healing_wave.description': 'Исцеляет дружественную цель на {damage}.',
+  'entities.abilities.chain_heal.name': 'Цепное исцеление',
+  'entities.abilities.chain_heal.description':
+    'Исцеляет дружественную цель на большую величину, затем перескакивает на 2 ближайших союзников, исцеляя на 50% меньше с каждым прыжком. (Специализация Исцеление)',
   'entities.abilities.earth_shock.name': 'Земной толчок',
   'entities.abilities.earth_shock.description':
     'Мгновенно поражает цель ударной силой, нанося {damage} ед. урона от сил природы.',
@@ -2331,6 +2334,72 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.revive_pet.name': 'Оживление питомца',
   'entities.abilities.revive_pet.description':
     'Оживляет вашего павшего питомца и возвращает его к вам.',
+  'entities.abilities.holy_shock.name': 'Шок небес',
+  'entities.abilities.holy_shock.description':
+    'Поражает дружественную цель энергией Света и исцеляет ее на {damage}. (знаковое умение Света)',
+  'entities.abilities.holy_shield.name': 'Священный щит',
+  'entities.abilities.holy_shield.description':
+    'Защищает вас силой Света на 10 сек., повышает броню на 90 и поражает атакующих в ближнем бою на 12 ед. урона от Света. (знаковое умение Защиты)',
+  'entities.abilities.bestial_wrath.name': 'Звериный гнев',
+  'entities.abilities.bestial_wrath.description':
+    'Повергает вас в звериную ярость, повышая силу атаки на 55 на 15 сек. (знаковое умение Повелителя зверей)',
+  'entities.abilities.trueshot_aura.name': 'Аура меткого выстрела',
+  'entities.abilities.trueshot_aura.description':
+    'Воодушевляет ближайших союзников, повышая силу атаки на 35 на 5 мин. (знаковое умение Стрельбы)',
+  'entities.abilities.wyvern_sting.name': 'Укус виверны',
+  'entities.abilities.wyvern_sting.description':
+    'Поражает врага издалека и выводит его из строя на срок до 4 сек. Любой урон прерывает эффект. (знаковое умение Выживания)',
+  'entities.abilities.arcane_power.name': 'Мощь тайной магии',
+  'entities.abilities.arcane_power.description':
+    'Повышает урон от заклинаний на 20% и скорость заклинаний на 10% на 10 сек. (знаковое умение Тайной магии)',
+  'entities.abilities.combustion.name': 'Возгорание',
+  'entities.abilities.combustion.description':
+    'Повышает шанс критического эффекта заклинаний на 50% на 15 сек. (знаковое умение Огня)',
+  'entities.abilities.icy_veins.name': 'Ледяные жилы',
+  'entities.abilities.icy_veins.description':
+    'Повышает скорость заклинаний на 30% и предотвращает прерывание и задержку произнесения на 10 сек. (знаковое умение Льда)',
+  'entities.abilities.cold_blood.name': 'Хладнокровие',
+  'entities.abilities.cold_blood.description':
+    'Сосредоточивает убийственное намерение, чтобы следующая атака стала критической. (знаковое умение Ликвидации)',
+  'entities.abilities.blade_flurry.name': 'Шквал клинков',
+  'entities.abilities.blade_flurry.description':
+    'Обрушивает шквал клинков, повышая скорость атаки на 20% на 12 сек. (знаковое умение Боя)',
+  'entities.abilities.hemorrhage.name': 'Кровоизлияние',
+  'entities.abilities.hemorrhage.description':
+    'Бьет врага, нанося урон оружием плюс {damage}, и вызывает кровотечение на 12 сек. Дает 1 прием. (знаковое умение Скрытности)',
+  'entities.abilities.power_infusion.name': 'Придание сил',
+  'entities.abilities.power_infusion.description':
+    'Наполняет дружественную цель силой, повышая ее силу заклинаний на 28 на 15 сек. (знаковое умение Послушания)',
+  'entities.abilities.holy_nova.name': 'Кольцо света',
+  'entities.abilities.holy_nova.description':
+    'Вызывает взрыв Света, исцеляя ближайших союзников на {damage} и раня ближайших врагов. (знаковое умение Света)',
+  'entities.abilities.shadowform.name': 'Облик Тьмы',
+  'entities.abilities.shadowform.description':
+    'Вы принимаете Облик Тьмы, усиливая темную магию до обратного перехода. Примените снова, чтобы вернуться в обычный облик. (знаковое умение Тьмы)',
+  'entities.abilities.elemental_mastery.name': 'Покорение стихий',
+  'entities.abilities.elemental_mastery.description':
+    'Призывает покорение стихий, делая следующее заклинание мгновенным. (знаковое умение Стихий)',
+  'entities.abilities.siphon_life.name': 'Вытягивание жизни',
+  'entities.abilities.siphon_life.description':
+    'Вытягивает жизнь из врага, нанося {damage} ед. урона от темной магии за 30 сек. и исцеляя вас на величину нанесенного урона. (знаковое умение Колдовства)',
+  'entities.abilities.conflagrate.name': 'Поджигание',
+  'entities.abilities.conflagrate.description':
+    'Поглощает ваше Жертвенное пламя на враге, поджигая его и нанося {damage} ед. урона от огня. (знаковое умение Разрушения)',
+  'entities.abilities.moonkin_form.name': 'Облик лунного совуха',
+  'entities.abilities.moonkin_form.description':
+    'Вы принимаете Облик лунного совуха, усиливая заклинания до обратного перехода. Примените снова, чтобы вернуться в обычный облик. (знаковое умение Баланса)',
+  'entities.abilities.feral_charge.name': 'Звериная атака',
+  'entities.abilities.feral_charge.description':
+    'Вы бросаетесь к врагу и обездвиживаете его на 1 сек. Дистанция 8-25 м. (знаковое умение Силы зверя)',
+  'entities.abilities.swiftmend.name': 'Быстрое восстановление',
+  'entities.abilities.swiftmend.description':
+    'Поглощает эффект периодического исцеления на дружественной цели и исцеляет ее на {damage}. (знаковое умение Исцеления)',
+  'entities.abilities.crusader_strike.name': 'Удар воина Света',
+  'entities.abilities.crusader_strike.description':
+    'Бьет цель, нанося урон оружием плюс {damage} ед. урона от Света. (талант паладина)',
+  'entities.abilities.metamorphosis.name': 'Метаморфоза',
+  'entities.abilities.metamorphosis.description':
+    'Принимает демоническую силу, повышая броню и силу атаки на 20 сек. (талант чернокнижника)',
   'entities.items.worn_sword.name': 'Щербатый короткий меч',
   'entities.items.gnarled_staff.name': 'Посох мореного дуба',
   'entities.items.rusty_dagger.name': 'Ржавый кинжал',
@@ -6956,6 +7025,28 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
     'Совет: сохраните несколько наборов талантов, чтобы менять билды, не тратя очки заново.',
   'loading.tips.pvp':
     'Совет: вызовите другого игрока на дружескую дуэль или встаньте в очередь на арену Пепельного Колизея, чтобы испытать свой билд.',
+  // Baseline class interrupts.
+  'entities.abilities.pummel.name': 'Челюстолом',
+  'entities.abilities.pummel.description':
+    'Прерывает читаемое заклинание и запрещает заклинания этой школы в течение 4 сек.',
+  'entities.abilities.kick.name': 'Пинок',
+  'entities.abilities.kick.description':
+    'Прерывает читаемое заклинание и запрещает заклинания этой школы в течение 4 сек.',
+  'entities.abilities.counterspell.name': 'Разрыв чар',
+  'entities.abilities.counterspell.description':
+    'Контрит заклинание цели и запрещает заклинания этой школы в течение 6 сек.',
+  'entities.abilities.counter_shot.name': 'Глушащий выстрел',
+  'entities.abilities.counter_shot.description':
+    'Быстрый выстрел прерывает заклинание цели и блокирует эту школу на 4 сек.',
+  'entities.abilities.rebuke.name': 'Укор',
+  'entities.abilities.rebuke.description':
+    'Прерывает читаемое заклинание и запрещает заклинания этой школы в течение 4 сек.',
+  'entities.abilities.skull_bash.name': 'Удар головой',
+  'entities.abilities.skull_bash.description':
+    'Рывковый удар головой прерывает заклинание цели и блокирует эту школу на 4 сек.',
+  'entities.abilities.spell_lock.name': 'Затычка',
+  'entities.abilities.spell_lock.description':
+    'Заставляет цель умолкнуть при чтении заклинания и запрещает заклинания этой школы на 5 сек.',
   'guide.bestiary.flavor.sethrael_palecoil':
     'Костисто-бледный змей, что скользит вдоль глубокого уступа Глиммермира, безмолвный страж вод, которые он объявил своими. Пловцы, делящие с ним озеро, редко всплывают снова.',
   'guide.combat.metersBody':

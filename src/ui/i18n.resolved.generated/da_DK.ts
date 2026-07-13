@@ -5944,6 +5944,98 @@ export const da_DK: EnTranslations = {
         "name": "Sydende Raseri",
         "description": "Gå i et sydende raseri, og generér 20 raseri. (Krigertalent)"
       },
+      "crusader_strike": {
+        "name": "Korsfarerslag",
+        "description": "Slår målet for våbenskade plus {damage} hellig skade. (Paladin-talent)"
+      },
+      "chain_heal": {
+        "name": "Chain Heal",
+        "description": "Heals a friendly target for a large amount, then jumps to up to 2 additional nearby allies, healing for 50% less with each jump. (Restoration signature)"
+      },
+      "metamorphosis": {
+        "name": "Metamorfose",
+        "description": "Antag dæmonisk kraft og øg rustning og angrebskraft i 20 sek. (Warlock-talent)"
+      },
+      "holy_shock": {
+        "name": "Hellig chok",
+        "description": "Chokerer et venligt mål med hellig energi og helbreder det for {damage}. (Hellig signatur)"
+      },
+      "holy_shield": {
+        "name": "Hellig skjold",
+        "description": "Beskytter dig med hellig kraft i 10 sek, øger rustning med 90 og rammer nærkampsangribere for 12 hellig skade. (Beskyttelsessignatur)"
+      },
+      "bestial_wrath": {
+        "name": "Bestialsk vrede",
+        "description": "Sender dig i bestialsk raseri, så angrebskraft øges med 55 i 15 sek. (Bæstmestersignatur)"
+      },
+      "trueshot_aura": {
+        "name": "Træfsikkerhedsaura",
+        "description": "Inspirerer nærliggende allierede og øger angrebskraft med 35 i 5 min. (Skytte signatur)"
+      },
+      "wyvern_sting": {
+        "name": "Wyvernstik",
+        "description": "Stikker fjenden på afstand og gør den ukampdygtig i op til 4 sek. Enhver skade bryder effekten. (Overlevelsessignatur)"
+      },
+      "arcane_power": {
+        "name": "Arkan kraft",
+        "description": "Øger besværgelsesskade med 20% og besværgelseshast med 10% i 10 sek. (Arcane-signatur)"
+      },
+      "combustion": {
+        "name": "Forbrænding",
+        "description": "Øger kritisk chance med besværgelser med 50% i 15 sek. (Fire-signatur)"
+      },
+      "icy_veins": {
+        "name": "Iskolde Årer",
+        "description": "Øger besværgelseshast med 30% og forhindrer afbrydelse og tilbageslag i 10 sek. (Frost-signatur)"
+      },
+      "cold_blood": {
+        "name": "Koldt blod",
+        "description": "Fokuserer din dræbervilje, så dit næste angreb bliver et kritisk træf. (Snigmordersignatur)"
+      },
+      "blade_flurry": {
+        "name": "Klingevirvel",
+        "description": "Udløser en byge af klinger og øger angrebshastighed med 20% i 12 sek. (Kampsignatur)"
+      },
+      "hemorrhage": {
+        "name": "Blødning",
+        "description": "Ramler fjenden for våbenskade plus {damage} og påfører blødningsskade over 12 sek. Giver 1 combopoint. (Underfundighedssignatur)"
+      },
+      "power_infusion": {
+        "name": "Kraftinfusion",
+        "description": "Indgyder et venligt mål med kraft og øger besværgelseskraft med 28 i 15 sek. (Disciplin signatur)"
+      },
+      "holy_nova": {
+        "name": "Hellig nova",
+        "description": "Udløser en eksplosion af helligt lys, helbreder nærliggende allierede for {damage} og skader nærliggende fjender. (Hellig signatur)"
+      },
+      "shadowform": {
+        "name": "Skyggeform",
+        "description": "Antag skyggeform, som styrker skyggemagi, indtil du skifter tilbage. Kast igen for at vende tilbage til normal form. (Skyggesignatur)"
+      },
+      "elemental_mastery": {
+        "name": "Elementær beherskelse",
+        "description": "Påkalder elementær beherskelse og gør din næste besværgelse øjeblikkelig. (Elementær signatur)"
+      },
+      "siphon_life": {
+        "name": "Sug liv",
+        "description": "Suger liv fra fjenden, påfører {damage} skyggeskade over 30 sek og helbreder dig for den skade, der bliver gjort. (Lidelsessignatur)"
+      },
+      "conflagrate": {
+        "name": "Antændelse",
+        "description": "Forbruger din Opbrænding på fjenden for at antænde den for {damage} ildskade. (Ødelæggelsessignatur)"
+      },
+      "moonkin_form": {
+        "name": "Månekinform",
+        "description": "Antag månekinform, som styrker besværgelser, indtil du skifter tilbage. Kast igen for at vende tilbage til normal form. (Balancesignatur)"
+      },
+      "feral_charge": {
+        "name": "Vild ladning",
+        "description": "Storm mod en fjende og rodfæst den i 1 sek. 8-25 m rækkevidde. (Vildskabssignatur)"
+      },
+      "swiftmend": {
+        "name": "Hurtig heling",
+        "description": "Forbruger en helbredelse over tid-effekt på et venligt mål for at helbrede det for {damage}. (Genoprettelsessignatur)"
+      },
       "summon_imp": {
         "name": "Tilkald Emberkin",
         "description": "Tilkalder en Emberkin under Heksemesterens kommando. Emberkinen slynger Askelyn mod dine fjender fra det fjerne. At tilkalde en ny dæmon bortsender din nuværende. Du kan have én dæmon ad gangen."
@@ -5971,6 +6063,34 @@ export const da_DK: EnTranslations = {
       "summon_doomguard": {
         "name": "Tilkald Wraithborn",
         "description": "Binder en Wraithborn til din vilje, en elitedæmon der regner tung Skygge skade ned på afstand. En lang nedkøling holder dens ødelæggende kraft i skak. At tilkalde en ny dæmon bortsender din nuværende. Du kan have én dæmon ad gangen."
+      },
+      "pummel": {
+        "name": "Jawcrack",
+        "description": "Interrupts the target's spellcast and prevents casting from that school for 4 sec."
+      },
+      "kick": {
+        "name": "Boot",
+        "description": "Interrupts the target's spellcast and prevents casting from that school for 4 sec."
+      },
+      "counterspell": {
+        "name": "Spellbreak",
+        "description": "Counters the target's spellcast and prevents casting from that school for 6 sec."
+      },
+      "counter_shot": {
+        "name": "Hushing Shot",
+        "description": "A snap shot that interrupts the target's spellcast and locks that school for 4 sec."
+      },
+      "rebuke": {
+        "name": "Reproach",
+        "description": "Interrupts the target's spellcast and prevents casting from that school for 4 sec."
+      },
+      "skull_bash": {
+        "name": "Headbutt",
+        "description": "A lunging headbutt that interrupts the target's spellcast and locks that school for 4 sec."
+      },
+      "spell_lock": {
+        "name": "Gag Order",
+        "description": "Silences the target mid-cast and prevents casting from that school for 5 sec."
       },
       "bear_charge": {
         "name": "Bruin-storm",

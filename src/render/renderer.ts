@@ -2915,6 +2915,7 @@ export class Renderer {
         }
         if (ev.fx === 'projectile') this.vfx.projectile(ev.sourceId, ev.targetId, ev.school);
         else if (ev.fx === 'beam') this.vfx.beam(ev.sourceId, ev.targetId, ev.school);
+        else if (ev.fx === 'chainHeal') this.vfx.chainHealArc(ev.sourceId, ev.targetId);
         else if (ev.fx === 'lightning') this.vfx.lightningProjectile(ev.sourceId, ev.targetId);
         else if (ev.fx === 'tick') this.vfx.tick(ev.targetId, ev.school);
         else this.vfx.nova(ev.targetId, ev.school);
@@ -4267,6 +4268,9 @@ export class Renderer {
       let hasCatForm = false;
       let hasTravelForm = false;
       let hasStealth = false;
+      let hasShadowform = false;
+      let hasMoonkin = false;
+      let hasMetamorph = false;
       for (const a of e.auras) {
         if (a.kind === 'polymorph') hasPoly = true;
         if (a.kind === 'form_bear') hasBear = true;
@@ -4274,6 +4278,9 @@ export class Renderer {
         if (a.kind === 'form_cat') hasCatForm = true;
         if (a.kind === 'form_travel') hasTravelForm = true;
         if (a.kind === 'stealth') hasStealth = true;
+        if (a.kind === 'form_shadow') hasShadowform = true;
+        if (a.kind === 'form_moonkin') hasMoonkin = true;
+        if (a.kind === 'form_metamorph') hasMetamorph = true;
       }
       const polyed = hasPoly;
       const bear = !polyed && hasBear;
@@ -4516,6 +4523,12 @@ export class Renderer {
         e.templateId === 'spirit_healer'; // the graveyard angel is an ethereal figure
       active.setGhost(ghost);
       active.setSoulRend(characterSoulRendActive(e));
+      // Shadowform tints the base priest rig shadow-purple (no rig swap). Moonkin Form and
+      // Metamorphosis reuse the same tint treatment (a bright violet, and a dark fel demon);
+      // Metamorphosis also grows the body via Entity.scale in the sim.
+      active.setShadowform(hasShadowform);
+      active.setMoonkin(hasMoonkin);
+      active.setMetamorph(hasMetamorph);
       v.visual.root.visible = active === v.visual;
       // distant rigs swap to the single-draw baked idle-pose mesh
       v.visual.setFar(v.isFar && active === v.visual);
@@ -4665,6 +4678,14 @@ export class Renderer {
       }
       if (e.auras.some((a) => a.id === 'nythraxis_soul_rend')) {
         this.vfx.castSparkle(e.id, 'shadow', dt * 3.2);
+      }
+      // Shapeshift-form particle auras riding the tints above: metamorph fire,
+      // moonkin star motes, shadowform gloom wisps. Suppressed for the dead
+      // (the auras themselves drop, but a corpse must not smolder for a frame).
+      if (!e.dead) {
+        if (hasMetamorph) this.vfx.formAura(e.id, 'metamorph', dt);
+        else if (hasMoonkin) this.vfx.formAura(e.id, 'moonkin', dt);
+        else if (hasShadowform) this.vfx.formAura(e.id, 'shadowform', dt);
       }
       // The graveyard angel: a soft, constant golden shimmer rising off the Spirit Healer.
       if (e.templateId === 'spirit_healer') this.vfx.castSparkle(e.id, 'holy', dt * 0.6);

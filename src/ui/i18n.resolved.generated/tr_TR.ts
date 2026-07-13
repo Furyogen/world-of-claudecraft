@@ -5944,6 +5944,98 @@ export const tr_TR: EnTranslations = {
         "name": "Kaynayan Gazap",
         "description": "Kaynayan bir gazaba kapılarak 20 öfke üretir. (Savaşçı yeteneği)"
       },
+      "crusader_strike": {
+        "name": "Haçlı Darbesi",
+        "description": "Hedefe silah hasarı artı {damage} Kutsal hasar verir. (Paladin yeteneği)"
+      },
+      "chain_heal": {
+        "name": "Chain Heal",
+        "description": "Heals a friendly target for a large amount, then jumps to up to 2 additional nearby allies, healing for 50% less with each jump. (Restoration signature)"
+      },
+      "metamorphosis": {
+        "name": "Metamorfoz",
+        "description": "İblis gücüne bürünür, zırhı ve saldırı gücünü 20 sn. artırır. (Warlock yeteneği)"
+      },
+      "holy_shock": {
+        "name": "Kutsal Şok",
+        "description": "Dost bir hedefi Kutsal enerjiyle sarsar ve onu {damage} kadar iyileştirir. (Kutsal imza)"
+      },
+      "holy_shield": {
+        "name": "Kutsal Kalkan",
+        "description": "Seni 10 sn boyunca Kutsal güçle korur, zırhı 90 artırır ve yakın dövüş saldırganlarına 12 Kutsal hasar verir. (Koruma imzası)"
+      },
+      "bestial_wrath": {
+        "name": "Vahşi Gazap",
+        "description": "Seni vahşi bir öfkeye sokar, saldırı gücünü 15 sn boyunca 55 artırır. (Canavar Ustalığı imzası)"
+      },
+      "trueshot_aura": {
+        "name": "Keskin Nişan Aurası",
+        "description": "Yakındaki müttefiklere ilham verir, saldırı gücünü 5 dk boyunca 35 artırır. (Nişancılık imzası)"
+      },
+      "wyvern_sting": {
+        "name": "Viverna Sokması",
+        "description": "Düşmanı uzaktan sokar ve en fazla 4 sn boyunca etkisiz bırakır. Herhangi bir hasar etkiyi bozar. (Hayatta Kalma imzası)"
+      },
+      "arcane_power": {
+        "name": "Gizemli Güç",
+        "description": "Büyü hasarını %20 ve büyü hızını %10 artırır, 10 sn sürer. (Gizem imza yeteneği)"
+      },
+      "combustion": {
+        "name": "Yakma",
+        "description": "Büyü kritik şansını %50 artırır, 15 sn sürer. (Ateş imza yeteneği)"
+      },
+      "icy_veins": {
+        "name": "Buzlu Damarlar",
+        "description": "Büyü hızını %30 artırır ve 10 sn boyunca büyü kesintisini ve geri itmeyi önler. (Buz imza yeteneği)"
+      },
+      "cold_blood": {
+        "name": "Soğukkanlılık",
+        "description": "Öldürme niyetini odaklar, böylece sonraki saldırın kritik vuruş olur. (Suikast imzası)"
+      },
+      "blade_flurry": {
+        "name": "Bıçak Yağmuru",
+        "description": "Bir bıçak yağmuru salar, saldırı hızını 12 sn boyunca 20% artırır. (Çarpışma imzası)"
+      },
+      "hemorrhage": {
+        "name": "Kanama",
+        "description": "Düşmana silah hasarı artı {damage} vurur ve 12 sn boyunca kanama hasarı verir. 1 kombo puanı kazandırır. (İncelik imzası)"
+      },
+      "power_infusion": {
+        "name": "Güç Aşılaması",
+        "description": "Dost bir hedefe güç aşılar, büyü gücünü 15 sn boyunca 28 artırır. (Disiplin imzası)"
+      },
+      "holy_nova": {
+        "name": "Kutsal Nova",
+        "description": "Kutsal ışık patlaması yaratır, yakındaki müttefikleri {damage} kadar iyileştirir ve yakındaki düşmanlara hasar verir. (Kutsal imza)"
+      },
+      "shadowform": {
+        "name": "Gölge Formu",
+        "description": "Gölge formuna girer, geri dönene kadar gölge büyüsünü güçlendirirsin. Normal forma dönmek için tekrar kullan. (Gölge imzası)"
+      },
+      "elemental_mastery": {
+        "name": "Element Ustalığı",
+        "description": "Element ustalığını çağırır, sonraki büyünü anında yapar. (Element imzası)"
+      },
+      "siphon_life": {
+        "name": "Can Sömürüsü",
+        "description": "Düşmandan can sömürür, 30 sn boyunca {damage} Gölge hasarı verir ve verilen hasar kadar seni iyileştirir. (Istırap imzası)"
+      },
+      "conflagrate": {
+        "name": "Tutuşturma",
+        "description": "Düşmandaki Yakma etkini tüketerek onu {damage} Ateş hasarıyla tutuşturur. (Yıkım imzası)"
+      },
+      "moonkin_form": {
+        "name": "Aykuşu Formu",
+        "description": "Aykuşu formuna girer, geri dönene kadar büyü yapmayı güçlendirirsin. Normal forma dönmek için tekrar kullan. (Denge imzası)"
+      },
+      "feral_charge": {
+        "name": "Yabani Hücum",
+        "description": "Bir düşmana hücum eder ve onu 1 sn köklersin. 8-25 m menzil. (Yabanilik imzası)"
+      },
+      "swiftmend": {
+        "name": "Hızlı İyileştirme",
+        "description": "Dost bir hedefteki zamanla iyileştirme etkisini tüketerek onu {damage} kadar iyileştirir. (Restorasyon imzası)"
+      },
       "summon_imp": {
         "name": "Emberkin Çağırma",
         "description": "Karabüyücünün komutası altında bir Emberkin çağırır. Emberkin, düşmanlarına uzaktan Kül Okları fırlatır. Yeni bir iblis çağırmak mevcut olanı gönderir. Bir seferde yalnızca bir iblisin olabilir."
@@ -5971,6 +6063,34 @@ export const tr_TR: EnTranslations = {
       "summon_doomguard": {
         "name": "Wraithborn Çağırma",
         "description": "Bir Wraithborn'u iradene bağlar: uzaktan ağır Gölge hasarı yağdıran seçkin bir iblis. Uzun bir bekleme süresi yıkıcı gücünü dizginler. Yeni bir iblis çağırmak mevcut olanı gönderir. Bir seferde yalnızca bir iblisin olabilir."
+      },
+      "pummel": {
+        "name": "Jawcrack",
+        "description": "Interrupts the target's spellcast and prevents casting from that school for 4 sec."
+      },
+      "kick": {
+        "name": "Boot",
+        "description": "Interrupts the target's spellcast and prevents casting from that school for 4 sec."
+      },
+      "counterspell": {
+        "name": "Spellbreak",
+        "description": "Counters the target's spellcast and prevents casting from that school for 6 sec."
+      },
+      "counter_shot": {
+        "name": "Hushing Shot",
+        "description": "A snap shot that interrupts the target's spellcast and locks that school for 4 sec."
+      },
+      "rebuke": {
+        "name": "Reproach",
+        "description": "Interrupts the target's spellcast and prevents casting from that school for 4 sec."
+      },
+      "skull_bash": {
+        "name": "Headbutt",
+        "description": "A lunging headbutt that interrupts the target's spellcast and locks that school for 4 sec."
+      },
+      "spell_lock": {
+        "name": "Gag Order",
+        "description": "Silences the target mid-cast and prevents casting from that school for 5 sec."
       },
       "bear_charge": {
         "name": "Bruin Hücumu",

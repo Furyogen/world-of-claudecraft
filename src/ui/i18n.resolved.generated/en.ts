@@ -5944,6 +5944,98 @@ export const en: EnTranslations = {
         "name": "Seething Fury",
         "description": "Enter a seething fury, generating 20 rage. (Warrior talent)"
       },
+      "crusader_strike": {
+        "name": "Crusader Strike",
+        "description": "Strikes the target for weapon damage plus {damage} Holy damage. (Paladin talent)"
+      },
+      "chain_heal": {
+        "name": "Chain Heal",
+        "description": "Heals a friendly target for a large amount, then jumps to up to 2 additional nearby allies, healing for 50% less with each jump. (Restoration signature)"
+      },
+      "metamorphosis": {
+        "name": "Dread Aspect",
+        "description": "Transform into a monstrous demon for 20 sec, increasing your spell damage by 20% and casting speed by 20%. Your demon gains 50% damage and 20% casting speed. (Demonology signature)"
+      },
+      "holy_shock": {
+        "name": "Holy Shock",
+        "description": "Shocks a friendly target with Holy energy to heal them, or an enemy for {damage} Holy damage. (Holy signature)"
+      },
+      "holy_shield": {
+        "name": "Hallowed Wall",
+        "description": "Hurls a radiant aegis at an enemy, dealing Holy damage and bouncing to 2 nearby enemies. (Protection signature)"
+      },
+      "bestial_wrath": {
+        "name": "Howling Rage",
+        "description": "Sends you into a bestial rage, increasing your attack power by 20% and your pet damage by 100% for 15 sec. (Beast Mastery signature)"
+      },
+      "trueshot_aura": {
+        "name": "Sureflight Aura",
+        "description": "Inspires nearby allies, increasing attack power by 10% for 30 min. (Marksmanship signature)"
+      },
+      "wyvern_sting": {
+        "name": "Wyvern Sting",
+        "description": "Stings the enemy from range, incapacitating it for up to 4 sec. Any damage breaks the effect. (Survival signature)"
+      },
+      "arcane_power": {
+        "name": "Aether Surge",
+        "description": "Increases spell damage by 20% and spell haste by 10% for 10 sec. (Arcane signature)"
+      },
+      "combustion": {
+        "name": "Flashfire",
+        "description": "Increases spell critical chance by 50% for 15 sec. (Fire signature)"
+      },
+      "icy_veins": {
+        "name": "Icy Veins",
+        "description": "Increases spell haste by 30% and prevents cast interruption and pushback for 10 sec. (Frost signature)"
+      },
+      "cold_blood": {
+        "name": "Killer's Calm",
+        "description": "Focuses your killing intent so your next attack is a critical strike. (Assassination signature)"
+      },
+      "blade_flurry": {
+        "name": "Mirrored Blades",
+        "description": "Unleashes a flurry of blades, increasing attack speed by 20% for 12 sec. (Combat signature)"
+      },
+      "hemorrhage": {
+        "name": "Red Ribbon",
+        "description": "Strikes the enemy for weapon damage plus {damage}, causes bleeding damage over 12 sec, and increases bleed damage taken by 40%. Awards 1 combo point. (Subtlety signature)"
+      },
+      "power_infusion": {
+        "name": "Anointing",
+        "description": "Infuses a friendly target with power, increasing spell haste by 20% for 15 sec. (Discipline signature)"
+      },
+      "holy_nova": {
+        "name": "Holy Nova",
+        "description": "Causes an explosion of holy radiance, healing nearby allies for {damage} and damaging nearby enemies. (Holy signature)"
+      },
+      "shadowform": {
+        "name": "Gloamveil Form",
+        "description": "Assume a Shadowform, increasing your Shadow damage by 15 and empowering shadow magic until you shift back. Cast again to return to normal form. (Shadow signature)"
+      },
+      "elemental_mastery": {
+        "name": "Primal Mastery",
+        "description": "Calls on the storm, making your next spell instant. (Elemental signature)"
+      },
+      "siphon_life": {
+        "name": "Veinleech",
+        "description": "Siphons life from the enemy, causing {damage} Shadow damage over 30 sec and healing you for the damage done. (Affliction signature)"
+      },
+      "conflagrate": {
+        "name": "Conflagrate",
+        "description": "Consumes your Immolate on the enemy to ignite them for {damage} Fire damage. (Destruction signature)"
+      },
+      "moonkin_form": {
+        "name": "Moonwing Form",
+        "description": "Shapeshift into a fearsome Moonkin, increasing your spell damage by 20% and your armor by 50%. Lasts until you shift out. Cast again to return to caster form. (Balance signature)"
+      },
+      "feral_charge": {
+        "name": "Primal Surge",
+        "description": "Unleash a primal surge. In Wolf Form, Energy regeneration is increased by 100% for 10 sec. In Bruin Form, instantly generates 50 Rage. (Feral signature)"
+      },
+      "swiftmend": {
+        "name": "Swiftmend",
+        "description": "Consumes a heal-over-time effect on a friendly target to heal them for {damage}. (Restoration signature)"
+      },
       "summon_imp": {
         "name": "Summon Emberkin",
         "description": "Summons an Emberkin under the command of the Warlock. The Emberkin hurls Ashbolts at your enemies from afar. Summoning a new demon dismisses your current one. You may have one demon at a time."
@@ -5971,6 +6063,34 @@ export const en: EnTranslations = {
       "summon_doomguard": {
         "name": "Summon Wraithborn",
         "description": "Binds a Wraithborn to your will — an elite demon that rains heavy Shadow damage from afar. A long cooldown gates its devastating power. Summoning a new demon dismisses your current one. You may have one demon at a time."
+      },
+      "pummel": {
+        "name": "Jawcrack",
+        "description": "Interrupts the target's spellcast and prevents casting from that school for 4 sec."
+      },
+      "kick": {
+        "name": "Boot",
+        "description": "Interrupts the target's spellcast and prevents casting from that school for 4 sec."
+      },
+      "counterspell": {
+        "name": "Spellbreak",
+        "description": "Counters the target's spellcast and prevents casting from that school for 6 sec."
+      },
+      "counter_shot": {
+        "name": "Hushing Shot",
+        "description": "A snap shot that interrupts the target's spellcast and locks that school for 4 sec."
+      },
+      "rebuke": {
+        "name": "Reproach",
+        "description": "Interrupts the target's spellcast and prevents casting from that school for 4 sec."
+      },
+      "skull_bash": {
+        "name": "Headbutt",
+        "description": "A lunging headbutt that interrupts the target's spellcast and locks that school for 4 sec."
+      },
+      "spell_lock": {
+        "name": "Gag Order",
+        "description": "Silences the target mid-cast and prevents casting from that school for 5 sec."
       },
       "bear_charge": {
         "name": "Bruin Rush",

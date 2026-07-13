@@ -221,7 +221,7 @@ export function fiestaStandardize(ctx: SimContext, meta: PlayerMeta, e: Entity):
   meta.fiestaRestore = { level: e.level, xp: meta.xp, talents: cloneAllocation(meta.talents) };
   e.level = FIESTA_STANDARD_LEVEL;
   meta.talents = defaultBuild(meta.cls, talentPointsAtLevel(FIESTA_STANDARD_LEVEL));
-  meta.talentMods = computeTalentModifiers(meta.cls, meta.talents);
+  meta.talentMods = computeTalentModifiers(meta.cls, meta.talents, e.level);
   meta.known = abilitiesKnownAt(meta.cls, e.level, ctx.playerMods(meta));
   meta.wireRev++; // talents/loadouts swapped for the bout, refresh the wire promptly
   recalcPlayerStats(e, meta.cls, meta.equipment, ctx.playerMods(meta), meta.equipmentInstance);
@@ -234,7 +234,7 @@ export function fiestaRestoreChar(meta: PlayerMeta, e: Entity): void {
   e.level = snap.level;
   meta.xp = snap.xp;
   meta.talents = snap.talents;
-  meta.talentMods = computeTalentModifiers(meta.cls, meta.talents);
+  meta.talentMods = computeTalentModifiers(meta.cls, meta.talents, e.level);
   meta.fiestaRestore = null;
   meta.known = abilitiesKnownAt(meta.cls, e.level, meta.talentMods);
   meta.wireRev++; // real talents restored, refresh the wire promptly

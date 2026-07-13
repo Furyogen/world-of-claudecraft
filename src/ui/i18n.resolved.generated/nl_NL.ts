@@ -5944,6 +5944,98 @@ export const nl_NL: EnTranslations = {
         "name": "Kolkende Woede",
         "description": "Ga in een kolkende woede en genereer 20 woede. (Krijger-talent)"
       },
+      "crusader_strike": {
+        "name": "Kruisvaardersslag",
+        "description": "Treft het doel voor wapenschade plus {damage} Heilige schade. (paladijntalent)"
+      },
+      "chain_heal": {
+        "name": "Chain Heal",
+        "description": "Heals a friendly target for a large amount, then jumps to up to 2 additional nearby allies, healing for 50% less with each jump. (Restoration signature)"
+      },
+      "metamorphosis": {
+        "name": "Metamorfose",
+        "description": "Neemt demonische kracht aan en verhoogt pantser en aanvalskracht 20 sec. lang. (heksenmeestertalent)"
+      },
+      "holy_shock": {
+        "name": "Heilige schok",
+        "description": "Schokt een bevriend doelwit met Heilige energie en geneest het voor {damage}. (Heilig signatuur)"
+      },
+      "holy_shield": {
+        "name": "Heilig schild",
+        "description": "Beschermt je 10 sec met Heilige kracht, verhoogt pantser met 90 en raakt melee-aanvallers voor 12 Heilige schade. (Bescherming signatuur)"
+      },
+      "bestial_wrath": {
+        "name": "Beestachtige woede",
+        "description": "Stuurt je in beestachtige razernij, waardoor aanvalskracht 15 sec met 55 toeneemt. (Beestbeheersing signatuur)"
+      },
+      "trueshot_aura": {
+        "name": "Zuiver schot-aura",
+        "description": "Inspireert nabije bondgenoten, waardoor aanvalskracht 5 min met 35 toeneemt. (Scherpschutter signatuur)"
+      },
+      "wyvern_sting": {
+        "name": "Wyvernsteek",
+        "description": "Steekt de vijand van afstand en maakt hem tot 4 sec uitgeschakeld. Elke schade verbreekt het effect. (Overleving signatuur)"
+      },
+      "arcane_power": {
+        "name": "Arcanekracht",
+        "description": "Verhoogt spreukschade met 20% en spreukhaast met 10% gedurende 10 sec. (Arcane-signatuur)"
+      },
+      "combustion": {
+        "name": "Verbranding",
+        "description": "Verhoogt de kritieke kans van spreuken met 50% gedurende 15 sec. (Fire-signatuur)"
+      },
+      "icy_veins": {
+        "name": "IJzige Aders",
+        "description": "Verhoogt spreukhaast met 30% en voorkomt onderbreking en terugslag van spreuken gedurende 10 sec. (Frost-signatuur)"
+      },
+      "cold_blood": {
+        "name": "Koud bloed",
+        "description": "Bundelt je dodelijke intentie zodat je volgende aanval een kritieke treffer is. (Moord signatuur)"
+      },
+      "blade_flurry": {
+        "name": "Klingenvlaag",
+        "description": "Ontketent een vlaag van klingen, waardoor aanvalssnelheid 12 sec met 20% toeneemt. (Gevecht signatuur)"
+      },
+      "hemorrhage": {
+        "name": "Bloeding",
+        "description": "Raakt de vijand voor wapenschade plus {damage} en veroorzaakt bloedschade gedurende 12 sec. Geeft 1 combopunt. (Subtiliteit signatuur)"
+      },
+      "power_infusion": {
+        "name": "Krachtinfusie",
+        "description": "Doordrenkt een bevriend doelwit met kracht, waardoor spreukkracht 15 sec met 28 toeneemt. (Discipline signatuur)"
+      },
+      "holy_nova": {
+        "name": "Heilige nova",
+        "description": "Veroorzaakt een explosie van Heilig licht, geneest nabije bondgenoten voor {damage} en beschadigt nabije vijanden. (Heilig signatuur)"
+      },
+      "shadowform": {
+        "name": "Schaduwvorm",
+        "description": "Neem schaduwvorm aan en versterk schaduwmagie totdat je terugschakelt. Spreek opnieuw uit om terug te keren naar normale vorm. (Schaduw signatuur)"
+      },
+      "elemental_mastery": {
+        "name": "Elementaire meesterschap",
+        "description": "Roept elementaire meesterschap aan, waardoor je volgende spreuk onmiddellijk is. (Elementair signatuur)"
+      },
+      "siphon_life": {
+        "name": "Levenshevel",
+        "description": "Hevelt leven uit de vijand, veroorzaakt {damage} Schaduwschade gedurende 30 sec en geneest je voor de toegebrachte schade. (Kwelling signatuur)"
+      },
+      "conflagrate": {
+        "name": "Ontvlamming",
+        "description": "Verbruikt je Verbranden op de vijand om hem te ontsteken voor {damage} Vuurschade. (Vernietiging signatuur)"
+      },
+      "moonkin_form": {
+        "name": "Maanuilvorm",
+        "description": "Neem maanuilvorm aan en versterk spreuken totdat je terugschakelt. Spreek opnieuw uit om terug te keren naar normale vorm. (Balans signatuur)"
+      },
+      "feral_charge": {
+        "name": "Wilde stormloop",
+        "description": "Storm op een vijand af en wortel hem 1 sec. Bereik 8-25 m. (Wildernis signatuur)"
+      },
+      "swiftmend": {
+        "name": "Snelle genezing",
+        "description": "Verbruikt een genezing-over-tijd-effect op een bevriend doelwit om het voor {damage} te genezen. (Herstel signatuur)"
+      },
       "summon_imp": {
         "name": "Emberkin Oproepen",
         "description": "Roept een Emberkin op onder bevel van de Heksenmeester. De Emberkin slingert van veraf Ashbolts naar je vijanden. Het oproepen van een nieuwe demon stuurt je huidige weg. Je mag één demon tegelijk hebben."
@@ -5971,6 +6063,34 @@ export const nl_NL: EnTranslations = {
       "summon_doomguard": {
         "name": "Wraithborn Oproepen",
         "description": "Bindt een Wraithborn aan je wil, een elite-demon die van veraf zware Schaduwschade laat regenen. Een lange afkoeltijd beteugelt zijn verwoestende kracht. Het oproepen van een nieuwe demon stuurt je huidige weg. Je mag één demon tegelijk hebben."
+      },
+      "pummel": {
+        "name": "Jawcrack",
+        "description": "Interrupts the target's spellcast and prevents casting from that school for 4 sec."
+      },
+      "kick": {
+        "name": "Boot",
+        "description": "Interrupts the target's spellcast and prevents casting from that school for 4 sec."
+      },
+      "counterspell": {
+        "name": "Spellbreak",
+        "description": "Counters the target's spellcast and prevents casting from that school for 6 sec."
+      },
+      "counter_shot": {
+        "name": "Hushing Shot",
+        "description": "A snap shot that interrupts the target's spellcast and locks that school for 4 sec."
+      },
+      "rebuke": {
+        "name": "Reproach",
+        "description": "Interrupts the target's spellcast and prevents casting from that school for 4 sec."
+      },
+      "skull_bash": {
+        "name": "Headbutt",
+        "description": "A lunging headbutt that interrupts the target's spellcast and locks that school for 4 sec."
+      },
+      "spell_lock": {
+        "name": "Gag Order",
+        "description": "Silences the target mid-cast and prevents casting from that school for 5 sec."
       },
       "bear_charge": {
         "name": "Bruin-stormloop",

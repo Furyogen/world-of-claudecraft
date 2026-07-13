@@ -5944,6 +5944,98 @@ export const fr_FR: EnTranslations = {
         "name": "Fureur bouillonnante",
         "description": "Entre dans une fureur bouillonnante et génère 20 points de rage. (talent de guerrier)"
       },
+      "crusader_strike": {
+        "name": "Frappe du croisé",
+        "description": "Frappe la cible et inflige les dégâts de l’arme plus {damage} points de dégâts du Sacré. (talent de paladin)"
+      },
+      "chain_heal": {
+        "name": "Chain Heal",
+        "description": "Heals a friendly target for a large amount, then jumps to up to 2 additional nearby allies, healing for 50% less with each jump. (Restoration signature)"
+      },
+      "metamorphosis": {
+        "name": "Métamorphose",
+        "description": "Vous adoptez une puissance démoniaque, ce qui augmente l’armure et la puissance d’attaque pendant 20 s. (talent de démoniste)"
+      },
+      "holy_shock": {
+        "name": "Horion sacré",
+        "description": "Frappe une cible alliée avec de l’énergie sacrée et lui rend {damage} points de vie. (signature Sacré)"
+      },
+      "holy_shield": {
+        "name": "Bouclier sacré",
+        "description": "Vous protège avec une puissance sacrée pendant 10 s, augmente l’armure de 90 et frappe les attaquants en mêlée pour 12 points de dégâts du Sacré. (signature Protection)"
+      },
+      "bestial_wrath": {
+        "name": "Courroux bestial",
+        "description": "Vous plonge dans une rage bestiale, augmentant la puissance d’attaque de 55 pendant 15 s. (signature Maîtrise des bêtes)"
+      },
+      "trueshot_aura": {
+        "name": "Aura de précision",
+        "description": "Inspire les alliés proches, augmentant leur puissance d’attaque de 35 pendant 5 min. (signature Précision)"
+      },
+      "wyvern_sting": {
+        "name": "Piqûre de wyverne",
+        "description": "Pique l’ennemi à distance et le rend incapable d’agir pendant un maximum de 4 s. Tout dégât interrompt l’effet. (signature Survie)"
+      },
+      "arcane_power": {
+        "name": "Pouvoir des Arcanes",
+        "description": "Augmente les dégâts des sorts de 20% et la hâte des sorts de 10% pendant 10 s. (signature Arcane)"
+      },
+      "combustion": {
+        "name": "Combustion",
+        "description": "Augmente les chances de coup critique des sorts de 50% pendant 15 s. (signature Feu)"
+      },
+      "icy_veins": {
+        "name": "Veines glaciales",
+        "description": "Augmente la hâte des sorts de 30% et empêche l’interruption et le recul des incantations pendant 10 s. (signature Givre)"
+      },
+      "cold_blood": {
+        "name": "Sang froid",
+        "description": "Concentre votre intention meurtrière afin que votre prochaine attaque soit un coup critique. (signature Assassinat)"
+      },
+      "blade_flurry": {
+        "name": "Déluge de lames",
+        "description": "Déchaîne un déluge de lames, augmentant la vitesse d’attaque de 20% pendant 12 s. (signature Combat)"
+      },
+      "hemorrhage": {
+        "name": "Hémorragie",
+        "description": "Frappe l’ennemi pour les dégâts de l’arme plus {damage} et inflige des dégâts de saignement pendant 12 s. Confère 1 point de combo. (signature Finesse)"
+      },
+      "power_infusion": {
+        "name": "Infusion de puissance",
+        "description": "Insuffle de la puissance à une cible alliée, augmentant sa puissance des sorts de 28 pendant 15 s. (signature Discipline)"
+      },
+      "holy_nova": {
+        "name": "Nova sacrée",
+        "description": "Provoque une explosion de lumière sacrée, rend {damage} points de vie aux alliés proches et blesse les ennemis proches. (signature Sacré)"
+      },
+      "shadowform": {
+        "name": "Forme d'Ombre",
+        "description": "Adopte la Forme d’Ombre, renforçant la magie de l’ombre jusqu’à ce que vous changiez de nouveau. Lancez à nouveau pour revenir à la forme normale. (signature Ombre)"
+      },
+      "elemental_mastery": {
+        "name": "Maîtrise élémentaire",
+        "description": "Fait appel à la maîtrise élémentaire, rendant votre prochain sort instantané. (signature Élémentaire)"
+      },
+      "siphon_life": {
+        "name": "Siphon de vie",
+        "description": "Siphonne la vie de l’ennemi, inflige {damage} points de dégâts d’Ombre en 30 s et vous soigne du montant des dégâts infligés. (signature Affliction)"
+      },
+      "conflagrate": {
+        "name": "Conflagration",
+        "description": "Consume votre Immolation sur l’ennemi pour l’enflammer et lui infliger {damage} points de dégâts de Feu. (signature Destruction)"
+      },
+      "moonkin_form": {
+        "name": "Forme de sélénien",
+        "description": "Adopte la forme de sélénien, renforçant l’incantation jusqu’à ce que vous changiez de nouveau. Lancez à nouveau pour revenir à la forme normale. (signature Équilibre)"
+      },
+      "feral_charge": {
+        "name": "Charge farouche",
+        "description": "Charge un ennemi et l’enracine pendant 1 s. Portée de 8-25 m. (signature Farouche)"
+      },
+      "swiftmend": {
+        "name": "Prompte guérison",
+        "description": "Consume un effet de soins sur la durée sur une cible alliée pour lui rendre {damage} points de vie. (signature Restauration)"
+      },
       "summon_imp": {
         "name": "Invoquer un Emberkin",
         "description": "Invoque un Emberkin sous le commandement du démoniste. L'Emberkin lance des Ashbolts sur vos ennemis à distance. Invoquer un nouveau démon renvoie celui que vous avez. Vous ne pouvez avoir qu'un démon à la fois."
@@ -5971,6 +6063,34 @@ export const fr_FR: EnTranslations = {
       "summon_doomguard": {
         "name": "Invoquer un Wraithborn",
         "description": "Soumet un Wraithborn à votre volonté, un démon d'élite qui déverse de lourds dégâts d'Ombre à distance. Un long temps de recharge bride sa puissance dévastatrice. Invoquer un nouveau démon renvoie celui que vous avez. Vous ne pouvez avoir qu'un démon à la fois."
+      },
+      "pummel": {
+        "name": "Jawcrack",
+        "description": "Interrupts the target's spellcast and prevents casting from that school for 4 sec."
+      },
+      "kick": {
+        "name": "Boot",
+        "description": "Interrupts the target's spellcast and prevents casting from that school for 4 sec."
+      },
+      "counterspell": {
+        "name": "Spellbreak",
+        "description": "Counters the target's spellcast and prevents casting from that school for 6 sec."
+      },
+      "counter_shot": {
+        "name": "Hushing Shot",
+        "description": "A snap shot that interrupts the target's spellcast and locks that school for 4 sec."
+      },
+      "rebuke": {
+        "name": "Reproach",
+        "description": "Interrupts the target's spellcast and prevents casting from that school for 4 sec."
+      },
+      "skull_bash": {
+        "name": "Headbutt",
+        "description": "A lunging headbutt that interrupts the target's spellcast and locks that school for 4 sec."
+      },
+      "spell_lock": {
+        "name": "Gag Order",
+        "description": "Silences the target mid-cast and prevents casting from that school for 5 sec."
       },
       "bear_charge": {
         "name": "Ruée de Bruin",

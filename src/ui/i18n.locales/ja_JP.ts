@@ -2127,6 +2127,9 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     '石の怒りを武器に込めます。5分間、各スイングが{damage}の追加ダメージを与えます。',
   'entities.abilities.healing_wave.name': '癒しの水流',
   'entities.abilities.healing_wave.description': '味方対象の体力を {damage} 回復します。',
+  'entities.abilities.chain_heal.name': 'チェインヒール',
+  'entities.abilities.chain_heal.description':
+    '味方1体を大きく回復し、近くの味方最大2体に連鎖します。連鎖するごとに回復量が50%減少します。（回復スペシャライゼーション）',
   'entities.abilities.earth_shock.name': '大地の衝撃',
   'entities.abilities.earth_shock.description':
     '衝撃の力で対象を即座に打ち、{damage} の自然ダメージを与えます。',
@@ -2305,6 +2308,72 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     'ステルス状態からの先制攻撃で、武器ダメージに加えて{damage}のダメージを与え、9秒かけて出血ダメージを与える。コンボポイントを1獲得する。ウルフフォーム時のみ使用可能。',
   'entities.abilities.revive_pet.name': 'ペット蘇生',
   'entities.abilities.revive_pet.description': '死んだペットを蘇生させ、自分のそばに呼び戻す。',
+  'entities.abilities.holy_shock.name': 'ホーリーショック',
+  'entities.abilities.holy_shock.description':
+    '聖なる力で味方を衝撃し、体力を{damage}回復します。（ホーリー特性のシグネチャ）',
+  'entities.abilities.holy_shield.name': 'ホーリーシールド',
+  'entities.abilities.holy_shield.description':
+    '10秒間、聖なる力で自分を守り、防御力を90上げ、近接攻撃者に12の聖属性ダメージを与えます。（プロテクション特性のシグネチャ）',
+  'entities.abilities.bestial_wrath.name': '野獣の怒り',
+  'entities.abilities.bestial_wrath.description':
+    '野獣の怒りに入り、15秒間攻撃力が55上がります。（ビーストマスタリー特性のシグネチャ）',
+  'entities.abilities.trueshot_aura.name': 'トゥルーショットオーラ',
+  'entities.abilities.trueshot_aura.description':
+    '近くの味方を鼓舞し、5分間攻撃力を35上げます。（マークスマンシップ特性のシグネチャ）',
+  'entities.abilities.wyvern_sting.name': 'ワイバーンスティング',
+  'entities.abilities.wyvern_sting.description':
+    '遠距離から敵を刺し、最大4秒間行動不能にします。ダメージを受けると効果は解除されます。（サバイバル特性のシグネチャ）',
+  'entities.abilities.arcane_power.name': 'アーケインパワー',
+  'entities.abilities.arcane_power.description':
+    '10秒間、呪文ダメージが20%、呪文ヘイストが10%上がります。（アーケイン特性のシグネチャ）',
+  'entities.abilities.combustion.name': 'コンバッション',
+  'entities.abilities.combustion.description':
+    '15秒間、呪文クリティカル率が50%上がります。（ファイア特性のシグネチャ）',
+  'entities.abilities.icy_veins.name': 'アイシーヴェインズ',
+  'entities.abilities.icy_veins.description':
+    '10秒間、呪文ヘイストが30%上がり、詠唱の中断と遅延を防ぎます。（フロスト特性のシグネチャ）',
+  'entities.abilities.cold_blood.name': 'コールドブラッド',
+  'entities.abilities.cold_blood.description':
+    '殺意を集中し、次の攻撃をクリティカルにします。（アサシネーション特性のシグネチャ）',
+  'entities.abilities.blade_flurry.name': 'ブレードフラリー',
+  'entities.abilities.blade_flurry.description':
+    '刃の連撃を放ち、12秒間攻撃速度を20%上げます。（コンバット特性のシグネチャ）',
+  'entities.abilities.hemorrhage.name': 'ヘモリッジ',
+  'entities.abilities.hemorrhage.description':
+    '敵を攻撃して武器ダメージに加え{damage}を与え、12秒間出血ダメージを与えます。コンボポイントを1得ます。（サブテリティ特性のシグネチャ）',
+  'entities.abilities.power_infusion.name': 'パワーインフュージョン',
+  'entities.abilities.power_infusion.description':
+    '味方に力を注ぎ、15秒間呪文力を28上げます。（ディシプリン特性のシグネチャ）',
+  'entities.abilities.holy_nova.name': 'ホーリーノヴァ',
+  'entities.abilities.holy_nova.description':
+    '聖なる光を爆発させ、近くの味方を{damage}回復し、近くの敵にダメージを与えます。（ホーリー特性のシグネチャ）',
+  'entities.abilities.shadowform.name': 'シャドウフォーム',
+  'entities.abilities.shadowform.description':
+    'シャドウフォームになり、戻るまで影の魔法を強化します。再び唱えると通常形態に戻ります。（シャドウ特性のシグネチャ）',
+  'entities.abilities.elemental_mastery.name': 'エレメンタルマスタリー',
+  'entities.abilities.elemental_mastery.description':
+    '元素の熟達を呼び、次の呪文を即時発動にします。（エレメンタル特性のシグネチャ）',
+  'entities.abilities.siphon_life.name': 'サイフォンライフ',
+  'entities.abilities.siphon_life.description':
+    '敵の生命を吸い取り、30秒間で{damage}のシャドウダメージを与え、与えたダメージ分あなたを回復します。（アフリクション特性のシグネチャ）',
+  'entities.abilities.conflagrate.name': 'コンフラグレート',
+  'entities.abilities.conflagrate.description':
+    '敵にかかったイモレートを消費して燃え上がらせ、{damage}のファイアダメージを与えます。（デストラクション特性のシグネチャ）',
+  'entities.abilities.moonkin_form.name': 'ムーンキンフォーム',
+  'entities.abilities.moonkin_form.description':
+    'ムーンキンフォームになり、戻るまで呪文詠唱を強化します。再び唱えると通常形態に戻ります。（バランス特性のシグネチャ）',
+  'entities.abilities.feral_charge.name': 'フェラルチャージ',
+  'entities.abilities.feral_charge.description':
+    '敵に突撃し、1秒間足止めします。射程8-25ヤード。（フェラル特性のシグネチャ）',
+  'entities.abilities.swiftmend.name': 'スウィフトメンド',
+  'entities.abilities.swiftmend.description':
+    '味方にかかった継続回復効果を消費し、体力を{damage}回復します。（レストレーション特性のシグネチャ）',
+  'entities.abilities.crusader_strike.name': 'クルセイダー ストライク',
+  'entities.abilities.crusader_strike.description':
+    '対象を攻撃し、武器ダメージに加えて {damage} の聖なるダメージを与えます。（パラディンのタレント）',
+  'entities.abilities.metamorphosis.name': '悪魔変身',
+  'entities.abilities.metamorphosis.description':
+    '悪魔の力をまとい、20 秒間防御力と攻撃力を高めます。（ウォーロックのタレント）',
   'entities.items.worn_sword.name': '錆穴だらけのショートソード',
   'entities.items.gnarled_staff.name': '沼樫の杖',
   'entities.items.rusty_dagger.name': '錆びたダガー',
@@ -6827,6 +6896,25 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     'ヒント：複数の特性ロードアウトを保存しておけば、ポイントを使い直さずにビルドを切り替えられます。',
   'loading.tips.pvp':
     'ヒント：他のプレイヤーに友好的な決闘を申し込むか、灰塵のコロシアムに参加してビルドを試してみましょう。',
+  // Baseline class interrupts.
+  'entities.abilities.pummel.name': '顎砕き',
+  'entities.abilities.pummel.description': '対象の呪文詠唱を中断し、4秒間その系統の呪文を封じる。',
+  'entities.abilities.kick.name': 'ブーツ',
+  'entities.abilities.kick.description': '対象の呪文詠唱を中断し、4秒間その系統の呪文を封じる。',
+  'entities.abilities.counterspell.name': 'スペルブレイク',
+  'entities.abilities.counterspell.description':
+    '対象の呪文を打ち消し、6秒間その系統の呪文を封じる。',
+  'entities.abilities.counter_shot.name': '沈黙の一射',
+  'entities.abilities.counter_shot.description':
+    '素早い一射で対象の詠唱を中断し、4秒間その系統を封じる。',
+  'entities.abilities.rebuke.name': '叱咤',
+  'entities.abilities.rebuke.description': '対象の呪文詠唱を中断し、4秒間その系統の呪文を封じる。',
+  'entities.abilities.skull_bash.name': '頭突き',
+  'entities.abilities.skull_bash.description':
+    '突進する頭突きで対象の詠唱を中断し、4秒間その系統を封じる。',
+  'entities.abilities.spell_lock.name': '猿轡',
+  'entities.abilities.spell_lock.description':
+    '詠唱中の対象を沈黙させ、5秒間その系統の呪文を封じる。',
   'guide.bestiary.flavor.sethrael_palecoil':
     '骨のように蒼白い蛇で、グリマーミアの深い棚を音もなく滑り、自らのものとした水域を守る無言の番人。この湖を分かち合った泳ぎ手が、水面に戻ることはまずない。',
   'guide.combat.metersBody':

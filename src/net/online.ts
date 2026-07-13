@@ -957,6 +957,9 @@ function blankEntity(id: number): Entity {
     critChance: 0.05,
     critRating: 0,
     hasteRating: 0,
+    critDmgSpellBonus: 0,
+    critDmgPhysBonus: 0,
+    critDmgHealBonus: 0,
     dodgeChance: 0.05,
     moveSpeed: 7,
     hostile: false,
@@ -2077,7 +2080,7 @@ export class ClientWorld implements IWorld {
         : abilitiesKnownAt(
             this.cfg.playerClass,
             e.level,
-            computeTalentModifiers(this.cfg.playerClass, talents),
+            computeTalentModifiers(this.cfg.playerClass, talents, e.level),
           );
       // --- IWorldParty: party roster + raid markers, delta-omitted self-decode
       // (keep the prior value when absent; `marks: null` clears on disband). ---
@@ -3150,7 +3153,7 @@ export class ClientWorld implements IWorld {
       this.known = abilitiesKnownAt(
         this.cfg.playerClass,
         this.player.level,
-        computeTalentModifiers(this.cfg.playerClass, this.talents),
+        computeTalentModifiers(this.cfg.playerClass, this.talents, this.player.level),
       );
     }
   }
@@ -3171,7 +3174,7 @@ export class ClientWorld implements IWorld {
         this.known = abilitiesKnownAt(
           this.cfg.playerClass,
           this.player.level,
-          computeTalentModifiers(this.cfg.playerClass, this.talents),
+          computeTalentModifiers(this.cfg.playerClass, this.talents, this.player.level),
         );
       }
     } else if (this.activeLoadout > index) this.activeLoadout -= 1;

@@ -5944,6 +5944,98 @@ export const pl_PL: EnTranslations = {
         "name": "Kipiąca furia",
         "description": "Wpadnij w kipiącą furię, generując 20 wściekłości. (Talent wojownika)"
       },
+      "crusader_strike": {
+        "name": "Cios krzyżowca",
+        "description": "Uderza cel za obrażenia broni plus {damage} obrażeń od Świętości. (talent paladyna)"
+      },
+      "chain_heal": {
+        "name": "Chain Heal",
+        "description": "Heals a friendly target for a large amount, then jumps to up to 2 additional nearby allies, healing for 50% less with each jump. (Restoration signature)"
+      },
+      "metamorphosis": {
+        "name": "Metamorfoza",
+        "description": "Przyjmujesz demoniczną moc, zwiększając pancerz i siłę ataku na 20 s. (talent czarnoksiężnika)"
+      },
+      "holy_shock": {
+        "name": "Święty wstrząs",
+        "description": "Razisz przyjazny cel Świętą energią, lecząc go za {damage}. (specjalizacja Świętość)"
+      },
+      "holy_shield": {
+        "name": "Święta tarcza",
+        "description": "Osłaniasz się Świętą mocą na 10 sek., zwiększając pancerz o 90 i rażąc napastników w zwarciu za 12 obrażeń Świętych. (specjalizacja Ochrona)"
+      },
+      "bestial_wrath": {
+        "name": "Bestialski gniew",
+        "description": "Wpadasz w bestialski szał, zwiększając siłę ataku o 55 na 15 sek. (specjalizacja Władca Bestii)"
+      },
+      "trueshot_aura": {
+        "name": "Aura celnego strzału",
+        "description": "Inspiruje pobliskich sojuszników, zwiększając siłę ataku o 35 na 5 min. (specjalizacja Strzelectwo)"
+      },
+      "wyvern_sting": {
+        "name": "Żądło wiwerny",
+        "description": "Żądli wroga z dystansu, obezwładniając go na maksymalnie 4 sek. Jakiekolwiek obrażenia przerywają efekt. (specjalizacja Przetrwanie)"
+      },
+      "arcane_power": {
+        "name": "Moc Arkanów",
+        "description": "Zwiększa obrażenia zaklęć o 20% i przyspieszenie zaklęć o 10% na 10 sek. (specjalizacja Arkana)"
+      },
+      "combustion": {
+        "name": "Zapłon",
+        "description": "Zwiększa szansę na krytyczny efekt zaklęć o 50% na 15 sek. (specjalizacja Ogień)"
+      },
+      "icy_veins": {
+        "name": "Lodowe Żyły",
+        "description": "Zwiększa przyspieszenie zaklęć o 30% oraz zapobiega przerwaniu i opóźnieniu rzucania na 10 sek. (specjalizacja Mróz)"
+      },
+      "cold_blood": {
+        "name": "Zimna krew",
+        "description": "Skupia twoją morderczą intencję, aby następny atak był trafieniem krytycznym. (specjalizacja Zabójstwo)"
+      },
+      "blade_flurry": {
+        "name": "Nawałnica ostrzy",
+        "description": "Uwalnia nawałnicę ostrzy, zwiększając szybkość ataku o 20% na 12 sek. (specjalizacja Walka)"
+      },
+      "hemorrhage": {
+        "name": "Krwotok",
+        "description": "Uderza wroga za obrażenia broni plus {damage} i powoduje krwawienie przez 12 sek. Daje 1 punkt combo. (specjalizacja Subtelność)"
+      },
+      "power_infusion": {
+        "name": "Infuzja mocy",
+        "description": "Napełnia przyjazny cel mocą, zwiększając moc zaklęć o 28 na 15 sek. (specjalizacja Dyscyplina)"
+      },
+      "holy_nova": {
+        "name": "Święta nova",
+        "description": "Wywołuje wybuch Świętego światła, leczy pobliskich sojuszników za {damage} i rani pobliskich wrogów. (specjalizacja Świętość)"
+      },
+      "shadowform": {
+        "name": "Postać cienia",
+        "description": "Przyjmujesz postać cienia, wzmacniając magię cienia do czasu powrotu. Rzuć ponownie, aby wrócić do zwykłej postaci. (specjalizacja Cień)"
+      },
+      "elemental_mastery": {
+        "name": "Mistrzostwo żywiołów",
+        "description": "Przywołuje mistrzostwo żywiołów, sprawiając, że następne zaklęcie jest natychmiastowe. (specjalizacja Żywioły)"
+      },
+      "siphon_life": {
+        "name": "Wyssanie życia",
+        "description": "Wysysa życie z wroga, zadając {damage} obrażeń od Cienia przez 30 sek. i lecząc cię za zadane obrażenia. (specjalizacja Udręka)"
+      },
+      "conflagrate": {
+        "name": "Pożoga",
+        "description": "Zużywa twoje podpalenie na wrogu, aby zajął się ogniem i otrzymał {damage} obrażeń od Ognia. (specjalizacja Zniszczenie)"
+      },
+      "moonkin_form": {
+        "name": "Postać księżycowej sowy",
+        "description": "Przyjmujesz postać księżycowej sowy, wzmacniając rzucanie zaklęć do czasu powrotu. Rzuć ponownie, aby wrócić do zwykłej postaci. (specjalizacja Równowaga)"
+      },
+      "feral_charge": {
+        "name": "Dzika szarża",
+        "description": "Szarżujesz na wroga i unieruchamiasz go na 1 sek. Zasięg 8-25 m. (specjalizacja Dzikość)"
+      },
+      "swiftmend": {
+        "name": "Szybkie uzdrowienie",
+        "description": "Zużywa efekt leczenia w czasie na przyjaznym celu, aby uleczyć go za {damage}. (specjalizacja Odnowa)"
+      },
       "summon_imp": {
         "name": "Przywołanie Emberkina",
         "description": "Przywołuje Emberkina pod komendę Czarnoksiężnika. Emberkin ciska popielnymi pociskami w twoich wrogów z oddali. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
@@ -5971,6 +6063,34 @@ export const pl_PL: EnTranslations = {
       "summon_doomguard": {
         "name": "Przywołanie Wraithborna",
         "description": "Wiąże Wraithborna z twoją wolą, elitarnego demona, który zsyła z oddali potężne obrażenia od Cienia. Długi czas odnowienia ogranicza jego niszczycielską moc. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
+      },
+      "pummel": {
+        "name": "Jawcrack",
+        "description": "Interrupts the target's spellcast and prevents casting from that school for 4 sec."
+      },
+      "kick": {
+        "name": "Boot",
+        "description": "Interrupts the target's spellcast and prevents casting from that school for 4 sec."
+      },
+      "counterspell": {
+        "name": "Spellbreak",
+        "description": "Counters the target's spellcast and prevents casting from that school for 6 sec."
+      },
+      "counter_shot": {
+        "name": "Hushing Shot",
+        "description": "A snap shot that interrupts the target's spellcast and locks that school for 4 sec."
+      },
+      "rebuke": {
+        "name": "Reproach",
+        "description": "Interrupts the target's spellcast and prevents casting from that school for 4 sec."
+      },
+      "skull_bash": {
+        "name": "Headbutt",
+        "description": "A lunging headbutt that interrupts the target's spellcast and locks that school for 4 sec."
+      },
+      "spell_lock": {
+        "name": "Gag Order",
+        "description": "Silences the target mid-cast and prevents casting from that school for 5 sec."
       },
       "bear_charge": {
         "name": "Szarża Bruina",

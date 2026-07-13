@@ -2028,6 +2028,9 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
     '以大地之怒灌注你的武器：每次揮擊額外造成 {damage} 點傷害，持續 5 分鐘。',
   'entities.abilities.healing_wave.name': '療癒之水',
   'entities.abilities.healing_wave.description': '為一個友方目標恢復 {damage} 點生命值。',
+  'entities.abilities.chain_heal.name': '治療鏈',
+  'entities.abilities.chain_heal.description':
+    '大量治療一個友方目標，然後跳躍至多2個附近的盟友，每次跳躍的治療量降低50%。（恢復專精招牌）',
   'entities.abilities.earth_shock.name': '大地震擊',
   'entities.abilities.earth_shock.description':
     '立即以震盪之力衝擊目標，造成 {damage} 點自然傷害。',
@@ -2194,6 +2197,72 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
     '一招隱匿起手技，以武器傷害外加 {damage} 撕裂敵人，並造成持續 9 秒的流血傷害。給予 1 點連擊點數。僅限狼形態。',
   'entities.abilities.revive_pet.name': '復活寵物',
   'entities.abilities.revive_pet.description': '復活你已死亡的寵物，並使其重回你身邊。',
+  'entities.abilities.holy_shock.name': '神聖震擊',
+  'entities.abilities.holy_shock.description':
+    '以神聖能量震擊一名友方目標，為其恢復{damage}點生命值。（神聖專精招牌）',
+  'entities.abilities.holy_shield.name': '神聖之盾',
+  'entities.abilities.holy_shield.description':
+    '以神聖之力保護你10秒，護甲提高90，並對近戰攻擊者造成12點神聖傷害。（防護專精招牌）',
+  'entities.abilities.bestial_wrath.name': '狂野怒火',
+  'entities.abilities.bestial_wrath.description':
+    '使你進入野獸怒火狀態，攻擊強度提高55點，持續15秒。（野獸控制專精招牌）',
+  'entities.abilities.trueshot_aura.name': '強擊光環',
+  'entities.abilities.trueshot_aura.description':
+    '鼓舞附近盟友，使攻擊強度提高35點，持續5分鐘。（射擊專精招牌）',
+  'entities.abilities.wyvern_sting.name': '翼龍釘刺',
+  'entities.abilities.wyvern_sting.description':
+    '從遠處釘刺敵人，使其癱瘓最多4秒。受到任何傷害都會打破效果。（生存專精招牌）',
+  'entities.abilities.arcane_power.name': '祕法強化',
+  'entities.abilities.arcane_power.description':
+    '法術傷害提高20%，法術加速提高10%，持續10秒。（祕法專精招牌）',
+  'entities.abilities.combustion.name': '燃燒',
+  'entities.abilities.combustion.description':
+    '法術致命一擊機率提高50%，持續15秒。（火焰專精招牌）',
+  'entities.abilities.icy_veins.name': '冰冷血脈',
+  'entities.abilities.icy_veins.description':
+    '法術加速提高30%，並防止施法被打斷或受到延遲，持續10秒。（冰霜專精招牌）',
+  'entities.abilities.cold_blood.name': '冷血',
+  'entities.abilities.cold_blood.description':
+    '集中你的殺意，使下一次攻擊造成致命一擊。（刺殺專精招牌）',
+  'entities.abilities.blade_flurry.name': '劍刃亂舞',
+  'entities.abilities.blade_flurry.description':
+    '釋放劍刃亂舞，攻擊速度提高20%，持續12秒。（戰鬥專精招牌）',
+  'entities.abilities.hemorrhage.name': '出血',
+  'entities.abilities.hemorrhage.description':
+    '攻擊敵人，造成武器傷害加{damage}點傷害，並在12秒內造成流血傷害。獎勵1個連擊點。（敏銳專精招牌）',
+  'entities.abilities.power_infusion.name': '能量灌注',
+  'entities.abilities.power_infusion.description':
+    '向一名友方目標灌注能量，使其法術強度提高28點，持續15秒。（戒律專精招牌）',
+  'entities.abilities.holy_nova.name': '神聖新星',
+  'entities.abilities.holy_nova.description':
+    '引發神聖之光爆炸，為附近盟友恢復{damage}點生命值並傷害附近敵人。（神聖專精招牌）',
+  'entities.abilities.shadowform.name': '暗影形態',
+  'entities.abilities.shadowform.description':
+    '進入暗影形態，強化暗影魔法直到你切換回來。再次施放可返回普通形態。（暗影專精招牌）',
+  'entities.abilities.elemental_mastery.name': '元素精通',
+  'entities.abilities.elemental_mastery.description':
+    '呼喚元素精通，使你的下一個法術變為瞬發。（元素專精招牌）',
+  'entities.abilities.siphon_life.name': '生命虹吸',
+  'entities.abilities.siphon_life.description':
+    '虹吸敵人的生命，在30秒內造成{damage}點暗影傷害，並按造成的傷害治療你。（痛苦專精招牌）',
+  'entities.abilities.conflagrate.name': '燃盡',
+  'entities.abilities.conflagrate.description':
+    '吞噬敵人身上的獻祭，將其點燃並造成{damage}點火焰傷害。（毀滅專精招牌）',
+  'entities.abilities.moonkin_form.name': '梟獸形態',
+  'entities.abilities.moonkin_form.description':
+    '進入梟獸形態，強化施法直到你切換回來。再次施放可返回普通形態。（平衡專精招牌）',
+  'entities.abilities.feral_charge.name': '野性衝鋒',
+  'entities.abilities.feral_charge.description':
+    '衝向敵人並使其定身1秒。8-25碼距離。（野性專精招牌）',
+  'entities.abilities.swiftmend.name': '迅癒',
+  'entities.abilities.swiftmend.description':
+    '吞噬友方目標身上的持續治療效果，為其恢復{damage}點生命值。（恢復專精招牌）',
+  'entities.abilities.crusader_strike.name': '十字軍聖擊',
+  'entities.abilities.crusader_strike.description':
+    '打擊目標，造成武器傷害外加 {damage} 點神聖傷害。（聖騎士天賦）',
+  'entities.abilities.metamorphosis.name': '惡魔變形',
+  'entities.abilities.metamorphosis.description':
+    '化為惡魔之力，使護甲和攻擊強度提高 20 秒。（術士天賦）',
   'entities.items.worn_sword.name': '鏽蝕短劍',
   'entities.items.gnarled_staff.name': '沼櫟法杖',
   'entities.items.rusty_dagger.name': '生鏽匕首',
@@ -6481,6 +6550,21 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'loading.tips.professions': '提示：採集與製造類生活技能可以與你的戰鬥職業同時培養。',
   'loading.tips.loadouts': '提示：保存多套天賦配置，即可在不同組合間切換而無需重新分配天賦點。',
   'loading.tips.pvp': '提示：向其他玩家發起友誼決鬥，或報名灰燼競技場，來檢驗你的組合。',
+  // Baseline class interrupts.
+  'entities.abilities.pummel.name': '碎顎擊',
+  'entities.abilities.pummel.description': '打斷目標的施法，並在4秒內封鎖該法術學派。',
+  'entities.abilities.kick.name': '飛踢',
+  'entities.abilities.kick.description': '打斷目標的施法，並在4秒內封鎖該法術學派。',
+  'entities.abilities.counterspell.name': '破法',
+  'entities.abilities.counterspell.description': '反制目標的施法，並在6秒內封鎖該法術學派。',
+  'entities.abilities.counter_shot.name': '靜默射擊',
+  'entities.abilities.counter_shot.description': '一記快射，打斷目標的施法，並在4秒內封鎖該學派。',
+  'entities.abilities.rebuke.name': '譴喝',
+  'entities.abilities.rebuke.description': '打斷目標的施法，並在4秒內封鎖該法術學派。',
+  'entities.abilities.skull_bash.name': '頭槌',
+  'entities.abilities.skull_bash.description': '猛然頭槌，打斷目標的施法，並在4秒內封鎖該學派。',
+  'entities.abilities.spell_lock.name': '封口令',
+  'entities.abilities.spell_lock.description': '在施法中沉默目標，並在5秒內封鎖該法術學派。',
   'guide.bestiary.flavor.sethrael_palecoil':
     '一條骨白如枯的巨蛇，滑行於微光湖深處的水底陡崖，是牠所據有這片水域的沉默守望者。與牠共享此湖的泅泳者，鮮少能再浮上水面。',
   'guide.combat.metersBody':
