@@ -1,15 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { Sim } from '../src/sim/sim';
-import type { SimEvent } from '../src/sim/types';
+import { SimEvent } from '../src/sim/types';
 
 function makeWorld() {
   return new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
 }
 
 function errorText(events: SimEvent[], pid: number): string | undefined {
-  const e = events.find(
-    (ev): ev is Extract<SimEvent, { type: 'error' }> => ev.type === 'error' && ev.pid === pid,
-  );
+  const e = events.find((ev): ev is Extract<SimEvent, { type: 'error' }> => ev.type === 'error' && ev.pid === pid);
   return e?.text;
 }
 

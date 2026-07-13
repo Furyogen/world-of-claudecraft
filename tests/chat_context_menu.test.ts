@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { ensureLocaleLoaded, setLanguage } from '../src/ui/i18n';
 import { chatPlayerContextActions } from '../src/ui/player_context_menu';
+import { ensureLocaleLoaded, setLanguage } from '../src/ui/i18n';
 
 describe('chat player context menu', () => {
   afterEach(() => setLanguage('en'));

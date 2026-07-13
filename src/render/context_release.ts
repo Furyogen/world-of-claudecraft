@@ -93,25 +93,15 @@ export function releaseTrackedWebGLContexts(): void {
  * navigation, and tab close, and unlike `unload` it does not disqualify the page
  * from the bfcache. Call once at startup.
  *
- * Release only on a real teardown (`persisted === false`) — this is what frees
- * the GPU context whose leak the ~16-per-process cap otherwise punishes (the
- * editor's viewport renderer never wired this, so every Playtest launch leaked
- * its context until the browser was restarted). Registered page-teardown
- * callbacks (e.g. closing AudioContexts) run in the same breath.
- *
- * When the page is frozen into the bfcache (`persisted === true`) everything must
- * survive: `dispose()` is terminal and nothing rebuilds them, so a bfcache
- * restore (`pageshow` with `persisted`) has to come back to live canvases, not
- * dead ones. bfcache retention is bounded (the browser evicts under memory
- * pressure), so it is not the unbounded leak.
+ * Release only on a real teardown (`persisted === false`). When the page is
+ * frozen into the bfcache (`persisted === true`) the contexts must survive:
+ * `dispose()` is terminal and nothing rebuilds them, so a bfcache restore
+ * (`pageshow` with `persisted`) has to come back to live canvases, not dead ones.
  */
 export function installWebGLContextRelease(
   target: Pick<EventTarget, 'addEventListener'> = window,
 ): void {
   target.addEventListener('pagehide', (e) => {
-    if (!(e as PageTransitionEvent).persisted) {
-      runPageTeardowns();
-      releaseTrackedWebGLContexts();
-    }
+    if (!(e as PageTransitionEvent).persisted) releaseTrackedWebGLContexts();
   });
 }

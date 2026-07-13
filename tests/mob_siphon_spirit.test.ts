@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import { Sim } from '../src/sim/sim';
 import { MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
-import { Sim } from '../src/sim/sim';
 import type { PlayerClass } from '../src/sim/types';
 
 const SEED = 42;
@@ -124,10 +124,7 @@ describe('mob Spirit Siphon (Sister Nhalia)', () => {
     const old = siphon.chance;
     siphon.chance = 1;
     try {
-      for (let i = 0; i < 80; i++) {
-        player.hp = player.maxHp;
-        (sim as any).mobSwing(mob, player);
-      }
+      for (let i = 0; i < 80; i++) { player.hp = player.maxHp; (sim as any).mobSwing(mob, player); }
     } finally {
       siphon.chance = old;
     }
@@ -143,10 +140,7 @@ describe('mob Spirit Siphon (Sister Nhalia)', () => {
     const old = siphon.chance;
     siphon.chance = 1;
     try {
-      for (let i = 0; i < 80; i++) {
-        player.hp = player.maxHp;
-        (sim as any).mobSwing(mob, player);
-      }
+      for (let i = 0; i < 80; i++) { player.hp = player.maxHp; (sim as any).mobSwing(mob, player); }
     } finally {
       siphon.chance = old;
     }

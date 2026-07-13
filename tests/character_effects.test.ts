@@ -74,23 +74,17 @@ function entity(partial: Partial<Entity>): Entity {
 describe('character visual effects', () => {
   it('detects Soul Rend as a model-level effect instead of a nameplate marker', () => {
     expect(characterSoulRendActive(entity({ auras: [] }))).toBe(false);
-    expect(
-      characterSoulRendActive(
-        entity({
-          auras: [
-            {
-              id: 'nythraxis_soul_rend',
-              name: 'Soul Rend',
-              kind: 'vulnerability',
-              remaining: 8,
-              duration: 8,
-              value: 0,
-              sourceId: 2,
-              school: 'shadow',
-            },
-          ],
-        }),
-      ),
-    ).toBe(true);
+    expect(characterSoulRendActive(entity({
+      auras: [{
+        id: 'nythraxis_soul_rend',
+        name: 'Soul Rend',
+        kind: 'vulnerability',
+        remaining: 8,
+        duration: 8,
+        value: 0,
+        sourceId: 2,
+        school: 'shadow',
+      }],
+    }))).toBe(true);
   });
 });

@@ -37,11 +37,7 @@ export interface FrameGraphCanvasMetrics {
  *  panel rather than pinning it: writing an absolute px display width once caused
  *  the sparkline to prop the shrink-wrapped overlay open, leaving the graph stuck
  *  at the expanded width when metrics were removed. Pure: no canvas, no DOM. */
-export function frameGraphCanvasMetrics(
-  cssW: number,
-  cssH: number,
-  devicePixelRatio: number,
-): FrameGraphCanvasMetrics {
+export function frameGraphCanvasMetrics(cssW: number, cssH: number, devicePixelRatio: number): FrameGraphCanvasMetrics {
   const dpr = Math.min(2, devicePixelRatio > 0 ? devicePixelRatio : 1);
   return {
     pxW: Math.max(1, Math.round(cssW * dpr)),
@@ -54,10 +50,7 @@ export function frameGraphCanvasMetrics(
  *  vertical range auto-scales from 2x target up to the worst sample, capped at
  *  MAX_VISIBLE_MS. Pure: no canvas, no DOM. */
 export function frameGraphGeometry(
-  samples: readonly number[],
-  targetMs: number,
-  cssW: number,
-  cssH: number,
+  samples: readonly number[], targetMs: number, cssW: number, cssH: number,
 ): FrameGraphGeometry {
   const n = samples.length;
   let maxMs = targetMs * 2;

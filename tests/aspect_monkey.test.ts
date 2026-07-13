@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { ABILITIES, abilitiesKnownAt } from '../src/sim/content/classes';
 import { Sim } from '../src/sim/sim';
+import { ABILITIES, abilitiesKnownAt } from '../src/sim/content/classes';
 
 describe('Aspect of the Monkey', () => {
   it('is a hunter nature self-buff learned at level 10', () => {

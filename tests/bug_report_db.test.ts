@@ -4,17 +4,12 @@ vi.mock('../server/db', () => ({
   pool: { query: vi.fn(), connect: vi.fn() },
 }));
 
-import {
-  BUG_REPORT_RATE_LIMIT,
-  BUG_SCREENSHOT_MAX,
-  BugReportRateLimitError,
-  clampBugReportMeta,
-  createBugReport,
-  getBugReportScreenshot,
-  isStorableScreenshot,
-  listBugReports,
-} from '../server/bug_report_db';
 import { pool } from '../server/db';
+import {
+  createBugReport, listBugReports, getBugReportScreenshot,
+  isStorableScreenshot, clampBugReportMeta,
+  BugReportRateLimitError, BUG_REPORT_RATE_LIMIT, BUG_SCREENSHOT_MAX,
+} from '../server/bug_report_db';
 
 const query = vi.mocked(pool.query);
 
@@ -75,10 +70,7 @@ describe('createBugReport', () => {
     query
       .mockResolvedValueOnce({ rows: [{ n: 0 }] } as any)
       .mockResolvedValueOnce({ rows: [{ id: 1 }] } as any);
-    await createBugReport({
-      ...base,
-      meta: { build: 'v1', evil: 'x'.repeat(99999), nested: { a: 1 } },
-    });
+    await createBugReport({ ...base, meta: { build: 'v1', evil: 'x'.repeat(99999), nested: { a: 1 } } });
     const stored = JSON.parse(query.mock.calls[1][1]?.[9] as string);
     expect(stored.build).toBe('v1');
     expect(stored.evil).toBeUndefined(); // unknown field dropped
@@ -107,9 +99,7 @@ describe('isStorableScreenshot', () => {
     expect(isStorableScreenshot('https://example.com/x.jpg')).toBe(false);
     expect(isStorableScreenshot(null)).toBe(false);
     expect(isStorableScreenshot(42)).toBe(false);
-    expect(isStorableScreenshot('data:image/jpeg;base64,' + 'A'.repeat(BUG_SCREENSHOT_MAX))).toBe(
-      false,
-    );
+    expect(isStorableScreenshot('data:image/jpeg;base64,' + 'A'.repeat(BUG_SCREENSHOT_MAX))).toBe(false);
   });
 });
 
@@ -117,13 +107,8 @@ describe('clampBugReportMeta', () => {
   it('returns the bounded shape and drops unknown fields', () => {
     const m = clampBugReportMeta({ build: 'b', extra: 'drop me', viewport: { w: 100, h: 200 } });
     expect(m).toEqual({
-      build: 'b',
-      userAgent: '',
-      viewport: { w: 100, h: 200, dpr: 1 },
-      zone: '',
-      level: 0,
-      className: '',
-      cameraYaw: 0,
+      build: 'b', userAgent: '', viewport: { w: 100, h: 200, dpr: 1 },
+      zone: '', level: 0, className: '', cameraYaw: 0,
     });
     expect(m).not.toHaveProperty('extra');
   });
@@ -144,12 +129,7 @@ describe('clampBugReportMeta', () => {
 describe('listBugReports', () => {
   it('returns rows + total, never selects the raw screenshot, newest first, capped', async () => {
     query
-      .mockResolvedValueOnce({
-        rows: [
-          { id: 2, has_screenshot: true },
-          { id: 1, has_screenshot: false },
-        ],
-      } as any)
+      .mockResolvedValueOnce({ rows: [{ id: 2, has_screenshot: true }, { id: 1, has_screenshot: false }] } as any)
       .mockResolvedValueOnce({ rows: [{ total: 2 }] } as any);
     const { rows, total } = await listBugReports(9999, 0);
     expect(rows.map((r) => r.id)).toEqual([2, 1]);

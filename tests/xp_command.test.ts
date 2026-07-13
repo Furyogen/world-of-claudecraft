@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Sim } from '../src/sim/sim';
-import { MAX_LEVEL, type SimEvent, xpForLevel } from '../src/sim/types';
+import { MAX_LEVEL, SimEvent, xpForLevel } from '../src/sim/types';
 
 function makeWorld() {
   return new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });

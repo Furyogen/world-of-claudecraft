@@ -1,11 +1,5 @@
 import * as THREE from 'three';
-import {
-  DUNGEON_X_THRESHOLD,
-  getActiveWorldContent,
-  WORLD_MAX_X,
-  WORLD_MAX_Z,
-  WORLD_MIN_Z,
-} from '../sim/data';
+import { DUNGEON_X_THRESHOLD, WORLD_MAX_X, WORLD_MAX_Z, WORLD_MIN_Z } from '../sim/data';
 import type { BiomeId } from '../sim/types';
 import { isInSowfieldShell } from '../sim/vale_cup_layout';
 import { terrainHeight, WATER_LEVEL, zoneBiomeAt } from '../sim/world';
@@ -83,9 +77,6 @@ function moteSprite(): THREE.Texture {
 export function buildMotes(seed: number): MotesView {
   const group = new THREE.Group();
   group.name = 'motes';
-  if (getActiveWorldContent().presentationMode === 'blank') {
-    return { group, update(): void {} };
-  }
 
   // count scales with tier — cheap THREE.Points, so high/ultra can afford a
   // dense shimmer while low stays sparse

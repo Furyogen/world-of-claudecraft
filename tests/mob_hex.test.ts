@@ -4,9 +4,9 @@
 // breaks the instant the victim takes damage. Unlike the player-cast version it
 // does NOT heal the victim to full on apply — a monster shouldn't restore its prey.
 import { describe, expect, it } from 'vitest';
+import { Sim } from '../src/sim/sim';
 import { MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
-import { Sim } from '../src/sim/sim';
 import type { Entity } from '../src/sim/types';
 
 function makeSim(playerClass: 'warrior' | 'mage' = 'mage') {
@@ -16,9 +16,7 @@ function makeSim(playerClass: 'warrior' | 'mage' = 'mage') {
 // Spawn a Mudfin Skulker adjacent to the player, hostile and ready to swing.
 function spawnSkulker(sim: Sim, target: Entity): Entity {
   const mob = createMob((sim as any).nextId++, MOBS['mudfin_murloc'], 5, {
-    x: target.pos.x,
-    y: target.pos.y,
-    z: target.pos.z,
+    x: target.pos.x, y: target.pos.y, z: target.pos.z,
   });
   mob.hostile = true;
   (sim as any).addEntity(mob);
@@ -33,13 +31,7 @@ function swing(sim: Sim, mob: Entity, target: Entity) {
   const rng = (sim as any).rng;
   const realNext = rng.next.bind(rng);
   let firstRoll = true;
-  rng.next = () => {
-    if (firstRoll) {
-      firstRoll = false;
-      return 0.999;
-    }
-    return realNext();
-  };
+  rng.next = () => { if (firstRoll) { firstRoll = false; return 0.999; } return realNext(); };
   try {
     (sim as any).mobSwing(mob, target);
   } finally {
@@ -50,10 +42,7 @@ function swing(sim: Sim, mob: Entity, target: Entity) {
 describe('mob polymorph hex ("Mudfin Hex")', () => {
   it('seeds the hex mechanic on the Mudfin Skulker', () => {
     expect(MOBS['mudfin_murloc'].polymorphHex).toEqual({
-      chance: 0.12,
-      duration: 4,
-      name: 'Mudfin Hex',
-      school: 'nature',
+      chance: 0.12, duration: 4, name: 'Mudfin Hex', school: 'nature',
     });
   });
 
@@ -76,8 +65,7 @@ describe('mob polymorph hex ("Mudfin Hex")', () => {
     const sim = makeSim();
     const p = sim.player;
     p.gm = true;
-    p.maxHp = 200;
-    p.hp = 50; // wounded
+    p.maxHp = 200; p.hp = 50; // wounded
     const mob = spawnSkulker(sim, p);
     MOBS['mudfin_murloc'].polymorphHex!.chance = 1;
     swing(sim, mob, p);
@@ -93,22 +81,13 @@ describe('mob polymorph hex ("Mudfin Hex")', () => {
     const sim = makeSim('mage');
     const p = sim.player;
     p.auras.push({
-      id: 'hex_mudfin_murloc',
-      name: 'Mudfin Hex',
-      kind: 'polymorph',
-      remaining: 4,
-      duration: 4,
-      value: 0,
-      sourceId: 999,
-      school: 'nature',
+      id: 'hex_mudfin_murloc', name: 'Mudfin Hex', kind: 'polymorph',
+      remaining: 4, duration: 4, value: 0, sourceId: 999, school: 'nature',
       breaksOnDamage: true,
     });
     const errs: string[] = [];
     const orig = (sim as any).error.bind(sim);
-    (sim as any).error = (pid: number, msg: string) => {
-      errs.push(msg);
-      orig(pid, msg);
-    };
+    (sim as any).error = (pid: number, msg: string) => { errs.push(msg); orig(pid, msg); };
     sim.castAbility('fireball', p.id);
     expect(errs).toContain('You are stunned!');
     expect(p.castingAbility).toBeNull();
@@ -117,17 +96,10 @@ describe('mob polymorph hex ("Mudfin Hex")', () => {
   it('breaks the hex the instant the victim takes damage', () => {
     const sim = makeSim('mage');
     const p = sim.player;
-    p.maxHp = 100000;
-    p.hp = 100000;
+    p.maxHp = 100000; p.hp = 100000;
     p.auras.push({
-      id: 'hex_mudfin_murloc',
-      name: 'Mudfin Hex',
-      kind: 'polymorph',
-      remaining: 4,
-      duration: 4,
-      value: 0,
-      sourceId: 999,
-      school: 'nature',
+      id: 'hex_mudfin_murloc', name: 'Mudfin Hex', kind: 'polymorph',
+      remaining: 4, duration: 4, value: 0, sourceId: 999, school: 'nature',
       breaksOnDamage: true,
     });
     (sim as any).dealDamage(null, p, 10, false, 'physical', null, 'hit');

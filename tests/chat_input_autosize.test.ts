@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { chatInputSize } from '../src/ui/chat_input_autosize';
 
 const LIMITS = { minHeight: 32, maxHeight: 110 };

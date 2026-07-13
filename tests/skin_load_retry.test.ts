@@ -1,14 +1,8 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
-const assetsSrc = readFileSync(
-  new URL('../src/render/characters/assets.ts', import.meta.url),
-  'utf8',
-);
-const visualSrc = readFileSync(
-  new URL('../src/render/characters/visual.ts', import.meta.url),
-  'utf8',
-);
+const assetsSrc = readFileSync(new URL('../src/render/characters/assets.ts', import.meta.url), 'utf8');
+const visualSrc = readFileSync(new URL('../src/render/characters/visual.ts', import.meta.url), 'utf8');
 
 // Hardening for "skin N needs a relog": when an alternate skin atlas exists but
 // has not finished loading, skinTexture() returns null and the body silently

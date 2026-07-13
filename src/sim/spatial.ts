@@ -2,7 +2,7 @@
 // otherwise scan every entity. Cells are re-bucketed once per tick (gradual
 // movement) and kept exact on spawn/despawn/teleport, so queries always see
 // the same roster as the entities map.
-import type { Entity } from './types';
+import { Entity } from './types';
 
 // shifts negative cell coordinates into the positive range before packing
 const OFFSET = 32768;
@@ -14,9 +14,7 @@ export class SpatialGrid {
   constructor(readonly cellSize = 32) {}
 
   private keyAt(x: number, z: number): number {
-    return (
-      (Math.floor(x / this.cellSize) + OFFSET) * 65536 + (Math.floor(z / this.cellSize) + OFFSET)
-    );
+    return (Math.floor(x / this.cellSize) + OFFSET) * 65536 + (Math.floor(z / this.cellSize) + OFFSET);
   }
 
   insert(e: Entity): void {

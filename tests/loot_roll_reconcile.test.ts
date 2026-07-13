@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import { Sim } from '../src/sim/sim';
 import { MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
-import { Sim } from '../src/sim/sim';
 import { terrainHeight } from '../src/sim/world';
 import { reconcileLootRolls } from '../src/ui/loot_roll_reconcile';
 
@@ -12,14 +12,11 @@ import { reconcileLootRolls } from '../src/ui/loot_roll_reconcile';
 // a player may still answer, the server rides them on the self snapshot, and the
 // online client mirrors them, so the HUD can re-show a missed prompt.
 
-const makeSim = (seed = 42) =>
-  new Sim({ seed, playerClass: 'warrior', autoEquip: true, noPlayer: true });
+const makeSim = (seed = 42) => new Sim({ seed, playerClass: 'warrior', autoEquip: true, noPlayer: true });
 
 function teleportTo(sim: Sim, pid: number, x: number, z: number) {
   const e = sim.entities.get(pid)!;
-  e.pos.x = x;
-  e.pos.z = z;
-  e.pos.y = terrainHeight(x, z, sim.cfg.seed);
+  e.pos.x = x; e.pos.z = z; e.pos.y = terrainHeight(x, z, sim.cfg.seed);
   e.prevPos = { ...e.pos };
 }
 
@@ -27,14 +24,11 @@ function partyWithSharedRoll(seed = 42) {
   const sim = makeSim(seed);
   const a = sim.addPlayer('warrior', 'Aaa');
   const b = sim.addPlayer('mage', 'Bbb');
-  sim.partyInvite(b, a);
-  sim.partyAccept(b);
+  sim.partyInvite(b, a); sim.partyAccept(b);
   teleportTo(sim, a, 20, 20);
   teleportTo(sim, b, 21, 20);
   const mob = createMob(990700, MOBS.forest_wolf, 2, { x: 20, y: 0, z: 22 });
-  mob.dead = true;
-  mob.lootable = true;
-  mob.tappedById = a;
+  mob.dead = true; mob.lootable = true; mob.tappedById = a;
   mob.loot = { copper: 0, items: [{ itemId: 'greyjaw_hide_boots', count: 1 }] };
   sim.entities.set(mob.id, mob);
   sim.lootCorpse(mob.id, a);

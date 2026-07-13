@@ -49,11 +49,7 @@ export function clampChatBox(
   limits: ChatBoxLimits = CHAT_BOX_LIMITS,
 ): ChatBoxGeometry {
   const { margin } = limits;
-  const width = clamp(
-    geo.width,
-    limits.minWidth,
-    Math.min(limits.maxWidth, viewport.w - margin * 2),
-  );
+  const width = clamp(geo.width, limits.minWidth, Math.min(limits.maxWidth, viewport.w - margin * 2));
   const height = clamp(
     geo.height,
     limits.minHeight,

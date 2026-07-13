@@ -2,15 +2,14 @@ import { describe, expect, it } from 'vitest';
 import { isMobThreateningViewer } from '../src/render/nameplate_threat';
 
 const ME = 7;
-const mob = (overrides: any) =>
-  ({
-    id: 1,
-    kind: 'mob',
-    dead: false,
-    ownerId: null,
-    aggroTargetId: null,
-    ...overrides,
-  }) as any;
+const mob = (overrides: any) => ({
+  id: 1,
+  kind: 'mob',
+  dead: false,
+  ownerId: null,
+  aggroTargetId: null,
+  ...overrides,
+}) as any;
 
 describe('threat-aware nameplate policy', () => {
   it('flags a living wild mob aggroed on me', () => {

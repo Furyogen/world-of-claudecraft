@@ -1,10 +1,10 @@
-import { describe, expect, it } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import {
+  stepSelfFacing,
   approachAngle,
   releaseSelfFacing,
-  SELF_FACING_CONVERGE_EPS,
   SELF_TURN_MAX_RATE,
-  stepSelfFacing,
+  SELF_FACING_CONVERGE_EPS,
 } from '../src/render/facing_smooth';
 
 const FRAME_60 = 1 / 60;

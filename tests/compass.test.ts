@@ -2,7 +2,7 @@
 // mapping under the world convention (facing 0 = north, turning right decreases
 // facing), the nearest-rose heading label, and the visible-strip windowing.
 import { describe, expect, it } from 'vitest';
-import { bearingDegrees, compassView, headingLabel } from '../src/ui/compass';
+import { bearingDegrees, headingLabel, compassView } from '../src/ui/compass';
 
 describe('bearingDegrees', () => {
   it('maps the four cardinals (facing 0 = north, right turn = +bearing)', () => {

@@ -57,7 +57,6 @@ import {
   DUNGEON_X_THRESHOLD,
   delveAt,
   dungeonAt,
-  getActiveWorldContent,
   ITEMS,
   isDelvePos,
   MOBS,
@@ -1873,13 +1872,9 @@ export class Hud {
     const startZoneName = zoneDisplayName(startZone.id);
     this.lastZoneId = startZone.id;
     this.prewarmMapBg(startZone.id); // render the spawn-zone map bg during idle, not on first open
-    // Unnamed zones (blank authoring maps before the maker adds locations)
-    // skip the banner/welcome entirely.
-    if (startZoneName) {
-      this.showBanner(startZoneName);
-      this.log(t('hud.core.welcomeZone', { zone: startZoneName }), '#ffd100');
-      this.logZoneWelcome(startZone);
-    }
+    this.showBanner(startZoneName);
+    this.log(t('hud.core.welcomeZone', { zone: startZoneName }), '#ffd100');
+    this.logZoneWelcome(startZone);
     this.log(t('hudChrome.tips.joinChannels'), '#7fd4ff');
   }
 
@@ -7115,28 +7110,9 @@ export class Hud {
 
       // subzone text: a smaller banner when you step into a named landmark
       // (classic "subzone" display). POIs are the same labels the minimap pins.
-      // Editor-authored location rects (custom maps) take precedence: standing
-      // inside one shows ITS name as the current location.
-      let subzone: string | null = null;
-      if (!inDungeon) {
-        const locations = getActiveWorldContent().locations;
-        if (locations) {
-          for (const loc of locations) {
-            if (
-              p.pos.x >= loc.minX &&
-              p.pos.x <= loc.maxX &&
-              p.pos.z >= loc.minZ &&
-              p.pos.z <= loc.maxZ
-            ) {
-              subzone = loc.name;
-              break;
-            }
-          }
-        }
-        if (subzone === null) {
-          subzone = nearestSubzone(p.pos.x, p.pos.z, currentZone.pois, this.lastSubzone);
-        }
-      }
+      const subzone = inDungeon
+        ? null
+        : nearestSubzone(p.pos.x, p.pos.z, currentZone.pois, this.lastSubzone);
       if (subzone !== this.lastSubzone) {
         this.lastSubzone = subzone;
         if (subzone) {
@@ -7203,10 +7179,7 @@ export class Hud {
         music.resetForDungeonEntry(musicDungeonId, zone);
       }
       this.lastMusicDungeonId = musicDungeonId;
-      // Map-authored music (custom maps): the area under the player, else the
-      // map-wide pick; dungeons keep their own themes.
-      const authoredZone = inDungeon || inNythraxisArena ? null : mapMusicZoneAt(p.pos.x, p.pos.z);
-      music.update(authoredZone ?? zone, musicCombat);
+      music.update(zone, musicCombat);
       music.setBossCombat(bossEngaged);
       // Sowfield area music: the 'match' track once a game has kicked off (ball in
       // play or a goal being celebrated), the 'waiting' track any other time you
@@ -10185,8 +10158,7 @@ export class Hud {
 
   private logZoneWelcome(zone: ZoneDef): void {
     if (zone.welcomeQuestId && this.sim.questState(zone.welcomeQuestId) !== 'available') return;
-    const text = zoneWelcome(zone.id);
-    if (text) this.log(text, '#ffd100');
+    this.log(zoneWelcome(zone.id), '#ffd100');
   }
 
   private chatLogFrom(

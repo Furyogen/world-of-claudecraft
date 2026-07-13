@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { MOBS } from '../src/sim/data';
-import { createMob } from '../src/sim/entity';
 import { Sim } from '../src/sim/sim';
+import { createMob } from '../src/sim/entity';
+import { MOBS } from '../src/sim/data';
 
 // Staggering mobs knock a player victim off-balance on a landed hit, cutting
 // their dodge chance for the duration so the attacker (and its pack) land more
@@ -10,10 +10,7 @@ import { Sim } from '../src/sim/sim';
 describe('mob stagger-on-hit', () => {
   it('the Deeprock Tunneler template carries a Jarring Swing proc', () => {
     expect(MOBS.deeprock_kobold.staggerHit).toMatchObject({
-      chance: 0.3,
-      dodgeReduction: 0.05,
-      duration: 8,
-      name: 'Off-Balance',
+      chance: 0.3, dodgeReduction: 0.05, duration: 8, name: 'Off-Balance',
     });
   });
 
@@ -82,14 +79,8 @@ describe('mob stagger-on-hit', () => {
 
     // A reduction larger than the victim's whole dodge clamps to exactly 0.
     (sim as any).applyAura(victim, {
-      id: 'stagger_test',
-      name: 'Off-Balance',
-      kind: 'buff_dodge',
-      remaining: 8,
-      duration: 8,
-      value: -1,
-      sourceId: victim.id,
-      school: 'physical',
+      id: 'stagger_test', name: 'Off-Balance', kind: 'buff_dodge',
+      remaining: 8, duration: 8, value: -1, sourceId: victim.id, school: 'physical',
     });
     expect(victim.dodgeChance).toBe(0);
   });

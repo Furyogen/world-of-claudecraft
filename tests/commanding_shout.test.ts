@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { ABILITIES, abilitiesKnownAt } from '../src/sim/content/classes';
 import { Sim } from '../src/sim/sim';
+import { ABILITIES, abilitiesKnownAt } from '../src/sim/content/classes';
 
 describe('Commanding Shout', () => {
   it('is a warrior physical stamina self-buff learned at level 14', () => {
@@ -11,7 +11,9 @@ describe('Commanding Shout', () => {
     expect(def.school).toBe('physical');
     expect(def.requiresTarget).toBe(false);
     expect(def.castTime).toBe(0);
-    expect(def.effects).toEqual([{ type: 'selfBuff', kind: 'buff_sta', value: 6, duration: 120 }]);
+    expect(def.effects).toEqual([
+      { type: 'selfBuff', kind: 'buff_sta', value: 6, duration: 120 },
+    ]);
   });
 
   it('is unknown at level 13 and known from level 14 in the warrior kit', () => {

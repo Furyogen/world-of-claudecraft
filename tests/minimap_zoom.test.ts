@@ -1,12 +1,12 @@
-import { describe, expect, it } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import {
-  clampMinimapZoom,
-  isMaxMinimapZoom,
-  isMinMinimapZoom,
-  MINIMAP_ZOOM_DEFAULT,
   MINIMAP_ZOOM_LEVELS,
-  minimapZoomValue,
+  MINIMAP_ZOOM_DEFAULT,
+  clampMinimapZoom,
   nextMinimapZoom,
+  isMinMinimapZoom,
+  isMaxMinimapZoom,
+  minimapZoomValue,
 } from '../src/ui/minimap_zoom';
 
 describe('minimap zoom', () => {

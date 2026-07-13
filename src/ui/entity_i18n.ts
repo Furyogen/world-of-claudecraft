@@ -4,7 +4,6 @@ import {
   CLASSES,
   DELVES,
   DUNGEONS,
-  getActiveWorldContent,
   ITEM_SETS,
   ITEMS,
   MOBS,
@@ -244,19 +243,12 @@ function canonicalEntityText(request: EntityTranslationRequest): string {
         `${request.questId}.${request.objectiveIndex}`
       );
     case 'zone': {
-      // Custom-map zones (playtest) are maker content, not in the static
-      // table or any locale: show the authored name verbatim (may be empty,
-      // which callers treat as "no banner"), never the raw zone id.
-      const zone =
-        ZONES.find((candidate) => candidate.id === request.id) ??
-        getActiveWorldContent().zones.find((candidate) => candidate.id === request.id);
+      const zone = ZONES.find((candidate) => candidate.id === request.id);
       if (!zone) return request.id;
       return request.field === 'welcome' ? zone.welcome : zone.name;
     }
     case 'zonePoi': {
-      const zone =
-        ZONES.find((candidate) => candidate.id === request.zoneId) ??
-        getActiveWorldContent().zones.find((candidate) => candidate.id === request.zoneId);
+      const zone = ZONES.find((candidate) => candidate.id === request.zoneId);
       return zone?.pois[request.poiIndex]?.label ?? `${request.zoneId}.pois.${request.poiIndex}`;
     }
     case 'dungeon': {

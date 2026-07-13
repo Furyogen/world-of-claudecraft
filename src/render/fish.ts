@@ -137,9 +137,6 @@ const scratch = new THREE.Vector3();
 export function buildFish(seed: number): FishView {
   const group = new THREE.Group();
   group.name = 'fish';
-  if (getActiveWorldContent().presentationMode === 'blank') {
-    return { group, update(): void {} };
-  }
   const rng = mulberry32(seed ^ 0x515f1577);
   const count = GFX.standardMaterials ? 12 : 5;
 

@@ -34,25 +34,12 @@ export function chatPlayerContextActions(state: ChatPlayerContextState): PlayerC
     actions.push({ id: 'whisper', label: t('hud.chat.context.whisper') });
     actions.push({ id: 'invite', label: t('hud.chat.context.invite') });
     if (state.online) {
-      actions.push({
-        id: state.isFriend ? 'unfriend' : 'friend',
-        label: state.isFriend
-          ? t('hud.chat.context.removeFriend')
-          : t('hud.chat.context.addFriend'),
-      });
+      actions.push({ id: state.isFriend ? 'unfriend' : 'friend', label: state.isFriend ? t('hud.chat.context.removeFriend') : t('hud.chat.context.addFriend') });
     }
-    if (state.canGuildInvite && !state.alreadyGuilded)
-      actions.push({ id: 'ginvite', label: t('hud.chat.context.inviteGuild') });
-    actions.push({
-      id: 'ignore',
-      label: state.ignored
-        ? state.online
-          ? t('hud.chat.context.unignore')
-          : t('hud.chat.context.unignoreChat')
-        : state.online
-          ? t('hud.chat.context.ignore')
-          : t('hud.chat.context.ignoreChat'),
-    });
+    if (state.canGuildInvite && !state.alreadyGuilded) actions.push({ id: 'ginvite', label: t('hud.chat.context.inviteGuild') });
+    actions.push({ id: 'ignore', label: state.ignored
+      ? (state.online ? t('hud.chat.context.unignore') : t('hud.chat.context.unignoreChat'))
+      : (state.online ? t('hud.chat.context.ignore') : t('hud.chat.context.ignoreChat')) });
     if (state.canReport) actions.push({ id: 'report', label: t('hud.chat.context.report') });
   }
 

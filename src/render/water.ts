@@ -45,30 +45,6 @@ export function hasWaterShaderAssets(): boolean {
 
 const DEEP_COLOR = new THREE.Color(0x0d3a52);
 const SHALLOW_COLOR = new THREE.Color(0x2d8077);
-
-// The map's authored water tint (Water tab hue/lightness sliders): hue swaps
-// the base colors' hue outright, lightness scales their L channel around the
-// authored midpoint (0.45 = shipped look), keeping the shipped deep/shallow
-// contrast. Fresh Color instances: never mutate the shipped constants.
-function tintedWaterColors(): { deep: THREE.Color; shallow: THREE.Color } {
-  const content = getActiveWorldContent();
-  const hue = content.waterHue;
-  const lum = content.waterLum;
-  const deep = DEEP_COLOR.clone();
-  const shallow = SHALLOW_COLOR.clone();
-  if (hue === undefined && lum === undefined) return { deep, shallow };
-  const lumScale = (lum ?? 0.45) / 0.45;
-  const hsl = { h: 0, s: 0, l: 0 };
-  for (const c of [deep, shallow]) {
-    c.getHSL(hsl);
-    c.setHSL(
-      hue !== undefined ? (((hue % 360) + 360) % 360) / 360 : hsl.h,
-      hsl.s,
-      Math.min(0.92, Math.max(0.03, hsl.l * lumScale)),
-    );
-  }
-  return { deep, shallow };
-}
 const SKY_TINT = new THREE.Color(0x7fb2e0); // matches the sky horizon band
 const SUN_COLOR = new THREE.Color(0xfff0d4);
 
@@ -176,8 +152,8 @@ function buildShaderWater(seed: number): WaterView {
       uSunDir: { value: SUN_DIR.clone() }, // the one shared sun (gfx.ts)
       uSunColor: { value: SUN_COLOR },
       uSkyColor: { value: SKY_TINT },
-      uDeep: { value: tintedWaterColors().deep },
-      uShallow: { value: tintedWaterColors().shallow },
+      uDeep: { value: DEEP_COLOR },
+      uShallow: { value: SHALLOW_COLOR },
       uTime: sharedUniforms.uTime,
     },
     vertexShader: WATER_VERT,
@@ -319,13 +295,6 @@ function buildPhongWater(): WaterView {
       for (const m of meshes) m.position.y = WATER_LEVEL;
     },
   };
-}
-
-/** The editor's blank/flat maps park the level at the sanitizer minimum to
- *  mean "no water"; the surface is hidden there instead of floating far
- *  under the world. */
-function waterVisible(): boolean {
-  return waterLevel() > MIN_WATER_LEVEL + 1e-6;
 }
 
 export function buildWater(seed: number): WaterView {

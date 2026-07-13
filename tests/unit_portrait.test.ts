@@ -1,11 +1,11 @@
-import { describe, expect, it } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import {
-  CREST_OVERSCAN,
-  crestIdForEntity,
-  MAX_PORTRAIT_DPR,
-  overscanRect,
-  PORTRAIT_CSS_SIZE,
   portraitBackingPx,
+  overscanRect,
+  crestIdForEntity,
+  PORTRAIT_CSS_SIZE,
+  CREST_OVERSCAN,
+  MAX_PORTRAIT_DPR,
 } from '../src/ui/unit_portrait';
 
 describe('portraitBackingPx', () => {

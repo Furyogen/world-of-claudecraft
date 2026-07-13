@@ -1,15 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { Sim } from '../src/sim/sim';
-import type { SimEvent } from '../src/sim/types';
+import { SimEvent } from '../src/sim/types';
 
 function makeSim() {
   return new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
 }
 
 function errorText(events: SimEvent[], pid: number): string | undefined {
-  const e = events.find(
-    (ev): ev is Extract<SimEvent, { type: 'error' }> => ev.type === 'error' && ev.pid === pid,
-  );
+  const e = events.find((ev): ev is Extract<SimEvent, { type: 'error' }> =>
+    ev.type === 'error' && ev.pid === pid);
   return e?.text;
 }
 
@@ -34,10 +33,8 @@ describe('/range command', () => {
     const a = sim.addPlayer('warrior', 'Aleph');
     const player = sim.entities.get(a)!;
     const wolf = findWolf(sim);
-    player.pos.x = 0;
-    player.pos.z = -200;
-    wolf.pos.x = 3;
-    wolf.pos.z = -200; // 3yd away, within MELEE_RANGE (5)
+    player.pos.x = 0; player.pos.z = -200;
+    wolf.pos.x = 3; wolf.pos.z = -200; // 3yd away, within MELEE_RANGE (5)
     sim.targetEntity(wolf.id, a);
     sim.tick();
 
@@ -50,17 +47,13 @@ describe('/range command', () => {
     const a = sim.addPlayer('warrior', 'Aleph');
     const player = sim.entities.get(a)!;
     const wolf = findWolf(sim);
-    player.pos.x = 0;
-    player.pos.z = -200;
-    wolf.pos.x = 12;
-    wolf.pos.z = -200; // 12yd away, beyond MELEE_RANGE
+    player.pos.x = 0; player.pos.z = -200;
+    wolf.pos.x = 12; wolf.pos.z = -200; // 12yd away, beyond MELEE_RANGE
     sim.targetEntity(wolf.id, a);
     sim.tick();
 
     sim.chat('/range', a);
-    expect(errorText(sim.tick(), a)).toBe(
-      `Your target ${wolf.name} is 12yd away (out of melee range).`,
-    );
+    expect(errorText(sim.tick(), a)).toBe(`Your target ${wolf.name} is 12yd away (out of melee range).`);
   });
 
   it('supports the /dist and /distance aliases', () => {

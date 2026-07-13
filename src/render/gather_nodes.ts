@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import type { GatherNodeType } from '../sim/data';
-import { GATHER_NODES, getActiveWorldContent } from '../sim/data';
+import { GATHER_NODES } from '../sim/data';
 import { terrainHeight } from '../sim/world';
 import { loadGltf } from './assets/loader';
 import { registerPreload } from './assets/preload';
@@ -71,9 +71,6 @@ function buildNodeMesh(type: GatherNodeType): THREE.Object3D {
 export function buildGatherNodes(seed: number): GatherNodesView {
   const group = new THREE.Group();
   group.name = 'gatherNodes';
-  // Blank-slate maps carry no built-in world content; the shipped node
-  // placements would render as floating primitives mid-map.
-  if (getActiveWorldContent().presentationMode === 'blank') return { group };
   for (const node of GATHER_NODES) {
     const obj = buildNodeMesh(node.type);
     const y = terrainHeight(node.pos.x, node.pos.z, seed);

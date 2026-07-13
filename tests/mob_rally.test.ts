@@ -1,21 +1,20 @@
 import { describe, expect, it } from 'vitest';
+import { Sim } from '../src/sim/sim';
 import { MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
-import { Sim } from '../src/sim/sim';
 import type { Entity } from '../src/sim/types';
 
 const SEED = 41099;
 
 // Ironvein Foreman is the seeded carrier of the rally commander mechanic.
-const inner = (sim: Sim) =>
-  sim as unknown as {
-    addEntity(e: Entity): void;
-    updateBossMechanics(m: Entity): void;
-    resetEvadingMob(m: Entity): void;
-    effectiveAttackPower(e: Entity): number;
-  };
+const inner = (sim: Sim) => sim as unknown as {
+  addEntity(e: Entity): void;
+  updateBossMechanics(m: Entity): void;
+  resetEvadingMob(m: Entity): void;
+  effectiveAttackPower(e: Entity): number;
+};
 
-function spawn(sim: Sim, id: number, tmpl: (typeof MOBS)[string]) {
+function spawn(sim: Sim, id: number, tmpl: typeof MOBS[string]) {
   const mob = createMob(id, tmpl, 16, { x: 0, y: 0, z: 0 });
   mob.inCombat = true;
   inner(sim).addEntity(mob);
@@ -29,11 +28,7 @@ function buffAp(e: Entity): number {
 describe('mob commander buff (rally)', () => {
   it('seeds the mechanic on the Ironvein Foreman', () => {
     expect(MOBS.ironvein_foreman.rally).toEqual({
-      radius: 14,
-      every: 12,
-      ap: 40,
-      duration: 10,
-      name: 'Rallying Banner',
+      radius: 14, every: 12, ap: 40, duration: 10, name: 'Rallying Banner',
     });
   });
 

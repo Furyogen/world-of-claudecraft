@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { nearestSubzone, SUBZONE_DEADBAND, SUBZONE_RADIUS } from '../src/ui/subzone';
+import { SUBZONE_DEADBAND, SUBZONE_RADIUS, nearestSubzone } from '../src/ui/subzone';
 
 const pois = [
   { x: 0, z: 0, label: 'Eastbrook' },
