@@ -33,7 +33,7 @@
 //   - npm run db:up  (dev Postgres on 127.0.0.1:5433)
 //   - a local .env with DATABASE_URL (the harness reads it via process.loadEnvFile,
 //     which needs Node 20.12+ or 21.7+; on older Node export DATABASE_URL yourself)
-//   - node_modules installed
+//   - node_modules installed (npm ci first in a fresh worktree)
 //   - restart the server after ANY code change: the server bundle is baked at start,
 //     so a stale bundle runs old code. The default child-server mode below re-bundles
 //     on every run, which sidesteps this; EXTERNAL_SERVER mode does not.
@@ -42,6 +42,8 @@
 // PERF_TICK_LOG=1, ALLOW_DEV_COMMANDS=1, and MAX_WS_PER_IP_HARD=<BOT_COUNT+5>, parses
 // its heartbeat lines live, and stops it on exit. Manual invocation:
 //   SCENARIO=idle-crowd BOT_COUNT=20 node scripts/mob_stall_repro.mjs
+// Leave >= 6 s between child-server runs so port 8787 frees; the harness refuses
+// to start while something still answers on the port.
 //
 // EXTERNAL_SERVER mode: attach to a server you started yourself and read its
 // heartbeats by tailing its stdout log (SERVER_LOG). Start the server with:
@@ -60,8 +62,11 @@
 //                        loopback-enforced like SERVER_URL
 //   EXTERNAL_SERVER      0 (spawn a child server) or 1 (attach to a running one)
 //   SERVER_LOG           required when EXTERNAL_SERVER=1: path to the server stdout log
-//   CLEANUP              1 (default: delete seeded accounts at the end) or 0 (keep them)
-//   RUN_ID               run tag (default 5 random letters)
+//   CLEANUP              1 (default: delete seeded accounts at the end) or 0 (keep them;
+//                        only the literal 0 keeps, CLEANUP=false still cleans)
+//   RUN_ID               run tag, LETTERS ONLY (digits are stripped, so run1 and run2
+//                        collide; default 5 random letters). Must be fresh per run: the
+//                        harness refuses to append to an existing results file
 //   REALM_NAME           realm the bot characters join (default Claudemoon)
 //   CONNECT_CONCURRENCY  parallel connects (default 10, 1 to 50)
 //
@@ -83,17 +88,34 @@
 // Loopback-only policy: BOTH the game-server target and the database host are resolved
 // at startup and any non-loopback host is refused (exit non-zero) before touching the
 // DB or spawning a server. Env overrides of SERVER_URL and DATABASE_URL are allowed but
-// must resolve to localhost, 127.0.0.1, or ::1. The DB guard matters because the
+// must resolve to localhost, 127.0.0.1, or ::1. The database host is resolved with
+// pg-connection-string, the same parser node-postgres uses, so a ?host= query override
+// cannot slip past a hostname-only check. The DB guard matters because the
 // harness also provisions a THROWAWAY admin account (for the ops.perf perf-capture
 // routes) that is created at startup and deleted in the same run's cleanup; that must
 // only ever happen against the disposable local dev database.
 
 import { execFileSync, spawn } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
-import { closeSync, createWriteStream, fstatSync, mkdirSync, openSync, readSync } from 'node:fs';
+import {
+  closeSync,
+  createWriteStream,
+  existsSync,
+  fstatSync,
+  mkdirSync,
+  openSync,
+  readSync,
+} from 'node:fs';
 import { createInterface } from 'node:readline';
 import pg from 'pg';
+import { parse as parsePgTarget } from 'pg-connection-string';
 import WebSocket from 'ws';
+import {
+  boundedInt,
+  evaluateStaging,
+  parseHeartbeat,
+  parseSimline,
+} from './lib/mob_stall_parse.mjs';
 
 try {
   process.loadEnvFile?.();
@@ -124,8 +146,9 @@ const RUN_ID =
 // N bots, wipe the 68 hp wolves. boss-pulse taps the world boss (which cannot die to N
 // taps) to hang an N-entry table on it; the boss is DESIGNED to require a healed raid
 // (moveSpeed 11.6 beats a player's 7, plus a 40yd snare, so unhealed bots cannot kite or
-// survive), so its engagement is FRONT-LOADED: strongest in the first ~20-30s before the
-// crowd wipes. The early perf capture is timed to land in that window.
+// survive), so the crowd dies in waves (~20-30s per wave), respawns, and re-taps: the
+// table is fullest in the first wave, then sustains through death-and-respawn churn.
+// The early perf capture is timed to land in that first full-table wave.
 // hold strategy during the measurement window:
 //   'passive'  never attack (idle-crowd): the mobs are trivial and never engage.
 //   'once'     tap each mob once then hold in place (mass-pull, boss-pulse): total damage
@@ -170,6 +193,9 @@ if (!SCENARIOS[SCENARIO]) {
 }
 
 const CFG = SCENARIOS[SCENARIO];
+// idle-crowd needs BOT_LEVEL >= 12: the trivial-con gap is 10 over the level 1-2
+// wolf camp, so a lower override makes the wolves engage and the idle-scan
+// signature disappears (staging then fails loudly rather than mismeasuring).
 const BOT_LEVEL = boundedInt(process.env.BOT_LEVEL, CFG.level, 1, 20);
 
 // Loop pacing constants (ms). Not env knobs: they are tuned to the server's 5s
@@ -179,7 +205,9 @@ const STAGE_MS = 4_000; // teleport + level settle (dev commands throttle at ~1.
 const OBSERVE_MS = 14_000; // staging-check window: spans ~2 to 3 heartbeats
 const CAPTURE_MS = 10_000; // perf-capture window length (clamped 3000 to 30000 server-side)
 const TAP_MELEE = 4.5; // yd: close enough to land an auto-attack
-const TAP_DWELL_MS = 2_200; // dwell on one mob long enough for an auto-attack swing to land
+// Dwell on one mob long enough for an auto-attack swing to land. Caster classes may
+// need a second pass to connect; the half-crowd staging floor absorbs that.
+const TAP_DWELL_MS = 2_200;
 const READY_TIMEOUT_MS = 180_000; // the child re-bundles before it listens, so be patient
 
 const CLASSES = [
@@ -209,25 +237,22 @@ const DELTA_SELF_KEYS = [
 const ENTITY_IDENTITY_KEYS = ['k', 'tid', 'nm', 'lv', 'sc', 'c', 'dgn'];
 
 // Runtime state shared by the server-line parser, the bots, and the summary.
-let botMode = 'idle'; // 'stage' | 'tap' | 'hold'
+let botMode = 'stage'; // 'stage' (level+teleport settle) | 'run' (scenario behavior per CFG.hold)
 let adminToken = null;
 const heartbeats = [];
 const simMobUpdate = [];
 let lastAggro = 0;
 let lastThreat = 0;
 let captureCount = 0;
+let lastServerLine = '';
+let lastServerStderr = '';
+let childExit = null;
 
 const TMP_DIR = 'tmp';
 const RESULTS_PATH = `${TMP_DIR}/mob_stall_${SCENARIO}_${BOT_COUNT}_${RUN_ID}.jsonl`;
 const SERVER_LOG_PATH = `${TMP_DIR}/mob_stall_${SCENARIO}_${BOT_COUNT}_${RUN_ID}.server.log`;
 let resultsStream = null;
 let logStream = null;
-
-function boundedInt(raw, fallback, min, max) {
-  const n = Number(raw);
-  if (!Number.isFinite(n)) return fallback;
-  return Math.max(min, Math.min(max, Math.trunc(n)));
-}
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -292,7 +317,11 @@ function mergeEnts(prevEnts, snap) {
 }
 
 function isAliveMob(entity) {
-  return entity?.k === 'mob' && entity.dead !== true && (entity.h ?? 1) > 0;
+  // Wire keys: hp is health, h is the HOSTILE flag, and dead is numeric 1 or
+  // absent while alive (server/game.ts dynamicFields). Reading h here, or
+  // comparing dead === true, counts corpses as live targets and wastes tap
+  // dwells attacking them.
+  return entity?.k === 'mob' && !entity.dead && (entity.hp ?? 1) > 0;
 }
 
 // --- Loopback safety: refuse any non-local target before doing anything else. ---
@@ -317,50 +346,30 @@ function assertLoopback(urlStr, label = 'SERVER_URL') {
   return u;
 }
 
-// --- Server-line parsing (heartbeat + per-sim-lap buckets). ---
-
-function num(re, line) {
-  const m = re.exec(line);
-  return m ? Number(m[1]) : null;
-}
-
-function timingPair(name, line) {
-  const m = new RegExp(`\\b${name}=([\\d.]+)/([\\d.]+)`).exec(line);
-  return m ? { p95: Number(m[1]), max: Number(m[2]) } : null;
-}
-
-function parseHeartbeat(line) {
-  const tickHzMatch = /\btickHz=(n\/a|[\d.]+)/.exec(line);
-  const tickHz = tickHzMatch ? (tickHzMatch[1] === 'n/a' ? null : Number(tickHzMatch[1])) : null;
-  const timings = {};
-  for (const name of ['total', 'tick', 'broadcast', 'bcastSelf', 'bcastGrid', 'events', 'social']) {
-    const p = timingPair(name, line);
-    if (p) timings[name] = p;
+// The DATABASE_URL guard must validate the host node-postgres will ACTUALLY use:
+// pg-connection-string honors a ?host= query override, so a WHATWG-hostname-only
+// check is bypassable (postgres://localhost/db?host=other passes it while pg
+// connects to "other"). Never echo the raw value: DATABASE_URL carries credentials.
+function assertLoopbackDb(urlStr) {
+  let host;
+  try {
+    host = String(parsePgTarget(urlStr).host ?? '').toLowerCase();
+  } catch {
+    throw new Error('invalid DATABASE_URL (not a parseable connection string)');
   }
-  return {
-    online: num(/\bonline=(\d+)/, line),
-    ents: num(/\bents=(\d+)/, line),
-    tickHz,
-    tickMs: num(/\btickMs=([\d.]+)/, line),
-    over: / OVER\b/.test(line),
-    timings,
-    visits: num(/\bvisits=(\d+)/, line),
-    serializes: num(/\bserializes=(\d+)/, line),
-    serializeMs: num(/\bserializeMs=([\d.]+)/, line),
-    aggroVisits: num(/\baggroVisits=(\d+)/, line),
-    threatVisits: num(/\bthreatVisits=(\d+)/, line),
-  };
+  const bare = host.replace(/^\[/, '').replace(/\]$/, '');
+  const ok = bare === 'localhost' || bare === '127.0.0.1' || bare === '::1';
+  if (!ok) {
+    throw new Error(
+      `refusing non-loopback DATABASE_URL host "${host || '(none)'}". This harness runs ` +
+        'against a LOCAL dev server and dev database only and must never touch production. ' +
+        'Allowed hosts: localhost, 127.0.0.1, ::1.',
+    );
+  }
+  return bare;
 }
 
-function parseSimline(line) {
-  const body = line.replace(/^\[perf\.sim\]\s+mean\/p95\/max\s+/, '');
-  const buckets = {};
-  const re = /([A-Za-z0-9.|_]+)=([\d.]+)\/([\d.]+)\/([\d.]+)/g;
-  for (const m of body.matchAll(re)) {
-    buckets[m[1]] = { mean: Number(m[2]), p95: Number(m[3]), max: Number(m[4]) };
-  }
-  return buckets;
-}
+// --- Server-line handling (parsers live in ./lib/mob_stall_parse.mjs). ---
 
 function writeRecord(rec) {
   if (resultsStream) resultsStream.write(`${JSON.stringify(rec)}\n`);
@@ -368,6 +377,7 @@ function writeRecord(rec) {
 
 function handleServerLine(line) {
   if (logStream) logStream.write(`${line}\n`);
+  if (line.trim()) lastServerLine = line;
   const ts = new Date().toISOString();
   if (line.startsWith('[perf.sim]')) {
     const buckets = parseSimline(line);
@@ -433,20 +443,16 @@ function tailFile(path, onLine, onError) {
 
 class Bot {
   constructor(record, spot) {
-    this.username = record.username;
     this.token = record.token;
     this.characterId = record.characterId;
-    this.accountId = record.accountId;
     this.name = record.name;
     this.spot = spot;
     this.ws = null;
-    this.pid = 0;
     this.self = null;
     this.ents = new Map();
     this.connected = false;
     this.ready = false;
     this.closed = false;
-    this.closeCode = 0;
     this.deaths = 0;
     this.facing = 0;
     this.tapped = new Set(); // mob ids this bot has already landed a hit on
@@ -485,7 +491,6 @@ class Bot {
         if (msg.t === 'hello') {
           if (settled) return;
           settled = true;
-          this.pid = msg.id;
           this.connected = true;
           clearTimeout(timeout);
           resolve(this);
@@ -499,7 +504,6 @@ class Bot {
         if (msg.t === 'snap') {
           this.self = mergeSelf(this.self, msg.self);
           this.ents = mergeEnts(this.ents, msg);
-          if (this.self?.dead === true) this.deaths += 0; // death handled in step()
           this.ready = true;
         }
       });
@@ -507,7 +511,6 @@ class Bot {
         if (!this.connected) fail(err);
       });
       ws.on('close', (code) => {
-        this.closeCode = code;
         this.closed = true;
         this.connected = false;
         if (!settled) {
@@ -527,7 +530,7 @@ class Bot {
     }
   }
 
-  input(mi = {}, facing = this.facing) {
+  input(mi, facing) {
     if (this.ws?.readyState !== WebSocket.OPEN) return;
     this.facing = facing;
     this.ws.send(JSON.stringify({ t: 'input', mi, facing }));
@@ -566,7 +569,11 @@ class Bot {
   }
 
   respawnIfDead() {
-    if (this.self?.dead !== true) return false;
+    // The wire encodes death as numeric dead:1 and OMITS the key while alive
+    // (server/game.ts dynamicFields), so this must be a truthiness check: a
+    // strict === true comparison never fires, the bot never releases, and the
+    // respawn-and-re-tap loop the tap scenarios depend on silently dies.
+    if (!this.self?.dead) return false;
     const now = Date.now();
     if (now - this.lastRespawnAt < 3_000) return true;
     this.lastRespawnAt = now;
@@ -645,17 +652,33 @@ class Bot {
 
 // --- DB seeding + admin token provisioning. ---
 
-async function provisionAdmin(pool) {
+// Seeded accounts INSERT with ON CONFLICT DO NOTHING and refuse a pre-existing
+// username: adopting an existing row would overwrite its credentials and then
+// DELETE it at cleanup, which must never happen to a row this run did not create.
+// Every created accountId is pushed onto the caller's cleanup list IMMEDIATELY,
+// so an interrupt mid-seeding still deletes the partial seed. Token expiry is one
+// hour: run-scoped, and well past the longest allowed measurement window.
+function accountExistsError(username) {
+  return new Error(
+    `account "${username}" already exists (leftovers from a previous run, or a reused ` +
+      'RUN_ID): refusing to adopt and later delete a row this run did not create. Use a ' +
+      'fresh RUN_ID or remove the leftover rows.',
+  );
+}
+
+async function provisionAdmin(pool, accountIds) {
   const username = `stall_admin_${RUN_ID.toLowerCase()}`;
   const token = randomBytes(32).toString('hex');
   const account = await pool.query(
     `INSERT INTO accounts (username, password_hash)
      VALUES ($1, $2)
-     ON CONFLICT (username) DO UPDATE SET password_hash = EXCLUDED.password_hash
+     ON CONFLICT (username) DO NOTHING
      RETURNING id`,
     [username, 'loadtest:token-only'],
   );
+  if (account.rows.length === 0) throw accountExistsError(username);
   const accountId = account.rows[0].id;
+  accountIds.push(accountId);
   // The admin dashboard resolves a Bearer auth_token to an account and reads its
   // admin_roles; the `admin` role carries the ops.perf permission the perf routes
   // require. This is a throwaway local dev account, deleted at cleanup.
@@ -665,13 +688,13 @@ async function provisionAdmin(pool) {
   );
   await pool.query(
     `INSERT INTO auth_tokens (token, account_id, expires_at)
-     VALUES ($1, $2, now() + interval '12 hours')`,
+     VALUES ($1, $2, now() + interval '1 hour')`,
     [token, accountId],
   );
   return { accountId, token, username };
 }
 
-async function seedBots(pool) {
+async function seedBots(pool, accountIds) {
   const records = [];
   for (let i = 0; i < BOT_COUNT; i += 1) {
     const username = `stall_${RUN_ID.toLowerCase()}_${String(i).padStart(3, '0')}`;
@@ -681,14 +704,16 @@ async function seedBots(pool) {
     const account = await pool.query(
       `INSERT INTO accounts (username, password_hash)
        VALUES ($1, $2)
-       ON CONFLICT (username) DO UPDATE SET password_hash = EXCLUDED.password_hash
+       ON CONFLICT (username) DO NOTHING
        RETURNING id`,
       [username, 'loadtest:token-only'],
     );
+    if (account.rows.length === 0) throw accountExistsError(username);
     const accountId = account.rows[0].id;
+    accountIds.push(accountId);
     await pool.query(
       `INSERT INTO auth_tokens (token, account_id, expires_at)
-       VALUES ($1, $2, now() + interval '12 hours')`,
+       VALUES ($1, $2, now() + interval '1 hour')`,
       [token, accountId],
     );
     const character = await pool.query(
@@ -697,7 +722,7 @@ async function seedBots(pool) {
        RETURNING id`,
       [accountId, name, cls, REALM],
     );
-    records.push({ username, token, characterId: character.rows[0].id, name, accountId });
+    records.push({ token, characterId: character.rows[0].id, name });
   }
   return records;
 }
@@ -809,8 +834,11 @@ function spawnServer() {
   rl.on('line', handleServerLine);
   child.stderr.on('data', (chunk) => {
     if (logStream) logStream.write(chunk);
+    const text = chunk.toString().trim();
+    if (text) lastServerStderr = text.split('\n').at(-1);
   });
   child.on('exit', (code, signal) => {
+    childExit = { code, signal };
     console.log(`[mob-stall] server child exited code=${code} signal=${signal}`);
   });
   const signalGroup = (sig) => {
@@ -835,6 +863,14 @@ async function waitForServerReady(timeoutMs) {
   const deadline = Date.now() + timeoutMs;
   let logged = false;
   while (Date.now() < deadline) {
+    // Fail fast if the child died (bundle error, port conflict, DB down) instead
+    // of burning the whole timeout on a server that can never become ready.
+    if (childExit) {
+      throw new Error(
+        `server child exited (code=${childExit.code} signal=${childExit.signal}) before ` +
+          `ready. Last server output: ${lastServerStderr || lastServerLine || '(none)'}`,
+      );
+    }
     try {
       const res = await fetch(`${SERVER_URL}/readyz`, { method: 'GET' });
       if (res.ok) return true;
@@ -849,29 +885,7 @@ async function waitForServerReady(timeoutMs) {
   return false;
 }
 
-// --- Staging evaluation. ---
-
-function evaluateStaging(fresh) {
-  const maxAggro = fresh.reduce((m, h) => Math.max(m, h.aggroVisits ?? 0), 0);
-  const maxThreat = fresh.reduce((m, h) => Math.max(m, h.threatVisits ?? 0), 0);
-  if (CFG.sig === 'aggro') {
-    const need = BOT_COUNT; // at least one idle mob scanning the whole crowd
-    return {
-      ok: maxAggro >= need,
-      detail: `aggroVisits max=${maxAggro} (need >= ${need}); threatVisits max=${maxThreat} (expect ~0)`,
-    };
-  }
-  // Both tap scenarios prove the signature with threatVisits clearly scaling past a
-  // half-crowd table. mass-pull spreads across several camp mobs that leash and respawn,
-  // so its tables never all fill at once; boss-pulse holds one big table but churns as
-  // the boss AoE kills and the crowd re-taps. A half-N floor confirms the mechanism
-  // without flaking on that churn (the heartbeats and captures carry the magnitude).
-  const need = Math.max(2, Math.floor(BOT_COUNT / 2));
-  return {
-    ok: maxThreat >= need,
-    detail: `threatVisits max=${maxThreat} (need >= ${need}); aggroVisits max=${maxAggro}`,
-  };
-}
+// --- Measurement (staging evaluation lives in ./lib/mob_stall_parse.mjs). ---
 
 async function measurementWindow(ms) {
   console.log(`[mob-stall] measurement window: ${ms} ms (bots holding, collecting heartbeats)`);
@@ -879,14 +893,19 @@ async function measurementWindow(ms) {
   const captures = [];
   const canCapture = adminToken && ms >= CAPTURE_MS + 6_000;
   if (canCapture) {
-    // Fire the first capture EARLY: boss-pulse engagement is front-loaded (the crowd
-    // wipes within ~20 to 30s), so a late capture would miss it. mass-pull is engaged
-    // throughout, so an early capture works for it too.
+    // Fire the first capture EARLY: boss-pulse engagement is strongest in the first
+    // wave before the crowd's death-and-respawn churn sets in, so a late capture
+    // would understate it. mass-pull is engaged throughout, so an early capture
+    // works for it too.
     await sleep(Math.max(3_000, Math.floor(ms * 0.08)));
-    captures.push(runCapture(CAPTURE_MS));
+    const first = runCapture(CAPTURE_MS);
+    captures.push(first);
     // A second capture mid-window when there is room, to catch mass-pull once its tables
     // have fully filled (it keeps building past the first capture).
     if (ms >= 2 * CAPTURE_MS + 12_000) {
+      // Await the first capture before arming the second: starting a new capture
+      // resets the server-side profiler and would orphan the first one's poll.
+      await first;
       const until = start + Math.floor(ms * 0.5);
       await sleep(Math.max(0, until - Date.now()));
       captures.push(runCapture(CAPTURE_MS));
@@ -901,10 +920,11 @@ async function measurementWindow(ms) {
   await Promise.allSettled(captures);
 }
 
-function printSummary(staging) {
+function printSummary(staging, bots) {
   const means = simMobUpdate.map((x) => x.mean).sort((a, b) => a - b);
   const meanAvg = means.length ? means.reduce((a, b) => a + b, 0) / means.length : 0;
   const p95 = means.length ? (means[Math.floor(means.length * 0.95)] ?? means.at(-1)) : 0;
+  const deaths = bots.reduce((sum, bot) => sum + bot.deaths, 0);
   console.log('[mob-stall] ---- summary ----');
   console.log(`[mob-stall] scenario=${SCENARIO} clients=${BOT_COUNT} level=${BOT_LEVEL}`);
   console.log(`[mob-stall] staging: ${staging.ok ? 'OK' : 'FAILED'} (${staging.detail})`);
@@ -917,6 +937,10 @@ function printSummary(staging) {
       `p95 of lap means=${Number(p95).toFixed(3)} ms`,
   );
   console.log(`[mob-stall] last aggroVisits=${lastAggro} threatVisits=${lastThreat}`);
+  console.log(
+    `[mob-stall] bot deaths=${deaths} (a dead bot drops off every threat table until it ` +
+      'respawns and re-taps)',
+  );
   console.log(`[mob-stall] results: ${RESULTS_PATH}`);
   console.log(`[mob-stall] server log: ${SERVER_LOG_PATH}`);
 }
@@ -933,8 +957,8 @@ async function main() {
   }
   // The DB gets disposable bot accounts AND a throwaway admin row, so it is
   // loopback-enforced exactly like the game-server target.
-  const dbUrl = assertLoopback(DATABASE_URL, 'DATABASE_URL');
-  console.log(`[mob-stall] database host ${dbUrl.hostname} is loopback: ok`);
+  const dbHost = assertLoopbackDb(DATABASE_URL);
+  console.log(`[mob-stall] database host ${dbHost} is loopback: ok`);
   if (EXTERNAL_SERVER && !SERVER_LOG) {
     throw new Error(
       'EXTERNAL_SERVER=1 requires SERVER_LOG=<path> so the harness can read the heartbeat counters. ' +
@@ -944,6 +968,12 @@ async function main() {
   }
 
   mkdirSync(TMP_DIR, { recursive: true });
+  if (existsSync(RESULTS_PATH)) {
+    throw new Error(
+      `results file ${RESULTS_PATH} already exists: use a fresh RUN_ID (letters only; a ` +
+        'reused tag would append a second meta record and collide on seeded account names).',
+    );
+  }
   resultsStream = createWriteStream(RESULTS_PATH, { flags: 'a' });
   logStream = createWriteStream(SERVER_LOG_PATH, { flags: 'a' });
 
@@ -987,6 +1017,11 @@ async function main() {
       await cleanupAccounts(pool, accountIds).catch((err) =>
         console.log(`[mob-stall] cleanup failed: ${err.message}`),
       );
+    } else if (accountIds.length > 0) {
+      console.log(
+        `[mob-stall] CLEANUP=0: keeping ${accountIds.length} seeded account(s), including ` +
+          'the throwaway admin row; its bearer token expires within 1 hour',
+      );
     }
     await pool.end().catch(() => {});
     stopTail();
@@ -995,16 +1030,36 @@ async function main() {
     if (logStream) logStream.end();
   }
 
-  process.once('SIGINT', () => {
-    console.log('[mob-stall] SIGINT: tearing down');
-    teardown()
-      .then(() => process.exit(130))
-      .catch(() => process.exit(1));
-  });
+  // SIGTERM/SIGHUP too: a plain kill or a dropped terminal must still delete the
+  // seeded accounts and signal the detached server child's process group, or the
+  // orphan keeps holding port 8787.
+  for (const [signal, exitCode] of [
+    ['SIGINT', 130],
+    ['SIGTERM', 143],
+    ['SIGHUP', 129],
+  ]) {
+    process.once(signal, () => {
+      console.log(`[mob-stall] ${signal}: tearing down`);
+      teardown()
+        .then(() => process.exit(exitCode))
+        .catch(() => process.exit(1));
+    });
+  }
 
   try {
     if (EXTERNAL_SERVER) {
       console.log(`[mob-stall] EXTERNAL_SERVER: attaching to ${SERVER_URL}, tailing ${SERVER_LOG}`);
+      // SERVER_LOG is a required input: an unreadable path would otherwise degrade
+      // to zero heartbeats and a misleading staging failure.
+      try {
+        closeSync(openSync(SERVER_LOG, 'r'));
+      } catch (err) {
+        throw new Error(
+          `cannot read SERVER_LOG "${SERVER_LOG}": ${err.message}. EXTERNAL_SERVER=1 needs ` +
+            'the running server stdout log (start the server with PERF_TICK_LOG=1 ' +
+            'ALLOW_DEV_COMMANDS=1 npm run server > tmp/server.log 2>&1).',
+        );
+      }
       if (BOT_COUNT > 20) {
         console.log(
           `[mob-stall] start the external server with MAX_WS_PER_IP_HARD=${BOT_COUNT + 5} or higher`,
@@ -1031,11 +1086,15 @@ async function main() {
     }
 
     const ready = await waitForServerReady(READY_TIMEOUT_MS);
-    if (!ready) throw new Error('server did not become ready before the timeout');
+    if (!ready) {
+      const last = lastServerStderr || lastServerLine;
+      throw new Error(
+        `server did not become ready before the timeout${last ? ` (last server output: ${last})` : ''}`,
+      );
+    }
     console.log('[mob-stall] server ready');
 
-    const admin = await provisionAdmin(pool);
-    accountIds.push(admin.accountId);
+    const admin = await provisionAdmin(pool, accountIds);
     // Confirm the token actually carries ops.perf before relying on captures. The
     // token must be live for adminFetch to make the request, so set it first and
     // clear it again if the probe does not come back with the capture status.
@@ -1051,8 +1110,7 @@ async function main() {
       );
     }
 
-    const records = await seedBots(pool);
-    for (const r of records) accountIds.push(r.accountId);
+    const records = await seedBots(pool, accountIds);
     console.log(`[mob-stall] seeded ${records.length} bot(s); connecting...`);
     bots = await connectAll(records);
     console.log(`[mob-stall] connected ${bots.filter((b) => b.connected).length}/${bots.length}`);
@@ -1068,28 +1126,44 @@ async function main() {
     const before = heartbeats.length;
     if (CFG.tap) {
       console.log('[mob-stall] tap window: every bot lands a hit on each co-located mob');
-      botMode = 'tap';
     } else {
       console.log('[mob-stall] hold window: crowd parked, mobs run their idle proximity scan');
-      botMode = 'hold';
     }
+    botMode = 'run';
     await sleep(OBSERVE_MS);
-    const staging = evaluateStaging(heartbeats.slice(before));
+    const staging = evaluateStaging(heartbeats.slice(before), CFG.sig, BOT_COUNT);
     console.log(`[mob-stall] STAGING ${staging.ok ? 'OK' : 'FAILED'}: ${staging.detail}`);
 
     if (!staging.ok) {
-      printSummary(staging);
+      if (staging.empty) {
+        console.log(
+          '[mob-stall] no [perf] heartbeats were parsed. Child mode sets PERF_TICK_LOG=1 ' +
+            'itself; in EXTERNAL_SERVER mode confirm the server runs with PERF_TICK_LOG=1 ' +
+            'and that SERVER_LOG points at its live stdout log.',
+        );
+      } else {
+        console.log(
+          '[mob-stall] heartbeats arrived but the scenario signature is missing: the ' +
+            'content may have moved. Re-check the spot against src/sim/content/zone1.ts ' +
+            '(forest_wolf camp) and src/sim/world_boss.ts, and update SCENARIOS.',
+        );
+      }
+      printSummary(staging, bots);
       await teardown();
       process.exit(1);
     }
 
-    botMode = 'hold'; // stop dealing damage so the mobs survive the window
+    // Bots keep their scenario behavior through the measurement window: passive
+    // bots hold in place, tap bots hold once everything reachable is tapped and
+    // re-tap only after a death or a mob respawn (the tapped-set design).
     await measurementWindow(MEASURE_MS);
-    printSummary(staging);
+    printSummary(staging, bots);
     await teardown();
     process.exit(0);
   } catch (err) {
     console.error(`[mob-stall] failed: ${err.message}`);
+    console.error(`[mob-stall] partial results (if any): ${RESULTS_PATH}`);
+    console.error(`[mob-stall] server log mirror: ${SERVER_LOG_PATH}`);
     await teardown();
     process.exit(1);
   }
