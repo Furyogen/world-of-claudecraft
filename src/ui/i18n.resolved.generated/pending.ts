@@ -17,7 +17,6 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.confirm",
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
-    "hudChrome.cameraPrompt.recommended",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ],
@@ -29,7 +28,6 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.confirm",
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
-    "hudChrome.cameraPrompt.recommended",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ],
@@ -41,7 +39,6 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.confirm",
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
-    "hudChrome.cameraPrompt.recommended",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ],
@@ -53,7 +50,6 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.confirm",
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
-    "hudChrome.cameraPrompt.recommended",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ],
@@ -66,7 +62,6 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.confirm",
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
-    "hudChrome.cameraPrompt.recommended",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ],
@@ -78,7 +73,6 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.confirm",
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
-    "hudChrome.cameraPrompt.recommended",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ],
@@ -94,7 +88,6 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.confirm",
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
-    "hudChrome.cameraPrompt.recommended",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ],
@@ -107,7 +100,6 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.confirm",
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
-    "hudChrome.cameraPrompt.recommended",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ],
@@ -119,7 +111,6 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.confirm",
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
-    "hudChrome.cameraPrompt.recommended",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ],
@@ -131,7 +122,6 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.confirm",
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
-    "hudChrome.cameraPrompt.recommended",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ],
@@ -143,7 +133,6 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.confirm",
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
-    "hudChrome.cameraPrompt.recommended",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ],
@@ -155,7 +144,6 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.confirm",
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
-    "hudChrome.cameraPrompt.recommended",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ],
@@ -167,7 +155,6 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.confirm",
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
-    "hudChrome.cameraPrompt.recommended",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ],
@@ -179,7 +166,6 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.confirm",
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
-    "hudChrome.cameraPrompt.recommended",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ],
@@ -191,7 +177,6 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.confirm",
     "hudChrome.cameraPrompt.intro",
     "hudChrome.cameraPrompt.mouseDesc",
-    "hudChrome.cameraPrompt.recommended",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer"
   ]

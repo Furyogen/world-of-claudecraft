@@ -4428,7 +4428,7 @@ export class Renderer {
         const r = releaseSelfFacing(this.selfFacingOverride, facing, dt);
         facing = r.facing;
         this.selfFacingOverride = r.done ? null : r.facing;
-        if (r.done) this.selfFacingLastTarget = null;
+        this.selfFacingLastTarget = r.lastTarget;
       }
       v.group.rotation.y = facing;
 
