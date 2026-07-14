@@ -64,13 +64,17 @@ describe('discord special roles - guild role name matching', () => {
     expect(specialRoleByName('Senior Mods')?.key).toBe('seniormods');
     expect(specialRoleByName('senior mods')?.key).toBe('seniormods');
     expect(specialRoleByName('Senior Mod')?.key).toBe('seniormods');
+    expect(specialRoleByName('Senior Moderator')?.key).toBe('seniormods');
     expect(specialRoleByName('Senior Moderators')?.key).toBe('seniormods');
     expect(specialRoleByName('Sr Mod')?.key).toBe('seniormods');
+    expect(specialRoleByName('Sr Mods')?.key).toBe('seniormods');
     expect(specialRoleByName('Junior Mods')?.key).toBe('juniormods');
     expect(specialRoleByName('junior mods')?.key).toBe('juniormods');
     expect(specialRoleByName('Junior Mod')?.key).toBe('juniormods');
+    expect(specialRoleByName('Junior Moderator')?.key).toBe('juniormods');
     expect(specialRoleByName('Junior Moderators')?.key).toBe('juniormods');
     expect(specialRoleByName('Jr Mod')?.key).toBe('juniormods');
+    expect(specialRoleByName('Jr Mods')?.key).toBe('juniormods');
     // The tiered mod roles are separate roles, not aliases that collapse into Mods.
     expect(specialRoleByName('Senior Mods')?.key).not.toBe('mods');
     expect(specialRoleByName('Junior Mods')?.key).not.toBe('mods');
