@@ -1,9 +1,9 @@
 // Pure resolver: the item tooltip's explicit "Requires: <classes>" line. Classic
 // MMO tooltips always name the eligible classes for a class-restricted item, but
 // ONLY when that list is the restriction `canEquipItem` actually enforces:
-// - Weapons: a weapon's `requiredClass` is always the enforced proficiency group,
-//   whether it resolves to a known archetype (see equipment_rules.ts
-//   weaponArchetypeForItem) or falls through to the literal `requiredClass` check.
+// - Weapons: start from `requiredClass`, then filter it through the canonical
+//   equipment boundary. This matters for hand-specific rules such as the blanket
+//   Rogue two-handed prohibition.
 // - Armor: `canEquipItem` short-circuits on armor weight (cloth/leather/mail) and
 //   never reads `requiredClass` at all. On armor, `requiredClass` is loot-targeting
 //   metadata unless it happens to name EXACTLY the classes that weight already
@@ -18,7 +18,11 @@
 // tooltip hid the class list whenever that happened, leaving a blocked player with
 // no in-game explanation at all. Fixing that regression must not start claiming
 // restrictions armor doesn't actually enforce (see classesThatCanEquipArmorType).
-import { armorTypeForItem, classesThatCanEquipArmorType } from '../sim/equipment_rules';
+import {
+  armorTypeForItem,
+  canEquipItem,
+  classesThatCanEquipArmorType,
+} from '../sim/equipment_rules';
 import type { ItemDef, PlayerClass } from '../sim/types';
 
 // True when `classes` names exactly the members of `allowed` (order-independent).
@@ -37,8 +41,8 @@ export function requiredClassesForTooltip(item: ItemDef): readonly PlayerClass[]
       ? item.requiredClass
       : null;
   }
-  // Weapons (and anything else carrying requiredClass): canEquipItem always
-  // enforces the literal requiredClass list, whether directly or via the
-  // matching weapon archetype.
-  return item.requiredClass;
+  // Apply hand/proficiency policy at the same boundary used by actual equips so
+  // tooltip eligibility can never drift from enforcement for future items.
+  const eligible = item.requiredClass.filter((cls) => canEquipItem(cls, item));
+  return eligible.length > 0 ? eligible : null;
 }

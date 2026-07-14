@@ -21,6 +21,27 @@ describe('requiredClassesForTooltip', () => {
     expect(requiredClassesForTooltip(item)).toEqual(['rogue', 'hunter']);
   });
 
+  it('does not advertise Rogue for a future two-handed weapon', () => {
+    const item = {
+      id: 'future_greatblade',
+      name: 'Future Greatblade',
+      kind: 'weapon' as const,
+      slot: 'mainhand' as const,
+      hand: 'twohand' as const,
+      weapon: { min: 20, max: 30, speed: 3.2 },
+      requiredClass: ['warrior', 'rogue', 'hunter', 'shaman', 'paladin'],
+      sellValue: 1,
+    };
+
+    expect(canEquipItem('rogue', item)).toBe(false);
+    expect(requiredClassesForTooltip(item)).toEqual([
+      'warrior',
+      'hunter',
+      'shaman',
+      'paladin',
+    ]);
+  });
+
   it('names the classes for a warrior/paladin/shaman mail chest (Deathlord Warplate)', () => {
     const item = ITEMS.deathlord_warplate;
     expect(item).toBeDefined();
