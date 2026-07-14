@@ -21,6 +21,11 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
     "hudChrome.petFeed.disabledNoFood"
@@ -37,6 +42,11 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
     "hudChrome.petFeed.disabledNoFood"
@@ -53,6 +63,11 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
     "hudChrome.petFeed.disabledNoFood"
@@ -69,6 +84,11 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
     "hudChrome.petFeed.disabledNoFood"
@@ -86,6 +106,11 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
     "hudChrome.petFeed.disabledNoFood"
@@ -102,14 +127,31 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
     "hudChrome.petFeed.disabledNoFood"
   ],
-  "zh_CN": [],
-  "zh_TW": [],
-  "ko_KR": [],
-  "ja_JP": [],
+  "zh_CN": [
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.shill"
+  ],
+  "zh_TW": [
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.shill"
+  ],
+  "ko_KR": [
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.shill"
+  ],
+  "ja_JP": [
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.shill"
+  ],
   "pt_BR": [
     "guide.family.reptile.desc",
     "guide.family.reptile.name",
@@ -122,11 +164,19 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
     "hudChrome.petFeed.disabledNoFood"
   ],
-  "ru_RU": [],
+  "ru_RU": [
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.shill"
+  ],
   "cs_CZ": [
     "guide.family.reptile.desc",
     "guide.family.reptile.name",
@@ -139,6 +189,11 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
     "hudChrome.petFeed.disabledNoFood"
@@ -155,6 +210,11 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
     "hudChrome.petFeed.disabledNoFood"
@@ -171,6 +231,11 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
     "hudChrome.petFeed.disabledNoFood"
@@ -187,6 +252,11 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
     "hudChrome.petFeed.disabledNoFood"
@@ -203,6 +273,11 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
     "hudChrome.petFeed.disabledNoFood"
@@ -219,6 +294,11 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
     "hudChrome.petFeed.disabledNoFood"
@@ -235,6 +315,11 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
     "hudChrome.petFeed.disabledNoFood"
@@ -251,6 +336,11 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.cameraPrompt.mouseDesc",
     "hudChrome.cameraPrompt.title",
     "hudChrome.discord.link.joinServer",
+    "hudChrome.discord.roleTag.contentcreator",
+    "hudChrome.discord.roleTag.juniormods",
+    "hudChrome.discord.roleTag.legend",
+    "hudChrome.discord.roleTag.seniormods",
+    "hudChrome.discord.roleTag.shill",
     "hudChrome.meters.autoShowHint",
     "hudChrome.petFeed.disabledFullHp",
     "hudChrome.petFeed.disabledNoFood"

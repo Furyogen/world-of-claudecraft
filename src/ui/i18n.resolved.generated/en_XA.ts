@@ -1526,8 +1526,13 @@ export const en_XA: EnTranslations = {
         "admin": "[Áðɱíñ]",
         "coredevs": "[Çóŕé Ðéʋ]",
         "devs": "[Ðéʋ]",
+        "seniormods": "[Šéñíóŕ Ɱóð]",
         "mods": "[Ɱóð]",
-        "artists": "[Áŕţíšţ]"
+        "juniormods": "[Ĵúñíóŕ Ɱóð]",
+        "artists": "[Áŕţíšţ]",
+        "contentcreator": "[Çóñţéñţ Çŕéáţóŕ]",
+        "legend": "[ĻÉĜÉÑÐ]",
+        "shill": "[ŠĤÍĻĻ]"
       },
       "guildMember": "[Ʋéŕíƒíéð ɱéɱƀéŕ]",
       "notMember": "[Ñóţ íñ ţĥé šéŕʋéŕ ýéţ]",
