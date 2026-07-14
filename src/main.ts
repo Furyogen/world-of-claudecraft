@@ -12,7 +12,13 @@ import {
   readBrowserEnv,
 } from './game/browser_env';
 import { isCameraDrivenFacingActive } from './game/camera_driven_facing';
-import { cameraFollowShouldSettle, updateFollowCameraYaw, wrapAngle } from './game/camera_follow';
+import {
+  cameraFollowShouldSettle,
+  newCameraReleaseHold,
+  stepCameraReleaseHold,
+  updateFollowCameraYaw,
+  wrapAngle,
+} from './game/camera_follow';
 import { shouldRecoverOnComposerBlur } from './game/chat_keyboard_dismiss';
 import {
   clickMoveShouldWalk,
@@ -2386,7 +2392,15 @@ async function startGame(
   // channel, passed through on the one engage-edge frame so the server still
   // sees a manual turn (breaks /follow, marks anti-AFK activity).
   const kbTurn = newKeyboardTurnState();
-  function updateCamera(frameDt: number, interpFacing: number): void {
+  // Release hold for camera-owned headings (touch swipe-look, the camera
+  // joystick, right-mouse mouselook, Mouse Camera movement): after the drag
+  // releases, the render-interpolated facing spends up to a tick offline (a
+  // round trip online) replaying facing commits the camera itself authored.
+  // Feeding that echo back through the rigid follow term overshoots the
+  // released heading and the settle then drags it back: the visible release
+  // bounce. The hold keeps follow disengaged until the echo converges.
+  const cameraReleaseHold = newCameraReleaseHold();
+  function updateCamera(frameDt: number, interpFacing: number, echoMs = 0): void {
     const mi = input.readMoveInput();
     const clickMoving = !!input.clickMoveTarget && !input.suspendMovement && !movementFrozen();
     // When click-to-move ends, the player's facing snaps from the (camera-lagging)
@@ -2396,15 +2410,25 @@ async function startGame(
     // handoff stays smooth even in pure-follow (non-camera-driven) mode.
     if (wasClickMoving && !clickMoving) lastInterpFacing = interpFacing;
     wasClickMoving = clickMoving;
+    const mouselook = input.isMouselookActive();
+    const mouseCameraDriven = input.isMouseCameraMode() && cameraMoveActive();
+    const releaseHold = stepCameraReleaseHold(cameraReleaseHold, {
+      cameraOwned: mouselook || mouseCameraDriven,
+      camYaw: input.camYaw,
+      interpFacing,
+      frameDt,
+      echoMs,
+      manualTurn: mi.turnLeft || mi.turnRight,
+    });
     const next = updateFollowCameraYaw({
       camYaw: input.camYaw,
       interpFacing,
       frameDt,
       lastInterpFacing,
-      mouselook: input.isMouselookActive(),
+      mouselook,
       moving: cameraFollowShouldSettle(mi, clickMoving),
       clickMoving,
-      cameraDriven: input.isMouseCameraMode() && cameraMoveActive(),
+      cameraDriven: mouseCameraDriven || releaseHold,
       orbiting: input.leftDown && input.isCameraDragActive(),
     });
     input.camYaw = next.camYaw;
@@ -2847,12 +2871,16 @@ async function startGame(
           alpha,
           frameDt,
         };
-    perf.trace('camera.follow', () => updateCamera(frameDt, kbFacing ?? interpServerFacing), {
-      mode: 'online',
-      alpha,
-      frameDtMs: frameDt * 1000,
-      lastSnapAge: net.lastSnapAt > 0 ? performance.now() - net.lastSnapAt : -1,
-    });
+    perf.trace(
+      'camera.follow',
+      () => updateCamera(frameDt, kbFacing ?? interpServerFacing, onlineInputEchoMs),
+      {
+        mode: 'online',
+        alpha,
+        frameDtMs: frameDt * 1000,
+        lastSnapAge: net.lastSnapAt > 0 ? performance.now() - net.lastSnapAt : -1,
+      },
+    );
     introCameraTick(now);
     renderer.camYaw = input.camYaw;
     renderer.camPitch = input.camPitch;
