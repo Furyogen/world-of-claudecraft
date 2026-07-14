@@ -58,6 +58,8 @@ the Elastic IP.
 ```bash
 ssh ubuntu@<elastic-ip>
 echo 'play.example.com {
+	@ops path /livez /readyz /metrics
+	respond @ops 404
 	route /wiki* {
 		reverse_proxy localhost:8080
 	}
@@ -101,11 +103,13 @@ sudo git -C private/bot_detector pull
 #    Node, and a production checkout has no devDependencies, so run it in the same
 #    Node the image builds with. The checkout goes in read-only and is copied inside
 #    the container, so no root-owned node_modules is left behind on the host. Two
-#    hardening flags: `rm -f /app/.env` keeps the host .env (every production secret)
-#    out of the throwaway container, and `--ignore-scripts` stops dependency install
-#    hooks from running as root with network access. The type check needs neither.
+#    hardenings: the find sweep drops every .env and every .git from the copy (the
+#    host .env holds every production secret, and a nested clone's .env or .git
+#    config can carry tokens; the type check needs none of them), and
+#    --ignore-scripts stops dependency install hooks from running as root with
+#    network access.
 sudo docker run --rm -v /opt/eastbrook:/src:ro -w /app node:22-alpine \
-  sh -c 'cp -a /src/. /app && rm -f /app/.env && npm ci --ignore-scripts --no-audit --no-fund && npx tsc --noEmit'
+  sh -c 'cp -a /src/. /app && find /app \( -name .git -o -name .env \) -prune -exec rm -rf {} + && npm ci --ignore-scripts --no-audit --no-fund && npx tsc --noEmit'
 #    Red means STOP, do not deploy: the image would build fine and fail at runtime.
 #    (On a host that does have Node 22 on PATH, `npm ci --ignore-scripts && npx tsc
 #    --noEmit` in the checkout is the same gate.)
@@ -141,7 +145,9 @@ sudo docker compose ps
 sudo docker inspect -f '{{.State.Health.Status}}' eastbrook-game
 
 # the startup logs are free of errors, and the bot detector line names the
-# implementation you actually expect (`stub (no-op)` or `private`)
+# implementation you actually expect (`stub (no-op)` or `private`); repeated
+# TypeErrors that mention the detector mean the bundled clone is out of step
+# with the game tree: stop, pull it (step 2), and rebuild
 sudo docker compose logs game --since 10m
 ```
 
@@ -283,15 +289,20 @@ For off-box safety, sync the directory to S3 occasionally:
   configured**: it answers 404 unless `METRICS_TOKEN` is set in the server
   runtime env. When set, the scraper must send `Authorization: Bearer <token>`
   (anything else gets an opaque 401). Configure the token on **both** the server
-  and the Prometheus scrape job in the same change or scraping goes dark.
-  `/livez` and `/readyz` stay open for load-balancer checks.
+  and the Prometheus scrape job in the same change or scraping goes dark, and point
+  the scrape job at `127.0.0.1:8787/metrics` on the host: the public edge answers
+  404 for all three ops paths (`/livez`, `/readyz`, `/metrics`) once the Caddy
+  block below is in place. `/livez` and `/readyz` need no token, but they are for
+  the container healthcheck and the host watchdog, which read them locally and
+  never through Caddy; nothing on the public internet needs them.
 - **Game watchdog (wedge recovery)**: `deploy/game_watchdog.sh`, installed as
   `/usr/local/bin/eastbrook-watchdog` and fired every minute from
   `/etc/cron.d/eastbrook-watchdog`. Docker's `restart: unless-stopped` only acts when
   the container process EXITS, so a wedged-but-alive container (world loop stalled,
   port still held) sits there until a human ssh-es in. The compose healthcheck probes
   `GET /livez`, which answers **503 once the world loop has not completed a pass in
-  over 30 seconds** (it stays open and unauthenticated, as above); Docker turns that
+  over 30 seconds** (unauthenticated on the server port, and hidden at the public
+  edge: see the Caddy note below); Docker turns that
   into a container health status; the watchdog reads that status and restarts the
   container **only** on `unhealthy`. Never on `starting`, never on `healthy`, and
   never when the container is stopped or its image predates the healthcheck. It never
@@ -303,8 +314,9 @@ For off-box safety, sync the directory to S3 occasionally:
   container that keeps re-wedging is restarted about once every five minutes (Docker's
   own `restart: unless-stopped` cannot help, since a wedge never exits the process), and
   an `flock` serializes overlapping cron fires. End to end, a wedge takes roughly 90
-  seconds to flip `unhealthy`, then up to the stop grace period to shut down, then a
-  boot: budget about three minutes from stall to recovered when planning on-call. Dry-run
+  seconds to flip `unhealthy`, up to a minute more before the next once-a-minute cron
+  fire reads it, then up to the stop grace period to shut down, then a boot: budget
+  about four minutes from stall to recovered when planning on-call. Dry-run
   it any time, it changes nothing:
   `sudo /usr/local/bin/eastbrook-watchdog --dry-run --verbose`. Actions land in
   `/var/log/eastbrook-watchdog.log`; it is silent when there is nothing to do.
@@ -324,6 +336,29 @@ For off-box safety, sync the directory to S3 occasionally:
   The watchdog only has something to read once the game container runs an image
   whose compose file carries the healthcheck, so install it alongside that deploy,
   not before it.
+  **The Caddy ops block needs the same by-hand treatment**: `deploy/user-data.sh`
+  writes the 404 block for `/livez`, `/readyz`, and `/metrics` at first boot only, so
+  a host provisioned before it existed still proxies all three to the public
+  internet, and `/livez` can now answer 503, which tells anyone polling it exactly
+  when the world loop is down. Add the matcher pair inside EACH public site block of
+  `/etc/caddy/Caddyfile` (alongside the existing `reverse_proxy`; `respond` runs
+  before `reverse_proxy`, so nothing else in the block needs to move):
+
+  ```
+  @ops path /livez /readyz /metrics
+  respond @ops 404
+  ```
+
+  Then validate and reload, and confirm from outside:
+
+  ```bash
+  sudo caddy validate --config /etc/caddy/Caddyfile
+  sudo systemctl reload caddy
+  curl -s -o /dev/null -w '%{http_code}\n' https://<your-domain>/livez  # expect 404
+  ```
+
+  The healthcheck and the watchdog are unaffected: both read the container's own
+  port and never traverse Caddy.
 - **API dispatch (rollback)**: every REST surface (`/api`, `/admin/api`, `/oauth`,
   `/internal`) runs through the in-house request pipeline by default. To roll back to
   the old handler ladder, set `API_DISPATCH=legacy` in the server runtime env and

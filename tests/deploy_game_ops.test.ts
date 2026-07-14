@@ -1,4 +1,6 @@
+import { spawn } from 'node:child_process';
 import { readFileSync } from 'node:fs';
+import { createServer, type Server } from 'node:http';
 import { describe, expect, it } from 'vitest';
 
 const compose = readFileSync('docker-compose.yml', 'utf8');
@@ -133,5 +135,57 @@ describe('Game container health and resource deploy contract', () => {
   // deploy would SIGKILL the server mid-save at the 75s grace mark.
   it('keeps node as the final exec in the Dockerfile CMD so it receives SIGTERM', () => {
     expect(dockerfile).toContain('node dist-server/server.cjs"]');
+  });
+});
+
+describe('healthcheck probe behavior (executed)', () => {
+  // The exact-string pin above keeps the compose text; this executes the LOGIC of that
+  // text. The probe source is EXTRACTED from the pinned line (never a copy that could
+  // drift), with only the port substituted: binding 8787 here would collide with a dev
+  // server, and the port is not what is under test. What is under test is the pair of
+  // failure arms: a bare http.get exits 0 on ANY response (a 503 would read healthy
+  // forever), and without the error handler a refused connection dies on an unhandled
+  // 'error' event instead of a clean nonzero exit.
+  const probeSource = HEALTHCHECK_TEST_LINE.match(/"-e", "(.+)"\]$/)?.[1] ?? '';
+
+  function listen(statusCode: number): Promise<{ server: Server; port: number }> {
+    return new Promise((resolve) => {
+      const server = createServer((_req, res) => {
+        res.statusCode = statusCode;
+        res.end(statusCode === 200 ? 'ok' : 'game loop stalled');
+      });
+      server.listen(0, '127.0.0.1', () => {
+        resolve({ server, port: (server.address() as { port: number }).port });
+      });
+    });
+  }
+
+  function runProbe(port: number): Promise<number | null> {
+    const code = probeSource.replace(
+      'http://127.0.0.1:8787/livez',
+      `http://127.0.0.1:${port}/livez`,
+    );
+    return new Promise((resolve) => {
+      const child = spawn(process.execPath, ['-e', code], { stdio: 'ignore', timeout: 8_000 });
+      child.on('close', (exitCode) => resolve(exitCode));
+    });
+  }
+
+  it('extracts the probe source from the pinned healthcheck line', () => {
+    expect(probeSource).toContain("require('http')");
+    expect(probeSource).toContain('/livez');
+  });
+
+  it('exits 0 on a 200, and nonzero on a 503 and on a refused connection', async () => {
+    const ok = await listen(200);
+    expect(await runProbe(ok.port)).toBe(0);
+    await new Promise((resolve) => ok.server.close(resolve));
+
+    const stalled = await listen(503);
+    expect(await runProbe(stalled.port)).toBe(1);
+    await new Promise((resolve) => stalled.server.close(resolve));
+
+    // Reuse the just-freed port for the refused arm: nothing listens there anymore.
+    expect(await runProbe(stalled.port)).toBe(1);
   });
 });

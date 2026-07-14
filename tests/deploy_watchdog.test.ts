@@ -65,6 +65,26 @@ describe('game watchdog deploy contract', () => {
     expect(watchdog).toContain('but the last watchdog restart was ');
     expect(watchdog).toContain('s), skipping');
   });
+
+  // Cron runs with a minimal PATH (often /usr/bin:/bin). Without this append, docker
+  // or flock installed under /usr/local/bin or /snap/bin are invisible and the
+  // watchdog silently no-ops every minute forever: installed but permanently blind.
+  // The harness cannot catch its loss (it prepends its own shim dir), so pin the line.
+  it('appends the standard binary dirs to the cron PATH, never prepending', () => {
+    expect(watchdog).toContain(
+      'export PATH="${PATH:-}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"',
+    );
+  });
+
+  // The exec harness feeds the shim's output directly, so the -f template itself is
+  // invisible to it. The template is load-bearing end to end: Running feeds the
+  // not-running guard, the {{if}} arm keeps an old image (no .State.Health at all)
+  // from rendering "<no value>", and the field order feeds the "${state%% *}" parse.
+  it('pins the full inspect format string: running, health, and the none fallback', () => {
+    expect(watchdog).toContain(
+      "'{{.State.Running}} {{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}'",
+    );
+  });
 });
 
 describe('game watchdog install', () => {
@@ -90,6 +110,35 @@ describe('game watchdog install', () => {
     // documented manual step and an already-provisioned host ships with no watchdog.
     expect(deployDoc).toContain('has to be given it by hand');
   });
+
+  // /livez can now answer 503, which makes it a public wedge oracle unless the edge
+  // hides it; /metrics exposes operational internals. The 404 block must sit on BOTH
+  // vhosts (site and admin domain), with the same path list, or one edge stays open.
+  // split() counts occurrences, so a drift between the two heredocs fails here.
+  it('hides the ops endpoints at the public edge, identically on both domains', () => {
+    expect(userData.split('@ops path /livez /readyz /metrics')).toHaveLength(3);
+    expect(userData.split('respond 404')).toHaveLength(3);
+  });
+
+  // user-data.sh writes that block at first boot only, so a host provisioned before
+  // it existed keeps proxying /livez publicly, and /livez can now answer 503: a
+  // public oracle for exactly when the world loop is down. The runbook must carry
+  // the by-hand retrofit (matcher, validate, reload) or the fix never reaches a
+  // host that is already running.
+  it('documents the by-hand Caddy retrofit for an already-provisioned host', () => {
+    expect(deployDoc).toContain('@ops path /livez /readyz /metrics');
+    expect(deployDoc).toContain('respond @ops 404');
+    expect(deployDoc).toContain('sudo caddy validate --config /etc/caddy/Caddyfile');
+    expect(deployDoc).toContain('sudo systemctl reload caddy');
+  });
+
+  // Cron appends to an open fd, so plain rotation would keep writing to the renamed
+  // file; copytruncate is what keeps the live log bounded. An unbounded root-owned
+  // log on a small host is a slow disk-full outage.
+  it('rotates the watchdog log with copytruncate', () => {
+    expect(userData).toContain('/etc/logrotate.d/eastbrook-watchdog');
+    expect(userData).toContain('copytruncate');
+  });
 });
 
 describe('update runbook guards', () => {
@@ -110,14 +159,15 @@ describe('update runbook guards', () => {
     // works if `npm ci` (to get devDependencies) and `npx tsc --noEmit` run TOGETHER
     // inside node:22-alpine, because a deploy host has neither Node nor devDependencies.
     // Pin the whole invocation as one contiguous block so a split can never pass. It
-    // must drop the host .env (rm -f /app/.env) so production secrets never enter the
-    // throwaway container, and pass --ignore-scripts so dependency install hooks cannot
-    // run as root with network access: losing either turns the type-check into a
-    // secret-exfiltration surface on every deploy.
+    // must sweep every .env and .git out of the copy (the host .env holds every
+    // production secret, and a nested clone's .env or .git config can carry tokens),
+    // and pass --ignore-scripts so dependency install hooks cannot run as root with
+    // network access: losing either turns the type-check into a secret-exfiltration
+    // surface on every deploy.
     expect(deployDoc).toContain(
       [
         'sudo docker run --rm -v /opt/eastbrook:/src:ro -w /app node:22-alpine \\',
-        "  sh -c 'cp -a /src/. /app && rm -f /app/.env && npm ci --ignore-scripts --no-audit --no-fund && npx tsc --noEmit'",
+        "  sh -c 'cp -a /src/. /app && find /app \\( -name .git -o -name .env \\) -prune -exec rm -rf {} + && npm ci --ignore-scripts --no-audit --no-fund && npx tsc --noEmit'",
       ].join('\n'),
     );
   });
@@ -173,7 +223,10 @@ if [ "$1" = "inspect" ]; then
   exit 0
 fi
 if [ "$1" = "restart" ]; then
-  printf '%s\\n' "$2" >> "$SHIM_RESTART_LOG"
+  # Record the cooldown stamp AS SEEN AT RESTART TIME next to the container name: the
+  # script must write the stamp BEFORE restarting (a hanging restart still holds the
+  # cooldown), and this is the only observable that pins that ordering.
+  printf '%s stamp=%s\\n' "$2" "$(cat "$WATCHDOG_STATE_FILE" 2>/dev/null || echo missing)" >> "$SHIM_RESTART_LOG"
   exit "\${SHIM_RESTART_EXIT:-0}"
 fi
 exit 0
@@ -320,6 +373,60 @@ describe('game watchdog behavior (executed against a fake docker)', () => {
     expect(res.status).toBe(0);
     expect(res.restarted).toBe(false);
     expect(res.output).toContain('skipping');
+  });
+
+  // The WRITE side of the cooldown: the first real restart must stamp the state file,
+  // and that stamp must suppress the immediately following run. Without this pair, a
+  // mutation that never writes the stamp passes every other case (they pre-seed the
+  // file or run once), and in production a genuinely crashing container would be
+  // restart-looped every minute: the exact hot loop the cooldown exists to prevent.
+  it('stamps the cooldown on a real restart, and the very next run is suppressed by it', () => {
+    const h = makeHarness();
+    const first = runWatchdog(h, { inspect: 'true unhealthy' });
+    expect(first.status).toBe(0);
+    expect(first.restarted).toBe(true);
+    // The shim records the stamp as seen AT RESTART TIME: a numeric value proves the
+    // stamp was written BEFORE docker restart ran (a hanging restart still holds the
+    // cooldown); 'missing' here means the ordering regressed to stamp-after-restart.
+    expect(readFileSync(h.restartLog, 'utf8')).toMatch(
+      new RegExp(`^${CONTAINER} stamp=\\d+$`, 'm'),
+    );
+    expect(readFileSync(h.stateFile, 'utf8').trim()).toMatch(/^\d+$/);
+    rmSync(h.restartLog, { force: true });
+    const second = runWatchdog(h, { inspect: 'true unhealthy' });
+    expect(second.status).toBe(0);
+    expect(second.restarted).toBe(false);
+    expect(second.output).toContain('cooldown');
+  });
+
+  // A failed restart must be LOUD (exit 1, FAILED in the log) and must still hold the
+  // cooldown stamp: retrying a restart that just failed, once a minute, helps nobody.
+  it('exits 1 and logs FAILED when docker restart itself fails, keeping the stamp', () => {
+    const h = makeHarness();
+    const res = runWatchdog(h, { inspect: 'true unhealthy', env: { SHIM_RESTART_EXIT: '1' } });
+    expect(res.status).toBe(1);
+    expect(res.output).toContain('FAILED');
+    expect(readFileSync(h.stateFile, 'utf8').trim()).toMatch(/^\d+$/);
+  });
+
+  // A corrupted stamp (partial write, manual edit) must read as ABSENT, not as a
+  // far-future epoch that latches the cooldown shut and blocks wedge recovery forever.
+  it('treats a corrupted cooldown stamp as absent and still restarts', () => {
+    const h = makeHarness();
+    writeFileSync(h.stateFile, 'not-a-number\n');
+    const res = runWatchdog(h, { inspect: 'true unhealthy' });
+    expect(res.status).toBe(0);
+    expect(res.restarted).toBe(true);
+  });
+
+  // An operator typo must fail loudly with usage, never fall through to a live run
+  // where the misspelled flag (say --dry-rum) silently performs a REAL restart.
+  it('rejects an unknown flag with usage and exit 2, restarting nothing', () => {
+    const h = makeHarness();
+    const res = runWatchdog(h, { inspect: 'true unhealthy', args: ['--bogus'] });
+    expect(res.status).toBe(2);
+    expect(res.output).toContain('usage:');
+    expect(res.restarted).toBe(false);
   });
 
   // A syntax error anywhere in the script would ship green through every string-grep
