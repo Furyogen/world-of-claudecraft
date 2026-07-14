@@ -618,13 +618,13 @@ export const cs_CZ: EnTranslations = {
       "update": "Aktualizovat"
     },
     "cameraPrompt": {
-      "title": "Choose Your Camera",
-      "intro": "Pick how the camera follows your character.",
-      "mouseDesc": "Move the mouse to turn the camera without holding a button.",
-      "classicTitle": "Classic Camera",
-      "classicDesc": "Hold right-click and move the mouse to turn the camera.",
-      "changeLater": "You can change this later under Esc, Key Bindings.",
-      "confirm": "Confirm"
+      "title": "Vyber si kameru",
+      "intro": "Vyber, jak má kamera sledovat tvou postavu.",
+      "mouseDesc": "Pohybem myši otáčej kamerou bez držení tlačítka.",
+      "classicTitle": "Klasická kamera",
+      "classicDesc": "Podrž pravé tlačítko myši a pohybem myši otáčej kamerou.",
+      "changeLater": "Později to můžeš změnit v nabídce Esc, Klávesové zkratky.",
+      "confirm": "Potvrdit"
     },
     "castBar": {
       "playerAria": "Tvoje lišta sesílání",
@@ -672,11 +672,11 @@ export const cs_CZ: EnTranslations = {
       "perSecondRow": "{total} ({rate})",
       "minutesSeconds": "{m} min {s} s",
       "seconds": "{s} s",
-      "autoShowHint": "Rows appear automatically once your party deals damage or healing, and this segment closes a few seconds after combat ends."
+      "autoShowHint": "Řádky se zobrazí automaticky, jakmile tvoje skupina způsobí poškození nebo léčení, a tento panel se několik sekund po skončení boje zavře."
     },
     "petFeed": {
-      "disabledFullHp": "Pet is at full health",
-      "disabledNoFood": "No food in your bags will heal your pet"
+      "disabledFullHp": "Mazlíček má plné zdraví",
+      "disabledNoFood": "Žádné jídlo v tvých brašnách mazlíčka nevyléčí"
     },
     "keybinds": {
       "emoteWheel": "Kruh emotů",
@@ -865,6 +865,25 @@ export const cs_CZ: EnTranslations = {
       "showDailyRewardsChest": "Zobrazit truhlu denních odměn",
       "mobileCameraJoystick": "Joystick kamery",
       "mobileLeftHanded": "Rozvržení pro leváky"
+    },
+    "talentRows": {
+      "tab": "Volby",
+      "defaultLoadout": "Výchozí sestava",
+      "comingSoon": "Již brzy",
+      "readoutSummary": "Talenty: {head}, vybráno {spent}/{total} řad."
+    },
+    "abilityError": {
+      "shieldRequired": "Musíte mít nasazený štít."
+    },
+    "specPanel": {
+      "primaryAttr": "Primární atribut",
+      "complexity": "Složitost",
+      "complexityLow": "Nízká",
+      "complexityMedium": "Střední",
+      "complexityHigh": "Vysoká",
+      "exampleAbilities": "Ukázkové schopnosti",
+      "viewTalents": "Zobrazit talenty",
+      "selectSpec": "Vybrat specializaci"
     },
     "controller": {
       "title": "Ovladač",
@@ -1277,7 +1296,7 @@ export const cs_CZ: EnTranslations = {
     },
     "bags": {
       "cannotDestroy": "Tento předmět nelze zničit.",
-      "rightClickDestroy": "Shift+right-click to destroy",
+      "rightClickDestroy": "Shift+kliknutí pravým tlačítkem pro zničení",
       "filterGroupAria": "Filtrovat batohy podle kategorie",
       "filterAll": "Vše",
       "filterWeapon": "Zbraně",
@@ -1478,7 +1497,7 @@ export const cs_CZ: EnTranslations = {
         "benefits": "Propoj Discord, získávej body za hraní a komunitní aktivitu a stoupej ve statusových stupních.",
         "error": "Discord se nepodařilo propojit. Zkus to prosím znovu.",
         "success": "Discord propojen.",
-        "joinServer": "Just join the Discord server"
+        "joinServer": "Jen se připojit k serveru Discord"
       },
       "choice": {
         "title": "Pokračovat přes Discord",
@@ -2452,10 +2471,10 @@ export const cs_CZ: EnTranslations = {
     },
     "abilityHook": {
       "heroic_strike": "Zařadí těžší švih, který utratí vztek při příštím zásahu.",
+      "revenge": "Sekne nepřátele před tebou a po úhybu nebo odražení může být zdarma.",
+      "hamstring": "Zmrzačí pohyb nepřítele, aby nemohl uniknout.",
       "battle_shout": "Povzbuzující pokřik, který zvedne sílu útoku party.",
-      "commanding_shout": "Posílí výdrž, aby všichni v boji vydrželi déle.",
       "charge": "Vyrazí k vzdálenému nepříteli a otevře boj krátkým omráčením.",
-      "rend": "Otevře krvácení, které cíl postupně opotřebuje.",
       "thunder_clap": "Zasáhne vše kolem tebe a zpomalí jejich útoky.",
       "seal_of_righteousness": "Naplní tvé švihy svatým poškozením, které potom utratíš Verdiktem.",
       "holy_light": "Stabilní, výrazné léčení pro doléčení spojence nebo sebe.",
@@ -2573,8 +2592,8 @@ export const cs_CZ: EnTranslations = {
         "desc": "Šupinaté, hadovité věci ze starých hlubin. Vzácné, hrdé a mnohem silnější, než vypadají."
       },
       "reptile": {
-        "name": "Reptiles",
-        "desc": "Cold-blooded hunters with a hiss and a snap all their own, distinct from the warm-blooded beasts."
+        "name": "Plazi",
+        "desc": "Chladnokrevní lovci s nezaměnitelným syčením a cvakáním čelistí, odlišní od teplokrevných šelem."
       }
     },
     "worldPage": {
@@ -5137,7 +5156,7 @@ export const cs_CZ: EnTranslations = {
       "defensiveDesc": "Útočí na nepřátele, kteří zraní tebe nebo tvého mazlíčka.",
       "aggressiveDesc": "Útočí na blízké nepřátelské protivníky.",
       "rename": "Přejmenovat mazlíčka",
-      "revive": "Oživit mazlíčka",
+      "revive": "Ošetření",
       "abandon": "Opustit mazlíčka",
       "cancel": "Zrušit",
       "renameLabel": "Vyber nové jméno mazlíčka.",
@@ -5392,6 +5411,7 @@ export const cs_CZ: EnTranslations = {
     },
     "slots": {
       "mainhand": "Hlavní ruka",
+      "offhand": "Vedlejší ruka",
       "helmet": "Helma",
       "neck": "Krk",
       "shoulder": "Ramena",
@@ -5673,10 +5693,6 @@ export const cs_CZ: EnTranslations = {
         "name": "Železný řev",
         "description": "Zvýší tvoji sílu útoku o {buff} na 2 min."
       },
-      "commanding_shout": {
-        "name": "Povzbuzující pokřik",
-        "description": "Zvýší tvoji výdrž o {buff} na 2 min."
-      },
       "demoralizing_shout": {
         "name": "Děsivé vytí",
         "description": "Vypustíš děsivý řev, který sníží sílu útoku všech blízkých nepřátel o {buff} na 30 s."
@@ -5684,10 +5700,6 @@ export const cs_CZ: EnTranslations = {
       "charge": {
         "name": "Nápor",
         "description": "Vyrazí k nepříteli, vygeneruje 9 vzteku a omráčí ho na 1 s. Dosah 8-25 yardů."
-      },
-      "rend": {
-        "name": "Hluboká rána",
-        "description": "Zraní cíl a způsobí mu krvácení za {damage} poškození během {duration} s."
       },
       "thunder_clap": {
         "name": "Chvějící úder",
@@ -6349,6 +6361,306 @@ export const cs_CZ: EnTranslations = {
         "name": "Vyvolat Zrozence přízraků",
         "description": "Spoutá Zrozence přízraků do tvé vůle, elitního démona, který z dálky sesílá těžké stínové poškození. Jeho ničivou sílu omezuje dlouhý cooldown. Vyvolání nového démona propustí toho současného. Můžeš mít vždy jen jednoho démona."
       },
+      "battle_stance": {
+        "name": "Bojový postoj",
+        "description": "Útočný bojový postoj: vytváříš o 10 % více vzteku. Výchozí postoj pro Arms a Protection."
+      },
+      "berserker_stance": {
+        "name": "Postoj berserka",
+        "description": "Lehkomyslný bojový postoj: tvoje kritické zásahy padají o 3 % častěji a udeří o 3 % silněji. Válečník Fury bojuje vždy v tomto postoji."
+      },
+      "sweeping_strikes": {
+        "name": "Široký oblouk",
+        "description": "Po dobu 12 s tvoje útoky na jeden cíl zasáhnou také 1 blízkého nepřítele za plné poškození. (Arms)"
+      },
+      "deep_wounds": {
+        "name": "Zející rány",
+        "description": "Pasivní: tvůj Mrzačící úder nechá cíl krvácet a působí mu fyzické poškození během 6 s. (Arms)"
+      },
+      "enrage_passive": {
+        "name": "Vřava",
+        "description": "Pasivní: když jsi rozzuřen(a), způsobuješ o 7 % více poškození, útočíš o 25 % rychleji a pohybuješ se o 10 % rychleji po dobu 4 s. Pouštění žilou má 30% šanci tě rozzuřit; Rudá žeň tě rozzuří vždy. (Fury)"
+      },
+      "raging_gale": {
+        "name": "Dvojúder",
+        "description": "Okamžitě dvakrát udeříš zbraní, každý zásah způsobí 40 % poškození zbraně plus {damage}, a vygeneruješ 8 vzteku. Ukládá až 2 nabití. (Fury)"
+      },
+      "red_harvest": {
+        "name": "Rudá žeň",
+        "description": "Vydej ze sebe vše: v šílenství třikrát udeříš, každý úder za 65 % poškození zbraně plus {damage}, a vždy tě to rozzuří. (Fury)"
+      },
+      "furious_mending": {
+        "name": "Zuřivé zacelení",
+        "description": "Po dobu 10 s utrpíš o 20 % méně poškození, a dokud efekt trvá, Pouštění žilou tě léčí za 20 % tvého maximálního zdraví. (Fury)"
+      },
+      "emboldening_roar": {
+        "name": "Osmělující řev",
+        "description": "Vydáš osmělující řev: ty a spřátelení hráči do 40 yardů jste Osměleni a vaše další 3 schopnosti budou zaručeně kritické zásahy. (Fury)"
+      },
+      "raised_guard": {
+        "name": "Zvednutý kryt",
+        "description": "Zapři se za štítem: po dobu 6 s utrpíš o 50 % méně fyzického poškození. Ukládá až 2 nabití. (Protection)"
+      },
+      "iron_resolve": {
+        "name": "Železné odhodlání",
+        "description": "Zatneš zuby a ignoruješ bolest: spotřebuješ až 40 vzteku (nejméně 20) a za každý spotřebovaný bod vzteku absorbuješ 4 poškození po dobu až 10 s. (Ochrana)"
+      },
+      "faultline": {
+        "name": "Zlomová linie",
+        "description": "Vyšle zemí tlakovou vlnu: nepřátelé před tebou do 8 yardů utrpí {damage} poškození a jsou na 3 s omráčeni. (Protection)"
+      },
+      "defiant_bellow": {
+        "name": "Vzdorný řev",
+        "description": "Vzdorný řev: každý nepřítel do 10 yardů je vyprovokován a nucen na tebe 3 s útočit. (Protection)"
+      },
+      "breachmaker": {
+        "name": "Prolamovač",
+        "description": "Ztluče cíl za poškození zbraně plus {damage} a prolomí jeho kryt: tvoje vlastní útoky proti němu způsobují o 20 % více poškození po dobu 8 s. (Arms)"
+      },
+      "measured_fury": {
+        "name": "Odměřená zuřivost",
+        "description": "Tvá odměřená zuřivost zostřuje tvé hospodaření: schopnosti tě stojí o 10 % méně vzteku. (Arms)"
+      },
+      "seasoned_soldier": {
+        "name": "Ostřílený voják",
+        "description": "Tvoje kritické automatické útoky generují o 10 % více vzteku. (Arms)"
+      },
+      "diabolical_twinstrike": {
+        "name": "Ďábelský dvojúder",
+        "description": "Když jsi rozzuřen(a), tvůj Dvojúder způsobuje o 15 % více poškození. (Fury)"
+      },
+      "cleaving_blows": {
+        "name": "Rozpolcující údery",
+        "description": "Rudá žeň vždy vrátí jedno nabití Dvojúderu. (Fury)"
+      },
+      "sudden_death": {
+        "name": "Náhlá smrt",
+        "description": "Tvoje automatické útoky mají šanci ti dovolit seslat Předčasný hrob na cíl s libovolným zdravím, a to zcela bez ceny vzteku. (Arms)"
+      },
+      "storm_bolt": {
+        "name": "Bouřná střela",
+        "description": "Mrštíš zbraní po cíli za {damage} poškození a omráčíš ho na 3 s."
+      },
+      "piercing_howl": {
+        "name": "Pronikavé zavytí",
+        "description": "Pronikavý pokřik, který na 8 s zpomalí všechny nepřátele do 15 yardů o 50 %."
+      },
+      "die_by_sword": {
+        "name": "Smrt s mečem v ruce",
+        "description": "Obranná schopnost: po dobu 8 s utrpíš o 30 % méně poškození a vyhneš se mnohem více útokům."
+      },
+      "recklessness": {
+        "name": "Bezhlavost",
+        "description": "Rozzuření: tvoje generování vzteku se zvýší o 50 % a šance na kritický zásah o 20 % na 12 s."
+      },
+      "sanguine_aura": {
+        "name": "Krvavá aura",
+        "description": "Naplň svou zbraň krví nepřátel: ty a tvoji spojenci na blízko získáte na 20 s o 10 % vyšší rychlost útoku a o 10 % vyšší poškození."
+      },
+      "victory_rush": {
+        "name": "Vítězný nápor",
+        "description": "Udeříš za poškození zbraně plus {damage} a vyléčíš se za 20 % svého maximálního zdraví. Použitelné jen do 20 s od zabití nepřítele."
+      },
+      "intimidating_shout": {
+        "name": "Zastrašující pokřik",
+        "description": "Děsivý pokřik, který až 5 nepřátel do 8 yardů zažene na 8 s na útěk hrůzou. Poškození může efekt přerušit."
+      },
+      "revenge": {
+        "name": "Odveta",
+        "description": "Zaútočíš širokým obloukem a způsobíš fyzické poškození všem nepřátelům před tebou. Při více než 5 cílech je poškození sníženo. Když se vyhneš útoku nebo ho odrazíš, tvá příští Odveta nemusí stát žádný vztek. (Protection)"
+      },
+      "heroic_leap": {
+        "name": "Válečný skok",
+        "description": "Skočíš do cílové oblasti a při dopadu způsobíš okolním nepřátelům {damage} poškození."
+      },
+      "rallying_cry": {
+        "name": "Řev odvahy",
+        "description": "Vydáš odvážný řev, který tobě a členům skupiny do 40 metrů na 10 s zvýší maximální zdraví o 20 %. Ochrana: po dobu trvání také utrpí o 5 % méně poškození."
+      },
+      "avatar": {
+        "name": "Avatar",
+        "description": "Na 20 s se proměníš v kolosa, zrušíš všechny ovládací efekty a zvýšíš své způsobené poškození o 20 %."
+      },
+      "bladestorm": {
+        "name": "Bouře čepelí",
+        "description": "Proměníš se ve vířící bouři oceli a po dobu 4 s každou sekundu zasáhneš všechny nepřátele do 8 metrů za {damage} poškození."
+      },
+      "aspect_of_the_wild": {
+        "name": "Maska divokého tesáku",
+        "description": "Povzbudí spojence do 30 m divokou silou a na 5 min. jim zvýší útočnou sílu o 45 a rychlost útoku o 5 %. (lovecký talent)"
+      },
+      "aura_surge": {
+        "name": "Úsvitový odraz",
+        "description": "Vrhne úsvitem kovaný štít za {damage} bodů Svatého poškození, umlčí hlavní cíl na 2 sek. a poté se odrazí až ke 2 dalším nepřátelům do 10 yardů; každý odraz způsobí 75% poškození. (Paladinský talent)"
+      },
+      "avenging_wrath": {
+        "name": "Křídlo odplaty",
+        "description": "Přivolá moc pomsty a na 20 s vám zvýší útočnou sílu o 60 a sílu kouzel o 30. (paladinský talent)"
+      },
+      "berserk": {
+        "name": "Rudý opar",
+        "description": "Na 15 s vám zvýší útočnou sílu o 70. (druidský talent)"
+      },
+      "blink": {
+        "name": "Mihokrok",
+        "description": "Teleportuje vás o 15 m vpřed a zruší účinky zakořenění. (mágský talent)"
+      },
+      "bloodlust": {
+        "name": "Válečné bubny",
+        "description": "Uvede spojence do 30 m do běsnění a na 15 s jim zvýší rychlost útoku o 30 %. (šamanský talent)"
+      },
+      "chain_lightning": {
+        "name": "Rozvětvený blesk",
+        "description": "Sešle blesk na cílovou oblast a způsobí blízkým nepřátelům {damage} bodů poškození. (šamanský talent)"
+      },
+      "chaos_bolt": {
+        "name": "Zkázný šíp",
+        "description": "Vrhne střelu chaotického ohně, která způsobí {damage} bodů ohnivého poškození. (černokněžnický talent)"
+      },
+      "cleansing_verdict": {
+        "name": "Očistný rozsudek",
+        "description": "Odstraní škodlivý magický účinek ze spojeneckého cíle a vyléčí jej svatou magií za {damage}."
+      },
+      "cloak_of_shadows": {
+        "name": "Stínoplášť",
+        "description": "Zahalí vás do stínů a po dobu 5 s absorbuje 420 bodů poškození. (lotrovský talent)"
+      },
+      "cone_of_cold": {
+        "name": "Mrazivý smyk",
+        "description": "Zasáhne blízké nepřátele mrazem za {damage} bodů mrazivého poškození. (charakteristická schopnost Mrazu)"
+      },
+      "curse_of_exhaustion": {
+        "name": "Olověná kletba",
+        "description": "Prokleje cíl a na 12 s mu sníží rychlost pohybu o 30 %. (černokněžnický talent)"
+      },
+      "death_coil": {
+        "name": "Hrobová spirála",
+        "description": "Zasáhne nepřítele za {damage} bodů stínového poškození a poté ho na 3 s vyděsí. (černokněžnický talent)"
+      },
+      "deep_freeze": {
+        "name": "Mrtvý mráz",
+        "description": "Hluboce zmrazí cíl, způsobí mu {damage} bodů mrazivého poškození a na 4 s ho omráčí. (mágský talent)"
+      },
+      "desperate_prayer": {
+        "name": "Poslední modlitba",
+        "description": "Okamžitě vás vyléčí o {damage}. (kněžský talent)"
+      },
+      "deterrence": {
+        "name": "Štětinová stráž",
+        "description": "Na 10 s zvýší vaši šanci na úhyb o 50 procentních bodů. (lovecký talent)"
+      },
+      "divine_shield": {
+        "name": "Světelný štít",
+        "description": "Ochrání vás svatou mocí, která po dobu 8 s absorbuje 900 bodů poškození. (paladinský talent)"
+      },
+      "earthbind": {
+        "name": "Svírající země",
+        "description": "Připoutá blízké nepřátele k zemi a na 2 s je zakoření. (šamanský talent)"
+      },
+      "evocation": {
+        "name": "Éterická studna",
+        "description": "Okamžitě obnoví 220 bodů many. (mágský talent)"
+      },
+      "frenzied_regeneration": {
+        "name": "Divoké zacelení",
+        "description": "Během 10 s obnoví 180 bodů zdraví. Pouze v Medvědí podobě. (druidský talent)"
+      },
+      "frost_trap": {
+        "name": "Jinovatková léčka",
+        "description": "Na 3 s zmrazí nepřátele v cílové oblasti, takže se nemohou pohybovat ani jednat. (lovecký talent)"
+      },
+      "ghostly_strike": {
+        "name": "Přízračný úder",
+        "description": "Zasáhne nepřítele za poškození zbraně plus {damage}, krátce zvýší úhyb a udělí 1 kombinovaný bod. (lotrovský talent)"
+      },
+      "hammer_of_wrath": {
+        "name": "Zvonící kladivo",
+        "description": "Vrhne svaté kladivo na zraněného nepřítele za {damage} bodů Svatého poškození. Lze použít pouze pod 20 % zdraví. (paladinský talent)"
+      },
+      "healing_stream": {
+        "name": "Pramenná studna",
+        "description": "Během 12 s obnoví spojeneckému cíli 120 bodů zdraví. (šamanský talent)"
+      },
+      "holy_wrath": {
+        "name": "Hněv světce",
+        "description": "Uvolní svatou moc a způsobí blízkým nepřátelům {damage} bodů poškození. (paladinský talent)"
+      },
+      "howl_of_terror": {
+        "name": "Děsivé zavytí",
+        "description": "Vyděsí blízké nepřátele až na 3 s. Poškození může účinek zrušit. (černokněžnický talent)"
+      },
+      "ice_block": {
+        "name": "Ledová rakev",
+        "description": "Uzavře vás do ledu, který po dobu 8 s absorbuje 600 bodů poškození. V ledu nemůžete jednat. Opětovným sesláním účinek zrušíte. (mágský talent)"
+      },
+      "inner_focus": {
+        "name": "Ztišená mysl",
+        "description": "Vaše příští kouzlo bude zdarma. Trvá 60 s. (kněžský talent)"
+      },
+      "innervate": {
+        "name": "Míza života",
+        "description": "Po dobu 10 s ve vás proudí živá míza a ve vlnách obnoví 20 bodů vašeho aktuálního zdroje: many, zuřivosti nebo energie. Změna podoby ji nepřeruší. Spánek, omráčení nebo stáze proud mízy zastaví. (druidský talent)"
+      },
+      "meteor": {
+        "name": "Nebeský kámen",
+        "description": "Přivolá meteor na cílovou oblast za {damage} bodů ohnivého poškození. Poté nepřátelé v oblasti utrpí každé 2 s po dobu 6 s dalších 12 až 18 bodů ohnivého poškození. (mágský talent)"
+      },
+      "mind_sear": {
+        "name": "Spálení mysli",
+        "description": "Usměrní stínovou energii na cílovou oblast a každou sekundu způsobí blízkým nepřátelům {damage} bodů poškození. (kněžský talent)"
+      },
+      "multi_shot": {
+        "name": "Tříštivý výstřel",
+        "description": "Vystřelí salvu na cílovou oblast a způsobí nepřátelům v okruhu 8 m {damage} bodů fyzického poškození. (lovecký talent)"
+      },
+      "prayer_of_healing": {
+        "name": "Sborové zacelení",
+        "description": "Vyléčí blízké spojence o {damage}. (kněžský talent)"
+      },
+      "preparation": {
+        "name": "Záložní plán",
+        "description": "Dokončí přebíjení Sprintu, Úhybu a Zmizení. (lotrovský talent)"
+      },
+      "presence_of_mind": {
+        "name": "Zrychlená mysl",
+        "description": "Vaše příští kouzlo s dobou sesílání bude okamžité. Trvá 60 s. (mágský talent)"
+      },
+      "psychic_scream": {
+        "name": "Výkřik hrůzy",
+        "description": "Vyděsí blízké nepřátele až na 4 s. Poškození může účinek zrušit. (kněžský talent)"
+      },
+      "shadowstep": {
+        "name": "Stínový skluz",
+        "description": "Vykročíte stíny směrem ke svému cíli. (lotrovský talent)"
+      },
+      "silence": {
+        "name": "Umlčení",
+        "description": "Na 4 s umlčí cíl. (kněžský talent)"
+      },
+      "smoke_screen": {
+        "name": "Kouřová clona",
+        "description": "Zmizíte v oblaku kouře a na 8 s zvýšíte svou šanci na úhyb o 30 %."
+      },
+      "spellsteal": {
+        "name": "Krádež kouzla",
+        "description": "Ukradne nepříteli prospěšný magický účinek a přenese jej na vás."
+      },
+      "startle_shot": {
+        "name": "Lekavý výstřel",
+        "description": "Divoký výstřel, který na {duration} s dezorientuje cíl. Jakékoli poškození účinek zruší."
+      },
+      "tranquility": {
+        "name": "Píseň háje",
+        "description": "Po dobu 4 s usměrňuje léčivou energii a každou sekundu vyléčí spojence do 30 m o 42 až 52. (druidský talent)"
+      },
+      "typhoon": {
+        "name": "Tajfun",
+        "description": "Poryv větru odhodí všechny nepřátele do 8 m a omráčí je, čímž na 4 s sníží jejich rychlost pohybu o 50 %."
+      },
+      "voidfeast": {
+        "name": "Hostina prázdnoty",
+        "description": "Pohltí magický účinek (prospěšný z nepřítele nebo škodlivý ze spojence) a vyléčí vás o 6 % maximálního zdraví."
+      },
       "pummel": {
         "name": "Drtič čelistí",
         "description": "Přeruší sesílání kouzla cíle a na 4 s mu znemožní kouzla stejné školy."
@@ -6394,8 +6706,8 @@ export const cs_CZ: EnTranslations = {
         "description": "Zahajovací útok z plížení, který rozdrásá nepřítele za poškození zbraně plus {damage} a způsobí krvácení během 9 s. Udělí 1 combo bod. Pouze ve vlčí podobě."
       },
       "revive_pet": {
-        "name": "Oživit mazlíčka",
-        "description": "Oživí tvého mrtvého mazlíčka a vrátí ho po tvém boku."
+        "name": "Ošetření",
+        "description": "Ošetří tvého mazlíčka. Pokud žije, obnoví mu celkem {overTime} zdraví během 12 s v intervalech po 3 s. Pokud je mrtvý, oživí ho s 35 % zdraví."
       }
     },
     "items": {
@@ -7607,6 +7919,18 @@ export const cs_CZ: EnTranslations = {
       },
       "heroic_mark": {
         "name": "Hrdinská značka"
+      },
+      "eastbrook_buckler": {
+        "name": "Eastbrookský pukléř"
+      },
+      "eastbrook_greatsword": {
+        "name": "Eastbrookský obouruční meč"
+      },
+      "highwatch_greatsword": {
+        "name": "Highwatchský obouruční meč"
+      },
+      "highwatch_wallshield": {
+        "name": "Highwatchský hradební štít"
       },
       "morthens_cryptforged_hauberk": {
         "name": "Morthenův kryptově kovaný hauberk"

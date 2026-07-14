@@ -632,7 +632,6 @@ const classAbilityNamesEn = {
         'Iron Bellow',
         'A shout that increases the attack power of all party members by {buff}% for 2 min.',
       ],
-      ['commanding_shout', 'Bolstering Cry', 'Increases your Stamina by {buff} for 2 min.'],
       [
         'demoralizing_shout',
         'Direhowl',
@@ -642,11 +641,6 @@ const classAbilityNamesEn = {
         'charge',
         'Onrush',
         'Charges an enemy, generating 9 rage and stunning it for 1 sec. 8-25 yd range.',
-      ],
-      [
-        'rend',
-        'Deep Gash',
-        'Wounds the target, causing them to bleed for {damage} damage over {duration} sec.',
       ],
       [
         'thunder_clap',
@@ -1337,6 +1331,349 @@ const classAbilityNamesEn = {
         'Summon Wraithborn',
         'Binds a Wraithborn to your will — an elite demon that rains heavy Shadow damage from afar. A long cooldown gates its devastating power. Summoning a new demon dismisses your current one. You may have one demon at a time.',
       ],
+      [
+        'battle_stance',
+        'Battle Stance',
+        'An aggressive combat stance: you generate 10% more rage. The default stance for Arms and Protection.',
+      ],
+      [
+        'berserker_stance',
+        'Berserker Stance',
+        'A reckless combat stance: your critical strikes land 3% more often and hit for 3% more. The Fury warrior always fights in this stance.',
+      ],
+      [
+        'sweeping_strikes',
+        'Widening Arc',
+        'For 12 sec your single-target attacks also strike 1 nearby enemy for full damage. (Arms)',
+      ],
+      [
+        'deep_wounds',
+        'Gaping Wounds',
+        'Passive: your Maiming Strike leaves the target bleeding for Physical damage over 6 sec. (Arms)',
+      ],
+      [
+        'enrage_passive',
+        'Mayhem',
+        'Passive: while Enraged you deal 7% more damage, attack 25% faster and move 10% faster for 4 sec. Bloodletting has a 30% chance to Enrage you; Red Harvest always does. (Fury)',
+      ],
+      [
+        'raging_gale',
+        'Twinstrike',
+        'Instantly strike with your weapon twice, each hit dealing 40% weapon damage plus {damage}, and generate 8 rage. Stores up to 2 charges. (Fury)',
+      ],
+      [
+        'red_harvest',
+        'Red Harvest',
+        'Spend everything: strike three times in a frenzy for 65% weapon damage plus {damage} each, always Enraging you. (Fury)',
+      ],
+      [
+        'furious_mending',
+        'Furious Mending',
+        'For 10 sec you take 20% reduced damage, and while it lasts your Bloodletting heals you for 20% of your maximum health. (Fury)',
+      ],
+      [
+        'emboldening_roar',
+        'Emboldening Roar',
+        'Lets loose an emboldening roar: you and friendly players within 40 yards are Emboldened, and your next 3 abilities are guaranteed critical strikes. (Fury)',
+      ],
+      [
+        'raised_guard',
+        'Raised Guard',
+        'Brace behind your shield: you take 50% reduced Physical damage for 6 sec. Stores up to 2 charges. (Protection)',
+      ],
+      [
+        'iron_resolve',
+        'Iron Resolve',
+        'Grit your teeth and ignore the pain: spends up to 40 rage (20 minimum) to absorb 4 damage per rage spent, lasting up to 10 sec. (Protection)',
+      ],
+      [
+        'faultline',
+        'Faultline',
+        'Send a shockwave through the ground: enemies in front of you within 8 yards take {damage} damage and are stunned for 3 sec. (Protection)',
+      ],
+      [
+        'defiant_bellow',
+        'Defiant Bellow',
+        'A defiant bellow: every enemy within 10 yards is taunted, compelled to attack you for 3 sec. (Protection)',
+      ],
+      [
+        'breachmaker',
+        'Breachmaker',
+        'Batter the target for weapon damage plus {damage} and crack its guard: your own attacks against it deal 20% more damage for 8 sec. (Arms)',
+      ],
+      [
+        'measured_fury',
+        'Measured Fury',
+        'Your measured fury sharpens your economy: your abilities cost 10% less rage. (Arms)',
+      ],
+      [
+        'seasoned_soldier',
+        'Seasoned Soldier',
+        'Your critical auto-attacks generate 10% more rage. (Arms)',
+      ],
+      [
+        'diabolical_twinstrike',
+        'Diabolical Twinstrike',
+        'While Enraged, your Twinstrike deals 15% more damage. (Fury)',
+      ],
+      [
+        'cleaving_blows',
+        'Cleaving Blows',
+        'Red Harvest always refunds a charge of Twinstrike. (Fury)',
+      ],
+      [
+        'sudden_death',
+        'Sudden Death',
+        'Your auto-attacks have a chance to let you cast Early Grave on a target at any health, costing no rage. (Arms)',
+      ],
+      [
+        'storm_bolt',
+        'Storm Bolt',
+        'Hurl your weapon at the target for {damage}, stunning it for 3 sec.',
+      ],
+      [
+        'piercing_howl',
+        'Piercing Howl',
+        'A piercing shout that slows all enemies within 15 yards by 50% for 8 sec.',
+      ],
+      [
+        'die_by_sword',
+        'Die by the Sword',
+        'Defensive cooldown: for 8 sec you take 30% less damage and dodge far more attacks.',
+      ],
+      [
+        'recklessness',
+        'Recklessness',
+        'Enrage: your rage generation increases by 50% and your critical strike chance by 20% for 12 sec.',
+      ],
+      [
+        'sanguine_aura',
+        'Sanguine Aura',
+        'Imbue your weapon with the blood of your foes: you and your melee allies gain 10% attack speed and 10% damage for 20 sec.',
+      ],
+      [
+        'victory_rush',
+        'Victory Rush',
+        'Strike for weapon damage plus {damage} and heal 20% of your maximum health. Only usable within 20 sec of killing an enemy.',
+      ],
+      [
+        'intimidating_shout',
+        'Intimidating Shout',
+        'A terrifying shout that sends up to 5 enemies within 8 yards fleeing in fear for 8 sec. Damage may break the effect.',
+      ],
+      [
+        'revenge',
+        'Revenge',
+        'Attack in a wide arc, dealing Physical damage to all enemies in front of you. Above 5 targets the damage is reduced. When you dodge or parry, your next Revenge may cost no rage. (Protection)',
+      ],
+      [
+        'heroic_leap',
+        'Heroic Leap',
+        'Leap to the target area, dealing {damage} damage to nearby enemies on landing.',
+      ],
+      [
+        'rallying_cry',
+        'Valor Roar',
+        'Lets loose a valorous roar, granting you and party members within 40 yards 20% additional maximum health for 10 sec. Protection: they also take 5% less damage for the duration.',
+      ],
+      [
+        'avatar',
+        'Avatar',
+        'Transform into a colossus for 20 sec, breaking all control on you and increasing your damage dealt by 20%.',
+      ],
+      [
+        'bladestorm',
+        'Bladestorm',
+        'Become a whirling storm of steel, striking all enemies within 8 yards for {damage} every second for 4 sec.',
+      ],
+      [
+        'aspect_of_the_wild',
+        'Wildfang Rally',
+        'Inspires allies within 30 yd with wild strength, increasing attack power by 45 and attack speed by 5% for 5 min. (Hunter talent)',
+      ],
+      [
+        'aura_surge',
+        'Dawnward Ricochet',
+        'Hurl a dawnforged shield for {damage} Holy damage and silence the primary target for 2 sec. It bounces to up to 2 additional enemies within 10 yd for 75% damage per bounce. (Paladin talent)',
+      ],
+      [
+        'avenging_wrath',
+        'Wrathwing',
+        'Calls down avenging power, increasing attack power by 60 and spell power by 30 for 20 sec. (Paladin talent)',
+      ],
+      ['berserk', 'Red Haze', 'Increases attack power by 70 for 15 sec. (Druid talent)'],
+      ['blink', 'Flickerstep', 'Teleports you 15 yd forward and breaks roots. (Mage talent)'],
+      [
+        'bloodlust',
+        'Storm Chorus',
+        'Whips allies within 30 yd into a frenzy, increasing attack speed by 30% for 15 sec. (Shaman talent)',
+      ],
+      [
+        'chain_lightning',
+        'Skybranch',
+        'Hurls lightning at the target area, damaging nearby enemies for {damage}. (Shaman talent)',
+      ],
+      [
+        'chaos_bolt',
+        'Ruinbolt',
+        'Hurls a bolt of chaotic fire for {damage} Fire damage. (Warlock talent)',
+      ],
+      [
+        'cleansing_verdict',
+        'Cleansing Verdict',
+        'Purges a harmful magic effect from a friendly target and heals them for {damage} Holy.',
+      ],
+      [
+        'cloak_of_shadows',
+        'Shadecloak',
+        'Wraps you in shadows, absorbing 420 damage for 5 sec. (Rogue talent)',
+      ],
+      [
+        'cone_of_cold',
+        'Frostsweep',
+        'Blasts nearby enemies with frost for {damage} Frost damage. (Frost signature)',
+      ],
+      [
+        'curse_of_exhaustion',
+        'Leaden Hex',
+        'Curses the target, slowing movement by 30% for 12 sec. (Warlock talent)',
+      ],
+      [
+        'death_coil',
+        'Morrowlash',
+        'Strikes the enemy for {damage} Shadow damage, then horrifies them for 3 sec. (Warlock talent)',
+      ],
+      [
+        'deep_freeze',
+        'Deadfrost',
+        'Deep freezes the target, dealing {damage} Frost damage and stunning it for 4 sec. (Mage talent)',
+      ],
+      ['desperate_prayer', 'Last Prayer', 'Instantly heals you for {damage}. (Priest talent)'],
+      [
+        'deterrence',
+        'Bristleguard',
+        'Increases your dodge chance by 50 percentage points for 10 sec. (Hunter talent)',
+      ],
+      [
+        'divine_shield',
+        'Lightward',
+        'Shields you with holy power, absorbing 900 damage for 8 sec. (Paladin talent)',
+      ],
+      [
+        'earthbind',
+        'Gripping Earth',
+        'Binds nearby enemies to the earth, rooting them for 2 sec. (Shaman talent)',
+      ],
+      ['evocation', 'Aetherwell', 'Instantly restores 220 mana. (Mage talent)'],
+      [
+        'frenzied_regeneration',
+        'Savage Mending',
+        'Restores 180 health over 10 sec. Bruin Form only. (Druid talent)',
+      ],
+      [
+        'frost_trap',
+        'Rime Snare',
+        'Freezes enemies at the target area for 3 sec, preventing movement and actions. (Hunter talent)',
+      ],
+      [
+        'ghostly_strike',
+        'Wraith Strike',
+        'Strikes the enemy for weapon damage plus {damage} and briefly increases dodge. Awards 1 combo point. (Rogue talent)',
+      ],
+      [
+        'hammer_of_wrath',
+        'Tolling Hammer',
+        'Hurls a holy hammer at a wounded enemy for {damage} Holy damage. Only usable below 20% health. (Paladin talent)',
+      ],
+      [
+        'healing_stream',
+        'Springwell',
+        'Restores 120 health to a friendly target over 12 sec. (Shaman talent)',
+      ],
+      [
+        'holy_wrath',
+        "Saint's Ire",
+        'Unleashes holy power, damaging nearby enemies for {damage}. (Paladin talent)',
+      ],
+      [
+        'howl_of_terror',
+        'Dread Chorus',
+        'Frightens nearby enemies for up to 3 sec. Damage may break the effect. (Warlock talent)',
+      ],
+      [
+        'ice_block',
+        'Cold Coffin',
+        'Encases you in ice, absorbing 600 damage for 8 sec. You cannot act while encased. Recast to cancel. (Mage talent)',
+      ],
+      ['inner_focus', 'Stilled Mind', 'Makes your next spell free. Lasts 60 sec. (Priest talent)'],
+      [
+        'innervate',
+        'Lifesap',
+        'Living sap wells up in you for 10 sec, restoring 20 of your current resource in waves: mana, Rage, or Energy, and shifting forms does not break it. Sleep, stun, or stasis stills the sap. (Druid talent)',
+      ],
+      [
+        'meteor',
+        'Skystone',
+        'Calls down a meteor at the target area, dealing {damage} Fire damage, then burning enemies there for 12 to 18 Fire damage every 2 sec for 6 sec. (Mage talent)',
+      ],
+      [
+        'mind_sear',
+        'Thoughtburn',
+        'Channels shadow energy at the target area, damaging nearby enemies each second for {damage}. (Priest talent)',
+      ],
+      [
+        'multi_shot',
+        'Splitshot',
+        'Loose a spread at the target area, dealing {damage} Physical damage to enemies within 8 yd. (Hunter talent)',
+      ],
+      ['prayer_of_healing', 'Choirmend', 'Heals nearby allies for {damage}. (Priest talent)'],
+      [
+        'preparation',
+        'Contingency',
+        'Finishes the cooldown on Sprint, Evasion, and Vanish. (Rogue talent)',
+      ],
+      [
+        'presence_of_mind',
+        'Racing Mind',
+        'Makes your next spell with a cast time instant. Lasts 60 sec. (Mage talent)',
+      ],
+      [
+        'psychic_scream',
+        'Terror Canticle',
+        'Frightens nearby enemies for up to 4 sec. Damage may break the effect. (Priest talent)',
+      ],
+      ['shadowstep', 'Shadeslip', 'Steps through the shadows toward your target. (Rogue talent)'],
+      ['silence', 'Hushword', 'Silences the target for 4 sec. (Priest talent)'],
+      [
+        'smoke_screen',
+        'Smoke Screen',
+        'Vanish into a cloud of smoke, increasing your chance to dodge by 30% for 8 sec.',
+      ],
+      [
+        'spellsteal',
+        'Spellsteal',
+        'Steals a beneficial magic effect from an enemy, transferring it to yourself.',
+      ],
+      [
+        'startle_shot',
+        'Startle Shot',
+        'A wild shot that disorients the target for {duration} sec. Any damage breaks the effect.',
+      ],
+      [
+        'tranquility',
+        'Gladesong',
+        'Channels restorative energy for 4 sec, healing allies within 30 yd for 42 to 52 each second. (Druid talent)',
+      ],
+      [
+        'typhoon',
+        'Typhoon',
+        'A blast of wind knocks back all enemies within 8 yd and dazes them, slowing their movement by 50% for 4 sec.',
+      ],
+      [
+        'voidfeast',
+        'Voidfeast',
+        'Devours a magic effect (a beneficial one from an enemy, or a harmful one from an ally) and heals you for 6% of your maximum health.',
+      ],
       // Baseline class interrupts.
       [
         'pummel',
@@ -1393,7 +1730,6 @@ export const classAbilityNames = {
           'Un ataque poderoso que aumenta el daño cuerpo a cuerpo en {damage}. Se activa en tu siguiente golpe.',
         ],
         ['battle_shout', 'Grito de batalla', 'Aumenta tu poder de ataque en 20 durante 2 min.'],
-        ['commanding_shout', 'Grito de mando', 'Aumenta tu Aguante en 6 durante 2 min.'],
         [
           'demoralizing_shout',
           'Grito desmoralizador',
@@ -1403,11 +1739,6 @@ export const classAbilityNames = {
           'charge',
           'Cargar',
           'Carga contra un enemigo, genera 9 de ira y lo aturde durante 1 s. Alcance de 8-25 m.',
-        ],
-        [
-          'rend',
-          'Desgarrar',
-          'Hiere al objetivo y le hace sangrar por {damage} de daño durante 9 s.',
         ],
         [
           'thunder_clap',
@@ -2137,7 +2468,6 @@ export const classAbilityNames = {
           'Cri de guerre',
           "Augmente votre puissance d'attaque de 20 pendant 2 min.",
         ],
-        ['commanding_shout', 'Cri de commandement', 'Augmente votre Endurance de 6 pendant 2 min.'],
         [
           'demoralizing_shout',
           'Cri démoralisant',
@@ -2147,11 +2477,6 @@ export const classAbilityNames = {
           'charge',
           'Charge',
           "Charge un ennemi, génère 9 rage et l'étourdit pendant 1 s. Portée de 8-25 m.",
-        ],
-        [
-          'rend',
-          'Pourfendre',
-          'Blesse la cible et la fait saigner pour {damage} points de dégâts en 9 s.',
         ],
         [
           'thunder_clap',
@@ -2928,7 +3253,6 @@ export const classAbilityNames = {
           'Un attacco potente che aumenta i danni in mischia di {damage}. Si attiva al tuo prossimo colpo.',
         ],
         ['battle_shout', 'Urlo di Battaglia', "Aumenta la tua potenza d'attacco di 20 per 2 min."],
-        ['commanding_shout', 'Urlo di Comando', 'Aumenta la tua Resistenza di 6 per 2 min.'],
         [
           'demoralizing_shout',
           'Urlo Demoralizzante',
@@ -2939,7 +3263,6 @@ export const classAbilityNames = {
           'Carica',
           'Carica un nemico, genera 9 rabbia e lo stordisce per 1 s. Portata 8-25 m.',
         ],
-        ['rend', 'Squarcio', 'Ferisce il bersaglio e lo fa sanguinare per {damage} danni in 9 s.'],
         [
           'thunder_clap',
           'Boato Tonante',
@@ -3643,7 +3966,6 @@ export const classAbilityNames = {
           'Ein mächtiger Angriff, der den Nahkampfschaden um {damage} erhöht. Wird bei eurem nächsten Schwung ausgelöst.',
         ],
         ['battle_shout', 'Schlachtruf', 'Erhöht eure Angriffskraft 2 Min. lang um 20.'],
-        ['commanding_shout', 'Befehlsruf', 'Erhöht eure Ausdauer 2 Min. lang um 6.'],
         [
           'demoralizing_shout',
           'Demoralisierender Ruf',
@@ -3653,11 +3975,6 @@ export const classAbilityNames = {
           'charge',
           'Sturmangriff',
           'Stürmt auf einen Gegner zu, erzeugt 9 Wut und betäubt ihn 1 Sek. lang. Reichweite 8-25 m.',
-        ],
-        [
-          'rend',
-          'Verwunden',
-          'Verwundet das Ziel und lässt es über 9 Sek. für {damage} Schaden bluten.',
         ],
         [
           'thunder_clap',
@@ -4366,14 +4683,12 @@ export const classAbilityNames = {
           '一次强力攻击，使近战伤害提高 {damage}。在你的下一次挥击时触发。',
         ],
         ['battle_shout', '战斗怒吼', '使你的攻击强度提高 20，持续 2 分钟。'],
-        ['commanding_shout', '命令怒吼', '使你的耐力提高 6，持续 2 分钟。'],
         [
           'demoralizing_shout',
           '挫志怒吼',
           '发出可怕的怒吼，使附近所有敌人的攻击强度降低 30，持续 30 秒。',
         ],
         ['charge', '冲锋', '向一名敌人冲锋，产生 9 点怒气并使其昏迷 1 秒。8-25 码距离。'],
-        ['rend', '撕裂', '撕裂目标，使其在 9 秒内流血并受到 {damage} 点伤害。'],
         [
           'thunder_clap',
           '雷霆一击',
@@ -4777,14 +5092,12 @@ export const classAbilityNames = {
           '一次強力攻擊，使近戰傷害提高 {damage}。在你的下一次揮擊時觸發。',
         ],
         ['battle_shout', '戰鬥怒吼', '使你的攻擊強度提高 20，持續 2 分鐘。'],
-        ['commanding_shout', '命令怒吼', '使你的耐力提高 6，持續 2 分鐘。'],
         [
           'demoralizing_shout',
           '挫志怒吼',
           '發出可怕的怒吼，使附近所有敵人的攻擊強度降低 30，持續 30 秒。',
         ],
         ['charge', '衝鋒', '向一名敵人衝鋒，產生 9 點怒氣並使其昏迷 1 秒。8-25 碼距離。'],
-        ['rend', '撕裂', '撕裂目標，使其在 9 秒內流血並受到 {damage} 點傷害。'],
         [
           'thunder_clap',
           '雷霆一擊',
@@ -5188,7 +5501,6 @@ export const classAbilityNames = {
           '강력한 공격으로 근접 피해가 {damage}만큼 증가합니다. 다음 무기 공격 시 발동됩니다.',
         ],
         ['battle_shout', '전투의 외침', '2분 동안 전투력이 20만큼 증가합니다.'],
-        ['commanding_shout', '지휘의 외침', '2분 동안 체력이 6만큼 증가합니다.'],
         [
           'demoralizing_shout',
           '사기의 외침',
@@ -5199,7 +5511,6 @@ export const classAbilityNames = {
           '돌진',
           '적에게 돌진하여 분노 9를 생성하고 1초 동안 기절시킵니다. 사거리 8-25yd.',
         ],
-        ['rend', '분쇄', '대상을 상처 입혀 9초에 걸쳐 {damage}의 출혈 피해를 입힙니다.'],
         [
           'thunder_clap',
           '천둥벼락',
@@ -5803,14 +6114,12 @@ export const classAbilityNames = {
           '強力な攻撃で近接ダメージが {damage} 増加します。次のスイングで発動します。',
         ],
         ['battle_shout', 'バトルシャウト', '2分間、攻撃力が20増加します。'],
-        ['commanding_shout', 'コマンディングシャウト', '2分間、スタミナが6増加します。'],
         [
           'demoralizing_shout',
           'デモラライジングシャウト',
           '恐ろしい雄叫びを上げ、30秒間、周囲の敵すべての攻撃力を30減少させます。',
         ],
         ['charge', 'チャージ', '敵に突撃し、怒りを9生成して1秒間スタンさせます。射程8-25yd。'],
-        ['rend', 'レンド', '対象を負傷させ、9秒間で {damage} の出血ダメージを与えます。'],
         [
           'thunder_clap',
           'サンダークラップ',
@@ -6458,7 +6767,6 @@ export const classAbilityNames = {
           'Um ataque forte que aumenta o dano corpo a corpo em {damage}. Ativa no seu próximo golpe.',
         ],
         ['battle_shout', 'Grito de Batalha', 'Aumenta seu poder de ataque em 20 por 2 min.'],
-        ['commanding_shout', 'Grito de Comando', 'Aumenta sua Vitalidade em 6 por 2 min.'],
         [
           'demoralizing_shout',
           'Grito Desmoralizante',
@@ -6469,7 +6777,6 @@ export const classAbilityNames = {
           'Investida',
           'Investe contra um inimigo, gera 9 de raiva e o atordoa por 1 s. Alcance de 8-25 m.',
         ],
-        ['rend', 'Rasgar', 'Fere o alvo, fazendo-o sangrar por {damage} de dano ao longo de 9 s.'],
         [
           'thunder_clap',
           'Trovoada',
@@ -7157,7 +7464,6 @@ export const classAbilityNames = {
           'Мощная атака, увеличивающая урон в ближнем бою на {damage}. Срабатывает при следующем взмахе оружием.',
         ],
         ['battle_shout', 'Боевой крик', 'Повышает вашу силу атаки на 20 на 2 мин.'],
-        ['commanding_shout', 'Командный крик', 'Повышает вашу выносливость на 6 на 2 мин.'],
         [
           'demoralizing_shout',
           'Деморализующий крик',
@@ -7167,11 +7473,6 @@ export const classAbilityNames = {
           'charge',
           'Рывок',
           'Вы бросаетесь к врагу, накапливаете 9 ярости и оглушаете его на 1 сек. Дальность 8-25 м.',
-        ],
-        [
-          'rend',
-          'Кровопускание',
-          'Ранит цель, вызывая кровотечение на {damage} ед. урона за 9 сек.',
         ],
         [
           'thunder_clap',

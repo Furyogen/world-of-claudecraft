@@ -11,7 +11,6 @@ import {
 import { verifyChallenge } from '../src/sim/client_challenge';
 import { DEEDS } from '../src/sim/content/deeds';
 import { MECH_CHROMAS, mechChromaItemId, mechChromaSkinIndex } from '../src/sim/content/skins';
-import type { TalentAllocation } from '../src/sim/content/talents';
 import { SPORT_ROLES, VALE_CUP_BALL_TEMPLATE_ID, VC_NATION_IDS } from '../src/sim/content/vale_cup';
 import { withWeaponSkinApplied } from '../src/sim/content/weapon_skin_rules';
 import { isWeaponSkinType, WEAPON_SKINS } from '../src/sim/content/weapon_skins';
@@ -42,6 +41,12 @@ import { parseMoveInputFrame } from '../src/sim/move_input';
 import type { PetState, PlayerMeta } from '../src/sim/sim';
 import { MAX_CHAT_MESSAGE_LEN, Sim } from '../src/sim/sim';
 import type { VcMatch } from '../src/sim/social/vale_cup';
+import {
+  parseTalentAllocation,
+  parseTalentLoadoutIndex,
+  parseTalentOptionId,
+  parseTalentRowLevel,
+} from '../src/sim/talent_allocation_input';
 import { stealthDetectionRadius, threatEntries } from '../src/sim/threat';
 import {
   type Aura,
@@ -347,6 +352,7 @@ type ClientMessage = Record<string, unknown> & {
   node?: string;
   npc?: number;
   objectId?: number;
+  optionId?: unknown;
   price?: number;
   q?: string;
   quest?: string;
@@ -358,49 +364,13 @@ type ClientMessage = Record<string, unknown> & {
   sig?: string;
   skin?: number;
   slot?: number | string;
-  spec?: string;
+  spec?: unknown;
   t?: string;
   text?: string;
   tierId?: string;
   x?: number;
   z?: number;
 };
-
-function recordValue(value: unknown): Record<string, unknown> | null {
-  return value && typeof value === 'object' && !Array.isArray(value)
-    ? (value as Record<string, unknown>)
-    : null;
-}
-
-function numberRecord(value: unknown): Record<string, number> {
-  const source = recordValue(value);
-  if (!source) return {};
-  const out: Record<string, number> = {};
-  for (const [key, raw] of Object.entries(source)) {
-    if (typeof raw === 'number') out[key] = raw;
-  }
-  return out;
-}
-
-function stringRecord(value: unknown): Record<string, string> {
-  const source = recordValue(value);
-  if (!source) return {};
-  const out: Record<string, string> = {};
-  for (const [key, raw] of Object.entries(source)) {
-    if (typeof raw === 'string') out[key] = raw;
-  }
-  return out;
-}
-
-function talentAllocationFromWire(value: unknown): TalentAllocation | null {
-  const source = recordValue(value);
-  if (!source) return null;
-  return {
-    spec: typeof source.spec === 'string' ? source.spec : null,
-    ranks: numberRecord(source.ranks),
-    choices: stringRecord(source.choices),
-  };
-}
 
 function isPickAction(value: unknown): value is PickAction {
   return typeof value === 'string' && LOCKPICK_ACTIONS.has(value as PickAction);
@@ -470,6 +440,7 @@ const HEAVY_SELF_CMDS = new Set<string>([
   'applyTalents',
   'respec',
   'setSpec',
+  'selectTalentRow',
   'saveLoadout',
   'switchLoadout',
   'deleteLoadout',
@@ -789,6 +760,7 @@ function identityFields(e: Entity): Record<string, unknown> {
   if (e.skinCatalog === 'mech') out.cat = 'mech';
   if (e.skin) out.sk = e.skin;
   if (e.mainhandItemId) out.mh = e.mainhandItemId; // equipped mainhand → held weapon model (render-only)
+  if (e.offhandItemId) out.oh = e.offhandItemId; // equipped offhand → held weapon model (render-only)
   if (e.weaponSkinId) out.wsk = e.weaponSkinId; // active weapon-skin cosmetic (render-only, like mh)
   // Full worn set, for the inspect-another-player window. Players only and only
   // when something is equipped; rides the identity record (first appearance +
@@ -4150,28 +4122,46 @@ export class GameServer {
 
       // Talents & Specializations — every allocation re-validated in the Sim.
       case 'applyTalents': {
-        const alloc = talentAllocationFromWire(msg.alloc);
+        const alloc = parseTalentAllocation(msg.alloc);
         if (alloc) sim.applyTalents(alloc, pid);
         break;
       }
       case 'respec':
         sim.respec(pid);
         break;
-      case 'setSpec':
-        sim.setSpec(typeof msg.spec === 'string' ? msg.spec : null, pid);
-        break;
-      case 'saveLoadout': {
-        const alloc = talentAllocationFromWire(msg.alloc) ?? undefined;
-        if (typeof msg.name === 'string')
-          sim.saveLoadout(msg.name, Array.isArray(msg.bar) ? msg.bar : [], pid, alloc);
+      case 'setSpec': {
+        const spec = parseTalentOptionId(msg.spec);
+        if (spec !== undefined) sim.setSpec(spec, pid);
         break;
       }
-      case 'switchLoadout':
-        if (typeof msg.index === 'number') sim.switchLoadout(msg.index | 0, pid);
+      case 'selectTalentRow': {
+        const level = parseTalentRowLevel(msg.level);
+        const optionId = parseTalentOptionId(msg.optionId);
+        if (level !== null && optionId !== undefined) sim.selectTalentRow(level, optionId, pid);
         break;
-      case 'deleteLoadout':
-        if (typeof msg.index === 'number') sim.deleteLoadout(msg.index | 0, pid);
+      }
+      case 'saveLoadout': {
+        const hasAlloc = Object.hasOwn(msg, 'alloc');
+        if (hasAlloc) {
+          const alloc = parseTalentAllocation(msg.alloc);
+          if (typeof msg.name === 'string' && alloc) {
+            sim.saveLoadout(msg.name, Array.isArray(msg.bar) ? msg.bar : [], pid, alloc);
+          }
+        } else if (typeof msg.name === 'string') {
+          sim.saveLoadout(msg.name, Array.isArray(msg.bar) ? msg.bar : [], pid);
+        }
         break;
+      }
+      case 'switchLoadout': {
+        const index = parseTalentLoadoutIndex(msg.index);
+        if (index !== null) sim.switchLoadout(index, pid);
+        break;
+      }
+      case 'deleteLoadout': {
+        const index = parseTalentLoadoutIndex(msg.index);
+        if (index !== null) sim.deleteLoadout(index, pid);
+        break;
+      }
       // World Market (the Merchant's auction house)
       case 'market_search':
         sim.marketSearch(
@@ -4898,8 +4888,6 @@ export class GameServer {
       // talents/spec/loadouts: the client recomputes its known abilities from this.
       maybe('tal', {
         alloc: meta.talents,
-        spec: meta.talentMods.spec,
-        role: meta.talentMods.role,
         loadouts: meta.loadouts,
         activeLoadout: meta.activeLoadout,
       });

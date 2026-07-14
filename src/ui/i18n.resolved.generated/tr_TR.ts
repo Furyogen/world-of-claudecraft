@@ -618,13 +618,13 @@ export const tr_TR: EnTranslations = {
       "update": "Güncelle"
     },
     "cameraPrompt": {
-      "title": "Choose Your Camera",
-      "intro": "Pick how the camera follows your character.",
-      "mouseDesc": "Move the mouse to turn the camera without holding a button.",
-      "classicTitle": "Classic Camera",
-      "classicDesc": "Hold right-click and move the mouse to turn the camera.",
-      "changeLater": "You can change this later under Esc, Key Bindings.",
-      "confirm": "Confirm"
+      "title": "Kameranı Seç",
+      "intro": "Kameranın karakterini nasıl takip edeceğini seç.",
+      "mouseDesc": "Bir tuşu basılı tutmadan kamerayı döndürmek için fareyi hareket ettir.",
+      "classicTitle": "Klasik Kamera",
+      "classicDesc": "Kamerayı döndürmek için farenin sağ tuşunu basılı tutup fareyi hareket ettir.",
+      "changeLater": "Bunu daha sonra Esc, Tuş Atamaları bölümünden değiştirebilirsin.",
+      "confirm": "Onayla"
     },
     "castBar": {
       "playerAria": "Senin Büyü Çubuğun",
@@ -672,11 +672,11 @@ export const tr_TR: EnTranslations = {
       "perSecondRow": "{total} ({rate})",
       "minutesSeconds": "{m}dk {s}sn",
       "seconds": "{s}sn",
-      "autoShowHint": "Rows appear automatically once your party deals damage or healing, and this segment closes a few seconds after combat ends."
+      "autoShowHint": "Grubun hasar verdiğinde veya iyileştirme yaptığında satırlar otomatik olarak görünür ve bu bölüm savaş bittikten birkaç saniye sonra kapanır."
     },
     "petFeed": {
-      "disabledFullHp": "Pet is at full health",
-      "disabledNoFood": "No food in your bags will heal your pet"
+      "disabledFullHp": "Yoldaşın sağlığı dolu",
+      "disabledNoFood": "Çantalarında yoldaşını iyileştirecek yiyecek yok"
     },
     "keybinds": {
       "emoteWheel": "İfade Çarkı",
@@ -865,6 +865,25 @@ export const tr_TR: EnTranslations = {
       "showDailyRewardsChest": "Günlük Ödül Sandığını Göster",
       "mobileCameraJoystick": "Kamera joystick'i",
       "mobileLeftHanded": "Solak düzen"
+    },
+    "talentRows": {
+      "tab": "Seçimler",
+      "defaultLoadout": "Varsayılan dizilim",
+      "comingSoon": "Yakında",
+      "readoutSummary": "Yetenekler: {head}, {spent}/{total} sıra seçildi."
+    },
+    "abilityError": {
+      "shieldRequired": "Bir kalkan kuşanmış olmalısın."
+    },
+    "specPanel": {
+      "primaryAttr": "Birincil nitelik",
+      "complexity": "Karmaşıklık",
+      "complexityLow": "Düşük",
+      "complexityMedium": "Orta",
+      "complexityHigh": "Yüksek",
+      "exampleAbilities": "Örnek yetenekler",
+      "viewTalents": "Yetenekleri görüntüle",
+      "selectSpec": "Uzmanlık seç"
     },
     "controller": {
       "title": "Oyun Kolu",
@@ -1277,7 +1296,7 @@ export const tr_TR: EnTranslations = {
     },
     "bags": {
       "cannotDestroy": "Bu eşya yok edilemez.",
-      "rightClickDestroy": "Shift+right-click to destroy",
+      "rightClickDestroy": "Yok etmek için Shift+sağ tık",
       "filterGroupAria": "Çantaları kategoriye göre filtrele",
       "filterAll": "Tümü",
       "filterWeapon": "Silahlar",
@@ -1478,7 +1497,7 @@ export const tr_TR: EnTranslations = {
         "benefits": "Oyun ve topluluk etkinliğinden puan kazanmak ve statü kademelerini tırmanmak için Discord hesabını bağla.",
         "error": "Discord bağlanamadı. Lütfen tekrar dene.",
         "success": "Discord bağlandı.",
-        "joinServer": "Just join the Discord server"
+        "joinServer": "Yalnızca Discord sunucusuna katıl"
       },
       "choice": {
         "title": "Discord ile devam et",
@@ -2452,10 +2471,10 @@ export const tr_TR: EnTranslations = {
     },
     "abilityHook": {
       "heroic_strike": "Bir sonraki vuruşunda öfke harcayan daha ağır bir savruş sıraya koyar.",
+      "revenge": "Önündeki düşmanları biçer ve bir kaçınma veya savuşturmadan sonra ücretsiz olabilir.",
+      "hamstring": "Bir düşmanın hareketini sakatlayarak kaçmasını engeller.",
       "battle_shout": "Grubun saldırı gücünü yükselten coşturucu bir nara.",
-      "commanding_shout": "Dayanıklılığı artırır, böylece dövüşte herkesin daha çok direnci olur.",
       "charge": "Uzaktaki bir düşmana atılarak kısa bir sersemletmeyle dövüşü başlatır.",
-      "rend": "Hedefi zamanla yıpratan bir kanama açar.",
       "thunder_clap": "Çevrendeki her şeye vurur ve saldırılarını yavaşlatır.",
       "seal_of_righteousness": "Savuruşlarını Kutsal hasarla güçlendirir, sonra onu Verdict ile harca.",
       "holy_light": "Bir dostu ya da kendini tam doldurmak için istikrarlı, hatırı sayılır bir iyileştirme.",
@@ -2573,8 +2592,8 @@ export const tr_TR: EnTranslations = {
         "desc": "Eski derinliklerin pullu, yılansı yaratıkları. Nadir, mağrur ve göründüklerinden çok daha güçlü."
       },
       "reptile": {
-        "name": "Reptiles",
-        "desc": "Cold-blooded hunters with a hiss and a snap all their own, distinct from the warm-blooded beasts."
+        "name": "Sürüngenler",
+        "desc": "Sıcakkanlı yaratıklardan ayrılan, kendilerine özgü tıslamaları ve çene şaklatmaları olan soğukkanlı avcılar."
       }
     },
     "worldPage": {
@@ -5137,7 +5156,7 @@ export const tr_TR: EnTranslations = {
       "defensiveDesc": "Sana ya da evciline zarar veren düşmanlara saldırır.",
       "aggressiveDesc": "Yakındaki düşman varlıklara saldırır.",
       "rename": "Evcili Yeniden Adlandır",
-      "revive": "Evcili Dirilt",
+      "revive": "Yarasını Sar",
       "abandon": "Evcili Terk Et",
       "cancel": "İptal",
       "renameLabel": "Yeni bir evcil adı seç.",
@@ -5392,6 +5411,7 @@ export const tr_TR: EnTranslations = {
     },
     "slots": {
       "mainhand": "Ana El",
+      "offhand": "Yardımcı El",
       "helmet": "Miğfer",
       "neck": "Boyun",
       "shoulder": "Omuzluk",
@@ -5673,10 +5693,6 @@ export const tr_TR: EnTranslations = {
         "name": "Demir Nara",
         "description": "Saldırı gücünü 2 dakika boyunca {buff} artırır."
       },
-      "commanding_shout": {
-        "name": "Güçlendiren Nara",
-        "description": "Dayanıklılığını 2 dakika boyunca {buff} artırır."
-      },
       "demoralizing_shout": {
         "name": "Vahim Uluma",
         "description": "Korkunç bir nara atarak yakındaki tüm düşmanların saldırı gücünü 30 saniye boyunca {buff} azaltır."
@@ -5684,10 +5700,6 @@ export const tr_TR: EnTranslations = {
       "charge": {
         "name": "Atılım",
         "description": "Bir düşmana hücum ederek 9 öfke üretir ve onu 1 saniye sersemletir. 8-25 yarda menzil."
-      },
-      "rend": {
-        "name": "Derin Yarık",
-        "description": "Hedefi yaralar, {duration} saniye boyunca {damage} kanama hasarı vermesine yol açar."
       },
       "thunder_clap": {
         "name": "Sarsan Darbe",
@@ -6349,6 +6361,306 @@ export const tr_TR: EnTranslations = {
         "name": "Wraithborn Çağırma",
         "description": "Bir Wraithborn'u iradene bağlar: uzaktan ağır Gölge hasarı yağdıran seçkin bir iblis. Uzun bir bekleme süresi yıkıcı gücünü dizginler. Yeni bir iblis çağırmak mevcut olanı gönderir. Bir seferde yalnızca bir iblisin olabilir."
       },
+      "battle_stance": {
+        "name": "Savaş Duruşu",
+        "description": "Saldırgan bir dövüş duruşu: %10 daha fazla öfke üretirsin. Silahşor ve Koruma için varsayılan duruş."
+      },
+      "berserker_stance": {
+        "name": "Berserker Duruşu",
+        "description": "Pervasız bir dövüş duruşu: kritik vuruşların %3 daha sık gerçekleşir ve %3 daha sert vurur. Hiddet savaşçısı her zaman bu duruşta dövüşür."
+      },
+      "sweeping_strikes": {
+        "name": "Genişleyen Yay",
+        "description": "12 sn boyunca tek hedefli saldırıların yakındaki 1 düşmana da tam hasarla vurur. (Silahşor)"
+      },
+      "deep_wounds": {
+        "name": "Kanayan Yaralar",
+        "description": "Pasif: Sakatlayan Darbe hedefi 6 sn boyunca Fiziksel hasar verecek şekilde kanatır. (Silahşor)"
+      },
+      "enrage_passive": {
+        "name": "Kargaşa",
+        "description": "Pasif: gazaba gelmişken 4 sn boyunca %7 daha fazla hasar verir, %25 daha hızlı saldırır ve %10 daha hızlı hareket edersin. Kan Akıtma %30 olasılıkla seni gazaba getirir; Kızıl Hasat ise her zaman getirir. (Hiddet)"
+      },
+      "raging_gale": {
+        "name": "Çifte Darbe",
+        "description": "Silahınla anında iki kez vurursun; her vuruş %40 silah hasarı artı {damage} verir ve 8 öfke üretirsin. En fazla 2 kullanım birikir. (Hiddet)"
+      },
+      "red_harvest": {
+        "name": "Kızıl Hasat",
+        "description": "Her şeyini harca: çılgınca üç kez vurursun; her vuruş %65 silah hasarı artı {damage} verir ve seni her zaman gazaba getirir. (Hiddet)"
+      },
+      "furious_mending": {
+        "name": "Öfkeli Onarım",
+        "description": "10 sn boyunca %20 azaltılmış hasar alırsın ve bu süre boyunca Kan Akıtma seni azami canının %20'si kadar iyileştirir. (Hiddet)"
+      },
+      "emboldening_roar": {
+        "name": "Yüreklendiren Kükreme",
+        "description": "Yüreklendiren bir kükreme koparırsın: sen ve 40 yarda içindeki dost oyuncular Yüreklenirsiniz ve sonraki 3 yeteneğiniz garantili kritik vuruş olur. (Hiddet)"
+      },
+      "raised_guard": {
+        "name": "Yükseltilmiş Gard",
+        "description": "Kalkanının ardında siper alırsın: 6 sn boyunca %50 azaltılmış Fiziksel hasar alırsın. En fazla 2 kullanım birikir. (Koruma)"
+      },
+      "iron_resolve": {
+        "name": "Demir Azim",
+        "description": "Dişini sıkıp acıyı yok say: 40’a kadar öfke harcar (en az 20) ve harcanan her öfke başına 4 hasarı en fazla 10 sn boyunca soğurur. (Koruma)"
+      },
+      "faultline": {
+        "name": "Fay Hattı",
+        "description": "Yerden bir şok dalgası gönderirsin: önündeki 8 yarda içindeki düşmanlar {damage} hasar alır ve 3 sn sersemler. (Koruma)"
+      },
+      "defiant_bellow": {
+        "name": "Meydan Okuyan Nara",
+        "description": "Meydan okuyan bir nara: 10 yarda içindeki her düşman kışkırtılır ve 3 sn boyunca sana saldırmaya zorlanır. (Koruma)"
+      },
+      "breachmaker": {
+        "name": "Gedik Açan",
+        "description": "Hedefe silah hasarı artı {damage} vurur ve gardını kırarsın: ona karşı kendi saldırıların 8 sn boyunca %20 daha fazla hasar verir. (Silahşor)"
+      },
+      "measured_fury": {
+        "name": "Ölçülü Gazap",
+        "description": "Ölçülü gazabın tutumunu keskinleştirir: yeteneklerin %10 daha az öfkeye mal olur. (Silahşor)"
+      },
+      "seasoned_soldier": {
+        "name": "Tecrübeli Asker",
+        "description": "Kritik otomatik saldırıların %10 daha fazla öfke üretir. (Silahşor)"
+      },
+      "diabolical_twinstrike": {
+        "name": "Şeytani Çifte Darbe",
+        "description": "Gazaba gelmişken Çifte Darbe %15 daha fazla hasar verir. (Hiddet)"
+      },
+      "cleaving_blows": {
+        "name": "Biçen Darbeler",
+        "description": "Kızıl Hasat her zaman bir Çifte Darbe kullanımını geri kazandırır. (Hiddet)"
+      },
+      "sudden_death": {
+        "name": "Ani Ölüm",
+        "description": "Otomatik saldırıların, canı ne olursa olsun bir hedefe hiç öfke harcamadan Erken Mezar kullanmana izin verme şansı taşır. (Silahşor)"
+      },
+      "storm_bolt": {
+        "name": "Fırtına Oku",
+        "description": "Silahını hedefe fırlatır, {damage} hasar verir ve onu 3 sn sersemletirsin."
+      },
+      "piercing_howl": {
+        "name": "Delici Uluma",
+        "description": "15 yarda içindeki tüm düşmanları 8 sn boyunca %50 yavaşlatan delici bir nara."
+      },
+      "die_by_sword": {
+        "name": "Kılıçla Ölüm",
+        "description": "Savunma yeteneği: 8 sn boyunca %30 daha az hasar alır ve saldırıları çok daha sık savuşturursun."
+      },
+      "recklessness": {
+        "name": "Pervasızlık",
+        "description": "Gazaba gelirsin: öfke üretimin %50, kritik vuruş şansın %20 artar, 12 sn sürer."
+      },
+      "sanguine_aura": {
+        "name": "Kan Aurası",
+        "description": "Silahını düşmanlarının kanıyla donatırsın: sen ve yakın dövüşçü müttefiklerin 20 sn boyunca %10 saldırı hızı ve %10 hasar kazanırsınız."
+      },
+      "victory_rush": {
+        "name": "Zafer Atılımı",
+        "description": "Silah hasarı artı {damage} vurur ve azami canının %20'sini iyileştirirsin. Yalnızca bir düşman öldürdükten sonraki 20 sn içinde kullanılabilir."
+      },
+      "intimidating_shout": {
+        "name": "Gözdağı Narası",
+        "description": "8 yarda içindeki en fazla 5 düşmanı 8 sn boyunca korku içinde kaçırtan dehşet verici bir nara. Hasar etkiyi bozabilir."
+      },
+      "revenge": {
+        "name": "İntikam",
+        "description": "Geniş bir yayla saldırır, önündeki tüm düşmanlara Fiziksel hasar verirsin. 5 hedefin üzerinde hasar azalır. Bir saldırıyı savuşturduğunda ya da karşıladığında bir sonraki İntikam hiç öfkeye mal olmayabilir. (Protection)"
+      },
+      "heroic_leap": {
+        "name": "Savaş Sıçrayışı",
+        "description": "Hedef bölgeye sıçrar ve yere indiğinde yakındaki düşmanlara {damage} hasar verirsin."
+      },
+      "rallying_cry": {
+        "name": "Yiğitlik Kükremesi",
+        "description": "Yiğitçe bir kükreme salarak sana ve 40 metre içindeki grup üyelerine 10 sn boyunca %20 ek azami sağlık kazandırır. Koruma: süre boyunca ayrıca %5 daha az hasar alırlar."
+      },
+      "avatar": {
+        "name": "Avatar",
+        "description": "20 sn boyunca bir devcüsseye dönüşür, üzerindeki tüm kontrol etkilerini kırar ve verdiğin hasarı %20 artırırsın."
+      },
+      "bladestorm": {
+        "name": "Kılıç Fırtınası",
+        "description": "Dönen bir çelik fırtınasına dönüşerek 4 sn boyunca 8 metre içindeki tüm düşmanlara her saniye {damage} hasar verirsin."
+      },
+      "aspect_of_the_wild": {
+        "name": "Yaban Dişi Sureti",
+        "description": "30 m içindeki müttefikleri vahşi güçle cesaretlendirir, saldırı güçlerini 45 ve saldırı hızlarını 5 dk. boyunca %5 artırır. (Avcı yeteneği)"
+      },
+      "aura_surge": {
+        "name": "Şafak Sekmesi",
+        "description": "Şafakta dövülmüş bir kalkan fırlatarak {damage} Kutsal hasar verir, ana hedefi 2 sn susturur ve ardından 10 metre içindeki en fazla 2 ek düşmana sekerek her sekmede %75 hasar verir. (Paladin yeteneği)"
+      },
+      "avenging_wrath": {
+        "name": "İntikam Kanadı",
+        "description": "İntikam gücünü çağırır, saldırı gücünü 20 sn. boyunca 60 ve büyü gücünü 30 artırır. (Paladin yeteneği)"
+      },
+      "berserk": {
+        "name": "Kızıl Sis",
+        "description": "Saldırı gücünü 15 sn. boyunca 70 artırır. (Druid yeteneği)"
+      },
+      "blink": {
+        "name": "Titreşim Adımı",
+        "description": "Seni 15 m ileri ışınlar ve kök salma etkilerini bozar. (Büyücü yeteneği)"
+      },
+      "bloodlust": {
+        "name": "Savaş Davulları",
+        "description": "30 m içindeki müttefikleri çılgınlığa sürükler ve saldırı hızlarını 15 sn. boyunca %30 artırır. (Şaman yeteneği)"
+      },
+      "chain_lightning": {
+        "name": "Çatallı Yıldırım",
+        "description": "Hedef alana yıldırım savurarak yakındaki düşmanlara {damage} hasar verir. (Şaman yeteneği)"
+      },
+      "chaos_bolt": {
+        "name": "Yıkım Oku",
+        "description": "{damage} Ateş hasarı veren kaotik bir ateş oku fırlatır. (Karabüyücü yeteneği)"
+      },
+      "cleansing_verdict": {
+        "name": "Arındırıcı Hüküm",
+        "description": "Dost bir hedeften zararlı bir büyü etkisini kaldırır ve onu {damage} Kutsal iyileştirir."
+      },
+      "cloak_of_shadows": {
+        "name": "Gölge Pelerini",
+        "description": "Seni gölgelerle sarar ve 5 sn. boyunca 420 hasar soğurur. (Haydut yeteneği)"
+      },
+      "cone_of_cold": {
+        "name": "Don Süpürüşü",
+        "description": "Yakındaki düşmanları ayazla vurarak {damage} Buz hasarı verir. (Buz imza yeteneği)"
+      },
+      "curse_of_exhaustion": {
+        "name": "Kurşun Lanet",
+        "description": "Hedefi lanetler ve hareket hızını 12 sn. boyunca %30 azaltır. (Karabüyücü yeteneği)"
+      },
+      "death_coil": {
+        "name": "Mezar Sarmalı",
+        "description": "Düşmana {damage} Gölge hasarı verir, ardından onu 3 sn. boyunca dehşete düşürür. (Karabüyücü yeteneği)"
+      },
+      "deep_freeze": {
+        "name": "Ölüdon",
+        "description": "Hedefi derinden dondurur, {damage} Buz hasarı verir ve 4 sn. boyunca sersemletir. (Büyücü yeteneği)"
+      },
+      "desperate_prayer": {
+        "name": "Son Dua",
+        "description": "Seni anında {damage} iyileştirir. (Rahip yeteneği)"
+      },
+      "deterrence": {
+        "name": "Diken Muhafızı",
+        "description": "Kaçınma şansını 10 sn. boyunca 50 yüzde puan artırır. (Avcı yeteneği)"
+      },
+      "divine_shield": {
+        "name": "Işık Siperi",
+        "description": "Seni kutsal güçle korur ve 8 sn. boyunca 900 hasar soğurur. (Paladin yeteneği)"
+      },
+      "earthbind": {
+        "name": "Kavrayan Toprak",
+        "description": "Yakındaki düşmanları toprağa bağlar ve 2 sn. boyunca kökler. (Şaman yeteneği)"
+      },
+      "evocation": {
+        "name": "Eter Kuyusu",
+        "description": "Anında 220 mana yeniler. (Büyücü yeteneği)"
+      },
+      "frenzied_regeneration": {
+        "name": "Yaban Onarımı",
+        "description": "10 sn. boyunca 180 sağlık yeniler. Yalnızca Ayı Formunda kullanılabilir. (Druid yeteneği)"
+      },
+      "frost_trap": {
+        "name": "Kırağı Tuzağı",
+        "description": "Hedef alandaki düşmanları 3 sn. boyunca dondurarak hareket etmelerini ve eyleme geçmelerini engeller. (Avcı yeteneği)"
+      },
+      "ghostly_strike": {
+        "name": "Hayalet Vuruş",
+        "description": "Düşmana silah hasarı artı {damage} vurur, kaçınmayı kısa süreliğine artırır ve 1 kombo puanı kazandırır. (Haydut yeteneği)"
+      },
+      "hammer_of_wrath": {
+        "name": "Çınlayan Çekiç",
+        "description": "Yaralı bir düşmana kutsal çekiç fırlatarak {damage} Kutsal hasar verir. Yalnızca %20 sağlığın altında kullanılabilir. (Paladin yeteneği)"
+      },
+      "healing_stream": {
+        "name": "Kaynak Kuyusu",
+        "description": "Bir müttefik hedefe 12 sn. boyunca 120 sağlık yeniler. (Şaman yeteneği)"
+      },
+      "holy_wrath": {
+        "name": "Aziz Hiddeti",
+        "description": "Kutsal güç salarak yakındaki düşmanlara {damage} hasar verir. (Paladin yeteneği)"
+      },
+      "howl_of_terror": {
+        "name": "Dehşet Uluması",
+        "description": "Yakındaki düşmanları 3 sn. kadar korkutur. Hasar etkiyi bozabilir. (Karabüyücü yeteneği)"
+      },
+      "ice_block": {
+        "name": "Soğuk Tabut",
+        "description": "Seni buza hapseder ve 8 sn. boyunca 600 hasar soğurur. Hapis durumundayken eyleme geçemezsin. İptal etmek için tekrar kullan. (Büyücü yeteneği)"
+      },
+      "inner_focus": {
+        "name": "Dingin Zihin",
+        "description": "Bir sonraki büyünü ücretsiz yapar. 60 sn. sürer. (Rahip yeteneği)"
+      },
+      "innervate": {
+        "name": "Yaşam Özsuyu",
+        "description": "Canlı özsu 10 sn. boyunca içinde kabarır ve mevcut kaynağından dalgalar halinde 20 yeniler: mana, öfke veya enerji. Form değiştirmek bunu bozmaz. Uyku, sersemletme veya durağanlık özsuyu durdurur. (Druid yeteneği)"
+      },
+      "meteor": {
+        "name": "Göktaşı",
+        "description": "Hedef alana bir meteor indirerek {damage} Ateş hasarı verir, ardından bölgedeki düşmanlara 6 sn. boyunca 2 sn. arayla 12 ile 18 Ateş hasarı verir. (Büyücü yeteneği)"
+      },
+      "mind_sear": {
+        "name": "Düşünce Yanığı",
+        "description": "Hedef alana Gölge enerjisi yönlendirerek yakındaki düşmanlara her saniye {damage} hasar verir. (Rahip yeteneği)"
+      },
+      "multi_shot": {
+        "name": "Bölük Atış",
+        "description": "Hedef alana bir yaylım atışı yaparak 8 m içindeki düşmanlara {damage} Fiziksel hasar verir. (Avcı yeteneği)"
+      },
+      "prayer_of_healing": {
+        "name": "Koro Şifası",
+        "description": "Yakındaki müttefikleri {damage} iyileştirir. (Rahip yeteneği)"
+      },
+      "preparation": {
+        "name": "Acil Plan",
+        "description": "Sprint, Kaçınma ve Kaybolmanın bekleme süresini bitirir. (Haydut yeteneği)"
+      },
+      "presence_of_mind": {
+        "name": "Atılgan Zihin",
+        "description": "Kullanım süresi olan bir sonraki büyünü anında kullanılır hâle getirir. 60 sn. sürer. (Büyücü yeteneği)"
+      },
+      "psychic_scream": {
+        "name": "Psişik Çığlık",
+        "description": "Yakındaki düşmanları 4 sn. kadar korkutur. Hasar etkiyi bozabilir. (Rahip yeteneği)"
+      },
+      "shadowstep": {
+        "name": "Gölge Kayışı",
+        "description": "Gölgelerin içinden hedefine doğru adım atarsın. (Haydut yeteneği)"
+      },
+      "silence": {
+        "name": "Sessizlik",
+        "description": "Hedefi 4 sn. boyunca susturur. (Rahip yeteneği)"
+      },
+      "smoke_screen": {
+        "name": "Duman Perdesi",
+        "description": "Bir duman bulutunda kaybolur ve 8 sn. boyunca kaçınma şansını %30 artırırsın."
+      },
+      "spellsteal": {
+        "name": "Büyü Çalma",
+        "description": "Bir düşmandan faydalı bir büyü etkisi çalar ve sana aktarır."
+      },
+      "startle_shot": {
+        "name": "İrkilten Atış",
+        "description": "Hedefi {duration} sn. boyunca sersemleten vahşi bir atış. Alınan her hasar etkiyi bozar."
+      },
+      "tranquility": {
+        "name": "Koru Şarkısı",
+        "description": "4 sn. boyunca iyileştirici enerji yönlendirir ve 30 m içindeki müttefikleri her saniye 42 ile 52 iyileştirir. (Druid yeteneği)"
+      },
+      "typhoon": {
+        "name": "Tayfun",
+        "description": "Bir rüzgâr patlaması 8 m içindeki tüm düşmanları geri savurup sersemletir ve hareket hızlarını 4 sn. boyunca %50 azaltır."
+      },
+      "voidfeast": {
+        "name": "Hiçlik Ziyafeti",
+        "description": "Bir büyü etkisini (düşmandaki faydalı etkiyi veya müttefikteki zararlı etkiyi) yutar ve azami sağlığının %6’sını iyileştirir."
+      },
       "pummel": {
         "name": "Yumruklama",
         "description": "Hedefin büyüsünü keser ve 4 saniye boyunca o okuldan büyü yapılmasını engeller."
@@ -6394,8 +6706,8 @@ export const tr_TR: EnTranslations = {
         "description": "Düşmanı silah hasarı artı {damage} ile tırmalayan ve 9 saniye boyunca kanama hasarı yaratan gizlilik açılışı. 1 kombo puanı kazandırır. Yalnızca Kurt Formu."
       },
       "revive_pet": {
-        "name": "Evcili Diriltme",
-        "description": "Ölü evcilini diriltir ve yanına geri getirir."
+        "name": "Yarasını Sar",
+        "description": "Evcilinin yaralarını sarar. Yaşıyorsa 12 saniye boyunca her 3 saniyede bir iyileştirerek toplam {overTime} can yeniler. Ölüyse %35 canla diriltir."
       }
     },
     "items": {
@@ -7607,6 +7919,18 @@ export const tr_TR: EnTranslations = {
       },
       "heroic_mark": {
         "name": "Kahramanca Nişan"
+      },
+      "eastbrook_buckler": {
+        "name": "Doğudere Kalkanı"
+      },
+      "eastbrook_greatsword": {
+        "name": "Doğudere Büyük Kılıcı"
+      },
+      "highwatch_greatsword": {
+        "name": "Yükseknöbet Büyük Kılıcı"
+      },
+      "highwatch_wallshield": {
+        "name": "Yükseknöbet Sur Kalkanı"
       },
       "morthens_cryptforged_hauberk": {
         "name": "Morthen'in Mezardövümü Zırh Gömleği"

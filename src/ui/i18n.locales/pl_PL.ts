@@ -2,6 +2,265 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const pl_PL: Partial<Record<TranslationKey, string>> = {
+  'entities.items.eastbrook_greatsword.name': 'Wielki miecz ze Wschodniego Strumienia',
+  'entities.items.highwatch_greatsword.name': 'Wielki miecz z Wysokiej Strażnicy',
+  'entities.items.highwatch_wallshield.name': 'Pawęż z Wysokiej Strażnicy',
+  'entities.items.eastbrook_buckler.name': 'Puklerz ze Wschodniego Strumienia',
+  'entities.abilities.avatar.name': 'Awatar',
+  'entities.abilities.avatar.description':
+    'Przemieniasz się w kolosa na 20 sek., uwalniając się od wszystkich efektów kontroli i zwiększając zadawane obrażenia o 20%.',
+  'entities.abilities.bladestorm.name': 'Burza Ostrzy',
+  'entities.abilities.bladestorm.description':
+    'Stajesz się wirującą burzą stali i przez 4 sek. co sekundę zadajesz {damage} pkt. obrażeń wszystkim wrogom w promieniu 8 m.',
+  'entities.abilities.battle_stance.description':
+    'Agresywna postawa bojowa: generujesz o 10% więcej wściekłości. Domyślna postawa specjalizacji Broń i Ochrona.',
+  'entities.abilities.battle_stance.name': 'Postawa bojowa',
+  'entities.abilities.berserker_stance.description':
+    'Brawurowa postawa bojowa: twoje trafienia krytyczne zdarzają się o 3% częściej i zadają o 3% większe obrażenia. Wojownik specjalizacji Furia zawsze walczy w tej postawie.',
+  'entities.abilities.berserker_stance.name': 'Postawa berserkera',
+  'entities.abilities.breachmaker.description':
+    'Młóci cel za obrażenia broni plus {damage} i kruszy jego gardę: twoje ataki przeciwko niemu zadają o 20% większe obrażenia przez 8 sek. (specjalizacja Broń)',
+  'entities.abilities.breachmaker.name': 'Wyłom',
+  'entities.abilities.cleaving_blows.description':
+    'Krwawe żniwo zawsze zwraca ładunek Bliźniaczego ciosu. (specjalizacja Furia)',
+  'entities.abilities.cleaving_blows.name': 'Rozcinające ciosy',
+  'entities.abilities.deep_wounds.description':
+    'Pasywne: twoje Okaleczające uderzenie pozostawia na celu krwawienie zadające obrażenia fizyczne przez 6 sek. (specjalizacja Broń)',
+  'entities.abilities.deep_wounds.name': 'Ziejące rany',
+  'entities.abilities.defiant_bellow.description':
+    'Wyzywający ryk: każdy wróg w promieniu 10 jardów zostaje sprowokowany i zmuszony do atakowania ciebie przez 3 sek. (specjalizacja Ochrona)',
+  'entities.abilities.defiant_bellow.name': 'Wyzywający ryk',
+  'entities.abilities.diabolical_twinstrike.description':
+    'Gdy jesteś w Szale, twój Bliźniaczy cios zadaje o 15% większe obrażenia. (specjalizacja Furia)',
+  'entities.abilities.diabolical_twinstrike.name': 'Diabelski bliźniaczy cios',
+  'entities.abilities.die_by_sword.description':
+    'Umiejętność obronna: przez 8 sek. otrzymujesz o 30% mniejsze obrażenia i unikasz znacznie większej liczby ataków.',
+  'entities.abilities.die_by_sword.name': 'Śmierć od miecza',
+  'entities.abilities.emboldening_roar.description':
+    'Wydajesz ośmielający ryk: ty i przyjaźni gracze w promieniu 40 jardów zostajecie Ośmieleni, a twoje następne 3 umiejętności są gwarantowanymi trafieniami krytycznymi. (specjalizacja Furia)',
+  'entities.abilities.emboldening_roar.name': 'Ośmielający ryk',
+  'entities.abilities.enrage_passive.description':
+    'Pasywne: gdy jesteś w Szale, przez 4 sek. zadajesz o 7% większe obrażenia, atakujesz o 25% szybciej i poruszasz się o 10% szybciej. Upust krwi ma 30% szansy na wprawienie cię w Szał; Krwawe żniwo robi to zawsze. (specjalizacja Furia)',
+  'entities.abilities.enrage_passive.name': 'Rzeź',
+  'entities.abilities.faultline.description':
+    'Posyłasz falę uderzeniową przez ziemię: wrogowie przed tobą w promieniu 8 jardów otrzymują {damage} obrażeń i zostają ogłuszeni na 3 sek. (specjalizacja Ochrona)',
+  'entities.abilities.faultline.name': 'Uskok',
+  'entities.abilities.furious_mending.description':
+    'Przez 10 sek. otrzymujesz o 20% mniejsze obrażenia, a póki efekt trwa, twój Upust krwi leczy cię o 20% maksymalnego zdrowia. (specjalizacja Furia)',
+  'entities.abilities.furious_mending.name': 'Wściekłe gojenie',
+  'entities.abilities.heroic_leap.description':
+    'Skaczesz do wskazanego obszaru, zadając przy lądowaniu pobliskim wrogom {damage} pkt. obrażeń.',
+  'entities.abilities.heroic_leap.name': 'Wojenny Skok',
+  'entities.abilities.intimidating_shout.description':
+    'Przerażający okrzyk, który zmusza maksymalnie 5 wrogów w promieniu 8 jardów do panicznej ucieczki na 8 sek. Obrażenia mogą przerwać efekt.',
+  'entities.abilities.intimidating_shout.name': 'Zastraszający okrzyk',
+  'entities.abilities.iron_resolve.description':
+    'Zaciśnij zęby i zignoruj ból: zużywa do 40 pkt. wściekłości (minimum 20), aby pochłonąć 4 pkt. obrażeń za każdy wydany punkt wściekłości przez maksymalnie 10 sek. (Ochrona)',
+  'entities.abilities.iron_resolve.name': 'Żelazny hart',
+  'entities.abilities.measured_fury.description':
+    'Wyważona furia uczy cię oszczędności: twoje umiejętności kosztują o 10% mniej wściekłości. (specjalizacja Broń)',
+  'entities.abilities.measured_fury.name': 'Wyważona furia',
+  'entities.abilities.piercing_howl.description':
+    'Przeszywający okrzyk, który spowalnia wszystkich wrogów w promieniu 15 jardów o 50% na 8 sek.',
+  'entities.abilities.piercing_howl.name': 'Przeszywające wycie',
+  'entities.abilities.raging_gale.description':
+    'Natychmiast uderzasz bronią dwukrotnie, każde trafienie zadaje 40% obrażeń broni plus {damage}, a ty generujesz 8 wściekłości. Gromadzi maksymalnie 2 ładunki. (specjalizacja Furia)',
+  'entities.abilities.raging_gale.name': 'Bliźniaczy cios',
+  'entities.abilities.raised_guard.description':
+    'Zapierasz się za tarczą: otrzymujesz o 50% mniejsze obrażenia fizyczne przez 6 sek. Gromadzi maksymalnie 2 ładunki. (specjalizacja Ochrona)',
+  'entities.abilities.raised_guard.name': 'Podniesiona garda',
+  'entities.abilities.rallying_cry.description':
+    'Wydajesz waleczny ryk, który zapewnia tobie i członkom grupy w promieniu 40 m 20% dodatkowego maksymalnego zdrowia na 10 sek. Ochrona: przez ten czas otrzymują też o 5% mniej obrażeń.',
+  'entities.abilities.rallying_cry.name': 'Ryk Waleczności',
+  'entities.abilities.recklessness.description':
+    'Szał: twoje generowanie wściekłości zwiększa się o 50%, a szansa na trafienie krytyczne o 20% na 12 sek.',
+  'entities.abilities.recklessness.name': 'Brawura',
+  'entities.abilities.red_harvest.description':
+    'Stawiasz wszystko: w amoku uderzasz trzykrotnie, każdy cios zadaje 65% obrażeń broni plus {damage}, a ty zawsze wpadasz w Szał. (specjalizacja Furia)',
+  'entities.abilities.red_harvest.name': 'Krwawe żniwo',
+  'entities.abilities.revenge.description':
+    'Atakujesz szerokim łukiem, zadając obrażenia fizyczne wszystkim wrogom przed tobą. Powyżej 5 celów obrażenia są zmniejszone. Gdy unikniesz ciosu lub go sparujesz, twój następny Odwet może nie kosztować wściekłości. (Protection)',
+  'entities.abilities.revenge.name': 'Odwet',
+  'entities.abilities.sanguine_aura.description':
+    'Nasycasz swój oręż krwią wrogów: ty i twoi sojusznicy walczący wręcz zyskujecie 10% szybkości ataku i 10% obrażeń na 20 sek.',
+  'entities.abilities.sanguine_aura.name': 'Aura krwi',
+  'entities.abilities.seasoned_soldier.description':
+    'Twoje krytyczne ataki automatyczne generują o 10% więcej wściekłości. (specjalizacja Broń)',
+  'entities.abilities.seasoned_soldier.name': 'Zaprawiony żołnierz',
+  'entities.abilities.storm_bolt.description':
+    'Ciskasz bronią w cel, zadając {damage} obrażeń i ogłuszając go na 3 sek.',
+  'entities.abilities.storm_bolt.name': 'Burzowy pocisk',
+  'entities.abilities.sudden_death.description':
+    'Twoje ataki automatyczne mają szansę pozwolić ci użyć Przedwczesnego grobu na celu o dowolnym poziomie zdrowia, bez kosztu wściekłości. (specjalizacja Broń)',
+  'entities.abilities.sudden_death.name': 'Nagła śmierć',
+  'entities.abilities.sweeping_strikes.description':
+    'Przez 12 sek. twoje ataki na pojedynczy cel trafiają dodatkowo 1 pobliskiego wroga za pełne obrażenia. (specjalizacja Broń)',
+  'entities.abilities.sweeping_strikes.name': 'Poszerzony łuk',
+  'entities.abilities.victory_rush.description':
+    'Uderzasz za obrażenia broni plus {damage} i leczysz się o 20% maksymalnego zdrowia. Można użyć tylko w ciągu 20 sek. od zabicia wroga.',
+  'entities.abilities.victory_rush.name': 'Zryw zwycięstwa',
+  'hudChrome.specPanel.complexity': 'Złożoność',
+  'hudChrome.specPanel.complexityHigh': 'Wysoka',
+  'hudChrome.specPanel.complexityLow': 'Niska',
+  'hudChrome.specPanel.complexityMedium': 'Średnia',
+  'hudChrome.specPanel.exampleAbilities': 'Przykładowe umiejętności',
+  'hudChrome.specPanel.primaryAttr': 'Główny atrybut',
+  'hudChrome.specPanel.selectSpec': 'Wybierz specjalizację',
+  'hudChrome.specPanel.viewTalents': 'Zobacz talenty',
+  'hudChrome.talentRows.comingSoon': 'Wkrótce',
+  'hudChrome.talentRows.defaultLoadout': 'Domyślny zestaw',
+  'hudChrome.talentRows.tab': 'Wybory',
+  'hudChrome.talentRows.readoutSummary': 'Talenty: {head}, wybrano {spent}/{total} rzędów.',
+  'entities.abilities.aspect_of_the_wild.name': 'Postać Dzikiego Kła',
+  'entities.abilities.aspect_of_the_wild.description':
+    'Napełnia sojuszników w promieniu 30 m dziką siłą, zwiększając ich siłę ataku o 45 i szybkość ataku o 5% na 5 min. (talent Łowcy)',
+  'entities.abilities.aura_surge.name': 'Rykoszet świtu',
+  'entities.abilities.aura_surge.description':
+    'Rzuca wykutą o świcie tarczę, zadając {damage} obrażeń od Świętości i uciszając główny cel na 2 sek., po czym odbija się do maksymalnie 2 kolejnych wrogów w promieniu 10 metrów, zadając 75% obrażeń przy każdym odbiciu. (talent Paladyna)',
+  'entities.abilities.avenging_wrath.name': 'Skrzydło Zemsty',
+  'entities.abilities.avenging_wrath.description':
+    'Przyzywa mściwą moc, zwiększając twoją siłę ataku o 60 i moc zaklęć o 30 na 20 sek. (talent Paladyna)',
+  'entities.abilities.berserk.name': 'Czerwona Mgła',
+  'entities.abilities.berserk.description':
+    'Zwiększa twoją siłę ataku o 70 na 15 sek. (talent Druida)',
+  'entities.abilities.blink.name': 'Migotliwy Krok',
+  'entities.abilities.blink.description':
+    'Teleportuje cię o 15 m do przodu i usuwa efekty unieruchomienia. (talent Maga)',
+  'entities.abilities.bloodlust.name': 'Bębny Wojny',
+  'entities.abilities.bloodlust.description':
+    'Wprawia sojuszników w promieniu 30 m w szał, zwiększając ich szybkość ataku o 30% na 15 sek. (talent Szamana)',
+  'entities.abilities.chain_lightning.name': 'Rozgałęziona Błyskawica',
+  'entities.abilities.chain_lightning.description':
+    'Ciska błyskawicę w wybrany obszar, zadając pobliskim wrogom {damage} obrażeń. (talent Szamana)',
+  'entities.abilities.chaos_bolt.name': 'Pocisk Ruiny',
+  'entities.abilities.chaos_bolt.description':
+    'Ciska pocisk chaotycznego ognia, który zadaje {damage} obrażeń od Ognia. (talent Czarnoksiężnika)',
+  'entities.abilities.cloak_of_shadows.name': 'Cieniopłaszcz',
+  'entities.abilities.cloak_of_shadows.description':
+    'Otacza cię cieniami i pochłania 420 obrażeń przez 5 sek. (talent Łotrzyka)',
+  'entities.abilities.cone_of_cold.name': 'Mroźny Zamiatacz',
+  'entities.abilities.cone_of_cold.description':
+    'Uderza pobliskich wrogów mrozem, zadając {damage} obrażeń od Mrozu. (zdolność charakterystyczna Mrozu)',
+  'entities.abilities.curse_of_exhaustion.name': 'Ołowiana Klątwa',
+  'entities.abilities.curse_of_exhaustion.description':
+    'Przeklina cel, zmniejszając jego szybkość ruchu o 30% na 12 sek. (talent Czarnoksiężnika)',
+  'entities.abilities.death_coil.name': 'Grobowa Spirala',
+  'entities.abilities.death_coil.description':
+    'Uderza wroga, zadając {damage} obrażeń od Cienia, a następnie przeraża go na 3 sek. (talent Czarnoksiężnika)',
+  'entities.abilities.deep_freeze.name': 'Martwy Mróz',
+  'entities.abilities.deep_freeze.description':
+    'Głęboko zamraża cel, zadając {damage} obrażeń od Mrozu i ogłuszając go na 4 sek. (talent Maga)',
+  'entities.abilities.desperate_prayer.name': 'Ostatnia Modlitwa',
+  'entities.abilities.desperate_prayer.description':
+    'Natychmiast leczy cię o {damage}. (talent Kapłana)',
+  'entities.abilities.deterrence.name': 'Kolczasta Straż',
+  'entities.abilities.deterrence.description':
+    'Zwiększa twoją szansę na unik o 50 punktów procentowych na 10 sek. (talent Łowcy)',
+  'entities.abilities.divine_shield.name': 'Straż Światła',
+  'entities.abilities.divine_shield.description':
+    'Osłania cię świętą mocą, pochłaniając 900 obrażeń przez 8 sek. (talent Paladyna)',
+  'entities.abilities.earthbind.name': 'Chwytająca Ziemia',
+  'entities.abilities.earthbind.description':
+    'Przywiązuje pobliskich wrogów do ziemi i unieruchamia ich na 2 sek. (talent Szamana)',
+  'entities.abilities.evocation.name': 'Studnia Eteru',
+  'entities.abilities.evocation.description': 'Natychmiast przywraca 220 many. (talent Maga)',
+  'entities.abilities.frenzied_regeneration.name': 'Dzikie Gojenie',
+  'entities.abilities.frenzied_regeneration.description':
+    'Przywraca 180 zdrowia przez 10 sek. Tylko w Formie Niedźwiedzia. (talent Druida)',
+  'entities.abilities.frost_trap.name': 'Szronowa Pułapka',
+  'entities.abilities.frost_trap.description':
+    'Zamraża wrogów w wybranym obszarze na 3 sek., uniemożliwiając im ruch i działanie. (talent Łowcy)',
+  'entities.abilities.ghostly_strike.name': 'Widmowe Uderzenie',
+  'entities.abilities.ghostly_strike.description':
+    'Uderza wroga, zadając obrażenia broni plus {damage}, krótko zwiększa unik i przyznaje 1 punkt kombinacji. (talent Łotrzyka)',
+  'entities.abilities.hammer_of_wrath.name': 'Bijący Młot',
+  'entities.abilities.hammer_of_wrath.description':
+    'Ciska święty młot w rannego wroga, zadając {damage} obrażeń od Świętości. Można użyć tylko poniżej 20% zdrowia. (talent Paladyna)',
+  'entities.abilities.healing_stream.name': 'Źródlisko',
+  'entities.abilities.healing_stream.description':
+    'Przywraca sojuszniczemu celowi 120 zdrowia przez 12 sek. (talent Szamana)',
+  'entities.abilities.holy_wrath.name': 'Gniew Świętego',
+  'entities.abilities.holy_wrath.description':
+    'Wyzwala świętą moc, zadając pobliskim wrogom {damage} obrażeń. (talent Paladyna)',
+  'entities.abilities.howl_of_terror.name': 'Wycie Grozy',
+  'entities.abilities.howl_of_terror.description':
+    'Przeraża pobliskich wrogów na maksymalnie 3 sek. Obrażenia mogą przerwać efekt. (talent Czarnoksiężnika)',
+  'entities.abilities.ice_block.name': 'Zimna Trumna',
+  'entities.abilities.ice_block.description':
+    'Zamyka cię w lodzie i pochłania 600 obrażeń przez 8 sek. W tym czasie nie możesz działać. Użyj ponownie, aby anulować. (talent Maga)',
+  'entities.abilities.inner_focus.name': 'Wyciszony Umysł',
+  'entities.abilities.inner_focus.description':
+    'Sprawia, że twoje następne zaklęcie jest darmowe. Trwa 60 sek. (talent Kapłana)',
+  'entities.abilities.innervate.name': 'Życiodajna Soki',
+  'entities.abilities.innervate.description':
+    'Żywe soki wzbierają w tobie przez 10 sek. i falami przywracają 20 twojego bieżącego zasobu: many, szału lub energii. Zmiana postaci ich nie przerywa. Sen, ogłuszenie lub zastój zatrzymują przepływ soków. (talent Druida)',
+  'entities.abilities.meteor.name': 'Niebiański Kamień',
+  'entities.abilities.meteor.description':
+    'Przyzywa meteor na wybrany obszar, zadając {damage} obrażeń od Ognia. Następnie przez 6 sek. zadaje znajdującym się tam wrogom od 12 do 18 obrażeń od Ognia co 2 sek. (talent Maga)',
+  'entities.abilities.mind_sear.name': 'Myślopalenie',
+  'entities.abilities.mind_sear.description':
+    'Kanalizuje energię Cienia na wybrany obszar, zadając pobliskim wrogom {damage} obrażeń co sekundę. (talent Kapłana)',
+  'entities.abilities.multi_shot.name': 'Rozszczepiony Strzał',
+  'entities.abilities.multi_shot.description':
+    'Wystrzeliwuje salwę w wybrany obszar, zadając wrogom w promieniu 8 m {damage} obrażeń fizycznych. (talent Łowcy)',
+  'entities.abilities.prayer_of_healing.name': 'Chóralne Uzdrowienie',
+  'entities.abilities.prayer_of_healing.description':
+    'Leczy pobliskich sojuszników o {damage}. (talent Kapłana)',
+  'entities.abilities.preparation.name': 'Plan Awaryjny',
+  'entities.abilities.preparation.description':
+    'Kończy czas odnowienia Sprintu, Uniku i Zniknięcia. (talent Łotrzyka)',
+  'entities.abilities.presence_of_mind.name': 'Pędzący Umysł',
+  'entities.abilities.presence_of_mind.description':
+    'Sprawia, że twoje następne zaklęcie z czasem rzucania staje się natychmiastowe. Trwa 60 sek. (talent Maga)',
+  'entities.abilities.psychic_scream.name': 'Psychiczny Krzyk',
+  'entities.abilities.psychic_scream.description':
+    'Przeraża pobliskich wrogów na maksymalnie 4 sek. Obrażenia mogą przerwać efekt. (talent Kapłana)',
+  'entities.abilities.shadowstep.name': 'Cieniokrok',
+  'entities.abilities.shadowstep.description':
+    'Przechodzisz przez cienie w kierunku celu. (talent Łotrzyka)',
+  'entities.abilities.silence.name': 'Cisza',
+  'entities.abilities.silence.description': 'Wycisza cel na 4 sek. (talent Kapłana)',
+  'entities.abilities.tranquility.name': 'Pieśń Gaju',
+  'entities.abilities.tranquility.description':
+    'Kanalizuje uzdrawiającą energię przez 4 sek., lecząc sojuszników w promieniu 30 m o 42 do 52 co sekundę. (talent Druida)',
+  'entities.abilities.cleansing_verdict.name': 'Oczyszczający Wyrok',
+  'entities.abilities.cleansing_verdict.description':
+    'Usuwa szkodliwy efekt magiczny z przyjaznego celu i leczy go świętą magią za {damage}.',
+  'entities.abilities.smoke_screen.name': 'Zasłona Dymna',
+  'entities.abilities.smoke_screen.description':
+    'Znikasz w chmurze dymu, zwiększając szansę na unik o 30% na 8 sek.',
+  'entities.abilities.spellsteal.name': 'Kradzież Zaklęcia',
+  'entities.abilities.spellsteal.description':
+    'Kradnie korzystny efekt magiczny z wroga i przenosi go na ciebie.',
+  'entities.abilities.startle_shot.name': 'Strzał Przestrachu',
+  'entities.abilities.startle_shot.description':
+    'Dziki strzał, który dezorientuje cel na {duration} sek. Każde obrażenia przerywają efekt.',
+  'entities.abilities.typhoon.name': 'Tajfun',
+  'entities.abilities.typhoon.description':
+    'Podmuch wiatru odrzuca wszystkich wrogów w promieniu 8 m i oszałamia ich, zmniejszając prędkość ruchu o 50% na 4 sek.',
+  'entities.abilities.voidfeast.name': 'Uczta Pustki',
+  'entities.abilities.voidfeast.description':
+    'Pożera efekt magiczny (korzystny z wroga albo szkodliwy z sojusznika) i leczy cię o 6% maksymalnego zdrowia.',
+  'hudChrome.abilityError.shieldRequired': 'Musisz mieć założoną tarczę.',
+  'guide.family.reptile.desc':
+    'Zimnokrwiści łowcy o niepowtarzalnym syku i kłapaniu szczęk, odmienni od ciepłokrwistych bestii.',
+  'guide.family.reptile.name': 'Gady',
+  'hudChrome.bags.rightClickDestroy': 'Shift+prawy przycisk myszy, aby zniszczyć',
+  'hudChrome.cameraPrompt.changeLater':
+    'Możesz to później zmienić w menu Esc, Przypisania klawiszy.',
+  'hudChrome.cameraPrompt.classicDesc':
+    'Przytrzymaj prawy przycisk myszy i poruszaj myszą, aby obracać kamerę.',
+  'hudChrome.cameraPrompt.classicTitle': 'Klasyczna kamera',
+  'hudChrome.cameraPrompt.confirm': 'Potwierdź',
+  'hudChrome.cameraPrompt.intro': 'Wybierz sposób, w jaki kamera podąża za twoją postacią.',
+  'hudChrome.cameraPrompt.mouseDesc':
+    'Poruszaj myszą, aby obracać kamerę bez przytrzymywania przycisku.',
+  'hudChrome.cameraPrompt.title': 'Wybierz kamerę',
+  'hudChrome.discord.link.joinServer': 'Po prostu dołącz do serwera Discord',
+  'hudChrome.meters.autoShowHint':
+    'Wiersze pojawiają się automatycznie, gdy twoja grupa zadaje obrażenia lub leczy, a ten panel zamyka się kilka sekund po zakończeniu walki.',
+  'hudChrome.petFeed.disabledFullHp': 'Zwierzę ma pełne zdrowie',
+  'hudChrome.petFeed.disabledNoFood': 'Żadne jedzenie w twoich torbach nie uleczy zwierzęcia',
   'entities.abilities.sport_boot.description':
     'Długie, wysokie wykopnięcie w stronę punktu celowania. Trybuny to uwielbiają.',
   'entities.abilities.sport_boot.name': 'Potężny Wykop',
@@ -1576,8 +1835,6 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.cleave.description':
     'Zamaszyste uderzenie, które trafia wszystkich wrogów przed tobą, zadając {damage} obrażeń.',
   'entities.abilities.cleave.name': 'Kosiący łuk',
-  'entities.abilities.commanding_shout.description': 'Zwiększa twoją kondycję o {buff} na 2 min.',
-  'entities.abilities.commanding_shout.name': 'Krzepiący okrzyk',
   'entities.abilities.concussive_shot.description':
     'Oszałamia cel, zadając {damage} obrażeń i spowalniając ruch o 50% na 4 sek.',
   'entities.abilities.concussive_shot.name': 'Wstrząsający strzał',
@@ -1823,17 +2080,14 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.regrowth.name': 'Drugi rozkwit',
   'entities.abilities.rejuvenation.description': 'Leczy cel o {damage} w ciągu 12 sek.',
   'entities.abilities.rejuvenation.name': 'Dziki rozkwit',
-  'entities.abilities.rend.description':
-    'Rani cel, powodując krwawienie zadające {damage} obrażeń w ciągu {duration} sek.',
-  'entities.abilities.rend.name': 'Głęboka rana',
   'entities.abilities.renew.description': 'Leczy cel o {damage} w ciągu 15 sek.',
   'entities.abilities.renew.name': 'Trwająca łaska',
   'entities.abilities.retribution_aura.description':
     'Otacza cię świętą energią na 30 min, zadając 5 obrażeń od Świętości każdemu wrogowi, który zaatakuje cię wręcz.',
   'entities.abilities.retribution_aura.name': 'Aura odpłaty',
   'entities.abilities.revive_pet.description':
-    'Wskrzesza twoje martwe zwierzę i przywraca je u twego boku.',
-  'entities.abilities.revive_pet.name': 'Wskrzeszenie zwierzęcia',
+    'Opatruje twojego zwierzaka. Jeśli żyje, przywraca mu łącznie {overTime} pkt. zdrowia przez 12 sek., co 3 sek. Jeśli nie żyje, wskrzesza go z 35% zdrowia.',
+  'entities.abilities.revive_pet.name': 'Opatrzenie',
   'entities.abilities.righteous_fury.description':
     'Zwiększa zagrożenie generowane przez twoje obrażenia od Świętości o 60% na 30 min. Filar paladyna-obrońcy.',
   'entities.abilities.righteous_fury.name': 'Płonąca przysięga',
@@ -3396,7 +3650,6 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
     'Szarżujesz na odległego wroga, otwierając walkę krótkim ogłuszeniem.',
   'guide.abilityHook.cheap_shot':
     'Rozpocznij ze skradania ogłuszeniem i przewagą w punktach kombinacji.',
-  'guide.abilityHook.commanding_shout': 'Wzmacnia wytrzymałość, by każdy dłużej wytrzymał w walce.',
   'guide.abilityHook.concussive_shot': 'Oszałamia cel i spowalnia go, by nie mógł cię dosięgnąć.',
   'guide.abilityHook.conjure_food':
     'Przywołuje jedzenie, które przywraca zdrowie, gdy usiądziesz, by się posilić.',
@@ -3451,7 +3704,6 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'guide.abilityHook.raptor_strike': 'Mocny cios wręcz na wypadek, gdy coś zbliży się do ciebie.',
   'guide.abilityHook.rejuvenation':
     'Rzucane natychmiast, leczy sojusznika z czasem, byś mógł działać dalej.',
-  'guide.abilityHook.rend': 'Otwiera krwawienie, które z czasem wyczerpuje cel.',
   'guide.abilityHook.renew':
     'Leczenie działające z czasem, dobre do rzucenia i kontynuowania ruchu.',
   'guide.abilityHook.rockbiter_weapon':
@@ -4773,7 +5025,7 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hud.pet.rename': 'Zmień imię zwierzęcia',
   'hud.pet.renameConfirm': 'Zmień imię',
   'hud.pet.renameLabel': 'Wybierz nowe imię zwierzęcia.',
-  'hud.pet.revive': 'Wskrześ zwierzę',
+  'hud.pet.revive': 'Opatrzenie',
   'hud.pet.stanceDesc': 'Kliknij, aby wybrać Pasywny, Obronny lub Agresywny.',
   'hud.pet.stanceTitle': 'Postawa zwierzęcia',
   'hud.pet.taunt': 'Prowokacja',
@@ -5486,6 +5738,7 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'itemUi.slots.helmet': 'Hełm',
   'itemUi.slots.legs': 'Nogi',
   'itemUi.slots.mainhand': 'Główna ręka',
+  'itemUi.slots.offhand': 'Druga ręka',
   'itemUi.slots.shoulder': 'Barki',
   'itemUi.slots.waist': 'Pas',
   'itemUi.stats.agi': 'Zręczność',
@@ -7358,4 +7611,7 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.wocStore.wtype.staff': 'Kostur',
   'hudChrome.wocStore.wtype.sword': 'Miecz',
   'hudChrome.wocStore.wtype.wand': 'Różdżka',
+  'guide.abilityHook.revenge':
+    'Uderza wrogów przed tobą i może stać się darmowa po uniku lub sparowaniu.',
+  'guide.abilityHook.hamstring': 'Ogranicza ruch wroga, aby nie mógł uciec.',
 };

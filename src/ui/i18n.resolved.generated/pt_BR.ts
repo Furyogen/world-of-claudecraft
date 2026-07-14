@@ -618,13 +618,13 @@ export const pt_BR: EnTranslations = {
       "update": "Atualizar"
     },
     "cameraPrompt": {
-      "title": "Choose Your Camera",
-      "intro": "Pick how the camera follows your character.",
-      "mouseDesc": "Move the mouse to turn the camera without holding a button.",
-      "classicTitle": "Classic Camera",
-      "classicDesc": "Hold right-click and move the mouse to turn the camera.",
-      "changeLater": "You can change this later under Esc, Key Bindings.",
-      "confirm": "Confirm"
+      "title": "Escolha sua câmera",
+      "intro": "Escolha como a câmera segue seu personagem.",
+      "mouseDesc": "Mova o mouse para girar a câmera sem segurar nenhum botão.",
+      "classicTitle": "Câmera clássica",
+      "classicDesc": "Segure o botão direito e mova o mouse para girar a câmera.",
+      "changeLater": "Você pode alterar isso depois no menu Esc, Atalhos de teclado.",
+      "confirm": "Confirmar"
     },
     "castBar": {
       "playerAria": "Sua barra de conjuração",
@@ -672,11 +672,11 @@ export const pt_BR: EnTranslations = {
       "perSecondRow": "{total} ({rate})",
       "minutesSeconds": "{m}min {s}s",
       "seconds": "{s}s",
-      "autoShowHint": "Rows appear automatically once your party deals damage or healing, and this segment closes a few seconds after combat ends."
+      "autoShowHint": "As linhas aparecem automaticamente quando o seu grupo causa dano ou cura, e este segmento fecha alguns segundos após o fim do combate."
     },
     "petFeed": {
-      "disabledFullHp": "Pet is at full health",
-      "disabledNoFood": "No food in your bags will heal your pet"
+      "disabledFullHp": "O mascote está com a vida cheia",
+      "disabledNoFood": "Nenhum alimento nas suas bolsas pode curar o mascote"
     },
     "keybinds": {
       "emoteWheel": "Roda de emotes",
@@ -865,6 +865,25 @@ export const pt_BR: EnTranslations = {
       "showDailyRewardsChest": "Mostrar Baú de Recompensas Diárias",
       "mobileCameraJoystick": "Joystick da câmera",
       "mobileLeftHanded": "Layout para canhotos"
+    },
+    "talentRows": {
+      "tab": "Escolhas",
+      "defaultLoadout": "Configuração padrão",
+      "comingSoon": "Em breve",
+      "readoutSummary": "Talentos: {head}, {spent}/{total} fileiras selecionadas."
+    },
+    "abilityError": {
+      "shieldRequired": "Você precisa ter um escudo equipado."
+    },
+    "specPanel": {
+      "primaryAttr": "Atributo primário",
+      "complexity": "Complexidade",
+      "complexityLow": "Baixa",
+      "complexityMedium": "Média",
+      "complexityHigh": "Alta",
+      "exampleAbilities": "Habilidades de exemplo",
+      "viewTalents": "Ver talentos",
+      "selectSpec": "Selecionar especialização"
     },
     "controller": {
       "title": "Controle",
@@ -1277,7 +1296,7 @@ export const pt_BR: EnTranslations = {
     },
     "bags": {
       "cannotDestroy": "Este item não pode ser destruído.",
-      "rightClickDestroy": "Shift+right-click to destroy",
+      "rightClickDestroy": "Shift+clique direito para destruir",
       "filterGroupAria": "Filtrar bolsas por categoria",
       "filterAll": "Todos",
       "filterWeapon": "Armas",
@@ -1478,7 +1497,7 @@ export const pt_BR: EnTranslations = {
         "benefits": "Vincule seu Discord para ganhar pontos jogando e participando da comunidade, e suba pelos níveis de status.",
         "error": "Não foi possível vincular o Discord. Tente novamente.",
         "success": "Discord vinculado.",
-        "joinServer": "Just join the Discord server"
+        "joinServer": "Apenas entrar no servidor do Discord"
       },
       "choice": {
         "title": "Continuar com o Discord",
@@ -2452,10 +2471,10 @@ export const pt_BR: EnTranslations = {
     },
     "abilityHook": {
       "heroic_strike": "Prepara um golpe mais pesado que gasta fúria no seu próximo ataque.",
+      "revenge": "Atinge os inimigos à sua frente e pode ficar gratuita após uma esquiva ou aparada.",
+      "hamstring": "Prejudica o movimento de um inimigo para impedir que ele escape.",
       "battle_shout": "Um grito de incentivo que aumenta o poder de ataque do grupo.",
-      "commanding_shout": "Reforça o vigor para que todos tenham mais resistência numa luta.",
       "charge": "Avança contra um inimigo distante para abrir a luta com um breve atordoamento.",
-      "rend": "Abre um sangramento que desgasta o alvo ao longo do tempo.",
       "thunder_clap": "Atinge tudo ao seu redor e reduz a velocidade dos ataques deles.",
       "seal_of_righteousness": "Imbui seus golpes com dano Sagrado; depois gaste-o com Verdict.",
       "holy_light": "Uma cura firme e considerável para recuperar um aliado ou você mesmo.",
@@ -2573,8 +2592,8 @@ export const pt_BR: EnTranslations = {
         "desc": "Criaturas escamosas e serpentinas das antigas profundezas. Raras, orgulhosas e muito mais fortes do que aparentam."
       },
       "reptile": {
-        "name": "Reptiles",
-        "desc": "Cold-blooded hunters with a hiss and a snap all their own, distinct from the warm-blooded beasts."
+        "name": "Répteis",
+        "desc": "Caçadores de sangue frio, com um silvo e uma mordida inconfundíveis, distintos das feras de sangue quente."
       }
     },
     "worldPage": {
@@ -5137,7 +5156,7 @@ export const pt_BR: EnTranslations = {
       "defensiveDesc": "Ataca inimigos que ferem você ou seu mascote.",
       "aggressiveDesc": "Ataca inimigos hostis próximos.",
       "rename": "Renomear mascote",
-      "revive": "Reviver mascote",
+      "revive": "Remendar",
       "abandon": "Abandonar mascote",
       "cancel": "Cancelar",
       "renameLabel": "Escolha um novo nome para o mascote.",
@@ -5392,6 +5411,7 @@ export const pt_BR: EnTranslations = {
     },
     "slots": {
       "mainhand": "Mão principal",
+      "offhand": "Mão secundária",
       "helmet": "Cabeça",
       "neck": "Pescoço",
       "shoulder": "Ombros",
@@ -5673,10 +5693,6 @@ export const pt_BR: EnTranslations = {
         "name": "Brado de Ferro",
         "description": "Aumenta seu poder de ataque em {buff} por 2 min."
       },
-      "commanding_shout": {
-        "name": "Brado Encorajador",
-        "description": "Aumenta seu Vigor em {buff} por 2 min."
-      },
       "demoralizing_shout": {
         "name": "Uivo Sinistro",
         "description": "Solta um grito apavorante, reduzindo o poder de ataque de todos os inimigos próximos em {buff} por 30 s."
@@ -5684,10 +5700,6 @@ export const pt_BR: EnTranslations = {
       "charge": {
         "name": "Arremetida",
         "description": "Investe contra um inimigo, gera 9 de raiva e o atordoa por 1 s. Alcance de 8-25 m."
-      },
-      "rend": {
-        "name": "Corte Profundo",
-        "description": "Fere o alvo, fazendo-o sangrar por {damage} de dano ao longo de {duration} s."
       },
       "thunder_clap": {
         "name": "Golpe Sísmico",
@@ -6349,6 +6361,306 @@ export const pt_BR: EnTranslations = {
         "name": "Invocar Wraithborn",
         "description": "Vincula um Wraithborn à sua vontade, um demônio de elite que faz chover pesado dano Sombrio à distância. Uma longa recarga limita seu poder devastador. Invocar um novo demônio dispensa o atual. Você só pode ter um demônio por vez."
       },
+      "battle_stance": {
+        "name": "Postura de Batalha",
+        "description": "Postura de combate agressiva: você gera 10% mais raiva. A postura padrão de Armas e Proteção."
+      },
+      "berserker_stance": {
+        "name": "Postura de Berserker",
+        "description": "Postura de combate imprudente: seus acertos críticos ocorrem 3% mais vezes e atingem com 3% mais força. O guerreiro de Fúria luta sempre nesta postura."
+      },
+      "sweeping_strikes": {
+        "name": "Arco Crescente",
+        "description": "Por 12 s, seus ataques de alvo único também atingem 1 inimigo próximo com dano total. (Armas)"
+      },
+      "deep_wounds": {
+        "name": "Feridas Abertas",
+        "description": "Passiva: seu Golpe Mutilador deixa o alvo sangrando, sofrendo dano Físico ao longo de 6 s. (Armas)"
+      },
+      "enrage_passive": {
+        "name": "Pandemônio",
+        "description": "Passiva: enquanto Enfurecido, você causa 7% mais dano, ataca 25% mais rápido e se move 10% mais rápido por 4 s. Sangria tem 30% de chance de Enfurecer você; Colheita Vermelha sempre enfurece. (Fúria)"
+      },
+      "raging_gale": {
+        "name": "Golpe Gêmeo",
+        "description": "Golpeia instantaneamente com sua arma duas vezes, cada acerto causando 40% do dano da arma mais {damage}, e gera 8 de raiva. Acumula até 2 cargas. (Fúria)"
+      },
+      "red_harvest": {
+        "name": "Colheita Vermelha",
+        "description": "Gaste tudo: golpeia três vezes em frenesi, causando 65% do dano da arma mais {damage} por golpe, sempre Enfurecendo você. (Fúria)"
+      },
+      "furious_mending": {
+        "name": "Remendo Furioso",
+        "description": "Por 10 s você recebe 20% menos dano e, enquanto durar, sua Sangria cura você em 20% da sua vida máxima. (Fúria)"
+      },
+      "emboldening_roar": {
+        "name": "Rugido Destemido",
+        "description": "Solta um rugido destemido: você e os jogadores aliados em um raio de 40 m ficam Destemidos, e suas próximas 3 habilidades são acertos críticos garantidos. (Fúria)"
+      },
+      "raised_guard": {
+        "name": "Guarda Erguida",
+        "description": "Firme-se atrás do seu escudo: você recebe 50% menos dano Físico por 6 s. Acumula até 2 cargas. (Proteção)"
+      },
+      "iron_resolve": {
+        "name": "Determinação de Ferro",
+        "description": "Cerre os dentes e ignore a dor: gasta até 40 de raiva (mínimo de 20) para absorver 4 de dano por ponto de raiva gasto, por até 10 s. (Proteção)"
+      },
+      "faultline": {
+        "name": "Linha de Falha",
+        "description": "Envia uma onda de choque pelo chão: inimigos à sua frente em um raio de 8 m sofrem {damage} de dano e são atordoados por 3 s. (Proteção)"
+      },
+      "defiant_bellow": {
+        "name": "Brado Desafiador",
+        "description": "Um brado desafiador: todos os inimigos em um raio de 10 m são provocados e forçados a atacar você por 3 s. (Proteção)"
+      },
+      "breachmaker": {
+        "name": "Abre-Brechas",
+        "description": "Golpeia o alvo com dano da arma mais {damage} e racha sua guarda: seus próprios ataques contra ele causam 20% mais dano por 8 s. (Armas)"
+      },
+      "measured_fury": {
+        "name": "Fúria Comedida",
+        "description": "Sua fúria comedida apura sua economia: suas habilidades custam 10% menos raiva. (Armas)"
+      },
+      "seasoned_soldier": {
+        "name": "Soldado Veterano",
+        "description": "Seus ataques automáticos críticos geram 10% mais raiva. (Armas)"
+      },
+      "diabolical_twinstrike": {
+        "name": "Golpe Gêmeo Diabólico",
+        "description": "Enquanto você está Enfurecido, seu Golpe Gêmeo causa 15% mais dano. (Fúria)"
+      },
+      "cleaving_blows": {
+        "name": "Golpes Ceifantes",
+        "description": "Colheita Vermelha sempre devolve uma carga de Golpe Gêmeo. (Fúria)"
+      },
+      "sudden_death": {
+        "name": "Morte Súbita",
+        "description": "Seus ataques automáticos têm uma chance de permitir lançar Cova Prematura em um alvo com qualquer quantidade de vida, sem custo de raiva. (Armas)"
+      },
+      "storm_bolt": {
+        "name": "Míssil da Tempestade",
+        "description": "Arremessa sua arma no alvo, causando {damage} de dano e atordoando-o por 3 s."
+      },
+      "piercing_howl": {
+        "name": "Uivo Penetrante",
+        "description": "Um grito penetrante que reduz em 50% a velocidade de todos os inimigos em um raio de 15 m por 8 s."
+      },
+      "die_by_sword": {
+        "name": "Morrer pela Espada",
+        "description": "Recurso defensivo: por 8 s você recebe 30% menos dano e esquiva de muito mais ataques."
+      },
+      "recklessness": {
+        "name": "Imprudência",
+        "description": "Enfurece você: sua geração de raiva aumenta em 50% e sua chance de acerto crítico em 20% por 12 s."
+      },
+      "sanguine_aura": {
+        "name": "Aura Sanguínea",
+        "description": "Imbui sua arma com o sangue dos seus inimigos: você e seus aliados corpo a corpo ganham 10% de velocidade de ataque e 10% de dano por 20 s."
+      },
+      "victory_rush": {
+        "name": "Ímpeto da Vitória",
+        "description": "Golpeia com dano da arma mais {damage} e cura 20% da sua vida máxima. Só pode ser usado até 20 s depois de matar um inimigo."
+      },
+      "intimidating_shout": {
+        "name": "Brado Intimidador",
+        "description": "Um brado aterrorizante que faz até 5 inimigos em um raio de 8 m fugirem de medo por 8 s. O dano pode quebrar o efeito."
+      },
+      "revenge": {
+        "name": "Vingança",
+        "description": "Ataca em um arco amplo, causando dano Físico a todos os inimigos à sua frente. Acima de 5 alvos, o dano é reduzido. Quando você esquiva ou apara, sua próxima Vingança pode não custar raiva. (Protection)"
+      },
+      "heroic_leap": {
+        "name": "Salto de Guerra",
+        "description": "Salta para a área-alvo, causando {damage} de dano aos inimigos próximos ao aterrissar."
+      },
+      "rallying_cry": {
+        "name": "Rugido de Valor",
+        "description": "Solta um rugido valoroso, concedendo a você e aos membros do grupo em um raio de 40 m 20% de vida máxima adicional por 10 s. Proteção: eles também recebem 5% menos dano durante o efeito."
+      },
+      "avatar": {
+        "name": "Avatar",
+        "description": "Transforma você em um colosso por 20 s, removendo todos os efeitos de controle e aumentando em 20% o dano causado."
+      },
+      "bladestorm": {
+        "name": "Tempestade de Lâminas",
+        "description": "Transforma você em uma tempestade de aço giratória, atingindo todos os inimigos em um raio de 8 m e causando {damage} de dano a cada segundo por 4 s."
+      },
+      "aspect_of_the_wild": {
+        "name": "Aspecto Presa Selvagem",
+        "description": "Inspira os aliados num raio de 30 m com força selvagem, aumentando o poder de ataque deles em 45 e a velocidade de ataque em 5% por 5 min. (talento de Caçador)"
+      },
+      "aura_surge": {
+        "name": "Ricochete da Alvorada",
+        "description": "Arremessa um escudo forjado ao alvorecer que causa {damage} de dano Sagrado, silencia o alvo principal por 2 s e ricocheteia em até 2 inimigos adicionais num raio de 10 m, causando 75% de dano por ricochete. (talento de Paladino)"
+      },
+      "avenging_wrath": {
+        "name": "Asa Vingadora",
+        "description": "Invoca poder vingativo, aumentando seu poder de ataque em 60 e seu poder mágico em 30 por 20 s. (talento de Paladino)"
+      },
+      "berserk": {
+        "name": "Névoa Rubra",
+        "description": "Aumenta seu poder de ataque em 70 por 15 s. (talento de Druida)"
+      },
+      "blink": {
+        "name": "Passo Cintilante",
+        "description": "Teletransporta você 15 m para a frente e rompe efeitos de enraizamento. (talento de Mago)"
+      },
+      "bloodlust": {
+        "name": "Tambores de Guerra",
+        "description": "Leva os aliados num raio de 30 m ao frenesi, aumentando a velocidade de ataque deles em 30% por 15 s. (talento de Xamã)"
+      },
+      "chain_lightning": {
+        "name": "Relâmpago Bifurcado",
+        "description": "Arremessa um raio na área-alvo, causando {damage} de dano aos inimigos próximos. (talento de Xamã)"
+      },
+      "chaos_bolt": {
+        "name": "Seta da Ruína",
+        "description": "Arremessa um raio de fogo caótico que causa {damage} de dano de Fogo. (talento de Bruxo)"
+      },
+      "cleansing_verdict": {
+        "name": "Veredito Purificador",
+        "description": "Expurga um efeito mágico nocivo de um alvo aliado e o cura em {damage} com magia Sagrada."
+      },
+      "cloak_of_shadows": {
+        "name": "Manto Sombrio",
+        "description": "Envolve você em sombras, absorvendo 420 de dano por 5 s. (talento de Ladino)"
+      },
+      "cone_of_cold": {
+        "name": "Varredura Gélida",
+        "description": "Atinge os inimigos próximos com gelo, causando {damage} de dano de Gelo. (habilidade característica de Gelo)"
+      },
+      "curse_of_exhaustion": {
+        "name": "Maldição Chúmbea",
+        "description": "Amaldiçoa o alvo, reduzindo a velocidade de movimento em 30% por 12 s. (talento de Bruxo)"
+      },
+      "death_coil": {
+        "name": "Espiral da Tumba",
+        "description": "Atinge o inimigo, causando {damage} de dano de Sombra, e depois o horroriza por 3 s. (talento de Bruxo)"
+      },
+      "deep_freeze": {
+        "name": "Geada Morta",
+        "description": "Congela profundamente o alvo, causando {damage} de dano de Gelo e atordoando-o por 4 s. (talento de Mago)"
+      },
+      "desperate_prayer": {
+        "name": "Última Prece",
+        "description": "Cura você instantaneamente em {damage}. (talento de Sacerdote)"
+      },
+      "deterrence": {
+        "name": "Guarda Espinhosa",
+        "description": "Aumenta sua chance de esquiva em 50 pontos percentuais por 10 s. (talento de Caçador)"
+      },
+      "divine_shield": {
+        "name": "Guarda de Luz",
+        "description": "Protege você com poder sagrado, absorvendo 900 de dano por 8 s. (talento de Paladino)"
+      },
+      "earthbind": {
+        "name": "Terra Agarradora",
+        "description": "Prende os inimigos próximos à terra, enraizando-os por 2 s. (talento de Xamã)"
+      },
+      "evocation": {
+        "name": "Poço Etéreo",
+        "description": "Restaura instantaneamente 220 de mana. (talento de Mago)"
+      },
+      "frenzied_regeneration": {
+        "name": "Remendo Selvagem",
+        "description": "Restaura 180 de vida ao longo de 10 s. Somente em Forma de Urso. (talento de Druida)"
+      },
+      "frost_trap": {
+        "name": "Armadilha de Geada",
+        "description": "Congela os inimigos na área-alvo por 3 s, impedindo que se movam ou ajam. (talento de Caçador)"
+      },
+      "ghostly_strike": {
+        "name": "Golpe Espectral",
+        "description": "Atinge o inimigo, causando o dano da arma mais {damage}, aumenta brevemente a esquiva e concede 1 ponto de combo. (talento de Ladino)"
+      },
+      "hammer_of_wrath": {
+        "name": "Martelo Badalante",
+        "description": "Arremessa um martelo sagrado contra um inimigo ferido, causando {damage} de dano Sagrado. Só pode ser usado abaixo de 20% de vida. (talento de Paladino)"
+      },
+      "healing_stream": {
+        "name": "Fonte Viva",
+        "description": "Restaura 120 de vida de um alvo aliado ao longo de 12 s. (talento de Xamã)"
+      },
+      "holy_wrath": {
+        "name": "Ira do Santo",
+        "description": "Libera poder sagrado, causando {damage} de dano aos inimigos próximos. (talento de Paladino)"
+      },
+      "howl_of_terror": {
+        "name": "Uivo de Terror",
+        "description": "Amedronta os inimigos próximos por até 3 s. O dano pode interromper o efeito. (talento de Bruxo)"
+      },
+      "ice_block": {
+        "name": "Caixão Frio",
+        "description": "Envolve você em gelo, absorvendo 600 de dano por 8 s. Você não pode agir enquanto estiver envolto. Lance novamente para cancelar. (talento de Mago)"
+      },
+      "inner_focus": {
+        "name": "Mente Serena",
+        "description": "Faz seu próximo feitiço não custar nada. Dura 60 s. (talento de Sacerdote)"
+      },
+      "innervate": {
+        "name": "Seiva Vital",
+        "description": "A seiva viva brota em você por 10 s e restaura em ondas 20 do seu recurso atual: mana, raiva ou energia. Mudar de forma não interrompe o efeito. Sono, atordoamento ou estase imobilizam a seiva. (talento de Druida)"
+      },
+      "meteor": {
+        "name": "Pedra Celeste",
+        "description": "Invoca um meteoro na área-alvo, causando {damage} de dano de Fogo, e depois queima os inimigos no local, causando de 12 a 18 de dano de Fogo a cada 2 s por 6 s. (talento de Mago)"
+      },
+      "mind_sear": {
+        "name": "Queima-mente",
+        "description": "Canaliza energia de Sombra na área-alvo, causando {damage} de dano a cada segundo aos inimigos próximos. (talento de Sacerdote)"
+      },
+      "multi_shot": {
+        "name": "Disparo Dividido",
+        "description": "Dispara uma saraivada na área-alvo, causando {damage} de dano Físico aos inimigos num raio de 8 m. (talento de Caçador)"
+      },
+      "prayer_of_healing": {
+        "name": "Cura do Coro",
+        "description": "Cura os aliados próximos em {damage}. (talento de Sacerdote)"
+      },
+      "preparation": {
+        "name": "Contingência",
+        "description": "Encerra a recarga de Disparada, Evasão e Sumir. (talento de Ladino)"
+      },
+      "presence_of_mind": {
+        "name": "Mente Acelerada",
+        "description": "Faz seu próximo feitiço com tempo de lançamento ser instantâneo. Dura 60 s. (talento de Mago)"
+      },
+      "psychic_scream": {
+        "name": "Grito Psíquico",
+        "description": "Amedronta os inimigos próximos por até 4 s. O dano pode interromper o efeito. (talento de Sacerdote)"
+      },
+      "shadowstep": {
+        "name": "Passo Sombrio",
+        "description": "Avança pelas sombras em direção ao seu alvo. (talento de Ladino)"
+      },
+      "silence": {
+        "name": "Silêncio",
+        "description": "Silencia o alvo por 4 s. (talento de Sacerdote)"
+      },
+      "smoke_screen": {
+        "name": "Cortina de Fumaça",
+        "description": "Você desaparece numa nuvem de fumaça, aumentando em 30% sua chance de esquiva por 8 s."
+      },
+      "spellsteal": {
+        "name": "Roubar Feitiço",
+        "description": "Rouba um efeito mágico benéfico de um inimigo e o transfere para você."
+      },
+      "startle_shot": {
+        "name": "Tiro de Sobressalto",
+        "description": "Um tiro selvagem que desorienta o alvo por {duration} s. Qualquer dano interrompe o efeito."
+      },
+      "tranquility": {
+        "name": "Canto do Bosque",
+        "description": "Canaliza energia restauradora por 4 s, curando os aliados num raio de 30 m em 42 a 52 a cada segundo. (talento de Druida)"
+      },
+      "typhoon": {
+        "name": "Tufão",
+        "description": "Uma rajada de vento repele todos os inimigos num raio de 8 m e os atordoa, reduzindo a velocidade de movimento em 50% por 4 s."
+      },
+      "voidfeast": {
+        "name": "Banquete do Vazio",
+        "description": "Devora um efeito mágico (um benéfico de um inimigo ou um nocivo de um aliado) e cura você em 6% da vida máxima."
+      },
       "pummel": {
         "name": "Quebra-queixo",
         "description": "Interrompe a conjuração do alvo e impede lançar feitiços dessa escola por 4 s."
@@ -6394,8 +6706,8 @@ export const pt_BR: EnTranslations = {
         "description": "Um golpe de abertura furtivo que dilacera o inimigo causando dano de arma mais {damage} e provoca sangramento ao longo de 9 s. Concede 1 ponto de combo. Apenas Forma de Lobo."
       },
       "revive_pet": {
-        "name": "Reviver Mascote",
-        "description": "Revive seu mascote morto e o traz de volta ao seu lado."
+        "name": "Remendar",
+        "description": "Remenda seu mascote, restaurando {overTime} de vida ao longo de 12 s em pulsos a cada 3 s se ele estiver vivo. Se estiver morto, revive-o com 35% da vida."
       }
     },
     "items": {
@@ -7607,6 +7919,18 @@ export const pt_BR: EnTranslations = {
       },
       "heroic_mark": {
         "name": "Marca Heroica"
+      },
+      "eastbrook_buckler": {
+        "name": "Broquel de Eastbrook"
+      },
+      "eastbrook_greatsword": {
+        "name": "Montante de Eastbrook"
+      },
+      "highwatch_greatsword": {
+        "name": "Montante de Highwatch"
+      },
+      "highwatch_wallshield": {
+        "name": "Escudo-Muralha de Highwatch"
       },
       "morthens_cryptforged_hauberk": {
         "name": "Cota de Malha Forjada na Cripta de Morthen"

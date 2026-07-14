@@ -618,13 +618,13 @@ export const fr_CA: EnTranslations = {
       "update": "Mettre à jour"
     },
     "cameraPrompt": {
-      "title": "Choose Your Camera",
-      "intro": "Pick how the camera follows your character.",
-      "mouseDesc": "Move the mouse to turn the camera without holding a button.",
-      "classicTitle": "Classic Camera",
-      "classicDesc": "Hold right-click and move the mouse to turn the camera.",
-      "changeLater": "You can change this later under Esc, Key Bindings.",
-      "confirm": "Confirm"
+      "title": "Choisissez votre caméra",
+      "intro": "Choisissez comment la caméra suit votre personnage.",
+      "mouseDesc": "Déplacez la souris pour tourner la caméra sans maintenir de bouton.",
+      "classicTitle": "Caméra classique",
+      "classicDesc": "Maintenez le clic droit et déplacez la souris pour tourner la caméra.",
+      "changeLater": "Vous pourrez modifier ce choix plus tard dans le menu Échap, Raccourcis clavier.",
+      "confirm": "Confirmer"
     },
     "castBar": {
       "playerAria": "Votre barre d'incantation",
@@ -672,11 +672,11 @@ export const fr_CA: EnTranslations = {
       "perSecondRow": "{total} ({rate})",
       "minutesSeconds": "{m} min {s} s",
       "seconds": "{s} s",
-      "autoShowHint": "Rows appear automatically once your party deals damage or healing, and this segment closes a few seconds after combat ends."
+      "autoShowHint": "Les lignes apparaissent automatiquement dès que votre groupe inflige des dégâts ou prodigue des soins, et ce segment se ferme quelques secondes après la fin du combat."
     },
     "petFeed": {
-      "disabledFullHp": "Pet is at full health",
-      "disabledNoFood": "No food in your bags will heal your pet"
+      "disabledFullHp": "Le familier a tous ses points de vie",
+      "disabledNoFood": "Aucune nourriture dans vos sacs ne peut soigner votre familier"
     },
     "keybinds": {
       "emoteWheel": "Roue des emotes",
@@ -865,6 +865,25 @@ export const fr_CA: EnTranslations = {
       "showDailyRewardsChest": "Afficher le coffre des récompenses quotidiennes",
       "mobileCameraJoystick": "Manette de caméra",
       "mobileLeftHanded": "Disposition pour gaucher"
+    },
+    "talentRows": {
+      "tab": "Choix",
+      "defaultLoadout": "Configuration par défaut",
+      "comingSoon": "Bientôt disponible",
+      "readoutSummary": "Talents : {head}, {spent}/{total} rangées sélectionnées."
+    },
+    "abilityError": {
+      "shieldRequired": "Vous devez équiper un bouclier."
+    },
+    "specPanel": {
+      "primaryAttr": "Caractéristique principale",
+      "complexity": "Complexité",
+      "complexityLow": "Faible",
+      "complexityMedium": "Moyenne",
+      "complexityHigh": "Élevée",
+      "exampleAbilities": "Exemples de techniques",
+      "viewTalents": "Voir les talents",
+      "selectSpec": "Choisir une spécialisation"
     },
     "controller": {
       "title": "Manette",
@@ -1277,7 +1296,7 @@ export const fr_CA: EnTranslations = {
     },
     "bags": {
       "cannotDestroy": "Cet objet ne peut pas être détruit.",
-      "rightClickDestroy": "Shift+right-click to destroy",
+      "rightClickDestroy": "Maj+clic droit pour détruire",
       "filterGroupAria": "Filtrer les sacs par catégorie",
       "filterAll": "Tous",
       "filterWeapon": "Armes",
@@ -1478,7 +1497,7 @@ export const fr_CA: EnTranslations = {
         "benefits": "Liez votre Discord pour gagner des points en jouant et en participant à la communauté, et gravir les rangs de statut.",
         "error": "Impossible de lier Discord. Veuillez réessayer.",
         "success": "Discord lié.",
-        "joinServer": "Just join the Discord server"
+        "joinServer": "Rejoindre simplement le serveur Discord"
       },
       "choice": {
         "title": "Continuer avec Discord",
@@ -2452,10 +2471,10 @@ export const fr_CA: EnTranslations = {
     },
     "abilityHook": {
       "heroic_strike": "Prépare un coup plus lourd qui dépense de la rage sur votre prochaine attaque.",
+      "revenge": "Frappe les ennemis devant vous et peut devenir gratuite après une esquive ou une parade.",
+      "hamstring": "Entrave les déplacements d’un ennemi pour l’empêcher de fuir.",
       "battle_shout": "Un cri de ralliement qui augmente la puissance d'attaque du groupe.",
-      "commanding_shout": "Renforce l'endurance pour que chacun tienne plus longtemps au combat.",
       "charge": "Fonce sur un ennemi lointain pour ouvrir le combat avec un bref étourdissement.",
-      "rend": "Ouvre un saignement qui use la cible dans la durée.",
       "thunder_clap": "Frappe tout autour de vous et ralentit les attaques des ennemis.",
       "seal_of_righteousness": "Imprègne vos coups de dégâts sacrés, à dépenser ensuite avec Verdict.",
       "holy_light": "Un soin régulier et conséquent pour remettre d'aplomb un allié ou vous-même.",
@@ -2574,7 +2593,7 @@ export const fr_CA: EnTranslations = {
       },
       "reptile": {
         "name": "Reptiles",
-        "desc": "Cold-blooded hunters with a hiss and a snap all their own, distinct from the warm-blooded beasts."
+        "desc": "Chasseurs à sang froid, avec un sifflement et un claquement qui leur sont propres, distincts des bêtes à sang chaud."
       }
     },
     "worldPage": {
@@ -5137,7 +5156,7 @@ export const fr_CA: EnTranslations = {
       "defensiveDesc": "Attaque les ennemis qui vous blessent, vous ou votre familier.",
       "aggressiveDesc": "Attaque les ennemis hostiles proches.",
       "rename": "Renommer le familier",
-      "revive": "Ranimer le familier",
+      "revive": "Rafistoler",
       "abandon": "Abandonner le familier",
       "cancel": "Annuler",
       "renameLabel": "Choisissez un nouveau nom de familier.",
@@ -5392,6 +5411,7 @@ export const fr_CA: EnTranslations = {
     },
     "slots": {
       "mainhand": "Main droite",
+      "offhand": "Main gauche",
       "helmet": "Tête",
       "neck": "Cou",
       "shoulder": "Épaules",
@@ -5673,10 +5693,6 @@ export const fr_CA: EnTranslations = {
         "name": "Beuglement de fer",
         "description": "Augmente votre puissance d'attaque de {buff} pendant 2 min."
       },
-      "commanding_shout": {
-        "name": "Cri fortifiant",
-        "description": "Augmente votre Endurance de {buff} pendant 2 min."
-      },
       "demoralizing_shout": {
         "name": "Direhowl",
         "description": "Pousse un cri terrifiant qui réduit la puissance d'attaque de tous les ennemis proches de {buff} pendant 30 s."
@@ -5684,10 +5700,6 @@ export const fr_CA: EnTranslations = {
       "charge": {
         "name": "Ruée",
         "description": "Charge un ennemi, génère 9 rage et l'étourdit pendant 1 s. Portée de 8-25 m."
-      },
-      "rend": {
-        "name": "Entaille profonde",
-        "description": "Blesse la cible et la fait saigner pour {damage} points de dégâts en {duration} s."
       },
       "thunder_clap": {
         "name": "Coup sismique",
@@ -6349,6 +6361,306 @@ export const fr_CA: EnTranslations = {
         "name": "Invoquer un Wraithborn",
         "description": "Soumet un Wraithborn à votre volonté, un démon d'élite qui déverse de lourds dégâts d'Ombre à distance. Un long temps de recharge bride sa puissance dévastatrice. Invoquer un nouveau démon renvoie celui que vous avez. Vous ne pouvez avoir qu'un démon à la fois."
       },
+      "battle_stance": {
+        "name": "Posture de combat",
+        "description": "Posture de combat agressive: vous générez 10% de rage en plus. La posture par défaut pour Armes et Protection."
+      },
+      "berserker_stance": {
+        "name": "Posture berserker",
+        "description": "Posture de combat téméraire: vos coups critiques surviennent 3% plus souvent et infligent 3% de dégâts en plus. Le guerrier Fureur combat toujours dans cette posture."
+      },
+      "sweeping_strikes": {
+        "name": "Arc élargi",
+        "description": "Pendant 12 s, vos attaques monocibles frappent aussi 1 ennemi proche pour la totalité des dégâts. (Armes)"
+      },
+      "deep_wounds": {
+        "name": "Plaies béantes",
+        "description": "Passif : votre Frappe mutilante fait saigner la cible, infligeant des dégâts physiques sur 6 s. (Armes)"
+      },
+      "enrage_passive": {
+        "name": "Carnage",
+        "description": "Passif : tant que vous êtes enragé, vous infligez 7% de dégâts en plus, attaquez 25% plus vite et vous déplacez 10% plus vite pendant 4 s. Saignée a 30% de chances de vous enrager ; Moisson rouge le fait toujours. (Fureur)"
+      },
+      "raging_gale": {
+        "name": "Double frappe",
+        "description": "Frappe instantanément deux fois avec votre arme, chaque coup infligeant 40% des dégâts de l'arme plus {damage}, et génère 8 points de rage. Cumule jusqu'à 2 charges. (Fureur)"
+      },
+      "red_harvest": {
+        "name": "Moisson rouge",
+        "description": "Dépensez tout : frappez trois fois dans une frénésie, chaque coup infligeant 65% des dégâts de l'arme plus {damage}, ce qui vous rend toujours enragé. (Fureur)"
+      },
+      "furious_mending": {
+        "name": "Guérison furieuse",
+        "description": "Pendant 10 s, vous subissez 20% de dégâts en moins et, tant que l'effet dure, votre Saignée vous soigne de 20% de votre vie maximale. (Fureur)"
+      },
+      "emboldening_roar": {
+        "name": "Rugissement galvanisant",
+        "description": "Pousse un rugissement galvanisant : vous et les joueurs alliés dans un rayon de 40 mètres êtes galvanisés, et vos 3 prochaines techniques sont des coups critiques garantis. (Fureur)"
+      },
+      "raised_guard": {
+        "name": "Garde haute",
+        "description": "Arc-boutez-vous derrière votre bouclier : vous subissez 50% de dégâts physiques en moins pendant 6 s. Cumule jusqu'à 2 charges. (Protection)"
+      },
+      "iron_resolve": {
+        "name": "Résolution de fer",
+        "description": "Serrez les dents et ignorez la douleur : dépense jusqu’à 40 points de rage (20 minimum) pour absorber 4 points de dégâts par point de rage dépensé, pendant un maximum de 10 s. (Protection)"
+      },
+      "faultline": {
+        "name": "Ligne de faille",
+        "description": "Envoie une onde de choc dans le sol : les ennemis devant vous dans un rayon de 8 mètres subissent {damage} points de dégâts et sont étourdis pendant 3 s. (Protection)"
+      },
+      "defiant_bellow": {
+        "name": "Beuglement de défi",
+        "description": "Un beuglement de défi : tous les ennemis dans un rayon de 10 mètres sont provoqués et forcés de vous attaquer pendant 3 s. (Protection)"
+      },
+      "breachmaker": {
+        "name": "Brise-garde",
+        "description": "Martèle la cible pour les dégâts de l'arme plus {damage} et fissure sa garde : vos propres attaques contre elle infligent 20% de dégâts en plus pendant 8 s. (Armes)"
+      },
+      "measured_fury": {
+        "name": "Fureur mesurée",
+        "description": "Votre fureur mesurée affine votre économie : vos techniques coûtent 10% de rage en moins. (Armes)"
+      },
+      "seasoned_soldier": {
+        "name": "Soldat aguerri",
+        "description": "Vos attaques automatiques critiques génèrent 10% de rage en plus. (Armes)"
+      },
+      "diabolical_twinstrike": {
+        "name": "Double frappe diabolique",
+        "description": "Tant que vous êtes enragé, votre Double frappe inflige 15% de dégâts en plus. (Fureur)"
+      },
+      "cleaving_blows": {
+        "name": "Coups pourfendeurs",
+        "description": "Moisson rouge rend toujours une charge de Double frappe. (Fureur)"
+      },
+      "sudden_death": {
+        "name": "Mort subite",
+        "description": "Vos attaques automatiques ont une chance de vous permettre de lancer Tombe précoce sur une cible quel que soit son niveau de vie, sans coût de rage. (Armes)"
+      },
+      "storm_bolt": {
+        "name": "Projectile-tempête",
+        "description": "Lancez votre arme sur la cible, infligeant {damage} et l'étourdissant pendant 3 s."
+      },
+      "piercing_howl": {
+        "name": "Hurlement perçant",
+        "description": "Un cri perçant qui ralentit de 50% tous les ennemis dans un rayon de 15 mètres pendant 8 s."
+      },
+      "die_by_sword": {
+        "name": "Périr par l'épée",
+        "description": "Recours défensif : pendant 8 s, vous subissez 30% de dégâts en moins et esquivez bien plus d'attaques."
+      },
+      "recklessness": {
+        "name": "Témérité",
+        "description": "Enrage : votre génération de rage augmente de 50% et vos chances de coup critique de 20% pendant 12 s."
+      },
+      "sanguine_aura": {
+        "name": "Aura sanguine",
+        "description": "Imprégnez votre arme du sang de vos ennemis : vous et vos alliés de mêlée gagnez 10% de vitesse d'attaque et 10% de dégâts pendant 20 s."
+      },
+      "victory_rush": {
+        "name": "Ruée victorieuse",
+        "description": "Frappe infligeant les dégâts de l'arme plus {damage} et vous soignant de 20% de votre vie maximale. Utilisable seulement dans les 20 s suivant la mort d'un ennemi."
+      },
+      "intimidating_shout": {
+        "name": "Cri intimidant",
+        "description": "Un cri terrifiant qui fait fuir jusqu'à 5 ennemis dans un rayon de 8 mètres pendant 8 s. Les dégâts peuvent briser l'effet."
+      },
+      "revenge": {
+        "name": "Vengeance",
+        "description": "Attaque dans un large arc et inflige des dégâts physiques à tous les ennemis devant vous. Au-delà de 5 cibles, les dégâts sont réduits. Quand vous esquivez ou parez, votre prochaine Vengeance peut ne coûter aucune rage. (Protection)"
+      },
+      "heroic_leap": {
+        "name": "Bond de guerre",
+        "description": "Bondit vers la zone ciblée et inflige {damage} points de dégâts aux ennemis proches à l’atterrissage."
+      },
+      "rallying_cry": {
+        "name": "Rugissement de vaillance",
+        "description": "Pousse un rugissement vaillant qui vous confère, ainsi qu’aux membres du groupe à moins de 40 mètres, 20% de points de vie maximum supplémentaires pendant 10 s. Protection : ils subissent également 5% de dégâts en moins pendant la durée."
+      },
+      "avatar": {
+        "name": "Avatar",
+        "description": "Vous vous transformez en colosse pendant 20 s, ce qui dissipe tous les effets de contrôle vous affectant et augmente de 20% les dégâts que vous infligez."
+      },
+      "bladestorm": {
+        "name": "Tempête de lames",
+        "description": "Vous devenez une tempête d’acier tourbillonnante qui inflige {damage} points de dégâts chaque seconde pendant 4 s à tous les ennemis à moins de 8 mètres."
+      },
+      "aspect_of_the_wild": {
+        "name": "Apparence du Croc-sauvage",
+        "description": "Insuffle une force sauvage aux alliés à moins de 30 m, augmentant leur puissance d'attaque de 45 et leur vitesse d'attaque de 5 % pendant 5 min. (talent de Chasseur)"
+      },
+      "aura_surge": {
+        "name": "Ricochet de l'aube",
+        "description": "Projette un bouclier forgé à l'aube qui inflige {damage} dégâts sacrés, réduit la cible principale au silence pendant 2 s, puis rebondit sur jusqu'à 2 ennemis supplémentaires à moins de 10 m, infligeant 75 % des dégâts par rebond. (talent de Paladin)"
+      },
+      "avenging_wrath": {
+        "name": "Aile vengeresse",
+        "description": "Invoque une puissance vengeresse, augmentant votre puissance d'attaque de 60 et votre puissance des sorts de 30 pendant 20 s. (talent de Paladin)"
+      },
+      "berserk": {
+        "name": "Brume rouge",
+        "description": "Augmente votre puissance d'attaque de 70 pendant 15 s. (talent de Druide)"
+      },
+      "blink": {
+        "name": "Pas scintillant",
+        "description": "Vous téléporte de 15 m vers l'avant et brise les immobilisations. (talent de Mage)"
+      },
+      "bloodlust": {
+        "name": "Tambours de guerre",
+        "description": "Plonge les alliés à moins de 30 m dans une frénésie, augmentant leur vitesse d'attaque de 30 % pendant 15 s. (talent de Chaman)"
+      },
+      "chain_lightning": {
+        "name": "Éclair fourchu",
+        "description": "Projette de la foudre sur la zone ciblée et inflige {damage} points de dégâts aux ennemis proches. (talent de Chaman)"
+      },
+      "chaos_bolt": {
+        "name": "Trait de ruine",
+        "description": "Projette un trait de feu chaotique qui inflige {damage} points de dégâts de Feu. (talent de Démoniste)"
+      },
+      "cleansing_verdict": {
+        "name": "Verdict purificateur",
+        "description": "Dissipe un effet magique néfaste sur une cible alliée et lui rend {damage} points de vie par la magie du Sacré."
+      },
+      "cloak_of_shadows": {
+        "name": "Cape d’ombre",
+        "description": "Vous enveloppe d'ombres et absorbe 420 points de dégâts pendant 5 s. (talent de Voleur)"
+      },
+      "cone_of_cold": {
+        "name": "Balayage de givre",
+        "description": "Frappe les ennemis proches avec du givre et inflige {damage} points de dégâts de Givre. (technique distinctive de Givre)"
+      },
+      "curse_of_exhaustion": {
+        "name": "Maléfice de plomb",
+        "description": "Maudit la cible et réduit sa vitesse de déplacement de 30 % pendant 12 s. (talent de Démoniste)"
+      },
+      "death_coil": {
+        "name": "Spirale funèbre",
+        "description": "Frappe l'ennemi et lui inflige {damage} points de dégâts d'Ombre, puis l'horrifie pendant 3 s. (talent de Démoniste)"
+      },
+      "deep_freeze": {
+        "name": "Gel mort",
+        "description": "Gèle profondément la cible, lui inflige {damage} points de dégâts de Givre et l'étourdit pendant 4 s. (talent de Mage)"
+      },
+      "desperate_prayer": {
+        "name": "Dernière prière",
+        "description": "Vous rend instantanément {damage} points de vie. (talent de Prêtre)"
+      },
+      "deterrence": {
+        "name": "Garde-hérissée",
+        "description": "Augmente vos chances d'esquiver de 50 points de pourcentage pendant 10 s. (talent de Chasseur)"
+      },
+      "divine_shield": {
+        "name": "Garde-lumière",
+        "description": "Vous protège par la puissance sacrée, absorbant 900 points de dégâts pendant 8 s. (talent de Paladin)"
+      },
+      "earthbind": {
+        "name": "Terre agrippante",
+        "description": "Lie les ennemis proches à la terre et les immobilise pendant 2 s. (talent de Chaman)"
+      },
+      "evocation": {
+        "name": "Puits d’éther",
+        "description": "Rend instantanément 220 points de mana. (talent de Mage)"
+      },
+      "frenzied_regeneration": {
+        "name": "Régénération sauvage",
+        "description": "Rend 180 points de vie en 10 s. Forme d'ours uniquement. (talent de Druide)"
+      },
+      "frost_trap": {
+        "name": "Piège de givre",
+        "description": "Gèle les ennemis dans la zone ciblée pendant 3 s, les empêchant de se déplacer et d'agir. (talent de Chasseur)"
+      },
+      "ghostly_strike": {
+        "name": "Frappe spectrale",
+        "description": "Frappe l'ennemi et lui inflige les dégâts de l'arme plus {damage}, augmente brièvement l'esquive et octroie 1 point de combo. (talent de Voleur)"
+      },
+      "hammer_of_wrath": {
+        "name": "Marteau sonnant",
+        "description": "Lance un marteau sacré sur un ennemi blessé et lui inflige {damage} points de dégâts du Sacré. Utilisable uniquement sous 20 % de points de vie. (talent de Paladin)"
+      },
+      "healing_stream": {
+        "name": "Puits de source",
+        "description": "Rend 120 points de vie à une cible alliée en 12 s. (talent de Chaman)"
+      },
+      "holy_wrath": {
+        "name": "Courroux du saint",
+        "description": "Libère une puissance sacrée et inflige {damage} points de dégâts aux ennemis proches. (talent de Paladin)"
+      },
+      "howl_of_terror": {
+        "name": "Hurlement d’effroi",
+        "description": "Effraie les ennemis proches pendant un maximum de 3 s. Les dégâts peuvent interrompre l'effet. (talent de Démoniste)"
+      },
+      "ice_block": {
+        "name": "Cercueil froid",
+        "description": "Vous enferme dans la glace et absorbe 600 points de dégâts pendant 8 s. Vous ne pouvez pas agir tant que vous êtes enfermé. Relancez pour annuler. (talent de Mage)"
+      },
+      "inner_focus": {
+        "name": "Esprit apaisé",
+        "description": "Votre prochain sort ne coûte rien. Dure 60 s. (talent de Prêtre)"
+      },
+      "innervate": {
+        "name": "Sève vitale",
+        "description": "De la sève vivante afflue en vous pendant 10 s et restaure par vagues 20 points de votre ressource actuelle : mana, rage ou énergie. Changer de forme ne l'interrompt pas. Le sommeil, l'étourdissement ou la stase immobilisent la sève. (talent de Druide)"
+      },
+      "meteor": {
+        "name": "Pierre du ciel",
+        "description": "Fait tomber un météore sur la zone ciblée et inflige {damage} points de dégâts de Feu, puis brûle les ennemis qui s'y trouvent de 12 à 18 points de dégâts de Feu toutes les 2 s pendant 6 s. (talent de Mage)"
+      },
+      "mind_sear": {
+        "name": "Brûle-pensée",
+        "description": "Canalise de l'énergie d'Ombre sur la zone ciblée et inflige {damage} points de dégâts chaque seconde aux ennemis proches. (talent de Prêtre)"
+      },
+      "multi_shot": {
+        "name": "Tir fendu",
+        "description": "Décoche une volée sur la zone ciblée et inflige {damage} points de dégâts physiques aux ennemis dans un rayon de 8 m. (talent de Chasseur)"
+      },
+      "prayer_of_healing": {
+        "name": "Soin du chœur",
+        "description": "Rend {damage} points de vie aux alliés proches. (talent de Prêtre)"
+      },
+      "preparation": {
+        "name": "Contingence",
+        "description": "Met fin au temps de recharge de Sprint, Évasion et Disparition. (talent de Voleur)"
+      },
+      "presence_of_mind": {
+        "name": "Esprit fulgurant",
+        "description": "Votre prochain sort avec un temps d'incantation devient instantané. Dure 60 s. (talent de Mage)"
+      },
+      "psychic_scream": {
+        "name": "Cri psychique",
+        "description": "Effraie les ennemis proches pendant un maximum de 4 s. Les dégâts peuvent interrompre l'effet. (talent de Prêtre)"
+      },
+      "shadowstep": {
+        "name": "Glissement d’ombre",
+        "description": "Vous fait traverser les ombres en direction de votre cible. (talent de Voleur)"
+      },
+      "silence": {
+        "name": "Silence",
+        "description": "Réduit la cible au silence pendant 4 s. (talent de Prêtre)"
+      },
+      "smoke_screen": {
+        "name": "Écran de fumée",
+        "description": "Vous disparaissez dans un nuage de fumée, ce qui augmente vos chances d’esquiver de 30 % pendant 8 s."
+      },
+      "spellsteal": {
+        "name": "Vol de sort",
+        "description": "Vole un effet magique bénéfique à un ennemi et vous le transfère."
+      },
+      "startle_shot": {
+        "name": "Tir de stupeur",
+        "description": "Un tir sauvage qui désoriente la cible pendant {duration} s. Tout dégât interrompt cet effet."
+      },
+      "tranquility": {
+        "name": "Chant du bosquet",
+        "description": "Canalise de l'énergie réparatrice pendant 4 s et rend de 42 à 52 points de vie chaque seconde aux alliés à moins de 30 m. (talent de Druide)"
+      },
+      "typhoon": {
+        "name": "Typhon",
+        "description": "Une rafale de vent repousse tous les ennemis dans un rayon de 8 m et les hébète, réduisant leur vitesse de déplacement de 50 % pendant 4 s."
+      },
+      "voidfeast": {
+        "name": "Festin du Vide",
+        "description": "Dévore un effet magique (un effet bénéfique sur un ennemi ou un effet néfaste sur un allié) et vous rend 6 % de votre maximum de points de vie."
+      },
       "pummel": {
         "name": "Casse-mâchoire",
         "description": "Interrompt l’incantation de la cible et l’empêche de lancer des sorts de cette école de magie pendant 4 s."
@@ -6394,8 +6706,8 @@ export const fr_CA: EnTranslations = {
         "description": "Une attaque d'ouverture en camouflage qui lacère l'ennemi pour les dégâts de l'arme plus {damage} et inflige des dégâts de saignement sur 9 sec. Octroie 1 point de combo. Forme de loup uniquement."
       },
       "revive_pet": {
-        "name": "Ranimer le familier",
-        "description": "Ranime votre familier mort et le ramène à vos côtés."
+        "name": "Rafistoler",
+        "description": "Rafistole votre familier et lui rend {overTime} points de vie en 12 s, par pulsations toutes les 3 s, s'il est vivant. S'il est mort, le ranime avec 35 % de ses points de vie."
       }
     },
     "items": {
@@ -7607,6 +7919,18 @@ export const fr_CA: EnTranslations = {
       },
       "heroic_mark": {
         "name": "Marque héroïque"
+      },
+      "eastbrook_buckler": {
+        "name": "Rondache d'Eastbrook"
+      },
+      "eastbrook_greatsword": {
+        "name": "Espadon d'Eastbrook"
+      },
+      "highwatch_greatsword": {
+        "name": "Espadon de Highwatch"
+      },
+      "highwatch_wallshield": {
+        "name": "Pavois de Highwatch"
       },
       "morthens_cryptforged_hauberk": {
         "name": "Haubert Cryptforged de Morthen"

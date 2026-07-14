@@ -866,6 +866,25 @@ export const ja_JP: EnTranslations = {
       "mobileCameraJoystick": "カメラスティック",
       "mobileLeftHanded": "左利き用レイアウト"
     },
+    "talentRows": {
+      "tab": "選択",
+      "defaultLoadout": "デフォルト構成",
+      "comingSoon": "近日公開",
+      "readoutSummary": "タレント：{head}、{spent}/{total}行を選択済み。"
+    },
+    "abilityError": {
+      "shieldRequired": "盾を装備する必要があります。"
+    },
+    "specPanel": {
+      "primaryAttr": "主要能力値",
+      "complexity": "複雑さ",
+      "complexityLow": "低",
+      "complexityMedium": "中",
+      "complexityHigh": "高",
+      "exampleAbilities": "代表的なアビリティ",
+      "viewTalents": "タレントを見る",
+      "selectSpec": "スペシャライゼーションを選択"
+    },
     "controller": {
       "title": "コントローラー",
       "enable": "コントローラーを有効化",
@@ -2452,10 +2471,10 @@ export const ja_JP: EnTranslations = {
     },
     "abilityHook": {
       "heroic_strike": "次の一撃にレイジを乗せ、より重い攻撃を予約します。",
+      "revenge": "前方の敵を薙ぎ払い、回避または受け流しの後に消費なしで使えることがある。",
+      "hamstring": "敵の移動を妨げ、逃走を阻止する。",
       "battle_shout": "パーティの攻撃力を高める鼓舞の雄叫びです。",
-      "commanding_shout": "持久力を底上げし、長い戦いでも全員が粘り強く戦えるようにします。",
       "charge": "離れた敵に突進し、短いスタンで戦闘の口火を切ります。",
-      "rend": "出血を与え、時間をかけて標的を削っていきます。",
       "thunder_clap": "周囲のすべてに当たり、相手の攻撃を遅くします。",
       "seal_of_righteousness": "一振りごとにホーリーダメージを付与し、ヴァーディクトで消費します。",
       "holy_light": "味方や自分の体力を満タンに戻す、安定した大きめのヒールです。",
@@ -5137,7 +5156,7 @@ export const ja_JP: EnTranslations = {
       "defensiveDesc": "あなたまたはペットを傷つけた敵を攻撃します。",
       "aggressiveDesc": "近くの敵対的な敵を攻撃します。",
       "rename": "ペット名変更",
-      "revive": "ペット蘇生",
+      "revive": "応急処置",
       "abandon": "ペット放棄",
       "cancel": "キャンセル",
       "renameLabel": "新しいペット名を選んでください。",
@@ -5392,6 +5411,7 @@ export const ja_JP: EnTranslations = {
     },
     "slots": {
       "mainhand": "メインハンド",
+      "offhand": "オフハンド",
       "helmet": "頭",
       "neck": "首",
       "shoulder": "肩",
@@ -5673,10 +5693,6 @@ export const ja_JP: EnTranslations = {
         "name": "鉄の咆哮",
         "description": "2分間、攻撃力が{buff}増加します。"
       },
-      "commanding_shout": {
-        "name": "鼓舞の号令",
-        "description": "2分間、スタミナが{buff}増加します。"
-      },
       "demoralizing_shout": {
         "name": "戦慄の遠吠え",
         "description": "恐ろしい雄叫びを上げ、30秒間、周囲の敵すべての攻撃力を{buff}低下させます。"
@@ -5684,10 +5700,6 @@ export const ja_JP: EnTranslations = {
       "charge": {
         "name": "突撃",
         "description": "敵に突撃し、怒りを9生成して1秒間スタンさせます。射程8-25yd。"
-      },
-      "rend": {
-        "name": "深き裂傷",
-        "description": "対象を負傷させ、{duration}秒かけて{damage}の出血ダメージを与えます。"
       },
       "thunder_clap": {
         "name": "震撼の一撃",
@@ -6349,6 +6361,306 @@ export const ja_JP: EnTranslations = {
         "name": "レイスボーンの召喚",
         "description": "レイスボーンを意のままに束縛します。遠方から強力なシャドウダメージを降らせるエリート悪魔です。長い再使用時間がその破壊的な力を制限します。新たな悪魔を召喚すると現在の悪魔は解放されます。悪魔は一度に1体しか従えられません。"
       },
+      "battle_stance": {
+        "name": "バトルスタンス",
+        "description": "攻撃的な戦闘スタンスです。怒りの生成量が10%増加します。武器と防御の基本スタンスです。"
+      },
+      "berserker_stance": {
+        "name": "バーサーカースタンス",
+        "description": "無謀な戦闘スタンスです。クリティカルの発生率が3%上昇し、ダメージが3%増加します。狂怒ウォリアーは常にこのスタンスで戦います。"
+      },
+      "sweeping_strikes": {
+        "name": "広がる弧",
+        "description": "12秒間、単体攻撃が近くの敵1体にも100%のダメージで命中します。（武器）"
+      },
+      "deep_wounds": {
+        "name": "抉れた傷",
+        "description": "パッシブ: あなたの重傷の一撃が対象に出血を残し、6秒かけて物理ダメージを与えます。（武器）"
+      },
+      "enrage_passive": {
+        "name": "狂乱",
+        "description": "パッシブ: 激昂している間、与えるダメージが7%増加し、攻撃速度が25%、移動速度が10%上昇します（4秒間）。瀉血には30%の確率で激昂させる効果があり、赤い収穫は必ず激昂させます。（狂怒）"
+      },
+      "raging_gale": {
+        "name": "双撃",
+        "description": "武器で即座に2回攻撃し、それぞれ武器ダメージの40%に{damage}を加えたダメージを与え、怒りを8生成します。最大2チャージまで蓄積します。（狂怒）"
+      },
+      "red_harvest": {
+        "name": "赤い収穫",
+        "description": "すべてを注ぎ込み、狂乱のうちに3回攻撃し、それぞれ武器ダメージの65%に{damage}を加えたダメージを与え、必ず激怒状態になります。（狂怒）"
+      },
+      "furious_mending": {
+        "name": "憤怒の癒し",
+        "description": "10秒間、受けるダメージが20%減少し、効果中は瀉血が最大体力の20%を回復します。（狂怒）"
+      },
+      "emboldening_roar": {
+        "name": "奮起の咆哮",
+        "description": "奮い立たせる咆哮を上げ、40yd以内の自分と味方プレイヤーを鼓舞します。次の3回のアビリティが必ずクリティカルになります。（狂怒）"
+      },
+      "raised_guard": {
+        "name": "守りの構え",
+        "description": "盾の陰に身を構え、6秒間、受ける物理ダメージが50%減少します。最大2チャージまで蓄積します。（防御）"
+      },
+      "iron_resolve": {
+        "name": "鉄の決意",
+        "description": "歯を食いしばって痛みを堪え、最大40の怒り（最低20）を消費し、消費した怒り1につき4のダメージを吸収します。最大10秒間持続します。（防御）"
+      },
+      "faultline": {
+        "name": "断層",
+        "description": "地面に衝撃波を走らせ、前方8yd以内の敵に{damage}のダメージを与え、3秒間スタンさせます。（防御）"
+      },
+      "defiant_bellow": {
+        "name": "不屈の雄叫び",
+        "description": "不屈の雄叫びを上げ、10yd以内のすべての敵を挑発し、3秒間あなたを攻撃するよう強制します。（防御）"
+      },
+      "breachmaker": {
+        "name": "崩し手",
+        "description": "対象を打ち据えて武器ダメージに{damage}を加えたダメージを与え、その守りを崩します。8秒間、あなたがその対象に与えるダメージが20%増加します。（武器）"
+      },
+      "measured_fury": {
+        "name": "制御された怒り",
+        "description": "制御された怒りが効率を高め、アビリティの怒りコストが10%減少します。（武器）"
+      },
+      "seasoned_soldier": {
+        "name": "歴戦の兵",
+        "description": "クリティカルの通常攻撃が生成する怒りが10%増加します。（武器）"
+      },
+      "diabolical_twinstrike": {
+        "name": "極悪の双撃",
+        "description": "激昂している間、双撃のダメージが15%増加します。（狂怒）"
+      },
+      "cleaving_blows": {
+        "name": "切り裂く連撃",
+        "description": "赤い収穫は必ず双撃のチャージを1つ回復します。（狂怒）"
+      },
+      "sudden_death": {
+        "name": "突然死",
+        "description": "通常攻撃に、体力に関係なく早すぎる墓を怒りコストなしで使用できるようになる確率があります。（武器）"
+      },
+      "storm_bolt": {
+        "name": "嵐の一投",
+        "description": "武器を対象に投げつけて{damage}のダメージを与え、3秒間スタンさせます。"
+      },
+      "piercing_howl": {
+        "name": "貫く咆哮",
+        "description": "劈くような叫びを上げ、15yd以内のすべての敵の移動速度を8秒間、50%低下させます。"
+      },
+      "die_by_sword": {
+        "name": "剣に死す",
+        "description": "防御的クールダウン。8秒間、受けるダメージが30%減少し、攻撃を回避する確率が大幅に上昇します。"
+      },
+      "recklessness": {
+        "name": "無謀",
+        "description": "激昂。12秒間、怒りの生成量が50%、クリティカル率が20%増加します。"
+      },
+      "sanguine_aura": {
+        "name": "血のオーラ",
+        "description": "武器に敵の血を宿し、20秒間、自分と近接の味方の攻撃速度が10%、ダメージが10%増加します。"
+      },
+      "victory_rush": {
+        "name": "勝利の追撃",
+        "description": "武器ダメージに{damage}を加えたダメージを与え、最大体力の20%を回復します。敵を倒してから20秒以内にのみ使用できます。"
+      },
+      "intimidating_shout": {
+        "name": "威圧の雄叫び",
+        "description": "恐ろしい叫びを上げ、8yd以内の最大5体の敵を8秒間、恐怖で逃げ惑わせます。ダメージを受けると効果が解除されることがあります。"
+      },
+      "revenge": {
+        "name": "意趣返し",
+        "description": "大きく弧を描いて攻撃し、前方のすべての敵に物理ダメージを与えます。対象が5体を超えるとダメージが減少します。回避または受け流しに成功すると、次の意趣返しの怒りコストが0になることがあります。 (Protection)"
+      },
+      "heroic_leap": {
+        "name": "英雄的跳躍",
+        "description": "対象地点へ跳躍し、着地時に周囲の敵へ{damage}のダメージを与えます。"
+      },
+      "rallying_cry": {
+        "name": "勇気の雄叫び",
+        "description": "勇壮な雄叫びを上げ、自分と40ヤード以内のパーティメンバーの最大体力を10秒間20%増加させます。防御の対象は、効果中に受けるダメージも5%減少します。"
+      },
+      "avatar": {
+        "name": "化身",
+        "description": "20秒間コロッサスに変身し、あらゆる行動妨害を解除し、与えるダメージが20%増加します。"
+      },
+      "bladestorm": {
+        "name": "剣の嵐",
+        "description": "鋼の嵐と化し、4秒間、8ヤード以内のすべての敵に毎秒{damage}のダメージを与えます。"
+      },
+      "aspect_of_the_wild": {
+        "name": "野牙の装い",
+        "description": "30ヤード以内の味方を野生の力で鼓舞し、攻撃力を45、攻撃速度を5%上昇させる。効果時間5分。（ハンターのタレント）"
+      },
+      "aura_surge": {
+        "name": "曙光の跳弾",
+        "description": "曙光で鍛えた盾を投げて{damage}の聖属性ダメージを与え、最初の対象を2秒間沈黙させる。その後、10ヤード以内の追加の敵最大2体へ跳ね返り、1回ごとに75%のダメージを与える。（パラディンのタレント）"
+      },
+      "avenging_wrath": {
+        "name": "復讐の翼",
+        "description": "復讐の力を呼び起こし、攻撃力を60、魔力を30上昇させる。効果時間20秒。（パラディンのタレント）"
+      },
+      "berserk": {
+        "name": "赤き霞",
+        "description": "攻撃力を70上昇させる。効果時間15秒。（ドルイドのタレント）"
+      },
+      "blink": {
+        "name": "瞬き歩み",
+        "description": "前方15ヤードへ瞬間移動し、移動不能効果を解除する。（メイジのタレント）"
+      },
+      "bloodlust": {
+        "name": "戦の太鼓",
+        "description": "30ヤード以内の味方を狂乱させ、攻撃速度を30%上昇させる。効果時間15秒。（シャーマンのタレント）"
+      },
+      "chain_lightning": {
+        "name": "枝分かれの稲妻",
+        "description": "対象地点へ雷を放ち、周囲の敵に{damage}のダメージを与える。（シャーマンのタレント）"
+      },
+      "chaos_bolt": {
+        "name": "破滅の矢",
+        "description": "混沌の炎を放ち、{damage}の火属性ダメージを与える。（ウォーロックのタレント）"
+      },
+      "cleansing_verdict": {
+        "name": "浄化の裁定",
+        "description": "味方1体の有害な魔法効果を解除し、{damage}の体力を回復する。"
+      },
+      "cloak_of_shadows": {
+        "name": "影まとい",
+        "description": "影で身を包み、5秒間に420のダメージを吸収する。（ローグのタレント）"
+      },
+      "cone_of_cold": {
+        "name": "霜払い",
+        "description": "周囲の敵を冷気で攻撃し、{damage}の氷属性ダメージを与える。（フロストのシグネチャー）"
+      },
+      "curse_of_exhaustion": {
+        "name": "鉛の呪い",
+        "description": "対象を呪い、移動速度を30%低下させる。効果時間12秒。（ウォーロックのタレント）"
+      },
+      "death_coil": {
+        "name": "墓所の螺旋",
+        "description": "敵に{damage}の闇属性ダメージを与え、その後3秒間恐怖状態にする。（ウォーロックのタレント）"
+      },
+      "deep_freeze": {
+        "name": "死霜",
+        "description": "対象を深く凍結させ、{damage}の氷属性ダメージを与えて4秒間スタンさせる。（メイジのタレント）"
+      },
+      "desperate_prayer": {
+        "name": "最後の祈り",
+        "description": "自分の体力を即座に{damage}回復する。（プリーストのタレント）"
+      },
+      "deterrence": {
+        "name": "針毛の守り",
+        "description": "回避率を50パーセントポイント上昇させる。効果時間10秒。（ハンターのタレント）"
+      },
+      "divine_shield": {
+        "name": "光の護り",
+        "description": "聖なる力で身を守り、8秒間に900のダメージを吸収する。（パラディンのタレント）"
+      },
+      "earthbind": {
+        "name": "大地の縛り",
+        "description": "周囲の敵を大地に縛り、2秒間移動不能にする。（シャーマンのタレント）"
+      },
+      "evocation": {
+        "name": "エーテルの井戸",
+        "description": "マナを即座に220回復する。（メイジのタレント）"
+      },
+      "frenzied_regeneration": {
+        "name": "野生の癒し",
+        "description": "10秒かけて体力を180回復する。熊形態でのみ使用可能。（ドルイドのタレント）"
+      },
+      "frost_trap": {
+        "name": "霧氷の罠",
+        "description": "対象地点の敵を3秒間凍結させ、移動と行動を封じる。（ハンターのタレント）"
+      },
+      "ghostly_strike": {
+        "name": "亡霊の一撃",
+        "description": "敵に武器ダメージと{damage}の追加ダメージを与え、短時間、回避率を上昇させる。コンボポイントを1獲得する。（ローグのタレント）"
+      },
+      "hammer_of_wrath": {
+        "name": "鐘鳴りの槌",
+        "description": "傷ついた敵に聖なるハンマーを投げ、{damage}の聖属性ダメージを与える。体力が20%未満の対象にのみ使用可能。（パラディンのタレント）"
+      },
+      "healing_stream": {
+        "name": "湧き水",
+        "description": "味方1体の体力を12秒かけて120回復する。（シャーマンのタレント）"
+      },
+      "holy_wrath": {
+        "name": "聖者の怒り",
+        "description": "聖なる力を解き放ち、周囲の敵に{damage}のダメージを与える。（パラディンのタレント）"
+      },
+      "howl_of_terror": {
+        "name": "恐怖の遠吠え",
+        "description": "周囲の敵を最大3秒間恐怖状態にする。ダメージを受けると解除されることがある。（ウォーロックのタレント）"
+      },
+      "ice_block": {
+        "name": "冷たき棺",
+        "description": "氷に身を閉じ、8秒間に600のダメージを吸収する。閉じ込められている間は行動できない。再使用すると解除する。（メイジのタレント）"
+      },
+      "inner_focus": {
+        "name": "静まる心",
+        "description": "次に使用するスペルの消費をなくす。効果時間60秒。（プリーストのタレント）"
+      },
+      "innervate": {
+        "name": "生命の樹液",
+        "description": "生命の樹液が10秒間あふれ、現在のリソースを波状に20回復する。マナ、怒り、エナジーに対応し、変身しても中断されない。睡眠、スタン、ステイシス中は樹液が止まる。（ドルイドのタレント）"
+      },
+      "meteor": {
+        "name": "天の石",
+        "description": "対象地点へ隕石を落とし、{damage}の火属性ダメージを与える。その後6秒間、その場の敵に2秒ごとに12から18の火属性ダメージを与える。（メイジのタレント）"
+      },
+      "mind_sear": {
+        "name": "思念焼き",
+        "description": "対象地点へ闇のエネルギーをチャネリングし、周囲の敵に毎秒{damage}のダメージを与える。（プリーストのタレント）"
+      },
+      "multi_shot": {
+        "name": "分裂射撃",
+        "description": "対象地点へ矢の一斉射撃を放ち、8ヤード以内の敵に{damage}の物理ダメージを与える。（ハンターのタレント）"
+      },
+      "prayer_of_healing": {
+        "name": "聖歌の癒し",
+        "description": "周囲の味方の体力を{damage}回復する。（プリーストのタレント）"
+      },
+      "preparation": {
+        "name": "備え",
+        "description": "スプリント、回避、バニッシュのクールダウンを完了させる。（ローグのタレント）"
+      },
+      "presence_of_mind": {
+        "name": "駆ける心",
+        "description": "次に使用する詠唱時間のあるスペルを即時発動にする。効果時間60秒。（メイジのタレント）"
+      },
+      "psychic_scream": {
+        "name": "精神の絶叫",
+        "description": "周囲の敵を最大4秒間恐怖状態にする。ダメージを受けると解除されることがある。（プリーストのタレント）"
+      },
+      "shadowstep": {
+        "name": "影すべり",
+        "description": "影を通り抜けて対象へ近づく。（ローグのタレント）"
+      },
+      "silence": {
+        "name": "沈黙",
+        "description": "対象を4秒間沈黙させる。（プリーストのタレント）"
+      },
+      "smoke_screen": {
+        "name": "スモークスクリーン",
+        "description": "煙幕に紛れ、8秒間、回避率を30%上昇させる。"
+      },
+      "spellsteal": {
+        "name": "魔法奪取",
+        "description": "敵の有益な魔法効果を1つ奪い、自分へ移す。"
+      },
+      "startle_shot": {
+        "name": "驚愕射撃",
+        "description": "荒々しい一射で対象を{duration}秒間混乱させる。ダメージを受けると解除される。"
+      },
+      "tranquility": {
+        "name": "木立の歌",
+        "description": "4秒間、回復エネルギーをチャネリングし、30ヤード以内の味方の体力を毎秒42から52回復する。（ドルイドのタレント）"
+      },
+      "typhoon": {
+        "name": "タイフーン",
+        "description": "突風で8ヤード以内のすべての敵を吹き飛ばしてよろめかせ、4秒間、移動速度を50%低下させる。"
+      },
+      "voidfeast": {
+        "name": "虚無の饗宴",
+        "description": "魔法効果（敵の有益効果または味方の有害効果）を貪り、自分の最大体力の6%を回復する。"
+      },
       "pummel": {
         "name": "顎砕き",
         "description": "対象の呪文詠唱を中断し、4秒間その系統の呪文を封じる。"
@@ -6394,8 +6706,8 @@ export const ja_JP: EnTranslations = {
         "description": "ステルス状態からの先制攻撃で、武器ダメージに加えて{damage}のダメージを与え、9秒かけて出血ダメージを与える。コンボポイントを1獲得する。ウルフフォーム時のみ使用可能。"
       },
       "revive_pet": {
-        "name": "ペット蘇生",
-        "description": "死んだペットを蘇生させ、自分のそばに呼び戻す。"
+        "name": "応急処置",
+        "description": "ペットを応急処置する。生存している場合は12秒間、3秒ごとに回復し、合計{overTime}の体力を回復する。死亡している場合は体力35%で蘇生する。"
       }
     },
     "items": {
@@ -7607,6 +7919,18 @@ export const ja_JP: EnTranslations = {
       },
       "heroic_mark": {
         "name": "英雄の証"
+      },
+      "eastbrook_buckler": {
+        "name": "イーストブルックのバックラー"
+      },
+      "eastbrook_greatsword": {
+        "name": "イーストブルックの大剣"
+      },
+      "highwatch_greatsword": {
+        "name": "ハイウォッチの大剣"
+      },
+      "highwatch_wallshield": {
+        "name": "ハイウォッチの壁盾"
       },
       "morthens_cryptforged_hauberk": {
         "name": "モルセンの墓鋳ホーバーク"

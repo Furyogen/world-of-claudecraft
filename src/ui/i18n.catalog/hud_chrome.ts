@@ -831,6 +831,26 @@ export const hudChromeStrings = {
     // panel's leftHandedTouch row, surfaced again here alongside the joystick.
     mobileLeftHanded: 'Left-handed layout',
   },
+  // Choice-row talents and specialization details in the Talents V2 window.
+  talentRows: {
+    tab: 'Choices',
+    defaultLoadout: 'Default Loadout',
+    comingSoon: 'Coming soon',
+    readoutSummary: 'Talents: {head}, {spent}/{total} rows selected.',
+  },
+  abilityError: {
+    shieldRequired: 'You must have a shield equipped.',
+  },
+  specPanel: {
+    primaryAttr: 'Primary attribute',
+    complexity: 'Complexity',
+    complexityLow: 'Low',
+    complexityMedium: 'Medium',
+    complexityHigh: 'High',
+    exampleAbilities: 'Example abilities',
+    viewTalents: 'View talents',
+    selectSpec: 'Select specialization',
+  },
   // Controller / gamepad options panel (Options > Controller). Player-facing
   // chrome, so every label is a key here; the live numbers run through
   // formatNumber. The button names themselves (A / LB / D-pad, etc.) stay as

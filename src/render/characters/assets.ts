@@ -14,9 +14,11 @@ import { WEAPON_SKINS } from '../../sim/content/weapon_skins';
 import { loadGltf, loadTexture } from '../assets/loader';
 import { registerPreload } from '../assets/preload';
 import { addRimGlow, GFX } from '../gfx';
+import { type HandGrip, KAYKIT_SHIELD_ACCESSORIES, KAYKIT_SHIELD_GRIPS } from './held_item_grips';
 import {
   type AttachDef,
   characterPreloadUrls,
+  itemOffhandModelUrl,
   itemWeaponModelUrl,
   SKIN_EMISSIVE,
   SKINS,
@@ -32,12 +34,6 @@ import { variantGripTransform, WEAPON_GRIP_OVERRIDES } from './weapon_grip';
 import { markOwnedWeaponSkinMaterials } from './weapon_skin_materials';
 
 const DEFAULT_TINT_STRENGTH = 0.4;
-
-type HandGrip = {
-  position: [number, number, number];
-  quaternion: [number, number, number, number];
-  scale: number;
-};
 
 // KayKit adventurer standalone weapon glbs ship a left-hand mesh offset on a
 // lone child node. handslot.r/l children in the character glbs carry the
@@ -149,6 +145,7 @@ const KAYKIT_WEAPON_ACCESSORY: Record<string, string> = {
   // Bow-SLOT skin with crossbow HANDLING (a gun aims, it is not drawn): the
   // grip family follows the handling, like the attach bone below.
   encore_the_second_falling_star: 'VAR_CROSSBOW',
+  ...KAYKIT_SHIELD_ACCESSORIES,
 };
 
 // Per-family grip for the variant pack. The model origin IS the grip, so we attach
@@ -208,6 +205,7 @@ const KAYKIT_HAND_GRIPS: Record<string, { r: HandGrip; l?: HandGrip }> = {
   '1H_Wand': {
     r: { position: [0, 0.2174, 0], quaternion: [0, 1, 0, 0], scale: 0.4831 },
   },
+  ...KAYKIT_SHIELD_GRIPS,
 };
 
 function isHandslotBone(name: string): boolean {
@@ -279,10 +277,10 @@ function flattenWeaponScene(src: THREE.Object3D): THREE.Object3D {
   return holder;
 }
 
-// Marks the holder group of the equipped-weapon attachment (the `weaponSlot`
-// entry), so setHeldWeapon can find and replace exactly that prop without
-// touching fixed offhands (rogue's second dagger, the warlock spellbook).
+// Mainhand and actual offhand holders have separate replacement cycles, so a
+// mainhand cosmetic swap cannot remove or reskin a shield or second weapon.
 const SWAP_WEAPON_TAG = 'swapWeaponHolder';
+const SWAP_OFFHAND_TAG = 'swapOffhandHolder';
 
 // Grip for a variant-pack weapon. Its origin is authored AT the grip, so we attach
 // at the origin (no recenter) and only clamp an oversized model so its blade does
@@ -323,13 +321,19 @@ function attachProp(
   root: THREE.Object3D,
   bone: THREE.Object3D,
   att: AttachDef,
-  markSwap = false,
+  swapKind: 'mainhand' | 'offhand' | null = null,
 ): THREE.Object3D {
   const payload = flattenWeaponScene(cloneSkinned(resolvedGltf(att.url).scene));
   payload.traverse((o) => {
     if ((o as THREE.Mesh).isMesh) o.userData.weaponMesh = true;
   });
-  if (markSwap) payload.userData[SWAP_WEAPON_TAG] = true;
+  if (swapKind === 'mainhand') {
+    payload.userData[SWAP_WEAPON_TAG] = true;
+    payload.userData.heldSlot = 0;
+  } else if (swapKind === 'offhand') {
+    payload.userData[SWAP_OFFHAND_TAG] = true;
+    payload.userData.heldSlot = 1;
+  }
   const variantGrip = isHandslotBone(att.bone) ? variantGripFor(att.url) : null;
   if (variantGrip) {
     applyVariantGrip(payload, att.bone, variantGrip, att.url);
@@ -359,6 +363,14 @@ function swapAttachDef(
 ): AttachDef {
   const url = weaponSkinModelUrl(weaponSkinId) ?? itemWeaponModelUrl(weaponItemId);
   return url ? { url, bone: base.bone } : base;
+}
+
+function offhandAttachDef(
+  base: AttachDef,
+  offhandItemId: string | null | undefined,
+): AttachDef | null {
+  const url = itemOffhandModelUrl(offhandItemId);
+  return url ? { url, bone: base.bone } : null;
 }
 
 // Classes without weaponSlots keep a FIXED weapon visual (the hunter's ranged
@@ -538,7 +550,11 @@ function optimizedScene(url: string): THREE.Object3D {
 
 /** Fresh SkeletonUtils clone of a manifest entry with its kit applied.
  *  Pure model space — normalization (scale/yaw/feet offset) happens upstream. */
-export function assembleModel(def: VisualDef, weaponItemId?: string | null): THREE.Object3D {
+export function assembleModel(
+  def: VisualDef,
+  weaponItemId?: string | null,
+  offhandItemId?: string | null,
+): THREE.Object3D {
   const root = cloneSkinned(optimizedScene(def.url));
   // tag the character's own meshes (body + accessories share one texture atlas)
   // so a skin override hits them but not the separate weapons attached below
@@ -559,18 +575,28 @@ export function assembleModel(def: VisualDef, weaponItemId?: string | null): THR
   // Low tier still downgrades body/material cost, but keeps attachments visible.
   const attachments = visibleAttachmentsForGraphics(def);
   for (let i = 0; i < attachments.length; i++) {
-    const isSwap = def.weaponSlots?.includes(i) ?? false;
-    // Swappable slots take the equipped item's model (when given); every other
-    // attachment is fixed (the warlock's spellbook offhand). The rogue lists both
-    // hand slots so a dagger shows in both. Fixed RANGED attaches (hunter) are
-    // still marked as swaps so a later bow/crossbow weapon skin can replace them
-    // in place (setHeldWeapon's stale cycle).
-    const att = isSwap ? swapAttachDef(attachments[i], weaponItemId) : attachments[i];
+    const isMainhandSwap = def.weaponSlots?.includes(i) ?? false;
+    const isOffhandSwap = def.offhandSlot === i;
+    // Mainhand and offhand swap slots take their respective equipped item model;
+    // every other attachment is fixed (the warlock's spellbook offhand). Fixed
+    // RANGED attaches (hunter) are still marked as mainhand swaps so a later
+    // bow/crossbow weapon skin can replace them in place.
+    const att = isMainhandSwap
+      ? swapAttachDef(attachments[i], weaponItemId)
+      : isOffhandSwap
+        ? offhandAttachDef(attachments[i], offhandItemId)
+        : attachments[i];
+    if (!att) continue;
     // GLTFLoader sanitizes node names (PropertyBinding strips [].:/ chars),
     // so the authored "handslot.r" arrives as "handslotr" — try both
     const bone = resolveBone(root, att.bone);
     if (!bone) continue; // manifest/bone mismatch — ship without the prop
-    attachProp(root, bone, att, isSwap || isRangedSwapAttach(attachments[i]));
+    const swapKind = isOffhandSwap
+      ? 'offhand'
+      : isMainhandSwap || isRangedSwapAttach(attachments[i])
+        ? 'mainhand'
+        : null;
+    attachProp(root, bone, att, swapKind);
   }
   // Re-orient mis-baked built-in weapon nodes (e.g. the golem axe) in place.
   for (const fix of def.weaponFix ?? []) {
@@ -584,14 +610,11 @@ export function assembleModel(def: VisualDef, weaponItemId?: string | null): THR
   return root;
 }
 
-/** Replace the equipped-weapon attachment(s) on an already-assembled model in place,
- *  for a runtime gear swap or a weapon-skin change. Re-attaches every swap slot (the
- *  rogue has two, so both hands update) plus, for classes with a fixed ranged visual
- *  (hunter), the fixed ranged attach that a bow/crossbow skin replaces. Returns the
- *  attached weapon payload roots so the caller can hang rarity VFX off them. The
- *  caller must re-apply materials and re-snapshot the original-material map
- *  afterwards (see CharacterVisual.setWeapon), since the new weapon meshes start on
- *  the source GLB's raw materials. */
+/** Replace the mainhand attachment on an already-assembled model in place for a
+ *  runtime gear swap or weapon-skin change. For classes with a fixed ranged
+ *  visual (hunter), also replaces the ranged attach when a bow/crossbow skin is
+ *  active. The actual equipped offhand has a separate replacement cycle. Returns
+ *  the attached payload roots so the caller can hang rarity VFX off them. */
 export function setHeldWeapon(
   root: THREE.Object3D,
   def: VisualDef,
@@ -617,9 +640,31 @@ export function setHeldWeapon(
       : (rangedSkinAttachDef(base, weaponSkinId) ?? base);
     const bone = resolveBone(root, att.bone);
     if (!bone) continue;
-    payloads.push(attachProp(root, bone, att, true));
+    payloads.push(attachProp(root, bone, att, 'mainhand'));
   }
   return payloads;
+}
+
+/** Replace only the actual offhand attachment. Mainhand item/cosmetic models
+ *  and their rarity VFX remain untouched. */
+export function setHeldOffhand(
+  root: THREE.Object3D,
+  def: VisualDef,
+  offhandItemId: string | null,
+): THREE.Object3D[] {
+  if (def.offhandSlot === undefined) return [];
+  const stale: THREE.Object3D[] = [];
+  root.traverse((o) => {
+    if (o.userData[SWAP_OFFHAND_TAG]) stale.push(o);
+  });
+  for (const o of stale) o.removeFromParent();
+
+  const base = def.attach?.[def.offhandSlot];
+  if (!base) return [];
+  const att = offhandAttachDef(base, offhandItemId);
+  if (!att) return [];
+  const bone = resolveBone(root, att.bone);
+  return bone ? [attachProp(root, bone, att, 'offhand')] : [];
 }
 
 /** A standalone display clone of a weapon-skin model for the armory inspect

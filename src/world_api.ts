@@ -369,6 +369,8 @@ export const COMMAND_NAMES = [
   // (An admin "mute" is a moderation action, not a wire command.)
   'ignore_add',
   'ignore_remove',
+  // Append-only protocol addition for the canonical Talents V2 row mutation.
+  'selectTalentRow',
 ] as const;
 
 // The union both the send path (`online.ts`) and the dispatch switch
@@ -467,6 +469,7 @@ export const COMMAND_FACETS = {
   applyTalents: 'IWorldTalents',
   respec: 'IWorldTalents',
   setSpec: 'IWorldTalents',
+  selectTalentRow: 'IWorldTalents',
   saveLoadout: 'IWorldTalents',
   switchLoadout: 'IWorldTalents',
   deleteLoadout: 'IWorldTalents',

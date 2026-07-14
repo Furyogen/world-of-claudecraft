@@ -17,7 +17,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 409,
-      "state": "6bd4c62d",
+      "state": "e71ed8eb",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -48,6 +48,7 @@
             "dungeonClears": {},
             "itemsDiscovered": [
               "baked_bread",
+              "eastbrook_buckler",
               "recruit_tunic",
               "worn_sword"
             ]
@@ -57,7 +58,8 @@
           "entityId": 408,
           "equipment": {
             "chest": "recruit_tunic",
-            "mainhand": "worn_sword"
+            "mainhand": "worn_sword",
+            "offhand": "eastbrook_buckler"
           },
           "equipmentInstance": {},
           "gatheringProficiency": {},
@@ -71,8 +73,7 @@
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -81,6 +82,19 @@
         {
           "aiState": "idle",
           "attackPower": 46,
+          "auras": [
+            {
+              "duration": 3600,
+              "id": "battle_stance",
+              "kind": "battle_stance",
+              "name": "Battle Stance",
+              "remaining": 3600,
+              "school": "physical",
+              "sourceId": 408
+            }
+          ],
+          "blockChance": 0.05,
+          "blockValue": 6,
           "combatTimer": 99,
           "comboUntil": -1,
           "critChance": 0.06,
@@ -88,14 +102,15 @@
           "dodgeChance": 0.06,
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
-          "hp": 90,
+          "hp": 100,
           "id": 408,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
-          "maxHp": 90,
+          "maxHp": 100,
           "maxResource": 100,
           "moveSpeed": 7,
+          "offhandItemId": "eastbrook_buckler",
           "onGround": true,
           "overpowerUntil": -1,
           "petMode": "defensive",
@@ -114,10 +129,10 @@
           "spellPower": 5,
           "stats": {
             "agi": 20,
-            "armor": 110,
+            "armor": 144,
             "int": 10,
             "spi": 11,
-            "sta": 22,
+            "sta": 23,
             "str": 23
           },
           "templateId": "warrior",
@@ -133,8 +148,8 @@
       "tick": 20,
       "time": 1,
       "nextId": 415,
-      "state": "7c57f6dc",
-      "events": "56b757c4",
+      "state": "bfa19f9a",
+      "events": "a1134a38",
       "rng": {
         "draws": 54,
         "digest": "d9836924"
@@ -144,8 +159,8 @@
       "tick": 40,
       "time": 2,
       "nextId": 415,
-      "state": "80683d83",
-      "events": "5174d031",
+      "state": "71c44782",
+      "events": "193b5fc9",
       "rng": {
         "draws": 95,
         "digest": "43c2d2eb"
@@ -155,8 +170,8 @@
       "tick": 60,
       "time": 3,
       "nextId": 415,
-      "state": "e2a1681f",
-      "events": "57fc463a",
+      "state": "4b79b001",
+      "events": "b2a57915",
       "rng": {
         "draws": 224,
         "digest": "22d4749f"
@@ -166,7 +181,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 415,
-      "state": "88bf5193",
+      "state": "e0756bb6",
       "events": "741638a5",
       "rng": {
         "draws": 224,
@@ -190,7 +205,7 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
-            "damageTaken": 1497
+            "damageTaken": 1473
           },
           "craftSkills": {},
           "craftThrottle": {},
@@ -199,6 +214,7 @@
             "dungeonClears": {},
             "itemsDiscovered": [
               "baked_bread",
+              "eastbrook_buckler",
               "recruit_tunic",
               "worn_sword"
             ],
@@ -229,7 +245,8 @@
           "entityId": 408,
           "equipment": {
             "chest": "recruit_tunic",
-            "mainhand": "worn_sword"
+            "mainhand": "worn_sword",
+            "offhand": "eastbrook_buckler"
           },
           "equipmentInstance": {},
           "gatheringProficiency": {},
@@ -245,8 +262,7 @@
           "nodeHarvestReadyAt": {},
           "renown": 30,
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -256,6 +272,15 @@
           "aiState": "idle",
           "attackPower": 106,
           "auras": [
+            {
+              "duration": 3600,
+              "id": "battle_stance",
+              "kind": "battle_stance",
+              "name": "Battle Stance",
+              "remaining": 3597,
+              "school": "physical",
+              "sourceId": 408
+            },
             {
               "duration": 3,
               "id": "ensnare_webwood_spider",
@@ -296,6 +321,8 @@
               "sourceId": 411
             }
           ],
+          "blockChance": 0.05,
+          "blockValue": 6,
           "combatTimer": 0.3,
           "comboUntil": -1,
           "critChance": 0.0675,
@@ -309,9 +336,10 @@
           "kind": "player",
           "level": 16,
           "lootFfaTimer": "Infinity",
-          "maxHp": 660,
+          "maxHp": 670,
           "maxResource": 100,
           "moveSpeed": 7,
+          "offhandItemId": "eastbrook_buckler",
           "onGround": true,
           "overpowerUntil": -1,
           "petMode": "defensive",
@@ -321,7 +349,7 @@
             "z": -2
           },
           "potionCooldownUntil": -1,
-          "resource": 55.444444,
+          "resource": 90.016667,
           "resourceType": "rage",
           "spawnPos": {
             "x": 2,
@@ -331,10 +359,10 @@
           "spellPower": 5,
           "stats": {
             "agi": 35,
-            "armor": 320,
+            "armor": 354,
             "int": 10,
             "spi": 11,
-            "sta": 52,
+            "sta": 53,
             "str": 53
           },
           "templateId": "warrior",
@@ -648,7 +676,7 @@
       "tick": 64,
       "time": 3.2,
       "nextId": 415,
-      "state": "d5259144",
+      "state": "69e75ffe",
       "events": "741638a5",
       "rng": {
         "draws": 244,
@@ -672,7 +700,7 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
-            "damageTaken": 1497
+            "damageTaken": 1473
           },
           "craftSkills": {},
           "craftThrottle": {},
@@ -681,6 +709,7 @@
             "dungeonClears": {},
             "itemsDiscovered": [
               "baked_bread",
+              "eastbrook_buckler",
               "recruit_tunic",
               "worn_sword"
             ],
@@ -711,7 +740,8 @@
           "entityId": 408,
           "equipment": {
             "chest": "recruit_tunic",
-            "mainhand": "worn_sword"
+            "mainhand": "worn_sword",
+            "offhand": "eastbrook_buckler"
           },
           "equipmentInstance": {},
           "gatheringProficiency": {},
@@ -727,8 +757,7 @@
           "nodeHarvestReadyAt": {},
           "renown": 30,
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -738,6 +767,15 @@
           "aiState": "idle",
           "attackPower": 106,
           "auras": [
+            {
+              "duration": 3600,
+              "id": "battle_stance",
+              "kind": "battle_stance",
+              "name": "Battle Stance",
+              "remaining": 3596.8,
+              "school": "physical",
+              "sourceId": 408
+            },
             {
               "duration": 3,
               "id": "ensnare_webwood_spider",
@@ -778,6 +816,8 @@
               "sourceId": 411
             }
           ],
+          "blockChance": 0.05,
+          "blockValue": 6,
           "combatTimer": 0.5,
           "comboUntil": -1,
           "critChance": 0.0675,
@@ -791,9 +831,10 @@
           "kind": "player",
           "level": 16,
           "lootFfaTimer": "Infinity",
-          "maxHp": 660,
+          "maxHp": 670,
           "maxResource": 100,
           "moveSpeed": 7,
+          "offhandItemId": "eastbrook_buckler",
           "onGround": true,
           "overpowerUntil": -1,
           "petMode": "defensive",
@@ -803,7 +844,7 @@
             "z": -2
           },
           "potionCooldownUntil": -1,
-          "resource": 55.444444,
+          "resource": 90.016667,
           "resourceType": "rage",
           "spawnPos": {
             "x": 2,
@@ -813,10 +854,10 @@
           "spellPower": 5,
           "stats": {
             "agi": 35,
-            "armor": 320,
+            "armor": 354,
             "int": 10,
             "spi": 11,
-            "sta": 52,
+            "sta": 53,
             "str": 53
           },
           "templateId": "warrior",

@@ -618,13 +618,13 @@ export const de_DE: EnTranslations = {
       "update": "Aktualisieren"
     },
     "cameraPrompt": {
-      "title": "Choose Your Camera",
-      "intro": "Pick how the camera follows your character.",
-      "mouseDesc": "Move the mouse to turn the camera without holding a button.",
-      "classicTitle": "Classic Camera",
-      "classicDesc": "Hold right-click and move the mouse to turn the camera.",
-      "changeLater": "You can change this later under Esc, Key Bindings.",
-      "confirm": "Confirm"
+      "title": "Wähle deine Kamera",
+      "intro": "Wähle, wie die Kamera deinem Charakter folgt.",
+      "mouseDesc": "Bewege die Maus, um die Kamera zu drehen, ohne eine Taste gedrückt zu halten.",
+      "classicTitle": "Klassische Kamera",
+      "classicDesc": "Halte die rechte Maustaste gedrückt und bewege die Maus, um die Kamera zu drehen.",
+      "changeLater": "Du kannst dies später unter Esc, Tastenbelegung ändern.",
+      "confirm": "Bestätigen"
     },
     "castBar": {
       "playerAria": "Eure Zauberleiste",
@@ -672,11 +672,11 @@ export const de_DE: EnTranslations = {
       "perSecondRow": "{total} ({rate})",
       "minutesSeconds": "{m} Min. {s} Sek.",
       "seconds": "{s} Sek.",
-      "autoShowHint": "Rows appear automatically once your party deals damage or healing, and this segment closes a few seconds after combat ends."
+      "autoShowHint": "Die Zeilen erscheinen automatisch, sobald deine Gruppe Schaden verursacht oder heilt. Dieser Bereich schließt sich wenige Sekunden nach Kampfende."
     },
     "petFeed": {
-      "disabledFullHp": "Pet is at full health",
-      "disabledNoFood": "No food in your bags will heal your pet"
+      "disabledFullHp": "Begleiter hat volle Gesundheit",
+      "disabledNoFood": "Kein Futter in deinen Taschen kann deinen Begleiter heilen"
     },
     "keybinds": {
       "emoteWheel": "Emote-Rad",
@@ -865,6 +865,25 @@ export const de_DE: EnTranslations = {
       "showDailyRewardsChest": "Truhe der täglichen Belohnungen anzeigen",
       "mobileCameraJoystick": "Kamera-Joystick",
       "mobileLeftHanded": "Linkshänder-Layout"
+    },
+    "talentRows": {
+      "tab": "Auswahl",
+      "defaultLoadout": "Standardkonfiguration",
+      "comingSoon": "Demnächst",
+      "readoutSummary": "Talente: {head}, {spent}/{total} Reihen ausgewählt."
+    },
+    "abilityError": {
+      "shieldRequired": "Ihr müsst einen Schild ausgerüstet haben."
+    },
+    "specPanel": {
+      "primaryAttr": "Primärattribut",
+      "complexity": "Komplexität",
+      "complexityLow": "Niedrig",
+      "complexityMedium": "Mittel",
+      "complexityHigh": "Hoch",
+      "exampleAbilities": "Beispielfähigkeiten",
+      "viewTalents": "Talente anzeigen",
+      "selectSpec": "Spezialisierung wählen"
     },
     "controller": {
       "title": "Controller",
@@ -1277,7 +1296,7 @@ export const de_DE: EnTranslations = {
     },
     "bags": {
       "cannotDestroy": "Dieser Gegenstand kann nicht zerstört werden.",
-      "rightClickDestroy": "Shift+right-click to destroy",
+      "rightClickDestroy": "Umschalt+Rechtsklick zum Zerstören",
       "filterGroupAria": "Taschen nach Kategorie filtern",
       "filterAll": "Alle",
       "filterWeapon": "Waffen",
@@ -1478,7 +1497,7 @@ export const de_DE: EnTranslations = {
         "benefits": "Verknüpfe deinen Discord, um durch Spiel und Gemeinschaftsaktivität Punkte zu verdienen und die Statusstufen zu erklimmen.",
         "error": "Discord konnte nicht verknüpft werden. Bitte versuche es erneut.",
         "success": "Discord verknüpft.",
-        "joinServer": "Just join the Discord server"
+        "joinServer": "Einfach dem Discord-Server beitreten"
       },
       "choice": {
         "title": "Mit Discord fortfahren",
@@ -2452,10 +2471,10 @@ export const de_DE: EnTranslations = {
     },
     "abilityHook": {
       "heroic_strike": "Reiht einen schwereren Schwung ein, der bei deinem nächsten Treffer Wut verbraucht.",
+      "revenge": "Trifft Gegner vor Euch und kann nach einem Ausweichen oder Parieren kostenlos werden.",
+      "hamstring": "Beeinträchtigt die Bewegung eines Gegners, damit er nicht entkommen kann.",
       "battle_shout": "Ein aufrüttelnder Ruf, der die Angriffskraft der Gruppe erhöht.",
-      "commanding_shout": "Stärkt die Ausdauer, damit alle in einem Kampf länger durchhalten.",
       "charge": "Stürmt auf einen entfernten Gegner zu und eröffnet den Kampf mit einer kurzen Betäubung.",
-      "rend": "Eröffnet eine Blutung, die das Ziel über Zeit zermürbt.",
       "thunder_clap": "Trifft alles um dich herum und verlangsamt deren Angriffe.",
       "seal_of_righteousness": "Verzaubert deine Schwünge mit heiligem Schaden, den du dann mit Verdict verbrauchst.",
       "holy_light": "Eine stetige, ansehnliche Heilung, um einen Verbündeten oder dich selbst aufzufüllen.",
@@ -2573,8 +2592,8 @@ export const de_DE: EnTranslations = {
         "desc": "Schuppige, schlangenhafte Wesen aus den alten Tiefen. Selten, stolz und weit stärker, als sie aussehen."
       },
       "reptile": {
-        "name": "Reptiles",
-        "desc": "Cold-blooded hunters with a hiss and a snap all their own, distinct from the warm-blooded beasts."
+        "name": "Reptilien",
+        "desc": "Kaltblütige Jäger mit unverwechselbarem Zischen und Zuschnappen, klar von den warmblütigen Bestien zu unterscheiden."
       }
     },
     "worldPage": {
@@ -5137,7 +5156,7 @@ export const de_DE: EnTranslations = {
       "defensiveDesc": "Greift Gegner an, die dich oder deinen Begleiter verletzen.",
       "aggressiveDesc": "Greift nahe feindliche Gegner an.",
       "rename": "Begleiter umbenennen",
-      "revive": "Begleiter wiederbeleben",
+      "revive": "Zusammenflicken",
       "abandon": "Begleiter aufgeben",
       "cancel": "Abbrechen",
       "renameLabel": "Wähle einen neuen Begleiternamen.",
@@ -5392,6 +5411,7 @@ export const de_DE: EnTranslations = {
     },
     "slots": {
       "mainhand": "Waffenhand",
+      "offhand": "Nebenhand",
       "helmet": "Kopf",
       "neck": "Hals",
       "shoulder": "Schultern",
@@ -5673,10 +5693,6 @@ export const de_DE: EnTranslations = {
         "name": "Eisernes Gebrüll",
         "description": "Erhöht eure Angriffskraft 2 Min. lang um {buff}."
       },
-      "commanding_shout": {
-        "name": "Stärkender Ruf",
-        "description": "Erhöht eure Ausdauer 2 Min. lang um {buff}."
-      },
       "demoralizing_shout": {
         "name": "Direhowl",
         "description": "Stößt einen furchterregenden Ruf aus und verringert die Angriffskraft aller nahen Gegner 30 Sek. lang um {buff}."
@@ -5684,10 +5700,6 @@ export const de_DE: EnTranslations = {
       "charge": {
         "name": "Vorpreschen",
         "description": "Stürmt auf einen Gegner zu, erzeugt 9 Wut und betäubt ihn 1 Sek. lang. Reichweite 8-25 m."
-      },
-      "rend": {
-        "name": "Tiefe Wunde",
-        "description": "Verwundet das Ziel und lässt es über {duration} Sek. für {damage} Schaden bluten."
       },
       "thunder_clap": {
         "name": "Bebender Schlag",
@@ -6349,6 +6361,306 @@ export const de_DE: EnTranslations = {
         "name": "Wraithborn beschwören",
         "description": "Bindet einen Wraithborn an Euren Willen, einen Elitedämon, der aus der Ferne schweren Schattenschaden niederregnen lässt. Eine lange Abklingzeit zügelt seine verheerende Kraft. Das Beschwören eines neuen Dämons entlässt Euren aktuellen. Ihr könnt nur einen Dämon zur Zeit haben."
       },
+      "battle_stance": {
+        "name": "Kampfhaltung",
+        "description": "Eine aggressive Kampfhaltung: Ihr erzeugt 10% mehr Wut. Die Standardhaltung für Waffen und Schutz."
+      },
+      "berserker_stance": {
+        "name": "Berserkerhaltung",
+        "description": "Eine tollkühne Kampfhaltung: Eure kritischen Treffer gelingen 3% öfter und treffen 3% härter. Der Furor-Krieger kämpft stets in dieser Haltung."
+      },
+      "sweeping_strikes": {
+        "name": "Ausladender Bogen",
+        "description": "12 Sek. lang treffen Eure Einzelzielangriffe zusätzlich 1 nahen Gegner mit vollem Schaden. (Waffen)"
+      },
+      "deep_wounds": {
+        "name": "Klaffende Wunden",
+        "description": "Passiv: Euer Verstümmelnder Hieb lässt das Ziel bluten und verursacht über 6 Sek. physischen Schaden. (Waffen)"
+      },
+      "enrage_passive": {
+        "name": "Gemetzel",
+        "description": "Passiv: Solange Ihr wutentbrannt seid, verursacht Ihr 4 Sek. lang 7% mehr Schaden, greift 25% schneller an und bewegt Euch 10% schneller. Aderlass hat eine Chance von 30%, Euch wutentbrannt zu machen; Rote Ernte tut es immer. (Furor)"
+      },
+      "raging_gale": {
+        "name": "Zwillingsschlag",
+        "description": "Schlagt sofort zweimal mit Eurer Waffe zu, jeder Treffer verursacht 40% Waffenschaden plus {damage}, und erzeugt 8 Wut. Speichert bis zu 2 Aufladungen. (Furor)"
+      },
+      "red_harvest": {
+        "name": "Rote Ernte",
+        "description": "Setzt alles ein: Schlagt dreimal in Raserei zu, jeder Treffer verursacht 65% Waffenschaden plus {damage}, und werdet dabei immer wutentbrannt. (Furor)"
+      },
+      "furious_mending": {
+        "name": "Rasende Heilung",
+        "description": "10 Sek. lang erleidet Ihr 20% weniger Schaden, und solange der Effekt anhält, heilt Euch Euer Aderlass um 20% Eurer maximalen Gesundheit. (Furor)"
+      },
+      "emboldening_roar": {
+        "name": "Ermutigendes Gebrüll",
+        "description": "Stößt ein ermutigendes Gebrüll aus: Ihr und freundliche Spieler im Umkreis von 40 m erhaltet Ermutigung, und Eure nächsten 3 Fähigkeiten treffen garantiert kritisch. (Furor)"
+      },
+      "raised_guard": {
+        "name": "Erhobene Deckung",
+        "description": "Verschanzt Euch hinter Eurem Schild: Ihr erleidet 6 Sek. lang 50% weniger physischen Schaden. Speichert bis zu 2 Aufladungen. (Schutz)"
+      },
+      "iron_resolve": {
+        "name": "Eiserne Entschlossenheit",
+        "description": "Beißt die Zähne zusammen und ignoriert den Schmerz: Verbraucht bis zu 40 Wut (mindestens 20), um pro verbrauchtem Wutpunkt 4 Schaden zu absorbieren. Hält bis zu 10 Sek. an. (Schutz)"
+      },
+      "faultline": {
+        "name": "Bruchlinie",
+        "description": "Schickt eine Schockwelle durch den Boden: Gegner vor Euch im Umkreis von 8 m erleiden {damage} Schaden und werden 3 Sek. lang betäubt. (Schutz)"
+      },
+      "defiant_bellow": {
+        "name": "Trotziges Gebrüll",
+        "description": "Ein trotziges Gebrüll: Jeder Gegner im Umkreis von 10 m wird verspottet und 3 Sek. lang gezwungen, Euch anzugreifen. (Schutz)"
+      },
+      "breachmaker": {
+        "name": "Breschenbrecher",
+        "description": "Prügelt auf das Ziel ein für Waffenschaden plus {damage} und brecht seine Deckung: Eure eigenen Angriffe gegen das Ziel verursachen 8 Sek. lang 20% mehr Schaden. (Waffen)"
+      },
+      "measured_fury": {
+        "name": "Maßvoller Zorn",
+        "description": "Euer maßvoller Zorn lehrt Euch Sparsamkeit: Eure Fähigkeiten kosten 10% weniger Wut. (Waffen)"
+      },
+      "seasoned_soldier": {
+        "name": "Kampferprobter Soldat",
+        "description": "Eure kritischen Auto-Angriffe erzeugen 10% mehr Wut. (Waffen)"
+      },
+      "diabolical_twinstrike": {
+        "name": "Diabolischer Zwillingsschlag",
+        "description": "Solange Ihr wutentbrannt seid, verursacht Euer Zwillingsschlag 15% mehr Schaden. (Furor)"
+      },
+      "cleaving_blows": {
+        "name": "Spaltende Hiebe",
+        "description": "Rote Ernte erstattet immer eine Aufladung von Zwillingsschlag zurück. (Furor)"
+      },
+      "sudden_death": {
+        "name": "Plötzlicher Tod",
+        "description": "Eure Auto-Angriffe haben eine Chance, Euch Frühes Grab auf ein Ziel mit beliebiger Gesundheit wirken zu lassen, ohne Wut zu kosten. (Waffen)"
+      },
+      "storm_bolt": {
+        "name": "Sturmblitz",
+        "description": "Schleudert Eure Waffe für {damage} auf das Ziel und betäubt es 3 Sek. lang."
+      },
+      "piercing_howl": {
+        "name": "Durchdringendes Heulen",
+        "description": "Ein durchdringender Schrei, der alle Gegner im Umkreis von 15 m 8 Sek. lang um 50% verlangsamt."
+      },
+      "die_by_sword": {
+        "name": "Tod durch das Schwert",
+        "description": "Defensive Abklingzeit: 8 Sek. lang erleidet Ihr 30% weniger Schaden und weicht weit mehr Angriffen aus."
+      },
+      "recklessness": {
+        "name": "Tollkühnheit",
+        "description": "Wutausbruch: Eure Wuterzeugung erhöht sich 12 Sek. lang um 50% und Eure kritische Trefferchance um 20%."
+      },
+      "sanguine_aura": {
+        "name": "Blutrote Aura",
+        "description": "Erfüllt Eure Waffe mit dem Blut Eurer Feinde: Ihr und Eure Nahkampfverbündeten erhaltet 20 Sek. lang 10% Angriffstempo und 10% Schaden."
+      },
+      "victory_rush": {
+        "name": "Siegesrausch",
+        "description": "Schlagt für Waffenschaden plus {damage} zu und heilt 20% Eurer maximalen Gesundheit. Nur innerhalb von 20 Sek. nach dem Töten eines Gegners einsetzbar."
+      },
+      "intimidating_shout": {
+        "name": "Drohruf",
+        "description": "Ein furchteinflößender Schrei, der bis zu 5 Gegner im Umkreis von 8 m 8 Sek. lang in Furcht davonlaufen lässt. Schaden kann den Effekt brechen."
+      },
+      "revenge": {
+        "name": "Rache",
+        "description": "Greift in einem weiten Bogen an und verursacht physischen Schaden an allen Gegnern vor Euch. Bei mehr als 5 Zielen ist der Schaden verringert. Wenn Ihr ausweicht oder pariert, kann Eure nächste Rache keine Wut kosten. (Protection)"
+      },
+      "heroic_leap": {
+        "name": "Kriegssprung",
+        "description": "Springt zum Zielgebiet und verursacht bei der Landung {damage} Schaden an Gegnern in der Nähe."
+      },
+      "rallying_cry": {
+        "name": "Ruf der Tapferkeit",
+        "description": "Stoßt einen tapferen Ruf aus, der Euch und Gruppenmitgliedern im Umkreis von 40 Metern 10 Sek. lang 20% zusätzliche maximale Gesundheit gewährt. Schutz: Sie erleiden währenddessen außerdem 5% weniger Schaden."
+      },
+      "avatar": {
+        "name": "Avatar",
+        "description": "Verwandelt Euch 20 Sek. lang in einen Koloss, brecht alle Kontrolleffekte auf Euch und erhöht Euren verursachten Schaden um 20%."
+      },
+      "bladestorm": {
+        "name": "Klingensturm",
+        "description": "Werdet zu einem wirbelnden Sturm aus Stahl und trefft 4 Sek. lang jede Sekunde alle Gegner im Umkreis von 8 Metern für {damage} Schaden."
+      },
+      "aspect_of_the_wild": {
+        "name": "Wildfanggewand",
+        "description": "Inspiriert Verbündete im Umkreis von 30 m mit wilder Kraft und erhöht ihre Angriffskraft 5 Min. lang um 45 und ihr Angriffstempo um 5 %. (Jägertalent)"
+      },
+      "aura_surge": {
+        "name": "Dämmerprall",
+        "description": "Schleudert einen dämmergeschmiedeten Schild für {damage} Heiligschaden, bringt das Primärziel 2 Sek. zum Schweigen und springt dann auf bis zu 2 weitere Gegner innerhalb von 10 Metern über, wobei jeder Sprung 75% Schaden verursacht. (Paladintalent)"
+      },
+      "avenging_wrath": {
+        "name": "Zornschwinge",
+        "description": "Ruft rächende Macht herbei und erhöht Eure Angriffskraft 20 Sek. lang um 60 und Eure Zaubermacht um 30. (Paladintalent)"
+      },
+      "berserk": {
+        "name": "Roter Dunst",
+        "description": "Erhöht Eure Angriffskraft 15 Sek. lang um 70. (Druidentalent)"
+      },
+      "blink": {
+        "name": "Flimmerschritt",
+        "description": "Teleportiert Euch 15 m nach vorn und löst Bewegungsunfähigkeitseffekte. (Magiertalent)"
+      },
+      "bloodlust": {
+        "name": "Kriegstrommeln",
+        "description": "Versetzt Verbündete im Umkreis von 30 m in Raserei und erhöht ihr Angriffstempo 15 Sek. lang um 30 %. (Schamanentalent)"
+      },
+      "chain_lightning": {
+        "name": "Gabelblitz",
+        "description": "Schleudert einen Blitz auf das Zielgebiet und fügt Gegnern in der Nähe {damage} Schaden zu. (Schamanentalent)"
+      },
+      "chaos_bolt": {
+        "name": "Verderbensblitz",
+        "description": "Schleudert einen chaotischen Feuerblitz, der {damage} Feuerschaden verursacht. (Hexenmeistertalent)"
+      },
+      "cleansing_verdict": {
+        "name": "Läuterndes Urteil",
+        "description": "Entfernt einen schädlichen magischen Effekt von einem verbündeten Ziel und heilt es mit heiliger Magie um {damage}."
+      },
+      "cloak_of_shadows": {
+        "name": "Schattenmantel",
+        "description": "Hüllt Euch in Schatten und absorbiert 5 Sek. lang 420 Schaden. (Schurkentalent)"
+      },
+      "cone_of_cold": {
+        "name": "Frostfeger",
+        "description": "Trifft Gegner in der Nähe mit Frost und verursacht {damage} Frostschaden. (Frost-Signatur)"
+      },
+      "curse_of_exhaustion": {
+        "name": "Bleierner Fluch",
+        "description": "Verflucht das Ziel und verringert sein Bewegungstempo 12 Sek. lang um 30 %. (Hexenmeistertalent)"
+      },
+      "death_coil": {
+        "name": "Grabspirale",
+        "description": "Trifft den Gegner für {damage} Schattenschaden und versetzt ihn anschließend 3 Sek. lang in Entsetzen. (Hexenmeistertalent)"
+      },
+      "deep_freeze": {
+        "name": "Totenfrost",
+        "description": "Friert das Ziel tief ein, verursacht {damage} Frostschaden und betäubt es 4 Sek. lang. (Magiertalent)"
+      },
+      "desperate_prayer": {
+        "name": "Letztes Gebet",
+        "description": "Heilt Euch sofort um {damage}. (Priestertalent)"
+      },
+      "deterrence": {
+        "name": "Borstenwacht",
+        "description": "Erhöht Eure Ausweichchance 10 Sek. lang um 50 Prozentpunkte. (Jägertalent)"
+      },
+      "divine_shield": {
+        "name": "Lichtwacht",
+        "description": "Schützt Euch mit heiliger Macht, die 8 Sek. lang 900 Schaden absorbiert. (Paladintalent)"
+      },
+      "earthbind": {
+        "name": "Greifende Erde",
+        "description": "Bindet Gegner in der Nähe an die Erde und macht sie 2 Sek. lang bewegungsunfähig. (Schamanentalent)"
+      },
+      "evocation": {
+        "name": "Ätherbrunnen",
+        "description": "Stellt sofort 220 Mana wieder her. (Magiertalent)"
+      },
+      "frenzied_regeneration": {
+        "name": "Wilde Heilung",
+        "description": "Stellt im Verlauf von 10 Sek. 180 Gesundheit wieder her. Nur in Bärengestalt. (Druidentalent)"
+      },
+      "frost_trap": {
+        "name": "Reifschlinge",
+        "description": "Friert Gegner im Zielgebiet 3 Sek. lang ein, sodass sie sich weder bewegen noch handeln können. (Jägertalent)"
+      },
+      "ghostly_strike": {
+        "name": "Geisterschlag",
+        "description": "Trifft den Gegner für Waffenschaden plus {damage}, erhöht kurzzeitig die Ausweichchance und gewährt 1 Combopunkt. (Schurkentalent)"
+      },
+      "hammer_of_wrath": {
+        "name": "Läutender Hammer",
+        "description": "Schleudert einen heiligen Hammer auf einen verwundeten Gegner und verursacht {damage} Heiligschaden. Nur unter 20 % Gesundheit einsetzbar. (Paladintalent)"
+      },
+      "healing_stream": {
+        "name": "Quellbrunnen",
+        "description": "Stellt bei einem verbündeten Ziel im Verlauf von 12 Sek. 120 Gesundheit wieder her. (Schamanentalent)"
+      },
+      "holy_wrath": {
+        "name": "Heiligenzorn",
+        "description": "Entfesselt heilige Macht und fügt Gegnern in der Nähe {damage} Schaden zu. (Paladintalent)"
+      },
+      "howl_of_terror": {
+        "name": "Schreckensheulen",
+        "description": "Versetzt Gegner in der Nähe bis zu 3 Sek. lang in Furcht. Schaden kann den Effekt aufheben. (Hexenmeistertalent)"
+      },
+      "ice_block": {
+        "name": "Kalter Sarg",
+        "description": "Hüllt Euch in Eis, das 8 Sek. lang 600 Schaden absorbiert. Währenddessen könnt Ihr nicht handeln. Erneut wirken, um den Effekt abzubrechen. (Magiertalent)"
+      },
+      "inner_focus": {
+        "name": "Stiller Geist",
+        "description": "Euer nächster Zauber kostet nichts. Hält 60 Sek. lang an. (Priestertalent)"
+      },
+      "innervate": {
+        "name": "Lebenssaft",
+        "description": "Lebendiger Pflanzensaft quillt 10 Sek. lang in Euch auf und stellt in Wellen 20 Eurer aktuellen Ressource wieder her: Mana, Wut oder Energie. Gestaltwandel unterbricht ihn nicht. Schlaf, Betäubung oder Stasis bringen den Saft zum Stillstand. (Druidentalent)"
+      },
+      "meteor": {
+        "name": "Himmelsstein",
+        "description": "Ruft einen Meteor auf das Zielgebiet herab, der {damage} Feuerschaden verursacht. Anschließend erleiden Gegner dort 6 Sek. lang alle 2 Sek. 12 bis 18 Feuerschaden. (Magiertalent)"
+      },
+      "mind_sear": {
+        "name": "Gedankenbrand",
+        "description": "Kanalisiert Schattenenergie auf das Zielgebiet und fügt Gegnern in der Nähe jede Sekunde {damage} Schaden zu. (Priestertalent)"
+      },
+      "multi_shot": {
+        "name": "Spaltschuss",
+        "description": "Feuert einen Geschosshagel auf das Zielgebiet ab und fügt Gegnern im Umkreis von 8 m {damage} körperlichen Schaden zu. (Jägertalent)"
+      },
+      "prayer_of_healing": {
+        "name": "Chorheilung",
+        "description": "Heilt Verbündete in der Nähe um {damage}. (Priestertalent)"
+      },
+      "preparation": {
+        "name": "Notfallplan",
+        "description": "Schließt die Abklingzeiten von Sprint, Entrinnen und Verschwinden ab. (Schurkentalent)"
+      },
+      "presence_of_mind": {
+        "name": "Rasender Geist",
+        "description": "Euer nächster Zauber mit Wirkzeit wird sofort gewirkt. Hält 60 Sek. lang an. (Magiertalent)"
+      },
+      "psychic_scream": {
+        "name": "Schreckensschrei",
+        "description": "Versetzt Gegner in der Nähe bis zu 4 Sek. lang in Furcht. Schaden kann den Effekt aufheben. (Priestertalent)"
+      },
+      "shadowstep": {
+        "name": "Schattengleiten",
+        "description": "Tretet durch die Schatten auf Euer Ziel zu. (Schurkentalent)"
+      },
+      "silence": {
+        "name": "Stille",
+        "description": "Bringt das Ziel 4 Sek. lang zum Schweigen. (Priestertalent)"
+      },
+      "smoke_screen": {
+        "name": "Rauchvorhang",
+        "description": "Ihr verschwindet in einer Rauchwolke, wodurch sich Eure Ausweichchance 8 Sek. lang um 30 % erhöht."
+      },
+      "spellsteal": {
+        "name": "Zauberraub",
+        "description": "Stiehlt einem Gegner einen vorteilhaften magischen Effekt und überträgt ihn auf Euch."
+      },
+      "startle_shot": {
+        "name": "Schreckschuss",
+        "description": "Ein wilder Schuss, der das Ziel {duration} Sek. lang desorientiert. Jeglicher Schaden bricht den Effekt."
+      },
+      "tranquility": {
+        "name": "Hainlied",
+        "description": "Kanalisiert 4 Sek. lang heilende Energie und heilt Verbündete im Umkreis von 30 m jede Sekunde um 42 bis 52. (Druidentalent)"
+      },
+      "typhoon": {
+        "name": "Taifun",
+        "description": "Eine Windböe stößt alle Gegner im Umkreis von 8 m zurück und macht sie benommen, wodurch ihr Bewegungstempo 4 Sek. lang um 50 % verringert wird."
+      },
+      "voidfeast": {
+        "name": "Leerenmahl",
+        "description": "Verschlingt einen magischen Effekt (einen vorteilhaften von einem Gegner oder einen schädlichen von einem Verbündeten) und heilt Euch um 6 % Eurer maximalen Gesundheit."
+      },
       "pummel": {
         "name": "Jawcrack",
         "description": "Unterbricht das Zauberwirken des Ziels und hindert es 4 Sek. lang daran, Zauber dieser Schule zu wirken."
@@ -6394,8 +6706,8 @@ export const de_DE: EnTranslations = {
         "description": "Ein Schleicheröffner, der den Gegner für Waffenschaden plus {damage} aufreißt und über 9 Sek. Blutungsschaden verursacht. Gewährt 1 Combopunkt. Nur in Wolfsgestalt."
       },
       "revive_pet": {
-        "name": "Begleiter wiederbeleben",
-        "description": "Belebt deinen toten Begleiter wieder und ruft ihn an deine Seite zurück."
+        "name": "Zusammenflicken",
+        "description": "Flickt deinen Begleiter zusammen und stellt ihm, solange er lebt, im Verlauf von 12 Sek. alle 3 Sek. insgesamt {overTime} Gesundheit wieder her. Ist er tot, wird er mit 35 % Gesundheit wiederbelebt."
       }
     },
     "items": {
@@ -7607,6 +7919,18 @@ export const de_DE: EnTranslations = {
       },
       "heroic_mark": {
         "name": "Heroische Marke"
+      },
+      "eastbrook_buckler": {
+        "name": "Eastbrook-Faustschild"
+      },
+      "eastbrook_greatsword": {
+        "name": "Eastbrook-Großschwert"
+      },
+      "highwatch_greatsword": {
+        "name": "Highwatch-Großschwert"
+      },
+      "highwatch_wallshield": {
+        "name": "Highwatch-Mauerschild"
       },
       "morthens_cryptforged_hauberk": {
         "name": "Morthens gruftgeschmiedetes Kettenhemd"

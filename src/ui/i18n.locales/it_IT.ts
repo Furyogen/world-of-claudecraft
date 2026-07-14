@@ -14,6 +14,267 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const it_IT: Partial<Record<TranslationKey, string>> = {
+  'entities.items.eastbrook_greatsword.name': 'Spadone di Eastbrook',
+  'entities.items.highwatch_greatsword.name': 'Spadone di Highwatch',
+  'entities.items.highwatch_wallshield.name': 'Scudo da muro di Highwatch',
+  'entities.items.eastbrook_buckler.name': 'Brocchiero di Eastbrook',
+  'entities.abilities.avatar.name': 'Avatar',
+  'entities.abilities.avatar.description':
+    'Ti trasformi in un colosso per 20 s, liberandoti da tutti gli effetti di controllo e aumentando del 20% i danni inflitti.',
+  'entities.abilities.bladestorm.name': 'Tempesta di Lame',
+  'entities.abilities.bladestorm.description':
+    'Diventi una tempesta d’acciaio vorticante che colpisce tutti i nemici entro 8 m, infliggendo {damage} danni ogni secondo per 4 s.',
+  'entities.abilities.battle_stance.description':
+    'Posizione di combattimento aggressiva: generi il 10% di rabbia in più. La posizione predefinita per Armi e Protezione.',
+  'entities.abilities.battle_stance.name': 'Posizione di Battaglia',
+  'entities.abilities.berserker_stance.description':
+    'Posizione di combattimento temeraria: i tuoi colpi critici vanno a segno il 3% più spesso e colpiscono il 3% più forte. Il guerriero Furia combatte sempre in questa posizione.',
+  'entities.abilities.berserker_stance.name': 'Posizione del Berserker',
+  'entities.abilities.breachmaker.description':
+    "Martella il bersaglio per danni dell'arma più {damage} e ne incrina la guardia: i tuoi attacchi contro di esso infliggono il 20% di danni in più per 8 sec. (Armi)",
+  'entities.abilities.breachmaker.name': 'Apribreccia',
+  'entities.abilities.cleaving_blows.description':
+    'Mietitura Rossa rimborsa sempre una carica di Colpo Gemello. (Furia)',
+  'entities.abilities.cleaving_blows.name': 'Colpi Fendenti',
+  'entities.abilities.deep_wounds.description':
+    'Passiva: il tuo Colpo Mutilante lascia il bersaglio sanguinante, infliggendo danni fisici in 6 sec. (Armi)',
+  'entities.abilities.deep_wounds.name': 'Ferite Aperte',
+  'entities.abilities.defiant_bellow.description':
+    'Un urlo di sfida: ogni nemico entro 10 metri viene provocato e costretto ad attaccarti per 3 sec. (Protezione)',
+  'entities.abilities.defiant_bellow.name': 'Urlo di Sfida',
+  'entities.abilities.diabolical_twinstrike.description':
+    'Mentre sei Infuriato, il tuo Colpo Gemello infligge il 15% di danni in più. (Furia)',
+  'entities.abilities.diabolical_twinstrike.name': 'Colpo Gemello Diabolico',
+  'entities.abilities.die_by_sword.description':
+    'Tempo di recupero difensivo: per 8 sec subisci il 30% di danni in meno e schivi molti più attacchi.',
+  'entities.abilities.die_by_sword.name': 'Morte per la Spada',
+  'entities.abilities.emboldening_roar.description':
+    'Liberi un ruggito ardimentoso: tu e i giocatori alleati entro 40 metri diventate Ardimentosi, e le vostre 3 abilità successive sono colpi critici garantiti. (Furia)',
+  'entities.abilities.emboldening_roar.name': 'Ruggito Ardimentoso',
+  'entities.abilities.enrage_passive.description':
+    'Passiva: mentre sei Infuriato infliggi il 7% di danni in più, attacchi il 25% più velocemente e ti muovi il 10% più velocemente per 4 sec. Salasso ha il 30% di probabilità di renderti Infuriato; Mietitura Rossa lo fa sempre. (Furia)',
+  'entities.abilities.enrage_passive.name': 'Carneficina',
+  'entities.abilities.faultline.description':
+    "Scagli un'onda d'urto attraverso il terreno: i nemici davanti a te entro 8 metri subiscono {damage} danni e sono storditi per 3 sec. (Protezione)",
+  'entities.abilities.faultline.name': 'Faglia',
+  'entities.abilities.furious_mending.description':
+    'Per 10 sec subisci il 20% di danni in meno e, finché dura, il tuo Salasso ti cura del 20% della tua salute massima. (Furia)',
+  'entities.abilities.furious_mending.name': 'Rammendo Furioso',
+  'entities.abilities.heroic_leap.description':
+    'Balza nell’area bersaglio, infliggendo {damage} danni ai nemici vicini all’atterraggio.',
+  'entities.abilities.heroic_leap.name': 'Balzo di Guerra',
+  'entities.abilities.intimidating_shout.description':
+    "Un urlo terrificante che fa fuggire in preda alla paura fino a 5 nemici entro 8 metri per 8 sec. I danni possono interrompere l'effetto.",
+  'entities.abilities.intimidating_shout.name': 'Urlo Intimidatorio',
+  'entities.abilities.iron_resolve.description':
+    'Stringi i denti e ignora il dolore: consuma fino a 40 rabbia (minimo 20) per assorbire 4 danni per ogni punto di rabbia speso, per un massimo di 10 s. (Protezione)',
+  'entities.abilities.iron_resolve.name': 'Fermezza di Ferro',
+  'entities.abilities.measured_fury.description':
+    'La tua furia misurata affina la tua economia: le tue abilità costano il 10% di rabbia in meno. (Armi)',
+  'entities.abilities.measured_fury.name': 'Furia Misurata',
+  'entities.abilities.piercing_howl.description':
+    'Un urlo penetrante che rallenta del 50% tutti i nemici entro 15 metri per 8 sec.',
+  'entities.abilities.piercing_howl.name': 'Ululato Penetrante',
+  'entities.abilities.raging_gale.description':
+    "Colpisci istantaneamente due volte con la tua arma: ogni colpo infligge il 40% dei danni dell'arma più {damage}, e generi 8 rabbia. Accumula fino a 2 cariche. (Furia)",
+  'entities.abilities.raging_gale.name': 'Colpo Gemello',
+  'entities.abilities.raised_guard.description':
+    'Ti pianti dietro il tuo scudo: subisci il 50% di danni fisici in meno per 6 sec. Accumula fino a 2 cariche. (Protezione)',
+  'entities.abilities.raised_guard.name': 'Guardia Alzata',
+  'entities.abilities.rallying_cry.description':
+    'Emetti un ruggito valoroso che conferisce a te e ai membri del gruppo entro 40 m il 20% di salute massima aggiuntiva per 10 s. Protezione: subiscono anche il 5% di danni in meno per la durata.',
+  'entities.abilities.rallying_cry.name': 'Ruggito del Valore',
+  'entities.abilities.recklessness.description':
+    'Ti infuri: la tua generazione di rabbia aumenta del 50% e la tua probabilità di colpo critico del 20% per 12 sec.',
+  'entities.abilities.recklessness.name': 'Temerarietà',
+  'entities.abilities.red_harvest.description':
+    "Spendi tutto: colpisci tre volte in una frenesia per il 65% dei danni dell'arma più {damage} ciascuno, e diventi sempre Infuriato. (Furia)",
+  'entities.abilities.red_harvest.name': 'Mietitura Rossa',
+  'entities.abilities.revenge.description':
+    'Attacchi con un arco ampio, infliggendo danni fisici a tutti i nemici davanti a te. Oltre i 5 bersagli i danni si riducono. Quando schivi o pari, la tua prossima Vendetta può non costare rabbia. (Protection)',
+  'entities.abilities.revenge.name': 'Vendetta',
+  'entities.abilities.sanguine_aura.description':
+    "Intridi la tua arma del sangue dei tuoi nemici: tu e i tuoi alleati in mischia ottenete il 10% di velocità d'attacco e il 10% di danni per 20 sec.",
+  'entities.abilities.sanguine_aura.name': 'Aura Sanguigna',
+  'entities.abilities.seasoned_soldier.description':
+    'I tuoi attacchi automatici critici generano il 10% di rabbia in più. (Armi)',
+  'entities.abilities.seasoned_soldier.name': 'Soldato Veterano',
+  'entities.abilities.storm_bolt.description':
+    'Scagli la tua arma contro il bersaglio, infliggendo {damage} danni e stordendolo per 3 sec.',
+  'entities.abilities.storm_bolt.name': 'Dardo della Tempesta',
+  'entities.abilities.sudden_death.description':
+    'I tuoi attacchi automatici hanno una probabilità di permetterti di lanciare Tomba Prematura su un bersaglio a qualsiasi livello di salute, senza costo di rabbia. (Armi)',
+  'entities.abilities.sudden_death.name': 'Morte Improvvisa',
+  'entities.abilities.sweeping_strikes.description':
+    'Per 12 sec i tuoi attacchi a bersaglio singolo colpiscono anche 1 nemico vicino per il danno completo. (Armi)',
+  'entities.abilities.sweeping_strikes.name': 'Arco Crescente',
+  'entities.abilities.victory_rush.description':
+    "Colpisci per danni dell'arma più {damage} e recuperi il 20% della tua salute massima. Utilizzabile solo entro 20 sec dall'uccisione di un nemico.",
+  'entities.abilities.victory_rush.name': 'Impeto della Vittoria',
+  'hudChrome.specPanel.complexity': 'Complessità',
+  'hudChrome.specPanel.complexityHigh': 'Alta',
+  'hudChrome.specPanel.complexityLow': 'Bassa',
+  'hudChrome.specPanel.complexityMedium': 'Media',
+  'hudChrome.specPanel.exampleAbilities': 'Abilità di esempio',
+  'hudChrome.specPanel.primaryAttr': 'Attributo principale',
+  'hudChrome.specPanel.selectSpec': 'Seleziona specializzazione',
+  'hudChrome.specPanel.viewTalents': 'Visualizza talenti',
+  'hudChrome.talentRows.comingSoon': 'Prossimamente',
+  'hudChrome.talentRows.defaultLoadout': 'Configurazione predefinita',
+  'hudChrome.talentRows.tab': 'Scelte',
+  'hudChrome.talentRows.readoutSummary': 'Talenti: {head}, {spent}/{total} righe selezionate.',
+  'entities.abilities.aspect_of_the_wild.name': 'Aspetto Zannaferina',
+  'entities.abilities.aspect_of_the_wild.description':
+    'Infondi forza selvaggia negli alleati entro 30 m, aumentando la loro potenza d’attacco di 45 e la velocità d’attacco del 5% per 5 min. (talento del Cacciatore)',
+  'entities.abilities.aura_surge.name': "Rimbalzo dell'Alba",
+  'entities.abilities.aura_surge.description':
+    "Scaglia uno scudo forgiato all'alba che infligge {damage} danni Sacri, silenzia il bersaglio principale per 2 sec. e rimbalza su un massimo di 2 nemici aggiuntivi entro 10 metri, infliggendo il 75% dei danni per rimbalzo. (talento del Paladino)",
+  'entities.abilities.avenging_wrath.name': 'Alavendetta',
+  'entities.abilities.avenging_wrath.description':
+    'Invoca un potere vendicativo, aumentando la tua potenza d’attacco di 60 e la potenza magica di 30 per 20 sec. (talento del Paladino)',
+  'entities.abilities.berserk.name': 'Bruma Rossa',
+  'entities.abilities.berserk.description':
+    'Aumenta la tua potenza d’attacco di 70 per 15 sec. (talento del Druido)',
+  'entities.abilities.blink.name': 'Passo Baleno',
+  'entities.abilities.blink.description':
+    'Ti teletrasporta di 15 m in avanti e spezza gli effetti di immobilizzazione. (talento del Mago)',
+  'entities.abilities.bloodlust.name': 'Tamburi di Guerra',
+  'entities.abilities.bloodlust.description':
+    'Spinge gli alleati entro 30 m alla frenesia, aumentando la loro velocità d’attacco del 30% per 15 sec. (talento dello Sciamano)',
+  'entities.abilities.chain_lightning.name': 'Fulmine Biforcuto',
+  'entities.abilities.chain_lightning.description':
+    'Scaglia un fulmine nell’area bersaglio, infliggendo {damage} danni ai nemici vicini. (talento dello Sciamano)',
+  'entities.abilities.chaos_bolt.name': 'Dardo della Rovina',
+  'entities.abilities.chaos_bolt.description':
+    'Scaglia un dardo di fuoco caotico che infligge {damage} danni da Fuoco. (talento dello Stregone)',
+  'entities.abilities.cloak_of_shadows.name': 'Manto d’Ombra',
+  'entities.abilities.cloak_of_shadows.description':
+    'Ti avvolge nelle ombre, assorbendo 420 danni per 5 sec. (talento del Ladro)',
+  'entities.abilities.cone_of_cold.name': 'Spazzata Gelida',
+  'entities.abilities.cone_of_cold.description':
+    'Investe i nemici vicini con il gelo, infliggendo {damage} danni da Gelo. (abilità distintiva del Gelo)',
+  'entities.abilities.curse_of_exhaustion.name': 'Maleficio Plum beo',
+  'entities.abilities.curse_of_exhaustion.description':
+    'Maledice il bersaglio, riducendone la velocità di movimento del 30% per 12 sec. (talento dello Stregone)',
+  'entities.abilities.death_coil.name': 'Spira Sepolcrale',
+  'entities.abilities.death_coil.description':
+    'Colpisce il nemico infliggendo {damage} danni da Ombra, poi lo terrorizza per 3 sec. (talento dello Stregone)',
+  'entities.abilities.deep_freeze.name': 'Gelo Morto',
+  'entities.abilities.deep_freeze.description':
+    'Congela profondamente il bersaglio, infliggendo {damage} danni da Gelo e stordendolo per 4 sec. (talento del Mago)',
+  'entities.abilities.desperate_prayer.name': 'Ultima Preghiera',
+  'entities.abilities.desperate_prayer.description':
+    'Ti cura istantaneamente di {damage}. (talento del Sacerdote)',
+  'entities.abilities.deterrence.name': 'Guardia Ispida',
+  'entities.abilities.deterrence.description':
+    'Aumenta la tua probabilità di schivata di 50 punti percentuali per 10 sec. (talento del Cacciatore)',
+  'entities.abilities.divine_shield.name': 'Custodia di Luce',
+  'entities.abilities.divine_shield.description':
+    'Ti protegge con il potere sacro, assorbendo 900 danni per 8 sec. (talento del Paladino)',
+  'entities.abilities.earthbind.name': 'Terra Avvinghiante',
+  'entities.abilities.earthbind.description':
+    'Lega alla terra i nemici vicini, immobilizzandoli per 2 sec. (talento dello Sciamano)',
+  'entities.abilities.evocation.name': 'Pozzo d’Etere',
+  'entities.abilities.evocation.description':
+    'Ripristina istantaneamente 220 mana. (talento del Mago)',
+  'entities.abilities.frenzied_regeneration.name': 'Rammendo Selvaggio',
+  'entities.abilities.frenzied_regeneration.description':
+    'Ripristina 180 salute in 10 sec. Utilizzabile solo in Forma d’Orso. (talento del Druido)',
+  'entities.abilities.frost_trap.name': 'Trappola di Brina',
+  'entities.abilities.frost_trap.description':
+    'Congela i nemici nell’area bersaglio per 3 sec., impedendo loro di muoversi e agire. (talento del Cacciatore)',
+  'entities.abilities.ghostly_strike.name': 'Colpo Spettrale',
+  'entities.abilities.ghostly_strike.description':
+    'Colpisce il nemico infliggendo i danni dell’arma più {damage}, aumenta brevemente la schivata e assegna 1 punto combo. (talento del Ladro)',
+  'entities.abilities.hammer_of_wrath.name': 'Martello Rintoccante',
+  'entities.abilities.hammer_of_wrath.description':
+    'Scaglia un martello sacro contro un nemico ferito, infliggendo {damage} danni sacri. Utilizzabile solo sotto il 20% di salute. (talento del Paladino)',
+  'entities.abilities.healing_stream.name': 'Fonte Viva',
+  'entities.abilities.healing_stream.description':
+    'Ripristina 120 salute a un bersaglio alleato in 12 sec. (talento dello Sciamano)',
+  'entities.abilities.holy_wrath.name': 'Ira del Santo',
+  'entities.abilities.holy_wrath.description':
+    'Scatena il potere sacro, infliggendo {damage} danni ai nemici vicini. (talento del Paladino)',
+  'entities.abilities.howl_of_terror.name': 'Ululato del Terrore',
+  'entities.abilities.howl_of_terror.description':
+    'Terrorizza i nemici vicini per un massimo di 3 sec. I danni possono interrompere l’effetto. (talento dello Stregone)',
+  'entities.abilities.ice_block.name': 'Bara Fredda',
+  'entities.abilities.ice_block.description':
+    'Ti racchiude nel ghiaccio, assorbendo 600 danni per 8 sec. Non puoi agire mentre sei racchiuso. Lancia di nuovo per annullare. (talento del Mago)',
+  'entities.abilities.inner_focus.name': 'Mente Quietata',
+  'entities.abilities.inner_focus.description':
+    'Rende gratuita la tua prossima magia. Dura 60 sec. (talento del Sacerdote)',
+  'entities.abilities.innervate.name': 'Linfa Vitale',
+  'entities.abilities.innervate.description':
+    'La linfa vivente scorre in te per 10 sec. e ripristina a ondate 20 della tua risorsa attuale: mana, rabbia o energia. Cambiare forma non la interrompe. Sonno, stordimento o stasi arrestano la linfa. (talento del Druido)',
+  'entities.abilities.meteor.name': 'Pietra Celeste',
+  'entities.abilities.meteor.description':
+    'Richiama una meteora sull’area bersaglio, infliggendo {damage} danni da Fuoco, poi brucia i nemici nell’area per 12-18 danni da Fuoco ogni 2 sec. per 6 sec. (talento del Mago)',
+  'entities.abilities.mind_sear.name': 'Bruciamente',
+  'entities.abilities.mind_sear.description':
+    'Incanala energia d’Ombra nell’area bersaglio, infliggendo {damage} danni ogni secondo ai nemici vicini. (talento del Sacerdote)',
+  'entities.abilities.multi_shot.name': 'Tiro Sdoppiato',
+  'entities.abilities.multi_shot.description':
+    'Scaglia una raffica sull’area bersaglio, infliggendo {damage} danni fisici ai nemici entro un raggio di 8 m. (talento del Cacciatore)',
+  'entities.abilities.prayer_of_healing.name': 'Cura del Coro',
+  'entities.abilities.prayer_of_healing.description':
+    'Cura gli alleati vicini di {damage}. (talento del Sacerdote)',
+  'entities.abilities.preparation.name': 'Contingenza',
+  'entities.abilities.preparation.description':
+    'Azzera il tempo di recupero di Scatto, Evasione e Sparizione. (talento del Ladro)',
+  'entities.abilities.presence_of_mind.name': 'Mente Rapida',
+  'entities.abilities.presence_of_mind.description':
+    'Rende istantanea la tua prossima magia con tempo di lancio. Dura 60 sec. (talento del Mago)',
+  'entities.abilities.psychic_scream.name': 'Urlo Psichico',
+  'entities.abilities.psychic_scream.description':
+    'Terrorizza i nemici vicini per un massimo di 4 sec. I danni possono interrompere l’effetto. (talento del Sacerdote)',
+  'entities.abilities.shadowstep.name': 'Scivolo d’Ombra',
+  'entities.abilities.shadowstep.description':
+    'Avanzi attraverso le ombre verso il tuo bersaglio. (talento del Ladro)',
+  'entities.abilities.silence.name': 'Silenzio',
+  'entities.abilities.silence.description':
+    'Silenzia il bersaglio per 4 sec. (talento del Sacerdote)',
+  'entities.abilities.tranquility.name': 'Canto della Radura',
+  'entities.abilities.tranquility.description':
+    'Incanala energia rigenerante per 4 sec., curando ogni secondo gli alleati entro 30 m di 42-52. (talento del Druido)',
+  'entities.abilities.cleansing_verdict.name': 'Verdetto Purificante',
+  'entities.abilities.cleansing_verdict.description':
+    'Dissipa un effetto magico dannoso da un bersaglio alleato e lo cura di {damage} con magia Sacra.',
+  'entities.abilities.smoke_screen.name': 'Cortina Fumogena',
+  'entities.abilities.smoke_screen.description':
+    'Scompari in una nube di fumo, aumentando del 30% la probabilità di schivare per 8 s.',
+  'entities.abilities.spellsteal.name': 'Rubamagie',
+  'entities.abilities.spellsteal.description':
+    'Ruba un effetto magico benefico da un nemico e lo trasferisce su di te.',
+  'entities.abilities.startle_shot.name': 'Tiro Sconcertante',
+  'entities.abilities.startle_shot.description':
+    'Un tiro selvaggio che disorienta il bersaglio per {duration} s. Qualsiasi danno interrompe l’effetto.',
+  'entities.abilities.typhoon.name': 'Tifone',
+  'entities.abilities.typhoon.description':
+    'Una raffica di vento respinge tutti i nemici entro 8 m e li frastorna, riducendone del 50% la velocità di movimento per 4 s.',
+  'entities.abilities.voidfeast.name': 'Banchetto del Vuoto',
+  'entities.abilities.voidfeast.description':
+    'Divora un effetto magico (uno benefico da un nemico o uno dannoso da un alleato) e ti cura del 6% della salute massima.',
+  'hudChrome.abilityError.shieldRequired': 'Devi avere uno scudo equipaggiato.',
+  'guide.family.reptile.desc':
+    'Cacciatori a sangue freddo, dal sibilo e dal morso inconfondibili, distinti dalle bestie a sangue caldo.',
+  'guide.family.reptile.name': 'Rettili',
+  'hudChrome.bags.rightClickDestroy': 'Maiusc+clic destro per distruggere',
+  'hudChrome.cameraPrompt.changeLater':
+    'Puoi modificare questa scelta in seguito dal menu Esc, Comandi da tastiera.',
+  'hudChrome.cameraPrompt.classicDesc':
+    'Tieni premuto il tasto destro e muovi il mouse per ruotare la visuale.',
+  'hudChrome.cameraPrompt.classicTitle': 'Visuale classica',
+  'hudChrome.cameraPrompt.confirm': 'Conferma',
+  'hudChrome.cameraPrompt.intro': 'Scegli come la visuale segue il tuo personaggio.',
+  'hudChrome.cameraPrompt.mouseDesc':
+    'Muovi il mouse per ruotare la visuale senza tenere premuto alcun tasto.',
+  'hudChrome.cameraPrompt.title': 'Scegli la visuale',
+  'hudChrome.discord.link.joinServer': 'Entra direttamente nel server Discord',
+  'hudChrome.meters.autoShowHint':
+    'Le righe compaiono automaticamente quando il tuo gruppo infligge danni o effettua cure, e questo riquadro si chiude pochi secondi dopo la fine del combattimento.',
+  'hudChrome.petFeed.disabledFullHp': 'La salute del famiglio è al massimo',
+  'hudChrome.petFeed.disabledNoFood': "Nelle tue borse non c'è cibo che possa curare il famiglio",
   'entities.abilities.sport_boot.description':
     'Un calcione alto e lungo verso il punto mirato. La folla lo adora.',
   'entities.abilities.sport_boot.name': 'Calcione',
@@ -2371,7 +2632,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hud.pet.defensiveDesc': 'Attacca i nemici che feriscono te o la tua mascotte.',
   'hud.pet.aggressiveDesc': 'Attacca i nemici ostili vicini.',
   'hud.pet.rename': 'Rinomina mascotte',
-  'hud.pet.revive': 'Rianima mascotte',
+  'hud.pet.revive': 'Rattoppare',
   'hud.pet.abandon': 'Abbandona mascotte',
   'hud.pet.cancel': 'Annulla',
   'hud.pet.renameLabel': 'Scegli un nuovo nome per la mascotte.',
@@ -2575,6 +2836,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'itemUi.money.silver': 'argento',
   'itemUi.money.copper': 'rame',
   'itemUi.slots.mainhand': 'Mano principale',
+  'itemUi.slots.offhand': 'Mano secondaria',
   'itemUi.slots.chest': 'Torace',
   'itemUi.slots.legs': 'Gambe',
   'itemUi.slots.feet': 'Piedi',
@@ -2772,17 +3034,12 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.battle_shout.name': 'Urlo di Ferro',
   'entities.abilities.battle_shout.description':
     "Aumenta la tua potenza d'attacco di {buff} per 2 min.",
-  'entities.abilities.commanding_shout.name': 'Grido Rincuorante',
-  'entities.abilities.commanding_shout.description': 'Aumenta la tua Tempra di {buff} per 2 min.',
   'entities.abilities.demoralizing_shout.name': 'Ululato Sinistro',
   'entities.abilities.demoralizing_shout.description':
     "Emette un urlo terrificante, riducendo la potenza d'attacco di tutti i nemici vicini di {buff} per 30 sec.",
   'entities.abilities.charge.name': 'Irruzione',
   'entities.abilities.charge.description':
     'Carica un nemico, genera 9 rabbia e lo stordisce per 1 s. Portata 8-25 m.',
-  'entities.abilities.rend.name': 'Squarcio Profondo',
-  'entities.abilities.rend.description':
-    'Ferisce il bersaglio e lo fa sanguinare per {damage} danni in {duration} sec.',
   'entities.abilities.thunder_clap.name': 'Colpo Sismico',
   'entities.abilities.thunder_clap.description':
     'Colpisce i nemici vicini per {damage} danni e rallenta i loro attacchi del 10% per 10 s.',
@@ -3216,9 +3473,9 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.rake.name': 'Scarnificare',
   'entities.abilities.rake.description':
     "Un'apertura furtiva che dilania il nemico infliggendo danno dell'arma più {damage} e provoca danno da sanguinamento per 9 sec. Conferisce 1 punto combo. Solo in Forma del Lupo.",
-  'entities.abilities.revive_pet.name': 'Rianima Famiglio',
+  'entities.abilities.revive_pet.name': 'Rattoppare',
   'entities.abilities.revive_pet.description':
-    'Rianima il tuo famiglio morto e lo richiama al tuo fianco.',
+    'Rattoppa il tuo famiglio, ripristinando {overTime} salute in 12 sec con impulsi ogni 3 sec se è vivo. Se è morto, lo rianima con il 35% della salute.',
   'entities.abilities.holy_shock.name': 'Shock Sacro',
   'entities.abilities.holy_shock.description':
     'Colpisce un bersaglio alleato con energia Sacra, curandolo di {damage}. (firma Sacro)',
@@ -5189,8 +5446,6 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
     'Si scaglia su un nemico distante per aprire lo scontro con un breve stordimento.',
   'guide.abilityHook.cheap_shot':
     'Apri dalla furtività con uno stordimento e un vantaggio sui punti combo.',
-  'guide.abilityHook.commanding_shout':
-    'Rafforza la vigoria, così tutti hanno più resistenza in combattimento.',
   'guide.abilityHook.concussive_shot':
     'Stordisce il bersaglio e lo rallenta, così non riesce a raggiungerti.',
   'guide.abilityHook.conjure_food':
@@ -5254,7 +5509,6 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
     'Un duro fendente in mischia per quando qualcosa ti arriva addosso.',
   'guide.abilityHook.rejuvenation':
     "Si lancia all'istante e cura un alleato nel tempo, così puoi continuare ad agire.",
-  'guide.abilityHook.rend': "Apre un'emorragia che logora il bersaglio nel tempo.",
   'guide.abilityHook.renew':
     'Una cura che pulsa nel tempo, ottima da lanciare per poi continuare a muoverti.',
   'guide.abilityHook.rockbiter_weapon':
@@ -7440,4 +7694,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.wocStore.wtype.staff': 'Personale',
   'hudChrome.wocStore.wtype.sword': 'Spada',
   'hudChrome.wocStore.wtype.wand': 'Bacchetta',
+  'guide.abilityHook.revenge':
+    'Colpisce i nemici davanti a te e può diventare gratuita dopo una schivata o una parata.',
+  'guide.abilityHook.hamstring': 'Ostacola il movimento di un nemico per impedirgli di fuggire.',
 };

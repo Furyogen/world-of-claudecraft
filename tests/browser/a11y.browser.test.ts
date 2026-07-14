@@ -136,17 +136,13 @@ describe('axe: talents window', () => {
   it('warrior talent tree is clean (dialog role + close button + tablist)', async () => {
     const root = host('talents-window');
     root.style.display = 'none';
-    let stage: TalentAllocation | null = null;
+    const allocation: TalentAllocation = { spec: null, rows: {} };
     const win = new TalentsWindow(
       stubDeps({
         root: () => root,
-        getStage: () => stage,
-        setStage: (s: TalentAllocation | null) => {
-          stage = s;
-        },
         playerClass: () => 'warrior',
-        totalPoints: () => 31,
-        currentAllocation: () => ({ ranks: {}, choices: {} }) as TalentAllocation,
+        playerLevel: () => 20,
+        currentAllocation: () => allocation,
         activeLoadout: () => -1,
         loadouts: () => [],
         currentBar: () => [],

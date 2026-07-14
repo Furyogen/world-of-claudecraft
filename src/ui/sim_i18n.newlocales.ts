@@ -2,6 +2,7 @@
 /* eslint-disable */
 export const BASE_NEW = {
   cs_CZ: {
+    'log.deathwardSaves': 'Ochrana před smrtí tě zachránila!',
     'error.heroicMarksNeeded': 'Potřebuješ {marks} Hrdinských značek k nákupu {name}.',
     'groundPickup.supplyCrateDeny': 'Bedna je zatlučená hřebíky.',
     'groundPickup.gravecallerSigilDeny': 'Pečeť odpuzuje tvůj dotyk.',
@@ -241,6 +242,7 @@ export const BASE_NEW = {
     'mechanic.siltHide': 'Bahenní kůže',
   },
   da_DK: {
+    'log.deathwardSaves': 'Et dødsværn redder dig!',
     'error.heroicMarksNeeded': 'Du skal bruge {marks} Heroiske Mærker for at købe {name}.',
     'groundPickup.supplyCrateDeny': 'Kassen er sømmet til.',
     'groundPickup.gravecallerSigilDeny': 'Seglet frastøder din berøring.',
@@ -483,6 +485,7 @@ export const BASE_NEW = {
     'mechanic.siltHide': 'Dyndskjul',
   },
   id_ID: {
+    'log.deathwardSaves': 'Perlindungan maut menyelamatkanmu!',
     'error.heroicMarksNeeded': 'Kamu butuh {marks} Tanda Heroik untuk membeli {name}.',
     'groundPickup.supplyCrateDeny': 'Peti itu dipaku rapat.',
     'groundPickup.gravecallerSigilDeny': 'Sigil itu menolak sentuhanmu.',
@@ -729,6 +732,7 @@ export const BASE_NEW = {
     'aura.soulblaze': 'Nyala Jiwa',
   },
   nl_NL: {
+    'log.deathwardSaves': 'Een bescherming tegen de dood redt je!',
     'error.heroicMarksNeeded': 'Je hebt {marks} Heroïsche Merken nodig om {name} te kopen.',
     'groundPickup.supplyCrateDeny': 'De kist is dichtgespijkerd.',
     'groundPickup.gravecallerSigilDeny': 'Het zegel weert je aanraking af.',
@@ -972,6 +976,7 @@ export const BASE_NEW = {
     'mechanic.siltHide': 'Slibhuid',
   },
   pl_PL: {
+    'log.deathwardSaves': 'Ochrona przed śmiercią cię ratuje!',
     'error.heroicMarksNeeded': 'Potrzebujesz {marks} Znaków heroicznych, aby kupić {name}.',
     'groundPickup.supplyCrateDeny': 'Skrzynia jest zabita gwoździami na głucho.',
     'groundPickup.gravecallerSigilDeny': 'Sygil odpycha twój dotyk.',
@@ -1215,6 +1220,7 @@ export const BASE_NEW = {
     'mechanic.siltHide': 'Mułowa skóra',
   },
   sv_SE: {
+    'log.deathwardSaves': 'Ett dödsskydd räddar dig!',
     'error.heroicMarksNeeded': 'Du behöver {marks} Heroiska märken för att köpa {name}.',
     'groundPickup.supplyCrateDeny': 'Lådan är igenspikad.',
     'groundPickup.gravecallerSigilDeny': 'Sigillet stöter bort din beröring.',
@@ -1458,6 +1464,7 @@ export const BASE_NEW = {
     'mechanic.siltHide': 'Slamhud',
   },
   tr_TR: {
+    'log.deathwardSaves': 'Ölüm muhafazası seni kurtarıyor!',
     'error.heroicMarksNeeded': '{name} satın almak için {marks} Kahramanca Nişan gerekiyor.',
     'groundPickup.supplyCrateDeny': 'Sandık çiviyle çakılıp kapatılmış.',
     'groundPickup.gravecallerSigilDeny': 'Mühür dokunuşunu geri itiyor.',
@@ -1697,6 +1704,7 @@ export const BASE_NEW = {
     'aura.soulblaze': 'Ruhalazı',
   },
   vi_VN: {
+    'log.deathwardSaves': 'Lá chắn tử thần cứu bạn!',
     'error.heroicMarksNeeded': 'Bạn cần {marks} Dấu Ấn Anh Hùng để mua {name}.',
     'groundPickup.supplyCrateDeny': 'Thùng gỗ đã bị đóng đinh chặt.',
     'groundPickup.gravecallerSigilDeny': 'Ấn phù đẩy bật tay bạn ra.',
